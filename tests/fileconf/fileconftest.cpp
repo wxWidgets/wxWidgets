@@ -373,8 +373,16 @@ void FileConfigTestCase::RenameGroup()
                          _T("[foot/group2]\n"),
                          fc );
 
+    // renaming a path doesn't work, it must be the immediate group
+    CPPUNIT_ASSERT( !fc.RenameGroup(_T("foot/group1"), _T("group2")) );
+
+
     fc.SetPath(_T("foot"));
 
+    // renaming to a name of existing group doesn't work
+    CPPUNIT_ASSERT( !fc.RenameGroup(_T("group1"), _T("group2")) );
+
+    // try exchanging the groups names and then restore them back
     CPPUNIT_ASSERT( fc.RenameGroup(_T("group1"), _T("groupTmp")) );
     wxVERIFY_FILECONFIG( _T("[foot]\n")
                          _T("entry=value\n")
@@ -403,6 +411,36 @@ void FileConfigTestCase::RenameGroup()
                          _T("subentry=subvalue\n")
                          _T("subentry2=subvalue2\n")
                          _T("[foot/group1]\n"),
+                         fc );
+
+    CPPUNIT_ASSERT( fc.RenameGroup(_T("group1"), _T("groupTmp")) );
+    wxVERIFY_FILECONFIG( _T("[foot]\n")
+                         _T("entry=value\n")
+                         _T("[foot/group2]\n")
+                         _T("[foot/group2/subgroup]\n")
+                         _T("subentry=subvalue\n")
+                         _T("subentry2=subvalue2\n")
+                         _T("[foot/groupTmp]\n"),
+                         fc );
+
+    CPPUNIT_ASSERT( fc.RenameGroup(_T("group2"), _T("group1")) );
+    wxVERIFY_FILECONFIG( _T("[foot]\n")
+                         _T("entry=value\n")
+                         _T("[foot/group1]\n")
+                         _T("[foot/group1/subgroup]\n")
+                         _T("subentry=subvalue\n")
+                         _T("subentry2=subvalue2\n")
+                         _T("[foot/groupTmp]\n"),
+                         fc );
+
+    CPPUNIT_ASSERT( fc.RenameGroup(_T("groupTmp"), _T("group2")) );
+    wxVERIFY_FILECONFIG( _T("[foot]\n")
+                         _T("entry=value\n")
+                         _T("[foot/group1]\n")
+                         _T("[foot/group1/subgroup]\n")
+                         _T("subentry=subvalue\n")
+                         _T("subentry2=subvalue2\n")
+                         _T("[foot/group2]\n"),
                          fc );
 }
 
