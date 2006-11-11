@@ -45,6 +45,11 @@
     #include "wx/mac/private.h"
 #endif
 
+#ifdef __WXGTK__
+    #include "wx/gtk/private.h"
+    #include "wx/gtk/win_gtk.h"
+#endif
+
 // -----------------------------------------------------------------------------
 // array types
 // -----------------------------------------------------------------------------
@@ -720,6 +725,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxGenericTreeCtrl, wxControl)
 
 BEGIN_EVENT_TABLE(wxGenericTreeCtrl, wxTreeCtrlBase)
     EVT_PAINT          (wxGenericTreeCtrl::OnPaint)
+    EVT_SIZE           (wxGenericTreeCtrl::OnSize)
     EVT_MOUSE_EVENTS   (wxGenericTreeCtrl::OnMouse)
     EVT_CHAR           (wxGenericTreeCtrl::OnChar)
     EVT_SET_FOCUS      (wxGenericTreeCtrl::OnSetFocus)
@@ -2234,7 +2240,37 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         int x, w, h;
         x=0;
         GetVirtualSize(&w, &h);
-        dc.DrawRectangle(x, item->GetY()+offset, w, total_h-offset);
+        wxRect rect( x, item->GetY()+offset, w, total_h-offset);
+#ifndef __WXGTK__
+        dc.DrawRectangle(rect);
+#else
+        if (!item->IsSelected())
+        {
+            dc.DrawRectangle(rect);
+        }
+        else
+        {
+            CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
+        
+            gtk_paint_flat_box( m_widget->style, 
+                                GTK_PIZZA(m_wxwindow)->bin_window,
+			                    GTK_STATE_SELECTED,
+                                GTK_SHADOW_NONE,
+                                NULL,
+                                m_wxwindow,
+                                "cell_even",
+                                rect.x, rect.y, rect.width, rect.height );
+                              
+            if ((item == m_current) && (m_hasFocus))
+                gtk_paint_focus( m_widget->style, 
+                                 GTK_PIZZA(m_wxwindow)->bin_window,
+                                 GTK_STATE_SELECTED,
+                                 NULL,
+                                 m_wxwindow,
+                                 "treeview",
+                                 rect.x, rect.y, rect.width, rect.height );
+        }
+#endif
     }
     else
     {
@@ -2243,16 +2279,74 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
             // If it's selected, and there's an image, then we should
             // take care to leave the area under the image painted in the
             // background colour.
-            dc.DrawRectangle( item->GetX() + image_w - 2, item->GetY()+offset,
-                              item->GetWidth() - image_w + 2, total_h-offset );
+            wxRect rect( item->GetX() + image_w - 2, item->GetY()+offset,
+                         item->GetWidth() - image_w + 2, total_h-offset );
+#ifndef __WXGTK__
+            dc.DrawRectangle( rect );
+#else
+            CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
+            rect.x -= 1;
+            rect.width += 2;
+        
+            gtk_paint_flat_box( m_widget->style, 
+                                GTK_PIZZA(m_wxwindow)->bin_window,
+			                    GTK_STATE_SELECTED,
+                                GTK_SHADOW_NONE,
+                                NULL,
+                                m_wxwindow,
+                                "cell_even",
+                                rect.x, rect.y, rect.width, rect.height );
+
+            if ((item == m_current) && (m_hasFocus))
+                gtk_paint_focus( m_widget->style, 
+                                 GTK_PIZZA(m_wxwindow)->bin_window,
+                                 GTK_STATE_SELECTED,
+                                 NULL,
+                                 m_wxwindow,
+                                 "treeview",
+                                 rect.x, rect.y, rect.width, rect.height );
+                         
+#endif
         }
         // On GTK+ 2, drawing a 'normal' background is wrong for themes that
         // don't allow backgrounds to be customized. Not drawing the background,
         // except for custom item backgrounds, works for both kinds of theme.
         else if (drawItemBackground)
         {
-            dc.DrawRectangle( item->GetX()-2, item->GetY()+offset,
-                              item->GetWidth()+2, total_h-offset );
+            wxRect rect( item->GetX()-2, item->GetY()+offset,
+                         item->GetWidth()+2, total_h-offset );
+#ifndef __WXGTK__
+            dc.DrawRectangle( rect );
+#else
+            if ( attr && attr->HasBackgroundColour() )
+            {
+                dc.DrawRectangle( rect );
+            }
+            else
+            {
+                CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
+                rect.x -= 1;
+                rect.width += 2;
+        
+                gtk_paint_flat_box( m_widget->style, 
+                                GTK_PIZZA(m_wxwindow)->bin_window,
+			                    GTK_STATE_SELECTED,
+                                GTK_SHADOW_NONE,
+                                NULL,
+                                m_wxwindow,
+                                "cell_even",
+                                rect.x, rect.y, rect.width, rect.height );
+                              
+                if ((item == m_current) && (m_hasFocus))
+                    gtk_paint_focus( m_widget->style, 
+                                 GTK_PIZZA(m_wxwindow)->bin_window,
+                                 GTK_STATE_SELECTED,
+                                 NULL,
+                                 m_wxwindow,
+                                 "treeview",
+                                 rect.x, rect.y, rect.width, rect.height );
+            }
+#endif
         }
     }
 
@@ -2539,6 +2633,16 @@ void wxGenericTreeCtrl::DrawLine(const wxTreeItemId &item, bool below)
 // -----------------------------------------------------------------------------
 // wxWidgets callbacks
 // -----------------------------------------------------------------------------
+
+void wxGenericTreeCtrl::OnSize( wxSizeEvent &event )
+{
+#ifdef __WXGTK__
+    if (HasFlag( wxTR_FULL_ROW_HIGHLIGHT) && m_current)
+        RefreshLine( m_current );
+#endif
+
+    event.Skip(true);
+}
 
 void wxGenericTreeCtrl::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {

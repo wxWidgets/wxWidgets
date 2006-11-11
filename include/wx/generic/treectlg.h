@@ -220,6 +220,7 @@ public:
     void OnChar( wxKeyEvent &event );
     void OnMouse( wxMouseEvent &event );
     void OnGetToolTip( wxTreeEvent &event );
+    void OnSize( wxSizeEvent &event );
     void OnInternalIdle( );
 
     virtual wxVisualAttributes GetDefaultAttributes() const

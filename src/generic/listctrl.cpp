@@ -52,6 +52,12 @@
     #include "wx/mac/private.h"
 #endif
 
+#ifdef __WXGTK__
+    #include "wx/gtk/private.h"
+    #include "wx/gtk/win_gtk.h"
+#endif
+
+
 
 // NOTE: If using the wxListBox visual attributes works everywhere then this can
 // be removed, as well as the #else case below.
@@ -71,7 +77,11 @@ static const int SCROLL_UNIT_X = 15;
 static const int LINE_SPACING = 0;
 
 // extra margins around the text label
+#ifdef __WXGTK__
+static const int EXTRA_WIDTH = 6;
+#else
 static const int EXTRA_WIDTH = 4;
+#endif
 static const int EXTRA_HEIGHT = 4;
 
 // margin between the window and the items
@@ -1243,9 +1253,9 @@ void wxListLineData::SetPosition( int x, int y, int spacing )
             if ( item->HasText() )
             {
                 if (m_gi->m_rectAll.width > spacing)
-                    m_gi->m_rectLabel.x = m_gi->m_rectAll.x + 2;
+                    m_gi->m_rectLabel.x = m_gi->m_rectAll.x + (EXTRA_WIDTH/2);
                 else
-                    m_gi->m_rectLabel.x = m_gi->m_rectAll.x + 2 + (spacing / 2) - (m_gi->m_rectLabel.width / 2);
+                    m_gi->m_rectLabel.x = m_gi->m_rectAll.x + (EXTRA_WIDTH/2) + (spacing / 2) - (m_gi->m_rectLabel.width / 2);
                 m_gi->m_rectLabel.y = m_gi->m_rectAll.y + m_gi->m_rectAll.height + 2 - m_gi->m_rectLabel.height;
                 m_gi->m_rectHighlight.x = m_gi->m_rectLabel.x - 2;
                 m_gi->m_rectHighlight.y = m_gi->m_rectLabel.y - 2;
@@ -1269,11 +1279,11 @@ void wxListLineData::SetPosition( int x, int y, int spacing )
             {
                 m_gi->m_rectIcon.x = m_gi->m_rectAll.x + 2;
                 m_gi->m_rectIcon.y = m_gi->m_rectAll.y + 2;
-                m_gi->m_rectLabel.x = m_gi->m_rectAll.x + 6 + m_gi->m_rectIcon.width;
+                m_gi->m_rectLabel.x = m_gi->m_rectAll.x + 4 + (EXTRA_WIDTH/2) + m_gi->m_rectIcon.width;
             }
             else
             {
-                m_gi->m_rectLabel.x = m_gi->m_rectAll.x + 2;
+                m_gi->m_rectLabel.x = m_gi->m_rectAll.x + (EXTRA_WIDTH/2);
             }
             break;
 
@@ -1438,7 +1448,32 @@ void wxListLineData::Draw( wxDC *dc )
     wxListItemAttr *attr = GetAttr();
 
     if ( SetAttributes(dc, attr, highlighted) )
+#ifndef __WXGTK__
+    {
         dc->DrawRectangle( m_gi->m_rectHighlight );
+    }
+#else
+    {
+        if (highlighted)
+        {
+            wxRect rect2( m_gi->m_rectHighlight );
+            m_owner->CalcScrolledPosition( rect2.x, rect2.y, &rect2.x, &rect2.y );
+        
+            gtk_paint_flat_box( m_owner->m_widget->style, 
+                            GTK_PIZZA(m_owner->m_wxwindow)->bin_window,
+			                GTK_STATE_SELECTED,
+                            GTK_SHADOW_NONE,
+                            NULL,
+                            m_owner->m_wxwindow,
+                            "cell_even",
+                            rect2.x, rect2.y, rect2.width, rect2.height );
+        }
+        else
+        {
+            dc->DrawRectangle( m_gi->m_rectHighlight );
+        }
+    }
+#endif
 
     // just for debugging to better see where the items are
 #if 0
@@ -1478,10 +1513,41 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
     //       GetAttr() and move these lines into the loop below
     wxListItemAttr *attr = GetAttr();
     if ( SetAttributes(dc, attr, highlighted) )
+#ifndef __WXGTK__
+    {
         dc->DrawRectangle( rectHL );
+    }
+#else
+    {
+        if (highlighted)
+        {
+            wxRect rect2( rectHL );
+            m_owner->CalcScrolledPosition( rect2.x, rect2.y, &rect2.x, &rect2.y );
+        
+            gtk_paint_flat_box( m_owner->m_widget->style, 
+                            GTK_PIZZA(m_owner->m_wxwindow)->bin_window,
+			                GTK_STATE_SELECTED,
+                            GTK_SHADOW_NONE,
+                            NULL,
+                            m_owner->m_wxwindow,
+                            "cell_even",
+                            rect2.x, rect2.y, rect2.width, rect2.height );
+        }
+        else
+        {
+            dc->DrawRectangle( rectHL );
+        }
+    }
+#endif
 
     wxCoord x = rect.x + HEADER_OFFSET_X,
             yMid = rect.y + rect.height/2;
+#ifdef __WXGTK__
+    // This probably needs to be done
+    // on all platforms as the icons
+    // otherwise nearly touch the border
+    x += 2;
+#endif
 
     size_t col = 0;
     for ( wxListItemDataList::compatibility_iterator node = m_items.GetFirst();
@@ -2729,9 +2795,23 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
     {
         if ( m_hasFocus )
         {
+            wxRect rect( GetLineHighlightRect( m_current ) );
+#ifndef __WXGTK__
             dc.SetPen( *wxBLACK_PEN );
             dc.SetBrush( *wxTRANSPARENT_BRUSH );
-            dc.DrawRectangle( GetLineHighlightRect( m_current ) );
+            dc.DrawRectangle( rect );
+#else
+            CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
+        
+            gtk_paint_focus( m_widget->style, 
+                             GTK_PIZZA(m_wxwindow)->bin_window,
+                             GTK_STATE_SELECTED,
+                             NULL,
+                             m_wxwindow,
+                             "treeview",
+                             rect.x, rect.y, rect.width, rect.height );
+            
+#endif
         }
     }
 #endif
