@@ -92,7 +92,7 @@ FIXME: this template has (at least) the following bugs:
     </if>
 
     <if cond="not isdefined('WX_VERSION')">
-        <set var="WX_VERSION_DEFAULT" overwrite="0">27</set>
+        <set var="WX_VERSION_DEFAULT" overwrite="0">28</set>
         <option name="WX_VERSION">
             <default-value>$(WX_VERSION_DEFAULT)</default-value>
             <description>
