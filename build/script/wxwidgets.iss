@@ -40,7 +40,8 @@ Source: "C:\wx\inno\wxWidgets\*"; DestDir: "{app}"; Flags: ignoreversion recurse
 Filename: "{app}\wx.url"; Section: "InternetShortcut"; Key: "URL"; String: "http://www.wxwidgets.org"
 
 [Icons]
-Name: "{group}\{cm:ProgramOnTheWeb,wxWidgets 2.8.0}"; Filename: "{app}\wx.url"
+Name: "{group}\{cm:ProgramOnTheWeb,wxWidgets {#WX_VERSION} }"; Filename: "{app}\wx.url"
+
 
 [UninstallDelete]
 Type: files; Name: "{app}\wx.url"

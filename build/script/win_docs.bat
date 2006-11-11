@@ -1,3 +1,6 @@
+rem Uncomment the next line to set the version; used also in wxWidgets.iss
+SET WXW_VER=2.8.0
+if %WXW_VER%="" SET WXW_VER=CVS
 
 rem  This builds the docs in %WXWIN% in a number of formats 
 rem  and a clean inno setup in a second tree
@@ -61,22 +64,21 @@ call ps2pdf tex2rtf.ps >> c:\temp.log
 
 echo Zipping
 cd %WXWIN%
-del %DAILY%\*.zip
-zip %DAILY%\wxWidgets-%WXW_VER%-CHM.zip docs\htmlhelp\wx.chm utils/tex2rtf/docs/*.chm docs/htmlhelp/*.chm
-zip %DAILY%\wxWidgets-%WXW_VER%-HLP.zip docs\winhelp\wx.hlp docs\winhelp\wx.cnt utils/tex2rtf/docs/*.HLP utils/tex2rtf/docs/*.cnt docs/winhelp/*.hlp docs/winhelp/*.cnt
-Rem zip %DAILY%\wx-docs-extra-hlp.ZIP utils/tex2rtf/docs/*.HLP utils/tex2rtf/docs/*.cnt docs/winhelp/*.hlp docs/winhelp/*.cnt -x  docs/winhelp/wx.hlp docs/winhelp/wx.*
-Rem zip %DAILY%\wx-docs-extra-chm.ZIP utils/tex2rtf/docs/*.chm docs/htmlhelp/*.chm 
+del %DAILY%\*.ZIP
+rem these need to be .ZIP so they will get date on Unix (rebuild_makefiles.sh)
+zip %DAILY%\wxWidgets-%WXW_VER%-CHM.ZIP docs\htmlhelp\wx.chm utils/tex2rtf/docs/*.chm docs/htmlhelp/*.chm
+zip %DAILY%\wxWidgets-%WXW_VER%-HLP.ZIP docs\winhelp\wx.hlp docs\winhelp\wx.cnt utils/tex2rtf/docs/*.HLP utils/tex2rtf/docs/*.cnt docs/winhelp/*.hlp docs/winhelp/*.cnt
+
 cd %DAILY%\
 mkdir docs
 mkdir docs\pdf
 del docs\pdf\*.pdf
 move in\*.pdf docs\pdf
-zip wxWidgets-%WXW_VER%-PDF.zip docs\pdf\*.pdf
-Rem zip wx-docs-extra-pdf.ZIP docs\pdf\*.pdf -x docs\pdf\wx.pdf
+zip wxWidgets-%WXW_VER%-PDF.ZIP docs\pdf\*.pdf
 
 rem copy chm to inno
 mkdir c:\wx\inno\wxWidgets\docs\htmlhelp
-copy docs\htmlhelp\wx.chm cd \wx\inno\wxWidgets\docs\htmlhelp\wx.chm
+copy docs\htmlhelp\wx.chm \wx\inno\wxWidgets\docs\htmlhelp\wx.chm
 cd %WXWIN%\build\script
 iscc wxwidgets.iss >> c:\temp.log
 
