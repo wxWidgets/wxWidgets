@@ -69,7 +69,8 @@ public:
     int GetNoCopies();
     bool GetCollate();
     int  GetOrientation();
-
+    bool IsOrientationReversed() const;
+    
     bool IsOk();
     %pythoncode { Ok = IsOk }
 
@@ -87,7 +88,8 @@ public:
     void SetNoCopies(int v);
     void SetCollate(bool flag);
     void SetOrientation(int orient);
-
+    void SetOrientationReversed(bool reversed);
+    
     void SetPrinterName(const wxString& name);
     void SetColour(bool colour);
     void SetDuplex(wxDuplexMode duplex);
