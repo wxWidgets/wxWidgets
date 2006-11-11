@@ -85,6 +85,9 @@ class TestVirtualList(wx.ListCtrl):
 
 #----------------------------------------------------------------------
 
+# for testing the new native control on wxMac
+#wx.SystemOptions.SetOptionInt("mac.listctrl.always_use_generic", 0)
+
 def runTest(frame, nb, log):
     win = TestVirtualList(nb, log)
     return win
