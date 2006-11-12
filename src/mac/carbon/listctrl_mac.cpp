@@ -621,7 +621,6 @@ bool wxListCtrl::Create(wxWindow *parent,
     // for now, we'll always use the generic list control for ICON and LIST views,
     // because they dynamically change the number of columns on resize.
     // Also, allow the user to set it to use the list ctrl as well.
-    // Also, use generic list control in VIRTUAL mode.
     if ( (wxSystemOptions::HasOption( wxMAC_ALWAYS_USE_GENERIC_LISTCTRL )
             && (wxSystemOptions::GetOptionInt( wxMAC_ALWAYS_USE_GENERIC_LISTCTRL ) == 1)) ||
             (style & wxLC_ICON) || (style & wxLC_SMALL_ICON) || (style & wxLC_LIST) )
@@ -2049,7 +2048,7 @@ void wxMacListCtrlItem::Notification(wxMacDataItemBrowserControl *owner ,
     }
 
     wxListCtrl *list = wxDynamicCast( owner->GetPeer() , wxListCtrl );
-    if ( list )
+    if ( list && lb )
     {
         bool trigger = false;
 
@@ -2135,14 +2134,10 @@ wxMacDataBrowserListCtrlControl::wxMacDataBrowserListCtrlControl( wxWindow *peer
     if ( gDataBrowserDrawItemUPP == NULL )
         gDataBrowserDrawItemUPP = NewDataBrowserDrawItemUPP(DataBrowserDrawItemProc);
 
-//    if ( gDataBrowserEditItemUPP == NULL )
-//        gDataBrowserEditItemUPP = NewDataBrowserEditItemUPP(DataBrowserEditTextProc);
-
     if ( gDataBrowserHitTestUPP == NULL )
         gDataBrowserHitTestUPP = NewDataBrowserHitTestUPP(DataBrowserHitTestProc);
 
     callbacks.u.v1.drawItemCallback = gDataBrowserDrawItemUPP;
-//    callbacks.u.v1.editTextCallback = gDataBrowserEditItemUPP;
     callbacks.u.v1.hitTestCallback = gDataBrowserHitTestUPP;
 
     SetDataBrowserCustomCallbacks( GetControlRef(), &callbacks );
@@ -2211,7 +2206,6 @@ bool wxMacDataBrowserListCtrlControl::ConfirmEditText(
         Rect *maxEditTextRect,
         Boolean *shrinkToFit)
 {
-    //wxListCtrl* list = wxDynamicCast( GetPeer() , wxListCtrl );
     return false;
 }
 
@@ -2351,7 +2345,13 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
                       enclosingRect.bottom - enclosingRect.top);
 
     active = IsControlActive(GetControlRef());
-
+    
+    // don't paint the background over the vertical rule line
+    if ( list->GetWindowStyleFlag() & wxLC_VRULES )
+    {
+        enclosingCGRect.origin.x += 1;
+        enclosingCGRect.size.width -= 1;
+    }
     if (itemState == kDataBrowserItemIsSelected)
     {
         RGBColor foregroundColor;
@@ -2494,7 +2494,7 @@ OSStatus wxMacDataBrowserListCtrlControl::GetSetItemData(DataBrowserItemID itemI
         if (!m_isVirtual)
         {
             lcItem = (wxMacListCtrlItem*) itemID;
-            if (lcItem->HasColumnInfo(listColumn)){
+            if (lcItem && lcItem->HasColumnInfo(listColumn)){
                 wxListItem* item = lcItem->GetColumnInfo(listColumn);
                 if (item->GetMask() & wxLIST_MASK_TEXT)
                     text = item->GetText();
@@ -2727,6 +2727,7 @@ wxMacDataBrowserListCtrlControl::~wxMacDataBrowserListCtrlControl()
 void wxMacDataBrowserListCtrlControl::MacSetColumnInfo( unsigned int row, unsigned int column, wxListItem* item )
 {
     wxMacDataItem* dataItem = GetItemFromLine(row);
+    wxASSERT_MSG( dataItem, _T("could not obtain wxMacDataItem for row in MacSetColumnInfo. Is row a valid wxListCtrl row?") );
     if (item)
     {
         wxMacListCtrlItem* listItem = dynamic_cast<wxMacListCtrlItem*>(dataItem);
@@ -2756,6 +2757,7 @@ void wxMacDataBrowserListCtrlControl::UpdateState(wxMacDataItem* dataItem, wxLis
 void wxMacDataBrowserListCtrlControl::MacGetColumnInfo( unsigned int row, unsigned int column, wxListItem& item )
 {
     wxMacDataItem* dataItem = GetItemFromLine(row);
+    wxASSERT_MSG( dataItem, _T("could not obtain wxMacDataItem in MacGetColumnInfo. Is row a valid wxListCtrl row?") );
     // CS should this guard against dataItem = 0 ? , as item is not a pointer if (item) is not appropriate
     //if (item)
     {
@@ -2806,17 +2808,21 @@ wxMacDataItem* wxMacDataBrowserListCtrlControl::CreateItem()
 
 wxMacListCtrlItem::wxMacListCtrlItem()
 {
-    m_rowItems = wxListItemList();
+    m_rowItems = wxListItemList( wxKEY_INTEGER );
 }
 
 int wxMacListCtrlItem::GetColumnImageValue( unsigned int column )
 {
-    return GetColumnInfo(column)->GetImage();
+    if ( HasColumnInfo(column) )
+        return GetColumnInfo(column)->GetImage();
+    
+    return -1;
 }
 
 void wxMacListCtrlItem::SetColumnImageValue( unsigned int column, int imageIndex )
 {
-    GetColumnInfo(column)->SetImage(imageIndex);
+    if ( HasColumnInfo(column) )
+        GetColumnInfo(column)->SetImage(imageIndex);
 }
 
 const wxString& wxMacListCtrlItem::GetColumnTextValue( unsigned int column )
@@ -2824,12 +2830,16 @@ const wxString& wxMacListCtrlItem::GetColumnTextValue( unsigned int column )
     if ( column == 0 )
         return GetLabel();
 
-    return GetColumnInfo(column)->GetText();
+    if ( HasColumnInfo(column) ) 
+        return GetColumnInfo(column)->GetText();
+    
+    return wxEmptyString;
 }
 
 void wxMacListCtrlItem::SetColumnTextValue( unsigned int column, const wxString& text )
 {
-    GetColumnInfo(column)->SetText(text);
+    if ( HasColumnInfo(column) )
+        GetColumnInfo(column)->SetText(text);
 
     // for compatibility with superclass APIs
     if ( column == 0 )
@@ -2838,7 +2848,7 @@ void wxMacListCtrlItem::SetColumnTextValue( unsigned int column, const wxString&
 
 wxListItem* wxMacListCtrlItem::GetColumnInfo( unsigned int column )
 {
-    wxListItemList::compatibility_iterator node = m_rowItems.Item( column );
+    wxListItemList::compatibility_iterator node = m_rowItems.Find( column );
     wxASSERT_MSG( node, _T("invalid column index in wxMacListCtrlItem") );
 
     return node->GetData();
@@ -2846,16 +2856,16 @@ wxListItem* wxMacListCtrlItem::GetColumnInfo( unsigned int column )
 
 bool wxMacListCtrlItem::HasColumnInfo( unsigned int column )
 {
-    return m_rowItems.GetCount() > column;
+    return m_rowItems.Find( column ) != NULL;
 }
 
 void wxMacListCtrlItem::SetColumnInfo( unsigned int column, wxListItem* item )
 {
 
-    if ( column >= m_rowItems.GetCount() )
+    if ( !HasColumnInfo(column) )
     {
         wxListItem* listItem = new wxListItem(*item);
-        m_rowItems.Append( listItem );
+        m_rowItems.Append( column, listItem );
     }
     else
     {
