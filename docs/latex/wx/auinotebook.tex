@@ -5,6 +5,9 @@
 
 \section{\class{wxAuiNotebook}}\label{wxauinotebook}
 
+wxAuiPaneInfo is part of the wxAUI class framework.
+See also \helpref{wxAUI overview}{wxauioverview}.
+
 wxAuiNotebook is a notebook control which implements many features common in applications with dockable panes.
 Specifically, wxAuiNotebook implements functionality which allows the user to rearrange tab order via drag-and-drop,
 split the tab window into many different splitter configurations, and toggle through different themes to customize
@@ -39,7 +42,7 @@ Constructor. Creates a wxAuiNotebok control.
 
 \func{bool}{AddPage}{\param{wxWindow* }{page}, \param{const wxString\& }{caption}, \param{bool }{select = false}, \param{const wxBitmap\& }{bitmap = wxNullBitmap}}
 
-Adds a page.
+Adds a page.  If the {\it select} parameter is true, calling this will generate a page change event.
 
 \membersection{wxAuiNotebook::Create}\label{wxauinotebookcreate}
 
@@ -51,19 +54,7 @@ Creates the notebook window.
 
 \func{bool}{DeletePage}{\param{size\_t }{page}}
 
-Deletes a page at the given index.
-
-\membersection{wxAuiNotebook::FindTab}\label{wxauinotebookfindtab}
-
-\func{bool}{FindTab}{\param{wxWindow* }{page}, \param{wxAuiTabCtrl** }{ctrl}, \param{int* }{idx}}
-
-Finds a tab.
-
-\membersection{wxAuiNotebook::GetActiveTabCtrl}\label{wxauinotebookgetactivetabctrl}
-
-\func{wxAuiTabCtrl*}{GetActiveTabCtrl}{\void}
-
-Returns the active tab.
+Deletes a page at the given index.  Calling this method will generate a page change event.
 
 \membersection{wxAuiNotebook::GetArtProvider}\label{wxauinotebookgetartprovider}
 
@@ -87,7 +78,7 @@ Returns the number of pages.
 
 \constfunc{int}{GetPageIndex}{\param{wxWindow* }{page\_wnd}}
 
-Reurns the page index for the given window.
+Reurns the page index for the specified window.  If the window is not found in the notebook, wxNOT_FOUND is returned.
 
 \membersection{wxAuiNotebook::GetSelection}\label{wxauinotebookgetselection}
 
@@ -105,7 +96,7 @@ Inserts a page.
 
 \func{bool}{RemovePage}{\param{size\_t }{page}}
 
-Removes a page.
+Removes a page, without deleting the window pointer.
 
 \membersection{wxAuiNotebook::SetArtProvider}\label{wxauinotebooksetartprovider}
 
@@ -123,13 +114,13 @@ Sets the bitmap for the page.
 
 \func{bool}{SetPageText}{\param{size\_t }{page}, \param{const wxString\& }{text}}
 
-Sets the ab label for the page.
+Sets the tab label for the page.
 
 \membersection{wxAuiNotebook::SetSelection}\label{wxauinotebooksetselection}
 
 \func{size\_t}{SetSelection}{\param{size\_t }{new\_page}}
 
-Sets the page selection.
+Sets the page selection.  Calling this method will generate a page change event.
 
 \membersection{wxAuiNotebook::SetTabCtrlHeight}\label{wxauinotebooksettabctrlheight}
 
