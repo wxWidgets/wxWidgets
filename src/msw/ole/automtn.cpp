@@ -804,7 +804,7 @@ static void ReleaseVariant(VARIANTARG *pvarg)
 {
     VARTYPE vt;
     VARIANTARG _huge *pvargArray;
-    long lLBound, lUBound, l;
+    LONG lLBound, lUBound, l;
 
     vt = (VARTYPE)(pvarg->vt & 0xfff);        // mask off flags
 
