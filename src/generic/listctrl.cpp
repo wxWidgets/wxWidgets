@@ -52,7 +52,7 @@
     #include "wx/mac/private.h"
 #endif
 
-#ifdef __WXGTK__
+#ifdef __WXGTK20__
     #include "wx/gtk/private.h"
     #include "wx/gtk/win_gtk.h"
 #endif
@@ -1448,7 +1448,7 @@ void wxListLineData::Draw( wxDC *dc )
     wxListItemAttr *attr = GetAttr();
 
     if ( SetAttributes(dc, attr, highlighted) )
-#ifndef __WXGTK__
+#ifndef __WXGTK20__
     {
         dc->DrawRectangle( m_gi->m_rectHighlight );
     }
@@ -1513,7 +1513,7 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
     //       GetAttr() and move these lines into the loop below
     wxListItemAttr *attr = GetAttr();
     if ( SetAttributes(dc, attr, highlighted) )
-#ifndef __WXGTK__
+#ifndef __WXGTK20__
     {
         dc->DrawRectangle( rectHL );
     }
@@ -2796,7 +2796,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         if ( m_hasFocus )
         {
             wxRect rect( GetLineHighlightRect( m_current ) );
-#ifndef __WXGTK__
+#ifndef __WXGTK20__
             dc.SetPen( *wxBLACK_PEN );
             dc.SetBrush( *wxTRANSPARENT_BRUSH );
             dc.DrawRectangle( rect );
