@@ -728,6 +728,23 @@ void wxListCtrl::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 
     if (m_genericImpl)
         m_genericImpl->SetSize(0, 0, width, height, sizeFlags);
+
+    // determine if we need a horizontal scrollbar, and add it if so
+    if (m_dbImpl)
+    {
+        int totalWidth = 0;
+        for (int column = 0; column < GetColumnCount(); column++)
+        {
+              totalWidth += m_dbImpl->GetColumnWidth( column );
+        }
+
+        Boolean vertScrollBar;
+        GetDataBrowserHasScrollBars( m_dbImpl->GetControlRef(), NULL, &vertScrollBar );
+        if (totalWidth > width)
+            SetDataBrowserHasScrollBars( m_dbImpl->GetControlRef(), true, vertScrollBar );
+        else
+            SetDataBrowserHasScrollBars( m_dbImpl->GetControlRef(), false, vertScrollBar );
+    }
 }
 
 wxSize wxListCtrl::DoGetBestSize() const
@@ -819,6 +836,7 @@ bool wxListCtrl::SetColumn(int col, wxListItem& item)
 
     if (m_dbImpl)
     {
+        long mask = item.GetMask();
         if ( col >= (int)m_colsInfo.GetCount() )
         {
             wxListItem* listItem = new wxListItem(item);
@@ -828,7 +846,7 @@ bool wxListCtrl::SetColumn(int col, wxListItem& item)
         {
             wxListItem listItem;
             GetColumn( col, listItem );
-            long mask = item.GetMask();
+
             if (mask & wxLIST_MASK_TEXT)
                 listItem.SetText(item.GetText());
             if (mask & wxLIST_MASK_DATA)
@@ -842,6 +860,9 @@ bool wxListCtrl::SetColumn(int col, wxListItem& item)
             if (mask & wxLIST_MASK_WIDTH)
                 listItem.SetWidth(item.GetWidth());
         }
+        
+        if (mask & wxLIST_MASK_WIDTH)
+            SetColumnWidth( col, item.GetWidth() )
 
         // change the appearance in the databrowser.
         DataBrowserListViewHeaderDesc columnDesc;
@@ -927,10 +948,22 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
         {
             for (int column = 0; column < GetColumnCount(); column++)
             {
+                wxListItem colInfo;
+                GetColumn(col, colInfo);
+             
+                colInfo.SetWidth(width);
+                SetColumn(col, colInfo);
+            
                 m_dbImpl->SetColumnWidth(col, mywidth);
             }
         }
-        else{
+        else
+        {
+            wxListItem colInfo;
+            GetColumn(col, colInfo);
+         
+            colInfo.SetWidth(width);
+            SetColumn(col, colInfo);
             m_dbImpl->SetColumnWidth(col, mywidth);
         }
         return true;
