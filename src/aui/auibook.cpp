@@ -2452,7 +2452,10 @@ void wxAuiNotebook::SetUniformBitmapSize(const wxSize& size)
     m_requested_bmp_size = size;
     
     // if window is already initialized, recalculate the tab height
-    SetTabCtrlHeight(CalculateTabCtrlHeight());
+    if (m_dummy_wnd)
+    {
+        SetTabCtrlHeight(CalculateTabCtrlHeight());
+    }
 }
 
 void wxAuiNotebook::SetTabCtrlHeight(int height)
