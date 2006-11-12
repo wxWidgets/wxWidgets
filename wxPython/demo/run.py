@@ -21,7 +21,7 @@ import wx                  # This module uses the new wx namespace
 import sys, os
 
 # stuff for debugging
-print "wx.VERSION_STRING = %s (%s)" % (wx.VERSION_STRING, wx.USE_UNICODE and 'unicode' or 'ansi')
+print "wx.version:", wx.version()
 print "pid:", os.getpid()
 ##raw_input("Press Enter...")
 
