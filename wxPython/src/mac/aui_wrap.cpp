@@ -13236,6 +13236,7 @@ SWIGINTERN PyObject *_wrap_AuiTabArt_GetBestTabCtrlSize(PyObject *SWIGUNUSEDPARM
   wxAuiTabArt *arg1 = (wxAuiTabArt *) 0 ;
   wxWindow *arg2 = (wxWindow *) 0 ;
   wxAuiNotebookPageArray *arg3 = 0 ;
+  wxSize *arg4 = 0 ;
   int result;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -13243,14 +13244,16 @@ SWIGINTERN PyObject *_wrap_AuiTabArt_GetBestTabCtrlSize(PyObject *SWIGUNUSEDPARM
   int res2 = 0 ;
   void *argp3 = 0 ;
   int res3 = 0 ;
+  wxSize temp4 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "wnd",(char *) "pages", NULL 
+    (char *) "self",(char *) "wnd",(char *) "pages",(char *) "required_bmp_size", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:AuiTabArt_GetBestTabCtrlSize",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:AuiTabArt_GetBestTabCtrlSize",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAuiTabArt, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AuiTabArt_GetBestTabCtrlSize" "', expected argument " "1"" of type '" "wxAuiTabArt *""'"); 
@@ -13270,8 +13273,12 @@ SWIGINTERN PyObject *_wrap_AuiTabArt_GetBestTabCtrlSize(PyObject *SWIGUNUSEDPARM
   }
   arg3 = reinterpret_cast< wxAuiNotebookPageArray * >(argp3);
   {
+    arg4 = &temp4;
+    if ( ! wxSize_helper(obj3, &arg4)) SWIG_fail;
+  }
+  {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (int)(arg1)->GetBestTabCtrlSize(arg2,*arg3);
+    result = (int)(arg1)->GetBestTabCtrlSize(arg2,*arg3,(wxSize const &)*arg4);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -15539,6 +15546,80 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_AuiNotebook_SetUniformBitmapSize(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAuiNotebook *arg1 = (wxAuiNotebook *) 0 ;
+  wxSize *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  wxSize temp2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "size", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:AuiNotebook_SetUniformBitmapSize",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAuiNotebook, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AuiNotebook_SetUniformBitmapSize" "', expected argument " "1"" of type '" "wxAuiNotebook *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAuiNotebook * >(argp1);
+  {
+    arg2 = &temp2;
+    if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetUniformBitmapSize((wxSize const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AuiNotebook_SetTabCtrlHeight(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAuiNotebook *arg1 = (wxAuiNotebook *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "height", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:AuiNotebook_SetTabCtrlHeight",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAuiNotebook, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AuiNotebook_SetTabCtrlHeight" "', expected argument " "1"" of type '" "wxAuiNotebook *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAuiNotebook * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AuiNotebook_SetTabCtrlHeight" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetTabCtrlHeight(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *AuiNotebook_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
@@ -15923,6 +16004,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"AuiNotebook_GetPageIndex", (PyCFunction) _wrap_AuiNotebook_GetPageIndex, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"AuiNotebook_SetArtProvider", (PyCFunction) _wrap_AuiNotebook_SetArtProvider, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"AuiNotebook_GetArtProvider", (PyCFunction)_wrap_AuiNotebook_GetArtProvider, METH_O, NULL},
+	 { (char *)"AuiNotebook_SetUniformBitmapSize", (PyCFunction) _wrap_AuiNotebook_SetUniformBitmapSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AuiNotebook_SetTabCtrlHeight", (PyCFunction) _wrap_AuiNotebook_SetTabCtrlHeight, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"AuiNotebook_swigregister", AuiNotebook_swigregister, METH_VARARGS, NULL},
 	 { (char *)"AuiNotebook_swiginit", AuiNotebook_swiginit, METH_VARARGS, NULL},
 	 { (char *)"PyAuiDockArt_swigregister", PyAuiDockArt_swigregister, METH_VARARGS, NULL},

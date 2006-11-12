@@ -1139,7 +1139,7 @@ class AuiTabArt(object):
         return _aui.AuiTabArt_ShowWindowList(*args, **kwargs)
 
     def GetBestTabCtrlSize(*args, **kwargs):
-        """GetBestTabCtrlSize(self, Window wnd, wxAuiNotebookPageArray pages) -> int"""
+        """GetBestTabCtrlSize(self, Window wnd, wxAuiNotebookPageArray pages, Size required_bmp_size) -> int"""
         return _aui.AuiTabArt_GetBestTabCtrlSize(*args, **kwargs)
 
 _aui.AuiTabArt_swigregister(AuiTabArt)
@@ -1387,6 +1387,14 @@ class AuiNotebook(_core.Control):
     def GetArtProvider(*args, **kwargs):
         """GetArtProvider(self) -> AuiTabArt"""
         return _aui.AuiNotebook_GetArtProvider(*args, **kwargs)
+
+    def SetUniformBitmapSize(*args, **kwargs):
+        """SetUniformBitmapSize(self, Size size)"""
+        return _aui.AuiNotebook_SetUniformBitmapSize(*args, **kwargs)
+
+    def SetTabCtrlHeight(*args, **kwargs):
+        """SetTabCtrlHeight(self, int height)"""
+        return _aui.AuiNotebook_SetTabCtrlHeight(*args, **kwargs)
 
     PageCount = property(GetPageCount,doc="See `GetPageCount`") 
     Selection = property(GetSelection,SetSelection,doc="See `GetSelection` and `SetSelection`") 
