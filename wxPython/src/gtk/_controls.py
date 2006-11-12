@@ -7097,6 +7097,8 @@ class CollapsiblePane(_core.Control):
         """
         return _controls_.CollapsiblePane_GetPane(*args, **kwargs)
 
+    Expanded = property(IsExpanded) 
+    Collapsed = property(IsCollapsed) 
 _controls_.CollapsiblePane_swigregister(CollapsiblePane)
 CollapsiblePaneNameStr = cvar.CollapsiblePaneNameStr
 
@@ -7127,6 +7129,7 @@ class CollapsiblePaneEvent(_core.CommandEvent):
         """SetCollapsed(self, bool c)"""
         return _controls_.CollapsiblePaneEvent_SetCollapsed(*args, **kwargs)
 
+    Collapsed = property(GetCollapsed,SetCollapsed) 
 _controls_.CollapsiblePaneEvent_swigregister(CollapsiblePaneEvent)
 
 

@@ -2084,6 +2084,41 @@ def PreHtmlListBox(*args, **kwargs):
     val = _windows_.new_PreHtmlListBox(*args, **kwargs)
     return val
 
+HLB_DEFAULT_STYLE = _windows_.HLB_DEFAULT_STYLE
+HLB_MULTIPLE = _windows_.HLB_MULTIPLE
+class SimpleHtmlListBox(HtmlListBox,_core.ItemContainer):
+    """Proxy of C++ SimpleHtmlListBox class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, wxArrayString choices=wxPyEmptyStringArray, 
+            long style=HLB_DEFAULT_STYLE, 
+            Validator validator=DefaultValidator, 
+            String name=SimpleHtmlListBoxNameStr) -> SimpleHtmlListBox
+        """
+        _windows_.SimpleHtmlListBox_swiginit(self,_windows_.new_SimpleHtmlListBox(*args, **kwargs))
+        self._setOORInfo(self)
+
+    def Create(*args, **kwargs):
+        """
+        Create(self, Window parent, int id=-1, Point pos=DefaultPosition, 
+            Size size=DefaultSize, wxArrayString choices=wxPyEmptyStringArray, 
+            long style=HLB_DEFAULT_STYLE, 
+            Validator validator=DefaultValidator, 
+            String name=SimpleHtmlListBoxNameStr) -> bool
+        """
+        return _windows_.SimpleHtmlListBox_Create(*args, **kwargs)
+
+_windows_.SimpleHtmlListBox_swigregister(SimpleHtmlListBox)
+SimpleHtmlListBoxNameStr = cvar.SimpleHtmlListBoxNameStr
+
+def PreSimpleHtmlListBox(*args, **kwargs):
+    """PreSimpleHtmlListBox() -> SimpleHtmlListBox"""
+    val = _windows_.new_PreSimpleHtmlListBox(*args, **kwargs)
+    return val
+
 #---------------------------------------------------------------------------
 
 class TaskBarIcon(_core.EvtHandler):

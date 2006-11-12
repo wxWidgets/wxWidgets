@@ -13662,6 +13662,24 @@ if RELEASE_VERSION != _core_.RELEASE_VERSION:
     import warnings
     warnings.warn("wxPython/wxWidgets release number mismatch")
 
+
+def version():
+    """Returns a string containing version and port info"""
+    ctype = wx.USE_UNICODE and 'unicode' or 'ansi'
+    if wx.Platform == '__WXMSW__':
+        port = 'msw'
+    elif wx.Platform == '__WXMAC__':
+        port = 'mac'
+    elif wx.Platform == '__WXGTK__':
+        port = 'gtk'
+        if 'gtk2' in wx.PlatformInfo:
+            port = 'gtk2'
+    else:
+        port = '?'
+
+    return "%s (%s-%s)" % (wx.VERSION_STRING, port, ctype)
+                       
+    
 #----------------------------------------------------------------------------
 
 # Set wxPython's default string<-->unicode conversion encoding from
