@@ -617,6 +617,48 @@ public:
 
 //---------------------------------------------------------------------------
 
+%{
+    const wxArrayString wxPyEmptyStringArray;
+%}
+MAKE_CONST_WXSTRING(SimpleHtmlListBoxNameStr);
+
+
+enum {
+    wxHLB_DEFAULT_STYLE,
+    wxHLB_MULTIPLE
+};
+
+MustHaveApp(wxSimpleHtmlListBox);
+
+class wxSimpleHtmlListBox : public wxPyHtmlListBox,
+                            public wxItemContainer
+{
+public:
+    %pythonAppend wxSimpleHtmlListBox         "self._setOORInfo(self)";
+    %pythonAppend wxSimpleHtmlListBox()       "";
+        
+    wxSimpleHtmlListBox(wxWindow *parent,
+                        wxWindowID id = -1,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        const wxArrayString& choices = wxPyEmptyStringArray,
+                        long style = wxHLB_DEFAULT_STYLE,
+                        const wxValidator& validator = wxDefaultValidator,
+                        const wxString& name = wxPySimpleHtmlListBoxNameStr);
+    %RenameCtor(PreSimpleHtmlListBox, wxSimpleHtmlListBox());
+
+    bool Create(wxWindow *parent,
+                wxWindowID id = -1,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size= wxDefaultSize,
+                const wxArrayString& choices = wxPyEmptyStringArray,
+                long style = wxHLB_DEFAULT_STYLE,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxPySimpleHtmlListBoxNameStr);
+};
+
+//---------------------------------------------------------------------------
+
 %init %{
     // Map renamed classes back to their common name for OOR
     wxPyPtrTypeMap_Add("wxHtmlListBox",     "wxPyHtmlListBox");
