@@ -88,27 +88,7 @@
     #define TEST_WCHAR
     #define TEST_ZIP
 #else // #if TEST_ALL
-<<<<<<< console.cpp
-<<<<<<< console.cpp
-<<<<<<< console.cpp
-<<<<<<< console.cpp
-<<<<<<< console.cpp
-    #define TEST_MIME
-=======
     #define TEST_STDPATHS
->>>>>>> 1.197
-=======
-    #define TEST_MODULE
->>>>>>> 1.199
-=======
-    #define TEST_INFO_FUNCTIONS
->>>>>>> 1.201
-=======
-    #define TEST_STDPATHS
->>>>>>> 1.203
-=======
-    #define TEST_FILE
->>>>>>> 1.204
 #endif
 
 // some tests are interactive, define this to run them
