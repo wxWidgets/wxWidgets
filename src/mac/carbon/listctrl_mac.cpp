@@ -186,7 +186,7 @@ public:
     virtual bool HasColumnInfo( unsigned int column );
 
     virtual void SetColumnTextValue( unsigned int column, const wxString& text );
-    virtual const wxString& GetColumnTextValue( unsigned int column );
+    virtual wxString GetColumnTextValue( unsigned int column );
 
     virtual int GetColumnImageValue( unsigned int column );
     virtual void SetColumnImageValue( unsigned int column, int imageIndex );
@@ -635,7 +635,7 @@ bool wxListCtrl::Create(wxWindow *parent,
         paneStyle &= ~wxSTATIC_BORDER;
         if ( !wxWindow::Create(parent, id, pos, size, paneStyle | wxNO_BORDER, name) )
             return false;
-        
+
         // since the generic control is a child, make sure we position it at 0, 0
         m_genericImpl = new wxGenericListCtrlHook(this, id, wxPoint(0, 0), size, style, validator, name);
         m_genericImpl->PushEventHandler( new wxMacListCtrlEventDelegate( this, GetId() ) );
@@ -947,10 +947,10 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
             {
                 wxListItem colInfo;
                 GetColumn(col, colInfo);
-             
+
                 colInfo.SetWidth(width);
                 SetColumn(col, colInfo);
-            
+
                 m_dbImpl->SetColumnWidth(col, mywidth);
             }
         }
@@ -958,7 +958,7 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
         {
             wxListItem colInfo;
             GetColumn(col, colInfo);
-         
+
             colInfo.SetWidth(width);
             SetColumn(col, colInfo);
             m_dbImpl->SetColumnWidth(col, mywidth);
@@ -1718,7 +1718,7 @@ wxListCtrl::HitTest(const wxPoint& point, int& flags, long *ptrSubItem) const
 
         if ( y < 0 )
             return -1;
-            
+
         int row = y / rowHeight;
         DataBrowserItemID id;
         m_dbImpl->GetItemID( (DataBrowserTableViewRowIndex) row, &id );
@@ -2375,7 +2375,7 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
                       enclosingRect.bottom - enclosingRect.top);
 
     active = IsControlActive(GetControlRef());
-    
+
     // don't paint the background over the vertical rule line
     if ( list->GetWindowStyleFlag() & wxLC_VRULES )
     {
@@ -2722,7 +2722,7 @@ Boolean wxMacDataBrowserListCtrlControl::CompareItems(DataBrowserItemID itemOneI
         }
         else
         {
-        
+
             long itemNum = (long)itemOneID;
             long otherItemNum = (long)itemTwoID;
             itemText = list->OnGetItemText( itemNum-1, colId );
@@ -2792,7 +2792,7 @@ void wxMacDataBrowserListCtrlControl::MacGetColumnInfo( unsigned int row, unsign
     //if (item)
     {
         wxMacListCtrlItem* listItem = dynamic_cast<wxMacListCtrlItem*>(dataItem);
-        
+
         if (!listItem->HasColumnInfo( column ))
             return;
 
@@ -2845,7 +2845,7 @@ int wxMacListCtrlItem::GetColumnImageValue( unsigned int column )
 {
     if ( HasColumnInfo(column) )
         return GetColumnInfo(column)->GetImage();
-    
+
     return -1;
 }
 
@@ -2855,14 +2855,14 @@ void wxMacListCtrlItem::SetColumnImageValue( unsigned int column, int imageIndex
         GetColumnInfo(column)->SetImage(imageIndex);
 }
 
-const wxString& wxMacListCtrlItem::GetColumnTextValue( unsigned int column )
+wxString wxMacListCtrlItem::GetColumnTextValue( unsigned int column )
 {
     if ( column == 0 )
         return GetLabel();
 
-    if ( HasColumnInfo(column) ) 
+    if ( HasColumnInfo(column) )
         return GetColumnInfo(column)->GetText();
-    
+
     return wxEmptyString;
 }
 
