@@ -31,7 +31,7 @@ Changes in behaviour which may result in compilation errors
   and not the object data. The code using it will have to be updated:
   * If the object was compared with wxNullXXX, use IsOk() method instead
   * If valid object need to be compared, use IsSameAs() to reproduce the old
-    behaviour or change the code to avoid comparing bitmaps &c
+    behaviour or change the code to avoid comparing bitmaps &c.
 - wxFontData::GetColour() now returns a const colour.
 - wxDC objects can't be created directly now (this never worked, now it doesn't
   even compile).
@@ -64,15 +64,24 @@ Deprecated methods since 2.6.x and their replacements
 
 - wxGetWorkingDirectory() deprecated in favour of wxGetCwd().
 - wxDC::BeginDrawing() and wxDC::EndDrawing() deprecated, don't use them.
-- wxWindowBase::GetBestFittingSize --> wxWindowBase::GetEffectiveMinSize
-- wxWindowBase::SetBestFittingSize --> wxWindowBase::SetInitialSize
-
+- wxWindowBase::GetBestFittingSize --> wxWindowBase::GetEffectiveMinSize.
+- wxWindowBase::SetBestFittingSize --> wxWindowBase::SetInitialSize.
 
 
 Major new features in 2.8 release
 ---------------------------------
 
 - New AUI library supporting docking windows and much more.
+- New rich text control library implementing a generic wxRichTextCtrl,
+  using only the wxWidgets API. Also includes formatting dialogs, conversion
+  to HTML, and printing classes.
+- New wxComboCtrl class giving the ability to create custom, graphical
+  comboboxes. Associated classes include wxOwnerDrawnComboBox, wxComboPopup
+  and wxBitmapComboBox.
+- Further functionality including wxAnimationCtrl (moved from contrib/src/anim
+  and enhanced), wxHtmlSimpleListBox, wxHyperlinkCtrl, wxColourPickerCtrl,
+  wxDirPickerCtrl, wxFilePickerCtrl, wxFontPickerCtrl, wxCollapsiblePane,
+  wxAboutBox, wxTreebook, tar streams.
 
 
 2.8.0
@@ -81,11 +90,11 @@ Major new features in 2.8 release
 All:
 
 - wxArrayString::Alloc() now works as reserve() and doesn't clear array contents
-- Fixed long standing bug in wxFileConfig groups renaming (Antti Koivisto)
+- Fixed long standing bug in wxFileConfig groups renaming (Antti Koivisto).
 
 wxMSW:
 
-- Fixed version script problems when using configure with cygwin/mingw32
+- Fixed version script problems when using configure with cygwin/mingw32.
 
 2.7.2
 -----
@@ -96,7 +105,7 @@ All:
 - Added GetTempDir() to wxFileName and wxStandardPaths.
 - Added wxTar streams.
 - Added wxFilterFSHandler and wxArchiveFSHandler.
-- Added wxString::ToLongLong() and ToULongLong()
+- Added wxString::ToLongLong() and ToULongLong().
 
 All (GUI): 
 
@@ -113,10 +122,10 @@ All (GUI):
 - Many enhancements to wxRichTextCtrl including URL support,
   formatting and symbol dialogs, print/preview, and better list
   formatting.
-- Support for loading TGA files added (Seth Jackson)
-- Added wxTB_RIGHT style for right-aligned toolbars (Igor Korot)
+- Support for loading TGA files added (Seth Jackson).
+- Added wxTB_RIGHT style for right-aligned toolbars (Igor Korot).
 - wxHtmlWindow now generates events on link clicks (Francesco Montorsi).
-- wxHtmlWindow now also generates wxEVT_COMMAND_TEXT_COPY event
+- wxHtmlWindow now also generates wxEVT_COMMAND_TEXT_COPY event.
 
 Unix Ports:
 
@@ -140,8 +149,8 @@ All:
 - Added wxDir::FindFirst() (Francesco Montorsi).
 - Added wxPlatformInfo class (Francesco Montorsi).
 - Added wxLocale::IsAvailable() (Creighton).
-- Added Malay translations (Mahrazi Mohd Kamal)
-- Added reference counting for wxVariant
+- Added Malay translations (Mahrazi Mohd Kamal).
+- Added reference counting for wxVariant.
 - For consistency, all classes having Ok() method now also have IsOk() one, use
   of the latter form is preferred although the former hasn't been deprecated yet.
 - Added wxFileName::Is(Dir|File)(Writ|Read|Execut)able() (Francesco Montorsi).
