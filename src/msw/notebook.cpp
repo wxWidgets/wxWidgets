@@ -293,7 +293,11 @@ bool wxNotebook::Create(wxWindow *parent,
     }
 #endif //wxUSE_UXTHEME
 
+#if defined(__WINE__) && wxUSE_UNICODE
+    LPCTSTR className = L"SysTabControl32";
+#else
     LPCTSTR className = WC_TABCONTROL;
+#endif
 
 #if USE_NOTEBOOK_ANTIFLICKER
     // SysTabCtl32 class has natively CS_HREDRAW and CS_VREDRAW enabled and it
