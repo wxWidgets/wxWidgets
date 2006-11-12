@@ -860,9 +860,6 @@ bool wxListCtrl::SetColumn(int col, wxListItem& item)
             if (mask & wxLIST_MASK_WIDTH)
                 listItem.SetWidth(item.GetWidth());
         }
-        
-        if (mask & wxLIST_MASK_WIDTH)
-            SetColumnWidth( col, item.GetWidth() )
 
         // change the appearance in the databrowser.
         DataBrowserListViewHeaderDesc columnDesc;
