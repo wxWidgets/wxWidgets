@@ -545,7 +545,7 @@ void wxAuiMDIChildFrame::SetIcon(const wxIcon& icon)
     
     wxBitmap bmp;
     bmp.CopyFromIcon(m_icon);
-    
+        
     wxAuiMDIClientWindow* pClientWindow = pParentFrame->GetClientWindow();
     if (pClientWindow != NULL)
     {
@@ -696,6 +696,11 @@ wxAuiMDIClientWindow::~wxAuiMDIClientWindow()
 bool wxAuiMDIClientWindow::CreateClient(wxAuiMDIParentFrame* parent, long style)
 {
     SetWindowStyleFlag(style);
+
+    wxSize caption_icon_size = 
+            wxSize(wxSystemSettings::GetMetric(wxSYS_SMALLICON_X),
+                   wxSystemSettings::GetMetric(wxSYS_SMALLICON_Y));
+    SetUniformBitmapSize(caption_icon_size);
 
     if (!wxAuiNotebook::Create(parent,
                                wxID_ANY,

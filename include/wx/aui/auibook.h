@@ -192,7 +192,8 @@ public:
                          int active_idx) = 0;
     
     virtual int GetBestTabCtrlSize(wxWindow* wnd,
-                                   wxAuiNotebookPageArray& pages) = 0;    
+                                   wxAuiNotebookPageArray& pages,
+                                   const wxSize& required_bmp_size) = 0;    
 };
 
 
@@ -256,7 +257,8 @@ public:
                  int active_idx);
 
     int GetBestTabCtrlSize(wxWindow* wnd,
-                 wxAuiNotebookPageArray& pages);  
+                 wxAuiNotebookPageArray& pages,
+                 const wxSize& required_bmp_size);  
 
 protected:
 
@@ -343,7 +345,8 @@ public:
                  int active_idx);
 
     int GetBestTabCtrlSize(wxWindow* wnd,
-                 wxAuiNotebookPageArray& pages);  
+                 wxAuiNotebookPageArray& pages,
+                 const wxSize& required_bmp_size);  
 
 protected:
 
@@ -526,12 +529,15 @@ public:
 
     void SetArtProvider(wxAuiTabArt* art);
     wxAuiTabArt* GetArtProvider() const;
+    
+    virtual void SetUniformBitmapSize(const wxSize& size);
+    virtual void SetTabCtrlHeight(int height);
 
 protected:
 
     // these can be overridden
-    virtual void SetTabCtrlHeight(int height);
     virtual int CalculateTabCtrlHeight();
+    virtual wxSize CalculateNewSplitSize();
     
 protected:
 
@@ -542,9 +548,9 @@ protected:
     wxAuiTabCtrl* GetActiveTabCtrl();
     bool FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx);
     void RemoveEmptyTabFrames();
-
+    void UpdateHintWindowSize();
+    
 protected:
-
 
     void OnChildFocus(wxChildFocusEvent& evt);
     void OnRender(wxAuiManagerEvent& evt);
@@ -564,10 +570,11 @@ protected:
     int m_tab_id_counter;
     wxWindow* m_dummy_wnd;
 
+    wxSize m_requested_bmp_size;
     wxFont m_selected_font;
     wxFont m_normal_font;
     int m_tab_ctrl_height;
-    
+        
     int m_last_drag_x;
     unsigned int m_flags;
 

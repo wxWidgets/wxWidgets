@@ -733,16 +733,34 @@ int wxAuiDefaultTabArt::ShowWindowList(wxWindow* wnd,
 }
 
 int wxAuiDefaultTabArt::GetBestTabCtrlSize(wxWindow* wnd,
-                                           wxAuiNotebookPageArray& pages)
+                                           wxAuiNotebookPageArray& pages,
+                                           const wxSize& required_bmp_size)
 {
     wxClientDC dc(wnd);
     dc.SetFont(m_measuring_font);
+
+    // sometimes a standard bitmap size needs to be enforced, especially
+    // if some tabs have bitmaps and others don't.  This is important because
+    // it prevents the tab control from resizing when tabs are added.
+    wxBitmap measure_bmp;
+    if (required_bmp_size.IsFullySpecified())
+    {
+        measure_bmp.Create(required_bmp_size.x,
+                           required_bmp_size.y);
+    }
+    
 
     int max_y = 0;
     size_t i, page_count = pages.GetCount();
     for (i = 0; i < page_count; ++i)
     {
         wxAuiNotebookPage& page = pages.Item(i);
+
+        wxBitmap bmp;
+        if (measure_bmp.IsOk())
+            bmp = measure_bmp;
+             else
+            bmp = page.bitmap;
 
         // we don't use the caption text because we don't
         // want tab heights to be different in the case
@@ -752,10 +770,11 @@ int wxAuiDefaultTabArt::GetBestTabCtrlSize(wxWindow* wnd,
         wxSize s = GetTabSize(dc,
                               wnd,
                               wxT("ABCDEFGHIj"),
-                              page.bitmap,
+                              bmp,
                               true,
                               wxAUI_BUTTON_STATE_HIDDEN,
                               &x_ext);
+                              
         max_y = wxMax(max_y, s.y);
     }
 
@@ -1176,7 +1195,8 @@ int wxAuiSimpleTabArt::ShowWindowList(wxWindow* wnd,
 }
 
 int wxAuiSimpleTabArt::GetBestTabCtrlSize(wxWindow* wnd,
-                                          wxAuiNotebookPageArray& WXUNUSED(pages))
+                                          wxAuiNotebookPageArray& WXUNUSED(pages),
+                                          const wxSize& WXUNUSED(required_bmp_size))
 {
     wxClientDC dc(wnd);
     dc.SetFont(m_measuring_font);
@@ -2332,7 +2352,7 @@ public:
 
 BEGIN_EVENT_TABLE(wxAuiNotebook, wxControl)
     //EVT_ERASE_BACKGROUND(wxAuiNotebook::OnEraseBackground)
-    //EVT_SIZE(wxAuiNotebook::OnSize)
+    EVT_SIZE(wxAuiNotebook::OnSize)
     //EVT_LEFT_DOWN(wxAuiNotebook::OnLeftDown)
     EVT_CHILD_FOCUS(wxAuiNotebook::OnChildFocus)
     EVT_COMMAND_RANGE(10000, 10100,
@@ -2358,6 +2378,7 @@ wxAuiNotebook::wxAuiNotebook()
     m_tab_id_counter = 10000;
     m_dummy_wnd = NULL;
     m_tab_ctrl_height = 20;
+    m_requested_bmp_size = wxDefaultSize;
 }
 
 wxAuiNotebook::wxAuiNotebook(wxWindow *parent,
@@ -2366,6 +2387,8 @@ wxAuiNotebook::wxAuiNotebook(wxWindow *parent,
                              const wxSize& size,
                              long style) : wxControl(parent, id, pos, size, style)
 {
+    m_dummy_wnd = NULL;
+    m_requested_bmp_size = wxDefaultSize;
     InitNotebook(style);
 }
 
@@ -2404,9 +2427,10 @@ void wxAuiNotebook::InitNotebook(long style)
     m_dummy_wnd->Show(false);
 
     m_mgr.SetManagedWindow(this);
+    m_mgr.SetFlags(wxAUI_MGR_DEFAULT | (1 << 28) /*wxAUI_MGR_NO_DOCK_SIZE_LIMIT*/);
 
     m_mgr.AddPane(m_dummy_wnd,
-              wxAuiPaneInfo().Name(wxT("dummy")).Bottom().Show(false));
+              wxAuiPaneInfo().Name(wxT("dummy")).Bottom().CaptionVisible(false).Show(false));
 
     m_mgr.Update();
 }
@@ -2420,6 +2444,14 @@ void wxAuiNotebook::SetArtProvider(wxAuiTabArt* art)
 {
     m_tabs.SetArtProvider(art);
 
+    SetTabCtrlHeight(CalculateTabCtrlHeight());
+}
+
+void wxAuiNotebook::SetUniformBitmapSize(const wxSize& size)
+{
+    m_requested_bmp_size = size;
+    
+    // if window is already initialized, recalculate the tab height
     SetTabCtrlHeight(CalculateTabCtrlHeight());
 }
 
@@ -2449,12 +2481,64 @@ void wxAuiNotebook::SetTabCtrlHeight(int height)
     }
 }
 
+void wxAuiNotebook::UpdateHintWindowSize()
+{
+    wxSize size = CalculateNewSplitSize();
+    
+    // the placeholder hint window should be set to this size
+    wxAuiPaneInfo& info = m_mgr.GetPane(wxT("dummy"));
+    if (info.IsOk())
+    {
+        info.MinSize(size);
+        info.BestSize(size);
+        m_dummy_wnd->SetSize(size);
+    }
+}
+
+
+// calculates the size of the new split
+wxSize wxAuiNotebook::CalculateNewSplitSize()
+{
+    // count number of tab controls
+    int tab_ctrl_count = 0;
+    wxAuiPaneInfoArray& all_panes = m_mgr.GetAllPanes();
+    size_t i, pane_count = all_panes.GetCount();
+    for (i = 0; i < pane_count; ++i)
+    {
+        wxAuiPaneInfo& pane = all_panes.Item(i);
+        if (pane.name == wxT("dummy"))
+            continue;
+        tab_ctrl_count++;
+    }
+
+    wxSize new_split_size;
+    
+    // if there is only one tab control, the first split
+    // should happen around the middle
+    if (tab_ctrl_count < 2)
+    {
+        new_split_size = GetClientSize();
+        new_split_size.x /= 2;
+        new_split_size.y /= 2;
+    }
+     else
+    {
+        // this is in place of a more complicated calculation
+        // that needs to be implemented
+        new_split_size = wxSize(180,180);
+    }
+    
+    return new_split_size;
+}
+
 int wxAuiNotebook::CalculateTabCtrlHeight()
 {
     // find out new best tab height
     wxAuiTabArt* art = m_tabs.GetArtProvider();
 
-    return art->GetBestTabCtrlSize(this, m_tabs.GetPages());
+    return art->GetBestTabCtrlSize(this,
+                                   m_tabs.GetPages(),
+                                   m_requested_bmp_size);
 }
 
 
@@ -2860,8 +2944,11 @@ void wxAuiNotebook::OnEraseBackground(wxEraseEvent&)
 {
 }
 
-void wxAuiNotebook::OnSize(wxSizeEvent&)
+void wxAuiNotebook::OnSize(wxSizeEvent& evt)
 {
+    UpdateHintWindowSize();
+    
+    evt.Skip();
 }
 
 void wxAuiNotebook::OnTabClicked(wxCommandEvent& command_evt)
@@ -3159,9 +3246,9 @@ void wxAuiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
                 return;
             }
 
-
             // If there is no tabframe at all, create one
             wxTabFrame* new_tabs = new wxTabFrame;
+            new_tabs->m_rect = wxRect(wxPoint(0,0), CalculateNewSplitSize());
             new_tabs->SetTabCtrlHeight(m_tab_ctrl_height);
             new_tabs->m_tabs = new wxAuiTabCtrl(this,
                                                 m_tab_id_counter++,
@@ -3208,6 +3295,8 @@ void wxAuiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
         dest_tabs->Refresh();
 
         SetSelection(m_tabs.GetIdxFromWindow(page_info.window));
+        
+        UpdateHintWindowSize();
     }
 }
 
