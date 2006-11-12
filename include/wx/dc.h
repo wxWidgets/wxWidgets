@@ -446,7 +446,7 @@ public:
                                         wxCoord *width,
                                         wxCoord *height,
                                         wxCoord *heightLine = NULL,
-                                        wxFont *font = NULL);
+                                        wxFont *font = NULL) const;
 
     // Measure cumulative width of text after each character
     bool GetPartialTextExtents(const wxString& text, wxArrayInt& widths) const
