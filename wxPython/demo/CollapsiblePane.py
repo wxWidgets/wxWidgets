@@ -39,8 +39,13 @@ class TestPanel(wx.Panel):
         
 
     def OnPaneChanged(self, evt=None):
-        self.log.write('wx.EVT_COLLAPSIBLEPANE_CHANGED')
+        if evt:
+            self.log.write('wx.EVT_COLLAPSIBLEPANE_CHANGED: %s' % evt.Collapsed)
+
+        # redo the layout
         self.Layout()
+
+        # and also change the labels
         if self.cp.IsExpanded():
             self.cp.SetLabel(label2)
             self.btn.SetLabel(btnlbl2)
@@ -65,8 +70,6 @@ class TestPanel(wx.Panel):
         zip   = wx.TextCtrl(pane, -1, "", size=(70,-1));
         
         addrSizer = wx.FlexGridSizer(cols=2, hgap=5, vgap=5)
-        addrSizer.Add((10,10))
-        addrSizer.Add((10,10))
         addrSizer.AddGrowableCol(1)
         addrSizer.Add(nameLbl, 0, 
                 wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
@@ -74,7 +77,7 @@ class TestPanel(wx.Panel):
         addrSizer.Add(addrLbl, 0,
                 wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
         addrSizer.Add(addr1, 0, wx.EXPAND)
-        addrSizer.Add((10,10)) 
+        addrSizer.Add((5,5)) 
         addrSizer.Add(addr2, 0, wx.EXPAND)
 
         addrSizer.Add(cstLbl, 0,
@@ -86,7 +89,9 @@ class TestPanel(wx.Panel):
         cstSizer.Add(zip)
         addrSizer.Add(cstSizer, 0, wx.EXPAND)
 
-        pane.SetSizer(addrSizer)
+        border = wx.BoxSizer()
+        border.Add(addrSizer, 1, wx.EXPAND|wx.ALL, 5)
+        pane.SetSizer(border)
 
 
 
