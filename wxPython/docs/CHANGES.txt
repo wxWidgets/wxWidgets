@@ -6,9 +6,11 @@ Recent Changes for wxPython
 -------
 *
 
-Lots of fixes and updates to AUI classes.
+Lots of fixes and updates to the AUI classes.
 
-Added wx.CollapsiblePane.
+Added wx.CollapsiblePane.  On wxGTK it uses a native expander widget,
+on the other platforms a regular button is used to control the
+collapsed/expanded state.
 
 
 
