@@ -11,9 +11,6 @@
        {wx}/*.spec
        {wx}/include/wx/version.h
        {wx}/include/msvc/wx/setup.h
-       {wx}/src/makeb32.env
-       {wx}/src/makeg95.env
-       {wx}/src/makevc.env
        {wx}/src/wxvc_dll.dsp
        {wx}/docs/changes.txt
        {wx}/docs/gtk/changes.txt
@@ -34,6 +31,9 @@
 Version: $Id$
 
 $Log$
+Revision 1.8  2006/11/12 20:13:09  VZ
+removed obsolete src/make*.env files
+
 Revision 1.7  2006/11/12 18:55:33  CE
 add places to change the version for distribution
 
