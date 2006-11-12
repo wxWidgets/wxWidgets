@@ -555,8 +555,8 @@ void wxLogStderr::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
     TimeStamp(&str);
     str << szString;
 
-    fputs(str.mb_str(), m_fp);
-    fputc(_T('\n'), m_fp);
+    wxFputs(str, m_fp);
+    wxFputc(_T('\n'), m_fp);
     fflush(m_fp);
 
     // under GUI systems such as Windows or Mac, programs usually don't have
