@@ -10,8 +10,7 @@
 \section{Archive formats such as zip}\label{wxarc}
 
 The archive classes handle archive formats such as zip, tar, rar and cab.
-Currently only the wxZip classes are included. wxTar classes are under
-development at \urlref{wxCode}{http://wxcode.sf.net}.
+Currently wxZip and wxTar classes are included.
 
 For each archive type, there are the following classes (using zip here
 as an example):
@@ -79,8 +78,7 @@ the end of the entry's data.
 When there are no more entries, GetNextEntry() returns NULL and sets Eof().
 
 \begin{verbatim}
-    // 'smart pointer' type created with wxDEFINE_SCOPED_PTR_TYPE
-    wxZipEntryPtr entry;
+    auto_ptr<wxZipEntry> entry;
 
     wxFFileInputStream in(_T("test.zip"));
     wxZipInputStream zip(in);
@@ -91,15 +89,6 @@ When there are no more entries, GetNextEntry() returns NULL and sets Eof().
         wxString name = entry->GetName();
         // read 'zip' to access the entry's data
     }
-
-\end{verbatim}
-
-The \helpref{smart pointer}{wxscopedptr} type {\em wxZipEntryPtr}
-can be created like this:
-
-\begin{verbatim}
-    #include <wx/ptr_scpd.h>
-    wxDEFINE_SCOPED_PTR_TYPE(wxZipEntry);
 
 \end{verbatim}
 
@@ -125,14 +114,13 @@ be helpful to do this.
 For example to delete all entries matching the pattern "*.txt":
 
 \begin{verbatim}
-    wxFFileInputStreamPtr in(new wxFFileInputStream(_T("test.zip")));
+    auto_ptr<wxFFileInputStream> in(new wxFFileInputStream(_T("test.zip")));
     wxTempFileOutputStream out(_T("test.zip"));
 
     wxZipInputStream inzip(*in);
     wxZipOutputStream outzip(out);
 
-    // 'smart pointer' type created with wxDEFINE_SCOPED_PTR_TYPE
-    wxZipEntryPtr entry;
+    auto_ptr<wxZipEntry> entry;
 
     // transfer any meta-data for the archive as a whole (the zip comment
     // in the case of zip)
@@ -150,16 +138,6 @@ For example to delete all entries matching the pattern "*.txt":
 
     // you can check for success as follows
     bool success = inzip.Eof() && outzip.Close() && out.Commit();
-
-\end{verbatim}
-
-The \helpref{smart pointer}{wxscopedptr} types {\em wxZipEntryPtr}
-and {\em wxFFileInputStreamPtr} can be created like this:
-
-\begin{verbatim}
-    #include <wx/ptr_scpd.h>
-    wxDEFINE_SCOPED_PTR_TYPE(wxZipEntry);
-    wxDEFINE_SCOPED_PTR_TYPE(wxFFileInputStream);
 
 \end{verbatim}
 
@@ -191,8 +169,7 @@ it is better to convert the local name to the archive's internal format
 and search for that:
 
 \begin{verbatim}
-    // 'smart pointer' type created with wxDEFINE_SCOPED_PTR_TYPE
-    wxZipEntryPtr entry;
+    auto_ptr<wxZipEntry> entry;
 
     // convert the local name we are looking for into the internal format
     wxString name = wxZipEntry::GetInternalName(localname);
@@ -279,8 +256,8 @@ entry (e.g. filename)}
 
 In order to able to write generic code it's necessary to be able to create
 instances of the classes without knowing which archive type is being used.
-So there is a class factory for each archive type, derived from
- \helpref{wxArchiveClassFactory}{wxarchiveclassfactory}, which can create
+To allow this there is a class factory for each archive type, derived from
+ \helpref{wxArchiveClassFactory}{wxarchiveclassfactory}, that can create
 the other classes.
 
 For example, given {\it wxArchiveClassFactory* factory}, streams and
@@ -288,51 +265,67 @@ entries can be created like this:
 
 \begin{verbatim}
     // create streams without knowing their type
-    wxArchiveInputStreamPtr  inarc(factory->NewStream(in));
-    wxArchiveOutputStreamPtr outarc(factory->NewStream(out));
+    auto_ptr<wxArchiveInputStream> inarc(factory->NewStream(in));
+    auto_ptr<wxArchiveOutputStream> outarc(factory->NewStream(out));
 
     // create an empty entry object
-    wxArchiveEntryPtr        entry(factory->NewEntry());
+    auto_ptr<wxArchiveEntry> entry(factory->NewEntry());
 
 \end{verbatim}
 
-The \helpref{smart pointer}{wxscopedptr} types {\em wxArchiveInputStreamPtr},
-{\em wxArchiveOutputStreamPtr} and {\em wxArchiveEntryPtr} would need to
-have already have been defined, which could be done like this:
+For the factory itself, the static member
+ \helpref{wxArchiveClassFactory::Find()}{wxarchiveclassfactoryfind}.
+can be used to find a class factory that can handle a given file
+extension or mime type. For example, given {\it filename}:
 
 \begin{verbatim}
-    #include <wx/ptr_scpd.h>
-    wxDEFINE_SCOPED_PTR_TYPE(wxArchiveInputStream);
-    wxDEFINE_SCOPED_PTR_TYPE(wxArchiveOutputStream);
-    wxDEFINE_SCOPED_PTR_TYPE(wxArchiveEntry);
+    const wxArchiveClassFactory *factory;
+    factory = wxArchiveClassFactory::Find(filename, wxSTREAM_FILEEXT);
+
+    if (factory)
+        stream = factory->NewStream(new wxFFileInputStream(filename));
 
 \end{verbatim}
 
-The class factory itself can either be created explicitly:
+{\it Find} does not give away ownership of the returned pointer, so it
+does not need to be deleted.
+
+There are similar class factories for the filter streams that handle the
+compression and decompression of a single stream, such as wxGzipInputStream.
+These can be found using
+ \helpref{wxFilterClassFactory::Find()}{wxfilterclassfactoryfind}.
+
+For example, to list the contents of archive {\it filename}:
 
 \begin{verbatim}
-    wxArchiveClassFactory *factory = new wxZipClassFactory;
+    auto_ptr<wxInputStream> in(new wxFFileInputStream(filename));
 
-\end{verbatim}
+    if (in->IsOk())
+    {
+        // look for a filter handler, e.g. for '.gz'
+        const wxFilterClassFactory *fcf;
+        fcf = wxFilterClassFactory::Find(filename, wxSTREAM_FILEEXT);
+        if (fcf) {
+            in.reset(fcf->NewStream(in.release()));
+            // pop the extension, so if it was '.tar.gz' it is now just '.tar'
+            filename = fcf->PopExtension(filename);
+        }
 
-or using wxWidgets' \helpref{RTTI}{runtimeclassoverview}:
+        // look for a archive handler, e.g. for '.zip' or '.tar'
+        const wxArchiveClassFactory *acf;
+        acf = wxArchiveClassFactory::Find(filename, wxSTREAM_FILEEXT);
+        if (acf) {
+            auto_ptr<wxArchiveInputStream> arc(acf->NewStream(in.release()));
+            auto_ptr<wxArchiveEntry> entry;
 
-\begin{verbatim}
-wxArchiveClassFactory *MakeFactory(const wxString& type)
-{
-    wxString name = _T("wx") + type.Left(1).Upper() +
-                    type.Mid(1).Lower() + _T("ClassFactory");
-
-    wxObject *pObj = wxCreateDynamicObject(name);
-    wxArchiveClassFactory *pcf = wxDynamicCast(pObj, wxArchiveClassFactory);
-
-    if (!pcf) {
-        wxLogError(_T("can't handle '%s' archives"), type.c_str());
-        delete pObj;
+            // list the contents of the archive
+            while ((entry.reset(arc->GetNextEntry())), entry.get() != NULL)
+                std::wcout << entry->GetName().c_str() << "\n";
+        }
+        else {
+            wxLogError(_T("can't handle '%s'"), filename.c_str());
+        }
     }
-
-    return pcf;
-}
 
 \end{verbatim}
 
@@ -414,9 +407,9 @@ required field before writing it with
  \helpref{CopyEntry()}{wxarchiveoutputstreamcopyentry}:
 
 \begin{verbatim}
-    wxArchiveInputStreamPtr  arc(factory->NewStream(in));
-    wxArchiveOutputStreamPtr outarc(factory->NewStream(out));
-    wxArchiveEntryPtr        entry;
+    auto_ptr<wxArchiveInputStream> arc(factory->NewStream(in));
+    auto_ptr<wxArchiveOutputStream> outarc(factory->NewStream(out));
+    auto_ptr<wxArchiveEntry> entry;
 
     outarc->CopyArchiveMetaData(*arc);
 
@@ -452,10 +445,10 @@ then \helpref{SetNotifier()}{wxarchiveentrynotifier} is called before
 CopyEntry():
 
 \begin{verbatim}
-    wxArchiveInputStreamPtr  arc(factory->NewStream(in));
-    wxArchiveOutputStreamPtr outarc(factory->NewStream(out));
-    wxArchiveEntryPtr        entry;
-    MyNotifier               notifier;
+    auto_ptr<wxArchiveInputStream> arc(factory->NewStream(in));
+    auto_ptr<wxArchiveOutputStream> outarc(factory->NewStream(out));
+    auto_ptr<wxArchiveEntry> entry;
+    MyNotifier notifier;
 
     outarc->CopyArchiveMetaData(*arc);
 
