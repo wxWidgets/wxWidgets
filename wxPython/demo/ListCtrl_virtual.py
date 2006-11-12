@@ -90,7 +90,8 @@ class TestVirtualListPanel(wx.Panel):
         self.log = log
         sizer = wx.BoxSizer(wx.VERTICAL)
         
-        if wx.Platform == "__WXMAC__":
+        if wx.Platform == "__WXMAC__" and \
+               hasattr(wx.GetApp().GetTopWindow(), "LoadDemo"):
             self.useNative = wx.CheckBox(self, -1, "Use native listctrl")
             self.useNative.SetValue( 
                 not wx.SystemOptions.GetOptionInt("mac.listctrl.always_use_generic") )
@@ -98,7 +99,7 @@ class TestVirtualListPanel(wx.Panel):
             sizer.Add(self.useNative, 0, wx.ALL | wx.ALIGN_RIGHT, 4)
             
         self.list = TestVirtualList(self, self.log)
-        sizer.Add(self.list, 1, wx.EXPAND | wx.ALL, 4)
+        sizer.Add(self.list, 1, wx.EXPAND)
         
         self.SetSizer(sizer)
         self.SetAutoLayout(True)

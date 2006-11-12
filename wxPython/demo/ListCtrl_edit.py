@@ -89,7 +89,8 @@ class TestListCtrlPanel(wx.Panel):
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         
-        if wx.Platform == "__WXMAC__":
+        if wx.Platform == "__WXMAC__" and \
+               hasattr(wx.GetApp().GetTopWindow(), "LoadDemo"):
             self.useNative = wx.CheckBox(self, -1, "Use native listctrl")
             self.useNative.SetValue( 
                 not wx.SystemOptions.GetOptionInt("mac.listctrl.always_use_generic") )
@@ -102,7 +103,7 @@ class TestListCtrlPanel(wx.Panel):
                                  | wx.LC_SORT_ASCENDING
                                  )
 
-        sizer.Add(self.list, 1, wx.EXPAND | wx.ALL, 4)
+        sizer.Add(self.list, 1, wx.EXPAND)
         self.SetSizer(sizer)
         self.SetAutoLayout(True)
 
