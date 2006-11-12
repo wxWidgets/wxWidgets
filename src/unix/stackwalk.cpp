@@ -222,7 +222,7 @@ int wxStackWalker::InitFrames(wxStackFrame *arr, size_t n, void **addresses, cha
 
     // build the (long) command line for executing addr2line in an optimized way
     // (e.g. use always chars, even in Unicode build: popen() always takes chars)
-    int len = snprintf(g_buf, BUFSIZE, "addr2line -C -f -e \"%s\"", exepath.mb_str());
+    int len = snprintf(g_buf, BUFSIZE, "addr2line -C -f -e \"%s\"", (const char*) exepath.mb_str());
     len = (len <= 0) ? strlen(g_buf) : len;     // in case snprintf() is broken
     for (size_t i=0; i<n; i++)
     {
