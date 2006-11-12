@@ -695,7 +695,7 @@ void wxFrame::PositionToolBar()
                       ,&vTHeight
                      );
 
-    if (pToolBar->GetWindowStyleFlag() & wxTB_HORIZONTAL)
+    if (pToolBar->GetWindowStyleFlag() & wxTB_TOP)
     {
         vWidth = (wxCoord)(vRect.xRight - vRect.xLeft);
         pToolBar->SetSize( vRect.xLeft - vFRect.xLeft
@@ -720,6 +720,22 @@ void wxFrame::PositionToolBar()
                           ,vTHeight
                          );
     }
+    else if (pToolBar->GetWindowStyleFlag() & wxTB_LEFT)
+    {
+        wxCoord                     vSwidth = 0;
+        wxCoord                     vSheight = 0;
+
+        if (m_frameStatusBar)
+            m_frameStatusBar->GetSize( &vSwidth
+                                      ,&vSheight
+                                     );
+        vHeight = (wxCoord)(vRect.yTop - vRect.yBottom);
+        pToolBar->SetSize( vRect.xLeft - vRect.xLeft
+                          ,vPos.y
+                          ,vTWidth
+                          ,vHeight - vSheight
+                         );
+    }
     else
     {
         wxCoord                     vSwidth = 0;
@@ -730,7 +746,7 @@ void wxFrame::PositionToolBar()
                                       ,&vSheight
                                      );
         vHeight = (wxCoord)(vRect.yTop - vRect.yBottom);
-        pToolBar->SetSize( vRect.xLeft - vFRect.xLeft
+        pToolBar->SetSize( vRect.xRight - vFRect.xLeft - vTWidth
                           ,vPos.y
                           ,vTWidth
                           ,vHeight - vSheight
@@ -1108,7 +1124,7 @@ MRESULT EXPENTRY wxFrameMainWndProc( HWND   hWnd,
                 {
                     if(pWnd->m_hWnd && pSWP[i].hwnd == pWnd->m_hWnd)
                     {
-                        if (pWnd->m_frameToolBar && pWnd->m_frameToolBar->GetWindowStyleFlag() & wxTB_HORIZONTAL)
+                        if (pWnd->m_frameToolBar && pWnd->m_frameToolBar->GetWindowStyleFlag() & wxTB_TOP)
                         {
                             pSWP[i].x    = vRectl.xLeft;
                             pSWP[i].y    = vRectl.yBottom + nHeight;
@@ -1122,9 +1138,16 @@ MRESULT EXPENTRY wxFrameMainWndProc( HWND   hWnd,
                             pSWP[i].cx   = vRectl.xRight - vRectl.xLeft;
                             pSWP[i].cy   = vRectl.yTop - vRectl.yBottom - (nHeight + nHeight2);
                          }
-                        else
+                        else if (pWnd->m_frameToolBar && pWnd->m_frameToolBar->GetWindowStyleFlag() & wxTB_LEFT)
                         {
                             pSWP[i].x    = vRectl.xLeft + nWidth;
+                            pSWP[i].y    = vRectl.yBottom + nHeight;
+                            pSWP[i].cx   = vRectl.xRight - (vRectl.xLeft + nWidth);
+                            pSWP[i].cy   = vRectl.yTop - vRectl.yBottom - nHeight;
+                        }
+                        else
+                        {
+                            pSWP[i].x    = vRectl.xLeft;
                             pSWP[i].y    = vRectl.yBottom + nHeight;
                             pSWP[i].cx   = vRectl.xRight - (vRectl.xLeft + nWidth);
                             pSWP[i].cy   = vRectl.yTop - vRectl.yBottom - nHeight;
