@@ -288,7 +288,6 @@ bool wxAnimationCtrl::Create(wxWindow *parent, wxWindowID id,
             const wxAnimation& animation, const wxPoint& pos,
             const wxSize& size, long style, const wxString& name)
 {
-    m_animation = animation;
     m_timer.SetOwner(this);
 
     if (!base_type::Create(parent, id, pos, size, style, wxDefaultValidator, name))
@@ -296,6 +295,9 @@ bool wxAnimationCtrl::Create(wxWindow *parent, wxWindowID id,
 
     // by default we get the same background colour of our parent
     SetBackgroundColour(parent->GetBackgroundColour());
+
+    SetAnimation(animation);
+
     return true;
 }
 
