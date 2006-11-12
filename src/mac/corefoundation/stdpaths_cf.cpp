@@ -151,8 +151,10 @@ wxString wxStandardPathsCF::GetDataDir() const
     return GetFromFunc(CFBundleCopySharedSupportURL);
 }
 
+// TODO: implement this using real CoreFoundation API instead of Carbon API
 wxString wxStandardPathsCF::GetExecutablePath() const
 {
+#ifdef __WXMAC__
     ProcessInfoRec processinfo;
     ProcessSerialNumber procno ;
     FSSpec fsSpec;
@@ -165,6 +167,9 @@ wxString wxStandardPathsCF::GetExecutablePath() const
 
     GetProcessInformation( &procno , &processinfo ) ;
     return wxMacFSSpec2MacFilename(&fsSpec);
+#else
+    return wxStandardPathsBase::GetExecutablePath();
+#endif
 }
 
 wxString wxStandardPathsCF::GetLocalDataDir() const
