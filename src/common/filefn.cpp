@@ -1956,7 +1956,7 @@ wxFileKind wxGetFileKind(FILE *fp)
 #if defined(wxFILEKIND_STUB) || wxONLY_WATCOM_EARLIER_THAN(1,4)
     (void)fp;
     return wxFILE_KIND_DISK;
-#elif defined(__WINDOWS__) && !defined(__CYGWIN__) && !defined(__WATCOMC__)
+#elif defined(__WINDOWS__) && !defined(__CYGWIN__) && !defined(__WATCOMC__) && !defined(__WINE__)
     return fp ? wxGetFileKind(_fileno(fp)) : wxFILE_KIND_UNKNOWN;
 #else
     return fp ? wxGetFileKind(fileno(fp)) : wxFILE_KIND_UNKNOWN;
