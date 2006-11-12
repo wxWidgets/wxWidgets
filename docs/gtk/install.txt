@@ -1,4 +1,4 @@
-wxWidgets 2.7 for GTK+ installation
+wxWidgets 2.8 for GTK+ installation
 -----------------------------------
 
 IMPORTANT NOTE:
@@ -11,7 +11,7 @@ IMPORTANT NOTE:
 
   When sending bug reports tell us what version of wxWidgets you are
   using (including the beta) and what compiler on what system. One
-  example: wxGTK 2.7.0, gcc 3.4.5, Fedora Core 4
+  example: wxGTK 2.8.0, gcc 3.4.5, Fedora Core 4
 
 * The simplest case
 -------------------

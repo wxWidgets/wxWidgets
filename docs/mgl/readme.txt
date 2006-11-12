@@ -1,7 +1,7 @@
 
-  Welcome to wxWidgets/MGL 2.7.2
+  Welcome to wxWidgets/MGL 2.8.0
 
-You have downloaded version 2.7.2 of the MGL port of
+You have downloaded version 2.8.0 of the MGL port of
 the wxWidgets GUI library. This runs on top of SciTech MGL library
 (http://www.scitechsoft.com/) that is available for variety of 
 operating systems and comes with support for embedded devices.

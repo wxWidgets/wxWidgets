@@ -14,7 +14,7 @@ IMPORTANT NOTE:
 
   When sending bug reports tell us what version of wxWidgets you are
   using (including the beta) and what compiler on what system. One
-  example: wxMGL 2.7.0, gcc 2.95.3, Redhat 7.0
+  example: wxMGL 2.8.0, gcc 2.95.3, Redhat 7.0
 
 First steps
 -----------

@@ -1,4 +1,4 @@
-wxWidgets 2.7.2 for X11 installation
+wxWidgets 2.8.0 for X11 installation
 ------------------------------------
 
 IMPORTANT NOTE:
@@ -11,7 +11,7 @@ IMPORTANT NOTE:
 
   When sending bug reports tell us what version of wxWidgets you are 
   using (including the beta) and what compiler on what system. One 
-  example: wxX11 2.7.2, gcc 2.95.4, Redhat 6.2
+  example: wxX11 2.8.0, gcc 2.95.4, Redhat 6.2
 
 First steps
 -----------

@@ -1,7 +1,7 @@
-   Welcome to wxWidgets 2.7.2 for GTK+
+   Welcome to wxWidgets 2.8.0 for GTK+
    -----------------------------------
 
-You have downloaded version 2.7 of the GTK+ port of the 
+You have downloaded version 2.8 of the GTK+ port of the 
 wxWidgets GUI library.
 
 wxWidgets no longer supports GTK 1.0.x (as did some early

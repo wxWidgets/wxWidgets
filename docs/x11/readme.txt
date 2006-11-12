@@ -1,7 +1,7 @@
 
-  Welcome to wxWidgets/X11 2.7.2
+  Welcome to wxWidgets/X11 2.8.0
 
-You have downloaded version 2.7.2 of the X11 port of
+You have downloaded version 2.8.0 of the X11 port of
 the wxWidgets GUI library. This runs on X11 with no
 Motif, Xt, GTK+ or any other standard widget set --
 instead it uses the wxUniversal widgets. The intention
