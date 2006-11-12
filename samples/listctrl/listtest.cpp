@@ -915,6 +915,12 @@ void MyListCtrl::OnListKeyDown(wxListEvent& event)
             {
                 wxListItem info;
                 info.m_itemId = event.GetIndex();
+                if ( info.m_itemId == -1 )
+                {
+                    // no item
+                    break;
+                }
+
                 GetItem(info);
 
                 wxListItemAttr *attr = info.GetAttributes();
