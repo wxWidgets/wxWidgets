@@ -822,6 +822,7 @@ void MyListCtrl::OnEndLabelEdit(wxListEvent& event)
 void MyListCtrl::OnDeleteItem(wxListEvent& event)
 {
     LogEvent(event, _T("OnDeleteItem"));
+    wxLogMessage( wxT("Number of items when delete event is sent: %d"), GetItemCount() );
 }
 
 void MyListCtrl::OnDeleteAllItems(wxListEvent& event)

@@ -697,7 +697,7 @@ public:
 
     // send out a wxListEvent
     void SendNotify( size_t line,
-                     wxEventType command,
+                     wxEventType command, 
                      const wxPoint& point = wxDefaultPosition );
 
     // override base class virtual to reset m_lineHeight when the font changes
@@ -2842,6 +2842,7 @@ void wxListMainWindow::SendNotify( size_t line,
 {
     wxListEvent le( command, GetParent()->GetId() );
     le.SetEventObject( GetParent() );
+    
     le.m_itemIndex = line;
 
     // set only for events which have position
@@ -2852,7 +2853,7 @@ void wxListMainWindow::SendNotify( size_t line,
     // program has it anyhow and if we did it would result in accessing all
     // the lines, even those which are not visible now and this is precisely
     // what we're trying to avoid
-    if ( !IsVirtual() && (command != wxEVT_COMMAND_LIST_DELETE_ITEM) )
+    if ( !IsVirtual() )
     {
         if ( line != (size_t)-1 )
         {
@@ -4332,11 +4333,11 @@ void wxListMainWindow::DeleteItem( long lindex )
         if ( m_current != index || m_current == count - 1 )
             m_current--;
     }
-
+ 
     if ( InReportView() )
     {
-    //  mark the Column Max Width cache as dirty if the items in the line
-    //  we're deleting contain the Max Column Width
+        //  mark the Column Max Width cache as dirty if the items in the line
+        //  we're deleting contain the Max Column Width
         wxListLineData * const line = GetLine(index);
         wxListItemDataList::compatibility_iterator n;
         wxListItemData *itemData;
@@ -4358,6 +4359,8 @@ void wxListMainWindow::DeleteItem( long lindex )
         ResetVisibleLinesRange();
     }
 
+    SendNotify( index, wxEVT_COMMAND_LIST_DELETE_ITEM, wxDefaultPosition );
+
     if ( IsVirtual() )
     {
         m_countVirt--;
@@ -4370,8 +4373,6 @@ void wxListMainWindow::DeleteItem( long lindex )
 
     // we need to refresh the (vert) scrollbar as the number of items changed
     m_dirty = true;
-
-    SendNotify( index, wxEVT_COMMAND_LIST_DELETE_ITEM );
 
     RefreshAfter(index);
 }
