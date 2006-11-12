@@ -18,9 +18,9 @@
        {wx}/docs/changes.txt
        {wx}/docs/gtk/changes.txt
        {wx}/build/bakefiles/wxpresets/presets/wx_win32.bkl
-       {wx}/build/script/wxwidgets.iss - AppVerName
-       {wx}/build/script/wxwidgets.iss - [Icons] section
-
+       {wx}/build/script/win_docs.bat {windows doc and setup file}
+       {wx}/distrib/scripts/build-environ.cfg {cvs tar and zip files}
+ 
 
 2. When to update the version numbers:
 
@@ -34,6 +34,9 @@
 Version: $Id$
 
 $Log$
+Revision 1.7  2006/11/12 18:55:33  CE
+add places to change the version for distribution
+
 Revision 1.6  2006/11/11 20:23:18  VZ
 added include/msvc/wx/setup.h
 
