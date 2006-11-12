@@ -1238,7 +1238,7 @@ void wxComboCtrlBase::PrepareBackground( wxDC&, const wxRect&, int ) const
 }
 #endif
 
-void wxComboCtrlBase::DrawButton( wxDC& dc, const wxRect& rect, bool paintBg )
+void wxComboCtrlBase::DrawButton( wxDC& dc, const wxRect& rect, int paintBg )
 {
     int drawState = m_btnState;
 

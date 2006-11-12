@@ -419,8 +419,14 @@ protected:
     // Installs standard input handler to combo (and optionally to the textctrl)
     void InstallInputHandlers();
 
+    // flags for DrawButton()
+    enum
+    {
+        Draw_PaintBg = 1
+    };
+
     // Draws dropbutton. Using wxRenderer or bitmaps, as appropriate.
-    void DrawButton( wxDC& dc, const wxRect& rect, bool paintBg = true );
+    void DrawButton( wxDC& dc, const wxRect& rect, int flags = Draw_PaintBg );
 
     // Call if cursor is on button area or mouse is captured for the button.
     //bool HandleButtonMouseEvent( wxMouseEvent& event, bool isInside );

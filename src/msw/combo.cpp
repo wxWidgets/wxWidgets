@@ -456,7 +456,7 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
     dc.DrawRectangle(rect);
 
     // Button background with theme?
-    bool drawButBg = true;
+    int drawButFlags = Draw_PaintBg;
     if ( hTheme && m_blankButtonBg )
     {
         RECT r;
@@ -468,11 +468,11 @@ void wxComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
                                          GetHdcOf(dc),
                                          &r);
 
-        drawButBg = false;
+        drawButFlags = 0;
     }
 
     // Standard button rendering
-    DrawButton(dc,rectb,drawButBg);
+    DrawButton(dc,rectb,drawButFlags);
 
     // paint required portion on the control
     if ( (!m_text || m_widthCustomPaint) )

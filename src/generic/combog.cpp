@@ -276,8 +276,10 @@ void wxGenericComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
     dc.DrawRectangle(rect);
 
     if ( !m_btn )
+    {
         // Standard button rendering
-        DrawButton(dc,rectb,true);
+        DrawButton(dc,rectb);
+    }
 
     // paint required portion on the control
     if ( (!m_text || m_widthCustomPaint) )
