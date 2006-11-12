@@ -380,6 +380,6 @@ wxWINE library will need recompiling with different options.
 Any progress on this front will be very welcome.
 
 Note that while wxWINE builds with --enable-unicode, samples
-don't run. Sample samples will run when built with
+don't run. Some samples will run when built with
 --disable-unicode, and others (such as auidemo) fail.
 
