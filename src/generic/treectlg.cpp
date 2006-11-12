@@ -45,7 +45,7 @@
     #include "wx/mac/private.h"
 #endif
 
-#ifdef __WXGTK__
+#ifdef __WXGTK20__
     #include "wx/gtk/private.h"
     #include "wx/gtk/win_gtk.h"
 #endif
@@ -2241,7 +2241,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         x=0;
         GetVirtualSize(&w, &h);
         wxRect rect( x, item->GetY()+offset, w, total_h-offset);
-#ifndef __WXGTK__
+#ifndef __WXGTK20__
         dc.DrawRectangle(rect);
 #else
         if (!item->IsSelected())
@@ -2281,7 +2281,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
             // background colour.
             wxRect rect( item->GetX() + image_w - 2, item->GetY()+offset,
                          item->GetWidth() - image_w + 2, total_h-offset );
-#ifndef __WXGTK__
+#ifndef __WXGTK20__
             dc.DrawRectangle( rect );
 #else
             CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
@@ -2315,7 +2315,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         {
             wxRect rect( item->GetX()-2, item->GetY()+offset,
                          item->GetWidth()+2, total_h-offset );
-#ifndef __WXGTK__
+#ifndef __WXGTK20__
             dc.DrawRectangle( rect );
 #else
             if ( attr && attr->HasBackgroundColour() )
