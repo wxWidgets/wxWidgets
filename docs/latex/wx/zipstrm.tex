@@ -623,7 +623,7 @@ If the parent stream is passed as a pointer then the new filter stream
 takes ownership of it. If it is passed by reference then it does not.
 
 In a Unicode build the third parameter {\tt conv} is used to translate
-the filename and comment fields to Unicode. It has no effect on the
+the filename and comment fields to an 8-bit encoding. It has no effect on the
 stream's data.
 
 
@@ -639,7 +639,7 @@ writing the zip if it has not been called already.
 
 \func{bool}{Close}{\void}
 
-Finishes writing the zip, returning true if successfully.
+Finishes writing the zip, returning true if successful.
 Called by the destructor if not called explicitly.
 
 
