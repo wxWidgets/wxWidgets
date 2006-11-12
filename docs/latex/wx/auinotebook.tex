@@ -3,18 +3,17 @@
 % auibook.h at 11/Nov/06 22:56:01
 %
 
-
 \section{\class{wxAuiNotebook}}\label{wxauinotebook}
 
-
-wxAuiNotebook is a notebook control which implements many features common in applications with dockable panes.  Specifically, wxAuiNotebook implements functionality which allows the user to rearrange tab order via drag-and-drop, split the tab window into many different spliiter configurations, and toggle through different themes to customize the control's look and feel.
-
-
+wxAuiNotebook is a notebook control which implements many features common in applications with dockable panes.
+Specifically, wxAuiNotebook implements functionality which allows the user to rearrange tab order via drag-and-drop,
+split the tab window into many different splitter configurations, and toggle through different themes to customize
+the control's look and feel.
 
 An effort has been made to try to maintain an API as similar to that of wxNotebook.
 
-The default theme that is used is wxAuiDefaultTabArt, which provides a modern, glossy look and feel.  The theme can be changed by calling \helpref{wxAuiNotebook::SetArtProvider}{wxauinotebooksetartprovider}
-
+The default theme that is used is wxAuiDefaultTabArt, which provides a modern, glossy look and feel.
+The theme can be changed by calling \helpref{wxAuiNotebook::SetArtProvider}{wxauinotebooksetartprovider}.
 
 \wxheading{Derived from}
 
@@ -22,125 +21,119 @@ The default theme that is used is wxAuiDefaultTabArt, which provides a modern, g
 
 \wxheading{Include files}
 
-<auibook.h>
+<wx/aui/auibook.h>
 
 \wxheading{Data structures}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-
 \membersection{wxAuiNotebook::wxAuiNotebook}\label{wxauinotebookwxauinotebook}
 
 \func{}{wxAuiNotebook}{\void}
 
-
 \func{}{wxAuiNotebook}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = wxAUI\_NB\_DEFAULT\_STYLE}}
 
-Constructor.  Creates a wxAuiNotebok control.
-
-\membersection{wxAuiNotebook::\destruct{wxAuiNotebook}}\label{wxauinotebookdtor}
-
-\func{}{\destruct{wxAuiNotebook}}{\void}
-
+Constructor. Creates a wxAuiNotebok control.
 
 \membersection{wxAuiNotebook::AddPage}\label{wxauinotebookaddpage}
 
 \func{bool}{AddPage}{\param{wxWindow* }{page}, \param{const wxString\& }{caption}, \param{bool }{select = false}, \param{const wxBitmap\& }{bitmap = wxNullBitmap}}
 
+Adds a page.
 
 \membersection{wxAuiNotebook::Create}\label{wxauinotebookcreate}
 
 \func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = 0}}
 
+Creates the notebook window.
 
 \membersection{wxAuiNotebook::DeletePage}\label{wxauinotebookdeletepage}
 
 \func{bool}{DeletePage}{\param{size\_t }{page}}
 
-
-\membersection{wxAuiNotebook::DoSizing}\label{wxauinotebookdosizing}
-
-\func{void}{DoSizing}{\void}
-
+Deletes a page at the given index.
 
 \membersection{wxAuiNotebook::FindTab}\label{wxauinotebookfindtab}
 
 \func{bool}{FindTab}{\param{wxWindow* }{page}, \param{wxAuiTabCtrl** }{ctrl}, \param{int* }{idx}}
 
+Finds a tab.
 
 \membersection{wxAuiNotebook::GetActiveTabCtrl}\label{wxauinotebookgetactivetabctrl}
 
 \func{wxAuiTabCtrl*}{GetActiveTabCtrl}{\void}
 
+Returns the active tab.
 
 \membersection{wxAuiNotebook::GetArtProvider}\label{wxauinotebookgetartprovider}
 
 \constfunc{wxAuiTabArt*}{GetArtProvider}{\void}
 
+Returns the associated art provider.
 
 \membersection{wxAuiNotebook::GetPage}\label{wxauinotebookgetpage}
 
 \constfunc{wxWindow*}{GetPage}{\param{size\_t }{page\_idx}}
 
+Returns the page specified by the given index.
 
 \membersection{wxAuiNotebook::GetPageCount}\label{wxauinotebookgetpagecount}
 
 \constfunc{size\_t}{GetPageCount}{\void}
 
+Returns the number of pages.
 
 \membersection{wxAuiNotebook::GetPageIndex}\label{wxauinotebookgetpageindex}
 
 \constfunc{int}{GetPageIndex}{\param{wxWindow* }{page\_wnd}}
 
+Reurns the page index for the given window.
 
 \membersection{wxAuiNotebook::GetSelection}\label{wxauinotebookgetselection}
 
 \constfunc{int}{GetSelection}{\void}
 
-
-\membersection{wxAuiNotebook::InitNotebook}\label{wxauinotebookinitnotebook}
-
-\func{void}{InitNotebook}{\param{long }{style}}
-
+Returns the currently selected page.
 
 \membersection{wxAuiNotebook::InsertPage}\label{wxauinotebookinsertpage}
 
 \func{bool}{InsertPage}{\param{size\_t }{page\_idx}, \param{wxWindow* }{page}, \param{const wxString\& }{caption}, \param{bool }{select = false}, \param{const wxBitmap\& }{bitmap = wxNullBitmap}}
 
+Inserts a page.
 
 \membersection{wxAuiNotebook::RemovePage}\label{wxauinotebookremovepage}
 
 \func{bool}{RemovePage}{\param{size\_t }{page}}
 
+Removes a page.
 
 \membersection{wxAuiNotebook::SetArtProvider}\label{wxauinotebooksetartprovider}
 
 \func{void}{SetArtProvider}{\param{wxAuiTabArt* }{art}}
 
+Sets the art provider to be used by the notebook.
 
 \membersection{wxAuiNotebook::SetPageBitmap}\label{wxauinotebooksetpagebitmap}
 
 \func{bool}{SetPageBitmap}{\param{size\_t }{page}, \param{const wxBitmap\& }{bitmap}}
 
+Sets the bitmap for the page.
 
 \membersection{wxAuiNotebook::SetPageText}\label{wxauinotebooksetpagetext}
 
 \func{bool}{SetPageText}{\param{size\_t }{page}, \param{const wxString\& }{text}}
 
+Sets the ab label for the page.
 
 \membersection{wxAuiNotebook::SetSelection}\label{wxauinotebooksetselection}
 
 \func{size\_t}{SetSelection}{\param{size\_t }{new\_page}}
 
+Sets the page selection.
 
 \membersection{wxAuiNotebook::SetTabCtrlHeight}\label{wxauinotebooksettabctrlheight}
 
 \func{void}{SetTabCtrlHeight}{\param{int }{height}}
 
-these can be overridden
-
-
-\membersection{wxAuiNotebook::SetWindowStyleFlag}\label{wxauinotebooksetwindowstyleflag}
-
-\func{void}{SetWindowStyleFlag}{\param{long }{style}}
+Sets the tab height.
 
