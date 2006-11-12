@@ -64,6 +64,9 @@ protected:
     // add the text, if it's not empty, to the text sizer contents
     void AddText(const wxString& text);
 
+    // add a wxCollapsiblePane containing the given text
+    void AddCollapsiblePane(const wxString& title, const wxString& text);
+
 private:
     // common part of all ctors
     void Init() { m_sizerText = NULL; }

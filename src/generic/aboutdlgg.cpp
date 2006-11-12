@@ -42,16 +42,13 @@
 // implementation
 // ============================================================================
 
-// ----------------------------------------------------------------------------
-// wxAboutDialogInfo
-// ----------------------------------------------------------------------------
-
 // helper function: returns all array elements in a single comma-separated and
 // newline-terminated string
 static wxString AllAsString(const wxArrayString& a)
 {
     wxString s;
     const size_t count = a.size();
+    s.reserve(20*count);
     for ( size_t n = 0; n < count; n++ )
     {
         s << a[n] << (n == count - 1 ? _T("\n") : _T(", "));
@@ -59,6 +56,10 @@ static wxString AllAsString(const wxArrayString& a)
 
     return s;
 }
+
+// ----------------------------------------------------------------------------
+// wxAboutDialogInfo
+// ----------------------------------------------------------------------------
 
 wxString wxAboutDialogInfo::GetDescriptionAndCredits() const
 {
@@ -134,21 +135,25 @@ bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info)
     }
 
 #if wxUSE_COLLPANE
-    // add licence
     if ( info.HasLicence() )
-    {
-        wxCollapsiblePane *
-            licensepnl = new wxCollapsiblePane(this, wxID_ANY, wxT("License"));
+        AddCollapsiblePane(wxT("License"), info.GetLicence());
 
-        new wxStaticText(licensepnl->GetPane(), wxID_ANY, info.GetLicence(),
-                         wxDefaultPosition, wxDefaultSize,
-                         wxALIGN_CENTRE);
+    if ( info.HasDevelopers() )
+        AddCollapsiblePane(wxT("Developers"),
+                           AllAsString(info.GetDevelopers()));
 
-        m_sizerText->Add(licensepnl, wxSizerFlags(1).Expand().Border(wxBOTTOM));
-    }
+    if ( info.HasDocWriters() )
+        AddCollapsiblePane(wxT("Documentation writers"),
+                           AllAsString(info.GetDocWriters()));
+
+    if ( info.HasArtists() )
+        AddCollapsiblePane(wxT("Artists"),
+                           AllAsString(info.GetArtists()));
+
+    if ( info.HasTranslators() )
+        AddCollapsiblePane(wxT("Translators"),
+                           AllAsString(info.GetTranslators()));
 #endif // wxUSE_COLLPANE
-
-    // TODO: add credits (developers, artists, doc writers, translators)
 
     DoAddCustomControls();
 
@@ -197,6 +202,22 @@ void wxGenericAboutDialog::AddText(const wxString& text)
 {
     if ( !text.empty() )
         AddControl(new wxStaticText(this, wxID_ANY, text));
+}
+
+void wxGenericAboutDialog::AddCollapsiblePane(const wxString& title,
+                                              const wxString& text)
+{
+    wxCollapsiblePane *pane = new wxCollapsiblePane(this, wxID_ANY, title);
+    wxStaticText *txt = new wxStaticText(pane->GetPane(), wxID_ANY, text,
+                                         wxDefaultPosition, wxDefaultSize,
+                                         wxALIGN_CENTRE);
+
+    // don't make the text unreasonably wide
+    static const int maxWidth = wxGetDisplaySize().x/3;
+    txt->Wrap(maxWidth);
+
+    // NB: all the wxCollapsiblePanes must be added with a null proportion value
+    m_sizerText->Add(pane, wxSizerFlags(0).Expand().Border(wxBOTTOM));
 }
 
 // ----------------------------------------------------------------------------
