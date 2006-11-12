@@ -106,11 +106,9 @@ wxStandardPaths::GetLocalizedResourcesDir(const wxChar *lang,
 // wxStandardPaths implementation for Unix
 // ============================================================================
 
-void wxStandardPaths::DetectPrefix()
+wxString wxStandardPaths::GetExecutablePath() const
 {
 #ifdef __LINUX__
-    // under Linux, we can try to infer the prefix from the location of the
-    // executable
     wxString exeStr;
 
     char buf[4096];
@@ -138,13 +136,23 @@ void wxStandardPaths::DetectPrefix()
     }
 
     if ( !exeStr.empty() )
+        return exeStr;
+#endif // __LINUX__
+
+    return wxStandardPathsBase::GetExecutablePath();
+}
+
+void wxStandardPaths::DetectPrefix()
+{
+    // we can try to infer the prefix from the location of the executable
+    wxString exeStr = GetExecutablePath();
+    if ( !exeStr.empty() )
     {
         // consider that we're in the last "bin" subdirectory of our prefix
         size_t pos = exeStr.rfind(wxT("/bin/"));
         if ( pos != wxString::npos )
             m_prefix.assign(exeStr, 0, pos);
     }
-#endif // __LINUX__
 
     if ( m_prefix.empty() )
     {

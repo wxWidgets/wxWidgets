@@ -274,6 +274,11 @@ wxString wxStandardPaths::GetDocumentsDir() const
 // public functions
 // ----------------------------------------------------------------------------
 
+wxString wxStandardPaths::GetExecutablePath() const
+{
+    return wxGetFullModuleName();
+}
+
 wxString wxStandardPaths::GetConfigDir() const
 {
     return AppendAppName(DoGetDirectory(CSIDL_COMMON_APPDATA));

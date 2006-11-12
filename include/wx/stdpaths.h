@@ -43,6 +43,11 @@ public:
     // return the global standard paths object
     static wxStandardPathsBase& Get();
 
+    // return the path (directory+filename) of the running executable or
+    // wxEmptyString if it couldn't be determined.
+    // The path is returned as an absolute path whenever possible.
+    // Default implementation only try to use wxApp->argv[0].
+    virtual wxString GetExecutablePath() const;
 
     // return the directory with system config files:
     // /etc under Unix, c:\Documents and Settings\All Users\Application Data
@@ -152,6 +157,8 @@ class WXDLLIMPEXP_BASE wxStandardPaths : public wxStandardPathsBase
 public:
     void SetInstallPrefix(const wxString& prefix) { m_prefix = prefix; }
     wxString GetInstallPrefix() const { return m_prefix; }
+
+    virtual wxString GetExecutablePath() const { return m_prefix; }
     virtual wxString GetConfigDir() const { return m_prefix; }
     virtual wxString GetUserConfigDir() const { return m_prefix; }
     virtual wxString GetDataDir() const { return m_prefix; }

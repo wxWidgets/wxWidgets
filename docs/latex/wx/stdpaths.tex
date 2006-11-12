@@ -111,6 +111,21 @@ Example return values:
 \newsince{2.7.0}
 
 
+\membersection{wxStandardPaths::GetExecutablePath}\label{wxstandardpathsgetexecutablepath}
+
+\constfunc{wxString}{GetExecutablePath}{\void}
+
+Return the directory and the filename for the current executable.
+
+Example return values:
+\begin{itemize}
+    \item Unix: \texttt{/usr/local/bin/exename}
+    \item Windows: \texttt{C:$\backslash$Programs$\backslash$AppFolder$\backslash$exename.exe}
+    \item Mac: \texttt{/Programs/exename}
+\end{itemize}
+
+
+
 \membersection{wxStandardPaths::GetInstallPrefix}\label{wxstandardpathsgetinstallprefix}
 
 \constfunc{wxString}{GetInstallPrefix}{\void}
@@ -253,7 +268,7 @@ all platforms except Windows where it returns
 \textbf{Note:} This function is only available under Unix.
 
 Lets wxStandardPaths know about the real program installation prefix on a Unix
-system. By default, the value returned by 
+system. By default, the value returned by
 \helpref{GetInstallPrefix}{wxstandardpathsgetinstallprefix} is used.
 
 Although under Linux systems the program prefix may usually be determined

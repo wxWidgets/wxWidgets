@@ -151,6 +151,22 @@ wxString wxStandardPathsCF::GetDataDir() const
     return GetFromFunc(CFBundleCopySharedSupportURL);
 }
 
+wxString wxStandardPathsCF::GetExecutablePath() const
+{
+    ProcessInfoRec processinfo;
+    ProcessSerialNumber procno ;
+    FSSpec fsSpec;
+
+    procno.highLongOfPSN = NULL ;
+    procno.lowLongOfPSN = kCurrentProcess ;
+    processinfo.processInfoLength = sizeof(ProcessInfoRec);
+    processinfo.processName = NULL;
+    processinfo.processAppSpec = &fsSpec;
+
+    GetProcessInformation( &procno , &processinfo ) ;
+    return wxMacFSSpec2MacFilename(&fsSpec);
+}
+
 wxString wxStandardPathsCF::GetLocalDataDir() const
 {
 #ifdef __WXMAC__

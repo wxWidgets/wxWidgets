@@ -88,7 +88,27 @@
     #define TEST_WCHAR
     #define TEST_ZIP
 #else // #if TEST_ALL
+<<<<<<< console.cpp
+<<<<<<< console.cpp
+<<<<<<< console.cpp
+<<<<<<< console.cpp
+<<<<<<< console.cpp
+    #define TEST_MIME
+=======
+    #define TEST_STDPATHS
+>>>>>>> 1.197
+=======
+    #define TEST_MODULE
+>>>>>>> 1.199
+=======
+    #define TEST_INFO_FUNCTIONS
+>>>>>>> 1.201
+=======
+    #define TEST_STDPATHS
+>>>>>>> 1.203
+=======
     #define TEST_FILE
+>>>>>>> 1.204
 #endif
 
 // some tests are interactive, define this to run them
@@ -2799,6 +2819,7 @@ static void TestStandardPaths()
     wxPrintf(_T("Data dir (user):\t%s\n"), stdp.GetUserDataDir().c_str());
     wxPrintf(_T("Data dir (user local):\t%s\n"), stdp.GetUserLocalDataDir().c_str());
     wxPrintf(_T("Documents dir:\t\t%s\n"), stdp.GetDocumentsDir().c_str());
+    wxPrintf(_T("Executable path:\t%s\n"), stdp.GetExecutablePath().c_str());
     wxPrintf(_T("Plugins dir:\t\t%s\n"), stdp.GetPluginsDir().c_str());
     wxPrintf(_T("Resources dir:\t\t%s\n"), stdp.GetResourcesDir().c_str());
     wxPrintf(_T("Localized res. dir:\t%s\n"),
@@ -4367,9 +4388,9 @@ int main(int argc, char **argv)
     wxLog::AddTraceMask(_T("mime"));
     #if TEST_ALL
         TestMimeEnum();
+    #endif
         TestMimeOverride();
         TestMimeAssociate();
-    #endif
     TestMimeFilename();
 #endif // TEST_MIME
 
