@@ -1159,6 +1159,12 @@ bool wxFileDataObject::GetDataHere(void *WXUNUSED_IN_WINCE(pData)) const
 // wxURLDataObject
 // ----------------------------------------------------------------------------
 
+// Work around bug in Wine headers
+#if defined(__WINE__) && defined(CFSTR_SHELLURL) && wxUSE_UNICODE
+#undef CFSTR_SHELLURL
+#define CFSTR_SHELLURL _T("CFSTR_SHELLURL")
+#endif
+
 class CFSTR_SHELLURLDataObject : public wxCustomDataObject
 {
 public:

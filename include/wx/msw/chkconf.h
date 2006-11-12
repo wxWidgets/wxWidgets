@@ -58,6 +58,15 @@
 #endif
 
 /*
+ * Don't use MSLU if compiling with Wine
+ */
+
+#if wxUSE_UNICODE_MSLU && defined(__WINE__)
+#   undef wxUSE_UNICODE_MSLU
+#   define wxUSE_UNICODE_MSLU 0
+#endif
+
+/*
  * All of the settings below require SEH support (__try/__catch) and can't work
  * without it.
  */
