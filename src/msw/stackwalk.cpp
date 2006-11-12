@@ -326,7 +326,7 @@ void wxStackWalker::WalkFromException()
     WalkFrom(wxGlobalSEInformation, 0);
 }
 
-void wxStackWalker::Walk(size_t skip)
+void wxStackWalker::Walk(size_t skip, size_t WXUNUSED(maxDepth))
 {
     // to get a CONTEXT for the current location, simply force an exception and
     // get EXCEPTION_POINTERS from it

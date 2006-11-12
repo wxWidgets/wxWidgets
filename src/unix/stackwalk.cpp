@@ -33,6 +33,7 @@
 #endif
 
 #include "wx/stackwalk.h"
+#include "wx/stdpaths.h"
 
 #include <execinfo.h>
 
@@ -73,23 +74,20 @@ private:
 // implementation
 // ============================================================================
 
-wxString wxStackWalker::ms_exepath;
-
 // ----------------------------------------------------------------------------
 // wxStackFrame
 // ----------------------------------------------------------------------------
 
 void wxStackFrame::OnGetName()
 {
-    if ( m_hasName )
+    if ( !m_name.empty() )
         return;
 
-    m_hasName = true;
-
-    // try addr2line first because it always gives us demangled names (even if
-    // __cxa_demangle is not available) and because it seems less error-prone
+    // we already tried addr2line in wxStackWalker::InitFrames: it always
+    // gives us demangled names (even if __cxa_demangle is not available) when
+    // the function is part of the ELF (when it's in a shared object addr2line
+    // will give "??") and because it seems less error-prone.
     // when it works, backtrace_symbols() sometimes returns incorrect results
-    OnGetLocation();
 
     // format is: "module(funcname+offset) [address]" but the part in
     // parentheses can be not present
@@ -138,102 +136,174 @@ void wxStackFrame::OnGetName()
     }
 }
 
-void wxStackFrame::OnGetLocation()
-{
-    if ( m_hasLocation )
-        return;
-
-    m_hasLocation = true;
-
-    // we need to launch addr2line tool to get this information and we need to
-    // have the program name for this
-    wxString exepath = wxStackWalker::GetExePath();
-    if ( exepath.empty() )
-    {
-        if ( !wxTheApp || !wxTheApp->argv )
-            return;
-        exepath = wxTheApp->argv[0];
-    }
-
-    wxStdioPipe fp(wxString::Format(_T("addr2line -C -f -e \"%s\" %p"),
-                                    exepath.c_str(), m_address).mb_str(),
-                   "r");
-
-    if ( !fp )
-        return;
-
-    // parse addr2line output
-    char buf[1024];
-    if ( !fgets(buf, WXSIZEOF(buf), fp) )
-    {
-        wxLogDebug(_T("Empty addr2line output?"));
-        return;
-    }
-
-    // 1st line has function name
-    if ( GetName().empty() )
-    {
-        m_name = wxString::FromAscii(buf);
-        m_name.RemoveLast(); // trailing newline
-
-        if ( m_name == _T("??") )
-            m_name.clear();
-    }
-
-    // 2nd one -- the file/line info
-    if ( fgets(buf, WXSIZEOF(buf), fp) )
-    {
-        wxString output(wxString::FromAscii(buf));
-        output.RemoveLast();
-
-        const size_t posColon = output.find(_T(':'));
-        if ( posColon != wxString::npos )
-        {
-            m_filename.assign(output, 0, posColon);
-            if ( m_filename == _T("??") )
-            {
-                m_filename.clear();
-            }
-            else
-            {
-                unsigned long line;
-                if ( wxString(output, posColon + 1, wxString::npos).
-                        ToULong(&line) )
-                    m_line = line;
-            }
-        }
-        else
-        {
-            wxLogDebug(_T("Unexpected addr2line format: \"%s\""),
-                       output.c_str());
-        }
-    }
-}
 
 // ----------------------------------------------------------------------------
 // wxStackWalker
 // ----------------------------------------------------------------------------
 
-void wxStackWalker::Walk(size_t skip)
-{
-    // that many frames should be enough for everyone
-    void *addresses[200];
+// that many frames should be enough for everyone
+#define MAX_FRAMES          200
 
-    int depth = backtrace(addresses, WXSIZEOF(addresses));
-    if ( !depth )
+// we need a char buffer big enough to contain a call to addr2line with
+// up to MAX_FRAMES addresses !
+// NB: %p specifier will print the pointer in hexadecimal form
+//     and thus will require 2 chars for each byte + 3 for the
+//     " 0x" prefix
+#define CHARS_PER_FRAME    (sizeof(void*) * 2 + 3)
+
+// BUFSIZE will be 2250 for 32 bit machines
+#define BUFSIZE            (50 + MAX_FRAMES*CHARS_PER_FRAME)
+
+// static data
+void *wxStackWalker::ms_addresses[MAX_FRAMES];
+char **wxStackWalker::ms_symbols = NULL;
+int wxStackWalker::m_depth = 0;
+wxString wxStackWalker::ms_exepath;
+static char g_buf[BUFSIZE];
+
+
+void wxStackWalker::SaveStack(size_t maxDepth)
+{
+    // read all frames required
+    maxDepth = wxMin(WXSIZEOF(ms_addresses)/sizeof(void*), maxDepth);
+    m_depth = backtrace(ms_addresses, maxDepth*sizeof(void*));
+    if ( !m_depth )
         return;
 
-    char **symbols = backtrace_symbols(addresses, depth);
+    ms_symbols = backtrace_symbols(ms_addresses, m_depth);
+}
+
+void wxStackWalker::ProcessFrames(size_t skip)
+{
+    wxStackFrame frames[MAX_FRAMES];
+
+    if (!ms_symbols || !m_depth)
+        return;
 
     // we have 3 more "intermediate" frames which the calling code doesn't know
-    // about., account for them
+    // about, account for them
     skip += 3;
 
-    for ( int n = skip; n < depth; n++ )
+    // call addr2line only once since this call may be very slow
+    // (it has to load in memory the entire EXE of this app which may be quite
+    //  big, especially if it contains debug info and is compiled statically!)
+    int towalk = InitFrames(frames, m_depth - skip, &ms_addresses[skip], &ms_symbols[skip]);
+
+    // now do user-defined operations on each frame
+    for ( int n = 0; n < towalk - (int)skip; n++ )
+        OnStackFrame(frames[n]);
+}
+
+void wxStackWalker::FreeStack()
+{
+    // ms_symbols has been allocated by backtrace_symbols() and it's the responsibility
+    // of the caller, i.e. us, to free that pointer
+    if (ms_symbols)
+        free( ms_symbols );
+    ms_symbols = NULL;
+    m_depth = 0;
+}
+
+int wxStackWalker::InitFrames(wxStackFrame *arr, size_t n, void **addresses, char **syminfo)
+{
+    // we need to launch addr2line tool to get this information and we need to
+    // have the program name for this
+    wxString exepath = wxStackWalker::GetExePath();
+    if ( exepath.empty() )
     {
-        wxStackFrame frame(n - skip, addresses[n], symbols[n]);
-        OnStackFrame(frame);
+        exepath = wxStandardPaths::Get().GetExecutablePath();
+        if ( exepath.empty() )
+        {
+            wxLogDebug(wxT("Cannot parse stack frame because the executable ")
+                       wxT("path could not be detected"));
+            return 0;
+        }
     }
+
+    // build the (long) command line for executing addr2line in an optimized way
+    // (e.g. use always chars, even in Unicode build: popen() always takes chars)
+    int len = snprintf(g_buf, BUFSIZE, "addr2line -C -f -e \"%s\"", exepath.mb_str());
+    len = (len <= 0) ? strlen(g_buf) : len;     // in case snprintf() is broken
+    for (size_t i=0; i<n; i++)
+    {
+        snprintf(&g_buf[len], BUFSIZE - len, " %p", addresses[i]);
+        len = strlen(g_buf);
+    }
+
+    //wxLogDebug(wxT("piping the command '%s'"), g_buf);  // for debug only
+
+    wxStdioPipe fp(g_buf, "r");
+    if ( !fp )
+        return 0;
+
+    // parse addr2line output (should be exactly 2 lines for each address)
+    // reusing the g_buf used for building the command line above
+    wxString name, filename;
+    unsigned long line, curr=0;
+    for (size_t i=0; i<n; i++)
+    {
+        // 1st line has function name
+        if ( fgets(g_buf, WXSIZEOF(g_buf), fp) )
+        {
+            name = wxString::FromAscii(g_buf);
+            name.RemoveLast(); // trailing newline
+
+            if ( name == _T("??") )
+                name.clear();
+        }
+        else
+        {
+            wxLogDebug(_T("cannot read addr2line output for %d-th stack frame!"), i);
+            return false;
+        }
+
+        // 2nd one -- the file/line info
+        if ( fgets(g_buf, WXSIZEOF(g_buf), fp) )
+        {
+            filename = wxString::FromAscii(g_buf);
+            filename.RemoveLast();
+
+            const size_t posColon = filename.find(_T(':'));
+            if ( posColon != wxString::npos )
+            {
+                // parse line number
+                if ( !wxString(filename, posColon + 1, wxString::npos).
+                        ToULong(&line) )
+                    line = 0;
+
+                // remove line number from 'filename'
+                filename.erase(posColon);
+                if ( filename == _T("??") )
+                    filename.clear();
+            }
+            else
+            {
+                wxLogDebug(_T("Unexpected addr2line format: \"%s\" - ")
+                           _T("the semicolon is missing"),
+                           filename.c_str());
+            }
+        }
+
+        if (!name.empty() || !filename.empty())
+        {
+            // now we've got enough info to initialize curr-th stack frame:
+            arr[curr++].Set(name, filename, syminfo[i], i, line, addresses[i]);
+        }
+    }
+
+    return curr;
+}
+
+void wxStackWalker::Walk(size_t skip, size_t maxDepth)
+{
+    // read all frames required
+    SaveStack(maxDepth);
+
+    // process them
+    ProcessFrames(skip);
+
+    // cleanup
+    FreeStack();
 }
 
 #endif // wxUSE_STACKWALKER

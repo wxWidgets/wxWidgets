@@ -82,12 +82,14 @@ This function must be overrided to process the given frame.
 
 \membersection{wxStackWalker::Walk}\label{wxstackwalkerwalk}
 
-\func{void}{Walk}{\param{size\_t }{skip = 1}}
+\func{void}{Walk}{\param{size\_t }{skip = 1}, \param{size\_t }{maxDepth = 200}}
 
 Enumerate stack frames from the current location, skipping the initial
 number of them (this can be useful when Walk() is called from some known
 location and you don't want to see the first few frames anyhow; also
 notice that Walk() frame itself is not included if skip $\ge 1$).
+
+Up to \arg{maxDepth} frames are walked from the innermost to the outermost one.
 
 
 \membersection{wxStackWalker::WalkFromException}\label{wxstackwalkerwalkfromexception}

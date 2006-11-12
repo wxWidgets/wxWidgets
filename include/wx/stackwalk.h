@@ -130,7 +130,7 @@ public:
     // number of them (this can be useful when Walk() is called from some known
     // location and you don't want to see the first few frames anyhow; also
     // notice that Walk() frame itself is not included if skip >= 1)
-    virtual void Walk(size_t skip = 1) = 0;
+    virtual void Walk(size_t skip = 1, size_t maxDepth = 200) = 0;
 
     // enumerate stack frames from the location of uncaught exception
     //

@@ -90,7 +90,7 @@ public:
     // only
     wxStackWalker(const char * WXUNUSED(argv0) = NULL) { }
 
-    virtual void Walk(size_t skip = 1);
+    virtual void Walk(size_t skip = 1, size_t maxDepth = 200);
     virtual void WalkFromException();
 
 
