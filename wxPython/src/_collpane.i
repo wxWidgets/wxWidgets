@@ -16,10 +16,6 @@
 //---------------------------------------------------------------------------
 %newgroup
 
-%{
-#include <wx/collpane.h>
-%}
-
 MAKE_CONST_WXSTRING(CollapsiblePaneNameStr);
 
 enum {
@@ -107,7 +103,9 @@ public:
         virtual wxWindow *, GetPane() const,
         "Returns a reference to the pane window.  Use the returned `wx.Window`
 as the parent of widgets to make them part of the collapsible area.", "");
-    
+
+    %property(Expanded, IsExpanded);
+    %property(Collapsed, IsCollapsed);
 };
 
 
@@ -128,6 +126,8 @@ public:
 
     bool GetCollapsed() const;
     void SetCollapsed(bool c);
+
+    %property(Collapsed, GetCollapsed, SetCollapsed);
 };
 
 //---------------------------------------------------------------------------
