@@ -400,7 +400,7 @@ void wxStackWalker::WalkFromException()
 {
 }
 
-void wxStackWalker::Walk(size_t WXUNUSED(skip))
+void wxStackWalker::Walk(size_t WXUNUSED(skip), size_t WXUNUSED(maxDepth))
 {
 }
 
