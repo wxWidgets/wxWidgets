@@ -387,7 +387,7 @@ const wxChar* wxGetHomeDir(wxString *pstr)
     wxString& strDir = *pstr;
 
     // first branch is for Cygwin
-#if defined(__UNIX__)
+#if defined(__UNIX__) && !defined(__WINE__)
     const wxChar *szHome = wxGetenv("HOME");
     if ( szHome == NULL ) {
       // we're homeless...

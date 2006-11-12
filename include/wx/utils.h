@@ -518,7 +518,7 @@ WXDLLIMPEXP_BASE const wxChar* wxGetHomeDir(wxString *pstr);
 
 // Get the user's home dir (caller must copy --- volatile)
 // returns NULL is no HOME dir is known
-#if defined(__UNIX__) && wxUSE_UNICODE
+#if defined(__UNIX__) && wxUSE_UNICODE && !defined(__WINE__)
 WXDLLIMPEXP_BASE const wxMB2WXbuf wxGetUserHome(const wxString& user = wxEmptyString);
 #else
 WXDLLIMPEXP_BASE wxChar* wxGetUserHome(const wxString& user = wxEmptyString);
