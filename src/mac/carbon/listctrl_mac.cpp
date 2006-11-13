@@ -2712,8 +2712,13 @@ Boolean wxMacDataBrowserListCtrlControl::CompareItems(DataBrowserItemID itemOneI
             long item1 = GetLineFromItem(item);
             long item2 = GetLineFromItem(otherItem);
 
-            if (func != NULL && item->HasColumnInfo(colId) && otherItem->HasColumnInfo(colId))
-                return func(item1, item2, list->GetCompareFuncData()) >= 0;
+            // FIXME: This code causes a crash in wxPython for some reason
+            // and moreover, further testing shows that the column click event
+            // is only sent to the list ctrl after the native control has finished
+            // sorting items anyway. So just disable this for now.
+            
+            //if (func != NULL && item->HasColumnInfo(colId) && otherItem->HasColumnInfo(colId))
+            //    return func(item1, item2, list->GetCompareFuncData()) >= 0;
 
             if (item->HasColumnInfo(colId))
                 itemText = item->GetColumnInfo(colId)->GetText();
