@@ -20,8 +20,8 @@ AppPublisher=wxWidgets
 AppPublisherURL=http://www.wxwidgets.org
 AppSupportURL=http://www.wxwidgets.org
 AppUpdatesURL=http://www.wxwidgets.org
-DefaultDirName={sd}\wxWidgets
-DefaultGroupName=wxWidgets
+DefaultDirName={sd}\wxWidgets-{#WX_VERSION}
+DefaultGroupName=wxWidgets {#WX_VERSION}
 DisableProgramGroupPage=yes
 LicenseFile=C:\wx\inno\wxWidgets\docs\licence.txt
 InfoBeforeFile=C:\wx\inno\wxWidgets\docs\readme.txt
@@ -42,6 +42,10 @@ Filename: "{app}\wx.url"; Section: "InternetShortcut"; Key: "URL"; String: "http
 [Icons]
 Name: "{group}\{cm:ProgramOnTheWeb,wxWidgets {#WX_VERSION}}"; Filename: "{app}\wx.url"
 Name: {group}\wxWidgets Manual; Filename: {app}\docs\htmlhelp\wx.chm; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
+Name: {group}\Changes; Filename: {app}\docs\changes.txt; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
+Name: {group}\Readme; Filename: {app}\docs\readme.txt; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
+Name: {group}\Compiling wxWidgets; Filename: {app}\docs\msw\install.txt; WorkingDir: {app}; IconIndex: 0; Flags: useapppaths
+Name: "{group}\Uninstall wxWidgets {#WX_VERSION}"; Filename: "{uninstallexe}"
 
 
 [UninstallDelete]
