@@ -60,6 +60,8 @@ enum
 #include "wx/mac/glcanvas.h"
 #elif defined(__WXCOCOA__)
 #include "wx/cocoa/glcanvas.h"
+#else
+#error "wxGLCanvas not supported in this wxWidgets port"
 #endif
 
 #include "wx/app.h"

@@ -32821,7 +32821,11 @@ fi
 
 USE_OPENGL=0
 if test "$wxUSE_OPENGL" = "yes"; then
-    if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = "1"; then
+    if test "$wxUSE_MGL" = 1 -o "$wxUSE_DFB" = "1"; then
+        { echo "$as_me:$LINENO: WARNING: wxGLCanvas not implemented for this port, library will be compiled without it." >&5
+echo "$as_me: WARNING: wxGLCanvas not implemented for this port, library will be compiled without it." >&2;}
+        wxUSE_OPENGL="no"
+    elif test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = "1"; then
         OPENGL_LIBS="-framework OpenGL -framework AGL"
     elif test "$wxUSE_MSW" = 1; then
         OPENGL_LIBS="-lopengl32 -lglu32"
