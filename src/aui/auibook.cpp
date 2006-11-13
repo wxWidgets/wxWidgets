@@ -308,19 +308,16 @@ void wxAuiDefaultTabArt::DrawBackground(wxDC& dc,
 {
     // draw background
     wxRect r(rect.x, rect.y, rect.width+2, rect.height-3);
-    wxColor start_colour = StepColour(m_base_colour, 90);
-    wxColor end_colour = StepColour(m_base_colour, 110);
-    dc.GradientFillLinear(r, start_colour, end_colour, wxSOUTH);
+    wxColor top_color = StepColour(m_base_colour, 90);
+    wxColor bottom_color = StepColour(m_base_colour, 110);
+    dc.GradientFillLinear(r, top_color, bottom_color, wxSOUTH);
 
     // draw base lines
     int y = rect.GetHeight();
     int w = rect.GetWidth();
     dc.SetPen(m_border_pen);
-    dc.DrawLine(0, y-4, w, y-4);
-    dc.DrawLine(0, y-1, w, y-1);
-    dc.SetPen(wxPen(start_colour));
-    dc.DrawLine(0, y-3, w, y-3);
-    dc.DrawLine(0, y-2, w, y-2);
+    dc.SetBrush(m_base_colour_brush);
+    dc.DrawRectangle(-1, y-4, w+2, 4);
 }
 
 
@@ -440,23 +437,24 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
         // this white helps fill out the gradient at the top of the tab
         dc.SetPen(*wxWHITE_PEN);
         dc.SetBrush(*wxWHITE_BRUSH);
-        dc.DrawRectangle(r.x+2, r.y+2, r.width-3, r.height);
+        dc.DrawRectangle(r.x+2, r.y+1, r.width-3, r.height);
 
         // these two points help the rounded corners appear more antialiased
         dc.SetPen(m_base_colour_pen);
-        dc.DrawPoint(r.x+2, r.y+2);
-        dc.DrawPoint(r.x+r.width-2, r.y+2);
+        dc.DrawPoint(r.x+2, r.y+1);
+        dc.DrawPoint(r.x+r.width-2, r.y+1);
 
         // set rectangle down a bit for gradient drawing
         r.SetHeight(r.GetHeight()/2);
         r.x += 2;
         r.width -= 2;
         r.y += r.height;
+        r.y -= 2;
 
         // draw gradient background
-        wxColor start_color = StepColour(m_base_colour, 95);
-        wxColor end_color = *wxWHITE;
-        dc.GradientFillLinear(r, start_color, end_color, wxNORTH);
+        wxColor top_color = *wxWHITE;
+        wxColor bottom_color = m_base_colour;
+        dc.GradientFillLinear(r, bottom_color, top_color, wxNORTH);
     }
      else
     {
@@ -464,22 +462,27 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
 
         wxRect r(tab_x, tab_y+1, tab_width, tab_height-3);
 
-        // draw base background color for inactive tabs
-        dc.SetPen(m_base_colour_pen);
-        dc.SetBrush(m_base_colour_brush);
-        dc.DrawRectangle(r.x, r.y, r.width, r.height);
-
         // start the gradent up a bit and leave the inside border inset
         // by a pixel for a 3D look.  Only the top half of the inactive
         // tab will have a slight gradient
-        r.x += 2;
-        r.width -= 2;
+        r.x += 3;
+        r.y++;
+        r.width -= 4;
         r.height /= 2;
-
-        // -- draw bottom gradient fill for glossy look
+        r.height--;
+        
+        // -- draw top gradient fill for glossy look
         wxColor top_color = m_base_colour;
         wxColor bottom_color = StepColour(top_color, 106);
         dc.GradientFillLinear(r, bottom_color, top_color, wxNORTH);
+        
+        r.y += r.height;
+        r.y--;
+        
+        // -- draw bottom fill for glossy look
+        top_color = m_base_colour;
+        bottom_color = m_base_colour;
+        dc.GradientFillLinear(r, top_color, bottom_color, wxSOUTH);
     }
 
     // draw tab outline
@@ -491,11 +494,11 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
     // this gets rid of the top one of those lines in the tab control
     if (active)
     {
-        wxColor start_color = StepColour(m_base_colour, 93);
-        dc.SetPen(wxPen(start_color));
-        dc.DrawLine(border_points[0].x,
+        wxColor start_color = m_base_colour;
+        dc.SetPen(m_base_colour_pen);
+        dc.DrawLine(border_points[0].x+1,
                     border_points[0].y,
-                    border_points[5].x+1,
+                    border_points[5].x,
                     border_points[5].y);
     }
 
