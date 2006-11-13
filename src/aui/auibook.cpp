@@ -2417,8 +2417,6 @@ void wxAuiNotebook::InitNotebook(long style)
     m_dummy_wnd = NULL;
     m_flags = (unsigned int)style;
     m_tab_ctrl_height = 20;
-    m_requested_bmp_size = wxDefaultSize;
-    m_requested_tabctrl_height = -1;
     
     m_normal_font = *wxNORMAL_FONT;
     m_selected_font = *wxNORMAL_FONT;
