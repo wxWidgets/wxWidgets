@@ -1825,7 +1825,8 @@ bool wxDb::DispAllErrors(HENV aHenv, HDBC aHdbc, HSTMT aHstmt)
 
    while (SQLError(aHenv, aHdbc, aHstmt, (SQLTCHAR FAR *) sqlState, &nativeError, (SQLTCHAR FAR *) errorMsg, SQL_MAX_MESSAGE_LENGTH - 1, &cbErrorMsg) == SQL_SUCCESS)
      {
-        odbcErrMsg.Printf(wxT("SQL State = %s\nNative Error Code = %li\nError Message = %s\n"), sqlState, nativeError, errorMsg);
+        odbcErrMsg.Printf(wxT("SQL State = %s\nNative Error Code = %li\nError Message = %s\n"),
+                          sqlState, (long)nativeError, errorMsg);
         logError(odbcErrMsg, sqlState);
         if (!silent)
         {
@@ -1863,7 +1864,8 @@ void wxDb::DispNextError(void)
 {
     wxString odbcErrMsg;
 
-    odbcErrMsg.Printf(wxT("SQL State = %s\nNative Error Code = %li\nError Message = %s\n"), sqlState, nativeError, errorMsg);
+    odbcErrMsg.Printf(wxT("SQL State = %s\nNative Error Code = %li\nError Message = %s\n"),
+                      sqlState, (long)nativeError, errorMsg);
     logError(odbcErrMsg, sqlState);
 
     if (silent)
