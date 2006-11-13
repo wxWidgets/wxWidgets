@@ -435,10 +435,17 @@ bool wxMultiChoiceDialog::Create( wxWindow *parent,
                                   long style,
                                   const wxPoint& pos )
 {
+    long styleLbox;
+#if wxUSE_CHECKLISTBOX
+    styleLbox = wxLB_ALWAYS_SB;
+#else
+    styleLbox = wxLB_ALWAYS_SB | wxLB_EXTENDED;
+#endif
+    
     if ( !wxAnyChoiceDialog::Create(parent, message, caption,
                                     n, choices,
                                     style, pos,
-                                    wxLB_ALWAYS_SB | wxLB_EXTENDED) )
+                                    styleLbox) )
         return false;
 
     return true;
