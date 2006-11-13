@@ -458,6 +458,30 @@ bool wxMultiChoiceDialog::Create( wxWindow *parent,
 
 void wxMultiChoiceDialog::SetSelections(const wxArrayInt& selections)
 {
+#if wxUSE_CHECKLISTBOX
+    wxCheckListBox* checkListBox = wxDynamicCast(m_listbox, wxCheckListBox);
+    if (checkListBox)
+    {
+        // first clear all currently selected items
+        size_t n,
+            count = checkListBox->GetCount();
+        for ( n = 0; n < count; ++n )
+        {
+            if (checkListBox->IsChecked(n))
+                checkListBox->Check(n, false);
+        }
+
+        // now select the ones which should be selected
+        count = selections.GetCount();
+        for ( n = 0; n < count; n++ )
+        {
+            checkListBox->Check(selections[n]);
+        }
+        
+        return;
+    }
+#endif
+    
     // first clear all currently selected items
     size_t n,
            count = m_listbox->GetCount();
@@ -477,6 +501,21 @@ void wxMultiChoiceDialog::SetSelections(const wxArrayInt& selections)
 bool wxMultiChoiceDialog::TransferDataFromWindow()
 {
     m_selections.Empty();
+
+#if wxUSE_CHECKLISTBOX
+    wxCheckListBox* checkListBox = wxDynamicCast(m_listbox, wxCheckListBox);
+    if (checkListBox)
+    {
+        size_t count = checkListBox->GetCount();
+        for ( size_t n = 0; n < count; n++ )
+        {
+            if ( checkListBox->IsChecked(n) )
+                m_selections.Add(n);
+        }
+        return true;
+    }
+#endif
+
     size_t count = m_listbox->GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
