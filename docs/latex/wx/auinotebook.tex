@@ -5,7 +5,7 @@
 
 \section{\class{wxAuiNotebook}}\label{wxauinotebook}
 
-wxAuiPaneInfo is part of the wxAUI class framework.
+wxAuiNotebook is part of the wxAUI class framework.
 See also \helpref{wxAUI overview}{wxauioverview}.
 
 wxAuiNotebook is a notebook control which implements many features common in applications with dockable panes.
@@ -25,6 +25,25 @@ The theme can be changed by calling \helpref{wxAuiNotebook::SetArtProvider}{wxau
 \wxheading{Include files}
 
 <wx/aui/auibook.h>
+
+
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxAUI\_NB\_DEFAULT\_STYLE}}{Defined as wxAUI\_NB\_TOP | wxAUI\_NB\_TAB\_SPLIT | wxAUI\_NB\_TAB\_MOVE | wxAUI\_NB\_SCROLL\_BUTTONS | wxAUI\_NB\_CLOSE\_ON\_ACTIVE\_TAB
+.}
+\twocolitem{\windowstyle{wxAUI\_NB\_TAB\_SPLIT}}{Allows the tab control to be split by dragging a tab.}
+\twocolitem{\windowstyle{wxAUI\_NB\_TAB\_MOVE}}{Allows a tab to be moved horizontally by dragging.}
+\twocolitem{\windowstyle{wxAUI\_NB\_TAB\_EXTERNAL\_MOVE}}{Allows a tab to be moved to another tab control.}
+\twocolitem{\windowstyle{wxAUI\_NB\_TAB\_FIXED\_WIDTH}}{With this style, all tabs have the same width.}
+\twocolitem{\windowstyle{wxAUI\_NB\_SCROLL\_BUTTONS}}{With this style, left and right scroll buttons are displayed.}
+\twocolitem{\windowstyle{wxAUI\_NB\_WINDOWLIST\_BUTTON}}{With this style, a drop-down list of windows is available.}
+\twocolitem{\windowstyle{wxAUI\_NB\_CLOSE\_BUTTON}}{With this style, a close button is available on the tab bar.}
+\twocolitem{\windowstyle{wxAUI\_NB\_CLOSE\_ON\_ACTIVE\_TAB}}{With this style, the close button is visible on the active tab.}
+\twocolitem{\windowstyle{wxAUI\_NB\_CLOSE\_ON\_ALL\_TABS}}{With this style, the close button is visible on all tabs.}
+\end{twocollist}
+
 
 \wxheading{Data structures}
 
@@ -72,7 +91,7 @@ Returns the page specified by the given index.
 
 \constfunc{size\_t}{GetPageCount}{\void}
 
-Returns the number of pages.
+Returns the number of pages in the notebook.
 
 \membersection{wxAuiNotebook::GetPageIndex}\label{wxauinotebookgetpageindex}
 
@@ -90,7 +109,8 @@ Returns the currently selected page.
 
 \func{bool}{InsertPage}{\param{size\_t }{page\_idx}, \param{wxWindow* }{page}, \param{const wxString\& }{caption}, \param{bool }{select = false}, \param{const wxBitmap\& }{bitmap = wxNullBitmap}}
 
-Inserts a page.
+InsertPage() is similar to AddPage, but allows the ability to specify the insert location.
+If the {\it select} parameter is true, calling this will generate a page change event.
 
 \membersection{wxAuiNotebook::RemovePage}\label{wxauinotebookremovepage}
 
@@ -108,7 +128,8 @@ Sets the art provider to be used by the notebook.
 
 \func{bool}{SetPageBitmap}{\param{size\_t }{page}, \param{const wxBitmap\& }{bitmap}}
 
-Sets the bitmap for the page.
+Sets the bitmap for the page.  To remove a bitmap from the tab caption, pass
+wxNullBitmap.
 
 \membersection{wxAuiNotebook::SetPageText}\label{wxauinotebooksetpagetext}
 
@@ -126,5 +147,18 @@ Sets the page selection.  Calling this method will generate a page change event.
 
 \func{void}{SetTabCtrlHeight}{\param{int }{height}}
 
-Sets the tab height.
+Sets the tab height.  By default, the tab control height is calculated
+by measuring the text height and bitmap sizes on the tab captions.  Calling this
+method will override that calculation and set the tab control to the specified
+height parameter.  A call to this method will override any call to SetUniformBitmapSize().
+Specifying -1 as the height will return the control to its default auto-sizing behaviour.
 
+\membersection{wxAuiNotebook::SetUniformBitmapSize}\label{wxauinotebooksetuniformbitmapsize}
+
+\func{void}{SetUniformBitmapSize}{\param{const wxSize\& }{size}}
+
+SetUniformBitmapSize() ensures that all tabs will have the same height, even
+if some tabs don't have bitmaps.  Passing wxDefaultSize to this function will
+instruct the control to use dynamic tab height, which is the default behaviour.
+Under the default behaviour, when a tab with a large bitmap is added, the tab control's
+height will automatically increase to accommodate the larger bitmap.
