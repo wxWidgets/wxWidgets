@@ -1521,7 +1521,7 @@ wxString MyFrame::GetIntroText()
         "<ul>"
         "<li>New wxAuiNotebook class, a dynamic splittable notebook control</li>"
         "<li>New wxAuiMDI* classes, a tab-based MDI and drop-in replacement for classic MDI</li>"
-        "<li>Maximize/Minimize buttons implemented</li>"
+        "<li>Maximize/Restore buttons implemented</li>"
         "<li>Better hinting with wxGTK</li>"
         "<li>Class rename.  'wxAui' is now the standard class prefix for all wxAUI classes</li>"
         "<li>Lots of bug fixes</li>"
