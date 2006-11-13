@@ -532,10 +532,11 @@ public:
     
     virtual void SetUniformBitmapSize(const wxSize& size);
     virtual void SetTabCtrlHeight(int height);
-
+    
 protected:
 
     // these can be overridden
+    virtual void UpdateTabCtrlHeight();
     virtual int CalculateTabCtrlHeight();
     virtual wxSize CalculateNewSplitSize();
     
@@ -571,6 +572,7 @@ protected:
     wxWindow* m_dummy_wnd;
 
     wxSize m_requested_bmp_size;
+    int m_requested_tabctrl_height;
     wxFont m_selected_font;
     wxFont m_normal_font;
     int m_tab_ctrl_height;

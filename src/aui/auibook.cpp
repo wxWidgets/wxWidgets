@@ -2379,6 +2379,7 @@ wxAuiNotebook::wxAuiNotebook()
     m_dummy_wnd = NULL;
     m_tab_ctrl_height = 20;
     m_requested_bmp_size = wxDefaultSize;
+    m_requested_tabctrl_height = -1;
 }
 
 wxAuiNotebook::wxAuiNotebook(wxWindow *parent,
@@ -2389,6 +2390,7 @@ wxAuiNotebook::wxAuiNotebook(wxWindow *parent,
 {
     m_dummy_wnd = NULL;
     m_requested_bmp_size = wxDefaultSize;
+    m_requested_tabctrl_height = -1;
     InitNotebook(style);
 }
 
@@ -2413,9 +2415,11 @@ void wxAuiNotebook::InitNotebook(long style)
     m_curpage = -1;
     m_tab_id_counter = 10000;
     m_dummy_wnd = NULL;
-    m_tab_ctrl_height = 20;
     m_flags = (unsigned int)style;
-
+    m_tab_ctrl_height = 20;
+    m_requested_bmp_size = wxDefaultSize;
+    m_requested_tabctrl_height = -1;
+    
     m_normal_font = *wxNORMAL_FONT;
     m_selected_font = *wxNORMAL_FONT;
     m_selected_font.SetWeight(wxBOLD);
@@ -2444,8 +2448,34 @@ void wxAuiNotebook::SetArtProvider(wxAuiTabArt* art)
 {
     m_tabs.SetArtProvider(art);
 
-    SetTabCtrlHeight(CalculateTabCtrlHeight());
+    UpdateTabCtrlHeight();
 }
+
+// SetTabCtrlHeight() is the highest-level override of the
+// tab height.  A call to this function effectively enforces a
+// specified tab ctrl height, overriding all other considerations,
+// such as text or bitmap height.  It overrides any call to
+// SetUniformBitmapSize().  Specifying a height of -1 reverts
+// any previous call and returns to the default behavior
+
+void wxAuiNotebook::SetTabCtrlHeight(int height)
+{
+    m_requested_tabctrl_height = height;
+    
+    // if window is already initialized, recalculate the tab height
+    if (m_dummy_wnd)
+    {
+        UpdateTabCtrlHeight();
+    }
+}
+
+
+// SetUniformBitmapSize() ensures that all tabs will have
+// the same height, even if some tabs don't have bitmaps
+// Passing wxDefaultSize to this function will instruct
+// the control to use dynamic tab height-- so when a tab
+// with a large bitmap is added, the tab ctrl's height will
+// automatically increase to accommodate the bitmap
 
 void wxAuiNotebook::SetUniformBitmapSize(const wxSize& size)
 {
@@ -2454,12 +2484,17 @@ void wxAuiNotebook::SetUniformBitmapSize(const wxSize& size)
     // if window is already initialized, recalculate the tab height
     if (m_dummy_wnd)
     {
-        SetTabCtrlHeight(CalculateTabCtrlHeight());
+        UpdateTabCtrlHeight();
     }
 }
 
-void wxAuiNotebook::SetTabCtrlHeight(int height)
+// UpdateTabCtrlHeight() does the actual tab resizing. It's meant
+// to be used interally
+void wxAuiNotebook::UpdateTabCtrlHeight()
 {
+    // get the tab ctrl height we will use
+    int height = CalculateTabCtrlHeight();
+    
     // if the tab control height needs to change, update
     // all of our tab controls with the new height
     if (m_tab_ctrl_height != height)
@@ -2536,6 +2571,12 @@ wxSize wxAuiNotebook::CalculateNewSplitSize()
 
 int wxAuiNotebook::CalculateTabCtrlHeight()
 {
+    // if a fixed tab ctrl height is specified,
+    // just return that instead of calculating a
+    // tab height
+    if (m_requested_tabctrl_height != -1)
+        return m_requested_tabctrl_height;
+        
     // find out new best tab height
     wxAuiTabArt* art = m_tabs.GetArtProvider();
 
@@ -2612,7 +2653,7 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
          else
         active_tabctrl->InsertPage(page, info, page_idx);
 
-    SetTabCtrlHeight(CalculateTabCtrlHeight());
+    UpdateTabCtrlHeight();
     DoSizing();
     active_tabctrl->DoShowHide();
 
@@ -2757,7 +2798,7 @@ bool wxAuiNotebook::SetPageBitmap(size_t page_idx, const wxBitmap& bitmap)
     page_info.bitmap = bitmap;
 
     // tab height might have changed
-    SetTabCtrlHeight(CalculateTabCtrlHeight());
+    UpdateTabCtrlHeight();
 
     // update what's on screen
     wxAuiTabCtrl* ctrl;

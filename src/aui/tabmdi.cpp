@@ -701,7 +701,7 @@ bool wxAuiMDIClientWindow::CreateClient(wxAuiMDIParentFrame* parent, long style)
             wxSize(wxSystemSettings::GetMetric(wxSYS_SMALLICON_X),
                    wxSystemSettings::GetMetric(wxSYS_SMALLICON_Y));
     SetUniformBitmapSize(caption_icon_size);
-
+    
     if (!wxAuiNotebook::Create(parent,
                                wxID_ANY,
                                wxPoint(0,0),
