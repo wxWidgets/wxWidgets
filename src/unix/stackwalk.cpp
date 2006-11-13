@@ -284,11 +284,10 @@ int wxStackWalker::InitFrames(wxStackFrame *arr, size_t n, void **addresses, cha
             }
         }
 
-        if (!name.empty() || !filename.empty())
-        {
-            // now we've got enough info to initialize curr-th stack frame:
-            arr[curr++].Set(name, filename, syminfo[i], i, line, addresses[i]);
-        }
+        // now we've got enough info to initialize curr-th stack frame
+        // (at worst, only addresses[i] and syminfo[i] have been initialized,
+        //  but wxStackFrame::OnGetName may still be able to get function name):
+        arr[curr++].Set(name, filename, syminfo[i], i, line, addresses[i]);
     }
 
     return curr;
