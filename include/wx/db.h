@@ -73,24 +73,16 @@
           typedef UCHAR SQLTCHAR;
           #endif
         #endif
-    #else
-      #if defined( __WXMOTIF__ ) && defined( __VMS )
-       // solves a type definition mismatch between IODBC and MOTIF on OpenVMS
-      #define BOOL int
-      #endif
-      #if defined( __DARWIN__ )
-       // solves a type definition mismatch between IODBC and Cocoa
-      #define BOOL signed char
-      #endif 
+    #else // !wxUSE_BUILTIN_IODBC
+        // SQL headers define BOOL if it's not defined yet but BOOL is also
+        // defined in many other places on other systems (Motif, at least on
+        // OpenVMS; Cocoa and X11) so prevent the problem by defining it before
+        // including these headers
+        #define BOOL int
         #include <sql.h>
         #include <sqlext.h>
-        //#if wxUSE_UNICODE
-        //    #include <sqlucode.h>
-        //#endif
-      #if defined( __WXMOTIF__ ) && defined( __VMS )
-      #undef BOOL
-      #endif
-    #endif
+        #undef BOOL
+    #endif // wxUSE_BUILTIN_IODBC/!wxUSE_BUILTIN_IODBC
     }
 #endif
 
