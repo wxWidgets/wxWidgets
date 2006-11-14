@@ -3325,6 +3325,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(ADVANCED_UNIX_SRC) $(ADVANCED_GTK_SRC)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(ADVANCED_UNIX_SRC) $(ADVANCED_GTK1_SRC)</if>
         <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_SRC)</if>
+        <if cond="TOOLKIT=='MGL' and PLATFORM_UNIX=='1'">$(ADVANCED_UNIX_SRC)</if>
         <if cond="TOOLKIT=='PM'">$(ADVANCED_OS2_SRC)</if>
     </set>
     <set var="ADVANCED_PLATFORM_HDR" hints="files">
@@ -3336,6 +3337,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">$(ADVANCED_UNIX_HDR) $(ADVANCED_GTK_HDR)</if>
         <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">$(ADVANCED_UNIX_HDR) $(ADVANCED_GTK1_HDR)</if>
         <if cond="TOOLKIT=='X11'">$(ADVANCED_UNIX_HDR)</if>
+        <if cond="TOOLKIT=='MGL' and PLATFORM_UNIX=='1'">$(ADVANCED_UNIX_HDR)</if>
         <if cond="TOOLKIT=='PM'">$(ADVANCED_OS2_HDR)</if>
     </set>
 

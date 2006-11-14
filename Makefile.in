@@ -2644,6 +2644,9 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/wince/textctrlce.h \
 	wx/msw/wince/resources.h
 @COND_TOOLKIT_WINCE@GUI_HDR = $(COND_TOOLKIT_WINCE_GUI_HDR)
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@ADVANCED_PLATFORM_HDR \
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	= wx/unix/joystick.h wx/unix/sound.h \
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	wx/unix/taskbarx11.h
 @COND_TOOLKIT_COCOA@ADVANCED_PLATFORM_HDR = \
 @COND_TOOLKIT_COCOA@	wx/cocoa/taskbar.h wx/mac/corefoundation/joystick.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@ADVANCED_PLATFORM_HDR \
@@ -10922,6 +10925,12 @@ COND_WITH_PLUGIN_SDL_1___sound_sdl___depname = \
 @COND_PLATFORM_MACOSX_1@__MAC_LOWLEVEL_SRC_OBJECTS \
 @COND_PLATFORM_MACOSX_1@	= monodll_gsockosx.o monodll_hid.o \
 @COND_PLATFORM_MACOSX_1@	monodll_utilsexc_cf.o
+COND_PLATFORM_UNIX_1_TOOLKIT_MGL___ADVANCED_PLATFORM_SRC_OBJECTS =  \
+	monodll_taskbarcmn.o \
+	monodll_joystick.o \
+	monodll_sound.o \
+	monodll_taskbarx11.o
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_UNIX_1_TOOLKIT_MGL___ADVANCED_PLATFORM_SRC_OBJECTS)
 @COND_TOOLKIT_COCOA@__ADVANCED_PLATFORM_SRC_OBJECTS = \
 @COND_TOOLKIT_COCOA@	monodll_taskbar.o monodll_taskbarcmn.o \
 @COND_TOOLKIT_COCOA@	monodll_hidjoystick.o
@@ -10979,6 +10988,12 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 @COND_PLATFORM_MACOSX_1@__MAC_LOWLEVEL_SRC_OBJECTS_0 \
 @COND_PLATFORM_MACOSX_1@	= monolib_gsockosx.o monolib_hid.o \
 @COND_PLATFORM_MACOSX_1@	monolib_utilsexc_cf.o
+COND_PLATFORM_UNIX_1_TOOLKIT_MGL___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
+	monolib_taskbarcmn.o \
+	monolib_joystick.o \
+	monolib_sound.o \
+	monolib_taskbarx11.o
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@__ADVANCED_PLATFORM_SRC_OBJECTS_0 = $(COND_PLATFORM_UNIX_1_TOOLKIT_MGL___ADVANCED_PLATFORM_SRC_OBJECTS_0)
 @COND_TOOLKIT_COCOA@__ADVANCED_PLATFORM_SRC_OBJECTS_0 = \
 @COND_TOOLKIT_COCOA@	monolib_taskbar.o monolib_taskbarcmn.o \
 @COND_TOOLKIT_COCOA@	monolib_hidjoystick.o
@@ -11039,6 +11054,9 @@ COND_TOOLKIT_X11___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 @COND_PLATFORM_MACOSX_1@__MAC_LOWLEVEL_SRC_OBJECTS_9 \
 @COND_PLATFORM_MACOSX_1@	= corelib_gsockosx.o corelib_hid.o \
 @COND_PLATFORM_MACOSX_1@	corelib_utilsexc_cf.o
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@__ADVANCED_PLATFORM_SRC_OBJECTS_8 \
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	= advdll_taskbarcmn.o advdll_joystick.o \
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	advdll_sound.o advdll_taskbarx11.o
 @COND_TOOLKIT_COCOA@__ADVANCED_PLATFORM_SRC_OBJECTS_8 = \
 @COND_TOOLKIT_COCOA@	advdll_taskbar.o advdll_taskbarcmn.o \
 @COND_TOOLKIT_COCOA@	advdll_hidjoystick.o
@@ -11087,6 +11105,9 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 @COND_TOOLKIT_X11@__ADVANCED_PLATFORM_SRC_OBJECTS_8 = \
 @COND_TOOLKIT_X11@	advdll_taskbarcmn.o advdll_joystick.o advdll_sound.o \
 @COND_TOOLKIT_X11@	advdll_taskbarx11.o
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@__ADVANCED_PLATFORM_SRC_OBJECTS_9 \
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	= advlib_taskbarcmn.o advlib_joystick.o \
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	advlib_sound.o advlib_taskbarx11.o
 @COND_TOOLKIT_COCOA@__ADVANCED_PLATFORM_SRC_OBJECTS_9 = \
 @COND_TOOLKIT_COCOA@	advlib_taskbar.o advlib_taskbarcmn.o \
 @COND_TOOLKIT_COCOA@	advlib_hidjoystick.o
@@ -15905,6 +15926,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_sound.o: $(srcdir)/src/unix/sound.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
 
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@monodll_sound.o: $(srcdir)/src/unix/sound.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
+
 @COND_TOOLKIT_PM_USE_GUI_1@monodll_sound.o: $(srcdir)/src/os2/sound.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/sound.cpp
 
@@ -16355,6 +16379,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
 
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@monodll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monodll_aboutdlg.o: $(srcdir)/src/msw/aboutdlg.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/aboutdlg.cpp
 
@@ -16400,6 +16427,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_joystick.o: $(srcdir)/src/unix/joystick.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
 
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@monodll_joystick.o: $(srcdir)/src/unix/joystick.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
+
 @COND_TOOLKIT_PM_USE_GUI_1@monodll_joystick.o: $(srcdir)/src/os2/joystick.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/joystick.cpp
 
@@ -16420,6 +16450,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
+
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@monodll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_animate.o: $(srcdir)/src/gtk/animate.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
@@ -19985,6 +20018,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_sound.o: $(srcdir)/src/unix/sound.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
 
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@monolib_sound.o: $(srcdir)/src/unix/sound.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
+
 @COND_TOOLKIT_PM_USE_GUI_1@monolib_sound.o: $(srcdir)/src/os2/sound.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/sound.cpp
 
@@ -20435,6 +20471,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
 
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@monolib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
+
 @COND_TOOLKIT_MSW_USE_GUI_1@monolib_aboutdlg.o: $(srcdir)/src/msw/aboutdlg.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/aboutdlg.cpp
 
@@ -20480,6 +20519,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_joystick.o: $(srcdir)/src/unix/joystick.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
 
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@monolib_joystick.o: $(srcdir)/src/unix/joystick.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
+
 @COND_TOOLKIT_PM_USE_GUI_1@monolib_joystick.o: $(srcdir)/src/os2/joystick.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/joystick.cpp
 
@@ -20500,6 +20542,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
+
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@monolib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_animate.o: $(srcdir)/src/gtk/animate.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
@@ -27797,6 +27842,9 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_X11@advdll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
 
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@advdll_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVDLL_ODEP)
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
+
 @COND_TOOLKIT_MSW@advdll_aboutdlg.o: $(srcdir)/src/msw/aboutdlg.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/msw/aboutdlg.cpp
 
@@ -27829,6 +27877,9 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 
 @COND_TOOLKIT_X11@advdll_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
+
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@advdll_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVDLL_ODEP)
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
 
 @COND_TOOLKIT_PM@advdll_sound.o: $(srcdir)/src/os2/sound.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_PM@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/os2/sound.cpp
@@ -27866,6 +27917,9 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_X11@advdll_joystick.o: $(srcdir)/src/unix/joystick.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
 
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@advdll_joystick.o: $(srcdir)/src/unix/joystick.cpp $(ADVDLL_ODEP)
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
+
 @COND_TOOLKIT_PM@advdll_joystick.o: $(srcdir)/src/os2/joystick.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_PM@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/os2/joystick.cpp
 
@@ -27889,6 +27943,9 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 
 @COND_TOOLKIT_X11@advdll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
+
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@advdll_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVDLL_ODEP)
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_animate.o: $(srcdir)/src/gtk/animate.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp
@@ -27995,6 +28052,9 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_X11@advlib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
 
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@advlib_taskbarcmn.o: $(srcdir)/src/common/taskbarcmn.cpp $(ADVLIB_ODEP)
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/common/taskbarcmn.cpp
+
 @COND_TOOLKIT_MSW@advlib_aboutdlg.o: $(srcdir)/src/msw/aboutdlg.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_MSW@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/msw/aboutdlg.cpp
 
@@ -28027,6 +28087,9 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_X11@advlib_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
+
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@advlib_sound.o: $(srcdir)/src/unix/sound.cpp $(ADVLIB_ODEP)
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/sound.cpp
 
 @COND_TOOLKIT_PM@advlib_sound.o: $(srcdir)/src/os2/sound.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_PM@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/os2/sound.cpp
@@ -28064,6 +28127,9 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_X11@advlib_joystick.o: $(srcdir)/src/unix/joystick.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
 
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@advlib_joystick.o: $(srcdir)/src/unix/joystick.cpp $(ADVLIB_ODEP)
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/joystick.cpp
+
 @COND_TOOLKIT_PM@advlib_joystick.o: $(srcdir)/src/os2/joystick.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_PM@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/os2/joystick.cpp
 
@@ -28087,6 +28153,9 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_X11@advlib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_X11@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
+
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@advlib_taskbarx11.o: $(srcdir)/src/unix/taskbarx11.cpp $(ADVLIB_ODEP)
+@COND_PLATFORM_UNIX_1_TOOLKIT_MGL@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/unix/taskbarx11.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_animate.o: $(srcdir)/src/gtk/animate.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/animate.cpp

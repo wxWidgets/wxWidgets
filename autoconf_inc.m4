@@ -386,6 +386,18 @@ dnl ### begin block 20_COND_PLATFORM_UNIX_1[../../contrib/build/animate/animate.
         COND_PLATFORM_UNIX_1=""
     fi
     AC_SUBST(COND_PLATFORM_UNIX_1)
+dnl ### begin block 20_COND_PLATFORM_UNIX_1_TOOLKIT_MGL[wx.bkl] ###
+    COND_PLATFORM_UNIX_1_TOOLKIT_MGL="#"
+    if test "x$PLATFORM_UNIX" = "x1" -a "x$TOOLKIT" = "xMGL" ; then
+        COND_PLATFORM_UNIX_1_TOOLKIT_MGL=""
+    fi
+    AC_SUBST(COND_PLATFORM_UNIX_1_TOOLKIT_MGL)
+dnl ### begin block 20_COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1[wx.bkl] ###
+    COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1="#"
+    if test "x$PLATFORM_UNIX" = "x1" -a "x$TOOLKIT" = "xMGL" -a "x$USE_GUI" = "x1" ; then
+        COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1=""
+    fi
+    AC_SUBST(COND_PLATFORM_UNIX_1_TOOLKIT_MGL_USE_GUI_1)
 dnl ### begin block 20_COND_PLATFORM_UNIX_1_USE_GUI_1[wx.bkl] ###
     COND_PLATFORM_UNIX_1_USE_GUI_1="#"
     if test "x$PLATFORM_UNIX" = "x1" -a "x$USE_GUI" = "x1" ; then
