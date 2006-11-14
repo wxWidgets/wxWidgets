@@ -913,9 +913,11 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
     #else /* !HAVE_UNIX98_PRINTF */
         /*
             The only compiler with positional parameters support under Windows
-            is VC++ 8.0 which provides a new xxprintf_p() functions family
+            is VC++ 8.0 which provides a new xxprintf_p() functions family.
+            The 2003 PSDK includes a slightly earlier version of VC8 than the
+            main release and does not have the printf_p functions.
          */
-        #if defined(__VISUALC__) && __VISUALC__ >= 1400 && !defined(__WXWINCE__)
+        #if defined _MSC_FULL_VER && _MSC_FULL_VER >= 140050727 && !defined __WXWINCE__
             #if wxUSE_UNICODE
                 #define wxVsnprintf_    _vswprintf_p
             #else
