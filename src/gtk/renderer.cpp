@@ -510,6 +510,10 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow *win,
     wxASSERT_MSG( gdk_window,
                   wxT("cannot use wxRendererNative on wxDC of this type") );
 
+    int x_diff = 0;
+    if (win->GetLayoutDirection() == wxLayout_RightToLeft)
+        x_diff = rect.width;
+
     GtkStateType state;
     if (flags & wxCONTROL_SELECTED)
     {
@@ -524,7 +528,7 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow *win,
                         NULL,
                         win->m_wxwindow,
                         "cell_even",
-                        dc.LogicalToDeviceX(rect.x),
+                        dc.LogicalToDeviceX(rect.x) - x_diff,
                         dc.LogicalToDeviceY(rect.y),
                         rect.width,
                         rect.height );
