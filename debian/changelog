@@ -1,3 +1,10 @@
+wxwidgets2.7 (2.8.0.0-0rc2) unstable; urgency=low
+
+  * wxArrayString::Alloc() doesn't clear array contents any more
+  * Fixed long standing bug in wxFileConfig groups renaming
+
+ -- Vadim Zeitlin <vadim@wxwindows.org>  Nov, 14 Tue 2006 19:06:37 +0100
+
 wxwidgets2.7 (2.7.2.0-0) unstable; urgency=low
 
   * Added wxTar streams.
