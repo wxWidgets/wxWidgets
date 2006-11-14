@@ -225,6 +225,10 @@ wxWindowGTK *g_delayedFocus = (wxWindowGTK*) NULL;
 // the last click here (extern: used from gtk/menu.cpp)
 guint32 wxGtkTimeLastClick = 0;
 
+// Save the last mouse event for drag start
+GdkEvent *g_lastMouseEvent = (GdkEvent*) NULL;
+int g_lastButtonNumber = 0;
+
 extern bool g_mainThreadLocked;
 
 //-----------------------------------------------------------------------------
@@ -1468,6 +1472,8 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
 
     if (!win->IsOwnGtkWindow( gdk_event->window )) return FALSE;
 
+    g_lastButtonNumber = gdk_event->button;
+
     if (win->m_wxwindow && (g_focusWindow != win) && win->AcceptsFocus())
     {
         gtk_widget_grab_focus( win->m_wxwindow );
@@ -1575,6 +1581,8 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
         return FALSE;
     }
 
+    g_lastMouseEvent = (GdkEvent*) gdk_event;
+    
     wxMouseEvent event( event_type );
     InitMouseEvent( win, event, gdk_event );
 
@@ -1651,6 +1659,8 @@ static gint gtk_window_button_release_callback( GtkWidget *widget,
 
     if (!win->IsOwnGtkWindow( gdk_event->window )) return FALSE;
 
+    g_lastButtonNumber = 0;
+
     wxEventType event_type = wxEVT_NULL;
 
     switch (gdk_event->button)
@@ -1672,6 +1682,8 @@ static gint gtk_window_button_release_callback( GtkWidget *widget,
             return FALSE;
     }
 
+    g_lastMouseEvent = (GdkEvent*) gdk_event;
+    
     wxMouseEvent event( event_type );
     InitMouseEvent( win, event, gdk_event );
 
@@ -1722,6 +1734,8 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget,
         gdk_event->x = x;
         gdk_event->y = y;
     }
+
+    g_lastMouseEvent = (GdkEvent*) gdk_event;
 
 /*
     printf( "OnMotion from " );
