@@ -169,11 +169,27 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
     InheritAttributes();
     if ( !m_hasFont )
     {
-#if wxUSE_LISTCTRL || wxUSE_TREECTRL
+        bool setFont = true;
+
+        wxFont font = GetDefaultAttributes().font;
+
         // if we set a font for {list,tree}ctrls and the font size is changed in
         // the display properties then the font size for these controls doesn't
         // automatically adjust when they receive WM_SETTINGCHANGE
-        if ( wxDynamicCastThis(wxListCtrl) || wxDynamicCastThis(wxTreeCtrl) )
+
+        // FIXME: replace the dynamic casts with virtual function calls!!
+#if wxUSE_LISTCTRL || wxUSE_TREECTRL
+        bool testFont = false;
+#if wxUSE_LISTCTRL
+        if ( wxDynamicCastThis(wxListCtrl) )
+            testFont = true;
+#endif // wxUSE_LISTCTRL
+#if wxUSE_TREECTRL
+        if ( wxDynamicCastThis(wxTreeCtrl) )
+            testFont = true;
+#endif wxUSE_TREECTRL
+
+        if ( testFont )
         {
             // not sure if we need to explicitly set the font here for Win95/NT4
             // but we definitely can't do it for any newer version
@@ -182,14 +198,14 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
 
             // TODO: test Win95/NT4 to see if this is needed or breaks the
             // font resizing as it does on newer versions
-            wxFont font = GetDefaultAttributes().font;
-            if ( font == wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT) )
+            if ( font != wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT) )
             {
-                SetFont(font);
+                setFont = false;
             }
         }
-        else
 #endif // wxUSE_LISTCTRL || wxUSE_TREECTRL
+
+        if ( setFont )
         {
             SetFont(GetDefaultAttributes().font);
         }
