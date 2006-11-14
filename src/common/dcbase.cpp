@@ -698,6 +698,7 @@ void wxDCBase::DoGradientFillLinear(const wxRect& rect,
 {
     // save old pen
     wxPen oldPen = m_pen;
+    wxBrush oldBrush = m_brush;
 
     wxUint8 nR1 = initialColour.Red();
     wxUint8 nG1 = initialColour.Green();
@@ -783,6 +784,7 @@ void wxDCBase::DoGradientFillLinear(const wxRect& rect,
     }
 
     SetPen(oldPen);
+    SetBrush(oldBrush);
 }
 
 void wxDCBase::DoGradientFillConcentric(const wxRect& rect,
