@@ -1095,32 +1095,50 @@ void MyCanvas::DrawSplines(wxDC& dc)
 
 void MyCanvas::DrawGradients(wxDC& dc)
 {
+    static const int TEXT_HEIGHT = 15;
+
     // LHS: linear
-    wxRect r(10, 10, 100, 100);
+    wxRect r(10, 10, 50, 50);
+    dc.DrawText(_T("wxRIGHT"), r.x, r.y);
+    r.Offset(0, TEXT_HEIGHT);
     dc.GradientFillLinear(r, *wxWHITE, *wxBLUE, wxRIGHT);
 
-    r.Offset(0, 110);
+    r.Offset(0, r.height + 10);
+    dc.DrawText(_T("wxLEFT"), r.x, r.y);
+    r.Offset(0, TEXT_HEIGHT);
     dc.GradientFillLinear(r, *wxWHITE, *wxBLUE, wxLEFT);
 
-    r.Offset(0, 110);
+    r.Offset(0, r.height + 10);
+    dc.DrawText(_T("wxDOWN"), r.x, r.y);
+    r.Offset(0, TEXT_HEIGHT);
     dc.GradientFillLinear(r, *wxWHITE, *wxBLUE, wxDOWN);
 
-    r.Offset(0, 110);
+    r.Offset(0, r.height + 10);
+    dc.DrawText(_T("wxUP"), r.x, r.y);
+    r.Offset(0, TEXT_HEIGHT);
     dc.GradientFillLinear(r, *wxWHITE, *wxBLUE, wxUP);
 
 
     // RHS: concentric
-    r = wxRect(200, 10, 100, 100);
+    r = wxRect(200, 10, 50, 50);
+    dc.DrawText(_T("Blue inside"), r.x, r.y);
+    r.Offset(0, TEXT_HEIGHT);
     dc.GradientFillConcentric(r, *wxBLUE, *wxWHITE);
 
-    r.Offset(0, 110);
+    r.Offset(0, r.height + 10);
+    dc.DrawText(_T("White inside"), r.x, r.y);
+    r.Offset(0, TEXT_HEIGHT);
     dc.GradientFillConcentric(r, *wxWHITE, *wxBLUE);
 
-    r.Offset(0, 110);
+    r.Offset(0, r.height + 10);
+    dc.DrawText(_T("Blue in top left corner"), r.x, r.y);
+    r.Offset(0, TEXT_HEIGHT);
     dc.GradientFillConcentric(r, *wxBLUE, *wxWHITE, wxPoint(0, 0));
 
-    r.Offset(0, 110);
-    dc.GradientFillConcentric(r, *wxBLUE, *wxWHITE, wxPoint(100, 100));
+    r.Offset(0, r.height + 10);
+    dc.DrawText(_T("Blue in bottom right corner"), r.x, r.y);
+    r.Offset(0, TEXT_HEIGHT);
+    dc.GradientFillConcentric(r, *wxBLUE, *wxWHITE, wxPoint(r.width, r.height));
 }
 
 void MyCanvas::DrawRegions(wxDC& dc)
