@@ -52,12 +52,6 @@
     #include "wx/mac/private.h"
 #endif
 
-#ifdef __WXGTK20__
-    #include "wx/gtk/private.h"
-    #include "wx/gtk/win_gtk.h"
-#endif
-
-
 
 // NOTE: If using the wxListBox visual attributes works everywhere then this can
 // be removed, as well as the #else case below.
@@ -1456,17 +1450,11 @@ void wxListLineData::Draw( wxDC *dc )
     {
         if (highlighted)
         {
-            wxRect rect2( m_gi->m_rectHighlight );
-            m_owner->CalcScrolledPosition( rect2.x, rect2.y, &rect2.x, &rect2.y );
-        
-            gtk_paint_flat_box( m_owner->m_widget->style, 
-                            GTK_PIZZA(m_owner->m_wxwindow)->bin_window,
-			                GTK_STATE_SELECTED,
-                            GTK_SHADOW_NONE,
-                            NULL,
-                            m_owner->m_wxwindow,
-                            "cell_even",
-                            rect2.x, rect2.y, rect2.width, rect2.height );
+            int flags = wxCONTROL_SELECTED;
+            if (m_owner->HasFocus())
+                flags |= wxCONTROL_FOCUSED;
+            wxRendererNative::Get().DrawItemSelectionRect( m_owner, *dc, m_gi->m_rectHighlight, flags );
+            
         }
         else
         {
@@ -1521,17 +1509,10 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
     {
         if (highlighted)
         {
-            wxRect rect2( rectHL );
-            m_owner->CalcScrolledPosition( rect2.x, rect2.y, &rect2.x, &rect2.y );
-        
-            gtk_paint_flat_box( m_owner->m_widget->style, 
-                            GTK_PIZZA(m_owner->m_wxwindow)->bin_window,
-			                GTK_STATE_SELECTED,
-                            GTK_SHADOW_NONE,
-                            NULL,
-                            m_owner->m_wxwindow,
-                            "cell_even",
-                            rect2.x, rect2.y, rect2.width, rect2.height );
+            int flags = wxCONTROL_SELECTED;
+            if (m_owner->HasFocus())
+                flags |= wxCONTROL_FOCUSED;
+            wxRendererNative::Get().DrawItemSelectionRect( m_owner, *dc, rectHL, flags );
         }
         else
         {
@@ -2801,15 +2782,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             dc.SetBrush( *wxTRANSPARENT_BRUSH );
             dc.DrawRectangle( rect );
 #else
-            CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
-        
-            gtk_paint_focus( m_widget->style, 
-                             GTK_PIZZA(m_wxwindow)->bin_window,
-                             GTK_STATE_SELECTED,
-                             NULL,
-                             m_wxwindow,
-                             "treeview",
-                             rect.x, rect.y, rect.width, rect.height );
+            wxRendererNative::Get().DrawItemSelectionRect( this, dc, rect, wxCONTROL_CURRENT|wxCONTROL_FOCUSED );
             
 #endif
         }

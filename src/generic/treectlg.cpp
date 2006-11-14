@@ -45,11 +45,6 @@
     #include "wx/mac/private.h"
 #endif
 
-#ifdef __WXGTK20__
-    #include "wx/gtk/private.h"
-    #include "wx/gtk/win_gtk.h"
-#endif
-
 // -----------------------------------------------------------------------------
 // array types
 // -----------------------------------------------------------------------------
@@ -2250,25 +2245,12 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         }
         else
         {
-            CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
-        
-            gtk_paint_flat_box( m_widget->style, 
-                                GTK_PIZZA(m_wxwindow)->bin_window,
-			                    GTK_STATE_SELECTED,
-                                GTK_SHADOW_NONE,
-                                NULL,
-                                m_wxwindow,
-                                "cell_even",
-                                rect.x, rect.y, rect.width, rect.height );
-                              
+            int flags = wxCONTROL_SELECTED;
+            if (m_hasFocus)
+                flags |= wxCONTROL_FOCUSED;
             if ((item == m_current) && (m_hasFocus))
-                gtk_paint_focus( m_widget->style, 
-                                 GTK_PIZZA(m_wxwindow)->bin_window,
-                                 GTK_STATE_SELECTED,
-                                 NULL,
-                                 m_wxwindow,
-                                 "treeview",
-                                 rect.x, rect.y, rect.width, rect.height );
+                flags |= wxCONTROL_CURRENT;
+            wxRendererNative::Get().DrawItemSelectionRect( this, dc, rect, flags );
         }
 #endif
     }
@@ -2284,28 +2266,15 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 #ifndef __WXGTK20__
             dc.DrawRectangle( rect );
 #else
-            CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
             rect.x -= 1;
             rect.width += 2;
         
-            gtk_paint_flat_box( m_widget->style, 
-                                GTK_PIZZA(m_wxwindow)->bin_window,
-			                    GTK_STATE_SELECTED,
-                                GTK_SHADOW_NONE,
-                                NULL,
-                                m_wxwindow,
-                                "cell_even",
-                                rect.x, rect.y, rect.width, rect.height );
-
+            int flags = wxCONTROL_SELECTED;
+            if (m_hasFocus)
+                flags |= wxCONTROL_FOCUSED;
             if ((item == m_current) && (m_hasFocus))
-                gtk_paint_focus( m_widget->style, 
-                                 GTK_PIZZA(m_wxwindow)->bin_window,
-                                 GTK_STATE_SELECTED,
-                                 NULL,
-                                 m_wxwindow,
-                                 "treeview",
-                                 rect.x, rect.y, rect.width, rect.height );
-                         
+                flags |= wxCONTROL_CURRENT;
+            wxRendererNative::Get().DrawItemSelectionRect( this, dc, rect, flags );
 #endif
         }
         // On GTK+ 2, drawing a 'normal' background is wrong for themes that
@@ -2324,27 +2293,15 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
             }
             else
             {
-                CalcScrolledPosition( rect.x, rect.y, &rect.x, &rect.y );
                 rect.x -= 1;
                 rect.width += 2;
-        
-                gtk_paint_flat_box( m_widget->style, 
-                                GTK_PIZZA(m_wxwindow)->bin_window,
-			                    GTK_STATE_SELECTED,
-                                GTK_SHADOW_NONE,
-                                NULL,
-                                m_wxwindow,
-                                "cell_even",
-                                rect.x, rect.y, rect.width, rect.height );
-                              
+                
+                int flags = wxCONTROL_SELECTED;
+                if (m_hasFocus)
+                    flags |= wxCONTROL_FOCUSED;
                 if ((item == m_current) && (m_hasFocus))
-                    gtk_paint_focus( m_widget->style, 
-                                 GTK_PIZZA(m_wxwindow)->bin_window,
-                                 GTK_STATE_SELECTED,
-                                 NULL,
-                                 m_wxwindow,
-                                 "treeview",
-                                 rect.x, rect.y, rect.width, rect.height );
+                    flags |= wxCONTROL_CURRENT;
+                wxRendererNative::Get().DrawItemSelectionRect( this, dc, rect, flags );
             }
 #endif
         }

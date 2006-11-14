@@ -513,18 +513,17 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow *win,
     GtkStateType state;
     if (flags & wxCONTROL_SELECTED)
     {
-        if (flags & wxCONTROL_FOCUSED)
-            state = GTK_STATE_SELECTED;
-        else
-            state = GTK_STATE_INSENSITIVE;
+        // the wxCONTROL_FOCUSED state is deduced
+        // directly from the m_wxwindow by GTK+
+        state = GTK_STATE_SELECTED;
 
-        gtk_paint_flat_box( win->m_wxwindow->style,
+        gtk_paint_flat_box( win->m_widget->style,
                         gdk_window,
                         state,
                         GTK_SHADOW_NONE,
                         NULL,
                         win->m_wxwindow,
-                        "treeview",
+                        "cell_even",
                         dc.LogicalToDeviceX(rect.x),
                         dc.LogicalToDeviceY(rect.y),
                         rect.width,
@@ -533,8 +532,15 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow *win,
 
     if (flags & wxCONTROL_CURRENT)
     {
-        dc.SetPen( *wxBLACK_PEN );
-        dc.SetBrush( *wxTRANSPARENT_BRUSH );
-        dc.DrawRectangle( rect );
+        gtk_paint_focus( win->m_widget->style, 
+                         gdk_window,
+                         GTK_STATE_SELECTED,
+                         NULL,
+                         win->m_wxwindow,
+                         "treeview",
+                         dc.LogicalToDeviceX(rect.x),
+                         dc.LogicalToDeviceY(rect.y),
+                         rect.width,
+                         rect.height );
     }
 }
