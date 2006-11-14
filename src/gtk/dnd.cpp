@@ -44,6 +44,10 @@ static long gs_flagsForDrag = 0;
 // (there are quite a few of them, so don't enable this by default)
 static const wxChar *TRACE_DND = _T("dnd");
 
+extern GdkEvent *g_lastMouseEvent;
+
+extern int g_lastButtonNumber;
+
 //----------------------------------------------------------------------------
 // standard icons
 //----------------------------------------------------------------------------
@@ -851,29 +855,8 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     }
     delete[] array;
 
-    GdkEventMotion event;
-    event.window = m_widget->window;
-    int x = 0;
-    int y = 0;
-    GdkModifierType state;
-    gdk_window_get_pointer( event.window, &x, &y, &state );
-    event.x = x;
-    event.y = y;
-    event.state = state;
-    event.time = (guint32)GDK_CURRENT_TIME;
-
-    /* GTK wants to know which button was pressed which caused the dragging */
-    int button_number = 0;
-    if (event.state & GDK_BUTTON1_MASK) button_number = 1;
-    else if (event.state & GDK_BUTTON2_MASK) button_number = 2;
-    else if (event.state & GDK_BUTTON3_MASK) button_number = 3;
-
-#if wxUSE_THREADS
-    /* disable GUI threads */
-#endif
-
     /* don't start dragging if no button is down */
-    if (button_number)
+    if (g_lastButtonNumber)
     {
         int action = GDK_ACTION_COPY;
         if ( flags & wxDrag_AllowMove )
@@ -887,8 +870,8 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
         GdkDragContext *context = gtk_drag_begin( m_widget,
                 target_list,
                 (GdkDragAction)action,
-                button_number,  /* number of mouse button which started drag */
-                (GdkEvent*) &event );
+                g_lastButtonNumber,  // number of mouse button which started drag
+                (GdkEvent*) g_lastMouseEvent );
 
         m_dragContext = context;
 
@@ -902,21 +885,9 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
             m_retValue = wxDragCancel;
     }
 
-#if wxUSE_THREADS
-    /* re-enable GUI threads */
-#endif
-
     g_blockEventsOnDrag = false;
 
     UnregisterWindow();
-
-    // this shouldn't be needed but somehow, sometimes, without this the cursor
-    // stays grabbed even when the DND operation ends and the application
-    // becomes unresponsive and has to be killed resulting in loss of all
-    // unsaved data, so while this fix is ugly it's still better than
-    // alternative
-    if ( gdk_pointer_is_grabbed() )
-        gdk_pointer_ungrab(GDK_CURRENT_TIME);
 
     return m_retValue;
 }

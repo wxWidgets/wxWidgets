@@ -210,6 +210,10 @@ wxWindowGTK *g_focusWindowLast = (wxWindowGTK*) NULL;
 // yet, defer setting the focus to idle time.
 wxWindowGTK *g_delayedFocus = (wxWindowGTK*) NULL;
 
+// Save the last mouse event for drag start
+GdkEvent *g_lastMouseEvent = (GdkEvent*) NULL;
+int g_lastButtonNumber = 0;
+
 extern bool g_mainThreadLocked;
 
 //-----------------------------------------------------------------------------
@@ -1462,6 +1466,8 @@ gtk_window_button_press_callback( GtkWidget *widget,
 {
     wxCOMMON_CALLBACK_PROLOGUE(gdk_event, win);
 
+    g_lastButtonNumber = gdk_event->button;
+
     if (win->m_wxwindow && (g_focusWindow != win) && win->AcceptsFocus())
     {
         gtk_widget_grab_focus( win->m_wxwindow );
@@ -1578,6 +1584,8 @@ gtk_window_button_press_callback( GtkWidget *widget,
         return FALSE;
     }
 
+    g_lastMouseEvent = (GdkEvent*) gdk_event;
+    
     wxMouseEvent event( event_type );
     InitMouseEvent( win, event, gdk_event );
 
@@ -1633,6 +1641,8 @@ gtk_window_button_release_callback( GtkWidget *widget,
 {
     wxCOMMON_CALLBACK_PROLOGUE(gdk_event, win);
 
+    g_lastButtonNumber = 0;
+
     wxEventType event_type = wxEVT_NULL;
 
     switch (gdk_event->button)
@@ -1654,6 +1664,8 @@ gtk_window_button_release_callback( GtkWidget *widget,
             return FALSE;
     }
 
+    g_lastMouseEvent = (GdkEvent*) gdk_event;
+    
     wxMouseEvent event( event_type );
     InitMouseEvent( win, event, gdk_event );
 
@@ -1692,6 +1704,8 @@ gtk_window_motion_notify_callback( GtkWidget *widget,
         gdk_event->x = x;
         gdk_event->y = y;
     }
+
+    g_lastMouseEvent = (GdkEvent*) gdk_event;
 
     wxMouseEvent event( wxEVT_MOTION );
     InitMouseEvent(win, event, gdk_event);
