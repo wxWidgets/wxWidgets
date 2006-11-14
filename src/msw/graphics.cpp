@@ -107,14 +107,14 @@ public :
     // begins a new subpath at (x,y)
     virtual void MoveToPoint( wxDouble x, wxDouble y );
 
-    // adds a straight line from the current point to (x,y) 
+    // adds a straight line from the current point to (x,y)
     virtual void AddLineToPoint( wxDouble x, wxDouble y );
 
     // adds a cubic Bezier curve from the current point, using two control points and an end point
     virtual void AddCurveToPoint( wxDouble cx1, wxDouble cy1, wxDouble cx2, wxDouble cy2, wxDouble x, wxDouble y );
 
 
-    // adds an arc of a circle centering at (x,y) with radius (r) from startAngle to endAngle 
+    // adds an arc of a circle centering at (x,y) with radius (r) from startAngle to endAngle
     virtual void AddArc( wxDouble x, wxDouble y, wxDouble r, wxDouble startAngle, wxDouble endAngle, bool clockwise ) ;
 
     // gets the last point of the current path, (0,0) if not yet set
@@ -127,11 +127,11 @@ public :
     virtual void CloseSubpath();
 
     //
-    // These are convenience functions which - if not available natively will be assembled 
+    // These are convenience functions which - if not available natively will be assembled
     // using the primitives from above
     //
 
-    // appends a rectangle as a new closed subpath 
+    // appends a rectangle as a new closed subpath
     virtual void AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h ) ;
     /*
 
@@ -142,11 +142,11 @@ public :
     virtual void AddArcToPoint( wxDouble x1, wxDouble y1 , wxDouble x2, wxDouble y2, wxDouble r )  ;
 */
 
-	// returns the native path
-	virtual void * GetNativePath() const { return m_path; }
-	
-	// give the native path returned by GetNativePath() back (there might be some deallocations necessary)
-	virtual void UnGetNativePath(void * WXUNUSED(path)) const {}
+    // returns the native path
+    virtual void * GetNativePath() const { return m_path; }
+
+    // give the native path returned by GetNativePath() back (there might be some deallocations necessary)
+    virtual void UnGetNativePath(void * WXUNUSED(path)) const {}
 
     // transforms each point of this path by the matrix
     virtual void Transform( const wxGraphicsMatrixData* matrix ) ;
@@ -172,7 +172,7 @@ public :
     virtual void Concat( const wxGraphicsMatrixData *t );
 
     // sets the matrix to the respective values
-    virtual void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
+    virtual void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
         wxDouble tx=0.0, wxDouble ty=0.0);
 
     // makes this the inverse matrix
@@ -195,7 +195,7 @@ public :
     virtual void Scale( wxDouble xScale , wxDouble yScale );
 
     // add the rotation to this matrix (radians)
-    virtual void Rotate( wxDouble angle );	
+    virtual void Rotate( wxDouble angle );
 
     //
     // apply the transforms
@@ -239,7 +239,7 @@ public:
     wxGDIPlusBrushData( wxGraphicsRenderer* renderer, const wxBrush &brush );
     ~wxGDIPlusBrushData ();
 
-    void CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
+    void CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
         const wxColour&c1, const wxColour&c2 );
     void CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
         const wxColour &oColor, const wxColour &cColor );
@@ -280,18 +280,18 @@ public:
     virtual void Clip( const wxRegion &region );
     // clips drawings to the rect
     virtual void Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h );
-	
-	// resets the clipping to original extent
-	virtual void ResetClip();
 
-	virtual void * GetNativeContext();
-	
+    // resets the clipping to original extent
+    virtual void ResetClip();
+
+    virtual void * GetNativeContext();
+
     virtual void StrokePath( const wxGraphicsPath& p );
     virtual void FillPath( const wxGraphicsPath& p , int fillStyle = wxODDEVEN_RULE );
 
-    virtual void Translate( wxDouble dx , wxDouble dy );    
-    virtual void Scale( wxDouble xScale , wxDouble yScale );    
-    virtual void Rotate( wxDouble angle );    
+    virtual void Translate( wxDouble dx , wxDouble dy );
+    virtual void Scale( wxDouble xScale , wxDouble yScale );
+    virtual void Rotate( wxDouble angle );
 
     // concatenates this transform with the current transform of this context
     virtual void ConcatTransform( const wxGraphicsMatrix& matrix );
@@ -304,7 +304,7 @@ public:
 
     virtual void DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
     virtual void DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h );
-    virtual void PushState();    
+    virtual void PushState();
     virtual void PopState();
 
     virtual void DrawText( const wxString &str, wxDouble x, wxDouble y);
@@ -344,7 +344,7 @@ void wxGDIPlusPenData::Init()
 
 wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &pen )
 : wxGraphicsObjectRefData(renderer)
-{    
+{
     Init();
     m_width = pen.GetWidth();
     if (m_width <= 0.0)
@@ -479,7 +479,7 @@ wxGDIPlusPenData::wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &p
             m_pen->SetBrush( m_penBrush );
         }
         break;
-    } 
+    }
     if ( dashStyle != DashStyleSolid )
         m_pen->SetDashStyle(dashStyle);
 }
@@ -531,7 +531,7 @@ wxGDIPlusBrushData::wxGDIPlusBrushData( wxGraphicsRenderer* renderer , const wxB
         m_brush = new HatchBrush(style,Color( brush.GetColour().Alpha() , brush.GetColour().Red() ,
             brush.GetColour().Green() , brush.GetColour().Blue() ), Color::Transparent );
     }
-    else 
+    else
     {
         wxBitmap* bmp = brush.GetStipple();
         if ( bmp && bmp->Ok() )
@@ -557,7 +557,7 @@ void wxGDIPlusBrushData::Init()
     m_brushPath= NULL;
 }
 
-void wxGDIPlusBrushData::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, const wxColour&c1, const wxColour&c2) 
+void wxGDIPlusBrushData::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, const wxColour&c1, const wxColour&c2)
 {
     m_brush = new LinearGradientBrush( PointF( x1,y1) , PointF( x2,y2),
         Color( c1.Alpha(), c1.Red(),c1.Green() , c1.Blue() ),
@@ -585,7 +585,7 @@ void wxGDIPlusBrushData::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wx
 // wxGDIPlusFont implementation
 //-----------------------------------------------------------------------------
 
-wxGDIPlusFontData::wxGDIPlusFontData( wxGraphicsRenderer* renderer, const wxFont &font, 
+wxGDIPlusFontData::wxGDIPlusFontData( wxGraphicsRenderer* renderer, const wxFont &font,
                              const wxColour& col ) : wxGraphicsObjectRefData( renderer )
 {
     m_textBrush = NULL;
@@ -672,7 +672,7 @@ void wxGDIPlusPathData::GetCurrentPoint( wxDouble* x, wxDouble* y) const
     *y = start.Y ;
 }
 
-void wxGDIPlusPathData::AddArc( wxDouble x, wxDouble y, wxDouble r, double startAngle, double endAngle, bool clockwise ) 
+void wxGDIPlusPathData::AddArc( wxDouble x, wxDouble y, wxDouble r, double startAngle, double endAngle, bool clockwise )
 {
     double sweepAngle = endAngle - startAngle ;
     if( abs(sweepAngle) >= 2*M_PI)
@@ -693,7 +693,7 @@ void wxGDIPlusPathData::AddArc( wxDouble x, wxDouble y, wxDouble r, double start
 
         }
    }
-   m_path->AddArc((REAL) (x-r),(REAL) (y-r),(REAL) (2*r),(REAL) (2*r),RadToDeg(startAngle),RadToDeg(sweepAngle)); 
+   m_path->AddArc((REAL) (x-r),(REAL) (y-r),(REAL) (2*r),(REAL) (2*r),RadToDeg(startAngle),RadToDeg(sweepAngle));
 }
 
 void wxGDIPlusPathData::AddRectangle( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
@@ -708,7 +708,7 @@ void wxGDIPlusPathData::AddPath( const wxGraphicsPathData* path )
 
 
 // transforms each point of this path by the matrix
-void wxGDIPlusPathData::Transform( const wxGraphicsMatrixData* matrix ) 
+void wxGDIPlusPathData::Transform( const wxGraphicsMatrixData* matrix )
 {
     m_path->Transform( (Matrix*) matrix->GetNativeMatrix() );
 }
@@ -743,12 +743,12 @@ wxGDIPlusMatrixData::wxGDIPlusMatrixData(wxGraphicsRenderer* renderer, Matrix* m
         m_matrix = new Matrix();
 }
 
-wxGDIPlusMatrixData::~wxGDIPlusMatrixData() 
+wxGDIPlusMatrixData::~wxGDIPlusMatrixData()
 {
     delete m_matrix;
 }
 
-wxGraphicsObjectRefData *wxGDIPlusMatrixData::Clone() const 
+wxGraphicsObjectRefData *wxGDIPlusMatrixData::Clone() const
 {
     return new wxGDIPlusMatrixData( GetRenderer(), m_matrix->Clone());
 }
@@ -760,7 +760,7 @@ void wxGDIPlusMatrixData::Concat( const wxGraphicsMatrixData *t )
 }
 
 // sets the matrix to the respective values
-void wxGDIPlusMatrixData::Set(wxDouble a, wxDouble b, wxDouble c, wxDouble d, 
+void wxGDIPlusMatrixData::Set(wxDouble a, wxDouble b, wxDouble c, wxDouble d,
                  wxDouble tx, wxDouble ty)
 {
     m_matrix->SetElements(a,b,c,d,tx,ty);
@@ -773,7 +773,7 @@ void wxGDIPlusMatrixData::Invert()
 }
 
 // returns true if the elements of the transformation matrix are equal ?
-bool wxGDIPlusMatrixData::IsEqual( const wxGraphicsMatrixData* t) const 
+bool wxGDIPlusMatrixData::IsEqual( const wxGraphicsMatrixData* t) const
 {
     return m_matrix->Equals((Matrix*) t->GetNativeMatrix())== TRUE ;
 }
@@ -840,7 +840,7 @@ void * wxGDIPlusMatrixData::GetNativeMatrix() const
 
 IMPLEMENT_DYNAMIC_CLASS(wxGDIPlusContext,wxGraphicsContext)
 
-wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, HDC hdc  ) 
+wxGDIPlusContext::wxGDIPlusContext( wxGraphicsRenderer* renderer, HDC hdc  )
     : wxGraphicsContext(renderer)
 {
     Init();
@@ -904,7 +904,7 @@ void wxGDIPlusContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
     m_context->SetClip(RectF(x,y,w,h),CombineModeIntersect);
 }
-	
+
 void wxGDIPlusContext::ResetClip()
 {
     m_context->ResetClip();
@@ -923,17 +923,17 @@ void wxGDIPlusContext::FillPath( const wxGraphicsPath& path , int fillStyle )
     if ( !m_brush.IsNull() )
     {
         ((GraphicsPath*) path.GetNativePath())->SetFillMode( fillStyle == wxODDEVEN_RULE ? FillModeAlternate : FillModeWinding);
-        m_context->FillPath( ((wxGDIPlusBrushData*)m_brush.GetRefData())->GetGDIPlusBrush() , 
+        m_context->FillPath( ((wxGDIPlusBrushData*)m_brush.GetRefData())->GetGDIPlusBrush() ,
             (GraphicsPath*) path.GetNativePath());
     }
 }
 
-void wxGDIPlusContext::Rotate( wxDouble angle ) 
+void wxGDIPlusContext::Rotate( wxDouble angle )
 {
     m_context->RotateTransform( RadToDeg(angle) );
 }
 
-void wxGDIPlusContext::Translate( wxDouble dx , wxDouble dy ) 
+void wxGDIPlusContext::Translate( wxDouble dx , wxDouble dy )
 {
     m_context->TranslateTransform( dx , dy );
 }
@@ -949,23 +949,23 @@ void wxGDIPlusContext::PushState()
     m_stateStack.push_back(state);
 }
 
-void wxGDIPlusContext::PopState() 
+void wxGDIPlusContext::PopState()
 {
     GraphicsState state = m_stateStack.back();
     m_stateStack.pop_back();
     m_context->Restore(state);
 }
 
-// the built-in conversions functions create non-premultiplied bitmaps, while GDIPlus needs them in the 
-// premultiplied format, therefore in the failing cases we create a new bitmap using the non-premultiplied 
+// the built-in conversions functions create non-premultiplied bitmaps, while GDIPlus needs them in the
+// premultiplied format, therefore in the failing cases we create a new bitmap using the non-premultiplied
 // bytes as parameter
 
-void wxGDIPlusContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) 
+void wxGDIPlusContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
     Bitmap* image = NULL;
     Bitmap* helper = NULL;
     if ( bmp.GetMask() )
-    { 
+    {
         Bitmap interim((HBITMAP)bmp.GetHBITMAP(),(HPALETTE)bmp.GetPalette()->GetHPALETTE()) ;
 
         size_t width = interim.GetWidth();
@@ -978,7 +978,7 @@ void wxGDIPlusContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, 
         wxASSERT(interimMask.GetPixelFormat() == PixelFormat1bppIndexed);
 
         BitmapData dataMask ;
-        interimMask.LockBits(&bounds,ImageLockModeRead, 
+        interimMask.LockBits(&bounds,ImageLockModeRead,
             interimMask.GetPixelFormat(),&dataMask);
 
 
@@ -1022,7 +1022,7 @@ void wxGDIPlusContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, 
     }
     else
     {
-        image = Bitmap::FromHBITMAP((HBITMAP)bmp.GetHBITMAP(),(HPALETTE)bmp.GetPalette()->GetHPALETTE());        
+        image = Bitmap::FromHBITMAP((HBITMAP)bmp.GetHBITMAP(),(HPALETTE)bmp.GetPalette()->GetHPALETTE());
         if ( GetPixelFormatSize(image->GetPixelFormat()) == 32 )
         {
             size_t width = image->GetWidth();
@@ -1035,7 +1035,7 @@ void wxGDIPlusContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, 
             helper->LockBits(&bounds, ImageLockModeRead,
                 helper->GetPixelFormat(),&data);
 
-            image = new Bitmap(data.Width, data.Height, data.Stride, 
+            image = new Bitmap(data.Width, data.Height, data.Stride,
                 PixelFormat32bppARGB , (BYTE*) data.Scan0);
 
             helper->UnlockBits(&data);
@@ -1047,7 +1047,7 @@ void wxGDIPlusContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, 
     delete helper ;
 }
 
-void wxGDIPlusContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h ) 
+void wxGDIPlusContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
     HICON hIcon = (HICON)icon.GetHICON();
     ICONINFO iconInfo ;
@@ -1074,7 +1074,7 @@ void wxGDIPlusContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxD
 
         interim.LockBits(&bounds, ImageLockModeRead,
             interim.GetPixelFormat(),&data);
-        image = new Bitmap(data.Width, data.Height, data.Stride, 
+        image = new Bitmap(data.Width, data.Height, data.Stride,
             PixelFormat32bppARGB , (BYTE*) data.Scan0);
         interim.UnlockBits(&data);
     }
@@ -1086,13 +1086,13 @@ void wxGDIPlusContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxD
     DeleteObject(iconInfo.hbmMask);
 }
 
-void wxGDIPlusContext::DrawText( const wxString &str, wxDouble x, wxDouble y ) 
+void wxGDIPlusContext::DrawText( const wxString &str, wxDouble x, wxDouble y )
 {
     if ( m_font.IsNull() || str.IsEmpty())
         return ;
 
     wxWCharBuffer s = str.wc_str( *wxConvUI );
-    m_context->DrawString( s , -1 , ((wxGDIPlusFontData*)m_font.GetRefData())->GetGDIPlusFont() , 
+    m_context->DrawString( s , -1 , ((wxGDIPlusFontData*)m_font.GetRefData())->GetGDIPlusFont() ,
             PointF( x , y ) , ((wxGDIPlusFontData*)m_font.GetRefData())->GetGDIPlusBrush() );
     // TODO m_backgroundMode == wxSOLID
 }
@@ -1103,7 +1103,7 @@ void wxGDIPlusContext::GetTextExtent( const wxString &str, wxDouble *width, wxDo
     wxWCharBuffer s = str.wc_str( *wxConvUI );
     FontFamily ffamily ;
     Font* f = ((wxGDIPlusFontData*)m_font.GetRefData())->GetGDIPlusFont();
-    
+
     f->GetFamily(&ffamily) ;
 
     REAL factorY = m_context->GetDpiY() / 72.0 ;
@@ -1122,7 +1122,7 @@ void wxGDIPlusContext::GetTextExtent( const wxString &str, wxDouble *width, wxDo
     if ( externalLeading )
         *externalLeading = (rHeight - rAscent - rDescent) * factorY + 0.5 ;
     // measuring empty strings is not guaranteed, so do it by hand
-    if ( str.IsEmpty()) 
+    if ( str.IsEmpty())
     {
         if ( width )
             *width = 0 ;
@@ -1144,7 +1144,7 @@ void wxGDIPlusContext::GetTextExtent( const wxString &str, wxDouble *width, wxDo
     }
 }
 
-void wxGDIPlusContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const 
+void wxGDIPlusContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const
 {
     widths.Empty();
     widths.Add(0, text.length());
@@ -1178,9 +1178,9 @@ void wxGDIPlusContext::GetPartialTextExtents(const wxString& text, wxArrayDouble
     }
 }
 
-void* wxGDIPlusContext::GetNativeContext() 
+void* wxGDIPlusContext::GetNativeContext()
 {
-	return m_context;
+    return m_context;
 }
 
 // concatenates this transform with the current transform of this context
@@ -1209,13 +1209,13 @@ wxGraphicsMatrix wxGDIPlusContext::GetTransform() const
 class WXDLLIMPEXP_CORE wxGDIPlusRenderer : public wxGraphicsRenderer
 {
 public :
-    wxGDIPlusRenderer() 
+    wxGDIPlusRenderer()
     {
         m_loaded = false;
-        m_gditoken = NULL;
+        m_gditoken = 0;
     }
 
-    virtual ~wxGDIPlusRenderer() 
+    virtual ~wxGDIPlusRenderer()
     {
         if (m_loaded)
         {
@@ -1243,7 +1243,7 @@ public :
 
     // Matrix
 
-    virtual wxGraphicsMatrix CreateMatrix( wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
+    virtual wxGraphicsMatrix CreateMatrix( wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
         wxDouble tx=0.0, wxDouble ty=0.0);
 
 
@@ -1252,10 +1252,10 @@ public :
     virtual wxGraphicsBrush CreateBrush(const wxBrush& brush ) ;
 
     // sets the brush to a linear gradient, starting at (x1,y1) with color c1 to (x2,y2) with color c2
-    virtual wxGraphicsBrush CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
+    virtual wxGraphicsBrush CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
         const wxColour&c1, const wxColour&c2) ;
 
-    // sets the brush to a radial gradient originating at (xo,yc) with color oColor and ends on a circle around (xc,yc) 
+    // sets the brush to a radial gradient originating at (xo,yc) with color oColor and ends on a circle around (xc,yc)
     // with radius r and color cColor
     virtual wxGraphicsBrush CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
         const wxColour &oColor, const wxColour &cColor) ;
@@ -1269,7 +1269,7 @@ protected :
 
 private :
     bool m_loaded;
-    DWORD m_gditoken;
+    ULONG_PTR m_gditoken;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxGDIPlusRenderer)
 } ;
@@ -1361,7 +1361,7 @@ wxGraphicsPath wxGDIPlusRenderer::CreatePath()
 
 // Matrix
 
-wxGraphicsMatrix wxGDIPlusRenderer::CreateMatrix( wxDouble a, wxDouble b, wxDouble c, wxDouble d, 
+wxGraphicsMatrix wxGDIPlusRenderer::CreateMatrix( wxDouble a, wxDouble b, wxDouble c, wxDouble d,
                                                            wxDouble tx, wxDouble ty)
 
 {
@@ -1373,7 +1373,7 @@ wxGraphicsMatrix wxGDIPlusRenderer::CreateMatrix( wxDouble a, wxDouble b, wxDoub
     return m;
 }
 
-wxGraphicsPen wxGDIPlusRenderer::CreatePen(const wxPen& pen) 
+wxGraphicsPen wxGDIPlusRenderer::CreatePen(const wxPen& pen)
 {
     EnsureIsLoaded();
     if ( !pen.Ok() || pen.GetStyle() == wxTRANSPARENT )
@@ -1386,7 +1386,7 @@ wxGraphicsPen wxGDIPlusRenderer::CreatePen(const wxPen& pen)
     }
 }
 
-wxGraphicsBrush wxGDIPlusRenderer::CreateBrush(const wxBrush& brush ) 
+wxGraphicsBrush wxGDIPlusRenderer::CreateBrush(const wxBrush& brush )
 {
     EnsureIsLoaded();
     if ( !brush.Ok() || brush.GetStyle() == wxTRANSPARENT )
@@ -1400,8 +1400,8 @@ wxGraphicsBrush wxGDIPlusRenderer::CreateBrush(const wxBrush& brush )
 }
 
 // sets the brush to a linear gradient, starting at (x1,y1) with color c1 to (x2,y2) with color c2
-wxGraphicsBrush wxGDIPlusRenderer::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2, 
-                                                                      const wxColour&c1, const wxColour&c2) 
+wxGraphicsBrush wxGDIPlusRenderer::CreateLinearGradientBrush( wxDouble x1, wxDouble y1, wxDouble x2, wxDouble y2,
+                                                                      const wxColour&c1, const wxColour&c2)
 {
     EnsureIsLoaded();
     wxGraphicsBrush p;
@@ -1411,10 +1411,10 @@ wxGraphicsBrush wxGDIPlusRenderer::CreateLinearGradientBrush( wxDouble x1, wxDou
     return p;
  }
 
-// sets the brush to a radial gradient originating at (xo,yc) with color oColor and ends on a circle around (xc,yc) 
+// sets the brush to a radial gradient originating at (xo,yc) with color oColor and ends on a circle around (xc,yc)
 // with radius r and color cColor
 wxGraphicsBrush wxGDIPlusRenderer::CreateRadialGradientBrush( wxDouble xo, wxDouble yo, wxDouble xc, wxDouble yc, wxDouble radius,
-                                                                      const wxColour &oColor, const wxColour &cColor) 
+                                                                      const wxColour &oColor, const wxColour &cColor)
 {
     EnsureIsLoaded();
     wxGraphicsBrush p;
@@ -1425,11 +1425,11 @@ wxGraphicsBrush wxGDIPlusRenderer::CreateRadialGradientBrush( wxDouble xo, wxDou
 }
 
 // sets the font
-wxGraphicsFont wxGDIPlusRenderer::CreateFont( const wxFont &font , const wxColour &col ) 
+wxGraphicsFont wxGDIPlusRenderer::CreateFont( const wxFont &font , const wxColour &col )
 {
     EnsureIsLoaded();
     if ( font.Ok() )
-    {        
+    {
         wxGraphicsFont p;
         p.SetRefData(new wxGDIPlusFontData( this , font, col ));
         return p;
