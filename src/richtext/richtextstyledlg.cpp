@@ -109,7 +109,6 @@ void wxRichTextStyleOrganiserDialog::Init()
     m_deleteStyle = NULL;
     m_closeButton = NULL;
     m_bottomButtonSizer = NULL;
-
     m_restartNumberingCtrl = NULL;
     m_okButton = NULL;
     m_cancelButton = NULL;
@@ -486,7 +485,7 @@ iaculis malesuada. Donec bibendum ipsum ut ante porta fringilla.\n");
 /// Clears the preview
 void wxRichTextStyleOrganiserDialog::ClearPreview()
 {
-    m_richTextCtrl->Clear();
+    m_previewCtrl->Clear();
 }
 
 bool wxRichTextStyleOrganiserDialog::ApplyStyle(wxRichTextCtrl* ctrl)
@@ -835,6 +834,28 @@ void wxRichTextStyleOrganiserDialog::OnNewListUpdate( wxUpdateUIEvent& event )
 
 void wxRichTextStyleOrganiserDialog::OnRenameClick( wxCommandEvent& WXUNUSED(event) )
 {
+    int sel = m_stylesListBox->GetStyleListBox()->GetSelection();
+    if (sel == -1)
+        return;
+    wxRichTextStyleDefinition* def = m_stylesListBox->GetStyleListBox()->GetStyle(sel);
+    if (!def)
+        return;
+
+    wxString styleName = wxGetTextFromUser(_("Enter a new style name"), _("New Style"), def->GetName());
+    if (!styleName.IsEmpty())
+    {
+        if (styleName == def->GetName())
+            return;
+
+        if (GetStyleSheet()->FindParagraphStyle(styleName) || GetStyleSheet()->FindCharacterStyle(styleName) || GetStyleSheet()->FindListStyle(styleName))
+        {
+            wxMessageBox(_("Sorry, that name is taken. Please choose another."), _("New Style"), wxICON_EXCLAMATION|wxOK, this);
+            return;
+        }
+
+        def->SetName(styleName);
+        m_stylesListBox->UpdateStyles();
+    }
 }
 
 /*!
