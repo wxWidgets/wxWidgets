@@ -414,7 +414,7 @@ provide a way to show a standard About box for the application, which
 will either be a native dialog or a generic one depending on what info
 is provided and if it can all be shown with the native dialog.
 
-The code in the animate contrib has been moved into the code wxWidgets
+The code in the animate contrib has been moved into the core wxWidgets
 library, and refactored a bit along the way.  For wxPython it still
 exists in the wx.animate module, but has basically been reduced to two
 classes, wx.animate.Animation, and wx.animate.AnimationCtrl.  You load
