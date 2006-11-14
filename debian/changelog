@@ -1,4 +1,4 @@
-wxwidgets2.7 (2.8.0.0-0rc2) unstable; urgency=low
+wxwidgets2.8 (2.8.0.0-0rc2) unstable; urgency=low
 
   * wxArrayString::Alloc() doesn't clear array contents any more
   * Fixed long standing bug in wxFileConfig groups renaming
