@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 7 November 2006                                                    *
+ * Date : 14 November 2006                                                    *
  *                                                                           *
  *****************************************************************************/
 
@@ -309,11 +309,7 @@ typedef pid_t GPid;
 
 #define wxUSE_XRC       1
 
-#if wxUSE_XRC
-#define wxUSE_XML       1
-#else
-#  define wxUSE_XML       1
-#endif
+#define wxUSE_XML       wxUSE_XRC
 
 #define wxUSE_AUI       1
 
@@ -1150,6 +1146,9 @@ typedef pid_t GPid;
 #else
 #undef HAVE_WCTYPE_H
 #endif
+
+/* Define if you have <widec.h> (Solaris only) */
+#undef HAVE_WIDEC_H
 
 /* Define if you have the <iconv.h> header file and iconv() symbol.  */
 #define HAVE_ICONV_H 1
