@@ -136,7 +136,7 @@ MustHaveApp(wxPyVScrolledWindow);
 class wxPyVScrolledWindow : public wxPanel
 {
 public:
-    %pythonAppend wxPyVScrolledWindow         "self._setOORInfo(self); self._setCallbackInfo(self, VScrolledWindow)"
+    %pythonAppend wxPyVScrolledWindow         "self._setOORInfo(self);" setCallbackInfo(VScrolledWindow)
     %pythonAppend wxPyVScrolledWindow()       ""
     
 
@@ -322,7 +322,7 @@ MustHaveApp(wxPyVListBox);
 class wxPyVListBox : public wxPyVScrolledWindow
 {
 public:
-    %pythonAppend wxPyVListBox         "self._setOORInfo(self);self._setCallbackInfo(self, VListBox)"
+    %pythonAppend wxPyVListBox         "self._setOORInfo(self);" setCallbackInfo(VListBox)
     %pythonAppend wxPyVListBox()       ""
     
 
@@ -577,7 +577,7 @@ MustHaveApp(wxPyHtmlListBox);
 class wxPyHtmlListBox : public wxPyVListBox
 {
 public:
-    %pythonAppend wxPyHtmlListBox         "self._setOORInfo(self);self._setCallbackInfo(self, HtmlListBox)"
+    %pythonAppend wxPyHtmlListBox         "self._setOORInfo(self);" setCallbackInfo(HtmlListBox)
     %pythonAppend wxPyHtmlListBox()       ""
     
 

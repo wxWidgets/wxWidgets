@@ -2063,7 +2063,7 @@ opaque.", "");
         if hasattr(self, '_setOORInfo'):
             self._setOORInfo(self)
         if hasattr(self, '_setCallbackInfo'):
-            self._setCallbackInfo(self, self.__class__)
+            self._setCallbackInfo(self, pre.__class__)
     }
 
     %pythoncode {

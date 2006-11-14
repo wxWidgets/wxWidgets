@@ -243,7 +243,7 @@ class wxPyArtProvider /*: public wxObject*/
 {
 public:
 
-    %pythonAppend wxPyArtProvider "self._setCallbackInfo(self, ArtProvider)"
+    %pythonAppend wxPyArtProvider setCallbackInfo(ArtProvider);
     wxPyArtProvider();
     ~wxPyArtProvider();
     

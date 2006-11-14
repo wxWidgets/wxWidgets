@@ -29955,7 +29955,7 @@ SWIGINTERN PyObject *_wrap_PyApp__setCallbackInfo(PyObject *SWIGUNUSEDPARM(self)
   wxPyApp *arg1 = (wxPyApp *) 0 ;
   PyObject *arg2 = (PyObject *) 0 ;
   PyObject *arg3 = (PyObject *) 0 ;
-  bool arg4 ;
+  bool arg4 = (bool) false ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   bool val4 ;
@@ -29968,7 +29968,7 @@ SWIGINTERN PyObject *_wrap_PyApp__setCallbackInfo(PyObject *SWIGUNUSEDPARM(self)
     (char *) "self",(char *) "self",(char *) "_class",(char *) "incref", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:PyApp__setCallbackInfo",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:PyApp__setCallbackInfo",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyApp, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PyApp__setCallbackInfo" "', expected argument " "1"" of type '" "wxPyApp *""'"); 
@@ -29976,11 +29976,13 @@ SWIGINTERN PyObject *_wrap_PyApp__setCallbackInfo(PyObject *SWIGUNUSEDPARM(self)
   arg1 = reinterpret_cast< wxPyApp * >(argp1);
   arg2 = obj1;
   arg3 = obj2;
-  ecode4 = SWIG_AsVal_bool(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "PyApp__setCallbackInfo" "', expected argument " "4"" of type '" "bool""'");
-  } 
-  arg4 = static_cast< bool >(val4);
+  if (obj3) {
+    ecode4 = SWIG_AsVal_bool(obj3, &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "PyApp__setCallbackInfo" "', expected argument " "4"" of type '" "bool""'");
+    } 
+    arg4 = static_cast< bool >(val4);
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->_setCallbackInfo(arg2,arg3,arg4);
@@ -41523,7 +41525,7 @@ SWIGINTERN PyObject *_wrap_PyValidator__setCallbackInfo(PyObject *SWIGUNUSEDPARM
   wxPyValidator *arg1 = (wxPyValidator *) 0 ;
   PyObject *arg2 = (PyObject *) 0 ;
   PyObject *arg3 = (PyObject *) 0 ;
-  int arg4 = (int) true ;
+  int arg4 = (int) 1 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int val4 ;

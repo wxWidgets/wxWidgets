@@ -210,7 +210,7 @@ MustHaveApp(wxPyWizardPage);
 class wxPyWizardPage : public wxWizardPage {
 public:
 
-    %pythonAppend wxPyWizardPage   "self._setCallbackInfo(self, PyWizardPage);self._setOORInfo(self)"
+    %pythonAppend wxPyWizardPage   "self._setOORInfo(self);" setCallbackInfo(PyWizardPage)
     %pythonAppend wxPyWizardPage() ""
     %typemap(out) wxPyWizardPage*;    // turn off this typemap
     

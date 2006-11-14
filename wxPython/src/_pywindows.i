@@ -146,7 +146,7 @@ MustHaveApp(wxPyWindow);
 class wxPyWindow : public wxWindow
 {
 public:
-    %pythonAppend wxPyWindow         "self._setOORInfo(self); self._setCallbackInfo(self, PyWindow)"
+    %pythonAppend wxPyWindow         "self._setOORInfo(self);" setCallbackInfo(PyWindow)
     %pythonAppend wxPyWindow()       ""
 
     wxPyWindow(wxWindow* parent, const wxWindowID id=-1,
@@ -328,7 +328,7 @@ MustHaveApp(wxPyPanel);
 class wxPyPanel : public wxPanel
 {
 public:
-    %pythonAppend wxPyPanel         "self._setOORInfo(self); self._setCallbackInfo(self, PyPanel)"
+    %pythonAppend wxPyPanel         "self._setOORInfo(self);" setCallbackInfo(PyPanel)
     %pythonAppend wxPyPanel()       ""
 
     wxPyPanel(wxWindow* parent, const wxWindowID id=-1,
@@ -502,7 +502,7 @@ MustHaveApp(wxPyScrolledWindow);
 class wxPyScrolledWindow : public wxScrolledWindow
 {
 public:
-    %pythonAppend wxPyScrolledWindow         "self._setOORInfo(self); self._setCallbackInfo(self, PyScrolledWindow)"
+    %pythonAppend wxPyScrolledWindow         "self._setOORInfo(self);" setCallbackInfo(PyScrolledWindow)
     %pythonAppend wxPyScrolledWindow()       ""
 
     wxPyScrolledWindow(wxWindow* parent, const wxWindowID id=-1,

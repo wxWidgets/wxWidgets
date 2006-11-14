@@ -118,7 +118,7 @@ MustHaveApp(wxPyControl);
 class wxPyControl : public wxControl
 {
 public:
-    %pythonAppend wxPyControl         "self._setOORInfo(self); self._setCallbackInfo(self, PyControl)"
+    %pythonAppend wxPyControl         "self._setOORInfo(self);"  setCallbackInfo(PyControl)
     %pythonAppend wxPyControl()       ""
 
     wxPyControl(wxWindow* parent, const wxWindowID id=-1,

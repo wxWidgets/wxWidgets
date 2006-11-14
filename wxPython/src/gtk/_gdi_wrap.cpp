@@ -15460,10 +15460,10 @@ SWIGINTERN PyObject *_wrap_FontEnumerator__setCallbackInfo(PyObject *SWIGUNUSEDP
   wxPyFontEnumerator *arg1 = (wxPyFontEnumerator *) 0 ;
   PyObject *arg2 = (PyObject *) 0 ;
   PyObject *arg3 = (PyObject *) 0 ;
-  bool arg4 ;
+  int arg4 = (int) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  bool val4 ;
+  int val4 ;
   int ecode4 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -15473,7 +15473,7 @@ SWIGINTERN PyObject *_wrap_FontEnumerator__setCallbackInfo(PyObject *SWIGUNUSEDP
     (char *) "self",(char *) "self",(char *) "_class",(char *) "incref", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:FontEnumerator__setCallbackInfo",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:FontEnumerator__setCallbackInfo",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyFontEnumerator, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "FontEnumerator__setCallbackInfo" "', expected argument " "1"" of type '" "wxPyFontEnumerator *""'"); 
@@ -15481,11 +15481,13 @@ SWIGINTERN PyObject *_wrap_FontEnumerator__setCallbackInfo(PyObject *SWIGUNUSEDP
   arg1 = reinterpret_cast< wxPyFontEnumerator * >(argp1);
   arg2 = obj1;
   arg3 = obj2;
-  ecode4 = SWIG_AsVal_bool(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "FontEnumerator__setCallbackInfo" "', expected argument " "4"" of type '" "bool""'");
-  } 
-  arg4 = static_cast< bool >(val4);
+  if (obj3) {
+    ecode4 = SWIG_AsVal_int(obj3, &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "FontEnumerator__setCallbackInfo" "', expected argument " "4"" of type '" "int""'");
+    } 
+    arg4 = static_cast< int >(val4);
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->_setCallbackInfo(arg2,arg3,arg4);

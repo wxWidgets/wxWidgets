@@ -2317,12 +2317,12 @@ class FontEnumerator(object):
     def __init__(self, *args, **kwargs): 
         """__init__(self) -> FontEnumerator"""
         _gdi_.FontEnumerator_swiginit(self,_gdi_.new_FontEnumerator(*args, **kwargs))
-        self._setCallbackInfo(self, FontEnumerator, 0)
+        FontEnumerator._setCallbackInfo(self, self, FontEnumerator)
 
     __swig_destroy__ = _gdi_.delete_FontEnumerator
     __del__ = lambda self : None;
     def _setCallbackInfo(*args, **kwargs):
-        """_setCallbackInfo(self, PyObject self, PyObject _class, bool incref)"""
+        """_setCallbackInfo(self, PyObject self, PyObject _class, int incref=0)"""
         return _gdi_.FontEnumerator__setCallbackInfo(*args, **kwargs)
 
     def EnumerateFacenames(*args, **kwargs):
@@ -2784,7 +2784,7 @@ class PyLocale(Locale):
     def __init__(self, *args, **kwargs): 
         """__init__(self, int language=-1, int flags=wxLOCALE_LOAD_DEFAULT|wxLOCALE_CONV_ENCODING) -> PyLocale"""
         _gdi_.PyLocale_swiginit(self,_gdi_.new_PyLocale(*args, **kwargs))
-        self._setCallbackInfo(self, PyLocale)
+        PyLocale._setCallbackInfo(self, self, PyLocale)
 
     __swig_destroy__ = _gdi_.delete_PyLocale
     __del__ = lambda self : None;

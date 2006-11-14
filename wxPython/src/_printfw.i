@@ -483,7 +483,7 @@ MustHaveApp(wxPyPrintout);
 %rename(Printout) wxPyPrintout;
 class wxPyPrintout  : public wxObject {
 public:
-    %pythonAppend wxPyPrintout   "self._setCallbackInfo(self, Printout)"
+    %pythonAppend wxPyPrintout   setCallbackInfo(Printout)
     %typemap(out) wxPyPrintout*;    // turn off this typemap
 
     wxPyPrintout(const wxString& title = wxPyPrintoutTitleStr);
@@ -824,7 +824,7 @@ class wxPyPrintPreview : public wxPrintPreview
 public:
     %disownarg(wxPyPrintout*);
 
-    %pythonAppend wxPyPrintPreview   "self._setCallbackInfo(self, PyPrintPreview)"
+    %pythonAppend wxPyPrintPreview   setCallbackInfo(PyPrintPreview)
     %nokwargs wxPyPrintPreview;
     wxPyPrintPreview(wxPyPrintout* printout,
                      wxPyPrintout* printoutForPrinting,
@@ -895,7 +895,7 @@ class wxPyPreviewFrame : public wxPreviewFrame
 {
 public:
     %disownarg(wxPrintPreview*);
-    %pythonAppend wxPyPreviewFrame "self._setCallbackInfo(self, PyPreviewFrame); self._setOORInfo(self)"
+    %pythonAppend wxPyPreviewFrame "self._setOORInfo(self);" setCallbackInfo(PyPreviewFrame) 
 
     wxPyPreviewFrame(wxPrintPreview* preview, wxFrame* parent,
                      const wxString& title,
@@ -955,7 +955,7 @@ MustHaveApp(wxPyPreviewControlBar);
 class wxPyPreviewControlBar : public wxPreviewControlBar
 {
 public:
-    %pythonAppend wxPyPreviewControlBar   "self._setCallbackInfo(self, PyPreviewControlBar); self._setOORInfo(self)"
+    %pythonAppend wxPyPreviewControlBar   "self._setOORInfo(self);" setCallbackInfo(PyPreviewControlBar)
 
     wxPyPreviewControlBar(wxPrintPreview *preview,
                           long buttons,

@@ -2070,7 +2070,7 @@ class FileSystemHandler(CPPFileSystemHandler):
     def __init__(self, *args, **kwargs): 
         """__init__(self) -> FileSystemHandler"""
         _core_.FileSystemHandler_swiginit(self,_core_.new_FileSystemHandler(*args, **kwargs))
-        self._setCallbackInfo(self, FileSystemHandler)
+        FileSystemHandler._setCallbackInfo(self, self, FileSystemHandler)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
@@ -7007,13 +7007,12 @@ class PyApp(EvtHandler):
         Create a new application object, starting the bootstrap process.
         """
         _core_.PyApp_swiginit(self,_core_.new_PyApp(*args, **kwargs))
-        self._setCallbackInfo(self, PyApp, False)
-        self._setOORInfo(self, False)
+        self._setOORInfo(self, False);PyApp._setCallbackInfo(self, self, PyApp)
 
     __swig_destroy__ = _core_.delete_PyApp
     __del__ = lambda self : None;
     def _setCallbackInfo(*args, **kwargs):
-        """_setCallbackInfo(self, PyObject self, PyObject _class, bool incref)"""
+        """_setCallbackInfo(self, PyObject self, PyObject _class, bool incref=False)"""
         return _core_.PyApp__setCallbackInfo(*args, **kwargs)
 
     def GetAppName(*args, **kwargs):
@@ -10332,7 +10331,7 @@ class Window(EvtHandler):
         if hasattr(self, '_setOORInfo'):
             self._setOORInfo(self)
         if hasattr(self, '_setCallbackInfo'):
-            self._setCallbackInfo(self, self.__class__)
+            self._setCallbackInfo(self, pre.__class__)
 
     def SendSizeEvent(self):
         self.GetEventHandler().ProcessEvent(wx.SizeEvent((-1,-1)))
@@ -10601,12 +10600,10 @@ class PyValidator(Validator):
     def __init__(self, *args, **kwargs): 
         """__init__(self) -> PyValidator"""
         _core_.PyValidator_swiginit(self,_core_.new_PyValidator(*args, **kwargs))
-        
-        self._setCallbackInfo(self, PyValidator, 1)
-        self._setOORInfo(self)
+        self._setOORInfo(self);PyValidator._setCallbackInfo(self, self, PyValidator)
 
     def _setCallbackInfo(*args, **kwargs):
-        """_setCallbackInfo(self, PyObject self, PyObject _class, int incref=True)"""
+        """_setCallbackInfo(self, PyObject self, PyObject _class, int incref=1)"""
         return _core_.PyValidator__setCallbackInfo(*args, **kwargs)
 
 _core_.PyValidator_swigregister(PyValidator)
@@ -12432,7 +12429,7 @@ class PySizer(Sizer):
         class.
         """
         _core_.PySizer_swiginit(self,_core_.new_PySizer(*args, **kwargs))
-        self._setCallbackInfo(self, PySizer);self._setOORInfo(self)
+        self._setOORInfo(self);PySizer._setCallbackInfo(self, self, PySizer)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""

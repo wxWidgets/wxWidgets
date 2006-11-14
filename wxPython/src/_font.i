@@ -861,11 +861,11 @@ MustHaveApp(wxPyFontEnumerator);
 %rename(FontEnumerator) wxPyFontEnumerator;
 class wxPyFontEnumerator {
 public:
-    %pythonAppend wxPyFontEnumerator "self._setCallbackInfo(self, FontEnumerator, 0)"
+    %pythonAppend wxPyFontEnumerator setCallbackInfo(FontEnumerator)
 
     wxPyFontEnumerator();
     ~wxPyFontEnumerator();
-    void _setCallbackInfo(PyObject* self, PyObject* _class, bool incref);
+    void _setCallbackInfo(PyObject* self, PyObject* _class, int incref=0);
 
     bool EnumerateFacenames(
         wxFontEncoding encoding = wxFONTENCODING_SYSTEM, // all

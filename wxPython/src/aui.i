@@ -443,7 +443,7 @@ methods to the Python methods implemented in the derived class.", "");
 
 class wxPyAuiDockArt :  public wxAuiDefaultDockArt
 {
-    %pythonAppend wxPyAuiDockArt     "self._setCallbackInfo(self, PyAuiDockArt)"
+    %pythonAppend wxPyAuiDockArt     setCallbackInfo(PyAuiDockArt)
     wxPyAuiDocArt();
 
 };
@@ -703,7 +703,7 @@ methods to the Python methods implemented in the derived class.", "");
 
 class wxPyAuiTabArt :  public wxAuiDefaultTabArt
 {
-    %pythonAppend wxPyAuiTabArt     "self._setCallbackInfo(self, PyAuiTabArt)"
+    %pythonAppend wxPyAuiTabArt     setCallbackInfo(PyAuiTabArt)
     wxPyAuiTabArt();
 
 };

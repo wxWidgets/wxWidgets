@@ -162,6 +162,12 @@ typedef unsigned long   wxUIntPtr;
     %pythoncode { NAME = property(STUFF) }
 %enddef
 
+
+%define setCallbackInfo(klass)
+    "klass._setCallbackInfo(self, self, klass)"
+%enddef
+
+
 //----------------------------------------------------------------------
 // Macros for the docstring and autodoc features of SWIG.  These will
 // help make the code look more readable, and pretty, as well as help

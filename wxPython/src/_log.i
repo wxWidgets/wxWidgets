@@ -411,7 +411,7 @@ IMP_PYCALLBACK_VOID_(wxPyLog, wxLog, Flush);
 // Now tell SWIG about it
 class wxPyLog : public wxLog {
 public:
-    %pythonAppend wxPyLog   "self._setCallbackInfo(self, PyLog)"
+    %pythonAppend wxPyLog  setCallbackInfo(PyLog)
 
     wxPyLog();
     

@@ -643,7 +643,7 @@ IMP_PYCALLBACK__STRING( wxPyGridCellRenderer, wxGridCellRenderer, SetParameters)
 // Let SWIG know about it so it can create the Python version
 class wxPyGridCellRenderer : public wxGridCellRenderer {
 public:
-    %pythonAppend wxPyGridCellRenderer  "self._setCallbackInfo(self, PyGridCellRenderer);self._setOORInfo(self)"
+    %pythonAppend wxPyGridCellRenderer  "self._setOORInfo(self);"  setCallbackInfo(PyGridCellRenderer);
 
     wxPyGridCellRenderer();
     void _setCallbackInfo(PyObject* self, PyObject* _class);
@@ -883,7 +883,7 @@ IMP_PYCALLBACK_STRING__constpure(wxPyGridCellEditor, wxGridCellEditor, GetValue)
 // Let SWIG know about it so it can create the Python version
 class wxPyGridCellEditor : public wxGridCellEditor {
 public:
-    %pythonAppend wxPyGridCellEditor  "self._setCallbackInfo(self, PyGridCellEditor);self._setOORInfo(self)"
+    %pythonAppend wxPyGridCellEditor  "self._setOORInfo(self);" setCallbackInfo(PyGridCellEditor)
 
     wxPyGridCellEditor();
     void _setCallbackInfo(PyObject* self, PyObject* _class);
@@ -1123,7 +1123,7 @@ public:
 class wxPyGridCellAttrProvider : public wxGridCellAttrProvider
 {
 public:
-    %pythonAppend wxPyGridCellAttrProvider  "self._setCallbackInfo(self, PyGridCellAttrProvider)"
+    %pythonAppend wxPyGridCellAttrProvider  setCallbackInfo(PyGridCellAttrProvider)
     wxPyGridCellAttrProvider();
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
@@ -1352,7 +1352,7 @@ public:
 class wxPyGridTableBase : public wxGridTableBase
 {
 public:
-    %pythonAppend wxPyGridTableBase "self._setCallbackInfo(self, PyGridTableBase);self._setOORInfo(self)"
+    %pythonAppend wxPyGridTableBase  "self._setOORInfo(self);"  setCallbackInfo(PyGridTableBase)
     wxPyGridTableBase();
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 

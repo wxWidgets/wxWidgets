@@ -127,7 +127,7 @@ class PyWizardPage(WizardPage):
     def __init__(self, *args, **kwargs): 
         """__init__(self, Wizard parent, Bitmap bitmap=&wxNullBitmap, String resource=&wxPyEmptyString) -> PyWizardPage"""
         _wizard.PyWizardPage_swiginit(self,_wizard.new_PyWizardPage(*args, **kwargs))
-        self._setCallbackInfo(self, PyWizardPage);self._setOORInfo(self)
+        self._setOORInfo(self);PyWizardPage._setCallbackInfo(self, self, PyWizardPage)
 
     def Create(*args, **kwargs):
         """Create(self, Wizard parent, Bitmap bitmap=wxNullBitmap, String resource=EmptyString) -> bool"""

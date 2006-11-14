@@ -320,7 +320,7 @@ MustHaveApp(wxPyTreeCompanionWindow);
 class wxPyTreeCompanionWindow: public wxWindow
 {
 public:
-    %pythonAppend wxPyTreeCompanionWindow         "self._setOORInfo(self);self._setCallbackInfo(self, TreeCompanionWindow)"
+    %pythonAppend wxPyTreeCompanionWindow         "self._setOORInfo(self);" setCallbackInfo(TreeCompanionWindow)
     %pythonAppend wxPyTreeCompanionWindow()       ""
 
     wxPyTreeCompanionWindow(wxWindow* parent, wxWindowID id = -1,

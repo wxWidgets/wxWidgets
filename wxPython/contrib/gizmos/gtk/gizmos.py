@@ -234,7 +234,7 @@ class TreeCompanionWindow(_core.Window):
             Size size=DefaultSize, long style=0) -> TreeCompanionWindow
         """
         _gizmos.TreeCompanionWindow_swiginit(self,_gizmos.new_TreeCompanionWindow(*args, **kwargs))
-        self._setOORInfo(self);self._setCallbackInfo(self, TreeCompanionWindow)
+        self._setOORInfo(self);TreeCompanionWindow._setCallbackInfo(self, self, TreeCompanionWindow)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
@@ -465,7 +465,7 @@ class TreeListCtrl(_core.Control):
             String name=TreeListCtrlNameStr) -> TreeListCtrl
         """
         _gizmos.TreeListCtrl_swiginit(self,_gizmos.new_TreeListCtrl(*args, **kwargs))
-        self._setOORInfo(self);self._setCallbackInfo(self, TreeListCtrl)
+        self._setOORInfo(self);TreeListCtrl._setCallbackInfo(self, self, TreeListCtrl)
 
     def Create(*args, **kwargs):
         """

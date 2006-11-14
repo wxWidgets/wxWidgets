@@ -85,7 +85,7 @@ MustHaveApp(wxPyPopupTransientWindow);
 class wxPyPopupTransientWindow : public wxPopupWindow
 {
 public:
-    %pythonAppend wxPyPopupTransientWindow         "self._setOORInfo(self);self._setCallbackInfo(self, PopupTransientWindow)"
+    %pythonAppend wxPyPopupTransientWindow         "self._setOORInfo(self);" setCallbackInfo(PopupTransientWindow)
     %pythonAppend wxPyPopupTransientWindow()       ""
     
     wxPyPopupTransientWindow(wxWindow *parent, int style = wxBORDER_NONE);

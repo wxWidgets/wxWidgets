@@ -391,7 +391,7 @@ class HtmlTagHandler(_core.Object):
     def __init__(self, *args, **kwargs): 
         """__init__(self) -> HtmlTagHandler"""
         _html.HtmlTagHandler_swiginit(self,_html.new_HtmlTagHandler(*args, **kwargs))
-        self._setCallbackInfo(self, HtmlTagHandler)
+        HtmlTagHandler._setCallbackInfo(self, self, HtmlTagHandler)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
@@ -419,7 +419,7 @@ class HtmlWinTagHandler(HtmlTagHandler):
     def __init__(self, *args, **kwargs): 
         """__init__(self) -> HtmlWinTagHandler"""
         _html.HtmlWinTagHandler_swiginit(self,_html.new_HtmlWinTagHandler(*args, **kwargs))
-        self._setCallbackInfo(self, HtmlWinTagHandler)
+        HtmlWinTagHandler._setCallbackInfo(self, self, HtmlWinTagHandler)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
@@ -920,7 +920,7 @@ class HtmlFilter(_core.Object):
     def __init__(self, *args, **kwargs): 
         """__init__(self) -> HtmlFilter"""
         _html.HtmlFilter_swiginit(self,_html.new_HtmlFilter(*args, **kwargs))
-        self._setCallbackInfo(self, HtmlFilter)
+        HtmlFilter._setCallbackInfo(self, self, HtmlFilter)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
@@ -983,7 +983,7 @@ class HtmlWindow(_windows.ScrolledWindow):
             String name=HtmlWindowNameStr) -> HtmlWindow
         """
         _html.HtmlWindow_swiginit(self,_html.new_HtmlWindow(*args, **kwargs))
-        self._setCallbackInfo(self, HtmlWindow); self._setOORInfo(self)
+        self._setOORInfo(self);HtmlWindow._setCallbackInfo(self, self, HtmlWindow)
 
     def Create(*args, **kwargs):
         """

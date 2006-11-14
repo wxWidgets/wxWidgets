@@ -1126,7 +1126,7 @@ When `Layout` is called it first calls `CalcMin` followed by
 ", "");
 class wxPySizer : public wxSizer {
 public:
-    %pythonAppend wxPySizer "self._setCallbackInfo(self, PySizer);self._setOORInfo(self)"
+    %pythonAppend wxPySizer "self._setOORInfo(self);" setCallbackInfo(PySizer)
 
     DocCtorStr(
         wxPySizer(),

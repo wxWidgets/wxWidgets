@@ -58,7 +58,7 @@ IMP_PYCALLBACK_BOOL_DR(wxPyDropSource, wxDropSource, GiveFeedback);
 %rename(DropSource) wxPyDropSource;
 class wxPyDropSource {
 public:
-    %pythonAppend wxPyDropSource "self._setCallbackInfo(self, DropSource, 0)"
+    %pythonAppend wxPyDropSource setCallbackInfo(DropSource)
 #ifndef __WXGTK__
      wxPyDropSource(wxWindow *win,
                     const wxCursor &copy = wxNullCursor,
@@ -71,7 +71,7 @@ public:
                    const wxIcon& none = wxNullIcon);
 #endif
 
-    void _setCallbackInfo(PyObject* self, PyObject* _class, int incref);
+    void _setCallbackInfo(PyObject* self, PyObject* _class, int incref=0);
     ~wxPyDropSource();
 
     // set the data which is transfered by drag and drop
@@ -138,8 +138,7 @@ IMP_PYCALLBACK_BOOL_INTINT(wxPyDropTarget, wxDropTarget, OnDrop);
 class wxPyDropTarget // : public wxDropTarget
 {
 public:
-    %pythonAppend wxPyDropTarget
-       "self._setCallbackInfo(self, DropTarget)"
+    %pythonAppend wxPyDropTarget      setCallbackInfo(DropTarget)
 
     %disownarg( wxDataObject *dataObject );
 
@@ -220,7 +219,7 @@ IMP_PYCALLBACK_BOOL_INTINT(wxPyTextDropTarget, wxTextDropTarget, OnDrop);
 %rename(TextDropTarget) wxPyTextDropTarget;
 class wxPyTextDropTarget : public wxPyDropTarget {
 public:
-    %pythonAppend wxPyTextDropTarget   "self._setCallbackInfo(self, TextDropTarget)"
+    %pythonAppend wxPyTextDropTarget   setCallbackInfo(TextDropTarget)
 
     wxPyTextDropTarget();
     void _setCallbackInfo(PyObject* self, PyObject* _class);
@@ -289,7 +288,7 @@ IMP_PYCALLBACK_BOOL_INTINT(wxPyFileDropTarget, wxFileDropTarget, OnDrop);
 class wxPyFileDropTarget : public wxPyDropTarget
 {
 public:
-    %pythonAppend wxPyFileDropTarget   "self._setCallbackInfo(self, FileDropTarget)"
+    %pythonAppend wxPyFileDropTarget   setCallbackInfo(FileDropTarget)
 
     wxPyFileDropTarget();
     void _setCallbackInfo(PyObject* self, PyObject* _class);

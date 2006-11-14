@@ -11540,7 +11540,7 @@ SWIGINTERN PyObject *_wrap_Timer__setCallbackInfo(PyObject *SWIGUNUSEDPARM(self)
   wxPyTimer *arg1 = (wxPyTimer *) 0 ;
   PyObject *arg2 = (PyObject *) 0 ;
   PyObject *arg3 = (PyObject *) 0 ;
-  int arg4 = (int) 1 ;
+  int arg4 = (int) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int val4 ;
@@ -33783,7 +33783,7 @@ SWIGINTERN PyObject *_wrap_DropSource__setCallbackInfo(PyObject *SWIGUNUSEDPARM(
   wxPyDropSource *arg1 = (wxPyDropSource *) 0 ;
   PyObject *arg2 = (PyObject *) 0 ;
   PyObject *arg3 = (PyObject *) 0 ;
-  int arg4 ;
+  int arg4 = (int) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int val4 ;
@@ -33796,7 +33796,7 @@ SWIGINTERN PyObject *_wrap_DropSource__setCallbackInfo(PyObject *SWIGUNUSEDPARM(
     (char *) "self",(char *) "self",(char *) "_class",(char *) "incref", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:DropSource__setCallbackInfo",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:DropSource__setCallbackInfo",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyDropSource, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "DropSource__setCallbackInfo" "', expected argument " "1"" of type '" "wxPyDropSource *""'"); 
@@ -33804,11 +33804,13 @@ SWIGINTERN PyObject *_wrap_DropSource__setCallbackInfo(PyObject *SWIGUNUSEDPARM(
   arg1 = reinterpret_cast< wxPyDropSource * >(argp1);
   arg2 = obj1;
   arg3 = obj2;
-  ecode4 = SWIG_AsVal_int(obj3, &val4);
-  if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "DropSource__setCallbackInfo" "', expected argument " "4"" of type '" "int""'");
-  } 
-  arg4 = static_cast< int >(val4);
+  if (obj3) {
+    ecode4 = SWIG_AsVal_int(obj3, &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "DropSource__setCallbackInfo" "', expected argument " "4"" of type '" "int""'");
+    } 
+    arg4 = static_cast< int >(val4);
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->_setCallbackInfo(arg2,arg3,arg4);

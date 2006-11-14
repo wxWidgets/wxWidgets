@@ -55,7 +55,7 @@ public:
     // there won't be a reference cycle and it can clean itself up via normal
     // Python refcounting
     %pythonAppend wxPyTimer
-        "self._setCallbackInfo(self, Timer, 0); self._setOORInfo(self, 0)"
+        "self._setOORInfo(self, 0);" setCallbackInfo(Timer); 
 
     // if you don't call SetOwner() or provide an owner in the ctor
     // then you must override Notify() in order to receive the timer
@@ -66,7 +66,7 @@ public:
     // Destructor.  
     virtual ~wxPyTimer();
 
-    void _setCallbackInfo(PyObject* self, PyObject* _class, int incref = 1);
+    void _setCallbackInfo(PyObject* self, PyObject* _class, int incref = 0);
 
     // Set the owner instance that will receive the EVT_TIMER events
     // using the given id.

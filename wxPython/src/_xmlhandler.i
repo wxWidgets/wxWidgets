@@ -143,7 +143,7 @@ IMP_PYCALLBACK_BOOL_NODE_pure(wxPyXmlResourceHandler, wxXmlResourceHandler, CanH
 %rename(XmlResourceHandler) wxPyXmlResourceHandler;
 class wxPyXmlResourceHandler : public wxObject {
 public:
-    %pythonAppend wxPyXmlResourceHandler "self._setCallbackInfo(self, XmlResourceHandler)"
+    %pythonAppend wxPyXmlResourceHandler setCallbackInfo(XmlResourceHandler)
     wxPyXmlResourceHandler() : wxXmlResourceHandler() {}
     ~wxPyXmlResourceHandler();
 

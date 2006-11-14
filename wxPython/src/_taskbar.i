@@ -101,12 +101,12 @@ MustHaveApp(wxPyTaskBarIcon);
 class wxPyTaskBarIcon : public wxEvtHandler
 {
 public:
-    %pythonAppend wxPyTaskBarIcon   "self._setCallbackInfo(self, TaskBarIcon, 0)"
+    %pythonAppend wxPyTaskBarIcon   setCallbackInfo(TaskBarIcon)
 
     wxPyTaskBarIcon();
     ~wxPyTaskBarIcon();
 
-    void _setCallbackInfo(PyObject* self, PyObject* _class, int incref);
+    void _setCallbackInfo(PyObject* self, PyObject* _class, int incref=0);
 
     %pythonPrepend Destroy "args[0].this.own(False)";
     %extend {

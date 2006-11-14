@@ -1758,7 +1758,7 @@ class PopupTransientWindow(PopupWindow):
     def __init__(self, *args, **kwargs): 
         """__init__(self, Window parent, int style=BORDER_NONE) -> PopupTransientWindow"""
         _windows_.PopupTransientWindow_swiginit(self,_windows_.new_PopupTransientWindow(*args, **kwargs))
-        self._setOORInfo(self);self._setCallbackInfo(self, PopupTransientWindow)
+        self._setOORInfo(self);PopupTransientWindow._setCallbackInfo(self, self, PopupTransientWindow)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
@@ -1819,7 +1819,7 @@ class VScrolledWindow(Panel):
             Size size=DefaultSize, long style=0, String name=PanelNameStr) -> VScrolledWindow
         """
         _windows_.VScrolledWindow_swiginit(self,_windows_.new_VScrolledWindow(*args, **kwargs))
-        self._setOORInfo(self); self._setCallbackInfo(self, VScrolledWindow)
+        self._setOORInfo(self);VScrolledWindow._setCallbackInfo(self, self, VScrolledWindow)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
@@ -1922,7 +1922,7 @@ class VListBox(VScrolledWindow):
             Size size=DefaultSize, long style=0, String name=VListBoxNameStr) -> VListBox
         """
         _windows_.VListBox_swiginit(self,_windows_.new_VListBox(*args, **kwargs))
-        self._setOORInfo(self);self._setCallbackInfo(self, VListBox)
+        self._setOORInfo(self);VListBox._setCallbackInfo(self, self, VListBox)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
@@ -2051,7 +2051,7 @@ class HtmlListBox(VListBox):
             Size size=DefaultSize, long style=0, String name=VListBoxNameStr) -> HtmlListBox
         """
         _windows_.HtmlListBox_swiginit(self,_windows_.new_HtmlListBox(*args, **kwargs))
-        self._setOORInfo(self);self._setCallbackInfo(self, HtmlListBox)
+        self._setOORInfo(self);HtmlListBox._setCallbackInfo(self, self, HtmlListBox)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
@@ -2128,12 +2128,12 @@ class TaskBarIcon(_core.EvtHandler):
     def __init__(self, *args, **kwargs): 
         """__init__(self) -> TaskBarIcon"""
         _windows_.TaskBarIcon_swiginit(self,_windows_.new_TaskBarIcon(*args, **kwargs))
-        self._setCallbackInfo(self, TaskBarIcon, 0)
+        TaskBarIcon._setCallbackInfo(self, self, TaskBarIcon)
 
     __swig_destroy__ = _windows_.delete_TaskBarIcon
     __del__ = lambda self : None;
     def _setCallbackInfo(*args, **kwargs):
-        """_setCallbackInfo(self, PyObject self, PyObject _class, int incref)"""
+        """_setCallbackInfo(self, PyObject self, PyObject _class, int incref=0)"""
         return _windows_.TaskBarIcon__setCallbackInfo(*args, **kwargs)
 
     def Destroy(*args, **kwargs):
@@ -3334,7 +3334,7 @@ class PyWindow(_core.Window):
             Size size=DefaultSize, long style=0, String name=PanelNameStr) -> PyWindow
         """
         _windows_.PyWindow_swiginit(self,_windows_.new_PyWindow(*args, **kwargs))
-        self._setOORInfo(self); self._setCallbackInfo(self, PyWindow)
+        self._setOORInfo(self);PyWindow._setCallbackInfo(self, self, PyWindow)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
@@ -3511,7 +3511,7 @@ class PyPanel(Panel):
             Size size=DefaultSize, long style=0, String name=PanelNameStr) -> PyPanel
         """
         _windows_.PyPanel_swiginit(self,_windows_.new_PyPanel(*args, **kwargs))
-        self._setOORInfo(self); self._setCallbackInfo(self, PyPanel)
+        self._setOORInfo(self);PyPanel._setCallbackInfo(self, self, PyPanel)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
@@ -3688,7 +3688,7 @@ class PyScrolledWindow(ScrolledWindow):
             Size size=DefaultSize, long style=0, String name=PanelNameStr) -> PyScrolledWindow
         """
         _windows_.PyScrolledWindow_swiginit(self,_windows_.new_PyScrolledWindow(*args, **kwargs))
-        self._setOORInfo(self); self._setCallbackInfo(self, PyScrolledWindow)
+        self._setOORInfo(self);PyScrolledWindow._setCallbackInfo(self, self, PyScrolledWindow)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
@@ -4442,7 +4442,7 @@ class Printout(_core.Object):
     def __init__(self, *args, **kwargs): 
         """__init__(self, String title=PrintoutTitleStr) -> Printout"""
         _windows_.Printout_swiginit(self,_windows_.new_Printout(*args, **kwargs))
-        self._setCallbackInfo(self, Printout)
+        Printout._setCallbackInfo(self, self, Printout)
 
     __swig_destroy__ = _windows_.delete_Printout
     __del__ = lambda self : None;
@@ -4859,7 +4859,7 @@ class PyPrintPreview(PrintPreview):
         __init__(self, Printout printout, Printout printoutForPrinting, PrintData data) -> PyPrintPreview
         """
         _windows_.PyPrintPreview_swiginit(self,_windows_.new_PyPrintPreview(*args))
-        self._setCallbackInfo(self, PyPrintPreview)
+        PyPrintPreview._setCallbackInfo(self, self, PyPrintPreview)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
@@ -4913,7 +4913,7 @@ class PyPreviewFrame(PreviewFrame):
             long style=DEFAULT_FRAME_STYLE, String name=FrameNameStr) -> PyPreviewFrame
         """
         _windows_.PyPreviewFrame_swiginit(self,_windows_.new_PyPreviewFrame(*args, **kwargs))
-        self._setCallbackInfo(self, PyPreviewFrame); self._setOORInfo(self)
+        self._setOORInfo(self);PyPreviewFrame._setCallbackInfo(self, self, PyPreviewFrame)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
@@ -4967,7 +4967,7 @@ class PyPreviewControlBar(PreviewControlBar):
             long style=0, String name=PanelNameStr) -> PyPreviewControlBar
         """
         _windows_.PyPreviewControlBar_swiginit(self,_windows_.new_PyPreviewControlBar(*args, **kwargs))
-        self._setCallbackInfo(self, PyPreviewControlBar); self._setOORInfo(self)
+        self._setOORInfo(self);PyPreviewControlBar._setCallbackInfo(self, self, PyPreviewControlBar)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""

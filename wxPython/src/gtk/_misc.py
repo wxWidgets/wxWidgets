@@ -1249,7 +1249,7 @@ class PyTipProvider(TipProvider):
     def __init__(self, *args, **kwargs): 
         """__init__(self, size_t currentTip) -> PyTipProvider"""
         _misc_.PyTipProvider_swiginit(self,_misc_.new_PyTipProvider(*args, **kwargs))
-        self._setCallbackInfo(self, PyTipProvider)
+        PyTipProvider._setCallbackInfo(self, self, PyTipProvider)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
@@ -1277,12 +1277,12 @@ class Timer(_core.EvtHandler):
     def __init__(self, *args, **kwargs): 
         """__init__(self, EvtHandler owner=None, int id=ID_ANY) -> Timer"""
         _misc_.Timer_swiginit(self,_misc_.new_Timer(*args, **kwargs))
-        self._setCallbackInfo(self, Timer, 0); self._setOORInfo(self, 0)
+        self._setOORInfo(self, 0);Timer._setCallbackInfo(self, self, Timer)
 
     __swig_destroy__ = _misc_.delete_Timer
     __del__ = lambda self : None;
     def _setCallbackInfo(*args, **kwargs):
-        """_setCallbackInfo(self, PyObject self, PyObject _class, int incref=1)"""
+        """_setCallbackInfo(self, PyObject self, PyObject _class, int incref=0)"""
         return _misc_.Timer__setCallbackInfo(*args, **kwargs)
 
     def SetOwner(*args, **kwargs):
@@ -1823,7 +1823,7 @@ class PyLog(Log):
     def __init__(self, *args, **kwargs): 
         """__init__(self) -> PyLog"""
         _misc_.PyLog_swiginit(self,_misc_.new_PyLog(*args, **kwargs))
-        self._setCallbackInfo(self, PyLog)
+        PyLog._setCallbackInfo(self, self, PyLog)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
@@ -1881,7 +1881,7 @@ class Process(_core.EvtHandler):
     def __init__(self, *args, **kwargs): 
         """__init__(self, EvtHandler parent=None, int id=-1) -> Process"""
         _misc_.Process_swiginit(self,_misc_.new_Process(*args, **kwargs))
-        self._setCallbackInfo(self, Process); self.this.own(False)
+        Process._setCallbackInfo(self, self, Process); self.this.own(False)
 
     __swig_destroy__ = _misc_.delete_Process
     __del__ = lambda self : None;
@@ -2650,7 +2650,7 @@ class ArtProvider(object):
 
         """
         _misc_.ArtProvider_swiginit(self,_misc_.new_ArtProvider(*args, **kwargs))
-        self._setCallbackInfo(self, ArtProvider)
+        ArtProvider._setCallbackInfo(self, self, ArtProvider)
 
     __swig_destroy__ = _misc_.delete_ArtProvider
     __del__ = lambda self : None;
@@ -4899,7 +4899,7 @@ class PyDataObjectSimple(DataObjectSimple):
 
         """
         _misc_.PyDataObjectSimple_swiginit(self,_misc_.new_PyDataObjectSimple(*args, **kwargs))
-        self._setCallbackInfo(self, PyDataObjectSimple)
+        PyDataObjectSimple._setCallbackInfo(self, self, PyDataObjectSimple)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
@@ -5048,7 +5048,7 @@ class PyTextDataObject(TextDataObject):
         into the data object.
         """
         _misc_.PyTextDataObject_swiginit(self,_misc_.new_PyTextDataObject(*args, **kwargs))
-        self._setCallbackInfo(self, PyTextDataObject)
+        PyTextDataObject._setCallbackInfo(self, self, PyTextDataObject)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
@@ -5117,7 +5117,7 @@ class PyBitmapDataObject(BitmapDataObject):
         data on demand derive from this class and overload `GetBitmap`.
         """
         _misc_.PyBitmapDataObject_swiginit(self,_misc_.new_PyBitmapDataObject(*args, **kwargs))
-        self._setCallbackInfo(self, PyBitmapDataObject)
+        PyBitmapDataObject._setCallbackInfo(self, self, PyBitmapDataObject)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
@@ -5278,10 +5278,10 @@ class DropSource(object):
             Icon none=wxNullIcon) -> DropSource
         """
         _misc_.DropSource_swiginit(self,_misc_.new_DropSource(*args, **kwargs))
-        self._setCallbackInfo(self, DropSource, 0)
+        DropSource._setCallbackInfo(self, self, DropSource)
 
     def _setCallbackInfo(*args, **kwargs):
-        """_setCallbackInfo(self, PyObject self, PyObject _class, int incref)"""
+        """_setCallbackInfo(self, PyObject self, PyObject _class, int incref=0)"""
         return _misc_.DropSource__setCallbackInfo(*args, **kwargs)
 
     __swig_destroy__ = _misc_.delete_DropSource
@@ -5333,7 +5333,7 @@ class DropTarget(object):
     def __init__(self, *args, **kwargs): 
         """__init__(self, DataObject dataObject=None) -> DropTarget"""
         _misc_.DropTarget_swiginit(self,_misc_.new_DropTarget(*args, **kwargs))
-        self._setCallbackInfo(self, DropTarget)
+        DropTarget._setCallbackInfo(self, self, DropTarget)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
@@ -5409,7 +5409,7 @@ class TextDropTarget(DropTarget):
     def __init__(self, *args, **kwargs): 
         """__init__(self) -> TextDropTarget"""
         _misc_.TextDropTarget_swiginit(self,_misc_.new_TextDropTarget(*args, **kwargs))
-        self._setCallbackInfo(self, TextDropTarget)
+        TextDropTarget._setCallbackInfo(self, self, TextDropTarget)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
@@ -5478,7 +5478,7 @@ class FileDropTarget(DropTarget):
     def __init__(self, *args, **kwargs): 
         """__init__(self) -> FileDropTarget"""
         _misc_.FileDropTarget_swiginit(self,_misc_.new_FileDropTarget(*args, **kwargs))
-        self._setCallbackInfo(self, FileDropTarget)
+        FileDropTarget._setCallbackInfo(self, self, FileDropTarget)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""

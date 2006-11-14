@@ -113,7 +113,7 @@ public:
 class wxPyFileSystemHandler : public wxFileSystemHandler
 {
 public:
-    %pythonAppend    wxPyFileSystemHandler "self._setCallbackInfo(self, FileSystemHandler)";
+    %pythonAppend    wxPyFileSystemHandler setCallbackInfo(FileSystemHandler)
 
     wxPyFileSystemHandler();
 

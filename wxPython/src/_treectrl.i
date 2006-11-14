@@ -344,7 +344,7 @@ MustHaveApp(wxPyTreeCtrl);
 %rename(TreeCtrl) wxPyTreeCtrl;
 class wxPyTreeCtrl : public wxControl {
 public:
-    %pythonAppend wxPyTreeCtrl         "self._setOORInfo(self);self._setCallbackInfo(self, TreeCtrl)"
+    %pythonAppend wxPyTreeCtrl         "self._setOORInfo(self);" setCallbackInfo(TreeCtrl)
     %pythonAppend wxPyTreeCtrl()       ""
     %typemap(out) wxPyTreeCtrl*;    // turn off this typemap
    

@@ -85,7 +85,7 @@ enum {
     wxLIST_HITTEST_TORIGHT,
     wxLIST_HITTEST_ONITEM,
 
-// GetSubItemRect constants    
+// GetSubItemRect constants
     wxLIST_GETSUBITEMRECT_WHOLEITEM,
 };
 
@@ -193,8 +193,8 @@ public:
 class wxListItem : public wxObject {
 public:
     // turn off this typemap
-    %typemap(out) wxListItem*;    
-    
+    %typemap(out) wxListItem*;
+
     wxListItem();
     ~wxListItem();
 
@@ -321,7 +321,7 @@ public:
     %property(Mask, GetMask, doc="See `GetMask`");
     %property(Point, GetPoint, doc="See `GetPoint`");
     %property(Text, GetText, doc="See `GetText`");
-    
+
 };
 
 /* List control event types */
@@ -446,7 +446,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxPyListCtrl, wxListCtrl);
 IMP_PYCALLBACK_STRING_LONGLONG(wxPyListCtrl, wxListCtrl, OnGetItemText);
 IMP_PYCALLBACK_LISTATTR_LONG(wxPyListCtrl, wxListCtrl, OnGetItemAttr);
 IMP_PYCALLBACK_INT_LONG_virtual(wxPyListCtrl, wxListCtrl, OnGetItemImage);
-IMP_PYCALLBACK_INT_LONGLONG(wxPyListCtrl, wxListCtrl, OnGetItemColumnImage); 
+IMP_PYCALLBACK_INT_LONGLONG(wxPyListCtrl, wxListCtrl, OnGetItemColumnImage);
 
 %}
 
@@ -462,9 +462,9 @@ MustHaveApp(wxPyListCtrl);
 class wxPyListCtrl : public wxControl {
 public:
     // turn off this typemap
-    %typemap(out) wxPyListCtrl*;    
+    %typemap(out) wxPyListCtrl*;
 
-    %pythonAppend wxPyListCtrl         "self._setOORInfo(self);self._setCallbackInfo(self, ListCtrl)"
+    %pythonAppend wxPyListCtrl         "self._setOORInfo(self);" setCallbackInfo(ListCtrl)
     %pythonAppend wxPyListCtrl()       ""
 
     wxPyListCtrl(wxWindow* parent, wxWindowID id = -1,
@@ -592,7 +592,7 @@ public:
             return rect;
         }
 
-// MSW only so far...        
+// MSW only so far...
 //         wxRect GetSubItemRect(long item, long subItem, int code = wxLIST_RECT_BOUNDS) {
 //             wxRect rect;
 //             self->GetSubItemRect(item, subItem, rect, code);
@@ -722,7 +722,7 @@ the second return value (see wx.LIST_HITTEST flags) and also the subItem, if
 any.", "",
         HitTestSubItem);
 
-    
+
     // Inserts an item, returning the index of the new item if successful,
     // -1 otherwise.
     long InsertItem(wxListItem& info);

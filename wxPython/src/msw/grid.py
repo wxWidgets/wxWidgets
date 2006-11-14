@@ -135,7 +135,7 @@ class PyGridCellRenderer(GridCellRenderer):
     def __init__(self, *args, **kwargs): 
         """__init__(self) -> PyGridCellRenderer"""
         _grid.PyGridCellRenderer_swiginit(self,_grid.new_PyGridCellRenderer(*args, **kwargs))
-        self._setCallbackInfo(self, PyGridCellRenderer);self._setOORInfo(self)
+        self._setOORInfo(self);PyGridCellRenderer._setCallbackInfo(self, self, PyGridCellRenderer)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
@@ -336,7 +336,7 @@ class PyGridCellEditor(GridCellEditor):
     def __init__(self, *args, **kwargs): 
         """__init__(self) -> PyGridCellEditor"""
         _grid.PyGridCellEditor_swiginit(self,_grid.new_PyGridCellEditor(*args, **kwargs))
-        self._setCallbackInfo(self, PyGridCellEditor);self._setOORInfo(self)
+        self._setOORInfo(self);PyGridCellEditor._setCallbackInfo(self, self, PyGridCellEditor)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
@@ -702,7 +702,7 @@ class PyGridCellAttrProvider(GridCellAttrProvider):
     def __init__(self, *args, **kwargs): 
         """__init__(self) -> PyGridCellAttrProvider"""
         _grid.PyGridCellAttrProvider_swiginit(self,_grid.new_PyGridCellAttrProvider(*args, **kwargs))
-        self._setCallbackInfo(self, PyGridCellAttrProvider)
+        PyGridCellAttrProvider._setCallbackInfo(self, self, PyGridCellAttrProvider)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
@@ -906,7 +906,7 @@ class PyGridTableBase(GridTableBase):
     def __init__(self, *args, **kwargs): 
         """__init__(self) -> PyGridTableBase"""
         _grid.PyGridTableBase_swiginit(self,_grid.new_PyGridTableBase(*args, **kwargs))
-        self._setCallbackInfo(self, PyGridTableBase);self._setOORInfo(self)
+        self._setOORInfo(self);PyGridTableBase._setCallbackInfo(self, self, PyGridTableBase)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""

@@ -262,7 +262,7 @@ class XmlSubclassFactory(object):
     def __init__(self, *args, **kwargs): 
         """__init__(self) -> XmlSubclassFactory"""
         _xrc.XmlSubclassFactory_swiginit(self,_xrc.new_XmlSubclassFactory(*args, **kwargs))
-        self._setCallbackInfo(self, XmlSubclassFactory)
+        XmlSubclassFactory._setCallbackInfo(self, self, XmlSubclassFactory)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""
@@ -535,7 +535,7 @@ class XmlResourceHandler(_core.Object):
     def __init__(self, *args, **kwargs): 
         """__init__(self) -> XmlResourceHandler"""
         _xrc.XmlResourceHandler_swiginit(self,_xrc.new_XmlResourceHandler(*args, **kwargs))
-        self._setCallbackInfo(self, XmlResourceHandler)
+        XmlResourceHandler._setCallbackInfo(self, self, XmlResourceHandler)
 
     __swig_destroy__ = _xrc.delete_XmlResourceHandler
     __del__ = lambda self : None;

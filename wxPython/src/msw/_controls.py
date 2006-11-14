@@ -4463,7 +4463,7 @@ class ListCtrl(_core.Control):
             Validator validator=DefaultValidator, String name=ListCtrlNameStr) -> ListCtrl
         """
         _controls_.ListCtrl_swiginit(self,_controls_.new_ListCtrl(*args, **kwargs))
-        self._setOORInfo(self);self._setCallbackInfo(self, ListCtrl)
+        self._setOORInfo(self);ListCtrl._setCallbackInfo(self, self, ListCtrl)
 
     def Create(*args, **kwargs):
         """
@@ -5185,7 +5185,7 @@ class TreeCtrl(_core.Control):
             String name=TreeCtrlNameStr) -> TreeCtrl
         """
         _controls_.TreeCtrl_swiginit(self,_controls_.new_TreeCtrl(*args, **kwargs))
-        self._setOORInfo(self);self._setCallbackInfo(self, TreeCtrl)
+        self._setOORInfo(self);TreeCtrl._setCallbackInfo(self, self, TreeCtrl)
 
     def Create(*args, **kwargs):
         """
@@ -5759,7 +5759,7 @@ class PyControl(_core.Control):
             String name=ControlNameStr) -> PyControl
         """
         _controls_.PyControl_swiginit(self,_controls_.new_PyControl(*args, **kwargs))
-        self._setOORInfo(self); self._setCallbackInfo(self, PyControl)
+        self._setOORInfo(self);PyControl._setCallbackInfo(self, self, PyControl)
 
     def _setCallbackInfo(*args, **kwargs):
         """_setCallbackInfo(self, PyObject self, PyObject _class)"""

@@ -497,7 +497,7 @@ data structures.
 ");
 class wxPyDataObjectSimple : public wxDataObjectSimple {
 public:
-    %pythonAppend wxPyDataObjectSimple   "self._setCallbackInfo(self, PyDataObjectSimple)"
+    %pythonAppend wxPyDataObjectSimple   setCallbackInfo(PyDataObjectSimple)
 
     wxPyDataObjectSimple(const wxDataFormat& format = wxFormatInvalid);
     void _setCallbackInfo(PyObject* self, PyObject* _class);
@@ -625,7 +625,7 @@ into the data object.", "");
 
 class wxPyTextDataObject : public wxTextDataObject {
 public:
-    %pythonAppend wxPyTextDataObject   "self._setCallbackInfo(self, PyTextDataObject)"
+    %pythonAppend wxPyTextDataObject   setCallbackInfo(PyTextDataObject)
 
     wxPyTextDataObject(const wxString& text = wxPyEmptyString);
     void _setCallbackInfo(PyObject* self, PyObject* _class);
@@ -718,7 +718,7 @@ data on demand derive from this class and overload `GetBitmap`.", "");
 
 class wxPyBitmapDataObject : public wxBitmapDataObject {
 public:
-    %pythonAppend wxPyBitmapDataObject   "self._setCallbackInfo(self, PyBitmapDataObject)"
+    %pythonAppend wxPyBitmapDataObject   setCallbackInfo(PyBitmapDataObject)
 
     wxPyBitmapDataObject(const wxBitmap& bitmap = wxNullBitmap);
     void _setCallbackInfo(PyObject* self, PyObject* _class);

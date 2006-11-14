@@ -595,7 +595,7 @@ wxChar *wxPyLocale::GetPluralString(const wxChar *szOrigString,
 class wxPyLocale : public wxLocale
 {
 public:
-    %pythonAppend wxPyLocale "self._setCallbackInfo(self, PyLocale)"
+    %pythonAppend wxPyLocale setCallbackInfo(PyLocale)
 
     // ctor & dtor
     // -----------

@@ -79,12 +79,11 @@ IMPLEMENT_DYNAMIC_CLASS(wxPyValidator, wxValidator);
 
 class wxPyValidator : public wxValidator {
 public:
-    %pythonAppend wxPyValidator "
-        self._setCallbackInfo(self, PyValidator, 1)
-        self._setOORInfo(self)"
+    %pythonAppend wxPyValidator "self._setOORInfo(self);"  setCallbackInfo(PyValidator)
+        
     wxPyValidator();
 
-    void _setCallbackInfo(PyObject* self, PyObject* _class, int incref=true);
+    void _setCallbackInfo(PyObject* self, PyObject* _class, int incref=1);
 };
 
 

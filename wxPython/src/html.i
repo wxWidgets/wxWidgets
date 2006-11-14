@@ -293,7 +293,7 @@ IMP_PYCALLBACK_BOOL_TAG_pure(wxPyHtmlTagHandler, wxHtmlTagHandler, HandleTag);
 %rename(HtmlTagHandler) wxPyHtmlTagHandler;
 class wxPyHtmlTagHandler : public wxObject {
 public:
-    %pythonAppend wxPyHtmlTagHandler   "self._setCallbackInfo(self, HtmlTagHandler)"
+    %pythonAppend wxPyHtmlTagHandler   setCallbackInfo(HtmlTagHandler)
     wxPyHtmlTagHandler();
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
@@ -334,7 +334,7 @@ IMP_PYCALLBACK_BOOL_TAG_pure(wxPyHtmlWinTagHandler, wxHtmlWinTagHandler, HandleT
 %rename(HtmlWinTagHandler) wxPyHtmlWinTagHandler;
 class wxPyHtmlWinTagHandler : public wxPyHtmlTagHandler {
 public:
-    %pythonAppend wxPyHtmlWinTagHandler    "self._setCallbackInfo(self, HtmlWinTagHandler)"
+    %pythonAppend wxPyHtmlWinTagHandler    setCallbackInfo(HtmlWinTagHandler)
     wxPyHtmlWinTagHandler();
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
@@ -798,7 +798,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxPyHtmlFilter, wxHtmlFilter);
 %rename(HtmlFilter) wxPyHtmlFilter;
 class wxPyHtmlFilter : public wxObject {
 public:
-    %pythonAppend wxPyHtmlFilter   "self._setCallbackInfo(self, HtmlFilter)"
+    %pythonAppend wxPyHtmlFilter   setCallbackInfo(HtmlFilter)
     wxPyHtmlFilter();
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
@@ -996,7 +996,7 @@ class wxPyHtmlWindow : public wxScrolledWindow //,
                        // public wxHtmlWindowMouseHelper
 {
 public:
-    %pythonAppend wxPyHtmlWindow      "self._setCallbackInfo(self, HtmlWindow); self._setOORInfo(self)"
+    %pythonAppend wxPyHtmlWindow      "self._setOORInfo(self);" setCallbackInfo(HtmlWindow)
     %pythonAppend wxPyHtmlWindow()    ""
     %typemap(out) wxPyHtmlWindow*;    // turn off this typemap
 

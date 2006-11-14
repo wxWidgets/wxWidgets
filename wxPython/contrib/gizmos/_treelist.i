@@ -199,7 +199,7 @@ MustHaveApp(wxPyTreeListCtrl);
 class wxPyTreeListCtrl : public wxControl
 {
 public:
-    %pythonAppend wxPyTreeListCtrl         "self._setOORInfo(self);self._setCallbackInfo(self, TreeListCtrl)"
+    %pythonAppend wxPyTreeListCtrl         "self._setOORInfo(self);" setCallbackInfo(TreeListCtrl)
     %pythonAppend wxPyTreeListCtrl()       ""
 
     wxPyTreeListCtrl(wxWindow *parent, wxWindowID id = -1,
