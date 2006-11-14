@@ -1,4 +1,4 @@
-Installing wxPython 2.7 from Source
+Installing wxPython 2.8 from Source
 ===================================
 
 
@@ -48,7 +48,7 @@ Installing on Unix-like Systems (not OS X)
    path into the binaries by using the rpath option when configuring
    wxWidgets.  For example::
 
-                     --enable-rpath=/opt/wx/2.7/lib \
+                     --enable-rpath=/opt/wx/2.8/lib \
 
    SOLARIS NOTE: The --enable-rpath option may cause problems when
    using wxGTK on Solaris when compiling wxPython as described below.
