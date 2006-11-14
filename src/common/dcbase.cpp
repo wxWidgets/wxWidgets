@@ -699,12 +699,12 @@ void wxDCBase::DoGradientFillLinear(const wxRect& rect,
     // save old pen
     wxPen oldPen = m_pen;
 
-    wxUint8 nR1 = destColour.Red();
-    wxUint8 nG1 = destColour.Green();
-    wxUint8 nB1 = destColour.Blue();
-    wxUint8 nR2 = initialColour.Red();
-    wxUint8 nG2 = initialColour.Green();
-    wxUint8 nB2 = initialColour.Blue();
+    wxUint8 nR1 = initialColour.Red();
+    wxUint8 nG1 = initialColour.Green();
+    wxUint8 nB1 = initialColour.Blue();
+    wxUint8 nR2 = destColour.Red();
+    wxUint8 nG2 = destColour.Green();
+    wxUint8 nB2 = destColour.Blue();
     wxUint8 nR, nG, nB;
 
     if ( nDirection == wxEAST || nDirection == wxWEST )
