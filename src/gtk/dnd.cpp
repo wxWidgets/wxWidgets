@@ -39,14 +39,17 @@ extern bool g_blockEventsOnDrag;
 // the flags used for the last DoDragDrop()
 static long gs_flagsForDrag = 0;
 
+#ifdef __WXDEBUG__
 // the trace mask we use with wxLogTrace() - call
 // wxLog::AddTraceMask(TRACE_DND) to enable the trace messages from here
 // (there are quite a few of them, so don't enable this by default)
 static const wxChar *TRACE_DND = _T("dnd");
+#endif
 
+// global variables because GTK+ DnD want to have the
+// mouse event that caused it
 extern GdkEvent *g_lastMouseEvent;
-
-extern int g_lastButtonNumber;
+extern int       g_lastButtonNumber;
 
 //----------------------------------------------------------------------------
 // standard icons
@@ -835,6 +838,14 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     if (g_blockEventsOnDrag)
         return wxDragNone;
 
+    // don't start dragging if no button is down
+    if (g_lastButtonNumber == 0)
+        return wxDragNone;
+        
+    // we can only start a drag after a mouse event
+    if (g_lastMouseEvent == NULL)
+        return wxDragNone;
+
     // disabled for now
     g_blockEventsOnDrag = true;
 
@@ -855,35 +866,31 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     }
     delete[] array;
 
-    /* don't start dragging if no button is down */
-    if (g_lastButtonNumber)
-    {
-        int action = GDK_ACTION_COPY;
-        if ( flags & wxDrag_AllowMove )
-            action |= GDK_ACTION_MOVE;
+    int action = GDK_ACTION_COPY;
+    if ( flags & wxDrag_AllowMove )
+        action |= GDK_ACTION_MOVE;
 
-        // VZ: as we already use g_blockEventsOnDrag it shouldn't be that bad
-        //     to use a global to pass the flags to the drop target but I'd
-        //     surely prefer a better way to do it
-        gs_flagsForDrag = flags;
+    // VZ: as we already use g_blockEventsOnDrag it shouldn't be that bad
+    //     to use a global to pass the flags to the drop target but I'd
+    //     surely prefer a better way to do it
+    gs_flagsForDrag = flags;
 
-        GdkDragContext *context = gtk_drag_begin( m_widget,
+    GdkDragContext *context = gtk_drag_begin( m_widget,
                 target_list,
                 (GdkDragAction)action,
                 g_lastButtonNumber,  // number of mouse button which started drag
                 (GdkEvent*) g_lastMouseEvent );
 
-        m_dragContext = context;
+    m_dragContext = context;
 
-        PrepareIcon( action, context );
+    PrepareIcon( action, context );
 
-        while (m_waiting)
-            gtk_main_iteration();
+    while (m_waiting)
+        gtk_main_iteration();
 
-        m_retValue = ConvertFromGTK(context->action);
-        if ( m_retValue == wxDragNone )
-            m_retValue = wxDragCancel;
-    }
+    m_retValue = ConvertFromGTK(context->action);
+    if ( m_retValue == wxDragNone )
+         m_retValue = wxDragCancel;
 
     g_blockEventsOnDrag = false;
 

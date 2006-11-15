@@ -210,9 +210,10 @@ wxWindowGTK *g_focusWindowLast = (wxWindowGTK*) NULL;
 // yet, defer setting the focus to idle time.
 wxWindowGTK *g_delayedFocus = (wxWindowGTK*) NULL;
 
-// Save the last mouse event for drag start
-GdkEvent *g_lastMouseEvent = (GdkEvent*) NULL;
-int g_lastButtonNumber = 0;
+// global variables because GTK+ DnD want to have the
+// mouse event that caused it
+GdkEvent    *g_lastMouseEvent = (GdkEvent*) NULL;
+int          g_lastButtonNumber = 0;
 
 extern bool g_mainThreadLocked;
 
@@ -1607,8 +1608,10 @@ gtk_window_button_press_callback( GtkWidget *widget,
 
     if (win->GTKProcessEvent( event ))
     {
+        g_lastMouseEvent = NULL;
         return TRUE;
     }
+    g_lastMouseEvent = NULL;
 
     if (event_type == wxEVT_RIGHT_DOWN)
     {
@@ -1749,7 +1752,11 @@ gtk_window_motion_notify_callback( GtkWidget *widget,
         }
     }
 
-    return win->GTKProcessEvent(event);
+    bool ret = win->GTKProcessEvent(event);
+    
+    g_lastMouseEvent = NULL;
+
+    return ret;
 }
 
 //-----------------------------------------------------------------------------
