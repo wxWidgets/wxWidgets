@@ -1556,7 +1556,7 @@ bool wxListCtrl::DeleteAllColumns()
         m_dbImpl->GetColumnCount(&cols);
         for (UInt32 col = 0; col < cols; col++)
         {
-                DeleteColumn(col);
+                DeleteColumn(0);
         }
     }
 
