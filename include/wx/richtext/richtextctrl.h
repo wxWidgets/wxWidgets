@@ -184,6 +184,10 @@ public:
     virtual bool GetStyle(long position, wxTextAttrEx& style);
     virtual bool GetStyle(long position, wxRichTextAttr& style);
 
+    // get the common set of styles for the range
+    virtual bool GetStyleForRange(const wxRichTextRange& range, wxRichTextAttr& style);
+    virtual bool GetStyleForRange(const wxRichTextRange& range, wxTextAttrEx& style);
+
     // extended style setting operation with flags including:
     // wxRICHTEXT_SETSTYLE_WITH_UNDO, wxRICHTEXT_SETSTYLE_OPTIMIZE, wxRICHTEXT_SETSTYLE_PARAGRAPHS_ONLY, wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY
     // see richtextbuffer.h for more details.
@@ -526,11 +530,11 @@ public:
     /// flags indicating which attributes are of interest.
     virtual bool HasCharacterAttributes(const wxRichTextRange& range, const wxTextAttrEx& style) const
     {
-        return GetBuffer().HasCharacterAttributes(range, style);
+        return GetBuffer().HasCharacterAttributes(range.ToInternal(), style);
     }
     virtual bool HasCharacterAttributes(const wxRichTextRange& range, const wxRichTextAttr& style) const
     {
-        return GetBuffer().HasCharacterAttributes(range, style);
+        return GetBuffer().HasCharacterAttributes(range.ToInternal(), style);
     }
 
     /// Test if this whole range has paragraph attributes of the specified kind. If any
@@ -539,11 +543,11 @@ public:
     /// flags indicating which attributes are of interest.
     virtual bool HasParagraphAttributes(const wxRichTextRange& range, const wxTextAttrEx& style) const
     {
-        return GetBuffer().HasParagraphAttributes(range, style);
+        return GetBuffer().HasParagraphAttributes(range.ToInternal(), style);
     }
     virtual bool HasParagraphAttributes(const wxRichTextRange& range, const wxRichTextAttr& style) const
     {
-        return GetBuffer().HasParagraphAttributes(range, style);
+        return GetBuffer().HasParagraphAttributes(range.ToInternal(), style);
     }
 
     /// Is all of the selection bold?

@@ -1647,7 +1647,9 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
                 else
                     newPara = para;
 
-                if (paragraphStyle && !charactersOnly)
+                // If we're specifying paragraphs only, then we really mean character formatting
+                // to be included in the paragraph style
+                if ((paragraphStyle || parasOnly) && !charactersOnly)
                 {
                     if (applyMinimal)
                     {

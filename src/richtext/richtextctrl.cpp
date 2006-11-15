@@ -2525,6 +2525,24 @@ bool wxRichTextCtrl::GetStyle(long position, wxRichTextAttr& style)
     return GetBuffer().GetStyle(position, style);
 }
 
+// get the common set of styles for the range
+bool wxRichTextCtrl::GetStyleForRange(const wxRichTextRange& range, wxRichTextAttr& style)
+{
+    wxTextAttrEx styleEx;
+    if (GetBuffer().GetStyleForRange(range.ToInternal(), styleEx))
+    {
+        style = styleEx;
+        return true;
+    }
+    else
+        return false;
+}
+
+bool wxRichTextCtrl::GetStyleForRange(const wxRichTextRange& range, wxTextAttrEx& style)
+{
+    return GetBuffer().GetStyleForRange(range.ToInternal(), style);
+}
+
 /// Get the content (uncombined) attributes for this position.
 
 bool wxRichTextCtrl::GetUncombinedStyle(long position, wxTextAttr& style)
@@ -2705,7 +2723,7 @@ bool wxRichTextCtrl::IsSelectionBold()
     if (HasSelection())
     {
         wxRichTextAttr attr;
-        wxRichTextRange range = GetInternalSelectionRange();
+        wxRichTextRange range = GetSelectionRange();
         attr.SetFlags(wxTEXT_ATTR_FONT_WEIGHT);
         attr.SetFontWeight(wxBOLD);
 
@@ -2734,7 +2752,7 @@ bool wxRichTextCtrl::IsSelectionItalics()
 {
     if (HasSelection())
     {
-        wxRichTextRange range = GetInternalSelectionRange();
+        wxRichTextRange range = GetSelectionRange();
         wxRichTextAttr attr;
         attr.SetFlags(wxTEXT_ATTR_FONT_ITALIC);
         attr.SetFontStyle(wxITALIC);
@@ -2764,7 +2782,7 @@ bool wxRichTextCtrl::IsSelectionUnderlined()
 {
     if (HasSelection())
     {
-        wxRichTextRange range = GetInternalSelectionRange();
+        wxRichTextRange range = GetSelectionRange();
         wxRichTextAttr attr;
         attr.SetFlags(wxTEXT_ATTR_FONT_UNDERLINE);
         attr.SetFontUnderlined(true);
@@ -2836,9 +2854,9 @@ bool wxRichTextCtrl::IsSelectionAligned(wxTextAttrAlignment alignment)
 {
     wxRichTextRange range;
     if (HasSelection())
-        range = GetInternalSelectionRange();
+        range = GetSelectionRange();
     else
-        range = wxRichTextRange(GetCaretPosition()+1, GetCaretPosition()+1);
+        range = wxRichTextRange(GetCaretPosition()+1, GetCaretPosition()+2);
 
     wxRichTextAttr attr;
     attr.SetAlignment(alignment);
