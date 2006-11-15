@@ -466,7 +466,7 @@ if [ $flag_USE_LXLITE -ne 0 ]; then
     if [ $EXPORT_BY_ORDINALS -ne 0 ]; then
         add_flags="-ynd"
     fi
-    doCommand "lxlite -cs -t: -mrn -mln $add_flags $dllFile"
+    doCommand "lxlite -cs -t: -mrn -mln $add_flags \"$dllFile\""
 fi
 
 #New version of emxomf do no longer want the "-l" flag
