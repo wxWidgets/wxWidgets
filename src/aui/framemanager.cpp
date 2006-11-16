@@ -646,9 +646,7 @@ void wxAuiManager::UpdateHintWindowConfig()
         if (w->IsKindOf(CLASSINFO(wxFrame)))
         {
             wxFrame* f = static_cast<wxFrame*>(w);
-            #if wxCHECK_VERSION(2,7,0)
             can_do_transparent = f->CanSetTransparent();
-            #endif
             break;
         }
         
@@ -1003,9 +1001,11 @@ bool wxAuiManager::DetachPane(wxWindow* window)
                     p.frame->Show(false);
 
                 // reparent to m_frame and destroy the pane
-                if(m_action_window == p.frame) {
+                if(m_action_window == p.frame)
+                {
                     m_action_window = NULL;
                 }
+                
                 p.window->Reparent(m_frame);
                 p.frame->SetSizer(NULL);
                 p.frame->Destroy();
@@ -1041,32 +1041,37 @@ bool wxAuiManager::DetachPane(wxWindow* window)
 void wxAuiManager::ClosePane(wxAuiPaneInfo& pane_info)
 {
     // if we were maximized, restore
-    if(pane_info.IsMaximized()) {
+    if (pane_info.IsMaximized())
+    {
         RestorePane(pane_info);
     }
 
     // first, hide the window
-    if (pane_info.window && pane_info.window->IsShown()) {
+    if (pane_info.window && pane_info.window->IsShown())
+    {
         pane_info.window->Show(false);
     }
 
     // make sure that we are the parent of this window
-    if(pane_info.window && pane_info.window->GetParent() != m_frame) {
+    if (pane_info.window && pane_info.window->GetParent() != m_frame)
+    {
         pane_info.window->Reparent(m_frame);
     }
 
     // if we have a frame, destroy it
-    if(pane_info.frame) {
+    if (pane_info.frame)
+    {
         pane_info.frame->Destroy();
         pane_info.frame = NULL;
     }
 
     // now we need to either destroy or hide the pane
-    if(pane_info.IsDestroyOnClose()) 
+    if (pane_info.IsDestroyOnClose()) 
     {
         wxWindow * window = pane_info.window;
         DetachPane(window);
-        if(window) {
+        if(window)
+        {
             window->Destroy();
         }
     } 
@@ -1084,7 +1089,8 @@ void wxAuiManager::MaximizePane(wxAuiPaneInfo& pane_info)
     for (i = 0, pane_count = m_panes.GetCount(); i < pane_count; ++i)
     {
         wxAuiPaneInfo& p = m_panes.Item(i);
-        if(!p.IsToolbar()) {
+        if (!p.IsToolbar())
+        {
             p.Restore();
             p.SaveHidden();
             p.Hide();
@@ -1097,7 +1103,8 @@ void wxAuiManager::MaximizePane(wxAuiPaneInfo& pane_info)
     m_has_maximized = true;
 
     // last, show the window
-    if (pane_info.window && !pane_info.window->IsShown()) {
+    if (pane_info.window && !pane_info.window->IsShown())
+    {
         pane_info.window->Show(true);
     }
 }
@@ -1110,7 +1117,8 @@ void wxAuiManager::RestorePane(wxAuiPaneInfo& pane_info)
     for (i = 0, pane_count = m_panes.GetCount(); i < pane_count; ++i)
     {
         wxAuiPaneInfo& p = m_panes.Item(i);
-        if(!p.IsToolbar()) {
+        if (!p.IsToolbar())
+        {
             p.RestoreHidden();
         }
     }
@@ -1120,7 +1128,8 @@ void wxAuiManager::RestorePane(wxAuiPaneInfo& pane_info)
     m_has_maximized = false;
 
     // last, show the window
-    if (pane_info.window && !pane_info.window->IsShown()) {
+    if (pane_info.window && !pane_info.window->IsShown())
+    {
         pane_info.window->Show(true);
     }
 }
@@ -1133,7 +1142,8 @@ void wxAuiManager::RestoreMaximizedPane()
     for (i = 0, pane_count = m_panes.GetCount(); i < pane_count; ++i)
     {
         wxAuiPaneInfo& p = m_panes.Item(i);
-        if(p.IsMaximized()) {
+        if(p.IsMaximized())
+        {
             RestorePane(p);
             break;
         }
@@ -2245,14 +2255,12 @@ void wxAuiManager::Update()
                 // pane, which has recently been floated
                 wxAuiFloatingFrame* frame = CreateFloatingFrame(m_frame, p);
 
-#if wxCHECK_VERSION(2,7,0)
                 // on MSW and Mac, if the owner desires transparent dragging, and
                 // the dragging is happening right now, then the floating
                 // window should have this style by default
                 if (m_action == actionDragFloatingPane &&
                     (m_flags & wxAUI_MGR_TRANSPARENT_DRAG))
                         frame->SetTransparent(150);
-#endif
 
                 frame->SetPaneWindow(p);
                 p.frame = frame;
@@ -2926,12 +2934,7 @@ void wxAuiManager::OnHintFadeTimer(wxTimerEvent& WXUNUSED(event))
     }
 
     m_hint_fadeamt += 4;
-#if wxCHECK_VERSION(2,7,0)
     m_hint_wnd->SetTransparent(m_hint_fadeamt);
-#else
-    if (m_hint_wnd->IsKindOf(CLASSINFO(wxPseudoTransparentFrame)))
-        ((wxPseudoTransparentFrame *)m_hint_wnd)->SetTransparent(m_hint_fadeamt);
-#endif
 }
 
 void wxAuiManager::ShowHint(const wxRect& rect)
@@ -2961,12 +2964,7 @@ void wxAuiManager::ShowHint(const wxRect& rect)
         if (m_action == actionDragFloatingPane && m_action_window)
             m_action_window->SetFocus();
 
-#if wxCHECK_VERSION(2,7,0)
         m_hint_wnd->SetTransparent(m_hint_fadeamt);
-#else
-        if (m_hint_wnd->IsKindOf(CLASSINFO(wxPseudoTransparentFrame)))
-            ((wxPseudoTransparentFrame*)m_hint_wnd)->SetTransparent(m_hint_fadeamt);
-#endif
         m_hint_wnd->Raise();
 
 
@@ -3040,12 +3038,7 @@ void wxAuiManager::HideHint()
     {
         if (m_hint_wnd->IsShown())
             m_hint_wnd->Show(false);
-#if wxCHECK_VERSION(2,7,0)
         m_hint_wnd->SetTransparent(0);
-#else
-        if (m_hint_wnd->IsKindOf(CLASSINFO(wxPseudoTransparentFrame)))
-        ((wxPseudoTransparentFrame *)m_hint_wnd)->SetTransparent(0);
-#endif
         m_hint_fadetimer.Stop();
         m_last_hint = wxRect();
         return;
@@ -3174,10 +3167,8 @@ void wxAuiManager::OnFloatingPaneMoveStart(wxWindow* wnd)
     wxAuiPaneInfo& pane = GetPane(wnd);
     wxASSERT_MSG(pane.IsOk(), wxT("Pane window not found"));
 
-#if wxCHECK_VERSION(2,7,0)
     if (m_flags & wxAUI_MGR_TRANSPARENT_DRAG)
         pane.frame->SetTransparent(150);
-#endif
 }
 
 void wxAuiManager::OnFloatingPaneMoving(wxWindow* wnd, wxDirection dir)
@@ -3349,11 +3340,11 @@ void wxAuiManager::OnFloatingPaneMoved(wxWindow* wnd, wxDirection dir)
     {
         pane.floating_pos = pane.frame->GetPosition();
 
-#if wxCHECK_VERSION(2,7,0)
         if (m_flags & wxAUI_MGR_TRANSPARENT_DRAG)
             pane.frame->SetTransparent(255);
-#endif
-    } else if(m_has_maximized) {
+    }
+     else if (m_has_maximized)
+    {
         RestoreMaximizedPane();
     }
 
