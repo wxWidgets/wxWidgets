@@ -673,7 +673,47 @@ void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc, wxWindow *WXUNUSED(window),
                                       const wxRect& _rect,
                                       wxAuiPaneInfo& pane)
 {
+    wxBitmap bmp;
+    switch (button)
+    {
+        default:
+        case wxAUI_BUTTON_CLOSE:
+            if (pane.state & wxAuiPaneInfo::optionActive)
+                bmp = m_active_close_bitmap;
+                 else
+                bmp = m_inactive_close_bitmap;
+            break;
+        case wxAUI_BUTTON_PIN:
+            if (pane.state & wxAuiPaneInfo::optionActive)
+                bmp = m_active_pin_bitmap;
+                 else
+                bmp = m_inactive_pin_bitmap;
+            break;
+        case wxAUI_BUTTON_MAXIMIZE_RESTORE:
+            if (pane.IsMaximized())
+            {
+                if (pane.state & wxAuiPaneInfo::optionActive)
+                    bmp = m_active_restore_bitmap;
+                     else
+                    bmp = m_inactive_restore_bitmap;
+            }
+             else
+            {
+                if (pane.state & wxAuiPaneInfo::optionActive)
+                    bmp = m_active_maximize_bitmap;
+                     else
+                    bmp = m_inactive_maximize_bitmap;
+            }
+            break;
+    }
+
+
     wxRect rect = _rect;
+
+    int old_y = rect.y;
+    rect.y = rect.y + (rect.height/2) - (bmp.GetHeight()/2);
+    rect.height = old_y + rect.height - rect.y - 1;
+
 
     if (button_state == wxAUI_BUTTON_STATE_PRESSED)
     {
@@ -699,36 +739,6 @@ void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc, wxWindow *WXUNUSED(window),
         dc.DrawRectangle(rect.x, rect.y, 15, 15);
     }
 
-    wxBitmap bmp;
-    switch (button)
-    {
-        default:
-        case wxAUI_BUTTON_MAXIMIZE_RESTORE:
-            if (pane.IsMaximized()) {
-                if (pane.state & wxAuiPaneInfo::optionActive)
-                    bmp = m_active_restore_bitmap;
-                    else
-                    bmp = m_inactive_restore_bitmap;
-            } else {
-                if (pane.state & wxAuiPaneInfo::optionActive)
-                    bmp = m_active_maximize_bitmap;
-                    else
-                    bmp = m_inactive_maximize_bitmap;
-            }
-            break;
-        case wxAUI_BUTTON_CLOSE:
-            if (pane.state & wxAuiPaneInfo::optionActive)
-                bmp = m_active_close_bitmap;
-                 else
-                bmp = m_inactive_close_bitmap;
-            break;
-        case wxAUI_BUTTON_PIN:
-            if (pane.state & wxAuiPaneInfo::optionActive)
-                bmp = m_active_pin_bitmap;
-                 else
-                bmp = m_inactive_pin_bitmap;
-            break;
-    }
 
     // draw the button itself
     dc.DrawBitmap(bmp, rect.x, rect.y, true);
