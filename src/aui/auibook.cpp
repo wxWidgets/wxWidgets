@@ -57,27 +57,15 @@ IMPLEMENT_DYNAMIC_CLASS(wxAuiNotebookEvent, wxEvent)
 
 
 
-// This functions are here for this proof of concept
-// and will be factored out later. See dockart.cpp
-static wxColor StepColour(const wxColor& c, int percent)
-{
-    int r = c.Red(), g = c.Green(), b = c.Blue();
-    return wxColour((unsigned char)wxMin((r*percent)/100,255),
-                    (unsigned char)wxMin((g*percent)/100,255),
-                    (unsigned char)wxMin((b*percent)/100,255));
-}
+// these functions live in dockart.cpp -- they'll eventually
+// be moved to a new utility cpp file
 
-// This functions are here for this proof of concept
-// and will be factored out later. See dockart.cpp
-static wxBitmap BitmapFromBits(const unsigned char bits[], int w, int h,
-                               const wxColour& color)
-{
-    wxImage img = wxBitmap((const char*)bits, w, h).ConvertToImage();
-    img.Replace(0,0,0,123,123,123);
-    img.Replace(255,255,255,color.Red(),color.Green(),color.Blue());
-    img.SetMaskColour(123,123,123);
-    return wxBitmap(img);
-}
+wxColor wxAuiStepColour(const wxColor& c, int percent);
+
+wxBitmap wxAuiBitmapFromBits(const unsigned char bits[], int w, int h,
+                             const wxColour& color);
+
+wxString wxAuiChopText(wxDC& dc, const wxString& text, int max_size);
 
 static void DrawButtons(wxDC& dc,
                         const wxRect& _rect,
@@ -96,8 +84,8 @@ static void DrawButtons(wxDC& dc,
     if (button_state == wxAUI_BUTTON_STATE_HOVER ||
         button_state == wxAUI_BUTTON_STATE_PRESSED)
     {
-        dc.SetBrush(wxBrush(StepColour(bkcolour, 120)));
-        dc.SetPen(wxPen(StepColour(bkcolour, 70)));
+        dc.SetBrush(wxBrush(wxAuiStepColour(bkcolour, 120)));
+        dc.SetPen(wxPen(wxAuiStepColour(bkcolour, 70)));
 
         // draw the background behind the button
         dc.DrawRectangle(rect.x, rect.y, 15, 15);
@@ -116,36 +104,6 @@ static void IndentPressedBitmap(wxRect* rect, int button_state)
     }
 }
 
-// chops the text so that it fits within |max_size| pixels.
-// Also adds an elipsis if necessary
-
-static wxString ChopText(wxDC& dc, const wxString& text, int max_size)
-{
-    wxCoord x,y;
-
-    // first check if the text fits with no problems
-    dc.GetTextExtent(text, &x, &y);
-    if (x <= max_size)
-        return text;
-
-    size_t i, len = text.Length();
-    size_t last_good_length = 0;
-    for (i = 0; i < len; ++i)
-    {
-        wxString s = text.Left(i);
-        s += wxT("...");
-
-        dc.GetTextExtent(s, &x, &y);
-        if (x > max_size)
-            break;
-
-        last_good_length = i;
-    }
-
-    wxString ret = text.Left(last_good_length);
-    ret += wxT("...");
-    return ret;
-}
 
 
 // -- GUI helper classes and functions --
@@ -236,23 +194,23 @@ wxAuiDefaultTabArt::wxAuiDefaultTabArt()
 #endif
 
     m_base_colour = base_colour;
-    wxColor darker2_colour = StepColour(base_colour, 70);
+    wxColor darker2_colour = wxAuiStepColour(base_colour, 70);
 
     m_border_pen = wxPen(darker2_colour);
     m_base_colour_pen = wxPen(m_base_colour);
     m_base_colour_brush = wxBrush(m_base_colour);
 
-    m_active_close_bmp = BitmapFromBits(close_bits, 16, 16, *wxBLACK);
-    m_disabled_close_bmp = BitmapFromBits(close_bits, 16, 16, wxColour(128,128,128));
+    m_active_close_bmp = wxAuiBitmapFromBits(close_bits, 16, 16, *wxBLACK);
+    m_disabled_close_bmp = wxAuiBitmapFromBits(close_bits, 16, 16, wxColour(128,128,128));
 
-    m_active_left_bmp = BitmapFromBits(left_bits, 16, 16, *wxBLACK);
-    m_disabled_left_bmp = BitmapFromBits(left_bits, 16, 16, wxColour(128,128,128));
+    m_active_left_bmp = wxAuiBitmapFromBits(left_bits, 16, 16, *wxBLACK);
+    m_disabled_left_bmp = wxAuiBitmapFromBits(left_bits, 16, 16, wxColour(128,128,128));
 
-    m_active_right_bmp = BitmapFromBits(right_bits, 16, 16, *wxBLACK);
-    m_disabled_right_bmp = BitmapFromBits(right_bits, 16, 16, wxColour(128,128,128));
+    m_active_right_bmp = wxAuiBitmapFromBits(right_bits, 16, 16, *wxBLACK);
+    m_disabled_right_bmp = wxAuiBitmapFromBits(right_bits, 16, 16, wxColour(128,128,128));
 
-    m_active_windowlist_bmp = BitmapFromBits(list_bits, 16, 16, *wxBLACK);
-    m_disabled_windowlist_bmp = BitmapFromBits(list_bits, 16, 16, wxColour(128,128,128));
+    m_active_windowlist_bmp = wxAuiBitmapFromBits(list_bits, 16, 16, *wxBLACK);
+    m_disabled_windowlist_bmp = wxAuiBitmapFromBits(list_bits, 16, 16, wxColour(128,128,128));
 
     m_flags = 0;
 }
@@ -308,8 +266,8 @@ void wxAuiDefaultTabArt::DrawBackground(wxDC& dc,
 {
     // draw background
     wxRect r(rect.x, rect.y, rect.width+2, rect.height-3);
-    wxColor top_color = StepColour(m_base_colour, 90);
-    wxColor bottom_color = StepColour(m_base_colour, 110);
+    wxColor top_color = wxAuiStepColour(m_base_colour, 90);
+    wxColor bottom_color = wxAuiStepColour(m_base_colour, 110);
     dc.GradientFillLinear(r, top_color, bottom_color, wxSOUTH);
 
     // draw base lines
@@ -473,7 +431,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
         
         // -- draw top gradient fill for glossy look
         wxColor top_color = m_base_colour;
-        wxColor bottom_color = StepColour(top_color, 106);
+        wxColor bottom_color = wxAuiStepColour(top_color, 106);
         dc.GradientFillLinear(r, bottom_color, top_color, wxNORTH);
         
         r.y += r.height;
@@ -530,7 +488,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
     }
 
 
-    wxString draw_text = ChopText(dc,
+    wxString draw_text = wxAuiChopText(dc,
                           caption,
                           tab_width - (text_offset-tab_x) - close_button_width);
 
@@ -814,7 +772,7 @@ wxAuiSimpleTabArt::wxAuiSimpleTabArt()
 
     wxColour base_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 
-    wxColour background_colour = StepColour(base_colour, 95);
+    wxColour background_colour = wxAuiStepColour(base_colour, 95);
     wxColour normaltab_colour = base_colour;
     wxColour selectedtab_colour = *wxWHITE;
 
@@ -824,17 +782,17 @@ wxAuiSimpleTabArt::wxAuiSimpleTabArt()
     m_selected_bkbrush = wxBrush(selectedtab_colour);
     m_selected_bkpen = wxPen(selectedtab_colour);
 
-    m_active_close_bmp = BitmapFromBits(close_bits, 16, 16, *wxBLACK);
-    m_disabled_close_bmp = BitmapFromBits(close_bits, 16, 16, wxColour(128,128,128));
+    m_active_close_bmp = wxAuiBitmapFromBits(close_bits, 16, 16, *wxBLACK);
+    m_disabled_close_bmp = wxAuiBitmapFromBits(close_bits, 16, 16, wxColour(128,128,128));
 
-    m_active_left_bmp = BitmapFromBits(left_bits, 16, 16, *wxBLACK);
-    m_disabled_left_bmp = BitmapFromBits(left_bits, 16, 16, wxColour(128,128,128));
+    m_active_left_bmp = wxAuiBitmapFromBits(left_bits, 16, 16, *wxBLACK);
+    m_disabled_left_bmp = wxAuiBitmapFromBits(left_bits, 16, 16, wxColour(128,128,128));
 
-    m_active_right_bmp = BitmapFromBits(right_bits, 16, 16, *wxBLACK);
-    m_disabled_right_bmp = BitmapFromBits(right_bits, 16, 16, wxColour(128,128,128));
+    m_active_right_bmp = wxAuiBitmapFromBits(right_bits, 16, 16, *wxBLACK);
+    m_disabled_right_bmp = wxAuiBitmapFromBits(right_bits, 16, 16, wxColour(128,128,128));
 
-    m_active_windowlist_bmp = BitmapFromBits(list_bits, 16, 16, *wxBLACK);
-    m_disabled_windowlist_bmp = BitmapFromBits(list_bits, 16, 16, wxColour(128,128,128));
+    m_active_windowlist_bmp = wxAuiBitmapFromBits(list_bits, 16, 16, *wxBLACK);
+    m_disabled_windowlist_bmp = wxAuiBitmapFromBits(list_bits, 16, 16, wxColour(128,128,128));
 
 }
 
@@ -1012,7 +970,7 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
         text_offset = tab_x + tab_height;
 
     // chop text if necessary
-    wxString draw_text = ChopText(dc,
+    wxString draw_text = wxAuiChopText(dc,
                           caption,
                           tab_width - (text_offset-tab_x) - close_button_width);
 

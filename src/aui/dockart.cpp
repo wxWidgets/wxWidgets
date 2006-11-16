@@ -56,9 +56,7 @@
 // wxAuiManager::SetDockArt()
 
 
-// StepColour() it a utility function that simply darkens
-// or lightens a color, based on the specified percentage
-static wxColor StepColour(const wxColor& c, int percent)
+wxColor wxAuiStepColour(const wxColor& c, int percent)
 {
     int r = c.Red(), g = c.Green(), b = c.Blue();
     return wxColour((unsigned char)wxMin((r*percent)/100,255),
@@ -66,7 +64,7 @@ static wxColor StepColour(const wxColor& c, int percent)
                     (unsigned char)wxMin((b*percent)/100,255));
 }
 
-static wxColor LightContrastColour(const wxColour& c)
+wxColor wxAuiLightContrastColour(const wxColour& c)
 {
     int amount = 120;
 
@@ -75,13 +73,13 @@ static wxColor LightContrastColour(const wxColour& c)
     if (c.Red() < 128 && c.Green() < 128 && c.Blue() < 128)
         amount = 160;
 
-    return StepColour(c, amount);
+    return wxAuiStepColour(c, amount);
 }
 
-// BitmapFromBits() is a utility function that creates a
+// wxAuiBitmapFromBits() is a utility function that creates a
 // masked bitmap from raw bits (XBM format)
-static wxBitmap BitmapFromBits(const unsigned char bits[], int w, int h,
-                               const wxColour& color)
+wxBitmap wxAuiBitmapFromBits(const unsigned char bits[], int w, int h,
+                             const wxColour& color)
 {
     wxImage img = wxBitmap((const char*)bits, w, h).ConvertToImage();
     img.Replace(0,0,0,123,123,123);
@@ -89,7 +87,7 @@ static wxBitmap BitmapFromBits(const unsigned char bits[], int w, int h,
     img.SetMaskColour(123,123,123);
     return wxBitmap(img);
 }
-
+                             
 
 static void DrawGradientRectangle(wxDC& dc,
                                   const wxRect& rect,
@@ -126,10 +124,9 @@ static void DrawGradientRectangle(wxDC& dc,
              else
             dc.DrawLine(rect.x+i, rect.y, rect.x+i, rect.y+rect.height);
     }
-
 }
 
-static wxString ChopText(wxDC& dc, const wxString& text, int max_size)
+wxString wxAuiChopText(wxDC& dc, const wxString& text, int max_size)
 {
     wxCoord x,y;
     
@@ -168,17 +165,17 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
 #endif
 
     m_base_colour = base_colour;
-    wxColor darker1_colour = StepColour(base_colour, 85);
-    wxColor darker2_colour = StepColour(base_colour, 70);
-    wxColor darker3_colour = StepColour(base_colour, 60);
-    wxColor darker4_colour = StepColour(base_colour, 50);
-    wxColor darker5_colour = StepColour(base_colour, 40);
+    wxColor darker1_colour = wxAuiStepColour(base_colour, 85);
+    wxColor darker2_colour = wxAuiStepColour(base_colour, 70);
+    wxColor darker3_colour = wxAuiStepColour(base_colour, 60);
+    wxColor darker4_colour = wxAuiStepColour(base_colour, 50);
+    wxColor darker5_colour = wxAuiStepColour(base_colour, 40);
 
     m_active_caption_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
-    m_active_caption_gradient_colour = LightContrastColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+    m_active_caption_gradient_colour = wxAuiLightContrastColour(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
     m_active_caption_text_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
     m_inactive_caption_colour = darker1_colour;
-    m_inactive_caption_gradient_colour = StepColour(base_colour, 97);
+    m_inactive_caption_gradient_colour = wxAuiStepColour(base_colour, 97);
     m_inactive_caption_text_colour = *wxBLACK;
 
 #ifdef __WXMAC__
@@ -235,31 +232,31 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
         0x7f,0xff,0xff,0xff,0xff,0xff,0xff,0xff};
 
 #ifdef __WXMAC__
-    m_inactive_close_bitmap = BitmapFromBits(close_bits, 16, 16, *wxWHITE);
-    m_active_close_bitmap = BitmapFromBits(close_bits, 16, 16, *wxWHITE );
+    m_inactive_close_bitmap = wxAuiBitmapFromBits(close_bits, 16, 16, *wxWHITE);
+    m_active_close_bitmap = wxAuiBitmapFromBits(close_bits, 16, 16, *wxWHITE );
 #else
-    m_inactive_close_bitmap = BitmapFromBits(close_bits, 16, 16, m_inactive_caption_text_colour);
-    m_active_close_bitmap = BitmapFromBits(close_bits, 16, 16, m_active_caption_text_colour);
+    m_inactive_close_bitmap = wxAuiBitmapFromBits(close_bits, 16, 16, m_inactive_caption_text_colour);
+    m_active_close_bitmap = wxAuiBitmapFromBits(close_bits, 16, 16, m_active_caption_text_colour);
 #endif
 
 #ifdef __WXMAC__
-    m_inactive_maximize_bitmap = BitmapFromBits(maximize_bits, 16, 16, *wxWHITE);
-    m_active_maximize_bitmap = BitmapFromBits(maximize_bits, 16, 16, *wxWHITE );
+    m_inactive_maximize_bitmap = wxAuiBitmapFromBits(maximize_bits, 16, 16, *wxWHITE);
+    m_active_maximize_bitmap = wxAuiBitmapFromBits(maximize_bits, 16, 16, *wxWHITE );
 #else
-    m_inactive_maximize_bitmap = BitmapFromBits(maximize_bits, 16, 16, m_inactive_caption_text_colour);
-    m_active_maximize_bitmap = BitmapFromBits(maximize_bits, 16, 16, m_active_caption_text_colour);
+    m_inactive_maximize_bitmap = wxAuiBitmapFromBits(maximize_bits, 16, 16, m_inactive_caption_text_colour);
+    m_active_maximize_bitmap = wxAuiBitmapFromBits(maximize_bits, 16, 16, m_active_caption_text_colour);
 #endif
 
 #ifdef __WXMAC__
-    m_inactive_restore_bitmap = BitmapFromBits(restore_bits, 16, 16, *wxWHITE);
-    m_active_restore_bitmap = BitmapFromBits(restore_bits, 16, 16, *wxWHITE );
+    m_inactive_restore_bitmap = wxAuiBitmapFromBits(restore_bits, 16, 16, *wxWHITE);
+    m_active_restore_bitmap = wxAuiBitmapFromBits(restore_bits, 16, 16, *wxWHITE );
 #else
-    m_inactive_restore_bitmap = BitmapFromBits(restore_bits, 16, 16, m_inactive_caption_text_colour);
-    m_active_restore_bitmap = BitmapFromBits(restore_bits, 16, 16, m_active_caption_text_colour);
+    m_inactive_restore_bitmap = wxAuiBitmapFromBits(restore_bits, 16, 16, m_inactive_caption_text_colour);
+    m_active_restore_bitmap = wxAuiBitmapFromBits(restore_bits, 16, 16, m_active_caption_text_colour);
 #endif
 
-    m_inactive_pin_bitmap = BitmapFromBits(pin_bits, 16, 16, m_inactive_caption_text_colour);
-    m_active_pin_bitmap = BitmapFromBits(pin_bits, 16, 16, m_active_caption_text_colour);
+    m_inactive_pin_bitmap = wxAuiBitmapFromBits(pin_bits, 16, 16, m_inactive_caption_text_colour);
+    m_active_pin_bitmap = wxAuiBitmapFromBits(pin_bits, 16, 16, m_active_caption_text_colour);
 
     // default metric values
 #if defined(__WXMAC__)
@@ -343,8 +340,8 @@ void wxAuiDefaultDockArt::SetColour(int id, const wxColor& colour)
         case wxAUI_ART_BORDER_COLOUR:                    m_border_pen.SetColour(colour); break;
         case wxAUI_ART_GRIPPER_COLOUR:
             m_gripper_brush.SetColour(colour);
-            m_gripper_pen1.SetColour(StepColour(colour, 40));
-            m_gripper_pen2.SetColour(StepColour(colour, 60));
+            m_gripper_pen1.SetColour(wxAuiStepColour(colour, 40));
+            m_gripper_pen2.SetColour(wxAuiStepColour(colour, 60));
             break;
         default: wxFAIL_MSG(wxT("Invalid Metric Ordinal")); break;
     }
@@ -569,7 +566,7 @@ void wxAuiDefaultDockArt::DrawCaption(wxDC& dc, wxWindow *WXUNUSED(window),
     if (pane.HasMaximizeButton())
         clip_rect.width -= m_button_size;    
 
-    wxString draw_text = ChopText(dc, text, clip_rect.width);
+    wxString draw_text = wxAuiChopText(dc, text, clip_rect.width);
 
     dc.SetClippingRegion(clip_rect);
     dc.DrawText(draw_text, rect.x+3, rect.y+(rect.height/2)-(h/2)-1);
@@ -646,13 +643,13 @@ void wxAuiDefaultDockArt::DrawPaneButton(wxDC& dc, wxWindow *WXUNUSED(window),
     {
         if (pane.state & wxAuiPaneInfo::optionActive)
         {
-            dc.SetBrush(wxBrush(StepColour(m_active_caption_colour, 120)));
-            dc.SetPen(wxPen(StepColour(m_active_caption_colour, 70)));
+            dc.SetBrush(wxBrush(wxAuiStepColour(m_active_caption_colour, 120)));
+            dc.SetPen(wxPen(wxAuiStepColour(m_active_caption_colour, 70)));
         }
          else
         {
-            dc.SetBrush(wxBrush(StepColour(m_inactive_caption_colour, 120)));
-            dc.SetPen(wxPen(StepColour(m_inactive_caption_colour, 70)));
+            dc.SetBrush(wxBrush(wxAuiStepColour(m_inactive_caption_colour, 120)));
+            dc.SetPen(wxPen(wxAuiStepColour(m_inactive_caption_colour, 70)));
         }
 
         // draw the background behind the button
