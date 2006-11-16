@@ -89,7 +89,8 @@ enum wxAuiPaneButtonState
     wxAUI_BUTTON_STATE_HOVER    = 1 << 1,
     wxAUI_BUTTON_STATE_PRESSED  = 1 << 2,
     wxAUI_BUTTON_STATE_DISABLED = 1 << 3,
-    wxAUI_BUTTON_STATE_HIDDEN   = 1 << 4
+    wxAUI_BUTTON_STATE_HIDDEN   = 1 << 4,
+    wxAUI_BUTTON_STATE_CHECKED  = 1 << 5
 };
 
 enum wxAuiButtonId
