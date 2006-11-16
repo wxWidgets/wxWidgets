@@ -342,7 +342,8 @@ public:
         wxPathFormat format = wxPATH_NATIVE) const = 0;
 
     void SetConv(wxMBConv& conv) { m_pConv = &conv; }
-    wxMBConv& GetConv() const { return *m_pConv; }
+    wxMBConv& GetConv() const
+        { if (m_pConv) return *m_pConv; else return wxConvLocal; }
 
     static const wxArchiveClassFactory *Find(const wxChar *protocol,
                                              wxStreamProtocolType type
@@ -363,7 +364,7 @@ protected:
     virtual wxArchiveInputStream  *DoNewStream(wxInputStream *stream) const = 0;
     virtual wxArchiveOutputStream *DoNewStream(wxOutputStream *stream) const = 0;
 
-    wxArchiveClassFactory() : m_pConv(&wxConvLocal), m_next(this) { }
+    wxArchiveClassFactory() : m_pConv(NULL), m_next(this) { }
     wxArchiveClassFactory& operator=(const wxArchiveClassFactory& WXUNUSED(f))
         { return *this; }
 
