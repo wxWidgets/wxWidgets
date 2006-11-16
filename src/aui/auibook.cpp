@@ -673,15 +673,9 @@ int wxAuiDefaultTabArt::ShowWindowList(wxWindow* wnd,
         menuPopup.Check(1000+active_idx, true);
     }
 
-    // find out where to put the popup menu of window
-    // items.  Subtract 100 for now to center the menu
-    // a bit, until a better mechanism can be implemented
+    // find out where to put the popup menu of window items
     wxPoint pt = ::wxGetMousePosition();
     pt = wnd->ScreenToClient(pt);
-    if (pt.x < 100)
-        pt.x = 0;
-         else
-        pt.x -= 100;
 
     // find out the screen coordinate at the bottom of the tab ctrl
     wxRect cli_rect = wnd->GetClientRect();
