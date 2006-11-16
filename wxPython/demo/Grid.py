@@ -31,9 +31,9 @@ class ButtonPanel(wx.Panel):
             box.Add(btn, 0, wx.ALIGN_CENTER|wx.ALL, 10)
             self.Bind(wx.EVT_BUTTON, self.OnButton, btn)
 
-        self.SetAutoLayout(True)
         self.SetSizer(box)
-
+        box.Fit(self)
+        
 
     def OnButton(self, evt):
         modName = buttonDefs[evt.GetId()][0]
