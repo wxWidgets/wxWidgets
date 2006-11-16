@@ -100,6 +100,11 @@ wxStandardPaths::GetLocalizedResourcesDir(const wxChar *lang,
     return wxStandardPathsBase::GetLocalizedResourcesDir(lang, category);
 }
 
+wxString wxStandardPaths::GetExecutablePath() const
+{
+    return wxStandardPathsBase::GetExecutablePath();
+}
+
 #else // !__VMS
 
 // ============================================================================

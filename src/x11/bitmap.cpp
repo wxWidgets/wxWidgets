@@ -1372,7 +1372,7 @@ bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name,
 
         XpmFreeAttributes(&xpmAttr);
 
-        M_BMPHANDLERDATA->m_bitmap = (WXPixmap) pixmap;
+        M_BMPHANDLERDATA->m_bitmap = (Pixmap) pixmap;
 
         if (mask)
         {
@@ -1497,7 +1497,7 @@ bool wxXPMDataHandler::Create(wxBitmap *bitmap, const void* bits,
 
         XpmFreeAttributes(&xpmAttr);
 
-        M_BMPHANDLERDATA->m_pixmap = (WXPixmap) pixmap;
+        M_BMPHANDLERDATA->m_pixmap = (Pixmap) pixmap;
 
         if (mask)
         {
