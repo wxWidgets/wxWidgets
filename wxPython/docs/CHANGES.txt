@@ -12,6 +12,14 @@ Added wx.CollapsiblePane.  On wxGTK it uses a native expander widget,
 on the other platforms a regular button is used to control the
 collapsed/expanded state.
 
+Added the wx.combo module, which contains the ComboCtrl and ComboPopup
+classes.  These classes allow you to implement a wx.ComboBox-like
+widget where the popup can be nearly any kind of widget, and where you
+have a lot of control over other aspects of the combo widget as well.
+It works very well on GTK and MSW, using native renderers for drawing
+the combo button, but is unfortunatly still a bit klunky on OSX...
+
+
 
 
 
@@ -378,7 +386,7 @@ were worked around in the wrapper code.
 
 Added wx.lib.delayedresult from Oliver Schoenborn.
 
-Added wx.lib.expando, a multi-line textctrl that exands as more lines
+Added wx.lib.expando, a multi-line textctrl that expands as more lines
 are needed.
 
 wx.Image.Scale and Rescale methods now take an extra parameter

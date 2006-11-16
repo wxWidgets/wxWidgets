@@ -361,6 +361,20 @@ ext = Extension('_calendar', swig_sources,
 wxpExtensions.append(ext)
 
 
+swig_sources = run_swig(['combo.i'], 'src', GENDIR, PKGDIR,
+                        USE_SWIG, swig_force, swig_args, swig_deps)
+ext = Extension('_combo', swig_sources,
+                include_dirs =  includes,
+                define_macros = defines,
+                library_dirs = libdirs,
+                libraries = libs,
+                extra_compile_args = cflags,
+                extra_link_args = lflags,
+                **depends
+                )
+wxpExtensions.append(ext)
+
+
 swig_sources = run_swig(['grid.i'], 'src', GENDIR, PKGDIR,
                         USE_SWIG, swig_force, swig_args, swig_deps)
 ext = Extension('_grid', swig_sources,

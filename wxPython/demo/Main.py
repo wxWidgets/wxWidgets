@@ -70,6 +70,7 @@ _treeList = [
         'AlphaDrawing',
         'GraphicsContext',
         'CollapsiblePane',
+        'ComboCtrl',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -113,6 +114,7 @@ _treeList = [
         'CheckListBox',
         'Choice',
         'ComboBox',
+        'ComboCtrl',
         'Gauge',
         'Grid',
         'Grid_MegaExample',
@@ -179,6 +181,7 @@ _treeList = [
         'CalendarCtrl',
         'CheckListCtrlMixin',
         'CollapsiblePane',
+        'ComboCtrl',
         'ContextHelp',
         'DatePickerCtrl',
         'DynamicSashWindow',
