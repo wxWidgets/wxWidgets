@@ -2525,6 +2525,7 @@ bool wxRichTextCtrl::GetStyle(long position, wxRichTextAttr& style)
     return GetBuffer().GetStyle(position, style);
 }
 
+/*
 // get the common set of styles for the range
 bool wxRichTextCtrl::GetStyleForRange(const wxRichTextRange& range, wxRichTextAttr& style)
 {
@@ -2542,6 +2543,7 @@ bool wxRichTextCtrl::GetStyleForRange(const wxRichTextRange& range, wxTextAttrEx
 {
     return GetBuffer().GetStyleForRange(range.ToInternal(), style);
 }
+*/
 
 /// Get the content (uncombined) attributes for this position.
 

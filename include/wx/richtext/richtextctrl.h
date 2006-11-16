@@ -184,10 +184,11 @@ public:
     virtual bool GetStyle(long position, wxTextAttrEx& style);
     virtual bool GetStyle(long position, wxRichTextAttr& style);
 
+/*
     // get the common set of styles for the range
     bool GetStyleForRange(const wxRichTextRange& range, wxRichTextAttr& style);
     bool GetStyleForRange(const wxRichTextRange& range, wxTextAttrEx& style);
-
+*/
     // extended style setting operation with flags including:
     // wxRICHTEXT_SETSTYLE_WITH_UNDO, wxRICHTEXT_SETSTYLE_OPTIMIZE, wxRICHTEXT_SETSTYLE_PARAGRAPHS_ONLY, wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY
     // see richtextbuffer.h for more details.
