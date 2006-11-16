@@ -119,7 +119,7 @@ wxArchiveFSCacheDataImpl::~wxArchiveFSCacheDataImpl()
 
 wxArchiveFSEntry *wxArchiveFSCacheDataImpl::AddToCache(wxArchiveEntry *entry)
 {
-    m_hash[entry->GetName()] = entry;
+    m_hash[entry->GetName(wxPATH_UNIX)] = entry;
     wxArchiveFSEntry *fse = new wxArchiveFSEntry;
     *m_endptr = fse;
     (*m_endptr)->entry = entry;
@@ -152,7 +152,7 @@ wxArchiveEntry *wxArchiveFSCacheDataImpl::Get(const wxString& name)
     {
         AddToCache(entry);
 
-        if (entry->GetName() == name)
+        if (entry->GetName(wxPATH_UNIX) == name)
             return entry;
     }
 
