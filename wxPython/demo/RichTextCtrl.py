@@ -17,7 +17,7 @@ class RichTextFrame(wx.Frame):
         self.rtc = rt.RichTextCtrl(self, style=wx.VSCROLL|wx.HSCROLL|wx.NO_BORDER);
         wx.CallAfter(self.rtc.SetFocus)
 
-
+        self.rtc.Freeze()
         self.rtc.BeginSuppressUndo()
 
         self.rtc.BeginParagraphSpacing(0, 20)
@@ -172,7 +172,8 @@ class RichTextFrame(wx.Frame):
         self.rtc.EndParagraphSpacing()
 
         self.rtc.EndSuppressUndo()
-
+        self.rtc.Thaw()
+        
 
     def OnFileOpen(self, evt):
         # TODO: Use RichTextBuffer.GetExtWildcard to get the wildcard string
