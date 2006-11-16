@@ -2177,8 +2177,6 @@ void wxAuiManager::Update()
     wxSizer* sizer;
     int i, pane_count = m_panes.GetCount();
 
-    // delete old sizer first
-    m_frame->SetSizer(NULL);
 
     // destroy floating panes which have been
     // redocked or are becoming non-floating
@@ -2226,6 +2224,9 @@ void wxAuiManager::Update()
         }
     }
 
+
+    // delete old sizer first
+    m_frame->SetSizer(NULL);
 
     // create a layout for all of the panes
     sizer = LayoutAll(m_panes, m_docks, m_uiparts, false);
