@@ -209,7 +209,7 @@ wxAuiDefaultDockArt::wxAuiDefaultDockArt()
 
     m_base_colour = base_colour;
     wxColor darker1_colour = wxAuiStepColour(base_colour, 85);
-    wxColor darker2_colour = wxAuiStepColour(base_colour, 70);
+    wxColor darker2_colour = wxAuiStepColour(base_colour, 75);
     wxColor darker3_colour = wxAuiStepColour(base_colour, 60);
     wxColor darker4_colour = wxAuiStepColour(base_colour, 50);
     wxColor darker5_colour = wxAuiStepColour(base_colour, 40);

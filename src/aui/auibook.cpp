@@ -85,7 +85,7 @@ static void DrawButtons(wxDC& dc,
         button_state == wxAUI_BUTTON_STATE_PRESSED)
     {
         dc.SetBrush(wxBrush(wxAuiStepColour(bkcolour, 120)));
-        dc.SetPen(wxPen(wxAuiStepColour(bkcolour, 70)));
+        dc.SetPen(wxPen(wxAuiStepColour(bkcolour, 75)));
 
         // draw the background behind the button
         dc.DrawRectangle(rect.x, rect.y, 15, 15);
@@ -194,9 +194,9 @@ wxAuiDefaultTabArt::wxAuiDefaultTabArt()
 #endif
 
     m_base_colour = base_colour;
-    wxColor darker2_colour = wxAuiStepColour(base_colour, 70);
+    wxColor border_colour = wxAuiStepColour(base_colour, 75);
 
-    m_border_pen = wxPen(darker2_colour);
+    m_border_pen = wxPen(border_colour);
     m_base_colour_pen = wxPen(m_base_colour);
     m_base_colour_brush = wxBrush(m_base_colour);
 
@@ -267,7 +267,7 @@ void wxAuiDefaultTabArt::DrawBackground(wxDC& dc,
     // draw background
     wxRect r(rect.x, rect.y, rect.width+2, rect.height-3);
     wxColor top_color = wxAuiStepColour(m_base_colour, 90);
-    wxColor bottom_color = wxAuiStepColour(m_base_colour, 110);
+    wxColor bottom_color = wxAuiStepColour(m_base_colour, 170);
     dc.GradientFillLinear(r, top_color, bottom_color, wxSOUTH);
 
     // draw base lines
@@ -354,6 +354,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
     if (tab_x + clip_width > in_rect.x + in_rect.width)
         clip_width = (in_rect.x + in_rect.width) - tab_x;
 
+/*
     wxPoint clip_points[6];
     clip_points[0] = wxPoint(tab_x,              tab_y+tab_height-3);
     clip_points[1] = wxPoint(tab_x,              tab_y+2);
@@ -368,7 +369,12 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
     wxRegion clipping_region(WXSIZEOF(clip_points), clip_points);
     dc.SetClippingRegion(clipping_region);
 #endif // !wxDFB && !wxCocoa
+*/
+    // since the above code above doesn't play well with WXDFB or WXCOCOA,
+    // we'll just use a rectangle for the clipping region for now --
+    dc.SetClippingRegion(tab_x, tab_y, clip_width+1, tab_height-3);
 
+    
     wxPoint border_points[6];
     border_points[0] = wxPoint(tab_x,             tab_y+tab_height-4);
     border_points[1] = wxPoint(tab_x,             tab_y+2);
@@ -390,12 +396,12 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
         wxRect r(tab_x, tab_y, tab_width, tab_height);
         dc.SetPen(m_base_colour_pen);
         dc.SetBrush(m_base_colour_brush);
-        dc.DrawRectangle(r.x, r.y, r.width, r.height);
+        dc.DrawRectangle(r.x+1, r.y+1, r.width-1, r.height-4);
 
         // this white helps fill out the gradient at the top of the tab
         dc.SetPen(*wxWHITE_PEN);
         dc.SetBrush(*wxWHITE_BRUSH);
-        dc.DrawRectangle(r.x+2, r.y+1, r.width-3, r.height);
+        dc.DrawRectangle(r.x+2, r.y+1, r.width-3, r.height-4);
 
         // these two points help the rounded corners appear more antialiased
         dc.SetPen(m_base_colour_pen);
@@ -431,7 +437,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
         
         // -- draw top gradient fill for glossy look
         wxColor top_color = m_base_colour;
-        wxColor bottom_color = wxAuiStepColour(top_color, 106);
+        wxColor bottom_color = wxAuiStepColour(top_color, 160);
         dc.GradientFillLinear(r, bottom_color, top_color, wxNORTH);
         
         r.y += r.height;
@@ -476,7 +482,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
         // draw bitmap
         dc.DrawBitmap(bitmap,
                       bitmap_offset,
-                      drawn_tab_yoff + (drawn_tab_height/2) - (bitmap.GetHeight()/2) + 1,
+                      drawn_tab_yoff + (drawn_tab_height/2) - (bitmap.GetHeight()/2),
                       true);
 
         text_offset = bitmap_offset + bitmap.GetWidth();
@@ -772,7 +778,7 @@ wxAuiSimpleTabArt::wxAuiSimpleTabArt()
 
     wxColour base_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 
-    wxColour background_colour = wxAuiStepColour(base_colour, 95);
+    wxColour background_colour = base_colour;
     wxColour normaltab_colour = base_colour;
     wxColour selectedtab_colour = *wxWHITE;
 
