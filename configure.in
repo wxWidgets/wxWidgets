@@ -5669,37 +5669,40 @@ fi
 dnl Unix implementation needs additional checks because audio support
 dnl comes in many favours:
 if test "$USE_UNIX" = "1" ; then
-    dnl it's not enough to check for just the header because OSS under NetBSD
-    dnl redefines ioctl as oss_ioctrl inside it and so we also need to test
-    dnl whether we need -lossaudio at link-time
-    AC_CACHE_CHECK([for SNDCTL_DSP_SPEED in sys/soundcard.h], ac_cv_header_sys_soundcard, [
-        AC_TRY_LINK([
-                #include <sys/ioctl.h>
-                #include <sys/soundcard.h>
-            ],
-            [
-                ioctl(0, SNDCTL_DSP_SPEED, 0);
-            ],
-            ac_cv_header_sys_soundcard=yes,
-            [
-                saveLibs="$LIBS"
-                LIBS="$saveLibs -lossaudio"
-                AC_TRY_LINK([
-                        #include <sys/ioctl.h>
-                        #include <sys/soundcard.h>
-                    ],
-                    [
-                        ioctl(0, SNDCTL_DSP_SPEED, 0);
-                    ],
-                    ac_cv_header_sys_soundcard=yes,
-                    [
-                        LIBS="$saveLibs"
-                        ac_cv_header_sys_soundcard=no
-                    ]
-                )
-            ]
-        )
-    ])
+    dnl mmedia doesn't compile with wxMGL, remove this if this is ever fixed
+    if test "$wxUSE_MGL" != 1; then
+        dnl it's not enough to check for just the header because OSS under NetBSD
+        dnl redefines ioctl as oss_ioctrl inside it and so we also need to test
+        dnl whether we need -lossaudio at link-time
+        AC_CACHE_CHECK([for SNDCTL_DSP_SPEED in sys/soundcard.h], ac_cv_header_sys_soundcard, [
+            AC_TRY_LINK([
+                    #include <sys/ioctl.h>
+                    #include <sys/soundcard.h>
+                ],
+                [
+                    ioctl(0, SNDCTL_DSP_SPEED, 0);
+                ],
+                ac_cv_header_sys_soundcard=yes,
+                [
+                    saveLibs="$LIBS"
+                    LIBS="$saveLibs -lossaudio"
+                    AC_TRY_LINK([
+                            #include <sys/ioctl.h>
+                            #include <sys/soundcard.h>
+                        ],
+                        [
+                            ioctl(0, SNDCTL_DSP_SPEED, 0);
+                        ],
+                        ac_cv_header_sys_soundcard=yes,
+                        [
+                            LIBS="$saveLibs"
+                            ac_cv_header_sys_soundcard=no
+                        ]
+                    )
+                ]
+            )
+        ])
+    fi
 
     if test "$ac_cv_header_sys_soundcard" = "yes"; then
         AC_DEFINE(HAVE_SYS_SOUNDCARD_H)
@@ -5707,6 +5710,7 @@ if test "$USE_UNIX" = "1" ; then
         DISABLED_CONTRIB="$DISABLED_CONTRIB mmedia"
     fi
 fi
+
 WITH_PLUGIN_SDL=0
 if test "$wxUSE_SOUND" = "yes"; then
   if test "$USE_UNIX" = "1" ; then
