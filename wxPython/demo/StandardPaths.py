@@ -55,6 +55,7 @@ class TestPanel(wx.Panel):
                   'GetInstallPrefix',
                   'GetResourcesDir',
                   'GetTempDir',
+                  'GetExecutablePath',
                   ]:
             makeitem(x)
 

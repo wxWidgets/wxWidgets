@@ -75,6 +75,12 @@ public:
     }
 
 
+    DocDeclStr(
+        virtual wxString , GetExecutablePath() const,
+        "Return the path (directory+filename) of the running executable or an
+empty string if it couldn't be determined.  The path is returned as an
+absolute path whenever possible.", "");
+    
     
     DocDeclStr(
         virtual wxString , GetConfigDir() const,

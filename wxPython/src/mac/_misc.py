@@ -6034,6 +6034,16 @@ class StandardPaths(object):
         return _misc_.StandardPaths_Get(*args, **kwargs)
 
     Get = staticmethod(Get)
+    def GetExecutablePath(*args, **kwargs):
+        """
+        GetExecutablePath(self) -> String
+
+        Return the path (directory+filename) of the running executable or an
+        empty string if it couldn't be determined.  The path is returned as an
+        absolute path whenever possible.
+        """
+        return _misc_.StandardPaths_GetExecutablePath(*args, **kwargs)
+
     def GetConfigDir(*args, **kwargs):
         """
         GetConfigDir(self) -> String

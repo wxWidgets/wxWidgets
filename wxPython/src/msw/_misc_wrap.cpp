@@ -36904,6 +36904,40 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_StandardPaths_GetExecutablePath(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxStandardPaths *arg1 = (wxStandardPaths *) 0 ;
+  wxString result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxStandardPaths, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StandardPaths_GetExecutablePath" "', expected argument " "1"" of type '" "wxStandardPaths const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxStandardPaths * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxStandardPaths const *)arg1)->GetExecutablePath();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+#if wxUSE_UNICODE
+    resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+    resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_StandardPaths_GetConfigDir(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxStandardPaths *arg1 = (wxStandardPaths *) 0 ;
@@ -40094,6 +40128,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Display_swigregister", Display_swigregister, METH_VARARGS, NULL},
 	 { (char *)"Display_swiginit", Display_swiginit, METH_VARARGS, NULL},
 	 { (char *)"StandardPaths_Get", (PyCFunction)_wrap_StandardPaths_Get, METH_NOARGS, NULL},
+	 { (char *)"StandardPaths_GetExecutablePath", (PyCFunction)_wrap_StandardPaths_GetExecutablePath, METH_O, NULL},
 	 { (char *)"StandardPaths_GetConfigDir", (PyCFunction)_wrap_StandardPaths_GetConfigDir, METH_O, NULL},
 	 { (char *)"StandardPaths_GetUserConfigDir", (PyCFunction)_wrap_StandardPaths_GetUserConfigDir, METH_O, NULL},
 	 { (char *)"StandardPaths_GetDataDir", (PyCFunction)_wrap_StandardPaths_GetDataDir, METH_O, NULL},
