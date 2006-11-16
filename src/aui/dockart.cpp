@@ -56,13 +56,56 @@
 // wxAuiManager::SetDockArt()
 
 
-wxColor wxAuiStepColour(const wxColor& c, int percent)
+// wxAuiBlendColour is used by wxAuiStepColour
+double wxAuiBlendColour(double fg, double bg, double alpha)
 {
-    int r = c.Red(), g = c.Green(), b = c.Blue();
-    return wxColour((unsigned char)wxMin((r*percent)/100,255),
-                    (unsigned char)wxMin((g*percent)/100,255),
-                    (unsigned char)wxMin((b*percent)/100,255));
+    double result = bg + (alpha * (fg - bg));
+    if (result < 0.0)
+        result = 0.0;
+    if (result > 255)
+        result = 255;
+    return result;
 }
+
+// wxAuiStepColour() it a utility function that simply darkens
+// or lightens a color, based on the specified percentage
+// ialpha of 0 would be completely black, 100 completely white
+// an ialpha of 100 returns the same colour
+wxColor wxAuiStepColour(const wxColor& c, int ialpha)
+{
+    if (ialpha == 100)
+        return c;
+        
+    double r = c.Red(), g = c.Green(), b = c.Blue();
+    double bg;
+    
+    // ialpha is 0..200 where 0 is completely black
+    // and 200 is completely white and 100 is the same
+    // convert that to normal alpha 0.0 - 1.0
+    ialpha = wxMin(ialpha, 200);
+    ialpha = wxMax(ialpha, 0);
+    double alpha = ((double)(ialpha - 100.0))/100.0;
+    
+    if (ialpha > 100)
+    {
+        // blend with white
+        bg = 255.0;
+        alpha = 1.0 - alpha;  // 0 = transparent fg; 1 = opaque fg
+    }
+     else
+    {
+        // blend with black
+        bg = 0.0;
+        alpha = 1.0 + alpha;  // 0 = transparent fg; 1 = opaque fg
+    }
+    
+    r = wxAuiBlendColour(r, bg, alpha);
+    g = wxAuiBlendColour(g, bg, alpha);
+    b = wxAuiBlendColour(b, bg, alpha);
+    
+    return wxColour((int)r, (int)g, (int)b);
+}
+
 
 wxColor wxAuiLightContrastColour(const wxColour& c)
 {
