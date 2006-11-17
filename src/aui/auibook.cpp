@@ -193,6 +193,15 @@ wxAuiDefaultTabArt::wxAuiDefaultTabArt()
     wxColor base_colour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 #endif
 
+    // the base_colour is too pale to use as our base colour,
+    // so darken it a bit --
+    if ((255-base_colour.Red()) +
+        (255-base_colour.Green()) +
+        (255-base_colour.Blue()) < 60)
+    {
+        base_colour = wxAuiStepColour(base_colour, 92);
+    }
+    
     m_base_colour = base_colour;
     wxColor border_colour = wxAuiStepColour(base_colour, 75);
 
