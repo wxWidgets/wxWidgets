@@ -322,12 +322,12 @@ int wxAuiDefaultDockArt::GetMetric(int id)
 {
     switch (id)
     {
-        case wxAUI_ART_SASH_SIZE:          return m_sash_size;
-        case wxAUI_ART_CAPTION_SIZE:       return m_caption_size;
-        case wxAUI_ART_GRIPPER_SIZE:       return m_gripper_size;
-        case wxAUI_ART_PANE_BORDER_SIZE:   return m_border_size;
-        case wxAUI_ART_PANE_BUTTON_SIZE:   return m_button_size;
-        case wxAUI_ART_GRADIENT_TYPE:      return m_gradient_type;
+        case wxAUI_DOCKART_SASH_SIZE:          return m_sash_size;
+        case wxAUI_DOCKART_CAPTION_SIZE:       return m_caption_size;
+        case wxAUI_DOCKART_GRIPPER_SIZE:       return m_gripper_size;
+        case wxAUI_DOCKART_PANE_BORDER_SIZE:   return m_border_size;
+        case wxAUI_DOCKART_PANE_BUTTON_SIZE:   return m_button_size;
+        case wxAUI_DOCKART_GRADIENT_TYPE:      return m_gradient_type;
         default: wxFAIL_MSG(wxT("Invalid Metric Ordinal")); break;
     }
 
@@ -338,12 +338,12 @@ void wxAuiDefaultDockArt::SetMetric(int id, int new_val)
 {
     switch (id)
     {
-        case wxAUI_ART_SASH_SIZE:          m_sash_size = new_val; break;
-        case wxAUI_ART_CAPTION_SIZE:       m_caption_size = new_val; break;
-        case wxAUI_ART_GRIPPER_SIZE:       m_gripper_size = new_val; break;
-        case wxAUI_ART_PANE_BORDER_SIZE:   m_border_size = new_val; break;
-        case wxAUI_ART_PANE_BUTTON_SIZE:   m_button_size = new_val; break;
-        case wxAUI_ART_GRADIENT_TYPE:      m_gradient_type = new_val; break;
+        case wxAUI_DOCKART_SASH_SIZE:          m_sash_size = new_val; break;
+        case wxAUI_DOCKART_CAPTION_SIZE:       m_caption_size = new_val; break;
+        case wxAUI_DOCKART_GRIPPER_SIZE:       m_gripper_size = new_val; break;
+        case wxAUI_DOCKART_PANE_BORDER_SIZE:   m_border_size = new_val; break;
+        case wxAUI_DOCKART_PANE_BUTTON_SIZE:   m_button_size = new_val; break;
+        case wxAUI_DOCKART_GRADIENT_TYPE:      m_gradient_type = new_val; break;
         default: wxFAIL_MSG(wxT("Invalid Metric Ordinal")); break;
     }
 }
@@ -352,16 +352,16 @@ wxColour wxAuiDefaultDockArt::GetColour(int id)
 {
     switch (id)
     {
-        case wxAUI_ART_BACKGROUND_COLOUR:                return m_background_brush.GetColour();
-        case wxAUI_ART_SASH_COLOUR:                      return m_sash_brush.GetColour();
-        case wxAUI_ART_INACTIVE_CAPTION_COLOUR:          return m_inactive_caption_colour;
-        case wxAUI_ART_INACTIVE_CAPTION_GRADIENT_COLOUR: return m_inactive_caption_gradient_colour;
-        case wxAUI_ART_INACTIVE_CAPTION_TEXT_COLOUR:     return m_inactive_caption_text_colour;
-        case wxAUI_ART_ACTIVE_CAPTION_COLOUR:            return m_active_caption_colour;
-        case wxAUI_ART_ACTIVE_CAPTION_GRADIENT_COLOUR:   return m_active_caption_gradient_colour;
-        case wxAUI_ART_ACTIVE_CAPTION_TEXT_COLOUR:       return m_active_caption_text_colour;
-        case wxAUI_ART_BORDER_COLOUR:                    return m_border_pen.GetColour();
-        case wxAUI_ART_GRIPPER_COLOUR:                   return m_gripper_brush.GetColour();
+        case wxAUI_DOCKART_BACKGROUND_COLOUR:                return m_background_brush.GetColour();
+        case wxAUI_DOCKART_SASH_COLOUR:                      return m_sash_brush.GetColour();
+        case wxAUI_DOCKART_INACTIVE_CAPTION_COLOUR:          return m_inactive_caption_colour;
+        case wxAUI_DOCKART_INACTIVE_CAPTION_GRADIENT_COLOUR: return m_inactive_caption_gradient_colour;
+        case wxAUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR:     return m_inactive_caption_text_colour;
+        case wxAUI_DOCKART_ACTIVE_CAPTION_COLOUR:            return m_active_caption_colour;
+        case wxAUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR:   return m_active_caption_gradient_colour;
+        case wxAUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR:       return m_active_caption_text_colour;
+        case wxAUI_DOCKART_BORDER_COLOUR:                    return m_border_pen.GetColour();
+        case wxAUI_DOCKART_GRIPPER_COLOUR:                   return m_gripper_brush.GetColour();
         default: wxFAIL_MSG(wxT("Invalid Metric Ordinal")); break;
     }
 
@@ -372,16 +372,16 @@ void wxAuiDefaultDockArt::SetColour(int id, const wxColor& colour)
 {
     switch (id)
     {
-        case wxAUI_ART_BACKGROUND_COLOUR:                m_background_brush.SetColour(colour); break;
-        case wxAUI_ART_SASH_COLOUR:                      m_sash_brush.SetColour(colour); break;
-        case wxAUI_ART_INACTIVE_CAPTION_COLOUR:          m_inactive_caption_colour = colour; break;
-        case wxAUI_ART_INACTIVE_CAPTION_GRADIENT_COLOUR: m_inactive_caption_gradient_colour = colour; break;
-        case wxAUI_ART_INACTIVE_CAPTION_TEXT_COLOUR:     m_inactive_caption_text_colour = colour; break;
-        case wxAUI_ART_ACTIVE_CAPTION_COLOUR:            m_active_caption_colour = colour; break;
-        case wxAUI_ART_ACTIVE_CAPTION_GRADIENT_COLOUR:   m_active_caption_gradient_colour = colour; break;
-        case wxAUI_ART_ACTIVE_CAPTION_TEXT_COLOUR:       m_active_caption_text_colour = colour; break;
-        case wxAUI_ART_BORDER_COLOUR:                    m_border_pen.SetColour(colour); break;
-        case wxAUI_ART_GRIPPER_COLOUR:
+        case wxAUI_DOCKART_BACKGROUND_COLOUR:                m_background_brush.SetColour(colour); break;
+        case wxAUI_DOCKART_SASH_COLOUR:                      m_sash_brush.SetColour(colour); break;
+        case wxAUI_DOCKART_INACTIVE_CAPTION_COLOUR:          m_inactive_caption_colour = colour; break;
+        case wxAUI_DOCKART_INACTIVE_CAPTION_GRADIENT_COLOUR: m_inactive_caption_gradient_colour = colour; break;
+        case wxAUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR:     m_inactive_caption_text_colour = colour; break;
+        case wxAUI_DOCKART_ACTIVE_CAPTION_COLOUR:            m_active_caption_colour = colour; break;
+        case wxAUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR:   m_active_caption_gradient_colour = colour; break;
+        case wxAUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR:       m_active_caption_text_colour = colour; break;
+        case wxAUI_DOCKART_BORDER_COLOUR:                    m_border_pen.SetColour(colour); break;
+        case wxAUI_DOCKART_GRIPPER_COLOUR:
             m_gripper_brush.SetColour(colour);
             m_gripper_pen1.SetColour(wxAuiStepColour(colour, 40));
             m_gripper_pen2.SetColour(wxAuiStepColour(colour, 60));
@@ -392,13 +392,13 @@ void wxAuiDefaultDockArt::SetColour(int id, const wxColor& colour)
 
 void wxAuiDefaultDockArt::SetFont(int id, const wxFont& font)
 {
-    if (id == wxAUI_ART_CAPTION_FONT)
+    if (id == wxAUI_DOCKART_CAPTION_FONT)
         m_caption_font = font;
 }
 
 wxFont wxAuiDefaultDockArt::GetFont(int id)
 {
-    if (id == wxAUI_ART_CAPTION_FONT)
+    if (id == wxAUI_DOCKART_CAPTION_FONT)
         return m_caption_font;
     return wxNullFont;
 }
@@ -502,7 +502,7 @@ void wxAuiDefaultDockArt::DrawBorder(wxDC& dc, wxWindow *WXUNUSED(window), const
     dc.SetBrush(*wxTRANSPARENT_BRUSH);
 
     wxRect rect = _rect;
-    int i, border_width = GetMetric(wxAUI_ART_PANE_BORDER_SIZE);
+    int i, border_width = GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE);
 
     if (pane.IsToolbar())
     {

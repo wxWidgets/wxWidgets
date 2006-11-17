@@ -403,9 +403,9 @@ public:
         GetSizer()->SetSizeHints(this);
 
         m_frame = frame;
-        m_border_size->SetValue(frame->GetDockArt()->GetMetric(wxAUI_ART_PANE_BORDER_SIZE));
-        m_sash_size->SetValue(frame->GetDockArt()->GetMetric(wxAUI_ART_SASH_SIZE));
-        m_caption_size->SetValue(frame->GetDockArt()->GetMetric(wxAUI_ART_CAPTION_SIZE));
+        m_border_size->SetValue(frame->GetDockArt()->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE));
+        m_sash_size->SetValue(frame->GetDockArt()->GetMetric(wxAUI_DOCKART_SASH_SIZE));
+        m_caption_size->SetValue(frame->GetDockArt()->GetMetric(wxAUI_DOCKART_CAPTION_SIZE));
 
         UpdateColors();
     }
@@ -429,54 +429,54 @@ private:
 
     void UpdateColors()
     {
-        wxColour bk = m_frame->GetDockArt()->GetColor(wxAUI_ART_BACKGROUND_COLOUR);
+        wxColour bk = m_frame->GetDockArt()->GetColor(wxAUI_DOCKART_BACKGROUND_COLOUR);
         m_background_color->SetBitmapLabel(CreateColorBitmap(bk));
 
-        wxColour cap = m_frame->GetDockArt()->GetColor(wxAUI_ART_INACTIVE_CAPTION_COLOUR);
+        wxColour cap = m_frame->GetDockArt()->GetColor(wxAUI_DOCKART_INACTIVE_CAPTION_COLOUR);
         m_inactive_caption_color->SetBitmapLabel(CreateColorBitmap(cap));
 
-        wxColour capgrad = m_frame->GetDockArt()->GetColor(wxAUI_ART_INACTIVE_CAPTION_GRADIENT_COLOUR);
+        wxColour capgrad = m_frame->GetDockArt()->GetColor(wxAUI_DOCKART_INACTIVE_CAPTION_GRADIENT_COLOUR);
         m_inactive_caption_gradient_color->SetBitmapLabel(CreateColorBitmap(capgrad));
 
-        wxColour captxt = m_frame->GetDockArt()->GetColor(wxAUI_ART_INACTIVE_CAPTION_TEXT_COLOUR);
+        wxColour captxt = m_frame->GetDockArt()->GetColor(wxAUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR);
         m_inactive_caption_text_color->SetBitmapLabel(CreateColorBitmap(captxt));
 
-        wxColour acap = m_frame->GetDockArt()->GetColor(wxAUI_ART_ACTIVE_CAPTION_COLOUR);
+        wxColour acap = m_frame->GetDockArt()->GetColor(wxAUI_DOCKART_ACTIVE_CAPTION_COLOUR);
         m_active_caption_color->SetBitmapLabel(CreateColorBitmap(acap));
 
-        wxColour acapgrad = m_frame->GetDockArt()->GetColor(wxAUI_ART_ACTIVE_CAPTION_GRADIENT_COLOUR);
+        wxColour acapgrad = m_frame->GetDockArt()->GetColor(wxAUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR);
         m_active_caption_gradient_color->SetBitmapLabel(CreateColorBitmap(acapgrad));
 
-        wxColour acaptxt = m_frame->GetDockArt()->GetColor(wxAUI_ART_ACTIVE_CAPTION_TEXT_COLOUR);
+        wxColour acaptxt = m_frame->GetDockArt()->GetColor(wxAUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR);
         m_active_caption_text_color->SetBitmapLabel(CreateColorBitmap(acaptxt));
 
-        wxColour sash = m_frame->GetDockArt()->GetColor(wxAUI_ART_SASH_COLOUR);
+        wxColour sash = m_frame->GetDockArt()->GetColor(wxAUI_DOCKART_SASH_COLOUR);
         m_sash_color->SetBitmapLabel(CreateColorBitmap(sash));
 
-        wxColour border = m_frame->GetDockArt()->GetColor(wxAUI_ART_BORDER_COLOUR);
+        wxColour border = m_frame->GetDockArt()->GetColor(wxAUI_DOCKART_BORDER_COLOUR);
         m_border_color->SetBitmapLabel(CreateColorBitmap(border));
 
-        wxColour gripper = m_frame->GetDockArt()->GetColor(wxAUI_ART_GRIPPER_COLOUR);
+        wxColour gripper = m_frame->GetDockArt()->GetColor(wxAUI_DOCKART_GRIPPER_COLOUR);
         m_gripper_color->SetBitmapLabel(CreateColorBitmap(gripper));
     }
 
     void OnPaneBorderSize(wxSpinEvent& event)
     {
-        m_frame->GetDockArt()->SetMetric(wxAUI_ART_PANE_BORDER_SIZE,
+        m_frame->GetDockArt()->SetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE,
                                          event.GetPosition());
         m_frame->DoUpdate();
     }
 
     void OnSashSize(wxSpinEvent& event)
     {
-        m_frame->GetDockArt()->SetMetric(wxAUI_ART_SASH_SIZE,
+        m_frame->GetDockArt()->SetMetric(wxAUI_DOCKART_SASH_SIZE,
                                          event.GetPosition());
         m_frame->DoUpdate();
     }
 
     void OnCaptionSize(wxSpinEvent& event)
     {
-        m_frame->GetDockArt()->SetMetric(wxAUI_ART_CAPTION_SIZE,
+        m_frame->GetDockArt()->SetMetric(wxAUI_DOCKART_CAPTION_SIZE,
                                          event.GetPosition());
         m_frame->DoUpdate();
     }
@@ -491,16 +491,16 @@ private:
         int var = 0;
         switch (event.GetId())
         {
-            case ID_BackgroundColor:              var = wxAUI_ART_BACKGROUND_COLOUR; break;
-            case ID_SashColor:                    var = wxAUI_ART_SASH_COLOUR; break;
-            case ID_InactiveCaptionColor:         var = wxAUI_ART_INACTIVE_CAPTION_COLOUR; break;
-            case ID_InactiveCaptionGradientColor: var = wxAUI_ART_INACTIVE_CAPTION_GRADIENT_COLOUR; break;
-            case ID_InactiveCaptionTextColor:     var = wxAUI_ART_INACTIVE_CAPTION_TEXT_COLOUR; break;
-            case ID_ActiveCaptionColor:           var = wxAUI_ART_ACTIVE_CAPTION_COLOUR; break;
-            case ID_ActiveCaptionGradientColor:   var = wxAUI_ART_ACTIVE_CAPTION_GRADIENT_COLOUR; break;
-            case ID_ActiveCaptionTextColor:       var = wxAUI_ART_ACTIVE_CAPTION_TEXT_COLOUR; break;
-            case ID_BorderColor:                  var = wxAUI_ART_BORDER_COLOUR; break;
-            case ID_GripperColor:                 var = wxAUI_ART_GRIPPER_COLOUR; break;
+            case ID_BackgroundColor:              var = wxAUI_DOCKART_BACKGROUND_COLOUR; break;
+            case ID_SashColor:                    var = wxAUI_DOCKART_SASH_COLOUR; break;
+            case ID_InactiveCaptionColor:         var = wxAUI_DOCKART_INACTIVE_CAPTION_COLOUR; break;
+            case ID_InactiveCaptionGradientColor: var = wxAUI_DOCKART_INACTIVE_CAPTION_GRADIENT_COLOUR; break;
+            case ID_InactiveCaptionTextColor:     var = wxAUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR; break;
+            case ID_ActiveCaptionColor:           var = wxAUI_DOCKART_ACTIVE_CAPTION_COLOUR; break;
+            case ID_ActiveCaptionGradientColor:   var = wxAUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR; break;
+            case ID_ActiveCaptionTextColor:       var = wxAUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR; break;
+            case ID_BorderColor:                  var = wxAUI_DOCKART_BORDER_COLOUR; break;
+            case ID_GripperColor:                 var = wxAUI_DOCKART_GRIPPER_COLOUR; break;
             default: return;
         }
 
@@ -987,7 +987,7 @@ void MyFrame::OnGradient(wxCommandEvent& event)
         case ID_HorizontalGradient: gradient = wxAUI_GRADIENT_HORIZONTAL; break;
     }
 
-    m_mgr.GetArtProvider()->SetMetric(wxAUI_ART_GRADIENT_TYPE, gradient);
+    m_mgr.GetArtProvider()->SetMetric(wxAUI_DOCKART_GRADIENT_TYPE, gradient);
     m_mgr.Update();
 }
 
@@ -1125,13 +1125,13 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& event)
     switch (event.GetId())
     {
         case ID_NoGradient:
-            event.Check(m_mgr.GetArtProvider()->GetMetric(wxAUI_ART_GRADIENT_TYPE) == wxAUI_GRADIENT_NONE);
+            event.Check(m_mgr.GetArtProvider()->GetMetric(wxAUI_DOCKART_GRADIENT_TYPE) == wxAUI_GRADIENT_NONE);
             break;
         case ID_VerticalGradient:
-            event.Check(m_mgr.GetArtProvider()->GetMetric(wxAUI_ART_GRADIENT_TYPE) == wxAUI_GRADIENT_VERTICAL);
+            event.Check(m_mgr.GetArtProvider()->GetMetric(wxAUI_DOCKART_GRADIENT_TYPE) == wxAUI_GRADIENT_VERTICAL);
             break;
         case ID_HorizontalGradient:
-            event.Check(m_mgr.GetArtProvider()->GetMetric(wxAUI_ART_GRADIENT_TYPE) == wxAUI_GRADIENT_HORIZONTAL);
+            event.Check(m_mgr.GetArtProvider()->GetMetric(wxAUI_DOCKART_GRADIENT_TYPE) == wxAUI_GRADIENT_HORIZONTAL);
             break;
         case ID_AllowFloating:
             event.Check((flags & wxAUI_MGR_ALLOW_FLOATING) != 0);

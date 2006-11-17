@@ -714,7 +714,7 @@ bool wxAuiMDIClientWindow::CreateClient(wxAuiMDIParentFrame* parent, long style)
     wxColour bkcolour = wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE);
     SetOwnBackgroundColour(bkcolour);
 
-    m_mgr.GetArtProvider()->SetColour(wxAUI_ART_BACKGROUND_COLOUR, bkcolour);
+    m_mgr.GetArtProvider()->SetColour(wxAUI_DOCKART_BACKGROUND_COLOUR, bkcolour);
 
     return true;
 }
