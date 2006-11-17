@@ -179,6 +179,14 @@ Returns the current manager's flags.
 
 Returns the frame currently being managed by wxAuiManager.
 
+\func{static wxAuiManager*}{GetManager}{\param{wxWindow* }{window}}
+
+Calling this method will return the wxAuiManager for a given window.  The \arg{window} parameter should
+specify any child window or sub-child window of the frame or window managed by wxAuiManager.
+The \arg{window} parameter need not be managed by the manager itself, nor does it even need to be a child
+or sub-child of a managed window.  It must however be inside the window hierarchy underneath the managed
+window.
+
 \membersection{wxAuiManager::GetPane}\label{wxauimanagergetpane}
 
 \func{wxAuiPaneInfo\&}{GetPane}{\param{wxWindow* }{window}}
