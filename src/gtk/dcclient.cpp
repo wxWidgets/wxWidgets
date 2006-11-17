@@ -391,6 +391,8 @@ void wxWindowDC::SetUpDC()
     gdk_gc_set_background( m_textGC, m_textBackgroundColour.GetColor() );
 
     gdk_gc_set_fill( m_textGC, GDK_SOLID );
+    
+    gdk_gc_set_colormap( m_textGC, m_cmap );
 
     /* m_penGC */
     m_pen.GetColour().CalcPixel( m_cmap );
