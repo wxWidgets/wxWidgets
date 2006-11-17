@@ -1,15 +1,4 @@
-aaaa                    ICON    "mondrian.ico"
+#include "../sample.rc"
 
-/* Useful if PROVIDE_DEFAULT_ICONS is set in wx_setup.h */
-#define IHaveMDIParentIcon
-#define IHaveMDIChildIcon
-
-wxSTD_MDIPARENTFRAME    ICON    "mondrian.ico"
-wxSTD_MDICHILDFRAME     ICON    "chart.ico"
-
-mdi_icn                 ICON    "mondrian.ico"
-chrt_icn                ICON    "chart.ico"
-
-
-#include "wx/msw/wx.rc"
+chart ICON "chart.ico"
 

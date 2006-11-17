@@ -116,21 +116,15 @@ bool MyApp::OnInit()
     frame = new MyFrame((wxFrame *)NULL, wxID_ANY, _T("MDI Demo"),
                         wxDefaultPosition, wxSize(500, 400),
                         wxDEFAULT_FRAME_STYLE | wxHSCROLL | wxVSCROLL);
-#ifdef __WXMSW__
 #if 0
     // Experimental: change the window menu
     wxMenu* windowMenu = new wxMenu;
     windowMenu->Append(5000, _T("My menu item!"));
     frame->SetWindowMenu(windowMenu);
 #endif
-#endif
 
     // Give it an icon
-#ifdef __WXMSW__
-    frame->SetIcon(wxIcon(_T("mdi_icn")));
-#else
-    frame->SetIcon(wxIcon( mondrian_xpm ));
-#endif
+    frame->SetIcon(wxICON(sample));
 
     // Make a menubar
     wxMenu *file_menu = new wxMenu;
@@ -171,8 +165,7 @@ MyFrame::MyFrame(wxWindow *parent,
                  const wxPoint& pos,
                  const wxSize& size,
                  const long style)
-       : wxMDIParentFrame(parent, id, title, pos, size,
-                          style | wxNO_FULL_REPAINT_ON_RESIZE)
+       : wxMDIParentFrame(parent, id, title, pos, size, style)
 {
     textWindow = new wxTextCtrl(this, wxID_ANY, _T("A help window"),
                                 wxDefaultPosition, wxDefaultSize,
@@ -235,11 +228,7 @@ void MyFrame::OnNewWindow(wxCommandEvent& WXUNUSED(event) )
     subframe->SetTitle(title);
 
     // Give it an icon
-#ifdef __WXMSW__
-    subframe->SetIcon(wxIcon(_T("chrt_icn")));
-#else
-    subframe->SetIcon(wxIcon( mondrian_xpm ));
-#endif
+    subframe->SetIcon(wxICON(chart));
 
 #if wxUSE_MENUS
     // Make a menubar
@@ -316,44 +305,30 @@ void MyFrame::OnSize(wxSizeEvent&
 #if wxUSE_TOOLBAR
 void MyFrame::InitToolBar(wxToolBar* toolBar)
 {
-    wxBitmap* bitmaps[8];
+    wxBitmap bitmaps[8];
 
-    bitmaps[0] = new wxBitmap( new_xpm );
-    bitmaps[1] = new wxBitmap( open_xpm );
-    bitmaps[2] = new wxBitmap( save_xpm );
-    bitmaps[3] = new wxBitmap( copy_xpm );
-    bitmaps[4] = new wxBitmap( cut_xpm );
-    bitmaps[5] = new wxBitmap( paste_xpm );
-    bitmaps[6] = new wxBitmap( print_xpm );
-    bitmaps[7] = new wxBitmap( help_xpm );
+    bitmaps[0] = wxBitmap( new_xpm );
+    bitmaps[1] = wxBitmap( open_xpm );
+    bitmaps[2] = wxBitmap( save_xpm );
+    bitmaps[3] = wxBitmap( copy_xpm );
+    bitmaps[4] = wxBitmap( cut_xpm );
+    bitmaps[5] = wxBitmap( paste_xpm );
+    bitmaps[6] = wxBitmap( print_xpm );
+    bitmaps[7] = wxBitmap( help_xpm );
 
-    int width = 24;
-    int currentX = 5;
-
-    toolBar->AddTool( MDI_NEW_WINDOW, *(bitmaps[0]), wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, _T("New file"));
-    currentX += width + 5;
-    toolBar->AddTool(1, *bitmaps[1], wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, _T("Open file"));
-    currentX += width + 5;
-    toolBar->AddTool(2, *bitmaps[2], wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, _T("Save file"));
-    currentX += width + 5;
+    toolBar->AddTool(MDI_NEW_WINDOW, _T("New"), bitmaps[0], _T("New file"));
+    toolBar->AddTool(1, _T("Open"), bitmaps[1], _T("Open file"));
+    toolBar->AddTool(2, _T("Save"), bitmaps[2], _T("Save file"));
     toolBar->AddSeparator();
-    toolBar->AddTool(3, *bitmaps[3], wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, _T("Copy"));
-    currentX += width + 5;
-    toolBar->AddTool(4, *bitmaps[4], wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, _T("Cut"));
-    currentX += width + 5;
-    toolBar->AddTool(5, *bitmaps[5], wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, _T("Paste"));
-    currentX += width + 5;
+    toolBar->AddTool(3, _T("Copy"), bitmaps[3], _T("Copy"));
+    toolBar->AddTool(4, _T("Cut"), bitmaps[4], _T("Cut"));
+    toolBar->AddTool(5, _T("Paste"), bitmaps[5], _T("Paste"));
     toolBar->AddSeparator();
-    toolBar->AddTool(6, *bitmaps[6], wxNullBitmap, false, currentX, wxDefaultCoord, (wxObject *) NULL, _T("Print"));
-    currentX += width + 5;
+    toolBar->AddTool(6, _T("Print"), bitmaps[6], _T("Print"));
     toolBar->AddSeparator();
-    toolBar->AddTool( MDI_ABOUT, *bitmaps[7], wxNullBitmap, true, currentX, wxDefaultCoord, (wxObject *) NULL, _T("Help"));
+    toolBar->AddTool(MDI_ABOUT, _T("About"), bitmaps[7], _T("Help"));
 
     toolBar->Realize();
-
-    int i;
-    for (i = 0; i < 8; i++)
-        delete bitmaps[i];
 }
 #endif // wxUSE_TOOLBAR
 
@@ -468,7 +443,7 @@ void MyChild::OnChangeSize(wxCommandEvent& WXUNUSED(event))
 
 void MyChild::OnChangeTitle(wxCommandEvent& WXUNUSED(event))
 {
-//#if wxUSE_TEXTDLG
+#if wxUSE_TEXTDLG
     static wxString s_title = _T("Canvas Frame");
 
     wxString title = wxGetTextFromUser(_T("Enter the new title for MDI child"),
@@ -480,7 +455,7 @@ void MyChild::OnChangeTitle(wxCommandEvent& WXUNUSED(event))
 
     s_title = title;
     SetTitle(s_title);
-//#endif
+#endif // wxUSE_TEXTDLG
 }
 
 void MyChild::OnActivate(wxActivateEvent& event)
