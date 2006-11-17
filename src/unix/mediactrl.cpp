@@ -1236,6 +1236,9 @@ bool wxGStreamerMediaBackend::DoLoad(const wxString& locstring)
             return false;
     }
 
+    // free current media resources
+    gst_element_set_state (m_playbin, GST_STATE_NULL);
+
     // Make sure the passed URI is valid and tell playbin to load it
     // non-file uris are encoded
     wxASSERT(gst_uri_protocol_is_valid("file"));
