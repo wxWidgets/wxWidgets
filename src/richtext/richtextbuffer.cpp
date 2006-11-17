@@ -1599,10 +1599,28 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
     bool applyMinimal = ((flags & wxRICHTEXT_SETSTYLE_OPTIMIZE) != 0);
     bool parasOnly = ((flags & wxRICHTEXT_SETSTYLE_PARAGRAPHS_ONLY) != 0);
     bool charactersOnly = ((flags & wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY) != 0);
+    bool resetExistingStyle = ((flags & wxRICHTEXT_SETSTYLE_RESET) != 0);
+
+    // Apply paragraph style first, if any
+    wxRichTextAttr wholeStyle(style);
+
+    if (wholeStyle.HasParagraphStyleName() && GetStyleSheet())
+    {
+        wxRichTextParagraphStyleDefinition* def = GetStyleSheet()->FindParagraphStyle(wholeStyle.GetParagraphStyleName());
+        if (def)
+            wxRichTextApplyStyle(wholeStyle, def->GetStyle());
+    }
 
     // Limit the attributes to be set to the content to only character attributes.
-    wxRichTextAttr characterAttributes(style);
+    wxRichTextAttr characterAttributes(wholeStyle);
     characterAttributes.SetFlags(characterAttributes.GetFlags() & (wxTEXT_ATTR_CHARACTER));
+
+    if (characterAttributes.HasCharacterStyleName() && GetStyleSheet())
+    {
+        wxRichTextCharacterStyleDefinition* def = GetStyleSheet()->FindCharacterStyle(characterAttributes.GetCharacterStyleName());
+        if (def)
+            wxRichTextApplyStyle(characterAttributes, def->GetStyle());
+    }
 
     // If we are associated with a control, make undoable; otherwise, apply immediately
     // to the data.
@@ -1651,15 +1669,20 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
                 // to be included in the paragraph style
                 if ((paragraphStyle || parasOnly) && !charactersOnly)
                 {
-                    if (applyMinimal)
-                    {
-                        // Only apply attributes that will make a difference to the combined
-                        // style as seen on the display
-                        wxRichTextAttr combinedAttr(para->GetCombinedAttributes());
-                        wxRichTextApplyStyle(newPara->GetAttributes(), style, & combinedAttr);
-                    }
+                    if (resetExistingStyle)
+                        newPara->GetAttributes() = wholeStyle;
                     else
-                        wxRichTextApplyStyle(newPara->GetAttributes(), style);
+                    {
+                        if (applyMinimal)
+                        {
+                            // Only apply attributes that will make a difference to the combined
+                            // style as seen on the display
+                            wxRichTextAttr combinedAttr(para->GetCombinedAttributes());
+                            wxRichTextApplyStyle(newPara->GetAttributes(), wholeStyle, & combinedAttr);
+                        }
+                        else
+                            wxRichTextApplyStyle(newPara->GetAttributes(), wholeStyle);
+                    }
                 }
 
 #if wxRICHTEXT_USE_DYNAMIC_STYLES
@@ -1725,15 +1748,20 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
                     {
                         wxRichTextObject* child = node2->GetData();
 
-                        if (applyMinimal)
-                        {
-                            // Only apply attributes that will make a difference to the combined
-                            // style as seen on the display
-                            wxRichTextAttr combinedAttr(newPara->GetCombinedAttributes(child->GetAttributes()));
-                            wxRichTextApplyStyle(child->GetAttributes(), characterAttributes, & combinedAttr);
-                        }
+                        if (resetExistingStyle)
+                            child->GetAttributes() = characterAttributes;
                         else
-                            wxRichTextApplyStyle(child->GetAttributes(), characterAttributes);
+                        {
+                            if (applyMinimal)
+                            {
+                                // Only apply attributes that will make a difference to the combined
+                                // style as seen on the display
+                                wxRichTextAttr combinedAttr(newPara->GetCombinedAttributes(child->GetAttributes()));
+                                wxRichTextApplyStyle(child->GetAttributes(), characterAttributes, & combinedAttr);
+                            }
+                            else
+                                wxRichTextApplyStyle(child->GetAttributes(), characterAttributes);
+                        }
 
                         if (node2 == lastNode)
                             break;

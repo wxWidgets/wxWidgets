@@ -176,6 +176,9 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextBuffer;
 // the current indentation will be used
 #define wxRICHTEXT_SETSTYLE_SPECIFY_LEVEL   0x20
 
+// Resets the existing style before applying the new style
+#define wxRICHTEXT_SETSTYLE_RESET           0x40
+
 /*!
  * Flags for text insertion
  */

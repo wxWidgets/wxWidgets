@@ -769,7 +769,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                 DeleteSelectedContent(& newPos);
 
                 wxString str = (wxChar) event.GetKeyCode();
-                GetBuffer().InsertTextWithUndo(newPos+1, str, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
+                GetBuffer().InsertTextWithUndo(newPos+1, str, this, 0);
 
                 EndBatchUndo();
 

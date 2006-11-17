@@ -1373,10 +1373,11 @@ So, for example, to set the style for a character at position 5, use the range (
 \item wxRICHTEXT\_SETSTYLE\_WITH\_UNDO: specifies that this operation should be undoable.
 \item wxRICHTEXT\_SETSTYLE\_OPTIMIZE: specifies that the style should not be applied if the
 combined style at this point is already the style in question.
-\item define wxRICHTEXT\_SETSTYLE\_PARAGRAPHS\_ONLY: specifies that the style should only be applied to paragraphs,
+\item wxRICHTEXT\_SETSTYLE\_PARAGRAPHS\_ONLY: specifies that the style should only be applied to paragraphs,
 and not the content. This allows content styling to be preserved independently from that of e.g. a named paragraph style.
 \item wxRICHTEXT\_SETSTYLE\_CHARACTERS\_ONLY: specifies that the style should only be applied to characters,
 and not the paragraph. This allows content styling to be preserved independently from that of e.g. a named paragraph style.
+\item wxRICHTEXT\_SETSTYLE\_RESET: resets (clears) the existing style before applying the new style.
 \end{itemize}
 
 \membersection{wxRichTextCtrl::SetStyleSheet}\label{wxrichtextctrlsetstylesheet}
