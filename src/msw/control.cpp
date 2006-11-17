@@ -187,7 +187,7 @@ bool wxControl::MSWCreateControl(const wxChar *classname,
 #if wxUSE_TREECTRL
         if ( wxDynamicCastThis(wxTreeCtrl) )
             testFont = true;
-#endif wxUSE_TREECTRL
+#endif // wxUSE_TREECTRL
 
         if ( testFont )
         {
