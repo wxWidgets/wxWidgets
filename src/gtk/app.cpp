@@ -431,24 +431,38 @@ bool wxApp::OnInitGui()
     // chosen a specific visual, then derive the GdkVisual from that
     if (m_glVisualInfo != NULL)
     {
-        // seems gtk_widget_set_default_visual no longer exists?
         GdkVisual* vis = gtk_widget_get_default_visual();
 
         GdkColormap *colormap = gdk_colormap_new( vis, FALSE );
         gtk_widget_set_default_colormap( colormap );
     }
-
-    // On some machines, the default visual is just 256 colours, so
-    // we make sure we get the best. This can sometimes be wasteful.
-
     else
-    if ((gdk_visual_get_best() != gdk_visual_get_system()) && (m_useBestVisual))
     {
-        /* seems gtk_widget_set_default_visual no longer exists? */
-        GdkVisual* vis = gtk_widget_get_default_visual();
-
-        GdkColormap *colormap = gdk_colormap_new( vis, FALSE );
-        gtk_widget_set_default_colormap( colormap );
+        // On some machines, the default visual is just 256 colours, so
+        // we make sure we get the best. This can sometimes be wasteful.
+        if (m_useBestVisual)
+        {
+            if (m_forceTrueColour)
+            {
+                GdkVisual* visual = gdk_visual_get_best_with_both( 24, GDK_VISUAL_TRUE_COLOR );
+                if (!visual)
+                {
+                    wxLogError(wxT("Unable to initialize TrueColor visual."));
+                    return false;
+                }
+                GdkColormap *colormap = gdk_colormap_new( visual, FALSE );
+                gtk_widget_set_default_colormap( colormap );
+            }
+            else
+            {
+                if (gdk_visual_get_best() != gdk_visual_get_system())
+                {
+                    GdkVisual* visual = gdk_visual_get_best();
+                    GdkColormap *colormap = gdk_colormap_new( visual, FALSE );
+                    gtk_widget_set_default_colormap( colormap );
+                }
+            }
+        }
     }
 
     return true;
