@@ -645,6 +645,7 @@ wxFrame* wxAuiManager::GetFrame() const
 wxAuiManager* wxAuiManager::GetManager(wxWindow* window)
 {
     wxAuiManagerEvent evt(wxEVT_AUI_FINDMANAGER);
+    evt.SetManager(NULL);
     evt.ResumePropagation(wxEVENT_PROPAGATE_MAX);
     if (!window->ProcessEvent(evt))
         return NULL;
@@ -3476,6 +3477,7 @@ void wxAuiManager::OnRender(wxAuiManagerEvent& evt)
 void wxAuiManager::Render(wxDC* dc)
 {
     wxAuiManagerEvent e(wxEVT_AUI_RENDER);
+    e.SetManager(this);
     e.SetDC(dc);
     ProcessMgrEvent(e);
 }
@@ -3932,6 +3934,7 @@ void wxAuiManager::OnLeftUp(wxMouseEvent& event)
         {
             // fire button-click event
             wxAuiManagerEvent e(wxEVT_AUI_PANEBUTTON);
+            e.SetManager(this);
             e.SetPane(m_action_part->pane);
             e.SetButton(m_action_part->button->button_id);
             ProcessMgrEvent(e);
@@ -4181,6 +4184,7 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
     {
         // fire pane close event
         wxAuiManagerEvent e(wxEVT_AUI_PANECLOSE);
+        e.SetManager(this);
         e.SetPane(evt.pane);
         ProcessMgrEvent(e);
 
@@ -4194,6 +4198,7 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
     {
         // fire pane close event
         wxAuiManagerEvent e(wxEVT_AUI_PANEMAXIMIZE);
+        e.SetManager(this);
         e.SetPane(evt.pane);
         ProcessMgrEvent(e);
 
@@ -4207,6 +4212,7 @@ void wxAuiManager::OnPaneButton(wxAuiManagerEvent& evt)
     {
         // fire pane close event
         wxAuiManagerEvent e(wxEVT_AUI_PANERESTORE);
+        e.SetManager(this);
         e.SetPane(evt.pane);
         ProcessMgrEvent(e);
 
