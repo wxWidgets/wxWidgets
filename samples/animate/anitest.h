@@ -31,6 +31,10 @@ public:
     void OnQuit(wxCommandEvent& event);
 
     void OnPlay(wxCommandEvent& event);
+    void OnSetNullAnimation(wxCommandEvent& event);
+    void OnSetInactiveBitmap(wxCommandEvent& event);
+    void OnSetNoAutoResize(wxCommandEvent& event);
+    void OnSetBgColor(wxCommandEvent& event);
     void OnStop(wxCommandEvent& event);
 
     void OnUpdateUI(wxUpdateUIEvent& event);

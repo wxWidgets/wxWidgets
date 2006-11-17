@@ -33,6 +33,8 @@
 #endif
 
 #include "wx/aboutdlg.h"
+#include "wx/artprov.h"
+#include "wx/colordlg.h"
 #include "anitest.h"
 
 #if !wxUSE_ANIMATIONCTRL
@@ -52,11 +54,20 @@ IMPLEMENT_APP(MyApp)
 
 enum
 {
-    ID_PLAY = 1
+    ID_PLAY = 1,
+    ID_SET_NULL_ANIMATION,
+    ID_SET_INACTIVE_BITMAP,
+    ID_SET_NO_AUTO_RESIZE,
+    ID_SET_BGCOLOR
 };
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(ID_PLAY, MyFrame::OnPlay)
+    EVT_MENU(ID_SET_NULL_ANIMATION, MyFrame::OnSetNullAnimation)
+    EVT_MENU(ID_SET_INACTIVE_BITMAP, MyFrame::OnSetInactiveBitmap)
+    EVT_MENU(ID_SET_NO_AUTO_RESIZE, MyFrame::OnSetNoAutoResize)
+    EVT_MENU(ID_SET_BGCOLOR, MyFrame::OnSetBgColor)
+
     EVT_MENU(wxID_STOP, MyFrame::OnStop)
     EVT_MENU(wxID_ABOUT, MyFrame::OnAbout)
     EVT_MENU(wxID_EXIT, MyFrame::OnQuit)
@@ -82,8 +93,8 @@ bool MyApp::OnInit()
     // Create the main frame window
 
     MyFrame* frame = new MyFrame((wxFrame *)NULL, wxID_ANY, _T("Animation Demo"),
-                        wxDefaultPosition, wxSize(500, 400),
-                        wxDEFAULT_FRAME_STYLE);
+                                 wxDefaultPosition, wxSize(500, 400),
+                                 wxDEFAULT_FRAME_STYLE);
 
     // Give it an icon
     frame->SetIcon(wxICON(sample));
@@ -99,6 +110,15 @@ bool MyApp::OnInit()
     wxMenu *play_menu = new wxMenu;
     play_menu->Append(ID_PLAY, _T("Play\tCtrl+P"), _T("Play the animation"));
     play_menu->Append(wxID_STOP, _T("Stop\tCtrl+P"), _T("Stop the animation"));
+    play_menu->AppendSeparator();
+    play_menu->Append(ID_SET_NULL_ANIMATION, _T("Set null animation"),
+                      _T("Sets the empty animation in the control"));
+    play_menu->AppendCheckItem(ID_SET_INACTIVE_BITMAP, _T("Set inactive bitmap"),
+                               _T("Sets an inactive bitmap for the control"));
+    play_menu->AppendCheckItem(ID_SET_NO_AUTO_RESIZE, _T("Set no autoresize"),
+                               _T("Tells the control not to resize automatically"));
+    play_menu->Append(ID_SET_BGCOLOR, _T("Set background colour..."),
+                      _T("Sets the background colour of the control"));
 
     wxMenu *help_menu = new wxMenu;
     help_menu->Append(wxID_ABOUT);
@@ -139,10 +159,19 @@ MyFrame::MyFrame(wxWindow *parent,
        : wxFrame(parent, id, title, pos, size,
                           style | wxNO_FULL_REPAINT_ON_RESIZE)
 {
-    m_animationCtrl = new wxAnimationCtrl(this, wxID_ANY, wxNullAnimation,
-                                          wxPoint(0,0),wxSize(100,100));
+    // use a wxBoxSizer otherwise wxFrame will automatically
+    // resize the m_animationCtrl to fill its client area on
+    // user resizes
+    wxSizer *sz = new wxBoxSizer(wxVERTICAL);
+    sz->Add(new wxStaticText(this, wxID_ANY, wxT("wxAnimationCtrl:")),
+            wxSizerFlags().Centre().Border());
+
+    m_animationCtrl = new wxAnimationCtrl(this, wxID_ANY);
     if (m_animationCtrl->LoadFile(wxT("throbber.gif")))
         m_animationCtrl->Play();
+
+    sz->Add(m_animationCtrl, wxSizerFlags().Centre().Border());
+    SetSizer(sz);
 }
 
 MyFrame::~MyFrame()
@@ -158,6 +187,62 @@ void MyFrame::OnPlay(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnStop(wxCommandEvent& WXUNUSED(event))
 {
     m_animationCtrl->Stop();
+}
+
+void MyFrame::OnSetNullAnimation(wxCommandEvent& WXUNUSED(event))
+{
+    m_animationCtrl->SetAnimation(wxNullAnimation);
+}
+
+void MyFrame::OnSetInactiveBitmap(wxCommandEvent& event)
+{
+    if (event.IsChecked())
+    {
+        // set a dummy bitmap as the inactive bitmap
+        wxBitmap bmp = wxArtProvider::GetBitmap(wxART_MISSING_IMAGE);
+        m_animationCtrl->SetInactiveBitmap(bmp);
+    }
+    else
+        m_animationCtrl->SetInactiveBitmap(wxNullBitmap);
+}
+
+void MyFrame::OnSetNoAutoResize(wxCommandEvent& event)
+{
+    // recreate the control with the new flag if necessary
+    long style = wxAC_DEFAULT_STYLE |
+                    (event.IsChecked() ? wxAC_NO_AUTORESIZE : 0);
+
+    if (style != m_animationCtrl->GetWindowStyle())
+    {
+        // save status of the control before destroying it
+        wxAnimation curr = m_animationCtrl->GetAnimation();
+        wxBitmap inactive = m_animationCtrl->GetInactiveBitmap();
+        wxColour bg = m_animationCtrl->GetBackgroundColour();
+
+        // destroy & rebuild
+        wxAnimationCtrl *old = m_animationCtrl;
+        m_animationCtrl = new wxAnimationCtrl(this, wxID_ANY, curr,
+                                              wxDefaultPosition, wxDefaultSize,
+                                              style);
+
+        GetSizer()->Replace(old, m_animationCtrl);
+        delete old;
+
+        // load old status in new control
+        m_animationCtrl->SetInactiveBitmap(inactive);
+        m_animationCtrl->SetBackgroundColour(bg);
+
+        GetSizer()->Layout();
+    }
+}
+
+void MyFrame::OnSetBgColor(wxCommandEvent& WXUNUSED(event))
+{
+    wxColour clr = wxGetColourFromUser(this, m_animationCtrl->GetBackgroundColour(),
+                                       wxT("Choose the background colour"));
+
+    if (clr.IsOk())
+        m_animationCtrl->SetBackgroundColour(clr);
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
@@ -224,6 +309,8 @@ void MyFrame::OnOpen(wxCommandEvent& WXUNUSED(event))
         m_animationCtrl->Play();
     #endif
 #endif
+
+        GetSizer()->Layout();
     }
 }
 #endif // wxUSE_FILEDLG
@@ -232,5 +319,6 @@ void MyFrame::OnUpdateUI(wxUpdateUIEvent& WXUNUSED(event) )
 {
     GetMenuBar()->FindItem(wxID_STOP)->Enable(m_animationCtrl->IsPlaying());
     GetMenuBar()->FindItem(ID_PLAY)->Enable(!m_animationCtrl->IsPlaying());
+    GetMenuBar()->FindItem(ID_SET_NO_AUTO_RESIZE)->Enable(!m_animationCtrl->IsPlaying());
 }
 
