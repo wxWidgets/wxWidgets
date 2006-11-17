@@ -319,7 +319,7 @@ void wxBitmapComboBox::DetermineIndent()
 
     if ( m_usedImgSize.x > 0 )
     {
-        indent = m_usedImgSize.y + IMAGE_SPACING_LEFT + IMAGE_SPACING_RIGHT;
+        indent = m_usedImgSize.x + IMAGE_SPACING_LEFT + IMAGE_SPACING_RIGHT;
         m_imgAreaWidth = indent;
 
         indent -= 3;
