@@ -27,7 +27,7 @@ typedef struct _GdkPixbufAnimationIter GdkPixbufAnimationIter;
 class WXDLLIMPEXP_ADV wxAnimation : public wxAnimationBase
 {
 public:
-    wxAnimation(GdkPixbufAnimation *p = NULL) { m_pixbuf = p; }
+    wxAnimation(GdkPixbufAnimation *p = NULL);
     wxAnimation(const wxAnimation&);
     ~wxAnimation() { UnRef(); }
 

@@ -107,6 +107,9 @@ public:
 
     void SetInactiveBitmap(const wxBitmap &bmp);
 
+    // override base class method
+    virtual bool SetBackgroundColour(const wxColour& col);
+
 public:     // event handlers
 
     void OnPaint(wxPaintEvent& event);

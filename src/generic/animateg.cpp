@@ -185,7 +185,6 @@ void wxAnimation::AddHandler( wxAnimationDecoder *handler )
         // for preventing duplicate additions.  If someone ever has
         // a good reason to add and remove duplicate handlers (and they
         // may) we should probably refcount the duplicates.
-        //   also an issue in InsertHandler below.
 
         wxLogDebug( _T("Adding duplicate animation handler for '%d' type"),
                     handler->GetType() );
@@ -330,15 +329,18 @@ void wxAnimationCtrl::SetAnimation(const wxAnimation& animation)
     if (IsPlaying())
         Stop();
 
+    // set new animation even if it's wxNullAnimation
     m_animation = animation;
+    if (!m_animation.IsOk())
+    {
+        UpdateBackingStoreWithStaticImage();
+        return;
+    }
 
     if (m_animation.GetBackgroundColour() == wxNullColour)
         SetUseWindowBackgroundColour();
     if (!this->HasFlag(wxAC_NO_AUTORESIZE))
         FitToAnimation();
-
-    // reset frame counter
-    m_currentFrame = 0;
 
     UpdateBackingStoreWithStaticImage();
 }
@@ -347,14 +349,35 @@ void wxAnimationCtrl::SetInactiveBitmap(const wxBitmap &bmp)
 {
     m_bmpStatic = bmp;
 
+    // if the bitmap has an associated mask, we need to set our background to
+    // the colour of our parent otherwise when calling DrawCurrentFrame()
+    // (which uses the bitmap's mask), our background colour would be used for
+    // transparent areas - and that's not what we want (at least for
+    // consistency with the GTK version)
+    if ( bmp.GetMask() != NULL && GetParent() != NULL )
+        SetBackgroundColour(GetParent()->GetBackgroundColour());
+
     // if not playing, update the backing store now
-    if (!IsPlaying())
+    if ( !IsPlaying() )
         UpdateBackingStoreWithStaticImage();
 }
 
 void wxAnimationCtrl::FitToAnimation()
 {
     SetSize(m_animation.GetSize());
+}
+
+bool wxAnimationCtrl::SetBackgroundColour(const wxColour& colour)
+{
+    if ( !wxWindow::SetBackgroundColour(colour) )
+        return false;
+
+    // if not playing, then this change must be seen immediately (unless
+    // there's an inactive bitmap set which has higher priority than bg colour)
+    if ( !IsPlaying() )
+        UpdateBackingStoreWithStaticImage();
+
+    return true;
 }
 
 
@@ -366,6 +389,9 @@ void wxAnimationCtrl::Stop()
 {
     m_timer.Stop();
     m_isPlaying = false;
+
+    // reset frame counter
+    m_currentFrame = 0;
 
     UpdateBackingStoreWithStaticImage();
 }
@@ -507,7 +533,16 @@ void wxAnimationCtrl::UpdateBackingStoreWithStaticImage()
     if (m_bmpStatic.IsOk())
     {
         // copy the inactive bitmap in the backing store
-        m_backingStore = m_bmpStatic;
+        // eventually using the mask if the static bitmap has one
+        if ( m_bmpStatic.GetMask() )
+        {
+            wxMemoryDC temp;
+            temp.SelectObject(m_backingStore);
+            DisposeToBackground(temp);
+            temp.DrawBitmap(m_bmpStatic, 0, 0, true /* use mask */);
+        }
+        else
+            m_backingStore = m_bmpStatic;
     }
     else
     {
@@ -557,6 +592,7 @@ void wxAnimationCtrl::DisposeToBackground(wxDC& dc)
     wxColour col = IsUsingWindowBackgroundColour()
                     ? GetBackgroundColour()
                     : m_animation.GetBackgroundColour();
+
     wxBrush brush(col);
     dc.SetBackground(brush);
     dc.Clear();
@@ -583,7 +619,12 @@ void wxAnimationCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     wxPaintDC dc(this);
 
     if ( m_backingStore.IsOk() )
-        DrawCurrentFrame(dc);
+    {
+        // NOTE: we draw the bitmap explicitely ignoring the mask (if any);
+        //       i.e. we don't want to combine the backing store with the 
+        //       possibly wrong preexisting contents of the window!
+        dc.DrawBitmap(m_backingStore, 0, 0, false /* no mask */);
+    }
     else
     {
         // m_animation is not valid and thus we don't have a valid backing store...
@@ -639,8 +680,8 @@ void wxAnimationCtrl::OnSize(wxSizeEvent &WXUNUSED(event))
         // with the last played frame is wrong in this case
         if (IsPlaying())
         {
-        if (!RebuildBackingStoreUpToFrame(m_currentFrame))
-            Stop();     // in case we are playing
+            if (!RebuildBackingStoreUpToFrame(m_currentFrame))
+                Stop();     // in case we are playing
         }
     }
 }

@@ -59,6 +59,13 @@ wxAnimation::wxAnimation(const wxAnimation& that)
         g_object_ref(m_pixbuf);
 }
 
+wxAnimation::wxAnimation(GdkPixbufAnimation *p)
+{
+    m_pixbuf = p;
+    if ( m_pixbuf )
+        g_object_ref(m_pixbuf);
+}
+
 wxAnimation& wxAnimation::operator=(const wxAnimation& that)
 {
     if (this != &that)
@@ -271,7 +278,7 @@ void wxAnimationCtrl::FitToAnimation()
         h = gdk_pixbuf_animation_get_height(m_anim);
 
     // update our size to fit animation
-        SetSize(w, h);
+    SetSize(w, h);
 }
 
 void wxAnimationCtrl::ResetAnim()
@@ -408,7 +415,13 @@ bool wxAnimationCtrl::SetBackgroundColour( const wxColour &colour )
     // Thus we clear the GtkImage contents to the background colour...
     if (!wxControl::SetBackgroundColour(colour))
         return false;
-    ClearToBackgroundColour();
+
+    // if not playing the change must take place immediately but
+    // remember that the inactive bitmap has higher priority over the background
+    // colour; DisplayStaticImage() will handle that
+    if ( !IsPlaying() )
+        DisplayStaticImage();
+
     return true;
 }
 
