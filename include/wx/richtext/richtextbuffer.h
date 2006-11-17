@@ -2090,6 +2090,10 @@ protected:
 // Save images as inline base64 data in HTML handler
 #define wxRICHTEXT_HANDLER_SAVE_IMAGES_TO_BASE64    0x0040
 
+// Don't write header and footer (or BODY), so we can include the fragment
+// in a larger document
+#define wxRICHTEXT_HANDLER_NO_HEADER_FOOTER         0x0080
+
 /*!
  * wxRichTextFileHandler
  * Base class for file handlers

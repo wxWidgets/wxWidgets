@@ -67,9 +67,10 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
     wxTextAttrEx currentParaStyle = buffer->GetAttributes();
     wxTextAttrEx currentCharStyle = buffer->GetAttributes();
 
-    str << wxT("<html><head></head><body>\n");
+    if ((GetFlags() & wxRICHTEXT_HANDLER_NO_HEADER_FOOTER) == 0)
+        str << wxT("<html><head></head><body>\n");
 
-    str << wxT("<table border=0 cellpadding=0 cellspacing=0><tr><td width=\"100%\">");
+    str << wxT("<table border=0 cellpadding=0 cellspacing=0><tr><td width=\"100%\">\n");
 
     str << wxString::Format(wxT("<font face=\"%s\" size=\"%ld\" color=\"%s\" >"),
         currentParaStyle.GetFont().GetFaceName().c_str(), PtToSize(currentParaStyle.GetFont().GetPointSize()),
@@ -122,7 +123,12 @@ bool wxRichTextHTMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream&
         node = node->GetNext();
     }
 
-    str << wxT("</font></td></tr></table></body></html>\n");
+    str << wxT("</font></td></tr></table>");
+
+    if ((GetFlags() & wxRICHTEXT_HANDLER_NO_HEADER_FOOTER) == 0)
+        str << wxT("</body></html>");
+    
+    str << wxT("\n");
 
     return true;
 }
@@ -174,7 +180,7 @@ void wxRichTextHTMLHandler::BeginCharacterFormatting(const wxTextAttrEx& current
     }
     else if( m_list )
     {
-        // The item is not bulleted and there is a list what should be closed now.
+        // The item is not bulleted and there is a list that should be closed now.
         // So close the list
 
         str << (m_is_ul ? wxT("</ul>") : wxT("</ol>"));
