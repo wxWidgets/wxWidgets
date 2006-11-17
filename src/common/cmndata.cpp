@@ -161,8 +161,11 @@ wxPrintData::wxPrintData()
     m_colour = true;
     m_duplexMode = wxDUPLEX_SIMPLEX;
     m_printQuality = wxPRINT_QUALITY_HIGH;
-    m_paperId = wxPAPER_A4;
-    m_paperSize = wxSize(210, 297);
+
+    // we intentionally don't initialize paper id and size at all, like this
+    // the default system settings will be used for them
+    m_paperId = wxPAPER_NONE;
+    m_paperSize = wxDefaultSize;
 
     m_privData = NULL;
     m_privDataLen = 0;

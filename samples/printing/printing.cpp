@@ -82,9 +82,9 @@ bool MyApp::OnInit(void)
     m_testFont.Create(10, wxSWISS, wxNORMAL, wxNORMAL);
 
     g_printData = new wxPrintData;
-    // Set an initial paper size
+    // You could set an initial paper size here
 //    g_printData->SetPaperId(wxPAPER_LETTER); // for Americans
-    g_printData->SetPaperId(wxPAPER_A4);    // for everyone else    
+//    g_printData->SetPaperId(wxPAPER_A4);    // for everyone else    
 
     g_pageSetupData = new wxPageSetupDialogData;
     // copy over initial paper size from print record

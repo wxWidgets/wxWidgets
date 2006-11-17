@@ -444,38 +444,40 @@ bool wxWindowsPrintNativeData::TransferFrom( const wxPrintData &data )
         devMode->dmFields |= DM_COLOR;
 
         //// Paper size
-        if (data.GetPaperId() == wxPAPER_NONE)
+
+        // Paper id has priority over paper size. If id is specified, then size
+        // is ignored (as it can be filled in even for standard paper sizes)
+
+        wxPrintPaperType *paperType = NULL;
+
+        const wxPaperSize paperId = data.GetPaperId();
+        if ( paperId != wxPAPER_NONE && wxThePrintPaperDatabase )
         {
-            // DEVMODE is in tenths of a milimeter
-            devMode->dmPaperWidth = (short)(data.GetPaperSize().x * 10);
-            devMode->dmPaperLength = (short)(data.GetPaperSize().y * 10);
-            if(m_customWindowsPaperId != 0)
-                devMode->dmPaperSize = m_customWindowsPaperId;
-            else
-                devMode->dmPaperSize = DMPAPER_USER;
-            devMode->dmFields |= DM_PAPERWIDTH;
-            devMode->dmFields |= DM_PAPERLENGTH;
+            paperType = wxThePrintPaperDatabase->FindPaperType(paperId);
         }
-        else
+
+        if ( paperType )
         {
-            if (wxThePrintPaperDatabase)
+            devMode->dmPaperSize = (short)paperType->GetPlatformId();
+            devMode->dmFields |= DM_PAPERSIZE;
+        }
+        else // custom (or no) paper size
+        {
+            const wxSize paperSize = data.GetPaperSize();
+            if ( paperSize != wxDefaultSize )
             {
-                wxPrintPaperType* paper = wxThePrintPaperDatabase->FindPaperType( data.GetPaperId() );
-                if (paper)
-                {
-                    devMode->dmPaperSize = (short)paper->GetPlatformId();
-                    devMode->dmFields |= DM_PAPERSIZE;
-                }
+                // Fall back on specifying the paper size explicitly
+                if(m_customWindowsPaperId != 0)
+                    devMode->dmPaperSize = m_customWindowsPaperId;
                 else
-                {
-                    // Fall back on specifying the paper size explicitly
-                    devMode->dmPaperWidth = (short)(data.GetPaperSize().x * 10);
-                    devMode->dmPaperLength = (short)(data.GetPaperSize().y * 10);
                     devMode->dmPaperSize = DMPAPER_USER;
-                    devMode->dmFields |= DM_PAPERWIDTH;
-                    devMode->dmFields |= DM_PAPERLENGTH;
-                }
+                devMode->dmPaperWidth = (short)(paperSize.x * 10);
+                devMode->dmPaperLength = (short)(paperSize.y * 10);
+                devMode->dmFields |= DM_PAPERWIDTH;
+                devMode->dmFields |= DM_PAPERLENGTH;
             }
+            //else: neither paper type nor size specified, don't fill DEVMODE
+            //      at all so that the system defaults are used
         }
 
         //// Duplex
