@@ -36,7 +36,7 @@
 #include "wx/msw/private.h"
 #endif
 
-IMPLEMENT_CLASS( wxAuiFloatingFrame, wxAuiFloatingFrameBaseClass )
+IMPLEMENT_CLASS(wxAuiFloatingFrame, wxAuiFloatingFrameBaseClass)
 
 wxAuiFloatingFrame::wxAuiFloatingFrame(wxWindow* parent,
                 wxAuiManager* owner_mgr,
@@ -73,7 +73,8 @@ wxAuiFloatingFrame::wxAuiFloatingFrame(wxWindow* parent,
 wxAuiFloatingFrame::~wxAuiFloatingFrame()
 {
     // if we do not do this, then we can crash...
-    if(m_owner_mgr && m_owner_mgr->m_action_window == this) {
+    if(m_owner_mgr && m_owner_mgr->m_action_window == this)
+    {
         m_owner_mgr->m_action_window = NULL;
     }
     m_mgr.UnInit();
@@ -130,6 +131,12 @@ void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
         SetClientSize(size);
     }
 }
+
+wxAuiManager* wxAuiFloatingFrame::GetOwnerManager() const
+{
+    return m_owner_mgr;
+}
+
 
 void wxAuiFloatingFrame::OnSize(wxSizeEvent& event)
 {

@@ -42,6 +42,7 @@ public:
                    );
     virtual ~wxAuiFloatingFrame();
     void SetPaneWindow(const wxAuiPaneInfo& pane);
+    wxAuiManager* GetOwnerManager() const;
     
 protected:
     virtual void OnMoveStart();
@@ -55,6 +56,7 @@ private:
     void OnIdle(wxIdleEvent& event);
     void OnActivate(wxActivateEvent& event);
     static bool isMouseDown();
+    
 private:
     wxWindow* m_pane_window;    // pane window being managed
     bool m_solid_drag;          // true if system uses solid window drag
@@ -70,7 +72,7 @@ private:
 
 #ifndef SWIG
     DECLARE_EVENT_TABLE()
-    DECLARE_CLASS(wxAuiFloatingFrameBaseClass)
+    DECLARE_CLASS(wxAuiFloatingFrame)
 #endif // SWIG
 };
 

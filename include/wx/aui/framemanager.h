@@ -431,6 +431,8 @@ public:
     void SetManagedWindow(wxWindow* managed_wnd);
     wxWindow* GetManagedWindow() const;
 
+    static wxAuiManager* GetManager(wxWindow* window);
+
 #ifdef SWIG
     %disownarg( wxAuiDockArt* art_provider );
 #endif
@@ -472,7 +474,6 @@ public:
                  bool update = true);
 
     void Update();
-
 
 public:
     virtual wxAuiFloatingFrame* CreateFloatingFrame(wxWindow* parent, const wxAuiPaneInfo& p);
@@ -567,6 +568,7 @@ protected:
     void OnLeaveWindow(wxMouseEvent& evt);
     void OnChildFocus(wxChildFocusEvent& evt);
     void OnHintFadeTimer(wxTimerEvent& evt);
+    void OnFindManager(wxAuiManagerEvent& evt);
 
 protected:
 
@@ -610,6 +612,7 @@ protected:
 
 #ifndef SWIG
     DECLARE_EVENT_TABLE()
+    DECLARE_CLASS(wxAuiManager)
 #endif // SWIG
 };
 
@@ -622,6 +625,7 @@ class WXDLLIMPEXP_AUI wxAuiManagerEvent : public wxEvent
 public:
     wxAuiManagerEvent(wxEventType type=wxEVT_NULL) : wxEvent(0, type)
     {
+        manager = NULL;
         pane = NULL;
         button = 0;
         veto_flag = false;
@@ -631,6 +635,7 @@ public:
 #ifndef SWIG
     wxAuiManagerEvent(const wxAuiManagerEvent& c) : wxEvent(c)
     {
+        manager = c.manager;
         pane = c.pane;
         button = c.button;
         veto_flag = c.veto_flag;
@@ -640,13 +645,15 @@ public:
 #endif
     wxEvent *Clone() const { return new wxAuiManagerEvent(*this); }
 
+    void SetManager(wxAuiManager* mgr) { manager = mgr; }
     void SetPane(wxAuiPaneInfo* p) { pane = p; }
     void SetButton(int b) { button = b; }
     void SetDC(wxDC* pdc) { dc = pdc; }
  
-    wxAuiPaneInfo* GetPane() { return pane; }
-    int GetButton() { return button; }
-    wxDC* GetDC() { return dc; }
+    wxAuiManager* GetManager() const { return manager; }
+    wxAuiPaneInfo* GetPane() const { return pane; }
+    int GetButton() const { return button; }
+    wxDC* GetDC() const { return dc; }
     
     void Veto(bool veto = true) { veto_flag = veto; }
     bool GetVeto() const { return veto_flag; }
@@ -654,6 +661,7 @@ public:
     bool CanVeto() const { return  canveto_flag && veto_flag; }
     
 public:
+    wxAuiManager* manager;
     wxAuiPaneInfo* pane;
     int button;
     bool veto_flag;
@@ -778,6 +786,7 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_PANEMAXIMIZE, 0)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_PANERESTORE, 0)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_RENDER, 0)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_AUI_FINDMANAGER, 0)
 END_DECLARE_EVENT_TYPES()
 
 typedef void (wxEvtHandler::*wxAuiManagerEventFunction)(wxAuiManagerEvent&);
@@ -795,6 +804,8 @@ typedef void (wxEvtHandler::*wxAuiManagerEventFunction)(wxAuiManagerEvent&);
    wx__DECLARE_EVT0(wxEVT_AUI_PANERESTORE, wxAuiManagerEventHandler(func))
 #define EVT_AUI_RENDER(func) \
    wx__DECLARE_EVT0(wxEVT_AUI_RENDER, wxAuiManagerEventHandler(func))
+#define EVT_AUI_FINDMANAGER(func) \
+   wx__DECLARE_EVT0(wxEVT_AUI_FINDMANAGER, wxAuiManagerEventHandler(func))
 
 #else
 
@@ -803,6 +814,7 @@ typedef void (wxEvtHandler::*wxAuiManagerEventFunction)(wxAuiManagerEvent&);
 %constant wxEventType wxEVT_AUI_PANEMAXIMIZE;
 %constant wxEventType wxEVT_AUI_PANERESTORE;
 %constant wxEventType wxEVT_AUI_RENDER;
+%constant wxEventType wxEVT_AUI_FINDMANAGER;
 
 %pythoncode {
     EVT_AUI_PANEBUTTON = wx.PyEventBinder( wxEVT_AUI_PANEBUTTON )
@@ -810,6 +822,7 @@ typedef void (wxEvtHandler::*wxAuiManagerEventFunction)(wxAuiManagerEvent&);
     EVT_AUI_PANEMAXIMIZE = wx.PyEventBinder( wxEVT_AUI_PANEMAXIMIZE )
     EVT_AUI_PANERESTORE = wx.PyEventBinder( wxEVT_AUI_PANERESTORE )
     EVT_AUI_RENDER = wx.PyEventBinder( wxEVT_AUI_RENDER )
+    EVT_AUI_FINDMANAGER = wx.PyEventBinder( wxEVT_AUI_FINDMANAGER )
 }
 #endif // SWIG
 

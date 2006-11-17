@@ -57,6 +57,7 @@ DEFINE_EVENT_TYPE(wxEVT_AUI_PANECLOSE)
 DEFINE_EVENT_TYPE(wxEVT_AUI_PANEMAXIMIZE)
 DEFINE_EVENT_TYPE(wxEVT_AUI_PANERESTORE)
 DEFINE_EVENT_TYPE(wxEVT_AUI_RENDER)
+DEFINE_EVENT_TYPE(wxEVT_AUI_FINDMANAGER)
 
 #ifdef __WXMAC__
     // a few defines to avoid nameclashes
@@ -66,7 +67,7 @@ DEFINE_EVENT_TYPE(wxEVT_AUI_RENDER)
 #endif
 
 IMPLEMENT_DYNAMIC_CLASS(wxAuiManagerEvent, wxEvent)
-
+IMPLEMENT_CLASS(wxAuiManager, wxEvtHandler)
 
 // private manager flags (not yet on the public API)
 enum wxAuiPrivateManagerOption
@@ -485,6 +486,7 @@ BEGIN_EVENT_TABLE(wxAuiManager, wxEvtHandler)
     EVT_MOTION(wxAuiManager::OnMotion)
     EVT_LEAVE_WINDOW(wxAuiManager::OnLeaveWindow)
     EVT_CHILD_FOCUS(wxAuiManager::OnChildFocus)
+    EVT_AUI_FINDMANAGER(wxAuiManager::OnFindManager)
     EVT_TIMER(101, wxAuiManager::OnHintFadeTimer)
 END_EVENT_TABLE()
 
@@ -632,6 +634,22 @@ void wxAuiManager::SetFrame(wxFrame* frame)
 wxFrame* wxAuiManager::GetFrame() const
 {
     return (wxFrame*)m_frame;
+}
+
+
+// this function will return the aui manager for a given
+// window.  The |window| parameter should be any child window
+// or grand-child window (and so on) of the frame/window
+// managed by wxAuiManager.  The |window| parameter does not
+// need to be managed by the manager itself.
+wxAuiManager* wxAuiManager::GetManager(wxWindow* window)
+{
+    wxAuiManagerEvent evt(wxEVT_AUI_FINDMANAGER);
+    evt.ResumePropagation(wxEVENT_PROPAGATE_MAX);
+    if (!window->ProcessEvent(evt))
+        return NULL;
+        
+    return evt.GetManager();
 }
 
 
@@ -3535,6 +3553,27 @@ void wxAuiManager::OnSize(wxSizeEvent& event)
     event.Skip();
 }
 
+void wxAuiManager::OnFindManager(wxAuiManagerEvent& evt)
+{
+    // get the window we are managing, if none, return NULL
+    wxWindow* window = GetManagedWindow();
+    if (!window)
+    {
+        evt.SetManager(NULL);
+        return;
+    }
+    
+    // if we are managing a child frame, get the 'real' manager
+    if (window->IsKindOf(CLASSINFO(wxAuiFloatingFrame)))
+    {
+        wxAuiFloatingFrame* float_frame = static_cast<wxAuiFloatingFrame*>(window);
+        evt.SetManager(float_frame->GetOwnerManager());
+        return;
+    }
+        
+    // return pointer to ourself
+    evt.SetManager(this);
+}
 
 void wxAuiManager::OnSetCursor(wxSetCursorEvent& event)
 {
