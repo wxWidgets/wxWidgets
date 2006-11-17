@@ -537,16 +537,30 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
 {
     // TODO: indicate list format for list style types
 
-    wxString str(wxT("<table><tr>"));
+    wxString str;
+
+    bool isCentred = false;
+
+    if (def->GetStyle().HasAlignment() && def->GetStyle().GetAlignment() == wxTEXT_ALIGNMENT_CENTRE)
+        isCentred = true;
+
+    if (isCentred)
+        str << wxT("<center>");
+
+    
+    str << wxT("<table><tr>");
 
     if (def->GetStyle().GetLeftIndent() > 0)
     {
         wxClientDC dc((wxWindow*) this);
 
-        str << wxT("<td width=") << (ConvertTenthsMMToPixels(dc, def->GetStyle().GetLeftIndent())/2) << wxT("></td>");
+        str << wxT("<td width=") << wxMin(50, (ConvertTenthsMMToPixels(dc, def->GetStyle().GetLeftIndent())/2)) << wxT("></td>");
     }
 
-    str << wxT("<td nowrap>");
+    if (isCentred)
+        str << wxT("<td nowrap align=\"center\">");
+    else
+        str << wxT("<td nowrap>");
 
 #ifdef __WXMSW__
     int size = 3;
@@ -601,9 +615,16 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
     if (hasBold)
         str << wxT("</b>");
 
+    if (isCentred)
+        str << wxT("</centre>");
+
     str << wxT("</font>");
 
-    str += wxT("</td></tr></table>");
+    str << wxT("</td></tr></table>");
+
+    if (isCentred)
+        str << wxT("</center>");
+
     return str;
 }
 
