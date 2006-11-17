@@ -184,11 +184,10 @@ public:
     virtual bool GetStyle(long position, wxTextAttrEx& style);
     virtual bool GetStyle(long position, wxRichTextAttr& style);
 
-/*
     // get the common set of styles for the range
-    bool GetStyleForRange(const wxRichTextRange& range, wxRichTextAttr& style);
-    bool GetStyleForRange(const wxRichTextRange& range, wxTextAttrEx& style);
-*/
+    virtual bool GetStyleForRange(const wxRichTextRange& range, wxRichTextAttr& style);
+    virtual bool GetStyleForRange(const wxRichTextRange& range, wxTextAttrEx& style);
+
     // extended style setting operation with flags including:
     // wxRICHTEXT_SETSTYLE_WITH_UNDO, wxRICHTEXT_SETSTYLE_OPTIMIZE, wxRICHTEXT_SETSTYLE_PARAGRAPHS_ONLY, wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY
     // see richtextbuffer.h for more details.
@@ -854,17 +853,19 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextEvent : public wxNotifyEvent
 public:
     wxRichTextEvent(wxEventType commandType = wxEVT_NULL, int winid = 0)
         : wxNotifyEvent(commandType, winid),
-        m_itemIndex(-1), m_flags(0), m_oldStyleSheet(NULL), m_newStyleSheet(NULL)
+        m_flags(0), m_position(-1), m_oldStyleSheet(NULL), m_newStyleSheet(NULL),
+        m_char((wxChar) 0)
         { }
 
     wxRichTextEvent(const wxRichTextEvent& event)
         : wxNotifyEvent(event),
-        m_itemIndex(event.m_itemIndex), m_flags(event.m_flags),
-        m_oldStyleSheet(event.m_oldStyleSheet), m_newStyleSheet(event.m_newStyleSheet)
+        m_flags(event.m_flags), m_position(-1),
+        m_oldStyleSheet(event.m_oldStyleSheet), m_newStyleSheet(event.m_newStyleSheet),
+        m_char((wxChar) 0)
         { }
 
-    int GetIndex() const { return m_itemIndex; }
-    void SetIndex(int n) { m_itemIndex = n; }
+    long GetPosition() const { return m_position; }
+    void SetPosition(long pos) { m_position = pos; }
 
     int GetFlags() const { return m_flags; }
     void SetFlags(int flags) { m_flags = flags; }
@@ -875,13 +876,21 @@ public:
     wxRichTextStyleSheet* GetNewStyleSheet() const { return m_newStyleSheet; }
     void SetNewStyleSheet(wxRichTextStyleSheet* sheet) { m_newStyleSheet = sheet; }
 
+    const wxRichTextRange& GetRange() const { return m_range; }
+    void SetRange(const wxRichTextRange& range) { m_range = range; }
+
+    wxChar GetCharacter() const { return m_char; }
+    void SetCharacter(wxChar ch) { m_char = ch; }
+
     virtual wxEvent *Clone() const { return new wxRichTextEvent(*this); }
 
 protected:
-    int                     m_itemIndex;
     int                     m_flags;
+    long                    m_position;
     wxRichTextStyleSheet*   m_oldStyleSheet;
     wxRichTextStyleSheet*   m_newStyleSheet;
+    wxRichTextRange         m_range;
+    wxChar                  m_char;
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxRichTextEvent)
@@ -892,34 +901,44 @@ private:
  */
 
 BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_ITEM_SELECTED, 2600)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_ITEM_DESELECTED, 2601)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_LEFT_CLICK, 2602)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_RIGHT_CLICK, 2603)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_MIDDLE_CLICK, 2604)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_LEFT_DCLICK, 2605)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_RETURN, 2606)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_CHARACTER, 2607)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_DELETE, 2608)
 
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING, 2607)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED, 2608)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING, 2609)
-    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED, 2610)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING, 2609)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED, 2610)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING, 2611)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED, 2612)
+
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED, 2613)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED, 2614)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED, 2615)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_RICHTEXT, wxEVT_COMMAND_RICHTEXT_SELECTION_CHANGED, 2616)
 END_DECLARE_EVENT_TYPES()
 
 typedef void (wxEvtHandler::*wxRichTextEventFunction)(wxRichTextEvent&);
 
-#define EVT_RICHTEXT_ITEM_SELECTED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_ITEM_SELECTED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
-#define EVT_RICHTEXT_ITEM_DESELECTED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_ITEM_DESELECTED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
 #define EVT_RICHTEXT_LEFT_CLICK(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_LEFT_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
 #define EVT_RICHTEXT_RIGHT_CLICK(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_RIGHT_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
 #define EVT_RICHTEXT_MIDDLE_CLICK(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_MIDDLE_CLICK, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
 #define EVT_RICHTEXT_LEFT_DCLICK(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_LEFT_DCLICK, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
 #define EVT_RICHTEXT_RETURN(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_RETURN, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
+#define EVT_RICHTEXT_CHARACTER(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_CHARACTER, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
+#define EVT_RICHTEXT_DELETE(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_DELETE, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
 
 #define EVT_RICHTEXT_STYLESHEET_CHANGING(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
 #define EVT_RICHTEXT_STYLESHEET_CHANGED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
 #define EVT_RICHTEXT_STYLESHEET_REPLACING(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
 #define EVT_RICHTEXT_STYLESHEET_REPLACED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
+
+#define EVT_RICHTEXT_CONTENT_INSERTED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
+#define EVT_RICHTEXT_CONTENT_DELETED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
+#define EVT_RICHTEXT_STYLE_CHANGED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
+#define EVT_RICHTEXT_SELECTION_CHANGED(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_COMMAND_RICHTEXT_SELECTION_CHANGED, id, -1, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxRichTextEventFunction, & fn ), NULL ),
 
 #endif
     // wxUSE_RICHTEXT

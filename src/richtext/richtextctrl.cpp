@@ -37,17 +37,23 @@
 #include "wx/app.h"
 WX_CHECK_BUILD_OPTIONS("wxRichTextCtrl")
 
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_ITEM_SELECTED)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_ITEM_DESELECTED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_LEFT_CLICK)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_MIDDLE_CLICK)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_RIGHT_CLICK)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_LEFT_DCLICK)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_RETURN)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_CHARACTER)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_DELETE)
+
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED)
+
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_RICHTEXT_SELECTION_CHANGED)
 
 IMPLEMENT_CLASS( wxRichTextCtrl, wxControl )
 
@@ -561,6 +567,8 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
             GetId());
         cmdEvent.SetEventObject(this);
         cmdEvent.SetFlags(flags);
+        cmdEvent.SetPosition(newPos+1);
+
         if (!GetEventHandler()->ProcessEvent(cmdEvent))
         {
             // Generate conventional event
@@ -574,7 +582,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
     else if (event.GetKeyCode() == WXK_BACK)
     {
         BeginBatchUndo(_("Delete Text"));
-
+        
         // Submit range in character positions, which are greater than caret positions,
         // so subtract 1 for deleted character and add 1 for conversion to character position.
         if (m_caretPosition > -1 && !HasSelection())
@@ -599,6 +607,15 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
         }
 
         ScrollIntoView(m_caretPosition, WXK_LEFT);
+
+        wxRichTextEvent cmdEvent(
+            wxEVT_COMMAND_RICHTEXT_DELETE,
+            GetId());
+        cmdEvent.SetEventObject(this);
+        cmdEvent.SetFlags(flags);
+        cmdEvent.SetPosition(m_caretPosition+1);
+        GetEventHandler()->ProcessEvent(cmdEvent);
+
         Update();
     }
     else if (event.GetKeyCode() == WXK_DELETE)
@@ -626,6 +643,15 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
             PositionCaret();
             SetDefaultStyleToCursorStyle();
         }
+
+        wxRichTextEvent cmdEvent(
+            wxEVT_COMMAND_RICHTEXT_DELETE,
+            GetId());
+        cmdEvent.SetEventObject(this);
+        cmdEvent.SetFlags(flags);
+        cmdEvent.SetPosition(m_caretPosition+1);
+        GetEventHandler()->ProcessEvent(cmdEvent);
+
         Update();
     }
     else
@@ -741,6 +767,14 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                     return;
                 }
 
+                wxRichTextEvent cmdEvent(
+                    wxEVT_COMMAND_RICHTEXT_CHARACTER,
+                    GetId());
+                cmdEvent.SetEventObject(this);
+                cmdEvent.SetFlags(flags);
+                cmdEvent.SetCharacter((wxChar) keycode);
+                cmdEvent.SetPosition(m_caretPosition+1);
+                
                 if (keycode == wxT('\t'))
                 {
                     // See if we need to promote or demote the selection or paragraph at the cursor
@@ -759,6 +793,8 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
                         PromoteList(promoteBy, range, NULL);
 
+                        GetEventHandler()->ProcessEvent(cmdEvent);
+
                         return;
                     }
                 }
@@ -775,6 +811,9 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
                 SetDefaultStyleToCursorStyle();
                 ScrollIntoView(m_caretPosition, WXK_RIGHT);
+                
+                GetEventHandler()->ProcessEvent(cmdEvent);
+
                 Update();
             }
         }
@@ -2525,7 +2564,6 @@ bool wxRichTextCtrl::GetStyle(long position, wxRichTextAttr& style)
     return GetBuffer().GetStyle(position, style);
 }
 
-/*
 // get the common set of styles for the range
 bool wxRichTextCtrl::GetStyleForRange(const wxRichTextRange& range, wxRichTextAttr& style)
 {
@@ -2543,7 +2581,6 @@ bool wxRichTextCtrl::GetStyleForRange(const wxRichTextRange& range, wxTextAttrEx
 {
     return GetBuffer().GetStyleForRange(range.ToInternal(), style);
 }
-*/
 
 /// Get the content (uncombined) attributes for this position.
 
@@ -2957,11 +2994,7 @@ bool wxRichTextCtrl::SetDefaultStyleToCursorStyle()
     // If at the start of a paragraph, use the next position.
     long pos = GetAdjustedCaretPosition(GetCaretPosition());
 
-#if wxRICHTEXT_USE_DYNAMIC_STYLES
     if (GetUncombinedStyle(pos, attr))
-#else
-    if (GetStyle(pos, attr))
-#endif
     {
         SetDefaultStyle(attr);
         return true;

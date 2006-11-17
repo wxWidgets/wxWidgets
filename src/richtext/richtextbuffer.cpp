@@ -85,12 +85,6 @@ void wxRichTextObject::Copy(const wxRichTextObject& obj)
     m_range = obj.m_range;
     m_attributes = obj.m_attributes;
     m_descent = obj.m_descent;
-/*
-    if (!m_attributes.GetFont().Ok())
-        wxLogDebug(wxT("No font!"));
-    if (!obj.m_attributes.GetFont().Ok())
-        wxLogDebug(wxT("Parent has no font!"));
-*/
 }
 
 void wxRichTextObject::SetMargins(int margin)
@@ -907,25 +901,14 @@ wxSize wxRichTextParagraphLayoutBox::GetLineSizeAtPosition(long pos, bool caretP
 /// Convenience function to add a paragraph of text
 wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraph(const wxString& text, wxTextAttrEx* paraStyle)
 {
-#if wxRICHTEXT_USE_DYNAMIC_STYLES
     // Don't use the base style, just the default style, and the base style will
     // be combined at display time.
     // Divide into paragraph and character styles.
     
     wxTextAttrEx defaultCharStyle;
     wxTextAttrEx defaultParaStyle;
+
     wxRichTextSplitParaCharStyles(GetDefaultStyle(), defaultParaStyle, defaultCharStyle);
-#else
-    wxTextAttrEx style(GetAttributes());
-
-    // Apply default style. If the style has no attributes set,
-    // then the attributes will remain the 'basic style' (i.e. the
-    // layout box's style).
-    wxRichTextApplyStyle(style, GetDefaultStyle());
-
-    wxTextAttrEx defaultCharStyle = style;
-    wxTextAttrEx defaultParaStyle = style;
-#endif
     wxTextAttrEx* pStyle = paraStyle ? paraStyle : (wxTextAttrEx*) & defaultParaStyle;
     wxTextAttrEx* cStyle = & defaultCharStyle;
 
@@ -942,7 +925,6 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraph(const wxString& text,
 /// Adds multiple paragraphs, based on newlines.
 wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraphs(const wxString& text, wxTextAttrEx* paraStyle)
 {
-#if wxRICHTEXT_USE_DYNAMIC_STYLES
     // Don't use the base style, just the default style, and the base style will
     // be combined at display time.
     // Divide into paragraph and character styles.
@@ -950,17 +932,6 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraphs(const wxString& text
     wxTextAttrEx defaultCharStyle;
     wxTextAttrEx defaultParaStyle;
     wxRichTextSplitParaCharStyles(GetDefaultStyle(), defaultParaStyle, defaultCharStyle);
-#else
-    wxTextAttrEx style(GetAttributes());
-
-    // Apply default style. If the style has no attributes set,
-    // then the attributes will remain the 'basic style' (i.e. the
-    // layout box's style).
-    wxRichTextApplyStyle(style, GetDefaultStyle());
-
-    wxTextAttrEx defaultCharStyle = style;
-    wxTextAttrEx defaultParaStyle = style;
-#endif
 
     wxTextAttrEx* pStyle = paraStyle ? paraStyle : (wxTextAttrEx*) & defaultParaStyle;
     wxTextAttrEx* cStyle = & defaultCharStyle;
@@ -1017,7 +988,6 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddParagraphs(const wxString& text
 /// Convenience function to add an image
 wxRichTextRange wxRichTextParagraphLayoutBox::AddImage(const wxImage& image, wxTextAttrEx* paraStyle)
 {
-#if wxRICHTEXT_USE_DYNAMIC_STYLES
     // Don't use the base style, just the default style, and the base style will
     // be combined at display time.
     // Divide into paragraph and character styles.
@@ -1025,17 +995,6 @@ wxRichTextRange wxRichTextParagraphLayoutBox::AddImage(const wxImage& image, wxT
     wxTextAttrEx defaultCharStyle;
     wxTextAttrEx defaultParaStyle;
     wxRichTextSplitParaCharStyles(GetDefaultStyle(), defaultParaStyle, defaultCharStyle);
-#else
-    wxTextAttrEx style(GetAttributes());
-
-    // Apply default style. If the style has no attributes set,
-    // then the attributes will remain the 'basic style' (i.e. the
-    // layout box's style).
-    wxRichTextApplyStyle(style, GetDefaultStyle());
-
-    wxTextAttrEx defaultCharStyle = style;
-    wxTextAttrEx defaultParaStyle = style;
-#endif
 
     wxTextAttrEx* pStyle = paraStyle ? paraStyle : (wxTextAttrEx*) & defaultParaStyle;
     wxTextAttrEx* cStyle = & defaultCharStyle;
@@ -1685,8 +1644,7 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
                     }
                 }
 
-#if wxRICHTEXT_USE_DYNAMIC_STYLES
-                // If applying paragraph styles dynamically, don't change the text objects' attributes
+                // When applying paragraph styles dynamically, don't change the text objects' attributes
                 // since they will computed as needed. Only apply the character styling if it's _only_
                 // character styling. This policy is subject to change and might be put under user control.
 
@@ -1698,9 +1656,6 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
 
                 // if (!paragraphStyle && characterStyle && range.GetStart() != newPara->GetRange().GetEnd())
                 if (!parasOnly && characterStyle && range.GetStart() != newPara->GetRange().GetEnd())
-#else
-                if (characterStyle && range.GetStart() != newPara->GetRange().GetEnd())
-#endif
                 {
                     wxRichTextRange childRange(range);
                     childRange.LimitTo(newPara->GetRange());
@@ -1837,7 +1792,6 @@ bool wxRichTextParagraphLayoutBox::DoGetStyle(long position, wxTextAttrEx& style
         obj = GetParagraphAtPosition(position);
         if (obj)
         {
-#if wxRICHTEXT_USE_DYNAMIC_STYLES
             if (combineStyles)
             {
                 // Start with the base style
@@ -1848,9 +1802,7 @@ bool wxRichTextParagraphLayoutBox::DoGetStyle(long position, wxTextAttrEx& style
             }
             else
                 style = obj->GetAttributes();
-#else
-            style = obj->GetAttributes();
-#endif
+
             return true;
         }
     }
@@ -1859,7 +1811,6 @@ bool wxRichTextParagraphLayoutBox::DoGetStyle(long position, wxTextAttrEx& style
         obj = GetLeafObjectAtPosition(position);
         if (obj)
         {
-#if wxRICHTEXT_USE_DYNAMIC_STYLES
             if (combineStyles)
             {
                 wxRichTextParagraph* para = wxDynamicCast(obj->GetParent(), wxRichTextParagraph);
@@ -1867,9 +1818,7 @@ bool wxRichTextParagraphLayoutBox::DoGetStyle(long position, wxTextAttrEx& style
             }
             else
                 style = obj->GetAttributes();
-#else
-            style = obj->GetAttributes();
-#endif
+
             return true;
         }
     }
@@ -2405,11 +2354,8 @@ bool wxRichTextParagraphLayoutBox::HasCharacterAttributes(const wxRichTextRange&
                     if (!child->GetRange().IsOutside(range) && child->IsKindOf(CLASSINFO(wxRichTextPlainText)))
                     {
                         foundCount ++;
-#if wxRICHTEXT_USE_DYNAMIC_STYLES
                         wxTextAttrEx textAttr = para->GetCombinedAttributes(child->GetAttributes());
-#else
-                        const wxTextAttrEx& textAttr = child->GetAttributes();
-#endif
+
                         if (wxTextAttrEqPartial(textAttr, style, style.GetFlags()))
                             matchingCount ++;
                     }
@@ -2454,14 +2400,10 @@ bool wxRichTextParagraphLayoutBox::HasParagraphAttributes(const wxRichTextRange&
 
             if (!para->GetRange().IsOutside(range))
             {
-#if wxRICHTEXT_USE_DYNAMIC_STYLES
                 wxTextAttrEx textAttr = GetAttributes();
                 // Apply the paragraph style
                 wxRichTextApplyStyle(textAttr, para->GetAttributes());
 
-#else
-                const wxTextAttrEx& textAttr = para->GetAttributes();
-#endif
                 foundCount ++;
                 if (wxTextAttrEqPartial(textAttr, style, style.GetFlags()))
                     matchingCount ++;
@@ -3060,11 +3002,7 @@ wxRichTextParagraph::~wxRichTextParagraph()
 /// Draw the item
 bool wxRichTextParagraph::Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& WXUNUSED(rect), int WXUNUSED(descent), int style)
 {
-#if wxRICHTEXT_USE_DYNAMIC_STYLES
     wxTextAttrEx attr = GetCombinedAttributes();
-#else
-    const wxTextAttrEx& attr = GetAttributes();
-#endif
 
     // Draw the bullet, if any
     if (attr.GetBulletStyle() != wxTEXT_ATTR_BULLET_STYLE_NONE)
@@ -3176,11 +3114,7 @@ bool wxRichTextParagraph::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
 /// Lay the item out
 bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
 {
-#if wxRICHTEXT_USE_DYNAMIC_STYLES
     wxTextAttrEx attr = GetCombinedAttributes();
-#else
-    const wxTextAttrEx& attr = GetAttributes();
-#endif
 
     // ClearLines();
 
@@ -4166,14 +4100,10 @@ wxRichTextPlainText::wxRichTextPlainText(const wxString& text, wxRichTextObject*
 /// Draw the item
 bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& rect, int descent, int WXUNUSED(style))
 {
-#if wxRICHTEXT_USE_DYNAMIC_STYLES
     wxRichTextParagraph* para = wxDynamicCast(GetParent(), wxRichTextParagraph);
     wxASSERT (para != NULL);
 
     wxTextAttrEx textAttr(para ? para->GetCombinedAttributes(GetAttributes()) : GetAttributes());
-#else
-    wxTextAttrEx textAttr(GetAttributes());
-#endif
 
     int offset = GetRange().GetStart();
 
@@ -4395,14 +4325,10 @@ bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxTextAttrEx& attr, c
 /// Lay the item out
 bool wxRichTextPlainText::Layout(wxDC& dc, const wxRect& WXUNUSED(rect), int WXUNUSED(style))
 {
-#if wxRICHTEXT_USE_DYNAMIC_STYLES
     wxRichTextParagraph* para = wxDynamicCast(GetParent(), wxRichTextParagraph);
     wxASSERT (para != NULL);
 
     wxTextAttrEx textAttr(para ? para->GetCombinedAttributes(GetAttributes()) : GetAttributes());
-#else
-    wxTextAttrEx textAttr(GetAttributes());
-#endif
 
     if (textAttr.GetFont().Ok())
         dc.SetFont(textAttr.GetFont());
@@ -4433,14 +4359,10 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
     if (!range.IsWithin(GetRange()))
         return false;
 
-#if wxRICHTEXT_USE_DYNAMIC_STYLES
     wxRichTextParagraph* para = wxDynamicCast(GetParent(), wxRichTextParagraph);
     wxASSERT (para != NULL);
 
     wxTextAttrEx textAttr(para ? para->GetCombinedAttributes(GetAttributes()) : GetAttributes());
-#else
-    wxTextAttrEx textAttr(GetAttributes());
-#endif
 
     // Always assume unformatted text, since at this level we have no knowledge
     // of line breaks - and we don't need it, since we'll calculate size within
@@ -4685,12 +4607,7 @@ bool wxRichTextBuffer::InsertParagraphsWithUndo(long pos, const wxRichTextParagr
 {
     wxRichTextAction* action = new wxRichTextAction(NULL, _("Insert Text"), wxRICHTEXT_INSERT, this, ctrl, false);
 
-#if wxRICHTEXT_USE_DYNAMIC_STYLES
     wxTextAttrEx attr(GetDefaultStyle());
-#else
-    wxTextAttrEx attr(GetBasicStyle());
-    wxRichTextApplyStyle(attr, GetDefaultStyle());
-#endif
 
     wxTextAttrEx* p = NULL;
     wxTextAttrEx paraAttr;
@@ -4775,12 +4692,7 @@ bool wxRichTextBuffer::InsertNewlineWithUndo(long pos, wxRichTextCtrl* ctrl, int
             p = & paraAttr;
     }
 
-#if wxRICHTEXT_USE_DYNAMIC_STYLES
     wxTextAttrEx attr(GetDefaultStyle());
-#else
-    wxTextAttrEx attr(GetBasicStyle());
-    wxRichTextApplyStyle(attr, GetDefaultStyle());
-#endif
 
     wxRichTextParagraph* newPara = new wxRichTextParagraph(wxEmptyString, this, & attr);
     action->GetNewParagraphs().AppendChild(newPara);
@@ -4813,12 +4725,7 @@ bool wxRichTextBuffer::InsertImageWithUndo(long pos, const wxRichTextImageBlock&
             p = & paraAttr;
     }
 
-#if wxRICHTEXT_USE_DYNAMIC_STYLES
     wxTextAttrEx attr(GetDefaultStyle());
-#else
-    wxTextAttrEx attr(GetBasicStyle());
-    wxRichTextApplyStyle(attr, GetDefaultStyle());
-#endif
 
     wxRichTextParagraph* newPara = new wxRichTextParagraph(this, & attr);
     if (p)
@@ -6054,13 +5961,21 @@ bool wxRichTextAction::Do()
             if (m_newParagraphs.GetPartialParagraph())
                 newCaretPosition --;
 
-            newCaretPosition = wxMin(newCaretPosition, (m_buffer->GetRange().GetEnd()-1));
-            
+            newCaretPosition = wxMin(newCaretPosition, (m_buffer->GetRange().GetEnd()-1));            
 
             if (optimizationLineCharPositions.GetCount() > 0)
                 UpdateAppearance(newCaretPosition, true /* send update event */, & optimizationLineCharPositions, & optimizationLineYPositions);
             else
                 UpdateAppearance(newCaretPosition, true /* send update event */);
+            
+            wxRichTextEvent cmdEvent(
+                wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED,
+                m_ctrl ? m_ctrl->GetId() : -1);
+            cmdEvent.SetEventObject(m_ctrl ? (wxObject*) m_ctrl : (wxObject*) m_buffer);
+            cmdEvent.SetRange(GetRange());
+            cmdEvent.SetPosition(GetRange().GetStart());
+            
+            m_buffer->SendEvent(cmdEvent);
 
             break;
         }
@@ -6072,6 +5987,15 @@ bool wxRichTextAction::Do()
 
             UpdateAppearance(GetRange().GetStart()-1, true /* send update event */);
 
+            wxRichTextEvent cmdEvent(
+                wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED,
+                m_ctrl ? m_ctrl->GetId() : -1);
+            cmdEvent.SetEventObject(m_ctrl ? (wxObject*) m_ctrl : (wxObject*) m_buffer);
+            cmdEvent.SetRange(GetRange());
+            cmdEvent.SetPosition(GetRange().GetStart());
+            
+            m_buffer->SendEvent(cmdEvent);
+
             break;
         }
     case wxRICHTEXT_CHANGE_STYLE:
@@ -6080,6 +6004,15 @@ bool wxRichTextAction::Do()
             m_buffer->Invalidate(GetRange());
 
             UpdateAppearance(GetPosition());
+
+            wxRichTextEvent cmdEvent(
+                wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED,
+                m_ctrl ? m_ctrl->GetId() : -1);
+            cmdEvent.SetEventObject(m_ctrl ? (wxObject*) m_ctrl : (wxObject*) m_buffer);
+            cmdEvent.SetRange(GetRange());
+            cmdEvent.SetPosition(GetRange().GetStart());
+            
+            m_buffer->SendEvent(cmdEvent);
 
             break;
         }
@@ -6103,10 +6036,17 @@ bool wxRichTextAction::Undo()
             m_buffer->Invalidate(wxRichTextRange(GetRange().GetStart(), GetRange().GetStart()));
 
             long newCaretPosition = GetPosition() - 1;
-            // if (m_newParagraphs.GetPartialParagraph())
-            //    newCaretPosition --;
             
             UpdateAppearance(newCaretPosition, true /* send update event */);
+
+            wxRichTextEvent cmdEvent(
+                wxEVT_COMMAND_RICHTEXT_CONTENT_DELETED,
+                m_ctrl ? m_ctrl->GetId() : -1);
+            cmdEvent.SetEventObject(m_ctrl ? (wxObject*) m_ctrl : (wxObject*) m_buffer);
+            cmdEvent.SetRange(GetRange());
+            cmdEvent.SetPosition(GetRange().GetStart());
+            
+            m_buffer->SendEvent(cmdEvent);
 
             break;
         }
@@ -6118,6 +6058,15 @@ bool wxRichTextAction::Undo()
 
             UpdateAppearance(GetPosition(), true /* send update event */);
 
+            wxRichTextEvent cmdEvent(
+                wxEVT_COMMAND_RICHTEXT_CONTENT_INSERTED,
+                m_ctrl ? m_ctrl->GetId() : -1);
+            cmdEvent.SetEventObject(m_ctrl ? (wxObject*) m_ctrl : (wxObject*) m_buffer);
+            cmdEvent.SetRange(GetRange());
+            cmdEvent.SetPosition(GetRange().GetStart());
+            
+            m_buffer->SendEvent(cmdEvent);
+
             break;
         }
     case wxRICHTEXT_CHANGE_STYLE:
@@ -6126,6 +6075,15 @@ bool wxRichTextAction::Undo()
             m_buffer->Invalidate(GetRange());
 
             UpdateAppearance(GetPosition());
+
+            wxRichTextEvent cmdEvent(
+                wxEVT_COMMAND_RICHTEXT_STYLE_CHANGED,
+                m_ctrl ? m_ctrl->GetId() : -1);
+            cmdEvent.SetEventObject(m_ctrl ? (wxObject*) m_ctrl : (wxObject*) m_buffer);
+            cmdEvent.SetRange(GetRange());
+            cmdEvent.SetPosition(GetRange().GetStart());
+            
+            m_buffer->SendEvent(cmdEvent);
 
             break;
         }

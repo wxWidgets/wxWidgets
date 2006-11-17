@@ -70,10 +70,6 @@
 #include "wx/dataobj.h"
 #endif
 
-// Experimental dynamic styles to avoid user-specific character styles from being
-// overwritten by paragraph styles.
-#define wxRICHTEXT_USE_DYNAMIC_STYLES 1
-
 /*!
  * File types
  */
