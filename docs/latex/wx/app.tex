@@ -675,12 +675,15 @@ wxWidgets.
 
 \membersection{wxApp::SetUseBestVisual}\label{wxappsetusebestvisual}
 
-\func{void}{SetUseBestVisual}{\param{bool}{ flag}}
+\func{void}{SetUseBestVisual}{\param{bool}{ flag}, \param{bool}{ forceTrueColour = false}}
 
 Allows the programmer to specify whether the application will use the best visual
 on systems that support several visual on the same display. This is typically the
 case under Solaris and IRIX, where the default visual is only 8-bit whereas certain
 applications are supposed to run in TrueColour mode.
+
+If \arg{forceTrueColour} is true then the application will try to force
+using a TrueColour visual and abort the app if none is found.
 
 Note that this function has to be called in the constructor of the {\tt wxApp} 
 instance and won't have any effect when called later on.

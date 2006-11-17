@@ -74,7 +74,10 @@ wxDEFINE_TIED_SCOPED_PTR_TYPE(wxEventLoop)
 wxAppBase::wxAppBase()
 {
     m_topWindow = (wxWindow *)NULL;
+    
     m_useBestVisual = false;
+    m_forceTrueColour = false;
+    
     m_isActive = true;
 
     m_mainLoop = NULL;

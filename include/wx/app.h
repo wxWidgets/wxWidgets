@@ -463,7 +463,8 @@ public:
     virtual bool SetDisplayMode(const wxVideoMode& WXUNUSED(info)) { return true; }
 
         // set use of best visual flag (see below)
-    void SetUseBestVisual( bool flag ) { m_useBestVisual = flag; }
+    void SetUseBestVisual( bool flag, bool forceTrueColour = false ) 
+        { m_useBestVisual = flag; m_forceTrueColour = forceTrueColour; }
     bool GetUseBestVisual() const { return m_useBestVisual; }
 
         // set/get printing mode: see wxPRINT_XXX constants.
@@ -534,6 +535,8 @@ protected:
     // true if the app wants to use the best visual on systems where
     // more than one are available (Sun, SGI, XFree86 4.0 ?)
     bool m_useBestVisual;
+    // force TrueColour just in case "best" isn't TrueColour
+    bool m_forceTrueColour;
 
     // does any of our windows have focus?
     bool m_isActive;
