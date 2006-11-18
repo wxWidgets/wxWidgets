@@ -153,13 +153,29 @@ Returns the next filename that matches parameters passed to \helpref{FindFirst}{
 
 \membersection{wxFileSystem::OpenFile}\label{wxfilesystemopenfile}
 
-\func{wxFSFile*}{OpenFile}{\param{const wxString\& }{location}}
+\func{wxFSFile*}{OpenFile}{\param{const wxString\& }{location}, \param{int }{flags = wxFS\_READ}}
 
 Opens the file and returns a pointer to a \helpref{wxFSFile}{wxfsfile} object
 or NULL if failed. It first tries to open the file in relative scope
 (based on value passed to ChangePathTo() method) and then as an
 absolute path.  Note that the user is responsible for deleting the returned
 wxFSFile.  
+
+{\it flags} can be one or more of the following bit values ored together:
+
+\begin{verbatim}
+// Open Bit Flags
+enum {
+    wxFS_READ = 1,      // Open for reading
+    wxFS_SEEKABLE = 4   // Returned stream will be seekable
+};
+\end{verbatim}
+
+A stream opened with just the default {\it wxFS\_READ} flag may
+or may not be seekable depending on the underlying source.
+Passing {\it wxFS\_READ | wxFS\_SEEKABLE} for {\it flags} will
+back a stream that is not natively seekable with memory or a file
+and return a stream that is always seekable.
 
 
 \membersection{wxFileSystem::URLToFileName}\label{wxfilesystemurltofilename}
