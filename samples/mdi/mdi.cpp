@@ -32,7 +32,8 @@
 #include "wx/toolbar.h"
 
 #if !defined(__WXMSW__)
-    #include "mondrian.xpm"
+    #include "../sample.xpm"
+    #include "chart.xpm"
 #endif
 
 #include "bitmaps/new.xpm"
