@@ -63,6 +63,10 @@ WXCURSOR_CROSS          CURSOR  DISCARDABLE     "wx/msw/cross.cur"
 // Default Icons
 //
 
+// First wx icon in alphabetical order, so it will be used by Explorer if the
+// application doesn't have any icons of its own
+wxICON_AAA                      ICON "wx/msw/std.ico"
+
 //wxDEFAULT_FRAME               ICON "wx/msw/std.ico"
 //wxDEFAULT_MDIPARENTFRAME      ICON "wx/msw/mdi.ico"
 //wxDEFAULT_MDICHILDFRAME       ICON "wx/msw/child.ico"
@@ -76,10 +80,6 @@ wxICON_SMALL_DRIVE              ICON "wx/msw/drive.ico"
 wxICON_SMALL_CDROM              ICON "wx/msw/cdrom.ico"
 wxICON_SMALL_FLOPPY             ICON "wx/msw/floppy.ico"
 wxICON_SMALL_REMOVEABLE         ICON "wx/msw/removble.ico"
-
-// Low alphabetically to make it the default, but not so low as to
-// affect applications that use 'a'
-bICON                           ICON "wx/msw/std.ico"
 
 //////////////////////////////////////////////////////////////////////////////
 //
