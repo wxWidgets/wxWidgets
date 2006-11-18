@@ -426,14 +426,10 @@ struct wxIDirectFBDisplayLayer : public wxDfbWrapper<IDirectFBDisplayLayer>
             return NULL;
     }
 
-    wxIDirectFBSurfacePtr GetSurface()
-    {
-        IDirectFBSurface *s;
-        if ( Check(m_ptr->GetSurface(m_ptr, &s)) )
-            return new wxIDirectFBSurface(s);
-        else
-            return NULL;
-    }
+    bool GetConfiguration(DFBDisplayLayerConfig *config)
+        { return Check(m_ptr->GetConfiguration(m_ptr, config)); }
+
+    wxVideoMode GetVideoMode();
 
     bool GetCursorPosition(int *x, int *y)
         { return Check(m_ptr->GetCursorPosition(m_ptr, x, y)); }

@@ -67,16 +67,11 @@ void wxApp::CleanUp()
 
 static wxVideoMode GetCurrentVideoMode()
 {
-    wxVideoMode m;
+    wxIDirectFBDisplayLayerPtr layer(wxIDirectFB::Get()->GetDisplayLayer());
+    if ( !layer )
+        return wxVideoMode(); // invalid
 
-    wxIDirectFBSurfacePtr surface(wxIDirectFB::Get()->GetPrimarySurface());
-    if ( !surface )
-        return m; // invalid
-
-    surface->GetSize(&m.w, &m.h);
-    m.bpp = surface->GetDepth();
-
-    return m;
+    return layer->GetVideoMode();
 }
 
 wxVideoMode wxApp::GetDisplayMode() const

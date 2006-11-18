@@ -98,8 +98,10 @@ void wxIDirectFB::CleanUp()
 
 wxIDirectFBSurfacePtr wxIDirectFB::GetPrimarySurface()
 {
-    wxIDirectFBDisplayLayerPtr layer(GetDisplayLayer());
-    return layer ? layer->GetSurface() : NULL;
+    DFBSurfaceDescription desc;
+    desc.flags = DSDESC_CAPS;
+    desc.caps = DSCAPS_PRIMARY;
+    return CreateSurface(&desc);
 }
 
 //-----------------------------------------------------------------------------
@@ -191,4 +193,27 @@ bool wxIDirectFBSurface::FlipToFront(const DFBRegion *region)
     // and so painting to the back buffer will never lose any previous
     // drawings:
     return Flip(region, DSFLIP_BLIT);
+}
+
+//-----------------------------------------------------------------------------
+// wxIDirectFBDisplayLayer
+//-----------------------------------------------------------------------------
+
+wxVideoMode wxIDirectFBDisplayLayer::GetVideoMode()
+{
+    DFBDisplayLayerConfig cfg;
+    if ( !GetConfiguration(&cfg) )
+        return wxVideoMode(); // invalid
+
+    if ( !((cfg.flags & DLCONF_WIDTH) &&
+           (cfg.flags & DLCONF_HEIGHT) &&
+           (cfg.flags & DLCONF_PIXELFORMAT)) )
+        return wxVideoMode(); // invalid
+
+    return wxVideoMode
+           (
+             cfg.width,
+             cfg.height,
+             DFB_BITS_PER_PIXEL(cfg.pixelformat)
+           );
 }
