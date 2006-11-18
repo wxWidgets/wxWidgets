@@ -552,6 +552,19 @@ def makeLibName(name):
     return [libname]
 
 
+def findLib(name, libdirs):
+    name = makeLibName(name)[0]
+    if os.name == 'posix':
+        dirs = libdirs + ['/usr/lib', '/usr/local/lib']
+        name = 'lib'+name
+    else:
+        dirs = libdirs[:]
+    for d in dirs:
+        p = os.path.join(d, name)
+        if glob.glob(p+'*') != []:
+            return True
+    return False
+
 
 def adjustCFLAGS(cflags, defines, includes):
     '''Extract the raw -I, -D, and -U flags and put them into

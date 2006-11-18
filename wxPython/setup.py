@@ -405,7 +405,7 @@ wxpExtensions.append(ext)
 
 
 mediaLibs = libs[:]
-if not MONOLITHIC:
+if not MONOLITHIC and findLib('media', libdirs):
     mediaLibs += makeLibName('media')
 swig_sources = run_swig(['media.i'], 'src', GENDIR, PKGDIR,
                         USE_SWIG, swig_force, swig_args, swig_deps)
@@ -459,7 +459,8 @@ swig_sources = run_swig(['xrc.i'], 'src', GENDIR, PKGDIR,
                           'src/_xml.i',
                           'src/_xmlhandler.i',
                           ])
-if not MONOLITHIC:
+
+if not MONOLITHIC and findLib('xrc', libdirs):
     xrcLib = makeLibName('xrc')
 else:
     xrcLib = []
@@ -481,7 +482,7 @@ wxpExtensions.append(ext)
 
 swig_sources = run_swig(['richtext.i'], 'src', GENDIR, PKGDIR,
                         USE_SWIG, swig_force, swig_args, swig_deps)
-if not MONOLITHIC:
+if not MONOLITHIC and findLib('richtext', libdirs):
     richLib = makeLibName('richtext')
 else:
     richLib = []
@@ -507,7 +508,7 @@ swig_sources = run_swig(['aui.i'], 'src', GENDIR, PKGDIR,
                                      opj(WXDIR, 'include/wx/aui/dockart.h'),
                                      opj(WXDIR, 'include/wx/aui/auibook.h'),
                                      ])
-if not MONOLITHIC:
+if not MONOLITHIC and findLib('aui', libdirs):
     auiLib = makeLibName('aui')
 else:
     auiLib = []
