@@ -1116,7 +1116,7 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
     wxString name = GetParamValue(param);
     if (name.empty()) return wxNullBitmap;
 #if wxUSE_FILESYSTEM
-    wxFSFile *fsfile = GetCurFileSystem().OpenFile(name);
+    wxFSFile *fsfile = GetCurFileSystem().OpenFile(name, wxFS_READ | wxFS_SEEKABLE);
     if (fsfile == NULL)
     {
         wxLogError(_("XRC resource: Cannot create bitmap from '%s'."),
@@ -1148,7 +1148,7 @@ wxAnimation wxXmlResourceHandler::GetAnimation(const wxString& param)
     wxString name = GetParamValue(param);
     if (name.empty()) return wxNullAnimation;
 #if wxUSE_FILESYSTEM
-    wxFSFile *fsfile = GetCurFileSystem().OpenFile(name);
+    wxFSFile *fsfile = GetCurFileSystem().OpenFile(name, wxFS_READ | wxFS_SEEKABLE);
     if (fsfile == NULL)
     {
         wxLogError(_("XRC resource: Cannot create animation from '%s'."),
