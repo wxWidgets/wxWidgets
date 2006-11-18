@@ -105,7 +105,7 @@ public:
     wxAnimation GetAnimation() const
         { return m_animation; }
 
-    void SetInactiveBitmap(const wxBitmap &bmp);
+    virtual void SetInactiveBitmap(const wxBitmap &bmp);
 
     // override base class method
     virtual bool SetBackgroundColour(const wxColour& col);
@@ -146,11 +146,11 @@ protected:      // internal utilities
     void DisposeToBackground(wxDC& dc);
     void DisposeToBackground(wxDC& dc, const wxPoint &pos, const wxSize &sz);
 
-    void UpdateBackingStoreWithStaticImage();
     void IncrementalUpdateBackingStore();
     bool RebuildBackingStoreUpToFrame(size_t);
     void DrawFrame(wxDC &dc, size_t);
 
+    virtual void DisplayStaticImage();
     virtual wxSize DoGetBestSize() const;
 
 protected:

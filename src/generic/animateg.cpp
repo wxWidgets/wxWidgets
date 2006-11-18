@@ -333,7 +333,7 @@ void wxAnimationCtrl::SetAnimation(const wxAnimation& animation)
     m_animation = animation;
     if (!m_animation.IsOk())
     {
-        UpdateBackingStoreWithStaticImage();
+        DisplayStaticImage();
         return;
     }
 
@@ -342,13 +342,11 @@ void wxAnimationCtrl::SetAnimation(const wxAnimation& animation)
     if (!this->HasFlag(wxAC_NO_AUTORESIZE))
         FitToAnimation();
 
-    UpdateBackingStoreWithStaticImage();
+    DisplayStaticImage();
 }
 
 void wxAnimationCtrl::SetInactiveBitmap(const wxBitmap &bmp)
 {
-    m_bmpStatic = bmp;
-
     // if the bitmap has an associated mask, we need to set our background to
     // the colour of our parent otherwise when calling DrawCurrentFrame()
     // (which uses the bitmap's mask), our background colour would be used for
@@ -357,9 +355,7 @@ void wxAnimationCtrl::SetInactiveBitmap(const wxBitmap &bmp)
     if ( bmp.GetMask() != NULL && GetParent() != NULL )
         SetBackgroundColour(GetParent()->GetBackgroundColour());
 
-    // if not playing, update the backing store now
-    if ( !IsPlaying() )
-        UpdateBackingStoreWithStaticImage();
+    wxAnimationCtrlBase::SetInactiveBitmap(bmp);
 }
 
 void wxAnimationCtrl::FitToAnimation()
@@ -375,7 +371,7 @@ bool wxAnimationCtrl::SetBackgroundColour(const wxColour& colour)
     // if not playing, then this change must be seen immediately (unless
     // there's an inactive bitmap set which has higher priority than bg colour)
     if ( !IsPlaying() )
-        UpdateBackingStoreWithStaticImage();
+        DisplayStaticImage();
 
     return true;
 }
@@ -393,7 +389,7 @@ void wxAnimationCtrl::Stop()
     // reset frame counter
     m_currentFrame = 0;
 
-    UpdateBackingStoreWithStaticImage();
+    DisplayStaticImage();
 }
 
 bool wxAnimationCtrl::Play(bool looped)
@@ -526,23 +522,26 @@ void wxAnimationCtrl::IncrementalUpdateBackingStore()
     dc.SelectObject(wxNullBitmap);
 }
 
-void wxAnimationCtrl::UpdateBackingStoreWithStaticImage()
+void wxAnimationCtrl::DisplayStaticImage()
 {
     wxASSERT(!IsPlaying());
 
-    if (m_bmpStatic.IsOk())
+    // m_bmpStaticReal will be updated only if necessary...
+    UpdateStaticImage();
+
+    if (m_bmpStaticReal.IsOk())
     {
         // copy the inactive bitmap in the backing store
         // eventually using the mask if the static bitmap has one
-        if ( m_bmpStatic.GetMask() )
+        if ( m_bmpStaticReal.GetMask() )
         {
             wxMemoryDC temp;
             temp.SelectObject(m_backingStore);
             DisposeToBackground(temp);
-            temp.DrawBitmap(m_bmpStatic, 0, 0, true /* use mask */);
+            temp.DrawBitmap(m_bmpStaticReal, 0, 0, true /* use mask */);
         }
         else
-            m_backingStore = m_bmpStatic;
+            m_backingStore = m_bmpStaticReal;
     }
     else
     {

@@ -325,35 +325,29 @@ void wxAnimationCtrl::Stop()
     DisplayStaticImage();
 }
 
-void wxAnimationCtrl::SetInactiveBitmap(const wxBitmap &bmp)
-{
-    m_bmpStatic = bmp;
-
-    // update the pixbuf associated with m_widget now...
-    if (!IsPlaying())
-        DisplayStaticImage();
-}
-
 void wxAnimationCtrl::DisplayStaticImage()
 {
     wxASSERT(!IsPlaying());
 
-    if (m_bmpStatic.IsOk())
+    // m_bmpStaticReal will be updated only if necessary...
+    UpdateStaticImage();
+
+    if (m_bmpStaticReal.IsOk())
     {
         // show inactive bitmap
         GdkBitmap *mask = (GdkBitmap *) NULL;
-        if (m_bmpStatic.GetMask())
-            mask = m_bmpStatic.GetMask()->GetBitmap();
+        if (m_bmpStaticReal.GetMask())
+            mask = m_bmpStaticReal.GetMask()->GetBitmap();
 
-        if (m_bmpStatic.HasPixbuf())
+        if (m_bmpStaticReal.HasPixbuf())
         {
             gtk_image_set_from_pixbuf(GTK_IMAGE(m_widget),
-                                        m_bmpStatic.GetPixbuf());
+                                      m_bmpStaticReal.GetPixbuf());
         }
         else
         {
             gtk_image_set_from_pixmap(GTK_IMAGE(m_widget),
-                                        m_bmpStatic.GetPixmap(), mask);
+                                      m_bmpStaticReal.GetPixmap(), mask);
         }
     }
     else

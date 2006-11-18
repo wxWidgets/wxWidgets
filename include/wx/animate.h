@@ -82,12 +82,25 @@ public:     // public API
 
     virtual bool IsPlaying() const = 0;
 
-    virtual void SetInactiveBitmap(const wxBitmap &bmp) = 0;
+    virtual void SetInactiveBitmap(const wxBitmap &bmp);
+
+    // always return the original bitmap set in this control
     wxBitmap GetInactiveBitmap() const
         { return m_bmpStatic; }
 
 protected:
+    // the inactive bitmap as it was set by the user
     wxBitmap m_bmpStatic;
+
+    // the inactive bitmap currently shown in the control
+    // (may differ in the size from m_bmpStatic)
+    wxBitmap m_bmpStaticReal;
+
+    // updates m_bmpStaticReal from m_bmpStatic if needed
+    virtual void UpdateStaticImage();
+
+    // called by SetInactiveBitmap
+    virtual void DisplayStaticImage() = 0;
 
 private:
     DECLARE_ABSTRACT_CLASS(wxAnimationCtrlBase)

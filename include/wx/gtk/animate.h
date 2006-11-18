@@ -124,14 +124,13 @@ public:     // public API
     virtual bool IsPlaying() const;
 
     bool SetBackgroundColour( const wxColour &colour );
-    void SetInactiveBitmap(const wxBitmap &bmp);
 
 protected:
 
+    virtual void DisplayStaticImage();
     virtual wxSize DoGetBestSize() const;
     void FitToAnimation();
     void ClearToBackgroundColour();
-    void DisplayStaticImage();
 
     void ResetAnim();
     void ResetIter();
