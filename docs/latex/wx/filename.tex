@@ -19,6 +19,39 @@ Second, it includes the functions for working with the files itself. Note that
 to change the file data you should use \helpref{wxFile}{wxfile} class instead.
 wxFileName provides functions for working with the file attributes.
 
+When working with directory names (i.e. without filename and extension)
+make sure not to misuse the file name part of this class with the last
+directory. Instead initialize the wxFileName instance like this:
+
+\begin{verbatim}
+wxFileName dirname( wxT("C:\mydir"), wxEmptyString );
+MyMethod( dirname.GetPath() );
+\end{verbatim}
+
+Accordingly, methods dealing with directories or directory names
+like \helpref{IsDirReadable}{wxfilenameisdirreadale} use
+\helpref{GetPath}{wxfilenamegetpath} whereas methods dealing 
+with file names like \helpref{IsFileReadable}{wxfilenameisfilereadale}
+use \helpref{GetFullPath}{wxfilenamegetfullpath}.
+
+If it is not known wether a string contains a directory name or
+a complete file name (such as when interpreting user input) you need to use
+the static function \helpref{wxFileName::DirExists}{wxfilenamedirexists}
+(or its global variant \helpref{wxDirExists}{wxdirexists}) and
+construct the wxFileName instance accordingly. This will only work
+if the directory actually exists, of course:
+
+\begin{verbatim}
+wxString user_input;
+// get input from user
+
+wxFileName fname;
+if (wxDirExists(user_input))
+    fname.AssignDir( user_input );
+else
+    fname.Assign( user_input );
+\end{verbatim}
+
 \wxheading{Derived from}
 
 No base class
@@ -574,6 +607,12 @@ to. Finally, the creation time is indeed the time when the file was created
 under Windows and the inode change time under Unix (as it is impossible to
 retrieve the real file creation time there anyhow) which can also be changed
 by many operations after the file creation.
+
+If no filename or extension is specified in this instance of wxFileName
+(and therefore \helpref{IsDir}{wxfilenameisdir} returns {\tt true}) then
+this function will return the directory times of the path specified by
+\helpref{GetPath}{wxfilenamegetpath}, otherwise the file times of the
+file specified by \helpref{GetFullPath}{wxfilenamegetfullpath}.
 
 Any of the pointers may be {\tt NULL} if the corresponding time is not
 needed.

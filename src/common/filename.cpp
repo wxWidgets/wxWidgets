@@ -2216,7 +2216,7 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
     // not 9x
     bool ok;
     FILETIME ftAccess, ftCreate, ftWrite;
-    if ( DirExists() ) // Don't use IsDir, because it returns false even if it's a directory
+    if ( IsDir() ) 
     {
         // implemented in msw/dir.cpp
         extern bool wxGetDirectoryTimes(const wxString& dirname,
@@ -2255,6 +2255,7 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
         return true;
     }
 #elif defined(__UNIX_LIKE__) || defined(__WXMAC__) || defined(__OS2__) || (defined(__DOS__) && defined(__WATCOMC__))
+    // no need to test for IsDir() here
     wxStructStat stBuf;
     if ( wxStat( GetFullPath().c_str(), &stBuf) == 0 )
     {
