@@ -1369,7 +1369,7 @@ class wxPythonDemo(wx.Frame):
         filter = self.filter.GetValue()
         for category, items in _treeList:
             if filter:
-                items = [item for item in items if filter in item.lower()]
+                items = [item for item in items if filter.lower() in item.lower()]
             if items:
                 child = self.tree.AppendItem(self.root, category)
                 if not firstChild: firstChild = child
