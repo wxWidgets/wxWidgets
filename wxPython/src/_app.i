@@ -228,7 +228,7 @@ explicitly from somewhere.", "");
     
     
     DocDeclStr(
-        void, SetUseBestVisual( bool flag ),
+        void, SetUseBestVisual( bool flag, bool forceTrueColour = false  ),
         "Set whether the app should try to use the best available visual on
 systems where more than one is available, (Sun, SGI, XFree86 4, etc.)", "");
     
