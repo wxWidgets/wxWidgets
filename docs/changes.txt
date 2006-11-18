@@ -81,7 +81,7 @@ Major new features in 2.8 release
   comboboxes. Associated classes include wxOwnerDrawnComboBox, wxComboPopup
   and wxBitmapComboBox.
 - Further functionality including wxAnimationCtrl (moved from contrib/src/anim
-  and enhanced), wxHtmlSimpleListBox, wxHyperlinkCtrl, wxColourPickerCtrl,
+  and enhanced), wxSimpleHtmlListBox, wxHyperlinkCtrl, wxColourPickerCtrl,
   wxDirPickerCtrl, wxFilePickerCtrl, wxFontPickerCtrl, wxCollapsiblePane,
   wxAboutBox, wxTreebook, tar streams.
 
