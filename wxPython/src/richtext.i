@@ -1525,8 +1525,6 @@ flag.", "");
 //----------------------------------------------------------------------
 
 
-%constant wxEventType wxEVT_COMMAND_RICHTEXT_ITEM_SELECTED;
-%constant wxEventType wxEVT_COMMAND_RICHTEXT_ITEM_DESELECTED;
 %constant wxEventType wxEVT_COMMAND_RICHTEXT_LEFT_CLICK;
 %constant wxEventType wxEVT_COMMAND_RICHTEXT_RIGHT_CLICK;
 %constant wxEventType wxEVT_COMMAND_RICHTEXT_MIDDLE_CLICK;
@@ -1536,10 +1534,10 @@ flag.", "");
 %constant wxEventType wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED;
 %constant wxEventType wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING;
 %constant wxEventType wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED;
+%constant wxEventType wxEVT_COMMAND_RICHTEXT_CHARACTER;
+%constant wxEventType wxEVT_COMMAND_RICHTEXT_DELETE;
 
 %pythoncode {
-EVT_RICHTEXT_ITEM_SELECTED = wx.PyEventBinder(wxEVT_COMMAND_RICHTEXT_ITEM_SELECTED, 1)
-EVT_RICHTEXT_ITEM_DESELECTED = wx.PyEventBinder(wxEVT_COMMAND_RICHTEXT_ITEM_DESELECTED, 1)
 EVT_RICHTEXT_LEFT_CLICK = wx.PyEventBinder(wxEVT_COMMAND_RICHTEXT_LEFT_CLICK, 1)
 EVT_RICHTEXT_RIGHT_CLICK = wx.PyEventBinder(wxEVT_COMMAND_RICHTEXT_RIGHT_CLICK, 1)
 EVT_RICHTEXT_MIDDLE_CLICK = wx.PyEventBinder(wxEVT_COMMAND_RICHTEXT_MIDDLE_CLICK, 1)
@@ -1549,6 +1547,8 @@ EVT_RICHTEXT_STYLESHEET_CHANGING = wx.PyEventBinder( wxEVT_COMMAND_RICHTEXT_STYL
 EVT_RICHTEXT_STYLESHEET_CHANGED = wx.PyEventBinder( wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED, 1)
 EVT_RICHTEXT_STYLESHEET_REPLACING = wx.PyEventBinder( wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING, 1)
 EVT_RICHTEXT_STYLESHEET_REPLACED = wx.PyEventBinder( wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED, 1)
+EVT_RICHTEXT_CHARACTER = wx.PyEventBinder( wxEVT_COMMAND_RICHTEXT_CHARACTER, 1)
+EVT_RICHTEXT_DELETE = wx.PyEventBinder( wxEVT_COMMAND_RICHTEXT_DELETE, 1)
 }
 
 
@@ -1557,14 +1557,14 @@ class wxRichTextEvent : public wxNotifyEvent
 public:
     wxRichTextEvent(wxEventType commandType = wxEVT_NULL, int winid = 0);
 
-    int GetIndex() const;
-    void SetIndex(int n);
+    int GetPosition() const;
+    void SetPosition(int n);
 
     int GetFlags() const;
     void SetFlags(int flags);
 
     %property(Flags, GetFlags, SetFlags, doc="See `GetFlags` and `SetFlags`");
-    %property(Index, GetIndex, SetIndex, doc="See `GetIndex` and `SetIndex`");
+    %property(Index, GetPosition, SetPosition, doc="See `GetPosition` and `SetPosition`");
 };
 
 //----------------------------------------------------------------------
