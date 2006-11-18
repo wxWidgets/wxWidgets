@@ -11,7 +11,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 %define DOCSTRING
-"ComboCtrl class that can have any type ofconst wxBitmap& bitmap,  popup widget, and also an
+"ComboCtrl class that can have any type of popup widget, and also an
 owner-drawn combobox control."
 %enddef
 
@@ -1100,7 +1100,7 @@ if not None.  The return value is the index of the newly added item.", "");
     
     
     DocDeclStr(
-        virtual wxBitmap , GetItemBitmap(unsigned int n) const,
+        virtual wxBitmap , GetItemBitmap(/*unsigned*/ int n) const,
         "Returns the image of the item with the given index.", "");
 
     
@@ -1109,7 +1109,7 @@ if not None.  The return value is the index of the newly added item.", "");
                "Insert an item into the control before the item at the ``pos`` index,
 optionally associating some data object with the item.", "");
         int Insert(const wxString& item, const wxBitmap& bitmap,
-                   unsigned int pos, PyObject* clientData=NULL) {
+                   /*unsigned*/ int pos, PyObject* clientData=NULL) {
             if (clientData) {
                 wxPyClientData* data = new wxPyClientData(clientData);
                 return self->Insert(item, bitmap, pos, data);
@@ -1120,7 +1120,7 @@ optionally associating some data object with the item.", "");
 
     
     DocDeclStr(
-        virtual void , SetItemBitmap(unsigned int n, const wxBitmap& bitmap),
+        virtual void , SetItemBitmap(/*unsigned*/ int n, const wxBitmap& bitmap),
         "Sets the image for the given item.", "");
     
 
