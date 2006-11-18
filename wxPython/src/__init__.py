@@ -23,8 +23,10 @@ __all__ = [
     'tools',
 
     # other modules
+    'animate',
     'aui',
     'calendar',
+    'combo',
     'grid',
     'html',
     'media',
@@ -34,7 +36,6 @@ __all__ = [
     'xrc',
 
     # contribs (need a better way to find these...)
-    'animate',
     'gizmos',
     'glcanvas',
     'stc',
