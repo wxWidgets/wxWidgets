@@ -2249,6 +2249,7 @@ void wxRichTextCtrl::DoSetSelection(long from, long to, bool WXUNUSED(scrollCare
 {
     m_selectionAnchor = from;
     m_selectionRange.SetRange(from, to-1);
+    m_caretPosition = from-1;
 
     Refresh(false);
     PositionCaret();
@@ -3096,6 +3097,12 @@ bool wxRichTextCtrl::PromoteList(int promoteBy, const wxRichTextRange& range, wx
 bool wxRichTextCtrl::PromoteList(int promoteBy, const wxRichTextRange& range, const wxString& defName, int flags, int specifiedLevel)
 {
     return GetBuffer().PromoteList(promoteBy, range.ToInternal(), defName, flags, specifiedLevel);
+}
+
+/// Deletes the content in the given range
+bool wxRichTextCtrl::Delete(const wxRichTextRange& range)
+{
+    return GetBuffer().DeleteRangeWithUndo(range.ToInternal(), this);
 }
 
 const wxArrayString& wxRichTextCtrl::GetAvailableFontNames()

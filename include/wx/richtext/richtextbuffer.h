@@ -1844,7 +1844,7 @@ public:
     bool InsertImageWithUndo(long pos, const wxRichTextImageBlock& imageBlock, wxRichTextCtrl* ctrl, int flags = 0);
 
     /// Submit command to delete this range
-    bool DeleteRangeWithUndo(const wxRichTextRange& range, long initialCaretPosition, long newCaretPositon, wxRichTextCtrl* ctrl);
+    bool DeleteRangeWithUndo(const wxRichTextRange& range, wxRichTextCtrl* ctrl);
 
     /// Mark modified
     void Modify(bool modify = true) { m_modified = modify; }

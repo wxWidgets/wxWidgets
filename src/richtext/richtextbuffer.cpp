@@ -4810,11 +4810,11 @@ wxRichTextAttr wxRichTextBuffer::GetStyleForNewParagraph(long pos, bool caretPos
 }
 
 /// Submit command to delete this range
-bool wxRichTextBuffer::DeleteRangeWithUndo(const wxRichTextRange& range, long initialCaretPosition, long WXUNUSED(newCaretPositon), wxRichTextCtrl* ctrl)
+bool wxRichTextBuffer::DeleteRangeWithUndo(const wxRichTextRange& range, wxRichTextCtrl* ctrl)
 {
     wxRichTextAction* action = new wxRichTextAction(NULL, _("Delete"), wxRICHTEXT_DELETE, this, ctrl);
 
-    action->SetPosition(initialCaretPosition);
+    action->SetPosition(ctrl->GetCaretPosition());
 
     // Set the range to delete
     action->SetRange(range);
