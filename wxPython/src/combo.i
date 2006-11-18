@@ -61,7 +61,9 @@ enum
 };
 
 
-// Namespace for wxComboCtrl feature flags
+DocStr( wxComboCtrlFeatures,
+        "Namespace for `wx.combo.ComboCtrl` feature flags.  See
+`wx.combo.ComboCtrl.GetFeatures`.", "");
 struct wxComboCtrlFeatures
 {
     enum
@@ -122,6 +124,23 @@ public:
             wxComboCtrl::DoSetPopupControl(popup);
     }
 
+    virtual bool IsKeyPopupToggle( const wxKeyEvent& event ) const
+    {
+        bool found;
+        bool rval = false;
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
+        if ((found = wxPyCBH_findCallback(m_myInst, "OnComboKeyEvent"))) {
+            PyObject* oevt = wxPyConstructObject((void*)&event, wxT("wxKeyEvent"), 0);
+            rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", oevt));
+            Py_DECREF(oevt);
+        }
+        wxPyEndBlockThreads(blocked);
+        if (! found)
+            rval = wxComboCtrl::IsKeyPopupToggle(event);
+        return rval;
+    }
+
+
     enum
     {
         ShowBelow       = 0x0000,  // Showing popup below the control
@@ -130,6 +149,8 @@ public:
     };
 
 
+    DEC_PYCALLBACK_VOID_(ShowPopup);
+    DEC_PYCALLBACK_VOID_(HidePopup);
     DEC_PYCALLBACK_VOID_(OnButtonClick);
     DEC_PYCALLBACK__RECTINT(DoShowPopup);
     DEC_PYCALLBACK_BOOL_RECTINT(AnimateShow);
@@ -139,6 +160,8 @@ public:
 
 IMPLEMENT_ABSTRACT_CLASS(wxPyComboCtrl, wxComboCtrl);
 
+IMP_PYCALLBACK_VOID_(wxPyComboCtrl, wxComboCtrl, ShowPopup);
+IMP_PYCALLBACK_VOID_(wxPyComboCtrl, wxComboCtrl, HidePopup);
 IMP_PYCALLBACK_VOID_(wxPyComboCtrl, wxComboCtrl, OnButtonClick);
 IMP_PYCALLBACK__RECTINT(wxPyComboCtrl, wxComboCtrl, DoShowPopup);
 IMP_PYCALLBACK_BOOL_RECTINT(wxPyComboCtrl, wxComboCtrl, AnimateShow);
@@ -148,6 +171,39 @@ IMP_PYCALLBACK_BOOL_RECTINT(wxPyComboCtrl, wxComboCtrl, AnimateShow);
 
 
 // Now declare wxPyComboCtrl for Python
+
+DocStr(wxPyComboCtrl,
+"A combo control is a generic combobox that allows for a totally custom
+popup. In addition it has other customization features. For instance,
+position and size of the dropdown button can be changed.
+
+To specify what to use for the popup control you need to derive a
+class from `wx.combo.ComboPopup` and pass it to the ComboCtrl with
+`SetPopupControl`.  It doesn't derive from any widget class so it can
+be used either as a mixin class combined with some standard or custom
+widget, or you can use the derived ComboPopup to create and hold an
+independent reference to the widget to be used for the popup.
+", "
+Window Styles
+-------------
+    ====================   ============================================
+    wx.CB_READONLY         Text will not be editable.
+    wx.CB_SORT             Sorts the entries in the list alphabetically.
+    wx.TE_PROCESS_ENTER    The control will generate the event
+                           EVT_TEXT_ENTER (otherwise pressing Enter key
+                           is either processed internally by the control
+                           or used for navigation between dialog controls).
+    wx.CC_SPECIAL_DCLICK   Double-clicking triggers a call to popup's
+                           OnComboDoubleClick. Actual behaviour is defined
+                           by a derived class. For instance,
+                           OwnerDrawnComboBox will cycle an item. This
+                           style only applies if wx.CB_READONLY is used
+                           as well.
+    wx.CC_STD_BUTTON       Drop button will behave more like a standard
+                           push button.
+    ====================   ============================================
+");
+
 MustHaveApp(wxPyComboCtrl);
 %rename(ComboCtrl) wxPyComboCtrl;
 
@@ -157,59 +213,98 @@ public:
     %pythonAppend wxPyComboCtrl      "self._setOORInfo(self);" setCallbackInfo(ComboCtrl)
     %pythonAppend wxPyComboCtrl()    "";
 
-    wxPyComboCtrl(wxWindow *parent,
-                  wxWindowID id = wxID_ANY,
-                  const wxString& value = wxEmptyString,
-                  const wxPoint& pos = wxDefaultPosition,
-                  const wxSize& size = wxDefaultSize,
-                  long style = 0,
-                  const wxValidator& validator = wxDefaultValidator,
-                  const wxString& name = wxPyComboBoxNameStr);
+    DocCtorStr(
+        wxPyComboCtrl(wxWindow *parent,
+                      wxWindowID id = wxID_ANY,
+                      const wxString& value = wxEmptyString,
+                      const wxPoint& pos = wxDefaultPosition,
+                      const wxSize& size = wxDefaultSize,
+                      long style = 0,
+                      const wxValidator& validator = wxDefaultValidator,
+                      const wxString& name = wxPyComboBoxNameStr),
+        "", "");
 
-    %RenameCtor(PreComboCtrl, wxPyComboCtrl());
+    DocCtorStrName(
+        wxPyComboCtrl(),
+        "", "",
+        PreComboCtrl);
+
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
-    // show/hide popup window
-    virtual void ShowPopup();
-    virtual void HidePopup();
+    DocDeclStr(
+        virtual void , ShowPopup(),
+        "Show the popup window.", "");
+
+    DocDeclStr(
+        virtual void , HidePopup(),
+        "Dismisses the popup window.", "");
+
 
     // Override for totally custom combo action
-    virtual void OnButtonClick();
+    DocDeclStr(
+        virtual void , OnButtonClick(),
+        "Implement in a derived class to define what happens on dropdown button
+click.  Default action is to show the popup. ", "");
+
 
     // return true if the popup is currently shown
-    bool IsPopupShown() const;
+    DocDeclStr(
+        bool , IsPopupShown() const,
+        "Returns true if the popup is currently shown.", "");
 
 
-    // set interface class instance derived from wxComboPopup
-    // NULL popup can be used to indicate default in a derived class
     %disownarg(wxPyComboPopup* popup);
-    void SetPopupControl( wxPyComboPopup* popup );
+    DocDeclStr(
+        void , SetPopupControl( wxPyComboPopup* popup ),
+        "Set popup interface class derived from `wx.combo.ComboPopup`. This
+method should be called as soon as possible after the control has been
+created, unless `OnButtonClick` has been overridden.", "");
     %cleardisown(wxPyComboPopup* popup);
 
 
-    // get interface class instance derived from wxComboPopup
-    wxPyComboPopup* GetPopupControl();
+    DocDeclStr(
+        wxPyComboPopup* , GetPopupControl(),
+        "Returns the current popup interface that has been set with
+`SetPopupControl`.", "");
 
-    // get the popup window containing the popup control
-    wxWindow *GetPopupWindow() const;
 
-    // Get the text control which is part of the combobox.
-    wxTextCtrl *GetTextCtrl() const;
+    DocDeclStr(
+        wxWindow *, GetPopupWindow() const,
+        "Returns the popup window containing the popup control.", "");
 
-    // get the dropdown button which is part of the combobox
-    // note: its not necessarily a wxButton or wxBitmapButton
-    wxWindow *GetButton() const;
 
-    // forward these methods to all subcontrols
-    virtual bool Enable(bool enable = true);
-    virtual bool Show(bool show = true);
-    virtual bool SetFont(const wxFont& font);
+    DocDeclStr(
+        wxTextCtrl *, GetTextCtrl() const,
+        "Get the text control which is part of the combo control.", "");
+
+
+   DocDeclStr(
+        wxWindow *, GetButton() const,
+        "Get the dropdown button which is part of the combobox.  Note: it's not
+necessarily a wx.Button or wx.BitmapButton.", "");
+
+
+//     // forward these methods to all subcontrols
+//     virtual bool Enable(bool enable = true);
+//     virtual bool Show(bool show = true);
+//     virtual bool SetFont(const wxFont& font);
 
     // wxTextCtrl methods - for readonly combo they should return
     // without errors.
-    virtual wxString GetValue() const;
-    virtual void SetValue(const wxString& value);
+
+    DocDeclStr(
+        virtual wxString , GetValue() const,
+        "Returns text representation of the current value. For writable combo
+control it always returns the value in the text field.", "");
+
+    DocDeclStr(
+        virtual void , SetValue(const wxString& value),
+        "Sets the text for the combo control text field.  For a combo control
+with wx.CB_READONLY style the string must be accepted by the popup (for
+instance, exist in the dropdown list), otherwise the call to
+SetValue is ignored.", "");
+
     virtual void Copy();
     virtual void Cut();
     virtual void Paste();
@@ -223,116 +318,129 @@ public:
 
     %Rename(SetMark, void , SetSelection(long from, long to));
 
-    // This method sets the text without affecting list selection
-    // (ie. wxComboPopup::SetStringValue doesn't get called).
-    void SetText(const wxString& value);
 
-    // This method sets value and also optionally sends EVT_TEXT
-    // (needed by combo popups)
-    void SetValueWithEvent(const wxString& value, bool withEvent = true);
+    DocDeclStr(
+        void , SetText(const wxString& value),
+        "Sets the text for the text field without affecting the popup. Thus,
+unlike `SetValue`, it works equally well with combo control using
+wx.CB_READONLY style.", "");
+
+
+    DocDeclStr(
+        void , SetValueWithEvent(const wxString& value, bool withEvent = true),
+        "Same as `SetValue`, but also sends a EVT_TEXT event if withEvent is true.", "");
+
 
     //
     // Popup customization methods
     //
 
-    // Sets minimum width of the popup. If wider than combo control, it will
-    // extend to the left.
-    // Remarks:
-    // * Value -1 indicates the default.
-    // * Custom popup may choose to ignore this (wxOwnerDrawnComboBox does not).
-    void SetPopupMinWidth( int width );
+    DocDeclStr(
+        void , SetPopupMinWidth( int width ),
+        "Sets minimum width of the popup. If wider than combo control, it will
+extend to the left.  A value of -1 indicates to use the default.  The
+popup implementation may choose to ignore this.", "");
 
-    // Sets preferred maximum height of the popup.
-    // Remarks:
-    // * Value -1 indicates the default.
-    // * Custom popup may choose to ignore this (wxOwnerDrawnComboBox does not).
-    void SetPopupMaxHeight( int height );
 
-    // Extends popup size horizontally, relative to the edges of the combo control.
-    // Remarks:
-    // * Popup minimum width may override extLeft (ie. it has higher precedence).
-    // * Values 0 indicate default.
-    // * Custom popup may not take this fully into account (wxOwnerDrawnComboBox takes).
-    void SetPopupExtents( int extLeft, int extRight );
+    DocDeclStr(
+        void , SetPopupMaxHeight( int height ),
+        "Sets preferred maximum height of the popup. A value of -1 indicates to
+use the default.  The popup implementation may choose to ignore this.", "");
 
-    // Set width, in pixels, of custom paint area in writable combo.
-    // In read-only, used to indicate area that is not covered by the
-    // focus rectangle (which may or may not be drawn, depending on the
-    // popup type).
-    void SetCustomPaintWidth( int width );
+
+    DocDeclStr(
+        void , SetPopupExtents( int extLeft, int extRight ),
+        "Extends popup size horizontally, relative to the edges of the combo
+control.  Values are given in pixels, and the defaults are zero.  It
+is up to th epopup to fully take these values into account.", "");
+
+
+    DocDeclStr(
+        void , SetCustomPaintWidth( int width ),
+        "Set width, in pixels, of custom painted area in control without
+wx.CB_READONLY style. In read-only OwnerDrawnComboBox, this is used
+to indicate the area that is not covered by the focus rectangle.", "");
+
     int GetCustomPaintWidth() const;
 
-    // Set side of the control to which the popup will align itself.
-    // Valid values are wxLEFT, wxRIGHT and 0. The default value 0 means
-    // that the side of the button will be used.
-    void SetPopupAnchor( int anchorSide );
 
-    // Set position of dropdown button.
-    //   width: button width. <= 0 for default.
-    //   height: button height. <= 0 for default.
-    //   side: wxLEFT or wxRIGHT, indicates on which side the button will be placed.
-    //   spacingX: empty space on sides of the button. Default is 0.
-    // Remarks:
-    //   There is no spacingY - the button will be centered vertically.
-    void SetButtonPosition( int width = -1,
-                            int height = -1,
-                            int side = wxRIGHT,
-                            int spacingX = 0 );
+    DocDeclStr(
+        void , SetPopupAnchor( int anchorSide ),
+        "Set side of the control to which the popup will align itself. Valid
+values are wx.LEFT, wx.RIGHT and 0. The default value 0 means that the
+most appropriate side is used (which, currently, is always wx.LEFT).", "");
 
-    // Returns current size of the dropdown button.
-    wxSize GetButtonSize();
 
-    //
-    // Sets dropbutton to be drawn with custom bitmaps.
-    //
-    //  bmpNormal: drawn when cursor is not on button
-    //  pushButtonBg: Draw push button background below the image.
-    //                NOTE! This is usually only properly supported on platforms with appropriate
-    //                      method in wxRendererNative.
-    //  bmpPressed: drawn when button is depressed
-    //  bmpHover: drawn when cursor hovers on button. This is ignored on platforms
-    //            that do not generally display hover differently.
-    //  bmpDisabled: drawn when combobox is disabled.
-    void SetButtonBitmaps( const wxBitmap& bmpNormal,
-                           bool pushButtonBg = false,
-                           const wxBitmap& bmpPressed = wxNullBitmap,
-                           const wxBitmap& bmpHover = wxNullBitmap,
-                           const wxBitmap& bmpDisabled = wxNullBitmap );
+    DocDeclStr(
+        void , SetButtonPosition( int width = -1,
+                                  int height = -1,
+                                  int side = wxRIGHT,
+                                  int spacingX = 0 ),
+        "Set the position of the dropdown button.", "");
 
-    //
-    // This will set the space in pixels between left edge of the control and the
-    // text, regardless whether control is read-only (ie. no wxTextCtrl) or not.
-    // Platform-specific default can be set with value-1.
-    // Remarks
-    // * This method may do nothing on some native implementations.
-    void SetTextIndent( int indent );
 
-    // Returns actual indentation in pixels.
-    wxCoord GetTextIndent() const;
+    DocDeclStr(
+        wxSize , GetButtonSize(),
+        "Returns current size of the dropdown button.", "");
 
-    // Returns area covered by the text field.
-    const wxRect& GetTextRect() const;
 
-    // Call with enable as true to use a type of popup window that guarantees ability
-    // to focus the popup control, and normal function of common native controls.
-    // This alternative popup window is usually a wxDialog, and as such it's parent
-    // frame will appear as if the focus has been lost from it.
-    void UseAltPopupWindow( bool enable = true );
+    DocDeclStr(
+        void , SetButtonBitmaps( const wxBitmap& bmpNormal,
+                                 bool pushButtonBg = false,
+                                 const wxBitmap& bmpPressed = wxNullBitmap,
+                                 const wxBitmap& bmpHover = wxNullBitmap,
+                                 const wxBitmap& bmpDisabled = wxNullBitmap ),
+        "Sets custom dropdown button graphics.
 
-    // Call with false to disable popup animation, if any.
-    void EnablePopupAnimation( bool enable = true );
+    :param bmpNormal:  Default button image
+    :param pushButtonBg: If ``True``, blank push button background is painted below the image.
+    :param bmpPressed:  Depressed butotn image.
+    :param bmpHover:  Button imate to use when the mouse hovers over it.
+    :param bmpDisabled: Disabled button image.
+", "");
+
+
+    DocDeclStr(
+        void , SetTextIndent( int indent ),
+        "This will set the space in pixels between left edge of the control and
+the text, regardless whether control is read-only or not. A value of -1 can
+be given to indicate platform default.", "");
+
+
+    DocDeclStr(
+        wxCoord , GetTextIndent() const,
+        "Returns actual indentation in pixels.", "");
+
+
+    DocDeclStr(
+        const wxRect& , GetTextRect() const,
+        "Returns area covered by the text field (includes everything except
+borders and the dropdown button).", "");
+
+
+    DocDeclStr(
+        void , UseAltPopupWindow( bool enable = true ),
+        "Enable or disable usage of an alternative popup window, which
+guarantees ability to focus the popup control, and allows common
+native controls to function normally. This alternative popup window is
+usually a wxDialog, and as such, when it is shown, its parent
+top-level window will appear as if the focus has been lost from it.", "");
+
+
+    DocDeclStr(
+        void , EnablePopupAnimation( bool enable = true ),
+        "Enables or disables popup animation, if any, depending on the value of
+the argument.", "");
+
 
     //
     // Utilies needed by the popups or native implementations
     //
 
-    // Returns true if given key combination should toggle the popup.
-    // NB: This is a separate from other keyboard handling because:
-    //     1) Replaceability.
-    //     2) Centralized code (otherwise it'd be split up between
-    //        wxComboCtrl key handler and wxVListBoxComboPopup's
-    //        key handler).
-    virtual bool IsKeyPopupToggle(const wxKeyEvent& event) const;
+    DocDeclStr(
+        virtual bool , IsKeyPopupToggle(const wxKeyEvent& event) const,
+        "Returns true if given key combination should toggle the popup.", "");
+
 
     // Prepare background of combo control or an item in a dropdown list
     // in a way typical on platform. This includes painting the focus/disabled
@@ -344,25 +452,48 @@ public:
     // flags: wxRendererNative flags: wxCONTROL_ISSUBMENU: is drawing a list item instead of combo control
     //                                wxCONTROL_SELECTED: list item is selected
     //                                wxCONTROL_DISABLED: control/item is disabled
-    virtual void PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const;
+    DocDeclStr(
+        virtual void , PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const,
+        "Prepare background of combo control or an item in a dropdown list in a
+way typical on platform. This includes painting the focus/disabled
+background and setting the clipping region.  Unless you plan to paint
+your own focus indicator, you should always call this in your
+wxComboPopup::PaintComboControl implementation.  In addition, it sets
+pen and text colour to what looks good and proper against the
+background.
 
-    // Returns true if focus indicator should be drawn in the control.
-    bool ShouldDrawFocus() const;
+flags are the same as wx.RendererNative flags:
 
-    // These methods return references to appropriate dropbutton bitmaps
+    ======================   ============================================
+    wx.CONTROL_ISSUBMENU     drawing a list item instead of combo control
+    wx.CONTROL_SELECTED      list item is selected
+    wx.CONTROL_DISABLED       control/item is disabled
+    ======================   ============================================
+", "");
+
+
+
+    DocDeclStr(
+        bool , ShouldDrawFocus() const,
+        "Returns true if focus indicator should be drawn in the control.", "");
+
+
     const wxBitmap& GetBitmapNormal() const;
     const wxBitmap& GetBitmapPressed() const;
     const wxBitmap& GetBitmapHover() const;
     const wxBitmap& GetBitmapDisabled() const;
 
-    // Return internal flags
     wxUint32 GetInternalFlags() const;
 
-    // Return true if Create has finished
-    bool IsCreated() const;
+    DocDeclStr(
+        bool , IsCreated() const,
+        "Return true if Create has finished", "");
 
-    // common code to be called on popup hide/dismiss
-    void OnPopupDismiss();
+
+    DocDeclStr(
+        void , OnPopupDismiss(),
+        "Common code to be called on popup hide/dismiss", "");
+
 
     // PopupShown states
     enum
@@ -380,7 +511,12 @@ public:
     // Set value returned by GetMainWindowOfCompositeControl
     void SetCtrlMainWnd( wxWindow* wnd );
 
-    static int GetFeatures();
+    DocDeclStr(
+        static int , GetFeatures(),
+        "Returns a bit-list of flags indicating which features of the ComboCtrl
+functionality are implemented by this implemetation.  See
+`wx.combo.ComboCtrlFeatures`.", "");
+
 
 
     // Flags for DoShowPopup and AnimateShow
@@ -392,13 +528,27 @@ public:
     };
 
     // Shows and positions the popup.
-    virtual void DoShowPopup( const wxRect& rect, int flags );
+    DocDeclStr(
+        virtual void , DoShowPopup( const wxRect& rect, int flags ),
+        "Shows and positions the popup.
 
-    // Implement in derived class to create a drop-down animation.
-    // Return true if finished immediately. Otherwise popup is only
-    // shown when the derived class call DoShowPopup.
-    // Flags are same as for DoShowPopup.
-    virtual bool AnimateShow( const wxRect& rect, int flags );
+Flags:
+    ============  =====================================================
+    ShowBelow     Showing popup below the control
+    ShowAbove     Showing popup above the control
+    CanDeferShow  Can only return true from AnimateShow if this is set
+    ============  =====================================================
+", "");
+
+
+
+    DocDeclStr(
+        virtual bool , AnimateShow( const wxRect& rect, int flags ),
+        "Implement in derived class to create a drop-down animation.  Return
+``True`` if finished immediately. Otherwise the popup is only shown when the
+derived class calls `DoShowPopup`.  Flags are same as for `DoShowPopup`.
+", "");
+
 
 };
 
@@ -521,7 +671,19 @@ IMP_PYCALLBACK_BOOL_(wxPyComboPopup, wxComboPopup, LazyCreate);
 
 
 
-// Now declare wxPyComboCtrl for Python
+// Now declare wxPyComboPopup for Python
+DocStr(wxPyComboPopup,
+"In order to use a custom popup with `wx.combo.ComboCtrl` an interface
+class derived from wx.combo.ComboPopup is used to manage the interface
+between the popup control and the popup.  You can either derive a new
+class from both the widget class and this ComboPopup class, or the
+derived class can have a reference to the widget used for the popup.
+In either case you simply need to return the widget from the
+`GetControl` method to allow the ComboCtrl to interact with it.
+
+Nearly all of the methods of this class are overridable in Python.", "");
+
+
 MustHaveApp(wxPyComboPopup);
 %rename(ComboPopup) wxPyComboPopup;
 
@@ -530,78 +692,135 @@ class wxPyComboPopup
 public:
     %pythonAppend wxPyComboPopup  setCallbackInfo(ComboPopup);
 
-    wxPyComboPopup();
-    ~wxPyComboPopup();
+    DocCtorStr(
+        wxPyComboPopup(),
+        "Constructor", "");
+
+    DocCtorStr(
+        ~wxPyComboPopup(),
+        "Destructor", "");
+
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
-    // This is called immediately after construction finishes. m_combo member
-    // variable has been initialized before the call.
-    // NOTE: It is not in constructor so the derived class doesn't need to redefine
-    //       a default constructor of its own.
-    virtual void Init();
+    DocDeclStr(
+        virtual void , Init(),
+        "This method is called after the popup is contructed and has been
+assigned to the ComboCtrl.  Derived classes can override this to do
+extra inialization or whatever.", "");
+
 
     // Create the popup child control.
     // Return true for success.
-    virtual bool Create(wxWindow* parent);
+    DocDeclStr(
+        virtual bool , Create(wxWindow* parent),
+        "The derived class must implement this method to create the popup
+control.  It should be a child of the ``parent`` passed in, but other
+than that there is much flexibility in what the widget can be, its
+style, etc.  Return ``True`` for success, ``False`` otherwise.  (NOTE:
+this return value is not currently checked...)", "");
 
-    // We must have an associated control which is subclassed by the combobox.
-    virtual wxWindow *GetControl();
 
-    // Called immediately after the popup is shown
-    virtual void OnPopup();
+    DocDeclStr(
+        virtual wxWindow *, GetControl(),
+        "The derived class must implement this method and it should return a
+reference to the widget created in the `Create` method.  If the
+derived class inherits from both the widget class and ComboPopup then
+the return value is probably just ``self``.", "");
 
-    // Called when popup is dismissed
-    virtual void OnDismiss();
 
-    // Called just prior to displaying popup.
-    // Default implementation does nothing.
-    virtual void SetStringValue( const wxString& value );
+    DocDeclStr(
+        virtual void , OnPopup(),
+        "The derived class may implement this to do special processing when
+popup is shown.", "");
 
-    // Gets displayed string representation of the value.
-    virtual wxString GetStringValue() const;
 
-    // This is called to custom paint in the combo control itself (ie. not the popup).
-    // Default implementation draws value as string.
-    virtual void PaintComboControl( wxDC& dc, const wxRect& rect );
+    DocDeclStr(
+        virtual void , OnDismiss(),
+        "The derived class may implement this to do special processing when
+popup is hidden.", "");
 
-    // Receives key events from the parent wxComboCtrl.
-    // Events not handled should be skipped, as usual.
-    virtual void OnComboKeyEvent( wxKeyEvent& event );
 
-    // Implement if you need to support special action when user
-    // double-clicks on the parent wxComboCtrl.
-    virtual void OnComboDoubleClick();
+    DocDeclStr(
+        virtual void , SetStringValue( const wxString& value ),
+        "Called just prior to displaying the popup.  The derived class can
+implement this to \"select\" the item in the popup that coresponds to
+the passed in string value, if appropriate.  The default
+implementation does nothing.", "");
 
-    // Return final size of popup. Called on every popup, just prior to OnPopup.
-    // minWidth = preferred minimum width for window
-    // prefHeight = preferred height. Only applies if > 0,
-    // maxHeight = max height for window, as limited by screen size
-    //   and should only be rounded down, if necessary.
-    virtual wxSize GetAdjustedSize( int minWidth, int prefHeight, int maxHeight );
 
-    // Return true if you want delay call to Create until the popup is shown
-    // for the first time. It is more efficient, but note that it is often
-    // more convenient to have the control created immediately.
-    // Default returns false.
-    virtual bool LazyCreate();
+    DocDeclStr(
+        virtual wxString , GetStringValue() const,
+        "Gets the string representation of the currently selected value to be
+used to display in the combo widget.", "");
+
+
+    DocDeclStr(
+        virtual void , PaintComboControl( wxDC& dc, const wxRect& rect ),
+        "This is called to custom paint in the combo control itself (ie. not
+the popup).  Default implementation draws the current value as string.", "");
+
+
+    DocDeclStr(
+        virtual void , OnComboKeyEvent( wxKeyEvent& event ),
+        "Receives key events from the parent ComboCtrl.  Events not handled
+should be skipped, as usual.", "");
+
+
+    DocDeclStr(
+        virtual void , OnComboDoubleClick(),
+        "Implement this method in the derived class if you need to support
+special actions when the user double-clicks on the parent ComboCtrl.", "");
+
+
+    DocDeclStr(
+        virtual wxSize , GetAdjustedSize( int minWidth, int prefHeight, int maxHeight ),
+        "The derived class may implement this method to return adjusted size
+for the popup control, according to the variables given.  It is called
+on every popup, just prior to `OnPopup`.
+
+    :param minWidth:    Preferred minimum width.
+    :param prefHeight:  Preferred height. May be -1 to indicate no preference.
+    :maxWidth:          Max height for window, as limited by screen size, and
+                        should only be rounded down, if necessary.
+", "");
+
+
+    DocDeclStr(
+        virtual bool , LazyCreate(),
+        "The derived class may implement this to return ``True`` if it wants to
+delay the call to `Create` until the popup is shown for the first
+time. It is more efficient, but on the other hand it is often more
+convenient to have the control created immediately.  The default
+implementation returns ``False``.", "");
+
 
     //
     // Utilies
     //
 
-    // Hides the popup
-    void Dismiss();
 
-    // Returns true if Create has been called.
-    bool IsCreated() const;
+    DocDeclStr(
+        void , Dismiss(),
+        "Hides the popup", "");
 
-    // Default PaintComboControl behaviour
-    static void DefaultPaintComboControl( wxComboCtrlBase* combo,
-                                          wxDC& dc,
-                                          const wxRect& rect );
 
-    wxPyComboCtrl* GetCombo();
+    DocDeclStr(
+        bool , IsCreated() const,
+        "Returns true if `Create` has been called.", "");
+
+
+    DocDeclStr(
+        static void , DefaultPaintComboControl( wxComboCtrlBase* combo,
+                                                wxDC& dc,
+                                                const wxRect& rect ),
+        "Default PaintComboControl behaviour", "");
+
+
+    DocDeclStr(
+        wxPyComboCtrl* , GetCombo(),
+        "Returns a reference to the `wx.combo.ComboCtrl` this ComboPopup object
+is associated with.", "");
 
 };
 
@@ -657,7 +876,18 @@ IMP_PYCALLBACK__DCRECTINTINT_const(wxPyOwnerDrawnComboBox, wxOwnerDrawnComboBox,
 
 
 
-// Now declare wxPyComboCtrl for Python
+// Now declare wxPyOwnerDrawnComboBox for Python
+
+DocStr(wxPyOwnerDrawnComboBox,
+"wx.combo.OwnerDrawnComboBox is a combobox with owner-drawn list
+items. In essence, it is a `wx.combo.ComboCtrl` with a `wx.VListBox`
+popup and a `wx.ControlWithItems` API.
+
+Implementing item drawing and measuring is similar to wx.VListBox.
+The application needs to subclass wx.combo.OwnerDrawnComboBox and
+implement the `OnDrawItem`, `OnMeasureItem` and `OnMeasureItemWidth`
+methods.", "");
+
 MustHaveApp(wxPyOwnerDrawnComboBox);
 %rename(OwnerDrawnComboBox) wxPyOwnerDrawnComboBox;
 
@@ -668,37 +898,104 @@ public:
     %pythonAppend wxPyOwnerDrawnComboBox      "self._setOORInfo(self);" setCallbackInfo(OwnerDrawnComboBox)
     %pythonAppend wxPyOwnerDrawnComboBox()    "";
 
-    wxPyOwnerDrawnComboBox(wxWindow *parent,
-                           wxWindowID id = -1,
-                           const wxString& value = wxPyEmptyString,
-                           const wxPoint& pos = wxDefaultPosition,
-                           const wxSize& size = wxDefaultSize,
-                           const wxArrayString& choices = wxPyEmptyStringArray,
-                           long style = 0,
-                           const wxValidator& validator = wxDefaultValidator,
-                           const wxString& name = wxPyComboBoxNameStr);
+    DocCtorStr(
+        wxPyOwnerDrawnComboBox(wxWindow *parent,
+                               wxWindowID id = -1,
+                               const wxString& value = wxPyEmptyString,
+                               const wxPoint& pos = wxDefaultPosition,
+                               const wxSize& size = wxDefaultSize,
+                               const wxArrayString& choices = wxPyEmptyStringArray,
+                               long style = 0,
+                               const wxValidator& validator = wxDefaultValidator,
+                               const wxString& name = wxPyComboBoxNameStr),
+        "Standard constructor.", "");
 
-    %RenameCtor(PreOwnerDrawnComboBox, wxPyOwnerDrawnComboBox());
+    DocCtorStrName(wxPyOwnerDrawnComboBox(),
+                   "2-phase create constructor.", "",
+                   PreOwnerDrawnComboBox);
 
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
 
-    bool Create(wxWindow *parent,
-                wxWindowID id = -1,
-                const wxString& value = wxPyEmptyString,
-                const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize,
-                const wxArrayString& choices = wxPyEmptyStringArray,
-                long style = 0,
-                const wxValidator& validator = wxDefaultValidator,
-                const wxString& name = wxPyComboBoxNameStr);
+    
+    DocDeclStr(        
+        bool , Create(wxWindow *parent,
+                      wxWindowID id = -1,
+                      const wxString& value = wxPyEmptyString,
+                      const wxPoint& pos = wxDefaultPosition,
+                      const wxSize& size = wxDefaultSize,
+                      const wxArrayString& choices = wxPyEmptyStringArray,
+                      long style = 0,
+                      const wxValidator& validator = wxDefaultValidator,
+                      const wxString& name = wxPyComboBoxNameStr),
+        "Create the UI object, and other initialization.", "");
+    
 
-    // Return the widest item width (recalculating it if necessary)
-    virtual int GetWidestItemWidth();
+    DocDeclStr(
+        virtual int , GetWidestItemWidth(),
+        "Return the widest item width (recalculating it if necessary.)", "");
+    
 
-    // Return the index of the widest item (recalculating it if necessary)
-    virtual int GetWidestItem();
+    DocDeclStr(
+        virtual int , GetWidestItem(),
+        "Return the index of the widest item (recalculating it if necessary.)", "");
+    
 
     void SetSelection(int n);
     %Rename(SetMark, void , SetSelection(long from, long to));
+
+
+    // Callback for drawing. Font, background and text colour have been
+    // prepared according to selection, focus and such.
+    // item: item index to be drawn, may be wxNOT_FOUND when painting combo control itself
+    //       and there is no valid selection
+    // flags: wxODCB_PAINTING_CONTROL is set if painting to combo control instead of list
+    DocDeclStr(
+        virtual void , OnDrawItem( wxDC& dc, const wxRect& rect, int item, int flags ) const,
+        "The derived class may implement this function to actually draw the
+item with the given index on the provided DC. If this method is not
+overridden, the item text is simply drawn as if the control was a
+normal combobox.
+
+   :param dc:    The device context to use for drawing.
+   :param rect:  The bounding rectangle for the item being drawn, the
+                 DC's clipping region is set to this rectangle before
+                 calling this method.
+   :param item:  The index of the item to be drawn.
+
+   :param flags: ``wx.combo.ODCB_PAINTING_CONTROL`` (The Combo control itself
+                  is being painted, instead of a list item.  The ``item``
+                  parameter may be ``wx.NOT_FOUND`` in this case.
+                  ``wx.combo.ODCB_PAINTING_SELECTED``  (An item with
+                  selection background is being painted. The DC's text colour
+                  should already be correct.
+", "");
+    
+
+    DocDeclStr(
+        virtual wxCoord , OnMeasureItem( size_t item ) const,
+        "The derived class may implement this method to return the height of
+the specified item (in pixels).  The default implementation returns
+text height, as if this control was a normal combobox.", "");
+    
+
+    DocDeclStr(
+        virtual wxCoord , OnMeasureItemWidth( size_t item ) const,
+        "The derived class may implement this method to return the width of the
+specified item (in pixels). If -1 is returned, then the item text
+width is used.  The default implementation returns -1.", "");
+    
+
+    DocDeclStr(
+        virtual void , OnDrawBackground( wxDC& dc, const wxRect& rect, int item, int flags ) const,
+        "This method is used to draw the items background and, maybe, a border
+around it.
+
+The base class version implements a reasonable default behaviour which
+consists in drawing the selected item with the standard background
+colour and drawing a border around the item if it is either selected
+or current.  ``flags`` has the sam meaning as with `OnDrawItem`.", "");
+    
+
 };
 
 
@@ -708,6 +1005,7 @@ public:
     // Map renamed classes back to their common name for OOR
     wxPyPtrTypeMap_Add("wxComboCtrl", "wxPyComboCtrl");
     wxPyPtrTypeMap_Add("wxComboPopup", "wxPyComboPopup");
+    wxPyPtrTypeMap_Add("wxOwnerDrawnComboBox", "wxPyOwnerDrawnComboBox");
 %}
 //---------------------------------------------------------------------------
 

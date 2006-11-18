@@ -71,6 +71,7 @@ _treeList = [
         'GraphicsContext',
         'CollapsiblePane',
         'ComboCtrl',
+        'OwnerDrawnComboBox',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -114,7 +115,6 @@ _treeList = [
         'CheckListBox',
         'Choice',
         'ComboBox',
-        'ComboCtrl',
         'Gauge',
         'Grid',
         'Grid_MegaExample',
@@ -200,6 +200,7 @@ _treeList = [
         'MaskedNumCtrl',
         'MediaCtrl',
         'MultiSplitterWindow',
+        'OwnerDrawnComboBox',
         'Pickers',
         'PyCrust',
         'PyPlot',

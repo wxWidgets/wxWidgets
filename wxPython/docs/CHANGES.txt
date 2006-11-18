@@ -19,6 +19,14 @@ have a lot of control over other aspects of the combo widget as well.
 It works very well on GTK and MSW, using native renderers for drawing
 the combo button, but is unfortunatly still a bit klunky on OSX...
 
+Use system default paper size for printing instead of A4 by default.
+
+Added wx.combo.OwnerDrawnComboBox, which is a ComboCtrl that delegates
+the drawing of the items in the popup and in the control itself to
+overridden methods of a derived class, similarly to how wx.VListBox
+works.
+
+
 
 
 
