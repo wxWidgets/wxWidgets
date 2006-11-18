@@ -68,8 +68,7 @@ class ListCtrlComboPopup(wx.ListCtrl, wx.combo.ComboPopup):
     def Create(self, parent):
         self.log.write("ListCtrlComboPopup.Create")
         wx.ListCtrl.Create(self, parent,
-                           style=wx.LC_LIST|wx.LC_SINGLE_SEL|
-                           wx.LC_SORT_ASCENDING|wx.SIMPLE_BORDER)
+                           style=wx.LC_LIST|wx.LC_SINGLE_SEL|wx.SIMPLE_BORDER)
         self.Bind(wx.EVT_MOTION, self.OnMotion)
         self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
         return True
@@ -316,12 +315,12 @@ class FileSelectorCombo(wx.combo.ComboCtrl):
         wx.combo.ComboCtrl.__init__(self, *args, **kw)
 
         # make a custom bitmap showing "..."
-        bw, bh = 16, 16
+        bw, bh = 14, 16
         bmp = wx.EmptyBitmap(bw,bh)
         dc = wx.MemoryDC(bmp)
 
         # clear to a specific background colour
-        bgcolor = wx.Colour(255,0,255)
+        bgcolor = wx.Colour(255,254,255)
         dc.SetBackground(wx.Brush(bgcolor))
         dc.Clear()
 
@@ -331,7 +330,6 @@ class FileSelectorCombo(wx.combo.ComboCtrl):
         font.SetWeight(wx.FONTWEIGHT_BOLD)
         dc.SetFont(font)
         tw,th = dc.GetTextExtent(label)
-        print tw, th
         dc.DrawText(label, (bw-tw)/2, (bw-tw)/2)
         del dc
 
@@ -457,6 +455,10 @@ def runTest(frame, nb, log):
 
 overview = """<html><body>
 <h2><center>wx.combo.ComboCtrl</center></h2>
+
+A combo control is a generic combobox that allows a totally custom
+popup. In addition it has other customization features. For instance,
+position and size of the dropdown button can be changed.
 
 </body></html>
 """
