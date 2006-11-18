@@ -736,7 +736,6 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     int mw, mh;
     dc->GetSizeMM(&mw, &mh);
     printout->SetPageSizeMM((int)mw, (int)mh);
-
     printout->OnPreparePrinting();
 
     // Get some parameters from the printout, if defined
@@ -854,6 +853,8 @@ wxGnomePrintDC::wxGnomePrintDC( wxGnomePrinter *printer )
 
     m_signX =  1;  // default x-axis left to right
     m_signY = -1;  // default y-axis bottom up -> top down
+    
+    GetSize( NULL, &m_deviceOffsetY );
 }
 
 wxGnomePrintDC::wxGnomePrintDC( const wxPrintData& data )
@@ -877,6 +878,8 @@ wxGnomePrintDC::wxGnomePrintDC( const wxPrintData& data )
 
     m_signX =  1;  // default x-axis left to right
     m_signY = -1;  // default y-axis bottom up -> top down    
+    
+    GetSize( NULL, &m_deviceOffsetY );
 }
 
 wxGnomePrintDC::~wxGnomePrintDC()
@@ -1669,8 +1672,6 @@ void wxGnomePrintDC::DestroyClippingRegion()
 
 bool wxGnomePrintDC::StartDoc(const wxString& message)
 {
-    SetDeviceOrigin( 0,0 );
-
     return true;
 }
 
@@ -1782,7 +1783,6 @@ void wxGnomePrintDC::DoGetSize(int* width, int* height) const
       (wxGnomePrintNativeData*) m_printData.GetNativeData();
 
     // Query page size. This seems to omit the margins
-    // right now, although it shouldn't
     double pw,ph;
     gs_lgp->gnome_print_job_get_page_size( native->GetPrintJob(), &pw, &ph );
 
@@ -1826,15 +1826,6 @@ void wxGnomePrintDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
     m_signY = (yBottomUp  ? 1 : -1);
 
     ComputeScaleAndOrigin();
-}
-
-void wxGnomePrintDC::SetDeviceOrigin( wxCoord x, wxCoord y )
-{
-    int h = 0;
-    int w = 0;
-    GetSize( &w, &h );
-
-    wxDC::SetDeviceOrigin( x, h-y );
 }
 
 void wxGnomePrintDC::SetResolution(int ppi)

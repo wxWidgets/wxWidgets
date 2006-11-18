@@ -261,7 +261,6 @@ public:
     void DoGetSizeMM(int *width, int *height) const;
     wxSize GetPPI() const;
     void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
-    void SetDeviceOrigin( wxCoord x, wxCoord y );
 
     virtual int GetDepth() const { return 24; }
 
@@ -286,6 +285,8 @@ private:
     unsigned char           m_currentRed;
     unsigned char           m_currentGreen;
     unsigned char           m_currentBlue;
+    
+    int                     m_deviceOffsetY;
 
     wxGnomePrinter         *m_printer;
     GnomePrintContext      *m_gpc;
@@ -304,7 +305,7 @@ private:
     }
     wxCoord YDEV2LOG(wxCoord y) const
     {
-        return wxRound((double)(y - m_deviceOriginY) / m_scaleY) * m_signY + m_logicalOriginY;
+        return wxRound((double)(y + m_deviceOriginY - m_deviceOffsetY) / m_scaleY) * m_signY + m_logicalOriginY;
     }
     wxCoord YDEV2LOGREL(wxCoord y) const
     {
@@ -320,7 +321,7 @@ private:
     }
     wxCoord YLOG2DEV(wxCoord y) const
     {
-        return wxRound((double)(y - m_logicalOriginY) * m_scaleY) * m_signY + m_deviceOriginY;
+        return wxRound((double)(y - m_logicalOriginY) * m_scaleY) * m_signY - m_deviceOriginY + m_deviceOffsetY;
     }
     wxCoord YLOG2DEVREL(wxCoord y) const
     {
