@@ -171,23 +171,23 @@ AUI_MGR_RECTANGLE_HINT = _aui.AUI_MGR_RECTANGLE_HINT
 AUI_MGR_HINT_FADE = _aui.AUI_MGR_HINT_FADE
 AUI_MGR_NO_VENETIAN_BLINDS_FADE = _aui.AUI_MGR_NO_VENETIAN_BLINDS_FADE
 AUI_MGR_DEFAULT = _aui.AUI_MGR_DEFAULT
-AUI_ART_SASH_SIZE = _aui.AUI_ART_SASH_SIZE
-AUI_ART_CAPTION_SIZE = _aui.AUI_ART_CAPTION_SIZE
-AUI_ART_GRIPPER_SIZE = _aui.AUI_ART_GRIPPER_SIZE
-AUI_ART_PANE_BORDER_SIZE = _aui.AUI_ART_PANE_BORDER_SIZE
-AUI_ART_PANE_BUTTON_SIZE = _aui.AUI_ART_PANE_BUTTON_SIZE
-AUI_ART_BACKGROUND_COLOUR = _aui.AUI_ART_BACKGROUND_COLOUR
-AUI_ART_SASH_COLOUR = _aui.AUI_ART_SASH_COLOUR
-AUI_ART_ACTIVE_CAPTION_COLOUR = _aui.AUI_ART_ACTIVE_CAPTION_COLOUR
-AUI_ART_ACTIVE_CAPTION_GRADIENT_COLOUR = _aui.AUI_ART_ACTIVE_CAPTION_GRADIENT_COLOUR
-AUI_ART_INACTIVE_CAPTION_COLOUR = _aui.AUI_ART_INACTIVE_CAPTION_COLOUR
-AUI_ART_INACTIVE_CAPTION_GRADIENT_COLOUR = _aui.AUI_ART_INACTIVE_CAPTION_GRADIENT_COLOUR
-AUI_ART_ACTIVE_CAPTION_TEXT_COLOUR = _aui.AUI_ART_ACTIVE_CAPTION_TEXT_COLOUR
-AUI_ART_INACTIVE_CAPTION_TEXT_COLOUR = _aui.AUI_ART_INACTIVE_CAPTION_TEXT_COLOUR
-AUI_ART_BORDER_COLOUR = _aui.AUI_ART_BORDER_COLOUR
-AUI_ART_GRIPPER_COLOUR = _aui.AUI_ART_GRIPPER_COLOUR
-AUI_ART_CAPTION_FONT = _aui.AUI_ART_CAPTION_FONT
-AUI_ART_GRADIENT_TYPE = _aui.AUI_ART_GRADIENT_TYPE
+AUI_DOCKART_SASH_SIZE = _aui.AUI_DOCKART_SASH_SIZE
+AUI_DOCKART_CAPTION_SIZE = _aui.AUI_DOCKART_CAPTION_SIZE
+AUI_DOCKART_GRIPPER_SIZE = _aui.AUI_DOCKART_GRIPPER_SIZE
+AUI_DOCKART_PANE_BORDER_SIZE = _aui.AUI_DOCKART_PANE_BORDER_SIZE
+AUI_DOCKART_PANE_BUTTON_SIZE = _aui.AUI_DOCKART_PANE_BUTTON_SIZE
+AUI_DOCKART_BACKGROUND_COLOUR = _aui.AUI_DOCKART_BACKGROUND_COLOUR
+AUI_DOCKART_SASH_COLOUR = _aui.AUI_DOCKART_SASH_COLOUR
+AUI_DOCKART_ACTIVE_CAPTION_COLOUR = _aui.AUI_DOCKART_ACTIVE_CAPTION_COLOUR
+AUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR = _aui.AUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR
+AUI_DOCKART_INACTIVE_CAPTION_COLOUR = _aui.AUI_DOCKART_INACTIVE_CAPTION_COLOUR
+AUI_DOCKART_INACTIVE_CAPTION_GRADIENT_COLOUR = _aui.AUI_DOCKART_INACTIVE_CAPTION_GRADIENT_COLOUR
+AUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR = _aui.AUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR
+AUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR = _aui.AUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR
+AUI_DOCKART_BORDER_COLOUR = _aui.AUI_DOCKART_BORDER_COLOUR
+AUI_DOCKART_GRIPPER_COLOUR = _aui.AUI_DOCKART_GRIPPER_COLOUR
+AUI_DOCKART_CAPTION_FONT = _aui.AUI_DOCKART_CAPTION_FONT
+AUI_DOCKART_GRADIENT_TYPE = _aui.AUI_DOCKART_GRADIENT_TYPE
 AUI_GRADIENT_NONE = _aui.AUI_GRADIENT_NONE
 AUI_GRADIENT_VERTICAL = _aui.AUI_GRADIENT_VERTICAL
 AUI_GRADIENT_HORIZONTAL = _aui.AUI_GRADIENT_HORIZONTAL
@@ -196,6 +196,7 @@ AUI_BUTTON_STATE_HOVER = _aui.AUI_BUTTON_STATE_HOVER
 AUI_BUTTON_STATE_PRESSED = _aui.AUI_BUTTON_STATE_PRESSED
 AUI_BUTTON_STATE_DISABLED = _aui.AUI_BUTTON_STATE_DISABLED
 AUI_BUTTON_STATE_HIDDEN = _aui.AUI_BUTTON_STATE_HIDDEN
+AUI_BUTTON_STATE_CHECKED = _aui.AUI_BUTTON_STATE_CHECKED
 AUI_BUTTON_CLOSE = _aui.AUI_BUTTON_CLOSE
 AUI_BUTTON_MAXIMIZE_RESTORE = _aui.AUI_BUTTON_MAXIMIZE_RESTORE
 AUI_BUTTON_MINIMIZE = _aui.AUI_BUTTON_MINIMIZE
@@ -592,6 +593,11 @@ class AuiManager(_core.EvtHandler):
         """GetManagedWindow(self) -> Window"""
         return _aui.AuiManager_GetManagedWindow(*args, **kwargs)
 
+    def GetManager(*args, **kwargs):
+        """GetManager(Window window) -> AuiManager"""
+        return _aui.AuiManager_GetManager(*args, **kwargs)
+
+    GetManager = staticmethod(GetManager)
     def SetArtProvider(*args, **kwargs):
         """SetArtProvider(self, AuiDockArt art_provider)"""
         return _aui.AuiManager_SetArtProvider(*args, **kwargs)
@@ -753,6 +759,10 @@ class AuiManager(_core.EvtHandler):
     ManagedWindow = property(GetManagedWindow,SetManagedWindow,doc="See `GetManagedWindow` and `SetManagedWindow`") 
 _aui.AuiManager_swigregister(AuiManager)
 
+def AuiManager_GetManager(*args, **kwargs):
+  """AuiManager_GetManager(Window window) -> AuiManager"""
+  return _aui.AuiManager_GetManager(*args, **kwargs)
+
 class AuiManagerEvent(_core.Event):
     """Proxy of C++ AuiManagerEvent class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -763,6 +773,10 @@ class AuiManagerEvent(_core.Event):
     def Clone(*args, **kwargs):
         """Clone(self) -> Event"""
         return _aui.AuiManagerEvent_Clone(*args, **kwargs)
+
+    def SetManager(*args, **kwargs):
+        """SetManager(self, AuiManager mgr)"""
+        return _aui.AuiManagerEvent_SetManager(*args, **kwargs)
 
     def SetPane(*args, **kwargs):
         """SetPane(self, AuiPaneInfo p)"""
@@ -775,6 +789,10 @@ class AuiManagerEvent(_core.Event):
     def SetDC(*args, **kwargs):
         """SetDC(self, DC pdc)"""
         return _aui.AuiManagerEvent_SetDC(*args, **kwargs)
+
+    def GetManager(*args, **kwargs):
+        """GetManager(self) -> AuiManager"""
+        return _aui.AuiManagerEvent_GetManager(*args, **kwargs)
 
     def GetPane(*args, **kwargs):
         """GetPane(self) -> AuiPaneInfo"""
@@ -804,6 +822,7 @@ class AuiManagerEvent(_core.Event):
         """CanVeto(self) -> bool"""
         return _aui.AuiManagerEvent_CanVeto(*args, **kwargs)
 
+    manager = property(_aui.AuiManagerEvent_manager_get, _aui.AuiManagerEvent_manager_set)
     pane = property(_aui.AuiManagerEvent_pane_get, _aui.AuiManagerEvent_pane_set)
     button = property(_aui.AuiManagerEvent_button_get, _aui.AuiManagerEvent_button_set)
     veto_flag = property(_aui.AuiManagerEvent_veto_flag_get, _aui.AuiManagerEvent_veto_flag_set)
@@ -888,11 +907,13 @@ wxEVT_AUI_PANECLOSE = _aui.wxEVT_AUI_PANECLOSE
 wxEVT_AUI_PANEMAXIMIZE = _aui.wxEVT_AUI_PANEMAXIMIZE
 wxEVT_AUI_PANERESTORE = _aui.wxEVT_AUI_PANERESTORE
 wxEVT_AUI_RENDER = _aui.wxEVT_AUI_RENDER
+wxEVT_AUI_FINDMANAGER = _aui.wxEVT_AUI_FINDMANAGER
 EVT_AUI_PANEBUTTON = wx.PyEventBinder( wxEVT_AUI_PANEBUTTON )
 EVT_AUI_PANECLOSE = wx.PyEventBinder( wxEVT_AUI_PANECLOSE )
 EVT_AUI_PANEMAXIMIZE = wx.PyEventBinder( wxEVT_AUI_PANEMAXIMIZE )
 EVT_AUI_PANERESTORE = wx.PyEventBinder( wxEVT_AUI_PANERESTORE )
 EVT_AUI_RENDER = wx.PyEventBinder( wxEVT_AUI_RENDER )
+EVT_AUI_FINDMANAGER = wx.PyEventBinder( wxEVT_AUI_FINDMANAGER )
 
 class AuiDockArt(object):
     """Proxy of C++ AuiDockArt class"""
@@ -986,6 +1007,10 @@ class AuiFloatingFrame(_windows.MiniFrame):
     def SetPaneWindow(*args, **kwargs):
         """SetPaneWindow(self, AuiPaneInfo pane)"""
         return _aui.AuiFloatingFrame_SetPaneWindow(*args, **kwargs)
+
+    def GetOwnerManager(*args, **kwargs):
+        """GetOwnerManager(self) -> AuiManager"""
+        return _aui.AuiFloatingFrame_GetOwnerManager(*args, **kwargs)
 
 _aui.AuiFloatingFrame_swigregister(AuiFloatingFrame)
 

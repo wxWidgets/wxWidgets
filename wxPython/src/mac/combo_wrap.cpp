@@ -2775,6 +2775,23 @@ public:
             wxComboCtrl::DoSetPopupControl(popup);
     }
 
+    virtual bool IsKeyPopupToggle( const wxKeyEvent& event ) const
+    {
+        bool found;
+        bool rval = false;
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
+        if ((found = wxPyCBH_findCallback(m_myInst, "OnComboKeyEvent"))) {
+            PyObject* oevt = wxPyConstructObject((void*)&event, wxT("wxKeyEvent"), 0);
+            rval = wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", oevt));
+            Py_DECREF(oevt);
+        }
+        wxPyEndBlockThreads(blocked);
+        if (! found)
+            rval = wxComboCtrl::IsKeyPopupToggle(event);
+        return rval;
+    }
+
+
     enum
     {
         ShowBelow       = 0x0000,  // Showing popup below the control
@@ -2783,6 +2800,8 @@ public:
     };
 
 
+    DEC_PYCALLBACK_VOID_(ShowPopup);
+    DEC_PYCALLBACK_VOID_(HidePopup);
     DEC_PYCALLBACK_VOID_(OnButtonClick);
     DEC_PYCALLBACK__RECTINT(DoShowPopup);
     DEC_PYCALLBACK_BOOL_RECTINT(AnimateShow);
@@ -2792,6 +2811,8 @@ public:
 
 IMPLEMENT_ABSTRACT_CLASS(wxPyComboCtrl, wxComboCtrl);
 
+IMP_PYCALLBACK_VOID_(wxPyComboCtrl, wxComboCtrl, ShowPopup);
+IMP_PYCALLBACK_VOID_(wxPyComboCtrl, wxComboCtrl, HidePopup);
 IMP_PYCALLBACK_VOID_(wxPyComboCtrl, wxComboCtrl, OnButtonClick);
 IMP_PYCALLBACK__RECTINT(wxPyComboCtrl, wxComboCtrl, DoShowPopup);
 IMP_PYCALLBACK_BOOL_RECTINT(wxPyComboCtrl, wxComboCtrl, AnimateShow);
@@ -3012,6 +3033,29 @@ IMP_PYCALLBACK_COORD_SIZET_const(wxPyOwnerDrawnComboBox, wxOwnerDrawnComboBox, O
 IMP_PYCALLBACK_COORD_SIZET_const(wxPyOwnerDrawnComboBox, wxOwnerDrawnComboBox, OnMeasureItemWidth);
 IMP_PYCALLBACK__DCRECTINTINT_const(wxPyOwnerDrawnComboBox, wxOwnerDrawnComboBox, OnDrawBackground);
 
+
+
+SWIGINTERN int 
+SWIG_AsVal_unsigned_SS_long (PyObject* obj, unsigned long* val)
+{
+    long v = 0;
+    if (SWIG_AsVal_long(obj, &v) && v < 0) {
+        return SWIG_TypeError;
+    }
+    else if (val)
+        *val = (unsigned long)v;
+    return SWIG_OK;
+}
+
+
+SWIGINTERNINLINE int
+SWIG_AsVal_size_t (PyObject * obj, size_t *val)
+{
+  unsigned long v;
+  int res = SWIG_AsVal_unsigned_SS_long (obj, val ? &v : 0);
+  if (SWIG_IsOK(res) && val) *val = static_cast< size_t >(v);
+  return res;
+}
 
 #ifdef __cplusplus
 extern "C" {
@@ -6051,6 +6095,41 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_OwnerDrawnComboBox__setCallbackInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyOwnerDrawnComboBox *arg1 = (wxPyOwnerDrawnComboBox *) 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
+  PyObject *arg3 = (PyObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "self",(char *) "_class", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:OwnerDrawnComboBox__setCallbackInfo",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyOwnerDrawnComboBox, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "OwnerDrawnComboBox__setCallbackInfo" "', expected argument " "1"" of type '" "wxPyOwnerDrawnComboBox *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyOwnerDrawnComboBox * >(argp1);
+  arg2 = obj1;
+  arg3 = obj2;
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->_setCallbackInfo(arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_OwnerDrawnComboBox_Create(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyOwnerDrawnComboBox *arg1 = (wxPyOwnerDrawnComboBox *) 0 ;
@@ -6319,6 +6398,216 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_OwnerDrawnComboBox_OnDrawItem(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyOwnerDrawnComboBox *arg1 = (wxPyOwnerDrawnComboBox *) 0 ;
+  wxDC *arg2 = 0 ;
+  wxRect *arg3 = 0 ;
+  int arg4 ;
+  int arg5 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  wxRect temp3 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  int val5 ;
+  int ecode5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "dc",(char *) "rect",(char *) "item",(char *) "flags", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:OwnerDrawnComboBox_OnDrawItem",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyOwnerDrawnComboBox, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "OwnerDrawnComboBox_OnDrawItem" "', expected argument " "1"" of type '" "wxPyOwnerDrawnComboBox const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyOwnerDrawnComboBox * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxDC,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "OwnerDrawnComboBox_OnDrawItem" "', expected argument " "2"" of type '" "wxDC &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "OwnerDrawnComboBox_OnDrawItem" "', expected argument " "2"" of type '" "wxDC &""'"); 
+  }
+  arg2 = reinterpret_cast< wxDC * >(argp2);
+  {
+    arg3 = &temp3;
+    if ( ! wxRect_helper(obj2, &arg3)) SWIG_fail;
+  }
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "OwnerDrawnComboBox_OnDrawItem" "', expected argument " "4"" of type '" "int""'");
+  } 
+  arg4 = static_cast< int >(val4);
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "OwnerDrawnComboBox_OnDrawItem" "', expected argument " "5"" of type '" "int""'");
+  } 
+  arg5 = static_cast< int >(val5);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    ((wxPyOwnerDrawnComboBox const *)arg1)->OnDrawItem(*arg2,(wxRect const &)*arg3,arg4,arg5);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_OwnerDrawnComboBox_OnMeasureItem(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyOwnerDrawnComboBox *arg1 = (wxPyOwnerDrawnComboBox *) 0 ;
+  size_t arg2 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "item", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:OwnerDrawnComboBox_OnMeasureItem",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyOwnerDrawnComboBox, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "OwnerDrawnComboBox_OnMeasureItem" "', expected argument " "1"" of type '" "wxPyOwnerDrawnComboBox const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyOwnerDrawnComboBox * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "OwnerDrawnComboBox_OnMeasureItem" "', expected argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (int)((wxPyOwnerDrawnComboBox const *)arg1)->OnMeasureItem(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_OwnerDrawnComboBox_OnMeasureItemWidth(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyOwnerDrawnComboBox *arg1 = (wxPyOwnerDrawnComboBox *) 0 ;
+  size_t arg2 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "item", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:OwnerDrawnComboBox_OnMeasureItemWidth",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyOwnerDrawnComboBox, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "OwnerDrawnComboBox_OnMeasureItemWidth" "', expected argument " "1"" of type '" "wxPyOwnerDrawnComboBox const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyOwnerDrawnComboBox * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "OwnerDrawnComboBox_OnMeasureItemWidth" "', expected argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (int)((wxPyOwnerDrawnComboBox const *)arg1)->OnMeasureItemWidth(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_OwnerDrawnComboBox_OnDrawBackground(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyOwnerDrawnComboBox *arg1 = (wxPyOwnerDrawnComboBox *) 0 ;
+  wxDC *arg2 = 0 ;
+  wxRect *arg3 = 0 ;
+  int arg4 ;
+  int arg5 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  wxRect temp3 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  int val5 ;
+  int ecode5 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "dc",(char *) "rect",(char *) "item",(char *) "flags", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOOO:OwnerDrawnComboBox_OnDrawBackground",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyOwnerDrawnComboBox, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "OwnerDrawnComboBox_OnDrawBackground" "', expected argument " "1"" of type '" "wxPyOwnerDrawnComboBox const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyOwnerDrawnComboBox * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxDC,  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "OwnerDrawnComboBox_OnDrawBackground" "', expected argument " "2"" of type '" "wxDC &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "OwnerDrawnComboBox_OnDrawBackground" "', expected argument " "2"" of type '" "wxDC &""'"); 
+  }
+  arg2 = reinterpret_cast< wxDC * >(argp2);
+  {
+    arg3 = &temp3;
+    if ( ! wxRect_helper(obj2, &arg3)) SWIG_fail;
+  }
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "OwnerDrawnComboBox_OnDrawBackground" "', expected argument " "4"" of type '" "int""'");
+  } 
+  arg4 = static_cast< int >(val4);
+  ecode5 = SWIG_AsVal_int(obj4, &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "OwnerDrawnComboBox_OnDrawBackground" "', expected argument " "5"" of type '" "int""'");
+  } 
+  arg5 = static_cast< int >(val5);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    ((wxPyOwnerDrawnComboBox const *)arg1)->OnDrawBackground(*arg2,(wxRect const &)*arg3,arg4,arg5);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *OwnerDrawnComboBox_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
@@ -6414,10 +6703,15 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ComboPopup_swiginit", ComboPopup_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_OwnerDrawnComboBox", (PyCFunction) _wrap_new_OwnerDrawnComboBox, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_PreOwnerDrawnComboBox", (PyCFunction)_wrap_new_PreOwnerDrawnComboBox, METH_NOARGS, NULL},
+	 { (char *)"OwnerDrawnComboBox__setCallbackInfo", (PyCFunction) _wrap_OwnerDrawnComboBox__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"OwnerDrawnComboBox_Create", (PyCFunction) _wrap_OwnerDrawnComboBox_Create, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"OwnerDrawnComboBox_GetWidestItemWidth", (PyCFunction)_wrap_OwnerDrawnComboBox_GetWidestItemWidth, METH_O, NULL},
 	 { (char *)"OwnerDrawnComboBox_GetWidestItem", (PyCFunction)_wrap_OwnerDrawnComboBox_GetWidestItem, METH_O, NULL},
 	 { (char *)"OwnerDrawnComboBox_SetMark", (PyCFunction) _wrap_OwnerDrawnComboBox_SetMark, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"OwnerDrawnComboBox_OnDrawItem", (PyCFunction) _wrap_OwnerDrawnComboBox_OnDrawItem, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"OwnerDrawnComboBox_OnMeasureItem", (PyCFunction) _wrap_OwnerDrawnComboBox_OnMeasureItem, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"OwnerDrawnComboBox_OnMeasureItemWidth", (PyCFunction) _wrap_OwnerDrawnComboBox_OnMeasureItemWidth, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"OwnerDrawnComboBox_OnDrawBackground", (PyCFunction) _wrap_OwnerDrawnComboBox_OnDrawBackground, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"OwnerDrawnComboBox_swigregister", OwnerDrawnComboBox_swigregister, METH_VARARGS, NULL},
 	 { (char *)"OwnerDrawnComboBox_swiginit", OwnerDrawnComboBox_swiginit, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
@@ -8359,6 +8653,7 @@ SWIGEXPORT void SWIG_init(void) {
   // Map renamed classes back to their common name for OOR
   wxPyPtrTypeMap_Add("wxComboCtrl", "wxPyComboCtrl");
   wxPyPtrTypeMap_Add("wxComboPopup", "wxPyComboPopup");
+  wxPyPtrTypeMap_Add("wxOwnerDrawnComboBox", "wxPyOwnerDrawnComboBox");
   
 }
 

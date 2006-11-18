@@ -7247,7 +7247,7 @@ class PyApp(EvtHandler):
 
     def SetUseBestVisual(*args, **kwargs):
         """
-        SetUseBestVisual(self, bool flag)
+        SetUseBestVisual(self, bool flag, bool forceTrueColour=False)
 
         Set whether the app should try to use the best available visual on
         systems where more than one is available, (Sun, SGI, XFree86 4, etc.)
