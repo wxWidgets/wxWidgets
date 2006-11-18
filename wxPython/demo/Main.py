@@ -72,6 +72,7 @@ _treeList = [
         'CollapsiblePane',
         'ComboCtrl',
         'OwnerDrawnComboBox',
+        'BitmapComboBox',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -176,7 +177,7 @@ _treeList = [
         'ActiveX_FlashWindow',
         'ActiveX_IEHtmlWindow',
         'ActiveX_PDFWindow',
-        #'RightTextCtrl',     deprecated as we have wxTE_RIGHT now.
+        'BitmapComboBox',
         'Calendar',
         'CalendarCtrl',
         'CheckListCtrlMixin',

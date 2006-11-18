@@ -11,7 +11,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 %define DOCSTRING
-"ComboCtrl class that can have any type of popup widget, and also an
+"ComboCtrl class that can have any type ofconst wxBitmap& bitmap,  popup widget, and also an
 owner-drawn combobox control."
 %enddef
 
@@ -141,6 +141,12 @@ public:
     }
 
 
+    virtual wxWindow *GetMainWindowOfCompositeControl()
+    {
+        return wxComboCtrl::GetMainWindowOfCompositeControl();
+    }
+
+    
     enum
     {
         ShowBelow       = 0x0000,  // Showing popup below the control
@@ -352,7 +358,7 @@ use the default.  The popup implementation may choose to ignore this.", "");
         void , SetPopupExtents( int extLeft, int extRight ),
         "Extends popup size horizontally, relative to the edges of the combo
 control.  Values are given in pixels, and the defaults are zero.  It
-is up to th epopup to fully take these values into account.", "");
+is up to the popup to fully take these values into account.", "");
 
 
     DocDeclStr(
@@ -510,6 +516,7 @@ flags are the same as wx.RendererNative flags:
 
     // Set value returned by GetMainWindowOfCompositeControl
     void SetCtrlMainWnd( wxWindow* wnd );
+    virtual wxWindow *GetMainWindowOfCompositeControl();
 
     DocDeclStr(
         static int , GetFeatures(),
@@ -549,6 +556,22 @@ Flags:
 derived class calls `DoShowPopup`.  Flags are same as for `DoShowPopup`.
 ", "");
 
+
+    %property(PopupControl, GetPopupControl, SetPopupControl);
+    %property(PopupWindow, GetPopupWindow);
+    %property(TextCtrl, GetTextCtrl);
+    %property(Button, GetButton);
+    %property(Value, GetValue, SetValue);
+    %property(InsertionPoint, GetInsertionPoint);
+    %property(CustomPaintWidth, GetCustomPaintWidth, SetCustomPaintWidth);
+    %property(ButtonSize, GetButtonSize);
+    %property(TextIndent, GetTextIndent, SetTextIndent);
+    %property(TextRect, GetTextRect);
+    %property(BitmapNormal, GetBitmapNormal);
+    %property(BitmapPressed, GetBitmapPressed);
+    %property(BitmapHover, GetBitmapHover);
+    %property(BitmapDisabled, GetBitmapDisabled);
+    %property(PopupWindowState, GetPopupWindowState);
 
 };
 
@@ -998,6 +1021,115 @@ or current.  ``flags`` has the sam meaning as with `OnDrawItem`.", "");
 
 };
 
+//---------------------------------------------------------------------------
+
+%{
+#include <wx/bmpcbox.h>
+%}
+
+DocStr(wxBitmapComboBox,
+       "A combobox that displays a bitmap in front of the list items. It
+currently only allows using bitmaps of one size, and resizes itself so
+that a bitmap can be shown next to the text field.",
+"
+Window Styles
+-------------
+    ===================    ============================================
+    wx.CB_READONLY         Creates a combobox without a text editor. On
+                           some platforms the control may appear very
+                           different when this style is used. 
+    wx.CB_SORT             Sorts the entries in the list alphabetically. 
+    wx.TE_PROCESS_ENTER    The control will generate the event
+                           wx.EVT__TEXT_ENTER (otherwise pressing Enter
+                           key is either processed internally by the
+                           control or used for navigation between dialog
+                           controls).
+    ===================    ============================================
+");
+
+MustHaveApp(wxBitmapComboBox);
+
+class wxBitmapComboBox : public wxPyOwnerDrawnComboBox
+{
+public:
+    %pythonAppend wxBitmapComboBox      "self._setOORInfo(self);";
+    %pythonAppend wxBitmapComboBox()    "";
+
+    DocCtorStr(
+        wxBitmapComboBox(wxWindow *parent,
+                         wxWindowID id = -1,
+                         const wxString& value = wxPyEmptyString,
+                         const wxPoint& pos = wxDefaultPosition,
+                         const wxSize& size = wxDefaultSize,
+                         const wxArrayString& choices = wxPyEmptyStringArray,
+                         long style = 0,
+                         const wxValidator& validator = wxDefaultValidator,
+                         const wxString& name = wxBitmapComboBoxNameStr),
+        "Standard constructor", "");
+
+    DocCtorStrName(wxBitmapComboBox(),
+                   "2-phase create constructor.", "",
+                   PreBitmapComboBox);
+
+    DocDeclStr(
+        bool , Create(wxWindow *parent,
+                      wxWindowID id = -1,
+                      const wxString& value = wxPyEmptyString,
+                      const wxPoint& pos = wxDefaultPosition,
+                      const wxSize& size = wxDefaultSize,
+                      const wxArrayString& choices = wxPyEmptyStringArray,
+                      long style = 0,
+                      const wxValidator& validator = wxDefaultValidator,
+                      const wxString& name = wxBitmapComboBoxNameStr),
+        "Create the UI object, and other initialization.", "");
+    
+
+
+    %extend {
+        DocStr(Append,
+               "Adds the item to the control, associating the given data with the item
+if not None.  The return value is the index of the newly added item.", "");
+        int Append(const wxString& item, const wxBitmap& bitmap = wxNullBitmap, PyObject* clientData=NULL) {
+            if (clientData) {
+                wxPyClientData* data = new wxPyClientData(clientData);
+                return self->Append(item, bitmap, data);
+            } else
+                return self->Append(item, bitmap);
+        }
+    }
+    
+    
+    DocDeclStr(
+        virtual wxBitmap , GetItemBitmap(unsigned int n) const,
+        "Returns the image of the item with the given index.", "");
+
+    
+    %extend {
+        DocStr(Insert,
+               "Insert an item into the control before the item at the ``pos`` index,
+optionally associating some data object with the item.", "");
+        int Insert(const wxString& item, const wxBitmap& bitmap,
+                   unsigned int pos, PyObject* clientData=NULL) {
+            if (clientData) {
+                wxPyClientData* data = new wxPyClientData(clientData);
+                return self->Insert(item, bitmap, pos, data);
+            } else
+                return self->Insert(item, bitmap, pos);
+        }
+    }
+
+    
+    DocDeclStr(
+        virtual void , SetItemBitmap(unsigned int n, const wxBitmap& bitmap),
+        "Sets the image for the given item.", "");
+    
+
+    DocDeclStr(
+        virtual wxSize , GetBitmapSize() const,
+        "Returns size of the image used in list.", "");
+    
+
+};
 
 //---------------------------------------------------------------------------
 

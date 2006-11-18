@@ -26,6 +26,8 @@ the drawing of the items in the popup and in the control itself to
 overridden methods of a derived class, similarly to how wx.VListBox
 works.
 
+Added wx.combo.BitmapComboBox which is a combobox that displays a
+bitmap in front of the list items.
 
 
 

@@ -1428,8 +1428,6 @@ def PreRichTextCtrl(*args, **kwargs):
     val = _richtext.new_PreRichTextCtrl(*args, **kwargs)
     return val
 
-wxEVT_COMMAND_RICHTEXT_ITEM_SELECTED = _richtext.wxEVT_COMMAND_RICHTEXT_ITEM_SELECTED
-wxEVT_COMMAND_RICHTEXT_ITEM_DESELECTED = _richtext.wxEVT_COMMAND_RICHTEXT_ITEM_DESELECTED
 wxEVT_COMMAND_RICHTEXT_LEFT_CLICK = _richtext.wxEVT_COMMAND_RICHTEXT_LEFT_CLICK
 wxEVT_COMMAND_RICHTEXT_RIGHT_CLICK = _richtext.wxEVT_COMMAND_RICHTEXT_RIGHT_CLICK
 wxEVT_COMMAND_RICHTEXT_MIDDLE_CLICK = _richtext.wxEVT_COMMAND_RICHTEXT_MIDDLE_CLICK
@@ -1439,8 +1437,8 @@ wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGING = _richtext.wxEVT_COMMAND_RICHTEXT_ST
 wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED = _richtext.wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED
 wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING = _richtext.wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING
 wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED = _richtext.wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED
-EVT_RICHTEXT_ITEM_SELECTED = wx.PyEventBinder(wxEVT_COMMAND_RICHTEXT_ITEM_SELECTED, 1)
-EVT_RICHTEXT_ITEM_DESELECTED = wx.PyEventBinder(wxEVT_COMMAND_RICHTEXT_ITEM_DESELECTED, 1)
+wxEVT_COMMAND_RICHTEXT_CHARACTER = _richtext.wxEVT_COMMAND_RICHTEXT_CHARACTER
+wxEVT_COMMAND_RICHTEXT_DELETE = _richtext.wxEVT_COMMAND_RICHTEXT_DELETE
 EVT_RICHTEXT_LEFT_CLICK = wx.PyEventBinder(wxEVT_COMMAND_RICHTEXT_LEFT_CLICK, 1)
 EVT_RICHTEXT_RIGHT_CLICK = wx.PyEventBinder(wxEVT_COMMAND_RICHTEXT_RIGHT_CLICK, 1)
 EVT_RICHTEXT_MIDDLE_CLICK = wx.PyEventBinder(wxEVT_COMMAND_RICHTEXT_MIDDLE_CLICK, 1)
@@ -1450,6 +1448,8 @@ EVT_RICHTEXT_STYLESHEET_CHANGING = wx.PyEventBinder( wxEVT_COMMAND_RICHTEXT_STYL
 EVT_RICHTEXT_STYLESHEET_CHANGED = wx.PyEventBinder( wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED, 1)
 EVT_RICHTEXT_STYLESHEET_REPLACING = wx.PyEventBinder( wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING, 1)
 EVT_RICHTEXT_STYLESHEET_REPLACED = wx.PyEventBinder( wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED, 1)
+EVT_RICHTEXT_CHARACTER = wx.PyEventBinder( wxEVT_COMMAND_RICHTEXT_CHARACTER, 1)
+EVT_RICHTEXT_DELETE = wx.PyEventBinder( wxEVT_COMMAND_RICHTEXT_DELETE, 1)
 
 class RichTextEvent(_core.NotifyEvent):
     """Proxy of C++ RichTextEvent class"""
@@ -1458,13 +1458,13 @@ class RichTextEvent(_core.NotifyEvent):
     def __init__(self, *args, **kwargs): 
         """__init__(self, EventType commandType=wxEVT_NULL, int winid=0) -> RichTextEvent"""
         _richtext.RichTextEvent_swiginit(self,_richtext.new_RichTextEvent(*args, **kwargs))
-    def GetIndex(*args, **kwargs):
-        """GetIndex(self) -> int"""
-        return _richtext.RichTextEvent_GetIndex(*args, **kwargs)
+    def GetPosition(*args, **kwargs):
+        """GetPosition(self) -> int"""
+        return _richtext.RichTextEvent_GetPosition(*args, **kwargs)
 
-    def SetIndex(*args, **kwargs):
-        """SetIndex(self, int n)"""
-        return _richtext.RichTextEvent_SetIndex(*args, **kwargs)
+    def SetPosition(*args, **kwargs):
+        """SetPosition(self, int n)"""
+        return _richtext.RichTextEvent_SetPosition(*args, **kwargs)
 
     def GetFlags(*args, **kwargs):
         """GetFlags(self) -> int"""
@@ -1475,7 +1475,7 @@ class RichTextEvent(_core.NotifyEvent):
         return _richtext.RichTextEvent_SetFlags(*args, **kwargs)
 
     Flags = property(GetFlags,SetFlags,doc="See `GetFlags` and `SetFlags`") 
-    Index = property(GetIndex,SetIndex,doc="See `GetIndex` and `SetIndex`") 
+    Index = property(GetPosition,SetPosition,doc="See `GetPosition` and `SetPosition`") 
 _richtext.RichTextEvent_swigregister(RichTextEvent)
 
 

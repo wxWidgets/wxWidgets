@@ -2,7 +2,7 @@
 # Don't modify this file, modify the SWIG interface instead.
 
 """
-ComboCtrl class that can have any type of popup widget, and also an
+ComboCtrl class that can have any type ofconst wxBitmap& bitmap,  popup widget, and also an
 owner-drawn combobox control.
 """
 
@@ -299,7 +299,7 @@ class ComboCtrl(_core.Control):
 
         Extends popup size horizontally, relative to the edges of the combo
         control.  Values are given in pixels, and the defaults are zero.  It
-        is up to th epopup to fully take these values into account.
+        is up to the popup to fully take these values into account.
         """
         return _combo.ComboCtrl_SetPopupExtents(*args, **kwargs)
 
@@ -498,6 +498,10 @@ class ComboCtrl(_core.Control):
         """SetCtrlMainWnd(self, Window wnd)"""
         return _combo.ComboCtrl_SetCtrlMainWnd(*args, **kwargs)
 
+    def GetMainWindowOfCompositeControl(*args, **kwargs):
+        """GetMainWindowOfCompositeControl(self) -> Window"""
+        return _combo.ComboCtrl_GetMainWindowOfCompositeControl(*args, **kwargs)
+
     def GetFeatures(*args, **kwargs):
         """
         GetFeatures() -> int
@@ -539,6 +543,21 @@ class ComboCtrl(_core.Control):
         """
         return _combo.ComboCtrl_AnimateShow(*args, **kwargs)
 
+    PopupControl = property(GetPopupControl,SetPopupControl) 
+    PopupWindow = property(GetPopupWindow) 
+    TextCtrl = property(GetTextCtrl) 
+    Button = property(GetButton) 
+    Value = property(GetValue,SetValue) 
+    InsertionPoint = property(GetInsertionPoint) 
+    CustomPaintWidth = property(GetCustomPaintWidth,SetCustomPaintWidth) 
+    ButtonSize = property(GetButtonSize) 
+    TextIndent = property(GetTextIndent,SetTextIndent) 
+    TextRect = property(GetTextRect) 
+    BitmapNormal = property(GetBitmapNormal) 
+    BitmapPressed = property(GetBitmapPressed) 
+    BitmapHover = property(GetBitmapHover) 
+    BitmapDisabled = property(GetBitmapDisabled) 
+    PopupWindowState = property(GetPopupWindowState) 
 _combo.ComboCtrl_swigregister(ComboCtrl)
 
 def PreComboCtrl(*args, **kwargs):
@@ -893,6 +912,92 @@ def PreOwnerDrawnComboBox(*args, **kwargs):
     2-phase create constructor.
     """
     val = _combo.new_PreOwnerDrawnComboBox(*args, **kwargs)
+    return val
+
+class BitmapComboBox(OwnerDrawnComboBox):
+    """
+    A combobox that displays a bitmap in front of the list items. It
+    currently only allows using bitmaps of one size, and resizes itself so
+    that a bitmap can be shown next to the text field.
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, Window parent, int id=-1, String value=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            wxArrayString choices=wxPyEmptyStringArray, 
+            long style=0, Validator validator=DefaultValidator, 
+            String name=wxBitmapComboBoxNameStr) -> BitmapComboBox
+
+        Standard constructor
+        """
+        _combo.BitmapComboBox_swiginit(self,_combo.new_BitmapComboBox(*args, **kwargs))
+        self._setOORInfo(self);
+
+    def Create(*args, **kwargs):
+        """
+        Create(self, Window parent, int id=-1, String value=EmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            wxArrayString choices=wxPyEmptyStringArray, 
+            long style=0, Validator validator=DefaultValidator, 
+            String name=wxBitmapComboBoxNameStr) -> bool
+
+        Create the UI object, and other initialization.
+        """
+        return _combo.BitmapComboBox_Create(*args, **kwargs)
+
+    def Append(*args, **kwargs):
+        """
+        Append(self, String item, Bitmap bitmap=wxNullBitmap, PyObject clientData=None) -> int
+
+        Adds the item to the control, associating the given data with the item
+        if not None.  The return value is the index of the newly added item.
+        """
+        return _combo.BitmapComboBox_Append(*args, **kwargs)
+
+    def GetItemBitmap(*args, **kwargs):
+        """
+        GetItemBitmap(self, unsigned int n) -> Bitmap
+
+        Returns the image of the item with the given index.
+        """
+        return _combo.BitmapComboBox_GetItemBitmap(*args, **kwargs)
+
+    def Insert(*args, **kwargs):
+        """
+        Insert(self, String item, Bitmap bitmap, unsigned int pos, PyObject clientData=None) -> int
+
+        Insert an item into the control before the item at the ``pos`` index,
+        optionally associating some data object with the item.
+        """
+        return _combo.BitmapComboBox_Insert(*args, **kwargs)
+
+    def SetItemBitmap(*args, **kwargs):
+        """
+        SetItemBitmap(self, unsigned int n, Bitmap bitmap)
+
+        Sets the image for the given item.
+        """
+        return _combo.BitmapComboBox_SetItemBitmap(*args, **kwargs)
+
+    def GetBitmapSize(*args, **kwargs):
+        """
+        GetBitmapSize(self) -> Size
+
+        Returns size of the image used in list.
+        """
+        return _combo.BitmapComboBox_GetBitmapSize(*args, **kwargs)
+
+_combo.BitmapComboBox_swigregister(BitmapComboBox)
+
+def PreBitmapComboBox(*args, **kwargs):
+    """
+    PreBitmapComboBox() -> BitmapComboBox
+
+    2-phase create constructor.
+    """
+    val = _combo.new_PreBitmapComboBox(*args, **kwargs)
     return val
 
 

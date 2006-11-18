@@ -11906,7 +11906,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_RichTextEvent_GetIndex(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_RichTextEvent_GetPosition(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxRichTextEvent *arg1 = (wxRichTextEvent *) 0 ;
   int result;
@@ -11918,12 +11918,12 @@ SWIGINTERN PyObject *_wrap_RichTextEvent_GetIndex(PyObject *SWIGUNUSEDPARM(self)
   swig_obj[0] = args;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxRichTextEvent, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RichTextEvent_GetIndex" "', expected argument " "1"" of type '" "wxRichTextEvent const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RichTextEvent_GetPosition" "', expected argument " "1"" of type '" "wxRichTextEvent const *""'"); 
   }
   arg1 = reinterpret_cast< wxRichTextEvent * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (int)((wxRichTextEvent const *)arg1)->GetIndex();
+    result = (int)((wxRichTextEvent const *)arg1)->GetPosition();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -11934,7 +11934,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_RichTextEvent_SetIndex(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_RichTextEvent_SetPosition(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxRichTextEvent *arg1 = (wxRichTextEvent *) 0 ;
   int arg2 ;
@@ -11948,20 +11948,20 @@ SWIGINTERN PyObject *_wrap_RichTextEvent_SetIndex(PyObject *SWIGUNUSEDPARM(self)
     (char *) "self",(char *) "n", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:RichTextEvent_SetIndex",kwnames,&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:RichTextEvent_SetPosition",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxRichTextEvent, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RichTextEvent_SetIndex" "', expected argument " "1"" of type '" "wxRichTextEvent *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "RichTextEvent_SetPosition" "', expected argument " "1"" of type '" "wxRichTextEvent *""'"); 
   }
   arg1 = reinterpret_cast< wxRichTextEvent * >(argp1);
   ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "RichTextEvent_SetIndex" "', expected argument " "2"" of type '" "int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "RichTextEvent_SetPosition" "', expected argument " "2"" of type '" "int""'");
   } 
   arg2 = static_cast< int >(val2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->SetIndex(arg2);
+    (arg1)->SetPosition(arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -12294,8 +12294,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"RichTextCtrl_swigregister", RichTextCtrl_swigregister, METH_VARARGS, NULL},
 	 { (char *)"RichTextCtrl_swiginit", RichTextCtrl_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_RichTextEvent", (PyCFunction) _wrap_new_RichTextEvent, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"RichTextEvent_GetIndex", (PyCFunction)_wrap_RichTextEvent_GetIndex, METH_O, NULL},
-	 { (char *)"RichTextEvent_SetIndex", (PyCFunction) _wrap_RichTextEvent_SetIndex, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"RichTextEvent_GetPosition", (PyCFunction)_wrap_RichTextEvent_GetPosition, METH_O, NULL},
+	 { (char *)"RichTextEvent_SetPosition", (PyCFunction) _wrap_RichTextEvent_SetPosition, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"RichTextEvent_GetFlags", (PyCFunction)_wrap_RichTextEvent_GetFlags, METH_O, NULL},
 	 { (char *)"RichTextEvent_SetFlags", (PyCFunction) _wrap_RichTextEvent_SetFlags, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"RichTextEvent_swigregister", RichTextEvent_swigregister, METH_VARARGS, NULL},
@@ -14500,8 +14500,6 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "TEXT_ATTR_CHARACTER",SWIG_From_int(static_cast< int >(wxTEXT_ATTR_CHARACTER)));
   SWIG_Python_SetConstant(d, "TEXT_ATTR_PARAGRAPH",SWIG_From_int(static_cast< int >(wxTEXT_ATTR_PARAGRAPH)));
   SWIG_Python_SetConstant(d, "TEXT_ATTR_ALL",SWIG_From_int(static_cast< int >(wxTEXT_ATTR_ALL)));
-  PyDict_SetItemString(d, "wxEVT_COMMAND_RICHTEXT_ITEM_SELECTED", PyInt_FromLong(wxEVT_COMMAND_RICHTEXT_ITEM_SELECTED));
-  PyDict_SetItemString(d, "wxEVT_COMMAND_RICHTEXT_ITEM_DESELECTED", PyInt_FromLong(wxEVT_COMMAND_RICHTEXT_ITEM_DESELECTED));
   PyDict_SetItemString(d, "wxEVT_COMMAND_RICHTEXT_LEFT_CLICK", PyInt_FromLong(wxEVT_COMMAND_RICHTEXT_LEFT_CLICK));
   PyDict_SetItemString(d, "wxEVT_COMMAND_RICHTEXT_RIGHT_CLICK", PyInt_FromLong(wxEVT_COMMAND_RICHTEXT_RIGHT_CLICK));
   PyDict_SetItemString(d, "wxEVT_COMMAND_RICHTEXT_MIDDLE_CLICK", PyInt_FromLong(wxEVT_COMMAND_RICHTEXT_MIDDLE_CLICK));
@@ -14511,6 +14509,8 @@ SWIGEXPORT void SWIG_init(void) {
   PyDict_SetItemString(d, "wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED", PyInt_FromLong(wxEVT_COMMAND_RICHTEXT_STYLESHEET_CHANGED));
   PyDict_SetItemString(d, "wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING", PyInt_FromLong(wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACING));
   PyDict_SetItemString(d, "wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED", PyInt_FromLong(wxEVT_COMMAND_RICHTEXT_STYLESHEET_REPLACED));
+  PyDict_SetItemString(d, "wxEVT_COMMAND_RICHTEXT_CHARACTER", PyInt_FromLong(wxEVT_COMMAND_RICHTEXT_CHARACTER));
+  PyDict_SetItemString(d, "wxEVT_COMMAND_RICHTEXT_DELETE", PyInt_FromLong(wxEVT_COMMAND_RICHTEXT_DELETE));
   
   wxRichTextModuleInit();
   
