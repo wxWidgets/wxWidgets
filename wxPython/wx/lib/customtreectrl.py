@@ -4296,7 +4296,12 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
                 elif self._vistaselection:
                     self.DrawVistaRectangle(dc, itemrect, self._hasFocus)
                 else:
-                    dc.DrawRectangleRect(itemrect)
+                    if wx.Platform in ["__WXGTK2__", "__WXMAC__"]:
+                        flags = wx.CONTROL_SELECTED
+                        if self._hasFocus: flags = flags | wx.CONTROL_FOCUSED
+                        wx.RendererNative.Get().DrawItemSelectionRect(self, dc, itemrect, flags) 
+                    else:
+                        dc.DrawRectangleRect(itemrect)
 
         else:
 
@@ -4324,7 +4329,12 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
                 elif self._vistaselection:
                     self.DrawVistaRectangle(dc, itemrect, self._hasFocus)
                 else:
-                    dc.DrawRectangleRect(itemrect)
+                    if wx.Platform in ["__WXGTK2__", "__WXMAC__"]:
+                        flags = wx.CONTROL_SELECTED
+                        if self._hasFocus: flags = flags | wx.CONTROL_FOCUSED
+                        wx.RendererNative.Get().DrawItemSelectionRect(self, dc, itemrect, flags) 
+                    else:
+                        dc.DrawRectangleRect(itemrect)
                             
             # On GTK+ 2, drawing a 'normal' background is wrong for themes that
             # don't allow backgrounds to be customized. Not drawing the background,
@@ -4382,6 +4392,8 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
             dc.DrawLabel(item.GetText(), textrect)
             dc.SetTextForeground(foreground)
         else:
+            if wx.Platform == "__WXMAC__" and item.IsSelected() and self._hasFocus:
+                dc.SetTextForeground(wx.WHITE)
             dc.DrawLabel(item.GetText(), textrect)
 
         wnd = item.GetWindow()
