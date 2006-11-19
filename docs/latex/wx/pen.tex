@@ -59,7 +59,7 @@ get a pointer to a pen by using the global list of pens {\bf
 wxThePenList}, and calling the member function {\bf FindOrCreatePen}.
 See the entry for \helpref{wxPenList}{wxpenlist}.
 
-wxPen uses a reference counting system, so assignments between brushes are very
+wxPen uses a reference counting system, so assignments between pens are very
 cheap. You can therefore use actual wxPen objects instead of pointers without
 efficiency problems. Once one wxPen object changes its data it will create its
 own pen data internally so that other pens, which previously shared the
