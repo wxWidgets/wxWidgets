@@ -2686,8 +2686,8 @@ void wxDC::DoGradientFillLinear (const wxRect& rect,
 
         vertices[0].x = rect.GetLeft();
         vertices[0].y = rect.GetTop();
-        vertices[1].x = rect.GetRight();
-        vertices[1].y = rect.GetBottom();
+        vertices[1].x = rect.GetRight()+1;
+        vertices[1].y = rect.GetBottom()+1;
 
         vertices[firstVertex].Red = (COLOR16)(initialColour.Red() << 8);
         vertices[firstVertex].Green = (COLOR16)(initialColour.Green() << 8);
