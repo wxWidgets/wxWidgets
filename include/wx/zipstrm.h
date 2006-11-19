@@ -383,7 +383,7 @@ protected:
     size_t WXZIPFIX OnSysRead(void *buffer, size_t size);
     wxFileOffset OnSysTell() const { return m_decomp ? m_decomp->TellI() : 0; }
 
-#if WXWIN_COMPATIBILITY_2_6 && wxUSE_FFILE
+#if WXWIN_COMPATIBILITY_2_6
     wxFileOffset WXZIPFIX OnSysSeek(wxFileOffset seek, wxSeekMode mode);
 #endif
 
