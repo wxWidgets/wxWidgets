@@ -3074,6 +3074,27 @@ void wxAuiManager::HideHint()
 
 
 
+void wxAuiManager::StartPaneDrag(wxWindow* pane_window,
+                                 const wxPoint& offset)
+{
+    wxAuiPaneInfo& pane = GetPane(pane_window);
+    if (!pane.IsOk())
+        return;
+    
+    if (pane.IsToolbar())
+    {
+        m_action = actionDragToolbarPane;
+    }
+     else
+    {
+        m_action = actionDragFloatingPane;
+    }
+    
+    m_action_window = pane_window;
+    m_action_offset = offset;
+    m_frame->CaptureMouse();
+}
+
 
 // CalculateHintRect() calculates the drop hint rectangle.  The method
 // first calls DoDrop() to determine the exact position the pane would
@@ -4041,9 +4062,8 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
                                                       pt.y - m_action_offset.y);
 
                     // float the window
-                    if(pane_info->IsMaximized()) {
+                    if (pane_info->IsMaximized())
                         RestorePane(*pane_info);
-                    }
                     pane_info->Float();
                     Update();
 
