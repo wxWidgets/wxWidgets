@@ -155,6 +155,8 @@ public:
     virtual bool Enable(bool enable = true);
     virtual bool Show(bool show = true);
 
+    virtual void SetWindowStyleFlag(long style);
+
     virtual wxVisualAttributes GetDefaultAttributes() const
         { return GetClassDefaultAttributes(GetWindowVariant()); }
 
