@@ -775,14 +775,26 @@ wxImage wxDIB::ConvertToImage() const
             dst[1] = *src++;
             dst[0] = *src++;
 
-            dst += 3;
-
             if ( is32bit )
             {
                 if ( alpha )
-                    *alpha++ = *src;
+                {
+                    // wxImage uses non premultiplied alpha so undo
+                    // premultiplication done in Create() above
+                    const unsigned char a = *src;
+                    *alpha++ = a;
+                    if ( a > 0 )
+                    {
+                        dst[0] = (dst[0] * 255 - 127) / a;
+                        dst[1] = (dst[1] * 255 - 127) / a;
+                        dst[2] = (dst[2] * 255 - 127) / a;
+                    }
+                }
+
                 src++;
             }
+
+            dst += 3;
         }
 
         // pass to the previous line in the image
