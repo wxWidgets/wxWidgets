@@ -147,16 +147,15 @@ drawing of a text or bitmap label can be passed in \arg{params}.
 
 \func{void}{DrawItemSelectionRect}{\param{wxWindow* }{win}, \param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{int }{flags = 0}}
 
-Draw a selection rectangle underneath the text as used e.g.
-in a \helpref{wxListCtrl}{wxlistctrl}. The supported \arg{flags}
-are \texttt{wxCONTROL\_SELECTED} for items which are selected
-(e.g. often a blue rectangle) and \texttt{wxCONTROL\_CURRENT}
-for the item that has the focus (often a dotted line around
-the item's text). \texttt{wxCONTROL\_CURRENT} may be used
-to indicate if the control has the focus (othewise the 
-the selection rectangle is e.g. often grey and not blue).
-This may be ignored by the renderer or deduced by the
-code directly from the \arg{win}.
+Draw a selection rectangle underneath the text as used e.g. in a 
+\helpref{wxListCtrl}{wxlistctrl}. The supported \arg{flags} are
+\texttt{wxCONTROL\_SELECTED} for items which are selected (e.g. often a blue
+rectangle) and \texttt{wxCONTROL\_CURRENT} for the item that has the focus
+(often a dotted line around the item's text). \texttt{wxCONTROL\_FOCUSED} may
+be used to indicate if the control has the focus (othewise the the selection
+rectangle is e.g. often grey and not blue). This may be ignored by the renderer
+or deduced by the code directly from the \arg{win}.
+
 
 \membersection{wxRendererNative::DrawPushButton}\label{wxrenderernativedrawpushbutton}
 
