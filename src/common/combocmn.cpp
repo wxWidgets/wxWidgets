@@ -1149,6 +1149,26 @@ void wxComboCtrlBase::DoSetToolTip(wxToolTip *tooltip)
 }
 #endif // wxUSE_TOOLTIPS
 
+#if wxUSE_VALIDATORS
+void wxComboCtrlBase::SetValidator(const wxValidator& validator)
+{
+    wxTextCtrl* textCtrl = GetTextCtrl();
+
+    if ( textCtrl )
+        textCtrl->SetValidator( validator );
+}
+
+wxValidator* wxComboCtrlBase::GetValidator()
+{
+    wxTextCtrl* textCtrl = GetTextCtrl();
+
+    if ( textCtrl )
+        return textCtrl->GetValidator();
+
+    return wxControl::GetValidator();
+}
+#endif // wxUSE_VALIDATORS
+
 // ----------------------------------------------------------------------------
 // painting
 // ----------------------------------------------------------------------------

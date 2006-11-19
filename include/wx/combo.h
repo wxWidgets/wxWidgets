@@ -184,6 +184,10 @@ public:
     virtual bool Enable(bool enable = true);
     virtual bool Show(bool show = true);
     virtual bool SetFont(const wxFont& font);
+#if wxUSE_VALIDATORS
+    virtual void SetValidator(const wxValidator &validator);
+    virtual wxValidator *GetValidator();
+#endif // wxUSE_VALIDATORS
 
     // wxTextCtrl methods - for readonly combo they should return
     // without errors.
