@@ -142,11 +142,6 @@
         -DAUTOCONF_MACROS_FILE=../../autoconf_inc.m4
     </add-flags>
 
-    <add-formats files="wx.bkl">wx24dsp</add-formats>
-    <add-flags formats="wx24dsp">
-        -DUSE_GUI=1 -DWXUNIV=0 -o../../src/wxWindows.dsp
-    </add-flags>
-
     <add-formats files="wx.bkl">rpmspec</add-formats>
 
 
