@@ -3,7 +3,7 @@
 
 <makefile>
 
-    <requires version="0.1.7"/>
+    <requires version="0.2.1"/>
 
     <!-- bakefile modules we need: -->
     <using module="datafiles"/>
@@ -351,17 +351,9 @@
 
     <define-tag name="msvc-headers" rules="dll,lib">
         <if cond="IS_MSVC_PRJ">
-            <!-- FIXME: remove this once we require >=bkl-0.1.9 -->
-            <if cond="BAKEFILE_VERSION in ['0.1.7', '0.1.8']">
-                <msvc-project-files>
-                    $(addPrefixToList('include\', wxwin.headersOnly(value)))
-                </msvc-project-files>
-            </if>
-            <if cond="BAKEFILE_VERSION not in ['0.1.7', '0.1.8']">
-                <msvc-project-files>
-                    $(addPrefixToList('include\\', wxwin.headersOnly(value)))
-                </msvc-project-files>
-            </if>
+            <msvc-project-files>
+                $(addPrefixToList('include\\', wxwin.headersOnly(value)))
+            </msvc-project-files>
         </if>
     </define-tag>
 
@@ -646,12 +638,10 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
         <ldflags cond="FORMAT=='autoconf'">$(WXMACVERSION_CMD)</ldflags>
 
         <!-- version info resources: -->
-        <if cond="FORMAT not in ['rpmspec','wx24dsp']"> <!-- FIXME: fix for bkl-0.1.7 only, remove the cond later -->
-            <res-define>WXDLLNAME=$(WXDLLNAME)</res-define>
-            <if cond="FORMAT=='autoconf'">
-                <res-include>$(RCDEFDIR)</res-include>
-                <res-include>$(TOP_SRCDIR)include</res-include>
-            </if>
+        <res-define>WXDLLNAME=$(WXDLLNAME)</res-define>
+        <if cond="FORMAT=='autoconf'">
+            <res-include>$(RCDEFDIR)</res-include>
+            <res-include>$(TOP_SRCDIR)include</res-include>
         </if>
         <win32-res>$(WXTOPDIR)src/msw/version.rc</win32-res>
     </template>
