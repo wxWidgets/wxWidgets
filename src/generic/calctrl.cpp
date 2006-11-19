@@ -255,6 +255,17 @@ wxCalendarCtrl::~wxCalendarCtrl()
     }
 }
 
+void wxCalendarCtrl::SetWindowStyleFlag(long style)
+{
+    // changing this style doesn't work because the controls are not
+    // created/shown/hidden accordingly
+    wxASSERT_MSG( (style & wxCAL_SEQUENTIAL_MONTH_SELECTION) ==
+                    (m_windowStyle & wxCAL_SEQUENTIAL_MONTH_SELECTION),
+                  _T("wxCAL_SEQUENTIAL_MONTH_SELECTION can't be changed after creation") );
+
+    wxControl::SetWindowStyleFlag(style);
+}
+
 // ----------------------------------------------------------------------------
 // Create the wxComboBox and wxSpinCtrl
 // ----------------------------------------------------------------------------
@@ -394,6 +405,7 @@ void wxCalendarCtrl::ShowCurrentControls()
         m_spinYear->Hide();
         m_staticYear->Show();
     }
+    //else: these controls are not even created, don't show/hide them
 }
 
 wxControl *wxCalendarCtrl::GetMonthControl() const
