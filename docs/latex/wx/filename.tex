@@ -28,18 +28,26 @@ wxFileName dirname( wxT("C:\mydir"), wxEmptyString );
 MyMethod( dirname.GetPath() );
 \end{verbatim}
 
+The same can be done using the static method \helpref{wxFileName::DirName}{wxfilenamedirname}:
+
+\begin{verbatim}
+wxFileName dirname = wxFileName::DirName( wxT("C:\mydir") );
+MyMethod( dirname.GetPath() );
+\end{verbatim}
+
 Accordingly, methods dealing with directories or directory names
-like \helpref{IsDirReadable}{wxfilenameisdirreadale} use
+like \helpref{IsDirReadable}{wxfilenameisdirreadable} use
 \helpref{GetPath}{wxfilenamegetpath} whereas methods dealing 
-with file names like \helpref{IsFileReadable}{wxfilenameisfilereadale}
+with file names like \helpref{IsFileReadable}{wxfilenameisfilereadable}
 use \helpref{GetFullPath}{wxfilenamegetfullpath}.
 
 If it is not known wether a string contains a directory name or
 a complete file name (such as when interpreting user input) you need to use
 the static function \helpref{wxFileName::DirExists}{wxfilenamedirexists}
-(or its global variant \helpref{wxDirExists}{wxdirexists}) and
-construct the wxFileName instance accordingly. This will only work
-if the directory actually exists, of course:
+(or its identical variants \helpref{wxDir::Exists}{wxdirexists} and
+\helpref{wxDirExists}{functionwxdirexists}) and construct the wxFileName
+instance accordingly. This will only work if the directory actually exists,
+of course:
 
 \begin{verbatim}
 wxString user_input;
