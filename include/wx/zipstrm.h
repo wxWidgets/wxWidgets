@@ -440,9 +440,9 @@ private:
     friend bool wxZipOutputStream::CopyArchiveMetaData(
                     wxZipInputStream& inputStream);
 
-#if WXWIN_COMPATIBILITY_2_6 && wxUSE_FFILE
+#if WXWIN_COMPATIBILITY_2_6
     bool m_allowSeeking;
-    friend class wxZipFSInputStream;
+    friend class wxArchiveFSHandler;
 #endif
 
     DECLARE_NO_COPY_CLASS(wxZipInputStream)

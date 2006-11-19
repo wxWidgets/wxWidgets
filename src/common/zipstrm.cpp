@@ -1374,7 +1374,7 @@ void wxZipInputStream::Init()
     m_signature = 0;
     m_TotalEntries = 0;
     m_lasterror = m_parent_i_stream->GetLastError();
-#if WXWIN_COMPATIBILITY_2_6 && wxUSE_FFILE
+#if WXWIN_COMPATIBILITY_2_6
     m_allowSeeking = false;
 #endif
 }
@@ -1883,7 +1883,7 @@ size_t wxZipInputStream::OnSysRead(void *buffer, size_t size)
     return count;
 }
 
-#if WXWIN_COMPATIBILITY_2_6 && wxUSE_FFILE
+#if WXWIN_COMPATIBILITY_2_6
 
 // Borrowed from VS's zip stream (c) 1999 Vaclav Slavik
 //
@@ -1948,7 +1948,7 @@ wxFileOffset wxZipInputStream::OnSysSeek(wxFileOffset seek, wxSeekMode mode)
     return pos;
 }
 
-#endif // WXWIN_COMPATIBILITY_2_6 && wxUSE_FFILE
+#endif // WXWIN_COMPATIBILITY_2_6
 
 
 /////////////////////////////////////////////////////////////////////////////

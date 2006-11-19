@@ -22,7 +22,12 @@
     #include "wx/log.h"
 #endif
 
-#include "wx/archive.h"
+#if WXWIN_COMPATIBILITY_2_6
+    #include "wx/zipstrm.h"
+#else
+    #include "wx/archive.h"
+#endif
+
 #include "wx/private/fileback.h"
 
 //---------------------------------------------------------------------------
@@ -393,6 +398,12 @@ wxFSFile* wxArchiveFSHandler::OpenFile(
     s->OpenEntry(*entry);
 
     if (s && s->IsOk())
+    {
+#if WXWIN_COMPATIBILITY_2_6
+        if (factory->IsKindOf(CLASSINFO(wxZipClassFactory)))
+            ((wxZipInputStream*)s)->m_allowSeeking = true;
+#endif // WXWIN_COMPATIBILITY_2_6
+
         return new wxFSFile(s,
                             key + right,
                             GetMimeTypeFromExt(location),
@@ -401,6 +412,7 @@ wxFSFile* wxArchiveFSHandler::OpenFile(
                             , entry->GetDateTime()
 #endif // wxUSE_DATETIME
                             );
+    }
 
     delete s;
     return NULL;
