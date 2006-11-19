@@ -754,13 +754,6 @@ void wxGenericTreeCtrl::Init()
     m_indent = 15;
     m_spacing = 18;
 
-#ifdef __WXMAC__
-    // OS X sel item highlight color differs from text highlight color, which is
-    // what wxSYS_COLOUR_HIGHLIGHT returns. 
-    RGBColor hilight;
-    GetThemeBrushAsColor(kThemeBrushAlternatePrimaryHighlightColor, 32, true, &hilight);
-    m_hilightBrush = new wxBrush( wxColour(hilight.red, hilight.green, hilight.blue ), wxSOLID );
-#else
     m_hilightBrush = new wxBrush
                          (
                             wxSystemSettings::GetColour
@@ -769,14 +762,7 @@ void wxGenericTreeCtrl::Init()
                             ),
                             wxSOLID
                          );
-#endif
 
-#ifdef __WXMAC__
-    // on Mac, this color also differs from the wxSYS_COLOUR_BTNSHADOW, enough to be noticable.
-    // I don't know if BTNSHADOW is appropriate in other contexts, so I'm just changing it here.
-    GetThemeBrushAsColor(kThemeBrushSecondaryHighlightColor, 32, true, &hilight);
-    m_hilightUnfocusedBrush = new wxBrush( wxColour(hilight.red, hilight.green, hilight.blue ), wxSOLID );
-#else
     m_hilightUnfocusedBrush = new wxBrush
                               (
                                  wxSystemSettings::GetColour
@@ -785,7 +771,7 @@ void wxGenericTreeCtrl::Init()
                                  ),
                                  wxSOLID
                               );
-#endif
+
     m_imageListButtons = NULL;
     m_ownsImageListButtons = false;
 
@@ -2236,7 +2222,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         x=0;
         GetVirtualSize(&w, &h);
         wxRect rect( x, item->GetY()+offset, w, total_h-offset);
-#ifndef __WXGTK20__
+#if !defined(__WXGTK20__) && !defined(__WXMAC__)
         dc.DrawRectangle(rect);
 #else
         if (!item->IsSelected())
@@ -2263,7 +2249,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
             // background colour.
             wxRect rect( item->GetX() + image_w - 2, item->GetY()+offset,
                          item->GetWidth() - image_w + 2, total_h-offset );
-#ifndef __WXGTK20__
+#if !defined(__WXGTK20__) && !defined(__WXMAC__)
             dc.DrawRectangle( rect );
 #else
             rect.x -= 1;
@@ -2284,7 +2270,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         {
             wxRect rect( item->GetX()-2, item->GetY()+offset,
                          item->GetWidth()+2, total_h-offset );
-#ifndef __WXGTK20__
+#if !defined(__WXGTK20__) && !defined(__WXMAC__)
             dc.DrawRectangle( rect );
 #else
             if ( attr && attr->HasBackgroundColour() )

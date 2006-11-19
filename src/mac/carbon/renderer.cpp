@@ -56,6 +56,11 @@ public:
         wxCoord position,
         wxOrientation orient,
         int flags = 0 );
+        
+    virtual void DrawItemSelectionRect(wxWindow *win,
+                                       wxDC& dc,
+                                       const wxRect& rect,
+                                       int flags = 0);
 
 private:
     // the tree buttons
@@ -340,4 +345,26 @@ void wxRendererMac::DrawSplitterSash( wxWindow *win,
         QDEndCGContext( (CGrafPtr) dc.m_macPort, &cgContext );
 #endif
     }
+}
+
+void
+wxRendererMac::DrawItemSelectionRect(wxWindow *win,
+                                     wxDC& dc,
+                                     const wxRect& rect,
+                                     int flags )
+{
+    RGBColor selColor; 
+    if (flags & wxCONTROL_SELECTED)
+    {
+        if (flags & wxCONTROL_FOCUSED)
+            GetThemeBrushAsColor(kThemeBrushAlternatePrimaryHighlightColor, 32, true, &selColor);
+        else
+            GetThemeBrushAsColor(kThemeBrushSecondaryHighlightColor, 32, true, &selColor);
+    }
+    
+    wxBrush selBrush = wxBrush( wxColour( selColor.red, selColor.green, selColor.blue ), wxSOLID );
+
+    dc.SetPen( *wxTRANSPARENT_PEN );
+    dc.SetBrush( selBrush );
+    dc.DrawRectangle( rect );
 }
