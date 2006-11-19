@@ -203,6 +203,7 @@ public:
     void SetItem( const wxListItem &item );
     void SetPosition( int x, int y );
     void SetWidth( int w );
+    void SetState( int state );
     void SetFormat( int format );
     void SetHeight( int h );
     bool HasImage() const;
@@ -217,6 +218,7 @@ public:
     int GetImage() const;
     int GetWidth() const;
     int GetFormat() const;
+    int GetState() const;
 
 protected:
     long      m_mask;
@@ -227,6 +229,7 @@ protected:
     int       m_xpos,
               m_ypos;
     int       m_height;
+    int       m_state;
 
 private:
     void Init();
@@ -1002,6 +1005,7 @@ void wxListHeaderData::Init()
     m_xpos = 0;
     m_ypos = 0;
     m_height = 0;
+    m_state = 0;
 }
 
 wxListHeaderData::wxListHeaderData()
@@ -1031,6 +1035,9 @@ void wxListHeaderData::SetItem( const wxListItem &item )
 
     if ( m_mask & wxLIST_MASK_WIDTH )
         SetWidth(item.m_width);
+        
+    if ( m_mask & wxLIST_MASK_STATE )
+        SetState(item.m_state);
 }
 
 void wxListHeaderData::SetPosition( int x, int y )
@@ -1047,6 +1054,11 @@ void wxListHeaderData::SetHeight( int h )
 void wxListHeaderData::SetWidth( int w )
 {
     m_width = w < 0 ? WIDTH_COL_DEFAULT : w;
+}
+
+void wxListHeaderData::SetState( int flag )
+{
+    m_state = flag;
 }
 
 void wxListHeaderData::SetFormat( int format )
@@ -1071,6 +1083,7 @@ void wxListHeaderData::GetItem( wxListItem& item )
     item.m_image = m_image;
     item.m_format = m_format;
     item.m_width = m_width;
+    item.m_state = m_state;
 }
 
 int wxListHeaderData::GetImage() const
@@ -1086,6 +1099,11 @@ int wxListHeaderData::GetWidth() const
 int wxListHeaderData::GetFormat() const
 {
     return m_format;
+}
+
+int wxListHeaderData::GetState() const
+{
+    return m_state;
 }
 
 //-----------------------------------------------------------------------------
@@ -1442,7 +1460,7 @@ void wxListLineData::Draw( wxDC *dc )
     wxListItemAttr *attr = GetAttr();
 
     if ( SetAttributes(dc, attr, highlighted) )
-#ifndef __WXGTK20__
+#if ( !defined(__WXGTK20__) && !defined(__WXMAC__) )
     {
         dc->DrawRectangle( m_gi->m_rectHighlight );
     }
@@ -1501,7 +1519,7 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
     //       GetAttr() and move these lines into the loop below
     wxListItemAttr *attr = GetAttr();
     if ( SetAttributes(dc, attr, highlighted) )
-#ifndef __WXGTK20__
+#if ( !defined(__WXGTK20__) && !defined(__WXMAC__) )
     {
         dc->DrawRectangle( rectHL );
     }
@@ -1779,13 +1797,26 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         int ch = h - 2;
 #endif
 
+        int flags = 0;
+        if (!m_parent->IsEnabled())
+            flags |= wxCONTROL_DISABLED;
+
+// NB: The code below is not really Mac-specific, but since we are close 
+// to 2.8 release and I don't have time to test on other platforms, I
+// defined this only for wxMac. If this behavior is desired on
+// other platforms, please go ahead and revise or remove the #ifdef.
+#ifdef __WXMAC__
+        if ( !m_owner->IsVirtual() && (item.m_mask & wxLIST_MASK_STATE) && 
+                (item.m_state & wxLIST_STATE_SELECTED) )
+            flags |= wxCONTROL_SELECTED;
+#endif
+
         wxRendererNative::Get().DrawHeaderButton
                                 (
                                     this,
                                     dc,
                                     wxRect(x, HEADER_OFFSET_Y, cw, ch),
-                                    m_parent->IsEnabled() ? 0
-                                                          : (int)wxCONTROL_DISABLED
+                                    flags
                                 );
 
         // see if we have enough space for the column label
@@ -1981,6 +2012,22 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
             }
             else // click on a column
             {
+                // record the selected state of the columns
+                if (event.LeftDown())
+                {
+                    for (int i=0; i < m_owner->GetColumnCount(); i++)
+                    {
+                        wxListItem colItem;
+                        m_owner->GetColumn(i, colItem);
+                        long state = colItem.GetState(); 
+                        if (i == m_column)
+                            colItem.SetState(state | wxLIST_STATE_SELECTED);
+                        else
+                            colItem.SetState(state & ~wxLIST_STATE_SELECTED);
+                        m_owner->SetColumn(i, colItem);
+                    }
+                }
+                
                 SendListEvent( event.LeftDown()
                                     ? wxEVT_COMMAND_LIST_COL_CLICK
                                     : wxEVT_COMMAND_LIST_COL_RIGHT_CLICK,
@@ -2243,14 +2290,6 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
 {
     Init();
 
-
-#ifdef __WXMAC__
-    // OS X sel item highlight color differs from text highlight color, which is
-    // what wxSYS_COLOUR_HIGHLIGHT returns. 
-    RGBColor hilight;
-    GetThemeBrushAsColor(kThemeBrushAlternatePrimaryHighlightColor, 32, true, &hilight);
-    m_highlightBrush = new wxBrush( wxColour(hilight.red, hilight.green, hilight.blue ), wxSOLID );
-#else
     m_highlightBrush = new wxBrush
                          (
                             wxSystemSettings::GetColour
@@ -2259,14 +2298,7 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
                             ),
                             wxSOLID
                          );
-#endif
-
-#ifdef __WXMAC__
-    // on Mac, this color also differs from the wxSYS_COLOUR_BTNSHADOW, enough to be noticable.
-    // I don't know if BTNSHADOW is appropriate in other contexts, so I'm just changing it here.
-    GetThemeBrushAsColor(kThemeBrushSecondaryHighlightColor, 32, true, &hilight);
-    m_highlightUnfocusedBrush = new wxBrush( wxColour(hilight.red, hilight.green, hilight.blue ), wxSOLID );
-#else
+                         
     m_highlightUnfocusedBrush = new wxBrush
                               (
                                  wxSystemSettings::GetColour
@@ -2275,7 +2307,6 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
                                  ),
                                  wxSOLID
                               );
-#endif
 
     SetScrollbars( 0, 0, 0, 0, 0, 0 );
 
