@@ -587,10 +587,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
         // so subtract 1 for deleted character and add 1 for conversion to character position.
         if (m_caretPosition > -1 && !HasSelection())
         {
-            GetBuffer().DeleteRangeWithUndo(wxRichTextRange(m_caretPosition, m_caretPosition),
-                m_caretPosition,   // Current caret position
-                m_caretPosition-1, // New caret position
-                this);
+            GetBuffer().DeleteRangeWithUndo(wxRichTextRange(m_caretPosition, m_caretPosition), this);
         }
         else
             DeleteSelectedContent();
@@ -625,10 +622,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
         // Submit range in character positions, which are greater than caret positions,
         if (m_caretPosition < GetBuffer().GetRange().GetEnd()+1 && !HasSelection())
         {
-            GetBuffer().DeleteRangeWithUndo(wxRichTextRange(m_caretPosition+1, m_caretPosition+1),
-                m_caretPosition,   // Current caret position
-                m_caretPosition+1, // New caret position
-                this);
+            GetBuffer().DeleteRangeWithUndo(wxRichTextRange(m_caretPosition+1, m_caretPosition+1), this);
         }
         else
             DeleteSelectedContent();
@@ -826,10 +820,7 @@ bool wxRichTextCtrl::DeleteSelectedContent(long* newPos)
     if (HasSelection())
     {
         long pos = m_selectionRange.GetStart();
-        GetBuffer().DeleteRangeWithUndo(m_selectionRange,
-            m_caretPosition,       // Current caret position
-            pos,    // New caret position
-            this);
+        GetBuffer().DeleteRangeWithUndo(m_selectionRange, this);
         m_selectionRange.SetRange(-2, -2);
 
         if (newPos)
@@ -2275,10 +2266,7 @@ void wxRichTextCtrl::Remove(long from, long to)
 {
     SelectNone();
 
-    GetBuffer().DeleteRangeWithUndo(wxRichTextRange(from, to),
-        m_caretPosition,       // Current caret position
-        from,                           // New caret position
-        this);
+    GetBuffer().DeleteRangeWithUndo(wxRichTextRange(from, to), this);
 
     LayoutContent();
     if (!IsFrozen())
