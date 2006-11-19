@@ -351,6 +351,14 @@ wxWindowBase::~wxWindowBase()
 #endif
 }
 
+void wxWindowBase::SendDestroyEvent()
+{
+    wxWindowDestroyEvent event;
+    event.SetEventObject(this);
+    event.SetId(GetId());
+    GetEventHandler()->ProcessEvent(event);
+}
+
 bool wxWindowBase::Destroy()
 {
     delete this;
@@ -1516,7 +1524,7 @@ void wxWindowBase::OnHelp(wxHelpEvent& event)
 #endif // wxUSE_HELP
 
 // ----------------------------------------------------------------------------
-// tooltipsroot.Replace("\\", "/");
+// tooltips
 // ----------------------------------------------------------------------------
 
 #if wxUSE_TOOLTIPS
@@ -2000,7 +2008,7 @@ void wxWindowBase::AdjustForParentClientOrigin(int& x, int& y, int sizeFlags) co
 }
 
 // ----------------------------------------------------------------------------
-// do Update UI processing for child controls
+// Update UI processing
 // ----------------------------------------------------------------------------
 
 void wxWindowBase::UpdateWindowUI(long flags)
@@ -2034,23 +2042,6 @@ void wxWindowBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
     if ( event.GetSetShown() )
         Show(event.GetShown());
 }
-
-#if 0
-// call internal idle recursively
-// may be obsolete (wait until OnIdle scheme stabilises)
-void wxWindowBase::ProcessInternalIdle()
-{
-    OnInternalIdle();
-
-    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
-    while (node)
-    {
-        wxWindow *child = node->GetData();
-        child->ProcessInternalIdle();
-        node = node->GetNext();
-    }
-}
-#endif
 
 // ----------------------------------------------------------------------------
 // dialog units translations
@@ -2275,14 +2266,14 @@ wxAccessible* wxWindowBase::CreateAccessible()
 #include "wx/listimpl.cpp"
 WX_DEFINE_LIST(wxWindowList)
 
-#else
+#else // !wxUSE_STL
 
 void wxWindowListNode::DeleteData()
 {
     delete (wxWindow *)GetData();
 }
 
-#endif
+#endif // wxUSE_STL/!wxUSE_STL
 
 // ----------------------------------------------------------------------------
 // borders
@@ -2450,14 +2441,6 @@ bool wxWindowBase::UnregisterHotKey(int WXUNUSED(hotkeyId))
 }
 
 #endif // wxUSE_HOTKEY
-
-void wxWindowBase::SendDestroyEvent()
-{
-    wxWindowDestroyEvent event;
-    event.SetEventObject(this);
-    event.SetId(GetId());
-    GetEventHandler()->ProcessEvent(event);
-}
 
 // ----------------------------------------------------------------------------
 // event processing
