@@ -64,6 +64,11 @@ Deprecated methods since 2.6.x and their replacements
 - wxDC::BeginDrawing() and wxDC::EndDrawing() deprecated, don't use them.
 - wxWindowBase::GetBestFittingSize --> wxWindowBase::GetEffectiveMinSize.
 - wxWindowBase::SetBestFittingSize --> wxWindowBase::SetInitialSize.
+- Seeking on a zip stream returned from wxFileSystem without using the new
+  wxFS_SEEKABLE flags is deprecated. You can still seek, but use the flag.
+- Constructor wxZipInputStream(const wxString& archive, const wxString& file)
+  deprecated in favour of wxFileSystem (other zip ctors are not deprecated).
+ 
 
 
 Major new features in 2.8 release
