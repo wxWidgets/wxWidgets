@@ -93,6 +93,7 @@ public:
 private:
     wxCalendarCtrl *m_calendar;
     wxStaticText   *m_date;
+    wxSizer        *m_sizer;
 
     DECLARE_EVENT_TABLE()
 };
@@ -516,7 +517,7 @@ MyPanel::MyPanel(wxFrame *frame)
 
     // adjust to vertical/horizontal display, check mostly dedicated to WinCE
     bool horizontal = ( wxSystemSettings::GetMetric(wxSYS_SCREEN_X) > wxSystemSettings::GetMetric(wxSYS_SCREEN_Y) );
-    wxBoxSizer *m_sizer = new wxBoxSizer( horizontal ? wxHORIZONTAL : wxVERTICAL );
+    m_sizer = new wxBoxSizer( horizontal ? wxHORIZONTAL : wxVERTICAL );
 
     m_sizer->Add(m_date, 0, wxALIGN_CENTER | wxALL, 10 );
     m_sizer->Add(m_calendar, 0, wxALIGN_CENTER | wxALIGN_LEFT);
@@ -563,9 +564,26 @@ void MyPanel::ToggleCalStyle(bool on, int flag)
     else
         style &= ~flag;
 
-    m_calendar->SetWindowStyle(style);
+    if ( flag == wxCAL_SEQUENTIAL_MONTH_SELECTION )
+    {
+        // changing this style requires recreating the control
+        wxCalendarCtrl *calendar = new wxCalendarCtrl(this, Calendar_CalCtrl,
+                                                      m_calendar->GetDate(),
+                                                      wxDefaultPosition,
+                                                      wxDefaultSize,
+                                                      style);
+        m_sizer->Replace(m_calendar, calendar);
+        delete m_calendar;
+        m_calendar = calendar;
 
-    m_calendar->Refresh();
+        m_sizer->Layout();
+    }
+    else // just changing the style is enough
+    {
+        m_calendar->SetWindowStyle(style);
+
+        m_calendar->Refresh();
+    }
 }
 
 void MyPanel::HighlightSpecial(bool on)
