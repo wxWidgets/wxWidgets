@@ -11374,7 +11374,7 @@ class ItemContainer(object):
 
     def Insert(*args, **kwargs):
         """
-        Insert(self, String item, unsigned int pos, PyObject clientData=None) -> int
+        Insert(self, String item, int pos, PyObject clientData=None) -> int
 
         Insert an item into the control before the item at the ``pos`` index,
         optionally associating some data object with the item.
@@ -11391,7 +11391,7 @@ class ItemContainer(object):
 
     def Delete(*args, **kwargs):
         """
-        Delete(self, unsigned int n)
+        Delete(self, int n)
 
         Deletes the item at the zero-based index 'n' from the control. Note
         that it is an error (signalled by a `wx.PyAssertionError` exception if
@@ -11402,7 +11402,7 @@ class ItemContainer(object):
 
     def GetClientData(*args, **kwargs):
         """
-        GetClientData(self, unsigned int n) -> PyObject
+        GetClientData(self, int n) -> PyObject
 
         Returns the client data associated with the given item, (if any.)
         """
@@ -11410,7 +11410,7 @@ class ItemContainer(object):
 
     def SetClientData(*args, **kwargs):
         """
-        SetClientData(self, unsigned int n, PyObject clientData)
+        SetClientData(self, int n, PyObject clientData)
 
         Associate the given client data with the item at position n.
         """
@@ -11418,7 +11418,7 @@ class ItemContainer(object):
 
     def GetCount(*args, **kwargs):
         """
-        GetCount(self) -> unsigned int
+        GetCount(self) -> int
 
         Returns the number of items in the control.
         """
@@ -11434,7 +11434,7 @@ class ItemContainer(object):
 
     def GetString(*args, **kwargs):
         """
-        GetString(self, unsigned int n) -> String
+        GetString(self, int n) -> String
 
         Returns the label of the item with the given index.
         """
@@ -11446,7 +11446,7 @@ class ItemContainer(object):
 
     def SetString(*args, **kwargs):
         """
-        SetString(self, unsigned int n, String s)
+        SetString(self, int n, String s)
 
         Sets the label for the given item.
         """

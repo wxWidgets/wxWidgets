@@ -2,7 +2,7 @@
 # Don't modify this file, modify the SWIG interface instead.
 
 """
-ComboCtrl class that can have any type ofconst wxBitmap& bitmap,  popup widget, and also an
+ComboCtrl class that can have any type of popup widget, and also an
 owner-drawn combobox control.
 """
 
@@ -958,7 +958,7 @@ class BitmapComboBox(OwnerDrawnComboBox):
 
     def GetItemBitmap(*args, **kwargs):
         """
-        GetItemBitmap(self, unsigned int n) -> Bitmap
+        GetItemBitmap(self, int n) -> Bitmap
 
         Returns the image of the item with the given index.
         """
@@ -966,7 +966,7 @@ class BitmapComboBox(OwnerDrawnComboBox):
 
     def Insert(*args, **kwargs):
         """
-        Insert(self, String item, Bitmap bitmap, unsigned int pos, PyObject clientData=None) -> int
+        Insert(self, String item, Bitmap bitmap, int pos, PyObject clientData=None) -> int
 
         Insert an item into the control before the item at the ``pos`` index,
         optionally associating some data object with the item.
@@ -975,7 +975,7 @@ class BitmapComboBox(OwnerDrawnComboBox):
 
     def SetItemBitmap(*args, **kwargs):
         """
-        SetItemBitmap(self, unsigned int n, Bitmap bitmap)
+        SetItemBitmap(self, int n, Bitmap bitmap)
 
         Sets the image for the given item.
         """

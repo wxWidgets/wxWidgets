@@ -3074,23 +3074,7 @@ SWIGINTERN int wxBitmapComboBox_Append(wxBitmapComboBox *self,wxString const &it
             } else
                 return self->Append(item, bitmap);
         }
-
-SWIGINTERN int
-SWIG_AsVal_unsigned_SS_int (PyObject * obj, unsigned int *val)
-{
-  unsigned long v;
-  int res = SWIG_AsVal_unsigned_SS_long (obj, &v);
-  if (SWIG_IsOK(res)) {
-    if ((v > UINT_MAX)) {
-      return SWIG_OverflowError;
-    } else {
-      if (val) *val = static_cast< unsigned int >(v);
-    }
-  }  
-  return res;
-}
-
-SWIGINTERN int wxBitmapComboBox_Insert(wxBitmapComboBox *self,wxString const &item,wxBitmap const &bitmap,unsigned int pos,PyObject *clientData=NULL){
+SWIGINTERN int wxBitmapComboBox_Insert(wxBitmapComboBox *self,wxString const &item,wxBitmap const &bitmap,int pos,PyObject *clientData=NULL){
             if (clientData) {
                 wxPyClientData* data = new wxPyClientData(clientData);
                 return self->Insert(item, bitmap, pos, data);
@@ -7097,11 +7081,11 @@ fail:
 SWIGINTERN PyObject *_wrap_BitmapComboBox_GetItemBitmap(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxBitmapComboBox *arg1 = (wxBitmapComboBox *) 0 ;
-  unsigned int arg2 ;
+  int arg2 ;
   wxBitmap result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned int val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -7115,11 +7099,11 @@ SWIGINTERN PyObject *_wrap_BitmapComboBox_GetItemBitmap(PyObject *SWIGUNUSEDPARM
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitmapComboBox_GetItemBitmap" "', expected argument " "1"" of type '" "wxBitmapComboBox const *""'"); 
   }
   arg1 = reinterpret_cast< wxBitmapComboBox * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_int(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BitmapComboBox_GetItemBitmap" "', expected argument " "2"" of type '" "unsigned int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BitmapComboBox_GetItemBitmap" "', expected argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< unsigned int >(val2);
+  arg2 = static_cast< int >(val2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = ((wxBitmapComboBox const *)arg1)->GetItemBitmap(arg2);
@@ -7138,7 +7122,7 @@ SWIGINTERN PyObject *_wrap_BitmapComboBox_Insert(PyObject *SWIGUNUSEDPARM(self),
   wxBitmapComboBox *arg1 = (wxBitmapComboBox *) 0 ;
   wxString *arg2 = 0 ;
   wxBitmap *arg3 = 0 ;
-  unsigned int arg4 ;
+  int arg4 ;
   PyObject *arg5 = (PyObject *) NULL ;
   int result;
   void *argp1 = 0 ;
@@ -7146,7 +7130,7 @@ SWIGINTERN PyObject *_wrap_BitmapComboBox_Insert(PyObject *SWIGUNUSEDPARM(self),
   bool temp2 = false ;
   void *argp3 = 0 ;
   int res3 = 0 ;
-  unsigned int val4 ;
+  int val4 ;
   int ecode4 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -7176,11 +7160,11 @@ SWIGINTERN PyObject *_wrap_BitmapComboBox_Insert(PyObject *SWIGUNUSEDPARM(self),
     SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "BitmapComboBox_Insert" "', expected argument " "3"" of type '" "wxBitmap const &""'"); 
   }
   arg3 = reinterpret_cast< wxBitmap * >(argp3);
-  ecode4 = SWIG_AsVal_unsigned_SS_int(obj3, &val4);
+  ecode4 = SWIG_AsVal_int(obj3, &val4);
   if (!SWIG_IsOK(ecode4)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "BitmapComboBox_Insert" "', expected argument " "4"" of type '" "unsigned int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "BitmapComboBox_Insert" "', expected argument " "4"" of type '" "int""'");
   } 
-  arg4 = static_cast< unsigned int >(val4);
+  arg4 = static_cast< int >(val4);
   if (obj4) {
     arg5 = obj4;
   }
@@ -7208,11 +7192,11 @@ fail:
 SWIGINTERN PyObject *_wrap_BitmapComboBox_SetItemBitmap(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxBitmapComboBox *arg1 = (wxBitmapComboBox *) 0 ;
-  unsigned int arg2 ;
+  int arg2 ;
   wxBitmap *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned int val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   void *argp3 = 0 ;
   int res3 = 0 ;
@@ -7229,11 +7213,11 @@ SWIGINTERN PyObject *_wrap_BitmapComboBox_SetItemBitmap(PyObject *SWIGUNUSEDPARM
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BitmapComboBox_SetItemBitmap" "', expected argument " "1"" of type '" "wxBitmapComboBox *""'"); 
   }
   arg1 = reinterpret_cast< wxBitmapComboBox * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_int(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BitmapComboBox_SetItemBitmap" "', expected argument " "2"" of type '" "unsigned int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "BitmapComboBox_SetItemBitmap" "', expected argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< unsigned int >(val2);
+  arg2 = static_cast< int >(val2);
   res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_wxBitmap,  0  | 0);
   if (!SWIG_IsOK(res3)) {
     SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "BitmapComboBox_SetItemBitmap" "', expected argument " "3"" of type '" "wxBitmap const &""'"); 

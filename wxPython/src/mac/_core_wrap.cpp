@@ -3997,14 +3997,14 @@ SWIGINTERN int wxItemContainer_Append(wxItemContainer *self,wxString const &item
             } else
                 return self->Append(item);
         }
-SWIGINTERN int wxItemContainer_Insert(wxItemContainer *self,wxString const &item,unsigned int pos,PyObject *clientData=NULL){
+SWIGINTERN int wxItemContainer_Insert(wxItemContainer *self,wxString const &item,int pos,PyObject *clientData=NULL){
             if (clientData) {
                 wxPyClientData* data = new wxPyClientData(clientData);
                 return self->Insert(item, pos, data);
             } else
                 return self->Insert(item, pos);
         }
-SWIGINTERN PyObject *wxItemContainer_GetClientData(wxItemContainer *self,unsigned int n){
+SWIGINTERN PyObject *wxItemContainer_GetClientData(wxItemContainer *self,int n){
             wxPyClientData* data = (wxPyClientData*)self->GetClientObject(n);
             if (data) {
                 Py_INCREF(data->m_obj);
@@ -4014,7 +4014,7 @@ SWIGINTERN PyObject *wxItemContainer_GetClientData(wxItemContainer *self,unsigne
                 return Py_None;
             }
         }
-SWIGINTERN void wxItemContainer_SetClientData(wxItemContainer *self,unsigned int n,PyObject *clientData){
+SWIGINTERN void wxItemContainer_SetClientData(wxItemContainer *self,int n,PyObject *clientData){
             wxPyClientData* data = new wxPyClientData(clientData);
             self->SetClientObject(n, data);
         }
@@ -47689,13 +47689,13 @@ SWIGINTERN PyObject *_wrap_ItemContainer_Insert(PyObject *SWIGUNUSEDPARM(self), 
   PyObject *resultobj = 0;
   wxItemContainer *arg1 = (wxItemContainer *) 0 ;
   wxString *arg2 = 0 ;
-  unsigned int arg3 ;
+  int arg3 ;
   PyObject *arg4 = (PyObject *) NULL ;
   int result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   bool temp2 = false ;
-  unsigned int val3 ;
+  int val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -47716,11 +47716,11 @@ SWIGINTERN PyObject *_wrap_ItemContainer_Insert(PyObject *SWIGUNUSEDPARM(self), 
     if (arg2 == NULL) SWIG_fail;
     temp2 = true;
   }
-  ecode3 = SWIG_AsVal_unsigned_SS_int(obj2, &val3);
+  ecode3 = SWIG_AsVal_int(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ItemContainer_Insert" "', expected argument " "3"" of type '" "unsigned int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "ItemContainer_Insert" "', expected argument " "3"" of type '" "int""'");
   } 
-  arg3 = static_cast< unsigned int >(val3);
+  arg3 = static_cast< int >(val3);
   if (obj3) {
     arg4 = obj3;
   }
@@ -47775,10 +47775,10 @@ fail:
 SWIGINTERN PyObject *_wrap_ItemContainer_Delete(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxItemContainer *arg1 = (wxItemContainer *) 0 ;
-  unsigned int arg2 ;
+  int arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned int val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -47792,11 +47792,11 @@ SWIGINTERN PyObject *_wrap_ItemContainer_Delete(PyObject *SWIGUNUSEDPARM(self), 
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ItemContainer_Delete" "', expected argument " "1"" of type '" "wxItemContainer *""'"); 
   }
   arg1 = reinterpret_cast< wxItemContainer * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_int(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ItemContainer_Delete" "', expected argument " "2"" of type '" "unsigned int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ItemContainer_Delete" "', expected argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< unsigned int >(val2);
+  arg2 = static_cast< int >(val2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->Delete(arg2);
@@ -47813,11 +47813,11 @@ fail:
 SWIGINTERN PyObject *_wrap_ItemContainer_GetClientData(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxItemContainer *arg1 = (wxItemContainer *) 0 ;
-  unsigned int arg2 ;
+  int arg2 ;
   PyObject *result = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned int val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -47831,11 +47831,11 @@ SWIGINTERN PyObject *_wrap_ItemContainer_GetClientData(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ItemContainer_GetClientData" "', expected argument " "1"" of type '" "wxItemContainer *""'"); 
   }
   arg1 = reinterpret_cast< wxItemContainer * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_int(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ItemContainer_GetClientData" "', expected argument " "2"" of type '" "unsigned int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ItemContainer_GetClientData" "', expected argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< unsigned int >(val2);
+  arg2 = static_cast< int >(val2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = (PyObject *)wxItemContainer_GetClientData(arg1,arg2);
@@ -47852,11 +47852,11 @@ fail:
 SWIGINTERN PyObject *_wrap_ItemContainer_SetClientData(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxItemContainer *arg1 = (wxItemContainer *) 0 ;
-  unsigned int arg2 ;
+  int arg2 ;
   PyObject *arg3 = (PyObject *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned int val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -47871,11 +47871,11 @@ SWIGINTERN PyObject *_wrap_ItemContainer_SetClientData(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ItemContainer_SetClientData" "', expected argument " "1"" of type '" "wxItemContainer *""'"); 
   }
   arg1 = reinterpret_cast< wxItemContainer * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_int(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ItemContainer_SetClientData" "', expected argument " "2"" of type '" "unsigned int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ItemContainer_SetClientData" "', expected argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< unsigned int >(val2);
+  arg2 = static_cast< int >(val2);
   arg3 = obj2;
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -47893,7 +47893,7 @@ fail:
 SWIGINTERN PyObject *_wrap_ItemContainer_GetCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxItemContainer *arg1 = (wxItemContainer *) 0 ;
-  unsigned int result;
+  int result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
@@ -47907,11 +47907,11 @@ SWIGINTERN PyObject *_wrap_ItemContainer_GetCount(PyObject *SWIGUNUSEDPARM(self)
   arg1 = reinterpret_cast< wxItemContainer * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (unsigned int)((wxItemContainer const *)arg1)->GetCount();
+    result = (int)((wxItemContainer const *)arg1)->GetCount();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_From_unsigned_SS_int(static_cast< unsigned int >(result));
+  resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
   return NULL;
@@ -47951,11 +47951,11 @@ fail:
 SWIGINTERN PyObject *_wrap_ItemContainer_GetString(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxItemContainer *arg1 = (wxItemContainer *) 0 ;
-  unsigned int arg2 ;
+  int arg2 ;
   wxString result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned int val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -47969,11 +47969,11 @@ SWIGINTERN PyObject *_wrap_ItemContainer_GetString(PyObject *SWIGUNUSEDPARM(self
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ItemContainer_GetString" "', expected argument " "1"" of type '" "wxItemContainer const *""'"); 
   }
   arg1 = reinterpret_cast< wxItemContainer * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_int(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ItemContainer_GetString" "', expected argument " "2"" of type '" "unsigned int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ItemContainer_GetString" "', expected argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< unsigned int >(val2);
+  arg2 = static_cast< int >(val2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = ((wxItemContainer const *)arg1)->GetString(arg2);
@@ -48026,11 +48026,11 @@ fail:
 SWIGINTERN PyObject *_wrap_ItemContainer_SetString(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxItemContainer *arg1 = (wxItemContainer *) 0 ;
-  unsigned int arg2 ;
+  int arg2 ;
   wxString *arg3 = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  unsigned int val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   bool temp3 = false ;
   PyObject * obj0 = 0 ;
@@ -48046,11 +48046,11 @@ SWIGINTERN PyObject *_wrap_ItemContainer_SetString(PyObject *SWIGUNUSEDPARM(self
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ItemContainer_SetString" "', expected argument " "1"" of type '" "wxItemContainer *""'"); 
   }
   arg1 = reinterpret_cast< wxItemContainer * >(argp1);
-  ecode2 = SWIG_AsVal_unsigned_SS_int(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ItemContainer_SetString" "', expected argument " "2"" of type '" "unsigned int""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ItemContainer_SetString" "', expected argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< unsigned int >(val2);
+  arg2 = static_cast< int >(val2);
   {
     arg3 = wxString_in_helper(obj2);
     if (arg3 == NULL) SWIG_fail;
