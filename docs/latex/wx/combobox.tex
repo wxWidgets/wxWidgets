@@ -218,6 +218,17 @@ doesn't have the focus.
 Returns the last position in the combobox text field.
 
 
+\membersection{wxComboBox::GetSelection}\label{wxcomboboxgetselection}
+
+\constfunc{void}{GetSelection}{\param{long *}{from}, \param{long *}{to}}
+
+This is the same as \helpref{wxTextCtrl::GetSelection}{wxtextctrlgetselection} 
+for the text control which is part of the combobox. Notice that this is a
+different method from \helpref{wxControlWithItems::GetSelection}{wxcontrolwithitemsgetselection}.
+
+Currently this method is only implemented in wxMSW and wxGTK.
+
+
 \membersection{wxComboBox::GetValue}\label{wxcomboboxgetvalue}
 
 \constfunc{wxString}{GetValue}{\void}
