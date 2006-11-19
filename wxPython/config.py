@@ -612,11 +612,13 @@ def getExtraPath(shortVer=True, addOpts=False):
     if shortVer:
         # short version, just Major.Minor
         ep = "wx-%d.%d" % (VER_MAJOR, VER_MINOR)
-        
+         
         # plus release if minor is odd
         if VER_MINOR % 2 == 1:
             ep += ".%d" % VER_RELEASE
             
+        ##ep = "wx-%d.%d.%d" % (VER_MAJOR, VER_MINOR, VER_RELEASE)
+        
     else:
         # long version, full version 
         ep = "wx-%d.%d.%d.%d" % (VER_MAJOR, VER_MINOR, VER_RELEASE, VER_SUBREL)
@@ -869,11 +871,9 @@ except:
 
 if UNICODE:
     BUILD_BASE = BUILD_BASE + '.unicode'
-    ##VER_FLAGS += 'u'
 
 if os.path.exists('DAILY_BUILD'):
-    
-    VER_FLAGS += '-' + open('DAILY_BUILD').read().strip()
+    VER_FLAGS += '.' + open('DAILY_BUILD').read().strip()
 
 VERSION = "%s.%s.%s.%s%s" % (VER_MAJOR, VER_MINOR, VER_RELEASE,
                              VER_SUBREL, VER_FLAGS)

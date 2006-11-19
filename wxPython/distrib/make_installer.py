@@ -22,7 +22,7 @@ will be created.
 
 import sys, os, time
 
-KEEP_TEMPS = False
+KEEP_TEMPS = True
 # default InnoSetup installer location
 ISCC = r"%s\InnoSetup5\ISCC.exe %s"
 
@@ -75,12 +75,18 @@ Name: pthfile;  Description: "Make this install be the default wxPython"; Types:
 
 [Files]
 %(RTDLL)s
-Source: "distrib\msw\gdiplus.dll"; DestDir: "{app}\%(PKGDIR)s\wx"; Check: OnlyBeforeXP; Flags: sharedfile; Components: core
 Source: "%(WXDIR)s\lib\vc_dll\wx*%(WXDLLVER)s_*.dll";  DestDir: "{app}\%(PKGDIR)s\wx"; Components: core; Flags: replacesameversion
+Source: "distrib\msw\gdiplus.dll";                     DestDir: "{app}\%(PKGDIR)s\wx"; Components: core; Flags: replacesameversion
+%(CPPDLL)s
 %(MSLU)s
+
+;; The old way, only installs on pre-XP systems...
+;;Source: "distrib\msw\gdiplus.dll"; DestDir: "{app}\%(PKGDIR)s\wx"; Check: OnlyBeforeXP; Flags: sharedfile; Components: core
+
 
 Source: "wx\_activex.pyd";                     DestDir: "{app}\%(PKGDIR)s\wx"; Components: core; Flags: comparetimestamp
 Source: "wx\_calendar.pyd";                    DestDir: "{app}\%(PKGDIR)s\wx"; Components: core; Flags: comparetimestamp
+Source: "wx\_combo.pyd";                       DestDir: "{app}\%(PKGDIR)s\wx"; Components: core; Flags: comparetimestamp
 Source: "wx\_controls_.pyd";                   DestDir: "{app}\%(PKGDIR)s\wx"; Components: core; Flags: comparetimestamp
 Source: "wx\_core_.pyd";                       DestDir: "{app}\%(PKGDIR)s\wx"; Components: core; Flags: comparetimestamp
 Source: "wx\_gdi_.pyd";                        DestDir: "{app}\%(PKGDIR)s\wx"; Components: core; Flags: comparetimestamp
@@ -655,18 +661,18 @@ def get_batch_files():
     return '\n'.join(scripts)
 
 
-runtime_template = 'Source: "%s"; DestDir: "{code:GetPythonDir}"; Flags: uninsneveruninstall; Components: core'
 
-def get_runtime_dlls(PYVER):
+runtime_template1 = 'Source: "%(name)s"; DestDir: "{code:GetPythonDir}"; Flags: uninsneveruninstall; Components: core'
+runtime_template2 = 'Source: "%(name)s"; DestDir: "{app}\%(PKGDIR)s\wx"; Components: core; Flags: replacesameversion'
+
+def get_runtime_dlls(PYVER, PKGDIR):
     if PYVER >= "py24":
-        source = [ r"distrib\msw\msvcr71.dll",
-                   r"distrib\msw\msvcp71.dll" ]
+        return ( runtime_template1 % dict(name=r"distrib\msw\msvcr71.dll", PKGDIR=PKGDIR),
+                 runtime_template2 % dict(name=r"distrib\msw\msvcp71.dll", PKGDIR=PKGDIR) )
     else:
-        source = [ r"distrib\msw\MSVCRT.dll",
-                   r"distrib\msw\MSVCIRT.dll",
-                   r"distrib\msw\MSVCP60.dll" ]
-    DLLs = [runtime_template % dll for dll in source]    
-    return '\n'.join(DLLs)
+        return (  runtime_template1 % dict(name=r"distrib\msw\MSVCRT.dll", PKGDIR=PKGDIR),
+                  runtime_template2 % dict(name=r"distrib\msw\MSVCIRT.dll", PKGDIR=PKGDIR) + "\n" +
+                  runtime_template2 % dict(name=r"distrib\msw\MSVCP60.dll", PKGDIR=PKGDIR) )
 
 
 #----------------------------------------------------------------------
@@ -690,9 +696,10 @@ def main():
     UNINSTALL_BATCH = get_batch_files()
     PKGDIR          = open('src/wx.pth').read()
     LOCALE          = build_locale_string(PKGDIR)
-    RTDLL           = get_runtime_dlls(PYVER)
+    RTDLL,CPPDLL    = get_runtime_dlls(PYVER, PKGDIR)
     
-    print """Building Win32 installer for wxPython:
+    print """
+Building Win32 installer for wxPython:
     VERSION    = %(VERSION)s
     SHORTVER   = %(SHORTVER)s
     WXDLLVER   = %(WXDLLVER)s
@@ -709,15 +716,10 @@ def main():
     else:
         IF22 = ""
 
-    # Starting with 2.3.3 the hybrid build is the release build too, so
-    # no need to label it that way.
-    ##if WXDLL.find("h") != -1:
-    ##    PYVER = PYVER + "-hybrid"
-
     MSLU=''
     CHARTYPE='ansi'
     if "UNICODE=1" in sys.argv:
-        MSLU=r'Source: "distrib\msw\unicows.dll";  DestDir: "{code:GetPythonDir}"; Components: core' % vars()
+        MSLU=r'Source: "distrib\msw\unicows.dll"; DestDir: "{app}\%(PKGDIR)s\wx"; Components: core; Flags: replacesameversion' % vars()
         CHARTYPE='unicode'
 
     f = open(ISSFILE, "w")
