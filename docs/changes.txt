@@ -19,10 +19,6 @@ Changes in behaviour not resulting in compilation errors, please read this!
   wxEVT_MOUSE_CAPTURE_LOST event and not call ReleaseMouse() in this case.
 - wxInputStream::GetC() now returns an int in the range 0 - 255 on success
   instead of a char the range -128 - 127.
-- A sequence returned by wxFileSystem::FindFirst()/FindNext() may now be
-  be scoped to a single instance of wxFileSystem.
-- Streams returned by wxFileSystem::OpenFile are not necessarily seekable by
-  default. Open with flags wxFS_READ | wxFS_SEEKABLE if seeking is required.
 
 
 Changes in behaviour which may result in compilation errors
@@ -93,6 +89,8 @@ All:
 
 - wxArrayString::Alloc() now works as reserve() and doesn't clear array contents
 - Fixed long standing bug in wxFileConfig groups renaming (Antti Koivisto).
+- New option wxFS_READ | wxFS_SEEKABLE for wxFileSystem::OpenFile() to return
+  a stream that is seekable.
 
 wxMSW:
 
