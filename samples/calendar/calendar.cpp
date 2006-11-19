@@ -112,6 +112,8 @@ public:
 
 #if wxUSE_DATEPICKCTRL
     void OnAskDate(wxCommandEvent& event);
+
+    void OnUpdateUIStartWithNone(wxUpdateUIEvent& event);
 #endif // wxUSE_DATEPICKCTRL
 
     void OnCalMonday(wxCommandEvent& event);
@@ -183,6 +185,7 @@ enum
     Calendar_DatePicker_ShowCentury,
     Calendar_DatePicker_DropDown,
     Calendar_DatePicker_AllowNone,
+    Calendar_DatePicker_StartWithNone,
 #if wxUSE_DATEPICKCTRL_GENERIC
     Calendar_DatePicker_Generic,
 #endif // wxUSE_DATEPICKCTRL_GENERIC
@@ -203,6 +206,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
 #if wxUSE_DATEPICKCTRL
     EVT_MENU(Calendar_DatePicker_AskDate, MyFrame::OnAskDate)
+
+    EVT_UPDATE_UI(Calendar_DatePicker_StartWithNone,
+                  MyFrame::OnUpdateUIStartWithNone)
 #endif // wxUSE_DATEPICKCTRL
 
     EVT_MENU(Calendar_Cal_Monday, MyFrame::OnCalMonday)
@@ -315,8 +321,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                     _T("Allow changing the year in the calendar"),
                     true);
     menuCal->AppendSeparator();
-    menuCal->Append(Calendar_Cal_SetDate, _T("SetDate()"), _T("Set date to 2005-12-24."));
-    menuCal->Append(Calendar_Cal_Today, _T("Today()"), _T("Set the current date."));
+    menuCal->Append(Calendar_Cal_SetDate, _T("Call &SetDate(2005-12-24)"), _T("Set date to 2005-12-24."));
+    menuCal->Append(Calendar_Cal_Today, _T("Call &Today()"), _T("Set the current date."));
 
 #if wxUSE_DATEPICKCTRL
     wxMenu *menuDate = new wxMenu;
@@ -326,6 +332,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
                               _T("Use &drop down control"));
     menuDate->AppendCheckItem(Calendar_DatePicker_AllowNone,
                               _T("Allow &no date"));
+    menuDate->AppendCheckItem(Calendar_DatePicker_StartWithNone,
+                              _T("Start &with no date"));
 #if wxUSE_DATEPICKCTRL_GENERIC
     menuDate->AppendCheckItem(Calendar_DatePicker_Generic,
                               _T("Use &generic version of the control"));
@@ -439,20 +447,33 @@ void MyFrame::OnToday(wxCommandEvent &WXUNUSED(event))
 
 #if wxUSE_DATEPICKCTRL
 
+void MyFrame::OnUpdateUIStartWithNone(wxUpdateUIEvent& event)
+{
+    // it only makes sense to start with invalid date if we can have no date
+    event.Enable( GetMenuBar()->IsChecked(Calendar_DatePicker_AllowNone) );
+}
+
 void MyFrame::OnAskDate(wxCommandEvent& WXUNUSED(event))
 {
+    wxDateTime dt = m_panel->GetCal()->GetDate();
+
     int style = wxDP_DEFAULT;
     if ( GetMenuBar()->IsChecked(Calendar_DatePicker_ShowCentury) )
         style |= wxDP_SHOWCENTURY;
     if ( GetMenuBar()->IsChecked(Calendar_DatePicker_DropDown) )
         style |= wxDP_DROPDOWN;
     if ( GetMenuBar()->IsChecked(Calendar_DatePicker_AllowNone) )
+    {
         style |= wxDP_ALLOWNONE;
 
-    MyDialog dlg(this, m_panel->GetCal()->GetDate(), style);
+        if ( GetMenuBar()->IsChecked(Calendar_DatePicker_StartWithNone) )
+            dt = wxDefaultDateTime;
+    }
+
+    MyDialog dlg(this, dt, style);
     if ( dlg.ShowModal() == wxID_OK )
     {
-        const wxDateTime dt = dlg.GetDate();
+        dt = dlg.GetDate();
         if ( dt.IsValid() )
         {
             const wxDateTime today = wxDateTime::Today();
@@ -648,7 +669,7 @@ MyDialog::MyDialog(wxWindow *parent, const wxDateTime& dt, int dtpStyle)
 void MyDialog::OnDateChange(wxDateEvent& event)
 {
     const wxDateTime dt = event.GetDate();
-    if(dt.IsValid())
+    if ( dt.IsValid() )
         m_text->SetValue(dt.FormatISODate());
     else
         m_text->SetValue(wxEmptyString);
