@@ -256,6 +256,14 @@ wxCalendarCtrl::~wxCalendarCtrl()
     {
         delete m_attrs[n];
     }
+
+    if ( !HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) )
+    {
+        delete m_comboMonth;
+        delete m_staticMonth;
+        delete m_spinYear;
+        delete m_staticYear;
+    }
 }
 
 void wxCalendarCtrl::SetWindowStyleFlag(long style)
