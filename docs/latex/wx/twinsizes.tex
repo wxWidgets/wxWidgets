@@ -4,10 +4,10 @@
 
 
 It can sometimes be confusing to keep track of the various
-size-related attribtes of a \helpref{wxWindow}{wxwindow}, how they
+size-related attributes of a \helpref{wxWindow}{wxwindow}, how they
 relate to each other, and how they interact with sizers. This document
 will attempt to clear the fog a little, and give some simple
-explainations of things.
+explanations of things.
 
 {\bf BestSize}: The best size of a widget depends on what kind of widget it
 is, and usually also on the contents of the widget. For example a
@@ -15,12 +15,12 @@ is, and usually also on the contents of the widget. For example a
 how many items it has, up to a certain limit, or a
 \helpref{wxButton}{wxbutton}'s best size will be calculated based on
 its label size, but normally won't be smaller than the platform
-deafult button size (unless a style flag overrides that). Get the
+default button size (unless a style flag overrides that). Get the
 picture? There is a special virtual method in the C++ window classes
 called \texttt{DoGetBestSize()} that a class needs to override if it
 wants to calculate its own best size based on its content. The default
 \texttt{DoGetBestSize()} is designed for use in container windows,
-such as wx.Panel, and works something like this:
+such as \helpref{wxPanel}{wxpanel}, and works something like this:
 
 \begin{enumerate}
   \item{If the window has a sizer then it is used to calculate the best size.}
@@ -33,7 +33,7 @@ such as wx.Panel, and works something like this:
 {\bf MinSize}: The min size of a widget is a size that is normally
 explicitly set by the programmer either with the \texttt{SetMinSize()}
 method or the \texttt{SetSizeHints()} method. Most controls will also
-set the min size to the size given in the control's contstructor if a
+set the min size to the size given in the control's constructor if a
 non-default value is passed. Top-level windows such as
 \helpref{wxFrame}{wxframe} will not allow the user to resize the frame
 below the min size.
@@ -82,11 +82,11 @@ is done, if it does have children then the size of the window is set
 to the window's best size.
 
 {\bf sizer.Fit(window)}: This sets the size of the window to be large
-enough to accomodate the minimum size needed by the sizer, (along with
+enough to accommodate the minimum size needed by the sizer, (along with
 a few other constraints...) If the sizer is the one that is assigned
 to the window then this should be equivalent to \texttt{window.Fit()}.
 
-{\bf sizer.Layout()}: Recalcualtes the minimum space needed by each
+{\bf sizer.Layout()}: Recalculates the minimum space needed by each
 item in the sizer, and then lays out the items within the space
 currently allotted to the sizer.
 
