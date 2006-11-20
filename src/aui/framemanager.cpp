@@ -1415,8 +1415,8 @@ bool wxAuiManager::LoadPerspective(const wxString& layout, bool update)
 }
 
 void wxAuiManager::GetPanePositionsAndSizes(wxAuiDockInfo& dock,
-                                              wxArrayInt& positions,
-                                              wxArrayInt& sizes)
+                                            wxArrayInt& positions,
+                                            wxArrayInt& sizes)
 {
     int caption_size = m_art->GetMetric(wxAUI_DOCKART_CAPTION_SIZE);
     int pane_border_size = m_art->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE);
@@ -1669,16 +1669,16 @@ void wxAuiManager::LayoutAddPane(wxSizer* cont,
         part.sizer_item = sizer_item;
         uiparts.Add(part);
     }
-    else
+     else
     {
         sizer_item = cont->Add(horz_pane_sizer, pane_proportion, wxEXPAND);
     }
 }
 
 void wxAuiManager::LayoutAddDock(wxSizer* cont,
-                                   wxAuiDockInfo& dock,
-                                   wxAuiDockUIPartArray& uiparts,
-                                   bool spacer_only)
+                                 wxAuiDockInfo& dock,
+                                 wxAuiDockUIPartArray& uiparts,
+                                 bool spacer_only)
 {
     wxSizerItem* sizer_item;
     wxAuiDockUIPart part;
@@ -1722,9 +1722,10 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
         {
             wxAuiPaneInfo& pane = *(dock.panes.Item(pane_i));
             int pane_pos = pane_positions.Item(pane_i);
-            if(pane.IsMaximized()) {
+            
+            if (pane.IsMaximized())
                 has_maximized_pane = true;
-            }
+
 
             int amount = pane_pos - offset;
             if (amount > 0)
@@ -1752,7 +1753,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
         }
 
         // at the end add a very small stretchable background area
-        sizer_item = dock_sizer->Add(1,1, 1, wxEXPAND);
+        sizer_item = dock_sizer->Add(0,0, 1, wxEXPAND);
 
         part.type = wxAuiDockUIPart::typeBackground;
         part.dock = &dock;
@@ -1768,9 +1769,9 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
         for (pane_i = 0; pane_i < pane_count; ++pane_i)
         {
             wxAuiPaneInfo& pane = *(dock.panes.Item(pane_i));
-            if(pane.IsMaximized()) {
+            
+            if(pane.IsMaximized())
                 has_maximized_pane = true;
-            }
 
             // if this is not the first pane being added,
             // we need to add a pane sizer
@@ -1812,8 +1813,10 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
         cont->SetItemMinSize(dock_sizer, dock.size, 0);
 
     //  top and left docks have a sash after them
-    if (!m_has_maximized && !dock.fixed && (dock.dock_direction == wxAUI_DOCK_TOP ||
-                        dock.dock_direction == wxAUI_DOCK_LEFT))
+    if (!m_has_maximized &&
+        !dock.fixed &&
+          (dock.dock_direction == wxAUI_DOCK_TOP ||
+           dock.dock_direction == wxAUI_DOCK_LEFT))
     {
         sizer_item = cont->Add(sash_size, sash_size, 0, wxEXPAND);
 
@@ -1853,13 +1856,15 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
     {
         wxAuiPaneInfo& p = panes.Item(i);
 
-        // find any docks in this layer
+        // find any docks with the same dock direction, dock layer, and
+        // dock row as the pane we are working on
         wxAuiDockInfo* dock;
         wxAuiDockInfoPtrArray arr;
         FindDocks(docks, p.dock_direction, p.dock_layer, p.dock_row, arr);
 
         if (arr.GetCount() > 0)
         {
+            // found the right dock
             dock = arr.Item(0);
         }
          else
@@ -2041,7 +2046,7 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
         // if the dock mode is fixed, and none of the panes
         // are being moved right now, make sure the panes
         // do not overlap each other.  If they do, we will
-        // adjust the panes' positions
+        // adjust the positions of the panes
         if (dock.fixed && !action_pane_marked)
         {
             wxArrayInt pane_positions, pane_sizes;
