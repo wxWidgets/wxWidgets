@@ -516,10 +516,11 @@ wxAuiManager::~wxAuiManager()
     delete m_art;
 }
 
-// Creates a floating frame for the windows
-wxAuiFloatingFrame * wxAuiManager::CreateFloatingFrame(wxWindow* parent, const wxAuiPaneInfo& p)
+// creates a floating frame for the windows
+wxAuiFloatingFrame* wxAuiManager::CreateFloatingFrame(wxWindow* parent,
+                                                      const wxAuiPaneInfo& pane_info)
 {
-    return new wxAuiFloatingFrame(parent, this, p);
+    return new wxAuiFloatingFrame(parent, this, pane_info);
 }
 
 // GetPane() looks up a wxAuiPaneInfo structure based
@@ -2301,9 +2302,14 @@ void wxAuiManager::Update()
                 if (p.frame->GetPosition() != p.floating_pos)
                 {
                     p.frame->SetSize(p.floating_pos.x, p.floating_pos.y,
+                                     p.floating_size.x, p.floating_size.y,
+                                     wxSIZE_USE_EXISTING);
+                /*
+                    p.frame->SetSize(p.floating_pos.x, p.floating_pos.y,
                                      wxDefaultCoord, wxDefaultCoord,
                                      wxSIZE_USE_EXISTING);
                     //p.frame->Move(p.floating_pos.x, p.floating_pos.y);
+                */
                 }
 
                 if (p.frame->IsShown() != p.IsShown())
