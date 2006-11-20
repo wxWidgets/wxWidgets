@@ -1845,7 +1845,6 @@ COND_TOOLKIT_MGL_LOWLEVEL_HDR =  \
 	wx/mgl/dcmemory.h \
 	wx/mgl/dcscreen.h \
 	wx/mgl/font.h \
-	wx/mgl/fontutil.h \
 	wx/mgl/palette.h \
 	wx/mgl/pen.h \
 	wx/mgl/popupwin.h \
@@ -3716,6 +3715,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS = \
 @COND_TOOLKIT_COCOA@	monodll_gsockosx.o monodll_hid.o monodll_utilsexc_cf.o
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS =  \
+	monodll_fontmgrcmn.o \
 	monodll_caret.o \
 	monodll_colour.o \
 	monodll_icon.o \
@@ -3733,6 +3733,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_evtloop.o \
 	monodll_font.o \
 	monodll_fontenum.o \
+	monodll_fontmgr.o \
 	monodll_overlay.o \
 	monodll_pen.o \
 	monodll_region.o \
@@ -3824,6 +3825,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS =  \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__LOWLEVEL_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS)
 @COND_TOOLKIT_MAC@__LOWLEVEL_SRC_OBJECTS = $(__MAC_LOWLEVEL_SRC_OBJECTS)
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS =  \
+	monodll_fontmgrcmn.o \
 	monodll_caret.o \
 	monodll_colour.o \
 	monodll_icon.o \
@@ -3844,6 +3846,7 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_evtloop.o \
 	monodll_font.o \
 	monodll_fontenum.o \
+	monodll_fontmgr.o \
 	monodll_fontutil.o \
 	monodll_palette.o \
 	monodll_pen.o \
@@ -4542,6 +4545,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_COCOA@	monodll_gsockosx.o monodll_hid.o monodll_utilsexc_cf.o
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_1 =  \
+	monodll_fontmgrcmn.o \
 	monodll_caret.o \
 	monodll_colour.o \
 	monodll_icon.o \
@@ -4559,6 +4563,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_evtloop.o \
 	monodll_font.o \
 	monodll_fontenum.o \
+	monodll_fontmgr.o \
 	monodll_overlay.o \
 	monodll_pen.o \
 	monodll_region.o \
@@ -4650,6 +4655,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__LOWLEVEL_SRC_OBJECTS_1 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_1)
 @COND_TOOLKIT_MAC@__LOWLEVEL_SRC_OBJECTS_1 = $(__MAC_LOWLEVEL_SRC_OBJECTS)
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_1 =  \
+	monodll_fontmgrcmn.o \
 	monodll_caret.o \
 	monodll_colour.o \
 	monodll_icon.o \
@@ -4670,6 +4676,7 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_evtloop.o \
 	monodll_font.o \
 	monodll_fontenum.o \
+	monodll_fontmgr.o \
 	monodll_fontutil.o \
 	monodll_palette.o \
 	monodll_pen.o \
@@ -5480,6 +5487,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_2 = \
 @COND_TOOLKIT_COCOA@	monolib_gsockosx.o monolib_hid.o monolib_utilsexc_cf.o
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_2 =  \
+	monolib_fontmgrcmn.o \
 	monolib_caret.o \
 	monolib_colour.o \
 	monolib_icon.o \
@@ -5497,6 +5505,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_evtloop.o \
 	monolib_font.o \
 	monolib_fontenum.o \
+	monolib_fontmgr.o \
 	monolib_overlay.o \
 	monolib_pen.o \
 	monolib_region.o \
@@ -5589,6 +5598,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_2 =  \
 @COND_TOOLKIT_MAC@__LOWLEVEL_SRC_OBJECTS_2 = \
 @COND_TOOLKIT_MAC@	$(__MAC_LOWLEVEL_SRC_OBJECTS_0)
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_2 =  \
+	monolib_fontmgrcmn.o \
 	monolib_caret.o \
 	monolib_colour.o \
 	monolib_icon.o \
@@ -5609,6 +5619,7 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_evtloop.o \
 	monolib_font.o \
 	monolib_fontenum.o \
+	monolib_fontmgr.o \
 	monolib_fontutil.o \
 	monolib_palette.o \
 	monolib_pen.o \
@@ -6307,6 +6318,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_3 = \
 @COND_TOOLKIT_COCOA@	monolib_gsockosx.o monolib_hid.o monolib_utilsexc_cf.o
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_3 =  \
+	monolib_fontmgrcmn.o \
 	monolib_caret.o \
 	monolib_colour.o \
 	monolib_icon.o \
@@ -6324,6 +6336,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_evtloop.o \
 	monolib_font.o \
 	monolib_fontenum.o \
+	monolib_fontmgr.o \
 	monolib_overlay.o \
 	monolib_pen.o \
 	monolib_region.o \
@@ -6416,6 +6429,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_MAC@__LOWLEVEL_SRC_OBJECTS_3 = \
 @COND_TOOLKIT_MAC@	$(__MAC_LOWLEVEL_SRC_OBJECTS_0)
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_3 =  \
+	monolib_fontmgrcmn.o \
 	monolib_caret.o \
 	monolib_colour.o \
 	monolib_icon.o \
@@ -6436,6 +6450,7 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_evtloop.o \
 	monolib_font.o \
 	monolib_fontenum.o \
+	monolib_fontmgr.o \
 	monolib_fontutil.o \
 	monolib_palette.o \
 	monolib_pen.o \
@@ -7474,6 +7489,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_4 = \
 @COND_TOOLKIT_COCOA@	coredll_gsockosx.o coredll_hid.o coredll_utilsexc_cf.o
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_4 =  \
+	coredll_fontmgrcmn.o \
 	coredll_caret.o \
 	coredll_colour.o \
 	coredll_icon.o \
@@ -7491,6 +7507,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_evtloop.o \
 	coredll_font.o \
 	coredll_fontenum.o \
+	coredll_fontmgr.o \
 	coredll_overlay.o \
 	coredll_pen.o \
 	coredll_region.o \
@@ -7583,6 +7600,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_4 =  \
 @COND_TOOLKIT_MAC@__LOWLEVEL_SRC_OBJECTS_4 = \
 @COND_TOOLKIT_MAC@	$(__MAC_LOWLEVEL_SRC_OBJECTS_8)
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_4 =  \
+	coredll_fontmgrcmn.o \
 	coredll_caret.o \
 	coredll_colour.o \
 	coredll_icon.o \
@@ -7603,6 +7621,7 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_evtloop.o \
 	coredll_font.o \
 	coredll_fontenum.o \
+	coredll_fontmgr.o \
 	coredll_fontutil.o \
 	coredll_palette.o \
 	coredll_pen.o \
@@ -8301,6 +8320,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_5 = \
 @COND_TOOLKIT_COCOA@	coredll_gsockosx.o coredll_hid.o coredll_utilsexc_cf.o
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_5 =  \
+	coredll_fontmgrcmn.o \
 	coredll_caret.o \
 	coredll_colour.o \
 	coredll_icon.o \
@@ -8318,6 +8338,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_evtloop.o \
 	coredll_font.o \
 	coredll_fontenum.o \
+	coredll_fontmgr.o \
 	coredll_overlay.o \
 	coredll_pen.o \
 	coredll_region.o \
@@ -8410,6 +8431,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_5 =  \
 @COND_TOOLKIT_MAC@__LOWLEVEL_SRC_OBJECTS_5 = \
 @COND_TOOLKIT_MAC@	$(__MAC_LOWLEVEL_SRC_OBJECTS_8)
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_5 =  \
+	coredll_fontmgrcmn.o \
 	coredll_caret.o \
 	coredll_colour.o \
 	coredll_icon.o \
@@ -8430,6 +8452,7 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_evtloop.o \
 	coredll_font.o \
 	coredll_fontenum.o \
+	coredll_fontmgr.o \
 	coredll_fontutil.o \
 	coredll_palette.o \
 	coredll_pen.o \
@@ -8912,6 +8935,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_6 = \
 @COND_TOOLKIT_COCOA@	corelib_gsockosx.o corelib_hid.o corelib_utilsexc_cf.o
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_6 =  \
+	corelib_fontmgrcmn.o \
 	corelib_caret.o \
 	corelib_colour.o \
 	corelib_icon.o \
@@ -8929,6 +8953,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_evtloop.o \
 	corelib_font.o \
 	corelib_fontenum.o \
+	corelib_fontmgr.o \
 	corelib_overlay.o \
 	corelib_pen.o \
 	corelib_region.o \
@@ -9021,6 +9046,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_6 =  \
 @COND_TOOLKIT_MAC@__LOWLEVEL_SRC_OBJECTS_6 = \
 @COND_TOOLKIT_MAC@	$(__MAC_LOWLEVEL_SRC_OBJECTS_9)
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_6 =  \
+	corelib_fontmgrcmn.o \
 	corelib_caret.o \
 	corelib_colour.o \
 	corelib_icon.o \
@@ -9041,6 +9067,7 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_evtloop.o \
 	corelib_font.o \
 	corelib_fontenum.o \
+	corelib_fontmgr.o \
 	corelib_fontutil.o \
 	corelib_palette.o \
 	corelib_pen.o \
@@ -9739,6 +9766,7 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_7 = \
 @COND_TOOLKIT_COCOA@	corelib_gsockosx.o corelib_hid.o corelib_utilsexc_cf.o
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_7 =  \
+	corelib_fontmgrcmn.o \
 	corelib_caret.o \
 	corelib_colour.o \
 	corelib_icon.o \
@@ -9756,6 +9784,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_evtloop.o \
 	corelib_font.o \
 	corelib_fontenum.o \
+	corelib_fontmgr.o \
 	corelib_overlay.o \
 	corelib_pen.o \
 	corelib_region.o \
@@ -9848,6 +9877,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___LOWLEVEL_SRC_OBJECTS_7 =  \
 @COND_TOOLKIT_MAC@__LOWLEVEL_SRC_OBJECTS_7 = \
 @COND_TOOLKIT_MAC@	$(__MAC_LOWLEVEL_SRC_OBJECTS_9)
 COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_7 =  \
+	corelib_fontmgrcmn.o \
 	corelib_caret.o \
 	corelib_colour.o \
 	corelib_icon.o \
@@ -9868,6 +9898,7 @@ COND_TOOLKIT_MGL___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_evtloop.o \
 	corelib_font.o \
 	corelib_fontenum.o \
+	corelib_fontmgr.o \
 	corelib_fontutil.o \
 	corelib_palette.o \
 	corelib_pen.o \
@@ -14747,6 +14778,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monodll_reparent.o: $(srcdir)/src/x11/reparent.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/x11/reparent.cpp
 
+@COND_TOOLKIT_MGL_USE_GUI_1@monodll_fontmgrcmn.o: $(srcdir)/src/common/fontmgrcmn.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fontmgrcmn.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_fontmgrcmn.o: $(srcdir)/src/common/fontmgrcmn.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/fontmgrcmn.cpp
+
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_mask.o: $(srcdir)/src/generic/mask.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/mask.cpp
 
@@ -14755,6 +14792,12 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monodll_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
+
+@COND_TOOLKIT_MGL_USE_GUI_1@monodll_fontmgr.o: $(srcdir)/src/mgl/fontmgr.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/fontmgr.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_fontmgr.o: $(srcdir)/src/dfb/fontmgr.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/fontmgr.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_overlay.o: $(srcdir)/src/dfb/overlay.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/overlay.cpp
@@ -18839,6 +18882,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@monolib_reparent.o: $(srcdir)/src/x11/reparent.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/x11/reparent.cpp
 
+@COND_TOOLKIT_MGL_USE_GUI_1@monolib_fontmgrcmn.o: $(srcdir)/src/common/fontmgrcmn.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fontmgrcmn.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_fontmgrcmn.o: $(srcdir)/src/common/fontmgrcmn.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/fontmgrcmn.cpp
+
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_mask.o: $(srcdir)/src/generic/mask.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/mask.cpp
 
@@ -18847,6 +18896,12 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@monolib_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
+
+@COND_TOOLKIT_MGL_USE_GUI_1@monolib_fontmgr.o: $(srcdir)/src/mgl/fontmgr.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/fontmgr.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_fontmgr.o: $(srcdir)/src/dfb/fontmgr.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/fontmgr.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_overlay.o: $(srcdir)/src/dfb/overlay.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/overlay.cpp
@@ -23312,6 +23367,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_reparent.o: $(srcdir)/src/x11/reparent.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/x11/reparent.cpp
 
+@COND_TOOLKIT_MGL_USE_GUI_1@coredll_fontmgrcmn.o: $(srcdir)/src/common/fontmgrcmn.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/fontmgrcmn.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_fontmgrcmn.o: $(srcdir)/src/common/fontmgrcmn.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/fontmgrcmn.cpp
+
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_mask.o: $(srcdir)/src/generic/mask.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/mask.cpp
 
@@ -23320,6 +23381,12 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@coredll_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
+
+@COND_TOOLKIT_MGL_USE_GUI_1@coredll_fontmgr.o: $(srcdir)/src/mgl/fontmgr.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/fontmgr.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_fontmgr.o: $(srcdir)/src/dfb/fontmgr.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/fontmgr.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_overlay.o: $(srcdir)/src/dfb/overlay.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/overlay.cpp
@@ -26240,6 +26307,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_reparent.o: $(srcdir)/src/x11/reparent.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/x11/reparent.cpp
 
+@COND_TOOLKIT_MGL_USE_GUI_1@corelib_fontmgrcmn.o: $(srcdir)/src/common/fontmgrcmn.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/fontmgrcmn.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_fontmgrcmn.o: $(srcdir)/src/common/fontmgrcmn.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/fontmgrcmn.cpp
+
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_mask.o: $(srcdir)/src/generic/mask.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/mask.cpp
 
@@ -26248,6 +26321,12 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_MGL_USE_GUI_1@corelib_dirmgl.o: $(srcdir)/src/mgl/dirmgl.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/dirmgl.cpp
+
+@COND_TOOLKIT_MGL_USE_GUI_1@corelib_fontmgr.o: $(srcdir)/src/mgl/fontmgr.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/fontmgr.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_fontmgr.o: $(srcdir)/src/dfb/fontmgr.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/fontmgr.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_overlay.o: $(srcdir)/src/dfb/overlay.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/overlay.cpp

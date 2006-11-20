@@ -390,10 +390,21 @@ void wxDC::SetFont(const wxFont& font)
 
     wxFont f(font.Ok() ? font : DEFAULT_FONT);
 
-    if ( !m_surface->SetFont(f.GetDirectFBFont()) )
-        return;
+    wxFont oldfont(m_font);
 
     m_font = f;
+
+    if ( !m_surface->SetFont(GetCurrentFont()) )
+    {
+        m_font = oldfont;
+        return;
+    }
+}
+
+wxIDirectFBFontPtr wxDC::GetCurrentFont() const
+{
+    bool aa = (GetDepth() > 8);
+    return m_font.GetDirectFBFont(aa);
 }
 
 void wxDC::SetBackground(const wxBrush& brush)
@@ -450,7 +461,7 @@ wxCoord wxDC::GetCharHeight() const
     wxCHECK_MSG( m_font.Ok(), -1, wxT("no font selected") );
 
     int h = -1;
-    m_font.GetDirectFBFont()->GetHeight(&h);
+    GetCurrentFont()->GetHeight(&h);
     return YDEV2LOGREL(h);
 }
 
@@ -460,7 +471,7 @@ wxCoord wxDC::GetCharWidth() const
     wxCHECK_MSG( m_font.Ok(), -1, wxT("no font selected") );
 
     int w = -1;
-    m_font.GetDirectFBFont()->GetStringWidth("H", 1, &w);
+    GetCurrentFont()->GetStringWidth("H", 1, &w);
     // VS: YDEV is corrent, it should *not* be XDEV, because font's are only
     //     scaled according to m_scaleY
     return YDEV2LOGREL(w);
@@ -483,7 +494,7 @@ void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
 
     wxCoord xx = 0, yy = 0;
     DFBRectangle rect;
-    wxIDirectFBFontPtr f = m_font.GetDirectFBFont();
+    wxIDirectFBFontPtr f = GetCurrentFont();
 
     if ( f->GetStringExtents(wxSTR_TO_DFB(string), -1, &rect, NULL) )
     {

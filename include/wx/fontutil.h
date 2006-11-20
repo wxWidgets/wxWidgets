@@ -239,12 +239,4 @@ extern bool wxTestFontEncoding(const wxNativeEncodingInfo& info);
     #include "wx/unix/fontutil.h"
 #endif // X || GDK
 
-// ----------------------------------------------------------------------------
-// font-related functions (MGL)
-// ----------------------------------------------------------------------------
-
-#ifdef __WXMGL__
-    #include "wx/mgl/fontutil.h"
-#endif // __WXMGL__
-
 #endif // _WX_FONTUTIL_H_

@@ -12560,7 +12560,7 @@ echo "${ECHO_T}$ac_cv_c_compiler_gnu" >&6
 GCC=`test $ac_compiler_gnu = yes && echo yes`
 ac_test_CFLAGS=${CFLAGS+set}
 ac_save_CFLAGS=$CFLAGS
-CFLAGS="-g"
+CFLAGS="$CFLAGS -g"
 echo "$as_me:$LINENO: checking whether $CC accepts -g" >&5
 echo $ECHO_N "checking whether $CC accepts -g... $ECHO_C" >&6
 if test "${ac_cv_prog_cc_g+set}" = set; then
@@ -13032,7 +13032,7 @@ fi
                 unset ac_cv_prog_cc_g
                 ac_test_CFLAGS=${CFLAGS+set}
 ac_save_CFLAGS=$CFLAGS
-CFLAGS="-g"
+CFLAGS="$CFLAGS -g"
 echo "$as_me:$LINENO: checking whether $CC accepts -g" >&5
 echo $ECHO_N "checking whether $CC accepts -g... $ECHO_C" >&6
 if test "${ac_cv_prog_cc_g+set}" = set; then
@@ -14197,9 +14197,9 @@ if test "$ac_test_CXXFLAGS" = set; then
   CXXFLAGS=$ac_save_CXXFLAGS
 elif test $ac_cv_prog_cxx_g = yes; then
   if test "$GXX" = yes; then
-    CXXFLAGS="-g -O2"
+    CXXFLAGS="$CXXFLAGS -g -O2"
   else
-    CXXFLAGS="-g"
+    CXXFLAGS="$CXXFLAGS -g"
   fi
 else
   if test "$GXX" = yes; then
@@ -14462,7 +14462,7 @@ fi
                 unset ac_cv_prog_cc_g
                 ac_test_CFLAGS=${CFLAGS+set}
 ac_save_CFLAGS=$CFLAGS
-CFLAGS="-g"
+CFLAGS="$CFLAGS -g"
 echo "$as_me:$LINENO: checking whether $CC accepts -g" >&5
 echo $ECHO_N "checking whether $CC accepts -g... $ECHO_C" >&6
 if test "${ac_cv_prog_cc_g+set}" = set; then
@@ -29048,12 +29048,12 @@ if test -n "$PKG_CONFIG"; then
         pkg_cv_DIRECTFB_CFLAGS="$DIRECTFB_CFLAGS"
     else
         if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"directfb >= 0.9.22\"") >&5
-  ($PKG_CONFIG --exists --print-errors "directfb >= 0.9.22") 2>&5
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"directfb >= 0.9.23\"") >&5
+  ($PKG_CONFIG --exists --print-errors "directfb >= 0.9.23") 2>&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; then
-  pkg_cv_DIRECTFB_CFLAGS=`$PKG_CONFIG --cflags "directfb >= 0.9.22" 2>/dev/null`
+  pkg_cv_DIRECTFB_CFLAGS=`$PKG_CONFIG --cflags "directfb >= 0.9.23" 2>/dev/null`
 else
   pkg_failed=yes
 fi
@@ -29066,12 +29066,12 @@ if test -n "$PKG_CONFIG"; then
         pkg_cv_DIRECTFB_LIBS="$DIRECTFB_LIBS"
     else
         if test -n "$PKG_CONFIG" && \
-    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"directfb >= 0.9.22\"") >&5
-  ($PKG_CONFIG --exists --print-errors "directfb >= 0.9.22") 2>&5
+    { (echo "$as_me:$LINENO: \$PKG_CONFIG --exists --print-errors \"directfb >= 0.9.23\"") >&5
+  ($PKG_CONFIG --exists --print-errors "directfb >= 0.9.23") 2>&5
   ac_status=$?
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); }; then
-  pkg_cv_DIRECTFB_LIBS=`$PKG_CONFIG --libs "directfb >= 0.9.22" 2>/dev/null`
+  pkg_cv_DIRECTFB_LIBS=`$PKG_CONFIG --libs "directfb >= 0.9.23" 2>/dev/null`
 else
   pkg_failed=yes
 fi
@@ -29090,9 +29090,9 @@ else
         _pkg_short_errors_supported=no
 fi
         if test $_pkg_short_errors_supported = yes; then
-	        DIRECTFB_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "directfb >= 0.9.22"`
+	        DIRECTFB_PKG_ERRORS=`$PKG_CONFIG --short-errors --errors-to-stdout --print-errors "directfb >= 0.9.23"`
         else
-	        DIRECTFB_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "directfb >= 0.9.22"`
+	        DIRECTFB_PKG_ERRORS=`$PKG_CONFIG --errors-to-stdout --print-errors "directfb >= 0.9.23"`
         fi
 	# Put the nasty error message in config.log where it belongs
 	echo "$DIRECTFB_PKG_ERRORS" >&5

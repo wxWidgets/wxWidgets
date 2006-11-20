@@ -32,6 +32,7 @@
 #include "wx/univ/colschem.h"
 #include "wx/sysopt.h"
 #include "wx/mgl/private.h"
+#include "wx/private/fontmgr.h"
 
 //-----------------------------------------------------------------------------
 // wxApp::Exit()
@@ -283,14 +284,8 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         return false;
     }
 
-    // must do it before calling wxAppBase::Initialize(), because fonts are
-    // needed by stock lists which are created there
-    wxTheFontsManager = new wxFontsManager;
-
     if ( !wxAppBase::Initialize(argc, argv) )
     {
-        delete wxTheFontsManager;
-        wxTheFontsManager = NULL;
         MGL_exit();
         return false;
     }
@@ -313,8 +308,7 @@ struct wxMGLFinalCleanup: public wxModule
 
     void OnExit()
     {
-        delete wxTheFontsManager;
-        wxTheFontsManager = (wxFontsManager*) NULL;
+        wxFontsManager::CleanUp();
 
         wxDestroyMGL_WM();
         MGL_exit();

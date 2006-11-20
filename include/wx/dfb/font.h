@@ -63,8 +63,12 @@ public:
     virtual void SetUnderlined(bool underlined);
     virtual void SetEncoding(wxFontEncoding encoding);
 
+    // Unofficial API, don't use
+    virtual void SetNoAntiAliasing(bool no = true);
+    virtual bool GetNoAntiAliasing() const;
+
     // implementation from now on:
-    wxIDirectFBFontPtr GetDirectFBFont() const;
+    wxIDirectFBFontPtr GetDirectFBFont(bool antialiased) const;
 
 protected:
     // ref counting code

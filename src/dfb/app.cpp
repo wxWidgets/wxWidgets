@@ -20,6 +20,7 @@
 
 #include "wx/evtloop.h"
 #include "wx/dfb/private.h"
+#include "wx/private/fontmgr.h"
 
 //-----------------------------------------------------------------------------
 // wxApp initialization
@@ -56,6 +57,8 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 void wxApp::CleanUp()
 {
     wxAppBase::CleanUp();
+
+    wxFontsManager::CleanUp();
 
     wxEventLoop::CleanUp();
     wxIDirectFB::CleanUp();

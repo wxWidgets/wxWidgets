@@ -1747,6 +1747,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- ====================================================================== -->
 
 <set var="MGL_LOWLEVEL_SRC" hints="files">
+    src/common/fontmgrcmn.cpp
     src/generic/caret.cpp
     src/generic/colour.cpp
     src/generic/icon.cpp
@@ -1767,6 +1768,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mgl/evtloop.cpp
     src/mgl/font.cpp
     src/mgl/fontenum.cpp
+    src/mgl/fontmgr.cpp
     src/mgl/fontutil.cpp
     src/mgl/palette.cpp
     src/mgl/pen.cpp
@@ -1794,7 +1796,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mgl/dcmemory.h
     wx/mgl/dcscreen.h
     wx/mgl/font.h
-    wx/mgl/fontutil.h
     wx/mgl/palette.h
     wx/mgl/pen.h
     wx/mgl/popupwin.h
@@ -1810,6 +1811,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- ====================================================================== -->
 
 <set var="DFB_LOWLEVEL_SRC" hints="files">
+    src/common/fontmgrcmn.cpp
     src/generic/caret.cpp
     src/generic/colour.cpp
     src/generic/icon.cpp
@@ -1828,6 +1830,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/dfb/evtloop.cpp
     src/dfb/font.cpp
     src/dfb/fontenum.cpp
+    src/dfb/fontmgr.cpp
     src/dfb/overlay.cpp
     src/dfb/pen.cpp
     src/dfb/region.cpp

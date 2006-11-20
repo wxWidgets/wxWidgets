@@ -32,6 +32,7 @@
 
 #include "wx/encinfo.h"
 #include "wx/fontutil.h"
+#include "wx/private/fontmgr.h"
 
 #include <mgraph.h>
 
@@ -48,19 +49,19 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
                                           bool fixedWidthOnly)
 {
     bool found = false;
-    wxMGLFontFamilyList *list = wxTheFontsManager->GetFamilyList();
-    wxMGLFontFamilyList::Node *node;
-    wxMGLFontFamily *f = NULL;
+    const wxFontBundleList& list = wxFontsManager::Get()->GetBundles();
+    wxFontBundleList::Node *node;
+    wxFontBundle *f = NULL;
     wxNativeEncodingInfo info;
 
     if ( encoding != wxFONTENCODING_SYSTEM )
         wxGetNativeFontEncoding(encoding, &info);
 
-    for (node = list->GetFirst(); node; node = node->GetNext())
+    for (node = list.GetFirst(); node; node = node->GetNext())
     {
         f = node->GetData();
         info.facename = f->GetName();
-        if ( (!fixedWidthOnly || f->GetInfo()->isFixed) &&
+        if ( (!fixedWidthOnly || f->IsFixed()) &&
              (encoding == wxFONTENCODING_SYSTEM || wxTestFontEncoding(info)) )
         {
             found = true;

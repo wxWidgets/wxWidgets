@@ -17,4 +17,8 @@
 #   error "wxDirectFB cannot be built without wxUniversal"
 #endif
 
+#if !wxUSE_CONFIG
+#   error "wxFileConfig is required by wxDFB port"
+#endif
+
 #endif /* _WX_DFB_CHKCONF_H_ */
