@@ -880,7 +880,7 @@ MyFrame::MyFrame(wxWindow* parent,
                   CenterPane().Hide());
 
     m_mgr.AddPane(CreateHTMLCtrl(), wxAuiPaneInfo().Name(wxT("html_content")).
-                  CenterPane());
+                  CenterPane().Hide());
 
     m_mgr.AddPane(CreateNotebook(), wxAuiPaneInfo().Name(wxT("notebook_content")).
                   CenterPane().PaneBorder(false));
