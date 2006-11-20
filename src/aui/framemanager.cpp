@@ -76,6 +76,7 @@ enum wxAuiPrivateManagerOption
 };
 
 
+const int auiToolBarLayer = 10;
 
 
 class wxPseudoTransparentFrame : public wxFrame
@@ -259,7 +260,8 @@ static void CopyDocksAndPanes(wxAuiDockInfoArray& dest_docks,
 
 // GetMaxLayer() is an internal function which returns
 // the highest layer inside the specified dock
-static int GetMaxLayer(const wxAuiDockInfoArray& docks, int dock_direction)
+static int GetMaxLayer(const wxAuiDockInfoArray& docks,
+                       int dock_direction)
 {
     int i, dock_count, max_layer = 0;
     for (i = 0, dock_count = docks.GetCount(); i < dock_count; ++i)
@@ -827,7 +829,7 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info)
         return false;
 
     // if the new pane is docked then we should undo maximize
-    if(pane_info.IsDocked())
+    if (pane_info.IsDocked())
         RestoreMaximizedPane();
 
     m_panes.Add(pane_info);
@@ -1020,7 +1022,7 @@ bool wxAuiManager::DetachPane(wxWindow* window)
                     p.frame->Show(false);
 
                 // reparent to m_frame and destroy the pane
-                if(m_action_window == p.frame)
+                if (m_action_window == p.frame)
                 {
                     m_action_window = NULL;
                 }
@@ -1089,7 +1091,7 @@ void wxAuiManager::ClosePane(wxAuiPaneInfo& pane_info)
     {
         wxWindow * window = pane_info.window;
         DetachPane(window);
-        if(window)
+        if (window)
         {
             window->Destroy();
         }
@@ -1161,7 +1163,7 @@ void wxAuiManager::RestoreMaximizedPane()
     for (i = 0, pane_count = m_panes.GetCount(); i < pane_count; ++i)
     {
         wxAuiPaneInfo& p = m_panes.Item(i);
-        if(p.IsMaximized())
+        if (p.IsMaximized())
         {
             RestorePane(p);
             break;
@@ -1770,7 +1772,7 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
         {
             wxAuiPaneInfo& pane = *(dock.panes.Item(pane_i));
             
-            if(pane.IsMaximized())
+            if (pane.IsMaximized())
                 has_maximized_pane = true;
 
             // if this is not the first pane being added,
@@ -2246,7 +2248,7 @@ void wxAuiManager::Update()
                 p.frame->Show(false);
 
             // reparent to m_frame and destroy the pane
-            if(m_action_window == p.frame)
+            if (m_action_window == p.frame)
             {
                 m_action_window = NULL;
             }
@@ -2558,10 +2560,10 @@ const int auiLayerInsertPixels = 40;
 const int auiLayerInsertOffset = 5;
 
 bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
-                            wxAuiPaneInfoArray& panes,
-                            wxAuiPaneInfo& target,
-                            const wxPoint& pt,
-                            const wxPoint& offset)
+                          wxAuiPaneInfoArray& panes,
+                          wxAuiPaneInfo& target,
+                          const wxPoint& pt,
+                          const wxPoint& offset)
 {
     wxSize cli_size = m_frame->GetClientSize();
 
@@ -2577,15 +2579,20 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
 
 
     int layer_insert_offset = auiLayerInsertOffset;
-    if (target.IsToolbar())
+    if (drop.IsToolbar())
         layer_insert_offset = 0;
+
 
     if (pt.x < layer_insert_offset &&
         pt.x > layer_insert_offset-auiLayerInsertPixels)
     {
         int new_layer = wxMax(wxMax(GetMaxLayer(docks, wxAUI_DOCK_LEFT),
                                 GetMaxLayer(docks, wxAUI_DOCK_BOTTOM)),
-                                GetMaxLayer(docks, wxAUI_DOCK_TOP)) + 1;  
+                                GetMaxLayer(docks, wxAUI_DOCK_TOP)) + 1;
+                                
+        if (drop.IsToolbar())
+            new_layer = auiToolBarLayer;
+            
         drop.Dock().Left().
              Layer(new_layer).
              Row(0).
@@ -2598,6 +2605,10 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
         int new_layer = wxMax(wxMax(GetMaxLayer(docks, wxAUI_DOCK_TOP),
                                 GetMaxLayer(docks, wxAUI_DOCK_LEFT)),
                                 GetMaxLayer(docks, wxAUI_DOCK_RIGHT)) + 1;
+                                
+        if (drop.IsToolbar())
+            new_layer = auiToolBarLayer;
+            
         drop.Dock().Top().
              Layer(new_layer).
              Row(0).
@@ -2611,6 +2622,9 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
                                 GetMaxLayer(docks, wxAUI_DOCK_TOP)),
                                 GetMaxLayer(docks, wxAUI_DOCK_BOTTOM)) + 1; 
                                 
+        if (drop.IsToolbar())
+            new_layer = auiToolBarLayer;
+            
         drop.Dock().Right().
              Layer(new_layer).
              Row(0).
@@ -2623,13 +2637,17 @@ bool wxAuiManager::DoDrop(wxAuiDockInfoArray& docks,
         int new_layer = wxMax( wxMax( GetMaxLayer(docks, wxAUI_DOCK_BOTTOM),
                                       GetMaxLayer(docks, wxAUI_DOCK_LEFT)),
                                       GetMaxLayer(docks, wxAUI_DOCK_RIGHT)) + 1;
-
+                                
+        if (drop.IsToolbar())
+            new_layer = auiToolBarLayer;
+            
         drop.Dock().Bottom().
              Layer(new_layer).
              Row(0).
              Position(pt.x - GetDockPixelOffset(drop) - offset.x);
         return ProcessDockResult(target, drop);
     }
+
 
     wxAuiDockUIPart* part = HitTest(pt.x, pt.y);
 
@@ -4093,7 +4111,8 @@ void wxAuiManager::OnMotion(wxMouseEvent& event)
     }
     else if (m_action == actionDragFloatingPane)
     {
-        if(m_action_window) {
+        if (m_action_window)
+        {
             wxPoint pt = m_frame->ClientToScreen(event.GetPosition());
             m_action_window->Move(pt.x - m_action_offset.x,
                                 pt.y - m_action_offset.y);
