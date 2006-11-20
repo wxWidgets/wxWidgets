@@ -297,6 +297,8 @@ protected:
     bool                            m_bInternalPS; // Internally generated PS?
 }; // end of CLASS wxFontRefData
 
+#define M_FONTDATA (wxFontRefData*)m_refData)
+
 // ============================================================================
 // implementation
 // ============================================================================

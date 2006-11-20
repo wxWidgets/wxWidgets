@@ -154,6 +154,8 @@ public:
     wxNativeFontInfo  m_info;
 };
 
+#define M_FONTDATA (wxFontRefData*)m_refData)
+
 
 // ============================================================================
 // implementation

@@ -24,7 +24,6 @@
 // forward declarations
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFontData;
 class WXDLLEXPORT wxFontBase;
 class WXDLLEXPORT wxFont;
 class WXDLLEXPORT wxSize;
@@ -212,10 +211,6 @@ public:
     static void SetDefaultEncoding(wxFontEncoding encoding);
 
 protected:
-    // get the internal data
-    wxFontRefData *GetFontData() const
-        { return (wxFontRefData *)m_refData; }
-
     // the function called by both overloads of SetNativeFontInfo()
     virtual void DoSetNativeFontInfo(const wxNativeFontInfo& info);
 
@@ -251,12 +246,6 @@ private:
 #elif defined(__WXPM__)
     #include "wx/os2/font.h"
 #endif
-
-// ----------------------------------------------------------------------------
-// macros
-// ----------------------------------------------------------------------------
-
-#define M_FONTDATA GetFontData()
 
 #endif
     // _WX_FONT_H_BASE_
