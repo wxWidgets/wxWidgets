@@ -23,136 +23,14 @@
 
 #include "wx/font.h"
 
-#ifndef WX_PRECOMP
-    #include "wx/log.h"
-    #include "wx/utils.h"
-    #include "wx/settings.h"
-    #include "wx/cmndata.h"
-    #include "wx/gdicmn.h"
-#endif
-
-#include "wx/fontutil.h"
-#include "wx/tokenzr.h"
-#include "wx/mgl/private.h"
-
-// ----------------------------------------------------------------------------
-// wxFontRefData
-// ----------------------------------------------------------------------------
-
-class wxFontRefData : public wxObjectRefData
-{
-public:
-    wxFontRefData(int size = wxDEFAULT,
-                  int family = wxDEFAULT,
-                  int style = wxDEFAULT,
-                  int weight = wxDEFAULT,
-                  bool underlined = false,
-                  const wxString& faceName = wxEmptyString,
-                  wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
-    wxFontRefData(const wxFontRefData& data);
-    virtual ~wxFontRefData();
-
-protected:
-    // common part of all ctors
-    void Init(int pointSize,
-              int family,
-              int style,
-              int weight,
-              bool underlined,
-              const wxString& faceName,
-              wxFontEncoding encoding);
-
-private:
-    int              m_pointSize;
-    int              m_family,
-                     m_style,
-                     m_weight;
-    bool             m_underlined;
-    wxString         m_faceName;
-    wxFontEncoding   m_encoding;
-
-    wxMGLFontLibrary *m_library;
-    bool              m_valid;
-
-    wxNativeFontInfo  m_info;
-
-    friend class wxFont;
-};
-
-#define M_FONTDATA ((wxFontRefData*)m_refData)
+#include "wx/private/fontmgr.h"
 
 // ============================================================================
 // implementation
 // ============================================================================
 
-// ----------------------------------------------------------------------------
-// wxFontRefData
-// ----------------------------------------------------------------------------
-
-void wxFontRefData::Init(int pointSize,
-                         int family,
-                         int style,
-                         int weight,
-                         bool underlined,
-                         const wxString& faceName,
-                         wxFontEncoding encoding)
-{
-    if ( family == wxDEFAULT )
-        m_family = wxSWISS;
-    else
-        m_family = family;
-
-    m_faceName = faceName;
-
-    if ( style == wxDEFAULT )
-        m_style = wxNORMAL;
-    else
-        m_style = style;
-
-    if ( weight == wxDEFAULT )
-        m_weight = wxNORMAL;
-    else
-        m_weight = weight;
-
-    if ( pointSize == wxDEFAULT )
-        m_pointSize = 12;
-    else
-        m_pointSize = pointSize;
-
-    m_underlined = underlined;
-    m_encoding = encoding;
-
-    m_library = NULL;
-    m_valid = false;
-}
-
-wxFontRefData::wxFontRefData(const wxFontRefData& data)
-{
-    Init(data.m_pointSize, data.m_family, data.m_style, data.m_weight,
-         data.m_underlined, data.m_faceName, data.m_encoding);
-
-    m_library = data.m_library;
-    m_valid = data.m_valid;
-    if ( m_library )
-        m_library->IncRef();
-    wxLogTrace("mgl_font", "created fntrefdata %p, library is %p", this, m_library);
-}
-
-wxFontRefData::wxFontRefData(int size, int family, int style,
-                             int weight, bool underlined,
-                             const wxString& faceName,
-                             wxFontEncoding encoding)
-{
-    Init(size, family, style, weight, underlined, faceName, encoding);
-    wxLogTrace("mgl_font", "created fntrefdata %p, library is %p", this, m_library);
-}
-
-wxFontRefData::~wxFontRefData()
-{
-    wxLogTrace("mgl_font", "destructing fntrefdata %p, library is %p", this, m_library);
-    if ( m_library )
-        m_library->DecRef();
-}
+typedef wxFontMgrFontRefData wxFontRefData;
+#define M_FONTDATA ((wxFontRefData*)m_refData)
 
 // ----------------------------------------------------------------------------
 // wxFont
@@ -179,23 +57,6 @@ bool wxFont::Create(int pointSize,
     return true;
 }
 
-struct font_t *wxFont::GetMGLfont_t(float scale, bool antialiased)
-{
-    if ( !M_FONTDATA->m_valid )
-    {
-        wxMGLFontLibrary *old = M_FONTDATA->m_library;
-        M_FONTDATA->m_library = wxTheFontsManager->GetFontLibrary(this);
-        M_FONTDATA->m_library->IncRef();
-        if ( old )
-            old->DecRef();
-    }
-
-    wxMGLFontInstance *instance =
-        M_FONTDATA->m_library->GetFontInstance(this, scale, antialiased);
-
-    return instance->GetMGLfont_t();
-}
-
 wxObjectRefData *wxFont::CreateRefData() const
 {
     return new wxFontRefData;
@@ -211,46 +72,55 @@ wxObjectRefData *wxFont::CloneRefData(const wxObjectRefData *data) const
 // accessors
 // ----------------------------------------------------------------------------
 
+struct font_t *wxFont::GetMGLfont_t(float scale, bool antialiased)
+{
+    wxCHECK_MSG( Ok(), NULL, wxT("invalid font") );
+
+    // we don't support DC scaling yet, so use scale=1
+    wxFontInstance *i = M_FONTDATA->GetFontInstance(1.0, antialiased);
+    return i ? i->GetMGLfont_t() : NULL;
+}
+
 int wxFont::GetPointSize() const
 {
     wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
 
-    return M_FONTDATA->m_pointSize;
+    return M_FONTDATA->GetPointSize();
 }
 
 wxString wxFont::GetFaceName() const
 {
     wxCHECK_MSG( Ok(), wxEmptyString, wxT("invalid font") );
 
-    return M_FONTDATA->m_faceName;
+    return M_FONTDATA->GetFaceName();
 }
 
 int wxFont::GetFamily() const
 {
     wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
 
-    return M_FONTDATA->m_family;
+    return M_FONTDATA->GetFamily();
 }
 
 int wxFont::GetStyle() const
 {
     wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
 
-    return M_FONTDATA->m_style;
+    return M_FONTDATA->GetStyle();
 }
 
 int wxFont::GetWeight() const
 {
     wxCHECK_MSG( Ok(), 0, wxT("invalid font") );
 
-    return M_FONTDATA->m_weight;
+    return M_FONTDATA->GetWeight();
 }
 
 bool wxFont::GetUnderlined() const
 {
     wxCHECK_MSG( Ok(), false, wxT("invalid font") );
 
-    return M_FONTDATA->m_underlined;
+    return M_FONTDATA->GetUnderlined();
 }
 
 
@@ -258,23 +128,28 @@ wxFontEncoding wxFont::GetEncoding() const
 {
     wxCHECK_MSG( Ok(), wxFONTENCODING_DEFAULT, wxT("invalid font") );
 
-    return M_FONTDATA->m_encoding;
+    return M_FONTDATA->GetEncoding();
 }
 
 bool wxFont::IsFixedWidth() const
 {
     wxCHECK_MSG( Ok(), false, wxT("invalid font") );
 
-    return (bool)(M_FONTDATA->m_library->GetFamily()->GetInfo()->isFixed);
+    return M_FONTDATA->IsFixedWidth();
 }
 
 const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
     wxCHECK_MSG( Ok(), NULL, wxT("invalid font") );
 
-    M_FONTDATA->m_info.InitFromFont(*this);
+    return M_FONTDATA->GetNativeFontInfo();
+}
 
-    return &(M_FONTDATA->m_info);
+bool wxFont::GetNoAntiAliasing() const
+{
+    wxCHECK_MSG( Ok(), false, wxT("invalid font") );
+
+    return M_FONTDATA->GetNoAntiAliasing();
 }
 
 // ----------------------------------------------------------------------------
@@ -284,56 +159,48 @@ const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 void wxFont::SetPointSize(int pointSize)
 {
     AllocExclusive();
-
-    M_FONTDATA->m_pointSize = pointSize;
-    M_FONTDATA->m_valid = false;
+    M_FONTDATA->SetPointSize(pointSize);
 }
 
 void wxFont::SetFamily(int family)
 {
     AllocExclusive();
-
-    M_FONTDATA->m_family = family;
-    M_FONTDATA->m_valid = false;
+    M_FONTDATA->SetFamily(family);
 }
 
 void wxFont::SetStyle(int style)
 {
     AllocExclusive();
-
-    M_FONTDATA->m_style = style;
-    M_FONTDATA->m_valid = false;
+    M_FONTDATA->SetStyle(style);
 }
 
 void wxFont::SetWeight(int weight)
 {
     AllocExclusive();
-
-    M_FONTDATA->m_weight = weight;
-    M_FONTDATA->m_valid = false;
+    M_FONTDATA->SetWeight(weight);
 }
 
 bool wxFont::SetFaceName(const wxString& faceName)
 {
     AllocExclusive();
-
-    M_FONTDATA->m_faceName = faceName;
-    M_FONTDATA->m_valid = false;
-
+    M_FONTDATA->SetFaceName(faceName);
     return wxFontBase::SetFaceName(faceName);
 }
 
 void wxFont::SetUnderlined(bool underlined)
 {
     AllocExclusive();
-
-    M_FONTDATA->m_underlined = underlined;
+    M_FONTDATA->SetUnderlined(underlined);
 }
 
 void wxFont::SetEncoding(wxFontEncoding encoding)
 {
     AllocExclusive();
+    M_FONTDATA->SetEncoding(encoding);
+}
 
-    M_FONTDATA->m_encoding = encoding;
-    M_FONTDATA->m_valid = false;
+void wxFont::SetNoAntiAliasing(bool no)
+{
+    AllocExclusive();
+    M_FONTDATA->SetNoAntiAliasing(no);
 }
