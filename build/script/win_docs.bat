@@ -1,6 +1,8 @@
 rem Uncomment the next line to set the version; used also in wxWidgets.iss
-SET WXW_VER=2.8.0
+rem SET WXW_VER=2.8.0
 if %WXW_VER%=="" SET WXW_VER=CVS
+
+echo docs building for %WXW_VER%
 
 rem  This builds the docs in %WXWIN% in a number of formats 
 rem  and a clean inno setup in a second tree
@@ -8,7 +10,7 @@ rem  it uses a number of tools nmake, gnuwin32 zip, ghostscript, MS word, cvsNT
 rem  cvs is in the path already from CVSNT install
 rem  writes a log file in c:\
 
-echo Building wxWidgets docs... > c:\temp.log
+echo Building wxWidgets-%WXW_VER% docs... > c:\temp.log
 
 set WXWIN=c:\wx\wxWidgets
 set DAILY=c:\daily
@@ -25,10 +27,11 @@ cvs up -P
 echo CVS update  >>  c:\temp.log
 
 rem add bakefile build...
+rem just build the formats not in the CVS to keep down the .#makefile...
 set PATH=%PATH%;C:\wx\Bakefile\src
 cd \wx\inno\wxWidgets\build\bakefiles
 del .bakefile_gen.state
-bakefile_gen 
+bakefile_gen -f dmars,dmars,msevc4prj,dmars_smake >> c:\temp.log
 
 
 rem add nmake to the path and build the docs
@@ -64,17 +67,16 @@ call ps2pdf tex2rtf.ps >> c:\temp.log
 
 echo Zipping
 cd %WXWIN%
-del %DAILY%\*.ZIP
-rem these need to be .ZIP so they will get date on Unix (rebuild_makefiles.sh)
-zip %DAILY%\wxWidgets-%WXW_VER%-CHM.ZIP docs\htmlhelp\wx.chm utils/tex2rtf/docs/*.chm docs/htmlhelp/*.chm
-zip %DAILY%\wxWidgets-%WXW_VER%-HLP.ZIP docs\winhelp\wx.hlp docs\winhelp\wx.cnt utils/tex2rtf/docs/*.HLP utils/tex2rtf/docs/*.cnt docs/winhelp/*.hlp docs/winhelp/*.cnt
+del %DAILY%\*.zip
+zip %DAILY%\wxWidgets-%WXW_VER%-CHM.zip docs\htmlhelp\wx.chm utils/tex2rtf/docs/*.chm docs/htmlhelp/*.chm
+zip %DAILY%\wxWidgets-%WXW_VER%-HLP.zip docs\winhelp\wx.hlp docs\winhelp\wx.cnt utils/tex2rtf/docs/*.HLP utils/tex2rtf/docs/*.cnt docs/winhelp/*.hlp docs/winhelp/*.cnt
 
 cd %DAILY%\
 mkdir docs
 mkdir docs\pdf
 del docs\pdf\*.pdf
 move in\*.pdf docs\pdf
-zip wxWidgets-%WXW_VER%-PDF.ZIP docs\pdf\*.pdf
+zip wxWidgets-%WXW_VER%-PDF.zip docs\pdf\*.pdf
 
 rem copy chm to inno
 cd %WXWIN%
@@ -83,14 +85,14 @@ copy docs\htmlhelp\wx.chm \wx\inno\wxWidgets\docs\htmlhelp\wx.chm
 cd %WXWIN%\build\script
 iscc wxwidgets.iss >> c:\temp.log
 
-echo setting S
-echo yes > net use s: /delete
-net use s: \\biolpc22\bake 
-net use >> c:\temp.log
+rem echo setting S
+rem echo yes > net use s: /delete
+rem net use s: \\biolpc22\bake 
+rem net use >> c:\temp.log
 
-copy %DAILY%\*.ZIP s:\bkl-cronjob\archives\win
-copy %DAILY%\*.exe s:\bkl-cronjob\archives\win\*.EXE
-dir s: /od >> c:\temp.log
+rem copy %DAILY%\*.ZIP s:\bkl-cronjob\archives\win
+rem copy %DAILY%\*.exe s:\bkl-cronjob\archives\win\*.exe
+rem dir s: /od >> c:\temp.log
 
 echo docs built for %WXW_VER%
 echo docs built for %WXW_VER% >> c:\temp.log
