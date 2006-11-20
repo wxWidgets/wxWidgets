@@ -360,6 +360,12 @@ Creates the underlying window.
 Copies the selected content (if any) to the clipboard and deletes the selection.
 This is undoable.
 
+\membersection{wxRichTextCtrl::Delete}\label{wxrichtextctrldelete}
+
+\func{bool}{Delete}{\param{const wxRichTextRange\&}{ range}}
+
+Deletes the content within the given range.
+
 \membersection{wxRichTextCtrl::DeleteSelectedContent}\label{wxrichtextctrldeleteselectedcontent}
 
 \func{bool}{DeleteSelectedContent}{\param{long* }{newPos = NULL}}
@@ -689,6 +695,15 @@ This function gets the combined style - that is, the style you see on the screen
 of combining base style, paragraph style and character style attributes. To get the character
 or paragraph style alone, use \helpref{GetUncombinedStyle}{wxrichtextctrlgetuncombinedstyle}.
 
+\membersection{wxRichTextCtrl::GetStyleForRange}\label{wxrichtextctrlgetstyleforrange}
+
+\func{bool}{GetStyleForRange}{\param{const wxRichTextRange\& }{range}, \param{wxRichTextAttr\& }{style}}
+
+\func{bool}{GetStyleForRange}{\param{const wxRichTextRange\& }{range}, \param{wxTextAttrEx\& }{style}}
+
+Gets the attributes common to the specified range. Attributes that differ in value within the range will
+not be included in {\it style}'s flags.
+
 \membersection{wxRichTextCtrl::GetStyleSheet}\label{wxrichtextctrlgetstylesheet}
 
 \constfunc{wxRichTextStyleSheet*}{GetStyleSheet}{\void}
@@ -898,6 +913,14 @@ Lays out the buffer, which must be done before certain operations, such as
 setting the caret position. This function should not normally be required by the
 application.
 
+\membersection{wxRichTextCtrl::LineBreak}\label{wxrichtextctrllinebreak}
+
+\func{bool}{LineBreak}{\void}
+
+Inserts a line break at the current insertion point. A line break forces wrapping within a paragraph, and
+can be introduced by using this function, by appending the wxChar value {\bf wxRichTextLineBreakChar} to text content,
+or by typing Shift-Return.
+
 \membersection{wxRichTextCtrl::LoadFile}\label{wxrichtextctrlloadfile}
 
 \func{bool}{LoadFile}{\param{const wxString\& }{file}, \param{int }{type = wxRICHTEXT\_TYPE\_ANY}}
@@ -999,7 +1022,7 @@ Moves up.
 
 \func{bool}{Newline}{\void}
 
-Insert a newline (actually paragraph) at the current insertion point.
+Inserts a new paragraph at the current insertion point. See also \helpref{wxRichTextCtrl::LineBreak}{wxrichtextctrllinebreak}.
 
 \membersection{wxRichTextCtrl::NumberList}\label{wxrichtextctrlnumberlist}
 

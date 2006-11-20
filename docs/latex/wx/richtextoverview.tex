@@ -9,6 +9,7 @@ Classes: \helpref{wxRichTextCtrl}{wxrichtextctrl}, \helpref{wxRichTextBuffer}{wx
 \helpref{wxRichTextStyleComboCtrl}{wxrichtextstylecomboctrl}, 
 \helpref{wxRichTextStyleListBox}{wxrichtextstylelistbox}, 
 \helpref{wxRichTextStyleListCtrl}{wxrichtextstylelistctrl}, 
+\helpref{wxRichTextStyleOrganiserDialog}{wxrichtextstyleorganiserdialog}, 
 \helpref{wxRichTextEvent}{wxrichtextevent}, \helpref{wxRichTextRange}{wxrichtextrange}, 
 \helpref{wxRichTextFileHandler}{wxrichtextfilehandler}, \helpref{wxRichTextHTMLHandler}{wxrichtexthtmlhandler}, 
 \helpref{wxRichTextXMLHandler}{wxrichtextxmlhandler}, 
@@ -19,8 +20,8 @@ Classes: \helpref{wxRichTextCtrl}{wxrichtextctrl}, \helpref{wxRichTextBuffer}{wx
 \helpref{wxSymbolPickerDialog}{wxsymbolpickerdialog}
 
 wxRichTextCtrl provides a generic implementation of a rich text editor that can handle different character
-styles, paragraph formatting, and images. It's aimed at editing 'natural' language text - if you need an editor that supports code editing,
-wxStyledTextCtrl is a better choice.
+styles, paragraph formatting, and images. It's aimed at editing 'natural' language text - if you need an editor
+that supports code editing, wxStyledTextCtrl is a better choice.
 
 Despite its name, it cannot currently read or write RTF (rich text format) files. Instead, it
 uses its own XML format, and can also read and write plain text. In future we expect to provide
@@ -35,7 +36,15 @@ the style information in a wxTextCtrl, whereas this information is readily
 available in wxRichTextCtrl. Since it's written in pure wxWidgets, any customizations
 you make to wxRichTextCtrl will be reflected on all platforms.
 
-There are of course a few disadvantages to using wxRichTextCtrl. It is not native,
+wxRichTextCtrl supports basic printing via the easy-to-use \helpref{wxRichTextPrinting}{wxrichtextprinting} class.
+Creating applications with simple word processing features is simplified with the inclusion of\rtfsp
+\helpref{wxRichTextFormattingDialog}{wxrichtextformattingdialog}, a tabbed dialog allowing
+interactive tailoring of paragraph and character styling. Also provided is the multi-purpose dialog\rtfsp
+\helpref{wxRichTextStyleOrganiserDialog}{wxrichtextstyleorganiserdialog} that can be used for
+managing style definitions, browsing styles and applying them, or selecting list styles with
+a renumber option.
+
+There are a few disadvantages to using wxRichTextCtrl. It is not native,
 so does not behave exactly as a native wxTextCtrl, although common editing conventions
 are followed. Users may miss the built-in spelling correction on Mac OS X, or any
 special character input that may be provided by the native control. It would also
@@ -44,10 +53,8 @@ with non-native text input implementation. You might mitigate this by providing
 the choice between wxTextCtrl and wxRichTextCtrl, with fewer features in the
 former case.
 
-wxRichTextCtrl does not yet support printing directly, but content can be converted
-to HTML which can then be used with \helpref{wxHtmlEasyPrinting}{wxhtmleasyprinting}.
-
-The following screenshot shows the wxRichTextCtrl sample in action:
+A good way to understand wxRichTextCtrl's capabilities is to compile and run the
+sample, {\tt samples/richtext}, and browse the code. The following screenshot shows the sample in action:
 
 $$\image{8cm;0cm}{richtextctrl.gif}$$
 
@@ -309,7 +316,7 @@ text editing functionality.
 
 \helpref{wxRichTextFormattingDialog}{wxrichtextformattingdialog} can be used
 for character or paragraph formatting, or a combination of both. It's a wxPropertySheetDialog
-with the following available tabs: Font, Indents \& Spacing, Tabs, Bullets, and Style.
+with the following available tabs: Font, Indents \& Spacing, Tabs, Bullets, Style, and List Style.
 You can select which pages will be shown by supplying flags to the dialog constructor.
 In a character formatting dialog, typically only the Font page will be shown.
 In a paragraph formatting dialog, you'll show the Indents \& Spacing, Tabs and Bullets
@@ -318,6 +325,11 @@ pages. The Style tab is useful when editing a style definition.
 You can customize this dialog by providing your own wxRichTextFormattingDialogFactory
 object, which tells the formatting dialog how many pages are supported, what their identifiers
 are, and how to creates the pages.
+
+\helpref{wxRichTextStyleOrganiserDialog}{wxrichtextstyleorganiserdialog} is a multi-purpose dialog
+that can be used for managing style definitions, browsing styles and applying them, or selecting list styles with
+a renumber option. See the sample for usage - it is used for the "Manage Styles" and "Bullets and Numbering"
+menu commands.
 
 \helpref{wxSymbolPickerDialog}{wxsymbolpickerdialog} lets the user insert a symbol from
 a specified font. It has no wxRichTextCtrl dependencies besides being included in
