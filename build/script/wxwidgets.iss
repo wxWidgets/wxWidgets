@@ -22,6 +22,7 @@ AppSupportURL=http://www.wxwidgets.org
 AppUpdatesURL=http://www.wxwidgets.org
 DefaultDirName={sd}\wxWidgets-{#WX_VERSION}
 DefaultGroupName=wxWidgets {#WX_VERSION}
+UsePreviousAppDir=no
 DisableProgramGroupPage=yes
 LicenseFile=C:\wx\inno\wxWidgets\docs\licence.txt
 InfoBeforeFile=C:\wx\inno\wxWidgets\docs\readme.txt
