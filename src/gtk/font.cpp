@@ -127,7 +127,7 @@ private:
     friend class wxFont;
 };
 
-#define M_FONTDATA (wxFontRefData*)m_refData)
+#define M_FONTDATA ((wxFontRefData*)m_refData)
 
 // ----------------------------------------------------------------------------
 // wxFontRefData

@@ -321,7 +321,7 @@ protected:
     bool             m_nativeFontInfoOk;
 };
 
-#define M_FONTDATA (wxFontRefData*)m_refData)
+#define M_FONTDATA ((wxFontRefData*)m_refData)
 
 // ============================================================================
 // implementation

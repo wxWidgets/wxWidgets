@@ -211,7 +211,7 @@ wxFontRefData::~wxFontRefData()
     m_fonts.Clear();
 }
 
-#define M_FONTDATA (wxFontRefData*)m_refData)
+#define M_FONTDATA ((wxFontRefData*)m_refData)
 
 // ----------------------------------------------------------------------------
 // wxFont

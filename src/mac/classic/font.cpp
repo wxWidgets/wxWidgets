@@ -133,7 +133,7 @@ public:
     void        MacFindFont() ;
 };
 
-#define M_FONTDATA (wxFontRefData*)m_refData)
+#define M_FONTDATA ((wxFontRefData*)m_refData)
 
 // ============================================================================
 // implementation

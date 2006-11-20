@@ -105,7 +105,7 @@ public:
     wxIDirectFBFontPtr m_font;
 };
 
-#define M_FONTDATA (wxFontRefData*)m_refData)
+#define M_FONTDATA ((wxFontRefData*)m_refData)
 
 
 // ----------------------------------------------------------------------------
