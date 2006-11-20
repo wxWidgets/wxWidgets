@@ -302,6 +302,9 @@ public:
     /// Insert a newline (actually paragraph) at the current insertion point.
     virtual bool Newline();
 
+    /// Insert a line break at the current insertion point.
+    virtual bool LineBreak();
+
     /// Set basic (overall) style
     virtual void SetBasicStyle(const wxTextAttrEx& style) { GetBuffer().SetBasicStyle(style); }
     virtual void SetBasicStyle(const wxRichTextAttr& style) { GetBuffer().SetBasicStyle(style); }

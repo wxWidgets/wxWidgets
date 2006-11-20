@@ -556,7 +556,15 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
         DeleteSelectedContent(& newPos);
 
-        GetBuffer().InsertNewlineWithUndo(newPos+1, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
+        if (event.ShiftDown())
+        {
+            wxString text;
+            text = wxRichTextLineBreakChar;
+            GetBuffer().InsertTextWithUndo(newPos+1, text, this);
+        }
+        else
+            GetBuffer().InsertNewlineWithUndo(newPos+1, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
+
         EndBatchUndo();
         SetDefaultStyleToCursorStyle();
 
@@ -2092,6 +2100,13 @@ bool wxRichTextCtrl::Newline()
     return GetBuffer().InsertNewlineWithUndo(m_caretPosition+1, this);
 }
 
+/// Insert a line break at the current insertion point.
+bool wxRichTextCtrl::LineBreak()
+{
+    wxString text;
+    text = wxRichTextLineBreakChar;
+    return GetBuffer().InsertTextWithUndo(m_caretPosition+1, text, this);
+}
 
 // ----------------------------------------------------------------------------
 // Clipboard operations
@@ -2240,7 +2255,8 @@ void wxRichTextCtrl::DoSetSelection(long from, long to, bool WXUNUSED(scrollCare
 {
     m_selectionAnchor = from;
     m_selectionRange.SetRange(from, to-1);
-    m_caretPosition = from-1;
+    if (from > -2)
+        m_caretPosition = from-1;
 
     Refresh(false);
     PositionCaret();

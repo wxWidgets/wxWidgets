@@ -71,6 +71,12 @@
 #endif
 
 /*!
+ * Special characters
+ */
+
+extern WXDLLIMPEXP_RICHTEXT const wxChar wxRichTextLineBreakChar;
+
+/*!
  * File types
  */
 
@@ -1344,6 +1350,9 @@ public:
     /// Get combined attributes of the base style and paragraph style.
     wxTextAttrEx GetCombinedAttributes() const;
 
+    /// Get the first position from pos that has a line break character.
+    long GetFirstLineBreakPosition(long pos);
+
     /// Create default tabstop array
     static void InitDefaultTabs();
 
@@ -1412,6 +1421,9 @@ public:
 
     /// Dump to output stream for debugging
     virtual void Dump(wxTextOutputStream& stream);
+
+    /// Get the first position from pos that has a line break character.
+    long GetFirstLineBreakPosition(long pos);
 
 // Accessors
 

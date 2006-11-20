@@ -46,6 +46,8 @@ WX_DEFINE_LIST(wxRichTextLineList)
 // Switch off if the platform doesn't like it for some reason
 #define wxRICHTEXT_USE_OPTIMIZED_DRAWING 1
 
+const wxChar wxRichTextLineBreakChar = (wxChar) 29;
+
 /*!
  * wxRichTextObject
  * This is the base for drawable objects.
@@ -3183,6 +3185,7 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
         // can't tell the position until the size is determined. So possibly introduce
         // another layout phase.
 
+        // TODO: can't this be called only once per child?
         child->Layout(dc, rect, style);
 
         // Available width depends on whether we're on the first or subsequent lines
@@ -3193,18 +3196,32 @@ bool wxRichTextParagraph::Layout(wxDC& dc, const wxRect& rect, int style)
         // We may only be looking at part of a child, if we searched back for wrapping
         // and found a suitable point some way into the child. So get the size for the fragment
         // if necessary.
+        
+        long nextBreakPos = GetFirstLineBreakPosition(lastEndPos+1);
+        long lastPosToUse = child->GetRange().GetEnd();
+        bool lineBreakInThisObject = (nextBreakPos > -1 && nextBreakPos <= child->GetRange().GetEnd());
+        
+        if (lineBreakInThisObject)
+            lastPosToUse = nextBreakPos;
 
         wxSize childSize;
         int childDescent = 0;
-        if (lastEndPos == child->GetRange().GetStart() - 1)
+        
+        if ((nextBreakPos == -1) && (lastEndPos == child->GetRange().GetStart() - 1)) // i.e. we want to get the whole thing
         {
             childSize = child->GetCachedSize();
             childDescent = child->GetDescent();
         }
         else
-            GetRangeSize(wxRichTextRange(lastEndPos+1, child->GetRange().GetEnd()), childSize, childDescent, dc, wxRICHTEXT_UNFORMATTED,rect.GetPosition());
+            GetRangeSize(wxRichTextRange(lastEndPos+1, lastPosToUse), childSize, childDescent, dc, wxRICHTEXT_UNFORMATTED, rect.GetPosition());
 
-        if (childSize.x + currentWidth > availableSpaceForText)
+        // Cases:
+        // 1) There was a line break BEFORE the natural break
+        // 2) There was a line break AFTER the natural break
+        // 3) The child still fits (carry on)
+
+        if ((lineBreakInThisObject && (childSize.x + currentWidth <= availableSpaceForText)) ||
+            (childSize.x + currentWidth > availableSpaceForText))
         {
             long wrapPosition = 0;
 
@@ -3874,11 +3891,19 @@ bool wxRichTextParagraph::FindWrapPosition(const wxRichTextRange& range, wxDC& d
     wxString plainText;
     if (GetContiguousPlainText(plainText, wxRichTextRange(range.GetStart(), breakPosition), false))
     {
-        int spacePos = plainText.Find(wxT(' '), true);
-        if (spacePos != wxNOT_FOUND)
+        int newLinePos = plainText.Find(wxRichTextLineBreakChar);
+        if (newLinePos != wxNOT_FOUND)
         {
-            int positionsFromEndOfString = plainText.length() - spacePos - 1;
-            breakPosition = breakPosition - positionsFromEndOfString;
+            breakPosition = wxMax(0, range.GetStart() + newLinePos);
+        }
+        else
+        {
+            int spacePos = plainText.Find(wxT(' '), true);
+            if (spacePos != wxNOT_FOUND)
+            {
+                int positionsFromEndOfString = plainText.length() - spacePos - 1;
+                breakPosition = breakPosition - positionsFromEndOfString;
+            }
         }
     }
 
@@ -4036,6 +4061,27 @@ void wxRichTextParagraph::ClearDefaultTabs()
     sm_defaultTabs.Clear();
 }
 
+/// Get the first position from pos that has a line break character.
+long wxRichTextParagraph::GetFirstLineBreakPosition(long pos)
+{
+    wxRichTextObjectList::compatibility_iterator node = m_children.GetFirst();
+    while (node)
+    {
+        wxRichTextObject* obj = node->GetData();
+        if (pos >= obj->GetRange().GetStart() && pos <= obj->GetRange().GetEnd())
+        {
+            wxRichTextPlainText* textObj = wxDynamicCast(obj, wxRichTextPlainText);
+            if (textObj)
+            {
+                long breakPos = textObj->GetFirstLineBreakPosition(pos);
+                if (breakPos > -1)
+                    return breakPos;
+            }
+        }
+        node = node->GetNext();
+    }
+    return -1;
+}
 
 /*!
  * wxRichTextLine
@@ -4107,8 +4153,13 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
 
     int offset = GetRange().GetStart();
 
+    // Replace line break characters with spaces
+    wxString str = m_text;
+    wxString toRemove = wxRichTextLineBreakChar;
+    str.Replace(toRemove, wxT(" "));
+    
     long len = range.GetLength();
-    wxString stringChunk = m_text.Mid(range.GetStart() - offset, (size_t) len);
+    wxString stringChunk = str.Mid(range.GetStart() - offset, (size_t) len);
     if (textAttr.HasTextEffects() && (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_CAPITALS))
         stringChunk.MakeUpper();
 
@@ -4149,7 +4200,7 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
             int fragmentLen = s1 - r1 + 1;
             if (fragmentLen < 0)
                 wxLogDebug(wxT("Mid(%d, %d"), (int)(r1 - offset), (int)fragmentLen);
-            wxString stringFragment = m_text.Mid(r1 - offset, fragmentLen);
+            wxString stringFragment = str.Mid(r1 - offset, fragmentLen);
 
             DrawTabbedString(dc, textAttr, rect, stringFragment, x, y, false);
 
@@ -4157,8 +4208,8 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
             if (stringChunk.Find(wxT("\t")) == wxNOT_FOUND)
             {
                 // Compensate for kerning difference
-                wxString stringFragment2(m_text.Mid(r1 - offset, fragmentLen+1));
-                wxString stringFragment3(m_text.Mid(r1 - offset + fragmentLen, 1));
+                wxString stringFragment2(str.Mid(r1 - offset, fragmentLen+1));
+                wxString stringFragment3(str.Mid(r1 - offset + fragmentLen, 1));
 
                 wxCoord w1, h1, w2, h2, w3, h3;
                 dc.GetTextExtent(stringFragment,  & w1, & h1);
@@ -4180,7 +4231,7 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
             int fragmentLen = s2 - s1 + 1;
             if (fragmentLen < 0)
                 wxLogDebug(wxT("Mid(%d, %d"), (int)(s1 - offset), (int)fragmentLen);
-            wxString stringFragment = m_text.Mid(s1 - offset, fragmentLen);
+            wxString stringFragment = str.Mid(s1 - offset, fragmentLen);
 
             DrawTabbedString(dc, textAttr, rect, stringFragment, x, y, true);
 
@@ -4188,8 +4239,8 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
             if (stringChunk.Find(wxT("\t")) == wxNOT_FOUND)
             {
                 // Compensate for kerning difference
-                wxString stringFragment2(m_text.Mid(s1 - offset, fragmentLen+1));
-                wxString stringFragment3(m_text.Mid(s1 - offset + fragmentLen, 1));
+                wxString stringFragment2(str.Mid(s1 - offset, fragmentLen+1));
+                wxString stringFragment3(str.Mid(s1 - offset + fragmentLen, 1));
 
                 wxCoord w1, h1, w2, h2, w3, h3;
                 dc.GetTextExtent(stringFragment,  & w1, & h1);
@@ -4211,7 +4262,7 @@ bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxR
             int fragmentLen = r2 - s2 + 1;
             if (fragmentLen < 0)
                 wxLogDebug(wxT("Mid(%d, %d"), (int)(s2 - offset), (int)fragmentLen);
-            wxString stringFragment = m_text.Mid(s2 - offset, fragmentLen);
+            wxString stringFragment = str.Mid(s2 - offset, fragmentLen);
 
             DrawTabbedString(dc, textAttr, rect, stringFragment, x, y, false);
         }
@@ -4337,6 +4388,9 @@ bool wxRichTextPlainText::Layout(wxDC& dc, const wxRect& WXUNUSED(rect), int WXU
     if (textAttr.HasTextEffects() && (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_CAPITALS))
         str.MakeUpper();
 
+    wxString toReplace = wxRichTextLineBreakChar;
+    str.Replace(toReplace, wxT(" "));
+
     wxCoord w, h;
     dc.GetTextExtent(str, & w, & h, & m_descent);
     m_size = wxSize(w, dc.GetCharHeight());
@@ -4373,7 +4427,12 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
 
     int startPos = range.GetStart() - GetRange().GetStart();
     long len = range.GetLength();
-    wxString stringChunk = m_text.Mid(startPos, (size_t) len);
+    
+    wxString str(m_text);
+    wxString toReplace = wxRichTextLineBreakChar;
+    str.Replace(toReplace, wxT(" "));
+
+    wxString stringChunk = str.Mid(startPos, (size_t) len);
 
     if (textAttr.HasTextEffects() && (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_CAPITALS))
         stringChunk.MakeUpper();
@@ -4432,7 +4491,8 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
 /// the first part in 'this'.
 wxRichTextObject* wxRichTextPlainText::DoSplit(long pos)
 {
-    int index = pos - GetRange().GetStart();
+    long index = pos - GetRange().GetStart();
+    
     if (index < 0 || index >= (int) m_text.length())
         return NULL;
 
@@ -4446,7 +4506,7 @@ wxRichTextObject* wxRichTextPlainText::DoSplit(long pos)
 
     newObject->SetRange(wxRichTextRange(pos, GetRange().GetEnd()));
     GetRange().SetEnd(pos-1);
-
+    
     return newObject;
 }
 
@@ -4518,6 +4578,23 @@ void wxRichTextPlainText::Dump(wxTextOutputStream& stream)
 {
     wxRichTextObject::Dump(stream);
     stream << m_text << wxT("\n");
+}
+
+/// Get the first position from pos that has a line break character.
+long wxRichTextPlainText::GetFirstLineBreakPosition(long pos)
+{
+    int i;
+    int len = m_text.length();
+    int startPos = pos - m_range.GetStart();
+    for (i = startPos; i < len; i++)
+    {
+        wxChar ch = m_text[i];
+        if (ch == wxRichTextLineBreakChar)
+        {
+            return i + m_range.GetStart();
+        }
+    }
+    return -1;
 }
 
 /*!
@@ -7775,6 +7852,10 @@ bool wxRichTextPlainTextHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputSt
         return false;
 
     wxString text = buffer->GetText();
+
+    wxString newLine = wxRichTextLineBreakChar;
+    text.Replace(newLine, wxT("\n"));
+    
     wxCharBuffer buf = text.ToAscii();
 
     stream.Write((const char*) buf, text.length());
