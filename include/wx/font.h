@@ -24,6 +24,7 @@
 // forward declarations
 // ----------------------------------------------------------------------------
 
+class WXDLLEXPORT wxFontData;
 class WXDLLEXPORT wxFontBase;
 class WXDLLEXPORT wxFont;
 class WXDLLEXPORT wxSize;
@@ -104,7 +105,6 @@ enum
 // wxFontBase represents a font object
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxFontRefData;
 class WXDLLEXPORT wxNativeFontInfo;
 
 class WXDLLEXPORT wxFontBase : public wxGDIObject
