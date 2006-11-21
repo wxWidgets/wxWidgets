@@ -4,6 +4,13 @@ A font is an object which determines the appearance of text. Fonts are
 used for drawing text to a device context, and setting the appearance of
 a window's text.
 
+This class uses \helpref{reference counting and copy-on-write}{trefcount}
+internally so that assignments between two instances of this class are very
+cheap. You can therefore use actual objects instead of pointers without
+efficiency problems. If an instance of this class is changed it will create
+its own data internally so that other instances, which previously shared the
+data using the reference counting, are not affected.
+
 You can retrieve the current system font settings with \helpref{wxSystemSettings}{wxsystemsettings}.
 
 \helpref{wxSystemSettings}{wxsystemsettings}

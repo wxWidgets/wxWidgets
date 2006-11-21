@@ -10,8 +10,14 @@
 
 \section{\class{wxRegion}}\label{wxregion}
 
-A wxRegion represents a simple or complex region on a device context or window. It uses
-reference counting, so copying and assignment operations are fast.
+A wxRegion represents a simple or complex region on a device context or window.
+
+This class uses \helpref{reference counting and copy-on-write}{trefcount}
+internally so that assignments between two instances of this class are very
+cheap. You can therefore use actual objects instead of pointers without
+efficiency problems. If an instance of this class is changed it will create
+its own data internally so that other instances, which previously shared the
+data using the reference counting, are not affected.
 
 \wxheading{Derived from}
 

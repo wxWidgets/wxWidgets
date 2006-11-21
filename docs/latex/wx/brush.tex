@@ -60,10 +60,11 @@ application may wish to get a pointer to a brush by using the global
 list of brushes {\bf wxTheBrushList}, and calling the member function
 \rtfsp{\bf FindOrCreateBrush}.
 
-wxBrush uses a reference counting system, so assignments between brushes are very
-cheap. You can therefore use actual wxBrush objects instead of pointers without
-efficiency problems. Once one wxBrush object changes its data it will create its
-own brush data internally so that other brushes, which previously shared the
+This class uses \helpref{reference counting and copy-on-write}{trefcount}
+internally so that assignments between two instances of this class are very
+cheap. You can therefore use actual objects instead of pointers without
+efficiency problems. If an instance of this class is changed it will create
+its own data internally so that other instances, which previously shared the
 data using the reference counting, are not affected.
 
 %TODO: an overview for wxBrush.
