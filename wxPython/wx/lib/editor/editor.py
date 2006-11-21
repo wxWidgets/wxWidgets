@@ -241,9 +241,8 @@ class Editor(wx.ScrolledWindow):
         if not odc:
             odc = wx.ClientDC(self)
 
-        bmp = wx.EmptyBitmap(max(1,self.bw), max(1,self.bh))
-        dc = wx.BufferedDC(odc, bmp)
-        if dc.Ok():
+        dc = wx.BufferedDC(odc)
+        if dc.IsOk():
             dc.SetFont(self.font)
             dc.SetBackgroundMode(wx.SOLID)
             dc.SetTextBackground(self.bgColor)
