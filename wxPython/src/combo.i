@@ -190,6 +190,7 @@ be used either as a mixin class combined with some standard or custom
 widget, or you can use the derived ComboPopup to create and hold an
 independent reference to the widget to be used for the popup.
 ", "
+
 Window Styles
 -------------
     ====================   ============================================
@@ -290,12 +291,17 @@ created, unless `OnButtonClick` has been overridden.", "");
         "Get the dropdown button which is part of the combobox.  Note: it's not
 necessarily a wx.Button or wx.BitmapButton.", "");
 
-
+    
+// NOTE: These are virtuals defined in a base class, so there
+// shouldn't be any reason to provide SWIG wrappers for them...    
 //     // forward these methods to all subcontrols
 //     virtual bool Enable(bool enable = true);
 //     virtual bool Show(bool show = true);
 //     virtual bool SetFont(const wxFont& font);
+//     virtual void SetValidator(const wxValidator &validator);
+//     virtual wxValidator *GetValidator();
 
+    
     // wxTextCtrl methods - for readonly combo they should return
     // without errors.
 
@@ -448,16 +454,6 @@ the argument.", "");
         "Returns true if given key combination should toggle the popup.", "");
 
 
-    // Prepare background of combo control or an item in a dropdown list
-    // in a way typical on platform. This includes painting the focus/disabled
-    // background and setting the clipping region.
-    // Unless you plan to paint your own focus indicator, you should always call this
-    // in your wxComboPopup::PaintComboControl implementation.
-    // In addition, it sets pen and text colour to what looks good and proper
-    // against the background.
-    // flags: wxRendererNative flags: wxCONTROL_ISSUBMENU: is drawing a list item instead of combo control
-    //                                wxCONTROL_SELECTED: list item is selected
-    //                                wxCONTROL_DISABLED: control/item is disabled
     DocDeclStr(
         virtual void , PrepareBackground( wxDC& dc, const wxRect& rect, int flags ) const,
         "Prepare background of combo control or an item in a dropdown list in a
@@ -1032,6 +1028,7 @@ DocStr(wxBitmapComboBox,
 currently only allows using bitmaps of one size, and resizes itself so
 that a bitmap can be shown next to the text field.",
 "
+
 Window Styles
 -------------
     ===================    ============================================
