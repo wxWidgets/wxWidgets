@@ -22,7 +22,7 @@ will be created.
 
 import sys, os, time
 
-KEEP_TEMPS = True
+KEEP_TEMPS = False
 # default InnoSetup installer location
 ISCC = r"%s\InnoSetup5\ISCC.exe %s"
 
@@ -719,7 +719,7 @@ Building Win32 installer for wxPython:
     MSLU=''
     CHARTYPE='ansi'
     if "UNICODE=1" in sys.argv:
-        MSLU=r'Source: "distrib\msw\unicows.dll"; DestDir: "{app}\%(PKGDIR)s\wx"; Components: core; Flags: replacesameversion' % vars()
+        MSLU=r'Source: "distrib\msw\unicows.dll"; DestDir: "{code:GetPythonDir}"; Components: core; Flags: replacesameversion sharedfile' % vars()
         CHARTYPE='unicode'
 
     f = open(ISSFILE, "w")
