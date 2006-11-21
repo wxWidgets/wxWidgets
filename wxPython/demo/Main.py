@@ -1305,6 +1305,8 @@ class wxPythonDemo(wx.Frame):
         # Set up a log window
         self.log = wx.TextCtrl(splitter2, -1,
                               style = wx.TE_MULTILINE|wx.TE_READONLY|wx.HSCROLL)
+        if wx.Platform == "__WXMAC__":
+            self.log.MacCheckSpelling(False)
 
         # Set the wxWindows log target to be this textctrl
         #wx.Log_SetActiveTarget(wx.LogTextCtrl(self.log))
