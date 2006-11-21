@@ -6308,60 +6308,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_ComboBox_SetString(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxComboBox *arg1 = (wxComboBox *) 0 ;
-  int arg2 ;
-  wxString *arg3 = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  bool temp3 = false ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "n",(char *) "string", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:ComboBox_SetString",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxComboBox, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ComboBox_SetString" "', expected argument " "1"" of type '" "wxComboBox *""'"); 
-  }
-  arg1 = reinterpret_cast< wxComboBox * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ComboBox_SetString" "', expected argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  {
-    arg3 = wxString_in_helper(obj2);
-    if (arg3 == NULL) SWIG_fail;
-    temp3 = true;
-  }
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->SetString(arg2,(wxString const &)*arg3);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_Py_Void();
-  {
-    if (temp3)
-    delete arg3;
-  }
-  return resultobj;
-fail:
-  {
-    if (temp3)
-    delete arg3;
-  }
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_ComboBox_SetEditable(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxComboBox *arg1 = (wxComboBox *) 0 ;
@@ -46068,7 +46014,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"ComboBox_GetMark", (PyCFunction)_wrap_ComboBox_GetMark, METH_O, NULL},
 	 { (char *)"ComboBox_GetCurrentSelection", (PyCFunction)_wrap_ComboBox_GetCurrentSelection, METH_O, NULL},
 	 { (char *)"ComboBox_SetStringSelection", (PyCFunction) _wrap_ComboBox_SetStringSelection, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"ComboBox_SetString", (PyCFunction) _wrap_ComboBox_SetString, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ComboBox_SetEditable", (PyCFunction) _wrap_ComboBox_SetEditable, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ComboBox_SetInsertionPointEnd", (PyCFunction)_wrap_ComboBox_SetInsertionPointEnd, METH_O, NULL},
 	 { (char *)"ComboBox_Remove", (PyCFunction) _wrap_ComboBox_Remove, METH_VARARGS | METH_KEYWORDS, NULL},

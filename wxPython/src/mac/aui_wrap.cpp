@@ -8286,6 +8286,51 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_AuiManager_StartPaneDrag(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxAuiManager *arg1 = (wxAuiManager *) 0 ;
+  wxWindow *arg2 = (wxWindow *) 0 ;
+  wxPoint *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  wxPoint temp3 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "pane_window",(char *) "offset", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:AuiManager_StartPaneDrag",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAuiManager, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AuiManager_StartPaneDrag" "', expected argument " "1"" of type '" "wxAuiManager *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAuiManager * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AuiManager_StartPaneDrag" "', expected argument " "2"" of type '" "wxWindow *""'"); 
+  }
+  arg2 = reinterpret_cast< wxWindow * >(argp2);
+  {
+    arg3 = &temp3;
+    if ( ! wxPoint_helper(obj2, &arg3)) SWIG_fail;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->StartPaneDrag(arg2,(wxPoint const &)*arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_AuiManager_CalculateHintRect(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxAuiManager *arg1 = (wxAuiManager *) 0 ;
@@ -15963,6 +16008,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"AuiManager_LoadPerspective", (PyCFunction) _wrap_AuiManager_LoadPerspective, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"AuiManager_Update", (PyCFunction)_wrap_AuiManager_Update, METH_O, NULL},
 	 { (char *)"AuiManager_CreateFloatingFrame", (PyCFunction) _wrap_AuiManager_CreateFloatingFrame, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AuiManager_StartPaneDrag", (PyCFunction) _wrap_AuiManager_StartPaneDrag, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"AuiManager_CalculateHintRect", (PyCFunction) _wrap_AuiManager_CalculateHintRect, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"AuiManager_DrawHintRect", (PyCFunction) _wrap_AuiManager_DrawHintRect, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"AuiManager_ShowHint", (PyCFunction) _wrap_AuiManager_ShowHint, METH_VARARGS | METH_KEYWORDS, NULL},

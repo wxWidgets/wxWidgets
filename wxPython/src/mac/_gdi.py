@@ -4729,7 +4729,11 @@ class BufferedDC(MemoryDC):
         Constructs a buffered DC.
         """
         _gdi_.BufferedDC_swiginit(self,_gdi_.new_BufferedDC(*args))
-        self.__dc = args[0] # save a ref so the other dc will not be deleted before self
+        # save a ref so the other dc will not be deleted before self
+        self.__dc = args[0] 
+        # also save a ref to the bitmap
+        if len(args) > 1: self.__bmp = args[1]
+
 
     __swig_destroy__ = _gdi_.delete_BufferedDC
     __del__ = lambda self : None;
@@ -4786,6 +4790,8 @@ class BufferedPaintDC(BufferedDC):
         window is automatically used).
         """
         _gdi_.BufferedPaintDC_swiginit(self,_gdi_.new_BufferedPaintDC(*args, **kwargs))
+        if len(args) > 1: self.__bmp = args[1]
+
 _gdi_.BufferedPaintDC_swigregister(BufferedPaintDC)
 
 #---------------------------------------------------------------------------

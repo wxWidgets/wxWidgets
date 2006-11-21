@@ -707,14 +707,6 @@ class ComboBox(_core.Control,_core.ItemContainer):
         """
         return _controls_.ComboBox_SetStringSelection(*args, **kwargs)
 
-    def SetString(*args, **kwargs):
-        """
-        SetString(self, int n, String string)
-
-        Set the label for the n'th item (zero based) in the list.
-        """
-        return _controls_.ComboBox_SetString(*args, **kwargs)
-
     def SetEditable(*args, **kwargs):
         """SetEditable(self, bool editable)"""
         return _controls_.ComboBox_SetEditable(*args, **kwargs)

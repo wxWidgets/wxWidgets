@@ -678,6 +678,10 @@ class AuiManager(_core.EvtHandler):
         """CreateFloatingFrame(self, Window parent, AuiPaneInfo p) -> AuiFloatingFrame"""
         return _aui.AuiManager_CreateFloatingFrame(*args, **kwargs)
 
+    def StartPaneDrag(*args, **kwargs):
+        """StartPaneDrag(self, Window pane_window, Point offset)"""
+        return _aui.AuiManager_StartPaneDrag(*args, **kwargs)
+
     def CalculateHintRect(*args, **kwargs):
         """CalculateHintRect(self, Window pane_window, Point pt, Point offset) -> Rect"""
         return _aui.AuiManager_CalculateHintRect(*args, **kwargs)
