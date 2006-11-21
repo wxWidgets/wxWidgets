@@ -1521,10 +1521,6 @@ that already do it automatically.
 class wxBufferedDC : public wxMemoryDC
 {
 public:
-    %pythonAppend wxBufferedDC
-        "self.__dc = args[0] # save a ref so the other dc will not be deleted before self";
-    
-    %nokwargs wxBufferedDC;
 
     DocStr(
         wxBufferedDC,
@@ -1550,8 +1546,16 @@ public:
         intended to cover the entire virtual size of a `wx.ScrolledWindow` or
         if it only covers the client area.  Acceptable values are
         ``wx.BUFFER_VIRTUAL_AREA`` and ``wx.BUFFER_CLIENT_AREA``.
-
 ");
+
+    %nokwargs wxBufferedDC;
+    %pythonAppend wxBufferedDC
+"# save a ref so the other dc will not be deleted before self
+        self.__dc = args[0] 
+        # also save a ref to the bitmap
+        if len(args) > 1: self.__bmp = args[1]
+";
+    
     wxBufferedDC( wxDC* dc,
                   wxBitmap& buffer=wxNullBitmap,
                   int style = wxBUFFER_CLIENT_AREA );
@@ -1609,6 +1613,8 @@ automatically when it is destroyed.  For example::
 class wxBufferedPaintDC : public wxBufferedDC
 {
 public:
+
+    %pythonAppend wxBufferedPaintDC  "if len(args) > 1: self.__bmp = args[1]";
 
     DocCtorStr(
         wxBufferedPaintDC( wxWindow *window,
