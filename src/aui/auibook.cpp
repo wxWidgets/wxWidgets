@@ -2615,6 +2615,12 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
 
     m_tabs.InsertPage(page, info, page_idx);
 
+    // if that was the first page added, even if
+    // select is false, it must become the "current page"
+    // (though no select events will be fired)
+    if (!select && m_tabs.GetPageCount() == 1)
+        m_curpage = GetPageIndex(page);
+
     wxAuiTabCtrl* active_tabctrl = GetActiveTabCtrl();
     if (page_idx >= active_tabctrl->GetPageCount())
         active_tabctrl->AddPage(page, info);
