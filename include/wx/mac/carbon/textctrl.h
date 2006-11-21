@@ -170,6 +170,7 @@ public:
     virtual void MacVisibilityChanged();
     virtual void MacEnabledStateChanged();
     virtual void MacSuperChangedPosition();
+    virtual void MacCheckSpelling(bool check);
 
 #ifndef __WXMAC_OSX__
     virtual void MacControlUserPaneDrawProc(wxInt16 part);

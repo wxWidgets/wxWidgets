@@ -206,6 +206,7 @@ public :
     virtual void ShowPosition(long WXUNUSED(pos)) ;
     virtual int GetLineLength(long lineNo) const ;
     virtual wxString GetLineText(long lineNo) const ;
+    virtual void CheckSpelling(bool check) { }
 
 #ifndef __WXMAC_OSX__
     virtual void            MacControlUserPaneDrawProc(wxInt16 part) = 0 ;
@@ -263,6 +264,12 @@ public :
         return false ;
     }
 
+    virtual void CheckSpelling(bool check)
+    {
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+    TXNSetSpellCheckAsYouType( m_txn, (Boolean) check );
+#endif
+    }
     virtual void Clear() ;
 
     virtual bool CanUndo() const ;
@@ -538,6 +545,11 @@ void wxTextCtrl::MacVisibilityChanged()
 
 void wxTextCtrl::MacEnabledStateChanged()
 {
+}
+
+void wxTextCtrl::MacCheckSpelling(bool check)
+{
+    GetPeer()->CheckSpelling(check);
 }
 
 wxString wxTextCtrl::GetValue() const

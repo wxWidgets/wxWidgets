@@ -343,6 +343,8 @@ the client area origin nor scrolling. ", "",
     virtual void SetSelection(long from, long to);
     virtual void SelectAll();
     virtual void SetEditable(bool editable);
+    
+    virtual void MacCheckSpelling(bool check);
 
     // generate the wxEVT_COMMAND_TEXT_UPDATED event, like SetValue() does
     void SendTextUpdatedEvent();
