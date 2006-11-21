@@ -1281,7 +1281,7 @@ wxPoint MyFrame::GetStartPosition()
 void MyFrame::OnCreateTree(wxCommandEvent& WXUNUSED(event))
 {
     m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
-                  Name(wxT("Test")).Caption(wxT("Tree Control")).
+                  Caption(wxT("Tree Control")).
                   Float().FloatingPosition(GetStartPosition()).
                   FloatingSize(wxSize(150,300)));
     m_mgr.Update();
@@ -1290,7 +1290,7 @@ void MyFrame::OnCreateTree(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnCreateGrid(wxCommandEvent& WXUNUSED(event))
 {
     m_mgr.AddPane(CreateGrid(), wxAuiPaneInfo().
-                  Name(wxT("Test")).Caption(wxT("Grid")).
+                  Caption(wxT("Grid")).
                   Float().FloatingPosition(GetStartPosition()).
                   FloatingSize(wxSize(300,200)));
     m_mgr.Update();
@@ -1299,7 +1299,7 @@ void MyFrame::OnCreateGrid(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnCreateHTML(wxCommandEvent& WXUNUSED(event))
 {
     m_mgr.AddPane(CreateHTMLCtrl(), wxAuiPaneInfo().
-                  Name(wxT("Test")).Caption(wxT("HTML Control")).
+                  Caption(wxT("HTML Control")).
                   Float().FloatingPosition(GetStartPosition()).
                   FloatingSize(wxSize(300,200)));
     m_mgr.Update();
@@ -1308,7 +1308,7 @@ void MyFrame::OnCreateHTML(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnCreateNotebook(wxCommandEvent& WXUNUSED(event))
 {
     m_mgr.AddPane(CreateNotebook(), wxAuiPaneInfo().
-                  Name(wxT("Test")).Caption(wxT("Notebook")).
+                  Caption(wxT("Notebook")).
                   Float().FloatingPosition(GetStartPosition()).
                   //FloatingSize(300,200).
                   CloseButton(true).MaximizeButton(true));
@@ -1318,7 +1318,7 @@ void MyFrame::OnCreateNotebook(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnCreateText(wxCommandEvent& WXUNUSED(event))
 {
     m_mgr.AddPane(CreateTextCtrl(), wxAuiPaneInfo().
-                  Name(wxT("Test")).Caption(wxT("Text Control")).
+                  Caption(wxT("Text Control")).
                   Float().FloatingPosition(GetStartPosition()));
     m_mgr.Update();
 }
@@ -1326,7 +1326,7 @@ void MyFrame::OnCreateText(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnCreateSizeReport(wxCommandEvent& WXUNUSED(event))
 {
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Name(wxT("Test")).Caption(wxT("Client Size Reporter")).
+                  Caption(wxT("Client Size Reporter")).
                   Float().FloatingPosition(GetStartPosition()).
                   CloseButton(true).MaximizeButton(true));
     m_mgr.Update();
@@ -1468,6 +1468,7 @@ wxAuiNotebook* MyFrame::CreateNotebook()
    flex->Add( 5,5 );   flex->Add( 5,5 );
    panel->SetSizer( flex );
    ctrl->AddPage( panel, wxT("wxPanel"), false, page_bmp );
+   
    
    ctrl->AddPage( new wxTextCtrl( ctrl, wxID_ANY, wxT("Some text"),
                 wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE|wxNO_BORDER) , wxT("wxTextCtrl 1"), false, page_bmp );
