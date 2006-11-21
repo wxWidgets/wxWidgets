@@ -692,7 +692,8 @@ class XML_Tree(wx.TreeCtrl):
         #oldItem = evt.GetOldItem()
         status = ''
         oldItem = self.selection
-        if oldItem:
+        # use GetItemParent as a way to determine if the itemId is still valid
+        if oldItem and self.GetItemParent(oldItem):
             xxx = self.GetPyData(oldItem)
             # If some data was modified, apply changes
             if g.panel.IsModified():
