@@ -825,9 +825,14 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info)
     if (!window)
         return false;
 
+    bool already_exists = false;
+    
     // check if the pane already exists
-    if (GetPane(pane_info.window).IsOk())
-        return false;
+    if (!pane_info.name.empty() && GetPane(pane_info.name).IsOk())
+    {
+        wxFAIL_MSG(wxT("A pane with that name already exists in the manager!"));
+        already_exists = true;
+    }
 
     // if the new pane is docked then we should undo maximize
     if (pane_info.IsDocked())
@@ -840,8 +845,9 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info)
     // set the pane window
     pinfo.window = window;
 
+
     // if the pane's name identifier is blank, create a random string
-    if (pinfo.name.empty())
+    if (pinfo.name.empty() || already_exists)
     {
         pinfo.name.Printf(wxT("%08lx%08x%08x%08lx"),
              ((unsigned long)pinfo.window) & 0xffffffff,
