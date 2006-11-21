@@ -825,9 +825,13 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info)
     if (!window)
         return false;
 
+    // check if the window is already managed by us
+    if (GetPane(pane_info.window).IsOk())
+        return false;
+
+    // check if the pane name already exists, this could reveal a
+    // bug in the library user's application
     bool already_exists = false;
-    
-    // check if the pane already exists
     if (!pane_info.name.empty() && GetPane(pane_info.name).IsOk())
     {
         wxFAIL_MSG(wxT("A pane with that name already exists in the manager!"));
