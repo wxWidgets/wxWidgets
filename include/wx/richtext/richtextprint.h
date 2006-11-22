@@ -199,6 +199,10 @@ public:
     wxPrintData *GetPrintData();
     wxPageSetupDialogData *GetPageSetupData() { return m_pageSetupData; }
 
+    /// Set print and page setup data
+    void SetPrintData(const wxPrintData& printData);
+    void SetPageSetupData(const wxPageSetupData& pageSetupData);
+
     /// Set the rich text buffer pointer, deleting the existing object if present
     void SetRichTextBufferPreview(wxRichTextBuffer* buf);
     wxRichTextBuffer* GetRichTextBufferPreview() const { return m_richTextBufferPreview; }

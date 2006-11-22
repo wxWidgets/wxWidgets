@@ -438,6 +438,17 @@ wxPrintData *wxRichTextPrinting::GetPrintData()
     return m_printData;
 }
 
+/// Set print and page setup data
+void wxRichTextPrinting::SetPrintData(const wxPrintData& printData)
+{
+    (*GetPrintData()) = printData;
+}
+
+void wxRichTextPrinting::SetPageSetupData(const wxPageSetupData& pageSetupData)
+{
+    (*GetPageSetupData()) = pageSetupData;
+}
+
 /// Set the rich text buffer pointer, deleting the existing object if present
 void wxRichTextPrinting::SetRichTextBufferPrinting(wxRichTextBuffer* buf)
 {
