@@ -1121,7 +1121,12 @@ void wxAuiManager::MaximizePane(wxAuiPaneInfo& pane_info)
         if (!p.IsToolbar())
         {
             p.Restore();
-            p.SaveHidden();
+            
+            // save hidden state
+            p.SetFlag(wxAuiPaneInfo::savedHiddenState, p.HasFlag(wxAuiPaneInfo::optionHidden));
+
+            // hide the pane, because only the newly
+            // maximized pane should show
             p.Hide();
         }
     }
@@ -1148,7 +1153,7 @@ void wxAuiManager::RestorePane(wxAuiPaneInfo& pane_info)
         wxAuiPaneInfo& p = m_panes.Item(i);
         if (!p.IsToolbar())
         {
-            p.RestoreHidden();
+            p.SetFlag(wxAuiPaneInfo::optionHidden, p.HasFlag(wxAuiPaneInfo::savedHiddenState));
         }
     }
 
@@ -1842,9 +1847,9 @@ void wxAuiManager::LayoutAddDock(wxSizer* cont,
 }
 
 wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
-                                   wxAuiDockInfoArray& docks,
-                                   wxAuiDockUIPartArray& uiparts,
-                                   bool spacer_only)
+                                 wxAuiDockInfoArray& docks,
+                                 wxAuiDockUIPartArray& uiparts,
+                                 bool spacer_only)
 {
     wxBoxSizer* container = new wxBoxSizer(wxVERTICAL);
 

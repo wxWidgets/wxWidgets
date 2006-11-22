@@ -299,9 +299,6 @@ public:
     wxAuiPaneInfo& Floatable(bool b = true) { return SetFlag(optionFloatable, b); }
     wxAuiPaneInfo& Movable(bool b = true) { return SetFlag(optionMovable, b); }
 
-    wxAuiPaneInfo& SaveHidden() { return SetFlag(optionSavedHidden, HasFlag(optionHidden)); }
-    wxAuiPaneInfo& RestoreHidden() { return SetFlag(optionHidden, HasFlag(optionSavedHidden)); }
-
     wxAuiPaneInfo& Dockable(bool b = true)
     {
         return TopDockable(b).BottomDockable(b).LeftDockable(b).RightDockable(b);
@@ -378,15 +375,16 @@ public:
         optionActive          = 1 << 14,
         optionGripperTop      = 1 << 15,
         optionMaximized       = 1 << 16,
-        optionSavedHidden     = 1 << 17,
 
-        buttonClose           = 1 << 24,
-        buttonMaximize        = 1 << 25,
-        buttonMinimize        = 1 << 26,
-        buttonPin             = 1 << 27,
-        buttonCustom1         = 1 << 28,
-        buttonCustom2         = 1 << 29,
-        buttonCustom3         = 1 << 30,
+        buttonClose           = 1 << 22,
+        buttonMaximize        = 1 << 23,
+        buttonMinimize        = 1 << 24,
+        buttonPin             = 1 << 25,
+        buttonCustom1         = 1 << 26,
+        buttonCustom2         = 1 << 27,
+        buttonCustom3         = 1 << 28,
+        
+        savedHiddenState      = 1 << 30, // used internally
         actionPane            = 1 << 31  // used internally
     };
 
