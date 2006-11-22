@@ -191,6 +191,11 @@ void wxWindowDC::DoGetSize( int* width, int* height ) const
 
 wxBitmap wxWindowDC::DoGetAsBitmap(const wxRect *subrect) const
 {
+    // wxScreenDC is derived from wxWindowDC, so a screen dc will
+    // call this method when a Blit is performed with it as a source.
+    if (!m_window)
+        return wxNullBitmap;
+        
     ControlRef handle = (ControlRef) m_window->GetHandle();
     if ( !handle )
         return wxNullBitmap;
