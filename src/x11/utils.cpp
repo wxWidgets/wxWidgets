@@ -110,6 +110,7 @@ void wxCheckForFinishedChildren()
       // Map empty, delete it.
       delete gs_procmap;
       gs_procmap = NULL;
+      return;
     }
     for (it = gs_procmap->begin();it != gs_procmap->end(); ++it)
     {
