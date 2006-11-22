@@ -1809,7 +1809,6 @@ bool wxWindowDC::DoGetPartialTextExtents(const wxString& text,
     {
         pango_layout_iter_get_cluster_extents(iter, NULL, &pos);
         int position = PANGO_PIXELS(pos.x);
-        size_t curIndex = pango_layout_iter_get_index(iter);
         widths[i++] = position;
     }
     while (i < len)
