@@ -220,52 +220,53 @@ class PyAUIFrame(wx.Frame):
 
         # add a bunch of panes
         self._mgr.AddPane(self.CreateSizeReportCtrl(), wx.aui.AuiPaneInfo().
-                          Name("test1").Caption("Pane Caption").Top())
+                          Name("test1").Caption("Pane Caption").Top().
+                          CloseButton(True).MaximizeButton(True))
 
         self._mgr.AddPane(self.CreateSizeReportCtrl(), wx.aui.AuiPaneInfo().
                           Name("test2").Caption("Client Size Reporter").
-                          Bottom().Position(1))
+                          Bottom().Position(1).CloseButton(True).MaximizeButton(True))
 
         self._mgr.AddPane(self.CreateSizeReportCtrl(), wx.aui.AuiPaneInfo().
                           Name("test3").Caption("Client Size Reporter").
-                          Bottom())
+                          Bottom().CloseButton(True).MaximizeButton(True))
      
         self._mgr.AddPane(self.CreateSizeReportCtrl(), wx.aui.AuiPaneInfo().
                           Name("test4").Caption("Pane Caption").
-                          Left())
+                          Left().CloseButton(True).MaximizeButton(True))
                       
         self._mgr.AddPane(self.CreateSizeReportCtrl(), wx.aui.AuiPaneInfo().
                           Name("test5").Caption("Pane Caption").
-                          Right())
+                          Right().CloseButton(True).MaximizeButton(True))
                       
         self._mgr.AddPane(self.CreateSizeReportCtrl(), wx.aui.AuiPaneInfo().
                           Name("test6").Caption("Client Size Reporter").
-                          Right().Row(1))
+                          Right().Row(1).CloseButton(True).MaximizeButton(True))
 
         self._mgr.AddPane(self.CreateSizeReportCtrl(), wx.aui.AuiPaneInfo().
                           Name("test7").Caption("Client Size Reporter").
-                          Left().Layer(1))
+                          Left().Layer(1).CloseButton(True).MaximizeButton(True))
                       
         self._mgr.AddPane(self.CreateTreeCtrl(), wx.aui.AuiPaneInfo().
                           Name("test8").Caption("Tree Pane").
-                          Left().Layer(1).Position(1))
+                          Left().Layer(1).Position(1).CloseButton(True).MaximizeButton(True))
                       
         self._mgr.AddPane(self.CreateSizeReportCtrl(), wx.aui.AuiPaneInfo().
                           Name("test9").Caption("Min Size 200x100").
                           BestSize(wx.Size(200,100)).MinSize(wx.Size(200,100)).
-                          Bottom().Layer(1))
+                          Bottom().Layer(1).CloseButton(True).MaximizeButton(True))
 
         self._mgr.AddPane(self.CreateTextCtrl(), wx.aui.AuiPaneInfo().
                           Name("test10").Caption("Text Pane").
-                          Bottom().Layer(1).Position(1))
+                          Bottom().Layer(1).Position(1).CloseButton(True).MaximizeButton(True))
                                       
         self._mgr.AddPane(self.CreateSizeReportCtrl(), wx.aui.AuiPaneInfo().
                           Name("test11").Caption("Fixed Pane").
-                          Bottom().Layer(1).Position(2).Fixed())
+                          Bottom().Layer(1).Position(2).Fixed().CloseButton(True).MaximizeButton(True))
 
         self._mgr.AddPane(SettingsPanel(self, self), wx.aui.AuiPaneInfo().
                           Name("settings").Caption("Dock Manager Settings").
-                          Dockable(False).Float().Hide())
+                          Dockable(False).Float().Hide().CloseButton(True).MaximizeButton(True))
 
         # create some center panes
 
@@ -365,7 +366,7 @@ class PyAUIFrame(wx.Frame):
         self.Bind(wx.EVT_CLOSE, self.OnClose)
 
         # Show How To Use The Closing Panes Event
-        self.Bind(wx.aui.EVT_AUI_PANEBUTTON, self.OnPaneButton)
+        self.Bind(wx.aui.EVT_AUI_PANE_CLOSE, self.OnPaneClose)
         
         self.Bind(wx.EVT_MENU, self.OnCreateTree, id=ID_CreateTree)
         self.Bind(wx.EVT_MENU, self.OnCreateGrid, id=ID_CreateGrid)
@@ -415,22 +416,18 @@ class PyAUIFrame(wx.Frame):
                   id2=ID_FirstPerspective+1000)
 
 
-    def OnPaneButton(self, event):
+    def OnPaneClose(self, event):
 
         caption = event.GetPane().caption
 
         if caption in ["Tree Pane", "Dock Manager Settings", "Fixed Pane"]:
             msg = "Are You Sure You Want To Close This Pane?"
             dlg = wx.MessageDialog(self, msg, "AUI Question",
-                                   wx.YES_NO | wx.NO_DEFAULT | wx.CANCEL | wx.ICON_QUESTION)
+                                   wx.YES_NO | wx.NO_DEFAULT | wx.ICON_QUESTION)
 
             if dlg.ShowModal() in [wx.ID_NO, wx.ID_CANCEL]:
-                dlg.Destroy()
-                return
-
+                event.Veto()
             dlg.Destroy()
-            
-        event.Skip()
         
 
     def OnClose(self, event):
@@ -612,45 +609,42 @@ class PyAUIFrame(wx.Frame):
 
 
     def OnCreateTree(self, event):
-
         self._mgr.AddPane(self.CreateTreeCtrl(), wx.aui.AuiPaneInfo().
-                          Name("Test").Caption("Tree Control").
+                          Caption("Tree Control").
                           Float().FloatingPosition(self.GetStartPosition()).
-                          FloatingSize(wx.Size(150, 300)))
+                          FloatingSize(wx.Size(150, 300)).CloseButton(True).MaximizeButton(True))
         self._mgr.Update()
 
 
     def OnCreateGrid(self, event):
-
         self._mgr.AddPane(self.CreateGrid(), wx.aui.AuiPaneInfo().
-                          Name("Test").Caption("Grid").
+                          Caption("Grid").
                           Float().FloatingPosition(self.GetStartPosition()).
-                          FloatingSize(wx.Size(300, 200)))
+                          FloatingSize(wx.Size(300, 200)).CloseButton(True).MaximizeButton(True))
         self._mgr.Update()
 
 
     def OnCreateHTML(self, event):
-
         self._mgr.AddPane(self.CreateHTMLCtrl(), wx.aui.AuiPaneInfo().
-                          Name("Test").Caption("HTML Content").
+                          Caption("HTML Content").
                           Float().FloatingPosition(self.GetStartPosition()).
-                          FloatingSize(wx.Size(300, 200)))
+                          FloatingSize(wx.Size(300, 200)).CloseButton(True).MaximizeButton(True))
         self._mgr.Update()
 
 
     def OnCreateText(self, event):
-
         self._mgr.AddPane(self.CreateTextCtrl(), wx.aui.AuiPaneInfo().
-                          Name("Test").Caption("Text Control").
-                          Float().FloatingPosition(self.GetStartPosition()))
+                          Caption("Text Control").
+                          Float().FloatingPosition(self.GetStartPosition()).
+                          CloseButton(True).MaximizeButton(True))
         self._mgr.Update()
 
 
     def OnCreateSizeReport(self, event):
-
         self._mgr.AddPane(self.CreateSizeReportCtrl(), wx.aui.AuiPaneInfo().
-                          Name("Test").Caption("Client Size Reporter").
-                          Float().FloatingPosition(self.GetStartPosition()))
+                          Caption("Client Size Reporter").
+                          Float().FloatingPosition(self.GetStartPosition()).
+                          CloseButton(True).MaximizeButton(True))
         self._mgr.Update()
 
 
@@ -968,9 +962,9 @@ class SettingsPanel(wx.Panel):
         self.SetSizer(cont_sizer)
         self.GetSizer().SetSizeHints(self)
 
-        self._border_size.SetValue(frame.GetDockArt().GetMetric(wx.aui.AUI_ART_PANE_BORDER_SIZE))
-        self._sash_size.SetValue(frame.GetDockArt().GetMetric(wx.aui.AUI_ART_SASH_SIZE))
-        self._caption_size.SetValue(frame.GetDockArt().GetMetric(wx.aui.AUI_ART_CAPTION_SIZE))
+        self._border_size.SetValue(frame.GetDockArt().GetMetric(wx.aui.AUI_DOCKART_PANE_BORDER_SIZE))
+        self._sash_size.SetValue(frame.GetDockArt().GetMetric(wx.aui.AUI_DOCKART_SASH_SIZE))
+        self._caption_size.SetValue(frame.GetDockArt().GetMetric(wx.aui.AUI_DOCKART_CAPTION_SIZE))
         
         self.UpdateColors()
 
@@ -1005,54 +999,54 @@ class SettingsPanel(wx.Panel):
     
     def UpdateColors(self):
     
-        bk = self._frame.GetDockArt().GetColour(wx.aui.AUI_ART_BACKGROUND_COLOUR)
+        bk = self._frame.GetDockArt().GetColour(wx.aui.AUI_DOCKART_BACKGROUND_COLOUR)
         self._background_color.SetBitmapLabel(self.CreateColorBitmap(bk))
         
-        cap = self._frame.GetDockArt().GetColour(wx.aui.AUI_ART_INACTIVE_CAPTION_COLOUR)
+        cap = self._frame.GetDockArt().GetColour(wx.aui.AUI_DOCKART_INACTIVE_CAPTION_COLOUR)
         self._inactive_caption_color.SetBitmapLabel(self.CreateColorBitmap(cap))
         
-        capgrad = self._frame.GetDockArt().GetColour(wx.aui.AUI_ART_INACTIVE_CAPTION_GRADIENT_COLOUR)
+        capgrad = self._frame.GetDockArt().GetColour(wx.aui.AUI_DOCKART_INACTIVE_CAPTION_GRADIENT_COLOUR)
         self._inactive_caption_gradient_color.SetBitmapLabel(self.CreateColorBitmap(capgrad))
         
-        captxt = self._frame.GetDockArt().GetColour(wx.aui.AUI_ART_INACTIVE_CAPTION_TEXT_COLOUR)
+        captxt = self._frame.GetDockArt().GetColour(wx.aui.AUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR)
         self._inactive_caption_text_color.SetBitmapLabel(self.CreateColorBitmap(captxt))
         
-        acap = self._frame.GetDockArt().GetColour(wx.aui.AUI_ART_ACTIVE_CAPTION_COLOUR)
+        acap = self._frame.GetDockArt().GetColour(wx.aui.AUI_DOCKART_ACTIVE_CAPTION_COLOUR)
         self._active_caption_color.SetBitmapLabel(self.CreateColorBitmap(acap))
         
-        acapgrad = self._frame.GetDockArt().GetColour(wx.aui.AUI_ART_ACTIVE_CAPTION_GRADIENT_COLOUR)
+        acapgrad = self._frame.GetDockArt().GetColour(wx.aui.AUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR)
         self._active_caption_gradient_color.SetBitmapLabel(self.CreateColorBitmap(acapgrad))
         
-        acaptxt = self._frame.GetDockArt().GetColour(wx.aui.AUI_ART_ACTIVE_CAPTION_TEXT_COLOUR)
+        acaptxt = self._frame.GetDockArt().GetColour(wx.aui.AUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR)
         self._active_caption_text_color.SetBitmapLabel(self.CreateColorBitmap(acaptxt))
         
-        sash = self._frame.GetDockArt().GetColour(wx.aui.AUI_ART_SASH_COLOUR)
+        sash = self._frame.GetDockArt().GetColour(wx.aui.AUI_DOCKART_SASH_COLOUR)
         self._sash_color.SetBitmapLabel(self.CreateColorBitmap(sash))
         
-        border = self._frame.GetDockArt().GetColour(wx.aui.AUI_ART_BORDER_COLOUR)
+        border = self._frame.GetDockArt().GetColour(wx.aui.AUI_DOCKART_BORDER_COLOUR)
         self._border_color.SetBitmapLabel(self.CreateColorBitmap(border))
         
-        gripper = self._frame.GetDockArt().GetColour(wx.aui.AUI_ART_GRIPPER_COLOUR)
+        gripper = self._frame.GetDockArt().GetColour(wx.aui.AUI_DOCKART_GRIPPER_COLOUR)
         self._gripper_color.SetBitmapLabel(self.CreateColorBitmap(gripper))
     
     
     def OnPaneBorderSize(self, event):
     
-        self._frame.GetDockArt().SetMetric(wx.aui.AUI_ART_PANE_BORDER_SIZE,
+        self._frame.GetDockArt().SetMetric(wx.aui.AUI_DOCKART_PANE_BORDER_SIZE,
                                            event.GetInt())
         self._frame.DoUpdate()
 
 
     def OnSashSize(self, event):
 
-        self._frame.GetDockArt().SetMetric(wx.aui.AUI_ART_SASH_SIZE,
+        self._frame.GetDockArt().SetMetric(wx.aui.AUI_DOCKART_SASH_SIZE,
                                            event.GetInt())
         self._frame.DoUpdate()
     
 
     def OnCaptionSize(self, event):
     
-        self._frame.GetDockArt().SetMetric(wx.aui.AUI_ART_CAPTION_SIZE,
+        self._frame.GetDockArt().SetMetric(wx.aui.AUI_DOCKART_CAPTION_SIZE,
                                            event.GetInt())
         self._frame.DoUpdate()
     
@@ -1068,25 +1062,25 @@ class SettingsPanel(wx.Panel):
         
         var = 0
         if event.GetId() == ID_BackgroundColor:
-            var = wx.aui.AUI_ART_BACKGROUND_COLOUR
+            var = wx.aui.AUI_DOCKART_BACKGROUND_COLOUR
         elif event.GetId() == ID_SashColor:
-            var = wx.aui.AUI_ART_SASH_COLOUR
+            var = wx.aui.AUI_DOCKART_SASH_COLOUR
         elif event.GetId() == ID_InactiveCaptionColor:
-            var = wx.aui.AUI_ART_INACTIVE_CAPTION_COLOUR
+            var = wx.aui.AUI_DOCKART_INACTIVE_CAPTION_COLOUR
         elif event.GetId() == ID_InactiveCaptionGradientColor:
-            var = wx.aui.AUI_ART_INACTIVE_CAPTION_GRADIENT_COLOUR
+            var = wx.aui.AUI_DOCKART_INACTIVE_CAPTION_GRADIENT_COLOUR
         elif event.GetId() == ID_InactiveCaptionTextColor:
-            var = wx.aui.AUI_ART_INACTIVE_CAPTION_TEXT_COLOUR
+            var = wx.aui.AUI_DOCKART_INACTIVE_CAPTION_TEXT_COLOUR
         elif event.GetId() == ID_ActiveCaptionColor:
-            var = wx.aui.AUI_ART_ACTIVE_CAPTION_COLOUR
+            var = wx.aui.AUI_DOCKART_ACTIVE_CAPTION_COLOUR
         elif event.GetId() == ID_ActiveCaptionGradientColor:
-            var = wx.aui.AUI_ART_ACTIVE_CAPTION_GRADIENT_COLOUR
+            var = wx.aui.AUI_DOCKART_ACTIVE_CAPTION_GRADIENT_COLOUR
         elif event.GetId() == ID_ActiveCaptionTextColor:
-            var = wx.aui.AUI_ART_ACTIVE_CAPTION_TEXT_COLOUR
+            var = wx.aui.AUI_DOCKART_ACTIVE_CAPTION_TEXT_COLOUR
         elif event.GetId() == ID_BorderColor:
-            var = wx.aui.AUI_ART_BORDER_COLOUR
+            var = wx.aui.AUI_DOCKART_BORDER_COLOUR
         elif event.GetId() == ID_GripperColor:
-            var = wx.aui.AUI_ART_GRIPPER_COLOUR
+            var = wx.aui.AUI_DOCKART_GRIPPER_COLOUR
         else:
             return        
         
