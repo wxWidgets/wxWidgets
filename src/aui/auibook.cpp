@@ -2806,14 +2806,14 @@ size_t wxAuiNotebook::SetSelection(size_t new_page)
     evt.SetSelection(new_page);
     evt.SetOldSelection(m_curpage);
     evt.SetEventObject(this);
-    if (!GetEventHandler()->ProcessEvent(evt) || evt.IsAllowed())
+    if (!GetParent()->GetEventHandler()->ProcessEvent(evt) || evt.IsAllowed())
     {
         int old_curpage = m_curpage;
         m_curpage = new_page;
 
         // program allows the page change
         evt.SetEventType(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED);
-        (void)GetEventHandler()->ProcessEvent(evt);
+        (void)GetParent()->GetEventHandler()->ProcessEvent(evt);
 
 
         wxAuiTabCtrl* ctrl;
@@ -3437,7 +3437,7 @@ void wxAuiNotebook::OnTabButton(wxCommandEvent& command_evt)
             e.SetSelection(m_tabs.GetIdxFromWindow(close_wnd));
             e.SetOldSelection(evt.GetSelection());
             e.SetEventObject(this);
-            GetEventHandler()->ProcessEvent(e);
+            GetParent()->GetEventHandler()->ProcessEvent(e);
             if (!e.IsAllowed())
                 return;
 
