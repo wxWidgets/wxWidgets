@@ -575,7 +575,6 @@ protected:
     wxSize GetMinWindowSize( wxWindow *window );
     wxSize GetMaxClientSize( wxWindow *window ) const;
     wxSize GetMinClientSize( wxWindow *window );
-    wxSize FitSize( wxWindow *window );
     wxSize VirtualFitSize( wxWindow *window );
 
     virtual void DoSetMinSize( int width, int height );

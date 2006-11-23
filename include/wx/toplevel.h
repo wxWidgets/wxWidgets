@@ -233,7 +233,6 @@ public:
     virtual bool Destroy();
     virtual bool IsTopLevel() const { return true; }
     virtual bool IsVisible() const { return IsShown(); }
-    virtual wxSize GetMaxSize() const;
 
     // event handlers
     void OnCloseWindow(wxCloseEvent& event);

@@ -17,6 +17,7 @@
     #pragma hdrstop
 #endif
 
+#include "wx/display.h"
 #include "wx/sizer.h"
 
 #ifndef WX_PRECOMP
@@ -760,8 +761,37 @@ void wxSizer::DeleteWindows()
 
 wxSize wxSizer::Fit( wxWindow *window )
 {
-    wxSize size(window->IsTopLevel() ? FitSize(window)
-                                     : GetMinWindowSize(window));
+    // take the min size by default and limit it by max size
+    wxSize size = GetMinWindowSize(window);
+    wxSize sizeMax = GetMaxWindowSize(window);
+
+    wxTopLevelWindow *tlw = wxDynamicCast(window, wxTopLevelWindow);
+    if ( tlw )
+    {
+        // hack for small screen devices where TLWs are always full screen
+        if ( tlw->IsAlwaysMaximized() )
+        {
+            size = tlw->GetSize();
+        }
+        else // normal situation
+        {
+            // limit the window to the size of the display it is on
+            int disp = wxDisplay::GetFromWindow(window);
+            if ( disp == wxNOT_FOUND )
+            {
+                // or, if we don't know which one it is, of the main one
+                disp = 0;
+            }
+
+            sizeMax = wxDisplay(disp).GetClientArea().GetSize();
+        }
+    }
+
+    if ( sizeMax.x != wxDefaultCoord && size.x > sizeMax.x )
+        size.x = sizeMax.x;
+    if ( sizeMax.y != wxDefaultCoord && size.y > sizeMax.y )
+        size.y = sizeMax.y;
+
 
     window->SetSize( size );
 
@@ -833,32 +863,6 @@ wxSize wxSizer::GetMinWindowSize( wxWindow *window )
 // TODO on mac we need a function that determines how much free space this
 // min size contains, in order to make sure that we have 20 pixels of free
 // space around the controls
-
-// Return a window size that will fit within the screens dimensions
-wxSize wxSizer::FitSize( wxWindow *window )
-{
-    if ( window->IsTopLevel() )
-    {
-        wxTopLevelWindow *tlw = wxDynamicCast(window, wxTopLevelWindow);
-        if ( tlw && tlw->IsAlwaysMaximized() )
-        {
-            return tlw->GetClientSize();
-        }
-    }
-
-    wxSize size     = GetMinWindowSize( window );
-    wxSize sizeMax  = GetMaxWindowSize( window );
-
-    // Limit the size if sizeMax != wxDefaultSize
-
-    if ( size.x > sizeMax.x && sizeMax.x != wxDefaultCoord )
-        size.x = sizeMax.x;
-    if ( size.y > sizeMax.y && sizeMax.y != wxDefaultCoord )
-        size.y = sizeMax.y;
-
-    return size;
-}
-
 wxSize wxSizer::GetMaxClientSize( wxWindow *window ) const
 {
     wxSize maxSize( window->GetMaxSize() );
