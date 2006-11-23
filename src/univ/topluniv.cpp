@@ -184,7 +184,9 @@ long wxTopLevelWindow::GetDecorationsStyle() const
             ms_canIconize = wxSystemSettings::HasFeature(wxSYS_CAN_ICONIZE_FRAME);
         }
 
-        style |= wxTOPLEVEL_TITLEBAR | wxTOPLEVEL_BUTTON_CLOSE;
+        style |= wxTOPLEVEL_TITLEBAR;
+        if ( m_windowStyle & wxCLOSE_BOX )
+            style |= wxTOPLEVEL_BUTTON_CLOSE;
         if ( (m_windowStyle & wxMINIMIZE_BOX) && ms_canIconize )
             style |= wxTOPLEVEL_BUTTON_ICONIZE;
         if ( m_windowStyle & wxMAXIMIZE_BOX )
