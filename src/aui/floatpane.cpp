@@ -97,8 +97,10 @@ void wxAuiFloatingFrame::SetPaneWindow(const wxAuiPaneInfo& pane)
     // if the frame window's max size is greater than the min size
     // then set the max size to the min size as well
     wxSize cur_max_size = GetMaxSize();
-    if (cur_max_size.x < pane.min_size.x ||
-        cur_max_size.y < pane.min_size.y)
+    if (cur_max_size.IsFullySpecified() &&
+          (cur_max_size.x < pane.min_size.x ||
+           cur_max_size.y < pane.min_size.y)
+       )
     {
         SetMaxSize(pane_min_size);
     }

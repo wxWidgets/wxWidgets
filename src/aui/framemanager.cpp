@@ -501,6 +501,7 @@ wxAuiManager::wxAuiManager(wxWindow* managed_wnd, unsigned int flags)
     m_frame = NULL;
     m_dock_constraint_x = 0.3;
     m_dock_constraint_y = 0.3;
+    m_reserved = NULL;
     
     if (managed_wnd)
     {
@@ -919,8 +920,8 @@ bool wxAuiManager::AddPane(wxWindow* window, const wxAuiPaneInfo& pane_info)
 }
 
 bool wxAuiManager::AddPane(wxWindow* window,
-                             int direction,
-                             const wxString& caption)
+                           int direction,
+                           const wxString& caption)
 {
     wxAuiPaneInfo pinfo;
     pinfo.Caption(caption);
@@ -936,8 +937,8 @@ bool wxAuiManager::AddPane(wxWindow* window,
 }
 
 bool wxAuiManager::AddPane(wxWindow* window,
-                             const wxAuiPaneInfo& pane_info,
-                             const wxPoint& drop_pos)
+                           const wxAuiPaneInfo& pane_info,
+                           const wxPoint& drop_pos)
 {
     if (!AddPane(window, pane_info))
         return false;
@@ -1123,7 +1124,8 @@ void wxAuiManager::MaximizePane(wxAuiPaneInfo& pane_info)
             p.Restore();
             
             // save hidden state
-            p.SetFlag(wxAuiPaneInfo::savedHiddenState, p.HasFlag(wxAuiPaneInfo::optionHidden));
+            p.SetFlag(wxAuiPaneInfo::savedHiddenState,
+                      p.HasFlag(wxAuiPaneInfo::optionHidden));
 
             // hide the pane, because only the newly
             // maximized pane should show
@@ -1153,7 +1155,8 @@ void wxAuiManager::RestorePane(wxAuiPaneInfo& pane_info)
         wxAuiPaneInfo& p = m_panes.Item(i);
         if (!p.IsToolbar())
         {
-            p.SetFlag(wxAuiPaneInfo::optionHidden, p.HasFlag(wxAuiPaneInfo::savedHiddenState));
+            p.SetFlag(wxAuiPaneInfo::optionHidden,
+                      p.HasFlag(wxAuiPaneInfo::savedHiddenState));
         }
     }
 
@@ -1318,7 +1321,7 @@ wxString wxAuiManager::SavePerspective()
 {
     wxString result;
     result.Alloc(500);
-    result = wxT("layout1|");
+    result = wxT("layout2|");
 
     int pane_i, pane_count = m_panes.GetCount();
     for (pane_i = 0; pane_i < pane_count; ++pane_i)
@@ -1349,11 +1352,13 @@ bool wxAuiManager::LoadPerspective(const wxString& layout, bool update)
     wxString part;
 
     // check layout string version
+    //    'layout1' = wxAUI 0.9.0 - wxAUI 0.9.2
+    //    'layout2' = wxAUI 0.9.2 (wxWidgets 2.8)
     part = input.BeforeFirst(wxT('|'));
     input = input.AfterFirst(wxT('|'));
     part.Trim(true);
     part.Trim(false);
-    if (part != wxT("layout1"))
+    if (part != wxT("layout2"))
         return false;
 
     // mark all panes currently managed as docked and hidden
@@ -1521,10 +1526,10 @@ void wxAuiManager::GetPanePositionsAndSizes(wxAuiDockInfo& dock,
 
 
 void wxAuiManager::LayoutAddPane(wxSizer* cont,
-                                   wxAuiDockInfo& dock,
-                                   wxAuiPaneInfo& pane,
-                                   wxAuiDockUIPartArray& uiparts,
-                                   bool spacer_only)
+                                 wxAuiDockInfo& dock,
+                                 wxAuiPaneInfo& pane,
+                                 wxAuiDockUIPartArray& uiparts,
+                                 bool spacer_only)
 {
     wxAuiDockUIPart part;
     wxSizerItem* sizer_item;
@@ -1642,7 +1647,7 @@ void wxAuiManager::LayoutAddPane(wxSizer* cont,
 
 
     // determine if the pane should have a minimum size; if the pane is
-    // non-resizable (fixed) then we must set a minimum size. Alternitavely,
+    // non-resizable (fixed) then we must set a minimum size. Alternatively,
     // if the pane.min_size is set, we must use that value as well
 
     wxSize min_size = pane.min_size;
@@ -2572,7 +2577,7 @@ int wxAuiManager::GetDockPixelOffset(wxAuiPaneInfo& test)
 // the target info.  If the operation was allowed, the function returns true.
 
 bool wxAuiManager::ProcessDockResult(wxAuiPaneInfo& target,
-                              const wxAuiPaneInfo& new_pos)
+                                     const wxAuiPaneInfo& new_pos)
 {
     bool allowed = false;
     switch (new_pos.dock_direction)

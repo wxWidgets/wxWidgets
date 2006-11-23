@@ -376,10 +376,11 @@ public:
         optionGripperTop      = 1 << 15,
         optionMaximized       = 1 << 16,
 
-        buttonClose           = 1 << 22,
-        buttonMaximize        = 1 << 23,
-        buttonMinimize        = 1 << 24,
-        buttonPin             = 1 << 25,
+        buttonClose           = 1 << 21,
+        buttonMaximize        = 1 << 22,
+        buttonMinimize        = 1 << 23,
+        buttonPin             = 1 << 24,
+        
         buttonCustom1         = 1 << 26,
         buttonCustom2         = 1 << 27,
         buttonCustom3         = 1 << 28,
@@ -621,6 +622,8 @@ protected:
     wxTimer m_hint_fadetimer;    // transparent fade timer
     wxByte m_hint_fadeamt;       // transparent fade amount
     wxByte m_hint_fademax;       // maximum value of hint fade
+    
+    void* m_reserved;
 
 #ifndef SWIG
     DECLARE_EVENT_TABLE()
@@ -700,6 +703,7 @@ public:
         resizable = true;
         fixed = false;
         toolbar = false;
+        reserved1 = false;
     }
 
 #ifndef SWIG
@@ -715,6 +719,7 @@ public:
         toolbar = c.toolbar;
         panes = c.panes;
         rect = c.rect;
+        reserved1 = c.reserved1;
     }
 
     wxAuiDockInfo& operator=(const wxAuiDockInfo& c)
@@ -729,6 +734,7 @@ public:
         toolbar = c.toolbar;
         panes = c.panes;
         rect = c.rect;
+        reserved1 = c.reserved1;
         return *this;
     }
 #endif // SWIG
@@ -751,6 +757,7 @@ public:
     bool toolbar;             // flag indicating dock contains only toolbars
     bool fixed;               // flag indicating that the dock operates on
                               // absolute coordinates as opposed to proportional
+    bool reserved1;
 };
 
 
