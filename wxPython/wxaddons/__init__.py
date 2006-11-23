@@ -177,7 +177,6 @@ def import_hook(name, globals=None, locals=None, fromlist=None):
     try:
         return builtin_import(name, globals, locals, fromlist)
     except:
-        print "Check imports is: " + `check_imports`
         if name.startswith("wxaddons"):
             print "Querying %s for module." % domain
             try:
