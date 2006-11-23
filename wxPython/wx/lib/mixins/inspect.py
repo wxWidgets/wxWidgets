@@ -11,7 +11,7 @@
 #----------------------------------------------------------------------------
 
 # NOTE: This class is based on ideas sent to the wxPython-users
-# mail-list by Dan Elof.
+# mail-list by Dan Eloff.
 
 import wx.py
 
@@ -25,13 +25,15 @@ class InspectionMixin(object):
     To use this class simply derive a class from wx.App and
     InspectionMixin and then call the Init() method from the app's
     OnInit.
-    """    
-    def Init(self):
+    """
+    def Init(self, pos=(-1, -1), size=(-1, -1)):
         """
         Make the event binding that will activate the PyCrust window.
         """
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyPress)
         self._crust = None
+        self._pos = pos
+        self._size = size
 
 
     def OnKeyPress(self, evt):
@@ -49,10 +51,9 @@ class InspectionMixin(object):
         Show the PyCrust window.
         """
         if not self._crust:
-            self._crust = wx.py.crust.CrustFrame(self.GetTopWindow())
+            self._crust = wx.py.crust.CrustFrame(self.GetTopWindow(),
+                                                 pos = self._pos, size = self._size)
             self._crust.shell.interp.locals['app'] = self
         win = wx.FindWindowAtPointer()
         self._crust.shell.interp.locals['win'] = win
         self._crust.Show()
-
-
