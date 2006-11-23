@@ -482,14 +482,6 @@ class AuiPaneInfo(object):
         """Movable(self, bool b=True) -> AuiPaneInfo"""
         return _aui.AuiPaneInfo_Movable(*args, **kwargs)
 
-    def SaveHidden(*args, **kwargs):
-        """SaveHidden(self) -> AuiPaneInfo"""
-        return _aui.AuiPaneInfo_SaveHidden(*args, **kwargs)
-
-    def RestoreHidden(*args, **kwargs):
-        """RestoreHidden(self) -> AuiPaneInfo"""
-        return _aui.AuiPaneInfo_RestoreHidden(*args, **kwargs)
-
     def Dockable(*args, **kwargs):
         """Dockable(self, bool b=True) -> AuiPaneInfo"""
         return _aui.AuiPaneInfo_Dockable(*args, **kwargs)
@@ -535,7 +527,6 @@ class AuiPaneInfo(object):
     optionActive = _aui.AuiPaneInfo_optionActive
     optionGripperTop = _aui.AuiPaneInfo_optionGripperTop
     optionMaximized = _aui.AuiPaneInfo_optionMaximized
-    optionSavedHidden = _aui.AuiPaneInfo_optionSavedHidden
     buttonClose = _aui.AuiPaneInfo_buttonClose
     buttonMaximize = _aui.AuiPaneInfo_buttonMaximize
     buttonMinimize = _aui.AuiPaneInfo_buttonMinimize
@@ -543,6 +534,7 @@ class AuiPaneInfo(object):
     buttonCustom1 = _aui.AuiPaneInfo_buttonCustom1
     buttonCustom2 = _aui.AuiPaneInfo_buttonCustom2
     buttonCustom3 = _aui.AuiPaneInfo_buttonCustom3
+    savedHiddenState = _aui.AuiPaneInfo_savedHiddenState
     actionPane = _aui.AuiPaneInfo_actionPane
     name = property(_aui.AuiPaneInfo_name_get, _aui.AuiPaneInfo_name_set)
     caption = property(_aui.AuiPaneInfo_caption_get, _aui.AuiPaneInfo_caption_set)

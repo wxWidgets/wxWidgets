@@ -5849,72 +5849,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_AuiPaneInfo_SaveHidden(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxAuiPaneInfo *arg1 = (wxAuiPaneInfo *) 0 ;
-  wxAuiPaneInfo *result = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAuiPaneInfo, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AuiPaneInfo_SaveHidden" "', expected argument " "1"" of type '" "wxAuiPaneInfo *""'"); 
-  }
-  arg1 = reinterpret_cast< wxAuiPaneInfo * >(argp1);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    {
-      wxAuiPaneInfo &_result_ref = (arg1)->SaveHidden();
-      result = (wxAuiPaneInfo *) &_result_ref;
-    }
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  {
-    resultobj = swig_obj[0]; Py_INCREF(resultobj); 
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AuiPaneInfo_RestoreHidden(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxAuiPaneInfo *arg1 = (wxAuiPaneInfo *) 0 ;
-  wxAuiPaneInfo *result = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAuiPaneInfo, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AuiPaneInfo_RestoreHidden" "', expected argument " "1"" of type '" "wxAuiPaneInfo *""'"); 
-  }
-  arg1 = reinterpret_cast< wxAuiPaneInfo * >(argp1);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    {
-      wxAuiPaneInfo &_result_ref = (arg1)->RestoreHidden();
-      result = (wxAuiPaneInfo *) &_result_ref;
-    }
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  {
-    resultobj = swig_obj[0]; Py_INCREF(resultobj); 
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_AuiPaneInfo_Dockable(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxAuiPaneInfo *arg1 = (wxAuiPaneInfo *) 0 ;
@@ -16041,8 +15975,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"AuiPaneInfo_RightDockable", (PyCFunction) _wrap_AuiPaneInfo_RightDockable, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"AuiPaneInfo_Floatable", (PyCFunction) _wrap_AuiPaneInfo_Floatable, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"AuiPaneInfo_Movable", (PyCFunction) _wrap_AuiPaneInfo_Movable, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"AuiPaneInfo_SaveHidden", (PyCFunction)_wrap_AuiPaneInfo_SaveHidden, METH_O, NULL},
-	 { (char *)"AuiPaneInfo_RestoreHidden", (PyCFunction)_wrap_AuiPaneInfo_RestoreHidden, METH_O, NULL},
 	 { (char *)"AuiPaneInfo_Dockable", (PyCFunction) _wrap_AuiPaneInfo_Dockable, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"AuiPaneInfo_DefaultPane", (PyCFunction)_wrap_AuiPaneInfo_DefaultPane, METH_O, NULL},
 	 { (char *)"AuiPaneInfo_CentrePane", (PyCFunction)_wrap_AuiPaneInfo_CentrePane, METH_O, NULL},
@@ -19104,7 +19036,6 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "AuiPaneInfo_optionActive",SWIG_From_int(static_cast< int >(wxAuiPaneInfo::optionActive)));
   SWIG_Python_SetConstant(d, "AuiPaneInfo_optionGripperTop",SWIG_From_int(static_cast< int >(wxAuiPaneInfo::optionGripperTop)));
   SWIG_Python_SetConstant(d, "AuiPaneInfo_optionMaximized",SWIG_From_int(static_cast< int >(wxAuiPaneInfo::optionMaximized)));
-  SWIG_Python_SetConstant(d, "AuiPaneInfo_optionSavedHidden",SWIG_From_int(static_cast< int >(wxAuiPaneInfo::optionSavedHidden)));
   SWIG_Python_SetConstant(d, "AuiPaneInfo_buttonClose",SWIG_From_int(static_cast< int >(wxAuiPaneInfo::buttonClose)));
   SWIG_Python_SetConstant(d, "AuiPaneInfo_buttonMaximize",SWIG_From_int(static_cast< int >(wxAuiPaneInfo::buttonMaximize)));
   SWIG_Python_SetConstant(d, "AuiPaneInfo_buttonMinimize",SWIG_From_int(static_cast< int >(wxAuiPaneInfo::buttonMinimize)));
@@ -19112,6 +19043,7 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "AuiPaneInfo_buttonCustom1",SWIG_From_int(static_cast< int >(wxAuiPaneInfo::buttonCustom1)));
   SWIG_Python_SetConstant(d, "AuiPaneInfo_buttonCustom2",SWIG_From_int(static_cast< int >(wxAuiPaneInfo::buttonCustom2)));
   SWIG_Python_SetConstant(d, "AuiPaneInfo_buttonCustom3",SWIG_From_int(static_cast< int >(wxAuiPaneInfo::buttonCustom3)));
+  SWIG_Python_SetConstant(d, "AuiPaneInfo_savedHiddenState",SWIG_From_int(static_cast< int >(wxAuiPaneInfo::savedHiddenState)));
   SWIG_Python_SetConstant(d, "AuiPaneInfo_actionPane",SWIG_From_int(static_cast< int >(wxAuiPaneInfo::actionPane)));
   SWIG_Python_SetConstant(d, "AuiDockUIPart_typeCaption",SWIG_From_int(static_cast< int >(wxAuiDockUIPart::typeCaption)));
   SWIG_Python_SetConstant(d, "AuiDockUIPart_typeGripper",SWIG_From_int(static_cast< int >(wxAuiDockUIPart::typeGripper)));
