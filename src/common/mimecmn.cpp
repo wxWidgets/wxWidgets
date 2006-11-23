@@ -63,6 +63,51 @@
 // ============================================================================
 
 // ----------------------------------------------------------------------------
+// wxMimeTypeCommands
+// ----------------------------------------------------------------------------
+
+void
+wxMimeTypeCommands::AddOrReplaceVerb(const wxString& verb, const wxString& cmd)
+{
+    int n = m_verbs.Index(verb, false /* ignore case */);
+    if ( n == wxNOT_FOUND )
+    {
+        m_verbs.Add(verb);
+        m_commands.Add(cmd);
+    }
+    else
+    {
+        m_commands[n] = cmd;
+    }
+}
+
+wxString
+wxMimeTypeCommands::GetCommandForVerb(const wxString& verb, size_t *idx) const
+{
+    wxString s;
+
+    int n = m_verbs.Index(verb);
+    if ( n != wxNOT_FOUND )
+    {
+        s = m_commands[(size_t)n];
+        if ( idx )
+            *idx = n;
+    }
+    else if ( idx )
+    {
+        // different from any valid index
+        *idx = (size_t)-1;
+    }
+
+    return s;
+}
+
+wxString wxMimeTypeCommands::GetVerbCmd(size_t n) const
+{
+    return m_verbs[n] + wxT('=') + m_commands[n];
+}
+
+// ----------------------------------------------------------------------------
 // wxFileTypeInfo
 // ----------------------------------------------------------------------------
 

@@ -82,20 +82,7 @@ public:
     }
 
     // add a new verb with the command or replace the old value
-    void AddOrReplaceVerb(const wxString& verb, const wxString& cmd)
-    {
-        int n = m_verbs.Index(verb, false /* ignore case */);
-        if ( n == wxNOT_FOUND )
-        {
-            m_verbs.Add(verb);
-            m_commands.Add(cmd);
-        }
-        else
-        {
-            m_commands[n] = cmd;
-        }
-    }
-
+    void AddOrReplaceVerb(const wxString& verb, const wxString& cmd);
     void Add(const wxString& s)
     {
         m_verbs.Add(s.BeforeFirst(wxT('=')));
@@ -110,31 +97,11 @@ public:
     bool HasVerb(const wxString& verb) const
         { return m_verbs.Index(verb) != wxNOT_FOUND; }
 
-    wxString GetCommandForVerb(const wxString& verb, size_t *idx = NULL) const
-    {
-        wxString s;
-
-        int n = m_verbs.Index(verb);
-        if ( n != wxNOT_FOUND )
-        {
-            s = m_commands[(size_t)n];
-            if ( idx )
-                *idx = n;
-        }
-        else if ( idx )
-        {
-            // different from any valid index
-            *idx = (size_t)-1;
-        }
-
-        return s;
-    }
+    // returns empty string and wxNOT_FOUND in idx if no such verb
+    wxString GetCommandForVerb(const wxString& verb, size_t *idx = NULL) const;
 
     // get a "verb=command" string
-    wxString GetVerbCmd(size_t n) const
-    {
-        return m_verbs[n] + wxT('=') + m_commands[n];
-    }
+    wxString GetVerbCmd(size_t n) const;
 
 private:
     wxArrayString m_verbs;
