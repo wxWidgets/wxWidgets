@@ -20,12 +20,22 @@ builtin_import = __builtin__.__import__
 
 debug = False
 use_gui = True
+checkImports = True
+config = wx.Config("wxaddons")
+if config.Read("PerformChecks", "true") != "true":
+    checkImports = False
 
 if use_gui and not wx.App.IsDisplayAvailable():
     use_gui = False
 
 s = xmlrpclib.Server('%s/xmlrpc-server.php' % domain, verbose=(debug == True)) 
-    
+
+def check_imports(check):
+    if check:
+        config.Write("PerformChecks", "true")
+    else:
+        config.Write("PerformChecks", "false")
+
 def version_greater_than_or_equal(version1, version2):
     """
     Checks if version1 >= version2, returning true if so,
@@ -167,6 +177,7 @@ def import_hook(name, globals=None, locals=None, fromlist=None):
     try:
         return builtin_import(name, globals, locals, fromlist)
     except:
+        print "Check imports is: " + `check_imports`
         if name.startswith("wxaddons"):
             print "Querying %s for module." % domain
             try:
@@ -199,5 +210,6 @@ def runTests():
     import wxaddons.foo_bar
     import googly
 
-__builtin__.__import__ = import_hook
+if checkImports:
+    __builtin__.__import__ = import_hook
 
