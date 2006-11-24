@@ -39,9 +39,12 @@ public:
     virtual wxStandardPathsBase& GetStandardPaths();
 #endif
     virtual wxPortId GetToolkitVersion(int *majVer, int *minVer) const;
-    
+
 #ifdef __WXGTK__
     virtual wxString GetDesktopEnvironment() const;
+#ifdef __WXDEBUG__
+    virtual bool ShowAssertDialog(const wxString& msg);
+#endif
 #endif
 };
 

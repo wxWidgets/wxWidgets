@@ -42,6 +42,12 @@
 #include "wx/vidmode.h"
 #include "wx/ptr_scpd.h"
 
+#ifdef __WXDEBUG__
+    #if wxUSE_STACKWALKER
+        #include "wx/stackwalk.h"
+    #endif // wxUSE_STACKWALKER
+#endif // __WXDEBUG__
+
 #if defined(__WXMSW__)
     #include  "wx/msw/private.h"  // includes windows.h for LOGFONT
 #endif
@@ -565,15 +571,27 @@ wxRendererNative *wxGUIAppTraitsBase::CreateRenderer()
 
 bool wxGUIAppTraitsBase::ShowAssertDialog(const wxString& msg)
 {
+#if defined(__WXMSW__) || !wxUSE_MSGDLG
     // under MSW we prefer to use the base class version using ::MessageBox()
     // even if wxMessageBox() is available because it has less chances to
     // double fault our app than our wxMessageBox()
-#if defined(__WXMSW__) || !wxUSE_MSGDLG
     return wxAppTraitsBase::ShowAssertDialog(msg);
 #else // wxUSE_MSGDLG
+    wxString msgDlg = msg;
+
+#if wxUSE_STACKWALKER
+    // on Unix stack frame generation may take some time, depending on the
+    // size of the executable mainly... warn the user that we are working
+    wxFprintf(stderr, wxT("[Debug] Generating a stack trace... please wait"));
+    fflush(stderr);
+
+    const wxString stackTrace = GetAssertStackTrace();
+    if ( !stackTrace.empty() )
+        msgDlg << _T("\n\nCall stack:\n") << stackTrace;
+#endif // wxUSE_STACKWALKER
+
     // this message is intentionally not translated -- it is for
     // developpers only
-    wxString msgDlg(msg);
     msgDlg += wxT("\nDo you want to stop the program?\n")
               wxT("You can also choose [Cancel] to suppress ")
               wxT("further warnings.");

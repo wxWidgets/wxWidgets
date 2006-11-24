@@ -535,10 +535,89 @@ GSocketGUIFunctionsTable* wxConsoleAppTraitsBase::GetSocketGUIFunctionsTable()
 
 #ifdef __WXDEBUG__
 
-bool wxAppTraitsBase::ShowAssertDialog(const wxString& msg)
+bool wxAppTraitsBase::ShowAssertDialog(const wxString& msgOriginal)
 {
+    wxString msg = msgOriginal;
+
+#if wxUSE_STACKWALKER
+#if !defined(__WXMSW__)
+    // on Unix stack frame generation may take some time, depending on the
+    // size of the executable mainly... warn the user that we are working
+    wxFprintf(stderr, wxT("[Debug] Generating a stack trace... please wait"));
+    fflush(stderr);
+#endif
+
+    const wxString stackTrace = GetAssertStackTrace();
+    if ( !stackTrace.empty() )
+        msg << _T("\n\nCall stack:\n") << stackTrace;
+#endif // wxUSE_STACKWALKER
+
     return DoShowAssertDialog(msg);
 }
+
+#if wxUSE_STACKWALKER
+wxString wxAppTraitsBase::GetAssertStackTrace()
+{
+    wxString stackTrace;
+
+    class StackDump : public wxStackWalker
+    {
+    public:
+        StackDump() { }
+
+        const wxString& GetStackTrace() const { return m_stackTrace; }
+
+    protected:
+        virtual void OnStackFrame(const wxStackFrame& frame)
+        {
+            m_stackTrace << wxString::Format
+                            (
+                              _T("[%02d] "),
+                              wx_truncate_cast(int, frame.GetLevel())
+                            );
+
+            wxString name = frame.GetName();
+            if ( !name.empty() )
+            {
+                m_stackTrace << wxString::Format(_T("%-40s"), name.c_str());
+            }
+            else
+            {
+                m_stackTrace << wxString::Format(_T("%p"), frame.GetAddress());
+            }
+
+            if ( frame.HasSourceLocation() )
+            {
+                m_stackTrace << _T('\t')
+                             << frame.GetFileName()
+                             << _T(':')
+                             << frame.GetLine();
+            }
+
+            m_stackTrace << _T('\n');
+        }
+
+    private:
+        wxString m_stackTrace;
+    };
+
+    // don't show more than maxLines or we could get a dialog too tall to be
+    // shown on screen: 20 should be ok everywhere as even with 15 pixel high
+    // characters it is still only 300 pixels...
+    static const int maxLines = 20;
+
+    StackDump dump;
+    dump.Walk(2, maxLines); // don't show OnAssert() call itself
+    stackTrace = dump.GetStackTrace();
+
+    const int count = stackTrace.Freq(wxT('\n'));
+    for ( int i = 0; i < count - maxLines; i++ )
+        stackTrace = stackTrace.BeforeLast(wxT('\n'));
+
+    return stackTrace;
+}
+#endif // wxUSE_STACKWALKER
+
 
 #endif // __WXDEBUG__
 
@@ -694,68 +773,6 @@ bool DoShowAssertDialog(const wxString& msg)
     return false;
 }
 
-#if wxUSE_STACKWALKER
-static wxString GetAssertStackTrace()
-{
-    wxString stackTrace;
-
-    class StackDump : public wxStackWalker
-    {
-    public:
-        StackDump() { }
-
-        const wxString& GetStackTrace() const { return m_stackTrace; }
-
-    protected:
-        virtual void OnStackFrame(const wxStackFrame& frame)
-        {
-            m_stackTrace << wxString::Format
-                            (
-                              _T("[%02d] "),
-                              wx_truncate_cast(int, frame.GetLevel())
-                            );
-
-            wxString name = frame.GetName();
-            if ( !name.empty() )
-            {
-                m_stackTrace << wxString::Format(_T("%-40s"), name.c_str());
-            }
-            else
-            {
-                m_stackTrace << wxString::Format(_T("%p"), frame.GetAddress());
-            }
-
-            if ( frame.HasSourceLocation() )
-            {
-                m_stackTrace << _T('\t')
-                             << frame.GetFileName()
-                             << _T(':')
-                             << frame.GetLine();
-            }
-
-            m_stackTrace << _T('\n');
-        }
-
-    private:
-        wxString m_stackTrace;
-    };
-
-    StackDump dump;
-    dump.Walk(2); // don't show OnAssert() call itself
-    stackTrace = dump.GetStackTrace();
-
-    // don't show more than maxLines or we could get a dialog too tall to be
-    // shown on screen: 20 should be ok everywhere as even with 15 pixel high
-    // characters it is still only 300 pixels...
-    static const int maxLines = 20;
-    const int count = stackTrace.Freq(wxT('\n'));
-    for ( int i = 0; i < count - maxLines; i++ )
-        stackTrace = stackTrace.BeforeLast(wxT('\n'));
-
-    return stackTrace;
-}
-#endif // wxUSE_STACKWALKER
-
 // show the assert modal dialog
 static
 void ShowAssertDialog(const wxChar *szFile,
@@ -789,14 +806,6 @@ void ShowAssertDialog(const wxChar *szFile,
     {
         msg << _T('.');
     }
-
-#if wxUSE_STACKWALKER
-    const wxString stackTrace = GetAssertStackTrace();
-    if ( !stackTrace.empty() )
-    {
-        msg << _T("\n\nCall stack:\n") << stackTrace;
-    }
-#endif // wxUSE_STACKWALKER
 
 #if wxUSE_THREADS
     // if we are not in the main thread, output the assert directly and trap

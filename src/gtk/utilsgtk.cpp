@@ -24,6 +24,13 @@
 
 #include "wx/unix/execute.h"
 
+#ifdef __WXDEBUG__
+    #if wxUSE_STACKWALKER
+        #include "wx/gtk/assertdlg_gtk.h"
+        #include "wx/stackwalk.h"
+    #endif // wxUSE_STACKWALKER
+#endif // __WXDEBUG__
+
 #include <stdarg.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -327,6 +334,112 @@ static wxString GetSM()
     return ret;
 }
 #endif // wxUSE_DETECT_SM
+
+
+//-----------------------------------------------------------------------------
+// wxGUIAppTraits
+//-----------------------------------------------------------------------------
+
+#ifdef __WXDEBUG__
+
+#if wxUSE_STACKWALKER
+
+// private helper class
+class StackDump : public wxStackWalker
+{
+public:
+    StackDump(GtkAssertDialog *dlg) { m_dlg=dlg; }
+
+protected:
+    virtual void OnStackFrame(const wxStackFrame& frame)
+    {
+        wxString fncname = frame.GetName();
+        wxString fncargs = fncname;
+
+        size_t n = fncname.find(wxT('('));
+        if (n != wxString::npos)
+        {
+            // remove arguments from function name
+            fncname.erase(n);
+
+            // remove function name and brackets from arguments
+            fncargs = fncargs.substr(n+1, fncargs.length()-n-2);
+        }
+        else
+            fncargs = wxEmptyString;
+
+        // append this stack frame's info in the dialog
+        if (!frame.GetFileName().empty() || !fncname.empty())
+            gtk_assert_dialog_append_stack_frame(m_dlg,
+                                                fncname.mb_str(),
+                                                fncargs.mb_str(),
+                                                frame.GetFileName().mb_str(),
+                                                frame.GetLine());
+    }
+
+private:
+    GtkAssertDialog *m_dlg;
+};
+
+// the callback functions must be extern "C" to comply with GTK+ declarations
+extern "C"
+{
+    void get_stackframe_callback(StackDump *dump)
+    {
+        dump->ProcessFrames(2); // don't show ShowAssertDialog() call itself
+    }
+}
+
+#endif      // wxUSE_STACKWALKER
+
+bool wxGUIAppTraits::ShowAssertDialog(const wxString& msg)
+{
+    // under GTK2 we prefer to use a dialog widget written using directly GTK+;
+    // in fact we cannot use a dialog written using wxWidgets: it would need
+    // the wxWidgets idle processing to work correctly!
+    GtkWidget *dialog = gtk_assert_dialog_new();
+    gtk_assert_dialog_set_message(GTK_ASSERT_DIALOG(dialog), msg.mb_str());
+
+#if wxUSE_STACKWALKER
+    // don't show more than maxLines or we could get a dialog too tall to be
+    // shown on screen: 20 should be ok everywhere as even with 15 pixel high
+    // characters it is still only 300 pixels...
+    static const int maxLines = 20;
+
+    // save current stack frame...
+    StackDump dump(GTK_ASSERT_DIALOG(dialog));
+    dump.SaveStack(maxLines);
+
+    // ...but process it only if the user needs it
+    gtk_assert_dialog_set_backtrace_callback(GTK_ASSERT_DIALOG(dialog),
+                                             (GtkAssertDialogStackFrameCallback)get_stackframe_callback,
+                                             &dump);
+#endif      // wxUSE_STACKWALKER
+
+    gint result = gtk_dialog_run(GTK_DIALOG (dialog));
+    bool returnCode = false;
+    switch (result)
+    {
+    case GTK_ASSERT_DIALOG_STOP:
+        wxTrap();
+        break;
+    case GTK_ASSERT_DIALOG_CONTINUE:
+        // nothing to do
+        break;
+    case GTK_ASSERT_DIALOG_CONTINUE_SUPPRESSING:
+        // no more asserts
+        returnCode = true;
+        break;
+
+    default:
+        wxFAIL_MSG( _T("unexpected return code from GtkAssertDialog") );
+    }
+
+    gtk_widget_destroy(dialog);
+    return returnCode;
+}
+
+#endif  // __WXDEBUG__
 
 wxString wxGUIAppTraits::GetDesktopEnvironment() const
 {
