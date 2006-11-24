@@ -42,9 +42,10 @@ public:
 
 #ifdef __WXGTK__
     virtual wxString GetDesktopEnvironment() const;
-#ifdef __WXDEBUG__
-    virtual bool ShowAssertDialog(const wxString& msg);
 #endif
+
+#if defined(__WXDEBUG__) && defined(__WXGTK20__)
+    virtual bool ShowAssertDialog(const wxString& msg);
 #endif
 };
 
