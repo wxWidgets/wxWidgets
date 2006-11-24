@@ -128,6 +128,8 @@ public:
     void OnSetDate(wxCommandEvent& event);
     void OnToday(wxCommandEvent& event);
 
+    void OnCalToggleResizable(wxCommandEvent& event);
+
     void OnAllowYearUpdate(wxUpdateUIEvent& event);
 
 private:
@@ -179,6 +181,7 @@ enum
     Calendar_Cal_SurroundWeeks,
     Calendar_Cal_SetDate,
     Calendar_Cal_Today,
+    Calendar_Cal_Resizable,
 #if wxUSE_DATEPICKCTRL
     Calendar_DatePicker_AskDate = 300,
     Calendar_DatePicker_ShowCentury,
@@ -222,6 +225,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     EVT_MENU(Calendar_Cal_SetDate, MyFrame::OnSetDate)
     EVT_MENU(Calendar_Cal_Today, MyFrame::OnToday)
+
+    EVT_MENU(Calendar_Cal_Resizable, MyFrame::OnCalToggleResizable)
 
 
     EVT_UPDATE_UI(Calendar_Cal_Year, MyFrame::OnAllowYearUpdate)
@@ -322,6 +327,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     menuCal->AppendSeparator();
     menuCal->Append(Calendar_Cal_SetDate, _T("Call &SetDate(2005-12-24)"), _T("Set date to 2005-12-24."));
     menuCal->Append(Calendar_Cal_Today, _T("Call &Today()"), _T("Set the current date."));
+    menuCal->AppendSeparator();
+    menuCal->AppendCheckItem(Calendar_Cal_Resizable, _T("Make &resizable\tCtrl-R"));
 
 #if wxUSE_DATEPICKCTRL
     wxMenu *menuDate = new wxMenu;
@@ -442,6 +449,24 @@ void MyFrame::OnSetDate(wxCommandEvent &WXUNUSED(event))
 void MyFrame::OnToday(wxCommandEvent &WXUNUSED(event))
 {
     m_panel->Today();
+}
+
+void MyFrame::OnCalToggleResizable(wxCommandEvent& event)
+{
+    wxSizer * const sizer = m_panel->GetSizer();
+    wxSizerItem * const item = sizer->GetItem(m_panel->GetCal());
+    if ( event.IsChecked() )
+    {
+        item->SetProportion(1);
+        item->SetFlag(wxEXPAND);
+    }
+    else // not resizable
+    {
+        item->SetProportion(0);
+        item->SetFlag(wxALIGN_CENTER);
+    }
+
+    sizer->Layout();
 }
 
 #if wxUSE_DATEPICKCTRL
