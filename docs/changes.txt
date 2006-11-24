@@ -96,6 +96,7 @@ All:
 - Fixed long standing bug in wxFileConfig groups renaming (Antti Koivisto).
 - New option wxFS_READ | wxFS_SEEKABLE for wxFileSystem::OpenFile() to return
   a stream that is seekable.
+- Fixed bug in wxCalendarCtrl::HitTest() when clicking on month change arrows
 
 wxMSW:
 

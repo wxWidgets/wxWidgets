@@ -1487,21 +1487,17 @@ wxCalendarHitTestResult wxCalendarCtrl::HitTest(const wxPoint& pos,
                                                 wxDateTime::WeekDay *wd)
 {
     RecalcGeometry();
-    // use the correct x-pos
-    wxCoord x0 = wxMax((GetSize().x - m_widthCol*7) /2, 0);
-    wxPoint pos_corr = pos;
-    pos_corr.x -= x0;
 
-    wxCoord y = pos_corr.y;
+    // the position where the calendar really begins
+    wxCoord x0 = wxMax((GetSize().x - m_widthCol*7)/2, 0);
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-    if ( (GetWindowStyle() & wxCAL_SEQUENTIAL_MONTH_SELECTION) )
+    if ( HasFlag(wxCAL_SEQUENTIAL_MONTH_SELECTION) )
     {
         // Header: month
 
         // we need to find out if the hit is on left arrow, on month or on right arrow
         // left arrow?
-        if ( wxRegion(m_leftArrowRect).Contains(pos_corr) == wxInRegion )
+        if ( m_leftArrowRect.Contains(pos) )
         {
             if ( date )
             {
@@ -1518,7 +1514,7 @@ wxCalendarHitTestResult wxCalendarCtrl::HitTest(const wxPoint& pos,
             return wxCAL_HITTEST_DECMONTH;
         }
 
-        if ( wxRegion(m_rightArrowRect).Contains(pos_corr) == wxInRegion )
+        if ( m_rightArrowRect.Contains(pos) )
         {
             if ( date )
             {
@@ -1537,14 +1533,11 @@ wxCalendarHitTestResult wxCalendarCtrl::HitTest(const wxPoint& pos,
 
     }
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Header: Days
-
-    int wday = pos_corr.x / m_widthCol;
-//    if ( y < m_heightRow )
-    if ( y < (m_heightRow + m_rowOffset) )
+    // header: week days
+    int wday = (pos.x - x0) / m_widthCol;
+    if ( pos.y < (m_heightRow + m_rowOffset) )
     {
-        if ( y > m_rowOffset )
+        if ( pos.y > m_rowOffset )
         {
             if ( wd )
             {
@@ -1564,8 +1557,7 @@ wxCalendarHitTestResult wxCalendarCtrl::HitTest(const wxPoint& pos,
         }
     }
 
-//    int week = (y - m_heightRow) / m_heightRow;
-    int week = (y - (m_heightRow + m_rowOffset)) / m_heightRow;
+    int week = (pos.y - (m_heightRow + m_rowOffset)) / m_heightRow;
     if ( week >= 6 || wday >= 7 )
     {
         return wxCAL_HITTEST_NOWHERE;
