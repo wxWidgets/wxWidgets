@@ -695,7 +695,10 @@ private:                                                                 \
 // the normal arrays otherwise.
 // ----------------------------------------------------------------------------
 
-#define wxARRAY_EMPTY_CMP
+// we need a macro which expands to nothing to pass correct number of
+// parameters to a nested macro invocation even when we don't have anything to
+// pass it
+#define wxARRAY_EMPTY
 
 #define WX_DEFINE_SORTED_TYPEARRAY(T, name, base)                         \
     WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, base,               \
@@ -708,7 +711,7 @@ private:                                                                 \
     typedef T _wxArray##name;                                             \
     typedef int (CMPFUNC_CONV *SCMPFUNC##name)(T pItem1, T pItem2);       \
     _WX_DEFINE_SORTED_TYPEARRAY_2(_wxArray##name, name, base,             \
-                                wxARRAY_EMPTY_CMP, class expmode, SCMPFUNC##name)
+                                wxARRAY_EMPTY, class expmode, SCMPFUNC##name)
 
 // ----------------------------------------------------------------------------
 // WX_DEFINE_SORTED_TYPEARRAY_CMP: exactly the same as above but the comparison
@@ -827,51 +830,51 @@ WX_DECLARE_USER_EXPORTED_BASEARRAY(double, wxBaseArrayDouble, WXDLLIMPEXP_BASE);
 #define WX_DEFINE_ARRAY_WITH_DECL_PTR(T, name, decl)                \
     WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayPtrVoid, decl)
 #define WX_DEFINE_USER_EXPORTED_ARRAY(T, name, expmode)                \
-    WX_DEFINE_TYPEARRAY_WITH_DECL(T, name, wxBaseArrayPtrVoid, expmode)
+    WX_DEFINE_TYPEARRAY_WITH_DECL(T, name, wxBaseArrayPtrVoid, wxARRAY_EMPTY expmode)
 #define WX_DEFINE_USER_EXPORTED_ARRAY_PTR(T, name, expmode)         \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayPtrVoid, expmode)
+    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayPtrVoid, wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_ARRAY_CHAR(T, name)                                 \
     WX_DEFINE_TYPEARRAY_PTR(T, name, wxBaseArrayChar)
 #define WX_DEFINE_EXPORTED_ARRAY_CHAR(T, name)                        \
     WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, wxBaseArrayChar)
 #define WX_DEFINE_USER_EXPORTED_ARRAY_CHAR(T, name, expmode)          \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayChar, expmode)
+    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayChar, wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_ARRAY_SHORT(T, name)                                 \
     WX_DEFINE_TYPEARRAY_PTR(T, name, wxBaseArrayShort)
 #define WX_DEFINE_EXPORTED_ARRAY_SHORT(T, name)                        \
     WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, wxBaseArrayShort)
 #define WX_DEFINE_USER_EXPORTED_ARRAY_SHORT(T, name, expmode)          \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayShort, expmode)
+    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayShort, wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_ARRAY_INT(T, name)                                   \
     WX_DEFINE_TYPEARRAY_PTR(T, name, wxBaseArrayInt)
 #define WX_DEFINE_EXPORTED_ARRAY_INT(T, name)                          \
     WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, wxBaseArrayInt)
 #define WX_DEFINE_USER_EXPORTED_ARRAY_INT(T, name, expmode)            \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayInt, expmode)
+    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayInt, wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_ARRAY_LONG(T, name)                                  \
     WX_DEFINE_TYPEARRAY_PTR(T, name, wxBaseArrayLong)
 #define WX_DEFINE_EXPORTED_ARRAY_LONG(T, name)                         \
     WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, wxBaseArrayLong)
 #define WX_DEFINE_USER_EXPORTED_ARRAY_LONG(T, name, expmode)           \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayLong, expmode)
+    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayLong, wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_ARRAY_SIZE_T(T, name)                                  \
     WX_DEFINE_TYPEARRAY_PTR(T, name, wxBaseArraySizeT)
 #define WX_DEFINE_EXPORTED_ARRAY_SIZE_T(T, name)                         \
     WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, wxBaseArraySizeT)
 #define WX_DEFINE_USER_EXPORTED_ARRAY_SIZE_T(T, name, expmode)           \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArraySizeT, expmode)
+    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArraySizeT, wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_ARRAY_DOUBLE(T, name)                                \
     WX_DEFINE_TYPEARRAY_PTR(T, name, wxBaseArrayDouble)
 #define WX_DEFINE_EXPORTED_ARRAY_DOUBLE(T, name)                       \
     WX_DEFINE_EXPORTED_TYPEARRAY_PTR(T, name, wxBaseArrayDouble)
 #define WX_DEFINE_USER_EXPORTED_ARRAY_DOUBLE(T, name, expmode)         \
-    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayDouble, expmode)
+    WX_DEFINE_TYPEARRAY_WITH_DECL_PTR(T, name, wxBaseArrayDouble, wxARRAY_EMPTY expmode)
 
 // ----------------------------------------------------------------------------
 // Convenience macros to define sorted arrays from base arrays
@@ -882,21 +885,21 @@ WX_DECLARE_USER_EXPORTED_BASEARRAY(double, wxBaseArrayDouble, WXDLLIMPEXP_BASE);
 #define WX_DEFINE_SORTED_EXPORTED_ARRAY(T, name)                       \
     WX_DEFINE_SORTED_EXPORTED_TYPEARRAY(T, name, wxBaseArrayPtrVoid)
 #define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY(T, name, expmode)         \
-    WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, wxBaseArrayPtrVoid, expmode)
+    WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, wxBaseArrayPtrVoid, wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_SORTED_ARRAY_CHAR(T, name)                          \
     WX_DEFINE_SORTED_TYPEARRAY(T, name, wxBaseArrayChar)
 #define WX_DEFINE_SORTED_EXPORTED_ARRAY_CHAR(T, name)                 \
     WX_DEFINE_SORTED_EXPORTED_TYPEARRAY(T, name, wxBaseArrayChar)
 #define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_CHAR(T, name, expmode)   \
-    WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, wxBaseArrayChar, expmode)
+    WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, wxBaseArrayChar, wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_SORTED_ARRAY_SHORT(T, name)                          \
     WX_DEFINE_SORTED_TYPEARRAY(T, name, wxBaseArrayShort)
 #define WX_DEFINE_SORTED_EXPORTED_ARRAY_SHORT(T, name)                 \
     WX_DEFINE_SORTED_EXPORTED_TYPEARRAY(T, name, wxBaseArrayShort)
 #define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_SHORT(T, name, expmode)   \
-    WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, wxBaseArrayShort, expmode)
+    WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, wxBaseArrayShort, wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_SORTED_ARRAY_INT(T, name)                            \
     WX_DEFINE_SORTED_TYPEARRAY(T, name, wxBaseArrayInt)
@@ -917,7 +920,7 @@ WX_DECLARE_USER_EXPORTED_BASEARRAY(double, wxBaseArrayDouble, WXDLLIMPEXP_BASE);
 #define WX_DEFINE_SORTED_EXPORTED_ARRAY_SIZE_T(T, name)                  \
     WX_DEFINE_SORTED_EXPORTED_TYPEARRAY(T, name, wxBaseArraySizeT)
 #define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_SIZE_T(T, name, expmode)    \
-    WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, wxBaseArraySizeT, expmode)
+    WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY(T, name, wxBaseArraySizeT, wxARRAY_EMPTY expmode)
 
 // ----------------------------------------------------------------------------
 // Convenience macros to define sorted arrays from base arrays
@@ -930,16 +933,18 @@ WX_DECLARE_USER_EXPORTED_BASEARRAY(double, wxBaseArrayDouble, WXDLLIMPEXP_BASE);
 #define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_CMP(T, cmpfunc,           \
                                                      name, expmode)    \
     WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name,     \
-                                                 wxBaseArrayPtrVoid, expmode)
+                                                 wxBaseArrayPtrVoid,   \
+                                                 wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_SORTED_ARRAY_CMP_CHAR(T, cmpfunc, name)             \
     WX_DEFINE_SORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArrayChar)
 #define WX_DEFINE_SORTED_EXPORTED_ARRAY_CMP_CHAR(T, cmpfunc, name)    \
     WX_DEFINE_SORTED_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArrayChar)
-#define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_CMP_CHAR(T, cmpfunc,     \
+#define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_CMP_CHAR(T, cmpfunc,      \
                                                        name, expmode)  \
     WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name,     \
-                                                 wxBaseArrayChar, expmode)
+                                                 wxBaseArrayChar,      \
+                                                 wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_SORTED_ARRAY_CMP_SHORT(T, cmpfunc, name)             \
     WX_DEFINE_SORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArrayShort)
@@ -948,7 +953,8 @@ WX_DECLARE_USER_EXPORTED_BASEARRAY(double, wxBaseArrayDouble, WXDLLIMPEXP_BASE);
 #define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_CMP_SHORT(T, cmpfunc,     \
                                                        name, expmode)  \
     WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name,     \
-                                                 wxBaseArrayShort, expmode)
+                                                 wxBaseArrayShort,     \
+                                                 wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_SORTED_ARRAY_CMP_INT(T, cmpfunc, name)               \
     WX_DEFINE_SORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArrayInt)
@@ -957,7 +963,8 @@ WX_DECLARE_USER_EXPORTED_BASEARRAY(double, wxBaseArrayDouble, WXDLLIMPEXP_BASE);
 #define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_CMP_INT(T, cmpfunc,       \
                                                      name, expmode)    \
     WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name,     \
-                                                 wxBaseArrayInt, expmode)
+                                                 wxBaseArrayInt,       \
+                                                 wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_SORTED_ARRAY_CMP_LONG(T, cmpfunc, name)              \
     WX_DEFINE_SORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArrayLong)
@@ -966,7 +973,8 @@ WX_DECLARE_USER_EXPORTED_BASEARRAY(double, wxBaseArrayDouble, WXDLLIMPEXP_BASE);
 #define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_CMP_LONG(T, cmpfunc,      \
                                                       name, expmode)   \
     WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name,     \
-                                                 wxBaseArrayLong, expmode)
+                                                 wxBaseArrayLong,      \
+                                                 wxARRAY_EMPTY expmode)
 
 #define WX_DEFINE_SORTED_ARRAY_CMP_SIZE_T(T, cmpfunc, name)              \
     WX_DEFINE_SORTED_TYPEARRAY_CMP(T, cmpfunc, name, wxBaseArraySizeT)
@@ -975,7 +983,8 @@ WX_DECLARE_USER_EXPORTED_BASEARRAY(double, wxBaseArrayDouble, WXDLLIMPEXP_BASE);
 #define WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_CMP_SIZE_T(T, cmpfunc,      \
                                                       name, expmode)   \
     WX_DEFINE_SORTED_USER_EXPORTED_TYPEARRAY_CMP(T, cmpfunc, name,     \
-                                                 wxBaseArraySizeT, expmode)
+                                                 wxBaseArraySizeT,     \
+                                                 wxARRAY_EMPTY expmode)
 
 // ----------------------------------------------------------------------------
 // Some commonly used predefined arrays
