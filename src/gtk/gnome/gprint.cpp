@@ -1828,6 +1828,16 @@ void wxGnomePrintDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
     ComputeScaleAndOrigin();
 }
 
+void wxGnomePrintDC::SetLogicalOrigin( wxCoord x, wxCoord y )
+{
+    wxDC::SetLogicalOrigin( x, y );
+}
+
+void wxGnomePrintDC::SetDeviceOrigin( wxCoord x, wxCoord y )
+{
+    wxDC::SetDeviceOrigin( x, y );
+}
+
 void wxGnomePrintDC::SetResolution(int ppi)
 {
 }

@@ -262,6 +262,9 @@ public:
     wxSize GetPPI() const;
     void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
 
+    void SetLogicalOrigin( wxCoord x, wxCoord y );
+    void SetDeviceOrigin( wxCoord x, wxCoord y );
+
     virtual int GetDepth() const { return 24; }
 
     void SetBackgroundMode(int WXUNUSED(mode)) { }
