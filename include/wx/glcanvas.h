@@ -35,13 +35,13 @@ enum
     WX_GL_MIN_RED,         /* use red buffer with most bits (> MIN_RED bits) */
     WX_GL_MIN_GREEN,       /* use green buffer with most bits (> MIN_GREEN bits) */
     WX_GL_MIN_BLUE,        /* use blue buffer with most bits (> MIN_BLUE bits) */
-    WX_GL_MIN_ALPHA,       /* use blue buffer with most bits (> MIN_ALPHA bits) */
+    WX_GL_MIN_ALPHA,       /* use alpha buffer with most bits (> MIN_ALPHA bits) */
     WX_GL_DEPTH_SIZE,      /* bits for Z-buffer (0,16,32) */
     WX_GL_STENCIL_SIZE,    /* bits for stencil buffer */
     WX_GL_MIN_ACCUM_RED,   /* use red accum buffer with most bits (> MIN_ACCUM_RED bits) */
     WX_GL_MIN_ACCUM_GREEN, /* use green buffer with most bits (> MIN_ACCUM_GREEN bits) */
     WX_GL_MIN_ACCUM_BLUE,  /* use blue buffer with most bits (> MIN_ACCUM_BLUE bits) */
-    WX_GL_MIN_ACCUM_ALPHA  /* use blue buffer with most bits (> MIN_ACCUM_ALPHA bits) */
+    WX_GL_MIN_ACCUM_ALPHA  /* use alpha buffer with most bits (> MIN_ACCUM_ALPHA bits) */
 };
 
 #define wxGLCanvasName _T("GLCanvas")
