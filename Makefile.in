@@ -2045,6 +2045,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_GUI_HDR =  \
 	wx/generic/statusbr.h \
 	wx/generic/tabg.h \
 	wx/gtk/accel.h \
+	wx/gtk/assertdlg_gtk.h \
 	wx/gtk/bmpbuttn.h \
 	wx/gtk/button.h \
 	wx/gtk/checkbox.h \
@@ -4155,6 +4156,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS =  \
 	monodll_tabg.o \
 	monodll_fontdlgg.o \
 	monodll_artgtk.o \
+	monodll_assertdlg_gtk.o \
 	monodll_bmpbuttn.o \
 	monodll_button.o \
 	monodll_checkbox.o \
@@ -5928,6 +5930,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_1 =  \
 	monolib_tabg.o \
 	monolib_fontdlgg.o \
 	monolib_artgtk.o \
+	monolib_assertdlg_gtk.o \
 	monolib_bmpbuttn.o \
 	monolib_button.o \
 	monolib_checkbox.o \
@@ -7930,6 +7933,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_2 =  \
 	coredll_tabg.o \
 	coredll_fontdlgg.o \
 	coredll_artgtk.o \
+	coredll_assertdlg_gtk.o \
 	coredll_bmpbuttn.o \
 	coredll_button.o \
 	coredll_checkbox.o \
@@ -9376,6 +9380,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___GUI_SRC_OBJECTS_3 =  \
 	corelib_tabg.o \
 	corelib_fontdlgg.o \
 	corelib_artgtk.o \
+	corelib_assertdlg_gtk.o \
 	corelib_bmpbuttn.o \
 	corelib_button.o \
 	corelib_checkbox.o \
@@ -12770,6 +12775,9 @@ monodll_graphicc.o: $(srcdir)/src/generic/graphicc.cpp $(MONODLL_ODEP)
 
 monodll_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/artgtk.cpp
+
+monodll_assertdlg_gtk.o: $(srcdir)/src/gtk/assertdlg_gtk.c $(MONODLL_ODEP)
+	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $(srcdir)/src/gtk/assertdlg_gtk.c
 
 monodll_collpane.o: $(srcdir)/src/gtk/collpane.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/collpane.cpp
@@ -16874,6 +16882,9 @@ monolib_graphicc.o: $(srcdir)/src/generic/graphicc.cpp $(MONOLIB_ODEP)
 
 monolib_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/artgtk.cpp
+
+monolib_assertdlg_gtk.o: $(srcdir)/src/gtk/assertdlg_gtk.c $(MONOLIB_ODEP)
+	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $(srcdir)/src/gtk/assertdlg_gtk.c
 
 monolib_collpane.o: $(srcdir)/src/gtk/collpane.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/collpane.cpp
@@ -21978,6 +21989,9 @@ coredll_graphicc.o: $(srcdir)/src/generic/graphicc.cpp $(COREDLL_ODEP)
 coredll_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/artgtk.cpp
 
+coredll_assertdlg_gtk.o: $(srcdir)/src/gtk/assertdlg_gtk.c $(COREDLL_ODEP)
+	$(CCC) -c -o $@ $(COREDLL_CFLAGS) $(srcdir)/src/gtk/assertdlg_gtk.c
+
 coredll_collpane.o: $(srcdir)/src/gtk/collpane.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/collpane.cpp
 
@@ -24917,6 +24931,9 @@ corelib_graphicc.o: $(srcdir)/src/generic/graphicc.cpp $(CORELIB_ODEP)
 
 corelib_artgtk.o: $(srcdir)/src/gtk/artgtk.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/artgtk.cpp
+
+corelib_assertdlg_gtk.o: $(srcdir)/src/gtk/assertdlg_gtk.c $(CORELIB_ODEP)
+	$(CCC) -c -o $@ $(CORELIB_CFLAGS) $(srcdir)/src/gtk/assertdlg_gtk.c
 
 corelib_collpane.o: $(srcdir)/src/gtk/collpane.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/collpane.cpp
