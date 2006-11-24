@@ -2316,7 +2316,7 @@ public:
 };
 
 
-
+const int wxAuiBaseTabCtrlId = 5380;
 
 
 // -- wxAuiNotebook class implementation --
@@ -2324,19 +2324,19 @@ public:
 BEGIN_EVENT_TABLE(wxAuiNotebook, wxControl)
     EVT_SIZE(wxAuiNotebook::OnSize)
     EVT_CHILD_FOCUS(wxAuiNotebook::OnChildFocus)
-    EVT_COMMAND_RANGE(10000, 10100,
+    EVT_COMMAND_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
                       wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING,
                       wxAuiNotebook::OnTabClicked)
-    EVT_COMMAND_RANGE(10000, 10100,
+    EVT_COMMAND_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
                       wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG,
                       wxAuiNotebook::OnTabBeginDrag)
-    EVT_COMMAND_RANGE(10000, 10100,
+    EVT_COMMAND_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
                       wxEVT_COMMAND_AUINOTEBOOK_END_DRAG,
                       wxAuiNotebook::OnTabEndDrag)
-    EVT_COMMAND_RANGE(10000, 10100,
+    EVT_COMMAND_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
                       wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION,
                       wxAuiNotebook::OnTabDragMotion)
-    EVT_COMMAND_RANGE(10000, 10100,
+    EVT_COMMAND_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
                       wxEVT_COMMAND_AUINOTEBOOK_BUTTON,
                       wxAuiNotebook::OnTabButton)
 END_EVENT_TABLE()
@@ -2344,7 +2344,7 @@ END_EVENT_TABLE()
 wxAuiNotebook::wxAuiNotebook()
 {
     m_curpage = -1;
-    m_tab_id_counter = 10000;
+    m_tab_id_counter = wxAuiBaseTabCtrlId;
     m_dummy_wnd = NULL;
     m_tab_ctrl_height = 20;
     m_requested_bmp_size = wxDefaultSize;
@@ -2382,7 +2382,7 @@ bool wxAuiNotebook::Create(wxWindow* parent,
 void wxAuiNotebook::InitNotebook(long style)
 {
     m_curpage = -1;
-    m_tab_id_counter = 10000;
+    m_tab_id_counter = wxAuiBaseTabCtrlId;
     m_dummy_wnd = NULL;
     m_flags = (unsigned int)style;
     m_tab_ctrl_height = 20;
@@ -2806,14 +2806,14 @@ size_t wxAuiNotebook::SetSelection(size_t new_page)
     evt.SetSelection(new_page);
     evt.SetOldSelection(m_curpage);
     evt.SetEventObject(this);
-    if (!GetParent()->GetEventHandler()->ProcessEvent(evt) || evt.IsAllowed())
+    if (!GetEventHandler()->ProcessEvent(evt) || evt.IsAllowed())
     {
         int old_curpage = m_curpage;
         m_curpage = new_page;
 
         // program allows the page change
         evt.SetEventType(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGED);
-        (void)GetParent()->GetEventHandler()->ProcessEvent(evt);
+        (void)GetEventHandler()->ProcessEvent(evt);
 
 
         wxAuiTabCtrl* ctrl;
@@ -3437,7 +3437,7 @@ void wxAuiNotebook::OnTabButton(wxCommandEvent& command_evt)
             e.SetSelection(m_tabs.GetIdxFromWindow(close_wnd));
             e.SetOldSelection(evt.GetSelection());
             e.SetEventObject(this);
-            GetParent()->GetEventHandler()->ProcessEvent(e);
+            GetEventHandler()->ProcessEvent(e);
             if (!e.IsAllowed())
                 return;
 
