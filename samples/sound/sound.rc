@@ -1,3 +1,0 @@
-FromResource	WAVE	"cuckoo.wav"
-
-#include "../sample.rc"
