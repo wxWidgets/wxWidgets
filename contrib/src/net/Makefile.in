@@ -116,7 +116,7 @@ COND_PLATFORM_OS2_1___netutilsdll___importlib = -import \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_PLATFORM_OS2_1@__netutilsdll___importlib = $(COND_PLATFORM_OS2_1___netutilsdll___importlib)
 COND_WINDOWS_IMPLIB_1___netutilsdll___importlib = \
-	-Wl,--out-implib,$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
+	-Wl,--out-implib=$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_netutils-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_WINDOWS_IMPLIB_1@__netutilsdll___importlib = $(COND_WINDOWS_IMPLIB_1___netutilsdll___importlib)
 @COND_GCC_PCH_1@__netutilsdll_PCH_INC = -I.pch/wxprec_netutilsdll
 @COND_ICC_PCH_1@__netutilsdll_PCH_INC = -use_pch \

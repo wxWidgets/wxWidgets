@@ -135,7 +135,7 @@ COND_PLATFORM_OS2_1___gizmosdll___importlib = -import \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_PLATFORM_OS2_1@__gizmosdll___importlib = $(COND_PLATFORM_OS2_1___gizmosdll___importlib)
 COND_WINDOWS_IMPLIB_1___gizmosdll___importlib = \
-	-Wl,--out-implib,$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
+	-Wl,--out-implib=$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_WINDOWS_IMPLIB_1@__gizmosdll___importlib = $(COND_WINDOWS_IMPLIB_1___gizmosdll___importlib)
 @COND_GCC_PCH_1@__gizmosdll_PCH_INC = -I.pch/wxprec_gizmosdll
 @COND_ICC_PCH_1@__gizmosdll_PCH_INC = -use_pch \
@@ -187,7 +187,7 @@ COND_PLATFORM_OS2_1___gizmos_xrcdll___importlib = -import \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_PLATFORM_OS2_1@__gizmos_xrcdll___importlib = $(COND_PLATFORM_OS2_1___gizmos_xrcdll___importlib)
 COND_WINDOWS_IMPLIB_1___gizmos_xrcdll___importlib = \
-	-Wl,--out-implib,$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
+	-Wl,--out-implib=$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gizmos_xrc-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_WINDOWS_IMPLIB_1@__gizmos_xrcdll___importlib = $(COND_WINDOWS_IMPLIB_1___gizmos_xrcdll___importlib)
 @COND_GCC_PCH_1@__gizmos_xrcdll_PCH_INC = -I.pch/wxprec_gizmos_xrcdll
 @COND_ICC_PCH_1@__gizmos_xrcdll_PCH_INC = -use_pch \

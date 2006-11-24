@@ -116,7 +116,7 @@ COND_PLATFORM_OS2_1___foldbardll___importlib = -import \
 	$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_PLATFORM_OS2_1@__foldbardll___importlib = $(COND_PLATFORM_OS2_1___foldbardll___importlib)
 COND_WINDOWS_IMPLIB_1___foldbardll___importlib = \
-	-Wl,--out-implib,$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
+	-Wl,--out-implib=$(LIBDIRNAME)/$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_foldbar-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_WINDOWS_IMPLIB_1@__foldbardll___importlib = $(COND_WINDOWS_IMPLIB_1___foldbardll___importlib)
 @COND_GCC_PCH_1@__foldbardll_PCH_INC = -I.pch/wxprec_foldbardll
 @COND_ICC_PCH_1@__foldbardll_PCH_INC = -use_pch \
