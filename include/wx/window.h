@@ -473,6 +473,11 @@ public:
         return wxSize( wxMax( client.x, best.x ), wxMax( client.y, best.y ) );
     }
 
+    // return the size of the left/right and top/bottom borders in x and y
+    // components of the result respectively
+    virtual wxSize GetWindowBorderSize() const;
+
+
     // window state
     // ------------
 

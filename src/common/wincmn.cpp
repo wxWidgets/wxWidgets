@@ -587,6 +587,76 @@ wxSize wxWindowBase::DoGetBestSize() const
     return best;
 }
 
+// helper of GetWindowBorderSize(): as many ports don't implement support for
+// wxSYS_BORDER/EDGE_X/Y metrics in their wxSystemSettings, use hard coded
+// fallbacks in this case
+static wxGetMetricOrDefault(wxSystemMetric what)
+{
+    int rc = wxSystemSettings::GetMetric(what);
+    if ( rc == -1 )
+    {
+        switch ( what )
+        {
+            case wxSYS_BORDER_X:
+            case wxSYS_BORDER_Y:
+                // 2D border is by default 1 pixel wide
+                rc = 1;
+                break;
+
+            case wxSYS_EDGE_X:
+            case wxSYS_EDGE_Y:
+                // 3D borders are by default 2 pixels
+                rc = 2;
+                break;
+
+            default:
+                wxFAIL_MSG( _T("unexpected wxGetMetricOrDefault() argument") );
+                rc = 0;
+        }
+    }
+
+    return rc;
+}
+
+wxSize wxWindowBase::GetWindowBorderSize() const
+{
+    wxSize size;
+
+    switch ( GetBorder() )
+    {
+        case wxBORDER_NONE:
+            // nothing to do, size is already (0, 0)
+            break;
+
+        case wxBORDER_SIMPLE:
+        case wxBORDER_STATIC:
+            size.x = wxGetMetricOrDefault(wxSYS_BORDER_X);
+            size.y = wxGetMetricOrDefault(wxSYS_BORDER_Y);
+            break;
+
+        case wxBORDER_SUNKEN:
+        case wxBORDER_RAISED:
+            size.x = wxMax(wxGetMetricOrDefault(wxSYS_EDGE_X),
+                           wxGetMetricOrDefault(wxSYS_BORDER_X));
+            size.y = wxMax(wxGetMetricOrDefault(wxSYS_EDGE_Y),
+                           wxGetMetricOrDefault(wxSYS_BORDER_Y));
+            break;
+
+        case wxBORDER_DOUBLE:
+            size.x = wxGetMetricOrDefault(wxSYS_EDGE_X) +
+                        wxGetMetricOrDefault(wxSYS_BORDER_X);
+            size.y = wxGetMetricOrDefault(wxSYS_EDGE_Y) +
+                        wxGetMetricOrDefault(wxSYS_BORDER_Y);
+            break;
+
+        default:
+            wxFAIL_MSG(_T("Unknown border style."));
+            break;
+    }
+
+    // we have borders on both sides
+    return size*2;
+}
 
 wxSize wxWindowBase::GetEffectiveMinSize() const
 {
