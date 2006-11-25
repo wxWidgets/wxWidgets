@@ -2161,6 +2161,12 @@ void wxWindowDC::DoSetClippingRegion( wxCoord x, wxCoord y, wxCoord width, wxCoo
 
     if (!m_window) return;
 
+    if (width <= 0)
+        width = 1;
+
+    if (height <= 0)
+        height = 1;
+
     wxRect rect;
     rect.x = XLOG2DEV(x);
     rect.y = YLOG2DEV(y);
