@@ -20,6 +20,9 @@ extern "C" {
 
 #include <gtk/gtk.h>
 
+/* For FILE */
+#include <stdio.h>
+
 
 #if GTK_CHECK_VERSION(2,4,0)
 #include <gtk/gtkexpander.h>
