@@ -101,9 +101,9 @@ samples/image/image.dsp
 
 samples/internat/internat.dsp
 
-samples/ipc/ipc_client.dsp
+samples/ipc/ipc_ipcclient.dsp
 
-samples/ipc/ipc_server.dsp
+samples/ipc/ipc_ipcserver.dsp
 
 samples/keyboard/keyboard.dsp
 

@@ -131,10 +131,10 @@ samples/internat/internat.vcw
 samples/keyboard/keyboard.vcp
 samples/keyboard/keyboard.vcw
 
-samples/ipc/ipc_client.vcp
-samples/ipc/ipc_client.vcw
-samples/ipc/ipc_server.vcp
-samples/ipc/ipc_server.vcw
+samples/ipc/ipc_ipcclient.vcp
+samples/ipc/ipc_ipcclient.vcw
+samples/ipc/ipc_ipcserver.vcp
+samples/ipc/ipc_ipcserver.vcw
 
 samples/joytest/joytest.vcp
 samples/joytest/joytest.vcw
