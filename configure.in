@@ -6386,7 +6386,13 @@ if test "$wxUSE_GUI" = "yes" -a "$wxUSE_JOYSTICK" = "yes"; then
     else
         dnl wxJoystick not supported by wxMGL at all
         if test "$wxUSE_MGL" != "1"; then
-            AC_CHECK_HEADERS(linux/joystick.h, wxUSE_JOYSTICK=yes)
+            dnl notice the dummy includes argument: without it, AC_CHECK_HEADER
+            dnl checks only whether the header can be preprocessed, not that it
+            dnl can be compiled and in Linux 2.6.16 joystick.h is present but
+            dnl can't be compiled because of an error and with the default
+            dnl AC_CHECK_HEADER semantics we'd still detect it in this case and
+            dnl build would fail later
+            AC_CHECK_HEADER(linux/joystick.h, wxUSE_JOYSTICK=yes,,[#include <stdio.h>])
         fi
     fi
 
