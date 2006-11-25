@@ -1519,7 +1519,7 @@ dnl does make support "-include" (only GNU make does AFAIK)?
 AC_CACHE_CHECK([if make is GNU make], wx_cv_prog_makeisgnu,
 [
     if ( ${SHELL-sh} -c "${MAKE-make} --version" 2> /dev/null |
-            egrep -s GNU > /dev/null); then
+            $EGREP -s GNU > /dev/null); then
         wx_cv_prog_makeisgnu="yes"
     else
         wx_cv_prog_makeisgnu="no"
@@ -8032,7 +8032,7 @@ for subdir in `echo $SUBDIRS`; do
                 disabled_var=DISABLED_`echo $subdir | tr [[a-z]] [[A-Z]]`;
                 eval "disabled=\$$disabled_var"
                 disabled=/`echo X $disabled | sed 's@ @/|/@g'`/
-                makefiles=`(cd $srcdir ; find $subdir -name Makefile.in) | egrep -v "$disabled"`
+                makefiles=`(cd $srcdir ; find $subdir -name Makefile.in) | $EGREP -v "$disabled"`
             fi
         else dnl we build wxBase only
             dnl don't take all samples/utils, just those which build with

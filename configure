@@ -15693,7 +15693,7 @@ if test "${wx_cv_prog_makeisgnu+set}" = set; then
 else
 
     if ( ${SHELL-sh} -c "${MAKE-make} --version" 2> /dev/null |
-            egrep -s GNU > /dev/null); then
+            $EGREP -s GNU > /dev/null); then
         wx_cv_prog_makeisgnu="yes"
     else
         wx_cv_prog_makeisgnu="no"
@@ -50500,7 +50500,7 @@ for subdir in `echo $SUBDIRS`; do
                                                                 disabled_var=DISABLED_`echo $subdir | tr [a-z] [A-Z]`;
                 eval "disabled=\$$disabled_var"
                 disabled=/`echo X $disabled | sed 's@ @/|/@g'`/
-                makefiles=`(cd $srcdir ; find $subdir -name Makefile.in) | egrep -v "$disabled"`
+                makefiles=`(cd $srcdir ; find $subdir -name Makefile.in) | $EGREP -v "$disabled"`
             fi
         else                                     if test ${subdir} = "samples"; then
                 makefiles="samples/Makefile.in samples/console/Makefile.in"
