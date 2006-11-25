@@ -118,7 +118,7 @@ DECLARE_CLASS(wxRichTextFormattingDialog)
 public:
     wxRichTextFormattingDialog() { Init(); }
 
-    wxRichTextFormattingDialog(long flags, wxWindow* parent, const wxString& title = _("Formatting"), wxWindowID id = wxID_ANY,
+    wxRichTextFormattingDialog(long flags, wxWindow* parent, const wxString& title = wxGetTranslation(wxT("Formatting")), wxWindowID id = wxID_ANY,
         const wxPoint& pos = wxDefaultPosition, const wxSize& sz = wxDefaultSize,
         long style = wxDEFAULT_DIALOG_STYLE)
     {
@@ -130,7 +130,7 @@ public:
 
     void Init();
 
-    bool Create(long flags, wxWindow* parent, const wxString& title = _("Formatting"), wxWindowID id = wxID_ANY,
+    bool Create(long flags, wxWindow* parent, const wxString& title = wxGetTranslation(wxT("Formatting")), wxWindowID id = wxID_ANY,
         const wxPoint& pos = wxDefaultPosition, const wxSize& sz = wxDefaultSize,
         long style = wxDEFAULT_DIALOG_STYLE);
 
