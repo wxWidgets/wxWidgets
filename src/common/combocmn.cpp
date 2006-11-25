@@ -1069,6 +1069,23 @@ wxSize wxComboCtrlBase::DoGetBestSize() const
     fhei += 1;
 #endif
 
+#ifdef __WXMAC__
+    // these are the numbers from the HIG:
+    switch ( m_windowVariant )
+    {
+        case wxWINDOW_VARIANT_NORMAL:
+        default :
+            fhei = 22;
+            break;
+        case wxWINDOW_VARIANT_SMALL:
+            fhei = 19;
+            break;
+        case wxWINDOW_VARIANT_MINI:
+            fhei = 15;
+            break;
+    }
+#endif
+    
     wxSize ret(sizeText.x + COMBO_MARGIN + DEFAULT_DROPBUTTON_WIDTH,
                fhei);
 
