@@ -37,9 +37,9 @@ WX_CXXFLAGS = `$(WX_CONFIG) --cxxflags`
 ### Variables: ###
 
 CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
-PRINTING_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
-PRINTING_OBJECTS =  \
-	printing_printing.o
+HTMLPRINTING_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
+HTMLPRINTING_OBJECTS =  \
+	htmlprinting_printing.o
 
 ### Conditionally set variables: ###
 
@@ -47,7 +47,7 @@ PRINTING_OBJECTS =  \
 
 ### Targets: ###
 
-all: printing
+all: htmlprinting
 
 install: all
 
@@ -56,13 +56,13 @@ uninstall:
 clean: 
 	rm -f ./*.o
 	rm -f ./*.d
-	rm -f printing
+	rm -f htmlprinting
 
-printing: $(PRINTING_OBJECTS)
-	$(CXX) -o $@ $(PRINTING_OBJECTS) $(LDFLAGS)   `$(WX_CONFIG) --libs html,core,base`
+htmlprinting: $(HTMLPRINTING_OBJECTS)
+	$(CXX) -o $@ $(HTMLPRINTING_OBJECTS) $(LDFLAGS)   `$(WX_CONFIG) --libs html,core,base`
 
-printing_printing.o: ./printing.cpp
-	$(CXX) -c -o $@ $(PRINTING_CXXFLAGS) $(CPPDEPS) $<
+htmlprinting_printing.o: ./printing.cpp
+	$(CXX) -c -o $@ $(HTMLPRINTING_CXXFLAGS) $(CPPDEPS) $<
 
 .PHONY: all install uninstall clean
 

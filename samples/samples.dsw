@@ -447,7 +447,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "ipcclient"=.\ipc\ipc_client.dsp - Package Owner=<4>
+Project: "ipcclient"=.\ipc\ipc_ipcclient.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -459,7 +459,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "ipcserver"=.\ipc\ipc_server.dsp - Package Owner=<4>
+Project: "ipcserver"=.\ipc\ipc_ipcserver.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

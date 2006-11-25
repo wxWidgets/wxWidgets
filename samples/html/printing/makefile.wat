@@ -220,15 +220,15 @@ OBJS = &
 LIBDIRNAME = .\..\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
-PRINTING_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG_5) &
-	$(__RUNTIME_LIBS_6) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
-	$(__UNICODE_DEFINE_p) $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) &
-	-i=.\..\..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 -i=. &
-	$(__DLLFLAG_p) -i=.\..\..\..\samples -dNOPCH $(__RTTIFLAG_7) &
+HTMLPRINTING_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) &
+	$(__THREADSFLAG_5) $(__RUNTIME_LIBS_6) -d__WXMSW__ $(__WXUNIV_DEFINE_p) &
+	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) &
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__GFXCTX_DEFINE_p) &
+	-i=$(SETUPHDIR) -i=.\..\..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 &
+	-i=. $(__DLLFLAG_p) -i=.\..\..\..\samples -dNOPCH $(__RTTIFLAG_7) &
 	$(__EXCEPTIONSFLAG_8) $(CPPFLAGS) $(CXXFLAGS)
-PRINTING_OBJECTS =  &
-	$(OBJS)\printing_printing.obj
+HTMLPRINTING_OBJECTS =  &
+	$(OBJS)\htmlprinting_printing.obj
 
 
 all : $(OBJS)
@@ -237,7 +237,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\printing.exe data
+all : .SYMBOLIC $(OBJS)\htmlprinting.exe data
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -245,27 +245,27 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
-	-if exist $(OBJS)\printing.exe del $(OBJS)\printing.exe
+	-if exist $(OBJS)\htmlprinting.exe del $(OBJS)\htmlprinting.exe
 
-$(OBJS)\printing.exe :  $(PRINTING_OBJECTS) $(OBJS)\printing_printing.res
-	@%create $(OBJS)\printing.lbc
-	@%append $(OBJS)\printing.lbc option quiet
-	@%append $(OBJS)\printing.lbc name $^@
-	@%append $(OBJS)\printing.lbc option caseexact
-	@%append $(OBJS)\printing.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
-	@for %i in ($(PRINTING_OBJECTS)) do @%append $(OBJS)\printing.lbc file %i
-	@for %i in ( $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\printing.lbc library %i
-	@%append $(OBJS)\printing.lbc option resource=$(OBJS)\printing_printing.res
-	@for %i in () do @%append $(OBJS)\printing.lbc option stack=%i
-	wlink @$(OBJS)\printing.lbc
+$(OBJS)\htmlprinting.exe :  $(HTMLPRINTING_OBJECTS) $(OBJS)\htmlprinting_printing.res
+	@%create $(OBJS)\htmlprinting.lbc
+	@%append $(OBJS)\htmlprinting.lbc option quiet
+	@%append $(OBJS)\htmlprinting.lbc name $^@
+	@%append $(OBJS)\htmlprinting.lbc option caseexact
+	@%append $(OBJS)\htmlprinting.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
+	@for %i in ($(HTMLPRINTING_OBJECTS)) do @%append $(OBJS)\htmlprinting.lbc file %i
+	@for %i in ( $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\htmlprinting.lbc library %i
+	@%append $(OBJS)\htmlprinting.lbc option resource=$(OBJS)\htmlprinting_printing.res
+	@for %i in () do @%append $(OBJS)\htmlprinting.lbc option stack=%i
+	wlink @$(OBJS)\htmlprinting.lbc
 
 data : .SYMBOLIC 
 	if not exist $(OBJS) mkdir $(OBJS)
 	for %f in (logo6.gif test.htm) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
 
-$(OBJS)\printing_printing.obj :  .AUTODEPEND .\printing.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(PRINTING_CXXFLAGS) $<
+$(OBJS)\htmlprinting_printing.obj :  .AUTODEPEND .\printing.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLPRINTING_CXXFLAGS) $<
 
-$(OBJS)\printing_printing.res :  .AUTODEPEND .\printing.rc
+$(OBJS)\htmlprinting_printing.res :  .AUTODEPEND .\printing.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=.\..\..\..\include -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples -dNOPCH $<
 

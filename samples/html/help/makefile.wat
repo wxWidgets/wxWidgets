@@ -220,15 +220,15 @@ OBJS = &
 LIBDIRNAME = .\..\..\..\lib\wat_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = &
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
-HELP_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG_5) &
+HTMLHELP_CXXFLAGS = $(__DEBUGINFO_0) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG_5) &
 	$(__RUNTIME_LIBS_6) -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) &
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) &
 	$(__UNICODE_DEFINE_p) $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) &
 	-i=.\..\..\..\include -wx -wcd=549 -wcd=656 -wcd=657 -wcd=667 -i=. &
 	$(__DLLFLAG_p) -i=.\..\..\..\samples -dNOPCH $(__RTTIFLAG_7) &
 	$(__EXCEPTIONSFLAG_8) $(CPPFLAGS) $(CXXFLAGS)
-HELP_OBJECTS =  &
-	$(OBJS)\help_help.obj
+HTMLHELP_OBJECTS =  &
+	$(OBJS)\htmlhelp_help.obj
 
 
 all : $(OBJS)
@@ -237,7 +237,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\help.exe data
+all : .SYMBOLIC $(OBJS)\htmlhelp.exe data
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -245,27 +245,27 @@ clean : .SYMBOLIC
 	-if exist $(OBJS)\*.lbc del $(OBJS)\*.lbc
 	-if exist $(OBJS)\*.ilk del $(OBJS)\*.ilk
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
-	-if exist $(OBJS)\help.exe del $(OBJS)\help.exe
+	-if exist $(OBJS)\htmlhelp.exe del $(OBJS)\htmlhelp.exe
 
-$(OBJS)\help.exe :  $(HELP_OBJECTS) $(OBJS)\help_help.res
-	@%create $(OBJS)\help.lbc
-	@%append $(OBJS)\help.lbc option quiet
-	@%append $(OBJS)\help.lbc name $^@
-	@%append $(OBJS)\help.lbc option caseexact
-	@%append $(OBJS)\help.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
-	@for %i in ($(HELP_OBJECTS)) do @%append $(OBJS)\help.lbc file %i
-	@for %i in ( $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\help.lbc library %i
-	@%append $(OBJS)\help.lbc option resource=$(OBJS)\help_help.res
-	@for %i in () do @%append $(OBJS)\help.lbc option stack=%i
-	wlink @$(OBJS)\help.lbc
+$(OBJS)\htmlhelp.exe :  $(HTMLHELP_OBJECTS) $(OBJS)\htmlhelp_help.res
+	@%create $(OBJS)\htmlhelp.lbc
+	@%append $(OBJS)\htmlhelp.lbc option quiet
+	@%append $(OBJS)\htmlhelp.lbc name $^@
+	@%append $(OBJS)\htmlhelp.lbc option caseexact
+	@%append $(OBJS)\htmlhelp.lbc $(LDFLAGS) $(__DEBUGINFO_1)  libpath $(LIBDIRNAME) system nt_win ref '_WinMain@16'
+	@for %i in ($(HTMLHELP_OBJECTS)) do @%append $(OBJS)\htmlhelp.lbc file %i
+	@for %i in ( $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE)  $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib) do @%append $(OBJS)\htmlhelp.lbc library %i
+	@%append $(OBJS)\htmlhelp.lbc option resource=$(OBJS)\htmlhelp_help.res
+	@for %i in () do @%append $(OBJS)\htmlhelp.lbc option stack=%i
+	wlink @$(OBJS)\htmlhelp.lbc
 
 data : .SYMBOLIC 
 	if not exist $(OBJS)\helpfiles mkdir $(OBJS)\helpfiles
 	for %f in (Index.hhk another.hhc another.hhp another.htm book1.htm book2.htm contents.hhc main.htm page2-b.htm testing.hhp) do if not exist $(OBJS)\helpfiles\%f copy .\helpfiles\%f $(OBJS)\helpfiles
 
-$(OBJS)\help_help.obj :  .AUTODEPEND .\help.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(HELP_CXXFLAGS) $<
+$(OBJS)\htmlhelp_help.obj :  .AUTODEPEND .\help.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(HTMLHELP_CXXFLAGS) $<
 
-$(OBJS)\help_help.res :  .AUTODEPEND .\help.rc
+$(OBJS)\htmlhelp_help.res :  .AUTODEPEND .\help.rc
 	wrc -q -ad -bt=nt -r -fo=$^@   -d__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p)  $(__GFXCTX_DEFINE_p) -i=$(SETUPHDIR) -i=.\..\..\..\include -i=. $(__DLLFLAG_p) -i=.\..\..\..\samples -dNOPCH $<
 

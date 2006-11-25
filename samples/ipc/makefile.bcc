@@ -27,22 +27,22 @@ OBJS = \
 LIBDIRNAME = .\..\..\lib\bcc_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
-CLIENT_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
+IPCCLIENT_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG_0) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
 	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include -I. $(__DLLFLAG_p) \
 	-I.\..\..\samples -DNOPCH $(CPPFLAGS) $(CXXFLAGS)
-CLIENT_OBJECTS =  \
-	$(OBJS)\client_client.obj
-SERVER_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
+IPCCLIENT_OBJECTS =  \
+	$(OBJS)\ipcclient_client.obj
+IPCSERVER_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG_0) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
 	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\include -I. $(__DLLFLAG_p) \
 	-I.\..\..\samples -DNOPCH $(CPPFLAGS) $(CXXFLAGS)
-SERVER_OBJECTS =  \
-	$(OBJS)\server_server.obj
+IPCSERVER_OBJECTS =  \
+	$(OBJS)\ipcserver_server.obj
 
 ### Conditionally set variables: ###
 
@@ -220,44 +220,44 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\client.exe $(OBJS)\server.exe
+all: $(OBJS)\ipcclient.exe $(OBJS)\ipcserver.exe
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\*.csm del $(OBJS)\*.csm
-	-if exist $(OBJS)\client.exe del $(OBJS)\client.exe
-	-if exist $(OBJS)\client.tds del $(OBJS)\client.tds
-	-if exist $(OBJS)\client.ilc del $(OBJS)\client.ilc
-	-if exist $(OBJS)\client.ild del $(OBJS)\client.ild
-	-if exist $(OBJS)\client.ilf del $(OBJS)\client.ilf
-	-if exist $(OBJS)\client.ils del $(OBJS)\client.ils
-	-if exist $(OBJS)\server.exe del $(OBJS)\server.exe
-	-if exist $(OBJS)\server.tds del $(OBJS)\server.tds
-	-if exist $(OBJS)\server.ilc del $(OBJS)\server.ilc
-	-if exist $(OBJS)\server.ild del $(OBJS)\server.ild
-	-if exist $(OBJS)\server.ilf del $(OBJS)\server.ilf
-	-if exist $(OBJS)\server.ils del $(OBJS)\server.ils
+	-if exist $(OBJS)\ipcclient.exe del $(OBJS)\ipcclient.exe
+	-if exist $(OBJS)\ipcclient.tds del $(OBJS)\ipcclient.tds
+	-if exist $(OBJS)\ipcclient.ilc del $(OBJS)\ipcclient.ilc
+	-if exist $(OBJS)\ipcclient.ild del $(OBJS)\ipcclient.ild
+	-if exist $(OBJS)\ipcclient.ilf del $(OBJS)\ipcclient.ilf
+	-if exist $(OBJS)\ipcclient.ils del $(OBJS)\ipcclient.ils
+	-if exist $(OBJS)\ipcserver.exe del $(OBJS)\ipcserver.exe
+	-if exist $(OBJS)\ipcserver.tds del $(OBJS)\ipcserver.tds
+	-if exist $(OBJS)\ipcserver.ilc del $(OBJS)\ipcserver.ilc
+	-if exist $(OBJS)\ipcserver.ild del $(OBJS)\ipcserver.ild
+	-if exist $(OBJS)\ipcserver.ilf del $(OBJS)\ipcserver.ilf
+	-if exist $(OBJS)\ipcserver.ils del $(OBJS)\ipcserver.ils
 
-$(OBJS)\client.exe: $(CLIENT_OBJECTS)  $(OBJS)\client_sample.res
+$(OBJS)\ipcclient.exe: $(IPCCLIENT_OBJECTS)  $(OBJS)\ipcclient_sample.res
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|
-	c0w32.obj $(CLIENT_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_0).lib,, $(OBJS)\client_sample.res
+	c0w32.obj $(IPCCLIENT_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_0).lib,, $(OBJS)\ipcclient_sample.res
 |
 
-$(OBJS)\server.exe: $(SERVER_OBJECTS)  $(OBJS)\server_sample.res
+$(OBJS)\ipcserver.exe: $(IPCSERVER_OBJECTS)  $(OBJS)\ipcserver_sample.res
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|
-	c0w32.obj $(SERVER_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_0).lib,, $(OBJS)\server_sample.res
+	c0w32.obj $(IPCSERVER_OBJECTS),$@,, $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib import32.lib cw32$(__THREADSFLAG)$(__RUNTIME_LIBS_0).lib,, $(OBJS)\ipcserver_sample.res
 |
 
-$(OBJS)\client_sample.res: .\..\..\samples\sample.rc
+$(OBJS)\ipcclient_sample.res: .\..\..\samples\sample.rc
 	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) $(__MSLU_DEFINE_p_0) $(__GFXCTX_DEFINE_p_0) -i$(SETUPHDIR) -i.\..\..\include -i. $(__DLLFLAG_p_0) -i.\..\..\samples $**
 
-$(OBJS)\client_client.obj: .\client.cpp
-	$(CXX) -q -c -P -o$@ $(CLIENT_CXXFLAGS) $**
+$(OBJS)\ipcclient_client.obj: .\client.cpp
+	$(CXX) -q -c -P -o$@ $(IPCCLIENT_CXXFLAGS) $**
 
-$(OBJS)\server_sample.res: .\..\..\samples\sample.rc
+$(OBJS)\ipcserver_sample.res: .\..\..\samples\sample.rc
 	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) $(__MSLU_DEFINE_p_0) $(__GFXCTX_DEFINE_p_0) -i$(SETUPHDIR) -i.\..\..\include -i. $(__DLLFLAG_p_0) -i.\..\..\samples $**
 
-$(OBJS)\server_server.obj: .\server.cpp
-	$(CXX) -q -c -P -o$@ $(SERVER_CXXFLAGS) $**
+$(OBJS)\ipcserver_server.obj: .\server.cpp
+	$(CXX) -q -c -P -o$@ $(IPCSERVER_CXXFLAGS) $**
 

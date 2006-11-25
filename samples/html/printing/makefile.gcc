@@ -19,16 +19,16 @@ OBJS = \
 LIBDIRNAME = .\..\..\..\lib\gcc_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
-PRINTING_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG) \
+HTMLPRINTING_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG_2) $(__THREADSFLAG) \
 	$(GCCFLAGS) -DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
 	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\..\include -W -Wall -I. \
 	$(__DLLFLAG_p) -I.\..\..\..\samples -DNOPCH $(__RTTIFLAG_5) \
 	$(__EXCEPTIONSFLAG_6) -Wno-ctor-dtor-privacy $(CPPFLAGS) $(CXXFLAGS)
-PRINTING_OBJECTS =  \
-	$(OBJS)\printing_printing.o \
-	$(OBJS)\printing_printing_rc.o
+HTMLPRINTING_OBJECTS =  \
+	$(OBJS)\htmlprinting_printing.o \
+	$(OBJS)\htmlprinting_printing_rc.o
 
 ### Conditionally set variables: ###
 
@@ -213,24 +213,24 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\printing.exe data
+all: $(OBJS)\htmlprinting.exe data
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
 	-if exist $(OBJS)\*.d del $(OBJS)\*.d
-	-if exist $(OBJS)\printing.exe del $(OBJS)\printing.exe
+	-if exist $(OBJS)\htmlprinting.exe del $(OBJS)\htmlprinting.exe
 
-$(OBJS)\printing.exe: $(PRINTING_OBJECTS) $(OBJS)\printing_printing_rc.o
-	$(CXX) -o $@ $(PRINTING_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
+$(OBJS)\htmlprinting.exe: $(HTMLPRINTING_OBJECTS) $(OBJS)\htmlprinting_printing_rc.o
+	$(CXX) -o $@ $(HTMLPRINTING_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--subsystem,windows -mwindows  $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
 
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
 	for %%f in (logo6.gif test.htm) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
 
-$(OBJS)\printing_printing.o: ./printing.cpp
-	$(CXX) -c -o $@ $(PRINTING_CXXFLAGS) $(CPPDEPS) $<
+$(OBJS)\htmlprinting_printing.o: ./printing.cpp
+	$(CXX) -c -o $@ $(HTMLPRINTING_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\printing_printing_rc.o: ./printing.rc
+$(OBJS)\htmlprinting_printing_rc.o: ./printing.rc
 	windres --use-temp-file -i$< -o$@   --define __WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) $(__GFXCTX_DEFINE_p_1) --include-dir $(SETUPHDIR) --include-dir ./../../../include --include-dir . $(__DLLFLAG_p_1) --include-dir ./../../../samples --define NOPCH
 
 .PHONY: all clean data

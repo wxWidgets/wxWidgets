@@ -27,14 +27,14 @@ OBJS = \
 LIBDIRNAME = .\..\..\..\lib\bcc_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
-HELP_CXXFLAGS = $(__RUNTIME_LIBS_7) -I$(BCCDIR)\include $(__DEBUGINFO) \
+HTMLHELP_CXXFLAGS = $(__RUNTIME_LIBS_7) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG_2) $(__THREADSFLAG_6) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
 	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
 	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
 	$(__GFXCTX_DEFINE_p) -I$(SETUPHDIR) -I.\..\..\..\include -I. $(__DLLFLAG_p) \
 	-I.\..\..\..\samples -DNOPCH $(CPPFLAGS) $(CXXFLAGS)
-HELP_OBJECTS =  \
-	$(OBJS)\help_help.obj
+HTMLHELP_OBJECTS =  \
+	$(OBJS)\htmlhelp_help.obj
 
 ### Conditionally set variables: ###
 
@@ -212,31 +212,31 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\help.exe data
+all: $(OBJS)\htmlhelp.exe data
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\*.csm del $(OBJS)\*.csm
-	-if exist $(OBJS)\help.exe del $(OBJS)\help.exe
-	-if exist $(OBJS)\help.tds del $(OBJS)\help.tds
-	-if exist $(OBJS)\help.ilc del $(OBJS)\help.ilc
-	-if exist $(OBJS)\help.ild del $(OBJS)\help.ild
-	-if exist $(OBJS)\help.ilf del $(OBJS)\help.ilf
-	-if exist $(OBJS)\help.ils del $(OBJS)\help.ils
+	-if exist $(OBJS)\htmlhelp.exe del $(OBJS)\htmlhelp.exe
+	-if exist $(OBJS)\htmlhelp.tds del $(OBJS)\htmlhelp.tds
+	-if exist $(OBJS)\htmlhelp.ilc del $(OBJS)\htmlhelp.ilc
+	-if exist $(OBJS)\htmlhelp.ild del $(OBJS)\htmlhelp.ild
+	-if exist $(OBJS)\htmlhelp.ilf del $(OBJS)\htmlhelp.ilf
+	-if exist $(OBJS)\htmlhelp.ils del $(OBJS)\htmlhelp.ils
 
-$(OBJS)\help.exe: $(HELP_OBJECTS)  $(OBJS)\help_help.res
+$(OBJS)\htmlhelp.exe: $(HTMLHELP_OBJECTS)  $(OBJS)\htmlhelp_help.res
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -aa @&&|
-	c0w32.obj $(HELP_OBJECTS),$@,, $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib import32.lib cw32$(__THREADSFLAG_5)$(__RUNTIME_LIBS_8).lib,, $(OBJS)\help_help.res
+	c0w32.obj $(HTMLHELP_OBJECTS),$@,, $(__WXLIB_HTML_p)  $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) ole2w32.lib oleacc.lib odbc32.lib import32.lib cw32$(__THREADSFLAG_5)$(__RUNTIME_LIBS_8).lib,, $(OBJS)\htmlhelp_help.res
 |
 
 data: 
 	if not exist $(OBJS)\helpfiles mkdir $(OBJS)\helpfiles
 	for %f in (Index.hhk another.hhc another.hhp another.htm book1.htm book2.htm contents.hhc main.htm page2-b.htm testing.hhp) do if not exist $(OBJS)\helpfiles\%f copy .\helpfiles\%f $(OBJS)\helpfiles
 
-$(OBJS)\help_help.obj: .\help.cpp
-	$(CXX) -q -c -P -o$@ $(HELP_CXXFLAGS) $**
+$(OBJS)\htmlhelp_help.obj: .\help.cpp
+	$(CXX) -q -c -P -o$@ $(HTMLHELP_CXXFLAGS) $**
 
-$(OBJS)\help_help.res: .\help.rc
+$(OBJS)\htmlhelp_help.res: .\help.rc
 	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include   -d__WXMSW__ $(__WXUNIV_DEFINE_p_1) $(__DEBUG_DEFINE_p_1) $(__EXCEPTIONS_DEFINE_p_1) $(__RTTI_DEFINE_p_1) $(__THREAD_DEFINE_p_1) $(__UNICODE_DEFINE_p_1) $(__MSLU_DEFINE_p_1) $(__GFXCTX_DEFINE_p_1) -i$(SETUPHDIR) -i.\..\..\..\include -i. $(__DLLFLAG_p_1) -i.\..\..\..\samples -dNOPCH $**
 

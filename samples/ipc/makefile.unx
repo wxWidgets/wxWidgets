@@ -37,12 +37,12 @@ WX_CXXFLAGS = `$(WX_CONFIG) --cxxflags`
 ### Variables: ###
 
 CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
-CLIENT_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
-CLIENT_OBJECTS =  \
-	client_client.o
-SERVER_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
-SERVER_OBJECTS =  \
-	server_server.o
+IPCCLIENT_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
+IPCCLIENT_OBJECTS =  \
+	ipcclient_client.o
+IPCSERVER_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
+IPCSERVER_OBJECTS =  \
+	ipcserver_server.o
 
 ### Conditionally set variables: ###
 
@@ -50,7 +50,7 @@ SERVER_OBJECTS =  \
 
 ### Targets: ###
 
-all: client server
+all: ipcclient ipcserver
 
 install: all
 
@@ -59,20 +59,20 @@ uninstall:
 clean: 
 	rm -f ./*.o
 	rm -f ./*.d
-	rm -f client
-	rm -f server
+	rm -f ipcclient
+	rm -f ipcserver
 
-client: $(CLIENT_OBJECTS)
-	$(CXX) -o $@ $(CLIENT_OBJECTS) $(LDFLAGS)   `$(WX_CONFIG) --libs core,net,base`
+ipcclient: $(IPCCLIENT_OBJECTS)
+	$(CXX) -o $@ $(IPCCLIENT_OBJECTS) $(LDFLAGS)   `$(WX_CONFIG) --libs core,net,base`
 
-server: $(SERVER_OBJECTS)
-	$(CXX) -o $@ $(SERVER_OBJECTS) $(LDFLAGS)   `$(WX_CONFIG) --libs core,net,base`
+ipcserver: $(IPCSERVER_OBJECTS)
+	$(CXX) -o $@ $(IPCSERVER_OBJECTS) $(LDFLAGS)   `$(WX_CONFIG) --libs core,net,base`
 
-client_client.o: ./client.cpp
-	$(CXX) -c -o $@ $(CLIENT_CXXFLAGS) $(CPPDEPS) $<
+ipcclient_client.o: ./client.cpp
+	$(CXX) -c -o $@ $(IPCCLIENT_CXXFLAGS) $(CPPDEPS) $<
 
-server_server.o: ./server.cpp
-	$(CXX) -c -o $@ $(SERVER_CXXFLAGS) $(CPPDEPS) $<
+ipcserver_server.o: ./server.cpp
+	$(CXX) -c -o $@ $(IPCSERVER_CXXFLAGS) $(CPPDEPS) $<
 
 .PHONY: all install uninstall clean
 

@@ -18,28 +18,28 @@ OBJS = \
 LIBDIRNAME = .\..\..\lib\vc$(DIR_SUFFIX_CPU)_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
-CLIENT_CXXFLAGS = /M$(__RUNTIME_LIBS_8)$(__DEBUGRUNTIME) /DWIN32 \
-	$(__DEBUGINFO) /Fd$(OBJS)\client.pdb $(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) \
-	$(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) $(__GFXCTX_DEFINE_p) \
-	/I$(SETUPHDIR) /I.\..\..\include /W4 /I. $(__DLLFLAG_p) /D_WINDOWS \
-	/I.\..\..\samples /DNOPCH $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) \
-	$(CXXFLAGS)
-CLIENT_OBJECTS =  \
-	$(OBJS)\client_sample.res \
-	$(OBJS)\client_client.obj
-SERVER_CXXFLAGS = /M$(__RUNTIME_LIBS_22)$(__DEBUGRUNTIME) /DWIN32 \
-	$(__DEBUGINFO) /Fd$(OBJS)\server.pdb $(____DEBUGRUNTIME) $(__OPTIMIZEFLAG) \
-	$(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
-	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	$(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) $(__GFXCTX_DEFINE_p) \
-	/I$(SETUPHDIR) /I.\..\..\include /W4 /I. $(__DLLFLAG_p) /D_WINDOWS \
-	/I.\..\..\samples /DNOPCH $(__RTTIFLAG) $(__EXCEPTIONSFLAG) $(CPPFLAGS) \
-	$(CXXFLAGS)
-SERVER_OBJECTS =  \
-	$(OBJS)\server_sample.res \
-	$(OBJS)\server_server.obj
+IPCCLIENT_CXXFLAGS = /M$(__RUNTIME_LIBS_8)$(__DEBUGRUNTIME) /DWIN32 \
+	$(__DEBUGINFO) /Fd$(OBJS)\ipcclient.pdb $(____DEBUGRUNTIME) \
+	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+	$(__GFXCTX_DEFINE_p) /I$(SETUPHDIR) /I.\..\..\include /W4 /I. $(__DLLFLAG_p) \
+	/D_WINDOWS /I.\..\..\samples /DNOPCH $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	$(CPPFLAGS) $(CXXFLAGS)
+IPCCLIENT_OBJECTS =  \
+	$(OBJS)\ipcclient_sample.res \
+	$(OBJS)\ipcclient_client.obj
+IPCSERVER_CXXFLAGS = /M$(__RUNTIME_LIBS_22)$(__DEBUGRUNTIME) /DWIN32 \
+	$(__DEBUGINFO) /Fd$(OBJS)\ipcserver.pdb $(____DEBUGRUNTIME) \
+	$(__OPTIMIZEFLAG) $(__NO_VC_CRTDBG_p) /D__WXMSW__ $(__WXUNIV_DEFINE_p) \
+	$(__DEBUG_DEFINE_p) $(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) \
+	$(__THREAD_DEFINE_p) $(__UNICODE_DEFINE_p) $(__MSLU_DEFINE_p) \
+	$(__GFXCTX_DEFINE_p) /I$(SETUPHDIR) /I.\..\..\include /W4 /I. $(__DLLFLAG_p) \
+	/D_WINDOWS /I.\..\..\samples /DNOPCH $(__RTTIFLAG) $(__EXCEPTIONSFLAG) \
+	$(CPPFLAGS) $(CXXFLAGS)
+IPCSERVER_OBJECTS =  \
+	$(OBJS)\ipcserver_sample.res \
+	$(OBJS)\ipcserver_server.obj
 
 ### Conditionally set variables: ###
 
@@ -307,38 +307,38 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\client.exe $(OBJS)\server.exe
+all: $(OBJS)\ipcclient.exe $(OBJS)\ipcserver.exe
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
 	-if exist $(OBJS)\*.res del $(OBJS)\*.res
 	-if exist $(OBJS)\*.pch del $(OBJS)\*.pch
-	-if exist $(OBJS)\client.exe del $(OBJS)\client.exe
-	-if exist $(OBJS)\client.ilk del $(OBJS)\client.ilk
-	-if exist $(OBJS)\client.pdb del $(OBJS)\client.pdb
-	-if exist $(OBJS)\server.exe del $(OBJS)\server.exe
-	-if exist $(OBJS)\server.ilk del $(OBJS)\server.ilk
-	-if exist $(OBJS)\server.pdb del $(OBJS)\server.pdb
+	-if exist $(OBJS)\ipcclient.exe del $(OBJS)\ipcclient.exe
+	-if exist $(OBJS)\ipcclient.ilk del $(OBJS)\ipcclient.ilk
+	-if exist $(OBJS)\ipcclient.pdb del $(OBJS)\ipcclient.pdb
+	-if exist $(OBJS)\ipcserver.exe del $(OBJS)\ipcserver.exe
+	-if exist $(OBJS)\ipcserver.ilk del $(OBJS)\ipcserver.ilk
+	-if exist $(OBJS)\ipcserver.pdb del $(OBJS)\ipcserver.pdb
 
-$(OBJS)\client.exe: $(CLIENT_OBJECTS) $(OBJS)\client_sample.res
+$(OBJS)\ipcclient.exe: $(IPCCLIENT_OBJECTS) $(OBJS)\ipcclient_sample.res
 	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_1)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<
-	$(CLIENT_OBJECTS)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib
+	$(IPCCLIENT_OBJECTS)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib
 <<
 
-$(OBJS)\server.exe: $(SERVER_OBJECTS) $(OBJS)\server_sample.res
+$(OBJS)\ipcserver.exe: $(IPCSERVER_OBJECTS) $(OBJS)\ipcserver_sample.res
 	link /NOLOGO /OUT:$@ $(LDFLAGS) $(__DEBUGINFO_1)  $(LINK_TARGET_CPU) /LIBPATH:$(LIBDIRNAME) /SUBSYSTEM:WINDOWS @<<
-	$(SERVER_OBJECTS)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib
+	$(IPCSERVER_OBJECTS)  $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p)  wxzlib$(WXDEBUGFLAG).lib  wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib wxexpat$(WXDEBUGFLAG).lib $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib
 <<
 
-$(OBJS)\client_sample.res: .\..\..\samples\sample.rc
+$(OBJS)\ipcclient_sample.res: .\..\..\samples\sample.rc
 	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_0) $(__NO_VC_CRTDBG_p_0)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) $(__MSLU_DEFINE_p_0) $(__GFXCTX_DEFINE_p_0) /i $(SETUPHDIR) /i .\..\..\include /i . $(__DLLFLAG_p_0) /d _WINDOWS /i .\..\..\samples $**
 
-$(OBJS)\client_client.obj: .\client.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(CLIENT_CXXFLAGS) $**
+$(OBJS)\ipcclient_client.obj: .\client.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(IPCCLIENT_CXXFLAGS) $**
 
-$(OBJS)\server_sample.res: .\..\..\samples\sample.rc
+$(OBJS)\ipcserver_sample.res: .\..\..\samples\sample.rc
 	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_0) $(__NO_VC_CRTDBG_p_0)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_0) $(__DEBUG_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) $(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) $(__UNICODE_DEFINE_p_0) $(__MSLU_DEFINE_p_0) $(__GFXCTX_DEFINE_p_0) /i $(SETUPHDIR) /i .\..\..\include /i . $(__DLLFLAG_p_0) /d _WINDOWS /i .\..\..\samples $**
 
-$(OBJS)\server_server.obj: .\server.cpp
-	$(CXX) /c /nologo /TP /Fo$@ $(SERVER_CXXFLAGS) $**
+$(OBJS)\ipcserver_server.obj: .\server.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(IPCSERVER_CXXFLAGS) $**
 

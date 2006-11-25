@@ -5,7 +5,7 @@
 
     <include file="../../../build/bakefiles/common_samples.bkl"/>
 
-    <exe id="printing" template="wx_sample" template_append="wx_append">
+    <exe id="htmlprinting" template="wx_sample" template_append="wx_append">
         <sources>printing.cpp</sources>
         <wx-lib>html</wx-lib>
         <wx-lib>core</wx-lib>

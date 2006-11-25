@@ -3,14 +3,14 @@
 
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
-    <exe id="client" template="wx_sample" template_append="wx_append">
+    <exe id="ipcclient" template="wx_sample" template_append="wx_append">
         <sources>client.cpp</sources>
         <wx-lib>core</wx-lib>
         <wx-lib>net</wx-lib>
         <wx-lib>base</wx-lib>
     </exe>
-    
-    <exe id="server" template="wx_sample" template_append="wx_append">
+
+    <exe id="ipcserver" template="wx_sample" template_append="wx_append">
         <sources>server.cpp</sources>
         <wx-lib>core</wx-lib>
         <wx-lib>net</wx-lib>

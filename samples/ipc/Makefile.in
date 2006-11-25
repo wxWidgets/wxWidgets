@@ -42,20 +42,20 @@ DESTDIR =
 WX_RELEASE = 2.8
 WX_VERSION = $(WX_RELEASE).0
 LIBDIRNAME = $(wx_top_builddir)/lib
-CLIENT_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+IPCCLIENT_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples $(CPPFLAGS) $(CXXFLAGS)
-CLIENT_OBJECTS =  \
-	$(__client___win32rc) \
-	$(os2_lib_res) \
-	client_client.o
-SERVER_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
+IPCCLIENT_OBJECTS =  \
+	$(__ipcclient___win32rc) \
+	$(__ipc) \
+	ipcclient_client.o
+IPCSERVER_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples $(CPPFLAGS) $(CXXFLAGS)
-SERVER_OBJECTS =  \
-	$(__server___win32rc) \
-	$(os2_lib_res) \
-	server_server.o
+IPCSERVER_OBJECTS =  \
+	$(__ipcserver___win32rc) \
+	$(__ipc) \
+	ipcserver_server.o
 
 ### Conditionally set variables: ###
 
@@ -72,41 +72,41 @@ SERVER_OBJECTS =  \
 @COND_MONOLITHIC_1@EXTRALIBS_FOR_BASE = $(EXTRALIBS) $(EXTRALIBS_GUI)
 @COND_MONOLITHIC_0@EXTRALIBS_FOR_GUI = $(EXTRALIBS_GUI)
 @COND_MONOLITHIC_1@EXTRALIBS_FOR_GUI = 
-@COND_PLATFORM_MAC_1@__client___mac_setfilecmd = \
-@COND_PLATFORM_MAC_1@	$(SETFILE) -a C client$(EXEEXT)
-@COND_PLATFORM_MAC_1@__client___mac_rezcmd = $(__MACOSX_RESOURCES_p_2)
-COND_PLATFORM_OS2_1___client___os2_emxbindcmd = $(NM) client$(EXEEXT) | if grep \
-	-q pmwin.763 ; then emxbind -ep client$(EXEEXT) ; fi
-@COND_PLATFORM_OS2_1@__client___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___client___os2_emxbindcmd)
-@COND_PLATFORM_WIN32_1@__client___win32rc = client_sample_rc.o
-@COND_PLATFORM_MACOSX_1@__client_bundle___depname = client_bundle
-@COND_TOOLKIT_COCOA@____client_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_COCOA@	client.app/Contents/PkgInfo
-@COND_TOOLKIT_MAC@____client_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_MAC@	client.app/Contents/PkgInfo
-@COND_PLATFORM_MAC_1@__server___mac_setfilecmd = \
-@COND_PLATFORM_MAC_1@	$(SETFILE) -a C server$(EXEEXT)
-@COND_PLATFORM_MAC_1@__server___mac_rezcmd = $(__MACOSX_RESOURCES_p_3)
-COND_PLATFORM_OS2_1___server___os2_emxbindcmd = $(NM) server$(EXEEXT) | if grep \
-	-q pmwin.763 ; then emxbind -ep server$(EXEEXT) ; fi
-@COND_PLATFORM_OS2_1@__server___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___server___os2_emxbindcmd)
-@COND_PLATFORM_WIN32_1@__server___win32rc = server_sample_rc.o
-@COND_PLATFORM_MACOSX_1@__server_bundle___depname = server_bundle
-@COND_TOOLKIT_COCOA@____server_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_COCOA@	server.app/Contents/PkgInfo
-@COND_TOOLKIT_MAC@____server_BUNDLE_TGT_REF_DEP = \
-@COND_TOOLKIT_MAC@	server.app/Contents/PkgInfo
+@COND_PLATFORM_MAC_1@__ipcclient___mac_setfilecmd = \
+@COND_PLATFORM_MAC_1@	$(SETFILE) -a C ipcclient$(EXEEXT)
+@COND_PLATFORM_MAC_1@__ipcclient___mac_rezcmd = $(__MACOSX_RESOURCES_p_2)
+COND_PLATFORM_OS2_1___ipcclient___os2_emxbindcmd = $(NM) ipcclient$(EXEEXT) | \
+	if grep -q pmwin.763 ; then emxbind -ep ipcclient$(EXEEXT) ; fi
+@COND_PLATFORM_OS2_1@__ipcclient___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___ipcclient___os2_emxbindcmd)
+@COND_PLATFORM_WIN32_1@__ipcclient___win32rc = ipcclient_sample_rc.o
+@COND_PLATFORM_MACOSX_1@__ipcclient_bundle___depname = ipcclient_bundle
+@COND_TOOLKIT_COCOA@____ipcclient_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_COCOA@	ipcclient.app/Contents/PkgInfo
+@COND_TOOLKIT_MAC@____ipcclient_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_MAC@	ipcclient.app/Contents/PkgInfo
+@COND_PLATFORM_MAC_1@__ipcserver___mac_setfilecmd = \
+@COND_PLATFORM_MAC_1@	$(SETFILE) -a C ipcserver$(EXEEXT)
+@COND_PLATFORM_MAC_1@__ipcserver___mac_rezcmd = $(__MACOSX_RESOURCES_p_3)
+COND_PLATFORM_OS2_1___ipcserver___os2_emxbindcmd = $(NM) ipcserver$(EXEEXT) | \
+	if grep -q pmwin.763 ; then emxbind -ep ipcserver$(EXEEXT) ; fi
+@COND_PLATFORM_OS2_1@__ipcserver___os2_emxbindcmd = $(COND_PLATFORM_OS2_1___ipcserver___os2_emxbindcmd)
+@COND_PLATFORM_WIN32_1@__ipcserver___win32rc = ipcserver_sample_rc.o
+@COND_PLATFORM_MACOSX_1@__ipcserver_bundle___depname = ipcserver_bundle
+@COND_TOOLKIT_COCOA@____ipcserver_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_COCOA@	ipcserver.app/Contents/PkgInfo
+@COND_TOOLKIT_MAC@____ipcserver_BUNDLE_TGT_REF_DEP = \
+@COND_TOOLKIT_MAC@	ipcserver.app/Contents/PkgInfo
 COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_2 = $(REZ) -d __DARWIN__ -t APPL -d \
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) \
 	$(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) -i $(srcdir) $(__DLLFLAG_p_0) -i \
 	$(srcdir)/../../samples $(__RCDEFDIR_p) -i $(top_srcdir)/include -o \
-	client$(EXEEXT) Carbon.r sample.r
+	ipcclient$(EXEEXT) Carbon.r sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_2 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_2)
 COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_3 = $(REZ) -d __DARWIN__ -t APPL -d \
 	__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_0) $(__EXCEPTIONS_DEFINE_p_0) \
 	$(__RTTI_DEFINE_p_0) $(__THREAD_DEFINE_p_0) -i $(srcdir) $(__DLLFLAG_p_0) -i \
 	$(srcdir)/../../samples $(__RCDEFDIR_p) -i $(top_srcdir)/include -o \
-	server$(EXEEXT) Carbon.r sample.r
+	ipcserver$(EXEEXT) Carbon.r sample.r
 @COND_TOOLKIT_MAC@__MACOSX_RESOURCES_p_3 = $(COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_3)
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p = -D__WXUNIVERSAL__
 @COND_WXUNIV_1@__WXUNIV_DEFINE_p_0 = -d __WXUNIVERSAL__
@@ -127,7 +127,7 @@ COND_TOOLKIT_MAC___MACOSX_RESOURCES_p_3 = $(REZ) -d __DARWIN__ -t APPL -d \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
 @COND_TOOLKIT_MSW@__RCDEFDIR_p_0 = --include-dir \
 @COND_TOOLKIT_MSW@	$(LIBDIRNAME)/wx/include/$(TOOLCHAIN_FULLNAME)
-@COND_PLATFORM_OS2_1@os2_lib_res = $(top_srcdir)/include/wx/os2/wx.res
+@COND_PLATFORM_OS2_1@__ipc = $(top_srcdir)/include/wx/os2/wx.res
 COND_MONOLITHIC_0___WXLIB_CORE_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIB_CORE_p = $(COND_MONOLITHIC_0___WXLIB_CORE_p)
@@ -161,7 +161,7 @@ COND_WXUSE_REGEX_BUILTIN___LIB_REGEX_p = \
 
 ### Targets: ###
 
-all: client$(EXEEXT) $(__client_bundle___depname) server$(EXEEXT) $(__server_bundle___depname)
+all: ipcclient$(EXEEXT) $(__ipcclient_bundle___depname) ipcserver$(EXEEXT) $(__ipcserver_bundle___depname)
 
 install: all
 
@@ -172,86 +172,86 @@ install-strip: install
 clean: 
 	rm -rf ./.deps ./.pch
 	rm -f ./*.o
-	rm -f client$(EXEEXT)
-	rm -rf client.app
-	rm -f server$(EXEEXT)
-	rm -rf server.app
+	rm -f ipcclient$(EXEEXT)
+	rm -rf ipcclient.app
+	rm -f ipcserver$(EXEEXT)
+	rm -rf ipcserver.app
 
 distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
-client$(EXEEXT): $(CLIENT_OBJECTS) $(__client___win32rc)
-	$(CXX) -o $@ $(CLIENT_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(LIBS) $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
-	$(__client___mac_rezcmd)
-	$(__client___mac_setfilecmd)
-	$(__client___os2_emxbindcmd)
+ipcclient$(EXEEXT): $(IPCCLIENT_OBJECTS) $(__ipcclient___win32rc)
+	$(CXX) -o $@ $(IPCCLIENT_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(LIBS) $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
+	$(__ipcclient___mac_rezcmd)
+	$(__ipcclient___mac_setfilecmd)
+	$(__ipcclient___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-client.app/Contents/PkgInfo: client$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
-	mkdir -p client.app/Contents
-	mkdir -p client.app/Contents/MacOS
-	mkdir -p client.app/Contents/Resources
+ipcclient.app/Contents/PkgInfo: ipcclient$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
+	mkdir -p ipcclient.app/Contents
+	mkdir -p ipcclient.app/Contents/MacOS
+	mkdir -p ipcclient.app/Contents/Resources
 	
 	
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
-	-e "s/EXECUTABLE/client/" \
+	-e "s/EXECUTABLE/ipcclient/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/carbon/Info.plist.in >client.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >ipcclient.app/Contents/Info.plist
 	
 	
-	echo -n "APPL????" >client.app/Contents/PkgInfo
+	echo -n "APPL????" >ipcclient.app/Contents/PkgInfo
 	
 	
-	ln -f client$(EXEEXT) client.app/Contents/MacOS/client
+	ln -f ipcclient$(EXEEXT) ipcclient.app/Contents/MacOS/ipcclient
 	
 	
-	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns client.app/Contents/Resources/wxmac.icns
+	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns ipcclient.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@client_bundle: $(____client_BUNDLE_TGT_REF_DEP)
+@COND_PLATFORM_MACOSX_1@ipcclient_bundle: $(____ipcclient_BUNDLE_TGT_REF_DEP)
 
-server$(EXEEXT): $(SERVER_OBJECTS) $(__server___win32rc)
-	$(CXX) -o $@ $(SERVER_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(LIBS) $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
-	$(__server___mac_rezcmd)
-	$(__server___mac_setfilecmd)
-	$(__server___os2_emxbindcmd)
+ipcserver$(EXEEXT): $(IPCSERVER_OBJECTS) $(__ipcserver___win32rc)
+	$(CXX) -o $@ $(IPCSERVER_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(LIBS) $(__WXLIB_CORE_p)  $(__WXLIB_NET_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
+	$(__ipcserver___mac_rezcmd)
+	$(__ipcserver___mac_setfilecmd)
+	$(__ipcserver___os2_emxbindcmd)
 	$(SAMPLES_RPATH_POSTLINK)
 
-server.app/Contents/PkgInfo: server$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
-	mkdir -p server.app/Contents
-	mkdir -p server.app/Contents/MacOS
-	mkdir -p server.app/Contents/Resources
+ipcserver.app/Contents/PkgInfo: ipcserver$(EXEEXT) $(top_srcdir)/src/mac/carbon/Info.plist.in $(top_srcdir)/src/mac/carbon/wxmac.icns
+	mkdir -p ipcserver.app/Contents
+	mkdir -p ipcserver.app/Contents/MacOS
+	mkdir -p ipcserver.app/Contents/Resources
 	
 	
 	sed -e "s/IDENTIFIER/`echo $(srcdir) | sed -e 's,\.\./,,g' | sed -e 's,/,.,g'`/" \
-	-e "s/EXECUTABLE/server/" \
+	-e "s/EXECUTABLE/ipcserver/" \
 	-e "s/VERSION/$(WX_VERSION)/" \
-	$(top_srcdir)/src/mac/carbon/Info.plist.in >server.app/Contents/Info.plist
+	$(top_srcdir)/src/mac/carbon/Info.plist.in >ipcserver.app/Contents/Info.plist
 	
 	
-	echo -n "APPL????" >server.app/Contents/PkgInfo
+	echo -n "APPL????" >ipcserver.app/Contents/PkgInfo
 	
 	
-	ln -f server$(EXEEXT) server.app/Contents/MacOS/server
+	ln -f ipcserver$(EXEEXT) ipcserver.app/Contents/MacOS/ipcserver
 	
 	
-	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns server.app/Contents/Resources/wxmac.icns
+	cp -f $(top_srcdir)/src/mac/carbon/wxmac.icns ipcserver.app/Contents/Resources/wxmac.icns
 
-@COND_PLATFORM_MACOSX_1@server_bundle: $(____server_BUNDLE_TGT_REF_DEP)
+@COND_PLATFORM_MACOSX_1@ipcserver_bundle: $(____ipcserver_BUNDLE_TGT_REF_DEP)
 
-client_sample_rc.o: $(srcdir)/../../samples/sample.rc
+ipcclient_sample_rc.o: $(srcdir)/../../samples/sample.rc
 	$(WINDRES) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_6)  $(__EXCEPTIONS_DEFINE_p_6) $(__RTTI_DEFINE_p_6) $(__THREAD_DEFINE_p_6)   --include-dir $(srcdir) $(__DLLFLAG_p_6) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_0) --include-dir $(top_srcdir)/include
 
-client_client.o: $(srcdir)/client.cpp
-	$(CXXC) -c -o $@ $(CLIENT_CXXFLAGS) $(srcdir)/client.cpp
+ipcclient_client.o: $(srcdir)/client.cpp
+	$(CXXC) -c -o $@ $(IPCCLIENT_CXXFLAGS) $(srcdir)/client.cpp
 
-server_sample_rc.o: $(srcdir)/../../samples/sample.rc
+ipcserver_sample_rc.o: $(srcdir)/../../samples/sample.rc
 	$(WINDRES) -i$< -o$@   --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_6)  $(__EXCEPTIONS_DEFINE_p_6) $(__RTTI_DEFINE_p_6) $(__THREAD_DEFINE_p_6)   --include-dir $(srcdir) $(__DLLFLAG_p_6) --include-dir $(srcdir)/../../samples $(__RCDEFDIR_p_0) --include-dir $(top_srcdir)/include
 
-server_server.o: $(srcdir)/server.cpp
-	$(CXXC) -c -o $@ $(SERVER_CXXFLAGS) $(srcdir)/server.cpp
+ipcserver_server.o: $(srcdir)/server.cpp
+	$(CXXC) -c -o $@ $(IPCSERVER_CXXFLAGS) $(srcdir)/server.cpp
 
 
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all install uninstall clean distclean client_bundle server_bundle
+.PHONY: all install uninstall clean distclean ipcclient_bundle ipcserver_bundle

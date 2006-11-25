@@ -3,7 +3,7 @@
 
     <include file="../../build/bakefiles/common_samples.bkl"/>
 
-    <exe id="docview" template="wx_sample" template_append="wx_append">
+    <exe id="docvwmdi" template="wx_sample" template_append="wx_append">
         <sources>docview.cpp doc.cpp view.cpp</sources>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>

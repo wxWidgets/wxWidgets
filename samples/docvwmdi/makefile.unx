@@ -37,11 +37,11 @@ WX_CXXFLAGS = `$(WX_CONFIG) --cxxflags`
 ### Variables: ###
 
 CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
-DOCVIEW_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
-DOCVIEW_OBJECTS =  \
-	docview_docview.o \
-	docview_doc.o \
-	docview_view.o
+DOCVWMDI_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
+DOCVWMDI_OBJECTS =  \
+	docvwmdi_docview.o \
+	docvwmdi_doc.o \
+	docvwmdi_view.o
 
 ### Conditionally set variables: ###
 
@@ -49,7 +49,7 @@ DOCVIEW_OBJECTS =  \
 
 ### Targets: ###
 
-all: docview
+all: docvwmdi
 
 install: all
 
@@ -58,19 +58,19 @@ uninstall:
 clean: 
 	rm -f ./*.o
 	rm -f ./*.d
-	rm -f docview
+	rm -f docvwmdi
 
-docview: $(DOCVIEW_OBJECTS)
-	$(CXX) -o $@ $(DOCVIEW_OBJECTS) $(LDFLAGS)   `$(WX_CONFIG) --libs core,base`
+docvwmdi: $(DOCVWMDI_OBJECTS)
+	$(CXX) -o $@ $(DOCVWMDI_OBJECTS) $(LDFLAGS)   `$(WX_CONFIG) --libs core,base`
 
-docview_docview.o: ./docview.cpp
-	$(CXX) -c -o $@ $(DOCVIEW_CXXFLAGS) $(CPPDEPS) $<
+docvwmdi_docview.o: ./docview.cpp
+	$(CXX) -c -o $@ $(DOCVWMDI_CXXFLAGS) $(CPPDEPS) $<
 
-docview_doc.o: ./doc.cpp
-	$(CXX) -c -o $@ $(DOCVIEW_CXXFLAGS) $(CPPDEPS) $<
+docvwmdi_doc.o: ./doc.cpp
+	$(CXX) -c -o $@ $(DOCVWMDI_CXXFLAGS) $(CPPDEPS) $<
 
-docview_view.o: ./view.cpp
-	$(CXX) -c -o $@ $(DOCVIEW_CXXFLAGS) $(CPPDEPS) $<
+docvwmdi_view.o: ./view.cpp
+	$(CXX) -c -o $@ $(DOCVWMDI_CXXFLAGS) $(CPPDEPS) $<
 
 .PHONY: all install uninstall clean
 

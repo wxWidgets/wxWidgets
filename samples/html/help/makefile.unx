@@ -37,9 +37,9 @@ WX_CXXFLAGS = `$(WX_CONFIG) --cxxflags`
 ### Variables: ###
 
 CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
-HELP_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
-HELP_OBJECTS =  \
-	help_help.o
+HTMLHELP_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
+HTMLHELP_OBJECTS =  \
+	htmlhelp_help.o
 
 ### Conditionally set variables: ###
 
@@ -47,7 +47,7 @@ HELP_OBJECTS =  \
 
 ### Targets: ###
 
-all: help
+all: htmlhelp
 
 install: all
 
@@ -56,13 +56,13 @@ uninstall:
 clean: 
 	rm -f ./*.o
 	rm -f ./*.d
-	rm -f help
+	rm -f htmlhelp
 
-help: $(HELP_OBJECTS)
-	$(CXX) -o $@ $(HELP_OBJECTS) $(LDFLAGS)   `$(WX_CONFIG) --libs html,core,base`
+htmlhelp: $(HTMLHELP_OBJECTS)
+	$(CXX) -o $@ $(HTMLHELP_OBJECTS) $(LDFLAGS)   `$(WX_CONFIG) --libs html,core,base`
 
-help_help.o: ./help.cpp
-	$(CXX) -c -o $@ $(HELP_CXXFLAGS) $(CPPDEPS) $<
+htmlhelp_help.o: ./help.cpp
+	$(CXX) -c -o $@ $(HTMLHELP_CXXFLAGS) $(CPPDEPS) $<
 
 .PHONY: all install uninstall clean
 
