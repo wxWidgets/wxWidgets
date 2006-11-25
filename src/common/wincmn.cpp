@@ -590,7 +590,7 @@ wxSize wxWindowBase::DoGetBestSize() const
 // helper of GetWindowBorderSize(): as many ports don't implement support for
 // wxSYS_BORDER/EDGE_X/Y metrics in their wxSystemSettings, use hard coded
 // fallbacks in this case
-static wxGetMetricOrDefault(wxSystemMetric what)
+static int wxGetMetricOrDefault(wxSystemMetric what)
 {
     int rc = wxSystemSettings::GetMetric(what);
     if ( rc == -1 )
