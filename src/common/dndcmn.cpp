@@ -20,4 +20,8 @@
 
 #include "wx/dnd.h"
 
-// Not much to do here, really, but GNU need this file.
+bool wxIsDragResultOk(wxDragResult res)
+{
+    return res == wxDragCopy || res == wxDragMove || res == wxDragLink;
+}
+

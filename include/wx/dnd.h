@@ -45,10 +45,9 @@ enum wxDragResult
     wxDragCancel    // the operation was cancelled by user (not an error)
 };
 
-inline WXDLLEXPORT bool wxIsDragResultOk(wxDragResult res)
-{
-    return res == wxDragCopy || res == wxDragMove || res == wxDragLink;
-}
+// return true if res indicates that something was done during a dnd operation,
+// i.e. is neither error nor none nor cancel
+WXDLLEXPORT bool wxIsDragResultOk(wxDragResult res);
 
 // ----------------------------------------------------------------------------
 // wxDropSource is the object you need to create (and call DoDragDrop on it)
