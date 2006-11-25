@@ -163,7 +163,12 @@ wxSize wxTreeCtrlBase::DoGetBestSize() const
     if ( !size.x || !size.y )
         size = wxControl::DoGetBestSize();
     else
+    {
+        // Add border size
+        size += GetWindowBorderSize();
+
         CacheBestSize(size);
+    }
 
     return size;
 }

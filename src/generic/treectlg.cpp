@@ -3647,4 +3647,14 @@ void wxGenericTreeCtrl::DoDirtyProcessing()
     AdjustMyScrollbars();
 }
 
+wxSize wxGenericTreeCtrl::DoGetBestSize() const
+{
+    wxSize size = wxTreeCtrlBase::DoGetBestSize();
+
+    // The generic control seems to have an implicit border
+    size.IncBy(4, 4);
+
+    return size;
+}
+
 #endif // wxUSE_TREECTRL

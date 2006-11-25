@@ -97,6 +97,8 @@ All:
 - New option wxFS_READ | wxFS_SEEKABLE for wxFileSystem::OpenFile() to return
   a stream that is seekable.
 - Fixed bug in wxCalendarCtrl::HitTest() when clicking on month change arrows
+- Added wxWindow::GetWindowBorderSize() and corrected wxTreeCtrl::GetBestSize()
+  for a control with borders (Tim Kosse)
 
 wxMSW:
 
