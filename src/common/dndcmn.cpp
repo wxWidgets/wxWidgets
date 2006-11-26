@@ -20,8 +20,12 @@
 
 #include "wx/dnd.h"
 
+#if wxUSE_DRAG_AND_DROP
+
 bool wxIsDragResultOk(wxDragResult res)
 {
     return res == wxDragCopy || res == wxDragMove || res == wxDragLink;
 }
+
+#endif
 
