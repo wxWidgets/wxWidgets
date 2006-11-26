@@ -8800,6 +8800,14 @@ class Window(EvtHandler):
         """
         return _core_.Window_GetVirtualSizeTuple(*args, **kwargs)
 
+    def GetWindowBorderSize(*args, **kwargs):
+        """
+        GetWindowBorderSize(self) -> Size
+
+        Return the size of the left/right and top/bottom borders.
+        """
+        return _core_.Window_GetWindowBorderSize(*args, **kwargs)
+
     def GetBestVirtualSize(*args, **kwargs):
         """
         GetBestVirtualSize(self) -> Size

@@ -10083,6 +10083,61 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_AuiDockInfo_reserved1_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAuiDockInfo *arg1 = (wxAuiDockInfo *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject *swig_obj[2] ;
+  
+  if (!SWIG_Python_UnpackTuple(args,"AuiDockInfo_reserved1_set",2,2,swig_obj)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAuiDockInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AuiDockInfo_reserved1_set" "', expected argument " "1"" of type '" "wxAuiDockInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAuiDockInfo * >(argp1);
+  ecode2 = SWIG_AsVal_bool(swig_obj[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AuiDockInfo_reserved1_set" "', expected argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  if (arg1) (arg1)->reserved1 = arg2;
+  
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AuiDockInfo_reserved1_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAuiDockInfo *arg1 = (wxAuiDockInfo *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAuiDockInfo, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AuiDockInfo_reserved1_get" "', expected argument " "1"" of type '" "wxAuiDockInfo *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAuiDockInfo * >(argp1);
+  result = (bool) ((arg1)->reserved1);
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_delete_AuiDockInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxAuiDockInfo *arg1 = (wxAuiDockInfo *) 0 ;
@@ -16109,6 +16164,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"AuiDockInfo_toolbar_get", (PyCFunction)_wrap_AuiDockInfo_toolbar_get, METH_O, NULL},
 	 { (char *)"AuiDockInfo_fixed_set", _wrap_AuiDockInfo_fixed_set, METH_VARARGS, NULL},
 	 { (char *)"AuiDockInfo_fixed_get", (PyCFunction)_wrap_AuiDockInfo_fixed_get, METH_O, NULL},
+	 { (char *)"AuiDockInfo_reserved1_set", _wrap_AuiDockInfo_reserved1_set, METH_VARARGS, NULL},
+	 { (char *)"AuiDockInfo_reserved1_get", (PyCFunction)_wrap_AuiDockInfo_reserved1_get, METH_O, NULL},
 	 { (char *)"delete_AuiDockInfo", (PyCFunction)_wrap_delete_AuiDockInfo, METH_O, NULL},
 	 { (char *)"AuiDockInfo_swigregister", AuiDockInfo_swigregister, METH_VARARGS, NULL},
 	 { (char *)"AuiDockInfo_swiginit", AuiDockInfo_swiginit, METH_VARARGS, NULL},

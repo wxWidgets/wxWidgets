@@ -866,6 +866,7 @@ class AuiDockInfo(object):
     resizable = property(_aui.AuiDockInfo_resizable_get, _aui.AuiDockInfo_resizable_set)
     toolbar = property(_aui.AuiDockInfo_toolbar_get, _aui.AuiDockInfo_toolbar_set)
     fixed = property(_aui.AuiDockInfo_fixed_get, _aui.AuiDockInfo_fixed_set)
+    reserved1 = property(_aui.AuiDockInfo_reserved1_get, _aui.AuiDockInfo_reserved1_set)
     __swig_destroy__ = _aui.delete_AuiDockInfo
     __del__ = lambda self : None;
 _aui.AuiDockInfo_swigregister(AuiDockInfo)

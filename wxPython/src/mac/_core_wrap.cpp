@@ -35414,6 +35414,34 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Window_GetWindowBorderSize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxWindow *arg1 = (wxWindow *) 0 ;
+  wxSize result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Window_GetWindowBorderSize" "', expected argument " "1"" of type '" "wxWindow const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxWindow * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxWindow const *)arg1)->GetWindowBorderSize();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxSize(static_cast< const wxSize& >(result))), SWIGTYPE_p_wxSize, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Window_GetBestVirtualSize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxWindow *arg1 = (wxWindow *) 0 ;
@@ -57348,6 +57376,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_SetVirtualSizeWH", (PyCFunction) _wrap_Window_SetVirtualSizeWH, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_GetVirtualSize", (PyCFunction)_wrap_Window_GetVirtualSize, METH_O, NULL},
 	 { (char *)"Window_GetVirtualSizeTuple", (PyCFunction)_wrap_Window_GetVirtualSizeTuple, METH_O, NULL},
+	 { (char *)"Window_GetWindowBorderSize", (PyCFunction)_wrap_Window_GetWindowBorderSize, METH_O, NULL},
 	 { (char *)"Window_GetBestVirtualSize", (PyCFunction)_wrap_Window_GetBestVirtualSize, METH_O, NULL},
 	 { (char *)"Window_Show", (PyCFunction) _wrap_Window_Show, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_Hide", (PyCFunction)_wrap_Window_Hide, METH_O, NULL},

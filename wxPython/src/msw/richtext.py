@@ -487,26 +487,6 @@ class RichTextAttr(object):
         """HasRightIndent(self) -> bool"""
         return _richtext.RichTextAttr_HasRightIndent(*args, **kwargs)
 
-    def HasWeight(*args, **kwargs):
-        """HasWeight(self) -> bool"""
-        return _richtext.RichTextAttr_HasWeight(*args, **kwargs)
-
-    def HasSize(*args, **kwargs):
-        """HasSize(self) -> bool"""
-        return _richtext.RichTextAttr_HasSize(*args, **kwargs)
-
-    def HasItalic(*args, **kwargs):
-        """HasItalic(self) -> bool"""
-        return _richtext.RichTextAttr_HasItalic(*args, **kwargs)
-
-    def HasUnderlined(*args, **kwargs):
-        """HasUnderlined(self) -> bool"""
-        return _richtext.RichTextAttr_HasUnderlined(*args, **kwargs)
-
-    def HasFaceName(*args, **kwargs):
-        """HasFaceName(self) -> bool"""
-        return _richtext.RichTextAttr_HasFaceName(*args, **kwargs)
-
     def HasFont(*args, **kwargs):
         """HasFont(self) -> bool"""
         return _richtext.RichTextAttr_HasFont(*args, **kwargs)
