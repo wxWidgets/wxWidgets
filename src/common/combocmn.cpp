@@ -96,6 +96,9 @@
 #define POPUPWIN_IS_PERFECT           0 // Same, but for non-transient popup window.
 #define TEXTCTRL_TEXT_CENTERED        1 // 1 if text in textctrl is vertically centered
 
+#undef DEFAULT_DROPBUTTON_WIDTH
+#define DEFAULT_DROPBUTTON_WIDTH 22
+
 #endif
 
 

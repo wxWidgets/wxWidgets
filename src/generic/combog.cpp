@@ -65,7 +65,7 @@
 #define TEXTCTRLXADJUST                 0 // position adjustment for wxTextCtrl, with zero indent
 #define TEXTCTRLYADJUST                 0
 #define TEXTXADJUST                     0 // how much is read-only text's x adjusted
-#define DEFAULT_DROPBUTTON_WIDTH        19
+#define DEFAULT_DROPBUTTON_WIDTH        22
 
 #else
 
