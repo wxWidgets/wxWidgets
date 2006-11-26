@@ -114,8 +114,10 @@ wxGetBestTreeSize(const wxTreeCtrlBase* treeCtrl, wxTreeItemId id, wxSize& size)
     if ( treeCtrl->GetBoundingRect(id, rect, true /* just the item */) )
     {
         // Translate to logical position so we get the full extent
+#if defined(__WXMSW__) && !defined(__WXUNIVERSAL__)
         rect.x += treeCtrl->GetScrollPos(wxHORIZONTAL);
         rect.y += treeCtrl->GetScrollPos(wxVERTICAL);
+#endif
 
         size.IncTo(wxSize(rect.GetRight(), rect.GetBottom()));
     }
