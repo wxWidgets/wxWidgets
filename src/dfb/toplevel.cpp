@@ -138,7 +138,7 @@ bool wxTopLevelWindowDFB::Create(wxWindow *parent,
     desc.width = size.x;
     desc.height = size.y;
     m_dfbwin = layer->CreateWindow(&desc);
-    if ( !layer )
+    if ( !m_dfbwin )
         return false;
 
     // add the new TLW to DFBWindowID->wxTLW map:
@@ -188,10 +188,16 @@ wxTopLevelWindowDFB::~wxTopLevelWindowDFB()
 
     wxDELETE(m_toPaint);
 
+    if ( !m_dfbwin )
+        return;
+
     // remove the TLW from DFBWindowID->wxTLW map:
     DFBWindowID winid;
     if ( m_dfbwin->GetID(&winid) )
         gs_dfbWindowsMap.erase(winid);
+
+    m_dfbwin->Destroy();
+    m_dfbwin.Reset();
 }
 
 // ----------------------------------------------------------------------------
