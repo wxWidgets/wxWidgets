@@ -45,7 +45,10 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
 
     if (style & wxYES_NO)
     {
-        buttons = GTK_BUTTONS_YES_NO;
+		if (style & wxCANCEL)
+			buttons = GTK_BUTTONS_NONE;
+		else
+	        buttons = GTK_BUTTONS_YES_NO;
     }
 
     if (style & wxOK)
@@ -81,8 +84,14 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
     if (style & wxYES_NO)
     {
         if (style & wxCANCEL)
+		{
+            gtk_dialog_add_button(GTK_DIALOG(m_widget), GTK_STOCK_NO,
+                                  GTK_RESPONSE_NO);
             gtk_dialog_add_button(GTK_DIALOG(m_widget), GTK_STOCK_CANCEL,
                                   GTK_RESPONSE_CANCEL);
+            gtk_dialog_add_button(GTK_DIALOG(m_widget), GTK_STOCK_YES,
+                                  GTK_RESPONSE_YES);
+		}
         if (style & wxNO_DEFAULT)
             gtk_dialog_set_default_response(GTK_DIALOG(m_widget), GTK_RESPONSE_NO);
         else
