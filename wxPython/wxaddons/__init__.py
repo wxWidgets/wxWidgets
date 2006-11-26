@@ -15,7 +15,12 @@ import xmlrpclib
 import __builtin__
 import wx
 
-domain = 'http://wxpyaddons.wxcommunity.com'
+# NB: For some reason that I haven't been able to track down, on Mac (at least)
+# calling xmlrpc methods no longer works after the wx.App is started. Therefore, 
+# we grab the package URL even before prompting the user if they want to install
+# the package in order for us to have the info we need before the wx.App is started.
+
+domain = 'http://wxaddons.wxcommunity.com'
 builtin_import = __builtin__.__import__
 
 debug = False
@@ -98,7 +103,7 @@ def require_addon_version(name, version=[], canBeNewer=True):
             should_install = prompt_install(name, comp_version)
             
             if should_install:
-                dl_and_install_addon(name, comp_version)
+                dl_and_install_addon(name, comp_version, url)
 
 def get_url(name, version):
     url = ""
@@ -117,9 +122,6 @@ def dl_and_install_addon(name, version, url):
     installed = True
     tempdir = None
     cwd = os.getcwd()
-    
-    # get the package URL
-    url = "http://wxpyaddons.wxcommunity.com/releases/sized_controls-0.5.tar.gz"
     
     if use_gui:
         progress = wx.ProgressDialog("Installing Dependency", 
@@ -205,7 +207,7 @@ def import_hook(name, globals=None, locals=None, fromlist=None):
             raise
 
 def runTests():
-    import wxaddons.sized_controls
+    import wxaddons.persistence
     import wxaddons.foo_bar
     import googly
 
