@@ -324,7 +324,7 @@ bool wxFontBase::operator==(const wxFont& font) const
 {
     // either it is the same font, i.e. they share the same common data or they
     // have different ref datas but still describe the same font
-    return m_refData == font.m_refData ||
+    return IsSameAs(font) ||
            (
             Ok() == font.Ok() &&
             GetPointSize() == font.GetPointSize() &&
