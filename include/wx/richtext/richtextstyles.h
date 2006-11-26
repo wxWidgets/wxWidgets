@@ -482,6 +482,7 @@ private:
     bool                    m_applyOnSelection; // if true, applies style on selection
     wxRichTextStyleType     m_styleType; // style type to display
     bool                    m_autoSetSelection;
+    wxArrayString           m_styleNames;
 };
 
 /*!

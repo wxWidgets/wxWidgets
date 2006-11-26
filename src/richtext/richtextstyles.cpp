@@ -508,33 +508,11 @@ wxRichTextStyleDefinition* wxRichTextStyleListBox::GetStyle(size_t i) const
 {
     if (!GetStyleSheet())
         return NULL;
+    
+    if (i >= m_styleNames.GetCount() || i < 0)
+        return NULL;
 
-    if (GetStyleType() == wxRICHTEXT_STYLE_ALL)
-    {
-        // First paragraph styles, then character, then list
-        if (i < GetStyleSheet()->GetParagraphStyleCount())
-            return GetStyleSheet()->GetParagraphStyle(i);
-
-        if ((i - GetStyleSheet()->GetParagraphStyleCount()) < GetStyleSheet()->GetCharacterStyleCount())
-            return GetStyleSheet()->GetCharacterStyle(i - GetStyleSheet()->GetParagraphStyleCount());
-
-        if ((i - GetStyleSheet()->GetParagraphStyleCount() - GetStyleSheet()->GetCharacterStyleCount()) < GetStyleSheet()->GetListStyleCount())
-            return GetStyleSheet()->GetListStyle(i - GetStyleSheet()->GetParagraphStyleCount() - GetStyleSheet()->GetCharacterStyleCount());
-    }
-    else if ((GetStyleType() == wxRICHTEXT_STYLE_PARAGRAPH) && (i < GetStyleSheet()->GetParagraphStyleCount()))
-    {
-        return GetStyleSheet()->GetParagraphStyle(i);
-    }
-    else if ((GetStyleType() == wxRICHTEXT_STYLE_CHARACTER) && (i < GetStyleSheet()->GetCharacterStyleCount()))
-    {
-        return GetStyleSheet()->GetCharacterStyle(i);
-    }
-    else if ((GetStyleType() == wxRICHTEXT_STYLE_LIST) && (i < GetStyleSheet()->GetListStyleCount()))
-    {
-        return GetStyleSheet()->GetListStyle(i);
-    }
-
-    return NULL;
+    return GetStyleSheet()->FindStyle(m_styleNames[i]);
 }
 
 /// Updates the list
@@ -543,15 +521,28 @@ void wxRichTextStyleListBox::UpdateStyles()
     if (GetStyleSheet())
     {
         SetSelection(wxNOT_FOUND);
-
-        if (GetStyleType() == wxRICHTEXT_STYLE_ALL)
-            SetItemCount(GetStyleSheet()->GetParagraphStyleCount()+GetStyleSheet()->GetCharacterStyleCount()+GetStyleSheet()->GetListStyleCount());
-        else if (GetStyleType() == wxRICHTEXT_STYLE_PARAGRAPH)
-            SetItemCount(GetStyleSheet()->GetParagraphStyleCount());
-        else if (GetStyleType() == wxRICHTEXT_STYLE_CHARACTER)
-            SetItemCount(GetStyleSheet()->GetCharacterStyleCount());
-        else if (GetStyleType() == wxRICHTEXT_STYLE_LIST)
-            SetItemCount(GetStyleSheet()->GetListStyleCount());
+        
+        m_styleNames.Clear();
+        
+        size_t i;
+        if (GetStyleType() == wxRICHTEXT_STYLE_ALL || GetStyleType() == wxRICHTEXT_STYLE_PARAGRAPH)
+        {
+            for (i = 0; i < GetStyleSheet()->GetParagraphStyleCount(); i++)
+                m_styleNames.Add(GetStyleSheet()->GetParagraphStyle(i)->GetName());
+        }
+        if (GetStyleType() == wxRICHTEXT_STYLE_ALL || GetStyleType() == wxRICHTEXT_STYLE_CHARACTER)
+        {
+            for (i = 0; i < GetStyleSheet()->GetCharacterStyleCount(); i++)
+                m_styleNames.Add(GetStyleSheet()->GetCharacterStyle(i)->GetName());
+        }
+        if (GetStyleType() == wxRICHTEXT_STYLE_ALL || GetStyleType() == wxRICHTEXT_STYLE_LIST)
+        {
+            for (i = 0; i < GetStyleSheet()->GetListStyleCount(); i++)
+                m_styleNames.Add(GetStyleSheet()->GetListStyle(i)->GetName());
+        }
+        
+        m_styleNames.Sort();
+        SetItemCount(m_styleNames.GetCount());
 
         Refresh();
 
@@ -566,19 +557,7 @@ void wxRichTextStyleListBox::UpdateStyles()
 // Get index for style name
 int wxRichTextStyleListBox::GetIndexForStyle(const wxString& name) const
 {
-    if (GetStyleSheet())
-    {
-        int count = GetItemCount();
-
-        int i;
-        for (i = 0; i < (int) count; i++)
-        {
-            wxRichTextStyleDefinition* def = GetStyle(i);
-            if (def->GetName() == name)
-                return i;
-        }
-    }
-    return -1;
+    return m_styleNames.Index(name);
 }
 
 /// Set selection for string
