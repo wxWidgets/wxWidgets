@@ -716,6 +716,11 @@ windows it is more or less independent of the screen window size.", "");
         GetVirtualSizeTuple);
 
 
+    DocDeclStr(
+        virtual wxSize , GetWindowBorderSize() const,
+        "Return the size of the left/right and top/bottom borders.", "");
+    
+   
 // TODO: using directors?
 //     // Override these methods for windows that have a virtual size
 //     // independent of their client size.  eg. the virtual area of a
