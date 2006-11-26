@@ -3,6 +3,12 @@
 wxRichTextCtrl provides a generic, ground-up implementation of a text control
 capable of showing multiple styles and images.
 
+wxRichTextCtrl sends notification events: see \helpref{wxRichTextEvent}{wxrichtextevent}.
+It also sends the standard wxTextCtrl events wxEVT\_COMMAND\_TEXT\_ENTER and wxEVT\_COMMAND\_TEXT\_UPDATED,
+and wxTextUrlEvent when URL content is clicked.
+
+For more information, see the \helpref{wxRichTextCtrl overview}{wxrichtextctrloverview}.
+
 \wxheading{Derived from}
 
 wxTextCtrlBase

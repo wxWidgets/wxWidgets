@@ -1,20 +1,29 @@
 \section{\class{wxRichTextEvent}}\label{wxrichtextevent}
 
-This is the event class for wxRichTextCtrl notifications. Note that event generation
-is incomplete; events to be implemented include selection of text, deletion, insertion, and so on.
+This is the event class for \helpref{wxRichTextCtrl}{wxrichtextctrl} notifications.
 
 \wxheading{Event table macros}
 
 To process a rich text event, use these event handler macros to direct input to a member
 function that takes a wxRichTextEvent argument.
 
-\twocolwidtha{7cm}
+\twocolwidtha{10cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf EVT\_RICHTEXT\_LEFT\_CLICK(id, func)}}{Process a wxEVT\_COMMAND\_RICHTEXT\_LEFT\_CLICK event. Not currently implemented.}
-\twocolitem{{\bf EVT\_RICHTEXT\_RIGHT\_CLICK(id, func)}}{Process a wxEVT\_COMMAND\_RICHTEXT\_RIGHT\_CLICK event. Not currently implemented.}
-\twocolitem{{\bf EVT\_RICHTEXT\_MIDDLE\_CLICK(id, func)}}{Process a wxEVT\_COMMAND\_RICHTEXT\_MIDDLE\_CLICK event. Not currently implemented.}
-\twocolitem{{\bf EVT\_RICHTEXT\_LEFT\_DCLICK(id, func)}}{Process a wxEVT\_COMMAND\_RICHTEXT\_LEFT\_DCLICK event. Not currently implemented.}
-\twocolitem{{\bf EVT\_RICHTEXT\_RETURN(id, func)}}{Process a wxEVT\_COMMAND\_RICHTEXT\_RETURN event, generated when the user presses the return key.}
+%\twocolitem{{\bf EVT\_RICHTEXT\_LEFT\_CLICK(id, func)}}{Process a wxEVT\_COMMAND\_RICHTEXT\_LEFT\_CLICK event. Not currently implemented.}
+%\twocolitem{{\bf EVT\_RICHTEXT\_RIGHT\_CLICK(id, func)}}{Process a wxEVT\_COMMAND\_RICHTEXT\_RIGHT\_CLICK event. Not currently implemented.}
+%\twocolitem{{\bf EVT\_RICHTEXT\_MIDDLE\_CLICK(id, func)}}{Process a wxEVT\_COMMAND\_RICHTEXT\_MIDDLE\_CLICK event. Not currently implemented.}
+%\twocolitem{{\bf EVT\_RICHTEXT\_LEFT\_DCLICK(id, func)}}{Process a wxEVT\_COMMAND\_RICHTEXT\_LEFT\_DCLICK event. Not currently implemented.}
+\twocolitem{{\bf EVT\_RICHTEXT\_CHARACTER(id, func)}}{Process a wxEVT\_COMMAND\_RICHTEXT\_CHARACTER event, generated when the user presses a character key. Valid event functions: GetFlags, GetPosition, GetCharacter.}
+\twocolitem{{\bf EVT\_RICHTEXT\_DELETE(id, func)}}{Process a wxEVT\_COMMAND\_RICHTEXT\_DELETE event, generated when the user presses the backspace or delete key. Valid event functions: GetFlags, GetPosition.}
+\twocolitem{{\bf EVT\_RICHTEXT\_RETURN(id, func)}}{Process a wxEVT\_COMMAND\_RICHTEXT\_RETURN event, generated when the user presses the return key. Valid event functions: GetFlags, GetPosition.}
+%\twocolitem{{\bf EVT\_RICHTEXT\_SELECTION\_CHANGED(id, func)}}{Process a wxEVT\_COMMAND\_RICHTEXT\_SELECTION\_CHANGED event, generated when the selection has been changed. Not currently implemented.}
+\twocolitem{{\bf EVT\_RICHTEXT\_STYLE\_CHANGED(id, func)}}{Process a wxEVT\_COMMAND\_RICHTEXT\_STYLE\_CHANGED event, generated when styling has been applied to the control. Valid event functions: GetPosition, GetRange.}
+%\twocolitem{{\bf EVT\_RICHTEXT\_STYLESHEET\_CHANGING(id, func)}}{Process a wxEVT\_COMMAND\_RICHTEXT\_STYLESHEET\_CHANGING event, generated when the control's stylesheet is about to change, for example the user added, edited or deleted a style.}
+\twocolitem{{\bf EVT\_RICHTEXT\_STYLESHEET\_CHANGED(id, func)}}{Process a wxEVT\_COMMAND\_RICHTEXT\_STYLESHEET\_CHANGING event, generated when the control's stylesheet has changed, for example the user added, edited or deleted a style. Valid event functions: GetRange, GetPosition.}
+\twocolitem{{\bf EVT\_RICHTEXT\_STYLESHEET\_REPLACING(id, func)}}{Process a wxEVT\_COMMAND\_RICHTEXT\_STYLESHEET\_REPLACING event, generated when the control's stylesheet is about to be replaced, for example when a file is loaded into the control. Valid event functions: Veto, GetOldStyleSheet, GetNewStyleSheet.}
+\twocolitem{{\bf EVT\_RICHTEXT\_STYLESHEET\_REPLACED(id, func)}}{Process a wxEVT\_COMMAND\_RICHTEXT\_STYLESHEET\_REPLACED event, generated when the control's stylesheet has been replaced, for example when a file is loaded into the control. Valid event functions: GetOldStyleSheet, GetNewStyleSheet.}
+\twocolitem{{\bf EVT\_RICHTEXT\_CONTENT\_INSERTED(id, func)}}{Process a wxEVT\_COMMAND\_RICHTEXT\_CONTENT\_INSERTED event, generated when content has been inserted into the control. Valid event functions: GetPosition, GetRange.}
+\twocolitem{{\bf EVT\_RICHTEXT\_CONTENT\_DELETED(id, func)}}{Process a wxEVT\_COMMAND\_RICHTEXT\_CONTENT\_DELETED event, generated when content has been deleted from the control. Valid event functions: GetPosition, GetRange.}
 \end{twocollist}%
  
 \wxheading{Derived from}
@@ -43,28 +52,79 @@ Constructors.
 
 Clones the event.
 
+\membersection{wxRichTextEvent::GetCharacter}\label{wxrichtexteventgetcharacter}
+
+\constfunc{wxChar}{GetCharacter}{\void}
+
+Returns the character pressed, within a wxEVT\_COMMAND\_RICHTEXT\_CHARACTER event.
+
 \membersection{wxRichTextEvent::GetFlags}\label{wxrichtexteventgetflags}
 
 \constfunc{int}{GetFlags}{\void}
 
-Returns flags indicating modifier keys pressed.
+Returns flags indicating modifier keys pressed. Possible values are wxRICHTEXT\_CTRL\_DOWN,
+wxRICHTEXT\_SHIFT\_DOWN, and wxRICHTEXT\_ALT\_DOWN.
 
-\membersection{wxRichTextEvent::GetIndex}\label{wxrichtexteventgetindex}
+\membersection{wxRichTextEvent::GetNewStyleSheet}\label{wxrichtexteventgetnewstylesheet}
 
-\constfunc{int}{GetIndex}{\void}
+\constfunc{wxRichTextStyleSheet*}{GetNewStyleSheet}{\void}
 
-Not currently used.
+Returns the new style sheet. Can be used in a wxEVT\_COMMAND\_RICHTEXT\_STYLESHEET\_CHANGING or
+wxEVT\_COMMAND\_RICHTEXT\_STYLESHEET\_CHANGED event handler.
+
+\membersection{wxRichTextEvent::GetOldStyleSheet}\label{wxrichtexteventgetoldstylesheet}
+
+\constfunc{wxRichTextStyleSheet*}{GetOldStyleSheet}{\void}
+
+Returns the old style sheet. Can be used in a wxEVT\_COMMAND\_RICHTEXT\_STYLESHEET\_CHANGING or
+wxEVT\_COMMAND\_RICHTEXT\_STYLESHEET\_CHANGED event handler.
+
+\membersection{wxRichTextEvent::GetPosition}\label{wxrichtexteventgetposition}
+
+\constfunc{long}{GetPosition}{\void}
+
+Returns the buffer position at which the event occured.
+
+\membersection{wxRichTextEvent::GetRange}\label{wxrichtexteventgetrange}
+
+\constfunc{wxRichTextRange}{GetRange}{\void}
+
+Gets the range for the current operation.
+
+\membersection{wxRichTextEvent::SetCharacter}\label{wxrichtexteventsetcharacter}
+
+\func{void}{SetCharacter}{\param{wxChar }{ch}}
+
+Sets the character variable.
 
 \membersection{wxRichTextEvent::SetFlags}\label{wxrichtexteventsetflags}
 
 \func{void}{SetFlags}{\param{int }{flags}}
 
 Sets flags indicating modifier keys pressed. Possible values are wxRICHTEXT\_CTRL\_DOWN,
-wxRICHTEXT\_SHIFT\_DOWN, andwxRICHTEXT\_ALT\_DOWN.
+wxRICHTEXT\_SHIFT\_DOWN, and wxRICHTEXT\_ALT\_DOWN.
 
-\membersection{wxRichTextEvent::SetIndex}\label{wxrichtexteventsetindex}
+\membersection{wxRichTextEvent::SetNewStyleSheet}\label{wxrichtexteventsetnewstylesheet}
 
-\func{void}{SetIndex}{\param{int }{n}}
+\func{void}{SetNewStyleSheet}{\param{wxRichTextStyleSheet*}{ sheet}}
 
-Not currently used.
+Sets the new style sheet variable.
+
+\membersection{wxRichTextEvent::SetOldStyleSheet}\label{wxrichtexteventsetoldstylesheet}
+
+\func{void}{SetOldStyleSheet}{\param{wxRichTextStyleSheet*}{ sheet}}
+
+Sets the old style sheet variable.
+
+\membersection{wxRichTextEvent::SetPosition}\label{wxrichtexteventsetposition}
+
+\func{void}{SetPosition}{\param{long }{pos}}
+
+Sets the buffer position variable.
+
+\membersection{wxRichTextEvent::SetRange}\label{wxrichtexteventsetrange}
+
+\func{void}{SetRange}{\param{const wxRichTextRange\&}{ range}}
+
+Sets the range variable.
 

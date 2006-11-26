@@ -1,22 +1,28 @@
 \section{wxRichTextCtrl overview}\label{wxrichtextctrloverview}
 
-Classes: \helpref{wxRichTextCtrl}{wxrichtextctrl}, \helpref{wxRichTextBuffer}{wxrichtextbuffer}, 
-\helpref{wxRichTextAttr}{wxrichtextattr}, \helpref{wxTextAttrEx}{wxtextattrex}, 
-\helpref{wxRichTextCharacterStyleDefinition}{wxrichtextcharacterstyledefinition}, 
+{\bf Major classes:} \helpref{wxRichTextCtrl}{wxrichtextctrl}, \helpref{wxRichTextBuffer}{wxrichtextbuffer}, \helpref{wxRichTextEvent}{wxrichtextevent}
+
+{\bf Helper classes:} \helpref{wxRichTextAttr}{wxrichtextattr}, \helpref{wxTextAttrEx}{wxtextattrex}, 
+\helpref{wxRichTextRange}{wxrichtextrange}
+
+{\bf File handler classes:} \helpref{wxRichTextFileHandler}{wxrichtextfilehandler}, \helpref{wxRichTextHTMLHandler}{wxrichtexthtmlhandler}, 
+\helpref{wxRichTextXMLHandler}{wxrichtextxmlhandler}
+
+{\bf Style classes:} \helpref{wxRichTextCharacterStyleDefinition}{wxrichtextcharacterstyledefinition}, 
 \helpref{wxRichTextParagraphStyleDefinition}{wxrichtextparagraphstyledefinition}, 
 \helpref{wxRichTextListStyleDefinition}{wxrichtextliststyledefinition}, 
-\helpref{wxRichTextStyleSheet}{wxrichtextstylesheet}, 
-\helpref{wxRichTextStyleComboCtrl}{wxrichtextstylecomboctrl}, 
+\helpref{wxRichTextStyleSheet}{wxrichtextstylesheet}
+
+{\bf Additional controls:} \helpref{wxRichTextStyleComboCtrl}{wxrichtextstylecomboctrl}, 
 \helpref{wxRichTextStyleListBox}{wxrichtextstylelistbox}, 
-\helpref{wxRichTextStyleListCtrl}{wxrichtextstylelistctrl}, 
-\helpref{wxRichTextStyleOrganiserDialog}{wxrichtextstyleorganiserdialog}, 
-\helpref{wxRichTextEvent}{wxrichtextevent}, \helpref{wxRichTextRange}{wxrichtextrange}, 
-\helpref{wxRichTextFileHandler}{wxrichtextfilehandler}, \helpref{wxRichTextHTMLHandler}{wxrichtexthtmlhandler}, 
-\helpref{wxRichTextXMLHandler}{wxrichtextxmlhandler}, 
-\helpref{wxRichTextFormattingDialog}{wxrichtextformattingdialog}, 
-\helpref{wxRichTextPrinting}{wxrichtextprinting}, 
+\helpref{wxRichTextStyleListCtrl}{wxrichtextstylelistctrl}
+
+{\bf Printing classes:} \helpref{wxRichTextPrinting}{wxrichtextprinting}, 
 \helpref{wxRichTextPrintout}{wxrichtextprintout}, 
-\helpref{wxRichTextHeaderFooterData}{wxrichtextheaderfooterdata}, 
+\helpref{wxRichTextHeaderFooterData}{wxrichtextheaderfooterdata}
+
+{\bf Dialog classes:} \helpref{wxRichTextStyleOrganiserDialog}{wxrichtextstyleorganiserdialog}, 
+\helpref{wxRichTextFormattingDialog}{wxrichtextformattingdialog}, 
 \helpref{wxSymbolPickerDialog}{wxsymbolpickerdialog}
 
 wxRichTextCtrl provides a generic implementation of a rich text editor that can handle different character
@@ -48,7 +54,7 @@ There are a few disadvantages to using wxRichTextCtrl. It is not native,
 so does not behave exactly as a native wxTextCtrl, although common editing conventions
 are followed. Users may miss the built-in spelling correction on Mac OS X, or any
 special character input that may be provided by the native control. It would also
-be a bad choice if intended users rely on screen readers that would be unhappy
+be a poor choice if intended users rely on screen readers that would be not work well
 with non-native text input implementation. You might mitigate this by providing
 the choice between wxTextCtrl and wxRichTextCtrl, with fewer features in the
 former case.
@@ -214,8 +220,8 @@ be processed by the control rather than being used for navigation between contro
 
 \subsubsection{wxRichTextCtrl and styles}
 
-Styling attributes are represented by one of three classes: \helpref{wxTextAttr}{wxtextattr}, \helpref{wxTextAttrEx}{wxtextattrex} and \helpref{wxRichTextAttr}{wxrichtextattr}.
-wxTextAttr is shared across all controls that are derived from wxTextCtrl and
+Styling attributes are represented by three classes: \helpref{wxTextAttr}{wxtextattr}, \helpref{wxTextAttrEx}{wxtextattrex} and \helpref{wxRichTextAttr}{wxrichtextattr}.
+wxTextAttr is shared across all controls that are derived from wxTextCtrlBase and
 can store basic character and paragraph attributes. wxTextAttrEx derives
 from wxTextAttr and adds some further attributes that are only supported
 by wxRichTextCtrl. Finally, wxRichTextAttr is a more efficient version
@@ -342,17 +348,18 @@ always has one such buffer.
 
 The content is represented by a hierarchy of objects, all derived from
 wxRichTextObject. An object might be an image, a fragment of text, a paragraph,
-or a whole buffer. Objects store a wxRichTextAttr containing style information;
-although it contains both paragraph formatting and character style, the
-paragraph style information is ignored by children of a paragraph (only
-character style is relevant to these objects).
+or a whole buffer. Objects store a wxTextAttrEx containing style information;
+a paragraph object can contain both paragraph and character information, but
+content objects such as text can only store character information. The final
+style displayed in the control or in a printout is a combination of base
+style, paragraph style and content (character) style.
 
 The top of the hierarchy is the buffer, a kind of wxRichTextParagraphLayoutBox.
 containing further wxRichTextParagraph objects, each of which can include text,
 images and potentially other types of object.
 
 Each object maintains a range (start and end position) measured
-from the start of the main parent box.
+from the start of the main parent object.
 
 When Layout is called on an object, it is given a size which the object
 must limit itself to, or one or more flexible directions (vertical
@@ -368,7 +375,7 @@ A paragraph of pure text with the same style contains just one further
 object, a wxRichTextPlainText object. When styling is applied to part of
 this object, the object is decomposed into separate objects, one object
 for each different character style. So each object within a paragraph always has
-just one wxRichTextAttr object to denote its character style. Of course, this can
+just one wxTextAttrEx object to denote its character style. Of course, this can
 lead to fragmentation after a lot of edit operations, potentially leading
 to several objects with the same style where just one would do. So
 a Defragment function is called when updating the control's display, to ensure that
