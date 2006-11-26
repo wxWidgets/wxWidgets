@@ -1234,7 +1234,7 @@ bool wxGridCellFloatEditor::IsAcceptedKey(wxKeyEvent& event)
 // ----------------------------------------------------------------------------
 
 // the default values for GetValue()
-wxString wxGridCellBoolEditor::ms_stringValues[2] = { _T("1"), _T("") };
+wxString wxGridCellBoolEditor::ms_stringValues[2] = { _T(""), _T("1") };
 
 void wxGridCellBoolEditor::Create(wxWindow* parent,
                                   wxWindowID id,
