@@ -37,8 +37,12 @@ while (child) {
 
 
         // process properties of <tag1>
-        wxString propvalue1 = child->GetPropVal(wxT("prop1"), wxT("default-value"));
-        wxString propvalue2 = child->GetPropVal(wxT("prop2"), wxT("default-value"));
+        wxString propvalue1 = 
+            child->GetPropVal(wxT("prop1"), 
+                              wxT("default-value"));
+        wxString propvalue2 = 
+            child->GetPropVal(wxT("prop2"), 
+                              wxT("default-value"));
 
         ...
 
@@ -57,7 +61,9 @@ and indentation, you need to turn off whitespace-only textnode removal and autom
 \begin{verbatim}
 wxXmlDocument doc;
 doc.Load(wxT("myfile.xml"), wxT("UTF-8"), wxXMLDOC_KEEP_WHITESPACE_NODES);
-doc.Save(wxT("myfile2.xml"), wxXML_NO_INDENTATION);       // myfile2.xml will be indentic to myfile.xml
+
+// myfile2.xml will be indentic to myfile.xml saving it this way:
+doc.Save(wxT("myfile2.xml"), wxXML_NO_INDENTATION);
 \end{verbatim}
 
 Using default parameters, you will get a reformatted document which in general is different from
@@ -66,7 +72,7 @@ the original loaded content:
 \begin{verbatim}
 wxXmlDocument doc;
 doc.Load(wxT("myfile.xml"));
-doc.Save(wxT("myfile2.xml"));       // myfile2.xml != myfile.xml
+doc.Save(wxT("myfile2.xml"));  // myfile2.xml != myfile.xml
 \end{verbatim}
 
 
@@ -94,15 +100,15 @@ doc.Save(wxT("myfile2.xml"));       // myfile2.xml != myfile.xml
 
 \func{}{wxXmlDocument}{\param{const wxString\& }{filename}, \param{const wxString\& }{encoding = wxT("UTF-8")}, \param{int }{flags = wxXMLDOC\_NONE}}
 
-Loads the given {\it filename} using the given encoding. See \helpref{Load()}{wxxmldocumentload}.
+Loads the given {\it filename} using the given encoding. See \helpref{Load}{wxxmldocumentload}.
 
 \func{}{wxXmlDocument}{\param{wxInputStream\& }{stream}, \param{const wxString\& }{encoding = wxT("UTF-8")}, \param{int }{flags = wxXMLDOC\_NONE}}
 
-Loads the XML document from given stream using the given encoding. See \helpref{Load()}{wxxmldocumentload}.
+Loads the XML document from given stream using the given encoding. See \helpref{Load}{wxxmldocumentload}.
 
 \func{}{wxXmlDocument}{\param{const wxXmlDocument\& }{doc}}
 
-Copy constructor.
+Copy constructor. Deep copies all the XML tree of the given document.
 
 
 \membersection{wxXmlDocument::\destruct{wxXmlDocument}}\label{wxxmldocumentdtor}
@@ -129,9 +135,9 @@ Note that the caller is reponsible for deleting the returned node in order to av
 \constfunc{wxString}{GetEncoding}{\void}
 
 Returns encoding of in-memory representation of the document
-(same as passed to \helpref{Load()}{wxxmldocumentload} or constructor, defaults to UTF-8).
+(same as passed to \helpref{Load}{wxxmldocumentload} or constructor, defaults to UTF-8).
 
-NB: this is meaningless in Unicode build where data are stored as wchar\_t*.
+NB: this is meaningless in Unicode build where data are stored as {\tt wchar\_t*}.
 
 
 
@@ -141,7 +147,7 @@ NB: this is meaningless in Unicode build where data are stored as wchar\_t*.
 
 Returns encoding of document (may be empty).
 
-Note: this is the encoding original file was saved in, *not* the
+Note: this is the encoding original file was saved in, {\bf not} the
 encoding of in-memory representation!
 
 
@@ -227,7 +233,8 @@ Sets the enconding of the file which will be used to save the document.
 \func{void}{SetRoot}{\param{wxXmlNode* }{node}}
 
 Sets the root node of this document. Deletes previous root node.
-Use \helpref{DetachRoot}{wxxmldocumentdetachroot} and then SetRoot if you want
+Use \helpref{DetachRoot}{wxxmldocumentdetachroot} and then 
+\helpref{SetRoot}{wxxmldocumentsetroot} if you want
 to replace the root node without deleting the old document tree.
 
 
@@ -242,5 +249,5 @@ Sets the version of the XML file which will be used to save the document.
 
 \func{wxXmlDocument\& operator}{operator=}{\param{const wxXmlDocument\& }{doc}}
 
-Copies the given document.
+Deep copies the given document.
 

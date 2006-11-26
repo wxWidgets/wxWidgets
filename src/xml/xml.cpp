@@ -386,7 +386,11 @@ void wxXmlDocument::DoCopy(const wxXmlDocument& doc)
     m_encoding = doc.m_encoding;
 #endif
     m_fileEncoding = doc.m_fileEncoding;
-    m_root = new wxXmlNode(*doc.m_root);
+
+    if (doc.m_root)
+        m_root = new wxXmlNode(*doc.m_root);
+    else
+        m_root = NULL;
 }
 
 bool wxXmlDocument::Load(const wxString& filename, const wxString& encoding, int flags)
