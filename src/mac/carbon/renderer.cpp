@@ -56,13 +56,30 @@ public:
         wxCoord position,
         wxOrientation orient,
         int flags = 0 );
-        
+
+    virtual void DrawComboBoxDropButton(wxWindow *win,
+                                        wxDC& dc,
+                                        const wxRect& rect,
+                                        int flags = 0);
+    
+    virtual void DrawPushButton(wxWindow *win,
+                                wxDC& dc,
+                                const wxRect& rect,
+                                int flags = 0);
+    
     virtual void DrawItemSelectionRect(wxWindow *win,
                                        wxDC& dc,
                                        const wxRect& rect,
                                        int flags = 0);
 
 private:
+    void DrawMacThemeButton(wxWindow *win,
+                            wxDC& dc,
+                            const wxRect& rect,
+                            int flags,
+                            int kind,
+                            int adornment);
+        
     // the tree buttons
     wxBitmap m_bmpTreeExpanded;
     wxBitmap m_bmpTreeCollapsed;
@@ -368,3 +385,105 @@ wxRendererMac::DrawItemSelectionRect(wxWindow *win,
     dc.SetBrush( selBrush );
     dc.DrawRectangle( rect );
 }
+
+
+void
+wxRendererMac::DrawMacThemeButton(wxWindow *win,
+                                  wxDC& dc,
+                                  const wxRect& rect,
+                                  int flags,
+                                  int kind,
+                                  int adornment)
+{
+#if !wxMAC_USE_CORE_GRAPHICS
+    const wxCoord x = dc.LogicalToDeviceX(rect.x);
+    const wxCoord y = dc.LogicalToDeviceY(rect.y);
+    const wxCoord w = dc.LogicalToDeviceXRel(rect.width);
+    const wxCoord h = dc.LogicalToDeviceYRel(rect.height);
+#else
+    // now the wxGCDC is using native transformations
+    const wxCoord x = rect.x;
+    const wxCoord y = rect.y;
+    const wxCoord w = rect.width;
+    const wxCoord h = rect.height;
+#endif
+
+    dc.SetBrush( *wxTRANSPARENT_BRUSH );
+
+    HIRect headerRect = CGRectMake( x, y, w, h );
+    if ( !dc.IsKindOf( CLASSINFO( wxPaintDC ) ) )
+    {
+        Rect r =
+        {
+            (short) headerRect.origin.y, (short) headerRect.origin.x,
+            (short) (headerRect.origin.y + headerRect.size.height),
+            (short) (headerRect.origin.x + headerRect.size.width)
+        };
+
+        RgnHandle updateRgn = NewRgn();
+        RectRgn( updateRgn, &r );
+        HIViewSetNeedsDisplayInRegion( (HIViewRef) win->GetHandle(), updateRgn, true );
+        DisposeRgn( updateRgn );
+    }
+    else
+    {
+        CGContextRef cgContext;
+
+#if wxMAC_USE_CORE_GRAPHICS
+        cgContext = (CGContextRef) dc.GetGraphicsContext()->GetNativeContext();
+#else
+        Rect bounds;
+
+        GetPortBounds( (CGrafPtr) dc.m_macPort, &bounds );
+        QDBeginCGContext( (CGrafPtr) dc.m_macPort, &cgContext );
+
+        CGContextTranslateCTM( cgContext, 0, bounds.bottom - bounds.top );
+        CGContextScaleCTM( cgContext, 1, -1 );
+
+        HIShapeReplacePathInCGContext( HIShapeCreateWithQDRgn( (RgnHandle) dc.m_macCurrentClipRgn ), cgContext );
+        CGContextClip( cgContext );
+        HIViewConvertRect( &headerRect, (HIViewRef) win->GetHandle(), (HIViewRef) win->MacGetTopLevelWindow()->GetHandle() );
+#endif
+
+        {
+            HIThemeButtonDrawInfo drawInfo;
+            HIRect labelRect;
+
+            memset( &drawInfo, 0, sizeof(drawInfo) );
+            drawInfo.version = 0;
+            drawInfo.kind = kind;
+            drawInfo.state = (flags & wxCONTROL_DISABLED) ? kThemeStateInactive : kThemeStateActive;
+            drawInfo.value = (flags & wxCONTROL_SELECTED) ? kThemeButtonOn : kThemeButtonOff;
+            drawInfo.adornment = adornment;
+
+            HIThemeDrawButton( &headerRect, &drawInfo, cgContext, kHIThemeOrientationNormal, &labelRect );
+        }
+
+#if wxMAC_USE_CORE_GRAPHICS
+#else
+        QDEndCGContext( (CGrafPtr) dc.m_macPort, &cgContext );
+#endif
+    }
+}
+
+
+void
+wxRendererMac::DrawComboBoxDropButton(wxWindow *win,
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int flags)
+{
+    DrawMacThemeButton(win, dc, rect, flags,
+                       kThemeArrowButton, kThemeAdornmentArrowDownArrow);
+}
+    
+void
+wxRendererMac::DrawPushButton(wxWindow *win,
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int flags)
+{
+    DrawMacThemeButton(win, dc, rect, flags,
+                       kThemeBevelButton, kThemeAdornmentNone);
+}
+    
