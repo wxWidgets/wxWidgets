@@ -2005,7 +2005,11 @@ void wxAuiTabCtrl::OnLeftDown(wxMouseEvent& evt)
     {
         int new_selection = GetIdxFromWindow(wnd);
 
-        if (new_selection != GetActivePage())
+        // wxAuiNotebooks always want to receive this event
+        // even if the tab is already active, because they may
+        // have multiple tab controls
+        if (new_selection != GetActivePage() ||
+            GetParent()->IsKindOf(CLASSINFO(wxAuiNotebook)))
         {
             wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CHANGING, m_windowId);
             e.SetSelection(new_selection);
@@ -2766,6 +2770,10 @@ int wxAuiNotebook::GetSelection() const
 // SetSelection() sets the currently active page
 size_t wxAuiNotebook::SetSelection(size_t new_page)
 {
+    // don't change the page unless necessary
+    if (new_page == m_curpage)
+        return m_curpage;
+        
     wxWindow* wnd = m_tabs.GetWindowFromIdx(new_page);
     if (!wnd)
         return m_curpage;
@@ -3275,6 +3283,10 @@ void wxAuiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
         dest_tabs->DoShowHide();
         dest_tabs->Refresh();
 
+        // force the set selection function reset the selection
+        m_curpage = -1;
+        
+        // set the active page to the one we just split off
         SetSelection(m_tabs.GetIdxFromWindow(page_info.window));
         
         UpdateHintWindowSize();
