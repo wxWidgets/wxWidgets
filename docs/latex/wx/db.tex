@@ -1383,7 +1383,7 @@ When called with {\it sqlLogOFF}, the logging file is closed, and any calls to \
 
 \membersection{wxDb::SQLColumnName}\label{wxdbsqlcolumnname}
 
-\func{const wxString}{SQLColumnName}{\param{const char *}{ colName}}
+\func{const wxString}{SQLColumnName}{\param{const wxChar *}{ colName}}
 
 Returns the column name in a form ready for use in SQL statements.
 In most cases, the column name is returned verbatim.  But some databases
@@ -1405,7 +1405,7 @@ before including the column name in a SQL statement}
 
 \membersection{wxDb::SQLTableName}\label{wxdbsqltablename}
 
-\func{const wxString}{SQLTableName}{\param{const char *}{ tableName}}
+\func{const wxString}{SQLTableName}{\param{const wxChar *}{ tableName}}
 
 Returns the table name in a form ready for use in SQL statements.
 In most cases, the table name is returned verbatim.  But some databases

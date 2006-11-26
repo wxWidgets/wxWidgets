@@ -12,7 +12,7 @@ uses its knowledge of internals of wxString class to achieve this).
 This class is used in the same way as other dynamic \helpref{arrays}{wxarray},
 except that no {\it WX\_DEFINE\_ARRAY} declaration is needed for it. When a
 string is added or inserted in the array, a copy of the string is created, so
-the original string may be safely deleted (e.g. if it was a {\it char *} 
+the original string may be safely deleted (e.g. if it was a {\it wxChar *} 
 pointer the memory it was using can be freed immediately after this). In
 general, there is no need to worry about string memory deallocation when using
 this class - it will always free the memory it uses itself.
@@ -171,7 +171,7 @@ Returns the number of items in the array.
 
 \membersection{wxArrayString::Index}\label{wxarraystringindex}
 
-\func{int}{Index}{\param{const char *}{ sz}, \param{bool}{ bCase = true}, \param{bool}{ bFromEnd = false}}
+\func{int}{Index}{\param{const wxChar *}{ sz}, \param{bool}{ bCase = true}, \param{bool}{ bFromEnd = false}}
 
 Search the element in the array, starting from the beginning if
 {\it bFromEnd} is false or from end otherwise. If {\it bCase}, comparison is
@@ -229,7 +229,7 @@ are done in release mode.
 
 \membersection{wxArrayString::Remove}\label{wxarraystringremove}
 
-\func{void}{Remove}{\param{const char *}{ sz}}
+\func{void}{Remove}{\param{const wxChar *}{ sz}}
 
 Removes the first item matching this value. An assert failure is provoked by
 an attempt to remove an element which does not exist in debug build.
