@@ -412,11 +412,11 @@ public:
     bool HasTabs() const;
     bool HasLeftIndent() const;
     bool HasRightIndent() const;
-    bool HasWeight() const;
-    bool HasSize() const;
-    bool HasItalic() const;
-    bool HasUnderlined() const;
-    bool HasFaceName() const;
+//     bool HasWeight() const;
+//     bool HasSize() const;
+//     bool HasItalic() const;
+//     bool HasUnderlined() const;
+//     bool HasFaceName() const;
     bool HasFont() const;
 
     bool HasParagraphSpacingAfter() const;
