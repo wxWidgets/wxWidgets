@@ -156,10 +156,8 @@ public:
 
     virtual void DrawTab(wxDC& dc,
                          wxWindow* wnd,
+                         const wxAuiNotebookPage& pane,
                          const wxRect& in_rect,
-                         const wxString& caption,
-                         const wxBitmap& bitmap,
-                         bool active,
                          int close_button_state,
                          wxRect* out_tab_rect,
                          wxRect* out_button_rect,
@@ -172,11 +170,8 @@ public:
                          int bitmap_id,
                          int button_state,
                          int orientation,
-                         const wxBitmap& bitmap_override,
                          wxRect* out_rect) = 0;
-               
-    virtual int GetIndentSize() = 0;
-  
+    
     virtual wxSize GetTabSize(
                          wxDC& dc,
                          wxWindow* wnd,
@@ -186,14 +181,17 @@ public:
                          int close_button_state,
                          int* x_extent) = 0;
                          
-    virtual int ShowWindowList(
+    virtual int ShowDropDown(
                          wxWindow* wnd,
-                         const wxArrayString& items,
+                         const wxAuiNotebookPageArray& items,
                          int active_idx) = 0;
+                         
+    virtual int GetIndentSize() = 0;
     
-    virtual int GetBestTabCtrlSize(wxWindow* wnd,
-                                   wxAuiNotebookPageArray& pages,
-                                   const wxSize& required_bmp_size) = 0;    
+    virtual int GetBestTabCtrlSize(
+                         wxWindow* wnd,
+                         const wxAuiNotebookPageArray& pages,
+                         const wxSize& required_bmp_size) = 0;    
 };
 
 
@@ -221,10 +219,8 @@ public:
                      
     void DrawTab(wxDC& dc,
                  wxWindow* wnd,
+                 const wxAuiNotebookPage& pane,
                  const wxRect& in_rect,
-                 const wxString& caption,
-                 const wxBitmap& bitmap,
-                 bool active,
                  int close_button_state,
                  wxRect* out_tab_rect,
                  wxRect* out_button_rect,
@@ -237,7 +233,6 @@ public:
                  int bitmap_id,
                  int button_state,
                  int orientation,
-                 const wxBitmap& bitmap_override,
                  wxRect* out_rect);
     
     int GetIndentSize();
@@ -251,13 +246,13 @@ public:
                  int close_button_state,
                  int* x_extent);
                   
-    int ShowWindowList(
+    int ShowDropDown(
                  wxWindow* wnd,
-                 const wxArrayString& items,
+                 const wxAuiNotebookPageArray& items,
                  int active_idx);
 
     int GetBestTabCtrlSize(wxWindow* wnd,
-                 wxAuiNotebookPageArray& pages,
+                 const wxAuiNotebookPageArray& pages,
                  const wxSize& required_bmp_size);  
 
 protected:
@@ -309,10 +304,8 @@ public:
                                           
     void DrawTab(wxDC& dc,
                  wxWindow* wnd,
+                 const wxAuiNotebookPage& pane,
                  const wxRect& in_rect,
-                 const wxString& caption,
-                 const wxBitmap& bitmap,
-                 bool active,
                  int close_button_state,
                  wxRect* out_tab_rect,
                  wxRect* out_button_rect,
@@ -325,7 +318,6 @@ public:
                  int bitmap_id,
                  int button_state,
                  int orientation,
-                 const wxBitmap& bitmap_override,
                  wxRect* out_rect);
              
     int GetIndentSize();
@@ -339,13 +331,13 @@ public:
                  int close_button_state,
                  int* x_extent);
                   
-    int ShowWindowList(
+    int ShowDropDown(
                  wxWindow* wnd,
-                 const wxArrayString& items,
+                 const wxAuiNotebookPageArray& items,
                  int active_idx);
 
     int GetBestTabCtrlSize(wxWindow* wnd,
-                 wxAuiNotebookPageArray& pages,
+                 const wxAuiNotebookPageArray& pages,
                  const wxSize& required_bmp_size);  
 
 protected:

@@ -299,10 +299,8 @@ void wxAuiDefaultTabArt::DrawBackground(wxDC& dc,
 
 void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
                                  wxWindow* wnd,
+                                 const wxAuiNotebookPage& page,
                                  const wxRect& in_rect,
-                                 const wxString& caption_text,
-                                 const wxBitmap& bitmap,
-                                 bool active,
                                  int close_button_state,
                                  wxRect* out_tab_rect,
                                  wxRect* out_button_rect,
@@ -313,8 +311,8 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
     wxCoord textx, texty;
 
     // if the caption is empty, measure some temporary text
-    wxString caption = caption_text;
-    if (caption_text.empty())
+    wxString caption = page.caption;
+    if (caption.empty())
         caption = wxT("Xj");
 
     dc.SetFont(m_selected_font);
@@ -326,9 +324,9 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
     // figure out the size of the tab
     wxSize tab_size = GetTabSize(dc,
                                  wnd,
-                                 caption,
-                                 bitmap,
-                                 active,
+                                 page.caption,
+                                 page.bitmap,
+                                 page.active,
                                  close_button_state,
                                  x_extent);
 
@@ -338,12 +336,12 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
     wxCoord tab_y = in_rect.y + in_rect.height - tab_height;
 
 
-    caption = caption_text;
+    caption = page.caption;
 
 
     // select pen, brush and font for the tab to be drawn
 
-    if (active)
+    if (page.active)
     {
         dc.SetFont(m_selected_font);
         textx = selected_textx;
@@ -397,7 +395,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
     int drawn_tab_height = border_points[0].y - border_points[1].y;
 
 
-    if (active)
+    if (page.active)
     {
         // draw active tab
 
@@ -465,7 +463,7 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
 
     // there are two horizontal grey lines at the bottom of the tab control,
     // this gets rid of the top one of those lines in the tab control
-    if (active)
+    if (page.active)
     {
         wxColor start_color = m_base_colour;
         dc.SetPen(m_base_colour_pen);
@@ -484,17 +482,17 @@ void wxAuiDefaultTabArt::DrawTab(wxDC& dc,
     }
 
 
-    if (bitmap.IsOk())
+    if (page.bitmap.IsOk())
     {
         int bitmap_offset = tab_x + 8;
 
         // draw bitmap
-        dc.DrawBitmap(bitmap,
+        dc.DrawBitmap(page.bitmap,
                       bitmap_offset,
-                      drawn_tab_yoff + (drawn_tab_height/2) - (bitmap.GetHeight()/2),
+                      drawn_tab_yoff + (drawn_tab_height/2) - (page.bitmap.GetHeight()/2),
                       true);
 
-        text_offset = bitmap_offset + bitmap.GetWidth();
+        text_offset = bitmap_offset + page.bitmap.GetWidth();
         text_offset += 3; // bitmap padding
     }
      else
@@ -598,46 +596,39 @@ void wxAuiDefaultTabArt::DrawButton(wxDC& dc,
                                     int bitmap_id,
                                     int button_state,
                                     int orientation,
-                                    const wxBitmap& bitmap_override,
                                     wxRect* out_rect)
 {
     wxBitmap bmp;
     wxRect rect;
 
-    if (bitmap_override.IsOk())
+    switch (bitmap_id)
     {
-        bmp = bitmap_override;
+        case wxAUI_BUTTON_CLOSE:
+            if (button_state & wxAUI_BUTTON_STATE_DISABLED)
+                bmp = m_disabled_close_bmp;
+                 else
+                bmp = m_active_close_bmp;
+            break;
+        case wxAUI_BUTTON_LEFT:
+            if (button_state & wxAUI_BUTTON_STATE_DISABLED)
+                bmp = m_disabled_left_bmp;
+                 else
+                bmp = m_active_left_bmp;
+            break;
+        case wxAUI_BUTTON_RIGHT:
+            if (button_state & wxAUI_BUTTON_STATE_DISABLED)
+                bmp = m_disabled_right_bmp;
+                 else
+                bmp = m_active_right_bmp;
+            break;
+        case wxAUI_BUTTON_WINDOWLIST:
+            if (button_state & wxAUI_BUTTON_STATE_DISABLED)
+                bmp = m_disabled_windowlist_bmp;
+                 else
+                bmp = m_active_windowlist_bmp;
+            break;
     }
-     else
-    {
-        switch (bitmap_id)
-        {
-            case wxAUI_BUTTON_CLOSE:
-                if (button_state & wxAUI_BUTTON_STATE_DISABLED)
-                    bmp = m_disabled_close_bmp;
-                     else
-                    bmp = m_active_close_bmp;
-                break;
-            case wxAUI_BUTTON_LEFT:
-                if (button_state & wxAUI_BUTTON_STATE_DISABLED)
-                    bmp = m_disabled_left_bmp;
-                     else
-                    bmp = m_active_left_bmp;
-                break;
-            case wxAUI_BUTTON_RIGHT:
-                if (button_state & wxAUI_BUTTON_STATE_DISABLED)
-                    bmp = m_disabled_right_bmp;
-                     else
-                    bmp = m_active_right_bmp;
-                break;
-            case wxAUI_BUTTON_WINDOWLIST:
-                if (button_state & wxAUI_BUTTON_STATE_DISABLED)
-                    bmp = m_disabled_windowlist_bmp;
-                     else
-                    bmp = m_active_windowlist_bmp;
-                break;
-        }
-    }
+
 
     if (!bmp.IsOk())
         return;
@@ -665,16 +656,17 @@ void wxAuiDefaultTabArt::DrawButton(wxDC& dc,
 }
 
 
-int wxAuiDefaultTabArt::ShowWindowList(wxWindow* wnd,
-                                       const wxArrayString& items,
-                                       int active_idx)
+int wxAuiDefaultTabArt::ShowDropDown(wxWindow* wnd,
+                                     const wxAuiNotebookPageArray& pages,
+                                     int active_idx)
 {
 	wxMenu menuPopup;
 
-    size_t i, count = items.GetCount();
+    size_t i, count = pages.GetCount();
     for (i = 0; i < count; ++i)
     {
-        menuPopup.AppendCheckItem(1000+i, items.Item(i));
+        const wxAuiNotebookPage& page = pages.Item(i);
+        menuPopup.AppendCheckItem(1000+i, page.caption);
     }
 
     if (active_idx != -1)
@@ -703,7 +695,7 @@ int wxAuiDefaultTabArt::ShowWindowList(wxWindow* wnd,
 }
 
 int wxAuiDefaultTabArt::GetBestTabCtrlSize(wxWindow* wnd,
-                                           wxAuiNotebookPageArray& pages,
+                                           const wxAuiNotebookPageArray& pages,
                                            const wxSize& required_bmp_size)
 {
     wxClientDC dc(wnd);
@@ -874,10 +866,8 @@ void wxAuiSimpleTabArt::DrawBackground(wxDC& dc,
 
 void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
                                 wxWindow* wnd,
+                                const wxAuiNotebookPage& page,
                                 const wxRect& in_rect,
-                                const wxString& caption_text,
-                                const wxBitmap& bitmap,
-                                bool active,
                                 int close_button_state,
                                 wxRect* out_tab_rect,
                                 wxRect* out_button_rect,
@@ -888,8 +878,8 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
     wxCoord textx, texty;
 
     // if the caption is empty, measure some temporary text
-    wxString caption = caption_text;
-    if (caption_text.empty())
+    wxString caption = page.caption;
+    if (caption.empty())
         caption = wxT("Xj");
 
     dc.SetFont(m_selected_font);
@@ -901,9 +891,9 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
     // figure out the size of the tab
     wxSize tab_size = GetTabSize(dc,
                                  wnd,
-                                 caption,
-                                 bitmap,
-                                 active,
+                                 page.caption,
+                                 page.bitmap,
+                                 page.active,
                                  close_button_state,
                                  x_extent);
 
@@ -912,11 +902,11 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
     wxCoord tab_x = in_rect.x;
     wxCoord tab_y = in_rect.y + in_rect.height - tab_height;
 
-    caption = caption_text;
+    caption = page.caption;
 
     // select pen, brush and font for the tab to be drawn
 
-    if (active)
+    if (page.active)
     {
         dc.SetPen(m_selected_bkpen);
         dc.SetBrush(m_selected_bkbrush);
@@ -993,7 +983,7 @@ void wxAuiSimpleTabArt::DrawTab(wxDC& dc,
     if (close_button_state != wxAUI_BUTTON_STATE_HIDDEN)
     {
         wxBitmap bmp;
-        if (active)
+        if (page.active)
             bmp = m_active_close_bmp;
              else
             bmp = m_disabled_close_bmp;
@@ -1054,45 +1044,37 @@ void wxAuiSimpleTabArt::DrawButton(wxDC& dc,
                                    int bitmap_id,
                                    int button_state,
                                    int orientation,
-                                   const wxBitmap& bitmap_override,
                                    wxRect* out_rect)
 {
     wxBitmap bmp;
     wxRect rect;
 
-    if (bitmap_override.IsOk())
+    switch (bitmap_id)
     {
-        bmp = bitmap_override;
-    }
-     else
-    {
-        switch (bitmap_id)
-        {
-            case wxAUI_BUTTON_CLOSE:
-                if (button_state & wxAUI_BUTTON_STATE_DISABLED)
-                    bmp = m_disabled_close_bmp;
-                     else
-                    bmp = m_active_close_bmp;
-                break;
-            case wxAUI_BUTTON_LEFT:
-                if (button_state & wxAUI_BUTTON_STATE_DISABLED)
-                    bmp = m_disabled_left_bmp;
-                     else
-                    bmp = m_active_left_bmp;
-                break;
-            case wxAUI_BUTTON_RIGHT:
-                if (button_state & wxAUI_BUTTON_STATE_DISABLED)
-                    bmp = m_disabled_right_bmp;
-                     else
-                    bmp = m_active_right_bmp;
-                break;
-            case wxAUI_BUTTON_WINDOWLIST:
-                if (button_state & wxAUI_BUTTON_STATE_DISABLED)
-                    bmp = m_disabled_windowlist_bmp;
-                     else
-                    bmp = m_active_windowlist_bmp;
-                break;
-        }
+        case wxAUI_BUTTON_CLOSE:
+            if (button_state & wxAUI_BUTTON_STATE_DISABLED)
+                bmp = m_disabled_close_bmp;
+                 else
+                bmp = m_active_close_bmp;
+            break;
+        case wxAUI_BUTTON_LEFT:
+            if (button_state & wxAUI_BUTTON_STATE_DISABLED)
+                bmp = m_disabled_left_bmp;
+                 else
+                bmp = m_active_left_bmp;
+            break;
+        case wxAUI_BUTTON_RIGHT:
+            if (button_state & wxAUI_BUTTON_STATE_DISABLED)
+                bmp = m_disabled_right_bmp;
+                 else
+                bmp = m_active_right_bmp;
+            break;
+        case wxAUI_BUTTON_WINDOWLIST:
+            if (button_state & wxAUI_BUTTON_STATE_DISABLED)
+                bmp = m_disabled_windowlist_bmp;
+                 else
+                bmp = m_active_windowlist_bmp;
+            break;
     }
 
     if (!bmp.IsOk())
@@ -1121,16 +1103,17 @@ void wxAuiSimpleTabArt::DrawButton(wxDC& dc,
 }
 
 
-int wxAuiSimpleTabArt::ShowWindowList(wxWindow* wnd,
-                                      const wxArrayString& items,
-                                      int active_idx)
+int wxAuiSimpleTabArt::ShowDropDown(wxWindow* wnd,
+                                    const wxAuiNotebookPageArray& pages,
+                                    int active_idx)
 {
 	wxMenu menuPopup;
 
-    size_t i, count = items.GetCount();
+    size_t i, count = pages.GetCount();
     for (i = 0; i < count; ++i)
     {
-        menuPopup.AppendCheckItem(1000+i, items.Item(i));
+        const wxAuiNotebookPage& page = pages.Item(i);
+        menuPopup.AppendCheckItem(1000+i, page.caption);
     }
 
     if (active_idx != -1)
@@ -1165,7 +1148,7 @@ int wxAuiSimpleTabArt::ShowWindowList(wxWindow* wnd,
 }
 
 int wxAuiSimpleTabArt::GetBestTabCtrlSize(wxWindow* wnd,
-                                          wxAuiNotebookPageArray& WXUNUSED(pages),
+                                          const wxAuiNotebookPageArray& WXUNUSED(pages),
                                           const wxSize& WXUNUSED(required_bmp_size))
 {
     wxClientDC dc(wnd);
@@ -1667,7 +1650,6 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
                           button.id,
                           button.cur_state,
                           wxRIGHT,
-                          wxNullBitmap,
                           &button.rect);
 
         offset -= button.rect.GetWidth();
@@ -1697,7 +1679,6 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
                           button.id,
                           button.cur_state,
                           wxLEFT,
-                          wxNullBitmap,
                           &button.rect);
 
         offset += button.rect.GetWidth();
@@ -1775,10 +1756,8 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
 
         m_art->DrawTab(dc,
                        wnd,
+                       page,
                        rect,
-                       page.caption,
-                       page.bitmap,
-                       page.active,
                        tab_button.cur_state,
                        &page.rect,
                        &tab_button.rect,
@@ -1820,10 +1799,8 @@ void wxAuiTabContainer::Render(wxDC* raw_dc, wxWindow* wnd)
         rect.x = active_offset;
         m_art->DrawTab(dc,
                        wnd,
+                       page,
                        active_rect,
-                       page.caption,
-                       page.bitmap,
-                       page.active,
                        tab_button.cur_state,
                        &page.rect,
                        &tab_button.rect,
@@ -2200,16 +2177,7 @@ void wxAuiTabCtrl::OnButton(wxAuiNotebookEvent& event)
     }
      else if (button == wxAUI_BUTTON_WINDOWLIST)
     {
-        wxArrayString as;
-
-        size_t i, page_count = m_pages.GetCount();
-        for (i = 0; i < page_count; ++i)
-        {
-            wxAuiNotebookPage& page = m_pages.Item(i);
-            as.Add(page.caption);
-        }
-
-        int idx = GetArtProvider()->ShowWindowList(this, as, GetActivePage());
+        int idx = GetArtProvider()->ShowDropDown(this, m_pages, GetActivePage());
 
         if (idx != -1)
         {
