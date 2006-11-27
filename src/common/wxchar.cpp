@@ -624,7 +624,7 @@ void wxPrintfConvSpec::ReplaceAsteriskWith(int width)
 
     // find the first * in our flag buffer
     char *pwidth = strchr(m_szFlags, '*');
-    wxASSERT(pwidth);
+    wxCHECK_RET(pwidth, _T("field width must be specified"));
 
     // save what follows the * (the +1 is to skip the asterisk itself!)
     strcpy(temp, pwidth+1);
