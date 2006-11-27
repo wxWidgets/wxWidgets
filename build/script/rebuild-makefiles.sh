@@ -9,7 +9,9 @@ LD_LIBRARY_PATH=/usr/local/lib
 update_from_cvs()
 {
     (
-    cd ${WORKDIR}/wxWidgets &&  cvs -z3 update -P -d
+    cd ${WORKDIR}/wxWidgets 
+    cvs -z3 update -P -d
+    find . -name \.#\* | xargs rm -rf
     )
 
 }
