@@ -25,8 +25,8 @@
 #include "wx/unix/execute.h"
 
 #ifdef __WXDEBUG__
+    #include "wx/gtk/assertdlg_gtk.h"
     #if wxUSE_STACKWALKER
-        #include "wx/gtk/assertdlg_gtk.h"
         #include "wx/stackwalk.h"
     #endif // wxUSE_STACKWALKER
 #endif // __WXDEBUG__
