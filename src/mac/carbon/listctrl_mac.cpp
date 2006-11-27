@@ -149,7 +149,10 @@ static pascal OSStatus wxMacListCtrlEventHandler( EventHandlerCallRef handler , 
                     GetDataBrowserSortProperty(controlRef, &col);
                     int column = col - kMinColumnId;
                     le.m_col = column;
-                    window->GetEventHandler()->ProcessEvent( le );
+                    // FIXME: we can't use the sort property for virtual listctrls
+                    // so we need to find a better way to determine which column was clicked...
+                    if (!window->IsVirtual())
+                        window->GetEventHandler()->ProcessEvent( le );
                 }
                 result = CallNextEventHandler(handler, event);
                 break;
@@ -805,7 +808,6 @@ bool wxListCtrl::GetColumn(int col, wxListItem& item) const
 
     if (m_dbImpl)
     {
-
         wxColumnList::compatibility_iterator node = m_colsInfo.Item( col );
         wxASSERT_MSG( node, _T("invalid column index in wxMacListCtrlItem") );
         wxListItem* column = node->GetData();
@@ -1818,7 +1820,7 @@ long wxListCtrl::InsertItem(wxListItem& info)
     if (m_genericImpl)
         return m_genericImpl->InsertItem(info);
 
-    if (m_dbImpl)
+    if (m_dbImpl && !IsVirtual())
     {
         int count = GetItemCount();
 
@@ -1830,9 +1832,9 @@ long wxListCtrl::InsertItem(wxListItem& info)
         event.SetEventObject( this );
         event.m_itemIndex = info.m_itemId;
         GetEventHandler()->ProcessEvent( event );
+        return info.m_itemId;
     }
-
-    return info.m_itemId;
+    return -1;
 }
 
 long wxListCtrl::InsertItem(long index, const wxString& label)
