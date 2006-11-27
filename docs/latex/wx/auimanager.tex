@@ -10,9 +10,9 @@ determine each pane's docking and floating behavior. wxAuiManager
 uses wxWidgets' sizer mechanism to plan the layout of each frame. It
 uses a replaceable dock art class to do all drawing, so all drawing is
 localized in one area, and may be customized depending on an
-applications' specific needs.
+application's specific needs.
 
-wxAuiManager works as follows: The programmer adds panes to the class,
+wxAuiManager works as follows: the programmer adds panes to the class,
 or makes changes to existing pane properties (dock position, floating
 state, show state, etc.). To apply these changes, wxAuiManager's
 Update() function is called. This batch processing can be used to avoid
@@ -48,19 +48,18 @@ Center. This is fairly self-explanatory. The pane will be placed in the
 location specified by this variable.
 
 {\bf Position:}
-More than one pane can be placed inside of a dock. Imagine to panes
+More than one pane can be placed inside of a dock. Imagine two panes
 being docked on the left side of a window. One pane can be placed over
 another. In proportionally managed docks, the pane position indicates
-it's sequential position, starting with zero. So, in our scenario with
+its sequential position, starting with zero. So, in our scenario with
 two panes docked on the left side, the top pane in the dock would have
 position 0, and the second one would occupy position 1.
 
 {\bf Row:}
 A row can allow for two docks to be placed next to each other. One of
 the most common places for this to happen is in the toolbar. Multiple
-toolbar rows are allowed, the first row being in row 0, and the second
-in row 1. Rows can also be used on vertically docked panes.
-
+toolbar rows are allowed, the first row being row 0, and the second
+row 1. Rows can also be used on vertically docked panes.
 
 {\bf Layer:}
 A layer is akin to an onion. Layer 0 is the very center of the
@@ -73,7 +72,7 @@ understand layers is by running the wxAUI sample.
 
 \wxheading{Derived from}
 
-\helpref{wxEvent}{wxevent}
+\helpref{wxEvtHandler}{wxevthandler}
 
 \wxheading{Include files}
 
