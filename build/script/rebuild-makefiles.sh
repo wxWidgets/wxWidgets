@@ -17,7 +17,7 @@ update_from_cvs()
 
 regenerate_makefiles()
 {
-    (cd ${WORKDIR}/wxWidgets/build/bakefiles && nice python -O ${WORKDIR}/bakefile/bin/bakefile_gen)
+    (cd ${WORKDIR}/wxWidgets/build/bakefiles && nice python -O /usr/local/bin/bakefile_gen)
 }
 
 
@@ -55,10 +55,12 @@ package_makefiles()
     do_package tar gnu       makefile.unx 
     do_package zip mingw     makefile.gcc config.gcc
     do_package zip dmars     makefile.dmc config.dmc makefile.dms config.dms
-    do_package zip watcom    makefile.wat config.wat
+    do_package zip watcom_msw    makefile.wat config.wat
     do_package zip msvc      makefile.vc config.vc
     do_package zip msvc6prj  '*.dsp' '*.dsw'
     do_package zip evcprj    '*.vcp' '*.vcw'
+  (cd ${WORKDIR}/wxWidgets/build/bakefiles && nice python -O /usr/local/bin/bakefile_gen -f watcom -d ../os2/Bakefiles.os2.bkgen)
+  do_package zip watcom_os2    makefile.wat config.wat
 }
 
 copy_files ()
