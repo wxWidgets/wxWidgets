@@ -162,7 +162,9 @@ wxSize wxTreeCtrlBase::DoGetBestSize() const
     else // use precise, if potentially slow, size computation method
     {
         // iterate over all items recursively
-        wxGetBestTreeSize(this, GetRootItem(), size);
+        wxTreeItemId idRoot = GetRootItem();
+        if ( idRoot.IsOk() )
+            wxGetBestTreeSize(this, idRoot, size);
     }
 
     // need some minimal size even for empty tree
