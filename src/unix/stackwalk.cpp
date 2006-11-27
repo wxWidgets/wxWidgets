@@ -239,8 +239,9 @@ int wxStackWalker::InitFrames(wxStackFrame *arr, size_t n, void **addresses, cha
     // parse addr2line output (should be exactly 2 lines for each address)
     // reusing the g_buf used for building the command line above
     wxString name, filename;
-    unsigned long line, curr=0;
-    for (size_t i=0; i<n; i++)
+    unsigned long line = 0,
+                  curr = 0;
+    for  ( size_t i = 0; i < n; i++ )
     {
         // 1st line has function name
         if ( fgets(g_buf, WXSIZEOF(g_buf), fp) )
@@ -266,10 +267,9 @@ int wxStackWalker::InitFrames(wxStackFrame *arr, size_t n, void **addresses, cha
             const size_t posColon = filename.find(_T(':'));
             if ( posColon != wxString::npos )
             {
-                // parse line number
-                if ( !wxString(filename, posColon + 1, wxString::npos).
-                        ToULong(&line) )
-                    line = 0;
+                // parse line number (it's ok if it fails, this will just leave
+                // line at its current, invalid, 0 value)
+                wxString(filename, posColon + 1, wxString::npos).ToULong(&line);
 
                 // remove line number from 'filename'
                 filename.erase(posColon);
