@@ -460,8 +460,8 @@ extern WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvUI;
 // filename conversion macros
 // ----------------------------------------------------------------------------
 
-// filenames are multibyte on Unix and probably widechar on Windows?
-#if defined(__UNIX__) || defined(__BORLANDC__) || defined(__WXMAC__ )
+// filenames are multibyte on Unix and widechar on Windows
+#if defined(__UNIX__) || defined(__WXMAC__)
     #define wxMBFILES 1
 #else
     #define wxMBFILES 0
