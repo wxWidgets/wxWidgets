@@ -274,7 +274,11 @@ Borland C++ compilation
 
 The minimum version required is 5.5 (last version supported by BC++ 5.0 was
 2.4.2), which can be downloaded for free from:
-http://www.borland.com/products/downloads/download_cbuilder.html#
+http://www.borland.com/products/downloads/download_cbuilder.html
+
+The version 5.6 included in Borland C++ Builder 2006 works as well after the
+following small change: please remove the test for __WINDOWS__ from line 88
+of the file BCCDIR\include\stl\_threads.h.
 
 Compiling using the makefiles:
 
