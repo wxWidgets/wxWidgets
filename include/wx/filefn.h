@@ -197,17 +197,20 @@ enum wxFileKind
     // to avoid using them as they're not present in earlier versions and
     // always using the native functions spelling is easier than testing for
     // the versions
-    #if defined(__BORLANDC__)
-        // Borland doesn't like "struct ::stat" so don't use the scope
-        // resolution operator with it
-        #define wxPOSIX_IDENT(func)    func
-    #elif defined(__DMC__) || defined(__WATCOMC__)
+    #if defined(__BORLANDC__) || defined(__DMC__) || defined(__WATCOMC__)
         #define wxPOSIX_IDENT(func)    ::func
     #else // by default assume MSVC-compatible names
         #define wxPOSIX_IDENT(func)    _ ## func
         #define wxHAS_UNDERSCORES_IN_POSIX_IDENTS
     #endif
 
+    // at least Borland 5.5 doesn't like "struct ::stat" so don't use the scope
+    // resolution operator present in wxPOSIX_IDENT for it
+    #ifdef __BORLANDC__
+        #define wxPOSIX_STRUCT(s)    struct s
+    #else
+        #define wxPOSIX_STRUCT(s)    struct wxPOSIX_IDENT(s)
+    #endif
 
     // first functions not working with strings, i.e. without ANSI/Unicode
     // complications
@@ -267,11 +270,10 @@ enum wxFileKind
                 WXDLLIMPEXP_BASE int wxMSLU__wrmdir(const wxChar *name);
 
                 WXDLLIMPEXP_BASE int
-                wxMSLU__wstat(const wxChar *name,
-                              struct wxPOSIX_IDENT(stat) *buffer);
+                wxMSLU__wstat(const wxChar *name, wxPOSIX_STRUCT(stat) *buffer);
                 WXDLLIMPEXP_BASE int
                 wxMSLU__wstati64(const wxChar *name,
-                                 struct wxPOSIX_IDENT(stati64) *buffer);
+                                 wxPOSIX_STRUCT(stati64) *buffer);
             #endif // Windows compilers with MSLU support
 
             #define   wxOpen       wxMSLU__wopen
