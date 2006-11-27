@@ -57,7 +57,7 @@
     //#endif
     #include "odbcinst.h"
 #else
-    #if defined(__WINDOWS__) && ( defined(HAVE_W32API_H) || defined(__BORLANDC__) )
+    #if defined(__WINDOWS__) && ( defined(HAVE_W32API_H) || defined(__BORLANDC__)  || defined (__DMC__))
         #include "wx/msw/wrapwin.h"
     #endif
     extern "C" {
