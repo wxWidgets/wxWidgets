@@ -52,6 +52,7 @@ private:
         CPPUNIT_TEST( ToULongLong );
 #endif // wxLongLong_t
         CPPUNIT_TEST( ToDouble );
+        CPPUNIT_TEST( WriteBuf );
     CPPUNIT_TEST_SUITE_END();
 
     void String();
@@ -74,6 +75,7 @@ private:
     void ToULongLong();
 #endif // wxLongLong_t
     void ToDouble();
+    void WriteBuf();
 
     DECLARE_NO_COPY_CLASS(StringTestCase)
 };
@@ -602,3 +604,29 @@ void StringTestCase::ToDouble()
             CPPUNIT_ASSERT_EQUAL( ld.value, d );
     }
 }
+
+void StringTestCase::WriteBuf()
+{
+    wxString s;
+    wxStrcpy(wxStringBuffer(s, 10), _T("foo"));
+
+    CPPUNIT_ASSERT_EQUAL(_T('f'), s[0u]);
+    CPPUNIT_ASSERT_EQUAL(_T('o'), s[1]);
+    CPPUNIT_ASSERT_EQUAL(_T('o'), s[2]);
+    CPPUNIT_ASSERT_EQUAL(3u, s.length());
+
+    {
+        wxChar *p = s.GetWriteBuf(10);
+        wxStrcpy(p, _T("barrbaz"));
+        s.UngetWriteBuf(4);
+
+        CPPUNIT_ASSERT_EQUAL(_T('b'), s[0u]);
+        CPPUNIT_ASSERT_EQUAL(_T('a'), s[1]);
+        CPPUNIT_ASSERT_EQUAL(_T('r'), s[2]);
+        CPPUNIT_ASSERT_EQUAL(_T('r'), s[3]);
+        CPPUNIT_ASSERT_EQUAL(4u, s.length());
+
+        CPPUNIT_ASSERT_EQUAL( 0, wxStrcmp(_T("barr"), s) );
+    }
+}
+
