@@ -1077,16 +1077,21 @@ wxChar *wxString::GetWriteBuf(size_t nLen)
 // put string back in a reasonable state after GetWriteBuf
 void wxString::UngetWriteBuf()
 {
-  GetStringData()->nDataLength = wxStrlen(m_pchData);
-  GetStringData()->Validate(true);
+  UngetWriteBuf(wxStrlen(m_pchData));
 }
 
 void wxString::UngetWriteBuf(size_t nLen)
 {
-  GetStringData()->nDataLength = nLen;
-  GetStringData()->Validate(true);
+  wxStringData * const pData = GetStringData();
+
+  wxASSERT_MSG( nLen < pData->nAllocLength, _T("buffer overrun") );
+
+  // the strings we store are always NUL-terminated
+  pData->data()[nLen] = _T('\0');
+  pData->nDataLength = nLen;
+  pData->Validate(true);
 }
-#endif
+#endif // !wxUSE_STL
 
 // ---------------------------------------------------------------------------
 // data access
