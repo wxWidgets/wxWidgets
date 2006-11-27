@@ -7,6 +7,7 @@ TBFLAGS = ( wx.TB_HORIZONTAL
             | wx.NO_BORDER
             | wx.TB_FLAT
             #| wx.TB_TEXT
+            #| wx.TB_HORZ_LAYOUT
             )
 
 #---------------------------------------------------------------------------
