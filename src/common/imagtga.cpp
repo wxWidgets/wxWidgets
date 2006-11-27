@@ -30,6 +30,7 @@
 
 #include "wx/imagtga.h"
 #include "wx/log.h"
+#include "wx/scopeguard.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -186,6 +187,8 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
     {
         return wxTGA_MEMERR;
     }
+
+    wxON_BLOCK_EXIT1(free, imageData);
 
     unsigned char *dst = image->GetData();
 
@@ -625,8 +628,6 @@ int ReadTGA(wxImage* image, wxInputStream& stream)
         default:
             return wxTGA_INVFORMAT;
     }
-
-    free(imageData);
 
     return wxTGA_OK;
 }
