@@ -3651,8 +3651,14 @@ wxSize wxGenericTreeCtrl::DoGetBestSize() const
 {
     wxSize size = wxTreeCtrlBase::DoGetBestSize();
 
-    // The generic control seems to have an implicit border
+    // there seems to be an implicit extra border around the items, although
+    // I'm not really sure where does it come from -- but without this, the
+    // scrollbars appear in a tree with default/best size
     size.IncBy(4, 4);
+
+    // avoid caching (necessarily arbitrary) default size for empty tree
+    if ( GetRootItem().IsOk() )
+        CacheBestSize(size);
 
     return size;
 }
