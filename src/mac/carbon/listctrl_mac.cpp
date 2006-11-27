@@ -1008,6 +1008,12 @@ bool wxListCtrl::GetItem(wxListItem& info) const
         {
             info.SetText( OnGetItemText(info.m_itemId, info.m_col) );
             info.SetImage( OnGetItemColumnImage(info.m_itemId, info.m_col) );
+            if (info.GetMask() & wxLIST_MASK_STATE)
+            {
+                if (IsDataBrowserItemSelected( m_dbImpl->GetControlRef(), info.m_itemId+1 )) 
+                    info.SetState(info.GetState() | wxLIST_STATE_SELECTED);
+            }
+            
             wxListItemAttr* attrs = OnGetItemAttr( info.m_itemId );
             if (attrs)
             {
@@ -1058,16 +1064,32 @@ int wxListCtrl::GetItemState(long item, long stateMask) const
     if (m_genericImpl)
         return m_genericImpl->GetItemState(item, stateMask);
 
-    wxListItem info;
+    if (m_dbImpl)
+    {
+        if ( HasFlag(wxLC_VIRTUAL) )
+        {
+            if (stateMask == wxLIST_STATE_SELECTED)
+            { 
+                if (IsDataBrowserItemSelected( m_dbImpl->GetControlRef(), item+1 )) 
+                    return wxLIST_STATE_SELECTED;
+                else
+                    return 0; 
+            }
+        }
+        else
+        {
+            wxListItem info;
 
-    info.m_mask = wxLIST_MASK_STATE;
-    info.m_stateMask = stateMask;
-    info.m_itemId = item;
+            info.m_mask = wxLIST_MASK_STATE;
+            info.m_stateMask = stateMask;
+            info.m_itemId = item;
 
-    if (!GetItem(info))
-        return 0;
+            if (!GetItem(info))
+                return 0;
 
-    return info.m_state;
+            return info.m_state;
+        }
+    }
 }
 
 // Sets the item state
@@ -1075,13 +1097,52 @@ bool wxListCtrl::SetItemState(long item, long state, long stateMask)
 {
     if (m_genericImpl)
         return m_genericImpl->SetItemState(item, state, stateMask);
-
-    wxListItem info;
-    info.m_itemId = item;
-    info.m_mask = wxLIST_MASK_STATE;
-    info.m_stateMask = stateMask;
-    info.m_state = state;
-    return SetItem(info);
+        
+    if (m_dbImpl)
+    {
+        DataBrowserSetOption option = kDataBrowserItemsAdd;
+        if ( stateMask == wxLIST_STATE_SELECTED && state == 0 )
+            option = kDataBrowserItemsRemove;
+    
+        if (item == -1)
+        {
+            if ( HasFlag(wxLC_VIRTUAL) )
+            {
+                wxMacDataItemBrowserSelectionSuppressor suppressor(m_dbImpl);
+                m_dbImpl->SetSelectedAllItems(option);
+            }
+            else
+            {
+                for(int i = 0; i < GetItemCount();i++)
+                {
+                    wxListItem info;
+                    info.m_itemId = i;
+                    info.m_mask = wxLIST_MASK_STATE;
+                    info.m_stateMask = stateMask;
+                    info.m_state = state;
+                    SetItem(info);
+                }
+            }
+        }
+        else
+        {
+            if ( HasFlag(wxLC_VIRTUAL) )
+            {
+                long itemID = item+1;
+                SetDataBrowserSelectedItems(m_dbImpl->GetControlRef(), 1, (DataBrowserItemID*)&itemID, option);
+            }
+            else
+            {
+                wxListItem info;
+                info.m_itemId = item;
+                info.m_mask = wxLIST_MASK_STATE;
+                info.m_stateMask = stateMask;
+                info.m_state = state;
+                return SetItem(info);
+            }
+        }
+    }
+    return true;
 }
 
 // Sets the item image
