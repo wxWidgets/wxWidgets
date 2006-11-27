@@ -18,6 +18,8 @@
 #include "wx/platform.h"
 #include "wx/dlimpexp.h"
 
+#include <stdio.h>  /* we use FILE below */
+
 #if defined(HAVE_STRTOK_R) && defined(__DARWIN__) && defined(_MSL_USING_MW_C_HEADERS) && _MSL_USING_MW_C_HEADERS
     char *strtok_r(char *, const char *, char **);
 #endif
@@ -1017,9 +1019,6 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
         either because we don't have them at all or because they don't have the
         semantics we need
      */
-
-    #include <stdio.h>  /* for FILE */
-
     int wxScanf( const wxChar *format, ... ) ATTRIBUTE_PRINTF_1;
     int wxSscanf( const wxChar *str, const wxChar *format, ... ) ATTRIBUTE_PRINTF_2;
     int wxFscanf( FILE *stream, const wxChar *format, ... ) ATTRIBUTE_PRINTF_2;
