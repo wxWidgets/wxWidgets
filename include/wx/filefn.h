@@ -197,7 +197,11 @@ enum wxFileKind
     // to avoid using them as they're not present in earlier versions and
     // always using the native functions spelling is easier than testing for
     // the versions
-    #if defined(__BORLANDC__) || defined(__DMC__) || defined(__WATCOMC__)
+    #if defined(__BORLANDC__)
+        // Borland doesn't like "struct ::stat" so don't use the scope
+        // resolution operator with it
+        #define wxPOSIX_IDENT(func)    func
+    #elif defined(__DMC__) || defined(__WATCOMC__)
         #define wxPOSIX_IDENT(func)    ::func
     #else // by default assume MSVC-compatible names
         #define wxPOSIX_IDENT(func)    _ ## func
