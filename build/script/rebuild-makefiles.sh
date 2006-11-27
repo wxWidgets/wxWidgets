@@ -82,12 +82,12 @@ echo CVS Makefiles generated from bakefiles last updated at `date -u` > ${FTPDIR
 find ${FTPDIR}/CVS_HEAD/v1/files -type f -name wx\* -mtime +3 | xargs rm -rf
 cp  ${WORKDIR}/archives/win/*.exe ${FTPDIR}/CVS_HEAD/v1/files
 
-rm -f ${FTPDIR}/CVS_HEAD/v1/*.exe ${FTPDIR}/CVS_Makefiles/MD5SUM
+rm -f ${FTPDIR}/CVS_HEAD/v1/*.exe ${FTPDIR}/CVS_HEAD/v1/MD5SUM
 ##there must be an easier way of doing these links...
 for f in `find ${FTPDIR}/CVS_HEAD/v1/files -type f -name wx\*.exe -mmin -601` ; do
        ln -s $f `echo $f | sed -e "s/-${CURDATE}//" | sed -e "s|/files||" `
 done
-md5sum ${FTPDIR}/CVS_HEAD/v1/wx* > ${FTPDIR}/CVS_Makefiles/MD5SUM
+md5sum ${FTPDIR}/CVS_HEAD/v1/wx* > ${FTPDIR}/CVS_HEAD/v1/MD5SUM
 sleep 10
 echo CVS HEAD  last updated at `date -u` > ${FTPDIR}/CVS_HEAD/v1/updated_at.txt
 
@@ -161,12 +161,10 @@ do_texrtf fl fl.tex contrib
 do_util_texrtf tex2rtf tex2rtf.tex 
 
 cd ${WORKDIR}/archives/
-tar zcvf ${WORKDIR}/archives/wx-docs-html-${CURDATE}.tar.gz  html/wx/*.html html/wx/*.gif html/wx/*.css
-tar zcvf ${WORKDIR}/archives/wx-docs-extra-html-${CURDATE}.tar.gz `find . -name 'wx' -prune -o -name '*.html' -print`
+tar zcvf ${WORKDIR}/archives/wx-docs-html-${CURDATE}.tar.gz `find . -name '*.gif' -print -o -name '*.html' -print` html/wx/*.css
 
-tar zcvf ${WORKDIR}/archives/wx-docs-htb-${CURDATE}.tar.gz  htb/wx.htb
-tar zcvf ${WORKDIR}/archives/wx-docs-extra-htb-${CURDATE}.tar.gz --exclude wx.htb htb/*.htb
-zip -q -9 ${WORKDIR}/archives/wx-docs-htb-${CURDATE}.zip htb/wx.htb
+tar zcvf ${WORKDIR}/archives/wx-docs-htb-${CURDATE}.tar.gz  htb/*
+zip -q -9 ${WORKDIR}/archives/wx-docs-htb-${CURDATE}.zip htb/*
 
 ##remove .con files
 rm ${WORKDIR}/*.con
