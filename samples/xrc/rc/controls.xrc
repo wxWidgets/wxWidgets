@@ -1234,6 +1234,7 @@ lay them out using wxSizers, absolute positioning, everything you like!
             <border>5</border>
             <object class="wxButton" name="wxID_OK">
                 <label>OK</label>
+                <default>1</default>
             </object>
         </object>
     </object>
