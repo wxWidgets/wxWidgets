@@ -103,7 +103,7 @@ wxColor wxAuiStepColour(const wxColor& c, int ialpha)
     g = wxAuiBlendColour(g, bg, alpha);
     b = wxAuiBlendColour(b, bg, alpha);
     
-    return wxColour((int)r, (int)g, (int)b);
+    return wxColour((unsigned char)r, (unsigned char)g, (unsigned char)b);
 }
 
 
