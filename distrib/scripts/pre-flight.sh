@@ -36,10 +36,14 @@ if [ ! -d $WX_SRC_DIR ]; then
   cvs -d:pserver:anoncvs:anoncvs@cvs.wxwidgets.org:/pack/cvsroots/wxwidgets login
   echo "Grabbing wx CVS with tag $BUILD_TAG"
   cvs -d:pserver:anoncvs@cvs.wxwidgets.org:/pack/cvsroots/wxwidgets checkout -r $BUILD_TAG wxWidgets
+  cd $WX_SRC_DIR
 else
     cd $WX_SRC_DIR
     cvs update -d -P
 fi
+#copy setup0.h setup.h for msw
+find . -name setup.h | xargs rm -rf
+cp include/wx/msw/setup0.h include/wx/msw/setup.h
 
 # this is where we will store the wxAll tarball we create
 if [ ! -d $START_DIR/$DISTDIR ]; then
