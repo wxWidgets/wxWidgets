@@ -23,7 +23,9 @@ c:
 cd %WXWIN%
 cvs up -P -d
 cd \wx\inno\wxWidgets
+if exist include\wx\msw\setup.h del include\wx\msw\setup.h
 cvs up -P
+copy include\wx\msw\setup0.h include\wx\msw\setup.h
 echo CVS update  >>  c:\temp.log
 
 rem add bakefile build...
