@@ -1138,24 +1138,18 @@ class AuiTabArt(object):
 
     def DrawTab(*args, **kwargs):
         """
-        DrawTab(self, DC dc, Window wnd, Rect in_rect, String caption, Bitmap bitmap, 
-            bool active, int close_button_state, 
-            Rect out_tab_rect, Rect out_button_rect, 
-            int x_extent)
+        DrawTab(self, DC dc, Window wnd, AuiNotebookPage pane, Rect in_rect, 
+            int close_button_state, Rect out_tab_rect, 
+            Rect out_button_rect, int x_extent)
         """
         return _aui.AuiTabArt_DrawTab(*args, **kwargs)
 
     def DrawButton(*args, **kwargs):
         """
         DrawButton(self, DC dc, Window wnd, Rect in_rect, int bitmap_id, int button_state, 
-            int orientation, Bitmap bitmap_override, 
-            Rect out_rect)
+            int orientation, Rect out_rect)
         """
         return _aui.AuiTabArt_DrawButton(*args, **kwargs)
-
-    def GetIndentSize(*args, **kwargs):
-        """GetIndentSize(self) -> int"""
-        return _aui.AuiTabArt_GetIndentSize(*args, **kwargs)
 
     def GetTabSize(*args, **kwargs):
         """
@@ -1164,9 +1158,13 @@ class AuiTabArt(object):
         """
         return _aui.AuiTabArt_GetTabSize(*args, **kwargs)
 
-    def ShowWindowList(*args, **kwargs):
-        """ShowWindowList(self, Window wnd, wxArrayString items, int active_idx) -> int"""
-        return _aui.AuiTabArt_ShowWindowList(*args, **kwargs)
+    def ShowDropDown(*args, **kwargs):
+        """ShowDropDown(self, Window wnd, wxAuiNotebookPageArray items, int active_idx) -> int"""
+        return _aui.AuiTabArt_ShowDropDown(*args, **kwargs)
+
+    def GetIndentSize(*args, **kwargs):
+        """GetIndentSize(self) -> int"""
+        return _aui.AuiTabArt_GetIndentSize(*args, **kwargs)
 
     def GetBestTabCtrlSize(*args, **kwargs):
         """GetBestTabCtrlSize(self, Window wnd, wxAuiNotebookPageArray pages, Size required_bmp_size) -> int"""
