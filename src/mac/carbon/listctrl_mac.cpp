@@ -2754,7 +2754,7 @@ void wxMacDataBrowserListCtrlControl::ItemNotification(DataBrowserItemID itemID,
         }
         else
         {
-            event.m_itemIndex = (long)itemID;
+            event.m_itemIndex = (long)itemID-1;
         }
 
         switch (message)
