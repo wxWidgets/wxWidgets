@@ -1270,9 +1270,12 @@ class AuiTabContainer(object):
         """GetPageCount(self) -> size_t"""
         return _aui.AuiTabContainer_GetPageCount(*args, **kwargs)
 
-    def GetPage(*args, **kwargs):
-        """GetPage(self, size_t idx) -> AuiNotebookPage"""
-        return _aui.AuiTabContainer_GetPage(*args, **kwargs)
+    def GetPage(*args):
+        """
+        GetPage(self, size_t idx) -> AuiNotebookPage
+        GetPage(self, size_t idx) -> AuiNotebookPage
+        """
+        return _aui.AuiTabContainer_GetPage(*args)
 
     def GetPages(*args, **kwargs):
         """GetPages(self) -> wxAuiNotebookPageArray"""
@@ -1361,6 +1364,22 @@ class AuiNotebook(_core.Control):
         """
         return _aui.AuiNotebook_Create(*args, **kwargs)
 
+    def SetArtProvider(*args, **kwargs):
+        """SetArtProvider(self, AuiTabArt art)"""
+        return _aui.AuiNotebook_SetArtProvider(*args, **kwargs)
+
+    def GetArtProvider(*args, **kwargs):
+        """GetArtProvider(self) -> AuiTabArt"""
+        return _aui.AuiNotebook_GetArtProvider(*args, **kwargs)
+
+    def SetUniformBitmapSize(*args, **kwargs):
+        """SetUniformBitmapSize(self, Size size)"""
+        return _aui.AuiNotebook_SetUniformBitmapSize(*args, **kwargs)
+
+    def SetTabCtrlHeight(*args, **kwargs):
+        """SetTabCtrlHeight(self, int height)"""
+        return _aui.AuiNotebook_SetTabCtrlHeight(*args, **kwargs)
+
     def AddPage(*args, **kwargs):
         """AddPage(self, Window page, String caption, bool select=False, Bitmap bitmap=wxNullBitmap) -> bool"""
         return _aui.AuiNotebook_AddPage(*args, **kwargs)
@@ -1380,22 +1399,6 @@ class AuiNotebook(_core.Control):
         """RemovePage(self, size_t page) -> bool"""
         return _aui.AuiNotebook_RemovePage(*args, **kwargs)
 
-    def SetPageText(*args, **kwargs):
-        """SetPageText(self, size_t page, String text) -> bool"""
-        return _aui.AuiNotebook_SetPageText(*args, **kwargs)
-
-    def SetPageBitmap(*args, **kwargs):
-        """SetPageBitmap(self, size_t page, Bitmap bitmap) -> bool"""
-        return _aui.AuiNotebook_SetPageBitmap(*args, **kwargs)
-
-    def SetSelection(*args, **kwargs):
-        """SetSelection(self, size_t new_page) -> size_t"""
-        return _aui.AuiNotebook_SetSelection(*args, **kwargs)
-
-    def GetSelection(*args, **kwargs):
-        """GetSelection(self) -> int"""
-        return _aui.AuiNotebook_GetSelection(*args, **kwargs)
-
     def GetPageCount(*args, **kwargs):
         """GetPageCount(self) -> size_t"""
         return _aui.AuiNotebook_GetPageCount(*args, **kwargs)
@@ -1408,21 +1411,33 @@ class AuiNotebook(_core.Control):
         """GetPageIndex(self, Window page_wnd) -> int"""
         return _aui.AuiNotebook_GetPageIndex(*args, **kwargs)
 
-    def SetArtProvider(*args, **kwargs):
-        """SetArtProvider(self, AuiTabArt art)"""
-        return _aui.AuiNotebook_SetArtProvider(*args, **kwargs)
+    def SetPageText(*args, **kwargs):
+        """SetPageText(self, size_t page, String text) -> bool"""
+        return _aui.AuiNotebook_SetPageText(*args, **kwargs)
 
-    def GetArtProvider(*args, **kwargs):
-        """GetArtProvider(self) -> AuiTabArt"""
-        return _aui.AuiNotebook_GetArtProvider(*args, **kwargs)
+    def GetPageText(*args, **kwargs):
+        """GetPageText(self, size_t page_idx) -> String"""
+        return _aui.AuiNotebook_GetPageText(*args, **kwargs)
 
-    def SetUniformBitmapSize(*args, **kwargs):
-        """SetUniformBitmapSize(self, Size size)"""
-        return _aui.AuiNotebook_SetUniformBitmapSize(*args, **kwargs)
+    def SetPageBitmap(*args, **kwargs):
+        """SetPageBitmap(self, size_t page, Bitmap bitmap) -> bool"""
+        return _aui.AuiNotebook_SetPageBitmap(*args, **kwargs)
 
-    def SetTabCtrlHeight(*args, **kwargs):
-        """SetTabCtrlHeight(self, int height)"""
-        return _aui.AuiNotebook_SetTabCtrlHeight(*args, **kwargs)
+    def GetPageBitmap(*args, **kwargs):
+        """GetPageBitmap(self, size_t page_idx) -> Bitmap"""
+        return _aui.AuiNotebook_GetPageBitmap(*args, **kwargs)
+
+    def SetSelection(*args, **kwargs):
+        """SetSelection(self, size_t new_page) -> size_t"""
+        return _aui.AuiNotebook_SetSelection(*args, **kwargs)
+
+    def GetSelection(*args, **kwargs):
+        """GetSelection(self) -> int"""
+        return _aui.AuiNotebook_GetSelection(*args, **kwargs)
+
+    def Split(*args, **kwargs):
+        """Split(self, size_t page, int direction)"""
+        return _aui.AuiNotebook_Split(*args, **kwargs)
 
     PageCount = property(GetPageCount,doc="See `GetPageCount`") 
     Selection = property(GetSelection,SetSelection,doc="See `GetSelection` and `SetSelection`") 
