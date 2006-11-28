@@ -1464,6 +1464,14 @@ long wxListCtrl::GetTopItem() const
     if (m_genericImpl)
         return m_genericImpl->GetTopItem();
 
+    if (m_dbImpl)
+    {
+        int flags = 0;
+        long item = HitTest( wxPoint(1, 1), flags);
+        if (flags == wxLIST_HITTEST_ONITEM)
+            return item;
+    }
+
     return 0;
 }
 
@@ -1810,6 +1818,23 @@ wxListCtrl::HitTest(const wxPoint& point, int& flags, long *ptrSubItem) const
     return -1;
 }
 
+int wxListCtrl::GetScrollPos(int orient) const
+{
+    if (m_genericImpl)
+        return m_genericImpl->GetScrollPos(orient);
+        
+    if (m_dbImpl)
+    {
+        UInt32 offsetX, offsetY;
+        m_dbImpl->GetScrollPosition( &offsetY, &offsetX );
+        if ( orient == wxHORIZONTAL )
+           return offsetX;
+        else
+           return offsetY;
+    }
+
+    return 0;
+}
 
 // Inserts an item, returning the index of the new item if successful,
 // -1 otherwise.
@@ -2063,6 +2088,10 @@ void wxListCtrl::SetItemCount(long count)
         // we need to temporarily disable the new item creation notification
         // procedure to speed things up
         // FIXME: Even this doesn't seem to help much...
+        
+        // FIXME: Find a more efficient way to do this.
+        m_dbImpl->MacClear();
+        
         DataBrowserCallbacks callbacks;
         DataBrowserItemNotificationUPP itemUPP;
         GetDataBrowserCallbacks(m_dbImpl->GetControlRef(), &callbacks);
@@ -2108,6 +2137,28 @@ void wxListCtrl::RefreshItems(long itemFrom, long itemTo)
     RefreshRect(rect);
 }
 
+void wxListCtrl::SetDropTarget( wxDropTarget *dropTarget )
+{
+#if wxUSE_DRAG_AND_DROP
+    if (m_genericImpl)
+        m_genericImpl->SetDropTarget( dropTarget );
+        
+    if (m_dbImpl)
+        wxWindow::SetDropTarget( dropTarget );
+#endif
+}
+
+wxDropTarget *wxListCtrl::GetDropTarget() const
+{
+#if wxUSE_DRAG_AND_DROP
+    if (m_genericImpl)
+        return m_genericImpl->GetDropTarget();
+        
+    if (m_dbImpl)
+        return wxWindow::GetDropTarget();
+#endif
+    return NULL;
+}
 
 // wxMac internal data structures
 
@@ -2428,6 +2479,14 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     ThemeDrawingState savedState = NULL;
     CGContextRef context = (CGContextRef)list->MacGetDrawingContext();
     RGBColor labelColor;
+    labelColor.red = 0;
+    labelColor.green = 0;
+    labelColor.blue = 0;
+
+    RGBColor backgroundColor;
+    backgroundColor.red = 255;
+    backgroundColor.green = 255;
+    backgroundColor.blue = 255;
 
     GetDataBrowserItemPartBounds(GetControlRef(), itemID, property, kDataBrowserPropertyEnclosingPart,
               &enclosingRect);
@@ -2447,18 +2506,17 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     }
     if (itemState == kDataBrowserItemIsSelected)
     {
-        RGBColor foregroundColor;
 
         GetThemeDrawingState(&savedState);
 
-        GetThemeBrushAsColor(kThemeBrushAlternatePrimaryHighlightColor, 32, true, &foregroundColor);
+        GetThemeBrushAsColor(kThemeBrushAlternatePrimaryHighlightColor, 32, true, &backgroundColor);
         GetThemeTextColor(kThemeTextColorWhite, gdDepth, colorDevice, &labelColor);
 
         CGContextSaveGState(context);
 
-        CGContextSetRGBFillColor(context, (float)foregroundColor.red / (float)USHRT_MAX,
-                      (float)foregroundColor.green / (float)USHRT_MAX,
-                      (float)foregroundColor.blue / (float)USHRT_MAX, 1.0);
+        CGContextSetRGBFillColor(context, (float)backgroundColor.red / (float)USHRT_MAX,
+                      (float)backgroundColor.green / (float)USHRT_MAX,
+                      (float)backgroundColor.blue / (float)USHRT_MAX, 1.0);
         CGContextFillRect(context, enclosingCGRect);
 
         CGContextRestoreGState(context);
@@ -2470,21 +2528,15 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
             labelColor = MAC_WXCOLORREF( color.GetPixel() );
         else if (list->GetTextColour().Ok())
             labelColor = MAC_WXCOLORREF( list->GetTextColour().GetPixel() );
-        else
-        {
-            labelColor.red = 0;
-            labelColor.green = 0;
-            labelColor.blue = 0;
-        }
 
         if (bgColor.Ok())
         {
-            RGBColor foregroundColor = MAC_WXCOLORREF( bgColor.GetPixel() );
+            backgroundColor = MAC_WXCOLORREF( bgColor.GetPixel() );
             CGContextSaveGState(context);
 
-            CGContextSetRGBFillColor(context, (float)foregroundColor.red / (float)USHRT_MAX,
-                          (float)foregroundColor.green / (float)USHRT_MAX,
-                          (float)foregroundColor.blue / (float)USHRT_MAX, 1.0);
+            CGContextSetRGBFillColor(context, (float)backgroundColor.red / (float)USHRT_MAX,
+                          (float)backgroundColor.green / (float)USHRT_MAX,
+                          (float)backgroundColor.blue / (float)USHRT_MAX, 1.0);
             CGContextFillRect(context, enclosingCGRect);
 
             CGContextRestoreGState(context);
@@ -2500,16 +2552,11 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
             wxBitmap bmp = imageList->GetBitmap(imgIndex);
             IconRef icon = bmp.GetBitmapData()->GetIconRef();
 
-            RGBColor iconLabel;
-            iconLabel.red = 0;
-            iconLabel.green = 0;
-            iconLabel.blue = 0;
-
             CGContextSaveGState(context);
             CGContextTranslateCTM(context, 0,iconCGRect.origin.y + CGRectGetMaxY(iconCGRect));
             CGContextScaleCTM(context,1.0f,-1.0f);
             PlotIconRefInContext(context, &iconCGRect, kAlignNone,
-              active ? kTransformNone : kTransformDisabled, &iconLabel,
+              active ? kTransformNone : kTransformDisabled, NULL,
               kPlotIconRefNormalFlags, icon);
 
             CGContextRestoreGState(context);
@@ -2771,14 +2818,15 @@ Boolean wxMacDataBrowserListCtrlControl::CompareItems(DataBrowserItemID itemOneI
         {
             wxMacListCtrlItem* item = (wxMacListCtrlItem*)itemOneID;
             wxMacListCtrlItem* otherItem = (wxMacListCtrlItem*)itemTwoID;
-            wxListCtrlCompare func = list->GetCompareFunc();
-            long item1 = GetLineFromItem(item);
-            long item2 = GetLineFromItem(otherItem);
-
+            
             // FIXME: This code causes a crash in wxPython for some reason
             // and moreover, further testing shows that the column click event
             // is only sent to the list ctrl after the native control has finished
             // sorting items anyway. So just disable this for now.
+            
+            //wxListCtrlCompare func = list->GetCompareFunc();
+            //long item1 = GetLineFromItem(item);
+            //long item2 = GetLineFromItem(otherItem);
             
             //if (func != NULL && item->HasColumnInfo(colId) && otherItem->HasColumnInfo(colId))
             //    return func(item1, item2, list->GetCompareFuncData()) >= 0;

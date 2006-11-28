@@ -339,6 +339,11 @@ class WXDLLEXPORT wxListCtrl: public wxControl
       SetFocus();
   }
   
+  virtual int GetScrollPos(int orient) const;
+  
+  virtual void SetDropTarget( wxDropTarget *dropTarget );
+  virtual wxDropTarget* GetDropTarget() const;
+  
   // with CG, we need to get the context from an kEventControlDraw event
   // unfortunately, the DataBrowser callbacks don't provide the context
   // and we need it, so we need to set/remove it before and after draw 
@@ -347,6 +352,7 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   void* MacGetDrawingContext() { return m_cgContext; }
 
 protected:
+
   // protected overrides needed for pimpl approach
   virtual void DoSetSize(int x, int y,
                          int width, int height,
