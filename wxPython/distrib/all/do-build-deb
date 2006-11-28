@@ -1,0 +1,31 @@
+#!/bin/bash
+# ---------------------------------------------------------------------------
+
+set -o errexit
+set -o xtrace
+
+echo "-=-=-=-  Hello from $HOSTNAME  -=-=-=-"
+
+VERSION=$1
+VER2=$2
+
+
+tar xjf wxPython-src-$VERSION.tar.bz2
+rm wxPython-src-$VERSION.tar.bz2
+
+mv wxPython-src-$VERSION wxwidgets$VER2-$VERSION
+cd wxwidgets$VER2-$VERSION
+
+CLVERSION=`dpkg-parsechangelog  | sed -n 's/Version: //p' | sed 's/-.*//'`
+if [ $CLVERSION != $VERSION ]; then
+    dch --newversion $VERSION-0 "automated build"
+fi
+
+debian/rules debian/control
+dpkg-buildpackage -rfakeroot -us -uc
+
+cd ..
+rm -r wxwidgets$VER2-$VERSION
+
+echo "-=-=-=-  Goodbye!  -=-=-=-"
+exit 0

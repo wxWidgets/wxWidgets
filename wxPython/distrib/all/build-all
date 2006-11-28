@@ -88,11 +88,16 @@ def getTasks(config_env):
 #          Job("co-mdk2006.24","distrib/all/build-rpm", ["beast", "co-mdk2006", "mdk2006", "2.4"], env=config_env),
           ])
 
+    xavierTask = Task([
+        Job("xavier", "distrib/all/build-deb", ["xavier", "/work/chroot/dapper", "dapper"], env=config_env),
+        ])
+
     buildTasks = [ #jaguarTask,
                    pantherTask,
                    tigerTask,
                    beastTask1,
                    beastTask2,
+                   xavierTask,
                    ]
     
     # Finalization.  This is for things that must wait until all the
@@ -121,7 +126,8 @@ def usage():
     print "   skipdocs     Don't rebuild the docs"
     print "   skipwin      Don't do the remote Windows build"
     print "   skiposx      Don't do the remote OSX build"
-    print "   skiplinux    Don't do the remote Linux (RPM) build"
+    print "   skiprpm      Don't do the remote Linux (RPM) build"
+    print "   skipdeb      Don't do the remote Linux (DEB) build"
     print "   skipclean    Don't do the cleanup step on the remote builds"
     print "   skipupload   Don't upload the builds to starship"
     print "   ansi         Also do the ansi builds"
@@ -166,8 +172,11 @@ def main(args):
         elif flag == "skiposx":
             config.skiposx = "yes"
             
-        elif flag == "skiplinux":
-            config.skiplinux = "yes"
+        elif flag == "skipdeb":
+            config.skipdeb = "yes"
+            
+        elif flag == "skiprpm":
+            config.skiprpm = "yes"
             
         elif flag == "skipclean":
             config.skipclean = "yes"
@@ -198,7 +207,8 @@ def main(args):
         file("DAILY_BUILD", "w").write(config.DAILY)
     sys.path.append('.')
     import setup
-    config.VERSION = setup.VERSION
+    v = config.VERSION = setup.VERSION
+    config.VER2 = '.'.join(v.split('.')[:2])
 
     config_env = config.asDict()
     config_env.update(os.environ)

@@ -1,0 +1,53 @@
+#!/bin/bash
+#----------------------------------------------------------------------
+
+set -o errexit
+#set -o xtrace
+
+host=$1
+chRootRoot=$2
+chRootName=$3
+
+
+function TestOnline {
+    local host=$1
+    local message=$2
+
+    if ping -q -c1 -w1 $host > /dev/null; then
+	return 0
+    else
+	return 1
+    fi
+}
+
+
+
+if [ $skipdeb != yes ]; then
+    # We use a chroot environment on th elocal machine for the debian
+    # builds, so this build is pretty simple.  Just copy the tarball
+    # and a build script to /tmp, and then run do-build-deb in the
+    # chroot.
+
+    if TestOnline $host; then
+    
+	echo "The $host machine is online, build continuing..."
+
+	echo "Copying source files and build script..."
+	ssh root@$host "mkdir -p $chRootRoot/$LINUX_BUILD && rm -rf $chRootRoot/$LINUX_BUILD/*"
+	scp $STAGING_DIR/wxPython-src* distrib/all/do-build-deb \
+            root@$host:$chRootRoot/$LINUX_BUILD
+    
+	ssh root@$host "dchroot --chroot $chRootName --directory $LINUX_BUILD \"do-build-deb $VERSION $VER2\""
+
+	echo "Fetching the results..."
+	mkdir -p $STAGING_DIR/$chRootName
+	ssh root@$host "rm $chRootRoot/$LINUX_BUILD/do-build-deb"
+	scp "root@$host:$chRootRoot/$LINUX_BUILD/*"  $STAGING_DIR/$chRootName
+	ssh root@$host "rm $chRootRoot/$LINUX_BUILD/*"
+	echo "Done!"
+    else
+	echo "The $host machine is **OFFLINE**, skipping the binary DEB build."
+	exit 0
+    fi
+fi
+

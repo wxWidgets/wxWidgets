@@ -28,7 +28,7 @@ function TestOnline {
 }
 
 
-if [ $skiplinux != yes ]; then
+if [ $skiprpm != yes ]; then
 
     startedCoHost=no
     hostAvailable=no

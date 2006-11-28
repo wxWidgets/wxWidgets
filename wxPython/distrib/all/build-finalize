@@ -19,14 +19,14 @@ if [ $KIND = daily ]; then
     echo "Copying to the local file server..."
     destdir=/stuff/temp/$VERSION
     mkdir -p $destdir
-    cp $STAGING_DIR/* $destdir
+    cp -R $STAGING_DIR/* $destdir
 
     if [ $skipupload != yes ]; then 
 	destdir=$UPLOAD_PREVIEW_ROOT/$DAILY
 	echo "Copying to $UPLOAD_HOST at $destdir..."
 	if [ $UPLOAD_METHOD = ssh ]; then
 	    ssh $UPLOAD_HOST "mkdir -p $destdir"
-	    scp -p $STAGING_DIR/* $UPLOAD_HOST:/$destdir
+	    scp -pr $STAGING_DIR/* $UPLOAD_HOST:/$destdir
 	fi
 	if [ $UPLOAD_METHOD = ftp ]; then
 	    lftp -c "open $UPLOAD_HOST; mkdir $destdir"
@@ -61,7 +61,7 @@ EOF
     fi
 
     echo "Cleaning up staging dir..."
-    rm $STAGING_DIR/*
+    rm -r $STAGING_DIR/*
     rmdir $STAGING_DIR
 
     exit 0
@@ -73,14 +73,14 @@ if [ $KIND = release ]; then
     echo "Copying to the local file server..."
     destdir=/stuff/Development/wxPython/dist/$VERSION
     mkdir -p $destdir
-    cp $STAGING_DIR/* $destdir
+    cp -R $STAGING_DIR/* $destdir
 
     if [ $skipupload != yes ]; then 
 	echo "Copying to $UPLOAD_HOST..."
 	destdir=$UPLOAD_RELEASE_ROOT/$VERSION
 	if [ $UPLOAD_METHOD = ssh ]; then
 	    ssh $UPLOAD_HOST "mkdir -p $destdir"
-	    scp -p $STAGING_DIR/* $UPLOAD_HOST:/$destdir
+	    scp -pr $STAGING_DIR/* $UPLOAD_HOST:/$destdir
 	fi
 	if [ $UPLOAD_METHOD = ftp ]; then
 	    lftp -c "open $UPLOAD_HOST; mkdir $destdir"
