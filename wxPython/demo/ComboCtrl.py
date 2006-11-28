@@ -260,7 +260,10 @@ class ComboCtrlWithCustomPopupAnim(wx.combo.ComboCtrl):
         dc = wx.ScreenDC()
         bmp = wx.EmptyBitmap(rect.width, rect.height)
         mdc = wx.MemoryDC(bmp)
-        mdc.Blit(0, 0, rect.width, rect.height, dc, rect.x, rect.y)
+        if "wxMac" in wx.PlatformInfo:
+            pass
+        else:
+            mdc.Blit(0, 0, rect.width, rect.height, dc, rect.x, rect.y)
         del mdc
         self.aniBackBitmap = bmp
 
@@ -352,7 +355,7 @@ class FileSelectorCombo(wx.combo.ComboCtrl):
         if dlg.ShowModal() == wx.ID_OK:
             self.SetValue(dlg.GetPath())
         dlg.Destroy()
-
+        self.SetFocus()
 
     # Overridden from ComboCtrl to avoid assert since there is no ComboPopup
     def DoSetPopupControl(self, popup):
@@ -412,6 +415,8 @@ class TestPanel(wx.Panel):
         fgs.Add(wx.StaticText(self, -1, "Custom popup animation"))
         for word in "How cool was that!?  Way COOL!".split():
             popup.AddItem(word)
+        if "wxMac" in wx.PlatformInfo:
+            cc.SetValue("Sorry, animation not working yet on Mac")
 
 
         cc = FileSelectorCombo(self, size=(250, -1))
