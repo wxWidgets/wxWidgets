@@ -1323,6 +1323,8 @@ if test "$wxUSE_WINE" = "yes"; then
     DEFAULT_DEFAULT_wxUSE_MOTIF=0
     DEFAULT_DEFAULT_wxUSE_MSW=1
     wxUSE_SHARED=no
+    CC=${CC:-winegcc}
+    CXX=${CXX:-wineg++}
 fi
 
 
@@ -1670,9 +1672,6 @@ esac
 
 if test "$wxUSE_WINE" = "yes"; then
     wants_win32=1
-    dnl FIXME: we should do a better job of testing for these
-    CC=winegcc
-    CXX=wineg++
     LDFLAGS_GUI="-mwindows"
 fi
 
