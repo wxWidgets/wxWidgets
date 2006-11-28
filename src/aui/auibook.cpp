@@ -2960,6 +2960,120 @@ bool wxAuiNotebook::FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx)
     return false;
 }
 
+void wxAuiNotebook::Split(size_t page, int direction)
+{
+    wxSize cli_size = GetClientSize();
+    
+    // get the page's window pointer
+    wxWindow* wnd = GetPage(page);
+    if (!wnd)
+        return;
+    
+    // notebooks with 1 or less pages can't be split
+    if (GetPageCount() < 2)
+        return;
+        
+    // find out which tab control the page currently belongs to
+    wxAuiTabCtrl *src_tabs, *dest_tabs;
+    int src_idx = -1;
+    src_tabs = NULL;
+    if (!FindTab(wnd, &src_tabs, &src_idx))
+        return;
+    if (!src_tabs || src_idx == -1)
+        return;
+    
+    // choose a split size
+    wxSize split_size;
+    if (GetPageCount() > 2)
+    {
+        split_size = CalculateNewSplitSize();
+    }
+     else
+    {
+        // because there are two panes, always split them
+        // equally
+        split_size = GetClientSize();
+        split_size.x /= 2;
+        split_size.y /= 2;
+    }
+    
+    
+    // create a new tab frame
+    wxTabFrame* new_tabs = new wxTabFrame;
+    new_tabs->m_rect = wxRect(wxPoint(0,0), split_size);
+    new_tabs->SetTabCtrlHeight(m_tab_ctrl_height);
+    new_tabs->m_tabs = new wxAuiTabCtrl(this,
+                                        m_tab_id_counter++,
+                                        wxDefaultPosition,
+                                        wxDefaultSize,
+                                        wxNO_BORDER);
+    new_tabs->m_tabs->SetArtProvider(m_tabs.GetArtProvider()->Clone());
+    new_tabs->m_tabs->SetFlags(m_flags);
+    dest_tabs = new_tabs->m_tabs;
+
+    // create a pane info structure with the information
+    // about where the pane should be added
+    wxAuiPaneInfo pane_info = wxAuiPaneInfo().Bottom().CaptionVisible(false);
+    wxPoint mouse_pt;
+        
+    if (direction == wxLEFT)
+    {
+        pane_info.Left();
+        mouse_pt = wxPoint(0, cli_size.y/2);
+    }
+     else if (direction == wxRIGHT)
+    {
+        pane_info.Right();
+        mouse_pt = wxPoint(cli_size.x, cli_size.y/2);
+    }
+     else if (direction == wxTOP)
+    {
+        pane_info.Top();
+        mouse_pt = wxPoint(cli_size.x/2, 0);
+    }
+     else if (direction == wxBOTTOM)
+    {
+        pane_info.Bottom();
+        mouse_pt = wxPoint(cli_size.x/2, cli_size.y);
+    }
+        
+    m_mgr.AddPane(new_tabs, pane_info, mouse_pt);
+    m_mgr.Update();
+            
+    // remove the page from the source tabs
+    wxAuiNotebookPage page_info = src_tabs->GetPage(src_idx);
+    page_info.active = false;
+    src_tabs->RemovePage(page_info.window);
+    if (src_tabs->GetPageCount() > 0)
+    {
+        src_tabs->SetActivePage((size_t)0);
+        src_tabs->DoShowHide();
+        src_tabs->Refresh();
+    }
+
+
+    // add the page to the destination tabs
+    dest_tabs->InsertPage(page_info.window, page_info, 0);
+
+    if (src_tabs->GetPageCount() == 0)
+    {
+        RemoveEmptyTabFrames();
+    }
+
+    DoSizing();
+    dest_tabs->DoShowHide();
+    dest_tabs->Refresh();
+
+    // force the set selection function reset the selection
+    m_curpage = -1;
+    
+    // set the active page to the one we just split off
+    SetSelection(m_tabs.GetIdxFromWindow(page_info.window));
+    
+    UpdateHintWindowSize();
+}
+
+
 void wxAuiNotebook::OnSize(wxSizeEvent& evt)
 {
     UpdateHintWindowSize();

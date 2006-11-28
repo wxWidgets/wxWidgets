@@ -494,7 +494,14 @@ public:
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
                 long style = 0);
-
+                
+    void SetWindowStyleFlag(long style);
+    void SetArtProvider(wxAuiTabArt* art);
+    wxAuiTabArt* GetArtProvider() const;
+    
+    virtual void SetUniformBitmapSize(const wxSize& size);
+    virtual void SetTabCtrlHeight(int height);
+ 
     bool AddPage(wxWindow* page,
                  const wxString& caption,
                  bool select = false,
@@ -509,7 +516,9 @@ public:
     bool DeletePage(size_t page);
     bool RemovePage(size_t page);
     
-    void SetWindowStyleFlag(long style);
+    size_t GetPageCount() const;
+    wxWindow* GetPage(size_t page_idx) const;
+    int GetPageIndex(wxWindow* page_wnd) const;
 
     bool SetPageText(size_t page, const wxString& text);
     wxString GetPageText(size_t page_idx) const;
@@ -520,17 +529,8 @@ public:
     size_t SetSelection(size_t new_page);
     int GetSelection() const;
 
-    size_t GetPageCount() const;
-    wxWindow* GetPage(size_t page_idx) const;
-
-    int GetPageIndex(wxWindow* page_wnd) const;
-
-    void SetArtProvider(wxAuiTabArt* art);
-    wxAuiTabArt* GetArtProvider() const;
-    
-    virtual void SetUniformBitmapSize(const wxSize& size);
-    virtual void SetTabCtrlHeight(int height);
-    
+    virtual void Split(size_t page, int direction);
+   
 protected:
 
     // these can be overridden
