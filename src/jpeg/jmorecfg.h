@@ -260,9 +260,29 @@ typedef unsigned int JDIMENSION;
  * Defining HAVE_BOOLEAN before including jpeglib.h should make it work.
  */
 
+#if 0
 #ifndef HAVE_BOOLEAN
 typedef int boolean;
 #endif
+#endif
+
+/*
+ * Notes about boolean above:
+ *
+ * The main conflict we see is with the Windows headers of some compilers that
+ * have a different definition of boolean. Therefore boolean has been replaced
+ * with wxjpeg_boolean throughout the jpeg sources. The alternative would have
+ * been to make the definition here the same as the Windows definition. It's
+ * not enough to just define HAVE_BOOLEAN when using the jpeg library, the
+ * definition of boolean must match when the jpeg library is compiled too.
+ *
+ * System jepg libs won't have this type, of course, so to use test
+ * HAVE_WXJPEG_BOOLEAN and fall back to boolean when not defined.
+ */
+
+typedef int wxjpeg_boolean;
+#define HAVE_WXJPEG_BOOLEAN
+
 #ifndef FALSE			/* in case these macros already exist */
 #define FALSE	0		/* values of boolean */
 #endif

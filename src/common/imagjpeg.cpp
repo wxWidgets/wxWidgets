@@ -26,17 +26,6 @@
     #include "wx/module.h"
 #endif
 
-// NB: Some compilers define boolean type in Windows headers
-//     (e.g. Watcom C++, but not some Open Watcom versions).
-//     This causes a conflict with jmorecfg.h header from libjpeg, so we have
-//     to make sure libjpeg won't try to define boolean itself. This is done by
-//     defining HAVE_BOOLEAN.
-#if defined(__WXMSW__) && (defined(__MWERKS__) || defined(__DIGITALMARS__) || \
-       (defined(__WATCOMC__) && !wxONLY_WATCOM_EARLIER_THAN(1,6)))
-    #define HAVE_BOOLEAN
-    #include "wx/msw/wrapwin.h"
-#endif
-
 extern "C"
 {
     #if defined(__WXMSW__)
@@ -44,6 +33,10 @@ extern "C"
     #endif
     #include "jpeglib.h"
 }
+
+#ifndef HAVE_WXJPEG_BOOLEAN
+typedef boolean wxjpeg_boolean;
+#endif
 
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
@@ -100,7 +93,7 @@ CPP_METHODDEF(void) wx_init_source ( j_decompress_ptr WXUNUSED(cinfo) )
 {
 }
 
-CPP_METHODDEF(boolean) wx_fill_input_buffer ( j_decompress_ptr cinfo )
+CPP_METHODDEF(wxjpeg_boolean) wx_fill_input_buffer ( j_decompress_ptr cinfo )
 {
     wx_src_ptr src = (wx_src_ptr) cinfo->src;
 
@@ -329,7 +322,7 @@ CPP_METHODDEF(void) wx_init_destination (j_compress_ptr cinfo)
     dest->pub.free_in_buffer = OUTPUT_BUF_SIZE;
 }
 
-CPP_METHODDEF(boolean) wx_empty_output_buffer (j_compress_ptr cinfo)
+CPP_METHODDEF(wxjpeg_boolean) wx_empty_output_buffer (j_compress_ptr cinfo)
 {
     wx_dest_ptr dest = (wx_dest_ptr) cinfo->dest;
 

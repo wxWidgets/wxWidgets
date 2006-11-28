@@ -61,7 +61,7 @@ typedef struct {
    * to discard the dummy last row if the image height is odd.
    */
   JSAMPROW spare_row;
-  boolean spare_full;		/* T if spare buffer is occupied */
+  wxjpeg_boolean spare_full;		/* T if spare buffer is occupied */
 
   JDIMENSION out_row_width;	/* samples per output row */
   JDIMENSION rows_to_go;	/* counts rows remaining in image */

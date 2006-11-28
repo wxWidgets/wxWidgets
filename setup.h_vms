@@ -1243,10 +1243,6 @@ typedef pid_t GPid;
 
 #define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 1
 
-/* Define if the system headers declare the type boolean (which will conflict
- * with the jpeg headers unless HAVE_BOOLEAN is defined).  */
-#undef HAVE_BOOLEAN
-
 /* Define if the header pbt.h is missing.  */
 #undef NEED_PBT_H
 

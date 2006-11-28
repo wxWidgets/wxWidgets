@@ -112,7 +112,7 @@ select_transform (JXFORM_CODE transform)
 
 LOCAL(int)
 parse_switches (j_compress_ptr cinfo, int argc, char **argv,
-		int last_file_arg_seen, boolean for_real)
+		int last_file_arg_seen, wxjpeg_boolean for_real)
 /* Parse optional switches.
  * Returns argv[] index of first file-name argument (== argc if none).
  * Any file names with indexes <= last_file_arg_seen are ignored;
@@ -124,7 +124,7 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
 {
   int argn;
   char * arg;
-  boolean simple_progressive;
+  wxjpeg_boolean simple_progressive;
   char * scansarg = NULL;	/* saves -scans parm if any */
 
   /* Set up default JPEG parameters. */
@@ -176,7 +176,7 @@ parse_switches (j_compress_ptr cinfo, int argc, char **argv,
     } else if (keymatch(arg, "debug", 1) || keymatch(arg, "verbose", 1)) {
       /* Enable debug printouts. */
       /* On first -d, print version identification */
-      static boolean printed_version = FALSE;
+      static wxjpeg_boolean printed_version = FALSE;
 
       if (! printed_version) {
 	fprintf(stderr, "Independent JPEG Group's JPEGTRAN, version %s\n%s\n",

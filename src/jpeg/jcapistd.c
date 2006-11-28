@@ -35,7 +35,7 @@
  */
 
 GLOBAL(void)
-jpeg_start_compress (j_compress_ptr cinfo, boolean write_all_tables)
+jpeg_start_compress (j_compress_ptr cinfo, wxjpeg_boolean write_all_tables)
 {
   if (cinfo->global_state != CSTATE_START)
     ERREXIT1(cinfo, JERR_BAD_STATE, cinfo->global_state);

@@ -71,8 +71,8 @@ typedef struct {
   d_derived_tbl * dc_cur_tbls[D_MAX_BLOCKS_IN_MCU];
   d_derived_tbl * ac_cur_tbls[D_MAX_BLOCKS_IN_MCU];
   /* Whether we care about the DC and AC coefficient values for each block */
-  boolean dc_needed[D_MAX_BLOCKS_IN_MCU];
-  boolean ac_needed[D_MAX_BLOCKS_IN_MCU];
+  wxjpeg_boolean dc_needed[D_MAX_BLOCKS_IN_MCU];
+  wxjpeg_boolean ac_needed[D_MAX_BLOCKS_IN_MCU];
 } huff_entropy_decoder;
 
 typedef huff_entropy_decoder * huff_entropy_ptr;
@@ -146,7 +146,7 @@ start_pass_huff_decoder (j_decompress_ptr cinfo)
  */
 
 GLOBAL(void)
-jpeg_make_d_derived_tbl (j_decompress_ptr cinfo, boolean isDC, int tblno,
+jpeg_make_d_derived_tbl (j_decompress_ptr cinfo, wxjpeg_boolean isDC, int tblno,
 			 d_derived_tbl ** pdtbl)
 {
   JHUFF_TBL *htbl;
@@ -288,7 +288,7 @@ jpeg_make_d_derived_tbl (j_decompress_ptr cinfo, boolean isDC, int tblno,
 #endif
 
 
-GLOBAL(boolean)
+GLOBAL(wxjpeg_boolean)
 jpeg_fill_bit_buffer (bitread_working_state * state,
 		      register bit_buf_type get_buffer, register int bits_left,
 		      int nbits)
@@ -464,7 +464,7 @@ static const int extend_offset[16] = /* entry n is (-1 << n) + 1 */
  * Returns FALSE if must suspend.
  */
 
-LOCAL(boolean)
+LOCAL(wxjpeg_boolean)
 process_restart (j_decompress_ptr cinfo)
 {
   huff_entropy_ptr entropy = (huff_entropy_ptr) cinfo->entropy;
@@ -513,7 +513,7 @@ process_restart (j_decompress_ptr cinfo)
  * this module, since we'll just re-assign them on the next call.)
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 decode_mcu (j_decompress_ptr cinfo, JBLOCKROW *MCU_data)
 {
   huff_entropy_ptr entropy = (huff_entropy_ptr) cinfo->entropy;

@@ -69,7 +69,7 @@ METHODDEF(int) decompress_data
 	JPP((j_decompress_ptr cinfo, JSAMPIMAGE output_buf));
 #endif
 #ifdef BLOCK_SMOOTHING_SUPPORTED
-LOCAL(boolean) smoothing_ok JPP((j_decompress_ptr cinfo));
+LOCAL(wxjpeg_boolean) smoothing_ok JPP((j_decompress_ptr cinfo));
 METHODDEF(int) decompress_smooth_data
 	JPP((j_decompress_ptr cinfo, JSAMPIMAGE output_buf));
 #endif
@@ -404,11 +404,11 @@ decompress_data (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
  * more accurately than they really are.
  */
 
-LOCAL(boolean)
+LOCAL(wxjpeg_boolean)
 smoothing_ok (j_decompress_ptr cinfo)
 {
   my_coef_ptr coef = (my_coef_ptr) cinfo->coef;
-  boolean smoothing_useful = FALSE;
+  wxjpeg_boolean smoothing_useful = FALSE;
   int ci, coefi;
   jpeg_component_info *compptr;
   JQUANT_TBL * qtable;
@@ -473,7 +473,7 @@ decompress_smooth_data (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
   JDIMENSION output_col;
   jpeg_component_info *compptr;
   inverse_DCT_method_ptr inverse_DCT;
-  boolean first_row, last_row;
+  wxjpeg_boolean first_row, last_row;
   JBLOCK workspace;
   int *coef_bits;
   JQUANT_TBL *quanttbl;
@@ -676,7 +676,7 @@ decompress_smooth_data (j_decompress_ptr cinfo, JSAMPIMAGE output_buf)
  */
 
 GLOBAL(void)
-jinit_d_coef_controller (j_decompress_ptr cinfo, boolean need_full_buffer)
+jinit_d_coef_controller (j_decompress_ptr cinfo, wxjpeg_boolean need_full_buffer)
 {
   my_coef_ptr coef;
 

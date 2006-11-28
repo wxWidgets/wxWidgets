@@ -279,7 +279,7 @@ start_pass_coef (j_compress_ptr cinfo, J_BUF_MODE pass_mode)
  * NB: input_buf is ignored; it is likely to be a NULL pointer.
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 compress_output (j_compress_ptr cinfo, JSAMPIMAGE input_buf)
 {
   my_coef_ptr coef = (my_coef_ptr) cinfo->coef;
