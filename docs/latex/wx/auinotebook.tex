@@ -175,3 +175,14 @@ instruct the control to use dynamic tab height, which is the default behaviour.
 Under the default behaviour, when a tab with a large bitmap is added, the tab control's
 height will automatically increase to accommodate the larger bitmap.
 
+\func{void}{Split}{\param{size_t }{page}, \param{int }{direction}}
+
+Split performs a split operation programmatically. The argument \arg{page} indicates
+the page that will be split off.  This page will also become the active page after the
+split.  The \arg{direction} argument specifies where the pane should go, it should be one
+of the following: wxTOP, wxBOTTOM, wxLEFT, or wxRIGHT.
+
+
+
+
+
