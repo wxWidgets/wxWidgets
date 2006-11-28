@@ -1454,6 +1454,13 @@ wxAuiNotebookPage& wxAuiTabContainer::GetPage(size_t idx)
     return m_pages[idx];
 }
 
+const wxAuiNotebookPage& wxAuiTabContainer::GetPage(size_t idx) const
+{
+    wxASSERT_MSG(idx < m_pages.GetCount(), wxT("Invalid Page index"));
+
+    return m_pages[idx];
+}
+
 wxAuiNotebookPageArray& wxAuiTabContainer::GetPages()
 {
     return m_pages;
@@ -2733,6 +2740,16 @@ bool wxAuiNotebook::SetPageText(size_t page_idx, const wxString& text)
     return true;
 }
 
+// returns the page caption
+wxString wxAuiNotebook::GetPageText(size_t page_idx) const
+{
+    if (page_idx >= m_tabs.GetPageCount())
+        return wxEmptyString;
+
+    // update our own tab catalog
+    const wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
+    return page_info.caption;
+}
 
 bool wxAuiNotebook::SetPageBitmap(size_t page_idx, const wxBitmap& bitmap)
 {
@@ -2760,6 +2777,16 @@ bool wxAuiNotebook::SetPageBitmap(size_t page_idx, const wxBitmap& bitmap)
     return true;
 }
 
+// returns the page bitmap
+wxBitmap wxAuiNotebook::GetPageBitmap(size_t page_idx) const
+{
+    if (page_idx >= m_tabs.GetPageCount())
+        return wxBitmap();
+
+    // update our own tab catalog
+    const wxAuiNotebookPage& page_info = m_tabs.GetPage(page_idx);
+    return page_info.bitmap;
+}
 
 // GetSelection() returns the index of the currently active page
 int wxAuiNotebook::GetSelection() const

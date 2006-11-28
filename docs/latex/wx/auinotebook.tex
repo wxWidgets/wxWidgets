@@ -87,6 +87,12 @@ Returns the associated art provider.
 
 Returns the page specified by the given index.
 
+\membersection{wxAuiNotebook::GetPageBitmap}\label{wxauinotebookgetpagebitmap}
+
+\constfunc{wxBitmap}{GetPageBitmap}{\param{size\_t }{page}}
+
+Returns the tab bitmap for the page.
+
 \membersection{wxAuiNotebook::GetPageCount}\label{wxauinotebookgetpagecount}
 
 \constfunc{size\_t}{GetPageCount}{\void}
@@ -98,6 +104,12 @@ Returns the number of pages in the notebook.
 \constfunc{int}{GetPageIndex}{\param{wxWindow* }{page\_wnd}}
 
 Returns the page index for the specified window.  If the window is not found in the notebook, wxNOT_FOUND is returned.
+
+\membersection{wxAuiNotebook::GetPageText}\label{wxauinotebookgetpagetext}
+
+\constfunc{wxString}{GetPageText}{\param{size\_t }{page}}
+
+Returns the tab label for the page.
 
 \membersection{wxAuiNotebook::GetSelection}\label{wxauinotebookgetselection}
 

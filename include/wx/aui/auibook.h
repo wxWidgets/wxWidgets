@@ -398,6 +398,7 @@ public:
     int GetIdxFromWindow(wxWindow* page) const;
     size_t GetPageCount() const;
     wxAuiNotebookPage& GetPage(size_t idx);
+    const wxAuiNotebookPage& GetPage(size_t idx) const;
     wxAuiNotebookPageArray& GetPages();
     void SetNormalFont(const wxFont& normal_font);
     void SetSelectedFont(const wxFont& selected_font);
@@ -511,9 +512,14 @@ public:
     void SetWindowStyleFlag(long style);
 
     bool SetPageText(size_t page, const wxString& text);
+    wxString GetPageText(size_t page_idx) const;
+
     bool SetPageBitmap(size_t page, const wxBitmap& bitmap);
+    wxBitmap GetPageBitmap(size_t page_idx) const;
+
     size_t SetSelection(size_t new_page);
     int GetSelection() const;
+
     size_t GetPageCount() const;
     wxWindow* GetPage(size_t page_idx) const;
 
