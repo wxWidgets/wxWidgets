@@ -265,7 +265,11 @@ void wxGenericComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
         dc.DrawRectangle(rect2);
     }
 
+#ifndef __WXMAC__  // see note in OnThemeChange
     wxColour winCol = GetBackgroundColour();
+#else
+    wxColour winCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+#endif
     dc.SetBrush(winCol);
     dc.SetPen(winCol);
 
@@ -274,7 +278,7 @@ void wxGenericComboCtrl::OnPaintEvent( wxPaintEvent& WXUNUSED(event) )
 
     // clear main background
     dc.DrawRectangle(rect);
-
+    
     if ( !m_btn )
     {
         // Standard button rendering

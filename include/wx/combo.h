@@ -474,6 +474,7 @@ protected:
     // event handlers
     void OnSizeEvent( wxSizeEvent& event );
     void OnFocusEvent(wxFocusEvent& event);
+    void OnIdleEvent(wxIdleEvent& event);
     void OnTextCtrlEvent(wxCommandEvent& event);
     void OnSysColourChanged(wxSysColourChangedEvent& event);
     void OnKeyEvent(wxKeyEvent& event);
@@ -602,6 +603,9 @@ protected:
     // is the popup window currenty shown?
     wxByte                  m_popupWinState;
 
+    // should the focus be reset to the textctrl in idle time?
+    bool                    m_resetFocus;
+    
 private:
     void Init();
 

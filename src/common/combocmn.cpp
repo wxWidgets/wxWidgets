@@ -62,6 +62,7 @@
                                         // native controls work on it like normal.
 #define POPUPWIN_IS_PERFECT           0 // Same, but for non-transient popup window.
 #define TEXTCTRL_TEXT_CENTERED        0 // 1 if text in textctrl is vertically centered
+#define FOCUS_RING                    0 // No focus ring on wxMSW
 
 //#undef wxUSE_POPUPWIN
 //#define wxUSE_POPUPWIN 0
@@ -79,6 +80,7 @@
                                         // native controls work on it like normal.
 #define POPUPWIN_IS_PERFECT           1 // Same, but for non-transient popup window.
 #define TEXTCTRL_TEXT_CENTERED        1 // 1 if text in textctrl is vertically centered
+#define FOCUS_RING                    0 // No focus ring on wxGTK
 
 #elif defined(__WXMAC__)
 
@@ -87,6 +89,12 @@
                                         // native controls work on it like normal.
 #define POPUPWIN_IS_PERFECT           0 // Same, but for non-transient popup window.
 #define TEXTCTRL_TEXT_CENTERED        1 // 1 if text in textctrl is vertically centered
+#define FOCUS_RING                    3 // Reserve room for the textctrl's focus ring to display
+
+#undef DEFAULT_DROPBUTTON_WIDTH
+#define DEFAULT_DROPBUTTON_WIDTH      22
+#undef COMBO_MARGIN
+#define COMBO_MARGIN                  FOCUS_RING
 
 #else
 
@@ -95,9 +103,7 @@
                                         // native controls work on it like normal.
 #define POPUPWIN_IS_PERFECT           0 // Same, but for non-transient popup window.
 #define TEXTCTRL_TEXT_CENTERED        1 // 1 if text in textctrl is vertically centered
-
-#undef DEFAULT_DROPBUTTON_WIDTH
-#define DEFAULT_DROPBUTTON_WIDTH 22
+#define FOCUS_RING                    0
 
 #endif
 
@@ -710,6 +716,7 @@ BEGIN_EVENT_TABLE(wxComboCtrlBase, wxControl)
     EVT_SIZE(wxComboCtrlBase::OnSizeEvent)
     EVT_SET_FOCUS(wxComboCtrlBase::OnFocusEvent)
     EVT_KILL_FOCUS(wxComboCtrlBase::OnFocusEvent)
+    EVT_IDLE(wxComboCtrlBase::OnIdleEvent)
     //EVT_BUTTON(wxID_ANY,wxComboCtrlBase::OnButtonClickEvent)
     EVT_KEY_DOWN(wxComboCtrlBase::OnKeyEvent)
     EVT_TEXT_ENTER(wxID_ANY,wxComboCtrlBase::OnTextCtrlEvent)
@@ -757,6 +764,8 @@ void wxComboCtrlBase::Init()
     m_absIndent = -1;
     m_iFlags = 0;
     m_timeCanAcceptClick = 0;
+
+    m_resetFocus = false;
 }
 
 bool wxComboCtrlBase::Create(wxWindow *parent,
@@ -838,7 +847,12 @@ wxComboCtrlBase::CreateTextCtrl(int style, const wxValidator& validator)
 
 void wxComboCtrlBase::OnThemeChange()
 {
+    // Leave the default bg on the Mac so the area used by the focus ring will
+    // be the correct colour and themed brush.  Instead we'll use
+    // wxSYS_COLOUR_WINDOW in the EVT_PAINT handler as needed.
+#ifndef __WXMAC__
     SetOwnBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
+#endif
 }
 
 wxComboCtrlBase::~wxComboCtrlBase()
@@ -966,14 +980,14 @@ void wxComboCtrlBase::CalculateAreas( int btnWidth )
     m_btnSize.y = butHeight;
 
     m_btnArea.x = ( m_btnSide==wxRIGHT ? sz.x - butAreaWid - btnBorder : btnBorder );
-    m_btnArea.y = btnBorder;
+    m_btnArea.y = btnBorder + FOCUS_RING;
     m_btnArea.width = butAreaWid;
-    m_btnArea.height = sz.y - (btnBorder*2);
+    m_btnArea.height = sz.y - ((btnBorder+FOCUS_RING)*2);
 
-    m_tcArea.x = ( m_btnSide==wxRIGHT ? 0 : butAreaWid ) + customBorder;
-    m_tcArea.y = customBorder;
-    m_tcArea.width = sz.x - butAreaWid - (customBorder*2);
-    m_tcArea.height = sz.y - (customBorder*2);
+    m_tcArea.x = ( m_btnSide==wxRIGHT ? 0 : butAreaWid ) + customBorder + FOCUS_RING;
+    m_tcArea.y = customBorder + FOCUS_RING;
+    m_tcArea.width = sz.x - butAreaWid - (customBorder*2) - (FOCUS_RING*2);
+    m_tcArea.height = sz.y - ((customBorder+FOCUS_RING)*2);
 
 /*
     if ( m_text )
@@ -1026,9 +1040,9 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
     {
         // If it has border, have textctrl will the entire text field.
         m_text->SetSize( m_tcArea.x + m_widthCustomPaint,
-                         customBorder,
-                         sz.x - m_btnArea.width - m_widthCustomPaint - customBorder,
-                         sz.y-(customBorder*2) );
+                         m_tcArea.y,
+                         m_tcArea.width - m_widthCustomPaint,
+                         m_tcArea.height );
     }
 }
 
@@ -1088,10 +1102,11 @@ wxSize wxComboCtrlBase::DoGetBestSize() const
             break;
     }
 #endif
-    
-    wxSize ret(sizeText.x + COMBO_MARGIN + DEFAULT_DROPBUTTON_WIDTH,
-               fhei);
 
+    fhei += 2 * FOCUS_RING;
+    int width = sizeText.x + FOCUS_RING + COMBO_MARGIN + DEFAULT_DROPBUTTON_WIDTH;
+
+    wxSize ret(width, fhei);
     CacheBestSize(ret);
     return ret;
 }
@@ -1252,13 +1267,21 @@ void wxComboCtrlBase::PrepareBackground( wxDC& dc, const wxRect& rect, int flags
         else
         {
             dc.SetTextForeground( wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT) );
+#ifndef __WXMAC__  // see note in OnThemeChange
             bgCol = GetBackgroundColour();
+#else
+            bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+#endif
         }
     }
     else
     {
         dc.SetTextForeground( wxSystemSettings::GetColour(wxSYS_COLOUR_GRAYTEXT) );
+#ifndef __WXMAC__  // see note in OnThemeChange
         bgCol = GetBackgroundColour();
+#else
+        bgCol = wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW);
+#endif
     }
 
     dc.SetBrush( bgCol );
@@ -1617,14 +1640,27 @@ void wxComboCtrlBase::OnFocusEvent( wxFocusEvent& event )
 {
     if ( event.GetEventType() == wxEVT_SET_FOCUS )
     {
-#ifndef __WXMAC__
         wxWindow* tc = GetTextCtrl();
         if ( tc && tc != DoFindFocus() )
+#ifdef __WXMAC__
+            m_resetFocus = true;
+#else
             tc->SetFocus();
 #endif
     }
 
     Refresh();
+}
+
+void wxComboCtrlBase::OnIdleEvent( wxIdleEvent& WXUNUSED(event) )
+{
+    if ( m_resetFocus )
+    {
+        m_resetFocus = false;
+        wxWindow* tc = GetTextCtrl();
+        if ( tc )
+            tc->SetFocus();
+    }
 }
 
 void wxComboCtrlBase::OnSysColourChanged(wxSysColourChangedEvent& WXUNUSED(event))
