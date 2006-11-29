@@ -1004,9 +1004,9 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
         return;
 
     wxSize sz = GetClientSize();
-    int customBorder = m_widthCustomBorder;
 
 #if !TEXTCTRL_TEXT_CENTERED
+    int customBorder = m_widthCustomBorder;
     if ( (m_text->GetWindowStyleFlag() & wxBORDER_MASK) == wxNO_BORDER )
     {
         // Centre textctrl
@@ -1033,10 +1033,10 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
         }
     }
     else
-#else
+#else // TEXTCTRL_TEXT_CENTERED
     wxUnusedVar(textCtrlXAdjust);
     wxUnusedVar(textCtrlYAdjust);
-#endif
+#endif // !TEXTCTRL_TEXT_CENTERED/TEXTCTRL_TEXT_CENTERED
     {
         // If it has border, have textctrl will the entire text field.
         m_text->SetSize( m_tcArea.x + m_widthCustomPaint,
