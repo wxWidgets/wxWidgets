@@ -151,11 +151,11 @@ else
 endif
 
 # Packages to build:
-package_wxbase_lib      := libwxbase$(release)$(unicode_suffix)
+package_wxbase_lib      := libwxbase$(sorelease)$(unicode_suffix)
 package_wxbase_dev      := libwxbase$(release)$(unicode_suffix)-dev
 package_wxbase_dbg      := libwxbase$(release)$(unicode_suffix)-dbg
 
-package_gtk_lib         := libwxgtk$(release)$(unicode_suffix)
+package_gtk_lib         := libwxgtk$(sorelease)$(unicode_suffix)
 package_gtk_dev         := libwxgtk$(release)$(unicode_suffix)-dev
 package_gtk_dbg         := libwxgtk$(release)$(unicode_suffix)-dbg
 
