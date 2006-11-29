@@ -1731,7 +1731,31 @@ long wxListCtrl::FindItem(long start, const wxString& str, bool partial)
     if (m_genericImpl)
         return m_genericImpl->FindItem(start, str, partial);
 
-    return -1;
+    wxString str_upper = str.Upper();
+
+    long idx = start;
+    if (idx < 0)
+        idx = 0;
+    long count = GetItemCount();
+
+    while (idx < count)
+    {
+        wxString line_upper = GetItemText(idx).Upper();
+        if (!partial)
+        {
+            if (line_upper == str_upper )
+                return idx;
+        }
+        else
+        {
+            if (line_upper.find(str_upper) == 0)
+                return idx;
+        }
+        
+        idx++;
+    };
+
+    return wxNOT_FOUND;
 }
 
 // Find an item whose data matches this data, starting from the item after 'start'
@@ -1741,7 +1765,9 @@ long wxListCtrl::FindItem(long start, long data)
     if (m_genericImpl)
         return m_genericImpl->FindItem(start, data);
 
-    long  idx = start + 1;
+    long idx = start;
+    if (idx < 0)
+        idx = 0;
     long count = GetItemCount();
 
     while (idx < count)
@@ -1751,7 +1777,7 @@ long wxListCtrl::FindItem(long start, long data)
         idx++;
     };
 
-    return -1;
+    return wxNOT_FOUND;
 }
 
 // Find an item nearest this position in the specified direction, starting from
