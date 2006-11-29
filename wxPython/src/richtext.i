@@ -1417,7 +1417,7 @@ flag.", "");
     %property(InternalSelectionRange, GetInternalSelectionRange, SetInternalSelectionRange, doc="See `GetInternalSelectionRange` and `SetInternalSelectionRange`");
     %property(LastPosition, GetLastPosition, doc="See `GetLastPosition`");
     %property(NumberOfLines, GetNumberOfLines, doc="See `GetNumberOfLines`");
-    %property(Selection, GetSelection, SetSelection, doc="See `GetSelection` and `SetSelection`");
+    %property(Selection, GetSelection, SetSelectionRange, doc="See `GetSelection` and `SetSelection`");
     %property(SelectionRange, GetSelectionRange, SetSelectionRange, doc="See `GetSelectionRange` and `SetSelectionRange`");
     %property(StringSelection, GetStringSelection, doc="See `GetStringSelection`");
     %property(StyleSheet, GetStyleSheet, SetStyleSheet, doc="See `GetStyleSheet` and `SetStyleSheet`");

@@ -1396,7 +1396,7 @@ class RichTextCtrl(_windows.ScrolledWindow):
     InternalSelectionRange = property(GetInternalSelectionRange,SetInternalSelectionRange,doc="See `GetInternalSelectionRange` and `SetInternalSelectionRange`") 
     LastPosition = property(GetLastPosition,doc="See `GetLastPosition`") 
     NumberOfLines = property(GetNumberOfLines,doc="See `GetNumberOfLines`") 
-    Selection = property(GetSelection,SetSelection,doc="See `GetSelection` and `SetSelection`") 
+    Selection = property(GetSelection,SetSelectionRange,doc="See `GetSelection` and `SetSelection`") 
     SelectionRange = property(GetSelectionRange,SetSelectionRange,doc="See `GetSelectionRange` and `SetSelectionRange`") 
     StringSelection = property(GetStringSelection,doc="See `GetStringSelection`") 
     StyleSheet = property(GetStyleSheet,SetStyleSheet,doc="See `GetStyleSheet` and `SetStyleSheet`") 
