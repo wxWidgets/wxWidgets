@@ -59,9 +59,14 @@ int TIFFFillTile(TIFF*, ttile_t);
 
    http://bugzilla.remotesensing.org/show_bug.cgi?id=188
 */
-#if defined(__RPCNDR_H__)
-#define HAVE_BOOLEAN
-#define boolean unsigned int
+#if defined wxHACK_BOOLEAN || defined __RPCNDR_H__ || defined __WINE_RPCNDR_H
+    #define HAVE_BOOLEAN
+
+    #ifdef wxHACK_BOOLEAN
+        #define boolean wxHACK_BOOLEAN
+    #else
+        #define boolean int
+    #endif
 #endif
 
 #include "jpeglib.h"

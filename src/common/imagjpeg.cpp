@@ -26,6 +26,22 @@
     #include "wx/module.h"
 #endif
 
+// A hack based on one from tif_jpeg.c to overcome the problem on Windows
+// of rpcndr.h defining boolean with a different type to the jpeg headers.
+// 
+// This hack is only necessary for an external jpeg library, the builtin one
+// usually used on Windows doesn't use the type boolean, so always works.
+//
+#if defined wxHACK_BOOLEAN || defined __RPCNDR_H__ || defined __WINE_RPCNDR_H
+    #define HAVE_BOOLEAN
+
+    #ifdef wxHACK_BOOLEAN
+        #define boolean wxHACK_BOOLEAN
+    #else
+        #define boolean int
+    #endif
+#endif
+
 extern "C"
 {
     #if defined(__WXMSW__)
