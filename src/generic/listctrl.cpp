@@ -4501,10 +4501,13 @@ void wxListMainWindow::EnsureVisible( long index )
     MoveToItem((size_t)index);
 }
 
-long wxListMainWindow::FindItem(long start, const wxString& str, bool WXUNUSED(partial) )
+long wxListMainWindow::FindItem(long start, const wxString& str, bool partial )
 {
+    if (str.empty())
+        return wxNOT_FOUND;
+        
     long pos = start;
-    wxString tmp = str;
+    wxString str_upper = str.Upper();
     if (pos < 0)
         pos = 0;
 
@@ -4512,8 +4515,17 @@ long wxListMainWindow::FindItem(long start, const wxString& str, bool WXUNUSED(p
     for ( size_t i = (size_t)pos; i < count; i++ )
     {
         wxListLineData *line = GetLine(i);
-        if ( line->GetText(0) == tmp )
-            return i;
+        wxString line_upper = line->GetText(0).Upper();
+        if (!partial)
+        {
+            if (line_upper == str_upper )
+                return i;
+        }
+        else
+        {
+            if (line_upper.find(str_upper) == 0)
+                return i;
+        }
     }
 
     return wxNOT_FOUND;

@@ -253,7 +253,9 @@ Ensures this item is visible.
 \func{long}{FindItem}{\param{long }{start}, \param{const wxString\& }{str}, \param{const bool }{partial = false}}
 
 Find an item whose label matches this string, starting from {\it start} or
-the beginning if {\it start} is -1.
+the beginning if {\it start} is -1. The string comparison is case
+insensitive. If {\it partial} is true then this method will look for
+items which begin with {\it str}.
 
 \func{long}{FindItem}{\param{long }{start}, \param{long }{data}}
 
