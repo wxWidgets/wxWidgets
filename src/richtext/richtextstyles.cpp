@@ -401,7 +401,7 @@ bool wxRichTextStyleSheet::AddStyle(wxRichTextStyleDefinition* def)
     wxRichTextCharacterStyleDefinition* charDef = wxDynamicCast(def, wxRichTextCharacterStyleDefinition);
     if (charDef)
         return AddCharacterStyle(charDef);
-    
+
     return false;
 }
 
@@ -419,8 +419,8 @@ wxRichTextStyleDefinition* wxRichTextStyleSheet::FindStyle(const wxString& name,
     wxRichTextCharacterStyleDefinition* charDef = FindCharacterStyle(name, recurse);
     if (charDef)
         return charDef;
-    
-    return NULL;    
+
+    return NULL;
 }
 
 /// Copy
@@ -447,7 +447,7 @@ void wxRichTextStyleSheet::Copy(const wxRichTextStyleSheet& sheet)
         wxRichTextListStyleDefinition* def = (wxRichTextListStyleDefinition*) node->GetData();
         AddListStyle(new wxRichTextListStyleDefinition(*def));
     }
-    
+
     SetName(sheet.GetName());
     SetDescription(sheet.GetDescription());
 }
@@ -508,7 +508,7 @@ wxRichTextStyleDefinition* wxRichTextStyleListBox::GetStyle(size_t i) const
 {
     if (!GetStyleSheet())
         return NULL;
-    
+
     if (i >= m_styleNames.GetCount() || i < 0)
         return NULL;
 
@@ -521,9 +521,9 @@ void wxRichTextStyleListBox::UpdateStyles()
     if (GetStyleSheet())
     {
         SetSelection(wxNOT_FOUND);
-        
+
         m_styleNames.Clear();
-        
+
         size_t i;
         if (GetStyleType() == wxRICHTEXT_STYLE_ALL || GetStyleType() == wxRICHTEXT_STYLE_PARAGRAPH)
         {
@@ -540,7 +540,7 @@ void wxRichTextStyleListBox::UpdateStyles()
             for (i = 0; i < GetStyleSheet()->GetListStyleCount(); i++)
                 m_styleNames.Add(GetStyleSheet()->GetListStyle(i)->GetName());
         }
-        
+
         m_styleNames.Sort();
         SetItemCount(m_styleNames.GetCount());
 
@@ -589,7 +589,7 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
     wxString str;
 
     bool isCentred = false;
-    
+
     wxRichTextAttr attr(def->GetStyleMergedWithBase(GetStyleSheet()));
 
     if (attr.HasAlignment() && attr.GetAlignment() == wxTEXT_ALIGNMENT_CENTRE)
@@ -598,7 +598,7 @@ wxString wxRichTextStyleListBox::CreateHTML(wxRichTextStyleDefinition* def) cons
     if (isCentred)
         str << wxT("<center>");
 
-    
+
     str << wxT("<table><tr>");
 
     if (attr.GetLeftIndent() > 0)
@@ -722,15 +722,20 @@ wxString wxRichTextStyleListBox::GetStyleToShowInIdleTime(wxRichTextCtrl* ctrl, 
     // Take into account current default style just chosen by user
     if (ctrl->IsDefaultStyleShowing())
     {
+        wxTextAttrEx attr;
+
+        ctrl->GetStyle(adjustedCaretPos, attr);
+        wxRichTextApplyStyle(attr, ctrl->GetDefaultStyleEx());
+
         if ((styleType == wxRICHTEXT_STYLE_ALL || styleType == wxRICHTEXT_STYLE_CHARACTER) &&
-                          !ctrl->GetDefaultStyleEx().GetCharacterStyleName().IsEmpty())
-            styleName = ctrl->GetDefaultStyleEx().GetCharacterStyleName();
+                          !attr.GetCharacterStyleName().IsEmpty())
+            styleName = attr.GetCharacterStyleName();
         else if ((styleType == wxRICHTEXT_STYLE_ALL || styleType == wxRICHTEXT_STYLE_PARAGRAPH) &&
-                          !ctrl->GetDefaultStyleEx().GetParagraphStyleName().IsEmpty())
-            styleName = ctrl->GetDefaultStyleEx().GetParagraphStyleName();
+                          !attr.GetParagraphStyleName().IsEmpty())
+            styleName = attr.GetParagraphStyleName();
         else if ((styleType == wxRICHTEXT_STYLE_ALL || styleType == wxRICHTEXT_STYLE_LIST) &&
-                          !ctrl->GetDefaultStyleEx().GetListStyleName().IsEmpty())
-            styleName = ctrl->GetDefaultStyleEx().GetListStyleName();
+                          !attr.GetListStyleName().IsEmpty())
+            styleName = attr.GetListStyleName();
     }
     else if (obj && (styleType == wxRICHTEXT_STYLE_ALL || styleType == wxRICHTEXT_STYLE_CHARACTER) &&
              !obj->GetAttributes().GetCharacterStyleName().IsEmpty())
