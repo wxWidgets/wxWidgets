@@ -80,44 +80,19 @@ public:
 
     int pIndexOf(const wxString & sSearch, bool bIncludeComments = false, int iStart = 0)
     {
-        size_t i = iStart;
-        int nResult = wxNOT_FOUND;
-        if (i >= GetLineCount())
-            return wxNOT_FOUND;
-
         wxString sTest = sSearch;
         sTest.MakeLower();
-        wxString sLine;
-
-        if (bIncludeComments)
+        for(size_t i = iStart; i < GetLineCount(); i++)
         {
-            while ( i < GetLineCount() )
+            wxString sLine = GetLine(i).Trim(false);
+            if(bIncludeComments || ! sLine.StartsWith(wxT("#")))
             {
-                sLine = GetLine(i);
                 sLine.MakeLower();
-                if (sLine.Contains(sTest))
-                    nResult = (int) i;
-
-                i++;
+                if(sLine.StartsWith(sTest))
+                    return (int)i;
             }
         }
-        else
-        {
-            while ( (i < GetLineCount()) )
-            {
-                sLine = GetLine(i);
-                sLine.MakeLower();
-                if ( ! sLine.StartsWith(wxT("#")))
-                {
-                    if (sLine.Contains(sTest))
-                        nResult = (int) i;
-                }
-
-                i++;
-            }
-        }
-
-        return  nResult;
+        return wxNOT_FOUND;
     }
 
     bool CommentLine(int nIndex)
@@ -773,12 +748,12 @@ void wxMimeTypesManagerImpl::LoadKDELinksForMimeSubtype(const wxString& dirbase,
                                                const wxString& filename,
                                                const wxArrayString& icondirs)
 {
+    wxFileName fullname(dirbase, filename);
     wxMimeTextFile file;
-    if ( !file.Open(dirbase + filename) )
-        return;
+    if(! file.Open( fullname.GetFullPath() )) return;
 
     wxLogTrace(TRACE_MIME, wxT("loading KDE file %s"),
-                           (dirbase + filename).c_str());
+                           fullname.GetFullPath().c_str());
 
     wxMimeTypeCommands * entry = new wxMimeTypeCommands;
     wxArrayString sExts;
@@ -910,54 +885,41 @@ void wxMimeTypesManagerImpl::LoadKDELinksForMimeType(const wxString& dirbase,
                                             const wxString& subdir,
                                             const wxArrayString& icondirs)
 {
-    wxString dirname = dirbase;
-    dirname += subdir;
-    wxDir dir(dirname);
-    if ( !dir.IsOpened() )
+    wxFileName dirname(dirbase, wxEmptyString);
+    dirname.AppendDir(subdir);
+    wxDir dir(dirname.GetPath());
+    if(! dir.IsOpened())
         return;
 
     wxLogTrace(TRACE_MIME, wxT("--- Loading from KDE directory %s  ---"),
-                           dirname.c_str());
-
-    dirname += wxT('/');
+                           dirname.GetPath().c_str());
 
     wxString filename;
     bool cont = dir.GetFirst(&filename, wxT("*.kdelnk"), wxDIR_FILES);
-    while ( cont )
-    {
-        LoadKDELinksForMimeSubtype(dirname, subdir, filename, icondirs);
-
+    while(cont) {
+        LoadKDELinksForMimeSubtype(dirname.GetPath(), subdir,
+                                   filename, icondirs);
         cont = dir.GetNext(&filename);
     }
 
     // new standard for Gnome and KDE
     cont = dir.GetFirst(&filename, wxT("*.desktop"), wxDIR_FILES);
-    while ( cont )
-    {
-        LoadKDELinksForMimeSubtype(dirname, subdir, filename, icondirs);
-
+    while(cont) {
+        LoadKDELinksForMimeSubtype(dirname.GetPath(), subdir,
+                                   filename, icondirs);
         cont = dir.GetNext(&filename);
     }
 }
 
-void wxMimeTypesManagerImpl::LoadKDELinkFilesFromDir(const wxString& dirbase,
+void wxMimeTypesManagerImpl::LoadKDELinkFilesFromDir(const wxString& dirname,
                                             const wxArrayString& icondirs)
 {
-    wxASSERT_MSG( !dirbase.empty() && !wxEndsWithPathSeparator(dirbase),
-                  wxT("base directory shouldn't end with a slash") );
-
-    wxString dirname = dirbase;
-    dirname << wxT("/mimelnk");
-
-    if ( !wxDir::Exists(dirname) )
+    if(! wxDir::Exists(dirname))
         return;
 
     wxDir dir(dirname);
     if ( !dir.IsOpened() )
         return;
-
-    // we will concatenate it with dir name to get the full path below
-    dirname += wxT('/');
 
     wxString subdir;
     bool cont = dir.GetFirst(&subdir, wxEmptyString, wxDIR_DIRS);
@@ -969,131 +931,322 @@ void wxMimeTypesManagerImpl::LoadKDELinkFilesFromDir(const wxString& dirbase,
     }
 }
 
+// Read a KDE .desktop file of type 'Application'
+void wxMimeTypesManagerImpl::LoadKDEApp(const wxString& filename)
+{
+    wxMimeTextFile file;
+    if ( !file.Open(filename) ) return;
+    wxLogTrace(TRACE_MIME, wxT("loading KDE file %s"), filename.c_str());
+
+    // Here, only type 'Application' should be considered.
+    int nIndex = file.pIndexOf( wxT("Type=") );
+    if (nIndex != wxNOT_FOUND &&
+        file.GetCmd(nIndex).Lower() != wxT("application"))
+        return;
+
+    // The hidden entry specifies a file to be ignored.
+    nIndex = file.pIndexOf( wxT("Hidden=") );
+    if (nIndex != wxNOT_FOUND && file.GetCmd(nIndex).Lower() == wxT("true"))
+        return;
+
+    // Semicolon separated list of mime types handled by the application.
+    nIndex = file.pIndexOf( wxT("MimeType=") );
+    if (nIndex == wxNOT_FOUND)
+        return;
+    wxString mimetypes = file.GetCmd (nIndex);
+
+    // Name of the application
+    wxString nameapp;
+    nIndex = wxNOT_FOUND;
+#if wxUSE_INTL // try "Name[locale name]" first
+    wxLocale *locale = wxGetLocale();
+    if ( locale )
+        nIndex = file.pIndexOf(_T("Name[")+locale->GetName()+_T("]="));
+#endif // wxUSE_INTL
+    if(nIndex == wxNOT_FOUND)
+        nIndex = file.pIndexOf( wxT("Name=") );
+    if(nIndex != wxNOT_FOUND)
+        nameapp = file.GetCmd(nIndex);
+
+    // Icon of the application.
+    wxString nameicon, namemini;
+    nIndex = wxNOT_FOUND;
+#if wxUSE_INTL // try "Icon[locale name]" first
+    if ( locale )
+        nIndex = file.pIndexOf(_T("Icon[")+locale->GetName()+_T("]="));
+#endif // wxUSE_INTL
+    if(nIndex == wxNOT_FOUND)
+        nIndex = file.pIndexOf( wxT("Icon=") );
+    if(nIndex != wxNOT_FOUND) {
+        nameicon = wxString(wxT("--icon ")) + file.GetCmd(nIndex);
+        namemini = wxString(wxT("--miniicon ")) + file.GetCmd(nIndex);
+    }
+
+    // Replace some of the field code in the 'Exec' entry.
+    // TODO: deal with %d, %D, %n, %N, %k and %v (but last one is deprecated)
+    nIndex = file.pIndexOf( wxT("Exec=") );
+    if (nIndex == wxNOT_FOUND)
+        return;
+    wxString sCmd = file.GetCmd(nIndex);
+    // we expect %f; others including  %F and %U and %u are possible
+    sCmd.Replace(wxT("%F"), wxT("%f"));
+    sCmd.Replace(wxT("%U"), wxT("%f"));
+    sCmd.Replace(wxT("%u"), wxT("%f"));
+    if (0 == sCmd.Replace ( wxT("%f"), wxT("%s") ))
+        sCmd = sCmd + wxT(" %s");
+    sCmd.Replace(wxT("%c"), nameapp);
+    sCmd.Replace(wxT("%i"), nameicon);
+    sCmd.Replace(wxT("%m"), namemini);
+
+    wxStringTokenizer tokenizer(mimetypes, _T(";"));
+    while(tokenizer.HasMoreTokens()) {
+        wxString mimetype = tokenizer.GetNextToken().Lower();
+        int nIndex = m_aTypes.Index(mimetype);
+        if(nIndex != wxNOT_FOUND) { // is this a known MIME type?
+            wxMimeTypeCommands* entry = m_aEntries[nIndex];
+            entry->AddOrReplaceVerb(wxT("open"), sCmd);
+        }
+    }
+}
+
+void wxMimeTypesManagerImpl::LoadKDEAppsFilesFromDir(const wxString& dirname)
+{
+    if(! wxDir::Exists(dirname))
+        return;
+    wxDir dir(dirname);
+    if ( !dir.IsOpened() )
+        return;
+
+    wxString filename;
+    // Look into .desktop files
+    bool cont = dir.GetFirst(&filename, _T("*.desktop"), wxDIR_FILES);
+    while(cont) {
+        wxFileName p(dirname, filename);
+        LoadKDEApp( p.GetFullPath() );
+        cont = dir.GetNext(&filename);
+    }
+    // Look recursively into subdirs
+    cont = dir.GetFirst(&filename, wxEmptyString, wxDIR_DIRS);
+    while(cont) {
+        wxFileName p(dirname, wxEmptyString);
+        p.AppendDir(filename);
+        LoadKDEAppsFilesFromDir( p.GetPath() );
+        cont = dir.GetNext(&filename);
+    }
+}
+
+// Return base KDE directories.
+// 1) Environment variable $KDEHOME, or "~/.kde" if not set.
+// 2) List of directories in colon separated environment variable $KDEDIRS.
+// 3) Environment variable $KDEDIR in case $KDEDIRS is not set.
+// Notice at least the local kde directory is added to the list. If it is the
+// only one, use later the application 'kde-config' to get additional paths.
+static void GetKDEBaseDirs(wxArrayString& basedirs)
+{
+    wxString env = wxGetenv( wxT("KDEHOME") );
+    if(env.IsEmpty())
+        env = wxGetHomeDir() + wxT("/.kde");
+    basedirs.Add(env);
+
+    env = wxGetenv( wxT("KDEDIRS") );
+    if(env.IsEmpty()) {
+        env = wxGetenv( wxT("KDEDIR") );
+        if(! env.IsEmpty())
+            basedirs.Add(env);
+    } else {
+        wxStringTokenizer tokenizer(env, wxT(":"));
+        while(tokenizer.HasMoreTokens())
+            basedirs.Add( tokenizer.GetNextToken() );
+    }
+}
+
+static wxString ReadPathFromKDEConfig(const wxString& request)
+{
+    wxString str;
+    wxArrayString output;
+    if(wxExecute(wxT("kde-config --path ")+request, output) == 0 &&
+       output.Count() > 0)
+        str = output.Item(0);
+    return str;
+}
+
+// Try to find the "Theme" entry in the configuration file, provided it exists.
+static wxString GetKDEThemeInFile(const wxFileName& filename)
+{
+    wxString theme;
+    wxTextFile config;
+    if(filename.FileExists() && config.Open( filename.GetFullPath() )) {
+        size_t cnt = config.GetLineCount();
+        for(size_t i = 0; i < cnt; i++)
+            if(config[i].StartsWith(wxT("Theme="), &theme))
+                break;
+    }
+    return theme;
+}
+
+// Try to find a file "kdeglobals" in one of the directories and read the
+// "Theme" entry there.
+static wxString GetKDETheme(const wxArrayString& basedirs)
+{
+    wxString theme;
+    for(size_t i = 0; i < basedirs.Count(); i++) {
+        wxFileName filename(basedirs.Item(i), wxEmptyString);
+        filename.AppendDir( wxT("share") );
+        filename.AppendDir( wxT("config") );
+        filename.SetName( wxT("kdeglobals") );
+        theme = GetKDEThemeInFile(filename);
+        if(! theme.IsEmpty())
+            return theme;
+    }
+    // If $KDEDIRS and $KDEDIR were set, we try nothing more. Otherwise, we
+    // try to get the configuration file with 'kde-config'.
+    if(basedirs.Count() > 1)
+        return theme;
+    wxString paths = ReadPathFromKDEConfig(wxT("config"));
+    if(! paths.IsEmpty()) {
+        wxStringTokenizer tokenizer(paths, wxT(":"));
+        while( tokenizer.HasMoreTokens() ) {
+            wxFileName filename(tokenizer.GetNextToken(), wxT("kdeglobals"));
+            theme = GetKDEThemeInFile(filename);
+            if(! theme.IsEmpty())
+                return theme;
+        }
+    }
+    return theme;
+}
+
+// Get list of directories of icons.
+static void GetKDEIconDirs(const wxArrayString& basedirs,
+                           wxArrayString& icondirs)
+{
+    wxString theme = GetKDETheme(basedirs);
+    if(theme.IsEmpty())
+        theme = wxT("default.kde");
+
+    for(size_t i = 0; i < basedirs.Count(); i++) {
+        wxFileName dirname(basedirs.Item(i), wxEmptyString);
+        dirname.AppendDir( wxT("share") );
+        dirname.AppendDir( wxT("icons") );
+        dirname.AppendDir(theme);
+        dirname.AppendDir( wxT("32x32") );
+        dirname.AppendDir( wxT("mimetypes") );
+        if( wxDir::Exists( dirname.GetPath() ) )
+            icondirs.Add( dirname.GetPath() );
+    }
+
+    // If $KDEDIRS and $KDEDIR were not set, use 'kde-config'
+    if(basedirs.Count() > 1)
+        return;
+    wxString paths = ReadPathFromKDEConfig(wxT("icon"));
+    if(! paths.IsEmpty()) {
+        wxStringTokenizer tokenizer(paths, wxT(":"));
+        while( tokenizer.HasMoreTokens() ) {
+            wxFileName dirname(tokenizer.GetNextToken(), wxEmptyString);
+            dirname.AppendDir(theme);
+            dirname.AppendDir( wxT("32x32") );
+            dirname.AppendDir( wxT("mimetypes") );
+            if(icondirs.Index(dirname.GetPath()) == wxNOT_FOUND &&
+               wxDir::Exists( dirname.GetPath() ) )
+                icondirs.Add( dirname.GetPath() );
+        }
+    }
+}
+
+// Get list of directories of mime types.
+static void GetKDEMimeDirs(const wxArrayString& basedirs,
+                           wxArrayString& mimedirs)
+{
+    for(size_t i = 0; i < basedirs.Count(); i++) {
+        wxFileName dirname(basedirs.Item(i), wxEmptyString);
+        dirname.AppendDir( wxT("share") );
+        dirname.AppendDir( wxT("mimelnk") );
+        if( wxDir::Exists( dirname.GetPath() ) )
+            mimedirs.Add( dirname.GetPath() );
+    }
+
+    // If $KDEDIRS and $KDEDIR were not set, use 'kde-config'
+    if(basedirs.Count() > 1)
+        return;
+    wxString paths = ReadPathFromKDEConfig(wxT("mime"));
+    if(! paths.IsEmpty()) {
+        wxStringTokenizer tokenizer(paths, wxT(":"));
+        while( tokenizer.HasMoreTokens() ) {
+            wxFileName p(tokenizer.GetNextToken(), wxEmptyString);
+            wxString dirname = p.GetPath(); // To remove possible trailing '/'
+            if(mimedirs.Index(dirname) == wxNOT_FOUND &&
+               wxDir::Exists(dirname) )
+                mimedirs.Add(dirname);
+        }
+    }
+}
+
+// Get list of directories of application desktop files.
+static void GetKDEAppsDirs(const wxArrayString& basedirs,
+                           wxArrayString& appsdirs)
+{
+    for(size_t i = 0; i < basedirs.Count(); i++) {
+        wxFileName dirname(basedirs.Item(i), wxEmptyString);
+        dirname.AppendDir( wxT("share") );
+        dirname.AppendDir( wxT("applnk") );
+        if( wxDir::Exists( dirname.GetPath() ) )
+            appsdirs.Add( dirname.GetPath() );
+    }
+
+    // If $KDEDIRS and $KDEDIR were not set, use 'kde-config'
+    if(basedirs.Count() > 1)
+        return;
+    wxString paths = ReadPathFromKDEConfig(wxT("apps"));
+    if(! paths.IsEmpty()) {
+        wxStringTokenizer tokenizer(paths, wxT(":"));
+        while( tokenizer.HasMoreTokens() ) {
+            wxFileName p(tokenizer.GetNextToken(), wxEmptyString);
+            wxString dirname = p.GetPath(); // To remove possible trailing '/'
+            if(appsdirs.Index(dirname) == wxNOT_FOUND &&
+               wxDir::Exists(dirname) )
+                appsdirs.Add(dirname);
+        }
+    }
+    paths = ReadPathFromKDEConfig(wxT("xdgdata-apps"));
+    if(! paths.IsEmpty()) {
+        wxStringTokenizer tokenizer(paths, wxT(":"));
+        while( tokenizer.HasMoreTokens() ) {
+            wxFileName p(tokenizer.GetNextToken(), wxEmptyString);
+            wxString dirname = p.GetPath(); // To remove possible trailing '/'
+            if(appsdirs.Index(dirname) == wxNOT_FOUND &&
+               wxDir::Exists(dirname) )
+                appsdirs.Add(dirname);
+        }
+    }
+}
+
+// Fill database with all mime types.
 void wxMimeTypesManagerImpl::GetKDEMimeInfo(const wxString& sExtraDir)
 {
-    wxArrayString dirs;
+    wxArrayString basedirs;
+    GetKDEBaseDirs(basedirs);
+
     wxArrayString icondirs;
+    GetKDEIconDirs(basedirs, icondirs);
+    wxArrayString mimedirs;
+    GetKDEMimeDirs(basedirs, mimedirs);
+    wxArrayString appsdirs;
+    GetKDEAppsDirs(basedirs, appsdirs);
 
-    // FIXME: This code is heavily broken. There are three bugs in it:
-    //        1) it uses only KDEDIR, which is deprecated, instead of using
-    //           list of paths from KDEDIRS and using KDEDIR only if KDEDIRS
-    //           is not set
-    //        2) it doesn't look into ~/.kde/share/config/kdeglobals where
-    //           user's settings are stored and thus *ignores* user's settings
-    //           instead of respecting them
-    //        3) it "tries to guess KDEDIR" and "tries a few likely theme
-    //           names", both of which is completely arbitrary; instead, the
-    //           code should give up if KDEDIR(S) is not set and/or the icon
-    //           theme cannot be determined, because it means that the user is
-    //           not using KDE (and thus is not interested in KDE icons anyway)
-
-    // the variable $KDEDIR is set when KDE is running
-    wxString kdedir = wxGetenv( wxT("KDEDIR") );
-
-    if (!kdedir.empty())
-    {
-        // $(KDEDIR)/share/config/kdeglobals holds info
-        // the current icons theme
-        wxFileName configFile( kdedir, wxEmptyString );
-        configFile.AppendDir( wxT("share") );
-        configFile.AppendDir( wxT("config") );
-        configFile.SetName( wxT("kdeglobals") );
-
-        wxTextFile config;
-        if (configFile.FileExists() && config.Open(configFile.GetFullPath()))
-        {
-            // $(KDEDIR)/share/config -> $(KDEDIR)/share
-            configFile.RemoveDir( configFile.GetDirCount() - 1 );
-            // $(KDEDIR)/share/ -> $(KDEDIR)/share/icons
-            configFile.AppendDir( wxT("icons") );
-
-            // Check for entry
-            wxString theme(wxT("default.kde"));
-            size_t nCount = config.GetLineCount();
-            for (size_t i = 0; i < nCount; i++)
-            {
-                if (config[i].StartsWith(wxT("Theme="), &theme/*rest*/))
-                    break;
-            }
-
-            configFile.AppendDir(theme);
-        }
-        else
-        {
-            // $(KDEDIR)/share/config -> $(KDEDIR)/share
-            configFile.RemoveDir( configFile.GetDirCount() - 1 );
-
-            // $(KDEDIR)/share/ -> $(KDEDIR)/share/icons
-            configFile.AppendDir( wxT("icons") );
-
-            // $(KDEDIR)/share/icons -> $(KDEDIR)/share/icons/default.kde
-            configFile.AppendDir( wxT("default.kde") );
-        }
-
-        configFile.SetName( wxEmptyString );
-        configFile.AppendDir( wxT("32x32") );
-        configFile.AppendDir( wxT("mimetypes") );
-
-        // Just try a few likely icons theme names
-
-        int pos = configFile.GetDirCount() - 3;
-
-        if (!wxDir::Exists(configFile.GetPath()))
-        {
-            configFile.RemoveDir( pos );
-            configFile.InsertDir( pos, wxT("default.kde") );
-        }
-
-        if (!wxDir::Exists(configFile.GetPath()))
-        {
-            configFile.RemoveDir( pos );
-            configFile.InsertDir( pos, wxT("default") );
-        }
-
-        if (!wxDir::Exists(configFile.GetPath()))
-        {
-            configFile.RemoveDir( pos );
-            configFile.InsertDir( pos, wxT("crystalsvg") );
-        }
-
-        if (!wxDir::Exists(configFile.GetPath()))
-        {
-            configFile.RemoveDir( pos );
-            configFile.InsertDir( pos, wxT("crystal") );
-        }
-
-        if (wxDir::Exists(configFile.GetPath()))
-            icondirs.Add( configFile.GetFullPath() );
+    if(! sExtraDir.IsEmpty()) {
+        icondirs.Add(sExtraDir + wxT("/icons"));
+        mimedirs.Add(sExtraDir + wxT("/mimelnk"));
+        appsdirs.Add(sExtraDir + wxT("/applnk"));
     }
 
-    // settings in ~/.kde have maximal priority
-    dirs.Add(wxGetHomeDir() + wxT("/.kde/share"));
-    icondirs.Add(wxGetHomeDir() + wxT("/.kde/share/icons/"));
+    // Load mime types
+    size_t nDirs = mimedirs.GetCount(), nDir;
+    for(nDir = 0; nDir < nDirs; nDir++)
+        LoadKDELinkFilesFromDir(mimedirs[nDir], icondirs);
 
-    if (kdedir)
-    {
-        dirs.Add( wxString(kdedir) + wxT("/share") );
-        icondirs.Add( wxString(kdedir) + wxT("/share/icons/") );
-    }
-    else
-    {
-        // try to guess KDEDIR
-        dirs.Add(wxT("/usr/share"));
-        dirs.Add(wxT("/opt/kde/share"));
-        icondirs.Add(wxT("/usr/share/icons/"));
-        icondirs.Add(wxT("/usr/X11R6/share/icons/")); // Debian/Corel linux
-        icondirs.Add(wxT("/opt/kde/share/icons/"));
-    }
-
-    if (!sExtraDir.empty())
-        dirs.Add(sExtraDir);
-    icondirs.Add(sExtraDir + wxT("/icons"));
-
-    size_t nDirs = dirs.GetCount();
-    for ( size_t nDir = 0; nDir < nDirs; nDir++ )
-    {
-        LoadKDELinkFilesFromDir(dirs[nDir], icondirs);
-    }
+    // Load application files and associate them to corresponding mime types.
+    nDirs = appsdirs.GetCount();
+    for(nDir = 0; nDir < nDirs; nDir++)
+        LoadKDEAppsFilesFromDir(appsdirs[nDir]);
 }
 
 // ----------------------------------------------------------------------------

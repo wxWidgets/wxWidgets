@@ -104,6 +104,8 @@ protected:
                                  const wxArrayString& icondirs);
     void LoadKDELinkFilesFromDir(const wxString& dirbase,
                                  const wxArrayString& icondirs);
+    void LoadKDEApp(const wxString& filename);
+    void LoadKDEAppsFilesFromDir(const wxString& dirname);
     void GetKDEMimeInfo(const wxString& sExtraDir);
 
     // write KDE
