@@ -157,8 +157,9 @@ public:
     // drawing functions
     // -----------------
 
-    // draw the header control button (used by wxListCtrl)
-    virtual void DrawHeaderButton(wxWindow *win,
+    // draw the header control button (used by wxListCtrl) Returns optimal
+    // width for the label contents.
+    virtual int  DrawHeaderButton(wxWindow *win,
                                   wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
@@ -168,7 +169,7 @@ public:
 
     // Draw the contents of a header control button (label, sort arrows, etc.)
     // Normally only called by DrawHeaderButton.
-    virtual void DrawHeaderButtonContents(wxWindow *win,
+    virtual int  DrawHeaderButtonContents(wxWindow *win,
                                           wxDC& dc,
                                           const wxRect& rect,
                                           int flags = 0,
@@ -308,21 +309,21 @@ public:
         : m_rendererNative(rendererNative) { }
 
 
-    virtual void DrawHeaderButton(wxWindow *win,
+    virtual int  DrawHeaderButton(wxWindow *win,
                                   wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
                                   wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
                                   wxHeaderButtonParams* params = NULL)
-        { m_rendererNative.DrawHeaderButton(win, dc, rect, flags, sortArrow, params); }
+        { return m_rendererNative.DrawHeaderButton(win, dc, rect, flags, sortArrow, params); }
 
-    virtual void DrawHeaderButtonContents(wxWindow *win,
+    virtual int  DrawHeaderButtonContents(wxWindow *win,
                                           wxDC& dc,
                                           const wxRect& rect,
                                           int flags = 0,
                                           wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
                                           wxHeaderButtonParams* params = NULL)
-        { m_rendererNative.DrawHeaderButtonContents(win, dc, rect, flags, sortArrow, params); }
+        { return m_rendererNative.DrawHeaderButtonContents(win, dc, rect, flags, sortArrow, params); }
 
     virtual int GetHeaderButtonHeight(wxWindow *win)
         { return m_rendererNative.GetHeaderButtonHeight(win); }

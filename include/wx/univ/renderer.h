@@ -847,13 +847,13 @@ public:
                              int flags) const
         { return m_renderer->HitTestFrame(rect, pt, flags); }
 
-    virtual void DrawHeaderButton(wxWindow *win,
+    virtual int  DrawHeaderButton(wxWindow *win,
                                   wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
                                   wxHeaderSortIconType sortIcon = wxHDR_SORT_ICON_NONE,
                                   wxHeaderButtonParams* params = NULL)
-        { m_renderer->DrawHeaderButton(win, dc, rect, flags, sortIcon, params); }
+        { return m_renderer->DrawHeaderButton(win, dc, rect, flags, sortIcon, params); }
     virtual void DrawTreeItemButton(wxWindow *win,
                                     wxDC& dc,
                                     const wxRect& rect,

@@ -118,7 +118,7 @@ public:
 
     static wxRendererNative& Get();
 
-    virtual void DrawHeaderButton(wxWindow *win,
+    virtual int DrawHeaderButton(wxWindow *win,
                                   wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
@@ -290,7 +290,7 @@ wxRendererXP::DrawComboBoxDropButton(wxWindow * win,
 
 }
 
-void
+int
 wxRendererXP::DrawHeaderButton(wxWindow *win,
                                wxDC& dc,
                                const wxRect& rect,
@@ -301,8 +301,7 @@ wxRendererXP::DrawHeaderButton(wxWindow *win,
     wxUxThemeHandle hTheme(win, L"HEADER");
     if ( !hTheme )
     {
-        m_rendererNative.DrawHeaderButton(win, dc, rect, flags, sortArrow, params);
-        return;
+        return m_rendererNative.DrawHeaderButton(win, dc, rect, flags, sortArrow, params);
     }
 
     RECT r;
@@ -330,7 +329,7 @@ wxRendererXP::DrawHeaderButton(wxWindow *win,
     // and then clear those flags before calling DrawHeaderButtonContents.
     
     // Add any extras that are specified in flags and params
-    DrawHeaderButtonContents(win, dc, rect, flags, sortArrow, params);
+    return DrawHeaderButtonContents(win, dc, rect, flags, sortArrow, params);
 }
 
 

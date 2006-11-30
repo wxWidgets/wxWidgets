@@ -43,7 +43,7 @@ class WXDLLEXPORT wxRendererGTK : public wxDelegateRendererNative
 {
 public:
     // draw the header control button (used by wxListCtrl)
-    virtual void DrawHeaderButton(wxWindow *win,
+    virtual int  DrawHeaderButton(wxWindow *win,
                                   wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
@@ -181,7 +181,7 @@ wxRendererGTK::GetTreeWidget()
 // list/tree controls drawing
 // ----------------------------------------------------------------------------
 
-void
+int
 wxRendererGTK::DrawHeaderButton(wxWindow *win,
                                 wxDC& dc,
                                 const wxRect& rect,
@@ -212,7 +212,7 @@ wxRendererGTK::DrawHeaderButton(wxWindow *win,
         dc.LogicalToDeviceX(rect.x) - x_diff, rect.y, rect.width, rect.height
     );
 
-    DrawHeaderButtonContents(win, dc, rect, flags, sortArrow, params);
+    return DrawHeaderButtonContents(win, dc, rect, flags, sortArrow, params);
 }
 
 // draw a ">" or "v" button

@@ -131,16 +131,19 @@ rectangle of a drop down button which arrow matches the size you need.
 
 \membersection{wxRendererNative::DrawHeaderButton}\label{wxrenderernativedrawheaderbutton}
 
-\func{void}{DrawHeaderButton}{\param{wxWindow* }{win}, \param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{int }{flags = 0}, \param{wxHeaderSortIconType }{sortArrow = wxHDR\_SORT\_ICON\_NONE}, \param{wxHeaderButtonParams* }{params = NULL}}
+\func{int}{DrawHeaderButton}{\param{wxWindow* }{win}, \param{wxDC\& }{dc}, \param{const wxRect\& }{rect}, \param{int }{flags = 0}, \param{wxHeaderSortIconType }{sortArrow = wxHDR\_SORT\_ICON\_NONE}, \param{wxHeaderButtonParams* }{params = NULL}}
 
 Draw the header control button (used, for example, by
 \helpref{wxListCtrl}{wxlistctrl}).  Depending on platforms the
 \arg{flags} parameter may support the \texttt{wxCONTROL\_SELECTED}
 \texttt{wxCONTROL\_DISABLED} and \texttt{wxCONTROL\_CURRENT} bits.
 The \arg{sortArrow} parameter can be one of
-\texttt{wxHDR\_SORT\_ICON\_NONE}, \texttt{wxHDR\_SORT\_ICON\_UP}, or 
+\texttt{wxHDR\_SORT\_ICON\_NONE}, \texttt{wxHDR\_SORT\_ICON\_UP}, or
 \texttt{wxHDR\_SORT\_ICON\_DOWN}.  Additional values controlling the
-drawing of a text or bitmap label can be passed in \arg{params}.
+drawing of a text or bitmap label can be passed in \arg{params}.  The
+value returned is the optimal width to contain the the unabreviated
+label text or bitmap, the sort arrow if present, and internal margins.
+
 
 
 \membersection{wxRendererNative::DrawItemSelectionRect}\label{wxrenderernativedrawitemselectionrect}

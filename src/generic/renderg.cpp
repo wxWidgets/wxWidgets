@@ -46,14 +46,14 @@ class WXDLLEXPORT wxRendererGeneric : public wxRendererNative
 public:
     wxRendererGeneric();
 
-    virtual void DrawHeaderButton(wxWindow *win,
+    virtual int  DrawHeaderButton(wxWindow *win,
                                   wxDC& dc,
                                   const wxRect& rect,
                                   int flags = 0,
                                   wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
                                   wxHeaderButtonParams* params = NULL);
 
-    virtual void DrawHeaderButtonContents(wxWindow *win,
+    virtual int  DrawHeaderButtonContents(wxWindow *win,
                                           wxDC& dc,
                                           const wxRect& rect,
                                           int flags = 0,
@@ -204,7 +204,7 @@ wxRendererGeneric::DrawShadedRect(wxDC& dc,
 // tree/list ctrl drawing
 // ----------------------------------------------------------------------------
 
-void
+int
 wxRendererGeneric::DrawHeaderButton(wxWindow* win,
                                     wxDC& dc,
                                     const wxRect& rect,
@@ -239,11 +239,11 @@ wxRendererGeneric::DrawHeaderButton(wxWindow* win,
     dc.DrawLine( x, y+h-1, x+1, y+h-1 );
     dc.DrawLine( x+w-1, y, x+w-1, y+1 );
 
-    DrawHeaderButtonContents(win, dc, rect, flags, sortArrow, params);
+    return DrawHeaderButtonContents(win, dc, rect, flags, sortArrow, params);
 }
 
 
-void
+int
 wxRendererGeneric::DrawHeaderButtonContents(wxWindow *win,
                                             wxDC& dc,
                                             const wxRect& rect,
@@ -251,6 +251,8 @@ wxRendererGeneric::DrawHeaderButtonContents(wxWindow *win,
                                             wxHeaderSortIconType sortArrow,
                                             wxHeaderButtonParams* params)
 {
+    int labelWidth = 0;
+    
     // Mark this item as selected.  For the generic version we'll just draw an
     // underline
     if ( flags & wxCONTROL_SELECTED )
@@ -306,14 +308,17 @@ wxRendererGeneric::DrawHeaderButtonContents(wxWindow *win,
         dc.SetBrush(wxBrush(c));
         dc.DrawPolygon( 3, triPt, ar.x, ar.y);                  
     }
-
+    labelWidth += arrowSpace;
+    
     const int margin = 5;   // number of pixels to reserve on either side of the label
     int bmpWidth = 0;
     int txtEnd = 0;
     
     if ( params && params->m_labelBitmap.Ok() )
         bmpWidth = params->m_labelBitmap.GetWidth() + 2;
-        
+
+    labelWidth += bmpWidth + 2*margin;
+    
     // Draw a label if one is given
     if ( params && !params->m_labelText.empty() )
     {
@@ -330,8 +335,9 @@ wxRendererGeneric::DrawHeaderButtonContents(wxWindow *win,
 
         int tw, th, td, x, y;
         dc.GetTextExtent( label, &tw, &th, &td);
+        labelWidth += tw;
         y = rect.y + wxMax(0, (rect.height - (th+td)) / 2);
-
+        
         // truncate and add an ellipsis (...) if the text is too wide.
         int targetWidth = rect.width - arrowSpace - bmpWidth - 2*margin;
         if ( tw > targetWidth )        
@@ -397,6 +403,7 @@ wxRendererGeneric::DrawHeaderButtonContents(wxWindow *win,
         }
         dc.DrawBitmap(params->m_labelBitmap, x, y, true);
     }
+    return labelWidth;
 }
 
 

@@ -156,23 +156,23 @@ public:
 
      
     DocDeclStr(
-        virtual void , DrawHeaderButton(wxWindow *win,
-                                        wxDC& dc,
-                                        const wxRect& rect,
-                                        int flags = 0,
-                                        wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
-                                        wxHeaderButtonParams* params=NULL),
-        "Draw the header control button (such as what is used by `wx.ListCtrl`
-in report mode.)", "");
+        virtual int , DrawHeaderButton(wxWindow *win,
+                                       wxDC& dc,
+                                       const wxRect& rect,
+                                       int flags = 0,
+                                       wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
+                                       wxHeaderButtonParams* params=NULL),
+        "Draw a header control button (such as what is used by `wx.ListCtrl` in report
+mode.)  The optimal size of the label (text and icons) is returned.", "");
     
 
     DocDeclStr(
-        virtual void , DrawHeaderButtonContents(wxWindow *win,
-                                                wxDC& dc,
-                                                const wxRect& rect,
-                                                int flags = 0,
-                                                wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
-                                                wxHeaderButtonParams* params=NULL),
+        virtual int , DrawHeaderButtonContents(wxWindow *win,
+                                               wxDC& dc,
+                                               const wxRect& rect,
+                                               int flags = 0,
+                                               wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
+                                               wxHeaderButtonParams* params=NULL),
         "Draw the contents of a header control button, (label, sort
 arrows, etc.)  Normally this is only called by `DrawHeaderButton`.", "");
 

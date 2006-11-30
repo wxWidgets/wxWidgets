@@ -34,7 +34,7 @@ class WXDLLEXPORT wxRendererMac : public wxDelegateRendererNative
 {
 public:
     // draw the header control button (used by wxListCtrl)
-    virtual void DrawHeaderButton( wxWindow *win,
+    virtual int DrawHeaderButton( wxWindow *win,
         wxDC& dc,
         const wxRect& rect,
         int flags = 0,
@@ -97,7 +97,7 @@ wxRendererNative& wxRendererNative::GetDefault()
     return s_rendererMac;
 }
 
-void wxRendererMac::DrawHeaderButton( wxWindow *win,
+int wxRendererMac::DrawHeaderButton( wxWindow *win,
     wxDC& dc,
     const wxRect& rect,
     int flags,
@@ -200,7 +200,7 @@ void wxRendererMac::DrawHeaderButton( wxWindow *win,
     }
     flags &= ~wxCONTROL_SELECTED;
 
-    DrawHeaderButtonContents(win, dc, newRect, flags, sortArrow, params);
+    return DrawHeaderButtonContents(win, dc, newRect, flags, sortArrow, params);
 }
 
 
