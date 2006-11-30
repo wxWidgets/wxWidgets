@@ -724,9 +724,9 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     r.BeginBold();
 
     r.BeginFontSize(14);
-    
+
     wxString lineBreak = (wxChar) 29;
-    
+
     r.WriteText(wxString(wxT("Welcome to wxRichTextCtrl, a wxWidgets control")) + lineBreak + wxT("for editing and presenting styled text and images"));
     r.EndFontSize();
     r.Newline();
@@ -1187,7 +1187,6 @@ void MyFrame::OnIndentMore(wxCommandEvent& WXUNUSED(event))
         if (m_richTextCtrl->HasSelection())
             range = m_richTextCtrl->GetSelectionRange();
 
-        wxFontData fontData;
         attr.SetLeftIndent(attr.GetLeftIndent() + 100);
 
         attr.SetFlags(wxTEXT_ATTR_LEFT_INDENT);
@@ -1206,10 +1205,9 @@ void MyFrame::OnIndentLess(wxCommandEvent& WXUNUSED(event))
         if (m_richTextCtrl->HasSelection())
             range = m_richTextCtrl->GetSelectionRange();
 
-        if (attr.GetLeftIndent() >= 100)
+        if (attr.GetLeftIndent() > 0)
         {
-            wxFontData fontData;
-            attr.SetLeftIndent(attr.GetLeftIndent() - 100);
+            attr.SetLeftIndent(wxMax(0, attr.GetLeftIndent() - 100));
 
             m_richTextCtrl->SetStyle(range, attr);
         }
@@ -1227,7 +1225,6 @@ void MyFrame::OnLineSpacingHalf(wxCommandEvent& WXUNUSED(event))
         if (m_richTextCtrl->HasSelection())
             range = m_richTextCtrl->GetSelectionRange();
 
-        wxFontData fontData;
         attr.SetFlags(wxTEXT_ATTR_LINE_SPACING);
         attr.SetLineSpacing(15);
 
@@ -1246,7 +1243,6 @@ void MyFrame::OnLineSpacingDouble(wxCommandEvent& WXUNUSED(event))
         if (m_richTextCtrl->HasSelection())
             range = m_richTextCtrl->GetSelectionRange();
 
-        wxFontData fontData;
         attr.SetFlags(wxTEXT_ATTR_LINE_SPACING);
         attr.SetLineSpacing(20);
 
@@ -1265,7 +1261,6 @@ void MyFrame::OnLineSpacingSingle(wxCommandEvent& WXUNUSED(event))
         if (m_richTextCtrl->HasSelection())
             range = m_richTextCtrl->GetSelectionRange();
 
-        wxFontData fontData;
         attr.SetFlags(wxTEXT_ATTR_LINE_SPACING);
         attr.SetLineSpacing(0); // Can also use 10
 
@@ -1284,7 +1279,6 @@ void MyFrame::OnParagraphSpacingMore(wxCommandEvent& WXUNUSED(event))
         if (m_richTextCtrl->HasSelection())
             range = m_richTextCtrl->GetSelectionRange();
 
-        wxFontData fontData;
         attr.SetParagraphSpacingAfter(attr.GetParagraphSpacingAfter() + 20);
 
         attr.SetFlags(wxTEXT_ATTR_PARA_SPACING_AFTER);
@@ -1305,7 +1299,6 @@ void MyFrame::OnParagraphSpacingLess(wxCommandEvent& WXUNUSED(event))
 
         if (attr.GetParagraphSpacingAfter() >= 20)
         {
-            wxFontData fontData;
             attr.SetParagraphSpacingAfter(attr.GetParagraphSpacingAfter() - 20);
 
             attr.SetFlags(wxTEXT_ATTR_PARA_SPACING_AFTER);
@@ -1332,7 +1325,7 @@ void MyFrame::OnViewHTML(wxCommandEvent& WXUNUSED(event))
 
     wxRichTextHTMLHandler htmlHandler;
     htmlHandler.SetFlags(wxRICHTEXT_HANDLER_SAVE_IMAGES_TO_MEMORY);
-    
+
     wxArrayInt fontSizeMapping;
     fontSizeMapping.Add(7);
     fontSizeMapping.Add(9);
@@ -1341,7 +1334,7 @@ void MyFrame::OnViewHTML(wxCommandEvent& WXUNUSED(event))
     fontSizeMapping.Add(14);
     fontSizeMapping.Add(22);
     fontSizeMapping.Add(100);
-    
+
     htmlHandler.SetFontSizeMapping(fontSizeMapping);
 
     if (htmlHandler.SaveFile(& m_richTextCtrl->GetBuffer(), strStream))
@@ -1533,7 +1526,7 @@ void MyFrame::OnInsertURL(wxCommandEvent& WXUNUSED(event))
         wxRichTextAttr urlStyle;
         urlStyle.SetTextColour(*wxBLUE);
         urlStyle.SetFontUnderlined(true);
-        
+
         m_richTextCtrl->BeginStyle(urlStyle);
         m_richTextCtrl->BeginURL(url);
         m_richTextCtrl->WriteText(url);
