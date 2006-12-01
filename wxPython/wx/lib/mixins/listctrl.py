@@ -117,7 +117,8 @@ class ColumnSorterMixin:
         self._col = col = evt.GetColumn()
         self._colSortFlag[col] = int(not self._colSortFlag[col])
         self.GetListCtrl().SortItems(self.GetColumnSorter())
-        self.__updateImages(oldCol)
+        if wx.Platform != "__WXMAC__" or wx.SystemOptions.GetOptionInt("mac.listctrl.always_use_generic") == 1:
+            self.__updateImages(oldCol)
         evt.Skip()
 
 
