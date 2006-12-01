@@ -59,7 +59,7 @@ class MyRenderer : public wxDelegateRendererNative
 public:
     MyRenderer() : wxDelegateRendererNative(wxRendererNative::GetDefault()) { }
 
-    virtual void DrawHeaderButton(wxWindow *WXUNUSED(win),
+    virtual int DrawHeaderButton(wxWindow *WXUNUSED(win),
                                   wxDC& dc,
                                   const wxRect& rect,
                                   int WXUNUSED(flags) = 0,
@@ -70,6 +70,7 @@ public:
         dc.SetTextForeground(*wxWHITE);
         dc.DrawRoundedRectangle(rect, 5);
         dc.DrawLabel(_T("MyRenderer"), wxNullBitmap, rect, wxALIGN_CENTER);
+        return rect.width;
     }
 };
 
