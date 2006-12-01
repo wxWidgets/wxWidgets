@@ -4745,6 +4745,8 @@ bool wxRichTextBuffer::InsertTextWithUndo(long pos, const wxString& text, wxRich
         length --;
         action->GetNewParagraphs().SetPartialParagraph(true);
     }
+    else if (text.length() > 0 && text.Last() == wxT('\n'))
+        length --;
 
     action->SetPosition(pos);
 
@@ -6038,6 +6040,13 @@ bool wxRichTextAction::Do()
             // Don't take into account the last newline
             if (m_newParagraphs.GetPartialParagraph())
                 newCaretPosition --;
+            else
+                if (m_newParagraphs.GetChildren().GetCount() > 0)
+                {
+                    wxRichTextObject* p = (wxRichTextObject*) m_newParagraphs.GetChildren().GetLast()->GetData();
+                    if (p->GetRange().GetLength() == 1)
+                        newCaretPosition --;
+                }
 
             newCaretPosition = wxMin(newCaretPosition, (m_buffer->GetRange().GetEnd()-1));            
 
