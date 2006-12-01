@@ -2964,6 +2964,9 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
         m_textctrlWrapper->AcceptChangesAndFinish();
 #endif // __WXMAC__
 
+    if ( event.LeftDown() )
+        SetFocus();
+    
     event.SetEventObject( GetParent() );
     if ( GetParent()->GetEventHandler()->ProcessEvent( event) )
         return;
