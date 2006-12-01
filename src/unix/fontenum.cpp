@@ -112,31 +112,7 @@ bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
 
 bool wxFontEnumerator::EnumerateEncodings(const wxString& facename)
 {
-    // name of UTF-8 encoding: no need to use wxFontMapper for it as it's
-    // unlikely to change
-    const wxString utf8(_T("UTF-8"));
-
-
-    // all fonts are in UTF-8 only when using Pango
-    if ( !facename.empty() )
-    {
-        OnFontEncoding(facename, utf8);
-        return true;
-    }
-
-    // so enumerating all facenames supporting this encoding is the same as
-    // enumerating all facenames
-    const wxArrayString facenames(GetFacenames(wxFONTENCODING_UTF8));
-    const size_t count = facenames.size();
-    if ( !count )
-        return false;
-
-    for ( size_t n = 0; n < count; n++ )
-    {
-        OnFontEncoding(facenames[n], utf8);
-    }
-
-    return true;
+    return EnumerateEncodingsUTF8(facename);
 }
 
 

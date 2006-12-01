@@ -16,21 +16,36 @@
 #endif
 
 #include "wx/fontenum.h"
+#include "wx/private/fontmgr.h"
 
 // ----------------------------------------------------------------------------
 // wxFontEnumerator
 // ----------------------------------------------------------------------------
 
-bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding WXUNUSED(encoding),
-                                          bool WXUNUSED(fixedWidthOnly))
+bool wxFontEnumerator::EnumerateFacenames(wxFontEncoding encoding,
+                                          bool fixedWidthOnly)
 {
-    // FIXME_DFB
-    OnFacename(_T("Default"));
-    return true;
+    // we only support UTF-8 and system (which means "use any"):
+    if ( encoding != wxFONTENCODING_SYSTEM && encoding != wxFONTENCODING_UTF8 )
+        return false;
+
+    bool found = false;
+    const wxFontBundleList& list = wxFontsManager::Get()->GetBundles();
+
+    for ( wxFontBundleList::const_iterator f = list.begin(); f != list.end(); ++f )
+    {
+        if ( fixedWidthOnly && !(*f)->IsFixed() )
+            continue;
+
+        found = true;
+        if ( !OnFacename((*f)->GetName()) )
+            break; // OnFacename() requests us to stop enumeration
+    }
+
+    return found;
 }
 
-bool wxFontEnumerator::EnumerateEncodings(const wxString& WXUNUSED(family))
+bool wxFontEnumerator::EnumerateEncodings(const wxString& facename)
 {
-    // FIXME_DFB
-    return false;
+    return EnumerateEncodingsUTF8(facename);
 }

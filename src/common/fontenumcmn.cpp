@@ -100,3 +100,32 @@ bool wxFontEnumerator::IsValidFacename(const wxString &facename)
     return true;
 }
 
+#ifdef wxHAS_UTF8_FONTS
+bool wxFontEnumerator::EnumerateEncodingsUTF8(const wxString& facename)
+{
+    // name of UTF-8 encoding: no need to use wxFontMapper for it as it's
+    // unlikely to change
+    const wxString utf8(_T("UTF-8"));
+
+    // all fonts are in UTF-8 only if this code is used
+    if ( !facename.empty() )
+    {
+        OnFontEncoding(facename, utf8);
+        return true;
+    }
+
+    // so enumerating all facenames supporting this encoding is the same as
+    // enumerating all facenames
+    const wxArrayString facenames(GetFacenames(wxFONTENCODING_UTF8));
+    const size_t count = facenames.size();
+    if ( !count )
+        return false;
+
+    for ( size_t n = 0; n < count; n++ )
+    {
+        OnFontEncoding(facenames[n], utf8);
+    }
+
+    return true;
+}
+#endif // wxHAS_UTF8_FONTS

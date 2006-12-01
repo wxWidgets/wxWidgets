@@ -16,6 +16,11 @@
 #include "wx/fontenc.h"
 #include "wx/arrstr.h"
 
+#if wxUSE_PANGO || defined(__WXDFB__)
+    // defined if the port uses only UTF-8 font encodings internally
+    #define wxHAS_UTF8_FONTS
+#endif
+
 // ----------------------------------------------------------------------------
 // wxFontEnumerator enumerates all available fonts on the system or only the
 // fonts with given attributes
@@ -72,6 +77,11 @@ public:
     static bool IsValidFacename(const wxString &str);
 
 private:
+#ifdef wxHAS_UTF8_FONTS
+    // helper for ports that only use UTF-8 encoding natively
+    bool EnumerateEncodingsUTF8(const wxString& facename);
+#endif
+
     DECLARE_NO_COPY_CLASS(wxFontEnumerator)
 };
 
