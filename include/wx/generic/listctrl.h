@@ -183,6 +183,9 @@ public:
     virtual bool SetFont( const wxFont &font );
     virtual bool SetCursor( const wxCursor &cursor );
 
+    virtual int GetScrollPos(int orient) const;
+    virtual void SetScrollPos(int orient, int pos, bool refresh = true); 
+
 #if wxUSE_DRAG_AND_DROP
     virtual void SetDropTarget( wxDropTarget *dropTarget );
     virtual wxDropTarget *GetDropTarget() const;

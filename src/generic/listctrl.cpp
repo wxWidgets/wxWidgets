@@ -5225,6 +5225,16 @@ wxColour wxGenericListCtrl::GetItemBackgroundColour( long item ) const
     return info.GetBackgroundColour();
 }
 
+int wxGenericListCtrl::GetScrollPos( int orient ) const
+{
+    return m_mainWin->GetScrollPos( orient );
+}
+
+void wxGenericListCtrl::SetScrollPos( int orient, int pos, bool refresh )
+{
+    m_mainWin->SetScrollPos( orient, pos, refresh );
+}
+
 void wxGenericListCtrl::SetItemFont( long item, const wxFont &f )
 {
     wxListItem info;
