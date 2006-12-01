@@ -334,8 +334,10 @@ static gboolean target_drag_drop( GtkWidget *widget,
 
     if (!ret)
     {
+#ifdef __WXDEBUG__
         wxLogTrace(TRACE_DND, wxT( "Drop target: OnDrop returned FALSE") );
-
+#endif
+       
         /* cancel the whole thing */
         gtk_drag_finish( context,
                           FALSE,        /* no success */
@@ -344,8 +346,10 @@ static gboolean target_drag_drop( GtkWidget *widget,
     }
     else
     {
+#ifdef __WXDEBUG__
         wxLogTrace(TRACE_DND, wxT( "Drop target: OnDrop returned true") );
-
+#endif
+       
 #if wxUSE_THREADS
         /* disable GUI threads */
 #endif
@@ -412,8 +416,10 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
         return;
     }
 
+#ifdef __WXDEBUG__
     wxLogTrace(TRACE_DND, wxT( "Drop target: data received event") );
-
+#endif
+   
     /* inform the wxDropTarget about the current GtkSelectionData.
        this is only valid for the duration of this call */
     drop_target->SetDragData( data );
@@ -422,15 +428,19 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
 
     if ( wxIsDragResultOk( drop_target->OnData( x, y, result ) ) )
     {
+#ifdef __WXDEBUG__
         wxLogTrace(TRACE_DND, wxT( "Drop target: OnData returned true") );
-
+#endif
+       
         /* tell GTK that data transfer was successful */
         gtk_drag_finish( context, TRUE, FALSE, time );
     }
     else
     {
+#ifdef __WXDEBUG__
         wxLogTrace(TRACE_DND, wxT( "Drop target: OnData returned FALSE") );
-
+#endif
+       
         /* tell GTK that data transfer was not successful */
         gtk_drag_finish( context, FALSE, FALSE, time );
     }
@@ -601,29 +611,37 @@ source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
 
     wxDataFormat format( selection_data->target );
 
+#ifdef __WXDEBUG__
     wxLogTrace(TRACE_DND, wxT("Drop source: format requested: %s"),
                format.GetId().c_str());
-
+#endif
+   
     drop_source->m_retValue = wxDragCancel;
 
     wxDataObject *data = drop_source->GetDataObject();
 
     if (!data)
     {
+#ifdef __WXDEBUG__
         wxLogTrace(TRACE_DND, wxT("Drop source: no data object") );
-        return;
+#endif
+       return;
     }
 
     if (!data->IsSupportedFormat(format))
     {
+#ifdef __WXDEBUG__
         wxLogTrace(TRACE_DND, wxT("Drop source: unsupported format") );
-        return;
+#endif
+       return;
     }
 
     if (data->GetDataSize(format) == 0)
     {
+#ifdef __WXDEBUG__
         wxLogTrace(TRACE_DND, wxT("Drop source: empty data") );
-        return;
+#endif
+       return;
     }
 
     size_t size = data->GetDataSize(format);
@@ -861,8 +879,10 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     for (size_t i = 0; i < count; i++)
     {
         GdkAtom atom = array[i];
+#ifdef __WXDEBUG__
         wxLogTrace(TRACE_DND, wxT("Drop source: Supported atom %s"), gdk_atom_name( atom ));
-        gtk_target_list_add( target_list, atom, 0, 0 );
+#endif
+       gtk_target_list_add( target_list, atom, 0, 0 );
     }
     delete[] array;
 
