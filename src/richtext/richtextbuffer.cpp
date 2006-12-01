@@ -4730,7 +4730,8 @@ bool wxRichTextBuffer::InsertTextWithUndo(long pos, const wxString& text, wxRich
     wxTextAttrEx paraAttr;
     if (flags & wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE)
     {
-        paraAttr = GetStyleForNewParagraph(pos);
+        // Get appropriate paragraph style
+        paraAttr = GetStyleForNewParagraph(pos, false, false);
         if (!paraAttr.IsDefault())
             p = & paraAttr;
     }
@@ -4767,7 +4768,7 @@ bool wxRichTextBuffer::InsertNewlineWithUndo(long pos, wxRichTextCtrl* ctrl, int
     wxTextAttrEx paraAttr;
     if (flags & wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE)
     {
-        paraAttr = GetStyleForNewParagraph(pos);
+        paraAttr = GetStyleForNewParagraph(pos, false, true /* look for next paragraph style */);
         if (!paraAttr.IsDefault())
             p = & paraAttr;
     }
@@ -4831,7 +4832,7 @@ bool wxRichTextBuffer::InsertImageWithUndo(long pos, const wxRichTextImageBlock&
 /// Get the style that is appropriate for a new paragraph at this position.
 /// If the previous paragraph has a paragraph style name, look up the next-paragraph
 /// style.
-wxRichTextAttr wxRichTextBuffer::GetStyleForNewParagraph(long pos, bool caretPosition) const
+wxRichTextAttr wxRichTextBuffer::GetStyleForNewParagraph(long pos, bool caretPosition, bool lookUpNewParaStyle) const
 {
     wxRichTextParagraph* para = GetParagraphAtPosition(pos, caretPosition);
     if (para)
@@ -4840,7 +4841,7 @@ wxRichTextAttr wxRichTextBuffer::GetStyleForNewParagraph(long pos, bool caretPos
         bool foundAttributes = false;
         
         // Look for a matching paragraph style
-        if (!para->GetAttributes().GetParagraphStyleName().IsEmpty() && GetStyleSheet())
+        if (lookUpNewParaStyle && !para->GetAttributes().GetParagraphStyleName().IsEmpty() && GetStyleSheet())
         {
             wxRichTextParagraphStyleDefinition* paraDef = GetStyleSheet()->FindParagraphStyle(para->GetAttributes().GetParagraphStyleName());
             if (paraDef)
@@ -6041,7 +6042,7 @@ bool wxRichTextAction::Do()
             if (m_newParagraphs.GetPartialParagraph())
                 newCaretPosition --;
             else
-                if (m_newParagraphs.GetChildren().GetCount() > 0)
+                if (m_newParagraphs.GetChildren().GetCount() > 1)
                 {
                     wxRichTextObject* p = (wxRichTextObject*) m_newParagraphs.GetChildren().GetLast()->GetData();
                     if (p->GetRange().GetLength() == 1)
