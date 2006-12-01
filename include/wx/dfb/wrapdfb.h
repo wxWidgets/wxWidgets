@@ -407,6 +407,9 @@ struct wxIDirectFBWindow : public wxDfbWrapper<IDirectFBWindow>
 
     bool RequestFocus()
         { return Check(m_ptr->RequestFocus(m_ptr)); }
+
+    bool Destroy()
+        { return Check(m_ptr->Destroy(m_ptr)); }
 };
 
 
