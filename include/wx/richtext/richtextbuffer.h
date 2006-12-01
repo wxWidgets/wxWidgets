@@ -1869,7 +1869,7 @@ public:
     /// Get the style that is appropriate for a new paragraph at this position.
     /// If the previous paragraph has a paragraph style name, look up the next-paragraph
     /// style.
-    wxRichTextAttr GetStyleForNewParagraph(long pos, bool caretPosition = false) const;
+    wxRichTextAttr GetStyleForNewParagraph(long pos, bool caretPosition = false, bool lookUpNewParaStyle=false) const;
 
     /// Dumps contents of buffer for debugging purposes
     virtual void Dump();
