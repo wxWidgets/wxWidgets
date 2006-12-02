@@ -6673,17 +6673,17 @@ class RendererNative(object):
     def DrawHeaderButton(*args, **kwargs):
         """
         DrawHeaderButton(self, Window win, DC dc, Rect rect, int flags=0, int sortArrow=HDR_SORT_ICON_NONE, 
-            HeaderButtonParams params=None)
+            HeaderButtonParams params=None) -> int
 
-        Draw the header control button (such as what is used by `wx.ListCtrl`
-        in report mode.)
+        Draw a header control button (such as what is used by `wx.ListCtrl` in report
+        mode.)  The optimal size of the label (text and icons) is returned.
         """
         return _gdi_.RendererNative_DrawHeaderButton(*args, **kwargs)
 
     def DrawHeaderButtonContents(*args, **kwargs):
         """
         DrawHeaderButtonContents(self, Window win, DC dc, Rect rect, int flags=0, int sortArrow=HDR_SORT_ICON_NONE, 
-            HeaderButtonParams params=None)
+            HeaderButtonParams params=None) -> int
 
         Draw the contents of a header control button, (label, sort
         arrows, etc.)  Normally this is only called by `DrawHeaderButton`.

@@ -34196,6 +34196,7 @@ SWIGINTERN PyObject *_wrap_RendererNative_DrawHeaderButton(PyObject *SWIGUNUSEDP
   int arg5 = (int) 0 ;
   wxHeaderSortIconType arg6 = (wxHeaderSortIconType) wxHDR_SORT_ICON_NONE ;
   wxHeaderButtonParams *arg7 = (wxHeaderButtonParams *) NULL ;
+  int result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -34266,11 +34267,11 @@ SWIGINTERN PyObject *_wrap_RendererNative_DrawHeaderButton(PyObject *SWIGUNUSEDP
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->DrawHeaderButton(arg2,*arg3,(wxRect const &)*arg4,arg5,arg6,arg7);
+    result = (int)(arg1)->DrawHeaderButton(arg2,*arg3,(wxRect const &)*arg4,arg5,arg6,arg7);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_Py_Void();
+  resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
   return NULL;
@@ -34286,6 +34287,7 @@ SWIGINTERN PyObject *_wrap_RendererNative_DrawHeaderButtonContents(PyObject *SWI
   int arg5 = (int) 0 ;
   wxHeaderSortIconType arg6 = (wxHeaderSortIconType) wxHDR_SORT_ICON_NONE ;
   wxHeaderButtonParams *arg7 = (wxHeaderButtonParams *) NULL ;
+  int result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
@@ -34356,11 +34358,11 @@ SWIGINTERN PyObject *_wrap_RendererNative_DrawHeaderButtonContents(PyObject *SWI
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->DrawHeaderButtonContents(arg2,*arg3,(wxRect const &)*arg4,arg5,arg6,arg7);
+    result = (int)(arg1)->DrawHeaderButtonContents(arg2,*arg3,(wxRect const &)*arg4,arg5,arg6,arg7);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_Py_Void();
+  resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
   return NULL;
