@@ -441,12 +441,26 @@ public:
                        wxFont *theFont = NULL) const
         { DoGetTextExtent(string, x, y, descent, externalLeading, theFont); }
 
+    wxSize GetTextExtent(const wxString& string) const
+    {
+        wxCoord w, h;
+        DoGetTextExtent(string, &w, &h);
+        return wxSize(w, h);
+    }
+
     // works for single as well as multi-line strings
-    virtual void GetMultiLineTextExtent(const wxString& text,
+    virtual void GetMultiLineTextExtent(const wxString& string,
                                         wxCoord *width,
                                         wxCoord *height,
                                         wxCoord *heightLine = NULL,
                                         wxFont *font = NULL) const;
+
+    wxSize GetMultiLineTextExtent(const wxString& string) const
+    {
+        wxCoord w, h;
+        GetMultiLineTextExtent(string, &w, &h);
+        return wxSize(w, h);
+    }
 
     // Measure cumulative width of text after each character
     bool GetPartialTextExtents(const wxString& text, wxArrayInt& widths) const

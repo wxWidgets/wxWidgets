@@ -662,6 +662,33 @@ Gets the current logical function (see \helpref{wxDC::SetLogicalFunction}{wxdcse
 Gets the {\it mapping mode} for the device context (see \helpref{wxDC::SetMapMode}{wxdcsetmapmode}).
 
 
+\membersection{wxDC::GetMultiLineTextExtent}\label{wxdcgetmultilinetextextent}
+
+\constfunc{void}{GetMultiLineTextExtent}{\param{const wxString\& }{string}, \param{wxCoord *}{w},\\
+  \param{wxCoord *}{h}, \param{wxCoord *}{heightLine = NULL}, \param{wxFont *}{font = NULL}}
+
+\constfunc{wxSize}{GetMultiLineTextExtent}{\param{const wxString\& }{string}}
+
+Gets the dimensions of the string using the currently selected font.
+\rtfsp{\it string} is the text string to measure, {\it heightLine}, if non NULL,
+is where to store the height of a single line.
+
+The text extent is returned in {\it w} and {\it h} pointers (first form) or as
+a \helpref{wxSize}{wxsize} object (second form).
+
+If the optional parameter {\it font} is specified and valid, then it is used
+for the text extent calculation. Otherwise the currently selected font is.
+
+Note that this function works both with single-line and multi-line strings.
+
+\wxheading{See also}
+
+\helpref{wxFont}{wxfont},\rtfsp
+\helpref{wxDC::SetFont}{wxdcsetfont},\rtfsp
+\helpref{wxDC::GetPartialTextExtents}{wxdcgetpartialtextextents},\rtfsp
+\helpref{wxDC::GetTextExtent}{wxdcgettextextent}
+
+
 \membersection{wxDC::GetPartialTextExtents}\label{wxdcgetpartialtextextents}
 
 \constfunc{bool}{GetPartialTextExtents}{\param{const wxString\&  }{text}, 
@@ -674,6 +701,11 @@ using \helpref{GetTextExtent}{wxdcgettextextent}, however if the
 various platforms have a native API function that is faster or more
 accurate than the generic implementation then it should be used
 instead. 
+
+\wxheading{See also}
+
+\helpref{wxDC::GetMultiLineTextExtent}{wxdcgetmultilinetextextent},\rtfsp
+\helpref{wxDC::GetTextExtent}{wxdcgettextextent}
 
 \pythonnote{This method only takes the {\it text} parameter and
   returns a Python list of integers.}
@@ -760,20 +792,31 @@ Gets the current text background colour (see \helpref{wxDC::SetTextBackground}{w
 
 \membersection{wxDC::GetTextExtent}\label{wxdcgettextextent}
 
-\func{void}{GetTextExtent}{\param{const wxString\& }{string}, \param{wxCoord *}{w}, \param{wxCoord *}{h},\\
+\constfunc{void}{GetTextExtent}{\param{const wxString\& }{string}, \param{wxCoord *}{w}, \param{wxCoord *}{h},\\
   \param{wxCoord *}{descent = NULL}, \param{wxCoord *}{externalLeading = NULL}, \param{wxFont *}{font = NULL}}
 
+\constfunc{wxSize}{GetTextExtent}{\param{const wxString\& }{string}}
+
 Gets the dimensions of the string using the currently selected font.
-\rtfsp{\it string} is the text string to measure, {\it w} and {\it h} are
-the total width and height respectively, {\it descent} is the
+\rtfsp{\it string} is the text string to measure, {\it descent} is the
 dimension from the baseline of the font to the bottom of the
 descender, and {\it externalLeading} is any extra vertical space added
 to the font by the font designer (usually is zero).
 
+The text extent is returned in {\it w} and {\it h} pointers (first form) or as
+a \helpref{wxSize}{wxsize} object (second form).
+
 If the optional parameter {\it font} is specified and valid, then it is used
 for the text extent calculation. Otherwise the currently selected font is.
 
-See also \helpref{wxFont}{wxfont}, \helpref{wxDC::SetFont}{wxdcsetfont}.
+Note that this function only works with single-line strings.
+
+\wxheading{See also}
+
+\helpref{wxFont}{wxfont},\rtfsp
+\helpref{wxDC::SetFont}{wxdcsetfont},\rtfsp
+\helpref{wxDC::GetPartialTextExtents}{wxdcgetpartialtextextents},\rtfsp
+\helpref{wxDC::GetMultiLineTextExtent}{wxdcgetmultilinetextextent}
 
 \pythonnote{The following methods are implemented in wxPython:\par
 \indented{2cm}{\begin{twocollist}
