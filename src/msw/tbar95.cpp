@@ -784,17 +784,21 @@ bool wxToolBar::Realize()
             }
         }
 
-        if ( m_disabledImgList )
+        // disable image lists are only supported in comctl32.dll 4.70+
+        if ( wxApp::GetComCtl32Version() >= 470 )
         {
+            HIMAGELIST hil = m_disabledImgList
+                                ? GetHimagelistOf(m_disabledImgList)
+                                : 0;
+
+            // notice that we set the image list even if don't have one right
+            // now as we could have it before and need to reset it in this case
             HIMAGELIST oldImageList = (HIMAGELIST)
-                ::SendMessage(GetHwnd(),
-                              TB_SETDISABLEDIMAGELIST,
-                              0,
-                              (LPARAM)GetHimagelistOf(m_disabledImgList));
+              ::SendMessage(GetHwnd(), TB_SETDISABLEDIMAGELIST, 0, (LPARAM)hil);
 
             // delete previous image list if any
             if ( oldImageList )
-                ::DeleteObject( oldImageList );
+                ::DeleteObject(oldImageList);
         }
     }
 
