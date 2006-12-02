@@ -154,7 +154,11 @@ outside of the current range, an invalid object is returned.
 
 \func{void}{SetFormat}{\param{const wxChar*}{ format}}
 
-Sets the display format for the date in the control. See wxDateTime for the meaning of format strings.
+Please note that this function is only available in the generic version of this
+control. The native version always uses the current system locale.
+
+Sets the display format for the date in the control. See wxDateTime for the
+meaning of format strings.
 
 \wxheading{Remarks}
 
