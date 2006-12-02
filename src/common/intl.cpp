@@ -2724,7 +2724,7 @@ bool wxLocale::IsAvailable(int lang)
     const wxLanguageInfo *info = wxLocale::GetLanguageInfo(lang);
     wxCHECK_MSG( info, false, _T("invalid language") );
 
-#ifdef __WIN32__
+#if defined(__WIN32__)
     if ( !info->WinLang )
         return false;
 
@@ -2734,10 +2734,23 @@ bool wxLocale::IsAvailable(int lang)
                          SORT_DEFAULT),
                 LCID_INSTALLED
             ) )
-      return false;
-#else // !__WIN32__
-    // TODO: test if setlocale(info->CanonicalName) works under other OS?
-#endif // __WIN32__/!__WIN32__
+        return false;
+
+#elif defined(__UNIX__)
+    
+    // Test if setting the locale works, then set it back. 
+    wxMB2WXbuf oldLocale = wxSetlocale(LC_ALL, wxEmptyString);
+    wxMB2WXbuf tmp = wxSetlocaleTryUTF(LC_ALL, info->CanonicalName);
+    if ( !tmp )
+    {
+        // Some C libraries don't like xx_YY form and require xx only
+        tmp = wxSetlocaleTryUTF(LC_ALL, info->CanonicalName.Left(2));
+        if ( !tmp )
+            return false;
+    }
+    // restore the original locale
+    wxSetlocale(LC_ALL, oldLocale);    
+#endif 
 
     return true;
 }
