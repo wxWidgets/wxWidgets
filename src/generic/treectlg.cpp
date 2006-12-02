@@ -3649,6 +3649,11 @@ void wxGenericTreeCtrl::DoDirtyProcessing()
 
 wxSize wxGenericTreeCtrl::DoGetBestSize() const
 {
+    // make sure all positions are calculated as normally this only done during
+    // idle time but we need them for base class DoGetBestSize() to return the
+    // correct result
+    wxConstCast(this, wxGenericTreeCtrl)->CalculatePositions();
+
     wxSize size = wxTreeCtrlBase::DoGetBestSize();
 
     // there seems to be an implicit extra border around the items, although
@@ -3656,9 +3661,19 @@ wxSize wxGenericTreeCtrl::DoGetBestSize() const
     // scrollbars appear in a tree with default/best size
     size.IncBy(4, 4);
 
-    // avoid caching (necessarily arbitrary) default size for empty tree
-    if ( GetRootItem().IsOk() )
-        CacheBestSize(size);
+    // and the border has to be rounded up to a multiple of PIXELS_PER_UNIT or
+    // scrollbars still appear
+    const wxSize& borderSize = GetWindowBorderSize();
+
+    int dx = (size.x - borderSize.x) % PIXELS_PER_UNIT;
+    if ( dx )
+        size.x += PIXELS_PER_UNIT - dx;
+    int dy = (size.y - borderSize.y) % PIXELS_PER_UNIT;
+    if ( dy )
+        size.y += PIXELS_PER_UNIT - dy;
+
+    // we need to update the cache too as the base class cached its own value
+    CacheBestSize(size);
 
     return size;
 }
