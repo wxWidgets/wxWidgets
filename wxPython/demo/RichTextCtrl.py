@@ -86,12 +86,12 @@ class RichTextFrame(wx.Frame):
         self.rtc.BeginLeftIndent(100, -40)
         self.rtc.Newline()
 
-        self.rtc.WriteText("It was in January, the most down-trodden month of an Edinburgh winteself.rtc. An attractive woman came into the cafe, which is nothing remarkable.")
+        self.rtc.WriteText("It was in January, the most down-trodden month of an Edinburgh winter. An attractive woman came into the cafe, which is nothing remarkable.")
         self.rtc.EndLeftIndent()
 
         self.rtc.Newline()
 
-        self.rtc.WriteText("Numbered bullets are possible, again using subindents:")
+        self.rtc.WriteText("Numbered bullets are possible, again using sub-indents:")
 
         self.rtc.BeginNumberedBullet(1, 100, 60)
         self.rtc.Newline()

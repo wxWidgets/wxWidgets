@@ -423,7 +423,6 @@ class TestPanel(wx.Panel):
         fgs.Add(cc)
         fgs.Add((10,10))
         fgs.Add(wx.StaticText(self, -1, "Custom popup action, and custom button bitmap"))
-        
 
         box = wx.BoxSizer()
         box.Add(fgs, 1, wx.EXPAND|wx.ALL, 20)
