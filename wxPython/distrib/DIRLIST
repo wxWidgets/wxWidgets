@@ -45,6 +45,13 @@ wxPython/demo
 wxPython/demo/bitmaps
 wxPython/demo/bmp_source
 wxPython/demo/data
+wxPython/demo/data/locale-src
+wxPython/demo/data/locale
+wxPython/demo/data/locale/af/LC_MESSAGES
+wxPython/demo/data/locale/de/LC_MESSAGES
+wxPython/demo/data/locale/es/LC_MESSAGES
+wxPython/demo/data/locale/fr/LC_MESSAGES
+wxPython/demo/data/locale/it/LC_MESSAGES
 wxPython/demo/dllwidget
 wxPython/distrib
 wxPython/distrib/all
@@ -107,6 +114,7 @@ wxPython/wx/build
 wxPython/wx/lib
 wxPython/wx/lib/analogclock
 wxPython/wx/lib/analogclock/lib_setup
+wxPython/wx/lib/art
 wxPython/wx/lib/colourchooser
 wxPython/wx/lib/editor
 wxPython/wx/lib/floatcanvas

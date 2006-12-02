@@ -34,6 +34,18 @@ class which can be mixed with a wx.App class and provides a PyCrust
 window that can be activated with a Ctrl-Alt-I keystroke (or Cmd-Alt-I
 on the Mac.)
 
+Added some modules from Riaan Booysen:  
+
+    * wx.lib.flagart:  contains icons of the flags of many countries.
+
+    * wx.lib.art.img2pyartprov: makes images embedded in a python file
+      with img2py available via the wx.ArtProvider.
+
+    * wx.lib.langlistctrl: A wx.ListCtrl for selecting a language,
+      which uses the country flag icons.
+
+    * An I18N sample for the demo.
+
 
 
 

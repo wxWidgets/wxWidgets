@@ -1,0 +1,15 @@
+#!/bin/bash
+#----------------------------------------------------------------------
+# Run msgfmt on all the .po files, and install them to ../locale
+#----------------------------------------------------------------------
+
+DEST=../locale
+NAME=wxpydemo
+
+for po in ??.po ??_??.po; do
+    echo compiling message catalog for $po
+    BASE=`basename $po .po`
+    mkdir -p $DEST/$BASE/LC_MESSAGES
+    msgfmt -o $DEST/$BASE/LC_MESSAGES/$NAME.mo $po
+done
+
