@@ -438,13 +438,17 @@ gchar *gtk_assert_dialog_get_backtrace (GtkAssertDialog *dlg)
 
 void gtk_assert_dialog_set_message(GtkAssertDialog *dlg, const gchar *msg)
 {
-    /* prepend and append the <b> tag */
-    gchar *decorated_msg = g_strdup_printf("<b>%s</b>", msg);
+    /* prepend and append the <b> tag
+       NOTE: g_markup_printf_escaped() is not used because it's available
+             only for glib >= 2.4 */
+    gchar *escaped_msg = g_markup_escape_text (msg, -1);
+    gchar *decorated_msg = g_strdup_printf ("<b>%s</b>", escaped_msg);
 
     g_return_if_fail (GTK_IS_ASSERT_DIALOG (dlg));
     gtk_label_set_markup (GTK_LABEL(dlg->message), decorated_msg);
 
     g_free (decorated_msg);
+    g_free (escaped_msg);
 }
 
 void gtk_assert_dialog_set_backtrace_callback(GtkAssertDialog *assertdlg,
