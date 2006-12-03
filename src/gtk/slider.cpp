@@ -126,13 +126,14 @@ gtk_value_changed(GtkRange* range, wxSlider* win)
 {
     if (g_isIdle) wxapp_install_idle_handler();
 
-    if (!win->m_hasVMT) return;
-    if (g_blockEventsOnDrag) return;
-
     GtkAdjustment* adj = gtk_range_get_adjustment (range);
     const int pos = wxRound(adj->value);
     const double oldPos = win->m_pos;
     win->m_pos = adj->value;
+
+    if (!win->m_hasVMT || g_blockEventsOnDrag)
+        return;
+
     if (win->m_blockScrollEvent)
     {
         win->m_scrollEventType = GTK_SCROLL_NONE;
@@ -346,13 +347,6 @@ void wxSlider::SetValue( int value )
         BlockScrollEvent();
         gtk_range_set_value(GTK_RANGE (m_widget), value);
         UnblockScrollEvent();
-
-        // keep m_pos in sync in case the value_changed callback didn't didn't
-        // get called, such as when the widget is first created
-        if (GetValue() != value)
-        {
-            m_pos = gtk_range_get_value(GTK_RANGE(m_widget));
-        }
     }
 }
 
