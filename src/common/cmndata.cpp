@@ -153,6 +153,7 @@ wxPrintData::wxPrintData()
     m_media = wxPRINTMEDIA_DEFAULT;
     m_printMode = wxPRINT_MODE_PRINTER;
     m_printOrientation = wxPORTRAIT;
+    m_printOrientationReversed = false;
     m_printNoCopies = 1;
     m_printCollate = false;
 
@@ -221,6 +222,7 @@ void wxPrintData::operator=(const wxPrintData& data)
     m_printNoCopies = data.m_printNoCopies;
     m_printCollate = data.m_printCollate;
     m_printOrientation = data.m_printOrientation;
+    m_printOrientationReversed = data.m_printOrientationReversed;
     m_printerName = data.m_printerName;
     m_colour = data.m_colour;
     m_duplexMode = data.m_duplexMode;
