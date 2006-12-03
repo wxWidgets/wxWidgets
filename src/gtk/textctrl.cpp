@@ -51,7 +51,6 @@ static void wxGtkOnRemoveTag(GtkTextBuffer *buffer,
 }
 }
 
-extern "C" {
 static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
                                        GtkTextBuffer *text_buffer,
                                        const wxTextAttr& attr,
@@ -260,9 +259,7 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
         gtk_text_buffer_apply_tag (text_buffer, tag, &para_start, &para_end);
     }
 }
-}
 
-extern "C" {
 static void wxGtkTextInsert(GtkWidget *text,
                             GtkTextBuffer *text_buffer,
                             const wxTextAttr& attr,
@@ -280,7 +277,6 @@ static void wxGtkTextInsert(GtkWidget *text,
     gtk_text_buffer_get_iter_at_offset (text_buffer, &start, start_offset);
 
     wxGtkTextApplyTagsFromAttr(text, text_buffer, attr, &start, &iter);
-}
 }
 
 // ----------------------------------------------------------------------------
@@ -1024,7 +1020,8 @@ void wxTextCtrl::WriteText( const wxString &text )
 
         GtkAdjustment *adj = gtk_scrolled_window_get_vadjustment( GTK_SCROLLED_WINDOW(m_widget) );
         // Scroll to cursor, but only if scrollbar thumb is at the very bottom
-        if ( wxIsSameDouble(adj->value, adj->upper - adj->page_size) )
+        // won't work when frozen, text view is not using m_buffer then
+        if (!IsFrozen() && wxIsSameDouble(adj->value, adj->upper - adj->page_size))
         {
             gtk_text_view_scroll_to_mark( GTK_TEXT_VIEW(m_text),
                     gtk_text_buffer_get_insert( m_buffer ), 0.0, FALSE, 0.0, 1.0 );
@@ -1170,11 +1167,15 @@ void wxTextCtrl::SetInsertionPoint( long pos )
         GtkTextIter iter;
         gtk_text_buffer_get_iter_at_offset( m_buffer, &iter, pos );
         gtk_text_buffer_place_cursor( m_buffer, &iter );
-        gtk_text_view_scroll_mark_onscreen
-        (
-            GTK_TEXT_VIEW(m_text),
-            gtk_text_buffer_get_insert( m_buffer )
-        );
+        if (!IsFrozen())
+        {
+            // won't work when frozen, text view is not using m_buffer then
+            gtk_text_view_scroll_mark_onscreen
+            (
+                GTK_TEXT_VIEW(m_text),
+                gtk_text_buffer_get_insert( m_buffer )
+            );
+        }
     }
     else
     {
@@ -1346,7 +1347,8 @@ void wxTextCtrl::SetSelection( long from, long to )
 
 void wxTextCtrl::ShowPosition( long pos )
 {
-    if ( IsMultiLine() )
+    // won't work when frozen, text view is not using m_buffer then
+    if (IsMultiLine() && !IsFrozen())
     {
         GtkTextIter iter;
         gtk_text_buffer_get_start_iter( m_buffer, &iter );
@@ -1815,9 +1817,11 @@ wxSize wxTextCtrl::DoGetBestSize() const
 
 void wxTextCtrl::Freeze()
 {
+    wxCHECK_RET(m_text != NULL, wxT("invalid text ctrl"));
+
     if ( HasFlag(wxTE_MULTILINE) )
     {
-        if ( !m_frozenness++ )
+        if (m_frozenness++ == 0)
         {
             // freeze textview updates and remove buffer
             g_signal_connect (m_text, "expose_event",
@@ -1827,9 +1831,16 @@ void wxTextCtrl::Freeze()
             gtk_widget_set_sensitive(m_widget, false);
             g_object_ref(m_buffer);
             GtkTextBuffer* buf_new = gtk_text_buffer_new(NULL);
+            GtkTextMark* mark = GTK_TEXT_VIEW(m_text)->first_para_mark;
             gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_text), buf_new);
-            // FIXME: this leaks the new buffer, since gtk_text_view_set_buffer
-            // adds its own reference, but unrefing it here can cause a crash later
+            // gtk_text_view_set_buffer adds its own reference
+            g_object_unref(buf_new);
+            // This mark should be deleted when the buffer is changed,
+            // but it's not (in GTK+ up to at least 2.10.6).
+            // Otherwise these anonymous marks start to build up in the buffer,
+            // and Freeze takes longer and longer each time it is called.
+            if (GTK_IS_TEXT_MARK(mark) && !gtk_text_mark_get_deleted(mark))
+                gtk_text_buffer_delete_mark(m_buffer, mark);
         }
     }
 }
@@ -1838,9 +1849,9 @@ void wxTextCtrl::Thaw()
 {
     if ( HasFlag(wxTE_MULTILINE) )
     {
-        wxASSERT_MSG( m_frozenness > 0, _T("Thaw() without matching Freeze()") );
+        wxCHECK_RET(m_frozenness != 0, _T("Thaw() without matching Freeze()"));
 
-        if ( !--m_frozenness )
+        if (--m_frozenness == 0)
         {
             // Reattach buffer and thaw textview updates
             gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_text), m_buffer);
