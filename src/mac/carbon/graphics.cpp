@@ -1181,7 +1181,7 @@ public:
     virtual void DrawPath( const wxGraphicsPath &path, int fillStyle = wxODDEVEN_RULE );
 
     virtual bool ShouldOffset() const
-    {
+    {     
         int penwidth = 0 ;
         if ( !m_pen.IsNull() )
         {
@@ -1339,6 +1339,7 @@ bool wxMacCoreGraphicsContext::SetLogicalFunction( int function )
         if ( CGContextSetBlendMode != NULL )
         {
             CGContextSetBlendMode( m_cgContext, kCGBlendModeNormal );
+            CGContextSetShouldAntialias( m_cgContext, true );
         }
 #endif
     }
@@ -1349,6 +1350,7 @@ bool wxMacCoreGraphicsContext::SetLogicalFunction( int function )
         {
             // change color to white
             CGContextSetBlendMode( m_cgContext, kCGBlendModeExclusion );
+            CGContextSetShouldAntialias( m_cgContext, false );
             retval = true;
         }
 #endif
