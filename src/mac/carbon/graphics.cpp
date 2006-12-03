@@ -37,6 +37,13 @@
 #if MAC_OS_X_VERSION_MAX_ALLOWED <= MAC_OS_X_VERSION_10_4
 typedef float CGFloat;
 #endif
+#ifndef wxMAC_USE_CORE_GRAPHICS_BLEND_MODES
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+    #define wxMAC_USE_CORE_GRAPHICS_BLEND_MODES 1
+#else
+    #define wxMAC_USE_CORE_GRAPHICS_BLEND_MODES 0
+#endif
+#endif
 
 //-----------------------------------------------------------------------------
 // constants
@@ -161,7 +168,7 @@ public :
     void StrokeLineSegments( CGContextRef ctxRef , const CGPoint pts[] , size_t count )
     {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-        if ( UMAGetSystemVersion() >= 0x1040 )
+        if ( CGContextStrokeLineSegments!=NULL  )
         {
             CGContextStrokeLineSegments( ctxRef , pts , count );
         }
@@ -457,7 +464,12 @@ void wxMacCoreGraphicsPenData::Apply( wxGraphicsContext* context )
     }
     else
     {
-        CGContextSetStrokeColorWithColor( cg , m_color );
+        if ( context->GetLogicalFunction() == wxINVERT || context->GetLogicalFunction() == wxXOR )
+        {
+            CGContextSetRGBStrokeColor( cg , 1.0, 1.0 , 1.0, 1.0 );
+        }
+        else
+            CGContextSetStrokeColorWithColor( cg , m_color );
     }
 }
 
@@ -1133,6 +1145,7 @@ public:
 
     virtual void * GetNativeContext();
 
+    bool SetLogicalFunction( int function );
     //
     // transformation
     //
@@ -1310,6 +1323,41 @@ void wxMacCoreGraphicsContext::EnsureIsValid()
 	}
 }
 
+bool wxMacCoreGraphicsContext::SetLogicalFunction( int function )
+{
+    if (m_logicalFunction == function)
+        return true;
+
+    EnsureIsValid();
+    
+    bool retval = false;
+
+    if ( function == wxCOPY )
+    {
+        retval = true;
+#if wxMAC_USE_CORE_GRAPHICS_BLEND_MODES
+        if ( CGContextSetBlendMode != NULL )
+        {
+            CGContextSetBlendMode( m_cgContext, kCGBlendModeNormal );
+        }
+#endif
+    }
+    else if ( function == wxINVERT || function == wxXOR )
+    {
+#if wxMAC_USE_CORE_GRAPHICS_BLEND_MODES
+        if ( CGContextSetBlendMode != NULL )
+        {
+            // change color to white
+            CGContextSetBlendMode( m_cgContext, kCGBlendModeExclusion );
+            retval = true;
+        }
+#endif
+    }
+    
+    if (retval)
+        m_logicalFunction = function;
+    return retval ;
+}
 
 void wxMacCoreGraphicsContext::Clip( const wxRegion &region )
 {
