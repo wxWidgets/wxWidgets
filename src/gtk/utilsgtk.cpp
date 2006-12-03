@@ -386,7 +386,8 @@ extern "C"
 {
     void get_stackframe_callback(StackDump *dump)
     {
-        dump->ProcessFrames(2); // don't show ShowAssertDialog() call itself
+        // skip over frames up to including wxOnAssert()
+        dump->ProcessFrames(3);
     }
 }
 
