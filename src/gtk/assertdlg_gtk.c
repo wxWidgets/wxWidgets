@@ -71,14 +71,16 @@ GtkWidget *gtk_assert_dialog_add_button_to (GtkBox *box, const gchar *label,
     return button;
 }
 
-void gtk_assert_dialog_add_button (GtkAssertDialog *dlg, const gchar *label,
-                                   const gchar *stock, gint response_id)
+GtkWidget *gtk_assert_dialog_add_button (GtkAssertDialog *dlg, const gchar *label,
+                                         const gchar *stock, gint response_id)
 {
     /* create the button */
     GtkWidget *button = gtk_assert_dialog_add_button_to (NULL, label, stock, response_id);
 
     /* add the button to the dialog's action area */
     gtk_dialog_add_action_widget (GTK_DIALOG (dlg), button, response_id);
+
+    return button;
 }
 
 void gtk_assert_dialog_append_text_column (GtkWidget *treeview, const gchar *name, int index)
@@ -222,6 +224,15 @@ void gtk_assert_dialog_copy_callback (GtkWidget *widget, GtkAssertDialog *dlg)
     g_string_free (str, TRUE);
 }
 
+void gtk_assert_dialog_continue_callback (GtkWidget *widget, GtkAssertDialog *dlg)
+{
+    gint response =
+        gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON(dlg->shownexttime)) ?
+            GTK_ASSERT_DIALOG_CONTINUE : GTK_ASSERT_DIALOG_CONTINUE_SUPPRESSING;
+
+    gtk_dialog_response (GTK_DIALOG(dlg), response);
+}
+
 
 /* ----------------------------------------------------------------------------
    GtkAssertDialogClass implementation
@@ -234,7 +245,7 @@ static void     gtk_assert_dialog_class_init        (GtkAssertDialogClass *klass
 GtkType gtk_assert_dialog_get_type (void)
 {
     static GtkType assert_dialog_type = 0;
-    
+
     if (!assert_dialog_type)
     {
         static const GTypeInfo assert_dialog_info =
@@ -263,7 +274,7 @@ void gtk_assert_dialog_class_init(GtkAssertDialogClass *klass)
 
 void gtk_assert_dialog_init(GtkAssertDialog *dlg)
 {
-    GtkWidget *vbox, *hbox, *image;
+    GtkWidget *vbox, *hbox, *image, *continuebtn;
 
     /* start the main vbox */
     gtk_widget_push_composite_child ();
@@ -357,12 +368,18 @@ void gtk_assert_dialog_init(GtkAssertDialog *dlg)
         g_signal_connect (button, "clicked", G_CALLBACK(gtk_assert_dialog_copy_callback), dlg);
     }
 
-    /* add the buttons */
+    /* add the checkbutton */
+    dlg->shownexttime = gtk_check_button_new_with_mnemonic("Show this _dialog the next time");
+    gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON(dlg->shownexttime), TRUE);
+    gtk_box_pack_end (GTK_BOX(GTK_DIALOG(dlg)->action_area), dlg->shownexttime, FALSE, TRUE, 8);
+
+    /* add the stop button */
     gtk_assert_dialog_add_button (dlg, "_Stop", GTK_STOCK_QUIT, GTK_ASSERT_DIALOG_STOP);
-    gtk_assert_dialog_add_button (dlg, "_Continue", GTK_STOCK_YES, GTK_ASSERT_DIALOG_CONTINUE);
-    gtk_assert_dialog_add_button (dlg, "Continue su_ppressing", GTK_STOCK_OK,
-                                  GTK_ASSERT_DIALOG_CONTINUE_SUPPRESSING);
     gtk_dialog_set_default_response (GTK_DIALOG (dlg), GTK_ASSERT_DIALOG_STOP);
+
+    /* add the continue button */
+    continuebtn = gtk_assert_dialog_add_button (dlg, "_Continue", GTK_STOCK_YES, GTK_ASSERT_DIALOG_CONTINUE);
+    g_signal_connect (continuebtn, "clicked", G_CALLBACK(gtk_assert_dialog_continue_callback), dlg);
 
     /* complete creation */
     dlg->callback = NULL;

@@ -37,6 +37,8 @@ struct _GtkAssertDialog
     GtkWidget *message;
     GtkWidget *treeview;
 
+    GtkWidget *shownexttime;
+
     /* callback for processing the stack frame */
     GtkAssertDialogStackFrameCallback callback;
     void *userdata;
