@@ -1012,10 +1012,10 @@ bool wxListCtrl::GetItem(wxListItem& info) const
             info.SetImage( OnGetItemColumnImage(info.m_itemId, info.m_col) );
             if (info.GetMask() & wxLIST_MASK_STATE)
             {
-                if (IsDataBrowserItemSelected( m_dbImpl->GetControlRef(), info.m_itemId+1 )) 
+                if (IsDataBrowserItemSelected( m_dbImpl->GetControlRef(), info.m_itemId+1 ))
                     info.SetState(info.GetState() | wxLIST_STATE_SELECTED);
             }
-            
+
             wxListItemAttr* attrs = OnGetItemAttr( info.m_itemId );
             if (attrs)
             {
@@ -1071,11 +1071,11 @@ int wxListCtrl::GetItemState(long item, long stateMask) const
         if ( HasFlag(wxLC_VIRTUAL) )
         {
             if (stateMask == wxLIST_STATE_SELECTED)
-            { 
-                if (IsDataBrowserItemSelected( m_dbImpl->GetControlRef(), item+1 )) 
+            {
+                if (IsDataBrowserItemSelected( m_dbImpl->GetControlRef(), item+1 ))
                     return wxLIST_STATE_SELECTED;
                 else
-                    return 0; 
+                    return 0;
             }
         }
         else
@@ -1092,6 +1092,8 @@ int wxListCtrl::GetItemState(long item, long stateMask) const
             return info.m_state;
         }
     }
+
+    return 0;
 }
 
 // Sets the item state
@@ -1099,13 +1101,13 @@ bool wxListCtrl::SetItemState(long item, long state, long stateMask)
 {
     if (m_genericImpl)
         return m_genericImpl->SetItemState(item, state, stateMask);
-        
+
     if (m_dbImpl)
     {
         DataBrowserSetOption option = kDataBrowserItemsAdd;
         if ( stateMask == wxLIST_STATE_SELECTED && state == 0 )
             option = kDataBrowserItemsRemove;
-    
+
         if (item == -1)
         {
             if ( HasFlag(wxLC_VIRTUAL) )
@@ -1751,7 +1753,7 @@ long wxListCtrl::FindItem(long start, const wxString& str, bool partial)
             if (line_upper.find(str_upper) == 0)
                 return idx;
         }
-        
+
         idx++;
     };
 
@@ -1848,7 +1850,7 @@ int wxListCtrl::GetScrollPos(int orient) const
 {
     if (m_genericImpl)
         return m_genericImpl->GetScrollPos(orient);
-        
+
     if (m_dbImpl)
     {
         UInt32 offsetX, offsetY;
@@ -2114,10 +2116,10 @@ void wxListCtrl::SetItemCount(long count)
         // we need to temporarily disable the new item creation notification
         // procedure to speed things up
         // FIXME: Even this doesn't seem to help much...
-        
+
         // FIXME: Find a more efficient way to do this.
         m_dbImpl->MacClear();
-        
+
         DataBrowserCallbacks callbacks;
         DataBrowserItemNotificationUPP itemUPP;
         GetDataBrowserCallbacks(m_dbImpl->GetControlRef(), &callbacks);
@@ -2168,7 +2170,7 @@ void wxListCtrl::SetDropTarget( wxDropTarget *dropTarget )
 #if wxUSE_DRAG_AND_DROP
     if (m_genericImpl)
         m_genericImpl->SetDropTarget( dropTarget );
-        
+
     if (m_dbImpl)
         wxWindow::SetDropTarget( dropTarget );
 #endif
@@ -2179,7 +2181,7 @@ wxDropTarget *wxListCtrl::GetDropTarget() const
 #if wxUSE_DRAG_AND_DROP
     if (m_genericImpl)
         return m_genericImpl->GetDropTarget();
-        
+
     if (m_dbImpl)
         return wxWindow::GetDropTarget();
 #endif
@@ -2844,16 +2846,16 @@ Boolean wxMacDataBrowserListCtrlControl::CompareItems(DataBrowserItemID itemOneI
         {
             wxMacListCtrlItem* item = (wxMacListCtrlItem*)itemOneID;
             wxMacListCtrlItem* otherItem = (wxMacListCtrlItem*)itemTwoID;
-            
+
             // FIXME: This code causes a crash in wxPython for some reason
             // and moreover, further testing shows that the column click event
             // is only sent to the list ctrl after the native control has finished
             // sorting items anyway. So just disable this for now.
-            
+
             //wxListCtrlCompare func = list->GetCompareFunc();
             //long item1 = GetLineFromItem(item);
             //long item2 = GetLineFromItem(otherItem);
-            
+
             //if (func != NULL && item->HasColumnInfo(colId) && otherItem->HasColumnInfo(colId))
             //    return func(item1, item2, list->GetCompareFuncData()) >= 0;
 
