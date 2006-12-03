@@ -695,7 +695,7 @@ public:
 
     // send out a wxListEvent
     void SendNotify( size_t line,
-                     wxEventType command, 
+                     wxEventType command,
                      const wxPoint& point = wxDefaultPosition );
 
     // override base class virtual to reset m_lineHeight when the font changes
@@ -728,7 +728,7 @@ public:
     {
         return m_hasFocus ? m_highlightBrush : m_highlightUnfocusedBrush;
     }
-    
+
     bool HasFocus() const
     {
         return m_hasFocus;
@@ -1036,7 +1036,7 @@ void wxListHeaderData::SetItem( const wxListItem &item )
 
     if ( m_mask & wxLIST_MASK_WIDTH )
         SetWidth(item.m_width);
-        
+
     if ( m_mask & wxLIST_MASK_STATE )
         SetState(item.m_state);
 }
@@ -1473,7 +1473,7 @@ void wxListLineData::Draw( wxDC *dc )
             if (m_owner->HasFocus())
                 flags |= wxCONTROL_FOCUSED;
             wxRendererNative::Get().DrawItemSelectionRect( m_owner, *dc, m_gi->m_rectHighlight, flags );
-            
+
         }
         else
         {
@@ -1802,12 +1802,12 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         if (!m_parent->IsEnabled())
             flags |= wxCONTROL_DISABLED;
 
-// NB: The code below is not really Mac-specific, but since we are close 
+// NB: The code below is not really Mac-specific, but since we are close
 // to 2.8 release and I don't have time to test on other platforms, I
 // defined this only for wxMac. If this behavior is desired on
 // other platforms, please go ahead and revise or remove the #ifdef.
 #ifdef __WXMAC__
-        if ( !m_owner->IsVirtual() && (item.m_mask & wxLIST_MASK_STATE) && 
+        if ( !m_owner->IsVirtual() && (item.m_mask & wxLIST_MASK_STATE) &&
                 (item.m_state & wxLIST_STATE_SELECTED) )
             flags |= wxCONTROL_SELECTED;
 #endif
@@ -2020,7 +2020,7 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
                     {
                         wxListItem colItem;
                         m_owner->GetColumn(i, colItem);
-                        long state = colItem.GetState(); 
+                        long state = colItem.GetState();
                         if (i == m_column)
                             colItem.SetState(state | wxLIST_STATE_SELECTED);
                         else
@@ -2028,7 +2028,7 @@ void wxListHeaderWindow::OnMouse( wxMouseEvent &event )
                         m_owner->SetColumn(i, colItem);
                     }
                 }
-                
+
                 SendListEvent( event.LeftDown()
                                     ? wxEVT_COMMAND_LIST_COL_CLICK
                                     : wxEVT_COMMAND_LIST_COL_RIGHT_CLICK,
@@ -2234,7 +2234,7 @@ BEGIN_EVENT_TABLE(wxListMainWindow,wxScrolledWindow)
   EVT_MOUSE_EVENTS   (wxListMainWindow::OnMouse)
   EVT_CHAR           (wxListMainWindow::OnChar)
   EVT_KEY_DOWN       (wxListMainWindow::OnKeyDown)
-  EVT_KEY_UP         (wxListMainWindow::OnKeyUp)      
+  EVT_KEY_UP         (wxListMainWindow::OnKeyUp)
   EVT_SET_FOCUS      (wxListMainWindow::OnSetFocus)
   EVT_KILL_FOCUS     (wxListMainWindow::OnKillFocus)
   EVT_SCROLLWIN      (wxListMainWindow::OnScroll)
@@ -2300,7 +2300,7 @@ wxListMainWindow::wxListMainWindow( wxWindow *parent,
                             ),
                             wxSOLID
                          );
-                         
+
     m_highlightUnfocusedBrush = new wxBrush
                               (
                                  wxSystemSettings::GetColour
@@ -2719,7 +2719,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         wxRect rectLine;
         int xOrig = dc.LogicalToDeviceX( 0 );
         int yOrig = dc.LogicalToDeviceY( 0 );
-        
+
         // tell the caller cache to cache the data
         if ( IsVirtual() )
         {
@@ -2816,7 +2816,7 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             dc.DrawRectangle( rect );
 #else
             wxRendererNative::Get().DrawItemSelectionRect( this, dc, rect, wxCONTROL_CURRENT|wxCONTROL_FOCUSED );
-            
+
 #endif
         }
     }
@@ -2848,7 +2848,7 @@ void wxListMainWindow::SendNotify( size_t line,
 {
     wxListEvent le( command, GetParent()->GetId() );
     le.SetEventObject( GetParent() );
-    
+
     le.m_itemIndex = line;
 
     // set only for events which have position
@@ -2875,6 +2875,11 @@ void wxListMainWindow::SendNotify( size_t line,
 void wxListMainWindow::ChangeCurrent(size_t current)
 {
     m_current = current;
+
+    // as the current item changed, we shouldn't start editing it when the
+    // "slow click" timer expires as the click happened on another item
+    if ( m_renameTimer->IsRunning() )
+        m_renameTimer->Stop();
 
     SendNotify(current, wxEVT_COMMAND_LIST_ITEM_FOCUSED);
 }
@@ -2966,7 +2971,7 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
 
     if ( event.LeftDown() )
         SetFocus();
-    
+
     event.SetEventObject( GetParent() );
     if ( GetParent()->GetEventHandler()->ProcessEvent( event) )
         return;
@@ -3076,7 +3081,9 @@ void wxListMainWindow::OnMouse( wxMouseEvent &event )
     bool forceClick = false;
     if (event.ButtonDClick())
     {
-        m_renameTimer->Stop();
+        if ( m_renameTimer->IsRunning() )
+            m_renameTimer->Stop();
+
         m_lastOnSame = false;
 
         if ( current == m_lineLastClicked )
@@ -4361,7 +4368,7 @@ void wxListMainWindow::DeleteItem( long lindex )
         if ( m_current != index || m_current == count - 1 )
             m_current--;
     }
- 
+
     if ( InReportView() )
     {
         //  mark the Column Max Width cache as dirty if the items in the line
@@ -4508,7 +4515,7 @@ long wxListMainWindow::FindItem(long start, const wxString& str, bool partial )
 {
     if (str.empty())
         return wxNOT_FOUND;
-        
+
     long pos = start;
     wxString str_upper = str.Upper();
     if (pos < 0)
