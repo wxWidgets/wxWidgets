@@ -95,10 +95,10 @@ OSStatus wxOverlayImpl::CreateOverlayWindow()
         CGRect cgbounds ;
         cgbounds = CGDisplayBounds(CGMainDisplayID());
         Rect bounds;
-        bounds.top = cgbounds.origin.y;
-        bounds.left = cgbounds.origin.x;
-        bounds.bottom = bounds.top + cgbounds.size.height;
-        bounds.right = bounds.left  + cgbounds.size.width;
+        bounds.top = (short)cgbounds.origin.y;
+        bounds.left = (short)cgbounds.origin.x;
+        bounds.bottom = (short)(bounds.top + cgbounds.size.height);
+        bounds.right = (short)(bounds.left  + cgbounds.size.width);
         err  = CreateNewWindow( kOverlayWindowClass, overlayAttributes, &bounds, &m_overlayWindow );
     }
     ShowWindow(m_overlayWindow);
@@ -115,7 +115,7 @@ void wxOverlayImpl::Init( wxWindowDC* dc, int x , int y , int width , int height
     if ( dc->IsKindOf( CLASSINFO( wxClientDC ) ))
     {
         wxPoint origin = m_window->GetClientAreaOrigin();
-        m_x += origin.x; 
+        m_x += origin.x;
         m_y += origin.y;
     }
     m_width = width ;
