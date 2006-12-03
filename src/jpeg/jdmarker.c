@@ -193,7 +193,7 @@ typedef my_marker_reader * my_marker_ptr;
  */
 
 
-LOCAL(boolean)
+LOCAL(wxjpeg_boolean)
 get_soi (j_decompress_ptr cinfo)
 /* Process an SOI marker */
 {
@@ -233,8 +233,8 @@ get_soi (j_decompress_ptr cinfo)
 }
 
 
-LOCAL(boolean)
-get_sof (j_decompress_ptr cinfo, boolean is_prog, boolean is_arith)
+LOCAL(wxjpeg_boolean)
+get_sof (j_decompress_ptr cinfo, wxjpeg_boolean is_prog, wxjpeg_boolean is_arith)
 /* Process a SOFn marker */
 {
   JPEG_INT32 length;
@@ -297,7 +297,7 @@ get_sof (j_decompress_ptr cinfo, boolean is_prog, boolean is_arith)
 }
 
 
-LOCAL(boolean)
+LOCAL(wxjpeg_boolean)
 get_sos (j_decompress_ptr cinfo)
 /* Process a SOS marker */
 {
@@ -369,7 +369,7 @@ get_sos (j_decompress_ptr cinfo)
 
 #ifdef D_ARITH_CODING_SUPPORTED
 
-LOCAL(boolean)
+LOCAL(wxjpeg_boolean)
 get_dac (j_decompress_ptr cinfo)
 /* Process a DAC marker */
 {
@@ -415,7 +415,7 @@ get_dac (j_decompress_ptr cinfo)
 #endif /* D_ARITH_CODING_SUPPORTED */
 
 
-LOCAL(boolean)
+LOCAL(wxjpeg_boolean)
 get_dht (j_decompress_ptr cinfo)
 /* Process a DHT marker */
 {
@@ -486,7 +486,7 @@ get_dht (j_decompress_ptr cinfo)
 }
 
 
-LOCAL(boolean)
+LOCAL(wxjpeg_boolean)
 get_dqt (j_decompress_ptr cinfo)
 /* Process a DQT marker */
 {
@@ -544,7 +544,7 @@ get_dqt (j_decompress_ptr cinfo)
 }
 
 
-LOCAL(boolean)
+LOCAL(wxjpeg_boolean)
 get_dri (j_decompress_ptr cinfo)
 /* Process a DRI marker */
 {
@@ -687,7 +687,7 @@ examine_app14 (j_decompress_ptr cinfo, JOCTET FAR * data,
 }
 
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 get_interesting_appn (j_decompress_ptr cinfo)
 /* Process an APP0 or APP14 marker without saving it */
 {
@@ -735,7 +735,7 @@ get_interesting_appn (j_decompress_ptr cinfo)
 
 #ifdef SAVE_MARKERS_SUPPORTED
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 save_marker (j_decompress_ptr cinfo)
 /* Save an APPn or COM marker into the marker list */
 {
@@ -841,7 +841,7 @@ save_marker (j_decompress_ptr cinfo)
 #endif /* SAVE_MARKERS_SUPPORTED */
 
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 skip_variable (j_decompress_ptr cinfo)
 /* Skip over an unknown or uninteresting variable-length marker */
 {
@@ -870,7 +870,7 @@ skip_variable (j_decompress_ptr cinfo)
  * but it will never be 0 or FF.
  */
 
-LOCAL(boolean)
+LOCAL(wxjpeg_boolean)
 next_marker (j_decompress_ptr cinfo)
 {
   int c;
@@ -917,7 +917,7 @@ next_marker (j_decompress_ptr cinfo)
 }
 
 
-LOCAL(boolean)
+LOCAL(wxjpeg_boolean)
 first_marker (j_decompress_ptr cinfo)
 /* Like next_marker, but used to obtain the initial SOI marker. */
 /* For this marker, we do not allow preceding garbage or fill; otherwise,
@@ -1109,7 +1109,7 @@ read_markers (j_decompress_ptr cinfo)
  * it holds a marker which the decoder will be unable to read past.
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 read_restart_marker (j_decompress_ptr cinfo)
 {
   /* Obtain a marker unless we already did. */
@@ -1188,7 +1188,7 @@ read_restart_marker (j_decompress_ptr cinfo)
  * any other marker would have to be bogus data in that case.
  */
 
-GLOBAL(boolean)
+GLOBAL(wxjpeg_boolean)
 jpeg_resync_to_restart (j_decompress_ptr cinfo, int desired)
 {
   int marker = cinfo->unread_marker;

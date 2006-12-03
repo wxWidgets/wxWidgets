@@ -58,12 +58,12 @@ typedef my_coef_controller * my_coef_ptr;
 
 
 /* Forward declarations */
-METHODDEF(boolean) compress_data
+METHODDEF(wxjpeg_boolean) compress_data
     JPP((j_compress_ptr cinfo, JSAMPIMAGE input_buf));
 #ifdef FULL_COEF_BUFFER_SUPPORTED
-METHODDEF(boolean) compress_first_pass
+METHODDEF(wxjpeg_boolean) compress_first_pass
     JPP((j_compress_ptr cinfo, JSAMPIMAGE input_buf));
-METHODDEF(boolean) compress_output
+METHODDEF(wxjpeg_boolean) compress_output
     JPP((j_compress_ptr cinfo, JSAMPIMAGE input_buf));
 #endif
 
@@ -139,7 +139,7 @@ start_pass_coef (j_compress_ptr cinfo, J_BUF_MODE pass_mode)
  * which we index according to the component's SOF position.
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 compress_data (j_compress_ptr cinfo, JSAMPIMAGE input_buf)
 {
   my_coef_ptr coef = (my_coef_ptr) cinfo->coef;
@@ -241,7 +241,7 @@ compress_data (j_compress_ptr cinfo, JSAMPIMAGE input_buf)
  * at the scan-dependent variables (MCU dimensions, etc).
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 compress_first_pass (j_compress_ptr cinfo, JSAMPIMAGE input_buf)
 {
   my_coef_ptr coef = (my_coef_ptr) cinfo->coef;
@@ -337,7 +337,7 @@ compress_first_pass (j_compress_ptr cinfo, JSAMPIMAGE input_buf)
  * NB: input_buf is ignored; it is likely to be a NULL pointer.
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 compress_output (j_compress_ptr cinfo, JSAMPIMAGE input_buf)
 {
   my_coef_ptr coef = (my_coef_ptr) cinfo->coef;
@@ -402,7 +402,7 @@ compress_output (j_compress_ptr cinfo, JSAMPIMAGE input_buf)
  */
 
 GLOBAL(void)
-jinit_c_coef_controller (j_compress_ptr cinfo, boolean need_full_buffer)
+jinit_c_coef_controller (j_compress_ptr cinfo, wxjpeg_boolean need_full_buffer)
 {
   my_coef_ptr coef;
 

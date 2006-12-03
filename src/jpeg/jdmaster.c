@@ -22,7 +22,7 @@ typedef struct {
 
   int pass_number;		/* # of passes completed */
 
-  boolean using_merged_upsample; /* TRUE if using merged upsample/cconvert */
+  wxjpeg_boolean using_merged_upsample; /* TRUE if using merged upsample/cconvert */
 
   /* Saved references to initialized quantizer modules,
    * in case we need to switch modes.
@@ -39,7 +39,7 @@ typedef my_decomp_master * my_master_ptr;
  * CRUCIAL: this must match the actual capabilities of jdmerge.c!
  */
 
-LOCAL(boolean)
+LOCAL(wxjpeg_boolean)
 use_merged_upsample (j_decompress_ptr cinfo)
 {
 #ifdef UPSAMPLE_MERGING_SUPPORTED
@@ -287,7 +287,7 @@ LOCAL(void)
 master_selection (j_decompress_ptr cinfo)
 {
   my_master_ptr master = (my_master_ptr) cinfo->master;
-  boolean use_c_buffer;
+  wxjpeg_boolean use_c_buffer;
   long samplesperrow;
   JDIMENSION jd_samplesperrow;
 

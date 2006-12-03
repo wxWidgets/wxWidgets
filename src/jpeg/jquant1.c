@@ -151,7 +151,7 @@ typedef struct {
    * premultiplied as described above.  Since colormap indexes must fit into
    * JSAMPLEs, the entries of this array will too.
    */
-  boolean is_padded;		/* is the colorindex padded for odither? */
+  wxjpeg_boolean is_padded;		/* is the colorindex padded for odither? */
 
   int Ncolors[MAX_Q_COMPS];	/* # of values alloced to each component */
 
@@ -161,7 +161,7 @@ typedef struct {
 
   /* Variables for Floyd-Steinberg dithering */
   FSERRPTR fserrors[MAX_Q_COMPS]; /* accumulated errors */
-  boolean on_odd_row;		/* flag to remember which row we are on */
+  wxjpeg_boolean on_odd_row;		/* flag to remember which row we are on */
 } my_cquantizer;
 
 typedef my_cquantizer * my_cquantize_ptr;
@@ -191,7 +191,7 @@ select_ncolors (j_decompress_ptr cinfo, int Ncolors[])
   int nc = cinfo->out_color_components; /* number of color components */
   int max_colors = cinfo->desired_number_of_colors;
   int total_colors, iroot, i, j;
-  boolean changed;
+  wxjpeg_boolean changed;
   long temp;
   static const int RGB_order[3] = { RGB_GREEN, RGB_RED, RGB_BLUE };
 
@@ -738,7 +738,7 @@ alloc_fs_workspace (j_decompress_ptr cinfo)
  */
 
 METHODDEF(void)
-start_pass_1_quant (j_decompress_ptr cinfo, boolean is_pre_scan)
+start_pass_1_quant (j_decompress_ptr cinfo, wxjpeg_boolean is_pre_scan)
 {
   my_cquantize_ptr cquantize = (my_cquantize_ptr) cinfo->cquantize;
   size_t arraysize;

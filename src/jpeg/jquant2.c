@@ -200,11 +200,11 @@ typedef struct {
   /* Variables for accumulating image statistics */
   hist3d histogram;		/* pointer to the histogram */
 
-  boolean needs_zeroed;		/* TRUE if next pass must zero histogram */
+  wxjpeg_boolean needs_zeroed;		/* TRUE if next pass must zero histogram */
 
   /* Variables for Floyd-Steinberg dithering */
   FSERRPTR fserrors;		/* accumulated errors */
-  boolean on_odd_row;		/* flag to remember which row we are on */
+  wxjpeg_boolean on_odd_row;		/* flag to remember which row we are on */
   int * error_limiter;		/* table for clamping the applied error */
 } my_cquantizer;
 
@@ -1164,7 +1164,7 @@ finish_pass2 (j_decompress_ptr cinfo)
  */
 
 METHODDEF(void)
-start_pass_2_quant (j_decompress_ptr cinfo, boolean is_pre_scan)
+start_pass_2_quant (j_decompress_ptr cinfo, wxjpeg_boolean is_pre_scan)
 {
   my_cquantize_ptr cquantize = (my_cquantize_ptr) cinfo->cquantize;
   hist3d histogram = cquantize->histogram;

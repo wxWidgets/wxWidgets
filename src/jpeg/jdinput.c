@@ -20,7 +20,7 @@
 typedef struct {
   struct jpeg_input_controller pub; /* public fields */
 
-  boolean inheaders;		/* TRUE until first SOS is reached */
+  wxjpeg_boolean inheaders;		/* TRUE until first SOS is reached */
 } my_input_controller;
 
 typedef my_input_controller * my_inputctl_ptr;
