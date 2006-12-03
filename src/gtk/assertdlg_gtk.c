@@ -106,7 +106,7 @@ GtkWidget *gtk_assert_dialog_create_backtrace_list_model ()
                                 G_TYPE_UINT,        // stack frame number
                                 G_TYPE_STRING,      // function name
                                 G_TYPE_STRING,      // source file name
-                                G_TYPE_UINT,        // line number
+                                G_TYPE_STRING,      // line number
                                 G_TYPE_STRING);     // function arguments
 
     /* create the tree view */
@@ -409,8 +409,8 @@ gchar *gtk_assert_dialog_get_message (GtkAssertDialog *dlg)
 
 gchar *gtk_assert_dialog_get_backtrace (GtkAssertDialog *dlg)
 {
-    gchar *function, *arguments, *sourcefile;
-    guint count, linenum;
+    gchar *function, *arguments, *sourcefile, *linenum;
+    guint count;
 
     GtkTreeModel *model;
     GtkTreeIter iter;
@@ -435,17 +435,18 @@ gchar *gtk_assert_dialog_get_backtrace (GtkAssertDialog *dlg)
                             LINE_NUMBER_COLIDX, &linenum,
                             -1);
 
+        g_string_append_printf (string, "[%d] %s(%s)",
+                                count, function, arguments);
         if (sourcefile[0] != '\0')
-            g_string_append_printf (string, "[%d] %s(%s) %s:%d\n",
-                                    count, function, arguments,
-                                    sourcefile, linenum);
-        else
-            g_string_append_printf (string, "[%d] %s(%s)\n",
-                                    count, function, arguments);
+            g_string_append_printf (string, " %s", sourcefile);
+        if (linenum[0] != '\0')
+            g_string_append_printf (string, ":%s", linenum);
+        g_string_append (string, "\n");
 
         g_free (function);
         g_free (arguments);
         g_free (sourcefile);
+        g_free (linenum);
 
     } while (gtk_tree_model_iter_next (model, &iter));
 
@@ -491,6 +492,7 @@ void gtk_assert_dialog_append_stack_frame(GtkAssertDialog *dlg,
 {
     GtkTreeModel *model;
     GtkTreeIter iter;
+    GString *linenum;
     gint count;
 
     g_return_if_fail (GTK_IS_ASSERT_DIALOG (dlg));
@@ -499,6 +501,10 @@ void gtk_assert_dialog_append_stack_frame(GtkAssertDialog *dlg,
     /* how many items are in the list up to now ? */
     count = gtk_tree_model_iter_n_children (model, NULL);
 
+    linenum = g_string_new("");
+    if ( line_number != 0 )
+        g_string_printf (linenum, "%d", line_number);
+
     /* add data to the list store */
     gtk_list_store_append (GTK_LIST_STORE(model), &iter);
     gtk_list_store_set (GTK_LIST_STORE(model), &iter,
@@ -506,8 +512,10 @@ void gtk_assert_dialog_append_stack_frame(GtkAssertDialog *dlg,
                         FUNCTION_NAME_COLIDX, function,
                         FUNCTION_ARGS_COLIDX, arguments,
                         SOURCE_FILE_COLIDX, sourcefile,
-                        LINE_NUMBER_COLIDX, line_number,
+                        LINE_NUMBER_COLIDX, linenum->str,
                         -1);
+
+    g_string_free (linenum, TRUE);
 }
 
 GtkWidget *gtk_assert_dialog_new(void)
