@@ -378,6 +378,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_OPTIMISE=no
   DEFAULT_wxUSE_PROFILE=no
   DEFAULT_wxUSE_NO_DEPS=no
+  DEFAULT_wxUSE_VARARG_MACROS=no
   DEFAULT_wxUSE_NO_RTTI=no
   DEFAULT_wxUSE_NO_EXCEPTIONS=no
   DEFAULT_wxUSE_UNIVERSAL_BINARY=no
@@ -601,6 +602,7 @@ else
   DEFAULT_wxUSE_OPTIMISE=yes
   DEFAULT_wxUSE_PROFILE=no
   DEFAULT_wxUSE_NO_DEPS=no
+  DEFAULT_wxUSE_VARARG_MACROS=yes
   DEFAULT_wxUSE_NO_RTTI=no
   DEFAULT_wxUSE_NO_EXCEPTIONS=no
   DEFAULT_wxUSE_UNIVERSAL_BINARY=no
@@ -930,6 +932,7 @@ WX_ARG_ENABLE(no_rtti,       [  --enable-no_rtti        create code without RTTI
 WX_ARG_ENABLE(no_exceptions, [  --enable-no_exceptions  create code without C++ exceptions handling], wxUSE_NO_EXCEPTIONS)
 WX_ARG_ENABLE(permissive,    [  --enable-permissive     compile code disregarding strict ANSI], wxUSE_PERMISSIVE)
 WX_ARG_ENABLE(no_deps,       [  --enable-no_deps        create code without dependency information], wxUSE_NO_DEPS)
+WX_ARG_ENABLE(vararg_macros, [  --disable-vararg_macros don't use vararg macros, even if they are supported], wxUSE_VARARG_MACROS)
 WX_ARG_ENABLE_PARAM(universal_binary, [[  --enable-universal_binary[=SDK] create Mac PowerPC and Intel Universal binary (not yet working)]], wxUSE_UNIVERSAL_BINARY)
 
 WX_ARG_ENABLE(compat24,      [  --enable-compat24       enable wxWidgets 2.4 compatibility], WXWIN_COMPATIBILITY_2_4, enable)
@@ -1968,6 +1971,11 @@ else
     fi
 fi
 
+dnl don't check for vararg macros if they're explicitly disabled: this is
+dnl useful if the user code using the library wants to limit itself to standard
+dnl C++ only (e.g. is compiled with g++ -std=c++98)
+if test "$wxUSE_VARARG_MACROS" = "yes"; then
+
 dnl Check if variadic macros (C99 feature) are supported:
 AC_CACHE_CHECK(
     [whether the compiler supports variadic macros],
@@ -1996,6 +2004,8 @@ AC_CACHE_CHECK(
 if test $wx_cv_have_variadic_macros = "yes"; then
     AC_DEFINE(HAVE_VARIADIC_MACROS)
 fi
+
+fi dnl wxUSE_VARARG_MACROS == yes
 
 dnl check for large file support
 AC_SYS_LARGEFILE

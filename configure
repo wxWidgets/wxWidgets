@@ -965,6 +965,7 @@ Optional Features:
   --enable-no_exceptions  create code without C++ exceptions handling
   --enable-permissive     compile code disregarding strict ANSI
   --enable-no_deps        create code without dependency information
+  --disable-vararg_macros don't use vararg macros, even if they are supported
   --enable-universal_binary[=SDK] create Mac PowerPC and Intel Universal binary (not yet working)
   --enable-compat24       enable wxWidgets 2.4 compatibility
   --disable-compat26      disable wxWidgets 2.6 compatibility
@@ -2190,6 +2191,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_OPTIMISE=no
   DEFAULT_wxUSE_PROFILE=no
   DEFAULT_wxUSE_NO_DEPS=no
+  DEFAULT_wxUSE_VARARG_MACROS=no
   DEFAULT_wxUSE_NO_RTTI=no
   DEFAULT_wxUSE_NO_EXCEPTIONS=no
   DEFAULT_wxUSE_UNIVERSAL_BINARY=no
@@ -2413,6 +2415,7 @@ else
   DEFAULT_wxUSE_OPTIMISE=yes
   DEFAULT_wxUSE_PROFILE=no
   DEFAULT_wxUSE_NO_DEPS=no
+  DEFAULT_wxUSE_VARARG_MACROS=yes
   DEFAULT_wxUSE_NO_RTTI=no
   DEFAULT_wxUSE_NO_EXCEPTIONS=no
   DEFAULT_wxUSE_UNIVERSAL_BINARY=no
@@ -4410,6 +4413,47 @@ fi;
           fi
 
           if test "$wxUSE_NO_DEPS" = yes; then
+            echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6
+          else
+            echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+          fi
+
+
+          enablestring=
+          echo "$as_me:$LINENO: checking for --${enablestring:-enable}-vararg_macros" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-vararg_macros... $ECHO_C" >&6
+          no_cache=0
+          # Check whether --enable-vararg_macros or --disable-vararg_macros was given.
+if test "${enable_vararg_macros+set}" = set; then
+  enableval="$enable_vararg_macros"
+
+                          if test "$enableval" = yes; then
+                            ac_cv_use_vararg_macros='wxUSE_VARARG_MACROS=yes'
+                          else
+                            ac_cv_use_vararg_macros='wxUSE_VARARG_MACROS=no'
+                          fi
+
+else
+
+                          LINE=`grep "wxUSE_VARARG_MACROS" ${wx_arg_cache_file}`
+                          if test "x$LINE" != x ; then
+                            eval "DEFAULT_$LINE"
+                          else
+                            no_cache=1
+                          fi
+
+                          ac_cv_use_vararg_macros='wxUSE_VARARG_MACROS='$DEFAULT_wxUSE_VARARG_MACROS
+
+fi;
+
+          eval "$ac_cv_use_vararg_macros"
+          if test "$no_cache" != 1; then
+            echo $ac_cv_use_vararg_macros >> ${wx_arg_cache_file}.tmp
+          fi
+
+          if test "$wxUSE_VARARG_MACROS" = yes; then
             echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
           else
@@ -21597,6 +21641,8 @@ _ACEOF
     fi
 fi
 
+if test "$wxUSE_VARARG_MACROS" = "yes"; then
+
 echo "$as_me:$LINENO: checking whether the compiler supports variadic macros" >&5
 echo $ECHO_N "checking whether the compiler supports variadic macros... $ECHO_C" >&6
 if test "${wx_cv_have_variadic_macros+set}" = set; then
@@ -21679,6 +21725,7 @@ _ACEOF
 
 fi
 
+fi
 # Check whether --enable-largefile or --disable-largefile was given.
 if test "${enable_largefile+set}" = set; then
   enableval="$enable_largefile"
@@ -29201,7 +29248,7 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <X11/Intrinsic.h>
+#include <X11/Xlib.h>
 _ACEOF
 if { (eval echo "$as_me:$LINENO: \"$ac_cpp conftest.$ac_ext\"") >&5
   (eval $ac_cpp conftest.$ac_ext) 2>conftest.er1
@@ -29228,7 +29275,7 @@ else
 sed 's/^/| /' conftest.$ac_ext >&5
 
   for ac_dir in $ac_x_header_dirs; do
-  if test -r "$ac_dir/X11/Intrinsic.h"; then
+  if test -r "$ac_dir/X11/Xlib.h"; then
     ac_x_includes=$ac_dir
     break
   fi
@@ -29242,18 +29289,18 @@ if test "$ac_x_libraries" = no; then
   # See if we find them without any special options.
   # Don't add to $LIBS permanently.
   ac_save_LIBS=$LIBS
-  LIBS="-lXt $LIBS"
+  LIBS="-lX11 $LIBS"
   cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <X11/Intrinsic.h>
+#include <X11/Xlib.h>
 int
 main ()
 {
-XtMalloc (0)
+XrmInitialize ()
   ;
   return 0;
 }
@@ -29291,7 +29338,7 @@ for ac_dir in `echo "$ac_x_includes $ac_x_header_dirs" | sed s/include/lib/g`
 do
   # Don't even attempt the hair of trying to link an X program!
   for ac_extension in a so sl; do
-    if test -r $ac_dir/libXt.$ac_extension; then
+    if test -r $ac_dir/libX11.$ac_extension; then
       ac_x_libraries=$ac_dir
       break 2
     fi
