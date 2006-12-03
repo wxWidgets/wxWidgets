@@ -302,8 +302,6 @@ void RadioWidgetsPage::CreateContent()
 
     // final initializations
     SetSizer(sizerTop);
-
-    sizerTop->Fit(this);
 }
 
 // ----------------------------------------------------------------------------

@@ -307,8 +307,6 @@ void StaticWidgetsPage::CreateContent()
     Reset();
 
     SetSizer(sizerTop);
-
-    sizerTop->Fit(this);
 }
 
 // ----------------------------------------------------------------------------

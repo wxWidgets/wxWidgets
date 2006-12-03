@@ -295,8 +295,6 @@ void BookWidgetsPage::CreateContent()
 #endif // USE_ICONS_IN_BOOK
 
     SetSizer(sizerTop);
-
-    sizerTop->Fit(this);
 }
 
 BookWidgetsPage::~BookWidgetsPage()

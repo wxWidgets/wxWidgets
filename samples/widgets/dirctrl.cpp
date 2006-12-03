@@ -216,8 +216,6 @@ void DirCtrlWidgetsPage::CreateContent()
     Reset();
 
     SetSizer(sizerTop);
-
-    sizerTop->Fit(this);
 }
 
 void DirCtrlWidgetsPage::Reset()

@@ -275,8 +275,6 @@ void ButtonWidgetsPage::CreateContent()
     CreateButton();
 
     SetSizer(sizerTop);
-
-    sizerTop->Fit(this);
 }
 
 // ----------------------------------------------------------------------------

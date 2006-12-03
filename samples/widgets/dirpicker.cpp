@@ -170,7 +170,7 @@ void DirPickerWidgetsPage::CreateContent()
     sz->Add(boxleft, 0, wxGROW|wxALL, 5);
     sz->Add(m_sizer, 1, wxGROW|wxALL, 5);
 
-    SetSizerAndFit(sz);
+    SetSizer(sz);
 }
 
 void DirPickerWidgetsPage::CreatePicker()

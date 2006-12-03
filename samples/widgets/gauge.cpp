@@ -261,8 +261,6 @@ void GaugeWidgetsPage::CreateContent()
     Reset();
 
     SetSizer(sizerTop);
-
-    sizerTop->Fit(this);
 }
 
 GaugeWidgetsPage::~GaugeWidgetsPage()

@@ -163,8 +163,6 @@ void ToggleWidgetsPage::CreateContent()
     Reset();
 
     SetSizer(sizerTop);
-
-    sizerTop->Fit(this);
 }
 
 void ToggleWidgetsPage::Reset()

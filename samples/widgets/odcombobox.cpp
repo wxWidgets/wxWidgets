@@ -464,8 +464,6 @@ void ODComboboxWidgetsPage::CreateContent()
     Reset();
 
     SetSizer(sizerTop);
-
-    sizerTop->Fit(this);
 }
 
 // ----------------------------------------------------------------------------

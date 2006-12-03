@@ -334,8 +334,6 @@ void ListboxWidgetsPage::CreateContent()
     Reset();
 
     SetSizer(sizerTop);
-
-    sizerTop->Fit(this);
 }
 
 // ----------------------------------------------------------------------------

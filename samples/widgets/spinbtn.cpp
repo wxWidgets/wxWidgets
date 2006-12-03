@@ -266,8 +266,6 @@ void SpinBtnWidgetsPage::CreateContent()
 
     // final initializations
     SetSizer(sizerTop);
-
-    sizerTop->Fit(this);
 }
 
 // ----------------------------------------------------------------------------

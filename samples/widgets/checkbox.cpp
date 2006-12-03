@@ -233,8 +233,6 @@ void CheckBoxWidgetsPage::CreateContent()
     Reset();
 
     SetSizer(sizerTop);
-
-    sizerTop->Fit(this);
 }
 
 void CheckBoxWidgetsPage::Reset()

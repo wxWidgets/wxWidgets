@@ -360,8 +360,6 @@ void SliderWidgetsPage::CreateContent()
 
     // final initializations
     SetSizer(sizerTop);
-
-    sizerTop->Fit(this);
 }
 
 // ----------------------------------------------------------------------------

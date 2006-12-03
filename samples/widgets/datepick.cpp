@@ -178,8 +178,6 @@ void DatePickerWidgetsPage::CreateContent()
     Reset();
 
     SetSizer(sizerTop);
-
-    sizerTop->Fit(this);
 }
 
 void DatePickerWidgetsPage::Reset()

@@ -653,12 +653,16 @@ void WidgetsFrame::OnPageChanged(WidgetsBookCtrlEvent& event)
 
     GetMenuBar()->Check(Widgets_BusyCursor, false);
 
-    // lazy creation of the pages
+    // create the pages on demand, otherwise the sample startup is too slow as
+    // it creates hundreds of controls
     WidgetsPage *page = CurrentPage();
     if ( page->GetChildren().empty() )
     {
         wxWindowUpdateLocker noUpdates(page);
         page->CreateContent();
+        //page->Layout();
+        page->GetSizer()->Fit(page);
+
         WidgetsBookCtrl *book = wxStaticCast(page->GetParent(), WidgetsBookCtrl);
         wxSize size;
         for ( size_t i = 0; i < book->GetPageCount(); ++i )
