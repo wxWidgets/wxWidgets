@@ -27,10 +27,6 @@
     #include "wx/region.h"
 #endif
 
-#ifndef wxMAC_USE_CORE_GRAPHICS_BLEND_MODES
-    #define wxMAC_USE_CORE_GRAPHICS_BLEND_MODES 0
-#endif
-
 //-----------------------------------------------------------------------------
 // constants
 //-----------------------------------------------------------------------------
@@ -103,6 +99,7 @@ void wxGCDC::Init()
     m_brush = *wxWHITE_BRUSH;
 
     m_graphicContext = NULL;
+    m_logicalFunctionSupported = true;
 }
 
 
@@ -378,7 +375,7 @@ void wxGCDC::SetBrush( const wxBrush &brush )
         m_graphicContext->SetBrush( m_brush );
     }
 }
-
+ 
 void wxGCDC::SetBackground( const wxBrush &brush )
 {
     if (m_backgroundBrush == brush)
@@ -395,17 +392,10 @@ void wxGCDC::SetLogicalFunction( int function )
         return;
 
     m_logicalFunction = function;
-#if wxMAC_USE_CORE_GRAPHICS_BLEND_MODES
-
-    CGContextRef cgContext = ((wxCairoContext*)(m_graphicContext))->GetNativeContext();
-    if ( m_logicalFunction == wxCOPY )
-        CGContextSetBlendMode( cgContext, kCGBlendModeNormal );
-    else if ( m_logicalFunction == wxINVERT )
-        CGContextSetBlendMode( cgContext, kCGBlendModeExclusion );
+    if ( m_graphicContext->SetLogicalFunction( function ) )
+        m_logicalFunctionSupported=true;
     else
-        CGContextSetBlendMode( cgContext, kCGBlendModeNormal );
-#endif
-
+        m_logicalFunctionSupported=false;
 }
 
 bool wxGCDC::DoFloodFill(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y),
@@ -424,11 +414,8 @@ void wxGCDC::DoDrawLine( wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2 )
 {
     wxCHECK_RET( Ok(), wxT("wxGCDC(cg)::DoDrawLine - invalid DC") );
 
-#if !wxMAC_USE_CORE_GRAPHICS_BLEND_MODES
-
-    if ( m_logicalFunction != wxCOPY )
+    if ( !m_logicalFunctionSupported )
         return;
-#endif
 
     m_graphicContext->StrokeLine(x1,y1,x2,y2);
 
@@ -440,7 +427,7 @@ void wxGCDC::DoCrossHair( wxCoord x, wxCoord y )
 {
     wxCHECK_RET( Ok(), wxT("wxGCDC(cg)::DoCrossHair - invalid DC") );
 
-    if ( m_logicalFunction != wxCOPY )
+    if ( !m_logicalFunctionSupported )
         return;
 
     int w = 0, h = 0;
@@ -460,7 +447,7 @@ void wxGCDC::DoDrawArc( wxCoord x1, wxCoord y1,
 {
     wxCHECK_RET( Ok(), wxT("wxGCDC(cg)::DoDrawArc - invalid DC") );
 
-    if ( m_logicalFunction != wxCOPY )
+    if ( !m_logicalFunctionSupported )
         return;
 
     double dx = x1 - xc;
@@ -505,7 +492,7 @@ void wxGCDC::DoDrawEllipticArc( wxCoord x, wxCoord y, wxCoord w, wxCoord h,
 {
     wxCHECK_RET( Ok(), wxT("wxGCDC(cg)::DoDrawEllipticArc - invalid DC") );
 
-    if ( m_logicalFunction != wxCOPY )
+    if ( !m_logicalFunctionSupported )
         return;
 
     bool fill = m_brush.GetStyle() != wxTRANSPARENT;
@@ -538,11 +525,8 @@ void wxGCDC::DoDrawLines(int n, wxPoint points[],
 {
     wxCHECK_RET( Ok(), wxT("wxGCDC(cg)::DoDrawLines - invalid DC") );
 
-#if !wxMAC_USE_CORE_GRAPHICS_BLEND_MODES
-
-    if ( m_logicalFunction != wxCOPY )
+    if ( !m_logicalFunctionSupported )
         return;
-#endif
 
     wxPoint2DDouble* pointsD = new wxPoint2DDouble[n];
     for( int i = 0; i < n; ++i)
@@ -560,7 +544,7 @@ void wxGCDC::DoDrawSpline(wxList *points)
 {
     wxCHECK_RET( Ok(), wxT("wxGCDC(cg)::DoDrawSpline - invalid DC") );
 
-    if ( m_logicalFunction != wxCOPY )
+    if ( !m_logicalFunctionSupported )
         return;
 
     wxGraphicsPath path = m_graphicContext->CreatePath();
@@ -622,7 +606,7 @@ void wxGCDC::DoDrawPolygon( int n, wxPoint points[],
 
     if ( n <= 0 || (m_brush.GetStyle() == wxTRANSPARENT && m_pen.GetStyle() == wxTRANSPARENT ) )
         return;
-    if ( m_logicalFunction != wxCOPY )
+    if ( !m_logicalFunctionSupported )
         return;
 
     bool closeIt = false;
@@ -675,7 +659,7 @@ void wxGCDC::DoDrawRectangle(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
 {
     wxCHECK_RET( Ok(), wxT("wxGCDC(cg)::DoDrawRectangle - invalid DC") );
 
-    if ( m_logicalFunction != wxCOPY )
+    if ( !m_logicalFunctionSupported )
         return;
 
     // CMB: draw nothing if transformed w or h is 0
@@ -698,7 +682,7 @@ void wxGCDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
 {
     wxCHECK_RET( Ok(), wxT("wxGCDC(cg)::DoDrawRoundedRectangle - invalid DC") );
 
-    if ( m_logicalFunction != wxCOPY )
+    if ( !m_logicalFunctionSupported )
         return;
 
     if (radius < 0.0)
@@ -715,7 +699,7 @@ void wxGCDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
 {
     wxCHECK_RET( Ok(), wxT("wxGCDC(cg)::DoDrawEllipse - invalid DC") );
 
-    if ( m_logicalFunction != wxCOPY )
+    if ( !m_logicalFunctionSupported )
         return;
 
     m_graphicContext->DrawEllipse(x,y,w,h);
@@ -773,7 +757,7 @@ void wxGCDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
 
     if ( str.length() == 0 )
         return;
-    if ( m_logicalFunction != wxCOPY )
+    if ( !m_logicalFunctionSupported )
         return;
 
     if ( m_backgroundMode == wxTRANSPARENT )
@@ -788,7 +772,8 @@ void wxGCDC::DoDrawText(const wxString& str, wxCoord x, wxCoord y)
 
     if ( str.length() == 0 )
         return;
-    if ( m_logicalFunction != wxCOPY )
+
+    if ( !m_logicalFunctionSupported )
         return;
 
     if ( m_backgroundMode == wxTRANSPARENT )

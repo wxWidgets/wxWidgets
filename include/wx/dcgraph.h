@@ -171,6 +171,7 @@ protected:
 
 protected:
     // scaling variables
+    bool m_logicalFunctionSupported;
     double       m_mm_to_pix_x, m_mm_to_pix_y;
     wxGraphicsMatrix m_matrixOriginal;
     wxGraphicsMatrix m_matrixCurrent;

@@ -495,6 +495,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxGraphicsContext, wxObject)
 
 wxGraphicsContext::wxGraphicsContext(wxGraphicsRenderer* renderer) : wxGraphicsObject(renderer) 
 {
+    m_logicalFunction = wxCOPY;
 }
 
 wxGraphicsContext::~wxGraphicsContext() 
@@ -533,6 +534,16 @@ void wxGraphicsContext::SetBrush( const wxBrush& brush )
 void wxGraphicsContext::SetFont( const wxGraphicsFont& font ) 
 {
     m_font = font;
+}
+
+bool wxGraphicsContext::SetLogicalFunction( int function )
+{
+    if ( function == wxCOPY )
+    {
+        m_logicalFunction = function;
+        return true;
+    }
+    return false;
 }
 
 void wxGraphicsContext::SetFont( const wxFont& font, const wxColour& colour )
