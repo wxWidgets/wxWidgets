@@ -2039,7 +2039,7 @@ void wxRichTextCtrl::DoWriteText(const wxString& value, int flags)
 {
     wxString valueUnix = wxTextFile::Translate(value, wxTextFileType_Unix);
 
-    GetBuffer().InsertTextWithUndo(m_caretPosition+1, valueUnix, this);
+    GetBuffer().InsertTextWithUndo(m_caretPosition+1, valueUnix, this, wxRICHTEXT_INSERT_WITH_PREVIOUS_PARAGRAPH_STYLE);
 
     if ( flags & SetValue_SendEvent )
         SendTextUpdatedEvent();
