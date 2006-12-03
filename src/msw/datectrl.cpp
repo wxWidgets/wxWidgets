@@ -343,7 +343,8 @@ wxDatePickerCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
             // filter out duplicate DTN_DATETIMECHANGE events which the native
             // control sends us when using wxDP_DROPDOWN style
-            if ( !m_date.IsValid() || dt != m_date )
+            if ( (m_date.IsValid() != dt.IsValid()) ||
+                    (m_date.IsValid() && dt != m_date) )
             {
                 m_date = dt;
                 wxDateEvent event(this, dt, wxEVT_DATE_CHANGED);
@@ -353,6 +354,7 @@ wxDatePickerCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     return true;
                 }
             }
+            //else: both the old and new values are invalid, nothing changed
         }
     }
 
