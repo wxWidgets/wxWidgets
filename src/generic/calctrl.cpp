@@ -202,9 +202,6 @@ bool wxCalendarCtrl::Create(wxWindow *parent,
                             long style,
                             const wxString& name)
 {
-    // set the style first to avoid assert in our SetWindowStyleFlag()
-    m_windowStyle = style;
-
     if ( !wxControl::Create(parent, id, pos, size,
                             style | wxCLIP_CHILDREN | wxWANTS_CHARS | wxFULL_REPAINT_ON_RESIZE,
                             wxDefaultValidator, name) )
