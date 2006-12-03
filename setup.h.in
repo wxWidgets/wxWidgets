@@ -1161,6 +1161,10 @@
  */
 #define wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW 1
 
+/* When using an external jpeg library and the Windows headers already define
+ * boolean, define to the type used by the jpeg library for boolean.  */
+#undef wxHACK_BOOLEAN
+
 /* Define if the header pbt.h is missing.  */
 #undef NEED_PBT_H
 

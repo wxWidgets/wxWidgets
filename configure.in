@@ -2788,6 +2788,30 @@ if test "$wxUSE_LIBJPEG" != "no" ; then
             else
                 dnl we are using the system library
                 wxUSE_LIBJPEG=sys
+
+                if test "$wxUSE_MSW" = 1; then
+                    dnl boolean is defined by the jpeg headers and also by the
+                    dnl Windows headers of some compilers. This type has been
+                    dnl renamed in the builtin, so it is only an issue when
+                    dnl using an external jpeg lib on Windows.
+                    AC_CHECK_TYPES(
+                        [boolean],
+                        [
+                            AC_CHECK_SIZEOF(
+                                [boolean],
+                                [],
+                                [
+                                    #undef HAVE_BOOLEAN
+                                    #include <stdio.h>
+                                    #include <jpeglib.h>
+                                ])
+                            AC_DEFINE_UNQUOTED(
+                                [wxHACK_BOOLEAN],
+                                [wxInt`expr 8 \* $ac_cv_sizeof_boolean`])
+                        ],
+                        [],
+                        [#include <windows.h>])
+                fi
             fi
         fi
     fi

@@ -32,14 +32,9 @@
 // This hack is only necessary for an external jpeg library, the builtin one
 // usually used on Windows doesn't use the type boolean, so always works.
 //
-#if defined wxHACK_BOOLEAN || defined __RPCNDR_H__ || defined __WINE_RPCNDR_H
+#ifdef wxHACK_BOOLEAN
     #define HAVE_BOOLEAN
-
-    #ifdef wxHACK_BOOLEAN
-        #define boolean wxHACK_BOOLEAN
-    #else
-        #define boolean int
-    #endif
+    #define boolean wxHACK_BOOLEAN
 #endif
 
 extern "C"
