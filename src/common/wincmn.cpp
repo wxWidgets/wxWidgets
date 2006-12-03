@@ -251,8 +251,12 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
     // generate a new id if the user doesn't care about it
     m_windowId = id == wxID_ANY ? NewControlId() : id;
 
+    // don't use SetWindowStyleFlag() here, this function should only be called
+    // to change the flag after creation as it tries to reflect the changes in
+    // flags by updating the window dynamically and we don't need this here
+    m_windowStyle = style;
+
     SetName(name);
-    SetWindowStyleFlag(style);
     SetParent(parent);
 
 #if wxUSE_VALIDATORS
