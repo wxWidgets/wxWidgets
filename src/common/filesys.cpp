@@ -385,6 +385,9 @@ wxFileSystemHandler *wxFileSystem::MakeLocal(wxFileSystemHandler *h)
 
 wxFSFile* wxFileSystem::OpenFile(const wxString& location, int flags)
 {
+    if ((flags & wxFS_READ) == 0)
+        return NULL;
+
     wxString loc = MakeCorrectPath(location);
     unsigned i, ln;
     wxChar meta;
