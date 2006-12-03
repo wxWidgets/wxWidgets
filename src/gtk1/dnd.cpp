@@ -53,13 +53,16 @@ extern bool g_blockEventsOnDrag;
 // the flags used for the last DoDragDrop()
 static long gs_flagsForDrag = 0;
 
+#ifdef __WXDEBUG__
 // the trace mask we use with wxLogTrace() - call
 // wxLog::AddTraceMask(TRACE_DND) to enable the trace messages from here
 // (there are quite a few of them, so don't enable this by default)
 static const wxChar *TRACE_DND = _T("dnd");
+#endif
 
+// global variables because GTK+ DnD want to have the
+// mouse event that caused it
 extern GdkEvent *g_lastMouseEvent;
-
 extern int g_lastButtonNumber;
 
 //----------------------------------------------------------------------------
@@ -855,6 +858,14 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     if (g_blockEventsOnDrag)
         return wxDragNone;
 
+    // don't start dragging if no button is down
+    if (g_lastButtonNumber == 0)
+        return wxDragNone;
+        
+    // we can only start a drag after a mouse event
+    if (g_lastMouseEvent == NULL)
+        return wxDragNone;
+
     // disabled for now
     g_blockEventsOnDrag = true;
 
@@ -875,9 +886,6 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     }
     delete[] array;
 
-    /* don't start dragging if no button is down */
-    if (g_lastButtonNumber)
-    {
         int action = GDK_ACTION_COPY;
         if ( flags & wxDrag_AllowMove )
             action |= GDK_ACTION_MOVE;
@@ -903,7 +911,6 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
         m_retValue = ConvertFromGTK(context->action);
         if ( m_retValue == wxDragNone )
             m_retValue = wxDragCancel;
-    }
 
     g_blockEventsOnDrag = false;
 

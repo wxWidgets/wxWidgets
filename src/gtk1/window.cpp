@@ -225,7 +225,8 @@ wxWindowGTK *g_delayedFocus = (wxWindowGTK*) NULL;
 // the last click here (extern: used from gtk/menu.cpp)
 guint32 wxGtkTimeLastClick = 0;
 
-// Save the last mouse event for drag start
+// global variables because GTK+ DnD want to have the
+// mouse event that caused it
 GdkEvent *g_lastMouseEvent = (GdkEvent*) NULL;
 int g_lastButtonNumber = 0;
 
@@ -1615,8 +1616,10 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
     if (win->GetEventHandler()->ProcessEvent( event ))
     {
         gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "button_press_event" );
+        g_lastMouseEvent = NULL;
         return TRUE;
     }
+    g_lastMouseEvent = NULL;
 
     if (event_type == wxEVT_RIGHT_DOWN)
     {
@@ -1773,13 +1776,15 @@ static gint gtk_window_motion_notify_callback( GtkWidget *widget,
         win = FindWindowForMouseEvent(win, event.m_x, event.m_y);
     }
 
-    if (win->GetEventHandler()->ProcessEvent( event ))
+    bool ret = win->GetEventHandler()->ProcessEvent( event );
+    g_lastMouseEvent = NULL;
+
+    if ( ret )
     {
         gtk_signal_emit_stop_by_name( GTK_OBJECT(widget), "motion_notify_event" );
-        return TRUE;
     }
 
-    return FALSE;
+    return ret ? TRUE : FALSE;
 }
 }
 
