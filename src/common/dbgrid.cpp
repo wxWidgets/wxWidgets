@@ -646,7 +646,8 @@ void wxDbGridTableBase::SetValueAsBool(int row, int col, bool value)
 
 void wxDbGridTableBase::ValidateRow(int row)
 {
-    wxLogDebug(wxT("ValidateRow(%i) currently on row (%i). Array count = %i"),row,m_row,m_keys.GetCount());
+    wxLogDebug(wxT("ValidateRow(%i) currently on row (%i). Array count = %lu"),
+               row, m_row, (unsigned long)m_keys.GetCount());
 
     if (row == m_row)
          return;
