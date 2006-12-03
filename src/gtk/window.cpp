@@ -331,13 +331,13 @@ static void draw_frame( GtkWidget *widget, wxWindowGTK *win )
 
     int x = dx;
     int y = dy;
-    
+
     int dw = 0;
     int dh = 0;
     if (win->m_hasScrolling)
     {
         GetScrollbarWidth(widget, dw, dh);
-        
+
         if (win->GetLayoutDirection() == wxLayout_RightToLeft)
         {
             // This is actually wrong for old GTK+ version
@@ -451,7 +451,7 @@ void wxgtk_combo_size_request_callback(GtkWidget *widget,
     button_req.height = 2;
     (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(gcombo->button) )->size_request )
         (gcombo->button, &button_req );
-        
+
     requisition->width = w - button_req.width;
     requisition->height = entry_req.height;
 }
@@ -1277,7 +1277,7 @@ template<typename T> void InitMouseEvent(wxWindowGTK *win,
     wxPoint pt = win->GetClientAreaOrigin();
     event.m_x = (wxCoord)gdk_event->x - pt.x;
     event.m_y = (wxCoord)gdk_event->y - pt.y;
-    
+
     if ((win->m_wxwindow) && (win->GetLayoutDirection() == wxLayout_RightToLeft))
     {
         // origin in the upper right corner
@@ -1586,7 +1586,7 @@ gtk_window_button_press_callback( GtkWidget *widget,
     }
 
     g_lastMouseEvent = (GdkEvent*) gdk_event;
-    
+
     wxMouseEvent event( event_type );
     InitMouseEvent( win, event, gdk_event );
 
@@ -1606,12 +1606,10 @@ gtk_window_button_press_callback( GtkWidget *widget,
     event.SetEventObject( win );
     event.SetId( win->GetId() );
 
-    if (win->GTKProcessEvent( event ))
-    {
-        g_lastMouseEvent = NULL;
-        return TRUE;
-    }
+    bool ret = win->GTKProcessEvent( event );
     g_lastMouseEvent = NULL;
+    if ( ret )
+        return TRUE;
 
     if (event_type == wxEVT_RIGHT_DOWN)
     {
@@ -1668,7 +1666,7 @@ gtk_window_button_release_callback( GtkWidget *widget,
     }
 
     g_lastMouseEvent = (GdkEvent*) gdk_event;
-    
+
     wxMouseEvent event( event_type );
     InitMouseEvent( win, event, gdk_event );
 
@@ -1753,7 +1751,7 @@ gtk_window_motion_notify_callback( GtkWidget *widget,
     }
 
     bool ret = win->GTKProcessEvent(event);
-    
+
     g_lastMouseEvent = NULL;
 
     return ret;
@@ -2145,7 +2143,7 @@ void gtk_window_size_callback( GtkWidget *WXUNUSED(widget),
                 alloc->width,
                 alloc->height );
 #endif
-                
+
     win->m_oldClientWidth = client_width;
     win->m_oldClientHeight = client_height;
 
@@ -2346,7 +2344,7 @@ bool wxWindowGTK::Create( wxWindow *parent,
 
         scrolledWindow->hscrollbar_visible = TRUE;
         scrolledWindow->vscrollbar_visible = TRUE;
-    } 
+    }
     else
     {
         gtk_scrolled_window_set_policy( scrolledWindow, GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
@@ -2612,7 +2610,7 @@ void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
 {
     // inform the parent to perform the move
     gtk_pizza_set_size( GTK_PIZZA(m_parent->m_wxwindow), m_widget, x, y, width, height );
-    
+
 }
 
 void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags )
@@ -2951,10 +2949,10 @@ void wxWindowGTK::DoClientToScreen( int *x, int *y ) const
     {
         if (GetLayoutDirection() == wxLayout_RightToLeft)
             *x = (GetClientSize().x - *x) + org_x;
-        else 
+        else
             *x += org_x;
     }
-    
+
     if (y) *y += org_y;
 }
 
@@ -2987,7 +2985,7 @@ void wxWindowGTK::DoScreenToClient( int *x, int *y ) const
     {
         if (GetLayoutDirection() == wxLayout_RightToLeft)
             *x = (GetClientSize().x - *x) - org_x;
-        else 
+        else
             *x -= org_x;
     }
     if (y) *y -= org_y;
@@ -3212,7 +3210,7 @@ void wxWindowGTK::SetFocus()
                 gtk_widget_grab_focus (m_widget);
                 return;
             }
-        
+
             gtk_widget_child_focus( m_widget, GTK_DIR_TAB_FORWARD );
         }
         else
@@ -3371,7 +3369,7 @@ void wxWindowGTK::SetLayoutDirection(wxLayoutDirection dir)
         return;
 
     GTKSetLayout(m_widget, dir);
-    
+
     if (m_wxwindow)
         GTKSetLayout(m_wxwindow, dir);
 }
@@ -3620,7 +3618,7 @@ void wxWindowGTK::Refresh( bool eraseBackground, const wxRect *rect )
         {
             p = NULL;
         }
-        
+
         gdk_window_invalidate_rect( GTK_PIZZA(m_wxwindow)->bin_window, p, TRUE );
     }
 }
@@ -3685,11 +3683,11 @@ void wxWindowGTK::GtkSendPaintEvents()
     {
         // Transform m_updateRegion under RTL
         m_updateRegion.Clear();
-        
+
         gint width;
         gdk_window_get_geometry( GTK_PIZZA(m_wxwindow)->bin_window,
                                  NULL, NULL, &width, NULL, NULL );
-        
+
         wxRegionIterator upd( m_nativeUpdateRegion );
         while (upd)
         {
@@ -3698,14 +3696,14 @@ void wxWindowGTK::GtkSendPaintEvents()
             rect.y = upd.GetY();
             rect.width = upd.GetWidth();
             rect.height = upd.GetHeight();
-            
+
             rect.x = width - rect.x - rect.width;
             m_updateRegion.Union( rect );
-            
+
             ++upd;
         }
     }
-    
+
     // widget to draw on
     GtkPizza *pizza = GTK_PIZZA (m_wxwindow);
 
@@ -4149,7 +4147,7 @@ void wxWindowGTK::SetScrollPos(int orient, int pos, bool WXUNUSED(refresh))
         if (pos < 0)
             pos = 0;
         m_scrollPos[dir] = adj->value = pos;
-        
+
         // If a "value_changed" signal emission is not already in progress
         if (!m_blockValueChanged[dir])
         {
@@ -4202,9 +4200,9 @@ wxEventType wxWindowGTK::GetScrollEventType(GtkRange* range)
 
     const int barIndex = range == m_scrollBar[1];
     GtkAdjustment* adj = range->adjustment;
-    
+
     const int value = int(adj->value + 0.5);
-    
+
     // save previous position
     const double oldPos = m_scrollPos[barIndex];
     // update current position
@@ -4265,19 +4263,19 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
         if (dx > 0)
             caretRect.width += dx;
         else
-	{
+        {
             caretRect.x += dx; caretRect.width -= dx;
-	}
+        }
         if (dy > 0)
             caretRect.height += dy;
         else
-	{
+        {
             caretRect.y += dy; caretRect.height -= dy;
-	}
-     
+        }
+
         RefreshRect(caretRect);
     }
-#endif
+#endif // wxUSE_CARET
 }
 
 void wxWindowGTK::GtkScrolledWindowSetBorder(GtkWidget* w, int wxstyle)
