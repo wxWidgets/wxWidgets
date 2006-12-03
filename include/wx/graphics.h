@@ -441,6 +441,12 @@ public:
     // returns the native context
     virtual void * GetNativeContext() = 0;
 
+    // returns the current logical function
+    virtual int GetLogicalFunction() const { return m_logicalFunction; }
+    
+    // sets the current logical function, returns true if it supported
+    virtual bool SetLogicalFunction(int function) ;
+
     //
     // transformation : changes the current transformation matrix CTM of the context
     //
@@ -551,6 +557,7 @@ protected :
     wxGraphicsPen m_pen;
     wxGraphicsBrush m_brush;
     wxGraphicsFont m_font;
+    int m_logicalFunction;
 
 private :
     DECLARE_NO_COPY_CLASS(wxGraphicsContext)
