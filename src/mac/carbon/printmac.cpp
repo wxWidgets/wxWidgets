@@ -33,6 +33,7 @@
 #include "wx/mac/private/print.h"
 
 #include "wx/printdlg.h"
+#include "wx/paper.h"
 #include "wx/mac/printdlg.h"
 
 #include <stdlib.h>
@@ -153,7 +154,26 @@ bool wxMacCarbonPrintData::TransferFrom( const wxPrintData &data )
         PMSetColorMode( (PMPrintSettings) m_macPrintSettings, kPMBlackAndWhite ) ;
 #endif
 
-    // PMDuplexMode not yet accessible via API
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+    if ( PMSetDuplex!=NULL )
+    {
+        PMDuplexMode mode = 0 ;
+        switch( data.GetDuplex() )
+        {
+            case wxDUPLEX_HORIZONTAL :
+                mode = kPMDuplexNoTumble ;
+                break ;
+            case wxDUPLEX_VERTICAL :
+                mode = kPMDuplexTumble ;
+                break ;
+            case wxDUPLEX_SIMPLEX :
+            default :
+                mode = kPMDuplexNone ;
+                break ;
+        }
+        PMSetDuplex( (PMPrintSettings) m_macPrintSettings, mode ) ;
+    }
+#endif
     // PMQualityMode not yet accessible via API
     // todo paperSize
 
@@ -220,16 +240,43 @@ bool wxMacCarbonPrintData::TransferTo( wxPrintData &data )
     if ( err == noErr )
         data.SetColour( !(color == kPMBlackAndWhite) ) ;
 #endif
-    // PMDuplexMode not yet accessible via API
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+    if ( PMGetDuplex!=NULL )
+    {
+        PMDuplexMode mode = 0 ;
+        PMGetDuplex( (PMPrintSettings) m_macPrintSettings, &mode ) ;
+        switch( mode )
+        {
+            case kPMDuplexNoTumble :
+                data.SetDuplex(wxDUPLEX_HORIZONTAL);
+                break ;
+            case kPMDuplexTumble :
+                data.SetDuplex(wxDUPLEX_VERTICAL);
+                break ;
+            case kPMDuplexNone :
+            default :
+                data.SetDuplex(wxDUPLEX_SIMPLEX);
+                break ;
+        }
+    }
+#endif
     // PMQualityMode not yet accessible via API
-    // todo paperSize
+    
+    PMPaper paper ;
+    PMGetPageFormatPaper( m_macPageFormat, &paper );
+    
     PMRect rPaper;
     err = PMGetUnadjustedPaperRect( m_macPageFormat, &rPaper);
     if ( err == noErr )
     {
-        data.SetPaperSize( wxSize (
-            (int)(( rPaper.right - rPaper.left ) * pt2mm + 0.5 ) ,
-             (int)(( rPaper.bottom - rPaper.top ) * pt2mm + 0.5 ) ) );
+        wxSize sz((int)(( rPaper.right - rPaper.left ) * pt2mm + 0.5 ) ,
+             (int)(( rPaper.bottom - rPaper.top ) * pt2mm + 0.5 ));
+        data.SetPaperSize(sz);
+        wxPaperSize id = wxThePrintPaperDatabase->GetSize(wxSize(sz.x* 10, sz.y * 10));
+        if (id != wxPAPER_NONE)
+        {
+            data.SetPaperId(id);
+        }
     }
     return true ;
 }
@@ -247,6 +294,10 @@ void wxMacCarbonPrintData::TransferTo( wxPageSetupData* data )
     OSStatus err = PMGetUnadjustedPaperRect(m_macPageFormat, &rPaper);
     if ( err == noErr )
     {
+        wxSize sz((int)(( rPaper.right - rPaper.left ) * pt2mm + 0.5 ) ,
+             (int)(( rPaper.bottom - rPaper.top ) * pt2mm + 0.5 ));
+        data->SetPaperSize(sz);
+
         PMRect rPage ;
         err = PMGetUnadjustedPageRect(m_macPageFormat , &rPage ) ;
         if ( err == noErr )
