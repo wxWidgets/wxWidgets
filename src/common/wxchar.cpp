@@ -1222,9 +1222,13 @@ int WXDLLEXPORT wxSnprintf_(wxChar *buf, size_t len, const wxChar *format, ...)
 #ifdef wxNEED_FPUTS
 int wxFputs(const wchar_t *ws, FILE *stream)
 {
+    wxCharBuffer buf(wxConvLibc.cWC2MB(ws));
+    if ( !buf )
+        return -1;
+
     // counting the number of wide characters written isn't worth the trouble,
     // simply distinguish between ok and error
-    return fputs(wxConvLibc.cWC2MB(ws), stream) == -1 ? -1 : 0;
+    return fputs(buf, stream) == -1 ? -1 : 0;
 }
 #endif // wxNEED_FPUTS
 
