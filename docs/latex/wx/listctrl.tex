@@ -38,6 +38,11 @@ Using many of wxListCtrl features is shown in the
 To intercept events from a list control, use the event table macros described
 in \helpref{wxListEvent}{wxlistevent}.
 
+{\bf Mac Note:} Starting with 2.8, wxListCtrl uses a native implementation for 
+report mode, and uses a generic implementation for other modes. You can use the
+generic implementation for report mode as well by setting the 
+mac.listctrl.always_use_generic \helpref{wxSystemOption}{wxsystemoptions} to 1.
+
 \wxheading{Derived from}
 
 \helpref{wxControl}{wxcontrol}\\
