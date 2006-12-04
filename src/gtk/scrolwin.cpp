@@ -85,6 +85,7 @@ void wxScrollHelperNative::DoAdjustScrollbar(GtkRange* range,
                                              int pixelsPerLine,
                                              int winSize,
                                              int virtSize,
+                                             int *pos,
                                              int *lines,
                                              int *linesPerPage)
 {
@@ -106,6 +107,11 @@ void wxScrollHelperNative::DoAdjustScrollbar(GtkRange* range,
         *lines = 0;
         *linesPerPage = 0;
     }
+
+    // ensure that the scroll position is always in valid range
+    if ( *pos > *lines )
+        *pos = *lines;
+
     GtkAdjustment* adj = range->adjustment;
     adj->step_increment = 1;
     adj->page_increment =
@@ -115,26 +121,24 @@ void wxScrollHelperNative::DoAdjustScrollbar(GtkRange* range,
 
 void wxScrollHelperNative::AdjustScrollbars()
 {
-    int w, h;
-    int vw, vh;
-
     // this flag indicates which window has the scrollbars
-    m_win->m_hasScrolling = m_xScrollPixelsPerLine != 0 || m_yScrollPixelsPerLine != 0;
+    m_win->m_hasScrolling = m_xScrollPixelsPerLine != 0 ||
+                                m_yScrollPixelsPerLine != 0;
 
+    int vw, vh;
     m_targetWindow->GetVirtualSize( &vw, &vh );
 
+    int w;
     m_targetWindow->GetClientSize(&w, NULL);
-    DoAdjustScrollbar(
-        m_win->m_scrollBar[wxWindow::ScrollDir_Horz], m_xScrollPixelsPerLine,
-        w, vw, &m_xScrollLines, &m_xScrollLinesPerPage);
+    DoAdjustHScrollbar(w, vw);
+
+    int h;
     m_targetWindow->GetClientSize(NULL, &h);
-    DoAdjustScrollbar(
-        m_win->m_scrollBar[wxWindow::ScrollDir_Vert], m_yScrollPixelsPerLine,
-        h, vh, &m_yScrollLines, &m_yScrollLinesPerPage);
+    DoAdjustVScrollbar(h, vh);
 
     const int w_old = w;
     m_targetWindow->GetClientSize(&w, NULL);
-    if (w != w_old)
+    if ( w != w_old )
     {
         // It is necessary to repeat the calculations in this case to avoid an
         // observed infinite series of size events, involving alternating
@@ -143,13 +147,10 @@ void wxScrollHelperNative::AdjustScrollbars()
         // AdjustScrollbars() to be called again. If the scrollbar visibility
         // is not correct before then, yet another resize will occur, possibly
         // leading to an unending series if the sizes are just right.
-        DoAdjustScrollbar(
-            m_win->m_scrollBar[wxWindow::ScrollDir_Horz], m_xScrollPixelsPerLine,
-            w, vw, &m_xScrollLines, &m_xScrollLinesPerPage);
+        DoAdjustHScrollbar(w, vw);
+
         m_targetWindow->GetClientSize(NULL, &h);
-        DoAdjustScrollbar(
-            m_win->m_scrollBar[wxWindow::ScrollDir_Vert], m_yScrollPixelsPerLine,
-            h, vh, &m_yScrollLines, &m_yScrollLinesPerPage);
+        DoAdjustVScrollbar(h, vh);
     }
 }
 

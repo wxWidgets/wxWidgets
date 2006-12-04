@@ -35,8 +35,29 @@ protected:
                            int pixelsPerLine,
                            int winSize,
                            int virtSize,
+                           int *pos,
                            int *lines,
                            int *linesPerPage);
+
+    void DoAdjustHScrollbar(int winSize, int virtSize)
+    {
+        DoAdjustScrollbar
+        (
+            m_win->m_scrollBar[wxWindow::ScrollDir_Horz],
+            m_xScrollPixelsPerLine, winSize, virtSize,
+            &m_xScrollPosition, &m_xScrollLines, &m_xScrollLinesPerPage
+        );
+    }
+
+    void DoAdjustVScrollbar(int winSize, int virtSize)
+    {
+        DoAdjustScrollbar
+        (
+            m_win->m_scrollBar[wxWindow::ScrollDir_Vert],
+            m_yScrollPixelsPerLine, winSize, virtSize,
+            &m_yScrollPosition, &m_yScrollLines, &m_yScrollLinesPerPage
+        );
+    }
 
     // and this does the same for Scroll()
     void DoScroll(int orient,
