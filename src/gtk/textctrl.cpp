@@ -866,11 +866,6 @@ bool wxTextCtrl::Create( wxWindow *parent,
     return true;
 }
 
-
-void wxTextCtrl::CalculateScrollbar()
-{
-}
-
 wxString wxTextCtrl::GetValue() const
 {
     wxCHECK_MSG( m_text != NULL, wxEmptyString, wxT("invalid text ctrl") );

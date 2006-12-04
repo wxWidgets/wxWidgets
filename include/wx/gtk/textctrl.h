@@ -138,7 +138,6 @@ public:
     bool SetBackgroundColour(const wxColour& colour);
 
     GtkWidget* GetConnectWidget();
-    void CalculateScrollbar();
 
     void SetUpdateFont(bool WXUNUSED(update)) { }
 
