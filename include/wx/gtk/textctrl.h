@@ -115,6 +115,8 @@ public:
     virtual void SetSelection(long from, long to);
     virtual void SetEditable(bool editable);
 
+    // Overridden wxWindow methods
+    virtual void SetWindowStyleFlag( long style );
     virtual bool Enable( bool enable = true );
 
     // Implementation from now on
@@ -189,6 +191,14 @@ protected:
     virtual bool UseGTKStyleBase() const { return true; }
 
     virtual void DoSetValue(const wxString &value, int flags = 0);
+
+    // wrappers hiding the differences between functions doing the same thing
+    // for GtkTextView and GtkEntry (all of them use current window style to
+    // set the given characteristic)
+    void GTKSetEditable();
+    void GTKSetVisibility();
+    void GTKSetWrapMode();
+    void GTKSetJustification();
 
 private:
     // change the font for everything in this control

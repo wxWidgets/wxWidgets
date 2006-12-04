@@ -106,6 +106,10 @@ wxMSW:
 - Use system default paper size for printing instead of A4.
 - Fix colours when converting wxBitmap with alpha to wxImage (nusi).
 
+wxGTK:
+
+- Allow dynamically changing most of text control styles
+
 
 2.7.2
 -----

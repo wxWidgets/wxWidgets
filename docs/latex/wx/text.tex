@@ -57,6 +57,14 @@ used, so that text won't be wrapped. No effect under wxGTK1.}
 
 See also \helpref{window styles overview}{windowstyles} and \helpref{wxTextCtrl::wxTextCtrl}{wxtextctrlctor}.
 
+Note that alignment styles (\windowstyle{wxTE\_LEFT}, 
+\windowstyle{wxTE\_CENTRE} and \windowstyle{wxTE\_RIGHT}) can be changed
+dynamically after control creation on wxMSW and wxGTK. 
+\windowstyle{wxTE\_READONLY}, \windowstyle{wxTE\_PASSWORD} and wrapping styles
+can be dynamically changed under wxGTK but not wxMSW. The other styles can be
+only set during control creation.
+
+
 \wxheading{wxTextCtrl text format}
 
 The multiline text controls always store the text as a sequence of lines

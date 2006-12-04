@@ -712,28 +712,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
         // Insert view into scrolled window
         gtk_container_add( GTK_CONTAINER(m_widget), m_text );
 
-        // translate wx wrapping style to GTK+
-        GtkWrapMode wrap;
-        if ( HasFlag( wxTE_DONTWRAP ) )
-            wrap = GTK_WRAP_NONE;
-        else if ( HasFlag( wxTE_CHARWRAP ) )
-            wrap = GTK_WRAP_CHAR;
-        else if ( HasFlag( wxTE_WORDWRAP ) )
-            wrap = GTK_WRAP_WORD;
-        else // HasFlag(wxTE_BESTWRAP) always true as wxTE_BESTWRAP == 0
-        {
-            // GTK_WRAP_WORD_CHAR seems to be new in GTK+ 2.4
-#ifdef __WXGTK24__
-            if ( !gtk_check_version(2,4,0) )
-            {
-                wrap = GTK_WRAP_WORD_CHAR;
-            }
-            else
-#endif
-            wrap = GTK_WRAP_WORD;
-        }
-
-        gtk_text_view_set_wrap_mode( GTK_TEXT_VIEW( m_text ), wrap );
+        GTKSetWrapMode();
 
         GtkScrolledWindowSetBorder(m_widget, style);
 
@@ -768,40 +747,14 @@ bool wxTextCtrl::Create( wxWindow *parent,
     }
 
     if (style & wxTE_PASSWORD)
-    {
-        if (!multi_line)
-            gtk_entry_set_visibility( GTK_ENTRY(m_text), FALSE );
-    }
+        GTKSetVisibility();
 
     if (style & wxTE_READONLY)
-    {
-        if (!multi_line)
-            gtk_editable_set_editable( GTK_EDITABLE(m_text), FALSE );
-        else
-            gtk_text_view_set_editable( GTK_TEXT_VIEW( m_text), FALSE);
-    }
+        GTKSetEditable();
 
-    if (multi_line)
-    {
-        if (style & wxTE_RIGHT)
-            gtk_text_view_set_justification( GTK_TEXT_VIEW(m_text), GTK_JUSTIFY_RIGHT );
-        else if (style & wxTE_CENTRE)
-            gtk_text_view_set_justification( GTK_TEXT_VIEW(m_text), GTK_JUSTIFY_CENTER );
-        // Left justify (alignment) is the default and we don't need to apply GTK_JUSTIFY_LEFT
-    }
-    else
-    {
-#ifdef __WXGTK24__
-        // gtk_entry_set_alignment was introduced in gtk+-2.3.5
-        if (!gtk_check_version(2,4,0))
-        {
-            if (style & wxTE_RIGHT)
-                gtk_entry_set_alignment( GTK_ENTRY(m_text), 1.0 );
-            else if (style & wxTE_CENTRE)
-                gtk_entry_set_alignment( GTK_ENTRY(m_text), 0.5 );
-        }
-#endif
-    }
+    // left justification (alignment) is the default anyhow
+    if ( style & (wxTE_RIGHT | wxTE_CENTRE) )
+        GTKSetJustification();
 
     // We want to be notified about text changes.
     if (multi_line)
@@ -865,6 +818,116 @@ bool wxTextCtrl::Create( wxWindow *parent,
 
     return true;
 }
+
+// ----------------------------------------------------------------------------
+// flags handling
+// ----------------------------------------------------------------------------
+
+void wxTextCtrl::GTKSetEditable()
+{
+    gboolean editable = !HasFlag(wxTE_READONLY);
+    if ( IsSingleLine() )
+        gtk_editable_set_editable(GTK_EDITABLE(m_text), editable);
+    else
+        gtk_text_view_set_editable(GTK_TEXT_VIEW(m_text), editable);
+}
+
+void wxTextCtrl::GTKSetVisibility()
+{
+    // VZ: shouldn't we assert if wxTE_PASSWORD is set for multiline control?
+    if ( IsSingleLine() )
+        gtk_entry_set_visibility(GTK_ENTRY(m_text), !HasFlag(wxTE_PASSWORD));
+}
+
+void wxTextCtrl::GTKSetWrapMode()
+{
+    // no wrapping in single line controls
+    if ( !IsMultiLine() )
+        return;
+
+    // translate wx wrapping style to GTK+
+    GtkWrapMode wrap;
+    if ( HasFlag( wxTE_DONTWRAP ) )
+        wrap = GTK_WRAP_NONE;
+    else if ( HasFlag( wxTE_CHARWRAP ) )
+        wrap = GTK_WRAP_CHAR;
+    else if ( HasFlag( wxTE_WORDWRAP ) )
+        wrap = GTK_WRAP_WORD;
+    else // HasFlag(wxTE_BESTWRAP) always true as wxTE_BESTWRAP == 0
+    {
+        // GTK_WRAP_WORD_CHAR seems to be new in GTK+ 2.4
+#ifdef __WXGTK24__
+        if ( !gtk_check_version(2,4,0) )
+        {
+            wrap = GTK_WRAP_WORD_CHAR;
+        }
+        else
+#endif // __WXGTK24__
+        wrap = GTK_WRAP_WORD;
+    }
+
+    gtk_text_view_set_wrap_mode( GTK_TEXT_VIEW( m_text ), wrap );
+}
+
+void wxTextCtrl::GTKSetJustification()
+{
+    if ( IsMultiLine() )
+    {
+        GtkJustification just;
+        if ( HasFlag(wxTE_RIGHT) )
+            just = GTK_JUSTIFY_RIGHT;
+        else if ( HasFlag(wxTE_CENTRE) )
+            just = GTK_JUSTIFY_CENTER;
+        else // wxTE_LEFT == 0
+            just = GTK_JUSTIFY_LEFT;
+
+        gtk_text_view_set_justification( GTK_TEXT_VIEW(m_text), GTK_JUSTIFY_CENTER );
+    }
+    else // single line
+    {
+#ifdef __WXGTK24__
+        // gtk_entry_set_alignment was introduced in gtk+-2.3.5
+        if (!gtk_check_version(2,4,0))
+        {
+            gfloat align;
+            if ( HasFlag(wxTE_RIGHT) )
+                align = 1.0;
+            else if ( HasFlag(wxTE_CENTRE) )
+                align = 0.5;
+            else // single line
+                align = 0.0;
+
+            gtk_entry_set_alignment(GTK_ENTRY(m_text), align);
+        }
+#endif // __WXGTK24__
+    }
+
+}
+
+void wxTextCtrl::SetWindowStyleFlag(long style)
+{
+    long styleOld = GetWindowStyleFlag();
+
+    wxTextCtrlBase::SetWindowStyleFlag(style);
+
+    if ( (style & wxTE_READONLY) != (styleOld & wxTE_READONLY) )
+        GTKSetEditable();
+
+    if ( (style & wxTE_PASSWORD) != (styleOld & wxTE_PASSWORD) )
+        GTKSetVisibility();
+
+    static const long flagsWrap = wxTE_WORDWRAP | wxTE_CHARWRAP | wxTE_DONTWRAP;
+    if ( (style & flagsWrap) != (styleOld & flagsWrap) )
+        GTKSetWrapMode();
+
+    static const long flagsAlign = wxTE_LEFT | wxTE_CENTRE | wxTE_RIGHT;
+    if ( (style & flagsAlign) != (styleOld & flagsAlign) )
+        GTKSetJustification();
+}
+
+// ----------------------------------------------------------------------------
+// control value
+// ----------------------------------------------------------------------------
 
 wxString wxTextCtrl::GetValue() const
 {
