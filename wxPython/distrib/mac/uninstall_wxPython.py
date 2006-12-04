@@ -24,8 +24,10 @@ RSRCDIR = "Contents/Resources"
 # /usr, /usr/local, etc.
 PREFIXES = [ '/Library/Python/2.3/',
              '/Library/Python/2.4/',
+             '/Library/Python/2.5/',
              '/Library/Frameworks/Python.framework/Versions/2.3/lib/python2.3/site-packages/',
              '/Library/Frameworks/Python.framework/Versions/2.4/lib/python2.4/site-packages/',
+             '/Library/Frameworks/Python.framework/Versions/2.5/lib/python2.5/site-packages/',
              '/usr/local/lib/',
              ]
 
