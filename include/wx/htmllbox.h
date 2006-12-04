@@ -74,6 +74,9 @@ public:
     virtual void RefreshAll();
     virtual void SetItemCount(size_t count);
 
+    // provide a way to set the default encoding (non-Unicode only)
+    void SetEncoding(wxFontEncoding encoding) { m_fontEncoding = encoding; }
+    wxFontEncoding GetEncoding() { return m_fontEncoding; }
 
 #if wxUSE_FILESYSTEM
     // retrieve the file system used by the wxHtmlWinParser: if you use
@@ -167,6 +170,9 @@ private:
 
     // HTML parser we use
     wxHtmlWinParser *m_htmlParser;
+
+    // font encoding (used in non-Unicode mode only)
+    wxFontEncoding  m_fontEncoding;
 
 #if wxUSE_FILESYSTEM
     // file system used by m_htmlParser
@@ -312,8 +318,9 @@ protected:
     virtual wxString OnGetItem(size_t n) const
         { return m_items[n]; }
 
-    wxArrayString m_items;
-    wxArrayPtrVoid m_HTMLclientData;
+    wxArrayString   m_items;
+    wxArrayPtrVoid  m_HTMLclientData;
+
     // Note: For the benefit of old compilers (like gcc-2.8) this should
     // not be named m_clientdata as that clashes with the name of an
     // anonymous struct member in wxEvtHandler, which we derive from.

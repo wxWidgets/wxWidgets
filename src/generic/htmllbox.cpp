@@ -225,6 +225,7 @@ void wxHtmlListBox::Init()
     m_htmlParser = NULL;
     m_htmlRendStyle = new wxHtmlListBoxStyle(*this);
     m_cache = new wxHtmlListBoxCache;
+    m_fontEncoding = wxFONTENCODING_ISO8859_1;
 }
 
 bool wxHtmlListBox::Create(wxWindow *parent,
@@ -293,7 +294,9 @@ void wxHtmlListBox::CacheItem(size_t n) const
             self->m_htmlParser = new wxHtmlWinParser(self);
             m_htmlParser->SetDC(new wxClientDC(self));
             m_htmlParser->SetFS(&self->m_filesystem);
-
+#if !wxUSE_UNICODE
+            m_htmlParser->SetInputEncoding(m_fontEncoding);
+#endif
             // use system's default GUI font by default:
             m_htmlParser->SetStandardFonts();
         }
