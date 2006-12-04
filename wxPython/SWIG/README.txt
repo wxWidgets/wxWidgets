@@ -15,7 +15,7 @@ and then build as normal.  I have also have made available a tarball
 containing the patched SWIG sources, plus a win32 binary, located
 here:
 
-	http://starship.python.net/crew/robind/wxPython/tools/
+	http://wxpython.wxcommunity.com/tools/
 
 If you want to use the patched version of SWIG and still have the
 stock version available for other projects, then you can configure the
