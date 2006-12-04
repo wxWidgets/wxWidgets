@@ -112,6 +112,13 @@ class InstalledReceipt(object):
                 handleFile(name)
             handleDir(dirpath)
 
+    # wxaddons should be always kept as the user may have installed
+    # third-party modules seperate from wxpython.
+    def testWxaddons(self, name):
+        for prefix in PREFIXES:
+            if name.startswith(prefix + "wxaddons"):
+                return True
+        return False
 
     def testCommon(self, name):
         for cmn in COMMON_FILES:
@@ -124,6 +131,8 @@ class InstalledReceipt(object):
         def show(name):
             if os.path.exists(name):
                 if not self.lastInstall and self.testCommon(name):
+                    return
+                if self.testWxaddons(name):
                     return
                 print "Will remove:", name
         self.walkFiles(show, show)
@@ -144,11 +153,13 @@ class InstalledReceipt(object):
             if os.path.exists(name):
                 if not self.lastInstall and self.testCommon(name):
                     return
+                if self.testWxaddons(name):
+                    return
                 print "Removing:", name
                 os.unlink(name)
         def removeDir(name):
             print "Removing:", name
-            if os.path.exists(name):
+            if os.path.exists(name) and not self.testWxaddons(name):
                 hasFiles = os.listdir(name)
                 if hasFiles:  # perhaps some stale symlinks, or .pyc files
                     for file in hasFiles:
