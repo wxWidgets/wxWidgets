@@ -10595,7 +10595,7 @@ void wxGrid::AutoSize()
     // we know that we're not going to have scrollbars so disable them now to
     // avoid trouble in SetClientSize() which can otherwise set the correct
     // client size but also leave space for (not needed any more) scrollbars
-    SetScrollbars(0, 0, 0, 0, 0, true);
+    SetScrollbars(0, 0, 0, 0, 0, 0, true);
     SetClientSize(sizeFit.x + m_rowLabelWidth, sizeFit.y + m_colLabelHeight);
 
     EndBatch();
