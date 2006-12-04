@@ -358,21 +358,7 @@ void wxTopLevelWindowBase::DoLayout()
             int clientW, clientH;
             DoGetClientSize(&clientW, &clientH);
 
-            // for whatever reasons, wxGTK wants to have a small offset - it
-            // probably looks better with it?
-#ifdef __WXGTK__
-            const int ofs = 1;
-            clientW -= 2 * ofs;
-            clientH -= 2 * ofs;
-            if (clientW < 0)
-                clientW = 0;
-            if (clientH < 0)
-                clientH = 0;
-#else
-            const int ofs = 0;
-#endif
-
-            child->SetSize(ofs, ofs, clientW, clientH);
+            child->SetSize(0, 0, clientW, clientH);
         }
     }
 }
