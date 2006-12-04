@@ -1202,7 +1202,7 @@ WX_ARG_ENABLE(filepicker,  [  --enable-filepicker     use wxFilePickerCtrl class
 WX_ARG_ENABLE(fontpicker,  [  --enable-fontpicker     use wxFontPickerCtrl class], wxUSE_FONTPICKERCTRL)
 WX_ARG_ENABLE(gauge,       [  --enable-gauge          use wxGauge class], wxUSE_GAUGE)
 WX_ARG_ENABLE(grid,        [  --enable-grid           use wxGrid class], wxUSE_GRID)
-WX_ARG_ENABLE(dataviewctrl,[  --enable-dataviewctrl,  use wxDataViewCtrl class], wxUSE_DATAVIEWCTRL)
+WX_ARG_ENABLE(dataviewctrl,[  --enable-dataviewctrl   use wxDataViewCtrl class], wxUSE_DATAVIEWCTRL)
 WX_ARG_ENABLE(hyperlink,   [  --enable-hyperlink      use wxHyperlinkCtrl class], wxUSE_HYPERLINKCTRL)
 WX_ARG_ENABLE(imaglist,    [  --enable-imaglist       use wxImageList class], wxUSE_IMAGLIST)
 WX_ARG_ENABLE(listbook,    [  --enable-listbook       use wxListbook class], wxUSE_LISTBOOK)
