@@ -53,12 +53,10 @@ extern bool g_blockEventsOnDrag;
 // the flags used for the last DoDragDrop()
 static long gs_flagsForDrag = 0;
 
-#ifdef __WXDEBUG__
 // the trace mask we use with wxLogTrace() - call
 // wxLog::AddTraceMask(TRACE_DND) to enable the trace messages from here
 // (there are quite a few of them, so don't enable this by default)
-static const wxChar *TRACE_DND = _T("dnd");
-#endif
+#define TRACE_DND _T("dnd")
 
 // global variables because GTK+ DnD want to have the
 // mouse event that caused it
