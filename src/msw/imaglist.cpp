@@ -340,6 +340,10 @@ wxIcon wxImageList::GetIcon(int index) const
 
 static HBITMAP GetMaskForImage(const wxBitmap& bitmap, const wxBitmap& mask)
 {
+#if wxUSE_IMAGE
+    wxBitmap bitmapWithMask;
+#endif // wxUSE_IMAGE
+
     HBITMAP hbmpMask;
     wxMask *pMask;
     bool deleteMask = false;
@@ -352,6 +356,23 @@ static HBITMAP GetMaskForImage(const wxBitmap& bitmap, const wxBitmap& mask)
     else
     {
         pMask = bitmap.GetMask();
+
+#if wxUSE_IMAGE
+        // check if we don't have alpha in this bitmap -- we can create a mask
+        // from it (and we need to do it for the older systems which don't
+        // support 32bpp bitmaps natively)
+        if ( !pMask )
+        {
+            wxImage img(bitmap.ConvertToImage());
+            if ( img.HasAlpha() )
+            {
+                img.ConvertAlphaToMask();
+                bitmapWithMask = wxBitmap(img);
+                pMask = bitmapWithMask.GetMask();
+            }
+        }
+#endif // wxUSE_IMAGE
+
         if ( !pMask )
         {
             // use the light grey count as transparent: the trouble here is
