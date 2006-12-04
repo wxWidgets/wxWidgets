@@ -80,7 +80,7 @@ docs and etc. that they belong together.
     AuiMultiNotebook -->   AuiNotebook
     AuiNotebookEvent -->   AuiNotebookEvent
        
-wx.lib.customtreectrl: A patch from Frame Niessink which adds an
+wx.lib.customtreectrl: A patch from Frank Niessink which adds an
 additional style (TR_AUTO_CHECK_PARENT) that (un)checks a parent when
 all children are (un)checked.
 
