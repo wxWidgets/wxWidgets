@@ -906,6 +906,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/icon.cpp
     src/generic/paletteg.cpp
     src/gtk/app.cpp
+    src/gtk/assertdlg_gtk.c
     src/gtk/bitmap.cpp
     src/gtk/brush.cpp
     src/gtk/clipbrd.cpp
@@ -940,6 +941,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/icon.h
     wx/generic/paletteg.h
     wx/gtk/app.h
+    wx/gtk/assertdlg_gtk.h
     wx/gtk/bitmap.h
     wx/gtk/brush.h
     wx/gtk/clipbrd.h
@@ -981,7 +983,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/fontdlgg.cpp
     <!-- GTK+ specific files: -->
     src/gtk/artgtk.cpp
-    src/gtk/assertdlg_gtk.c
     src/gtk/bmpbuttn.cpp
     src/gtk/button.cpp
     src/gtk/checkbox.cpp
@@ -1032,7 +1033,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/statusbr.h
     wx/generic/tabg.h
     wx/gtk/accel.h
-    wx/gtk/assertdlg_gtk.h
     wx/gtk/bmpbuttn.h
     wx/gtk/button.h
     wx/gtk/checkbox.h
