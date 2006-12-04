@@ -2910,7 +2910,14 @@ wxTextCtrl *wxListMainWindow::EditLabel(long item, wxClassInfo* textControlClass
     // We have to call this here because the label in question might just have
     // been added and no screen update taken place.
     if ( m_dirty )
+    {
         wxSafeYield();
+
+        // Pending events dispatched by wxSafeYield might have changed the item
+        // count
+        if ( (size_t)item >= GetItemCount() )
+            return NULL;
+    }
 
     wxTextCtrl * const text = (wxTextCtrl *)textControlClass->CreateObject();
     m_textctrlWrapper = new wxListTextCtrlWrapper(this, text, item);
