@@ -228,15 +228,7 @@ bool wxImageList::Remove(int index)
 bool wxImageList::RemoveAll()
 {
     // don't use ImageList_RemoveAll() because mingw32 headers don't have it
-    int count = ImageList_GetImageCount(GetHImageList());
-    for ( int i = 0; i < count; i++ )
-    {
-        // the image indexes are shifted, so we should always remove the first
-        // one
-        (void)Remove(0);
-    }
-
-    return true;
+    return Remove(-1);
 }
 
 // Draws the given image on a dc at the specified position.
