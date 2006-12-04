@@ -68,17 +68,23 @@
 // other standard headers
 #include <ctype.h>
 
-// this class extends wxTextFile
+// this class is a wxTextFile specialization for dealing with files storing
+// various MIME-related information
 //
-// VZ: ???
+// it should be used instead of wxTextFile even if none of its additional
+// methods are used just because it handles files with mixed encodings (often
+// the case for MIME files which contain strings for different languages)
+// correctly, see OnRead()
 class wxMimeTextFile : public wxTextFile
 {
 public:
     // constructors
-    wxMimeTextFile () : wxTextFile () {};
-    wxMimeTextFile(const wxString& strFile) : wxTextFile(strFile) {};
+    wxMimeTextFile () : wxTextFile () { }
+    wxMimeTextFile(const wxString& strFile) : wxTextFile(strFile) { }
 
-    int pIndexOf(const wxString & sSearch, bool bIncludeComments = false, int iStart = 0)
+    int pIndexOf(const wxString& sSearch,
+                 bool bIncludeComments = false,
+                 int iStart = 0)
     {
         wxString sTest = sSearch;
         sTest.MakeLower();
@@ -134,6 +140,19 @@ public:
 
         wxString sTmp = GetLine(i).AfterFirst(wxT('='));
         return sTmp;
+    }
+
+protected:
+    // we override this virtual method because we want to always use UTF-8
+    // conversion allowing for invalid characters as MIME information files
+    // often contain lines in different encodings and can't be read using any
+    // single conversion in Unicode build, so we just try to read what we can
+    // suing the most common encoding (UTF-8 is almost ubiquitous nowadays) and
+    // ignore the rest
+    virtual bool OnRead(const wxMBConv& conv)
+    {
+        return wxTextFile::OnRead(
+                    wxMBConvUTF8(wxMBConvUTF8::MAP_INVALID_UTF8_TO_OCTAL));
     }
 };
 
@@ -255,12 +274,8 @@ static bool IsKnownUnimportantField(const wxString& field);
 void wxMimeTypesManagerImpl::LoadGnomeDataFromKeyFile(const wxString& filename,
                                                       const wxArrayString& dirs)
 {
-    wxTextFile textfile(filename);
-#if defined(__WXGTK20__) && wxUSE_UNICODE
-    if ( !textfile.Open(wxMBConvUTF8(wxMBConvUTF8::MAP_INVALID_UTF8_TO_OCTAL)) )
-#else
+    wxMimeTextFile textfile(filename);
     if ( !textfile.Open() )
-#endif
         return;
 
     wxLogTrace(TRACE_MIME, wxT("--- Opened Gnome file %s  ---"),
@@ -399,7 +414,7 @@ void wxMimeTypesManagerImpl::LoadGnomeDataFromKeyFile(const wxString& filename,
 
 void wxMimeTypesManagerImpl::LoadGnomeMimeTypesFromMimeFile(const wxString& filename)
 {
-    wxTextFile textfile(filename);
+    wxMimeTextFile textfile(filename);
     if ( !textfile.Open() )
         return;
 
@@ -749,16 +764,12 @@ void wxMimeTypesManagerImpl::LoadKDELinksForMimeSubtype(const wxString& dirbase,
                                                const wxArrayString& icondirs)
 {
     wxFileName fullname(dirbase, filename);
-    wxMimeTextFile file;
-    {
-        wxLogNull logNull;
-        if ( !file.Open(fullname.GetFullPath()) )
-            if ( !file.Open(fullname.GetFullPath(), wxConvISO8859_1) )
-                return;
-    }
-
     wxLogTrace(TRACE_MIME, wxT("loading KDE file %s"),
                            fullname.GetFullPath().c_str());
+
+    wxMimeTextFile file;
+    if ( !file.Open(fullname.GetFullPath()) )
+        return;
 
     wxMimeTypeCommands * entry = new wxMimeTypeCommands;
     wxArrayString sExts;
@@ -939,16 +950,11 @@ void wxMimeTypesManagerImpl::LoadKDELinkFilesFromDir(const wxString& dirname,
 // Read a KDE .desktop file of type 'Application'
 void wxMimeTypesManagerImpl::LoadKDEApp(const wxString& filename)
 {
-    wxMimeTextFile file;
-
-    {
-        wxLogNull logNull;
-        if ( !file.Open(filename) )
-            if ( !file.Open(filename, wxConvISO8859_1) )
-                return;
-    }
-
     wxLogTrace(TRACE_MIME, wxT("loading KDE file %s"), filename.c_str());
+
+    wxMimeTextFile file;
+    if ( !file.Open(filename) )
+        return;
 
     // Here, only type 'Application' should be considered.
     int nIndex = file.pIndexOf( wxT("Type=") );
@@ -1086,13 +1092,17 @@ static wxString ReadPathFromKDEConfig(const wxString& request)
 static wxString GetKDEThemeInFile(const wxFileName& filename)
 {
     wxString theme;
-    wxTextFile config;
-    if(filename.FileExists() && config.Open( filename.GetFullPath() )) {
+    wxMimeTextFile config;
+    if ( filename.FileExists() && config.Open(filename.GetFullPath()) )
+    {
         size_t cnt = config.GetLineCount();
-        for(size_t i = 0; i < cnt; i++)
-            if(config[i].StartsWith(wxT("Theme="), &theme))
+        for ( size_t i = 0; i < cnt; i++ )
+        {
+            if ( config[i].StartsWith(wxT("Theme="), &theme) )
                 break;
+        }
     }
+
     return theme;
 }
 
@@ -2246,12 +2256,8 @@ bool wxMimeTypesManagerImpl::ReadMimeTypes(const wxString& strFileName)
     wxLogTrace(TRACE_MIME, wxT("--- Parsing mime.types file '%s' ---"),
                strFileName.c_str());
 
-    wxTextFile file(strFileName);
-#if defined(__WXGTK20__) && wxUSE_UNICODE
-    if ( !file.Open(wxConvUTF8) )
-#else
+    wxMimeTextFile file(strFileName);
     if ( !file.Open() )
-#endif
         return false;
 
     // the information we extract
@@ -2543,12 +2549,8 @@ bool wxMimeTypesManagerImpl::ReadMailcap(const wxString& strFileName,
     wxLogTrace(TRACE_MIME, wxT("--- Parsing mailcap file '%s' ---"),
                strFileName.c_str());
 
-    wxTextFile file(strFileName);
-#if defined(__WXGTK20__) && wxUSE_UNICODE
-    if ( !file.Open(wxConvUTF8) )
-#else
+    wxMimeTextFile file(strFileName);
     if ( !file.Open() )
-#endif
         return false;
 
     // indices of MIME types (in m_aTypes) we already found in this file
