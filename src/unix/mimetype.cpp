@@ -750,7 +750,12 @@ void wxMimeTypesManagerImpl::LoadKDELinksForMimeSubtype(const wxString& dirbase,
 {
     wxFileName fullname(dirbase, filename);
     wxMimeTextFile file;
-    if(! file.Open( fullname.GetFullPath() )) return;
+    {
+        wxLogNull logNull;
+        if ( !file.Open(fullname.GetFullPath()) )
+            if ( !file.Open(fullname.GetFullPath(), wxConvISO8859_1) )
+                return;
+    }
 
     wxLogTrace(TRACE_MIME, wxT("loading KDE file %s"),
                            fullname.GetFullPath().c_str());
@@ -935,7 +940,14 @@ void wxMimeTypesManagerImpl::LoadKDELinkFilesFromDir(const wxString& dirname,
 void wxMimeTypesManagerImpl::LoadKDEApp(const wxString& filename)
 {
     wxMimeTextFile file;
-    if ( !file.Open(filename) ) return;
+
+    {
+        wxLogNull logNull;
+        if ( !file.Open(filename) )
+            if ( !file.Open(filename, wxConvISO8859_1) )
+                return;
+    }
+
     wxLogTrace(TRACE_MIME, wxT("loading KDE file %s"), filename.c_str());
 
     // Here, only type 'Application' should be considered.
