@@ -1209,11 +1209,9 @@ wxDataViewProgressRenderer::wxDataViewProgressRenderer( const wxString &label,
 
         GValue gvalue = { 0, };
         g_value_init( &gvalue, G_TYPE_STRING );
-#if wxUSE_UNICODE
-        g_value_set_string( &gvalue, wxGTK_CONV(m_label) );
-#else
+
+        // FIXME: font encoding support
         g_value_set_string( &gvalue, wxGTK_CONV_SYS(m_label) );
-#endif
         g_object_set_property( G_OBJECT(m_renderer), "text", &gvalue );
         g_value_unset( &gvalue );
     }
@@ -1529,10 +1527,7 @@ void wxDataViewColumn::SetOwner( wxDataViewCtrl *owner )
     
     GtkTreeViewColumn *column = (GtkTreeViewColumn *)m_column;
     
-#if wxUSE_UNICODE
-#else
     gtk_tree_view_column_set_title( column, wxGTK_CONV_FONT(GetTitle(), GetOwner()->GetFont() ) );
-#endif
 }
 
 void wxDataViewColumn::SetTitle( const wxString &title )
@@ -1550,14 +1545,10 @@ void wxDataViewColumn::SetTitle( const wxString &title )
         m_isConnected = false;
     }
 
-#if wxUSE_UNICODE
-    gtk_tree_view_column_set_title( column, wxGTK_CONV(title) );
-#else
-    if (GetOwner())
-        gtk_tree_view_column_set_title( column, wxGTK_CONV_FONT(title, GetOwner()->GetFont() ) );
-    else
-        gtk_tree_view_column_set_title( column, "" );
-#endif
+    // FIXME: can it really happen that we don't have the owner here??
+    wxDataViewCtrl *ctrl = GetOwner();
+    gtk_tree_view_column_set_title( column, ctrl ? wxGTK_CONV_FONT(title, ctrl->GetFont())
+                                                 : wxGTK_CONV_SYS(title) );
 
     gtk_tree_view_column_set_widget( column, NULL );
 }
