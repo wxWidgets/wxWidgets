@@ -8921,6 +8921,15 @@ class Window(EvtHandler):
         """
         return _core_.Window_IsRetained(*args, **kwargs)
 
+    def ToggleWindowStyle(*args, **kwargs):
+        """
+        ToggleWindowStyle(self, int flag) -> bool
+
+        Turn the flag on if it had been turned off before and vice versa,
+        returns True if the flag is turned on by this function call.
+        """
+        return _core_.Window_ToggleWindowStyle(*args, **kwargs)
+
     def SetExtraStyle(*args, **kwargs):
         """
         SetExtraStyle(self, long exStyle)

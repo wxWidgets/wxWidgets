@@ -812,6 +812,12 @@ method.", "");
 windows are only available on X platforms.", "");
     
 
+    DocDeclStr(
+        bool , ToggleWindowStyle(int flag),
+        "Turn the flag on if it had been turned off before and vice versa,
+returns True if the flag is turned on by this function call.", "");
+    
+    
 
     DocDeclStr(
         virtual void , SetExtraStyle(long exStyle),

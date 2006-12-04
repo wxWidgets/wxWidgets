@@ -35844,6 +35844,47 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Window_ToggleWindowStyle(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxWindow *arg1 = (wxWindow *) 0 ;
+  int arg2 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "flag", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Window_ToggleWindowStyle",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Window_ToggleWindowStyle" "', expected argument " "1"" of type '" "wxWindow *""'"); 
+  }
+  arg1 = reinterpret_cast< wxWindow * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Window_ToggleWindowStyle" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)(arg1)->ToggleWindowStyle(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Window_SetExtraStyle(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxWindow *arg1 = (wxWindow *) 0 ;
@@ -57390,6 +57431,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_GetWindowStyleFlag", (PyCFunction)_wrap_Window_GetWindowStyleFlag, METH_O, NULL},
 	 { (char *)"Window_HasFlag", (PyCFunction) _wrap_Window_HasFlag, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_IsRetained", (PyCFunction)_wrap_Window_IsRetained, METH_O, NULL},
+	 { (char *)"Window_ToggleWindowStyle", (PyCFunction) _wrap_Window_ToggleWindowStyle, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_SetExtraStyle", (PyCFunction) _wrap_Window_SetExtraStyle, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_GetExtraStyle", (PyCFunction)_wrap_Window_GetExtraStyle, METH_O, NULL},
 	 { (char *)"Window_MakeModal", (PyCFunction) _wrap_Window_MakeModal, METH_VARARGS | METH_KEYWORDS, NULL},
