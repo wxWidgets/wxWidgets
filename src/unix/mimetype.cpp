@@ -149,7 +149,7 @@ protected:
     // single conversion in Unicode build, so we just try to read what we can
     // suing the most common encoding (UTF-8 is almost ubiquitous nowadays) and
     // ignore the rest
-    virtual bool OnRead(const wxMBConv& conv)
+    virtual bool OnRead(const wxMBConv& WXUNUSED(conv))
     {
         return wxTextFile::OnRead(
                     wxMBConvUTF8(wxMBConvUTF8::MAP_INVALID_UTF8_TO_OCTAL));
