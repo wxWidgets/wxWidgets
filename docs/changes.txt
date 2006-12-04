@@ -110,6 +110,7 @@ wxMSW:
 wxGTK:
 
 - Allow dynamically changing most of text control styles
+- Enable use of libgnomeprintui by default in configure
 
 
 2.7.2
