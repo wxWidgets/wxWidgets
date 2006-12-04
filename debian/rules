@@ -112,7 +112,6 @@ BASE_CONFIGURE_OPTIONS = $(COMMON_CONFIGURE_OPTIONS) \
 
 GTK_CONFIGURE_OPTIONS = $(COMMON_CONFIGURE_OPTIONS) \
     --with-gtk \
-    --with-gnomeprint \
     --enable-mediactrl \
     --enable-sound \
     --with-sdl \
