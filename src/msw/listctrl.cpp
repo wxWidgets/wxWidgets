@@ -2316,10 +2316,13 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                     }
 #endif // NM_CUSTOMDRAW
 
-                    // a little dose of healthy paranoia: as we never use
-                    // LVM_SETCALLBACKMASK we're not supposed to get these ones
-                    wxASSERT_MSG( !(lvi.mask & LVIF_STATE),
-                                  _T("we don't support state callbacks yet!") );
+                    // even though we never use LVM_SETCALLBACKMASK, we still
+                    // can get messages with LVIF_STATE in lvi.mask under Vista
+                    if ( lvi.mask & LVIF_STATE )
+                    {
+                        // we don't have anything to return from here...
+                        lvi.stateMask = 0;
+                    }
 
                     return true;
                 }

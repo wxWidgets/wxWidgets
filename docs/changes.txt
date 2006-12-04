@@ -104,6 +104,7 @@ wxMSW:
 
 - Fixed version script problems when using configure with cygwin/mingw32.
 - Use system default paper size for printing instead of A4.
+- Fix (harmless) assert in virtual list control under Vista
 - Fix colours when converting wxBitmap with alpha to wxImage (nusi).
 
 wxGTK:
