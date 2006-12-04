@@ -74,10 +74,6 @@ public:
     virtual void RefreshAll();
     virtual void SetItemCount(size_t count);
 
-    // provide a way to set the default encoding (non-Unicode only)
-    void SetEncoding(wxFontEncoding encoding) { m_fontEncoding = encoding; }
-    wxFontEncoding GetEncoding() { return m_fontEncoding; }
-
 #if wxUSE_FILESYSTEM
     // retrieve the file system used by the wxHtmlWinParser: if you use
     // relative paths in your HTML, you should use its ChangePathTo() method
@@ -170,9 +166,6 @@ private:
 
     // HTML parser we use
     wxHtmlWinParser *m_htmlParser;
-
-    // font encoding (used in non-Unicode mode only)
-    wxFontEncoding  m_fontEncoding;
 
 #if wxUSE_FILESYSTEM
     // file system used by m_htmlParser
