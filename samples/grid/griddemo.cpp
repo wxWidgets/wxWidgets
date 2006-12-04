@@ -1465,8 +1465,6 @@ BugsGridFrame::BugsGridFrame()
     grid->SetColAttr(Col_Priority, attrRangeEditor);
     grid->SetColAttr(Col_Severity, attrCombo);
 
-    grid->SetMargins(0, 0);
-
     grid->Fit();
     SetClientSize(grid->GetSize());
 }
