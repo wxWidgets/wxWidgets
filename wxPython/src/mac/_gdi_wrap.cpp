@@ -3820,6 +3820,8 @@ public:
     virtual void Clip( wxDouble , wxDouble , wxDouble , wxDouble  ) {}
     virtual void ResetClip() {}
     virtual void * GetNativeContext() { return NULL; }
+    virtual int GetLogicalFunction() const { return 0; }
+    virtual bool SetLogicalFunction(int ) {}    
     virtual void Translate( wxDouble , wxDouble ) {}
     virtual void Scale( wxDouble , wxDouble ) {}
     virtual void Rotate( wxDouble ) {}
@@ -28353,6 +28355,71 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_GraphicsContext_GetLogicalFunction(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_GetLogicalFunction" "', expected argument " "1"" of type '" "wxGraphicsContext const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  {
+    result = (int)((wxGraphicsContext const *)arg1)->GetLogicalFunction();
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GraphicsContext_SetLogicalFunction(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
+  int arg2 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "function", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GraphicsContext_SetLogicalFunction",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGraphicsContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsContext_SetLogicalFunction" "', expected argument " "1"" of type '" "wxGraphicsContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsContext * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "GraphicsContext_SetLogicalFunction" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    result = (bool)(arg1)->SetLogicalFunction(arg2);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_GraphicsContext_Translate(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxGraphicsContext *arg1 = (wxGraphicsContext *) 0 ;
@@ -39163,6 +39230,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GraphicsContext_Clip", (PyCFunction) _wrap_GraphicsContext_Clip, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsContext_ResetClip", (PyCFunction)_wrap_GraphicsContext_ResetClip, METH_O, NULL},
 	 { (char *)"GraphicsContext_GetNativeContext", (PyCFunction)_wrap_GraphicsContext_GetNativeContext, METH_O, NULL},
+	 { (char *)"GraphicsContext_GetLogicalFunction", (PyCFunction)_wrap_GraphicsContext_GetLogicalFunction, METH_O, NULL},
+	 { (char *)"GraphicsContext_SetLogicalFunction", (PyCFunction) _wrap_GraphicsContext_SetLogicalFunction, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsContext_Translate", (PyCFunction) _wrap_GraphicsContext_Translate, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsContext_Scale", (PyCFunction) _wrap_GraphicsContext_Scale, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsContext_Rotate", (PyCFunction) _wrap_GraphicsContext_Rotate, METH_VARARGS | METH_KEYWORDS, NULL},

@@ -215,6 +215,8 @@ public:
     virtual void Clip( wxDouble , wxDouble , wxDouble , wxDouble  ) {}
     virtual void ResetClip() {}
     virtual void * GetNativeContext() { return NULL; }
+    virtual int GetLogicalFunction() const { return 0; }
+    virtual bool SetLogicalFunction(int ) {}    
     virtual void Translate( wxDouble , wxDouble ) {}
     virtual void Scale( wxDouble , wxDouble ) {}
     virtual void Rotate( wxDouble ) {}
@@ -753,6 +755,16 @@ values. The defaults result in an identity matrix.", "");
         "Returns the native context (CGContextRef for Core Graphics, Graphics
 pointer for GDIPlus and cairo_t pointer for cairo).", "");
 
+    
+    DocDeclStr(
+        virtual int , GetLogicalFunction() const,
+        "Returns the current logical function.", "");
+    
+    
+    DocDeclStr(
+        virtual bool , SetLogicalFunction(int function) ,
+        "Sets the current logical function, returns ``True`` if it supported", "");
+       
     
     DocDeclStr(
         virtual void , Translate( wxDouble dx , wxDouble dy ),

@@ -5518,6 +5518,22 @@ class GraphicsContext(GraphicsObject):
         """
         return _gdi_.GraphicsContext_GetNativeContext(*args, **kwargs)
 
+    def GetLogicalFunction(*args, **kwargs):
+        """
+        GetLogicalFunction(self) -> int
+
+        Returns the current logical function.
+        """
+        return _gdi_.GraphicsContext_GetLogicalFunction(*args, **kwargs)
+
+    def SetLogicalFunction(*args, **kwargs):
+        """
+        SetLogicalFunction(self, int function) -> bool
+
+        Sets the current logical function, returns ``True`` if it supported
+        """
+        return _gdi_.GraphicsContext_SetLogicalFunction(*args, **kwargs)
+
     def Translate(*args, **kwargs):
         """
         Translate(self, Double dx, Double dy)
