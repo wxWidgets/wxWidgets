@@ -51,6 +51,7 @@
 
 #include "wx/txtstrm.h"
 #include "wx/numdlg.h"
+#include "wx/textdlg.h"
 #include "wx/ffile.h"
 
 #include "wx/process.h"
@@ -105,6 +106,7 @@ public:
     void OnPOpen(wxCommandEvent& event);
 
     void OnFileExec(wxCommandEvent& event);
+    void OnOpenURL(wxCommandEvent& event);
 
     void OnAbout(wxCommandEvent& event);
 
@@ -302,6 +304,7 @@ enum
     Exec_Shell,
     Exec_POpen,
     Exec_OpenFile,
+    Exec_OpenURL,
     Exec_DDEExec,
     Exec_DDERequest,
     Exec_Redirect,
@@ -338,6 +341,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Exec_POpen, MyFrame::OnPOpen)
 
     EVT_MENU(Exec_OpenFile, MyFrame::OnFileExec)
+    EVT_MENU(Exec_OpenURL, MyFrame::OnOpenURL)
 
 #ifdef __WINDOWS__
     EVT_MENU(Exec_DDEExec, MyFrame::OnDDEExec)
@@ -445,6 +449,8 @@ MyFrame::MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size)
     execMenu->AppendSeparator();
     execMenu->Append(Exec_OpenFile, _T("Open &file...\tCtrl-F"),
                      _T("Launch the command to open this kind of files"));
+    execMenu->Append(Exec_OpenURL, _T("Open &URL...\tCtrl-U"),
+                     _T("Launch the default browser with the given URL"));
 #ifdef __WINDOWS__
     execMenu->AppendSeparator();
     execMenu->Append(Exec_DDEExec, _T("Execute command via &DDE...\tCtrl-D"));
@@ -800,8 +806,11 @@ void MyFrame::OnFileExec(wxCommandEvent& WXUNUSED(event))
     wxString filename;
 
 #if wxUSE_FILEDLG
-    filename = wxLoadFileSelector(wxEmptyString, wxEmptyString, s_filename);
-#endif // wxUSE_FILEDLG
+    filename = wxLoadFileSelector(_T("any file"), NULL, s_filename, this);
+#else // !wxUSE_FILEDLG
+    filename = wxGetTextFromUser(_T("Enter the file name"), _T("exec sample"),
+                                 s_filename, this);
+#endif // wxUSE_FILEDLG/!wxUSE_FILEDLG
 
     if ( filename.empty() )
         return;
@@ -829,6 +838,27 @@ void MyFrame::OnFileExec(wxCommandEvent& WXUNUSED(event))
     }
 
     DoAsyncExec(cmd);
+}
+
+void MyFrame::OnOpenURL(wxCommandEvent& WXUNUSED(event))
+{
+    static wxString s_filename;
+
+    wxString filename = wxGetTextFromUser
+                        (
+                            _T("Enter the URL"),
+                            _T("exec sample"),
+                            s_filename,
+                            this
+                        );
+
+    if ( filename.empty() )
+        return;
+
+    s_filename = filename;
+
+    if ( !wxLaunchDefaultBrowser(s_filename) )
+        wxLogError(_T("Failed to open URL \"%s\""), s_filename.c_str());
 }
 
 // ----------------------------------------------------------------------------
