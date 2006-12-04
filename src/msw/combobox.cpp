@@ -364,7 +364,7 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD id)
 
     // skip wxChoice version as it would generate its own events for
     // CBN_SELENDOK
-    return wxControl::MSWCommand(param, id);
+    return true;
 }
 
 WXHWND wxComboBox::GetEditHWND() const
