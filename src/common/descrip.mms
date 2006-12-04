@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 1 November 2006                                                     *
+# Date : 1 December 2006                                                     *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -393,9 +393,11 @@ all : $(SOURCES)
 	library [--.lib]libwx_gtk.olb $(OBJECTS_X11)
 .else
 .ifdef __WXGTK2__
+	$(MMS)$(MMSQUALIFIERS) $(OBJECTS_X11)
 	library [--.lib]libwx_gtk2.olb $(OBJECTS)
 	library [--.lib]libwx_gtk2.olb $(OBJECTS1)
 	library [--.lib]libwx_gtk2.olb $(OBJECTS2)
+	library [--.lib]libwx_gtk2.olb $(OBJECTS_X11)
 .else
 .ifdef __WXX11__
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS_X11)
