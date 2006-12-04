@@ -251,6 +251,10 @@ wxgtk_list_store_get_column_type (GtkTreeModel *tree_model,
 
     if (wxtype == wxT("string"))
         gtype = G_TYPE_STRING;
+    else
+    {
+        wxFAIL_MSG( _T("non-string columns not supported yet") );
+    }
 
     return gtype;
 }
@@ -299,41 +303,23 @@ wxgtk_list_store_get_value (GtkTreeModel *tree_model,
     GtkWxListStore *list_store = (GtkWxListStore *) tree_model;
     g_return_if_fail (GTK_IS_WX_LIST_STORE (tree_model) );
 
-#if 0
     wxDataViewListModel *model = list_store->model;
     wxString mtype = model->GetColType( (unsigned int) column );
     if (mtype == wxT("string"))
     {
         wxVariant variant;
         g_value_init( value, G_TYPE_STRING );
-        model->GetValue( variant, (unsigned int) column, (unsigned int) iter->user_data );
-        g_value_set_string( value, wxGTK_CONV(variant.GetString()) );
+        model->GetValue( variant,
+                         (unsigned int) column,
+                         (unsigned int) iter->user_data );
+
+        // FIXME: we should support different encodings here
+        g_value_set_string( value, wxGTK_CONV_SYS(variant.GetString()) );
     }
     else
     {
+        wxFAIL_MSG( _T("non-string columns not supported yet") );
     }
-#endif
-
-#if 0
-  GtkTreeDataList *list;
-  gint tmp_column = column;
-
-  g_return_if_fail (column < GTK_LIST_STORE (tree_model)->n_columns);
-  g_return_if_fail (GTK_LIST_STORE (tree_model)->stamp == iter->stamp);
-
-  list = G_SLIST (iter->user_data)->data;
-
-  while (tmp_column-- > 0 && list)
-    list = list->next;
-
-  if (list == NULL)
-    g_value_init (value, GTK_LIST_STORE (tree_model)->column_headers[column]);
-  else
-    _gtk_tree_data_list_node_to_value (list,
-                                       GTK_LIST_STORE (tree_model)->column_headers[column],
-                                       value);
-#endif
-
 }
 
 static gboolean
@@ -948,11 +934,7 @@ bool wxDataViewTextRenderer::SetValue( const wxVariant &value )
 
     GValue gvalue = { 0, };
     g_value_init( &gvalue, G_TYPE_STRING );
-#if wxUSE_UNICODE
-    g_value_set_string( &gvalue, wxGTK_CONV( tmp ) );
-#else
     g_value_set_string( &gvalue, wxGTK_CONV_FONT( tmp, GetOwner()->GetOwner()->GetFont() ) );
-#endif
     g_object_set_property( G_OBJECT(m_renderer), "text", &gvalue );
     g_value_unset( &gvalue );
 
