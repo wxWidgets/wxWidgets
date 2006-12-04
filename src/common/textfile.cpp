@@ -132,7 +132,7 @@ bool wxTextFile::OnRead(const wxMBConv& conv)
 #if wxUSE_UNICODE
     if ( bufSize > 4 && str.empty() )
     {
-        wxLogError(_("Failed to convert file contents to Unicode."));
+        wxLogError(_("Failed to convert file \"%s\" to Unicode."), GetName());
         return false;
     }
 #endif // wxUSE_UNICODE
