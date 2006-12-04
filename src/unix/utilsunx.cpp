@@ -262,7 +262,8 @@ long wxMacExecute(wxChar **argv,
 long wxExecute( const wxString& command, int flags, wxProcess *process )
 {
     wxCHECK_MSG( !command.empty(), 0, wxT("can't exec empty command") );
-    wxLogDebug(wxString(wxT("Launching: ")) + command);
+
+    wxLogTrace(wxT("exec"), wxT("Executing \"%s\""), command.c_str());
 
 #if wxUSE_THREADS
     // fork() doesn't mix well with POSIX threads: on many systems the program
