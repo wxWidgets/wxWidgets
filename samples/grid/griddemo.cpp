@@ -1444,8 +1444,7 @@ wxString BugsGridTable::GetColLabelValue( int col )
 // ----------------------------------------------------------------------------
 
 BugsGridFrame::BugsGridFrame()
-             : wxFrame(NULL, wxID_ANY, _T("Bugs table"),
-                       wxDefaultPosition, wxSize(500, 300))
+             : wxFrame(NULL, wxID_ANY, _T("Bugs table"))
 {
     wxGrid *grid = new wxGrid(this, wxID_ANY, wxDefaultPosition);
     wxGridTableBase *table = new BugsGridTable();
