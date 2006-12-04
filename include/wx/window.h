@@ -506,8 +506,13 @@ public:
     void SetWindowStyle( long style ) { SetWindowStyleFlag(style); }
     long GetWindowStyle() const { return GetWindowStyleFlag(); }
 
+        // check if the flag is set
     bool HasFlag(int flag) const { return (m_windowStyle & flag) != 0; }
     virtual bool IsRetained() const { return HasFlag(wxRETAINED); }
+
+        // turn the flag on if it had been turned off before and vice versa,
+        // return true if the flag is currently turned on
+    bool ToggleWindowStyle(int flag);
 
         // extra style: the less often used style bits which can't be set with
         // SetWindowStyleFlag()

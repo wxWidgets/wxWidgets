@@ -274,6 +274,28 @@ bool wxWindowBase::CreateBase(wxWindowBase *parent,
     return true;
 }
 
+bool wxWindowBase::ToggleWindowStyle(int flag)
+{
+    wxASSERT_MSG( flag, _T("flags with 0 value can't be toggled") );
+
+    bool rc;
+    long style = GetWindowStyleFlag();
+    if ( style & flag )
+    {
+        style &= ~flag;
+        rc = false;
+    }
+    else // currently off
+    {
+        style |= flag;
+        rc = true;
+    }
+
+    SetWindowStyleFlag(style);
+
+    return rc;
+}
+
 // ----------------------------------------------------------------------------
 // destruction
 // ----------------------------------------------------------------------------
@@ -301,7 +323,7 @@ wxWindowBase::~wxWindowBase()
     {
         wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent((wxWindow*)this),
                                               wxTopLevelWindow);
-        
+
         if ( tlw && tlw->GetDefaultItem() == this )
             tlw->SetDefaultItem(NULL);
         if ( tlw && tlw->GetTmpDefaultItem() == this )

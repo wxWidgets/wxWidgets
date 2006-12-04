@@ -3443,7 +3443,8 @@ Identical to \helpref{SetWindowStyleFlag}{wxwindowsetwindowstyleflag}.
 
 Sets the style of the window. Please note that some styles cannot be changed
 after the window creation and that \helpref{Refresh()}{wxwindowrefresh} might
-be called after changing the others for the change to take place immediately.
+need to be be called after changing the others for the change to take place
+immediately.
 
 See \helpref{Window styles}{windowstyles} for more information about flags.
 
@@ -3521,6 +3522,23 @@ exactly the same number of times as \helpref{Freeze}{wxwindowfreeze}.
 \wxheading{See also}
 
 \helpref{wxWindowUpdateLocker}{wxwindowupdatelocker}
+
+
+\membersection{wxWindow::ToggleWindowStyle}\label{wxwindowtogglewindowstyle}
+
+\func{void}{ToggleWindowStyle}{\param{int }{flag}}
+
+Turns the given \arg{flag} on if it's currently turned off and vice versa.
+This function cannot be used if the value of the flag is $0$ (which is often
+the case for default flags).
+
+Also, please notice that not all styles can be changed after the control
+creation.
+
+\wxheading{See also}
+
+\helpref{wxWindow::SetWindowStyleFlag}{wxwindowsetwindowstyleflag},\rtfsp
+\helpref{wxWindow::HasFlag}{wxwindowhasflag}
 
 
 \membersection{wxWindow::TransferDataFromWindow}\label{wxwindowtransferdatafromwindow}
