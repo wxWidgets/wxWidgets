@@ -3526,7 +3526,7 @@ exactly the same number of times as \helpref{Freeze}{wxwindowfreeze}.
 
 \membersection{wxWindow::ToggleWindowStyle}\label{wxwindowtogglewindowstyle}
 
-\func{void}{ToggleWindowStyle}{\param{int }{flag}}
+\func{bool}{ToggleWindowStyle}{\param{int }{flag}}
 
 Turns the given \arg{flag} on if it's currently turned off and vice versa.
 This function cannot be used if the value of the flag is $0$ (which is often
@@ -3534,6 +3534,11 @@ the case for default flags).
 
 Also, please notice that not all styles can be changed after the control
 creation.
+
+\wxheading{Return value}
+
+Returns \true if the style was turned on by this function, \false if it was
+switched off.
 
 \wxheading{See also}
 
