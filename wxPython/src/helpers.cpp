@@ -1260,7 +1260,7 @@ wxPyCBInputStream::wxPyCBInputStream(const wxPyCBInputStream& other)
 
 
 wxPyCBInputStream::~wxPyCBInputStream() {
-    wxPyBlock_t blocked;
+    wxPyBlock_t blocked = wxPyBlock_t_default;
     if (m_block) blocked = wxPyBeginBlockThreads();
     Py_XDECREF(m_read);
     Py_XDECREF(m_seek);
@@ -1270,7 +1270,7 @@ wxPyCBInputStream::~wxPyCBInputStream() {
 
 
 wxPyCBInputStream* wxPyCBInputStream::create(PyObject *py, bool block) {
-    wxPyBlock_t blocked;
+    wxPyBlock_t blocked = wxPyBlock_t_default;
     if (block) blocked = wxPyBeginBlockThreads();
 
     PyObject* read = getMethod(py, "read");

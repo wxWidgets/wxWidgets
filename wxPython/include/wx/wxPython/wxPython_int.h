@@ -185,9 +185,11 @@ bool wxPySwigInstance_Check(PyObject* obj);
 #if PY_VERSION_HEX < 0x02040000
 #define wxPyUSE_GIL_STATE 0
 typedef bool wxPyBlock_t;
+#define wxPyBlock_t_default false
 #else
 #define wxPyUSE_GIL_STATE 1
 typedef PyGILState_STATE wxPyBlock_t;
+#define wxPyBlock_t_default PyGILState_UNLOCKED
 #endif
 
 
