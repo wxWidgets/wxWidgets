@@ -186,6 +186,10 @@ public :
     virtual void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
         wxDouble tx=0.0, wxDouble ty=0.0);
 
+    // gets the component valuess of the matrix
+    virtual void Get(wxDouble* a=NULL, wxDouble* b=NULL,  wxDouble* c=NULL,
+                     wxDouble* d=NULL, wxDouble* tx=NULL, wxDouble* ty=NULL) const;
+       
     // makes this the inverse matrix
     virtual void Invert();
 
@@ -864,6 +868,18 @@ void wxCairoMatrixData::Set(wxDouble a, wxDouble b, wxDouble c, wxDouble d,
                         wxDouble tx, wxDouble ty) 
 {
     cairo_matrix_init( &m_matrix, a, b, c, d, tx, ty);
+}
+
+// gets the component valuess of the matrix
+void wxCairoMatrixData::Get(wxDouble* a, wxDouble* b,  wxDouble* c,
+                            wxDouble* d, wxDouble* tx, wxDouble* ty) const
+{
+    if (a)  *a = m_matrix.xx;
+    if (b)  *b = m_matrix.yx;
+    if (c)  *c = m_matrix.xy;
+    if (d)  *d = m_matrix.yy;
+    if (tx) *tx= m_matrix.x0;
+    if (ty) *ty= m_matrix.y0;
 }
 
 // makes this the inverse matrix

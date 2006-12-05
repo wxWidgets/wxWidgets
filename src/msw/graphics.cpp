@@ -175,6 +175,10 @@ public :
     virtual void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0,
         wxDouble tx=0.0, wxDouble ty=0.0);
 
+    // gets the component valuess of the matrix
+    virtual void Get(wxDouble* a=NULL, wxDouble* b=NULL,  wxDouble* c=NULL,
+                     wxDouble* d=NULL, wxDouble* tx=NULL, wxDouble* ty=NULL) const;
+       
     // makes this the inverse matrix
     virtual void Invert();
 
@@ -764,6 +768,20 @@ void wxGDIPlusMatrixData::Set(wxDouble a, wxDouble b, wxDouble c, wxDouble d,
                  wxDouble tx, wxDouble ty)
 {
     m_matrix->SetElements(a,b,c,d,tx,ty);
+}
+
+// gets the component valuess of the matrix
+void wxGDIPlusMatrixData::Get(wxDouble* a, wxDouble* b,  wxDouble* c,
+                              wxDouble* d, wxDouble* tx, wxDouble* ty) const
+{
+    REAL elements[6];
+    m_matrix->GetElements(elements);
+    if (a)  *a = elements[0];
+    if (b)  *b = elements[1];
+    if (c)  *c = elements[2];
+    if (d)  *d = elements[3];
+    if (tx) *tx= elements[4];
+    if (ty) *ty= elements[5];
 }
 
 // makes this the inverse matrix

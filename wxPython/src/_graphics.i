@@ -138,6 +138,8 @@ public :
     virtual void Copy( const wxGraphicsMatrix & )  {}
     virtual void Set(wxDouble , wxDouble , wxDouble , wxDouble ,
                      wxDouble , wxDouble ) {}
+    virtual void Get(wxDouble*, wxDouble*, wxDouble*,
+                     wxDouble*, wxDouble*, wxDouble*) {}
     virtual void Invert() {}
     virtual bool IsEqual( const wxGraphicsMatrix& t) const  { return false; }
     virtual bool IsIdentity() const { return false; }
@@ -449,6 +451,13 @@ public :
         "Sets the matrix to the specified values (default values are the
 identity matrix.)", "");
 
+    
+    DocDeclAStr(
+        virtual void , Get(wxDouble* OUTPUT, wxDouble* OUTPUT, wxDouble* OUTPUT,
+                           wxDouble* OUTPUT, wxDouble* OUTPUT, wxDouble* OUTPUT),
+        "Get(self) --> (a, b, c, d, tx, ty)",
+        "Gets the component values of the matrix and returns them as a tuple.", "");
+    
 
     DocDeclStr(
         virtual void , Invert(),

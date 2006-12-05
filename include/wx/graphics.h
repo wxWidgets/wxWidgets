@@ -125,6 +125,10 @@ public :
        virtual void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
            wxDouble tx=0.0, wxDouble ty=0.0) = 0;
 
+       // gets the component valuess of the matrix
+       virtual void Get(wxDouble* a=NULL, wxDouble* b=NULL,  wxDouble* c=NULL,
+                        wxDouble* d=NULL, wxDouble* tx=NULL, wxDouble* ty=NULL) const = 0;
+       
        // makes this the inverse matrix
        virtual void Invert() = 0;
 
@@ -176,6 +180,10 @@ public :
     virtual void Set(wxDouble a=1.0, wxDouble b=0.0, wxDouble c=0.0, wxDouble d=1.0, 
         wxDouble tx=0.0, wxDouble ty=0.0);
 
+    // gets the component valuess of the matrix
+    virtual void Get(wxDouble* a=NULL, wxDouble* b=NULL,  wxDouble* c=NULL,
+                     wxDouble* d=NULL, wxDouble* tx=NULL, wxDouble* ty=NULL) const;
+       
     // makes this the inverse matrix
     virtual void Invert();
 

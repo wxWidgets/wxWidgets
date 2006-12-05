@@ -5226,6 +5226,14 @@ class GraphicsMatrix(GraphicsObject):
         """
         return _gdi_.GraphicsMatrix_Set(*args, **kwargs)
 
+    def Get(*args, **kwargs):
+        """
+        Get(self) --> (a, b, c, d, tx, ty)
+
+        Gets the component values of the matrix and returns them as a tuple.
+        """
+        return _gdi_.GraphicsMatrix_Get(*args, **kwargs)
+
     def Invert(*args, **kwargs):
         """
         Invert(self)

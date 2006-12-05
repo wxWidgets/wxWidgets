@@ -147,6 +147,13 @@ void wxGraphicsMatrix::Set(wxDouble a, wxDouble b, wxDouble c, wxDouble d,
     GetMatrixData()->Set(a,b,c,d,tx,ty);
 }
 
+// gets the component valuess of the matrix
+void wxGraphicsMatrix::Get(wxDouble* a, wxDouble* b,  wxDouble* c,
+                           wxDouble* d, wxDouble* tx, wxDouble* ty) const
+{
+    GetMatrixData()->Get(a, b, c, d, tx, ty);
+}
+
 // makes this the inverse matrix
 void wxGraphicsMatrix::Invert()
 {

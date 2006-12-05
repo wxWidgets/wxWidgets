@@ -3721,6 +3721,8 @@ public :
     virtual void Copy( const wxGraphicsMatrix & )  {}
     virtual void Set(wxDouble , wxDouble , wxDouble , wxDouble ,
                      wxDouble , wxDouble ) {}
+    virtual void Get(wxDouble*, wxDouble*, wxDouble*,
+                     wxDouble*, wxDouble*, wxDouble*) {}
     virtual void Invert() {}
     virtual bool IsEqual( const wxGraphicsMatrix& t) const  { return false; }
     virtual bool IsIdentity() const { return false; }
@@ -26594,6 +26596,91 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_GraphicsMatrix_Get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxGraphicsMatrix *arg1 = (wxGraphicsMatrix *) 0 ;
+  wxDouble *arg2 = (wxDouble *) 0 ;
+  wxDouble *arg3 = (wxDouble *) 0 ;
+  wxDouble *arg4 = (wxDouble *) 0 ;
+  wxDouble *arg5 = (wxDouble *) 0 ;
+  wxDouble *arg6 = (wxDouble *) 0 ;
+  wxDouble *arg7 = (wxDouble *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  wxDouble temp2 ;
+  int res2 = SWIG_TMPOBJ ;
+  wxDouble temp3 ;
+  int res3 = SWIG_TMPOBJ ;
+  wxDouble temp4 ;
+  int res4 = SWIG_TMPOBJ ;
+  wxDouble temp5 ;
+  int res5 = SWIG_TMPOBJ ;
+  wxDouble temp6 ;
+  int res6 = SWIG_TMPOBJ ;
+  wxDouble temp7 ;
+  int res7 = SWIG_TMPOBJ ;
+  PyObject *swig_obj[1] ;
+  
+  arg2 = &temp2;
+  arg3 = &temp3;
+  arg4 = &temp4;
+  arg5 = &temp5;
+  arg6 = &temp6;
+  arg7 = &temp7;
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGraphicsMatrix, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsMatrix_Get" "', expected argument " "1"" of type '" "wxGraphicsMatrix *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGraphicsMatrix * >(argp1);
+  {
+    (arg1)->Get(arg2,arg3,arg4,arg5,arg6,arg7);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  if (SWIG_IsTmpObj(res2)) {
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_From_double((*arg2)));
+  } else {
+    int new_flags = SWIG_IsNewObj(res2) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_NewPointerObj((void*)(arg2), SWIGTYPE_p_double, new_flags));
+  }
+  if (SWIG_IsTmpObj(res3)) {
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_From_double((*arg3)));
+  } else {
+    int new_flags = SWIG_IsNewObj(res3) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_NewPointerObj((void*)(arg3), SWIGTYPE_p_double, new_flags));
+  }
+  if (SWIG_IsTmpObj(res4)) {
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_From_double((*arg4)));
+  } else {
+    int new_flags = SWIG_IsNewObj(res4) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_NewPointerObj((void*)(arg4), SWIGTYPE_p_double, new_flags));
+  }
+  if (SWIG_IsTmpObj(res5)) {
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_From_double((*arg5)));
+  } else {
+    int new_flags = SWIG_IsNewObj(res5) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_NewPointerObj((void*)(arg5), SWIGTYPE_p_double, new_flags));
+  }
+  if (SWIG_IsTmpObj(res6)) {
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_From_double((*arg6)));
+  } else {
+    int new_flags = SWIG_IsNewObj(res6) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_NewPointerObj((void*)(arg6), SWIGTYPE_p_double, new_flags));
+  }
+  if (SWIG_IsTmpObj(res7)) {
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_From_double((*arg7)));
+  } else {
+    int new_flags = SWIG_IsNewObj(res7) ? (SWIG_POINTER_OWN |  0 ) :  0 ;
+    resultobj = SWIG_Python_AppendOutput(resultobj, SWIG_NewPointerObj((void*)(arg7), SWIGTYPE_p_double, new_flags));
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_GraphicsMatrix_Invert(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxGraphicsMatrix *arg1 = (wxGraphicsMatrix *) 0 ;
@@ -39941,6 +40028,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_GraphicsMatrix", (PyCFunction)_wrap_delete_GraphicsMatrix, METH_O, NULL},
 	 { (char *)"GraphicsMatrix_Concat", (PyCFunction) _wrap_GraphicsMatrix_Concat, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsMatrix_Set", (PyCFunction) _wrap_GraphicsMatrix_Set, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GraphicsMatrix_Get", (PyCFunction)_wrap_GraphicsMatrix_Get, METH_O, NULL},
 	 { (char *)"GraphicsMatrix_Invert", (PyCFunction)_wrap_GraphicsMatrix_Invert, METH_O, NULL},
 	 { (char *)"GraphicsMatrix_IsEqual", (PyCFunction) _wrap_GraphicsMatrix_IsEqual, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsMatrix_IsIdentity", (PyCFunction)_wrap_GraphicsMatrix_IsIdentity, METH_O, NULL},
