@@ -850,6 +850,7 @@ if __name__ == "__main__":
                           'wx.lib',
                           'wx.lib.analogclock',
                           'wx.lib.analogclock.lib_setup',
+                          'wx.lib.art',
                           'wx.lib.colourchooser',
                           'wx.lib.editor',
                           'wx.lib.floatcanvas',

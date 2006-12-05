@@ -47,6 +47,11 @@ wxPython/demo/bmp_source
 wxPython/demo/data
 wxPython/demo/data/locale-src
 wxPython/demo/data/locale
+wxPython/demo/data/locale/af
+wxPython/demo/data/locale/de
+wxPython/demo/data/locale/es
+wxPython/demo/data/locale/fr
+wxPython/demo/data/locale/it
 wxPython/demo/data/locale/af/LC_MESSAGES
 wxPython/demo/data/locale/de/LC_MESSAGES
 wxPython/demo/data/locale/es/LC_MESSAGES
