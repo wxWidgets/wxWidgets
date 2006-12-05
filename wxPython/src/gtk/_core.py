@@ -13709,7 +13709,10 @@ if default == 'ascii':
     import locale
     import codecs
     try:
-        default = locale.getdefaultlocale()[1]
+        if hasattr(locale, 'getpreferredencoding'):
+            default = locale.getpreferredencoding()
+        else:
+            default = locale.getdefaultlocale()[1]
         codecs.lookup(default)
     except (ValueError, LookupError, TypeError):
         default = _sys.getdefaultencoding()
