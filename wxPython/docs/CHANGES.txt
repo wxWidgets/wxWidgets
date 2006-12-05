@@ -46,6 +46,9 @@ Added some modules from Riaan Booysen:
 
     * An I18N sample for the demo.
 
+wx.lib.masked: Patch from Will Sadkin.  Includes Unicode fixes, plus
+more helpful exceptions and ability to designate fields in mask
+without intervening fixed characters.
 
 
 

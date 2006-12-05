@@ -9,6 +9,12 @@
 # Copyright:   (c) 2004
 # License:     wxWidgets license
 #----------------------------------------------------------------------
+__author__  = "Will Sadkin <wsadkin |at| parlancecorp.com>"
+__date__    = "02 Dec 2006, 19:00 GMT-05:00"
+__version__ = "1.11"
+__doc__     = """\
+package providing "masked edit" controls, allowing characters within a data entry control to remain fixed, and providing fine-grain control over allowed user input.
+"""
 
 # import relevant external symbols into package namespace:
 from maskededit import *
