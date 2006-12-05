@@ -1,3 +1,13 @@
+wxwidgets2.8 (2.8.0.0-0rc3) unstable; urgency=low
+
+  * wxFileSystem::OpenFile() takes wxFS_SEEKABLE by default now.
+  * Fixed wxCalendarCtrl::HitTest() when clicking on month change arrows.
+  * Added wxWindow::GetWindowBorderSize(), corrected wxTreeCtrl::GetBestSize().
+  * Allow dynamically changing most of text control styles.
+  * Enable use of libgnomeprintui by default in configure.
+
+ -- Vadim Zeitlin <vadim@wxwindows.org>  Dec, 05 Tue 2006 14:41:22 +0100
+
 wxwidgets2.8 (2.8.0.0-0rc2) unstable; urgency=low
 
   * wxArrayString::Alloc() doesn't clear array contents any more
