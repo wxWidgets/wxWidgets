@@ -64,6 +64,8 @@ int wxEventLoop::Run()
 
     [[NSApplication sharedApplication] run];
 
+    OnExit();
+
     int exitcode = m_impl->GetExitCode();
     delete m_impl;
     m_impl = NULL;

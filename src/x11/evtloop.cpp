@@ -372,10 +372,6 @@ int wxEventLoop::Run()
     m_impl->m_keepGoing = true;
     while ( m_impl->m_keepGoing )
     {
-#if 0 // wxUSE_THREADS
-        wxMutexGuiLeaveOrEnter();
-#endif // wxUSE_THREADS
-
         // generate and process idle events for as long as we don't have
         // anything else to do
         while ( ! Pending() )
@@ -385,13 +381,6 @@ int wxEventLoop::Run()
 #endif
             if (!m_impl->SendIdleEvent())
             {
-#if 0 // wxUSE_THREADS
-                // leave the main loop to give other threads a chance to
-                // perform their GUI work
-                wxMutexGuiLeave();
-                wxUsleep(20);
-                wxMutexGuiEnter();
-#endif
                 // Break out of while loop
                 break;
             }
@@ -404,6 +393,8 @@ int wxEventLoop::Run()
             break;
         }
     }
+
+    OnExit();
 
     int exitcode = m_impl->GetExitCode();
     delete m_impl;

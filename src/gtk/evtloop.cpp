@@ -75,6 +75,8 @@ int wxEventLoop::Run()
 
     gtk_main();
 
+    OnExit();
+
     int exitcode = m_impl->GetExitCode();
     delete m_impl;
     m_impl = NULL;

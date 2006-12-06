@@ -122,6 +122,8 @@ int wxEventLoop::Run()
             break;
     }
 
+    OnExit();
+
     int exitcode = m_impl->GetExitCode();
     delete m_impl;
     m_impl = NULL;

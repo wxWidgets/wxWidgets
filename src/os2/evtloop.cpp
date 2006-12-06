@@ -277,6 +277,8 @@ int wxEventLoop::Run()
             wxMilliSleep(10);
     }
 
+    OnExit();
+
     return m_impl->GetExitCode();
 }
 
