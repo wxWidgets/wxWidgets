@@ -21,7 +21,7 @@
 #ifndef WX_PRECOMP
 #endif
 
-#include <stdio.h>
+#include "wx/uri.h"
 #include "wx/wfstream.h"
 #include "wx/protocol/file.h"
 

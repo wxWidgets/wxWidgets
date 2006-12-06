@@ -17,7 +17,6 @@
 #if wxUSE_PROTOCOL_FILE
 
 #include "wx/protocol/protocol.h"
-#include "wx/url.h"
 
 class WXDLLIMPEXP_NET wxFileProto: public wxProtocol {
   DECLARE_DYNAMIC_CLASS_NO_COPY(wxFileProto)
