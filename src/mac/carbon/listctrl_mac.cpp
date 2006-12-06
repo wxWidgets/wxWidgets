@@ -1881,6 +1881,8 @@ long wxListCtrl::InsertItem(wxListItem& info)
             info.m_itemId = count;
 
         m_dbImpl->MacInsertItem(info.m_itemId, &info );
+        wxMacDataItem* dataItem = m_dbImpl->GetItemFromLine(info.m_itemId);
+        
         wxListEvent event( wxEVT_COMMAND_LIST_INSERT_ITEM, GetId() );
         event.SetEventObject( this );
         event.m_itemIndex = info.m_itemId;
@@ -2025,6 +2027,12 @@ bool wxListCtrl::SortItems(wxListCtrlCompare fn, long data)
     {
         m_compareFunc = fn;
         m_compareFuncData = data;
+        SortDataBrowserContainer( m_dbImpl->GetControlRef(), kDataBrowserNoItem, true);
+        
+        // we need to do this after each call, else we get a crash from wxPython when
+        // SortItems is called the second time.
+        m_compareFunc = NULL;
+        m_compareFuncData = 0;
     }
 
     return true;
@@ -2847,18 +2855,22 @@ Boolean wxMacDataBrowserListCtrlControl::CompareItems(DataBrowserItemID itemOneI
             wxMacListCtrlItem* item = (wxMacListCtrlItem*)itemOneID;
             wxMacListCtrlItem* otherItem = (wxMacListCtrlItem*)itemTwoID;
 
-            // FIXME: This code causes a crash in wxPython for some reason
-            // and moreover, further testing shows that the column click event
-            // is only sent to the list ctrl after the native control has finished
-            // sorting items anyway. So just disable this for now.
-
-            //wxListCtrlCompare func = list->GetCompareFunc();
-            //long item1 = GetLineFromItem(item);
-            //long item2 = GetLineFromItem(otherItem);
-
-            //if (func != NULL && item->HasColumnInfo(colId) && otherItem->HasColumnInfo(colId))
-            //    return func(item1, item2, list->GetCompareFuncData()) >= 0;
-
+            wxListCtrlCompare func = list->GetCompareFunc();
+            if (func != NULL)
+            {
+                long item1 = -1;
+                long item2 = -1;
+                if (item && item->HasColumnInfo(0))
+                    item1 = item->GetColumnInfo(0)->GetData();
+                if (otherItem && otherItem->HasColumnInfo(0))
+                    item2 = otherItem->GetColumnInfo(0)->GetData(); 
+                
+                if (item1 > -1 && item2 > -1)
+                {
+                    int result = func(item1, item2, list->GetCompareFuncData());
+                    return result >= 0;
+                }
+            }
             if (item->HasColumnInfo(colId))
                 itemText = item->GetColumnInfo(colId)->GetText();
             if (otherItem->HasColumnInfo(colId))
@@ -2905,8 +2917,19 @@ void wxMacDataBrowserListCtrlControl::MacSetColumnInfo( unsigned int row, unsign
     if (item)
     {
         wxMacListCtrlItem* listItem = dynamic_cast<wxMacListCtrlItem*>(dataItem);
+        bool hasInfo = listItem->HasColumnInfo( column );
         listItem->SetColumnInfo( column, item );
         UpdateState(dataItem, item);
+        
+        wxListCtrl* list = wxDynamicCast( GetPeer() , wxListCtrl );
+        
+        // NB: When this call was made before a control was completely shown, it would
+        // update the item prematurely (i.e. no text would be listed) and, on show, 
+        // only the sorted column would be refreshed, meaning only first column text labels
+        // would be shown. Making sure not to update items until the control is visible
+        // seems to fix this issue.
+        if (hasInfo && list->IsShown())
+            UpdateItem( wxMacDataBrowserRootContainer, listItem , kMinColumnId + column );
     }
 }
 
