@@ -17,7 +17,7 @@ characters from languages other than English.
 
 \subsection{What is Unicode?}\label{whatisunicode}
 
-Starting with release 2.1 wxWidgets has support for compiling in Unicode mode
+wxWidgets has support for compiling in Unicode mode
 on the platforms which support it. Unicode is a standard for character
 encoding which addresses the shortcomings of the previous, 8 bit standards, by
 using at least 16 (and possibly 32) bits for encoding each character. This
@@ -189,9 +189,7 @@ the \helpref{wxMBConv classes overview}{mbconvclasses}.
 \subsection{Unicode-related compilation settings}\label{unicodesettings}
 
 You should define {\tt wxUSE\_UNICODE} to $1$ to compile your program in
-Unicode mode. Note that it currently only works in Win32 and GTK 2.0 and
-that some parts of
-wxWidgets are not Unicode-compliant yet. If you
+Unicode mode. This currently works for wxMSW, wxGTK, wxMac and wxX11. If you
 compile your program in ANSI mode you can still define {\tt wxUSE\_WCHAR\_T} 
 to get some limited support for {\tt wchar\_t} type.
 
