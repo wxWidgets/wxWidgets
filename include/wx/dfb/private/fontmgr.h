@@ -72,6 +72,7 @@ public:
 private:
     // adds all fonts using AddBundle()
     void AddAllFonts();
+    void AddFontsFromDir(const wxString& indexFile);
     void AddFont(const wxString& dir, const wxString& name, wxFileConfig& cfg);
     void SetDefaultFonts(wxFileConfig& cfg);
 

@@ -18,6 +18,8 @@
 
 #include "wx/fileconf.h"
 #include "wx/filename.h"
+#include "wx/tokenzr.h"
+#include "wx/dir.h"
 
 #include "wx/private/fontmgr.h"
 #include "wx/dfb/wrapdfb.h"
@@ -91,13 +93,16 @@ wxFontBundle::wxFontBundle(const wxString& name,
 // ----------------------------------------------------------------------------
 
 /*
-   The code below parses font configuration file ${WXDFB_FONTDIR}/FontsIndex.
-   By default, the directory is $prefix/share/wx/fonts, but can be ovewritten
-   by setting WXDFB_FONTDIR environment variable.
+   The code below looks up and parses font configuration files FontsIndex.
+   The files are looked up in directories specified in the WXDFB_FONTPATH
+   environment variable (separated with :, similarly to the PATH variable).
+   If the variable is not set, $prefix/share/wx/fonts directory is used.
+   All subdirectories of directories on the path are scanned for FontsIndex
+   files.
 
-   The file is standard wxFileConfig file text file. Each toplevel group
-   specifies one font bundle, font's name is the name of group. Group's entries
-   look like this:
+   The FontsIndex file is standard wxFileConfig file text file. Each toplevel
+   group specifies one font bundle, font's name is the name of group. Group's
+   entries look like this:
 
    [Font Name]
    # font files (at least one of them must be present):
@@ -125,14 +130,42 @@ wxFontBundle::wxFontBundle(const wxString& name,
 
 void wxFontsManager::AddAllFonts()
 {
-    wxString dir = _T(wxINSTALL_PREFIX "/share/wx/fonts");
-    wxGetEnv(_T("WXDFB_FONTDIR"), &dir);
+    wxString path;
+    if ( !wxGetEnv(_T("WXDFB_FONTPATH"), &path) )
+        path = _T(wxINSTALL_PREFIX "/share/wx/fonts");
 
-    wxString indexFile = dir + _T("/FontsIndex");
-
-    if ( !wxFileName::FileExists(indexFile) )
+    wxStringTokenizer tkn(path, wxPATH_SEP);
+    while ( tkn.HasMoreTokens() )
     {
-        wxLogWarning(_("No fonts found in %s"), dir.c_str());
+        wxString dir = tkn.GetNextToken();
+
+        wxArrayString indexFiles;
+        if ( !wxDir::GetAllFiles(dir, &indexFiles, _T("FontsIndex")) )
+            continue;
+
+        for ( wxArrayString::const_iterator i = indexFiles.begin();
+              i != indexFiles.end(); ++i )
+        {
+            AddFontsFromDir(*i);
+        }
+    }
+
+    if ( GetBundles().empty() )
+    {
+        // wxDFB is unusable without fonts, so terminate the app
+        wxLogFatalError(_("No fonts found in %s."), path.c_str());
+    }
+}
+
+void wxFontsManager::AddFontsFromDir(const wxString& indexFile)
+{
+    wxFileName fn(indexFile);
+    wxString dir = fn.GetPath();
+
+    if ( !fn.FileExists() )
+    {
+        wxLogWarning(_("Fonts index file %s disappeared while loading fonts."),
+                     indexFile.c_str());
         return;
     }
 
