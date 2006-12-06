@@ -61,10 +61,155 @@ static const EventTypeSpec eventList[] =
     { kEventClassMouse, kEventMouseDown },
     { kEventClassMouse, kEventMouseMoved },
     { kEventClassMouse, kEventMouseDragged },
+    
+    { kEventClassKeyboard, kEventRawKeyDown } ,
+    { kEventClassKeyboard, kEventRawKeyRepeat } ,
+    { kEventClassKeyboard, kEventRawKeyUp } ,
+    { kEventClassKeyboard, kEventRawKeyModifiersChanged } ,
+    
+    { kEventClassTextInput, kEventTextInputUnicodeForKeyEvent } ,
+    { kEventClassTextInput, kEventTextInputUpdateActiveInputArea } ,
+    
 #if DEBUG_WEBKIT_SIZING == 1
     { kEventClassControl, kEventControlBoundsChanged } ,
 #endif
 };
+
+// mix this in from window.cpp
+pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , EventRef event , void *data ) ;
+
+// NOTE: This is mostly taken from KeyboardEventHandler in toplevel.cpp, but
+// that expects the data pointer is a top-level window, so I needed to change
+// that in this case. However, once 2.8 is out, we should factor out the common logic
+// among the two functions and merge them.
+static pascal OSStatus wxWebKitKeyEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
+{
+    OSStatus result = eventNotHandledErr ;
+    wxMacCarbonEvent cEvent( event ) ;
+
+    wxWebKitCtrl* thisWindow = (wxWebKitCtrl*) data ;    
+    wxWindow* focus = thisWindow ;
+
+    unsigned char charCode ;
+    wxChar uniChar[2] ;
+    uniChar[0] = 0;
+    uniChar[1] = 0;
+
+    UInt32 keyCode ;
+    UInt32 modifiers ;
+    Point point ;
+    UInt32 when = EventTimeToTicks( GetEventTime( event ) ) ;
+
+#if wxUSE_UNICODE
+    ByteCount dataSize = 0 ;
+    if ( GetEventParameter( event, kEventParamKeyUnicodes, typeUnicodeText, NULL, 0 , &dataSize, NULL ) == noErr )
+    {
+        UniChar buf[2] ;
+        int numChars = dataSize / sizeof( UniChar) + 1;
+
+        UniChar* charBuf = buf ;
+
+        if ( numChars * 2 > 4 )
+            charBuf = new UniChar[ numChars ] ;
+        GetEventParameter( event, kEventParamKeyUnicodes, typeUnicodeText, NULL, dataSize , NULL , charBuf ) ;
+        charBuf[ numChars - 1 ] = 0;
+
+#if SIZEOF_WCHAR_T == 2
+        uniChar = charBuf[0] ;
+#else
+        wxMBConvUTF16 converter ;
+        converter.MB2WC( uniChar , (const char*)charBuf , 2 ) ;
+#endif
+
+        if ( numChars * 2 > 4 )
+            delete[] charBuf ;
+    }
+#endif
+
+    GetEventParameter( event, kEventParamKeyMacCharCodes, typeChar, NULL, sizeof(char), NULL, &charCode );
+    GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode );
+    GetEventParameter( event, kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &modifiers );
+    GetEventParameter( event, kEventParamMouseLocation, typeQDPoint, NULL, sizeof(Point), NULL, &point );
+
+    UInt32 message = (keyCode << 8) + charCode;
+    switch ( GetEventKind( event ) )
+    {
+        case kEventRawKeyRepeat :
+        case kEventRawKeyDown :
+            {
+                WXEVENTREF formerEvent = wxTheApp->MacGetCurrentEvent() ;
+                WXEVENTHANDLERCALLREF formerHandler = wxTheApp->MacGetCurrentEventHandlerCallRef() ;
+                wxTheApp->MacSetCurrentEvent( event , handler ) ;
+                if ( /* focus && */ wxTheApp->MacSendKeyDownEvent(
+                    focus , message , modifiers , when , point.h , point.v , uniChar[0] ) )
+                {
+                    result = noErr ;
+                }
+                wxTheApp->MacSetCurrentEvent( formerEvent , formerHandler ) ;
+            }
+            break ;
+
+        case kEventRawKeyUp :
+            if ( /* focus && */ wxTheApp->MacSendKeyUpEvent(
+                focus , message , modifiers , when , point.h , point.v , uniChar[0] ) )
+            {
+                result = noErr ;
+            }
+            break ;
+
+        case kEventRawKeyModifiersChanged :
+            {
+                wxKeyEvent event(wxEVT_KEY_DOWN);
+
+                event.m_shiftDown = modifiers & shiftKey;
+                event.m_controlDown = modifiers & controlKey;
+                event.m_altDown = modifiers & optionKey;
+                event.m_metaDown = modifiers & cmdKey;
+                event.m_x = point.h;
+                event.m_y = point.v;
+
+#if wxUSE_UNICODE
+                event.m_uniChar = uniChar[0] ;
+#endif
+
+                event.SetTimestamp(when);
+                event.SetEventObject(focus);
+
+                if ( /* focus && */ (modifiers ^ wxApp::s_lastModifiers ) & controlKey )
+                {
+                    event.m_keyCode = WXK_CONTROL ;
+                    event.SetEventType( ( modifiers & controlKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
+                    focus->GetEventHandler()->ProcessEvent( event ) ;
+                }
+                if ( /* focus && */ (modifiers ^ wxApp::s_lastModifiers ) & shiftKey )
+                {
+                    event.m_keyCode = WXK_SHIFT ;
+                    event.SetEventType( ( modifiers & shiftKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
+                    focus->GetEventHandler()->ProcessEvent( event ) ;
+                }
+                if ( /* focus && */ (modifiers ^ wxApp::s_lastModifiers ) & optionKey )
+                {
+                    event.m_keyCode = WXK_ALT ;
+                    event.SetEventType( ( modifiers & optionKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
+                    focus->GetEventHandler()->ProcessEvent( event ) ;
+                }
+                if ( /* focus && */ (modifiers ^ wxApp::s_lastModifiers ) & cmdKey )
+                {
+                    event.m_keyCode = WXK_COMMAND ;
+                    event.SetEventType( ( modifiers & cmdKey ) ? wxEVT_KEY_DOWN : wxEVT_KEY_UP ) ;
+                    focus->GetEventHandler()->ProcessEvent( event ) ;
+                }
+
+                wxApp::s_lastModifiers = modifiers ;
+            }
+            break ;
+
+        default:
+            break;
+    }
+
+    return result ;
+}
 
 static pascal OSStatus wxWebKitCtrlEventHandler( EventHandlerCallRef handler , EventRef event , void *data )
 {
@@ -85,40 +230,49 @@ static pascal OSStatus wxWebKitCtrlEventHandler( EventHandlerCallRef handler , E
     if ( wxApp::s_captureWindow )
         currentMouseWindow = wxApp::s_captureWindow;
 
-    switch ( GetEventKind( event ) )
+    switch ( GetEventClass( event ) )
     {
-        case kEventMouseDragged :
-        case kEventMouseMoved :
+        case kEventClassKeyboard:
+        {
+            result = wxWebKitKeyEventHandler(handler, event, data);
+            break;
+        }
+        
+        case kEventClassTextInput:
+        {
+            result = wxMacUnicodeTextEventHandler(handler, event, data);
+            break;
+        }
+        
+        case kEventClassMouse:
+        {
+            switch ( GetEventKind( event ) )
             {
-                wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
-                SetupMouseEvent( wxevent , cEvent ) ;
-                
-                currentMouseWindow->ScreenToClient( &wxevent.m_x , &wxevent.m_y ) ;
-                wxevent.SetEventObject( currentMouseWindow ) ;
-                wxevent.SetId( currentMouseWindow->GetId() ) ;
-                
-                if ( currentMouseWindow->GetEventHandler()->ProcessEvent(wxevent) )
+                case kEventMouseDragged :
+                case kEventMouseMoved :
+                case kEventMouseDown :
+                case kEventMouseUp :
                 {
-                    result = noErr;
-                }
-
-                break; // this should enable WebKit to fire mouse dragged and mouse up events...
-            }
-
-        case kEventControlBoundsChanged:
-            {
-                // this is just here for debugging, so we can note any differences between
-                // native event sizes and the sizes the wxWindow receives.
-                Rect origBounds = cEvent.GetParameter<Rect>(kEventParamOriginalBounds, typeQDRectangle) ;
-                Rect prevBounds = cEvent.GetParameter<Rect>(kEventParamPreviousBounds, typeQDRectangle) ;
-                Rect curBounds = cEvent.GetParameter<Rect>(kEventParamCurrentBounds, typeQDRectangle) ;
+                    wxMouseEvent wxevent(wxEVT_LEFT_DOWN);
+                    SetupMouseEvent( wxevent , cEvent ) ;
                     
-                fprintf(stderr, "Orig bounds x=%d, y=%d, height=%d, width=%d\n", origBounds.left, origBounds.top, origBounds.bottom -origBounds.top, origBounds.right - origBounds.left);
-                fprintf(stderr, "Prev bounds x=%d, y=%d, height=%d, width=%d\n", prevBounds.left, prevBounds.top, prevBounds.bottom -prevBounds.top, prevBounds.right - prevBounds.left);
-                fprintf(stderr, "Cur bounds x=%d, y=%d, height=%d, width=%d\n", curBounds.left, curBounds.top, curBounds.bottom -curBounds.top, curBounds.right - curBounds.left);
+                    currentMouseWindow->ScreenToClient( &wxevent.m_x , &wxevent.m_y ) ;
+                    wxevent.SetEventObject( currentMouseWindow ) ;
+                    wxevent.SetId( currentMouseWindow->GetId() ) ;
+                    
+                    if ( currentMouseWindow->GetEventHandler()->ProcessEvent(wxevent) )
+                    {
+                        result = noErr;
+                    }
+
+                    break; // this should enable WebKit to fire mouse dragged and mouse up events...
+                }
+                default :
+                    break ;
             }
-        default :
-            break ;
+        }
+        default:
+            break;
     }
 
     result = CallNextEventHandler(handler, event);
@@ -529,8 +683,9 @@ void wxWebKitCtrl::OnSize(wxSizeEvent &event){
         return;
     }
 
-    int x = GetPosition().x; 
-    int y = GetPosition().y;
+    // since we no longer use parent coordinates, we always want 0,0.
+    int x = 0; 
+    int y = 0;
     
     HIRect rect;
     rect.origin.x = x;
@@ -584,6 +739,11 @@ void wxWebKitCtrl::MacVisibilityChanged(){
 // Listener interfaces
 //------------------------------------------------------------
 
+// NB: I'm still tracking this down, but it appears the Cocoa window
+// still has these events fired on it while the Carbon control is being
+// destroyed. Therefore, we must be careful to check both the existence
+// of the Carbon control and the event handler before firing events.
+
 @implementation MyFrameLoadMonitor
 
 - initWithWxWindow: (wxWebKitCtrl*)inWindow
@@ -595,62 +755,67 @@ void wxWebKitCtrl::MacVisibilityChanged(){
 
 - (void)webView:(WebView *)sender didStartProvisionalLoadForFrame:(WebFrame *)frame
 {
-    if (frame == [sender mainFrame]){
+    if (webKitWindow && frame == [sender mainFrame]){
         NSString *url = [[[[frame provisionalDataSource] request] URL] absoluteString];
         wxWebKitStateChangedEvent thisEvent(webKitWindow);
         thisEvent.SetState(wxWEBKIT_STATE_NEGOTIATING);
         thisEvent.SetURL( wxStringWithNSString( url ) );
-        webKitWindow->GetEventHandler()->ProcessEvent( thisEvent );
+        if (webKitWindow->GetEventHandler())
+            webKitWindow->GetEventHandler()->ProcessEvent( thisEvent );
     }
 }
 
 - (void)webView:(WebView *)sender didCommitLoadForFrame:(WebFrame *)frame
 {
-    if (frame == [sender mainFrame]){
+    if (webKitWindow && frame == [sender mainFrame]){
         NSString *url = [[[[frame dataSource] request] URL] absoluteString];
         wxWebKitStateChangedEvent thisEvent(webKitWindow);
         thisEvent.SetState(wxWEBKIT_STATE_TRANSFERRING);
         thisEvent.SetURL( wxStringWithNSString( url ) );
-        webKitWindow->GetEventHandler()->ProcessEvent( thisEvent );
+        if (webKitWindow->GetEventHandler())
+            webKitWindow->GetEventHandler()->ProcessEvent( thisEvent );
     }
 }
 
 - (void)webView:(WebView *)sender didFinishLoadForFrame:(WebFrame *)frame
 {
-    if (frame == [sender mainFrame]){
+    if (webKitWindow && frame == [sender mainFrame]){
         NSString *url = [[[[frame dataSource] request] URL] absoluteString];
         wxWebKitStateChangedEvent thisEvent(webKitWindow);
         thisEvent.SetState(wxWEBKIT_STATE_STOP);
         thisEvent.SetURL( wxStringWithNSString( url ) );
-        webKitWindow->GetEventHandler()->ProcessEvent( thisEvent );
+        if (webKitWindow->GetEventHandler())
+            webKitWindow->GetEventHandler()->ProcessEvent( thisEvent );
     }
 }
 
 - (void)webView:(WebView *)sender didFailLoadWithError:(NSError*) error forFrame:(WebFrame *)frame
 {
-    if (frame == [sender mainFrame]){
+    if (webKitWindow && frame == [sender mainFrame]){
         NSString *url = [[[[frame dataSource] request] URL] absoluteString];
         wxWebKitStateChangedEvent thisEvent(webKitWindow);
         thisEvent.SetState(wxWEBKIT_STATE_FAILED);
         thisEvent.SetURL( wxStringWithNSString( url ) );
-        webKitWindow->GetEventHandler()->ProcessEvent( thisEvent );
+        if (webKitWindow->GetEventHandler())
+            webKitWindow->GetEventHandler()->ProcessEvent( thisEvent );
     }
 }
 
 - (void)webView:(WebView *)sender didFailProvisionalLoadWithError:(NSError*) error forFrame:(WebFrame *)frame
 {
-    if (frame == [sender mainFrame]){
+    if (webKitWindow && frame == [sender mainFrame]){
         NSString *url = [[[[frame provisionalDataSource] request] URL] absoluteString];
         wxWebKitStateChangedEvent thisEvent(webKitWindow);
         thisEvent.SetState(wxWEBKIT_STATE_FAILED);
         thisEvent.SetURL( wxStringWithNSString( url ) );
-        webKitWindow->GetEventHandler()->ProcessEvent( thisEvent );
+        if (webKitWindow->GetEventHandler())
+            webKitWindow->GetEventHandler()->ProcessEvent( thisEvent );
     }
 }
 
 - (void)webView:(WebView *)sender didReceiveTitle:(NSString *)title forFrame:(WebFrame *)frame
 {
-    if (frame == [sender mainFrame]){
+    if (webKitWindow && frame == [sender mainFrame]){
         webKitWindow->SetPageTitle(wxStringWithNSString( title ));
     }
 }
@@ -677,7 +842,8 @@ void wxWebKitCtrl::MacVisibilityChanged(){
     NSString *url = [[request URL] absoluteString];
     thisEvent.SetURL( wxStringWithNSString( url ) );
     
-    webKitWindow->GetEventHandler()->ProcessEvent(thisEvent);
+    if (webKitWindow && webKitWindow->GetEventHandler())
+        webKitWindow->GetEventHandler()->ProcessEvent(thisEvent);
 
 	if (thisEvent.IsCancelled())
         [listener ignore];
