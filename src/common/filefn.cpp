@@ -1270,7 +1270,7 @@ bool wxRmdir(const wxString& dir, int WXUNUSED(flags))
 #elif defined(__OS2__)
     return (::DosDeleteDir((PSZ)dir.c_str()) == 0);
 #elif defined(__WXWINCE__)
-    return (CreateDirectory(dir, NULL) != 0);
+    return (RemoveDirectory(dir) != 0);
 #elif defined(__WXPALMOS__)
     // TODO with VFSFileRename()
     return false;
