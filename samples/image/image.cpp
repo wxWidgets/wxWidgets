@@ -185,7 +185,7 @@ public:
         wxFileName::SplitPath(savefilename, NULL, NULL, &extension);
 
         bool saved = false;
-        if ( extension == _T("bpp") )
+        if ( extension == _T("bmp") )
         {
             static const int bppvalues[] =
             {
