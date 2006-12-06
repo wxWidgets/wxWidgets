@@ -425,7 +425,7 @@ int wxFileDialog::ShowModal()
         defextBuffer = AppendExtension(wxT("a"), extension);
         if (defextBuffer.StartsWith(wxT("a.")))
         {
-            defextBuffer.Mid(2);
+            defextBuffer = defextBuffer.Mid(2); // remove "a."
             of.lpstrDefExt = defextBuffer.c_str();
         }
     }
