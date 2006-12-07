@@ -193,12 +193,11 @@ static void gtk_radiobutton_size_allocate( GtkWidget *widget,
                                            GtkAllocation * alloc,
                                            wxRadioBox *win )
 {
-    unsigned int n = 0;
     for ( wxRadioBoxButtonsInfoList::compatibility_iterator node = win->m_buttonsInfo.GetFirst();
           node;
-          node = node->GetNext(), n++ )
+          node = node->GetNext())
     {
-        if( widget == GTK_WIDGET(node->GetData()->button) )
+        if (widget == GTK_WIDGET(node->GetData()->button))
         {
             const wxPoint origin = win->GetPosition();
             wxRect rect = wxRect( alloc->x - origin.x, alloc->y - origin.y,
