@@ -221,7 +221,7 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
     {
 #if wxUSE_MENUS_NATIVE
         // menu bar
-        if (m_frameMenuBar && !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOMENUBAR != 0)))
+        if (m_frameMenuBar && !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOMENUBAR) != 0))
         {
             if (!m_menuBarDetached)
                 (*height) -= m_menuBarHeight;
@@ -233,7 +233,7 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
 #if wxUSE_STATUSBAR
         // status bar
         if (m_frameStatusBar && m_frameStatusBar->IsShown() && 
-            !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOSTATUSBAR != 0)))
+            !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOSTATUSBAR) != 0))
             (*height) -= wxSTATUS_HEIGHT;
 #endif // wxUSE_STATUSBAR
     }
@@ -277,7 +277,7 @@ void wxFrame::DoSetClientSize( int width, int height )
 
 #if wxUSE_MENUS_NATIVE
         // menu bar
-        if (m_frameMenuBar && !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOMENUBAR != 0)))
+        if (m_frameMenuBar && !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOMENUBAR) != 0))
         {
             if (!m_menuBarDetached)
                 height += m_menuBarHeight;
@@ -289,7 +289,7 @@ void wxFrame::DoSetClientSize( int width, int height )
 #if wxUSE_STATUSBAR
         // status bar
         if (m_frameStatusBar && m_frameStatusBar->IsShown() && 
-            !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOSTATUSBAR != 0)))
+            !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOSTATUSBAR) != 0))
             height += wxSTATUS_HEIGHT;
 #endif
 
@@ -359,7 +359,7 @@ void wxFrame::GtkOnSize()
         // area, which is represented by m_wxwindow.
 
 #if wxUSE_MENUS_NATIVE
-        if (m_frameMenuBar && !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOMENUBAR != 0)))
+        if (m_frameMenuBar && !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOMENUBAR) != 0))
         {
             if (!GTK_WIDGET_VISIBLE(m_frameMenuBar->m_widget))
                 gtk_widget_show( m_frameMenuBar->m_widget );
@@ -481,7 +481,7 @@ void wxFrame::GtkOnSize()
 
 #if wxUSE_STATUSBAR
     if (m_frameStatusBar && m_frameStatusBar->IsShown() &&
-        !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOSTATUSBAR != 0)))
+        !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOSTATUSBAR) != 0))
     {
         if (!GTK_WIDGET_VISIBLE(m_frameStatusBar->m_widget))
             gtk_widget_show( m_frameStatusBar->m_widget );
