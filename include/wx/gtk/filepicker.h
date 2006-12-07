@@ -17,8 +17,6 @@
 // that GTK+ < 2.4
 #include "wx/generic/filepickerg.h"
 
-
-
 //-----------------------------------------------------------------------------
 // wxFileButton and wxDirButton shared code
 // (cannot be a base class since they need to derive from wxGenericFileButton
@@ -49,6 +47,7 @@
     /*      invalid cast from `GtkFileChooserButton' to  `GtkButton'       */ \
     /* so, override wxButton::GTKGetWindow and return NULL as GTK+ doesn't */ \
     /* give us access to the internal GdkWindow of a GtkFileChooserButton  */ \
+protected:                                                                    \
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const         \
         { return NULL; }
 
@@ -98,9 +97,6 @@ public:     // overrides
     // event handler for the click
     void OnDialogOK(wxCommandEvent &);
 
-
-public:     // some overrides
-
     // GtkFileChooserButton does not support GTK_FILE_CHOOSER_ACTION_SAVE
     // so we replace it with GTK_FILE_CHOOSER_ACTION_OPEN; since wxFD_SAVE
     // is not supported, wxFD_OVERWRITE_PROMPT isn't too...
@@ -118,7 +114,6 @@ public:     // some overrides
 protected:
     wxDialog *m_dialog;
 
-private:
     DECLARE_DYNAMIC_CLASS(wxFileButton)
 };
 

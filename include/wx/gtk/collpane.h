@@ -51,25 +51,22 @@ public:
                 const wxValidator& val = wxDefaultValidator,
                 const wxString& name = wxCollapsiblePaneNameStr);
 
-public:     // public API
-
-    wxSize DoGetBestSize() const;
     void Collapse(bool collapse = true);
     bool IsCollapsed() const;
     void SetLabel(const wxString &str);
 
-    void OnSize(wxSizeEvent&);
+protected:
+    virtual wxSize DoGetBestSize() const;
 
 public:     // used by GTK callbacks
-
     bool m_bIgnoreNextChange;
     wxSize m_szCollapsed;
 
 private:
+    void OnSize(wxSizeEvent&);
+
     DECLARE_DYNAMIC_CLASS(wxCollapsiblePane)
     DECLARE_EVENT_TABLE()
 };
 
-
-#endif
-    // _WX_COLLAPSABLE_PANEL_H_GTK_
+#endif // _WX_COLLAPSABLE_PANEL_H_GTK_

@@ -21,7 +21,6 @@ class WXDLLEXPORT wxStaticLine;
 // class name
 extern WXDLLIMPEXP_DATA_CORE(const wxChar) wxCollapsiblePaneNameStr[];
 
-
 // ----------------------------------------------------------------------------
 // wxGenericCollapsiblePane
 // ----------------------------------------------------------------------------
@@ -64,7 +63,6 @@ public:
                 const wxValidator& val = wxDefaultValidator,
                 const wxString& name = wxCollapsiblePaneNameStr);
 
-
     // public wxCollapsiblePane API
     virtual void Collapse(bool collapse = true);
     virtual void SetLabel(const wxString &label);
@@ -76,6 +74,7 @@ public:
     virtual wxString GetLabel() const
         { return m_strLabel; }
 
+    virtual bool Layout();
 
     // implementation only, don't use
     void OnStateChange(const wxSize& sizeNew);
@@ -83,7 +82,6 @@ public:
 protected:
     // overridden methods
     virtual wxSize DoGetBestSize() const;
-    bool Layout();
 
     wxString GetBtnLabel() const;
     int GetBorder() const;
@@ -107,6 +105,4 @@ private:
 };
 
 #endif // wxUSE_BUTTON && wxUSE_STATLINE
-
-
 #endif // _WX_COLLAPSABLE_PANE_H_GENERIC_
