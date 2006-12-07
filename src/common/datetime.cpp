@@ -2472,7 +2472,7 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
                         // replace all occurrences of year with it
                         bool wasReplaced = fmt2.Replace(strYear, replacement) > 0;
                         // evaluation order ensures we always attempt the replacement.
-                        wasReplaced = (fmt2.Replace(strYear2, replacement2) > 0) | wasReplaced ;
+                        wasReplaced = (fmt2.Replace(strYear2, replacement2) > 0) || wasReplaced;
 
                         // use strftime() to format the same date but in supported
                         // year
