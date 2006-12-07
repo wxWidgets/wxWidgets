@@ -171,6 +171,8 @@ public:
 
     wxDL_METHOD_DEFINE( GtkWidget*, gnome_print_job_preview_new,
         (GnomePrintJob *gpm, const guchar *title), (gpm, title), NULL )
+
+    DECLARE_NO_COPY_CLASS(wxGnomePrintLibrary)
 };
 
 wxGnomePrintLibrary::wxGnomePrintLibrary()
@@ -846,6 +848,7 @@ wxGnomePrintDC::wxGnomePrintDC( wxGnomePrinter *printer )
 
     m_layout = gs_lgp->gnome_print_pango_create_layout( m_gpc );
     m_fontdesc = pango_font_description_from_string( "Sans 12" );
+    m_context = NULL;
 
     m_currentRed = 0;
     m_currentBlue = 0;
@@ -871,6 +874,7 @@ wxGnomePrintDC::wxGnomePrintDC( const wxPrintData& data )
 
     m_layout = gs_lgp->gnome_print_pango_create_layout( m_gpc );
     m_fontdesc = pango_font_description_from_string( "Sans 12" );
+    m_context = NULL;
 
     m_currentRed = 0;
     m_currentBlue = 0;
@@ -952,25 +956,25 @@ void wxGnomePrintDC::DoDrawArc(wxCoord x1,wxCoord y1,wxCoord x2,wxCoord y2,wxCoo
         while (alpha2 > 360)  alpha2 -= 360;
     }
 
-        if (m_brush.GetStyle() != wxTRANSPARENT)
-        {
-            SetBrush( m_brush );
-            gs_lgp->gnome_print_moveto ( m_gpc, XLOG2DEV(xc), YLOG2DEV(yc) );
-            gs_lgp->gnome_print_arcto( m_gpc, XLOG2DEV(xc), YLOG2DEV(yc), XLOG2DEVREL((int)radius), alpha1, alpha2, 0 );
+    if (m_brush.GetStyle() != wxTRANSPARENT)
+    {
+        SetBrush( m_brush );
+        gs_lgp->gnome_print_moveto ( m_gpc, XLOG2DEV(xc), YLOG2DEV(yc) );
+        gs_lgp->gnome_print_arcto( m_gpc, XLOG2DEV(xc), YLOG2DEV(yc), XLOG2DEVREL((int)radius), alpha1, alpha2, 0 );
 
-            gs_lgp->gnome_print_fill( m_gpc );
-        }
+        gs_lgp->gnome_print_fill( m_gpc );
+    }
 
-        if (m_pen.GetStyle() != wxTRANSPARENT)
-        {
-            SetPen (m_pen);
-            gs_lgp->gnome_print_newpath( m_gpc );
-            gs_lgp->gnome_print_moveto ( m_gpc, XLOG2DEV(xc), YLOG2DEV(yc) );
-            gs_lgp->gnome_print_arcto( m_gpc, XLOG2DEV(xc), YLOG2DEV(yc), XLOG2DEVREL((int)radius), alpha1, alpha2, 0 );
-            gs_lgp->gnome_print_closepath( m_gpc );
+    if (m_pen.GetStyle() != wxTRANSPARENT)
+    {
+        SetPen (m_pen);
+        gs_lgp->gnome_print_newpath( m_gpc );
+        gs_lgp->gnome_print_moveto ( m_gpc, XLOG2DEV(xc), YLOG2DEV(yc) );
+        gs_lgp->gnome_print_arcto( m_gpc, XLOG2DEV(xc), YLOG2DEV(yc), XLOG2DEVREL((int)radius), alpha1, alpha2, 0 );
+        gs_lgp->gnome_print_closepath( m_gpc );
 
-            gs_lgp->gnome_print_stroke( m_gpc );
-        }
+        gs_lgp->gnome_print_stroke( m_gpc );
+    }
 
     CalcBoundingBox (x1, y1);
     CalcBoundingBox (x2, y2);
