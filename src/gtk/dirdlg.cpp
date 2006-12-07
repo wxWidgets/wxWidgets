@@ -115,7 +115,7 @@ wxDirDialog::wxDirDialog(wxWindow* parent, const wxString& title,
             gtk_parent = GTK_WINDOW( gtk_widget_get_toplevel(parent->m_widget) );
 
         if (HasFlag(wxDD_DIR_MUST_EXIST))
-        gtk_action = GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER;
+            gtk_action = GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER;
         else
             gtk_action = GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER;
 
