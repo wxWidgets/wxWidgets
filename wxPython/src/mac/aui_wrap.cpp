@@ -14435,7 +14435,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_AuiTabContainer_GetPage__SWIG_0(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
+SWIGINTERN PyObject *_wrap_AuiTabContainer_GetPage(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxAuiTabContainer *arg1 = (wxAuiTabContainer *) 0 ;
   size_t arg2 ;
@@ -14444,14 +14444,19 @@ SWIGINTERN PyObject *_wrap_AuiTabContainer_GetPage__SWIG_0(PyObject *SWIGUNUSEDP
   int res1 = 0 ;
   size_t val2 ;
   int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "idx", NULL 
+  };
   
-  if ((nobjs < 2) || (nobjs > 2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAuiTabContainer, 0 |  0 );
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:AuiTabContainer_GetPage",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxAuiTabContainer, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AuiTabContainer_GetPage" "', expected argument " "1"" of type '" "wxAuiTabContainer *""'"); 
   }
   arg1 = reinterpret_cast< wxAuiTabContainer * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(swig_obj[1], &val2);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
     SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AuiTabContainer_GetPage" "', expected argument " "2"" of type '" "size_t""'");
   } 
@@ -14468,62 +14473,6 @@ SWIGINTERN PyObject *_wrap_AuiTabContainer_GetPage__SWIG_0(PyObject *SWIGUNUSEDP
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxAuiNotebookPage, 0 |  0 );
   return resultobj;
 fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AuiTabContainer_GetPage__SWIG_1(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
-  PyObject *resultobj = 0;
-  wxAuiTabContainer *arg1 = (wxAuiTabContainer *) 0 ;
-  size_t arg2 ;
-  wxAuiNotebookPage *result = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  size_t val2 ;
-  int ecode2 = 0 ;
-  
-  if ((nobjs < 2) || (nobjs > 2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAuiTabContainer, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AuiTabContainer_GetPage" "', expected argument " "1"" of type '" "wxAuiTabContainer const *""'"); 
-  }
-  arg1 = reinterpret_cast< wxAuiTabContainer * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(swig_obj[1], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AuiTabContainer_GetPage" "', expected argument " "2"" of type '" "size_t""'");
-  } 
-  arg2 = static_cast< size_t >(val2);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    {
-      wxAuiNotebookPage const &_result_ref = ((wxAuiTabContainer const *)arg1)->GetPage(arg2);
-      result = (wxAuiNotebookPage *) &_result_ref;
-    }
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxAuiNotebookPage, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AuiTabContainer_GetPage(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[3];
-  
-  if (!(argc = SWIG_Python_UnpackTuple(args,"AuiTabContainer_GetPage",0,2,argv))) SWIG_fail;
-  --argc;
-  if (argc == 2) {
-    return _wrap_AuiTabContainer_GetPage__SWIG_0(self, argc, argv);
-  }
-  if (argc == 2) {
-    return _wrap_AuiTabContainer_GetPage__SWIG_1(self, argc, argv);
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"No matching function for overloaded 'AuiTabContainer_GetPage'");
   return NULL;
 }
 
@@ -16421,7 +16370,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"AuiTabContainer_GetWindowFromIdx", (PyCFunction) _wrap_AuiTabContainer_GetWindowFromIdx, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"AuiTabContainer_GetIdxFromWindow", (PyCFunction) _wrap_AuiTabContainer_GetIdxFromWindow, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"AuiTabContainer_GetPageCount", (PyCFunction)_wrap_AuiTabContainer_GetPageCount, METH_O, NULL},
-	 { (char *)"AuiTabContainer_GetPage", _wrap_AuiTabContainer_GetPage, METH_VARARGS, NULL},
+	 { (char *)"AuiTabContainer_GetPage", (PyCFunction) _wrap_AuiTabContainer_GetPage, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"AuiTabContainer_GetPages", (PyCFunction)_wrap_AuiTabContainer_GetPages, METH_O, NULL},
 	 { (char *)"AuiTabContainer_SetNormalFont", (PyCFunction) _wrap_AuiTabContainer_SetNormalFont, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"AuiTabContainer_SetSelectedFont", (PyCFunction) _wrap_AuiTabContainer_SetSelectedFont, METH_VARARGS | METH_KEYWORDS, NULL},

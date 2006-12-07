@@ -183,6 +183,10 @@ The following example shows a simple implementation that utilizes
 
 %ignore wxAuiDefaultTabArt::SetWindow;        // Link error...
 
+// ignore this overload
+%ignore wxAuiTabContainer::GetPage(size_t idx) const;
+
+
 //---------------------------------------------------------------------------
 // Get all our defs from the REAL header files.
 %include framemanager.h

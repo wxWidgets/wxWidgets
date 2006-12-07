@@ -1270,12 +1270,9 @@ class AuiTabContainer(object):
         """GetPageCount(self) -> size_t"""
         return _aui.AuiTabContainer_GetPageCount(*args, **kwargs)
 
-    def GetPage(*args):
-        """
-        GetPage(self, size_t idx) -> AuiNotebookPage
-        GetPage(self, size_t idx) -> AuiNotebookPage
-        """
-        return _aui.AuiTabContainer_GetPage(*args)
+    def GetPage(*args, **kwargs):
+        """GetPage(self, size_t idx) -> AuiNotebookPage"""
+        return _aui.AuiTabContainer_GetPage(*args, **kwargs)
 
     def GetPages(*args, **kwargs):
         """GetPages(self) -> wxAuiNotebookPageArray"""
