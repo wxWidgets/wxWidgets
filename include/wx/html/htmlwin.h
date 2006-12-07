@@ -443,7 +443,7 @@ protected:
 
     wxString DoSelectionToText(wxHtmlSelection *sel);
 
-private:
+public:
     // wxHtmlWindowInterface methods:
     virtual void SetHTMLWindowTitle(const wxString& title);
     virtual void OnHTMLLinkClicked(const wxHtmlLinkInfo& link);
