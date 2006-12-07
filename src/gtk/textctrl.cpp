@@ -881,7 +881,7 @@ void wxTextCtrl::GTKSetJustification()
         else // wxTE_LEFT == 0
             just = GTK_JUSTIFY_LEFT;
 
-        gtk_text_view_set_justification( GTK_TEXT_VIEW(m_text), GTK_JUSTIFY_CENTER );
+        gtk_text_view_set_justification(GTK_TEXT_VIEW(m_text), just);
     }
     else // single line
     {
