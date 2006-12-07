@@ -355,6 +355,7 @@ public:
 #if USES_WXPOPUPTRANSIENTWINDOW
     virtual bool Show( bool show );
     virtual bool ProcessLeftDown(wxMouseEvent& event);
+protected:
     virtual void OnDismiss();
 #endif
 
@@ -1003,9 +1004,10 @@ void wxComboCtrlBase::PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust
     if ( !m_text )
         return;
 
+#if !TEXTCTRL_TEXT_CENTERED
+
     wxSize sz = GetClientSize();
 
-#if !TEXTCTRL_TEXT_CENTERED
     int customBorder = m_widthCustomBorder;
     if ( (m_text->GetWindowStyleFlag() & wxBORDER_MASK) == wxNO_BORDER )
     {
