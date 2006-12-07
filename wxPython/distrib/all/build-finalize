@@ -25,8 +25,8 @@ if [ $KIND = daily ]; then
 	destdir=$UPLOAD_PREVIEW_ROOT/$DAILY
 	echo "Copying to $UPLOAD_HOST at $destdir..."
 	if [ $UPLOAD_METHOD = ssh ]; then
-	    ssh $UPLOAD_HOST "mkdir -p $destdir"
-	    scp -pr $STAGING_DIR/* $UPLOAD_HOST:/$destdir
+	    ssh $UPLOAD_USER@$UPLOAD_HOST "mkdir -p $destdir"
+	    scp -pr $STAGING_DIR/* $UPLOAD_USER@$UPLOAD_HOST:/$destdir
 	fi
 	if [ $UPLOAD_METHOD = ftp ]; then
 	    lftp -c "open $UPLOAD_HOST; mkdir $destdir"
@@ -79,8 +79,8 @@ if [ $KIND = release ]; then
 	echo "Copying to $UPLOAD_HOST..."
 	destdir=$UPLOAD_RELEASE_ROOT/$VERSION
 	if [ $UPLOAD_METHOD = ssh ]; then
-	    ssh $UPLOAD_HOST "mkdir -p $destdir"
-	    scp -pr $STAGING_DIR/* $UPLOAD_HOST:/$destdir
+	    ssh $UPLOAD_USER@$UPLOAD_HOST "mkdir -p $destdir"
+	    scp -pr $STAGING_DIR/* $UPLOAD_USER@$UPLOAD_HOST:/$destdir
 	fi
 	if [ $UPLOAD_METHOD = ftp ]; then
 	    lftp -c "open $UPLOAD_HOST; mkdir $destdir"
