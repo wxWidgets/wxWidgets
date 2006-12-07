@@ -329,7 +329,7 @@ void wxLog::OnLog(wxLogLevel level, const wxChar *szString, time_t t)
             {
                 if ( GetRepetitionCounting() )
                 {
-                    pLogger->DoLogNumberOfRepeats();
+                    DoLogNumberOfRepeats();
                 }
                 ms_prevString = szString;
                 ms_prevLevel = level;
