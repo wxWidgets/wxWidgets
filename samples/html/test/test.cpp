@@ -322,13 +322,13 @@ void MyFrame::OnHtmlLinkClicked(wxHtmlLinkEvent &event)
 
 void MyFrame::OnHtmlCellHover(wxHtmlCellEvent &event)
 {
-    wxLogMessage(wxT("Mouse moved over cell %d at %d;%d"),
+    wxLogMessage(wxT("Mouse moved over cell %p at %d;%d"),
                  event.GetCell(), event.GetPoint().x, event.GetPoint().y);
 }
 
 void MyFrame::OnHtmlCellClicked(wxHtmlCellEvent &event)
 {
-    wxLogMessage(wxT("Click over cell %d at %d;%d"),
+    wxLogMessage(wxT("Click over cell %p at %d;%d"),
                  event.GetCell(), event.GetPoint().x, event.GetPoint().y);
 
     // if we don't skip the event, OnHtmlLinkClicked won't be called!
