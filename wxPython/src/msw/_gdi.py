@@ -5466,7 +5466,7 @@ class GraphicsPath(GraphicsObject):
 
     def GetBox(*args, **kwargs):
         """
-        GetBox(self) -> wxRect2DDouble
+        GetBox(self) -> Rect2D
 
         Gets the bounding box enclosing all points (possibly including control points)
         """
@@ -5475,7 +5475,7 @@ class GraphicsPath(GraphicsObject):
     def Contains(*args):
         """
         Contains(self, Double x, Double y, int fillStyle=ODDEVEN_RULE) -> bool
-        Contains(self, wxPoint2DDouble c, int fillStyle=ODDEVEN_RULE) -> bool
+        Contains(self, Point2D c, int fillStyle=ODDEVEN_RULE) -> bool
 
         Returns ``True`` if the point is within the path.
         """

@@ -2590,52 +2590,51 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 #define SWIGTYPE_p_wxPixelDataBase swig_types[124]
 #define SWIGTYPE_p_wxPoint swig_types[125]
 #define SWIGTYPE_p_wxPoint2D swig_types[126]
-#define SWIGTYPE_p_wxPoint2DDouble swig_types[127]
-#define SWIGTYPE_p_wxPostScriptDC swig_types[128]
-#define SWIGTYPE_p_wxPrintData swig_types[129]
-#define SWIGTYPE_p_wxPrinterDC swig_types[130]
-#define SWIGTYPE_p_wxPseudoDC swig_types[131]
-#define SWIGTYPE_p_wxPyApp swig_types[132]
-#define SWIGTYPE_p_wxPyCommandEvent swig_types[133]
-#define SWIGTYPE_p_wxPyEvent swig_types[134]
-#define SWIGTYPE_p_wxPyFontEnumerator swig_types[135]
-#define SWIGTYPE_p_wxPyImageHandler swig_types[136]
-#define SWIGTYPE_p_wxPyLocale swig_types[137]
-#define SWIGTYPE_p_wxPySizer swig_types[138]
-#define SWIGTYPE_p_wxPyValidator swig_types[139]
-#define SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[140]
-#define SWIGTYPE_p_wxRect swig_types[141]
-#define SWIGTYPE_p_wxRect2DDouble swig_types[142]
-#define SWIGTYPE_p_wxRegion swig_types[143]
-#define SWIGTYPE_p_wxRegionIterator swig_types[144]
-#define SWIGTYPE_p_wxRendererNative swig_types[145]
-#define SWIGTYPE_p_wxRendererVersion swig_types[146]
-#define SWIGTYPE_p_wxScreenDC swig_types[147]
-#define SWIGTYPE_p_wxScrollEvent swig_types[148]
-#define SWIGTYPE_p_wxScrollWinEvent swig_types[149]
-#define SWIGTYPE_p_wxSetCursorEvent swig_types[150]
-#define SWIGTYPE_p_wxShowEvent swig_types[151]
-#define SWIGTYPE_p_wxSize swig_types[152]
-#define SWIGTYPE_p_wxSizeEvent swig_types[153]
-#define SWIGTYPE_p_wxSizer swig_types[154]
-#define SWIGTYPE_p_wxSizerItem swig_types[155]
-#define SWIGTYPE_p_wxSplitterRenderParams swig_types[156]
-#define SWIGTYPE_p_wxStaticBoxSizer swig_types[157]
-#define SWIGTYPE_p_wxStdDialogButtonSizer swig_types[158]
-#define SWIGTYPE_p_wxStockGDI swig_types[159]
-#define SWIGTYPE_p_wxString swig_types[160]
-#define SWIGTYPE_p_wxSysColourChangedEvent swig_types[161]
-#define SWIGTYPE_p_wxTGAHandler swig_types[162]
-#define SWIGTYPE_p_wxTIFFHandler swig_types[163]
-#define SWIGTYPE_p_wxUpdateUIEvent swig_types[164]
-#define SWIGTYPE_p_wxValidator swig_types[165]
-#define SWIGTYPE_p_wxWindow swig_types[166]
-#define SWIGTYPE_p_wxWindowCreateEvent swig_types[167]
-#define SWIGTYPE_p_wxWindowDC swig_types[168]
-#define SWIGTYPE_p_wxWindowDestroyEvent swig_types[169]
-#define SWIGTYPE_p_wxXPMHandler swig_types[170]
-static swig_type_info *swig_types[172];
-static swig_module_info swig_module = {swig_types, 171, 0, 0, 0, 0};
+#define SWIGTYPE_p_wxPostScriptDC swig_types[127]
+#define SWIGTYPE_p_wxPrintData swig_types[128]
+#define SWIGTYPE_p_wxPrinterDC swig_types[129]
+#define SWIGTYPE_p_wxPseudoDC swig_types[130]
+#define SWIGTYPE_p_wxPyApp swig_types[131]
+#define SWIGTYPE_p_wxPyCommandEvent swig_types[132]
+#define SWIGTYPE_p_wxPyEvent swig_types[133]
+#define SWIGTYPE_p_wxPyFontEnumerator swig_types[134]
+#define SWIGTYPE_p_wxPyImageHandler swig_types[135]
+#define SWIGTYPE_p_wxPyLocale swig_types[136]
+#define SWIGTYPE_p_wxPySizer swig_types[137]
+#define SWIGTYPE_p_wxPyValidator swig_types[138]
+#define SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[139]
+#define SWIGTYPE_p_wxRect swig_types[140]
+#define SWIGTYPE_p_wxRect2D swig_types[141]
+#define SWIGTYPE_p_wxRegion swig_types[142]
+#define SWIGTYPE_p_wxRegionIterator swig_types[143]
+#define SWIGTYPE_p_wxRendererNative swig_types[144]
+#define SWIGTYPE_p_wxRendererVersion swig_types[145]
+#define SWIGTYPE_p_wxScreenDC swig_types[146]
+#define SWIGTYPE_p_wxScrollEvent swig_types[147]
+#define SWIGTYPE_p_wxScrollWinEvent swig_types[148]
+#define SWIGTYPE_p_wxSetCursorEvent swig_types[149]
+#define SWIGTYPE_p_wxShowEvent swig_types[150]
+#define SWIGTYPE_p_wxSize swig_types[151]
+#define SWIGTYPE_p_wxSizeEvent swig_types[152]
+#define SWIGTYPE_p_wxSizer swig_types[153]
+#define SWIGTYPE_p_wxSizerItem swig_types[154]
+#define SWIGTYPE_p_wxSplitterRenderParams swig_types[155]
+#define SWIGTYPE_p_wxStaticBoxSizer swig_types[156]
+#define SWIGTYPE_p_wxStdDialogButtonSizer swig_types[157]
+#define SWIGTYPE_p_wxStockGDI swig_types[158]
+#define SWIGTYPE_p_wxString swig_types[159]
+#define SWIGTYPE_p_wxSysColourChangedEvent swig_types[160]
+#define SWIGTYPE_p_wxTGAHandler swig_types[161]
+#define SWIGTYPE_p_wxTIFFHandler swig_types[162]
+#define SWIGTYPE_p_wxUpdateUIEvent swig_types[163]
+#define SWIGTYPE_p_wxValidator swig_types[164]
+#define SWIGTYPE_p_wxWindow swig_types[165]
+#define SWIGTYPE_p_wxWindowCreateEvent swig_types[166]
+#define SWIGTYPE_p_wxWindowDC swig_types[167]
+#define SWIGTYPE_p_wxWindowDestroyEvent swig_types[168]
+#define SWIGTYPE_p_wxXPMHandler swig_types[169]
+static swig_type_info *swig_types[171];
+static swig_module_info swig_module = {swig_types, 170, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -28153,7 +28152,7 @@ fail:
 SWIGINTERN PyObject *_wrap_GraphicsPath_GetBox(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxGraphicsPath *arg1 = (wxGraphicsPath *) 0 ;
-  wxRect2DDouble result;
+  wxRect2D result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
@@ -28169,7 +28168,7 @@ SWIGINTERN PyObject *_wrap_GraphicsPath_GetBox(PyObject *SWIGUNUSEDPARM(self), P
     result = ((wxGraphicsPath const *)arg1)->GetBox();
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_NewPointerObj((new wxRect2DDouble(static_cast< const wxRect2DDouble& >(result))), SWIGTYPE_p_wxRect2DDouble, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_NewPointerObj((new wxRect2D(static_cast< const wxRect2D& >(result))), SWIGTYPE_p_wxRect2D, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -28231,13 +28230,12 @@ fail:
 SWIGINTERN PyObject *_wrap_GraphicsPath_Contains__SWIG_1(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
   PyObject *resultobj = 0;
   wxGraphicsPath *arg1 = (wxGraphicsPath *) 0 ;
-  wxPoint2DDouble *arg2 = 0 ;
+  wxPoint2D *arg2 = 0 ;
   int arg3 = (int) wxODDEVEN_RULE ;
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  wxPoint2D temp2 ;
   int val3 ;
   int ecode3 = 0 ;
   
@@ -28247,14 +28245,10 @@ SWIGINTERN PyObject *_wrap_GraphicsPath_Contains__SWIG_1(PyObject *SWIGUNUSEDPAR
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsPath_Contains" "', expected argument " "1"" of type '" "wxGraphicsPath const *""'"); 
   }
   arg1 = reinterpret_cast< wxGraphicsPath * >(argp1);
-  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_wxPoint2DDouble,  0  | 0);
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GraphicsPath_Contains" "', expected argument " "2"" of type '" "wxPoint2DDouble const &""'"); 
+  {
+    arg2 = &temp2;
+    if ( ! wxPoint2D_helper(swig_obj[1], &arg2)) SWIG_fail;
   }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GraphicsPath_Contains" "', expected argument " "2"" of type '" "wxPoint2DDouble const &""'"); 
-  }
-  arg2 = reinterpret_cast< wxPoint2DDouble * >(argp2);
   if (swig_obj[2]) {
     ecode3 = SWIG_AsVal_int(swig_obj[2], &val3);
     if (!SWIG_IsOK(ecode3)) {
@@ -28263,7 +28257,7 @@ SWIGINTERN PyObject *_wrap_GraphicsPath_Contains__SWIG_1(PyObject *SWIGUNUSEDPAR
     arg3 = static_cast< int >(val3);
   }
   {
-    result = (bool)((wxGraphicsPath const *)arg1)->Contains((wxPoint2DDouble const &)*arg2,arg3);
+    result = (bool)((wxGraphicsPath const *)arg1)->Contains((wxPoint2D const &)*arg2,arg3);
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
@@ -28284,8 +28278,9 @@ SWIGINTERN PyObject *_wrap_GraphicsPath_Contains(PyObject *self, PyObject *args)
   if ((argc >= 2) && (argc <= 3)) {
     int _v = 0;
     {
-      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_wxPoint2DDouble, 0);
-      _v = SWIG_CheckState(res);
+      {
+        _v = wxPySimple_typecheck(argv[1], wxT("wxPoint2D"), 2);
+      }
     }
     if (!_v) goto check_1;
     if (argc > 2) {
@@ -40976,7 +40971,6 @@ static swig_type_info _swigt__p_wxPenList = {"_p_wxPenList", "wxPenList *", 0, 0
 static swig_type_info _swigt__p_wxPixelDataBase = {"_p_wxPixelDataBase", "wxPixelDataBase *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPoint = {"_p_wxPoint", "wxPoint *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPoint2D = {"_p_wxPoint2D", "wxPoint2D *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_wxPoint2DDouble = {"_p_wxPoint2DDouble", "wxPoint2DDouble *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPostScriptDC = {"_p_wxPostScriptDC", "wxPostScriptDC *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPrintData = {"_p_wxPrintData", "wxPrintData *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPrinterDC = {"_p_wxPrinterDC", "wxPrinterDC *", 0, 0, (void*)0, 0};
@@ -40984,7 +40978,7 @@ static swig_type_info _swigt__p_wxPseudoDC = {"_p_wxPseudoDC", "wxPseudoDC *", 0
 static swig_type_info _swigt__p_wxPyFontEnumerator = {"_p_wxPyFontEnumerator", "wxPyFontEnumerator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPyLocale = {"_p_wxPyLocale", "wxPyLocale *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxRect = {"_p_wxRect", "wxRect *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_wxRect2DDouble = {"_p_wxRect2DDouble", "wxRect2DDouble *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxRect2D = {"_p_wxRect2D", "wxRect2D *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxRegion = {"_p_wxRegion", "wxRegion *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxRegionIterator = {"_p_wxRegionIterator", "wxRegionIterator *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxRendererNative = {"_p_wxRendererNative", "wxRendererNative *", 0, 0, (void*)0, 0};
@@ -41125,7 +41119,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxPixelDataBase,
   &_swigt__p_wxPoint,
   &_swigt__p_wxPoint2D,
-  &_swigt__p_wxPoint2DDouble,
   &_swigt__p_wxPostScriptDC,
   &_swigt__p_wxPrintData,
   &_swigt__p_wxPrinterDC,
@@ -41140,7 +41133,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxPyValidator,
   &_swigt__p_wxQueryNewPaletteEvent,
   &_swigt__p_wxRect,
-  &_swigt__p_wxRect2DDouble,
+  &_swigt__p_wxRect2D,
   &_swigt__p_wxRegion,
   &_swigt__p_wxRegionIterator,
   &_swigt__p_wxRendererNative,
@@ -41322,7 +41315,6 @@ static swig_cast_info _swigc__p_wxPenList[] = {  {&_swigt__p_wxPenList, 0, 0, 0}
 static swig_cast_info _swigc__p_wxPixelDataBase[] = {  {&_swigt__p_wxPixelDataBase, 0, 0, 0},  {&_swigt__p_wxNativePixelData, _p_wxNativePixelDataTo_p_wxPixelDataBase, 0, 0},  {&_swigt__p_wxAlphaPixelData, _p_wxAlphaPixelDataTo_p_wxPixelDataBase, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPoint[] = {  {&_swigt__p_wxPoint, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPoint2D[] = {  {&_swigt__p_wxPoint2D, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_wxPoint2DDouble[] = {  {&_swigt__p_wxPoint2DDouble, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPostScriptDC[] = {  {&_swigt__p_wxPostScriptDC, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPrintData[] = {  {&_swigt__p_wxPrintData, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPrinterDC[] = {  {&_swigt__p_wxPrinterDC, 0, 0, 0},{0, 0, 0, 0}};
@@ -41330,7 +41322,7 @@ static swig_cast_info _swigc__p_wxPseudoDC[] = {  {&_swigt__p_wxPseudoDC, 0, 0, 
 static swig_cast_info _swigc__p_wxPyFontEnumerator[] = {  {&_swigt__p_wxPyFontEnumerator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPyLocale[] = {  {&_swigt__p_wxPyLocale, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxRect[] = {  {&_swigt__p_wxRect, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_wxRect2DDouble[] = {  {&_swigt__p_wxRect2DDouble, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxRect2D[] = {  {&_swigt__p_wxRect2D, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxRegion[] = {  {&_swigt__p_wxRegion, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxRegionIterator[] = {  {&_swigt__p_wxRegionIterator, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxRendererNative[] = {  {&_swigt__p_wxRendererNative, 0, 0, 0},{0, 0, 0, 0}};
@@ -41471,7 +41463,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_wxPixelDataBase,
   _swigc__p_wxPoint,
   _swigc__p_wxPoint2D,
-  _swigc__p_wxPoint2DDouble,
   _swigc__p_wxPostScriptDC,
   _swigc__p_wxPrintData,
   _swigc__p_wxPrinterDC,
@@ -41486,7 +41477,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_wxPyValidator,
   _swigc__p_wxQueryNewPaletteEvent,
   _swigc__p_wxRect,
-  _swigc__p_wxRect2DDouble,
+  _swigc__p_wxRect2D,
   _swigc__p_wxRegion,
   _swigc__p_wxRegionIterator,
   _swigc__p_wxRendererNative,

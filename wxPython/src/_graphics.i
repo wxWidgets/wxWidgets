@@ -620,7 +620,7 @@ returned by GetNativePath is newly allocated each time).", "");
 
 
     DocDeclStr(
-        wxRect2DDouble , GetBox() const,
+        wxRect2D , GetBox() const,
         "Gets the bounding box enclosing all points (possibly including control points)", "");
 
 
@@ -628,7 +628,7 @@ returned by GetNativePath is newly allocated each time).", "");
     DocStr(Contains,
         "Returns ``True`` if the point is within the path.", "");
     virtual bool Contains( wxDouble x, wxDouble y, int fillStyle = wxODDEVEN_RULE) const;
-    bool Contains( const wxPoint2DDouble& c, int fillStyle = wxODDEVEN_RULE) const;
+    bool Contains( const wxPoint2D& c, int fillStyle = wxODDEVEN_RULE) const;
 
 };
 
