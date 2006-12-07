@@ -8,10 +8,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __gvfs_H__
-#define __gvfs_H__
-
-// Include wxWindows' headers
+#ifndef _WX_GTK_GVFS_H_
+#define _WX_GTK_GVFS_H_
 
 #include "wx/defs.h"
 
@@ -28,7 +26,8 @@ class wxGnomeVFSMimeTypesManagerImpl: public wxMimeTypesManagerImpl
 {
 public:
     wxGnomeVFSMimeTypesManagerImpl() { }
-    
+
+protected:
     virtual bool DoAssociation(const wxString& strType,
                        const wxString& strIcon,
                        wxMimeTypeCommands *entry,

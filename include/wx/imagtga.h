@@ -34,10 +34,10 @@ public:
                             bool verbose = true, int index = -1);
     virtual bool SaveFile(wxImage* image, wxOutputStream& stream,
                              bool verbose = true);
+protected:
     virtual bool DoCanRead(wxInputStream& stream);
 #endif // wxUSE_STREAMS
 
-private:
     DECLARE_DYNAMIC_CLASS(wxTGAHandler)
 };
 

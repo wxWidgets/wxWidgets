@@ -12,7 +12,6 @@
 #ifndef _WX_DCMEMORY_H_BASE_
 #define _WX_DCMEMORY_H_BASE_
 
-#include "wx/defs.h"
 #include "wx/bitmap.h"
 
 // NOTE: different native implementations of wxMemoryDC will derive from
@@ -45,6 +44,7 @@ public:
         DoSelect(bmp);
     }
 
+protected:
     virtual void DoSelect(const wxBitmap& bmp) = 0;
 };
 

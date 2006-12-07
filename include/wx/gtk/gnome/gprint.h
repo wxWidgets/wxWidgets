@@ -8,10 +8,8 @@
 // Licence:     wxWindows Licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __gprint_H__
-#define __gprint_H__
-
-// Include wxWindows' headers
+#ifndef _WX_GTK_GPRINT_H_
+#define _WX_GTK_GPRINT_H_
 
 #include "wx/defs.h"
 
@@ -50,7 +48,6 @@ private:
     GnomePrintConfig  *m_config;
     GnomePrintJob     *m_job;
 
-private:
     DECLARE_DYNAMIC_CLASS(wxGnomePrintNativeData)
 };
 
@@ -116,7 +113,7 @@ public:
     virtual bool TransferDataToWindow();
     virtual bool TransferDataFromWindow();
 
-private:
+protected:
     // Implement some base class methods to do nothing to avoid asserts and
     // GTK warnings, since this is not a real wxDialog.
     virtual void DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
@@ -125,10 +122,10 @@ private:
     virtual void DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y),
                               int WXUNUSED(width), int WXUNUSED(height)) {}
 
+private:
     void Init();
     wxPrintDialogData   m_printDialogData;
 
-private:
     DECLARE_DYNAMIC_CLASS(wxGnomePrintDialog)
 };
 
@@ -151,7 +148,7 @@ public:
     virtual bool TransferDataToWindow();
     virtual bool TransferDataFromWindow();
 
-private:
+protected:
     // Implement some base class methods to do nothing to avoid asserts and
     // GTK warnings, since this is not a real wxDialog.
     virtual void DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
@@ -160,9 +157,9 @@ private:
     virtual void DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y),
                               int WXUNUSED(width), int WXUNUSED(height)) {}
 
+private:
     wxPageSetupDialogData   m_pageDialogData;
 
-private:
     DECLARE_DYNAMIC_CLASS(wxGnomePageSetupDialog)
 };
 
@@ -207,6 +204,32 @@ public:
     bool Ok() const { return IsOk(); }
     bool IsOk() const;
 
+    bool CanDrawBitmap() const { return true; }
+    void Clear();
+    void SetFont( const wxFont& font );
+    void SetPen( const wxPen& pen );
+    void SetBrush( const wxBrush& brush );
+    void SetLogicalFunction( int function );
+    void SetBackground( const wxBrush& brush );
+    void DestroyClippingRegion();
+    bool StartDoc(const wxString& message);
+    void EndDoc();
+    void StartPage();
+    void EndPage();
+    wxCoord GetCharHeight() const;
+    wxCoord GetCharWidth() const;
+    bool CanGetTextExtent() const { return true; }
+    wxSize GetPPI() const;
+    void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
+    void SetLogicalOrigin( wxCoord x, wxCoord y );
+    void SetDeviceOrigin( wxCoord x, wxCoord y );
+    virtual int GetDepth() const { return 24; }
+    void SetBackgroundMode(int WXUNUSED(mode)) { }
+    void SetPalette(const wxPalette& WXUNUSED(palette)) { }
+    static void SetResolution(int ppi);
+    static int GetResolution();
+
+protected:
     bool DoFloodFill(wxCoord x1, wxCoord y1, const wxColour &col, int style=wxFLOOD_SURFACE );
     bool DoGetPixel(wxCoord x1, wxCoord y1, wxColour *col) const;
     void DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2);
@@ -223,58 +246,24 @@ public:
 #if wxUSE_SPLINES
     void DoDrawSpline(wxList *points);
 #endif // wxUSE_SPLINES
-
     bool DoBlit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
             wxDC *source, wxCoord xsrc, wxCoord ysrc, int rop = wxCOPY, bool useMask = false,
             wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
     void DoDrawIcon( const wxIcon& icon, wxCoord x, wxCoord y );
     void DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y, bool useMask = false  );
-    bool CanDrawBitmap() const { return true; }
-
     void DoDrawText(const wxString& text, wxCoord x, wxCoord y );
     void DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord y, double angle);
-    void Clear();
-    void SetFont( const wxFont& font );
-    void SetPen( const wxPen& pen );
-    void SetBrush( const wxBrush& brush );
-    void SetLogicalFunction( int function );
-    void SetBackground( const wxBrush& brush );
-
     void DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
-    void DestroyClippingRegion();
     void DoSetClippingRegionAsRegion( const wxRegion &WXUNUSED(clip) ) { }
-
-    bool StartDoc(const wxString& message);
-    void EndDoc();
-    void StartPage();
-    void EndPage();
-
-    wxCoord GetCharHeight() const;
-    wxCoord GetCharWidth() const;
-    bool CanGetTextExtent() const { return true; }
     void DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
                      wxCoord *descent = (wxCoord *) NULL,
                      wxCoord *externalLeading = (wxCoord *) NULL,
                      wxFont *theFont = (wxFont *) NULL ) const;
-
     void DoGetSize(int* width, int* height) const;
     void DoGetSizeMM(int *width, int *height) const;
-    wxSize GetPPI() const;
-    void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
-
-    void SetLogicalOrigin( wxCoord x, wxCoord y );
-    void SetDeviceOrigin( wxCoord x, wxCoord y );
-
-    virtual int GetDepth() const { return 24; }
-
-    void SetBackgroundMode(int WXUNUSED(mode)) { }
-    void SetPalette(const wxPalette& WXUNUSED(palette)) { }
 
     wxPrintData& GetPrintData() { return m_printData; }
     void SetPrintData(const wxPrintData& data) { m_printData = data; }
-
-    static void SetResolution(int ppi);
-    static int GetResolution();
 
 private:
     static float ms_PSScaleFactor;

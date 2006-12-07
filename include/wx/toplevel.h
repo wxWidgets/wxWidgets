@@ -248,8 +248,6 @@ public:
     // do the window-specific processing after processing the update event
     virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) ;
 
-protected:
-
     // a different API for SetSizeHints
     virtual void SetMinSize(const wxSize& minSize);
     virtual void SetMaxSize(const wxSize& maxSize);
@@ -259,6 +257,7 @@ protected:
                                  int maxW = wxDefaultCoord, int maxH = wxDefaultCoord,
                                  int incW = wxDefaultCoord, int incH = wxDefaultCoord );
 
+protected:
     // the frame client to screen translation should take account of the
     // toolbar which may shift the origin of the client area
     virtual void DoClientToScreen(int *x, int *y) const;

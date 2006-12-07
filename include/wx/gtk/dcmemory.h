@@ -7,17 +7,10 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKDCMEMORYH__
-#define __GTKDCMEMORYH__
+#ifndef _WX_GTK_DCMEMORY_H_
+#define _WX_GTK_DCMEMORY_H_
 
-#include "wx/defs.h"
 #include "wx/dcclient.h"
-
-//-----------------------------------------------------------------------------
-// classes
-//-----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_CORE wxMemoryDC;
 
 //-----------------------------------------------------------------------------
 // wxMemoryDC
@@ -48,15 +41,13 @@ public:
 protected:
     void DoGetSize( int *width, int *height ) const;
     virtual void DoSelect(const wxBitmap& bitmap);
+    virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const 
+    { return subrect == NULL ? GetSelectedBitmap() : GetSelectedBitmap().GetSubBitmap(*subrect); }
 
 private:
     void Init();
-    virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const 
-    { return subrect == NULL ? GetSelectedBitmap() : GetSelectedBitmap().GetSubBitmap(*subrect); }
 
     DECLARE_DYNAMIC_CLASS(wxMemoryDC)
 };
 
-#endif
-    // __GTKDCMEMORYH__
-
+#endif // _WX_GTK_DCMEMORY_H_
