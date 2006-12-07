@@ -616,11 +616,14 @@ void wxApp::OnAssertFailure(const wxChar *file,
                             const wxChar* cond,
                             const wxChar *msg)
 {
-    m_isInAssert = true;
+    // This doesn't seem to be required anymore. Indeed,
+    // it breaks any code from working after a suppressed
+    // assert.
+    // m_isInAssert = true;
 
     wxAppBase::OnAssertFailure(file, line, func, cond, msg);
 
-    m_isInAssert = false;
+    // m_isInAssert = false;
 }
 
 #endif // __WXDEBUG__
