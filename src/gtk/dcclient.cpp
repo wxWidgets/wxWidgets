@@ -1771,7 +1771,7 @@ void wxWindowDC::DoGetTextExtent(const wxString &string,
     }
 
     // Reset old font description
-    if (theFont)
+    if (theFont->IsOk())
         pango_layout_set_font_description( m_layout, m_fontdesc );
 }
 
