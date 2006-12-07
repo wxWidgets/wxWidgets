@@ -395,11 +395,8 @@ void wxClipboard::Clear()
             while (m_waiting) gtk_main_iteration();
         }
 
-        if (m_data)
-        {
-            delete m_data;
-            m_data = (wxDataObject*) NULL;
-        }
+        delete m_data;
+        m_data = NULL;
 
 #if wxUSE_THREADS
         /* re-enable GUI threads */
