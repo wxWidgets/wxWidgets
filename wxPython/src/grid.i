@@ -593,6 +593,7 @@ public:
                     rval = *ptr;
                 }
                 else if (PySequence_Check(ro) && PyObject_Length(ro) == 2) {
+                    PyErr_Clear();  // Clear the exception left over from wxPyConvertSwigPtr
                     PyObject* o1 = PySequence_GetItem(ro, 0);
                     PyObject* o2 = PySequence_GetItem(ro, 1);
                     if (PyNumber_Check(o1) && PyNumber_Check(o2))
