@@ -208,31 +208,32 @@ static inline void wxAddEmissionHook()
 
 static gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 {
+    // this does not look possible, but just in case...
     if (!wxTheApp)
         return false;
 
+    bool moreIdles = false;
+
 #ifdef __WXDEBUG__
     // don't generate the idle events while the assert modal dialog is shown,
-    // this completely confuses the apps which don't expect to be reentered
-    // from some safely-looking functions
-    if ( wxTheApp->IsInAssert() )
-        return false;
+    // this matches the behavior of wxMSW
+    if (!wxTheApp->IsInAssert())
 #endif // __WXDEBUG__
+    {
+        // When getting called from GDK's time-out handler
+        // we are no longer within GDK's grab on the GUI
+        // thread so we must lock it here ourselves.
+        gdk_threads_enter();
 
-    // When getting called from GDK's time-out handler
-    // we are no longer within GDK's grab on the GUI
-    // thread so we must lock it here ourselves.
-    gdk_threads_enter();
+        // Send idle event to all who request them as long as
+        // no events have popped up in the event queue.
+        do {
+            moreIdles = wxTheApp->ProcessIdle();
+        } while (moreIdles && gtk_events_pending() == 0);
 
-    bool moreIdles;
-
-    // Send idle event to all who request them as long as
-    // no events have popped up in the event queue.
-    while ( (moreIdles = wxTheApp->ProcessIdle()) && gtk_events_pending() == 0)
-        ;
-
-    // Release lock again
-    gdk_threads_leave();
+        // Release lock again
+        gdk_threads_leave();
+    }
 
     if (!moreIdles)
     {
@@ -616,14 +617,13 @@ void wxApp::OnAssertFailure(const wxChar *file,
                             const wxChar* cond,
                             const wxChar *msg)
 {
-    // This doesn't seem to be required anymore. Indeed,
-    // it breaks any code from working after a suppressed
-    // assert.
-    // m_isInAssert = true;
+
+    // block wx idle events while assert dialog is showing
+    m_isInAssert = true;
 
     wxAppBase::OnAssertFailure(file, line, func, cond, msg);
 
-    // m_isInAssert = false;
+    m_isInAssert = false;
 }
 
 #endif // __WXDEBUG__
