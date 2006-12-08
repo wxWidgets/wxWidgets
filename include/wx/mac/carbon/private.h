@@ -487,12 +487,13 @@ Rect wxMacGetBoundsForControl( wxWindow* window , const wxPoint& pos , const wxS
 
 ControlActionUPP GetwxMacLiveScrollbarActionProc();
 
-class wxMacControl
+class wxMacControl : public wxObject
 {
 public :
     wxMacControl( wxWindow* peer , bool isRootControl = false );
     wxMacControl( wxWindow* peer , ControlRef control );
     wxMacControl( wxWindow* peer , WXWidget control );
+    wxMacControl() ;
     virtual ~wxMacControl();
 
     void Init();
@@ -656,6 +657,7 @@ protected :
     wxWindow*   m_peer;
     bool        m_needsFocusRect;
     bool        m_isRootControl;
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacControl)
 };
 
 // ============================================================================
@@ -669,6 +671,7 @@ class wxMacDataBrowserControl : public wxMacControl
 {
 public :
     wxMacDataBrowserControl( wxWindow* peer, const wxPoint& pos, const wxSize& size, long style);
+    wxMacDataBrowserControl() {}
 
     OSStatus SetCallbacks( const DataBrowserCallbacks *callbacks );
 
@@ -793,6 +796,7 @@ protected :
     virtual Boolean CompareItems(DataBrowserItemID itemOneID,
         DataBrowserItemID itemTwoID,
         DataBrowserPropertyID sortProperty) = 0;
+    DECLARE_ABSTRACT_CLASS(wxMacDataBrowserControl)
 };
 
 // ============================================================================
@@ -903,7 +907,7 @@ class wxMacDataItemBrowserControl : public wxMacDataBrowserControl, public wxMac
 {
 public :
     wxMacDataItemBrowserControl( wxWindow* peer , const wxPoint& pos, const wxSize& size, long style);
-
+    wxMacDataItemBrowserControl() {}
     // create a list item (can be a subclass of wxMacListBoxItem)
 
     virtual wxMacDataItem* CreateItem();
@@ -1030,6 +1034,7 @@ protected:
 private :
 
     bool m_suppressSelection;
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacDataItemBrowserControl)
 };
 
 class wxMacDataItemBrowserSelectionSuppressor
@@ -1066,6 +1071,7 @@ class wxMacDataBrowserListControl : public wxMacDataItemBrowserControl
 {
 public:
     wxMacDataBrowserListControl( wxWindow *peer, const wxPoint& pos, const wxSize& size, long style );
+    wxMacDataBrowserListControl() {}
     virtual ~wxMacDataBrowserListControl();
 
     virtual wxMacDataItem* CreateItem();
@@ -1074,6 +1080,7 @@ public:
 
     wxWindow * GetPeer() const;
 
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacDataBrowserListControl)
 };
 
 // ============================================================================

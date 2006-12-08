@@ -821,6 +821,13 @@ OSStatus wxMacCarbonEvent::SetParameter(EventParamName inName, EventParamType in
 // Control Access Support
 // ----------------------------------------------------------------------------
 
+IMPLEMENT_DYNAMIC_CLASS( wxMacControl , wxObject )
+
+wxMacControl::wxMacControl() 
+{
+    Init();
+}
+
 wxMacControl::wxMacControl(wxWindow* peer , bool isRootControl )
 {
     Init();
@@ -1287,13 +1294,15 @@ wxMacControl* wxMacControl::GetReferenceFromNativeControl(ControlRef control)
 // basing on DataBrowserItemIDs
 //
 
+IMPLEMENT_ABSTRACT_CLASS( wxMacDataBrowserControl , wxMacControl )
+
 pascal void wxMacDataBrowserControl::DataBrowserItemNotificationProc(
     ControlRef browser,
     DataBrowserItemID itemID,
     DataBrowserItemNotification message,
     DataBrowserItemDataRef itemData )
 {
-    wxMacDataBrowserControl* ctl = dynamic_cast<wxMacDataBrowserControl*>( wxMacControl::GetReferenceFromNativeControl( browser ) );
+    wxMacDataBrowserControl* ctl = wxDynamicCast(wxMacControl::GetReferenceFromNativeControl( browser ), wxMacDataBrowserControl);
     if ( ctl != 0 )
     {
         ctl->ItemNotification(itemID, message, itemData);
@@ -1308,7 +1317,7 @@ pascal OSStatus wxMacDataBrowserControl::DataBrowserGetSetItemDataProc(
     Boolean changeValue )
 {
     OSStatus err = errDataBrowserPropertyNotSupported;
-    wxMacDataBrowserControl* ctl = dynamic_cast<wxMacDataBrowserControl*>( wxMacControl::GetReferenceFromNativeControl( browser ) );
+    wxMacDataBrowserControl* ctl = wxDynamicCast(wxMacControl::GetReferenceFromNativeControl( browser ), wxMacDataBrowserControl);
     if ( ctl != 0 )
     {
         err = ctl->GetSetItemData(itemID, property, itemData, changeValue);
@@ -1322,7 +1331,7 @@ pascal Boolean wxMacDataBrowserControl::DataBrowserCompareProc(
     DataBrowserItemID itemTwoID,
     DataBrowserPropertyID sortProperty)
 {
-    wxMacDataBrowserControl* ctl = dynamic_cast<wxMacDataBrowserControl*>( wxMacControl::GetReferenceFromNativeControl( browser ) );
+    wxMacDataBrowserControl* ctl = wxDynamicCast(wxMacControl::GetReferenceFromNativeControl( browser ), wxMacDataBrowserControl);
     if ( ctl != 0 )
     {
         return ctl->CompareItems(itemOneID, itemTwoID, sortProperty);
@@ -1678,7 +1687,7 @@ bool wxMacDataItem::IsLessThan(wxMacDataItemBrowserControl *owner ,
     const wxMacDataItem* rhs,
     DataBrowserPropertyID sortProperty) const
 {
-    const wxMacDataItem* otherItem = dynamic_cast<const wxMacDataItem*>(rhs);
+    const wxMacDataItem* otherItem = wx_const_cast(wxMacDataItem*,rhs);
     bool retval = false;
 
     if ( sortProperty == m_colId ){
@@ -1729,6 +1738,7 @@ void wxMacDataItem::Notification(wxMacDataItemBrowserControl *owner ,
 {
 }
 
+IMPLEMENT_DYNAMIC_CLASS( wxMacDataItemBrowserControl , wxMacDataBrowserControl )
 
 wxMacDataItemBrowserControl::wxMacDataItemBrowserControl( wxWindow* peer , const wxPoint& pos, const wxSize& size, long style) :
     wxMacDataBrowserControl( peer, pos, size, style )

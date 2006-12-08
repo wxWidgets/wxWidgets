@@ -37,13 +37,17 @@ class wxMacDataBrowserCheckListControl : public wxMacDataBrowserListControl , pu
 {
 public:
     wxMacDataBrowserCheckListControl( wxListBox *peer, const wxPoint& pos, const wxSize& size, long style );
+    wxMacDataBrowserCheckListControl() {}
     virtual ~wxMacDataBrowserCheckListControl();
 
     virtual wxMacDataItem* CreateItem();
 
     virtual bool            MacIsChecked(unsigned int n) const;
     virtual void            MacCheck(unsigned int n, bool bCheck = true);
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacDataBrowserCheckListControl)
 };
+
+IMPLEMENT_DYNAMIC_CLASS( wxMacDataBrowserCheckListControl , wxMacDataBrowserListControl )
 
 void wxCheckListBox::Init()
 {
@@ -124,7 +128,8 @@ void wxCheckListBox::Check(unsigned int item, bool check)
 
 wxMacCheckListControl* wxCheckListBox::GetPeer() const
 {
-    return dynamic_cast<wxMacCheckListControl*>(m_peer);
+    wxMacDataBrowserCheckListControl *lb = wxDynamicCast(m_peer,wxMacDataBrowserCheckListControl);
+    return lb ? wx_static_cast(wxMacCheckListControl*,lb) : 0 ;
 }
 
 const short kCheckboxColumnId = 1026;
@@ -256,14 +261,14 @@ wxMacDataItem* wxMacDataBrowserCheckListControl::CreateItem()
 
 void wxMacDataBrowserCheckListControl::MacCheck( unsigned int n, bool bCheck)
 {
-    wxMacCheckListBoxItem* item = dynamic_cast<wxMacCheckListBoxItem*>( GetItemFromLine( n) );
+    wxMacCheckListBoxItem* item = wx_static_cast(wxMacCheckListBoxItem*, GetItemFromLine( n) );
     item->Check( bCheck);
     UpdateItem(wxMacDataBrowserRootContainer, item , kCheckboxColumnId);
 }
 
 bool wxMacDataBrowserCheckListControl::MacIsChecked( unsigned int n) const
 {
-    wxMacCheckListBoxItem * item = dynamic_cast<wxMacCheckListBoxItem*>( GetItemFromLine( n ) );
+    wxMacCheckListBoxItem * item = wx_static_cast( wxMacCheckListBoxItem*, GetItemFromLine( n ) );
     return item->IsChecked();
 }
 

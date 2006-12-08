@@ -208,6 +208,7 @@ class wxMacDataBrowserListCtrlControl : public wxMacDataItemBrowserControl
 {
 public:
     wxMacDataBrowserListCtrlControl( wxWindow *peer, const wxPoint& pos, const wxSize& size, long style );
+    wxMacDataBrowserListCtrlControl() {}
     virtual ~wxMacDataBrowserListCtrlControl();
 
     // create a list item (can be a subclass of wxMacListBoxItem)
@@ -273,7 +274,7 @@ protected:
 
     wxClientDataType m_clientDataItemsType;
     bool m_isVirtual;
-
+    DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacDataBrowserListCtrlControl)
 };
 
 class wxMacListCtrlEventDelegate : public wxEvtHandler
@@ -512,7 +513,8 @@ END_EVENT_TABLE()
 
 wxMacListControl* wxListCtrl::GetPeer() const
 {
-    return dynamic_cast<wxMacListControl*>(m_peer);
+    wxMacDataBrowserListCtrlControl *lb = wxDynamicCast(m_peer,wxMacDataBrowserListCtrlControl);
+    return lb ? wx_static_cast(wxMacListControl*,lb) : 0 ;
 }
 
 // ----------------------------------------------------------------------------
@@ -2207,7 +2209,7 @@ void wxMacListCtrlItem::Notification(wxMacDataItemBrowserControl *owner ,
     DataBrowserItemDataRef itemData ) const
 {
 
-    wxMacDataBrowserListCtrlControl *lb = dynamic_cast<wxMacDataBrowserListCtrlControl*>(owner);
+    wxMacDataBrowserListCtrlControl *lb = wxDynamicCast(owner, wxMacDataBrowserListCtrlControl);
 
     // we want to depend on as little as possible to make sure tear-down of controls is safe
     if ( message == kDataBrowserItemRemoved)
@@ -2284,6 +2286,8 @@ void wxMacListCtrlItem::Notification(wxMacDataItemBrowserControl *owner ,
     }
 
 }
+
+IMPLEMENT_DYNAMIC_CLASS(wxMacDataBrowserListCtrlControl, wxMacDataItemBrowserControl )
 
 wxMacDataBrowserListCtrlControl::wxMacDataBrowserListCtrlControl( wxWindow *peer, const wxPoint& pos, const wxSize& size, long style)
     : wxMacDataItemBrowserControl( peer, pos, size, style )
@@ -2370,7 +2374,7 @@ pascal Boolean wxMacDataBrowserListCtrlControl::DataBrowserEditTextProc(
         Boolean *shrinkToFit)
 {
     Boolean result = false;
-    wxMacDataBrowserListCtrlControl* ctl = dynamic_cast<wxMacDataBrowserListCtrlControl*>( wxMacControl::GetReferenceFromNativeControl( browser ) );
+    wxMacDataBrowserListCtrlControl* ctl = wxDynamicCast(wxMacControl::GetReferenceFromNativeControl( browser ), wxMacDataBrowserListCtrlControl);
     if ( ctl != 0 )
     {
         result = ctl->ConfirmEditText(itemID, property, theString, maxEditTextRect, shrinkToFit);
@@ -2398,7 +2402,7 @@ pascal void wxMacDataBrowserListCtrlControl::DataBrowserDrawItemProc(
         SInt16 gdDepth,
         Boolean colorDevice)
 {
-    wxMacDataBrowserListCtrlControl* ctl = dynamic_cast<wxMacDataBrowserListCtrlControl*>( wxMacControl::GetReferenceFromNativeControl( browser ) );
+    wxMacDataBrowserListCtrlControl* ctl = wxDynamicCast(wxMacControl::GetReferenceFromNativeControl( browser ), wxMacDataBrowserListCtrlControl);
     if ( ctl != 0 )
     {
         ctl->DrawItem(itemID, property, itemState, itemRect, gdDepth, colorDevice);
@@ -2916,7 +2920,7 @@ void wxMacDataBrowserListCtrlControl::MacSetColumnInfo( unsigned int row, unsign
     wxASSERT_MSG( dataItem, _T("could not obtain wxMacDataItem for row in MacSetColumnInfo. Is row a valid wxListCtrl row?") );
     if (item)
     {
-        wxMacListCtrlItem* listItem = dynamic_cast<wxMacListCtrlItem*>(dataItem);
+        wxMacListCtrlItem* listItem = wx_static_cast(wxMacListCtrlItem*,dataItem);
         bool hasInfo = listItem->HasColumnInfo( column );
         listItem->SetColumnInfo( column, item );
         UpdateState(dataItem, item);
@@ -2958,7 +2962,7 @@ void wxMacDataBrowserListCtrlControl::MacGetColumnInfo( unsigned int row, unsign
     // CS should this guard against dataItem = 0 ? , as item is not a pointer if (item) is not appropriate
     //if (item)
     {
-        wxMacListCtrlItem* listItem = dynamic_cast<wxMacListCtrlItem*>(dataItem);
+        wxMacListCtrlItem* listItem =wx_static_cast(wxMacListCtrlItem*,dataItem);
 
         if (!listItem->HasColumnInfo( column ))
             return;

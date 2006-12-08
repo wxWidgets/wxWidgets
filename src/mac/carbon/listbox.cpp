@@ -58,7 +58,8 @@ bool wxListBox::Create(
 
 wxMacListControl* wxListBox::GetPeer() const
 {
-    return dynamic_cast<wxMacListControl*>(m_peer);
+    wxMacDataBrowserListControl *lb = wxDynamicCast(m_peer,wxMacDataBrowserListControl);
+    return lb ? wx_static_cast(wxMacListControl*,lb) : 0 ;
 }
 
 bool wxListBox::Create(
@@ -463,7 +464,7 @@ void wxMacListBoxItem::Notification(wxMacDataItemBrowserControl *owner ,
     DataBrowserItemNotification message,
     DataBrowserItemDataRef itemData ) const
 {
-    wxMacDataBrowserListControl *lb = dynamic_cast<wxMacDataBrowserListControl*>(owner);
+    wxMacDataBrowserListControl *lb = wxDynamicCast(owner,wxMacDataBrowserListControl);
 
     // we want to depend on as little as possible to make sure tear-down of controls is safe
 
@@ -521,6 +522,8 @@ void wxMacListBoxItem::Notification(wxMacDataItemBrowserControl *owner ,
         wxPostEvent( list->GetEventHandler(), event );
     }
 }
+
+IMPLEMENT_DYNAMIC_CLASS( wxMacDataBrowserListControl , wxMacDataItemBrowserControl )
 
 wxMacDataBrowserListControl::wxMacDataBrowserListControl( wxWindow *peer, const wxPoint& pos, const wxSize& size, long style)
     : wxMacDataItemBrowserControl( peer, pos, size, style )
