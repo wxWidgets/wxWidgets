@@ -200,19 +200,21 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
     if ( style & wxFD_MULTIPLE )
         gtk_file_chooser_set_select_multiple(GTK_FILE_CHOOSER(m_widget), true);
 
-    // gtk_widget_hide_on_delete is used here to avoid that Gtk automatically destroys
-    // the dialog when the user press ESC on the dialog: in that case a second call to
-    // ShowModal() would result in a bunch of Gtk-CRITICAL errors...
+    // gtk_widget_hide_on_delete is used here to avoid that Gtk automatically
+    // destroys the dialog when the user press ESC on the dialog: in that case
+    // a second call to ShowModal() would result in a bunch of Gtk-CRITICAL
+    // errors...
     g_signal_connect (G_OBJECT(m_widget),
                     "delete_event",
                     G_CALLBACK (gtk_widget_hide_on_delete),
                     (gpointer)this);
 
-    // local-only property could be set to false to allow non-local files to be loaded.
-    // In that case get/set_uri(s) should be used instead of get/set_filename(s) everywhere
-    // and the GtkFileChooserDialog should probably also be created with a backend,
-    // e.g "gnome-vfs", "default", ... (gtk_file_chooser_dialog_new_with_backend).
-    // Currently local-only is kept as the default - true:
+    // local-only property could be set to false to allow non-local files to be
+    // loaded. In that case get/set_uri(s) should be used instead of
+    // get/set_filename(s) everywhere and the GtkFileChooserDialog should
+    // probably also be created with a backend, e.g "gnome-vfs", "default", ...
+    // (gtk_file_chooser_dialog_new_with_backend). Currently local-only is kept
+    // as the default - true:
     // gtk_file_chooser_set_local_only(GTK_FILE_CHOOSER(m_widget), true);
 
     g_signal_connect (m_widget, "response",
@@ -220,14 +222,34 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
 
     SetWildcard(wildCard);
 
+    // if defaultDir is specified it should contain the directory and
+    // defaultFileName should contain the default name of the file, however if
+    // directory is not given, defaultFileName contains both
+    wxFileName fn;
+    if ( defaultDir.empty() )
+        fn.Assign(defaultFileName);
+    else if ( !defaultFileName.empty() )
+        fn.Assign(defaultDir, defaultFileName);
+
+    // set the initial file name and/or directory
+    wxString fname = fn.GetFullName();
+    if ( fname.empty() )
+    {
+        wxString dir = fn.GetPath();
+        if ( !dir.empty() )
+        {
+            gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget),
+                                                dir.fn_str());
+        }
+    }
+
     if ( style & wxFD_SAVE )
     {
-        if ( !defaultDir.empty() )
-            gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget),
-            wxConvFileName->cWX2MB(defaultDir));
-
-        gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget),
-            wxGTK_CONV(defaultFileName));
+        if ( !fname.empty() )
+        {
+            gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(m_widget),
+                                              fname.fn_str());
+        }
 
 #if GTK_CHECK_VERSION(2,7,3)
         if ((style & wxFD_OVERWRITE_PROMPT) && !gtk_check_version(2,7,3))
@@ -236,22 +258,10 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
     }
     else // wxFD_OPEN
     {
-        if ( !defaultFileName.empty() )
+        if ( !fname.empty() )
         {
-            wxString dir;
-            if ( defaultDir.empty() )
-                dir = ::wxGetCwd();
-            else
-                dir = defaultDir;
-
-            gtk_file_chooser_set_filename(
-                GTK_FILE_CHOOSER(m_widget),
-                wxConvFileName->cWX2MB( wxFileName(dir, defaultFileName).GetFullPath() ) );
-        }
-        else if ( !defaultDir.empty() )
-        {
-            gtk_file_chooser_set_current_folder( GTK_FILE_CHOOSER(m_widget),
-                wxConvFileName->cWX2MB(defaultDir) );
+            gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(m_widget),
+                                          fn.GetFullPath().fn_str());
         }
     }
 
