@@ -2231,6 +2231,8 @@ wxWindow* wxFindWindowByLabel( const wxString& label,
 #endif
 %}
 
+MustHaveApp(wxWindow_FromHWND);
+
 %inline %{
     wxWindow* wxWindow_FromHWND(wxWindow* parent, unsigned long _hWnd) {
 #ifdef __WXMSW__
