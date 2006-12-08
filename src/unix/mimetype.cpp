@@ -152,7 +152,7 @@ protected:
     virtual bool OnRead(const wxMBConv& WXUNUSED(conv))
     {
         return wxTextFile::OnRead(
-                    wxMBConvUTF8(wxMBConvUTF8::MAP_INVALID_UTF8_TO_OCTAL));
+                    wxMBConvUTF8(wxMBConvUTF8::MAP_INVALID_UTF8_TO_PUA));
     }
 };
 
