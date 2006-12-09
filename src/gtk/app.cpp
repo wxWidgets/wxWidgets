@@ -135,7 +135,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
     // We need to remove idle callbacks or the loop will
     // never finish.
-    RemoveIdleSource();
+    SuspendIdleCallback();
 
 #if wxUSE_LOG
     // disable log flushing from here because a call to wxYield() shouldn't
@@ -628,7 +628,7 @@ void wxApp::OnAssertFailure(const wxChar *file,
 
 #endif // __WXDEBUG__
 
-void wxApp::RemoveIdleSource()
+void wxApp::SuspendIdleCallback()
 {
 #if wxUSE_THREADS
     wxMutexLocker lock(gs_idleTagsMutex);
