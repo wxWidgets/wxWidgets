@@ -26,7 +26,7 @@ public:
                  ,const wxPoint&  rPos = wxDefaultPosition
                  ,const wxSize&   rSize = wxDefaultSize
                  ,long            lStyle = wxLI_HORIZONTAL
-                 ,const wxString& rsName = wxStaticTextNameStr
+                 ,const wxString& rsName = wxStaticLineNameStr
                 )
     {
         Create(pParent, vId, rPos, rSize, lStyle, rsName);
@@ -37,7 +37,7 @@ public:
                  ,const wxPoint&  rPos = wxDefaultPosition
                  ,const wxSize&   rSize = wxDefaultSize
                  ,long            lStyle = wxLI_HORIZONTAL
-                 ,const wxString& rsName = wxStaticTextNameStr
+                 ,const wxString& rsName = wxStaticLineNameStr
                 );
 
     inline bool          IsVertical(void) const { return((GetWindowStyleFlag() & wxLI_VERTICAL) != 0); }

@@ -28,7 +28,7 @@ public:
                   const wxPoint &pos = wxDefaultPosition,
                   const wxSize &size = wxDefaultSize,
                   long style = wxLI_HORIZONTAL,
-                  const wxString &name = wxStaticTextNameStr )
+                  const wxString &name = wxStaticLineNameStr )
         : m_statbox(NULL)
     {
         Create(parent, id, pos, size, style, name);
@@ -39,7 +39,7 @@ public:
                  const wxPoint &pos = wxDefaultPosition,
                  const wxSize &size = wxDefaultSize,
                  long style = wxLI_HORIZONTAL,
-                 const wxString &name = wxStaticTextNameStr );
+                 const wxString &name = wxStaticLineNameStr );
 
     // it's necessary to override this wxWindow function because we
     // will want to return the main widget for m_statbox

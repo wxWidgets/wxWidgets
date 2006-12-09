@@ -46,6 +46,7 @@ extern WXDLLEXPORT_DATA(const wxChar) wxDialogNameStr[] = wxT("dialog");
 extern WXDLLEXPORT_DATA(const wxChar) wxFrameNameStr[] = wxT("frame");
 extern WXDLLEXPORT_DATA(const wxChar) wxStaticBoxNameStr[] = wxT("groupBox");
 extern WXDLLEXPORT_DATA(const wxChar) wxListBoxNameStr[] = wxT("listBox");
+extern WXDLLEXPORT_DATA(const wxChar) wxStaticLineNameStr[] = wxT("staticLine");
 extern WXDLLEXPORT_DATA(const wxChar) wxStaticTextNameStr[] = wxT("staticText");
 extern WXDLLEXPORT_DATA(const wxChar) wxStaticBitmapNameStr[] = wxT("staticBitmap");
 extern WXDLLEXPORT_DATA(const wxChar) wxNotebookNameStr[] = wxT("notebook");

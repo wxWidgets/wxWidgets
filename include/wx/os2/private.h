@@ -103,6 +103,7 @@ WXDLLEXPORT_DATA(extern const wxChar) wxFrameNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxGaugeNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxStaticBoxNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxListBoxNameStr[];
+WXDLLEXPORT_DATA(extern const wxChar) wxStaticLineNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxStaticTextNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxStaticBitmapNameStr[];
 WXDLLEXPORT_DATA(extern const wxChar) wxPanelNameStr[];
