@@ -89,12 +89,12 @@ AC_DEFUN([_AC_BAKEFILE_LANG_COMPILER],
          )
         ]
     )
-    AC_LANG_POP($2)
     if test "x$bakefile_cv_[]_AC_LANG_ABBREV[]_compiler_[]$3" = "xyes"; then
         :; $4
     else
         :; $5
     fi
+    AC_LANG_POP($2)
 ])
 
 dnl recent versions of SGI mipsPro compiler define _SGI_COMPILER_VERSION
