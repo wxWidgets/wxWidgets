@@ -262,7 +262,7 @@ public:
         if ( m_nativeFontInfoOk )
             return m_nativeFontInfo.SetFaceName(faceName);
 
-            m_faceName = faceName;
+        m_faceName = faceName;
         return true;
     }
 

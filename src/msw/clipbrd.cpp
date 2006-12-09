@@ -555,10 +555,10 @@ void wxClipboard::Clear()
         if (S_OK == hr)
         {
             hr = OleSetClipboard(NULL);
-    if ( FAILED(hr) )
-    {
-        wxLogApiError(wxT("OleSetClipboard(NULL)"), hr);
-    }
+            if ( FAILED(hr) )
+            {
+                wxLogApiError(wxT("OleSetClipboard(NULL)"), hr);
+            }
         }
         m_lastDataObject = NULL;
     }
@@ -576,14 +576,14 @@ bool wxClipboard::Flush()
         if (S_OK == hr)
         {
             hr = OleFlushClipboard();
-    if ( FAILED(hr) )
-    {
-        wxLogApiError(wxT("OleFlushClipboard"), hr);
+            if ( FAILED(hr) )
+            {
+                wxLogApiError(wxT("OleFlushClipboard"), hr);
 
-        return false;
-    }
-        return true;
-    }
+                return false;
+            }
+            return true;
+        }
     }
     return false;
 #else // !wxUSE_OLE_CLIPBOARD
