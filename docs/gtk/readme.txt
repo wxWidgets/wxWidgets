@@ -4,11 +4,22 @@
 You have downloaded version 2.8 of the GTK+ port of the 
 wxWidgets GUI library.
 
-wxWidgets no longer supports GTK 1.0.x (as did some early
-snapshots) and support for GTK 1.2.x will be phased out
-over time. Nearly all work is now done on GTK 2.0.x and
-quite a few of the enhancements of GTK+ 2.4.x and even
-GTK 2.8.x are used.
+It is recommended to use at least GTK+ 2.2.3 to get the
+most out of wxWidgets and some features are only available
+when using GTK+ 2.4 or even from GTK+ 2.8. Note that if you
+compile wxWidgets against GTK+ 2.8 your app will still work
+with older GTK+ version down to version 2.2 as wxWidgets
+tests for the presence of newer features at run-time and it
+will fall back to a generic implementation if these features
+are not present in the GTK+ version used.
+
+wxWidgets 2.8 still supports GTK+ 1.2, but no developement
+is done on that port anymore and support for GTK+ 1.2 will
+probably be dropped entirely. Indeed, one of the major steps
+in the developement cycle leading up to wxWidgets 2.8 was
+that the codebase for GTK+ 1.2 and GTK+ 2.0 were separated
+so that improvements and clean-ups to the GTK+ 2.0 port 
+could be done without caring for GTK+ 1.2.
 
 More info about the wxWidgets project (including all the
 other ports and version of wxWidgets) can be found at the
@@ -39,7 +50,6 @@ different builds of it (for example with and without debug) in
 parallel. If you build in the source directory, don't forget to
 do "make clean" before changing the configuration!
 
-
 When you run into problems, please read the INSTALL.txt and 
 follow those instructions. If you still don't have any success,
 please send a bug report to one of our mailing list, INCLUDING 
@@ -51,8 +61,6 @@ Please send problems concerning installation, feature requests,
 bug reports or comments to the wxWidgets users list. These can
 be found at http://www.wxwidgets.org and more specifically at 
 http://lists.wxwidgets.org.
-
-Do NOT send any comments directly to me.
 
 wxWidgets doesn't come with any guarantee whatsoever. It 
 might crash your harddisk or destroy your monitor. It doesn't 
