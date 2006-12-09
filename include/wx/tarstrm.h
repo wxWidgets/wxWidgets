@@ -118,11 +118,11 @@ public:
 
     void SetNotifier(wxTarNotifier& WXUNUSED(notifier)) { }
 
-protected:
+private:
     void SetOffset(wxFileOffset offset)         { m_Offset = offset; }
+
     virtual wxArchiveEntry* DoClone() const     { return Clone(); }
 
-private:
     wxString     m_Name;
     int          m_Mode;
     bool         m_IsModeSet;
@@ -161,7 +161,6 @@ public:
     virtual ~wxTarInputStream();
 
     bool OpenEntry(wxTarEntry& entry);
-    bool OpenEntry(wxArchiveEntry& entry);
     bool CloseEntry();
 
     wxTarEntry *GetNextEntry();
@@ -174,11 +173,11 @@ protected:
     wxFileOffset OnSysTell() const      { return m_pos; }
     wxFileOffset OnSysSeek(wxFileOffset seek, wxSeekMode mode);
 
-    wxArchiveEntry *DoGetNextEntry()    { return GetNextEntry(); }
-
 private:
     void Init();
 
+    wxArchiveEntry *DoGetNextEntry()    { return GetNextEntry(); }
+    bool OpenEntry(wxArchiveEntry& entry);
     bool IsOpened() const               { return m_pos != wxInvalidOffset; }
 
     wxStreamError ReadHeaders();
@@ -219,7 +218,6 @@ public:
     virtual ~wxTarOutputStream();
 
     bool PutNextEntry(wxTarEntry *entry);
-    bool PutNextEntry(wxArchiveEntry *entry);
 
     bool PutNextEntry(const wxString& name,
                       const wxDateTime& dt = wxDateTime::Now(),
@@ -229,9 +227,7 @@ public:
                          const wxDateTime& dt = wxDateTime::Now());
 
     bool CopyEntry(wxTarEntry *entry, wxTarInputStream& inputStream);
-    bool CopyEntry(wxArchiveEntry *entry, wxArchiveInputStream& stream);
     bool CopyArchiveMetaData(wxTarInputStream& WXUNUSED(s)) { return true; }
-    bool CopyArchiveMetaData(wxArchiveInputStream& WXUNUSED(s)) { return true; }
 
     void Sync();
     bool CloseEntry();
@@ -250,6 +246,9 @@ protected:
 private:
     void Init(wxTarFormat format);
 
+    bool PutNextEntry(wxArchiveEntry *entry);
+    bool CopyEntry(wxArchiveEntry *entry, wxArchiveInputStream& stream);
+    bool CopyArchiveMetaData(wxArchiveInputStream& WXUNUSED(s)) { return true; }
     bool IsOpened() const               { return m_pos != wxInvalidOffset; }
 
     bool WriteHeaders(wxTarEntry& entry);

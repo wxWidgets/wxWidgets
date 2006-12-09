@@ -824,7 +824,7 @@ wxTarNumber wxTarInputStream::GetHeaderNumber(int id) const
 {
     wxString value;
 
-    if ((value = GetExtendedHeader(wxTarHeaderBlock::Name(id))) != wxEmptyString) {
+    if ((value = GetExtendedHeader(m_hdr->Name(id))) != wxEmptyString) {
         wxTarNumber n = 0;
         const wxChar *p = value;
         while (*p == ' ')
@@ -841,7 +841,7 @@ wxString wxTarInputStream::GetHeaderString(int id) const
 {
     wxString value;
 
-    if ((value = GetExtendedHeader(wxTarHeaderBlock::Name(id))) != wxEmptyString)
+    if ((value = GetExtendedHeader(m_hdr->Name(id))) != wxEmptyString)
         return value;
 
     return wxString(m_hdr->Get(id), GetConv());
@@ -1291,7 +1291,7 @@ bool wxTarOutputStream::ModifyHeader()
         originalPos = m_parent_o_stream->TellO();
         if (originalPos != wxInvalidOffset)
             sizePos =
-                m_parent_o_stream->SeekO(m_headpos + wxTarHeaderBlock::Offset(TAR_SIZE));
+                m_parent_o_stream->SeekO(m_headpos + m_hdr->Offset(TAR_SIZE));
     }
 
     if (sizePos == wxInvalidOffset || !m_hdr->SetOctal(TAR_SIZE, m_pos)) {
@@ -1302,7 +1302,7 @@ bool wxTarOutputStream::ModifyHeader()
 
     m_chksum += m_hdr->SumField(TAR_SIZE);
     m_hdr->SetOctal(TAR_CHKSUM, m_chksum);
-    wxFileOffset sumPos = m_headpos + wxTarHeaderBlock::Offset(TAR_CHKSUM);
+    wxFileOffset sumPos = m_headpos + m_hdr->Offset(TAR_CHKSUM);
 
     return
         m_hdr->WriteField(*m_parent_o_stream, TAR_SIZE) &&
@@ -1322,16 +1322,16 @@ bool wxTarOutputStream::SetHeaderNumber(int id, wxTarNumber n)
     if (m_hdr->SetOctal(id, n)) {
         return true;
     } else {
-        SetExtendedHeader(wxTarHeaderBlock::Name(id), wxLongLong(n).ToString());
+        SetExtendedHeader(m_hdr->Name(id), wxLongLong(n).ToString());
         return false;
     }
 }
 
 void wxTarOutputStream::SetHeaderString(int id, const wxString& str)
 {
-    strncpy(m_hdr->Get(id), str.mb_str(GetConv()), wxTarHeaderBlock::Len(id));
-    if (str.length() > wxTarHeaderBlock::Len(id))
-        SetExtendedHeader(wxTarHeaderBlock::Name(id), str);
+    strncpy(m_hdr->Get(id), str.mb_str(GetConv()), m_hdr->Len(id));
+    if (str.length() > m_hdr->Len(id))
+        SetExtendedHeader(m_hdr->Name(id), str);
 }
 
 void wxTarOutputStream::SetHeaderDate(const wxString& key,

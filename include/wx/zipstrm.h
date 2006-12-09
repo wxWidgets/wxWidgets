@@ -221,9 +221,9 @@ protected:
 
     void Notify();
 
+private:
     wxArchiveEntry* DoClone() const             { return ZipClone(); }
 
-private:
     size_t ReadLocal(wxInputStream& stream, wxMBConv& conv);
     size_t WriteLocal(wxOutputStream& stream, wxMBConv& conv) const;
 
@@ -283,7 +283,6 @@ public:
     virtual WXZIPFIX ~wxZipOutputStream();
 
     bool PutNextEntry(wxZipEntry *entry)        { return DoCreate(entry); }
-    bool WXZIPFIX PutNextEntry(wxArchiveEntry *entry);
 
     bool WXZIPFIX PutNextEntry(const wxString& name,
                                const wxDateTime& dt = wxDateTime::Now(),
@@ -293,9 +292,7 @@ public:
                                   const wxDateTime& dt = wxDateTime::Now());
 
     bool WXZIPFIX CopyEntry(wxZipEntry *entry, wxZipInputStream& inputStream);
-    bool WXZIPFIX CopyEntry(wxArchiveEntry *entry, wxArchiveInputStream& stream);
     bool WXZIPFIX CopyArchiveMetaData(wxZipInputStream& inputStream);
-    bool WXZIPFIX CopyArchiveMetaData(wxArchiveInputStream& stream);
 
     void WXZIPFIX Sync();
     bool WXZIPFIX CloseEntry();
@@ -322,6 +319,10 @@ protected:
 
 private:
     void Init(int level);
+
+    bool WXZIPFIX PutNextEntry(wxArchiveEntry *entry);
+    bool WXZIPFIX CopyEntry(wxArchiveEntry *entry, wxArchiveInputStream& stream);
+    bool WXZIPFIX CopyArchiveMetaData(wxArchiveInputStream& stream);
 
     bool IsOpened() const { return m_comp || m_pending; }
 
@@ -369,7 +370,6 @@ public:
     virtual WXZIPFIX ~wxZipInputStream();
 
     bool OpenEntry(wxZipEntry& entry)   { return DoOpen(&entry); }
-    bool WXZIPFIX OpenEntry(wxArchiveEntry& entry);
     bool WXZIPFIX CloseEntry();
 
     wxZipEntry *GetNextEntry();
@@ -391,14 +391,16 @@ protected:
     virtual wxInputStream* WXZIPFIX OpenDecompressor(wxInputStream& stream);
     virtual bool WXZIPFIX CloseDecompressor(wxInputStream *decomp);
 
-    wxArchiveEntry *DoGetNextEntry()    { return GetNextEntry(); }
-
 private:
     void Init();
     void Init(const wxString& file);
 #if WXWIN_COMPATIBILITY_2_6 && wxUSE_FFILE
     static wxInputStream *OpenFile(const wxString& archive);
 #endif
+
+    wxArchiveEntry *DoGetNextEntry()    { return GetNextEntry(); }
+
+    bool WXZIPFIX OpenEntry(wxArchiveEntry& entry);
 
     wxStreamError ReadLocal(bool readEndRec = false);
     wxStreamError ReadCentral();
