@@ -92,6 +92,7 @@ Major new features in 2.8 release
 
 All:
 
+- wxCSConv("UTF-16/32") now behaves correctly, i.e. same as wxMBConvUTF16/32
 - wxArrayString::Alloc() now works as reserve() and doesn't clear array contents
 - Fixed long standing bug in wxFileConfig groups renaming (Antti Koivisto).
 - New option wxFS_READ | wxFS_SEEKABLE for wxFileSystem::OpenFile() to return
