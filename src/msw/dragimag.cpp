@@ -182,9 +182,8 @@ bool wxDragImage::Create(const wxIcon& image, const wxCursor& cursor)
     else
         flags = ILC_COLOR32;
 #endif
-    bool mask = true;
-    if ( mask )
-        flags |= ILC_MASK;
+
+    flags |= ILC_MASK;
 
     m_hImageList = (WXHIMAGELIST) ImageList_Create(image.GetWidth(), image.GetHeight(), flags, 1, 1);
 
