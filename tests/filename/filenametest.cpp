@@ -149,7 +149,7 @@ void FileNameTestCase::TestConstruction()
         // if the test is run from root directory or its direct subdirectory
         CPPUNIT_ASSERT_MESSAGE
         (
-            wxString::Format("Normalize(%s) failed", fni.fullname).c_str(),
+            (const char *)wxString::Format(_T("Normalize(%s) failed"), fni.fullname).mb_str(),
             fn.Normalize(wxPATH_NORM_ALL, _T("/foo/bar/baz"), fni.format)
         );
 
@@ -274,7 +274,7 @@ void FileNameTestCase::TestNormalize()
         // be sure this normalization does not fail
         CPPUNIT_ASSERT_MESSAGE
         (
-            wxString::Format("Normalize(%s) failed", tests[i].original).c_str(),
+            (const char *)wxString::Format(_T("Normalize(%s) failed"), tests[i].original).mb_str(),
             fn.Normalize(tests[i].flags, cwd, wxPATH_UNIX)
         );
 

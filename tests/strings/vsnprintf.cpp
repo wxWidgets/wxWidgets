@@ -253,7 +253,7 @@ void VsnprintfTestCase::S()
     CMP3("abcde", "%.5s", wxT("abcdefghi"));
 
     // do the same tests but with Unicode characters:
-#if wxUSE_UNICODE
+#if wxUSE_UNICODE && !defined(__VISUALC__) // FIXME: this doesn't compile with VC7
     #define ALPHA     "\x3B1"
     #define BETA      "\x3B2"
     #define GAMMA     "\x3B3"
