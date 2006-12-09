@@ -78,8 +78,8 @@ extern int wxEntryReal(int& argc, wxChar **argv);
 
     // this warns that /EHa (async exceptions) should be used when using
     // _set_se_translator but, in fact, this doesn't seem to change anything
-    // with VC++ up to 7.1 -- to be confirmed with VC++ 8
-    #if _MSC_VER <= 1310
+    // with VC++ up to 8.0
+    #if _MSC_VER <= 1400
         #pragma warning(disable:4535)
     #endif
 
