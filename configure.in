@@ -1465,9 +1465,13 @@ AC_PROG_RANLIB
 
 dnl ar command
 dnl   defines AR with the appropriate command
-AC_CHECK_TOOL(AR, ar)
-if test "x$AR" = "x" ; then
-    AC_MSG_ERROR([ar is needed to build wxWidgets])
+dnl 
+dnl For Sun CC AC_BAKEFILE below sets AR to the compiler itself.
+if test "x$SUNCXX" != xyes; then
+    AC_CHECK_TOOL(AR, ar)
+    if test "x$AR" = "x" ; then
+        AC_MSG_ERROR([ar is needed to build wxWidgets])
+    fi
 fi
 
 dnl install checks

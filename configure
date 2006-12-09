@@ -15219,7 +15219,8 @@ else
 fi
 
 
-if test -n "$ac_tool_prefix"; then
+if test "x$SUNCXX" != xyes; then
+    if test -n "$ac_tool_prefix"; then
   # Extract the first word of "${ac_tool_prefix}ar", so it can be a program name with args.
 set dummy ${ac_tool_prefix}ar; ac_word=$2
 echo "$as_me:$LINENO: checking for $ac_word" >&5
@@ -15298,10 +15299,11 @@ else
   AR="$ac_cv_prog_AR"
 fi
 
-if test "x$AR" = "x" ; then
-    { { echo "$as_me:$LINENO: error: ar is needed to build wxWidgets" >&5
+    if test "x$AR" = "x" ; then
+        { { echo "$as_me:$LINENO: error: ar is needed to build wxWidgets" >&5
 echo "$as_me: error: ar is needed to build wxWidgets" >&2;}
    { (exit 1); exit 1; }; }
+    fi
 fi
 
 # Find a good install program.  We prefer a C program (faster),
@@ -47931,9 +47933,9 @@ fi
 
 
     if test "x$SUNCXX" = "xyes"; then
-                                AR=$CXX
+                                AR=${AR:-"$CXX"}
 
-        AROPTIONS="-xar -o"
+        AROPTIONS=${AROPTIONS:-"-xar -o"}
     else
         if test -n "$ac_tool_prefix"; then
   # Extract the first word of "${ac_tool_prefix}ar", so it can be a program name with args.

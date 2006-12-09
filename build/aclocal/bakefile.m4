@@ -601,9 +601,9 @@ AC_DEFUN([AC_BAKEFILE_CHECK_BASIC_STUFF],
         dnl Sun C++ compiler requires special way of creating static libs;
         dnl see here for more details:
         dnl https://sourceforge.net/tracker/?func=detail&atid=109863&aid=1229751&group_id=9863
-        AR=$CXX
+        AR=${AR:-"$CXX"}
         AC_SUBST(AR)
-        AROPTIONS="-xar -o"
+        AROPTIONS=${AROPTIONS:-"-xar -o"}
     else
         AC_CHECK_TOOL(AR, ar, ar)
         AROPTIONS=rcu
