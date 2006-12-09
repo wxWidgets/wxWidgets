@@ -647,7 +647,8 @@ void wxTextCtrl::Init()
     SetUpdateFont(false);
 
     m_text = NULL;
-    m_frozenness = 0;
+    m_freezeCount = 0;
+    m_showPositionOnThaw = NULL;
     m_gdkHandCursor = NULL;
     m_gdkXTermCursor = NULL;
 }
@@ -701,6 +702,11 @@ bool wxTextCtrl::Create( wxWindow *parent,
         m_text = gtk_text_view_new();
 
         m_buffer = gtk_text_view_get_buffer( GTK_TEXT_VIEW(m_text) );
+
+        // create "ShowPosition" marker
+        GtkTextIter iter;
+        gtk_text_buffer_get_start_iter(m_buffer, &iter);
+        gtk_text_buffer_create_mark(m_buffer, "ShowPosition", &iter, true);
 
         // create scrolled window
         m_widget = gtk_scrolled_window_new( NULL, NULL );
@@ -1225,15 +1231,12 @@ void wxTextCtrl::SetInsertionPoint( long pos )
         GtkTextIter iter;
         gtk_text_buffer_get_iter_at_offset( m_buffer, &iter, pos );
         gtk_text_buffer_place_cursor( m_buffer, &iter );
-        if (!IsFrozen())
-        {
-            // won't work when frozen, text view is not using m_buffer then
-            gtk_text_view_scroll_mark_onscreen
-            (
-                GTK_TEXT_VIEW(m_text),
-                gtk_text_buffer_get_insert( m_buffer )
-            );
-        }
+        GtkTextMark* mark = gtk_text_buffer_get_insert(m_buffer);
+        if (IsFrozen())
+            // defer until Thaw, text view is not using m_buffer now
+            m_showPositionOnThaw = mark;
+        else
+            gtk_text_view_scroll_mark_onscreen(GTK_TEXT_VIEW(m_text), mark);
     }
     else
     {
@@ -1405,14 +1408,17 @@ void wxTextCtrl::SetSelection( long from, long to )
 
 void wxTextCtrl::ShowPosition( long pos )
 {
-    // won't work when frozen, text view is not using m_buffer then
-    if (IsMultiLine() && !IsFrozen())
+    if (IsMultiLine())
     {
         GtkTextIter iter;
-        gtk_text_buffer_get_start_iter( m_buffer, &iter );
-        gtk_text_iter_set_offset( &iter, pos );
-        GtkTextMark *mark = gtk_text_buffer_create_mark( m_buffer, NULL, &iter, TRUE );
-        gtk_text_view_scroll_to_mark( GTK_TEXT_VIEW(m_text), mark, 0.0, FALSE, 0.0, 0.0 );
+        gtk_text_buffer_get_iter_at_offset(m_buffer, &iter, int(pos));
+        GtkTextMark* mark = gtk_text_buffer_get_mark(m_buffer, "ShowPosition");
+        gtk_text_buffer_move_mark(m_buffer, mark, &iter);
+        if (IsFrozen())
+            // defer until Thaw, text view is not using m_buffer now
+            m_showPositionOnThaw = mark;
+        else
+            gtk_text_view_scroll_mark_onscreen(GTK_TEXT_VIEW(m_text), mark);
     }
 }
 
@@ -1879,7 +1885,7 @@ void wxTextCtrl::Freeze()
 
     if ( HasFlag(wxTE_MULTILINE) )
     {
-        if (m_frozenness++ == 0)
+        if (m_freezeCount++ == 0)
         {
             // freeze textview updates and remove buffer
             g_signal_connect (m_text, "expose_event",
@@ -1907,9 +1913,9 @@ void wxTextCtrl::Thaw()
 {
     if ( HasFlag(wxTE_MULTILINE) )
     {
-        wxCHECK_RET(m_frozenness != 0, _T("Thaw() without matching Freeze()"));
+        wxCHECK_RET(m_freezeCount != 0, _T("Thaw() without matching Freeze()"));
 
-        if (--m_frozenness == 0)
+        if (--m_freezeCount == 0)
         {
             // Reattach buffer and thaw textview updates
             gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_text), m_buffer);
@@ -1919,6 +1925,12 @@ void wxTextCtrl::Thaw()
                     (gpointer) gtk_text_exposed_callback, this);
             g_signal_handlers_disconnect_by_func (m_text,
                     (gpointer) gtk_text_exposed_callback, this);
+            if (m_showPositionOnThaw != NULL)
+            {
+                gtk_text_view_scroll_mark_onscreen(
+                    GTK_TEXT_VIEW(m_text), m_showPositionOnThaw);
+                m_showPositionOnThaw = NULL;
+            }
         }
     }
 }

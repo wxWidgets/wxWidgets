@@ -8,8 +8,10 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKTEXTCTRLH__
-#define __GTKTEXTCTRLH__
+#ifndef _WX_GTK_TEXTCTRL_H_
+#define _WX_GTK_TEXTCTRL_H_
+
+typedef struct _GtkTextMark GtkTextMark;
 
 //-----------------------------------------------------------------------------
 // wxTextCtrl
@@ -176,7 +178,7 @@ public:
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
     // has the control been frozen by Freeze()?
-    bool IsFrozen() const { return m_frozenness > 0; }
+    bool IsFrozen() const { return m_freezeCount > 0; }
 
 protected:
     virtual wxSize DoGetBestSize() const;
@@ -219,11 +221,12 @@ private:
     int         m_countUpdatesToIgnore;
 
     // Our text buffer. Convenient, and holds the buffer while using
-    // a dummy one when m_frozenness > 0
+    // a dummy one when frozen
     GtkTextBuffer *m_buffer;
 
     // number of calls to Freeze() minus number of calls to Thaw()
-    unsigned int m_frozenness;
+    unsigned m_freezeCount;
+    GtkTextMark* m_showPositionOnThaw;
 
     // For wxTE_AUTO_URL
     void OnUrlMouseEvent(wxMouseEvent&);
@@ -234,5 +237,4 @@ private:
     DECLARE_DYNAMIC_CLASS(wxTextCtrl)
 };
 
-#endif // __GTKTEXTCTRLH__
-
+#endif // _WX_GTK_TEXTCTRL_H_
