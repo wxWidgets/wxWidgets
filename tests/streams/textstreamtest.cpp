@@ -1,10 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        tests/uris/uris.cpp
 // Purpose:     wxTextXXXStream unit test
-// Author:      Ryan Norton
+// Author:      Ryan Norton, Vince Harron
 // Created:     2004-08-14
 // RCS-ID:      $Id$
-// Copyright:   (c) 2004 Ryan Norton
+// Copyright:   (c) 2004 Ryan Norton, (c) 2006 Vince Harron
 ///////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------------
@@ -25,8 +25,12 @@
 #include "wx/wfstream.h"
 
 #if wxUSE_LONGLONG
-#include "wx/longlong.h"
+    #include "wx/longlong.h"
 #endif
+
+#if wxUSE_UNICODE
+    #include "wx/mstream.h"
+#endif // wxUSE_UNICODE
 
 // ----------------------------------------------------------------------------
 // test class
@@ -40,17 +44,38 @@ public:
 private:
     CPPUNIT_TEST_SUITE( TextStreamTestCase );
         CPPUNIT_TEST( Endline );
+
 #if wxUSE_LONGLONG
         CPPUNIT_TEST( TestLongLong );
         CPPUNIT_TEST( TestLongLong );
-#endif
+#endif // wxUSE_LONGLONG
+
+#if wxUSE_UNICODE
+        CPPUNIT_TEST( TestUTF8Input );
+        CPPUNIT_TEST( TestEmbeddedZerosUTF16LEInput );
+        CPPUNIT_TEST( TestEmbeddedZerosUTF16BEInput );
+        CPPUNIT_TEST( TestEmbeddedZerosUTF32LEInput );
+        CPPUNIT_TEST( TestEmbeddedZerosUTF32BEInput );
+#endif // wxUSE_UNICODE
     CPPUNIT_TEST_SUITE_END();
 
     void Endline();
+
 #if wxUSE_LONGLONG
     void TestLongLong();
     void TestULongLong();
 #endif // wxUSE_LONGLONG
+
+#if wxUSE_UNICODE
+    void TestUTF8Input();
+    void TestEmbeddedZerosUTF16LEInput();
+    void TestEmbeddedZerosUTF16BEInput();
+    void TestEmbeddedZerosUTF32LEInput();
+    void TestEmbeddedZerosUTF32BEInput();
+    void TestInput(wxFontEncoding encoding,
+                   const void* encodedText,
+                   size_t encodedSize );
+#endif // wxUSE_UNICODE
 
 
     DECLARE_NO_COPY_CLASS(TextStreamTestCase)
@@ -81,7 +106,7 @@ void TextStreamTestCase::Endline()
 {
     wxFileOutputStream* pOutFile = new wxFileOutputStream(_T("test.txt"));
     wxTextOutputStream* pOutText = new wxTextOutputStream(*pOutFile);
-    *pOutText   << _T("Test text") << endl 
+    *pOutText   << _T("Test text") << endl
                 << _T("More Testing Text (There should be newline before this)");
 
     delete pOutText;
@@ -158,3 +183,85 @@ void TextStreamTestCase::TestULongLong()
 
 #endif // wxUSE_LONGLONG
 
+#if wxUSE_UNICODE
+
+const static wchar_t txtWchar[4] =
+{
+    0x0041, // LATIN CAPITAL LETTER A
+    0x0100, // A WITH BREVE, LATIN SMALL LETTER
+    0x0041, // LATIN CAPITAL LETTER A
+    0x0100, // A WITH BREVE, LATIN SMALL LETTER
+};
+
+const static unsigned char txtUtf8[6] =
+{
+    0x41, 0xc4, 0x80, 0x41, 0xc4, 0x80,
+};
+
+const static unsigned char txtUtf16le[8] =
+{
+    0x41, 0x00, 0x00, 0x01, 0x41, 0x00, 0x00, 0x01,
+};
+
+const static unsigned char txtUtf16be[8] =
+{
+    0x00, 0x41, 0x01, 0x00, 0x00, 0x41, 0x01, 0x00,
+};
+
+const static unsigned char txtUtf32le[16] =
+{
+    0x41, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00,
+    0x41, 0x00, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00,
+};
+
+const static unsigned char txtUtf32be[16] =
+{
+    0x00, 0x00, 0x00, 0x41, 0x00, 0x00, 0x01, 0x00,
+    0x00, 0x00, 0x00, 0x41, 0x00, 0x00, 0x01, 0x00,
+};
+
+void TextStreamTestCase::TestUTF8Input()
+{
+    TestInput(wxFONTENCODING_UTF8, txtUtf8, sizeof(txtUtf8));
+}
+
+void TextStreamTestCase::TestEmbeddedZerosUTF16LEInput()
+{
+    TestInput(wxFONTENCODING_UTF16LE, txtUtf16le, sizeof(txtUtf16le));
+}
+
+void TextStreamTestCase::TestEmbeddedZerosUTF16BEInput()
+{
+    TestInput(wxFONTENCODING_UTF16BE, txtUtf16be, sizeof(txtUtf16be));
+}
+
+void TextStreamTestCase::TestEmbeddedZerosUTF32LEInput()
+{
+    TestInput(wxFONTENCODING_UTF32LE, txtUtf32le, sizeof(txtUtf32le));
+}
+
+void TextStreamTestCase::TestEmbeddedZerosUTF32BEInput()
+{
+    TestInput(wxFONTENCODING_UTF32BE, txtUtf32be, sizeof(txtUtf32be));
+}
+
+void TextStreamTestCase::TestInput(wxFontEncoding encoding,
+                                   const void *encodedText,
+                                   size_t encodedSize)
+{
+    wxCSConv conv(encoding);
+    wxMemoryInputStream byteIn(encodedText, encodedSize);
+    wxTextInputStream textIn(byteIn, wxT("\n"), conv);
+
+    wxString temp;
+    while ( wxChar c = textIn.GetChar() )
+    {
+        temp.Append(c);
+    }
+
+    CPPUNIT_ASSERT_EQUAL( WXSIZEOF(txtWchar), temp.length() );
+
+    CPPUNIT_ASSERT_EQUAL( 0, memcmp(txtWchar, temp.c_str(), sizeof(txtWchar)) );
+}
+
+#endif // wxUSE_UNICODE
