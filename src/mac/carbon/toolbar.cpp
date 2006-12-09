@@ -82,11 +82,6 @@ public:
     virtual ~wxToolBarTool()
     {
         ClearControl();
-
-#if wxMAC_USE_NATIVE_TOOLBAR
-        if ( m_toolbarItemRef )
-            CFRelease( m_toolbarItemRef );
-#endif
     }
 
     WXWidget GetControlHandle()
@@ -116,7 +111,13 @@ public:
         }
 
 #if wxMAC_USE_NATIVE_TOOLBAR
-        m_toolbarItemRef = NULL;
+        if ( m_toolbarItemRef )
+        {
+            CFIndex count = CFGetRetainCount( m_toolbarItemRef ) ;
+            wxASSERT_MSG( count == 1 , wxT("Reference Count of native tool was not 1 in wxToolBarTool destructor") );
+            CFRelease( m_toolbarItemRef );
+            m_toolbarItemRef = NULL;
+        }
 #endif
     }
 
@@ -610,8 +611,17 @@ static pascal OSStatus ControlToolbarItemHandler( EventHandlerCallRef inCallRef,
                     break;
 
                 case kEventHIObjectDestruct:
-                    free( object ) ;
-                    result = noErr;
+                    {
+                        // we've increased the ref count when creating this, so we decrease manually again in case
+                        // it was never really installed and deinstalled
+                        HIViewRef viewRef = object->viewRef ;
+                        if( viewRef && CFGetRetainCount( viewRef ) > 1 )
+                        {
+                            CFRelease( viewRef ) ;
+                        }
+	                    free( object ) ;
+    	                result = noErr;
+                    }
                     break;
             }
             break;
@@ -833,6 +843,9 @@ wxToolBar::~wxToolBar()
         // if this is the installed toolbar, then deinstall it
         if (m_macUsesNativeToolbar)
             MacInstallNativeToolbar( false );
+
+        CFIndex count = CFGetRetainCount( m_macHIToolbarRef ) ;
+        wxASSERT_MSG( count == 1 , wxT("Reference Count of native control was not 1 in wxToolBar destructor") );
 
         CFRelease( (HIToolbarRef)m_macHIToolbarRef );
         m_macHIToolbarRef = NULL;
@@ -1518,34 +1531,29 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolbase)
     CFIndex removeIndex = tool->GetIndex();
 #endif
 
+#if wxMAC_USE_NATIVE_TOOLBAR
+    if ( removeIndex != -1 && m_macHIToolbarRef )
+    {
+        HIToolbarRemoveItemAtIndex( (HIToolbarRef) m_macHIToolbarRef, removeIndex );
+        tool->SetIndex( -1 );
+    }
+#endif
     switch ( tool->GetStyle() )
     {
         case wxTOOL_STYLE_CONTROL:
-            {
+            if ( tool->GetControl() )
                 tool->GetControl()->Destroy();
-                tool->ClearControl();
-            }
             break;
 
         case wxTOOL_STYLE_BUTTON:
         case wxTOOL_STYLE_SEPARATOR:
-            if ( tool->GetControlHandle() )
-            {
-#if wxMAC_USE_NATIVE_TOOLBAR
-                if ( removeIndex != -1 && m_macHIToolbarRef )
-                {
-                    HIToolbarRemoveItemAtIndex( (HIToolbarRef) m_macHIToolbarRef, removeIndex );
-                    tool->SetIndex( -1 );
-                }
-#endif
-
-                tool->ClearControl();
-            }
+            // nothing special
             break;
 
         default:
             break;
     }
+    tool->ClearControl();
 
     // and finally reposition all the controls after this one
 
