@@ -1247,18 +1247,7 @@ void wxTextCtrl::SetInsertionPoint( long pos )
 
 void wxTextCtrl::SetInsertionPointEnd()
 {
-    wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
-
-    if ( IsMultiLine() )
-    {
-        GtkTextIter end;
-        gtk_text_buffer_get_end_iter( m_buffer, &end );
-        gtk_text_buffer_place_cursor( m_buffer, &end );
-    }
-    else
-    {
-        gtk_editable_set_position( GTK_EDITABLE(m_text), -1 );
-    }
+    SetInsertionPoint(-1);
 }
 
 void wxTextCtrl::SetEditable( bool editable )
