@@ -92,6 +92,7 @@ public:
     virtual bool Show(unsigned int n, bool show = true);
     virtual bool IsItemEnabled(unsigned int n) const;
     virtual bool IsItemShown(unsigned int n) const;
+    virtual int GetItemFromPoint(const wxPoint& pt) const;
 
     // override some base class methods
     virtual bool Show(bool show = true);
@@ -102,6 +103,13 @@ public:
 #if wxUSE_TOOLTIPS
     virtual bool HasToolTips() const;
 #endif // wxUSE_TOOLTIPS
+#if wxUSE_HELP
+    // override virtual function with a platform-independent implementation
+    virtual wxString GetHelpTextAtPoint(const wxPoint & pt, wxHelpEvent::Origin origin) const
+    {
+        return wxRadioBoxBase::DoGetHelpTextAtPoint( this, pt, origin );
+    }
+#endif // wxUSE_HELP
 
     // we inherit a version always returning false from wxStaticBox, override
     // it to behave normally
@@ -109,7 +117,6 @@ public:
 
     void SetLabelFont(const wxFont& WXUNUSED(font)) {}
     void SetButtonFont(const wxFont& font) { SetFont(font); }
-
 
     // implementation only from now on
     // -------------------------------
@@ -140,16 +147,6 @@ protected:
 #if wxUSE_TOOLTIPS
     virtual void DoSetItemToolTip(unsigned int n, wxToolTip * tooltip);
 #endif
-
-    virtual int GetItemFromPoint(const wxPoint& pt) const;
-
-#if wxUSE_HELP
-    // override virtual function with a platform-independent implementation
-    virtual wxString GetHelpTextAtPoint(const wxPoint & pt, wxHelpEvent::Origin origin) const
-    {
-        return wxRadioBoxBase::DoGetHelpTextAtPoint( this, pt, origin );
-    }
-#endif // wxUSE_HELP
 
 #ifndef __WXWINCE__
     virtual WXHRGN MSWGetRegionWithoutChildren();

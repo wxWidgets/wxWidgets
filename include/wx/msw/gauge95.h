@@ -56,10 +56,10 @@ public:
     void SetDeterminateMode();
     void Pulse();
 
+    WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
+
 protected:
     virtual wxSize DoGetBestSize() const;
-
-    WXDWORD MSWGetStyle(long style, WXDWORD *exstyle) const;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxGauge95)
 };

@@ -73,8 +73,9 @@ public:
     static int GetFeatures() { return wxComboCtrlFeatures::All; }
 
 #if wxUSE_COMBOCTRL_POPUP_ANIMATION
-    virtual bool AnimateShow( const wxRect& rect, int flags );
     void OnTimerEvent( wxTimerEvent& event );
+protected:
+    virtual bool AnimateShow( const wxRect& rect, int flags );
 #endif
 
 protected:
