@@ -373,9 +373,14 @@ public:
 
     wxCSConv& operator=(const wxCSConv& conv);
 
+    virtual size_t ToWChar(wchar_t *dst, size_t dstLen,
+                           const char *src, size_t srcLen = wxNO_LEN) const;
+    virtual size_t FromWChar(char *dst, size_t dstLen,
+                             const wchar_t *src, size_t srcLen = wxNO_LEN) const;
     virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
     virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
     virtual size_t GetMBNulLen() const;
+
     virtual wxMBConv *Clone() const { return new wxCSConv(*this); }
 
     void Clear();
