@@ -19,6 +19,7 @@
     #include "wx/wx.h"
 #endif
 
+#include "wx/app.h"
 #include "wx/mac/uma.h"
 #include "wx/geometry.h"
 
@@ -115,7 +116,8 @@ public:
         {
             CFIndex count = CFGetRetainCount( m_toolbarItemRef ) ;
             wxASSERT_MSG( count == 1 , wxT("Reference Count of native tool was not 1 in wxToolBarTool destructor") );
-            CFRelease( m_toolbarItemRef );
+            wxTheApp->MacAddToAutorelease(m_toolbarItemRef);
+            CFRelease(m_toolbarItemRef);
             m_toolbarItemRef = NULL;
         }
 #endif
@@ -615,9 +617,11 @@ static pascal OSStatus ControlToolbarItemHandler( EventHandlerCallRef inCallRef,
                         // we've increased the ref count when creating this, so we decrease manually again in case
                         // it was never really installed and deinstalled
                         HIViewRef viewRef = object->viewRef ;
-                        if( viewRef && CFGetRetainCount( viewRef ) > 1 )
+                        if( viewRef && IsValidControlHandle( viewRef)  )
                         {
-                            CFRelease( viewRef ) ;
+                            CFIndex count =  CFGetRetainCount( viewRef ) ; 
+                            if ( count >= 1 )
+                                CFRelease( viewRef ) ;
                         }
 	                    free( object ) ;
     	                result = noErr;

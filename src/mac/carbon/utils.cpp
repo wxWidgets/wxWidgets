@@ -865,10 +865,8 @@ void wxMacControl::Dispose()
 {
     wxASSERT_MSG( IsValidControlHandle(m_controlRef) , wxT("Invalid Control Handle (maybe already released) in Dispose") );
 
-    CFIndex count = CFGetRetainCount( m_controlRef ) ;
-    wxASSERT_MSG( count == 1 , wxT("Reference Count of native control was not 1 in Dispose") );
-
-    ::DisposeControl( m_controlRef );
+    // we cannot check the ref count here anymore, as autorelease objects might delete their refs later
+    CFRelease(m_controlRef);
     m_controlRef = NULL;
 }
 
