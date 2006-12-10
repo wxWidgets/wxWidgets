@@ -509,7 +509,7 @@ wxRichTextStyleDefinition* wxRichTextStyleListBox::GetStyle(size_t i) const
     if (!GetStyleSheet())
         return NULL;
 
-    if (i >= m_styleNames.GetCount() || i < 0)
+    if (i >= m_styleNames.GetCount() /* || i < 0 */ )
         return NULL;
 
     return GetStyleSheet()->FindStyle(m_styleNames[i]);
