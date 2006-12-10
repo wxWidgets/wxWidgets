@@ -1196,7 +1196,11 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
             item_rect.width = size.x;
             item_rect.height= size.y;
-            cell->Render( item_rect, &dc, 0 );
+
+            int state = 0;
+            if (item == m_currentRow)
+                state |= wxDATAVIEW_CELL_SELECTED;
+            cell->Render( item_rect, &dc, state );
         }
 
         cell_rect.x += cell_rect.width;
