@@ -228,7 +228,7 @@ void DatePickerWidgetsPage::OnButtonSet(wxCommandEvent& WXUNUSED(event))
          m_month->GetValue().ToLong(&month) &&
          m_year->GetValue().ToLong(&year) )
     {
-        const wxDateTime someDay(day, wxDateTime::Month(month), year);
+        const wxDateTime someDay(day, wxDateTime::Month(month - 1), year);
         if ( someDay.IsValid() )
         {
             m_datePicker->SetValue(someDay);
