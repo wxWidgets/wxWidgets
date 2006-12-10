@@ -75,6 +75,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "collpane"=.\collpane\collpane.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "config"=.\config\config.dsp - Package Owner=<4>
 
 Package=<5>
