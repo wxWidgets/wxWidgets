@@ -75,6 +75,10 @@ public:
     void MacSetCurrentEvent( WXEVENTREF event , WXEVENTHANDLERCALLREF handler )
     { m_macCurrentEvent = event ; m_macCurrentEventHandlerCallRef = handler ; }
 
+    // adding a CFType object to be released only at the end of the current event cycle (increases the
+    // refcount of the object passed), needed in case we are in the middle of an event concering an object
+    // we want to delete and cannot do it immediately
+    void                  MacAddToAutorelease( void* cfrefobj );
 public:
     static wxWindow*      s_captureWindow ;
     static long           s_lastModifiers ;

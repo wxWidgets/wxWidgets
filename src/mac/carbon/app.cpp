@@ -1231,6 +1231,14 @@ void wxApp::MacHandleUnhandledEvent( WXEVENTREF evr )
     // Override to process unhandled events as you please
 }
 
+CFMutableArrayRef GetAutoReleaseArray()
+{
+    static CFMutableArrayRef array = 0;
+    if ( array == 0)
+        array= CFArrayCreateMutable(kCFAllocatorDefault,0,&kCFTypeArrayCallBacks);
+    return array;
+}
+
 void wxApp::MacHandleOneEvent( WXEVENTREF evr )
 {
     EventTargetRef theTarget;
@@ -1246,6 +1254,13 @@ void wxApp::MacHandleOneEvent( WXEVENTREF evr )
 #if wxUSE_THREADS
     wxMutexGuiLeaveOrEnter();
 #endif // wxUSE_THREADS
+
+    CFArrayRemoveAllValues( GetAutoReleaseArray() );
+}
+
+void wxApp::MacAddToAutorelease( void* cfrefobj )
+{
+    CFArrayAppendValue( GetAutoReleaseArray(), cfrefobj );
 }
 
 long wxMacTranslateKey(unsigned char key, unsigned char code)
