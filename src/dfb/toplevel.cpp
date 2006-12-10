@@ -176,16 +176,11 @@ wxTopLevelWindowDFB::~wxTopLevelWindowDFB()
 {
     m_isBeingDeleted = true;
 
-    wxTopLevelWindows.DeleteObject(this);
+    // destroy all children before we destroy the underlying DirectFB window,
+    // so that if any of them does something with the TLW, it will still work:
+    DestroyChildren();
 
-    if ( wxTheApp->GetTopWindow() == this )
-        wxTheApp->SetTopWindow(NULL);
-
-    if ( wxTopLevelWindows.empty() && wxTheApp->GetExitOnFrameDelete() )
-    {
-        wxTheApp->ExitMainLoop();
-    }
-
+    // it's safe to delete the underlying DirectFB window now:
     wxDELETE(m_toPaint);
 
     if ( !m_dfbwin )
