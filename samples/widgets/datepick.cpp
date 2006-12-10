@@ -156,7 +156,7 @@ void DatePickerWidgetsPage::CreateContent()
     sizerLeft->Add( CreateSizerWithTextAndLabel( wxT("&Year:"), DatePickerPage_Year , &m_year ),
                     0, wxALL | wxALIGN_RIGHT , 5 );
 
-    sizerLeft->Add( new wxButton( this, wxID_ANY, wxT("&Set date") ),
+    sizerLeft->Add( new wxButton( this, DatePickerPage_Set, wxT("&Set date") ),
                     0, wxALL , 5 );
 
     // right pane
@@ -223,6 +223,27 @@ void DatePickerWidgetsPage::OnButtonReset(wxCommandEvent& WXUNUSED(event))
 
 void DatePickerWidgetsPage::OnButtonSet(wxCommandEvent& WXUNUSED(event))
 {
+    long day = 0, month = 0, year = 0;
+    if ( m_day->GetValue().ToLong(&day) &&
+         m_month->GetValue().ToLong(&month) &&
+         m_year->GetValue().ToLong(&year) )
+    {
+        const wxDateTime someDay(wxDateTime::wxDateTime_t(day),
+                                 wxDateTime::Month(month),
+                                 year);
+        if(someDay.IsValid())
+        {
+            m_datePicker->SetValue(someDay);
+        }
+        else
+        {
+            wxLogError(_T("Date is invalid"));
+        }
+    }
+    else
+    {
+        wxLogError(_T("One of inputs is not number"));
+    }
 }
 
 #endif // wxUSE_DATEPICKCTRL
