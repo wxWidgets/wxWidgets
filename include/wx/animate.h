@@ -9,8 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_ANIMATEH__
-#define _WX_ANIMATEH__
+#ifndef _WX_ANIMATE_H_
+#define _WX_ANIMATE_H_
 
 #include "wx/defs.h"
 
@@ -39,14 +39,16 @@ public:
     virtual bool IsOk() const = 0;
 
     // can be -1
-    virtual int GetDelay(size_t i) const = 0;
+    virtual int GetDelay(unsigned int frame) const = 0;
 
-    virtual size_t GetFrameCount() const = 0;
-    virtual wxImage GetFrame(size_t i) const = 0;
+    virtual unsigned int GetFrameCount() const = 0;
+    virtual wxImage GetFrame(unsigned int frame) const = 0;
     virtual wxSize GetSize() const = 0;
 
-    virtual bool LoadFile(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY) = 0;
-    virtual bool Load(wxInputStream &stream, wxAnimationType type = wxANIMATION_TYPE_ANY) = 0;
+    virtual bool LoadFile(const wxString& name,
+                          wxAnimationType type = wxANIMATION_TYPE_ANY) = 0;
+    virtual bool Load(wxInputStream& stream,
+                      wxAnimationType type = wxANIMATION_TYPE_ANY) = 0;
 
 protected:
     DECLARE_ABSTRACT_CLASS(wxAnimationBase)
@@ -68,11 +70,11 @@ protected:
 class WXDLLIMPEXP_ADV wxAnimationCtrlBase : public wxControl
 {
 public:
-    wxAnimationCtrlBase() {}
+    wxAnimationCtrlBase() { }
 
-public:     // public API
-
-    virtual bool LoadFile(const wxString& filename, wxAnimationType type = wxANIMATION_TYPE_ANY) = 0;
+    // public API
+    virtual bool LoadFile(const wxString& filename,
+                          wxAnimationType type = wxANIMATION_TYPE_ANY) = 0;
 
     virtual void SetAnimation(const wxAnimation &anim) = 0;
     virtual wxAnimation GetAnimation() const = 0;
@@ -117,6 +119,6 @@ private:
     #include "wx/generic/animate.h"
 #endif
 
-#endif      // wxUSE_ANIMATIONCTRL
+#endif // wxUSE_ANIMATIONCTRL
 
-#endif // _WX_ANIMATEH__
+#endif // _WX_ANIMATE_H_

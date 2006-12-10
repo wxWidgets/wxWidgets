@@ -65,7 +65,7 @@ See \helpref{reference-counted object destruction}{refcountdestruct} for more in
 
 \membersection{wxAnimation::GetDelay}\label{wxanimationgetdelay}
 
-\constfunc{int}{GetDelay}{\param{size\_t }{i}}
+\constfunc{int}{GetDelay}{\param{unsigned int }{i}}
 
 Returns the delay for the i-th frame in milliseconds.
 If {\tt -1} is returned the frame is to be displayed forever.
@@ -73,14 +73,14 @@ If {\tt -1} is returned the frame is to be displayed forever.
 
 \membersection{wxAnimation::GetFrameCount}\label{wxanimationgetframecount}
 
-\constfunc{size\_t}{GetFrameCount}{\void}
+\constfunc{unsigned int}{GetFrameCount}{\void}
 
 Returns the number of frames for this animation.
 
 
 \membersection{wxAnimation::GetFrame}\label{wxanimationgetframe}
 
-\constfunc{wxImage}{GetFrame}{\param{size\_t }{i}}
+\constfunc{wxImage}{GetFrame}{\param{unsigned int }{i}}
 
 Returns the i-th frame as a \helpref{wxImage}{wximage}.
 

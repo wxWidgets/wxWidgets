@@ -51,14 +51,14 @@ wxSize wxAnimation::GetSize() const
     return M_ANIMDATA->GetAnimationSize();
 }
 
-size_t wxAnimation::GetFrameCount() const
+unsigned int wxAnimation::GetFrameCount() const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid animation") );
 
     return M_ANIMDATA->GetFrameCount();
 }
 
-wxImage wxAnimation::GetFrame(size_t i) const
+wxImage wxAnimation::GetFrame(unsigned int i) const
 {
     wxCHECK_MSG( IsOk(), wxNullImage, wxT("invalid animation") );
 
@@ -68,35 +68,35 @@ wxImage wxAnimation::GetFrame(size_t i) const
     return ret;
 }
 
-int wxAnimation::GetDelay(size_t i) const
+int wxAnimation::GetDelay(unsigned int i) const
 {
     wxCHECK_MSG( IsOk(), 0, wxT("invalid animation") );
 
     return M_ANIMDATA->GetDelay(i);
 }
 
-wxPoint wxAnimation::GetFramePosition(size_t frame) const
+wxPoint wxAnimation::GetFramePosition(unsigned int frame) const
 {
     wxCHECK_MSG( IsOk(), wxDefaultPosition, wxT("invalid animation") );
 
     return M_ANIMDATA->GetFramePosition(frame);
 }
 
-wxSize wxAnimation::GetFrameSize(size_t frame) const
+wxSize wxAnimation::GetFrameSize(unsigned int frame) const
 {
     wxCHECK_MSG( IsOk(), wxDefaultSize, wxT("invalid animation") );
 
     return M_ANIMDATA->GetFrameSize(frame);
 }
 
-wxAnimationDisposal wxAnimation::GetDisposalMethod(size_t frame) const
+wxAnimationDisposal wxAnimation::GetDisposalMethod(unsigned int frame) const
 {
     wxCHECK_MSG( IsOk(), wxANIM_UNSPECIFIED, wxT("invalid animation") );
 
     return M_ANIMDATA->GetDisposalMethod(frame);
 }
 
-wxColour wxAnimation::GetTransparentColour(size_t frame) const
+wxColour wxAnimation::GetTransparentColour(unsigned int frame) const
 {
     wxCHECK_MSG( IsOk(), wxNullColour, wxT("invalid animation") );
 
@@ -428,7 +428,7 @@ bool wxAnimationCtrl::Play(bool looped)
 // wxAnimationCtrl - rendering methods
 // ----------------------------------------------------------------------------
 
-bool wxAnimationCtrl::RebuildBackingStoreUpToFrame(size_t frame)
+bool wxAnimationCtrl::RebuildBackingStoreUpToFrame(unsigned int frame)
 {
     // if we've not created the backing store yet or it's too
     // small, then recreate it
@@ -451,7 +451,7 @@ bool wxAnimationCtrl::RebuildBackingStoreUpToFrame(size_t frame)
     DisposeToBackground(dc);
 
     // Draw all intermediate frames that haven't been removed from the animation
-    for (size_t i = 0; i < frame; i++)
+    for (unsigned int i = 0; i < frame; i++)
     {
         if (m_animation.GetDisposalMethod(i) == wxANIM_DONOTREMOVE ||
             m_animation.GetDisposalMethod(i) == wxANIM_UNSPECIFIED)
@@ -557,7 +557,7 @@ void wxAnimationCtrl::DisplayStaticImage()
     Refresh();
 }
 
-void wxAnimationCtrl::DrawFrame(wxDC &dc, size_t frame)
+void wxAnimationCtrl::DrawFrame(wxDC &dc, unsigned int frame)
 {
     // PERFORMANCE NOTE:
     // this draw stuff is not as fast as possible: the wxAnimationDecoder

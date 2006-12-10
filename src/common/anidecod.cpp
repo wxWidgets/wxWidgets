@@ -35,10 +35,10 @@ wxCURHandler wxANIDecoder::sm_handler;
 class wxANIFrameInfo
 {
 public:
-    wxANIFrameInfo(size_t delay = 0, int idx = -1)
+    wxANIFrameInfo(unsigned int delay = 0, int idx = -1)
         { m_delay=delay; m_imageIndex=idx; }
 
-    size_t m_delay;
+    unsigned int m_delay;
     int m_imageIndex;
 };
 
@@ -61,9 +61,9 @@ wxANIDecoder::~wxANIDecoder()
 {
 }
 
-bool wxANIDecoder::ConvertToImage(size_t frame, wxImage *image) const
+bool wxANIDecoder::ConvertToImage(unsigned int frame, wxImage *image) const
 {
-    size_t idx = m_info[frame].m_imageIndex;
+    unsigned int idx = m_info[frame].m_imageIndex;
     *image = m_images[idx];       // copy
     return image->IsOk();
 }
@@ -73,32 +73,32 @@ bool wxANIDecoder::ConvertToImage(size_t frame, wxImage *image) const
 // Data accessors
 //---------------------------------------------------------------------------
 
-wxSize wxANIDecoder::GetFrameSize(size_t WXUNUSED(frame)) const
+wxSize wxANIDecoder::GetFrameSize(unsigned int WXUNUSED(frame)) const
 {
     // all frames are of the same size...
     return m_szAnimation;
 }
 
-wxPoint wxANIDecoder::GetFramePosition(size_t WXUNUSED(frame)) const
+wxPoint wxANIDecoder::GetFramePosition(unsigned int WXUNUSED(frame)) const
 {
     // all frames are of the same size...
     return wxPoint(0,0);
 }
 
-wxAnimationDisposal wxANIDecoder::GetDisposalMethod(size_t WXUNUSED(frame)) const
+wxAnimationDisposal wxANIDecoder::GetDisposalMethod(unsigned int WXUNUSED(frame)) const
 {
     // this disposal is implicit for all frames inside an ANI file
     return wxANIM_TOBACKGROUND;
 }
 
-long wxANIDecoder::GetDelay(size_t frame) const
+long wxANIDecoder::GetDelay(unsigned int frame) const
 {
     return m_info[frame].m_delay;
 }
 
-wxColour wxANIDecoder::GetTransparentColour(size_t frame) const
+wxColour wxANIDecoder::GetTransparentColour(unsigned int frame) const
 {
-    size_t idx = m_info[frame].m_imageIndex;
+    unsigned int idx = m_info[frame].m_imageIndex;
 
     if (!m_images[idx].HasMask())
         return wxNullColour;
@@ -205,7 +205,7 @@ bool wxANIDecoder::Load( wxInputStream& stream )
 {
     wxInt32 FCC1, FCC2;
     wxUint32 datalen;
-    size_t globaldelay=0;
+    unsigned int globaldelay=0;
 
     wxInt32 riff32;
     memcpy( &riff32, "RIFF", 4 );
@@ -278,7 +278,7 @@ bool wxANIDecoder::Load( wxInputStream& stream )
                 return false;       // rate chunks should always be placed after anih chunk
 
             wxASSERT(m_info.GetCount() == m_nFrames);
-            for (size_t i=0; i<m_nFrames; i++)
+            for (unsigned int i=0; i<m_nFrames; i++)
             {
                 stream.Read(&FCC2, 4);
                 m_info[i].m_delay = wxINT32_SWAP_ON_BE(FCC2) * 1000 / 60;
@@ -291,7 +291,7 @@ bool wxANIDecoder::Load( wxInputStream& stream )
                 return false;       // seq chunks should always be placed after anih chunk
 
             wxASSERT(m_info.GetCount() == m_nFrames);
-            for (size_t i=0; i<m_nFrames; i++)
+            for (unsigned int i=0; i<m_nFrames; i++)
             {
                 stream.Read(&FCC2, 4);
                 m_info[i].m_imageIndex = wxINT32_SWAP_ON_BE(FCC2);
@@ -322,14 +322,14 @@ bool wxANIDecoder::Load( wxInputStream& stream )
     {
         // if no SEQ chunk is available, display the frames in the order
         // they were loaded
-        for (size_t i=0; i<m_nFrames; i++)
+        for (unsigned int i=0; i<m_nFrames; i++)
             if (m_info[i].m_imageIndex == -1)
                 m_info[i].m_imageIndex = i;
     }
 
     // if some frame has an invalid delay, use the global delay given in the
     // ANI header
-    for (size_t i=0; i<m_nFrames; i++)
+    for (unsigned int i=0; i<m_nFrames; i++)
         if (m_info[i].m_delay == 0)
             m_info[i].m_delay = globaldelay;
 

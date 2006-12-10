@@ -26,9 +26,9 @@ public:
     virtual bool IsOk() const
         { return m_refData != NULL; }
 
-    virtual size_t GetFrameCount() const;
-    virtual int GetDelay(size_t i) const;
-    virtual wxImage GetFrame(size_t i) const;
+    virtual unsigned int GetFrameCount() const;
+    virtual int GetDelay(unsigned int i) const;
+    virtual wxImage GetFrame(unsigned int i) const;
     virtual wxSize GetSize() const;
 
     virtual bool LoadFile(const wxString& filename,
@@ -36,12 +36,11 @@ public:
     virtual bool Load(wxInputStream& stream,
                       wxAnimationType type = wxANIMATION_TYPE_ANY);
 
-public:     // extended interface used by the generic implementation of wxAnimationCtrl
-
-    wxPoint GetFramePosition(size_t frame) const;
-    wxSize GetFrameSize(size_t frame) const;
-    wxAnimationDisposal GetDisposalMethod(size_t frame) const;
-    wxColour GetTransparentColour(size_t frame) const;
+    // extended interface used by the generic implementation of wxAnimationCtrl
+    wxPoint GetFramePosition(unsigned int frame) const;
+    wxSize GetFrameSize(unsigned int frame) const;
+    wxAnimationDisposal GetDisposalMethod(unsigned int frame) const;
+    wxColour GetTransparentColour(unsigned int frame) const;
     wxColour GetBackgroundColour() const;
 
 protected:
@@ -147,14 +146,14 @@ protected:      // internal utilities
     void DisposeToBackground(wxDC& dc, const wxPoint &pos, const wxSize &sz);
 
     void IncrementalUpdateBackingStore();
-    bool RebuildBackingStoreUpToFrame(size_t);
-    void DrawFrame(wxDC &dc, size_t);
+    bool RebuildBackingStoreUpToFrame(unsigned int);
+    void DrawFrame(wxDC &dc, unsigned int);
 
     virtual void DisplayStaticImage();
     virtual wxSize DoGetBestSize() const;
 
 protected:
-    size_t        m_currentFrame;     // Current frame
+    unsigned int  m_currentFrame;     // Current frame
     bool          m_looped;           // Looped, or not
     wxTimer       m_timer;            // The timer
     wxAnimation   m_animation;        // The animation

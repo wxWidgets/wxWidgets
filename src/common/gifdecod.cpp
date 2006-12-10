@@ -38,16 +38,16 @@ public:
     // def ctor
     GIFImage();
 
-    unsigned int w;                 /* width */
-    unsigned int h;                 /* height */
-    unsigned int left;              /* x coord (in logical screen) */
-    unsigned int top;               /* y coord (in logical screen) */
-    int transparent;                /* transparent color index (-1 = none) */
-    wxAnimationDisposal disposal;   /* disposal method */
-    long delay;                     /* delay in ms (-1 = unused) */
-    unsigned char *p;               /* bitmap */
-    unsigned char *pal;             /* palette */
-    unsigned int ncolours;          /* number of colours */
+    unsigned int w;                 // width
+    unsigned int h;                 // height
+    unsigned int left;              // x coord (in logical screen)
+    unsigned int top;               // y coord (in logical screen)
+    int transparent;                // transparent color index (-1 = none)
+    wxAnimationDisposal disposal;   // disposal method
+    long delay;                     // delay in ms (-1 = unused)
+    unsigned char *p;               // bitmap
+    unsigned char *pal;             // palette
+    unsigned int ncolours;          // number of colours
 
     DECLARE_NO_COPY_CLASS(GIFImage)
 };
@@ -87,7 +87,7 @@ wxGIFDecoder::~wxGIFDecoder()
 void wxGIFDecoder::Destroy()
 {
     wxASSERT(m_nFrames==m_frames.GetCount());
-    for (size_t i=0; i<m_nFrames; i++)
+    for (unsigned int i=0; i<m_nFrames; i++)
     {
         GIFImage *f = (GIFImage*)m_frames[i];
         free(f->p);
@@ -106,16 +106,16 @@ void wxGIFDecoder::Destroy()
 
 // This function was designed by Vaclav Slavik
 
-bool wxGIFDecoder::ConvertToImage(size_t frame, wxImage *image) const
+bool wxGIFDecoder::ConvertToImage(unsigned int frame, wxImage *image) const
 {
     unsigned char *src, *dst, *pal;
     unsigned long i;
     int      transparent;
 
-    /* just in case... */
+    // just in case...
     image->Destroy();
 
-    /* create the image */
+    // create the image
     wxSize sz = GetFrameSize(frame);
     image->Create(sz.GetWidth(), sz.GetHeight());
 
@@ -127,7 +127,7 @@ bool wxGIFDecoder::ConvertToImage(size_t frame, wxImage *image) const
     dst = image->GetData();
     transparent = GetTransparentColourIndex(frame);
 
-    /* set transparent colour mask */
+    // set transparent colour mask
     if (transparent != -1)
     {
         for (i = 0; i < GetNcolours(frame); i++)
@@ -164,7 +164,7 @@ bool wxGIFDecoder::ConvertToImage(size_t frame, wxImage *image) const
     image->SetPalette(wxPalette(GetNcolours(frame), r, g, b));
 #endif // wxUSE_PALETTE
 
-    /* copy image data */
+    // copy image data
     unsigned long npixel = sz.GetWidth() * sz.GetHeight();
     for (i = 0; i < npixel; i++, src++)
     {
@@ -186,27 +186,27 @@ bool wxGIFDecoder::ConvertToImage(size_t frame, wxImage *image) const
 
 // Get data for current frame
 
-wxSize wxGIFDecoder::GetFrameSize(size_t frame) const 
+wxSize wxGIFDecoder::GetFrameSize(unsigned int frame) const 
 {
     return wxSize(GetFrame(frame)->w, GetFrame(frame)->h);
 }
 
-wxPoint wxGIFDecoder::GetFramePosition(size_t frame) const
+wxPoint wxGIFDecoder::GetFramePosition(unsigned int frame) const
 {
     return wxPoint(GetFrame(frame)->left, GetFrame(frame)->top);
 }
 
-wxAnimationDisposal wxGIFDecoder::GetDisposalMethod(size_t frame) const
+wxAnimationDisposal wxGIFDecoder::GetDisposalMethod(unsigned int frame) const
 {
     return GetFrame(frame)->disposal;
 }
 
-long wxGIFDecoder::GetDelay(size_t frame) const
+long wxGIFDecoder::GetDelay(unsigned int frame) const
 {
     return GetFrame(frame)->delay;
 }
 
-wxColour wxGIFDecoder::GetTransparentColour(size_t frame) const
+wxColour wxGIFDecoder::GetTransparentColour(unsigned int frame) const
 {
     unsigned char *pal = GetFrame(frame)->pal;
     int n = GetFrame(frame)->transparent;
@@ -218,10 +218,10 @@ wxColour wxGIFDecoder::GetTransparentColour(size_t frame) const
                     pal[n*3 + 2]);
 }
 
-unsigned char* wxGIFDecoder::GetData(size_t frame) const    { return (GetFrame(frame)->p); }
-unsigned char* wxGIFDecoder::GetPalette(size_t frame) const { return (GetFrame(frame)->pal); }
-unsigned int wxGIFDecoder::GetNcolours(size_t frame) const  { return (GetFrame(frame)->ncolours); }
-int wxGIFDecoder::GetTransparentColourIndex(size_t frame) const  { return (GetFrame(frame)->transparent); }
+unsigned char* wxGIFDecoder::GetData(unsigned int frame) const    { return (GetFrame(frame)->p); }
+unsigned char* wxGIFDecoder::GetPalette(unsigned int frame) const { return (GetFrame(frame)->pal); }
+unsigned int wxGIFDecoder::GetNcolours(unsigned int frame) const  { return (GetFrame(frame)->ncolours); }
+int wxGIFDecoder::GetTransparentColourIndex(unsigned int frame) const  { return (GetFrame(frame)->transparent); }
 
 
 
@@ -234,17 +234,17 @@ int wxGIFDecoder::GetTransparentColourIndex(size_t frame) const  { return (GetFr
 //
 int wxGIFDecoder::getcode(wxInputStream& stream, int bits, int ab_fin)
 {
-    unsigned int mask;          /* bit mask */
-    unsigned int code;          /* code (result) */
+    unsigned int mask;          // bit mask
+    unsigned int code;          // code (result)
 
-    /* get remaining bits from last byte read */
+    // get remaining bits from last byte read
     mask = (1 << bits) - 1;
     code = (m_lastbyte >> (8 - m_restbits)) & mask;
 
-    /* keep reading new bytes while needed */
+    // keep reading new bytes while needed
     while (bits > m_restbits)
     {
-        /* if no bytes left in this block, read the next block */
+        // if no bytes left in this block, read the next block
         if (m_restbyte == 0)
         {
             m_restbyte = (unsigned char)stream.GetC();
@@ -260,7 +260,7 @@ int wxGIFDecoder::getcode(wxInputStream& stream, int bits, int ab_fin)
                 break;
             }
 
-            /* prefetch data */
+            // prefetch data
             stream.Read((void *) m_buffer, m_restbyte);
             if (stream.LastRead() != m_restbyte)
             {
@@ -270,17 +270,17 @@ int wxGIFDecoder::getcode(wxInputStream& stream, int bits, int ab_fin)
             m_bufp = m_buffer;
         }
 
-        /* read next byte and isolate the bits we need */
+        // read next byte and isolate the bits we need
         m_lastbyte = (unsigned char) (*m_bufp++);
         mask       = (1 << (bits - m_restbits)) - 1;
         code       = code + ((m_lastbyte & mask) << m_restbits);
         m_restbyte--;
 
-        /* adjust total number of bits extracted from the buffer */
+        // adjust total number of bits extracted from the buffer
         m_restbits = m_restbits + 8;
     }
 
-    /* find number of bits remaining for next code */
+    // find number of bits remaining for next code
     m_restbits = (m_restbits - bits);
 
     return code;
@@ -292,23 +292,24 @@ int wxGIFDecoder::getcode(wxInputStream& stream, int bits, int ab_fin)
 //  is 'bits'. Supports interlaced images (interl == 1).
 //  Returns wxGIF_OK (== 0) on success, or an error code if something
 // fails (see header file for details)
-wxGIFErrorCode wxGIFDecoder::dgif(wxInputStream& stream, GIFImage *img, int interl, int bits)
+wxGIFErrorCode
+wxGIFDecoder::dgif(wxInputStream& stream, GIFImage *img, int interl, int bits)
 {
     static const int allocSize = 4096 + 1;
-    int *ab_prefix = new int[allocSize]; /* alphabet (prefixes) */
+    int *ab_prefix = new int[allocSize]; // alphabet (prefixes)
     if (ab_prefix == NULL)
     {
         return wxGIF_MEMERR;
     }
 
-    int *ab_tail = new int[allocSize];   /* alphabet (tails) */
+    int *ab_tail = new int[allocSize];   // alphabet (tails)
     if (ab_tail == NULL)
     {
         delete[] ab_prefix;
         return wxGIF_MEMERR;
     }
 
-    int *stack = new int[allocSize];     /* decompression stack */
+    int *stack = new int[allocSize];     // decompression stack
     if (stack == NULL)
     {
         delete[] ab_prefix;
@@ -316,22 +317,22 @@ wxGIFErrorCode wxGIFDecoder::dgif(wxInputStream& stream, GIFImage *img, int inte
         return wxGIF_MEMERR;
     }
 
-    int ab_clr;                     /* clear code */
-    int ab_fin;                     /* end of info code */
-    int ab_bits;                    /* actual symbol width, in bits */
-    int ab_free;                    /* first free position in alphabet */
-    int ab_max;                     /* last possible character in alphabet */
-    int pass;                       /* pass number in interlaced images */
-    int pos;                        /* index into decompresion stack */
-    unsigned int x, y;              /* position in image buffer */
+    int ab_clr;                     // clear code
+    int ab_fin;                     // end of info code
+    int ab_bits;                    // actual symbol width, in bits
+    int ab_free;                    // first free position in alphabet
+    int ab_max;                     // last possible character in alphabet
+    int pass;                       // pass number in interlaced images
+    int pos;                        // index into decompresion stack
+    unsigned int x, y;              // position in image buffer
 
     int code, readcode, lastcode, abcabca;
 
-    /* these won't change */
+    // these won't change
     ab_clr = (1 << bits);
     ab_fin = (1 << bits) + 1;
 
-    /* these will change through the decompression proccess */
+    // these will change through the decompression proccess
     ab_bits  = bits + 1;
     ab_free  = (1 << bits) + 2;
     ab_max   = (1 << ab_bits) - 1;
@@ -340,41 +341,41 @@ wxGIFErrorCode wxGIFDecoder::dgif(wxInputStream& stream, GIFImage *img, int inte
     pass     = 1;
     pos = x = y = 0;
 
-    /* reset decoder vars */
+    // reset decoder vars
     m_restbits = 0;
     m_restbyte = 0;
     m_lastbyte = 0;
 
     do
     {
-        /* get next code */
+        // get next code
         readcode = code = getcode(stream, ab_bits, ab_fin);
 
-        /* end of image? */
+        // end of image?
         if (code == ab_fin) break;
 
-        /* reset alphabet? */
+        // reset alphabet?
         if (code == ab_clr)
         {
-            /* reset main variables */
+            // reset main variables
             ab_bits  = bits + 1;
             ab_free  = (1 << bits) + 2;
             ab_max   = (1 << ab_bits) - 1;
             lastcode = -1;
             abcabca  = -1;
 
-            /* skip to next code */
+            // skip to next code
             continue;
         }
 
-        /* unknown code: special case (like in ABCABCA) */
+        // unknown code: special case (like in ABCABCA)
         if (code >= ab_free)
         {
-            code = lastcode;            /* take last string */
-            stack[pos++] = abcabca;     /* add first character */
+            code = lastcode;            // take last string
+            stack[pos++] = abcabca;     // add first character
         }
 
-        /* build the string for this code in the stack */
+        // build the string for this code in the stack
         while (code > ab_clr)
         {
             stack[pos++] = ab_tail[code];
@@ -400,10 +401,10 @@ wxGIFErrorCode wxGIFDecoder::dgif(wxInputStream& stream, GIFImage *img, int inte
             return wxGIF_INVFORMAT;
         }
 
-        stack[pos] = code;              /* push last code into the stack */
-        abcabca    = code;              /* save for special case */
+        stack[pos] = code;              // push last code into the stack
+        abcabca    = code;              // save for special case
 
-        /* make new entry in alphabet (only if NOT just cleared) */
+        // make new entry in alphabet (only if NOT just cleared)
         if (lastcode != -1)
         {
             // Normally, after the alphabet is full and can't grow any
@@ -436,7 +437,7 @@ wxGIFErrorCode wxGIFDecoder::dgif(wxInputStream& stream, GIFImage *img, int inte
             }
         }
 
-        /* dump stack data to the image buffer */
+        // dump stack data to the image buffer
         while (pos >= 0)
         {
             (img->p)[x + (y * (img->w))] = (char) stack[pos];
@@ -448,7 +449,7 @@ wxGIFErrorCode wxGIFDecoder::dgif(wxInputStream& stream, GIFImage *img, int inte
 
                 if (interl)
                 {
-                    /* support for interlaced images */
+                    // support for interlaced images
                     switch (pass)
                     {
                         case 1: y += 8; break;
@@ -505,7 +506,7 @@ wxGIFErrorCode wxGIFDecoder::dgif(wxInputStream& stream, GIFImage *img, int inte
                 }
                 else
                 {
-                    /* non-interlaced */
+                    // non-interlaced
                     y++;
 /*
 Normally image decoding is finished when an End of Information code is
@@ -601,13 +602,13 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
     unsigned char buf[16];
     bool anim = true;
 
-    /* check GIF signature */
+    // check GIF signature
     if (!CanRead(stream))
         return wxGIF_INVFORMAT;
 
-    /* check for animated GIF support (ver. >= 89a) */
+    // check for animated GIF support (ver. >= 89a)
 
-    static const size_t headerSize = (3 + 3);
+    static const unsigned int headerSize = (3 + 3);
     stream.Read(buf, headerSize);
     if (stream.LastRead() != headerSize)
     {
@@ -619,8 +620,8 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
         anim = false;
     }
 
-    /* read logical screen descriptor block (LSDB) */
-    static const size_t lsdbSize = (2 + 2 + 1 + 1 + 1);
+    // read logical screen descriptor block (LSDB)
+    static const unsigned int lsdbSize = (2 + 2 + 1 + 1 + 1);
     stream.Read(buf, lsdbSize);
     if (stream.LastRead() != lsdbSize)
     {
@@ -635,13 +636,13 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
         return wxGIF_INVFORMAT;
     }
 
-    /* load global color map if available */
+    // load global color map if available
     if ((buf[4] & 0x80) == 0x80)
     {
         int backgroundColIndex = buf[5];
 
         global_ncolors = 2 << (buf[4] & 0x07);
-        size_t numBytes = 3 * global_ncolors;
+        unsigned int numBytes = 3 * global_ncolors;
         stream.Read(pal, numBytes);
         if (stream.LastRead() != numBytes)
         {
@@ -653,7 +654,7 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
                          pal[backgroundColIndex*3 + 2]);
     }
 
-    /* transparent colour, disposal method and delay default to unused */
+    // transparent colour, disposal method and delay default to unused
     transparent = -1;
     disposal = wxANIM_UNSPECIFIED;
     delay = -1;
@@ -680,19 +681,19 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
             break; // Alternative : "return wxGIF_INVFORMAT;"
         }
 
-        /* end of data? */
+        // end of data?
         if (type == 0x3B)
         {
             done = true;
         }
         else
-        /* extension block? */
+        // extension block?
         if (type == 0x21)
         {
             if (((unsigned char)stream.GetC()) == 0xF9)
-            /* graphics control extension, parse it */
+            // graphics control extension, parse it
             {
-                static const size_t gceSize = 6;
+                static const unsigned int gceSize = 6;
                 stream.Read(buf, gceSize);
                 if (stream.LastRead() != gceSize)
                 {
@@ -700,18 +701,18 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
                     return wxGIF_INVFORMAT;
                 }
 
-                /* read delay and convert from 1/100 of a second to ms */
+                // read delay and convert from 1/100 of a second to ms
                 delay = 10 * (buf[2] + 256 * buf[3]);
 
-                /* read transparent colour index, if used */
+                // read transparent colour index, if used
                 if (buf[1] & 0x01)
                     transparent = buf[4];
 
-                /* read disposal method */
+                // read disposal method
                 disposal = (wxAnimationDisposal)(((buf[1] & 0x1C) >> 2) - 1);
             }
             else
-            /* other extension, skip */
+            // other extension, skip
             {
                 while ((i = (unsigned char)stream.GetC()) != 0)
                 {
@@ -725,10 +726,10 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
             }
         }
         else
-        /* image descriptor block? */
+        // image descriptor block?
         if (type == 0x2C)
         {
-            /* allocate memory for IMAGEN struct */
+            // allocate memory for IMAGEN struct
             GIFImage *pimg = new GIFImage();
 
             if (pimg == NULL)
@@ -737,8 +738,8 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
                 return wxGIF_MEMERR;
             }
 
-            /* fill in the data */
-            static const size_t idbSize = (2 + 2 + 2 + 2 + 1);
+            // fill in the data
+            static const unsigned int idbSize = (2 + 2 + 2 + 2 + 1);
             stream.Read(buf, idbSize);
             if (stream.LastRead() != idbSize)
             {
@@ -769,8 +770,8 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
             pimg->disposal = disposal;
             pimg->delay = delay;
 
-            /* allocate memory for image and palette */
-            pimg->p   = (unsigned char *) malloc((size_t)size);
+            // allocate memory for image and palette
+            pimg->p   = (unsigned char *) malloc((unsigned int)size);
             pimg->pal = (unsigned char *) malloc(768);
 
             if ((!pimg->p) || (!pimg->pal))
@@ -779,11 +780,11 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
                 return wxGIF_MEMERR;
             }
 
-            /* load local color map if available, else use global map */
+            // load local color map if available, else use global map
             if ((buf[8] & 0x80) == 0x80)
             {
                 unsigned int local_ncolors = 2 << (buf[8] & 0x07);
-                size_t numBytes = 3 * local_ncolors;
+                unsigned int numBytes = 3 * local_ncolors;
                 stream.Read(pimg->pal, numBytes);
                 pimg->ncolours = local_ncolors;
                 if (stream.LastRead() != numBytes)
@@ -798,7 +799,7 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
                 pimg->ncolours = global_ncolors;
             }
 
-            /* get initial code size from first byte in raster data */
+            // get initial code size from first byte in raster data
             bits = (unsigned char)stream.GetC();
             if (bits == 0)
             {
@@ -806,7 +807,7 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
                 return wxGIF_INVFORMAT;
             }
 
-            /* decode image */
+            // decode image
             wxGIFErrorCode result = dgif(stream, pimg, interl, bits);
             if (result != wxGIF_OK)
             {
@@ -814,11 +815,11 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
                 return result;
             }
 
-            /* add the image to our frame array */
+            // add the image to our frame array
             m_frames.Add((void*)pimg);
             m_nFrames++;
 
-            /* if this is not an animated GIF, exit after first image */
+            // if this is not an animated GIF, exit after first image
             if (!anim)
                 done = true;
         }
@@ -830,7 +831,7 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
         return wxGIF_INVFORMAT;
     }
 
-    /* try to read to the end of the stream */
+    // try to read to the end of the stream
     while (type != 0x3B)
     {
         if (!stream.IsOk())
@@ -840,10 +841,10 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
 
         if (type == 0x21)
         {
-            /* extension type */
+            // extension type
             (void) stream.GetC();
 
-            /* skip all data */
+            // skip all data
             while ((i = (unsigned char)stream.GetC()) != 0)
             {
                 if (stream.Eof() || (stream.LastRead() == 0))
@@ -856,8 +857,8 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
         }
         else if (type == 0x2C)
         {
-            /* image descriptor block */
-            static const size_t idbSize = (2 + 2 + 2 + 2 + 1);
+            // image descriptor block
+            static const unsigned int idbSize = (2 + 2 + 2 + 2 + 1);
             stream.Read(buf, idbSize);
             if (stream.LastRead() != idbSize)
             {
@@ -865,7 +866,7 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
                 return wxGIF_INVFORMAT;
             }
 
-            /* local color map */
+            // local color map
             if ((buf[8] & 0x80) == 0x80)
             {
                 unsigned int local_ncolors = 2 << (buf[8] & 0x07);
@@ -873,7 +874,7 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
                 stream.SeekI(numBytes, wxFromCurrent);
             }
 
-            /* initial code size */
+            // initial code size
             (void) stream.GetC();
             if (stream.Eof() || (stream.LastRead() == 0))
             {
@@ -881,7 +882,7 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
                 return wxGIF_INVFORMAT;
             }
 
-            /* skip all data */
+            // skip all data
             while ((i = (unsigned char)stream.GetC()) != 0)
             {
                 if (stream.Eof() || (stream.LastRead() == 0))
@@ -892,9 +893,9 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
                 stream.SeekI(i, wxFromCurrent);
             }
         }
-        else if ((type != 0x3B) && (type != 00)) /* testing */
+        else if ((type != 0x3B) && (type != 00)) // testing
         {
-            /* images are OK, but couldn't read to the end of the stream */
+            // images are OK, but couldn't read to the end of the stream
             return wxGIF_TRUNCATED;
         }
     }

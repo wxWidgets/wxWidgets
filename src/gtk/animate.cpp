@@ -150,7 +150,7 @@ bool wxAnimation::Load(wxInputStream &stream, wxAnimationType type)
     return true;
 }
 
-wxImage wxAnimation::GetFrame(size_t i) const
+wxImage wxAnimation::GetFrame(unsigned int WXUNUSED(frame)) const
 {
     return wxNullImage;
 }

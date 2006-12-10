@@ -86,47 +86,13 @@ enum wxAnimationType
 
 class WXDLLEXPORT wxAnimationDecoder : public wxObjectRefData
 {
-protected:
-    wxSize m_szAnimation;
-    size_t m_nFrames;
-
-    // this is the colour to use for the wxANIM_TOBACKGROUND disposal.
-    // if not specified by the animation, it's set to wxNullColour
-    wxColour m_background;
-
-public:     // frame specific data getters
-
-    // not all frames may be of the same size; e.g. GIF allows to
-    // specify that between two frames only a smaller portion of the
-    // entire animation has changed.
-    virtual wxSize GetFrameSize(size_t frame) const = 0;
-
-    // the position of this frame in case it's not as big as m_szAnimation
-    // or wxPoint(0,0) otherwise.
-    virtual wxPoint GetFramePosition(size_t frame) const = 0;
-
-    // what should be done after displaying this frame.
-    virtual wxAnimationDisposal GetDisposalMethod(size_t frame) const = 0;
-
-    // the number of milliseconds this frame should be displayed.
-    // if returns -1 then the frame must be displayed forever.
-    virtual long GetDelay(size_t frame) const = 0;
-
-    // the transparent colour for this frame if any or wxNullColour.
-    virtual wxColour GetTransparentColour(size_t frame) const = 0;
-
-    // get global data
-    wxSize GetAnimationSize() const { return m_szAnimation; }
-    wxColour GetBackgroundColour() const { return m_background; }
-    size_t GetFrameCount() const { return m_nFrames; }
-
 public:
     wxAnimationDecoder()
     {
         m_background = wxNullColour;
         m_nFrames = 0;
     }
-    ~wxAnimationDecoder() {}
+    virtual ~wxAnimationDecoder() { }
 
 
     virtual bool Load( wxInputStream& stream ) = 0;
@@ -136,7 +102,42 @@ public:
     virtual wxAnimationType GetType() const = 0;
 
     // convert given frame to wxImage
-    virtual bool ConvertToImage(size_t frame, wxImage *image) const = 0;
+    virtual bool ConvertToImage(unsigned int frame, wxImage *image) const = 0;
+
+
+    // frame specific data getters
+
+    // not all frames may be of the same size; e.g. GIF allows to
+    // specify that between two frames only a smaller portion of the
+    // entire animation has changed.
+    virtual wxSize GetFrameSize(unsigned int frame) const = 0;
+
+    // the position of this frame in case it's not as big as m_szAnimation
+    // or wxPoint(0,0) otherwise.
+    virtual wxPoint GetFramePosition(unsigned int frame) const = 0;
+
+    // what should be done after displaying this frame.
+    virtual wxAnimationDisposal GetDisposalMethod(unsigned int frame) const = 0;
+
+    // the number of milliseconds this frame should be displayed.
+    // if returns -1 then the frame must be displayed forever.
+    virtual long GetDelay(unsigned int frame) const = 0;
+
+    // the transparent colour for this frame if any or wxNullColour.
+    virtual wxColour GetTransparentColour(unsigned int frame) const = 0;
+
+    // get global data
+    wxSize GetAnimationSize() const { return m_szAnimation; }
+    wxColour GetBackgroundColour() const { return m_background; }
+    unsigned int GetFrameCount() const { return m_nFrames; }
+
+protected:
+    wxSize m_szAnimation;
+    unsigned int m_nFrames;
+
+    // this is the colour to use for the wxANIM_TOBACKGROUND disposal.
+    // if not specified by the animation, it's set to wxNullColour
+    wxColour m_background;
 };
 
 
