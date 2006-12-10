@@ -40,8 +40,6 @@ public:
                 long style = wxDEFAULT_FRAME_STYLE,
                 const wxString& name = wxFrameNameStr);
 
-    virtual ~wxTopLevelWindowMGL();
-
     // implement base class pure virtuals
     virtual void Maximize(bool maximize = true);
     virtual bool IsMaximized() const;

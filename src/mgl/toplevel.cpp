@@ -109,22 +109,6 @@ bool wxTopLevelWindowMGL::Create(wxWindow *parent,
     return true;
 }
 
-wxTopLevelWindowMGL::~wxTopLevelWindowMGL()
-{
-    m_isBeingDeleted = true;
-
-    wxTopLevelWindows.DeleteObject(this);
-
-    if (wxTheApp->GetTopWindow() == this)
-        wxTheApp->SetTopWindow(NULL);
-
-    if (wxTopLevelWindows.IsEmpty() &&
-        wxTheApp->GetExitOnFrameDelete())
-    {
-        wxTheApp->ExitMainLoop();
-    }
-}
-
 bool wxTopLevelWindowMGL::ShowFullScreen(bool show, long style)
 {
     if (show == m_fsIsShowing) return false; // return what?
