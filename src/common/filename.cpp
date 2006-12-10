@@ -1793,7 +1793,7 @@ wxString wxFileName::GetLongPath() const
     wxString pathOut,
              path = GetFullPath();
 
-#if defined(__WIN32__) && !defined(__WXMICROWIN__)
+#if defined(__WIN32__) && !defined(__WXWINCE__) && !defined(__WXMICROWIN__)
 
 #if wxUSE_DYNAMIC_LOADER
     typedef DWORD (WINAPI *GET_LONG_PATH_NAME)(const wxChar *, wxChar *, DWORD);
