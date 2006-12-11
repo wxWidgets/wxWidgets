@@ -66,6 +66,7 @@ WIDGETS_OBJECTS =  \
 	widgets_notebook.o \
 	widgets_odcombobox.o \
 	widgets_radiobox.o \
+	widgets_searchctrl.o \
 	widgets_slider.o \
 	widgets_spinbtn.o \
 	widgets_static.o \
@@ -261,6 +262,9 @@ widgets_odcombobox.o: $(srcdir)/odcombobox.cpp
 
 widgets_radiobox.o: $(srcdir)/radiobox.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/radiobox.cpp
+
+widgets_searchctrl.o: $(srcdir)/searchctrl.cpp
+	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/searchctrl.cpp
 
 widgets_slider.o: $(srcdir)/slider.cpp
 	$(CXXC) -c -o $@ $(WIDGETS_CXXFLAGS) $(srcdir)/slider.cpp

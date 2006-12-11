@@ -2678,55 +2678,6 @@ SWIG_From_int  (int value)
 }
 
 
-SWIGINTERN int
-SWIG_AsVal_long (PyObject* obj, long* val)
-{
-    if (PyNumber_Check(obj)) {
-        if (val) *val = PyInt_AsLong(obj);
-        return SWIG_OK;
-    }
-    return SWIG_TypeError;
-}
-
-
-SWIGINTERN int 
-SWIG_AsVal_unsigned_SS_long (PyObject* obj, unsigned long* val)
-{
-    long v = 0;
-    if (SWIG_AsVal_long(obj, &v) && v < 0) {
-        return SWIG_TypeError;
-    }
-    else if (val)
-        *val = (unsigned long)v;
-    return SWIG_OK;
-}
-
-
-SWIGINTERNINLINE int
-SWIG_AsVal_size_t (PyObject * obj, size_t *val)
-{
-  unsigned long v;
-  int res = SWIG_AsVal_unsigned_SS_long (obj, val ? &v : 0);
-  if (SWIG_IsOK(res) && val) *val = static_cast< size_t >(v);
-  return res;
-}
-
-
-SWIGINTERNINLINE PyObject* 
-SWIG_From_unsigned_SS_long  (unsigned long value)
-{
-  return (value > LONG_MAX) ?
-    PyLong_FromUnsignedLong(value) : PyInt_FromLong(static_cast< long >(value)); 
-}
-
-
-SWIGINTERNINLINE PyObject *
-SWIG_From_size_t  (size_t value)
-{    
-  return SWIG_From_unsigned_SS_long  (static_cast< unsigned long >(value));
-}
-
-
 #include <limits.h>
 #ifndef LLONG_MIN
 # define LLONG_MIN	LONG_LONG_MIN
@@ -2737,6 +2688,17 @@ SWIG_From_size_t  (size_t value)
 #ifndef ULLONG_MAX
 # define ULLONG_MAX	ULONG_LONG_MAX
 #endif
+
+
+SWIGINTERN int
+SWIG_AsVal_long (PyObject* obj, long* val)
+{
+    if (PyNumber_Check(obj)) {
+        if (val) *val = PyInt_AsLong(obj);
+        return SWIG_OK;
+    }
+    return SWIG_TypeError;
+}
 
 
 SWIGINTERN int
@@ -2759,10 +2721,10 @@ SWIGINTERN wxAnimation *new_wxAnimation__SWIG_1(wxString const &name,wxAnimation
             ani->LoadFile(name, type);
             return ani;
         }
-SWIGINTERN wxPoint wxAnimation_GetFramePosition(wxAnimation const *self,size_t frame){ return wxDefaultPosition; }
-SWIGINTERN wxSize wxAnimation_GetFrameSize(wxAnimation const *self,size_t frame){ return wxDefaultSize; }
-SWIGINTERN wxAnimationDisposal wxAnimation_GetDisposalMethod(wxAnimation const *self,size_t frame){ return wxANIM_UNSPECIFIED; }
-SWIGINTERN wxColour wxAnimation_GetTransparentColour(wxAnimation const *self,size_t frame){ return wxNullColour; }
+SWIGINTERN wxPoint wxAnimation_GetFramePosition(wxAnimation const *self,int frame){ return wxDefaultPosition; }
+SWIGINTERN wxSize wxAnimation_GetFrameSize(wxAnimation const *self,int frame){ return wxDefaultSize; }
+SWIGINTERN wxAnimationDisposal wxAnimation_GetDisposalMethod(wxAnimation const *self,int frame){ return wxANIM_UNSPECIFIED; }
+SWIGINTERN wxColour wxAnimation_GetTransparentColour(wxAnimation const *self,int frame){ return wxNullColour; }
 SWIGINTERN wxColour wxAnimation_GetBackgroundColour(wxAnimation const *self){ return wxNullColour; }
 // for backwards compatibility
 #ifndef wxAN_FIT_ANIMATION
@@ -2875,11 +2837,11 @@ fail:
 SWIGINTERN PyObject *_wrap_AnimationBase_GetDelay(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxAnimationBase *arg1 = (wxAnimationBase *) 0 ;
-  size_t arg2 ;
+  int arg2 ;
   int result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -2893,11 +2855,11 @@ SWIGINTERN PyObject *_wrap_AnimationBase_GetDelay(PyObject *SWIGUNUSEDPARM(self)
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AnimationBase_GetDelay" "', expected argument " "1"" of type '" "wxAnimationBase const *""'"); 
   }
   arg1 = reinterpret_cast< wxAnimationBase * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AnimationBase_GetDelay" "', expected argument " "2"" of type '" "size_t""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AnimationBase_GetDelay" "', expected argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< size_t >(val2);
+  arg2 = static_cast< int >(val2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = (int)((wxAnimationBase const *)arg1)->GetDelay(arg2);
@@ -2914,7 +2876,7 @@ fail:
 SWIGINTERN PyObject *_wrap_AnimationBase_GetFrameCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxAnimationBase *arg1 = (wxAnimationBase *) 0 ;
-  size_t result;
+  int result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
@@ -2928,11 +2890,11 @@ SWIGINTERN PyObject *_wrap_AnimationBase_GetFrameCount(PyObject *SWIGUNUSEDPARM(
   arg1 = reinterpret_cast< wxAnimationBase * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (size_t)((wxAnimationBase const *)arg1)->GetFrameCount();
+    result = (int)((wxAnimationBase const *)arg1)->GetFrameCount();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
   return NULL;
@@ -2942,11 +2904,11 @@ fail:
 SWIGINTERN PyObject *_wrap_AnimationBase_GetFrame(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxAnimationBase *arg1 = (wxAnimationBase *) 0 ;
-  size_t arg2 ;
+  int arg2 ;
   SwigValueWrapper<wxImage > result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -2960,11 +2922,11 @@ SWIGINTERN PyObject *_wrap_AnimationBase_GetFrame(PyObject *SWIGUNUSEDPARM(self)
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AnimationBase_GetFrame" "', expected argument " "1"" of type '" "wxAnimationBase const *""'"); 
   }
   arg1 = reinterpret_cast< wxAnimationBase * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AnimationBase_GetFrame" "', expected argument " "2"" of type '" "size_t""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "AnimationBase_GetFrame" "', expected argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< size_t >(val2);
+  arg2 = static_cast< int >(val2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = ((wxAnimationBase const *)arg1)->GetFrame(arg2);
@@ -3250,11 +3212,11 @@ fail:
 SWIGINTERN PyObject *_wrap_Animation_GetFramePosition(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxAnimation *arg1 = (wxAnimation *) 0 ;
-  size_t arg2 ;
+  int arg2 ;
   wxPoint result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -3268,11 +3230,11 @@ SWIGINTERN PyObject *_wrap_Animation_GetFramePosition(PyObject *SWIGUNUSEDPARM(s
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Animation_GetFramePosition" "', expected argument " "1"" of type '" "wxAnimation const *""'"); 
   }
   arg1 = reinterpret_cast< wxAnimation * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Animation_GetFramePosition" "', expected argument " "2"" of type '" "size_t""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Animation_GetFramePosition" "', expected argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< size_t >(val2);
+  arg2 = static_cast< int >(val2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = wxAnimation_GetFramePosition((wxAnimation const *)arg1,arg2);
@@ -3289,11 +3251,11 @@ fail:
 SWIGINTERN PyObject *_wrap_Animation_GetFrameSize(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxAnimation *arg1 = (wxAnimation *) 0 ;
-  size_t arg2 ;
+  int arg2 ;
   wxSize result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -3307,11 +3269,11 @@ SWIGINTERN PyObject *_wrap_Animation_GetFrameSize(PyObject *SWIGUNUSEDPARM(self)
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Animation_GetFrameSize" "', expected argument " "1"" of type '" "wxAnimation const *""'"); 
   }
   arg1 = reinterpret_cast< wxAnimation * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Animation_GetFrameSize" "', expected argument " "2"" of type '" "size_t""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Animation_GetFrameSize" "', expected argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< size_t >(val2);
+  arg2 = static_cast< int >(val2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = wxAnimation_GetFrameSize((wxAnimation const *)arg1,arg2);
@@ -3328,11 +3290,11 @@ fail:
 SWIGINTERN PyObject *_wrap_Animation_GetDisposalMethod(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxAnimation *arg1 = (wxAnimation *) 0 ;
-  size_t arg2 ;
+  int arg2 ;
   wxAnimationDisposal result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -3346,11 +3308,11 @@ SWIGINTERN PyObject *_wrap_Animation_GetDisposalMethod(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Animation_GetDisposalMethod" "', expected argument " "1"" of type '" "wxAnimation const *""'"); 
   }
   arg1 = reinterpret_cast< wxAnimation * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Animation_GetDisposalMethod" "', expected argument " "2"" of type '" "size_t""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Animation_GetDisposalMethod" "', expected argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< size_t >(val2);
+  arg2 = static_cast< int >(val2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = (wxAnimationDisposal)wxAnimation_GetDisposalMethod((wxAnimation const *)arg1,arg2);
@@ -3367,11 +3329,11 @@ fail:
 SWIGINTERN PyObject *_wrap_Animation_GetTransparentColour(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxAnimation *arg1 = (wxAnimation *) 0 ;
-  size_t arg2 ;
+  int arg2 ;
   wxColour result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t val2 ;
+  int val2 ;
   int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
@@ -3385,11 +3347,11 @@ SWIGINTERN PyObject *_wrap_Animation_GetTransparentColour(PyObject *SWIGUNUSEDPA
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Animation_GetTransparentColour" "', expected argument " "1"" of type '" "wxAnimation const *""'"); 
   }
   arg1 = reinterpret_cast< wxAnimation * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Animation_GetTransparentColour" "', expected argument " "2"" of type '" "size_t""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Animation_GetTransparentColour" "', expected argument " "2"" of type '" "int""'");
   } 
-  arg2 = static_cast< size_t >(val2);
+  arg2 = static_cast< int >(val2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = wxAnimation_GetTransparentColour((wxAnimation const *)arg1,arg2);

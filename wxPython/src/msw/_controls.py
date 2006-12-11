@@ -1018,6 +1018,7 @@ _controls_.StaticBox_swigregister(StaticBox)
 StaticBitmapNameStr = cvar.StaticBitmapNameStr
 StaticBoxNameStr = cvar.StaticBoxNameStr
 StaticTextNameStr = cvar.StaticTextNameStr
+StaticLineNameStr = cvar.StaticLineNameStr
 
 def PreStaticBox(*args, **kwargs):
     """PreStaticBox() -> StaticBox"""
@@ -1051,7 +1052,7 @@ class StaticLine(_core.Control):
         """
         __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=LI_HORIZONTAL, 
-            String name=StaticTextNameStr) -> StaticLine
+            String name=StaticLineNameStr) -> StaticLine
         """
         _controls_.StaticLine_swiginit(self,_controls_.new_StaticLine(*args, **kwargs))
         self._setOORInfo(self)
@@ -1060,7 +1061,7 @@ class StaticLine(_core.Control):
         """
         Create(self, Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=LI_HORIZONTAL, 
-            String name=StaticTextNameStr) -> bool
+            String name=StaticLineNameStr) -> bool
         """
         return _controls_.StaticLine_Create(*args, **kwargs)
 
@@ -7146,6 +7147,87 @@ class CollapsiblePaneEvent(_core.CommandEvent):
 
     Collapsed = property(GetCollapsed,SetCollapsed) 
 _controls_.CollapsiblePaneEvent_swigregister(CollapsiblePaneEvent)
+
+#---------------------------------------------------------------------------
+
+class SearchCtrl(TextCtrl):
+    """Proxy of C++ SearchCtrl class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, Window parent, int id=-1, String value=wxEmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, Validator validator=DefaultValidator, 
+            String name=SearchCtrlNameStr) -> SearchCtrl
+        """
+        _controls_.SearchCtrl_swiginit(self,_controls_.new_SearchCtrl(*args, **kwargs))
+        self._setOORInfo(self)
+
+    def Create(*args, **kwargs):
+        """
+        Create(self, Window parent, int id=-1, String value=wxEmptyString, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=0, Validator validator=DefaultValidator, 
+            String name=SearchCtrlNameStr) -> bool
+        """
+        return _controls_.SearchCtrl_Create(*args, **kwargs)
+
+    def SetMenu(*args, **kwargs):
+        """SetMenu(self, Menu menu)"""
+        return _controls_.SearchCtrl_SetMenu(*args, **kwargs)
+
+    def GetMenu(*args, **kwargs):
+        """GetMenu(self) -> Menu"""
+        return _controls_.SearchCtrl_GetMenu(*args, **kwargs)
+
+    def SetSearchButtonVisible(*args, **kwargs):
+        """SetSearchButtonVisible(self, bool show)"""
+        return _controls_.SearchCtrl_SetSearchButtonVisible(*args, **kwargs)
+
+    def GetSearchButtonVisible(*args, **kwargs):
+        """GetSearchButtonVisible(self) -> bool"""
+        return _controls_.SearchCtrl_GetSearchButtonVisible(*args, **kwargs)
+
+    def SetCancelButtonVisible(*args, **kwargs):
+        """SetCancelButtonVisible(self, bool show)"""
+        return _controls_.SearchCtrl_SetCancelButtonVisible(*args, **kwargs)
+
+    def GetCancelButtonVisible(*args, **kwargs):
+        """GetCancelButtonVisible(self) -> bool"""
+        return _controls_.SearchCtrl_GetCancelButtonVisible(*args, **kwargs)
+
+    def SetSearchBitmap(*args, **kwargs):
+        """SetSearchBitmap(self, Bitmap bitmap)"""
+        return _controls_.SearchCtrl_SetSearchBitmap(*args, **kwargs)
+
+    def SetSearchMenuBitmap(*args, **kwargs):
+        """SetSearchMenuBitmap(self, Bitmap bitmap)"""
+        return _controls_.SearchCtrl_SetSearchMenuBitmap(*args, **kwargs)
+
+    def SetCancelBitmap(*args, **kwargs):
+        """SetCancelBitmap(self, Bitmap bitmap)"""
+        return _controls_.SearchCtrl_SetCancelBitmap(*args, **kwargs)
+
+    Menu = property(GetMenu,SetMenu) 
+    SearchButtonVisible = property(GetSearchButtonVisible,SetSearchButtonVisible) 
+    CancelButtonVisible = property(GetCancelButtonVisible,SetCancelButtonVisible) 
+_controls_.SearchCtrl_swigregister(SearchCtrl)
+SearchCtrlNameStr = cvar.SearchCtrlNameStr
+
+def PreSearchCtrl(*args, **kwargs):
+    """
+    PreSearchCtrl() -> SearchCtrl
+
+    Precreate a wx.SearchCtrl for 2-phase creation.
+    """
+    val = _controls_.new_PreSearchCtrl(*args, **kwargs)
+    return val
+
+wxEVT_COMMAND_SEARCHCTRL_CANCEL = _controls_.wxEVT_COMMAND_SEARCHCTRL_CANCEL
+wxEVT_COMMAND_SEARCHCTRL_SEARCH = _controls_.wxEVT_COMMAND_SEARCHCTRL_SEARCH
+EVT_SEARCHCTRL_CANCEL = wx.PyEventBinder( wxEVT_COMMAND_SEARCHCTRL_CANCEL, 1)
+EVT_SEARCHCTRL_SEARCH = wx.PyEventBinder( wxEVT_COMMAND_SEARCHCTRL_SEARCH, 1)
 
 
 

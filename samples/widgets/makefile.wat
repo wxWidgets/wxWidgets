@@ -254,6 +254,7 @@ WIDGETS_OBJECTS =  &
 	$(OBJS)\widgets_notebook.obj &
 	$(OBJS)\widgets_odcombobox.obj &
 	$(OBJS)\widgets_radiobox.obj &
+	$(OBJS)\widgets_searchctrl.obj &
 	$(OBJS)\widgets_slider.obj &
 	$(OBJS)\widgets_spinbtn.obj &
 	$(OBJS)\widgets_static.obj &
@@ -336,6 +337,9 @@ $(OBJS)\widgets_odcombobox.obj :  .AUTODEPEND .\odcombobox.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_radiobox.obj :  .AUTODEPEND .\radiobox.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
+
+$(OBJS)\widgets_searchctrl.obj :  .AUTODEPEND .\searchctrl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(WIDGETS_CXXFLAGS) $<
 
 $(OBJS)\widgets_slider.obj :  .AUTODEPEND .\slider.cpp

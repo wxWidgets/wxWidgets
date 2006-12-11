@@ -62,7 +62,7 @@ MAKE_CONST_WXSTRING_NOSWIG(ControlNameStr);
 %include _hyperlink.i
 %include _picker.i
 %include _collpane.i
-
+%include _srchctrl.i
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------

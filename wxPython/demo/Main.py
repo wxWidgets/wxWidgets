@@ -75,6 +75,7 @@ _treeList = [
         'BitmapComboBox',
         'I18N',
         'Img2PyArtProvider',
+        'SearchCtrl',        
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -132,6 +133,7 @@ _treeList = [
         'RadioButton',
         'SashWindow',
         'ScrolledWindow',
+        'SearchCtrl',        
         'Slider',
         'SpinButton',
         'SpinCtrl',

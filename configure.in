@@ -552,6 +552,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_RADIOBTN=no
   DEFAULT_wxUSE_SASH=no
   DEFAULT_wxUSE_SCROLLBAR=no
+  DEFAULT_wxUSE_SEARCHCTRL=no
   DEFAULT_wxUSE_SLIDER=no
   DEFAULT_wxUSE_SPINBTN=no
   DEFAULT_wxUSE_SPINCTRL=no
@@ -775,6 +776,7 @@ else
   DEFAULT_wxUSE_RADIOBTN=yes
   DEFAULT_wxUSE_SASH=yes
   DEFAULT_wxUSE_SCROLLBAR=yes
+  DEFAULT_wxUSE_SEARCHCTRL=yes
   DEFAULT_wxUSE_SLIDER=yes
   DEFAULT_wxUSE_SPINBTN=yes
   DEFAULT_wxUSE_SPINCTRL=yes
@@ -1107,6 +1109,7 @@ if test "$wxUSE_CONTROLS" = "yes"; then
   DEFAULT_wxUSE_RADIOBTN=yes
   DEFAULT_wxUSE_SASH=yes
   DEFAULT_wxUSE_SCROLLBAR=yes
+  DEFAULT_wxUSE_SEARCHCTRL=yes
   DEFAULT_wxUSE_SLIDER=yes
   DEFAULT_wxUSE_SPINBTN=yes
   DEFAULT_wxUSE_SPINCTRL=yes
@@ -1159,6 +1162,7 @@ elif test "$wxUSE_CONTROLS" = "no"; then
   DEFAULT_wxUSE_RADIOBTN=no
   DEFAULT_wxUSE_SASH=no
   DEFAULT_wxUSE_SCROLLBAR=no
+  DEFAULT_wxUSE_SEARCHCTRL=no
   DEFAULT_wxUSE_SLIDER=no
   DEFAULT_wxUSE_SPINBTN=no
   DEFAULT_wxUSE_SPINCTRL=no
@@ -1214,6 +1218,7 @@ WX_ARG_ENABLE(radiobox,    [  --enable-radiobox       use wxRadioBox class], wxU
 WX_ARG_ENABLE(radiobtn,    [  --enable-radiobtn       use wxRadioButton class], wxUSE_RADIOBTN)
 WX_ARG_ENABLE(sash,        [  --enable-sash           use wxSashWindow class], wxUSE_SASH)
 WX_ARG_ENABLE(scrollbar,   [  --enable-scrollbar      use wxScrollBar class and scrollable windows], wxUSE_SCROLLBAR)
+WX_ARG_ENABLE(searchctrl,  [  --enable-searchctrl     use wxSearchCtrl class], wxUSE_SEARCHCTRL)
 WX_ARG_ENABLE(slider,      [  --enable-slider         use wxSlider class], wxUSE_SLIDER)
 WX_ARG_ENABLE(spinbtn,     [  --enable-spinbtn        use wxSpinButton class], wxUSE_SPINBTN)
 WX_ARG_ENABLE(spinctrl,    [  --enable-spinctrl       use wxSpinCtrl class], wxUSE_SPINCTRL)
@@ -6880,6 +6885,11 @@ if test "$wxUSE_SCROLLBAR" = "yes"; then
     AC_DEFINE(wxUSE_SCROLLBAR)
     USES_CONTROLS=1
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS scroll scrollsub"
+fi
+
+if test "$wxUSE_SEARCHCTRL" = "yes"; then
+    AC_DEFINE(wxUSE_SEARCHCTRL)
+    USES_CONTROLS=1
 fi
 
 if test "$wxUSE_SLIDER" = "yes"; then

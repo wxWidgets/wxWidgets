@@ -406,7 +406,6 @@
 		4086C859063AB2FF00D4CD53 /* pngwrite.c in Sources */ = {isa = PBXBuildFile; fileRef = F5A863DB01FA022D0175ACA7 /* pngwrite.c */; };
 		4086C85A063AB2FF00D4CD53 /* pngwio.c in Sources */ = {isa = PBXBuildFile; fileRef = F5A863DA01FA022D0175ACA7 /* pngwio.c */; };
 		4086C85B063AB2FF00D4CD53 /* pngtrans.c in Sources */ = {isa = PBXBuildFile; fileRef = F5A863D901FA022D0175ACA7 /* pngtrans.c */; };
-		4086C85C063AB2FF00D4CD53 /* pngtest.c in Sources */ = {isa = PBXBuildFile; fileRef = F5A863D801FA022D0175ACA7 /* pngtest.c */; };
 		4086C85D063AB2FF00D4CD53 /* pngset.c in Sources */ = {isa = PBXBuildFile; fileRef = F5A863D701FA022D0175ACA7 /* pngset.c */; };
 		4086C85E063AB2FF00D4CD53 /* pngrutil.c in Sources */ = {isa = PBXBuildFile; fileRef = F5A863D601FA022D0175ACA7 /* pngrutil.c */; };
 		4086C85F063AB2FF00D4CD53 /* pngrtran.c in Sources */ = {isa = PBXBuildFile; fileRef = F5A863D501FA022D0175ACA7 /* pngrtran.c */; };
@@ -780,7 +779,6 @@
 		4086CB6C063AB30000D4CD53 /* pngwrite.c in Sources */ = {isa = PBXBuildFile; fileRef = F5A863DB01FA022D0175ACA7 /* pngwrite.c */; };
 		4086CB6D063AB30000D4CD53 /* pngwio.c in Sources */ = {isa = PBXBuildFile; fileRef = F5A863DA01FA022D0175ACA7 /* pngwio.c */; };
 		4086CB6E063AB30000D4CD53 /* pngtrans.c in Sources */ = {isa = PBXBuildFile; fileRef = F5A863D901FA022D0175ACA7 /* pngtrans.c */; };
-		4086CB6F063AB30000D4CD53 /* pngtest.c in Sources */ = {isa = PBXBuildFile; fileRef = F5A863D801FA022D0175ACA7 /* pngtest.c */; };
 		4086CB70063AB30000D4CD53 /* pngset.c in Sources */ = {isa = PBXBuildFile; fileRef = F5A863D701FA022D0175ACA7 /* pngset.c */; };
 		4086CB71063AB30000D4CD53 /* pngrutil.c in Sources */ = {isa = PBXBuildFile; fileRef = F5A863D601FA022D0175ACA7 /* pngrutil.c */; };
 		4086CB72063AB30000D4CD53 /* pngrtran.c in Sources */ = {isa = PBXBuildFile; fileRef = F5A863D501FA022D0175ACA7 /* pngrtran.c */; };
@@ -1112,6 +1110,15 @@
 		43DFF5BB09926F7B0033000B /* helpwnd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DFF5B909926F7B0033000B /* helpwnd.cpp */; };
 		43DFF5BC09926F7B0033000B /* helpdlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DFF5B809926F7B0033000B /* helpdlg.cpp */; };
 		43DFF5BD09926F7B0033000B /* helpwnd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 43DFF5B909926F7B0033000B /* helpwnd.cpp */; };
+		61048A650B2756CB009C253D /* srchctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61048A640B2756CB009C253D /* srchctrl.cpp */; };
+		61048A660B2756CB009C253D /* srchctrl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61048A640B2756CB009C253D /* srchctrl.cpp */; };
+		61048A740B277DE5009C253D /* mactext.h in Headers */ = {isa = PBXBuildFile; fileRef = 61048A6E0B277DE5009C253D /* mactext.h */; };
+		61048A750B277DE5009C253D /* overlay.h in Headers */ = {isa = PBXBuildFile; fileRef = 61048A6F0B277DE5009C253D /* overlay.h */; };
+		61048A760B277DE5009C253D /* print.h in Headers */ = {isa = PBXBuildFile; fileRef = 61048A700B277DE5009C253D /* print.h */; };
+		61048AE20B278C9A009C253D /* srchctrl.h in Headers */ = {isa = PBXBuildFile; fileRef = 61048AE10B278C9A009C253D /* srchctrl.h */; };
+		61048AE30B278C9A009C253D /* srchctrl.h in Headers */ = {isa = PBXBuildFile; fileRef = 61048AE10B278C9A009C253D /* srchctrl.h */; };
+		61048BE90B27B7D0009C253D /* srchctlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61048BE80B27B7D0009C253D /* srchctlg.cpp */; };
+		61048BEA0B27B7D0009C253D /* srchctlg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 61048BE80B27B7D0009C253D /* srchctlg.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -1124,23 +1131,6 @@
 			);
 		};
 /* End PBXBuildRule section */
-
-/* Begin PBXBuildStyle section */
-		402AB2150AFF45A400C0D0C9 /* Development */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = NO;
-			};
-			name = Development;
-		};
-		402AB2160AFF45A400C0D0C9 /* Deployment */ = {
-			isa = PBXBuildStyle;
-			buildSettings = {
-				COPY_PHASE_STRIP = YES;
-			};
-			name = Deployment;
-		};
-/* End PBXBuildStyle section */
 
 /* Begin PBXContainerItemProxy section */
 		4086D202063BC05E00D4CD53 /* PBXContainerItemProxy */ = {
@@ -1158,18 +1148,6 @@
 			remoteInfo = wxDynamicDebug;
 		};
 /* End PBXContainerItemProxy section */
-
-/* Begin PBXCopyFilesBuildPhase section */
-		409E9DD5065140690091DE7E /* CopyFiles */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 7;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		08FB77AAFE841565C02AAC07 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
@@ -1352,6 +1330,12 @@
 		43DFF59C09926B080033000B /* helpwnd.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = helpwnd.h; sourceTree = "<group>"; };
 		43DFF5B809926F7B0033000B /* helpdlg.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = helpdlg.cpp; sourceTree = "<group>"; };
 		43DFF5B909926F7B0033000B /* helpwnd.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = helpwnd.cpp; sourceTree = "<group>"; };
+		61048A640B2756CB009C253D /* srchctrl.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = srchctrl.cpp; sourceTree = "<group>"; };
+		61048A6E0B277DE5009C253D /* mactext.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = mactext.h; path = private/mactext.h; sourceTree = "<group>"; };
+		61048A6F0B277DE5009C253D /* overlay.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = overlay.h; path = private/overlay.h; sourceTree = "<group>"; };
+		61048A700B277DE5009C253D /* print.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; name = print.h; path = private/print.h; sourceTree = "<group>"; };
+		61048AE10B278C9A009C253D /* srchctrl.h */ = {isa = PBXFileReference; fileEncoding = 30; indentWidth = 4; lastKnownFileType = sourcecode.c.h; path = srchctrl.h; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
+		61048BE80B27B7D0009C253D /* srchctlg.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = srchctlg.cpp; sourceTree = "<group>"; };
 		CA0CB57B0450773900000102 /* accesscmn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = accesscmn.cpp; sourceTree = "<group>"; };
 		CA0CB57C0450773900000102 /* datacmn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = datacmn.cpp; sourceTree = "<group>"; };
 		CA0CB57D0450773900000102 /* dpycmn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = dpycmn.cpp; sourceTree = "<group>"; };
@@ -2017,7 +2001,7 @@
 		F5A861FB01FA022C0175ACA7 /* statlmac.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = statlmac.cpp; sourceTree = "<group>"; };
 		F5A861FC01FA022C0175ACA7 /* stattext.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = stattext.cpp; sourceTree = "<group>"; };
 		F5A861FD01FA022C0175ACA7 /* tabctrl.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = tabctrl.cpp; sourceTree = "<group>"; };
-		F5A861FF01FA022C0175ACA7 /* textctrl.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = textctrl.cpp; sourceTree = "<group>"; };
+		F5A861FF01FA022C0175ACA7 /* textctrl.cpp */ = {isa = PBXFileReference; fileEncoding = 30; indentWidth = 4; lastKnownFileType = sourcecode.cpp.cpp; path = textctrl.cpp; sourceTree = "<group>"; tabWidth = 4; usesTabs = 0; };
 		F5A8620101FA022C0175ACA7 /* timer.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = timer.cpp; sourceTree = "<group>"; };
 		F5A8620201FA022C0175ACA7 /* toolbar.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = toolbar.cpp; sourceTree = "<group>"; };
 		F5A8620301FA022C0175ACA7 /* tooltip.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = tooltip.cpp; sourceTree = "<group>"; };
@@ -2036,7 +2020,6 @@
 		F5A863D501FA022D0175ACA7 /* pngrtran.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pngrtran.c; sourceTree = "<group>"; };
 		F5A863D601FA022D0175ACA7 /* pngrutil.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pngrutil.c; sourceTree = "<group>"; };
 		F5A863D701FA022D0175ACA7 /* pngset.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pngset.c; sourceTree = "<group>"; };
-		F5A863D801FA022D0175ACA7 /* pngtest.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pngtest.c; sourceTree = "<group>"; };
 		F5A863D901FA022D0175ACA7 /* pngtrans.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pngtrans.c; sourceTree = "<group>"; };
 		F5A863DA01FA022D0175ACA7 /* pngwio.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pngwio.c; sourceTree = "<group>"; };
 		F5A863DB01FA022D0175ACA7 /* pngwrite.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = pngwrite.c; sourceTree = "<group>"; };
@@ -2287,6 +2270,16 @@
 			path = richtext;
 			sourceTree = "<group>";
 		};
+		61048A6D0B277DC2009C253D /* private */ = {
+			isa = PBXGroup;
+			children = (
+				61048A6E0B277DE5009C253D /* mactext.h */,
+				61048A6F0B277DE5009C253D /* overlay.h */,
+				61048A700B277DE5009C253D /* print.h */,
+			);
+			name = private;
+			sourceTree = "<group>";
+		};
 		CADEF54203C8C0A800000133 /* morefilex */ = {
 			isa = PBXGroup;
 			children = (
@@ -2483,6 +2476,7 @@
 				F5A85F2801FA022B0175ACA7 /* spinctrl.h */,
 				F5A85F2901FA022B0175ACA7 /* splash.h */,
 				F5A85F2A01FA022B0175ACA7 /* splitter.h */,
+				61048AE10B278C9A009C253D /* srchctrl.h */,
 				F5A85F2B01FA022B0175ACA7 /* stack.h */,
 				F5A85F2C01FA022B0175ACA7 /* statbmp.h */,
 				F5A85F2D01FA022B0175ACA7 /* statbox.h */,
@@ -2611,6 +2605,7 @@
 		F5A85D3B01FA022B0175ACA7 /* mac/carbon */ = {
 			isa = PBXGroup;
 			children = (
+				61048A6D0B277DC2009C253D /* private */,
 				F5A85D3C01FA022B0175ACA7 /* accel.h */,
 				F5A85D3D01FA022B0175ACA7 /* aga.h */,
 				F5A85D3E01FA022B0175ACA7 /* app.h */,
@@ -2972,6 +2967,7 @@
 				CA60176D04D43CAA00000080 /* selstore.cpp */,
 				F5A8609701FA022C0175ACA7 /* splash.cpp */,
 				F5A8609801FA022C0175ACA7 /* splitter.cpp */,
+				61048BE80B27B7D0009C253D /* srchctlg.cpp */,
 				F5A8609A01FA022C0175ACA7 /* statusbr.cpp */,
 				F5A8609B01FA022C0175ACA7 /* tabg.cpp */,
 				F5A8609D01FA022C0175ACA7 /* textdlgg.cpp */,
@@ -3148,6 +3144,7 @@
 				4086C3A2063A454900D4CD53 /* sound.cpp */,
 				F5A861F501FA022C0175ACA7 /* spinbutt.cpp */,
 				407A90F6065742ED00F01665 /* spinctrl.cpp */,
+				61048A640B2756CB009C253D /* srchctrl.cpp */,
 				F5A861F701FA022C0175ACA7 /* statbmp.cpp */,
 				F5A861F801FA022C0175ACA7 /* statbox.cpp */,
 				F5A861F901FA022C0175ACA7 /* statbrma.cpp */,
@@ -3199,7 +3196,6 @@
 				F5A863D501FA022D0175ACA7 /* pngrtran.c */,
 				F5A863D601FA022D0175ACA7 /* pngrutil.c */,
 				F5A863D701FA022D0175ACA7 /* pngset.c */,
-				F5A863D801FA022D0175ACA7 /* pngtest.c */,
 				F5A863D901FA022D0175ACA7 /* pngtrans.c */,
 				F5A863DA01FA022D0175ACA7 /* pngwio.c */,
 				F5A863DB01FA022D0175ACA7 /* pngwrite.c */,
@@ -3275,6 +3271,7 @@
 				40011F3D0897D8DF00E4DE95 /* setup0.h in Headers */,
 				43DFF59D09926B080033000B /* helpdlg.h in Headers */,
 				43DFF59E09926B080033000B /* helpwnd.h in Headers */,
+				61048AE20B278C9A009C253D /* srchctrl.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3286,6 +3283,10 @@
 				40011F3C0897D8DF00E4DE95 /* setup0.h in Headers */,
 				43DFF59F09926B080033000B /* helpdlg.h in Headers */,
 				43DFF5A009926B080033000B /* helpwnd.h in Headers */,
+				61048A740B277DE5009C253D /* mactext.h in Headers */,
+				61048A750B277DE5009C253D /* overlay.h in Headers */,
+				61048A760B277DE5009C253D /* print.h in Headers */,
+				61048AE30B278C9A009C253D /* srchctrl.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3296,8 +3297,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 18B5B98A08564B5D002803C9 /* Build configuration list for PBXNativeTarget "static" */;
 			buildPhases = (
-				4086C743063AB2FF00D4CD53 /* ShellScript */,
-				409E9DD5065140690091DE7E /* CopyFiles */,
 				4086C744063AB2FF00D4CD53 /* Headers */,
 				4086C746063AB2FF00D4CD53 /* Sources */,
 				4086C8C8063AB2FF00D4CD53 /* Frameworks */,
@@ -3338,12 +3337,6 @@
 		0867D690FE84028FC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			buildConfigurationList = 18B5B99E08564B5D002803C9 /* Build configuration list for PBXProject "wxWindows" */;
-			buildSettings = {
-			};
-			buildStyles = (
-				402AB2150AFF45A400C0D0C9 /* Development */,
-				402AB2160AFF45A400C0D0C9 /* Deployment */,
-			);
 			hasScannedForEncodings = 1;
 			mainGroup = 0867D691FE84028FC02AAC07 /* wxWindows */;
 			productRefGroup = 034768DDFF38A45A11DB9C8B /* Products */;
@@ -3374,15 +3367,6 @@
 /* End PBXRezBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4086C743063AB2FF00D4CD53 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "$SRCROOT/../distrib/mac/pbsetup-sh \"${SRCROOT}\" \"${SYMROOT}\"";
-		};
 		4086CA56063AB30000D4CD53 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -3668,7 +3652,6 @@
 				4086C859063AB2FF00D4CD53 /* pngwrite.c in Sources */,
 				4086C85A063AB2FF00D4CD53 /* pngwio.c in Sources */,
 				4086C85B063AB2FF00D4CD53 /* pngtrans.c in Sources */,
-				4086C85C063AB2FF00D4CD53 /* pngtest.c in Sources */,
 				4086C85D063AB2FF00D4CD53 /* pngset.c in Sources */,
 				4086C85E063AB2FF00D4CD53 /* pngrutil.c in Sources */,
 				4086C85F063AB2FF00D4CD53 /* pngrtran.c in Sources */,
@@ -3933,6 +3916,8 @@
 				402AB2810AFF567600C0D0C9 /* xh_collpane.cpp in Sources */,
 				402AB2820AFF567600C0D0C9 /* xh_htmllbox.cpp in Sources */,
 				402AB42C0AFF574600C0D0C9 /* imagtga.cpp in Sources */,
+				61048A650B2756CB009C253D /* srchctrl.cpp in Sources */,
+				61048BE90B27B7D0009C253D /* srchctlg.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4209,7 +4194,6 @@
 				4086CB6C063AB30000D4CD53 /* pngwrite.c in Sources */,
 				4086CB6D063AB30000D4CD53 /* pngwio.c in Sources */,
 				4086CB6E063AB30000D4CD53 /* pngtrans.c in Sources */,
-				4086CB6F063AB30000D4CD53 /* pngtest.c in Sources */,
 				4086CB70063AB30000D4CD53 /* pngset.c in Sources */,
 				4086CB71063AB30000D4CD53 /* pngrutil.c in Sources */,
 				4086CB72063AB30000D4CD53 /* pngrtran.c in Sources */,
@@ -4474,6 +4458,8 @@
 				402AB27E0AFF567600C0D0C9 /* xh_collpane.cpp in Sources */,
 				402AB27F0AFF567600C0D0C9 /* xh_htmllbox.cpp in Sources */,
 				402AB42B0AFF574600C0D0C9 /* imagtga.cpp in Sources */,
+				61048A660B2756CB009C253D /* srchctrl.cpp in Sources */,
+				61048BEA0B27B7D0009C253D /* srchctlg.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

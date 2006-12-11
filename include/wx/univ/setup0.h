@@ -662,6 +662,7 @@
 #define wxUSE_RADIOBOX         1    // wxRadioBox
 #define wxUSE_RADIOBTN         1    // wxRadioButton
 #define wxUSE_SCROLLBAR        1    // wxScrollBar
+#define wxUSE_SEARCHCTRL       1    // wxSearchCtrl
 #define wxUSE_SLIDER           1    // wxSlider
 #define wxUSE_SPINBTN          1    // wxSpinButton
 #define wxUSE_SPINCTRL         1    // wxSpinCtrl

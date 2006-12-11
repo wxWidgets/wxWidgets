@@ -536,6 +536,10 @@ SOURCE=.\..\sample.rc
 # End Source File
 # Begin Source File
 
+SOURCE=.\searchctrl.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\slider.cpp
 # End Source File
 # Begin Source File

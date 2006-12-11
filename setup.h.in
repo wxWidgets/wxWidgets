@@ -332,6 +332,7 @@
 #define wxUSE_RADIOBOX      0
 #define wxUSE_RADIOBTN      0
 #define wxUSE_SCROLLBAR     0
+#define wxUSE_SEARCHCTRL    0
 #define wxUSE_SLIDER        0
 #define wxUSE_SPINBTN       0
 #define wxUSE_SPINCTRL      0

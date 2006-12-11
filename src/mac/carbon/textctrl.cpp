@@ -63,6 +63,7 @@
 #endif
 
 #include "wx/mac/uma.h"
+#include "wx/mac/carbon/private/mactext.h"
 
 #ifndef __WXMAC_OSX__
 enum
@@ -165,60 +166,6 @@ void* wxMacMPRemoteGUICall( classtype *object , void (classtype::*function)( con
     return result ;
 }
 
-// common interface for all implementations
-class wxMacTextControl : public wxMacControl
-{
-public :
-    wxMacTextControl( wxTextCtrl *peer ) ;
-    virtual ~wxMacTextControl() ;
-
-    virtual wxString GetStringValue() const = 0 ;
-    virtual void SetStringValue( const wxString &val ) = 0 ;
-    virtual void SetSelection( long from, long to ) = 0 ;
-    virtual void GetSelection( long* from, long* to ) const = 0 ;
-    virtual void WriteText( const wxString& str ) = 0 ;
-
-    virtual void SetStyle( long start, long end, const wxTextAttr& style ) ;
-    virtual void Copy() ;
-    virtual void Cut() ;
-    virtual void Paste() ;
-    virtual bool CanPaste() const ;
-    virtual void SetEditable( bool editable ) ;
-    virtual wxTextPos GetLastPosition() const ;
-    virtual void Replace( long from, long to, const wxString &str ) ;
-    virtual void Remove( long from, long to ) ;
-
-
-    virtual bool HasOwnContextMenu() const
-    { return false ; }
-
-    virtual bool SetupCursor( const wxPoint& pt )
-    { return false ; }
-
-    virtual void Clear() ;
-    virtual bool CanUndo() const;
-    virtual void Undo() ;
-    virtual bool CanRedo() const;
-    virtual void Redo() ;
-    virtual int GetNumberOfLines() const ;
-    virtual long XYToPosition(long x, long y) const;
-    virtual bool PositionToXY(long pos, long *x, long *y) const ;
-    virtual void ShowPosition(long WXUNUSED(pos)) ;
-    virtual int GetLineLength(long lineNo) const ;
-    virtual wxString GetLineText(long lineNo) const ;
-    virtual void CheckSpelling(bool check) { }
-
-#ifndef __WXMAC_OSX__
-    virtual void            MacControlUserPaneDrawProc(wxInt16 part) = 0 ;
-    virtual wxInt16         MacControlUserPaneHitTestProc(wxInt16 x, wxInt16 y) = 0 ;
-    virtual wxInt16         MacControlUserPaneTrackingProc(wxInt16 x, wxInt16 y, void* actionProc) = 0 ;
-    virtual void            MacControlUserPaneIdleProc() = 0 ;
-    virtual wxInt16         MacControlUserPaneKeyDownProc(wxInt16 keyCode, wxInt16 charCode, wxInt16 modifiers) = 0 ;
-    virtual void            MacControlUserPaneActivateProc(bool activating) = 0 ;
-    virtual wxInt16         MacControlUserPaneFocusProc(wxInt16 action) = 0 ;
-    virtual void            MacControlUserPaneBackgroundProc(void* info) = 0 ;
-#endif
-} ;
 
 // common parts for implementations based on MLTE
 
@@ -318,38 +265,6 @@ protected :
 };
 
 #endif
-
-class wxMacUnicodeTextControl : public wxMacTextControl
-{
-public :
-    wxMacUnicodeTextControl( wxTextCtrl *wxPeer,
-                             const wxString& str,
-                             const wxPoint& pos,
-                             const wxSize& size, long style ) ;
-    virtual ~wxMacUnicodeTextControl();
-
-    virtual void VisibilityChanged(bool shown);
-    virtual wxString GetStringValue() const ;
-    virtual void SetStringValue( const wxString &str) ;
-    virtual void Copy();
-    virtual void Cut();
-    virtual void Paste();
-    virtual bool CanPaste() const;
-    virtual void SetEditable(bool editable) ;
-    virtual void GetSelection( long* from, long* to) const ;
-    virtual void SetSelection( long from , long to ) ;
-    virtual void WriteText(const wxString& str) ;
-
-protected :
-    // contains the tag for the content (is different for password and non-password controls)
-    OSType m_valueTag ;
-
-    // as the selection tag only works correctly when the control has the focus we have to mirror the
-    // intended value
-    EventHandlerRef m_focusHandlerRef ;
-public :
-    ControlEditTextSelectionRec m_selection ;
-};
 
 #endif
 
@@ -480,6 +395,27 @@ bool wxTextCtrl::Create( wxWindow *parent,
         style |= wxTE_PROCESS_ENTER ;
     }
 
+    CreatePeer( str, pos, size, style );
+
+    MacPostControlCreate(pos, size) ;
+
+    // only now the embedding is correct and we can do a positioning update
+
+    MacSuperChangedPosition() ;
+
+    if ( m_windowStyle & wxTE_READONLY)
+        SetEditable( false ) ;
+
+    SetCursor( wxCursor( wxCURSOR_IBEAM ) ) ;
+
+    return true;
+}
+
+void wxTextCtrl::CreatePeer(
+           const wxString& str,
+           const wxPoint& pos,
+           const wxSize& size, long style )
+{
     bool forceMLTE = false ;
 
 #if wxUSE_SYSTEM_OPTIONS
@@ -517,19 +453,6 @@ bool wxTextCtrl::Create( wxWindow *parent,
     if ( !m_peer )
         m_peer = new wxMacMLTEClassicControl( this , str , pos , size , style ) ;
 #endif
-
-    MacPostControlCreate(pos, size) ;
-
-    // only now the embedding is correct and we can do a positioning update
-
-    MacSuperChangedPosition() ;
-
-    if ( m_windowStyle & wxTE_READONLY)
-        SetEditable( false ) ;
-
-    SetCursor( wxCursor( wxCURSOR_IBEAM ) ) ;
-
-    return true;
 }
 
 void wxTextCtrl::MacSuperChangedPosition()
@@ -1426,11 +1349,23 @@ static pascal OSStatus wxMacUnicodeTextControlEventHandler( EventHandlerCallRef 
 
 DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacUnicodeTextControlEventHandler )
 
+wxMacUnicodeTextControl::wxMacUnicodeTextControl( wxTextCtrl *wxPeer ) : wxMacTextControl( wxPeer )
+{
+}
+
 wxMacUnicodeTextControl::wxMacUnicodeTextControl( wxTextCtrl *wxPeer,
     const wxString& str,
     const wxPoint& pos,
     const wxSize& size, long style )
     : wxMacTextControl( wxPeer )
+{
+    Create( wxPeer, str, pos, size, style );
+}
+
+bool wxMacUnicodeTextControl::Create( wxTextCtrl *wxPeer,
+    const wxString& str,
+    const wxPoint& pos,
+    const wxSize& size, long style )
 {
     m_font = wxPeer->GetFont() ;
     m_windowStyle = style ;
@@ -1439,13 +1374,9 @@ wxMacUnicodeTextControl::wxMacUnicodeTextControl( wxTextCtrl *wxPeer,
     wxMacConvertNewlines10To13( &st ) ;
     wxMacCFStringHolder cf(st , m_font.GetEncoding()) ;
     CFStringRef cfr = cf ;
-    Boolean isPassword = ( m_windowStyle & wxTE_PASSWORD ) != 0 ;
-    m_valueTag = isPassword ? kControlEditTextPasswordCFStringTag : kControlEditTextCFStringTag ;
-
-    OSStatus err = CreateEditUnicodeTextControl(
-        MAC_WXHWND(wxPeer->MacGetTopLevelWindowRef()), &bounds , cfr ,
-        isPassword , NULL , &m_controlRef ) ;
-    verify_noerr( err );
+    
+    m_valueTag = kControlEditTextCFStringTag ;
+    CreateControl( wxPeer, &bounds, cfr );
 
     if ( !(m_windowStyle & wxTE_MULTILINE) )
         SetData<Boolean>( kControlEditTextPart , kControlEditTextSingleLineTag , true ) ;
@@ -1453,6 +1384,8 @@ wxMacUnicodeTextControl::wxMacUnicodeTextControl( wxTextCtrl *wxPeer,
     InstallControlEventHandler( m_controlRef , GetwxMacUnicodeTextControlEventHandlerUPP(),
                                 GetEventTypeCount(unicodeTextControlEventList), unicodeTextControlEventList, this,
                                 &m_focusHandlerRef);
+                                
+    return true;
 }
 
 wxMacUnicodeTextControl::~wxMacUnicodeTextControl()
@@ -1503,6 +1436,19 @@ void wxMacUnicodeTextControl::SetStringValue( const wxString &str )
     wxMacConvertNewlines10To13( &st ) ;
     wxMacCFStringHolder cf( st , m_font.GetEncoding() ) ;
     verify_noerr( SetData<CFStringRef>( 0, m_valueTag , cf ) ) ;
+}
+
+void wxMacUnicodeTextControl::CreateControl( wxTextCtrl* peer, const Rect* bounds, CFStringRef cfr )
+{
+    Boolean isPassword = ( m_windowStyle & wxTE_PASSWORD ) != 0 ;
+    if ( isPassword )
+    {
+        m_valueTag = kControlEditTextPasswordCFStringTag ;
+    }
+    OSStatus err = CreateEditUnicodeTextControl(
+        MAC_WXHWND(peer->MacGetTopLevelWindowRef()), bounds , cfr ,
+        isPassword , NULL , &m_controlRef ) ;
+    verify_noerr( err );
 }
 
 void wxMacUnicodeTextControl::Copy()

@@ -12,9 +12,45 @@ TBFLAGS = ( wx.TB_HORIZONTAL
 
 #---------------------------------------------------------------------------
 
+class TestSearchCtrl(wx.SearchCtrl):
+    maxSearches = 5
+    
+    def __init__(self, parent, id=-1, value="",
+                 pos=wx.DefaultPosition, size=wx.DefaultSize, style=0,
+                 doSearch=None):
+        style |= wx.TE_PROCESS_ENTER
+        wx.SearchCtrl.__init__(self, parent, id, value, pos, size, style)
+        self.Bind(wx.EVT_TEXT_ENTER, self.OnTextEntered)
+        self.Bind(wx.EVT_MENU_RANGE, self.OnMenuItem, id=1, id2=self.maxSearches)
+        self.doSearch = doSearch
+        self.searches = []
+
+    def OnTextEntered(self, evt):
+        text = self.GetValue()
+        if self.doSearch(text):
+            self.searches.append(text)
+            if len(self.searches) > self.maxSearches:
+                del self.searches[0]
+            self.SetMenu(self.MakeMenu())            
+        self.SetValue("")
+
+    def OnMenuItem(self, evt):
+        text = self.searches[evt.GetId()-1]
+        self.doSearch(text)
+        
+    def MakeMenu(self):
+        menu = wx.Menu()
+        item = menu.Append(-1, "Recent Searches")
+        item.Enable(False)
+        for idx, txt in enumerate(self.searches):
+            menu.Append(1+idx, txt)
+        return menu
+    
+
+
 class TestToolBar(wx.Frame):
     def __init__(self, parent, log):
-        wx.Frame.__init__(self, parent, -1, 'Test ToolBar', size=(500, 300))
+        wx.Frame.__init__(self, parent, -1, 'Test ToolBar', size=(600, 400))
         self.log = log
         self.timer = None
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
@@ -83,10 +119,6 @@ class TestToolBar(wx.Frame):
                                     shortHelp="Toggle this")
         self.Bind(wx.EVT_TOOL, self.OnToolClick, id=50)
 
-##         tb.AddCheckTool(60, images.getTog1Bitmap(), images.getTog2Bitmap(),
-##                         shortHelp="Toggle with 2 bitmaps")
-##         self.Bind(EVT_TOOL, self.OnToolClick, id=60)
-
         self.Bind(wx.EVT_TOOL_ENTER, self.OnToolEnter)
         self.Bind(wx.EVT_TOOL_RCLICKED, self.OnToolRClick) # Match all
         self.Bind(wx.EVT_TIMER, self.OnClearSB)
@@ -101,12 +133,21 @@ class TestToolBar(wx.Frame):
                 ))
         self.Bind(wx.EVT_COMBOBOX, self.OnCombo, id=cbID)
 
-        tb.AddControl(wx.TextCtrl(tb, -1, "Toolbar controls!!", size=(150, -1)))
+        search = TestSearchCtrl(tb, size=(150,-1), doSearch=self.DoSearch)
+        tb.AddControl(search)
 
         # Final thing to do for a toolbar is call the Realize() method. This
         # causes it to render (more or less, that is).
         tb.Realize()
 
+
+
+    def DoSearch(self,  text):
+        # called by TestSearchCtrl
+        self.log.WriteText("DoSearch: %s\n" % text)
+        # return true to tell the search ctrl to remember the text
+        return True
+    
 
     def OnToolClick(self, event):
         self.log.WriteText("tool %s clicked\n" % event.GetId())

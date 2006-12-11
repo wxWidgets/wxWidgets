@@ -638,6 +638,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/rgncmn.cpp
     src/common/settcmn.cpp
     src/common/sizer.cpp
+    src/common/srchcmn.cpp
     src/common/statbar.cpp
     src/common/stockitem.cpp
     src/common/tbarbase.cpp
@@ -673,6 +674,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/selstore.cpp
     src/generic/spinctlg.cpp
     src/generic/splitter.cpp
+    src/generic/srchctlg.cpp
     src/generic/textdlgg.cpp
     src/generic/tipwin.cpp
     src/generic/toolbkg.cpp
@@ -736,6 +738,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/scrolwin.h
     wx/generic/spinctlg.h
     wx/generic/splitter.h
+    wx/generic/srchctlg.h
     wx/generic/textdlgg.h
     wx/generic/timer.h
     wx/generic/treectlg.h
@@ -854,6 +857,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/spinbutt.h
     wx/spinctrl.h
     wx/splitter.h
+    wx/srchctrl.h
     wx/statline.h
     wx/tab.h
     wx/tabctrl.h
@@ -2135,6 +2139,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/carbon/slider.cpp
     src/mac/carbon/spinbutt.cpp
     src/mac/carbon/spinctrl.cpp
+    src/mac/carbon/srchctrl.cpp
     src/mac/carbon/statbmp.cpp
     src/mac/carbon/statbox.cpp
     src/mac/carbon/statbrma.cpp
@@ -2227,6 +2232,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/sound.h
     wx/mac/spinbutt.h
     wx/mac/spinctrl.h
+    wx/mac/srchctrl.h
     wx/mac/statbmp.h
     wx/mac/statbox.h
     wx/mac/statline.h
@@ -2303,6 +2309,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/carbon/printdlg.h
     wx/mac/carbon/printmac.h
     wx/mac/carbon/private.h
+    wx/mac/carbon/private/mactext.h
+    wx/mac/carbon/private/overlay.h
+    wx/mac/carbon/private/print.h
     wx/mac/carbon/radiobox.h
     wx/mac/carbon/radiobut.h
     wx/mac/carbon/region.h
@@ -2310,6 +2319,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/carbon/slider.h
     wx/mac/carbon/spinbutt.h
     wx/mac/carbon/spinctrl.h
+    wx/mac/carbon/srchctrl.h
     wx/mac/carbon/statbmp.h
     wx/mac/carbon/statbox.h
     wx/mac/carbon/statline.h

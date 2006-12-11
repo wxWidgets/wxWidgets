@@ -2157,6 +2157,7 @@ COND_TOOLKIT_MAC_GUI_HDR =  \
 	wx/mac/sound.h \
 	wx/mac/spinbutt.h \
 	wx/mac/spinctrl.h \
+	wx/mac/srchctrl.h \
 	wx/mac/statbmp.h \
 	wx/mac/statbox.h \
 	wx/mac/statline.h \
@@ -2230,6 +2231,9 @@ COND_TOOLKIT_MAC_GUI_HDR =  \
 	wx/mac/carbon/printdlg.h \
 	wx/mac/carbon/printmac.h \
 	wx/mac/carbon/private.h \
+	wx/mac/carbon/private/mactext.h \
+	wx/mac/carbon/private/overlay.h \
+	wx/mac/carbon/private/print.h \
 	wx/mac/carbon/radiobox.h \
 	wx/mac/carbon/radiobut.h \
 	wx/mac/carbon/region.h \
@@ -2237,6 +2241,7 @@ COND_TOOLKIT_MAC_GUI_HDR =  \
 	wx/mac/carbon/slider.h \
 	wx/mac/carbon/spinbutt.h \
 	wx/mac/carbon/spinctrl.h \
+	wx/mac/carbon/srchctrl.h \
 	wx/mac/carbon/statbmp.h \
 	wx/mac/carbon/statbox.h \
 	wx/mac/carbon/statline.h \
@@ -2871,6 +2876,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/generic/scrolwin.h \
 	wx/generic/spinctlg.h \
 	wx/generic/splitter.h \
+	wx/generic/srchctlg.h \
 	wx/generic/textdlgg.h \
 	wx/generic/timer.h \
 	wx/generic/treectlg.h \
@@ -2988,6 +2994,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/spinbutt.h \
 	wx/spinctrl.h \
 	wx/splitter.h \
+	wx/srchctrl.h \
 	wx/statline.h \
 	wx/tab.h \
 	wx/tabctrl.h \
@@ -3497,6 +3504,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_rgncmn.o \
 	monodll_settcmn.o \
 	monodll_sizer.o \
+	monodll_srchcmn.o \
 	monodll_statbar.o \
 	monodll_stockitem.o \
 	monodll_tbarbase.o \
@@ -3532,6 +3540,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_selstore.o \
 	monodll_spinctlg.o \
 	monodll_splitter.o \
+	monodll_srchctlg.o \
 	monodll_textdlgg.o \
 	monodll_tipwin.o \
 	monodll_toolbkg.o \
@@ -3670,6 +3679,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_rgncmn.o \
 	monodll_settcmn.o \
 	monodll_sizer.o \
+	monodll_srchcmn.o \
 	monodll_statbar.o \
 	monodll_stockitem.o \
 	monodll_tbarbase.o \
@@ -3705,6 +3715,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_selstore.o \
 	monodll_spinctlg.o \
 	monodll_splitter.o \
+	monodll_srchctlg.o \
 	monodll_textdlgg.o \
 	monodll_tipwin.o \
 	monodll_toolbkg.o \
@@ -4263,6 +4274,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_slider.o \
 	monodll_spinbutt.o \
 	monodll_spinctrl.o \
+	monodll_srchctrl.o \
 	monodll_statbmp.o \
 	monodll_statbox.o \
 	monodll_statbrma.o \
@@ -5271,6 +5283,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_rgncmn.o \
 	monolib_settcmn.o \
 	monolib_sizer.o \
+	monolib_srchcmn.o \
 	monolib_statbar.o \
 	monolib_stockitem.o \
 	monolib_tbarbase.o \
@@ -5306,6 +5319,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_selstore.o \
 	monolib_spinctlg.o \
 	monolib_splitter.o \
+	monolib_srchctlg.o \
 	monolib_textdlgg.o \
 	monolib_tipwin.o \
 	monolib_toolbkg.o \
@@ -5444,6 +5458,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_rgncmn.o \
 	monolib_settcmn.o \
 	monolib_sizer.o \
+	monolib_srchcmn.o \
 	monolib_statbar.o \
 	monolib_stockitem.o \
 	monolib_tbarbase.o \
@@ -5479,6 +5494,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_selstore.o \
 	monolib_spinctlg.o \
 	monolib_splitter.o \
+	monolib_srchctlg.o \
 	monolib_textdlgg.o \
 	monolib_tipwin.o \
 	monolib_toolbkg.o \
@@ -6038,6 +6054,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_slider.o \
 	monolib_spinbutt.o \
 	monolib_spinctrl.o \
+	monolib_srchctrl.o \
 	monolib_statbmp.o \
 	monolib_statbox.o \
 	monolib_statbrma.o \
@@ -7275,6 +7292,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_rgncmn.o \
 	coredll_settcmn.o \
 	coredll_sizer.o \
+	coredll_srchcmn.o \
 	coredll_statbar.o \
 	coredll_stockitem.o \
 	coredll_tbarbase.o \
@@ -7310,6 +7328,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_selstore.o \
 	coredll_spinctlg.o \
 	coredll_splitter.o \
+	coredll_srchctlg.o \
 	coredll_textdlgg.o \
 	coredll_tipwin.o \
 	coredll_toolbkg.o \
@@ -7448,6 +7467,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_rgncmn.o \
 	coredll_settcmn.o \
 	coredll_sizer.o \
+	coredll_srchcmn.o \
 	coredll_statbar.o \
 	coredll_stockitem.o \
 	coredll_tbarbase.o \
@@ -7483,6 +7503,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_selstore.o \
 	coredll_spinctlg.o \
 	coredll_splitter.o \
+	coredll_srchctlg.o \
 	coredll_textdlgg.o \
 	coredll_tipwin.o \
 	coredll_toolbkg.o \
@@ -8042,6 +8063,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_slider.o \
 	coredll_spinbutt.o \
 	coredll_spinctrl.o \
+	coredll_srchctrl.o \
 	coredll_statbmp.o \
 	coredll_statbox.o \
 	coredll_statbrma.o \
@@ -8723,6 +8745,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_rgncmn.o \
 	corelib_settcmn.o \
 	corelib_sizer.o \
+	corelib_srchcmn.o \
 	corelib_statbar.o \
 	corelib_stockitem.o \
 	corelib_tbarbase.o \
@@ -8758,6 +8781,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_selstore.o \
 	corelib_spinctlg.o \
 	corelib_splitter.o \
+	corelib_srchctlg.o \
 	corelib_textdlgg.o \
 	corelib_tipwin.o \
 	corelib_toolbkg.o \
@@ -8896,6 +8920,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_rgncmn.o \
 	corelib_settcmn.o \
 	corelib_sizer.o \
+	corelib_srchcmn.o \
 	corelib_statbar.o \
 	corelib_stockitem.o \
 	corelib_tbarbase.o \
@@ -8931,6 +8956,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_selstore.o \
 	corelib_spinctlg.o \
 	corelib_splitter.o \
+	corelib_srchctlg.o \
 	corelib_textdlgg.o \
 	corelib_tipwin.o \
 	corelib_toolbkg.o \
@@ -9490,6 +9516,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_slider.o \
 	corelib_spinbutt.o \
 	corelib_spinctrl.o \
+	corelib_srchctrl.o \
 	corelib_statbmp.o \
 	corelib_statbox.o \
 	corelib_statbrma.o \
@@ -12851,6 +12878,9 @@ monodll_notebmac.o: $(srcdir)/src/mac/carbon/notebmac.cpp $(MONODLL_ODEP)
 
 monodll_printmac.o: $(srcdir)/src/mac/carbon/printmac.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/printmac.cpp
+
+monodll_srchctrl.o: $(srcdir)/src/mac/carbon/srchctrl.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/srchctrl.cpp
 
 monodll_statbrma.o: $(srcdir)/src/mac/carbon/statbrma.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/statbrma.cpp
@@ -16224,6 +16254,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_sizer.o: $(srcdir)/src/common/sizer.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/sizer.cpp
 
+@COND_USE_GUI_1@monodll_srchcmn.o: $(srcdir)/src/common/srchcmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/srchcmn.cpp
+
 @COND_USE_GUI_1@monodll_statbar.o: $(srcdir)/src/common/statbar.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/statbar.cpp
 
@@ -16328,6 +16361,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_USE_GUI_1@monodll_splitter.o: $(srcdir)/src/generic/splitter.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/splitter.cpp
+
+@COND_USE_GUI_1@monodll_srchctlg.o: $(srcdir)/src/generic/srchctlg.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/srchctlg.cpp
 
 @COND_USE_GUI_1@monodll_textdlgg.o: $(srcdir)/src/generic/textdlgg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/textdlgg.cpp
@@ -16958,6 +16994,9 @@ monolib_notebmac.o: $(srcdir)/src/mac/carbon/notebmac.cpp $(MONOLIB_ODEP)
 
 monolib_printmac.o: $(srcdir)/src/mac/carbon/printmac.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/printmac.cpp
+
+monolib_srchctrl.o: $(srcdir)/src/mac/carbon/srchctrl.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/srchctrl.cpp
 
 monolib_statbrma.o: $(srcdir)/src/mac/carbon/statbrma.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/statbrma.cpp
@@ -20331,6 +20370,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_sizer.o: $(srcdir)/src/common/sizer.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/sizer.cpp
 
+@COND_USE_GUI_1@monolib_srchcmn.o: $(srcdir)/src/common/srchcmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/srchcmn.cpp
+
 @COND_USE_GUI_1@monolib_statbar.o: $(srcdir)/src/common/statbar.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/statbar.cpp
 
@@ -20435,6 +20477,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_splitter.o: $(srcdir)/src/generic/splitter.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/splitter.cpp
+
+@COND_USE_GUI_1@monolib_srchctlg.o: $(srcdir)/src/generic/srchctlg.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/srchctlg.cpp
 
 @COND_USE_GUI_1@monolib_textdlgg.o: $(srcdir)/src/generic/textdlgg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/textdlgg.cpp
@@ -22064,6 +22109,9 @@ coredll_notebmac.o: $(srcdir)/src/mac/carbon/notebmac.cpp $(COREDLL_ODEP)
 
 coredll_printmac.o: $(srcdir)/src/mac/carbon/printmac.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/printmac.cpp
+
+coredll_srchctrl.o: $(srcdir)/src/mac/carbon/srchctrl.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/srchctrl.cpp
 
 coredll_statbrma.o: $(srcdir)/src/mac/carbon/statbrma.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/statbrma.cpp
@@ -24783,6 +24831,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_sizer.o: $(srcdir)/src/common/sizer.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/sizer.cpp
 
+@COND_USE_GUI_1@coredll_srchcmn.o: $(srcdir)/src/common/srchcmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/srchcmn.cpp
+
 @COND_USE_GUI_1@coredll_statbar.o: $(srcdir)/src/common/statbar.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/statbar.cpp
 
@@ -24887,6 +24938,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_USE_GUI_1@coredll_splitter.o: $(srcdir)/src/generic/splitter.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/splitter.cpp
+
+@COND_USE_GUI_1@coredll_srchctlg.o: $(srcdir)/src/generic/srchctlg.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/srchctlg.cpp
 
 @COND_USE_GUI_1@coredll_textdlgg.o: $(srcdir)/src/generic/textdlgg.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/textdlgg.cpp
@@ -25007,6 +25061,9 @@ corelib_notebmac.o: $(srcdir)/src/mac/carbon/notebmac.cpp $(CORELIB_ODEP)
 
 corelib_printmac.o: $(srcdir)/src/mac/carbon/printmac.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/printmac.cpp
+
+corelib_srchctrl.o: $(srcdir)/src/mac/carbon/srchctrl.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/srchctrl.cpp
 
 corelib_statbrma.o: $(srcdir)/src/mac/carbon/statbrma.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/statbrma.cpp
@@ -27726,6 +27783,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@corelib_sizer.o: $(srcdir)/src/common/sizer.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/sizer.cpp
 
+@COND_USE_GUI_1@corelib_srchcmn.o: $(srcdir)/src/common/srchcmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/srchcmn.cpp
+
 @COND_USE_GUI_1@corelib_statbar.o: $(srcdir)/src/common/statbar.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/statbar.cpp
 
@@ -27830,6 +27890,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_splitter.o: $(srcdir)/src/generic/splitter.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/splitter.cpp
+
+@COND_USE_GUI_1@corelib_srchctlg.o: $(srcdir)/src/generic/srchctlg.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/srchctlg.cpp
 
 @COND_USE_GUI_1@corelib_textdlgg.o: $(srcdir)/src/generic/textdlgg.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/textdlgg.cpp

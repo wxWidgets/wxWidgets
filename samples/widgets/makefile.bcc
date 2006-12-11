@@ -50,6 +50,7 @@ WIDGETS_OBJECTS =  \
 	$(OBJS)\widgets_notebook.obj \
 	$(OBJS)\widgets_odcombobox.obj \
 	$(OBJS)\widgets_radiobox.obj \
+	$(OBJS)\widgets_searchctrl.obj \
 	$(OBJS)\widgets_slider.obj \
 	$(OBJS)\widgets_spinbtn.obj \
 	$(OBJS)\widgets_static.obj \
@@ -305,6 +306,9 @@ $(OBJS)\widgets_odcombobox.obj: .\odcombobox.cpp
 	$(CXX) -q -c -P -o$@ $(WIDGETS_CXXFLAGS) $**
 
 $(OBJS)\widgets_radiobox.obj: .\radiobox.cpp
+	$(CXX) -q -c -P -o$@ $(WIDGETS_CXXFLAGS) $**
+
+$(OBJS)\widgets_searchctrl.obj: .\searchctrl.cpp
 	$(CXX) -q -c -P -o$@ $(WIDGETS_CXXFLAGS) $**
 
 $(OBJS)\widgets_slider.obj: .\slider.cpp
