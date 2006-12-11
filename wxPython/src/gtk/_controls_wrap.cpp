@@ -3378,9 +3378,6 @@ SWIGINTERN wxDateTime wxDatePickerCtrl_GetUpperLimit(wxDatePickerCtrl *self){
  static const wxString wxPyFileSelectorDefaultWildcardStr(wxFileSelectorDefaultWildcardStr); 
  static const wxString wxPyFontPickerCtrlNameStr(wxFontPickerCtrlNameStr); 
  static const wxString wxPyCollapsiblePaneNameStr(wxCollapsiblePaneNameStr); 
-
-#include <wx/srchctrl.h>
-
  static const wxString wxPySearchCtrlNameStr(wxSearchCtrlNameStr); 
 #ifdef __cplusplus
 extern "C" {

@@ -80,15 +80,15 @@ class AnimationBase(_core.Object):
         return _animate.AnimationBase_IsOk(*args, **kwargs)
 
     def GetDelay(*args, **kwargs):
-        """GetDelay(self, size_t i) -> int"""
+        """GetDelay(self, int i) -> int"""
         return _animate.AnimationBase_GetDelay(*args, **kwargs)
 
     def GetFrameCount(*args, **kwargs):
-        """GetFrameCount(self) -> size_t"""
+        """GetFrameCount(self) -> int"""
         return _animate.AnimationBase_GetFrameCount(*args, **kwargs)
 
     def GetFrame(*args, **kwargs):
-        """GetFrame(self, size_t i) -> Image"""
+        """GetFrame(self, int i) -> Image"""
         return _animate.AnimationBase_GetFrame(*args, **kwargs)
 
     def GetSize(*args, **kwargs):
@@ -120,19 +120,19 @@ class Animation(AnimationBase):
     __swig_destroy__ = _animate.delete_Animation
     __del__ = lambda self : None;
     def GetFramePosition(*args, **kwargs):
-        """GetFramePosition(self, size_t frame) -> Point"""
+        """GetFramePosition(self, int frame) -> Point"""
         return _animate.Animation_GetFramePosition(*args, **kwargs)
 
     def GetFrameSize(*args, **kwargs):
-        """GetFrameSize(self, size_t frame) -> Size"""
+        """GetFrameSize(self, int frame) -> Size"""
         return _animate.Animation_GetFrameSize(*args, **kwargs)
 
     def GetDisposalMethod(*args, **kwargs):
-        """GetDisposalMethod(self, size_t frame) -> int"""
+        """GetDisposalMethod(self, int frame) -> int"""
         return _animate.Animation_GetDisposalMethod(*args, **kwargs)
 
     def GetTransparentColour(*args, **kwargs):
-        """GetTransparentColour(self, size_t frame) -> Colour"""
+        """GetTransparentColour(self, int frame) -> Colour"""
         return _animate.Animation_GetTransparentColour(*args, **kwargs)
 
     def GetBackgroundColour(*args, **kwargs):
