@@ -2084,7 +2084,6 @@ opaque.", "");
 
     
     %property(AcceleratorTable, GetAcceleratorTable, SetAcceleratorTable, doc="See `GetAcceleratorTable` and `SetAcceleratorTable`");
-    %property(AdjustedBestSize, GetAdjustedBestSize, doc="See `GetAdjustedBestSize`");
     %property(AutoLayout, GetAutoLayout, SetAutoLayout, doc="See `GetAutoLayout` and `SetAutoLayout`");
     %property(BackgroundColour, GetBackgroundColour, SetBackgroundColour, doc="See `GetBackgroundColour` and `SetBackgroundColour`");
     %property(BackgroundStyle, GetBackgroundStyle, SetBackgroundStyle, doc="See `GetBackgroundStyle` and `SetBackgroundStyle`");
