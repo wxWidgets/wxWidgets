@@ -83,6 +83,8 @@ public:
 
     wxMacSearchFieldControl * GetPeer() const
     { return (wxMacSearchFieldControl*) m_peer; }
+    
+    virtual void SetFocus();
 	
 protected:
 

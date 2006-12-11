@@ -261,7 +261,34 @@ wxSearchCtrl::~wxSearchCtrl()
 
 wxSize wxSearchCtrl::DoGetBestSize() const
 {
-    return wxWindow::DoGetBestSize();
+    wxSize size = wxWindow::DoGetBestSize();
+    // it seems to return a default width of about 16, which is way too small here.
+    if (size.GetWidth() < 100)
+        size.SetWidth(100);
+    
+    return size;
+}
+
+void wxSearchCtrl::SetFocus()
+{
+    // NB: We have to implement SetFocus a little differently because kControlFocusNextPart
+    // leads to setting the focus on the search icon rather than the text area.
+    // We get around this by explicitly telling the control to set focus to the
+    // text area.
+    if ( !AcceptsFocus() )
+            return ;
+
+    wxWindow* former = FindFocus() ;
+    if ( former == this )
+        return ;
+
+    // as we cannot rely on the control features to find out whether we are in full keyboard mode,
+    // we can only leave in case of an error
+    OSStatus err = m_peer->SetFocus( kControlEditTextPart ) ;
+    if ( err == errCouldntSetFocus )
+        return ;
+
+    SetUserFocusWindow( (WindowRef)MacGetTopLevelWindowRef() );
 }
 
 // search control specific interfaces
