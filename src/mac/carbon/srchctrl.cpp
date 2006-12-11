@@ -179,7 +179,6 @@ static pascal OSStatus wxMacSearchControlEventHandler( EventHandlerCallRef handl
 
     ControlRef controlRef ;
     wxSearchCtrl* thisWindow = (wxSearchCtrl*) data ;
-    wxTextCtrl* textCtrl = wxDynamicCast( thisWindow , wxTextCtrl ) ;
     cEvent.GetParameter( kEventParamDirectObject , &controlRef ) ;
 
     switch( GetEventKind( event ) )
