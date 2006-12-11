@@ -2,9 +2,8 @@
 // Name:        wx/generic/srchctlg.h
 // Purpose:     generic wxSearchCtrl class
 // Author:      Vince Harron
-// Modified by:
 // Created:     2006-02-19
-// RCS-ID:      
+// RCS-ID:      $Id$
 // Copyright:   Vince Harron
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
@@ -38,7 +37,7 @@ public:
                const wxValidator& validator = wxDefaultValidator,
                const wxString& name = wxSearchCtrlNameStr);
 
-    ~wxSearchCtrl();
+    virtual ~wxSearchCtrl();
 
     bool Create(wxWindow *parent, wxWindowID id,
                 const wxString& value = wxEmptyString,
@@ -52,7 +51,7 @@ public:
     // --------------------------
     virtual void SetMenu( wxMenu* menu );
     virtual wxMenu* GetMenu();
-    
+
     // get/set search options
     // ----------------------
     virtual void ShowSearchButton( bool show );

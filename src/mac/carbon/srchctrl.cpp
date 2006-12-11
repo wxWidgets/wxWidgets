@@ -2,9 +2,8 @@
 // Name:        src/mac/carbon/srchctrl.cpp
 // Purpose:     implements mac carbon wxSearchCtrl
 // Author:      Vince Harron
-// Modified by:
 // Created:     2006-02-19
-// RCS-ID:      
+// RCS-ID:      $Id$
 // Copyright:   Vince Harron
 // License:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -90,14 +89,14 @@ void wxMacSearchFieldControl::CreateControl( wxTextCtrl* /*peer*/, const Rect* b
         attributes = kHISearchFieldAttributesSearchIcon;
     }
     HIRect hibounds = { { bounds->left, bounds->top }, { bounds->right-bounds->left, bounds->bottom-bounds->top } };
-    verify_noerr( HISearchFieldCreate( 
+    verify_noerr( HISearchFieldCreate(
         &hibounds,
         attributes,
         0, // MenuRef
         CFSTR("Search"),
         &m_controlRef
         ) );
-    HIViewSetVisible (m_controlRef, true); 
+    HIViewSetVisible (m_controlRef, true);
 }
 
 // search field options
@@ -120,7 +119,7 @@ void wxMacSearchFieldControl::SetSearchButtonVisible( bool show )
 }
 
 bool wxMacSearchFieldControl::GetSearchButtonVisible() const
-{ 
+{
     OptionBits attributes = 0;
     verify_noerr( HISearchFieldGetAttributes( m_controlRef, &attributes ) );
     return ( attributes & kHISearchFieldAttributesSearchIcon ) != 0;
@@ -142,7 +141,7 @@ void wxMacSearchFieldControl::SetCancelButtonVisible( bool show )
 }
 
 bool wxMacSearchFieldControl::GetCancelButtonVisible() const
-{ 
+{
     OptionBits attributes = 0;
     verify_noerr( HISearchFieldGetAttributes( m_controlRef, &attributes ) );
     return ( attributes & kHISearchFieldAttributesCancel ) != 0;
@@ -207,7 +206,7 @@ DEFINE_ONE_SHOT_HANDLER_GETTER( wxMacSearchControlEventHandler )
 // --------
 
 wxSearchCtrl::wxSearchCtrl()
-{ 
+{
     Init();
 }
 
@@ -261,7 +260,7 @@ wxSize wxSearchCtrl::DoGetBestSize() const
     // it seems to return a default width of about 16, which is way too small here.
     if (size.GetWidth() < 100)
         size.SetWidth(100);
-    
+
     return size;
 }
 

@@ -2,9 +2,8 @@
 // Name:        src/generic/srchctlg.cpp
 // Purpose:     implements wxSearchCtrl as a composite control
 // Author:      Vince Harron
-// Modified by:
 // Created:     2006-02-19
-// RCS-ID:      
+// RCS-ID:      $Id$
 // Copyright:   Vince Harron
 // License:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
@@ -72,7 +71,7 @@ public:
                      style | wxNO_BORDER)
     {
         m_search = search;
-        
+
         // remove the default minsize, the searchctrl will have one instead
         SetSizeHints(wxDefaultCoord,wxDefaultCoord);
     }
@@ -92,7 +91,7 @@ protected:
         // copy constructor is disabled for some reason?
         //wxTextUrlEvent event(eventText);
         wxTextUrlEvent event(
-            m_search->GetId(), 
+            m_search->GetId(),
             eventText.GetMouseEvent(),
             eventText.GetURLStart(),
             eventText.GetURLEnd()
@@ -131,13 +130,13 @@ public:
 
     void SetBitmapLabel(const wxBitmap& label) { m_bmp = label; }
 
-    
+
 protected:
     wxSize DoGetBestSize() const
     {
         return wxSize(m_bmp.GetWidth(), m_bmp.GetHeight());
     }
-    
+
     void OnLeftUp(wxMouseEvent&)
     {
         wxCommandEvent event(m_eventType, m_search->GetId());
@@ -160,7 +159,7 @@ protected:
         dc.DrawBitmap(m_bmp, 0,0, true);
     }
 
-    
+
 private:
     wxSearchCtrl *m_search;
     wxEventType   m_eventType;
@@ -193,7 +192,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxSearchCtrl, wxSearchCtrlBase)
 // --------
 
 wxSearchCtrl::wxSearchCtrl()
-{ 
+{
     Init();
 }
 
@@ -1004,9 +1003,9 @@ void wxSearchCtrl::RecalcBitmaps()
 
     if ( !m_searchBitmapUser )
     {
-        if ( 
+        if (
             !m_searchBitmap.Ok() ||
-            m_searchBitmap.GetHeight() != bitmapHeight || 
+            m_searchBitmap.GetHeight() != bitmapHeight ||
             m_searchBitmap.GetWidth() != bitmapWidth
             )
         {
@@ -1021,9 +1020,9 @@ void wxSearchCtrl::RecalcBitmaps()
 
     if ( !m_searchMenuBitmapUser )
     {
-        if ( 
+        if (
             !m_searchMenuBitmap.Ok() ||
-            m_searchMenuBitmap.GetHeight() != bitmapHeight || 
+            m_searchMenuBitmap.GetHeight() != bitmapHeight ||
             m_searchMenuBitmap.GetWidth() != bitmapWidth
             )
         {
@@ -1038,9 +1037,9 @@ void wxSearchCtrl::RecalcBitmaps()
 
     if ( !m_cancelBitmapUser )
     {
-        if ( 
+        if (
             !m_cancelBitmap.Ok() ||
-            m_cancelBitmap.GetHeight() != bitmapHeight || 
+            m_cancelBitmap.GetHeight() != bitmapHeight ||
             m_cancelBitmap.GetWidth() != bitmapHeight
             )
         {
