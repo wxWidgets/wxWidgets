@@ -3523,8 +3523,11 @@ size_t wxCSConv::ToWChar(wchar_t *dst, size_t dstLen,
 {
     CreateConvIfNeeded();
 
-    return m_convReal ? m_convReal->ToWChar(dst, dstLen, src, srcLen)
-                      : wxCONV_FAILED;
+    if (m_convReal)
+        return m_convReal->ToWChar(dst, dstLen, src, srcLen);
+
+    // latin-1 (direct)
+    return wxMBConv::ToWChar(dst, dstLen, src, srcLen);
 }
 
 size_t wxCSConv::FromWChar(char *dst, size_t dstLen,
@@ -3532,8 +3535,11 @@ size_t wxCSConv::FromWChar(char *dst, size_t dstLen,
 {
     CreateConvIfNeeded();
 
-    return m_convReal ? m_convReal->FromWChar(dst, dstLen, src, srcLen)
-                      : wxCONV_FAILED;
+    if (m_convReal)
+        return m_convReal->FromWChar(dst, dstLen, src, srcLen);
+
+    // latin-1 (direct)
+    return wxMBConv::FromWChar(dst, dstLen, src, srcLen);
 }
 
 size_t wxCSConv::MB2WC(wchar_t *buf, const char *psz, size_t n) const
