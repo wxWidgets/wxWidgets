@@ -23,8 +23,8 @@ MAKE_CONST_WXSTRING(SearchCtrlNameStr);
 // define a dummy class for builds that don't have wxSearchCtrl
 
 enum {
-    wxEVT_COMMAND_SEARCHCTRL_CANCEL,
-    wxEVT_COMMAND_SEARCHCTRL_SEARCH
+    wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN,
+    wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN
 };
 
 class wxSearchCtrl : public wxTextCtrl
@@ -94,14 +94,14 @@ Enter key in the control and wishes to start a search.
 
 Events
 -------
-    ======================    =========================================
-    EVT_SEARCHCTRL_SEARCH     Sent when the search icon is clicked
-    EVT_SEARCHCTRL_CANCEL     Sent when the cancel icon is clicked
-    EVT_TEXT                  Sent when the text changes
-    EVT_TEXT_ENTER            Sent when the RETURN/ENTER key is pressed 
-                              in the search control and the control has
-                              the wx.TE_PROCESS_ENTER style flag set.
-    ======================    =========================================
+    =========================    =========================================
+    EVT_SEARCHCTRL_SEARCH_BTN    Sent when the search icon is clicked
+    EVT_SEARCHCTRL_CANCEL_BTN    Sent when the cancel icon is clicked
+    EVT_TEXT                     Sent when the text changes
+    EVT_TEXT_ENTER               Sent when the RETURN/ENTER key is pressed 
+                                 in the search control and the control has
+                                 the wx.TE_PROCESS_ENTER style flag set.
+    =========================    =========================================
 ");
 
 

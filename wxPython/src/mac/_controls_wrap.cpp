@@ -3383,8 +3383,8 @@ SWIGINTERN wxDateTime wxDatePickerCtrl_GetUpperLimit(wxDatePickerCtrl *self){
 // define a dummy class for builds that don't have wxSearchCtrl
 
 enum {
-    wxEVT_COMMAND_SEARCHCTRL_CANCEL,
-    wxEVT_COMMAND_SEARCHCTRL_SEARCH
+    wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN,
+    wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN
 };
 
 class wxSearchCtrl : public wxTextCtrl
@@ -50541,7 +50541,7 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "CP_NO_TLW_RESIZE",SWIG_From_int(static_cast< int >(wxCP_NO_TLW_RESIZE)));
   PyDict_SetItemString(d, "wxEVT_COMMAND_COLLPANE_CHANGED", PyInt_FromLong(wxEVT_COMMAND_COLLPANE_CHANGED));
   SWIG_addvarlink(SWIG_globals(),(char*)"SearchCtrlNameStr",SearchCtrlNameStr_get, SearchCtrlNameStr_set);
-  PyDict_SetItemString(d, "wxEVT_COMMAND_SEARCHCTRL_CANCEL", PyInt_FromLong(wxEVT_COMMAND_SEARCHCTRL_CANCEL));
-  PyDict_SetItemString(d, "wxEVT_COMMAND_SEARCHCTRL_SEARCH", PyInt_FromLong(wxEVT_COMMAND_SEARCHCTRL_SEARCH));
+  PyDict_SetItemString(d, "wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN", PyInt_FromLong(wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN));
+  PyDict_SetItemString(d, "wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN", PyInt_FromLong(wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN));
 }
 
