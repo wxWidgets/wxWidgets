@@ -352,6 +352,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_rgncmn.obj &
 	$(OBJS)\monodll_settcmn.obj &
 	$(OBJS)\monodll_sizer.obj &
+	$(OBJS)\monodll_srchcmn.obj &
 	$(OBJS)\monodll_statbar.obj &
 	$(OBJS)\monodll_stockitem.obj &
 	$(OBJS)\monodll_tbarbase.obj &
@@ -387,6 +388,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_selstore.obj &
 	$(OBJS)\monodll_spinctlg.obj &
 	$(OBJS)\monodll_splitter.obj &
+	$(OBJS)\monodll_srchctlg.obj &
 	$(OBJS)\monodll_textdlgg.obj &
 	$(OBJS)\monodll_tipwin.obj &
 	$(OBJS)\monodll_toolbkg.obj &
@@ -527,6 +529,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_rgncmn.obj &
 	$(OBJS)\monodll_settcmn.obj &
 	$(OBJS)\monodll_sizer.obj &
+	$(OBJS)\monodll_srchcmn.obj &
 	$(OBJS)\monodll_statbar.obj &
 	$(OBJS)\monodll_stockitem.obj &
 	$(OBJS)\monodll_tbarbase.obj &
@@ -562,6 +565,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_selstore.obj &
 	$(OBJS)\monodll_spinctlg.obj &
 	$(OBJS)\monodll_splitter.obj &
+	$(OBJS)\monodll_srchctlg.obj &
 	$(OBJS)\monodll_textdlgg.obj &
 	$(OBJS)\monodll_tipwin.obj &
 	$(OBJS)\monodll_toolbkg.obj &
@@ -893,6 +897,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_rgncmn.obj &
 	$(OBJS)\monolib_settcmn.obj &
 	$(OBJS)\monolib_sizer.obj &
+	$(OBJS)\monolib_srchcmn.obj &
 	$(OBJS)\monolib_statbar.obj &
 	$(OBJS)\monolib_stockitem.obj &
 	$(OBJS)\monolib_tbarbase.obj &
@@ -928,6 +933,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_selstore.obj &
 	$(OBJS)\monolib_spinctlg.obj &
 	$(OBJS)\monolib_splitter.obj &
+	$(OBJS)\monolib_srchctlg.obj &
 	$(OBJS)\monolib_textdlgg.obj &
 	$(OBJS)\monolib_tipwin.obj &
 	$(OBJS)\monolib_toolbkg.obj &
@@ -1068,6 +1074,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_rgncmn.obj &
 	$(OBJS)\monolib_settcmn.obj &
 	$(OBJS)\monolib_sizer.obj &
+	$(OBJS)\monolib_srchcmn.obj &
 	$(OBJS)\monolib_statbar.obj &
 	$(OBJS)\monolib_stockitem.obj &
 	$(OBJS)\monolib_tbarbase.obj &
@@ -1103,6 +1110,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_selstore.obj &
 	$(OBJS)\monolib_spinctlg.obj &
 	$(OBJS)\monolib_splitter.obj &
+	$(OBJS)\monolib_srchctlg.obj &
 	$(OBJS)\monolib_textdlgg.obj &
 	$(OBJS)\monolib_tipwin.obj &
 	$(OBJS)\monolib_toolbkg.obj &
@@ -1360,6 +1368,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_rgncmn.obj &
 	$(OBJS)\coredll_settcmn.obj &
 	$(OBJS)\coredll_sizer.obj &
+	$(OBJS)\coredll_srchcmn.obj &
 	$(OBJS)\coredll_statbar.obj &
 	$(OBJS)\coredll_stockitem.obj &
 	$(OBJS)\coredll_tbarbase.obj &
@@ -1395,6 +1404,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_selstore.obj &
 	$(OBJS)\coredll_spinctlg.obj &
 	$(OBJS)\coredll_splitter.obj &
+	$(OBJS)\coredll_srchctlg.obj &
 	$(OBJS)\coredll_textdlgg.obj &
 	$(OBJS)\coredll_tipwin.obj &
 	$(OBJS)\coredll_toolbkg.obj &
@@ -1535,6 +1545,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_rgncmn.obj &
 	$(OBJS)\coredll_settcmn.obj &
 	$(OBJS)\coredll_sizer.obj &
+	$(OBJS)\coredll_srchcmn.obj &
 	$(OBJS)\coredll_statbar.obj &
 	$(OBJS)\coredll_stockitem.obj &
 	$(OBJS)\coredll_tbarbase.obj &
@@ -1570,6 +1581,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_selstore.obj &
 	$(OBJS)\coredll_spinctlg.obj &
 	$(OBJS)\coredll_splitter.obj &
+	$(OBJS)\coredll_srchctlg.obj &
 	$(OBJS)\coredll_textdlgg.obj &
 	$(OBJS)\coredll_tipwin.obj &
 	$(OBJS)\coredll_toolbkg.obj &
@@ -1748,6 +1760,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_rgncmn.obj &
 	$(OBJS)\corelib_settcmn.obj &
 	$(OBJS)\corelib_sizer.obj &
+	$(OBJS)\corelib_srchcmn.obj &
 	$(OBJS)\corelib_statbar.obj &
 	$(OBJS)\corelib_stockitem.obj &
 	$(OBJS)\corelib_tbarbase.obj &
@@ -1783,6 +1796,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_selstore.obj &
 	$(OBJS)\corelib_spinctlg.obj &
 	$(OBJS)\corelib_splitter.obj &
+	$(OBJS)\corelib_srchctlg.obj &
 	$(OBJS)\corelib_textdlgg.obj &
 	$(OBJS)\corelib_tipwin.obj &
 	$(OBJS)\corelib_toolbkg.obj &
@@ -1923,6 +1937,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_rgncmn.obj &
 	$(OBJS)\corelib_settcmn.obj &
 	$(OBJS)\corelib_sizer.obj &
+	$(OBJS)\corelib_srchcmn.obj &
 	$(OBJS)\corelib_statbar.obj &
 	$(OBJS)\corelib_stockitem.obj &
 	$(OBJS)\corelib_tbarbase.obj &
@@ -1958,6 +1973,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_selstore.obj &
 	$(OBJS)\corelib_spinctlg.obj &
 	$(OBJS)\corelib_splitter.obj &
+	$(OBJS)\corelib_srchctlg.obj &
 	$(OBJS)\corelib_textdlgg.obj &
 	$(OBJS)\corelib_tipwin.obj &
 	$(OBJS)\corelib_toolbkg.obj &
@@ -5987,6 +6003,11 @@ $(OBJS)\monodll_sizer.obj :  .AUTODEPEND ..\..\src\common\sizer.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_srchcmn.obj :  .AUTODEPEND ..\..\src\common\srchcmn.cpp
+	$(CXX) -bt=os2 -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_statbar.obj :  .AUTODEPEND ..\..\src\common\statbar.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -6158,6 +6179,11 @@ $(OBJS)\monodll_spinctlg.obj :  .AUTODEPEND ..\..\src\generic\spinctlg.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_splitter.obj :  .AUTODEPEND ..\..\src\generic\splitter.cpp
+	$(CXX) -bt=os2 -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monodll_srchctlg.obj :  .AUTODEPEND ..\..\src\generic\srchctlg.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
@@ -7845,6 +7871,11 @@ $(OBJS)\monolib_sizer.obj :  .AUTODEPEND ..\..\src\common\sizer.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monolib_srchcmn.obj :  .AUTODEPEND ..\..\src\common\srchcmn.cpp
+	$(CXX) -bt=os2 -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monolib_statbar.obj :  .AUTODEPEND ..\..\src\common\statbar.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -8016,6 +8047,11 @@ $(OBJS)\monolib_spinctlg.obj :  .AUTODEPEND ..\..\src\generic\spinctlg.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_splitter.obj :  .AUTODEPEND ..\..\src\generic\splitter.cpp
+	$(CXX) -bt=os2 -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_srchctlg.obj :  .AUTODEPEND ..\..\src\generic\srchctlg.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -9685,6 +9721,11 @@ $(OBJS)\coredll_sizer.obj :  .AUTODEPEND ..\..\src\common\sizer.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_srchcmn.obj :  .AUTODEPEND ..\..\src\common\srchcmn.cpp
+	$(CXX) -bt=os2 -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_statbar.obj :  .AUTODEPEND ..\..\src\common\statbar.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -9856,6 +9897,11 @@ $(OBJS)\coredll_spinctlg.obj :  .AUTODEPEND ..\..\src\generic\spinctlg.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_splitter.obj :  .AUTODEPEND ..\..\src\generic\splitter.cpp
+	$(CXX) -bt=os2 -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\coredll_srchctlg.obj :  .AUTODEPEND ..\..\src\generic\srchctlg.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
@@ -10887,6 +10933,11 @@ $(OBJS)\corelib_sizer.obj :  .AUTODEPEND ..\..\src\common\sizer.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\corelib_srchcmn.obj :  .AUTODEPEND ..\..\src\common\srchcmn.cpp
+	$(CXX) -bt=os2 -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\corelib_statbar.obj :  .AUTODEPEND ..\..\src\common\statbar.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
@@ -11058,6 +11109,11 @@ $(OBJS)\corelib_spinctlg.obj :  .AUTODEPEND ..\..\src\generic\spinctlg.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_splitter.obj :  .AUTODEPEND ..\..\src\generic\splitter.cpp
+	$(CXX) -bt=os2 -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_srchctlg.obj :  .AUTODEPEND ..\..\src\generic\srchctlg.cpp
 	$(CXX) -bt=os2 -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
