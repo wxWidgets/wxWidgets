@@ -41272,6 +41272,7 @@ SWIGINTERN PyObject *_wrap_Window_FromHWND(PyObject *SWIGUNUSEDPARM(self), PyObj
   } 
   arg2 = static_cast< unsigned long >(val2);
   {
+    if (!wxPyCheckForApp()) SWIG_fail;
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = (wxWindow *)wxWindow_FromHWND(arg1,arg2);
     wxPyEndAllowThreads(__tstate);

@@ -1018,6 +1018,7 @@ _controls_.StaticBox_swigregister(StaticBox)
 StaticBitmapNameStr = cvar.StaticBitmapNameStr
 StaticBoxNameStr = cvar.StaticBoxNameStr
 StaticTextNameStr = cvar.StaticTextNameStr
+StaticLineNameStr = cvar.StaticLineNameStr
 
 def PreStaticBox(*args, **kwargs):
     """PreStaticBox() -> StaticBox"""
@@ -1051,7 +1052,7 @@ class StaticLine(_core.Control):
         """
         __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=LI_HORIZONTAL, 
-            String name=StaticTextNameStr) -> StaticLine
+            String name=StaticLineNameStr) -> StaticLine
         """
         _controls_.StaticLine_swiginit(self,_controls_.new_StaticLine(*args, **kwargs))
         self._setOORInfo(self)
@@ -1060,7 +1061,7 @@ class StaticLine(_core.Control):
         """
         Create(self, Window parent, int id=-1, Point pos=DefaultPosition, 
             Size size=DefaultSize, long style=LI_HORIZONTAL, 
-            String name=StaticTextNameStr) -> bool
+            String name=StaticLineNameStr) -> bool
         """
         return _controls_.StaticLine_Create(*args, **kwargs)
 

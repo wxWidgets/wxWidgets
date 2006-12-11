@@ -2824,6 +2824,7 @@ SWIG_AsVal_bool (PyObject *obj, bool *val)
  static const wxString wxPyStaticBitmapNameStr(wxStaticBitmapNameStr); 
  static const wxString wxPyStaticBoxNameStr(wxStaticBoxNameStr); 
  static const wxString wxPyStaticTextNameStr(wxStaticTextNameStr); 
+ static const wxString wxPyStaticLineNameStr(wxStaticLineNameStr); 
 
 #include <wx/checklst.h>
 
@@ -7436,6 +7437,26 @@ SWIGINTERN PyObject *StaticTextNameStr_get(void) {
 }
 
 
+SWIGINTERN int StaticLineNameStr_set(PyObject *) {
+  SWIG_Error(SWIG_AttributeError,"Variable StaticLineNameStr is read-only.");
+  return 1;
+}
+
+
+SWIGINTERN PyObject *StaticLineNameStr_get(void) {
+  PyObject *pyobj = 0;
+  
+  {
+#if wxUSE_UNICODE
+    pyobj = PyUnicode_FromWideChar((&wxPyStaticLineNameStr)->c_str(), (&wxPyStaticLineNameStr)->Len());
+#else
+    pyobj = PyString_FromStringAndSize((&wxPyStaticLineNameStr)->c_str(), (&wxPyStaticLineNameStr)->Len());
+#endif
+  }
+  return pyobj;
+}
+
+
 SWIGINTERN PyObject *_wrap_new_StaticBox(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxWindow *arg1 = (wxWindow *) 0 ;
@@ -7740,7 +7761,7 @@ SWIGINTERN PyObject *_wrap_new_StaticLine(PyObject *SWIGUNUSEDPARM(self), PyObje
   wxSize const &arg4_defvalue = wxDefaultSize ;
   wxSize *arg4 = (wxSize *) &arg4_defvalue ;
   long arg5 = (long) wxLI_HORIZONTAL ;
-  wxString const &arg6_defvalue = wxPyStaticTextNameStr ;
+  wxString const &arg6_defvalue = wxPyStaticLineNameStr ;
   wxString *arg6 = (wxString *) &arg6_defvalue ;
   wxStaticLine *result = 0 ;
   void *argp1 = 0 ;
@@ -7852,7 +7873,7 @@ SWIGINTERN PyObject *_wrap_StaticLine_Create(PyObject *SWIGUNUSEDPARM(self), PyO
   wxSize const &arg5_defvalue = wxDefaultSize ;
   wxSize *arg5 = (wxSize *) &arg5_defvalue ;
   long arg6 = (long) wxLI_HORIZONTAL ;
-  wxString const &arg7_defvalue = wxPyStaticTextNameStr ;
+  wxString const &arg7_defvalue = wxPyStaticLineNameStr ;
   wxString *arg7 = (wxString *) &arg7_defvalue ;
   bool result;
   void *argp1 = 0 ;
@@ -49515,6 +49536,7 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_addvarlink(SWIG_globals(),(char*)"StaticBitmapNameStr",StaticBitmapNameStr_get, StaticBitmapNameStr_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"StaticBoxNameStr",StaticBoxNameStr_get, StaticBoxNameStr_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"StaticTextNameStr",StaticTextNameStr_get, StaticTextNameStr_set);
+  SWIG_addvarlink(SWIG_globals(),(char*)"StaticLineNameStr",StaticLineNameStr_get, StaticLineNameStr_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"ListBoxNameStr",ListBoxNameStr_get, ListBoxNameStr_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"TextCtrlNameStr",TextCtrlNameStr_get, TextCtrlNameStr_set);
   SWIG_Python_SetConstant(d, "TE_NO_VSCROLL",SWIG_From_int(static_cast< int >(wxTE_NO_VSCROLL)));

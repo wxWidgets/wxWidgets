@@ -192,6 +192,8 @@ protected:
 
     virtual wxSize DoGetBestSize() const;
 
+    virtual void CreatePeer(const wxString& str, const wxPoint& pos, const wxSize& size, long style );
+	
     virtual void DoSetValue(const wxString& value, int flags = 0);
 
     bool  m_editable;
