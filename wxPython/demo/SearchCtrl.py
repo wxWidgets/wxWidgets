@@ -45,10 +45,10 @@ class TestPanel(wx.Panel):
         
 
     def OnToggleSearchButton(self, evt):
-        self.search.SetSearchButtonVisible( evt.GetInt() )
+        self.search.ShowSearchButton( evt.GetInt() )
             
     def OnToggleCancelButton(self, evt):
-        self.search.SetCancelButtonVisible( evt.GetInt() )
+        self.search.ShowCancelButton( evt.GetInt() )
         
     def OnToggleSearchMenu(self, evt):
         if evt.GetInt():

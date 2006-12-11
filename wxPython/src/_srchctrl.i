@@ -56,11 +56,11 @@ public:
     
     // get/set search options
     // ----------------------
-    virtual void SetSearchButtonVisible( bool show );
-    virtual bool GetSearchButtonVisible() const;
+    virtual void ShowSearchButton( bool show );
+    virtual bool IsSearchButtonVisible() const;
 
-    virtual void SetCancelButtonVisible( bool show );
-    virtual bool GetCancelButtonVisible() const;
+    virtual void ShowCancelButton( bool show );
+    virtual bool IsCancelButtonVisible() const;
 
 #ifdef __WXMAC__
     %extend {
@@ -76,8 +76,8 @@ public:
     
     
     %property(Menu, GetMenu, SetMenu);
-    %property(SearchButtonVisible, GetSearchButtonVisible, SetSearchButtonVisible);
-    %property(CancelButtonVisible, GetCancelButtonVisible, SetCancelButtonVisible);
+    %property(SearchButtonVisible, IsSearchButtonVisible, ShowSearchButton);
+    %property(CancelButtonVisible, IsCancelButtonVisible, ShowCancelButton);
 };
      
 
