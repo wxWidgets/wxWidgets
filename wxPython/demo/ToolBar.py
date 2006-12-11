@@ -133,13 +133,13 @@ class TestToolBar(wx.Frame):
                 ))
         self.Bind(wx.EVT_COMBOBOX, self.OnCombo, id=cbID)
 
+        tb.AddSeparator()
         search = TestSearchCtrl(tb, size=(150,-1), doSearch=self.DoSearch)
         tb.AddControl(search)
 
         # Final thing to do for a toolbar is call the Realize() method. This
         # causes it to render (more or less, that is).
         tb.Realize()
-
 
 
     def DoSearch(self,  text):
@@ -200,6 +200,7 @@ class TestPanel(wx.Panel):
     def OnButton(self, evt):
         win = TestToolBar(self, self.log)
         win.Show(True)
+        self.frame = win
 
 
 #---------------------------------------------------------------------------
