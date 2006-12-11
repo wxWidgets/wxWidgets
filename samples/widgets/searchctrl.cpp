@@ -31,6 +31,7 @@
     #include "wx/app.h"
     #include "wx/log.h"
     #include "wx/radiobox.h"
+    #include "wx/statbox.h"
 #endif
 
 #include "wx/artprov.h"
