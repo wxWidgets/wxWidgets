@@ -8,14 +8,6 @@
 // License:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-// ============================================================================
-// declarations
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// headers
-// ----------------------------------------------------------------------------
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -23,13 +15,13 @@
     #pragma hdrstop
 #endif
 
-#ifndef WX_PRECOMP
-    #include "wx/menu.h"
-#endif //WX_PRECOMP
-
 #if wxUSE_SEARCHCTRL
 
 #include "wx/srchctrl.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/menu.h"
+#endif //WX_PRECOMP
 
 #if wxUSE_NATIVE_SEARCH_CONTROL
 
