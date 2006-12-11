@@ -173,7 +173,7 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-BEGIN_EVENT_TABLE(wxSearchButton, wxButton)
+BEGIN_EVENT_TABLE(wxSearchButton, wxControl)
     EVT_LEFT_UP(wxSearchButton::OnLeftUp)
     EVT_PAINT(wxSearchButton::OnPaint)
 END_EVENT_TABLE()
