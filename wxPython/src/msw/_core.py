@@ -10358,7 +10358,6 @@ class Window(EvtHandler):
         self.GetEventHandler().ProcessEvent(wx.SizeEvent((-1,-1)))
 
     AcceleratorTable = property(GetAcceleratorTable,SetAcceleratorTable,doc="See `GetAcceleratorTable` and `SetAcceleratorTable`") 
-    AdjustedBestSize = property(GetAdjustedBestSize,doc="See `GetAdjustedBestSize`") 
     AutoLayout = property(GetAutoLayout,SetAutoLayout,doc="See `GetAutoLayout` and `SetAutoLayout`") 
     BackgroundColour = property(GetBackgroundColour,SetBackgroundColour,doc="See `GetBackgroundColour` and `SetBackgroundColour`") 
     BackgroundStyle = property(GetBackgroundStyle,SetBackgroundStyle,doc="See `GetBackgroundStyle` and `SetBackgroundStyle`") 

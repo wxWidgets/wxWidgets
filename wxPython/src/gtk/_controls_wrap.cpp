@@ -3379,6 +3379,49 @@ SWIGINTERN wxDateTime wxDatePickerCtrl_GetUpperLimit(wxDatePickerCtrl *self){
  static const wxString wxPyFontPickerCtrlNameStr(wxFontPickerCtrlNameStr); 
  static const wxString wxPyCollapsiblePaneNameStr(wxCollapsiblePaneNameStr); 
  static const wxString wxPySearchCtrlNameStr(wxSearchCtrlNameStr); 
+
+#if !defined(wxUSE_SEARCHCTRL) || !wxUSE_SEARCHCTRL
+// define a dummy class for builds that don't have wxSearchCtrl
+
+enum {
+    wxEVT_COMMAND_SEARCHCTRL_CANCEL,
+    wxEVT_COMMAND_SEARCHCTRL_SEARCH
+};
+
+class wxSearchCtrl : public wxTextCtrl
+{
+public:
+    wxSearchCtrl() { wxPyRaiseNotImplemented(); }
+    wxSearchCtrl(wxWindow*, wxWindowID,
+                 const wxString&,
+                 const wxPoint&,
+                 const wxSize&,
+                 long style,
+                 const wxValidator&,
+                 const wxString& name)
+    { wxPyRaiseNotImplemented(); }
+
+    bool Create( wxWindow*, wxWindowID,
+                 const wxString&,
+                 const wxPoint&,
+                 const wxSize&,
+                 long style,
+                 const wxValidator&,
+                 const wxString& name) {}
+        
+    virtual void SetMenu( wxMenu* ) {}
+    virtual wxMenu* GetMenu() { return NULL; }
+    
+    // get/set search options
+    // ----------------------
+    virtual void ShowSearchButton( bool ) {}
+    virtual bool IsSearchButtonVisible() const { return false; }
+
+    virtual void ShowCancelButton( bool ) {}
+    virtual bool IsCancelButtonVisible() const { return false; }
+};    
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif

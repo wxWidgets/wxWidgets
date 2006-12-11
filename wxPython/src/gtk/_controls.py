@@ -7132,7 +7132,31 @@ _controls_.CollapsiblePaneEvent_swigregister(CollapsiblePaneEvent)
 #---------------------------------------------------------------------------
 
 class SearchCtrl(TextCtrl):
-    """Proxy of C++ SearchCtrl class"""
+    """
+    A search control is a composite of a `wx.TextCtrl` with optional
+    bitmap buttons and a drop-down menu.  Controls like this can typically
+    be found on a toolbar of applications that support some form of search
+    functionality.  On the Mac this control is implemneted using the
+    native HISearchField control, on the other platforms a generic control
+    is used, although that may change in the future as more platforms
+    introduce native search widgets.
+
+    If you wish to use a drop-down menu with your wx.SearchCtrl then you
+    will need to manage its content and handle the menu events yourself,
+    but this is an easy thing to do.  Simply build the menu, pass it to
+    `SetMenu`, and also bind a handler for a range of EVT_MENU events.
+    This gives you the flexibility to use the drop-down menu however you
+    wish, such as for a history of searches, or as a way to select
+    different kinds of searches.  The ToolBar.py sample in the demo shows
+    one way to do this.
+
+    Since the control derives from `wx.TextCtrl` it is convenient to use
+    the styles and events designed for `wx.TextCtrl`.  For example you can
+    use the ``wx.TE_PROCESS_ENTER`` style and catch the
+    ``wx.EVT_TEXT_ENTER`` event to know when the user has pressed the
+    Enter key in the control and wishes to start a search.
+
+    """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
@@ -7141,6 +7165,30 @@ class SearchCtrl(TextCtrl):
             Point pos=DefaultPosition, Size size=DefaultSize, 
             long style=0, Validator validator=DefaultValidator, 
             String name=SearchCtrlNameStr) -> SearchCtrl
+
+        A search control is a composite of a `wx.TextCtrl` with optional
+        bitmap buttons and a drop-down menu.  Controls like this can typically
+        be found on a toolbar of applications that support some form of search
+        functionality.  On the Mac this control is implemneted using the
+        native HISearchField control, on the other platforms a generic control
+        is used, although that may change in the future as more platforms
+        introduce native search widgets.
+
+        If you wish to use a drop-down menu with your wx.SearchCtrl then you
+        will need to manage its content and handle the menu events yourself,
+        but this is an easy thing to do.  Simply build the menu, pass it to
+        `SetMenu`, and also bind a handler for a range of EVT_MENU events.
+        This gives you the flexibility to use the drop-down menu however you
+        wish, such as for a history of searches, or as a way to select
+        different kinds of searches.  The ToolBar.py sample in the demo shows
+        one way to do this.
+
+        Since the control derives from `wx.TextCtrl` it is convenient to use
+        the styles and events designed for `wx.TextCtrl`.  For example you can
+        use the ``wx.TE_PROCESS_ENTER`` style and catch the
+        ``wx.EVT_TEXT_ENTER`` event to know when the user has pressed the
+        Enter key in the control and wishes to start a search.
+
         """
         _controls_.SearchCtrl_swiginit(self,_controls_.new_SearchCtrl(*args, **kwargs))
         self._setOORInfo(self)
@@ -7155,39 +7203,86 @@ class SearchCtrl(TextCtrl):
         return _controls_.SearchCtrl_Create(*args, **kwargs)
 
     def SetMenu(*args, **kwargs):
-        """SetMenu(self, Menu menu)"""
+        """
+        SetMenu(self, Menu menu)
+
+        Sets the search control's menu object. If there is already a menu
+        associated with the search control it is deleted.
+        """
         return _controls_.SearchCtrl_SetMenu(*args, **kwargs)
 
     def GetMenu(*args, **kwargs):
-        """GetMenu(self) -> Menu"""
+        """
+        GetMenu(self) -> Menu
+
+        Returns a pointer to the search control's menu object or None if there
+        is no menu attached.
+        """
         return _controls_.SearchCtrl_GetMenu(*args, **kwargs)
 
     def ShowSearchButton(*args, **kwargs):
-        """ShowSearchButton(self, bool show)"""
+        """
+        ShowSearchButton(self, bool show)
+
+        Sets the search button visibility value on the search control. If
+        there is a menu attached, the search button will be visible regardless
+        of the search button visibility value.  This has no effect in Mac OS X
+        v10.3
+        """
         return _controls_.SearchCtrl_ShowSearchButton(*args, **kwargs)
 
     def IsSearchButtonVisible(*args, **kwargs):
-        """IsSearchButtonVisible(self) -> bool"""
+        """
+        IsSearchButtonVisible(self) -> bool
+
+        Returns the search button visibility value. If there is a menu
+        attached, the search button will be visible regardless of the search
+        button visibility value.  This always returns false in Mac OS X v10.3
+        """
         return _controls_.SearchCtrl_IsSearchButtonVisible(*args, **kwargs)
 
     def ShowCancelButton(*args, **kwargs):
-        """ShowCancelButton(self, bool show)"""
+        """
+        ShowCancelButton(self, bool show)
+
+        Shows or hides the cancel button.
+        """
         return _controls_.SearchCtrl_ShowCancelButton(*args, **kwargs)
 
     def IsCancelButtonVisible(*args, **kwargs):
-        """IsCancelButtonVisible(self) -> bool"""
+        """
+        IsCancelButtonVisible(self) -> bool
+
+        Indicates whether the cancel button is visible. 
+        """
         return _controls_.SearchCtrl_IsCancelButtonVisible(*args, **kwargs)
 
     def SetSearchBitmap(*args, **kwargs):
-        """SetSearchBitmap(self, Bitmap bitmap)"""
+        """
+        SetSearchBitmap(self, Bitmap bitmap)
+
+        Sets the bitmap to use for the search button.  This currently does not
+        work on the Mac.
+        """
         return _controls_.SearchCtrl_SetSearchBitmap(*args, **kwargs)
 
     def SetSearchMenuBitmap(*args, **kwargs):
-        """SetSearchMenuBitmap(self, Bitmap bitmap)"""
+        """
+        SetSearchMenuBitmap(self, Bitmap bitmap)
+
+        Sets the bitmap to use for the search button when there is a drop-down
+        menu associated with the search control.  This currently does not work
+        on the Mac.
+        """
         return _controls_.SearchCtrl_SetSearchMenuBitmap(*args, **kwargs)
 
     def SetCancelBitmap(*args, **kwargs):
-        """SetCancelBitmap(self, Bitmap bitmap)"""
+        """
+        SetCancelBitmap(self, Bitmap bitmap)
+
+        Sets the bitmap to use for the cancel button.  This currently does not
+        work on the Mac.
+        """
         return _controls_.SearchCtrl_SetCancelBitmap(*args, **kwargs)
 
     Menu = property(GetMenu,SetMenu) 
