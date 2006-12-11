@@ -100,7 +100,7 @@ void wxMacSearchFieldControl::CreateControl( wxTextCtrl* /*peer*/, const Rect* b
 }
 
 // search field options
-void wxMacSearchFieldControl::SetSearchButtonVisible( bool show )
+void wxMacSearchFieldControl::ShowSearchButton( bool show )
 {
     if ( UMAGetSystemVersion() >= 0x1040 )
     {
@@ -118,14 +118,14 @@ void wxMacSearchFieldControl::SetSearchButtonVisible( bool show )
     }
 }
 
-bool wxMacSearchFieldControl::GetSearchButtonVisible() const
+bool wxMacSearchFieldControl::IsSearchButtonVisible() const
 {
     OptionBits attributes = 0;
     verify_noerr( HISearchFieldGetAttributes( m_controlRef, &attributes ) );
     return ( attributes & kHISearchFieldAttributesSearchIcon ) != 0;
 }
 
-void wxMacSearchFieldControl::SetCancelButtonVisible( bool show )
+void wxMacSearchFieldControl::ShowCancelButton( bool show )
 {
     OptionBits set = 0;
     OptionBits clear = 0;
@@ -140,7 +140,7 @@ void wxMacSearchFieldControl::SetCancelButtonVisible( bool show )
     HISearchFieldChangeAttributes( m_controlRef, set, clear );
 }
 
-bool wxMacSearchFieldControl::GetCancelButtonVisible() const
+bool wxMacSearchFieldControl::IsCancelButtonVisible() const
 {
     OptionBits attributes = 0;
     verify_noerr( HISearchFieldGetAttributes( m_controlRef, &attributes ) );
@@ -317,35 +317,35 @@ wxMenu* wxSearchCtrl::GetMenu()
     return m_menu;
 }
 
-void wxSearchCtrl::SetSearchButtonVisible( bool show )
+void wxSearchCtrl::ShowSearchButton( bool show )
 {
-    if ( GetSearchButtonVisible() == show )
+    if ( IsSearchButtonVisible() == show )
     {
         // no change
         return;
     }
-    GetPeer()->SetSearchButtonVisible( show );
+    GetPeer()->ShowSearchButton( show );
 }
 
-bool wxSearchCtrl::GetSearchButtonVisible() const
+bool wxSearchCtrl::IsSearchButtonVisible() const
 {
-    return GetPeer()->GetSearchButtonVisible();
+    return GetPeer()->IsSearchButtonVisible();
 }
 
 
-void wxSearchCtrl::SetCancelButtonVisible( bool show )
+void wxSearchCtrl::ShowCancelButton( bool show )
 {
-    if ( GetCancelButtonVisible() == show )
+    if ( IsCancelButtonVisible() == show )
     {
         // no change
         return;
     }
-    GetPeer()->SetCancelButtonVisible( show );
+    GetPeer()->ShowCancelButton( show );
 }
 
-bool wxSearchCtrl::GetCancelButtonVisible() const
+bool wxSearchCtrl::IsCancelButtonVisible() const
 {
-    return GetPeer()->GetCancelButtonVisible();
+    return GetPeer()->IsCancelButtonVisible();
 }
 
 wxInt32 wxSearchCtrl::MacSearchFieldSearchHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) )
