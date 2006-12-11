@@ -16,10 +16,10 @@
 // ----------------------------------------------------------------------------
 // headers
 // ----------------------------------------------------------------------------
-
+ 
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
-
+ 
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -40,7 +40,6 @@
     #include "../sample.xpm"
 #endif
 
-//###include "dmalloc.h"
 // ----------------------------------------------------------------------------
 // private classes
 // ----------------------------------------------------------------------------
@@ -149,15 +148,13 @@ MyFrame::MyFrame(const wxString& title)
     // set the frame icon
     SetIcon(wxICON(sample));
 
-//   char * c = new char [100] ;
-//   strcpy (c, "hello");
 #if wxUSE_MENUS
     // create a menu bar
     wxMenu *fileMenu = new wxMenu;
 
     // the "About" item should be in the help menu
     wxMenu *helpMenu = new wxMenu;
-    helpMenu->Append(Minimal_About, "hello", _T("Show about dialog"));
+    helpMenu->Append(Minimal_About, _T("&About...\tF1"), _T("Show about dialog"));
 
     fileMenu->Append(Minimal_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
 
