@@ -28,8 +28,8 @@ class TestPanel(wx.Panel):
         sizer.Add((15,15))
         sizer.Add(self.search, 0, wx.ALL, 15)
 
-        self.tc = wx.TextCtrl(self)  # just for testing that heights match...
-        sizer.Add(self.tc, 0, wx.TOP, 15)
+##         self.tc = wx.TextCtrl(self)  # just for testing that heights match...
+##         sizer.Add(self.tc, 0, wx.TOP, 15)
 
         self.SetSizer(sizer)
 
@@ -41,7 +41,7 @@ class TestPanel(wx.Panel):
 
         self.Bind(wx.EVT_SEARCHCTRL_SEARCH_BTN, self.OnSearch, self.search)
         self.Bind(wx.EVT_SEARCHCTRL_CANCEL_BTN, self.OnCancel, self.search)
-        self.search.Bind(wx.EVT_TEXT_ENTER,        self.OnDoSearch) #, self.search)
+        self.search.Bind(wx.EVT_TEXT_ENTER, self.OnDoSearch, self.search)
         
 
     def OnToggleSearchButton(self, evt):
