@@ -165,7 +165,7 @@ BEGIN_EVENT_TABLE(wxSearchButton, wxControl)
 END_EVENT_TABLE()
 
 BEGIN_EVENT_TABLE(wxSearchCtrl, wxSearchCtrlBase)
-    EVT_SEARCHCTRL_SEARCH(wxID_ANY, wxSearchCtrl::OnSearchButton)
+    EVT_SEARCHCTRL_SEARCH_BTN(wxID_ANY, wxSearchCtrl::OnSearchButton)
     EVT_SET_FOCUS(wxSearchCtrl::OnSetFocus)
 END_EVENT_TABLE()
 
