@@ -120,9 +120,9 @@ Returns a pointer to the search control's menu object or NULL if there is no
 menu attached.
 
 
-\membersection{wxSearchCtrl::SetSearchButtonVisible}\label{wxsearchctrlsetsearchbuttonvisible}
+\membersection{wxSearchCtrl::ShowSearchButton}\label{wxsearchctrlshowsearchbutton}
 
-\func{virtual void}{SetSearchButtonVisible}{\param{bool }{ show}}
+\func{virtual void}{ShowSearchButton}{\param{bool }{ show}}
 
 Sets the search button visibility value on the search control.  
 If there is a menu attached, the search button will be visible regardless of the search
@@ -131,9 +131,9 @@ button visibility value.
 This has no effect in Mac OS X v10.3
 
 
-\membersection{wxSearchCtrl::GetSearchButtonVisible}\label{wxsearchctrlgetsearchbuttonvisible}
+\membersection{wxSearchCtrl::IsSearchButtonVisible}\label{wxsearchctrlissearchbuttonvisible}
 
-\func{virtual bool}{GetSearchButtonVisible}{\void}
+\func{virtual bool}{IsSearchButtonVisible}{\void}
 
 Returns the search button visibility value.  
 If there is a menu attached, the search button will be visible regardless of the search
@@ -142,15 +142,15 @@ button visibility value.
 This always returns false in Mac OS X v10.3
 
 
-\membersection{wxSearchCtrl::SetCancelButtonVisible}\label{wxsearchctrlsetcancelbuttonvisible}
+\membersection{wxSearchCtrl::ShowCancelButton}\label{wxsearchctrlshowcancelbutton}
 
-\func{virtual void}{SetCancelButtonVisible}{\param{bool }{ show}}
+\func{virtual void}{ShowCancelButton}{\param{bool }{ show}}
 
 Shows or hides the cancel button.
 
 
-\membersection{wxSearchCtrl::GetCancelButtonVisible}\label{wxsearchctrlgetcancelbuttonvisible}
+\membersection{wxSearchCtrl::IsCancelButtonVisible}\label{wxsearchctrliscancelbuttonvisible}
 
-\func{virtual bool}{GetCancelButtonVisible}{\void}
+\func{virtual bool}{IsCancelButtonVisible}{\void}
 
 Indicates whether the cancel button is visible.

@@ -14,36 +14,10 @@
 
 #if wxUSE_SEARCHCTRL
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "srchctlg.h"
-#endif
-
 #include "wx/bitmap.h"
-
-// ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxSearchButton;
 class WXDLLEXPORT wxSearchTextCtrl;
-
-class WXDLLEXPORT wxSearchCtrlBase : public wxTextCtrlBase
-{
-public:
-    wxSearchCtrlBase() {}
-    virtual ~wxSearchCtrlBase() {}
-
-    // search control 
-    virtual void SetMenu( wxMenu* menu ) = 0;
-    virtual wxMenu* GetMenu() = 0;
-
-
-    // get/set options
-    virtual void SetSearchButtonVisible( bool show ) = 0;
-    virtual bool GetSearchButtonVisible() const = 0;
-
-    virtual void SetCancelButtonVisible( bool show ) = 0;
-    virtual bool GetCancelButtonVisible() const = 0;
-protected:
-};
 
 // ----------------------------------------------------------------------------
 // wxSearchCtrl is a combination of wxTextCtrl and wxSearchButton
@@ -81,11 +55,11 @@ public:
     
     // get/set search options
     // ----------------------
-    virtual void SetSearchButtonVisible( bool show );
-    virtual bool GetSearchButtonVisible() const;
+    virtual void ShowSearchButton( bool show );
+    virtual bool IsSearchButtonVisible() const;
 
-    virtual void SetCancelButtonVisible( bool show );
-    virtual bool GetCancelButtonVisible() const;
+    virtual void ShowCancelButton( bool show );
+    virtual bool IsCancelButtonVisible() const;
 
     // accessors
     // ---------

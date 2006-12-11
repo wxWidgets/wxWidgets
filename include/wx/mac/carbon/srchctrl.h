@@ -14,30 +14,6 @@
 
 #if wxUSE_SEARCHCTRL
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma interface "srchctrl.h"
-#endif
-
-class WXDLLEXPORT wxSearchCtrlBase : public wxTextCtrl
-{
-public:
-    wxSearchCtrlBase() {}
-    virtual ~wxSearchCtrlBase() {}
-
-    // search control 
-    virtual void SetMenu( wxMenu* menu ) = 0;
-    virtual wxMenu* GetMenu() = 0;
-
-
-    // get/set options
-    virtual void SetSearchButtonVisible( bool show ) = 0;
-    virtual bool GetSearchButtonVisible() const = 0;
-
-    virtual void SetCancelButtonVisible( bool show ) = 0;
-    virtual bool GetCancelButtonVisible() const = 0;
-protected:
-};
-
 class wxMacSearchFieldControl;
 
 class WXDLLEXPORT wxSearchCtrl : public wxSearchCtrlBase
@@ -72,11 +48,11 @@ public:
     
     // get/set search options
     // ----------------------
-    virtual void SetSearchButtonVisible( bool show );
-    virtual bool GetSearchButtonVisible() const;
+    virtual void ShowSearchButton( bool show );
+    virtual bool IsSearchButtonVisible() const;
 
-    virtual void SetCancelButtonVisible( bool show );
-    virtual bool GetCancelButtonVisible() const;
+    virtual void ShowCancelButton( bool show );
+    virtual bool IsCancelButtonVisible() const;
 
     virtual wxInt32     MacSearchFieldSearchHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
     virtual wxInt32     MacSearchFieldCancelHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;

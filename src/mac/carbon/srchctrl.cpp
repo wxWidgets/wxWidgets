@@ -17,10 +17,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma implementation "srchctrl.h"
-#endif
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -71,11 +67,11 @@ public :
     }
 
     // search field options
-    virtual void SetSearchButtonVisible( bool show );
-    virtual bool GetSearchButtonVisible() const;
+    virtual void ShowSearchButton( bool show );
+    virtual bool IsSearchButtonVisible() const;
 
-    virtual void SetCancelButtonVisible( bool show );
-    virtual bool GetCancelButtonVisible() const;
+    virtual void ShowCancelButton( bool show );
+    virtual bool IsCancelButtonVisible() const;
 
     virtual void SetSearchMenu( wxMenu* menu );
     virtual wxMenu* GetSearchMenu() const;
@@ -91,8 +87,8 @@ void wxMacSearchFieldControl::CreateControl( wxTextCtrl* /*peer*/, const Rect* b
     OptionBits attributes = 0;
     if ( UMAGetSystemVersion() >= 0x1040 )
     {
-		attributes = kHISearchFieldAttributesSearchIcon;
-	}
+        attributes = kHISearchFieldAttributesSearchIcon;
+    }
     HIRect hibounds = { { bounds->left, bounds->top }, { bounds->right-bounds->left, bounds->bottom-bounds->top } };
     verify_noerr( HISearchFieldCreate( 
         &hibounds,

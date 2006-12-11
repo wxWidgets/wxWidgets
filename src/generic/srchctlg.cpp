@@ -17,10 +17,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
-    #pragma implementation "srchctlg.h"
-#endif
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -316,7 +312,7 @@ wxMenu* wxSearchCtrl::GetMenu()
     return m_menu;
 }
 
-void wxSearchCtrl::SetSearchButtonVisible( bool show )
+void wxSearchCtrl::ShowSearchButton( bool show )
 {
     if ( m_searchButtonVisible == show )
     {
@@ -333,13 +329,13 @@ void wxSearchCtrl::SetSearchButtonVisible( bool show )
     LayoutControls(0, 0, rect.GetWidth(), rect.GetHeight());
 }
 
-bool wxSearchCtrl::GetSearchButtonVisible() const
+bool wxSearchCtrl::IsSearchButtonVisible() const
 {
     return m_searchButtonVisible;
 }
 
 
-void wxSearchCtrl::SetCancelButtonVisible( bool show )
+void wxSearchCtrl::ShowCancelButton( bool show )
 {
     if ( m_cancelButtonVisible == show )
     {
@@ -352,7 +348,7 @@ void wxSearchCtrl::SetCancelButtonVisible( bool show )
     LayoutControls(0, 0, rect.GetWidth(), rect.GetHeight());
 }
 
-bool wxSearchCtrl::GetCancelButtonVisible() const
+bool wxSearchCtrl::IsCancelButtonVisible() const
 {
     return m_cancelButtonVisible;
 }

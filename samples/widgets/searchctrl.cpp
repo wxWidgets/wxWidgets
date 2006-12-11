@@ -204,12 +204,12 @@ wxMenu* SearchCtrlWidgetsPage::CreateTestMenu()
 
 void SearchCtrlWidgetsPage::OnToggleSearchButton(wxCommandEvent&)
 {
-    m_srchCtrl->SetSearchButtonVisible( m_searchBtnCheck->GetValue() );
+    m_srchCtrl->ShowSearchButton( m_searchBtnCheck->GetValue() );
 }
 
 void SearchCtrlWidgetsPage::OnToggleCancelButton(wxCommandEvent&)
 {
-    m_srchCtrl->SetCancelButtonVisible( m_cancelBtnCheck->GetValue() );
+    m_srchCtrl->ShowCancelButton( m_cancelBtnCheck->GetValue() );
         
 }
 
