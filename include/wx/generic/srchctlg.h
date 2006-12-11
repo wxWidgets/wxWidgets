@@ -18,6 +18,10 @@
     #pragma interface "srchctlg.h"
 #endif
 
+#include "wx/bitmap.h"
+
+// ----------------------------------------------------------------------------
+
 class WXDLLEXPORT wxSearchButton;
 class WXDLLEXPORT wxSearchTextCtrl;
 
