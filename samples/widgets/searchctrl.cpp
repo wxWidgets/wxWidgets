@@ -123,7 +123,7 @@ END_EVENT_TABLE()
 #endif
 
 IMPLEMENT_WIDGETS_PAGE(SearchCtrlWidgetsPage, _T("SearchCtrl"),
-                       FAMILY_CTRLS | ALL_CTRLS);
+                       FAMILY_CTRLS | EDITABLE_CTRLS | ALL_CTRLS);
 
 SearchCtrlWidgetsPage::SearchCtrlWidgetsPage(WidgetsBookCtrl *book,
                                      wxImageList *imaglist)
