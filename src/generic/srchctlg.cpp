@@ -8,20 +8,16 @@
 // License:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-// ============================================================================
-// declarations
-// ============================================================================
-
-// ----------------------------------------------------------------------------
-// headers
-// ----------------------------------------------------------------------------
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
+
+#if wxUSE_SEARCHCTRL
+
+#include "wx/srchctrl.h"
 
 #ifndef WX_PRECOMP
     #include "wx/button.h"
@@ -30,16 +26,11 @@
     #include "wx/dcmemory.h"
 #endif //WX_PRECOMP
 
-#if wxUSE_SEARCHCTRL
-
-#include "wx/srchctrl.h"
-
 #if !wxUSE_NATIVE_SEARCH_CONTROL
 
 #include "wx/image.h"
 
-#define WXMIN(a,b) (a)<(b)?(a):(b)
-#define WXMAX(a,b) (a)>(b)?(a):(b)
+#define WXMAX(a,b) ((a)>(b)?(a):(b))
 
 // ----------------------------------------------------------------------------
 // constants
@@ -239,8 +230,6 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
 
     m_text = new wxSearchTextCtrl(this, value, style & ~wxBORDER_MASK);
 
-    wxSize sizeText = m_text->GetBestSize();
-
     m_searchButton = new wxSearchButton(this,wxEVT_COMMAND_SEARCHCTRL_SEARCH,m_searchBitmap);
     m_cancelButton = new wxSearchButton(this,wxEVT_COMMAND_SEARCHCTRL_CANCEL,m_cancelBitmap);
 
@@ -276,8 +265,8 @@ void wxSearchCtrl::SetMenu( wxMenu* menu )
         // no change
         return;
     }
+    bool hadMenu = (m_menu != NULL);
     delete m_menu;
-    bool hadMenu = (m_menu!=0);
     m_menu = menu;
 
     if ( m_menu && !hadMenu )
@@ -692,7 +681,7 @@ bool wxSearchCtrl::SetFont(const wxFont& font)
     bool result = wxSearchCtrlBase::SetFont(font);
     if ( result && m_text )
     {
-        result &= m_text->SetFont(font);
+        result = m_text->SetFont(font);
     }
     RecalcBitmaps();
     return result;
