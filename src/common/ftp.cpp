@@ -87,7 +87,7 @@ wxFTP::wxFTP()
     m_passwd << wxGetUserId() << wxT('@') << wxGetFullHostName();
 
     SetNotify(0);
-    SetFlags(wxSOCKET_NONE);
+    SetFlags(wxSOCKET_NOWAIT);
     m_bPassive = true;
     SetDefaultTimeout(60); // Default is Sixty Seconds
     m_bEncounteredError = false;
