@@ -158,7 +158,6 @@ v10.3", "");
 attached, the search button will be visible regardless of the search
 button visibility value.  This always returns false in Mac OS X v10.3", "");
     
-
     DocDeclStr(
         virtual void , ShowCancelButton( bool show ),
         "Shows or hides the cancel button.", "");
@@ -200,12 +199,12 @@ work on the Mac.", "");
 
 
 
-%constant wxEventType wxEVT_COMMAND_SEARCHCTRL_CANCEL;
-%constant wxEventType wxEVT_COMMAND_SEARCHCTRL_SEARCH;
+%constant wxEventType wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN;
+%constant wxEventType wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN;
 
 %pythoncode {
-    EVT_SEARCHCTRL_CANCEL = wx.PyEventBinder( wxEVT_COMMAND_SEARCHCTRL_CANCEL, 1)
-    EVT_SEARCHCTRL_SEARCH = wx.PyEventBinder( wxEVT_COMMAND_SEARCHCTRL_SEARCH, 1)
+    EVT_SEARCHCTRL_CANCEL_BTN = wx.PyEventBinder( wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN, 1)
+    EVT_SEARCHCTRL_SEARCH_BTN = wx.PyEventBinder( wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, 1)
 }
 
 //---------------------------------------------------------------------------

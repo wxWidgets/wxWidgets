@@ -341,7 +341,7 @@ bool wxSearchCtrl::IsCancelButtonVisible() const
 
 wxInt32 wxSearchCtrl::MacSearchFieldSearchHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) )
 {
-    wxCommandEvent event(wxEVT_COMMAND_SEARCHCTRL_SEARCH, m_windowId );
+    wxCommandEvent event(wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, m_windowId );
     event.SetEventObject(this);
     ProcessCommand(event);
     return eventNotHandledErr ;
@@ -349,7 +349,7 @@ wxInt32 wxSearchCtrl::MacSearchFieldSearchHit(WXEVENTHANDLERREF WXUNUSED(handler
 
 wxInt32 wxSearchCtrl::MacSearchFieldCancelHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) )
 {
-    wxCommandEvent event(wxEVT_COMMAND_SEARCHCTRL_CANCEL, m_windowId );
+    wxCommandEvent event(wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN, m_windowId );
     event.SetEventObject(this);
     ProcessCommand(event);
     return eventNotHandledErr ;

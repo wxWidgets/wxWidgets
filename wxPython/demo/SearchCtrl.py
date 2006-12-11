@@ -39,8 +39,8 @@ class TestPanel(wx.Panel):
         self.Bind(wx.EVT_CHECKBOX, self.OnToggleCancelButton, cancelBtnOpt)
         self.Bind(wx.EVT_CHECKBOX, self.OnToggleSearchMenu,   menuBtnOpt)
 
-        self.Bind(wx.EVT_SEARCHCTRL_SEARCH, self.OnSearch, self.search)
-        self.Bind(wx.EVT_SEARCHCTRL_CANCEL, self.OnCancel, self.search)
+        self.Bind(wx.EVT_SEARCHCTRL_SEARCH_BTN, self.OnSearch, self.search)
+        self.Bind(wx.EVT_SEARCHCTRL_CANCEL_BTN, self.OnCancel, self.search)
         self.search.Bind(wx.EVT_TEXT_ENTER,        self.OnDoSearch) #, self.search)
         
 

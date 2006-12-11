@@ -137,7 +137,7 @@ protected:
 
         m_search->SetFocus();
 
-        if ( m_eventType == wxEVT_COMMAND_SEARCHCTRL_SEARCH )
+        if ( m_eventType == wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN )
         {
             // this happens automatically, just like on Mac OS X
             m_search->PopupSearchMenu();
@@ -230,8 +230,10 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
 
     m_text = new wxSearchTextCtrl(this, value, style & ~wxBORDER_MASK);
 
-    m_searchButton = new wxSearchButton(this,wxEVT_COMMAND_SEARCHCTRL_SEARCH,m_searchBitmap);
-    m_cancelButton = new wxSearchButton(this,wxEVT_COMMAND_SEARCHCTRL_CANCEL,m_cancelBitmap);
+    wxSize sizeText = m_text->GetBestSize();
+
+    m_searchButton = new wxSearchButton(this,wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN,m_searchBitmap);
+    m_cancelButton = new wxSearchButton(this,wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN,m_cancelBitmap);
 
     SetForegroundColour( m_text->GetForegroundColour() );
     m_searchButton->SetForegroundColour( m_text->GetForegroundColour() );

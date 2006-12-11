@@ -7,7 +7,7 @@ control, and a cancel button.
 
 \wxheading{Derived from}
 
-\helpref{wxTextCtrl}{wxsearchctrl}\\
+\helpref{wxTextCtrl}{wxtextctrl}\\
 streambuf\\
 \helpref{wxControl}{wxcontrol}\\
 \helpref{wxWindow}{wxwindow}\\
@@ -44,13 +44,14 @@ See also \helpref{window styles overview}{windowstyles} and \helpref{wxSearchCtr
 \wxheading{Event handling}
 
 To process input from a search control, use these event handler macros to direct input to member
-functions that take a \helpref{wxCommandEvent}{wxcommandevent} argument.
+functions that take a \helpref{wxCommandEvent}{wxcommandevent} argument. To retrieve actual search
+queries, use EVT\_TEXT and EVT\_TEXT\_ENTER events, just as you would with \helpref{wxTextCtrl}{wxtextctrl}.
 
 \twocolwidtha{9cm}%
 \begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf EVT\_SEARCHCTRL\_SEARCH(id, func)}}{Respond to a wxEVT\_SEARCHCTRL\_SEARCH event,
-generated when the search button is clicked.}
-\twocolitem{{\bf EVT\_SEARCHCTRL\_CANCEL(id, func)}}{Respond to a wxEVT\_SEARCHCTRL\_CANCEL event,
+\twocolitem{{\bf EVT\_SEARCHCTRL\_SEARCH\_BTN(id, func)}}{Respond to a wxEVT\_SEARCHCTRL\_SEARCH\_BTN event,
+generated when the search button is clicked. Note that this does not initiate a search.}
+\twocolitem{{\bf EVT\_SEARCHCTRL\_CANCEL\_BTN(id, func)}}{Respond to a wxEVT\_SEARCHCTRL\_CANCEL\_BTN event,
 generated when the cancel button is clicked.}
 \end{twocollist}%
 

@@ -37,8 +37,8 @@
 extern WXDLLEXPORT_DATA(const wxChar) wxSearchCtrlNameStr[];
 
 BEGIN_DECLARE_EVENT_TYPES()
-    DECLARE_EVENT_TYPE(wxEVT_COMMAND_SEARCHCTRL_CANCEL, 1119)
-    DECLARE_EVENT_TYPE(wxEVT_COMMAND_SEARCHCTRL_SEARCH, 1120)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN, 1119)
+    DECLARE_EVENT_TYPE(wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, 1120)
 END_DECLARE_EVENT_TYPES()
 
 // ----------------------------------------------------------------------------
@@ -78,11 +78,11 @@ public:
 // macros for handling search events
 // ----------------------------------------------------------------------------
 
-#define EVT_SEARCHCTRL_CANCEL(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_SEARCHCTRL_CANCEL, id, wxCommandEventHandler(fn))
+#define EVT_SEARCHCTRL_CANCEL_BTN(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_SEARCHCTRL_CANCEL_BTN, id, wxCommandEventHandler(fn))
 
-#define EVT_SEARCHCTRL_SEARCH(id, fn) \
-    wx__DECLARE_EVT1(wxEVT_COMMAND_SEARCHCTRL_SEARCH, id, wxCommandEventHandler(fn))
+#define EVT_SEARCHCTRL_SEARCH_BTN(id, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN, id, wxCommandEventHandler(fn))
 
 #endif // wxUSE_SEARCHCTRL
 
