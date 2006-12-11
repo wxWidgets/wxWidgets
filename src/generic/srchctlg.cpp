@@ -30,6 +30,9 @@
 
 #ifndef WX_PRECOMP
     #include "wx/button.h"
+    #include "wx/dcclient.h"
+    #include "wx/menu.h"
+    #include "wx/dcmemory.h"
 #endif //WX_PRECOMP
 
 #if wxUSE_SEARCHCTRL
