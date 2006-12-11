@@ -7155,21 +7155,21 @@ class SearchCtrl(TextCtrl):
         """GetMenu(self) -> Menu"""
         return _controls_.SearchCtrl_GetMenu(*args, **kwargs)
 
-    def SetSearchButtonVisible(*args, **kwargs):
-        """SetSearchButtonVisible(self, bool show)"""
-        return _controls_.SearchCtrl_SetSearchButtonVisible(*args, **kwargs)
+    def ShowSearchButton(*args, **kwargs):
+        """ShowSearchButton(self, bool show)"""
+        return _controls_.SearchCtrl_ShowSearchButton(*args, **kwargs)
 
-    def GetSearchButtonVisible(*args, **kwargs):
-        """GetSearchButtonVisible(self) -> bool"""
-        return _controls_.SearchCtrl_GetSearchButtonVisible(*args, **kwargs)
+    def IsSearchButtonVisible(*args, **kwargs):
+        """IsSearchButtonVisible(self) -> bool"""
+        return _controls_.SearchCtrl_IsSearchButtonVisible(*args, **kwargs)
 
-    def SetCancelButtonVisible(*args, **kwargs):
-        """SetCancelButtonVisible(self, bool show)"""
-        return _controls_.SearchCtrl_SetCancelButtonVisible(*args, **kwargs)
+    def ShowCancelButton(*args, **kwargs):
+        """ShowCancelButton(self, bool show)"""
+        return _controls_.SearchCtrl_ShowCancelButton(*args, **kwargs)
 
-    def GetCancelButtonVisible(*args, **kwargs):
-        """GetCancelButtonVisible(self) -> bool"""
-        return _controls_.SearchCtrl_GetCancelButtonVisible(*args, **kwargs)
+    def IsCancelButtonVisible(*args, **kwargs):
+        """IsCancelButtonVisible(self) -> bool"""
+        return _controls_.SearchCtrl_IsCancelButtonVisible(*args, **kwargs)
 
     def SetSearchBitmap(*args, **kwargs):
         """SetSearchBitmap(self, Bitmap ?)"""
@@ -7184,8 +7184,8 @@ class SearchCtrl(TextCtrl):
         return _controls_.SearchCtrl_SetCancelBitmap(*args, **kwargs)
 
     Menu = property(GetMenu,SetMenu) 
-    SearchButtonVisible = property(GetSearchButtonVisible,SetSearchButtonVisible) 
-    CancelButtonVisible = property(GetCancelButtonVisible,SetCancelButtonVisible) 
+    SearchButtonVisible = property(IsSearchButtonVisible,ShowSearchButton) 
+    CancelButtonVisible = property(IsCancelButtonVisible,ShowCancelButton) 
 _controls_.SearchCtrl_swigregister(SearchCtrl)
 SearchCtrlNameStr = cvar.SearchCtrlNameStr
 

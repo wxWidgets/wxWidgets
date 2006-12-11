@@ -8396,7 +8396,7 @@ class Window(EvtHandler):
         Raise(self)
 
         Raises the window to the top of the window hierarchy.  In current
-        version of wxWidgets this works both for manage and child windows.
+        version of wxWidgets this works both for managed and child windows.
         """
         return _core_.Window_Raise(*args, **kwargs)
 
@@ -8405,7 +8405,7 @@ class Window(EvtHandler):
         Lower(self)
 
         Lowers the window to the bottom of the window hierarchy.  In current
-        version of wxWidgets this works both for manage and child windows.
+        version of wxWidgets this works both for managed and child windows.
         """
         return _core_.Window_Lower(*args, **kwargs)
 

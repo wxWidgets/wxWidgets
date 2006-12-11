@@ -46594,7 +46594,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_SearchCtrl_SetSearchButtonVisible(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_SearchCtrl_ShowSearchButton(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxSearchCtrl *arg1 = (wxSearchCtrl *) 0 ;
   bool arg2 ;
@@ -46608,20 +46608,20 @@ SWIGINTERN PyObject *_wrap_SearchCtrl_SetSearchButtonVisible(PyObject *SWIGUNUSE
     (char *) "self",(char *) "show", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:SearchCtrl_SetSearchButtonVisible",kwnames,&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:SearchCtrl_ShowSearchButton",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxSearchCtrl, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SearchCtrl_SetSearchButtonVisible" "', expected argument " "1"" of type '" "wxSearchCtrl *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SearchCtrl_ShowSearchButton" "', expected argument " "1"" of type '" "wxSearchCtrl *""'"); 
   }
   arg1 = reinterpret_cast< wxSearchCtrl * >(argp1);
   ecode2 = SWIG_AsVal_bool(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SearchCtrl_SetSearchButtonVisible" "', expected argument " "2"" of type '" "bool""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SearchCtrl_ShowSearchButton" "', expected argument " "2"" of type '" "bool""'");
   } 
   arg2 = static_cast< bool >(val2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->SetSearchButtonVisible(arg2);
+    (arg1)->ShowSearchButton(arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -46632,7 +46632,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_SearchCtrl_GetSearchButtonVisible(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_SearchCtrl_IsSearchButtonVisible(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxSearchCtrl *arg1 = (wxSearchCtrl *) 0 ;
   bool result;
@@ -46644,12 +46644,12 @@ SWIGINTERN PyObject *_wrap_SearchCtrl_GetSearchButtonVisible(PyObject *SWIGUNUSE
   swig_obj[0] = args;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxSearchCtrl, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SearchCtrl_GetSearchButtonVisible" "', expected argument " "1"" of type '" "wxSearchCtrl const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SearchCtrl_IsSearchButtonVisible" "', expected argument " "1"" of type '" "wxSearchCtrl const *""'"); 
   }
   arg1 = reinterpret_cast< wxSearchCtrl * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)((wxSearchCtrl const *)arg1)->GetSearchButtonVisible();
+    result = (bool)((wxSearchCtrl const *)arg1)->IsSearchButtonVisible();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -46662,7 +46662,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_SearchCtrl_SetCancelButtonVisible(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_SearchCtrl_ShowCancelButton(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxSearchCtrl *arg1 = (wxSearchCtrl *) 0 ;
   bool arg2 ;
@@ -46676,20 +46676,20 @@ SWIGINTERN PyObject *_wrap_SearchCtrl_SetCancelButtonVisible(PyObject *SWIGUNUSE
     (char *) "self",(char *) "show", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:SearchCtrl_SetCancelButtonVisible",kwnames,&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:SearchCtrl_ShowCancelButton",kwnames,&obj0,&obj1)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxSearchCtrl, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SearchCtrl_SetCancelButtonVisible" "', expected argument " "1"" of type '" "wxSearchCtrl *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SearchCtrl_ShowCancelButton" "', expected argument " "1"" of type '" "wxSearchCtrl *""'"); 
   }
   arg1 = reinterpret_cast< wxSearchCtrl * >(argp1);
   ecode2 = SWIG_AsVal_bool(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SearchCtrl_SetCancelButtonVisible" "', expected argument " "2"" of type '" "bool""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SearchCtrl_ShowCancelButton" "', expected argument " "2"" of type '" "bool""'");
   } 
   arg2 = static_cast< bool >(val2);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->SetCancelButtonVisible(arg2);
+    (arg1)->ShowCancelButton(arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -46700,7 +46700,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_SearchCtrl_GetCancelButtonVisible(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_SearchCtrl_IsCancelButtonVisible(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxSearchCtrl *arg1 = (wxSearchCtrl *) 0 ;
   bool result;
@@ -46712,12 +46712,12 @@ SWIGINTERN PyObject *_wrap_SearchCtrl_GetCancelButtonVisible(PyObject *SWIGUNUSE
   swig_obj[0] = args;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxSearchCtrl, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SearchCtrl_GetCancelButtonVisible" "', expected argument " "1"" of type '" "wxSearchCtrl const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SearchCtrl_IsCancelButtonVisible" "', expected argument " "1"" of type '" "wxSearchCtrl const *""'"); 
   }
   arg1 = reinterpret_cast< wxSearchCtrl * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)((wxSearchCtrl const *)arg1)->GetCancelButtonVisible();
+    result = (bool)((wxSearchCtrl const *)arg1)->IsCancelButtonVisible();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -47932,10 +47932,10 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SearchCtrl_Create", (PyCFunction) _wrap_SearchCtrl_Create, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"SearchCtrl_SetMenu", (PyCFunction) _wrap_SearchCtrl_SetMenu, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"SearchCtrl_GetMenu", (PyCFunction)_wrap_SearchCtrl_GetMenu, METH_O, NULL},
-	 { (char *)"SearchCtrl_SetSearchButtonVisible", (PyCFunction) _wrap_SearchCtrl_SetSearchButtonVisible, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"SearchCtrl_GetSearchButtonVisible", (PyCFunction)_wrap_SearchCtrl_GetSearchButtonVisible, METH_O, NULL},
-	 { (char *)"SearchCtrl_SetCancelButtonVisible", (PyCFunction) _wrap_SearchCtrl_SetCancelButtonVisible, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"SearchCtrl_GetCancelButtonVisible", (PyCFunction)_wrap_SearchCtrl_GetCancelButtonVisible, METH_O, NULL},
+	 { (char *)"SearchCtrl_ShowSearchButton", (PyCFunction) _wrap_SearchCtrl_ShowSearchButton, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"SearchCtrl_IsSearchButtonVisible", (PyCFunction)_wrap_SearchCtrl_IsSearchButtonVisible, METH_O, NULL},
+	 { (char *)"SearchCtrl_ShowCancelButton", (PyCFunction) _wrap_SearchCtrl_ShowCancelButton, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"SearchCtrl_IsCancelButtonVisible", (PyCFunction)_wrap_SearchCtrl_IsCancelButtonVisible, METH_O, NULL},
 	 { (char *)"SearchCtrl_SetSearchBitmap", (PyCFunction) _wrap_SearchCtrl_SetSearchBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"SearchCtrl_SetSearchMenuBitmap", (PyCFunction) _wrap_SearchCtrl_SetSearchMenuBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"SearchCtrl_SetCancelBitmap", (PyCFunction) _wrap_SearchCtrl_SetCancelBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
