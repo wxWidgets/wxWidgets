@@ -32,7 +32,7 @@
 
 #include "wx/srchctrl.h"
 
-#if USE_NATIVE_SEARCH_CONTROL
+#if wxUSE_NATIVE_SEARCH_CONTROL
 
 #include "wx/mac/uma.h"
 #include "wx/mac/carbon/private/mactext.h"
@@ -385,6 +385,6 @@ void wxSearchCtrl::CreatePeer(
     }
 }
 
-#endif // USE_NATIVE_SEARCH_CONTROL
+#endif // wxUSE_NATIVE_SEARCH_CONTROL
 
 #endif // wxUSE_SEARCHCTRL
