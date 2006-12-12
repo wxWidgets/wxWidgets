@@ -2,9 +2,9 @@ Recent Changes for wxPython
 =====================================================================
 
 
-2.8.0.0
+2.8.0.1
 -------
-*
+* 11-Dec-2006
 
 Lots of fixes and updates to the AUI classes.
 
@@ -49,6 +49,15 @@ Added some modules from Riaan Booysen:
 wx.lib.masked: Patch from Will Sadkin.  Includes Unicode fixes, plus
 more helpful exceptions and ability to designate fields in mask
 without intervening fixed characters.
+
+Added wx.SearchCtrl, which is a composite of a wx.TextCtrl with optional
+bitmap buttons and a drop-down menu.  Controls like this can typically
+be found on a toolbar of applications that support some form of search
+functionality.  On the Mac this control is implemneted using the
+native HISearchField control, on the other platforms a generic control
+is used, although that may change in the future as more platforms
+introduce native search widgets.
+
 
 
 
