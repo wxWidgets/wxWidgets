@@ -11,9 +11,9 @@
 <div class="document" id="recent-changes-for-wxpython">
 <h1 class="title">Recent Changes for wxPython</h1>
 <div class="section">
-<h1><a id="id1" name="id1">2.8.0.0</a></h1>
+<h1><a id="id1" name="id1">2.8.0.1</a></h1>
 <ul class="simple">
-<li></li>
+<li>11-Dec-2006</li>
 </ul>
 <p>Lots of fixes and updates to the AUI classes.</p>
 <p>Added wx.CollapsiblePane.  On wxGTK it uses a native expander widget,
@@ -36,6 +36,29 @@ bitmap in front of the list items.</p>
 class which can be mixed with a wx.App class and provides a PyCrust
 window that can be activated with a Ctrl-Alt-I keystroke (or Cmd-Alt-I
 on the Mac.)</p>
+<p>Added some modules from Riaan Booysen:</p>
+<blockquote>
+<ul class="simple">
+<li>wx.lib.flagart:  contains icons of the flags of many countries.</li>
+<li>wx.lib.art.img2pyartprov: makes images embedded in a python file
+with img2py available via the wx.ArtProvider.</li>
+<li>wx.lib.langlistctrl: A wx.ListCtrl for selecting a language,
+which uses the country flag icons.</li>
+<li>An I18N sample for the demo.</li>
+</ul>
+</blockquote>
+<p>wx.lib.masked: Patch from Will Sadkin.  Includes Unicode fixes, plus
+more helpful exceptions and ability to designate fields in mask
+without intervening fixed characters.</p>
+<p>Added wx.SearchCtrl, which is a composite of a wx.TextCtrl with optional
+bitmap buttons and a drop-down menu.  Controls like this can typically
+be found on a toolbar of applications that support some form of search
+functionality.  On the Mac this control is implemented using the
+native HISearchField control, on the other platforms a generic control
+is used, although that may change in the future as more platforms
+introduce native search widgets.</p>
+<p>Added a set of button classes to wx.lib.buttons from David Hughes that
+uses the native renderer to draw the button.</p>
 </div>
 <div class="section">
 <h1><a id="id2" name="id2">2.7.2.0</a></h1>
@@ -61,7 +84,7 @@ DockArt --&gt;            AuiDockArt
 TabArt --&gt;             AuiTabArt
 AuiMultiNotebook --&gt;   AuiNotebook
 AuiNotebookEvent --&gt;   AuiNotebookEvent</blockquote>
-<p>wx.lib.customtreectrl: A patch from Frame Niessink which adds an
+<p>wx.lib.customtreectrl: A patch from Frank Niessink which adds an
 additional style (TR_AUTO_CHECK_PARENT) that (un)checks a parent when
 all children are (un)checked.</p>
 <p>wx.animate.AnimationCtrl fixed to display inactive bitmap at start
