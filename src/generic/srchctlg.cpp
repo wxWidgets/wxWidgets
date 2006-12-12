@@ -224,7 +224,11 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
             const wxValidator& validator,
             const wxString& name)
 {
+#ifdef __WXGTK__
+    if ( !wxTextCtrlBase::Create(parent, id, pos, size, wxSUNKEN_BORDER | style, validator, name) )
+#else
     if ( !wxTextCtrlBase::Create(parent, id, pos, size, wxSIMPLE_BORDER | style, validator, name) )
+#endif
     {
         return false;
     }
@@ -424,7 +428,10 @@ void wxSearchCtrl::LayoutControls(int x, int y, int width, int height)
     // position the subcontrols inside the client area
 
     m_searchButton->SetSize(x, y + ICON_OFFSET, sizeSearch.x, height);
-    m_text->SetSize(x + sizeSearch.x + searchMargin, y + ICON_OFFSET, textWidth, height);
+    m_text->SetSize( x + sizeSearch.x + searchMargin, 
+                     y + ICON_OFFSET - BORDER,
+                     textWidth, 
+                     height);
     m_cancelButton->SetSize(x + sizeSearch.x + searchMargin + textWidth + cancelMargin,
                             y + ICON_OFFSET, sizeCancel.x, height);
 }
