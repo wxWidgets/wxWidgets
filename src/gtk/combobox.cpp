@@ -201,29 +201,6 @@ gtkcombobox_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 }
 }
 
-extern "C" {
-static
-void gtkcombobox_size_callback( GtkWidget *widget,
-                               GtkAllocation *alloc,
-                               wxWindow *win )
-{
-    if (win->GetParent()->m_wxwindow) return;
-    
-    // we are probably a wxToolBar
-    
-    wxSize size = win->GetEffectiveMinSize();
-    if (size.y != alloc->height)
-    {
-        GtkAllocation alloc2;
-        alloc2.x = alloc->x;
-        alloc2.y = (alloc->height - size.y + 3) / 2;
-        alloc2.width = alloc->width;
-        alloc2.height = size.y;
-        gtk_widget_size_allocate( widget, &alloc2 );
-    }
-}
-}
-
 #endif
 
 //-----------------------------------------------------------------------------
@@ -373,9 +350,6 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
         g_signal_connect_after (m_widget, "changed",
                             G_CALLBACK (gtkcombobox_changed_callback), this);
                             
-        // Connect to in order to correct size_allocate events
-        g_signal_connect_after (m_widget, "size_allocate",
-                          G_CALLBACK (gtkcombobox_size_callback), this);
     }
     else
 #endif

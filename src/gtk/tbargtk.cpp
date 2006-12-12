@@ -215,6 +215,27 @@ static gint gtk_toolbar_tool_callback( GtkWidget *WXUNUSED(widget),
 }
 }
 
+extern "C" {
+static
+void gtktoolwidget_size_callback( GtkWidget *widget,
+                                  GtkAllocation *alloc,
+                                  wxWindow *win )
+{
+    // this shouldn't happen...
+    if (win->GetParent()->m_wxwindow) return;
+    
+    wxSize size = win->GetEffectiveMinSize();
+    if (size.y != alloc->height)
+    {
+        GtkAllocation alloc2;
+        alloc2.x = alloc->x;
+        alloc2.y = (alloc->height - size.y + 3) / 2;
+        alloc2.width = alloc->width;
+        alloc2.height = size.y;
+        gtk_widget_size_allocate( widget, &alloc2 );
+    }
+}
+}
 //-----------------------------------------------------------------------------
 // InsertChild callback for wxToolBar
 //-----------------------------------------------------------------------------
@@ -453,6 +474,11 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                                        (const char *) NULL,
                                        posGtk
                                       );
+                                      
+            // connect after in order to correct size_allocate events
+            g_signal_connect_after (tool->GetControl()->m_widget, "size_allocate",
+                          G_CALLBACK (gtktoolwidget_size_callback), tool->GetControl());
+                                      
             break;
     }
 
