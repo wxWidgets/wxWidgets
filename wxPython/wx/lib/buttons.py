@@ -198,7 +198,9 @@ class GenButton(wx.PyControl):
         self.InitColours()
 
     def SetDefault(self):
-        self.GetParent().SetDefaultItem(self)
+        tlw = wx.GetTopLevelParent(self)
+        if hasattr(tlw, 'SetDefaultItem'):
+            tlw.SetDefaultItem(self)
         
     def _GetLabelSize(self):
         """ used internally """
@@ -579,4 +581,35 @@ class GenBitmapTextToggleButton(__ToggleMixin, GenBitmapTextButton):
 
 #----------------------------------------------------------------------
 
+class ThemedGenButton(GenButton):
+    " A themed generic button, and base class for the other themed buttons "
+    def DrawBezel(self, dc, x1, y1, x2, y2):
+        rect = wx.Rect(x1, y1, x2, y2)
+        if self.up:
+            state = 0
+        else:
+            state = wx.CONTROL_PRESSED
+        wx.RendererNative.Get().DrawPushButton(self, dc, rect, state)
+ 
+class ThemedGenBitmapButton(ThemedGenButton, GenBitmapButton):
+    """A themed generic bitmap button."""
+    pass
 
+class ThemedGenBitmapTextButton(ThemedGenButton, GenBitmapTextButton):
+    """A themed generic bitmapped button with text label"""
+    pass
+    
+class ThemedGenToggleButton(ThemedGenButton, GenToggleButton):
+    """A themed generic toggle button"""
+    pass
+
+class ThemedGenBitmapToggleButton(ThemedGenButton, GenBitmapToggleButton):
+    """A themed generic toggle bitmap button"""
+    pass
+
+class ThemedGenBitmapTextToggleButton(ThemedGenButton, GenBitmapTextToggleButton):
+    """A themed generic toggle bitmap button with text label"""
+    pass
+
+
+#----------------------------------------------------------------------

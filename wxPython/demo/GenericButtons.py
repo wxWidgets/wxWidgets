@@ -128,6 +128,10 @@ class TestPanel(wx.Panel):
         ##b.SetBackgroundColour("sky blue")
         ##b.SetBackgroundColour("pink")
 
+        b = buttons.ThemedGenButton(self, -1, 'Drawn with native renderer')
+        self.Bind(wx.EVT_BUTTON, self.OnButton, b)
+        sizer.Add(b)
+        
 
         border = wx.BoxSizer(wx.VERTICAL)
         border.Add(sizer, 0, wx.ALL, 25)
