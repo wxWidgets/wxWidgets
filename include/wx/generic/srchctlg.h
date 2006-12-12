@@ -212,7 +212,8 @@ protected:
     virtual void OnSearchButton( wxCommandEvent& event );
 
     void OnSetFocus( wxFocusEvent& event );
-
+    void OnSize( wxSizeEvent& event );
+    
 private:
     friend class wxSearchButton;
 

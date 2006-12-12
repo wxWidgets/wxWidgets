@@ -167,6 +167,7 @@ END_EVENT_TABLE()
 BEGIN_EVENT_TABLE(wxSearchCtrl, wxSearchCtrlBase)
     EVT_SEARCHCTRL_SEARCH_BTN(wxID_ANY, wxSearchCtrl::OnSearchButton)
     EVT_SET_FOCUS(wxSearchCtrl::OnSetFocus)
+    EVT_SIZE(wxSearchCtrl::OnSize)
 END_EVENT_TABLE()
 
 IMPLEMENT_DYNAMIC_CLASS(wxSearchCtrl, wxSearchCtrlBase)
@@ -383,6 +384,9 @@ void wxSearchCtrl::DoMoveWindow(int x, int y, int width, int height)
 
 void wxSearchCtrl::LayoutControls(int x, int y, int width, int height)
 {
+    if ( !m_text )
+        return;
+    
     wxSize sizeText = m_text->GetBestSize();
     // make room for the search menu & clear button
     int horizontalBorder = 1 + ( sizeText.y - sizeText.y * 14 / 21 ) / 2;
@@ -1052,6 +1056,13 @@ void wxSearchCtrl::OnSetFocus( wxFocusEvent& /*event*/ )
     {
         m_text->SetFocus();
     }
+}
+
+void wxSearchCtrl::OnSize( wxSizeEvent& event )
+{
+    int width, height;
+    GetSize(&width, &height);
+    LayoutControls(0, 0, width, height);
 }
 
 void wxSearchCtrl::PopupSearchMenu()
