@@ -7129,7 +7129,7 @@ class SearchCtrl(TextCtrl):
     A search control is a composite of a `wx.TextCtrl` with optional
     bitmap buttons and a drop-down menu.  Controls like this can typically
     be found on a toolbar of applications that support some form of search
-    functionality.  On the Mac this control is implemneted using the
+    functionality.  On the Mac this control is implemented using the
     native HISearchField control, on the other platforms a generic control
     is used, although that may change in the future as more platforms
     introduce native search widgets.
@@ -7162,7 +7162,7 @@ class SearchCtrl(TextCtrl):
         A search control is a composite of a `wx.TextCtrl` with optional
         bitmap buttons and a drop-down menu.  Controls like this can typically
         be found on a toolbar of applications that support some form of search
-        functionality.  On the Mac this control is implemneted using the
+        functionality.  On the Mac this control is implemented using the
         native HISearchField control, on the other platforms a generic control
         is used, although that may change in the future as more platforms
         introduce native search widgets.
