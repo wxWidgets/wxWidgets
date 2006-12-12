@@ -1,3 +1,10 @@
+wxwidgets2.8 (2.8.0.1-0) unstable; urgency=low
+
+  * Add wxSearchCtrl
+  * Official wxPython release
+
+ -- Robin Dunn <robin@alldunn.com>  Mon, 11 Dec 2006 18:50:29 -0800
+
 wxwidgets2.8 (2.8.0.0-0rc3) unstable; urgency=low
 
   * wxFileSystem::OpenFile() takes wxFS_SEEKABLE by default now.
