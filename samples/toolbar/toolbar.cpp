@@ -32,6 +32,8 @@
 #include "wx/log.h"
 #include "wx/image.h"
 #include "wx/filedlg.h"
+#include "wx/spinctrl.h"
+#include "wx/srchctrl.h"
 
 // define this to use XPMs everywhere (by default, BMPs are used under Win)
 // BMPs use less space, but aren't compiled into the executable on other platforms
@@ -391,7 +393,7 @@ void MyFrame::RecreateToolbar()
     // adding a combo to a vertical toolbar is not very smart
     if ( !( toolBar->IsVertical() ) )
     {
-        wxComboBox *combo = new wxComboBox(toolBar, ID_COMBO, wxEmptyString, wxDefaultPosition, wxSize(200,wxDefaultCoord) );
+        wxComboBox *combo = new wxComboBox(toolBar, ID_COMBO, wxEmptyString, wxDefaultPosition, wxSize(100,-1) );
         combo->Append(_T("This"));
         combo->Append(_T("is a"));
         combo->Append(_T("combobox"));
@@ -399,8 +401,14 @@ void MyFrame::RecreateToolbar()
         combo->Append(_T("toolbar"));
         toolBar->AddControl(combo);
 
-        //wxSpinCtrl *spin = new wxSpinCtrl( toolBar, ID_SPIN, wxT("0"), wxDefaultPosition, wxSize(80,wxDefaultCoord), 0, 100, 0 );
-        //toolBar->AddControl( spin );
+        wxSpinCtrl *spin = new wxSpinCtrl( toolBar, ID_SPIN, wxT("0"), wxDefaultPosition, wxSize(80,wxDefaultCoord), 0, 0, 100 );
+        toolBar->AddControl( spin );
+        
+        wxTextCtrl *text = new wxTextCtrl( toolBar, -1, wxT("text"), wxDefaultPosition, wxSize(80,wxDefaultCoord) );
+        toolBar->AddControl( text );
+        
+        wxSearchCtrl *srch = new wxSearchCtrl( toolBar, -1, wxT("xx"), wxDefaultPosition, wxSize(80,wxDefaultCoord), wxSUNKEN_BORDER );
+        toolBar->AddControl( srch );
     }
 #endif // toolbars which don't support controls
 
