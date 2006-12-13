@@ -149,6 +149,14 @@ When finished the binary and source packages will be left in the
 parent dir of the source tree.
 
 
+Automating the process
+----------------------
+
+The script debian/build_all automates the above stepds and builds both
+wxWidgets and wxPython packages in both ANSI and Unicode modes. You should do
+the build manually at least the first time however to make sure you have all
+the prerequisites and the build doesn't fail.
+
 
 Other Sources of Information
 ----------------------------

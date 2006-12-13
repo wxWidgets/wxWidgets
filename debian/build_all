@@ -1,0 +1,49 @@
+#!/bin/sh
+##############################################################################
+# Name:       debian/build_all
+# Purpose:    build both ANSI and Unicode Debian packages at once
+# Created:    2006-12-13
+# RCS-ID:     $Id$
+# Copyright:  (c) 2006 Vadim Zeitlin <vadim@wxwindows.org>
+# Licence:    wxWindows licence
+##############################################################################
+
+# The following variables may be defined:
+#   wx          The wxWidgets root directory (if it's unset you have to run the
+#               script from this directory)
+#   debsrc_dir  If set, suppose there are already debian sources in this dir
+
+set -e
+wx_dir=${wx-`pwd`}
+if [ ! -f $wx_dir/debian/build_all ]; then
+    echo "Please run the script from the root wx directory" >&2
+    exit 1
+fi
+
+(
+if [ -z $debsrc_dir ]; then
+    configure_dir=/tmp/wxtmp-$$
+
+    mkdir $configure_dir
+    cd $configure_dir
+    $wx_dir/configure --without-subdirs > /dev/null
+    make debian-dist > /dev/null
+    debsrc_dir=`grep 'DEBIAN_SOURCE_DIR =' Makefile | sed 's@.*/@@'`
+    cd ..
+    rm -rf $configure_dir
+fi
+
+cd $wx_dir/../$debsrc_dir
+./debian/rules debian/control
+dpkg-buildpackage -rfakeroot > /dev/null
+
+fakeroot ./debian/rules clean
+
+sed -i '/^WX_UNICODE := /s/1/0/' debian/rules
+rm debian/control
+./debian/rules debian/control
+dpkg-buildpackage -rfakeroot > /dev/null
+
+fakeroot ./debian/rules clean
+
+) 2>&1 | tee $wx_dir/debian/build.log
