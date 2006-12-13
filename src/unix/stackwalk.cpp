@@ -254,7 +254,8 @@ int wxStackWalker::InitFrames(wxStackFrame *arr, size_t n, void **addresses, cha
         }
         else
         {
-            wxLogDebug(_T("cannot read addr2line output for %u-th stack frame!"), unsigned(i));
+            wxLogDebug(_T("cannot read addr2line output for stack frame #%lu"),
+                       (unsigned long)i);
             return false;
         }
 
