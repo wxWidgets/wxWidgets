@@ -1,3 +1,9 @@
+wxwidgets2.8 (2.8.0.1-1) unstable; urgency=low
+
+  * No changes, just a different packager
+
+ -- Vadim Zeitlin <vadim@wxwindows.org>  Dec, 13 Wed 2006 17:40:24 +0100
+
 wxwidgets2.8 (2.8.0.1-0) unstable; urgency=low
 
   * Add wxSearchCtrl
@@ -52,7 +58,7 @@ wxwidgets2.7 (2.7.1.2-0) unstable; urgency=low
 wxwidgets2.7 (2.7.1.1-0) unstable; urgency=low
 
   * First 2.7.x release from wxPython team.
-  * Many enhancements, changes, fixes and updates.  See 
+  * Many enhancements, changes, fixes and updates.  See
     http://wxpython.org/CHANGES.txt for details.
 
  -- Robin Dunn <robin@alldunn.com>  Wed, 18 Oct 2006 17:09:53 -0700
