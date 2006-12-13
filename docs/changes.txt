@@ -68,7 +68,7 @@ Deprecated methods since 2.6.x and their replacements
   wxFS_SEEKABLE flags is deprecated. You can still seek, but use the flag.
 - Constructor wxZipInputStream(const wxString& archive, const wxString& file)
   deprecated in favour of wxFileSystem (other zip ctors are not deprecated).
- 
+
 
 
 Major new features in 2.8 release
@@ -89,6 +89,10 @@ Major new features in 2.8 release
 
 2.8.1
 -----
+
+wxMSW:
+
+- Fixed compilation with Borland C++ in Unicode mode but without MSLU
 
 wxGTK:
 
@@ -134,7 +138,7 @@ All:
 - Added wxFilterFSHandler and wxArchiveFSHandler.
 - Added wxString::ToLongLong() and ToULongLong().
 
-All (GUI): 
+All (GUI):
 
 - wxMemoryDC constructor now optionally accepts a wxBitmap parameter,
   calling SelectObject itself if a valid bitmap is passed.
