@@ -3,6 +3,8 @@ readme-mac.txt
 
 lib/dummy
 
+distrib/mac/pbsetup-sh 
+
 docs/licence.txt
 docs/mac/*.txt
 docs/mac/*.hqx
