@@ -164,7 +164,7 @@ dospinport(){
     popd
     rm -rf /tmp/wx$port
     rm ${portfiles}
-#    rm /tmp/textfiles
+    rm /tmp/textfiles
 }
 
 prepareforrelease()
