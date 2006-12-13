@@ -131,7 +131,7 @@ else
      cp $g $START_DIR/$DIST_DIR/readme-`echo $g | sed -e "s|${DOCDIR}||g" | sed -e "s|msw/wince|wince|g" | sed -e "s|/readme.txt||g"`-${BUILD_VERSION}.txt
    done
    # Rename double readme
-   mv $START_DIR/$DIST_DIR/readme-readme-${BUILD_VERSION}.txt $START_DIR/$DIST_DIR/readme-${BUILD_VERSION}.txt
+   mv $START_DIR/$DIST_DIR/readme-readme.txt-${BUILD_VERSION}.txt $START_DIR/$DIST_DIR/readme-${BUILD_VERSION}.txt
    ## copy files ...
    mkdir ${FTPDIR}/
    cp  $START_DIR/$DIST_DIR/* ${FTPDIR}/
