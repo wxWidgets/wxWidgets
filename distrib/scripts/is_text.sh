@@ -14,6 +14,17 @@ if [ $# != 1 ]; then
     exit 2
 fi
 
+# don't do configure; config.sub; config.guess
+if [ `basename $1` = "configure" ] ; then
+    exit 1
+fi
+if [ `basename $1` = "config.sub" ] ; then
+    exit 1
+fi
+if [ `basename $1` = "config.guess" ] ; then
+    exit 1
+fi
+
 entries=`dirname $1`/CVS/Entries
 if [ ! -f $entries ]; then
     echo "CVS entries file \"$entries\" not found." >&2
