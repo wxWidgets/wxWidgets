@@ -270,11 +270,10 @@ bool wxTopLevelWindowDFB::ShowFullScreen(bool show, long style)
 
 bool wxTopLevelWindowDFB::Show(bool show)
 {
+    // NB: this calls wxWindow::Show() and so ensures DoRefreshWindow() is
+    //     called on the window -- we'll need that below
     if ( !wxTopLevelWindowBase::Show(show) )
         return false;
-
-    // hide/show the window by setting its opacity to 0/full:
-    m_dfbwin->SetOpacity(show ? m_opacity : 0);
 
     // If this is the first time Show was called, send size event,
     // so that the frame can adjust itself (think auto layout or single child)
@@ -285,6 +284,17 @@ bool wxTopLevelWindowDFB::Show(bool show)
         event.SetEventObject(this);
         GetEventHandler()->ProcessEvent(event);
     }
+
+    // make sure the window is fully painted, with all pending updates, before
+    // DFB WM shows it, otherwise it would attempt to show either empty (=
+    // black) window surface (if shown for the first time) or it would show
+    // window with outdated content; note that the window was already refreshed
+    // in the wxTopLevelWindowBase::Show() call above:
+    if ( show )
+        Update();
+
+    // hide/show the window by setting its opacity to 0/full:
+    m_dfbwin->SetOpacity(show ? m_opacity : 0);
 
     if ( show )
     {
