@@ -87,6 +87,14 @@ Major new features in 2.8 release
   wxSearchCtrl, wxAboutBox, wxTreebook, tar streams.
 
 
+2.8.1
+-----
+
+wxGTK:
+
+- Don't crash if command line is not valid UTF-8 (Unicode build only)
+
+
 2.8.0
 -----
 

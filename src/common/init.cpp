@@ -176,14 +176,23 @@ static struct InitData
 static void ConvertArgsToUnicode(int argc, char **argv)
 {
     gs_initData.argv = new wchar_t *[argc + 1];
+    int wargc = 0;
     for ( int i = 0; i < argc; i++ )
     {
         wxWCharBuffer buf(wxConvLocal.cMB2WX(argv[i]));
-        gs_initData.argv[i] = buf ? wxStrdup(buf) : NULL;
+        if ( !buf )
+        {
+            wxLogWarning(_("Command line argument %d couldn't be converted to Unicode and will be ignored."),
+                         i);
+        }
+        else // converted ok
+        {
+            gs_initData.argv[wargc++] = wxStrdup(buf);
+        }
     }
 
-    gs_initData.argc = argc;
-    gs_initData.argv[argc] = NULL;
+    gs_initData.argc = wargc;
+    gs_initData.argv[wargc] = NULL;
 }
 
 static void FreeConvertedArgs()
@@ -320,7 +329,7 @@ bool wxEntryStart(int& argc, char **argv)
 {
     ConvertArgsToUnicode(argc, argv);
 
-    if ( !wxEntryStart(argc, gs_initData.argv) )
+    if ( !wxEntryStart(gs_initData.argc, gs_initData.argv) )
     {
         FreeConvertedArgs();
 
@@ -449,7 +458,7 @@ int wxEntry(int& argc, char **argv)
 {
     ConvertArgsToUnicode(argc, argv);
 
-    return wxEntry(argc, gs_initData.argv);
+    return wxEntry(gs_initData.argc, gs_initData.argv);
 }
 
 #endif // wxUSE_UNICODE
