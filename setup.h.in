@@ -541,13 +541,13 @@
 
 /* for some features we don't have dedicated configure switches, so just choose
  * the common values automatically */
-#if (defined(__WIN95__) && !defined(__WXUNIVERSAL__)) || defined(__WXPM__)
+#if (defined(__WIN32__) && !defined(__WXUNIVERSAL__)) || defined(__WXPM__)
 #define wxUSE_OWNER_DRAWN 1
 #else
 #define wxUSE_OWNER_DRAWN 0
 #endif
 
-#if defined(__WIN95__) && !defined(__WINE__) && !defined(__GNUWIN32_OLD__)
+#if defined(__WIN32__) && !defined(__WINE__) && !defined(__GNUWIN32_OLD__)
 #define wxUSE_RICHEDIT 1
 #define wxUSE_RICHEDIT2 1
 #else
