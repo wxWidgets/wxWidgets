@@ -1311,6 +1311,7 @@ void wxWindow::OnKeyDown(wxKeyEvent& event)
             }
 #endif // wxUSE_MENUS
 
+#if wxUSE_BUTTON
             // if it wasn't in a menu, try to find a button
             if ( command != -1 )
             {
@@ -1326,6 +1327,7 @@ void wxWindow::OnKeyDown(wxKeyEvent& event)
                     }
                 }
             }
+#endif // wxUSE_BUTTON
 
             // don't propagate accels from the child frame to the parent one
             break;
