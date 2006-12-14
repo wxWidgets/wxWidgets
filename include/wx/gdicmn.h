@@ -157,6 +157,9 @@ enum wxStockCursor
 #elif defined(__WXMGL__)
     // Initialize from an included XPM
     #define wxICON(X) wxIcon( (const char**) X##_xpm )
+#elif defined(__WXDFB__)
+    // Initialize from an included XPM
+    #define wxICON(X) wxIcon( (const char**) X##_xpm )
 #elif defined(__WXGTK__)
     // Initialize from an included XPM
     #define wxICON(X) wxIcon( (const char**) X##_xpm )
@@ -185,6 +188,7 @@ enum wxStockCursor
       defined(__WXX11__)   || \
       defined(__WXMAC__)   || \
       defined(__WXMGL__)   || \
+      defined(__WXDFB__)   || \
       defined(__WXCOCOA__)
     // Initialize from an included XPM
     #define wxBITMAP(name) wxBitmap( (const char**) name##_xpm )
