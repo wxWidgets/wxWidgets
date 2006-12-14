@@ -1399,6 +1399,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="X11_LOWLEVEL_SRC" hints="files">
     $(XWIN_LOWLEVEL_SRC)
+    src/common/socketevtdispatch.cpp
     src/generic/icon.cpp
     src/generic/timer.cpp
     src/x11/app.cpp
@@ -1415,7 +1416,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/x11/dcscreen.cpp
     src/x11/evtloop.cpp
     src/x11/font.cpp
-    src/x11/gsockx11.cpp
     src/x11/minifram.cpp
     src/x11/nanox.c
     src/x11/palette.cpp
@@ -1818,6 +1818,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="DFB_LOWLEVEL_SRC" hints="files">
     src/common/fontmgrcmn.cpp
+    src/common/socketevtdispatch.cpp
     src/generic/caret.cpp
     src/generic/colour.cpp
     src/generic/icon.cpp

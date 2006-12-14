@@ -26,6 +26,7 @@
 #endif
 
 #include "wx/timer.h"
+#include "wx/private/socketevtdispatch.h"
 #include "wx/dfb/private.h"
 
 #define TRACE_EVENTS _T("events")
@@ -86,7 +87,8 @@ bool wxEventLoop::Dispatch()
     //     time out after a brief period in order to make sure that
     //     OnNextIteration() will be called frequently enough
     //
-    //     FIXME: call NotifyTimers() from here (and loop) instead?
+    //     FIXME: call NotifyTimers() and wxSocketEventDispatcher::RunLoop() from here
+    //            (and loop) instead?
     const int TIMEOUT = 100;
 
     if ( ms_buffer->WaitForEventWithTimeout(0, TIMEOUT) )
@@ -125,9 +127,15 @@ void wxEventLoop::WakeUp()
 
 void wxEventLoop::OnNextIteration()
 {
-#if wxUSE_TIMER
     // see the comment in Dispatch
+
+#if wxUSE_TIMER
     wxTimer::NotifyTimers();
+#endif
+
+#if wxUSE_SOCKETS
+    // handle any pending socket events:
+    wxSocketEventDispatcher::Get().RunLoop();
 #endif
 }
 
