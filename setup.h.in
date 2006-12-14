@@ -125,9 +125,6 @@
 #undef __WINDOWS__
 #endif
 
-#ifndef __WIN95__
-#undef __WIN95__
-#endif
 #ifndef __WIN32__
 #undef __WIN32__
 #endif
