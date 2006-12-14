@@ -631,20 +631,22 @@ void wxFrame::AttachMenuBar( wxMenuBar *menuBar )
 
 void wxFrame::UpdateMenuBarSize()
 {
-    GtkRequisition  req;
-
-    req.width = 2;
-    req.height = 2;
+    m_menuBarHeight = 2;
 
     // this is called after Remove with a NULL m_frameMenuBar
     if ( m_frameMenuBar )
-        (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(m_frameMenuBar->m_widget) )->size_request )
-            (m_frameMenuBar->m_widget, &req );
+    {
+        GtkRequisition req;
+        gtk_widget_ensure_style(m_frameMenuBar->m_widget);
+        // have to call class method directly because
+        // "size_request" signal is overridden by wx
+        GTK_WIDGET_GET_CLASS(m_frameMenuBar->m_widget)->size_request(
+            m_frameMenuBar->m_widget, &req);
 
-    m_menuBarHeight = req.height;
+        m_menuBarHeight = req.height;
+    }
 
     // resize window in OnInternalIdle
-
     GtkUpdateSize();
 }
 
