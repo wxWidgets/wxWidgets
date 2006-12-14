@@ -4557,7 +4557,7 @@ if test "$ac_cv_func_snprintf" = "yes"; then
                         int main (void)
                         {
                             char buffer[128];
-                            snprintf (buffer, 128, "%2\$d %3\$d %1\$d", 1, 2, 3);
+                            snprintf (buffer, 128, "%2$d %3$d %1$d", 1, 2, 3);
                             if (strcmp ("2 3 1", buffer) == 0)
                                 exit (0);
                             exit (1);
