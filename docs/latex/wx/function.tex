@@ -1273,6 +1273,11 @@ Removes the directory {\it dir}, returning true if successful. Does not work und
 
 The {\it flags} parameter is reserved for future use.
 
+Please notice that there is also a wxRmDir() function which simply wraps the
+standard POSIX rmdir() function and so return an integer error code instead of
+a boolean value (but otherwise is currently identical to wxRmdir), don't
+confuse these two functions.
+
 
 \membersection{::wxSetWorkingDirectory}\label{wxsetworkingdirectory}
 
