@@ -4568,10 +4568,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = (
-					i386,
-					ppc,
-				);
+				ARCHS = "$(NATIVE_ARCH)";
 				DEBUG_INFORMATION_FORMAT = stabs;
 				DYLIB_COMPATIBILITY_VERSION = 2.6;
 				DYLIB_CURRENT_VERSION = 2.6.0;
