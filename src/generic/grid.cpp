@@ -10652,46 +10652,22 @@ void wxGrid::AutoSizeColLabelSize( int col )
 
 wxSize wxGrid::DoGetBestSize() const
 {
-    // don't set sizes, only calculate them
     wxGrid *self = (wxGrid *)this;  // const_cast
 
-    int width, height;
-    width = self->SetOrCalcColumnSizes(true);
-    height = self->SetOrCalcRowSizes(true);
-
-    if (!width)
-        width = 100;
-    if (!height)
-        height = 80;
-
-    // Round up to a multiple the scroll rate
-    // NOTE: this still doesn't get rid of the scrollbars;
-    // is there any magic incantation for that?
-    int xpu, ypu;
-    GetScrollPixelsPerUnit(&xpu, &ypu);
-    if (xpu)
-        width  += 1 + xpu - (width  % xpu);
-    if (ypu)
-        height += 1 + ypu - (height % ypu);
-
-    // limit to 1/4 of the screen size
-    int maxwidth, maxheight;
-    wxDisplaySize( &maxwidth, &maxheight );
-    maxwidth /= 2;
-    maxheight /= 2;
-    if ( width > maxwidth )
-        width = maxwidth;
-    if ( height > maxheight )
-        height = maxheight;
-
-    wxSize best(width, height);
+    // we do the same as in AutoSize() here with the exception that we don't
+    // change the column/row sizes, only calculate them
+    wxSize size(self->SetOrCalcColumnSizes(true) - m_rowLabelWidth + m_extraWidth,
+                self->SetOrCalcRowSizes(true) - m_colLabelHeight + m_extraHeight);
+    wxSize sizeFit(GetScrollX(size.x) * GetScrollLineX(),
+                   GetScrollY(size.y) * GetScrollLineY());
 
     // NOTE: This size should be cached, but first we need to add calls to
     // InvalidateBestSize everywhere that could change the results of this
     // calculation.
     // CacheBestSize(size);
 
-    return best;
+    return wxSize(sizeFit.x + m_rowLabelWidth, sizeFit.y + m_colLabelHeight)
+            + GetWindowBorderSize();
 }
 
 void wxGrid::Fit()
