@@ -92,6 +92,7 @@ Major new features in 2.8 release
 
 All:
 
+- Fix compilation with wxUSE_STL=1
 - wxGrid::GetBestSize() returns same size the grid would have after AutoSize()
 
 wxMSW:

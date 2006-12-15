@@ -181,16 +181,18 @@ private:
         static BaseListType EmptyList;                                        \
                                                                               \
         bool m_destroy;                                                       \
+                                                                              \
     public:                                                                   \
         decl compatibility_iterator                                           \
         {                                                                     \
         private:                                                              \
-          /* Workaround for broken VC6 nested class name resolution */        \
-          typedef std::list<elT>::iterator iterator;                          \
-          friend class liT;                                                   \
-        private:                                                              \
+            /* Workaround for broken VC6 nested class name resolution */      \
+            typedef std::list<elT>::iterator iterator;                        \
+            friend class liT;                                                 \
+                                                                              \
             iterator m_iter;                                                  \
             liT * m_list;                                                     \
+                                                                              \
         public:                                                               \
             compatibility_iterator()                                          \
                 : m_iter(EmptyList.end()), m_list( NULL ) {}                  \
@@ -338,6 +340,9 @@ private:
         void Sort( wxSortCompareFunction compfunc )                           \
             { sort( WX_LIST_SORTFUNCTION( elT, compfunc ) ); }                \
         ~liT() { Clear(); }                                                   \
+                                                                              \
+        /* It needs access to our EmptyList */                                \
+        friend decl compatibility_iterator;                                   \
     }
 
 #define WX_DECLARE_LIST(elementtype, listname)                              \
