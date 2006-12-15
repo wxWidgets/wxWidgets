@@ -1219,7 +1219,7 @@ class wxPythonDemo(wx.Frame):
 
         # Make a Demo menu
         menu = wx.Menu()
-        for item in _treeList:
+        for item in _treeList[:-1]:
             submenu = wx.Menu()
             for childItem in item[1]:
                 mi = submenu.Append(-1, childItem)
