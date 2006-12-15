@@ -136,6 +136,8 @@
 		407C6AE50A899E260056252A /* floatpane.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 407C6ADA0A899E260056252A /* floatpane.cpp */; };
 		407C6AE60A899E260056252A /* framemanager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 407C6ADB0A899E260056252A /* framemanager.cpp */; };
 		407C6AE70A899E260056252A /* tabmdi.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 407C6ADC0A899E260056252A /* tabmdi.cpp */; };
+		408443F10B3274EF00485940 /* srchcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 408443F00B3274EF00485940 /* srchcmn.cpp */; };
+		408443F20B3274EF00485940 /* srchcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 408443F00B3274EF00485940 /* srchcmn.cpp */; };
 		4086C745063AB2FF00D4CD53 /* setup.h in Headers */ = {isa = PBXBuildFile; fileRef = F5FD822102CCECE601000133 /* setup.h */; };
 		4086C747063AB2FF00D4CD53 /* file.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A8600801FA022B0175ACA7 /* file.cpp */; };
 		4086C748063AB2FF00D4CD53 /* appcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F5A85FDF01FA022B0175ACA7 /* appcmn.cpp */; };
@@ -1207,6 +1209,7 @@
 		407C6ADA0A899E260056252A /* floatpane.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = floatpane.cpp; sourceTree = "<group>"; };
 		407C6ADB0A899E260056252A /* framemanager.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = framemanager.cpp; sourceTree = "<group>"; };
 		407C6ADC0A899E260056252A /* tabmdi.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = tabmdi.cpp; sourceTree = "<group>"; };
+		408443F00B3274EF00485940 /* srchcmn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = srchcmn.cpp; sourceTree = "<group>"; };
 		4086C3A2063A454900D4CD53 /* sound.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = sound.cpp; sourceTree = "<group>"; };
 		4086C59F063AA5C700D4CD53 /* glcanvas.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = glcanvas.cpp; sourceTree = "<group>"; };
 		4086C638063AAD4A00D4CD53 /* regcomp.c */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.c; path = regcomp.c; sourceTree = "<group>"; };
@@ -2876,6 +2879,7 @@
 				F5AC2EDE03803A3601000133 /* settcmn.cpp */,
 				F5A8604A01FA022C0175ACA7 /* sizer.cpp */,
 				F5A8604B01FA022C0175ACA7 /* socket.cpp */,
+				408443F00B3274EF00485940 /* srchcmn.cpp */,
 				40670A9407377B1000F7C08C /* sstream.cpp */,
 				0A98CB6A07146A06007B4289 /* statbar.cpp */,
 				40670A9507377B1000F7C08C /* stdpbase.cpp */,
@@ -3918,6 +3922,7 @@
 				402AB42C0AFF574600C0D0C9 /* imagtga.cpp in Sources */,
 				61048A650B2756CB009C253D /* srchctrl.cpp in Sources */,
 				61048BE90B27B7D0009C253D /* srchctlg.cpp in Sources */,
+				408443F20B3274EF00485940 /* srchcmn.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4460,6 +4465,7 @@
 				402AB42B0AFF574600C0D0C9 /* imagtga.cpp in Sources */,
 				61048A660B2756CB009C253D /* srchctrl.cpp in Sources */,
 				61048BEA0B27B7D0009C253D /* srchctlg.cpp in Sources */,
+				408443F10B3274EF00485940 /* srchcmn.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
