@@ -102,6 +102,10 @@ wxGTK:
 
 - Don't crash if command line is not valid UTF-8 (Unicode build only)
 
+wxUniv:
+
+- It is now possible to set background colour of wxStaticText
+
 
 2.8.0
 -----
