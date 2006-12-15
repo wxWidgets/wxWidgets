@@ -491,7 +491,7 @@ class PyAUIFrame(wx.Frame):
         elif event.GetId() == ID_HorizontalGradient:
             gradient = wx.aui.AUI_GRADIENT_HORIZONTAL
 
-        self._mgr.GetArtProvider().SetMetric(wx.aui.AUI_ART_GRADIENT_TYPE, gradient)
+        self._mgr.GetArtProvider().SetMetric(wx.aui.AUI_DOCKART_GRADIENT_TYPE, gradient)
         self._mgr.Update()
 
 
@@ -533,13 +533,13 @@ class PyAUIFrame(wx.Frame):
         eid = event.GetId()
         
         if eid == ID_NoGradient:
-            event.Check(self._mgr.GetArtProvider().GetMetric(wx.aui.AUI_ART_GRADIENT_TYPE) == wx.aui.AUI_GRADIENT_NONE)
+            event.Check(self._mgr.GetArtProvider().GetMetric(wx.aui.AUI_DOCKART_GRADIENT_TYPE) == wx.aui.AUI_GRADIENT_NONE)
 
         elif eid == ID_VerticalGradient:
-            event.Check(self._mgr.GetArtProvider().GetMetric(wx.aui.AUI_ART_GRADIENT_TYPE) == wx.aui.AUI_GRADIENT_VERTICAL)
+            event.Check(self._mgr.GetArtProvider().GetMetric(wx.aui.AUI_DOCKART_GRADIENT_TYPE) == wx.aui.AUI_GRADIENT_VERTICAL)
 
         elif eid == ID_HorizontalGradient:
-            event.Check(self._mgr.GetArtProvider().GetMetric(wx.aui.AUI_ART_GRADIENT_TYPE) == wx.aui.AUI_GRADIENT_HORIZONTAL)
+            event.Check(self._mgr.GetArtProvider().GetMetric(wx.aui.AUI_DOCKART_GRADIENT_TYPE) == wx.aui.AUI_GRADIENT_HORIZONTAL)
 
         elif eid == ID_AllowFloating:
             event.Check((flags & wx.aui.AUI_MGR_ALLOW_FLOATING) != 0)
