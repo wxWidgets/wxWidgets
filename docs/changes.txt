@@ -90,6 +90,10 @@ Major new features in 2.8 release
 2.8.1
 -----
 
+All:
+
+- wxGrid::GetBestSize() returns same size the grid would have after AutoSize()
+
 wxMSW:
 
 - Fixed compilation with Borland C++ in Unicode mode but without MSLU
