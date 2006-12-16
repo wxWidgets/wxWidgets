@@ -1,3 +1,5 @@
+include/msvc/wx/setup.h
+
 build/msw/*.dsp
 build/msw/*.dsw
 
