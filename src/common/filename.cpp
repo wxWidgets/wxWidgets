@@ -427,7 +427,7 @@ void wxFileName::Assign(const wxString& fullpathOrig,
     // always recognize fullpath as directory, even if it doesn't end with a
     // slash
     wxString fullpath = fullpathOrig;
-    if ( !wxEndsWithPathSeparator(fullpath) )
+    if ( !fullpath.empty() && !wxEndsWithPathSeparator(fullpath) )
     {
         fullpath += GetPathSeparator(format);
     }

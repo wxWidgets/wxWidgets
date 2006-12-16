@@ -49,6 +49,11 @@ static struct FileNameInfo
     wxPathFormat format;
 } filenames[] =
 {
+    // the empty string
+    { _T(""), _(""), _(""), _(""), _(""), false, wxPATH_UNIX }, 
+    { _T(""), _(""), _(""), _(""), _(""), false, wxPATH_DOS }, 
+    { _T(""), _(""), _(""), _(""), _(""), false, wxPATH_VMS }, 
+
     // Unix file names
     { _T("/usr/bin/ls"), _T(""), _T("/usr/bin"), _T("ls"), _T(""), true, wxPATH_UNIX },
     { _T("/usr/bin/"), _T(""), _T("/usr/bin"), _T(""), _T(""), true, wxPATH_UNIX },
@@ -167,6 +172,24 @@ void FileNameTestCase::TestConstruction()
                                              fni.format), fn );
         }
     }
+
+    wxFileName fn;
+
+    // empty strings
+    fn.AssignDir(wxEmptyString);
+    CPPUNIT_ASSERT( !fn.IsOk() );
+
+    fn.Assign(wxEmptyString);
+    CPPUNIT_ASSERT( !fn.IsOk() );
+
+    fn.Assign(wxEmptyString, wxEmptyString);
+    CPPUNIT_ASSERT( !fn.IsOk() );
+
+    fn.Assign(wxEmptyString, wxEmptyString, wxEmptyString);
+    CPPUNIT_ASSERT( !fn.IsOk() );
+
+    fn.Assign(wxEmptyString, wxEmptyString, wxEmptyString, wxEmptyString);
+    CPPUNIT_ASSERT( !fn.IsOk() );
 }
 
 void FileNameTestCase::TestComparison()
