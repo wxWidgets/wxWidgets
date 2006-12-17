@@ -284,6 +284,17 @@ static wxString wxGetVolumeString(const wxString& volume, wxPathFormat format)
     return path;
 }
 
+// return true if the format used is the DOS/Windows one and the string looks
+// like a UNC path
+static bool IsUNCPath(const wxString& path, wxPathFormat format)
+{
+    return format == wxPATH_DOS &&
+                path.length() >= 4 && // "\\a" can't be a UNC path
+                    path[0u] == wxFILE_SEP_PATH_DOS &&
+                        path[1u] == wxFILE_SEP_PATH_DOS &&
+                            path[2u] != wxFILE_SEP_PATH_DOS;
+}
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -307,9 +318,28 @@ void wxFileName::Assign(const wxString& volume,
                         const wxString& name,
                         const wxString& ext,
                         bool hasExt,
-                        wxPathFormat format )
+                        wxPathFormat format)
 {
-    SetPath( path, format );
+    // we should ignore paths which look like UNC shares because we already
+    // have the volume here and the UNC notation (\\server\path) is only valid
+    // for paths which don't start with a volume, so prevent SetPath() from
+    // recognizing "\\foo\bar" in "c:\\foo\bar" as an UNC path
+    //
+    // note also that this is a rather ugly way to do what we want (passing
+    // some kind of flag telling to ignore UNC paths to SetPath() would be
+    // better) but this is the safest thing to do to avoid breaking backwards
+    // compatibility in 2.8
+    if ( IsUNCPath(path, format) )
+    {
+        // remove one of the 2 leading backslashes to ensure that it's not
+        // recognized as an UNC path by SetPath()
+        wxString pathNonUNC(path, 1, wxString::npos);
+        SetPath(pathNonUNC, format);
+    }
+    else // no UNC complications
+    {
+        SetPath(path, format);
+    }
 
     m_volume = volume;
     m_ext = ext;
@@ -1944,23 +1974,18 @@ wxFileName::SplitVolume(const wxString& fullpathWithVolume,
     wxString fullpath = fullpathWithVolume;
 
     // special Windows UNC paths hack: transform \\share\path into share:path
-    if ( format == wxPATH_DOS )
+    if ( IsUNCPath(fullpath, format) )
     {
-        if ( fullpath.length() >= 4 &&
-                fullpath[0u] == wxFILE_SEP_PATH_DOS &&
-                    fullpath[1u] == wxFILE_SEP_PATH_DOS )
+        fullpath.erase(0, 2);
+
+        size_t posFirstSlash =
+            fullpath.find_first_of(GetPathTerminators(format));
+        if ( posFirstSlash != wxString::npos )
         {
-            fullpath.erase(0, 2);
+            fullpath[posFirstSlash] = wxFILE_SEP_DSK;
 
-            size_t posFirstSlash =
-                fullpath.find_first_of(GetPathTerminators(format));
-            if ( posFirstSlash != wxString::npos )
-            {
-                fullpath[posFirstSlash] = wxFILE_SEP_DSK;
-
-                // UNC paths are always absolute, right? (FIXME)
-                fullpath.insert(posFirstSlash + 1, 1, wxFILE_SEP_PATH_DOS);
-            }
+            // UNC paths are always absolute, right? (FIXME)
+            fullpath.insert(posFirstSlash + 1, 1, wxFILE_SEP_PATH_DOS);
         }
     }
 
