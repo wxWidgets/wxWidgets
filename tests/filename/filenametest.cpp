@@ -78,6 +78,10 @@ static struct FileNameInfo
     { _T("\\\\server\\foo.bar"), _T("server"), _T("\\"), _T("foo"), _T("bar"), true, wxPATH_DOS },
     { _T("\\\\server\\dir\\foo.bar"), _T("server"), _T("\\dir"), _T("foo"), _T("bar"), true, wxPATH_DOS },
 
+    // consecutive [back]slashes should be treated as single occurrences of
+    // them and not interpreted as share names if there is a volume name
+    { _T("c:\\aaa\\bbb\\ccc"), _T("c"), _T("\\aaa\\bbb"), _T("ccc"), _T(""), true, wxPATH_DOS },
+    { _T("c:\\\\aaa\\bbb\\ccc"), _T("c"), _T("\\aaa\\bbb"), _T("ccc"), _T(""), true, wxPATH_DOS },
 
     // wxFileName support for Mac file names is broken currently
 #if 0
