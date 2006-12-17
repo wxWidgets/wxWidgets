@@ -81,7 +81,7 @@ static struct FileNameInfo
     // consecutive [back]slashes should be treated as single occurrences of
     // them and not interpreted as share names if there is a volume name
     { _T("c:\\aaa\\bbb\\ccc"), _T("c"), _T("\\aaa\\bbb"), _T("ccc"), _T(""), true, wxPATH_DOS },
-    { _T("c:\\\\aaa\\bbb\\ccc"), _T("c"), _T("\\aaa\\bbb"), _T("ccc"), _T(""), true, wxPATH_DOS },
+    { _T("c:\\\\aaa\\bbb\\ccc"), _T("c"), _T("\\\\aaa\\bbb"), _T("ccc"), _T(""), true, wxPATH_DOS },
 
     // wxFileName support for Mac file names is broken currently
 #if 0
@@ -150,8 +150,37 @@ void FileNameTestCase::TestConstruction()
 
         wxFileName fn(fni.fullname, fni.format);
 
+        // the original full name could contain consecutive [back]slashes,
+        // squeeze them except for the double backslash in the beginning in
+        // Windows filenames where it has special meaning
+        wxString fullnameOrig;
+        if ( fni.format == wxPATH_DOS )
+        {
+            // copy the backslashes at beginning unchanged
+            const wxChar *p = fni.fullname;
+            while ( *p == _T('\\') )
+                fullnameOrig += *p++;
+
+            // replace consecutive slashes with single ones in the rest
+            for ( wxChar chPrev = _T('\0'); *p; p++ )
+            {
+                if ( *p == _T('\\') && chPrev == _T('\\') )
+                    continue;
+
+                chPrev = *p;
+                fullnameOrig += chPrev;
+            }
+        }
+        else // !wxPATH_DOS
+        {
+            fullnameOrig = fni.fullname;
+        }
+
+        fullnameOrig.Replace(_T("//"), _T("/"));
+
+
         wxString fullname = fn.GetFullPath(fni.format);
-        CPPUNIT_ASSERT_EQUAL( wxString(fni.fullname), fullname );
+        CPPUNIT_ASSERT_EQUAL( fullnameOrig, fullname );
 
         // notice that we use a dummy working directory to ensure that paths
         // with "../.." in them could be normalized, otherwise this would fail
