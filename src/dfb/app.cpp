@@ -138,10 +138,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
     wxLog::Suspend();
 
     if ( wxEventLoop::GetActive() )
-    {
-        while (wxEventLoop::GetActive()->Pending())
-            wxEventLoop::GetActive()->Dispatch();
-    }
+        wxEventLoop::GetActive()->Yield();
 
     // it's necessary to call ProcessIdle() to update the frames sizes which
     // might have been changed (it also will update other things set from

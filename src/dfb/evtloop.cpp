@@ -86,9 +86,6 @@ bool wxEventLoop::Dispatch()
     // NB: we don't block indefinitely waiting for an event, but instead
     //     time out after a brief period in order to make sure that
     //     OnNextIteration() will be called frequently enough
-    //
-    //     FIXME: call NotifyTimers() and wxSocketEventDispatcher::RunLoop() from here
-    //            (and loop) instead?
     const int TIMEOUT = 100;
 
     if ( ms_buffer->WaitForEventWithTimeout(0, TIMEOUT) )
@@ -127,8 +124,6 @@ void wxEventLoop::WakeUp()
 
 void wxEventLoop::OnNextIteration()
 {
-    // see the comment in Dispatch
-
 #if wxUSE_TIMER
     wxTimer::NotifyTimers();
 #endif
@@ -137,6 +132,16 @@ void wxEventLoop::OnNextIteration()
     // handle any pending socket events:
     wxSocketEventDispatcher::Get().RunLoop();
 #endif
+}
+
+void wxEventLoop::Yield()
+{
+    // process all pending events:
+    while ( Pending() )
+        Dispatch();
+
+    // handle timers, sockets etc.
+    OnNextIteration();
 }
 
 
