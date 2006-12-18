@@ -1816,7 +1816,6 @@ class CustomTreeCtrl(CT.CustomTreeCtrl):
             self.log.write("Beginning Drag..." + "\n")
 
             event.Allow()
-            event.Skip()
 
 
     def OnBeginRDrag(self, event):
@@ -1826,7 +1825,6 @@ class CustomTreeCtrl(CT.CustomTreeCtrl):
             self.log.write("Beginning Right Drag..." + "\n")
 
             event.Allow()
-            event.Skip()
         
 
     def OnEndDrag(self, event):

@@ -1,6 +1,18 @@
 Recent Changes for wxPython
 =====================================================================
 
+2.8.0.2
+-------
+* 
+
+wxGTK: Fix for controls on a toolbar being the full height of the
+toolbar instead of their natural height.
+
+wx.lib.customtreectrl patches from Andrea Gavana.
+
+
+
+
 
 2.8.0.1
 -------

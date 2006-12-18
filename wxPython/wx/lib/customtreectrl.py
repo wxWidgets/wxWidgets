@@ -4855,7 +4855,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
                         current = self.GetItemParent(current)
                         if current:
                             next = self.GetNextSibling(current)
-                            if not self.IsEnabled(next):
+                            if not next or not self.IsEnabled(next):
                                 next = None
 
                 else:
@@ -5130,7 +5130,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         underMouse = thisItem
         underMouseChanged = underMouse != self._underMouse
 
-        if underMouse and (flags & TREE_HITTEST_ONITEMBUTTON) and not event.LeftIsDown() and \
+        if underMouse and (flags & TREE_HITTEST_ONITEM) and not event.LeftIsDown() and \
            not self._isDragging and (not self._renameTimer or not self._renameTimer.IsRunning()):
             underMouse = underMouse
         else:
