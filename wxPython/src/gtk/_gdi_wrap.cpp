@@ -26571,7 +26571,7 @@ SWIGINTERN PyObject *_wrap_GraphicsPath_AddArc__SWIG_0(PyObject *SWIGUNUSEDPARM(
   wxDouble arg4 ;
   wxDouble arg5 ;
   wxDouble arg6 ;
-  bool arg7 ;
+  bool arg7 = (bool) true ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   double val2 ;
@@ -26587,7 +26587,7 @@ SWIGINTERN PyObject *_wrap_GraphicsPath_AddArc__SWIG_0(PyObject *SWIGUNUSEDPARM(
   bool val7 ;
   int ecode7 = 0 ;
   
-  if ((nobjs < 7) || (nobjs > 7)) SWIG_fail;
+  if ((nobjs < 6) || (nobjs > 7)) SWIG_fail;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGraphicsPath, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsPath_AddArc" "', expected argument " "1"" of type '" "wxGraphicsPath *""'"); 
@@ -26618,11 +26618,13 @@ SWIGINTERN PyObject *_wrap_GraphicsPath_AddArc__SWIG_0(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "GraphicsPath_AddArc" "', expected argument " "6"" of type '" "wxDouble""'");
   } 
   arg6 = static_cast< wxDouble >(val6);
-  ecode7 = SWIG_AsVal_bool(swig_obj[6], &val7);
-  if (!SWIG_IsOK(ecode7)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "GraphicsPath_AddArc" "', expected argument " "7"" of type '" "bool""'");
-  } 
-  arg7 = static_cast< bool >(val7);
+  if (swig_obj[6]) {
+    ecode7 = SWIG_AsVal_bool(swig_obj[6], &val7);
+    if (!SWIG_IsOK(ecode7)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "GraphicsPath_AddArc" "', expected argument " "7"" of type '" "bool""'");
+    } 
+    arg7 = static_cast< bool >(val7);
+  }
   {
     (arg1)->AddArc(arg2,arg3,arg4,arg5,arg6,arg7);
     if (PyErr_Occurred()) SWIG_fail;
@@ -26641,7 +26643,7 @@ SWIGINTERN PyObject *_wrap_GraphicsPath_AddArc__SWIG_1(PyObject *SWIGUNUSEDPARM(
   wxDouble arg3 ;
   wxDouble arg4 ;
   wxDouble arg5 ;
-  bool arg6 ;
+  bool arg6 = (bool) true ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   wxPoint2D temp2 ;
@@ -26654,7 +26656,7 @@ SWIGINTERN PyObject *_wrap_GraphicsPath_AddArc__SWIG_1(PyObject *SWIGUNUSEDPARM(
   bool val6 ;
   int ecode6 = 0 ;
   
-  if ((nobjs < 6) || (nobjs > 6)) SWIG_fail;
+  if ((nobjs < 5) || (nobjs > 6)) SWIG_fail;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGraphicsPath, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GraphicsPath_AddArc" "', expected argument " "1"" of type '" "wxGraphicsPath *""'"); 
@@ -26679,11 +26681,13 @@ SWIGINTERN PyObject *_wrap_GraphicsPath_AddArc__SWIG_1(PyObject *SWIGUNUSEDPARM(
     SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "GraphicsPath_AddArc" "', expected argument " "5"" of type '" "wxDouble""'");
   } 
   arg5 = static_cast< wxDouble >(val5);
-  ecode6 = SWIG_AsVal_bool(swig_obj[5], &val6);
-  if (!SWIG_IsOK(ecode6)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "GraphicsPath_AddArc" "', expected argument " "6"" of type '" "bool""'");
-  } 
-  arg6 = static_cast< bool >(val6);
+  if (swig_obj[5]) {
+    ecode6 = SWIG_AsVal_bool(swig_obj[5], &val6);
+    if (!SWIG_IsOK(ecode6)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "GraphicsPath_AddArc" "', expected argument " "6"" of type '" "bool""'");
+    } 
+    arg6 = static_cast< bool >(val6);
+  }
   {
     (arg1)->AddArc((wxPoint2D const &)*arg2,arg3,arg4,arg5,arg6);
     if (PyErr_Occurred()) SWIG_fail;
@@ -26701,10 +26705,28 @@ SWIGINTERN PyObject *_wrap_GraphicsPath_AddArc(PyObject *self, PyObject *args) {
   
   if (!(argc = SWIG_Python_UnpackTuple(args,"GraphicsPath_AddArc",0,7,argv))) SWIG_fail;
   --argc;
-  if (argc == 6) {
+  if ((argc >= 5) && (argc <= 6)) {
+    int _v = 0;
+    {
+      {
+        _v = wxPySimple_typecheck(argv[1], wxT("wxPoint2D"), 2);
+      }
+    }
+    if (!_v) goto check_1;
+    if (argc > 5) {
+      {
+        {
+          int res = SWIG_AsVal_bool(argv[5], NULL);
+          _v = SWIG_CheckState(res);
+        }
+      }
+      if (!_v) goto check_1;
+    }
     return _wrap_GraphicsPath_AddArc__SWIG_1(self, argc, argv);
   }
-  if (argc == 7) {
+check_1:
+  
+  if ((argc >= 6) && (argc <= 7)) {
     return _wrap_GraphicsPath_AddArc__SWIG_0(self, argc, argv);
   }
   

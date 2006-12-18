@@ -45646,7 +45646,7 @@ SWIGINTERN PyObject *MenuBar_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *
 SWIGINTERN PyObject *_wrap_new_MenuItem(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxMenu *arg1 = (wxMenu *) NULL ;
-  int arg2 = (int) wxID_ANY ;
+  int arg2 = (int) wxID_SEPARATOR ;
   wxString const &arg3_defvalue = wxPyEmptyString ;
   wxString *arg3 = (wxString *) &arg3_defvalue ;
   wxString const &arg4_defvalue = wxPyEmptyString ;

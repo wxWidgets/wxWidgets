@@ -5252,9 +5252,9 @@ class GraphicsPath(GraphicsObject):
     def AddArc(*args):
         """
         AddArc(self, Double x, Double y, Double r, Double startAngle, Double endAngle, 
-            bool clockwise)
+            bool clockwise=True)
         AddArc(self, Point2D c, Double r, Double startAngle, Double endAngle, 
-            bool clockwise)
+            bool clockwise=True)
 
         Adds an arc of a circle centering at (x,y) with radius (r) from
         startAngle to endAngle

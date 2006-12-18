@@ -11036,13 +11036,14 @@ class MenuItem(Object):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, Menu parentMenu=None, int id=ID_ANY, String text=EmptyString, 
+        __init__(self, Menu parentMenu=None, int id=ID_SEPARATOR, String text=EmptyString, 
             String help=EmptyString, int kind=ITEM_NORMAL, 
             Menu subMenu=None) -> MenuItem
         """
         _core_.MenuItem_swiginit(self,_core_.new_MenuItem(*args, **kwargs))
     __swig_destroy__ = _core_.delete_MenuItem
     __del__ = lambda self : None;
+    def Destroy(self): pass 
     def GetMenu(*args, **kwargs):
         """GetMenu(self) -> Menu"""
         return _core_.MenuItem_GetMenu(*args, **kwargs)
