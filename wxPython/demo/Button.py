@@ -19,7 +19,7 @@ class TestPanel(wx.Panel):
         b.SetToolTipString("This is a Hello button...")
 
         b = wx.Button(self, 40, "Flat Button?", (20,150), style=wx.NO_BORDER)
-        b.SetToolTipString("This button has a style flag of wx.NO_BORDER. On some platforms that will give it a flattened look.")
+        b.SetToolTipString("This button has a style flag of wx.NO_BORDER.\nOn some platforms that will give it a flattened look.")
         self.Bind(wx.EVT_BUTTON, self.OnClick, b)
 
 

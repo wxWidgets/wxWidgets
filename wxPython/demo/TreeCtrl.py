@@ -43,6 +43,9 @@ class TestTreeCtrlPanel(wx.Panel):
         fileidx     = il.Add(wx.ArtProvider_GetBitmap(wx.ART_NORMAL_FILE, wx.ART_OTHER, isz))
         smileidx    = il.Add(images.getSmilesBitmap())
 
+        b = images.getSmilesBitmap()
+        print b.GetSize()
+
         self.tree.SetImageList(il)
         self.il = il
 
