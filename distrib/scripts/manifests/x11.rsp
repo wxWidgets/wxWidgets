@@ -21,13 +21,6 @@ docs/x11/makewxx11
 
 lib/dummy
 
-mobile/configure
-mobile/configure.in
-mobile/Makefile.in
-mobile/wxedit/Makefile.in
-mobile/wxedit/*.cpp
-mobile/wxedit/*.h
-
 misc/afm/*.afm
 misc/gs_afm/*.afm
 
