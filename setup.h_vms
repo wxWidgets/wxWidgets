@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 14 November 2006                                                    *
+ * Date : 19 December 2006                                                   *
  *                                                                           *
  *****************************************************************************/
 
@@ -143,9 +143,6 @@ typedef pid_t GPid;
 #undef __WINDOWS__
 #endif
 
-#ifndef __WIN95__
-#undef __WIN95__
-#endif
 #ifndef __WIN32__
 #undef __WIN32__
 #endif
@@ -349,6 +346,7 @@ typedef pid_t GPid;
 #define wxUSE_RADIOBOX     1
 #define wxUSE_RADIOBTN     1
 #define wxUSE_SCROLLBAR    1
+#define wxUSE_SEARCHCTRL    1
 #define wxUSE_SLIDER       1
 #define wxUSE_SPINBTN      1
 #define wxUSE_SPINCTRL     1
@@ -566,14 +564,14 @@ typedef pid_t GPid;
 
 /* for some features we don't have dedicated configure switches, so just choose
  * the common values automatically */
-#if (defined(__WIN95__) && !defined(__WXUNIVERSAL__)) || defined(__WXPM__)
+#if (defined(__WIN32__) && !defined(__WXUNIVERSAL__)) || defined(__WXPM__)
 #define wxUSE_OWNER_DRAWN 1
 #else
 #define wxUSE_OWNER_DRAWN 0
 #endif
 
 /* enable rich edit under Win32 */
-#if defined(__WIN95__) && !defined(__WINE__) && !defined(__GNUWIN32_OLD__)
+#if defined(__WIN32__) && !defined(__WINE__) && !defined(__GNUWIN32_OLD__)
 #define wxUSE_RICHEDIT 1
 #define wxUSE_RICHEDIT2 1
 #else
