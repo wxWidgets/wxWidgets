@@ -118,8 +118,6 @@ include/wx/richtext/*.h
 include/wx/aui/*.h
 lib/dummy
 
-tools/gettext/*.*
-
 utils/*.bkl
 utils/make*.*
 utils/configure

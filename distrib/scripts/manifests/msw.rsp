@@ -16,9 +16,6 @@ docs/wine/COPYING.LIB
 docs/microwin/readme.txt
 docs/microwin/microwindows.patches
 
-tools/gettext/*.exe
-tools/gettext/*.sed
-
 src/cwcopysetup.bat
 src/cwdcopysetup.bat
 src/common/*.rc
