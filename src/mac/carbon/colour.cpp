@@ -63,3 +63,9 @@ void wxColour::FromRGBColor( WXCOLORREF* color )
     m_blue = col->blue >> 8;
     m_green = col->green >> 8;
 }
+
+bool wxColour::IsOk() const 
+{
+    return m_isInit; 
+}
+

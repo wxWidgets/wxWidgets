@@ -77,12 +77,12 @@ public:
     virtual bool IsOk() const;
 
     // can be -1
-    virtual int GetDelay(size_t i) const;
+    virtual int GetDelay(int i) const;
 
-    virtual size_t GetFrameCount() const;
+    virtual int GetFrameCount() const;
 
     %newobject GetFrame;
-    virtual wxImage GetFrame(size_t i) const;
+    virtual wxImage GetFrame(int i) const;
     virtual wxSize GetSize() const;
 
     virtual bool LoadFile(const wxString &name, wxAnimationType type = wxANIMATION_TYPE_ANY);
@@ -112,17 +112,17 @@ public:
 public:     // extended interface used by the generic implementation of wxAnimationCtrl
 
 #ifndef __WXGTK__
-    wxPoint GetFramePosition(size_t frame) const;
-    wxSize GetFrameSize(size_t frame) const;
-    wxAnimationDisposal GetDisposalMethod(size_t frame) const;
-    wxColour GetTransparentColour(size_t frame) const;
+    wxPoint GetFramePosition(int frame) const;
+    wxSize GetFrameSize(int frame) const;
+    wxAnimationDisposal GetDisposalMethod(int frame) const;
+    wxColour GetTransparentColour(int frame) const;
     wxColour GetBackgroundColour() const;
 #else
     %extend {
-        wxPoint GetFramePosition(size_t frame) const { return wxDefaultPosition; }
-        wxSize GetFrameSize(size_t frame) const { return wxDefaultSize; }
-        wxAnimationDisposal GetDisposalMethod(size_t frame) const { return wxANIM_UNSPECIFIED; }
-        wxColour GetTransparentColour(size_t frame) const { return wxNullColour; }
+        wxPoint GetFramePosition(int frame) const { return wxDefaultPosition; }
+        wxSize GetFrameSize(int frame) const { return wxDefaultSize; }
+        wxAnimationDisposal GetDisposalMethod(int frame) const { return wxANIM_UNSPECIFIED; }
+        wxColour GetTransparentColour(int frame) const { return wxNullColour; }
         wxColour GetBackgroundColour() const { return wxNullColour; }
     }
 #endif

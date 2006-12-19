@@ -480,6 +480,27 @@ bool wxTextCtrl::Create( wxWindow *parent,
         style |= wxTE_PROCESS_ENTER ;
     }
 
+    CreatePeer( str, pos, size, style );
+
+    MacPostControlCreate(pos, size) ;
+
+    // only now the embedding is correct and we can do a positioning update
+
+    MacSuperChangedPosition() ;
+
+    if ( m_windowStyle & wxTE_READONLY)
+        SetEditable( false ) ;
+
+    SetCursor( wxCursor( wxCURSOR_IBEAM ) ) ;
+
+    return true;
+}
+
+void wxTextCtrl::CreatePeer(
+           const wxString& str,
+           const wxPoint& pos,
+           const wxSize& size, long style )
+{
     bool forceMLTE = false ;
 
 #if wxUSE_SYSTEM_OPTIONS
@@ -517,19 +538,6 @@ bool wxTextCtrl::Create( wxWindow *parent,
     if ( !m_peer )
         m_peer = new wxMacMLTEClassicControl( this , str , pos , size , style ) ;
 #endif
-
-    MacPostControlCreate(pos, size) ;
-
-    // only now the embedding is correct and we can do a positioning update
-
-    MacSuperChangedPosition() ;
-
-    if ( m_windowStyle & wxTE_READONLY)
-        SetEditable( false ) ;
-
-    SetCursor( wxCursor( wxCURSOR_IBEAM ) ) ;
-
-    return true;
 }
 
 void wxTextCtrl::MacSuperChangedPosition()

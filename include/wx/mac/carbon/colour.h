@@ -31,7 +31,7 @@ public:
 
     // accessors
     bool Ok() const { return IsOk(); }
-    bool IsOk() const {return m_isInit; }
+    bool IsOk() const;
 
     unsigned char Red() const { return m_red; }
     unsigned char Green() const { return m_green; }
