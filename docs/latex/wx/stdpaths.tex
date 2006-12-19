@@ -176,9 +176,9 @@ Return the directory where the loadable modules (plugins) live.
 
 Example return values:
 \begin{itemize}
-    \item Unix: \texttt{\textit{prefix}/share/\textit{appname}}
-    \item Windows: the directory where the executable file is located
-    \item Mac: \texttt{\textit{appname}.app/Contents/Resources} bundle subdirectory
+    \item Unix: \texttt{\textit{prefix}/lib/\textit{appname}}
+    \item Windows: the directory of the executable file
+    \item Mac: \texttt{\textit{appname}.app/Contents/PlugIns} bundle subdirectory
 \end{itemize}
 
 \wxheading{See also}
@@ -199,9 +199,9 @@ all platforms except Mac OS X.
 
 Example return values:
 \begin{itemize}
-    \item Unix: \texttt{\textit{prefix}/lib/\textit{appname}}
-    \item Windows: the directory of the executable file
-    \item Mac: \texttt{\textit{appname}.app/Contents/PlugIns} bundle subdirectory
+    \item Unix: \texttt{\textit{prefix}/share/\textit{appname}}
+    \item Windows: the directory where the executable file is located
+    \item Mac: \texttt{\textit{appname}.app/Contents/Resources} bundle subdirectory
 \end{itemize}
 
 \newsince{2.7.0}
