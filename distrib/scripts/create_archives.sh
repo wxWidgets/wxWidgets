@@ -37,56 +37,56 @@ fi
 getfilelist(){
   port=$1
   outfile=$2
-  
+
   filelist="base.rsp"
   contribfiles="stc.rsp contrib.rsp ogl.rsp"
   utilsfiles="tex2rtf.rsp utils.rsp utilmake.rsp"
   commonfiles="generic.rsp jpeg.rsp tiff.rsp xml.rsp deprecated.rsp makefile.rsp $utilsfiles $contribfiles"
-  
+
   if [ ! $port = "base" ]; then
-    filelist="$filelist $commonfiles" 
-  fi 
-  
+    filelist="$filelist $commonfiles"
+  fi
+
   if [ $port = "msw" ] || [ $port = "all" ]; then
     filelist="$filelist msw.rsp univ.rsp vc.rsp mmedia.rsp wince.rsp dmc.rsp"
   fi
-  
+
   if [ $port = "os2" ] || [ $port = "all" ]; then
     filelist="$filelist os2.rsp"
   fi
-  
+
   if [ $port = "x11" ] || [ $port = "all" ]; then
-    filelist="$filelist x11.rsp"
+    filelist="$filelist univ.rsp x11.rsp"
   fi
-  
+
   if [ $port = "mgl" ] || [ $port = "all" ]; then
-    filelist="$filelist mgl.rsp" 
+    filelist="$filelist mgl.rsp"
   fi
-  
+
   if [ $port = "gtk" ] || [ $port = "all" ]; then
     filelist="$filelist gtk.rsp"
   fi
-  
+
   if [ $port = "motif" ] || [ $port = "all" ]; then
     filelist="$filelist motif.rsp"
   fi
-  
+
   if [ $port = "mac" ] || [ $port = "all" ]; then
     filelist="$filelist mac.rsp cocoa.rsp"
   fi
-  
+
   if [ $port = "all" ]; then
     filelist="$filelist gtk1.rsp palmos.rsp docsrc.rsp"
   fi
-  
+
   tempfile="/tmp/wx$port.files.in"
   rm -f $outfile
-  
+
   olddir=$PWD
   cd $MANIFESTDIR
-  
+
   cat $filelist > $outfile
-  
+
   cd $olddir
 }
 
@@ -94,12 +94,12 @@ copyfilelist(){
     FILELIST=$1
     APPDIR=$2
     DESTDIR=$3
-    
+
     for line in `cat $FILELIST` ; do
       if [ "$line" != "" ]; then
         subdir=`dirname $line`
         mkdir -p $DESTDIR/$subdir
-        cp -rf $APPDIR/$line $DESTDIR/$subdir 
+        cp -rf $APPDIR/$line $DESTDIR/$subdir
       fi
     done
 }
@@ -113,7 +113,7 @@ doinit()
 
 dospinport(){
     port=$1
-    
+
     case "$port" in
         all)
             portname="Widgets";;
@@ -128,13 +128,13 @@ dospinport(){
             # upper-case version as they are abbreviations
             portname=`echo $port | tr '[a-z]' '[A-Z]'`;;
     esac
-    
+
     echo "Creating wx$portname distribution..."
 
     cd $APPDIR
     portfiles="/tmp/wx$port.files"
     getfilelist "$port" "$portfiles"
-    
+
     TMPFILESDIR=/tmp/wx$port/wx$portname-$VERSION
     rm -rf $TMPFILESDIR
     mkdir -p $TMPFILESDIR
@@ -174,7 +174,7 @@ prepareforrelease()
     cp $WEBFILES/site/faq*.htm $APPDIR/docs/html
     cp $WEBFILES/site/platform.htm $APPDIR/docs/html
     cp $WEBFILES/site/i18n.htm $APPDIR/docs/html
-    
+
     echo Copying readme files...
     cp $APPDIR/docs/msw/readme.txt README-MSW.txt
     cp $APPDIR/docs/msw/install.txt INSTALL-MSW.txt
@@ -201,7 +201,7 @@ prepareforrelease()
 
     cp $APPDIR/docs/cocoa/readme.txt $APPDIR/readme-cocoa.txt
     cp $APPDIR/docs/cocoa/install.txt $APPDIR/install-cocoa.txt
-    
+
     # Now delete a few files that are unnecessary
     rm -f BuildCVS.txt descrip.mms
     rm -f setup.h_vms
@@ -210,16 +210,16 @@ prepareforrelease()
     rm -f src/mingegcs.bat
 #    rm -f *.spec
     rm -f src/gtk/descrip.mms src/motif/descrip.mms
-    
+
     # Copy setup0.h files to setup.h
     # OS/2 always built with configure now
     # cp $APPDIR/include/wx/os2/setup0.h $APPDIR/include/wx/os2/setup.h
     cp $APPDIR/include/wx/msw/setup0.h $APPDIR/include/wx/msw/setup.h
     cp $APPDIR/include/wx/univ/setup0.h $APPDIR/include/wx/univ/setup.h
-    
+
     # Make MSW project files always have DOS line endings.
-    unix2dos `cat $MANIFESTDIR/vc.rsp` 
-    
+    unix2dos `cat $MANIFESTDIR/vc.rsp`
+
     popd
 }
 
@@ -280,7 +280,7 @@ fi
 
 # Do wxAll spin
 if [ "$SPINWXALL" = "1" ] || [ "$SPINALL" = "1" ]; then
-    dospinport "all" 
+    dospinport "all"
 fi
 
 if [ "$SPINALL" = "1" ]; then
