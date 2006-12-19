@@ -39,7 +39,7 @@ public:
     wxFileOffset GetLength() const;
 
     bool Ok() const { return IsOk(); }
-    virtual bool IsOk() const { return (wxStreamBase::IsOk() && m_file->IsOpened()); }
+    virtual bool IsOk() const;
     bool IsSeekable() const { return m_file->GetKind() == wxFILE_KIND_DISK; }
 
 protected:
@@ -69,7 +69,7 @@ public:
     wxFileOffset GetLength() const;
 
     bool Ok() const { return IsOk(); }
-    virtual bool IsOk() const { return (wxStreamBase::IsOk() && m_file->IsOpened()); }
+    virtual bool IsOk() const;
     bool IsSeekable() const { return m_file->GetKind() == wxFILE_KIND_DISK; }
 
 protected:
@@ -140,7 +140,7 @@ public:
     wxFileOffset GetLength() const;
 
     bool Ok() const { return IsOk(); }
-    virtual bool IsOk() const { return (wxStreamBase::IsOk() && m_file->IsOpened()); }
+    virtual bool IsOk() const;
     bool IsSeekable() const { return m_file->GetKind() == wxFILE_KIND_DISK; }
 
 protected:
@@ -170,7 +170,7 @@ public:
     wxFileOffset GetLength() const;
 
     bool Ok() const { return IsOk(); }
-    virtual bool IsOk() const { return (wxStreamBase::IsOk() && m_file->IsOpened()); }
+    virtual bool IsOk() const ;
     bool IsSeekable() const { return m_file->GetKind() == wxFILE_KIND_DISK; }
 
 protected:

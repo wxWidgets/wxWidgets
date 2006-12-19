@@ -107,6 +107,11 @@ wxFileOffset wxFileInputStream::OnSysTell() const
     return m_file->Tell();
 }
 
+bool wxFileInputStream::IsOk() const 
+{ 
+    return (wxStreamBase::IsOk() && m_file->IsOpened()); 
+}
+
 // ----------------------------------------------------------------------------
 // wxFileOutputStream
 // ----------------------------------------------------------------------------
@@ -176,6 +181,11 @@ void wxFileOutputStream::Sync()
 wxFileOffset wxFileOutputStream::GetLength() const
 {
     return m_file->Length();
+}
+
+bool wxFileOutputStream::IsOk() const 
+{ 
+    return (wxStreamBase::IsOk() && m_file->IsOpened()); 
 }
 
 // ----------------------------------------------------------------------------
@@ -290,6 +300,11 @@ wxFileOffset wxFFileInputStream::OnSysTell() const
     return m_file->Tell();
 }
 
+bool wxFFileInputStream::IsOk() const 
+{ 
+    return (wxStreamBase::IsOk() && m_file->IsOpened()); 
+}
+
 // ----------------------------------------------------------------------------
 // wxFFileOutputStream
 // ----------------------------------------------------------------------------
@@ -369,6 +384,11 @@ void wxFFileOutputStream::Sync()
 wxFileOffset wxFFileOutputStream::GetLength() const
 {
     return m_file->Length();
+}
+
+bool wxFFileOutputStream::IsOk() const 
+{ 
+    return (wxStreamBase::IsOk() && m_file->IsOpened()); 
 }
 
 // ----------------------------------------------------------------------------
