@@ -1065,7 +1065,7 @@ void wxSearchCtrl::OnSetFocus( wxFocusEvent& /*event*/ )
     }
 }
 
-void wxSearchCtrl::OnSize( wxSizeEvent& event )
+void wxSearchCtrl::OnSize( wxSizeEvent& WXUNUSED(event) )
 {
     int width, height;
     GetSize(&width, &height);
