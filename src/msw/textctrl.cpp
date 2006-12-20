@@ -291,7 +291,8 @@ wxTextCtrl::~wxTextCtrl()
     delete m_privateContextMenu;
 }
 
-bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
+bool wxTextCtrl::Create(wxWindow *parent,
+                        wxWindowID id,
                         const wxString& value,
                         const wxPoint& pos,
                         const wxSize& size,
@@ -308,6 +309,16 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return false;
 
+    if ( !MSWCreateText(value, pos, size) )
+        return false;
+
+    return true;
+}
+
+bool wxTextCtrl::MSWCreateText(const wxString& value,
+                               const wxPoint& pos,
+                               const wxSize& size)
+{
     // translate wxWin style flags to MSW ones
     WXDWORD msStyle = MSWGetCreateWindowFlags();
 
@@ -316,7 +327,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
 
 #if defined(__POCKETPC__) || defined(__SMARTPHONE__)
     // A control that capitalizes the first letter
-    if (style & wxTE_CAPITALIZE)
+    if ( HasFlag(wxTE_CAPITALIZE) )
         windowClass = wxT("CAPEDIT");
 #endif
 
@@ -597,6 +608,60 @@ WXDWORD wxTextCtrl::MSWGetStyle(long style, WXDWORD *exstyle) const
 
 void wxTextCtrl::SetWindowStyleFlag(long style)
 {
+    // changing the alignment of the control dynamically only works under XP
+    // (but not older Windows version) and only for plain EDIT controls (not
+    // RICH ones) and we have to recreate the control to make it always work
+    if ( IsRich() || wxGetWinVersion() < wxWinVersion_XP )
+    {
+        const long alignMask = wxTE_LEFT | wxTE_CENTRE | wxTE_RIGHT;
+        if ( (style & alignMask) != (GetWindowStyle() & alignMask) )
+        {
+            const wxString value = GetValue();
+            const wxPoint pos = GetPosition();
+            const wxSize size = GetSize();
+
+            // delete the old window
+            HWND hwnd = GetHwnd();
+            DissociateHandle();
+            ::DestroyWindow(hwnd);
+
+            // create the new one with the updated flags
+            m_windowStyle = style;
+            MSWCreateText(value, pos, size);
+
+            // and make sure it has the same attributes as before
+            if ( m_hasFont )
+            {
+                // calling SetFont(m_font) would do nothing as the code would
+                // notice that the font didn't change, so force it to believe
+                // that it did
+                wxFont font = m_font;
+                m_font = wxNullFont;
+                SetFont(font);
+            }
+
+            if ( m_hasFgCol )
+            {
+                wxColour colFg = m_foregroundColour;
+                m_foregroundColour = wxNullColour;
+                SetForegroundColour(colFg);
+            }
+
+            if ( m_hasBgCol )
+            {
+                wxColour colBg = m_backgroundColour;
+                m_backgroundColour = wxNullColour;
+                SetBackgroundColour(colBg);
+            }
+
+            // note that text styles are lost but this is probably not a big
+            // problem: if you use styles, you probably don't use nor change
+            // alignment flags anyhow
+
+            return;
+        }
+    }
+
 #if wxUSE_RICHEDIT
     // we have to deal with some styles separately because they can't be
     // changed by simply calling SetWindowLong(GWL_STYLE) but can be changed

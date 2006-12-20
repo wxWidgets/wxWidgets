@@ -207,6 +207,15 @@ protected:
     // common part of all ctors
     void Init();
 
+    // creates the control of appropriate class (plain or rich edit) with the
+    // styles corresponding to m_windowStyle
+    //
+    // this is used by ctor/Create() and when we need to recreate the control
+    // later
+    bool MSWCreateText(const wxString& value,
+                       const wxPoint& pos,
+                       const wxSize& size);
+
     virtual void DoSetValue(const wxString &value, int flags = 0);
 
     // return true if this control has a user-set limit on amount of text (i.e.
