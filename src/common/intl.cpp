@@ -1904,14 +1904,14 @@ void wxLocale::AddCatalogLookupPathPrefix(const wxString& prefix)
         !wxGetEnv(wxT("LC_MESSAGES"), &langFull) &&
         !wxGetEnv(wxT("LANG"), &langFull))
     {
-        // no language specified, threat it as English
-        return wxLANGUAGE_ENGLISH;
+        // no language specified, treat it as English
+        return wxLANGUAGE_ENGLISH_US;
     }
 
     if ( langFull == _T("C") || langFull == _T("POSIX") )
     {
-        // default C locale
-        return wxLANGUAGE_ENGLISH;
+        // default C locale is English too
+        return wxLANGUAGE_ENGLISH_US;
     }
 
     // the language string has the following form
@@ -2764,7 +2764,7 @@ bool wxLocale::IsLoaded(const wxChar *szDomain) const
 // add a catalog to our linked list
 bool wxLocale::AddCatalog(const wxChar *szDomain)
 {
-    return AddCatalog(szDomain, wxLANGUAGE_ENGLISH, NULL);
+    return AddCatalog(szDomain, wxLANGUAGE_ENGLISH_US, NULL);
 }
 
 // add a catalog to our linked list
