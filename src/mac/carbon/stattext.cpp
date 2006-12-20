@@ -74,45 +74,56 @@ bool wxStaticText::Create( wxWindow *parent,
 
 wxSize wxStaticText::DoGetBestSize() const
 {
-    ControlFontStyleRec controlFont;
-    OSStatus err = m_peer->GetData<ControlFontStyleRec>( kControlEntireControl, kControlFontStyleTag, &controlFont );
-    verify_noerr( err );
-
+    Rect bestsize = { 0 , 0 , 0 , 0 } ;
     Point bounds;
-    SInt16 baseline;
-    wxMacCFStringHolder str( m_label,  m_font.GetEncoding() );
-
-    if ( m_font.MacGetThemeFontID() != kThemeCurrentPortFont )
+    
+    // try the built-in best size if available
+    m_peer->GetBestRect( &bestsize ) ;
+    if ( !EmptyRect( &bestsize ) )
     {
-        err = GetThemeTextDimensions(
-            (!m_label.empty() ? (CFStringRef)str : CFSTR(" ")),
-            m_font.MacGetThemeFontID(), kThemeStateActive, false, &bounds, &baseline );
-        verify_noerr( err );
+        bounds.h = bestsize.right - bestsize.left ;
+        bounds.v = bestsize.bottom - bestsize.top ;
     }
     else
     {
-#if wxMAC_USE_CORE_GRAPHICS
-        wxClientDC dc(const_cast<wxStaticText*>(this));
-        wxCoord width, height ;
-        dc.GetTextExtent( m_label , &width, &height);
-        bounds.h = width;
-        bounds.v = height;
-#else
-        wxMacWindowStateSaver sv( this );
-        ::TextFont( m_font.MacGetFontNum() );
-        ::TextSize( (short)(m_font.MacGetFontSize()) );
-        ::TextFace( m_font.MacGetFontStyle() );
-
-        err = GetThemeTextDimensions(
-            (!m_label.empty() ? (CFStringRef)str : CFSTR(" ")),
-            kThemeCurrentPortFont, kThemeStateActive, false, &bounds, &baseline );
+        ControlFontStyleRec controlFont;
+        OSStatus err = m_peer->GetData<ControlFontStyleRec>( kControlEntireControl, kControlFontStyleTag, &controlFont );
         verify_noerr( err );
-#endif
+
+        SInt16 baseline;
+        wxMacCFStringHolder str( m_label,  m_font.GetEncoding() );
+
+        if ( m_font.MacGetThemeFontID() != kThemeCurrentPortFont )
+        {
+            err = GetThemeTextDimensions(
+                (!m_label.empty() ? (CFStringRef)str : CFSTR(" ")),
+                m_font.MacGetThemeFontID(), kThemeStateActive, false, &bounds, &baseline );
+            verify_noerr( err );
+        }
+        else
+        {
+    #if wxMAC_USE_CORE_GRAPHICS
+            wxClientDC dc(const_cast<wxStaticText*>(this));
+            wxCoord width, height ;
+            dc.GetTextExtent( m_label , &width, &height);
+            bounds.h = width;
+            bounds.v = height;
+    #else
+            wxMacWindowStateSaver sv( this );
+            ::TextFont( m_font.MacGetFontNum() );
+            ::TextSize( (short)(m_font.MacGetFontSize()) );
+            ::TextFace( m_font.MacGetFontStyle() );
+
+            err = GetThemeTextDimensions(
+                (!m_label.empty() ? (CFStringRef)str : CFSTR(" ")),
+                kThemeCurrentPortFont, kThemeStateActive, false, &bounds, &baseline );
+            verify_noerr( err );
+    #endif
+        }
+
+        if ( m_label.empty() )
+            bounds.h = 0;
     }
-
-    if ( m_label.empty() )
-        bounds.h = 0;
-
     bounds.h += MacGetLeftBorderSize() + MacGetRightBorderSize();
     bounds.v += MacGetTopBorderSize() + MacGetBottomBorderSize();
 
