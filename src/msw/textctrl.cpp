@@ -263,49 +263,9 @@ BEGIN_EVENT_TABLE(wxTextCtrl, wxTextCtrlBase)
     EVT_SET_FOCUS(wxTextCtrl::OnSetFocus)
 END_EVENT_TABLE()
 
-// ----------------------------------------------------------------------------
-// function prototypes
-// ----------------------------------------------------------------------------
-
-LRESULT APIENTRY _EXPORT wxTextCtrlWndProc(HWND hWnd,
-                                           UINT message,
-                                           WPARAM wParam,
-                                           LPARAM lParam);
-
-// ---------------------------------------------------------------------------
-// global vars
-// ---------------------------------------------------------------------------
-
-// the pointer to standard text control wnd proc
-static WNDPROC gs_wndprocEdit = (WNDPROC)NULL;
-
 // ============================================================================
 // implementation
 // ============================================================================
-
-// ----------------------------------------------------------------------------
-// wnd proc for subclassed edit control
-// ----------------------------------------------------------------------------
-
-LRESULT APIENTRY _EXPORT wxTextCtrlWndProc(HWND hWnd,
-                                           UINT message,
-                                           WPARAM wParam,
-                                           LPARAM lParam)
-{
-    switch ( message )
-    {
-        case WM_CUT:
-        case WM_COPY:
-        case WM_PASTE:
-            {
-                wxWindow *win = wxFindWinFromHandle((WXHWND)hWnd);
-                if( win->HandleClipboardEvent( message ) )
-                    return 0;
-                break;
-            }
-    }
-    return ::CallWindowProc(CASTWNDPROC gs_wndprocEdit, hWnd, message, wParam, lParam);
-}
 
 // ----------------------------------------------------------------------------
 // creation
@@ -523,9 +483,6 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
         ::SendMessage(GetHwnd(), EM_SETEVENTMASK, 0, mask);
     }
 #endif // wxUSE_RICHEDIT
-
-    gs_wndprocEdit = wxSetWindowProc((HWND)GetHwnd(),
-                                     wxTextCtrlWndProc);
 
     return true;
 }
@@ -1923,41 +1880,53 @@ WXLRESULT wxTextCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
 {
     WXLRESULT lRc = wxTextCtrlBase::MSWWindowProc(nMsg, wParam, lParam);
 
-    if ( nMsg == WM_GETDLGCODE )
+    switch ( nMsg )
     {
-        // we always want the chars and the arrows: the arrows for navigation
-        // and the chars because we want Ctrl-C to work even in a read only
-        // control
-        long lDlgCode = DLGC_WANTCHARS | DLGC_WANTARROWS;
+        case WM_GETDLGCODE:
+            {
+                // we always want the chars and the arrows: the arrows for
+                // navigation and the chars because we want Ctrl-C to work even
+                // in a read only control
+                long lDlgCode = DLGC_WANTCHARS | DLGC_WANTARROWS;
 
-        if ( IsEditable() )
-        {
-            // we may have several different cases:
-            // 1. normal case: both TAB and ENTER are used for dlg navigation
-            // 2. ctrl which wants TAB for itself: ENTER is used to pass to the
-            //    next control in the dialog
-            // 3. ctrl which wants ENTER for itself: TAB is used for dialog
-            //    navigation
-            // 4. ctrl which wants both TAB and ENTER: Ctrl-ENTER is used to go
-            //    to the next control
+                if ( IsEditable() )
+                {
+                    // we may have several different cases:
+                    // 1. normal: both TAB and ENTER are used for navigation
+                    // 2. ctrl wants TAB for itself: ENTER is used to pass to
+                    //    the next control in the dialog
+                    // 3. ctrl wants ENTER for itself: TAB is used for dialog
+                    //    navigation
+                    // 4. ctrl wants both TAB and ENTER: Ctrl-ENTER is used to
+                    //    go to the next control (we need some way to do it)
 
-            // the multiline edit control should always get <Return> for itself
-            if ( HasFlag(wxTE_PROCESS_ENTER) || HasFlag(wxTE_MULTILINE) )
-                lDlgCode |= DLGC_WANTMESSAGE;
+                    // multiline controls should always get ENTER for themselves
+                    if ( HasFlag(wxTE_PROCESS_ENTER) || HasFlag(wxTE_MULTILINE) )
+                        lDlgCode |= DLGC_WANTMESSAGE;
 
-            if ( HasFlag(wxTE_PROCESS_TAB) )
-                lDlgCode |= DLGC_WANTTAB;
+                    if ( HasFlag(wxTE_PROCESS_TAB) )
+                        lDlgCode |= DLGC_WANTTAB;
 
-            lRc |= lDlgCode;
-        }
-        else // !editable
-        {
-            // NB: use "=", not "|=" as the base class version returns the
-            //     same flags is this state as usual (i.e. including
-            //     DLGC_WANTMESSAGE). This is strange (how does it work in the
-            //     native Win32 apps?) but for now live with it.
-            lRc = lDlgCode;
-        }
+                    lRc |= lDlgCode;
+                }
+                else // !editable
+                {
+                    // NB: use "=", not "|=" as the base class version returns
+                    //     the same flags is this state as usual (i.e.
+                    //     including DLGC_WANTMESSAGE). This is strange (how
+                    //     does it work in the native Win32 apps?) but for now
+                    //     live with it.
+                    lRc = lDlgCode;
+                }
+            }
+            break;
+
+        case WM_CUT:
+        case WM_COPY:
+        case WM_PASTE:
+            if ( HandleClipboardEvent(nMsg) )
+                lRc = 0;
+            break;
     }
 
     return lRc;
