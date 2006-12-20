@@ -471,7 +471,7 @@ bool wxTextCtrl::Create(wxWindow *parent, wxWindowID id,
            // Windows XP, so if we're sure it works correctly under other
            // systems we could do this only for XP
            SetSize(-1, 1); // 1 is small enough to force vert scrollbar
-           SetSize(size);
+           SetInitialSize(size);
         }
         else if ( m_windowStyle & wxTE_AUTO_URL )
         {
