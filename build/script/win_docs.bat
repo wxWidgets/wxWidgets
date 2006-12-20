@@ -1,12 +1,12 @@
 rem Uncomment the next line to set the version; used also in wxWidgets.iss
-SET WXW_VER=2.8.0
+rem SET WXW_VER=2.8.0
 if (%WXW_VER%)==() SET WXW_VER=CVS
 
 echo docs building for %WXW_VER%
 
 rem  This builds the docs in %WXWIN% in a number of formats 
 rem  and a clean inno setup in a second tree
-rem  it uses a number of tools nmake, gnuwin32 zip, ghostscript, MS word, cvsNT
+rem  it uses a number of tools nmake, gnuwin32 zip & dos2unix, ghostscript, MS word, cvsNT
 rem  cvs is in the path already from CVSNT install
 rem  writes a log file in c:\
 
@@ -18,14 +18,22 @@ set PATH=%PATH%;C:\wx\wxw26b\utils\tex2rtf\src\vc_based;C:\wx\Gnu\bin;c:\progra~
 set PATH=%PATH%;C:\Program Files\gs\gs8.51\lib;C:\Program Files\gs\gs8.51\bin
 echo %PATH% >> c:\temp.log
 
-rem update wxwidgets (holds docs) and inno (cvs wxMSW module only)
+rem update wxwidgets (holds docs) and inno (cvs wxMSW setup.exe only)
 c:
 cd %WXWIN%
 cvs up -P -d
+
+rem now inno
 cd \wx\inno\wxWidgets
+del c*.*
 if exist include\wx\msw\setup.h del include\wx\msw\setup.h
+if exist include\wx\univ\setup.h del include\wx\univ\setup.h
 cvs up -P
+dos2unix configure
+dos2unix config.guess
+dos2unix config.sub
 copy include\wx\msw\setup0.h include\wx\msw\setup.h
+copy include\wx\univ\setup0.h include\wx\univ\setup.h
 echo CVS update  >>  c:\temp.log
 
 rem add bakefile build...
