@@ -68,7 +68,8 @@ Deprecated methods since 2.6.x and their replacements
   wxFS_SEEKABLE flags is deprecated. You can still seek, but use the flag.
 - Constructor wxZipInputStream(const wxString& archive, const wxString& file)
   deprecated in favour of wxFileSystem (other zip ctors are not deprecated).
-
+- wx{Dir|File}Dialog::{Set|Get}Style deprecated in favour of the generic
+  wxWindow::{Set|Get}WindowStyle()
 
 
 Major new features in 2.8 release

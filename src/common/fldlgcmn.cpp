@@ -113,6 +113,19 @@ int wxFileDialogBase::ParseWildcard(const wxString& filterStr,
 }
 #endif // WXWIN_COMPATIBILITY_2_4
 
+#if WXWIN_COMPATIBILITY_2_6
+long wxFileDialogBase::GetStyle() const
+{
+    return GetWindowStyle();
+}
+
+void wxFileDialogBase::SetStyle(long style)
+{
+    SetWindowStyle(style);
+}
+#endif // WXWIN_COMPATIBILITY_2_6
+
+
 wxString wxFileDialogBase::AppendExtension(const wxString &filePath,
                                            const wxString &extensionList)
 {
@@ -312,5 +325,23 @@ WXDLLEXPORT wxString wxSaveFileSelector(const wxChar *what,
 {
     return wxDefaultFileSelector(false, what, extension, default_name, parent);
 }
+
+
+//----------------------------------------------------------------------------
+// wxDirDialogBase
+//----------------------------------------------------------------------------
+
+#if WXWIN_COMPATIBILITY_2_6
+long wxDirDialogBase::GetStyle() const
+{
+    return GetWindowStyle();
+}
+
+void wxDirDialogBase::SetStyle(long style)
+{
+    SetWindowStyle(style);
+}
+#endif // WXWIN_COMPATIBILITY_2_6
+
 
 #endif // wxUSE_FILEDLG

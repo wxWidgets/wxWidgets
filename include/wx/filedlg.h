@@ -129,6 +129,14 @@ public:
                                            wxArrayString& filters) );
 #endif // WXWIN_COMPATIBILITY_2_4
 
+#if WXWIN_COMPATIBILITY_2_6
+
+    wxDEPRECATED( long GetStyle() const );
+    wxDEPRECATED( void SetStyle(long style) );
+
+#endif  // WXWIN_COMPATIBILITY_2_6
+
+
     // Append first extension to filePath from a ';' separated extensionList
     // if filePath = "path/foo.bar" just return it as is
     // if filePath = "foo[.]" and extensionList = "*.jpg;*.png" return "foo.jpg"

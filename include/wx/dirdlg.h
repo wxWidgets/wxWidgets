@@ -73,6 +73,12 @@ public:
         return true;
     }
 
+#if WXWIN_COMPATIBILITY_2_6
+
+    wxDEPRECATED( long GetStyle() const );
+    wxDEPRECATED( void SetStyle(long style) );
+
+#endif  // WXWIN_COMPATIBILITY_2_6
 
     virtual void SetMessage(const wxString& message) { m_message = message; }
     virtual void SetPath(const wxString& path) { m_path = path; }
