@@ -28,7 +28,6 @@ wxWidgets features that don't work in wxDFB yet:
 
 $ ./configure --with-directfb \
               --with-themes=mono \
-              --disable-sockets \
               --disable-accel \
               --disable-display \
               --disable-palette \
