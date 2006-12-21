@@ -341,6 +341,8 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   
   virtual int GetScrollPos(int orient) const;
   
+  virtual void SetFocus();
+  
   virtual void SetDropTarget( wxDropTarget *dropTarget );
   virtual wxDropTarget* GetDropTarget() const;
   

@@ -38,6 +38,8 @@
 #include "wx/sysopt.h"
 #include "wx/timer.h"
 
+#include "wx/hashmap.h"
+
 #define wxMAC_ALWAYS_USE_GENERIC_LISTCTRL wxT("mac.listctrl.always_use_generic")
 
 #if wxUSE_EXTENDED_RTTI
@@ -113,9 +115,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxListItem, wxObject)
 
 IMPLEMENT_DYNAMIC_CLASS(wxListEvent, wxNotifyEvent)
 
-WX_DECLARE_EXPORTED_LIST(wxListItem, wxListItemList);
+WX_DECLARE_HASH_MAP( int, wxListItem*, wxIntegerHash, wxIntegerEqual, wxListItemList );
+
 #include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wxListItemList)
 WX_DEFINE_LIST(wxColumnList)
 
 // so we can check for column clicks
@@ -2198,6 +2200,17 @@ wxDropTarget *wxListCtrl::GetDropTarget() const
     return NULL;
 }
 
+void wxListCtrl::SetFocus()
+{
+        if (m_genericImpl)
+        {
+                m_genericImpl->SetFocus();
+                return;
+        }
+       
+        wxWindow::SetFocus();
+}
+
 // wxMac internal data structures
 
 wxMacListCtrlItem::~wxMacListCtrlItem()
@@ -2848,9 +2861,15 @@ Boolean wxMacDataBrowserListCtrlControl::CompareItems(DataBrowserItemID itemOneI
     bool retval = false;
     wxString itemText;
     wxString otherItemText;
+    long itemOrder;
+    long otherItemOrder;
+    
     int colId = sortProperty - kMinColumnId;
 
     wxListCtrl* list = wxDynamicCast( GetPeer() , wxListCtrl );
+
+    DataBrowserSortOrder sort;
+    verify_noerr(GetSortOrder(&sort));
 
     if (colId >= 0)
     {
@@ -2872,13 +2891,25 @@ Boolean wxMacDataBrowserListCtrlControl::CompareItems(DataBrowserItemID itemOneI
                 if (item1 > -1 && item2 > -1)
                 {
                     int result = func(item1, item2, list->GetCompareFuncData());
-                    return result >= 0;
+                    if (sort == kDataBrowserOrderIncreasing)
+                        return result >= 0;
+                    else
+                        return result < 0;
                 }
             }
+
             if (item->HasColumnInfo(colId))
-                itemText = item->GetColumnInfo(colId)->GetText();
+            {
+                wxListItem* colItem = item->GetColumnInfo(colId);
+                itemText = colItem->GetText();
+                itemOrder = colItem->GetId();
+            }
             if (otherItem->HasColumnInfo(colId))
-                otherItemText = otherItem->GetColumnInfo(colId)->GetText();
+            {
+                wxListItem* colItem = otherItem->GetColumnInfo(colId);
+                otherItemText = colItem->GetText();
+                otherItemOrder = colItem->GetId();
+            }
         }
         else
         {
@@ -2887,19 +2918,24 @@ Boolean wxMacDataBrowserListCtrlControl::CompareItems(DataBrowserItemID itemOneI
             long otherItemNum = (long)itemTwoID;
             itemText = list->OnGetItemText( itemNum-1, colId );
             otherItemText = list->OnGetItemText( otherItemNum-1, colId );
+            
+            // virtual listctrls don't support sorting
+            return itemNum < otherItemNum;
+
 
         }
 
-        DataBrowserSortOrder sort;
-        verify_noerr(GetSortOrder(&sort));
-
-        if ( sort == kDataBrowserOrderIncreasing )
+        if ( sort == kDataBrowserOrderIncreasing && !m_sortOrder == SortOrder_None )
         {
             retval = itemText.CmpNoCase( otherItemText ) > 0;
         }
-        else if ( sort == kDataBrowserOrderDecreasing )
+        else if ( sort == kDataBrowserOrderDecreasing && !m_sortOrder == SortOrder_None )
         {
             retval = itemText.CmpNoCase( otherItemText ) < 0;
+        }
+        else
+        {
+            retval = itemOrder < otherItemOrder;
         }
     }
     else{
@@ -3009,7 +3045,7 @@ wxMacDataItem* wxMacDataBrowserListCtrlControl::CreateItem()
 
 wxMacListCtrlItem::wxMacListCtrlItem()
 {
-    m_rowItems = wxListItemList( wxKEY_INTEGER );
+    m_rowItems = wxListItemList();
 }
 
 int wxMacListCtrlItem::GetColumnImageValue( unsigned int column )
@@ -3049,15 +3085,13 @@ void wxMacListCtrlItem::SetColumnTextValue( unsigned int column, const wxString&
 
 wxListItem* wxMacListCtrlItem::GetColumnInfo( unsigned int column )
 {
-    wxListItemList::compatibility_iterator node = m_rowItems.Find( column );
-    wxASSERT_MSG( node, _T("invalid column index in wxMacListCtrlItem") );
-
-    return node->GetData();
+    wxASSERT_MSG( HasColumnInfo(column), _T("invalid column index in wxMacListCtrlItem") );
+    return m_rowItems[column]; 
 }
 
 bool wxMacListCtrlItem::HasColumnInfo( unsigned int column )
 {
-    return m_rowItems.Find( column ) != NULL;
+    return !(m_rowItems.find( column ) == m_rowItems.end());
 }
 
 void wxMacListCtrlItem::SetColumnInfo( unsigned int column, wxListItem* item )
@@ -3066,7 +3100,7 @@ void wxMacListCtrlItem::SetColumnInfo( unsigned int column, wxListItem* item )
     if ( !HasColumnInfo(column) )
     {
         wxListItem* listItem = new wxListItem(*item);
-        m_rowItems.Append( column, listItem );
+        m_rowItems[column] = listItem;
     }
     else
     {
