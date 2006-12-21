@@ -570,7 +570,9 @@ bool wxSimpleHtmlListBox::Create(wxWindow *parent, wxWindowID id,
     if (!wxHtmlListBox::Create(parent, id, pos, size, style, name))
         return false;
 
+#if wxUSE_VALIDATORS
     SetValidator(validator);
+#endif
     for (int i=0; i<n; i++)
         Append(choices[i]);
 
@@ -588,7 +590,9 @@ bool wxSimpleHtmlListBox::Create(wxWindow *parent, wxWindowID id,
     if (!wxHtmlListBox::Create(parent, id, pos, size, style, name))
         return false;
 
+#if wxUSE_VALIDATORS
     SetValidator(validator);
+#endif
     Append(choices);
 
     return true;
