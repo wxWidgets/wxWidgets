@@ -1,9 +1,9 @@
-                    Binary Compatability and wxWidgets
+                    Binary Compatibility and wxWidgets
                     ==================================
 0. Purpose
 ----------
 
-This is broad technote covering all aspects of binary compatability with 
+This is broad technote covering all aspects of binary compatibility with 
 wxWidgets.
 
 1. Releases
@@ -21,38 +21,64 @@ Major  Minor Release
 
 (I.E. Major.Minor.Release).
 
-All Release versions where the Minor is EVEN (2.4.x,2.6.x 
-etc.  ODD minors are development versions)  are expected to be binary 
-compatable.  Note that this means FORWARD binary compatability only -
-new methods to classes are ok as long as they arn't virtual, etc.
+All versions with EVEN minor version component (e.g. 2.4.x, 2.6.x etc.)
+are expected to be binary compatible (ODD minors are development versions
+and the compatibility constraints don't apply to them). Note that by
+preserving binary compatibility we mean BACKWARDS compatibility only,
+meaning that applications built with old wxWidgets headers should continue
+to work with new wxWidgets (shared/dynamic) libraries without the need to
+rebuild. There is no requirement to preserve compatibility in the other
+direction (i.e. make new headers compatible with old libraries) as this
+would preclude any additions whatsoever to the stable branch. But see
+also section (4).
 
-2. What kind of changes are NOT binary compatable
+
+2. What kind of changes are NOT binary compatible
 -------------------------------------------------
 
 If its still up, the KDE guide is a good reference:
 http://developer.kde.org/documentation/other/binarycompatibility.html
 
-The changes that are NOT binary compatable:
+The changes that are NOT binary compatible:
 - Adding a virtual function
 - Changing the name of a any function or variable
 - Changing the signature of a virtual function (adding a parameter, 
 even a default one)
 - Changing the order of the virtual functions in a class
 ["switching" them, etc.]
-- Changing access privalages to a function (protected to private etc.)
+- Changing access privileges to a function (protected to private etc.)
 [unlike KDE we need to support windows so this is not allowed]
 - Adding a member variable
 - Changing the order of non-static member variables
 
 
-3. wxABI_VERSION and BACKWARD binary compatability
+3. Changes which are compatible
+-------------------------------
+
+- Adding a new class
+- Adding a new non-virtual method to an existing class
+- Overriding the implementation of an existing virtual function
+[this is considered to be backwards binary compatible until we find a
+ counter example; currently it's known to work with Apple gcc at least]
+- Anything which doesn't result in ABI change at all, e.g. adding new
+  macros, constants and, of course, private changes in the implementation
+
+
+4. wxABI_VERSION and "forward" binary compatibility
 --------------------------------------------------
 
-As mentioned we do not support BACKWARD binary compatability. 
+As mentioned we do not support "forward" binary compatibility, that is the
+ability to run applications compiled with new wxWidgets headers on systems
+with old wxWidgets libraries.
 
-However, for this purpose we have the macro wxABI_VERSION.  All
-new symbols added to binary compatable releases are to be ifed
-with wxABI_VERSION.
+However, for the developers who want to ensure that their application works
+with some fixed old wxWidgets version and doesn't (inadvertently) require
+features added in later releases, we provide the macro wxABI_VERSION which
+can be defined to restrict the API exported by wxWidgets headers to that of
+a fixed old release.
+
+For this to work, all new symbols added to binary compatible releases must
+be #if'ed with wxABI_VERSION.
 
 The layout of wxABI_VERSION is as follows:
 
@@ -63,7 +89,7 @@ where
  2     06     02
 Major Minor Release
 
-I.E. it corresponds to the wxWidgets release in {1}.
+I.E. it corresponds to the wxWidgets release in (1).
 
 An example of using wxABI_VERSION is as follows for symbols
 only in a 2.6.2 release:
@@ -86,10 +112,10 @@ bool LoadURIWithProxy(const wxString& fileName, const wxString& proxy)
 #endif
 
 
-4. Workarounds for adding virtual functions
+5. Workarounds for adding virtual functions
 -------------------------------------------
 
-Originally the idea for adding virtual functions to binary compatable
+Originally the idea for adding virtual functions to binary compatible
 releases was to pad out some empty "reserved" functions and then
 rename those later when someone needed to add a virtual function.
 
@@ -115,7 +141,7 @@ is a wxShadowObjectMethod which is a typedef:
 typedef int (*wxShadowObjectMethod)(void*, void*);
 
 After you add a field, you can set it via SetField with the same
-params as AddField, the second param being the value to set
+parameters as AddField, the second parameter being the value to set
 the field to.  You can get the field after you call AddField
 via GetField, with the parameters as the other two field functions,
 only in the case the second parameter is the fallback 
@@ -130,11 +156,11 @@ parameter passed to the wxShadowObjectMethod, the third is the
 second parameter passed to that wxShadowObjectMethod, and the
 fourth is the return value of the wxShadowObjectMethod.
 
-5. version-script.in
+6. version-script.in
 --------------------
 
 For ld/libtool we use sun-style version scripts.  Basically
-anything which fits the conditions of being ifed via wxABI_VERSION
+anything which fits the conditions of being #if'ed via wxABI_VERSION
 needs to go here also.
 
 See 'info ld scripts version' on a GNU system, it's online here:
@@ -175,8 +201,8 @@ For example for wxLogBuffer a line like this:
     *wxLogBuffer*;
 
 
-5.5. Checking the version information in libraries and programs
----------------------------------------------------------------
+7. Checking the version information in libraries and programs
+-------------------------------------------------------------
 
 On Sun there is a tool for this, see pvs(1). On GNU you can use objdump, below
 are some examples.
@@ -226,18 +252,18 @@ $ objdump -T libwx_based-2.6.so | grep 'WXD_2\.6\.2' | grep -v 'UND\|ABS'
 00000000000abe10 g    DF .text  0000000000000088  WXD_2.6.2   _ZN14wxZipFSHandler7CleanupEv
 
 
-6. Testing binary compatability between releases
+8. Testing binary compatibility between releases
 ------------------------------------------------
 
-An easy way of testing binary compatability is just to build wxWidgets
+An easy way of testing binary compatibility is just to build wxWidgets
 in dll/dynamic library mode and then switch out the current library
 in question with an earlier stable version of the library, then running
 the application in question again.  If it runs OK then there is usually
-binary compatability between those releases.
+binary compatibility between those releases.
 
 You can also break into your debugger or whatever program you want
 to use and check the memory layout of the class.  If it is the same
-then it is binary compatable.
+then it is binary compatible.
 
 Also remember to look at http://www.wxwidgets.org/bincompat.html page which
 summarizes the results of testing of all the samples built against old
