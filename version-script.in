@@ -24,6 +24,13 @@
 # and once released its version cannot be changed.
 
 
+# public symbols added in 2.8.1 (please keep in alphabetical order):
+@WX_VERSION_TAG@.1 {
+    global:
+        # wx{Dir|File}Dialog::Get/SetStyle()
+        *wxFileDialog*etStyle*;
+        *wxDirDialog*etStyle*;
+};
 
 # symbols available since the beginning of this branch are only given
 # generic branch tag (don't remove this!):
