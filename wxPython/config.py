@@ -105,7 +105,7 @@ FULL_DOCS = 0      # Some docstrings are split into a basic docstring and a
                    # cause the two strings to be combined and output
                    # as the full docstring.
 
-UNICODE = 0        # This will pass the 'wxUSE_UNICODE' flag to SWIG and
+UNICODE = 1        # This will pass the 'wxUSE_UNICODE' flag to SWIG and
                    # will ensure that the right headers are found and the
                    # right libs are linked.
 
