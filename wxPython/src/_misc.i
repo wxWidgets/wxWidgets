@@ -124,7 +124,7 @@ MustHaveApp(wxBusyInfo);
 
 class wxBusyInfo : public wxObject {
 public:
-    wxBusyInfo(const wxString& message);
+    wxBusyInfo(const wxString& message, wxWindow *parent = NULL);
     ~wxBusyInfo();
 
     %pythoncode { def Destroy(self): pass }
