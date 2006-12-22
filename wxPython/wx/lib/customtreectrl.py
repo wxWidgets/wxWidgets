@@ -924,7 +924,7 @@ class TreeTextCtrl(wx.TextCtrl):
         
             else:
         
-                raise "\n ERROR: You Must Create An Image List To Use Images!"
+                raise Exception("\n ERROR: You Must Create An Image List To Use Images!")
 
         checkimage = item.GetCurrentCheckedImage()
 
@@ -1321,7 +1321,7 @@ class GenericTreeItem:
         """Returns whether the associated window is enabled or not."""
 
         if not self._wnd:
-            raise "\nERROR: This Item Has No Window Associated"
+            raise Exception("\nERROR: This Item Has No Window Associated")
 
         return self._windowenabled
 
@@ -1330,7 +1330,7 @@ class GenericTreeItem:
         """Sets whether the associated window is enabled or not."""
 
         if not self._wnd:
-            raise "\nERROR: This Item Has No Window Associated"
+            raise Exception("\nERROR: This Item Has No Window Associated")
 
         self._windowenabled = enable
         self._wnd.Enable(enable)
@@ -1993,7 +1993,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Toggles the item selection."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
         
         self.SelectItem(item, not self.IsSelected(item))
 
@@ -2023,7 +2023,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Enables/disables an item."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
         
         if item.IsEnabled() == enable:
             return
@@ -2054,7 +2054,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Returns whether an item is enabled or disabled."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
         
         return item.IsEnabled()        
 
@@ -2076,7 +2076,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Returns whether an item is checked or not."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "        
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         return item.IsChecked()
 
@@ -2123,7 +2123,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         # Should we raise an error here?!?        
         if item.GetType() == 0:
@@ -2173,7 +2173,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Transverses the tree and toggles the items. Meaningful only for check items."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
         
         child, cookie = self.GetFirstChild(item)
 
@@ -2193,7 +2193,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Transverses the tree and checks/unchecks the items. Meaningful only for check items."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
         
         (child, cookie) = self.GetFirstChild(item)
 
@@ -2213,7 +2213,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         Meaningful only for check items."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         parent = item.GetParent()
         if not parent or parent.GetType() != 1:
@@ -2234,7 +2234,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Programatically check/uncheck item children. Does not generate EVT_TREE_CHECK* events."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
         
         if checked == None:
             self.AutoToggleChild(item)
@@ -2270,7 +2270,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Starts editing an item label."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
         
         self.Edit(item)
 
@@ -2305,7 +2305,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Returns whether an item has children or not."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
         
         return len(item.GetChildren()) > 0
 
@@ -2314,7 +2314,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Gets the item children count."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         return item.GetChildrenCount(recursively)
 
@@ -2363,7 +2363,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Returns the item text."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         return item.GetText()
     
@@ -2372,7 +2372,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Returns the item image."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         return item.GetImage(which)
 
@@ -2381,7 +2381,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Returns the data associated to an item."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         return item.GetData()
 
@@ -2392,7 +2392,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Returns the item text colour."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         return item.Attr().GetTextColour()
 
@@ -2401,7 +2401,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Returns the item background colour."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         return item.Attr().GetBackgroundColour()
 
@@ -2410,7 +2410,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Returns the item font."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         return item.Attr().GetFont()
 
@@ -2419,7 +2419,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Returns whether an item is hypertext or not."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
         
         return item.IsHyperText()
 
@@ -2428,7 +2428,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Sets the item text."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         dc = wx.ClientDC(self)
         item.SetText(text)
@@ -2440,7 +2440,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Sets the item image, depending on the item state."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         item.SetImage(image, which)
 
@@ -2453,7 +2453,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Sets the data associated to an item."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         item.SetData(data)
 
@@ -2464,7 +2464,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Forces the appearance of the button next to the item."""
         
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         item.SetHasPlus(has)
         self.RefreshLine(item)
@@ -2474,7 +2474,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Sets the item font bold/unbold."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
         
         # avoid redrawing the tree if no real change
         if item.IsBold() != bold:
@@ -2486,7 +2486,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Sets the item font italic/non-italic."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         if item.IsItalic() != italic:
             itemFont = self.GetItemFont(item)
@@ -2508,7 +2508,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         if highlight:
             bg = wx.SystemSettings_GetColour(wx.SYS_COLOUR_HIGHLIGHT)
@@ -2523,7 +2523,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Sets the item text colour."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         if self.GetItemTextColour(item) == col:
             return
@@ -2536,7 +2536,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Sets the item background colour."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         item.Attr().SetBackgroundColour(col)
         self.RefreshLine(item)
@@ -2546,7 +2546,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Sets whether the item is hypertext or not."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "        
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         item.SetHyperText(hyper)
         self.RefreshLine(item)
@@ -2556,7 +2556,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Sets the item font."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         if self.GetItemFont(item) == font:
             return
@@ -2621,7 +2621,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Sets whether an hypertext item was visited."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
         
         item.SetVisited(visited)
         self.RefreshLine(item)
@@ -2631,7 +2631,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Returns whether an hypertext item was visited."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         return item.GetVisited()            
 
@@ -2803,7 +2803,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Returns the window associated to the item (if any)."""
 
         if not item:
-            raise "\nERROR: Invalid Item"
+            raise Exception("\nERROR: Invalid Item")
         
         return item.GetWindow()
 
@@ -2812,7 +2812,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Returns whether the window associated to the item is enabled."""
 
         if not item:
-            raise "\nERROR: Invalid Item"
+            raise Exception("\nERROR: Invalid Item")
         
         return item.GetWindowEnabled()
 
@@ -2821,7 +2821,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Enables/disables the window associated to the item."""
 
         if not item:
-            raise "\nERROR: Invalid Item"
+            raise Exception("\nERROR: Invalid Item")
         
         item.SetWindowEnabled(enable)
 
@@ -2835,7 +2835,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """
 
         if not item:
-            raise "\nERROR: Invalid Item"
+            raise Exception("\nERROR: Invalid Item")
         
         return item.GetType()
 
@@ -2847,7 +2847,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Returns whether the item is visible or not."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         # An item is only visible if it's not a descendant of a collapsed item
         parent = item.GetParent()
@@ -2880,7 +2880,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Returns whether the item has children or not."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         # consider that the item does have children if it has the "+" button: it
         # might not have them (if it had never been expanded yet) but then it
@@ -2894,7 +2894,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Returns whether the item is expanded or not."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         return item.IsExpanded()
 
@@ -2903,7 +2903,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Returns whether the item is selected or not."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         return item.IsSelected()
 
@@ -2912,7 +2912,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Returns whether the item font is bold or not."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         return item.IsBold()
 
@@ -2921,7 +2921,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Returns whether the item font is italic or not."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         return item.IsItalic()
 
@@ -2934,7 +2934,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Gets the item parent."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         return item.GetParent()
 
@@ -2943,7 +2943,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Gets the item first child."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         cookie = 0
         return self.GetNextChild(item, cookie)
@@ -2956,7 +2956,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         children = item.GetChildren()
 
@@ -2977,7 +2977,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Gets the item last child."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         children = item.GetChildren()
         return (len(children) == 0 and [None] or [children[-1]])[0]
@@ -2987,7 +2987,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Gets the next sibling of an item."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         i = item
         parent = i.GetParent()
@@ -3008,7 +3008,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Gets the previous sibling of an item."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         i = item
         parent = i.GetParent()
@@ -3028,7 +3028,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Gets the next item. Only for internal use right now."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         i = item
 
@@ -3066,7 +3066,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Returns the next visible item."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         id = item
 
@@ -3081,9 +3081,9 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
     def GetPrevVisible(self, item):
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
-        raise "\nERROR: Not Implemented"
+        raise Exception("\nERROR: Not Implemented")
 
         return None
 
@@ -3141,13 +3141,13 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Actually inserts an item in the tree."""
 
         if wnd is not None and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
-            raise "\nERROR: In Order To Append/Insert Controls You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT"
+            raise Exception("\nERROR: In Order To Append/Insert Controls You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
 
         if text.find("\n") >= 0 and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
-            raise "\nERROR: In Order To Append/Insert A MultiLine Text You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT"
+            raise Exception("\nERROR: In Order To Append/Insert A MultiLine Text You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
 
         if ct_type < 0 or ct_type > 2:
-            raise "\nERROR: Item Type Should Be 0 (Normal), 1 (CheckBox) or 2 (RadioButton). "
+            raise Exception("\nERROR: Item Type Should Be 0 (Normal), 1 (CheckBox) or 2 (RadioButton). ")
         
         parent = parentId
         
@@ -3173,16 +3173,16 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Adds a root to the CustomTreeCtrl. Only one root must exist."""
 
         if self._anchor:
-            raise "\nERROR: Tree Can Have Only One Root"
+            raise Exception("\nERROR: Tree Can Have Only One Root")
 
         if wnd is not None and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
-            raise "\nERROR: In Order To Append/Insert Controls You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT"
+            raise Exception("\nERROR: In Order To Append/Insert Controls You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
 
         if text.find("\n") >= 0 and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
-            raise "\nERROR: In Order To Append/Insert A MultiLine Text You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT"
+            raise Exception("\nERROR: In Order To Append/Insert A MultiLine Text You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
 
         if ct_type < 0 or ct_type > 2:
-            raise "\nERROR: Item Type Should Be 0 (Normal), 1 (CheckBox) or 2 (RadioButton). "
+            raise Exception("\nERROR: Item Type Should Be 0 (Normal), 1 (CheckBox) or 2 (RadioButton). ")
 
         self._dirty = True     # do this first so stuff below doesn't cause flicker
 
@@ -3212,10 +3212,10 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Appends an item as a first child of parent."""
 
         if wnd is not None and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
-            raise "\nERROR: In Order To Append/Insert Controls You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT"
+            raise Exception("\nERROR: In Order To Append/Insert Controls You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
 
         if text.find("\n") >= 0 and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
-            raise "\nERROR: In Order To Append/Insert A MultiLine Text You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT"
+            raise Exception("\nERROR: In Order To Append/Insert A MultiLine Text You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
         
         return self.DoInsertItem(parent, 0, text, ct_type, wnd, image, selImage, data)
 
@@ -3224,10 +3224,10 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Auxiliary function to cope with the C++ hideous multifunction."""
         
         if wnd is not None and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
-            raise "\nERROR: In Order To Append/Insert Controls You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT"
+            raise Exception("\nERROR: In Order To Append/Insert Controls You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
 
         if text.find("\n") >= 0 and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
-            raise "\nERROR: In Order To Append/Insert A MultiLine Text You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT"
+            raise Exception("\nERROR: In Order To Append/Insert A MultiLine Text You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
         
         parent = parentId
         
@@ -3241,7 +3241,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
             try:
                 index = parent.GetChildren().index(idPrevious)
             except:
-                raise "ERROR: Previous Item In CustomTreeCtrl.InsertItem() Is Not A Sibling"
+                raise Exception("ERROR: Previous Item In CustomTreeCtrl.InsertItem() Is Not A Sibling")
 
         return self.DoInsertItem(parentId, index+1, text, ct_type, wnd, image, selImage, data)
 
@@ -3250,10 +3250,10 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Auxiliary function to cope with the C++ hideous multifunction."""
 
         if wnd is not None and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
-            raise "\nERROR: In Order To Append/Insert Controls You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT"
+            raise Exception("\nERROR: In Order To Append/Insert Controls You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
 
         if text.find("\n") >= 0 and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
-            raise "\nERROR: In Order To Append/Insert A MultiLine Text You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT"
+            raise Exception("\nERROR: In Order To Append/Insert A MultiLine Text You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
         
         parent = parentId
         
@@ -3268,10 +3268,10 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Inserts an item after the given previous."""
 
         if wnd is not None and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
-            raise "\nERROR: In Order To Append/Insert Controls You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT"
+            raise Exception("\nERROR: In Order To Append/Insert Controls You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
 
         if text.find("\n") >= 0 and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
-            raise "\nERROR: In Order To Append/Insert A MultiLine Text You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT"
+            raise Exception("\nERROR: In Order To Append/Insert A MultiLine Text You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
         
         if type(input) == type(1):
             return self.InsertItemByIndex(parentId, input, text, ct_type, wnd, image, selImage, data)
@@ -3283,10 +3283,10 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Appends an item as a last child of its parent."""
 
         if wnd is not None and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
-            raise "\nERROR: In Order To Append/Insert Controls You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT"
+            raise Exception("\nERROR: In Order To Append/Insert Controls You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
 
         if text.find("\n") >= 0 and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
-            raise "\nERROR: In Order To Append/Insert A MultiLine Text You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT"
+            raise Exception("\nERROR: In Order To Append/Insert A MultiLine Text You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
         
         parent = parentId
         
@@ -3344,7 +3344,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Delete item children."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
         
         self._dirty = True     # do this first so stuff below doesn't cause flicker
 
@@ -3356,7 +3356,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Delete an item."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
         
         self._dirty = True     # do this first so stuff below doesn't cause flicker
 
@@ -3433,10 +3433,10 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
         
         if self.HasFlag(TR_HIDE_ROOT) and item == self.GetRootItem():
-             raise "\nERROR: Can't Expand An Hidden Root. "
+             raise Exception("\nERROR: Can't Expand An Hidden Root. ")
 
         if not item.HasPlus():
             return
@@ -3469,7 +3469,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Expands all the items."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
         
         if not self.HasFlag(TR_HIDE_ROOT) or item != self.GetRootItem():
             self.Expand(item)
@@ -3490,10 +3490,10 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
         
         if self.HasFlag(TR_HIDE_ROOT) and item == self.GetRootItem():
-             raise "\nERROR: Can't Collapse An Hidden Root. "
+             raise Exception("\nERROR: Can't Collapse An Hidden Root. ")
 
         if not item.IsExpanded():
             return
@@ -3644,7 +3644,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Actually selects/unselects an item, sending a EVT_TREE_SEL_CHANGED event."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         self._select_me = None
 
@@ -3725,7 +3725,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Selects/deselects an item."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
         
         if select:
         
@@ -3749,7 +3749,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         if item.IsSelected():
             array.append(item)
 
-        if item.HasChildren():    
+        if item.HasChildren() and item.IsExpanded():
             for child in item.GetChildren():
                 array = self.FillArray(child, array)
         
@@ -3776,7 +3776,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Ensure that an item is visible in CustomTreeCtrl."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         # first expand all parent branches
         parent = item.GetParent()
@@ -3860,7 +3860,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
 
         children = item.GetChildren()
         
@@ -5025,7 +5025,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Gets the bounding rectangle of the item."""
 
         if not item:
-            raise "\nERROR: Invalid Tree Item. "
+            raise Exception("\nERROR: Invalid Tree Item. ")
     
         i = item
 
@@ -5663,7 +5663,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         """Thaw CustomTreeCtrl."""
 
         if self._freezeCount == 0:
-            raise "\nERROR: Thawing Unfrozen Tree Control?"
+            raise Exception("\nERROR: Thawing Unfrozen Tree Control?")
 
         self._freezeCount = self._freezeCount - 1
         
