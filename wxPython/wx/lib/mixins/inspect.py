@@ -13,6 +13,7 @@
 # NOTE: This class is based on ideas sent to the wxPython-users
 # mail-list by Dan Eloff.
 
+import wx
 import wx.py
 
 class InspectionMixin(object):
@@ -54,6 +55,7 @@ class InspectionMixin(object):
             self._crust = wx.py.crust.CrustFrame(self.GetTopWindow(),
                                                  pos = self._pos, size = self._size)
             self._crust.shell.interp.locals['app'] = self
+            self._crust.shell.interp.locals['wx'] = wx
         win = wx.FindWindowAtPointer()
         self._crust.shell.interp.locals['win'] = win
         self._crust.Show()
