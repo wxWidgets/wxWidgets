@@ -189,10 +189,15 @@ The following example shows a simple implementation that utilizes
 
 //---------------------------------------------------------------------------
 // Get all our defs from the REAL header files.
+
+#define wxColor wxColour  // fix problem in dockart.h
+
 %include framemanager.h
 %include dockart.h
 %include floatpane.h
 %include auibook.h
+
+#undef wxColor
 
 //---------------------------------------------------------------------------
 // Methods to inject into the FrameManager class that will sort out calls to

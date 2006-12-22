@@ -73,7 +73,7 @@ current platform.", "");
     KeepGIL(FindObjects);
     DocDeclStr(
         PyObject*, FindObjects(wxCoord x, wxCoord y, 
-                               wxCoord radius=1, const wxColor& bg=*wxWHITE),
+                               wxCoord radius=1, const wxColour& bg=*wxWHITE),
         "Returns a list of all the id's that draw a pixel with color
 not equal to bg within radius of (x,y).
 Returns an empty list if nothing is found.  The list is in
