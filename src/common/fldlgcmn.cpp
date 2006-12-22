@@ -19,6 +19,7 @@
 #if wxUSE_FILEDLG
 
 #include "wx/filedlg.h"
+#include "wx/dirdlg.h"
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
