@@ -30,6 +30,8 @@
         # wx{Dir|File}Dialog::Get/SetStyle()
         *wxFileDialog*etStyle*;
         *wxDirDialog*etStyle*;
+        # Mac OS X only, but it still must go in IIUC
+        *wxListCtrl*SetFocus*;
 };
 
 # symbols available since the beginning of this branch are only given

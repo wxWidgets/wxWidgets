@@ -12,6 +12,7 @@
 #ifndef _WX_LISTCTRL_H_
 #define _WX_LISTCTRL_H_
 
+#include "wx/defs.h"
 #include "wx/generic/listctrl.h"
 
 class wxMacDataBrowserListCtrlControl;
@@ -341,8 +342,10 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   
   virtual int GetScrollPos(int orient) const;
   
+#if wxABI_VERSION >= 20801
   virtual void SetFocus();
-  
+#endif
+
   virtual void SetDropTarget( wxDropTarget *dropTarget );
   virtual wxDropTarget* GetDropTarget() const;
   

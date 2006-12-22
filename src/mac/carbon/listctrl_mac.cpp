@@ -2200,6 +2200,7 @@ wxDropTarget *wxListCtrl::GetDropTarget() const
     return NULL;
 }
 
+#if wxABI_VERSION >= 20801
 void wxListCtrl::SetFocus()
 {
         if (m_genericImpl)
@@ -2210,6 +2211,7 @@ void wxListCtrl::SetFocus()
        
         wxWindow::SetFocus();
 }
+#endif
 
 // wxMac internal data structures
 
