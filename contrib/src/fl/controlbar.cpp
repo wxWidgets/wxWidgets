@@ -887,9 +887,7 @@ void wxFrameLayout::DoSetBarState( cbBarInfo* pBar )
         pMiniFrm->Create( &GetParentFrame(), wxID_ANY, pBar->mName,
                           wxPoint( 50,50 ),
                           wxSize ( 0, 0  ),
-                          wxFRAME_FLOAT_ON_PARENT |
-                          wxNO_BORDER |
-                          wxFRAME_NO_TASKBAR
+                          wxFRAME_TOOL_WINDOW | wxFRAME_FLOAT_ON_PARENT
                         );
 
         pMiniFrm->SetClient( pBar->mpBarWnd );
