@@ -224,7 +224,7 @@ void wxRichTextHTMLHandler::BeginParagraphFormatting(const wxTextAttrEx& WXUNUSE
         str << wxT("<table border=0 cellpadding=0 cellspacing=0><tr><td width=\"100%\">");
     }
 
-    if (thisStyle.HasLeftIndent())
+    if (thisStyle.HasLeftIndent() && thisStyle.GetLeftIndent() != 0)
     {
         if (thisStyle.HasBulletStyle())
         {
