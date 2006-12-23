@@ -1172,6 +1172,10 @@ void wxTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font)
 
     attr->SetFont(font);
 
+    // Reset the item's text to ensure that the bounding rect will be adjusted
+    // for the new font.
+    SetItemText(item, GetItemText(item));
+    
     RefreshItem(item);
 }
 
