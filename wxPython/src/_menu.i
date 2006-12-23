@@ -133,8 +133,19 @@ public:
     // deleting it!)
     %newobject Remove;
     wxMenuItem *Remove(int id);
-    %Rename(RemoveItem,  wxMenuItem*, Remove(wxMenuItem *item));
 
+    %feature("shadow") Remove(wxMenuItem *item) %{
+        def RemoveItem(self, item):
+            """RemoveItem(self, MenuItem item) -> MenuItem"""
+            #// The return object is always the parameter, so return that 
+            #// proxy instead of the new one
+            val = _core_.Menu_RemoveItem(self, item)
+            item.this.own(val.this.own())
+            val.this.disown()
+            return item
+    %}
+    %Rename(RemoveItem,  wxMenuItem*, Remove(wxMenuItem *item));
+    
     // delete an item from the menu (submenus are not destroyed by this
     // function, see Destroy)
     bool Delete(int id);
@@ -377,7 +388,7 @@ public:
     ~wxMenuItem();
 
     // Turn it back on again
-    %typemap(out) wxEvtHandler* { $result = wxPyMake_wxObject($1, $owner); }
+    %typemap(out) wxMenuItem* { $result = wxPyMake_wxObject($1, $owner); }
 
     // Make Destroy a NOP.  The destruction will be handled by SWIG.
     %pythoncode { def Destroy(self): pass }
