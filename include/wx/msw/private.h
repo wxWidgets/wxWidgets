@@ -406,28 +406,48 @@ private:
 // dtor
 class SelectInHDC
 {
+private:
+    void DoInit(HGDIOBJ hgdiobj) { m_hgdiobj = ::SelectObject(m_hdc, hgdiobj); }
+
 public:
-    SelectInHDC(HDC hdc, HGDIOBJ hgdiobj) : m_hdc(hdc)
-        { m_hgdiobj = ::SelectObject(hdc, hgdiobj); }
+    SelectInHDC() : m_hdc(NULL) { }
+    SelectInHDC(HDC hdc, HGDIOBJ hgdiobj) : m_hdc(hdc) { DoInit(hgdiobj); }
 
-   ~SelectInHDC() { ::SelectObject(m_hdc, m_hgdiobj); }
+    void Init(HDC hdc, HGDIOBJ hgdiobj)
+    {
+        wxASSERT_MSG( !m_hdc, _T("initializing twice?") );
 
-   // return true if the object was successfully selected
-   operator bool() const { return m_hgdiobj != 0; }
+        m_hdc = hdc;
+
+        DoInit(hgdiobj);
+    }
+
+    ~SelectInHDC() { if ( m_hdc ) ::SelectObject(m_hdc, m_hgdiobj); }
+
+    // return true if the object was successfully selected
+    operator bool() const { return m_hgdiobj != 0; }
 
 private:
-   HDC m_hdc;
-   HGDIOBJ m_hgdiobj;
+    HDC m_hdc;
+    HGDIOBJ m_hgdiobj;
 
-   DECLARE_NO_COPY_CLASS(SelectInHDC)
+    DECLARE_NO_COPY_CLASS(SelectInHDC)
 };
 
 // a class which cleans up any GDI object
 class AutoGDIObject
 {
 protected:
+    AutoGDIObject() { m_gdiobj = NULL; }
     AutoGDIObject(HGDIOBJ gdiobj) : m_gdiobj(gdiobj) { }
     ~AutoGDIObject() { if ( m_gdiobj ) ::DeleteObject(m_gdiobj); }
+
+    void InitGdiobj(HGDIOBJ gdiobj)
+    {
+        wxASSERT_MSG( !m_gdiobj, _T("initializing twice?") );
+
+        m_gdiobj = gdiobj;
+    }
 
     HGDIOBJ GetObject() const { return m_gdiobj; }
 
@@ -437,7 +457,7 @@ private:
 
 // TODO: all this asks for using a AutoHandler<T, CreateFunc> template...
 
-// a class for temporary pens
+// a class for temporary brushes
 class AutoHBRUSH : private AutoGDIObject
 {
 public:
@@ -445,6 +465,22 @@ public:
         : AutoGDIObject(::CreateSolidBrush(col)) { }
 
     operator HBRUSH() const { return (HBRUSH)GetObject(); }
+};
+
+// a class for temporary fonts
+class AutoHFONT : private AutoGDIObject
+{
+private:
+public:
+    AutoHFONT()
+        : AutoGDIObject() { }
+
+    AutoHFONT(const LOGFONT& lf)
+        : AutoGDIObject(::CreateFontIndirect(&lf)) { }
+
+    void Init(const LOGFONT& lf) { InitGdiobj(::CreateFontIndirect(&lf)); }
+
+    operator HFONT() const { return (HFONT)GetObject(); }
 };
 
 // a class for temporary pens
