@@ -42,6 +42,13 @@
 #include "wx/msw/private.h"
 #include "wx/msw/missing.h"
 
+// the values coincide with those in tmschema.h
+#define BP_GROUPBOX 4
+
+#define GBS_NORMAL 1
+
+#define TMT_FONT 210
+
 // ----------------------------------------------------------------------------
 // wxWin macros
 // ----------------------------------------------------------------------------
@@ -383,40 +390,11 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT& rc)
     // background mode doesn't change anything: the static box def window proc
     // still draws the label in its own colours, so we need to redraw the text
     // ourselves if we have a non default fg colour
-    if ( wxUxThemeEngine::GetIfActive() )
+    if ( m_hasFgCol && wxUxThemeEngine::GetIfActive() )
     {
         // draw over the text in default colour in our colour
-        dc.SetFont(GetFont());
-
         HDC hdc = GetHdcOf(dc);
-        if ( m_hasFgCol )
-        {
-            ::SetTextColor(hdc, GetForegroundColour().GetPixel());
-        }
-        else
-        {
-            wxUxThemeHandle hTheme(this, L"BUTTON");
-            if (hTheme)
-            {
-                COLORREF col;
-                wxUxThemeEngine::Get()->GetThemeColor(
-                                            hTheme,
-                                            4 /* BP_GROUPBOX */,
-                                            1 /* GBS_NORMAL */,
-                                            3803 /* TMT_TEXTCOLOR */,
-                                            &col);
-
-                ::SetTextColor(hdc, col);
-            }
-            else
-            {
-                // can't open the theme - default to blue
-                ::SetTextColor(hdc, 0x00D54600);
-            }
-        }
-
-        // FIXME: value of x is hardcoded as this is what it is on my system,
-        //        no idea if it's true everywhere
+        ::SetTextColor(hdc, GetForegroundColour().GetPixel());
 
         const bool rtl = wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft;
         if ( rtl )
@@ -425,13 +403,17 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT& rc)
         // Get dimensions of the label
         const wxString label = GetLabel();
         int width, height;
-        dc.GetTextExtent(wxStripMenuCodes(label, wxStrip_Mnemonics), &width, &height);
+        dc.GetTextExtent(wxStripMenuCodes(label, wxStrip_Mnemonics),
+                         &width, &height);
 
         int x;
         int y = height;
 
         // first we need to correctly paint the background of the label
         // as Windows ignores the brush offset when doing it
+        //
+        // FIXME: value of x is hardcoded as this is what it is on my system,
+        //        no idea if it's true everywhere
         RECT dimensions = {0, 0, 0, y};
         if ( !rtl )
         {
@@ -451,6 +433,54 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT& rc)
         dimensions.right += 2;
         dimensions.bottom += 2;
         PaintBackground(dc, dimensions);
+
+        // choose the correct font
+        AutoHFONT font;
+        SelectInHDC selFont;
+        if ( m_hasFont )
+        {
+            selFont.Init(hdc, GetHfontOf(GetFont()));
+        }
+        else // no font set, use the one set by the theme
+        {
+            wxUxThemeHandle hTheme(this, L"BUTTON");
+            if ( hTheme )
+            {
+                // GetThemeFont() expects its parameter to be LOGFONTW and not
+                // LOGFONTA even in ANSI programs and will happily corrupt
+                // memory after the struct end if we pass a LOGFONTA (which is
+                // smaller) to it!
+                LOGFONTW lfw;
+                if ( wxUxThemeEngine::Get()->GetThemeFont
+                                             (
+                                                hTheme,
+                                                hdc,
+                                                BP_GROUPBOX,
+                                                GBS_NORMAL,
+                                                TMT_FONT,
+                                                (LOGFONT *)&lfw
+                                             ) == S_OK )
+                {
+#if wxUSE_UNICODE
+                    // ok, no conversion necessary
+                    const LOGFONT& lf = lfw;
+#else // !wxUSE_UNICODE
+                    // most of the fields are the same in LOGFONTA and LOGFONTW
+                    LOGFONT lf;
+                    memcpy(&lf, &lfw, sizeof(lf));
+
+                    // but the face name must be converted
+                    WideCharToMultiByte(CP_ACP, 0, lfw.lfFaceName, -1,
+                                        lf.lfFaceName, sizeof(lf.lfFaceName),
+                                        NULL, NULL);
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
+
+                    font.Init(lf);
+                    if ( font )
+                        selFont.Init(hdc, font);
+                }
+            }
+        }
 
         // now draw the text
         if ( !rtl )
