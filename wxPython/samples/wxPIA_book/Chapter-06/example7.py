@@ -188,7 +188,7 @@ class SketchFrame(wx.Frame):
         dlg.Destroy()
 
     def OnOtherColor(self, event):
-        dlg = wx.ColourDialog(frame)
+        dlg = wx.ColourDialog(self)
         dlg.GetColourData().SetChooseFull(True)
         if dlg.ShowModal() == wx.ID_OK:
             self.sketch.SetColor(dlg.GetColourData().GetColour())
@@ -302,7 +302,7 @@ class ControlPanel(wx.Panel):
 
     def OnSetColour(self, event):
         color = self.colorMap[event.GetId()]
-        if color != self.sketch.color:
+        if color != self.sketch.color and self.sketch.color in self.colorButtons:
             self.colorButtons[self.sketch.color].SetToggle(False)
         self.sketch.SetColor(color)
 
