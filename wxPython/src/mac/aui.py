@@ -948,7 +948,7 @@ class AuiDockArt(object):
         return _aui.AuiDockArt_GetColour(*args, **kwargs)
 
     def SetColour(*args, **kwargs):
-        """SetColour(self, int id, wxColor colour)"""
+        """SetColour(self, int id, Colour colour)"""
         return _aui.AuiDockArt_SetColour(*args, **kwargs)
 
     def GetColor(*args, **kwargs):

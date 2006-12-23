@@ -924,7 +924,7 @@ class BusyInfo(_core.Object):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self, String message) -> BusyInfo"""
+        """__init__(self, String message, Window parent=None) -> BusyInfo"""
         _misc_.BusyInfo_swiginit(self,_misc_.new_BusyInfo(*args, **kwargs))
     __swig_destroy__ = _misc_.delete_BusyInfo
     __del__ = lambda self : None;

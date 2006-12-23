@@ -10728,9 +10728,15 @@ class Menu(EvtHandler):
         """Remove(self, int id) -> MenuItem"""
         return _core_.Menu_Remove(*args, **kwargs)
 
-    def RemoveItem(*args, **kwargs):
+    def RemoveItem(self, item):
         """RemoveItem(self, MenuItem item) -> MenuItem"""
-        return _core_.Menu_RemoveItem(*args, **kwargs)
+        #// The return object is always the parameter, so return that 
+        #// proxy instead of the new one
+        val = _core_.Menu_RemoveItem(self, item)
+        item.this.own(val.this.own())
+        val.this.disown()
+        return item
+
 
     def Delete(*args, **kwargs):
         """Delete(self, int id) -> bool"""

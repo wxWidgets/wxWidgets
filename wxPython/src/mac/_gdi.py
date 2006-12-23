@@ -6931,7 +6931,7 @@ class PseudoDC(_core.Object):
 
     def FindObjects(*args, **kwargs):
         """
-        FindObjects(self, int x, int y, int radius=1, wxColor bg=*wxWHITE) -> PyObject
+        FindObjects(self, int x, int y, int radius=1, Colour bg=*wxWHITE) -> PyObject
 
         Returns a list of all the id's that draw a pixel with color
         not equal to bg within radius of (x,y).

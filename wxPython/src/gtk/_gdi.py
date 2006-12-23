@@ -5121,7 +5121,8 @@ class GraphicsMatrix(GraphicsObject):
         """
         IsEqual(self, GraphicsMatrix t) -> bool
 
-        Returns ``True`` if the elements of the transformation matrix are equal
+        Returns ``True`` if the elements of the transformation matrix are
+        equal
         """
         return _gdi_.GraphicsMatrix_IsEqual(*args, **kwargs)
 
@@ -5290,8 +5291,8 @@ class GraphicsPath(GraphicsObject):
         """
         AddArcToPoint(self, Double x1, Double y1, Double x2, Double y2, Double r)
 
-        Appends an arc to two tangents connecting (current) to (x1,y1) and (x1,y1)
-        to (x2,y2), also a straight line from (current) to (x1,y1)
+        Appends an arc to two tangents connecting (current) to (x1,y1) and
+        (x1,y1) to (x2,y2), also a straight line from (current) to (x1,y1)
         """
         return _gdi_.GraphicsPath_AddArcToPoint(*args, **kwargs)
 
@@ -5343,7 +5344,8 @@ class GraphicsPath(GraphicsObject):
         """
         GetBox(self) -> Rect2D
 
-        Gets the bounding box enclosing all points (possibly including control points)
+        Gets the bounding box enclosing all points (possibly including control
+        points)
         """
         return _gdi_.GraphicsPath_GetBox(*args, **kwargs)
 
@@ -5398,9 +5400,9 @@ class GraphicsContext(GraphicsObject):
         """
         CreateFromNative(void context) -> GraphicsContext
 
-        Creates a wx.GraphicsContext from a native context. This native context
-        must be eg a CGContextRef for Core Graphics, a Graphics pointer for
-        GDIPlus or a cairo_t pointer for Cairo.
+        Creates a wx.GraphicsContext from a native context. This native
+        context must be eg a CGContextRef for Core Graphics, a Graphics
+        pointer for GDIPlus or a cairo_t pointer for Cairo.
         """
         return _gdi_.GraphicsContext_CreateFromNative(*args, **kwargs)
 
@@ -5453,8 +5455,8 @@ class GraphicsContext(GraphicsObject):
         CreateRadialGradientBrush(self, Double xo, Double yo, Double xc, Double yc, Double radius, 
             Colour oColor, Colour cColor) -> GraphicsBrush
 
-        Creates a native brush, having a radial gradient originating at 
-        point (xo,yc) with color oColour and ends on a circle around (xc,yc) with
+        Creates a native brush, having a radial gradient originating at point
+        (xo,yc) with color oColour and ends on a circle around (xc,yc) with
         radius r and color cColour.
         """
         return _gdi_.GraphicsContext_CreateRadialGradientBrush(*args, **kwargs)
@@ -5481,7 +5483,8 @@ class GraphicsContext(GraphicsObject):
         """
         PushState(self)
 
-        push the current state of the context, ie the transformation matrix on a stack
+        Push the current state of the context, (ie the transformation matrix)
+        on a stack
         """
         return _gdi_.GraphicsContext_PushState(*args, **kwargs)
 
@@ -5489,7 +5492,7 @@ class GraphicsContext(GraphicsObject):
         """
         PopState(self)
 
-        pops a stored state from the stack
+        Pops a stored state from the stack
         """
         return _gdi_.GraphicsContext_PopState(*args, **kwargs)
 
@@ -5806,9 +5809,9 @@ def GraphicsContext_CreateFromNative(*args, **kwargs):
   """
     GraphicsContext_CreateFromNative(void context) -> GraphicsContext
 
-    Creates a wx.GraphicsContext from a native context. This native context
-    must be eg a CGContextRef for Core Graphics, a Graphics pointer for
-    GDIPlus or a cairo_t pointer for Cairo.
+    Creates a wx.GraphicsContext from a native context. This native
+    context must be eg a CGContextRef for Core Graphics, a Graphics
+    pointer for GDIPlus or a cairo_t pointer for Cairo.
     """
   return _gdi_.GraphicsContext_CreateFromNative(*args, **kwargs)
 
@@ -6901,7 +6904,7 @@ class PseudoDC(_core.Object):
 
     def FindObjects(*args, **kwargs):
         """
-        FindObjects(self, int x, int y, int radius=1, wxColor bg=*wxWHITE) -> PyObject
+        FindObjects(self, int x, int y, int radius=1, Colour bg=*wxWHITE) -> PyObject
 
         Returns a list of all the id's that draw a pixel with color
         not equal to bg within radius of (x,y).
