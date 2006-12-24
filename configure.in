@@ -6619,8 +6619,8 @@ if test "$wxUSE_IPC" = "yes"; then
 fi
 
 if test "$wxUSE_DATAOBJ" = "yes"; then
-    if test "$wxUSE_MGL" = 1; then
-        AC_MSG_WARN([wxDataObject not yet supported under MGL... disabled])
+    if test "$wxUSE_MGL" = 1 -o "$wxUSE_DFB" = 1; then
+        AC_MSG_WARN([wxDataObject not yet supported under $TOOLKIT... disabled])
         wxUSE_DATAOBJ=no
     else
         AC_DEFINE(wxUSE_DATAOBJ)
@@ -6632,8 +6632,8 @@ else
 fi
 
 if test "$wxUSE_CLIPBOARD" = "yes"; then
-    if test "$wxUSE_MGL" = 1; then
-        AC_MSG_WARN([Clipboard not yet supported under MGL... disabled])
+    if test "$wxUSE_MGL" = 1 -o "$wxUSE_DFB" = 1; then
+        AC_MSG_WARN([Clipboard not yet supported under $TOOLKIT... disabled])
         wxUSE_CLIPBOARD=no
     fi
 
@@ -6650,18 +6650,9 @@ if test "$wxUSE_DRAG_AND_DROP" = "yes" ; then
         fi
     fi
 
-    if test "$wxUSE_MOTIF" = 1; then
-        AC_MSG_WARN([Drag and drop not yet supported under Motif... disabled])
-        wxUSE_DRAG_AND_DROP=no
-    fi
-
-    if test "$wxUSE_X11" = 1; then
-        AC_MSG_WARN([Drag and drop not yet supported under X11... disabled])
-        wxUSE_DRAG_AND_DROP=no
-    fi
-
-    if test "$wxUSE_MGL" = 1; then
-        AC_MSG_WARN([Drag and drop not yet supported under MGL... disabled])
+    if test "$wxUSE_MOTIF" = 1 -o "$wxUSE_X11" = 1 -o "$wxUSE_MGL" = 1 -o \
+            "$wxUSE_DFB" = 1; then
+        AC_MSG_WARN([Drag and drop not yet supported under $TOOLKIT... disabled])
         wxUSE_DRAG_AND_DROP=no
     fi
 
@@ -6788,8 +6779,13 @@ if test "$wxUSE_FONTPICKERCTRL" = "yes"; then
 fi
 
 if test "$wxUSE_DISPLAY" = "yes"; then
-    AC_DEFINE(wxUSE_DISPLAY)
-    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS display multimon"
+    if test "$wxUSE_DFB" = 1 -o "$wxUSE_MGL" = 1; then
+        AC_MSG_WARN([wxDisplay not yet supported under $TOOLKIT... disabled])
+        wxUSE_DISPLAY=no
+    else
+        AC_DEFINE(wxUSE_DISPLAY)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS display multimon"
+    fi
 fi
 
 if test "$wxUSE_DETECT_SM" = "yes"; then
@@ -7156,7 +7152,12 @@ if test "$wxUSE_VALIDATORS" = "yes"; then
 fi
 
 if test "$wxUSE_PALETTE" = "yes" ; then
-  AC_DEFINE(wxUSE_PALETTE)
+    if test "$wxUSE_DFB" = 1; then
+        AC_MSG_WARN([wxPalette not yet supported under DFB... disabled])
+        wxUSE_PALETTE=no
+    else
+        AC_DEFINE(wxUSE_PALETTE)
+    fi
 fi
 
 if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_UNICODE_MSLU" = "yes" ; then

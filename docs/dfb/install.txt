@@ -29,9 +29,6 @@ wxWidgets features that don't work in wxDFB yet:
 $ ./configure --with-directfb \
               --with-themes=mono \
               --disable-accel \
-              --disable-display \
-              --disable-palette \
-              --disable-dataobj \
               --disable-popupwin \
               --disable-help \
               --disable-combobox \
