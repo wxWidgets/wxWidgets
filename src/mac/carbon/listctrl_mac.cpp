@@ -507,6 +507,7 @@ void wxListCtrlTextCtrlWrapper::OnKillFocus( wxFocusEvent &event )
 BEGIN_EVENT_TABLE(wxListCtrl, wxControl)
     EVT_LEFT_DOWN(wxListCtrl::OnLeftDown)
     EVT_LEFT_DCLICK(wxListCtrl::OnDblClick)
+    EVT_RIGHT_DOWN(wxListCtrl::OnRightDown)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -607,6 +608,30 @@ void wxListCtrl::OnLeftDown(wxMouseEvent& event)
     {
         m_current = current;
     }
+    event.Skip();
+}
+
+void wxListCtrl::OnRightDown(wxMouseEvent& event)
+{
+    wxListEvent le( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, GetId() );
+    le.SetEventObject(this);
+    le.m_pointDrag = event.GetPosition();
+    le.m_itemIndex = -1;
+    
+    int flags;
+    long item = HitTest(event.GetPosition(), flags);
+    if (flags & wxLIST_HITTEST_ONITEM)
+    {
+        le.m_itemIndex = item;
+        if (!IsVirtual())
+        {
+            
+            le.m_item.m_itemId = item;
+            GetItem(le.m_item);
+        }
+    }
+    
+    GetEventHandler()->ProcessEvent(le);
     event.Skip();
 }
 
@@ -2354,19 +2379,16 @@ wxMacDataBrowserListCtrlControl::wxMacDataBrowserListCtrlControl( wxWindow *peer
         SetSortProperty( kMinColumnId - 1 );
     else
         SetSortProperty( kMinColumnId );
-    if ( style & wxLC_SORT_ASCENDING )
+    
+    m_sortOrder = SortOrder_None;
+    
+    if ( style & wxLC_SORT_DESCENDING )
     {
-        m_sortOrder = SortOrder_Text_Ascending;
-        SetSortOrder( kDataBrowserOrderIncreasing );
-    }
-    else if ( style & wxLC_SORT_DESCENDING )
-    {
-        m_sortOrder = SortOrder_Text_Descending;
         SetSortOrder( kDataBrowserOrderDecreasing );
     }
-    else
+    else if ( style & wxLC_SORT_ASCENDING )
     {
-        m_sortOrder = SortOrder_None;
+        SetSortOrder( kDataBrowserOrderIncreasing );
     }
 
     if ( style & wxLC_VRULES )
@@ -2880,6 +2902,9 @@ Boolean wxMacDataBrowserListCtrlControl::CompareItems(DataBrowserItemID itemOneI
             wxMacListCtrlItem* item = (wxMacListCtrlItem*)itemOneID;
             wxMacListCtrlItem* otherItem = (wxMacListCtrlItem*)itemTwoID;
 
+            itemOrder = item->GetOrder();
+            otherItemOrder = item->GetOrder();
+                            
             wxListCtrlCompare func = list->GetCompareFunc();
             if (func != NULL)
             {
@@ -2899,19 +2924,10 @@ Boolean wxMacDataBrowserListCtrlControl::CompareItems(DataBrowserItemID itemOneI
                         return result < 0;
                 }
             }
-
-            if (item->HasColumnInfo(colId))
-            {
-                wxListItem* colItem = item->GetColumnInfo(colId);
-                itemText = colItem->GetText();
-                itemOrder = colItem->GetId();
-            }
-            if (otherItem->HasColumnInfo(colId))
-            {
-                wxListItem* colItem = otherItem->GetColumnInfo(colId);
-                otherItemText = colItem->GetText();
-                otherItemOrder = colItem->GetId();
-            }
+            
+            // we can't use the native control's sorting abilities, so just
+            // sort by item id.
+            return itemOrder < otherItemOrder;
         }
         else
         {
@@ -2923,21 +2939,6 @@ Boolean wxMacDataBrowserListCtrlControl::CompareItems(DataBrowserItemID itemOneI
             
             // virtual listctrls don't support sorting
             return itemNum < otherItemNum;
-
-
-        }
-
-        if ( sort == kDataBrowserOrderIncreasing && !m_sortOrder == SortOrder_None )
-        {
-            retval = itemText.CmpNoCase( otherItemText ) > 0;
-        }
-        else if ( sort == kDataBrowserOrderDecreasing && !m_sortOrder == SortOrder_None )
-        {
-            retval = itemText.CmpNoCase( otherItemText ) < 0;
-        }
-        else
-        {
-            retval = itemOrder < otherItemOrder;
         }
     }
     else{
@@ -2961,6 +2962,7 @@ void wxMacDataBrowserListCtrlControl::MacSetColumnInfo( unsigned int row, unsign
         wxMacListCtrlItem* listItem = wx_static_cast(wxMacListCtrlItem*,dataItem);
         bool hasInfo = listItem->HasColumnInfo( column );
         listItem->SetColumnInfo( column, item );
+        listItem->SetOrder(row);
         UpdateState(dataItem, item);
         
         wxListCtrl* list = wxDynamicCast( GetPeer() , wxListCtrl );

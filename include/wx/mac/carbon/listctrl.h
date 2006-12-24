@@ -331,6 +331,7 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   bool HasCurrent() const { return m_current != (long)-1; }
   
   void OnLeftDown(wxMouseEvent& event);
+  void OnRightDown(wxMouseEvent& event);
   void OnDblClick(wxMouseEvent& event);
   
   void FinishEditing(wxTextCtrl *text)
