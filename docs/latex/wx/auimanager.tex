@@ -125,7 +125,7 @@ enum wxAuiManagerOption
 
 \func{}{wxAuiManager}{\param{wxWindow* }{managed\_wnd = NULL}, \param{unsigned int }{flags = wxAUI\_MGR\_DEFAULT}}
 
-Constructor. \arg{frame} specifies the wxFrame which should be managed.
+Constructor. \arg{managed\_wnd} specifies the wxFrame which should be managed.
 \arg{flags}  specifies options which allow the frame management behavior
 to be modified.
 
@@ -166,9 +166,11 @@ Returns the current art provider being used.
 
 See also: \helpref{wxAuiDockArt}{wxauidockart}.
 
+\membersection{wxAuiManager::GetDockSizeConstraint}\label{wxauimanagergetdocksizeconstraint}
+
 \func{void}{GetDockSizeConstraint}{\param{double* }{widthpct}, \param{double* }{heightpct}}
 
-Returns the current dock constraint values.  See SetDockSizeConstraint() for more information.
+Returns the current dock constraint values.  See \helpref{SetDockSizeConstraint()}{wxauimanagersetdocksizeconstraint} for more information.
 
 \membersection{wxAuiManager::GetFlags}\label{wxauimanagergetflags}
 
@@ -181,6 +183,8 @@ Returns the current manager's flags.
 \constfunc{wxWindow*}{GetManagedWindow}{\void}
 
 Returns the frame currently being managed by wxAuiManager.
+
+\membersection{wxAuiManager::GetManager}\label{wxauimanagergetmanager}
 
 \func{static wxAuiManager*}{GetManager}{\param{wxWindow* }{window}}
 
@@ -268,6 +272,8 @@ look-and-feel features. The previous art provider object, if any,
 will be deleted by wxAuiManager.
 
 See also: \helpref{wxAuiDockArt}{wxauidockart}.
+
+\membersection{wxAuiManager::SetDockSizeConstraint}\label{wxauimanagersetdocksizeconstraint}
 
 \func{void}{SetDockSizeConstraint}{\param{double }{widthpct}, \param{double }{heightpct}}
 
