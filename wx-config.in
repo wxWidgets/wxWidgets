@@ -44,29 +44,29 @@ usage()
     cat 1>&2 <<EOF
 
  wx-config [--prefix[=DIR]] [--exec-prefix[=DIR]] [--release] [--version-full]
-           [--list] [--host=HOST] [--toolkit=TOOLKIT] [--universal[=yes|no]]
-           [--unicode[=yes|no]] [--debug[=yes|no]] [--static[=yes|no]]
-           [--version[=VERSION]] [--basename] [--cc] [--cppflags] [--cflags]
-           [--cxxflags] [--rescomp] [--libs] [--cxx] [--ld] [--linkdeps]
-           [--utility=UTIL] [LIB ...] 
+           [--list] [--selected-config] [--host=HOST] [--toolkit=TOOLKIT]
+	   [--universal[=yes|no]] [--unicode[=yes|no]] [--debug[=yes|no]]
+	   [--static[=yes|no]] [--version[=VERSION]] [--basename] [--cc]
+	   [--cppflags] [--cflags] [--cxxflags] [--rescomp] [--libs] [--cxx]
+	   [--ld] [--linkdeps] [--utility=UTIL] [LIB ...] 
 
-   wx-config returns  information about  the wxWidgets libraries available
-   on your system.  It may be used to retrieve the information you require
-   to build applications using these libraries.
+    wx-config returns information about the wxWidgets libraries available on
+  your system.  It may be used to retrieve the information required to build
+  applications using these libraries using --cppflags, --cflags,  --cxxflags
+  and --libs options.
 
-    If alternative builds of wxWidgets exist on the system, you can use the
-  options:  --prefix,  --host,  --toolkit,  --unicode,  --debug,  --static,
-  --version and --universal, to select from them.  Use the --list option to
-  show alternatives available which match specified criteria.   The unicode,
-  debug, and universal options  take an  optional yes or no  argument, while
-  host and version  accept posix extended regex.   The --utility option will
-  return the correct version of UTIL to use with the selected library build.
-  --linkdeps returns only static libraries for your makefile link rule deps.
+    If multiple builds of wxWidgets  are available,  you can use the options
+  --prefix, --host, --toolkit, --unicode, --debug, --static, --universal and
+  --version to select from them. The --selected-config option shows the name
+  of the current configuration and --list shows available alternatives which
+  match specified criteria. The --utility option returns the correct version
+  of UTIL to use with the selected build. The --linkdeps option returns only
+  static libraries for your makefile link rule dependencies.
 
     Optional LIB arguments (comma or space separated) may be used to specify
   the wxWidgets libraries that  you wish  to use.  The magic "std" label may
   be used to import all libraries that would be used by default if none were
-  specified explicitly.  eg. wx-config --libs core,base.
+  specified explicitly, e.g. wx-config --libs core,base.
 
 EOF
 
