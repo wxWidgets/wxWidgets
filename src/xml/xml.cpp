@@ -636,7 +636,7 @@ bool wxXmlDocument::Load(wxInputStream& stream, const wxString& encoding, int fl
     ctx.encoding = wxT("UTF-8"); // default in absence of encoding=""
     ctx.conv = NULL;
 #if !wxUSE_UNICODE
-    if ( encoding != wxT("UTF-8") && encoding != wxT("utf-8") )
+    if ( encoding.CmpNoCase(wxT("UTF-8")) != 0 )
         ctx.conv = new wxCSConv(encoding);
 #endif
     ctx.removeWhiteOnlyNodes = (flags & wxXMLDOC_KEEP_WHITESPACE_NODES) == 0;
@@ -853,16 +853,22 @@ bool wxXmlDocument::Save(wxOutputStream& stream, int indentstep) const
 
     wxString s;
 
-    wxMBConv *convMem = NULL;
+    wxMBConv *convMem = NULL,
+             *convFile;
 
 #if wxUSE_UNICODE
-    wxMBConv *convFile = new wxCSConv(GetFileEncoding());
+    convFile = new wxCSConv(GetFileEncoding());
+    convMem = NULL;
 #else
-    wxMBConv *convFile = NULL;
-    if ( GetFileEncoding() != GetEncoding() )
+    if ( GetFileEncoding().CmpNoCase(GetEncoding()) != 0 )
     {
         convFile = new wxCSConv(GetFileEncoding());
         convMem = new wxCSConv(GetEncoding());
+    }
+    else // file and in-memory encodings are the same, no conversion needed
+    {
+        convFile =
+        convMem = NULL;
     }
 #endif
 
@@ -873,10 +879,8 @@ bool wxXmlDocument::Save(wxOutputStream& stream, int indentstep) const
     OutputNode(stream, GetRoot(), 0, convMem, convFile, indentstep);
     OutputString(stream, wxT("\n"));
 
-    if ( convFile )
-        delete convFile;
-    if ( convMem )
-        delete convMem;
+    delete convFile;
+    delete convMem;
 
     return true;
 }
