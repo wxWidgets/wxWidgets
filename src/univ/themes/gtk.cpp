@@ -679,6 +679,7 @@ wxColour wxGTKColourScheme::Get(wxGTKColourScheme::StdColour col) const
 {
     switch ( col )
     {
+        case FRAME:
         case WINDOW:            return *wxWHITE;
 
         case SHADOW_DARK:       return *wxBLACK;

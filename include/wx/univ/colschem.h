@@ -53,20 +53,23 @@ public:
         SHADOW_HIGHLIGHT,
         SHADOW_IN,
         SHADOW_OUT,
-        
+
         // the titlebar background colours for the normal and focused states
         TITLEBAR,
         TITLEBAR_ACTIVE,
-        
+
         // the titlebar text colours
         TITLEBAR_TEXT,
         TITLEBAR_ACTIVE_TEXT,
-        
+
         // the default gauge fill colour
         GAUGE,
 
         // desktop background colour (only used by framebuffer ports)
         DESKTOP,
+
+        // wxFrame's background colour
+        FRAME,
 
         MAX
     };

@@ -1283,6 +1283,7 @@ wxColour wxWin32ColourScheme::Get(wxWin32ColourScheme::StdColour col) const
         case TITLEBAR_ACTIVE_TEXT: return wxColour(GetSysColor(COLOR_CAPTIONTEXT));
 
         case DESKTOP:           return wxColour(0x808000);
+        case FRAME:             return wxColour(GetSysColor(COLOR_APPWORKSPACE));
 #else // !__WXMSW__
         // use the standard Windows colours elsewhere
         case WINDOW:            return *wxWHITE;
@@ -1315,6 +1316,7 @@ wxColour wxWin32ColourScheme::Get(wxWin32ColourScheme::StdColour col) const
         case TITLEBAR_ACTIVE_TEXT:return *wxWHITE;
 
         case DESKTOP:           return wxColour(0x808000);
+        case FRAME:             return wxColour(0x808080);
 #endif // __WXMSW__
 
         case GAUGE:             return Get(HIGHLIGHT);

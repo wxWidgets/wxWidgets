@@ -600,6 +600,7 @@ wxColour wxMonoColourScheme::Get(wxMonoColourScheme::StdColour col) const
         case TITLEBAR_ACTIVE:
         case HIGHLIGHT_TEXT:
         case DESKTOP:
+        case FRAME:
             return GetBg();
 
         case MAX:

@@ -65,7 +65,7 @@ wxColour wxSystemSettings::GetColour(wxSystemColour index)
         wxColourScheme::CONTROL_TEXT /* wxSYS_COLOUR_CAPTIONTEXT */,
         wxColourScheme::MAX /* wxSYS_COLOUR_ACTIVEBORDER */,
         wxColourScheme::MAX /* wxSYS_COLOUR_INACTIVEBORDER */,
-        wxColourScheme::MAX /* wxSYS_COLOUR_APPWORKSPACE */,
+        wxColourScheme::FRAME /* wxSYS_COLOUR_APPWORKSPACE */,
         wxColourScheme::HIGHLIGHT /* wxSYS_COLOUR_HIGHLIGHT */,
         wxColourScheme::HIGHLIGHT_TEXT /* wxSYS_COLOUR_HIGHLIGHTTEXT */,
         wxColourScheme::CONTROL /* wxSYS_COLOUR_BTNFACE */,
