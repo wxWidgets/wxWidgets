@@ -55,7 +55,7 @@ bool hvApp::OnInit()
     delete wxLog::SetActiveTarget(new wxLogStderr); // So dialog boxes aren't used
 #endif
 
-    wxArtProvider::PushProvider(new AlternateArtProvider);
+    wxArtProvider::Push(new AlternateArtProvider);
 
 #ifdef __WXMAC__
     wxApp::s_macAboutMenuItemId = wxID_ABOUT;
@@ -259,7 +259,7 @@ bool hvApp::OpenBook(wxHtmlHelpController* controller)
         _(
         "Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|\
         HTML Help Project (*.hhp)|*.hhp"),
-        wxOPEN | wxFILE_MUST_EXIST,
+        wxFD_OPEN | wxFD_FILE_MUST_EXIST,
         NULL);
 
     if ( !s.empty() )
