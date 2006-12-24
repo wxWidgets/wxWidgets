@@ -116,16 +116,10 @@ public:
     void OnFromUnicodeSelected( wxCommandEvent& event );
 
 #endif
-#if defined(__WXMSW__) || defined(__WXGTK__) || defined(__WXPM__) || defined(__WXMGL__) || defined(__WXMOTIF__) || defined(__WXCOCOA__) || defined(__WXX11__) || defined(__WXPALMOS__)
+
     /// wxEVT_UPDATE_UI event handler for wxID_OK
     void OnOkUpdate( wxUpdateUIEvent& event );
 
-#endif
-#if defined(__WXMAC__)
-    /// wxEVT_UPDATE_UI event handler for wxID_OK
-    void OnOkUpdate( wxUpdateUIEvent& event );
-
-#endif
 ////@end wxSymbolPickerDialog event handler declarations
 
 ////@begin wxSymbolPickerDialog member function declarations
