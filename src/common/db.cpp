@@ -2306,6 +2306,7 @@ bool wxDb::ExecSql(const wxString &pSqlStmt, wxDbColInf** columns, short& numcol
             return false;
         }
 
+        pColInf[colNum].sqlDataType = Sqllen;
         switch (Sqllen)
         {
 #if wxUSE_UNICODE
