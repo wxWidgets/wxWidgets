@@ -32,6 +32,8 @@
         *wxDirDialog*etStyle*;
         # Mac OS X only, but it still must go in IIUC
         *wxListCtrl*SetFocus*;
+		*wxListCtrl*OnChar*;
+		*wxListCtrl*OnRightDown*;
 };
 
 # symbols available since the beginning of this branch are only given
