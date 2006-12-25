@@ -107,8 +107,21 @@ int wxMessageDialog::ShowModal()
     else
         msStyle |= MB_TASKMODAL;
 
+    // per MSDN documentation for MessageBox() we can prefix the message with 2
+    // right-to-left mark characters to tell the function to use RTL layout
+    // (unfortunately this only works in Unicode builds)
+    wxString message = m_message;
+#if wxUSE_UNICODE
+    if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
+    {
+        // NB: not all compilers support \u escapes
+        static const wchar_t wchRLM = 0x200f;
+        message.Prepend(wxString(wchRLM, 2));
+    }
+#endif // wxUSE_UNICODE
+
     // do show the dialog
-    int msAns = MessageBox(hWnd, m_message.c_str(), m_caption.c_str(), msStyle);
+    int msAns = MessageBox(hWnd, message, m_caption, msStyle);
     int ans;
     switch (msAns)
     {
