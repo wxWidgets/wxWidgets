@@ -699,8 +699,7 @@ bool wxListCtrl::Create(wxWindow *parent,
     else
     {
          m_macIsUserPane = false;
-
-        if ( !wxWindow::Create(parent, id, pos, size, style, name) )
+        if ( !wxWindow::Create(parent, id, pos, size, style & ~(wxHSCROLL | wxVSCROLL), name) )
             return false;
         m_dbImpl = new wxMacDataBrowserListCtrlControl( this, pos, size, style );
         m_peer = m_dbImpl;
@@ -2421,7 +2420,7 @@ wxMacDataBrowserListCtrlControl::wxMacDataBrowserListCtrlControl( wxWindow *peer
     }
 
     verify_noerr( SetHiliteStyle(kDataBrowserTableViewFillHilite ) );
-    err = SetHasScrollBars( (style & wxHSCROLL) != 0 , true );
+    err = SetHasScrollBars( (style & wxHSCROLL) != 0 , (style & wxVSCROLL) != 0 );
 }
 
 pascal Boolean wxMacDataBrowserListCtrlControl::DataBrowserEditTextProc(
