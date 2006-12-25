@@ -508,6 +508,7 @@ BEGIN_EVENT_TABLE(wxListCtrl, wxControl)
     EVT_LEFT_DOWN(wxListCtrl::OnLeftDown)
     EVT_LEFT_DCLICK(wxListCtrl::OnDblClick)
     EVT_RIGHT_DOWN(wxListCtrl::OnRightDown)
+    EVT_CHAR(wxListCtrl::OnChar)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -611,6 +612,13 @@ void wxListCtrl::OnLeftDown(wxMouseEvent& event)
     event.Skip();
 }
 
+void wxListCtrl::OnDblClick(wxMouseEvent& event)
+{
+    m_current = -1;
+    event.Skip();
+}
+
+#if wxABI_VERSION >= 20801
 void wxListCtrl::OnRightDown(wxMouseEvent& event)
 {
     wxListEvent le( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, GetId() );
@@ -629,17 +637,31 @@ void wxListCtrl::OnRightDown(wxMouseEvent& event)
             le.m_item.m_itemId = item;
             GetItem(le.m_item);
         }
+        GetEventHandler()->ProcessEvent(le);
     }
-    
-    GetEventHandler()->ProcessEvent(le);
+
     event.Skip();
 }
 
-void wxListCtrl::OnDblClick(wxMouseEvent& event)
+void wxListCtrl::OnChar(wxKeyEvent& event)
 {
-    m_current = -1;
-    event.Skip();
+    wxListEvent le( wxEVT_COMMAND_LIST_KEY_DOWN, GetId() );
+    le.SetEventObject(this);
+    le.m_code = event.GetKeyCode();
+    le.m_itemIndex = -1;
+    
+    if (m_current != -1)
+    {
+        le.m_itemIndex = m_current;
+        if (!IsVirtual())
+        {
+            le.m_item.m_itemId = m_current;
+            GetItem(le.m_item);
+        }
+        GetEventHandler()->ProcessEvent(le);
+    }
 }
+#endif
 
 bool wxListCtrl::Create(wxWindow *parent,
                         wxWindowID id,

@@ -331,7 +331,6 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   bool HasCurrent() const { return m_current != (long)-1; }
   
   void OnLeftDown(wxMouseEvent& event);
-  void OnRightDown(wxMouseEvent& event);
   void OnDblClick(wxMouseEvent& event);
   
   void FinishEditing(wxTextCtrl *text)
@@ -344,6 +343,8 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   virtual int GetScrollPos(int orient) const;
   
 #if wxABI_VERSION >= 20801
+  void OnRightDown(wxMouseEvent& event);
+  void OnChar(wxKeyEvent& event);
   virtual void SetFocus();
 #endif
 
