@@ -111,7 +111,10 @@ MustHaveApp(wxStyledTextCtrl);
     %property(SelectedText, GetSelectedText, doc="See `GetSelectedText`");
     %property(SelectedTextRaw, GetSelectedTextRaw, doc="See `GetSelectedTextRaw`");
     %property(SelectedTextUTF8, GetSelectedTextUTF8, doc="See `GetSelectedTextUTF8`");
-    %property(Selection, GetSelection, SetSelection, doc="See `GetSelection` and `SetSelection`");
+
+    //%property(Selection, GetSelection, SetSelection, doc="See `GetSelection` and `SetSelection`");
+    %property(Selection, GetSelection, doc="See `GetSelection`");
+    
     %property(SelectionEnd, GetSelectionEnd, SetSelectionEnd, doc="See `GetSelectionEnd` and `SetSelectionEnd`");
     %property(SelectionMode, GetSelectionMode, SetSelectionMode, doc="See `GetSelectionMode` and `SetSelectionMode`");
     %property(SelectionStart, GetSelectionStart, SetSelectionStart, doc="See `GetSelectionStart` and `SetSelectionStart`");
