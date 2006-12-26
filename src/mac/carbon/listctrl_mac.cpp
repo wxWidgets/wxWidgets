@@ -507,6 +507,7 @@ void wxListCtrlTextCtrlWrapper::OnKillFocus( wxFocusEvent &event )
 BEGIN_EVENT_TABLE(wxListCtrl, wxControl)
     EVT_LEFT_DOWN(wxListCtrl::OnLeftDown)
     EVT_LEFT_DCLICK(wxListCtrl::OnDblClick)
+    EVT_MIDDLE_DOWN(wxListCtrl::OnMiddleDown)
     EVT_RIGHT_DOWN(wxListCtrl::OnRightDown)
     EVT_CHAR(wxListCtrl::OnChar)
 END_EVENT_TABLE()
@@ -621,13 +622,25 @@ void wxListCtrl::OnDblClick(wxMouseEvent& event)
 #if wxABI_VERSION >= 20801
 void wxListCtrl::OnRightDown(wxMouseEvent& event)
 {
-    wxListEvent le( wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, GetId() );
+    FireMouseEvent(wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, event.GetPosition());
+    event.Skip();
+}
+
+void wxListCtrl::OnMiddleDown(wxMouseEvent& event)
+{
+    FireMouseEvent(wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK, event.GetPosition());
+    event.Skip();
+}
+
+void wxListCtrl::FireMouseEvent(wxEventType eventType, wxPoint position)
+{
+    wxListEvent le( eventType, GetId() );
     le.SetEventObject(this);
-    le.m_pointDrag = event.GetPosition();
+    le.m_pointDrag = position;
     le.m_itemIndex = -1;
     
     int flags;
-    long item = HitTest(event.GetPosition(), flags);
+    long item = HitTest(position, flags);
     if (flags & wxLIST_HITTEST_ONITEM)
     {
         le.m_itemIndex = item;
@@ -639,8 +652,6 @@ void wxListCtrl::OnRightDown(wxMouseEvent& event)
         }
         GetEventHandler()->ProcessEvent(le);
     }
-
-    event.Skip();
 }
 
 void wxListCtrl::OnChar(wxKeyEvent& event)

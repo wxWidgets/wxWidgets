@@ -34,6 +34,8 @@
         *wxListCtrl*SetFocus*;
 		*wxListCtrl*OnChar*;
 		*wxListCtrl*OnRightDown*;
+		*wxListCtrl*OnMiddleDown*;
+		*wxListCtrl*FireMouseEvent*;
 };
 
 # symbols available since the beginning of this branch are only given

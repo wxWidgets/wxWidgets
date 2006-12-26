@@ -344,8 +344,10 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   
 #if wxABI_VERSION >= 20801
   void OnRightDown(wxMouseEvent& event);
+  void OnMiddleDown(wxMouseEvent& event);
   void OnChar(wxKeyEvent& event);
   virtual void SetFocus();
+  void FireMouseEvent(wxEventType eventType, wxPoint position);
 #endif
 
   virtual void SetDropTarget( wxDropTarget *dropTarget );
