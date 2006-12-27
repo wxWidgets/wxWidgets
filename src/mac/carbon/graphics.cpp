@@ -1836,6 +1836,9 @@ void wxMacCoreGraphicsContext::GetTextExtent( const wxString &str, wxDouble *wid
         *width = FixedToInt(textAfter - textBefore);
 
     ::ATSUDisposeTextLayout(atsuLayout);
+#if SIZEOF_WCHAR_T == 4
+    free( ubuf ) ;
+#endif
 }
 
 void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const
@@ -1894,6 +1897,9 @@ void wxMacCoreGraphicsContext::GetPartialTextExtents(const wxString& text, wxArr
     }
 
     ::ATSUDisposeTextLayout(atsuLayout);
+#if SIZEOF_WCHAR_T == 4
+    free( ubuf ) ;
+#endif
 }
 
 void * wxMacCoreGraphicsContext::GetNativeContext()
