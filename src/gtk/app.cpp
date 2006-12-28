@@ -220,6 +220,20 @@ static gint wxapp_idle_callback( gpointer WXUNUSED(data) )
     if (!wxTheApp->IsInAssert())
 #endif // __WXDEBUG__
     {
+        guint idleID_save;
+        {
+            // Allow another idle source to be added while this one is busy.
+            // Needed if an idle event handler runs a new event loop,
+            // for example by showing a dialog.
+#if wxUSE_THREADS
+            wxMutexLocker lock(gs_idleTagsMutex);
+#endif
+            idleID_save = wxTheApp->m_idleTag;
+            wxTheApp->m_idleTag = 0;
+            g_isIdle = true;
+            wxAddEmissionHook();
+        }
+
         // When getting called from GDK's time-out handler
         // we are no longer within GDK's grab on the GUI
         // thread so we must lock it here ourselves.
@@ -233,6 +247,17 @@ static gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 
         // Release lock again
         gdk_threads_leave();
+        
+        {
+            // If another idle source was added, remove it
+#if wxUSE_THREADS
+            wxMutexLocker lock(gs_idleTagsMutex);
+#endif
+            if (wxTheApp->m_idleTag != 0)
+                g_source_remove(wxTheApp->m_idleTag);
+            wxTheApp->m_idleTag = idleID_save;
+            g_isIdle = false;
+        }
     }
 
     if (!moreIdles)
