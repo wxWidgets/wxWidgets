@@ -156,6 +156,7 @@ static const EventTypeSpec eventList[] =
     { kEventClassCommand, kEventProcessCommand } ,
     { kEventClassCommand, kEventCommandUpdateStatus } ,
 
+    { kEventClassControl , kEventControlGetClickActivation } ,
     { kEventClassControl , kEventControlHit } ,
 
     { kEventClassTextInput, kEventTextInputUnicodeForKeyEvent } ,
@@ -348,6 +349,18 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
 
         case kEventControlHit :
             result = thisWindow->MacControlHit( handler , event ) ;
+            break ;
+
+        case kEventControlGetClickActivation :
+            {
+            	// fix to always have a proper activation for DataBrowser controls (stay in bkgnd otherwise)
+                WindowRef owner = cEvent.GetParameter<WindowRef>(kEventParamWindowRef);
+                if ( !IsWindowActive(owner) )
+                {
+                    cEvent.SetParameter(kEventParamClickActivation,(UInt32) kActivateAndIgnoreClick) ;
+                    result = noErr ;
+                }
+            }
             break ;
 
         default :
