@@ -1946,7 +1946,6 @@ long wxListCtrl::InsertItem(wxListItem& info)
             info.m_itemId = count;
 
         m_dbImpl->MacInsertItem(info.m_itemId, &info );
-        wxMacDataItem* dataItem = m_dbImpl->GetItemFromLine(info.m_itemId);
         
         wxListEvent event( wxEVT_COMMAND_LIST_INSERT_ITEM, GetId() );
         event.SetEventObject( this );
@@ -2622,10 +2621,17 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     {
 
         GetThemeDrawingState(&savedState);
-
-        GetThemeBrushAsColor(kThemeBrushAlternatePrimaryHighlightColor, 32, true, &backgroundColor);
-        GetThemeTextColor(kThemeTextColorWhite, gdDepth, colorDevice, &labelColor);
-
+        
+        if (active)
+        {
+            GetThemeBrushAsColor(kThemeBrushAlternatePrimaryHighlightColor, 32, true, &backgroundColor);
+            GetThemeTextColor(kThemeTextColorWhite, gdDepth, colorDevice, &labelColor);
+        }
+        else
+        {
+            GetThemeBrushAsColor(kThemeBrushSecondaryHighlightColor, 32, true, &backgroundColor);
+            GetThemeTextColor(kThemeTextColorBlack, gdDepth, colorDevice, &labelColor);
+        }
         CGContextSaveGState(context);
 
         CGContextSetRGBFillColor(context, (float)backgroundColor.red / (float)USHRT_MAX,
@@ -2642,7 +2648,7 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
             labelColor = MAC_WXCOLORREF( color.GetPixel() );
         else if (list->GetTextColour().Ok())
             labelColor = MAC_WXCOLORREF( list->GetTextColour().GetPixel() );
-
+        
         if (bgColor.Ok())
         {
             backgroundColor = MAC_WXCOLORREF( bgColor.GetPixel() );
@@ -3175,3 +3181,4 @@ void wxMacListCtrlItem::SetColumnInfo( unsigned int column, wxListItem* item )
 }
 
 #endif // wxUSE_LISTCTRL
+
