@@ -40,8 +40,6 @@
 
 #include "wx/hashmap.h"
 
-#define wxMAC_ALWAYS_USE_GENERIC_LISTCTRL wxT("mac.listctrl.always_use_generic")
-
 #if wxUSE_EXTENDED_RTTI
 WX_DEFINE_FLAGS( wxListCtrlStyle )
 
@@ -221,7 +219,8 @@ public:
     virtual void MacSetColumnInfo( unsigned int row, unsigned int column, wxListItem* item );
     virtual void MacGetColumnInfo( unsigned int row, unsigned int column, wxListItem& item );
     virtual void UpdateState(wxMacDataItem* dataItem, wxListItem* item);
-
+    int GetFlags() { return m_flags; }
+    
 protected:
     // we need to override to provide specialized handling for virtual wxListCtrls
     virtual OSStatus GetSetItemData(DataBrowserItemID itemID,
@@ -276,6 +275,7 @@ protected:
 
     wxClientDataType m_clientDataItemsType;
     bool m_isVirtual;
+    int m_flags;
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxMacDataBrowserListCtrlControl)
 };
 
@@ -671,6 +671,7 @@ void wxListCtrl::OnChar(wxKeyEvent& event)
         }
         GetEventHandler()->ProcessEvent(le);
     }
+    event.Skip();
 }
 #endif
 
@@ -802,12 +803,15 @@ void wxListCtrl::DoSetSize( int x, int y, int width, int height, int sizeFlags )
               totalWidth += m_dbImpl->GetColumnWidth( column );
         }
 
-        Boolean vertScrollBar;
-        GetDataBrowserHasScrollBars( m_dbImpl->GetControlRef(), NULL, &vertScrollBar );
-        if (totalWidth > width)
-            SetDataBrowserHasScrollBars( m_dbImpl->GetControlRef(), true, vertScrollBar );
-        else
-            SetDataBrowserHasScrollBars( m_dbImpl->GetControlRef(), false, vertScrollBar );
+        if ( !(m_dbImpl->GetFlags() & wxHSCROLL) )
+        {
+            Boolean vertScrollBar;
+            GetDataBrowserHasScrollBars( m_dbImpl->GetControlRef(), NULL, &vertScrollBar );
+            if (totalWidth > width)
+                SetDataBrowserHasScrollBars( m_dbImpl->GetControlRef(), true, vertScrollBar );
+            else
+                SetDataBrowserHasScrollBars( m_dbImpl->GetControlRef(), false, vertScrollBar );
+        }
     }
 }
 
@@ -1021,7 +1025,7 @@ bool wxListCtrl::SetColumnWidth(int col, int width)
         {
             wxListItem colInfo;
             GetColumn(col, colInfo);
-
+            
             colInfo.SetWidth(width);
             SetColumn(col, colInfo);
             m_dbImpl->SetColumnWidth(col, mywidth);
@@ -2367,6 +2371,7 @@ wxMacDataBrowserListCtrlControl::wxMacDataBrowserListCtrlControl( wxWindow *peer
     OSStatus err = noErr;
     m_clientDataItemsType = wxClientData_None;
     m_isVirtual = false;
+    m_flags = 0;
 
     if ( style & wxLC_VIRTUAL )
         m_isVirtual = true;
@@ -2431,7 +2436,7 @@ wxMacDataBrowserListCtrlControl::wxMacDataBrowserListCtrlControl( wxWindow *peer
     }
 
     verify_noerr( SetHiliteStyle(kDataBrowserTableViewFillHilite ) );
-    err = SetHasScrollBars( (style & wxHSCROLL) != 0 , (style & wxVSCROLL) != 0 );
+    verify_noerr( SetHasScrollBars( (style & wxHSCROLL) != 0 , true ) );
 }
 
 pascal Boolean wxMacDataBrowserListCtrlControl::DataBrowserEditTextProc(
@@ -2842,7 +2847,7 @@ void wxMacDataBrowserListCtrlControl::ItemNotification(DataBrowserItemID itemID,
         // avoid asserts by getting out now
         return  ;
     }
-
+    
     wxListCtrl *list = wxDynamicCast( GetPeer() , wxListCtrl );
     if ( list )
     {

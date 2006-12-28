@@ -15,6 +15,8 @@
 #include "wx/defs.h"
 #include "wx/generic/listctrl.h"
 
+#define wxMAC_ALWAYS_USE_GENERIC_LISTCTRL wxT("mac.listctrl.always_use_generic")
+
 class wxMacDataBrowserListCtrlControl;
 class wxMacListControl;
 class wxListCtrlTextCtrlWrapper;
