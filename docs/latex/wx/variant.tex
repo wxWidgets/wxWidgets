@@ -34,12 +34,12 @@ for different data types, or a remote procedure call protocol.
 An optional name member is associated with a wxVariant. This might be used, for example,
 in CORBA or OLE automation classes, where named parameters are required.
 
-Note that as of wxWidgets 2.7.1, wxVariant is reference counted. Additionally, the
-conveniance macros {\bf DECLARE\_VARIANT\_OBJECT} and {\bf IMPLEMENT\_VARIANT\_OBJECT}
-were added so that adding (limited) support for conversion to and from wxVariant
-can be very easily implemented without modifiying either wxVariant or the class
-to be stored by wxVariant. Since assignement operators cannot be declared outside
-the class, the shift left operators are used like this:
+Note that as of wxWidgets 2.7.1, wxVariant is \helpref{reference counted}{trefcount}. 
+Additionally, the convenience macros {\bf DECLARE\_VARIANT\_OBJECT} and 
+{\bf IMPLEMENT\_VARIANT\_OBJECT} were added so that adding (limited) support 
+for conversion to and from wxVariant can be very easily implemented without modifying 
+either wxVariant or the class to be stored by wxVariant. Since assignment operators 
+cannot be declared outside the class, the shift left operators are used like this:
 
 \begin{verbatim}
     // in the header file
@@ -94,7 +94,7 @@ Default constructor.
 
 \func{}{wxVariant}{\param{const wxVariant\& }{variant}}
 
-Copy constructor.
+Copy constructor, uses \helpref{reference counting}{trefcount}.
 
 \func{}{wxVariant}{\param{const wxChar*}{ value}, \param{const wxString\& }{name = ``"}}
 
@@ -165,6 +165,7 @@ Destructor.
 
 Note that destructor is protected, so wxVariantData cannot usually
 be deleted. Instead, \helpref{DecRef}{wxvariantdatadecref} should be called.
+See \helpref{reference-counted object destruction}{refcountdestruct} for more info.
 
 
 \membersection{wxVariant::Append}\label{wxvariantappend}
@@ -382,7 +383,7 @@ Sets the internal variant data, deleting the existing data if there is any.
 
 \func{void}{operator $=$}{\param{const TIMESTAMP\_STRUCT* }{value}}
 
-Assignment operators.
+Assignment operators, using \helpref{reference counting}{trefcount} when possible.
 
 \membersection{wxVariant::operator $==$}\label{wxvarianteq}
 
@@ -485,13 +486,18 @@ Operator for implicit conversion to a pointer to a void, using \helpref{wxVarian
 
 Operator for implicit conversion to a pointer to a \helpref{wxDateTime}{wxdatetime}, using \helpref{wxVariant::GetDateTime}{wxvariantgetdatetime}.
 
+
+
+%% wxVariantData
+
+
 \section{\class{wxVariantData}}\label{wxvariantdata}
 
-The {\bf wxVariantData} is used to implement a new type for wxVariant. Derive from wxVariantData,
-and override the pure virtual functions.
+The {\bf wxVariantData} class is used to implement a new type for \helpref{wxVariant}{wxvariant}. 
+Derive from wxVariantData, and override the pure virtual functions.
 
-wxVariantData is reference counted, but you don't normally have to care about this, as
-wxVariant manages the count automatically. However, incase your application needs to take
+wxVariantData is \helpref{reference counted}{refcount}, but you don't normally have to care about this, 
+as wxVariant manages the count automatically. However, in case your application needs to take
 ownership of wxVariantData, be aware that the object is created with reference count of 1,
 and passing it to wxVariant will not increase this. In other words, \helpref{IncRef}{wxvariantdataincref}
 needs to be called only if you both take ownership of wxVariantData and pass it to a wxVariant.
@@ -527,7 +533,9 @@ Decreases reference count. If the count reaches zero, the object is
 automatically deleted.
 
 Note that destructor of wxVariantData is protected, so delete
-cannot be used as normal. Instead, DecRef should be called.
+cannot be used as normal. Instead, \helpref{DecRef}{wxvariantdatadecref} should be called.
+
+
 
 \membersection{wxVariantData::Eq}\label{wxvariantdataeq}
 
