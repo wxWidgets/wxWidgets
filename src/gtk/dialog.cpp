@@ -118,7 +118,7 @@ int wxDialog::ShowModal()
         wxWindow *parent = wxTheApp->GetTopWindow();
         if ( parent &&
                 parent != this &&
-                    parent->IsBeingDeleted() &&
+                    !parent->IsBeingDeleted() &&
                         !(parent->GetExtraStyle() & wxWS_EX_TRANSIENT) )
         {
             m_parent = parent;
