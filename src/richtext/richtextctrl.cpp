@@ -74,6 +74,7 @@ BEGIN_EVENT_TABLE( wxRichTextCtrl, wxControl )
     EVT_SIZE(wxRichTextCtrl::OnSize)
     EVT_SET_FOCUS(wxRichTextCtrl::OnSetFocus)
     EVT_KILL_FOCUS(wxRichTextCtrl::OnKillFocus)
+    EVT_MOUSE_CAPTURE_LOST(wxRichTextCtrl::OnCaptureLost)
     EVT_CONTEXT_MENU(wxRichTextCtrl::OnContextMenu)
 
     EVT_MENU(wxID_UNDO, wxRichTextCtrl::OnUndo)
@@ -323,6 +324,11 @@ void wxRichTextCtrl::OnKillFocus(wxFocusEvent& WXUNUSED(event))
 
     // if (!IsFrozen())
     //    Refresh(false);
+}
+
+void wxRichTextCtrl::OnCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
+{
+    m_dragging = false;    
 }
 
 /// Left-click
