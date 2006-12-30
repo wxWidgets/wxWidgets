@@ -10,7 +10,6 @@ src/x11/*.inc
 src/x11/*.xbm
 
 include/wx/x11/*.h
-include/wx/univ/*.h
 include/wx/gtk/private/string.h
 include/wx/x11/nanox/X11/*.h
 
