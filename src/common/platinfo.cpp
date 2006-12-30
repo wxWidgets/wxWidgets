@@ -62,6 +62,9 @@ static const wxChar* const wxOperatingSystemIdNames[] =
     _T("AIX"),
     _T("HPUX"),
 
+    _T("Other Unix"),
+    _T("Other Unix"),
+
     _T("DOS"),
     _T("OS/2")
 };
