@@ -71,6 +71,7 @@ enum wxDirTraverseResult
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxDirTraverser::OnDir}\label{wxdirtraverserondir}
 
 \func{virtual wxDirTraverseResult}{OnDir}{\param{const wxString\& }{dirname}}
@@ -82,6 +83,7 @@ subdirectories in this directory.
 
 This is a pure virtual function and must be implemented in the derived class.
 
+
 \membersection{wxDirTraverser::OnFile}\label{wxdirtraverseronfile}
 
 \func{virtual wxDirTraverseResult}{OnFile}{\param{const wxString\& }{filename}}
@@ -92,9 +94,10 @@ traversing (for example, if the file being searched is found) or
 
 This is a pure virtual function and must be implemented in the derived class.
 
-\membersection{wxOpenErrorTraverser::OnOpenError}\label{wxopenerrortraverseronopenerror}
 
-\func{virtual wxOpenErrorTraverseResult}{OnOpenError}{\param{const wxString\& }{openerrorname}}
+\membersection{wxDirTraverser::OnOpenError}\label{wxopenerrortraverseronopenerror}
+
+\func{virtual wxDirTraverseResult}{OnOpenError}{\param{const wxString\& }{openerrorname}}
 
 This function is called for each directory which we failed to open for
 enumerating. It may return {\tt wxSIR\_STOP} to abort traversing completely,
