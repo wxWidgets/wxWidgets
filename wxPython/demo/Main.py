@@ -75,7 +75,8 @@ _treeList = [
         'BitmapComboBox',
         'I18N',
         'Img2PyArtProvider',
-        'SearchCtrl',        
+        'SearchCtrl',
+        'SizedControls',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -230,6 +231,7 @@ _treeList = [
         'Layoutf',
         'RowColSizer',
         'ScrolledPanel',
+        'SizedControls',
         'Sizers',
         'XmlResource',
         'XmlResourceHandler',
