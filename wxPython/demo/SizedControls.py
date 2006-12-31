@@ -1,6 +1,79 @@
 import wx
 import wxaddons.sized_controls as sc
 
+overview = """\
+SizedControls is an addon library that attempts to simplify the creation of
+sizer-based layouts. It adds the following classes:
+
+<b>SizedPanel</b>
+
+This class automatically creates its own sizer (a vertical box sizer 
+by default) and automatically adds its children to the sizer. You can change the
+SizedPanel's sizer type by calling panel.SetSizerType("type", [args]), where valid types are
+"horizontal", "vertical", "form" (a 2-col flex grid sizer), and "grid". Args include
+"cols" and "rows" attributes for grids. This class also applies control borders
+that adhere to the native platform's Human Interface Guidelines (HIG) on Win, GTK and Mac.
+
+<b>SizedFrame and SizedDialog</b>
+
+These classes automatically setup a SizedPanel which
+is appropriately positioned and given appropriate borders in accordance with the
+platform's HIGs.
+
+Since controls are added to the parent's sizer upon creation, you don't need to
+use sizer.Add or even create sizers yourself. You just use SetSizerType() to 
+change the sizer you want to use, and control.SetSizerProps() to change the
+sizer properties of the control. So as a result, code that used to look like this:
+
+<table bgcolor="#EFEFEF"><tr><td><code>
+... wx.Dialog init code...
+
+panel = wx.Panel(self, -1)
+b1 = wx.Button(panel, -1)
+b2 = wx.Button(panel, -1)
+t1 = wx.TextCtrl(panel, -1)
+b3 = wx.Button(panel, -1)
+
+sizer = wx.BoxSizer(wx.HORIZONTAL)
+sizer.Add(b1, 0, wx.ALL, 6)
+sizer.Add(b2, 0, wx.ALL, 6)
+sizer.Add(t1, 0, wx.EXPAND | wx.ALL, 6)
+sizer.Add(b3, 0, wx.ALL, 6)
+panel.SetSizer(sizer)
+
+dlgSizer = wx.BoxSizer()
+dlgSizer.Add(panel, 1, wx.EXPAND)
+self.SetSizer(dlgSizer)
+self.SetAutoLayout(True)
+
+... rest of dialog ...</code>
+</td></tr></table>
+
+would now look like this:
+
+<table bgcolor="#EFEFEF"><tr><td><code>
+... wx.Dialog init code...
+
+panel = self.GetContentsPane()
+panel.SetSizerType("horizontal")
+
+b1 = wx.Button(panel, -1)
+b2 = wx.Button(panel, -1)
+
+t1 = wx.TextCtrl(panel, -1)
+t1.SetSizerProps(expand=True)
+
+b3 = wx.Button(panel, -1)
+
+... rest of dialog ...</code>
+</td></tr></table>
+and the latter example will adhere to HIG spacing guidelines on all platforms,
+unlike the former example.
+
+Please check the demos for more complete and sophisticated examples of SizedControls
+in action.
+"""
+
 class FormDialog(sc.SizedDialog):
     def __init__(self, parent, id):
         sc.SizedDialog.__init__(self, None, -1, "SizedForm Dialog", 
@@ -54,7 +127,6 @@ class FormDialog(sc.SizedDialog):
 class ErrorDialog(sc.SizedDialog):
     def __init__(self, parent, id):
         sc.SizedDialog.__init__(self, parent, id, "Error log viewer", 
-                                wx.DefaultPosition, wx.Size(420, 340), 
                                 style=wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER)
         
         # Always use self.GetContentsPane() - this ensures that your dialog
@@ -64,7 +136,7 @@ class ErrorDialog(sc.SizedDialog):
         pane = self.GetContentsPane()
         
         # first row
-        self.listCtrl = wx.ListCtrl(pane, -1, style=wx.LC_REPORT)
+        self.listCtrl = wx.ListCtrl(pane, -1, size=(300, -1), style=wx.LC_REPORT)
         self.listCtrl.SetSizerProps(expand=True, proportion=1)
         self.ConfigureListCtrl()
         
@@ -146,7 +218,6 @@ class TestPanel(wx.Panel):
 def runTest(frame, nb, log):
     win = TestPanel(nb, log)
     return win
-        
 
 if __name__ == "__main__":  
     app = wx.PySimpleApp()
