@@ -622,13 +622,15 @@ void wxListCtrl::OnDblClick(wxMouseEvent& event)
 #if wxABI_VERSION >= 20801
 void wxListCtrl::OnRightDown(wxMouseEvent& event)
 {
-    FireMouseEvent(wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, event.GetPosition());
+    if (m_dbImpl)
+        FireMouseEvent(wxEVT_COMMAND_LIST_ITEM_RIGHT_CLICK, event.GetPosition());
     event.Skip();
 }
 
 void wxListCtrl::OnMiddleDown(wxMouseEvent& event)
 {
-    FireMouseEvent(wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK, event.GetPosition());
+    if (m_dbImpl)
+        FireMouseEvent(wxEVT_COMMAND_LIST_ITEM_MIDDLE_CLICK, event.GetPosition());
     event.Skip();
 }
 
@@ -656,20 +658,23 @@ void wxListCtrl::FireMouseEvent(wxEventType eventType, wxPoint position)
 
 void wxListCtrl::OnChar(wxKeyEvent& event)
 {
-    wxListEvent le( wxEVT_COMMAND_LIST_KEY_DOWN, GetId() );
-    le.SetEventObject(this);
-    le.m_code = event.GetKeyCode();
-    le.m_itemIndex = -1;
-    
-    if (m_current != -1)
+    if (m_dbImpl)
     {
-        le.m_itemIndex = m_current;
-        if (!IsVirtual())
+        wxListEvent le( wxEVT_COMMAND_LIST_KEY_DOWN, GetId() );
+        le.SetEventObject(this);
+        le.m_code = event.GetKeyCode();
+        le.m_itemIndex = -1;
+        
+        if (m_current != -1)
         {
-            le.m_item.m_itemId = m_current;
-            GetItem(le.m_item);
+            le.m_itemIndex = m_current;
+            if (!IsVirtual())
+            {
+                le.m_item.m_itemId = m_current;
+                GetItem(le.m_item);
+            }
+            GetEventHandler()->ProcessEvent(le);
         }
-        GetEventHandler()->ProcessEvent(le);
     }
     event.Skip();
 }
