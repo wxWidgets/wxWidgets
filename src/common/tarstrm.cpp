@@ -133,7 +133,7 @@ public:
 
     bool Read(wxInputStream& in);
     bool Write(wxOutputStream& out);
-    bool WriteField(wxOutputStream& out, int id);
+    inline bool WriteField(wxOutputStream& out, int id);
 
     bool IsAllZeros() const;
     wxUint32 Sum(bool SignedSum = false);
@@ -247,7 +247,7 @@ bool wxTarHeaderBlock::Write(wxOutputStream& out)
     return ok;
 }
 
-bool wxTarHeaderBlock::WriteField(wxOutputStream& out, int id)
+inline bool wxTarHeaderBlock::WriteField(wxOutputStream& out, int id)
 {
     return out.Write(Get(id), Len(id)).LastWrite() == Len(id);
 }

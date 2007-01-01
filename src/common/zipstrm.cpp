@@ -173,9 +173,9 @@ class wxZipHeader
 public:
     wxZipHeader(wxInputStream& stream, size_t size);
 
-    wxUint8 Read8();
-    wxUint16 Read16();
-    wxUint32 Read32();
+    inline wxUint8 Read8();
+    inline wxUint16 Read16();
+    inline wxUint32 Read32();
 
     const char *GetData() const             { return m_data; }
     size_t GetSize() const                  { return m_size; }
@@ -205,13 +205,13 @@ wxZipHeader::wxZipHeader(wxInputStream& stream, size_t size)
     m_ok = m_size == size;
 }
 
-wxUint8 wxZipHeader::Read8()
+inline wxUint8 wxZipHeader::Read8()
 {
     wxASSERT(m_pos < m_size);
     return m_data[m_pos++];
 }
 
-wxUint16 wxZipHeader::Read16()
+inline wxUint16 wxZipHeader::Read16()
 {
     wxASSERT(m_pos + 2 <= m_size);
     wxUint16 n = CrackUint16(m_data + m_pos);
@@ -219,7 +219,7 @@ wxUint16 wxZipHeader::Read16()
     return n;
 }
 
-wxUint32 wxZipHeader::Read32()
+inline wxUint32 wxZipHeader::Read32()
 {
     wxASSERT(m_pos + 4 <= m_size);
     wxUint32 n = CrackUint32(m_data + m_pos);

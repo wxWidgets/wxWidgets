@@ -108,7 +108,7 @@ aStdKeys[] =
 // ----------------------------------------------------------------------------
 
 // removes the trailing backslash from the string if it has one
-static void RemoveTrailingSeparator(wxString& str);
+static inline void RemoveTrailingSeparator(wxString& str);
 
 // returns true if given registry key exists
 static bool KeyExists(WXHKEY hRootKey, const wxChar *szKey);
@@ -1413,7 +1413,7 @@ const wxChar *GetFullName(const wxRegKey *pKey, const wxChar *szValue)
   return s_str.c_str();
 }
 
-void RemoveTrailingSeparator(wxString& str)
+inline void RemoveTrailingSeparator(wxString& str)
 {
   if ( !str.empty() && str.Last() == REG_SEPARATOR )
     str.Truncate(str.Len() - 1);
