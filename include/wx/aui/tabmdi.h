@@ -74,7 +74,7 @@ public:
     virtual bool ProcessEvent(wxEvent& event);
 
     wxAuiMDIChildFrame *GetActiveChild() const;
-    inline void SetActiveChild(wxAuiMDIChildFrame* pChildFrame);
+    void SetActiveChild(wxAuiMDIChildFrame* pChildFrame);
 
     wxAuiMDIClientWindow *GetClientWindow() const;
     virtual wxAuiMDIClientWindow *OnCreateClient();

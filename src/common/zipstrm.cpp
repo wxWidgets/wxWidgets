@@ -173,9 +173,9 @@ class wxZipHeader
 public:
     wxZipHeader(wxInputStream& stream, size_t size);
 
-    inline wxUint8 Read8();
-    inline wxUint16 Read16();
-    inline wxUint32 Read32();
+    wxUint8 Read8();
+    wxUint16 Read16();
+    wxUint32 Read32();
 
     const char *GetData() const             { return m_data; }
     size_t GetSize() const                  { return m_size; }

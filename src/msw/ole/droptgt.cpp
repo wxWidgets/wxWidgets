@@ -80,7 +80,7 @@ protected:
     HWND          m_hwnd;         // window we're associated with
 
     // get default drop effect for given keyboard flags
-    static inline DWORD GetDropEffect(DWORD flags, wxDragResult defaultAction);
+    static DWORD GetDropEffect(DWORD flags, wxDragResult defaultAction);
 
     DECLARE_NO_COPY_CLASS(wxIDropTarget)
 };

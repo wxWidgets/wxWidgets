@@ -95,7 +95,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxFileHistory, wxObject)
 // function prototypes
 // ----------------------------------------------------------------------------
 
-static inline wxString FindExtension(const wxChar *path);
 static wxWindow* wxFindSuitableParent(void);
 
 // ----------------------------------------------------------------------------

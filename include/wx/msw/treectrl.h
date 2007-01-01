@@ -273,10 +273,10 @@ private:
     void Init();
 
     // helper functions
-    inline bool DoGetItem(wxTreeViewItem *tvItem) const;
-    inline void DoSetItem(wxTreeViewItem *tvItem);
+    bool DoGetItem(wxTreeViewItem *tvItem) const;
+    void DoSetItem(wxTreeViewItem *tvItem);
 
-    inline void DoExpand(const wxTreeItemId& item, int flag);
+    void DoExpand(const wxTreeItemId& item, int flag);
 
     void DeleteTextCtrl();
 

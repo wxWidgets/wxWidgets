@@ -108,7 +108,7 @@ aStdKeys[] =
 // ----------------------------------------------------------------------------
 
 // removes the trailing backslash from the string if it has one
-static inline void RemoveTrailingSeparator(wxString& str);
+static void RemoveTrailingSeparator(wxString& str);
 
 // returns true if given registry key exists
 static bool KeyExists(WXHKEY hRootKey, const wxChar *szKey);

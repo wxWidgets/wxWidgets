@@ -133,7 +133,7 @@ public:
 
     bool Read(wxInputStream& in);
     bool Write(wxOutputStream& out);
-    inline bool WriteField(wxOutputStream& out, int id);
+    bool WriteField(wxOutputStream& out, int id);
 
     bool IsAllZeros() const;
     wxUint32 Sum(bool SignedSum = false);
