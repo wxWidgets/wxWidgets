@@ -1737,7 +1737,11 @@ bool wxListCtrl::MSWShouldPreProcessMessage(WXMSG* msg)
     {
         if ( msg->wParam == VK_RETURN )
         {
-            // we need VK_RETURN to generate wxEVT_COMMAND_LIST_ITEM_ACTIVATED
+            // We need VK_RETURN to generate wxEVT_COMMAND_LIST_ITEM_ACTIVATED,
+            // but only if none of the modifiers is down.  We'll let normal
+            // accelerators handle those.
+            if ( !wxIsCtrlDown() && !wxIsCtrlDown() &&
+                 !((HIWORD(msg->lParam) & KF_ALTDOWN) == KF_ALTDOWN))
             return false;
         }
     }
