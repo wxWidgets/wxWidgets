@@ -5331,7 +5331,7 @@ class StyledTextCtrl(_core.Control):
     SelectedText = property(GetSelectedText,doc="See `GetSelectedText`") 
     SelectedTextRaw = property(GetSelectedTextRaw,doc="See `GetSelectedTextRaw`") 
     SelectedTextUTF8 = property(GetSelectedTextUTF8,doc="See `GetSelectedTextUTF8`") 
-    Selection = property(GetSelection,SetSelection,doc="See `GetSelection` and `SetSelection`") 
+    Selection = property(GetSelection,doc="See `GetSelection`") 
     SelectionEnd = property(GetSelectionEnd,SetSelectionEnd,doc="See `GetSelectionEnd` and `SetSelectionEnd`") 
     SelectionMode = property(GetSelectionMode,SetSelectionMode,doc="See `GetSelectionMode` and `SetSelectionMode`") 
     SelectionStart = property(GetSelectionStart,SetSelectionStart,doc="See `GetSelectionStart` and `SetSelectionStart`") 

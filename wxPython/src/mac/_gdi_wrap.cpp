@@ -3858,9 +3858,8 @@ public:
     virtual void StrokeLines( size_t , const wxPoint2DDouble *, const wxPoint2DDouble *) {}
     virtual void DrawLines( size_t , const wxPoint2DDouble *, int ) {}
     virtual void DrawRectangle( wxDouble , wxDouble , wxDouble , wxDouble ) {}
-    virtual void DrawRoundedRectangle( wxDouble , wxDouble , wxDouble , wxDouble , wxDouble ) {}
     virtual void DrawEllipse( wxDouble , wxDouble , wxDouble , wxDouble ) {}
-    virtual void DrawRoundedRectangle( wxDouble  wxDouble , wxDouble , wxDouble , wxDouble ) {}
+    virtual void DrawRoundedRectangle( wxDouble , wxDouble , wxDouble , wxDouble , wxDouble ) {}
     virtual bool ShouldOffset() const { return false; }
 };
 
