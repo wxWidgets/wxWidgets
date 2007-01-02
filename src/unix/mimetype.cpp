@@ -1512,9 +1512,11 @@ void wxMimeTypesManagerImpl::Initialize(int mailcapStyles,
     if (mailcapStyles & wxMAILCAP_GNOME)
         GetGnomeMimeInfo(sExtraDir);
 
-    // read KDE tables
+    // read KDE tables which are never installed on OpenVMS
+#ifndef __VMS
     if (mailcapStyles & wxMAILCAP_KDE)
         GetKDEMimeInfo(sExtraDir);
+#endif
 
     m_mailcapStylesInited |= mailcapStyles;
 }
