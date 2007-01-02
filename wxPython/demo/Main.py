@@ -47,13 +47,6 @@ import images
 _treeList = [
     # new stuff
     ('Recent Additions/Updates', [
-        'AnalogClock',
-        'AUI_DockingWindowMgr',
-        'AUI_Notebook',
-        'CheckListCtrlMixin',
-        'ComboTreeBox',
-        'Pickers',
-        'PseudoDC',
         'RichTextCtrl',
         'Treebook',
         'Toolbook',
@@ -66,7 +59,6 @@ _treeList = [
         'FlatNotebook',
         'CustomTreeCtrl',
         'AboutBox',
-        'AnimateCtrl',
         'AlphaDrawing',
         'GraphicsContext',
         'CollapsiblePane',
