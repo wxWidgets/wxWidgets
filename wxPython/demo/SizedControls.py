@@ -2,30 +2,35 @@ import wx
 import wxaddons.sized_controls as sc
 
 overview = """\
-SizedControls is an addon library that attempts to simplify the creation of
-sizer-based layouts. It adds the following classes:
+<html><body><h2>Sized Controls</h2>
+SizedControls is an addon library that attempts to simplify the
+creation of sizer-based layouts. It adds the following classes:
 
-<b>SizedPanel</b>
+<h3>SizedPanel</h3>
 
-This class automatically creates its own sizer (a vertical box sizer 
-by default) and automatically adds its children to the sizer. You can change the
-SizedPanel's sizer type by calling panel.SetSizerType("type", [args]), where valid types are
-"horizontal", "vertical", "form" (a 2-col flex grid sizer), and "grid". Args include
-"cols" and "rows" attributes for grids. This class also applies control borders
-that adhere to the native platform's Human Interface Guidelines (HIG) on Win, GTK and Mac.
+This class automatically creates its own sizer (a vertical box sizer
+by default) and automatically adds its children to the sizer. You can
+change the SizedPanel's sizer type by calling
+panel.SetSizerType(\"type\", [args]), where valid types are
+\"horizontal\", \"vertical\", \"form\" (a 2-col flex grid sizer), and
+\"grid\". Args include \"cols\" and \"rows\" attributes for
+grids. This class also applies control borders that adhere to the
+native platform's Human Interface Guidelines (HIG) on Win, GTK and
+Mac.
 
-<b>SizedFrame and SizedDialog</b>
+<h3>SizedFrame and SizedDialog</h3>
 
-These classes automatically setup a SizedPanel which
-is appropriately positioned and given appropriate borders in accordance with the
+These classes automatically setup a SizedPanel which is appropriately
+positioned and given appropriate borders in accordance with the
 platform's HIGs.
 
-Since controls are added to the parent's sizer upon creation, you don't need to
-use sizer.Add or even create sizers yourself. You just use SetSizerType() to 
-change the sizer you want to use, and control.SetSizerProps() to change the
-sizer properties of the control. So as a result, code that used to look like this:
+<p>Since controls are added to the parent's sizer upon creation, you
+don't need to use sizer.Add or even create sizers yourself. You just
+use SetSizerType() to change the sizer you want to use, and
+control.SetSizerProps() to change the sizer properties of the
+control. So as a result, code that used to look like this:
 
-<table bgcolor="#EFEFEF"><tr><td><code>
+<table bgcolor=\"#EFEFEF\"><tr><td><pre>
 ... wx.Dialog init code...
 
 panel = wx.Panel(self, -1)
@@ -46,16 +51,16 @@ dlgSizer.Add(panel, 1, wx.EXPAND)
 self.SetSizer(dlgSizer)
 self.SetAutoLayout(True)
 
-... rest of dialog ...</code>
+... rest of dialog ...</pre>
 </td></tr></table>
 
 would now look like this:
 
-<table bgcolor="#EFEFEF"><tr><td><code>
+<table bgcolor=\"#EFEFEF\"><tr><td><pre>
 ... wx.Dialog init code...
 
 panel = self.GetContentsPane()
-panel.SetSizerType("horizontal")
+panel.SetSizerType(\"horizontal\")
 
 b1 = wx.Button(panel, -1)
 b2 = wx.Button(panel, -1)
@@ -65,8 +70,9 @@ t1.SetSizerProps(expand=True)
 
 b3 = wx.Button(panel, -1)
 
-... rest of dialog ...</code>
+... rest of dialog ...</pre>
 </td></tr></table>
+
 and the latter example will adhere to HIG spacing guidelines on all platforms,
 unlike the former example.
 
