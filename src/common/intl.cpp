@@ -18,7 +18,7 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if defined(__BORLAND__) && !defined(__WXDEBUG__)
+#if defined(__BORLANDC__) && !defined(__WXDEBUG__)
     // There's a bug in Borland's compiler that breaks wxLocale with -O2,
     // so make sure that flag is not used for this file:
     #pragma option -O1
