@@ -25,6 +25,7 @@
     #include "wx/app.h"
 #endif
 
+#include "wx/thread.h"
 #include "wx/timer.h"
 #include "wx/private/socketevtdispatch.h"
 #include "wx/dfb/private.h"
@@ -88,7 +89,16 @@ bool wxEventLoop::Dispatch()
     //     OnNextIteration() will be called frequently enough
     const int TIMEOUT = 100;
 
-    if ( ms_buffer->WaitForEventWithTimeout(0, TIMEOUT) )
+    // release the GUI mutex so that other threads have a chance to post
+    // events:
+    wxMutexGuiLeave();
+
+    bool rv = ms_buffer->WaitForEventWithTimeout(0, TIMEOUT);
+
+    // and acquire it back before calling any event handlers:
+    wxMutexGuiEnter();
+
+    if ( rv )
     {
         switch ( ms_buffer->GetLastResult() )
         {
