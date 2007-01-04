@@ -208,6 +208,8 @@ OBJECTS_X11=accesscmn.obj,dndcmn.obj,dpycmn.obj,dseldlg.obj,\
 	regex.obj,taskbarcmn.obj,xti.obj,xtistrm.obj,xtixml.obj,\
 	combocmn.obj
 
+OBJECTS_X11_2=socketevtdispatch.obj
+
 SOURCES = \
 		anidecod.cpp,\
 		animatecmn.cpp,\
@@ -321,6 +323,7 @@ SOURCES = \
 		sckstrm.cpp,\
 		sizer.cpp,\
 		socket.cpp,\
+		socketevtdispatch.cpp,\
 		settcmn.cpp,\
 		statbar.cpp,\
 		stdpbase.cpp,\
@@ -401,10 +404,12 @@ all : $(SOURCES)
 .else
 .ifdef __WXX11__
 	$(MMS)$(MMSQUALIFIERS) $(OBJECTS_X11)
+	$(MMS)$(MMSQUALIFIERS) $(OBJECTS_X11_2)
 	library [--.lib]libwx_x11_univ.olb $(OBJECTS)
 	library [--.lib]libwx_x11_univ.olb $(OBJECTS1)
 	library [--.lib]libwx_x11_univ.olb $(OBJECTS2)
 	library [--.lib]libwx_x11_univ.olb $(OBJECTS_X11)
+	library [--.lib]libwx_x11_univ.olb $(OBJECTS_X11_2)
 .endif
 .endif
 .endif
@@ -520,6 +525,7 @@ sckipc.obj : sckipc.cpp
 sckstrm.obj : sckstrm.cpp
 sizer.obj : sizer.cpp
 socket.obj : socket.cpp
+socketevtdispatch.obj : socketevtdispatch.cpp
 settcmn.obj : settcmn.cpp
 statbar.obj : statbar.cpp
 stdpbase.obj : stdpbase.cpp

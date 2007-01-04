@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 21 August 2006                                                      *
+# Date : 3 January 2007                                                      *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -44,7 +44,6 @@ OBJECTS_X11=app.obj,dc.obj,\
 		dcscreen.obj,\
 		evtloop.obj,\
 		font.obj,\
-		gsockx11.obj,\
 		minifram.obj,\
 		nanox.obj,\
 		palette.obj,\
@@ -75,7 +74,6 @@ SOURCES = \
 		dcscreen.cpp,\
 		evtloop.cpp,\
 		font.cpp,\
-		gsockx11.cpp,\
 		minifram.cpp,\
 		nanox.c,\
 		palette.cpp,\
@@ -115,7 +113,6 @@ dcmemory.obj : dcmemory.cpp
 dcscreen.obj : dcscreen.cpp
 evtloop.obj : evtloop.cpp
 font.obj : font.cpp
-gsockx11.obj : gsockx11.cpp
 minifram.obj : minifram.cpp
 nanox.obj : nanox.c
 palette.obj : palette.cpp
