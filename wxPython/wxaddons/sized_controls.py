@@ -330,7 +330,8 @@ def GetSizerProps(self):
 def SetSizerProp(self, prop, value):
     
     lprop = prop.lower()
-    item = self.GetParent().GetSizer().GetItem(self) 
+    sizer = self.GetParent().GetSizer()
+    item = sizer.GetItem(self) 
     flag = item.GetFlag()
     if lprop == "proportion":
         item.SetProportion(int(value))
@@ -359,6 +360,27 @@ def SetSizerProp(self, prop, value):
             flag = flag &~ misc_flags[lprop]
         else:
             flag = flag | misc_flags[lprop]
+    
+    # auto-adjust growable rows/columns if expand or proportion is set
+    # on a sizer item in a FlexGridSizer
+    if lprop in ["expand", "proportion"] and isinstance(sizer, wx.FlexGridSizer):
+        cols = sizer.GetCols()
+        rows = sizer.GetRows()
+        # FIXME: I'd like to get the item index in the sizer instead, but
+        # doing sizer.GetChildren.index(item) always gives an error
+        itemnum = self.GetParent().GetChildren().index(self)
+                
+        col = 0
+        row = 0
+        if cols == 0:
+            col, row = divmod( itemnum, rows )
+        else:
+            row, col = divmod( itemnum, cols )
+        
+        if lprop == "expand":
+            sizer.AddGrowableCol(col)
+        elif lprop == "proportion" and int(value) != 0:
+            sizer.AddGrowableRow(row)
 
     item.SetFlag(flag)
 
@@ -462,7 +484,7 @@ class SizedPanel(wx.PyPanel):
         elif type == "form":
             #sizer = TableSizer(2, 0)
             sizer = wx.FlexGridSizer(0, 2, 0, 0)
-            sizer.AddGrowableCol(1)
+            #sizer.AddGrowableCol(1)
             
         elif type == "table":
             rows = cols = 0
