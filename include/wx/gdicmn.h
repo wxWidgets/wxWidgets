@@ -487,7 +487,7 @@ public:
 };
 
 #if WXWIN_COMPATIBILITY_2_6
-inline bool wxRect::Inside(int x, int y) const { return Contains(x, y); }
+inline bool wxRect::Inside(int cx, int cy) const { return Contains(cx, cy); }
 inline bool wxRect::Inside(const wxPoint& pt) const { return Contains(pt); }
 inline bool wxRect::Inside(const wxRect& rect) const { return Contains(rect); }
 #endif // WXWIN_COMPATIBILITY_2_6
