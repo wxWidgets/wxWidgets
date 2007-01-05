@@ -133,6 +133,7 @@ int BufSize = 500;
 
 bool Go(void);
 void ShowOptions(void);
+void ShowVersion(void);
 
 wxChar wxTex2RTFBuffer[1500];
 
@@ -292,6 +293,11 @@ bool MyApp::OnInit()
     {
       i ++;
       checkSyntax = true;
+    }
+    else if (wxStrcmp(argv[i], _T("-version")) == 0)
+    {
+      i ++;
+      ShowVersion();
     }
     else
     {
@@ -595,11 +601,17 @@ int MyApp::OnExit()
   return 0;
 }
 #endif
-void ShowOptions(void)
+
+void ShowVersion(void)
 {
     wxChar buf[100];
     wxSnprintf(buf, sizeof(buf), _T("Tex2RTF version %.2f"), versionNo);
     OnInform(buf);
+}
+
+void ShowOptions(void)
+{
+    ShowVersion();
     OnInform(_T("Usage: tex2rtf [input] [output] [switches]\n"));
     OnInform(_T("where valid switches are"));
 #ifndef NO_GUI
