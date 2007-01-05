@@ -1560,19 +1560,43 @@ long wxListCtrl::GetNextItem(long item, int geom, int state) const
     if (m_genericImpl)
         return m_genericImpl->GetNextItem(item, geom, state);
 
-    if (m_dbImpl && geom == wxLIST_NEXT_ALL && state == wxLIST_STATE_SELECTED )
+    // TODO: implement all geometry and state options?
+    if ( m_dbImpl )
     {
-        long count = m_dbImpl->MacGetCount() ;
-        for ( long line = item + 1 ; line < count; line++ )
+        if ( geom == wxLIST_NEXT_ALL || geom == wxLIST_NEXT_BELOW )
         {
-            wxMacDataItem* id = m_dbImpl->GetItemFromLine(line);
-            if ( m_dbImpl->IsItemSelected(id ) )
-                return line;
+            long count = m_dbImpl->MacGetCount() ;
+            for ( long line = item + 1 ; line < count; line++ )
+            {
+                wxMacDataItem* id = m_dbImpl->GetItemFromLine(line);
+                
+                if ( (state == wxLIST_STATE_DONTCARE ) )
+                    return line;
+                
+                if ( (state & wxLIST_STATE_SELECTED) && m_dbImpl->IsItemSelected( id ) )
+                    return line;
+            }
         }
-        return -1;
+        else if ( geom == wxLIST_NEXT_ABOVE )
+        {
+            int item2 = item;
+            if ( item2 == -1 )
+                item2 = m_dbImpl->MacGetCount();
+                
+            for ( long line = item2 - 1 ; line >= 0; line-- )
+            {
+                wxMacDataItem* id = m_dbImpl->GetItemFromLine(line);
+                
+                if ( (state == wxLIST_STATE_DONTCARE ) )
+                    return line;
+                
+                if ( (state & wxLIST_STATE_SELECTED) && m_dbImpl->IsItemSelected( id ) )
+                    return line;
+            }
+        }
     }
 
-    return 0;
+    return -1;
 }
 
 
