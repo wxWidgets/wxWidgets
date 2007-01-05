@@ -3027,12 +3027,20 @@ wxMacMLTEHIViewControl::wxMacMLTEHIViewControl( wxTextCtrl *wxPeer,
 
     m_scrollView = NULL ;
     TXNFrameOptions frameOptions = FrameOptionsFromWXStyle( style ) ;
-    if ( frameOptions & (kTXNWantVScrollBarMask | kTXNWantHScrollBarMask) )
+    if (( frameOptions & (kTXNWantVScrollBarMask | kTXNWantHScrollBarMask)) || !(frameOptions &kTXNSingleLineOnlyMask))
     {
-        HIScrollViewCreate(
-            (frameOptions & kTXNWantHScrollBarMask ? kHIScrollViewOptionsHorizScroll : 0)
-            | (frameOptions & kTXNWantVScrollBarMask ? kHIScrollViewOptionsVertScroll : 0) ,
-            &m_scrollView ) ;
+        if ( frameOptions & (kTXNWantVScrollBarMask | kTXNWantHScrollBarMask) )
+        {
+            HIScrollViewCreate(
+                (frameOptions & kTXNWantHScrollBarMask ? kHIScrollViewOptionsHorizScroll : 0)
+                | (frameOptions & kTXNWantVScrollBarMask ? kHIScrollViewOptionsVertScroll : 0) ,
+                &m_scrollView ) ;
+        }
+        else
+        {
+            HIScrollViewCreate(kHIScrollViewOptionsVertScroll,&m_scrollView);
+            HIScrollViewSetScrollBarAutoHide(m_scrollView,true);
+        }
 
         HIViewSetFrame( m_scrollView, &hr );
         HIViewSetVisible( m_scrollView, true );
