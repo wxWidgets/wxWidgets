@@ -2638,6 +2638,7 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
                       enclosingRect.right - enclosingRect.left,
                       enclosingRect.bottom - enclosingRect.top);
 
+    bool hasFocus = (wxWindow::FindFocus() == list);
     active = IsControlActive(GetControlRef());
 
     // don't paint the background over the vertical rule line
@@ -2651,7 +2652,7 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
 
         GetThemeDrawingState(&savedState);
         
-        if (active)
+        if (active && hasFocus)
         {
             GetThemeBrushAsColor(kThemeBrushAlternatePrimaryHighlightColor, 32, true, &backgroundColor);
             GetThemeTextColor(kThemeTextColorWhite, gdDepth, colorDevice, &labelColor);
