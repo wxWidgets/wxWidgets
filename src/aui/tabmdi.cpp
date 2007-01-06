@@ -82,8 +82,9 @@ wxAuiMDIParentFrame::~wxAuiMDIParentFrame()
     wxDELETE(m_pClientWindow);
 
 #if wxUSE_MENUS
+    wxDELETE(m_pMyMenuBar);
     RemoveWindowMenu(GetMenuBar());
-    delete m_pWindowMenu;
+    wxDELETE(m_pWindowMenu);
 #endif // wxUSE_MENUS
 }
 
@@ -166,7 +167,7 @@ void wxAuiMDIParentFrame::SetMenuBar(wxMenuBar* pMenuBar)
     AddWindowMenu(pMenuBar);
 
     wxFrame::SetMenuBar(pMenuBar);
-    m_pMyMenuBar = GetMenuBar();
+    //m_pMyMenuBar = GetMenuBar();
 }
 #endif // wxUSE_MENUS
 
@@ -179,7 +180,7 @@ void wxAuiMDIParentFrame::SetChildMenuBar(wxAuiMDIChildFrame* pChild)
         SetMenuBar(m_pMyMenuBar);
 
         // Make sure we know our menu bar is in use
-        //m_pMyMenuBar = NULL;
+        m_pMyMenuBar = NULL;
     }
      else
     {
@@ -416,6 +417,13 @@ wxAuiMDIChildFrame::wxAuiMDIChildFrame(wxAuiMDIParentFrame *parent,
 
 wxAuiMDIChildFrame::~wxAuiMDIChildFrame()
 {
+    wxAuiMDIParentFrame* pParentFrame = GetMDIParentFrame();
+    if (pParentFrame && pParentFrame->GetActiveChild() == this)
+    {
+        pParentFrame->SetActiveChild(NULL);
+        pParentFrame->SetChildMenuBar(NULL);
+    }
+    
 #if wxUSE_MENUS
     wxDELETE(m_pMenuBar);
 #endif // wxUSE_MENUS
