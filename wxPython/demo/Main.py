@@ -69,11 +69,13 @@ _treeList = [
         'Img2PyArtProvider',
         'SearchCtrl',
         'SizedControls',
+        'AUI_MDI',
         ]),
 
     # managed windows == things with a (optional) caption you can close
     ('Frames and Dialogs', [
         'AUI_DockingWindowMgr',
+        'AUI_MDI',
         'Dialog',
         'Frame',
         'MDIWindows',

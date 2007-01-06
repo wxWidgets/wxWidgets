@@ -155,6 +155,7 @@ import _windows
 wx = _core 
 __docfilter__ = wx.__DocFilter(globals()) 
 USE_AUI = _aui.USE_AUI
+USE_MENUS = _aui.USE_MENUS
 AUI_DOCK_NONE = _aui.AUI_DOCK_NONE
 AUI_DOCK_TOP = _aui.AUI_DOCK_TOP
 AUI_DOCK_RIGHT = _aui.AUI_DOCK_RIGHT
@@ -1443,7 +1444,7 @@ _aui.AuiNotebook_swigregister(AuiNotebook)
 def PreAuiNotebook(*args, **kwargs):
     """PreAuiNotebook() -> AuiNotebook"""
     val = _aui.new_PreAuiNotebook(*args, **kwargs)
-    self._setOORInfo(self)
+    val._setOORInfo(val)
     return val
 
 wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE = _aui.wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE
@@ -1462,6 +1463,252 @@ EVT_AUINOTEBOOK_BEGIN_DRAG = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_BEGIN_D
 EVT_AUINOTEBOOK_END_DRAG = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, 1 )
 EVT_AUINOTEBOOK_DRAG_MOTION = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION, 1 )
 EVT_AUINOTEBOOK_ALLOW_DND = wx.PyEventBinder( wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND, 1 )
+
+class AuiMDIParentFrame(_windows.Frame):
+    """Proxy of C++ AuiMDIParentFrame class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, Window parent, int winid, String title, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=wxDEFAULT_FRAME_STYLE|wxVSCROLL|wxHSCROLL, 
+            String name=wxFrameNameStr) -> AuiMDIParentFrame
+        """
+        _aui.AuiMDIParentFrame_swiginit(self,_aui.new_AuiMDIParentFrame(*args, **kwargs))
+        self._setOORInfo(self)
+
+    def Create(*args, **kwargs):
+        """
+        Create(self, Window parent, int winid, String title, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=wxDEFAULT_FRAME_STYLE|wxVSCROLL|wxHSCROLL, 
+            String name=wxFrameNameStr) -> bool
+        """
+        return _aui.AuiMDIParentFrame_Create(*args, **kwargs)
+
+    def SetArtProvider(*args, **kwargs):
+        """SetArtProvider(self, AuiTabArt provider)"""
+        return _aui.AuiMDIParentFrame_SetArtProvider(*args, **kwargs)
+
+    def GetArtProvider(*args, **kwargs):
+        """GetArtProvider(self) -> AuiTabArt"""
+        return _aui.AuiMDIParentFrame_GetArtProvider(*args, **kwargs)
+
+    def GetNotebook(*args, **kwargs):
+        """GetNotebook(self) -> AuiNotebook"""
+        return _aui.AuiMDIParentFrame_GetNotebook(*args, **kwargs)
+
+    def GetWindowMenu(*args, **kwargs):
+        """GetWindowMenu(self) -> Menu"""
+        return _aui.AuiMDIParentFrame_GetWindowMenu(*args, **kwargs)
+
+    def SetWindowMenu(*args, **kwargs):
+        """SetWindowMenu(self, Menu pMenu)"""
+        return _aui.AuiMDIParentFrame_SetWindowMenu(*args, **kwargs)
+
+    def SetChildMenuBar(*args, **kwargs):
+        """SetChildMenuBar(self, AuiMDIChildFrame pChild)"""
+        return _aui.AuiMDIParentFrame_SetChildMenuBar(*args, **kwargs)
+
+    def ProcessEvent(*args, **kwargs):
+        """ProcessEvent(self, Event event) -> bool"""
+        return _aui.AuiMDIParentFrame_ProcessEvent(*args, **kwargs)
+
+    def GetActiveChild(*args, **kwargs):
+        """GetActiveChild(self) -> AuiMDIChildFrame"""
+        return _aui.AuiMDIParentFrame_GetActiveChild(*args, **kwargs)
+
+    def SetActiveChild(*args, **kwargs):
+        """SetActiveChild(self, AuiMDIChildFrame pChildFrame)"""
+        return _aui.AuiMDIParentFrame_SetActiveChild(*args, **kwargs)
+
+    def GetClientWindow(*args, **kwargs):
+        """GetClientWindow(self) -> AuiMDIClientWindow"""
+        return _aui.AuiMDIParentFrame_GetClientWindow(*args, **kwargs)
+
+    def OnCreateClient(*args, **kwargs):
+        """OnCreateClient(self) -> AuiMDIClientWindow"""
+        return _aui.AuiMDIParentFrame_OnCreateClient(*args, **kwargs)
+
+    def Cascade(*args, **kwargs):
+        """Cascade(self)"""
+        return _aui.AuiMDIParentFrame_Cascade(*args, **kwargs)
+
+    def Tile(*args, **kwargs):
+        """Tile(self, int orient=HORIZONTAL)"""
+        return _aui.AuiMDIParentFrame_Tile(*args, **kwargs)
+
+    def ArrangeIcons(*args, **kwargs):
+        """ArrangeIcons(self)"""
+        return _aui.AuiMDIParentFrame_ArrangeIcons(*args, **kwargs)
+
+    def ActivateNext(*args, **kwargs):
+        """ActivateNext(self)"""
+        return _aui.AuiMDIParentFrame_ActivateNext(*args, **kwargs)
+
+    def ActivatePrevious(*args, **kwargs):
+        """ActivatePrevious(self)"""
+        return _aui.AuiMDIParentFrame_ActivatePrevious(*args, **kwargs)
+
+_aui.AuiMDIParentFrame_swigregister(AuiMDIParentFrame)
+
+def PreAuiMDIParentFrame(*args, **kwargs):
+    """PreAuiMDIParentFrame() -> AuiMDIParentFrame"""
+    val = _aui.new_PreAuiMDIParentFrame(*args, **kwargs)
+    val._setOORInfo(val)
+    return val
+
+class AuiMDIChildFrame(_windows.Panel):
+    """Proxy of C++ AuiMDIChildFrame class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, AuiMDIParentFrame parent, int winid, String title, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=DEFAULT_FRAME_STYLE, String name=wxFrameNameStr) -> AuiMDIChildFrame
+        """
+        _aui.AuiMDIChildFrame_swiginit(self,_aui.new_AuiMDIChildFrame(*args, **kwargs))
+        self._setOORInfo(self)
+
+    def Create(*args, **kwargs):
+        """
+        Create(self, AuiMDIParentFrame parent, int winid, String title, 
+            Point pos=DefaultPosition, Size size=DefaultSize, 
+            long style=DEFAULT_FRAME_STYLE, String name=wxFrameNameStr) -> bool
+        """
+        return _aui.AuiMDIChildFrame_Create(*args, **kwargs)
+
+    def SetMenuBar(*args, **kwargs):
+        """SetMenuBar(self, MenuBar menu_bar)"""
+        return _aui.AuiMDIChildFrame_SetMenuBar(*args, **kwargs)
+
+    def GetMenuBar(*args, **kwargs):
+        """GetMenuBar(self) -> MenuBar"""
+        return _aui.AuiMDIChildFrame_GetMenuBar(*args, **kwargs)
+
+    def SetTitle(*args, **kwargs):
+        """SetTitle(self, String title)"""
+        return _aui.AuiMDIChildFrame_SetTitle(*args, **kwargs)
+
+    def GetTitle(*args, **kwargs):
+        """GetTitle(self) -> String"""
+        return _aui.AuiMDIChildFrame_GetTitle(*args, **kwargs)
+
+    def SetIcons(*args, **kwargs):
+        """SetIcons(self, wxIconBundle icons)"""
+        return _aui.AuiMDIChildFrame_SetIcons(*args, **kwargs)
+
+    def GetIcons(*args, **kwargs):
+        """GetIcons(self) -> wxIconBundle"""
+        return _aui.AuiMDIChildFrame_GetIcons(*args, **kwargs)
+
+    def SetIcon(*args, **kwargs):
+        """SetIcon(self, Icon icon)"""
+        return _aui.AuiMDIChildFrame_SetIcon(*args, **kwargs)
+
+    def GetIcon(*args, **kwargs):
+        """GetIcon(self) -> Icon"""
+        return _aui.AuiMDIChildFrame_GetIcon(*args, **kwargs)
+
+    def Activate(*args, **kwargs):
+        """Activate(self)"""
+        return _aui.AuiMDIChildFrame_Activate(*args, **kwargs)
+
+    def DoSetSizeHints(*args, **kwargs):
+        """
+        DoSetSizeHints(self, int minW, int minH, int maxW=wxDefaultCoord, int maxH=wxDefaultCoord, 
+            int incW=wxDefaultCoord, int incH=wxDefaultCoord)
+        """
+        return _aui.AuiMDIChildFrame_DoSetSizeHints(*args, **kwargs)
+
+    def Maximize(*args, **kwargs):
+        """Maximize(self, bool maximize=True)"""
+        return _aui.AuiMDIChildFrame_Maximize(*args, **kwargs)
+
+    def Restore(*args, **kwargs):
+        """Restore(self)"""
+        return _aui.AuiMDIChildFrame_Restore(*args, **kwargs)
+
+    def Iconize(*args, **kwargs):
+        """Iconize(self, bool iconize=True)"""
+        return _aui.AuiMDIChildFrame_Iconize(*args, **kwargs)
+
+    def IsMaximized(*args, **kwargs):
+        """IsMaximized(self) -> bool"""
+        return _aui.AuiMDIChildFrame_IsMaximized(*args, **kwargs)
+
+    def IsIconized(*args, **kwargs):
+        """IsIconized(self) -> bool"""
+        return _aui.AuiMDIChildFrame_IsIconized(*args, **kwargs)
+
+    def ShowFullScreen(*args, **kwargs):
+        """ShowFullScreen(self, bool show, long style) -> bool"""
+        return _aui.AuiMDIChildFrame_ShowFullScreen(*args, **kwargs)
+
+    def IsFullScreen(*args, **kwargs):
+        """IsFullScreen(self) -> bool"""
+        return _aui.AuiMDIChildFrame_IsFullScreen(*args, **kwargs)
+
+    def OnMenuHighlight(*args, **kwargs):
+        """OnMenuHighlight(self, MenuEvent evt)"""
+        return _aui.AuiMDIChildFrame_OnMenuHighlight(*args, **kwargs)
+
+    def OnActivate(*args, **kwargs):
+        """OnActivate(self, ActivateEvent evt)"""
+        return _aui.AuiMDIChildFrame_OnActivate(*args, **kwargs)
+
+    def OnCloseWindow(*args, **kwargs):
+        """OnCloseWindow(self, CloseEvent evt)"""
+        return _aui.AuiMDIChildFrame_OnCloseWindow(*args, **kwargs)
+
+    def SetMDIParentFrame(*args, **kwargs):
+        """SetMDIParentFrame(self, AuiMDIParentFrame parent)"""
+        return _aui.AuiMDIChildFrame_SetMDIParentFrame(*args, **kwargs)
+
+    def GetMDIParentFrame(*args, **kwargs):
+        """GetMDIParentFrame(self) -> AuiMDIParentFrame"""
+        return _aui.AuiMDIChildFrame_GetMDIParentFrame(*args, **kwargs)
+
+    def ApplyMDIChildFrameRect(*args, **kwargs):
+        """ApplyMDIChildFrameRect(self)"""
+        return _aui.AuiMDIChildFrame_ApplyMDIChildFrameRect(*args, **kwargs)
+
+    def DoShow(*args, **kwargs):
+        """DoShow(self, bool show)"""
+        return _aui.AuiMDIChildFrame_DoShow(*args, **kwargs)
+
+_aui.AuiMDIChildFrame_swigregister(AuiMDIChildFrame)
+
+def PreAuiMDIChildFrame(*args, **kwargs):
+    """PreAuiMDIChildFrame() -> AuiMDIChildFrame"""
+    val = _aui.new_PreAuiMDIChildFrame(*args, **kwargs)
+    val._setOORInfo(val)
+    return val
+
+class AuiMDIClientWindow(AuiNotebook):
+    """Proxy of C++ AuiMDIClientWindow class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """__init__(self, AuiMDIParentFrame parent, long style=0) -> AuiMDIClientWindow"""
+        _aui.AuiMDIClientWindow_swiginit(self,_aui.new_AuiMDIClientWindow(*args, **kwargs))
+        self._setOORInfo(self)
+
+    def CreateClient(*args, **kwargs):
+        """CreateClient(self, AuiMDIParentFrame parent, long style=wxVSCROLL|wxHSCROLL) -> bool"""
+        return _aui.AuiMDIClientWindow_CreateClient(*args, **kwargs)
+
+    def SetSelection(*args, **kwargs):
+        """SetSelection(self, size_t page) -> int"""
+        return _aui.AuiMDIClientWindow_SetSelection(*args, **kwargs)
+
+_aui.AuiMDIClientWindow_swigregister(AuiMDIClientWindow)
+
+def PreAuiMDIClientWindow(*args, **kwargs):
+    """PreAuiMDIClientWindow() -> AuiMDIClientWindow"""
+    val = _aui.new_PreAuiMDIClientWindow(*args, **kwargs)
+    val._setOORInfo(val)
+    return val
 
 class PyAuiDockArt(AuiDefaultDockArt):
     """

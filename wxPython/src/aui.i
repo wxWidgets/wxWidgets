@@ -132,11 +132,16 @@ The following example shows a simple implementation that utilizes
 
 //---------------------------------------------------------------------------
 
-
+// Preprocessor stuff so SWIG doesn't get confused when %include-ing
+// the aui .h files.
 #define wxUSE_AUI 1
+#define wxUSE_MENUS 1
 #define WXDLLIMPEXP_AUI
 #define unsigned
 #define wxDEPRECATED(decl)
+#define DECLARE_EVENT_TABLE()
+#define DECLARE_DYNAMIC_CLASS(foo)
+
 
 
 // We'll skip making wrappers for these, they have overloads that take a
@@ -175,16 +180,32 @@ The following example shows a simple implementation that utilizes
 %pythonAppend wxAuiTabCtrl::wxAuiTabCtrl "self._setOORInfo(self)";
 
 %pythonAppend wxAuiNotebook::wxAuiNotebook    "self._setOORInfo(self)";
-%pythonAppend wxAuiNotebook::wxAuiNotebook()  "self._setOORInfo(self)";
+%pythonAppend wxAuiNotebook::wxAuiNotebook()  "val._setOORInfo(val)";
 %ignore wxAuiiNotebook::~wxAuiNotebook;
 %rename(PreAuiNotebook) wxAuiNotebook::wxAuiNotebook();
 
-
-
-%ignore wxAuiDefaultTabArt::SetWindow;        // Link error...
+// Link error...
+%ignore wxAuiDefaultTabArt::SetWindow;        
 
 // ignore this overload
 %ignore wxAuiTabContainer::GetPage(size_t idx) const;
+
+
+
+%pythonAppend wxAuiMDIParentFrame::wxAuiMDIParentFrame    "self._setOORInfo(self)";
+%pythonAppend wxAuiMDIParentFrame::wxAuiMDIParentFrame()  "val._setOORInfo(val)";
+%ignore wxAuiMDIParentFrame::~wxAuiMDIParentFrame;
+%rename(PreAuiMDIParentFrame) wxAuiMDIParentFrame::wxAuiMDIParentFrame();
+
+%pythonAppend wxAuiMDIChildFrame::wxAuiMDIChildFrame    "self._setOORInfo(self)";
+%pythonAppend wxAuiMDIChildFrame::wxAuiMDIChildFrame()  "val._setOORInfo(val)";
+%ignore wxAuiMDIChildFrame::~wxAuiMDIChildFrame;
+%rename(PreAuiMDIChildFrame) wxAuiMDIChildFrame::wxAuiMDIChildFrame();
+
+%pythonAppend wxAuiMDIClientWindow::wxAuiMDIClientWindow    "self._setOORInfo(self)";
+%pythonAppend wxAuiMDIClientWindow::wxAuiMDIClientWindow()  "val._setOORInfo(val)";
+%ignore wxAuiMDIClientWindow::~wxAuiMDIClientWindow;
+%rename(PreAuiMDIClientWindow) wxAuiMDIClientWindow::wxAuiMDIClientWindow();
 
 
 //---------------------------------------------------------------------------
@@ -196,6 +217,7 @@ The following example shows a simple implementation that utilizes
 %include dockart.h
 %include floatpane.h
 %include auibook.h
+%include tabmdi.h
 
 #undef wxColor
 
@@ -716,6 +738,7 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
 //---------------------------------------------------------------------------
 
 #undef wxUSE_AUI
+#undef wxUSE_MENUS 
 #undef WXDLLIMPEXP_AUI
 
 //---------------------------------------------------------------------------
