@@ -74,10 +74,56 @@ b3 = wx.Button(panel, -1)
 </td></tr></table>
 
 and the latter example will adhere to HIG spacing guidelines on all platforms,
-unlike the former example.
-
-Please check the demos for more complete and sophisticated examples of SizedControls
+unlike the former example. Please check the demos for more complete and sophisticated examples of SizedControls
 in action.
+
+<h3>wx.Window.SetSizerProps Quick Reference</h3>
+
+<p><pre>wx.Window.SetSizerProps(&lt;props&gt;)</pre>
+
+<p>
+<table bgcolor=\"#EFEFEF\">
+<tr>
+<td valign="middle" width="90"><b>Parameter</b></td> <td valign="middle"><b>Values</b></td> <td valign="middle"><b>Summary</b></td>
+</tr>
+
+<tr>
+<td><i>expand</i></td> <td>True/False</td>
+<td>Whether or not the control should grow to fill free space if 
+free space is available.</td>
+</tr>
+
+<tr>
+<td><i>proportion</i></td> <td>Number (typically 0-10)</td> 
+<td>How much of the free space the control should take up. Note that this value is 
+<i>relative</i> to other controls, so a proportion of 2 means take up 
+'twice as much' space as controls with a proportion of 1.</td>
+</tr>
+
+<tr>
+<td><i>halign</i> <td>"left", "center", "centre", "right"</td>
+<td>Determines horizontal alignment of control.</td>
+</tr>
+
+<tr>
+<td><i>valign</i> <td>"top", "center", "centre", "bottom"</td>
+<td>Determines vertical alignment of control.</td>
+</tr>
+
+<tr>
+<td><i>border</i> <td>Tuple: ([<i>dirs</i>], integer)</td>
+<td>Specifies amount of border padding to apply to specified directions. </br>
+Example: (["left", "right"], 6) would add six pixels to left and right borders. </br>
+Note that, unfortunately,
+it is not currently possible to assign different border sizes to each direction.</td>
+</tr>
+
+<tr>
+<td><i>minsize</i> <td>One of the following string values: "fixed", "adjust"</td>
+<td>Determines whether or not the minsize can be updated when the control's best size changes.</td>
+</tr>
+
+</table>
 """
 
 class FormDialog(sc.SizedDialog):
@@ -176,6 +222,35 @@ class ErrorDialog(sc.SizedDialog):
         self.listCtrl.SetColumnWidth(0, 100)
         self.listCtrl.SetColumnWidth(1, 280)
         
+
+class GridFrame(sc.SizedFrame):
+    def __init__(self, parent, id):
+        sc.SizedFrame.__init__(self, parent, id, "Grid Layout Demo Frame")
+        
+        pane = self.GetContentsPane()
+        pane.SetSizerType("grid", {"cols":3}) # 3-column grid layout
+        
+        # row 1
+        wx.TextCtrl(pane, -1).SetSizerProps(halign="left")
+        wx.TextCtrl(pane, -1).SetSizerProps(halign="center")
+        wx.TextCtrl(pane, -1).SetSizerProps(halign="right")
+        
+        # row 2
+        wx.TextCtrl(pane, -1).SetSizerProps(valign="center")
+        wx.TextCtrl(pane, -1).SetSizerProps(expand=True, proportion=1)
+        wx.TextCtrl(pane, -1).SetSizerProps(valign="center")
+        
+        # row 3
+        wx.TextCtrl(pane, -1).SetSizerProps(halign="left")
+        wx.TextCtrl(pane, -1).SetSizerProps(halign="center")
+        wx.TextCtrl(pane, -1).SetSizerProps(halign="right")
+        
+        self.CreateStatusBar() # should always do this when there's a resize border
+        
+        self.Fit()
+        self.SetMinSize(self.GetSize())
+        
+        
 #---------------------------------------------------------------------------
 
 class TestPanel(wx.Panel):
@@ -188,7 +263,10 @@ class TestPanel(wx.Panel):
         self.Bind(wx.EVT_BUTTON, self.OnFormButton, b)
 
         b2 = wx.Button(self, -1, "Sized Controls Error Dialog", (50,90))
-        self.Bind(wx.EVT_BUTTON, self.OnErrorButton, b2)            
+        self.Bind(wx.EVT_BUTTON, self.OnErrorButton, b2)
+        
+        b3 = wx.Button(self, -1, "Sized Controls Grid Layout Demo", (50,130))
+        self.Bind(wx.EVT_BUTTON, self.OnGridButton, b3)    
         
 
     def OnFormButton(self, evt):
@@ -220,6 +298,13 @@ class TestPanel(wx.Panel):
             self.log.WriteText("You pressed Cancel\n")
 
         dlg.Destroy()
+        
+    def OnGridButton(self, evt):
+            
+        dlg = GridFrame(self, -1)
+        dlg.CenterOnScreen()
+
+        dlg.Show()
         
 def runTest(frame, nb, log):
     win = TestPanel(nb, log)
