@@ -530,7 +530,11 @@ public:
     int GetSelection() const;
 
     virtual void Split(size_t page, int direction);
-   
+
+#if wxABI_VERSION >= 20801
+    const wxAuiManager& GetAuiManager() const { return m_mgr; }
+#endif
+
 protected:
 
     // these can be overridden
