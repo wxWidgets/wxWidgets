@@ -31,35 +31,36 @@
 
 // temporary buffers
 static wxChar buf[MAX_TEST_LEN];
+int r;
 
 // these macros makes it possible to write all tests without repeating a lot of times wxT() macro
 
 #define ASSERT_STR_EQUAL( a, b ) \
     CPPUNIT_ASSERT_EQUAL( wxString(a), wxString(b) );
 
-#define CMP5(expected, x, y, z, w)                  \
-    wxSnprintf(buf, MAX_TEST_LEN, wxT(x), y, z, w); \
-                                                    \
+#define CMP5(expected, x, y, z, w)                    \
+    r=wxSnprintf(buf, MAX_TEST_LEN, wxT(x), y, z, w); \
+    CPPUNIT_ASSERT( r > 0 );                          \
     ASSERT_STR_EQUAL( wxT(expected), buf );
 
 #define CMP4(expected, x, y, z)                     \
-    wxSnprintf(buf, MAX_TEST_LEN, wxT(x), y, z);    \
-                                                    \
+    r=wxSnprintf(buf, MAX_TEST_LEN, wxT(x), y, z);  \
+    CPPUNIT_ASSERT( r > 0 );                        \
     ASSERT_STR_EQUAL( wxT(expected), buf );
 
 #define CMP3(expected, x, y)                        \
-    wxSnprintf(buf, MAX_TEST_LEN, wxT(x), y);       \
-                                                    \
+    r=wxSnprintf(buf, MAX_TEST_LEN, wxT(x), y);     \
+    CPPUNIT_ASSERT( r > 0 );                        \
     ASSERT_STR_EQUAL( wxT(expected), buf );
 
 #define CMP2(expected, x)                           \
-    wxSnprintf(buf, MAX_TEST_LEN, wxT(x));          \
-                                                    \
+    r=wxSnprintf(buf, MAX_TEST_LEN, wxT(x));        \
+    CPPUNIT_ASSERT( r > 0 );                        \
     ASSERT_STR_EQUAL( wxT(expected), buf );
 
 #define CMPTOSIZE(buffer, size, expected, fmt, x, y, z, w)          \
-    wxSnprintf(buffer, size, wxT(fmt), x, y, z, w);                 \
-                                                                    \
+    r=wxSnprintf(buffer, size, wxT(fmt), x, y, z, w);               \
+    CPPUNIT_ASSERT( r > 0 );                                        \
     CPPUNIT_ASSERT_EQUAL( wxString(wxT(expected)).Left(size - 1),   \
                           wxString(buffer) )
 
@@ -92,6 +93,7 @@ private:
 #endif
 
         CPPUNIT_TEST( BigToSmallBuffer );
+        CPPUNIT_TEST( WrongFormatStrings );
         CPPUNIT_TEST( Miscellaneous );
     CPPUNIT_TEST_SUITE_END();
 
@@ -112,6 +114,7 @@ private:
     void Unicode();
 
     void BigToSmallBuffer();
+    void WrongFormatStrings();
     void Miscellaneous();
     void Misc(wxChar *buffer, int size);
 
@@ -321,9 +324,12 @@ void VsnprintfTestCase::Misc(wxChar *buffer, int size)
     //     value can be the number of characters required for the output buffer
     //     (conforming to ISO C99; implemented in e.g. GNU libc >= 2.1), or
     //     just a negative number, usually -1; (this is how e.g. MSVC's
-    //     *printf() behaves).  Fortunately, in all implementations, when the
+    //     *printf() behaves). Luckily, in all implementations, when the
     //     output buffer is too small, it's nonetheless filled up to its max
     //     size.
+    //
+    //     Note that in the second case (i.e. when we're using our own implementation),
+    //     wxVsnprintf() will always return the number of characters which 
 
     // test without positionals
     CMPTOSIZE(buffer, size, "123 444444444 - test - 555 -0.666",
@@ -348,6 +354,31 @@ void VsnprintfTestCase::Misc(wxChar *buffer, int size)
               "unicode string: unicode!! W - ansi string: ansi!! w\n\n",
               "unicode string: %ls %lc - ansi string: %hs %hc\n\n",
               L"unicode!!", L'W', "ansi!!", 'w');
+}
+
+void VsnprintfTestCase::WrongFormatStrings()
+{
+    // test how wxVsnprintf() behaves with wrong format string:
+
+#if wxUSE_PRINTF_POS_PARAMS
+
+    // two positionals with the same index:
+    r = wxSnprintf(buf, MAX_TEST_LEN, wxT("%1$s %1$s"), "hello");
+    CPPUNIT_ASSERT(r == -1);
+
+    // three positionals with the same index mixed with other pos args:
+    r = wxSnprintf(buf, MAX_TEST_LEN, wxT("%4$d %2$f %1$s %2$s %3$d"), "hello", "world", 3, 4);
+    CPPUNIT_ASSERT(r == -1);
+
+    // a missing positional arg:
+    r = wxSnprintf(buf, MAX_TEST_LEN, wxT("%1$d %3$d"), 1, 2, 3);
+    CPPUNIT_ASSERT(r == -1);
+
+    // positional and non-positionals in the same format string:
+    r = wxSnprintf(buf, MAX_TEST_LEN, wxT("%1$d %d %3$d"), 1, 2, 3);
+    CPPUNIT_ASSERT(r == -1);
+
+#endif // wxUSE_PRINTF_POS_PARAMS
 }
 
 void VsnprintfTestCase::BigToSmallBuffer()

@@ -982,13 +982,18 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
 #endif /* wxUSE_PRINTF_POS_PARAMS/!wxUSE_PRINTF_POS_PARAMS */
 
 #ifndef wxSnprintf_
-    /* no [v]snprintf(), cook our own */
+    /* no snprintf(), cook our own */
     WXDLLIMPEXP_BASE int
     wxSnprintf_(wxChar *buf, size_t len, const wxChar *format, ...) ATTRIBUTE_PRINTF_3;
 #endif
 #ifndef wxVsnprintf_
+    /* no (suitable) vsnprintf(), cook our own */
     WXDLLIMPEXP_BASE int
     wxVsnprintf_(wxChar *buf, size_t len, const wxChar *format, va_list argptr);
+
+    #define wxUSE_WXVSNPRINTF 1
+#else
+    #define wxUSE_WXVSNPRINTF 0
 #endif
 
 /*

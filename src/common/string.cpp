@@ -1837,15 +1837,29 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
         // buffer were large enough (newer standards such as Unix98)
         if ( len < 0 )
         {
+#if wxUSE_WXVSNPRINTF
+            // we know that our own implementation of wxVsnprintf() returns -1
+            // only for a format error - thus there's something wrong with
+            // the user's format string
+            return -1;
+#else // assume that system version only returns error if not enough space
             // still not enough, as we don't know how much we need, double the
             // current size of the buffer
             size *= 2;
+#endif // wxUSE_WXVSNPRINTF/!wxUSE_WXVSNPRINTF
         }
         else if ( len >= size )
         {
+#if wxUSE_WXVSNPRINTF
+            // we know that our own implementation of wxVsnprintf() returns 
+            // size+1 when there's not enough space but that's not the size
+            // of the required buffer!
+            size *= 2;      // so we just double the current size of the buffer
+#else
             // some vsnprintf() implementations NUL-terminate the buffer and
             // some don't in len == size case, to be safe always add 1
             size = len + 1;
+#endif
         }
         else // ok, there was enough space
         {

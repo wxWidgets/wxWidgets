@@ -167,6 +167,10 @@ bool WXDLLEXPORT wxOKlibc()
 
 #if !defined(wxVsnprintf_)
 
+#if !wxUSE_WXVSNPRINTF
+    #error wxUSE_WXVSNPRINTF must be 1 if our wxVsnprintf_ is used
+#endif
+
 // wxUSE_STRUTILS says our wxVsnprintf_ implementation to use or not to
 // use wxStrlen and wxStrncpy functions over one-char processing loops.
 //
@@ -1124,6 +1128,7 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
     va_end(ap);
 
     // something failed while loading arguments from the variable list...
+    // (e.g. the user repeated twice the same positional argument)
     if (!ok)
     {
         buf[0] = 0;
@@ -1143,7 +1148,7 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
         if (lenCur == lenMax)
         {
             buf[lenMax - 1] = 0;
-            return -1;
+            return lenMax+1;      // not enough space in the output buffer !
         }
 
         // process this specifier directly in the output buffer
@@ -1151,7 +1156,7 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
         if (n == -1)
         {
             buf[lenMax-1] = wxT('\0');  // be sure to always NUL-terminate the string
-            return -1;      // not enough space in the output buffer !
+            return lenMax+1;      // not enough space in the output buffer !
         }
         lenCur += n;
 
@@ -1171,7 +1176,7 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
     if (buf[lenCur])
     {
         buf[lenCur] = 0;
-        return -1;
+        return lenMax+1;     // not enough space in the output buffer !
     }
 
     wxASSERT(lenCur == wxStrlen(buf));
@@ -1182,7 +1187,13 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
 #undef APPEND_STR
 #undef CHECK_PREC
 
-#endif // !wxVsnprintfA
+#else    // wxVsnprintf_ is defined
+
+#if wxUSE_WXVSNPRINTF
+    #error wxUSE_WXVSNPRINTF must be 0 if our wxVsnprintf_ is not used
+#endif
+
+#endif // !wxVsnprintf_
 
 #if !defined(wxSnprintf_)
 int WXDLLEXPORT wxSnprintf_(wxChar *buf, size_t len, const wxChar *format, ...)
