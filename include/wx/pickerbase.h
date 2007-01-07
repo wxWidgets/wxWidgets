@@ -17,6 +17,7 @@
 #include "wx/containr.h"
 
 class WXDLLIMPEXP_CORE wxTextCtrl;
+class WXDLLEXPORT wxToolTip;
 
 extern WXDLLEXPORT_DATA(const wxChar) wxButtonNameStr[];
 
@@ -51,6 +52,7 @@ public:
                     const wxValidator& validator = wxDefaultValidator,
                     const wxString& name = wxButtonNameStr);
 
+    virtual void DoSetToolTip( wxToolTip *tip );
 
 public:     // public API
 

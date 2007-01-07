@@ -30,10 +30,12 @@
     wxUSE_FONTPICKERCTRL
 
 #include "wx/pickerbase.h"
+#include "wx/tooltip.h"
 
 #ifndef WX_PRECOMP
     #include "wx/textctrl.h"
 #endif
+
 
 // ============================================================================
 // implementation
@@ -121,6 +123,23 @@ void wxPickerBase::PostCreation()
     SetSizer(m_sizer);
     SetMinSize( m_sizer->GetMinSize() );
 }
+
+void wxPickerBase::DoSetToolTip( wxToolTip *tip )
+{
+    // don't set the tooltip on us but rather on our two child windows
+    // as otherwise it would appear only when the cursor is placed on the
+    // small area around the child windows which belong to wxPickerBase
+    m_picker->SetToolTip(tip);
+
+    // do a copy as wxWindow will own the pointer we pass
+    m_text->SetToolTip(tip ? new wxToolTip(tip->GetTip()) : NULL);
+}
+
+
+
+// ----------------------------------------------------------------------------
+// wxPickerBase - event handlers
+// ----------------------------------------------------------------------------
 
 void wxPickerBase::OnTextCtrlKillFocus(wxFocusEvent &)
 {
