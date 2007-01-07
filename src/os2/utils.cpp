@@ -83,7 +83,8 @@ bool wxGetHostName( wxChar* zBuf, int nMaxSize )
     wxChar*        zSysname;
     const wxChar*  zDefaultHost = _T("noname");
 
-    if ((zSysname = wxGetenv(_T("SYSTEM_NAME"))) == NULL)
+    if ((zSysname = wxGetenv(_T("SYSTEM_NAME"))) == NULL &&
+	(zSysname = wxGetenv(_T("HOSTNAME"))) == NULL)
     {
         ::PrfQueryProfileString( HINI_PROFILE
                                 ,(PSZ)WX_SECTION
