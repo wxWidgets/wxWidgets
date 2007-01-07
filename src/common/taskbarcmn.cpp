@@ -38,7 +38,7 @@ DEFINE_EVENT_TYPE( wxEVT_TASKBAR_RIGHT_DCLICK )
 
 
 BEGIN_EVENT_TABLE(wxTaskBarIconBase, wxEvtHandler)
-    EVT_TASKBAR_RIGHT_DOWN(wxTaskBarIconBase::OnRightButtonDown)
+    EVT_TASKBAR_CLICK(wxTaskBarIconBase::OnRightButtonDown)
 END_EVENT_TABLE()
 
 void wxTaskBarIconBase::OnRightButtonDown(wxTaskBarIconEvent& WXUNUSED(event))

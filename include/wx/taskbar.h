@@ -109,8 +109,16 @@ END_DECLARE_EVENT_TYPES()
 #define EVT_TASKBAR_LEFT_DCLICK(fn)  wx__DECLARE_TASKBAREVT(LEFT_DCLICK, fn)
 #define EVT_TASKBAR_RIGHT_DCLICK(fn) wx__DECLARE_TASKBAREVT(RIGHT_DCLICK, fn)
 
+// taskbar menu is shown on right button press under all platforms except MSW
+// where it's shown on right button release, using this event type and macro
+// allows to write code which works correctly on all platforms
+#ifdef __WXMSW__
+    #define wxEVT_TASKBAR_CLICK wxEVT_TASKBAR_RIGHT_UP
+#else
+    #define wxEVT_TASKBAR_CLICK wxEVT_TASKBAR_RIGHT_DOWN
 #endif
-    // wxHAS_TASK_BAR_ICON
+#define EVT_TASKBAR_CLICK(fn)        wx__DECLARE_TASKBAREVT(CLICK, fn)
 
-#endif
-    // _WX_TASKBAR_H_BASE_
+#endif // wxHAS_TASK_BAR_ICON
+
+#endif // _WX_TASKBAR_H_BASE_

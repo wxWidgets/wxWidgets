@@ -103,6 +103,7 @@ All:
 wxMSW:
 
 - Fixed compilation with Borland C++ in Unicode mode but without MSLU
+- Show taskbar icon menu on right button release, not press
 
 wxGTK:
 
