@@ -1,5 +1,5 @@
 %define _prefix /usr
-%define ver  2.8.0
+%define ver  2.8.1
 %define ver2 2.8
 %define rel  1
 
