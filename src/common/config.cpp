@@ -297,6 +297,24 @@ wxConfigPathChanger::~wxConfigPathChanger()
   }
 }
 
+// this is a wxConfig method but it's mainly used with wxConfigPathChanger
+/* static */
+wxString wxConfigBase::RemoveTrailingSeparator(const wxString& key)
+{
+    wxString path(key);
+
+    // don't remove the only separator from a root group path!
+    while ( path.length() > 1 )
+    {
+        if ( *path.rbegin() != wxCONFIG_PATH_SEPARATOR )
+            break;
+
+        path.erase(path.end() - 1);
+    }
+
+    return path;
+}
+
 #endif // wxUSE_CONFIG
 
 // ----------------------------------------------------------------------------
