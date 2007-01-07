@@ -172,8 +172,10 @@ public:
     virtual bool IsSelected(const wxTreeItemId& item) const = 0;
         // is item text in bold font?
     virtual bool IsBold(const wxTreeItemId& item) const = 0;
+#if wxABI_VERSION >= 20801
         // is the control empty?
     bool IsEmpty() const;
+#endif // wxABI 2.8.1+
 
 
     // number of children
@@ -296,10 +298,12 @@ public:
     void ExpandAll();
         // collapse the item without removing its children
     virtual void Collapse(const wxTreeItemId& item) = 0;
+#if wxABI_VERSION >= 20801
         // collapse the item and all its childs and thats childs
     void CollapseAllChildren(const wxTreeItemId& item);
         // collapse all items
     void CollapseAll();
+#endif // wxABI 2.8.1+
         // collapse the item and remove all children
     virtual void CollapseAndReset(const wxTreeItemId& item) = 0;
         // toggles the current state

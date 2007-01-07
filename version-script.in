@@ -36,6 +36,9 @@
 		*wxListCtrl*OnRightDown*;
 		*wxListCtrl*OnMiddleDown*;
 		*wxListCtrl*FireMouseEvent*;
+        # wxTreeCtrl::CollapseAll[Children]() and IsEmpty
+        *wxTreeCtrl*CollapseAll*;
+        *wxTreeCtrl*IsEmpty*;
 };
 
 # symbols available since the beginning of this branch are only given
