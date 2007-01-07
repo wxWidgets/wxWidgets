@@ -136,6 +136,7 @@ protected:
     void OnFreeze(wxCommandEvent& event);
     void OnThaw(wxCommandEvent& event);
     void OnToggleLines(wxCommandEvent& event);
+    void OnToggleMacUseGeneric(wxCommandEvent& event);
 
     void OnUpdateShowColInfo(wxUpdateUIEvent& event);
     void OnUpdateToggleMultiSel(wxUpdateUIEvent& event);
@@ -203,6 +204,7 @@ enum
     LIST_FREEZE,
     LIST_THAW,
     LIST_TOGGLE_LINES,
+    LIST_MAC_USE_GENERIC,
 
     LIST_CTRL                   = 1000
 };

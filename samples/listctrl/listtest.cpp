@@ -42,6 +42,7 @@
 #include "wx/timer.h"           // for wxStopWatch
 #include "wx/colordlg.h"        // for wxGetColourFromUser
 #include "wx/settings.h"
+#include "wx/sysopt.h"
 
 #include "listtest.h"
 
@@ -91,6 +92,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(LIST_FREEZE, MyFrame::OnFreeze)
     EVT_MENU(LIST_THAW, MyFrame::OnThaw)
     EVT_MENU(LIST_TOGGLE_LINES, MyFrame::OnToggleLines)
+    EVT_MENU(LIST_MAC_USE_GENERIC, MyFrame::OnToggleMacUseGeneric)
 
     EVT_UPDATE_UI(LIST_SHOW_COL_INFO, MyFrame::OnUpdateShowColInfo)
     EVT_UPDATE_UI(LIST_TOGGLE_MULTI_SEL, MyFrame::OnUpdateToggleMultiSel)
@@ -222,6 +224,9 @@ MyFrame::MyFrame(const wxChar *title)
     menuView->Append(LIST_SMALL_ICON_TEXT_VIEW, _T("Small icon &view with text\tF6"));
     menuView->Append(LIST_VIRTUAL_VIEW, _T("&Virtual view\tF7"));
     menuView->Append(LIST_SMALL_VIRTUAL_VIEW, _T("Small virtual vie&w\tF8"));
+#ifdef __WXMAC__
+    menuView->AppendCheckItem(LIST_MAC_USE_GENERIC, _T("Mac: Use Generic Control"));
+#endif
 
     wxMenu *menuList = new wxMenu;
     menuList->Append(LIST_FOCUS_LAST, _T("&Make last item current\tCtrl-L"));
@@ -338,6 +343,11 @@ void MyFrame::OnThaw(wxCommandEvent& WXUNUSED(event))
 void MyFrame::OnToggleLines(wxCommandEvent& event)
 {
     m_listCtrl->SetSingleStyle(wxLC_HRULES | wxLC_VRULES, event.IsChecked());
+}
+
+void MyFrame::OnToggleMacUseGeneric(wxCommandEvent& event)
+{
+    wxSystemOptions::SetOption(wxT("mac.listctrl.always_use_generic"), event.IsChecked());
 }
 
 void MyFrame::OnFocusLast(wxCommandEvent& WXUNUSED(event))
