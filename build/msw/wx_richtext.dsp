@@ -970,6 +970,10 @@ SOURCE=..\..\include\wx\richtext\richtextformatdlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\richtext\richtexthtml.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\richtext\richtextprint.h
 # End Source File
 # Begin Source File
