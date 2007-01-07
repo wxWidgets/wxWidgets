@@ -73,7 +73,8 @@ ver_for_sed="$ver_major\.$ver_minor\.$ver_release"
 
 run_sed include/wx/version.h \
     "s/^\(#define wxRELEASE_NUMBER *\) $ver_release$/\1 $ver_release_new/" \
-    "s/^\(#define wxSUBRELEASE_NUMBER *\) [0-9]\{1,\}$/\1 0/"
+    "s/^\(#define wxSUBRELEASE_NUMBER *\) [0-9]\{1,\}$/\1 0/" \
+    "/^#define wxVERSION_STRING/s/$ver_for_sed/$ver_string_new/"
 
 run_sed configure.in \
     "/^AC_INIT/s/$ver_for_sed/$ver_string_new/" \
