@@ -21,6 +21,7 @@
 #include "wx/os2/private.h"
 #include "wx/intl.h"
 #include "wx/apptrait.h"
+#include "wx/filename.h"
 
 #include <ctype.h>
 #ifdef __EMX__
@@ -84,7 +85,8 @@ bool wxGetHostName(
     wxChar*                         zSysname;
     const wxChar*                   zDefaultHost = _T("noname");
 
-    if ((zSysname = wxGetenv(_T("SYSTEM_NAME"))) == NULL)
+    if ((zSysname = wxGetenv(_T("SYSTEM_NAME"))) == NULL &&
+	(zSysname = wxGetenv(_T("HOSTNAME"))) == NULL)
     {
         ::PrfQueryProfileString( HINI_PROFILE
                                 ,(PSZ)WX_SECTION
@@ -497,6 +499,51 @@ wxChar* wxGetUserHome ( const wxString &rUser )
     return (wxChar*)wxEmptyString; // No home known!
 }
 
+bool wxGetDiskSpace(const wxString& path,
+                    wxDiskspaceSize_t *pTotal,
+                    wxDiskspaceSize_t *pFree)
+{
+    if (path.empty())
+        return false;
+
+    wxFileName fn(path);
+    FSALLOCATE fsaBuf = {0};
+    APIRET rc = NO_ERROR;
+    ULONG disknum = 0;
+
+    fn.MakeAbsolute();
+
+    if (wxDirExists(fn.GetFullPath()) == false)
+        return false;
+
+    disknum = 1 + wxToupper(fn.GetVolume().GetChar(0)) - _T('A');
+
+    rc = ::DosQueryFSInfo(disknum,             // 1 = A, 2 = B, 3 = C, ...
+                          FSIL_ALLOC,          // allocation info
+                          (PVOID)&fsaBuf,
+                          sizeof(FSALLOCATE));
+
+    if (rc != NO_ERROR)
+        return false;
+    else
+    {
+        if(pTotal)
+        {
+           // to try to avoid 32-bit overflow, let's not multiply right away
+            // (num of alloc units)
+            *pTotal = fsaBuf.cUnit;  
+            // * (num of sectors per alloc unit) * (num of bytes per sector)
+            (*pTotal) *= fsaBuf.cSectorUnit * fsaBuf.cbSector;
+        }
+        if(pFree)
+        {
+            *pFree = fsaBuf.cUnitAvail;
+            (*pFree) *= fsaBuf.cSectorUnit * fsaBuf.cbSector;
+        }
+        return true;
+    }
+}
+ 
 wxString WXDLLEXPORT wxPMErrorToStr(ERRORID vError)
 {
     wxString                        sError;
