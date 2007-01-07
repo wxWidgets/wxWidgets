@@ -7091,7 +7091,10 @@ if test "$wxUSE_WEBKIT" = "yes"; then
                            AC_MSG_WARN([WebKit headers not found; disabling wxWebKit])
                            wxUSE_WEBKIT=no
                         ],
-                        [#include <Carbon/Carbon.h>])
+                        [
+                           #include <Carbon/Carbon.h>
+                           #include <WebKit/WebKit.h>
+                        ])
         CPPFLAGS="$old_CPPFLAGS"
     elif test "$wxUSE_COCOA" = 1; then
         AC_DEFINE(wxUSE_WEBKIT)

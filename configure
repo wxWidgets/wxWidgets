@@ -46748,6 +46748,7 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #include <Carbon/Carbon.h>
+#include <WebKit/WebKit.h>
 
 #include <WebKit/HIWebView.h>
 _ACEOF
