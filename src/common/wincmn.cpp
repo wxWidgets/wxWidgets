@@ -2286,7 +2286,7 @@ void wxWindowBase::OnMiddleClick( wxMouseEvent& event )
         msg.Printf(_T("wxWidgets Library (%s port)\n")
                    _T("Version %d.%d.%d%s%s, compiled at %s %s\n")
                    _T("Runtime version of toolkit used is %d.%d.%s\n")
-                   _T("Copyright (c) 1995-2006 wxWidgets team"),
+                   _T("Copyright (c) 1995-2007 wxWidgets team"),
                    wxPlatformInfo::Get().GetPortIdName().c_str(),
                    wxMAJOR_VERSION,
                    wxMINOR_VERSION,
