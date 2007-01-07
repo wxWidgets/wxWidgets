@@ -98,6 +98,7 @@ All:
 - Added wxTreeCtrl::CollapseAll[Children]() and IsEmpty() (Francesco Montorsi)
 - Several RTL-related positioning fixes (Diaa Sami)
 - Fix wxConfig::DeleteGroup() for arguments with trailing slash (David Hart)
+- Fix memory leak in wxGrid::ShowCellEditControl() (Christian Sturmlechner)
 
 wxMSW:
 

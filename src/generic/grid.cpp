@@ -8309,7 +8309,8 @@ void wxGrid::ShowCellEditControl()
             // might not cover the entire cell
             wxClientDC dc( m_gridWin );
             PrepareDC( dc );
-            dc.SetBrush(wxBrush(GetCellAttr(row, col)->GetBackgroundColour(), wxSOLID));
+            wxGridCellAttr* attr = GetCellAttr(row, col);
+            dc.SetBrush(wxBrush(attr->GetBackgroundColour(), wxSOLID));
             dc.SetPen(*wxTRANSPARENT_PEN);
             dc.DrawRectangle(rect);
 
@@ -8329,7 +8330,6 @@ void wxGrid::ShowCellEditControl()
             if (rect.y > 0)
                 rect.y--;
 
-            wxGridCellAttr* attr = GetCellAttr(row, col);
             wxGridCellEditor* editor = attr->GetEditor(this, row, col);
             if ( !editor->IsCreated() )
             {
