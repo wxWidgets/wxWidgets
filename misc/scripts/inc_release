@@ -84,4 +84,6 @@ for f in *.spec; do
     run_sed $f "/^%define *ver/s/$ver_for_sed/$ver_string_new/"
 done
 
+run_sed docs/latex/wx/manual.tex \
+    "/^\\\\\\\\title/s/$ver_for_sed/$ver_string_new/"
 run_sed build/script/win_docs.bat "/SET WXW_VER=/s/$ver_for_sed/$ver_string_new/"
