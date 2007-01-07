@@ -17,6 +17,14 @@ msg() {
     echo "$progname: $*"
 }
 
+msgn() {
+    echo -n "$progname: $*"
+}
+
+msgc() {
+    echo "$*"
+}
+
 run_sed() {
     filename=$1
     shift
@@ -26,8 +34,15 @@ run_sed() {
         shift
     done
 
-    msg "	updating $filename"
-    eval "sed -i $cmd $filename"
+    msgn "	processing $filename ...	"
+    eval "sed $cmd $filename" > $filename.$$
+    if cmp -s $filename $filename.$$; then
+        rm $filename.$$
+        msgc "unchanged"
+    else
+        mv $filename.$$ $filename
+        msgc "done"
+    fi
 }
 
 progname=`basename $0`
