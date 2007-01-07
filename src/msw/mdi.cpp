@@ -859,6 +859,21 @@ void wxMDIChildFrame::DoSetClientSize(int width, int height)
   GetEventHandler()->ProcessEvent(event);
 }
 
+// Unlike other wxTopLevelWindowBase, the mdi child's "GetPosition" is not the
+//  same as its GetScreenPosition
+void wxMDIChildFrame::DoGetScreenPosition(int *x, int *y) const
+{
+  HWND hWnd = GetHwnd();
+
+  RECT rect;
+  ::GetWindowRect(hWnd, &rect);
+  if (x)
+     *x = rect.left;
+  if (y)
+     *y = rect.top;
+}
+
+
 void wxMDIChildFrame::DoGetPosition(int *x, int *y) const
 {
   RECT rect;

@@ -178,6 +178,7 @@ public:
     virtual bool Show(bool show = true);
 
 protected:
+    virtual void DoGetScreenPosition(int *x, int *y) const;
     virtual void DoGetPosition(int *x, int *y) const;
     virtual void DoSetClientSize(int width, int height);
     virtual void InternalSetMenuBar();
