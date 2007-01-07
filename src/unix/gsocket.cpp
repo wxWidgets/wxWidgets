@@ -201,40 +201,87 @@ static struct hostent * deepCopyHostent(struct hostent *h,
 					const struct hostent *he,
 					char *buffer, int size, int *err)
 {
+  /* copy old structure */
   memcpy(h, he, sizeof(struct hostent));
+
+  /* copy name */
   int len = strlen(h->h_name);
   if (len > size)
-    len = size - 1;
+  {
+    *err = ENOMEM;
+    return NULL;
+  }
   memcpy(buffer, h->h_name, len);
   buffer[len] = '\0';
   h->h_name = buffer;
-  buffer += len + 1;
-  size -= len + 1;
+
+  /* track position in the buffer */
+  int pos = len + 1;
+
+  /* reuse len to store address length */
   len = h->h_length;
-  for (char **p = h->h_addr_list; *p != 0; p++) {
-    if (size < len){
+
+  /* ensure pointer alignment */
+  unsigned int misalign = sizeof(char *) - pos%sizeof(char *);
+  if(misalign < sizeof(char *))
+    pos += misalign;
+
+  /* leave space for pointer list */
+  char **p = h->h_addr_list, **q;
+  char **h_addr_list = (char **)(buffer + pos);
+  while(*(p++) != 0)
+    pos += sizeof(char *);
+
+  /* copy addresses and fill new pointer list */
+  for (p = h->h_addr_list, q = h_addr_list; *p != 0; p++, q++)
+  {
+    if (size < pos + len)
+    {
       *err = ENOMEM;
       return NULL;
     }
-    memcpy(buffer, *p, len);
-    *p = buffer;
-    buffer += len;
-    size -= len;
+    memcpy(buffer + pos, *p, len); /* copy content */
+    *q = buffer + pos; /* set copied pointer to copied content */
+    pos += len;
   }
-  for (char **q = h->h_aliases; size > 0 && *q != 0; q++){
-    len = strlen(*q);
-    if (len > size)
-      len = size - 1;
-    memcpy(buffer, *q, len);
-    buffer[len] = '\0';
-    *q = buffer;
-    buffer += len + 1;
-    size -= len + 1;
+  *++q = 0; /* null terminate the pointer list */
+  h->h_addr_list = h_addr_list; /* copy pointer to pointers */
+
+  /* ensure word alignment of pointers */
+  misalign = sizeof(char *) - pos%sizeof(char *);
+  if(misalign < sizeof(char *))
+    pos += misalign;
+  
+  /* leave space for pointer list */
+  p = h->h_aliases;
+  char **h_aliases = (char **)(buffer + pos);
+  while(*(p++) != 0)
+    pos += sizeof(char *);
+  
+  /* copy aliases and fill new pointer list */
+  for (p = h->h_aliases, q = h_aliases; *p != 0; p++, q++)
+  {
+    len = strlen(*p);
+    if (size <= pos + len)
+    {
+      *err = ENOMEM;
+      return NULL;
+    }
+    memcpy(buffer + pos, *p, len); /* copy content */
+    buffer[pos + len] = '\0';
+    *q = buffer + pos; /* set copied pointer to copied content */
+    pos += len + 1;
   }
+  *++q = 0; /* null terminate the pointer list */
+  h->h_aliases = h_aliases; /* copy pointer to pointers */
+
   return h;
 }
 #endif
 
+#if defined(HAVE_GETHOSTBYNAME) && wxUSE_THREADS
+static wxMutex nameLock;
+#endif
 struct hostent * wxGethostbyname_r(const char *hostname, struct hostent *h,
 				   void *buffer, int size, int *err)
 
@@ -256,7 +303,6 @@ struct hostent * wxGethostbyname_r(const char *hostname, struct hostent *h,
     he = h;
 #elif defined(HAVE_GETHOSTBYNAME)
 #if wxUSE_THREADS
-  static wxMutex nameLock;
   wxMutexLocker locker(nameLock);
 #endif
   he = gethostbyname(hostname);
@@ -268,6 +314,9 @@ struct hostent * wxGethostbyname_r(const char *hostname, struct hostent *h,
   return he;
 }
 
+#if defined(HAVE_GETHOSTBYNAME) && wxUSE_THREADS
+static wxMutex addrLock;
+#endif
 struct hostent * wxGethostbyaddr_r(const char *addr_buf, int buf_size,
 				   int proto, struct hostent *h,
 				   void *buffer, int size, int *err)
@@ -291,7 +340,6 @@ struct hostent * wxGethostbyaddr_r(const char *addr_buf, int buf_size,
     he = h;
 #elif defined(HAVE_GETHOSTBYNAME)
 #if wxUSE_THREADS
-  static wxMutex addrLock;
   wxMutexLocker locker(addrLock);
 #endif
   he = gethostbyaddr(addr_buf, buf_size, proto);
@@ -308,37 +356,67 @@ static struct servent * deepCopyServent(struct servent *s,
 					const struct servent *se,
 					char *buffer, int size)
 {
+  /* copy plain old structure */
   memcpy(s, se, sizeof(struct servent));
+
+  /* copy name */
   int len = strlen(s->s_name);
-  if (len > size)
-    len = size - 1;
+  if (len >= size)
+  {
+    return NULL;
+  }
   memcpy(buffer, s->s_name, len);
   buffer[len] = '\0';
   s->s_name = buffer;
-  buffer += len + 1;
-  size -= len + 1;
+
+  /* track position in the buffer */
+  int pos = len + 1;
+
+  /* copy protocol */
   len = strlen(s->s_proto);
-  if (len > size)
-    len = size - 1;
-  memcpy(buffer, s->s_proto, len);
-  buffer[len] = '\0';
-  s->s_proto = buffer;
-  buffer += len + 1;
-  size -= len + 1;
-  for (char **q = s->s_aliases; size > 0 && *q != 0; q++){
-    len = strlen(*q);
-    if (len > size)
-      len = size - 1;
-    memcpy(buffer, *q, len);
-    buffer[len] = '\0';
-    *q = buffer;
-    buffer += len + 1;
-    size -= len + 1;
+  if (pos + len >= size)
+  {
+    return NULL;
   }
+  memcpy(buffer + pos, s->s_proto, len);
+  buffer[pos + len] = '\0';
+  s->s_proto = buffer + pos;
+
+  /* track position in the buffer */
+  pos += len + 1;
+
+  /* ensure pointer alignment */
+  unsigned int misalign = sizeof(char *) - pos%sizeof(char *);
+  if(misalign < sizeof(char *))
+    pos += misalign;
+  
+  /* leave space for pointer list */
+  char **p = s->s_aliases, **q;
+  char **s_aliases = (char **)(buffer + pos);
+  while(*(p++) != 0)
+    pos += sizeof(char *);
+  
+  /* copy addresses and fill new pointer list */
+  for (p = s->s_aliases, q = s_aliases; *p != 0; p++, q++){
+    len = strlen(*p);
+    if (size <= pos + len)
+    {
+      return NULL;
+    }
+    memcpy(buffer + pos, *p, len); /* copy content */
+    buffer[pos + len] = '\0';
+    *q = buffer + pos; /* set copied pointer to copied content */
+    pos += len + 1;
+  }
+  *++q = 0; /* null terminate the pointer list */
+  s->s_aliases = s_aliases; /* copy pointer to pointers */
   return s;
 }
 #endif
 
+#if defined(HAVE_GETSERVBYNAME) && wxUSE_THREADS
+static wxMutex servLock;
+#endif
 struct servent *wxGetservbyname_r(const char *port, const char *protocol,
 				  struct servent *serv, void *buffer, int size)
 {
@@ -355,7 +433,6 @@ struct servent *wxGetservbyname_r(const char *port, const char *protocol,
     se = serv;
 #elif defined(HAVE_GETSERVBYNAME)
 #if wxUSE_THREADS
-  static wxMutex servLock;
   wxMutexLocker locker(servLock);
 #endif
   se = getservbyname(port, protocol);
