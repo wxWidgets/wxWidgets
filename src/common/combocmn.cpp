@@ -1881,6 +1881,10 @@ void wxComboCtrlBase::ShowPopup()
 
     int rightX = scrPos.x + ctrlSz.x + m_extRight - szp.x;
     int leftX = scrPos.x - m_extLeft;
+
+    if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
+        leftX -= ctrlSz.x;
+
     int screenWidth = wxSystemSettings::GetMetric( wxSYS_SCREEN_X );
 
     // If there is not enough horizontal space, anchor on the other side.
