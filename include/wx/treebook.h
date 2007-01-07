@@ -135,6 +135,7 @@ public:
     virtual wxSize CalcSizeFromPage(const wxSize& sizePage) const;
     virtual int SetSelection(size_t n) { return DoSetSelection(n, SetSelection_SendEvent); }
     virtual int ChangeSelection(size_t n) { return DoSetSelection(n); }
+    virtual int HitTest(const wxPoint& pt, long *flags = NULL) const;
     virtual void SetImageList(wxImageList *imageList);
     virtual void AssignImageList(wxImageList *imageList);
     virtual bool DeleteAllPages();
@@ -145,9 +146,6 @@ protected:
 
     // This subclass of wxBookCtrlBase accepts NULL page pointers (empty pages)
     virtual bool AllowNullPage() const { return true; }
-
-    // return the page corresponding to the tab at the specified position
-    virtual int HitTest(const wxPoint& pt, long *flags = NULL) const;
 
     // event handlers
     void OnTreeSelectionChange(wxTreeEvent& event);

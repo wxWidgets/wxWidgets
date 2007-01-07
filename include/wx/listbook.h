@@ -65,6 +65,7 @@ public:
                 const wxString& name = wxEmptyString);
 
 
+    // overridden base class methods
     virtual int GetSelection() const;
     virtual bool SetPageText(size_t n, const wxString& strText);
     virtual wxString GetPageText(size_t n) const;
@@ -78,6 +79,7 @@ public:
                             int imageId = -1);
     virtual int SetSelection(size_t n) { return DoSetSelection(n, SetSelection_SendEvent); }
     virtual int ChangeSelection(size_t n) { return DoSetSelection(n); }
+    virtual int HitTest(const wxPoint& pt, long *flags = NULL) const;
     virtual void SetImageList(wxImageList *imageList);
 
     virtual bool DeleteAllPages();
@@ -89,9 +91,6 @@ protected:
 
     // get the size which the list control should have
     virtual wxSize GetControllerSize() const;
-
-    // return the page corresponding to the tab at the specified position
-    virtual int HitTest(const wxPoint& pt, long *flags = NULL) const;
 
     void UpdateSelectedPage(size_t newsel);
 
