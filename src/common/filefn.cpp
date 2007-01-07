@@ -1575,6 +1575,14 @@ wxString wxGetCwd()
 bool wxSetWorkingDirectory(const wxString& d)
 {
 #if defined(__OS2__)
+    if (d[1] == ':')
+    {
+        ::DosSetDefaultDisk(1 + wxToupper(d[0]) - _T('A'));
+	// do not call DosSetCurrentDir when just changing drive,
+	// since it requires e.g. "d:." instead of "d:"!
+	if (d.length() == 2)
+	    return true;
+    }
     return (::DosSetCurrentDir((PSZ)d.c_str()) == 0);
 #elif defined(__UNIX__) || defined(__WXMAC__) || defined(__DOS__)
     return (chdir(wxFNSTRINGCAST d.fn_str()) == 0);
