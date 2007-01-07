@@ -95,6 +95,7 @@ All:
 
 - Fix compilation with wxUSE_STL=1
 - wxGrid::GetBestSize() returns same size the grid would have after AutoSize()
+- Added wxTreeCtrl::CollapseAll[Children]() and IsEmpty() (Francesco Montorsi)
 
 wxMSW:
 

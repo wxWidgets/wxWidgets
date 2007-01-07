@@ -13,7 +13,7 @@
 
 A tree control presents information as a hierarchy, with items that may be expanded
 to show further items. Items in a tree control are referenced by wxTreeItemId handles,
-which may be tested for validity by calling wxTreeItemId::IsOk.
+which may be tested for validity by calling \helpref{wxTreeItemId::IsOk}{wxtreeitemidisok}.
 
 To intercept events from a tree control, use the event table macros described in \helpref{wxTreeEvent}{wxtreeevent}.
 
@@ -238,6 +238,28 @@ See also \helpref{SetStateImageList}{wxtreectrlsetstateimagelist}.
 Collapses the given item.
 
 
+\membersection{wxTreeCtrl::CollapseAll}\label{wxtreectrlcollapseall}
+
+\func{void}{CollapseAll}{\void}
+
+Collapses the root item.
+
+\wxheading{See also}
+
+\helpref{ExpandAll}{wxtreectrlexpandall}
+
+
+\membersection{wxTreeCtrl::CollapseAllChildren}\label{wxtreectrlcollapseallchildren}
+
+\func{void}{CollapseAllChildren}{\param{const wxTreeItemId\&}{ item}}
+
+Collapses this item and all of its children, recursively.
+
+\wxheading{See also}
+
+\helpref{ExpandAllChildren}{wxtreectrlexpandallchildren}
+
+
 \membersection{wxTreeCtrl::CollapseAndReset}\label{wxtreectrlcollapseandreset}
 
 \func{void}{CollapseAndReset}{\param{const wxTreeItemId\&}{ item}}
@@ -333,7 +355,7 @@ Expands the given item.
 
 \membersection{wxTreeCtrl::ExpandAll}\label{wxtreectrlexpandall}
 
-\func{void}{Expand}{\void}
+\func{void}{ExpandAll}{\void}
 
 Expands all items in the tree.
 
@@ -728,6 +750,13 @@ Returns {\tt true} if the given item is in bold state.
 See also: \helpref{SetItemBold}{wxtreectrlsetitembold}
 
 
+\membersection{wxTreeCtrl::IsEmpty}\label{wxtreectrlisempty}
+
+\constfunc{bool}{IsEmpty}{}
+
+Returns \true if the control is empty (i.e. has no items, even no root one).
+
+
 \membersection{wxTreeCtrl::IsExpanded}\label{wxtreectrlisexpanded}
 
 \constfunc{bool}{IsExpanded}{\param{const wxTreeItemId\&}{ item}}
@@ -1022,4 +1051,60 @@ all items if it does have this style.
 \func{void}{UnselectItem}{\param{const wxTreeItemId\& }{item}}
 
 Unselects the given item. This works in multiselection controls only.
+
+
+
+
+
+%% the wxTreeItemId opaque class
+
+
+\section{\class{wxTreeItemId}}\label{wxtreeitemid}
+
+An opaque reference to a tree item.
+
+
+\wxheading{Derived from}
+
+None
+
+\wxheading{Include files}
+
+<wx/treebase.h>
+
+\wxheading{See also}
+
+\helpref{wxTreeItemCtrl}{wxtreeitemctrl}, \helpref{wxTreeItemData}{wxtreeitemdata},\\
+\helpref{wxTreeCtrl overview}{wxtreectrloverview}
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxTreeItemId::wxTreeItemId}\label{wxtreeitemidconstr}
+
+\func{}{wxTreeItemId}{\void}
+
+Default constructor. wxTreemItemIds are not meant to be constructed explicitly by
+the user; they are returned by the \helpref{wxTreeItemCtrl}{wxtreeitemctrl} functions instead.
+
+
+\membersection{wxTreeItemId::IsOk}\label{wxtreeitemidisok}
+
+\constfunc{bool}{IsOk}{}
+
+Returns \true if this instance is referencing a valid tree item.
+
+
+\membersection{Operators}\label{wxtreeitemidoperators}
+
+\constfunc{void}{operator $!$}{}
+
+Synonim for \helpref{IsOk}{wxtreeitemidisok}
+
+
+\constfunc{bool}{operator $==$}{\param{const wxTreeItemId\& }{item}}
+
+\constfunc{bool}{operator $!=$}{\param{const wxTreeItemId\& }{item}}
+
+Operators for comparison between \helpref{wxTreeItemId}{wxtreeitemid} objects.
 

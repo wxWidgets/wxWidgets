@@ -183,6 +183,9 @@ wxSize wxTreeCtrlBase::DoGetBestSize() const
 
 void wxTreeCtrlBase::ExpandAll()
 {
+    if ( IsEmpty() )
+        return;
+
     ExpandAllChildren(GetRootItem());
 }
 
@@ -200,6 +203,34 @@ void wxTreeCtrlBase::ExpandAllChildren(const wxTreeItemId& item)
     {
         ExpandAllChildren(idCurr);
     }
+}
+
+void wxTreeCtrlBase::CollapseAll()
+{
+    if ( IsEmpty() )
+        return;
+
+    CollapseAllChildren(GetRootItem());
+}
+
+void wxTreeCtrlBase::CollapseAllChildren(const wxTreeItemId& item)
+{
+    // first (recursively) collapse all the children
+    wxTreeItemIdValue cookie;
+    for ( wxTreeItemId idCurr = GetFirstChild(item, cookie);
+          idCurr.IsOk();
+          idCurr = GetNextChild(item, cookie) )
+    {
+        CollapseAllChildren(idCurr);
+    }
+
+    // then collapse this element too
+    Collapse(item);
+}
+
+bool wxTreeCtrlBase::IsEmpty() const
+{
+    return !GetRootItem().IsOk();
 }
 
 #endif // wxUSE_TREECTRL
