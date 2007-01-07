@@ -51,8 +51,14 @@
 
 #else
 
+#if !defined(__GNUC__) || wxCHECK_GCC_VERSION(2, 95)
+// namespace support was first implemented in gcc-2.95,
+// so avoid using it for older versions.
 namespace wxPrivate
 {
+#else
+#define wxPrivate
+#endif
     // in the original implementation this was a member template function of
     // ScopeGuardImplBase but gcc 2.8 which is still used for OS/2 doesn't
     // support member templates and so we must make it global
@@ -75,7 +81,9 @@ namespace wxPrivate
     void Use(const T& WXUNUSED(t))
     {
     }
+#if !defined(__GNUC__) || wxCHECK_GCC_VERSION(2, 95)
 } // namespace wxPrivate
+#endif
 
 #define wxPrivateOnScopeExit(n) wxPrivate::OnScopeExit(n)
 #define wxPrivateUse(n) wxPrivate::Use(n)
