@@ -217,7 +217,7 @@ enum wxPrintfArgType {
 
     wxPAT_INT,          // %d, %i, %o, %u, %x, %X
     wxPAT_LONGINT,      // %ld, etc
-#if SIZEOF_LONG_LONG
+#ifdef wxLongLong_t
     wxPAT_LONGLONGINT,  // %Ld, etc
 #endif
     wxPAT_SIZET,        // %Zd, etc
@@ -242,7 +242,7 @@ enum wxPrintfArgType {
 typedef union {
     int pad_int;                        //  %d, %i, %o, %u, %x, %X
     long int pad_longint;               // %ld, etc
-#if SIZEOF_LONG_LONG
+#ifdef wxLongLong_t
     long long int pad_longlongint;      // %Ld, etc
 #endif
     size_t pad_sizet;                   // %Zd, etc
@@ -351,7 +351,8 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
 
     // temporary parse data
     size_t flagofs = 1;
-    bool in_prec, prec_dot;
+    bool in_prec,       // true if we found the dot in some previous iteration
+         prec_dot;      // true if the dot has been already added to m_szFlags
     int ilen = 0;
 
     m_bAlignLeft = in_prec = prec_dot = false;
@@ -421,6 +422,25 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
                 CHECK_PREC
                 m_szFlags[flagofs++] = char(ch);
                 break;
+#ifdef __WXMSW__
+            // under Windows we support the special '%I64' notation as longlong
+            // integer conversion specifier for MSVC compatibility
+            // (it behaves exactly as '%lli' or '%Li' or '%qi')
+            case wxT('I'):
+                if (*(m_pArgEnd+1) != wxT('6') ||
+                    *(m_pArgEnd+2) != wxT('4'))
+                    return false;       // bad format
+
+                m_pArgEnd++;
+                m_pArgEnd++;
+
+                ilen = 2;
+                CHECK_PREC
+                m_szFlags[flagofs++] = char(ch);
+                m_szFlags[flagofs++] = '6';
+                m_szFlags[flagofs++] = '4';
+                break;
+#endif      // __WXMSW__
 
             case wxT('Z'):
                 ilen = 3;
@@ -512,7 +532,7 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
                 else if (ilen == 1)
                     m_type = wxPAT_LONGINT;
                 else if (ilen == 2)
-#if SIZEOF_LONG_LONG
+#ifdef wxLongLong_t
                     m_type = wxPAT_LONGLONGINT;
 #else // !long long
                     m_type = wxPAT_LONGINT;
@@ -682,7 +702,7 @@ bool wxPrintfConvSpec::LoadArg(wxPrintfArg *p, va_list &argptr)
         case wxPAT_LONGINT:
             p->pad_longint = va_arg(argptr, long int);
             break;
-#if SIZEOF_LONG_LONG
+#ifdef wxLongLong_t
         case wxPAT_LONGLONGINT:
             p->pad_longlongint = va_arg(argptr, long long int);
             break;
@@ -766,7 +786,7 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p, size_t
             lenScratch = system_sprintf(szScratch, wxMAX_SVNPRINTF_SCRATCHBUFFER_LEN, m_szFlags, p->pad_longint);
             break;
 
-#if SIZEOF_LONG_LONG
+#ifdef wxLongLong_t
         case wxPAT_LONGLONGINT:
             lenScratch = system_sprintf(szScratch, wxMAX_SVNPRINTF_SCRATCHBUFFER_LEN, m_szFlags, p->pad_longlongint);
             break;
@@ -932,7 +952,7 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p, size_t
     {
         case wxPAT_INT:
         case wxPAT_LONGINT:
-#if SIZEOF_LONG_LONG
+#ifdef wxLongLong_t
         case wxPAT_LONGLONGINT:
 #endif
         case wxPAT_SIZET:
