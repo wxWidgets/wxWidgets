@@ -56,16 +56,6 @@
 // private functions
 // ----------------------------------------------------------------------------
 
-// wrapper for TreeView_HitTest
-static HTREEITEM GetItemFromPoint(HWND hwndTV, int x, int y)
-{
-    TV_HITTESTINFO tvht;
-    tvht.pt.x = x;
-    tvht.pt.y = y;
-
-    return (HTREEITEM)TreeView_HitTest(hwndTV, &tvht);
-}
-
 // wrappers for TreeView_GetItem/TreeView_SetItem
 static bool IsItemSelected(HWND hwndTV, HTREEITEM hItem)
 {
@@ -2059,13 +2049,12 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
         // same meaning for all of them
         int x = GET_X_LPARAM(lParam),
             y = GET_Y_LPARAM(lParam);
-        HTREEITEM htItem = GetItemFromPoint(GetHwnd(), x, y);
 
         TV_HITTESTINFO tvht;
         tvht.pt.x = x;
         tvht.pt.y = y;
 
-        (void) TreeView_HitTest(GetHwnd(), &tvht);
+        HTREEITEM htItem = TreeView_HitTest(GetHwnd(), &tvht);
 
         switch ( nMsg )
         {
