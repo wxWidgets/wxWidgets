@@ -33,6 +33,8 @@
     #include "wx/layout.h"
     #include "wx/statusbr.h"
     #include "wx/menuitem.h"
+    #include "wx/treectrl.h"
+    #include "wx/listctrl.h"
 #endif
 
 #include "wx/tooltip.h"
@@ -167,6 +169,9 @@ static const EventTypeSpec eventList[] =
     { kEventClassControl , kEventControlVisibilityChanged } ,
     { kEventClassControl , kEventControlEnabledStateChanged } ,
     { kEventClassControl , kEventControlHiliteChanged } ,
+
+    { kEventClassControl , kEventControlActivate } ,
+    { kEventClassControl , kEventControlDeactivate } ,
 #endif
     { kEventClassControl , kEventControlSetFocusPart } ,
 
@@ -293,6 +298,16 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
 
         case kEventControlHiliteChanged :
             thisWindow->MacHiliteChanged() ;
+            break ;
+            
+        case kEventControlActivate :
+        case kEventControlDeactivate :
+            if ( thisWindow->IsKindOf( CLASSINFO( wxTreeCtrl ) ) 
+                    || thisWindow->IsKindOf( CLASSINFO( wxListCtrl ) ) 
+                )
+                thisWindow->Refresh();
+            
+            //thisWindow->MacActivateStateChanged() ;
             break ;
 #endif
 

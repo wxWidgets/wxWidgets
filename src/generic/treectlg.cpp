@@ -2232,7 +2232,11 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
         else
         {
             int flags = wxCONTROL_SELECTED;
-            if (m_hasFocus)
+            if (m_hasFocus
+#ifdef __WXMAC__
+                && IsControlActive( (ControlRef)GetHandle() )
+#endif
+            )
                 flags |= wxCONTROL_FOCUSED;
             if ((item == m_current) && (m_hasFocus))
                 flags |= wxCONTROL_CURRENT;
@@ -2374,7 +2378,7 @@ void wxGenericTreeCtrl::PaintLevel( wxGenericTreeItem *item, wxDC &dc, int level
             // rectangle, so we want to make sure that the text is visible
             // against the normal background, not the highlightbackground, so
             // don't use the highlight text colour unless we have the focus.
-             && m_hasFocus
+             && m_hasFocus && IsControlActive( (ControlRef)GetHandle() )
 #endif
             )
         {

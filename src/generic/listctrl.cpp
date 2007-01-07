@@ -1410,7 +1410,11 @@ bool wxListLineData::SetAttributes(wxDC *dc,
     if ( highlighted )
 #ifdef __WXMAC__
     {
-        if (m_owner->HasFocus())
+        if (m_owner->HasFocus()
+#ifdef __WXMAC__
+                && IsControlActive( (ControlRef)m_owner->GetHandle() )
+#endif
+        )
             colText = *wxWHITE;
         else
             colText = *wxBLACK;
@@ -1470,7 +1474,11 @@ void wxListLineData::Draw( wxDC *dc )
         if (highlighted)
         {
             int flags = wxCONTROL_SELECTED;
-            if (m_owner->HasFocus())
+            if (m_owner->HasFocus()
+#ifdef __WXMAC__
+                && IsControlActive( (ControlRef)m_owner->GetHandle() )
+#endif
+            )
                 flags |= wxCONTROL_FOCUSED;
             wxRendererNative::Get().DrawItemSelectionRect( m_owner, *dc, m_gi->m_rectHighlight, flags );
 
@@ -1529,7 +1537,11 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
         if (highlighted)
         {
             int flags = wxCONTROL_SELECTED;
-            if (m_owner->HasFocus())
+            if (m_owner->HasFocus()
+#ifdef __WXMAC__
+                && IsControlActive( (ControlRef)m_owner->GetHandle() )
+#endif
+            )
                 flags |= wxCONTROL_FOCUSED;
             wxRendererNative::Get().DrawItemSelectionRect( m_owner, *dc, rectHL, flags );
         }
