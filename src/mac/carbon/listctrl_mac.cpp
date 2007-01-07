@@ -646,12 +646,8 @@ void wxListCtrl::FireMouseEvent(wxEventType eventType, wxPoint position)
     if (flags & wxLIST_HITTEST_ONITEM)
     {
         le.m_itemIndex = item;
-        if (!IsVirtual())
-        {
-            
-            le.m_item.m_itemId = item;
-            GetItem(le.m_item);
-        }
+        le.m_item.m_itemId = item;
+        GetItem(le.m_item);
         GetEventHandler()->ProcessEvent(le);
     }
 }
@@ -668,11 +664,8 @@ void wxListCtrl::OnChar(wxKeyEvent& event)
         if (m_current != -1)
         {
             le.m_itemIndex = m_current;
-            if (!IsVirtual())
-            {
-                le.m_item.m_itemId = m_current;
-                GetItem(le.m_item);
-            }
+            le.m_item.m_itemId = m_current;
+            GetItem(le.m_item);
             GetEventHandler()->ProcessEvent(le);
         }
     }
@@ -1075,7 +1068,10 @@ bool wxListCtrl::GetItem(wxListItem& info) const
     if (m_dbImpl)
     {
         if (!IsVirtual())
-            m_dbImpl->MacGetColumnInfo(info.m_itemId, info.m_col, info);
+        {
+            if (info.m_itemId > 0 && info.m_itemId < GetItemCount())
+                m_dbImpl->MacGetColumnInfo(info.m_itemId, info.m_col, info);
+        }
         else
         {
             info.SetText( OnGetItemText(info.m_itemId, info.m_col) );
@@ -2343,10 +2339,8 @@ void wxMacListCtrlItem::Notification(wxMacDataItemBrowserControl *owner ,
 
         event.SetEventObject( list );
         event.m_itemIndex = owner->GetLineFromItem( this ) ;
-        if ( !list->IsVirtual() )
-        {
-            lb->MacGetColumnInfo(event.m_itemIndex,0,event.m_item);
-        }
+        event.m_item.m_itemId = event.m_itemIndex;
+        list->GetItem(event.m_item);
 
         switch (message)
         {
@@ -2898,14 +2892,13 @@ void wxMacDataBrowserListCtrlControl::ItemNotification(DataBrowserItemID itemID,
             DataBrowserTableViewRowIndex result = 0;
             verify_noerr( GetItemRow( itemID, &result ) ) ;
             event.m_itemIndex = result;
-
-            if (event.m_itemIndex >= 0)
-                MacGetColumnInfo(event.m_itemIndex,0,event.m_item);
         }
         else
         {
             event.m_itemIndex = (long)itemID-1;
         }
+        event.m_item.m_itemId = event.m_itemIndex;
+        list->GetItem(event.m_item);
 
         switch (message)
         {
