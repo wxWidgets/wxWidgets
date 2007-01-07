@@ -495,7 +495,9 @@ wxSize wxDataViewProgressRenderer::GetSize()
 // wxDataViewDateRenderer
 // ---------------------------------------------------------
 
-#if wxUSE_CALENDARCTRL
+#define wxUSE_DATE_RENDERER_POPUP (wxUSE_CALENDARCTRL && wxUSE_POPUPWIN)
+
+#if wxUSE_DATE_RENDERER_POPUP
 
 class wxDataViewDateRendererPopupTransient: public wxPopupTransientWindow
 {
@@ -543,7 +545,7 @@ void wxDataViewDateRendererPopupTransient::OnCalendar( wxCalendarEvent &event )
     DismissAndNotify();
 }
 
-#endif // wxUSE_CALENDARCTRL
+#endif // wxUSE_DATE_RENDERER_POPUP
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewDateRenderer, wxDataViewCustomRenderer)
 
@@ -584,16 +586,16 @@ bool wxDataViewDateRenderer::Activate( wxRect WXUNUSED(cell), wxDataViewListMode
     model->GetValue( variant, col, row );
     wxDateTime value = variant.GetDateTime();
 
-#if wxUSE_CALENDARCTRL
+#if wxUSE_DATE_RENDERER_POPUP
     wxDataViewDateRendererPopupTransient *popup = new wxDataViewDateRendererPopupTransient(
         GetOwner()->GetOwner()->GetParent(), &value, model, col, row );
     wxPoint pos = wxGetMousePosition();
     popup->Move( pos );
     popup->Layout();
     popup->Popup( popup->m_cal );
-#else
+#else // !wxUSE_DATE_RENDERER_POPUP
     wxMessageBox(value.Format());
-#endif
+#endif // wxUSE_DATE_RENDERER_POPUP/!wxUSE_DATE_RENDERER_POPUP
     return true;
 }
 
