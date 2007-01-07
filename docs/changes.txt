@@ -97,6 +97,7 @@ All:
 - wxGrid::GetBestSize() returns same size the grid would have after AutoSize()
 - Added wxTreeCtrl::CollapseAll[Children]() and IsEmpty() (Francesco Montorsi)
 - Several RTL-related positioning fixes (Diaa Sami)
+- Fix wxConfig::DeleteGroup() for arguments with trailing slash (David Hart)
 
 wxMSW:
 

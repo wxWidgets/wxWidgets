@@ -697,7 +697,7 @@ bool wxRegConfig::DeleteEntry(const wxString& value, bool bGroupIfEmptyAlso)
 
 bool wxRegConfig::DeleteGroup(const wxString& key)
 {
-  wxConfigPathChanger path(this, key);
+  wxConfigPathChanger path(this, RemoveTrailingSeparator(key));
 
   if ( !m_keyLocal.Exists() )
   {

@@ -225,7 +225,7 @@ public:
     // delete the group (with all subgroups)
   virtual bool DeleteGroup(const wxString& key) = 0;
     // delete the whole underlying object (disk file, registry key, ...)
-    // primarly for use by desinstallation routine.
+    // primarily for use by uninstallation routine.
   virtual bool DeleteAll() = 0;
 
   // options
@@ -253,6 +253,13 @@ public:
 protected:
   static bool IsImmutable(const wxString& key)
     { return !key.IsEmpty() && key[0] == wxCONFIG_IMMUTABLE_PREFIX; }
+
+  // return the path without trailing separator, if any: this should be called
+  // to sanitize paths referring to the group names before passing them to
+  // wxConfigPathChanger as "/foo/bar/" should be the same as "/foo/bar" and it
+  // isn't interpreted in the same way by it (and this can't be changed there
+  // as it's not the same for the entries names)
+  static wxString RemoveTrailingSeparator(const wxString& key);
 
   // do read/write the values of different types
   virtual bool DoReadString(const wxString& key, wxString *pStr) const = 0;

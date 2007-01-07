@@ -309,7 +309,8 @@ void FileConfigTestCase::DeleteGroup()
                          _T("[root/group2]\n"),
                          fc );
 
-    CPPUNIT_ASSERT( fc.DeleteGroup(_T("root/group2")) );
+    // notice trailing slash: it should be ignored
+    CPPUNIT_ASSERT( fc.DeleteGroup(_T("root/group2/")) );
     wxVERIFY_FILECONFIG( _T("[root]\n")
                          _T("entry=value\n"),
                          fc );

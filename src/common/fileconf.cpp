@@ -1172,7 +1172,7 @@ bool wxFileConfig::DeleteEntry(const wxString& key, bool bGroupIfEmptyAlso)
 
 bool wxFileConfig::DeleteGroup(const wxString& key)
 {
-  wxConfigPathChanger path(this, key);
+  wxConfigPathChanger path(this, RemoveTrailingSeparator(key));
 
   if ( !m_pCurrentGroup->DeleteSubgroupByName(path.Name()) )
       return false;
