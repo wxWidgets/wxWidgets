@@ -2009,30 +2009,45 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
     {
         int x = GET_X_LPARAM(lParam),
             y = GET_Y_LPARAM(lParam);
-        // Convert the screen point to a client point
-        wxPoint MenuPoint = ScreenToClient(wxPoint(x, y));
 
-        // can't use GetSelection() here as it would assert in multiselect mode
-        wxTreeEvent event(wxEVT_COMMAND_TREE_ITEM_MENU, this,
-                          wxTreeItemId(TreeView_GetSelection(GetHwnd())));
+        // the item for which the menu should be shown
+        wxTreeItemId item;
 
-        // Get the bounding rectangle for the item, including the non-text areas
-        wxRect ItemRect;
-        GetBoundingRect(event.m_item, ItemRect, false);
-        // If the point is inside the bounding rectangle, use it as the click position.
-        // This should be the case for WM_CONTEXTMENU as the result of a right-click
-        if (ItemRect.Contains(MenuPoint))
+        // the position where the menu should be shown in client coordinates
+        // (so that it can be passed directly to PopupMenu())
+        wxPoint pt;
+
+        if ( x == -1 || y == -1 )
         {
-            event.m_pointDrag = MenuPoint;
+            // this means that the event was generated from keyboard (e.g. with
+            // Shift-F10 or special Windows menu key)
+            //
+            // use the Explorer standard of putting the menu at the left edge
+            // of the text, in the vertical middle of the text
+            item = wxTreeItemId(TreeView_GetSelection(GetHwnd()));
+            if ( item.IsOk() )
+            {
+                // Use the bounding rectangle of only the text part
+                wxRect rect;
+                GetBoundingRect(item, rect, true);
+                pt = wxPoint(rect.GetX(), rect.GetY() + rect.GetHeight() / 2);
+            }
         }
-        // Use the Explorer standard of putting the menu at the left edge of the text,
-        // in the vertical middle of the text. Should be the case for the "menu" key
-        else
+        else // event from mouse, use mouse position
         {
-            // Use the bounding rectangle of only the text part
-            GetBoundingRect(event.m_item, ItemRect, true);
-            event.m_pointDrag = wxPoint(ItemRect.GetX(), ItemRect.GetY() + ItemRect.GetHeight() / 2);
+            pt = ScreenToClient(wxPoint(x, y));
+
+            TV_HITTESTINFO tvhti;
+            tvhti.pt.x = pt.x;
+            tvhti.pt.y = pt.y;
+            if ( TreeView_HitTest(GetHwnd(), &tvhti) )
+                item = wxTreeItemId(tvhti.hItem);
         }
+
+        // create the event
+        wxTreeEvent event(wxEVT_COMMAND_TREE_ITEM_MENU, this, item);
+
+        event.m_pointDrag = pt;
 
         if ( GetEventHandler()->ProcessEvent(event) )
             processed = true;
