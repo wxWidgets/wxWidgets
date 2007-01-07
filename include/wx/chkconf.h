@@ -1276,6 +1276,17 @@
                         wxUSE_CHOICEBOOK || \
                         wxUSE_TREEBOOK)
 
+#if wxUSE_COLLPANE
+#   if !wxUSE_BUTTON || !wxUSE_STATLINE
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_COLLPANE requires wxUSE_BUTTON and wxUSE_STATLINE"
+#       else
+#           undef wxUSE_COLLPANE
+#           define wxUSE_COLLPANE 0
+#       endif
+#   endif
+#endif /* wxUSE_COLLPANE */
+
 #if wxUSE_LISTBOOK
 #   if !wxUSE_LISTCTRL
 #       ifdef wxABORT_ON_CONFIG_ERROR

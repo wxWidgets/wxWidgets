@@ -12,8 +12,6 @@
 #ifndef _WX_COLLAPSABLE_PANE_H_GENERIC_
 #define _WX_COLLAPSABLE_PANE_H_GENERIC_
 
-#if wxUSE_BUTTON && wxUSE_STATLINE
-
 // forward declared
 class WXDLLEXPORT wxButton;
 class WXDLLEXPORT wxStaticLine;
@@ -104,5 +102,4 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
-#endif // wxUSE_BUTTON && wxUSE_STATLINE
 #endif // _WX_COLLAPSABLE_PANE_H_GENERIC_
