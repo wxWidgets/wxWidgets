@@ -1069,25 +1069,28 @@ bool wxListCtrl::GetItem(wxListItem& info) const
     {
         if (!IsVirtual())
         {
-            if (info.m_itemId > 0 && info.m_itemId < GetItemCount())
+            if (info.m_itemId >= 0 && info.m_itemId < GetItemCount())
                 m_dbImpl->MacGetColumnInfo(info.m_itemId, info.m_col, info);
         }
         else
         {
-            info.SetText( OnGetItemText(info.m_itemId, info.m_col) );
-            info.SetImage( OnGetItemColumnImage(info.m_itemId, info.m_col) );
-            if (info.GetMask() & wxLIST_MASK_STATE)
+            if (info.m_itemId >= 0 && info.m_itemId < GetItemCount())
             {
-                if (IsDataBrowserItemSelected( m_dbImpl->GetControlRef(), info.m_itemId+1 ))
-                    info.SetState(info.GetState() | wxLIST_STATE_SELECTED);
-            }
+                info.SetText( OnGetItemText(info.m_itemId, info.m_col) );
+                info.SetImage( OnGetItemColumnImage(info.m_itemId, info.m_col) );
+                if (info.GetMask() & wxLIST_MASK_STATE)
+                {
+                    if (IsDataBrowserItemSelected( m_dbImpl->GetControlRef(), info.m_itemId+1 ))
+                        info.SetState(info.GetState() | wxLIST_STATE_SELECTED);
+                }
 
-            wxListItemAttr* attrs = OnGetItemAttr( info.m_itemId );
-            if (attrs)
-            {
-                info.SetFont( attrs->GetFont() );
-                info.SetBackgroundColour( attrs->GetBackgroundColour() );
-                info.SetTextColour( attrs->GetTextColour() );
+                wxListItemAttr* attrs = OnGetItemAttr( info.m_itemId );
+                if (attrs)
+                {
+                    info.SetFont( attrs->GetFont() );
+                    info.SetBackgroundColour( attrs->GetBackgroundColour() );
+                    info.SetTextColour( attrs->GetTextColour() );
+                }
             }
         }
     }
@@ -2583,17 +2586,21 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
         }
         else
         {
-            text = list->OnGetItemText( (long)itemID-1, listColumn );
-            imgIndex = list->OnGetItemColumnImage( (long)itemID-1, listColumn );
-            wxListItemAttr* attrs = list->OnGetItemAttr( (long)itemID-1 );
-            if (attrs)
+            long itemNum = (long)itemID-1;
+            if (itemNum >= 0 && itemNum < list->GetItemCount())
             {
-                if (attrs->HasBackgroundColour())
-                    bgColor = attrs->GetBackgroundColour();
-                if (attrs->HasTextColour())
-                    color = attrs->GetTextColour();
-                if (attrs->HasFont())
-                    font = attrs->GetFont();
+                text = list->OnGetItemText( itemNum, listColumn );
+                imgIndex = list->OnGetItemColumnImage( itemNum, listColumn );
+                wxListItemAttr* attrs = list->OnGetItemAttr( itemNum );
+                if (attrs)
+                {
+                    if (attrs->HasBackgroundColour())
+                        bgColor = attrs->GetBackgroundColour();
+                    if (attrs->HasTextColour())
+                        color = attrs->GetTextColour();
+                    if (attrs->HasFont())
+                        font = attrs->GetFont();
+                }
             }
         }
     }
@@ -2788,8 +2795,12 @@ OSStatus wxMacDataBrowserListCtrlControl::GetSetItemData(DataBrowserItemID itemI
         }
         else
         {
-            text = list->OnGetItemText( (long)itemID-1, listColumn );
-            imgIndex = list->OnGetItemColumnImage( (long)itemID-1, listColumn );
+            long itemNum = (long)itemID-1;
+            if (itemNum >= 0 && itemNum < list->GetItemCount())
+            {
+                text = list->OnGetItemText( itemNum, listColumn );
+                imgIndex = list->OnGetItemColumnImage( itemNum, listColumn );
+            }
         }
     }
 
@@ -3000,9 +3011,7 @@ Boolean wxMacDataBrowserListCtrlControl::CompareItems(DataBrowserItemID itemOneI
 
             long itemNum = (long)itemOneID;
             long otherItemNum = (long)itemTwoID;
-            itemText = list->OnGetItemText( itemNum-1, colId );
-            otherItemText = list->OnGetItemText( otherItemNum-1, colId );
-            
+
             // virtual listctrls don't support sorting
             return itemNum < otherItemNum;
         }
