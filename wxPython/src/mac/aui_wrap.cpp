@@ -16013,6 +16013,37 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_AuiNotebook_GetAuiManager(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAuiNotebook *arg1 = (wxAuiNotebook *) 0 ;
+  wxAuiManager *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAuiNotebook, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AuiNotebook_GetAuiManager" "', expected argument " "1"" of type '" "wxAuiNotebook const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAuiNotebook * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    {
+      wxAuiManager const &_result_ref = ((wxAuiNotebook const *)arg1)->GetAuiManager();
+      result = (wxAuiManager *) &_result_ref;
+    }
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxAuiManager, 0 |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *AuiNotebook_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
@@ -18499,6 +18530,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"AuiNotebook_SetSelection", (PyCFunction) _wrap_AuiNotebook_SetSelection, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"AuiNotebook_GetSelection", (PyCFunction)_wrap_AuiNotebook_GetSelection, METH_O, NULL},
 	 { (char *)"AuiNotebook_Split", (PyCFunction) _wrap_AuiNotebook_Split, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"AuiNotebook_GetAuiManager", (PyCFunction)_wrap_AuiNotebook_GetAuiManager, METH_O, NULL},
 	 { (char *)"AuiNotebook_swigregister", AuiNotebook_swigregister, METH_VARARGS, NULL},
 	 { (char *)"AuiNotebook_swiginit", AuiNotebook_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_PreAuiMDIParentFrame", (PyCFunction)_wrap_new_PreAuiMDIParentFrame, METH_NOARGS, NULL},
@@ -21348,8 +21380,6 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_InstallConstants(d,swig_const_table);
   
   
-  SWIG_Python_SetConstant(d, "USE_AUI",SWIG_From_int(static_cast< int >(1)));
-  SWIG_Python_SetConstant(d, "USE_MENUS",SWIG_From_int(static_cast< int >(1)));
   SWIG_Python_SetConstant(d, "AUI_DOCK_NONE",SWIG_From_int(static_cast< int >(wxAUI_DOCK_NONE)));
   SWIG_Python_SetConstant(d, "AUI_DOCK_TOP",SWIG_From_int(static_cast< int >(wxAUI_DOCK_TOP)));
   SWIG_Python_SetConstant(d, "AUI_DOCK_RIGHT",SWIG_From_int(static_cast< int >(wxAUI_DOCK_RIGHT)));

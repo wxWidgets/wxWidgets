@@ -154,8 +154,6 @@ import _core
 import _windows
 wx = _core 
 __docfilter__ = wx.__DocFilter(globals()) 
-USE_AUI = _aui.USE_AUI
-USE_MENUS = _aui.USE_MENUS
 AUI_DOCK_NONE = _aui.AUI_DOCK_NONE
 AUI_DOCK_TOP = _aui.AUI_DOCK_TOP
 AUI_DOCK_RIGHT = _aui.AUI_DOCK_RIGHT
@@ -1436,6 +1434,10 @@ class AuiNotebook(_core.Control):
     def Split(*args, **kwargs):
         """Split(self, size_t page, int direction)"""
         return _aui.AuiNotebook_Split(*args, **kwargs)
+
+    def GetAuiManager(*args, **kwargs):
+        """GetAuiManager(self) -> AuiManager"""
+        return _aui.AuiNotebook_GetAuiManager(*args, **kwargs)
 
     PageCount = property(GetPageCount,doc="See `GetPageCount`") 
     Selection = property(GetSelection,SetSelection,doc="See `GetSelection` and `SetSelection`") 

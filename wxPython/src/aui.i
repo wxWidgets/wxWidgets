@@ -134,8 +134,13 @@ The following example shows a simple implementation that utilizes
 
 // Preprocessor stuff so SWIG doesn't get confused when %include-ing
 // the aui .h files.
+%ignore wxUSE_AUI;
+%ignore wxUSE_MENUS;
+%ignore wxABI_VERSION;
 #define wxUSE_AUI 1
 #define wxUSE_MENUS 1
+#define wxABI_VERSION 99999
+
 #define WXDLLIMPEXP_AUI
 #define unsigned
 #define wxDEPRECATED(decl)
@@ -737,9 +742,4 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
 
 //---------------------------------------------------------------------------
 
-#undef wxUSE_AUI
-#undef wxUSE_MENUS 
-#undef WXDLLIMPEXP_AUI
-
-//---------------------------------------------------------------------------
 
