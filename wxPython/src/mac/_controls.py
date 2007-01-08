@@ -5319,6 +5319,10 @@ class TreeCtrl(_core.Control):
         """IsBold(self, TreeItemId item) -> bool"""
         return _controls_.TreeCtrl_IsBold(*args, **kwargs)
 
+    def IsEmpty(*args, **kwargs):
+        """IsEmpty(self) -> bool"""
+        return _controls_.TreeCtrl_IsEmpty(*args, **kwargs)
+
     def GetChildrenCount(*args, **kwargs):
         """GetChildrenCount(self, TreeItemId item, bool recursively=True) -> size_t"""
         return _controls_.TreeCtrl_GetChildrenCount(*args, **kwargs)
@@ -5430,6 +5434,14 @@ class TreeCtrl(_core.Control):
     def Collapse(*args, **kwargs):
         """Collapse(self, TreeItemId item)"""
         return _controls_.TreeCtrl_Collapse(*args, **kwargs)
+
+    def CollapseAllChildren(*args, **kwargs):
+        """CollapseAllChildren(self, TreeItemId item)"""
+        return _controls_.TreeCtrl_CollapseAllChildren(*args, **kwargs)
+
+    def CollapseAll(*args, **kwargs):
+        """CollapseAll(self)"""
+        return _controls_.TreeCtrl_CollapseAll(*args, **kwargs)
 
     def CollapseAndReset(*args, **kwargs):
         """CollapseAndReset(self, TreeItemId item)"""

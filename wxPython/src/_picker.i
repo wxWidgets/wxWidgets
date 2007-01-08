@@ -153,6 +153,7 @@ clicked. Native implementations may differ but this is usually a
 "
 Window Styles
 -------------
+
     ======================  ============================================
     wx.CLRP_DEFAULT         Default style.
     wx.CLRP_USE_TEXTCTRL    Creates a text control to the left of the
@@ -168,6 +169,7 @@ Window Styles
 
 Events
 ------
+
     ========================  ==========================================
     EVT_COLOURPICKER_CHANGED  The user changed the colour selected in the
                               control either using the button or using the

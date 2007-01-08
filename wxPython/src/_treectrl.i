@@ -516,6 +516,9 @@ public:
     // is item text in bold font?
     bool IsBold(const wxTreeItemId& item) const;
 
+    // is the control empty?
+    bool IsEmpty() const;
+    
 
     // if 'recursively' is False, only immediate children count, otherwise
     // the returned number is the number of all items in this branch
@@ -673,6 +676,12 @@ public:
     // collapse the item without removing its children
     void Collapse(const wxTreeItemId& item);
 
+    // collapse the item and all its childs and thats childs
+    void CollapseAllChildren(const wxTreeItemId& item);
+
+    // collapse all items
+    void CollapseAll();
+    
     // collapse the item and remove all children
     void CollapseAndReset(const wxTreeItemId& item);
 

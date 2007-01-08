@@ -35643,6 +35643,36 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_TreeCtrl_IsEmpty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPyTreeCtrl *arg1 = (wxPyTreeCtrl *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyTreeCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeCtrl_IsEmpty" "', expected argument " "1"" of type '" "wxPyTreeCtrl const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyTreeCtrl * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxPyTreeCtrl const *)arg1)->IsEmpty();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_TreeCtrl_GetChildrenCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyTreeCtrl *arg1 = (wxPyTreeCtrl *) 0 ;
@@ -36854,6 +36884,74 @@ SWIGINTERN PyObject *_wrap_TreeCtrl_Collapse(PyObject *SWIGUNUSEDPARM(self), PyO
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->Collapse((wxTreeItemId const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TreeCtrl_CollapseAllChildren(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyTreeCtrl *arg1 = (wxPyTreeCtrl *) 0 ;
+  wxTreeItemId *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "item", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:TreeCtrl_CollapseAllChildren",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyTreeCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeCtrl_CollapseAllChildren" "', expected argument " "1"" of type '" "wxPyTreeCtrl *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyTreeCtrl * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxTreeItemId,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "TreeCtrl_CollapseAllChildren" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "TreeCtrl_CollapseAllChildren" "', expected argument " "2"" of type '" "wxTreeItemId const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxTreeItemId * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->CollapseAllChildren((wxTreeItemId const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_TreeCtrl_CollapseAll(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPyTreeCtrl *arg1 = (wxPyTreeCtrl *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyTreeCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "TreeCtrl_CollapseAll" "', expected argument " "1"" of type '" "wxPyTreeCtrl *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyTreeCtrl * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->CollapseAll();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -47714,6 +47812,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TreeCtrl_IsExpanded", (PyCFunction) _wrap_TreeCtrl_IsExpanded, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeCtrl_IsSelected", (PyCFunction) _wrap_TreeCtrl_IsSelected, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeCtrl_IsBold", (PyCFunction) _wrap_TreeCtrl_IsBold, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeCtrl_IsEmpty", (PyCFunction)_wrap_TreeCtrl_IsEmpty, METH_O, NULL},
 	 { (char *)"TreeCtrl_GetChildrenCount", (PyCFunction) _wrap_TreeCtrl_GetChildrenCount, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeCtrl_GetRootItem", (PyCFunction)_wrap_TreeCtrl_GetRootItem, METH_O, NULL},
 	 { (char *)"TreeCtrl_GetSelection", (PyCFunction)_wrap_TreeCtrl_GetSelection, METH_O, NULL},
@@ -47739,6 +47838,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TreeCtrl_ExpandAllChildren", (PyCFunction) _wrap_TreeCtrl_ExpandAllChildren, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeCtrl_ExpandAll", (PyCFunction)_wrap_TreeCtrl_ExpandAll, METH_O, NULL},
 	 { (char *)"TreeCtrl_Collapse", (PyCFunction) _wrap_TreeCtrl_Collapse, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeCtrl_CollapseAllChildren", (PyCFunction) _wrap_TreeCtrl_CollapseAllChildren, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"TreeCtrl_CollapseAll", (PyCFunction)_wrap_TreeCtrl_CollapseAll, METH_O, NULL},
 	 { (char *)"TreeCtrl_CollapseAndReset", (PyCFunction) _wrap_TreeCtrl_CollapseAndReset, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeCtrl_Toggle", (PyCFunction) _wrap_TreeCtrl_Toggle, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"TreeCtrl_Unselect", (PyCFunction)_wrap_TreeCtrl_Unselect, METH_O, NULL},

@@ -1,6 +1,25 @@
 Recent Changes for wxPython
 =====================================================================
 
+2.8.1.0
+-------
+*
+
+Added EVT_TASKBAR_CLICK and use it to show taskbar icon menu on right
+button release, not press, under MSW (bug 1623761)
+
+Added wxTreeCtrl::CollapseAll[Children]() and IsEmpty() methods;
+documented wxTreeItemId (patch 1622125)
+
+Fix wxMDIChidFrame::GetPosition() (patch 1626610)
+
+Fix attribute memory leak in wxGrid::ShowCellEditControl() (patch
+1629949)
+
+
+
+
+
 2.8.0.2
 -------
 * 6-Jan-2007

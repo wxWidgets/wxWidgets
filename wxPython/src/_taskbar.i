@@ -143,6 +143,7 @@ public:
 %constant wxEventType wxEVT_TASKBAR_RIGHT_UP;
 %constant wxEventType wxEVT_TASKBAR_LEFT_DCLICK;
 %constant wxEventType wxEVT_TASKBAR_RIGHT_DCLICK;
+%constant wxEventType wxEVT_TASKBAR_CLICK;
 
 
 %pythoncode {
@@ -153,6 +154,7 @@ EVT_TASKBAR_RIGHT_DOWN = wx.PyEventBinder (   wxEVT_TASKBAR_RIGHT_DOWN )
 EVT_TASKBAR_RIGHT_UP = wx.PyEventBinder (     wxEVT_TASKBAR_RIGHT_UP )
 EVT_TASKBAR_LEFT_DCLICK = wx.PyEventBinder (  wxEVT_TASKBAR_LEFT_DCLICK )
 EVT_TASKBAR_RIGHT_DCLICK = wx.PyEventBinder ( wxEVT_TASKBAR_RIGHT_DCLICK )
+EVT_TASKBAR_CLICK =  wx.PyEventBinder (       wxEVT_TASKBAR_CLICK )
 }
 
 //---------------------------------------------------------------------------

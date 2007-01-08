@@ -34828,6 +34828,7 @@ SWIGEXPORT void SWIG_init(void) {
   PyDict_SetItemString(d, "wxEVT_TASKBAR_RIGHT_UP", PyInt_FromLong(wxEVT_TASKBAR_RIGHT_UP));
   PyDict_SetItemString(d, "wxEVT_TASKBAR_LEFT_DCLICK", PyInt_FromLong(wxEVT_TASKBAR_LEFT_DCLICK));
   PyDict_SetItemString(d, "wxEVT_TASKBAR_RIGHT_DCLICK", PyInt_FromLong(wxEVT_TASKBAR_RIGHT_DCLICK));
+  PyDict_SetItemString(d, "wxEVT_TASKBAR_CLICK", PyInt_FromLong(wxEVT_TASKBAR_CLICK));
   SWIG_addvarlink(SWIG_globals(),(char*)"FileSelectorPromptStr",FileSelectorPromptStr_get, FileSelectorPromptStr_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"DirSelectorPromptStr",DirSelectorPromptStr_get, DirSelectorPromptStr_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"DirDialogNameStr",DirDialogNameStr_get, DirDialogNameStr_set);
