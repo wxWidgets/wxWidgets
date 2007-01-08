@@ -84,10 +84,17 @@
 #       pragma warning(disable:4702)    /* unreachable code */ 
 #   endif
 
-/* Deprecated functions such as sprintf, localtime */
+/*
+  VC++ 8 gives a warning when using standard functions such as sprintf,
+  localtime, ... -- stop this madness, unless the user had already done it
+*/
 #if __VISUALC__ >= 1400
-#define _CRT_SECURE_NO_DEPRECATE 1
-#define _CRT_NON_CONFORMING_SWPRINTFS 1
+    #ifndef _CRT_SECURE_NO_DEPRECATE
+        #define _CRT_SECURE_NO_DEPRECATE 1
+    #endif
+    #ifndef _CRT_NON_CONFORMING_SWPRINTFS
+        #define _CRT_NON_CONFORMING_SWPRINTFS 1
+    #endif
 #endif
 
 #endif /*  __VISUALC__ */
