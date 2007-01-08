@@ -243,7 +243,7 @@ typedef union {
     int pad_int;                        //  %d, %i, %o, %u, %x, %X
     long int pad_longint;               // %ld, etc
 #ifdef wxLongLong_t
-    long long int pad_longlongint;      // %Ld, etc
+    wxLongLong_t pad_longlongint;      // %Ld, etc
 #endif
     size_t pad_sizet;                   // %Zd, etc
 
@@ -534,9 +534,9 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
                 else if (ilen == 2)
 #ifdef wxLongLong_t
                     m_type = wxPAT_LONGLONGINT;
-#else // !long long
+#else // !wxLongLong_t
                     m_type = wxPAT_LONGINT;
-#endif // long long/!long long
+#endif // wxLongLong_t/!wxLongLong_t
                 else if (ilen == 3)
                     m_type = wxPAT_SIZET;
                 done = true;
@@ -704,9 +704,9 @@ bool wxPrintfConvSpec::LoadArg(wxPrintfArg *p, va_list &argptr)
             break;
 #ifdef wxLongLong_t
         case wxPAT_LONGLONGINT:
-            p->pad_longlongint = va_arg(argptr, long long int);
+            p->pad_longlongint = va_arg(argptr, wxLongLong_t);
             break;
-#endif
+#endif // wxLongLong_t
         case wxPAT_SIZET:
             p->pad_sizet = va_arg(argptr, size_t);
             break;
