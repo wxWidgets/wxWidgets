@@ -1567,16 +1567,19 @@ long wxListCtrl::GetNextItem(long item, int geom, int state) const
             long count = m_dbImpl->MacGetCount() ;
             for ( long line = item + 1 ; line < count; line++ )
             {
-                wxMacDataItem* id = m_dbImpl->GetItemFromLine(line);
+                DataBrowserItemID id = line + 1;
+                if ( !IsVirtual() )
+                    id = (DataBrowserItemID)m_dbImpl->GetItemFromLine(line);
                 
                 if ( (state == wxLIST_STATE_DONTCARE ) )
                     return line;
                 
-                if ( (state & wxLIST_STATE_SELECTED) && m_dbImpl->IsItemSelected( id ) )
+                if ( (state & wxLIST_STATE_SELECTED) && IsDataBrowserItemSelected(m_dbImpl->GetControlRef(), id ) )
                     return line;
             }
         }
-        else if ( geom == wxLIST_NEXT_ABOVE )
+        
+        if ( geom == wxLIST_NEXT_ALL || geom == wxLIST_NEXT_ABOVE )
         {
             int item2 = item;
             if ( item2 == -1 )
@@ -1584,12 +1587,14 @@ long wxListCtrl::GetNextItem(long item, int geom, int state) const
                 
             for ( long line = item2 - 1 ; line >= 0; line-- )
             {
-                wxMacDataItem* id = m_dbImpl->GetItemFromLine(line);
+                DataBrowserItemID id = line + 1; 
+                if ( !IsVirtual() )
+                    id = (DataBrowserItemID)m_dbImpl->GetItemFromLine(line);
                 
                 if ( (state == wxLIST_STATE_DONTCARE ) )
                     return line;
                 
-                if ( (state & wxLIST_STATE_SELECTED) && m_dbImpl->IsItemSelected( id ) )
+                if ( (state & wxLIST_STATE_SELECTED) && IsDataBrowserItemSelected(m_dbImpl->GetControlRef(), id ) )
                     return line;
             }
         }
