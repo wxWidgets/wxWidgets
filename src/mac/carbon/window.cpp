@@ -41,6 +41,14 @@
 #include "wx/spinctrl.h"
 #include "wx/geometry.h"
 
+#if wxUSE_LISTCTRL
+    #include "wx/listctrl.h"
+#endif
+
+#if wxUSE_TREECTRL
+    #include "wx/treectrl.h"
+#endif
+
 #if wxUSE_CARET
     #include "wx/caret.h"
 #endif
