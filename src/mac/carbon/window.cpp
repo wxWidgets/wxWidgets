@@ -310,14 +310,17 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
             
         case kEventControlActivate :
         case kEventControlDeactivate :
-            if ( thisWindow->IsKindOf( CLASSINFO( wxTreeCtrl ) ) 
-                    || thisWindow->IsKindOf( CLASSINFO( wxListCtrl ) ) 
-                )
+            // FIXME: we should have a virtual function for this!
+#if wxUSE_TREECTRL
+            if ( thisWindow->IsKindOf( CLASSINFO( wxTreeCtrl ) ) )
                 thisWindow->Refresh();
-            
-            //thisWindow->MacActivateStateChanged() ;
-            break ;
 #endif
+#if wxUSE_LISTCTRL
+            if ( thisWindow->IsKindOf( CLASSINFO( wxListCtrl ) ) )
+                thisWindow->Refresh();
+#endif
+            break ;
+#endif // TARGET_API_MAC_OSX
 
         // we emulate this event under Carbon CFM
         case kEventControlSetFocusPart :
