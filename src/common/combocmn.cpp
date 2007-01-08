@@ -28,6 +28,7 @@
 #include "wx/combobox.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/log.h"
     #include "wx/dcclient.h"
     #include "wx/settings.h"
