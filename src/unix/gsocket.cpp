@@ -873,9 +873,11 @@ int GSocket::Read(char *buffer, int size)
 
   /* If the socket is blocking, wait for data (with a timeout) */
   if (Input_Timeout() == GSOCK_TIMEDOUT)
+  {
     m_error = GSOCK_TIMEDOUT;
     /* We no longer return here immediately, otherwise socket events would not be re-enabled! */
     ret = -1;
+  }
   else {
     /* Read the data */
     if (m_stream)
