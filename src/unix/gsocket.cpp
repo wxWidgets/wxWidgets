@@ -873,6 +873,7 @@ int GSocket::Read(char *buffer, int size)
 
   /* If the socket is blocking, wait for data (with a timeout) */
   if (Input_Timeout() == GSOCK_TIMEDOUT)
+    m_error = GSOCK_TIMEDOUT;
     /* We no longer return here immediately, otherwise socket events would not be re-enabled! */
     ret = -1;
   else {
@@ -881,19 +882,19 @@ int GSocket::Read(char *buffer, int size)
       ret = Recv_Stream(buffer, size);
     else
       ret = Recv_Dgram(buffer, size);
-  }
 
-  /* If recv returned zero, then the connection is lost, and errno is not set.
-   * Otherwise, recv has returned an error (-1), in which case we have lost the
-   * socket only if errno does _not_ indicate that there may be more data to read.
-   */
-  if (ret == 0)
-    m_error = GSOCK_IOERR;
-  else if (ret == -1) {
-    if ((errno == EWOULDBLOCK) || (errno == EAGAIN))
-      m_error = GSOCK_WOULDBLOCK;
-    else
+    /* If recv returned zero, then the connection is lost, and errno is not set.
+     * Otherwise, recv has returned an error (-1), in which case we have lost the
+     * socket only if errno does _not_ indicate that there may be more data to read.
+     */
+    if (ret == 0)
       m_error = GSOCK_IOERR;
+    else if (ret == -1) {
+      if ((errno == EWOULDBLOCK) || (errno == EAGAIN))
+        m_error = GSOCK_WOULDBLOCK;
+      else
+        m_error = GSOCK_IOERR;
+    }
   }
 
   /* Enable events again now that we are done processing */
