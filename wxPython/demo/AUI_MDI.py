@@ -9,7 +9,8 @@ class ParentFrame(wx.aui.AuiMDIParentFrame):
     def __init__(self, parent):
         wx.aui.AuiMDIParentFrame.__init__(self, parent, -1,
                                           title="AuiMDIParentFrame",
-                                          size=(640,480))
+                                          size=(640,480),
+                                          style=wx.DEFAULT_FRAME_STYLE)
         self.count = 0
         mb = self.MakeMenuBar()
         self.SetMenuBar(mb)
