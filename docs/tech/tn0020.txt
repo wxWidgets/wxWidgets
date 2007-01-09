@@ -46,8 +46,14 @@ The changes that are NOT binary compatible:
 even a default one)
 - Changing the order of the virtual functions in a class
 ["switching" them, etc.]
-- Changing access privileges to a function (protected to private etc.)
-[unlike KDE we need to support windows so this is not allowed]
+- Changing access privileges of a function: some compilers (among which MSVC)
+  use the function access specifier in its mangled name. Moreover, while
+  changing a private function to public should be compatible (as the old
+  symbol can't be referenced from outside the library anyhow), changing a
+  virtual private function to public is NOT compatible because the old symbol
+  is referenced by the virtual tables in the executable code and so an old
+  program compiled with MSVC wouldn't start up with a new DLL even if it
+  doesn't use the affected symbol at all!
 - Adding a member variable
 - Changing the order of non-static member variables
 
