@@ -400,14 +400,14 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
         pos += 2; // for the title itself and its separator
 
     BOOL ok = false;
-    
+
 #if wxUSE_OWNER_DRAWN
     // Currently, mixing owner-drawn and non-owner-drawn items results in
     // inconsistent margins, so we force this to be owner-drawn if any other
     // items already are. Later we might want to use a boolean in the wxMenu
     // to avoid search. Also we might make this fix unnecessary by getting the correct
     // margin using NONCLIENTMETRICS.
-    if ( !pItem->IsOwnerDrawn() )
+    if ( !pItem->IsOwnerDrawn() && !pItem->IsSeparator() )
     {
         // Check if any other items are ownerdrawn, and make ownerdrawn if so
         wxMenuItemList::compatibility_iterator node = GetMenuItems().GetFirst();
