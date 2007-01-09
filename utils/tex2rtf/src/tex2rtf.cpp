@@ -298,6 +298,12 @@ bool MyApp::OnInit()
     {
       i ++;
       ShowVersion();
+#ifdef NO_GUI
+      ShowOptions();
+      exit(1);
+#else
+      return false;
+#endif
     }
     else
     {
@@ -623,6 +629,7 @@ void ShowOptions(void)
     OnInform(_T("    -sync"));
     OnInform(_T("    -checkcurlybraces"));
     OnInform(_T("    -checksyntax"));
+    OnInform(_T("    -version"));
     OnInform(_T("    -macros <filename>"));
     OnInform(_T("    -winhelp"));
     OnInform(_T("    -rtf"));
