@@ -156,6 +156,8 @@ public:
     // the colours for them otherwise
     virtual bool SetBackgroundColour(const wxColour& colour);
     virtual bool SetForegroundColour(const wxColour& colour);
+#else
+    bool IsRich() const { return false; }
 #endif // wxUSE_RICHEDIT
 
 #if wxUSE_INKEDIT && wxUSE_RICHEDIT
