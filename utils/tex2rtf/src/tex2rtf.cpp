@@ -185,22 +185,6 @@ bool MyApp::OnInit()
 
   TexPathList.Add(::wxGetCwd());
 
-#ifdef NO_GUI
-  if (InputFile.empty() || OutputFile.empty())
-  {
-      wxSTD cout << "Tex2RTF: input or output file is missing.\n";
-      ShowOptions();
-      exit(1);
-  }
-#endif
-
-  if (!InputFile.empty())
-  {
-      TexPathList.EnsureFileAccessible(InputFile);
-  }
-  if (InputFile.empty() || OutputFile.empty())
-      isInteractive = true;
-
   int i;
   for (i = n; i < argc;)
   {
@@ -299,7 +283,6 @@ bool MyApp::OnInit()
       i ++;
       ShowVersion();
 #ifdef NO_GUI
-      ShowOptions();
       exit(1);
 #else
       return false;
@@ -318,6 +301,22 @@ bool MyApp::OnInit()
 #endif
     }
   }
+
+#ifdef NO_GUI
+  if (InputFile.empty() || OutputFile.empty())
+  {
+      wxSTD cout << "Tex2RTF: input or output file is missing.\n";
+      ShowOptions();
+      exit(1);
+  }
+#endif
+
+  if (!InputFile.empty())
+  {
+      TexPathList.EnsureFileAccessible(InputFile);
+  }
+  if (InputFile.empty() || OutputFile.empty())
+      isInteractive = true;
 
 #if defined(__WXMSW__) && !defined(NO_GUI)
   wxDDEInitialize();
