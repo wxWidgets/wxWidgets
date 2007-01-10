@@ -1,7 +1,7 @@
-Installing wxWidgets 2.8.0
---------------------------
+Installing wxWidgets
+--------------------
 
-This is wxWidgets 2.8.0 for IBM OS/2 Warp3 and Warp4. This is an unstable
+This is wxWidgets for IBM OS/2 Warp3 and Warp4. This is an unstable
 development release and OS/2 is considered to be in beta.
 
 IMPORTANT NOTE: If you experience problems installing, please

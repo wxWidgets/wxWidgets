@@ -1,7 +1,7 @@
-Installing wxWidgets 2.8.0
+Installing wxWidgets for Windows
 -----------------------------------------------------------
 
-This is wxWidgets 2.8.0 for Microsoft Windows 9x/ME, Windows NT,
+This is wxWidgets for Microsoft Windows 9x/ME, Windows NT,
 Windows 2000, Windows XP and Windows CE.
 
 These installation notes can be found in docs/msw/install.txt
@@ -368,7 +368,7 @@ Metrowerks CodeWarrior compilation
 **       The authoritative list of files is in build/bakefiles/files.bkl
 
 1. CodeWarrior Pro 7 project files in XML format are already
-   included in wxMSW-2.8.0.zip and the setup version.
+   included in wxMSW-2.8.x.zip and the setup version.
 
 2. Review the file include\wx\msw\setup.h (or include\wx\msw\setup0.h if
    you are working from the CVS version) to make sure the settings reflect

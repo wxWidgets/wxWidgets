@@ -1,5 +1,5 @@
-wxWidgets 2.8 for GTK+ installation
------------------------------------
+wxWidgets for GTK+ installation
+-------------------------------
 
 IMPORTANT NOTE:
 

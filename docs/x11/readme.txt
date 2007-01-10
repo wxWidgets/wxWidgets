@@ -1,11 +1,10 @@
 
-  Welcome to wxWidgets/X11 2.8.0
+  Welcome to wxWidgets/X11
 
-You have downloaded version 2.8.0 of the X11 port of
-the wxWidgets GUI library. This runs on X11 with no
-Motif, Xt, GTK+ or any other standard widget set --
-instead it uses the wxUniversal widgets. The intention
-is to have it run on NanoX as well as desktop X11.
+You have downloaded the X11 port of the wxWidgets GUI library.
+This runs on X11 with no Motif, Xt, GTK+ or any other standard
+widget set -- instead it uses the wxUniversal widgets. The
+intention is to have it run on NanoX as well as desktop X11.
 
 More information about the wxWidgets project as a whole
 can be found at:

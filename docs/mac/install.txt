@@ -1,5 +1,5 @@
-wxWidgets 2.8.0 for Mac installation
-------------------------------------
+wxWidgets for Mac installation
+------------------------------
 
 On MacOS X, you can download Apple's free developer tools (gcc
 and associated headers and libraries, such as the Carbon API).

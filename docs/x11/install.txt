@@ -1,5 +1,5 @@
-wxWidgets 2.8.0 for X11 installation
-------------------------------------
+wxWidgets for X11 installation
+------------------------------
 
 IMPORTANT NOTE:
 
