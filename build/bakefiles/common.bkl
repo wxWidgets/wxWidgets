@@ -347,7 +347,9 @@
 
     <!-- deal with the need to copy setup.h here: -->
 
-    <set var="IS_MSVC_PRJ">$(FORMAT in ['msvc6prj','msevc4prj'])</set>
+    <set var="IS_MSVC_PRJ">
+        $(FORMAT in ['msvc6prj','msevc4prj','msvs2005prj'])
+    </set>
 
     <define-tag name="msvc-headers" rules="dll,lib">
         <if cond="IS_MSVC_PRJ">

@@ -98,8 +98,8 @@ Accepted values: AMD64, IA64.
     <!-- FIXME: restore this once bakefile is fixed to not use
                 /Gm /GZ (incompatible with /O2) w/ debug-info -->
     <set var="DEBUG_INFO_DEFAULT">
-        <if cond="FORMAT in ['msvc','msvc6prj','msevc4prj']">1</if>
-        <if cond="FORMAT not in ['msvc','msvc6prj','msevc4prj']">default</if>
+        <if cond="FORMAT in ['msvc','msvc6prj','msevc4prj','msvs2005prj']">1</if>
+        <if cond="FORMAT not in ['msvc','msvc6prj','msevc4prj','msvs2005prj']">default</if>
     </set>
     -->
     <set var="DEBUG_INFO_DEFAULT">default</set>
@@ -231,8 +231,8 @@ Acts according to BUILD by default.
 
     <!-- currently only VC++ can compile wxDebugReport which is in QA lib -->
     <set var="USE_QA_DEFAULT">
-        <if cond="FORMAT in ['msvc','msvc6prj']">1</if>
-        <if cond="FORMAT not in ['msvc','msvc6prj']">0</if>
+        <if cond="FORMAT in ['msvc','msvc6prj','msvs2005prj']">1</if>
+        <if cond="FORMAT not in ['msvc','msvc6prj','msvs2005prj']">0</if>
     </set>
     <option name="USE_QA">
         <values>0,1</values>

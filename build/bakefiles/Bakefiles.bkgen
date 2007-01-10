@@ -54,22 +54,22 @@
     </add-formats>
 
     <del-formats files="../../samples/*.bkl">
-        autoconf,msvc6prj,msevc4prj,cbuilderx,cbx_unix
+        autoconf,msvc6prj,msevc4prj,msvs2005prj,cbuilderx,cbx_unix
     </del-formats>
     <del-formats files="../../demos/*.bkl">
-        msvc6prj,msevc4prj,cbuilderx,cbx_unix
+        msvc6prj,msevc4prj,msvs2005prj,cbuilderx,cbx_unix
     </del-formats>
     <del-formats files="../../samples/html/html_samples.bkl">
-        msvc6prj,msevc4prj,cbuilderx,cbx_unix
+        msvc6prj,msevc4prj,msvs2005prj,cbuilderx,cbx_unix
     </del-formats>
     <del-formats files="../../samples/mobile/mobile_samples.bkl">
-        msvc6prj,msevc4prj,cbuilderx,cbx_unix
+        msvc6prj,msevc4prj,msvs2005prj,cbuilderx,cbx_unix
     </del-formats>
     <del-formats files="../../samples/opengl/opengl_samples.bkl">
-        msvc6prj,msevc4prj,cbuilderx,cbx_unix
+        msvc6prj,msevc4prj,msvs2005prj,cbuilderx,cbx_unix
     </del-formats>
     <del-formats files="../../utils/*.bkl">
-        msvc6prj,msevc4prj,cbuilderx,cbx_unix
+        msvc6prj,msevc4prj,msvs2005prj,cbuilderx,cbx_unix
     </del-formats>
 
     <!-- WinCE can't have console apps: -->
@@ -81,7 +81,7 @@
 
     <!-- HtmlCtrl sample is Cocoa only (autoconf format) -->
     <del-formats files="../../samples/html/htmlctrl/htmlctrl.bkl">
-        borland,dmars_smake,dmars,mingw,msvc,msvc6prj,msevc4prj,watcom,cbuilderx,cbx_unix
+        borland,dmars_smake,dmars,mingw,msvc,msvc6prj,msevc4prj,msvs2005prj,watcom,cbuilderx,cbx_unix
     </del-formats>
 
 
@@ -114,6 +114,9 @@
     <add-flags files="wx.bkl" formats="msvc6prj">
         -o../msw/wx.dsw
     </add-flags>
+    <add-flags files="wx.bkl" formats="msvs2005prj">
+        -o../msw/wx.sln
+    </add-flags>
     <add-flags files="wx.bkl" formats="msevc4prj">
         -o../wince/wx.vcw
     </add-flags>
@@ -131,7 +134,7 @@
         -o../../contrib/src/$(INPUT_FILE_BASENAME_NOEXT)/$(INPUT_FILE_BASENAME_NOEXT).cbx
     </add-flags>
     <add-flags files="../../contrib/build/*/*.bkl"
-               formats="mingw,borland,dmars_smake,dmars,watcom,msvc,msvc6prj,msevc4prj">
+               formats="mingw,borland,dmars_smake,dmars,watcom,msvc,msvc6prj,msevc4prj,msvs2005prj">
         -DSRCDIR=../../src/$(INPUT_FILE_BASENAME_NOEXT)
     </add-flags>
 

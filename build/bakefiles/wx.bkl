@@ -24,7 +24,7 @@
     <!-- ...and when there are multiple libraries: -->
     <include file="multilib.bkl"/>
 
-    <if cond="FORMAT in ['msvc6prj','msevc4prj']">
+    <if cond="FORMAT in ['msvc6prj','msevc4prj','msvs2005prj']">
         <set var="MSVC6PRJ_MERGED_TARGETS">
             <if cond="MONOLITHIC=='0'">$(MSVC6PRJ_MERGED_TARGETS_MULTILIB)</if>
             <if cond="MONOLITHIC=='1'">$(MSVC6PRJ_MERGED_TARGETS_MONOLIB)</if>
