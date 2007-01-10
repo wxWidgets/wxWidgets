@@ -62,7 +62,11 @@ getfilelist(){
   if [ $port = "mgl" ] || [ $port = "all" ]; then
     filelist="$filelist mgl.rsp"
   fi
-
+  
+  if [ $port = "dfb" ] || [ $port = "all" ]; then
+    filelist="$filelist dfb.rsp" 
+  fi
+  
   if [ $port = "gtk" ] || [ $port = "all" ]; then
     filelist="$filelist gtk.rsp"
   fi
@@ -124,7 +128,7 @@ dospinport(){
         mac)
             portname="Mac";;
         *)
-            # for all the others (DFB, GTK, MGL, MSW, X11) just use the
+            # for all the others (DFB, GTK, MGL, DFB, MSW, X11) just use the
             # upper-case version as they are abbreviations
             portname=`echo $port | tr '[a-z]' '[A-Z]'`;;
     esac
@@ -186,6 +190,8 @@ prepareforrelease()
 
     cp $APPDIR/docs/mgl/readme.txt $APPDIR/readme-mgl.txt
     cp $APPDIR/docs/mgl/install.txt $APPDIR/install-mgl.txt
+    
+    cp $APPDIR/docs/dfb/install.txt $APPDIR/install-dfb.txt
 
     cp $APPDIR/docs/x11/readme.txt $APPDIR/readme-x11.txt
     cp $APPDIR/docs/x11/install.txt $APPDIR/install-x11.txt
@@ -285,6 +291,7 @@ fi
 
 if [ "$SPINALL" = "1" ]; then
     dospinport "mgl"
+    dospinport "dfb"
     dospinport "gtk"
     dospinport "x11"
     dospinport "motif"

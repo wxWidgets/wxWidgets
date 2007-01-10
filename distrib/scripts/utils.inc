@@ -52,6 +52,8 @@ docopydocs()
 
     cp $APPDIR/docs/mgl/readme.txt $DESTDIR/readme-mgl-$VERSION.txt
     cp $APPDIR/docs/mgl/install.txt $DESTDIR/install-mgl-$VERSION.txt
+    
+    cp $APPDIR/docs/dfb/install.txt $DESTDIR/install-dfb-$VERSION.txt
 
     cp $APPDIR/docs/cocoa/readme.txt $DESTDIR/readme-cocoa-$VERSION.txt
     cp $APPDIR/docs/cocoa/install.txt $DESTDIR/install-cocoa-$VERSION.txt

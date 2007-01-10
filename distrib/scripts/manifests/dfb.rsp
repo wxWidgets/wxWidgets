@@ -1,0 +1,6 @@
+install-dfb.txt
+
+include/wx/dfb/*.h
+include/wx/dfb/private/*.h
+src/dfb/*.cpp
+docs/dfb/*.txt
