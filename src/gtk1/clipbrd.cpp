@@ -619,8 +619,25 @@ bool wxClipboard::GetData( wxDataObject& data )
 
         while (m_waiting) gtk_main_iteration();
 
-        /* this is a true error as we checked for the presence of such data before */
-        wxCHECK_MSG( m_formatSupported, false, wxT("error retrieving data from clipboard") );
+        /*
+           Normally this is a true error as we checked for the presence of such
+           data before, but there are applications that may return an empty
+           string (e.g. Gnumeric-1.6.1 on Linux if an empty cell is copied)
+           which would produce a false error message here, so we check for the
+           size of the string first. In ansi, GetDataSize returns an extra
+           value (for the closing null?), with unicode, the exact number of
+           tokens is given (that is more than 1 for special characters)
+           (tested with Gnumeric-1.6.1 and OpenOffice.org-2.0.2)
+         */
+#if wxUSE_UNICODE
+        if ( format != wxDF_UNICODETEXT || data.GetDataSize(format) > 0 )
+#else // !UNICODE
+        if ( format != wxDF_TEXT || data.GetDataSize(format) > 1 )
+#endif // UNICODE / !UNICODE
+        {
+            wxCHECK_MSG( m_formatSupported, false,
+                         wxT("error retrieving data from clipboard") );
+        }
 
         /* return success */
         delete[] array;
