@@ -269,16 +269,21 @@ void wxSpinCtrl::OnSetFocus(wxFocusEvent& event)
 void wxSpinCtrl::NormalizeValue()
 {
     const int value = GetValue();
-    if ( value == m_oldValue )
-        return;
+    const bool changed = value == m_oldValue;
 
+    // notice that we have to call SetValue() even if the value didn't change
+    // because otherwise we could be left with empty buddy control when value
+    // is 0, see comment in SetValue()
     SetValue(value);
 
-    wxCommandEvent event(wxEVT_COMMAND_SPINCTRL_UPDATED, GetId());
-    event.SetEventObject(this);
-    event.SetInt(value);
-    GetEventHandler()->ProcessEvent(event);
-    m_oldValue = value;
+    if ( changed )
+    {
+        wxCommandEvent event(wxEVT_COMMAND_SPINCTRL_UPDATED, GetId());
+        event.SetEventObject(this);
+        event.SetInt(value);
+        GetEventHandler()->ProcessEvent(event);
+        m_oldValue = value;
+    }
 }
 
 // ----------------------------------------------------------------------------
