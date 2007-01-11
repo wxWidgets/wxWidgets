@@ -172,7 +172,7 @@ wxOutputStream &DoodleSegment::SaveObject(wxOutputStream& stream)
     wxTextOutputStream text_stream( stream );
 
     wxInt32 n = lines.GetCount();
-    text_stream << n << _T('\n');
+    text_stream << n << _T("\n");
 
     wxList::compatibility_iterator node = lines.GetFirst();
     while (node)
