@@ -111,7 +111,6 @@ wxCONSTRUCTOR_6( wxSpinCtrl , wxWindow* , Parent , wxWindowID , Id , wxString , 
 IMPLEMENT_DYNAMIC_CLASS(wxSpinCtrl, wxControl)
 #endif
 
-//pmg EVT_KILL_FOCUS
 BEGIN_EVENT_TABLE(wxSpinCtrl, wxSpinButton)
     EVT_CHAR(wxSpinCtrl::OnChar)
 
@@ -269,16 +268,17 @@ void wxSpinCtrl::OnSetFocus(wxFocusEvent& event)
 
 void wxSpinCtrl::NormalizeValue()
 {
-    int value = GetValue();
-    SetValue( value );
-    if (value != m_oldValue)
-    {
-        wxCommandEvent event( wxEVT_COMMAND_SPINCTRL_UPDATED, GetId() );
-        event.SetEventObject( this );
-        event.SetInt( value );
-        GetEventHandler()->ProcessEvent( event );
-        m_oldValue = value;
-    }
+    const int value = GetValue();
+    if ( value == m_oldValue )
+        return;
+
+    SetValue(value);
+
+    wxCommandEvent event(wxEVT_COMMAND_SPINCTRL_UPDATED, GetId());
+    event.SetEventObject(this);
+    event.SetInt(value);
+    GetEventHandler()->ProcessEvent(event);
+    m_oldValue = value;
 }
 
 // ----------------------------------------------------------------------------
@@ -368,7 +368,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
 
     SetRange(min, max);
     SetValue(initial);
-    
+
     m_oldValue = initial;
 
     // subclass the text ctrl to be able to intercept some events
@@ -449,7 +449,7 @@ void  wxSpinCtrl::SetValue(int val)
         // current value in the control, so do it manually
         ::SetWindowText(GetBuddyHwnd(), wxString::Format(_T("%d"), val));
     }
-    
+
     m_oldValue = GetValue();
 }
 
@@ -550,7 +550,7 @@ void wxSpinCtrl::OnSpinChange(wxSpinEvent& eventSpin)
     event.SetEventObject(this);
     int value = eventSpin.GetPosition();
     event.SetInt( value );
-    
+
     if (value != m_oldValue)
         (void)GetEventHandler()->ProcessEvent(event);
 
@@ -558,7 +558,7 @@ void wxSpinCtrl::OnSpinChange(wxSpinEvent& eventSpin)
     {
         event.Skip();
     }
-    
+
     m_oldValue = value;
 }
 

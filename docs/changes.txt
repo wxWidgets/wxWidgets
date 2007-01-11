@@ -88,6 +88,13 @@ Major new features in 2.8 release
   wxSearchCtrl, wxAboutBox, wxTreebook, tar streams.
 
 
+2.8.2
+-----
+
+wxMSW
+
+- Fix lack of spin control update event when control lost focus
+
 2.8.1
 -----
 
