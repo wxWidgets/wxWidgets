@@ -427,12 +427,11 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 #if wxUSE_OWNER_DRAWN
     if ( pItem->IsOwnerDrawn() )
     {
-        // is the item owner-drawn just because of the bitmap?
-        if ( pItem->GetBitmap().Ok() &&
+        // is the item owner-drawn just because of the [checked] bitmap?
+        if ( (pItem->GetBitmap(false).Ok() || pItem->GetBitmap(true).Ok()) &&
                 !pItem->GetTextColour().Ok() &&
                     !pItem->GetBackgroundColour().Ok() &&
-                        !pItem->GetFont().Ok() &&
-                            !pItem->GetBitmap(true).Ok() )
+                        !pItem->GetFont().Ok() )
         {
             // try to use InsertMenuItem() as it's guaranteed to look correct
             // while our owner-drawn code is not
@@ -445,6 +444,13 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
             if ( wxGetWinVersion() >= wxWinVersion_98 )
             {
                 mii.fMask = MIIM_STRING | MIIM_DATA | MIIM_BITMAP;
+                if ( pItem->IsCheckable() )
+                {
+                    // need to set checked/unchecked bitmaps as otherwise our
+                    // MSWOnDrawItem() item is not called
+                    mii.fMask |= MIIM_CHECKMARKS;
+                }
+
                 mii.cch = itemText.length();
                 mii.dwTypeData = wx_const_cast(wxChar *, itemText.c_str());
 
@@ -467,6 +473,11 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                 //
                 // so instead draw it ourselves in MSWOnDrawItem()
                 mii.dwItemData = wx_reinterpret_cast(ULONG_PTR, pItem);
+                if ( pItem->IsCheckable() )
+                {
+                    mii.hbmpChecked =
+                    mii.hbmpUnchecked = HBMMENU_CALLBACK;
+                }
                 mii.hbmpItem = HBMMENU_CALLBACK;
 
                 ok = ::InsertMenuItem(GetHmenu(), pos, TRUE /* by pos */, &mii);
