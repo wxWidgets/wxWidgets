@@ -269,7 +269,7 @@ void wxSpinCtrl::OnSetFocus(wxFocusEvent& event)
 void wxSpinCtrl::NormalizeValue()
 {
     const int value = GetValue();
-    const bool changed = value == m_oldValue;
+    const bool changed = value != m_oldValue;
 
     // notice that we have to call SetValue() even if the value didn't change
     // because otherwise we could be left with empty buddy control when value
@@ -278,11 +278,7 @@ void wxSpinCtrl::NormalizeValue()
 
     if ( changed )
     {
-        wxCommandEvent event(wxEVT_COMMAND_SPINCTRL_UPDATED, GetId());
-        event.SetEventObject(this);
-        event.SetInt(value);
-        GetEventHandler()->ProcessEvent(event);
-        m_oldValue = value;
+        SendSpinUpdate(value);
     }
 }
 
@@ -299,6 +295,11 @@ bool wxSpinCtrl::Create(wxWindow *parent,
                         int min, int max, int initial,
                         const wxString& name)
 {
+    // this should be in ctor/init function but I don't want to add one to 2.8
+    // to avoid problems with default ctor which can be inlined in the user
+    // code and so might not get this fix without recompilation
+    m_oldValue = INT_MIN;
+
     // before using DoGetBestSize(), have to set style to let the base class
     // know whether this is a horizontal or vertical control (we're always
     // vertical)
@@ -546,25 +547,27 @@ void wxSpinCtrl::DoSetToolTip(wxToolTip *tip)
 #endif // wxUSE_TOOLTIPS
 
 // ----------------------------------------------------------------------------
-// event processing
+// events processing and generation
 // ----------------------------------------------------------------------------
 
-void wxSpinCtrl::OnSpinChange(wxSpinEvent& eventSpin)
+void wxSpinCtrl::SendSpinUpdate(int value)
 {
     wxCommandEvent event(wxEVT_COMMAND_SPINCTRL_UPDATED, GetId());
     event.SetEventObject(this);
-    int value = eventSpin.GetPosition();
-    event.SetInt( value );
+    event.SetInt(value);
 
-    if (value != m_oldValue)
-        (void)GetEventHandler()->ProcessEvent(event);
-
-    if ( eventSpin.GetSkipped() )
-    {
-        event.Skip();
-    }
+    (void)GetEventHandler()->ProcessEvent(event);
 
     m_oldValue = value;
+}
+
+void wxSpinCtrl::OnSpinChange(wxSpinEvent& eventSpin)
+{
+    const int value = eventSpin.GetPosition();
+    if ( value != m_oldValue )
+    {
+        SendSpinUpdate(value);
+    }
 }
 
 // ----------------------------------------------------------------------------
