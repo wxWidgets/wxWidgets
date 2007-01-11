@@ -2545,11 +2545,16 @@ fi
 
 dnl check for C99 string to long long conversion functions, assume that if we
 dnl have the unsigned variants, then we have the signed ones as well
+dnl
+dnl at least under SGI these functions are only available in C99 code and not
+dnl in C++ so do these tests using C++ compiler
+AC_LANG_PUSH(C++)
 if test "wxUSE_UNICODE" = "yes"; then
     WX_CHECK_FUNCS(wcstoull)
 else
     WX_CHECK_FUNCS(strtoull)
 fi
+AC_LANG_POP()
 
 dnl ---------------------------------------------------------------------------
 dnl Optional libraries
