@@ -1274,6 +1274,7 @@
 #define wxUSE_BOOKCTRL (wxUSE_NOTEBOOK || \
                         wxUSE_LISTBOOK || \
                         wxUSE_CHOICEBOOK || \
+                        wxUSE_TOOLBOOK || \
                         wxUSE_TREEBOOK)
 
 #if wxUSE_COLLPANE
@@ -1308,6 +1309,17 @@
 #       endif
 #   endif
 #endif /* wxUSE_CHOICEBOOK */
+
+#if wxUSE_TOOLBOOK
+#   if !wxUSE_TOOLBAR
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxToolbook requires wxToolBar"
+#       else
+#           undef wxUSE_TOOLBAR
+#           define wxUSE_TOOLBAR 1
+#       endif
+#   endif
+#endif /* wxUSE_TOOLBOOK */
 
 #if !wxUSE_ODCOMBOBOX
 #   if wxUSE_BITMAPCOMBOBOX
