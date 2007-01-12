@@ -1079,24 +1079,30 @@ void wxWindow::ScrollWindow(int dx, int dy, const wxRect *rect)
         //          and scrolling direction
         //       2. if scrolling in both axes, scroll all children
 
+        bool shouldMove = false;
+
         if ( rect && (dx * dy == 0 /* moving in only one of x, y axis */) )
         {
             wxRect childRect = child->GetRect();
             if ( dx == 0 && (childRect.GetLeft() <= rect->GetRight() ||
                              childRect.GetRight() >= rect->GetLeft()) )
             {
-                child->Move(child->GetPosition() + offset);
+                shouldMove = true;
             }
             else if ( dy == 0 && (childRect.GetTop() <= rect->GetBottom() ||
                                   childRect.GetBottom() >= rect->GetTop()) )
             {
-                child->Move(child->GetPosition() + offset);
+                shouldMove = true;
             }
+            // else: child outside of scrolling shaft, don't move
         }
-        else
+        else // scrolling in both axes or rect=NULL
         {
-            child->Move(child->GetPosition() + offset);
+            shouldMove = true;
         }
+
+        if ( shouldMove )
+            child->Move(child->GetPosition() + offset, wxSIZE_ALLOW_MINUS_ONE);
     }
 #endif // wxX11/!wxX11
 }
