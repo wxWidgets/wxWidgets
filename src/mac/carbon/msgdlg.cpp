@@ -53,68 +53,69 @@ int wxMessageDialog::ShowModal()
         alertType = kAlertCautionAlert;
 
 #if TARGET_API_MAC_OSX
-    CFStringRef defaultButtonTitle = NULL;
-    CFStringRef alternateButtonTitle = NULL;
-    CFStringRef otherButtonTitle = NULL;
-
-    wxMacCFStringHolder cfTitle( m_caption, m_font.GetEncoding() );
-    wxMacCFStringHolder cfText( m_message, m_font.GetEncoding() );
-
-    wxMacCFStringHolder cfNoString( _("No"), m_font.GetEncoding() );
-    wxMacCFStringHolder cfYesString( _("Yes"), m_font.GetEncoding() );
-    wxMacCFStringHolder cfOKString( _("OK") , m_font.GetEncoding()) ;
-    wxMacCFStringHolder cfCancelString( _("Cancel"), m_font.GetEncoding() );
-
-    int buttonId[4] = { 0, 0, 0, wxID_CANCEL /* time-out */ };
-
-    if (style & wxYES_NO)
+    if ( !wxIsMainThread() )
     {
-        if ( style & wxNO_DEFAULT )
+        CFStringRef defaultButtonTitle = NULL;
+        CFStringRef alternateButtonTitle = NULL;
+        CFStringRef otherButtonTitle = NULL;
+
+        wxMacCFStringHolder cfTitle( m_caption, m_font.GetEncoding() );
+        wxMacCFStringHolder cfText( m_message, m_font.GetEncoding() );
+
+        wxMacCFStringHolder cfNoString( _("No"), m_font.GetEncoding() );
+        wxMacCFStringHolder cfYesString( _("Yes"), m_font.GetEncoding() );
+        wxMacCFStringHolder cfOKString( _("OK") , m_font.GetEncoding()) ;
+        wxMacCFStringHolder cfCancelString( _("Cancel"), m_font.GetEncoding() );
+
+        int buttonId[4] = { 0, 0, 0, wxID_CANCEL /* time-out */ };
+
+        if (style & wxYES_NO)
         {
-            defaultButtonTitle = cfNoString;
-            alternateButtonTitle = cfYesString;
-            buttonId[0] = wxID_NO;
-            buttonId[1] = wxID_YES;
+            if ( style & wxNO_DEFAULT )
+            {
+                defaultButtonTitle = cfNoString;
+                alternateButtonTitle = cfYesString;
+                buttonId[0] = wxID_NO;
+                buttonId[1] = wxID_YES;
+            }
+            else
+            {
+                defaultButtonTitle = cfYesString;
+                alternateButtonTitle = cfNoString;
+                buttonId[0] = wxID_YES;
+                buttonId[1] = wxID_NO;
+            }
+            if (style & wxCANCEL)
+            {
+                otherButtonTitle = cfCancelString;
+                buttonId[2] = wxID_CANCEL;
+            }
         }
         else
         {
-            defaultButtonTitle = cfYesString;
-            alternateButtonTitle = cfNoString;
-            buttonId[0] = wxID_YES;
-            buttonId[1] = wxID_NO;
+            // the MSW implementation even shows an OK button if it is not specified, we'll do the same
+            buttonId[0] = wxID_OK;
+            // using null as default title does not work on earlier systems
+            defaultButtonTitle = cfOKString;
+            if (style & wxCANCEL)
+            {
+                alternateButtonTitle = cfCancelString;
+                buttonId[1] = wxID_CANCEL;
+            }
         }
-        if (style & wxCANCEL)
-        {
-            otherButtonTitle = cfCancelString;
-            buttonId[2] = wxID_CANCEL;
-        }
+
+        CFOptionFlags exitButton;
+        OSStatus err = CFUserNotificationDisplayAlert(
+            0, alertType, NULL, NULL, NULL, cfTitle, cfText,
+            defaultButtonTitle, alternateButtonTitle, otherButtonTitle, &exitButton );
+        if (err == noErr)
+            resultbutton = buttonId[exitButton];
     }
     else
+#endif
     {
-        // the MSW implementation even shows an OK button if it is not specified, we'll do the same
-        buttonId[0] = wxID_OK;
-        // using null as default title does not work on earlier systems
-        defaultButtonTitle = cfOKString;
-        if (style & wxCANCEL)
-        {
-            alternateButtonTitle = cfCancelString;
-            buttonId[1] = wxID_CANCEL;
-        }
-    }
+        short result;
 
-    CFOptionFlags exitButton;
-    OSStatus err = CFUserNotificationDisplayAlert(
-        0, alertType, NULL, NULL, NULL, cfTitle, cfText,
-        defaultButtonTitle, alternateButtonTitle, otherButtonTitle, &exitButton );
-    if (err == noErr)
-        resultbutton = buttonId[exitButton];
-
-#else
-    short result;
-
-#if TARGET_CARBON
-    if ( UMAGetSystemVersion() >= 0x1000 )
-    {
         AlertStdCFStringAlertParamRec param;
         wxMacCFStringHolder cfNoString( _("No"), m_font.GetEncoding() );
         wxMacCFStringHolder cfYesString( _("Yes"), m_font.GetEncoding() );
@@ -172,12 +173,6 @@ int wxMessageDialog::ShowModal()
                 param.cancelButton = 0;
             }
         }
-#if 0
-        else
-        {
-            skipDialog = true;
-        }
-#endif
 
         param.position = kWindowDefaultPosition;
         if ( !skipDialog )
@@ -190,114 +185,48 @@ int wxMessageDialog::ShowModal()
         {
             return wxID_CANCEL;
         }
-    }
-    else
-#endif
-    {
-        AlertStdAlertParamRec param;
-        Str255 yesPString, noPString;
-        Str255 pascalTitle, pascalText;
 
-        wxMacStringToPascal( m_caption, pascalTitle );
-        wxMacStringToPascal( _("Yes"), yesPString );
-        wxMacStringToPascal( _("No"), noPString );
-        wxMacStringToPascal( m_message, pascalText );
-
-        param.movable = true;
-        param.filterProc = NULL;
-
-        if (style & wxYES_NO)
+        if (style & wxOK)
         {
-            if (style & wxCANCEL)
+            switch ( result )
             {
-                param.defaultText = yesPString;
-                param.cancelText = (StringPtr) kAlertDefaultCancelText;
-                param.otherText = noPString;
-                param.helpButton = false;
-                param.defaultButton = kAlertStdAlertOKButton;
-                param.cancelButton = kAlertStdAlertCancelButton;
-            }
-            else
-            {
-                param.defaultText = yesPString;
-                param.cancelText = NULL;
-                param.otherText = noPString;
-                param.helpButton = false;
-                param.defaultButton = kAlertStdAlertOKButton;
-                param.cancelButton = 0;
+            case 1:
+                resultbutton = wxID_OK;
+                break;
+
+            case 2:
+                // TODO: add Cancel button
+                // if (style & wxCANCEL)
+                //     resultbutton = wxID_CANCEL;
+                break;
+
+            case 3:
+            default:
+                break;
             }
         }
-        else if (style & wxOK)
+        else if (style & wxYES_NO)
         {
-            if (style & wxCANCEL)
+            switch ( result )
             {
-                param.defaultText = (StringPtr) kAlertDefaultOKText;
-                param.cancelText = (StringPtr) kAlertDefaultCancelText;
-                param.otherText = NULL;
-                param.helpButton = false;
-                param.defaultButton = kAlertStdAlertOKButton;
-                param.cancelButton = 0;
+            case 1:
+                resultbutton = wxID_YES;
+                break;
+
+            case 2:
+                if (!(style & wxCANCEL))
+                    resultbutton = wxID_CANCEL;
+                break;
+
+            case 3:
+                resultbutton = wxID_NO;
+                break;
+
+            default:
+                break;
             }
-            else
-            {
-                param.defaultText = (StringPtr) kAlertDefaultOKText;
-                param.cancelText = NULL;
-                param.otherText = NULL;
-                param.helpButton = false;
-                param.defaultButton = kAlertStdAlertOKButton;
-                param.cancelButton = 0;
-            }
-        }
-        else
-        {
-            return resultbutton;
-        }
-
-        param.position = 0;
-        StandardAlert( alertType, pascalTitle, pascalText, &param, &result );
-    }
-
-    if (style & wxOK)
-    {
-        switch ( result )
-        {
-        case 1:
-            resultbutton = wxID_OK;
-            break;
-
-        case 2:
-            // TODO: add Cancel button
-            // if (style & wxCANCEL)
-            //     resultbutton = wxID_CANCEL;
-            break;
-
-        case 3:
-        default:
-            break;
         }
     }
-    else if (style & wxYES_NO)
-    {
-        switch ( result )
-        {
-        case 1:
-            resultbutton = wxID_YES;
-            break;
-
-        case 2:
-            if (!(style & wxCANCEL))
-                resultbutton = wxID_CANCEL;
-            break;
-
-        case 3:
-            resultbutton = wxID_NO;
-            break;
-
-        default:
-            break;
-        }
-    }
-#endif
 
     return resultbutton;
 }
