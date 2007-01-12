@@ -37,8 +37,11 @@ class TestPanel(wx.Panel):
         # Finally, if the directory is changed in the process of getting files, this
         # dialog is set up to change the current working directory to the path chosen.
         dlg = wx.FileDialog(
-            self, message="Choose a file", defaultDir=os.getcwd(), 
-            defaultFile="", wildcard=wildcard, style=wx.OPEN | wx.MULTIPLE | wx.CHANGE_DIR
+            self, message="Choose a file",
+            defaultDir=os.getcwd(), 
+            defaultFile="",
+            wildcard=wildcard,
+            style=wx.OPEN | wx.MULTIPLE | wx.CHANGE_DIR
             )
 
         # Show the dialog and retrieve the user response. If it is the OK response, 
