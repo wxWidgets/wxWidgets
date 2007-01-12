@@ -246,6 +246,7 @@ wxSize wxListBox::DoGetBestSize() const
     {
 #if wxMAC_USE_CORE_GRAPHICS
         wxClientDC dc(const_cast<wxListBox*>(this));
+        dc.SetFont(GetFont());
 #else
         wxMacPortStateHelper st( UMAGetWindowPort( (WindowRef)MacGetTopLevelWindowRef() ) );
 
@@ -288,9 +289,8 @@ wxSize wxListBox::DoGetBestSize() const
 #else
             wLine = ::TextWidth( str.c_str(), 0, str.length() );
 #endif
-
-            lbWidth = wxMax( lbWidth, wLine );
 #endif
+            lbWidth = wxMax( lbWidth, wLine );
         }
 
         // Add room for the scrollbar
@@ -300,10 +300,10 @@ wxSize wxListBox::DoGetBestSize() const
         int cy = 12;
 #if wxMAC_USE_CORE_GRAPHICS
         wxCoord width, height ;
-        dc.GetTextExtent( wxT("X") , &width, &height);
+        dc.GetTextExtent( wxT("XX") , &width, &height);
         int cx = width ;
 #else
-        int cx = ::TextWidth( "X", 0, 1 );
+        int cx = ::TextWidth( "XX", 0, 1 );
 #endif
         lbWidth += cx;
 
