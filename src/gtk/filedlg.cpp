@@ -230,6 +230,8 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
         fn.Assign(defaultFileName);
     else if ( !defaultFileName.empty() )
         fn.Assign(defaultDir, defaultFileName);
+    else
+        fn.AssignDir(defaultDir);
 
     // set the initial file name and/or directory
     wxString fname = fn.GetFullName();
