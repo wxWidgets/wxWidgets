@@ -56,7 +56,7 @@ class GenStaticText(wx.PyControl):
         style = self.GetWindowStyleFlag()
         self.InvalidateBestSize()
         if not style & wx.ST_NO_AUTORESIZE:
-            self.SetInitialSize(self.GetBestSize())
+            self.SetSize(self.GetBestSize())
         self.Refresh()
 
 
@@ -69,7 +69,7 @@ class GenStaticText(wx.PyControl):
         style = self.GetWindowStyleFlag()
         self.InvalidateBestSize()
         if not style & wx.ST_NO_AUTORESIZE:
-            self.SetInitialSize(self.GetBestSize())
+            self.SetSize(self.GetBestSize())
         self.Refresh()
 
 
