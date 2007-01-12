@@ -55,6 +55,7 @@ ID_STARTUP = wx.NewId()
 ID_SETTINGS = wx.NewId()
 ID_FIND = wx.ID_FIND
 ID_FINDNEXT = wx.NewId()
+ID_SHOWTOOLS = wx.NewId()
 
 
 
@@ -154,6 +155,10 @@ class Frame(wx.Frame):
                  'Wrap lines at right edge', wx.ITEM_CHECK)
         m.Append(ID_SHOW_LINENUMBERS, '&Show Line Numbers\tCtrl+Shift+L', 'Show Line Numbers', wx.ITEM_CHECK)
         m.Append(ID_TOGGLE_MAXIMIZE, '&Toggle Maximize\tF11', 'Maximize/Restore Application')
+        if hasattr(self, 'ToggleTools'):
+            m.Append(ID_SHOWTOOLS,
+                     'Show &Tools\tF4',
+                     'Show the filling and other tools', wx.ITEM_CHECK)
 
         # Options
         m = self.autocompMenu = wx.Menu()
@@ -268,6 +273,7 @@ class Frame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnExecStartupScript, id=ID_EXECSTARTUPSCRIPT)
         self.Bind(wx.EVT_MENU, self.OnFindText, id=ID_FIND)
         self.Bind(wx.EVT_MENU, self.OnFindNext, id=ID_FINDNEXT)
+        self.Bind(wx.EVT_MENU, self.OnToggleTools, id=ID_SHOWTOOLS)
 
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateMenu, id=ID_NEW)
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateMenu, id=ID_OPEN)
@@ -306,6 +312,7 @@ class Frame(wx.Frame):
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateMenu, id=ID_EDITSTARTUPSCRIPT)
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateMenu, id=ID_FIND)
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateMenu, id=ID_FINDNEXT)
+        self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateMenu, id=ID_SHOWTOOLS)
         
         self.Bind(wx.EVT_ACTIVATE, self.OnActivate)
         self.Bind(wx.EVT_FIND, self.OnFindNext)
@@ -510,7 +517,9 @@ class Frame(wx.Frame):
         self.findDlg.Destroy()
         self.findDlg = None
     
-
+    def OnToggleTools(self, event):
+        self.ToggleTools()
+        
 
     def OnUpdateMenu(self, event):
         """Update menu items based on current status and context."""
@@ -609,6 +618,9 @@ class Frame(wx.Frame):
                 event.Enable(hasattr(win, 'DoFindNext'))
             elif id == ID_FINDNEXT:
                 event.Enable(hasattr(win, 'DoFindNext'))
+
+            elif id == ID_SHOWTOOLS:
+                event.Check(self.ToolsShown())
                                              
             else:
                 event.Enable(False)

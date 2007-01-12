@@ -17,6 +17,8 @@ multiple event types at once, and in these cases the typeId property
 may not give you what you want.  You should use te component events in
 these cases.
 
+PyCrust now has an option for showing/hiding the notebook.
+
 
 
 
