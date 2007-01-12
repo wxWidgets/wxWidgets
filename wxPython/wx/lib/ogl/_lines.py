@@ -350,7 +350,7 @@ class LineShape(Shape):
                         y2 = first_point[1]
                         y1 = last_point[1]
                     self._lineControlPoints[i] = wx.RealPoint((x2 - x1) / 2.0 + x1, (y2 - y1) / 2.0 + y1)
-                    self._initialised = True
+            self._initialised = True
                     
     def FormatText(self, dc, s, i):
         """Format a text string according to the region size, adding
