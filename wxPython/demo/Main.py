@@ -1208,9 +1208,9 @@ class wxPythonDemo(wx.Frame):
                            wx.ITEM_CHECK)
         self.Bind(wx.EVT_MENU, self.OnToggleRedirect, item)
  
-        item = menu.Append(-1, 'E&xit\tAlt-X', 'Get the heck outta here!')
-        self.Bind(wx.EVT_MENU, self.OnFileExit, item)
-        wx.App.SetMacExitMenuItemId(item.GetId())
+        exitItem = menu.Append(-1, 'E&xit\tAlt-X', 'Get the heck outta here!')
+        self.Bind(wx.EVT_MENU, self.OnFileExit, exitItem)
+        wx.App.SetMacExitMenuItemId(exitItem.GetId())
         self.mainmenu.Append(menu, '&File')
 
         # Make a Demo menu
@@ -1251,13 +1251,14 @@ class wxPythonDemo(wx.Frame):
         self.finddata = wx.FindReplaceData()
         self.finddata.SetFlags(wx.FR_DOWN)
 
-        if 0:
+        if False:
             # This is another way to set Accelerators, in addition to
             # using the '\t<key>' syntax in the menu items.
-            aTable = wx.AcceleratorTable([(wx.ACCEL_ALT,  ord('X'), exitID),
-                                          (wx.ACCEL_CTRL, ord('H'), helpID),
-                                          (wx.ACCEL_CTRL, ord('F'), findID),
-                                          (wx.ACCEL_NORMAL, WXK_F3, findnextID)
+            aTable = wx.AcceleratorTable([(wx.ACCEL_ALT,  ord('X'), exitItem.GetId()),
+                                          (wx.ACCEL_CTRL, ord('H'), helpItem.GetId()),
+                                          (wx.ACCEL_CTRL, ord('F'), findItem.GetId()),
+                                          (wx.ACCEL_NORMAL, wx.WXK_F3, findnextItem.GetId()),
+                                          (wx.ACCEL_NORMAL, wx.WXK_F9, shellItem.GetId()),
                                           ])
             self.SetAcceleratorTable(aTable)
 
@@ -1266,8 +1267,11 @@ class wxPythonDemo(wx.Frame):
         tID = wx.NewId()
         leftPanel = wx.Panel(splitter)
         
-        self.filter = wx.TextCtrl(leftPanel)
+        self.filter = wx.SearchCtrl(leftPanel)
+        self.filter.ShowCancelButton(True)
         self.filter.Bind(wx.EVT_TEXT, self.RecreateTree)
+        self.filter.Bind(wx.EVT_SEARCHCTRL_CANCEL_BTN,
+                         lambda e: self.filter.SetValue(''))
         
         self.treeMap = {}
         self.tree = wx.TreeCtrl(leftPanel, tID, style =
@@ -1384,7 +1388,8 @@ class wxPythonDemo(wx.Frame):
         self.tree.Expand(self.root)
         if firstChild:
             self.tree.Expand(firstChild)
-
+        if filter:
+            self.tree.ExpandAll()
     
     def WriteText(self, text):
         if text[-1:] == '\n':
