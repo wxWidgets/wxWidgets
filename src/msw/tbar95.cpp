@@ -1071,9 +1071,9 @@ bool wxToolBar::Realize()
     }
     else if ( m_nButtons > 0 ) // vertical non empty toolbar
     {
-        if ( m_maxRows == 0 )
-            // if not set yet, have one column
-            SetRows(m_nButtons);
+        // if not set yet, have one column
+        m_maxRows = 1;
+        SetRows(m_nButtons);        
     }
 
     InvalidateBestSize();
