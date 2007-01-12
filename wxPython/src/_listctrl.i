@@ -863,7 +863,6 @@ any.", "",
     %property(CountPerPage, GetCountPerPage, doc="See `GetCountPerPage`");
     %property(EditControl, GetEditControl, doc="See `GetEditControl`");
     %property(FocusedItem, GetFocusedItem, doc="See `GetFocusedItem`");
-    %property(ImageList, GetImageList, SetImageList, doc="See `GetImageList` and `SetImageList`");
     %property(ItemCount, GetItemCount, SetItemCount, doc="See `GetItemCount` and `SetItemCount`");
     %property(MainWindow, GetMainWindow, doc="See `GetMainWindow`");
     %property(SelectedItemCount, GetSelectedItemCount, doc="See `GetSelectedItemCount`");
