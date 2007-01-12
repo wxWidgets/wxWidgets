@@ -1,6 +1,26 @@
 Recent Changes for wxPython
 =====================================================================
 
+2.8.1.1
+-------
+*
+
+wxMSW: Fix lack of spin control update event when control lost focus
+
+Added a typeId property to the PyEventBinder class that holds the
+eventType ID used for that event.  So when you need the eventType
+(such as when sending your own instance of standard events) you can
+use, for example, wx.EVT_BUTTON.typeId instead of
+wx.wxEVT_COMMAND_BUTTON_CLICKED.   Note that there are a few composite
+events, such as EVT_MOUSE and EVT_SCROLL, that will actually bind
+multiple event types at once, and in these cases the typeId property
+may not give you what you want.  You should use te component events in
+these cases.
+
+
+
+
+
 2.8.1.0
 -------
 * 8-Jan-2006
