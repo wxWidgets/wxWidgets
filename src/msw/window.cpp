@@ -803,7 +803,30 @@ bool wxWindowMSW::SetCursor(const wxCursor& cursor)
     // don't "overwrite" busy cursor
     if ( m_cursor.Ok() && !wxIsBusy() )
     {
-        ::SetCursor(GetHcursorOf(m_cursor));
+        // normally we should change the cursor only if it's over this window
+        // but we should do it always if we capture the mouse currently
+        bool set = HasCapture();
+        if ( !set )
+        {
+            HWND hWnd = GetHwnd();
+
+            POINT point;
+#ifdef __WXWINCE__
+            ::GetCursorPosWinCE(&point);
+#else
+            ::GetCursorPos(&point);
+#endif
+
+            RECT rect = wxGetWindowRect(hWnd);
+
+            set = ::PtInRect(&rect, point) != 0;
+        }
+
+        if ( set )
+        {
+            ::SetCursor(GetHcursorOf(m_cursor));
+        }
+        //else: will be set later when the mouse enters this window
     }
 
     return true;
