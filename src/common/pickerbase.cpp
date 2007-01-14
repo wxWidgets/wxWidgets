@@ -134,7 +134,8 @@ void wxPickerBase::DoSetToolTip(wxToolTip *tip)
     m_picker->SetToolTip(tip);
 
     // do a copy as wxWindow will own the pointer we pass
-    m_text->SetToolTip(tip ? new wxToolTip(tip->GetTip()) : NULL);
+    if ( m_text )
+        m_text->SetToolTip(tip ? new wxToolTip(tip->GetTip()) : NULL);
 }
 
 #endif // wxUSE_TOOLTIPS
