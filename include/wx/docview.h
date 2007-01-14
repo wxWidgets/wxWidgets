@@ -594,6 +594,10 @@ public:
 
     const wxList& GetMenus() const { return m_fileMenus; }
 
+	// Set/get base id
+    void SetBaseId(wxWindowID baseId) { m_idBase = baseId; }
+    wxWindowID GetBaseId() const { return m_idBase; }
+
 #if WXWIN_COMPATIBILITY_2_6
     // deprecated, use GetCount() instead
     wxDEPRECATED( size_t GetNoHistoryFiles() const );
