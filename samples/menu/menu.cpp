@@ -84,7 +84,8 @@ protected:
     void OnQuit(wxCommandEvent& event);
 #if USE_LOG_WINDOW
     void OnClearLog(wxCommandEvent& event);
-#endif
+    void OnClearLogUpdateUI(wxUpdateUIEvent& event);
+#endif // USE_LOG_WINDOW
 
     void OnAbout(wxCommandEvent& event);
 
@@ -200,7 +201,7 @@ enum
 {
     Menu_File_Quit = wxID_EXIT,
 #if USE_LOG_WINDOW
-    Menu_File_ClearLog,
+    Menu_File_ClearLog = 100,
 #endif
 
     Menu_MenuBar_Toggle = 200,
@@ -266,6 +267,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(Menu_File_Quit,     MyFrame::OnQuit)
 #if USE_LOG_WINDOW
     EVT_MENU(Menu_File_ClearLog, MyFrame::OnClearLog)
+    EVT_UPDATE_UI(Menu_File_ClearLog, MyFrame::OnClearLogUpdateUI)
 #endif
 
     EVT_MENU(Menu_Help_About, MyFrame::OnAbout)
@@ -629,11 +631,21 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 }
 
 #if USE_LOG_WINDOW
+
 void MyFrame::OnClearLog(wxCommandEvent& WXUNUSED(event))
 {
     m_textctrl->Clear();
 }
-#endif
+
+void MyFrame::OnClearLogUpdateUI(wxUpdateUIEvent& event)
+{
+    // if we only enable this item when the log window is empty, we never see
+    // it in the disable state as a message is logged whenever the menu is
+    // opened, so we disable it if there is not "much" text in the window
+    event.Enable( m_textctrl->GetNumberOfLines() > 5 );
+}
+
+#endif // USE_LOG_WINDOW
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
 {
