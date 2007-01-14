@@ -91,6 +91,10 @@ Major new features in 2.8 release
 2.8.2
 -----
 
+All:
+
+- Added wxSizerFlags::Shaped() and FixedMinSize() methods
+
 wxMSW
 
 - Fix lack of spin control update event when control lost focus

@@ -670,6 +670,14 @@ Aligns the object to the left, shortcut for \texttt{Align(wxALIGN\_LEFT)}
 \helpref{Align}{wxsizerflagsalign}
 
 
+\membersection{wxSizerFlags::FixedMinSize}\label{wxsizerflagsfixedminsize}
+
+\func{wxSizerFlags\& }{FixedMinSize}{\void}
+
+Set the \texttt{wxFIXED\_MINSIZE} flag which indicates that the initial size of
+the window should be also set as its minimal size.
+
+
 \membersection{wxSizerFlags::Proportion}\label{wxsizerflagsproportion}
 
 \func{wxSizerFlags\& }{Proportion}{\param{int }{proportion = 0}}
@@ -686,6 +694,14 @@ Aligns the object to the right, shortcut for \texttt{Align(wxALIGN\_RIGHT)}
 \wxheading{See also}
 
 \helpref{Align}{wxsizerflagsalign}
+
+
+\membersection{wxSizerFlags::Shaped}\label{wxsizerflagsshaped}
+
+\func{wxSizerFlags\& }{Shaped}{\void}
+
+Set the \texttt{wx\_SHAPED} flag which indicates that the elements should
+always keep the fixed width to height ratio equal to its original value.
 
 
 \membersection{wxSizerFlags::TripleBorder}\label{wxsizerflagstriplebleborder}

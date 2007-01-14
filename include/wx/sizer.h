@@ -153,6 +153,23 @@ public:
 #endif
     }
 
+#if wxABI_VERSION >= 20802
+    // setters for the others flags
+    wxSizerFlags& Shaped()
+    {
+        m_flags |= wxSHAPED;
+
+        return *this;
+    }
+
+    wxSizerFlags& FixedMinSize()
+    {
+        m_flags |= wxFIXED_MINSIZE;
+
+        return *this;
+    }
+#endif // wx 2.8.2+
+
     // accessors for wxSizer only
     int GetProportion() const { return m_proportion; }
     int GetFlags() const { return m_flags; }

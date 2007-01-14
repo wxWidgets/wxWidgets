@@ -29,6 +29,8 @@
     global:
         # wxFileHistory::Set/GetBaseId()
         *wxFileHistory*etBaseId*;
+        *wxSizerFlags*Shaped*;
+        *wxSizerFlags*FixedMinSize*;
 };
 
 # public symbols added in 2.8.1 (please keep in alphabetical order):
