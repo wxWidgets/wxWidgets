@@ -421,9 +421,20 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
 
         if ( !bmp.Ok() )
         {
-            // for not checkable bitmaps we should always use unchecked one because
-            // their checked bitmap is not set
+            // for not checkable bitmaps we should always use unchecked one
+            // because their checked bitmap is not set
             bmp = GetBitmap(!IsCheckable() || (st & wxODChecked));
+
+#if wxUSE_IMAGE
+            if ( bmp.Ok() && st & wxODDisabled )
+            {
+                // we need to grey out the bitmap as we don't have any specific
+                // disabled bitmap
+                wxImage imgGrey = bmp.ConvertToImage().ConvertToGreyscale();
+                if ( imgGrey.Ok() )
+                    bmp = wxBitmap(imgGrey);
+            }
+#endif // wxUSE_IMAGE
         }
 
         if ( bmp.Ok() )

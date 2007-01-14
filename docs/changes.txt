@@ -98,6 +98,8 @@ All:
 wxMSW
 
 - Fix lack of spin control update event when control lost focus
+- Corrected drawing of bitmaps for disabled menu items
+
 
 2.8.1
 -----
