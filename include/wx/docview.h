@@ -594,9 +594,11 @@ public:
 
     const wxList& GetMenus() const { return m_fileMenus; }
 
-	// Set/get base id
+#if wxABI_VERSION >= 20802
+    // Set/get base id
     void SetBaseId(wxWindowID baseId) { m_idBase = baseId; }
     wxWindowID GetBaseId() const { return m_idBase; }
+#endif // wxABI 2.8.2+
 
 #if WXWIN_COMPATIBILITY_2_6
     // deprecated, use GetCount() instead

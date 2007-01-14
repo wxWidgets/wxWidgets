@@ -24,6 +24,13 @@
 # and once released its version cannot be changed.
 
 
+# public symbols added in 2.8.2 (please keep in alphabetical order):
+@WX_VERSION_TAG@.2 {
+    global:
+        # wxFileHistory::Set/GetBaseId()
+        *wxFileHistory*etBaseId*;
+};
+
 # public symbols added in 2.8.1 (please keep in alphabetical order):
 @WX_VERSION_TAG@.1 {
     global:
