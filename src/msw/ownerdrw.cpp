@@ -21,6 +21,7 @@
     #include "wx/msw/private.h"
     #include "wx/font.h"
     #include "wx/bitmap.h"
+    #include "wx/image.h"
     #include "wx/dcmemory.h"
     #include "wx/menu.h"
     #include "wx/utils.h"
