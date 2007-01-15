@@ -39,37 +39,6 @@
     #include "wx/univ/renderer.h"
 #endif
 
-#include <unistd.h>
-
-#ifdef HAVE_POLL
-    #if defined(__VMS)
-        #include <poll.h>
-    #else
-        // bug in the OpenBSD headers: at least in 3.1 there is no extern "C"
-        // in neither poll.h nor sys/poll.h which results in link errors later
-        #ifdef __OPENBSD__
-            extern "C"
-            {
-        #endif
-
-        #include <sys/poll.h>
-
-        #ifdef __OPENBSD__
-            };
-        #endif
-    #endif // platform
-#else // !HAVE_POLL
-    // we implement poll() ourselves using select() which is supposed exist in
-    // all modern Unices
-    #include <sys/types.h>
-    #include <sys/time.h>
-    #include <unistd.h>
-    #ifdef HAVE_SYS_SELECT_H
-        #include <sys/select.h>
-    #endif
-#endif // HAVE_POLL/!HAVE_POLL
-
-#include "wx/unix/private.h"
 #include "wx/gtk/win_gtk.h"
 #include "wx/gtk/private.h"
 
@@ -276,75 +245,13 @@ static gint wxapp_idle_callback( gpointer WXUNUSED(data) )
     // Return FALSE if no more idle events are to be sent
     return moreIdles;
 }
+} // extern "C"
 
 #if wxUSE_THREADS
 
-#ifdef HAVE_POLL
-    #define wxPoll poll
-    #define wxPollFd pollfd
-#else // !HAVE_POLL
+static GPollFunc wxgs_poll_func;
 
-typedef GPollFD wxPollFd;
-
-int wxPoll(wxPollFd *ufds, unsigned int nfds, int timeout)
-{
-    // convert timeout from ms to struct timeval (s/us)
-    timeval tv_timeout;
-    tv_timeout.tv_sec = timeout/1000;
-    tv_timeout.tv_usec = (timeout%1000)*1000;
-
-    // remember the highest fd used here
-    int fdMax = -1;
-
-    // and fill the sets for select()
-    fd_set readfds;
-    fd_set writefds;
-    fd_set exceptfds;
-    wxFD_ZERO(&readfds);
-    wxFD_ZERO(&writefds);
-    wxFD_ZERO(&exceptfds);
-
-    unsigned int i;
-    for ( i = 0; i < nfds; i++ )
-    {
-        wxASSERT_MSG( ufds[i].fd < FD_SETSIZE, _T("fd out of range") );
-
-        if ( ufds[i].events & G_IO_IN )
-            wxFD_SET(ufds[i].fd, &readfds);
-
-        if ( ufds[i].events & G_IO_PRI )
-            wxFD_SET(ufds[i].fd, &exceptfds);
-
-        if ( ufds[i].events & G_IO_OUT )
-            wxFD_SET(ufds[i].fd, &writefds);
-
-        if ( ufds[i].fd > fdMax )
-            fdMax = ufds[i].fd;
-    }
-
-    fdMax++;
-    int res = select(fdMax, &readfds, &writefds, &exceptfds, &tv_timeout);
-
-    // translate the results back
-    for ( i = 0; i < nfds; i++ )
-    {
-        ufds[i].revents = 0;
-
-        if ( wxFD_ISSET(ufds[i].fd, &readfds ) )
-            ufds[i].revents |= G_IO_IN;
-
-        if ( wxFD_ISSET(ufds[i].fd, &exceptfds ) )
-            ufds[i].revents |= G_IO_PRI;
-
-        if ( wxFD_ISSET(ufds[i].fd, &writefds ) )
-            ufds[i].revents |= G_IO_OUT;
-    }
-
-    return res;
-}
-
-#endif // HAVE_POLL/!HAVE_POLL
-
+extern "C" {
 static gint wxapp_poll_func( GPollFD *ufds, guint nfds, gint timeout )
 {
     gdk_threads_enter();
@@ -352,9 +259,7 @@ static gint wxapp_poll_func( GPollFD *ufds, guint nfds, gint timeout )
     wxMutexGuiLeave();
     g_mainThreadLocked = true;
 
-    // we rely on the fact that glib GPollFD struct is really just pollfd but
-    // I wonder how wise is this in the long term (VZ)
-    gint res = wxPoll( (wxPollFd *) ufds, nfds, timeout );
+    gint res = (*wxgs_poll_func)(ufds, nfds, timeout);
 
     wxMutexGuiEnter();
     g_mainThreadLocked = false;
@@ -363,10 +268,9 @@ static gint wxapp_poll_func( GPollFD *ufds, guint nfds, gint timeout )
 
     return res;
 }
+}
 
 #endif // wxUSE_THREADS
-
-} // extern "C"
 
 void wxapp_install_idle_handler()
 {
@@ -432,10 +336,6 @@ wxApp::wxApp()
     m_idleTag = 0;
     g_isIdle = true;
     wxapp_install_idle_handler();
-
-#if wxUSE_THREADS
-    g_main_context_set_poll_func( NULL, wxapp_poll_func );
-#endif
 
     // this is NULL for a "regular" wxApp, but is set (and freed) by a wxGLApp
     m_glVisualInfo = (void *) NULL;
@@ -515,6 +415,9 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 #if wxUSE_THREADS
     if (!g_thread_supported())
         g_thread_init(NULL);
+
+    wxgs_poll_func = g_main_context_get_poll_func(NULL);
+    g_main_context_set_poll_func(NULL, wxapp_poll_func);
 #endif // wxUSE_THREADS
 
     gtk_set_locale();
