@@ -717,7 +717,8 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     {
         gs_lgp->gnome_print_job_close( job );
         g_object_unref (job);
-        sm_lastError = wxPRINTER_ERROR;
+        if (sm_lastError != wxPRINTER_CANCELLED)
+            sm_lastError = wxPRINTER_ERROR;
         return false;
     }
 
