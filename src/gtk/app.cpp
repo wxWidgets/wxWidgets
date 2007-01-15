@@ -26,17 +26,10 @@
     #include "wx/font.h"
 #endif
 
-#include "wx/file.h"
-#include "wx/filename.h"
 #include "wx/thread.h"
 
 #ifdef __WXGPE__
     #include <gpe/init.h>
-#endif
-
-#ifdef __WXUNIVERSAL__
-    #include "wx/univ/theme.h"
-    #include "wx/univ/renderer.h"
 #endif
 
 #include "wx/gtk/win_gtk.h"
@@ -48,9 +41,9 @@
 // link GnomeVFS
 //-----------------------------------------------------------------------------
 
-#if wxUSE_LIBGNOMEVFS
-#include "wx/html/forcelnk.h"
-FORCE_LINK(gnome_vfs)
+#if wxUSE_MIMETYPE && wxUSE_LIBGNOMEVFS
+    #include "wx/link.h"
+    wxFORCE_LINK_MODULE(gnome_vfs)
 #endif
 
 //-----------------------------------------------------------------------------

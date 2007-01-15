@@ -15,9 +15,9 @@
     #pragma hdrstop
 #endif
 
-#include "wx/gtk/gnome/gvfs.h"
-
 #if wxUSE_MIMETYPE && wxUSE_LIBGNOMEVFS
+
+#include "wx/gtk/gnome/gvfs.h"
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -25,13 +25,12 @@
 #endif
 
 #include "wx/mimetype.h"
-#include "wx/gtk/private.h"
 #include "wx/dynlib.h"
 
 #include <libgnomevfs/gnome-vfs-mime-handlers.h>
 
-#include "wx/html/forcelnk.h"
-FORCE_LINK_ME(gnome_vfs)
+#include "wx/link.h"
+wxFORCE_LINK_THIS_MODULE(gnome_vfs)
 
 //----------------------------------------------------------------------------
 // wxGnomeVFSLibrary

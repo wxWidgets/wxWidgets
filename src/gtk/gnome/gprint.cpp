@@ -15,9 +15,9 @@
     #pragma hdrstop
 #endif
 
-#include "wx/gtk/gnome/gprint.h"
-
 #if wxUSE_LIBGNOMEPRINT
+
+#include "wx/gtk/gnome/gprint.h"
 
 #ifndef WX_PRECOMP
     #include "wx/log.h"
@@ -42,8 +42,8 @@
 
 static const double RAD2DEG  = 180.0 / M_PI;
 
-#include "wx/html/forcelnk.h"
-FORCE_LINK_ME(gnome_print)
+#include "wx/link.h"
+wxFORCE_LINK_THIS_MODULE(gnome_print)
 
 //----------------------------------------------------------------------------
 // wxGnomePrintLibrary

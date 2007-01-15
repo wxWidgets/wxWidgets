@@ -26,6 +26,8 @@
 
 #if wxUSE_PRINTING_ARCHITECTURE && (!defined(__WXMSW__) || wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW)
 
+#include "wx/generic/prntdlgg.h"
+
 #ifndef WX_PRECOMP
     #include "wx/utils.h"
     #include "wx/dc.h"
@@ -46,8 +48,6 @@
     #include "wx/statline.h"
 #endif
 
-#include "wx/generic/prntdlgg.h"
-
 #if wxUSE_POSTSCRIPT
     #include "wx/generic/dcpsg.h"
 #endif
@@ -63,8 +63,8 @@
 #include <string.h>
 
 #if wxUSE_LIBGNOMEPRINT
-#include "wx/html/forcelnk.h"
-FORCE_LINK(gnome_print)
+    #include "wx/link.h"
+    wxFORCE_LINK_MODULE(gnome_print)
 #endif
 
 // ----------------------------------------------------------------------------
