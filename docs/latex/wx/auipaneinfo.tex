@@ -20,7 +20,7 @@ No base class
 
 \wxheading{See also}
 
-\helpref{wxAuiManager}{wxauimanager},
+\helpref{wxAuiManager}{wxauimanager}, 
 \helpref{wxAuiDockArt}{wxauidockart}
 
 \wxheading{Data structures}
@@ -55,15 +55,16 @@ Copy constructor.
 \membersection{wxAuiPaneInfo::BestSize}\label{wxauipaneinfobestsize}
 
 \func{wxAuiPaneInfo\&}{BestSize}{\param{const wxSize\& }{size}}
+
 \func{wxAuiPaneInfo\&}{BestSize}{\param{int }{x}, \param{int }{y}}
 
-BestSize() sets the ideal size for the pane.  The docking manager will attempt to use this size as much as possible when docking or floating the pane.
+BestSize() sets the ideal size for the pane. The docking manager will attempt to use this size as much as possible when docking or floating the pane.
 
 \membersection{wxAuiPaneInfo::Bottom}\label{wxauipaneinfobottom}
 
 \func{wxAuiPaneInfo\&}{Bottom}{\void}
 
-Bottom() sets the pane dock position to the bottom side of the frame.  This is
+Bottom() sets the pane dock position to the bottom side of the frame. This is
 the same thing as calling Direction(wxAUI\_DOCK\_BOTTOM).
 
 \membersection{wxAuiPaneInfo::BottomDockable}\label{wxauipaneinfobottomdockable}
@@ -82,36 +83,26 @@ Caption() sets the caption of the pane.
 
 \func{wxAuiPaneInfo\&}{CaptionVisible}{\param{bool }{visible = true}}
 
-CaptionVisible indicates that a pane caption should be visible.  If false, no pane caption is drawn.
+CaptionVisible indicates that a pane caption should be visible. If false, no pane caption is drawn.
 
 \membersection{wxAuiPaneInfo::Centre}\label{wxauipaneinfocentre}
 
 \func{wxAuiPaneInfo\&}{Centre}{\void}
+
 \func{wxAuiPaneInfo\&}{Center}{\void}
 
-Center() sets the pane dock position to the left side of the frame.  This is
-the same thing as calling Direction(wxAUI\_DOCK\_CENTRE).
+Center() sets the pane dock position to the left side of the frame.
+The centre pane is the space in the middle after all border panes (left, top, right, bottom) are subtracted from the layout.
+
+This is the same thing as calling Direction(wxAUI\_DOCK\_CENTRE). 
 
 \membersection{wxAuiPaneInfo::CentrePane}\label{wxauipaneinfocentrepane}
 
 \func{wxAuiPaneInfo\&}{CentrePane}{\void}
+
 \func{wxAuiPaneInfo\&}{CenterPane}{\void}
 
-CentrePane() specifies that the pane should adopt the default centre pane settings.
-
-\membersection{wxAuiPaneInfo::Centre}\label{wxauipaneinfocentre}
-
-\func{wxAuiPaneInfo\&}{Centre}{\void}
-\func{wxAuiPaneInfo\&}{Center}{\void}
-
-Centre() sets the pane to the center position of the frame.  The centre pane is the space in the middle after all border panes (left, top, right, bottom) are subtracted from the layout.
-
-\membersection{wxAuiPaneInfo::CentrePane}\label{wxauipaneinfocentrepane}
-
-\func{wxAuiPaneInfo\&}{CentrePane}{\void}
-\func{wxAuiPaneInfo\&}{CenterPane}{\void}
-
-CentrePane() specifies that the pane should adopt the default center pane settings.  Centre panes usually do not have caption bars.  This function provides an easy way of preparing a pane to be displayed in the center dock position.
+CentrePane() specifies that the pane should adopt the default center pane settings. Centre panes usually do not have caption bars. This function provides an easy way of preparing a pane to be displayed in the center dock position.
 
 \membersection{wxAuiPaneInfo::CloseButton}\label{wxauipaneinfoclosebutton}
 
@@ -129,13 +120,13 @@ DefaultPane() specifies that the pane should adopt the default pane settings.
 
 \func{wxAuiPaneInfo\&}{DestroyOnClose}{\param{bool }{b = true}}
 
-DestroyOnClose() indicates whether a pane should be detroyed when it is closed.  Normally a pane is simply hidden when the close button is clicked.  Setting DestroyOnClose to true will cause the window to be destroyed when the user clicks the pane's close button.
+DestroyOnClose() indicates whether a pane should be detroyed when it is closed. Normally a pane is simply hidden when the close button is clicked. Setting DestroyOnClose to true will cause the window to be destroyed when the user clicks the pane's close button.
 
 \membersection{wxAuiPaneInfo::Direction}\label{wxauipaneinfodirection}
 
 \func{wxAuiPaneInfo\&}{Direction}{\param{int }{direction}}
 
-Direction() determines the direction of the docked pane.  It is functionally the same as calling Left(), Right(), Top() or Bottom(), except that docking direction may be specified programmatically via the parameter.
+Direction() determines the direction of the docked pane. It is functionally the same as calling Left(), Right(), Top() or Bottom(), except that docking direction may be specified programmatically via the parameter.
 
 \membersection{wxAuiPaneInfo::Dock}\label{wxauipaneinfodock}
 
@@ -146,13 +137,13 @@ Direction() determines the direction of the docked pane.  It is functionally the
 
 \func{wxAuiPaneInfo\&}{Dockable}{\param{bool }{b = true}}
 
-Dockable() specifies whether a frame can be docked or not.  It is the same as specifying TopDockable(b).BottomDockable(b).LeftDockable(b).RightDockable(b).
+Dockable() specifies whether a frame can be docked or not. It is the same as specifying TopDockable(b).BottomDockable(b).LeftDockable(b).RightDockable(b).
 
 \membersection{wxAuiPaneInfo::Fixed}\label{wxauipaneinfofixed}
 
 \func{wxAuiPaneInfo\&}{Fixed}{\void}
 
-Fixed() forces a pane to be fixed size so that it cannot be resized.  After calling Fixed(), IsFixed() will return true.
+Fixed() forces a pane to be fixed size so that it cannot be resized. After calling Fixed(), IsFixed() will return true.
 
 \membersection{wxAuiPaneInfo::Float}\label{wxauipaneinfofloat}
 
@@ -169,6 +160,7 @@ Floatable() sets whether the user will be able to undock a pane and turn it into
 \membersection{wxAuiPaneInfo::FloatingPosition}\label{wxauipaneinfofloatingposition}
 
 \func{wxAuiPaneInfo\&}{FloatingPosition}{\param{const wxPoint\& }{pos}}
+
 \func{wxAuiPaneInfo\&}{FloatingPosition}{\param{int }{x}, \param{int }{y}}
 
 FloatingPosition() sets the position of the floating pane.
@@ -176,6 +168,7 @@ FloatingPosition() sets the position of the floating pane.
 \membersection{wxAuiPaneInfo::FloatingSize}\label{wxauipaneinfofloatingsize}
 
 \func{wxAuiPaneInfo\&}{FloatingSize}{\param{const wxSize\& }{size}}
+
 \func{wxAuiPaneInfo\&}{FloatingSize}{\param{int }{x}, \param{int }{y}}
 
 FloatingSize() sets the size of the floating pane.
@@ -298,7 +291,7 @@ IsMoveable() returns true if the docked frame can be undocked or moved to anothe
 
 \constfunc{bool}{IsOk}{\void}
 
-IsOk() returns true if the wxAuiPaneInfo structure is valid.  A pane structure is valid if it has an associated window.
+IsOk() returns true if the wxAuiPaneInfo structure is valid. A pane structure is valid if it has an associated window.
 
 \membersection{wxAuiPaneInfo::IsResizable}\label{wxauipaneinfoisresizable}
 
@@ -334,13 +327,13 @@ IsTopDockable() returns true if the pane can be docked at the top of the managed
 
 \func{wxAuiPaneInfo\&}{Layer}{\param{int }{layer}}
 
-Layer() determines the layer of the docked pane.  The dock layer is similar to an onion, the inner-most layer being layer 0.  Each shell moving in the outward direction has a higher layer number.  This allows for more complex docking layout formation.
+Layer() determines the layer of the docked pane. The dock layer is similar to an onion, the inner-most layer being layer 0. Each shell moving in the outward direction has a higher layer number. This allows for more complex docking layout formation.
 
 \membersection{wxAuiPaneInfo::Left}\label{wxauipaneinfoleft}
 
 \func{wxAuiPaneInfo\&}{Left}{\void}
 
-Left() sets the pane dock position to the left side of the frame.  This is the
+Left() sets the pane dock position to the left side of the frame. This is the
 same thing as calling Direction(wxAUI\_DOCK\_LEFT).
 
 \membersection{wxAuiPaneInfo::LeftDockable}\label{wxauipaneinfoleftdockable}
@@ -352,6 +345,7 @@ LeftDockable() indicates whether a pane can be docked on the left of the frame.
 \membersection{wxAuiPaneInfo::MaxSize}\label{wxauipaneinfomaxsize}
 
 \func{wxAuiPaneInfo\&}{MaxSize}{\param{const wxSize\& }{size}}
+
 \func{wxAuiPaneInfo\&}{MaxSize}{\param{int }{x}, \param{int }{y}}
 
 MaxSize() sets the maximum size of the pane.
@@ -365,9 +359,10 @@ MaximizeButton() indicates that a maximize button should be drawn for the pane.
 \membersection{wxAuiPaneInfo::MinSize}\label{wxauipaneinfominsize}
 
 \func{wxAuiPaneInfo\&}{MinSize}{\param{const wxSize\& }{size}}
+
 \func{wxAuiPaneInfo\&}{MinSize}{\param{int }{x}, \param{int }{y}}
 
-MinSize() sets the minimum size of the pane.  Please note that this is only partially supported as of this writing.
+MinSize() sets the minimum size of the pane. Please note that this is only partially supported as of this writing.
 
 \membersection{wxAuiPaneInfo::MinimizeButton}\label{wxauipaneinfominimizebutton}
 
@@ -385,7 +380,7 @@ Movable indicates whether a frame can be moved.
 
 \func{wxAuiPaneInfo\&}{Name}{\param{const wxString\& }{n}}
 
-Name() sets the name of the pane so it can be referenced in lookup functions.  If a name is not specified by the user, a random name is assigned to the pane when it is added to the manager.
+Name() sets the name of the pane so it can be referenced in lookup functions. If a name is not specified by the user, a random name is assigned to the pane when it is added to the manager.
 
 \membersection{wxAuiPaneInfo::PaneBorder}\label{wxauipaneinfopaneborder}
 
@@ -409,7 +404,7 @@ Position() determines the position of the docked pane.
 
 \func{wxAuiPaneInfo\&}{Resizable}{\param{bool }{resizable = true}}
 
-Resizable() allows a pane to be resized if the parameter is true, and forces it to be a fixed size if the parameter is false.  This is simply an antonym for Fixed().
+Resizable() allows a pane to be resized if the parameter is true, and forces it to be a fixed size if the parameter is false. This is simply an antonym for Fixed().
 
 \membersection{wxAuiPaneInfo::Right}\label{wxauipaneinforight}
 
@@ -470,7 +465,7 @@ TopDockable() indicates whether a pane can be docked at the top of the frame.
 
 \func{wxAuiPaneInfo\&}{Window}{\param{wxWindow* }{w}}
 
-Window() assigns the window pointer that the wxAuiPaneInfo should use.  This normally does not need to be specified, as the window pointer is automatically assigned to the wxAuiPaneInfo structure as soon as it is added to the manager.
+Window() assigns the window pointer that the wxAuiPaneInfo should use. This normally does not need to be specified, as the window pointer is automatically assigned to the wxAuiPaneInfo structure as soon as it is added to the manager.
 
 \membersection{wxAuiPaneInfo::operator=}\label{wxauipaneinfooperatorassign}
 
