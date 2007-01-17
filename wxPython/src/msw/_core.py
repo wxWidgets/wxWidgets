@@ -3847,6 +3847,15 @@ class PyEventBinder(object):
             success += target.Disconnect(id1, id2, et)
         return success != 0
 
+    def _getEvtType(self):
+        """
+        Make it easy to get to the default wxEventType typeID for this
+        event binder.
+        """
+        return self.evtType[0]
+    
+    typeId = property(_getEvtType)
+
     
     def __call__(self, *args):
         """
@@ -13328,6 +13337,16 @@ class GridBagSizer(FlexGridSizer):
         not found. (non-recursive)
         """
         return _core_.GridBagSizer_FindItem(*args)
+
+    def GetItem(self, item):
+        gbsi = None
+        si = wx.FlexGridSizer.GetItem(self, item)
+        if not si:
+            return None
+        if type(item) is not int:
+            gbsi = self.FindItem(item)
+        if gbsi: return gbsi
+        return si
 
     def FindItemAtPosition(*args, **kwargs):
         """

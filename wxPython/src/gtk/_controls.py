@@ -4838,7 +4838,6 @@ class ListCtrl(_core.Control):
     CountPerPage = property(GetCountPerPage,doc="See `GetCountPerPage`") 
     EditControl = property(GetEditControl,doc="See `GetEditControl`") 
     FocusedItem = property(GetFocusedItem,doc="See `GetFocusedItem`") 
-    ImageList = property(GetImageList,SetImageList,doc="See `GetImageList` and `SetImageList`") 
     ItemCount = property(GetItemCount,SetItemCount,doc="See `GetItemCount` and `SetItemCount`") 
     MainWindow = property(GetMainWindow,doc="See `GetMainWindow`") 
     SelectedItemCount = property(GetSelectedItemCount,doc="See `GetSelectedItemCount`") 
