@@ -554,7 +554,17 @@ Find the sizer item for the given window or subsizer, returns None if
 not found. (non-recursive)", "");
     wxGBSizerItem* FindItem(wxWindow* window);
     wxGBSizerItem* FindItem(wxSizer* sizer);
-
+    %pythoncode {
+        def GetItem(self, item):
+            gbsi = None
+            si = wx.FlexGridSizer.GetItem(self, item)
+            if not si:
+                return None
+            if type(item) is not int:
+                gbsi = self.FindItem(item)
+            if gbsi: return gbsi
+            return si
+    }
     
     DocDeclStr(
         wxGBSizerItem* , FindItemAtPosition(const wxGBPosition& pos),
