@@ -143,7 +143,9 @@ class EditWindow(stc.StyledTextCtrl):
                           faces)
 
         self.StyleClearAll()
-
+        self.SetSelForeground(True, wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHTTEXT))
+        self.SetSelBackground(True, wx.SystemSettings.GetColour(wx.SYS_COLOUR_HIGHLIGHT))
+        
         # Built in styles
         self.StyleSetSpec(stc.STC_STYLE_LINENUMBER,
                           "back:#C0C0C0,face:%(mono)s,size:%(lnsize)d" % FACES)
