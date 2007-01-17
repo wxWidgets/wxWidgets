@@ -1208,7 +1208,7 @@ class wxPythonDemo(wx.Frame):
                            wx.ITEM_CHECK)
         self.Bind(wx.EVT_MENU, self.OnToggleRedirect, item)
  
-        exitItem = menu.Append(-1, 'E&xit\tAlt-X', 'Get the heck outta here!')
+        exitItem = menu.Append(-1, 'E&xit\tCtrl-Q', 'Get the heck outta here!')
         self.Bind(wx.EVT_MENU, self.OnFileExit, exitItem)
         wx.App.SetMacExitMenuItemId(exitItem.GetId())
         self.mainmenu.Append(menu, '&File')
@@ -1232,11 +1232,14 @@ class wxPythonDemo(wx.Frame):
 
         shellItem = menu.Append(-1, 'Open Py&Shell Window\tF5',
                                 'An interactive interpreter window with the demo app and frame objects in the namesapce')
+        inspToolItem = menu.Append(-1, 'Open &Widget Inspector\tF6',
+                                'A tool that lets you browse the live widgets and sizers in an application')
         menu.AppendSeparator()
         helpItem = menu.Append(-1, '&About wxPython Demo', 'wxPython RULES!!!')
         wx.App.SetMacAboutMenuItemId(helpItem.GetId())
 
         self.Bind(wx.EVT_MENU, self.OnOpenShellWindow, shellItem)
+        self.Bind(wx.EVT_MENU, self.OnOpenWidgetInspector, inspToolItem)
         self.Bind(wx.EVT_MENU, self.OnHelpAbout, helpItem)
         self.Bind(wx.EVT_MENU, self.OnHelpFind,  findItem)
         self.Bind(wx.EVT_MENU, self.OnFindNext,  findnextItem)
@@ -1680,6 +1683,12 @@ class wxPythonDemo(wx.Frame):
                 evt.Skip()
             self.Bind(wx.EVT_CLOSE, CloseShell)
 
+
+    def OnOpenWidgetInspector(self, evt):
+        # Activate the widget inspector that was mixed in with the
+        # app, see MyApp and MyApp.OnInit below.
+        wx.GetApp().ShowInspectionTool()
+
         
     #---------------------------------------------
     def OnCloseWindow(self, event):
@@ -1778,9 +1787,9 @@ class MySplashScreen(wx.SplashScreen):
         frame.Show()
         if self.fc.IsRunning():
             self.Raise()
+
         
 import wx.lib.mixins.inspect
-
 class MyApp(wx.App, wx.lib.mixins.inspect.InspectionMixin):
     def OnInit(self):
         """

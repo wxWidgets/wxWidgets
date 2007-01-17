@@ -17,7 +17,8 @@ directory within its own frame window.  Just specify the module name
 on the command line.
 """
 
-import wx                  # This module uses the new wx namespace
+import wx
+import wx.lib.mixins.inspect
 import sys, os
 
 # stuff for debugging
@@ -39,7 +40,7 @@ class Log:
     write = WriteText
 
 
-class RunDemoApp(wx.App):
+class RunDemoApp(wx.App, wx.lib.mixins.inspect.InspectionMixin):
     def __init__(self, name, module, useShell):
         self.name = name
         self.demoModule = module
@@ -51,9 +52,10 @@ class RunDemoApp(wx.App):
         wx.Log_SetActiveTarget(wx.LogStderr())
 
         self.SetAssertMode(assertMode)
+        self.Init()  # InspectionMixin
 
         frame = wx.Frame(None, -1, "RunDemo: " + self.name, pos=(50,50), size=(200,100),
-                        style=wx.DEFAULT_FRAME_STYLE)
+                        style=wx.DEFAULT_FRAME_STYLE, name="run a sample")
         frame.CreateStatusBar()
 
         menuBar = wx.MenuBar()
