@@ -19,6 +19,17 @@ these cases.
 
 PyCrust now has an option for showing/hiding the notebook.
 
+wxMSW:  Corrected drawing of bitmaps for disabled menu items.
+
+Enhanced the wx.lib.mixins.inspect module.  In addition to showing a
+PyCrust window it is now a widget browser, which provides a tree
+loaded up with all the widgets in the app, optionally with the sizers
+too, and also a panel displaying the properties of the selected
+window.  Run the demo and type Ctrl-Alt-I keystroke (or Cmd-Alt-I on
+the Mac) to see how it works.  You can add this to your own apps with
+just a few lines of code.
+
+
 
 
 
