@@ -96,6 +96,7 @@ class Crust(wx.SplitterWindow):
             self.lastsashpos = self.GetSashPosition()
         else:
             self.lastsashpos = -1
+        self.issplit = self.IsSplit()       
 
     def ToggleTools(self):
         """Toggle the display of the filling and other tools"""

@@ -343,11 +343,12 @@ class Shell(editwindow.EditWindow):
     def showIntro(self, text=''):
         """Display introductory text in the shell."""
         if text:
-            if not text.endswith(os.linesep):
-                text += os.linesep
             self.write(text)
         try:
-            self.write(self.interp.introText)
+            if self.interp.introText:
+                if text and not text.endswith(os.linesep):
+                    self.write(os.linesep)
+                self.write(self.interp.introText)
         except AttributeError:
             pass
 
