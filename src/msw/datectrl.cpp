@@ -256,7 +256,10 @@ void wxDatePickerCtrl::SetValue(const wxDateTime& dt)
         wxLogDebug(_T("DateTime_SetSystemtime() failed"));
     }
 
+    // we need to keep only the date part, times don't make sense for this
+    // control (in particular, comparisons with other dates would fail)
     m_date = dt;
+    m_date.ResetTime();
 }
 
 wxDateTime wxDatePickerCtrl::GetValue() const
