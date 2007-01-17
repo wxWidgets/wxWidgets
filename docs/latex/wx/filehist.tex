@@ -89,6 +89,13 @@ Appends the files in the history list, to all menus managed by the file history 
 Appends the files in the history list, to the given menu only.
 
 
+\membersection{wxFileHistory::GetBaseId}\label{wxfilehistorygetbaseid}
+
+\constfunc{wxWindowID}{GetBaseId}{\void}
+
+Returns the base identifier for the range used for appending items.
+
+
 \membersection{wxFileHistory::GetCount}\label{wxfilehistorygetcount}
 
 \constfunc{size\_t}{GetCount}{\void}
@@ -155,6 +162,13 @@ explicitly by the application.
 \wxheading{See also}
 
 \helpref{wxConfig}{wxconfigbase}
+
+
+\membersection{wxFileHistory::SetBaseId}\label{wxfilehistorysetbaseid}
+
+\func{void}{SetBaseId}{\param{wxWindowID}{ baseId}}
+
+Sets the base identifier for the range used for appending items.
 
 
 \membersection{wxFileHistory::UseMenu}\label{wxfilehistoryusemenu}
