@@ -422,7 +422,7 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
             <set var="_custom_build_include_wx_msw_genrcdefs_h">
 Creating $(SETUPHDIR)\wx\msw\rcdefs.h
 
-"$(SETUPHDIR)\wx\msw\rcdefs.h" : "$(DOLLAR)(SOURCE)" "$(DOLLAR)(SETUPHDIR)\wx\msw"
+"$(SETUPHDIR)\wx\msw\rcdefs.h" : "$(DOLLAR)(SOURCE)" "$(SETUPHDIR)\wx\msw"
 $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"
             </set>
         </if>
