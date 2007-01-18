@@ -191,8 +191,10 @@ wxObject* wxSizerXmlHandler::Handle_sizer()
     if (m_class == wxT("wxBoxSizer"))
         sizer = Handle_wxBoxSizer();
 
+#if wxUSE_STATBOX
     else if (m_class == wxT("wxStaticBoxSizer"))
         sizer = Handle_wxStaticBoxSizer();
+#endif
 
     else if (m_class == wxT("wxGridSizer"))
         sizer = Handle_wxGridSizer();
@@ -251,6 +253,7 @@ wxSizer*  wxSizerXmlHandler::Handle_wxBoxSizer()
     return new wxBoxSizer(GetStyle(wxT("orient"), wxHORIZONTAL));
 }
 
+#if wxUSE_STATBOX
 wxSizer*  wxSizerXmlHandler::Handle_wxStaticBoxSizer()
 {
     return new wxStaticBoxSizer(
@@ -262,6 +265,7 @@ wxSizer*  wxSizerXmlHandler::Handle_wxStaticBoxSizer()
                             GetName()),
             GetStyle(wxT("orient"), wxHORIZONTAL));
 }
+#endif // wxUSE_STATBOX
 
 wxSizer*  wxSizerXmlHandler::Handle_wxGridSizer()
 {

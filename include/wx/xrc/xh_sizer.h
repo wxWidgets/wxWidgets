@@ -41,7 +41,9 @@ private:
     wxObject* Handle_spacer();
     wxObject* Handle_sizer();
     wxSizer*  Handle_wxBoxSizer();
+#if wxUSE_STATBOX
     wxSizer*  Handle_wxStaticBoxSizer();
+#endif
     wxSizer*  Handle_wxGridSizer();
     wxSizer*  Handle_wxFlexGridSizer();
     wxSizer*  Handle_wxGridBagSizer();
