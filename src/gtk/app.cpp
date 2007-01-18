@@ -247,11 +247,17 @@ static GPollFunc wxgs_poll_func;
 extern "C" {
 static gint wxapp_poll_func( GPollFD *ufds, guint nfds, gint timeout )
 {
+    gdk_threads_enter();
+
+    wxMutexGuiLeave();
     g_mainThreadLocked = true;
 
     gint res = (*wxgs_poll_func)(ufds, nfds, timeout);
 
+    wxMutexGuiEnter();
     g_mainThreadLocked = false;
+
+    gdk_threads_leave();
 
     return res;
 }
@@ -402,7 +408,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 #if wxUSE_THREADS
     if (!g_thread_supported())
         g_thread_init(NULL);
-    gdk_threads_init();
 
     wxgs_poll_func = g_main_context_get_poll_func(NULL);
     g_main_context_set_poll_func(NULL, wxapp_poll_func);
@@ -557,15 +562,3 @@ void wxApp::SuspendIdleCallback()
         wxAddEmissionHook();
     }
 }
-
-#if wxUSE_THREADS
-void wxMutexGuiEnter()
-{
-    gdk_threads_enter();
-}
-
-void wxMutexGuiLeave()
-{
-    gdk_threads_leave();
-}
-#endif
