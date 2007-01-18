@@ -97,6 +97,7 @@ All:
 - Added wxCSConv::IsOk() (Manuel Martin)
 - Added wxDateTime::GetDateOnly()
 - Made wxTextFile work with unseekable files again (David Hart)
+- Added wxCONFIG_USE_SUBDIR flag to wxFileConfig (Giuseppe Bilotta)
 
 wxMSW
 

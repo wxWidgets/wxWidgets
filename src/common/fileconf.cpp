@@ -435,7 +435,13 @@ wxFileConfig::wxFileConfig(const wxString& appName, const wxString& vendorName,
 {
     // Make up names for files if empty
     if ( m_strLocalFile.empty() && (style & wxCONFIG_USE_LOCAL_FILE) )
+    {
         m_strLocalFile = GetLocalFileName(GetAppName());
+#if defined(__UNIX__) && !defined(__VMS)
+        if ( style & wxCONFIG_USE_SUBDIR )
+            m_strLocalFile << wxFILE_SEP_PATH << GetAppName();
+#endif
+    }
 
     if ( m_strGlobalFile.empty() && (style & wxCONFIG_USE_GLOBAL_FILE) )
         m_strGlobalFile = GetGlobalFileName(GetAppName());

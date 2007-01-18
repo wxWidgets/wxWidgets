@@ -377,18 +377,30 @@ this is not present, but required, the application name will be used instead.}
 
 \docparam{style}{Can be one of wxCONFIG\_USE\_LOCAL\_FILE and
 wxCONFIG\_USE\_GLOBAL\_FILE. The style interpretation depends on the config
-class and is ignored by some. For wxFileConfig, these styles determine whether
-a local or global config file is created or used. If the flag is present but
-the parameter is empty, the parameter will be set to a default. If the
-parameter is present but the style flag not, the relevant flag will be added
-to the style. For wxFileConfig you can also add wxCONFIG\_USE\_RELATIVE\_PATH 
-by logically or'ing it to either of the \_FILE options to tell wxFileConfig to 
-use relative instead of absolute paths.  For wxFileConfig, you can also 
-add wxCONFIG\_USE\_NO\_ESCAPE\_CHARACTERS which will turn off character 
-escaping for the values of entries stored in the config file: for example 
-a {\it foo} key with some backslash characters will be stored as {\tt foo=C:$\backslash$mydir} instead
-of the usual storage of {\tt foo=C:$\backslash\backslash$mydir}.
-For wxRegConfig, this flag refers to HKLM, and provides read-only access.
+class and is ignored by some implementations. For wxFileConfig, these styles
+determine whether a local or global config file is created or used. If the
+flag is present but the parameter is empty, the parameter will be set to a
+default. If the parameter is present but the style flag not, the relevant flag
+will be added to the style. For wxRegConfig, thie GLOBAL flag refers to HKLM
+key while LOCAL one is for the usual HKCU one.
+
+For wxFileConfig you can also add wxCONFIG\_USE\_RELATIVE\_PATH by logically
+or'ing it to either of the \_FILE options to tell wxFileConfig to use relative
+instead of absolute paths.
+
+On non-VMS Unix systems, the default local configuration file is \tt{~/.appname}.
+However, this path may be also used as user data directory
+(see \helpref{wxStandardPaths::GetUserDataDir}{wxstandardpathsgetuserdatadir}) if
+the application has several data files. In this case wxCONFIG\_USE\_SUBDIR
+flag, which changes the default local configuration file to \tt{~/.appname/appname}
+should be used. Notice that this flag is ignored on non-Unix system, including
+VMS, or if a non-default \textit{localFilename} is provided. \newsince{2.8.2}
+
+For wxFileConfig, you can also add wxCONFIG\_USE\_NO\_ESCAPE\_CHARACTERS which
+will turn off character escaping for the values of entries stored in the config
+file: for example a {\it foo} key with some backslash characters will be stored
+as {\tt foo=C:$\backslash$mydir} instead of the usual storage of {\tt
+foo=C:$\backslash\backslash$mydir}.
 
 The wxCONFIG\_USE\_NO\_ESCAPE\_CHARACTERS style can be helpful if your config 
 file must be read or written to by a non-wxWidgets program (which might not 
