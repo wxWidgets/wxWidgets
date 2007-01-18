@@ -223,7 +223,7 @@ public:
     // resource. If an unknown str_id is requested (i.e. other than wxID_XXX
     // or integer), a new record is created which associates the given string
     // with a number. If value_if_not_found == wxID_NONE, the number is obtained via
-    // wxNewId(). Otherwise value_if_not_found is used.
+    // wxWindow::NewControlId(). Otherwise value_if_not_found is used.
     // Macro XRCID(name) is provided for convenient use in event tables.
     static int GetXRCID(const wxChar *str_id, int value_if_not_found = wxID_NONE);
 

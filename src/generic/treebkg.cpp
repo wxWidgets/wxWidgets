@@ -54,7 +54,7 @@ const wxEventType wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED = wxNewEventType();
 const wxEventType wxEVT_COMMAND_TREEBOOK_NODE_COLLAPSED = wxNewEventType();
 const wxEventType wxEVT_COMMAND_TREEBOOK_NODE_EXPANDED = wxNewEventType();
 #endif
-const int wxID_TREEBOOKTREEVIEW = wxNewId();
+const int wxID_TREEBOOKTREEVIEW = wxWindow::NewControlId();
 
 BEGIN_EVENT_TABLE(wxTreebook, wxBookCtrlBase)
     EVT_TREE_SEL_CHANGED   (wxID_TREEBOOKTREEVIEW, wxTreebook::OnTreeSelectionChange)

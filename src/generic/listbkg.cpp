@@ -54,7 +54,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxListbookEvent, wxNotifyEvent)
 const wxEventType wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING = wxNewEventType();
 const wxEventType wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED = wxNewEventType();
 #endif
-const int wxID_LISTBOOKLISTVIEW = wxNewId();
+const int wxID_LISTBOOKLISTVIEW = wxWindow::NewControlId();
 
 BEGIN_EVENT_TABLE(wxListbook, wxBookCtrlBase)
     EVT_SIZE(wxListbook::OnSize)
