@@ -3639,6 +3639,10 @@ class DateTime(object):
         """ResetTime(self) -> DateTime"""
         return _misc_.DateTime_ResetTime(*args, **kwargs)
 
+    def GetDateOnly(*args, **kwargs):
+        """GetDateOnly(self) -> DateTime"""
+        return _misc_.DateTime_GetDateOnly(*args, **kwargs)
+
     def SetYear(*args, **kwargs):
         """SetYear(self, int year) -> DateTime"""
         return _misc_.DateTime_SetYear(*args, **kwargs)

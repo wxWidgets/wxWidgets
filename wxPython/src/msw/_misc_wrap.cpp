@@ -24450,6 +24450,34 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_DateTime_GetDateOnly(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxDateTime *arg1 = (wxDateTime *) 0 ;
+  wxDateTime result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxDateTime, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "DateTime_GetDateOnly" "', expected argument " "1"" of type '" "wxDateTime const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxDateTime * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxDateTime const *)arg1)->GetDateOnly();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxDateTime(static_cast< const wxDateTime& >(result))), SWIGTYPE_p_wxDateTime, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_DateTime_SetYear(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxDateTime *arg1 = (wxDateTime *) 0 ;
@@ -39792,6 +39820,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DateTime_SetHMS", (PyCFunction) _wrap_DateTime_SetHMS, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DateTime_Set", (PyCFunction) _wrap_DateTime_Set, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DateTime_ResetTime", (PyCFunction)_wrap_DateTime_ResetTime, METH_O, NULL},
+	 { (char *)"DateTime_GetDateOnly", (PyCFunction)_wrap_DateTime_GetDateOnly, METH_O, NULL},
 	 { (char *)"DateTime_SetYear", (PyCFunction) _wrap_DateTime_SetYear, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DateTime_SetMonth", (PyCFunction) _wrap_DateTime_SetMonth, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DateTime_SetDay", (PyCFunction) _wrap_DateTime_SetDay, METH_VARARGS | METH_KEYWORDS, NULL},
