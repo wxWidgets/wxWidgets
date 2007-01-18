@@ -94,6 +94,7 @@ Major new features in 2.8 release
 All:
 
 - Added wxSizerFlags::Shaped() and FixedMinSize() methods
+- Added wxDateTime::GetDateOnly()
 
 wxMSW
 

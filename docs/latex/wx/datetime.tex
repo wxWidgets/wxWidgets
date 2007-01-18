@@ -862,6 +862,20 @@ Same as \helpref{Set}{wxdatetimesettm}.
 Returns {\tt true} if the object represents a valid time moment.
 
 
+\membersection{wxDateTime::GetDateOnly}\label{wxdatetimegetdateonly}
+
+\constfunc{wxDateTime}{GetDateOnly}{\void}
+
+Returns the object having the same date component as this one but time of
+00:00:00.
+
+\newsince{2.8.2}
+
+\wxheading{See also}
+
+\helpref{ResetTime}{wxdatetimeresettime}
+
+
 \membersection{wxDateTime::GetTm}\label{wxdatetimegettm}
 
 \constfunc{Tm}{GetTm}{\param{const TimeZone\& }{tz = Local}}

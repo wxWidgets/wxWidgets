@@ -191,6 +191,7 @@ private:
         CPPUNIT_TEST( TestDateParse );
         CPPUNIT_TEST( TestTimeArithmetics );
         CPPUNIT_TEST( TestDSTBug );
+        CPPUNIT_TEST( TestDateOnly );
     CPPUNIT_TEST_SUITE_END();
 
     void TestLeapYears();
@@ -206,6 +207,7 @@ private:
     void TestDateParse();
     void TestTimeArithmetics();
     void TestDSTBug();
+    void TestDateOnly();
 
     DECLARE_NO_COPY_CLASS(DateTimeTestCase)
 };
@@ -918,6 +920,22 @@ void DateTimeTestCase::TestDSTBug()
     CPPUNIT_ASSERT_EQUAL(0, (int)dt2.GetSecond());
     CPPUNIT_ASSERT_EQUAL(0, (int)dt2.GetMillisecond());
 #endif // CHANGE_SYSTEM_DATE
+}
+
+void DateTimeTestCase::TestDateOnly()
+{
+    wxDateTime dt(19, wxDateTime::Jan, 2007, 15, 01, 00);
+
+    static const wxDateTime::wxDateTime_t DATE_ZERO = 0;
+    CPPUNIT_ASSERT_EQUAL( DATE_ZERO, dt.GetDateOnly().GetHour() );
+    CPPUNIT_ASSERT_EQUAL( DATE_ZERO, dt.GetDateOnly().GetMinute() );
+    CPPUNIT_ASSERT_EQUAL( DATE_ZERO, dt.GetDateOnly().GetSecond() );
+    CPPUNIT_ASSERT_EQUAL( DATE_ZERO, dt.GetDateOnly().GetMillisecond() );
+
+    dt.ResetTime();
+    CPPUNIT_ASSERT_EQUAL( wxDateTime(19, wxDateTime::Jan, 2007), dt );
+
+    CPPUNIT_ASSERT_EQUAL( wxDateTime::Today(), wxDateTime::Now().GetDateOnly() );
 }
 
 #endif // wxUSE_DATETIME

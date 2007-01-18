@@ -1496,6 +1496,16 @@ wxDateTime& wxDateTime::ResetTime()
     return *this;
 }
 
+wxDateTime wxDateTime::GetDateOnly() const
+{
+    Tm tm = GetTm();
+    tm.msec =
+    tm.sec =
+    tm.min =
+    tm.hour = 0;
+    return wxDateTime(tm);
+}
+
 // ----------------------------------------------------------------------------
 // DOS Date and Time Format functions
 // ----------------------------------------------------------------------------
