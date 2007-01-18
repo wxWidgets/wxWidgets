@@ -95,6 +95,7 @@ All:
 
 - Added wxSizerFlags::Shaped() and FixedMinSize() methods
 - Added wxDateTime::GetDateOnly()
+- Made wxTextFile work with unseekable files again (David Hart)
 
 wxMSW
 

@@ -88,8 +88,8 @@ bool wxTextFile::OnClose()
 
 bool wxTextFile::OnRead(const wxMBConv& conv)
 {
-    // file should be opened and we must be in it's beginning
-    wxASSERT( m_file.IsOpened() && m_file.Tell() == 0 );
+    // file should be opened
+    wxASSERT_MSG( m_file.IsOpened(), _T("can't read closed file") );
 
     // read the entire file in memory: this is not the most efficient thing to
     // do but there is no good way to avoid it in Unicode build because if we
@@ -98,14 +98,35 @@ bool wxTextFile::OnRead(const wxMBConv& conv)
     // read and so the conversion would fail) and, as the file contents is kept
     // in memory by wxTextFile anyhow, it shouldn't be a big problem to read
     // the file entirely
-    const size_t bufSize = (size_t)(m_file.Length() + 4 /* for trailing NULs */ );
-    size_t bufPos = 0;
-    wxCharBuffer buf(bufSize - 1 /* it adds 1 internally */);
-
+    size_t bufSize,
+           bufPos = 0;
     char block[1024];
-    for ( bool eof = false; !eof; )
+    wxCharBuffer buf;
+
+    // first determine if the file is seekable or not and so whether we can
+    // determine its length in advance
+    wxFileOffset fileLength;
     {
-        // try to read up to the size of the entire block
+        wxLogNull logNull;
+        fileLength = m_file.Length();
+    }
+
+    // some non-seekable files under /proc under Linux pretend that they're
+    // seekable but always return 0; others do return an error
+    const bool seekable = fileLength != wxInvalidOffset && fileLength != 0;
+    if ( seekable )
+    {
+        // we know the required length, so set the buffer size in advance
+        bufSize = fileLength;
+        if ( !buf.extend(bufSize - 1 /* it adds 1 internally */) )
+            return false;
+
+        // if the file is seekable, also check that we're at its beginning
+        wxASSERT_MSG( m_file.Tell() == 0, _T("should be at start of file") );
+    }
+
+    for ( ;; )
+    {
         ssize_t nRead = m_file.Read(block, WXSIZEOF(block));
 
         if ( nRead == wxInvalidOffset )
@@ -115,20 +136,41 @@ bool wxTextFile::OnRead(const wxMBConv& conv)
         }
 
         if ( nRead == 0 )
-            break;
+        {
+            // if no bytes have been read, presumably this is a valid-but-empty file
+            if ( bufPos == 0 )
+                return true;
 
-        // this shouldn't happen but don't overwrite the buffer if it does
-        wxCHECK_MSG( bufPos + nRead <= bufSize, false,
-                     _T("read more than file length?") );
+            // otherwise we've finished reading the file
+            break;
+        }
+
+        if ( seekable )
+        {
+            // this shouldn't happen but don't overwrite the buffer if it does
+            wxCHECK_MSG( bufPos + nRead <= bufSize, false,
+                         _T("read more than file length?") );
+        }
+        else // !seekable
+        {
+            // for non-seekable files we have to allocate more memory on the go
+            if ( !buf.extend(bufPos + nRead - 1 /* it adds 1 internally */) )
+                return false;
+        }
 
         // append to the buffer
         memcpy(buf.data() + bufPos, block, nRead);
         bufPos += nRead;
     }
 
+    if ( !seekable )
+    {
+        bufSize = bufPos;
+    }
+
     const wxString str(buf, conv, bufPos);
 
-    // this doesn't risk to happen in ANSI build
+    // there's no risk of this happening in ANSI build
 #if wxUSE_UNICODE
     if ( bufSize > 4 && str.empty() )
     {
