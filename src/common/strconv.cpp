@@ -3518,6 +3518,19 @@ void wxCSConv::CreateConvIfNeeded() const
     }
 }
 
+bool wxCSConv::IsOk() const
+{
+    CreateConvIfNeeded();
+
+    // special case: no convReal created for wxFONTENCODING_ISO8859_1
+    if ( m_encoding == wxFONTENCODING_ISO8859_1 )
+        return true; // always ok as we do it ourselves
+
+    // m_convReal->IsOk() is called at its own creation, so we know it must
+    // be ok if m_convReal is non-NULL
+    return m_convReal != NULL;
+}
+
 size_t wxCSConv::ToWChar(wchar_t *dst, size_t dstLen,
                          const char *src, size_t srcLen) const
 {

@@ -385,6 +385,11 @@ public:
 
     void Clear();
 
+#if wxABI_VERSION >= 20802
+    // return true if the conversion could be initilized successfully
+    bool IsOk() const;
+#endif // wx 2.8.2+
+
 private:
     // common part of all ctors
     void Init();

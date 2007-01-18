@@ -59,6 +59,7 @@ private:
         CPPUNIT_TEST( ConversionUTF8 );
         CPPUNIT_TEST( ConversionUTF16 );
         CPPUNIT_TEST( ConversionUTF32 );
+        CPPUNIT_TEST( IsConvOk );
 #endif // wxUSE_WCHAR_T
     CPPUNIT_TEST_SUITE_END();
 
@@ -71,6 +72,7 @@ private:
     void ConversionUTF8();
     void ConversionUTF16();
     void ConversionUTF32();
+    void IsConvOk();
 
     // test if converting s using the given encoding gives ws and vice versa
     //
@@ -315,6 +317,17 @@ void UnicodeTestCase::ConversionUTF32()
     wxWCharBuffer wbuf(conv.cMB2WC("\0\0\x01\0\0\0\0B\0\0\0C" /* A macron BC */,
                                    12, &len));
     CPPUNIT_ASSERT_EQUAL( (size_t)3, len );
+}
+
+void UnicodeTestCase::IsConvOk()
+{
+    CPPUNIT_ASSERT( wxCSConv(wxFONTENCODING_SYSTEM).IsOk() );
+    CPPUNIT_ASSERT( wxCSConv(_T("UTF-8")).IsOk() );
+    CPPUNIT_ASSERT( !wxCSConv(_T("NoSuchConversion")).IsOk() );
+
+#ifdef __WINDOWS__
+    CPPUNIT_ASSERT( wxCSConv(_T("WINDOWS-437")).IsOk() );
+#endif
 }
 
 #endif // wxUSE_WCHAR_T

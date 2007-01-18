@@ -32,8 +32,8 @@ default user character set.
 \func{}{wxCSConv}{\param{wxFontEncoding }{encoding}}
 
 Constructor. You may specify either the name of the character set you want to
-convert from/to or an encoding constant. If the character set name is not
-recognized, ISO 8859-1 is used as fall back.
+convert from/to or an encoding constant. If the character set name (or the
+encoding) is not recognized, ISO 8859-1 is used as fall back.
 
 
 \membersection{wxCSConv::\destruct{wxCSConv}}\label{wxcsconvdtor}
@@ -43,11 +43,25 @@ recognized, ISO 8859-1 is used as fall back.
 Destructor frees any resources needed to perform the conversion.
 
 
+\membersection{wxCSConv::IsOk}\label{wxcsconvisok}
+
+\constfunc{bool}{IsOk}{\void}
+
+Returns \true if the charset (or the encoding) given at constructor is really
+available to use. Returns \false if ISO 8859-1 will be used instead.
+
+Note this does \emph{not} mean that a given string will be correctly converted.
+A malformed string may still make conversion functions return \texttt{wxCONV\_FAILED}.
+
+\newsince{2.8.2}
+
+
 \membersection{wxCSConv::MB2WC}\label{wxcsconvmb2wc}
 
 \constfunc{size\_t}{MB2WC}{\param{wchar\_t* }{buf}, \param{const char* }{psz}, \param{size\_t }{n}}
 
 Converts from the selected character set to Unicode. Returns length of string written to destination buffer.
+
 
 \membersection{wxCSConv::WC2MB}\label{wxcsconvwc2mb}
 
