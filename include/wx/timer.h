@@ -21,6 +21,7 @@
 #include "wx/longlong.h"
 #include "wx/event.h"
 #include "wx/stopwatch.h" // for backwards compatibility
+#include "wx/window.h"    // only for NewControlId()
 
 
 // more readable flags for Start():
