@@ -269,7 +269,8 @@ class SettingsPanel : public wxPanel
 public:
 
     SettingsPanel(wxWindow* parent, MyFrame* frame)
-            : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize)
+            : wxPanel(parent, wxID_ANY, wxDefaultPosition, wxDefaultSize),
+              m_frame(frame)
     {
         //wxBoxSizer* vert = new wxBoxSizer(wxVERTICAL);
 
@@ -402,7 +403,6 @@ public:
         SetSizer(cont_sizer);
         GetSizer()->SetSizeHints(this);
 
-        m_frame = frame;
         m_border_size->SetValue(frame->GetDockArt()->GetMetric(wxAUI_DOCKART_PANE_BORDER_SIZE));
         m_sash_size->SetValue(frame->GetDockArt()->GetMetric(wxAUI_DOCKART_SASH_SIZE));
         m_caption_size->SetValue(frame->GetDockArt()->GetMetric(wxAUI_DOCKART_CAPTION_SIZE));
