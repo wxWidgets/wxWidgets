@@ -98,7 +98,7 @@ bool wxTextFile::OnRead(const wxMBConv& conv)
     // read and so the conversion would fail) and, as the file contents is kept
     // in memory by wxTextFile anyhow, it shouldn't be a big problem to read
     // the file entirely
-    size_t bufSize,
+    size_t bufSize = 0,
            bufPos = 0;
     char block[1024];
     wxCharBuffer buf;
