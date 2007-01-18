@@ -453,7 +453,7 @@ void wxToolBarTool::UpdateToggleImage( bool toggle )
         dc.DrawBitmap( m_bmpNormal, 0, 0, true );
         dc.SelectObject( wxNullBitmap );
         ControlButtonContentInfo info;
-        wxMacCreateBitmapButton( &info, bmp );
+        wxMacCreateBitmapButton( &info, bmp, kControlContentIconRef );
         SetControlData( m_controlHandle, 0, kControlIconContentTag, sizeof(info), (Ptr)&info );
 #if wxMAC_USE_NATIVE_TOOLBAR
         if (m_toolbarItemRef != NULL)
@@ -466,7 +466,7 @@ void wxToolBarTool::UpdateToggleImage( bool toggle )
     else
     {
         ControlButtonContentInfo info;
-        wxMacCreateBitmapButton( &info, m_bmpNormal );
+        wxMacCreateBitmapButton( &info, m_bmpNormal, kControlContentIconRef );
         SetControlData( m_controlHandle, 0, kControlIconContentTag, sizeof(info), (Ptr)&info );
 #if wxMAC_USE_NATIVE_TOOLBAR
         if (m_toolbarItemRef != NULL)
