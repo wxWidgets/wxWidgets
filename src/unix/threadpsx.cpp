@@ -132,12 +132,10 @@ static wxMutex *gs_mutexDeleteThread = (wxMutex *)NULL;
 // gs_nThreadsBeingDeleted will have been deleted
 static wxCondition *gs_condAllDeleted = (wxCondition *)NULL;
 
-#ifndef __WXGTK20__
 // this mutex must be acquired before any call to a GUI function
 // (it's not inside #if wxUSE_GUI because this file is compiled as part
 // of wxBase)
 static wxMutex *gs_mutexGui = NULL;
-#endif
 
 // when we wait for a thread to exit, we're blocking on a condition which the
 // thread signals in its SignalExit() method -- but this condition can't be a
@@ -1626,10 +1624,8 @@ bool wxThreadModule::OnInit()
 
     gs_mutexAllThreads = new wxMutex();
 
-#ifndef __WXGTK20__
     gs_mutexGui = new wxMutex();
     gs_mutexGui->Lock();
-#endif
 
     gs_mutexDeleteThread = new wxMutex();
     gs_condAllDeleted = new wxCondition(*gs_mutexDeleteThread);
@@ -1682,11 +1678,9 @@ void wxThreadModule::OnExit()
 
     delete gs_mutexAllThreads;
 
-#ifndef __WXGTK20__
     // destroy GUI mutex
     gs_mutexGui->Unlock();
     delete gs_mutexGui;
-#endif
 
     // and free TLD slot
     (void)pthread_key_delete(gs_keySelf);
@@ -1733,7 +1727,6 @@ static void DeleteThread(wxThread *This)
     }
 }
 
-#ifndef __WXGTK20__
 void wxMutexGuiEnter()
 {
     gs_mutexGui->Lock();
@@ -1743,7 +1736,6 @@ void wxMutexGuiLeave()
 {
     gs_mutexGui->Unlock();
 }
-#endif
 
 // ----------------------------------------------------------------------------
 // include common implementation code
