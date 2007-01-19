@@ -290,6 +290,11 @@ others are not.
 
 \helpref{wxToolBar::AddTool}{wxtoolbaraddtool}
 
+\membersection{wxToolBar::ClearTools}\label{wxtoolbarcleartools}
+
+\func{void}{ClearTools}{\void}
+
+Deletes all the tools in the toolbar.
 
 \membersection{wxToolBar::DeleteTool}\label{wxtoolbardeletetool}
 
@@ -377,6 +382,13 @@ A pointer to a tool if a tool is found, or \NULL otherwise.
 \wxheading{Remarks}
 
 Currently not implemented in wxGTK (always returns \NULL there).
+
+
+\membersection{wxToolBar::GetToolsCount}\label{wxtoolbargettoolscount}
+
+\constfunc{int}{GetToolsCount}{\void}
+
+Returns the number of tools in the toolbar.
 
 
 \membersection{wxToolBar::GetToolSize}\label{wxtoolbargettoolsize}
