@@ -1719,7 +1719,7 @@ bool wxLocale::Init(int language, int flags)
         {
             retloc = wxSetlocaleTryUTF(LC_ALL, localeAlt);
             if ( !retloc )
-                retloc = wxSetlocaleTryUTF(LC_ALL, locale.Left(2));
+                retloc = wxSetlocaleTryUTF(LC_ALL, localeAlt.Left(2));
         }
     }
 
