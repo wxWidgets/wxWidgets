@@ -98,6 +98,7 @@ All:
 - Added wxDateTime::GetDateOnly()
 - Made wxTextFile work with unseekable files again (David Hart)
 - Added wxCONFIG_USE_SUBDIR flag to wxFileConfig (Giuseppe Bilotta)
+- Added wxSearchCtrl::[Get|Set]DescriptiveText
 
 wxMSW
 
