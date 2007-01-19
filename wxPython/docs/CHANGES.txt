@@ -3,7 +3,7 @@ Recent Changes for wxPython
 
 2.8.1.1
 -------
-*
+* 19-Jan-2007
 
 wxMSW: Fix lack of spin control update event when control lost focus
 
@@ -29,6 +29,7 @@ window.  Run the demo and type Ctrl-Alt-I keystroke (or Cmd-Alt-I on
 the Mac) to see how it works.  You can add this to your own apps with
 just a few lines of code.
 
+Added wx.SearchCtrl.[Get|Set]DescriptiveText
 
 
 
@@ -41,12 +42,11 @@ just a few lines of code.
 Added EVT_TASKBAR_CLICK and use it to show taskbar icon menu on right
 button release, not press, under MSW (bug 1623761)
 
-Added wxTreeCtrl::CollapseAll[Children]() and IsEmpty() methods;
-documented wxTreeItemId (patch 1622125)
+Added wx.TreeCtrl.CollapseAll[Children]() and IsEmpty() methods
 
-Fix wxMDIChidFrame::GetPosition() (patch 1626610)
+Fix wx.MDIChidFrame.GetPosition() (patch 1626610)
 
-Fix attribute memory leak in wxGrid::ShowCellEditControl() (patch
+Fix attribute memory leak in wx.grid.Grid::ShowCellEditControl() (patch
 1629949)
 
 wxGTK: Fix for controls on a toolbar being the full height of the
