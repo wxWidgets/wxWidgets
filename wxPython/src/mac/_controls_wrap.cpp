@@ -3418,6 +3418,9 @@ public:
 
     virtual void ShowCancelButton( bool ) {}
     virtual bool IsCancelButtonVisible() const { return false; }
+
+    virtual void SetDescriptiveText(const wxString& text);
+    virtual wxString GetDescriptiveText() const;
 };    
 #endif
 
@@ -46586,6 +46589,85 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_SearchCtrl_SetDescriptiveText(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxSearchCtrl *arg1 = (wxSearchCtrl *) 0 ;
+  wxString *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool temp2 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "text", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:SearchCtrl_SetDescriptiveText",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxSearchCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SearchCtrl_SetDescriptiveText" "', expected argument " "1"" of type '" "wxSearchCtrl *""'"); 
+  }
+  arg1 = reinterpret_cast< wxSearchCtrl * >(argp1);
+  {
+    arg2 = wxString_in_helper(obj1);
+    if (arg2 == NULL) SWIG_fail;
+    temp2 = true;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetDescriptiveText((wxString const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp2)
+    delete arg2;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_SearchCtrl_GetDescriptiveText(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxSearchCtrl *arg1 = (wxSearchCtrl *) 0 ;
+  wxString result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxSearchCtrl, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SearchCtrl_GetDescriptiveText" "', expected argument " "1"" of type '" "wxSearchCtrl const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxSearchCtrl * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxSearchCtrl const *)arg1)->GetDescriptiveText();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+#if wxUSE_UNICODE
+    resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+    resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_SearchCtrl_SetSearchBitmap(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxSearchCtrl *arg1 = (wxSearchCtrl *) 0 ;
@@ -47788,6 +47870,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SearchCtrl_IsSearchButtonVisible", (PyCFunction)_wrap_SearchCtrl_IsSearchButtonVisible, METH_O, NULL},
 	 { (char *)"SearchCtrl_ShowCancelButton", (PyCFunction) _wrap_SearchCtrl_ShowCancelButton, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"SearchCtrl_IsCancelButtonVisible", (PyCFunction)_wrap_SearchCtrl_IsCancelButtonVisible, METH_O, NULL},
+	 { (char *)"SearchCtrl_SetDescriptiveText", (PyCFunction) _wrap_SearchCtrl_SetDescriptiveText, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"SearchCtrl_GetDescriptiveText", (PyCFunction)_wrap_SearchCtrl_GetDescriptiveText, METH_O, NULL},
 	 { (char *)"SearchCtrl_SetSearchBitmap", (PyCFunction) _wrap_SearchCtrl_SetSearchBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"SearchCtrl_SetSearchMenuBitmap", (PyCFunction) _wrap_SearchCtrl_SetSearchMenuBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"SearchCtrl_SetCancelBitmap", (PyCFunction) _wrap_SearchCtrl_SetCancelBitmap, METH_VARARGS | METH_KEYWORDS, NULL},

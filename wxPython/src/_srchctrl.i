@@ -58,6 +58,9 @@ public:
 
     virtual void ShowCancelButton( bool ) {}
     virtual bool IsCancelButtonVisible() const { return false; }
+
+    virtual void SetDescriptiveText(const wxString& text);
+    virtual wxString GetDescriptiveText() const;
 };    
 #endif
 %}
@@ -167,6 +170,17 @@ button visibility value.  This always returns false in Mac OS X v10.3", "");
         "Indicates whether the cancel button is visible. ", "");
     
 
+    DocDeclStr(
+        virtual void , SetDescriptiveText(const wxString& text),
+        "Set the text to be displayed when the user has not yet typed anything
+in the control.", "");
+    
+    DocDeclStr(
+        virtual wxString , GetDescriptiveText() const,
+        "Get the text to be displayed when the user has not yet typed anything
+in the control.", "");
+    
+    
     DocStr(SetSearchBitmap,
            "Sets the bitmap to use for the search button.  This currently does not
 work on the Mac.", "");
@@ -177,6 +191,7 @@ on the Mac.", "");
     DocStr(SetCancelBitmap,
            "Sets the bitmap to use for the cancel button.  This currently does not
 work on the Mac.", "");
+
     
 #ifdef __WXMAC__
     %extend {
@@ -194,6 +209,7 @@ work on the Mac.", "");
     %property(Menu, GetMenu, SetMenu);
     %property(SearchButtonVisible, IsSearchButtonVisible, ShowSearchButton);
     %property(CancelButtonVisible, IsCancelButtonVisible, ShowCancelButton);
+    %property(DescriptiveText, GetDescriptiveText, SetDescriptiveText);
 };
      
 

@@ -68,6 +68,10 @@ public :
 
     virtual void SetSearchMenu( wxMenu* menu );
     virtual wxMenu* GetSearchMenu() const;
+
+    virtual void SetDescriptiveText(const wxString& text);
+    virtual wxString GetDescriptiveText() const;
+    
 protected :
     virtual void CreateControl( wxTextCtrl* peer, const Rect* bounds, CFStringRef crf );
 
@@ -165,6 +169,28 @@ void wxMacSearchFieldControl::SetSearchMenu( wxMenu* menu )
 wxMenu* wxMacSearchFieldControl::GetSearchMenu() const
 {
     return m_menu;
+}
+
+
+void wxMacSearchFieldControl::SetDescriptiveText(const wxString& text)
+{
+    verify_noerr( HISearchFieldSetDescriptiveText(
+                      m_controlRef,
+                      wxMacCFStringHolder( text, wxFont::GetDefaultEncoding() )));
+}
+
+wxString wxMacSearchFieldControl::GetDescriptiveText() const
+{
+    CFStringRef cfStr;
+    verify_noerr( HISearchFieldCopyDescriptiveText( m_controlRef, &cfStr ));
+    if ( cfStr )
+    {
+        return wxMacCFStringHolder(cfStr).AsString();
+    }
+    else
+    {
+        return wxEmptyString;
+    }
 }
 
 #endif
@@ -349,6 +375,16 @@ void wxSearchCtrl::ShowCancelButton( bool show )
 bool wxSearchCtrl::IsCancelButtonVisible() const
 {
     return GetPeer()->IsCancelButtonVisible();
+}
+
+void wxSearchCtrl::SetDescriptiveText(const wxString& text)
+{
+    GetPeer()->SetDescriptiveText(text);
+}
+
+wxString wxSearchCtrl::GetDescriptiveText() const
+{
+    return GetPeer()->GetDescriptiveText();
 }
 
 wxInt32 wxSearchCtrl::MacSearchFieldSearchHit(WXEVENTHANDLERREF WXUNUSED(handler) , WXEVENTREF WXUNUSED(event) )

@@ -7287,6 +7287,24 @@ class SearchCtrl(TextCtrl):
         """
         return _controls_.SearchCtrl_IsCancelButtonVisible(*args, **kwargs)
 
+    def SetDescriptiveText(*args, **kwargs):
+        """
+        SetDescriptiveText(self, String text)
+
+        Set the text to be displayed when the user has not yet typed anything
+        in the control.
+        """
+        return _controls_.SearchCtrl_SetDescriptiveText(*args, **kwargs)
+
+    def GetDescriptiveText(*args, **kwargs):
+        """
+        GetDescriptiveText(self) -> String
+
+        Get the text to be displayed when the user has not yet typed anything
+        in the control.
+        """
+        return _controls_.SearchCtrl_GetDescriptiveText(*args, **kwargs)
+
     def SetSearchBitmap(*args, **kwargs):
         """
         SetSearchBitmap(self, Bitmap bitmap)
@@ -7318,6 +7336,7 @@ class SearchCtrl(TextCtrl):
     Menu = property(GetMenu,SetMenu) 
     SearchButtonVisible = property(IsSearchButtonVisible,ShowSearchButton) 
     CancelButtonVisible = property(IsCancelButtonVisible,ShowCancelButton) 
+    DescriptiveText = property(GetDescriptiveText,SetDescriptiveText) 
 _controls_.SearchCtrl_swigregister(SearchCtrl)
 SearchCtrlNameStr = cvar.SearchCtrlNameStr
 

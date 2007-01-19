@@ -31,6 +31,8 @@
         *wxFileHistory*etBaseId*;
         *wxSizerFlags*Shaped*;
         *wxSizerFlags*FixedMinSize*;
+	*wxSearchCtrl*SetDescriptiveText*;
+	*wxSearchCtrl*GetDescriptiveText*;
 };
 
 # public symbols added in 2.8.1 (please keep in alphabetical order):

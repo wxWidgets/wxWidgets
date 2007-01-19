@@ -53,6 +53,12 @@ public:
     virtual void ShowCancelButton( bool show );
     virtual bool IsCancelButtonVisible() const;
 
+#if wxABI_VERSION >= 20802
+    // TODO: In 2.9 these should probably be virtual, and declared in the base class...
+    void SetDescriptiveText(const wxString& text);
+    wxString GetDescriptiveText() const;
+#endif
+
     virtual wxInt32     MacSearchFieldSearchHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
     virtual wxInt32     MacSearchFieldCancelHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
 
