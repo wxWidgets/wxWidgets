@@ -10,8 +10,7 @@
 # Licence:     wxWindows license
 #----------------------------------------------------------------------
 
-from __future__ import nested_scopes
-
+import wx
 
 def grayOut(anImage):
     """
@@ -43,3 +42,50 @@ def makeGray((r,g,b), factor, maskColor):
         return map(lambda x: int((230 - x) * factor) + x, (r,g,b))
     else:
         return (r,g,b)
+
+
+
+def stepColour(c, step):
+    """
+    stepColour is a utility function that simply darkens or lightens a
+    color, based on the specified step value.  A step of 0 is
+    completely black and a step of 200 is totally white, and 100
+    results in the same color as was passed in.
+    """
+    def _blendColour(fg, bg, dstep):
+        result = bg + (dstep * (fg - bg))
+        if result < 0:
+            result = 0
+        if result > 255:
+            result = 255
+        return result
+
+    if step == 100:
+        return c
+        
+    r = c.Red()
+    g = c.Green()
+    b = c.Blue()
+    
+    # step is 0..200 where 0 is completely black
+    # and 200 is completely white and 100 is the same
+    # convert that to a range of -1.0 .. 1.0
+    step = min(step, 200)
+    step = max(step, 0)
+    dstep = (step - 100.0)/100.0
+    
+    if step > 100:
+        # blend with white
+        bg = 255.0
+        dstep = 1.0 - dstep  # 0 = transparent fg; 1 = opaque fg
+    else:
+        # blend with black
+        bg = 0.0
+        dstep = 1.0 + dstep;  # 0 = transparent fg; 1 = opaque fg
+    
+    r = _blendColour(r, bg, dstep)
+    g = _blendColour(g, bg, dstep)
+    b = _blendColour(b, bg, dstep)
+    
+    return wx.Colour(int(r), int(g), int(b))
+
