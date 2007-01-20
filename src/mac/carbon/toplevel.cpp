@@ -929,7 +929,7 @@ bool wxTopLevelWindowMac::Create(wxWindow *parent,
     m_windowId = id == -1 ? NewControlId() : id;
     wxWindow::SetLabel( title ) ;
 
-    MacCreateRealWindow( title, pos , size , MacRemoveBordersFromStyle(style) , name ) ;
+    MacCreateRealWindow( title, pos , size , style , name ) ;
 
     SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE));
 
@@ -1110,6 +1110,20 @@ void  wxTopLevelWindowMac::MacCreateRealWindow(
             wclass = kPlainWindowClass ;
         }
     }
+    else if ( HasFlag( wxPOPUP_WINDOW ) )
+    {
+        // TEMPORARY HACK!
+        // Until we've got a real wxPopupWindow class on wxMac make it a
+        // little easier for wxFrame to be used to emulate it and workaround
+        // the lack of wxPopupWindow.
+        if ( HasFlag( wxBORDER_NONE ) )
+            wclass = kHelpWindowClass ;   // has no border
+        else
+            wclass = kPlainWindowClass ;  // has a single line border, it will have to do for now
+        //attr |= kWindowNoShadowAttribute; // turn off the shadow  Should we??
+        group = GetWindowGroupOfClass(    // float above other windows   
+            kFloatingWindowClass) ;
+    }
     else if ( HasFlag( wxCAPTION ) )
     {
         wclass = kDocumentWindowClass ;
@@ -1156,6 +1170,9 @@ void  wxTopLevelWindowMac::MacCreateRealWindow(
     if ( HasFlag(wxSTAY_ON_TOP) )
         group = GetWindowGroupOfClass(kUtilityWindowClass) ;
 
+    if ( HasFlag( wxFRAME_FLOAT_ON_PARENT ) )
+        group = GetWindowGroupOfClass(kFloatingWindowClass) ;
+        
     attr |= kWindowCompositingAttribute;
 #if 0 // wxMAC_USE_CORE_GRAPHICS ; TODO : decide on overall handling of high dpi screens (pixel vs userscale)
     attr |= kWindowFrameworkScaledAttribute;

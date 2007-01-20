@@ -105,6 +105,10 @@ wxMSW
 - Fix lack of spin control update event when control lost focus
 - Corrected drawing of bitmaps for disabled menu items
 
+wxMac
+
+- Added support for the wxFRAME_FLOAT_ON_PARENT style
+
 
 2.8.1
 -----
