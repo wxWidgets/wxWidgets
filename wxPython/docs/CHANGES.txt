@@ -31,6 +31,12 @@ just a few lines of code.
 
 Added wx.SearchCtrl.[Get|Set]DescriptiveText
 
+wxMac: Added support for the wx.FRAME_FLOAT_ON_PARENT style.
+
+wxMac: the popups used for call tips and autocomplete lists in
+StyledTextCtrl (such as in PyShell) are now top-level float-on-parent
+windows so they are no longer clipped by the bounds of the stc window.
+
 
 
 
