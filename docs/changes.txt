@@ -109,6 +109,10 @@ wxMac
 
 - Added support for the wxFRAME_FLOAT_ON_PARENT style
 
+wxX11:
+
+- Don't crash in wxWindow dtor if the window hadn't been really Create()d
+
 
 2.8.1
 -----

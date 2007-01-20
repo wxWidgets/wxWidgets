@@ -357,10 +357,13 @@ wxWindowX11::~wxWindowX11()
     }
 
     // Destroy the window
-    Window xwindow = (Window) m_mainWindow;
-    wxDeleteWindowFromTable( xwindow );
-    XDestroyWindow( wxGlobalDisplay(), xwindow );
-    m_mainWindow = NULL;
+    if ( m_mainWindow )
+    {
+        Window xwindow = (Window) m_mainWindow;
+        wxDeleteWindowFromTable( xwindow );
+        XDestroyWindow( wxGlobalDisplay(), xwindow );
+        m_mainWindow = NULL;
+    }
 }
 
 // ---------------------------------------------------------------------------
