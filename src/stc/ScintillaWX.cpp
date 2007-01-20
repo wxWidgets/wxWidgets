@@ -87,7 +87,7 @@ void  wxSTCDropTarget::OnLeave() {
 #define wxSTCCallTipBase wxPopupWindow
 #define param2  wxBORDER_NONE  // popup's 2nd param is flags
 #else
-#define wxSTCCallTipBase wxWindow
+#define wxSTCCallTipBase wxFrame
 #define param2 -1 // wxWindow's 2nd param is ID
 #endif
 
@@ -95,8 +95,19 @@ void  wxSTCDropTarget::OnLeave() {
 
 class wxSTCCallTip : public wxSTCCallTipBase {
 public:
-    wxSTCCallTip(wxWindow* parent, CallTip* ct, ScintillaWX* swx)
-        : wxSTCCallTipBase(parent, param2),
+    wxSTCCallTip(wxWindow* parent, CallTip* ct, ScintillaWX* swx) :
+#if wxUSE_POPUPWIN && wxSTC_USE_POPUP
+        wxSTCCallTipBase(parent, wxBORDER_NONE),
+#else
+        wxSTCCallTipBase(parent, -1, wxEmptyString, wxDefaultPosition, wxDefaultSize,
+                         wxFRAME_NO_TASKBAR
+                         | wxFRAME_FLOAT_ON_PARENT
+                         | wxBORDER_NONE
+#ifdef __WXMAC__
+                         | wxPOPUP_WINDOW  
+#endif
+            ), 
+#endif
           m_ct(ct), m_swx(swx), m_cx(wxDefaultCoord), m_cy(wxDefaultCoord)
         {
         }
@@ -112,7 +123,8 @@ public:
 
     bool AcceptsFocus() const { return false; }
 
-    void OnPaint(wxPaintEvent& WXUNUSED(evt)) {
+    void OnPaint(wxPaintEvent& WXUNUSED(evt))
+    {
         wxBufferedPaintDC dc(this);
         Surface* surfaceWindow = Surface::Allocate();
         surfaceWindow->Init(&dc, m_ct->wDraw.GetID());
@@ -121,22 +133,25 @@ public:
         delete surfaceWindow;
     }
 
-    void OnFocus(wxFocusEvent& event) {
+    void OnFocus(wxFocusEvent& event)
+    {
         GetParent()->SetFocus();
         event.Skip();
     }
 
-    void OnLeftDown(wxMouseEvent& event) {
+    void OnLeftDown(wxMouseEvent& event)
+    {
         wxPoint pt = event.GetPosition();
         Point p(pt.x, pt.y);
         m_ct->MouseClick(p);
         m_swx->CallTipClick();
     }
 
-#if wxUSE_POPUPWIN && wxSTC_USE_POPUP
     virtual void DoSetSize(int x, int y,
                            int width, int height,
-                           int sizeFlags = wxSIZE_AUTO) {
+                           int sizeFlags = wxSIZE_AUTO)
+    {
+        // convert coords to screen coords since we're a top-level window
         if (x != wxDefaultCoord) {
             m_cx = x;
             GetParent()->ClientToScreen(&x, NULL);
@@ -147,9 +162,27 @@ public:
         }
         wxSTCCallTipBase::DoSetSize(x, y, width, height, sizeFlags);
     }
-#endif
 
-    wxPoint GetMyPosition() {
+#if wxUSE_POPUPWIN && wxSTC_USE_POPUP
+#else
+    virtual bool Show( bool show = true )
+    {
+        // Although we're a frame, we always want the parent to be active, so
+        // raise it whenever we get shown.
+        bool rv = wxSTCCallTipBase::Show(show);
+        if (rv && show)
+        {
+            wxTopLevelWindow *frame = wxDynamicCast(
+                wxGetTopLevelParent(GetParent()), wxTopLevelWindow);
+            if (frame)
+                frame->Raise();
+        }
+        return rv;
+    }
+#endif
+    
+    wxPoint GetMyPosition()
+    {
         return wxPoint(m_cx, m_cy);
     }
 
