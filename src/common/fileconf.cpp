@@ -439,7 +439,7 @@ wxFileConfig::wxFileConfig(const wxString& appName, const wxString& vendorName,
         m_strLocalFile = GetLocalFileName(GetAppName());
 #if defined(__UNIX__) && !defined(__VMS)
         if ( style & wxCONFIG_USE_SUBDIR )
-            m_strLocalFile << wxFILE_SEP_PATH << GetAppName();
+            m_strLocalFile << wxFILE_SEP_PATH << GetAppName() << _T(".conf");
 #endif
     }
 
