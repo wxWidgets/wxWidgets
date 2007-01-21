@@ -375,7 +375,7 @@ wxMenuItemBase::wxMenuItemBase(wxMenu *parentMenu,
     m_id          = id;
     m_kind        = kind;
     if (m_id == wxID_ANY)
-        m_id = wxWindow::NewControlId();
+        m_id = wxNewId();
     if (m_id == wxID_SEPARATOR)
         m_kind = wxITEM_SEPARATOR;
 
