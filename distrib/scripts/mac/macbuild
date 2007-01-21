@@ -21,7 +21,6 @@ do_build
 make prefix=$INSTALLDIR install
 
 if [ "$WXPYTHON" == "1" ]; then
-  make -C contrib/src/animate prefix=$INSTALLDIR install
   make -C contrib/src/gizmos prefix=$INSTALLDIR install
   make -C contrib/src/stc prefix=$INSTALLDIR install
 fi
