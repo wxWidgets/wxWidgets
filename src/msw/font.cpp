@@ -1020,6 +1020,8 @@ int wxFont::GetPointSize() const
 
 wxSize wxFont::GetPixelSize() const
 {
+    wxCHECK_MSG( Ok(), wxDefaultSize, wxT("invalid font") );
+
     return M_FONTDATA->GetPixelSize();
 }
 
@@ -1074,12 +1076,14 @@ wxFontEncoding wxFont::GetEncoding() const
 
 const wxNativeFontInfo *wxFont::GetNativeFontInfo() const
 {
-    return M_FONTDATA->HasNativeFontInfo() ? &(M_FONTDATA->GetNativeFontInfo())
+    return Ok() && M_FONTDATA->HasNativeFontInfo() ? &(M_FONTDATA->GetNativeFontInfo())
                                            : NULL;
 }
 
 wxString wxFont::GetNativeFontInfoDesc() const
 {
+    wxCHECK_MSG( Ok(), wxEmptyString, wxT("invalid font") );
+
     // be sure we have an HFONT associated...
     wxConstCast(this, wxFont)->RealizeResource();
     return wxFontBase::GetNativeFontInfoDesc();
@@ -1087,6 +1091,8 @@ wxString wxFont::GetNativeFontInfoDesc() const
 
 wxString wxFont::GetNativeFontInfoUserDesc() const
 {
+    wxCHECK_MSG( Ok(), wxEmptyString, wxT("invalid font") );
+
     // be sure we have an HFONT associated...
     wxConstCast(this, wxFont)->RealizeResource();
     return wxFontBase::GetNativeFontInfoUserDesc();
