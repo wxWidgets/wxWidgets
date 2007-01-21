@@ -4357,24 +4357,33 @@ wxGrid::wxGridSelectionModes wxGrid::GetSelectionMode() const
 bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership,
                        wxGrid::wxGridSelectionModes selmode )
 {
+    bool checkSelection = false;
     if ( m_created )
     {
         // stop all processing
         m_created = false;
 
-        if (m_ownTable)
+        if (m_table) 
         {
-            wxGridTableBase *t = m_table;
+            m_table->SetView(0);
+            if( m_ownTable )
+                delete m_table;
             m_table = NULL;
-            delete t;
         }
 
         delete m_selection;
-
-        m_table = NULL;
         m_selection = NULL;
+
+        m_ownTable = false;
         m_numRows = 0;
         m_numCols = 0;
+        checkSelection = true;
+
+        // kill row and column size arrays
+        m_colWidths.Empty();
+        m_colRights.Empty();
+        m_rowHeights.Empty();
+        m_rowBottoms.Empty();
     }
 
     if (table)
@@ -4386,7 +4395,28 @@ bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership,
         m_table->SetView( this );
         m_ownTable = takeOwnership;
         m_selection = new wxGridSelection( this, selmode );
-
+        if (checkSelection)
+        {
+            // If the newly set table is smaller than the
+            // original one current cell and selection regions
+            // might be invalid,
+            m_selectingKeyboard = wxGridNoCellCoords;
+            m_currentCellCoords = 
+              wxGridCellCoords(wxMin(m_numRows, m_currentCellCoords.GetRow()),
+                               wxMin(m_numCols, m_currentCellCoords.GetCol()));
+            if (m_selectingTopLeft.GetRow() >= m_numRows ||
+                m_selectingTopLeft.GetCol() >= m_numCols)
+            {
+                m_selectingTopLeft = wxGridNoCellCoords;
+                m_selectingBottomRight = wxGridNoCellCoords;
+            }
+            else
+                m_selectingBottomRight =
+                  wxGridCellCoords(wxMin(m_numRows,
+                                         m_selectingBottomRight.GetRow()),
+                                   wxMin(m_numCols,
+                                         m_selectingBottomRight.GetCol()));
+        }
         CalcDimensions();
 
         m_created = true;
