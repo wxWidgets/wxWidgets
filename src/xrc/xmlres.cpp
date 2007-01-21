@@ -1594,7 +1594,7 @@ static int XRCID_Lookup(const wxChar *str_id, int value_if_not_found = wxID_NONE
         }
         else
         {
-            (*rec_var)->id = wxWindow::NewControlId();
+            (*rec_var)->id = wxNewId();
         }
     }
 
