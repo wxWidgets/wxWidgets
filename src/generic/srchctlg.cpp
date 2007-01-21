@@ -534,7 +534,11 @@ void wxSearchCtrl::LayoutControls(int x, int y, int width, int height)
 
 wxString wxSearchCtrl::GetValue() const
 {
-    return m_text->GetValue();
+    wxString value = m_text->GetValue();
+    if (value == m_text->GetDescriptiveText())
+        return wxEmptyString;
+    else
+        return value;
 }
 void wxSearchCtrl::SetValue(const wxString& value)
 {
