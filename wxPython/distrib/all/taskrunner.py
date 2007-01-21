@@ -229,7 +229,7 @@ class TaskRunner(object):
                     if job and job.finished():
                         if job.returnCode() != 0:
                             rc = job.returnCode()
-                            print "JOB RETURNED FAILURE CODE! (%d)" % rc
+                            print "'%s' JOB RETURNED FAILURE CODE! (%d)" % (job.label, rc)
                             self.rc = rc
                             self.stopAllJobs()
                             return rc

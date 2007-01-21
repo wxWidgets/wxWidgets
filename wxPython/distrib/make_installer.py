@@ -202,6 +202,8 @@ Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\analogclock\*.pyc";
 Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\analogclock\*.pyo";
 Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\analogclock\lib_setup\*.pyc";
 Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\analogclock\lib_setup\*.pyo";
+Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\art\*.pyc";
+Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\art\*.pyo";
 Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\colourchooser\*.pyc";
 Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\colourchooser\*.pyo";
 Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\editor\*.pyc";

@@ -164,7 +164,7 @@ cd $DESTDIR
 
 if [ $SKIPCLEAN != yes ]; then 
     echo "Cleaning up..."
-    rm -r $WXDIR || true
+    rm -fr $WXDIR || true
 fi
 
 echo "-=-=-=-  Goodbye!  -=-=-=-"

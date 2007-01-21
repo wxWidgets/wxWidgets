@@ -36,6 +36,7 @@ if [ $skipwin != yes ]; then
      echo "Fetching the results..."
      scp "$WIN_HOST:$WIN_BUILD/wxPython*-win32*"  $STAGING_DIR
      ssh $WIN_HOST "rm $WIN_BUILD/wxPython*-win32*"
+     ssh $WIN_HOST "rm -rf $WIN_BUILD/*"
 
      echo "Done!"
 fi
