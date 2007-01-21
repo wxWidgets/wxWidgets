@@ -114,10 +114,14 @@ constants.", "");
         "Returns the platform-specific number identifying the format.", "");
     
 
-    DocDeclStr(
-        wxString , GetId() const,
-        "Returns the name of a custom format (this function will fail for a
-standard format).", "");
+    %Rename(_GetId, wxString , GetId() const);
+    %pythoncode {
+        def GetId(self):
+            """Returns the name of a custom format (this function will fail for a
+standard format)."""
+            nolog = wx.LogNull()
+            return self._GetId()
+    }
     
     DocDeclStr(
         void , SetId(const wxString& format),
