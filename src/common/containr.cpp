@@ -307,8 +307,15 @@ void wxControlContainer::HandleOnNavigationKey( wxNavigationKeyEvent& event )
             }
         }
 
-        if ( bookctrl && bookctrl->GetEventHandler()->ProcessEvent(event) )
-            return;
+        if ( bookctrl )
+        {
+            // make sure that we don't bubble up the event again from the book
+            // control resulting in infinite recursion
+            wxNavigationKeyEvent eventCopy(event);
+            eventCopy.SetEventObject(m_winParent);
+            if ( bookctrl->GetEventHandler()->ProcessEvent(eventCopy) )
+                return;
+        }
     }
 
     // there is not much to do if we don't have children and we're not
