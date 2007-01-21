@@ -159,6 +159,7 @@ wxString wxDataFormat::GetId() const
     if ( !len )
     {
         wxLogError(_("The clipboard format '%d' doesn't exist."), m_format);
+        return wxEmptyString;
     }
 
     return s;
