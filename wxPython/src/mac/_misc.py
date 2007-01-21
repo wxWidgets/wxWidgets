@@ -4688,14 +4688,15 @@ class DataFormat(object):
         """
         return _misc_.DataFormat_GetType(*args, **kwargs)
 
-    def GetId(*args, **kwargs):
-        """
-        GetId(self) -> String
+    def _GetId(*args, **kwargs):
+        """_GetId(self) -> String"""
+        return _misc_.DataFormat__GetId(*args, **kwargs)
 
-        Returns the name of a custom format (this function will fail for a
-        standard format).
-        """
-        return _misc_.DataFormat_GetId(*args, **kwargs)
+    def GetId(self):
+        """Returns the name of a custom format (this function will fail for a
+     format)."""
+        nolog = wx.LogNull()
+        return self._GetId()
 
     def SetId(*args, **kwargs):
         """
@@ -5686,7 +5687,6 @@ class Clipboard(_core.Object):
         return _misc_.Clipboard_Get(*args, **kwargs)
 
     Get = staticmethod(Get)
-    Data = property(GetData,SetData,doc="See `GetData` and `SetData`") 
 _misc_.Clipboard_swigregister(Clipboard)
 
 def Clipboard_Get(*args):

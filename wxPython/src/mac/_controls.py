@@ -7274,7 +7274,7 @@ class SearchCtrl(TextCtrl):
         """
         GetDescriptiveText(self) -> String
 
-        Set the text to be displayed when the user has not yet typed anything
+        Get the text to be displayed when the user has not yet typed anything
         in the control.
         """
         return _controls_.SearchCtrl_GetDescriptiveText(*args, **kwargs)

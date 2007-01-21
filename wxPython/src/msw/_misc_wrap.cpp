@@ -31943,7 +31943,7 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_DataFormat_GetId(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_DataFormat__GetId(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxDataFormat *arg1 = (wxDataFormat *) 0 ;
   wxString result;
@@ -31955,7 +31955,7 @@ SWIGINTERN PyObject *_wrap_DataFormat_GetId(PyObject *SWIGUNUSEDPARM(self), PyOb
   swig_obj[0] = args;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxDataFormat, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "DataFormat_GetId" "', expected argument " "1"" of type '" "wxDataFormat const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "DataFormat__GetId" "', expected argument " "1"" of type '" "wxDataFormat const *""'"); 
   }
   arg1 = reinterpret_cast< wxDataFormat * >(argp1);
   {
@@ -40003,7 +40003,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DataFormat___ne__", _wrap_DataFormat___ne__, METH_VARARGS, NULL},
 	 { (char *)"DataFormat_SetType", (PyCFunction) _wrap_DataFormat_SetType, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DataFormat_GetType", (PyCFunction)_wrap_DataFormat_GetType, METH_O, NULL},
-	 { (char *)"DataFormat_GetId", (PyCFunction)_wrap_DataFormat_GetId, METH_O, NULL},
+	 { (char *)"DataFormat__GetId", (PyCFunction)_wrap_DataFormat__GetId, METH_O, NULL},
 	 { (char *)"DataFormat_SetId", (PyCFunction) _wrap_DataFormat_SetId, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DataFormat_swigregister", DataFormat_swigregister, METH_VARARGS, NULL},
 	 { (char *)"DataFormat_swiginit", DataFormat_swiginit, METH_VARARGS, NULL},
