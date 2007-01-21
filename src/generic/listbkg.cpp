@@ -54,11 +54,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxListbookEvent, wxNotifyEvent)
 const wxEventType wxEVT_COMMAND_LISTBOOK_PAGE_CHANGING = wxNewEventType();
 const wxEventType wxEVT_COMMAND_LISTBOOK_PAGE_CHANGED = wxNewEventType();
 #endif
-const int wxID_LISTBOOKLISTVIEW = wxWindow::NewControlId();
 
 BEGIN_EVENT_TABLE(wxListbook, wxBookCtrlBase)
     EVT_SIZE(wxListbook::OnSize)
-    EVT_LIST_ITEM_SELECTED(wxID_LISTBOOKLISTVIEW, wxListbook::OnListSelected)
+    EVT_LIST_ITEM_SELECTED(wxID_ANY, wxListbook::OnListSelected)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -103,7 +102,7 @@ wxListbook::Create(wxWindow *parent,
     m_bookctrl = new wxListView
                  (
                     this,
-                    wxID_LISTBOOKLISTVIEW,
+                    wxID_ANY,
                     wxDefaultPosition,
                     wxDefaultSize,
                     wxLC_ICON | wxLC_SINGLE_SEL |
@@ -392,6 +391,12 @@ bool wxListbook::DeleteAllPages()
 
 void wxListbook::OnListSelected(wxListEvent& eventList)
 {
+    if ( eventList.GetEventObject() != m_bookctrl )
+    {
+        eventList.Skip();
+        return;
+    }
+
     const int selNew = eventList.GetIndex();
 
     if ( selNew == m_selection )

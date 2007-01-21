@@ -54,10 +54,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxChoicebookEvent, wxNotifyEvent)
 const wxEventType wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGING = wxNewEventType();
 const wxEventType wxEVT_COMMAND_CHOICEBOOK_PAGE_CHANGED = wxNewEventType();
 #endif
-const int wxID_CHOICEBOOKCHOICE = wxWindow::NewControlId();
 
 BEGIN_EVENT_TABLE(wxChoicebook, wxBookCtrlBase)
-    EVT_CHOICE(wxID_CHOICEBOOKCHOICE, wxChoicebook::OnChoiceSelected)
+    EVT_CHOICE(wxID_ANY, wxChoicebook::OnChoiceSelected)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -98,7 +97,7 @@ wxChoicebook::Create(wxWindow *parent,
     m_bookctrl = new wxChoice
                  (
                     this,
-                    wxID_CHOICEBOOKCHOICE,
+                    wxID_ANY,
                     wxDefaultPosition,
                     wxDefaultSize
                  );
@@ -302,6 +301,12 @@ bool wxChoicebook::DeleteAllPages()
 
 void wxChoicebook::OnChoiceSelected(wxCommandEvent& eventChoice)
 {
+    if ( eventChoice.GetEventObject() != m_bookctrl )
+    {
+        eventChoice.Skip();
+        return;
+    }
+
     const int selNew = eventChoice.GetSelection();
 
     if ( selNew == m_selection )

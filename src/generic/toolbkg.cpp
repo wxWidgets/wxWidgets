@@ -50,7 +50,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxToolbookEvent, wxNotifyEvent)
 const wxEventType wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGING = wxNewEventType();
 const wxEventType wxEVT_COMMAND_TOOLBOOK_PAGE_CHANGED = wxNewEventType();
 #endif
-const int wxID_TOOLBOOKTOOLBAR = wxWindow::NewControlId();
 
 BEGIN_EVENT_TABLE(wxToolbook, wxBookCtrlBase)
     EVT_SIZE(wxToolbook::OnSize)
@@ -102,7 +101,7 @@ bool wxToolbook::Create(wxWindow *parent,
         m_bookctrl = new wxButtonToolBar
                  (
                     this,
-                    wxID_TOOLBOOKTOOLBAR,
+                    wxID_ANY,
                     wxDefaultPosition,
                     wxDefaultSize,
                     orient|wxTB_TEXT|wxTB_FLAT|wxNO_BORDER
@@ -114,7 +113,7 @@ bool wxToolbook::Create(wxWindow *parent,
         m_bookctrl = new wxToolBar
                  (
                     this,
-                    wxID_TOOLBOOKTOOLBAR,
+                    wxID_ANY,
                     wxDefaultPosition,
                     wxDefaultSize,
                     orient|wxTB_TEXT|wxTB_FLAT|wxTB_NODIVIDER|wxNO_BORDER

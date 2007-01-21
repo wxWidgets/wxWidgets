@@ -54,12 +54,11 @@ const wxEventType wxEVT_COMMAND_TREEBOOK_PAGE_CHANGED = wxNewEventType();
 const wxEventType wxEVT_COMMAND_TREEBOOK_NODE_COLLAPSED = wxNewEventType();
 const wxEventType wxEVT_COMMAND_TREEBOOK_NODE_EXPANDED = wxNewEventType();
 #endif
-const int wxID_TREEBOOKTREEVIEW = wxWindow::NewControlId();
 
 BEGIN_EVENT_TABLE(wxTreebook, wxBookCtrlBase)
-    EVT_TREE_SEL_CHANGED   (wxID_TREEBOOKTREEVIEW, wxTreebook::OnTreeSelectionChange)
-    EVT_TREE_ITEM_EXPANDED (wxID_TREEBOOKTREEVIEW, wxTreebook::OnTreeNodeExpandedCollapsed)
-    EVT_TREE_ITEM_COLLAPSED(wxID_TREEBOOKTREEVIEW, wxTreebook::OnTreeNodeExpandedCollapsed)
+    EVT_TREE_SEL_CHANGED   (wxID_ANY, wxTreebook::OnTreeSelectionChange)
+    EVT_TREE_ITEM_EXPANDED (wxID_ANY, wxTreebook::OnTreeNodeExpandedCollapsed)
+    EVT_TREE_ITEM_COLLAPSED(wxID_ANY, wxTreebook::OnTreeNodeExpandedCollapsed)
 
     WX_EVENT_TABLE_CONTROL_CONTAINER(wxTreebook)
 END_EVENT_TABLE()
@@ -108,7 +107,7 @@ wxTreebook::Create(wxWindow *parent,
     m_bookctrl = new wxTreeCtrl
                  (
                     this,
-                    wxID_TREEBOOKTREEVIEW,
+                    wxID_ANY,
                     wxDefaultPosition,
                     wxDefaultSize,
 #ifndef __WXMSW__
@@ -691,6 +690,12 @@ void wxTreebook::AssignImageList(wxImageList *imageList)
 
 void wxTreebook::OnTreeSelectionChange(wxTreeEvent& event)
 {
+    if ( event.GetEventObject() != m_bookctrl )
+    {
+        event.Skip();
+        return;
+    }
+
     wxTreeItemId newId = event.GetItem();
 
     if ( (m_selection == wxNOT_FOUND &&
@@ -710,6 +715,12 @@ void wxTreebook::OnTreeSelectionChange(wxTreeEvent& event)
 
 void wxTreebook::OnTreeNodeExpandedCollapsed(wxTreeEvent & event)
 {
+    if ( event.GetEventObject() != m_bookctrl )
+    {
+        event.Skip();
+        return;
+    }
+
     wxTreeItemId nodeId = event.GetItem();
     if ( !nodeId.IsOk() || nodeId == GetTreeCtrl()->GetRootItem() )
         return;
