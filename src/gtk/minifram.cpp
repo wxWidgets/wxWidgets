@@ -58,12 +58,12 @@ static wxColor LightContrastColour(const wxColour& c)
 }
 
 extern "C" {
-static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *gdk_event, wxMiniFrame *win )
+static gboolean gtk_window_own_expose_callback(GtkWidget* widget, GdkEventExpose* gdk_event, wxMiniFrame* win)
 {
     // don't need to install idle handler, its done from "event" signal
 
-    if (!win->m_hasVMT) return;
-    if (gdk_event->count > 0) return;
+    if (!win->m_hasVMT || gdk_event->count > 0)
+        return false;
 
     GtkPizza *pizza = GTK_PIZZA(widget);
 
@@ -107,6 +107,7 @@ static void gtk_window_own_expose_callback( GtkWidget *widget, GdkEventExpose *g
         if (style & wxCLOSE_BOX)
             dc.DrawBitmap( win->m_closeButton, win->m_width-19, 2, true );
     }
+    return false;
 }
 }
 
