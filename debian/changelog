@@ -1,3 +1,21 @@
+wxwidgets2.8 (2.8.1.1-0) unstable; urgency=low
+
+  * Fix compilation with wxUSE_STL=1
+  * wxGrid::GetBestSize() returns same size the grid would have after AutoSize()
+  * Added wxTreeCtrl::CollapseAll[Children]() and IsEmpty() (Francesco Montorsi)
+  * Several RTL-related positioning fixes (Diaa Sami)
+  * Fix wxConfig::DeleteGroup() for arguments with trailing slash (David Hart)
+  * Fix memory leak in wxGrid::ShowCellEditControl() (Christian Sturmlechner)
+  * Don't crash if command line is not valid UTF-8 (Unicode build only)
+  * Added wxSizerFlags::Shaped() and FixedMinSize() methods
+  * Added wxCSConv::IsOk() (Manuel Martin)
+  * Added wxDateTime::GetDateOnly()
+  * Made wxTextFile work with unseekable files again (David Hart)
+  * Added wxCONFIG_USE_SUBDIR flag to wxFileConfig (Giuseppe Bilotta)
+  * Added wxSearchCtrl::[Get|Set]DescriptiveText
+
+ -- Robin Dunn <robin@alldunn.com>  Fri, 19 Jan 2007 12:02:52 -0800
+
 wxwidgets2.8 (2.8.0.1-1) unstable; urgency=low
 
   * No changes, just a different packager
