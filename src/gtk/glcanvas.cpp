@@ -166,7 +166,7 @@ gtk_glwindow_map_callback( GtkWidget * WXUNUSED(widget), wxGLCanvas *win )
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gboolean
+static void
 gtk_glwindow_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gdk_event, wxGLCanvas *win )
 {
     // don't need to install idle handler, its done from "event" signal
@@ -177,7 +177,6 @@ gtk_glwindow_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gdk_e
                                   gdk_event->area.y,
                                   gdk_event->area.width,
                                   gdk_event->area.height );
-    return false;
 }
 }
 
