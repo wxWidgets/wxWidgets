@@ -23,33 +23,11 @@ Please refer to e.g. wxGTK's install.txt for details if you are unfamiliar
 with configure.
 
 When configuring, use the --with-directfb option instead of e.g. --with-gtk
-to specify that the wxDFB port should be built. You'll also need to disable
-wxWidgets features that don't work in wxDFB yet:
+to specify that the wxDFB port should be built. You may also need to disable
+wxUniv themes that don't work in wxDFB yet (alternatively you can set the
+WXTHEME environment variable to "mono"):
 
-$ ./configure --with-directfb \
-              --with-themes=mono \
-              --disable-accel \
-              --disable-popupwin \
-              --disable-help \
-              --disable-combobox \
-              --disable-menus \
-              --disable-mdi \
-              --disable-mdidoc \
-              --disable-docview \
-              --disable-printarch \
-              --disable-calendar \
-              --disable-choice \
-              --disable-choicebook \
-              --disable-dirdlg \
-              --disable-filedlg \
-              --disable-fontdlg \
-              --disable-filepicker \
-              --disable-dirpicker \
-              --disable-fontpicker \
-              --disable-datepick \
-              --disable-hyperlink \
-              --disable-aui \
-              --disable-richtext
+$ ./configure --with-directfb --with-themes=mono
 $ make
 
 
