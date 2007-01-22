@@ -58,6 +58,11 @@ static wxRect GetUncoveredWindowArea(wxWindow *win)
     // coordinates; this will remove parts of 'r' that are outside of the
     // parent's area:
     wxRect rp(GetUncoveredWindowArea(parent));
+
+    // normal windows cannot extend out of its parent's client area:
+    if ( !win->CanBeOutsideClientArea() )
+        rp.Intersect(parent->GetClientRect());
+
     rp.Offset(-win->GetPosition());
     rp.Offset(-parent->GetClientAreaOrigin());
     r.Intersect(rp);

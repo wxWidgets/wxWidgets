@@ -488,6 +488,8 @@ public:
     // update all menu item states in all menus
     virtual void UpdateMenus();
 
+    virtual bool CanBeOutsideClientArea() const { return true; }
+
 protected:
     // the list of all our menus
     wxMenuList m_menus;

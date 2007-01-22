@@ -1136,6 +1136,10 @@ public:
     // behaviour in the most common case
     virtual bool ShouldInheritColours() const { return false; }
 
+    // returns true if the window can be positioned outside of parent's client
+    // area (normal windows can't, but e.g. menubar or statusbar can):
+    virtual bool CanBeOutsideClientArea() const { return false; }
+
 protected:
     // event handling specific to wxWindow
     virtual bool TryValidator(wxEvent& event);

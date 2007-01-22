@@ -61,6 +61,29 @@
 // ============================================================================
 
 // ----------------------------------------------------------------------------
+// scrollbars class
+// ----------------------------------------------------------------------------
+
+// This is scrollbar class used to implement wxWindow's "built-in" scrollbars;
+// unlike the standard wxScrollBar class, this one is positioned outside of its
+// parent's client area
+class wxWindowScrollBar : public wxScrollBar
+{
+public:
+    wxWindowScrollBar(wxWindow *parent,
+                      wxWindowID id,
+                      const wxPoint& pos = wxDefaultPosition,
+                      const wxSize& size = wxDefaultSize,
+                      long style = wxSB_HORIZONTAL)
+        : wxScrollBar(parent, id, pos, size, style)
+    {
+    }
+
+    virtual bool CanBeOutsideClientArea() const { return true; }
+};
+
+
+// ----------------------------------------------------------------------------
 // event tables
 // ----------------------------------------------------------------------------
 
@@ -156,9 +179,9 @@ bool wxWindow::Create(wxWindow *parent,
         SetInsertIntoMain( true );
 #endif
 #if wxUSE_SCROLLBAR
-        m_scrollbarVert = new wxScrollBar(this, wxID_ANY,
-                                          wxDefaultPosition, wxDefaultSize,
-                                          wxSB_VERTICAL);
+        m_scrollbarVert = new wxWindowScrollBar(this, wxID_ANY,
+                                                wxDefaultPosition, wxDefaultSize,
+                                                wxSB_VERTICAL);
 #endif // wxUSE_SCROLLBAR
 #if wxUSE_TWO_WINDOWS
         SetInsertIntoMain( false );
@@ -172,9 +195,9 @@ bool wxWindow::Create(wxWindow *parent,
         SetInsertIntoMain( true );
 #endif
 #if wxUSE_SCROLLBAR
-        m_scrollbarHorz = new wxScrollBar(this, wxID_ANY,
-                                          wxDefaultPosition, wxDefaultSize,
-                                          wxSB_HORIZONTAL);
+        m_scrollbarHorz = new wxWindowScrollBar(this, wxID_ANY,
+                                                wxDefaultPosition, wxDefaultSize,
+                                                wxSB_HORIZONTAL);
 #endif // wxUSE_SCROLLBAR
 #if wxUSE_TWO_WINDOWS
         SetInsertIntoMain( false );
@@ -903,10 +926,10 @@ void wxWindow::SetScrollbar(int orient,
 #if wxUSE_TWO_WINDOWS
             SetInsertIntoMain( true );
 #endif
-            scrollbar = new wxScrollBar(this, wxID_ANY,
-                                        wxDefaultPosition, wxDefaultSize,
-                                        orient & wxVERTICAL ? wxSB_VERTICAL
-                                                            : wxSB_HORIZONTAL);
+            scrollbar = new wxWindowScrollBar(this, wxID_ANY,
+                                              wxDefaultPosition, wxDefaultSize,
+                                              orient & wxVERTICAL ? wxSB_VERTICAL
+                                                                  : wxSB_HORIZONTAL);
 #if wxUSE_TWO_WINDOWS
             SetInsertIntoMain( false );
 #endif

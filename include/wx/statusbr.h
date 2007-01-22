@@ -97,6 +97,8 @@ public:
     // don't want status bars to accept the focus at all
     virtual bool AcceptsFocus() const { return false; }
 
+    virtual bool CanBeOutsideClientArea() const { return true; }
+
 protected:
     // set the widths array to NULL
     void InitWidths();
