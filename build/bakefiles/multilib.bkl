@@ -176,6 +176,11 @@
         <msvc-headers>$(HTML_HDR)</msvc-headers>
     </dll>
 
+    <!-- use this to conditonally link against htmldll with <library>: -->
+    <set var="htmldll_library_link">
+        <if cond="SHARED=='1' and USE_GUI=='1' and USE_HTML=='1' and MONOLITHIC=='0'">htmldll</if>
+    </set>
+
     <lib id="htmllib" template="wx_lib"
          cond="SHARED=='0' and USE_GUI=='1' and USE_HTML=='1' and MONOLITHIC=='0'">
         <sources>$(HTML_SRC)</sources>
@@ -247,7 +252,7 @@
         <define>WXUSINGDLL</define>
         <define>WXMAKINGDLL_XRC</define>
         <sources>$(XRC_SRC)</sources>
-        <library>htmldll</library>
+        <library>$(htmldll_library_link)</library>
         <library>advdll</library>
         <library>coredll</library>
         <library>xmldll</library>
@@ -296,7 +301,7 @@
         <define>WXMAKINGDLL_RICHTEXT</define>
         <sources>$(RICHTEXT_SRC)</sources>
         <library>advdll</library>
-        <library>htmldll</library>
+        <library>$(htmldll_library_link)</library>
         <library>xmldll</library>
         <library>coredll</library>
         <library>basedll</library>
