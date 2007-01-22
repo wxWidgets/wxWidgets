@@ -49,10 +49,7 @@ $ ./configure --with-directfb \
               --disable-datepick \
               --disable-hyperlink \
               --disable-aui \
-              --disable-richtext \
-              --disable-fontmap \
-              --disable-xrc \
-              --disable-html
+              --disable-richtext
 $ make
 
 

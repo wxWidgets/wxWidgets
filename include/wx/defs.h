@@ -59,9 +59,6 @@
     #define __WXBASE__
 #endif
 
-/*  include the feature test macros */
-#include "wx/features.h"
-
 /*  suppress some Visual C++ warnings */
 #ifdef __VISUALC__
     /*  the only "real" warning here is 4244 but there are just too many of them */
@@ -2841,6 +2838,10 @@ typedef const void* WXWidget;
 #endif
 #endif
   /*  __WXMSW__ */
+
+
+/*  include the feature test macros */
+#include "wx/features.h"
 
 /*  --------------------------------------------------------------------------- */
 /*  macro to define a class without copy ctor nor assignment operator */

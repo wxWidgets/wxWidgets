@@ -53,13 +53,10 @@ struct WXDLLEXPORT wxNativeEncodingInfo
 #elif defined(_WX_X_FONTLIKE)
     wxString xregistry,
              xencoding;
-#elif defined(__WXGTK20__)
-    // No way to specify this in Pango as this
-    // seems to be handled internally.
+#elif defined(wxHAS_UTF8_FONTS)
+    // ports using UTF-8 for text don't need encoding information for fonts
 #elif defined(__WXMGL__)
     int      mglEncoding;
-#elif defined(__WXDFB__)
-    // DirectFB uses UTF-8 internally, doesn't use font encodings
 #else
     #error "Unsupported toolkit"
 #endif

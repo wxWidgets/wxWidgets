@@ -60,5 +60,11 @@
     #undef wxHAS_REGEX_ADVANCED
 #endif
 
+/* Pango-based ports and wxDFB use UTF-8 for text and font encodings
+ * internally and so their fonts can handle any encodings: */
+#if wxUSE_PANGO || defined(__WXDFB__)
+    #define wxHAS_UTF8_FONTS
+#endif
+
 #endif /*  _WX_FEATURES_H_ */
 

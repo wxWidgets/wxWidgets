@@ -340,36 +340,6 @@ wxString wxNativeFontInfo::ToUserString() const
     return ToString();
 }
 
-// ----------------------------------------------------------------------------
-// wxNativeEncodingInfo
-// ----------------------------------------------------------------------------
-
-bool wxNativeEncodingInfo::FromString(const wxString& WXUNUSED(s))
-{
-    return false;
-}
-
-wxString wxNativeEncodingInfo::ToString() const
-{
-    return wxEmptyString;
-}
-
-bool wxTestFontEncoding(const wxNativeEncodingInfo& WXUNUSED(info))
-{
-    return true;
-}
-
-bool wxGetNativeFontEncoding(wxFontEncoding encoding,
-                             wxNativeEncodingInfo *info)
-{
-    // all encodings are available in GTK+ 2 because we translate text in any
-    // encoding to UTF-8 internally anyhow
-    info->facename.clear();
-    info->encoding = encoding;
-
-    return true;
-}
-
 #else // GTK+ 1.x
 
 #ifdef __X__

@@ -16,11 +16,6 @@
 #include "wx/fontenc.h"
 #include "wx/arrstr.h"
 
-#if wxUSE_PANGO || defined(__WXDFB__)
-    // defined if the port uses only UTF-8 font encodings internally
-    #define wxHAS_UTF8_FONTS
-#endif
-
 // ----------------------------------------------------------------------------
 // wxFontEnumerator enumerates all available fonts on the system or only the
 // fonts with given attributes

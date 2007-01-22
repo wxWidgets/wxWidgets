@@ -614,6 +614,10 @@ SOURCE=..\..\src\common\fontpickercmn.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\fontutilcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\framecmn.cpp
 # End Source File
 # Begin Source File

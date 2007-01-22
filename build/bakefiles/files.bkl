@@ -599,6 +599,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/fontcmn.cpp
     src/common/fontenumcmn.cpp
     src/common/fontmap.cpp
+    src/common/fontutilcmn.cpp
     src/common/framecmn.cpp
     src/common/gaugecmn.cpp
     src/common/gbsizer.cpp
