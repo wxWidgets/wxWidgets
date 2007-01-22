@@ -21,7 +21,7 @@ wxDFB_DECLARE_INTERFACE(IDirectFBSurface);
 struct wxDFBWindowEvent;
 
 class WXDLLIMPEXP_CORE wxFont;
-class WXDLLIMPEXP_CORE wxTopLevelWindowDFB;
+class WXDLLIMPEXP_CORE wxNonOwnedWindow;
 
 class wxOverlayImpl;
 class wxDfbOverlaysList;
@@ -108,7 +108,7 @@ public:
     wxIDirectFBSurfacePtr GetDfbSurface();
 
     // returns toplevel window the window belongs to
-    wxTopLevelWindowDFB *GetTLW() const { return m_tlw; }
+    wxNonOwnedWindow *GetTLW() const { return m_tlw; }
 
     void OnInternalIdle();
 
@@ -174,7 +174,7 @@ private:
 
 protected:
     // toplevel window (i.e. DirectFB window) this window belongs to
-    wxTopLevelWindowDFB *m_tlw;
+    wxNonOwnedWindow *m_tlw;
 
 private:
     // subsurface of TLW's surface covered by this window
@@ -190,7 +190,7 @@ private:
     // overlays for this window (or NULL if it doesn't have any)
     wxDfbOverlaysList *m_overlays;
 
-    friend class wxTopLevelWindowDFB; // for HandleXXXEvent
+    friend class wxNonOwnedWindow; // for HandleXXXEvent
     friend class wxOverlayImpl; // for Add/RemoveOverlay
     friend class wxWindowDC; // for PaintOverlays
 

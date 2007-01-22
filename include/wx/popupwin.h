@@ -16,14 +16,14 @@
 
 #if wxUSE_POPUPWIN
 
-#include "wx/window.h"
+#include "wx/nonownedwnd.h"
 
 // ----------------------------------------------------------------------------
 // wxPopupWindow: a special kind of top level window used for popup menus,
 // combobox popups and such.
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxPopupWindowBase : public wxWindow
+class WXDLLEXPORT wxPopupWindowBase : public wxNonOwnedWindow
 {
 public:
     wxPopupWindowBase() { }
@@ -64,6 +64,8 @@ public:
     #include "wx/x11/popupwin.h"
 #elif defined(__WXMOTIF__)
     #include "wx/motif/popupwin.h"
+#elif defined(__WXDFB__)
+    #include "wx/dfb/popupwin.h"
 #elif defined(__WXMGL__)
     #include "wx/mgl/popupwin.h"
 #else

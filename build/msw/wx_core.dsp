@@ -9105,6 +9105,10 @@ SOURCE=..\..\include\wx\msgdlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\nonownedwnd.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\notebook.h
 # End Source File
 # Begin Source File

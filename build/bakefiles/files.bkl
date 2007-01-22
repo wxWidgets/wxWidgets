@@ -841,6 +841,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/menuitem.h
     wx/metafile.h
     wx/minifram.h
+    wx/nonownedwnd.h
     wx/notebook.h
     wx/ownerdrw.h
     wx/paper.h
@@ -1839,6 +1840,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/dfb/font.cpp
     src/dfb/fontenum.cpp
     src/dfb/fontmgr.cpp
+    src/dfb/nonownedwnd.cpp
     src/dfb/overlay.cpp
     src/dfb/pen.cpp
     src/dfb/region.cpp
@@ -1867,7 +1869,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/dfb/dfbptr.h
     wx/dfb/evtloop.h
     wx/dfb/font.h
+    wx/dfb/nonownedwnd.h
     wx/dfb/pen.h
+    wx/dfb/popupwin.h
     wx/dfb/private.h
     wx/dfb/region.h
     wx/dfb/toplevel.h

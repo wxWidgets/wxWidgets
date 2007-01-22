@@ -1755,7 +1755,9 @@ COND_TOOLKIT_DFB_LOWLEVEL_HDR =  \
 	wx/dfb/dfbptr.h \
 	wx/dfb/evtloop.h \
 	wx/dfb/font.h \
+	wx/dfb/nonownedwnd.h \
 	wx/dfb/pen.h \
+	wx/dfb/popupwin.h \
 	wx/dfb/private.h \
 	wx/dfb/region.h \
 	wx/dfb/toplevel.h \
@@ -2977,6 +2979,7 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/menuitem.h \
 	wx/metafile.h \
 	wx/minifram.h \
+	wx/nonownedwnd.h \
 	wx/notebook.h \
 	wx/ownerdrw.h \
 	wx/paper.h \
@@ -3750,6 +3753,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_font.o \
 	monodll_fontenum.o \
 	monodll_fontmgr.o \
+	monodll_nonownedwnd.o \
 	monodll_overlay.o \
 	monodll_pen.o \
 	monodll_region.o \
@@ -4583,6 +4587,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_font.o \
 	monodll_fontenum.o \
 	monodll_fontmgr.o \
+	monodll_nonownedwnd.o \
 	monodll_overlay.o \
 	monodll_pen.o \
 	monodll_region.o \
@@ -5533,6 +5538,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_font.o \
 	monolib_fontenum.o \
 	monolib_fontmgr.o \
+	monolib_nonownedwnd.o \
 	monolib_overlay.o \
 	monolib_pen.o \
 	monolib_region.o \
@@ -6367,6 +6373,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_font.o \
 	monolib_fontenum.o \
 	monolib_fontmgr.o \
+	monolib_nonownedwnd.o \
 	monolib_overlay.o \
 	monolib_pen.o \
 	monolib_region.o \
@@ -7546,6 +7553,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_font.o \
 	coredll_fontenum.o \
 	coredll_fontmgr.o \
+	coredll_nonownedwnd.o \
 	coredll_overlay.o \
 	coredll_pen.o \
 	coredll_region.o \
@@ -8380,6 +8388,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_font.o \
 	coredll_fontenum.o \
 	coredll_fontmgr.o \
+	coredll_nonownedwnd.o \
 	coredll_overlay.o \
 	coredll_pen.o \
 	coredll_region.o \
@@ -9003,6 +9012,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_font.o \
 	corelib_fontenum.o \
 	corelib_fontmgr.o \
+	corelib_nonownedwnd.o \
 	corelib_overlay.o \
 	corelib_pen.o \
 	corelib_region.o \
@@ -9837,6 +9847,7 @@ COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_font.o \
 	corelib_fontenum.o \
 	corelib_fontmgr.o \
+	corelib_nonownedwnd.o \
 	corelib_overlay.o \
 	corelib_pen.o \
 	corelib_region.o \
@@ -14869,6 +14880,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_fontmgr.o: $(srcdir)/src/dfb/fontmgr.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/fontmgr.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_nonownedwnd.o: $(srcdir)/src/dfb/nonownedwnd.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/nonownedwnd.cpp
+
 @COND_TOOLKIT_DFB_USE_GUI_1@monodll_overlay.o: $(srcdir)/src/dfb/overlay.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/overlay.cpp
 
@@ -18990,6 +19004,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_fontmgr.o: $(srcdir)/src/dfb/fontmgr.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/fontmgr.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_nonownedwnd.o: $(srcdir)/src/dfb/nonownedwnd.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/nonownedwnd.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@monolib_overlay.o: $(srcdir)/src/dfb/overlay.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/overlay.cpp
@@ -23494,6 +23511,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_fontmgr.o: $(srcdir)/src/dfb/fontmgr.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/fontmgr.cpp
 
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_nonownedwnd.o: $(srcdir)/src/dfb/nonownedwnd.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/nonownedwnd.cpp
+
 @COND_TOOLKIT_DFB_USE_GUI_1@coredll_overlay.o: $(srcdir)/src/dfb/overlay.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/overlay.cpp
 
@@ -26451,6 +26471,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_fontmgr.o: $(srcdir)/src/dfb/fontmgr.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/fontmgr.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_nonownedwnd.o: $(srcdir)/src/dfb/nonownedwnd.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/nonownedwnd.cpp
 
 @COND_TOOLKIT_DFB_USE_GUI_1@corelib_overlay.o: $(srcdir)/src/dfb/overlay.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/overlay.cpp

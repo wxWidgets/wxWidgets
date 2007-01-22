@@ -18,7 +18,7 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#include "wx/window.h"
+#include "wx/nonownedwnd.h"
 #include "wx/iconbndl.h"
 
 // the default names for various classes
@@ -115,7 +115,7 @@ enum
 // wxTopLevelWindow: a top level (as opposed to child) window
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTopLevelWindowBase : public wxWindow
+class WXDLLEXPORT wxTopLevelWindowBase : public wxNonOwnedWindow
 {
 public:
     // construction
