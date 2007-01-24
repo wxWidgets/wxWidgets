@@ -16,6 +16,11 @@
     #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/utils.h"
+    #include "wx/log.h"
+#endif
+
 #include "wx/fileconf.h"
 #include "wx/filename.h"
 #include "wx/tokenzr.h"

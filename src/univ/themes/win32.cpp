@@ -35,6 +35,7 @@
     #include "wx/window.h"
 
     #include "wx/dcmemory.h"
+    #include "wx/dcclient.h"
 
     #include "wx/button.h"
     #include "wx/bmpbuttn.h"

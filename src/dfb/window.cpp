@@ -28,6 +28,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
+    #include "wx/nonownedwnd.h"
 #endif
 
 #include "wx/caret.h"

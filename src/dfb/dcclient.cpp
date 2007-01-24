@@ -27,6 +27,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/window.h"
+    #include "wx/nonownedwnd.h"
 #endif
 
 #include "wx/dfb/private.h"

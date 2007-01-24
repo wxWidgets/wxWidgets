@@ -12,6 +12,8 @@
 #define _WX_DFB_WRAPDFB_H_
 
 #include "wx/dfb/dfbptr.h"
+#include "wx/gdicmn.h"
+#include "wx/vidmode.h"
 
 #include <directfb.h>
 

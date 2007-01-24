@@ -15,6 +15,11 @@
     #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/intl.h"
+    #include "wx/log.h"
+#endif
+
 #include "wx/dfb/wrapdfb.h"
 
 //-----------------------------------------------------------------------------
