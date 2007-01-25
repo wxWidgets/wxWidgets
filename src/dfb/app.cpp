@@ -105,7 +105,9 @@ void wxApp::WakeUpIdle()
         wxMutexGuiEnter();
 #endif
 
-    wxEventLoop::GetActive()->WakeUp();
+    wxEventLoop * const loop = wxEventLoop::GetActive();
+    if ( loop )
+        loop->WakeUp();
 
 #if wxUSE_THREADS
     if (!wxThread::IsMain())
@@ -137,8 +139,9 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
     wxLog::Suspend();
 
-    if ( wxEventLoop::GetActive() )
-        wxEventLoop::GetActive()->Yield();
+    wxEventLoop * const loop = wxEventLoop::GetActive();
+    if ( loop )
+        loop->Yield();
 
     // it's necessary to call ProcessIdle() to update the frames sizes which
     // might have been changed (it also will update other things set from
