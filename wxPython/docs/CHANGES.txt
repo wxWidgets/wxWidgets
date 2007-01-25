@@ -5,6 +5,12 @@ Recent Changes for wxPython
 -------
 *
 
+Added wx.ToolBar.SetToolNormalBitmap and SetToolDisabledBitmap
+methods.  (Keep in mind however that the disabled bitmap is currently
+generated on the fly by most native toolbar widgets, so this
+SetToolDisabledBitmap method won't have any affect on them...)
+
+
 
 
 2.8.1.1

@@ -99,6 +99,7 @@ All:
 - Made wxTextFile work with unseekable files again (David Hart)
 - Added wxCONFIG_USE_SUBDIR flag to wxFileConfig (Giuseppe Bilotta)
 - Added wxSearchCtrl::[Get|Set]DescriptiveText
+- Added wxToolBar::SetTool[Normal|Disabled]Bitmap for wxMSW, wxGTK and wxMac
 
 wxMSW
 
