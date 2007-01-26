@@ -17,6 +17,7 @@
 import wx
 import wx.py
 import wx.stc
+import wx.aui
 import sys
 
 
@@ -105,22 +106,27 @@ class InspectionFrame(wx.Frame):
 
         self.MacSetMetalAppearance(True)
         self.MakeToolBar()
+        panel = wx.Panel(self, size=self.GetClientSize())
+        
+        # tell FrameManager to manage this frame        
+        self.mgr = wx.aui.AuiManager(panel,
+                                     wx.aui.AUI_MGR_DEFAULT
+                                     | wx.aui.AUI_MGR_TRANSPARENT_DRAG
+                                     | wx.aui.AUI_MGR_ALLOW_ACTIVE_PANE)
 
-        self.outerSplitter = wx.SplitterWindow(self,style=wx.SP_LIVE_UPDATE)
-        self.innerSplitter = wx.SplitterWindow(self.outerSplitter,style=wx.SP_LIVE_UPDATE)
-        self.tree = InspectionTree(self.outerSplitter)
-        self.info = InspectionInfoPanel(self.innerSplitter)
+        # make the child tools        
+        self.tree = InspectionTree(panel)
+        self.info = InspectionInfoPanel(panel)
 
         if not locals:
             locals = {}
         myIntroText = (
-            "Python %s on %s\nNOTE: The 'obj' variable refers to the selected object."
+            "Python %s on %s\nNOTE: The 'obj' variable refers to the object selected in the tree."
             % (sys.version.split()[0], sys.platform))
-        self.crust = wx.py.crust.Crust(self.innerSplitter, locals=locals,
+        self.crust = wx.py.crust.Crust(panel, locals=locals,
                                        intro=myIntroText,
                                        showInterpIntro=False,
                                        )
-        self.crust.shell.SetMarginWidth(1, 0)
         self.locals = self.crust.shell.interp.locals
         self.crust.shell.interp.introText = ''
         self.locals['obj'] = self.obj = wnd
@@ -128,11 +134,34 @@ class InspectionFrame(wx.Frame):
         self.locals['wx'] = wx
         wx.CallAfter(self._postStartup)
 
-        self.innerSplitter.SplitHorizontally(self.info, self.crust, -225)
-        self.outerSplitter.SplitVertically(self.tree, self.innerSplitter, 280)
-        self.outerSplitter.SetMinimumPaneSize(20)
-        self.innerSplitter.SetMinimumPaneSize(20)
+        # put the chlid tools in AUI panes
+        self.mgr.AddPane(self.info,
+                         wx.aui.AuiPaneInfo().Name("info").Caption("Object Info").
+                         CenterPane().CaptionVisible(True).
+                         CloseButton(False).MaximizeButton(True)
+                         )
+        self.mgr.AddPane(self.tree,
+                         wx.aui.AuiPaneInfo().Name("tree").Caption("Widget Tree").
+                         CaptionVisible(True).Left().Dockable(True).Floatable(True).
+                         BestSize((280,200)).CloseButton(False).MaximizeButton(True)
+                         )
+        self.mgr.AddPane(self.crust,
+                         wx.aui.AuiPaneInfo().Name("crust").Caption("PyCrust").
+                         CaptionVisible(True).Bottom().Dockable(True).Floatable(True).
+                         BestSize((400,200)).CloseButton(False).MaximizeButton(True)
+                         )
 
+        self.mgr.Update()
+
+        if config is None:
+            config = wx.Config('wxpyinspector')
+        self.config = config
+        self.Bind(wx.EVT_CLOSE, self.OnClose)
+        self.LoadSettings(self.config)
+        self.crust.shell.lineNumbers = False
+        self.crust.shell.setDisplayLineNumbers(False)
+        self.crust.shell.SetMarginWidth(1, 0)
+        
 
     def MakeToolBar(self):
         tbar = self.CreateToolBar(wx.TB_HORIZONTAL | wx.TB_FLAT | wx.TB_TEXT | wx.NO_BORDER )
@@ -170,8 +199,15 @@ class InspectionFrame(wx.Frame):
         self.UpdateInfo()
         self.started = True
 
+
+    def OnClose(self, evt):
+        self.SaveSettings(self.config)
+        evt.Skip()
+        
+
     def UpdateInfo(self):
         self.info.Update(self.obj)
+
 
     def SetObj(self, obj):
         if self.obj is obj:
@@ -197,6 +233,7 @@ class InspectionFrame(wx.Frame):
         self.Bind(wx.EVT_MOUSE_CAPTURE_LOST, self.OnCaptureLost)
         self.CaptureMouse()
         self.finding = wx.BusyInfo("Click on any widget in the app...")
+
 
     def OnCaptureLost(self, evt):
         self.Unbind(wx.EVT_LEFT_DOWN)
@@ -231,7 +268,39 @@ class InspectionFrame(wx.Frame):
             evt.Check(self.crust.ToolsShown())
 
 
+    def LoadSettings(self, config):
+        self.crust.LoadSettings(config)
 
+        pos  = wx.Point(config.ReadInt('Window/PosX', -1),
+                        config.ReadInt('Window/PosY', -1))
+                        
+        size = wx.Size(config.ReadInt('Window/Width', -1),
+                       config.ReadInt('Window/Height', -1))
+        self.SetSize(size)
+        self.Move(pos)
+
+        perspective = config.Read('perspective', '')
+        if perspective:
+            self.mgr.LoadPerspective(perspective)
+        self.includeSizers = config.ReadBool('includeSizers', False)
+            
+
+    def SaveSettings(self, config):
+        self.crust.SaveSettings(config)
+
+        if not self.IsIconized() and not self.IsMaximized():
+            w, h = self.GetSize()
+            config.WriteInt('Window/Width', w)
+            config.WriteInt('Window/Height', h)
+            
+            px, py = self.GetPosition()
+            config.WriteInt('Window/PosX', px)
+            config.WriteInt('Window/PosY', py)
+
+        perspective = self.mgr.SavePerspective()
+        config.Write('perspective', perspective)
+        config.WriteBool('includeSizers', self.includeSizers)
+        
 #---------------------------------------------------------------------------
 
 # should inspection frame (and children) be includeed in the tree?
@@ -249,7 +318,7 @@ class InspectionTree(wx.TreeCtrl):
         self.roots = []
         self.built = False
         self.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnSelectionChanged)
-
+        self.toolFrame = wx.GetTopLevelParent(self)
 
     def BuildTree(self, startWidget, includeSizers=False):
         if self.GetCount():
@@ -360,8 +429,7 @@ class InspectionTree(wx.TreeCtrl):
 
     def OnSelectionChanged(self, evt):
         obj = self.GetItemPyData(evt.GetItem())
-        toolFrm = wx.GetTopLevelParent(self)
-        toolFrm.SetObj(obj)
+        self.toolFrame.SetObj(obj)
 
 
 #---------------------------------------------------------------------------
