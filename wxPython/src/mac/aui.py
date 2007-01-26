@@ -1730,8 +1730,18 @@ class PyAuiTabArt(AuiDefaultTabArt):
     methods to the Python methods implemented in the derived class.
     """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self) -> PyAuiTabArt
+
+        This version of the `TabArt` class has been instrumented to be
+        subclassable in Python and to reflect all calls to the C++ base class
+        methods to the Python methods implemented in the derived class.
+        """
+        _aui.PyAuiTabArt_swiginit(self,_aui.new_PyAuiTabArt(*args, **kwargs))
+        PyAuiTabArt._setCallbackInfo(self, self, PyAuiTabArt)
+
 _aui.PyAuiTabArt_swigregister(PyAuiTabArt)
 
 

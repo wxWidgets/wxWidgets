@@ -306,6 +306,7 @@ The following example shows a simple implementation that utilizes
 // A wxDocArt class that knows how to forward virtuals to Python methods
 class wxPyAuiDockArt :  public wxAuiDefaultDockArt
 {
+public:
     wxPyAuiDockArt() : wxAuiDefaultDockArt() {}
 
     DEC_PYCALLBACK_INT_INT(GetMetric);
@@ -479,6 +480,7 @@ methods to the Python methods implemented in the derived class.", "");
 
 class wxPyAuiDockArt :  public wxAuiDefaultDockArt
 {
+public:
     %pythonAppend wxPyAuiDockArt     setCallbackInfo(PyAuiDockArt)
     wxPyAuiDocArt();
 
@@ -527,6 +529,7 @@ class wxPyAuiDockArt :  public wxAuiDefaultDockArt
 // A wxTabArt class that knows how to forward virtuals to Python methods
 class wxPyAuiTabArt :  public wxAuiDefaultTabArt
 {
+public:
     wxPyAuiTabArt() : wxAuiDefaultTabArt() {}
 
     
@@ -734,6 +737,7 @@ methods to the Python methods implemented in the derived class.", "");
 
 class wxPyAuiTabArt :  public wxAuiDefaultTabArt
 {
+public:
     %pythonAppend wxPyAuiTabArt     setCallbackInfo(PyAuiTabArt)
     wxPyAuiTabArt();
 
