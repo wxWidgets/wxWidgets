@@ -10,6 +10,11 @@ methods.  (Keep in mind however that the disabled bitmap is currently
 generated on the fly by most native toolbar widgets, so this
 SetToolDisabledBitmap method won't have any affect on them...)
 
+Refactored the inspection tool such that it can be used as a wx.App
+mix-in class as it was used before (with the wx.lib.mixins.inspect
+module) and also as a non minx-in tool (using
+wx.lib.inspect.InspectionTool). 
+
 
 
 
