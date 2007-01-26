@@ -263,6 +263,11 @@ void wxFontRefData::MacFindFont()
 #ifndef __LP64__
                 wxMacStringToPascal( m_faceName , qdFontName );
                 m_macFontFamily = FMGetFontFamilyFromName( qdFontName );
+                if ( m_macFontFamily == kInvalidFontFamily )
+                {
+                    wxLogDebug( wxT("ATSFontFamilyFindFromName failed for %s"), m_faceName );
+                    m_macFontFamily = GetAppFont();
+                }
 #endif
             }
         }
@@ -283,8 +288,13 @@ void wxFontRefData::MacFindFont()
             {
                 wxMacCFStringHolder cf( m_faceName, wxLocale::GetSystemEncoding() );
                 ATSFontFamilyRef atsfamily = ATSFontFamilyFindFromName( cf , kATSOptionFlagsDefault );
-                wxASSERT_MSG( atsfamily != (ATSFontFamilyRef) -1 , wxT("ATSFontFamilyFindFromName failed") );
-                m_macFontFamily = FMGetFontFamilyFromATSFontFamilyRef( atsfamily );
+                if ( atsfamily == (ATSFontFamilyRef) -1 )
+                {
+                    wxLogDebug( wxT("ATSFontFamilyFindFromName failed for %s"), m_faceName );
+                    m_macFontFamily = GetAppFont();
+                }
+                else
+                    m_macFontFamily = FMGetFontFamilyFromATSFontFamilyRef( atsfamily );
             }
         }
 
