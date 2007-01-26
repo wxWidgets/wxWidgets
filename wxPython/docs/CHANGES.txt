@@ -12,8 +12,8 @@ SetToolDisabledBitmap method won't have any affect on them...)
 
 Refactored the inspection tool such that it can be used as a wx.App
 mix-in class as it was used before (with the wx.lib.mixins.inspect
-module) and also as a non minx-in tool (using
-wx.lib.inspect.InspectionTool). 
+module) and also as a non mix-in tool (using wx.lib.inspect.InspectionTool). 
+
 
 
 
