@@ -1790,7 +1790,9 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         btnshadow = wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNSHADOW)
         self._hilightUnfocusedBrush = wx.Brush(btnshadow)
         r, g, b = btnshadow.Red(), btnshadow.Green(), btnshadow.Blue()
-        backcolour = ((r >> 1) - 20, (g >> 1) - 20, (b >> 1) - 20)
+        backcolour = (max((r >> 1) - 20, 0),
+                      max((g >> 1) - 20, 0),
+                      max((b >> 1) - 20, 0))
         backcolour = wx.Colour(backcolour[0], backcolour[1], backcolour[2])
         self._hilightUnfocusedBrush2 = wx.Brush(backcolour)
 
