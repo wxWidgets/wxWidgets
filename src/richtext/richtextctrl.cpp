@@ -438,7 +438,7 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
     // See if we need to change the cursor
     
     {
-        if (hit != wxRICHTEXT_HITTEST_NONE)
+        if (hit != wxRICHTEXT_HITTEST_NONE & !(hit & wxRICHTEXT_HITTEST_OUTSIDE))
         {
             wxTextAttrEx attr;
             if (GetStyle(position, attr))
@@ -453,6 +453,8 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
                 }
             }
         }
+        else
+            SetCursor(m_textCursor);
     }
 
     if (!event.Dragging())
@@ -1331,7 +1333,7 @@ bool wxRichTextCtrl::MoveDown(int noLines, int flags)
         // we want to be at the end of the last line but with m_caretAtLineStart set to true,
         // so we view the caret at the start of the line.
         bool caretLineStart = false;
-        if (hitTest == wxRICHTEXT_HITTEST_BEFORE)
+        if (hitTest & wxRICHTEXT_HITTEST_BEFORE)
         {
             wxRichTextLine* thisLine = GetBuffer().GetLineAtPosition(newPos-1);
             wxRichTextRange lineRange;
@@ -1975,17 +1977,14 @@ wxRichTextCtrl::HitTest(const wxPoint& pt,
 
     int hit = ((wxRichTextCtrl*)this)->GetBuffer().HitTest(dc, pt2, *pos);
 
-    switch ( hit )
-    {
-        case wxRICHTEXT_HITTEST_BEFORE:
-            return wxTE_HT_BEFORE;
-
-        case wxRICHTEXT_HITTEST_AFTER:
-            return wxTE_HT_BEYOND;
-
-        case wxRICHTEXT_HITTEST_ON:
-            return wxTE_HT_ON_TEXT;
-    }
+    if ((hit & wxRICHTEXT_HITTEST_BEFORE) && (hit & wxRICHTEXT_HITTEST_OUTSIDE))
+        return wxTE_HT_BEFORE;
+    else if ((hit & wxRICHTEXT_HITTEST_AFTER) && (hit & wxRICHTEXT_HITTEST_OUTSIDE))
+        return wxTE_HT_BEYOND;
+    else if (hit & wxRICHTEXT_HITTEST_BEFORE|wxRICHTEXT_HITTEST_AFTER)
+        return wxTE_HT_ON_TEXT;
+    else
+        return wxTE_HT_UNKNOWN;
 
     return wxTE_HT_UNKNOWN;
 }

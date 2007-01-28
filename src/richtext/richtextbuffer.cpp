@@ -3668,12 +3668,12 @@ int wxRichTextParagraph::HitTest(wxDC& dc, const wxPoint& pt, long& textPosition
             if (pt.x < linePos.x)
             {
                 textPosition = lineRange.GetStart();
-                return wxRICHTEXT_HITTEST_BEFORE;
+                return wxRICHTEXT_HITTEST_BEFORE|wxRICHTEXT_HITTEST_OUTSIDE;
             }
             else if (pt.x >= (linePos.x + lineSize.x))
             {
                 textPosition = lineRange.GetEnd();
-                return wxRICHTEXT_HITTEST_AFTER;
+                return wxRICHTEXT_HITTEST_AFTER|wxRICHTEXT_HITTEST_OUTSIDE;
             }
             else
             {
