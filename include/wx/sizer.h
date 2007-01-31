@@ -75,8 +75,10 @@ public:
     // some shortcuts for Align()
     wxSizerFlags& Centre() { return Align(wxCENTRE); }
     wxSizerFlags& Center() { return Centre(); }
+    wxSizerFlags& Top() { return Align(wxALIGN_TOP); }
     wxSizerFlags& Left() { return Align(wxALIGN_LEFT); }
     wxSizerFlags& Right() { return Align(wxALIGN_RIGHT); }
+    wxSizerFlags& Bottom() { return Align(wxALIGN_BOTTOM); }
 
     // default border size used by Border() below
     static int GetDefaultBorder()

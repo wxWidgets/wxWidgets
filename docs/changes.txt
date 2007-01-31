@@ -18,6 +18,11 @@ Major new features in this release
 ----------------------------------
 
 
+2.9.0
+-----
+
+- Added wxSizerFlags::Top() and Bottom()
+
 
 2.8.2
 -----

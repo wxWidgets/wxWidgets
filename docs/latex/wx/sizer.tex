@@ -596,8 +596,10 @@ Note that if this method is not called, the wxSizerFlags has no specified alignm
 
 \wxheading{See also}
 
+\helpref{Top}{wxsizerflagstop},\\
 \helpref{Left}{wxsizerflagsleft},\\
 \helpref{Right}{wxsizerflagsright},\\
+\helpref{Bottom}{wxsizerflagsbottom},\\
 \helpref{Centre}{wxsizerflagscentre}
 
 
@@ -613,6 +615,17 @@ Sets the wxSizerFlags to have a border of a number of pixels specified by
 In the overloaded version without \arg{borderinpixels} parameter, the border of
 default size, as returned by \helpref{GetDefaultBorder}{wxsizerflagsgetdefaultborder},
 is used.
+
+
+\membersection{wxSizerFlags::Bottom}\label{wxsizerflagsbottom}
+
+\func{wxSizerFlags\& }{Bottom}{\void}
+
+Aligns the object to the bottom, shortcut for \texttt{Align(wxALIGN\_BOTTOM)}
+
+\wxheading{See also}
+
+\helpref{Align}{wxsizerflagsalign}
 
 
 \membersection{wxSizerFlags::Center}\label{wxsizerflagscenter}
@@ -702,6 +715,17 @@ Aligns the object to the right, shortcut for \texttt{Align(wxALIGN\_RIGHT)}
 
 Set the \texttt{wx\_SHAPED} flag which indicates that the elements should
 always keep the fixed width to height ratio equal to its original value.
+
+
+\membersection{wxSizerFlags::Top}\label{wxsizerflagstop}
+
+\func{wxSizerFlags\& }{Top}{\void}
+
+Aligns the object to the top, shortcut for \texttt{Align(wxALIGN\_TOP)}
+
+\wxheading{See also}
+
+\helpref{Align}{wxsizerflagsalign}
 
 
 \membersection{wxSizerFlags::TripleBorder}\label{wxsizerflagstriplebleborder}
