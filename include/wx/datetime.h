@@ -639,11 +639,9 @@ public:
         // resets time to 00:00:00, doesn't change the date
     wxDateTime& ResetTime();
 
-#if wxABI_VERSION >= 20802
         // get the date part of this object only, i.e. the object which has the
         // same date as this one but time of 00:00:00
     wxDateTime GetDateOnly() const;
-#endif // wxABI 2.8.1+
 
         // the following functions don't change the values of the other
         // fields, i.e. SetMinute() won't change either hour or seconds value

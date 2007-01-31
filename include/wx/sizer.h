@@ -155,7 +155,6 @@ public:
 #endif
     }
 
-#if wxABI_VERSION >= 20802
     // setters for the others flags
     wxSizerFlags& Shaped()
     {
@@ -170,7 +169,6 @@ public:
 
         return *this;
     }
-#endif // wx 2.8.2+
 
     // accessors for wxSizer only
     int GetProportion() const { return m_proportion; }
