@@ -93,7 +93,7 @@ Major new features in 2.8 release
 
 All:
 
-- Added wxSizerFlags::Shaped() and FixedMinSize() methods
+- Added wxSizerFlags::Shaped(), FixedMinSize(), Top() and Bottom() methods
 - Added wxCSConv::IsOk() (Manuel Martin)
 - Added wxDateTime::GetDateOnly()
 - Made wxTextFile work with unseekable files again (David Hart)

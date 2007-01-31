@@ -31,8 +31,10 @@
         *wxFileHistory*etBaseId*;
         *wxSearchCtrl*SetDescriptiveText*;
         *wxSearchCtrl*GetDescriptiveText*;
-        *wxSizerFlags*Shaped*;
+        *wxSizerFlags*Bottom*;
         *wxSizerFlags*FixedMinSize*;
+        *wxSizerFlags*Shaped*;
+        *wxSizerFlags*Top*;
         *wxToolBar*SetToolNormalBitmap;
         *wxToolBar*SetToolDisabledBitmap;
 };

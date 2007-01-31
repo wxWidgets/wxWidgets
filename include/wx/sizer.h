@@ -78,6 +78,11 @@ public:
     wxSizerFlags& Left() { return Align(wxALIGN_LEFT); }
     wxSizerFlags& Right() { return Align(wxALIGN_RIGHT); }
 
+#if wxABI_VERSION >= 20802
+    wxSizerFlags& Top() { return Align(wxALIGN_TOP); }
+    wxSizerFlags& Bottom() { return Align(wxALIGN_BOTTOM); }
+#endif // wxABI 2.8.2+
+
     // default border size used by Border() below
     static int GetDefaultBorder()
     {
