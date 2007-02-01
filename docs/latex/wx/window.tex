@@ -1735,6 +1735,23 @@ navigation behaviour for the tab key, since the standard default behaviour for
 a multiline text control with the wxTE\_PROCESS\_TAB style is to insert a tab
 and not navigate to the next control.
 
+
+\membersection{wxWindow::NextControlId}\label{wxwindownextcontrolid}
+
+\func{static int}{NextControlId}{\param{int }{winid}}
+
+If two controls are created consecutively using \texttt{wxID\_ANY} id, this
+function allows to retrieve the effective id of the latter control from the id
+of the former. This is useful for example to find the control following its 
+\helpref{wxStaticText}{wxstatictext} label if only the id of or pointer to the
+label is available to the caller but it is known that the two controls were
+created together.
+
+\wxheading{See also}
+
+\helpref{PrevControlId}{wxwindowprevcontrolid}
+
+
 %% VZ: wxWindow::OnXXX() functions should not be documented but I'm leaving
 %%     the old docs here in case we want to move any still needed bits to
 %%     the right location (i.e. probably the corresponding events docs)
@@ -2292,6 +2309,14 @@ implements the following methods:\par
 \twocolitem{{\bf PopupMenuXY(menu, x, y)}}{Specifies position with two integers (x, y)}
 \end{twocollist}}
 }
+
+
+\membersection{wxWindow::PrevControlId}\label{wxwindowprevcontrolid}
+
+\func{static int}{PrevControlId}{\param{int }{winid}}
+
+This is similar to \helpref{NextControlId}{wxwindownextcontrolid} but returns
+the id of the control created just before the one with the given \arg{winid}.
 
 
 \membersection{wxWindow::PushEventHandler}\label{wxwindowpusheventhandler}
