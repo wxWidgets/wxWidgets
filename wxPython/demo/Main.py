@@ -1692,7 +1692,7 @@ class wxPythonDemo(wx.Frame):
         if not InspectionTool().initialized:
             InspectionTool().Init()
 
-        # Eind a widget to be selected in the tree.  Use either the
+        # Find a widget to be selected in the tree.  Use either the
         # one under the cursor, if any, or this frame.
         wnd = wx.FindWindowAtPointer()
         if not wnd:
