@@ -21,7 +21,14 @@ Major new features in this release
 2.9.0
 -----
 
+All:
+
 - Added wxSizerFlags::Top() and Bottom()
+
+wxGTK:
+
+- Implemented support for underlined fonts in wxStaticText
+
 
 
 2.8.2

@@ -129,7 +129,33 @@ void wxStaticText::SetLabel( const wxString &label )
 
 bool wxStaticText::SetFont( const wxFont &font )
 {
+    const bool wasUnderlined = GetFont().GetUnderlined();
+
     bool ret = wxControl::SetFont(font);
+
+    if ( font.GetUnderlined() != wasUnderlined )
+    {
+        // the underlines for mnemonics are incompatible with using attributes
+        // so turn them off when setting underlined font and restore them when
+        // unsetting it
+        gtk_label_set_use_underline(GTK_LABEL(m_widget), wasUnderlined);
+
+        if ( wasUnderlined )
+        {
+            // it's not underlined any more, remove the attributes we set
+            gtk_label_set_attributes(GTK_LABEL(m_widget), NULL);
+        }
+        else // the text is underlined now
+        {
+            PangoAttrList *attrs = pango_attr_list_new();
+            PangoAttribute *a = pango_attr_underline_new(PANGO_UNDERLINE_SINGLE);
+            a->start_index = 0;
+            a->end_index = -1;
+            pango_attr_list_insert(attrs, a);
+            gtk_label_set_attributes(GTK_LABEL(m_widget), attrs);
+            pango_attr_list_unref(attrs);
+        }
+    }
 
     // adjust the label size to the new label unless disabled
     if (!HasFlag(wxST_NO_AUTORESIZE))
