@@ -755,15 +755,26 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
 #if !defined(QS_ALLPOSTMESSAGE)
 #define QS_ALLPOSTMESSAGE 0
 #endif
-
-        result = ::MsgWaitForMultipleObjects
-                 (
-                   1,              // number of objects to wait for
-                   &m_hThread,     // the objects
-                   false,          // don't wait for all objects
-                   INFINITE,       // no timeout
-                   QS_ALLINPUT|QS_ALLPOSTMESSAGE   // return as soon as there are any events
-                 );
+        if ( !wxEventLoop::GetActive() )
+        {
+            // don't ask for Windows messages if we don't have a running event
+            // loop to process them as otherwise we'd enter an infinite loop
+            // with MsgWaitForMultipleObjects() always returning WAIT_OBJECT_0
+            // + 1 because the message would remain forever in the queue
+            result = ::WaitForSingleObject(&m_hThread, INFINITE);
+        }
+        else // wait for thread termination without blocking the GUI
+        {
+            result = ::MsgWaitForMultipleObjects
+                     (
+                       1,              // number of objects to wait for
+                       &m_hThread,     // the objects
+                       false,          // don't wait for all objects
+                       INFINITE,       // no timeout
+                       QS_ALLINPUT |   // return as soon as there are any events
+                       QS_ALLPOSTMESSAGE
+                     );
+        }
 
         switch ( result )
         {
