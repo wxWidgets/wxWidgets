@@ -58,6 +58,7 @@
 #ifdef __WXMSW__
 #include <windows.h>
 #include "wx/msw/winundef.h"
+#include "wx/volume.h"
 
 // FIXME - Mingw32 1.0 has both _getdrive() and _chdrive(). For now, let's assume
 //         older releases don't, but it should be verified and the checks modified
@@ -111,48 +112,42 @@ size_t wxGetAvailableDrives(wxArrayString &paths, wxArrayString &names, wxArrayI
     paths.Add(wxT("\\"));
     names.Add(wxT("\\"));
     icon_ids.Add(wxFileIconsTable::computer);
-#elif defined(__WIN32__)
-    wxChar driveBuffer[256];
-    size_t n = (size_t) GetLogicalDriveStrings(255, driveBuffer);
-    size_t i = 0;
-    while (i < n)
+#elif defined(__WIN32__) && wxUSE_FSVOLUME
+    // TODO: this code (using wxFSVolumeBase) should be used for all platforms
+    //       but unfortunately wxFSVolumeBase is not implemented everywhere
+    const wxArrayString as = wxFSVolumeBase::GetVolumes();
+
+    for (size_t i = 0; i < as.GetCount(); i++)
     {
-        wxString path, name;
-        path.Printf(wxT("%c:\\"), driveBuffer[i]);
-        name.Printf(wxT("%c:"), driveBuffer[i]);
-
-        // Do not use GetVolumeInformation to further decorate the
-        // name, since it can cause severe delays on network drives.
-
+        wxString path = as[i];
+        wxFSVolume vol(path);
         int imageId;
-        int driveType = ::GetDriveType(path);
-        switch (driveType)
+        switch (vol.GetKind())
         {
-            case DRIVE_REMOVABLE:
-                if (path == wxT("a:\\") || path == wxT("b:\\"))
+            case wxFS_VOL_FLOPPY:
+                if ( (path == wxT("a:\\")) || (path == wxT("b:\\")) )
                     imageId = wxFileIconsTable::floppy;
                 else
                     imageId = wxFileIconsTable::removeable;
                 break;
-            case DRIVE_CDROM:
+            case wxFS_VOL_DVDROM:
+            case wxFS_VOL_CDROM:
                 imageId = wxFileIconsTable::cdrom;
                 break;
-            case DRIVE_REMOTE:
-            case DRIVE_FIXED:
+            case wxFS_VOL_NETWORK:
+                if (path[0] == wxT('\\'))
+                    continue; // skip "\\computer\folder"
+                imageId = wxFileIconsTable::drive;
+                break;
+            case wxFS_VOL_DISK:
+            case wxFS_VOL_OTHER:
             default:
                 imageId = wxFileIconsTable::drive;
                 break;
         }
-
         paths.Add(path);
-        names.Add(name);
+        names.Add(vol.GetDisplayName());
         icon_ids.Add(imageId);
-
-        while (driveBuffer[i] != wxT('\0'))
-            i ++;
-        i ++;
-        if (driveBuffer[i] == wxT('\0'))
-            break;
     }
 #elif defined(__OS2__)
     APIRET rc;
