@@ -225,6 +225,19 @@ bool wxGUIAppTraits::DoMessageFromThreadWait()
     return evtLoop->Dispatch();
 }
 
+DWORD wxGUIAppTraits::WaitForThread(WXHANDLE hThread)
+{
+    return ::MsgWaitForMultipleObjects
+             (
+               1,                   // number of objects to wait for
+               (HANDLE *)&hThread,  // the objects
+               false,               // wait for any objects, not all
+               INFINITE,            // no timeout
+               QS_ALLINPUT |        // return as soon as there are any events
+               QS_ALLPOSTMESSAGE
+             );
+}
+
 wxPortId wxGUIAppTraits::GetToolkitVersion(int *majVer, int *minVer) const
 {
     OSVERSIONINFO info;

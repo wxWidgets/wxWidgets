@@ -71,3 +71,8 @@ bool wxConsoleAppTraits::DoMessageFromThreadWait()
     return true;
 }
 
+WXDWORD wxConsoleAppTraits::WaitForThread(WXHANDLE hThread)
+{
+    return ::WaitForSingleObject((HANDLE)hThread, INFINITE);
+}
+

@@ -29,6 +29,9 @@ wxGTK:
 
 - Implemented support for underlined fonts in wxStaticText
 
+wxMSW:
+
+- Fixed infinite loop in wxThread::Wait() in console applications
 
 
 2.8.2

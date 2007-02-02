@@ -755,15 +755,16 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
 #if !defined(QS_ALLPOSTMESSAGE)
 #define QS_ALLPOSTMESSAGE 0
 #endif
-
-        result = ::MsgWaitForMultipleObjects
-                 (
-                   1,              // number of objects to wait for
-                   &m_hThread,     // the objects
-                   false,          // don't wait for all objects
-                   INFINITE,       // no timeout
-                   QS_ALLINPUT|QS_ALLPOSTMESSAGE   // return as soon as there are any events
-                 );
+        wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+        if ( traits )
+        {
+            result = traits->WaitForThread(m_hThread);
+        }
+        else // can't wait for the thread
+        {
+            // so kill it below
+            result = 0xFFFFFFFF;
+        }
 
         switch ( result )
         {
@@ -788,9 +789,6 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
                 //     the system might dead lock then
                 if ( wxThread::IsMain() )
                 {
-                    wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits()
-                                                   : NULL;
-
                     if ( traits && !traits->DoMessageFromThreadWait() )
                     {
                         // WM_QUIT received: kill the thread

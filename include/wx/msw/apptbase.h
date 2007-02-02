@@ -40,6 +40,9 @@ public:
     // process a message while waiting for a(nother) thread, should return
     // false if and only if we have to exit the application
     virtual bool DoMessageFromThreadWait() = 0;
+
+    // wait for the handle to be signaled
+    virtual WXDWORD WaitForThread(WXHANDLE hThread) = 0;
 };
 
 #endif // _WX_MSW_APPTBASE_H_
