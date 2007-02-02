@@ -36,6 +36,15 @@
 #include "wx/msw/private.h"
 
 // ============================================================================
+// wxAppTraits implementation
+// ============================================================================
+
+WXDWORD wxAppTraits::DoSimpleWaitForThread(WXHANDLE hThread)
+{
+    return ::WaitForSingleObject((HANDLE)hThread, INFINITE);
+}
+
+// ============================================================================
 // wxConsoleAppTraits implementation
 // ============================================================================
 
@@ -73,6 +82,6 @@ bool wxConsoleAppTraits::DoMessageFromThreadWait()
 
 WXDWORD wxConsoleAppTraits::WaitForThread(WXHANDLE hThread)
 {
-    return ::WaitForSingleObject((HANDLE)hThread, INFINITE);
+    return DoSimpleWaitForThread(hThread);
 }
 

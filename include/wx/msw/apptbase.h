@@ -41,8 +41,14 @@ public:
     // false if and only if we have to exit the application
     virtual bool DoMessageFromThreadWait() = 0;
 
-    // wait for the handle to be signaled
+    // wait for the handle to be signaled, return WAIT_OBJECT_0 if it is or, in
+    // the GUI code, WAIT_OBJECT_0 + 1 if a Windows message arrived
     virtual WXDWORD WaitForThread(WXHANDLE hThread) = 0;
+
+protected:
+    // implementation of WaitForThread() for the console applications which is
+    // also used by the GUI code if it doesn't [yet|already} dispatch events
+    WXDWORD DoSimpleWaitForThread(WXHANDLE hThread);
 };
 
 #endif // _WX_MSW_APPTBASE_H_
