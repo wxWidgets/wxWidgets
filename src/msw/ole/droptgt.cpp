@@ -99,8 +99,11 @@ static DWORD ConvertDragResultToEffect(wxDragResult result);
 // Name    : static wxIDropTarget::GetDropEffect
 // Purpose : determine the drop operation from keyboard/mouse state.
 // Returns : DWORD combined from DROPEFFECT_xxx constants
-// Params  : [in] DWORD flags       kbd & mouse flags as passed to
-//                                  IDropTarget methods
+// Params  : [in] DWORD flags                 kbd & mouse flags as passed to
+//                                            IDropTarget methods
+//           [in] wxDragResult defaultAction  the default action of the drop target
+//           [in] DWORD pdwEffect             the supported actions of the drop 
+//                                            source passed to IDropTarget methods
 // Notes   : We do "move" normally and "copy" if <Ctrl> is pressed,
 //           which is the standard behaviour (currently there is no
 //           way to redefine it)
@@ -151,10 +154,12 @@ IMPLEMENT_IUNKNOWN_METHODS(wxIDropTarget)
 // Name    : wxIDropTarget::DragEnter
 // Purpose : Called when the mouse enters the window (dragging something)
 // Returns : S_OK
-// Params  : [in] IDataObject *pIDataSource : source data
-//           [in] DWORD        grfKeyState  : kbd & mouse state
-//           [in] POINTL       pt           : mouse coordinates
-//           [out]DWORD       *pdwEffect    : effect flag
+// Params  : [in]    IDataObject *pIDataSource : source data
+//           [in]    DWORD        grfKeyState  : kbd & mouse state
+//           [in]    POINTL       pt           : mouse coordinates
+//           [in/out]DWORD       *pdwEffect    : effect flag
+//                                               In:  Supported effects
+//                                               Out: Resulting effect
 // Notes   :
 STDMETHODIMP wxIDropTarget::DragEnter(IDataObject *pIDataSource,
                                       DWORD        grfKeyState,
@@ -218,9 +223,9 @@ STDMETHODIMP wxIDropTarget::DragEnter(IDataObject *pIDataSource,
 // Purpose : Indicates that the mouse was moved inside the window represented
 //           by this drop target.
 // Returns : S_OK
-// Params  : [in] DWORD   grfKeyState     kbd & mouse state
-//           [in] POINTL  pt              mouse coordinates
-//           [out]LPDWORD pdwEffect       effect flag
+// Params  : [in]    DWORD   grfKeyState     kbd & mouse state
+//           [in]    POINTL  pt              mouse coordinates
+//           [in/out]LPDWORD pdwEffect       current effect flag
 // Notes   : We're called on every WM_MOUSEMOVE, so this function should be
 //           very efficient.
 STDMETHODIMP wxIDropTarget::DragOver(DWORD   grfKeyState,
@@ -273,10 +278,10 @@ STDMETHODIMP wxIDropTarget::DragLeave()
 // Purpose : Instructs the drop target to paste data that was just now
 //           dropped on it.
 // Returns : S_OK
-// Params  : [in] IDataObject *pIDataSource     the data to paste
-//           [in] DWORD        grfKeyState      kbd & mouse state
-//           [in] POINTL       pt               where the drop occurred?
-//           [ouy]DWORD       *pdwEffect        operation effect
+// Params  : [in]    IDataObject *pIDataSource     the data to paste
+//           [in]    DWORD        grfKeyState      kbd & mouse state
+//           [in]    POINTL       pt               where the drop occurred?
+//           [in/out]DWORD       *pdwEffect        operation effect
 // Notes   :
 STDMETHODIMP wxIDropTarget::Drop(IDataObject *pIDataSource,
                                  DWORD        grfKeyState,
