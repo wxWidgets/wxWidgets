@@ -83,7 +83,6 @@
         #include <stdlib.h>
         #include <ctype.h>
     #endif
-    extern bool wxIsDriveAvailable(const wxString& dirName);
 #endif // __OS2__
 
 #if defined(__WXMAC__)
@@ -98,6 +97,8 @@
 #ifdef GetFirstChild
 #undef GetFirstChild
 #endif
+
+bool wxIsDriveAvailable(const wxString& dirName);
 
 // ----------------------------------------------------------------------------
 // wxGetAvailableDrives, for WINDOWS, DOS, OS2, MAC, UNIX (returns "/")
