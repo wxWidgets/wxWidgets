@@ -17,6 +17,7 @@
 #if wxUSE_FILEPICKERCTRL || wxUSE_DIRPICKERCTRL
 
 #include "wx/pickerbase.h"
+#include "wx/filename.h"
 
 class WXDLLIMPEXP_CORE wxDialog;
 class WXDLLIMPEXP_CORE wxFileDirPickerEvent;
@@ -215,6 +216,11 @@ public:
                                                    validator, name);
     }
 
+    void SetFileName(const wxFileName &filename)
+        { SetPath(filename.GetFullPath()); }
+
+    wxFileName GetFileName() const
+        { return wxFileName(GetPath()); }
 
 public:     // overrides
 
@@ -307,6 +313,11 @@ public:
                );
     }
 
+    void SetDirName(const wxFileName &dirname)
+        { SetPath(dirname.GetPath()); }
+
+    wxFileName GetDirName() const
+        { return wxFileName::DirName(GetPath()); }
 
 public:     // overrides
 

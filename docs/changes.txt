@@ -23,6 +23,8 @@ Major new features in this release
 
 All:
 
+- Added wxEventBlocker class (Francesco Montorsi)
+- Added wxFile/DirPickerCtrl::Get/SetFile/DirName() (Francesco Montorsi)
 - Added wxSizerFlags::Top() and Bottom()
 
 wxGTK:

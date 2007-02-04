@@ -128,11 +128,27 @@ all the parameters.
 \true if the control was successfully created or \false if creation failed.
 
 
+\membersection{wxFilePickerCtrl::GetFileName}\label{wxfilepickerctrlgetfilename}
+
+\constfunc{wxFileName}{GetFileName}{\void}
+
+Similar to \helpref{GetPath}{wxfilepickerctrlgetpath} but returns the path of
+the currently selected file as a \helpref{wxFileName} object.
+
+
 \membersection{wxFilePickerCtrl::GetPath}\label{wxfilepickerctrlgetpath}
 
 \constfunc{wxString}{GetPath}{\void}
 
 Returns the absolute path of the currently selected file.
+
+
+\membersection{wxFilePickerCtrl::SetFileName}\label{wxfilepickerctrlsetfilename}
+
+\func{void}{SetFileName}{\param{const wxFileName \&}{filename}}
+
+This method does the same thing as \helpref{SetPath}{wxfilepickerctrlsetpath} but
+takes a \helpref{wxFileName}{wxfilename} object instead of a string.
 
 
 \membersection{wxFilePickerCtrl::SetPath}\label{wxfilepickerctrlsetpath}

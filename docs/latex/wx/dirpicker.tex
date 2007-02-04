@@ -117,12 +117,28 @@ all the parameters.
 
 \true if the control was successfully created or \false if creation failed.
 
+ 
+\membersection{wxFilePickerCtrl::GetDirName}\label{wxfilepickerctrlgetdirname}
+
+\constfunc{wxFileName}{GetDirName}{\void}
+
+Returns the absolute path of the currently selected directory as a \helpref{wxFileName} object.
+This function is equivalent to \helpref{GetPath}{wxdirpickerctrlgetpath}
+
 
 \membersection{wxDirPickerCtrl::GetPath}\label{wxdirpickerctrlgetpath}
 
 \constfunc{wxString}{GetPath}{\void}
 
 Returns the absolute path of the currently selected directory.
+
+
+\membersection{wxFilePickerCtrl::SetDirName}\label{wxfilepickerctrlsetdirname}
+
+\func{void}{SetDirName}{\param{const wxFileName \&}{dirname}}
+
+Just like \helpref{SetPath}{wxdirpickerctrlsetpath} but this function takes a
+\helpref{wxFileName} object.
 
 
 \membersection{wxDirPickerCtrl::SetPath}\label{wxdirpickerctrlsetpath}
