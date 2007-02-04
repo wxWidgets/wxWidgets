@@ -463,6 +463,10 @@ void wxScrollHelper::HandleOnScroll(wxScrollWinEvent& event)
     }
 
     bool needsRefresh = false;
+#ifdef __WXMAC__
+    // OS X blocks on immediate redraws, so make this a refresh
+    needsRefresh = true;
+#endif
     int dx = 0,
         dy = 0;
     int orient = event.GetOrientation();
@@ -1299,7 +1303,7 @@ void wxScrollHelper::HandleOnMouseWheel(wxMouseEvent& event)
         wxScrollWinEvent newEvent;
 
         newEvent.SetPosition(0);
-        newEvent.SetOrientation(wxVERTICAL);
+        newEvent.SetOrientation( event.GetWheelAxis() == 0 ? wxVERTICAL : wxHORIZONTAL);
         newEvent.SetEventObject(m_win);
 
         if (event.IsPageScroll())
