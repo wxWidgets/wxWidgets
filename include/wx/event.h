@@ -855,10 +855,15 @@ public:
     // should occur for each delta.
     int GetWheelDelta() const { return m_wheelDelta; }
 
+    // Gets the axis the wheel operation concerns, 0 being the y axis as on
+    // most mouse wheels, 1 is the x axis for things like MightyMouse scrolls
+    // or horizontal trackpad scrolling
+    int GetWheelAxis() const { return m_wheelAxis; }
+
     // Returns the configured number of lines (or whatever) to be scrolled per
     // wheel action.  Defaults to one.
     int GetLinesPerAction() const { return m_linesPerAction; }
-
+    
     // Is the system set to do page scrolling?
     bool IsPageScroll() const { return ((unsigned int)m_linesPerAction == UINT_MAX); }
 
@@ -877,7 +882,8 @@ public:
     bool          m_shiftDown;
     bool          m_altDown;
     bool          m_metaDown;
-
+    
+    int           m_wheelAxis;
     int           m_wheelRotation;
     int           m_wheelDelta;
     int           m_linesPerAction;
