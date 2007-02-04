@@ -47,6 +47,8 @@ class WXDLLIMPEXP_BASE wxEvtHandler;
 
 typedef int wxEventType;
 
+#define wxEVT_ANY           ((wxEventType)-1)
+
 // this is used to make the event table entry type safe, so that for an event
 // handler only a function with proper parameter list can be given.
 #define wxStaticCastEvent(type, val) wx_static_cast(type, val)
@@ -466,6 +468,7 @@ private:
 
     DECLARE_NO_COPY_CLASS(wxPropagateOnce)
 };
+
 
 #if wxUSE_GUI
 
@@ -2569,6 +2572,30 @@ typedef void (wxEvtHandler::*wxEventFunction)(wxEvent&);
     (wxObjectEventFunction)wxStaticCastEvent(wxEventFunction, &func)
 
 #if wxUSE_GUI
+
+// ----------------------------------------------------------------------------
+// wxEventBlocker: helper class to temporarily disable event handling for a window
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_BASE wxEventBlocker : public wxEvtHandler
+{
+public:
+    wxEventBlocker(wxWindow *win, wxEventType type = wxEVT_ANY);
+    virtual ~wxEventBlocker();
+
+    void Block(wxEventType type)
+    {
+        m_eventsToBlock.push_back(type);
+    }
+
+    virtual bool ProcessEvent(wxEvent& event);
+
+protected:
+    wxArrayInt m_eventsToBlock;
+    wxWindow *m_window;
+
+    DECLARE_NO_COPY_CLASS(wxEventBlocker)
+};
 
 typedef void (wxEvtHandler::*wxCommandEventFunction)(wxCommandEvent&);
 typedef void (wxEvtHandler::*wxScrollEventFunction)(wxScrollEvent&);

@@ -1460,4 +1460,38 @@ wxWindow* wxFindFocusDescendant(wxWindow* ancestor)
     return focusWin;
 }
 
+// ----------------------------------------------------------------------------
+// wxEventBlocker
+// ----------------------------------------------------------------------------
+
+wxEventBlocker::wxEventBlocker(wxWindow *win, wxEventType type)
+{
+    wxCHECK_RET(win, wxT("Null window given to wxEventBlocker"));
+
+    m_window = win;
+
+    Block(type);
+    m_window->PushEventHandler(this);
+}
+
+wxEventBlocker::~wxEventBlocker()
+{
+    wxEvtHandler *popped = m_window->PopEventHandler(false);
+    wxCHECK_RET(popped == this, 
+        wxT("Don't push other event handlers into a window managed by wxEventBlocker!"));
+}
+
+bool wxEventBlocker::ProcessEvent(wxEvent& event)
+{
+    // should this event be blocked?
+    for ( size_t i = 0; i < m_eventsToBlock.size(); i++ )
+    {
+        wxEventType t = (wxEventType)m_eventsToBlock[i];
+        if ( t == wxEVT_ANY || t == event.GetEventType() )
+            return true;   // yes, it should: mark this event as processed
+    }
+
+    return false;
+}
+
 #endif // wxUSE_GUI
