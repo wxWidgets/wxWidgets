@@ -60,6 +60,9 @@ IMPLEMENT_APP(MyApp)
 // 'Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
+    if ( !wxApp::OnInit() )
+        return false;
+
     // If there is any of a certain format of image in the xrcs, then first
     // load a handler for that image type. This example uses XPMs, but if
     // you want PNGs, then add a PNG handler, etc. See wxImage::AddHandler()

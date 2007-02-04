@@ -363,6 +363,9 @@ MyApp::MyApp()
 // `Main program' equivalent, creating windows and returning main app frame
 bool MyApp::OnInit()
 {
+    if ( !wxApp::OnInit() )
+        return false;
+
     // uncomment this to get some debugging messages from the trace code
     // on the console (or just set WXTRACE env variable to include "thread")
     //wxLog::AddTraceMask("thread");

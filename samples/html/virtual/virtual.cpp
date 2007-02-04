@@ -155,6 +155,9 @@ wxFSFile* MyVFS::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString& location)
    // `Main program' equivalent: the program execution "starts" here
    bool MyApp::OnInit()
    {
+     if ( !wxApp::OnInit() )
+         return false;
+
     // Create the main application window
       MyFrame *frame = new MyFrame(_("wxHtmlWindow testing application"),
          wxDefaultPosition, wxSize(640, 480));

@@ -43,6 +43,9 @@ int nButtons = 0;
 // Initialise this in OnInit, not statically
 bool MyApp::OnInit()
 {
+    if ( !wxApp::OnInit() )
+        return false;
+
     wxJoystick stick(wxJOYSTICK1);
     if (!stick.IsOk())
     {

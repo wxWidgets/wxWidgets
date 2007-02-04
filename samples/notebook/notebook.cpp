@@ -34,6 +34,9 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit()
 {
+    if ( !wxApp::OnInit() )
+        return false;
+
 #if wxUSE_HELP
     wxHelpProvider::Set( new wxSimpleHelpProvider );
 #endif

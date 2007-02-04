@@ -32,6 +32,9 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit(void)
 {
+  if ( !wxApp::OnInit() )
+    return false;
+
   // Create the main frame window
   MyFrame   *frame = new MyFrame(NULL, wxID_ANY, _T("wxWidgets Native Dialog Sample"), wxPoint(0, 0), wxSize(300, 250));
 

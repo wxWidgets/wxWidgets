@@ -40,6 +40,9 @@ int winNumber = 1;
 // Initialise this in OnInit, not statically
 bool MyApp::OnInit(void)
 {
+  if ( !wxApp::OnInit() )
+    return false;
+
   // Create the main frame window
 
   frame = new MyFrame(NULL, wxID_ANY, _T("Sash Demo"), wxPoint(0, 0), wxSize(500, 400),

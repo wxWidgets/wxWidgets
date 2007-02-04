@@ -123,6 +123,9 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit()
 {
+  if ( !wxApp::OnInit() )
+      return false;
+
   // Create the main application window
   MyFrame *frame = new MyFrame();
 

@@ -232,6 +232,9 @@ BOOL CTheApp::OnIdle(LONG WXUNUSED(lCount))
 
 bool MyApp::OnInit()
 {
+    if ( !wxApp::OnInit() )
+        return false;
+
 #if !START_WITH_MFC_WINDOW
     // as we're not inside wxWidgets main loop, the default logic doesn't work
     // in our case and we need to do this explicitly

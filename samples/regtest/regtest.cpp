@@ -318,6 +318,9 @@ IMPLEMENT_APP(RegApp)
 // `Main program' equivalent, creating windows and returning main app frame
 bool RegApp::OnInit()
 {
+    if ( !wxApp::OnInit() )
+        return false;
+
     // create the main frame window and show it
     RegFrame *frame = new RegFrame(NULL, _T("wxRegTest"), 50, 50, 600, 350);
     frame->Show(true);

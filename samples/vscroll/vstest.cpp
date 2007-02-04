@@ -213,6 +213,9 @@ IMPLEMENT_APP(VScrollApp)
 // 'Main program' equivalent: the program execution "starts" here
 bool VScrollApp::OnInit()
 {
+    if ( !wxApp::OnInit() )
+        return false;
+
     // create the main application window
     VScrollFrame *frame = new VScrollFrame;
 

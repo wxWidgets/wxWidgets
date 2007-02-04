@@ -409,6 +409,9 @@ IMPLEMENT_APP(wxMediaPlayerApp)
 // ----------------------------------------------------------------------------
 bool wxMediaPlayerApp::OnInit()
 {
+    if ( !wxApp::OnInit() )
+        return false;
+
     // SetAppName() lets wxConfig and others know where to write
     SetAppName(wxT("wxMediaPlayer"));
 

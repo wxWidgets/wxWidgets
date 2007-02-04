@@ -123,6 +123,9 @@ IMPLEMENT_APP(MyApp)
 // 'Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
+    if ( !wxApp::OnInit() )
+        return false;
+
     wxImage::AddHandler(new wxPNGHandler);
 
     // create the main application window

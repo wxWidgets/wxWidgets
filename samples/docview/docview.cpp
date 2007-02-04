@@ -55,6 +55,9 @@ MyApp::MyApp(void)
 
 bool MyApp::OnInit(void)
 {
+    if ( !wxApp::OnInit() )
+        return false;
+
     //// Find out if we're:
     ////  multiple window: multiple windows, each view in a separate frame
     ////  single window:   one view (within the main frame) and one document at a time, as in Windows Write.

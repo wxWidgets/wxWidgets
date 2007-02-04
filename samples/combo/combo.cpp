@@ -154,6 +154,9 @@ IMPLEMENT_APP(MyApp)
 // 'Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
+    if ( !wxApp::OnInit() )
+        return false;
+
     // create the main application window
     MyFrame *frame = new MyFrame(_T("wxComboCtrl and wxOwnerDrawnComboBox Sample"));
 

@@ -74,6 +74,9 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit()
 {
+    if ( !wxApp::OnInit() )
+        return false;
+
     // Create and display the main frame window.
     MyFrame *frame = new MyFrame((wxFrame *) NULL, wxT("Validator Test"),
                                  50, 50, 300, 250);

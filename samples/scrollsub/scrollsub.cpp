@@ -448,6 +448,9 @@ void MyFrame::OnAbout( wxCommandEvent &WXUNUSED(event) )
 
 bool MyApp::OnInit()
 {
+    if ( !wxApp::OnInit() )
+        return false;
+
     wxFrame *frame = new MyFrame();
     frame->Show( true );
 

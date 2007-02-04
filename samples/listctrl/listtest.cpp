@@ -153,6 +153,9 @@ int wxCALLBACK MyCompareFunction(long item1, long item2, long WXUNUSED(sortData)
 // `Main program' equivalent, creating windows and returning main app frame
 bool MyApp::OnInit()
 {
+  if ( !wxApp::OnInit() )
+      return false;
+
   // Create the main frame window
   MyFrame *frame = new MyFrame(wxT("wxListCtrl Test"));
 

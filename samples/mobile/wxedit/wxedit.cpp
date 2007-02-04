@@ -404,6 +404,9 @@ IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit()
 {
+    if ( !wxApp::OnInit() )
+        return false;
+
     SetVendorName(_T("Free world"));
     SetAppName(_T("wxEdit"));
 

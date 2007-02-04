@@ -102,6 +102,9 @@
    // `Main program' equivalent: the program execution "starts" here
    bool MyApp::OnInit()
    {
+       if ( !wxApp::OnInit() )
+           return false;
+
       wxInitAllImageHandlers();
 #if wxUSE_STREAMS && wxUSE_ZIPSTREAM && wxUSE_ZLIB
       wxFileSystem::AddHandler(new wxZipFSHandler);

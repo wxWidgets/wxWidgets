@@ -90,6 +90,9 @@ END_EVENT_TABLE()
 // Initialise this in OnInit, not statically
 bool MyApp::OnInit()
 {
+    if ( !wxApp::OnInit() )
+        return false;
+
     // Create the main frame window
 
     MyFrame* frame = new MyFrame((wxFrame *)NULL, wxID_ANY, _T("Animation Demo"),

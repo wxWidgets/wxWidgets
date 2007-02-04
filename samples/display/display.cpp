@@ -167,6 +167,9 @@ IMPLEMENT_APP(MyApp)
 // 'Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
+    if ( !wxApp::OnInit() )
+        return false;
+
 #ifdef __WXMSW__
     if ( argc == 2 && !wxStricmp(argv[1],  _T("/dx")) )
     {

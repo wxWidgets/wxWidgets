@@ -88,6 +88,9 @@ IMPLEMENT_APP(OwnerDrawnApp)
 // init our app: create windows
 bool OwnerDrawnApp::OnInit(void)
 {
+    if ( !wxApp::OnInit() )
+        return false;
+
     OwnerDrawnFrame *pFrame
         = new OwnerDrawnFrame(NULL, _T("wxWidgets Ownerdraw Sample"),
                               50, 50, 450, 340);

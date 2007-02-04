@@ -72,6 +72,9 @@ wxString file_name2 = wxString(_T("test_wx2.dat"));
 
 bool MyApp::OnInit()
 {
+    if ( !wxApp::OnInit() )
+        return false;
+
     // Create the main frame window
     MyFrame *frame = new MyFrame((wxFrame *) NULL, _T("wxWidgets Types Demo"),
                                  wxPoint(50, 50), wxSize(450, 340));

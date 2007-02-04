@@ -368,6 +368,9 @@ MyApp::MyApp()
 
 bool MyApp::OnInit()
 {
+    if ( !wxApp::OnInit() )
+        return false;
+
 #if wxUSE_LIBPNG
     wxImage::AddHandler( new wxPNGHandler );
 #endif

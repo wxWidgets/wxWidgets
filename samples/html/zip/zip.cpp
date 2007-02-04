@@ -97,6 +97,9 @@ IMPLEMENT_APP(MyApp)
 // `Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
+    if ( !wxApp::OnInit() )
+        return false;
+
 #if wxUSE_LIBPNG
     wxImage::AddHandler(new wxPNGHandler);
 #endif

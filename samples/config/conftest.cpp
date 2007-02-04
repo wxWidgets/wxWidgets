@@ -85,6 +85,9 @@ IMPLEMENT_APP(MyApp)
 // `Main program' equivalent, creating windows and returning main app frame
 bool MyApp::OnInit()
 {
+  if ( !wxApp::OnInit() )
+      return false;
+
   // we're using wxConfig's "create-on-demand" feature: it will create the
   // config object when it's used for the first time. It has a number of
   // advantages compared with explicitly creating our wxConfig:

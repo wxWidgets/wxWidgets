@@ -57,6 +57,9 @@ wxButton      *button     = (wxButton*) NULL;
 // main frame
 bool MyApp::OnInit()
 {
+  if ( !wxApp::OnInit() )
+    return false;
+
   // Create the main frame window
   main_frame = new MyMainFrame((wxFrame *) NULL, wxID_ANY, _T("wxFrame sample"),
      wxPoint(100, 100), wxSize(300, 200));

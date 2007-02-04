@@ -289,6 +289,9 @@ IMPLEMENT_APP(MyApp)
 // 'Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
+    if ( !wxApp::OnInit() )
+        return false;
+
     // create the main application window
     m_frame = new MyFrame(_T("Popup wxWidgets App"));
 

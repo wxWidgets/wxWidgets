@@ -883,6 +883,9 @@ END_EVENT_TABLE()
 // `Main program' equivalent, creating windows and returning main app frame
 bool DnDApp::OnInit()
 {
+    if ( !wxApp::OnInit() )
+        return false;
+
 #if wxUSE_DRAG_AND_DROP || wxUSE_CLIPBOARD
     // switch on trace messages
 #if wxUSE_LOG

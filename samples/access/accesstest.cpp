@@ -163,6 +163,9 @@ IMPLEMENT_APP(MyApp)
 // 'Main program' equivalent: the program execution "starts" here
 bool MyApp::OnInit()
 {
+    if ( !wxApp::OnInit() )
+        return false;
+
 #if wxUSE_ACCESSIBILITY
     // Note: JAWS for Windows will only speak the context-sensitive
     // help if you use this help provider:
