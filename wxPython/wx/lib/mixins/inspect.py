@@ -75,3 +75,14 @@ class InspectionMixin(object):
 
 #---------------------------------------------------------------------------
 
+class InspectableApp(wx.App, InspectionMixin):
+    """
+    A simple mix of wx.App and InspectionMixin that can be used stand-alone.
+    """
+
+    def OnInit(self):
+        self.Init()
+        return True
+
+#---------------------------------------------------------------------------
+
