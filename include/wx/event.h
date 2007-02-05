@@ -2583,7 +2583,7 @@ typedef void (wxEvtHandler::*wxEventFunction)(wxEvent&);
 // wxEventBlocker: helper class to temporarily disable event handling for a window
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxEventBlocker : public wxEvtHandler
+class WXDLLIMPEXP_CORE wxEventBlocker : public wxEvtHandler
 {
 public:
     wxEventBlocker(wxWindow *win, wxEventType type = wxEVT_ANY);
