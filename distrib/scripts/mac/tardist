@@ -64,7 +64,22 @@ echo Tarring wxMac...
 cp $WXSRC/include/wx/mac/setup0.h $WXSRC/include/wx/setup.h
 cp $WXSRC/include/wx/mac/setup0.h $WXSRC/include/wx/mac/setup.h
 cd $WXSRC
-cat $SCRIPTDIR/manifests/mac.rsp $SCRIPTDIR/manifests/cocoa.rsp $SCRIPTDIR/manifests/generic.rsp $SCRIPTDIR/manifests/cw_mac.rsp $SCRIPTDIR/manifests/tex2rtf.rsp $SCRIPTDIR/manifests/utils.rsp $SCRIPTDIR/manifests/ogl.rsp $SCRIPTDIR/manifests/stc.rsp $SCRIPTDIR/manifests/xml.rsp $SCRIPTDIR/manifests/contrib.rsp $SCRIPTDIR/manifests/deprecated.rsp $SCRIPTDIR/manifests/makefile.rsp $SCRIPTDIR/manifests/tiff.rsp $SCRIPTDIR/manifests/jpeg.rsp > /tmp/wxmac_in.txt
+cat $SCRIPTDIR/manifests/mac.rsp  \
+    $SCRIPTDIR/manifests/cocoa.rsp  \
+    $SCRIPTDIR/manifests/generic.rsp  \
+    $SCRIPTDIR/manifests/generic_samples.rsp  \
+    $SCRIPTDIR/manifests/cw_mac.rsp  \
+    $SCRIPTDIR/manifests/tex2rtf.rsp  \
+    $SCRIPTDIR/manifests/utils.rsp  \
+    $SCRIPTDIR/manifests/ogl.rsp  \
+    $SCRIPTDIR/manifests/stc.rsp  \
+    $SCRIPTDIR/manifests/xml.rsp  \
+    $SCRIPTDIR/manifests/contrib.rsp  \
+    $SCRIPTDIR/manifests/deprecated.rsp  \
+    $SCRIPTDIR/manifests/makefile.rsp  \
+    $SCRIPTDIR/manifests/tiff.rsp  \
+    $SCRIPTDIR/manifests/jpeg.rsp \
+    > /tmp/wxmac_in.txt
 expandlines /tmp/wxmac_in.txt /tmp/wxmac.txt
 $TAR cf $WXDEST/wxMac-${WXVER}.tar -T /tmp/wxmac.txt
 
@@ -111,7 +126,38 @@ echo Tarring wxAll...
 
 ### wxAll: all distributions in one giant archive
 cd $WXSRC
-cat $SCRIPTDIR/manifests/generic.rsp $SCRIPTDIR/manifests/msw.rsp $SCRIPTDIR/manifests/wince.rsp $SCRIPTDIR/manifests/vc.rsp $SCRIPTDIR/manifests/cw.rsp $SCRIPTDIR/manifests/cw_mac.rsp $SCRIPTDIR/manifests/gtk.rsp $SCRIPTDIR/manifests/x11.rsp $SCRIPTDIR/manifests/motif.rsp $SCRIPTDIR/manifests/mac.rsp $SCRIPTDIR/manifests/cocoa.rsp $SCRIPTDIR/manifests/os2.rsp $SCRIPTDIR/manifests/palmos.rsp $SCRIPTDIR/manifests/x11.rsp $SCRIPTDIR/manifests/univ.rsp $SCRIPTDIR/manifests/mgl.rsp $SCRIPTDIR/manifests/contrib.rsp $SCRIPTDIR/manifests/deprecated.rsp $SCRIPTDIR/manifests/utilmake.rsp $SCRIPTDIR/manifests/utils.rsp $SCRIPTDIR/manifests/mmedia.rsp $SCRIPTDIR/manifests/tex2rtf.rsp $SCRIPTDIR/manifests/stc.rsp $SCRIPTDIR/manifests/xml.rsp $SCRIPTDIR/manifests/ogl.rsp $SCRIPTDIR/manifests/makefile.rsp $SCRIPTDIR/manifests/tiff.rsp $SCRIPTDIR/manifests/jpeg.rsp $SCRIPTDIR/manifests/docsrc.rsp | uniq > /tmp/wxall_in.txt
+cat $SCRIPTDIR/manifests/generic.rsp \
+    $SCRIPTDIR/manifests/generic_samples.rsp \
+    $SCRIPTDIR/manifests/msw.rsp \
+    $SCRIPTDIR/manifests/wince.rsp  \
+    $SCRIPTDIR/manifests/vc.rsp  \
+    $SCRIPTDIR/manifests/cw.rsp  \
+    $SCRIPTDIR/manifests/cw_mac.rsp  \
+    $SCRIPTDIR/manifests/gtk.rsp  \
+    $SCRIPTDIR/manifests/x11.rsp  \
+    $SCRIPTDIR/manifests/motif.rsp  \
+    $SCRIPTDIR/manifests/mac.rsp  \
+    $SCRIPTDIR/manifests/cocoa.rsp  \
+    $SCRIPTDIR/manifests/os2.rsp  \
+    $SCRIPTDIR/manifests/palmos.rsp  \
+    $SCRIPTDIR/manifests/x11.rsp  \
+    $SCRIPTDIR/manifests/univ.rsp  \
+    $SCRIPTDIR/manifests/mgl.rsp  \
+    $SCRIPTDIR/manifests/dfb.rsp  \
+    $SCRIPTDIR/manifests/contrib.rsp  \
+    $SCRIPTDIR/manifests/deprecated.rsp  \
+    $SCRIPTDIR/manifests/utilmake.rsp  \
+    $SCRIPTDIR/manifests/utils.rsp  \
+    $SCRIPTDIR/manifests/mmedia.rsp  \
+    $SCRIPTDIR/manifests/tex2rtf.rsp  \
+    $SCRIPTDIR/manifests/stc.rsp  \
+    $SCRIPTDIR/manifests/xml.rsp  \
+    $SCRIPTDIR/manifests/ogl.rsp  \
+    $SCRIPTDIR/manifests/makefile.rsp  \
+    $SCRIPTDIR/manifests/tiff.rsp  \
+    $SCRIPTDIR/manifests/jpeg.rsp  \
+    $SCRIPTDIR/manifests/docsrc.rsp \
+    | uniq > /tmp/wxall_in.txt
 expandlines /tmp/wxall_in.txt /tmp/wxall.txt
 $TAR cf $WXDEST/wxWidgets-${WXVER}.tar -T /tmp/wxall.txt
 

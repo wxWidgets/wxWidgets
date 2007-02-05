@@ -48,8 +48,9 @@ samples/ with demos/ where needed).
 
 6. Add any non-standard sample's files to build/bakefiles/make_dist.mk (the
    makefiles copies all bmp, cpp, h, ico, png, rc, xpm and makefiles by
-   default) and update distrib/scripts/manifests/{generic|makefile|vc|dmc
-   |wince}.rsp.
+   default, you only need to update it if the sample uses some other files)
+   and run the ./update-manifests.sh script in distrib/scripts (don't forget
+   to check the changes to manifests/*.rsp files in).
 
 === EOF ===
 
