@@ -372,7 +372,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
         return false;
     }
 
-    SetRange(min, max);
+    wxSpinButtonBase::SetRange(min, max);
     SetValue(initial);
 
     m_oldValue = initial;
