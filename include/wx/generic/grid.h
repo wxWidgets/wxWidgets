@@ -705,8 +705,8 @@ public:
     void GetSize(int *num_rows, int *num_cols) const;
     bool GetOverflow() const
         { return m_overflow != SingleCell; }
-    wxGridCellRenderer *GetRenderer(wxGrid* grid, int row, int col) const;
-    wxGridCellEditor *GetEditor(wxGrid* grid, int row, int col) const;
+    wxGridCellRenderer *GetRenderer(const wxGrid* grid, int row, int col) const;
+    wxGridCellEditor *GetEditor(const wxGrid* grid, int row, int col) const;
 
     bool IsReadOnly() const { return m_isReadOnly == wxGridCellAttr::ReadOnly; }
 
@@ -1107,16 +1107,16 @@ public:
 
     // ------ grid dimensions
     //
-    int      GetNumberRows() { return  m_numRows; }
-    int      GetNumberCols() { return  m_numCols; }
+    int      GetNumberRows() const { return  m_numRows; }
+    int      GetNumberCols() const { return  m_numCols; }
 
 
     // ------ display update functions
     //
-    wxArrayInt CalcRowLabelsExposed( const wxRegion& reg );
+    wxArrayInt CalcRowLabelsExposed( const wxRegion& reg ) const;
 
-    wxArrayInt CalcColLabelsExposed( const wxRegion& reg );
-    wxGridCellCoordsArray CalcCellsExposed( const wxRegion& reg );
+    wxArrayInt CalcColLabelsExposed( const wxRegion& reg ) const;
+    wxGridCellCoordsArray CalcCellsExposed( const wxRegion& reg ) const;
 
 
     // ------ event handlers
@@ -1175,14 +1175,14 @@ public:
                             int textOrientation = wxHORIZONTAL );
 
 
-    // Split a string containing newline chararcters into an array of
+    // Split a string containing newline characters into an array of
     // strings and return the number of lines
     //
-    void StringToLines( const wxString& value, wxArrayString& lines );
+    void StringToLines( const wxString& value, wxArrayString& lines ) const;
 
     void GetTextBoxSize( const wxDC& dc,
                          const wxArrayString& lines,
-                         long *width, long *height );
+                         long *width, long *height ) const;
 
 
     // ------
@@ -1231,25 +1231,25 @@ public:
     //  grid cells and labels so you will need to convert from device
     //  coordinates for mouse events etc.
     //
-    void XYToCell( int x, int y, wxGridCellCoords& );
-    int  YToRow( int y );
-    int  XToCol( int x, bool clipToMinMax = false );
+    void XYToCell( int x, int y, wxGridCellCoords& ) const;
+    int  YToRow( int y ) const;
+    int  XToCol( int x, bool clipToMinMax = false ) const;
 
-    int  YToEdgeOfRow( int y );
-    int  XToEdgeOfCol( int x );
+    int  YToEdgeOfRow( int y ) const;
+    int  XToEdgeOfCol( int x ) const;
 
-    wxRect CellToRect( int row, int col );
-    wxRect CellToRect( const wxGridCellCoords& coords )
+    wxRect CellToRect( int row, int col ) const;
+    wxRect CellToRect( const wxGridCellCoords& coords ) const
         { return CellToRect( coords.GetRow(), coords.GetCol() ); }
 
-    int  GetGridCursorRow() { return m_currentCellCoords.GetRow(); }
-    int  GetGridCursorCol() { return m_currentCellCoords.GetCol(); }
+    int  GetGridCursorRow() const { return m_currentCellCoords.GetRow(); }
+    int  GetGridCursorCol() const { return m_currentCellCoords.GetCol(); }
 
     // check to see if a cell is either wholly visible (the default arg) or
     // at least partially visible in the grid window
     //
-    bool IsVisible( int row, int col, bool wholeCellVisible = true );
-    bool IsVisible( const wxGridCellCoords& coords, bool wholeCellVisible = true )
+    bool IsVisible( int row, int col, bool wholeCellVisible = true ) const;
+    bool IsVisible( const wxGridCellCoords& coords, bool wholeCellVisible = true ) const
         { return IsVisible( coords.GetRow(), coords.GetCol(), wholeCellVisible ); }
     void MakeCellVisible( int row, int col );
     void MakeCellVisible( const wxGridCellCoords& coords )
@@ -1275,28 +1275,28 @@ public:
 
     // ------ label and gridline formatting
     //
-    int      GetDefaultRowLabelSize() { return WXGRID_DEFAULT_ROW_LABEL_WIDTH; }
-    int      GetRowLabelSize() { return m_rowLabelWidth; }
-    int      GetDefaultColLabelSize() { return WXGRID_DEFAULT_COL_LABEL_HEIGHT; }
-    int      GetColLabelSize() { return m_colLabelHeight; }
-    wxColour GetLabelBackgroundColour() { return m_labelBackgroundColour; }
-    wxColour GetLabelTextColour() { return m_labelTextColour; }
-    wxFont   GetLabelFont() { return m_labelFont; }
-    void     GetRowLabelAlignment( int *horiz, int *vert );
-    void     GetColLabelAlignment( int *horiz, int *vert );
-    int      GetColLabelTextOrientation();
-    wxString GetRowLabelValue( int row );
-    wxString GetColLabelValue( int col );
-    wxColour GetGridLineColour() { return m_gridLineColour; }
+    int      GetDefaultRowLabelSize() const { return WXGRID_DEFAULT_ROW_LABEL_WIDTH; }
+    int      GetRowLabelSize() const { return m_rowLabelWidth; }
+    int      GetDefaultColLabelSize() const { return WXGRID_DEFAULT_COL_LABEL_HEIGHT; }
+    int      GetColLabelSize() const { return m_colLabelHeight; }
+    wxColour GetLabelBackgroundColour() const { return m_labelBackgroundColour; }
+    wxColour GetLabelTextColour() const { return m_labelTextColour; }
+    wxFont   GetLabelFont() const { return m_labelFont; }
+    void     GetRowLabelAlignment( int *horiz, int *vert ) const;
+    void     GetColLabelAlignment( int *horiz, int *vert ) const;
+    int      GetColLabelTextOrientation() const;
+    wxString GetRowLabelValue( int row ) const;
+    wxString GetColLabelValue( int col ) const;
+    wxColour GetGridLineColour() const { return m_gridLineColour; }
 
     // these methods may be overridden to customize individual grid lines
     // appearance
     virtual wxPen GetDefaultGridLinePen();
     virtual wxPen GetRowGridLinePen(int row);
     virtual wxPen GetColGridLinePen(int col);
-    wxColour GetCellHighlightColour() { return m_cellHighlightColour; }
-    int      GetCellHighlightPenWidth() { return m_cellHighlightPenWidth; }
-    int      GetCellHighlightROPenWidth() { return m_cellHighlightROPenWidth; }
+    wxColour GetCellHighlightColour() const { return m_cellHighlightColour; }
+    int      GetCellHighlightPenWidth() const { return m_cellHighlightPenWidth; }
+    int      GetCellHighlightROPenWidth() const { return m_cellHighlightROPenWidth; }
 
     void     SetRowLabelSize( int width );
     void     SetColLabelSize( int height );
@@ -1315,20 +1315,20 @@ public:
 
     void     EnableDragRowSize( bool enable = true );
     void     DisableDragRowSize() { EnableDragRowSize( false ); }
-    bool     CanDragRowSize() { return m_canDragRowSize; }
+    bool     CanDragRowSize() const { return m_canDragRowSize; }
     void     EnableDragColSize( bool enable = true );
     void     DisableDragColSize() { EnableDragColSize( false ); }
-    bool     CanDragColSize() { return m_canDragColSize; }
+    bool     CanDragColSize() const { return m_canDragColSize; }
     void     EnableDragColMove( bool enable = true );
     void     DisableDragColMove() { EnableDragColMove( false ); }
-    bool     CanDragColMove() { return m_canDragColMove; }
+    bool     CanDragColMove() const { return m_canDragColMove; }
     void     EnableDragGridSize(bool enable = true);
     void     DisableDragGridSize() { EnableDragGridSize(false); }
-    bool     CanDragGridSize() { return m_canDragGridSize; }
+    bool     CanDragGridSize() const { return m_canDragGridSize; }
 
     void     EnableDragCell( bool enable = true );
     void     DisableDragCell() { EnableDragCell( false ); }
-    bool     CanDragCell() { return m_canDragCell; }
+    bool     CanDragCell() const { return m_canDragCell; }
 
     // this sets the specified attribute for this cell or in this row/col
     void     SetAttr(int row, int col, wxGridCellAttr *attr);
@@ -1351,25 +1351,25 @@ public:
     void     SetColFormatCustom(int col, const wxString& typeName);
 
     void     EnableGridLines( bool enable = true );
-    bool     GridLinesEnabled() { return m_gridLinesEnabled; }
+    bool     GridLinesEnabled() const { return m_gridLinesEnabled; }
 
     // ------ row and col formatting
     //
-    int      GetDefaultRowSize();
-    int      GetRowSize( int row );
-    int      GetDefaultColSize();
-    int      GetColSize( int col );
-    wxColour GetDefaultCellBackgroundColour();
-    wxColour GetCellBackgroundColour( int row, int col );
-    wxColour GetDefaultCellTextColour();
-    wxColour GetCellTextColour( int row, int col );
-    wxFont   GetDefaultCellFont();
-    wxFont   GetCellFont( int row, int col );
-    void     GetDefaultCellAlignment( int *horiz, int *vert );
-    void     GetCellAlignment( int row, int col, int *horiz, int *vert );
-    bool     GetDefaultCellOverflow();
-    bool     GetCellOverflow( int row, int col );
-    void     GetCellSize( int row, int col, int *num_rows, int *num_cols );
+    int      GetDefaultRowSize() const;
+    int      GetRowSize( int row ) const;
+    int      GetDefaultColSize() const;
+    int      GetColSize( int col ) const;
+    wxColour GetDefaultCellBackgroundColour() const;
+    wxColour GetCellBackgroundColour( int row, int col ) const;
+    wxColour GetDefaultCellTextColour() const;
+    wxColour GetCellTextColour( int row, int col ) const;
+    wxFont   GetDefaultCellFont() const;
+    wxFont   GetCellFont( int row, int col ) const;
+    void     GetDefaultCellAlignment( int *horiz, int *vert ) const;
+    void     GetCellAlignment( int row, int col, int *horiz, int *vert ) const;
+    bool     GetDefaultCellOverflow() const;
+    bool     GetCellOverflow( int row, int col ) const;
+    void     GetCellSize( int row, int col, int *num_rows, int *num_cols ) const;
 
     void     SetDefaultRowSize( int height, bool resizeExistingRows = false );
     void     SetRowSize( int row, int height );
@@ -1464,19 +1464,19 @@ public:
     void SetDefaultRenderer(wxGridCellRenderer *renderer);
     void SetCellRenderer(int row, int col, wxGridCellRenderer *renderer);
     wxGridCellRenderer *GetDefaultRenderer() const;
-    wxGridCellRenderer* GetCellRenderer(int row, int col);
+    wxGridCellRenderer* GetCellRenderer(int row, int col) const;
 
     // takes ownership of the pointer
     void SetDefaultEditor(wxGridCellEditor *editor);
     void SetCellEditor(int row, int col, wxGridCellEditor *editor);
     wxGridCellEditor *GetDefaultEditor() const;
-    wxGridCellEditor* GetCellEditor(int row, int col);
+    wxGridCellEditor* GetCellEditor(int row, int col) const;
 
 
 
     // ------ cell value accessors
     //
-    wxString GetCellValue( int row, int col )
+    wxString GetCellValue( int row, int col ) const
     {
         if ( m_table )
         {
@@ -1488,7 +1488,7 @@ public:
         }
     }
 
-    wxString GetCellValue( const wxGridCellCoords& coords )
+    wxString GetCellValue( const wxGridCellCoords& coords ) const
         { return GetCellValue( coords.GetRow(), coords.GetCol() ); }
 
     void SetCellValue( int row, int col, const wxString& s );
@@ -1518,7 +1518,7 @@ public:
 
     void SelectAll();
 
-    bool IsSelection();
+    bool IsSelection() const;
 
     // ------ deselect blocks or cells
     //
@@ -1544,7 +1544,7 @@ public:
     //  to the client size of the grid window.
     //
     wxRect BlockToDeviceRect( const wxGridCellCoords & topLeft,
-                              const wxGridCellCoords & bottomRight );
+                              const wxGridCellCoords & bottomRight ) const;
 
     // Access or update the selection fore/back colours
     wxColour GetSelectionBackground() const
@@ -1579,10 +1579,10 @@ public:
     }
 
     // Accessors for component windows
-    wxWindow* GetGridWindow()            { return (wxWindow*)m_gridWin; }
-    wxWindow* GetGridRowLabelWindow()    { return (wxWindow*)m_rowLabelWin; }
-    wxWindow* GetGridColLabelWindow()    { return (wxWindow*)m_colLabelWin; }
-    wxWindow* GetGridCornerLabelWindow() { return (wxWindow*)m_cornerLabelWin; }
+    wxWindow* GetGridWindow() const            { return (wxWindow*)m_gridWin; }
+    wxWindow* GetGridRowLabelWindow() const    { return (wxWindow*)m_rowLabelWin; }
+    wxWindow* GetGridColLabelWindow() const    { return (wxWindow*)m_colLabelWin; }
+    wxWindow* GetGridCornerLabelWindow() const { return (wxWindow*)m_cornerLabelWin; }
 
     // Allow adjustment of scroll increment. The default is (15, 15).
     void SetScrollLineX(int x) { m_scrollLineX = x; }
@@ -1631,13 +1631,13 @@ public:
     void UpdateDimensions()
         { CalcDimensions(); }
 
-    int GetRows() { return GetNumberRows(); }
-    int GetCols() { return GetNumberCols(); }
-    int GetCursorRow() { return GetGridCursorRow(); }
-    int GetCursorColumn() { return GetGridCursorCol(); }
+    int GetRows() const { return GetNumberRows(); }
+    int GetCols() const { return GetNumberCols(); }
+    int GetCursorRow() const { return GetGridCursorRow(); }
+    int GetCursorColumn() const { return GetGridCursorCol(); }
 
-    int GetScrollPosX() { return 0; }
-    int GetScrollPosY() { return 0; }
+    int GetScrollPosX() const { return 0; }
+    int GetScrollPosY() const { return 0; }
 
     void SetScrollX( int WXUNUSED(x) ) { }
     void SetScrollY( int WXUNUSED(y) ) { }
@@ -1645,7 +1645,7 @@ public:
     void SetColumnWidth( int col, int width )
         { SetColSize( col, width ); }
 
-    int GetColumnWidth( int col )
+    int GetColumnWidth( int col ) const
         { return GetColSize( col ); }
 
     void SetRowHeight( int row, int height )
@@ -1653,10 +1653,10 @@ public:
 
     // GetRowHeight() is below
 
-    int GetViewHeight() // returned num whole rows visible
+    int GetViewHeight() const // returned num whole rows visible
         { return 0; }
 
-    int GetViewWidth() // returned num whole cols visible
+    int GetViewWidth() const // returned num whole cols visible
         { return 0; }
 
     void SetLabelSize( int orientation, int sz )
@@ -1667,7 +1667,7 @@ public:
                 SetRowLabelSize( sz );
         }
 
-    int GetLabelSize( int orientation )
+    int GetLabelSize( int orientation ) const
         {
             if ( orientation == wxHORIZONTAL )
                 return GetColLabelSize();
@@ -1683,7 +1683,7 @@ public:
                 SetRowLabelAlignment( align, -1 );
         }
 
-    int GetLabelAlignment( int orientation, int WXUNUSED(align) )
+    int GetLabelAlignment( int orientation, int WXUNUSED(align) ) const
         {
             int h, v;
             if ( orientation == wxHORIZONTAL )
@@ -1706,7 +1706,7 @@ public:
                 SetRowLabelValue( pos, val );
         }
 
-    wxString GetLabelValue( int orientation, int pos)
+    wxString GetLabelValue( int orientation, int pos) const
         {
             if ( orientation == wxHORIZONTAL )
                 return GetColLabelValue( pos );
@@ -1738,9 +1738,9 @@ public:
     void SetCellBackgroundColour(const wxColour& colour, int row, int col)
         { SetCellBackgroundColour( row, col, colour ); }
 
-    bool GetEditable() { return IsEditable(); }
+    bool GetEditable() const { return IsEditable(); }
     void SetEditable( bool edit = true ) { EnableEditing( edit ); }
-    bool GetEditInPlace() { return IsCellEditControlEnabled(); }
+    bool GetEditInPlace() const { return IsCellEditControlEnabled(); }
 
     void SetEditInPlace(bool WXUNUSED(edit) = true) { }
 
@@ -1871,7 +1871,7 @@ protected:
     int GetRowMinimalHeight(int col) const;
 
     // do we have some place to store attributes in?
-    bool CanHaveAttributes();
+    bool CanHaveAttributes() const;
 
     // cell attribute cache (currently we only cache 1, may be will do
     // more/better later)
@@ -1893,7 +1893,7 @@ protected:
     // looks for the attr in cache, if not found asks the table and caches the
     // result
     wxGridCellAttr *GetCellAttr(int row, int col) const;
-    wxGridCellAttr *GetCellAttr(const wxGridCellCoords& coords )
+    wxGridCellAttr *GetCellAttr(const wxGridCellCoords& coords ) const
         { return GetCellAttr( coords.GetRow(), coords.GetCol() ); }
 
     // the default cell attr object for cells that don't have their own

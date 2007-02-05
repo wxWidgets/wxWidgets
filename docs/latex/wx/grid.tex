@@ -257,7 +257,7 @@ screen flicker. The final EndBatch will cause the grid to be repainted.
 
 \membersection{wxGrid::BlockToDeviceRect}\label{wxgridblocktodevicerect}
 
-\func{wxRect}{BlockToDeviceRect}{\param{const wxGridCellCoords \& }{topLeft}, \param{const wxGridCellCoords \& }{bottomRight}}
+\constfunc{wxRect}{BlockToDeviceRect}{\param{const wxGridCellCoords \& }{topLeft}, \param{const wxGridCellCoords \& }{bottomRight}}
 
 This function returns the rectangle that encloses the block of cells
 limited by TopLeft and BottomRight cell in device coords and clipped
@@ -267,7 +267,7 @@ to the client size of the grid window.
 
 \membersection{wxGrid::CanDragColMove}\label{wxgridcandragcolmove}
 
-\func{bool}{CanDragColMove}{\void}
+\constfunc{bool}{CanDragColMove}{\void}
 
 Returns true if columns can be moved by dragging with the mouse. Columns can be moved
 by dragging on their labels.
@@ -276,7 +276,7 @@ by dragging on their labels.
 
 \membersection{wxGrid::CanDragColSize}\label{wxgridcandragcolsize}
 
-\func{bool}{CanDragColSize}{\void}
+\constfunc{bool}{CanDragColSize}{\void}
 
 Returns true if columns can be resized by dragging with the mouse. Columns can be resized
 by dragging the edges of their labels. If grid line dragging is enabled they can also be
@@ -287,7 +287,7 @@ resized by dragging the right edge of the column in the grid cell area
 
 \membersection{wxGrid::CanDragRowSize}\label{wxgridcandragrowsize}
 
-\func{bool}{CanDragRowSize}{\void}
+\constfunc{bool}{CanDragRowSize}{\void}
 
 Returns true if rows can be resized by dragging with the mouse. Rows can be resized
 by dragging the edges of their labels. If grid line dragging is enabled they can also be
@@ -298,7 +298,7 @@ resized by dragging the lower edge of the row in the grid cell area
 
 \membersection{wxGrid::CanDragGridSize}\label{wxgridcandraggridsize}
 
-\func{bool}{CanDragGridSize}{\void}
+\constfunc{bool}{CanDragGridSize}{\void}
 
 Return true if the dragging of grid lines to resize rows and columns is enabled or false otherwise.
 
@@ -315,7 +315,7 @@ false otherwise (e.g. if the current cell is read-only).
 
 \membersection{wxGrid::CanHaveAttributes}\label{wxgridcanhaveattributes}
 
-\func{bool}{CanHaveAttributes}{\void}
+\constfunc{bool}{CanHaveAttributes}{\void}
 
 Do we have some place to store attributes in?
 
@@ -323,9 +323,9 @@ Do we have some place to store attributes in?
 
 \membersection{wxGrid::CellToRect}\label{wxgridcelltorect}
 
-\func{wxRect}{CellToRect}{\param{int }{row}, \param{int }{col}}
+\constfunc{wxRect}{CellToRect}{\param{int }{row}, \param{int }{col}}
 
-\func{wxRect}{CellToRect}{\param{const wxGridCellCoords\& }{coords}}
+\constfunc{wxRect}{CellToRect}{\param{const wxGridCellCoords\& }{coords}}
 
 Return the rectangle corresponding to the grid cell's size and position in logical
 coordinates.
@@ -534,7 +534,7 @@ Causes immediate repainting of the grid. Use this instead of the usual wxWindow:
 
 \membersection{wxGrid::GetBatchCount}\label{wxgridgetbatchcount}
 
-\func{int}{GetBatchCount}{\void}
+\constfunc{int}{GetBatchCount}{\void}
 
 Returns the number of times that \helpref{wxGrid::BeginBatch}{wxgridbeginbatch} has been called
 without (yet) matching calls to \helpref{wxGrid::EndBatch}{wxgridendbatch}. While
@@ -544,7 +544,7 @@ the grid's batch count is greater than zero the display will not be updated.
 
 \membersection{wxGrid::GetCellAlignment}\label{wxgridgetcellalignment}
 
-\func{void}{GetCellAlignment}{\param{int }{row}, \param{int }{col}, \param{int* }{horiz}, \param{int* }{vert}}
+\constfunc{void}{GetCellAlignment}{\param{int }{row}, \param{int }{col}, \param{int* }{horiz}, \param{int* }{vert}}
 
 Sets the arguments to the horizontal and vertical text alignment values for the
 grid cell at the specified location.
@@ -559,7 +559,7 @@ returns a 2-element list {\tt ( horiz, vert )}.}
 
 \membersection{wxGrid::GetCellBackgroundColour}\label{wxgridgetcellbackgroundcolour}
 
-\func{wxColour}{GetCellBackgroundColour}{\param{int }{row}, \param{int }{col}}
+\constfunc{wxColour}{GetCellBackgroundColour}{\param{int }{row}, \param{int }{col}}
 
 Returns the background colour of the cell at the specified location.
 
@@ -567,7 +567,7 @@ Returns the background colour of the cell at the specified location.
 
 \membersection{wxGrid::GetCellEditor}\label{wxgridgetcelleditor}
 
-\func{wxGridCellEditor*}{GetCellEditor}{\param{int }{row}, \param{int }{col}}
+\constfunc{wxGridCellEditor*}{GetCellEditor}{\param{int }{row}, \param{int }{col}}
 
 Returns a pointer to the editor for the cell at the specified location.
 
@@ -578,7 +578,7 @@ the \helpref{wxGrid overview}{gridoverview} for more information about cell edit
 
 \membersection{wxGrid::GetCellFont}\label{wxgridgetcellfont}
 
-\func{wxFont}{GetCellFont}{\param{int }{row}, \param{int }{col}}
+\constfunc{wxFont}{GetCellFont}{\param{int }{row}, \param{int }{col}}
 
 Returns the font for text in the grid cell at the specified location.
 
@@ -586,7 +586,7 @@ Returns the font for text in the grid cell at the specified location.
 
 \membersection{wxGrid::GetCellRenderer}\label{wxgridgetcellrenderer}
 
-\func{wxGridCellRenderer*}{GetCellRenderer}{\param{int }{row}, \param{int }{col}}
+\constfunc{wxGridCellRenderer*}{GetCellRenderer}{\param{int }{row}, \param{int }{col}}
 
 Returns a pointer to the renderer for the grid cell at the specified location.
 
@@ -597,7 +597,7 @@ the \helpref{wxGrid overview}{gridoverview} for more information about cell edit
 
 \membersection{wxGrid::GetCellTextColour}\label{wxgridgetcelltextcolour}
 
-\func{wxColour}{GetCellTextColour}{\param{int }{row}, \param{int }{col}}
+\constfunc{wxColour}{GetCellTextColour}{\param{int }{row}, \param{int }{col}}
 
 Returns the text colour for the grid cell at the specified location.
 
@@ -605,9 +605,9 @@ Returns the text colour for the grid cell at the specified location.
 
 \membersection{wxGrid::GetCellValue}\label{wxgridgetcellvalue}
 
-\func{wxString}{GetCellValue}{\param{int }{row}, \param{int }{col}}
+\constfunc{wxString}{GetCellValue}{\param{int }{row}, \param{int }{col}}
 
-\func{wxString}{GetCellValue}{\param{const wxGridCellCoords\&}{coords}}
+\constfunc{wxString}{GetCellValue}{\param{const wxGridCellCoords\&}{coords}}
 
 Returns the string contained in the cell at the specified location. For simple applications where a
 grid object automatically uses a default grid table of string values you use this function together
@@ -637,7 +637,7 @@ Returns the column ID of the specified column position.
 
 \membersection{wxGrid::GetColLabelAlignment}\label{wxgridgetcollabelalignment}
 
-\func{void}{GetColLabelAlignment}{\param{int* }{horiz}, \param{int* }{vert}}
+\constfunc{void}{GetColLabelAlignment}{\param{int* }{horiz}, \param{int* }{vert}}
 
 Sets the arguments to the current column label alignment values.
 
@@ -651,7 +651,7 @@ returns a 2-element list {\tt ( horiz, vert )}.}
 
 \membersection{wxGrid::GetColLabelSize}\label{wxgridgetcollabelsize}
 
-\func{int}{GetColLabelSize}{\void}
+\constfunc{int}{GetColLabelSize}{\void}
 
 Returns the current height of the column labels.
 
@@ -659,7 +659,7 @@ Returns the current height of the column labels.
 
 \membersection{wxGrid::GetColLabelValue}\label{wxgridgetcollabelvalue}
 
-\func{wxString}{GetColLabelValue}{\param{int }{col}}
+\constfunc{wxString}{GetColLabelValue}{\param{int }{col}}
 
 Returns the specified column label. The default grid table class provides column labels of
 the form A,B...Z,AA,AB...ZZ,AAA... If you are using a custom grid table you can override
@@ -670,7 +670,7 @@ your own labels.
 
 \membersection{wxGrid::GetColMinimalAcceptableWidth}\label{wxgridgetcolminimalacceptablewidth}
 
-\func{int}{GetColMinimalAcceptableWidth}{}
+\constfunc{int}{GetColMinimalAcceptableWidth}{}
 
 This returns the value of the lowest column width that can be handled correctly. See
 member \helpref{SetColMinimalAcceptableWidth}{wxgridsetcolminimalacceptablewidth} for details.
@@ -701,7 +701,7 @@ Returns the position of the specified column.
 
 \membersection{wxGrid::GetColSize}\label{wxgridgetcolsize}
 
-\func{int}{GetColSize}{\param{int }{col}}
+\constfunc{int}{GetColSize}{\param{int }{col}}
 
 Returns the width of the specified column.
 
@@ -709,7 +709,7 @@ Returns the width of the specified column.
 
 \membersection{wxGrid::GetDefaultCellAlignment}\label{wxgridgetdefaultcellalignment}
 
-\func{void}{GetDefaultCellAlignment}{\param{int* }{horiz}, \param{int* }{vert}}
+\constfunc{void}{GetDefaultCellAlignment}{\param{int* }{horiz}, \param{int* }{vert}}
 
 Sets the arguments to the current default horizontal and vertical text alignment
 values.
@@ -721,7 +721,7 @@ Vertical alignment will be one of wxALIGN\_TOP, wxALIGN\_CENTRE or wxALIGN\_BOTT
 
 \membersection{wxGrid::GetDefaultCellBackgroundColour}\label{wxgridgetdefaultcellbackgroundcolour}
 
-\func{wxColour}{GetDefaultCellBackgroundColour}{\void}
+\constfunc{wxColour}{GetDefaultCellBackgroundColour}{\void}
 
 Returns the current default background colour for grid cells.
 
@@ -729,7 +729,7 @@ Returns the current default background colour for grid cells.
 
 \membersection{wxGrid::GetDefaultCellFont}\label{wxgridgetdefaultcellfont}
 
-\func{wxFont}{GetDefaultCellFont}{\void}
+\constfunc{wxFont}{GetDefaultCellFont}{\void}
 
 Returns the current default font for grid cell text.
 
@@ -737,7 +737,7 @@ Returns the current default font for grid cell text.
 
 \membersection{wxGrid::GetDefaultCellTextColour}\label{wxgridgetdefaultcelltextcolour}
 
-\func{wxColour}{GetDefaultCellTextColour}{\void}
+\constfunc{wxColour}{GetDefaultCellTextColour}{\void}
 
 Returns the current default colour for grid cell text.
 
@@ -745,7 +745,7 @@ Returns the current default colour for grid cell text.
 
 \membersection{wxGrid::GetDefaultColLabelSize}\label{wxgridgetdefaultcollabelsize}
 
-\func{int}{GetDefaultColLabelSize}{\void}
+\constfunc{int}{GetDefaultColLabelSize}{\void}
 
 Returns the default height for column labels.
 
@@ -753,7 +753,7 @@ Returns the default height for column labels.
 
 \membersection{wxGrid::GetDefaultColSize}\label{wxgridgetdefaultcolsize}
 
-\func{int}{GetDefaultColSize}{\void}
+\constfunc{int}{GetDefaultColSize}{\void}
 
 Returns the current default width for grid columns.
 
@@ -809,7 +809,7 @@ the \helpref{wxGrid overview}{gridoverview} for more information about cell edit
 
 \membersection{wxGrid::GetDefaultRowLabelSize}\label{wxgridgetdefaultrowlabelsize}
 
-\func{int}{GetDefaultRowLabelSize}{\void}
+\constfunc{int}{GetDefaultRowLabelSize}{\void}
 
 Returns the default width for the row labels.
 
@@ -817,7 +817,7 @@ Returns the default width for the row labels.
 
 \membersection{wxGrid::GetDefaultRowSize}\label{wxgridgetdefaultrowsize}
 
-\func{int}{GetDefaultRowSize}{\void}
+\constfunc{int}{GetDefaultRowSize}{\void}
 
 Returns the current default height for grid rows.
 
@@ -825,7 +825,7 @@ Returns the current default height for grid rows.
 
 \membersection{wxGrid::GetGridCursorCol}\label{wxgridgetgridcursorcol}
 
-\func{int}{GetGridCursorCol}{\void}
+\constfunc{int}{GetGridCursorCol}{\void}
 
 Returns the current grid cell column position.
 
@@ -833,7 +833,7 @@ Returns the current grid cell column position.
 
 \membersection{wxGrid::GetGridCursorRow}\label{wxgridgetgridcursorrow}
 
-\func{int}{GetGridCursorRow}{\void}
+\constfunc{int}{GetGridCursorRow}{\void}
 
 Returns the current grid cell row position.
 
@@ -841,7 +841,7 @@ Returns the current grid cell row position.
 
 \membersection{wxGrid::GetGridLineColour}\label{wxgridgetgridlinecolour}
 
-\func{wxColour}{GetGridLineColour}{\void}
+\constfunc{wxColour}{GetGridLineColour}{\void}
 
 Returns the colour used for grid lines.
 
@@ -905,7 +905,7 @@ See \helpref{GetRowGridLinePen()}{wxgridgetrowgridlinepen} for an example.
 
 \membersection{wxGrid::GridLinesEnabled}\label{wxgridgridlinesenabled}
 
-\func{bool}{GridLinesEnabled}{\void}
+\constfunc{bool}{GridLinesEnabled}{\void}
 
 Returns true if drawing of grid lines is turned on, false otherwise.
 
@@ -913,7 +913,7 @@ Returns true if drawing of grid lines is turned on, false otherwise.
 
 \membersection{wxGrid::GetLabelBackgroundColour}\label{wxgridgetlabelbackgroundcolour}
 
-\func{wxColour}{GetLabelBackgroundColour}{\void}
+\constfunc{wxColour}{GetLabelBackgroundColour}{\void}
 
 Returns the colour used for the background of row and column labels.
 
@@ -921,7 +921,7 @@ Returns the colour used for the background of row and column labels.
 
 \membersection{wxGrid::GetLabelFont}\label{wxgridgetlabelfont}
 
-\func{wxFont}{GetLabelFont}{\void}
+\constfunc{wxFont}{GetLabelFont}{\void}
 
 Returns the font used for row and column labels.
 
@@ -929,7 +929,7 @@ Returns the font used for row and column labels.
 
 \membersection{wxGrid::GetLabelTextColour}\label{wxgridgetlabeltextcolour}
 
-\func{wxColour}{GetLabelTextColour}{\void}
+\constfunc{wxColour}{GetLabelTextColour}{\void}
 
 Returns the colour used for row and column label text.
 
@@ -937,7 +937,7 @@ Returns the colour used for row and column label text.
 
 \membersection{wxGrid::GetNumberCols}\label{wxgridgetnumbercols}
 
-\func{int}{GetNumberCols}{\void}
+\constfunc{int}{GetNumberCols}{\void}
 
 Returns the total number of grid columns (actually the number of columns in the underlying grid
 table).
@@ -946,7 +946,7 @@ table).
 
 \membersection{wxGrid::GetNumberRows}\label{wxgridgetnumberrows}
 
-\func{int}{GetNumberRows}{\void}
+\constfunc{int}{GetNumberRows}{\void}
 
 Returns the total number of grid rows (actually the number of rows in the underlying grid table).
 
@@ -960,7 +960,7 @@ Returns the total number of grid rows (actually the number of rows in the underl
 
 \membersection{wxGrid::GetRowMinimalAcceptableHeight}\label{wxgridgetrowminimalacceptableheight}
 
-\func{int}{GetRowMinimalAcceptableHeight}{}
+\constfunc{int}{GetRowMinimalAcceptableHeight}{}
 
 This returns the value of the lowest row width that can be handled correctly. See
 member \helpref{SetRowMinimalAcceptableHeight}{wxgridsetrowminimalacceptableheight} for details.
@@ -975,7 +975,7 @@ member \helpref{SetRowMinimalAcceptableHeight}{wxgridsetrowminimalacceptableheig
 
 \membersection{wxGrid::GetRowLabelAlignment}\label{wxgridgetrowlabelalignment}
 
-\func{void}{GetRowLabelAlignment}{\param{int* }{horiz}, \param{int* }{vert}}
+\constfunc{void}{GetRowLabelAlignment}{\param{int* }{horiz}, \param{int* }{vert}}
 
 Sets the arguments to the current row label alignment values.
 
@@ -989,7 +989,7 @@ returns a 2-element list {\tt ( horiz, vert )}.}
 
 \membersection{wxGrid::GetRowLabelSize}\label{wxgridgetrowlabelsize}
 
-\func{int}{GetRowLabelSize}{\void}
+\constfunc{int}{GetRowLabelSize}{\void}
 
 Returns the current width of the row labels.
 
@@ -997,7 +997,7 @@ Returns the current width of the row labels.
 
 \membersection{wxGrid::GetRowLabelValue}\label{wxgridgetrowlabelvalue}
 
-\func{wxString}{GetRowLabelValue}{\param{int }{row}}
+\constfunc{wxString}{GetRowLabelValue}{\param{int }{row}}
 
 Returns the specified row label. The default grid table class provides numeric row labels.
 If you are using a custom grid table you can override
@@ -1008,7 +1008,7 @@ your own labels.
 
 \membersection{wxGrid::GetRowSize}\label{wxgridgetrowsize}
 
-\func{int}{GetRowSize}{\param{int }{row}}
+\constfunc{int}{GetRowSize}{\param{int }{row}}
 
 Returns the height of the specified row.
 
@@ -1116,7 +1116,7 @@ Returns a base pointer to the current table object.
 
 \membersection{wxGrid::GetViewWidth}\label{wxgridgetviewwidth}
 
-\func{int}{GetViewWidth}{\void}
+\constfunc{int}{GetViewWidth}{\void}
 
 Returned number of whole cols visible.
 
@@ -1206,7 +1206,7 @@ Returns true if the current cell has been set to read-only
 
 \membersection{wxGrid::IsEditable}\label{wxgridiseditable}
 
-\func{bool}{IsEditable}{\void}
+\constfunc{bool}{IsEditable}{\void}
 
 Returns false if the whole grid has been set as read-only or true otherwise.
 See \helpref{wxGrid::EnableEditing}{wxgridenableediting} for more information about
@@ -1235,7 +1235,7 @@ See also \helpref{wxGrid::IsReadOnly}{wxgridisreadonly}.
 
 \membersection{wxGrid::IsSelection}\label{wxgridisselection}
 
-\func{bool}{IsSelection}{\void}
+\constfunc{bool}{IsSelection}{\void}
 
 Returns true if there are currently rows, columns or blocks of cells selected.
 
@@ -1243,9 +1243,9 @@ Returns true if there are currently rows, columns or blocks of cells selected.
 
 \membersection{wxGrid::IsVisible}\label{wxgridisvisible}
 
-\func{bool}{IsVisible}{\param{int }{row}, \param{int }{col}, \param{bool }{wholeCellVisible = true}}
+\constfunc{bool}{IsVisible}{\param{int }{row}, \param{int }{col}, \param{bool }{wholeCellVisible = true}}
 
-\func{bool}{IsVisible}{\param{const wxGridCellCoords\& }{coords}, \param{bool }{wholeCellVisible = true}}
+\constfunc{bool}{IsVisible}{\param{const wxGridCellCoords\& }{coords}, \param{bool }{wholeCellVisible = true}}
 
 Returns true if a cell is either wholly visible (the default) or at least partially
 visible in the grid window.
@@ -1438,7 +1438,7 @@ deselected; if true the column will be added to the existing selection.
 
 \membersection{wxGrid::SelectionToDeviceRect}\label{wxgridselectiontodevicerect}
 
-\func{wxRect}{SelectionToDeviceRect}{\void}
+\constfunc{wxRect}{SelectionToDeviceRect}{\void}
 
 This function returns the rectangle that encloses the selected cells
 in device coords and clipped to the client size of the grid window.
@@ -1982,7 +1982,7 @@ Displays the in-place cell edit control for the current cell.
 
 \membersection{wxGrid::XToCol}\label{wxgridxtocol}
 
-\func{int}{XToCol}{\param{int }{x}, \param{bool }{clipToMinMax = false}}
+\constfunc{int}{XToCol}{\param{int }{x}, \param{bool }{clipToMinMax = false}}
 
 \wxheading{Parameters}
 \docparam{x}{The x position to evaluate.}
@@ -1996,7 +1996,7 @@ The grid column that corresponds to the logical x coordinate. Returns
 
 \membersection{wxGrid::XToEdgeOfCol}\label{wxgridxtoedgeofcol}
 
-\func{int}{XToEdgeOfCol}{\param{int }{x}}
+\constfunc{int}{XToEdgeOfCol}{\param{int }{x}}
 
 Returns the column whose right hand edge is close to the given logical x position.
 If no column edge is near to this position {\tt wxNOT\_FOUND} is returned.
@@ -2005,7 +2005,7 @@ If no column edge is near to this position {\tt wxNOT\_FOUND} is returned.
 
 \membersection{wxGrid::YToEdgeOfRow}\label{wxgridytoedgeofrow}
 
-\func{int}{YToEdgeOfRow}{\param{int }{y}}
+\constfunc{int}{YToEdgeOfRow}{\param{int }{y}}
 
 Returns the row whose bottom edge is close to the given logical y position.
 If no row edge is near to this position {\tt wxNOT\_FOUND} is returned.
@@ -2014,7 +2014,7 @@ If no row edge is near to this position {\tt wxNOT\_FOUND} is returned.
 
 \membersection{wxGrid::YToRow}\label{wxgridytorow}
 
-\func{int}{YToRow}{\param{int }{y}}
+\constfunc{int}{YToRow}{\param{int }{y}}
 
 Returns the grid row that corresponds to the logical y coordinate. Returns
 {\tt wxNOT\_FOUND} if there is no row at the y position.
