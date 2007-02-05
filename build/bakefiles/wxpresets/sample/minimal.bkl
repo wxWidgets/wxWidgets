@@ -7,6 +7,9 @@
 
     <exe id="minimal" template="wx">
         <app-type>gui</app-type>
+
+        <!-- this sample builds always in debug mode; if you have
+             compiled wxWidgets in release mode, you'll get link errors! -->
         <debug-info>on</debug-info>
         <runtime-libs>dynamic</runtime-libs>
         

@@ -1,0 +1,64 @@
+dnl Process this file with autoconf to produce a configure script.
+
+AC_PREREQ(2.59)
+AC_INIT([libsample],[1.2.5],[vslavik@fastmail.fm])
+AC_CONFIG_SRCDIR([libsample.cpp])
+
+
+dnl ---------------------------------------------------------------------------
+dnl DEFINE CONFIGURE OPTIONS
+dnl ---------------------------------------------------------------------------
+
+dnl define all the wx-config related options
+dnl (i.e. --with-wxdir, --with-wx-config, --with-wx-prefix, --with-wx-exec-prefix)
+WX_CONFIG_OPTIONS
+
+dnl define all the wxpresets related options
+WX_STANDARD_OPTIONS([debug,unicode,shared,toolkit,wxshared])
+
+
+
+dnl ---------------------------------------------------------------------------
+dnl CONFIGURE CHECKS
+dnl ---------------------------------------------------------------------------
+
+dnl these checks are required by bakefile:
+AC_CANONICAL_SYSTEM
+AC_PROG_AWK
+AC_PROG_INSTALL
+AC_PROG_LN_S
+AC_PROG_RANLIB
+AC_PROG_CC
+AC_PROG_CXX
+AC_PROG_CXXCPP
+
+dnl we want to always have DEBUG==WX_DEBUG and UNICODE==WX_UNICODE
+WX_DEBUG=$DEBUG
+WX_UNICODE=$UNICODE
+
+dnl the following macros will search for the best matching wxWidgets build 
+dnl (taking in count the values of the --enable-debug|unicode|shared and of
+dnl the --with-toolkit|wxshared options) and then set appropriately all the
+dnl WX_* options
+WX_CONVERT_STANDARD_OPTIONS_TO_WXCONFIG_FLAGS
+WX_CONFIG_CHECK([2.8.0], [wxWin=1],,[core,base],[$WXCONFIG_FLAGS])
+WX_DETECT_STANDARD_OPTION_VALUES
+
+dnl here all WX_* option values are available for your own processing...
+
+
+
+
+dnl ---------------------------------------------------------------------------
+dnl CONFIGURE END
+dnl ---------------------------------------------------------------------------
+
+AC_BAKEFILE([m4_include(autoconf_inc.m4)])
+AC_CONFIG_FILES([Makefile])
+AC_OUTPUT
+
+
+dnl show a nice summary of the chosen build settings to the user
+WX_STANDARD_OPTIONS_SUMMARY_MSG_BEGIN
+WX_STANDARD_OPTIONS_SUMMARY_MSG_END
+
