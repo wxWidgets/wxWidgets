@@ -1165,7 +1165,7 @@ void wxTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font)
     // Reset the item's text to ensure that the bounding rect will be adjusted
     // for the new font.
     SetItemText(item, GetItemText(item));
-    
+
     RefreshItem(item);
 }
 
@@ -2224,6 +2224,8 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
 
                     // generate the drag end event
                     wxTreeEvent event(wxEVT_COMMAND_TREE_END_DRAG, this, htItem);
+                    event.m_pointDrag = wxPoint(x, y);
+
                     (void)GetEventHandler()->ProcessEvent(event);
 
                     // if we don't do it, the tree seems to think that 2 items
