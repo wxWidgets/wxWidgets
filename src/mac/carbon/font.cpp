@@ -22,6 +22,7 @@
 
 #include "wx/fontutil.h"
 #include "wx/graphics.h"
+#include "wx/log.h"
 
 #include "wx/mac/private.h"
 
