@@ -2072,9 +2072,15 @@ opaque.", "");
         self.thisown = pre.thisown
         pre.thisown = 0
         if hasattr(self, '_setOORInfo'):
-            self._setOORInfo(self)
+            try:
+                self._setOORInfo(self)
+            except TypeError:
+                pass
         if hasattr(self, '_setCallbackInfo'):
-            self._setCallbackInfo(self, pre.__class__)
+            try:
+                self._setCallbackInfo(self, pre.__class__)
+            except TypeError:
+                pass
     }
 
     %pythoncode {
