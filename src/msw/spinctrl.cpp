@@ -373,7 +373,6 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     }
 
     wxSpinButtonBase::SetRange(min, max);
-    SetValue(initial);
 
     m_oldValue = initial;
 
@@ -403,6 +402,14 @@ bool wxSpinCtrl::Create(wxWindow *parent,
 
     // associate the text window with the spin button
     (void)::SendMessage(GetHwnd(), UDM_SETBUDDY, (WPARAM)m_hwndBuddy, 0);
+
+    SetValue(initial);
+
+    // Set the range in the native control
+    SetRange(min, max);
+
+    // Send the initial event
+    SendSpinUpdate(initial);
 
     if ( !value.empty() )
     {
