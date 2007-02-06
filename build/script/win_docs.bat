@@ -1,5 +1,5 @@
 rem Uncomment the next line to set the version; used also in wxWidgets.iss
-SET WXW_VER=2.8.1
+SET WXW_VER=2.9.0
 if (%WXW_VER%)==() SET WXW_VER=CVS
 
 echo docs building for %WXW_VER%
