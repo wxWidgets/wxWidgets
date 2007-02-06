@@ -5921,13 +5921,6 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 SaveEditControlValue();
             }
 
-            // Have we captured the mouse yet?
-            if (! m_winCapture)
-            {
-                m_winCapture = m_gridWin;
-                m_winCapture->CaptureMouse();
-            }
-
             if ( coords != wxGridNoCellCoords )
             {
                 if ( event.CmdDown() )
@@ -5947,6 +5940,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                                    coords.GetRow(),
                                    coords.GetCol(),
                                    event );
+                        return;
                     }
                 }
                 else
@@ -5968,6 +5962,14 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                     // scrolling is way to fast, at least on MSW - also on GTK.
                 }
             }
+            // Have we captured the mouse yet?
+            if (! m_winCapture)
+            {
+                m_winCapture = m_gridWin;
+                m_winCapture->CaptureMouse();
+            }
+
+            
         }
         else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
         {
