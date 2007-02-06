@@ -62,6 +62,10 @@ wxX11:
 
 - Don't crash in wxWindow dtor if the window hadn't been really Create()d
 
+wxUniv:
+
+- Fixed wxComboBox always sorted
+
 
 2.8.1
 -----

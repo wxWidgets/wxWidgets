@@ -122,8 +122,8 @@ bool wxComboListBox::Create(wxWindow* parent)
     if ( !wxListBox::Create(parent, wxID_ANY,
                             wxDefaultPosition, wxDefaultSize,
                             0, NULL,
-                            wxBORDER_SIMPLE | wxLB_INT_HEIGHT |
-                            m_combo->GetWindowStyle() & wxCB_SORT ? wxLB_SORT : 0) )
+                            wxBORDER_SIMPLE |
+                            ( m_combo->GetWindowStyle() & wxCB_SORT ? wxLB_SORT : 0 ) ) )
         return false;
 
     // we don't react to the mouse events outside the window at all
