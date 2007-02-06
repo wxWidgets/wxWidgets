@@ -463,6 +463,10 @@ void wxScrollHelper::HandleOnScroll(wxScrollWinEvent& event)
     }
 
     bool needsRefresh = false;
+#ifdef __WXMAC__
+    // OS X blocks on immediate redraws, so make this a refresh
+    needsRefresh = true;
+#endif
     int dx = 0,
         dy = 0;
     int orient = event.GetOrientation();
