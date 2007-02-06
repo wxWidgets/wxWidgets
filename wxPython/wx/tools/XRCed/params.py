@@ -555,7 +555,7 @@ class ContentCheckListDialog(wx.Dialog):
         pre = wx.PreDialog()
         g.frame.res.LoadOnDialog(pre, parent, 'DIALOG_CONTENT_CHECKLIST')
         self.PostCreate(pre)
-        self.list = xrc.XRCCTRL(self, 'CHECKLIST')
+        self.list = xrc.XRCCTRL(self, 'CHECK_LIST')
         # Set list items
         i = 0
         for v,ch in value:
@@ -674,6 +674,17 @@ class ParamContentCheckList(ParamContent):
             self.SetModified()
             self.textModified = False
         dlg.Destroy()
+    def SetValue(self, value):
+        self.freeze = True
+        if not value: value = []
+        self.value = value
+        if value:
+            if len(value) == 1: repr_ = str(value)
+            else: repr_ = reduce(lambda a,b: '%s|%s' % (a,b), value)
+        else:
+            repr_ = ''
+        self.text.SetValue(repr_)  # update text ctrl
+        self.freeze = False        
 
 class IntListDialog(wx.Dialog):
     def __init__(self, parent, value):

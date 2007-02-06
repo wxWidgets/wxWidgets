@@ -605,8 +605,8 @@ class xxxCalendarCtrl(xxxObject):
 
 class xxxNotebook(xxxContainer):
     allParams = ['pos', 'size', 'style']
-    winStyles = ['wxNB_DEFAULT', 'wxNB_LEFT', 'wxNB_RIGHT', 'wxNB_BOTTOM',
-                 'wxNB_FIXEDWIDTH', 'wxNB_MULTILINE', 'wxNB_NOPAGETHEME']
+    winStyles = ['wxNB_TOP', 'wxNB_LEFT', 'wxNB_RIGHT', 'wxNB_BOTTOM',
+                 'wxNB_FIXEDWIDTH', 'wxNB_MULTILINE', 'wxNB_NOPAGETHEME', 'wxNB_FLAT']
 
 class xxxChoicebook(xxxContainer):
     allParams = ['pos', 'size', 'style']
@@ -645,7 +645,8 @@ class xxxButton(xxxObject):
     allParams = ['label', 'default', 'pos', 'size', 'style']
     paramDict = {'default': ParamBool}
     required = ['label']
-    winStyles = ['wxBU_LEFT', 'wxBU_TOP', 'wxBU_RIGHT', 'wxBU_BOTTOM', 'wxBU_EXACTFIT']
+    winStyles = ['wxBU_LEFT', 'wxBU_TOP', 'wxBU_RIGHT', 'wxBU_BOTTOM', 'wxBU_EXACTFIT',
+                 'wxNO_BORDER']
 
 class xxxBitmapButton(xxxObject):
     allParams = ['bitmap', 'selected', 'focus', 'disabled', 'default',
@@ -654,7 +655,7 @@ class xxxBitmapButton(xxxObject):
                  'default': ParamBool}
     required = ['bitmap']
     winStyles = ['wxBU_AUTODRAW', 'wxBU_LEFT', 'wxBU_RIGHT',
-                 'wxBU_TOP', 'wxBU_BOTTOM', 'wxBU_EXACTFIT']
+                 'wxBU_TOP', 'wxBU_BOTTOM']
 
 class xxxRadioButton(xxxObject):
     allParams = ['label', 'value', 'pos', 'size', 'style']
@@ -833,6 +834,11 @@ class xxxChildContainer(xxxObject):
                 element.removeChild(node)
                 node.unlink()
         assert 0, 'no child found'
+    def resetChild(self, xxx):
+        '''Reset child info (for replacing with another class).'''
+        self.child = xxx
+        self.hasChildren = xxx.hasChildren
+        self.isSizer = xxx.isSizer        
 
 class xxxSizerItem(xxxChildContainer):
     allParams = ['option', 'flag', 'border', 'minsize', 'ratio']
@@ -847,6 +853,12 @@ class xxxSizerItem(xxxChildContainer):
         if 'pos' in self.child.allParams:
             self.child.allParams = self.child.allParams[:]
             self.child.allParams.remove('pos')
+    def resetChild(self, xxx):
+        xxxChildContainer.resetChild(self, xxx)
+        # Remove pos parameter - not needed for sizeritems
+        if 'pos' in self.child.allParams:
+            self.child.allParams = self.child.allParams[:]
+            self.child.allParams.remove('pos')        
 
 class xxxSizerItemButton(xxxSizerItem):
     allParams = []
@@ -1089,5 +1101,9 @@ def MakeEmptyRefXXX(parent, ref):
             pageElem.appendChild(elem)
             elem = pageElem
     # Now just make object
-    return MakeXXXFromDOM(parent, elem)
+    xxx = MakeXXXFromDOM(parent, elem)
+    # Label is not used for references
+    xxx.allParams = xxx.allParams[:]
+    #xxx.allParams.remove('label')
+    return xxx
 

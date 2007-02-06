@@ -89,7 +89,7 @@ class Panel(wx.Notebook):
             g.currentXXX = xxx.treeObject()
             # Normal or SizerItem page
             isGBSizerItem = isinstance(xxx.parent, xxxGridBagSizer)
-            cacheID = (xxx.__class__, isGBSizerItem)            
+            cacheID = (xxx.panelName(), isGBSizerItem)
             try:
                 page = self.pageCache[cacheID]
                 page.box.SetLabel(xxx.panelName())
@@ -102,7 +102,7 @@ class Panel(wx.Notebook):
             sizer.Add(page, 1, wx.EXPAND)
             if xxx.hasChild:
                 # Special label for child objects - they may have different GUI
-                cacheID = (xxx.child.__class__, xxx.__class__)
+                cacheID = (xxx.child.panelName(), xxx.__class__)
                 try:
                     page = self.pageCache[cacheID]
                     page.box.SetLabel(xxx.child.panelName())
