@@ -18,11 +18,11 @@
     #include "wx/utils.h"
     #include "wx/intl.h"
     #include "wx/gdicmn.h"
+    #include "wx/log.h"
 #endif
 
 #include "wx/fontutil.h"
 #include "wx/graphics.h"
-#include "wx/log.h"
 
 #include "wx/mac/private.h"
 
