@@ -54,6 +54,9 @@ public:
 
     virtual void SetRows(int nRows);
 
+    virtual void SetToolNormalBitmap(int id, const wxBitmap& bitmap);
+    virtual void SetToolDisabledBitmap(int id, const wxBitmap& bitmap);
+    
     // implementation only from now on
     // -------------------------------
 

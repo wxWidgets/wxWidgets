@@ -57,7 +57,10 @@ class WXDLLEXPORT wxToolBar: public wxToolBarBase
 
     virtual void SetRows(int nRows);
 
-  // Add all the buttons
+    virtual void SetToolNormalBitmap(int id, const wxBitmap& bitmap);
+    virtual void SetToolDisabledBitmap(int id, const wxBitmap& bitmap);
+
+    // Add all the buttons
 
     virtual wxString MacGetToolTipString( wxPoint &where ) ;
     void OnPaint(wxPaintEvent& event) ;

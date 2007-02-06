@@ -372,6 +372,9 @@ public:
     virtual void SetToolLongHelp(int toolid, const wxString& helpString);
     virtual wxString GetToolLongHelp(int toolid) const;
 
+    virtual void SetToolNormalBitmap(int id, const wxBitmap& bitmap) {}
+    virtual void SetToolDisabledBitmap(int id, const wxBitmap& bitmap) {}
+
     // margins/packing/separation
     // --------------------------
 

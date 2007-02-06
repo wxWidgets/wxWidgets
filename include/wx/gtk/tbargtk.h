@@ -52,6 +52,9 @@ public:
 
     virtual void SetWindowStyleFlag( long style );
 
+    virtual void SetToolNormalBitmap(int id, const wxBitmap& bitmap);
+    virtual void SetToolDisabledBitmap(int id, const wxBitmap& bitmap);
+    
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
     
