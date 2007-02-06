@@ -960,51 +960,31 @@ void wxTopLevelWindowGTK::DoSetSizeHints( int minW, int minH,
                                           int incW, int incH )
 {
     wxTopLevelWindowBase::DoSetSizeHints( minW, minH, maxW, maxH, incW, incH );
-    
-    if (m_widget)
+
+    const wxSize minSize = GetMinSize();
+    const wxSize maxSize = GetMaxSize();
+    GdkGeometry hints;
+    int hints_mask = 0;
+    if (minSize.x > 0 || minSize.y > 0)
     {
-        int minWidth = GetMinWidth(),
-            minHeight = GetMinHeight(),
-            maxWidth = GetMaxWidth(),
-            maxHeight = GetMaxHeight();
-            
-        // set size hints
-        gint            flag = 0; // GDK_HINT_POS;
-        GdkGeometry     geom;
-
-        if ((minWidth != -1) || (minHeight != -1)) flag |= GDK_HINT_MIN_SIZE;
-        if ((maxWidth != -1) || (maxHeight != -1)) flag |= GDK_HINT_MAX_SIZE;
-
-        geom.min_width = minWidth;
-        geom.min_height = minHeight;
-
-            // Because of the way we set GDK_HINT_MAX_SIZE above, if either of
-            // maxHeight or maxWidth is set, we must set them both, else the
-            // remaining -1 will be taken literally.
-
-            // I'm certain this also happens elsewhere, and is the probable
-            // cause of other such things as:
-            // Gtk-WARNING **: gtk_widget_size_allocate():
-            //       attempt to allocate widget with width 65535 and height 600
-            // but I don't have time to track them all now..
-            //
-            // Really we need to encapulate all this height/width business and
-            // stop any old method from ripping at the members directly and
-            // scattering -1's without regard for who might resolve them later.
-
-        geom.max_width = ( maxHeight == -1 ) ? maxWidth
-                         : ( maxWidth == -1 ) ? wxGetDisplaySize().GetWidth()
-                           : maxWidth ;
-
-        geom.max_height = ( maxWidth == -1 ) ? maxHeight    // ( == -1 here )
-                          : ( maxHeight == -1 ) ? wxGetDisplaySize().GetHeight()
-                            : maxHeight ;
-
-        gtk_window_set_geometry_hints( GTK_WINDOW(m_widget),
-                                       (GtkWidget*) NULL,
-                                       &geom,
-                                       (GdkWindowHints) flag );
+        hints_mask |= GDK_HINT_MIN_SIZE;
+        hints.min_width  = minSize.x > 0 ? minSize.x : 0;
+        hints.min_height = minSize.y > 0 ? minSize.y : 0;
     }
+    if (maxSize.x > 0 || maxSize.y > 0)
+    {
+        hints_mask |= GDK_HINT_MAX_SIZE;
+        hints.max_width  = maxSize.x > 0 ? maxSize.x : INT_MAX;
+        hints.max_height = maxSize.y > 0 ? maxSize.y : INT_MAX;
+    }
+    if (incW > 0 || incH > 0)
+    {
+        hints_mask |= GDK_HINT_RESIZE_INC;
+        hints.width_inc  = incW > 0 ? incW : 1;
+        hints.height_inc = incH > 0 ? incH : 1;
+    }
+    gtk_window_set_geometry_hints(
+        (GtkWindow*)m_widget, NULL, &hints, (GdkWindowHints)hints_mask);
 }
 
 

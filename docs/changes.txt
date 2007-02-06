@@ -30,6 +30,7 @@ All:
 wxGTK:
 
 - Implemented support for underlined fonts in wxStaticText
+- wxTopLevelWindow::SetSizeHints size increments now work
 
 wxMSW:
 
