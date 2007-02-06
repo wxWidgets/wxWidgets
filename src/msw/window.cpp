@@ -2864,12 +2864,12 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
 #endif // defined(WM_DRAWITEM)
 
         case WM_GETDLGCODE:
-            if ( !IsOfStandardClass() )
+            if ( !IsOfStandardClass() || HasFlag(wxWANTS_CHARS) )
             {
                 // we always want to get the char events
                 rc.result = DLGC_WANTCHARS;
 
-                if ( GetWindowStyleFlag() & wxWANTS_CHARS )
+                if ( HasFlag(wxWANTS_CHARS) )
                 {
                     // in fact, we want everything
                     rc.result |= DLGC_WANTARROWS |
