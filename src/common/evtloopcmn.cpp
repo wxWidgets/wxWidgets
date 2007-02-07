@@ -30,6 +30,23 @@
     #include "wx/app.h"
 #endif //WX_PRECOMP
 
+// see the comment near the declaration of wxRunningEventLoopCount in
+// src/msw/thread.cpp for the explanation of this hack
+#ifdef __WXMSW__
+
+extern int wxRunningEventLoopCount;
+struct wxRunningEventLoopCounter
+{
+    wxRunningEventLoopCounter() { wxRunningEventLoopCount++; }
+    ~wxRunningEventLoopCounter() { wxRunningEventLoopCount--; }
+};
+
+#else // !__WXMSW__
+
+struct wxRunningEventLoopCounter { };
+
+#endif // __WXMSW__/!__WXMSW__
+
 // ----------------------------------------------------------------------------
 // globals
 // ----------------------------------------------------------------------------
@@ -58,6 +75,8 @@ int wxEventLoopManual::Run()
     // be exception-safe, hence we must use local objects for all actions we
     // should undo
     wxEventLoopActivator activate(wx_static_cast(wxEventLoop *, this));
+
+    wxRunningEventLoopCounter evtLoopCounter;
 
     // we must ensure that OnExit() is called even if an exception is thrown
     // from inside Dispatch() but we must call it from Exit() in normal

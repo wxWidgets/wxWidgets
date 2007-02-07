@@ -86,6 +86,16 @@
     #define THREAD_CALLCONV WINAPI
 #endif
 
+// this is a hack to allow the code here to know whether wxEventLoop is
+// currently running: as wxBase doesn't have event loop at all, we can't simple
+// use "wxEventLoop::GetActive() != NULL" test, so instead wxEventLoop uses
+// this variable to indicate whether it is active
+//
+// the proper solution is to use wxAppTraits to abstract the base/GUI-dependent
+// operation of waiting for the thread to terminate and is already implemented
+// in cvs HEAD, this is just a backwards compatible hack for 2.8
+int wxRunningEventLoopCount = 0;
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -755,7 +765,7 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
 #if !defined(QS_ALLPOSTMESSAGE)
 #define QS_ALLPOSTMESSAGE 0
 #endif
-        if ( !wxEventLoop::GetActive() )
+        if ( !wxRunningEventLoopCount )
         {
             // don't ask for Windows messages if we don't have a running event
             // loop to process them as otherwise we'd enter an infinite loop
