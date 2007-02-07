@@ -93,6 +93,7 @@ generate_manifest vc.rsp \
 generate_manifest makefile.rsp \
                   autoconf \
                   "locale/Makefile" \
+                  "samples/Makefile.in" \
                   "libs/vms.opt" \
                   "libs/vms_gtk.opt" \
                   `find . -name descrip.mms`

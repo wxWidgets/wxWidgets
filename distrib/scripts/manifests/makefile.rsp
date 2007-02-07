@@ -36,7 +36,6 @@ demos/life/Makefile.in
 demos/Makefile.in
 demos/poem/Makefile.in
 Makefile.in
-samples/Makefile.in
 samples/access/Makefile.in
 samples/animate/Makefile.in
 samples/artprov/Makefile.in
@@ -144,6 +143,7 @@ utils/Makefile.in
 utils/tex2rtf/src/Makefile.in
 utils/wxrc/Makefile.in
 locale/Makefile
+samples/Makefile.in
 libs/vms.opt
 libs/vms_gtk.opt
 ./src/aui/descrip.mms
