@@ -3900,6 +3900,7 @@ EVENT_PROPAGATE_MAX = _core_.EVENT_PROPAGATE_MAX
 def NewEventType(*args):
   """NewEventType() -> EventType"""
   return _core_.NewEventType(*args)
+wxEVT_ANY = _core_.wxEVT_ANY
 wxEVT_NULL = _core_.wxEVT_NULL
 wxEVT_FIRST = _core_.wxEVT_FIRST
 wxEVT_USER_FIRST = _core_.wxEVT_USER_FIRST
@@ -5050,6 +5051,16 @@ class MouseEvent(Event):
         should occur for each delta.
         """
         return _core_.MouseEvent_GetWheelDelta(*args, **kwargs)
+
+    def GetWheelAxis(*args, **kwargs):
+        """
+        GetWheelAxis(self) -> int
+
+        Gets the axis the wheel operation concerns, 0 being the y axis as on
+        most mouse wheels, 1 is the x axis for things like MightyMouse scrolls
+        or horizontal trackpad scrolling.
+        """
+        return _core_.MouseEvent_GetWheelAxis(*args, **kwargs)
 
     def GetLinesPerAction(*args, **kwargs):
         """
@@ -6993,6 +7004,25 @@ _core_.DateEvent_swigregister(DateEvent)
 
 wxEVT_DATE_CHANGED = _core_.wxEVT_DATE_CHANGED
 EVT_DATE_CHANGED = wx.PyEventBinder( wxEVT_DATE_CHANGED, 1 )
+
+class EventBlocker(EvtHandler):
+    """Helper class to temporarily disable event handling for a window."""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, Window win, EventType type=wxEVT_ANY) -> EventBlocker
+
+        Helper class to temporarily disable event handling for a window.
+        """
+        _core_.EventBlocker_swiginit(self,_core_.new_EventBlocker(*args, **kwargs))
+    __swig_destroy__ = _core_.delete_EventBlocker
+    __del__ = lambda self : None;
+    def Block(*args, **kwargs):
+        """Block(self, EventType type)"""
+        return _core_.EventBlocker_Block(*args, **kwargs)
+
+_core_.EventBlocker_swigregister(EventBlocker)
 
 #---------------------------------------------------------------------------
 
@@ -10355,9 +10385,15 @@ class Window(EvtHandler):
         self.thisown = pre.thisown
         pre.thisown = 0
         if hasattr(self, '_setOORInfo'):
-            self._setOORInfo(self)
+            try:
+                self._setOORInfo(self)
+            except TypeError:
+                pass
         if hasattr(self, '_setCallbackInfo'):
-            self._setCallbackInfo(self, pre.__class__)
+            try:
+                self._setCallbackInfo(self, pre.__class__)
+            except TypeError:
+                pass
 
     def SendSizeEvent(self):
         self.GetEventHandler().ProcessEvent(wx.SizeEvent((-1,-1)))
