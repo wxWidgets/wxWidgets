@@ -113,6 +113,7 @@ wxMac
 wxX11:
 
 - Don't crash in wxWindow dtor if the window hadn't been really Create()d
+- Update wxChoice value when SetSelection() is called
 
 wxUniv:
 

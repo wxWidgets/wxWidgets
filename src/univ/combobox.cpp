@@ -389,8 +389,8 @@ void wxComboBox::SetSelection(int n)
     wxCHECK_RET( (n == wxNOT_FOUND || IsValid(n)), _T("invalid index in wxComboBox::Select") );
 
     GetLBox()->SetSelection(n);
-    if ( GetTextCtrl() )
-        GetTextCtrl()->SetValue(GetLBox()->GetString(n));
+
+    SetText(GetLBox()->GetString(n));
 }
 
 int wxComboBox::GetSelection() const
