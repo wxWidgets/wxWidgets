@@ -183,6 +183,9 @@ class WXDLLIMPEXP_RICHTEXT wxRichTextBuffer;
 // Resets the existing style before applying the new style
 #define wxRICHTEXT_SETSTYLE_RESET           0x40
 
+// Removes the given style instead of applying it
+#define wxRICHTEXT_SETSTYLE_REMOVE          0x80
+
 /*!
  * Flags for text insertion
  */
@@ -2318,6 +2321,9 @@ WXDLLIMPEXP_RICHTEXT bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wx
 WXDLLIMPEXP_RICHTEXT bool wxRichTextApplyStyle(wxRichTextAttr& destStyle, const wxTextAttrEx& style);
 WXDLLIMPEXP_RICHTEXT bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, wxRichTextAttr* compareWith = NULL);
 WXDLLIMPEXP_RICHTEXT bool wxRichTextApplyStyle(wxRichTextAttr& destStyle, const wxRichTextAttr& style, wxRichTextAttr* compareWith = NULL);
+
+// Remove attributes
+WXDLLIMPEXP_RICHTEXT bool wxRichTextRemoveStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style);
 
 /// Combine two bitlists
 WXDLLIMPEXP_RICHTEXT bool wxRichTextCombineBitlists(int& valueA, int valueB, int& flagsA, int flagsB);
