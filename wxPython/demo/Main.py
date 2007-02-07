@@ -1374,6 +1374,7 @@ class wxPythonDemo(wx.Frame):
     #---------------------------------------------
     
     def RecreateTree(self, evt=None):
+        self.tree.Freeze()
         self.tree.DeleteAllItems()
         self.root = self.tree.AddRoot("wxPython Overview")
         firstChild = None
@@ -1393,6 +1394,7 @@ class wxPythonDemo(wx.Frame):
             self.tree.Expand(firstChild)
         if filter:
             self.tree.ExpandAll()
+        self.tree.Thaw()
     
     def WriteText(self, text):
         if text[-1:] == '\n':
@@ -1685,9 +1687,17 @@ class wxPythonDemo(wx.Frame):
 
 
     def OnOpenWidgetInspector(self, evt):
-        # Activate the widget inspector that was mixed in with the
-        # app, see MyApp and MyApp.OnInit below.
-        wx.GetApp().ShowInspectionTool()
+        # Activate the widget inspection tool
+        from wx.lib.inspect import InspectionTool
+        if not InspectionTool().initialized:
+            InspectionTool().Init()
+
+        # Find a widget to be selected in the tree.  Use either the
+        # one under the cursor, if any, or this frame.
+        wnd = wx.FindWindowAtPointer()
+        if not wnd:
+            wnd = self
+        InspectionTool().Show(wnd, True)
 
         
     #---------------------------------------------
@@ -1789,8 +1799,7 @@ class MySplashScreen(wx.SplashScreen):
             self.Raise()
 
         
-import wx.lib.mixins.inspect
-class MyApp(wx.App, wx.lib.mixins.inspect.InspectionMixin):
+class MyApp(wx.App):
     def OnInit(self):
         """
         Create and show the splash screen.  It will then create and show
@@ -1811,9 +1820,6 @@ class MyApp(wx.App, wx.lib.mixins.inspect.InspectionMixin):
         splash = MySplashScreen()
         splash.Show()
 
-        # Setup the InspectionMixin
-        self.Init()
-        
         return True
 
 

@@ -37,6 +37,7 @@ enum Propagation_state
 
 wxEventType wxNewEventType();
 
+%constant wxEventType wxEVT_ANY;
 
 %constant wxEventType wxEVT_NULL;
 %constant wxEventType wxEVT_FIRST;
@@ -1086,6 +1087,12 @@ have been accumulated before scrolling.", "");
 taken, and one such action (for example, scrolling one increment)
 should occur for each delta.", "");
 
+    DocDeclStr(
+        int , GetWheelAxis() const,
+        "Gets the axis the wheel operation concerns, 0 being the y axis as on
+most mouse wheels, 1 is the x axis for things like MightyMouse scrolls
+or horizontal trackpad scrolling.", "");
+    
 
     DocDeclStr(
         int , GetLinesPerAction() const,
@@ -2673,6 +2680,21 @@ internally.", "");
 %pythoncode {
     EVT_DATE_CHANGED = wx.PyEventBinder( wxEVT_DATE_CHANGED, 1 )
 }
+
+
+//---------------------------------------------------------------------------
+
+DocStr(wxEventBlocker,
+"Helper class to temporarily disable event handling for a window.", "");
+
+class wxEventBlocker : public wxEvtHandler
+{
+public:
+    wxEventBlocker(wxWindow *win, wxEventType type = wxEVT_ANY);
+    virtual ~wxEventBlocker();
+
+    void Block(wxEventType type);
+};
 
 
 //---------------------------------------------------------------------------

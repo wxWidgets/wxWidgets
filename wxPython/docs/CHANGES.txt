@@ -1,6 +1,36 @@
 Recent Changes for wxPython
 =====================================================================
 
+2.9.0.0
+-------
+*
+
+wxGTK: Implemented support for underlined fonts in wx.StaticText
+
+wxGTK: wx.TopLevelWindow.SetSizeHints size increments now work
+
+Added wx.EventBlocker class 
+
+
+
+
+2.8.1.2
+-------
+*
+
+Added wx.ToolBar.SetToolNormalBitmap and SetToolDisabledBitmap
+methods.  (Keep in mind however that the disabled bitmap is currently
+generated on the fly by most native toolbar widgets, so this
+SetToolDisabledBitmap method won't have any affect on them...)
+
+Refactored the inspection tool such that it can be used as a wx.App
+mix-in class as it was used before (with the wx.lib.mixins.inspect
+module) and also as a non mix-in tool (using wx.lib.inspect.InspectionTool). 
+
+
+
+
+
 2.8.1.1
 -------
 * 19-Jan-2007
