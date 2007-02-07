@@ -52148,7 +52148,7 @@ _ACEOF
 _ACEOF
 
                 cat >>confdefs.h <<\_ACEOF
-#define wxUSE_OLE_ACTIVEX 1
+#define wxUSE_ACTIVEX 1
 _ACEOF
 
                 SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS oleauto"
