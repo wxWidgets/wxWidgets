@@ -36,6 +36,7 @@ demos/life/Makefile.in
 demos/Makefile.in
 demos/poem/Makefile.in
 Makefile.in
+samples/Makefile.in
 samples/access/Makefile.in
 samples/animate/Makefile.in
 samples/artprov/Makefile.in
