@@ -374,8 +374,6 @@ bool wxSpinCtrl::Create(wxWindow *parent,
 
     wxSpinButtonBase::SetRange(min, max);
 
-    m_oldValue = initial;
-
     // subclass the text ctrl to be able to intercept some events
     wxSetWindowUserData(GetBuddyHwnd(), this);
     m_wndProcBuddy = (WXFARPROC)wxSetWindowProc(GetBuddyHwnd(),
