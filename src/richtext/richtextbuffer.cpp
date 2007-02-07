@@ -1561,11 +1561,12 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
     bool parasOnly = ((flags & wxRICHTEXT_SETSTYLE_PARAGRAPHS_ONLY) != 0);
     bool charactersOnly = ((flags & wxRICHTEXT_SETSTYLE_CHARACTERS_ONLY) != 0);
     bool resetExistingStyle = ((flags & wxRICHTEXT_SETSTYLE_RESET) != 0);
+    bool removeStyle = ((flags & wxRICHTEXT_SETSTYLE_REMOVE) != 0);
 
     // Apply paragraph style first, if any
     wxRichTextAttr wholeStyle(style);
 
-    if (wholeStyle.HasParagraphStyleName() && GetStyleSheet())
+    if (!removeStyle && wholeStyle.HasParagraphStyleName() && GetStyleSheet())
     {
         wxRichTextParagraphStyleDefinition* def = GetStyleSheet()->FindParagraphStyle(wholeStyle.GetParagraphStyleName());
         if (def)
@@ -1576,7 +1577,7 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
     wxRichTextAttr characterAttributes(wholeStyle);
     characterAttributes.SetFlags(characterAttributes.GetFlags() & (wxTEXT_ATTR_CHARACTER));
 
-    if (characterAttributes.HasCharacterStyleName() && GetStyleSheet())
+    if (!removeStyle && characterAttributes.HasCharacterStyleName() && GetStyleSheet())
     {
         wxRichTextCharacterStyleDefinition* def = GetStyleSheet()->FindCharacterStyle(characterAttributes.GetCharacterStyleName());
         if (def)
@@ -1630,7 +1631,12 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
                 // to be included in the paragraph style
                 if ((paragraphStyle || parasOnly) && !charactersOnly)
                 {
-                    if (resetExistingStyle)
+                    if (removeStyle)
+                    {
+                        // Removes the given style from the paragraph
+                        wxRichTextRemoveStyle(newPara->GetAttributes(), style);
+                    }
+                    else if (resetExistingStyle)
                         newPara->GetAttributes() = wholeStyle;
                     else
                     {
@@ -1705,7 +1711,12 @@ bool wxRichTextParagraphLayoutBox::SetStyle(const wxRichTextRange& range, const 
                     {
                         wxRichTextObject* child = node2->GetData();
 
-                        if (resetExistingStyle)
+                        if (removeStyle)
+                        {
+                            // Removes the given style from the paragraph
+                            wxRichTextRemoveStyle(child->GetAttributes(), style);
+                        }
+                        else if (resetExistingStyle)
                             child->GetAttributes() = characterAttributes;
                         else
                         {
@@ -7095,6 +7106,17 @@ bool wxRichTextApplyStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style, 
         if (!(compareWith && compareWith->HasOutlineLevel() && compareWith->GetOutlineLevel() == style.GetOutlineLevel()))
             destStyle.SetOutlineLevel(style.GetOutlineLevel());
     }
+
+    return true;
+}
+
+// Remove attributes
+bool wxRichTextRemoveStyle(wxTextAttrEx& destStyle, const wxRichTextAttr& style)
+{
+    int flags = style.GetFlags();
+    int destFlags = destStyle.GetFlags();
+
+    destStyle.SetFlags(destFlags & ~flags);
 
     return true;
 }
