@@ -55,18 +55,18 @@ RSC=rc.exe
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivudll\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivu" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv28u_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivu" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv28u_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivu" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv290u_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivu" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv290u_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivu" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmswuniv28u_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
-# ADD RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivu" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmswuniv28u_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
+# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivu" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmswuniv290u_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
+# ADD RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivu" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmswuniv290u_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28u_core.lib wxbase28u.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv28u_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv28u_deprecated.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28u_core.lib wxbase28u.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv28u_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv28u_deprecated.lib"
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv29u_core.lib wxbase29u.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv290u_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv29u_deprecated.lib"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv29u_core.lib wxbase29u.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv290u_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv29u_deprecated.lib"
 
 !ELSEIF  "$(CFG)" == "deprecated - Win32 DLL Universal Unicode Debug"
 
@@ -80,18 +80,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivuddll\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivud" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv28ud_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivud" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv28ud_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivud" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv290ud_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivud" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv290ud_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivud" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmswuniv28ud_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivud" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmswuniv28ud_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivud" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmswuniv290ud_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
+# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivud" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmswuniv290ud_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28ud_core.lib wxbase28ud.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv28ud_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv28ud_deprecated.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28ud_core.lib wxbase28ud.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv28ud_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv28ud_deprecated.lib" /debug
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv29ud_core.lib wxbase29ud.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv290ud_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv29ud_deprecated.lib" /debug
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv29ud_core.lib wxbase29ud.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv290ud_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv29ud_deprecated.lib" /debug
 
 !ELSEIF  "$(CFG)" == "deprecated - Win32 DLL Universal Release"
 
@@ -105,18 +105,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivdll\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswuniv" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv28_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswuniv" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv28_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswuniv" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv290_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswuniv" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv290_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswuniv" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmswuniv28_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
-# ADD RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswuniv" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmswuniv28_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
+# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswuniv" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmswuniv290_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
+# ADD RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswuniv" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmswuniv290_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28_core.lib wxbase28.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv28_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv28_deprecated.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28_core.lib wxbase28.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv28_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv28_deprecated.lib"
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv29_core.lib wxbase29.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv290_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv29_deprecated.lib"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv29_core.lib wxbase29.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv290_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv29_deprecated.lib"
 
 !ELSEIF  "$(CFG)" == "deprecated - Win32 DLL Universal Debug"
 
@@ -130,18 +130,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivddll\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivd" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv28d_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivd" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv28d_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivd" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv290d_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivd" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv290d_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivd" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmswuniv28d_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivd" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmswuniv28d_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivd" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmswuniv290d_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
+# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswunivd" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmswuniv290d_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28d_core.lib wxbase28d.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv28d_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv28d_deprecated.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28d_core.lib wxbase28d.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv28d_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv28d_deprecated.lib" /debug
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv29d_core.lib wxbase29d.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv290d_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv29d_deprecated.lib" /debug
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv29d_core.lib wxbase29d.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv290d_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmswuniv29d_deprecated.lib" /debug
 
 !ELSEIF  "$(CFG)" == "deprecated - Win32 DLL Unicode Release"
 
@@ -155,18 +155,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswudll\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswu" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw28u_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswu" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw28u_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswu" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw290u_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswu" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw290u_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "_UNICODE" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswu" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmsw28u_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
-# ADD RSC /l 0x409 /d "__WXMSW__" /d "_UNICODE" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswu" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmsw28u_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
+# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "_UNICODE" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswu" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmsw290u_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
+# ADD RSC /l 0x409 /d "__WXMSW__" /d "_UNICODE" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswu" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmsw290u_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28u_core.lib wxbase28u.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw28u_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw28u_deprecated.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28u_core.lib wxbase28u.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw28u_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw28u_deprecated.lib"
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw29u_core.lib wxbase29u.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw290u_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw29u_deprecated.lib"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw29u_core.lib wxbase29u.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw290u_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw29u_deprecated.lib"
 
 !ELSEIF  "$(CFG)" == "deprecated - Win32 DLL Unicode Debug"
 
@@ -180,18 +180,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswuddll\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswud" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw28ud_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswud" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw28ud_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswud" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw290ud_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswud" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw290ud_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswud" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmsw28ud_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswud" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmsw28ud_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswud" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmsw290ud_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
+# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswud" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmsw290ud_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28ud_core.lib wxbase28ud.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw28ud_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw28ud_deprecated.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28ud_core.lib wxbase28ud.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw28ud_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw28ud_deprecated.lib" /debug
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw29ud_core.lib wxbase29ud.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw290ud_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw29ud_deprecated.lib" /debug
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw29ud_core.lib wxbase29ud.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw290ud_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw29ud_deprecated.lib" /debug
 
 !ELSEIF  "$(CFG)" == "deprecated - Win32 DLL Release"
 
@@ -205,18 +205,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswdll\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\msw" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw28_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\msw" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw28_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\msw" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw290_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\msw" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_deprecateddll.pch" /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw290_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "__WXMSW__" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\msw" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmsw28_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
-# ADD RSC /l 0x409 /d "__WXMSW__" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\msw" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmsw28_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
+# ADD BASE RSC /l 0x409 /d "__WXMSW__" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\msw" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmsw290_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
+# ADD RSC /l 0x409 /d "__WXMSW__" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\msw" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmsw290_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28_core.lib wxbase28.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw28_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw28_deprecated.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28_core.lib wxbase28.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw28_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw28_deprecated.lib"
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw29_core.lib wxbase29.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw290_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw29_deprecated.lib"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw29_core.lib wxbase29.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw290_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw29_deprecated.lib"
 
 !ELSEIF  "$(CFG)" == "deprecated - Win32 DLL Debug"
 
@@ -230,18 +230,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswddll\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswd" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw28d_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswd" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw28d_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswd" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw290d_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_dll\mswd" /I "..\..\src\deprecated\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_deprecateddll.pch" /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw290d_deprecated_vc_custom.pdb /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_DEPRECATED" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswd" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmsw28d_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswd" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmsw28d_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswd" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmsw290d_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
+# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\deprecated\..\..\..\lib\vc_dll\mswd" /i "..\..\src\deprecated\..\..\..\include" /d WXDLLNAME=wxmsw290d_deprecated_vc_custom /i "..\..\src\deprecated\..\..\include" /d "WXUSINGDLL" /d "WXMAKINGDLL_DEPRECATED" /i ..\..\src\deprecated
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28d_core.lib wxbase28d.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw28d_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw28d_deprecated.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28d_core.lib wxbase28d.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw28d_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw28d_deprecated.lib" /debug
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw29d_core.lib wxbase29d.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw290d_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw29d_deprecated.lib" /debug
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw29d_core.lib wxbase29d.lib /nologo /dll /machine:i386 /out:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw290d_deprecated_vc_custom.dll" /libpath:"..\..\src\deprecated\..\..\..\lib\vc_dll" /implib:"..\..\src\deprecated\..\..\..\lib\vc_dll\wxmsw29d_deprecated.lib" /debug
 
 !ELSEIF  "$(CFG)" == "deprecated - Win32 Universal Unicode Release"
 
@@ -255,16 +255,16 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivu\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswunivu" /I "..\..\src\deprecated\..\..\..\include" /W4 /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv28u_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswunivu" /I "..\..\src\deprecated\..\..\..\include" /W4 /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv28u_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswunivu" /I "..\..\src\deprecated\..\..\..\include" /W4 /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv29u_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswunivu" /I "..\..\src\deprecated\..\..\..\include" /W4 /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv29u_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv28u_deprecated.lib"
-# ADD LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv28u_deprecated.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv29u_deprecated.lib"
+# ADD LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv29u_deprecated.lib"
 
 !ELSEIF  "$(CFG)" == "deprecated - Win32 Universal Unicode Debug"
 
@@ -278,16 +278,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivud\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswunivud" /I "..\..\src\deprecated\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv28ud_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswunivud" /I "..\..\src\deprecated\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv28ud_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswunivud" /I "..\..\src\deprecated\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv29ud_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswunivud" /I "..\..\src\deprecated\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv29ud_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv28ud_deprecated.lib"
-# ADD LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv28ud_deprecated.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv29ud_deprecated.lib"
+# ADD LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv29ud_deprecated.lib"
 
 !ELSEIF  "$(CFG)" == "deprecated - Win32 Universal Release"
 
@@ -301,16 +301,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswuniv\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswuniv" /I "..\..\src\deprecated\..\..\..\include" /W4 /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv28_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswuniv" /I "..\..\src\deprecated\..\..\..\include" /W4 /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv28_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswuniv" /I "..\..\src\deprecated\..\..\..\include" /W4 /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv29_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswuniv" /I "..\..\src\deprecated\..\..\..\include" /W4 /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv29_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv28_deprecated.lib"
-# ADD LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv28_deprecated.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv29_deprecated.lib"
+# ADD LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv29_deprecated.lib"
 
 !ELSEIF  "$(CFG)" == "deprecated - Win32 Universal Debug"
 
@@ -324,16 +324,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivd\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswunivd" /I "..\..\src\deprecated\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv28d_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswunivd" /I "..\..\src\deprecated\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv28d_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswunivd" /I "..\..\src\deprecated\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv29d_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswunivd" /I "..\..\src\deprecated\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv29d_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv28d_deprecated.lib"
-# ADD LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv28d_deprecated.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv29d_deprecated.lib"
+# ADD LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmswuniv29d_deprecated.lib"
 
 !ELSEIF  "$(CFG)" == "deprecated - Win32 Unicode Release"
 
@@ -347,16 +347,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswu\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswu" /I "..\..\src\deprecated\..\..\..\include" /W4 /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw28u_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswu" /I "..\..\src\deprecated\..\..\..\include" /W4 /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw28u_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswu" /I "..\..\src\deprecated\..\..\..\include" /W4 /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw29u_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswu" /I "..\..\src\deprecated\..\..\..\include" /W4 /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw29u_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw28u_deprecated.lib"
-# ADD LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw28u_deprecated.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw29u_deprecated.lib"
+# ADD LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw29u_deprecated.lib"
 
 !ELSEIF  "$(CFG)" == "deprecated - Win32 Unicode Debug"
 
@@ -370,16 +370,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswud\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswud" /I "..\..\src\deprecated\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw28ud_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswud" /I "..\..\src\deprecated\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw28ud_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswud" /I "..\..\src\deprecated\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw29ud_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswud" /I "..\..\src\deprecated\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw29ud_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw28ud_deprecated.lib"
-# ADD LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw28ud_deprecated.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw29ud_deprecated.lib"
+# ADD LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw29ud_deprecated.lib"
 
 !ELSEIF  "$(CFG)" == "deprecated - Win32 Release"
 
@@ -393,16 +393,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_msw\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\msw" /I "..\..\src\deprecated\..\..\..\include" /W4 /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw28_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\msw" /I "..\..\src\deprecated\..\..\..\include" /W4 /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw28_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\msw" /I "..\..\src\deprecated\..\..\..\include" /W4 /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw29_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\msw" /I "..\..\src\deprecated\..\..\..\include" /W4 /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw29_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw28_deprecated.lib"
-# ADD LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw28_deprecated.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw29_deprecated.lib"
+# ADD LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw29_deprecated.lib"
 
 !ELSEIF  "$(CFG)" == "deprecated - Win32 Debug"
 
@@ -416,16 +416,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\deprecated\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswd\deprecated"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswd" /I "..\..\src\deprecated\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw28d_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswd" /I "..\..\src\deprecated\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw28d_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswd" /I "..\..\src\deprecated\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw29d_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\deprecated\..\..\..\lib\vc_lib\mswd" /I "..\..\src\deprecated\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw29d_deprecated.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_deprecatedlib.pch" /I "..\..\src\deprecated\..\..\include" /I "..\..\src\deprecated" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw28d_deprecated.lib"
-# ADD LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw28d_deprecated.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw29d_deprecated.lib"
+# ADD LIB32 /nologo /out:"..\..\src\deprecated\..\..\..\lib\vc_lib\wxmsw29d_deprecated.lib"
 
 !ENDIF
 

@@ -25,8 +25,20 @@ LDFLAGS =
 # Location and arguments of wx-config script 
 WX_CONFIG = wx-config
 
-# C++ flags to use with wxWidgets code 
-WX_CXXFLAGS = `$(WX_CONFIG) --cxxflags`
+# Port of the wx library to build against [gtk1,gtk2,msw,x11,motif,mgl,mac,$(shell $(WX_CONFIG) --selected-config | cut -d '-' -f 1)]
+WX_PORT = $(shell $(WX_CONFIG) --selected-config | cut -d '-' -f 1)
+
+# Use DLL build of wx library to use? [0,1,$(shell if test -z `$(WX_CONFIG) --selected-config | cut -d '-' -f 5`; then echo 1; else echo 0; fi)]
+WX_SHARED = $(shell if test -z `$(WX_CONFIG) --selected-config | cut -d '-' -f 5`; then echo 1; else echo 0; fi)
+
+# Compile Unicode build of wxWidgets? [0,1,$(shell $(WX_CONFIG) --selected-config | cut -d '-' -f 2 | sed 's/unicode/1/;s/ansi/0/')]
+WX_UNICODE = $(shell $(WX_CONFIG) --selected-config | cut -d '-' -f 2 | sed 's/unicode/1/;s/ansi/0/')
+
+# Use debug build of wxWidgets (define __WXDEBUG__)? [0,1,$(shell $(WX_CONFIG) --selected-config | cut -d '-' -f 3 | sed 's/debug/1/;s/release/0/')]
+WX_DEBUG = $(shell $(WX_CONFIG) --selected-config | cut -d '-' -f 3 | sed 's/debug/1/;s/release/0/')
+
+# Version of the wx library to build against. 
+WX_VERSION = $(shell $(WX_CONFIG) --selected-config | sed -e 's/.*-\([0-9]*\)\.\([0-9]*\)$$/\1\2/')
 
 
 
@@ -37,17 +49,41 @@ WX_CXXFLAGS = `$(WX_CONFIG) --cxxflags`
 ### Variables: ###
 
 CPPDEPS = -MT$@ -MF`echo $@ | sed -e 's,\.o$$,.d,'` -MD
-NETTEST_CXXFLAGS =  -I.  $(WX_CXXFLAGS) $(CPPFLAGS) $(CXXFLAGS)
+WX_VERSION_MAJOR = $(shell echo $(WX_VERSION) | cut -c1,1)
+WX_VERSION_MINOR = $(shell echo $(WX_VERSION) | cut -c2,2)
+WX_CONFIG_FLAGS = $(WX_CONFIG_DEBUG_FLAG) $(WX_CONFIG_UNICODE_FLAG) \
+	$(WX_CONFIG_SHARED_FLAG) --toolkit=$(WX_PORT) \
+	--version=$(WX_VERSION_MAJOR).$(WX_VERSION_MINOR)
+NETTEST_CXXFLAGS = -I. `$(WX_CONFIG) --cxxflags $(WX_CONFIG_FLAGS)` $(CPPFLAGS) \
+	$(CXXFLAGS)
 NETTEST_OBJECTS =  \
 	nettest_nettest.o
 
 ### Conditionally set variables: ###
 
+ifeq ($(WX_DEBUG),0)
+WX_CONFIG_DEBUG_FLAG = --debug=no
+endif
+ifeq ($(WX_DEBUG),1)
+WX_CONFIG_DEBUG_FLAG = --debug=yes
+endif
+ifeq ($(WX_UNICODE),0)
+WX_CONFIG_UNICODE_FLAG = --unicode=no
+endif
+ifeq ($(WX_UNICODE),1)
+WX_CONFIG_UNICODE_FLAG = --unicode=yes
+endif
+ifeq ($(WX_SHARED),0)
+WX_CONFIG_SHARED_FLAG = --static=yes
+endif
+ifeq ($(WX_SHARED),1)
+WX_CONFIG_SHARED_FLAG = --static=no
+endif
 
 
 ### Targets: ###
 
-all: nettest
+all: test_for_selected_wxbuild nettest
 
 install: all
 
@@ -58,8 +94,11 @@ clean:
 	rm -f ./*.d
 	rm -f nettest
 
+test_for_selected_wxbuild: 
+	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
+
 nettest: $(NETTEST_OBJECTS)
-	$(CXX) -o $@ $(NETTEST_OBJECTS) $(LDFLAGS)   `$(WX_CONFIG) --libs core,base`
+	$(CXX) -o $@ $(NETTEST_OBJECTS) $(LDFLAGS)   `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs core,base`
 
 nettest_nettest.o: ./nettest.cpp
 	$(CXX) -c -o $@ $(NETTEST_CXXFLAGS) $(CPPDEPS) $<

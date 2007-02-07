@@ -55,18 +55,18 @@ RSC=rc.exe
 # PROP Output_Dir "..\..\src\foldbar\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivudll\foldbar"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswunivu" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_foldbardll.pch" /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv28u_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswunivu" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_foldbardll.pch" /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv28u_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswunivu" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_foldbardll.pch" /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv290u_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswunivu" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivudll\wxprec_foldbardll.pch" /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv290u_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswunivu" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmswuniv28u_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
-# ADD RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswunivu" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmswuniv28u_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
+# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswunivu" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmswuniv290u_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
+# ADD RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "_UNICODE" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswunivu" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmswuniv290u_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28u_core.lib wxbase28u.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv28u_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv28u_foldbar.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28u_core.lib wxbase28u.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv28u_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv28u_foldbar.lib"
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv29u_core.lib wxbase29u.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv290u_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv29u_foldbar.lib"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv29u_core.lib wxbase29u.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv290u_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv29u_foldbar.lib"
 
 !ELSEIF  "$(CFG)" == "foldbar - Win32 DLL Universal Unicode Debug"
 
@@ -80,18 +80,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\foldbar\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivuddll\foldbar"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswunivud" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_foldbardll.pch" /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv28ud_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswunivud" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_foldbardll.pch" /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv28ud_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswunivud" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_foldbardll.pch" /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv290ud_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswunivud" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivuddll\wxprec_foldbardll.pch" /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv290ud_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswunivud" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmswuniv28ud_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswunivud" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmswuniv28ud_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswunivud" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmswuniv290ud_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
+# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswunivud" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmswuniv290ud_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28ud_core.lib wxbase28ud.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv28ud_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv28ud_foldbar.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28ud_core.lib wxbase28ud.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv28ud_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv28ud_foldbar.lib" /debug
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv29ud_core.lib wxbase29ud.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv290ud_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv29ud_foldbar.lib" /debug
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv29ud_core.lib wxbase29ud.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv290ud_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv29ud_foldbar.lib" /debug
 
 !ELSEIF  "$(CFG)" == "foldbar - Win32 DLL Universal Release"
 
@@ -105,18 +105,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\foldbar\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivdll\foldbar"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswuniv" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_foldbardll.pch" /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv28_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswuniv" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_foldbardll.pch" /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv28_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswuniv" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_foldbardll.pch" /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv290_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswuniv" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivdll\wxprec_foldbardll.pch" /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv290_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswuniv" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmswuniv28_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
-# ADD RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswuniv" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmswuniv28_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
+# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswuniv" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmswuniv290_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
+# ADD RSC /l 0x409 /d "__WXMSW__" /d "__WXUNIVERSAL__" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswuniv" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmswuniv290_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28_core.lib wxbase28.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv28_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv28_foldbar.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28_core.lib wxbase28.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv28_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv28_foldbar.lib"
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv29_core.lib wxbase29.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv290_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv29_foldbar.lib"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv29_core.lib wxbase29.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv290_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv29_foldbar.lib"
 
 !ELSEIF  "$(CFG)" == "foldbar - Win32 DLL Universal Debug"
 
@@ -130,18 +130,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\foldbar\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswunivddll\foldbar"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswunivd" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_foldbardll.pch" /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv28d_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswunivd" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_foldbardll.pch" /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv28d_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswunivd" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_foldbardll.pch" /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv290d_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswunivd" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswunivddll\wxprec_foldbardll.pch" /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv290d_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswunivd" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmswuniv28d_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswunivd" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmswuniv28d_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswunivd" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmswuniv290d_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
+# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXUNIVERSAL__" /d "__WXDEBUG__" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswunivd" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmswuniv290d_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28d_core.lib wxbase28d.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv28d_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv28d_foldbar.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv28d_core.lib wxbase28d.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv28d_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv28d_foldbar.lib" /debug
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv29d_core.lib wxbase29d.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv290d_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv29d_foldbar.lib" /debug
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmswuniv29d_core.lib wxbase29d.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv290d_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmswuniv29d_foldbar.lib" /debug
 
 !ELSEIF  "$(CFG)" == "foldbar - Win32 DLL Unicode Release"
 
@@ -155,18 +155,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\foldbar\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswudll\foldbar"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswu" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_foldbardll.pch" /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw28u_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswu" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_foldbardll.pch" /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw28u_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswu" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_foldbardll.pch" /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw290u_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswu" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswudll\wxprec_foldbardll.pch" /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw290u_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "_UNICODE" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswu" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmsw28u_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
-# ADD RSC /l 0x409 /d "__WXMSW__" /d "_UNICODE" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswu" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmsw28u_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
+# ADD BASE RSC /l 0x409 /d "__WXMSW__" /d "_UNICODE" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswu" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmsw290u_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
+# ADD RSC /l 0x409 /d "__WXMSW__" /d "_UNICODE" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswu" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmsw290u_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28u_core.lib wxbase28u.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw28u_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw28u_foldbar.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28u_core.lib wxbase28u.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw28u_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw28u_foldbar.lib"
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw29u_core.lib wxbase29u.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw290u_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw29u_foldbar.lib"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregexu.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw29u_core.lib wxbase29u.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw290u_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw29u_foldbar.lib"
 
 !ELSEIF  "$(CFG)" == "foldbar - Win32 DLL Unicode Debug"
 
@@ -180,18 +180,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\foldbar\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswuddll\foldbar"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswud" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_foldbardll.pch" /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw28ud_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswud" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_foldbardll.pch" /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw28ud_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswud" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_foldbardll.pch" /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw290ud_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswud" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswuddll\wxprec_foldbardll.pch" /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw290ud_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswud" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmsw28ud_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswud" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmsw28ud_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswud" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmsw290ud_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
+# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /d "_UNICODE" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswud" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmsw290ud_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28ud_core.lib wxbase28ud.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw28ud_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw28ud_foldbar.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28ud_core.lib wxbase28ud.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw28ud_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw28ud_foldbar.lib" /debug
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw29ud_core.lib wxbase29ud.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw290ud_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw29ud_foldbar.lib" /debug
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexud.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw29ud_core.lib wxbase29ud.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw290ud_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw29ud_foldbar.lib" /debug
 
 !ELSEIF  "$(CFG)" == "foldbar - Win32 DLL Release"
 
@@ -205,18 +205,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\foldbar\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswdll\foldbar"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\msw" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_foldbardll.pch" /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw28_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\msw" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_foldbardll.pch" /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw28_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\msw" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_foldbardll.pch" /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw290_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\msw" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswdll\wxprec_foldbardll.pch" /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw290_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "__WXMSW__" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "__WXMSW__" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\msw" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmsw28_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
-# ADD RSC /l 0x409 /d "__WXMSW__" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\msw" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmsw28_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
+# ADD BASE RSC /l 0x409 /d "__WXMSW__" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\msw" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmsw290_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
+# ADD RSC /l 0x409 /d "__WXMSW__" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\msw" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmsw290_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28_core.lib wxbase28.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw28_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw28_foldbar.lib"
-# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28_core.lib wxbase28.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw28_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw28_foldbar.lib"
+# ADD BASE LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw29_core.lib wxbase29.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw290_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw29_foldbar.lib"
+# ADD LINK32 wxtiff.lib wxjpeg.lib wxpng.lib wxzlib.lib wxregex.lib wxexpat.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw29_core.lib wxbase29.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw290_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw29_foldbar.lib"
 
 !ELSEIF  "$(CFG)" == "foldbar - Win32 DLL Debug"
 
@@ -230,18 +230,18 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\foldbar\..\..\..\lib\vc_dll"
 # PROP Intermediate_Dir "vc_mswddll\foldbar"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswd" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_foldbardll.pch" /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw28d_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswd" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_foldbardll.pch" /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw28d_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswd" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_foldbardll.pch" /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw290d_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_dll\mswd" /I "..\..\src\foldbar\..\..\..\include" /W4 /Yu"wx/wxprec.h" /Fp"vc_mswddll\wxprec_foldbardll.pch" /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw290d_foldbar_vc_custom.pdb /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /c
 # ADD BASE MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /mktyplib203 /win32
 # ADD MTL /nologo /D "WIN32" /D "_USRDLL" /D "DLL_EXPORTS" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "WXUSINGDLL" /D "WXMAKINGDLL_FOLDBAR" /mktyplib203 /win32
-# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswd" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmsw28d_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
-# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswd" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmsw28d_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswd" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmsw290d_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
+# ADD RSC /l 0x409 /d "_DEBUG" /d "__WXMSW__" /d "__WXDEBUG__" /i "..\..\src\foldbar\..\..\..\lib\vc_dll\mswd" /i "..\..\src\foldbar\..\..\..\include" /d WXDLLNAME=wxmsw290d_foldbar_vc_custom /i "..\..\src\foldbar\..\..\include" /d "WXUSINGDLL" /d WXMAKINGDLL_FOLDBAR
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LINK32=link.exe
-# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28d_core.lib wxbase28d.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw28d_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw28d_foldbar.lib" /debug
-# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw28d_core.lib wxbase28d.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw28d_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw28d_foldbar.lib" /debug
+# ADD BASE LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw29d_core.lib wxbase29d.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw290d_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw29d_foldbar.lib" /debug
+# ADD LINK32 wxtiffd.lib wxjpegd.lib wxpngd.lib wxzlibd.lib wxregexd.lib wxexpatd.lib kernel32.lib user32.lib gdi32.lib comdlg32.lib winspool.lib winmm.lib shell32.lib comctl32.lib ole32.lib oleaut32.lib uuid.lib rpcrt4.lib advapi32.lib wsock32.lib odbc32.lib wxmsw29d_core.lib wxbase29d.lib /nologo /dll /machine:i386 /out:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw290d_foldbar_vc_custom.dll" /libpath:"..\..\src\foldbar\..\..\..\lib\vc_dll" /implib:"..\..\src\foldbar\..\..\..\lib\vc_dll\wxmsw29d_foldbar.lib" /debug
 
 !ELSEIF  "$(CFG)" == "foldbar - Win32 Universal Unicode Release"
 
@@ -255,16 +255,16 @@ LINK32=link.exe
 # PROP Output_Dir "..\..\src\foldbar\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivu\foldbar"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswunivu" /I "..\..\src\foldbar\..\..\..\include" /W4 /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv28u_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswunivu" /I "..\..\src\foldbar\..\..\..\include" /W4 /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv28u_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswunivu" /I "..\..\src\foldbar\..\..\..\include" /W4 /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv29u_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswunivu" /I "..\..\src\foldbar\..\..\..\include" /W4 /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv29u_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivu\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv28u_foldbar.lib"
-# ADD LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv28u_foldbar.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv29u_foldbar.lib"
+# ADD LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv29u_foldbar.lib"
 
 !ELSEIF  "$(CFG)" == "foldbar - Win32 Universal Unicode Debug"
 
@@ -278,16 +278,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\foldbar\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivud\foldbar"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswunivud" /I "..\..\src\foldbar\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv28ud_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswunivud" /I "..\..\src\foldbar\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv28ud_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswunivud" /I "..\..\src\foldbar\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv29ud_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswunivud" /I "..\..\src\foldbar\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv29ud_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivud\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv28ud_foldbar.lib"
-# ADD LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv28ud_foldbar.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv29ud_foldbar.lib"
+# ADD LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv29ud_foldbar.lib"
 
 !ELSEIF  "$(CFG)" == "foldbar - Win32 Universal Release"
 
@@ -301,16 +301,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\foldbar\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswuniv\foldbar"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswuniv" /I "..\..\src\foldbar\..\..\..\include" /W4 /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv28_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswuniv" /I "..\..\src\foldbar\..\..\..\include" /W4 /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv28_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswuniv" /I "..\..\src\foldbar\..\..\..\include" /W4 /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv29_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswuniv" /I "..\..\src\foldbar\..\..\..\include" /W4 /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv29_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswuniv\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "__WXUNIVERSAL__" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv28_foldbar.lib"
-# ADD LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv28_foldbar.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv29_foldbar.lib"
+# ADD LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv29_foldbar.lib"
 
 !ELSEIF  "$(CFG)" == "foldbar - Win32 Universal Debug"
 
@@ -324,16 +324,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\foldbar\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswunivd\foldbar"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswunivd" /I "..\..\src\foldbar\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv28d_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswunivd" /I "..\..\src\foldbar\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv28d_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswunivd" /I "..\..\src\foldbar\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv29d_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswunivd" /I "..\..\src\foldbar\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv29d_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswunivd\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXUNIVERSAL__" /D "__WXDEBUG__" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv28d_foldbar.lib"
-# ADD LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv28d_foldbar.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv29d_foldbar.lib"
+# ADD LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmswuniv29d_foldbar.lib"
 
 !ELSEIF  "$(CFG)" == "foldbar - Win32 Unicode Release"
 
@@ -347,16 +347,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\foldbar\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswu\foldbar"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswu" /I "..\..\src\foldbar\..\..\..\include" /W4 /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw28u_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswu" /I "..\..\src\foldbar\..\..\..\include" /W4 /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw28u_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswu" /I "..\..\src\foldbar\..\..\..\include" /W4 /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw29u_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswu" /I "..\..\src\foldbar\..\..\..\include" /W4 /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw29u_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswu\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw28u_foldbar.lib"
-# ADD LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw28u_foldbar.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw29u_foldbar.lib"
+# ADD LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw29u_foldbar.lib"
 
 !ELSEIF  "$(CFG)" == "foldbar - Win32 Unicode Debug"
 
@@ -370,16 +370,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\foldbar\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswud\foldbar"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswud" /I "..\..\src\foldbar\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw28ud_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswud" /I "..\..\src\foldbar\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw28ud_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswud" /I "..\..\src\foldbar\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw29ud_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswud" /I "..\..\src\foldbar\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw29ud_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswud\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /D "_UNICODE" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw28ud_foldbar.lib"
-# ADD LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw28ud_foldbar.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw29ud_foldbar.lib"
+# ADD LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw29ud_foldbar.lib"
 
 !ELSEIF  "$(CFG)" == "foldbar - Win32 Release"
 
@@ -393,16 +393,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\foldbar\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_msw\foldbar"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\msw" /I "..\..\src\foldbar\..\..\..\include" /W4 /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw28_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
-# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\msw" /I "..\..\src\foldbar\..\..\..\include" /W4 /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw28_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
+# ADD BASE CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\msw" /I "..\..\src\foldbar\..\..\..\include" /W4 /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw29_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
+# ADD CPP /nologo /FD /MD /O2 /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\msw" /I "..\..\src\foldbar\..\..\..\include" /W4 /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw29_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_msw\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "__WXMSW__" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw28_foldbar.lib"
-# ADD LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw28_foldbar.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw29_foldbar.lib"
+# ADD LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw29_foldbar.lib"
 
 !ELSEIF  "$(CFG)" == "foldbar - Win32 Debug"
 
@@ -416,16 +416,16 @@ LIB32=link.exe -lib
 # PROP Output_Dir "..\..\src\foldbar\..\..\..\lib\vc_lib"
 # PROP Intermediate_Dir "vc_mswd\foldbar"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswd" /I "..\..\src\foldbar\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw28d_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
-# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswd" /I "..\..\src\foldbar\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw28d_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
+# ADD BASE CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswd" /I "..\..\src\foldbar\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw29d_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
+# ADD CPP /nologo /FD /MDd /Od /GR /EHsc /I "..\..\src\foldbar\..\..\..\lib\vc_lib\mswd" /I "..\..\src\foldbar\..\..\..\include" /W4 /Zi /Gm /GZ /Fd..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw29d_foldbar.pdb /Yu"wx/wxprec.h" /Fp"vc_mswd\wxprec_foldbarlib.pch" /I "..\..\src\foldbar\..\..\include" /D "WIN32" /D "_LIB" /D "_DEBUG" /D "__WXMSW__" /D "__WXDEBUG__" /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
 # ADD BASE BSC32 /nologo
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
-# ADD BASE LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw28d_foldbar.lib"
-# ADD LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw28d_foldbar.lib"
+# ADD BASE LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw29d_foldbar.lib"
+# ADD LIB32 /nologo /out:"..\..\src\foldbar\..\..\..\lib\vc_lib\wxmsw29d_foldbar.lib"
 
 !ENDIF
 

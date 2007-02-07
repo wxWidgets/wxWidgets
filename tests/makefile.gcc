@@ -13,7 +13,7 @@ include ../build/msw/config.gcc
 ### Variables: ###
 
 CPPDEPS = -MT$@ -MF$@.d -MD
-WX_RELEASE_NODOT = 28
+WX_RELEASE_NODOT = 29
 OBJS = \
 	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
 LIBDIRNAME = .\..\lib\gcc_$(LIBTYPE_SUFFIX)$(CFG)

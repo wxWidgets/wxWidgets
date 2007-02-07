@@ -39,7 +39,7 @@ wx_top_builddir = @wx_top_builddir@
 ### Variables: ###
 
 DESTDIR = 
-WX_RELEASE = 2.8
+WX_RELEASE = 2.9
 WX_VERSION = $(WX_RELEASE).0
 LIBDIRNAME = $(wx_top_builddir)/lib
 ERASE_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
