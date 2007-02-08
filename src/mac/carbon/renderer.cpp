@@ -473,8 +473,16 @@ wxRendererMac::DrawComboBoxDropButton(wxWindow *win,
                               const wxRect& rect,
                               int flags)
 {
+    int kind;
+    if (flags & wxCONTROL_SIZE_SMALL)
+        kind = kThemeArrowButtonSmall;
+    else if (flags & wxCONTROL_SIZE_MINI)
+        kind = kThemeArrowButtonMini;
+    else
+        kind = kThemeArrowButton;
+    
     DrawMacThemeButton(win, dc, rect, flags,
-                       kThemeArrowButton, kThemeAdornmentArrowDownArrow);
+                       kind, kThemeAdornmentArrowDownArrow);
 }
     
 void
@@ -483,7 +491,13 @@ wxRendererMac::DrawPushButton(wxWindow *win,
                               const wxRect& rect,
                               int flags)
 {
+    int kind;
+    if (flags & wxCONTROL_SIZE_SMALL)
+        kind = kThemeBevelButtonSmall;
+    else
+        kind = kThemeBevelButton;
+
     DrawMacThemeButton(win, dc, rect, flags,
-                       kThemeBevelButton, kThemeAdornmentNone);
+                       kind, kThemeAdornmentNone);
 }
     

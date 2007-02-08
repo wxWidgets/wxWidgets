@@ -1347,6 +1347,11 @@ void wxComboCtrlBase::DrawButton( wxDC& dc, const wxRect& rect, int paintBg )
         }
 
         // Draw standard button
+        if (GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_SMALL)
+            drawState |= wxCONTROL_SIZE_SMALL;
+        else if (GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_MINI)
+            drawState |= wxCONTROL_SIZE_MINI;
+        
         wxRendererNative::Get().DrawComboBoxDropButton(this,
                                                        dc,
                                                        drawRect,
@@ -1379,6 +1384,11 @@ void wxComboCtrlBase::DrawButton( wxDC& dc, const wxRect& rect, int paintBg )
                 dc.SetBrush(bgCol);
                 dc.DrawRectangle(rect);
             }
+
+            if (GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_SMALL)
+                drawState |= wxCONTROL_SIZE_SMALL;
+            else if (GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_MINI)
+                drawState |= wxCONTROL_SIZE_MINI;
 
             wxRendererNative::Get().DrawPushButton(this,
                                                    dc,
