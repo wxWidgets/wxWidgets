@@ -94,7 +94,7 @@
 // the proper solution is to use wxAppTraits to abstract the base/GUI-dependent
 // operation of waiting for the thread to terminate and is already implemented
 // in cvs HEAD, this is just a backwards compatible hack for 2.8
-int wxRunningEventLoopCount = 0;
+WXDLLIMPEXP_DATA_BASE(int) wxRunningEventLoopCount = 0;
 
 // ----------------------------------------------------------------------------
 // constants
