@@ -16,6 +16,13 @@
 
 #if wxUSE_DATEPICKCTRL
 
+// this is currently defined in wx/msw/setup.h but not for MSW configure builds
+// and other ports which only have the generic version anyhow, so provide a
+// fallback definition here for them
+#ifndef wxUSE_DATEPICKCTRL_GENERIC
+    #define wxUSE_DATEPICKCTRL_GENERIC 0
+#endif
+
 #include "wx/control.h"         // the base class
 #include "wx/datetime.h"
 
