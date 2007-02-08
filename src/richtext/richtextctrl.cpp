@@ -438,7 +438,7 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
     // See if we need to change the cursor
     
     {
-        if (hit != wxRICHTEXT_HITTEST_NONE & !(hit & wxRICHTEXT_HITTEST_OUTSIDE))
+        if (hit != wxRICHTEXT_HITTEST_NONE && !(hit & wxRICHTEXT_HITTEST_OUTSIDE))
         {
             wxTextAttrEx attr;
             if (GetStyle(position, attr))
