@@ -550,6 +550,8 @@ public:
 
     wxSizerItemList& GetChildren()
         { return m_children; }
+    const wxSizerItemList& GetChildren() const
+        { return m_children; }
 
     void SetDimension( int x, int y, int width, int height );
 
