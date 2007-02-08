@@ -89,7 +89,7 @@ gtk_pizza_get_type ()
 
     if (!pizza_type)
     {
-        static const GTypeInfo pizza_info =
+        const GTypeInfo pizza_info =
         {
             sizeof (GtkPizzaClass),
             NULL,           /* base_init */

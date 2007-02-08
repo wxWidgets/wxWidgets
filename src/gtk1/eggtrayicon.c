@@ -135,7 +135,7 @@ egg_tray_icon_get_type (void)
 
   if (our_type == 0)
     {
-      static const GTypeInfo our_info =
+      const GTypeInfo our_info =
       {
 	sizeof (EggTrayIconClass),
 	(GBaseInitFunc) NULL,
