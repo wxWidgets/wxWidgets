@@ -231,15 +231,17 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
         }
     }
 
-    // reset the skipped flag to false as it might have been set to true in
-    // ProcessEvent() above
-    event.Skip(false);
-
     if ( evType == wxEVT_PAINT )
     {
         m_scrollHelper->HandleOnPaint((wxPaintEvent &)event);
         return true;
     }
+
+    // reset the skipped flag (which might have been set to true in
+    // ProcessEvent() above) to be able to test it below
+    bool wasSkipped = event.GetSkipped();
+    if ( wasSkipped )
+        event.Skip(false);
 
     if ( evType == wxEVT_SCROLLWIN_TOP ||
          evType == wxEVT_SCROLLWIN_BOTTOM ||
@@ -250,8 +252,16 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
          evType == wxEVT_SCROLLWIN_THUMBTRACK ||
          evType == wxEVT_SCROLLWIN_THUMBRELEASE )
     {
-            m_scrollHelper->HandleOnScroll((wxScrollWinEvent &)event);
-            return !event.GetSkipped();
+        m_scrollHelper->HandleOnScroll((wxScrollWinEvent &)event);
+        if ( !event.GetSkipped() )
+        {
+            // it makes sense to indicate that we processed the message as we
+            // did scroll the window (and also notice that wxAutoScrollTimer
+            // relies on our return value to stop scrolling when we are at top
+            // or bottom already)
+            processed = true;
+            wasSkipped = false;
+        }
     }
 
     if ( evType == wxEVT_ENTER_WINDOW )
@@ -271,10 +281,17 @@ bool wxScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
     else if ( evType == wxEVT_CHAR )
     {
         m_scrollHelper->HandleOnChar((wxKeyEvent &)event);
-        return !event.GetSkipped();
+        if ( !event.GetSkipped() )
+        {
+            processed = true;
+            wasSkipped = false;
+        }
     }
 
-    return false;
+    if ( processed )
+        event.Skip(wasSkipped);
+
+    return processed;
 }
 
 // ----------------------------------------------------------------------------
