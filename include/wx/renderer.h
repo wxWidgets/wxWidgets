@@ -62,6 +62,11 @@ enum
     wxCONTROL_CHECKABLE  = 0x00000080,  // (menu) item can be checked
     wxCONTROL_UNDETERMINED = wxCONTROL_CHECKABLE, // (check) undetermined state
 
+    wxCONTROL_SIZE_NORMAL = 0x00000100,
+    wxCONTROL_SIZE_LARGE  = 0x00000200,
+    wxCONTROL_SIZE_SMALL  = 0x00000400,
+    wxCONTROL_SIZE_MINI   = 0x00000800,
+
     wxCONTROL_FLAGS_MASK = 0x000000ff,
 
     // this is a pseudo flag not used directly by wxRenderer but rather by some
