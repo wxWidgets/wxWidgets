@@ -67,7 +67,7 @@ enum
     wxCONTROL_SIZE_SMALL  = 0x00000400,
     wxCONTROL_SIZE_MINI   = 0x00000800,
 
-    wxCONTROL_FLAGS_MASK = 0x000000ff,
+    wxCONTROL_FLAGS_MASK = 0x00000fff,
 
     // this is a pseudo flag not used directly by wxRenderer but rather by some
     // controls internally
