@@ -586,19 +586,6 @@ MyFrame::MyFrame(wxFrame* parent,
     m_textWindow = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
 }
 
-#if USE_GENERIC_TBAR
-
-wxToolBar* MyFrame::OnCreateToolBar(long style,
-                                    wxWindowID id,
-                                    const wxString& name)
-{
-    return (wxToolBar *)new wxToolBarSimple(this, id,
-                                            wxDefaultPosition, wxDefaultSize,
-                                            style, name);
-}
-
-#endif // USE_GENERIC_TBAR
-
 void MyFrame::LayoutChildren()
 {
     wxSize size = GetClientSize();
