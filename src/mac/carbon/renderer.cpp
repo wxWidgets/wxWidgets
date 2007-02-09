@@ -42,7 +42,7 @@ public:
         wxHeaderButtonParams* params = NULL );
 
     virtual int GetHeaderButtonHeight(wxWindow *win);
-    
+
     // draw the expanded/collapsed icon for a tree control item
     virtual void DrawTreeItemButton( wxWindow *win,
         wxDC& dc,
@@ -61,12 +61,12 @@ public:
                                         wxDC& dc,
                                         const wxRect& rect,
                                         int flags = 0);
-    
+
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,
                                 const wxRect& rect,
                                 int flags = 0);
-    
+
     virtual void DrawItemSelectionRect(wxWindow *win,
                                        wxDC& dc,
                                        const wxRect& rect,
@@ -79,7 +79,7 @@ private:
                             int flags,
                             int kind,
                             int adornment);
-        
+
     // the tree buttons
     wxBitmap m_bmpTreeExpanded;
     wxBitmap m_bmpTreeCollapsed;
@@ -168,7 +168,7 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
             // The down arrow is drawn automatically, change it to an up arrow if needed.
             if ( sortArrow == wxHDR_SORT_ICON_UP )
                 drawInfo.adornment = kThemeAdornmentHeaderButtonSortUp;
-                
+
             HIThemeDrawButton( &headerRect, &drawInfo, cgContext, kHIThemeOrientationNormal, &labelRect );
 
             // If we don't want any arrows we need to draw over the one already there
@@ -181,7 +181,7 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
                 headerRect.size.width += 25;
                 HIThemeDrawButton( &headerRect, &drawInfo, cgContext, kHIThemeOrientationNormal, &labelRect );
                 CGContextRestoreGState( cgContext );
-            }                
+            }
         }
 
 #if wxMAC_USE_CORE_GRAPHICS
@@ -233,7 +233,7 @@ void wxRendererMac::DrawTreeItemButton( wxWindow *win,
     const wxCoord y = rect.y;
     const wxCoord w = rect.width;
     const wxCoord h = rect.height;
-#endif    
+#endif
 
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
 
@@ -283,10 +283,10 @@ void wxRendererMac::DrawTreeItemButton( wxWindow *win,
             // Apple mailing list posts say to use the arrow adornment constants, but those don't work.
             // We need to set the value using the 'old' DrawThemeButton constants instead.
             drawInfo.value = (flags & wxCONTROL_EXPANDED) ? kThemeDisclosureDown : kThemeDisclosureRight;
-            drawInfo.adornment = kThemeAdornmentNone; 
+            drawInfo.adornment = kThemeAdornmentNone;
 
             HIThemeDrawButton( &headerRect, &drawInfo, cgContext, kHIThemeOrientationNormal, &labelRect );
-            
+
         }
 
 #if wxMAC_USE_CORE_GRAPHICS
@@ -370,7 +370,7 @@ wxRendererMac::DrawItemSelectionRect(wxWindow *win,
                                      const wxRect& rect,
                                      int flags )
 {
-    RGBColor selColor; 
+    RGBColor selColor;
     if (flags & wxCONTROL_SELECTED)
     {
         if (flags & wxCONTROL_FOCUSED)
@@ -378,7 +378,7 @@ wxRendererMac::DrawItemSelectionRect(wxWindow *win,
         else
             GetThemeBrushAsColor(kThemeBrushSecondaryHighlightColor, 32, true, &selColor);
     }
-    
+
     wxBrush selBrush = wxBrush( wxColour( selColor.red, selColor.green, selColor.blue ), wxSOLID );
 
     dc.SetPen( *wxTRANSPARENT_PEN );
@@ -474,17 +474,17 @@ wxRendererMac::DrawComboBoxDropButton(wxWindow *win,
                               int flags)
 {
     int kind;
-    if (flags & wxCONTROL_SIZE_SMALL)
+    if (win->GetWindowVariant() == wxWINDOW_VARIANT_SMALL || (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_SMALL))
         kind = kThemeArrowButtonSmall;
-    else if (flags & wxCONTROL_SIZE_MINI)
+    else if (win->GetWindowVariant() == wxWINDOW_VARIANT_MINI || (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_MINI))
         kind = kThemeArrowButtonMini;
     else
         kind = kThemeArrowButton;
-    
+
     DrawMacThemeButton(win, dc, rect, flags,
                        kind, kThemeAdornmentArrowDownArrow);
 }
-    
+
 void
 wxRendererMac::DrawPushButton(wxWindow *win,
                               wxDC& dc,
@@ -492,7 +492,10 @@ wxRendererMac::DrawPushButton(wxWindow *win,
                               int flags)
 {
     int kind;
-    if (flags & wxCONTROL_SIZE_SMALL)
+    if (win->GetWindowVariant() == wxWINDOW_VARIANT_SMALL || (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_SMALL))
+        kind = kThemeBevelButtonSmall;
+    // There is no kThemeBevelButtonMini, but in this case, use Small
+    else if (win->GetWindowVariant() == wxWINDOW_VARIANT_MINI || (win->GetParent() && win->GetParent()->GetWindowVariant() == wxWINDOW_VARIANT_MINI))
         kind = kThemeBevelButtonSmall;
     else
         kind = kThemeBevelButton;
@@ -500,4 +503,4 @@ wxRendererMac::DrawPushButton(wxWindow *win,
     DrawMacThemeButton(win, dc, rect, flags,
                        kind, kThemeAdornmentNone);
 }
-    
+
