@@ -273,6 +273,7 @@ protected: // event stuff
     void OnMouseLeftDown(wxMouseEvent& event);
     void OnMouseLeftUp(wxMouseEvent& event);
     void OnMouseMove(wxMouseEvent& event);
+    void OnMouseCaptureLost(wxMouseCaptureLostEvent& event);
     void OnScroll(wxScrollWinEvent& event);
 
     DECLARE_EVENT_TABLE()
@@ -743,6 +744,7 @@ BEGIN_EVENT_TABLE(MyAutoTimedScrollingWindow, wxScrolledWindow)
     EVT_LEFT_DOWN(MyAutoTimedScrollingWindow::OnMouseLeftDown)
     EVT_LEFT_UP(MyAutoTimedScrollingWindow::OnMouseLeftUp)
     EVT_MOTION(MyAutoTimedScrollingWindow::OnMouseMove)
+    EVT_MOUSE_CAPTURE_LOST(MyAutoTimedScrollingWindow::OnMouseCaptureLost)
     EVT_SCROLLWIN(MyAutoTimedScrollingWindow::OnScroll)
 END_EVENT_TABLE()
 
@@ -1011,6 +1013,12 @@ void MyAutoTimedScrollingWindow::OnMouseMove(wxMouseEvent& event)
             CaptureMouse();
         }
     }
+}
+
+void MyAutoTimedScrollingWindow::OnMouseCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
+{
+    // we only capture mouse for timed scrolling, so nothing is needed here
+    // other than making sure to not call event.Skip()
 }
 
 void MyAutoTimedScrollingWindow::OnScroll(wxScrollWinEvent& event)
