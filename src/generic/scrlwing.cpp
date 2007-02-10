@@ -41,6 +41,10 @@
     #include "wx/sizer.h"
 #endif
 
+#ifdef __WXMAC__
+#include "wx/scrolbar.h"
+#endif
+
 #include "wx/recguard.h"
 
 #ifdef __WXMSW__
@@ -464,6 +468,22 @@ wxWindow *wxScrollHelper::GetTargetWindow() const
     return m_targetWindow;
 }
 
+#ifdef __WXMAC__
+static bool wxScrolledWindowHasChildren(wxWindow* win)
+{
+    wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
+    while ( node )
+    {
+        wxWindow* child = node->GetData();
+        if ( !child->IsKindOf(CLASSINFO(wxScrollBar)) )
+            return true;
+
+        node = node->GetNext();
+    }
+    return false;
+}
+#endif
+
 // ----------------------------------------------------------------------------
 // scrolling implementation itself
 // ----------------------------------------------------------------------------
@@ -482,7 +502,8 @@ void wxScrollHelper::HandleOnScroll(wxScrollWinEvent& event)
     bool needsRefresh = false;
 #ifdef __WXMAC__
     // OS X blocks on immediate redraws, so make this a refresh
-    needsRefresh = true;
+    if (!wxScrolledWindowHasChildren(m_targetWindow))
+      needsRefresh = true;
 #endif
     int dx = 0,
         dy = 0;
