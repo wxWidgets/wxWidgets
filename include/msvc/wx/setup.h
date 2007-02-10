@@ -30,9 +30,9 @@
         #endif
 
         #ifdef _DEBUG
-            #pragma comment(lib,"wxbase290ud")
-            #pragma comment(lib,"wxbase290ud_net")
-            #pragma comment(lib,"wxbase290ud_xml")
+            #pragma comment(lib,"wxbase29ud")
+            #pragma comment(lib,"wxbase29ud_net")
+            #pragma comment(lib,"wxbase29ud_xml")
             #if wxUSE_REGEX
                 #pragma comment(lib,"wxregexud")
             #endif
@@ -53,35 +53,35 @@
                 #if wxUSE_ZLIB
                     #pragma comment(lib,"wxzlibd")
                 #endif
-                #pragma comment(lib,"wxmsw290ud_adv")
-                #pragma comment(lib,"wxmsw290ud_core")
-                #pragma comment(lib,"wxmsw290ud_html")
+                #pragma comment(lib,"wxmsw29ud_adv")
+                #pragma comment(lib,"wxmsw29ud_core")
+                #pragma comment(lib,"wxmsw29ud_html")
                 #if wxUSE_GLCANVAS
-                    #pragma comment(lib,"wxmsw290ud_gl")
+                    #pragma comment(lib,"wxmsw29ud_gl")
                 #endif
                 #if wxUSE_DEBUGREPORT
-                    #pragma comment(lib,"wxmsw290ud_qa")
+                    #pragma comment(lib,"wxmsw29ud_qa")
                 #endif
                 #if wxUSE_XRC
-                    #pragma comment(lib,"wxmsw290ud_xrc")
+                    #pragma comment(lib,"wxmsw29ud_xrc")
                 #endif
                 #if wxUSE_AUI
-                    #pragma comment(lib,"wxmsw290ud_aui")
+                    #pragma comment(lib,"wxmsw29ud_aui")
                 #endif
                 #if wxUSE_RICHTEXT
-                    #pragma comment(lib,"wxmsw290ud_richtext")
+                    #pragma comment(lib,"wxmsw29ud_richtext")
                 #endif
                 #if wxUSE_MEDIACTRL
-                    #pragma comment(lib,"wxmsw290ud_media")
+                    #pragma comment(lib,"wxmsw29ud_media")
                 #endif
                 #if wxUSE_ODBC
-                    #pragma comment(lib,"wxbase290ud_odbc")
+                    #pragma comment(lib,"wxbase29ud_odbc")
                 #endif
             #endif // wxUSE_GUI
         #else // release
-            #pragma comment(lib,"wxbase290u")
-            #pragma comment(lib,"wxbase290u_net")
-            #pragma comment(lib,"wxbase290u_xml")
+            #pragma comment(lib,"wxbase29u")
+            #pragma comment(lib,"wxbase29u_net")
+            #pragma comment(lib,"wxbase29u_xml")
             #if wxUSE_REGEX
                 #pragma comment(lib,"wxregexu")
             #endif
@@ -102,29 +102,29 @@
                 #if wxUSE_ZLIB
                     #pragma comment(lib,"wxzlib")
                 #endif
-                #pragma comment(lib,"wxmsw290u_adv")
-                #pragma comment(lib,"wxmsw290u_core")
-                #pragma comment(lib,"wxmsw290u_html")
+                #pragma comment(lib,"wxmsw29u_adv")
+                #pragma comment(lib,"wxmsw29u_core")
+                #pragma comment(lib,"wxmsw29u_html")
                 #if wxUSE_GLCANVAS
-                    #pragma comment(lib,"wxmsw290u_gl")
+                    #pragma comment(lib,"wxmsw29u_gl")
                 #endif
                 #if wxUSE_DEBUGREPORT
-                    #pragma comment(lib,"wxmsw290u_qa")
+                    #pragma comment(lib,"wxmsw29u_qa")
                 #endif
                 #if wxUSE_XRC
-                    #pragma comment(lib,"wxmsw290u_xrc")
+                    #pragma comment(lib,"wxmsw29u_xrc")
                 #endif
                 #if wxUSE_AUI
-                    #pragma comment(lib,"wxmsw290u_aui")
+                    #pragma comment(lib,"wxmsw29u_aui")
                 #endif
                 #if wxUSE_RICHTEXT
-                    #pragma comment(lib,"wxmsw290u_richtext")
+                    #pragma comment(lib,"wxmsw29u_richtext")
                 #endif
                 #if wxUSE_MEDIACTRL
-                    #pragma comment(lib,"wxmsw290u_media")
+                    #pragma comment(lib,"wxmsw29u_media")
                 #endif
                 #if wxUSE_ODBC
-                    #pragma comment(lib,"wxbase290u_odbc")
+                    #pragma comment(lib,"wxbase29u_odbc")
                 #endif
             #endif // wxUSE_GUI
         #endif // debug/release
@@ -144,9 +144,9 @@
         #endif // shared/static
 
         #ifdef _DEBUG
-            #pragma comment(lib,"wxbase290d")
-            #pragma comment(lib,"wxbase290d_net")
-            #pragma comment(lib,"wxbase290d_xml")
+            #pragma comment(lib,"wxbase29d")
+            #pragma comment(lib,"wxbase29d_net")
+            #pragma comment(lib,"wxbase29d_xml")
             #if wxUSE_REGEX
                 #pragma comment(lib,"wxregexd")
             #endif
@@ -167,35 +167,35 @@
                 #if wxUSE_ZLIB
                     #pragma comment(lib,"wxzlibd")
                 #endif
-                #pragma comment(lib,"wxmsw290d_adv")
-                #pragma comment(lib,"wxmsw290d_core")
-                #pragma comment(lib,"wxmsw290d_html")
+                #pragma comment(lib,"wxmsw29d_adv")
+                #pragma comment(lib,"wxmsw29d_core")
+                #pragma comment(lib,"wxmsw29d_html")
                 #if wxUSE_GLCANVAS
-                    #pragma comment(lib,"wxmsw290d_gl")
+                    #pragma comment(lib,"wxmsw29d_gl")
                 #endif
                 #if wxUSE_DEBUGREPORT
-                    #pragma comment(lib,"wxmsw290d_qa")
+                    #pragma comment(lib,"wxmsw29d_qa")
                 #endif
                 #if wxUSE_XRC
-                    #pragma comment(lib,"wxmsw290d_xrc")
+                    #pragma comment(lib,"wxmsw29d_xrc")
                 #endif
                 #if wxUSE_AUI
-                    #pragma comment(lib,"wxmsw290d_aui")
+                    #pragma comment(lib,"wxmsw29d_aui")
                 #endif
                 #if wxUSE_RICHTEXT
-                    #pragma comment(lib,"wxmsw290d_richtext")
+                    #pragma comment(lib,"wxmsw29d_richtext")
                 #endif
                 #if wxUSE_MEDIACTRL
-                    #pragma comment(lib,"wxmsw290d_media")
+                    #pragma comment(lib,"wxmsw29d_media")
                 #endif
                 #if wxUSE_ODBC
-                    #pragma comment(lib,"wxbase290d_odbc")
+                    #pragma comment(lib,"wxbase29d_odbc")
                 #endif
             #endif // wxUSE_GUI
         #else // release
-            #pragma comment(lib,"wxbase290")
-            #pragma comment(lib,"wxbase290_net")
-            #pragma comment(lib,"wxbase290_xml")
+            #pragma comment(lib,"wxbase29")
+            #pragma comment(lib,"wxbase29_net")
+            #pragma comment(lib,"wxbase29_xml")
             #if wxUSE_REGEX
                 #pragma comment(lib,"wxregex")
             #endif
@@ -216,29 +216,29 @@
                 #if wxUSE_ZLIB
                     #pragma comment(lib,"wxzlib")
                 #endif
-                #pragma comment(lib,"wxmsw290_adv")
-                #pragma comment(lib,"wxmsw290_core")
-                #pragma comment(lib,"wxmsw290_html")
+                #pragma comment(lib,"wxmsw29_adv")
+                #pragma comment(lib,"wxmsw29_core")
+                #pragma comment(lib,"wxmsw29_html")
                 #if wxUSE_GLCANVAS
-                    #pragma comment(lib,"wxmsw290_gl")
+                    #pragma comment(lib,"wxmsw29_gl")
                 #endif
                 #if wxUSE_DEBUGREPORT
-                    #pragma comment(lib,"wxmsw290_qa")
+                    #pragma comment(lib,"wxmsw29_qa")
                 #endif
                 #if wxUSE_XRC
-                    #pragma comment(lib,"wxmsw290_xrc")
+                    #pragma comment(lib,"wxmsw29_xrc")
                 #endif
                 #if wxUSE_AUI
-                    #pragma comment(lib,"wxmsw290_aui")
+                    #pragma comment(lib,"wxmsw29_aui")
                 #endif
                 #if wxUSE_RICHTEXT
-                    #pragma comment(lib,"wxmsw290_richtext")
+                    #pragma comment(lib,"wxmsw29_richtext")
                 #endif
                 #if wxUSE_MEDIACTRL
-                    #pragma comment(lib,"wxmsw290_media")
+                    #pragma comment(lib,"wxmsw29_media")
                 #endif
                 #if wxUSE_ODBC
-                    #pragma comment(lib,"wxbase290_odbc")
+                    #pragma comment(lib,"wxbase29_odbc")
                 #endif
             #endif // wxUSE_GUI
         #endif // debug/release
