@@ -19,7 +19,13 @@ class TestPanel(wx.Panel):
 
     def OnPaint(self, evt):
         dc = wx.PaintDC(self)
-        gc = wx.GraphicsContext.Create(dc)
+        try:
+            gc = wx.GraphicsContext.Create(dc)
+        except NotImplementedError:
+            dc.DrawText("This build of wxPython does not support the wx.GraphicsContext "
+                        "family of classes.",
+                        25, 25)
+            return
 
         font = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
         font.SetWeight(wx.BOLD)
