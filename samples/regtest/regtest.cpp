@@ -259,9 +259,10 @@ END_EVENT_TABLE()
 #if DO_REGTEST
 
 BEGIN_EVENT_TABLE(RegTreeCtrl, wxTreeCtrl)
-    EVT_TREE_DELETE_ITEM   (Ctrl_RegTree, RegTreeCtrl::OnDeleteItem)
-    EVT_TREE_ITEM_EXPANDING(Ctrl_RegTree, RegTreeCtrl::OnItemExpanding)
-    EVT_TREE_SEL_CHANGED   (Ctrl_RegTree, RegTreeCtrl::OnSelChanged)
+    EVT_TREE_DELETE_ITEM    (Ctrl_RegTree, RegTreeCtrl::OnDeleteItem)
+    EVT_TREE_ITEM_EXPANDING (Ctrl_RegTree, RegTreeCtrl::OnItemExpanding)
+    EVT_TREE_ITEM_COLLAPSING(Ctrl_RegTree, RegTreeCtrl::OnItemExpanding)
+    EVT_TREE_SEL_CHANGED    (Ctrl_RegTree, RegTreeCtrl::OnSelChanged)
 
     EVT_TREE_BEGIN_LABEL_EDIT(Ctrl_RegTree, RegTreeCtrl::OnBeginEdit)
     EVT_TREE_END_LABEL_EDIT  (Ctrl_RegTree, RegTreeCtrl::OnEndEdit)
@@ -713,7 +714,7 @@ void RegTreeCtrl::OnSelChanged(wxTreeEvent& event)
 void RegTreeCtrl::OnItemExpanding(wxTreeEvent& event)
 {
     TreeNode *pNode = GetNode(event);
-    bool bExpanding = event.GetKeyCode() == wxTREE_EXPAND_EXPAND;
+    bool bExpanding = event.GetEventType() == wxEVT_TREE_ITEM_EXPANDING;
 
     // expansion might take some time
     wxSetCursor(*wxHOURGLASS_CURSOR);
