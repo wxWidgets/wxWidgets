@@ -122,20 +122,28 @@ protected:
     // from both DoSetSize() and DoSetClientSize()
     virtual void DoMoveWindow(int x, int y, int width, int height);
 
-    // override wxWindow methods to take into account tool/menu/statusbars
+    // take into account WM decorations here
+    virtual void DoGetSize(int *width, int *height) const;
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
-                                 
-    virtual void DoSetClientSize(int width, int height);
-    virtual void DoGetClientSize( int *width, int *height ) const;
 
-    wxString      m_title;
+    // override these methods to take into account tool/menu/statusbars
+    virtual void DoSetClientSize(int width, int height);
+    virtual void DoGetClientSize(int *width, int *height) const;
+
+    // this method takes the size of the window not taking account of
+    // decorations and is used by both DoSetSize() and DoSetClientSize()
+    void GTKDoSetSize(int width, int height);
+
+
+    // string shown in the title bar
+    wxString m_title;
 
     // is the frame currently iconized?
     bool m_isIconized;
-    // is the frame currently grabbed explicitly
-    // by the application?
+
+    // is the frame currently grabbed explicitly by the application?
     bool m_grabbed;
 };
 

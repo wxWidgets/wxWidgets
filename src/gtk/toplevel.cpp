@@ -242,7 +242,7 @@ static void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation*
         // Tell the wxWindow class about the new size
         win->m_width = alloc->width;
         win->m_height = alloc->height;
-        
+
         win->GtkUpdateSize();
     }
 }
@@ -629,7 +629,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     {
         m_gdkDecor = 0;
         m_gdkFunc = 0;
-        
+
         if ((style & wxRESIZE_BORDER) != 0)
            m_gdkFunc |= GDK_FUNC_RESIZE;
     }
@@ -700,10 +700,10 @@ bool wxTopLevelWindowGTK::EnableCloseButton( bool enable )
         m_gdkFunc |= GDK_FUNC_CLOSE;
     else
         m_gdkFunc &= ~GDK_FUNC_CLOSE;
-    
+
     if (GTK_WIDGET_REALIZED(m_widget) && (m_widget->window))
         gdk_window_set_functions( m_widget->window, (GdkWMFunction)m_gdkFunc );
-        
+
     return true;
 }
 
@@ -845,78 +845,44 @@ void wxTopLevelWindowGTK::DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y), int WXU
     wxFAIL_MSG( wxT("DoMoveWindow called for wxTopLevelWindowGTK") );
 }
 
-void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags )
+// ----------------------------------------------------------------------------
+// window geometry
+// ----------------------------------------------------------------------------
+
+void wxTopLevelWindowGTK::GTKDoSetSize(int width, int height)
 {
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
-
-    // this shouldn't happen: wxFrame, wxMDIParentFrame and wxMDIChildFrame have m_wxwindow
-    wxASSERT_MSG( (m_wxwindow != NULL), wxT("invalid frame") );
-
     // avoid recursions
     if (m_resizing)
         return;
     m_resizing = true;
 
-    int old_x = m_x;
-    int old_y = m_y;
-
     int old_width = m_width;
     int old_height = m_height;
 
-    if ((sizeFlags & wxSIZE_ALLOW_MINUS_ONE) == 0)
-    {
-        if (x != -1) m_x = x;
-        if (y != -1) m_y = y;
-    }
-    else
-    {
-        m_x = x;
-        m_y = y;
-    }
-    if (width != -1) m_width = width;
-    if (height != -1) m_height = height;
-    
-/*
-    if ((sizeFlags & wxSIZE_AUTO_WIDTH) == wxSIZE_AUTO_WIDTH)
-    {
-        if (width == -1) m_width = 80;
-    }
+    if ( width != -1 )
+        m_width = width;
+    if ( height != -1 )
+        m_height = height;
 
-    if ((sizeFlags & wxSIZE_AUTO_HEIGHT) == wxSIZE_AUTO_HEIGHT)
-    {
-       if (height == -1) m_height = 26;
-    }
-*/
-
+    // GPE's window manager doesn't like size hints at all, esp. when the user
+    // has to use the virtual keyboard, so don't constrain size there
+#ifndef __WXGPE__
     int minWidth = GetMinWidth(),
         minHeight = GetMinHeight(),
         maxWidth = GetMaxWidth(),
         maxHeight = GetMaxHeight();
 
-#ifdef __WXGPE__
-    // GPE's window manager doesn't like size hints
-    // at all, esp. when the user has to use the
-    // virtual keyboard.
-    minWidth = -1;
-    minHeight = -1;
-    maxWidth = -1;
-    maxHeight = -1;
-#endif
+    if ( minWidth != -1 && m_width < minWidth )
+        m_width = minWidth;
+    if ( minHeight != -1 && m_height < minHeight )
+        m_height = minHeight;
+    if ( maxWidth != -1 && m_width > maxWidth )
+        m_width = maxWidth;
+    if ( maxHeight != -1 && m_height > maxHeight )
+        m_height = maxHeight;
+#endif // __WXGPE__
 
-    if ((minWidth != -1) && (m_width < minWidth)) m_width = minWidth;
-    if ((minHeight != -1) && (m_height < minHeight)) m_height = minHeight;
-    if ((maxWidth != -1) && (m_width > maxWidth)) m_width = maxWidth;
-    if ((maxHeight != -1) && (m_height > maxHeight)) m_height = maxHeight;
-
-    if ((m_x != -1) || (m_y != -1))
-    {
-        if ((m_x != old_x) || (m_y != old_y))
-        {
-            gtk_window_move( GTK_WINDOW(m_widget), m_x, m_y );
-        }
-    }
-
-    if ((m_width != old_width) || (m_height != old_height))
+    if ( m_width != old_width || m_height != old_height )
     {
         gtk_window_resize( GTK_WINDOW(m_widget), m_width, m_height );
 
@@ -927,6 +893,81 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
     }
 
     m_resizing = false;
+}
+
+void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags )
+{
+    wxCHECK_RET( m_widget, wxT("invalid frame") );
+
+    // this shouldn't happen: wxFrame, wxMDIParentFrame and wxMDIChildFrame have m_wxwindow
+    wxASSERT_MSG( (m_wxwindow != NULL), wxT("invalid frame") );
+
+
+    // deal with the position first
+    int old_x = m_x;
+    int old_y = m_y;
+
+    if ( !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
+    {
+        // -1 means "use existing" unless the flag above is specified
+        if ( x != -1 )
+            m_x = x;
+        if ( y != -1 )
+            m_y = y;
+    }
+    else // wxSIZE_ALLOW_MINUS_ONE
+    {
+        m_x = x;
+        m_y = y;
+    }
+
+    if ( m_x != old_x || m_y != old_y )
+    {
+        gtk_window_move( GTK_WINDOW(m_widget), m_x, m_y );
+    }
+
+
+    // and now change the size: as we want to set the size of the entire
+    // window, including decorations, we must adjust the size passed to
+    // GTKDoSetSize() which takes with the size of undecorated frame only
+    if ( width != -1 || height != -1 )
+    {
+        int wTotal,
+            hTotal;
+        DoGetSize(&wTotal, &hTotal);
+
+        int wUndec,
+            hUndec;
+        wxTopLevelWindowBase::DoGetSize(&wUndec, &hUndec);
+
+        if ( width != -1 )
+            width -= wTotal - wUndec;
+        if ( height != -1 )
+            height -= hTotal - hUndec;
+    }
+
+    GTKDoSetSize(width, height);
+}
+
+void wxTopLevelWindowGTK::DoGetSize(int *width, int *height) const
+{
+    wxCHECK_RET( m_widget, wxT("invalid frame") );
+
+    if ( !m_widget->window )
+    {
+        // this can happen if we're called before the window is realized, so
+        // don't assert but just return the stored values
+        wxTopLevelWindowBase::DoGetSize(width, height);
+        return;
+    }
+
+    GdkRectangle rect;
+    gdk_window_get_frame_extents(m_widget->window, &rect);
+
+    if ( width )
+        *width = rect.width;
+    if ( height )
+        *height = rect.height;
 }
 
 void wxTopLevelWindowGTK::DoGetClientSize( int *width, int *height ) const
@@ -949,10 +990,7 @@ void wxTopLevelWindowGTK::DoGetClientSize( int *width, int *height ) const
 
 void wxTopLevelWindowGTK::DoSetClientSize( int width, int height )
 {
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
-
-    DoSetSize(-1, -1,
-              width + m_miniEdge*2, height  + m_miniEdge*2 + m_miniTitle, 0);
+    GTKDoSetSize(width + m_miniEdge*2, height  + m_miniEdge*2 + m_miniTitle);
 }
 
 void wxTopLevelWindowGTK::DoSetSizeHints( int minW, int minH,
