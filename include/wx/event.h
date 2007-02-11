@@ -2404,7 +2404,7 @@ public:
     virtual bool ProcessEvent(wxEvent& event);
 
     // add an event to be processed later
-    void AddPendingEvent(wxEvent& event);
+    virtual void AddPendingEvent(wxEvent& event);
 
     void ProcessPendingEvents();
 
