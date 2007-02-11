@@ -15,6 +15,11 @@
 
 #include "wx/gizmos/gizmos.h"
 
+#if !wxUSE_MDI
+#    error "wxUSE_MDI must be defined for gizmos to compile."
+#endif /* !wxUSE_MDI */
+
+
 /*
 
     wxDynamicSashWindow
