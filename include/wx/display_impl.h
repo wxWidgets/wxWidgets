@@ -37,7 +37,7 @@ public:
     // return the display for the given window or wxNOT_FOUND
     //
     // the window pointer must not be NULL (i.e. caller should check it)
-    virtual int GetFromWindow(wxWindow *window);
+    virtual int GetFromWindow(const wxWindow *window);
 };
 
 // ----------------------------------------------------------------------------

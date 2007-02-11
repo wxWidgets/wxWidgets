@@ -145,7 +145,7 @@ wxDisplay::~wxDisplay()
     return Factory().GetFromPoint(pt);
 }
 
-/* static */ int wxDisplay::GetFromWindow(wxWindow *window)
+/* static */ int wxDisplay::GetFromWindow(const wxWindow *window)
 {
     wxCHECK_MSG( window, wxNOT_FOUND, _T("invalid window") );
 
@@ -235,7 +235,7 @@ bool wxDisplay::ChangeMode(const wxVideoMode& mode)
 // wxDisplayFactory implementation
 // ============================================================================
 
-int wxDisplayFactory::GetFromWindow(wxWindow *window)
+int wxDisplayFactory::GetFromWindow(const wxWindow *window)
 {
     // consider that the window belongs to the display containing its centre
     const wxRect r(window->GetRect());

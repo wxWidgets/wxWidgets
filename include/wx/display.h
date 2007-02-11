@@ -62,7 +62,7 @@ public:
 
     // find the display where the given window lies, return wxNOT_FOUND if it
     // is not shown at all
-    static int GetFromWindow(wxWindow *window);
+    static int GetFromWindow(const wxWindow *window);
 
 
     // return true if the object was initialized successfully

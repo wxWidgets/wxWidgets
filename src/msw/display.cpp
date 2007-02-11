@@ -223,7 +223,7 @@ public:
 
     virtual unsigned GetCount() { return unsigned(m_displays.size()); }
     virtual int GetFromPoint(const wxPoint& pt);
-    virtual int GetFromWindow(wxWindow *window);
+    virtual int GetFromWindow(const wxWindow *window);
 
 protected:
     // ctor checks if the current system supports multimon API and dynamically
@@ -573,7 +573,7 @@ int wxDisplayFactoryWin32Base::GetFromPoint(const wxPoint& pt)
                                                        MONITOR_DEFAULTTONULL));
 }
 
-int wxDisplayFactoryWin32Base::GetFromWindow(wxWindow *window)
+int wxDisplayFactoryWin32Base::GetFromWindow(const wxWindow *window)
 {
     return FindDisplayFromHMONITOR(gs_MonitorFromWindow(GetHwndOf(window),
                                                         MONITOR_DEFAULTTONULL));
