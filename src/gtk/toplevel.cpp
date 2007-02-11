@@ -972,6 +972,18 @@ void wxTopLevelWindowGTK::DoGetSize(int *width, int *height) const
 
 void wxTopLevelWindowGTK::DoGetClientSize( int *width, int *height ) const
 {
+    if ( IsIconized() )
+    {
+        // for consistency with wxMSW, client area is supposed to be empty for
+        // the iconized windows
+        if ( width )
+            *width = 0;
+        if ( height )
+            *height = 0;
+
+        return;
+    }
+
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
     if (height)

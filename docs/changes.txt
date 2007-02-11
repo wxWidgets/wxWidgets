@@ -32,6 +32,7 @@ wxGTK:
 - Implemented support for underlined fonts in wxStaticText
 - wxTopLevelWindow::SetSizeHints size increments now work
 - wxTopLevelWindow::GetSize() returns the size including the WM decorations
+- wxTopLevelWindow::GetClientSize() returns 0x0 when the window is minimized
 
 wxMSW:
 

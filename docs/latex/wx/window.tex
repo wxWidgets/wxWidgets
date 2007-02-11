@@ -873,6 +873,9 @@ Returns the size of the window `client area' in pixels. The client area is the
 area which may be drawn on by the programmer, excluding title bar, border,
 scrollbars, etc.
 
+Note that if this window is a top-level one and it is currently minimized, the
+return size is empty (both width and height are $0$).
+
 \wxheading{Parameters}
 
 \docparam{width}{Receives the client width in pixels.}
