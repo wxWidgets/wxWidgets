@@ -869,9 +869,9 @@ a 2-element list {\tt (width, height)}.}
 
 \constfunc{wxSize}{GetClientSize}{\void}
 
-This gets the size of the window `client area' in pixels.
-The client area is the area which may be drawn on by the programmer,
-excluding title bar, border, scrollbars, etc.
+Returns the size of the window `client area' in pixels. The client area is the
+area which may be drawn on by the programmer, excluding title bar, border,
+scrollbars, etc.
 
 \wxheading{Parameters}
 
@@ -1246,8 +1246,11 @@ Returns the built-in scrollbar thumb size.
 
 \constfunc{wxSize}{GetSize}{\void}
 
-This gets the size of the entire window in pixels,
-including title bar, border, scrollbars, etc.
+Returns the size of the entire window in pixels, including title bar, border,
+scrollbars, etc.
+
+Note that if this window is a top-level one and it is currently minimized, the
+returned size is the restored window size, not the size of the window icon.
 
 \wxheading{Parameters}
 

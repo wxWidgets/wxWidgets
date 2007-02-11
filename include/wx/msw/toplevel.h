@@ -55,7 +55,7 @@ public:
     virtual void SetIcon(const wxIcon& icon);
     virtual void SetIcons(const wxIconBundle& icons );
     virtual void Restore();
-    
+
     virtual void SetLayoutDirection(wxLayoutDirection dir);
 
 #ifndef __WXWINCE__
@@ -76,7 +76,7 @@ public:
     virtual bool SetTransparent(wxByte alpha);
     virtual bool CanSetTransparent();
 
-    
+
     // implementation from now on
     // --------------------------
 
@@ -126,6 +126,12 @@ protected:
 
     // common part of Iconize(), Maximize() and Restore()
     void DoShowWindow(int nShowCmd);
+
+    // override those to return the normal window coordinates even when the
+    // window is minimized
+    virtual void DoGetPosition(int *x, int *y) const;
+    virtual void DoGetSize(int *width, int *height) const;
+
 
     // is the window currently iconized?
     bool m_iconized;

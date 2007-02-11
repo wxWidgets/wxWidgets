@@ -781,6 +781,75 @@ void wxTopLevelWindowMSW::SetLayoutDirection(wxLayoutDirection dir)
 }
 
 // ----------------------------------------------------------------------------
+// wxTopLevelWindowMSW geometry
+// ----------------------------------------------------------------------------
+
+void wxTopLevelWindowMSW::DoGetPosition(int *x, int *y) const
+{
+    if ( IsIconized() )
+    {
+        WINDOWPLACEMENT wp;
+        wp.length = sizeof(WINDOWPLACEMENT);
+        if ( ::GetWindowPlacement(GetHwnd(), &wp) )
+        {
+            RECT& rc = wp.rcNormalPosition;
+
+            // the position returned by GetWindowPlacement() is in workspace
+            // coordinates except for windows with WS_EX_TOOLWINDOW style
+            if ( !HasFlag(wxFRAME_TOOL_WINDOW) )
+            {
+                // we must use the correct display for the translation as the
+                // task bar might be shown on one display but not the other one
+                int n = wxDisplay::GetFromWindow(this);
+                wxDisplay dpy(n == wxNOT_FOUND ? 0 : n);
+                const wxPoint ptOfs = dpy.GetClientArea().GetPosition() -
+                                      dpy.GetGeometry().GetPosition();
+
+                rc.left += ptOfs.x;
+                rc.top += ptOfs.y;
+            }
+
+            if ( x )
+                *x = rc.left;
+            if ( y )
+                *y = rc.top;
+
+            return;
+        }
+
+        wxLogLastError(_T("GetWindowPlacement"));
+    }
+    //else: normal case
+
+    wxTopLevelWindowBase::DoGetPosition(x, y);
+}
+
+void wxTopLevelWindowMSW::DoGetSize(int *width, int *height) const
+{
+    if ( IsIconized() )
+    {
+        WINDOWPLACEMENT wp;
+        wp.length = sizeof(WINDOWPLACEMENT);
+        if ( ::GetWindowPlacement(GetHwnd(), &wp) )
+        {
+            const RECT& rc = wp.rcNormalPosition;
+
+            if ( width )
+                *width = rc.right - rc.left;
+            if ( height )
+                *height = rc.bottom - rc.top;
+
+            return;
+        }
+
+        wxLogLastError(_T("GetWindowPlacement"));
+    }
+    //else: normal case
+
+    wxTopLevelWindowBase::DoGetSize(width, height);
+}
+
+// ----------------------------------------------------------------------------
 // wxTopLevelWindowMSW fullscreen
 // ----------------------------------------------------------------------------
 

@@ -36,6 +36,7 @@ wxGTK:
 wxMSW:
 
 - Fixed infinite loop in wxThread::Wait() in console applications
+- Return the restored window size from GetSize() when window is minimized
 
 
 2.8.2
