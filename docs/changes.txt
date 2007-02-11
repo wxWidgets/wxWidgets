@@ -33,6 +33,7 @@ wxGTK:
 - wxTopLevelWindow::SetSizeHints size increments now work
 - wxTopLevelWindow::GetSize() returns the size including the WM decorations
 - wxTopLevelWindow::GetClientSize() returns 0x0 when the window is minimized
+- Added support for colour cursors (Pascal Monasse)
 
 wxMSW:
 

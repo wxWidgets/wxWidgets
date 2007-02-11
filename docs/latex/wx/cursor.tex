@@ -74,13 +74,20 @@ Constructs a cursor using a cursor identifier.
 
 \func{}{wxCursor}{\param{const wxImage\&}{ image}}
 
-Constructs a cursor from a wxImage. The cursor is monochrome, colors with the RGB elements all greater
-than 127 will be foreground, colors less than this background. The mask (if any) will be used as transparent.
+Constructs a cursor from a wxImage. If cursor are monochrome on the current
+platform, colors with the RGB elements all greater than 127 will be foreground,
+colors less than this background. The mask (if any) will be used to specify the
+transparent area.
 
-In MSW the foreground will be white and the background black. If the cursor is larger than 32x32 it is resized.
-In GTK, the two most frequent colors will be used for foreground and background. The cursor will be displayed
-at the size of the image.
-On MacOS if the cursor is larger than 16x16 it is resized and currently only shown as black/white (mask respected).
+In wxMSW the foreground will be white and the background black. If the cursor
+is larger than 32x32 it is resized.
+
+In wxGTK, colour cursors and alpha channel are supported (starting from GTK+
+2.2). Otherwise the two most frequent colors will be used for foreground and
+background. In any case, the cursor will be displayed at the size of the image.
+
+In wxMac, if the cursor is larger than 16x16 it is resized and currently only
+shown as black/white (mask respected).
 
 \func{}{wxCursor}{\param{const wxCursor\&}{ cursor}}
 
