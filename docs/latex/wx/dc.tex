@@ -999,7 +999,7 @@ whether text will be drawn with a background colour or not.
 Sets the current brush for the DC.
 
 If the argument is wxNullBrush, the current brush is selected out of the device
-context, and the original brush restored, allowing the current brush to
+context (leaving wxDC without any valid brush), allowing the current brush to
 be destroyed safely.
 
 See also \helpref{wxBrush}{wxbrush}.
@@ -1152,7 +1152,8 @@ See \helpref{wxPalette}{wxpalette} for further details.
 Sets the current pen for the DC.
 
 If the argument is wxNullPen, the current pen is selected out of the device
-context, and the original pen restored.
+context (leaving wxDC without any valid pen), allowing the current brush to
+be destroyed safely.
 
 See also \helpref{wxMemoryDC}{wxmemorydc} for the interpretation of colours
 when drawing into a monochrome bitmap.

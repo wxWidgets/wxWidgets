@@ -41,7 +41,7 @@ because during a new node addition the list integrity is temporarily broken
         s_mutexProtectingTheGlobalList->Unlock();
     }
 
-    // return true the given number is greater than all array elements
+    // return true if the given number is greater than all array elements
     bool MyThread::IsGreater(int num)
     {
         // before using the list we must acquire the mutex

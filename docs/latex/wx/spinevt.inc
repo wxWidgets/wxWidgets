@@ -24,5 +24,5 @@ direct input to member functions that take a
 \end{twocollist}%
 
 Note that if you handle both SPIN and UP or DOWN events, you will be notified
-about each of them twice: first the UP/DOWN event will be receieved and then,
+about each of them twice: first the UP/DOWN event will be received and then,
 if it wasn't vetoed, the SPIN event will be sent.

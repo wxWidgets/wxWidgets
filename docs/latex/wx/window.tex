@@ -659,7 +659,7 @@ If no window with such name is found,
 \func{virtual void}{Fit}{\void}
 
 Sizes the window so that it fits around its subwindows. This function won't do
-anything if there are no subwindows and will only really work correctly if the
+anything if there are no subwindows and will only really work correctly if
 sizers are used for the subwindows layout. Also, if the window has exactly one
 subwindow it is better (faster and the result is more precise as Fit adds some
 margin to account for fuzziness of its calculations) to call
@@ -1171,7 +1171,7 @@ method:\par
 
 \constfunc{virtual wxRect}{GetRect}{\void}
 
-Returns the size and position of the window as a \helpref{wxRect}{wxrect} object.
+Returns the position and size of the window as a \helpref{wxRect}{wxrect} object.
 
 \wxheading{See also}
 
@@ -1202,7 +1202,7 @@ child window or a top level one.
 
 \constfunc{virtual wxRect}{GetScreenRect}{\void}
 
-Returns the size and position of the window on the screen as a 
+Returns the position and size of the window on the screen as a 
 \helpref{wxRect}{wxrect} object.
 
 \wxheading{See also}
@@ -3266,7 +3266,7 @@ and usually the scrollbar will be automatically hidden.
 
 \func{virtual void}{SetSize}{\param{const wxRect\&}{ rect}}
 
-Sets the size and position of the window in pixels.
+Sets the position and size of the window in pixels.
 
 \func{virtual void}{SetSize}{\param{int}{ width}, \param{int}{ height}}
 
@@ -3363,7 +3363,7 @@ parameter if the {\it sizer}\/ is non-NULL and {\tt false} otherwise.
 \docparam{sizer}{The sizer to set. Pass NULL to disassociate and conditionally delete
 the window's sizer.  See below.}
 
-\docparam{deleteOld}{If true (the default), this will delete any prexisting sizer.
+\docparam{deleteOld}{If true (the default), this will delete any pre-existing sizer.
 Pass false if you wish to handle deleting the old sizer yourself.}
 
 \wxheading{Remarks}
