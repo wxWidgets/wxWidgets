@@ -41,9 +41,9 @@
 static wxChar buf[MAX_TEST_LEN];
 int r;
 
-// these macros makes it possible to write all tests without repeating a lot 
+// these macros makes it possible to write all tests without repeating a lot
 // of times the wxT() macro
-// NOTE: you should use expected strings with these macros which do not exceed 
+// NOTE: you should use expected strings with these macros which do not exceed
 //       MAX_TEST_LEN as these macro do check if the return value is == (int)wxStrlen(buf)
 
 #define ASSERT_STR_EQUAL( a, b ) \
@@ -78,7 +78,24 @@ int r;
     CPPUNIT_ASSERT_EQUAL( wxString(wxT(expected)).Left(size - 1),   \
                           wxString(buffer) )
 
+// this is the same as wxSnprintf() but it passes the format string to
+// wxVsnprintf() without using ATTRIBUTE_PRINTF and thus suppresses the gcc
+// checks (and resulting warnings) for the format string
+//
+// use with extreme care and only when you're really sure the warnings must be
+// suppressed!
+static int
+wxUnsafeSnprintf(wxChar *buf, size_t len, const wxChar *fmt, ...)
+{
+    va_list args;
+    va_start(args, fmt);
 
+    int rc = wxVsnprintf(buf, len, fmt, args);
+
+    va_end(args);
+
+    return rc;
+}
 
 // ----------------------------------------------------------------------------
 // test class
@@ -376,7 +393,7 @@ void VsnprintfTestCase::Misc(wxChar *buffer, int size)
     //
     // Note that in the second case (i.e. when we're using our own implementation),
     // wxVsnprintf() will return the number of characters written in the standard
-    // output or 
+    // output or
     //   -1         if there was an error in the format string
     //   maxSize+1  if the output buffer is too small
 
@@ -393,16 +410,18 @@ void VsnprintfTestCase::Misc(wxChar *buffer, int size)
 #endif
 
     // test unicode/ansi conversion specifiers
-    // NB: this line will output two warnings like these, on GCC:
-    //     warning: use of 'h' length modifier with 's' type character (i.e.
-    //     GCC warns you that 'h' is not legal on 's' conv spec) but they must
-    //     be ignored as here we explicitely want to test the wxSnprintf()
-    //     behaviour in such case
+    //
+    // NB: we use wxUnsafeSnprintf() as %hs and %hc are invalid in printf
+    //     format and gcc would warn about this otherwise
 
-    CMPTOSIZE(buffer, size,
-              "unicode string: unicode!! W - ansi string: ansi!! w\n\n",
-              "unicode string: %ls %lc - ansi string: %hs %hc\n\n",
-              L"unicode!!", L'W', "ansi!!", 'w');
+    r = wxUnsafeSnprintf(buffer, size,
+                         "unicode string: %ls %lc - ansi string: %hs %hc\n\n",
+                         L"unicode!!", L'W', "ansi!!", 'w');
+    CPPUNIT_ASSERT( r != -1 );
+    CPPUNIT_ASSERT_EQUAL(
+        wxString(wxT("unicode string: unicode!! W - ansi string: ansi!! w\n\n")).Left(size - 1),
+        wxString(buffer)
+    );
 }
 
 
@@ -468,7 +487,7 @@ void VsnprintfTestCase::DoMisc(
 
     va_list ap;
     va_start(ap, format);
-    
+
     int n = wxVsnprintf(buf, max, format, ap);
 
     va_end(ap);
