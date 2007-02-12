@@ -108,7 +108,9 @@ private:
 #endif
 
         CPPUNIT_TEST( BigToSmallBuffer );
+#if wxUSE_WXVSNPRINTF
         CPPUNIT_TEST( WrongFormatStrings );
+#endif // wxUSE_WXVSNPRINTF
         CPPUNIT_TEST( Miscellaneous );
     CPPUNIT_TEST_SUITE_END();
 
@@ -130,7 +132,9 @@ private:
     void Unicode();
 
     void BigToSmallBuffer();
+#if wxUSE_WXVSNPRINTF
     void WrongFormatStrings();
+#endif // wxUSE_WXVSNPRINTF
     void Miscellaneous();
     void Misc(wxChar *buffer, int size);
 
@@ -401,30 +405,40 @@ void VsnprintfTestCase::Misc(wxChar *buffer, int size)
               L"unicode!!", L'W', "ansi!!", 'w');
 }
 
+
+// this test is only for our own implementation, the system implementation
+// doesn't always give errors for invalid format strings (e.g. glibc doesn't)
+// and as it's not required too (the behaviour is "undefined" according to the
+// spec), there is really no sense in testing for it (and the first 2 formats
+// in this test are not invalid at all in fact)
+#if wxUSE_WXVSNPRINTF
+
 void VsnprintfTestCase::WrongFormatStrings()
 {
     // test how wxVsnprintf() behaves with wrong format string:
 
-#if wxUSE_PRINTF_POS_PARAMS
+    // NB: the next 2 tests currently return an error but they shouldn't,
+    //     according to POSIX reusing the parameters is allowed
 
     // two positionals with the same index:
     r = wxSnprintf(buf, MAX_TEST_LEN, wxT("%1$s %1$s"), "hello");
-    CPPUNIT_ASSERT(r == -1);
+    CPPUNIT_ASSERT(r != -1);
 
     // three positionals with the same index mixed with other pos args:
     r = wxSnprintf(buf, MAX_TEST_LEN, wxT("%4$d %2$f %1$s %2$s %3$d"), "hello", "world", 3, 4);
-    CPPUNIT_ASSERT(r == -1);
+    CPPUNIT_ASSERT(r != -1);
 
-    // a missing positional arg:
+    // a missing positional arg: this should result in an error but not all
+    // implementations detect it (e.g. glibc doesn't)
     r = wxSnprintf(buf, MAX_TEST_LEN, wxT("%1$d %3$d"), 1, 2, 3);
-    CPPUNIT_ASSERT(r == -1);
+    CPPUNIT_ASSERT_EQUAL(-1, r);
 
     // positional and non-positionals in the same format string:
     r = wxSnprintf(buf, MAX_TEST_LEN, wxT("%1$d %d %3$d"), 1, 2, 3);
-    CPPUNIT_ASSERT(r == -1);
-
-#endif // wxUSE_PRINTF_POS_PARAMS
+    CPPUNIT_ASSERT_EQUAL(-1, r);
 }
+
+#endif // wxUSE_WXVSNPRINTF
 
 void VsnprintfTestCase::BigToSmallBuffer()
 {
