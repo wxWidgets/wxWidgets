@@ -278,8 +278,14 @@ bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *buf)
                     // skip the slashes
                     lenPrefix += 2;
                 }
-
-                AddFile(wxURI::Unescape(filename.c_str() + lenPrefix));
+                
+                // It would probably be nicer to use a GTK or Glib
+                // function to unescape the 8-bit strings pointed to
+                // by buf, but this does the same in wx code.
+                wxString filename_unicode = wxURI::Unescape(filename.c_str() + lenPrefix);
+                wxCharBuffer filename_8bit = wxConvISO8859_1.cWX2MB( filename_unicode );
+                filename_unicode = wxConvFileName->cMB2WX( filename_8bit );
+                AddFile( filename_unicode );
                 filename.Empty();
             }
             else if ( !filename.empty() )
@@ -296,6 +302,7 @@ bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *buf)
         }
         else
         {
+            // The string is in ISO-8859-1 according to XDND spec
             filename += *p;
         }
     }
