@@ -122,7 +122,7 @@ all the parameters.
 
 \constfunc{wxFileName}{GetDirName}{\void}
 
-Returns the absolute path of the currently selected directory as a \helpref{wxFileName} object.
+Returns the absolute path of the currently selected directory as a \helpref{wxFileName}{wxfilename} object.
 This function is equivalent to \helpref{GetPath}{wxdirpickerctrlgetpath}
 
 
@@ -138,14 +138,15 @@ Returns the absolute path of the currently selected directory.
 \func{void}{SetDirName}{\param{const wxFileName \&}{dirname}}
 
 Just like \helpref{SetPath}{wxdirpickerctrlsetpath} but this function takes a
-\helpref{wxFileName} object.
+\helpref{wxFileName}{wxfilename} object.
 
 
 \membersection{wxDirPickerCtrl::SetPath}\label{wxdirpickerctrlsetpath}
 
 \func{void}{SetPath}{\param{const wxString \&}{dirname}}
 
-Sets the absolute path of the currently selected directory. This must be a valid directory if
+Sets the absolute path of  (the default converter uses current locale's
+charset)the currently selected directory. This must be a valid directory if
 {\tt wxDIRP\_DIR\_MUST\_EXIST} style was given.
 
 
