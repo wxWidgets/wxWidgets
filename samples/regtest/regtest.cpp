@@ -714,7 +714,7 @@ void RegTreeCtrl::OnSelChanged(wxTreeEvent& event)
 void RegTreeCtrl::OnItemExpanding(wxTreeEvent& event)
 {
     TreeNode *pNode = GetNode(event);
-    bool bExpanding = event.GetEventType() == wxEVT_TREE_ITEM_EXPANDING;
+    bool bExpanding = event.GetEventType() == wxEVT_COMMAND_TREE_ITEM_EXPANDING;
 
     // expansion might take some time
     wxSetCursor(*wxHOURGLASS_CURSOR);
