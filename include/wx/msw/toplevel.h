@@ -129,8 +129,10 @@ protected:
 
     // override those to return the normal window coordinates even when the
     // window is minimized
+#ifndef __WXWINCE__
     virtual void DoGetPosition(int *x, int *y) const;
     virtual void DoGetSize(int *width, int *height) const;
+#endif // __WXWINCE__
 
 
     // is the window currently iconized?
