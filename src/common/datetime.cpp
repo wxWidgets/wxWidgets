@@ -2261,11 +2261,11 @@ wxString wxDateTime::Format(const wxChar *format, const TimeZone& tz) const
 {
     wxCHECK_MSG( format, wxEmptyString, _T("NULL format in wxDateTime::Format") );
 
-    time_t time = GetTicks();
-
     // we have to use our own implementation if the date is out of range of
     // strftime() or if we use non standard specificators
 #ifdef HAVE_STRFTIME
+    time_t time = GetTicks();
+
     if ( (time != (time_t)-1) && !wxStrstr(format, _T("%l")) )
     {
         // use strftime()
