@@ -234,14 +234,20 @@ DWORD wxGUIAppTraits::WaitForThread(WXHANDLE hThread)
     if ( !wxEventLoop::GetActive() )
         return DoSimpleWaitForThread(hThread);
 
+    const DWORD wakeMask =
+               QS_ALLINPUT          // return as soon as there are any events
+#if !defined(__WXWINCE__)
+               | QS_ALLPOSTMESSAGE
+#endif
+               ;
+
     return ::MsgWaitForMultipleObjects
              (
                1,                   // number of objects to wait for
                (HANDLE *)&hThread,  // the objects
                false,               // wait for any objects, not all
                INFINITE,            // no timeout
-               QS_ALLINPUT |        // return as soon as there are any events
-               QS_ALLPOSTMESSAGE
+               wakeMask
              );
 }
 

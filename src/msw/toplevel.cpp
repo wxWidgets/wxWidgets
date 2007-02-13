@@ -786,6 +786,9 @@ void wxTopLevelWindowMSW::SetLayoutDirection(wxLayoutDirection dir)
 
 void wxTopLevelWindowMSW::DoGetPosition(int *x, int *y) const
 {
+
+#ifndef __WXWINCE__
+
     if ( IsIconized() )
     {
         WINDOWPLACEMENT wp;
@@ -821,11 +824,15 @@ void wxTopLevelWindowMSW::DoGetPosition(int *x, int *y) const
     }
     //else: normal case
 
+#endif // __WXWINCE__
+
     wxTopLevelWindowBase::DoGetPosition(x, y);
 }
 
 void wxTopLevelWindowMSW::DoGetSize(int *width, int *height) const
 {
+#ifndef __WXWINCE__
+
     if ( IsIconized() )
     {
         WINDOWPLACEMENT wp;
@@ -845,6 +852,8 @@ void wxTopLevelWindowMSW::DoGetSize(int *width, int *height) const
         wxLogLastError(_T("GetWindowPlacement"));
     }
     //else: normal case
+
+#endif
 
     wxTopLevelWindowBase::DoGetSize(width, height);
 }
