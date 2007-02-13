@@ -25679,22 +25679,6 @@ SWIGINTERN PyObject *GraphicsFont_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObj
   return SWIG_Python_InitShadowInstance(args);
 }
 
-SWIGINTERN PyObject *_wrap_new_GraphicsMatrix(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxGraphicsMatrix *result = 0 ;
-  
-  if (!SWIG_Python_UnpackTuple(args,"new_GraphicsMatrix",0,0,0)) SWIG_fail;
-  {
-    result = (wxGraphicsMatrix *)new wxGraphicsMatrix();
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxGraphicsMatrix, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_delete_GraphicsMatrix(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxGraphicsMatrix *arg1 = (wxGraphicsMatrix *) 0 ;
@@ -26325,29 +26309,6 @@ SWIGINTERN PyObject *GraphicsMatrix_swigregister(PyObject *SWIGUNUSEDPARM(self),
   SWIG_TypeNewClientData(SWIGTYPE_p_wxGraphicsMatrix, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
-
-SWIGINTERN PyObject *GraphicsMatrix_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  return SWIG_Python_InitShadowInstance(args);
-}
-
-SWIGINTERN PyObject *_wrap_new_GraphicsPath(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxGraphicsPath *result = 0 ;
-  
-  if (!SWIG_Python_UnpackTuple(args,"new_GraphicsPath",0,0,0)) SWIG_fail;
-  {
-    if (!wxPyCheckForApp()) SWIG_fail;
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxGraphicsPath *)new wxGraphicsPath();
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxGraphicsPath, SWIG_POINTER_NEW |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
 
 SWIGINTERN PyObject *_wrap_delete_GraphicsPath(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
@@ -27591,10 +27552,6 @@ SWIGINTERN PyObject *GraphicsPath_swigregister(PyObject *SWIGUNUSEDPARM(self), P
   if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
   SWIG_TypeNewClientData(SWIGTYPE_p_wxGraphicsPath, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
-}
-
-SWIGINTERN PyObject *GraphicsPath_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  return SWIG_Python_InitShadowInstance(args);
 }
 
 SWIGINTERN int NullGraphicsPen_set(PyObject *) {
@@ -39272,7 +39229,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"delete_GraphicsFont", (PyCFunction)_wrap_delete_GraphicsFont, METH_O, NULL},
 	 { (char *)"GraphicsFont_swigregister", GraphicsFont_swigregister, METH_VARARGS, NULL},
 	 { (char *)"GraphicsFont_swiginit", GraphicsFont_swiginit, METH_VARARGS, NULL},
-	 { (char *)"new_GraphicsMatrix", (PyCFunction)_wrap_new_GraphicsMatrix, METH_NOARGS, NULL},
 	 { (char *)"delete_GraphicsMatrix", (PyCFunction)_wrap_delete_GraphicsMatrix, METH_O, NULL},
 	 { (char *)"GraphicsMatrix_Concat", (PyCFunction) _wrap_GraphicsMatrix_Concat, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsMatrix_Set", (PyCFunction) _wrap_GraphicsMatrix_Set, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -39287,8 +39243,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GraphicsMatrix_TransformDistance", (PyCFunction) _wrap_GraphicsMatrix_TransformDistance, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GraphicsMatrix_GetNativeMatrix", (PyCFunction)_wrap_GraphicsMatrix_GetNativeMatrix, METH_O, NULL},
 	 { (char *)"GraphicsMatrix_swigregister", GraphicsMatrix_swigregister, METH_VARARGS, NULL},
-	 { (char *)"GraphicsMatrix_swiginit", GraphicsMatrix_swiginit, METH_VARARGS, NULL},
-	 { (char *)"new_GraphicsPath", (PyCFunction)_wrap_new_GraphicsPath, METH_NOARGS, NULL},
 	 { (char *)"delete_GraphicsPath", (PyCFunction)_wrap_delete_GraphicsPath, METH_O, NULL},
 	 { (char *)"GraphicsPath_MoveToPoint", _wrap_GraphicsPath_MoveToPoint, METH_VARARGS, NULL},
 	 { (char *)"GraphicsPath_AddLineToPoint", _wrap_GraphicsPath_AddLineToPoint, METH_VARARGS, NULL},
@@ -39309,7 +39263,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GraphicsPath_GetBox", (PyCFunction)_wrap_GraphicsPath_GetBox, METH_O, NULL},
 	 { (char *)"GraphicsPath_Contains", _wrap_GraphicsPath_Contains, METH_VARARGS, NULL},
 	 { (char *)"GraphicsPath_swigregister", GraphicsPath_swigregister, METH_VARARGS, NULL},
-	 { (char *)"GraphicsPath_swiginit", GraphicsPath_swiginit, METH_VARARGS, NULL},
 	 { (char *)"delete_GraphicsContext", (PyCFunction)_wrap_delete_GraphicsContext, METH_O, NULL},
 	 { (char *)"GraphicsContext_Create", _wrap_GraphicsContext_Create, METH_VARARGS, NULL},
 	 { (char *)"GraphicsContext_CreateMeasuringContext", (PyCFunction)_wrap_GraphicsContext_CreateMeasuringContext, METH_NOARGS, NULL},

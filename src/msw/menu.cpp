@@ -777,7 +777,12 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id)
     // ignore commands from the menu title
     if ( id != (WXWORD)idMenuTitle )
     {
-        // get the checked status of the command: notice that menuState is the
+        // update the check item when it's clicked
+        wxMenuItem * const item = FindItem(id);
+        if ( item && item->IsCheckable() )
+            item->Toggle();
+
+        // get the checked status of the menu item: note that menuState is the
         // old state of the menu, so the test for MF_CHECKED must be inverted
         UINT menuState = ::GetMenuState(GetHmenu(), id, MF_BYCOMMAND);
         SendEvent(id, !(menuState & MF_CHECKED));

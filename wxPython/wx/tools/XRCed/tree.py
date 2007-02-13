@@ -563,6 +563,8 @@ class XML_Tree(wx.TreeCtrl):
         # Different color for references
         if treeObj.ref:
             self.SetItemTextColour(item, 'DarkGreen')
+        elif treeObj.hasStyle and treeObj.params.get('hidden', False):
+            self.SetItemTextColour(item, 'Grey')
         # Try to find children objects
         if treeObj.hasChildren:
             nodes = treeObj.element.childNodes[:]
@@ -723,7 +725,8 @@ class XML_Tree(wx.TreeCtrl):
         if item == g.testWin.item: return False
         while item != self.root:
             item = self.GetItemParent(item)
-            if item == g.testWin.item: return True
+            if item == g.testWin.item:
+                return True
         return False
 
     # Highlight selected item
@@ -739,7 +742,9 @@ class XML_Tree(wx.TreeCtrl):
             return
         # Get window/sizer object
         obj = self.FindNodeObject(item)
-        if not obj:
+        xxx = self.GetPyData(item).treeObject()
+        # Remove existing HL if item not found or is hidden
+        if not obj or xxx.hasStyle and xxx.params.get('hidden', False):
             if g.testWin.highLight: g.testWin.highLight.Remove()
             return
         pos = self.FindNodePos(item, obj)
@@ -769,6 +774,7 @@ class XML_Tree(wx.TreeCtrl):
             return
         # Show item in bold
         if g.testWin:     # Reset old
+            self.Unselect()
             self.SetItemBold(g.testWin.item, False)
         try:
             wx.BeginBusyCursor()
@@ -1116,7 +1122,7 @@ class XML_Tree(wx.TreeCtrl):
                         (ID_NEW.PANEL, 'Panel', 'Create panel'),
                         (ID_NEW.DIALOG, 'Dialog', 'Create dialog'),
                         (ID_NEW.FRAME, 'Frame', 'Create frame')], shift=True)
-                elif xxx.isSizer:
+                elif xxx.isSizer and self.ItemHasChildren(item):
                     SetMenu(m, pullDownMenu.sizers, shift=True)
                 else:
                     SetMenu(m, pullDownMenu.controls, shift=True)
@@ -1142,6 +1148,11 @@ class XML_Tree(wx.TreeCtrl):
                 menu.Append(pullDownMenu.ID_COLLAPSE, 'Collapse', 'Collapse subtree')
         self.PopupMenu(menu, evt.GetPosition())
         menu.Destroy()
+
+    # Redefine to force the update of font dimentions
+    def SetItemBold(self, item):
+        wx.TreeCtrl.SetItemBold(self, item)
+        self.SetIndent(self.GetIndent())
 
     # Apply changes
     def Apply(self, xxx, item):

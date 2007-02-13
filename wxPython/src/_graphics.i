@@ -422,26 +422,18 @@ public :
 
 DocStr(wxGraphicsMatrix,
 "A wx.GraphicsMatrix is a native representation of an affine
-matrix. The contents are specific an private to the respective
+matrix. The contents are specific and private to the respective
 renderer. The only way to get a valid instance is via a CreateMatrix
 call on the graphics context or the renderer instance.", "");
 class wxGraphicsMatrix : public wxGraphicsObject
 {
 public :
-    wxGraphicsMatrix(); 
+//    wxGraphicsMatrix(); 
     virtual ~wxGraphicsMatrix();
 
     DocDeclStr(
         virtual void , Concat( const wxGraphicsMatrix& t ),
         "Concatenates the passed in matrix to the current matrix.", "");
-
-//     %extend  {
-//         DocStr(Copy,
-//                "Copy the passed in matrix to this one.", "");
-//         void Copy( const wxGraphicsMatrix& t ) {
-//             *self = t;
-//         }
-//     }
 
 
     DocDeclStr(
@@ -515,7 +507,7 @@ way to make this value usable.", "");
 class wxGraphicsPath : public wxGraphicsObject
 {
 public :
-    wxGraphicsPath();
+//    wxGraphicsPath();
     virtual ~wxGraphicsPath();
 
 

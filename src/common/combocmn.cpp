@@ -1855,7 +1855,7 @@ void wxComboCtrlBase::ShowPopup()
     }
 
     winPopup->Enable();
-    
+
     wxASSERT( !m_popup || m_popup == popup ); // Consistency check.
 
     wxSize adjustedSize = m_popupInterface->GetAdjustedSize(widthPopup,

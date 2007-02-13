@@ -141,7 +141,7 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
 
     GetBuffer().Reset();
     GetBuffer().SetRichTextCtrl(this);
-    
+
     SetCaret(new wxCaret(this, wxRICHTEXT_DEFAULT_CARET_WIDTH, 16));
     GetCaret()->Show();
 
@@ -194,7 +194,7 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
 wxRichTextCtrl::~wxRichTextCtrl()
 {
     GetBuffer().RemoveEventHandler(this);
-    
+
     delete m_contextMenu;
 }
 
@@ -328,7 +328,7 @@ void wxRichTextCtrl::OnKillFocus(wxFocusEvent& WXUNUSED(event))
 
 void wxRichTextCtrl::OnCaptureLost(wxMouseCaptureLostEvent& WXUNUSED(event))
 {
-    m_dragging = false;    
+    m_dragging = false;
 }
 
 /// Left-click
@@ -390,7 +390,7 @@ void wxRichTextCtrl::OnLeftUp(wxMouseEvent& event)
         long position = 0;
         wxPoint logicalPt = event.GetLogicalPosition(dc);
         int hit = GetBuffer().HitTest(dc, logicalPt, position);
-    
+
         if (hit != wxRICHTEXT_HITTEST_NONE)
         {
             wxTextAttrEx attr;
@@ -402,20 +402,20 @@ void wxRichTextCtrl::OnLeftUp(wxMouseEvent& event)
                     if (!urlTarget.IsEmpty())
                     {
                         wxMouseEvent mouseEvent(event);
-                        
+
                         long startPos = 0, endPos = 0;
                         wxRichTextObject* obj = GetBuffer().GetLeafObjectAtPosition(position);
                         if (obj)
                         {
                             startPos = obj->GetRange().GetStart();
                             endPos = obj->GetRange().GetEnd();
-                        }                        
-                        
+                        }
+
                         wxTextUrlEvent urlEvent(GetId(), mouseEvent, startPos, endPos);
                         InitCommandEvent(urlEvent);
 
                         urlEvent.SetString(urlTarget);
-                        
+
                         GetEventHandler()->ProcessEvent(urlEvent);
                     }
                 }
@@ -434,11 +434,11 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
     long position = 0;
     wxPoint logicalPt = event.GetLogicalPosition(dc);
     int hit = GetBuffer().HitTest(dc, logicalPt, position);
-    
+
     // See if we need to change the cursor
-    
+
     {
-        if (hit != wxRICHTEXT_HITTEST_NONE)
+        if (hit != wxRICHTEXT_HITTEST_NONE & !(hit & wxRICHTEXT_HITTEST_OUTSIDE))
         {
             wxTextAttrEx attr;
             if (GetStyle(position, attr))
@@ -453,6 +453,8 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
                 }
             }
         }
+        else
+            SetCursor(m_textCursor);
     }
 
     if (!event.Dragging())
@@ -588,7 +590,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
             // Generate conventional event
             wxCommandEvent textEvent(wxEVT_COMMAND_TEXT_ENTER, GetId());
             InitCommandEvent(textEvent);
-            
+
             GetEventHandler()->ProcessEvent(textEvent);
         }
         Update();
@@ -596,7 +598,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
     else if (event.GetKeyCode() == WXK_BACK)
     {
         BeginBatchUndo(_("Delete Text"));
-        
+
         // Submit range in character positions, which are greater than caret positions,
         // so subtract 1 for deleted character and add 1 for conversion to character position.
         if (m_caretPosition > -1 && !HasSelection())
@@ -782,7 +784,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                 cmdEvent.SetFlags(flags);
                 cmdEvent.SetCharacter((wxChar) keycode);
                 cmdEvent.SetPosition(m_caretPosition+1);
-                
+
                 if (keycode == wxT('\t'))
                 {
                     // See if we need to promote or demote the selection or paragraph at the cursor
@@ -819,7 +821,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
 
                 SetDefaultStyleToCursorStyle();
                 ScrollIntoView(m_caretPosition, WXK_RIGHT);
-                
+
                 GetEventHandler()->ProcessEvent(cmdEvent);
 
                 Update();
@@ -1331,7 +1333,7 @@ bool wxRichTextCtrl::MoveDown(int noLines, int flags)
         // we want to be at the end of the last line but with m_caretAtLineStart set to true,
         // so we view the caret at the start of the line.
         bool caretLineStart = false;
-        if (hitTest == wxRICHTEXT_HITTEST_BEFORE)
+        if (hitTest & wxRICHTEXT_HITTEST_BEFORE)
         {
             wxRichTextLine* thisLine = GetBuffer().GetLineAtPosition(newPos-1);
             wxRichTextRange lineRange;
@@ -1975,17 +1977,14 @@ wxRichTextCtrl::HitTest(const wxPoint& pt,
 
     int hit = ((wxRichTextCtrl*)this)->GetBuffer().HitTest(dc, pt2, *pos);
 
-    switch ( hit )
-    {
-        case wxRICHTEXT_HITTEST_BEFORE:
-            return wxTE_HT_BEFORE;
-
-        case wxRICHTEXT_HITTEST_AFTER:
-            return wxTE_HT_BEYOND;
-
-        case wxRICHTEXT_HITTEST_ON:
-            return wxTE_HT_ON_TEXT;
-    }
+    if ((hit & wxRICHTEXT_HITTEST_BEFORE) && (hit & wxRICHTEXT_HITTEST_OUTSIDE))
+        return wxTE_HT_BEFORE;
+    else if ((hit & wxRICHTEXT_HITTEST_AFTER) && (hit & wxRICHTEXT_HITTEST_OUTSIDE))
+        return wxTE_HT_BEYOND;
+    else if (hit & wxRICHTEXT_HITTEST_BEFORE|wxRICHTEXT_HITTEST_AFTER)
+        return wxTE_HT_ON_TEXT;
+    else
+        return wxTE_HT_UNKNOWN;
 
     return wxTE_HT_UNKNOWN;
 }

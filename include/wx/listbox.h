@@ -45,11 +45,11 @@ public:
     // all generic methods are in wxControlWithItems, except for the following
     // ones which are not yet implemented by wxChoice/wxComboBox
     void Insert(const wxString& item, unsigned int pos)
-        { DoInsert(item, pos); }
+        { /* return*/ wxControlWithItems::Insert(item,pos); }
     void Insert(const wxString& item, unsigned int pos, void *clientData)
-        { DoInsert(item, pos); SetClientData(pos, clientData); }
+        { /* return*/ wxControlWithItems::Insert(item,pos,clientData); }
     void Insert(const wxString& item, unsigned int pos, wxClientData *clientData)
-        { DoInsert(item, pos); SetClientObject(pos, clientData); }
+        { /* return*/ wxControlWithItems::Insert(item,pos,clientData); }
 
     void InsertItems(unsigned int nItems, const wxString *items, unsigned int pos);
     void InsertItems(const wxArrayString& items, unsigned int pos)

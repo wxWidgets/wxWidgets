@@ -1,3 +1,16 @@
+0.1.8-0
+-------
+
+New feature added from a patch submitted on sourceforge by botg:
+moving of tree items. 
+
+Bugs fixed:
+- ChecklistBox content editing;
+- Window styles more in sync with the docs;
+- Replacing items;
+- Reference property page created correctly (every property is
+  optional).
+
 0.1.7-5
 -------
 

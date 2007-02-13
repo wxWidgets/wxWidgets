@@ -52,6 +52,12 @@ public:
 
     virtual void SetWindowStyleFlag( long style );
 
+#if wxABI_VERSION >= 20802
+    // TODO: In 2.9 these should probably be virtual, and declared in the base class...
+    void SetToolNormalBitmap(int id, const wxBitmap& bitmap);
+    void SetToolDisabledBitmap(int id, const wxBitmap& bitmap);
+#endif
+    
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
     

@@ -177,7 +177,10 @@ class LanguageSelectPanel(wx.Panel):
         
         # create a locale object for this language
         self.locale = wx.Locale(lang)
-        self.locale.AddCatalog('wxpydemo')
+        if self.locale.IsOk():
+            self.locale.AddCatalog('wxpydemo')
+        else:
+            self.locale = None
 
     def translateExample(self):
         self.translatedST.SetLabel(_(self.englishBaseCh.GetStringSelection()))

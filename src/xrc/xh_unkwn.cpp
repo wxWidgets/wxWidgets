@@ -68,8 +68,7 @@ void wxUnknownControlContainer::AddChild(wxWindowBase *child)
 
     wxSizer *sizer = new wxBoxSizer(wxHORIZONTAL);
     sizer->Add((wxWindow*)child, 1, wxEXPAND);
-    SetSizer(sizer);
-    Layout();
+    SetSizerAndFit(sizer);
 }
 
 void wxUnknownControlContainer::RemoveChild(wxWindowBase *child)

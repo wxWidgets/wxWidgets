@@ -1,6 +1,8 @@
 TODO for XRCed
 ==============
 
+- undo for Replace op
+
 - better help
 
 + undo/redo
@@ -28,4 +30,4 @@ TODO for XRCed
 
 + selecting object by clicking in test window
 
-- hidden items should not be highlighted
++ hidden items should not be highlighted

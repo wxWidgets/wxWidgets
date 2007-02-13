@@ -26127,6 +26127,106 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_ToolBar_SetToolNormalBitmap(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxToolBar *arg1 = (wxToolBar *) 0 ;
+  int arg2 ;
+  wxBitmap *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "id",(char *) "bitmap", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:ToolBar_SetToolNormalBitmap",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxToolBar, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ToolBar_SetToolNormalBitmap" "', expected argument " "1"" of type '" "wxToolBar *""'"); 
+  }
+  arg1 = reinterpret_cast< wxToolBar * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ToolBar_SetToolNormalBitmap" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_wxBitmap,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ToolBar_SetToolNormalBitmap" "', expected argument " "3"" of type '" "wxBitmap const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ToolBar_SetToolNormalBitmap" "', expected argument " "3"" of type '" "wxBitmap const &""'"); 
+  }
+  arg3 = reinterpret_cast< wxBitmap * >(argp3);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetToolNormalBitmap(arg2,(wxBitmap const &)*arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_ToolBar_SetToolDisabledBitmap(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxToolBar *arg1 = (wxToolBar *) 0 ;
+  int arg2 ;
+  wxBitmap *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "id",(char *) "bitmap", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:ToolBar_SetToolDisabledBitmap",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxToolBar, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ToolBar_SetToolDisabledBitmap" "', expected argument " "1"" of type '" "wxToolBar *""'"); 
+  }
+  arg1 = reinterpret_cast< wxToolBar * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "ToolBar_SetToolDisabledBitmap" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_wxBitmap,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ToolBar_SetToolDisabledBitmap" "', expected argument " "3"" of type '" "wxBitmap const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "ToolBar_SetToolDisabledBitmap" "', expected argument " "3"" of type '" "wxBitmap const &""'"); 
+  }
+  arg3 = reinterpret_cast< wxBitmap * >(argp3);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetToolDisabledBitmap(arg2,(wxBitmap const &)*arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_ToolBar_GetClassDefaultAttributes(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxWindowVariant arg1 = (wxWindowVariant) wxWINDOW_VARIANT_NORMAL ;
@@ -47635,6 +47735,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_ToolBar", (PyCFunction) _wrap_new_ToolBar, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_PreToolBar", (PyCFunction)_wrap_new_PreToolBar, METH_NOARGS, NULL},
 	 { (char *)"ToolBar_Create", (PyCFunction) _wrap_ToolBar_Create, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"ToolBar_SetToolNormalBitmap", (PyCFunction) _wrap_ToolBar_SetToolNormalBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"ToolBar_SetToolDisabledBitmap", (PyCFunction) _wrap_ToolBar_SetToolDisabledBitmap, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ToolBar_GetClassDefaultAttributes", (PyCFunction) _wrap_ToolBar_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"ToolBar_swigregister", ToolBar_swigregister, METH_VARARGS, NULL},
 	 { (char *)"ToolBar_swiginit", ToolBar_swiginit, METH_VARARGS, NULL},

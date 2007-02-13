@@ -7258,7 +7258,7 @@ SWIGINTERN PyObject *_wrap_Rect_Inflate(PyObject *SWIGUNUSEDPARM(self), PyObject
   wxRect *arg1 = (wxRect *) 0 ;
   int arg2 ;
   int arg3 ;
-  wxRect *result = 0 ;
+  wxRect result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   int val2 ;
@@ -7289,13 +7289,10 @@ SWIGINTERN PyObject *_wrap_Rect_Inflate(PyObject *SWIGUNUSEDPARM(self), PyObject
   } 
   arg3 = static_cast< int >(val3);
   {
-    {
-      wxRect &_result_ref = (arg1)->Inflate(arg2,arg3);
-      result = (wxRect *) &_result_ref;
-    }
+    result = (arg1)->Inflate(arg2,arg3);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxRect, 0 |  0 );
+  resultobj = SWIG_NewPointerObj((new wxRect(static_cast< const wxRect& >(result))), SWIGTYPE_p_wxRect, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;

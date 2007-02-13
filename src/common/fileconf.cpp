@@ -1047,15 +1047,17 @@ bool wxFileConfig::Flush(bool /* bCurrentOnly */)
   }
 
   // write all strings to file
+  wxString filetext;
+  filetext.reserve(4096);
   for ( wxFileConfigLineList *p = m_linesHead; p != NULL; p = p->Next() )
   {
-    wxString line = p->Text();
-    line += wxTextFile::GetEOL();
-    if ( !file.Write(line, *m_conv) )
-    {
-      wxLogError(_("can't write user configuration file."));
-      return false;
-    }
+    filetext << p->Text() << wxTextFile::GetEOL();
+  }
+
+  if ( !file.Write(filetext, *m_conv) )
+  {
+    wxLogError(_("can't write user configuration file."));
+    return false;
   }
 
   if ( !file.Commit() )

@@ -122,8 +122,8 @@ bool wxComboListBox::Create(wxWindow* parent)
     if ( !wxListBox::Create(parent, wxID_ANY,
                             wxDefaultPosition, wxDefaultSize,
                             0, NULL,
-                            wxBORDER_SIMPLE | wxLB_INT_HEIGHT |
-                            m_combo->GetWindowStyle() & wxCB_SORT ? wxLB_SORT : 0) )
+                            wxBORDER_SIMPLE |
+                            ( m_combo->GetWindowStyle() & wxCB_SORT ? wxLB_SORT : 0 ) ) )
         return false;
 
     // we don't react to the mouse events outside the window at all
@@ -389,8 +389,8 @@ void wxComboBox::SetSelection(int n)
     wxCHECK_RET( (n == wxNOT_FOUND || IsValid(n)), _T("invalid index in wxComboBox::Select") );
 
     GetLBox()->SetSelection(n);
-    if ( GetTextCtrl() )
-        GetTextCtrl()->SetValue(GetLBox()->GetString(n));
+
+    SetText(GetLBox()->GetString(n));
 }
 
 int wxComboBox::GetSelection() const

@@ -1790,7 +1790,9 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         btnshadow = wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNSHADOW)
         self._hilightUnfocusedBrush = wx.Brush(btnshadow)
         r, g, b = btnshadow.Red(), btnshadow.Green(), btnshadow.Blue()
-        backcolour = ((r >> 1) - 20, (g >> 1) - 20, (b >> 1) - 20)
+        backcolour = (max((r >> 1) - 20, 0),
+                      max((g >> 1) - 20, 0),
+                      max((b >> 1) - 20, 0))
         backcolour = wx.Colour(backcolour[0], backcolour[1], backcolour[2])
         self._hilightUnfocusedBrush2 = wx.Brush(backcolour)
 
@@ -3956,21 +3958,22 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         self._imageListNormal = imageList
         self._ownsImageListNormal = False
         self._dirty = True
+        
         # Don't do any drawing if we're setting the list to NULL,
         # since we may be in the process of deleting the tree control.
         if imageList:
             self.CalculateLineHeight()
 
-        # We gray out the image list to use the grayed icons with disabled items
-        self._grayedImageList = wx.ImageList(16, 16, True, 0)
-        
-        for ii in xrange(imageList.GetImageCount()):
-            
-            bmp = imageList.GetBitmap(ii)
-            image = wx.ImageFromBitmap(bmp)
-            image = GrayOut(image)
-            newbmp = wx.BitmapFromImage(image)
-            self._grayedImageList.Add(newbmp)
+            # We gray out the image list to use the grayed icons with disabled items
+            sz = imageList.GetSize(0)
+            self._grayedImageList = wx.ImageList(sz[0], sz[1], True, 0)
+
+            for ii in xrange(imageList.GetImageCount()):
+                bmp = imageList.GetBitmap(ii)
+                image = wx.ImageFromBitmap(bmp)
+                image = GrayOut(image)
+                newbmp = wx.BitmapFromImage(image)
+                self._grayedImageList.Add(newbmp)
         
 
     def SetStateImageList(self, imageList):
