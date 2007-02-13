@@ -138,6 +138,10 @@
 #define LWA_ALPHA 2
 #endif
 
+#ifndef QS_ALLPOSTMESSAGE
+#define QS_ALLPOSTMESSAGE 0
+#endif
+
 /*
  * The following are required for VC++ 5 when the PSDK is not available.
  */

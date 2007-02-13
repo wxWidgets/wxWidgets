@@ -752,9 +752,6 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
             }
         }
 
-#if !defined(QS_ALLPOSTMESSAGE)
-#define QS_ALLPOSTMESSAGE 0
-#endif
         wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
         if ( traits )
         {

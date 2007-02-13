@@ -77,10 +77,7 @@
 #include <string.h>
 #include <ctype.h>
 
-// For MB_TASKMODAL
-#ifdef __WXWINCE__
-#include "wx/msw/wince/missing.h"
-#endif
+#include "wx/msw/missing.h"
 
 // instead of including <shlwapi.h> which is not part of the core SDK and not
 // shipped at all with other compilers, we always define the parts of it we
@@ -234,20 +231,14 @@ DWORD wxGUIAppTraits::WaitForThread(WXHANDLE hThread)
     if ( !wxEventLoop::GetActive() )
         return DoSimpleWaitForThread(hThread);
 
-    const DWORD wakeMask =
-               QS_ALLINPUT          // return as soon as there are any events
-#if !defined(__WXWINCE__)
-               | QS_ALLPOSTMESSAGE
-#endif
-               ;
-
     return ::MsgWaitForMultipleObjects
              (
                1,                   // number of objects to wait for
                (HANDLE *)&hThread,  // the objects
                false,               // wait for any objects, not all
                INFINITE,            // no timeout
-               wakeMask
+               QS_ALLINPUT |        // return as soon as there are any events
+               QS_ALLPOSTMESSAGE
              );
 }
 
