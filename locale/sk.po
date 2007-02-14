@@ -1,0 +1,6717 @@
+# Slovak translation of wxWidgets
+# Copyright (C) 2007
+# This file is distributed under the same license as the wxWidgets package.
+# Ivan Masar <helix84@centrum.sk>, 2007.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: $Id$\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2006-10-29 14:59+0100\n"
+"PO-Revision-Date: 2007-02-14 13:36+0100\n"
+"Last-Translator: helix84 <helix84@centrum.sk>\n"
+"Language-Team: Slovak <sk-i18n@lists.linux.sk>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural= (n==1) ? 1 : (n>=2 && n<=4) ? 2 : 0;\n"
+
+#: ../src/common/debugrpt.cpp:575
+#, c-format
+msgid "\t%s: %s\n"
+msgstr "\t%s: %s\n"
+
+#: ../src/common/debugrpt.cpp:578
+msgid ""
+"\n"
+"Please send this report to the program maintainer, thank you!\n"
+msgstr ""
+"\n"
+"Prosím, pošlite túto správu správcovi balíka, vďaka!\n"
+
+#: ../src/palmos/utils.cpp:216
+#: ../src/richtext/richtextstyledlg.cpp:203
+#: ../src/richtext/richtextstyledlg.cpp:215
+msgid " "
+msgstr " "
+
+#: ../src/generic/dbgrptg.cpp:313
+msgid "              Thank you and we're sorry for the inconvenience!\n"
+msgstr "              Ďakujeme a prepáčte za nepríjemnosti!\n"
+
+#: ../src/common/log.cpp:245
+#, c-format
+msgid " (error %ld: %s)"
+msgstr " (chyba %ld: %s)"
+
+#: ../src/common/docview.cpp:1429
+msgid " - "
+msgstr " - "
+
+#: ../src/common/strconv.cpp:3063
+#: ../src/common/strconv.cpp:3071
+msgid " Couldn't create the UnicodeConverter"
+msgstr " Nebolo možné vytvoriť UnicodeConverter"
+
+#: ../src/html/htmprint.cpp:579
+#: ../src/richtext/richtextprint.cpp:535
+msgid " Preview"
+msgstr " Náhľad"
+
+#: ../src/msw/aboutdlg.cpp:52
+msgid " Version "
+msgstr " Verzia "
+
+#: ../src/common/fontcmn.cpp:619
+msgid " bold"
+msgstr " tučné"
+
+#: ../src/common/fontcmn.cpp:635
+msgid " italic"
+msgstr " kurzíva"
+
+#: ../src/common/fontcmn.cpp:615
+msgid " light"
+msgstr " svetlé"
+
+#: ../src/common/paper.cpp:119
+msgid "#10 Envelope, 4 1/8 x 9 1/2 in"
+msgstr ""
+
+#: ../src/common/paper.cpp:120
+msgid "#11 Envelope, 4 1/2 x 10 3/8 in"
+msgstr ""
+
+#: ../src/common/paper.cpp:121
+msgid "#12 Envelope, 4 3/4 x 11 in"
+msgstr ""
+
+#: ../src/common/paper.cpp:122
+msgid "#14 Envelope, 5 x 11 1/2 in"
+msgstr ""
+
+#: ../src/common/paper.cpp:118
+msgid "#9 Envelope, 3 7/8 x 8 7/8 in"
+msgstr ""
+
+#: ../contrib/src/deprecated/resource.cpp:1808
+#: ../contrib/src/deprecated/resource.cpp:1938
+#: ../contrib/src/deprecated/resource.cpp:3036
+#, c-format
+msgid "#define %s must be an integer."
+msgstr ""
+
+#: ../src/common/filename.cpp:2345
+#, c-format
+msgid "%.*f GB"
+msgstr "%.*f GB"
+
+#: ../src/common/filename.cpp:2343
+#, c-format
+msgid "%.*f MB"
+msgstr "%.*f MB"
+
+#: ../src/common/filename.cpp:2347
+#, c-format
+msgid "%.*f TB"
+msgstr "%.*f TB"
+
+#: ../src/common/filename.cpp:2341
+#, c-format
+msgid "%.*f kB"
+msgstr "%.*f kB"
+
+#: ../src/html/helpwnd.cpp:1021
+#: ../src/html/helpwnd.cpp:1023
+#: ../src/html/helpwnd.cpp:1655
+#: ../src/html/helpwnd.cpp:1693
+#, c-format
+msgid "%i of %i"
+msgstr "%i z %i"
+
+#: ../src/generic/filedlgg.cpp:360
+#, c-format
+msgid "%ld byte"
+msgid_plural "%ld bytes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../src/common/cmdline.cpp:870
+#, c-format
+msgid "%s (or %s)"
+msgstr "%s (alebo %s)"
+
+#: ../src/common/filename.cpp:2339
+#, c-format
+msgid "%s B"
+msgstr "%s B"
+
+#: ../src/generic/logg.cpp:260
+#, c-format
+msgid "%s Error"
+msgstr "%s Chyba"
+
+#: ../src/generic/logg.cpp:268
+#, c-format
+msgid "%s Information"
+msgstr "%s Informácia"
+
+#: ../src/generic/logg.cpp:264
+#, c-format
+msgid "%s Warning"
+msgstr "%s Varovanie"
+
+#: ../src/common/tarstrm.cpp:1235
+#, c-format
+msgid "%s did not fit the tar header for entry '%s'"
+msgstr "%s sa nehodilo do hlavičky záznamu '%s'"
+
+#: ../src/common/fldlgcmn.cpp:93
+#, c-format
+msgid "%s files (%s)|%s"
+msgstr "%s súborov (%s)|%s"
+
+#: ../src/common/msgout.cpp:217
+#, c-format
+msgid "%s message"
+msgstr "%s správa"
+
+#: ../contrib/src/deprecated/resource.cpp:2400
+#, c-format
+msgid "%s not a bitmap resource specification."
+msgstr "%s nie je špecifikácia zdroja s bitmapou."
+
+#: ../contrib/src/deprecated/resource.cpp:2554
+#, c-format
+msgid "%s not an icon resource specification."
+msgstr "%s nie je špecifikácia zdroja s ikonou."
+
+#: ../contrib/src/deprecated/resource.cpp:1901
+#: ../contrib/src/deprecated/resource.cpp:2030
+#: ../contrib/src/deprecated/resource.cpp:3133
+#, c-format
+msgid "%s: ill-formed resource file syntax."
+msgstr "%s: syntaktická chyba v súbore zdrojov."
+
+#: ../src/common/stockitem.cpp:110
+msgid "&About"
+msgstr "&O aplikácii"
+
+#: ../src/html/helpfrm.cpp:122
+#: ../src/html/helpfrm.cpp:124
+msgid "&About..."
+msgstr "&O aplikácii..."
+
+#: ../src/common/stockitem.cpp:160
+msgid "&Actual Size"
+msgstr "&Skutočná veľkosť"
+
+#: ../src/richtext/richtextindentspage.cpp:135
+#: ../src/richtext/richtextliststylepage.cpp:319
+msgid "&Alignment"
+msgstr "&Zarovnanie"
+
+#: ../src/common/stockitem.cpp:112
+msgid "&Apply"
+msgstr "&Použiť"
+
+#: ../src/richtext/richtextstyledlg.cpp:238
+msgid "&Apply Style"
+msgstr "&Použiť štýl"
+
+#: ../src/msw/mdi.cpp:175
+msgid "&Arrange Icons"
+msgstr "&Zoradiť ikony"
+
+#: ../src/common/stockitem.cpp:124
+msgid "&Back"
+msgstr "&Späť"
+
+#: ../src/richtext/richtextstylepage.cpp:112
+msgid "&Based on:"
+msgstr "&Založené na:"
+
+#: ../src/common/stockitem.cpp:113
+msgid "&Bold"
+msgstr "&Tučné"
+
+#: ../src/richtext/richtextbulletspage.cpp:155
+#: ../src/richtext/richtextliststylepage.cpp:209
+msgid "&Bullet style:"
+msgstr "&Štýl oddeľovača položiek zoznamu:"
+
+#: ../src/common/stockitem.cpp:114
+#: ../src/generic/fontdlgg.cpp:377
+#: ../src/generic/fontdlgg.cpp:396
+#: ../src/generic/wizard.cpp:451
+#: ../src/mac/carbon/fontdlg.cpp:525
+msgid "&Cancel"
+msgstr ""
+
+#: ../src/msw/mdi.cpp:171
+msgid "&Cascade"
+msgstr ""
+
+#: ../src/richtext/richtextsymboldlg.cpp:438
+msgid "&Character code:"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:115
+msgid "&Clear"
+msgstr ""
+
+#: ../src/common/prntbase.cpp:1101
+#: ../src/common/stockitem.cpp:116
+#: ../src/generic/logg.cpp:510
+#: ../src/html/helpfrm.cpp:119
+#: ../src/html/helpdlg.cpp:91
+msgid "&Close"
+msgstr ""
+
+#: ../src/richtext/richtextfontpage.cpp:201
+msgid "&Colour:"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:117
+#: ../src/mac/carbon/textctrl.cpp:1118
+#: ../src/msw/textctrl.cpp:2210
+#: ../src/richtext/richtextctrl.cpp:2424
+msgid "&Copy"
+msgstr ""
+
+#: ../src/generic/dbgrptg.cpp:321
+msgid "&Debug report preview:"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:119
+#: ../src/mac/carbon/textctrl.cpp:1120
+#: ../src/msw/textctrl.cpp:2212
+#: ../src/richtext/richtextctrl.cpp:2426
+#: ../src/richtext/richtexttabspage.cpp:142
+msgid "&Delete"
+msgstr ""
+
+#: ../src/richtext/richtextstyledlg.cpp:256
+msgid "&Delete Style..."
+msgstr ""
+
+#: ../src/generic/logg.cpp:718
+msgid "&Details"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:125
+msgid "&Down"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:120
+msgid "&Edit"
+msgstr ""
+
+#: ../src/richtext/richtextstyledlg.cpp:250
+msgid "&Edit Style..."
+msgstr ""
+
+#: ../src/common/stockitem.cpp:122
+#: ../src/html/helpfrm.cpp:126
+msgid "&File"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:121
+msgid "&Find"
+msgstr ""
+
+#: ../src/generic/wizard.cpp:646
+msgid "&Finish"
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:278
+msgid "&Font family:"
+msgstr ""
+
+#: ../src/richtext/richtextliststylepage.cpp:193
+msgid "&Font for Level..."
+msgstr ""
+
+#: ../src/richtext/richtextfontpage.cpp:122
+#: ../src/richtext/richtextsymboldlg.cpp:399
+msgid "&Font:"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:126
+msgid "&Forward"
+msgstr ""
+
+#: ../src/richtext/richtextsymboldlg.cpp:450
+msgid "&From:"
+msgstr ""
+
+#: ../src/common/prntbase.cpp:1147
+msgid "&Goto..."
+msgstr ""
+
+#: ../src/common/stockitem.cpp:128
+#: ../src/generic/wizard.cpp:447
+#: ../src/generic/wizard.cpp:454
+#: ../src/html/helpfrm.cpp:127
+msgid "&Help"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:129
+msgid "&Home"
+msgstr ""
+
+#: ../src/richtext/richtextindentspage.cpp:191
+#: ../src/richtext/richtextliststylepage.cpp:372
+msgid "&Indentation (tenths of a mm)"
+msgstr ""
+
+#: ../src/richtext/richtextindentspage.cpp:174
+#: ../src/richtext/richtextliststylepage.cpp:356
+msgid "&Indeterminate"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:131
+msgid "&Index"
+msgstr "&Index"
+
+#: ../src/common/stockitem.cpp:132
+msgid "&Italic"
+msgstr "&Kurzíva"
+
+#: ../src/richtext/richtextindentspage.cpp:160
+#: ../src/richtext/richtextliststylepage.cpp:342
+msgid "&Justified"
+msgstr "&Centrovať"
+
+#: ../src/richtext/richtextindentspage.cpp:146
+#: ../src/richtext/richtextliststylepage.cpp:328
+msgid "&Left"
+msgstr "&Vľavo"
+
+#: ../src/richtext/richtextindentspage.cpp:202
+#: ../src/richtext/richtextliststylepage.cpp:381
+msgid "&Left:"
+msgstr "&Vľavo:"
+
+#: ../src/richtext/richtextliststylepage.cpp:182
+msgid "&List level:"
+msgstr "Ú&roveň zoznamu:"
+
+#: ../src/generic/logg.cpp:511
+msgid "&Log"
+msgstr ""
+
+#: ../src/univ/themes/win32.cpp:3734
+msgid "&Move"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:137
+#: ../src/richtext/richtexttabspage.cpp:136
+msgid "&New"
+msgstr ""
+
+#: ../src/generic/mdig.cpp:118
+#: ../src/aui/tabmdi.cpp:107
+#: ../src/msw/mdi.cpp:176
+msgid "&Next"
+msgstr ""
+
+#: ../src/generic/wizard.cpp:450
+#: ../src/generic/wizard.cpp:646
+msgid "&Next >"
+msgstr ""
+
+#: ../src/generic/tipdlg.cpp:239
+msgid "&Next Tip"
+msgstr ""
+
+#: ../src/richtext/richtextstylepage.cpp:122
+msgid "&Next style:"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:138
+msgid "&No"
+msgstr "&Nie"
+
+#: ../src/generic/dbgrptg.cpp:343
+msgid "&Notes:"
+msgstr "&Poznámky:"
+
+#: ../src/richtext/richtextbulletspage.cpp:261
+msgid "&Number:"
+msgstr "&Číslo:"
+
+#: ../src/common/stockitem.cpp:139
+#: ../src/generic/fontdlgg.cpp:382
+#: ../src/generic/fontdlgg.cpp:389
+#: ../src/mac/carbon/fontdlg.cpp:531
+msgid "&OK"
+msgstr "&OK"
+
+#: ../src/common/stockitem.cpp:140
+msgid "&Open"
+msgstr "&Otvoriť"
+
+#: ../src/html/helpfrm.cpp:117
+msgid "&Open..."
+msgstr "&Otvoriť..."
+
+#: ../src/common/stockitem.cpp:141
+#: ../src/mac/carbon/textctrl.cpp:1119
+#: ../src/msw/textctrl.cpp:2211
+#: ../src/richtext/richtextctrl.cpp:2425
+msgid "&Paste"
+msgstr "&Prilepiť"
+
+#: ../src/generic/fontdlgg.cpp:329
+msgid "&Point size:"
+msgstr "&Veľkosť bodu:"
+
+#: ../src/richtext/richtexttabspage.cpp:113
+msgid "&Position (tenths of a mm):"
+msgstr "&Umiestnenie (desatiny milimetra):"
+
+#: ../src/common/stockitem.cpp:142
+msgid "&Preferences"
+msgstr "&Nastavenia"
+
+#: ../src/generic/mdig.cpp:119
+#: ../src/aui/tabmdi.cpp:108
+#: ../src/msw/mdi.cpp:177
+msgid "&Previous"
+msgstr "&Predchádzajúci"
+
+#: ../src/common/stockitem.cpp:143
+msgid "&Print"
+msgstr "&Tlačiť"
+
+#: ../src/common/prntbase.cpp:1106
+msgid "&Print..."
+msgstr "&Tlačiť..."
+
+#: ../src/common/stockitem.cpp:145
+msgid "&Properties"
+msgstr "&Vlastnosti"
+
+#: ../src/common/stockitem.cpp:146
+msgid "&Quit"
+msgstr "&Skončiť"
+
+#: ../src/common/cmdproc.cpp:288
+#: ../src/common/cmdproc.cpp:295
+#: ../src/common/stockitem.cpp:147
+#: ../src/mac/carbon/textctrl.cpp:1115
+#: ../src/msw/textctrl.cpp:2207
+#: ../src/richtext/richtextctrl.cpp:2421
+msgid "&Redo"
+msgstr "&Opakovať"
+
+#: ../src/common/cmdproc.cpp:284
+#: ../src/common/cmdproc.cpp:304
+msgid "&Redo "
+msgstr "&Opakovať"
+
+#: ../src/richtext/richtextstyledlg.cpp:244
+msgid "&Rename Style..."
+msgstr "&Premenovať štýl..."
+
+#: ../src/generic/fdrepdlg.cpp:178
+msgid "&Replace"
+msgstr "&Nahradiť"
+
+#: ../src/richtext/richtextstyledlg.cpp:274
+msgid "&Restart numbering"
+msgstr "&Reštartovať číslovanie"
+
+#: ../src/univ/themes/win32.cpp:3733
+msgid "&Restore"
+msgstr "&Obnoviť"
+
+#: ../src/richtext/richtextindentspage.cpp:153
+#: ../src/richtext/richtextliststylepage.cpp:335
+msgid "&Right"
+msgstr "&Vpravo"
+
+#: ../src/richtext/richtextindentspage.cpp:226
+#: ../src/richtext/richtextliststylepage.cpp:403
+msgid "&Right:"
+msgstr "&Vpravo:"
+
+#: ../src/common/stockitem.cpp:151
+msgid "&Save"
+msgstr "&Uložiť"
+
+#: ../src/generic/logg.cpp:506
+msgid "&Save..."
+msgstr "&Uložiť..."
+
+#: ../src/generic/tipdlg.cpp:234
+msgid "&Show tips at startup"
+msgstr "&Zobrazovať tipy pri spustení"
+
+#: ../src/univ/themes/win32.cpp:3736
+msgid "&Size"
+msgstr "&Veľkosť"
+
+#: ../src/richtext/richtextfontpage.cpp:140
+msgid "&Size:"
+msgstr "&Veľkosť:"
+
+#: ../src/richtext/richtextindentspage.cpp:248
+#: ../src/richtext/richtextliststylepage.cpp:423
+msgid "&Spacing (tenths of a mm)"
+msgstr "&Rozostup (desatiny milimetra)"
+
+#: ../src/common/stockitem.cpp:154
+msgid "&Stop"
+msgstr "&Stop"
+
+#: ../src/generic/fontdlgg.cpp:289
+#: ../src/richtext/richtextstylepage.cpp:103
+msgid "&Style:"
+msgstr "&Štýl:"
+
+#: ../src/richtext/richtextstyledlg.cpp:191
+msgid "&Styles:"
+msgstr "&Štýly:"
+
+#: ../src/richtext/richtextsymboldlg.cpp:412
+msgid "&Subset:"
+msgstr "&Podmnožina:"
+
+#: ../src/richtext/richtextbulletspage.cpp:216
+#: ../src/richtext/richtextliststylepage.cpp:268
+msgid "&Symbol:"
+msgstr "&Symbol:"
+
+#: ../src/common/stockitem.cpp:156
+#: ../src/generic/fontdlgg.cpp:351
+msgid "&Underline"
+msgstr "&Podčiarknutie"
+
+#: ../src/richtext/richtextfontpage.cpp:188
+msgid "&Underlining:"
+msgstr "&Podčiarknutie:"
+
+#: ../src/common/cmdproc.cpp:266
+#: ../src/common/stockitem.cpp:157
+#: ../src/mac/carbon/textctrl.cpp:1114
+#: ../src/msw/textctrl.cpp:2206
+#: ../src/richtext/richtextctrl.cpp:2420
+msgid "&Undo"
+msgstr "&Vrátiť"
+
+#: ../src/common/cmdproc.cpp:260
+msgid "&Undo "
+msgstr "&Vrátiť"
+
+#: ../src/common/stockitem.cpp:158
+msgid "&Unindent"
+msgstr "&Zrušiť odsadenie"
+
+#: ../src/common/stockitem.cpp:127
+msgid "&Up"
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:300
+msgid "&Weight:"
+msgstr ""
+
+#: ../src/generic/mdig.cpp:298
+#: ../src/generic/mdig.cpp:314
+#: ../src/generic/mdig.cpp:318
+#: ../src/aui/tabmdi.cpp:272
+#: ../src/aui/tabmdi.cpp:288
+#: ../src/aui/tabmdi.cpp:290
+#: ../src/msw/mdi.cpp:1417
+#: ../src/msw/mdi.cpp:1424
+#: ../src/msw/mdi.cpp:1454
+msgid "&Window"
+msgstr "&Okno"
+
+#: ../src/common/stockitem.cpp:159
+msgid "&Yes"
+msgstr "Á&no"
+
+#: ../src/common/config.cpp:451
+#: ../src/msw/regconf.cpp:253
+#, c-format
+msgid "'%s' has extra '..', ignored."
+msgstr ""
+
+#: ../src/common/valtext.cpp:128
+#: ../src/common/valtext.cpp:158
+#: ../src/common/valtext.cpp:164
+#, c-format
+msgid "'%s' is invalid"
+msgstr ""
+
+#: ../src/common/cmdline.cpp:786
+#, c-format
+msgid "'%s' is not a correct numeric value for option '%s'."
+msgstr ""
+
+#: ../src/common/intl.cpp:1194
+#, c-format
+msgid "'%s' is not a valid message catalog."
+msgstr ""
+
+#: ../src/common/textbuf.cpp:245
+#, c-format
+msgid "'%s' is probably a binary buffer."
+msgstr ""
+
+#: ../src/common/valtext.cpp:153
+#, c-format
+msgid "'%s' should be numeric."
+msgstr ""
+
+#: ../src/common/valtext.cpp:135
+#, c-format
+msgid "'%s' should only contain ASCII characters."
+msgstr ""
+
+#: ../src/common/valtext.cpp:141
+#, c-format
+msgid "'%s' should only contain alphabetic characters."
+msgstr ""
+
+#: ../src/common/valtext.cpp:147
+#, c-format
+msgid "'%s' should only contain alphabetic or numeric characters."
+msgstr ""
+
+#: ../src/richtext/richtextbulletspage.cpp:175
+#: ../src/richtext/richtextliststylepage.cpp:228
+msgid "(*)"
+msgstr "(*)"
+
+#: ../src/html/htmlhelp.cpp:638
+#: ../src/html/helpwnd.cpp:956
+msgid "(Help)"
+msgstr ""
+
+#: ../src/richtext/richtextbulletspage.cpp:280
+#: ../src/richtext/richtextliststylepage.cpp:485
+msgid "(None)"
+msgstr ""
+
+#: ../src/richtext/richtextsymboldlg.cpp:525
+msgid "(Normal text)"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:408
+#: ../src/html/helpwnd.cpp:1092
+#: ../src/html/helpwnd.cpp:1720
+msgid "(bookmarks)"
+msgstr ""
+
+#: ../src/richtext/richtextformatdlg.cpp:584
+msgid "(none)"
+msgstr ""
+
+#: ../src/richtext/richtextbulletspage.cpp:291
+#: ../src/richtext/richtextliststylepage.cpp:496
+msgid "*"
+msgstr ""
+
+#: ../src/richtext/richtextbulletspage.cpp:182
+#: ../src/richtext/richtextliststylepage.cpp:235
+msgid "*)"
+msgstr ""
+
+#: ../src/common/debugrpt.cpp:565
+msgid "*** A debug report has been generated\n"
+msgstr ""
+
+#: ../src/common/debugrpt.cpp:568
+msgid "*** And includes the following files:\n"
+msgstr ""
+
+#: ../src/common/debugrpt.cpp:566
+#, c-format
+msgid "*** It can be found in \"%s\"\n"
+msgstr ""
+
+#: ../src/richtext/richtextbulletspage.cpp:294
+#: ../src/richtext/richtextliststylepage.cpp:499
+msgid "+"
+msgstr ""
+
+#: ../contrib/src/deprecated/resource.cpp:1840
+#: ../contrib/src/deprecated/resource.cpp:1970
+#: ../contrib/src/deprecated/resource.cpp:3072
+msgid ""
+", expected static, #include or #define\n"
+"while parsing resource."
+msgstr ""
+
+#: ../src/richtext/richtextbulletspage.cpp:292
+#: ../src/richtext/richtextliststylepage.cpp:497
+msgid "-"
+msgstr ""
+
+#: ../src/richtext/richtextindentspage.cpp:290
+#: ../src/richtext/richtextliststylepage.cpp:461
+msgid "1.5"
+msgstr ""
+
+#: ../src/common/paper.cpp:142
+msgid "10 x 11 in"
+msgstr ""
+
+#: ../src/common/paper.cpp:115
+msgid "10 x 14 in"
+msgstr ""
+
+#: ../src/common/paper.cpp:116
+msgid "11 x 17 in"
+msgstr ""
+
+#: ../src/common/paper.cpp:186
+msgid "12 x 11 in"
+msgstr ""
+
+#: ../src/common/paper.cpp:143
+msgid "15 x 11 in"
+msgstr ""
+
+#: ../src/richtext/richtextindentspage.cpp:291
+#: ../src/richtext/richtextliststylepage.cpp:462
+msgid "2"
+msgstr ""
+
+#: ../src/common/paper.cpp:134
+msgid "6 3/4 Envelope, 3 5/8 x 6 1/2 in"
+msgstr ""
+
+#: ../src/common/paper.cpp:141
+msgid "9 x 11 in"
+msgstr ""
+
+#: ../src/html/htmprint.cpp:303
+msgid ": file does not exist!"
+msgstr ": súbor neexistuje!"
+
+#: ../src/common/fontmap.cpp:197
+msgid ": unknown charset"
+msgstr ": neznáma znaková sada"
+
+#: ../src/common/fontmap.cpp:411
+msgid ": unknown encoding"
+msgstr ": neznáme kódovanie"
+
+#: ../src/generic/wizard.cpp:456
+msgid "< &Back"
+msgstr "< &Späť"
+
+#: ../src/common/prntbase.cpp:1129
+msgid "<<"
+msgstr "<<"
+
+#: ../src/mac/carbon/fontdlg.cpp:545
+#: ../src/mac/carbon/fontdlg.cpp:752
+#: ../src/mac/carbon/fontdlg.cpp:772
+msgid "<Any Decorative>"
+msgstr "<ľubovoľné okrasné>"
+
+#: ../src/mac/carbon/fontdlg.cpp:546
+#: ../src/mac/carbon/fontdlg.cpp:754
+#: ../src/mac/carbon/fontdlg.cpp:774
+msgid "<Any Modern>"
+msgstr "<ľubovoľné moderné>"
+
+#: ../src/mac/carbon/fontdlg.cpp:544
+#: ../src/mac/carbon/fontdlg.cpp:750
+#: ../src/mac/carbon/fontdlg.cpp:770
+msgid "<Any Roman>"
+msgstr "<ľubovoľné rímske>"
+
+#: ../src/mac/carbon/fontdlg.cpp:547
+#: ../src/mac/carbon/fontdlg.cpp:756
+#: ../src/mac/carbon/fontdlg.cpp:776
+msgid "<Any Script>"
+msgstr "<ľubovoľné písané>"
+
+#: ../src/mac/carbon/fontdlg.cpp:548
+#: ../src/mac/carbon/fontdlg.cpp:761
+#: ../src/mac/carbon/fontdlg.cpp:780
+msgid "<Any Swiss>"
+msgstr "<ľubovoľné švajčiarske>"
+
+#: ../src/mac/carbon/fontdlg.cpp:549
+#: ../src/mac/carbon/fontdlg.cpp:758
+#: ../src/mac/carbon/fontdlg.cpp:778
+msgid "<Any Teletype>"
+msgstr "<ľubovoľné terminálové>"
+
+#: ../src/mac/carbon/fontdlg.cpp:543
+msgid "<Any>"
+msgstr "<ľubovoľné>"
+
+#: ../src/generic/filedlgg.cpp:331
+#: ../src/generic/filedlgg.cpp:354
+msgid "<DIR>"
+msgstr "<ADRESÁR>"
+
+#: ../src/generic/filedlgg.cpp:335
+#: ../src/generic/filedlgg.cpp:358
+msgid "<DRIVE>"
+msgstr "<JEDNOTKA>"
+
+#: ../src/generic/filedlgg.cpp:333
+#: ../src/generic/filedlgg.cpp:356
+msgid "<LINK>"
+msgstr "<ODKAZ>"
+
+#: ../src/html/helpwnd.cpp:1248
+msgid "<b><i>Bold italic face.</i></b><br>"
+msgstr "<b><i>Hrubé kurzívou.</i></b><br>"
+
+#: ../src/html/helpwnd.cpp:1252
+msgid "<b><i>bold italic <u>underlined</u></i></b><br>"
+msgstr "<b><i>Hrubé kurzívou, <u>podčiarknuté</u></i></b><br>"
+
+#: ../src/html/helpwnd.cpp:1247
+msgid "<b>Bold face.</b> "
+msgstr "<b>Hrubé.</b> "
+
+#: ../src/html/helpwnd.cpp:1246
+msgid "<i>Italic face.</i> "
+msgstr "<i>Kurzívou.</i> "
+
+#: ../src/richtext/richtextbulletspage.cpp:293
+#: ../src/richtext/richtextliststylepage.cpp:498
+msgid ">"
+msgstr ">"
+
+#: ../src/common/prntbase.cpp:1135
+msgid ">>"
+msgstr ">>"
+
+#: ../src/common/prntbase.cpp:1141
+msgid ">>|"
+msgstr ">>|"
+
+#: ../src/generic/dbgrptg.cpp:305
+msgid "A debug report has been generated in the directory\n"
+msgstr ""
+
+#: ../src/common/xtixml.cpp:406
+msgid "A non empty collection must consist of 'element' nodes"
+msgstr ""
+
+#: ../src/richtext/richtextbulletspage.cpp:254
+#: ../src/richtext/richtextbulletspage.cpp:256
+#: ../src/richtext/richtextliststylepage.cpp:304
+#: ../src/richtext/richtextliststylepage.cpp:306
+msgid "A standard bullet name."
+msgstr "Názov štandardného oddeľovača položiek zoznamu."
+
+#: ../src/common/paper.cpp:161
+msgid "A2 420 x 594 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:158
+msgid "A3 Extra 322 x 445 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:163
+msgid "A3 Extra Transverse 322 x 445 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:172
+msgid "A3 Rotated 420 x 297 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:162
+msgid "A3 Transverse 297 x 420 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:108
+msgid "A3 sheet, 297 x 420 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:148
+msgid "A4 Extra 9.27 x 12.69 in"
+msgstr ""
+
+#: ../src/common/paper.cpp:155
+msgid "A4 Plus 210 x 330 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:173
+msgid "A4 Rotated 297 x 210 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:150
+msgid "A4 Transverse 210 x 297 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:99
+msgid "A4 sheet, 210 x 297 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:109
+msgid "A4 small sheet, 210 x 297 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:159
+msgid "A5 Extra 174 x 235 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:174
+msgid "A5 Rotated 210 x 148 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:156
+msgid "A5 Transverse 148 x 210 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:110
+msgid "A5 sheet, 148 x 210 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:166
+msgid "A6 105 x 148 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:179
+msgid "A6 Rotated 148 x 105 mm"
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:87
+#: ../src/mac/carbon/fontdlg.cpp:276
+#: ../src/richtext/richtextformatdlg.cpp:401
+msgid "ABCDEFGabcdefg12345"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:94
+msgid "ADD"
+msgstr ""
+
+#: ../src/common/ftp.cpp:381
+#: ../src/richtext/richtextsymboldlg.cpp:457
+#: ../src/richtext/richtextsymboldlg.cpp:460
+#: ../src/richtext/richtextsymboldlg.cpp:461
+msgid "ASCII"
+msgstr ""
+
+#: ../src/generic/aboutdlgg.cpp:105
+msgid "About "
+msgstr ""
+
+#: ../src/common/stockitem.cpp:111
+msgid "Add"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:421
+msgid "Add current page to bookmarks"
+msgstr ""
+
+#: ../src/generic/colrdlgg.cpp:291
+msgid "Add to custom colours"
+msgstr ""
+
+#: ../include/wx/xti.h:898
+msgid "AddToPropertyCollection called on a generic accessor"
+msgstr ""
+
+#: ../include/wx/xti.h:845
+msgid "AddToPropertyCollection called w/o valid adder"
+msgstr ""
+
+#: ../src/html/helpctrl.cpp:138
+#, c-format
+msgid "Adding book %s"
+msgstr ""
+
+#: ../src/richtext/richtextindentspage.cpp:271
+#: ../src/richtext/richtextliststylepage.cpp:443
+msgid "After a paragraph:"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:135
+msgid "Align Left"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:136
+msgid "Align Right"
+msgstr ""
+
+#: ../src/generic/prntdlgg.cpp:210
+msgid "All"
+msgstr ""
+
+#: ../src/common/fldlgcmn.cpp:76
+#, c-format
+msgid "All files (%s)|%s"
+msgstr ""
+
+#: ../include/wx/defs.h:2332
+msgid "All files (*)|*"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:1530
+msgid "All files (*.*)|*"
+msgstr ""
+
+#: ../include/wx/defs.h:2329
+msgid "All files (*.*)|*.*"
+msgstr ""
+
+#: ../src/richtext/richtextstyles.cpp:751
+msgid "All styles"
+msgstr ""
+
+#: ../src/common/xtistrm.cpp:381
+msgid "Already Registered Object passed to SetObjectClassInfo"
+msgstr ""
+
+#: ../src/unix/dialup.cpp:356
+msgid "Already dialling ISP."
+msgstr ""
+
+#: ../src/common/menucmn.cpp:314
+msgid "Alt-"
+msgstr ""
+
+#: ../src/generic/animateg.cpp:163
+#, c-format
+msgid "Animation file is not of type %ld."
+msgstr ""
+
+#: ../src/generic/logg.cpp:1164
+#, c-format
+msgid "Append log to file '%s' (choosing [No] will overwrite it)?"
+msgstr ""
+
+#: ../src/richtext/richtextbulletspage.cpp:281
+#: ../src/richtext/richtextliststylepage.cpp:486
+msgid "Arabic"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:111
+msgid "Arabic (ISO-8859-6)"
+msgstr "Arabské (ISO-8859-6)"
+
+#: ../src/html/chm.cpp:564
+msgid "Archive doesnt contain #SYSTEM file"
+msgstr ""
+
+#: ../src/generic/filedlgg.cpp:515
+msgid "Attributes"
+msgstr ""
+
+#: ../src/richtext/richtextbulletspage.cpp:242
+#: ../src/richtext/richtextbulletspage.cpp:244
+#: ../src/richtext/richtextliststylepage.cpp:294
+msgid "Available fonts."
+msgstr ""
+
+#: ../src/common/paper.cpp:139
+msgid "B4 (ISO) 250 x 353 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:175
+msgid "B4 (JIS) Rotated 364 x 257 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:129
+msgid "B4 Envelope, 250 x 353 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:111
+msgid "B4 sheet, 250 x 354 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:160
+msgid "B5 (ISO) Extra 201 x 276 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:176
+msgid "B5 (JIS) Rotated 257 x 182 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:157
+msgid "B5 (JIS) Transverse 182 x 257 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:130
+msgid "B5 Envelope, 176 x 250 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:112
+msgid "B5 sheet, 182 x 257 millimeter"
+msgstr ""
+
+#: ../src/common/paper.cpp:184
+msgid "B6 (JIS) 128 x 182 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:185
+msgid "B6 (JIS) Rotated 182 x 128 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:131
+msgid "B6 Envelope, 176 x 125 mm"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:67
+msgid "BACK"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:152
+msgid "BIG5"
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:474
+#: ../src/common/imagbmp.cpp:490
+msgid "BMP: Couldn't allocate memory."
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:91
+msgid "BMP: Couldn't save invalid image."
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:295
+msgid "BMP: Couldn't write RGB color map."
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:428
+msgid "BMP: Couldn't write data."
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:200
+msgid "BMP: Couldn't write the file (Bitmap) header."
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:221
+msgid "BMP: Couldn't write the file (BitmapInfo) header."
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:125
+msgid "BMP: wxImage doesn't have own wxPalette."
+msgstr ""
+
+#: ../src/mac/carbon/fontdlg.cpp:343
+#: ../src/richtext/richtextformatdlg.cpp:481
+msgid "Background colour"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:118
+msgid "Baltic (ISO-8859-13)"
+msgstr "Baltské (ISO-8859-13)"
+
+#: ../src/common/fmapbase.cpp:109
+msgid "Baltic (old) (ISO-8859-4)"
+msgstr "Baltské (staré) (ISO-8859-4)"
+
+#: ../src/richtext/richtextindentspage.cpp:259
+#: ../src/richtext/richtextliststylepage.cpp:432
+msgid "Before a paragraph:"
+msgstr ""
+
+#: ../src/richtext/richtextbulletspage.cpp:288
+#: ../src/richtext/richtextliststylepage.cpp:493
+msgid "Bitmap"
+msgstr "Bitmapa"
+
+#: ../contrib/src/deprecated/resource.cpp:2534
+#, c-format
+msgid "Bitmap resource specification %s not found."
+msgstr "Špecifikácia zdroja s bitmapu %s nenájdená."
+
+#: ../src/generic/fontdlgg.cpp:240
+#: ../src/mac/carbon/fontdlg.cpp:477
+#: ../src/richtext/richtextfontpage.cpp:226
+#: ../src/richtext/richtextfontpage.cpp:297
+#: ../src/richtext/richtextfontpage.cpp:457
+msgid "Bold"
+msgstr "Hrubé"
+
+#: ../src/generic/prntdlgg.cpp:887
+msgid "Bottom margin (mm):"
+msgstr "Spodný okraj (mm):"
+
+#: ../src/richtext/richtextbulletspage.cpp:191
+#: ../src/richtext/richtextliststylepage.cpp:244
+msgid "Bullet &Alignment:"
+msgstr "&Zarovnanie oddeľovačov položiek zoznamu:"
+
+#: ../src/richtext/richtextliststylepage.cpp:309
+msgid "Bullet style"
+msgstr "Štýl oddeľovača položiek zoznamu"
+
+#: ../src/richtext/richtextformatdlg.cpp:290
+msgid "Bullets"
+msgstr "Oddeľovače položiek zoznamu"
+
+#: ../src/common/paper.cpp:100
+msgid "C sheet, 17 x 22 in"
+msgstr ""
+
+#: ../src/generic/logg.cpp:508
+msgid "C&lear"
+msgstr "&Vyčistiť"
+
+#: ../src/generic/fontdlgg.cpp:313
+msgid "C&olour:"
+msgstr "&Farba:"
+
+#: ../src/common/paper.cpp:125
+msgid "C3 Envelope, 324 x 458 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:126
+msgid "C4 Envelope, 229 x 324 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:124
+msgid "C5 Envelope, 162 x 229 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:127
+msgid "C6 Envelope, 114 x 162 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:128
+msgid "C65 Envelope, 114 x 229 mm"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:84
+msgid "CANCEL"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:88
+msgid "CAPITAL"
+msgstr ""
+
+#: ../src/html/chm.cpp:797
+#: ../src/html/chm.cpp:856
+msgid "CHM handler currently supports only local files!"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:85
+msgid "CLEAR"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:129
+msgid "COMMAND"
+msgstr ""
+
+#: ../src/os2/thread.cpp:116
+msgid "Can not create mutex."
+msgstr ""
+
+#: ../src/common/filefn.cpp:1345
+#, c-format
+msgid "Can not enumerate files '%s'"
+msgstr ""
+
+#: ../src/msw/dir.cpp:201
+#: ../src/unix/dir.cpp:228
+#, c-format
+msgid "Can not enumerate files in directory '%s'"
+msgstr ""
+
+#: ../src/os2/thread.cpp:516
+#, c-format
+msgid "Can not resume thread %lu"
+msgstr ""
+
+#: ../src/mac/classic/thread.cpp:487
+#: ../src/msw/thread.cpp:868
+#, c-format
+msgid "Can not resume thread %x"
+msgstr ""
+
+#: ../src/msw/thread.cpp:515
+msgid "Can not start thread: error writing TLS."
+msgstr ""
+
+#: ../src/os2/thread.cpp:502
+#, c-format
+msgid "Can not suspend thread %lu"
+msgstr ""
+
+#: ../src/mac/classic/thread.cpp:460
+#: ../src/msw/thread.cpp:853
+#, c-format
+msgid "Can not suspend thread %x"
+msgstr ""
+
+#: ../src/msw/thread.cpp:772
+msgid "Can not wait for thread termination"
+msgstr ""
+
+#: ../src/common/cmdproc.cpp:262
+msgid "Can't &Undo "
+msgstr ""
+
+#: ../src/common/image.cpp:2624
+#, c-format
+msgid "Can't check image format of file '%s': file does not exist."
+msgstr ""
+
+#: ../src/msw/registry.cpp:437
+#, c-format
+msgid "Can't close registry key '%s'"
+msgstr ""
+
+#: ../src/msw/registry.cpp:513
+#, c-format
+msgid "Can't copy values of unsupported type %d."
+msgstr ""
+
+#: ../src/msw/registry.cpp:418
+#, c-format
+msgid "Can't create registry key '%s'"
+msgstr ""
+
+#: ../src/mac/carbon/mpthread.cpp:906
+#: ../src/mac/classic/thread.cpp:435
+#: ../src/msw/thread.cpp:641
+#: ../src/os2/thread.cpp:483
+msgid "Can't create thread"
+msgstr ""
+
+#: ../src/msw/window.cpp:3397
+#, c-format
+msgid "Can't create window of class %s"
+msgstr ""
+
+#: ../src/msw/registry.cpp:689
+#, c-format
+msgid "Can't delete key '%s'"
+msgstr ""
+
+#: ../src/msw/iniconf.cpp:435
+#: ../src/os2/iniconf.cpp:466
+#, c-format
+msgid "Can't delete the INI file '%s'"
+msgstr ""
+
+#: ../src/msw/registry.cpp:717
+#, c-format
+msgid "Can't delete value '%s' from key '%s'"
+msgstr ""
+
+#: ../src/msw/registry.cpp:1066
+#, c-format
+msgid "Can't enumerate subkeys of key '%s'"
+msgstr ""
+
+#: ../src/msw/registry.cpp:1021
+#, c-format
+msgid "Can't enumerate values of key '%s'"
+msgstr ""
+
+#: ../src/msw/registry.cpp:1283
+#, c-format
+msgid "Can't export value of unsupported type %d."
+msgstr ""
+
+#: ../src/common/ffile.cpp:238
+#, c-format
+msgid "Can't find current position in file '%s'"
+msgstr ""
+
+#: ../src/msw/registry.cpp:346
+#, c-format
+msgid "Can't get info about registry key '%s'"
+msgstr ""
+
+#: ../src/common/zstream.cpp:330
+msgid "Can't initialize zlib deflate stream."
+msgstr ""
+
+#: ../src/common/zstream.cpp:176
+msgid "Can't initialize zlib inflate stream."
+msgstr ""
+
+#: ../src/common/image.cpp:2015
+#: ../src/common/image.cpp:2037
+#, c-format
+msgid "Can't load image from file '%s': file does not exist."
+msgstr ""
+
+#: ../src/msw/registry.cpp:382
+#, c-format
+msgid "Can't open registry key '%s'"
+msgstr ""
+
+#: ../src/common/zstream.cpp:246
+#, c-format
+msgid "Can't read from inflate stream: %s"
+msgstr ""
+
+#: ../src/common/zstream.cpp:239
+msgid "Can't read inflate stream: unexpected EOF in underlying stream."
+msgstr ""
+
+#: ../src/msw/registry.cpp:955
+#, c-format
+msgid "Can't read value of '%s'"
+msgstr ""
+
+#: ../src/msw/registry.cpp:790
+#: ../src/msw/registry.cpp:820
+#: ../src/msw/registry.cpp:880
+#, c-format
+msgid "Can't read value of key '%s'"
+msgstr ""
+
+#: ../src/common/image.cpp:2059
+#, c-format
+msgid "Can't save image to file '%s': unknown extension."
+msgstr ""
+
+#: ../src/generic/logg.cpp:570
+#: ../src/generic/logg.cpp:1021
+msgid "Can't save log contents to file."
+msgstr ""
+
+#: ../src/msw/thread.cpp:597
+#: ../src/os2/thread.cpp:466
+msgid "Can't set thread priority"
+msgstr ""
+
+#: ../src/msw/registry.cpp:807
+#: ../src/msw/registry.cpp:849
+#: ../src/msw/registry.cpp:970
+#, c-format
+msgid "Can't set value of '%s'"
+msgstr ""
+
+#: ../src/common/zstream.cpp:414
+#, c-format
+msgid "Can't write to deflate stream: %s"
+msgstr ""
+
+#: ../src/generic/dirdlgg.cpp:105
+#: ../src/html/htmlhelp.cpp:434
+#: ../src/mac/carbon/msgdlg.cpp:66
+#: ../src/motif/msgdlg.cpp:204
+#: ../src/richtext/richtextstyledlg.cpp:290
+#: ../src/gtk1/fontdlg.cpp:145
+#: ../contrib/src/deprecated/proplist.cpp:514
+msgid "Cancel"
+msgstr ""
+
+#: ../src/xrc/xmlres.cpp:1270
+#: ../src/xrc/xmlres.cpp:1318
+msgid "Cannot convert dialog units: dialog unknown."
+msgstr ""
+
+#: ../src/common/strconv.cpp:3482
+#, c-format
+msgid "Cannot convert from the charset '%s'!"
+msgstr ""
+
+#: ../src/msw/dialup.cpp:547
+#, c-format
+msgid "Cannot find active dialup connection: %s"
+msgstr ""
+
+#: ../src/xrc/xmlres.cpp:347
+#, c-format
+msgid "Cannot find container for unknown control '%s'."
+msgstr ""
+
+#: ../src/xrc/xmlres.cpp:1353
+#, c-format
+msgid "Cannot find font node '%s'."
+msgstr ""
+
+#: ../src/msw/dialup.cpp:852
+msgid "Cannot find the location of address book file"
+msgstr ""
+
+#: ../src/unix/threadpsx.cpp:1128
+#, c-format
+msgid "Cannot get priority range for scheduling policy %d."
+msgstr ""
+
+#: ../src/unix/utilsunx.cpp:802
+msgid "Cannot get the hostname"
+msgstr ""
+
+#: ../src/unix/utilsunx.cpp:838
+msgid "Cannot get the official hostname"
+msgstr ""
+
+#: ../src/msw/dialup.cpp:946
+msgid "Cannot hang up - no active dialup connection."
+msgstr ""
+
+#: ../include/wx/msw/ole/oleutils.h:46
+msgid "Cannot initialize OLE"
+msgstr ""
+
+#: ../src/mgl/app.cpp:282
+msgid "Cannot initialize SciTech MGL!"
+msgstr ""
+
+#: ../src/mgl/window.cpp:547
+msgid "Cannot initialize display."
+msgstr ""
+
+#: ../src/msw/volume.cpp:600
+#, c-format
+msgid "Cannot load icon from '%s'."
+msgstr ""
+
+#: ../src/xrc/xmlres.cpp:478
+#, c-format
+msgid "Cannot load resources from file '%s'."
+msgstr ""
+
+#: ../src/html/htmlfilt.cpp:158
+#, c-format
+msgid "Cannot open HTML document: %s"
+msgstr ""
+
+#: ../src/html/helpdata.cpp:665
+#, c-format
+msgid "Cannot open HTML help book: %s"
+msgstr ""
+
+#: ../src/html/helpdata.cpp:305
+#, c-format
+msgid "Cannot open contents file: %s"
+msgstr ""
+
+#: ../src/xrc/xmlres.cpp:442
+#, c-format
+msgid "Cannot open file '%s'."
+msgstr ""
+
+#: ../src/generic/dcpsg.cpp:1583
+msgid "Cannot open file for PostScript printing!"
+msgstr ""
+
+#: ../src/html/helpdata.cpp:319
+#, c-format
+msgid "Cannot open index file: %s"
+msgstr ""
+
+#: ../src/common/intl.cpp:1250
+#, c-format
+msgid "Cannot parse Plural-Forms:'%s'"
+msgstr ""
+
+#: ../src/xrc/xmlres.cpp:1254
+#, c-format
+msgid "Cannot parse coordinates from '%s'."
+msgstr ""
+
+#: ../src/xrc/xmlres.cpp:1302
+#, c-format
+msgid "Cannot parse dimension from '%s'."
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:1514
+msgid "Cannot print empty page."
+msgstr ""
+
+#: ../src/msw/volume.cpp:158
+#: ../src/msw/volume.cpp:490
+#, c-format
+msgid "Cannot read typename from '%s'!"
+msgstr ""
+
+#: ../src/unix/threadpsx.cpp:1109
+msgid "Cannot retrieve thread scheduling policy."
+msgstr ""
+
+#: ../src/unix/threadpsx.cpp:732
+msgid "Cannot start thread: error writing TLS"
+msgstr ""
+
+#: ../src/mac/carbon/mpthread.cpp:972
+msgid "Cannot wait for thread termination."
+msgstr ""
+
+#: ../src/mac/carbon/mpthread.cpp:888
+msgid "Cant create the thread event queue"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:511
+msgid "Case sensitive"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:119
+msgid "Celtic (ISO-8859-14)"
+msgstr "Keltské (ISO-8859-14)"
+
+#: ../src/richtext/richtextindentspage.cpp:167
+#: ../src/richtext/richtextliststylepage.cpp:349
+msgid "Cen&tred"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:133
+msgid "Centered"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:107
+msgid "Central European (ISO-8859-2)"
+msgstr "Stredoeurópske (ISO-8859-2)"
+
+#: ../src/richtext/richtextbulletspage.cpp:196
+#: ../src/richtext/richtextliststylepage.cpp:249
+msgid "Centre"
+msgstr ""
+
+#: ../src/richtext/richtextindentspage.cpp:169
+#: ../src/richtext/richtextindentspage.cpp:171
+#: ../src/richtext/richtextliststylepage.cpp:351
+#: ../src/richtext/richtextliststylepage.cpp:353
+msgid "Centre text."
+msgstr ""
+
+#: ../src/richtext/richtextbulletspage.cpp:229
+#: ../src/richtext/richtextliststylepage.cpp:280
+msgid "Ch&oose..."
+msgstr ""
+
+#: ../src/richtext/richtextbuffer.cpp:2573
+msgid "Change List Style"
+msgstr ""
+
+#: ../src/richtext/richtextbuffer.cpp:1608
+msgid "Change Style"
+msgstr ""
+
+#: ../src/richtext/richtextstyles.cpp:753
+msgid "Character styles"
+msgstr ""
+
+#: ../src/richtext/richtextbulletspage.cpp:170
+#: ../src/richtext/richtextbulletspage.cpp:172
+#: ../src/richtext/richtextliststylepage.cpp:223
+#: ../src/richtext/richtextliststylepage.cpp:225
+msgid "Check to add a period after the bullet."
+msgstr "Nezabudnite pridať bodku za oddeľovač položiek zoznamu."
+
+#: ../src/richtext/richtextbulletspage.cpp:184
+#: ../src/richtext/richtextbulletspage.cpp:186
+#: ../src/richtext/richtextliststylepage.cpp:237
+#: ../src/richtext/richtextliststylepage.cpp:239
+msgid "Check to add a right parenthesis."
+msgstr "Nezabudnite pridať pravú zátvorku."
+
+#: ../src/richtext/richtextbulletspage.cpp:177
+#: ../src/richtext/richtextbulletspage.cpp:179
+#: ../src/richtext/richtextliststylepage.cpp:230
+#: ../src/richtext/richtextliststylepage.cpp:232
+msgid "Check to enclose the bullet in parentheses."
+msgstr "Nezabudnite uzatvoriť oddeľovač položiek zoznamu do zátvoriek."
+
+#: ../src/mac/carbon/fontdlg.cpp:479
+#: ../src/mac/carbon/fontdlg.cpp:481
+msgid "Check to make the font bold."
+msgstr "Nezabudnite urobiť písmo tučným."
+
+#: ../src/mac/carbon/fontdlg.cpp:486
+#: ../src/mac/carbon/fontdlg.cpp:488
+msgid "Check to make the font italic."
+msgstr "Nezabudnite urobiť písmo kurzívou."
+
+#: ../src/mac/carbon/fontdlg.cpp:495
+#: ../src/mac/carbon/fontdlg.cpp:497
+msgid "Check to make the font underlined."
+msgstr "Nezabudnite urobiť písmo podčiarknutým."
+
+#: ../src/richtext/richtextstyledlg.cpp:276
+#: ../src/richtext/richtextstyledlg.cpp:278
+msgid "Check to restart numbering."
+msgstr "Nezabudnite reštartovať číslovanie."
+
+#: ../src/msw/dialup.cpp:787
+msgid "Choose ISP to dial"
+msgstr "Vyberte, ktorého poskytovateľa vytočiť"
+
+#: ../src/generic/colrdlgg.cpp:144
+#: ../src/gtk/colordlg.cpp:41
+#: ../src/palmos/colordlg.cpp:74
+msgid "Choose colour"
+msgstr "Vybrať farbu"
+
+#: ../src/gtk/fontdlg.cpp:107
+#: ../src/gtk1/fontdlg.cpp:126
+msgid "Choose font"
+msgstr "Vybrať písmo"
+
+#: ../src/common/module.cpp:78
+#, c-format
+msgid "Circular dependency involving module \"%s\" detected."
+msgstr "Bola detekovaná kruhová závislosť týkajúca sa modulu \"%s\"."
+
+#: ../src/generic/mdig.cpp:115
+#: ../src/aui/tabmdi.cpp:104
+msgid "Cl&ose"
+msgstr "&Zatvoriť"
+
+#: ../src/generic/logg.cpp:508
+msgid "Clear the log contents"
+msgstr "Vymazať obsah záznamu"
+
+#: ../src/richtext/richtextstyledlg.cpp:239
+#: ../src/richtext/richtextstyledlg.cpp:241
+msgid "Click to apply the selected style."
+msgstr "Kliknutím použijete vybraný štýl."
+
+#: ../src/richtext/richtextbulletspage.cpp:230
+#: ../src/richtext/richtextbulletspage.cpp:232
+#: ../src/richtext/richtextliststylepage.cpp:281
+#: ../src/richtext/richtextliststylepage.cpp:283
+msgid "Click to browse for a symbol."
+msgstr "Kliknutím budete vyberať symbol."
+
+#: ../src/mac/carbon/fontdlg.cpp:526
+#: ../src/mac/carbon/fontdlg.cpp:528
+msgid "Click to cancel changes to the font."
+msgstr "Kliknutím zrušíte zmeny písma."
+
+#: ../src/generic/fontdlgg.cpp:379
+#: ../src/generic/fontdlgg.cpp:398
+msgid "Click to cancel the font selection."
+msgstr "Kliknutím zrušíte výber písma."
+
+#: ../src/richtext/richtextstyledlg.cpp:291
+#: ../src/richtext/richtextstyledlg.cpp:293
+msgid "Click to cancel this window."
+msgstr "Kliknutím zrušíte toto okno."
+
+#: ../src/mac/carbon/fontdlg.cpp:507
+#: ../src/mac/carbon/fontdlg.cpp:509
+msgid "Click to change the font colour."
+msgstr "Kliknutím zmeníte farbu písma."
+
+#: ../src/richtext/richtextfontpage.cpp:205
+#: ../src/richtext/richtextfontpage.cpp:207
+msgid "Click to change the text colour."
+msgstr "Kliknutím zmeníte farbu textu."
+
+#: ../src/richtext/richtextliststylepage.cpp:194
+#: ../src/richtext/richtextliststylepage.cpp:196
+msgid "Click to choose the font for this level."
+msgstr "Kliknutím zmeníte písmo pre túto úroveň."
+
+#: ../src/richtext/richtextstyledlg.cpp:266
+#: ../src/richtext/richtextstyledlg.cpp:268
+msgid "Click to close this window."
+msgstr "Kliknutím zatvoríte toto okno."
+
+#: ../src/mac/carbon/fontdlg.cpp:533
+#: ../src/mac/carbon/fontdlg.cpp:535
+msgid "Click to confirm changes to the font."
+msgstr "Kliknutím potvrdíte zmeny písma."
+
+#: ../src/generic/fontdlgg.cpp:384
+#: ../src/generic/fontdlgg.cpp:386
+#: ../src/generic/fontdlgg.cpp:391
+#: ../src/generic/fontdlgg.cpp:393
+msgid "Click to confirm the font selection."
+msgstr "Kliknutím potvrdíte výber písma."
+
+#: ../src/richtext/richtextstyledlg.cpp:285
+#: ../src/richtext/richtextstyledlg.cpp:287
+msgid "Click to confirm your selection."
+msgstr "Kliknutím potvrdíte váš výber."
+
+#: ../src/richtext/richtextstyledlg.cpp:219
+#: ../src/richtext/richtextstyledlg.cpp:221
+msgid "Click to create a new character style."
+msgstr "Kliknutím vytvoríte štýl nového znaku."
+
+#: ../src/richtext/richtextstyledlg.cpp:231
+#: ../src/richtext/richtextstyledlg.cpp:233
+msgid "Click to create a new list style."
+msgstr "Kliknutím vytvoríte štýl nového zoznamu."
+
+#: ../src/richtext/richtextstyledlg.cpp:225
+#: ../src/richtext/richtextstyledlg.cpp:227
+msgid "Click to create a new paragraph style."
+msgstr "Kliknutím vytvoríte štýl nového odstavca."
+
+#: ../src/richtext/richtexttabspage.cpp:137
+#: ../src/richtext/richtexttabspage.cpp:139
+msgid "Click to create a new tab position."
+msgstr "Kliknutím vytvoríte novú pozíciu tabulátora."
+
+#: ../src/richtext/richtexttabspage.cpp:149
+#: ../src/richtext/richtexttabspage.cpp:151
+msgid "Click to delete all tab positions."
+msgstr "Kliknutím zmažete všetky pozície tabulátora."
+
+#: ../src/richtext/richtextstyledlg.cpp:257
+#: ../src/richtext/richtextstyledlg.cpp:259
+msgid "Click to delete the selected style."
+msgstr "Kliknutím zmažete vybraný štýl."
+
+#: ../src/richtext/richtexttabspage.cpp:143
+#: ../src/richtext/richtexttabspage.cpp:145
+msgid "Click to delete the selected tab position."
+msgstr "Kliknutím zmažete vybranú pozíciu tabulátora."
+
+#: ../src/richtext/richtextstyledlg.cpp:251
+#: ../src/richtext/richtextstyledlg.cpp:253
+msgid "Click to edit the selected style."
+msgstr "Kliknutím začnete upravovať vybraný štýl."
+
+#: ../src/richtext/richtextstyledlg.cpp:245
+#: ../src/richtext/richtextstyledlg.cpp:247
+msgid "Click to rename the selected style."
+msgstr "Kliknutím premenujete vybraný štýl."
+
+#: ../src/generic/dbgrptg.cpp:93
+#: ../src/generic/progdlgg.cpp:658
+#: ../src/generic/progdlgg.cpp:663
+#: ../src/richtext/richtextsymboldlg.cpp:482
+#: ../src/richtext/richtextsymboldlg.cpp:496
+#: ../src/richtext/richtextstyledlg.cpp:264
+#: ../contrib/src/deprecated/proplist.cpp:509
+msgid "Close"
+msgstr "Zatvoriť"
+
+#: ../src/univ/themes/win32.cpp:3742
+msgid "Close\tAlt-F4"
+msgstr "Zatvoriť\tAlt-F4"
+
+#: ../src/generic/mdig.cpp:116
+#: ../src/aui/tabmdi.cpp:105
+msgid "Close All"
+msgstr "Zatvoriť všetky"
+
+#: ../src/common/stockitem.cpp:211
+msgid "Close current document"
+msgstr "Zatvoriť aktuálny dokument"
+
+#: ../src/generic/logg.cpp:510
+msgid "Close this window"
+msgstr "Zatvoriť toto okno"
+
+#: ../src/richtext/richtextsymboldlg.cpp:483
+#: ../src/richtext/richtextsymboldlg.cpp:485
+#: ../src/richtext/richtextsymboldlg.cpp:497
+#: ../src/richtext/richtextsymboldlg.cpp:499
+msgid "Closes the dialog without inserting a symbol."
+msgstr "Zatvorí dialóg bez vlkadania symbolu."
+
+#: ../src/mac/carbon/fontdlg.cpp:503
+msgid "Colour:"
+msgstr "Farba:"
+
+#: ../src/html/helpwnd.cpp:1528
+msgid "Compressed HTML Help file (*.chm)|*.chm|"
+msgstr "Komprimovaný HTML súbor Pomocníka (*.chm)|*.chm|"
+
+#: ../src/generic/dirctrlg.cpp:606
+msgid "Computer"
+msgstr "Počítač"
+
+#: ../src/common/fileconf.cpp:996
+#, c-format
+msgid "Config entry name cannot start with '%c'."
+msgstr "Záznam konfigurácie nemôže začínať '%c'."
+
+#: ../src/generic/filedlgg.cpp:1466
+#: ../src/gtk/filedlg.cpp:61
+msgid "Confirm"
+msgstr "Potvrdiť"
+
+#: ../src/msw/mimetype.cpp:674
+msgid "Confirm registry update"
+msgstr "Potvrdiť aktualizáciu registra"
+
+#: ../src/html/htmlwin.cpp:491
+msgid "Connecting..."
+msgstr "Pripája sa..."
+
+#: ../src/html/htmlhelp.cpp:565
+#: ../src/html/helpwnd.cpp:453
+msgid "Contents"
+msgstr "Obsah"
+
+#: ../src/common/strconv.cpp:1732
+#, c-format
+msgid "Conversion to charset '%s' doesn't work."
+msgstr "Konverzia do znakovej sady '%s' nefunguje."
+
+#: ../src/html/htmlwin.cpp:914
+#, c-format
+msgid "Copied to clipboard:\"%s\""
+msgstr "Skopírované do schránky:\"%s\""
+
+#: ../src/generic/prntdlgg.cpp:243
+msgid "Copies:"
+msgstr "Kópie:"
+
+#: ../src/common/stockitem.cpp:203
+msgid "Copy selection"
+msgstr "Kopírovať výber"
+
+#: ../src/html/chm.cpp:703
+#, c-format
+msgid "Could not create temporary file '%s'"
+msgstr "Nebolo možné vytvoriť dočasný súbor '%s'"
+
+#: ../src/html/chm.cpp:274
+#, c-format
+msgid "Could not extract %s into %s: %s"
+msgstr "Nebolo možné rozbaliť %s do %s: %s"
+
+#: ../contrib/src/deprecated/resource.cpp:1830
+#: ../contrib/src/deprecated/resource.cpp:1960
+#, c-format
+msgid "Could not find resource include file %s."
+msgstr ""
+
+#: ../src/generic/tabg.cpp:1049
+msgid "Could not find tab for id"
+msgstr ""
+
+#: ../src/html/chm.cpp:445
+#, c-format
+msgid "Could not locate file '%s'."
+msgstr ""
+
+#: ../contrib/src/deprecated/resource.cpp:829
+#, c-format
+msgid ""
+"Could not resolve control class or id '%s'. Use (non-zero) integer instead\n"
+" or provide #define (see manual for caveats)"
+msgstr ""
+
+#: ../contrib/src/deprecated/resource.cpp:1278
+#, c-format
+msgid ""
+"Could not resolve menu id '%s'. Use (non-zero) integer instead\n"
+"or provide #define (see manual for caveats)"
+msgstr ""
+
+#: ../src/common/prntbase.cpp:1520
+msgid "Could not start document preview."
+msgstr ""
+
+#: ../src/generic/printps.cpp:181
+#: ../src/gtk/gnome/gprint.cpp:773
+#: ../src/msw/printwin.cpp:230
+msgid "Could not start printing."
+msgstr ""
+
+#: ../src/common/wincmn.cpp:1398
+msgid "Could not transfer data to window"
+msgstr ""
+
+#: ../src/mac/carbon/mpthread.cpp:222
+#: ../src/mac/carbon/mpthread.cpp:301
+msgid "Could not unlock mutex"
+msgstr ""
+
+#: ../src/os2/thread.cpp:149
+msgid "Couldn't acquire a mutex lock"
+msgstr ""
+
+#: ../src/msw/dragimag.cpp:156
+#: ../src/msw/dragimag.cpp:196
+#: ../src/msw/imaglist.cpp:147
+#: ../src/msw/imaglist.cpp:165
+#: ../src/msw/imaglist.cpp:177
+msgid "Couldn't add an image to the image list."
+msgstr ""
+
+#: ../src/msw/timer.cpp:101
+#: ../src/os2/timer.cpp:144
+msgid "Couldn't create a timer"
+msgstr ""
+
+#: ../src/mgl/cursor.cpp:132
+#: ../src/mgl/cursor.cpp:163
+msgid "Couldn't create cursor."
+msgstr ""
+
+#: ../src/mac/carbon/overlay.cpp:113
+msgid "Couldn't create the overlay window"
+msgstr ""
+
+#: ../src/mac/carbon/overlay.cpp:157
+msgid "Couldn't end the context on the overlay window"
+msgstr ""
+
+#: ../src/common/dynlib.cpp:199
+#, c-format
+msgid "Couldn't find symbol '%s' in a dynamic library"
+msgstr ""
+
+#: ../src/mac/classic/thread.cpp:517
+#: ../src/msw/thread.cpp:894
+msgid "Couldn't get the current thread pointer"
+msgstr ""
+
+#: ../src/mac/carbon/overlay.cpp:119
+msgid "Couldn't init the context on the overlay window"
+msgstr ""
+
+#: ../src/common/imagpng.cpp:621
+msgid "Couldn't load a PNG image - file is corrupted or not enough memory."
+msgstr ""
+
+#: ../src/unix/sound.cpp:471
+#, c-format
+msgid "Couldn't load sound data from '%s'."
+msgstr ""
+
+#: ../src/unix/sound_sdl.cpp:228
+#, c-format
+msgid "Couldn't open audio: %s"
+msgstr ""
+
+#: ../src/msw/ole/dataobj.cpp:143
+#, c-format
+msgid "Couldn't register clipboard format '%s'."
+msgstr ""
+
+#: ../src/os2/thread.cpp:166
+msgid "Couldn't release a mutex"
+msgstr ""
+
+#: ../src/msw/listctrl.cpp:716
+#, c-format
+msgid "Couldn't retrieve information about list control item %d."
+msgstr ""
+
+#: ../src/common/imagpng.cpp:670
+#: ../src/common/imagpng.cpp:679
+#: ../src/common/imagpng.cpp:687
+msgid "Couldn't save PNG image."
+msgstr ""
+
+#: ../src/mac/classic/thread.cpp:775
+#: ../src/msw/thread.cpp:658
+msgid "Couldn't terminate thread"
+msgstr ""
+
+#: ../src/common/xtistrm.cpp:157
+msgid "Create Parameter not found in declared RTTI Parameters"
+msgstr ""
+
+#: ../src/generic/dirdlgg.cpp:315
+msgid "Create directory"
+msgstr ""
+
+#: ../src/generic/dirdlgg.cpp:129
+#: ../src/generic/filedlgg.cpp:1088
+msgid "Create new directory"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:316
+msgid "Ctrl-"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:118
+#: ../src/mac/carbon/textctrl.cpp:1117
+#: ../src/msw/textctrl.cpp:2209
+#: ../src/richtext/richtextctrl.cpp:2423
+msgid "Cu&t"
+msgstr ""
+
+#: ../src/generic/filedlgg.cpp:1099
+msgid "Current directory:"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:204
+msgid "Cut selection"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:110
+msgid "Cyrillic (ISO-8859-5)"
+msgstr "Cyrilika (ISO-8859-5)"
+
+#: ../src/common/paper.cpp:101
+msgid "D sheet, 22 x 34 in"
+msgstr ""
+
+#: ../src/msw/dde.cpp:627
+msgid "DDE poke request failed"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:97
+msgid "DECIMAL"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:65
+msgid "DEL"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:66
+msgid "DELETE"
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:918
+msgid "DIB Header: Encoding doesn't match bitdepth."
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:880
+msgid "DIB Header: Image height > 32767 pixels for file."
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:874
+msgid "DIB Header: Image width > 32767 pixels for file."
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:894
+msgid "DIB Header: Unknown bitdepth in file."
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:904
+msgid "DIB Header: Unknown encoding in file."
+msgstr ""
+
+#: ../src/common/menucmn.cpp:98
+msgid "DIVIDE"
+msgstr ""
+
+#: ../src/common/paper.cpp:123
+msgid "DL Envelope, 110 x 220 mm"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:77
+msgid "DOWN"
+msgstr ""
+
+#: ../src/generic/dbgrptg.cpp:296
+#, c-format
+msgid "Debug report \"%s\""
+msgstr ""
+
+#: ../src/common/debugrpt.cpp:209
+msgid "Debug report couldn't be created."
+msgstr ""
+
+#: ../src/common/debugrpt.cpp:545
+msgid "Debug report generation has failed."
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:230
+msgid "Decorative"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:657
+msgid "Default encoding"
+msgstr ""
+
+#: ../src/generic/prntdlgg.cpp:504
+msgid "Default printer"
+msgstr ""
+
+#: ../src/richtext/richtextbuffer.cpp:4827
+msgid "Delete"
+msgstr ""
+
+#: ../src/richtext/richtexttabspage.cpp:148
+msgid "Delete A&ll"
+msgstr ""
+
+#: ../src/richtext/richtextstyledlg.cpp:736
+msgid "Delete Style"
+msgstr ""
+
+#: ../src/richtext/richtextctrl.cpp:560
+#: ../src/richtext/richtextctrl.cpp:589
+msgid "Delete Text"
+msgstr ""
+
+#: ../contrib/src/gizmos/editlbox.cpp:156
+msgid "Delete item"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:205
+msgid "Delete selection"
+msgstr ""
+
+#: ../src/richtext/richtextstyledlg.cpp:736
+#, c-format
+msgid "Delete style %s?"
+msgstr ""
+
+#: ../src/unix/snglinst.cpp:296
+#, c-format
+msgid "Deleted stale lock file '%s'."
+msgstr ""
+
+#: ../src/common/module.cpp:124
+#, c-format
+msgid "Dependency \"%s\" of module \"%s\" doesn't exist."
+msgstr ""
+
+#: ../src/generic/dirctrlg.cpp:672
+msgid "Desktop"
+msgstr ""
+
+#: ../src/generic/aboutdlgg.cpp:70
+msgid "Developed by "
+msgstr ""
+
+#: ../src/msw/dialup.cpp:396
+msgid "Dial up functions are unavailable because the remote access service (RAS) is not installed on this machine. Please install it."
+msgstr ""
+
+#: ../src/generic/tipdlg.cpp:242
+msgid "Did you know..."
+msgstr ""
+
+#: ../src/dfb/wrapdfb.cpp:59
+#, c-format
+msgid "DirectFB error %d occured."
+msgstr ""
+
+#: ../src/motif/filedlg.cpp:222
+msgid "Directories"
+msgstr ""
+
+#: ../src/common/filefn.cpp:1219
+#, c-format
+msgid "Directory '%s' couldn't be created"
+msgstr ""
+
+#: ../src/mgl/dirmgl.cpp:211
+#, c-format
+msgid "Directory '%s' doesn't exist!"
+msgstr ""
+
+#: ../src/generic/dirdlgg.cpp:231
+msgid "Directory does not exist"
+msgstr ""
+
+#: ../src/generic/filedlgg.cpp:1444
+msgid "Directory doesn't exist."
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:480
+msgid "Display all index items that contain given substring. Search is case insensitive."
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:671
+msgid "Display options dialog"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:335
+msgid "Displays help as you browse the books on the left."
+msgstr ""
+
+#: ../src/msw/mimetype.cpp:667
+msgid ""
+"Do you want to overwrite the command used to %s files with extension \"%s\" ?\n"
+"Current value is \n"
+"%s, \n"
+"New value is \n"
+"%s %1"
+msgstr ""
+
+#: ../src/common/docview.cpp:459
+#, c-format
+msgid "Do you want to save changes to document %s?"
+msgstr ""
+
+#: ../src/generic/aboutdlgg.cpp:73
+msgid "Documentation by "
+msgstr ""
+
+#: ../src/common/sizer.cpp:2019
+msgid "Don't Save"
+msgstr ""
+
+#: ../src/html/htmlwin.cpp:556
+#: ../src/msw/frame.cpp:195
+msgid "Done"
+msgstr ""
+
+#: ../src/generic/progdlgg.cpp:424
+msgid "Done."
+msgstr ""
+
+#: ../src/common/paper.cpp:178
+msgid "Double Japanese Postcard Rotated 148 x 200 mm"
+msgstr ""
+
+#: ../src/common/xtixml.cpp:268
+#, c-format
+msgid "Doubly used id : %d"
+msgstr ""
+
+#: ../src/generic/fdrepdlg.cpp:151
+msgid "Down"
+msgstr ""
+
+#: ../src/common/paper.cpp:102
+msgid "E sheet, 34 x 44 in"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:79
+msgid "END"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:70
+msgid "ENTER"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:82
+msgid "ESC"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:83
+msgid "ESCAPE"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:91
+msgid "EXECUTE"
+msgstr ""
+
+#: ../contrib/src/gizmos/editlbox.cpp:154
+msgid "Edit item"
+msgstr ""
+
+#: ../src/generic/progdlgg.cpp:190
+msgid "Elapsed time : "
+msgstr ""
+
+#: ../src/richtext/richtextstyledlg.cpp:570
+msgid "Enter a character style name"
+msgstr ""
+
+#: ../src/richtext/richtextstyledlg.cpp:772
+msgid "Enter a list style name"
+msgstr ""
+
+#: ../src/common/prntbase.cpp:1072
+#, c-format
+msgid "Enter a page number between %d and %d:"
+msgstr ""
+
+#: ../src/richtext/richtextstyledlg.cpp:618
+msgid "Enter a paragraph style name"
+msgstr ""
+
+#: ../src/generic/dbgrptg.cpp:170
+#, c-format
+msgid "Enter command to open file \"%s\":"
+msgstr ""
+
+#: ../src/generic/helpext.cpp:462
+msgid "Entries found"
+msgstr ""
+
+#: ../src/common/paper.cpp:144
+msgid "Envelope Invite 220 x 220 mm"
+msgstr ""
+
+#: ../src/common/config.cpp:402
+#, c-format
+msgid "Environment variables expansion failed: missing '%c' at position %u in '%s'."
+msgstr ""
+
+#: ../src/generic/dirctrlg.cpp:708
+#: ../src/generic/dirctrlg.cpp:726
+#: ../src/generic/dirctrlg.cpp:737
+#: ../src/generic/dirdlgg.cpp:350
+#: ../src/generic/filedlgg.cpp:712
+#: ../src/generic/filedlgg.cpp:830
+#: ../src/generic/filedlgg.cpp:844
+#: ../src/generic/filedlgg.cpp:862
+#: ../src/generic/filedlgg.cpp:1416
+#: ../src/generic/filedlgg.cpp:1444
+#: ../src/generic/filedlgg.cpp:1472
+#: ../src/gtk1/fontdlg.cpp:75
+msgid "Error"
+msgstr ""
+
+#: ../src/generic/dirdlgg.cpp:249
+msgid "Error creating directory"
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:927
+msgid "Error in reading image DIB."
+msgstr ""
+
+#: ../src/common/fileconf.cpp:504
+msgid "Error reading config options."
+msgstr ""
+
+#: ../src/common/fileconf.cpp:1084
+msgid "Error saving user configuration data."
+msgstr ""
+
+#: ../src/mac/carbon/mpthread.cpp:477
+msgid "Error while waiting on semaphore"
+msgstr ""
+
+#: ../src/common/log.cpp:441
+msgid "Error: "
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:108
+msgid "Esperanto (ISO-8859-3)"
+msgstr "Esperanto (ISO-8859-3)"
+
+#: ../src/generic/progdlgg.cpp:198
+msgid "Estimated time : "
+msgstr ""
+
+#: ../src/generic/dbgrptg.cpp:230
+msgid "Executable files (*.exe)|*.exe|All files (*.*)|*.*||"
+msgstr ""
+
+#: ../src/msw/utilsexc.cpp:765
+#, c-format
+msgid "Execution of command '%s' failed"
+msgstr ""
+
+#: ../src/os2/utilsexc.cpp:163
+#, c-format
+msgid "Execution of command '%s' failed with error: %ul"
+msgstr ""
+
+#: ../src/common/paper.cpp:107
+msgid "Executive, 7 1/4 x 10 1/2 in"
+msgstr ""
+
+#: ../contrib/src/deprecated/resource.cpp:1869
+#: ../contrib/src/deprecated/resource.cpp:1999
+#: ../contrib/src/deprecated/resource.cpp:3101
+msgid "Expected '*' while parsing resource."
+msgstr ""
+
+#: ../contrib/src/deprecated/resource.cpp:1886
+#: ../contrib/src/deprecated/resource.cpp:2015
+#: ../contrib/src/deprecated/resource.cpp:3118
+msgid "Expected '=' while parsing resource."
+msgstr ""
+
+#: ../contrib/src/deprecated/resource.cpp:1855
+#: ../contrib/src/deprecated/resource.cpp:1985
+#: ../contrib/src/deprecated/resource.cpp:3087
+msgid "Expected 'char' while parsing resource."
+msgstr ""
+
+#: ../src/msw/registry.cpp:1135
+#, c-format
+msgid "Exporting registry key: file \"%s\" already exists and won't be overwritten."
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:150
+msgid "Extended Unix Codepage for Japanese (EUC-JP)"
+msgstr ""
+
+#: ../src/html/chm.cpp:710
+#, c-format
+msgid "Extraction of '%s' into '%s' failed."
+msgstr ""
+
+#: ../src/common/menucmn.cpp:251
+#: ../src/common/menucmn.cpp:325
+msgid "F"
+msgstr ""
+
+#: ../src/msw/dialup.cpp:881
+#, c-format
+msgid "Failed to %s dialup connection: %s"
+msgstr ""
+
+#: ../src/unix/snglinst.cpp:270
+msgid "Failed to access lock file."
+msgstr ""
+
+#: ../src/msw/dib.cpp:563
+#, c-format
+msgid "Failed to allocated %luKb of memory for bitmap data."
+msgstr ""
+
+#: ../src/unix/displayx11.cpp:226
+msgid "Failed to change video mode"
+msgstr ""
+
+#: ../src/common/debugrpt.cpp:243
+#, c-format
+msgid "Failed to clean up debug report directory \"%s\""
+msgstr ""
+
+#: ../src/common/filename.cpp:190
+msgid "Failed to close file handle"
+msgstr ""
+
+#: ../src/unix/snglinst.cpp:335
+#, c-format
+msgid "Failed to close lock file '%s'"
+msgstr ""
+
+#: ../src/msw/clipbrd.cpp:113
+msgid "Failed to close the clipboard."
+msgstr ""
+
+#: ../src/x11/utils.cpp:264
+#, c-format
+msgid "Failed to close the display \"%s\""
+msgstr ""
+
+#: ../src/msw/dialup.cpp:821
+msgid "Failed to connect: missing username/password."
+msgstr ""
+
+#: ../src/msw/dialup.cpp:767
+msgid "Failed to connect: no ISP to dial."
+msgstr ""
+
+#: ../src/common/textfile.cpp:135
+msgid "Failed to convert file contents to Unicode."
+msgstr ""
+
+#: ../src/msw/registry.cpp:621
+#, c-format
+msgid "Failed to copy registry value '%s'"
+msgstr ""
+
+#: ../src/msw/registry.cpp:630
+#, c-format
+msgid "Failed to copy the contents of registry key '%s' to '%s'."
+msgstr ""
+
+#: ../src/common/filefn.cpp:1034
+#, c-format
+msgid "Failed to copy the file '%s' to '%s'"
+msgstr ""
+
+#: ../src/msw/registry.cpp:608
+#, c-format
+msgid "Failed to copy the registry subkey '%s' to '%s'."
+msgstr ""
+
+#: ../src/msw/dde.cpp:984
+msgid "Failed to create DDE string"
+msgstr ""
+
+#: ../src/msw/mdi.cpp:463
+msgid "Failed to create MDI parent frame."
+msgstr ""
+
+#: ../src/msw/statbr95.cpp:108
+msgid "Failed to create a status bar."
+msgstr ""
+
+#: ../src/common/filename.cpp:822
+msgid "Failed to create a temporary file name"
+msgstr ""
+
+#: ../src/msw/utilsexc.cpp:225
+msgid "Failed to create an anonymous pipe"
+msgstr ""
+
+#: ../src/msw/dde.cpp:442
+#, c-format
+msgid "Failed to create connection to server '%s' on topic '%s'"
+msgstr ""
+
+#: ../src/msw/cursor.cpp:215
+msgid "Failed to create cursor."
+msgstr ""
+
+#: ../src/common/debugrpt.cpp:208
+#, c-format
+msgid "Failed to create directory \"%s\""
+msgstr ""
+
+#: ../src/generic/dirdlgg.cpp:247
+#, c-format
+msgid ""
+"Failed to create directory '%s'\n"
+"(Do you have the required permissions?)"
+msgstr ""
+
+#: ../src/msw/mimetype.cpp:189
+#, c-format
+msgid "Failed to create registry entry for '%s' files."
+msgstr ""
+
+#: ../src/msw/fdrepdlg.cpp:472
+#, c-format
+msgid "Failed to create the standard find/replace dialog (error code %d)"
+msgstr ""
+
+#: ../src/html/winpars.cpp:587
+#, c-format
+msgid "Failed to display HTML document in %s encoding"
+msgstr ""
+
+#: ../src/mac/classic/clipbrd.cpp:187
+#: ../src/msw/clipbrd.cpp:125
+msgid "Failed to empty the clipboard."
+msgstr ""
+
+#: ../src/unix/displayx11.cpp:203
+msgid "Failed to enumerate video modes"
+msgstr ""
+
+#: ../src/msw/dde.cpp:646
+msgid "Failed to establish an advise loop with DDE server"
+msgstr ""
+
+#: ../src/msw/dialup.cpp:659
+#, c-format
+msgid "Failed to establish dialup connection: %s"
+msgstr ""
+
+#: ../src/unix/utilsunx.cpp:508
+#: ../src/unix/utilsunx.cpp:524
+#, c-format
+msgid "Failed to execute '%s'\n"
+msgstr ""
+
+#: ../src/common/debugrpt.cpp:672
+msgid "Failed to execute curl, please install it in PATH."
+msgstr ""
+
+#: ../contrib/src/deprecated/resource.cpp:2499
+#, c-format
+msgid ""
+"Failed to find XBM resource %s.\n"
+"Forgot to use wxResourceLoadBitmapData?"
+msgstr ""
+
+#: ../contrib/src/deprecated/resource.cpp:2653
+#, c-format
+msgid ""
+"Failed to find XBM resource %s.\n"
+"Forgot to use wxResourceLoadIconData?"
+msgstr ""
+
+#: ../contrib/src/deprecated/resource.cpp:2514
+#, c-format
+msgid ""
+"Failed to find XPM resource %s.\n"
+"Forgot to use wxResourceLoadBitmapData?"
+msgstr ""
+
+#: ../src/common/regex.cpp:425
+#: ../src/common/regex.cpp:473
+#, c-format
+msgid "Failed to find match for regular expression: %s"
+msgstr ""
+
+#: ../src/msw/dialup.cpp:719
+#, c-format
+msgid "Failed to get ISP names: %s"
+msgstr ""
+
+#: ../src/mac/classic/clipbrd.cpp:136
+msgid "Failed to get clipboard data."
+msgstr ""
+
+#: ../src/msw/clipbrd.cpp:731
+msgid "Failed to get data from the clipboard"
+msgstr ""
+
+#: ../src/common/stopwatch.cpp:231
+msgid "Failed to get the local system time"
+msgstr ""
+
+#: ../src/common/filefn.cpp:1478
+msgid "Failed to get the working directory"
+msgstr ""
+
+#: ../src/univ/theme.cpp:114
+msgid "Failed to initialize GUI: no built-in themes found."
+msgstr ""
+
+#: ../src/msw/helpchm.cpp:64
+msgid "Failed to initialize MS HTML Help."
+msgstr ""
+
+#: ../src/msw/glcanvas.cpp:653
+msgid "Failed to initialize OpenGL"
+msgstr ""
+
+#: ../src/gtk/textctrl.cpp:1006
+msgid "Failed to insert text in the control."
+msgstr ""
+
+#: ../src/unix/snglinst.cpp:242
+#, c-format
+msgid "Failed to inspect the lock file '%s'"
+msgstr ""
+
+#: ../src/unix/threadpsx.cpp:910
+msgid "Failed to join a thread, potential memory leak detected - please restart the program"
+msgstr ""
+
+#: ../src/msw/utils.cpp:725
+#, c-format
+msgid "Failed to kill process %d"
+msgstr ""
+
+#: ../src/common/iconbndl.cpp:66
+#, c-format
+msgid "Failed to load image %d from file '%s'."
+msgstr ""
+
+#: ../src/msw/enhmeta.cpp:80
+#, c-format
+msgid "Failed to load metafile from file \"%s\"."
+msgstr ""
+
+#: ../src/msw/volume.cpp:310
+msgid "Failed to load mpr.dll."
+msgstr ""
+
+#: ../src/common/dynlib.cpp:133
+#, c-format
+msgid "Failed to load shared library '%s'"
+msgstr ""
+
+#: ../src/common/dynlib.cpp:115
+#, c-format
+msgid "Failed to load shared library '%s' Error '%s'"
+msgstr ""
+
+#: ../src/unix/snglinst.cpp:199
+#, c-format
+msgid "Failed to lock the lock file '%s'"
+msgstr ""
+
+#: ../src/common/filename.cpp:2183
+#, c-format
+msgid "Failed to modify file times for '%s'"
+msgstr ""
+
+#: ../src/common/filename.cpp:178
+#, c-format
+msgid "Failed to open '%s' for %s"
+msgstr ""
+
+#: ../src/html/chm.cpp:142
+#, c-format
+msgid "Failed to open CHM archive '%s'."
+msgstr ""
+
+#: ../src/x11/utils.cpp:280
+#, c-format
+msgid "Failed to open display \"%s\"."
+msgstr ""
+
+#: ../src/common/filename.cpp:857
+msgid "Failed to open temporary file."
+msgstr ""
+
+#: ../src/msw/clipbrd.cpp:93
+msgid "Failed to open the clipboard."
+msgstr ""
+
+#: ../src/msw/clipbrd.cpp:634
+msgid "Failed to put data on the clipboard"
+msgstr ""
+
+#: ../src/unix/snglinst.cpp:279
+msgid "Failed to read PID from lock file."
+msgstr ""
+
+#: ../src/unix/utilsunx.cpp:598
+msgid "Failed to redirect child process input/output"
+msgstr ""
+
+#: ../src/msw/utilsexc.cpp:651
+msgid "Failed to redirect the child process IO"
+msgstr ""
+
+#: ../src/msw/dde.cpp:292
+#, c-format
+msgid "Failed to register DDE server '%s'"
+msgstr ""
+
+#: ../src/msw/glcanvas.cpp:331
+msgid "Failed to register OpenGL window class."
+msgstr ""
+
+#: ../src/common/fontmap.cpp:243
+#, c-format
+msgid "Failed to remember the encoding for the charset '%s'."
+msgstr ""
+
+#: ../src/common/debugrpt.cpp:226
+#, c-format
+msgid "Failed to remove debug report file \"%s\""
+msgstr ""
+
+#: ../src/unix/snglinst.cpp:323
+#, c-format
+msgid "Failed to remove lock file '%s'"
+msgstr ""
+
+#: ../src/unix/snglinst.cpp:289
+#, c-format
+msgid "Failed to remove stale lock file '%s'."
+msgstr ""
+
+#: ../src/msw/registry.cpp:459
+#, c-format
+msgid "Failed to rename registry value '%s' to '%s'."
+msgstr ""
+
+#: ../src/common/filefn.cpp:1137
+#, c-format
+msgid "Failed to rename the file '%s' to '%s' because the destination file already exists."
+msgstr ""
+
+#: ../src/msw/registry.cpp:563
+#, c-format
+msgid "Failed to rename the registry key '%s' to '%s'."
+msgstr ""
+
+#: ../src/msw/clipbrd.cpp:497
+msgid "Failed to retrieve data from the clipboard."
+msgstr ""
+
+#: ../src/common/filename.cpp:2276
+#, c-format
+msgid "Failed to retrieve file times for '%s'"
+msgstr ""
+
+#: ../src/msw/dialup.cpp:492
+msgid "Failed to retrieve text of RAS error message"
+msgstr ""
+
+#: ../src/msw/clipbrd.cpp:768
+msgid "Failed to retrieve the supported clipboard formats"
+msgstr ""
+
+#: ../src/msw/dib.cpp:341
+#, c-format
+msgid "Failed to save the bitmap image to file \"%s\"."
+msgstr ""
+
+#: ../src/msw/dde.cpp:692
+msgid "Failed to send DDE advise notification"
+msgstr ""
+
+#: ../src/common/ftp.cpp:380
+#, c-format
+msgid "Failed to set FTP transfer mode to %s."
+msgstr ""
+
+#: ../src/msw/clipbrd.cpp:373
+msgid "Failed to set clipboard data."
+msgstr ""
+
+#: ../src/unix/snglinst.cpp:182
+#, c-format
+msgid "Failed to set permissions on lock file '%s'"
+msgstr ""
+
+#: ../src/common/file.cpp:517
+msgid "Failed to set temporary file permissions"
+msgstr ""
+
+#: ../src/gtk/textctrl.cpp:948
+msgid "Failed to set text in the text control."
+msgstr ""
+
+#: ../src/unix/threadpsx.cpp:1253
+#: ../src/unix/threadpsx.cpp:1263
+#, c-format
+msgid "Failed to set thread priority %d."
+msgstr ""
+
+#: ../src/common/fs_mem.cpp:219
+#, c-format
+msgid "Failed to store image '%s' to memory VFS!"
+msgstr ""
+
+#: ../src/mac/carbon/mpthread.cpp:1268
+#: ../src/unix/threadpsx.cpp:1436
+msgid "Failed to terminate a thread."
+msgstr ""
+
+#: ../src/msw/dde.cpp:665
+msgid "Failed to terminate the advise loop with DDE server"
+msgstr ""
+
+#: ../src/msw/dialup.cpp:956
+#, c-format
+msgid "Failed to terminate the dialup connection: %s"
+msgstr ""
+
+#: ../src/common/filename.cpp:2198
+#, c-format
+msgid "Failed to touch the file '%s'"
+msgstr ""
+
+#: ../src/unix/snglinst.cpp:329
+#, c-format
+msgid "Failed to unlock lock file '%s'"
+msgstr ""
+
+#: ../src/msw/dde.cpp:313
+#, c-format
+msgid "Failed to unregister DDE server '%s'"
+msgstr ""
+
+#: ../src/common/fileconf.cpp:1057
+msgid "Failed to update user configuration file."
+msgstr ""
+
+#: ../src/common/debugrpt.cpp:685
+#, c-format
+msgid "Failed to upload the debug report (error code %d)."
+msgstr ""
+
+#: ../src/unix/snglinst.cpp:169
+#, c-format
+msgid "Failed to write to lock file '%s'"
+msgstr ""
+
+#: ../src/generic/logg.cpp:395
+msgid "Fatal error"
+msgstr ""
+
+#: ../src/common/log.cpp:430
+msgid "Fatal error: "
+msgstr ""
+
+#: ../src/msw/wince/filedlgwce.cpp:119
+msgid "File"
+msgstr ""
+
+#: ../src/mgl/bitmap.cpp:422
+#, c-format
+msgid "File %s does not exist."
+msgstr ""
+
+#: ../src/generic/filedlgg.cpp:1464
+#: ../src/gtk/filedlg.cpp:58
+#, c-format
+msgid "File '%s' already exists, do you really want to overwrite it?"
+msgstr ""
+
+#: ../src/os2/filedlg.cpp:312
+#, c-format
+msgid ""
+"File '%s' already exists.\n"
+"Do you want to replace it?"
+msgstr ""
+
+#: ../src/common/textcmn.cpp:218
+#: ../src/richtext/richtextctrl.cpp:1764
+msgid "File couldn't be loaded."
+msgstr ""
+
+#: ../src/common/docview.cpp:566
+#: ../src/common/docview.cpp:1606
+msgid "File error"
+msgstr ""
+
+#: ../src/generic/dirctrlg.cpp:726
+#: ../src/generic/filedlgg.cpp:844
+msgid "File name exists already."
+msgstr ""
+
+#: ../src/motif/filedlg.cpp:223
+msgid "Files"
+msgstr ""
+
+#: ../src/common/filefn.cpp:1775
+#, c-format
+msgid "Files (%s)"
+msgstr ""
+
+#: ../src/motif/filedlg.cpp:221
+msgid "Filter"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:468
+msgid "Find"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:1191
+msgid "Fixed font:"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:1251
+msgid "Fixed size face.<br> <b>bold</b> <i>italic</i> "
+msgstr ""
+
+#: ../src/common/paper.cpp:113
+msgid "Folio, 8 1/2 x 13 in"
+msgstr ""
+
+#: ../src/mac/carbon/fontdlg.cpp:410
+#: ../src/richtext/richtextformatdlg.cpp:272
+msgid "Font"
+msgstr ""
+
+#: ../src/richtext/richtextfontpage.cpp:175
+msgid "Font &weight:"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:1192
+msgid "Font size:"
+msgstr ""
+
+#: ../src/richtext/richtextfontpage.cpp:162
+msgid "Font st&yle:"
+msgstr ""
+
+#: ../src/mac/carbon/fontdlg.cpp:452
+msgid "Font:"
+msgstr ""
+
+#: ../src/unix/utilsunx.cpp:545
+msgid "Fork failed"
+msgstr ""
+
+#: ../include/wx/richtext/richtextformatdlg.h:121
+#: ../include/wx/richtext/richtextformatdlg.h:133
+msgid "Formatting"
+msgstr ""
+
+#: ../src/common/xtixml.cpp:232
+msgid "Forward hrefs are not supported"
+msgstr ""
+
+#: ../contrib/src/deprecated/resource.cpp:1838
+#: ../contrib/src/deprecated/resource.cpp:1968
+#: ../contrib/src/deprecated/resource.cpp:3070
+msgid "Found "
+msgstr ""
+
+#: ../src/html/htmlhelp.cpp:460
+#: ../src/html/helpwnd.cpp:867
+#, c-format
+msgid "Found %i matches"
+msgstr ""
+
+#: ../src/generic/prntdlgg.cpp:234
+msgid "From:"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:154
+msgid "GB-2312"
+msgstr ""
+
+#: ../src/common/imaggif.cpp:80
+msgid "GIF: Invalid gif index."
+msgstr ""
+
+#: ../src/common/imaggif.cpp:70
+msgid "GIF: data stream seems to be truncated."
+msgstr ""
+
+#: ../src/common/imaggif.cpp:54
+msgid "GIF: error in GIF image format."
+msgstr ""
+
+#: ../src/common/imaggif.cpp:57
+msgid "GIF: not enough memory."
+msgstr ""
+
+#: ../src/common/imaggif.cpp:60
+msgid "GIF: unknown error!!!"
+msgstr ""
+
+#: ../src/univ/themes/gtk.cpp:530
+msgid "GTK+ theme"
+msgstr ""
+
+#: ../src/common/prntbase.cpp:237
+msgid "Generic PostScript"
+msgstr ""
+
+#: ../src/common/paper.cpp:137
+msgid "German Legal Fanfold, 8 1/2 x 13 in"
+msgstr ""
+
+#: ../src/common/paper.cpp:136
+msgid "German Std Fanfold, 8 1/2 x 12 in"
+msgstr ""
+
+#: ../include/wx/xti.h:841
+msgid "GetProperty called w/o valid getter"
+msgstr ""
+
+#: ../include/wx/xti.h:902
+msgid "GetPropertyCollection called on a generic accessor"
+msgstr ""
+
+#: ../include/wx/xti.h:849
+msgid "GetPropertyCollection called w/o valid collection getter"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:637
+msgid "Go back"
+msgstr ""
+
+#: ../src/html/htmlhelp.cpp:541
+msgid "Go back to the previous HTML page"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:640
+msgid "Go forward"
+msgstr ""
+
+#: ../src/html/htmlhelp.cpp:543
+msgid "Go forward to the next HTML page"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:645
+msgid "Go one level up in document hierarchy"
+msgstr ""
+
+#: ../src/generic/dirdlgg.cpp:134
+#: ../src/generic/filedlgg.cpp:1078
+msgid "Go to home directory"
+msgstr ""
+
+#: ../src/generic/filedlgg.cpp:1070
+msgid "Go to parent directory"
+msgstr ""
+
+#: ../src/common/prntbase.cpp:1077
+msgid "Goto Page"
+msgstr ""
+
+#: ../src/generic/aboutdlgg.cpp:76
+msgid "Graphics art by "
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:112
+msgid "Greek (ISO-8859-7)"
+msgstr "Grécke (ISO-8859-7)"
+
+#: ../src/common/zstream.cpp:149
+#: ../src/common/zstream.cpp:302
+msgid "Gzip not supported by this version of zlib"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:93
+msgid "HELP"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:78
+msgid "HOME"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:1526
+msgid "HTML Help Project (*.hhp)|*.hhp|"
+msgstr ""
+
+#: ../src/html/htmlwin.cpp:603
+#, c-format
+msgid "HTML anchor %s does not exist."
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:1524
+msgid "HTML files (*.html;*.htm)|*.html;*.htm|"
+msgstr ""
+
+#: ../src/html/htmprint.cpp:379
+msgid "HTML pagination algorithm generated more than the allowed maximum number of pages and it can continue any longer!"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:113
+msgid "Hebrew (ISO-8859-8)"
+msgstr "Hebrejské (ISO-8859-8)"
+
+#: ../src/html/helpfrm.cpp:96
+#: ../src/html/helpdlg.cpp:67
+#: ../contrib/src/deprecated/proplist.cpp:519
+msgid "Help"
+msgstr ""
+
+#: ../src/html/htmlhelp.cpp:87
+#, c-format
+msgid "Help : %s"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:1185
+msgid "Help Browser Options"
+msgstr ""
+
+#: ../src/generic/helpext.cpp:461
+#: ../src/generic/helpext.cpp:462
+msgid "Help Index"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:1512
+msgid "Help Printing"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:796
+msgid "Help Topics"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:1525
+msgid "Help books (*.htb)|*.htb|Help books (*.zip)|*.zip|"
+msgstr ""
+
+#: ../src/generic/helpext.cpp:274
+#, c-format
+msgid "Help directory \"%s\" not found."
+msgstr ""
+
+#: ../src/generic/helpext.cpp:282
+#, c-format
+msgid "Help file \"%s\" not found."
+msgstr ""
+
+#: ../src/html/helpctrl.cpp:51
+#, c-format
+msgid "Help: %s"
+msgstr ""
+
+#: ../src/generic/dirdlgg.cpp:96
+msgid "Home"
+msgstr ""
+
+#: ../src/generic/dirctrlg.cpp:670
+msgid "Home directory"
+msgstr ""
+
+#: ../include/wx/filefn.h:141
+msgid "I64"
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:940
+msgid "ICO: Error in reading mask DIB."
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:1045
+#: ../src/common/imagbmp.cpp:1104
+#: ../src/common/imagbmp.cpp:1113
+#: ../src/common/imagbmp.cpp:1124
+#: ../src/common/imagbmp.cpp:1168
+#: ../src/common/imagbmp.cpp:1178
+#: ../src/common/imagbmp.cpp:1187
+msgid "ICO: Error writing the image file!"
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:1013
+msgid "ICO: Image too tall for an icon."
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:1019
+msgid "ICO: Image too wide for an icon."
+msgstr ""
+
+#: ../src/common/imagbmp.cpp:1252
+msgid "ICO: Invalid icon index."
+msgstr ""
+
+#: ../src/common/imagiff.cpp:766
+msgid "IFF: data stream seems to be truncated."
+msgstr ""
+
+#: ../src/common/imagiff.cpp:750
+msgid "IFF: error in IFF image format."
+msgstr ""
+
+#: ../src/common/imagiff.cpp:753
+msgid "IFF: not enough memory."
+msgstr ""
+
+#: ../src/common/imagiff.cpp:756
+msgid "IFF: unknown error!!!"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:68
+msgid "INS"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:69
+msgid "INSERT"
+msgstr ""
+
+#: ../contrib/src/deprecated/resource.cpp:2683
+#: ../contrib/src/deprecated/resource.cpp:2694
+#, c-format
+msgid "Icon resource specification %s not found."
+msgstr ""
+
+#: ../src/generic/dbgrptg.cpp:345
+msgid ""
+"If you have any additional information pertaining to this bug\n"
+"report, please enter it here and it will be joined to it:"
+msgstr ""
+
+#: ../src/generic/dbgrptg.cpp:311
+msgid ""
+"If you wish to suppress this debug report completely, please choose the \"Cancel\" button,\n"
+"but be warned that it may hinder improving the program, so if\n"
+"at all possible please do continue with the report generation.\n"
+msgstr ""
+
+#: ../src/msw/registry.cpp:1299
+#, c-format
+msgid "Ignoring value \"%s\" of the key \"%s\"."
+msgstr ""
+
+#: ../contrib/src/deprecated/resource.cpp:266
+msgid "Ill-formed resource file syntax."
+msgstr ""
+
+#: ../src/common/xtistrm.cpp:256
+msgid "Illegal Object Class (Non-wxEvtHandler) as Event Source"
+msgstr ""
+
+#: ../include/wx/xti.h:1668
+msgid "Illegal Parameter Count for ConstructObject Method"
+msgstr ""
+
+#: ../include/wx/xti.h:1742
+msgid "Illegal Parameter Count for Create Method"
+msgstr ""
+
+#: ../src/generic/dirctrlg.cpp:708
+#: ../src/generic/filedlgg.cpp:830
+msgid "Illegal directory name."
+msgstr ""
+
+#: ../src/generic/filedlgg.cpp:1416
+msgid "Illegal file specification."
+msgstr ""
+
+#: ../src/common/image.cpp:1830
+msgid "Image and mask have different sizes."
+msgstr ""
+
+#: ../src/common/image.cpp:2176
+#: ../src/common/image.cpp:2216
+#, c-format
+msgid "Image file is not of type %ld."
+msgstr ""
+
+#: ../src/common/image.cpp:2240
+#, c-format
+msgid "Image file is not of type %s."
+msgstr ""
+
+#: ../src/msw/textctrl.cpp:454
+msgid "Impossible to create a rich edit control, using simple text control instead. Please reinstall riched32.dll"
+msgstr ""
+
+#: ../src/unix/utilsunx.cpp:434
+msgid "Impossible to get child process input"
+msgstr ""
+
+#: ../src/common/filefn.cpp:1053
+#, c-format
+msgid "Impossible to get permissions for file '%s'"
+msgstr ""
+
+#: ../src/common/filefn.cpp:1067
+#, c-format
+msgid "Impossible to overwrite the file '%s'"
+msgstr ""
+
+#: ../src/common/filefn.cpp:1111
+#, c-format
+msgid "Impossible to set permissions for the file '%s'"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:130
+msgid "Indent"
+msgstr ""
+
+#: ../src/richtext/richtextformatdlg.cpp:278
+msgid "Indents && Spacing"
+msgstr ""
+
+#: ../src/html/htmlhelp.cpp:578
+#: ../src/html/helpwnd.cpp:493
+msgid "Index"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:117
+msgid "Indian (ISO-8859-12)"
+msgstr "Indické (ISO-8859-12)"
+
+#: ../src/common/init.cpp:232
+msgid "Initialization failed in post init, aborting."
+msgstr ""
+
+#: ../src/richtext/richtextsymboldlg.cpp:475
+#: ../src/richtext/richtextsymboldlg.cpp:502
+msgid "Insert"
+msgstr ""
+
+#: ../src/richtext/richtextbuffer.cpp:4724
+#: ../src/richtext/richtextbuffer.cpp:5503
+msgid "Insert Image"
+msgstr ""
+
+#: ../src/richtext/richtextbuffer.cpp:4600
+#: ../src/richtext/richtextbuffer.cpp:4644
+#: ../src/richtext/richtextbuffer.cpp:4686
+#: ../src/richtext/richtextctrl.cpp:532
+#: ../src/richtext/richtextctrl.cpp:748
+msgid "Insert Text"
+msgstr ""
+
+#: ../src/richtext/richtextsymboldlg.cpp:477
+#: ../src/richtext/richtextsymboldlg.cpp:479
+#: ../src/richtext/richtextsymboldlg.cpp:504
+#: ../src/richtext/richtextsymboldlg.cpp:506
+msgid "Inserts the chosen symbol."
+msgstr ""
+
+#: ../src/common/xtistrm.cpp:700
+msgid "Internal error, illegal wxCustomTypeInfo"
+msgstr ""
+
+#: ../src/common/imagtiff.cpp:256
+msgid "Invalid TIFF image index."
+msgstr ""
+
+#: ../src/xrc/xmlres.cpp:485
+#, c-format
+msgid "Invalid XRC resource '%s': doesn't have root node 'resource'."
+msgstr ""
+
+#: ../src/common/appcmn.cpp:277
+#, c-format
+msgid "Invalid display mode specification '%s'."
+msgstr ""
+
+#: ../src/x11/app.cpp:127
+#, c-format
+msgid "Invalid geometry specification '%s'"
+msgstr ""
+
+#: ../src/unix/snglinst.cpp:307
+#, c-format
+msgid "Invalid lock file '%s'."
+msgstr ""
+
+#: ../src/common/xtistrm.cpp:361
+#: ../src/common/xtistrm.cpp:376
+msgid "Invalid or Null Object ID passed to GetObjectClassInfo"
+msgstr ""
+
+#: ../src/common/xtistrm.cpp:391
+msgid "Invalid or Null Object ID passed to HasObjectClassInfo"
+msgstr ""
+
+#: ../src/common/regex.cpp:304
+#, c-format
+msgid "Invalid regular expression '%s': %s"
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:236
+#: ../src/mac/carbon/fontdlg.cpp:484
+#: ../src/richtext/richtextfontpage.cpp:223
+#: ../src/richtext/richtextfontpage.cpp:281
+#: ../src/richtext/richtextfontpage.cpp:446
+msgid "Italic"
+msgstr ""
+
+#: ../src/common/paper.cpp:132
+msgid "Italy Envelope, 110 x 230 mm"
+msgstr ""
+
+#: ../src/common/imagjpeg.cpp:245
+msgid "JPEG: Couldn't load - file is probably corrupted."
+msgstr ""
+
+#: ../src/common/imagjpeg.cpp:388
+msgid "JPEG: Couldn't save image."
+msgstr ""
+
+#: ../src/common/paper.cpp:165
+msgid "Japanese Double Postcard 200 x 148 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:169
+msgid "Japanese Envelope Chou #3"
+msgstr ""
+
+#: ../src/common/paper.cpp:182
+msgid "Japanese Envelope Chou #3 Rotated"
+msgstr ""
+
+#: ../src/common/paper.cpp:170
+msgid "Japanese Envelope Chou #4"
+msgstr ""
+
+#: ../src/common/paper.cpp:183
+msgid "Japanese Envelope Chou #4 Rotated"
+msgstr ""
+
+#: ../src/common/paper.cpp:167
+msgid "Japanese Envelope Kaku #2"
+msgstr ""
+
+#: ../src/common/paper.cpp:180
+msgid "Japanese Envelope Kaku #2 Rotated"
+msgstr ""
+
+#: ../src/common/paper.cpp:168
+msgid "Japanese Envelope Kaku #3"
+msgstr ""
+
+#: ../src/common/paper.cpp:181
+msgid "Japanese Envelope Kaku #3 Rotated"
+msgstr ""
+
+#: ../src/common/paper.cpp:187
+msgid "Japanese Envelope You #4"
+msgstr ""
+
+#: ../src/common/paper.cpp:188
+msgid "Japanese Envelope You #4 Rotated"
+msgstr ""
+
+#: ../src/common/paper.cpp:140
+msgid "Japanese Postcard 100 x 148 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:177
+msgid "Japanese Postcard Rotated 148 x 100 mm"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:134
+msgid "Justified"
+msgstr ""
+
+#: ../src/richtext/richtextindentspage.cpp:162
+#: ../src/richtext/richtextindentspage.cpp:164
+#: ../src/richtext/richtextliststylepage.cpp:344
+#: ../src/richtext/richtextliststylepage.cpp:346
+msgid "Justify text left and right."
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:121
+msgid "KOI8-R"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:122
+msgid "KOI8-U"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:267
+#: ../src/common/menucmn.cpp:327
+msgid "KP_"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:121
+msgid "KP_ADD"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:116
+msgid "KP_BEGIN"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:124
+msgid "KP_DECIMAL"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:118
+msgid "KP_DELETE"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:125
+msgid "KP_DIVIDE"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:110
+msgid "KP_DOWN"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:115
+msgid "KP_END"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:105
+msgid "KP_ENTER"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:119
+msgid "KP_EQUAL"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:106
+msgid "KP_HOME"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:117
+msgid "KP_INSERT"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:107
+msgid "KP_LEFT"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:120
+msgid "KP_MULTIPLY"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:113
+msgid "KP_NEXT"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:114
+msgid "KP_PAGEDOWN"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:112
+msgid "KP_PAGEUP"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:111
+msgid "KP_PRIOR"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:109
+msgid "KP_RIGHT"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:122
+msgid "KP_SEPARATOR"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:103
+msgid "KP_SPACE"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:123
+msgid "KP_SUBTRACT"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:104
+msgid "KP_TAB"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:108
+msgid "KP_UP"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:74
+msgid "LEFT"
+msgstr ""
+
+#: ../src/generic/prntdlgg.cpp:607
+#: ../src/generic/prntdlgg.cpp:862
+msgid "Landscape"
+msgstr "Krajinka"
+
+#: ../src/common/paper.cpp:105
+msgid "Ledger, 17 x 11 in"
+msgstr ""
+
+#: ../src/richtext/richtextbulletspage.cpp:195
+#: ../src/richtext/richtextbulletspage.cpp:199
+#: ../src/richtext/richtextbulletspage.cpp:200
+#: ../src/richtext/richtextliststylepage.cpp:248
+#: ../src/richtext/richtextliststylepage.cpp:252
+#: ../src/richtext/richtextliststylepage.cpp:253
+msgid "Left"
+msgstr ""
+
+#: ../src/richtext/richtextindentspage.cpp:214
+#: ../src/richtext/richtextliststylepage.cpp:392
+msgid "Left (&first line):"
+msgstr ""
+
+#: ../src/generic/prntdlgg.cpp:874
+msgid "Left margin (mm):"
+msgstr ""
+
+#: ../src/richtext/richtextindentspage.cpp:148
+#: ../src/richtext/richtextindentspage.cpp:150
+#: ../src/richtext/richtextliststylepage.cpp:330
+#: ../src/richtext/richtextliststylepage.cpp:332
+msgid "Left-align text."
+msgstr ""
+
+#: ../src/common/paper.cpp:146
+msgid "Legal Extra 9 1/2 x 15 in"
+msgstr ""
+
+#: ../src/common/paper.cpp:98
+msgid "Legal, 8 1/2 x 14 in"
+msgstr ""
+
+#: ../src/common/paper.cpp:145
+msgid "Letter Extra 9 1/2 x 12 in"
+msgstr ""
+
+#: ../src/common/paper.cpp:151
+msgid "Letter Extra Transverse 9.275 x 12 in"
+msgstr ""
+
+#: ../src/common/paper.cpp:154
+msgid "Letter Plus 8 1/2 x 12.69 in"
+msgstr ""
+
+#: ../src/common/paper.cpp:171
+msgid "Letter Rotated 11 x 8 1/2 in"
+msgstr ""
+
+#: ../src/common/paper.cpp:103
+msgid "Letter Small, 8 1/2 x 11 in"
+msgstr ""
+
+#: ../src/common/paper.cpp:149
+msgid "Letter Transverse 8 1/2 x 11 in"
+msgstr ""
+
+#: ../src/common/paper.cpp:97
+msgid "Letter, 8 1/2 x 11 in"
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:239
+msgid "Light"
+msgstr ""
+
+#: ../src/generic/helpext.cpp:301
+#, c-format
+msgid "Line %lu of map file \"%s\" has invalid syntax, skipped."
+msgstr ""
+
+#: ../src/richtext/richtextindentspage.cpp:282
+#: ../src/richtext/richtextliststylepage.cpp:454
+msgid "Line spacing:"
+msgstr ""
+
+#: ../src/html/chm.cpp:820
+msgid "Link contained '//', converted to absolute link."
+msgstr ""
+
+#: ../src/richtext/richtextformatdlg.cpp:296
+msgid "List Style"
+msgstr ""
+
+#: ../src/richtext/richtextstyles.cpp:754
+msgid "List styles"
+msgstr ""
+
+#: ../src/richtext/richtextfontpage.cpp:151
+#: ../src/richtext/richtextfontpage.cpp:153
+msgid "Lists font sizes in points."
+msgstr ""
+
+#: ../src/richtext/richtextfontpage.cpp:132
+#: ../src/richtext/richtextfontpage.cpp:134
+msgid "Lists the available fonts."
+msgstr ""
+
+#: ../src/common/fldlgcmn.cpp:269
+#, c-format
+msgid "Load %s file"
+msgstr ""
+
+#: ../src/html/htmlwin.cpp:521
+msgid "Loading : "
+msgstr ""
+
+#: ../src/unix/snglinst.cpp:247
+#, c-format
+msgid "Lock file '%s' has incorrect owner."
+msgstr ""
+
+#: ../src/unix/snglinst.cpp:252
+#, c-format
+msgid "Lock file '%s' has incorrect permissions."
+msgstr ""
+
+#: ../src/generic/logg.cpp:573
+#, c-format
+msgid "Log saved to the file '%s'."
+msgstr ""
+
+#: ../include/wx/xti.h:497
+#: ../include/wx/xti.h:501
+msgid "Long Conversions not supported"
+msgstr ""
+
+#: ../src/richtext/richtextbulletspage.cpp:283
+#: ../src/richtext/richtextliststylepage.cpp:488
+msgid "Lower case letters"
+msgstr ""
+
+#: ../src/richtext/richtextbulletspage.cpp:285
+#: ../src/richtext/richtextliststylepage.cpp:490
+msgid "Lower case roman numerals"
+msgstr ""
+
+#: ../src/gtk/mdi.cpp:466
+#: ../src/gtk1/mdi.cpp:462
+msgid "MDI child"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:86
+msgid "MENU"
+msgstr ""
+
+#: ../src/msw/helpchm.cpp:57
+msgid "MS HTML Help functions are unavailable because the MS HTML Help library is not installed on this machine. Please install it."
+msgstr ""
+
+#: ../src/univ/themes/win32.cpp:3740
+msgid "Ma&ximize"
+msgstr ""
+
+#: ../src/generic/fdrepdlg.cpp:146
+msgid "Match case"
+msgstr ""
+
+#: ../src/common/fs_mem.cpp:164
+#, c-format
+msgid "Memory VFS already contains file '%s'!"
+msgstr ""
+
+#: ../src/msw/frame.cpp:366
+msgid "Menu"
+msgstr ""
+
+#: ../src/univ/themes/metal.cpp:169
+msgid "Metal theme"
+msgstr ""
+
+#: ../src/univ/themes/win32.cpp:3738
+msgid "Mi&nimize"
+msgstr ""
+
+#: ../src/mgl/app.cpp:161
+#, c-format
+msgid "Mode %ix%i-%i not available."
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:231
+msgid "Modern"
+msgstr ""
+
+#: ../src/generic/filedlgg.cpp:509
+msgid "Modified"
+msgstr ""
+
+#: ../src/common/module.cpp:133
+#, c-format
+msgid "Module \"%s\" initialization failed"
+msgstr ""
+
+#: ../src/common/paper.cpp:133
+msgid "Monarch Envelope, 3 7/8 x 7 1/2 in"
+msgstr ""
+
+#: ../contrib/src/gizmos/editlbox.cpp:158
+msgid "Move down"
+msgstr ""
+
+#: ../contrib/src/gizmos/editlbox.cpp:157
+msgid "Move up"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:99
+msgid "NUM_LOCK"
+msgstr ""
+
+#: ../src/generic/filedlgg.cpp:506
+msgid "Name"
+msgstr ""
+
+#: ../src/richtext/richtextstyledlg.cpp:218
+msgid "New &Character Style..."
+msgstr ""
+
+#: ../src/richtext/richtextstyledlg.cpp:230
+msgid "New &List Style..."
+msgstr ""
+
+#: ../src/richtext/richtextstyledlg.cpp:224
+msgid "New &Paragraph Style..."
+msgstr ""
+
+#: ../src/richtext/richtextstyledlg.cpp:570
+#: ../src/richtext/richtextstyledlg.cpp:575
+#: ../src/richtext/richtextstyledlg.cpp:618
+#: ../src/richtext/richtextstyledlg.cpp:623
+#: ../src/richtext/richtextstyledlg.cpp:772
+#: ../src/richtext/richtextstyledlg.cpp:777
+msgid "New Style"
+msgstr ""
+
+#: ../src/generic/dirdlgg.cpp:100
+msgid "New directory"
+msgstr ""
+
+#: ../contrib/src/gizmos/editlbox.cpp:155
+msgid "New item"
+msgstr ""
+
+#: ../src/generic/dirdlgg.cpp:324
+#: ../src/generic/dirdlgg.cpp:334
+#: ../src/generic/filedlgg.cpp:688
+#: ../src/generic/filedlgg.cpp:697
+msgid "NewName"
+msgstr ""
+
+#: ../src/generic/tipdlg.cpp:301
+msgid "Next"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:651
+msgid "Next page"
+msgstr ""
+
+#: ../src/mac/carbon/msgdlg.cpp:63
+#: ../src/mac/carbon/msgdlg.cpp:119
+#: ../src/mac/carbon/msgdlg.cpp:203
+#: ../src/mac/classic/msgdlg.cpp:59
+#: ../src/mac/classic/msgdlg.cpp:143
+#: ../src/motif/msgdlg.cpp:204
+msgid "No"
+msgstr ""
+
+#: ../contrib/src/deprecated/resource.cpp:2505
+#: ../contrib/src/deprecated/resource.cpp:2659
+msgid "No XBM facility available!"
+msgstr ""
+
+#: ../contrib/src/deprecated/resource.cpp:2677
+msgid "No XPM icon facility available!"
+msgstr ""
+
+#: ../src/generic/animateg.cpp:156
+#, c-format
+msgid "No animation handler for type %ld defined."
+msgstr ""
+
+#: ../src/generic/helpext.cpp:452
+msgid "No entries found."
+msgstr ""
+
+#: ../src/common/fontmap.cpp:419
+#, c-format
+msgid ""
+"No font for displaying text in encoding '%s' found,\n"
+"but an alternative encoding '%s' is available.\n"
+"Do you want to use this encoding (otherwise you will have to choose another one)?"
+msgstr ""
+
+#: ../src/common/fontmap.cpp:424
+#, c-format
+msgid ""
+"No font for displaying text in encoding '%s' found.\n"
+"Would you like to select a font to be used for this encoding\n"
+"(otherwise the text in this encoding will not be shown correctly)?"
+msgstr ""
+
+#: ../src/xrc/xmlres.cpp:715
+#, c-format
+msgid "No handler found for XML node '%s', class '%s'!"
+msgstr ""
+
+#: ../src/generic/animateg.cpp:144
+msgid "No handler found for animation type."
+msgstr ""
+
+#: ../src/common/image.cpp:2158
+#: ../src/common/image.cpp:2201
+msgid "No handler found for image type."
+msgstr ""
+
+#: ../src/common/image.cpp:2254
+#, c-format
+msgid "No image handler for type %d defined."
+msgstr ""
+
+#: ../src/common/image.cpp:2166
+#: ../src/common/image.cpp:2209
+#, c-format
+msgid "No image handler for type %ld defined."
+msgstr ""
+
+#: ../src/common/image.cpp:2233
+#: ../src/common/image.cpp:2269
+#, c-format
+msgid "No image handler for type %s defined."
+msgstr ""
+
+#: ../src/html/htmlhelp.cpp:436
+#: ../src/html/htmlhelp.cpp:441
+#: ../src/html/helpwnd.cpp:850
+msgid "No matching page found yet"
+msgstr ""
+
+#: ../src/unix/sound.cpp:82
+msgid "No sound"
+msgstr ""
+
+#: ../src/common/image.cpp:1838
+#: ../src/common/image.cpp:1879
+msgid "No unused colour in image being masked."
+msgstr ""
+
+#: ../src/common/image.cpp:2682
+msgid "No unused colour in image."
+msgstr ""
+
+#: ../src/generic/helpext.cpp:309
+#, c-format
+msgid "No valid mappings found in the file \"%s\"."
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:115
+msgid "Nordic (ISO-8859-10)"
+msgstr "Severské (ISO-8859-10)"
+
+#: ../src/generic/fontdlgg.cpp:235
+#: ../src/generic/fontdlgg.cpp:238
+msgid "Normal"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:1245
+msgid "Normal face<br>and <u>underlined</u>. "
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:1190
+msgid "Normal font:"
+msgstr ""
+
+#: ../src/richtext/richtextfontpage.cpp:228
+msgid "Not underlined"
+msgstr ""
+
+#: ../src/common/paper.cpp:117
+msgid "Note, 8 1/2 x 11 in"
+msgstr ""
+
+#: ../src/richtext/richtextbulletspage.cpp:286
+#: ../src/richtext/richtextliststylepage.cpp:491
+msgid "Numbered outline"
+msgstr ""
+
+#: ../src/mac/carbon/msgdlg.cpp:65
+#: ../src/msw/dialog.cpp:180
+#: ../src/richtext/richtextstyledlg.cpp:283
+#: ../src/gtk1/fontdlg.cpp:139
+#: ../contrib/src/deprecated/proplist.cpp:502
+msgid "OK"
+msgstr ""
+
+#: ../src/common/xtixml.cpp:260
+msgid "Objects must have an id attribute"
+msgstr ""
+
+#: ../src/common/docview.cpp:1279
+#: ../src/common/docview.cpp:1629
+msgid "Open File"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:659
+#: ../src/html/helpwnd.cpp:1531
+msgid "Open HTML document"
+msgstr ""
+
+#: ../src/generic/dbgrptg.cpp:159
+#, c-format
+msgid "Open file \"%s\""
+msgstr ""
+
+#: ../src/generic/dirctrlg.cpp:737
+#: ../src/generic/dirdlgg.cpp:350
+#: ../src/generic/filedlgg.cpp:712
+#: ../src/generic/filedlgg.cpp:862
+msgid "Operation not permitted."
+msgstr ""
+
+#: ../src/common/cmdline.cpp:716
+#, c-format
+msgid "Option '%s' requires a value, '=' expected."
+msgstr ""
+
+#: ../src/common/cmdline.cpp:737
+#, c-format
+msgid "Option '%s' requires a value."
+msgstr ""
+
+#: ../src/common/cmdline.cpp:802
+#, c-format
+msgid "Option '%s': '%s' cannot be converted to a date."
+msgstr ""
+
+#: ../src/generic/dirdlgg.cpp:185
+#: ../src/generic/prntdlgg.cpp:612
+msgid "Options"
+msgstr ""
+
+#: ../src/generic/prntdlgg.cpp:609
+#: ../src/generic/prntdlgg.cpp:863
+msgid "Orientation"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:102
+msgid "PAGEDOWN"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:101
+msgid "PAGEUP"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:87
+msgid "PAUSE"
+msgstr ""
+
+#: ../src/common/imagpcx.cpp:456
+#: ../src/common/imagpcx.cpp:479
+msgid "PCX: couldn't allocate memory"
+msgstr ""
+
+#: ../src/common/imagpcx.cpp:455
+msgid "PCX: image format unsupported"
+msgstr ""
+
+#: ../src/common/imagpcx.cpp:478
+msgid "PCX: invalid image"
+msgstr ""
+
+#: ../src/common/imagpcx.cpp:442
+msgid "PCX: this is not a PCX file."
+msgstr ""
+
+#: ../src/common/imagpcx.cpp:458
+#: ../src/common/imagpcx.cpp:480
+msgid "PCX: unknown error !!!"
+msgstr ""
+
+#: ../src/common/imagpcx.cpp:457
+msgid "PCX: version number too low"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:73
+msgid "PGDN"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:72
+msgid "PGUP"
+msgstr ""
+
+#: ../src/common/imagpnm.cpp:88
+msgid "PNM: Couldn't allocate memory."
+msgstr ""
+
+#: ../src/common/imagpnm.cpp:72
+msgid "PNM: File format is not recognized."
+msgstr ""
+
+#: ../src/common/imagpnm.cpp:104
+#: ../src/common/imagpnm.cpp:121
+#: ../src/common/imagpnm.cpp:138
+msgid "PNM: File seems truncated."
+msgstr ""
+
+#: ../src/common/paper.cpp:189
+msgid "PRC 16K 146 x 215 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:202
+msgid "PRC 16K Rotated"
+msgstr ""
+
+#: ../src/common/paper.cpp:190
+msgid "PRC 32K 97 x 151 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:203
+msgid "PRC 32K Rotated"
+msgstr ""
+
+#: ../src/common/paper.cpp:191
+msgid "PRC 32K(Big) 97 x 151 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:204
+msgid "PRC 32K(Big) Rotated"
+msgstr ""
+
+#: ../src/common/paper.cpp:192
+msgid "PRC Envelope #1 102 x 165 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:205
+msgid "PRC Envelope #1 Rotated 165 x 102 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:201
+msgid "PRC Envelope #10 324 x 458 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:214
+msgid "PRC Envelope #10 Rotated 458 x 324 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:193
+msgid "PRC Envelope #2 102 x 176 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:206
+msgid "PRC Envelope #2 Rotated 176 x 102 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:194
+msgid "PRC Envelope #3 125 x 176 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:207
+msgid "PRC Envelope #3 Rotated 176 x 125 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:195
+msgid "PRC Envelope #4 110 x 208 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:208
+msgid "PRC Envelope #4 Rotated 208 x 110 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:196
+msgid "PRC Envelope #5 110 x 220 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:209
+msgid "PRC Envelope #5 Rotated 220 x 110 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:197
+msgid "PRC Envelope #6 120 x 230 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:210
+msgid "PRC Envelope #6 Rotated 230 x 120 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:198
+msgid "PRC Envelope #7 160 x 230 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:211
+msgid "PRC Envelope #7 Rotated 230 x 160 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:199
+msgid "PRC Envelope #8 120 x 309 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:212
+msgid "PRC Envelope #8 Rotated 309 x 120 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:200
+msgid "PRC Envelope #9 229 x 324 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:213
+msgid "PRC Envelope #9 Rotated 324 x 229 mm"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:90
+msgid "PRINT"
+msgstr ""
+
+#: ../src/common/prntbase.cpp:1542
+#, c-format
+msgid "Page %d"
+msgstr ""
+
+#: ../src/common/prntbase.cpp:1540
+#, c-format
+msgid "Page %d of %d"
+msgstr ""
+
+#: ../src/generic/prntdlgg.cpp:822
+msgid "Page Setup"
+msgstr ""
+
+#: ../src/common/prntbase.cpp:460
+#: ../src/gtk/gnome/gprint.cpp:548
+msgid "Page setup"
+msgstr ""
+
+#: ../src/generic/prntdlgg.cpp:211
+msgid "Pages"
+msgstr ""
+
+#: ../src/generic/prntdlgg.cpp:795
+#: ../src/generic/prntdlgg.cpp:849
+#: ../src/generic/prntdlgg.cpp:1051
+msgid "Paper Size"
+msgstr ""
+
+#: ../src/generic/prntdlgg.cpp:596
+#: ../src/generic/prntdlgg.cpp:836
+#: ../src/generic/prntdlgg.cpp:1046
+msgid "Paper size"
+msgstr ""
+
+#: ../src/richtext/richtextstyles.cpp:752
+msgid "Paragraph styles"
+msgstr ""
+
+#: ../src/common/xtistrm.cpp:421
+msgid "Passing a already registered object to SetObject"
+msgstr ""
+
+#: ../src/common/xtistrm.cpp:639
+msgid "Passing a already registered object to SetObjectName"
+msgstr ""
+
+#: ../src/common/xtistrm.cpp:432
+#: ../src/common/xtistrm.cpp:652
+msgid "Passing an unkown object to GetObject"
+msgstr ""
+
+#: ../src/richtext/richtextctrl.cpp:2077
+msgid "Paste"
+msgstr "Prilepiť"
+
+#: ../src/common/stockitem.cpp:207
+msgid "Paste selection"
+msgstr "Prilepiť výber"
+
+#: ../src/richtext/richtextbulletspage.cpp:168
+#: ../src/richtext/richtextliststylepage.cpp:221
+msgid "Peri&od"
+msgstr ""
+
+#: ../src/generic/filedlgg.cpp:512
+msgid "Permissions"
+msgstr "Povolenia"
+
+#: ../include/wx/unix/pipe.h:47
+msgid "Pipe creation failed"
+msgstr "Vytvorenie rúry zlyhalo"
+
+#: ../src/gtk1/fontdlg.cpp:75
+msgid "Please choose a valid font."
+msgstr "Prosím, vyberte platné písmo."
+
+#: ../src/generic/filedlgg.cpp:1472
+msgid "Please choose an existing file."
+msgstr "Prosím, vyberte existujúci súbor."
+
+#: ../src/html/helpwnd.cpp:795
+msgid "Please choose the page to display:"
+msgstr "Prosím, vyberte stránku, ktorá sa má zobraziť:"
+
+#: ../src/msw/dialup.cpp:788
+msgid "Please choose which ISP do you want to connect to"
+msgstr "Prosím, vyberte poskytovateľa, ku ktorému sa chcete pripájať"
+
+#: ../src/msw/listctrl.cpp:415
+#, c-format
+msgid ""
+"Please install a newer version of comctl32.dll\n"
+"(at least version 4.70 is required but you have %d.%02d)\n"
+"or this program won't operate correctly."
+msgstr ""
+"Prosím, nainštalujte si novšiu verziu comctl32.dll\n"
+"(je potrebná aspoň verzia 4.70, ale vaša verzia je %d.%02d)\n"
+"inak tento program nebude fungovať správne."
+
+#: ../src/common/prntbase.cpp:322
+msgid "Please wait while printing\n"
+msgstr "Prosím čakajte, prebieha tlačenie\n"
+
+#: ../src/generic/prntdlgg.cpp:606
+#: ../src/generic/prntdlgg.cpp:861
+msgid "Portrait"
+msgstr "Portrét"
+
+#: ../src/generic/prntdlgg.cpp:294
+msgid "PostScript file"
+msgstr "súbor PostScript"
+
+#: ../src/html/htmlhelp.cpp:509
+msgid "Preparing help window..."
+msgstr "Pripravuje sa okno pomocníka..."
+
+#: ../src/generic/fontdlgg.cpp:362
+#: ../src/html/helpwnd.cpp:1207
+#: ../src/mac/carbon/fontdlg.cpp:513
+msgid "Preview:"
+msgstr "Náhľad:"
+
+#: ../src/html/helpwnd.cpp:648
+msgid "Previous page"
+msgstr "Predchádzajúca strana"
+
+#: ../src/common/prntbase.cpp:402
+#: ../src/generic/prntdlgg.cpp:139
+#: ../src/generic/prntdlgg.cpp:152
+#: ../src/gtk/gnome/gprint.cpp:403
+#: ../src/gtk/gnome/gprint.cpp:415
+msgid "Print"
+msgstr "Tlačiť"
+
+#: ../src/common/docview.cpp:1042
+msgid "Print Preview"
+msgstr "Náhľad pred tlačou"
+
+#: ../src/common/prntbase.cpp:1494
+#: ../src/common/prntbase.cpp:1520
+msgid "Print Preview Failure"
+msgstr "Chyba náhľadu pred tlačou"
+
+#: ../src/generic/prntdlgg.cpp:219
+msgid "Print Range"
+msgstr "Tlačiť rozsah strán"
+
+#: ../src/generic/prntdlgg.cpp:443
+msgid "Print Setup"
+msgstr "Nastavenie tlače"
+
+#: ../src/generic/prntdlgg.cpp:615
+msgid "Print in colour"
+msgstr "Tlačiť farebne"
+
+#: ../src/common/stockitem.cpp:144
+msgid "Print previe&w"
+msgstr "&Náhľad pred tlačou"
+
+#: ../src/gtk/gnome/gprint.cpp:795
+msgid "Print preview"
+msgstr "Náhľad pred tlačou"
+
+#: ../src/generic/prntdlgg.cpp:624
+msgid "Print spooling"
+msgstr "Spooling tlače"
+
+#: ../src/html/helpwnd.cpp:665
+msgid "Print this page"
+msgstr "Vytlačiť túto stránku"
+
+#: ../src/generic/prntdlgg.cpp:180
+msgid "Print to File"
+msgstr "Tlačiť do súboru"
+
+#: ../src/generic/prntdlgg.cpp:487
+msgid "Printer"
+msgstr "Tlačiareň"
+
+#: ../src/generic/prntdlgg.cpp:627
+msgid "Printer command:"
+msgstr "Príkaz tlačiarne:"
+
+#: ../src/generic/prntdlgg.cpp:175
+msgid "Printer options"
+msgstr "Voľby tlačiarne"
+
+#: ../src/generic/prntdlgg.cpp:639
+msgid "Printer options:"
+msgstr "Voľby tlačiarne:"
+
+#: ../src/generic/prntdlgg.cpp:910
+msgid "Printer..."
+msgstr "Tlačiareň..."
+
+#: ../src/generic/prntdlgg.cpp:191
+msgid "Printer:"
+msgstr "Tlačiareň:"
+
+#: ../src/common/prntbase.cpp:319
+#: ../src/common/prntbase.cpp:540
+msgid "Printing "
+msgstr "Tlačí sa"
+
+#: ../src/common/prntbase.cpp:336
+msgid "Printing Error"
+msgstr "Chyba tlače"
+
+#: ../src/generic/printps.cpp:204
+#, c-format
+msgid "Printing page %d..."
+msgstr "Tlačí sa stránka %d..."
+
+#: ../src/generic/printps.cpp:164
+msgid "Printing..."
+msgstr "Tlačí sa..."
+
+#: ../src/common/debugrpt.cpp:552
+#, c-format
+msgid "Processing debug report has failed, leaving the files in \"%s\" directory."
+msgstr "Spracovanie správy o chybe zlyhalo, nechávam súbry v adresári \"%s\"."
+
+#: ../src/common/log.cpp:431
+msgid "Program aborted."
+msgstr "Program zrušený."
+
+#: ../src/common/paper.cpp:114
+msgid "Quarto, 215 x 275 mm"
+msgstr ""
+
+#: ../src/generic/logg.cpp:1166
+msgid "Question"
+msgstr "Otázka"
+
+#: ../src/common/stockitem.cpp:208
+msgid "Quit this program"
+msgstr "Ukončiť tento program"
+
+#: ../src/common/menucmn.cpp:71
+msgid "RETURN"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:75
+msgid "RIGHT"
+msgstr ""
+
+#: ../src/common/ffile.cpp:125
+#: ../src/common/ffile.cpp:144
+#, c-format
+msgid "Read error on file '%s'"
+msgstr "Chyba pri čítaní súboru '%s'"
+
+#: ../src/common/prntbase.cpp:251
+msgid "Ready"
+msgstr "Priravený"
+
+#: ../src/common/stockitem.cpp:209
+msgid "Redo last action"
+msgstr "Opakovať poslednú vrátenú činnosť"
+
+#: ../src/xrc/xmlres.cpp:681
+#, c-format
+msgid "Referenced object node with ref=\"%s\" not found!"
+msgstr "Odkazovaný uzol objektu s ref=\"%s\" nebol nájdený!"
+
+#: ../src/common/stockitem.cpp:148
+msgid "Refresh"
+msgstr "Obnoviť"
+
+#: ../src/msw/registry.cpp:555
+#, c-format
+msgid "Registry key '%s' already exists."
+msgstr "Kľúč registra '%s' už existuje."
+
+#: ../src/msw/registry.cpp:524
+#, c-format
+msgid "Registry key '%s' does not exist, cannot rename it."
+msgstr "Kľúč registra '%s' neexistuje, nie je ho možné premenovať."
+
+#: ../src/msw/registry.cpp:656
+#, c-format
+msgid ""
+"Registry key '%s' is needed for normal system operation,\n"
+"deleting it will leave your system in unusable state:\n"
+"operation aborted."
+msgstr ""
+"Kľúč registra '%s' je potrebný pre normálnu prevýdzku systému,\n"
+"jeho zmazanie by zanechalo systém v nepoužiteľnom stave:\n"
+"operácia bola zrušená."
+
+#: ../src/msw/registry.cpp:451
+#, c-format
+msgid "Registry value '%s' already exists."
+msgstr "Hodnota registra '%s' už existuje."
+
+#: ../src/richtext/richtextfontpage.cpp:222
+#: ../src/richtext/richtextfontpage.cpp:225
+msgid "Regular"
+msgstr ""
+
+#: ../src/generic/helpext.cpp:461
+msgid "Relevant entries:"
+msgstr "Relevantné položky:"
+
+#: ../src/generic/progdlgg.cpp:206
+msgid "Remaining time : "
+msgstr "Zostávajúci čas : "
+
+#: ../src/common/stockitem.cpp:149
+msgid "Remove"
+msgstr "Odstrániť"
+
+#: ../src/html/helpwnd.cpp:422
+msgid "Remove current page from bookmarks"
+msgstr "Odstrániť aktuálnu stránku zo záložiek"
+
+#: ../src/common/rendcmn.cpp:196
+#, c-format
+msgid "Renderer \"%s\" has incompatible version %d.%d and couldn't be loaded."
+msgstr "Vykresľovacie jadro \"%s\" má nekompatibilnú verziu %d.%d a nie je možné ho načítať."
+
+#: ../src/richtext/richtextbuffer.cpp:2732
+msgid "Renumber List"
+msgstr "Prečíslovať zoznam"
+
+#: ../src/common/stockitem.cpp:123
+msgid "Rep&lace"
+msgstr "Nah&radiť"
+
+#: ../src/richtext/richtextctrl.cpp:2206
+msgid "Replace"
+msgstr "Nahradiť"
+
+#: ../src/generic/fdrepdlg.cpp:181
+msgid "Replace &all"
+msgstr "Nahradiť &všetky"
+
+#: ../src/common/stockitem.cpp:206
+msgid "Replace selection"
+msgstr "Nahradiť výber"
+
+#: ../src/generic/fdrepdlg.cpp:123
+msgid "Replace with:"
+msgstr "Nahradiť čím:"
+
+#: ../src/xrc/xmlres.cpp:504
+msgid "Resource files must have same version number!"
+msgstr "Súbory zdrojov musia mať rovnaké číslo verzie!"
+
+#: ../src/common/stockitem.cpp:150
+msgid "Revert to Saved"
+msgstr "Návrat k uloženej verzii"
+
+#: ../src/richtext/richtextbulletspage.cpp:197
+#: ../src/richtext/richtextliststylepage.cpp:250
+msgid "Right"
+msgstr "Vpravo"
+
+#: ../src/generic/prntdlgg.cpp:886
+msgid "Right margin (mm):"
+msgstr "pravý okraj (mm):"
+
+#: ../src/richtext/richtextindentspage.cpp:155
+#: ../src/richtext/richtextindentspage.cpp:157
+#: ../src/richtext/richtextliststylepage.cpp:337
+#: ../src/richtext/richtextliststylepage.cpp:339
+msgid "Right-align text."
+msgstr "Zarovnať text doprava."
+
+#: ../src/generic/fontdlgg.cpp:229
+msgid "Roman"
+msgstr ""
+
+#: ../src/richtext/richtextbulletspage.cpp:249
+#: ../src/richtext/richtextliststylepage.cpp:299
+msgid "S&tandard bullet name:"
+msgstr "Názov š&tandardného oddeľovača položiek zoznamu:"
+
+#: ../src/common/menucmn.cpp:100
+msgid "SCROLL_LOCK"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:89
+msgid "SELECT"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:95
+msgid "SEPARATOR"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:153
+msgid "SHIFT-JIS"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:92
+msgid "SNAPSHOT"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:80
+msgid "SPACE"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:270
+#: ../src/common/menucmn.cpp:329
+msgid "SPECIAL"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:96
+msgid "SUBTRACT"
+msgstr ""
+
+#: ../src/common/sizer.cpp:2018
+msgid "Save"
+msgstr ""
+
+#: ../src/common/fldlgcmn.cpp:271
+#, c-format
+msgid "Save %s file"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:152
+msgid "Save &As..."
+msgstr ""
+
+#: ../src/common/docview.cpp:300
+msgid "Save as"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:212
+msgid "Save current document"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:213
+msgid "Save current document with a different filename"
+msgstr ""
+
+#: ../src/generic/logg.cpp:506
+msgid "Save log contents to file"
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:232
+msgid "Script"
+msgstr ""
+
+#: ../src/html/htmlhelp.cpp:610
+#: ../src/html/helpwnd.cpp:513
+#: ../src/html/helpwnd.cpp:528
+msgid "Search"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:515
+msgid "Search contents of help book(s) for all occurences of the text you typed above"
+msgstr ""
+
+#: ../src/generic/fdrepdlg.cpp:159
+msgid "Search direction"
+msgstr "Smer hľadania"
+
+#: ../src/generic/fdrepdlg.cpp:111
+msgid "Search for:"
+msgstr "Hľadať:"
+
+#: ../src/html/helpwnd.cpp:1039
+msgid "Search in all books"
+msgstr "Hľadať vo všetkých knihách"
+
+#: ../src/html/htmlhelp.cpp:593
+msgid "Search!"
+msgstr "Hľadať!"
+
+#: ../src/html/htmlhelp.cpp:383
+#: ../src/html/htmlhelp.cpp:441
+#: ../src/html/helpwnd.cpp:849
+msgid "Searching..."
+msgstr "Hľadá sa..."
+
+#: ../src/generic/dirctrlg.cpp:608
+msgid "Sections"
+msgstr "Sekcie"
+
+#: ../src/common/ffile.cpp:222
+#, c-format
+msgid "Seek error on file '%s'"
+msgstr "Chyba presunu na pozíciu v súbore '%s'"
+
+#: ../src/common/ffile.cpp:212
+#, c-format
+msgid "Seek error on file '%s' (large files not supported by stdio)"
+msgstr "Chyba presunu na pozíciu v súbore '%s' (stdio nepodporuje veľké súbory)"
+
+#: ../src/mac/carbon/textctrl.cpp:1122
+#: ../src/msw/textctrl.cpp:2214
+#: ../src/richtext/richtextctrl.cpp:2428
+msgid "Select &All"
+msgstr "Vybrať &všetky"
+
+#: ../src/common/docview.cpp:1709
+msgid "Select a document template"
+msgstr "Vybrať šablónu dokumentu"
+
+#: ../src/common/docview.cpp:1786
+msgid "Select a document view"
+msgstr "Vybrať pohľad dokumentu"
+
+#: ../src/common/docview.cpp:1589
+msgid "Select a file"
+msgstr "Vybrať súbor"
+
+#: ../src/common/stockitem.cpp:153
+msgid "Select all"
+msgstr "Vybrať všetky"
+
+#: ../src/richtext/richtextfontpage.cpp:180
+#: ../src/richtext/richtextfontpage.cpp:182
+msgid "Select regular or bold."
+msgstr "Vybrať obyčajné alebo tučné."
+
+#: ../src/richtext/richtextfontpage.cpp:167
+#: ../src/richtext/richtextfontpage.cpp:169
+msgid "Select regular or italic style."
+msgstr "Vybrať obyčajné alebo kurzívu."
+
+#: ../src/richtext/richtextfontpage.cpp:193
+#: ../src/richtext/richtextfontpage.cpp:195
+msgid "Select underlining or no underlining."
+msgstr "Vybrať podčiarkovanie alebo bez podčiarkovania."
+
+#: ../src/motif/filedlg.cpp:223
+msgid "Selection"
+msgstr "Výber"
+
+#: ../src/richtext/richtextliststylepage.cpp:186
+#: ../src/richtext/richtextliststylepage.cpp:188
+msgid "Selects the list level to edit."
+msgstr "Vyberá, ktorá úroveň zoznamu sa bude upravovať."
+
+#: ../src/common/cmdline.cpp:755
+#, c-format
+msgid "Separator expected after the option '%s'."
+msgstr ""
+
+#: ../include/wx/xti.h:837
+msgid "SetProperty called w/o valid setter"
+msgstr ""
+
+#: ../src/generic/prntdlgg.cpp:183
+msgid "Setup..."
+msgstr "Nastavenie..."
+
+#: ../src/msw/dialup.cpp:568
+msgid "Several active dialup connections found, choosing one randomly."
+msgstr "Bolo nájdených niekoľko aktívnych vytáčaných spojení, vyberám náhodne jedno."
+
+#: ../src/common/menucmn.cpp:318
+msgid "Shift-"
+msgstr "Posun-"
+
+#: ../src/generic/dirdlgg.cpp:168
+msgid "Show &hidden directories"
+msgstr "Zobraziť &skryté adresáre"
+
+#: ../src/generic/filedlgg.cpp:1157
+msgid "Show &hidden files"
+msgstr "Zobraziť &skryté súbory"
+
+#: ../src/common/stockitem.cpp:202
+msgid "Show about dialog"
+msgstr "Zobraziť dialóg O aplikácii"
+
+#: ../src/html/helpwnd.cpp:470
+msgid "Show all"
+msgstr "Zobraziť všetky"
+
+#: ../src/html/helpwnd.cpp:481
+msgid "Show all items in index"
+msgstr "Zobraziť všetky položky v indexe"
+
+#: ../src/generic/dirdlgg.cpp:103
+msgid "Show hidden directories"
+msgstr ""
+
+#: ../src/html/htmlhelp.cpp:538
+#: ../src/html/helpwnd.cpp:632
+msgid "Show/hide navigation panel"
+msgstr ""
+
+#: ../src/richtext/richtextsymboldlg.cpp:420
+#: ../src/richtext/richtextsymboldlg.cpp:422
+msgid "Shows a Unicode subset."
+msgstr "Zobrazí náhľad podsadu Unicode."
+
+#: ../src/richtext/richtextbulletspage.cpp:273
+#: ../src/richtext/richtextbulletspage.cpp:275
+#: ../src/richtext/richtextliststylepage.cpp:476
+#: ../src/richtext/richtextliststylepage.cpp:478
+msgid "Shows a preview of the bullet settings."
+msgstr "Zobrazí náhľad nastavení oddeľovačov položiek zoznamu."
+
+#: ../src/richtext/richtextfontpage.cpp:213
+#: ../src/richtext/richtextfontpage.cpp:215
+msgid "Shows a preview of the font settings."
+msgstr "Zobrazí náhľad nastavení písma."
+
+#: ../src/mac/carbon/fontdlg.cpp:517
+#: ../src/mac/carbon/fontdlg.cpp:519
+msgid "Shows a preview of the font."
+msgstr "Zobrazí náhľad písma."
+
+#: ../src/richtext/richtextindentspage.cpp:303
+#: ../src/richtext/richtextindentspage.cpp:305
+msgid "Shows a preview of the paragraph settings."
+msgstr "Zobrazí náhľad nastavení odstavca."
+
+#: ../src/generic/fontdlgg.cpp:367
+#: ../src/generic/fontdlgg.cpp:369
+msgid "Shows the font preview."
+msgstr "Zobrazí náhľad písma."
+
+#: ../src/univ/themes/mono.cpp:509
+msgid "Simple monochrome theme"
+msgstr "Jednoduchá monochromatická téma."
+
+#: ../src/richtext/richtextindentspage.cpp:289
+#: ../src/richtext/richtextindentspage.cpp:293
+#: ../src/richtext/richtextindentspage.cpp:294
+#: ../src/richtext/richtextliststylepage.cpp:460
+#: ../src/richtext/richtextliststylepage.cpp:464
+#: ../src/richtext/richtextliststylepage.cpp:465
+msgid "Single"
+msgstr ""
+
+#: ../src/generic/filedlgg.cpp:507
+msgid "Size"
+msgstr "Veľkosť"
+
+#: ../src/mac/carbon/fontdlg.cpp:462
+msgid "Size:"
+msgstr "Veľkosť:"
+
+#: ../src/generic/progdlgg.cpp:218
+#: ../src/generic/progdlgg.cpp:236
+#: ../src/generic/progdlgg.cpp:627
+msgid "Skip"
+msgstr "Preskočiť"
+
+#: ../src/generic/fontdlgg.cpp:237
+msgid "Slant"
+msgstr ""
+
+#: ../src/common/docview.cpp:576
+msgid "Sorry, could not open this file for saving."
+msgstr ""
+
+#: ../src/common/docview.cpp:612
+#: ../src/common/docview.cpp:1608
+msgid "Sorry, could not open this file."
+msgstr ""
+
+#: ../src/common/docview.cpp:583
+msgid "Sorry, could not save this file."
+msgstr ""
+
+#: ../contrib/src/fl/controlbar.cpp:384
+msgid "Sorry, docking is not supported for ports other than wxMSW, wxMac and wxGTK"
+msgstr ""
+
+#: ../src/common/prntbase.cpp:1494
+msgid "Sorry, not enough memory to create a preview."
+msgstr ""
+
+#: ../src/common/docview.cpp:1038
+msgid "Sorry, print preview needs a printer to be installed."
+msgstr ""
+
+#: ../src/richtext/richtextstyledlg.cpp:575
+#: ../src/richtext/richtextstyledlg.cpp:623
+#: ../src/richtext/richtextstyledlg.cpp:777
+msgid "Sorry, that name is taken. Please choose another."
+msgstr ""
+
+#: ../src/common/docview.cpp:1278
+#: ../src/common/docview.cpp:1628
+msgid "Sorry, the format for this file is unknown."
+msgstr ""
+
+#: ../src/unix/sound.cpp:493
+msgid "Sound data are in unsupported format."
+msgstr "Zvukové údaje sú v nepodporovanom formáte."
+
+#: ../src/unix/sound.cpp:478
+#, c-format
+msgid "Sound file '%s' is in unsupported format."
+msgstr "Zvukový súbor '%s' je v nepodporovanom formáte."
+
+#: ../src/richtext/richtextliststylepage.cpp:471
+msgid "Spacing"
+msgstr "Rozostup"
+
+#: ../src/richtext/richtextbulletspage.cpp:289
+#: ../src/richtext/richtextliststylepage.cpp:494
+msgid "Standard"
+msgstr "Štandard"
+
+#: ../src/common/paper.cpp:106
+msgid "Statement, 5 1/2 x 8 1/2 in"
+msgstr ""
+
+#: ../src/generic/prntdlgg.cpp:199
+msgid "Status:"
+msgstr "Stav: "
+
+#: ../src/generic/logg.cpp:623
+msgid "Status: "
+msgstr "Stav: "
+
+#: ../src/common/xtistrm.cpp:249
+msgid "Streaming delegates for not already streamed objects not yet supported"
+msgstr ""
+
+#: ../src/msw/colour.cpp:35
+#, c-format
+msgid "String To Colour : Incorrect colour specification : %s"
+msgstr "Reťazec na farbu : Nesprávna špecifikácia farby : %s"
+
+#: ../include/wx/xti.h:424
+#: ../include/wx/xti.h:428
+msgid "String conversions not supported"
+msgstr "Konverzie reťazcov nie sú podporované"
+
+#: ../src/richtext/richtextformatdlg.cpp:266
+msgid "Style"
+msgstr "Štýl"
+
+#: ../include/wx/richtext/richtextstyledlg.h:42
+msgid "Style Organiser"
+msgstr "Organizátor štýlov"
+
+#: ../src/mac/carbon/fontdlg.cpp:471
+msgid "Style:"
+msgstr "Štýl:"
+
+#: ../src/xrc/xmlres.cpp:788
+#, c-format
+msgid "Subclass '%s' not found for resource '%s', not subclassing!"
+msgstr ""
+
+#: ../src/common/paper.cpp:152
+msgid "SuperA/SuperA/A4 227 x 356 mm"
+msgstr ""
+
+#: ../src/common/paper.cpp:153
+msgid "SuperB/SuperB/A3 305 x 487 mm"
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:233
+msgid "Swiss"
+msgstr "Švajčiarske"
+
+#: ../src/richtext/richtextbulletspage.cpp:287
+#: ../src/richtext/richtextliststylepage.cpp:492
+msgid "Symbol"
+msgstr "Symbol"
+
+#: ../src/richtext/richtextbulletspage.cpp:237
+#: ../src/richtext/richtextliststylepage.cpp:288
+msgid "Symbol &font:"
+msgstr "&Písmo symbolu:"
+
+#: ../include/wx/richtext/richtextsymboldlg.h:44
+msgid "Symbols"
+msgstr "Symboly"
+
+#: ../src/common/menucmn.cpp:81
+msgid "TAB"
+msgstr ""
+
+#: ../src/common/imagtiff.cpp:194
+msgid "TIFF library error."
+msgstr "Chyba knižnice TIFF."
+
+#: ../src/common/imagtiff.cpp:178
+msgid "TIFF library warning."
+msgstr "Varovanie knižnice TIFF."
+
+#: ../src/common/imagtiff.cpp:277
+#: ../src/common/imagtiff.cpp:288
+#: ../src/common/imagtiff.cpp:434
+msgid "TIFF: Couldn't allocate memory."
+msgstr "TIFF: Nebolo možné alokovať pamäť."
+
+#: ../src/common/imagtiff.cpp:248
+msgid "TIFF: Error loading image."
+msgstr "TIFF: Chyba pri načítaní obrázka."
+
+#: ../src/common/imagtiff.cpp:299
+msgid "TIFF: Error reading image."
+msgstr "TIFF: Chyba pri čítaní obrázka."
+
+#: ../src/common/imagtiff.cpp:376
+msgid "TIFF: Error saving image."
+msgstr "TIFF: Chyba pri ukladaní obrázka."
+
+#: ../src/common/imagtiff.cpp:480
+msgid "TIFF: Error writing image."
+msgstr "TIFF: Chyba pri zapisovaní obrázka."
+
+#: ../src/common/paper.cpp:147
+msgid "Tabloid Extra 11.69 x 18 in"
+msgstr ""
+
+#: ../src/common/paper.cpp:104
+msgid "Tabloid, 11 x 17 in"
+msgstr ""
+
+#: ../src/richtext/richtextformatdlg.cpp:284
+msgid "Tabs"
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:234
+msgid "Teletype"
+msgstr "Terminál"
+
+#: ../src/common/docview.cpp:1710
+msgid "Templates"
+msgstr "Šablóny"
+
+#: ../src/common/fmapbase.cpp:116
+msgid "Thai (ISO-8859-11)"
+msgstr "Thajské (ISO-8859-11)"
+
+#: ../src/common/ftp.cpp:704
+msgid "The FTP server doesn't support passive mode."
+msgstr "FTP server nepodporuje pasívny režim."
+
+#: ../src/common/ftp.cpp:692
+msgid "The FTP server doesn't support the PORT command."
+msgstr "FTP server nepodporuje príkaz PORT."
+
+#: ../src/richtext/richtextbulletspage.cpp:160
+#: ../src/richtext/richtextbulletspage.cpp:162
+#: ../src/richtext/richtextliststylepage.cpp:214
+#: ../src/richtext/richtextliststylepage.cpp:216
+msgid "The available bullet styles."
+msgstr "Dostupné štýly oddeľovačov položiek zoznamu."
+
+#: ../src/richtext/richtextstyledlg.cpp:195
+#: ../src/richtext/richtextstyledlg.cpp:197
+msgid "The available styles."
+msgstr "Dostupné štýly."
+
+#: ../src/richtext/richtextbulletspage.cpp:201
+#: ../src/richtext/richtextbulletspage.cpp:203
+#: ../src/richtext/richtextbulletspage.cpp:224
+#: ../src/richtext/richtextbulletspage.cpp:226
+#: ../src/richtext/richtextliststylepage.cpp:254
+#: ../src/richtext/richtextliststylepage.cpp:256
+#: ../src/richtext/richtextliststylepage.cpp:275
+#: ../src/richtext/richtextliststylepage.cpp:277
+msgid "The bullet character."
+msgstr "Znak oddeľovača položiek zoznamu."
+
+#: ../src/richtext/richtextsymboldlg.cpp:442
+#: ../src/richtext/richtextsymboldlg.cpp:444
+msgid "The character code."
+msgstr "Kód znaku."
+
+#: ../src/common/fontmap.cpp:201
+#, c-format
+msgid ""
+"The charset '%s' is unknown. You may select\n"
+"another charset to replace it with or choose\n"
+"[Cancel] if it cannot be replaced"
+msgstr ""
+
+#: ../src/msw/ole/dataobj.cpp:160
+#, c-format
+msgid "The clipboard format '%d' doesn't exist."
+msgstr ""
+
+#: ../src/richtext/richtextstylepage.cpp:127
+#: ../src/richtext/richtextstylepage.cpp:129
+msgid "The default style for the next paragraph."
+msgstr ""
+
+#: ../src/generic/dirdlgg.cpp:229
+#, c-format
+msgid ""
+"The directory '%s' does not exist\n"
+"Create it now?"
+msgstr ""
+
+#: ../src/common/docview.cpp:1977
+#, c-format
+msgid ""
+"The file '%s' couldn't be opened.\n"
+"It has been removed from the most recently used files list."
+msgstr ""
+
+#: ../src/common/docview.cpp:1987
+#, c-format
+msgid ""
+"The file '%s' doesn't exist and couldn't be opened.\n"
+"It has been removed from the most recently used files list."
+msgstr ""
+
+#: ../src/richtext/richtextindentspage.cpp:221
+#: ../src/richtext/richtextindentspage.cpp:223
+#: ../src/richtext/richtextliststylepage.cpp:398
+#: ../src/richtext/richtextliststylepage.cpp:400
+msgid "The first line indent."
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:321
+#: ../src/generic/fontdlgg.cpp:323
+msgid "The font colour."
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:282
+#: ../src/generic/fontdlgg.cpp:284
+msgid "The font family."
+msgstr ""
+
+#: ../src/richtext/richtextsymboldlg.cpp:404
+#: ../src/richtext/richtextsymboldlg.cpp:406
+msgid "The font from which to take the symbol."
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:334
+#: ../src/generic/fontdlgg.cpp:336
+#: ../src/generic/fontdlgg.cpp:341
+#: ../src/generic/fontdlgg.cpp:343
+msgid "The font point size."
+msgstr ""
+
+#: ../src/mac/carbon/fontdlg.cpp:466
+#: ../src/mac/carbon/fontdlg.cpp:468
+msgid "The font size in points."
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:293
+#: ../src/generic/fontdlgg.cpp:295
+msgid "The font style."
+msgstr ""
+
+#: ../src/generic/fontdlgg.cpp:304
+#: ../src/generic/fontdlgg.cpp:306
+msgid "The font weight."
+msgstr ""
+
+#: ../src/richtext/richtextindentspage.cpp:209
+#: ../src/richtext/richtextindentspage.cpp:211
+#: ../src/richtext/richtextliststylepage.cpp:387
+#: ../src/richtext/richtextliststylepage.cpp:389
+msgid "The left indent."
+msgstr ""
+
+#: ../src/richtext/richtextindentspage.cpp:295
+#: ../src/richtext/richtextindentspage.cpp:297
+#: ../src/richtext/richtextliststylepage.cpp:466
+#: ../src/richtext/richtextliststylepage.cpp:468
+msgid "The line spacing."
+msgstr ""
+
+#: ../src/richtext/richtextbulletspage.cpp:265
+#: ../src/richtext/richtextbulletspage.cpp:267
+msgid "The list item number."
+msgstr ""
+
+#: ../src/common/filename.cpp:1224
+#, c-format
+msgid "The path '%s' contains too many \"..\"!"
+msgstr ""
+
+#: ../src/common/log.cpp:291
+#, c-format
+msgid "The previous message repeated once."
+msgid_plural "The previous message repeated %lu times."
+msgstr[0] ""
+msgstr[1] ""
+
+#: ../src/richtext/richtextsymboldlg.cpp:462
+#: ../src/richtext/richtextsymboldlg.cpp:464
+msgid "The range to show."
+msgstr ""
+
+#: ../src/generic/dbgrptg.cpp:309
+msgid ""
+"The report contains the files listed below. If any of these files contain private information,\n"
+"please uncheck them and they will be removed from the report.\n"
+msgstr ""
+
+#: ../src/common/cmdline.cpp:903
+#, c-format
+msgid "The required parameter '%s' was not specified."
+msgstr ""
+
+#: ../src/richtext/richtextindentspage.cpp:233
+#: ../src/richtext/richtextindentspage.cpp:235
+#: ../src/richtext/richtextliststylepage.cpp:409
+#: ../src/richtext/richtextliststylepage.cpp:411
+msgid "The right indent."
+msgstr ""
+
+#: ../src/richtext/richtextindentspage.cpp:279
+#: ../src/richtext/richtextliststylepage.cpp:449
+#: ../src/richtext/richtextliststylepage.cpp:451
+msgid "The spacing after the paragraph."
+msgstr ""
+
+#: ../src/richtext/richtextindentspage.cpp:266
+#: ../src/richtext/richtextindentspage.cpp:268
+#: ../src/richtext/richtextliststylepage.cpp:438
+#: ../src/richtext/richtextliststylepage.cpp:440
+msgid "The spacing before the paragraph."
+msgstr ""
+
+#: ../src/richtext/richtextstylepage.cpp:107
+#: ../src/richtext/richtextstylepage.cpp:109
+msgid "The style name."
+msgstr ""
+
+#: ../src/richtext/richtextstylepage.cpp:117
+#: ../src/richtext/richtextstylepage.cpp:119
+msgid "The style on which this style is based."
+msgstr ""
+
+#: ../src/richtext/richtextstyledlg.cpp:207
+#: ../src/richtext/richtextstyledlg.cpp:209
+msgid "The style preview."
+msgstr ""
+
+#: ../src/richtext/richtexttabspage.cpp:117
+#: ../src/richtext/richtexttabspage.cpp:119
+msgid "The tab position."
+msgstr ""
+
+#: ../src/richtext/richtexttabspage.cpp:123
+msgid "The tab positions."
+msgstr ""
+
+#: ../src/common/textcmn.cpp:254
+#: ../src/richtext/richtextctrl.cpp:1781
+msgid "The text couldn't be saved."
+msgstr ""
+
+#: ../src/common/cmdline.cpp:881
+#, c-format
+msgid "The value for the option '%s' must be specified."
+msgstr ""
+
+#: ../src/msw/dialup.cpp:456
+#, c-format
+msgid "The version of remote access service (RAS) installed on this machine is tooold, please upgrade (the following required function is missing: %s)."
+msgstr ""
+
+#: ../src/html/htmprint.cpp:610
+#: ../src/richtext/richtextprint.cpp:561
+msgid "There was a problem during page setup: you may need to set a default printer."
+msgstr ""
+
+#: ../src/msw/datectrl.cpp:110
+msgid "This system doesn't support date picker control, please upgrade your version of comctl32.dll"
+msgstr ""
+
+#: ../src/msw/thread.cpp:1247
+msgid "Thread module initialization failed: can not store value in thread local storage"
+msgstr ""
+
+#: ../src/unix/threadpsx.cpp:1618
+msgid "Thread module initialization failed: failed to create thread key"
+msgstr ""
+
+#: ../src/msw/thread.cpp:1235
+msgid "Thread module initialization failed: impossible to allocate index in thread local storage"
+msgstr ""
+
+#: ../src/unix/threadpsx.cpp:1136
+msgid "Thread priority setting is ignored."
+msgstr ""
+
+#: ../src/msw/mdi.cpp:172
+msgid "Tile &Horizontally"
+msgstr ""
+
+#: ../src/msw/mdi.cpp:173
+msgid "Tile &Vertically"
+msgstr ""
+
+#: ../src/common/ftp.cpp:631
+msgid "Timeout while waiting for FTP server to connect, try passive mode."
+msgstr ""
+
+#: ../src/msw/timer.cpp:111
+#: ../src/os2/timer.cpp:130
+msgid "Timer creation failed."
+msgstr ""
+
+#: ../src/generic/tipdlg.cpp:218
+msgid "Tip of the Day"
+msgstr "Tip dňa"
+
+#: ../src/generic/tipdlg.cpp:153
+msgid "Tips not available, sorry!"
+msgstr "Tipy nie sú dostupné, prepáčte!"
+
+#: ../src/generic/prntdlgg.cpp:238
+msgid "To:"
+msgstr ""
+
+#: ../src/richtext/richtextbuffer.cpp:4953
+msgid "Too many EndStyle calls!"
+msgstr "Príliš veľa volaní EndStyle!"
+
+#: ../src/common/imagpng.cpp:294
+msgid "Too many colours in PNG, the image may be slightly blurred."
+msgstr "Príliš veľa farieb v PNG, obrázok môže byť mierne rozmazaný."
+
+#: ../src/generic/prntdlgg.cpp:875
+msgid "Top margin (mm):"
+msgstr "Vrchný okraj (mm):"
+
+#: ../src/generic/aboutdlgg.cpp:79
+msgid "Translations by "
+msgstr "Preklad"
+
+#: ../src/common/fs_mem.cpp:193
+#, c-format
+msgid "Trying to remove file '%s' from memory VFS, but it is not loaded!"
+msgstr ""
+
+#: ../src/common/sckaddr.cpp:144
+#: ../src/common/sckaddr.cpp:247
+msgid "Trying to solve a NULL hostname: giving up"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:114
+msgid "Turkish (ISO-8859-9)"
+msgstr "Turecké (ISO-8859-9)"
+
+#: ../src/generic/filedlgg.cpp:508
+msgid "Type"
+msgstr ""
+
+#: ../src/richtext/richtextfontpage.cpp:126
+#: ../src/richtext/richtextfontpage.cpp:128
+msgid "Type a font name."
+msgstr ""
+
+#: ../src/richtext/richtextfontpage.cpp:144
+#: ../src/richtext/richtextfontpage.cpp:146
+msgid "Type a size in points."
+msgstr ""
+
+#: ../src/common/xtistrm.cpp:277
+#: ../src/common/xtixml.cpp:348
+#: ../src/common/xtixml.cpp:495
+msgid "Type must have enum - long conversion"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:76
+msgid "UP"
+msgstr ""
+
+#: ../src/common/paper.cpp:135
+msgid "US Std Fanfold, 14 7/8 x 11 in"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:151
+msgid "US-ASCII"
+msgstr ""
+
+#: ../src/common/strconv.cpp:2771
+#: ../src/common/strconv.cpp:2775
+msgid "Unable to create TextEncodingConverter"
+msgstr ""
+
+#: ../src/html/htmlwin.cpp:508
+#, c-format
+msgid "Unable to open requested HTML document: %s"
+msgstr ""
+
+#: ../src/unix/sound.cpp:369
+msgid "Unable to play sound asynchronously."
+msgstr ""
+
+#: ../src/common/stockitem.cpp:155
+msgid "Undelete"
+msgstr ""
+
+#: ../src/mac/carbon/fontdlg.cpp:493
+#: ../src/richtext/richtextfontpage.cpp:229
+#: ../src/richtext/richtextfontpage.cpp:313
+#: ../src/richtext/richtextfontpage.cpp:468
+msgid "Underlined"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:210
+msgid "Undo last action"
+msgstr "Vrátiť poslednú činnosť"
+
+#: ../src/common/cmdline.cpp:691
+#, c-format
+msgid "Unexpected characters following option '%s'."
+msgstr ""
+
+#: ../contrib/src/deprecated/resource.cpp:1848
+#: ../contrib/src/deprecated/resource.cpp:1862
+#: ../contrib/src/deprecated/resource.cpp:1879
+#: ../contrib/src/deprecated/resource.cpp:1893
+#: ../contrib/src/deprecated/resource.cpp:1978
+#: ../contrib/src/deprecated/resource.cpp:1992
+#: ../contrib/src/deprecated/resource.cpp:2008
+#: ../contrib/src/deprecated/resource.cpp:2022
+#: ../contrib/src/deprecated/resource.cpp:3080
+#: ../contrib/src/deprecated/resource.cpp:3094
+#: ../contrib/src/deprecated/resource.cpp:3111
+#: ../contrib/src/deprecated/resource.cpp:3125
+msgid "Unexpected end of file while parsing resource."
+msgstr ""
+
+#: ../src/common/cmdline.cpp:844
+#, c-format
+msgid "Unexpected parameter '%s'"
+msgstr "Očakáva sa parameter '%s'"
+
+#: ../src/richtext/richtextsymboldlg.cpp:458
+msgid "Unicode"
+msgstr "Unicode"
+
+#: ../src/common/fmapbase.cpp:140
+#: ../src/common/fmapbase.cpp:146
+msgid "Unicode 16 bit (UTF-16)"
+msgstr "Unicode 16-bitov (UTF-16)"
+
+#: ../src/common/fmapbase.cpp:145
+msgid "Unicode 16 bit Big Endian (UTF-16BE)"
+msgstr "Unicode 16-bitov Big Endian (UTF-16BE)"
+
+#: ../src/common/fmapbase.cpp:141
+msgid "Unicode 16 bit Little Endian (UTF-16LE)"
+msgstr "Unicode 16-bitov Little Endian (UTF-16LE)"
+
+#: ../src/common/fmapbase.cpp:142
+#: ../src/common/fmapbase.cpp:148
+msgid "Unicode 32 bit (UTF-32)"
+msgstr "Unicode 32-bitov (UTF-32)"
+
+#: ../src/common/fmapbase.cpp:147
+msgid "Unicode 32 bit Big Endian (UTF-32BE)"
+msgstr "Unicode 32-bitov Big Endian (UTF-32BE)"
+
+#: ../src/common/fmapbase.cpp:143
+msgid "Unicode 32 bit Little Endian (UTF-32LE)"
+msgstr "Unicode 32-bitov Little Endian (UTF-32LE)"
+
+#: ../src/common/fmapbase.cpp:137
+msgid "Unicode 7 bit (UTF-7)"
+msgstr "Unicode 7-bitov (UTF-7)"
+
+#: ../src/common/fmapbase.cpp:138
+msgid "Unicode 8 bit (UTF-8)"
+msgstr "Unicode 8-bitov (UTF-8)"
+
+#: ../src/generic/progdlgg.cpp:613
+msgid "Unknown"
+msgstr "Neznámy"
+
+#: ../src/msw/dde.cpp:1088
+#, c-format
+msgid "Unknown DDE error %08x"
+msgstr "Neznáma chyba DDE %08x"
+
+#: ../src/common/xtistrm.cpp:366
+msgid "Unknown Object passed to GetObjectClassInfo"
+msgstr "GetObjectClassInfo bol daný ako parameter neznámy objekt"
+
+#: ../src/unix/dlunix.cpp:281
+msgid "Unknown dynamic library error"
+msgstr "Neznáma chyba dynamickej knižnice"
+
+#: ../src/common/fmapbase.cpp:671
+#, c-format
+msgid "Unknown encoding (%d)"
+msgstr "Neznáme kódovanie (%d)"
+
+#: ../src/common/cmdline.cpp:598
+#, c-format
+msgid "Unknown long option '%s'"
+msgstr "Neznámy dlhý parameter '%s'"
+
+#: ../src/common/cmdline.cpp:608
+#: ../src/common/cmdline.cpp:630
+#, c-format
+msgid "Unknown option '%s'"
+msgstr "Neznámy parameter '%s'"
+
+#: ../src/xrc/xmlres.cpp:865
+msgid "Unknown style flag "
+msgstr "Neznámy prepínač štýlu"
+
+#: ../src/common/xtixml.cpp:321
+#, c-format
+msgid "Unkown Property %s"
+msgstr "Neznáma vlastnosť %s"
+
+#: ../src/common/mimecmn.cpp:169
+#, c-format
+msgid "Unmatched '{' in an entry for mime type %s."
+msgstr "Nespárovaná '{' v zázname mime typu %s."
+
+#: ../src/common/cmdproc.cpp:257
+#: ../src/common/cmdproc.cpp:283
+#: ../src/common/cmdproc.cpp:303
+msgid "Unnamed command"
+msgstr "Nepomenovaný príkaz"
+
+#: ../contrib/src/deprecated/resource.cpp:2377
+#, c-format
+msgid "Unrecognized style %s while parsing resource."
+msgstr "Počas parsovania zdroja nebol rozpoznaný štýl %s."
+
+#: ../src/mac/classic/clipbrd.cpp:66
+#: ../src/msw/clipbrd.cpp:267
+#: ../src/msw/clipbrd.cpp:439
+msgid "Unsupported clipboard format."
+msgstr "Nepodporovaný formát schránky."
+
+#: ../src/common/appcmn.cpp:260
+#, c-format
+msgid "Unsupported theme '%s'."
+msgstr "nepodporovaná téma '%s'."
+
+#: ../src/generic/fdrepdlg.cpp:151
+msgid "Up"
+msgstr ""
+
+#: ../src/richtext/richtextbulletspage.cpp:282
+#: ../src/richtext/richtextliststylepage.cpp:487
+msgid "Upper case letters"
+msgstr ""
+
+#: ../src/richtext/richtextbulletspage.cpp:284
+#: ../src/richtext/richtextliststylepage.cpp:489
+msgid "Upper case roman numerals"
+msgstr ""
+
+#: ../src/common/cmdline.cpp:975
+#, c-format
+msgid "Usage: %s"
+msgstr ""
+
+#: ../src/richtext/richtextindentspage.cpp:176
+#: ../src/richtext/richtextindentspage.cpp:178
+#: ../src/richtext/richtextliststylepage.cpp:358
+#: ../src/richtext/richtextliststylepage.cpp:360
+msgid "Use the current alignment setting."
+msgstr ""
+
+#: ../src/common/valtext.cpp:177
+msgid "Validation conflict"
+msgstr "Konflikt overovania"
+
+#: ../contrib/src/mmedia/vidbase.cpp:62
+msgid "Video Output"
+msgstr "Video výstup"
+
+#: ../src/generic/filedlgg.cpp:1061
+msgid "View files as a detailed view"
+msgstr "Zobraziť súbory v detailnom pohľade"
+
+#: ../src/generic/filedlgg.cpp:1054
+msgid "View files as a list view"
+msgstr "Zobraziť súbory v pohľade zoznamu"
+
+#: ../src/common/docview.cpp:1787
+msgid "Views"
+msgstr "Pohľady"
+
+#: ../src/common/menucmn.cpp:126
+msgid "WINDOWS_LEFT"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:128
+msgid "WINDOWS_MENU"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:127
+msgid "WINDOWS_RIGHT"
+msgstr ""
+
+#: ../src/unix/baseunix.cpp:78
+msgid "Waiting for subprocess termination failed"
+msgstr ""
+
+#: ../src/common/docview.cpp:456
+#: ../src/html/htmprint.cpp:380
+msgid "Warning"
+msgstr "Varovanie"
+
+#: ../src/common/log.cpp:445
+msgid "Warning: "
+msgstr "Varovanie:"
+
+#: ../src/html/htmlpars.cpp:385
+msgid "Warning: attempt to remove HTML tag handler from empty stack."
+msgstr "Varovanie: pokus odstrániť obsluhu HTML značky z prázdneho zásobníka."
+
+#: ../src/common/fmapbase.cpp:106
+msgid "Western European (ISO-8859-1)"
+msgstr "Západoeurópske (ISO-8859-1)"
+
+#: ../src/common/fmapbase.cpp:120
+msgid "Western European with Euro (ISO-8859-15)"
+msgstr "Západoeurópske so znakom euro (ISO-8859-15)"
+
+#: ../src/generic/fontdlgg.cpp:353
+#: ../src/generic/fontdlgg.cpp:355
+msgid "Whether the font is underlined."
+msgstr ""
+
+#: ../src/generic/fdrepdlg.cpp:143
+msgid "Whole word"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:512
+msgid "Whole words only"
+msgstr ""
+
+#: ../src/univ/themes/win32.cpp:1058
+msgid "Win32 theme"
+msgstr ""
+
+#: ../src/msw/utils.cpp:1080
+msgid "Win32s on Windows 3.1"
+msgstr ""
+
+#: ../src/msw/utils.cpp:1129
+#, c-format
+msgid "Windows 2000 (build %lu"
+msgstr ""
+
+#: ../src/msw/utils.cpp:1094
+msgid "Windows 95"
+msgstr ""
+
+#: ../src/msw/utils.cpp:1090
+msgid "Windows 95 OSR2"
+msgstr ""
+
+#: ../src/msw/utils.cpp:1105
+msgid "Windows 98"
+msgstr ""
+
+#: ../src/msw/utils.cpp:1101
+msgid "Windows 98 SE"
+msgstr ""
+
+#: ../src/msw/utils.cpp:1112
+#, c-format
+msgid "Windows 9x (%d.%d)"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:134
+msgid "Windows Arabic (CP 1256)"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:135
+msgid "Windows Baltic (CP 1257)"
+msgstr ""
+
+#: ../src/msw/utils.cpp:1074
+#, c-format
+msgid "Windows CE (%d.%d)"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:128
+msgid "Windows Central European (CP 1250)"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:125
+msgid "Windows Chinese Simplified (CP 936)"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:127
+msgid "Windows Chinese Traditional (CP 950)"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:129
+msgid "Windows Cyrillic (CP 1251)"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:131
+msgid "Windows Greek (CP 1253)"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:133
+msgid "Windows Hebrew (CP 1255)"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:124
+msgid "Windows Japanese (CP 932)"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:126
+msgid "Windows Korean (CP 949)"
+msgstr ""
+
+#: ../src/msw/utils.cpp:1109
+msgid "Windows ME"
+msgstr ""
+
+#: ../src/msw/utils.cpp:1144
+#, c-format
+msgid "Windows NT %lu.%lu (build %lu"
+msgstr ""
+
+#: ../src/msw/utils.cpp:1137
+#, c-format
+msgid "Windows Server 2003 (build %lu"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:123
+msgid "Windows Thai (CP 874)"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:132
+msgid "Windows Turkish (CP 1254)"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:130
+msgid "Windows Western European (CP 1252)"
+msgstr ""
+
+#: ../src/msw/utils.cpp:1133
+#, c-format
+msgid "Windows XP (build %lu"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:136
+msgid "Windows/DOS OEM (CP 437)"
+msgstr ""
+
+#: ../src/common/ffile.cpp:158
+#, c-format
+msgid "Write error on file '%s'"
+msgstr ""
+
+#: ../src/xml/xml.cpp:658
+#, c-format
+msgid "XML parsing error: '%s' at line %d"
+msgstr ""
+
+#: ../src/common/xpmdecod.cpp:794
+msgid "XPM: Malformed pixel data!"
+msgstr ""
+
+#: ../src/common/xpmdecod.cpp:709
+#, c-format
+msgid "XPM: incorrect colour description in line %d"
+msgstr ""
+
+#: ../src/common/xpmdecod.cpp:682
+msgid "XPM: incorrect header format!"
+msgstr ""
+
+#: ../src/common/xpmdecod.cpp:720
+#: ../src/common/xpmdecod.cpp:729
+#, c-format
+msgid "XPM: malformed colour definition '%s' at line %d!"
+msgstr ""
+
+#: ../src/common/xpmdecod.cpp:781
+#, c-format
+msgid "XPM: truncated image data at line %d!"
+msgstr ""
+
+#: ../src/xrc/xmlres.cpp:606
+#, c-format
+msgid "XRC resource '%s' (class '%s') not found!"
+msgstr ""
+
+#: ../src/xrc/xmlres.cpp:1154
+#: ../src/xrc/xmlres.cpp:1166
+#, c-format
+msgid "XRC resource: Cannot create animation from '%s'."
+msgstr ""
+
+#: ../src/xrc/xmlres.cpp:1122
+#: ../src/xrc/xmlres.cpp:1134
+#, c-format
+msgid "XRC resource: Cannot create bitmap from '%s'."
+msgstr ""
+
+#: ../src/xrc/xmlres.cpp:1080
+#, c-format
+msgid "XRC resource: Incorrect colour specification '%s' for property '%s'."
+msgstr ""
+
+#: ../src/mac/carbon/msgdlg.cpp:64
+#: ../src/mac/carbon/msgdlg.cpp:120
+#: ../src/mac/carbon/msgdlg.cpp:202
+#: ../src/mac/classic/msgdlg.cpp:60
+#: ../src/mac/classic/msgdlg.cpp:142
+#: ../src/motif/msgdlg.cpp:204
+msgid "Yes"
+msgstr ""
+
+#: ../src/mac/carbon/overlay.cpp:146
+msgid "You cannot Clear an overlay that is not inited"
+msgstr ""
+
+#: ../src/mac/carbon/overlay.cpp:104
+#: ../src/dfb/overlay.cpp:55
+msgid "You cannot Init an overlay twice"
+msgstr ""
+
+#: ../src/generic/dirdlgg.cpp:314
+msgid "You cannot add a new directory to this section."
+msgstr ""
+
+#: ../src/common/stockitem.cpp:162
+msgid "Zoom &In"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:163
+msgid "Zoom &Out"
+msgstr ""
+
+#: ../src/common/stockitem.cpp:161
+msgid "Zoom to &Fit"
+msgstr ""
+
+#: ../src/common/docview.cpp:2161
+msgid "[EMPTY]"
+msgstr ""
+
+#: ../src/msw/dde.cpp:1055
+msgid "a DDEML application has created a prolonged race condition."
+msgstr ""
+
+#: ../src/msw/dde.cpp:1043
+msgid ""
+"a DDEML function was called without first calling the DdeInitialize function,\n"
+"or an invalid instance identifier\n"
+"was passed to a DDEML function."
+msgstr ""
+
+#: ../src/msw/dde.cpp:1061
+msgid "a client's attempt to establish a conversation has failed."
+msgstr ""
+
+#: ../src/msw/dde.cpp:1058
+msgid "a memory allocation failed."
+msgstr ""
+
+#: ../src/msw/dde.cpp:1052
+msgid "a parameter failed to be validated by the DDEML."
+msgstr ""
+
+#: ../src/msw/dde.cpp:1034
+msgid "a request for a synchronous advise transaction has timed out."
+msgstr ""
+
+#: ../src/msw/dde.cpp:1040
+msgid "a request for a synchronous data transaction has timed out."
+msgstr ""
+
+#: ../src/msw/dde.cpp:1049
+msgid "a request for a synchronous execute transaction has timed out."
+msgstr ""
+
+#: ../src/msw/dde.cpp:1067
+msgid "a request for a synchronous poke transaction has timed out."
+msgstr ""
+
+#: ../src/msw/dde.cpp:1082
+msgid "a request to end an advise transaction has timed out."
+msgstr ""
+
+#: ../src/msw/dde.cpp:1076
+msgid ""
+"a server-side transaction was attempted on a conversation\n"
+"that was terminated by the client, or the server\n"
+"terminated before completing a transaction."
+msgstr ""
+
+#: ../src/msw/dde.cpp:1064
+msgid "a transaction failed."
+msgstr ""
+
+#: ../src/common/menucmn.cpp:199
+msgid "alt"
+msgstr ""
+
+#: ../src/msw/dde.cpp:1046
+msgid ""
+"an application initialized as APPCLASS_MONITOR has\n"
+"attempted to perform a DDE transaction,\n"
+"or an application initialized as APPCMD_CLIENTONLY has \n"
+"attempted to perform server transactions."
+msgstr ""
+
+#: ../src/msw/dde.cpp:1070
+msgid "an internal call to the PostMessage function has failed. "
+msgstr ""
+
+#: ../src/msw/dde.cpp:1079
+msgid "an internal error has occurred in the DDEML."
+msgstr ""
+
+#: ../src/msw/dde.cpp:1085
+msgid ""
+"an invalid transaction identifier was passed to a DDEML function.\n"
+"Once the application has returned from an XTYP_XACT_COMPLETE callback,\n"
+"the transaction identifier for that callback is no longer valid."
+msgstr ""
+
+#: ../src/common/zipstrm.cpp:1272
+msgid "assuming this is a multi-part zip concatenated"
+msgstr ""
+
+#: ../src/common/fileconf.cpp:1880
+#, c-format
+msgid "attempt to change immutable key '%s' ignored."
+msgstr ""
+
+#: ../src/html/chm.cpp:330
+msgid "bad arguments to library function"
+msgstr ""
+
+#: ../src/html/chm.cpp:342
+msgid "bad signature"
+msgstr ""
+
+#: ../src/common/zipstrm.cpp:1712
+msgid "bad zipfile offset to entry"
+msgstr ""
+
+#: ../src/common/ftp.cpp:381
+msgid "binary"
+msgstr ""
+
+#: ../src/common/fontcmn.cpp:696
+msgid "bold"
+msgstr ""
+
+#: ../src/os2/iniconf.cpp:458
+msgid "buffer is too small for Windows directory."
+msgstr ""
+
+#: ../src/common/ffile.cpp:91
+#, c-format
+msgid "can't close file '%s'"
+msgstr ""
+
+#: ../src/common/file.cpp:279
+#, c-format
+msgid "can't close file descriptor %d"
+msgstr ""
+
+#: ../src/common/file.cpp:545
+#, c-format
+msgid "can't commit changes to file '%s'"
+msgstr ""
+
+#: ../src/common/file.cpp:213
+#, c-format
+msgid "can't create file '%s'"
+msgstr ""
+
+#: ../src/common/fileconf.cpp:1195
+#, c-format
+msgid "can't delete user configuration file '%s'"
+msgstr ""
+
+#: ../src/common/file.cpp:451
+#, c-format
+msgid "can't determine if the end of file is reached on descriptor %d"
+msgstr ""
+
+#: ../src/msdos/utilsdos.cpp:299
+#: ../src/msdos/utilsdos.cpp:458
+#, c-format
+msgid "can't execute '%s'"
+msgstr ""
+
+#: ../src/common/zipstrm.cpp:1487
+msgid "can't find central directory in zip"
+msgstr ""
+
+#: ../src/common/file.cpp:421
+#, c-format
+msgid "can't find length of file on file descriptor %d"
+msgstr ""
+
+#: ../src/msw/utils.cpp:394
+msgid "can't find user's HOME, using current directory."
+msgstr ""
+
+#: ../src/common/file.cpp:337
+#, c-format
+msgid "can't flush file descriptor %d"
+msgstr ""
+
+#: ../src/common/file.cpp:393
+#: ../src/msw/wince/filefnwce.cpp:198
+#, c-format
+msgid "can't get seek position on file descriptor %d"
+msgstr ""
+
+#: ../src/common/fontmap.cpp:323
+msgid "can't load any font, aborting"
+msgstr ""
+
+#: ../src/common/ffile.cpp:75
+#: ../src/common/file.cpp:265
+#, c-format
+msgid "can't open file '%s'"
+msgstr ""
+
+#: ../src/common/fileconf.cpp:403
+#, c-format
+msgid "can't open global configuration file '%s'."
+msgstr ""
+
+#: ../src/common/fileconf.cpp:418
+#, c-format
+msgid "can't open user configuration file '%s'."
+msgstr ""
+
+#: ../src/common/fileconf.cpp:1039
+msgid "can't open user configuration file."
+msgstr ""
+
+#: ../src/common/zipstrm.cpp:528
+msgid "can't re-initialize zlib deflate stream"
+msgstr ""
+
+#: ../src/common/zipstrm.cpp:553
+msgid "can't re-initialize zlib inflate stream"
+msgstr ""
+
+#: ../src/common/file.cpp:303
+#, c-format
+msgid "can't read from file descriptor %d"
+msgstr ""
+
+#: ../src/common/file.cpp:540
+#, c-format
+msgid "can't remove file '%s'"
+msgstr ""
+
+#: ../src/common/file.cpp:556
+#, c-format
+msgid "can't remove temporary file '%s'"
+msgstr ""
+
+#: ../src/common/file.cpp:379
+#: ../src/msw/wince/filefnwce.cpp:185
+#, c-format
+msgid "can't seek on file descriptor %d"
+msgstr ""
+
+#: ../src/common/textfile.cpp:233
+#, c-format
+msgid "can't write buffer '%s' to disk."
+msgstr ""
+
+#: ../src/common/file.cpp:319
+#, c-format
+msgid "can't write to file descriptor %d"
+msgstr ""
+
+#: ../src/common/fileconf.cpp:1050
+msgid "can't write user configuration file."
+msgstr ""
+
+#: ../src/common/intl.cpp:1152
+#, c-format
+msgid "catalog file for domain '%s' not found."
+msgstr ""
+
+#: ../src/html/chm.cpp:346
+msgid "checksum error"
+msgstr ""
+
+#: ../src/common/tarstrm.cpp:744
+msgid "checksum failure reading tar header block"
+msgstr ""
+
+#: ../src/html/chm.cpp:348
+msgid "compression error"
+msgstr ""
+
+#: ../src/common/regex.cpp:235
+msgid "conversion to 8-bit encoding failed"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:197
+msgid "ctrl"
+msgstr ""
+
+#: ../src/common/cmdline.cpp:1115
+msgid "date"
+msgstr ""
+
+#: ../src/html/chm.cpp:350
+msgid "decompression error"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:681
+msgid "default"
+msgstr ""
+
+#: ../src/common/xtistrm.cpp:839
+msgid "delegate has no type info"
+msgstr ""
+
+#: ../src/common/debugrpt.cpp:530
+msgid "dump of the process state (binary)"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3936
+msgid "eighteenth"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3926
+msgid "eighth"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3929
+msgid "eleventh"
+msgstr ""
+
+#: ../src/common/strconv.cpp:3488
+#, c-format
+msgid "encoding %i"
+msgstr ""
+
+#: ../src/common/fileconf.cpp:1866
+#, c-format
+msgid "entry '%s' appears more than once in group '%s'"
+msgstr ""
+
+#: ../src/html/chm.cpp:344
+msgid "error in data format"
+msgstr ""
+
+#: ../src/msdos/utilsdos.cpp:399
+#, c-format
+msgid "error opening '%s'"
+msgstr ""
+
+#: ../src/html/chm.cpp:332
+msgid "error opening file"
+msgstr ""
+
+#: ../src/common/zipstrm.cpp:1573
+msgid "error reading zip central directory"
+msgstr ""
+
+#: ../src/common/zipstrm.cpp:1664
+msgid "error reading zip local header"
+msgstr ""
+
+#: ../src/common/zipstrm.cpp:2383
+#, c-format
+msgid "error writing zip entry '%s': bad crc or length"
+msgstr ""
+
+#: ../src/msw/dialup.cpp:882
+msgid "establish"
+msgstr ""
+
+#: ../src/common/ffile.cpp:172
+#, c-format
+msgid "failed to flush the file '%s'"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3933
+msgid "fifteenth"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3923
+msgid "fifth"
+msgstr ""
+
+#: ../src/common/fileconf.cpp:666
+#, c-format
+msgid "file '%s', line %d: '%s' ignored after group header."
+msgstr ""
+
+#: ../src/common/fileconf.cpp:695
+#, c-format
+msgid "file '%s', line %d: '=' expected."
+msgstr ""
+
+#: ../src/common/fileconf.cpp:718
+#, c-format
+msgid "file '%s', line %d: key '%s' was first found at line %d."
+msgstr ""
+
+#: ../src/common/fileconf.cpp:708
+#, c-format
+msgid "file '%s', line %d: value for immutable key '%s' ignored."
+msgstr ""
+
+#: ../src/common/fileconf.cpp:630
+#, c-format
+msgid "file '%s': unexpected character %c at line %d."
+msgstr ""
+
+#: ../src/richtext/richtextbuffer.cpp:5342
+msgid "files"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3919
+msgid "first"
+msgstr ""
+
+#: ../src/html/helpwnd.cpp:1234
+msgid "font size"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3932
+msgid "fourteenth"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3922
+msgid "fourth"
+msgstr ""
+
+#: ../src/common/appbase.cpp:369
+msgid "generate verbose log messages"
+msgstr ""
+
+#: ../src/richtext/richtextbuffer.cpp:7480
+#: ../src/richtext/richtextbuffer.cpp:7520
+#: ../src/richtext/richtextbuffer.cpp:7591
+msgid "image"
+msgstr ""
+
+#: ../src/common/tarstrm.cpp:721
+msgid "incomplete header block in tar"
+msgstr ""
+
+#: ../src/common/xtixml.cpp:476
+msgid "incorrect event handler string, missing dot"
+msgstr ""
+
+#: ../src/common/tarstrm.cpp:1297
+msgid "incorrect size given for tar entry"
+msgstr ""
+
+#: ../src/msw/dialup.cpp:882
+msgid "initiate"
+msgstr ""
+
+#: ../src/common/tarstrm.cpp:917
+msgid "invalid data in extended tar header"
+msgstr ""
+
+#: ../src/common/file.cpp:453
+msgid "invalid eof() return value."
+msgstr ""
+
+#: ../src/generic/logg.cpp:1180
+msgid "invalid message box return value"
+msgstr ""
+
+#: ../src/common/zipstrm.cpp:1444
+msgid "invalid zip file"
+msgstr ""
+
+#: ../src/common/fontcmn.cpp:701
+msgid "italic"
+msgstr ""
+
+#: ../src/common/fontcmn.cpp:691
+msgid "light"
+msgstr ""
+
+#: ../src/common/intl.cpp:1568
+#, c-format
+msgid "locale '%s' can not be set."
+msgstr ""
+
+#: ../src/common/intl.cpp:1143
+#, c-format
+msgid "looking for catalog '%s' in path '%s'."
+msgstr ""
+
+#: ../src/common/datetime.cpp:4088
+msgid "midnight"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3937
+msgid "nineteenth"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3927
+msgid "ninth"
+msgstr ""
+
+#: ../src/msw/dde.cpp:1030
+msgid "no DDE error."
+msgstr ""
+
+#: ../src/html/chm.cpp:328
+msgid "no error"
+msgstr ""
+
+#: ../src/html/helpdata.cpp:655
+#: ../src/html/htmlhelp.cpp:201
+msgid "noname"
+msgstr ""
+
+#: ../src/common/datetime.cpp:4087
+msgid "noon"
+msgstr ""
+
+#: ../src/common/cmdline.cpp:1111
+msgid "num"
+msgstr ""
+
+#: ../src/common/xtixml.cpp:255
+msgid "objects cannot have XML Text Nodes"
+msgstr ""
+
+#: ../src/html/chm.cpp:340
+msgid "out of memory"
+msgstr ""
+
+#: ../src/common/debugrpt.cpp:506
+msgid "process context description"
+msgstr ""
+
+#: ../src/html/chm.cpp:334
+msgid "read error"
+msgstr ""
+
+#: ../src/common/filename.cpp:180
+msgid "reading"
+msgstr ""
+
+#: ../src/common/zipstrm.cpp:1876
+#, c-format
+msgid "reading zip stream (entry %s): bad crc"
+msgstr ""
+
+#: ../src/common/zipstrm.cpp:1873
+#, c-format
+msgid "reading zip stream (entry %s): bad length"
+msgstr ""
+
+#: ../src/msw/dde.cpp:1073
+msgid "reentrancy problem."
+msgstr ""
+
+#: ../src/common/datetime.cpp:3920
+msgid "second"
+msgstr ""
+
+#: ../src/html/chm.cpp:338
+msgid "seek error"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3935
+msgid "seventeenth"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3925
+msgid "seventh"
+msgstr ""
+
+#: ../src/common/menucmn.cpp:201
+msgid "shift"
+msgstr ""
+
+#: ../src/common/appbase.cpp:359
+msgid "show this help message"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3934
+msgid "sixteenth"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3924
+msgid "sixth"
+msgstr ""
+
+#: ../src/common/appcmn.cpp:231
+msgid "specify display mode to use (e.g. 640x480-16)"
+msgstr ""
+
+#: ../src/common/appcmn.cpp:217
+msgid "specify the theme to use"
+msgstr ""
+
+#: ../src/common/zipstrm.cpp:1779
+msgid "stored file length not in Zip header"
+msgstr ""
+
+#: ../src/common/cmdline.cpp:1107
+msgid "str"
+msgstr ""
+
+#: ../src/common/tarstrm.cpp:927
+#: ../src/common/tarstrm.cpp:949
+#: ../src/common/tarstrm.cpp:1417
+#: ../src/common/tarstrm.cpp:1439
+msgid "tar entry not open"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3928
+msgid "tenth"
+msgstr ""
+
+#: ../src/msw/dde.cpp:1037
+msgid "the response to the transaction caused the DDE_FBUSY bit to be set."
+msgstr ""
+
+#: ../src/common/datetime.cpp:3921
+msgid "third"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3931
+msgid "thirteenth"
+msgstr ""
+
+#: ../src/common/imagtiff.cpp:174
+#: ../src/common/imagtiff.cpp:190
+#, c-format
+msgid "tiff module: %s"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3746
+msgid "today"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3748
+msgid "tomorrow"
+msgstr ""
+
+#: ../src/gtk/aboutdlg.cpp:153
+msgid "translator-credits"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3930
+msgid "twelfth"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3938
+msgid "twentieth"
+msgstr ""
+
+#: ../src/common/fontcmn.cpp:602
+#: ../src/common/fontcmn.cpp:687
+msgid "underlined"
+msgstr ""
+
+#: ../src/common/fileconf.cpp:1993
+#, c-format
+msgid "unexpected \" at position %d in '%s'."
+msgstr ""
+
+#: ../src/common/tarstrm.cpp:968
+msgid "unexpected end of file"
+msgstr ""
+
+#: ../src/common/tarstrm.cpp:351
+#: ../src/generic/progdlgg.cpp:303
+msgid "unknown"
+msgstr ""
+
+#: ../src/common/xtixml.cpp:249
+#, c-format
+msgid "unknown class %s"
+msgstr ""
+
+#: ../src/common/regex.cpp:257
+#: ../src/html/chm.cpp:352
+msgid "unknown error"
+msgstr ""
+
+#: ../src/msw/dialup.cpp:495
+#, c-format
+msgid "unknown error (error code %08x)."
+msgstr ""
+
+#: ../src/common/textbuf.cpp:229
+msgid "unknown line terminator"
+msgstr ""
+
+#: ../src/common/file.cpp:361
+#: ../src/msw/wince/filefnwce.cpp:166
+msgid "unknown seek origin"
+msgstr ""
+
+#: ../src/common/fmapbase.cpp:695
+#, c-format
+msgid "unknown-%d"
+msgstr ""
+
+#: ../src/common/docview.cpp:425
+msgid "unnamed"
+msgstr ""
+
+#: ../src/common/docview.cpp:1411
+#, c-format
+msgid "unnamed%d"
+msgstr ""
+
+#: ../src/common/zipstrm.cpp:1793
+#: ../src/common/zipstrm.cpp:2174
+msgid "unsupported Zip compression method"
+msgstr ""
+
+#: ../src/common/intl.cpp:1158
+#, c-format
+msgid "using catalog '%s' from '%s'."
+msgstr ""
+
+#: ../src/html/chm.cpp:336
+msgid "write error"
+msgstr ""
+
+#: ../src/common/filename.cpp:180
+msgid "writing"
+msgstr ""
+
+#: ../src/common/stopwatch.cpp:289
+msgid "wxGetTimeOfDay failed."
+msgstr ""
+
+#: ../include/wx/richtext/richtextbulletspage.h:39
+msgid "wxRichTextBulletsPage"
+msgstr ""
+
+#: ../include/wx/richtext/richtextfontpage.h:38
+#: ../include/wx/richtext/richtextindentspage.h:37
+#: ../include/wx/richtext/richtexttabspage.h:35
+msgid "wxRichTextFontPage"
+msgstr ""
+
+#: ../include/wx/richtext/richtextliststylepage.h:31
+msgid "wxRichTextListStylePage"
+msgstr ""
+
+#: ../include/wx/richtext/richtextstylepage.h:21
+msgid "wxRichTextStylePage"
+msgstr ""
+
+#: ../src/html/search.cpp:49
+msgid "wxSearchEngine::LookFor must be called before scanning!"
+msgstr ""
+
+#: ../src/common/socket.cpp:412
+#: ../src/common/socket.cpp:466
+msgid "wxSocket: invalid signature in ReadMsg."
+msgstr ""
+
+#: ../src/common/socket.cpp:993
+msgid "wxSocket: unknown event!."
+msgstr ""
+
+#: ../src/motif/app.cpp:278
+#, c-format
+msgid "wxWidgets could not open display for '%s': exiting."
+msgstr ""
+
+#: ../src/x11/app.cpp:170
+msgid "wxWidgets could not open display. Exiting."
+msgstr ""
+
+#: ../src/richtext/richtextsymboldlg.cpp:433
+msgid "xxxx"
+msgstr ""
+
+#: ../src/common/datetime.cpp:3747
+msgid "yesterday"
+msgstr ""
+
+#: ../src/common/zstream.cpp:245
+#: ../src/common/zstream.cpp:413
+#, c-format
+msgid "zlib error %d"
+msgstr ""
+
+#: ../src/common/prntbase.cpp:1123
+msgid "|<<"
+msgstr ""
+
+#: ../src/richtext/richtextbulletspage.cpp:295
+#: ../src/richtext/richtextliststylepage.cpp:500
+msgid "~"
+msgstr ""
+

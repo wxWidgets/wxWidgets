@@ -26,6 +26,7 @@ All:
 - Added wxEventBlocker class (Francesco Montorsi)
 - Added wxFile/DirPickerCtrl::Get/SetFile/DirName() (Francesco Montorsi)
 - Added wxSizerFlags::Top() and Bottom()
+- Slovak translation added
 
 wxGTK:
 
