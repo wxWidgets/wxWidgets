@@ -80,7 +80,7 @@ wxBEGIN_FLAGS( wxListBoxStyle )
 
 wxEND_FLAGS( wxListBoxStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxListBox, wxControl,"wx/listbox.h")
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxListBox, wxControlWithItems,"wx/listbox.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxListBox)
     wxEVENT_PROPERTY( Select , wxEVT_COMMAND_LISTBOX_SELECTED , wxCommandEvent )
@@ -97,7 +97,7 @@ wxEND_HANDLERS_TABLE()
 
 wxCONSTRUCTOR_4( wxListBox , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size )
 #else
-IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxListBox, wxControlWithItems)
 #endif
 
 /*

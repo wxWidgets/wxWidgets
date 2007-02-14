@@ -70,7 +70,7 @@ wxBEGIN_FLAGS( wxChoiceStyle )
 
 wxEND_FLAGS( wxChoiceStyle )
 
-IMPLEMENT_DYNAMIC_CLASS_XTI(wxChoice, wxControl,"wx/choice.h")
+IMPLEMENT_DYNAMIC_CLASS_XTI(wxChoice, wxControlWithItems,"wx/choice.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxChoice)
     wxEVENT_PROPERTY( Select , wxEVT_COMMAND_CHOICE_SELECTED , wxCommandEvent )
@@ -86,7 +86,7 @@ wxEND_HANDLERS_TABLE()
 
 wxCONSTRUCTOR_4( wxChoice , wxWindow* , Parent , wxWindowID , Id , wxPoint , Position , wxSize , Size )
 #else
-IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControl)
+IMPLEMENT_DYNAMIC_CLASS(wxChoice, wxControlWithItems)
 #endif
 /*
     TODO PROPERTIES
