@@ -21,6 +21,7 @@ class WXDLLEXPORT wxListEvent;
 #define wxEL_ALLOW_NEW          0x0100
 #define wxEL_ALLOW_EDIT         0x0200
 #define wxEL_ALLOW_DELETE       0x0400
+#define wxEL_NO_REORDER         0x0800
 
 // This class provides a composite control that lets the
 // user easily enter list of strings

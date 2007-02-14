@@ -144,18 +144,21 @@ wxEditableListBox::wxEditableListBox(wxWindow *parent, wxWindowID id,
         subsizer->Add(m_bDel, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
     }
 
-    m_bUp = new wxBitmapButton(subp, wxID_ELB_UP, wxBitmap(elup_xpm));
-    subsizer->Add(m_bUp, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
+    if (!(m_style & wxEL_NO_REORDER))
+    {
+        m_bUp = new wxBitmapButton(subp, wxID_ELB_UP, wxBitmap(elup_xpm));
+        subsizer->Add(m_bUp, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
 
-    m_bDown = new wxBitmapButton(subp, wxID_ELB_DOWN, wxBitmap(eldown_xpm));
-    subsizer->Add(m_bDown, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
+        m_bDown = new wxBitmapButton(subp, wxID_ELB_DOWN, wxBitmap(eldown_xpm));
+        subsizer->Add(m_bDown, 0, wxALIGN_CENTRE_VERTICAL | wxTOP | wxBOTTOM, BTN_BORDER);
+    }
 
 #if wxUSE_TOOLTIPS
     if ( m_bEdit ) m_bEdit->SetToolTip(_("Edit item"));
     if ( m_bNew ) m_bNew->SetToolTip(_("New item"));
     if ( m_bDel ) m_bDel->SetToolTip(_("Delete item"));
-    m_bUp->SetToolTip(_("Move up"));
-    m_bDown->SetToolTip(_("Move down"));
+    if ( m_bUp ) m_bUp->SetToolTip(_("Move up"));
+    if ( m_bDown ) m_bDown->SetToolTip(_("Move down"));
 #endif
 
     subp->SetSizer(subsizer);
@@ -200,8 +203,12 @@ void wxEditableListBox::GetStrings(wxArrayString& strings) const
 void wxEditableListBox::OnItemSelected(wxListEvent& event)
 {
     m_selection = event.GetIndex();
-    m_bUp->Enable(m_selection != 0 && m_selection < m_listCtrl->GetItemCount()-1);
-    m_bDown->Enable(m_selection < m_listCtrl->GetItemCount()-2);
+    if (!(m_style & wxEL_NO_REORDER))
+    {
+        m_bUp->Enable(m_selection != 0 && m_selection < m_listCtrl->GetItemCount()-1);
+        m_bDown->Enable(m_selection < m_listCtrl->GetItemCount()-2);
+    }
+
     if (m_style & wxEL_ALLOW_EDIT)
         m_bEdit->Enable(m_selection < m_listCtrl->GetItemCount()-1);
     if (m_style & wxEL_ALLOW_DELETE)
