@@ -120,11 +120,6 @@ public:
     // for consistency with other wxMSW classes
     WXHFONT GetHFONT() const;
 
-    /*
-       virtual bool UseResource();
-       virtual bool ReleaseResource();
-     */
-
 protected:
     // real font creation function, used in all cases
     bool DoCreate(int size,
@@ -139,7 +134,9 @@ protected:
 
     virtual void DoSetNativeFontInfo(const wxNativeFontInfo& info);
 
-    void Unshare();
+    // implement wxObject virtuals which are used by AllocExclusive()
+    virtual wxObjectRefData *CreateRefData() const;
+    virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxFont)
