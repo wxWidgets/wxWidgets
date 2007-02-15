@@ -248,6 +248,24 @@ static void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation*
 }
 }
 
+// ----------------------------------------------------------------------------
+// "size_request"
+// ----------------------------------------------------------------------------
+
+extern "C" {
+void wxgtk_tlw_size_request_callback(GtkWidget * WXUNUSED(widget),
+                                     GtkRequisition *requisition,
+                                     wxTopLevelWindowGTK *win)
+{
+    // we must return the size of the window without WM decorations, otherwise
+    // GTK+ gets confused, so don't call just GetSize() here
+    int w, h;
+    win->GTKDoGetSize(&w, &h);
+
+    requisition->height = h;
+    requisition->width = w;
+}
+}
 //-----------------------------------------------------------------------------
 // "delete_event"
 //-----------------------------------------------------------------------------
@@ -586,6 +604,8 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     g_signal_connect (m_widget, "size_allocate",
                       G_CALLBACK (gtk_frame_size_callback), this);
 
+    g_signal_connect (m_widget, "size_request",
+                      G_CALLBACK (wxgtk_tlw_size_request_callback), this);
     PostCreation();
 
     if ((m_x != -1) || (m_y != -1))
@@ -849,6 +869,11 @@ void wxTopLevelWindowGTK::DoMoveWindow(int WXUNUSED(x), int WXUNUSED(y), int WXU
 // window geometry
 // ----------------------------------------------------------------------------
 
+void wxTopLevelWindowGTK::GTKDoGetSize(int *width, int *height) const
+{
+    return wxTopLevelWindowBase::DoGetSize(width, height);
+}
+
 void wxTopLevelWindowGTK::GTKDoSetSize(int width, int height)
 {
     // avoid recursions
@@ -938,7 +963,7 @@ void wxTopLevelWindowGTK::DoSetSize( int x, int y, int width, int height, int si
 
         int wUndec,
             hUndec;
-        wxTopLevelWindowBase::DoGetSize(&wUndec, &hUndec);
+        GTKDoGetSize(&wUndec, &hUndec);
 
         if ( width != -1 )
             width -= wTotal - wUndec;
@@ -957,7 +982,7 @@ void wxTopLevelWindowGTK::DoGetSize(int *width, int *height) const
     {
         // this can happen if we're called before the window is realized, so
         // don't assert but just return the stored values
-        wxTopLevelWindowBase::DoGetSize(width, height);
+        GTKDoGetSize(width, height);
         return;
     }
 

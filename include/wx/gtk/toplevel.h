@@ -114,6 +114,9 @@ public:
                                  int maxW = wxDefaultCoord, int maxH = wxDefaultCoord,
                                  int incW = wxDefaultCoord, int incH = wxDefaultCoord );
 
+    // return the full size of the window without WM decorations
+    void GTKDoGetSize(int *width, int *height) const;
+
 protected:
     // common part of all ctors
     void Init();

@@ -2556,7 +2556,7 @@ void wxWindowGTK::PostCreation()
         // FIXME: what should be done here ?
     }
 #endif
-    else
+    else if ( !IsTopLevel() ) // top level windows use their own callback
     {
         // This is needed if we want to add our windows into native
         // GTK controls, such as the toolbar. With this callback, the
