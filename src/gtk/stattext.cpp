@@ -150,7 +150,7 @@ bool wxStaticText::SetFont( const wxFont &font )
             PangoAttrList *attrs = pango_attr_list_new();
             PangoAttribute *a = pango_attr_underline_new(PANGO_UNDERLINE_SINGLE);
             a->start_index = 0;
-            a->end_index = -1;
+            a->end_index = (guint)-1;
             pango_attr_list_insert(attrs, a);
             gtk_label_set_attributes(GTK_LABEL(m_widget), attrs);
             pango_attr_list_unref(attrs);
