@@ -11040,7 +11040,6 @@ class MenuBar(Window):
             self.Append(m, l)
 
     Frame = property(GetFrame,doc="See `GetFrame`") 
-    Menu = property(GetMenu,doc="See `GetMenu`") 
     MenuCount = property(GetMenuCount,doc="See `GetMenuCount`") 
     Menus = property(GetMenus,SetMenus,doc="See `GetMenus` and `SetMenus`") 
 _core_.MenuBar_swigregister(MenuBar)
