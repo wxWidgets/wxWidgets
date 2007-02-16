@@ -460,6 +460,11 @@ bool wxSizerItem::IsShown() const
             // shown, so are we (this arbitrariness is the reason for
             // deprecating this function)
             {
+                // Some apps (such as dialog editors) depend on an empty sizer still
+                // being laid out correctly and reporting the correct size and position.
+                if (m_sizer->GetChildren().GetCount() == 0)
+                    return true;
+
                 for ( wxSizerItemList::compatibility_iterator
                         node = m_sizer->GetChildren().GetFirst();
                       node;
