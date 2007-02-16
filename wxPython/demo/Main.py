@@ -70,6 +70,7 @@ _treeList = [
         'SearchCtrl',
         'SizedControls',
         'AUI_MDI',
+        'TreeMixin',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -214,6 +215,7 @@ _treeList = [
         'Throbber',
         'Ticker',
         'TimeCtrl',
+        'TreeMixin',
         'VListBox',
         ]),
 

@@ -14,6 +14,8 @@ Refactored the inspection tool such that it can be used as a wx.App
 mix-in class as it was used before (with the wx.lib.mixins.inspect
 module) and also as a non mix-in tool (using wx.lib.inspect.InspectionTool). 
 
+Add wx.lib.mixins.treemixin from Frank Niessink.
+
 
 
 
