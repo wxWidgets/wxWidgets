@@ -154,6 +154,12 @@ public:
                                 const wxRect& rect,
                                 int flags = 0);
 
+    virtual void DrawItemSelectionRect(wxWindow *win,
+                                       wxDC& dc,
+                                       const wxRect& rect,
+                                       int flags = 0 );
+
+
     virtual wxSplitterRenderParams GetSplitterParams(const wxWindow *win);
 private:
     DECLARE_NO_COPY_CLASS(wxRendererXP)
@@ -468,6 +474,40 @@ wxRendererXP::DrawPushButton(wxWindow * win,
                             );
 
 }
+
+void
+wxRendererXP::DrawItemSelectionRect(wxWindow * WXUNUSED(win),
+                                    wxDC& dc,
+                                    const wxRect& rect,
+                                    int flags)
+{
+    wxBrush brush;
+    if ( flags & wxCONTROL_SELECTED )
+    {
+        if ( flags & wxCONTROL_FOCUSED )
+        {
+            brush = wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT));
+        }
+        else // !focused
+        {
+            brush = wxBrush(wxSystemSettings::GetColour(wxSYS_COLOUR_BTNSHADOW));
+        }
+    }
+    else // !selected
+    {
+        brush = *wxTRANSPARENT_BRUSH;
+    }
+
+    dc.SetBrush(brush);
+
+    // unlike for wxRendererGeneric, on windows we _never_ want to draw
+    // the outline of the rectangle:
+    dc.SetPen(*wxTRANSPARENT_PEN);
+
+    dc.DrawRectangle( rect );
+}
+
+
 
 // ----------------------------------------------------------------------------
 // splitter drawing

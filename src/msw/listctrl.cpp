@@ -1769,6 +1769,50 @@ bool wxListCtrl::MSWCommand(WXUINT cmd, WXWORD id)
         return false;
 }
 
+// utility used by wxListCtrl::MSWOnNotify and by wxDataViewHeaderWindowMSW::MSWOnNotify
+unsigned int wxMSWGetColumnClicked(NMHDR *nmhdr, POINT *ptClick)
+{
+    wxASSERT(nmhdr && ptClick);
+
+    // find the column clicked: we have to search for it
+    // ourselves as the notification message doesn't provide
+    // this info
+
+    // where did the click occur?
+#if defined(__WXWINCE__) && !defined(__HANDHELDPC__) && _WIN32_WCE < 400
+    if (nmhdr->code == GN_CONTEXTMENU) 
+    {
+        *ptClick = ((NMRGINFO*)nmhdr)->ptAction;
+    } 
+    else
+#endif //__WXWINCE__
+    if ( !::GetCursorPos(ptClick) )
+    {
+        wxLogLastError(_T("GetCursorPos"));
+    }
+
+    if ( !::ScreenToClient(nmhdr->hwndFrom, ptClick) )
+    {
+        wxLogLastError(_T("ScreenToClient(header)"));
+    }
+
+    int colCount = Header_GetItemCount(nmhdr->hwndFrom);
+
+    RECT rect;
+    for ( int col = 0; col < colCount; col++ )
+    {
+        if ( Header_GetItemRect(nmhdr->hwndFrom, col, &rect) )
+        {
+            if ( ::PtInRect(&rect, *ptClick) )
+            {
+                return col;
+            }
+        }
+    }
+
+    return wxNOT_FOUND;
+}
+
 bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 {
 
@@ -1836,47 +1880,12 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 #endif //__WXWINCE__
             case NM_RCLICK:
                 {
-                    eventType = wxEVT_COMMAND_LIST_COL_RIGHT_CLICK;
-                    event.m_col = -1;
-
-                    // find the column clicked: we have to search for it
-                    // ourselves as the notification message doesn't provide
-                    // this info
-
-                    // where did the click occur?
                     POINT ptClick;
-#if defined(__WXWINCE__) && !defined(__HANDHELDPC__) && _WIN32_WCE < 400
-                  if(nmhdr->code == GN_CONTEXTMENU) {
-                      ptClick = ((NMRGINFO*)nmhdr)->ptAction;
-                  } else
-#endif //__WXWINCE__
-                    if ( !::GetCursorPos(&ptClick) )
-                    {
-                        wxLogLastError(_T("GetCursorPos"));
-                    }
 
-                    if ( !::ScreenToClient(GetHwnd(), &ptClick) )
-                    {
-                        wxLogLastError(_T("ScreenToClient(listctrl header)"));
-                    }
-
+                    eventType = wxEVT_COMMAND_LIST_COL_RIGHT_CLICK;
+                    event.m_col = wxMSWGetColumnClicked(nmhdr, &ptClick);
                     event.m_pointDrag.x = ptClick.x;
                     event.m_pointDrag.y = ptClick.y;
-
-                    int colCount = Header_GetItemCount(hwndHdr);
-
-                    RECT rect;
-                    for ( int col = 0; col < colCount; col++ )
-                    {
-                        if ( Header_GetItemRect(hwndHdr, col, &rect) )
-                        {
-                            if ( ::PtInRect(&rect, ptClick) )
-                            {
-                                event.m_col = col;
-                                break;
-                            }
-                        }
-                    }
                 }
                 break;
 
@@ -1886,7 +1895,7 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 // parameters
                 //
                 // I have no idea what is the real cause of the bug (which is,
-                // just to make things interesting, is impossible to reproduce
+                // just to make things interesting, impossible to reproduce
                 // reliably) but ignoring all these messages does fix it and
                 // doesn't seem to have any negative consequences
                 return true;
