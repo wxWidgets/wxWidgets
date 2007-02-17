@@ -47,24 +47,30 @@ class WXDLLIMPEXP_ADV wxDataViewRenderer;
 
 extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxDataViewCtrlNameStr[];
 
+// the default width of new (text) columns:
+#define wxDVC_DEFAULT_WIDTH             80
+
+// the default width of new toggle columns:
+#define wxDVC_TOGGLE_DEFAULT_WIDTH      30
+
+
 // ---------------------------------------------------------
 // wxDataViewModel
 // ---------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewModel: public wxObject
+class WXDLLIMPEXP_ADV wxDataViewModel: public wxObjectRefData
 {
 public:
     wxDataViewModel() { }
-    virtual ~wxDataViewModel() { }
 
 protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewModel)
+    // the user should not delete this class directly: he should use DecRef() instead!
+    virtual ~wxDataViewModel() { }
 };
 
 // ---------------------------------------------------------
 // wxDataViewListModelNotifier
 // ---------------------------------------------------------
-
 
 class WXDLLIMPEXP_ADV wxDataViewListModelNotifier: public wxObject
 {
@@ -80,6 +86,8 @@ public:
     virtual bool ValueChanged( unsigned int col, unsigned int row ) = 0;
     virtual bool RowsReordered( unsigned int *new_order ) = 0;
     virtual bool Cleared() = 0;
+    virtual bool Freed()
+        { m_owner = NULL; return true; }
 
     void SetOwner( wxDataViewListModel *owner ) { m_owner = owner; }
     wxDataViewListModel *GetOwner()             { return m_owner; }
@@ -107,16 +115,24 @@ public:
 
 class WXDLLIMPEXP_ADV wxDataViewListModel: public wxDataViewModel
 {
+    friend class WXDLLIMPEXP_ADV wxDataViewCtrl;
+    friend class WXDLLIMPEXP_ADV wxDataViewCtrlBase;
+    friend class WXDLLIMPEXP_ADV wxDataViewSortedListModel;
+    friend class WXDLLIMPEXP_ADV wxDataViewColumnBase;
+    friend class WXDLLIMPEXP_ADV wxGtkDataViewListModelNotifier;
+
 public:
     wxDataViewListModel();
-    virtual ~wxDataViewListModel();
 
     virtual unsigned int GetNumberOfRows() = 0;
     virtual unsigned int GetNumberOfCols() = 0;
+
     // return type as reported by wxVariant
     virtual wxString GetColType( unsigned int col ) = 0;
+
     // get value into a wxVariant
     virtual void GetValue( wxVariant &variant, unsigned int col, unsigned int row ) = 0;
+
     // set value, call ValueChanged() afterwards!
     virtual bool SetValue( wxVariant &variant, unsigned int col, unsigned int row ) = 0;
 
@@ -130,6 +146,10 @@ public:
     virtual bool RowsReordered( unsigned int *new_order );
     virtual bool Cleared();
 
+protected:
+    // the user should not delete this class directly: he should use DecRef() instead!
+    virtual ~wxDataViewListModel();
+
     // Used internally
     void AddViewingColumn( wxDataViewColumn *view_column, unsigned int model_column );
     void RemoveViewingColumn( wxDataViewColumn *column );
@@ -139,10 +159,9 @@ public:
 
     wxList                      m_notifiers;
     wxList                      m_viewingColumns;
-
-protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewListModel)
 };
+
+
 
 // ---------------------------------------------------------
 // wxDataViewSortedListModel
@@ -155,6 +174,8 @@ WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_SIZE_T(unsigned int, wxDataViewSortedIndexA
 
 class WXDLLIMPEXP_ADV wxDataViewSortedListModel: public wxDataViewListModel
 {
+    friend class wxDataViewSortedListModelNotifier;
+
 public:
     wxDataViewSortedListModel( wxDataViewListModel *child );
     virtual ~wxDataViewSortedListModel();
@@ -200,9 +221,6 @@ private:
     wxDataViewListModelNotifier     *m_notifierOnChild;
     
     void InitStatics(); // BAD
-
-protected:
-    DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewSortedListModel)
 };
 
 // ---------------------------------------------------------
@@ -262,10 +280,14 @@ enum wxDataViewColumnFlags
 class WXDLLIMPEXP_ADV wxDataViewColumnBase: public wxObject
 {
 public:
-    wxDataViewColumnBase( const wxString &title, wxDataViewRenderer *renderer, unsigned int model_column,
-        int width = 80, int flags = wxDATAVIEW_COL_RESIZABLE );
-    wxDataViewColumnBase( const wxBitmap &bitmap, wxDataViewRenderer *renderer, unsigned int model_column,
-        int width = 80, int flags = wxDATAVIEW_COL_RESIZABLE );
+    wxDataViewColumnBase( const wxString &title, wxDataViewRenderer *renderer, 
+                          unsigned int model_column, int width = wxDVC_DEFAULT_WIDTH, 
+                          wxAlignment align = wxALIGN_CENTER,
+                          int flags = wxDATAVIEW_COL_RESIZABLE );
+    wxDataViewColumnBase( const wxBitmap &bitmap, wxDataViewRenderer *renderer, 
+                          unsigned int model_column, int width = wxDVC_DEFAULT_WIDTH, 
+                          wxAlignment align = wxALIGN_CENTER,
+                          int flags = wxDATAVIEW_COL_RESIZABLE );
     virtual ~wxDataViewColumnBase();
 
     virtual void SetTitle( const wxString &title );
@@ -277,9 +299,15 @@ public:
     virtual void SetAlignment( wxAlignment align ) = 0;
     
     virtual void SetSortable( bool sortable ) = 0;
-    virtual bool GetSortable() = 0;
+    virtual bool IsSortable() const
+        { return (m_flags & wxDATAVIEW_COL_SORTABLE) != 0; }
+    virtual bool IsResizeable() const
+        { return (m_flags & wxDATAVIEW_COL_RESIZABLE) != 0; }
+    virtual bool IsHidden() const
+        { return (m_flags & wxDATAVIEW_COL_HIDDEN) != 0; }
+
     virtual void SetSortOrder( bool ascending ) = 0;
-    virtual bool IsSortOrderAscending() = 0;
+    virtual bool IsSortOrderAscending() const = 0;
 
     wxDataViewRenderer* GetRenderer()       { return m_renderer; }
 
@@ -288,7 +316,7 @@ public:
     virtual void SetOwner( wxDataViewCtrl *owner )  { m_owner = owner; }
     wxDataViewCtrl *GetOwner()              { return m_owner; }
 
-    virtual int GetWidth() = 0;
+    virtual int GetWidth() const = 0;
 
 private:
     wxDataViewCtrl          *m_ctrl;
@@ -321,25 +349,45 @@ public:
 
     // short cuts
     bool AppendTextColumn( const wxString &label, unsigned int model_column, 
-                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1 );
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
+                    wxAlignment align = wxALIGN_CENTER,
+                    int flags = wxDATAVIEW_COL_RESIZABLE );
     bool AppendToggleColumn( const wxString &label, unsigned int model_column,
-                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = 30 );
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_TOGGLE_DEFAULT_WIDTH,
+                    wxAlignment align = wxALIGN_CENTER,
+                    int flags = wxDATAVIEW_COL_RESIZABLE );
     bool AppendProgressColumn( const wxString &label, unsigned int model_column, 
-                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = 80 );
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_DEFAULT_WIDTH,
+                    wxAlignment align = wxALIGN_CENTER,
+                    int flags = wxDATAVIEW_COL_RESIZABLE );
     bool AppendDateColumn( const wxString &label, unsigned int model_column,
-                    wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, int width = -1 );
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, int width = -1,
+                    wxAlignment align = wxALIGN_CENTER,
+                    int flags = wxDATAVIEW_COL_RESIZABLE );
     bool AppendBitmapColumn( const wxString &label, unsigned int model_column,
-                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1 );
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
+                    wxAlignment align = wxALIGN_CENTER,
+                    int flags = wxDATAVIEW_COL_RESIZABLE );
     bool AppendTextColumn( const wxBitmap &label, unsigned int model_column,
-                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1 );
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
+                    wxAlignment align = wxALIGN_CENTER,
+                    int flags = wxDATAVIEW_COL_RESIZABLE );
     bool AppendToggleColumn( const wxBitmap &label, unsigned int model_column,
-                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = 30 );
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_TOGGLE_DEFAULT_WIDTH,
+                    wxAlignment align = wxALIGN_CENTER,
+                    int flags = wxDATAVIEW_COL_RESIZABLE );
     bool AppendProgressColumn( const wxBitmap &label, unsigned int model_column,
-                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = 80 );
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = wxDVC_DEFAULT_WIDTH,
+                    wxAlignment align = wxALIGN_CENTER,
+                    int flags = wxDATAVIEW_COL_RESIZABLE );
     bool AppendDateColumn( const wxBitmap &label, unsigned int model_column,
-                    wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, int width = -1 );
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_ACTIVATABLE, int width = -1,
+                    wxAlignment align = wxALIGN_CENTER,
+                    int flags = wxDATAVIEW_COL_RESIZABLE );
     bool AppendBitmapColumn( const wxBitmap &label, unsigned int model_column,
-                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1 );
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT, int width = -1,
+                    wxAlignment align = wxALIGN_CENTER,
+                    int flags = wxDATAVIEW_COL_RESIZABLE );
     
     virtual bool AppendColumn( wxDataViewColumn *col );
     virtual unsigned int GetNumberOfColumns();

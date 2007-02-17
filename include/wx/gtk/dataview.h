@@ -21,6 +21,7 @@
 
 class WXDLLIMPEXP_CORE wxDataViewCtrl;
 
+
 // --------------------------------------------------------- 
 // wxDataViewRenderer
 // --------------------------------------------------------- 
@@ -28,7 +29,8 @@ class WXDLLIMPEXP_CORE wxDataViewCtrl;
 class wxDataViewRenderer: public wxDataViewRendererBase
 {
 public:
-    wxDataViewRenderer( const wxString &varianttype, wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
+    wxDataViewRenderer( const wxString &varianttype, 
+                        wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT );
 
     // implementation
     void* GetGtkHandle() { return m_renderer; }
@@ -188,10 +190,15 @@ protected:
 class WXDLLIMPEXP_CORE wxDataViewColumn: public wxDataViewColumnBase
 {
 public:
-    wxDataViewColumn( const wxString &title, wxDataViewRenderer *renderer, unsigned int model_column,
-        int width = 80, int flags = wxDATAVIEW_COL_RESIZABLE );
-    wxDataViewColumn( const wxBitmap &bitmap, wxDataViewRenderer *renderer, unsigned int model_column,
-        int width = 80, int flags = wxDATAVIEW_COL_RESIZABLE );
+    wxDataViewColumn( const wxString &title, wxDataViewRenderer *renderer,
+                      unsigned int model_column, int width = wxDVC_DEFAULT_WIDTH,
+                      wxAlignment align = wxALIGN_CENTER,
+                      int flags = wxDATAVIEW_COL_RESIZABLE );
+    wxDataViewColumn( const wxBitmap &bitmap, wxDataViewRenderer *renderer,
+                      unsigned int model_column, int width = wxDVC_DEFAULT_WIDTH,
+                      wxAlignment align = wxALIGN_CENTER,
+                      int flags = wxDATAVIEW_COL_RESIZABLE );
+
     virtual ~wxDataViewColumn();
 
     virtual void SetTitle( const wxString &title );
@@ -202,14 +209,15 @@ public:
     virtual void SetAlignment( wxAlignment align );
     
     virtual void SetSortable( bool sortable );
-    virtual bool GetSortable();
     virtual void SetSortOrder( bool ascending );
-    virtual bool IsSortOrderAscending();
 
-    virtual int GetWidth();
+    virtual bool IsSortable() const;
+    virtual bool IsSortOrderAscending() const;
+
+    virtual int GetWidth() const;
     
     virtual void SetFixedWidth( int width );
-    virtual int GetFixedWidth();
+    virtual int GetFixedWidth() const;
     
     // implementation
     void* GetGtkHandle() { return m_column; }

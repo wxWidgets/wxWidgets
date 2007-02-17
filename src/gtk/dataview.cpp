@@ -726,6 +726,13 @@ public:
     virtual bool RowsReordered( unsigned int *new_order );
     virtual bool Cleared();
 
+    virtual bool Freed()
+{
+    m_wx_model = NULL;
+    m_gtk_store = NULL;
+    return wxDataViewListModelNotifier::Freed();
+}
+
     GtkWxListStore      *m_gtk_store;
     wxDataViewListModel *m_wx_model;
 };
@@ -1430,9 +1437,10 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
 
 IMPLEMENT_CLASS(wxDataViewColumn, wxDataViewColumnBase)
 
-wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *cell, unsigned int model_column,
-    int width, int flags ) :
-    wxDataViewColumnBase( title, cell, model_column, width, flags )
+wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *cell, 
+                                    unsigned int model_column, int width, 
+                                    wxAlignment align, int flags ) :
+    wxDataViewColumnBase( title, cell, model_column, width, align, flags )
 {
     m_isConnected = false;
 
@@ -1464,11 +1472,13 @@ wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *c
     gtk_tree_view_column_set_cell_data_func( column, renderer,
         wxGtkTreeCellDataFunc, (gpointer) cell, NULL );
 
+    SetAlignment(align);
 }
 
-wxDataViewColumn::wxDataViewColumn( const wxBitmap &bitmap, wxDataViewRenderer *cell, unsigned int model_column,
-    int width, int flags ) :
-    wxDataViewColumnBase( bitmap, cell, model_column, width, flags )
+wxDataViewColumn::wxDataViewColumn( const wxBitmap &bitmap, wxDataViewRenderer *cell, 
+                                    unsigned int model_column, int width, 
+                                    wxAlignment align, int flags ) :
+    wxDataViewColumnBase( bitmap, cell, model_column, width, align, flags )
 {
     m_isConnected = false;
     
@@ -1497,6 +1507,8 @@ wxDataViewColumn::wxDataViewColumn( const wxBitmap &bitmap, wxDataViewRenderer *
 
     gtk_tree_view_column_set_cell_data_func( column, renderer,
         wxGtkTreeCellDataFunc, (gpointer) cell, NULL );
+
+    SetAlignment(align);
 }
 
 wxDataViewColumn::~wxDataViewColumn()
@@ -1605,7 +1617,7 @@ void wxDataViewColumn::SetSortable( bool sortable )
     gtk_tree_view_column_set_sort_indicator( column, sortable );
 }
 
-bool wxDataViewColumn::GetSortable()
+bool wxDataViewColumn::IsSortable() const
 {
     GtkTreeViewColumn *column = (GtkTreeViewColumn *)m_column;
     return gtk_tree_view_column_get_sort_indicator( column );
@@ -1621,14 +1633,14 @@ void wxDataViewColumn::SetSortOrder( bool ascending )
         gtk_tree_view_column_set_sort_order( column, GTK_SORT_DESCENDING );
 }
 
-bool wxDataViewColumn::IsSortOrderAscending()
+bool wxDataViewColumn::IsSortOrderAscending() const
 {
     GtkTreeViewColumn *column = (GtkTreeViewColumn *)m_column;
     
     return (gtk_tree_view_column_get_sort_order( column ) != GTK_SORT_DESCENDING);
 }
 
-int wxDataViewColumn::GetWidth()
+int wxDataViewColumn::GetWidth() const
 {
     return gtk_tree_view_column_get_width( (GtkTreeViewColumn *)m_column );
 }
@@ -1638,7 +1650,7 @@ void wxDataViewColumn::SetFixedWidth( int width )
     gtk_tree_view_column_set_fixed_width( (GtkTreeViewColumn *)m_column, width );
 }
 
-int wxDataViewColumn::GetFixedWidth()
+int wxDataViewColumn::GetFixedWidth() const
 {
     return gtk_tree_view_column_get_fixed_width( (GtkTreeViewColumn *)m_column );
 }
@@ -1680,6 +1692,10 @@ wxDataViewCtrl::~wxDataViewCtrl()
 {
     if (m_notifier)
         GetModel()->RemoveNotifier( m_notifier );
+
+    // remove the model from the GtkTreeView before it gets destroyed by the
+    // wxDataViewCtrlBase's dtor
+    gtk_tree_view_set_model( GTK_TREE_VIEW(m_treeview), NULL );
 }
 
 void wxDataViewCtrl::Init()

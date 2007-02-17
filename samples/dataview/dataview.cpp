@@ -21,6 +21,8 @@
 #endif
 
 #include "wx/datetime.h"
+#include "wx/splitter.h"
+#include "wx/aboutdlg.h"
 
 #ifndef __WXMSW__
     #include "../sample.xpm"
@@ -34,9 +36,9 @@
 // MyTextModel
 // -------------------------------------
 
-WX_DECLARE_LIST(wxDateTime,wxArrayDate);
-#include <wx/listimpl.cpp>
-WX_DEFINE_LIST(wxArrayDate)
+WX_DECLARE_OBJARRAY(wxDateTime,wxArrayDate);
+#include <wx/arrimpl.cpp>
+WX_DEFINE_OBJARRAY(wxArrayDate)
 
 class MyTextModel: public wxDataViewListModel
 {
@@ -54,8 +56,8 @@ public:
             { m_progress.Add( i/10 ); }
         for (i = 0; i < 1000; i++)
             {
-                wxDateTime *date = new wxDateTime( wxDateTime::Now() );
-                m_dates.Append( date );
+                wxDateTime date( wxDateTime::Now() );
+                m_dates.Add( date );
             }
     }
 
@@ -83,7 +85,7 @@ public:
         {
             if (col == 6)
             {
-                variant = (wxDateTime) *m_dates[row];
+                variant = (wxDateTime) m_dates[row];
             } else
             if (col == 5)
             {
@@ -95,7 +97,7 @@ public:
             } else
             if (col == 3)
             {
-                variant = (bool) m_bools[row];
+                variant = (bool) (m_bools[row] != 0);
             } else
             if (col == 2)
             {
@@ -112,7 +114,7 @@ public:
         {
             if (col == 6)
             {
-                *m_dates[row] = value.GetDateTime();
+                m_dates[row] = value.GetDateTime();
             } else
             if (col == 3)
             {
@@ -263,13 +265,14 @@ class MyApp: public wxApp
 {
 public:
     bool OnInit(void);
+    int OnExit();
 };
 
 // -------------------------------------
 // MyFrame
 // -------------------------------------
 
-class MyFrame: public wxFrame
+class MyFrame : public wxFrame
 {
 public:
     MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h);
@@ -277,10 +280,26 @@ public:
 public:
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+    void OnNewSortingFrame(wxCommandEvent& event);
+
+    void OnSingleSelMode(wxCommandEvent& event);
+    void OnMultipleSelMode(wxCommandEvent& event);
+    void OnResizeableColumn(wxCommandEvent& event);
+    void OnSortableColumn(wxCommandEvent& event);
+    void OnHideColumn(wxCommandEvent& event);
+    void OnChooseAlign(wxCommandEvent& event);
 
 private:
     wxDataViewCtrl* dataview_left;
     wxDataViewCtrl* dataview_right;
+    wxSplitterWindow *m_splitter;
+
+    wxAlignment m_align;
+
+    void CreateControls();
+
+private:
+    DECLARE_EVENT_TABLE()
 };
 
 // -------------------------------------
@@ -358,80 +377,174 @@ private:
 // MyApp
 // -------------------------------------
 
-#define DYNAMIC_QUIT   wxID_EXIT
-#define DYNAMIC_ABOUT  wxID_ABOUT
-
-IMPLEMENT_APP  (MyApp)
+IMPLEMENT_APP(MyApp)
 
 bool MyApp::OnInit(void)
 {
     if ( !wxApp::OnInit() )
         return false;
 
-    MyFrame *frame = new MyFrame(NULL, wxT("wxDataViewCtrl feature test"), 10, 10, 800, 340);
+    // build the first frame
+    MyFrame *frame = 
+        new MyFrame(NULL, wxT("wxDataViewCtrl feature test"), 10, 10, 800, 340);
     frame->Show(true);
 
-    MySortingFrame *frame2 = new MySortingFrame(NULL, wxT("wxDataViewCtrl sorting test"), 10, 150, 600, 500);
-    frame2->Show(true);
-
     SetTopWindow(frame);
-    
     return true;
 }
+
+int MyApp::OnExit()
+{
+    return 0;
+}
+
 
 // -------------------------------------
 // MyFrame
 // -------------------------------------
+
+enum
+{
+    // file menu
+    ID_ABOUT = wxID_ABOUT,
+    ID_NEW_SORT_FRAME,
+    ID_EXIT = wxID_EXIT,
+
+    // dataviewctrl menu
+    ID_SINGLE_SEL_MODE,
+    ID_MULTIPLE_SEL_MODE,
+
+    ID_RESIZEABLE_COLUMNS,
+    ID_SORTABLE_COLUMNS,
+    ID_HIDDEN_COLUMNS,
+
+    ID_CHOOSE_ALIGNMENT
+};
+
+BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+
+    // file menu
+    EVT_MENU( ID_ABOUT, MyFrame::OnAbout )
+    EVT_MENU( ID_NEW_SORT_FRAME, MyFrame::OnNewSortingFrame )
+    EVT_MENU( ID_EXIT, MyFrame::OnQuit )
+
+    // dataviewctrl menu
+    EVT_MENU( ID_SINGLE_SEL_MODE, MyFrame::OnSingleSelMode )
+    EVT_MENU( ID_MULTIPLE_SEL_MODE, MyFrame::OnMultipleSelMode )
+
+    EVT_MENU( ID_RESIZEABLE_COLUMNS, MyFrame::OnResizeableColumn )
+    EVT_MENU( ID_SORTABLE_COLUMNS, MyFrame::OnSortableColumn )
+    EVT_MENU( ID_HIDDEN_COLUMNS, MyFrame::OnHideColumn )
+
+    EVT_MENU( ID_CHOOSE_ALIGNMENT, MyFrame::OnChooseAlign )
+
+END_EVENT_TABLE()
 
 MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
   wxFrame(frame, wxID_ANY, title, wxPoint(x, y), wxSize(w, h))
 {
     SetIcon(wxICON(sample));
 
-    wxMenu *file_menu = new wxMenu;
+    // build the menus:
 
-    file_menu->Append(DYNAMIC_ABOUT, _T("&About"));
-    file_menu->Append(DYNAMIC_QUIT, _T("E&xit"));
+    wxMenu *file_menu = new wxMenu;
+    file_menu->Append(ID_NEW_SORT_FRAME, _T("&New sorting frame"));
+    file_menu->AppendSeparator();
+    file_menu->Append(ID_ABOUT, _T("&About"));
+    file_menu->AppendSeparator();
+    file_menu->Append(ID_EXIT, _T("E&xit"));
+
+    wxMenu *data_menu = new wxMenu;
+    data_menu->AppendRadioItem(ID_SINGLE_SEL_MODE, _T("&Single selection mode"));
+    data_menu->AppendRadioItem(ID_MULTIPLE_SEL_MODE, _T("&Multiple selection mode"));
+    data_menu->AppendSeparator();
+    data_menu->AppendCheckItem(ID_RESIZEABLE_COLUMNS, _T("Make columns resizeable"));
+    data_menu->AppendCheckItem(ID_SORTABLE_COLUMNS, _T("Make columns sortable"));
+    data_menu->AppendCheckItem(ID_HIDDEN_COLUMNS, _T("Make columns hidden"));
+    data_menu->AppendSeparator();
+    data_menu->Append(ID_CHOOSE_ALIGNMENT, _T("Set alignment..."));
+
     wxMenuBar *menu_bar = new wxMenuBar;
     menu_bar->Append(file_menu, _T("&File"));
+    menu_bar->Append(data_menu, _T("&DataViewCtrl"));
+
     SetMenuBar(menu_bar);
-
-    // You used to have to do some casting for param 4, but now there are type-safe handlers
-    Connect( DYNAMIC_QUIT,  wxID_ANY,
-                    wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame::OnQuit) );
-    Connect( DYNAMIC_ABOUT, wxID_ANY,
-                    wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MyFrame::OnAbout) );
-
     CreateStatusBar();
 
-    wxPanel *panel = new wxPanel( this, wxID_ANY );
+
+    // build the other controls:
+
+    m_splitter = new wxSplitterWindow( this, wxID_ANY );
+    m_splitter->SetSashGravity(0.5);
+
+    m_align = wxALIGN_CENTER;
+    dataview_left = dataview_right = NULL;
+    CreateControls();
+
+    m_splitter->SplitVertically(dataview_left, dataview_right);
+}
+
+void MyFrame::CreateControls()
+{
+    wxDataViewCtrl *old1 = NULL, *old2 = NULL;
+
+    if (dataview_left)
+        old1 = dataview_left;
+    if (dataview_right)
+        old2 = dataview_right;
+
+    // styles:
+
+    long style = 0;
+    if (GetMenuBar()->FindItem(ID_MULTIPLE_SEL_MODE)->IsChecked())
+        style |= wxDV_MULTIPLE;
+
+    int flags = 0;
+    if (GetMenuBar()->FindItem(ID_RESIZEABLE_COLUMNS)->IsChecked())
+        flags |= wxDATAVIEW_COL_RESIZABLE;
+    if (GetMenuBar()->FindItem(ID_SORTABLE_COLUMNS)->IsChecked())
+        flags |= wxDATAVIEW_COL_SORTABLE;
+    if (GetMenuBar()->FindItem(ID_HIDDEN_COLUMNS)->IsChecked())
+        flags |= wxDATAVIEW_COL_HIDDEN;
 
 
     // Left wxDataViewCtrl
-    dataview_left = new wxDataViewCtrl( panel, wxID_ANY );
+    dataview_left = new wxDataViewCtrl( m_splitter, wxID_ANY, wxDefaultPosition,
+                                        wxDefaultSize, style );
 
     MyTextModel *model = new MyTextModel;
     dataview_left->AssociateModel( model );
+    model->DecRef(); // don't leak memory
 
-    dataview_left->AppendTextColumn( wxT("first"), 0 );
-    dataview_left->AppendTextColumn( wxT("second"), 1 );
+    dataview_left->AppendTextColumn( wxT("first"), 0, wxDATAVIEW_CELL_INERT, -1, 
+                                     m_align, flags );
+    dataview_left->AppendTextColumn( wxT("second"), 1, wxDATAVIEW_CELL_INERT, -1, 
+                                     m_align, flags );
 
-    wxDataViewTextRenderer *text_renderer = new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
-    wxDataViewColumn *column = new wxDataViewColumn( wxT("editable"), text_renderer, 2 );
+    wxDataViewTextRenderer *text_renderer = 
+        new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
+    wxDataViewColumn *column = new wxDataViewColumn( wxT("editable"), text_renderer, 2,
+                                                     -1, m_align, flags );
     dataview_left->AppendColumn( column );
 
-    dataview_left->AppendToggleColumn( wxT("fourth"), 3 );
+    dataview_left->AppendToggleColumn( wxT("fourth"), 3, wxDATAVIEW_CELL_INERT, -1,  
+                                       m_align, flags );
 
     MyCustomRenderer *custom_renderer = new MyCustomRenderer;
-    column = new wxDataViewColumn( wxT("custom"), custom_renderer, 4 );
+    column = new wxDataViewColumn( wxT("custom"), custom_renderer, 4, -1,  
+                                   m_align, flags );
     dataview_left->AppendColumn( column );
 
-    dataview_left->AppendProgressColumn( wxT("progress"), 5 );
+    dataview_left->AppendProgressColumn( wxT("progress"), 5, wxDATAVIEW_CELL_INERT, -1,  
+                                         m_align, flags );
 
-    dataview_left->AppendDateColumn( wxT("date"), 6 );
+    dataview_left->AppendDateColumn( wxT("date"), 6, wxDATAVIEW_CELL_INERT, -1,  
+                                     m_align, flags );
+
 
     // Right wxDataViewCtrl using the same model
-    dataview_right = new wxDataViewCtrl( panel, wxID_ANY );
+    dataview_right = new wxDataViewCtrl( m_splitter, wxID_ANY, wxDefaultPosition,
+                                         wxDefaultSize, style );
     dataview_right->AssociateModel( model );
 
     text_renderer = new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
@@ -439,19 +552,25 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     dataview_right->AppendColumn( column );
     dataview_right->AppendTextColumn( wxT("first"), 0 );
     dataview_right->AppendTextColumn( wxT("second"), 1 );
-    wxDataViewToggleRenderer *toggle_renderer = new wxDataViewToggleRenderer( wxT("bool"), wxDATAVIEW_CELL_ACTIVATABLE );
+    wxDataViewToggleRenderer *toggle_renderer = 
+        new wxDataViewToggleRenderer( wxT("bool"), wxDATAVIEW_CELL_ACTIVATABLE );
     column = new wxDataViewColumn( wxT("bool"), toggle_renderer, 3, 30 );
     dataview_right->AppendColumn( column );
 
     dataview_right->AppendDateColumn( wxT("date"), 6 );
 
-    // layout dataview controls.
+    // layout dataview controls
+    if (old1)
+    {
+        m_splitter->ReplaceWindow(old1, dataview_left);
+        delete old1;
+    }
 
-    wxBoxSizer *sizer = new wxBoxSizer( wxHORIZONTAL );
-    sizer->Add( dataview_left, 3, wxGROW );
-    sizer->Add(10,10);
-    sizer->Add( dataview_right, 2, wxGROW );
-    panel->SetSizer( sizer );
+    if (old2)
+    {
+        m_splitter->ReplaceWindow(old2, dataview_right);
+        delete old2;
+    }
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
@@ -461,11 +580,83 @@ void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
 
 void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event) )
 {
-    wxMessageDialog dialog(this, _T("This demonstrates the dataview control handling"),
-        _T("About DataView"), wxOK);
+    wxAboutDialogInfo info;
+    info.SetName(_("DataView sample"));
+    info.SetDescription(_("This sample demonstrates the dataview control handling"));
+    info.SetCopyright(_T("(C) 2007 Robert Roebling"));
 
-    dialog.ShowModal();
+    wxAboutBox(info);
 }
+
+void MyFrame::OnNewSortingFrame(wxCommandEvent& WXUNUSED(event) )
+{
+    MySortingFrame *frame2 = 
+        new MySortingFrame(NULL, wxT("wxDataViewCtrl sorting test"), 10, 150, 600, 500);
+    frame2->Show(true);
+}
+
+void MyFrame::OnSingleSelMode(wxCommandEvent& event)
+{
+    CreateControls();
+}
+
+void MyFrame::OnMultipleSelMode(wxCommandEvent& event)
+{
+    CreateControls();
+}
+
+void MyFrame::OnResizeableColumn(wxCommandEvent& event)
+{
+    CreateControls();
+}
+
+void MyFrame::OnSortableColumn(wxCommandEvent& event)
+{
+    CreateControls();
+}
+
+void MyFrame::OnHideColumn(wxCommandEvent& event)
+{
+    CreateControls();
+}
+
+void MyFrame::OnChooseAlign(wxCommandEvent& event)
+{
+    const wxString choices[] =
+    {
+        wxT("Left"),
+        wxT("Center horizontally"),
+        wxT("Right"),
+        wxT("Top"),
+        wxT("Center vertically"),
+        wxT("Bottom"),
+        wxT("Center")
+    };
+
+    wxAlignment flags[] =
+    {
+        wxALIGN_LEFT,
+        wxALIGN_CENTER_HORIZONTAL,
+        wxALIGN_RIGHT,
+        wxALIGN_TOP,
+        wxALIGN_CENTER_VERTICAL,
+        wxALIGN_BOTTOM,
+        wxALIGN_CENTER
+    };
+
+    int choice = wxGetSingleChoiceIndex(
+        wxT("Select the alignment for the cells of the wxDataViewCtrl:"),
+        wxT("Alignment"),
+        WXSIZEOF(choices), choices,
+        this);
+
+    if (choice == wxNOT_FOUND)
+        return;
+
+    m_align = flags[choice];
+    CreateControls();
+}
+
 
 // -------------------------------------
 // MySortingFrame
@@ -491,43 +682,39 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
     m_logOld = NULL;
     
     SetIcon(wxICON(sample));
-
-    wxMenu *file_menu = new wxMenu;
-
-    file_menu->Append(DYNAMIC_ABOUT, _T("&About"));
-    file_menu->Append(DYNAMIC_QUIT, _T("E&xit"));
-    wxMenuBar *menu_bar = new wxMenuBar;
-    menu_bar->Append(file_menu, _T("&File"));
-    SetMenuBar(menu_bar);
-
-    // You used to have to do some casting for param 4, but now there are type-safe handlers
-    Connect( DYNAMIC_QUIT,  wxID_ANY,
-                    wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MySortingFrame::OnQuit) );
-    Connect( DYNAMIC_ABOUT, wxID_ANY,
-                    wxEVT_COMMAND_MENU_SELECTED, wxCommandEventHandler(MySortingFrame::OnAbout) );
-
     CreateStatusBar();
 
+    wxPanel *main = new wxPanel(this);
 
     // Left wxDataViewCtrl
-    dataview_left = new wxDataViewCtrl( this, ID_UNSORTED, wxDefaultPosition, wxDefaultSize, wxDV_MULTIPLE );
+    dataview_left = new wxDataViewCtrl( main, ID_UNSORTED, wxDefaultPosition, 
+                                        wxDefaultSize, wxDV_MULTIPLE );
 
     m_unsorted_model = new MyUnsortedTextModel;
     dataview_left->AssociateModel( m_unsorted_model );
-    wxDataViewTextRenderer *text_renderer = new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
+    m_unsorted_model->DecRef(); // don't leak memory
+
+    wxDataViewTextRenderer *text_renderer = 
+        new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
     wxDataViewColumn *column = new wxDataViewColumn( wxT("editable"), text_renderer, 0 );
     dataview_left->AppendColumn( column );
     dataview_left->AppendTextColumn( wxT("second"), 1 );
-    dataview_left->AppendColumn( new wxDataViewColumn( wxBitmap(null_xpm), new wxDataViewBitmapRenderer, 2, 25 ) );
-    dataview_left->AppendColumn( new wxDataViewColumn( wxT("icon"), new wxDataViewBitmapRenderer, 3, 25 ) );
+    dataview_left->AppendColumn( new wxDataViewColumn( wxBitmap(null_xpm), 
+                                 new wxDataViewBitmapRenderer, 2, 25 ) );
+    dataview_left->AppendColumn( new wxDataViewColumn( wxT("icon"), 
+                                 new wxDataViewBitmapRenderer, 3, 25 ) );
 
     // Right wxDataViewCtrl using the sorting model
-    dataview_right = new wxDataViewCtrl( this, ID_SORTED );
+    dataview_right = new wxDataViewCtrl( main, ID_SORTED );
     
     m_sorted_model = new wxDataViewSortedListModel( m_unsorted_model );
     dataview_right->AssociateModel( m_sorted_model );
+    m_sorted_model->DecRef(); // don't leak memory
+
     text_renderer = new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
-    column = new wxDataViewColumn( wxT("editable"), text_renderer, 0, -1, wxDATAVIEW_COL_SORTABLE|wxDATAVIEW_COL_RESIZABLE );
+    column = new wxDataViewColumn( wxT("editable"), text_renderer, 0, -1, 
+                                   wxALIGN_CENTER,
+                                   wxDATAVIEW_COL_SORTABLE|wxDATAVIEW_COL_RESIZABLE );
     dataview_right->AppendColumn( column );
     
     dataview_right->AppendTextColumn( wxT("second"), 1 );
@@ -542,22 +729,22 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
     wxBoxSizer *button_sizer = new wxBoxSizer( wxHORIZONTAL );
     button_sizer->Add( 10, 10, 1 );
     wxFlexGridSizer *left_sizer = new wxFlexGridSizer( 2 );
-    left_sizer->Add( new wxButton( this, ID_APPEND_ROW_LEFT, wxT("Append") ), 0, wxALL, 5 );
-    left_sizer->Add( new wxButton( this, ID_PREPEND_ROW_LEFT, wxT("Prepend") ), 0, wxALL, 5 );
-    left_sizer->Add( new wxButton( this, ID_INSERT_ROW_LEFT, wxT("Insert") ), 0, wxALL, 5 );
-    left_sizer->Add( new wxButton( this, ID_DELETE_ROW_LEFT, wxT("Delete second") ), 0, wxALL, 5 );
-    left_sizer->Add( new wxButton( this, ID_EDIT_ROW_LEFT, wxT("Edit") ), 0, wxALL, 5 );
+    left_sizer->Add( new wxButton( main, ID_APPEND_ROW_LEFT, wxT("Append") ), 0, wxALL, 5 );
+    left_sizer->Add( new wxButton( main, ID_PREPEND_ROW_LEFT, wxT("Prepend") ), 0, wxALL, 5 );
+    left_sizer->Add( new wxButton( main, ID_INSERT_ROW_LEFT, wxT("Insert") ), 0, wxALL, 5 );
+    left_sizer->Add( new wxButton( main, ID_DELETE_ROW_LEFT, wxT("Delete second") ), 0, wxALL, 5 );
+    left_sizer->Add( new wxButton( main, ID_EDIT_ROW_LEFT, wxT("Edit") ), 0, wxALL, 5 );
     left_sizer->Add( 5,5 );
-    left_sizer->Add( new wxButton( this, ID_SELECT, wxT("Select third") ), 0, wxALL, 5 );
-    left_sizer->Add( new wxButton( this, ID_UNSELECT_ALL, wxT("Unselect all") ), 0, wxALL, 5 );
+    left_sizer->Add( new wxButton( main, ID_SELECT, wxT("Select third") ), 0, wxALL, 5 );
+    left_sizer->Add( new wxButton( main, ID_UNSELECT_ALL, wxT("Unselect all") ), 0, wxALL, 5 );
     button_sizer->Add( left_sizer );
     button_sizer->Add( 10, 10, 2 );
     wxFlexGridSizer *right_sizer = new wxFlexGridSizer( 2 );
-    right_sizer->Add( new wxButton( this, ID_APPEND_ROW_RIGHT, wxT("Append") ), 0, wxALL, 5 );
-    right_sizer->Add( new wxButton( this, ID_PREPEND_ROW_RIGHT, wxT("Prepend") ), 0, wxALL, 5 );
-    right_sizer->Add( new wxButton( this, ID_INSERT_ROW_RIGHT, wxT("Insert") ), 0, wxALL, 5 );
-    right_sizer->Add( new wxButton( this, ID_DELETE_ROW_RIGHT, wxT("Delete second") ), 0, wxALL, 5 );
-    right_sizer->Add( new wxButton( this, ID_EDIT_ROW_RIGHT, wxT("Edit") ), 0, wxALL, 5 );
+    right_sizer->Add( new wxButton( main, ID_APPEND_ROW_RIGHT, wxT("Append") ), 0, wxALL, 5 );
+    right_sizer->Add( new wxButton( main, ID_PREPEND_ROW_RIGHT, wxT("Prepend") ), 0, wxALL, 5 );
+    right_sizer->Add( new wxButton( main, ID_INSERT_ROW_RIGHT, wxT("Insert") ), 0, wxALL, 5 );
+    right_sizer->Add( new wxButton( main, ID_DELETE_ROW_RIGHT, wxT("Delete second") ), 0, wxALL, 5 );
+    right_sizer->Add( new wxButton( main, ID_EDIT_ROW_RIGHT, wxT("Edit") ), 0, wxALL, 5 );
     button_sizer->Add( right_sizer );
     button_sizer->Add( 10, 10, 1 );
 
@@ -565,7 +752,7 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
     main_sizer->Add( top_sizer, 1, wxGROW );
     main_sizer->Add( button_sizer, 0, wxGROW );
     
-    m_logWindow = new wxTextCtrl(this, wxID_ANY, wxEmptyString,
+    m_logWindow = new wxTextCtrl(main, wxID_ANY, wxEmptyString,
                                  wxDefaultPosition, wxDefaultSize,
                                  wxTE_MULTILINE | wxSUNKEN_BORDER);
     main_sizer->Add( 20,20 );
@@ -573,7 +760,7 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
 
     m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_logWindow));
 
-    SetSizer( main_sizer );
+    main->SetSizer( main_sizer );
 }
 
 MySortingFrame::~MySortingFrame()
@@ -625,7 +812,8 @@ void MySortingFrame::OnHeaderClickSorted(wxDataViewEvent &event)
 
 void MySortingFrame::OnHeaderClickUnsorted(wxDataViewEvent &event)
 {
-    wxLogMessage( wxT("OnHeaderClick from unsorted list, column %s"), event.GetDataViewColumn()->GetTitle().c_str() );
+    wxLogMessage( wxT("OnHeaderClick from unsorted list, column %s"), 
+                  event.GetDataViewColumn()->GetTitle().c_str() );
 }
 
 void MySortingFrame::OnQuit(wxCommandEvent& WXUNUSED(event) )
