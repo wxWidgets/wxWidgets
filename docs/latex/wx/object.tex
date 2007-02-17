@@ -202,6 +202,10 @@ The {\it delete} operator is defined for debugging versions of the library only,
 the identifier \_\_WXDEBUG\_\_ is defined. It takes over memory deallocation, allowing
 wxDebugContext operations.
 
+
+
+%% wxObjectRefData
+
 \section{\class{wxObjectRefData}}\label{wxobjectrefdata}
 
 This class is used to store reference-counted data. Derive classes from this to
@@ -223,19 +227,36 @@ you will need to cast to your own derived class.
 
 \func{}{wxObjectRefData}{\void}
 
-Default constructor. Initialises the {\bf m\_count} member to 1.
+Default constructor. Initialises the internal reference count to 1.
 
 \membersection{wxObjectRefData::\destruct{wxObjectRefData}}\label{wxobjectrefdatadtor}
 
 \func{}{wxObjectRefData}{\void}
 
-Destructor.
+Destructor. It's declared {\tt protected} so that wxObjectRefData instances will never
+be destroyed directly but only as result of a \helpref{DecRef}{wxobjectrefdatadecref} call.
 
 \membersection{wxObjectRefData::GetRefCount}\label{wxobjectrefdatagetrefcount}
 
 \constfunc{int}{GetRefCount}{\void}
 
 Returns the reference count associated with this shared data.
-When this goes to zero during a \helpref{wxObject::UnRef}{wxobjectunref}, an object
-can delete this {\bf wxObjectRefData} object.
+When this goes to zero during a \helpref{DecRef}{wxobjectrefdatadecref} call, the object
+will auto-free itself.
+
+\membersection{wxObjectRefData::DecRef}\label{wxobjectrefdatadecref}
+
+\func{void}{DecRef}{\void}
+
+Decrements the reference count associated with this shared data and, if it reaches zero,
+destroys this instance of wxObjectRefData releasing its memory.
+
+Please note that after calling this function, the caller should absolutely avoid to use
+the pointer to this instance since it may not be valid anymore.
+
+\membersection{wxObjectRefData::IncRef}\label{wxobjectrefdataincref}
+
+\func{void}{IncRef}{\void}
+
+Increments the reference count associated with this shared data.
 

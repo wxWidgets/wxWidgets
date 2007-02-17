@@ -290,6 +290,17 @@ wxObject *wxCreateDynamicObject(const wxChar *name)
 
 
 // ----------------------------------------------------------------------------
+// wxObjectRefData
+// ----------------------------------------------------------------------------
+
+void wxObjectRefData::DecRef()
+{
+    if ( --m_count == 0 )
+        delete this;
+}
+
+
+// ----------------------------------------------------------------------------
 // wxObject
 // ----------------------------------------------------------------------------
 
@@ -310,7 +321,7 @@ void wxObject::Ref(const wxObject& clone)
     if ( clone.m_refData )
     {
         m_refData = clone.m_refData;
-        ++(m_refData->m_count);
+        m_refData->IncRef();
     }
 }
 
@@ -320,8 +331,7 @@ void wxObject::UnRef()
     {
         wxASSERT_MSG( m_refData->m_count > 0, _T("invalid ref data count") );
 
-        if ( --m_refData->m_count == 0 )
-            delete m_refData;
+        m_refData->DecRef();
         m_refData = NULL;
     }
 }
