@@ -44,7 +44,17 @@
 // in the version after it completely.
 //
 // Recommended setting: 0 (please update your code)
-#define WXWIN_COMPATIBILITY_2_6 1
+#define WXWIN_COMPATIBILITY_2_6 0
+
+// This setting determines the compatibility with 2.8 API: set it to 0 to
+// flag all cases of using deprecated functions.
+//
+// Default is 1 but please try building your code with 0 as the default will
+// change to 0 in the next version and the deprecated functions will disappear
+// in the version after it completely.
+//
+// Recommended setting: 0 (please update your code)
+#define WXWIN_COMPATIBILITY_2_8 1
 
 // MSW-only: Set to 0 for accurate dialog units, else 1 for old behaviour when
 // default system font is used for wxWindow::GetCharWidth/Height() instead of

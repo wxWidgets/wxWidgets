@@ -938,7 +938,8 @@ WX_ARG_ENABLE(vararg_macros, [  --disable-vararg_macros don't use vararg macros,
 WX_ARG_ENABLE_PARAM(universal_binary, [[  --enable-universal_binary[=SDK] create Mac PowerPC and Intel Universal binary (not yet working)]], wxUSE_UNIVERSAL_BINARY)
 
 WX_ARG_ENABLE(compat24,      [  --enable-compat24       enable wxWidgets 2.4 compatibility], WXWIN_COMPATIBILITY_2_4, enable)
-WX_ARG_ENABLE(compat26,      [  --disable-compat26      disable wxWidgets 2.6 compatibility], WXWIN_COMPATIBILITY_2_6, disable)
+WX_ARG_ENABLE(compat26,      [  --enable-compat26       enable wxWidgets 2.6 compatibility], WXWIN_COMPATIBILITY_2_6, enable)
+WX_ARG_ENABLE(compat28,      [  --disable-compat28      disable wxWidgets 2.8 compatibility], WXWIN_COMPATIBILITY_2_8, disable)
 
 WX_ARG_ENABLE(rpath,         [  --disable-rpath         disable use of rpath for uninstalled builds], wxUSE_RPATH)
 
@@ -5557,8 +5558,14 @@ if test "x$WXWIN_COMPATIBILITY_2_4" = "xyes"; then
     WXWIN_COMPATIBILITY_2_6="yes"
 fi
 
-if test "x$WXWIN_COMPATIBILITY_2_6" != "xno"; then
+if test "x$WXWIN_COMPATIBILITY_2_6" = "xyes"; then
     AC_DEFINE(WXWIN_COMPATIBILITY_2_6)
+
+    WXWIN_COMPATIBILITY_2_8="yes"
+fi
+
+if test "x$WXWIN_COMPATIBILITY_2_8" != "xno"; then
+    AC_DEFINE(WXWIN_COMPATIBILITY_2_8)
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -8127,6 +8134,7 @@ echo "  Should wxWidgets be compiled in Unicode mode?           ${wxUSE_UNICODE:
 echo "  What level of wxWidgets compatibility should be enabled?"
 echo "                                       wxWidgets 2.4      ${WXWIN_COMPATIBILITY_2_4:-no}"
 echo "                                       wxWidgets 2.6      ${WXWIN_COMPATIBILITY_2_6:-yes}"
+echo "                                       wxWidgets 2.8      ${WXWIN_COMPATIBILITY_2_8:-yes}"
 
 echo "  Which libraries should wxWidgets use?"
 echo "                                       jpeg               ${wxUSE_LIBJPEG-none}"

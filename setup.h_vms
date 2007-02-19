@@ -168,6 +168,8 @@ typedef pid_t GPid;
 
 #define WXWIN_COMPATIBILITY_2_6 1
 
+#define WXWIN_COMPATIBILITY_2_8 1
+
 #define wxDIALOG_UNIT_COMPATIBILITY   1
 
 
