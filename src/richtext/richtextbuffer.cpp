@@ -4398,24 +4398,7 @@ bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxTextAttrEx& attr, c
 /// Lay the item out
 bool wxRichTextPlainText::Layout(wxDC& dc, const wxRect& WXUNUSED(rect), int WXUNUSED(style))
 {
-    wxRichTextParagraph* para = wxDynamicCast(GetParent(), wxRichTextParagraph);
-    wxASSERT (para != NULL);
-
-    wxTextAttrEx textAttr(para ? para->GetCombinedAttributes(GetAttributes()) : GetAttributes());
-
-    if (textAttr.GetFont().Ok())
-        dc.SetFont(textAttr.GetFont());
-
-    wxString str = m_text;    
-    if (textAttr.HasTextEffects() && (textAttr.GetTextEffects() & wxTEXT_ATTR_EFFECT_CAPITALS))
-        str.MakeUpper();
-
-    wxString toReplace = wxRichTextLineBreakChar;
-    str.Replace(toReplace, wxT(" "));
-
-    wxCoord w, h;
-    dc.GetTextExtent(str, & w, & h, & m_descent);
-    m_size = wxSize(w, dc.GetCharHeight());
+    GetRangeSize(GetRange(), m_size, m_descent, dc, 0, wxPoint(0, 0));
 
     return true;
 }
