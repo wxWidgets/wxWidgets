@@ -113,9 +113,10 @@ wxColour wxGetColourFromUser(wxWindow *parent = (wxWindow *)NULL,
 //--------------------------------------------------------------------------------
 
 enum {
+    wxDD_CHANGE_DIR,
+    wxDD_DIR_MUST_EXIST,
     wxDD_NEW_DIR_BUTTON,
     wxDD_DEFAULT_STYLE,
-    wxDD_CHANGE_DIR,
 };
 
 DocStr(wxDirDialog,
@@ -129,10 +130,12 @@ Window  Styles
                           wx.DEFAULT_DIALOG_STYLE, wx.DD_NEW_DIR_BUTTON
                           and wx.RESIZE_BORDER.
 
-    wx.DD_NEW_DIR_BUTTON  Add 'Create new directory' button and allow
-                          directory names to be editable. On Windows
-                          the new directory button is only available
-                          with recent versions of the common dialogs.
+    wx.DD_DIR_MUST_EXIST  The dialog will allow the user to choose only an
+                          existing folder. When this style is not given, a
+                          'Create new directory' button is added to the dialog
+                          (on Windows) or some other way is provided to the
+                          user to type the name of a new folder.
+                          Use this instead of deprecated wx.DD_NEW_DIR_BUTTON.
 
     wx.DD_CHANGE_DIR      Change the current working directory to the
                           directory chosen by the user.
