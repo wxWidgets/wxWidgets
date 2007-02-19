@@ -25,24 +25,24 @@ Event \helpref{wxMediaCtrl}{wxmediactrl} uses.
 
 \twocolwidtha{7cm}
 \begin{twocollist}\itemsep=0pt
-\twocolitem{{\bf EVT\_MEDIA\_LOADED(func)}}{
+\twocolitem{{\bf EVT\_MEDIA\_LOADED(id, func)}}{
 Sent when a media has loaded enough data that it can start playing.}
-\twocolitem{{\bf EVT\_MEDIA\_STOP(func)}}{
+\twocolitem{{\bf EVT\_MEDIA\_STOP(id, func)}}{
 Send when a media has switched to the wxMEDIASTATE\_STOPPED state.
 You may be able to Veto this event to prevent it from stopping,
 causing it to continue playing - even if it has reached that end of the media
 (note that this may not have the desired effect - if you want to loop the
 media, for example, catch the EVT\_MEDIA\_FINISHED and play there instead). }
-\twocolitem{{\bf EVT\_MEDIA\_FINISHED(func)}}{
+\twocolitem{{\bf EVT\_MEDIA\_FINISHED(id, func)}}{
 Sent when a media has finished playing in a \helpref{wxMediaCtrl}{wxmediactrl}.
 }
-\twocolitem{{\bf EVT\_MEDIA\_STATECHANGED(func)}}{
+\twocolitem{{\bf EVT\_MEDIA\_STATECHANGED(id, func)}}{
 Send when a media has switched its state (from any media state).
 }
-\twocolitem{{\bf EVT\_MEDIA\_PLAY(func)}}{
+\twocolitem{{\bf EVT\_MEDIA\_PLAY(id, func)}}{
 Send when a media has switched to the wxMEDIASTATE\_PLAYING state.
 }
-\twocolitem{{\bf EVT\_MEDIA\_PAUSE(func)}}{
+\twocolitem{{\bf EVT\_MEDIA\_PAUSE(id, func)}}{
 Send when a media has switched to the wxMEDIASTATE\_PAUSED state.
 }
 \end{twocollist}
