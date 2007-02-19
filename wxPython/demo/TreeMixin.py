@@ -1,6 +1,7 @@
 import wx, wx.lib.customtreectrl, wx.gizmos
 import wx.lib.mixins.treemixin as treemixin
 
+
 class TreeModel(object):
     def __init__(self, *args, **kwargs):
         self.items = []
@@ -38,11 +39,12 @@ class TreeModel(object):
         oldParentChildren.remove(itemToMove)
 
 
-class DemoVirtualTreeMixin(treemixin.VirtualTree, treemixin.DragAndDrop):
+class DemoTreeMixin(treemixin.VirtualTree, treemixin.DragAndDrop, 
+                    treemixin.ExpansionState):
     def __init__(self, *args, **kwargs):
         self.model = kwargs.pop('treemodel')
         self.log = kwargs.pop('log')
-        super(DemoVirtualTreeMixin, self).__init__(*args, **kwargs)
+        super(DemoTreeMixin, self).__init__(*args, **kwargs)
         self.CreateImageList()
 
     def CreateImageList(self):
@@ -63,7 +65,7 @@ class DemoVirtualTreeMixin(treemixin.VirtualTree, treemixin.DragAndDrop):
         if self.model.GetChildrenCount(indices) > 0:
             return wx.SMALL_FONT
         else:
-            return super(DemoVirtualTreeMixin, self).OnGetItemFont(indices)
+            return super(DemoTreeMixin, self).OnGetItemFont(indices)
 
     def OnGetItemTextColour(self, indices):
         if len(indices) % 2 == 0:
@@ -71,14 +73,13 @@ class DemoVirtualTreeMixin(treemixin.VirtualTree, treemixin.DragAndDrop):
         elif len(indices) % 3 == 0:
             return wx.BLUE
         else:
-            return super(DemoVirtualTreeMixin, 
-                         self).OnGetItemTextColour(indices)
+            return super(DemoTreeMixin, self).OnGetItemTextColour(indices)
 
     def OnGetItemBackgroundColour(self, indices):
         if indices[-1] == len(indices):
             return wx.GREEN
         else: 
-            return super(DemoVirtualTreeMixin, 
+            return super(DemoTreeMixin, 
                          self).OnGetItemBackgroundColour(indices)
 
     def OnGetItemImage(self, indices, which):
@@ -101,11 +102,11 @@ class DemoVirtualTreeMixin(treemixin.VirtualTree, treemixin.DragAndDrop):
         self.GetParent().RefreshItems()
 
 
-class VirtualTreeCtrl(DemoVirtualTreeMixin, wx.TreeCtrl):
+class VirtualTreeCtrl(DemoTreeMixin, wx.TreeCtrl):
     pass
 
 
-class VirtualTreeListCtrl(DemoVirtualTreeMixin, wx.gizmos.TreeListCtrl):
+class VirtualTreeListCtrl(DemoTreeMixin, wx.gizmos.TreeListCtrl):
     def __init__(self, *args, **kwargs):
         kwargs['style'] = wx.TR_DEFAULT_STYLE | wx.TR_FULL_ROW_HIGHLIGHT
         super(VirtualTreeListCtrl, self).__init__(*args, **kwargs)
@@ -129,7 +130,7 @@ class VirtualTreeListCtrl(DemoVirtualTreeMixin, wx.gizmos.TreeListCtrl):
             return 3
 
 
-class VirtualCustomTreeCtrl(DemoVirtualTreeMixin, 
+class VirtualCustomTreeCtrl(DemoTreeMixin, 
                             wx.lib.customtreectrl.CustomTreeCtrl):
     def __init__(self, *args, **kwargs):
         self.checked = {}
@@ -193,22 +194,41 @@ class TestPanel(wx.Panel):
         self.log = log
         super(TestPanel, self).__init__(parent)
         self.treemodel = TreeModel()
-        self.notebook = TreeNotebook(self, treemodel=self.treemodel, log=log)
-        label = wx.StaticText(self, label='Number of children: ')
+        self.CreateControls()
+        self.LayoutControls()
+        self.BindEvents()
+
+    def CreateControls(self):
+        self.notebook = TreeNotebook(self, treemodel=self.treemodel, 
+                                     log=self.log)
+        self.label = wx.StaticText(self, label='Number of children: ')
         self.childrenCountCtrl = wx.SpinCtrl(self, value='0', max=10000)
-        button = wx.Button(self, label='Update children')
-        button.Bind(wx.EVT_BUTTON, self.onEnter)
+        self.button = wx.Button(self, label='Update children')
+
+    def LayoutControls(self):
         hSizer = wx.BoxSizer(wx.HORIZONTAL)
         options = dict(flag=wx.ALIGN_CENTER_VERTICAL|wx.ALL, border=2)
-        hSizer.Add(label, **options)
+        hSizer.Add(self.label, **options)
         hSizer.Add(self.childrenCountCtrl, 2, **options)
-        hSizer.Add(button, **options)
+        hSizer.Add(self.button, **options)
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.notebook, 1, wx.EXPAND)
         sizer.Add(hSizer, 0, wx.EXPAND)
         self.SetSizer(sizer)
 
-    def onEnter(self, event):
+    def BindEvents(self):
+        self.notebook.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
+        self.button.Bind(wx.EVT_BUTTON, self.OnEnter)
+
+    def OnPageChanged(self, event):
+        if self.IsBeingDeleted():
+            return
+        oldTree = self.notebook.GetPage(event.OldSelection)
+        newTree = self.notebook.GetPage(event.Selection)
+        newTree.SetExpansionState(oldTree.GetExpansionState())
+        event.Skip()
+
+    def OnEnter(self, event):
         indices = self.notebook.GetSelectedItemIndices()
         text = self.treemodel.GetText(indices)
         oldChildrenCount = self.treemodel.GetChildrenCount(indices)

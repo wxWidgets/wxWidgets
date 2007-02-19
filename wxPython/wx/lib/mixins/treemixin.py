@@ -1,50 +1,81 @@
 '''
 treemixin.py 
 
-This module provides two mixin classes that can be used with tree
+This module provides three mixin classes that can be used with tree
 controls: 
-- VirtualTree is a class that, when mixed in with a tree control,
-makes the tree control virtual, similar to a ListCtrl in virtual mode. 
-A virtual tree control builds the tree itself by means of callbacks,
-so the programmer is freed from the burden of building the tree herself.
-- DragAndDrop is a mixin class that helps with dragging and dropping of
-items. The graphical part of dragging and dropping tree items is done by
-this mixin class. You only need to implement the OnDrop method that is
-called when the drop happens.
 
-Both mixin classes work with wx.TreeCtrl, wx.gizmos.TreeListCtrl, 
+- VirtualTree is a class that, when mixed in with a tree control,
+  makes the tree control virtual, similar to a ListCtrl in virtual mode. 
+  A virtual tree control builds the tree itself by means of callbacks,
+  so the programmer is freed from the burden of building the tree herself.
+
+- DragAndDrop is a mixin class that helps with dragging and dropping of
+  items. The graphical part of dragging and dropping tree items is done by
+  this mixin class. You only need to implement the OnDrop method that is
+  called when the drop happens.
+
+- ExpansionState is a mixin that can be queried for the expansion state of
+  all items in the tree to restore it later.
+
+All mixin classes work with wx.TreeCtrl, wx.gizmos.TreeListCtrl, 
 and wx.lib.customtree.CustomTreeCtrl. They can be used together or 
 separately.
 
-Both mixins force the wx.TR_HIDE_ROOT style.
+The VirtualTree and DragAndDrop mixins force the wx.TR_HIDE_ROOT style.
 
-Frank Niessink <frank@niessink.com>
+Author: Frank Niessink <frank@niessink.com>
 License: wxWidgets license
-Version: 0.5
-Date: 11 February 2007
+Version: 0.6
+Date: 17 February 2007
+
+ExpansionState is based on code and ideas from Karsten Hilbert.
+Andrea Gavana provided help with the CustomTreeCtrl integration.
 '''
 
-import wx
+
+import wx, wx.lib.customtreectrl
+
 
 class TreeAPIHarmonizer(object):
     ''' This class attempts to hide the differences in API between the
-    different tree controls currently supported. '''
+    different tree controls that are part of wxPython. '''
 
-    def GetColumnCount(self):
+    def __init__(self, *args, **kwargs):
+        # CustomTreeCtrl uses a different keyword for the window style 
+        # argument ('ctstyle'). To hide this, we replace the 'style' keyword
+        # by 'ctstyle' if we're mixed in with CustomTreeCtrl.
+        if isinstance(self, wx.lib.customtreectrl.CustomTreeCtrl):
+            kwargs['ctstyle'] = kwargs.pop('style', wx.TR_DEFAULT_STYLE)
+        super(TreeAPIHarmonizer, self).__init__(*args, **kwargs)
+
+    def __callSuper(self, methodName, default, *args, **kwargs):
+        # If our super class has a method called methodName, call it,
+        # otherwise return the default value.
+        superClass = super(TreeAPIHarmonizer, self)
+        if hasattr(superClass, methodName):
+            return getattr(superClass, methodName)(*args, **kwargs)
+        else:
+            return default
+
+    def GetColumnCount(self, *args, **kwargs):
         # Only TreeListCtrl has columns, return 0 if we are mixed in
         # with another tree control.
-        try:
-            return super(TreeAPIHarmonizer, self).GetColumnCount()
-        except AttributeError:
-            return 0
+        return self.__callSuper('GetColumnCount', 0, *args, **kwargs)
 
-    def GetItemType(self, item):
+    def GetItemType(self, *args, **kwargs):
         # Only CustomTreeCtrl has different item types, return the
         # default item type if we are mixed in with another tree control.
-        try:
-            return super(TreeAPIHarmonizer, self).GetItemType(item)
-        except AttributeError:
-            return 0
+        return self.__callSuper('GetItemType', 0, *args, **kwargs)
+
+    def IsItemChecked(self, *args, **kwargs):
+        # Only CustomTreeCtrl supports checkable items, return False if
+        # we are mixed in with another tree control.
+        return self.__callSuper('IsItemChecked', False, *args, **kwargs)
+
+    def GetMainWindow(self, *args, **kwargs):
+        # Only TreeListCtrl has a separate main window, return self if we are 
+        # mixed in with another tree control.
+        return self.__callSuper('GetMainWindow', self, *args, **kwargs)
 
     def SetItemImage(self, item, imageIndex, which, column=0):
         # The SetItemImage signature is different for TreeListCtrl and
@@ -55,22 +86,18 @@ class TreeAPIHarmonizer(object):
             args = (item, imageIndex, which)
         super(TreeAPIHarmonizer, self).SetItemImage(*args)
 
-    def GetMainWindow(self):
-        # Only TreeListCtrl has a separate main window, return self if we are 
-        # mixed in with another tree control.
-        try:
-            return super(TreeAPIHarmonizer, self).GetMainWindow()
-        except AttributeError:
-            return self
-
     def UnselectAll(self):
-        if self.GetWindowStyle() & wx.TR_MULTIPLE:
+        # Unselect all items, regardless of whether we are in multiple 
+        # selection mode or not.
+        if self.HasFlag(wx.TR_MULTIPLE):
             super(TreeAPIHarmonizer, self).UnselectAll()
         else:
             self.Unselect()
 
     def GetSelections(self):
-        if self.GetWindowStyle() & wx.TR_MULTIPLE:
+        # Always return a list of selected items, regardless of whether
+        # we are in multiple selection mode or not.
+        if self.HasFlag(wx.TR_MULTIPLE):
             return super(TreeAPIHarmonizer, self).GetSelections()
         else:
             selection = self.GetSelection()
@@ -80,18 +107,31 @@ class TreeAPIHarmonizer(object):
                 return []
 
     def HitTest(self, *args, **kwargs):
-        # Only TreeListCtrl has columns, return 0 for the column if we are 
-        # mixed in with another tree control.
+        ''' HitTest returns a two-tuple (item, flags) for tree controls
+        without columns and a three-tuple (item, flags, column) for tree
+        controls with columns. Our caller can indicate this method to
+        always return a three-tuple no matter what tree control we're mixed
+        in with by specifying the optional argument 'alwaysReturnColumn'
+        to be True. '''
+        alwaysReturnColumn = kwargs.pop('alwaysReturnColumn', False)
         hitTestResult = super(TreeAPIHarmonizer, self).HitTest(*args, **kwargs)
+        if len(hitTestResult) == 2 and alwaysReturnColumn:
+            hitTestResult += (0,)
+        return hitTestResult
+
+    def ExpandAll(self, item=None):
+        # TreeListCtrl wants an item as argument. That's an inconsistency with
+        # the TreeCtrl API. 
         try:
-            item, flags, column = hitTestResult
-        except ValueError:
-            (item, flags), column = hitTestResult, 0
-        return item, flags, column
+            super(TreeAPIHarmonizer, self).ExpandAll()
+        except TypeError:
+            if item is None:
+                item = self.GetRootItem()
+            super(TreeAPIHarmonizer, self).ExpandAll(item)
 
     def GetItemChildren(self, item, recursively=False):
         ''' Return the children of item as a list. This method is not
-        part of the API of any tree control, but merely convenient to
+        part of the API of any tree control, but very convenient to
         have available. '''
         children = []
         child, cookie = self.GetFirstChild(item)
@@ -101,6 +141,20 @@ class TreeAPIHarmonizer(object):
                 children.extend(self.GetItemChildren(child, True))
             child, cookie = self.GetNextChild(item, cookie)
         return children
+
+    def ItemIndices(self, item):
+        ''' Construct an index typle for item. The root item is () the 
+        first child of the root item is (0,), the second child of the 
+        root item is (1,), the first child of the first child of the 
+        root item is (0, 0), the second child of the first child of the 
+        root item is (0, 1), etc. '''
+        parent = self.GetItemParent(item)
+        if parent:
+            parentIndices = self.ItemIndices(parent)
+            ownIndex = self.GetItemChildren(parent).index(item)
+            return parentIndices + (ownIndex,)
+        else:
+            return ()
 
 
 class VirtualTree(TreeAPIHarmonizer):
@@ -121,18 +175,17 @@ class VirtualTree(TreeAPIHarmonizer):
     About specifying item indices: the VirtualTree uses various item 
     callbacks (such as OnGetItemText) to retrieve information needed 
     to display the items. To specify what item a callback needs
-    information about, the callback passes a list of indices. The first
-    index in the list is the index of the root item. If no more indices
-    are in the list (i.e. the length of the list of indices is exactly
+    information about, the callback passes a tuple of indices. The first
+    index in the tuple is the index of the root item. If no more indices
+    are in the tuple (i.e. the length of the tuple of indices is exactly
     1), the callback should return the information about that root item.
-    If the list contains two indices, the first index is the index of
+    If the tuple contains two indices, the first index is the index of
     the root item, and the second index is the index of the child of
     that root item. For example, if OnGetItemText is called with
-    indices=[0,2], the callback should return information about that the
+    indices=(0,2), the callback should return information about that the
     third child of the first root item. OnGetChildrenCount may also be
-    called with indices == [] to get the number of root items in the
-    tree.
-    '''
+    called with indices == () to get the number of root items in the
+    tree. '''
 
     def __init__(self, *args, **kwargs):
         kwargs['style'] = kwargs.get('style', wx.TR_DEFAULT_STYLE) | \
@@ -144,7 +197,7 @@ class VirtualTree(TreeAPIHarmonizer):
     def OnGetChildrenCount(self, indices):
         ''' This function must be overloaded in the derived class. It
         should return the number of child items of the item with the
-        provided indices. If indices == [] it should return the number
+        provided indices. If indices == () it should return the number
         of root items. '''
         raise NotImplementedError
 
@@ -189,7 +242,7 @@ class VirtualTree(TreeAPIHarmonizer):
     def OnGetItemChecked(self, indices):
         ''' This function may be overloaded in the derived class, but
         that only makes sense when this class is mixed in with a tree 
-        control that supports checkable items, e.g. CustomTreeCtrl. 
+        control that supports checkable items, i.e. CustomTreeCtrl. 
         This method should return whether the item is to be checked. 
         Note that OnGetItemType should return 1 (checkbox) or 2
         (radiobutton) for this item. '''
@@ -200,15 +253,15 @@ class VirtualTree(TreeAPIHarmonizer):
         rootItem = self.GetRootItem()
         if not rootItem:
             rootItem = self.AddRoot('Hidden root')
-        self.RefreshChildrenRecursively(rootItem, [], 
-                                        self.OnGetChildrenCount([]))
+        self.RefreshChildrenRecursively(rootItem, (), 
+                                        self.OnGetChildrenCount(()))
 
     def RefreshChildrenRecursively(self, item, indices, childrenCount):
         ''' Refresh the children of item, reusing as much of the
         existing items in the tree as possible. '''
         existingChildren = self.GetItemChildren(item)
         for childIndex in range(childrenCount):
-            childIndices = indices + [childIndex]
+            childIndices = indices + (childIndex,)
             if childIndex < len(existingChildren):
                 child = existingChildren[childIndex]
             else:
@@ -240,17 +293,14 @@ class VirtualTree(TreeAPIHarmonizer):
         self.RefreshCheckedState(item, indices)
 
     def RefreshItemType(self, item, indices):
-        try:
-            currentType = self.GetItemType(item)
-        except AttributeError:
-            return item
-        type = self.OnGetItemType(indices)
-        if type != currentType:
+        currentType = self.GetItemType(item)
+        newType = self.OnGetItemType(indices)
+        if newType != currentType:
             # There's no way to change the type so we create a new item
             # and delete the old one.
             oldItem = item
             item = self.InsertItem(self.GetItemParent(oldItem), item, '', 
-                ct_type=type)
+                ct_type=newType)
             self.Delete(oldItem)
         return item
 
@@ -276,8 +326,8 @@ class VirtualTree(TreeAPIHarmonizer):
             self.SetItemTextColour(item, colour)
 
     def RefreshBackgroundColour(self, item, indices):
-        # This one only seems to work for wx.TreeCtrl and not for
-        # wx.gizmos.TreeListCtrl and wx.lib.customtreectrl.CustomTreeCtrl...
+        # On Mac OSX this one only seems to work for TreeCtrl and not 
+        # for TreeListCtrl and CustomTreeCtrl.
         colour = self.OnGetItemBackgroundColour(indices)
         if self.GetItemBackgroundColour(item) != colour:
             self.SetItemBackgroundColour(item, colour)
@@ -306,10 +356,7 @@ class VirtualTree(TreeAPIHarmonizer):
                     self.SetItemImage(item, imageIndex, icon, columnIndex)
 
     def RefreshCheckedState(self, item, indices):
-        try: 
-            isChecked = self.IsItemChecked(item)
-        except AttributeError:
-            return # Checking not supported
+        isChecked = self.IsItemChecked(item)
         shouldBeChecked = self.OnGetItemChecked(indices)
         if isChecked != shouldBeChecked:
             self.CheckItem(item, shouldBeChecked)
@@ -329,16 +376,6 @@ class VirtualTree(TreeAPIHarmonizer):
         self.RefreshChildrenRecursively(parent, indices, childrenCount)
         event.Skip()
         
-    def ItemIndices(self, item):
-        ''' Construct index list for item. '''
-        parent = self.GetItemParent(item)
-        if parent:
-            parentIndices = self.ItemIndices(parent)
-            ownIndex = self.GetItemChildren(parent).index(item)
-            return parentIndices + [ownIndex]
-        else:
-            return []
-
 
 class DragAndDrop(TreeAPIHarmonizer):
     ''' This is a mixin class that can be used to easily implement
@@ -354,8 +391,7 @@ class DragAndDrop(TreeAPIHarmonizer):
     dropped an item on top of another item. It's up to you to decide how
     to handle the drop. If you are using this mixin together with the
     VirtualTree mixin, it makes sense to rearrange your underlying data
-    and then call RefreshItems to let de virtual tree refresh itself.
-    '''    
+    and then call RefreshItems to let de virtual tree refresh itself. '''    
  
     def __init__(self, *args, **kwargs):
         kwargs['style'] = kwargs.get('style', wx.TR_DEFAULT_STYLE) | \
@@ -395,7 +431,8 @@ class DragAndDrop(TreeAPIHarmonizer):
         if not event.Dragging():
             self.StopDragging()
             return
-        item, flags, column = self.HitTest(wx.Point(event.GetX(), event.GetY()))
+        item, flags, column = self.HitTest(wx.Point(event.GetX(), event.GetY()),
+                                           alwaysReturnColumn=True)
         if not item:
             item = self.GetRootItem()
         if self.IsValidDropTarget(item):
@@ -441,3 +478,87 @@ class DragAndDrop(TreeAPIHarmonizer):
             return True        
 
 
+class ExpansionState(TreeAPIHarmonizer):
+    ''' This is a mixin class that can be used to save and restore
+    the expansion state (i.e. which items are expanded and which items
+    are collapsed) of a tree. It can be mixed in with wx.TreeCtrl, 
+    wx.gizmos.TreeListCtrl, or wx.lib.customtree.CustomTreeCtrl.
+
+    To use it derive a new class from this class and one of the tree
+    controls, e.g.:
+    class MyTree(ExpansionState, wx.TreeCtrl):
+        ...
+
+    By default, ExpansionState uses the position of tree items in the tree 
+    for keeping track of which items are expanded. This should be 
+    sufficient for the scenario where you save the expansion state of the
+    tree when the user closes the application or file so that you can 
+    restore the expansion state when the user start the application or loads 
+    that file for the next session.  
+
+    If you need to add or remove items between the moments of saving and 
+    restoring the expansion state (e.g. in case of a multi-user application)
+    you must override GetItemIdentity so that saving and loading of the 
+    expansion doesn't depend on the position of items in the tree, but 
+    rather on some more stable characteristic of the underlying domain 
+    object, e.g. a social security number in case of persons or an isbn 
+    number in case of books.
+    '''    
+
+    def GetItemIdentity(self, item):
+        ''' Return a hashable object that represents the identify of the
+        item. By default this returns the position of the item in the 
+        tree. You may want to override this to return the item label 
+        (if you know that labels are unique and don't change), or return 
+        something that represents the underlying domain object, e.g. 
+        a database key. ''' 
+        return self.ItemIndices(item)
+ 
+    def GetExpansionState(self):
+        ''' GetExpansionState() -> list of expanded items. Expanded items 
+        are coded as determined by the result of GetItemIdentity(item). '''
+        root = self.GetRootItem()
+        if not root:
+            return []
+        if self.HasFlag(wx.TR_HIDE_ROOT):
+            return self.GetExpansionStateOfChildren(root)
+        else:
+            return self.GetExpansionStateOfItem(root)
+
+    def SetExpansionState(self, listOfExpandedItems):
+        ''' SetExpansionState(listOfExpandedItems). Expands all tree items 
+        whose identify, as determined by GetItemIdentity(item), is present
+        in the list and collapses all other tree items. '''
+        root = self.GetRootItem()
+        if not root:
+            return
+        if self.HasFlag(wx.TR_HIDE_ROOT):
+            self.SetExpansionStateOfChildren(listOfExpandedItems, root)
+        else:
+            self.SetExpansionStateOfItem(listOfExpandedItems, root)
+
+    ExpansionState = property(GetExpansionState, SetExpansionState)
+
+    def GetExpansionStateOfItem(self, item):
+        listOfExpandedItems = []
+        if self.IsExpanded(item):
+            listOfExpandedItems.append(self.GetItemIdentity(item))
+            listOfExpandedItems.extend(self.GetExpansionStateOfChildren(item))
+        return listOfExpandedItems
+
+    def GetExpansionStateOfChildren(self, item):
+        listOfExpandedItems = []
+        for child in self.GetItemChildren(item):
+            listOfExpandedItems.extend(self.GetExpansionStateOfItem(child))
+        return listOfExpandedItems
+
+    def SetExpansionStateOfItem(self, listOfExpandedItems, item):
+        if self.GetItemIdentity(item) in listOfExpandedItems:
+            self.Expand(item)
+            self.SetExpansionStateOfChildren(listOfExpandedItems, item)
+        else:
+            self.Collapse(item)
+
+    def SetExpansionStateOfChildren(self, listOfExpandedItems, item):
+        for child in self.GetItemChildren(item):
+            self.SetExpansionStateOfItem(listOfExpandedItems, child)
