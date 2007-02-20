@@ -4165,6 +4165,9 @@ wxRichTextPlainText::wxRichTextPlainText(const wxString& text, wxRichTextObject*
 
 #define USE_KERNING_FIX 1
 
+// If insufficient tabs are defined, this is the tab width used
+#define WIDTH_FOR_DEFAULT_TABS 50
+
 /// Draw the item
 bool wxRichTextPlainText::Draw(wxDC& dc, const wxRichTextRange& range, const wxRichTextRange& selectionRange, const wxRect& rect, int descent, int WXUNUSED(style))
 {
@@ -4346,8 +4349,17 @@ bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxTextAttrEx& attr, c
         for (int i = 0; i < tabCount && not_found; ++i)
         {
             nextTabPos = tabArray.Item(i);
-            if (nextTabPos > tabPos)
+            // Find the next tab position.
+            // Even if we're at the end of the tab array, we must still draw the chunk.
+
+            if (nextTabPos > tabPos || (i == (tabCount - 1)))
             {
+                if (nextTabPos <= tabPos)
+                {
+                    int defaultTabWidth = ConvertTenthsMMToPixels(dc, WIDTH_FOR_DEFAULT_TABS);
+                    nextTabPos = tabPos + defaultTabWidth;
+                }
+
                 not_found = false;
                 if (selected)
                 {
@@ -4477,8 +4489,18 @@ bool wxRichTextPlainText::GetRangeSize(const wxRichTextRange& range, wxSize& siz
             for (int i = 0; i < tabCount && notFound; ++i)
             {
                 nextTabPos = tabArray.Item(i);
-                if (nextTabPos > absoluteWidth)
+
+                // Find the next tab position.
+                // Even if we're at the end of the tab array, we must still process the chunk.
+
+                if (nextTabPos > absoluteWidth || (i == (tabCount - 1)))
                 {
+                    if (nextTabPos <= absoluteWidth)
+                    {
+                        int defaultTabWidth = ((wxRichTextPlainText*) this)->ConvertTenthsMMToPixels(dc, WIDTH_FOR_DEFAULT_TABS);
+                        nextTabPos = absoluteWidth + defaultTabWidth;
+                    }
+
                     notFound = false;
                     width = nextTabPos - position.x;
                 }
