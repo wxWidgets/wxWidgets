@@ -731,7 +731,7 @@ the item to be found.", "");
             """
             if isinstance(olditem, wx.Window):
                 return self._ReplaceWin(olditem, item, recursive)
-            elif isinstnace(olditem, wx.Sizer):
+            elif isinstance(olditem, wx.Sizer):
                 return self._ReplaceSizer(olditem, item, recursive)
             elif isinstnace(olditem, int):
                 return self._ReplaceItem(olditem, item)
