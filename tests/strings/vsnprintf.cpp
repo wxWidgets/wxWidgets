@@ -415,7 +415,7 @@ void VsnprintfTestCase::Misc(wxChar *buffer, int size)
     //     format and gcc would warn about this otherwise
 
     r = wxUnsafeSnprintf(buffer, size,
-                         "unicode string: %ls %lc - ansi string: %hs %hc\n\n",
+                         _T("unicode string: %ls %lc - ansi string: %hs %hc\n\n"),
                          L"unicode!!", L'W', "ansi!!", 'w');
     CPPUNIT_ASSERT( r != -1 );
     CPPUNIT_ASSERT_EQUAL(
