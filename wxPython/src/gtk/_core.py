@@ -4580,7 +4580,7 @@ class ScrollEvent(CommandEvent):
     """
     A scroll event holds information about events sent from stand-alone
     scrollbars and sliders. Note that scrolled windows do not send
-    instnaces of this event class, but send the `wx.ScrollWinEvent`
+    instances of this event class, but send the `wx.ScrollWinEvent`
     instead.
     """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -12052,7 +12052,7 @@ class Sizer(Object):
         """
         if isinstance(olditem, wx.Window):
             return self._ReplaceWin(olditem, item, recursive)
-        elif isinstnace(olditem, wx.Sizer):
+        elif isinstance(olditem, wx.Sizer):
             return self._ReplaceSizer(olditem, item, recursive)
         elif isinstnace(olditem, int):
             return self._ReplaceItem(olditem, item)
