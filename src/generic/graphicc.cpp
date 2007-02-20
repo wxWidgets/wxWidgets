@@ -757,7 +757,9 @@ void wxCairoPathData::AddLineToPoint( wxDouble x , wxDouble y )
 
 void wxCairoPathData::AddPath( const wxGraphicsPathData* path )
 {
-    // TODO
+    cairo_path_t* p = (cairo_path_t*)path->GetNativePath();
+    cairo_append_path(m_pathContext, p);
+    UnGetNativePath(p);
 }
 
 void wxCairoPathData::CloseSubpath()
@@ -1028,19 +1030,44 @@ wxCairoContext::~wxCairoContext()
 }
 
 
-void wxCairoContext::Clip( const wxRegion & WXUNUSED(region) )
+void wxCairoContext::Clip( const wxRegion& region )
 {
-// TODO
+    // Create a path with all the rectangles in the region
+    wxGraphicsPath path = GetRenderer()->CreatePath();
+    wxRegionIterator ri(region);
+    while (ri)
+    {
+        path.AddRectangle(ri.GetX(), ri.GetY(), ri.GetW(), ri.GetH());
+        ri++;
+    }
+    
+    // Put it in the context
+    cairo_path_t* cp = (cairo_path_t*) path.GetNativePath() ;
+    cairo_append_path(m_context, cp);
+
+    // clip to that path
+    cairo_clip(m_context);
+    path.UnGetNativePath(cp);  
 }
 
 void wxCairoContext::Clip( wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
-// TODO
+    // Create a path with this rectangle
+    wxGraphicsPath path = GetRenderer()->CreatePath();
+    path.AddRectangle(x,y,w,h);
+
+    // Put it in the context
+    cairo_path_t* cp = (cairo_path_t*) path.GetNativePath() ;
+    cairo_append_path(m_context, cp);
+
+    // clip to that path
+    cairo_clip(m_context);
+    path.UnGetNativePath(cp);  
 }
 
 void wxCairoContext::ResetClip()
 {
-// TODO
+    cairo_reset_clip(m_context);
 }
 
 
@@ -1137,18 +1164,49 @@ void wxCairoContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDou
 
 void wxCairoContext::DrawText( const wxString &str, wxDouble x, wxDouble y )
 {
-    if ( m_font.IsNull() || str.IsEmpty())
-        return ;
-    cairo_move_to(m_context,x,y);
-    const wxWX2MBbuf buf(str.mb_str(wxConvUTF8));
+    if ( m_font.IsNull() || str.empty())
+        return;
+    
     ((wxCairoFontData*)m_font.GetRefData())->Apply(this);
+
+    // Cairo's x,y for drawing text is at the baseline, so we need to adjust
+    // the position we move to by the ascent.
+    cairo_font_extents_t fe;
+    cairo_font_extents(m_context, &fe);
+    cairo_move_to(m_context, x, y+fe.ascent);
+    
+    const wxWX2MBbuf buf(str.mb_str(wxConvUTF8));
     cairo_show_text(m_context,buf);
 }
 
 void wxCairoContext::GetTextExtent( const wxString &str, wxDouble *width, wxDouble *height,
                                     wxDouble *descent, wxDouble *externalLeading ) const
 {
-    // TODO
+    if ( m_font.IsNull() || str.empty())
+        return;
+
+    ((wxCairoFontData*)m_font.GetRefData())->Apply((wxCairoContext*)this);
+
+    if (width)
+    {
+        const wxWX2MBbuf buf(str.mb_str(wxConvUTF8));
+        cairo_text_extents_t te;
+        cairo_text_extents(m_context, buf, &te);
+        *width = te.width;
+    }
+
+    if (height || descent || externalLeading)
+    {
+        cairo_font_extents_t fe;
+        cairo_font_extents(m_context, &fe);
+    
+        if (height)
+            *height = fe.height;
+        if ( descent )
+            *descent = fe.descent;
+        if ( externalLeading )
+            *externalLeading = wxMax(0, fe.height - (fe.ascent + fe.descent));
+    }
 }
 
 void wxCairoContext::GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const
