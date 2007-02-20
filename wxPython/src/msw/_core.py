@@ -12058,7 +12058,7 @@ class Sizer(Object):
             return self._ReplaceWin(olditem, item, recursive)
         elif isinstance(olditem, wx.Sizer):
             return self._ReplaceSizer(olditem, item, recursive)
-        elif isinstnace(olditem, int):
+        elif isinstance(olditem, int):
             return self._ReplaceItem(olditem, item)
         else:
             raise TypeError("Expected Window, Sizer, or integer for first parameter.")
