@@ -670,7 +670,6 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
         switch ( keycode )
         {
             case WXK_ESCAPE:
-            // case WXK_SPACE:
             case WXK_DELETE:
             case WXK_START:
             case WXK_LBUTTON:
@@ -764,6 +763,7 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
             case WXK_NUMPAD_SEPARATOR:
             case WXK_NUMPAD_SUBTRACT:
             case WXK_NUMPAD_DECIMAL:
+            case WXK_WINDOWS_LEFT:
             {
                 event.Skip();
                 return;
@@ -2683,6 +2683,10 @@ bool wxRichTextCtrl::GetCaretPositionForIndex(long position, wxRect& rect)
 
     if (GetBuffer().FindPosition(dc, position, pt, & height, m_caretAtLineStart))
     {
+        // Caret height can't be zero
+        if (height == 0)
+            height = dc.GetCharHeight();
+
         rect = wxRect(pt, wxSize(wxRICHTEXT_DEFAULT_CARET_WIDTH, height));
         return true;
     }
