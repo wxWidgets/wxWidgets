@@ -355,6 +355,26 @@ void StringTestCase::Compare()
     CPPUNIT_ASSERT( s1 != neq3 );
     CPPUNIT_ASSERT( s1 != neq4 );
 
+    CPPUNIT_ASSERT( s1 == wxT("AHH") );
+    CPPUNIT_ASSERT( s1 != wxT("no") );
+    CPPUNIT_ASSERT( s1 < wxT("AZ") );
+    CPPUNIT_ASSERT( s1 <= wxT("AZ") );
+    CPPUNIT_ASSERT( s1 <= wxT("AHH") );
+    CPPUNIT_ASSERT( s1 > wxT("AA") );
+    CPPUNIT_ASSERT( s1 >= wxT("AA") );
+    CPPUNIT_ASSERT( s1 >= wxT("AHH") );
+
+    // test comparison with C strings in Unicode build (must work in ANSI as
+    // well, of course):
+    CPPUNIT_ASSERT( s1 == "AHH" );
+    CPPUNIT_ASSERT( s1 != "no" );
+    CPPUNIT_ASSERT( s1 < "AZ" );
+    CPPUNIT_ASSERT( s1 <= "AZ" );
+    CPPUNIT_ASSERT( s1 <= "AHH" );
+    CPPUNIT_ASSERT( s1 > "AA" );
+    CPPUNIT_ASSERT( s1 >= "AA" );
+    CPPUNIT_ASSERT( s1 >= "AHH" );
+
 //    wxString _s1 = wxT("A\0HH");
 //    wxString _eq = wxT("A\0HH");
 //    wxString _neq1 = wxT("H\0AH");

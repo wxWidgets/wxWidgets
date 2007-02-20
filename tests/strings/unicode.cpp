@@ -141,6 +141,18 @@ void UnicodeTestCase::ConstructorsWithConversion()
     CPPUNIT_ASSERT ( wxString("\t[pl]open.format.Sformatuj dyskietkê=gfloppy %f", 
                                wxConvUTF8) == wxT("") ); //should stop at pos 35 
 #endif
+
+
+    // test using Unicode strings together with char* strings (this must work
+    // in ANSI mode as well, of course):
+    wxString s5("ascii");
+    CPPUNIT_ASSERT( s5 == "ascii" );
+
+    s5 += " value";
+
+    CPPUNIT_ASSERT( strcmp(s5.mb_str(), "ascii value") == 0 );
+    CPPUNIT_ASSERT( s5 == "ascii value" );
+    CPPUNIT_ASSERT( s5 != "SomethingElse" );
 }
 
 void UnicodeTestCase::ConversionEmpty()
