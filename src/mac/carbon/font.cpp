@@ -289,9 +289,12 @@ void wxFontRefData::MacFindFont()
             {
                 wxMacCFStringHolder cf( m_faceName, wxLocale::GetSystemEncoding() );
                 ATSFontFamilyRef atsfamily = ATSFontFamilyFindFromName( cf , kATSOptionFlagsDefault );
-                if ( atsfamily == (ATSFontFamilyRef) -1 )
+                
+                // ATSFontFamilyRef is an unsigned type, so check against max
+                // for an invalid value, not -1.
+                if ( atsfamily == 0xffffffff  )
                 {
-                    wxLogDebug( wxT("ATSFontFamilyFindFromName failed for %s"), m_faceName );
+                    wxLogDebug( wxT("ATSFontFamilyFindFromName failed for ") + m_faceName );
                     m_macFontFamily = GetAppFont();
                 }
                 else
