@@ -94,10 +94,7 @@ class ParamBinaryOr(PPanel):
                     value.append(self.values[i])
             # Add ignored flags
             value.extend(ignored)
-            if value:
-                self.SetValue(reduce(lambda a,b: a+'|'+b, value))
-            else:
-                self.SetValue('')
+            self.SetValue('|'.join(value))
             self.SetModified()
         dlg.Destroy()
 
@@ -172,10 +169,7 @@ class ParamStyle(ParamBinaryOr):
                      [self.valuesGeneric[i]
                       for i in range(listBoxGeneric.GetCount())
                       if listBoxGeneric.IsChecked(i)] + ignored
-            if value:
-                self.SetValue(reduce(lambda a,b: a+'|'+b, value))
-            else:
-                self.SetValue('')
+            self.SetValue('|'.join(value))
             self.SetModified()
         dlg.Destroy()
 
@@ -639,10 +633,7 @@ class ParamContent(PPanel):
         self.freeze = True
         if not value: value = []
         self.value = value
-        if value:
-            repr_ = reduce(lambda a,b: '%s|%s' % (a,b), value)
-        else:
-            repr_ = ''
+        repr_ = '|'.join(map(str, value))
         self.text.SetValue(repr_)  # update text ctrl
         self.freeze = False
     def OnButtonEdit(self, evt):
@@ -678,11 +669,7 @@ class ParamContentCheckList(ParamContent):
         self.freeze = True
         if not value: value = []
         self.value = value
-        if value:
-            if len(value) == 1: repr_ = str(value)
-            else: repr_ = reduce(lambda a,b: '%s|%s' % (a,b), value)
-        else:
-            repr_ = ''
+        repr_ = '|'.join(map(str,value))
         self.text.SetValue(repr_)  # update text ctrl
         self.freeze = False        
 
@@ -740,7 +727,7 @@ class ParamIntList(ParamContent):
     def OnButtonEdit(self, evt):
         if self.textModified:           # text has newer value
             try:
-                self.value = eval(self.text.GetValue())
+                self.value = map(int, self.text.GetValue().split('|'))
             except SyntaxError:
                 wx.LogError('Syntax error in parameter value: ' + self.GetName())
                 self.value = []
