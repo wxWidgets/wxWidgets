@@ -1,8 +1,8 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        dataview.cpp
-// Purpose:     DataVewCtrl  wxWidgets sample
+// Purpose:     wxDataViewCtrl wxWidgets sample
 // Author:      Robert Roebling
-// Modified by:
+// Modified by: Francesco Montorsi
 // Created:     06/01/06
 // RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
@@ -23,6 +23,9 @@
 #include "wx/datetime.h"
 #include "wx/splitter.h"
 #include "wx/aboutdlg.h"
+#include "wx/choicdlg.h"
+#include "wx/numdlg.h"
+#include "wx/dataview.h"
 
 #ifndef __WXMSW__
     #include "../sample.xpm"
@@ -30,7 +33,11 @@
 
 #include "null.xpm"
 
-#include "wx/dataview.h"
+
+#define DEFAULT_ALIGN                   wxALIGN_LEFT
+#define DATAVIEW_DEFAULT_STYLE          (wxDV_MULTIPLE|wxDV_HORIZ_RULES|wxDV_VERT_RULES)
+
+
 
 // -------------------------------------
 // MyTextModel
@@ -61,13 +68,13 @@ public:
             }
     }
 
-    virtual unsigned int GetNumberOfRows()
+    virtual unsigned int GetRowCount() const
         { return 1000; }
-    virtual unsigned int GetNumberOfCols()
+    virtual unsigned int GetColumnCount() const
         { return 7; }
 
     // as reported by wxVariant
-    virtual wxString GetColType( unsigned int col )
+    virtual wxString GetColumnType( unsigned int col ) const
         {
             if (col == 6)
                 return wxT("datetime");
@@ -81,7 +88,7 @@ public:
             return wxT("string");
         }
 
-    virtual void GetValue( wxVariant &variant, unsigned int col, unsigned int row )
+    virtual void GetValue( wxVariant &variant, unsigned int col, unsigned int row ) const
         {
             if (col == 6)
             {
@@ -151,6 +158,13 @@ public:
         m_colour = value.GetString();
         return true;
     }
+
+    bool GetValue( wxVariant &value ) const
+    {
+        value = m_colour;
+        return true;
+    }
+
     bool Render( wxRect rect, wxDC *dc, int WXUNUSED(state) )
     {
         dc->SetPen( *wxBLACK_PEN );
@@ -163,7 +177,7 @@ public:
         dc->DrawRectangle( rect );
         return true;
     }
-    wxSize GetSize()
+    wxSize GetSize() const
     {
         return wxSize(20,8);
     }
@@ -199,10 +213,22 @@ public:
         m_bitmap = wxBitmap( null_xpm );
     }
 
-    virtual unsigned int GetNumberOfRows() { return m_list.GetCount(); }
-    virtual unsigned int GetNumberOfCols() { return 2; }
-    virtual wxString GetColType( unsigned int WXUNUSED(col) ) { return wxT("string"); }
-    virtual void GetValue( wxVariant &variant, unsigned int col, unsigned int row )
+    virtual unsigned int GetRowCount() const 
+    { 
+        return m_list.GetCount(); 
+    }
+
+    virtual unsigned int GetColumnCount() const 
+    { 
+        return 2; 
+    }
+
+    virtual wxString GetColumnType( unsigned int WXUNUSED(col) ) const 
+    { 
+        return wxT("string"); 
+    }
+
+    virtual void GetValue( wxVariant &variant, unsigned int col, unsigned int row ) const
     {
         if (col == 0)
         {
@@ -218,6 +244,7 @@ public:
         tmp.Printf( wxT("item(%d;%d)"), (int)row, (int)col );
         variant = tmp;
     }
+
     virtual bool SetValue( wxVariant &variant, unsigned int col, unsigned int row )
     {
         if (col == 0)
@@ -282,21 +309,24 @@ public:
     void OnAbout(wxCommandEvent& event);
     void OnNewSortingFrame(wxCommandEvent& event);
 
-    void OnSingleSelMode(wxCommandEvent& event);
-    void OnMultipleSelMode(wxCommandEvent& event);
-    void OnResizeableColumn(wxCommandEvent& event);
-    void OnSortableColumn(wxCommandEvent& event);
-    void OnHideColumn(wxCommandEvent& event);
-    void OnChooseAlign(wxCommandEvent& event);
+    void OnStyleChange(wxCommandEvent& event);
+    void OnColumnSetting(wxCommandEvent& event);
 
 private:
     wxDataViewCtrl* dataview_left;
     wxDataViewCtrl* dataview_right;
     wxSplitterWindow *m_splitter;
+    wxPanel *m_panelLeft, *m_panelRight;
 
-    wxAlignment m_align;
+    // utilities:
 
-    void CreateControls();
+    void CreateDataViewControls();
+
+    wxArrayInt GetFlaggedColumns(int flag);
+    wxAlignment ChooseAlign(const wxString &msg, bool onlyHorizontal);
+    void SetFlag(const wxArrayInt &idx, int flag);
+    void SetAlignment(const wxArrayInt &idx, bool header, wxAlignment align);
+    void SetWidth(const wxArrayInt &idx, bool minwidth, int width);
 
 private:
     DECLARE_EVENT_TABLE()
@@ -367,8 +397,8 @@ private:
     wxLog          *m_logOld;
     wxTextCtrl     *m_logWindow;
 
-    MyUnsortedTextModel        *m_unsorted_model;
-    wxDataViewSortedListModel  *m_sorted_model;
+    wxObjectDataPtr<MyUnsortedTextModel> m_unsorted_model;
+    wxObjectDataPtr<wxDataViewSortedListModel> m_sorted_model;
 
     DECLARE_EVENT_TABLE()
 };
@@ -407,18 +437,25 @@ enum
 {
     // file menu
     ID_ABOUT = wxID_ABOUT,
-    ID_NEW_SORT_FRAME,
+    ID_NEW_SORT_FRAME = wxID_HIGHEST+1,
     ID_EXIT = wxID_EXIT,
 
     // dataviewctrl menu
-    ID_SINGLE_SEL_MODE,
+    ID_SINGLE_SEL_MODE = wxID_HIGHEST+2,
     ID_MULTIPLE_SEL_MODE,
+    ID_NO_HEADER_MODE,
+    ID_HORIZ_RULES_MODE,
+    ID_VERT_RULES_MODE,
 
     ID_RESIZEABLE_COLUMNS,
     ID_SORTABLE_COLUMNS,
     ID_HIDDEN_COLUMNS,
 
-    ID_CHOOSE_ALIGNMENT
+    ID_CHOOSE_COLUMN_ALIGNMENT,
+    ID_CHOOSE_CONTENTS_ALIGNMENT,
+
+    ID_SET_MINWIDTH,
+    ID_SET_WIDTH
 };
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
@@ -429,14 +466,11 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU( ID_EXIT, MyFrame::OnQuit )
 
     // dataviewctrl menu
-    EVT_MENU( ID_SINGLE_SEL_MODE, MyFrame::OnSingleSelMode )
-    EVT_MENU( ID_MULTIPLE_SEL_MODE, MyFrame::OnMultipleSelMode )
+    EVT_COMMAND_RANGE( ID_SINGLE_SEL_MODE, ID_VERT_RULES_MODE,
+                       wxEVT_COMMAND_MENU_SELECTED, MyFrame::OnStyleChange )
 
-    EVT_MENU( ID_RESIZEABLE_COLUMNS, MyFrame::OnResizeableColumn )
-    EVT_MENU( ID_SORTABLE_COLUMNS, MyFrame::OnSortableColumn )
-    EVT_MENU( ID_HIDDEN_COLUMNS, MyFrame::OnHideColumn )
-
-    EVT_MENU( ID_CHOOSE_ALIGNMENT, MyFrame::OnChooseAlign )
+    EVT_COMMAND_RANGE( ID_RESIZEABLE_COLUMNS, ID_SET_WIDTH,
+                       wxEVT_COMMAND_MENU_SELECTED, MyFrame::OnColumnSetting )
 
 END_EVENT_TABLE()
 
@@ -458,11 +492,19 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     data_menu->AppendRadioItem(ID_SINGLE_SEL_MODE, _T("&Single selection mode"));
     data_menu->AppendRadioItem(ID_MULTIPLE_SEL_MODE, _T("&Multiple selection mode"));
     data_menu->AppendSeparator();
-    data_menu->AppendCheckItem(ID_RESIZEABLE_COLUMNS, _T("Make columns resizeable"));
-    data_menu->AppendCheckItem(ID_SORTABLE_COLUMNS, _T("Make columns sortable"));
-    data_menu->AppendCheckItem(ID_HIDDEN_COLUMNS, _T("Make columns hidden"));
+    data_menu->AppendCheckItem(ID_NO_HEADER_MODE, _T("No header mode"));
+    data_menu->AppendCheckItem(ID_HORIZ_RULES_MODE, _T("Horizontal rules"));
+    data_menu->AppendCheckItem(ID_VERT_RULES_MODE, _T("Vertical rules"));
     data_menu->AppendSeparator();
-    data_menu->Append(ID_CHOOSE_ALIGNMENT, _T("Set alignment..."));
+    data_menu->Append(ID_RESIZEABLE_COLUMNS, _T("Set column(s) as resizeable..."));
+    data_menu->Append(ID_SORTABLE_COLUMNS, _T("Set column(s) as sortable..."));
+    data_menu->Append(ID_HIDDEN_COLUMNS, _T("Set column(s) as hidden..."));
+    data_menu->AppendSeparator();
+    data_menu->Append(ID_CHOOSE_COLUMN_ALIGNMENT, _T("Set column(s) title alignment..."));
+    data_menu->Append(ID_CHOOSE_CONTENTS_ALIGNMENT, _T("Set column(s) contents alignment..."));
+    data_menu->AppendSeparator();
+    data_menu->Append(ID_SET_MINWIDTH, _T("Set column(s) minimal width..."));
+    data_menu->Append(ID_SET_WIDTH, _T("Set column(s) width..."));
 
     wxMenuBar *menu_bar = new wxMenuBar;
     menu_bar->Append(file_menu, _T("&File"));
@@ -472,19 +514,52 @@ MyFrame::MyFrame(wxFrame *frame, wxChar *title, int x, int y, int w, int h):
     CreateStatusBar();
 
 
+    // check the menus for the default wxDataViewCtrl style
+    data_menu->Check(ID_MULTIPLE_SEL_MODE, (DATAVIEW_DEFAULT_STYLE & wxDV_MULTIPLE) != 0);
+    data_menu->Check(ID_NO_HEADER_MODE, (DATAVIEW_DEFAULT_STYLE & wxDV_NO_HEADER) != 0);
+    data_menu->Check(ID_HORIZ_RULES_MODE, (DATAVIEW_DEFAULT_STYLE & wxDV_HORIZ_RULES) != 0);
+    data_menu->Check(ID_VERT_RULES_MODE, (DATAVIEW_DEFAULT_STYLE & wxDV_VERT_RULES) != 0);
+
+
     // build the other controls:
 
     m_splitter = new wxSplitterWindow( this, wxID_ANY );
     m_splitter->SetSashGravity(0.5);
 
-    m_align = wxALIGN_CENTER;
-    dataview_left = dataview_right = NULL;
-    CreateControls();
+    m_panelLeft = new wxPanel( m_splitter, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                               wxNO_BORDER );
+    m_panelRight = new wxPanel( m_splitter, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                wxNO_BORDER );
+    wxSizer *szLeft = new wxBoxSizer(wxVERTICAL);
+    wxSizer *szRight = new wxBoxSizer(wxVERTICAL);
 
-    m_splitter->SplitVertically(dataview_left, dataview_right);
+    dataview_left = NULL;
+    dataview_right = NULL;
+    CreateDataViewControls();
+
+    // left panel
+    szLeft->Add( dataview_left, 1, wxGROW|wxALL, 5 );
+    m_panelLeft->SetSizerAndFit(szLeft);
+
+    // right panel
+    wxStaticText *stattext =
+        new wxStaticText(m_panelRight, wxID_ANY,
+                wxT("This is another wxDataViewCtrl using the same wxDataViewModel ")
+                wxT("of the wxDataViewCtrl on the left but, unlike it, this window ")
+                wxT("won't react to the style/column changes done through the ")
+                wxT("'DataViewCtrl' menu"));
+    stattext->Wrap(GetClientSize().GetWidth() / 2);
+
+    szRight->Add( stattext, 0, wxALL, 5 );
+    szRight->Add( dataview_right, 1, wxGROW|wxALL, 5 );
+    m_panelRight->SetSizerAndFit(szRight);
+
+    // split the two panels
+    m_splitter->SplitVertically(m_panelLeft, m_panelRight);
+    this->SetMinSize(m_splitter->GetBestSize());
 }
 
-void MyFrame::CreateControls()
+void MyFrame::CreateDataViewControls()
 {
     wxDataViewCtrl *old1 = NULL, *old2 = NULL;
 
@@ -494,58 +569,52 @@ void MyFrame::CreateControls()
         old2 = dataview_right;
 
     // styles:
-
     long style = 0;
     if (GetMenuBar()->FindItem(ID_MULTIPLE_SEL_MODE)->IsChecked())
         style |= wxDV_MULTIPLE;
-
-    int flags = 0;
-    if (GetMenuBar()->FindItem(ID_RESIZEABLE_COLUMNS)->IsChecked())
-        flags |= wxDATAVIEW_COL_RESIZABLE;
-    if (GetMenuBar()->FindItem(ID_SORTABLE_COLUMNS)->IsChecked())
-        flags |= wxDATAVIEW_COL_SORTABLE;
-    if (GetMenuBar()->FindItem(ID_HIDDEN_COLUMNS)->IsChecked())
-        flags |= wxDATAVIEW_COL_HIDDEN;
+    if (GetMenuBar()->FindItem(ID_NO_HEADER_MODE)->IsChecked())
+        style |= wxDV_NO_HEADER;
+    if (GetMenuBar()->FindItem(ID_HORIZ_RULES_MODE)->IsChecked())
+        style |= wxDV_HORIZ_RULES;
+    if (GetMenuBar()->FindItem(ID_VERT_RULES_MODE)->IsChecked())
+        style |= wxDV_VERT_RULES;
 
 
     // Left wxDataViewCtrl
-    dataview_left = new wxDataViewCtrl( m_splitter, wxID_ANY, wxDefaultPosition,
+    dataview_left = new wxDataViewCtrl( m_panelLeft, wxID_ANY, wxDefaultPosition,
                                         wxDefaultSize, style );
 
-    MyTextModel *model = new MyTextModel;
-    dataview_left->AssociateModel( model );
-    model->DecRef(); // don't leak memory
 
-    dataview_left->AppendTextColumn( wxT("first"), 0, wxDATAVIEW_CELL_INERT, -1, 
-                                     m_align, flags );
-    dataview_left->AppendTextColumn( wxT("second"), 1, wxDATAVIEW_CELL_INERT, -1, 
-                                     m_align, flags );
+    wxObjectDataPtr<MyTextModel> model(new MyTextModel);
+    dataview_left->AssociateModel( model.get() );
+
+    dataview_left->AppendTextColumn( wxT("First"), 0, wxDATAVIEW_CELL_INERT, -1, 
+                                     DEFAULT_ALIGN );
+    dataview_left->AppendTextColumn( wxT("Second"), 1, wxDATAVIEW_CELL_INERT, -1,
+                                     DEFAULT_ALIGN );
 
     wxDataViewTextRenderer *text_renderer = 
         new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
     wxDataViewColumn *column = new wxDataViewColumn( wxT("editable"), text_renderer, 2,
-                                                     -1, m_align, flags );
+                                                     -1, DEFAULT_ALIGN );
     dataview_left->AppendColumn( column );
 
-    dataview_left->AppendToggleColumn( wxT("fourth"), 3, wxDATAVIEW_CELL_INERT, -1,  
-                                       m_align, flags );
+    dataview_left->AppendToggleColumn( wxT("fourth"), 3, wxDATAVIEW_CELL_INERT, -1, 
+                                       DEFAULT_ALIGN );
 
     MyCustomRenderer *custom_renderer = new MyCustomRenderer;
-    column = new wxDataViewColumn( wxT("custom"), custom_renderer, 4, -1,  
-                                   m_align, flags );
+    column = new wxDataViewColumn( wxT("custom"), custom_renderer, 4, -1, DEFAULT_ALIGN );
     dataview_left->AppendColumn( column );
 
-    dataview_left->AppendProgressColumn( wxT("progress"), 5, wxDATAVIEW_CELL_INERT, -1,  
-                                         m_align, flags );
+    dataview_left->AppendProgressColumn( wxT("progress"), 5, wxDATAVIEW_CELL_INERT, -1,
+                                         DEFAULT_ALIGN );
 
-    dataview_left->AppendDateColumn( wxT("date"), 6, wxDATAVIEW_CELL_INERT, -1,  
-                                     m_align, flags );
+    dataview_left->AppendDateColumn( wxT("date"), 6, wxDATAVIEW_CELL_INERT, -1, DEFAULT_ALIGN );
 
 
     // Right wxDataViewCtrl using the same model
-    dataview_right = new wxDataViewCtrl( m_splitter, wxID_ANY, wxDefaultPosition,
-                                         wxDefaultSize, style );
-    dataview_right->AssociateModel( model );
+    dataview_right = new wxDataViewCtrl( m_panelRight, wxID_ANY );
+    dataview_right->AssociateModel( model.get() );
 
     text_renderer = new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
     column = new wxDataViewColumn( wxT("editable"), text_renderer, 2 );
@@ -559,17 +628,22 @@ void MyFrame::CreateControls()
 
     dataview_right->AppendDateColumn( wxT("date"), 6 );
 
-    // layout dataview controls
+
+    // layout the new dataview controls
     if (old1)
     {
-        m_splitter->ReplaceWindow(old1, dataview_left);
+        m_panelLeft->GetSizer()->Replace(old1, dataview_left);
         delete old1;
+
+        m_panelLeft->Layout();
     }
 
     if (old2)
     {
-        m_splitter->ReplaceWindow(old2, dataview_right);
+        m_panelRight->GetSizer()->Replace(old2, dataview_right);
         delete old2;
+
+        m_panelRight->Layout();
     }
 }
 
@@ -595,32 +669,102 @@ void MyFrame::OnNewSortingFrame(wxCommandEvent& WXUNUSED(event) )
     frame2->Show(true);
 }
 
-void MyFrame::OnSingleSelMode(wxCommandEvent& event)
+void MyFrame::OnStyleChange(wxCommandEvent& WXUNUSED(event) )
 {
-    CreateControls();
+    // recreate the wxDataViewCtrl:
+    CreateDataViewControls();
 }
 
-void MyFrame::OnMultipleSelMode(wxCommandEvent& event)
+void MyFrame::OnColumnSetting(wxCommandEvent& event)
 {
-    CreateControls();
+    wxArrayInt columns;
+    int flag = 0;
+    bool header = false, minwidth = false;
+    wxString msg;
+
+    switch (event.GetId())
+    {
+    case ID_RESIZEABLE_COLUMNS:
+        flag = wxDATAVIEW_COL_RESIZABLE;
+        columns = GetFlaggedColumns(flag);
+        break;
+    case ID_SORTABLE_COLUMNS:
+        flag = wxDATAVIEW_COL_SORTABLE;
+        columns = GetFlaggedColumns(flag);
+        break;
+    case ID_HIDDEN_COLUMNS:
+        flag = wxDATAVIEW_COL_HIDDEN;
+        columns = GetFlaggedColumns(flag);
+        break;
+
+    case ID_CHOOSE_COLUMN_ALIGNMENT:
+        msg = wxT("Select the columns whose headers' alignment will be modified.");
+        header = true;
+        break;
+    case ID_CHOOSE_CONTENTS_ALIGNMENT:
+        msg = wxT("Select the columns whose contents' alignment will be modified.");
+        header = false;
+        break;
+
+    case ID_SET_MINWIDTH:
+        msg = wxT("Please provide the new minimal width:");
+        minwidth = true;
+        break;
+    case ID_SET_WIDTH:
+        msg = wxT("Please provide the new width:");
+        minwidth = false;
+        break;
+    }
+
+    // get column titles:
+
+    wxArrayString choices;
+    for (size_t i=0; i<dataview_left->GetColumnCount(); i++)
+        choices.Add(dataview_left->GetColumn(i)->GetTitle());
+
+    // ask the user
+    wxGetMultipleChoices(
+        columns,
+        wxT("Choose the columns to which apply the change."),
+        wxT("Choose the column"),
+        choices,
+        this);
+
+    switch (event.GetId())
+    {
+    case ID_RESIZEABLE_COLUMNS:
+    case ID_SORTABLE_COLUMNS:
+    case ID_HIDDEN_COLUMNS:
+        SetFlag(columns, flag);
+        break;
+
+    case ID_CHOOSE_COLUMN_ALIGNMENT:
+    case ID_CHOOSE_CONTENTS_ALIGNMENT:
+        SetAlignment(columns, header, ChooseAlign(msg, header));
+        break;
+
+    case ID_SET_MINWIDTH:
+    case ID_SET_WIDTH:
+        {
+            int def = minwidth ? wxDVC_DEFAULT_MINWIDTH : wxDVC_DEFAULT_WIDTH;
+
+            msg << wxT("\nNOTE: all non-selected columns will be reset to a width of ") 
+                << def << wxT(" pixels.");
+
+            long ret =
+                wxGetNumberFromUser(msg, wxT("New value:"), wxT("Modify width"),
+                                    def, 0, 300, this);
+
+            if (ret != -1)
+                SetWidth(columns, minwidth, ret);
+        }
+        break;
+    }
+
+    dataview_left->Refresh();
 }
 
-void MyFrame::OnResizeableColumn(wxCommandEvent& event)
-{
-    CreateControls();
-}
-
-void MyFrame::OnSortableColumn(wxCommandEvent& event)
-{
-    CreateControls();
-}
-
-void MyFrame::OnHideColumn(wxCommandEvent& event)
-{
-    CreateControls();
-}
-
-void MyFrame::OnChooseAlign(wxCommandEvent& event)
+wxAlignment MyFrame::ChooseAlign(const wxString &msg, bool onlyHorizontal)
 {
     const wxString choices[] =
     {
@@ -644,17 +788,78 @@ void MyFrame::OnChooseAlign(wxCommandEvent& event)
         wxALIGN_CENTER
     };
 
+    int n = WXSIZEOF(choices);
+    if (onlyHorizontal)
+        n = 3;      // show only the first three choices
+
     int choice = wxGetSingleChoiceIndex(
-        wxT("Select the alignment for the cells of the wxDataViewCtrl:"),
+        msg + wxT("\nNOTE: _all_ non-selected column's alignment will be reset to wxALIGN_LEFT!"),
         wxT("Alignment"),
-        WXSIZEOF(choices), choices,
+        n, choices,
         this);
 
     if (choice == wxNOT_FOUND)
-        return;
+        return wxALIGN_LEFT;
 
-    m_align = flags[choice];
-    CreateControls();
+    return flags[choice];
+}
+
+void MyFrame::SetFlag(const wxArrayInt &idx, int toadd)
+{
+    for (size_t i=0; i<dataview_left->GetColumnCount(); i++)
+    {
+        int current = dataview_left->GetColumn(i)->GetFlags();
+
+        if (idx.Index(i) != wxNOT_FOUND)
+            dataview_left->GetColumn(i)->SetFlags(current | toadd);
+        else
+            dataview_left->GetColumn(i)->SetFlags(current & ~toadd);
+    }
+}
+
+wxArrayInt MyFrame::GetFlaggedColumns(int flag)
+{
+    wxArrayInt ret;
+    for (size_t i=0; i<dataview_left->GetColumnCount(); i++)
+        if (dataview_left->GetColumn(i)->GetFlags() & flag)
+            ret.Add(i);
+    return ret;
+}
+
+void MyFrame::SetAlignment(const wxArrayInt &idx, bool header, wxAlignment align)
+{
+    // set to DEFAULT_ALIGN all columns except those
+    // contained in 'idx' which are set to 'align'
+
+    for (size_t i=0; i<dataview_left->GetColumnCount(); i++)
+    {
+        wxAlignment toset = DEFAULT_ALIGN;
+        if (idx.Index(i) != wxNOT_FOUND)
+            toset = align;
+
+        if (header)
+            dataview_left->GetColumn(i)->SetAlignment(toset);
+        else
+            dataview_left->GetColumn(i)->GetRenderer()->SetAlignment(toset);
+    }
+}
+
+void MyFrame::SetWidth(const wxArrayInt &idx, bool minwidth, int width)
+{
+    // set to wxDVC_DEFAULT_WIDTH wide all columns except those
+    // contained in 'idx' which are set to 'width'
+
+    for (size_t i=0; i<dataview_left->GetColumnCount(); i++)
+    {
+        int toset = minwidth ? wxDVC_DEFAULT_MINWIDTH : wxDVC_DEFAULT_WIDTH;
+        if (idx.Index(i) != wxNOT_FOUND)
+            toset = width;
+
+        if (minwidth)
+            dataview_left->GetColumn(i)->SetMinWidth(toset);
+        else
+            dataview_left->GetColumn(i)->SetWidth(toset);
+    }
 }
 
 
@@ -690,9 +895,8 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
     dataview_left = new wxDataViewCtrl( main, ID_UNSORTED, wxDefaultPosition, 
                                         wxDefaultSize, wxDV_MULTIPLE );
 
-    m_unsorted_model = new MyUnsortedTextModel;
-    dataview_left->AssociateModel( m_unsorted_model );
-    m_unsorted_model->DecRef(); // don't leak memory
+    m_unsorted_model.reset(new MyUnsortedTextModel);
+    dataview_left->AssociateModel( m_unsorted_model.get() );
 
     wxDataViewTextRenderer *text_renderer = 
         new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
@@ -707,9 +911,8 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
     // Right wxDataViewCtrl using the sorting model
     dataview_right = new wxDataViewCtrl( main, ID_SORTED );
     
-    m_sorted_model = new wxDataViewSortedListModel( m_unsorted_model );
-    dataview_right->AssociateModel( m_sorted_model );
-    m_sorted_model->DecRef(); // don't leak memory
+    m_sorted_model.reset(new wxDataViewSortedListModel( m_unsorted_model.get() ));
+    dataview_right->AssociateModel( m_sorted_model.get() );
 
     text_renderer = new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
     column = new wxDataViewColumn( wxT("editable"), text_renderer, 0, -1, 
