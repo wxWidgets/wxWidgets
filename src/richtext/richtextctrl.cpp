@@ -1556,6 +1556,11 @@ bool wxRichTextCtrl::PageDown(int noPages, int flags)
     return false;
 }
 
+static bool wxRichTextCtrlIsWhitespace(const wxString& str)
+{
+    return str == wxT(" ") || str == wxT("\t");
+}
+
 // Finds the caret position for the next word
 long wxRichTextCtrl::FindNextWordPosition(int direction) const
 {
@@ -1570,7 +1575,12 @@ long wxRichTextCtrl::FindNextWordPosition(int direction) const
         {
             // i is in character, not caret positions
             wxString text = GetBuffer().GetTextForRange(wxRichTextRange(i, i));
-            if (text != wxT(" ") && !text.empty())
+            wxRichTextLine* line = GetBuffer().GetLineAtPosition(i, false);
+            if (line && (i == line->GetAbsoluteRange().GetEnd()))
+            {
+                break;
+            }
+            else if (!wxRichTextCtrlIsWhitespace(text) && !text.empty())
                 i += direction;
             else
             {
@@ -1581,9 +1591,13 @@ long wxRichTextCtrl::FindNextWordPosition(int direction) const
         {
             // i is in character, not caret positions
             wxString text = GetBuffer().GetTextForRange(wxRichTextRange(i, i));
+            wxRichTextLine* line = GetBuffer().GetLineAtPosition(i, false);
+            if (line && (i == line->GetAbsoluteRange().GetEnd()))
+                return wxMax(-1, i);
+
             if (text.empty()) // End of paragraph, or maybe an image
                 return wxMax(-1, i - 1);
-            else if (text == wxT(" ") || text.empty())
+            else if (wxRichTextCtrlIsWhitespace(text) || text.empty())
                 i += direction;
             else
             {
@@ -1604,9 +1618,11 @@ long wxRichTextCtrl::FindNextWordPosition(int direction) const
         {
             // i is in character, not caret positions
             wxString text = GetBuffer().GetTextForRange(wxRichTextRange(i, i));
-            if (text.empty()) // End of paragraph, or maybe an image
+            wxRichTextLine* line = GetBuffer().GetLineAtPosition(i, false);
+
+            if (text.empty() || (line && (i == line->GetAbsoluteRange().GetStart()))) // End of paragraph, or maybe an image
                 break;
-            else if (text == wxT(" ") || text.empty())
+            else if (wxRichTextCtrlIsWhitespace(text) || text.empty())
                 i += direction;
             else
                 break;
@@ -1616,7 +1632,11 @@ long wxRichTextCtrl::FindNextWordPosition(int direction) const
         {
             // i is in character, not caret positions
             wxString text = GetBuffer().GetTextForRange(wxRichTextRange(i, i));
-            if (text != wxT(" ") /* && !text.empty() */)
+            wxRichTextLine* line = GetBuffer().GetLineAtPosition(i, false);
+            if (line && line->GetAbsoluteRange().GetStart() == i)
+                return i-1;
+
+            if (!wxRichTextCtrlIsWhitespace(text) /* && !text.empty() */)
                 i += direction;
             else
             {
