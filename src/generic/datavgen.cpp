@@ -918,14 +918,10 @@ void wxDataViewHeaderWindowBase::SendEvent(wxEventType type, unsigned int n)
 
 #if defined(__WXMSW__) && USE_NATIVE_HEADER_WINDOW
 
-// implemented in msw/window.cpp:
-void wxAssociateWinWithHandle(HWND hWnd, wxWindowMSW *win);
-void wxRemoveHandleAssociation(wxWindowMSW *win);
-
 // implemented in msw/listctrl.cpp:
 unsigned int wxMSWGetColumnClicked(NMHDR *nmhdr, POINT *ptClick);
 
-IMPLEMENT_ABSTRACT_CLASS(wxDataViewHeaderWindowMSW, wxWindow);
+IMPLEMENT_ABSTRACT_CLASS(wxDataViewHeaderWindowMSW, wxWindow)
 
 bool wxDataViewHeaderWindowMSW::Create( wxDataViewCtrl *parent, wxWindowID id,
                                         const wxPoint &pos, const wxSize &size, 
@@ -959,9 +955,9 @@ bool wxDataViewHeaderWindowMSW::Create( wxDataViewCtrl *parent, wxWindowID id,
         return false;
     }
 
-    // we need to do the association to force wxWindow::HandleNotify
+    // we need to subclass the m_hWnd to force wxWindow::HandleNotify
     // to call wxDataViewHeaderWindow::MSWOnNotify
-    wxAssociateWinWithHandle((HWND)m_hWnd, this);
+    SubclassWin(m_hWnd);
 
     // the following is required to get the default win's font for 
     // header windows and must be done befor sending the HDM_LAYOUT msg
@@ -1002,7 +998,7 @@ bool wxDataViewHeaderWindowMSW::Create( wxDataViewCtrl *parent, wxWindowID id,
 
 wxDataViewHeaderWindowMSW::~wxDataViewHeaderWindow()
 {
-    wxRemoveHandleAssociation(this);
+    UnsubclassWin();
 }
 
 void wxDataViewHeaderWindowMSW::UpdateDisplay()
@@ -1051,6 +1047,10 @@ void wxDataViewHeaderWindowMSW::UpdateDisplay()
         case wxALIGN_RIGHT:
             hdi.fmt |= HDF_RIGHT;
             break;
+
+        default:
+            // such alignment is not allowed for the column header!
+            wxFAIL;
         }
         
         SendMessage((HWND)m_hWnd, HDM_INSERTITEM, 
@@ -1946,7 +1946,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         bool selected = m_selection.Index( item ) != wxNOT_FOUND;
         if (selected || item == m_currentRow)
         {
-            int flags = selected ? wxCONTROL_SELECTED : 0;
+            int flags = selected ? (int)wxCONTROL_SELECTED : 0;
             if (item == m_currentRow)
                 flags |= wxCONTROL_CURRENT;
             if (m_hasFocus)
