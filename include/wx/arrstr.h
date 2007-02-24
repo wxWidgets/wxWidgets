@@ -328,7 +328,7 @@ private:
   size_t  m_nSize,    // current size of the array
           m_nCount;   // current number of elements
 
-  wxChar  **m_pItems; // pointer to data
+  const wxChar  **m_pItems; // pointer to data
 
   bool    m_autoSort; // if true, keep the array always sorted
 };

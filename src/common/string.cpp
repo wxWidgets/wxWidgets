@@ -2084,7 +2084,7 @@ void wxArrayString::Init(bool autoSort)
 {
   m_nSize  =
   m_nCount = 0;
-  m_pItems = (wxChar **) NULL;
+  m_pItems = (const wxChar **) NULL;
   m_autoSort = autoSort;
 }
 
@@ -2134,7 +2134,7 @@ void wxArrayString::Grow(size_t nIncrement)
       m_nSize = ARRAY_DEFAULT_INITIAL_SIZE;
       if (m_nSize < nIncrement)
           m_nSize = nIncrement;
-      m_pItems = new wxChar *[m_nSize];
+      m_pItems = new const wxChar *[m_nSize];
     }
     else {
       // otherwise when it's called for the first time, nIncrement would be 0
@@ -2147,7 +2147,7 @@ void wxArrayString::Grow(size_t nIncrement)
       if ( nIncrement < ndefIncrement )
         nIncrement = ndefIncrement;
       m_nSize += nIncrement;
-      wxChar **pNew = new wxChar *[m_nSize];
+      const wxChar **pNew = new const wxChar *[m_nSize];
 
       // copy data to new location
       memcpy(pNew, m_pItems, m_nCount*sizeof(wxChar *));
@@ -2204,7 +2204,7 @@ void wxArrayString::Alloc(size_t nSize)
 {
   // only if old buffer was not big enough
   if ( nSize > m_nSize ) {
-    wxChar **pNew = new wxChar *[nSize];
+    const wxChar **pNew = new const wxChar *[nSize];
     if ( !pNew )
         return;
 
@@ -2222,7 +2222,7 @@ void wxArrayString::Shrink()
   // only do it if we have some memory to free
   if( m_nCount < m_nSize ) {
     // allocates exactly as much memory as we need
-    wxChar **pNew = new wxChar *[m_nCount];
+    const wxChar **pNew = new const wxChar *[m_nCount];
 
     // copy data to new location
     memcpy(pNew, m_pItems, m_nCount*sizeof(wxChar *));
@@ -2344,7 +2344,7 @@ size_t wxArrayString::Add(const wxString& str, size_t nInsert)
         str.GetStringData()->Lock();
 
         // just append
-        m_pItems[m_nCount + i] = (wxChar *)str.c_str(); // const_cast
+        m_pItems[m_nCount + i] = str.c_str();
     }
     size_t ret = m_nCount;
     m_nCount += nInsert;
@@ -2369,7 +2369,7 @@ void wxArrayString::Insert(const wxString& str, size_t nIndex, size_t nInsert)
   for (size_t i = 0; i < nInsert; i++)
   {
       str.GetStringData()->Lock();
-      m_pItems[nIndex + i] = (wxChar *)str.c_str();
+      m_pItems[nIndex + i] = str.c_str();
   }
   m_nCount += nInsert;
 }
@@ -2405,7 +2405,7 @@ void wxArrayString::SetCount(size_t count)
 
     wxString s;
     while ( m_nCount < count )
-        m_pItems[m_nCount++] = (wxChar *)s.c_str();
+        m_pItems[m_nCount++] = s.c_str();
 }
 
 // removes item from array (by index)
