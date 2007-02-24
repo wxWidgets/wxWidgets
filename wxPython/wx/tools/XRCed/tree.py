@@ -1149,10 +1149,11 @@ class XML_Tree(wx.TreeCtrl):
         self.PopupMenu(menu, evt.GetPosition())
         menu.Destroy()
 
-    # Redefine to force the update of font dimentions
-    def SetItemBold(self, item):
-        wx.TreeCtrl.SetItemBold(self, item)
-        self.SetIndent(self.GetIndent())
+    # Redefine to force the update of font dimentions on wxGTK
+    if wx.Platform == '__WXGTK__':
+        def SetItemBold(self, item, state=True):
+            wx.TreeCtrl.SetItemBold(self, item, state)
+            self.SetIndent(self.GetIndent())
 
     # Apply changes
     def Apply(self, xxx, item):
