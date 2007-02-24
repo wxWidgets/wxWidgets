@@ -196,18 +196,18 @@ static const wxChar* gs_encodingNames[WXSIZEOF(gs_encodingDescs)][9] =
     { wxT( "WINDOWS-1257" ),wxT( "CP-1257" ),wxT( "MS-1257" ),wxT( "IBM-1257" ),NULL },
     { wxT( "WINDOWS-437" ), wxT( "CP-437" ), wxT( "MS-437" ), wxT( "IBM-437" ), NULL },
 
-    { wxT( "UTF-7" ), wxT("utf7"), NULL },
-    { wxT( "UTF-8" ), wxT("utf8"), NULL },
+    { wxT( "UTF-7" ), NULL },
+    { wxT( "UTF-8" ), NULL },
 #ifdef WORDS_BIGENDIAN
-    { wxT( "UTF-16BE" ), wxT("UCS-2BE"), wxT( "UTF-16" ), wxT("UCS-2"), wxT("UCS2"), NULL },
+    { wxT( "UTF-16BE" ), wxT("UCS-2BE"), wxT( "UTF-16" ), wxT("UCS-2"), NULL },
     { wxT( "UTF-16LE" ), wxT("UCS-2LE"), NULL },
-    { wxT( "UTF-32BE" ), wxT( "UCS-4BE" ), wxT( "UTF-32" ), wxT( "UCS-4" ), wxT("UCS4"), NULL },
+    { wxT( "UTF-32BE" ), wxT( "UCS-4BE" ), wxT( "UTF-32" ), wxT( "UCS-4" ), NULL },
     { wxT( "UTF-32LE" ), wxT( "UCS-4LE" ), NULL },
 #else // WORDS_BIGENDIAN
     { wxT( "UTF-16BE" ), wxT("UCS-2BE"), NULL },
-    { wxT( "UTF-16LE" ), wxT("UCS-2LE"), wxT( "UTF-16" ), wxT("UCS-2"), wxT("UCS2"), NULL },
+    { wxT( "UTF-16LE" ), wxT("UCS-2LE"), wxT( "UTF-16" ), wxT("UCS-2"), NULL },
     { wxT( "UTF-32BE" ), wxT( "UCS-4BE" ), NULL },
-    { wxT( "UTF-32LE" ), wxT( "UCS-4LE" ), wxT( "UTF-32" ), wxT( "UCS-4" ), wxT("UCS4"), NULL },
+    { wxT( "UTF-32LE" ), wxT( "UCS-4LE" ), wxT( "UTF-32" ), wxT( "UCS-4" ), NULL },
 #endif // WORDS_BIGENDIAN
 
     { wxT( "EUC-JP" ), wxT( "eucJP" ), wxT( "euc_jp" ), wxT( "IBM-eucJP" ), NULL },
@@ -507,32 +507,25 @@ wxFontMapperBase::NonInteractiveCharsetToEncoding(const wxString& charset)
             }
         }
 
-        for ( size_t i = 0; i < WXSIZEOF(gs_encodingNames); ++i )
-        {
-            for ( const wxChar** encName = gs_encodingNames[i]; *encName; ++encName )
-            {
-                if ( cs.CmpNoCase(*encName) == 0 )
-                    return gs_encodings[i];
-            }
-        }
+        // check for known encoding name
+        const wxFontEncoding e = GetEncodingFromName(cs);
+        if ( e != wxFONTENCODING_MAX )
+            return e;
 
+        // deal with general encoding names of the form FOO-xxx
         cs.MakeUpper();
 
         if ( cs.Left(3) == wxT("ISO") )
         {
-            // the dash is optional (or, to be exact, it is not, but
-            // several brokenmails "forget" it)
+            // the dash is optional (or, to be exact, it is not, but many
+            // broken programs "forget" it in the output they generate)
             const wxChar *p = cs.c_str() + 3;
             if ( *p == wxT('-') )
                 p++;
 
-            // printf( "iso %s\n", (const char*) cs.ToAscii() );
-
             unsigned int value;
             if ( wxSscanf(p, wxT("8859-%u"), &value) == 1 )
             {
-                // printf( "value %d\n", (int)value );
-
                 // make it 0 based and check that it is strictly positive in
                 // the process (no such thing as iso8859-0 encoding)
                 if ( (value-- > 0) &&
@@ -552,8 +545,6 @@ wxFontMapperBase::NonInteractiveCharsetToEncoding(const wxString& charset)
             unsigned int value;
             if ( wxSscanf(p, wxT("8859-%u"), &value) == 1 )
             {
-                // printf( "value %d\n", (int)value );
-
                 // make it 0 based and check that it is strictly positive in
                 // the process (no such thing as iso8859-0 encoding)
                 if ( (value-- > 0) &&
@@ -722,12 +713,28 @@ wxFontEncoding wxFontMapperBase::GetEncodingFromName(const wxString& name)
 {
     const size_t count = WXSIZEOF(gs_encodingNames);
 
+    // many charsets use hyphens in their names but some systems use the
+    // same names without hyphens (e.g. "UTF-8" and "UTF8" are both common)
+    // so to avoid bloating gs_encodingNames array too much recognize both
+    // versions with and without hyphens here
+    wxString nameNoHyphens(name);
+    if ( !nameNoHyphens.Replace(_T("-"), _T("")) )
+    {
+        // no replacement has been done, no need to compare twice
+        nameNoHyphens.clear();
+    }
+
+
     for ( size_t i = 0; i < count; i++ )
     {
         for ( const wxChar** encName = gs_encodingNames[i]; *encName; ++encName )
         {
-            if ( name.CmpNoCase(*encName) == 0 )
+            if ( name.CmpNoCase(*encName) == 0 ||
+                    (!nameNoHyphens.empty() &&
+                     nameNoHyphens.CmpNoCase(*encName) == 0) )
+            {
                 return gs_encodings[i];
+            }
         }
     }
 
