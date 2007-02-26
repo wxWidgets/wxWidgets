@@ -3,6 +3,10 @@ import wx.lib.mixins.treemixin as treemixin
 
 
 class TreeModel(object):
+    ''' TreeModel holds the domain objects that are shown in the different
+    tree controls. Each domain object is simply a two-tuple consisting of
+    a label and a list of child tuples, i.e. (label, [list of child tuples]). 
+    '''
     def __init__(self, *args, **kwargs):
         self.items = []
         self.itemCounter = 0
@@ -62,12 +66,17 @@ class DemoTreeMixin(treemixin.VirtualTree, treemixin.DragAndDrop,
         return self.model.GetChildrenCount(indices)
 
     def OnGetItemFont(self, indices):
+        # Show how to change the item font. Here we use a small font for
+        # items that have children and the default font otherwise.
         if self.model.GetChildrenCount(indices) > 0:
             return wx.SMALL_FONT
         else:
             return super(DemoTreeMixin, self).OnGetItemFont(indices)
 
     def OnGetItemTextColour(self, indices):
+        # Show how to change the item text colour. In this case second level
+        # items are coloured red and third level items are blue. All other
+        # items have the default text colour.
         if len(indices) % 2 == 0:
             return wx.RED
         elif len(indices) % 3 == 0:
@@ -76,13 +85,16 @@ class DemoTreeMixin(treemixin.VirtualTree, treemixin.DragAndDrop,
             return super(DemoTreeMixin, self).OnGetItemTextColour(indices)
 
     def OnGetItemBackgroundColour(self, indices):
-        if indices[-1] == len(indices):
+        # Show how to change the item background colour. In this case the
+        # background colour of each third item is green.
+        if indices[-1] == 2:
             return wx.GREEN
         else: 
             return super(DemoTreeMixin, 
                          self).OnGetItemBackgroundColour(indices)
 
     def OnGetItemImage(self, indices, which):
+        # Return the right icon depending on whether the item has children.
         if which in [wx.TreeItemIcon_Normal, wx.TreeItemIcon_Selected]:
             if self.model.GetChildrenCount(indices):
                 return 0
@@ -117,10 +129,13 @@ class VirtualTreeListCtrl(DemoTreeMixin, wx.gizmos.TreeListCtrl):
                                                         (16, 16)))
 
     def OnGetItemText(self, indices, column=0):
+        # Return a different label depending on column.
         return '%s, column %d'%\
             (super(VirtualTreeListCtrl, self).OnGetItemText(indices), column)
 
     def OnGetItemImage(self, indices, which, column=0):
+        # Also change the image of the other columns when the item has 
+        # children.
         if column == 0:
             return super(VirtualTreeListCtrl, self).OnGetItemImage(indices, 
                                                                    which)
@@ -174,19 +189,26 @@ class TreeNotebook(wx.Notebook):
             tree = class_(self, treemodel=treemodel, log=log)
             self.trees.append(tree)
             self.AddPage(tree, title)
-        self.RefreshItems()
+        self.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
+
+    def OnPageChanged(self, event):
+        oldTree = self.GetPage(event.OldSelection)
+        newTree = self.GetPage(event.Selection)
+        newTree.SetExpansionState(oldTree.GetExpansionState())
+        newTree.RefreshItems()
+        event.Skip()
+
+    def GetIndicesOfSelectedItems(self):
+        tree = self.trees[self.GetSelection()]
+        if tree.GetSelections():
+            return [tree.ItemIndices(item) for item in tree.GetSelections()]
+        else:
+            return [()]
 
     def RefreshItems(self):
-        for tree in self.trees:
-            tree.RefreshItems()
-            tree.UnselectAll()
-
-    def GetSelectedItemIndices(self):
         tree = self.trees[self.GetSelection()]
-        if tree.GetSelection():
-            return tree.ItemIndices(tree.GetSelection())
-        else:
-            return []
+        tree.RefreshItems()
+        tree.UnselectAll()
 
 
 class TestPanel(wx.Panel):
@@ -196,7 +218,6 @@ class TestPanel(wx.Panel):
         self.treemodel = TreeModel()
         self.CreateControls()
         self.LayoutControls()
-        self.BindEvents()
 
     def CreateControls(self):
         self.notebook = TreeNotebook(self, treemodel=self.treemodel, 
@@ -204,6 +225,7 @@ class TestPanel(wx.Panel):
         self.label = wx.StaticText(self, label='Number of children: ')
         self.childrenCountCtrl = wx.SpinCtrl(self, value='0', max=10000)
         self.button = wx.Button(self, label='Update children')
+        self.button.Bind(wx.EVT_BUTTON, self.OnEnter)
 
     def LayoutControls(self):
         hSizer = wx.BoxSizer(wx.HORIZONTAL)
@@ -216,26 +238,15 @@ class TestPanel(wx.Panel):
         sizer.Add(hSizer, 0, wx.EXPAND)
         self.SetSizer(sizer)
 
-    def BindEvents(self):
-        self.notebook.Bind(wx.EVT_NOTEBOOK_PAGE_CHANGED, self.OnPageChanged)
-        self.button.Bind(wx.EVT_BUTTON, self.OnEnter)
-
-    def OnPageChanged(self, event):
-        if self.IsBeingDeleted():
-            return
-        oldTree = self.notebook.GetPage(event.OldSelection)
-        newTree = self.notebook.GetPage(event.Selection)
-        newTree.SetExpansionState(oldTree.GetExpansionState())
-        event.Skip()
-
     def OnEnter(self, event):
-        indices = self.notebook.GetSelectedItemIndices()
-        text = self.treemodel.GetText(indices)
-        oldChildrenCount = self.treemodel.GetChildrenCount(indices)
+        indicesList = self.notebook.GetIndicesOfSelectedItems()
         newChildrenCount = self.childrenCountCtrl.GetValue()
-        self.log.write('%s %s now has %d children (was %d)'%(text, indices,
-            newChildrenCount, oldChildrenCount))
-        self.treemodel.SetChildrenCount(indices, newChildrenCount)
+        for indices in indicesList:
+            text = self.treemodel.GetText(indices)
+            oldChildrenCount = self.treemodel.GetChildrenCount(indices)
+            self.log.write('%s %s now has %d children (was %d)'%(text, indices,
+                newChildrenCount, oldChildrenCount))
+            self.treemodel.SetChildrenCount(indices, newChildrenCount)
         self.notebook.RefreshItems()
 
 

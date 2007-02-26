@@ -25,8 +25,8 @@ The VirtualTree and DragAndDrop mixins force the wx.TR_HIDE_ROOT style.
 
 Author: Frank Niessink <frank@niessink.com>
 License: wxWidgets license
-Version: 0.6
-Date: 17 February 2007
+Version: 0.7
+Date: 22 February 2007
 
 ExpansionState is based on code and ideas from Karsten Hilbert.
 Andrea Gavana provided help with the CustomTreeCtrl integration.
@@ -143,7 +143,7 @@ class TreeAPIHarmonizer(object):
         return children
 
     def ItemIndices(self, item):
-        ''' Construct an index typle for item. The root item is () the 
+        ''' Construct an index typle for item. The root item is (), the 
         first child of the root item is (0,), the second child of the 
         root item is (1,), the first child of the first child of the 
         root item is (0, 0), the second child of the first child of the 
@@ -409,8 +409,8 @@ class DragAndDrop(TreeAPIHarmonizer):
 
     def OnBeginDrag(self, event):
         # We allow only one item to be dragged at a time, to keep it simple
-        self._dragItem = self.GetSelections()[0]
-        if self._dragItem: 
+        self._dragItem = event.GetItem()
+        if self._dragItem and self._dragItem != self.GetRootItem(): 
             self.StartDragging()
             event.Allow()
         else:
