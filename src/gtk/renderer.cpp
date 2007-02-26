@@ -533,12 +533,16 @@ wxRendererGTK::DrawItemSelectionRect(wxWindow *win,
                         rect.width,
                         rect.height );
     }
+    else // !wxCONTROL_SELECTED
+    {
+        state = GTK_STATE_NORMAL;
+    }
 
     if (flags & wxCONTROL_CURRENT)
     {
         gtk_paint_focus( win->m_widget->style, 
                          gdk_window,
-                         GTK_STATE_SELECTED,
+                         state,
                          NULL,
                          win->m_wxwindow,
                          "treeview",
