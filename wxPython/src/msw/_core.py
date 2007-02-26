@@ -11574,6 +11574,222 @@ _core_.ControlWithItems_swigregister(ControlWithItems)
 
 #---------------------------------------------------------------------------
 
+class SizerFlags(object):
+    """
+    Normally, when you add an item to a sizer via `wx.Sizer.Add`, you have
+    to specify a lot of flags and parameters which can be unwieldy. This
+    is where wx.SizerFlags comes in: it allows you to specify all
+    parameters using the named methods instead. For example, instead of::
+
+        sizer.Add(ctrl, 0, wx.EXPAND | wx.ALL, 10)
+
+    you can now write::
+
+        sizer.AddF(ctrl, wx.SizerFlags().Expand().Border(10))
+
+    This is more readable and also allows you to create wx.SizerFlags
+    objects which can be reused for several sizer items.::
+
+        flagsExpand = wx.SizerFlags(1)
+        flagsExpand.Expand().Border(10)
+        sizer.AddF(ctrl1, flagsExpand)
+        sizer.AddF(ctrl2, flagsExpand)
+
+    Note that by specification, all methods of wx.SizerFlags return the
+    wx.SizerFlags object itself allowing chaining multiple method calls
+    like in the examples above.
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, int proportion=0) -> SizerFlags
+
+        Constructs the flags object with the specified proportion.
+        """
+        _core_.SizerFlags_swiginit(self,_core_.new_SizerFlags(*args, **kwargs))
+    __swig_destroy__ = _core_.delete_SizerFlags
+    __del__ = lambda self : None;
+    def Proportion(*args, **kwargs):
+        """
+        Proportion(self, int proportion) -> SizerFlags
+
+        Sets the item's proportion value.
+        """
+        return _core_.SizerFlags_Proportion(*args, **kwargs)
+
+    def Align(*args, **kwargs):
+        """
+        Align(self, int alignment) -> SizerFlags
+
+        Sets the item's alignment
+        """
+        return _core_.SizerFlags_Align(*args, **kwargs)
+
+    def Expand(*args, **kwargs):
+        """
+        Expand(self) -> SizerFlags
+
+        Sets the wx.EXPAND flag, which will cause the item to be expanded to
+        fill as much space as it is given by the sizer.
+        """
+        return _core_.SizerFlags_Expand(*args, **kwargs)
+
+    def Centre(*args, **kwargs):
+        """
+        Centre(self) -> SizerFlags
+
+        Same as `Center` for those with an alternate dialect of English.
+        """
+        return _core_.SizerFlags_Centre(*args, **kwargs)
+
+    def Center(*args, **kwargs):
+        """
+        Center(self) -> SizerFlags
+
+        Sets the centering alignment flags.
+        """
+        return _core_.SizerFlags_Center(*args, **kwargs)
+
+    def Left(*args, **kwargs):
+        """
+        Left(self) -> SizerFlags
+
+        Aligns the object to the left, a shortcut for calling
+        Align(wx.ALIGN_LEFT)
+        """
+        return _core_.SizerFlags_Left(*args, **kwargs)
+
+    def Right(*args, **kwargs):
+        """
+        Right(self) -> SizerFlags
+
+        Aligns the object to the right, a shortcut for calling
+        Align(wx.ALIGN_RIGHT)
+        """
+        return _core_.SizerFlags_Right(*args, **kwargs)
+
+    def Top(*args, **kwargs):
+        """
+        Top(self) -> SizerFlags
+
+        Aligns the object to the top of the available space, a shortcut for
+        calling Align(wx.ALIGN_TOP)
+        """
+        return _core_.SizerFlags_Top(*args, **kwargs)
+
+    def Bottom(*args, **kwargs):
+        """
+        Bottom(self) -> SizerFlags
+
+        Aligns the object to the bottom of the available space, a shortcut for
+        calling Align(wx.ALIGN_BOTTOM)
+        """
+        return _core_.SizerFlags_Bottom(*args, **kwargs)
+
+    def Shaped(*args, **kwargs):
+        """
+        Shaped(self) -> SizerFlags
+
+        Sets the wx.SHAPED flag.
+        """
+        return _core_.SizerFlags_Shaped(*args, **kwargs)
+
+    def FixedMinSize(*args, **kwargs):
+        """
+        FixedMinSize(self) -> SizerFlags
+
+        Sets the wx.FIXED_MINSIZE flag.
+        """
+        return _core_.SizerFlags_FixedMinSize(*args, **kwargs)
+
+    def Border(*args, **kwargs):
+        """
+        Border(self, int direction=ALL, int borderInPixels=-1) -> SizerFlags
+
+        Sets the border of the item in the direction(s) or sides given by the
+        direction parameter.  If the borderInPixels value is not given then
+        the default border size (see `GetDefaultBorder`) will be used.
+        """
+        return _core_.SizerFlags_Border(*args, **kwargs)
+
+    def DoubleBorder(*args, **kwargs):
+        """
+        DoubleBorder(self, int direction=ALL) -> SizerFlags
+
+        Sets the border in the given direction to twice the default border
+        size.
+        """
+        return _core_.SizerFlags_DoubleBorder(*args, **kwargs)
+
+    def TripleBorder(*args, **kwargs):
+        """
+        TripleBorder(self, int direction=ALL) -> SizerFlags
+
+        Sets the border in the given direction to three times the default
+        border size.
+        """
+        return _core_.SizerFlags_TripleBorder(*args, **kwargs)
+
+    def HorzBorder(*args, **kwargs):
+        """
+        HorzBorder(self) -> SizerFlags
+
+        Sets the left and right borders to the default border size.
+        """
+        return _core_.SizerFlags_HorzBorder(*args, **kwargs)
+
+    def DoubleHorzBorder(*args, **kwargs):
+        """
+        DoubleHorzBorder(self) -> SizerFlags
+
+        Sets the left and right borders to twice the default border size.
+        """
+        return _core_.SizerFlags_DoubleHorzBorder(*args, **kwargs)
+
+    def GetDefaultBorder(*args, **kwargs):
+        """
+        GetDefaultBorder() -> int
+
+        Returns the default border size used by the other border methods
+        """
+        return _core_.SizerFlags_GetDefaultBorder(*args, **kwargs)
+
+    GetDefaultBorder = staticmethod(GetDefaultBorder)
+    def GetProportion(*args, **kwargs):
+        """
+        GetProportion(self) -> int
+
+        Returns the proportion value to be used in the sizer item.
+        """
+        return _core_.SizerFlags_GetProportion(*args, **kwargs)
+
+    def GetFlags(*args, **kwargs):
+        """
+        GetFlags(self) -> int
+
+        Returns the flags value to be used in the sizer item.
+        """
+        return _core_.SizerFlags_GetFlags(*args, **kwargs)
+
+    def GetBorderInPixels(*args, **kwargs):
+        """
+        GetBorderInPixels(self) -> int
+
+        Returns the border value in pixels to be used in the sizer item.
+        """
+        return _core_.SizerFlags_GetBorderInPixels(*args, **kwargs)
+
+_core_.SizerFlags_swigregister(SizerFlags)
+
+def SizerFlags_GetDefaultBorder(*args):
+  """
+    SizerFlags_GetDefaultBorder() -> int
+
+    Returns the default border size used by the other border methods
+    """
+  return _core_.SizerFlags_GetDefaultBorder(*args)
+
 class SizerItem(Object):
     """
     The wx.SizerItem class is used to track the position, size and other
@@ -11969,6 +12185,15 @@ class Sizer(Object):
         """
         return _core_.Sizer_Add(*args, **kwargs)
 
+    def AddF(*args, **kwargs):
+        """
+        AddF(self, item, wx.SizerFlags flags) -> wx.SizerItem
+
+        Similar to `Add` but uses the `wx.SizerFlags` convenience class for
+        setting the various flags, options and borders.
+        """
+        return _core_.Sizer_AddF(*args, **kwargs)
+
     def Insert(*args, **kwargs):
         """
         Insert(self, int before, item, int proportion=0, int flag=0, int border=0,
@@ -11979,6 +12204,15 @@ class Sizer(Object):
         """
         return _core_.Sizer_Insert(*args, **kwargs)
 
+    def InsertF(*args, **kwargs):
+        """
+        InsertF(self, int before, item, wx.SizerFlags flags) -> wx.SizerItem
+
+        Similar to `Insert`, but uses the `wx.SizerFlags` convenience class
+        for setting the various flags, options and borders.
+        """
+        return _core_.Sizer_InsertF(*args, **kwargs)
+
     def Prepend(*args, **kwargs):
         """
         Prepend(self, item, int proportion=0, int flag=0, int border=0,
@@ -11988,6 +12222,15 @@ class Sizer(Object):
         this sizer.  See `Add` for a description of the parameters.
         """
         return _core_.Sizer_Prepend(*args, **kwargs)
+
+    def PrependF(*args, **kwargs):
+        """
+        PrependF(self, item, wx.SizerFlags flags) -> wx.SizerItem
+
+        Similar to `Prepend` but uses the `wx.SizerFlags` convenience class
+        for setting the various flags, options and borders.
+        """
+        return _core_.Sizer_PrependF(*args, **kwargs)
 
     def Remove(*args, **kwargs):
         """

@@ -16,6 +16,18 @@ module) and also as a non mix-in tool (using wx.lib.inspect.InspectionTool).
 
 Add wx.lib.mixins.treemixin from Frank Niessink.
 
+Added the wx.SizerFlags class, and also added AddF, InsertF and
+PrependF methods to wx.Sizer.  The wxSizerFlags class provides a
+convienient and easier to read way to add items to a sizer.  For
+example, instead of writing::
+
+    sizer.Add(ctrl, 0, wx.EXPAND | wx.ALL, 10)
+
+you can now write::
+
+    sizer.AddF(ctrl, wx.SizerFlags().Expand().Border(10))
+
+
 
 
 
