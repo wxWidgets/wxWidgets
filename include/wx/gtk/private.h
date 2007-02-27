@@ -28,14 +28,22 @@
     #define wxGTK_CONV_ENC(s, enc) wxGTK_CONV((s))
     #define wxGTK_CONV_FONT(s, font) wxGTK_CONV((s))
     #define wxGTK_CONV_SYS(s) wxGTK_CONV((s))
+
     #define wxGTK_CONV_BACK(s) wxConvUTF8.cMB2WX((s))
+    #define wxGTK_CONV_BACK_ENC(s, enc) wxGTK_CONV_BACK(s)
+    #define wxGTK_CONV_BACK_FONT(s, font) wxGTK_CONV_BACK(s)
+    #define wxGTK_CONV_BACK_SYS(s) wxGTK_CONV_BACK(s)
 #else
     #include "wx/font.h"
 
-    // convert the text in given encoding to UTF-8 used by wxGTK
+    // convert the text between the given encoding and UTF-8 used by wxGTK
     extern wxCharBuffer
     wxConvertToGTK(const wxString& s,
                    wxFontEncoding enc = wxFONTENCODING_SYSTEM);
+
+    extern wxCharBuffer
+    wxConvertFromGTK(const wxString& s,
+                     wxFontEncoding enc = wxFONTENCODING_SYSTEM);
 
     // helper: use the encoding of the given font if it's valid
     inline wxCharBuffer wxConvertToGTK(const wxString& s, const wxFont& font)
@@ -44,11 +52,35 @@
                                            : wxFONTENCODING_SYSTEM);
     }
 
+    inline wxCharBuffer wxConvertFromGTK(const wxString& s, const wxFont& font)
+    {
+        return wxConvertFromGTK(s, font.Ok() ? font.GetEncoding()
+                                             : wxFONTENCODING_SYSTEM);
+    }
+
+    // more helpers: allow passing GTK+ strings directly
+    inline wxCharBuffer
+    wxConvertFromGTK(const wxGtkString& gs,
+                     wxFontEncoding enc = wxFONTENCODING_SYSTEM)
+    {
+        return wxConvertFromGTK(gs.c_str(), enc);
+    }
+
+    inline wxCharBuffer
+    wxConvertFromGTK(const wxGtkString& gs, const wxFont& font)
+    {
+        return wxConvertFromGTK(gs.c_str(), font);
+    }
+
+    #define wxGTK_CONV(s) wxGTK_CONV_FONT((s), m_font)
     #define wxGTK_CONV_ENC(s, enc) wxConvertToGTK((s), (enc))
     #define wxGTK_CONV_FONT(s, font) wxConvertToGTK((s), (font))
-    #define wxGTK_CONV(s) wxGTK_CONV_FONT((s), m_font)
     #define wxGTK_CONV_SYS(s) wxConvertToGTK((s))
-    #define wxGTK_CONV_BACK(s)  wxConvLocal.cWC2WX(wxConvUTF8.cMB2WC((s)))
+
+    #define wxGTK_CONV_BACK(s) wxConvertFromGTK((s), m_font)
+    #define wxGTK_CONV_BACK_ENC(s, enc) wxConvertFromGTK((s), (enc))
+    #define wxGTK_CONV_BACK_FONT(s, font) wxConvertFromGTK((s), (font))
+    #define wxGTK_CONV_BACK_SYS(s) wxConvertFromGTK((s))
 #endif
 
 // Some deprecated GTK+ prototypes we still use often

@@ -209,6 +209,17 @@ wxCharBuffer wxConvertToGTK(const wxString& s, wxFontEncoding enc)
     return wxConvUTF8.cWC2MB(wbuf);
 }
 
+wxCharBuffer wxConvertFromGTK(const wxString& s, wxFontEncoding enc)
+{
+    // this conversion should never fail as GTK+ always uses UTF-8 internally
+    // so there are no complications here
+    const wxWCharBuffer wbuf(wxConvUTF8.cMB2WC(s));
+    if ( enc == wxFONTENCODING_SYSTEM )
+        return wxConvUI->cWC2MB(wbuf);
+
+    return wxCSConv(enc).cWC2MB(wbuf);
+}
+
 #endif // !wxUSE_UNICODE
 
 // ----------------------------------------------------------------------------

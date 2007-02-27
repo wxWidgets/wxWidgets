@@ -136,9 +136,7 @@ bool wxNativeFontInfo::GetUnderlined() const
 
 wxString wxNativeFontInfo::GetFaceName() const
 {
-    wxString tmp = wxGTK_CONV_BACK( pango_font_description_get_family( description ) );
-
-    return tmp;
+    return wxGTK_CONV_BACK_SYS(pango_font_description_get_family(description));
 }
 
 wxFontFamily wxNativeFontInfo::GetFamily() const
@@ -327,7 +325,7 @@ wxString wxNativeFontInfo::ToString() const
 {
     wxGtkString str(pango_font_description_to_string( description ));
 
-    return wxGTK_CONV_BACK(str);
+    return wxGTK_CONV_BACK_SYS(str);
 }
 
 bool wxNativeFontInfo::FromUserString(const wxString& s)

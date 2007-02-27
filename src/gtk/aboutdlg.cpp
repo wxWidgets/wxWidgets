@@ -93,7 +93,7 @@ wxGtkAboutDialogOnLink(GtkAboutDialog * WXUNUSED(about),
                        const gchar *link,
                        gpointer WXUNUSED(data))
 {
-    wxLaunchDefaultBrowser(wxGTK_CONV_BACK(link));
+    wxLaunchDefaultBrowser(wxGTK_CONV_BACK_SYS(link));
 }
 
 void wxAboutBox(const wxAboutDialogInfo& info)
