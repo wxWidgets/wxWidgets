@@ -4,7 +4,7 @@ wx.GraphicsContext.
 """
 
 import wx
-import os; print "PID:", os.getpid(); raw_input("Press Enter...")
+#import os; print "PID:", os.getpid(); raw_input("Press Enter...")
 
 
 class TestPanel(wx.Panel):
