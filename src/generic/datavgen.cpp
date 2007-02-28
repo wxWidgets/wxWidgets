@@ -1004,7 +1004,7 @@ wxDataViewHeaderWindowMSW::~wxDataViewHeaderWindow()
 void wxDataViewHeaderWindowMSW::UpdateDisplay()
 {
     // remove old columns
-    for (int i=0, max=Header_GetItemCount((HWND)m_hWnd); i < max; i++)
+    for (int j=0, max=Header_GetItemCount((HWND)m_hWnd); j < max; j++)
         Header_DeleteItem((HWND)m_hWnd, 0);
     
     // add the updated array of columns to the header control
