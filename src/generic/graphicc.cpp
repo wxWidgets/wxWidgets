@@ -37,6 +37,7 @@
 #endif
 
 #include "wx/graphics.h"
+#include "wx/rawbmp.h"
 
 #if wxUSE_GRAPHICS_CONTEXT
 
@@ -1145,20 +1146,107 @@ void wxCairoContext::PopState()
 
 void wxCairoContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
-    /*
-        Bitmap* image = Bitmap::FromHBITMAP((HBITMAP)bmp.GetHBITMAP(),(HPALETTE)bmp.GetPalette()->GetHPALETTE());
-        m_context->DrawImage(image,(REAL) x,(REAL) y,(REAL) w,(REAL) h) ;
-        delete image ;
-    */
+    wxCHECK_RET( bmp.IsOk(), wxT("Invalid bitmap in wxCairoContext::DrawBitmap"));
+
+    cairo_surface_t* surface;
+    int bw = bmp.GetWidth();
+    int bh = bmp.GetHeight();
+    wxBitmap bmpSource = bmp;  // we need a non-const instance
+    
+    // Create a surface object and copy the bitmap pixel data to it.
+    if (bmpSource.HasAlpha() || bmpSource.GetMask())
+    {
+        surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, bw, bh);
+        wxUint32* data = (wxUint32*)cairo_image_surface_get_data(surface);
+        wxAlphaPixelData pixData(bmpSource, wxPoint(0,0), wxSize(bw, bh));
+        wxCHECK_RET( pixData, wxT("Failed to gain raw access to bitmap data."));
+        
+        wxAlphaPixelData::Iterator p(pixData);
+        for (int y=0; y<bh; y++)
+        {
+            wxAlphaPixelData::Iterator rowStart = p;
+            for (int x=0; x<bw; x++)
+            {
+                // Each pixel in CAIRO_FORMAT_ARGB32 is a 32-bit quantity,
+                // with alpha in the upper 8 bits, then red, then green, then
+                // blue. The 32-bit quantities are stored native-endian.
+                // Pre-multiplied alpha is used.
+                unsigned char alpha = p.Alpha();
+                if (alpha == 0)
+                    *data = 0;
+                else
+                    *data = ( alpha                      << 24 
+                              | (p.Red() * alpha/255)    << 16 
+                              | (p.Green() * alpha/255)  <<  8 
+                              | (p.Blue() * alpha/255) );
+                ++data;
+                ++p;
+            }
+            p = rowStart;
+            p.OffsetY(pixData, 1);
+        }        
+    }
+    else
+    {
+        wxImage img = bmpSource.ConvertToImage();
+        surface = cairo_image_surface_create_for_data(
+            img.GetData(), CAIRO_FORMAT_RGB24, bw, bh, bw*3);
+        
+        surface = cairo_image_surface_create(CAIRO_FORMAT_RGB24, bw, bh);
+        wxUint32* data = (wxUint32*)cairo_image_surface_get_data(surface);
+        wxNativePixelData pixData(bmpSource, wxPoint(0,0), wxSize(bw, bh));
+        wxCHECK_RET( pixData, wxT("Failed to gain raw access to bitmap data."));
+        
+        wxNativePixelData::Iterator p(pixData);
+        for (int y=0; y<bh; y++)
+        {
+            wxNativePixelData::Iterator rowStart = p;
+            for (int x=0; x<bw; x++)
+            {
+                // Each pixel in CAIRO_FORMAT_RGB24 is a 32-bit quantity, with
+                // the upper 8 bits unused. Red, Green, and Blue are stored in
+                // the remaining 24 bits in that order.  The 32-bit quantities
+                // are stored native-endian.
+                *data = ( p.Red() << 16 | p.Green() << 8 | p.Blue() );
+                ++data;
+                ++p;
+            }
+            p = rowStart;
+            p.OffsetY(pixData, 1);
+        }        
+    }
+
+    
+    PushState();
+    
+    // In case we're scaling the image by using a width and height different
+    // than the bitmap's size create a pattern transformation on the surface and
+    // draw the transformed pattern.
+    cairo_pattern_t* pattern = cairo_pattern_create_for_surface(surface);
+    wxDouble scaleX = w / bw;
+    wxDouble scaleY = h / bh;
+    cairo_scale(m_context, scaleX, scaleY);
+
+    // prepare to draw the image
+    cairo_translate(m_context, x, y);
+    cairo_set_source(m_context, pattern);
+    // use the original size here since the context is scaled already...
+    cairo_rectangle(m_context, 0, 0, bw, bh);
+    // fill the rectangle using the pattern
+    cairo_fill(m_context);
+
+    // clean up
+    cairo_pattern_destroy(pattern);
+    cairo_surface_destroy(surface);
+    PopState();
 }
 
 void wxCairoContext::DrawIcon( const wxIcon &icon, wxDouble x, wxDouble y, wxDouble w, wxDouble h )
 {
-    /*
-        Bitmap* image = Bitmap::FromHICON((HICON)icon.GetHICON());
-        m_context->DrawImage(image,(REAL) x,(REAL) y,(REAL) w,(REAL) h) ;
-        delete image ;
-    */
+    // An icon is a bitmap on wxGTK, so do this the easy way.  When we want to
+    // start using the Cairo backend on other platforms then we may need to
+    // fiddle with this...
+    DrawBitmap(icon, x, y, w, h);
 }
 
 
