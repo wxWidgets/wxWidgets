@@ -18,8 +18,9 @@ Add wx.lib.mixins.treemixin from Frank Niessink.
 
 Added the wx.SizerFlags class, and also added AddF, InsertF and
 PrependF methods to wx.Sizer.  The wxSizerFlags class provides a
-convienient and easier to read way to add items to a sizer.  For
-example, instead of writing::
+convienient and easier to read way to add items to a sizer.  It was
+added as a new set of methods of the wx.Sizer class so as to not
+disturb existing code.  For example, instead of writing::
 
     sizer.Add(ctrl, 0, wx.EXPAND | wx.ALL, 10)
 
@@ -27,6 +28,9 @@ you can now write::
 
     sizer.AddF(ctrl, wx.SizerFlags().Expand().Border(10))
 
+
+Will Sadkin provided a patch for the wx.lib.masked package that fixes
+its support for using the navigation keys on the numeric keypad.
 
 
 
