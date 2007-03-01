@@ -4304,14 +4304,14 @@ SWIGINTERN bool wxSizer_Detach(wxSizer *self,PyObject *item){
             else
                 return false;
         }
-SWIGINTERN wxSizerItem *wxSizer_GetItem(wxSizer *self,PyObject *item){
+SWIGINTERN wxSizerItem *wxSizer_GetItem(wxSizer *self,PyObject *item,bool recursive=false){
             wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
             wxPyEndBlockThreads(blocked);
             if ( info.window )
-                return self->GetItem(info.window);
+                return self->GetItem(info.window, recursive);
             else if ( info.sizer )
-                return self->GetItem(info.sizer);
+                return self->GetItem(info.sizer, recursive);
             else if ( info.gotPos )
                 return self->GetItem(info.pos);
             else
@@ -51059,25 +51059,36 @@ SWIGINTERN PyObject *_wrap_Sizer_GetItem(PyObject *SWIGUNUSEDPARM(self), PyObjec
   PyObject *resultobj = 0;
   wxSizer *arg1 = (wxSizer *) 0 ;
   PyObject *arg2 = (PyObject *) 0 ;
+  bool arg3 = (bool) false ;
   wxSizerItem *result = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
+  bool val3 ;
+  int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "item", NULL 
+    (char *) "self",(char *) "item",(char *) "recursive", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Sizer_GetItem",kwnames,&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:Sizer_GetItem",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxSizer, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Sizer_GetItem" "', expected argument " "1"" of type '" "wxSizer *""'"); 
   }
   arg1 = reinterpret_cast< wxSizer * >(argp1);
   arg2 = obj1;
+  if (obj2) {
+    ecode3 = SWIG_AsVal_bool(obj2, &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Sizer_GetItem" "', expected argument " "3"" of type '" "bool""'");
+    } 
+    arg3 = static_cast< bool >(val3);
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxSizerItem *)wxSizer_GetItem(arg1,arg2);
+    result = (wxSizerItem *)wxSizer_GetItem(arg1,arg2,arg3);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }

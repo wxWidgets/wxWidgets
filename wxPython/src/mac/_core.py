@@ -12255,7 +12255,7 @@ class Sizer(Object):
 
     def GetItem(*args, **kwargs):
         """
-        GetItem(self, item) -> wx.SizerItem
+        GetItem(self, item, recursive=False) -> wx.SizerItem
 
         Returns the `wx.SizerItem` which holds the *item* given.  The *item*
         parameter can be either a window, a sizer, or the zero-based index of

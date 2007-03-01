@@ -903,18 +903,18 @@ was found and detached.", "");
 
 
         DocAStr(GetItem,
-                "GetItem(self, item) -> wx.SizerItem",
+                "GetItem(self, item, recursive=False) -> wx.SizerItem",
                 "Returns the `wx.SizerItem` which holds the *item* given.  The *item*
 parameter can be either a window, a sizer, or the zero-based index of
 the item to be found.", "");
-        wxSizerItem* GetItem(PyObject* item) {
+        wxSizerItem* GetItem(PyObject* item, bool recursive=false) {
             wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
             wxPyEndBlockThreads(blocked);
             if ( info.window )
-                return self->GetItem(info.window);
+                return self->GetItem(info.window, recursive);
             else if ( info.sizer )
-                return self->GetItem(info.sizer);
+                return self->GetItem(info.sizer, recursive);
             else if ( info.gotPos )
                 return self->GetItem(info.pos);
             else
