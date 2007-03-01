@@ -32,6 +32,9 @@ you can now write::
 Will Sadkin provided a patch for the wx.lib.masked package that fixes
 its support for using the navigation keys on the numeric keypad.
 
+wx.lib.plot: patch #1663937 to allow user to turn off scientific
+notation on plot.
+
 
 
 
