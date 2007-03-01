@@ -5516,7 +5516,8 @@ class GraphicsContext(GraphicsObject):
 
         Creates a wx.GraphicsContext from a native context. This native
         context must be eg a CGContextRef for Core Graphics, a Graphics
-        pointer for GDIPlus or a cairo_t pointer for Cairo.
+        pointer for GDIPlus or a cairo_t pointer for Cairo.  NOTE: For
+        wxPython we still need a way to make this value usable.
         """
         return _gdi_.GraphicsContext_CreateFromNative(*args, **kwargs)
 
@@ -5525,7 +5526,8 @@ class GraphicsContext(GraphicsObject):
         """
         CreateFromNativeWindow(void window) -> GraphicsContext
 
-        Creates a wx.GraphicsContext from a native window.
+        Creates a wx.GraphicsContext from a native window.  NOTE: For wxPython
+        we still need a way to make this value usable.
         """
         return _gdi_.GraphicsContext_CreateFromNativeWindow(*args, **kwargs)
 
@@ -5844,7 +5846,7 @@ class GraphicsContext(GraphicsObject):
 
     def StrokeLineSegements(*args, **kwargs):
         """
-        StrokeLineSegements(self, PyObject beginPoints, PyObject endPoints)
+        StrokeLineSegments(self, List beginPoints, List endPoints)
 
         Stroke disconnected lines from begin to end points
         """
@@ -5925,7 +5927,8 @@ def GraphicsContext_CreateFromNative(*args, **kwargs):
 
     Creates a wx.GraphicsContext from a native context. This native
     context must be eg a CGContextRef for Core Graphics, a Graphics
-    pointer for GDIPlus or a cairo_t pointer for Cairo.
+    pointer for GDIPlus or a cairo_t pointer for Cairo.  NOTE: For
+    wxPython we still need a way to make this value usable.
     """
   return _gdi_.GraphicsContext_CreateFromNative(*args, **kwargs)
 
@@ -5933,7 +5936,8 @@ def GraphicsContext_CreateFromNativeWindow(*args, **kwargs):
   """
     GraphicsContext_CreateFromNativeWindow(void window) -> GraphicsContext
 
-    Creates a wx.GraphicsContext from a native window.
+    Creates a wx.GraphicsContext from a native window.  NOTE: For wxPython
+    we still need a way to make this value usable.
     """
   return _gdi_.GraphicsContext_CreateFromNativeWindow(*args, **kwargs)
 
