@@ -72,15 +72,13 @@ def main(args=sys.argv):
         print "Adding %s..." % helpfile
         helpctrl.AddBook(helpfile, 1)
 
-    # on Mac a menubar and About box are added for HIG compliance, but
-    # the frame used by the HtmlHelpController is set to not prevent
-    # app exit.  So in the case of a standalone helpviewer like this
-    # when the about box is closed that frame will be the only one
-    # left and the app will close unexpectedly.  To work around this
-    # we'll create another frame that is never shown, but which will
-    # be closed when the helpviewer frame is closed.
-    if "wxMac" in wx.PlatformInfo:
-        wx.CallAfter(makeOtherFrame, helpctrl)
+    # The frame used by the HtmlHelpController is set to not prevent
+    # app exit, so in the case of a standalone helpviewer like this
+    # when the about box or search box is closed the help frame will
+    # be the only one left and the app will close unexpectedly.  To
+    # work around this we'll create another frame that is never shown,
+    # but which will be closed when the helpviewer frame is closed.
+    wx.CallAfter(makeOtherFrame, helpctrl)
 
     # start it up!
     helpctrl.DisplayContents()
