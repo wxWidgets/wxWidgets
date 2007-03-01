@@ -203,8 +203,12 @@ public:
 
   // we have to provide a separate version for C strings as otherwise they
   // would be converted to bool and not to wxString as expected!
-  bool Write(const wxString& key, const wxChar *value)
+  bool Write(const wxString& key, const char *value)
     { return Write(key, wxString(value)); }
+#if wxUSE_WCHAR_T
+  bool Write(const wxString& key, const wchar_t *value)
+    { return Write(key, wxString(value)); }
+#endif
 
   // permanently writes all changes
   virtual bool Flush(bool bCurrentOnly = false) = 0;

@@ -328,12 +328,12 @@ wxString wxFileConfig::GetLocalDir()
     return strDir;
 }
 
-wxString wxFileConfig::GetGlobalFileName(const wxChar *szFile)
+wxString wxFileConfig::GetGlobalFileName(const wxString& file)
 {
     wxString str = GetGlobalDir();
-    str << szFile;
+    str << file;
 
-    if ( wxStrchr(szFile, wxT('.')) == NULL )
+    if ( wxStrchr(file, wxT('.')) == NULL )
 #if defined( __WXMAC__ )
         str << wxT(" Preferences") ;
 #elif defined( __UNIX__ )
@@ -345,7 +345,7 @@ wxString wxFileConfig::GetGlobalFileName(const wxChar *szFile)
     return str;
 }
 
-wxString wxFileConfig::GetLocalFileName(const wxChar *szFile)
+wxString wxFileConfig::GetLocalFileName(const wxString& file)
 {
 #ifdef __VMS__
     // On VMS I saw the problem that the home directory was appended
@@ -360,10 +360,10 @@ wxString wxFileConfig::GetLocalFileName(const wxChar *szFile)
     str << wxT('.');
 #endif
 
-    str << szFile;
+    str << file;
 
 #if defined(__WINDOWS__) || defined(__DOS__)
-    if ( wxStrchr(szFile, wxT('.')) == NULL )
+    if ( wxStrchr(file, wxT('.')) == NULL )
         str << wxT(".ini");
 #endif
 
