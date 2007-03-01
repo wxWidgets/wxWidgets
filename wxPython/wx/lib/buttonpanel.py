@@ -1765,7 +1765,8 @@ class ButtonPanel(wx.PyPanel):
             self.RepaintOldSelection()
         
         if btn.GetRect().Contains(event.GetPosition()):
-            btn.SetStatus("Hover")
+            if btn.GetStatus() != "Pressed":
+                btn.SetStatus("Hover")
         else:
             btn.SetStatus("Normal")
 
