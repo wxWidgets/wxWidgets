@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------
-# Name:        wxPython.tools.helpviewer
+# Name:        wx.tools.helpviewer
 # Purpose:     HTML Help viewer
 #
 # Author:      Robin Dunn
