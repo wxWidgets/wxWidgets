@@ -676,7 +676,7 @@ class Bitmap(GDIObject):
         CopyFromBuffer(self, buffer data)
 
         Copy data from a RGB buffer object to replace the bitmap pixel data.
-        See `wxBitmapFromBuffer` for more .
+        See `wx.BitmapFromBuffer` for more .
         """
         return _gdi_.Bitmap_CopyFromBuffer(*args, **kwargs)
 
@@ -685,7 +685,7 @@ class Bitmap(GDIObject):
         CopyFromBufferRGBA(self, buffer data)
 
         Copy data from a RGBA buffer object to replace the bitmap pixel data.
-        See `wxBitmapFromBufferRGBA` for more .
+        See `wx.BitmapFromBufferRGBA` for more .
         """
         return _gdi_.Bitmap_CopyFromBufferRGBA(*args, **kwargs)
 
