@@ -109,7 +109,7 @@ public:
 
     // we don't want to prevent the app from closing just because a help window
     // remains opened
-    virtual bool ShouldPreventAppExit() const { return false; }
+    virtual bool ShouldPreventAppExit() const;
 
 protected:
     void Init(wxHtmlHelpData* data = NULL);

@@ -84,6 +84,8 @@ bool MyApp::OnInit()
 
     help -> DisplayContents();
 
+    SetTopWindow(help->GetFrame());
+
     return true;
 }
 
