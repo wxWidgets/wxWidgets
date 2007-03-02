@@ -3,7 +3,7 @@
 # Inspired By And Heavily Based On wxGenericTreeCtrl.
 #
 # Andrea Gavana, @ 17 May 2006
-# Latest Revision: 26 May 2006, 22.30 CET
+# Latest Revision: 02 Mar 2007, 22.30 CET
 #
 #
 # TODO List
@@ -134,8 +134,8 @@ CustomTreeCtrl has been tested on the following platforms:
   * Mac OS (Thanks to John Jackson).
 
 
-Latest Revision: Andrea Gavana @ 26 May 2006, 22.30 CET
-Version 0.8
+Latest Revision: Andrea Gavana @ 02 Mar 2007, 22.30 CET
+Version 0.9
 
 """
 
@@ -1736,7 +1736,7 @@ def EventFlagsToSelType(style, shiftDown=False, ctrlDown=False):
 class CustomTreeCtrl(wx.PyScrolledWindow):
 
     def __init__(self, parent, id=wx.ID_ANY, pos=wx.DefaultPosition, size=wx.DefaultSize,
-                 style=0, ctstyle=TR_DEFAULT_STYLE, validator=wx.DefaultValidator,
+                 style=TR_DEFAULT_STYLE, ctstyle=0, validator=wx.DefaultValidator,
                  name="CustomTreeCtrl"):
         """
         Default class constructor.
@@ -1749,9 +1749,8 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
 
         size: window size. If the default size (-1, -1) is specified then the window is sized appropriately.
 
-        style: the underlying wx.ScrolledWindow style
+        style: the underlying wx.ScrolledWindow style + CustomTreeCtrl window style. This can be one of:
         
-        ctstyle: CustomTreeCtrl window style. This can be one of:
             TR_NO_BUTTONS
             TR_HAS_BUTTONS                          # draw collapsed/expanded btns
             TR_NO_LINES                             # don't draw lines at all
@@ -1769,10 +1768,14 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
             TR_AUTO_CHECK_PARENT                    # only meaningful for checkboxes
             TR_AUTO_TOGGLE_CHILD                    # only meaningful for checkboxes
 
+        ctstyle: kept for backward compatibility.
+        
         validator: window validator.
 
         name: window name.
         """
+
+        style = style | ctstyle
         
         self._current = self._key_current = self._anchor = self._select_me = None
         self._hasFocus = False
@@ -1873,14 +1876,14 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         self._itemWithWindow = []
         
         if wx.Platform == "__WXMAC__":
-            ctstyle &= ~TR_LINES_AT_ROOT
-            ctstyle |= TR_NO_LINES
+            style &= ~TR_LINES_AT_ROOT
+            style |= TR_NO_LINES
             
             platform, major, minor = wx.GetOsVersion()
             if major < 10:
-                ctstyle |= TR_ROW_LINES
+                style |= TR_ROW_LINES
 
-        self._windowStyle = ctstyle
+        self._windowStyle = style
 
         # Create the default check image list        
         self.SetImageListCheck(13, 13)
@@ -3467,8 +3470,8 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         self.ProcessEvent(event)
 
 
-    def ExpandAll(self, item):
-        """Expands all the items."""
+    def ExpandAllChildren(self, item):
+        """Expands all the items children of the input item."""
 
         if not item:
             raise Exception("\nERROR: Invalid Tree Item. ")
@@ -3481,9 +3484,16 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         child, cookie = self.GetFirstChild(item)
         
         while child:
-            self.ExpandAll(child)
+            self.ExpandAllChildren(child)
             child, cookie = self.GetNextChild(item, cookie)
         
+
+    def ExpandAll(self):
+        """Expands all CustomTreeCtrl items."""
+
+        if self._anchor:
+            self.ExpandAllChildren(self._anchor)
+            
 
     def Collapse(self, item):
         """
@@ -3578,7 +3588,8 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         # the tree might not have the root item at all
         if rootItem:
             self.UnselectAllChildren(rootItem)
-        
+
+        self.Unselect()        
 
     # Recursive function !
     # To stop we must have crt_item<last_item
@@ -5734,4 +5745,6 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         attr.font  = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
         return attr
 
+    GetClassDefaultAttributes = classmethod(GetClassDefaultAttributes)
 
+    

@@ -40,6 +40,23 @@ have been done.  This includes implementations for GetTextExtent,
 Clip, DrawBitmap, fixing the drawing position of text to be at the
 upper left corner instead of the baseline, etc.
 
+wx.lib.customtreectrl patches from Andrea:
+
+  1. ExpandAll has been renamed as ExpandAllChildren, and the new
+     ExpandAll now takes no input arguments (consistent with
+     wx.TreeCtrl)
+
+  2. ctstyle keyword is now defaulted to 0: every style related to
+     CustomTreeCtrl and the underlying wx.PyScrolledWindow should be
+     declared using the keyword "style" only. For backward
+     compatibility, ctstyle continues to work as I merged ctstyle and
+     style in the __init__ method.
+
+  3. GetClassDefaultAttributes is now a classmethod.
+
+  4. UnselectAll bug fixed.
+
+
 
 
 
