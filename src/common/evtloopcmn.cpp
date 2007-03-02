@@ -32,7 +32,7 @@
 
 // see the comment near the declaration of wxRunningEventLoopCount in
 // src/msw/thread.cpp for the explanation of this hack
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && wxUSE_THREADS
 
 extern WXDLLIMPEXP_DATA_BASE(int) wxRunningEventLoopCount;
 struct wxRunningEventLoopCounter
