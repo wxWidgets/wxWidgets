@@ -1152,12 +1152,16 @@ void wxCairoContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wx
     int bw = bmp.GetWidth();
     int bh = bmp.GetHeight();
     wxBitmap bmpSource = bmp;  // we need a non-const instance
+    unsigned char* buffer = new unsigned char[bw*bh*4];
+    wxUint32* data = (wxUint32*)buffer;
     
-    // Create a surface object and copy the bitmap pixel data to it.
+    // Create a surface object and copy the bitmap pixel data to it.  if the
+    // image has alpha (or a mask represented as alpha) then we'll use a
+    // different format and iterator than if it doesn't...
     if (bmpSource.HasAlpha() || bmpSource.GetMask())
     {
-        surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, bw, bh);
-        wxUint32* data = (wxUint32*)cairo_image_surface_get_data(surface);
+        surface = cairo_image_surface_create_for_data(
+            buffer, CAIRO_FORMAT_ARGB32, bw, bh, bw*4);
         wxAlphaPixelData pixData(bmpSource, wxPoint(0,0), wxSize(bw, bh));
         wxCHECK_RET( pixData, wxT("Failed to gain raw access to bitmap data."));
         
@@ -1186,14 +1190,10 @@ void wxCairoContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wx
             p.OffsetY(pixData, 1);
         }        
     }
-    else
+    else  // no alpha
     {
-        wxImage img = bmpSource.ConvertToImage();
         surface = cairo_image_surface_create_for_data(
-            img.GetData(), CAIRO_FORMAT_RGB24, bw, bh, bw*3);
-        
-        surface = cairo_image_surface_create(CAIRO_FORMAT_RGB24, bw, bh);
-        wxUint32* data = (wxUint32*)cairo_image_surface_get_data(surface);
+            buffer, CAIRO_FORMAT_RGB24, bw, bh, bw*4);
         wxNativePixelData pixData(bmpSource, wxPoint(0,0), wxSize(bw, bh));
         wxCHECK_RET( pixData, wxT("Failed to gain raw access to bitmap data."));
         
@@ -1238,6 +1238,7 @@ void wxCairoContext::DrawBitmap( const wxBitmap &bmp, wxDouble x, wxDouble y, wx
     // clean up
     cairo_pattern_destroy(pattern);
     cairo_surface_destroy(surface);
+    delete [] buffer;
     PopState();
 }
 
