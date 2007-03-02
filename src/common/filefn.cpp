@@ -1280,9 +1280,9 @@ bool wxRmdir(const wxString& dir, int WXUNUSED(flags))
 }
 
 // does the path exists? (may have or not '/' or '\\' at the end)
-bool wxDirExists(const wxChar *pszPathName)
+bool wxDirExists(const wxString& pathName)
 {
-    wxString strPath(pszPathName);
+    wxString strPath(pathName);
 
 #if defined(__WINDOWS__) || defined(__OS2__)
     // Windows fails to find directory named "c:\dir\" even if "c:\dir" exists,
@@ -1326,7 +1326,7 @@ bool wxDirExists(const wxChar *pszPathName)
     return wxStat(strPath.c_str(), &st) == 0 && ((st.st_mode & S_IFMT) == S_IFDIR);
 #else
     // S_IFMT not supported in VA compilers.. st_mode is a 2byte value only
-    return wxStat(pszPathName, &st) == 0 && (st.st_mode == S_IFDIR);
+    return wxStat(strPath.c_str(), &st) == 0 && (st.st_mode == S_IFDIR);
 #endif
 
 #endif // __WIN32__/!__WIN32__

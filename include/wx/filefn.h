@@ -452,7 +452,7 @@ const int wxInvalidOffset = -1;
 WXDLLIMPEXP_BASE bool wxFileExists(const wxString& filename);
 
 // does the path exist? (may have or not '/' or '\\' at the end)
-WXDLLIMPEXP_BASE bool wxDirExists(const wxChar *pszPathName);
+WXDLLIMPEXP_BASE bool wxDirExists(const wxString& pathName);
 
 WXDLLIMPEXP_BASE bool wxIsAbsolutePath(const wxString& filename);
 
