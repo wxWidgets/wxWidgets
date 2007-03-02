@@ -35,6 +35,11 @@ its support for using the navigation keys on the numeric keypad.
 wx.lib.plot: patch #1663937 to allow user to turn off scientific
 notation on plot.
 
+wxGTK: Most of the remaining TODOs for the wx.GraphicsContext on wxGTK
+have been done.  This includes implementations for GetTextExtent,
+Clip, DrawBitmap, fixing the drawing position of text to be at the
+upper left corner instead of the baseline, etc.
+
 
 
 
