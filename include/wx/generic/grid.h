@@ -1770,6 +1770,9 @@ public:
     // overridden wxWindow methods
     virtual void Fit();
 
+    // implementation only
+    void CancelMouseCapture();
+
 protected:
     virtual wxSize DoGetBestSize() const;
 
