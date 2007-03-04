@@ -14,6 +14,8 @@ Changes in behaviour which may result in compilation errors
 Deprecated methods and their replacements
 -----------------------------------------
 
+- wxCreateGreyedImage() deprecated, use wxImage::ConvertToGreyscale() instead
+
 Major new features in this release
 ----------------------------------
 

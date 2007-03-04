@@ -603,8 +603,14 @@ private:
     DECLARE_NO_COPY_CLASS(wxToolBarBase)
 };
 
-// Helper function for creating the image for disabled buttons
-bool wxCreateGreyedImage(const wxImage& in, wxImage& out) ;
+// deprecated function for creating the image for disabled buttons, use
+// wxImage::ConvertToGreyscale() instead
+#if WXWIN_COMPATIBILITY_2_8
+
+wxDEPRECATED( bool wxCreateGreyedImage(const wxImage& in, wxImage& out) );
+
+#endif // WXWIN_COMPATIBILITY_2_8
+
 
 #endif // wxUSE_TOOLBAR
 

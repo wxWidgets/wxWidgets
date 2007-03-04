@@ -680,8 +680,8 @@ bool wxToolBar::Realize()
                         // no disabled bitmap specified but we still need to
                         // fill the space in the image list with something, so
                         // we grey out the normal bitmap
-                        wxImage imgGreyed;
-                        wxCreateGreyedImage(bmp.ConvertToImage(), imgGreyed);
+                        wxImage
+                          imgGreyed = bmp.ConvertToImage().ConvertToGreyscale();
 
 #ifdef wxREMAP_BUTTON_COLOURS
                         if ( remapValue == Remap_Buttons )

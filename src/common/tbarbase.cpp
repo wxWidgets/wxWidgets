@@ -32,7 +32,9 @@
     #include "wx/control.h"
     #include "wx/frame.h"
     #include "wx/settings.h"
-    #include "wx/image.h"
+    #if WXWIN_COMPATIBILITY_2_8
+        #include "wx/image.h"
+    #endif // WXWIN_COMPATIBILITY_2_8
 #endif
 
 // ----------------------------------------------------------------------------
@@ -674,73 +676,19 @@ void wxToolBarBase::UpdateWindowUI(long flags)
     }
 }
 
-#if wxUSE_IMAGE
+#if WXWIN_COMPATIBILITY_2_8
 
-/*
- * Make a greyed-out image suitable for disabled buttons.
- * This code is adapted from wxNewBitmapButton in FL.
- */
-
-bool wxCreateGreyedImage(const wxImage& src, wxImage& dst)
+bool wxCreateGreyedImage(const wxImage& in, wxImage& out)
 {
-    dst = src.Copy();
+#if wxUSE_IMAGE
+    out = in.ConvertToGreyscale();
+    if ( out.Ok() )
+        return true;
+#endif // wxUSE_IMAGE
 
-    unsigned char rBg, gBg, bBg;
-    if ( src.HasMask() )
-    {
-        src.GetOrFindMaskColour(&rBg, &gBg, &bBg);
-        dst.SetMaskColour(rBg, gBg, bBg);
-    }
-    else // assuming the pixels along the edges are of the background color
-    {
-        rBg = src.GetRed(0, 0);
-        gBg = src.GetGreen(0, 0);
-        bBg = src.GetBlue(0, 0);
-    }
-
-    const wxColour colBg(rBg, gBg, bBg);
-
-    const wxColour colDark = wxSystemSettings::GetColour(wxSYS_COLOUR_3DSHADOW);
-    const wxColour colLight = wxSystemSettings::GetColour(wxSYS_COLOUR_3DHIGHLIGHT);
-
-    // Second attempt, just making things monochrome
-    const int width = src.GetWidth();
-    const int height = src.GetHeight();
-
-    for ( int x = 0; x < width; x++ )
-    {
-        for ( int y = 0; y < height; y++ )
-        {
-            const int r = src.GetRed(x, y);
-            const int g = src.GetGreen(x, y);
-            const int b = src.GetBlue(x, y);
-
-            if ( r == rBg && g == gBg && b == bBg )
-            {
-                // Leave the background colour as-is
-                continue;
-            }
-
-            // Change light things to the background colour
-            wxColour col;
-            if ( r >= (colLight.Red() - 50) &&
-                    g >= (colLight.Green() - 50) &&
-                        b >= (colLight.Blue() - 50) )
-            {
-                col = colBg;
-            }
-            else // Change dark things to really dark
-            {
-                col = colDark;
-            }
-
-            dst.SetRGB(x, y, col.Red(), col.Green(), col.Blue());
-        }
-    }
-
-    return true;
+    return false;
 }
 
-#endif // wxUSE_IMAGE
+#endif // WXWIN_COMPATIBILITY_2_8
 
 #endif // wxUSE_TOOLBAR
