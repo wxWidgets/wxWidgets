@@ -133,7 +133,6 @@ the corresponding topic.
 \helpref{wxGetMousePosition}{wxgetmouseposition}\\
 \helpref{wxGetMouseState}{wxgetmousestate}\\
 \helpref{wxGetMultipleChoices}{wxgetmultiplechoices}\\
-\helpref{wxGetMultipleChoice}{wxgetmultiplechoice}\\
 \helpref{wxGetNumberFromUser}{wxgetnumberfromuser}\\
 \helpref{wxGetOSDirectory}{wxgetosdirectory}\\
 \helpref{wxGetOsDescription}{wxgetosdescription}\\
@@ -2186,33 +2185,6 @@ is centred; if false, the message is left-justified.
 \wxheading{Include files}
 
 <wx/textdlg.h>
-
-
-\membersection{::wxGetMultipleChoice}\label{wxgetmultiplechoice}
-
-\func{int}{wxGetMultipleChoice}{\param{const wxString\& }{message}, \param{const wxString\& }{caption}, \param{int}{ n}, \param{const wxString\& }{choices[]},\\
- \param{int }{nsel}, \param{int *}{selection},
- \param{wxWindow *}{parent = NULL}, \param{int}{ x = -1}, \param{int}{ y = -1},\\
- \param{bool}{ centre = true}, \param{int }{width=150}, \param{int }{height=200}}
-
-Pops up a dialog box containing a message, OK/Cancel buttons and a multiple-selection
-listbox. The user may choose one or more item(s) and press OK or Cancel.
-
-The number of initially selected choices, and array of the selected indices,
-are passed in; this array will contain the user selections on exit, with
-the function returning the number of selections. {\it selection} must be
-as big as the number of choices, in case all are selected.
-
-If Cancel is pressed, -1 is returned.
-
-{\it choices} is an array of {\it n} strings for the listbox.
-
-If {\it centre} is true, the message text (which may include new line characters)
-is centred; if false, the message is left-justified.
-
-\wxheading{Include files}
-
-<wx/choicdlg.h>
 
 
 \membersection{::wxGetSingleChoice}\label{wxgetsinglechoice}
