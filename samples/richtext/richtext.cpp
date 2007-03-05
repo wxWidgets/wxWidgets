@@ -757,9 +757,12 @@ MyFrame::MyFrame(const wxString& title, wxWindowID id, const wxPoint& pos,
     r.WriteText(wxT("colour, like this red bit."));
     r.EndTextColour();
 
-    r.BeginTextColour(wxColour(0, 0, 255));
-    r.WriteText(wxT(" And this blue bit."));
-    r.EndTextColour();
+    wxRichTextAttr backgroundColourAttr;
+    backgroundColourAttr.SetBackgroundColour(*wxGREEN);
+    backgroundColourAttr.SetTextColour(wxColour(0, 0, 255));
+    r.BeginStyle(backgroundColourAttr);
+    r.WriteText(wxT(" And this blue on green bit."));
+    r.EndStyle();
 
     r.WriteText(wxT(" Naturally you can make things "));
     r.BeginBold();
