@@ -42,11 +42,16 @@ protected:
 
 IMPLEMENT_APP(hvApp)
 
+BEGIN_EVENT_TABLE(hvApp, wxApp)
+    EVT_IDLE(hvApp::OnIdle)
+END_EVENT_TABLE()
+
 hvApp::hvApp()
 {
 #if wxUSE_IPC
     m_server = NULL;
 #endif
+    m_exitIfNoMainWindow = false;
 }
 
 bool hvApp::OnInit()
@@ -54,6 +59,11 @@ bool hvApp::OnInit()
 #ifdef __WXMOTIF__
     delete wxLog::SetActiveTarget(new wxLogStderr); // So dialog boxes aren't used
 #endif
+
+    // Don't exit on frame deletion, since the help window is programmed
+    // to cause the app to exit even if it is still open. We need to have the app
+    // close by other means.
+    SetExitOnFrameDelete(false);
 
     wxArtProvider::Push(new AlternateArtProvider);
 
@@ -218,10 +228,17 @@ bool hvApp::OnInit()
 #endif
 
     m_helpController->DisplayContents();
+    SetTopWindow(m_helpController->GetFrame());
+    m_exitIfNoMainWindow = true;
 
     return true;
 }
 
+void hvApp::OnIdle(wxIdleEvent& event)
+{
+    if (m_exitIfNoMainWindow && !GetTopWindow())
+        ExitMainLoop();
+}
 
 int hvApp::OnExit()
 {
