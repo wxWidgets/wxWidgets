@@ -78,7 +78,7 @@ bool MyApp::OnInit()
     SetAppName(wxT("wxHTMLHelp")); 
     wxConfig::Get(); // create an instance
 
-    help = new wxHtmlHelpController;
+    help = new wxHtmlHelpController(wxHF_DEFAULT_STYLE|wxHF_OPEN_FILES);
 
     if (argc < 2) {
         wxLogError(wxT("Usage : helpview <helpfile> [<more helpfiles>]"));
@@ -104,6 +104,9 @@ void MyApp::OnIdle(wxIdleEvent& event)
 {
     if (m_exitIfNoMainWindow && !GetTopWindow())
         ExitMainLoop();
+
+    event.Skip();
+    event.RequestMore();
 }
 
 int MyApp::OnExit()

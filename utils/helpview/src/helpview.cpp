@@ -72,7 +72,7 @@ bool hvApp::OnInit()
     wxFileName::MacRegisterDefaultTypeAndCreator( wxT("htb") , 'HTBD' , 'HTBA' ) ;
 #endif
 
-    int istyle = wxHF_DEFAULT_STYLE;
+    int istyle = wxHF_DEFAULT_STYLE|wxHF_OPEN_FILES;
 
     wxString service, windowName, titleFormat, argStr;
     wxString book[10];
@@ -238,6 +238,9 @@ void hvApp::OnIdle(wxIdleEvent& event)
 {
     if (m_exitIfNoMainWindow && !GetTopWindow())
         ExitMainLoop();
+
+    event.Skip();
+    event.RequestMore();
 }
 
 int hvApp::OnExit()
