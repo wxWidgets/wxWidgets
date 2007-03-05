@@ -14,7 +14,7 @@ Changes in behaviour which may result in compilation errors
 Deprecated methods and their replacements
 -----------------------------------------
 
-- wxCreateGreyedImage() deprecated, use wxImage::ConvertToGreyscale() instead
+- wxCreateGreyedImage() deprecated, use wxImage::ConvertToGreyscale() instead.
 
 Major new features in this release
 ----------------------------------
@@ -25,23 +25,26 @@ Major new features in this release
 
 All:
 
-- Added wxEventBlocker class (Francesco Montorsi)
-- Added wxFile/DirPickerCtrl::Get/SetFile/DirName() (Francesco Montorsi)
-- Added wxSizerFlags::Top() and Bottom()
-- Slovak translation added
+- Added wxEventBlocker class (Francesco Montorsi).
+- Added wxFile/DirPickerCtrl::Get/SetFile/DirName() (Francesco Montorsi).
+- Added wxSizerFlags::Top() and Bottom().
+- Slovak translation added.
+- Fixed tab-related drawing and hit-testing bugs in wxRichTextCtrl.
+- Implemented background colour in wxRichTextCtrl.
+- Fixed crashes in helpview when opening a file.
 
 wxGTK:
 
-- Implemented support for underlined fonts in wxStaticText
-- wxTopLevelWindow::SetSizeHints size increments now work
-- wxTopLevelWindow::GetSize() returns the size including the WM decorations
-- wxTopLevelWindow::GetClientSize() returns 0x0 when the window is minimized
-- Added support for colour cursors (Pascal Monasse)
+- Implemented support for underlined fonts in wxStaticText.
+- wxTopLevelWindow::SetSizeHints size increments now work.
+- wxTopLevelWindow::GetSize() returns the size including the WM decorations.
+- wxTopLevelWindow::GetClientSize() returns 0x0 when the window is minimized.
+- Added support for colour cursors (Pascal Monasse).
 
 wxMSW:
 
-- Fixed infinite loop in wxThread::Wait() in console applications
-- Return the restored window size from GetSize() when window is minimized
+- Fixed infinite loop in wxThread::Wait() in console applications.
+- Return the restored window size from GetSize() when window is minimized.
 
 
 2.8.2
@@ -49,29 +52,29 @@ wxMSW:
 
 All:
 
-- Added wxSizerFlags::Shaped() and FixedMinSize() methods
-- Added wxCSConv::IsOk() (Manuel Martin)
-- Added wxDateTime::GetDateOnly()
-- Made wxTextFile work with unseekable files again (David Hart)
-- Added wxCONFIG_USE_SUBDIR flag to wxFileConfig (Giuseppe Bilotta)
-- Added wxSearchCtrl::[Get|Set]DescriptiveText
+- Added wxSizerFlags::Shaped() and FixedMinSize() methods.
+- Added wxCSConv::IsOk() (Manuel Martin).
+- Added wxDateTime::GetDateOnly().
+- Made wxTextFile work with unseekable files again (David Hart).
+- Added wxCONFIG_USE_SUBDIR flag to wxFileConfig (Giuseppe Bilotta).
+- Added wxSearchCtrl::[Get|Set]DescriptiveText.
 
 wxMSW
 
-- Fix lack of spin control update event when control lost focus
-- Corrected drawing of bitmaps for disabled menu items
+- Fix lack of spin control update event when control lost focus.
+- Corrected drawing of bitmaps for disabled menu items.
 
 wxMac
 
-- Added support for the wxFRAME_FLOAT_ON_PARENT style
+- Added support for the wxFRAME_FLOAT_ON_PARENT style.
 
 wxX11:
 
-- Don't crash in wxWindow dtor if the window hadn't been really Create()d
+- Don't crash in wxWindow dtor if the window hadn't been really Create()d.
 
 wxUniv:
 
-- Fixed wxComboBox always sorted
+- Fixed wxComboBox always sorted.
 
 
 2.8.1
@@ -79,25 +82,25 @@ wxUniv:
 
 All:
 
-- Fix compilation with wxUSE_STL=1
-- wxGrid::GetBestSize() returns same size the grid would have after AutoSize()
-- Added wxTreeCtrl::CollapseAll[Children]() and IsEmpty() (Francesco Montorsi)
-- Several RTL-related positioning fixes (Diaa Sami)
-- Fix wxConfig::DeleteGroup() for arguments with trailing slash (David Hart)
-- Fix memory leak in wxGrid::ShowCellEditControl() (Christian Sturmlechner)
+- Fix compilation with wxUSE_STL=1.
+- wxGrid::GetBestSize() returns same size the grid would have after AutoSize().
+- Added wxTreeCtrl::CollapseAll[Children]() and IsEmpty() (Francesco Montorsi).
+- Several RTL-related positioning fixes (Diaa Sami).
+- Fix wxConfig::DeleteGroup() for arguments with trailing slash (David Hart).
+- Fix memory leak in wxGrid::ShowCellEditControl() (Christian Sturmlechner).
 
 wxMSW:
 
-- Fixed compilation with Borland C++ in Unicode mode but without MSLU
-- Show taskbar icon menu on right button release, not press
+- Fixed compilation with Borland C++ in Unicode mode but without MSLU.
+- Show taskbar icon menu on right button release, not press.
 
 wxGTK:
 
-- Don't crash if command line is not valid UTF-8 (Unicode build only)
+- Don't crash if command line is not valid UTF-8 (Unicode build only).
 
 wxUniv:
 
-- It is now possible to set background colour of wxStaticText
+- It is now possible to set background colour of wxStaticText.
 
 
 2.8.0
@@ -105,27 +108,27 @@ wxUniv:
 
 All:
 
-- Added wxSearchCtrl (Vince Harron)
-- wxCSConv("UTF-16/32") now behaves correctly, i.e. same as wxMBConvUTF16/32
-- wxArrayString::Alloc() now works as reserve() and doesn't clear array contents
+- Added wxSearchCtrl (Vince Harron).
+- wxCSConv("UTF-16/32") now behaves correctly, i.e. same as wxMBConvUTF16/32.
+- wxArrayString::Alloc() now works as reserve() and doesn't clear array contents.
 - Fixed long standing bug in wxFileConfig groups renaming (Antti Koivisto).
 - New option wxFS_READ | wxFS_SEEKABLE for wxFileSystem::OpenFile() to return
   a stream that is seekable.
-- Fixed bug in wxCalendarCtrl::HitTest() when clicking on month change arrows
-- Added wxWindow::GetWindowBorderSize() and corrected wxTreeCtrl::GetBestSize()
-  for a control with borders (Tim Kosse)
+- Fixed bug in wxCalendarCtrl::HitTest() when clicking on month change arrows.
+- Added wxWindow::GetWindowBorderSize() and corrected wxTreeCtrl::GetBestSize().
+  for a control with borders (Tim Kosse).
 
 wxMSW:
 
 - Fixed version script problems when using configure with cygwin/mingw32.
 - Use system default paper size for printing instead of A4.
-- Fix (harmless) assert in virtual list control under Vista
+- Fix (harmless) assert in virtual list control under Vista.
 - Fix colours when converting wxBitmap with alpha to wxImage (nusi).
 
 wxGTK:
 
-- Allow dynamically changing most of text control styles
-- Enable use of libgnomeprintui by default in configure
+- Allow dynamically changing most of text control styles.
+- Enable use of libgnomeprintui by default in configure.
 
 
 2.7.2
