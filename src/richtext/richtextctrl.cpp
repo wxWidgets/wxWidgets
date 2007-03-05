@@ -152,7 +152,6 @@ bool wxRichTextCtrl::Create( wxWindow* parent, wxWindowID id, const wxString& va
     wxTextAttrEx attributes;
     attributes.SetFont(GetFont());
     attributes.SetTextColour(*wxBLACK);
-    attributes.SetBackgroundColour(*wxWHITE);
     attributes.SetAlignment(wxTEXT_ALIGNMENT_LEFT);
     attributes.SetLineSpacing(10);
     attributes.SetParagraphSpacingAfter(10);
