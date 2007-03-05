@@ -4329,19 +4329,20 @@ bool wxRichTextPlainText::DrawTabbedString(wxDC& dc, const wxTextAttrEx& attr, c
         dc.SetBrush(*wxBLACK_BRUSH);
         dc.SetPen(*wxBLACK_PEN);
         dc.SetTextForeground(*wxWHITE);
+        dc.SetBackgroundMode(wxTRANSPARENT);
     }
     else
     {
         dc.SetTextForeground(attr.GetTextColour());
-    }
 
-    if (attr.HasFlag(wxTEXT_ATTR_BACKGROUND_COLOUR) && attr.GetBackgroundColour().IsOk())
-    {
-        dc.SetBackgroundMode(wxSOLID);
-        dc.SetTextBackground(attr.GetBackgroundColour());
+        if (attr.HasFlag(wxTEXT_ATTR_BACKGROUND_COLOUR) && attr.GetBackgroundColour().IsOk())
+        {
+            dc.SetBackgroundMode(wxSOLID);
+            dc.SetTextBackground(attr.GetBackgroundColour());
+        }
+        else
+            dc.SetBackgroundMode(wxTRANSPARENT);
     }
-    else
-        dc.SetBackgroundMode(wxTRANSPARENT);
 
     while (hasTabs)
     {
