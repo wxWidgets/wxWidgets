@@ -9097,6 +9097,14 @@ class Window(EvtHandler):
         """
         return _core_.Window_GetGrandParent(*args, **kwargs)
 
+    def GetTopLevelParent(*args, **kwargs):
+        """
+        GetTopLevelParent(self) -> Window
+
+        Returns the first frame or dialog in this window's parental hierarchy.
+        """
+        return _core_.Window_GetTopLevelParent(*args, **kwargs)
+
     def IsTopLevel(*args, **kwargs):
         """
         IsTopLevel(self) -> bool
@@ -10397,6 +10405,7 @@ class Window(EvtHandler):
     Font = property(GetFont,SetFont,doc="See `GetFont` and `SetFont`") 
     ForegroundColour = property(GetForegroundColour,SetForegroundColour,doc="See `GetForegroundColour` and `SetForegroundColour`") 
     GrandParent = property(GetGrandParent,doc="See `GetGrandParent`") 
+    TopLevelParent = property(GetTopLevelParent,doc="See `GetTopLevelParent`") 
     Handle = property(GetHandle,doc="See `GetHandle`") 
     HelpText = property(GetHelpText,SetHelpText,doc="See `GetHelpText` and `SetHelpText`") 
     Id = property(GetId,SetId,doc="See `GetId` and `SetId`") 

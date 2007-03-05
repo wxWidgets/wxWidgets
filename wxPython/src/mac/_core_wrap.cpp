@@ -3885,6 +3885,9 @@ SWIGINTERN PyObject *wxWindow_GetChildren(wxWindow *self){
             wxWindowList& list = self->GetChildren();
             return wxPy_ConvertList(&list);
         }
+SWIGINTERN wxWindow *wxWindow_GetTopLevelParent(wxWindow *self){
+            return wxGetTopLevelParent(self);
+        }
 SWIGINTERN void wxWindow_SetDoubleBuffered(wxWindow *self,bool on){}
 SWIGINTERN bool wxWindow_RegisterHotKey(wxWindow *self,int hotkeyId,int modifiers,int keycode){
         #if wxUSE_HOTKEY
@@ -36467,6 +36470,36 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Window_GetTopLevelParent(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxWindow *arg1 = (wxWindow *) 0 ;
+  wxWindow *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Window_GetTopLevelParent" "', expected argument " "1"" of type '" "wxWindow *""'"); 
+  }
+  arg1 = reinterpret_cast< wxWindow * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxWindow *)wxWindow_GetTopLevelParent(arg1);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = wxPyMake_wxObject(result, 0); 
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Window_IsTopLevel(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxWindow *arg1 = (wxWindow *) 0 ;
@@ -58443,6 +58476,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_GetChildren", (PyCFunction)_wrap_Window_GetChildren, METH_O, NULL},
 	 { (char *)"Window_GetParent", (PyCFunction)_wrap_Window_GetParent, METH_O, NULL},
 	 { (char *)"Window_GetGrandParent", (PyCFunction)_wrap_Window_GetGrandParent, METH_O, NULL},
+	 { (char *)"Window_GetTopLevelParent", (PyCFunction)_wrap_Window_GetTopLevelParent, METH_O, NULL},
 	 { (char *)"Window_IsTopLevel", (PyCFunction)_wrap_Window_IsTopLevel, METH_O, NULL},
 	 { (char *)"Window_Reparent", (PyCFunction) _wrap_Window_Reparent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_AddChild", (PyCFunction) _wrap_Window_AddChild, METH_VARARGS | METH_KEYWORDS, NULL},
