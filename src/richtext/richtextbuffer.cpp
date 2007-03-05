@@ -3500,7 +3500,7 @@ bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& siz
                 rangeToUse.LimitTo(child->GetRange());
                 int childDescent = 0;
 
-                if (child->GetRangeSize(rangeToUse, childSize, childDescent, dc, flags, position))
+                if (child->GetRangeSize(rangeToUse, childSize, childDescent, dc, flags, wxPoint(position.x + sz.x, position.y)))
                 {
                     sz.y = wxMax(sz.y, childSize.y);
                     sz.x += childSize.x;
@@ -3545,7 +3545,7 @@ bool wxRichTextParagraph::GetRangeSize(const wxRichTextRange& range, wxSize& siz
 
                         wxSize childSize;
                         int childDescent = 0;
-                        if (child->GetRangeSize(rangeToUse, childSize, childDescent, dc, flags, position))
+                        if (child->GetRangeSize(rangeToUse, childSize, childDescent, dc, flags, wxPoint(position.x + sz.x, position.y)))
                         {
                             lineSize.y = wxMax(lineSize.y, childSize.y);
                             lineSize.x += childSize.x;
