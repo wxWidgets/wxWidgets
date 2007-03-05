@@ -99,9 +99,9 @@ public:
     void* MacGetATSUStyle() const ; 
     
 protected:
-    void Unshare();
+    virtual wxObjectRefData* CreateRefData() const;
+    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const;
 
-private:
     DECLARE_DYNAMIC_CLASS(wxFont)
 };
 

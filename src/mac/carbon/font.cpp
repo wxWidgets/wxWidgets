@@ -266,7 +266,7 @@ void wxFontRefData::MacFindFont()
                 m_macFontFamily = FMGetFontFamilyFromName( qdFontName );
                 if ( m_macFontFamily == kInvalidFontFamily )
                 {
-                    wxLogDebug( wxT("ATSFontFamilyFindFromName failed for %s"), m_faceName );
+                    wxLogDebug( wxT("ATSFontFamilyFindFromName failed for %s"), m_faceName.c_str() );
                     m_macFontFamily = GetAppFont();
                 }
 #endif
@@ -444,31 +444,26 @@ bool wxFont::RealizeResource()
 
 void wxFont::SetEncoding(wxFontEncoding encoding)
 {
-    Unshare();
+    AllocExclusive();
 
     M_FONTDATA->m_encoding = encoding;
 
     RealizeResource();
 }
 
-void wxFont::Unshare()
+wxObjectRefData* wxFont::CreateRefData() const
 {
-    // Don't change shared data
-    if (!m_refData)
-    {
-        m_refData = new wxFontRefData();
-    }
-    else
-    {
-        wxFontRefData* ref = new wxFontRefData(*(wxFontRefData*)m_refData);
-        UnRef();
-        m_refData = ref;
-    }
+    return new wxFontRefData;
+}
+
+wxObjectRefData* wxFont::CloneRefData(const wxObjectRefData* data) const
+{
+    return new wxFontRefData(*wx_static_cast(const wxFontRefData*, data));
 }
 
 void wxFont::SetPointSize(int pointSize)
 {
-    Unshare();
+    AllocExclusive();
 
     M_FONTDATA->m_pointSize = pointSize;
 
@@ -477,7 +472,7 @@ void wxFont::SetPointSize(int pointSize)
 
 void wxFont::SetFamily(int family)
 {
-    Unshare();
+    AllocExclusive();
 
     M_FONTDATA->m_family = family;
 
@@ -486,7 +481,7 @@ void wxFont::SetFamily(int family)
 
 void wxFont::SetStyle(int style)
 {
-    Unshare();
+    AllocExclusive();
 
     M_FONTDATA->m_style = style;
 
@@ -495,7 +490,7 @@ void wxFont::SetStyle(int style)
 
 void wxFont::SetWeight(int weight)
 {
-    Unshare();
+    AllocExclusive();
 
     M_FONTDATA->m_weight = weight;
 
@@ -504,7 +499,7 @@ void wxFont::SetWeight(int weight)
 
 bool wxFont::SetFaceName(const wxString& faceName)
 {
-    Unshare();
+    AllocExclusive();
 
     M_FONTDATA->m_faceName = faceName;
 
@@ -515,7 +510,7 @@ bool wxFont::SetFaceName(const wxString& faceName)
 
 void wxFont::SetUnderlined(bool underlined)
 {
-    Unshare();
+    AllocExclusive();
 
     M_FONTDATA->m_underlined = underlined;
 
@@ -524,7 +519,7 @@ void wxFont::SetUnderlined(bool underlined)
 
 void wxFont::SetNoAntiAliasing( bool no )
 {
-    Unshare();
+    AllocExclusive();
 
     M_FONTDATA->SetNoAntiAliasing( no );
 
