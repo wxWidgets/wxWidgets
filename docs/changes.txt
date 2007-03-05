@@ -103,6 +103,9 @@ All:
 - Added wxRICHTEXT_SETSTYLE_REMOVE flag for removing styles, and
   wxRICHTEXT_HITTEST_OUTSIDE for more accurate hit-testing.
 - Fixed a crash when writing wxRichTextCtrl styles.
+- Fixed tab-related drawing and hit-testing bugs in wxRichTextCtrl.
+- Implemented background colour in wxRichTextCtrl.
+- Fixed crashes in helpview when opening a file.
 
 wxMSW
 
