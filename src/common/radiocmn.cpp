@@ -277,18 +277,4 @@ wxString wxRadioBoxBase::DoGetHelpTextAtPoint(const wxWindow *derived,
 
 #endif // wxUSE_HELP
 
-#if WXWIN_COMPATIBILITY_2_4
-
-// these functions are deprecated and don't do anything
-int wxRadioBoxBase::GetNumberOfRowsOrCols() const
-{
-    return 1;
-}
-
-void wxRadioBoxBase::SetNumberOfRowsOrCols(int WXUNUSED(n))
-{
-}
-
-#endif // WXWIN_COMPATIBILITY_2_4
-
 #endif // wxUSE_RADIOBOX

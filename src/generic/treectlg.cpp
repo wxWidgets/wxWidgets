@@ -1214,36 +1214,6 @@ wxTreeItemId wxGenericTreeCtrl::GetNextChild(const wxTreeItemId& item,
     }
 }
 
-#if WXWIN_COMPATIBILITY_2_4
-
-wxTreeItemId wxGenericTreeCtrl::GetFirstChild(const wxTreeItemId& item,
-                                              long& cookie) const
-{
-    wxCHECK_MSG( item.IsOk(), wxTreeItemId(), wxT("invalid tree item") );
-
-    cookie = 0;
-    return GetNextChild(item, cookie);
-}
-
-wxTreeItemId wxGenericTreeCtrl::GetNextChild(const wxTreeItemId& item,
-                                             long& cookie) const
-{
-    wxCHECK_MSG( item.IsOk(), wxTreeItemId(), wxT("invalid tree item") );
-
-    wxArrayGenericTreeItems& children = ((wxGenericTreeItem*) item.m_pItem)->GetChildren();
-    if ( (size_t)cookie < children.Count() )
-    {
-        return children.Item((size_t)cookie++);
-    }
-    else
-    {
-        // there are no more of them
-        return wxTreeItemId();
-    }
-}
-
-#endif // WXWIN_COMPATIBILITY_2_4
-
 wxTreeItemId wxGenericTreeCtrl::GetLastChild(const wxTreeItemId& item) const
 {
     wxCHECK_MSG( item.IsOk(), wxTreeItemId(), wxT("invalid tree item") );
@@ -3624,20 +3594,6 @@ wxGenericTreeCtrl::GetClassDefaultAttributes(wxWindowVariant WXUNUSED(variant))
     return attr;
 #endif
 }
-
-#if WXWIN_COMPATIBILITY_2_4
-
-int wxGenericTreeCtrl::GetItemSelectedImage(const wxTreeItemId& item) const
-{
-    return GetItemImage(item, wxTreeItemIcon_Selected);
-}
-
-void wxGenericTreeCtrl::SetItemSelectedImage(const wxTreeItemId& item, int image)
-{
-    SetItemImage(item, image, wxTreeItemIcon_Selected);
-}
-
-#endif // WXWIN_COMPATIBILITY_2_4
 
 void wxGenericTreeCtrl::DoDirtyProcessing()
 {

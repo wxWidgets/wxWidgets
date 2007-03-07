@@ -1384,11 +1384,6 @@ wxString WXDLLIMPEXP_BASE operator+(const wxString& string, const wxChar *psz);
 wxString WXDLLIMPEXP_BASE operator+(const wxChar *psz, const wxString& string);
 
 
-// define wxArrayString, for compatibility
-#if WXWIN_COMPATIBILITY_2_4 && !wxUSE_STL
-    #include "wx/arrstr.h"
-#endif
-
 #if wxUSE_STL
     // return an empty wxString (not very useful with wxUSE_STL == 1)
     inline const wxString wxGetEmptyString() { return wxString(); }

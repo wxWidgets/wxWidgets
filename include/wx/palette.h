@@ -48,11 +48,6 @@ public:
     #include "wx/os2/palette.h"
 #endif
 
-#if WXWIN_COMPATIBILITY_2_4
-    #define wxColorMap wxPalette
-    #define wxColourMap wxPalette
-#endif
-
 #endif // wxUSE_PALETTE
 
 #endif

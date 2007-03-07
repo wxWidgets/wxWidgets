@@ -173,23 +173,6 @@ public:
     // allows us to abstract the differences behind the common façade
     wxAppTraits *GetTraits();
 
-    // the functions below shouldn't be used now that we have wxAppTraits
-#if WXWIN_COMPATIBILITY_2_4
-
-#if wxUSE_LOG
-        // override this function to create default log target of arbitrary
-        // user-defined class (default implementation creates a wxLogGui
-        // object) -- this log object is used by default by all wxLogXXX()
-        // functions.
-    wxDEPRECATED( virtual wxLog *CreateLogTarget() );
-#endif // wxUSE_LOG
-
-        // similar to CreateLogTarget() but for the global wxMessageOutput
-        // object
-    wxDEPRECATED( virtual wxMessageOutput *CreateMessageOutput() );
-
-#endif // WXWIN_COMPATIBILITY_2_4
-
 
     // event processing functions
     // --------------------------
@@ -267,9 +250,6 @@ public:
     // options of the library and abort if it doesn't
     static bool CheckBuildOptions(const char *optionsSignature,
                                   const char *componentName);
-#if WXWIN_COMPATIBILITY_2_4
-    wxDEPRECATED( static bool CheckBuildOptions(const wxBuildOptions& buildOptions) );
-#endif
 
     // implementation only from now on
     // -------------------------------

@@ -107,19 +107,6 @@ wxDbTable::wxDbTable(wxDb *pwxDb, const wxString &tblName, const UWORD numColumn
 }  // wxDbTable::wxDbTable()
 
 
-/***** DEPRECATED: use wxDbTable::wxDbTable() format above *****/
-#if WXWIN_COMPATIBILITY_2_4
-wxDbTable::wxDbTable(wxDb *pwxDb, const wxString &tblName, const UWORD numColumns,
-                    const wxChar *qryTblName, bool qryOnly, const wxString &tblPath)
-{
-    wxString tempQryTblName;
-    tempQryTblName = qryTblName;
-    if (!initialize(pwxDb, tblName, numColumns, tempQryTblName, qryOnly, tblPath))
-        cleanup();
-}  // wxDbTable::wxDbTable()
-#endif // WXWIN_COMPATIBILITY_2_4
-
-
 /********** wxDbTable::~wxDbTable() **********/
 wxDbTable::~wxDbTable()
 {

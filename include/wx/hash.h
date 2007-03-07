@@ -14,11 +14,7 @@
 
 #include "wx/defs.h"
 
-#if !wxUSE_STL && WXWIN_COMPATIBILITY_2_4
-    #define wxUSE_OLD_HASH_TABLE 1
-#else
-    #define wxUSE_OLD_HASH_TABLE 0
-#endif
+#define wxUSE_OLD_HASH_TABLE 0
 
 #if !wxUSE_STL
     #include "wx/object.h"
@@ -27,9 +23,6 @@
 #endif
 #if wxUSE_OLD_HASH_TABLE
     #include "wx/list.h"
-#endif
-#if WXWIN_COMPATIBILITY_2_4
-    #include "wx/dynarray.h"
 #endif
 
 // the default size of the hash
@@ -224,85 +217,6 @@ private:
 };
 
 #endif // wxUSE_OLD_HASH_TABLE
-
-#if !wxUSE_STL
-
-#if WXWIN_COMPATIBILITY_2_4
-
-// ----------------------------------------------------------------------------
-// a hash table which stores longs
-// ----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_BASE wxHashTableLong : public wxObject
-{
-public:
-    wxHashTableLong(size_t size = wxHASH_SIZE_DEFAULT)
-        { Init(size); }
-    virtual ~wxHashTableLong();
-
-    void Create(size_t size = wxHASH_SIZE_DEFAULT);
-    void Destroy();
-
-    size_t GetSize() const { return m_hashSize; }
-    size_t GetCount() const { return m_count; }
-
-    void Put(long key, long value);
-    long Get(long key) const;
-    long Delete(long key);
-
-protected:
-    void Init(size_t size);
-
-private:
-    wxArrayLong **m_values,
-                **m_keys;
-
-    // the size of array above
-    size_t m_hashSize;
-
-    // the total number of elements in the hash
-    size_t m_count;
-
-    // not implemented yet
-    DECLARE_NO_COPY_CLASS(wxHashTableLong)
-};
-
-// ----------------------------------------------------------------------------
-// wxStringHashTable: a hash table which indexes strings with longs
-// ----------------------------------------------------------------------------
-
-class WXDLLIMPEXP_BASE wxStringHashTable : public wxObject
-{
-public:
-    wxStringHashTable(size_t sizeTable = wxHASH_SIZE_DEFAULT);
-    virtual ~wxStringHashTable();
-
-    // add a string associated with this key to the table
-    void Put(long key, const wxString& value);
-
-    // get the string from the key: if not found, an empty string is returned
-    // and the wasFound is set to false if not NULL
-    wxString Get(long key, bool *wasFound = NULL) const;
-
-    // remove the item, returning true if the item was found and deleted
-    bool Delete(long key) const;
-
-    // clean up
-    void Destroy();
-
-private:
-    wxArrayLong **m_keys;
-    wxArrayString **m_values;
-
-    // the size of array above
-    size_t m_hashSize;
-
-    DECLARE_NO_COPY_CLASS(wxStringHashTable)
-};
-
-#endif // WXWIN_COMPATIBILITY_2_4
-
-#endif // !wxUSE_STL
 
 // ----------------------------------------------------------------------------
 // for compatibility only

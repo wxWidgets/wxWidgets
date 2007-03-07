@@ -33,9 +33,6 @@
 
 #include "wx/listimpl.cpp"
 
-#if WXWIN_COMPATIBILITY_2_4
-    #include "wx/notebook.h"
-#endif
 
 //---------------------------------------------------------------------------
 
@@ -2107,88 +2104,3 @@ void wxStdDialogButtonSizer::Realize()
 }
 
 #endif // wxUSE_BUTTON
-
-#if WXWIN_COMPATIBILITY_2_4
-
-// ----------------------------------------------------------------------------
-// wxNotebookSizer
-// ----------------------------------------------------------------------------
-
-#if wxUSE_BOOKCTRL
-IMPLEMENT_CLASS(wxBookCtrlSizer, wxSizer)
-#if wxUSE_NOTEBOOK
-IMPLEMENT_CLASS(wxNotebookSizer, wxBookCtrlSizer)
-#endif // wxUSE_NOTEBOOK
-#endif // wxUSE_BOOKCTRL
-
-#if wxUSE_BOOKCTRL
-
-#if WXWIN_COMPATIBILITY_2_6
-
-wxBookCtrlSizer::wxBookCtrlSizer(wxBookCtrlBase *bookctrl)
-               : m_bookctrl(bookctrl)
-{
-    wxASSERT_MSG( bookctrl, wxT("wxBookCtrlSizer needs a control") );
-}
-
-#endif // WXWIN_COMPATIBILITY_2_6
-
-void wxBookCtrlSizer::RecalcSizes()
-{
-    m_bookctrl->SetSize( m_position.x, m_position.y, m_size.x, m_size.y );
-}
-
-wxSize wxBookCtrlSizer::CalcMin()
-{
-    wxSize sizeBorder = m_bookctrl->CalcSizeFromPage(wxSize(0,0));
-
-    sizeBorder.x += 5;
-    sizeBorder.y += 5;
-
-    if ( m_bookctrl->GetPageCount() == 0 )
-    {
-        return wxSize(sizeBorder.x + 10, sizeBorder.y + 10);
-    }
-
-    int maxX = 0;
-    int maxY = 0;
-
-    wxWindowList::compatibility_iterator
-        node = m_bookctrl->GetChildren().GetFirst();
-    while (node)
-    {
-        wxWindow *item = node->GetData();
-        wxSizer *itemsizer = item->GetSizer();
-
-        if (itemsizer)
-        {
-            wxSize subsize( itemsizer->CalcMin() );
-
-            if (subsize.x > maxX)
-                maxX = subsize.x;
-            if (subsize.y > maxY)
-                maxY = subsize.y;
-        }
-
-        node = node->GetNext();
-    }
-
-    return wxSize( maxX, maxY ) + sizeBorder;
-}
-
-#if wxUSE_NOTEBOOK
-
-#if WXWIN_COMPATIBILITY_2_6
-
-wxNotebookSizer::wxNotebookSizer(wxNotebook *nb)
-{
-    wxASSERT_MSG( nb, wxT("wxNotebookSizer needs a control") );
-    m_bookctrl = nb;
-}
-
-#endif // WXWIN_COMPATIBILITY_2_6
-
-#endif // wxUSE_NOTEBOOOK
-#endif // wxUSE_BOOKCTRL
-
-#endif // WXWIN_COMPATIBILITY_2_4

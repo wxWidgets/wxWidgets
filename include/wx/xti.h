@@ -1719,12 +1719,6 @@ public:
     // gets the streaming callback from this class or any superclass
     wxObjectStreamingCallback GetStreamingCallback() const ;
 
-#if WXWIN_COMPATIBILITY_2_4
-    // Initializes parent pointers and hash table for fast searching.
-    wxDEPRECATED( static void InitializeClasses() );
-    // Cleans up hash table used for fast searching.
-    wxDEPRECATED( static void CleanUpClasses() );
-#endif
     static void CleanUp();
 
     // returns the first property

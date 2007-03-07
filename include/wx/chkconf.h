@@ -972,16 +972,16 @@
    check consistency of the settings
  */
 
-#if WXWIN_COMPATIBILITY_2_4
-#   if !WXWIN_COMPATIBILITY_2_6
+#if WXWIN_COMPATIBILITY_2_6
+#   if !WXWIN_COMPATIBILITY_2_8
 #       ifdef wxABORT_ON_CONFIG_ERROR
-#           error "2.4.X compatibility requires 2.6.X compatibility"
+#           error "2.6.X compatibility requires 2.8.X compatibility"
 #       else
-#           undef WXWIN_COMPATIBILITY_2_6
-#           define WXWIN_COMPATIBILITY_2_6 1
+#           undef WXWIN_COMPATIBILITY_2_8
+#           define WXWIN_COMPATIBILITY_2_8 1
 #       endif
 #   endif
-#endif /* WXWIN_COMPATIBILITY_2_4 */
+#endif /* WXWIN_COMPATIBILITY_2_6 */
 
 #if wxUSE_ARCHIVE_STREAMS
 #   if !wxUSE_DATETIME

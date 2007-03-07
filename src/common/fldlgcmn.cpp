@@ -102,18 +102,6 @@ bool wxFileDialogBase::Create(wxWindow *parent,
     return true;
 }
 
-#if WXWIN_COMPATIBILITY_2_4
-// Parses the filterStr, returning the number of filters.
-// Returns 0 if none or if there's a problem.
-// filterStr is in the form: "All files (*.*)|*.*|JPEG Files (*.jpeg)|*.jpg"
-int wxFileDialogBase::ParseWildcard(const wxString& filterStr,
-                                    wxArrayString& descriptions,
-                                    wxArrayString& filters)
-{
-    return ::wxParseCommonDialogsFilter(filterStr, descriptions, filters);
-}
-#endif // WXWIN_COMPATIBILITY_2_4
-
 #if WXWIN_COMPATIBILITY_2_6
 long wxFileDialogBase::GetStyle() const
 {

@@ -27,9 +27,6 @@ enum {
 
 // Flags
 enum {
-#if WXWIN_COMPATIBILITY_2_4
-    wxZLIB_24COMPATIBLE = 4, // read v2.4.x data without error
-#endif
     wxZLIB_NO_HEADER = 0,    // raw deflate stream, no header or checksum
     wxZLIB_ZLIB = 1,         // zlib header and checksum
     wxZLIB_GZIP = 2,         // gzip header and checksum, requires zlib 1.2.1+
@@ -59,9 +56,6 @@ class WXDLLIMPEXP_BASE wxZlibInputStream: public wxFilterInputStream {
   unsigned char *m_z_buffer;
   struct z_stream_s *m_inflate;
   wxFileOffset m_pos;
-#if WXWIN_COMPATIBILITY_2_4
-  bool m_24compatibilty;
-#endif
 
   DECLARE_NO_COPY_CLASS(wxZlibInputStream)
 };

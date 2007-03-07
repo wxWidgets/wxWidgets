@@ -769,30 +769,3 @@ terminate the program,\r\n\
 }
 
 #endif // wxUSE_EXCEPTIONS
-
-// ----------------------------------------------------------------------------
-// deprecated event loop functions
-// ----------------------------------------------------------------------------
-
-#if WXWIN_COMPATIBILITY_2_4
-
-void wxApp::DoMessage(WXMSG *pMsg)
-{
-    wxEventLoop *evtLoop = wxEventLoop::GetActive();
-    if ( evtLoop )
-        evtLoop->ProcessMessage(pMsg);
-}
-
-bool wxApp::DoMessage()
-{
-    wxEventLoop *evtLoop = wxEventLoop::GetActive();
-    return evtLoop ? evtLoop->Dispatch() : false;
-}
-
-bool wxApp::ProcessMessage(WXMSG* pMsg)
-{
-    wxEventLoop *evtLoop = wxEventLoop::GetActive();
-    return evtLoop && evtLoop->PreProcessMessage(pMsg);
-}
-
-#endif // WXWIN_COMPATIBILITY_2_4

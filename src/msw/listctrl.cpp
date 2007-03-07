@@ -2038,16 +2038,6 @@ bool wxListCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 wxDeleteInternalData(this, iItem);
                 break;
 
-#if WXWIN_COMPATIBILITY_2_4
-            case LVN_SETDISPINFO:
-                {
-                    eventType = wxEVT_COMMAND_LIST_SET_INFO;
-                    LV_DISPINFO *info = (LV_DISPINFO *)lParam;
-                    wxConvertFromMSWListItem(GetHwnd(), event.m_item, info->item);
-                }
-                break;
-#endif
-
             case LVN_INSERTITEM:
                 eventType = wxEVT_COMMAND_LIST_INSERT_ITEM;
                 event.m_itemIndex = iItem;

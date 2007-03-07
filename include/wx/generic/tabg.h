@@ -102,11 +102,7 @@ public:
   virtual ~wxTabView();
 
   inline int GetNumberOfLayers() const { return m_layers.GetCount(); }
-#if WXWIN_COMPATIBILITY_2_4
-  inline wxList& GetLayers() { return *(wxList *)&m_layers; }
-#else
   inline wxTabLayerList& GetLayers() { return m_layers; }
-#endif
 
   inline void SetWindow(wxWindow* wnd) { m_window = wnd; }
   inline wxWindow* GetWindow(void) const { return m_window; }

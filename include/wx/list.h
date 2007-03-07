@@ -369,11 +369,6 @@ private:
 
 #else // if !wxUSE_STL
 
-// due to circular header dependencies this function has to be declared here
-// (normally it's found in utils.h which includes itself list.h...)
-#if WXWIN_COMPATIBILITY_2_4
-extern WXDLLIMPEXP_BASE wxChar* copystring(const wxChar *s);
-#endif
 
 // undef it to get rid of old, deprecated functions
 #define wxLIST_COMPATIBILITY

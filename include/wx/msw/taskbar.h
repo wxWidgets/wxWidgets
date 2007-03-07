@@ -34,19 +34,6 @@ public:
     bool RemoveIcon(void);
     bool PopupMenu(wxMenu *menu); //, int x, int y);
 
-#if WXWIN_COMPATIBILITY_2_4
-    wxDEPRECATED( bool IsOK() const );
-
-// Overridables
-    virtual void OnMouseMove(wxEvent&);
-    virtual void OnLButtonDown(wxEvent&);
-    virtual void OnLButtonUp(wxEvent&);
-    virtual void OnRButtonDown(wxEvent&);
-    virtual void OnRButtonUp(wxEvent&);
-    virtual void OnLButtonDClick(wxEvent&);
-    virtual void OnRButtonDClick(wxEvent&);
-#endif
-
 // Implementation
 protected:
     friend class wxTaskBarIconWindow;
@@ -60,23 +47,7 @@ protected:
     wxIcon               m_icon;
     wxString             m_strTooltip;
 
-#if WXWIN_COMPATIBILITY_2_4
-    // non-virtual default event handlers to forward events to the virtuals
-    void _OnMouseMove(wxTaskBarIconEvent&);
-    void _OnLButtonDown(wxTaskBarIconEvent&);
-    void _OnLButtonUp(wxTaskBarIconEvent&);
-    void _OnRButtonDown(wxTaskBarIconEvent&);
-    void _OnRButtonUp(wxTaskBarIconEvent&);
-    void _OnLButtonDClick(wxTaskBarIconEvent&);
-    void _OnRButtonDClick(wxTaskBarIconEvent&);
-
-    DECLARE_EVENT_TABLE()
-#endif
 };
-
-#if WXWIN_COMPATIBILITY_2_4
-inline bool wxTaskBarIcon::IsOK() const { return IsOk(); }
-#endif
 
 #endif
     // _TASKBAR_H_

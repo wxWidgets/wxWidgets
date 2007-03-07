@@ -211,63 +211,6 @@ bool wxTextValidator::TransferFromWindow(void)
     return true;
 }
 
-#if WXWIN_COMPATIBILITY_2_4
-
-inline void wxCopyStringListToArrayString(wxArrayString& to, const wxStringList& from)
-{
-    to.Clear();
-
-    for ( wxStringList::compatibility_iterator pNode = from.GetFirst();
-          pNode;
-          pNode = pNode->GetNext() )
-    {
-        to.Add(pNode->GetData());
-    }
-}
-
-inline void wxCopyArrayStringToStringList(wxStringList& to, const wxArrayString& from)
-{
-    to.Clear();
-
-    for(size_t i = 0; i < from.GetCount(); ++i)
-        to.Add(from[i]);
-}
-
-wxStringList& wxTextValidator::GetIncludeList()
-{
-    wxCopyArrayStringToStringList(m_includeList, m_includes);
-    return m_includeList;
-}
-
-wxStringList& wxTextValidator::GetExcludeList()
-{
-    wxCopyArrayStringToStringList(m_excludeList, m_excludes);
-    return m_excludeList;
-}
-
-void wxTextValidator::SetIncludeList(const wxStringList& list)
-{
-    wxCopyStringListToArrayString(m_includes, list);
-}
-
-void wxTextValidator::SetExcludeList(const wxStringList& list)
-{
-    wxCopyStringListToArrayString(m_excludes, list);
-}
-
-bool wxTextValidator::IsInCharIncludeList(const wxString& val)
-{
-    return IsInCharIncludes(val);
-}
-
-bool wxTextValidator::IsNotInCharExcludeList(const wxString& val)
-{
-    return IsNotInCharExcludes(val);
-}
-
-#endif //compat 2.4
-
-
 bool wxTextValidator::IsInCharIncludes(const wxString& val)
 {
     size_t i;

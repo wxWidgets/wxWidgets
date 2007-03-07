@@ -2231,30 +2231,6 @@ void wxArrayString::Shrink()
   }
 }
 
-#if WXWIN_COMPATIBILITY_2_4
-
-// return a wxString[] as required for some control ctors.
-wxString* wxArrayString::GetStringArray() const
-{
-    wxString *array = 0;
-
-    if( m_nCount > 0 )
-    {
-        array = new wxString[m_nCount];
-        for( size_t i = 0; i < m_nCount; i++ )
-            array[i] = m_pItems[i];
-    }
-
-    return array;
-}
-
-void wxArrayString::Remove(size_t nIndex, size_t nRemove)
-{
-    RemoveAt(nIndex, nRemove);
-}
-
-#endif // WXWIN_COMPATIBILITY_2_4
-
 // searches the array for an item (forward or backwards)
 int wxArrayString::Index(const wxChar *sz, bool bCase, bool bFromEnd) const
 {

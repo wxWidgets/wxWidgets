@@ -185,21 +185,6 @@ public:
     void Edit( const wxTreeItemId& item ) { EditLabel(item); }
 #endif // WXWIN_COMPATIBILITY_2_6
 
-#if WXWIN_COMPATIBILITY_2_4
-    // deprecated functions: use Set/GetItemImage directly
-    wxDEPRECATED( int GetItemSelectedImage(const wxTreeItemId& item) const );
-    wxDEPRECATED( void SetItemSelectedImage(const wxTreeItemId& item, int image) );
-
-    // use the versions taking wxTreeItemIdValue cookies (note that
-    // GetNextChild() is not inside wxDEPRECATED on purpose, as otherwise we
-    // get twice as many warnings without any added benefit: it is always used
-    // with GetFirstChild() anyhow)
-    wxDEPRECATED( wxTreeItemId GetFirstChild(const wxTreeItemId& item,
-                                             long& cookie) const );
-    wxTreeItemId GetNextChild(const wxTreeItemId& item,
-                              long& cookie) const;
-#endif // WXWIN_COMPATIBILITY_2_4
-
     // implementation only from now on
 
     // overridden base class virtuals

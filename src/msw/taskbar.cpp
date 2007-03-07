@@ -39,18 +39,6 @@
 UINT   gs_msgTaskbar = 0;
 UINT   gs_msgRestartTaskbar = 0;
 
-#if WXWIN_COMPATIBILITY_2_4
-BEGIN_EVENT_TABLE(wxTaskBarIcon, wxTaskBarIconBase)
-    EVT_TASKBAR_MOVE         (wxTaskBarIcon::_OnMouseMove)
-    EVT_TASKBAR_LEFT_DOWN    (wxTaskBarIcon::_OnLButtonDown)
-    EVT_TASKBAR_LEFT_UP      (wxTaskBarIcon::_OnLButtonUp)
-    EVT_TASKBAR_RIGHT_DOWN   (wxTaskBarIcon::_OnRButtonDown)
-    EVT_TASKBAR_RIGHT_UP     (wxTaskBarIcon::_OnRButtonUp)
-    EVT_TASKBAR_LEFT_DCLICK  (wxTaskBarIcon::_OnLButtonDClick)
-    EVT_TASKBAR_RIGHT_DCLICK (wxTaskBarIcon::_OnRButtonDClick)
-END_EVENT_TABLE()
-#endif
-
 
 IMPLEMENT_DYNAMIC_CLASS(wxTaskBarIcon, wxEvtHandler)
 
@@ -218,32 +206,6 @@ bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
 
     return rval;
 }
-
-#if WXWIN_COMPATIBILITY_2_4
-// Overridables
-void wxTaskBarIcon::OnMouseMove(wxEvent& e)         { e.Skip(); }
-void wxTaskBarIcon::OnLButtonDown(wxEvent& e)       { e.Skip(); }
-void wxTaskBarIcon::OnLButtonUp(wxEvent& e)         { e.Skip(); }
-void wxTaskBarIcon::OnRButtonDown(wxEvent& e)       { e.Skip(); }
-void wxTaskBarIcon::OnRButtonUp(wxEvent& e)         { e.Skip(); }
-void wxTaskBarIcon::OnLButtonDClick(wxEvent& e)     { e.Skip(); }
-void wxTaskBarIcon::OnRButtonDClick(wxEvent& e)     { e.Skip(); }
-
-void wxTaskBarIcon::_OnMouseMove(wxTaskBarIconEvent& e)
-    { OnMouseMove(e);     }
-void wxTaskBarIcon::_OnLButtonDown(wxTaskBarIconEvent& e)
-    { OnLButtonDown(e);   }
-void wxTaskBarIcon::_OnLButtonUp(wxTaskBarIconEvent& e)
-    { OnLButtonUp(e);     }
-void wxTaskBarIcon::_OnRButtonDown(wxTaskBarIconEvent& e)
-    { OnRButtonDown(e);   }
-void wxTaskBarIcon::_OnRButtonUp(wxTaskBarIconEvent& e)
-    { OnRButtonUp(e);     }
-void wxTaskBarIcon::_OnLButtonDClick(wxTaskBarIconEvent& e)
-    { OnLButtonDClick(e); }
-void wxTaskBarIcon::_OnRButtonDClick(wxTaskBarIconEvent& e)
-    { OnRButtonDClick(e); }
-#endif
 
 void wxTaskBarIcon::RegisterWindowMessages()
 {

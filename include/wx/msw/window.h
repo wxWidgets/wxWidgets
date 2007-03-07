@@ -17,15 +17,6 @@
 // constants
 // ---------------------------------------------------------------------------
 
-#if WXWIN_COMPATIBILITY_2_4
-// they're unused by wxWidgets...
-enum
-{
-    wxKEY_SHIFT = 1,
-    wxKEY_CTRL  = 2
-};
-#endif
-
 // ---------------------------------------------------------------------------
 // wxWindow declaration for MSW
 // ---------------------------------------------------------------------------
@@ -123,12 +114,6 @@ public:
 
     // Accept files for dragging
     virtual void DragAcceptFiles(bool accept);
-
-#if WXWIN_COMPATIBILITY_2_4
-    wxDEPRECATED( bool GetUseCtl3D() const );
-    wxDEPRECATED( bool GetTransparentBackground() const );
-    wxDEPRECATED( void SetTransparent(bool t = true) );
-#endif // WXWIN_COMPATIBILITY_2_4
 
 #ifndef __WXUNIVERSAL__
     // Native resource loading (implemented in src/msw/nativdlg.cpp)
@@ -545,14 +530,6 @@ private:
 // inline functions
 // ----------------------------------------------------------------------------
 
-#if WXWIN_COMPATIBILITY_2_4
-
-inline bool wxWindowMSW::GetUseCtl3D() const { return false; }
-inline bool wxWindowMSW::GetTransparentBackground() const { return false; }
-inline void wxWindowMSW::SetTransparent(bool WXUNUSED(t)) { }
-
-#endif // WXWIN_COMPATIBILITY_2_4
-
 // ---------------------------------------------------------------------------
 // global functions
 // ---------------------------------------------------------------------------
@@ -580,11 +557,7 @@ public:
 #include "wx/hash.h"
 
 // pseudo-template HWND <-> wxWindow hash table
-#if WXWIN_COMPATIBILITY_2_4
-WX_DECLARE_HASH(wxWindow, wxWindowList, wxWinHashTable);
-#else
 WX_DECLARE_HASH(wxWindowMSW, wxWindowList, wxWinHashTable);
-#endif
 
 extern wxWinHashTable *wxWinHandleHash;
 

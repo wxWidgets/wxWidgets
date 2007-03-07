@@ -84,14 +84,6 @@ public:
     }
 
 
-    // deprecated functions
-    // --------------------
-
-#if WXWIN_COMPATIBILITY_2_4
-    wxDEPRECATED( int GetNumberOfRowsOrCols() const );
-    wxDEPRECATED( void SetNumberOfRowsOrCols(int n) );
-#endif // WXWIN_COMPATIBILITY_2_4
-
 protected:
     wxRadioBoxBase()
     {

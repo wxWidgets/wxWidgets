@@ -72,11 +72,6 @@ class WXDLLIMPEXP_CORE wxWindowList;
 // String functions (deprecated, use wxString)
 // ----------------------------------------------------------------------------
 
-// Make a copy of this string using 'new'
-#if WXWIN_COMPATIBILITY_2_4
-wxDEPRECATED( WXDLLIMPEXP_BASE wxChar* copystring(const wxChar *s) );
-#endif
-
 // A shorter way of using strcmp
 #define wxStringEq(s1, s2) (s1 && s2 && (wxStrcmp(s1, s2) == 0))
 
@@ -291,23 +286,6 @@ WXDLLEXPORT long wxGetCurrentId();
 // ----------------------------------------------------------------------------
 // Various conversions
 // ----------------------------------------------------------------------------
-
-// these functions are deprecated, use wxString methods instead!
-#if WXWIN_COMPATIBILITY_2_4
-
-extern WXDLLIMPEXP_DATA_BASE(const wxChar*) wxFloatToStringStr;
-extern WXDLLIMPEXP_DATA_BASE(const wxChar*) wxDoubleToStringStr;
-
-wxDEPRECATED( WXDLLIMPEXP_BASE void StringToFloat(const wxChar *s, float *number) );
-wxDEPRECATED( WXDLLIMPEXP_BASE wxChar* FloatToString(float number, const wxChar *fmt = wxFloatToStringStr) );
-wxDEPRECATED( WXDLLIMPEXP_BASE void StringToDouble(const wxChar *s, double *number) );
-wxDEPRECATED( WXDLLIMPEXP_BASE wxChar* DoubleToString(double number, const wxChar *fmt = wxDoubleToStringStr) );
-wxDEPRECATED( WXDLLIMPEXP_BASE void StringToInt(const wxChar *s, int *number) );
-wxDEPRECATED( WXDLLIMPEXP_BASE void StringToLong(const wxChar *s, long *number) );
-wxDEPRECATED( WXDLLIMPEXP_BASE wxChar* IntToString(int number) );
-wxDEPRECATED( WXDLLIMPEXP_BASE wxChar* LongToString(long number) );
-
-#endif // WXWIN_COMPATIBILITY_2_4
 
 // Convert 2-digit hex number to decimal
 WXDLLIMPEXP_BASE int wxHexToDec(const wxString& buf);

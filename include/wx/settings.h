@@ -198,13 +198,6 @@ public:
     // Value
     static wxSystemScreenType ms_screen;
 
-#if WXWIN_COMPATIBILITY_2_4
-    // the backwards compatible versions of wxSystemSettingsNative functions,
-    // don't use these methods in the new code!
-    wxDEPRECATED(static wxColour GetSystemColour(int index));
-    wxDEPRECATED(static wxFont GetSystemFont(int index));
-    wxDEPRECATED(static int GetSystemMetric(int index));
-#endif
 };
 
 #endif

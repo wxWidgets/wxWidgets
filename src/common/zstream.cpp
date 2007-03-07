@@ -132,13 +132,6 @@ void wxZlibInputStream::Init(int flags)
   m_z_size = ZSTREAM_BUFFER_SIZE;
   m_pos = 0;
 
-#if WXWIN_COMPATIBILITY_2_4
-  // treat compatibility mode as auto
-  m_24compatibilty = flags == wxZLIB_24COMPATIBLE;
-  if (m_24compatibilty)
-    flags = wxZLIB_AUTO;
-#endif
-
   // if gzip is asked for but not supported...
   if ((flags == wxZLIB_GZIP || flags == wxZLIB_AUTO) && !CanHandleGZip()) {
     if (flags == wxZLIB_AUTO) {
@@ -231,11 +224,6 @@ size_t wxZlibInputStream::OnSysRead(void *buffer, size_t size)
       // by the parent strean,
       m_lasterror = wxSTREAM_READ_ERROR;
       if (m_parent_i_stream->Eof())
-#if WXWIN_COMPATIBILITY_2_4
-        if (m_24compatibilty)
-          m_lasterror = wxSTREAM_EOF;
-        else
-#endif
           wxLogError(_("Can't read inflate stream: unexpected EOF in underlying stream."));
       break;
 

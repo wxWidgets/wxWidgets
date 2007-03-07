@@ -50,9 +50,6 @@ enum
     wxOPEN              = wxFD_OPEN,
     wxSAVE              = wxFD_SAVE,
     wxOVERWRITE_PROMPT  = wxFD_OVERWRITE_PROMPT,
-#if WXWIN_COMPATIBILITY_2_4
-    wxHIDE_READONLY     = 0x0008,
-#endif
     wxFILE_MUST_EXIST   = wxFD_FILE_MUST_EXIST,
     wxMULTIPLE          = wxFD_MULTIPLE,
     wxCHANGE_DIR        = wxFD_CHANGE_DIR
@@ -117,17 +114,6 @@ public:
     virtual int GetFilterIndex() const { return m_filterIndex; }
 
     // Utility functions
-
-#if WXWIN_COMPATIBILITY_2_4
-    // Parses the wildCard, returning the number of filters.
-    // Returns 0 if none or if there's a problem,
-    // The arrays will contain an equal number of items found before the error.
-    // wildCard is in the form:
-    // "All files (*)|*|Image Files (*.jpeg *.png)|*.jpg;*.png"
-    wxDEPRECATED( static int ParseWildcard(const wxString& wildCard,
-                                           wxArrayString& descriptions,
-                                           wxArrayString& filters) );
-#endif // WXWIN_COMPATIBILITY_2_4
 
 #if WXWIN_COMPATIBILITY_2_6
 

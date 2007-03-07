@@ -39,11 +39,6 @@
     #define wxHAS_TEXT_WINDOW_STREAM 0
 #endif
 
-#if WXWIN_COMPATIBILITY_2_4 && !wxHAS_TEXT_WINDOW_STREAM
-    // define old flag if one could use it somewhere
-    #define NO_TEXT_WINDOW_STREAM
-#endif
-
 class WXDLLEXPORT wxTextCtrl;
 class WXDLLEXPORT wxTextCtrlBase;
 

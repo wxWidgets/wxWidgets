@@ -265,17 +265,10 @@ IMPLEMENT_DYNAMIC_CLASS(wxHtmlHelpData, wxObject)
 
 wxHtmlHelpData::wxHtmlHelpData()
 {
-#if WXWIN_COMPATIBILITY_2_4
-    m_cacheContents = NULL;
-    m_cacheIndex = NULL;
-#endif
 }
 
 wxHtmlHelpData::~wxHtmlHelpData()
 {
-#if WXWIN_COMPATIBILITY_2_4
-    CleanCompatibilityData();
-#endif
 }
 
 bool wxHtmlHelpData::LoadMSProject(wxHtmlBookRecord *book, wxFileSystem& fsys,
@@ -703,10 +696,6 @@ bool wxHtmlHelpData::AddBook(const wxString& book)
                               title, contents, index, start, fsys.GetPath());
     delete fi;
 
-#if WXWIN_COMPATIBILITY_2_4
-    CleanCompatibilityData();
-#endif
-
     return rtval;
 }
 
@@ -779,90 +768,6 @@ wxString wxHtmlHelpData::FindPageById(int id)
     return wxEmptyString;
 }
 
-#if WXWIN_COMPATIBILITY_2_4
-wxHtmlContentsItem::wxHtmlContentsItem()
-    : m_Level(0), m_ID(wxID_ANY), m_Name(NULL), m_Page(NULL), m_Book(NULL),
-      m_autofree(false)
-{
-}
-
-wxHtmlContentsItem::wxHtmlContentsItem(const wxHtmlHelpDataItem& d)
-{
-    m_autofree = true;
-    m_Level = d.level;
-    m_ID = d.id;
-    m_Name = wxStrdup(d.name.c_str());
-    m_Page = wxStrdup(d.page.c_str());
-    m_Book = d.book;
-}
-
-wxHtmlContentsItem& wxHtmlContentsItem::operator=(const wxHtmlContentsItem& d)
-{
-    if (m_autofree)
-    {
-        free(m_Name);
-        free(m_Page);
-    }
-    m_autofree = true;
-    m_Level = d.m_Level;
-    m_ID = d.m_ID;
-    m_Name = d.m_Name ? wxStrdup(d.m_Name) : NULL;
-    m_Page = d.m_Page ? wxStrdup(d.m_Page) : NULL;
-    m_Book = d.m_Book;
-    return *this;
-}
-
-wxHtmlContentsItem::~wxHtmlContentsItem()
-{
-    if (m_autofree)
-    {
-        free(m_Name);
-        free(m_Page);
-    }
-}
-
-wxHtmlContentsItem* wxHtmlHelpData::GetContents()
-{
-    if (!m_cacheContents && !m_contents.empty())
-    {
-        size_t len = m_contents.size();
-        m_cacheContents = new wxHtmlContentsItem[len];
-        for (size_t i = 0; i < len; i++)
-            m_cacheContents[i] = m_contents[i];
-    }
-    return m_cacheContents;
-}
-
-int wxHtmlHelpData::GetContentsCnt()
-{
-    return m_contents.size();
-}
-
-wxHtmlContentsItem* wxHtmlHelpData::GetIndex()
-{
-    if (!m_cacheContents && !m_index.empty())
-    {
-        size_t len = m_index.size();
-        m_cacheContents = new wxHtmlContentsItem[len];
-        for (size_t i = 0; i < len; i++)
-            m_cacheContents[i] = m_index[i];
-    }
-    return m_cacheContents;
-}
-
-int wxHtmlHelpData::GetIndexCnt()
-{
-    return m_index.size();
-}
-
-void wxHtmlHelpData::CleanCompatibilityData()
-{
-    delete[] m_cacheContents;
-    m_cacheContents = NULL;
-    delete[] m_cacheIndex;
-    m_cacheIndex = NULL;
-}
-#endif // WXWIN_COMPATIBILITY_2_4
 
 //----------------------------------------------------------------------------------
 // wxHtmlSearchStatus functions
@@ -899,15 +804,6 @@ wxHtmlSearchStatus::wxHtmlSearchStatus(wxHtmlHelpData* data, const wxString& key
     m_Engine.LookFor(keyword, case_sensitive, whole_words_only);
     m_Active = (m_CurIndex < m_MaxIndex);
 }
-
-#if WXWIN_COMPATIBILITY_2_4
-wxHtmlContentsItem* wxHtmlSearchStatus::GetContentsItem()
-{
-    static wxHtmlContentsItem it;
-    it = wxHtmlContentsItem(*m_CurItem);
-    return &it;
-}
-#endif
 
 bool wxHtmlSearchStatus::Search()
 {

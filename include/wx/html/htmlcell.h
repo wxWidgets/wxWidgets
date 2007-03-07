@@ -458,9 +458,7 @@ public:
                                    const wxMouseEvent& event);
 
     virtual wxHtmlCell* GetFirstChild() const { return m_Cells; }
-#if WXWIN_COMPATIBILITY_2_4
-    wxDEPRECATED( wxHtmlCell* GetFirstCell() const );
-#endif
+
     // returns last child cell:
     wxHtmlCell* GetLastChild() const { return m_LastCell; }
 
@@ -518,12 +516,6 @@ protected:
     DECLARE_ABSTRACT_CLASS(wxHtmlContainerCell)
     DECLARE_NO_COPY_CLASS(wxHtmlContainerCell)
 };
-
-#if WXWIN_COMPATIBILITY_2_4
-inline wxHtmlCell* wxHtmlContainerCell::GetFirstCell() const
-    { return GetFirstChild(); }
-#endif
-
 
 
 

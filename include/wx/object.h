@@ -94,13 +94,6 @@ public:
                  ( m_baseInfo2 && m_baseInfo2->IsKindOf(info) ) );
     }
 
-#if WXWIN_COMPATIBILITY_2_4
-    // Initializes parent pointers and hash table for fast searching.
-    wxDEPRECATED( static void InitializeClasses() );
-    // Cleans up hash table used for fast searching.
-    wxDEPRECATED( static void CleanUpClasses() );
-#endif
-
 public:
     const wxChar            *m_className;
     int                      m_objectSize;
@@ -134,11 +127,6 @@ protected:
 };
 
 WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
-
-#if WXWIN_COMPATIBILITY_2_4
-inline void wxClassInfo::InitializeClasses() {}
-inline void wxClassInfo::CleanUpClasses() {}
-#endif
 
 // ----------------------------------------------------------------------------
 // Dynamic class macros

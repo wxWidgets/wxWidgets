@@ -1205,15 +1205,6 @@ bool wxGenericDirCtrl::ExtractWildcard(const wxString& filterStr, int n, wxStrin
     return false;
 }
 
-#if WXWIN_COMPATIBILITY_2_4
-// Parses the global filter, returning the number of filters.
-// Returns 0 if none or if there's a problem.
-// filterStr is in the form: "All files (*.*)|*.*|JPEG Files (*.jpeg)|*.jpg"
-int wxGenericDirCtrl::ParseFilter(const wxString& filterStr, wxArrayString& filters, wxArrayString& descriptions)
-{
-    return wxParseCommonDialogsFilter(filterStr, descriptions, filters );
-}
-#endif // WXWIN_COMPATIBILITY_2_4
 
 void wxGenericDirCtrl::DoResize()
 {

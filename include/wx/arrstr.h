@@ -167,13 +167,6 @@ public:
       return Item(Count() - 1);
   }
 
-    // return a wxString[], useful for the controls which
-    // take one in their ctor.  You must delete[] it yourself
-    // once you are done with it.  Will return NULL if the
-    // ArrayString was empty.
-#if WXWIN_COMPATIBILITY_2_4
-  wxDEPRECATED( wxString* GetStringArray() const );
-#endif
 
   // item management
     // Search the element in the array, starting from the beginning if
@@ -191,9 +184,6 @@ public:
     // remove first item matching this value
   void Remove(const wxChar *sz);
     // remove item by index
-#if WXWIN_COMPATIBILITY_2_4
-  wxDEPRECATED( void Remove(size_t nIndex, size_t nRemove = 1) );
-#endif
   void RemoveAt(size_t nIndex, size_t nRemove = 1);
 
   // sorting

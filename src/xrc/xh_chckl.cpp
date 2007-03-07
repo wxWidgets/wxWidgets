@@ -44,16 +44,8 @@ wxCheckListBoxXmlHandler::wxCheckListBoxXmlHandler()
 
 wxObject *wxCheckListBoxXmlHandler::DoCreateResource()
 {
-    if (m_class == wxT("wxCheckListBox")
-#if WXWIN_COMPATIBILITY_2_4
-        || m_class == wxT("wxCheckList")
-#endif
-       )
+    if (m_class == wxT("wxCheckListBox"))
     {
-#if WXWIN_COMPATIBILITY_2_4
-        if (m_class == wxT("wxCheckList"))
-            wxLogDebug(wxT("'wxCheckList' name is deprecated, use 'wxCheckListBox' instead."));
-#endif
         // need to build the list of strings from children
         m_insideBox = true;
         CreateChildrenPrivately(NULL, GetParamNode(wxT("content")));
@@ -112,9 +104,6 @@ wxObject *wxCheckListBoxXmlHandler::DoCreateResource()
 bool wxCheckListBoxXmlHandler::CanHandle(wxXmlNode *node)
 {
     return (IsOfClass(node, wxT("wxCheckListBox")) ||
-#if WXWIN_COMPATIBILITY_2_4
-            IsOfClass(node, wxT("wxCheckList")) ||
-#endif
            (m_insideBox && node->GetName() == wxT("item")));
 }
 

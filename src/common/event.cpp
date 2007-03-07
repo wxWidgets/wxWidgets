@@ -380,9 +380,6 @@ wxEvent::wxEvent(const wxEvent &src)
 
 wxCommandEvent::wxCommandEvent(wxEventType commandType, int theId)
               : wxEvent(theId, commandType)
-#if WXWIN_COMPATIBILITY_2_4
-              , m_commandString(this)
-#endif
 {
     m_clientData = (char *) NULL;
     m_clientObject = (wxClientData *) NULL;

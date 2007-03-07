@@ -11,6 +11,9 @@ Changes in behaviour not resulting in compilation errors, please read this!
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------
 
+- WXWIN_COMPATIBILITY_2_4 doesn't exist any more, please update your code if
+  you still relied on features deprecated since version 2.4
+
 Deprecated methods and their replacements
 -----------------------------------------
 

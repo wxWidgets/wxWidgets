@@ -266,171 +266,6 @@ bool wxPrintData::IsOk() const
     return m_nativeData->Ok();
 }
 
-// What should happen here?  wxPostScriptPrintNativeData is not
-// defined unless all this is true on MSW.
-#if WXWIN_COMPATIBILITY_2_4 && wxUSE_PRINTING_ARCHITECTURE && (!defined(__WXMSW__) || wxUSE_POSTSCRIPT_ARCHITECTURE_IN_MSW)
-
-#include "wx/generic/prntdlgg.h"
-
-#if wxUSE_POSTSCRIPT
-    #define WXUNUSED_WITHOUT_PS(name) name
-#else
-    #define WXUNUSED_WITHOUT_PS(name) WXUNUSED(name)
-#endif
-
-wxString wxPrintData::GetPrinterCommand() const
-{
-#if wxUSE_POSTSCRIPT
-    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
-        return ((wxPostScriptPrintNativeData*)m_nativeData)->GetPrinterCommand();
-#endif
-    return wxEmptyString;
-}
-
-wxString wxPrintData::GetPrinterOptions() const
-{
-#if wxUSE_POSTSCRIPT
-    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
-        return ((wxPostScriptPrintNativeData*)m_nativeData)->GetPrinterOptions();
-#endif
-    return wxEmptyString;
-}
-
-wxString wxPrintData::GetPreviewCommand() const
-{
-#if wxUSE_POSTSCRIPT
-    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
-        return ((wxPostScriptPrintNativeData*)m_nativeData)->GetPreviewCommand();
-#endif
-    return wxEmptyString;
-}
-
-wxString wxPrintData::GetFontMetricPath() const
-{
-#if wxUSE_POSTSCRIPT
-    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
-        return ((wxPostScriptPrintNativeData*)m_nativeData)->GetFontMetricPath();
-#endif
-    return wxEmptyString;
-}
-
-double wxPrintData::GetPrinterScaleX() const
-{
-#if wxUSE_POSTSCRIPT
-    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
-        return ((wxPostScriptPrintNativeData*)m_nativeData)->GetPrinterScaleX();
-#endif
-    return 1.0;
-}
-
-double wxPrintData::GetPrinterScaleY() const
-{
-#if wxUSE_POSTSCRIPT
-    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
-        return ((wxPostScriptPrintNativeData*)m_nativeData)->GetPrinterScaleY();
-#endif
-    return 1.0;
-}
-
-long wxPrintData::GetPrinterTranslateX() const
-{
-#if wxUSE_POSTSCRIPT
-    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
-        return ((wxPostScriptPrintNativeData*)m_nativeData)->GetPrinterTranslateX();
-#endif
-    return 0;
-}
-
-long wxPrintData::GetPrinterTranslateY() const
-{
-#if wxUSE_POSTSCRIPT
-    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
-        return ((wxPostScriptPrintNativeData*)m_nativeData)->GetPrinterTranslateY();
-#endif
-    return 0;
-}
-
-void wxPrintData::SetPrinterCommand(const wxString& WXUNUSED_WITHOUT_PS(command))
-{
-#if wxUSE_POSTSCRIPT
-    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
-        ((wxPostScriptPrintNativeData*)m_nativeData)->SetPrinterCommand( command );
-#endif
-}
-
-void wxPrintData::SetPrinterOptions(const wxString& WXUNUSED_WITHOUT_PS(options))
-{
-#if wxUSE_POSTSCRIPT
-    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
-        ((wxPostScriptPrintNativeData*)m_nativeData)->SetPrinterOptions( options );
-#endif
-}
-
-void wxPrintData::SetPreviewCommand(const wxString& WXUNUSED_WITHOUT_PS(command))
-{
-#if wxUSE_POSTSCRIPT
-    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
-        ((wxPostScriptPrintNativeData*)m_nativeData)->SetPreviewCommand( command );
-#endif
-}
-
-void wxPrintData::SetFontMetricPath(const wxString& WXUNUSED_WITHOUT_PS(path))
-{
-#if wxUSE_POSTSCRIPT
-    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
-        ((wxPostScriptPrintNativeData*)m_nativeData)->SetFontMetricPath( path );
-#endif
-}
-
-void wxPrintData::SetPrinterScaleX(double WXUNUSED_WITHOUT_PS(x))
-{
-#if wxUSE_POSTSCRIPT
-    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
-        ((wxPostScriptPrintNativeData*)m_nativeData)->SetPrinterScaleX( x );
-#endif
-}
-
-void wxPrintData::SetPrinterScaleY(double WXUNUSED_WITHOUT_PS(y))
-{
-#if wxUSE_POSTSCRIPT
-    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
-        ((wxPostScriptPrintNativeData*)m_nativeData)->SetPrinterScaleY( y );
-#endif
-}
-
-void wxPrintData::SetPrinterScaling(double WXUNUSED_WITHOUT_PS(x), double WXUNUSED_WITHOUT_PS(y))
-{
-#if wxUSE_POSTSCRIPT
-    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
-        ((wxPostScriptPrintNativeData*)m_nativeData)->SetPrinterScaling( x, y );
-#endif
-}
-
-void wxPrintData::SetPrinterTranslateX(long WXUNUSED_WITHOUT_PS(x))
-{
-#if wxUSE_POSTSCRIPT
-    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
-        ((wxPostScriptPrintNativeData*)m_nativeData)->SetPrinterTranslateX( x );
-#endif
-}
-
-void wxPrintData::SetPrinterTranslateY(long WXUNUSED_WITHOUT_PS(y))
-{
-#if wxUSE_POSTSCRIPT
-    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
-        ((wxPostScriptPrintNativeData*)m_nativeData)->SetPrinterTranslateY( y );
-#endif
-}
-
-void wxPrintData::SetPrinterTranslation(long WXUNUSED_WITHOUT_PS(x), long WXUNUSED_WITHOUT_PS(y))
-{
-#if wxUSE_POSTSCRIPT
-    if (m_nativeData && wxIsKindOf(m_nativeData,wxPostScriptPrintNativeData))
-        ((wxPostScriptPrintNativeData*)m_nativeData)->SetPrinterTranslation( x, y );
-#endif
-}
-#endif
-
 // ----------------------------------------------------------------------------
 // Print dialog data
 // ----------------------------------------------------------------------------
@@ -453,9 +288,6 @@ wxPrintDialogData::wxPrintDialogData()
     m_printEnablePrintToFile = ! factory->HasOwnPrintToFile();
 
     m_printEnableHelp = false;
-#if WXWIN_COMPATIBILITY_2_4
-    m_printSetupDialog = false;
-#endif
 }
 
 wxPrintDialogData::wxPrintDialogData(const wxPrintDialogData& dialogData)
@@ -479,9 +311,6 @@ wxPrintDialogData::wxPrintDialogData(const wxPrintData& printData)
     m_printEnablePageNumbers = true;
     m_printEnablePrintToFile = true;
     m_printEnableHelp = false;
-#if WXWIN_COMPATIBILITY_2_4
-    m_printSetupDialog = false;
-#endif
     m_printData = printData;
 }
 
@@ -504,9 +333,6 @@ void wxPrintDialogData::operator=(const wxPrintDialogData& data)
     m_printEnablePageNumbers = data.m_printEnablePageNumbers;
     m_printEnableHelp = data.m_printEnableHelp;
     m_printEnablePrintToFile = data.m_printEnablePrintToFile;
-#if WXWIN_COMPATIBILITY_2_4
-    m_printSetupDialog = data.m_printSetupDialog;
-#endif
     m_printData = data.m_printData;
 }
 

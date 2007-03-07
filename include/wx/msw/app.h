@@ -50,13 +50,6 @@ public:
     virtual bool OnExceptionInMainLoop();
 #endif // wxUSE_EXCEPTIONS
 
-    // deprecated functions, use wxEventLoop directly instead
-#if WXWIN_COMPATIBILITY_2_4
-    wxDEPRECATED( void DoMessage(WXMSG *pMsg) );
-    wxDEPRECATED( bool DoMessage() );
-    wxDEPRECATED( bool ProcessMessage(WXMSG* pMsg) );
-#endif // WXWIN_COMPATIBILITY_2_4
-
 protected:
     int    m_printMode; // wxPRINT_WINDOWS, wxPRINT_POSTSCRIPT
 

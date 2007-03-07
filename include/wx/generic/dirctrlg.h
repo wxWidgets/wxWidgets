@@ -149,11 +149,6 @@ public:
     // Helper
     virtual void SetupSections();
 
-#if WXWIN_COMPATIBILITY_2_4
-    // Parse the filter into an array of filters and an array of descriptions
-    virtual int ParseFilter(const wxString& filterStr, wxArrayString& filters, wxArrayString& descriptions);
-#endif // WXWIN_COMPATIBILITY_2_4
-
     // Find the child that matches the first part of 'path'.
     // E.g. if a child path is "/usr" and 'path' is "/usr/include"
     // then the child for /usr is returned.

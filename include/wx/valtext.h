@@ -60,16 +60,6 @@ public:
     inline long GetStyle() const { return m_validatorStyle; }
     inline void SetStyle(long style) { m_validatorStyle = style; }
 
-#if WXWIN_COMPATIBILITY_2_4
-    wxDEPRECATED( void SetIncludeList(const wxStringList& list) );
-    wxDEPRECATED( wxStringList& GetIncludeList() );
-
-    wxDEPRECATED( void SetExcludeList(const wxStringList& list) );
-    wxDEPRECATED( wxStringList& GetExcludeList() );
-
-    wxDEPRECATED( bool IsInCharIncludeList(const wxString& val) );
-    wxDEPRECATED( bool IsNotInCharExcludeList(const wxString& val) );
-#endif
 
     void SetIncludes(const wxArrayString& includes) { m_includes = includes; }
     inline wxArrayString& GetIncludes() { return m_includes; }
@@ -89,10 +79,6 @@ DECLARE_EVENT_TABLE()
 protected:
     long            m_validatorStyle;
     wxString *      m_stringValue;
-#if WXWIN_COMPATIBILITY_2_4
-    wxStringList    m_includeList;
-    wxStringList    m_excludeList;
-#endif
     wxArrayString   m_includes;
     wxArrayString   m_excludes;
 

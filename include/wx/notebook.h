@@ -56,10 +56,6 @@ typedef wxWindow wxNotebookPage;  // so far, any window can be a page
 
 extern WXDLLEXPORT_DATA(const wxChar) wxNotebookNameStr[];
 
-#if WXWIN_COMPATIBILITY_2_4
-    #define wxNOTEBOOK_NAME wxNotebookNameStr
-#endif
-
 // ----------------------------------------------------------------------------
 // wxNotebookBase: define wxNotebook interface
 // ----------------------------------------------------------------------------

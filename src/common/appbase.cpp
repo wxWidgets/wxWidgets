@@ -237,27 +237,6 @@ wxAppTraits *wxAppConsole::GetTraits()
     return m_traits;
 }
 
-// we must implement CreateXXX() in wxApp itself for backwards compatibility
-#if WXWIN_COMPATIBILITY_2_4
-
-#if wxUSE_LOG
-
-wxLog *wxAppConsole::CreateLogTarget()
-{
-    wxAppTraits *traits = GetTraits();
-    return traits ? traits->CreateLogTarget() : NULL;
-}
-
-#endif // wxUSE_LOG
-
-wxMessageOutput *wxAppConsole::CreateMessageOutput()
-{
-    wxAppTraits *traits = GetTraits();
-    return traits ? traits->CreateMessageOutput() : NULL;
-}
-
-#endif // WXWIN_COMPATIBILITY_2_4
-
 // ----------------------------------------------------------------------------
 // event processing
 // ----------------------------------------------------------------------------
@@ -452,15 +431,6 @@ void wxAppConsole::OnAssert(const wxChar *file,
 }
 
 #endif // __WXDEBUG__
-
-#if WXWIN_COMPATIBILITY_2_4
-
-bool wxAppConsole::CheckBuildOptions(const wxBuildOptions& buildOptions)
-{
-    return CheckBuildOptions(buildOptions.m_signature, "your program");
-}
-
-#endif
 
 // ============================================================================
 // other classes implementations

@@ -255,14 +255,6 @@ public:
     wxObject* GetWxObjectPtr() const;
 
 
-#if WXWIN_COMPATIBILITY_2_4
-    wxDEPRECATED( wxVariant(const wxStringList& val, const wxString& name = wxEmptyString) );
-    wxDEPRECATED( bool operator== (const wxStringList& value) const );
-    wxDEPRECATED( bool operator!= (const wxStringList& value) const );
-    wxDEPRECATED( void operator= (const wxStringList& value) );
-    wxDEPRECATED( wxStringList& GetStringList() const );
-#endif
-
     // ------------------------------
     // list operations
     // ------------------------------

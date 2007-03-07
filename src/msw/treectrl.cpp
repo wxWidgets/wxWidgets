@@ -1316,36 +1316,6 @@ wxTreeItemId wxTreeCtrl::GetNextChild(const wxTreeItemId& WXUNUSED(item),
     return item;
 }
 
-#if WXWIN_COMPATIBILITY_2_4
-
-wxTreeItemId wxTreeCtrl::GetFirstChild(const wxTreeItemId& item,
-                                       long& cookie) const
-{
-    wxCHECK_MSG( item.IsOk(), wxTreeItemId(), wxT("invalid tree item") );
-
-    cookie = (long)TreeView_GetChild(GetHwnd(), HITEM(item));
-
-    return wxTreeItemId((void *)cookie);
-}
-
-wxTreeItemId wxTreeCtrl::GetNextChild(const wxTreeItemId& WXUNUSED(item),
-                                      long& cookie) const
-{
-    wxTreeItemId fromCookie((void *)cookie);
-
-    HTREEITEM hitem = HITEM(fromCookie);
-
-    hitem = TreeView_GetNextSibling(GetHwnd(), hitem);
-
-    wxTreeItemId item(hitem);
-
-    cookie = (long)item.m_pItem;
-
-    return item;
-}
-
-#endif // WXWIN_COMPATIBILITY_2_4
-
 wxTreeItemId wxTreeCtrl::GetLastChild(const wxTreeItemId& item) const
 {
     wxCHECK_MSG( item.IsOk(), wxTreeItemId(), wxT("invalid tree item") );
@@ -1507,26 +1477,6 @@ wxTreeItemId wxTreeCtrl::DoInsertAfter(const wxTreeItemId& parent,
     return wxTreeItemId(id);
 }
 
-// for compatibility only
-#if WXWIN_COMPATIBILITY_2_4
-
-void wxTreeCtrl::SetImageList(wxImageList *imageList, int)
-{
-    SetImageList(imageList);
-}
-
-int wxTreeCtrl::GetItemSelectedImage(const wxTreeItemId& item) const
-{
-    return GetItemImage(item, wxTreeItemIcon_Selected);
-}
-
-void wxTreeCtrl::SetItemSelectedImage(const wxTreeItemId& item, int image)
-{
-    SetItemImage(item, image, wxTreeItemIcon_Selected);
-}
-
-#endif // WXWIN_COMPATIBILITY_2_4
-
 wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
                                  int image, int selectedImage,
                                  wxTreeItemData *data)
@@ -1684,15 +1634,6 @@ void wxTreeCtrl::Toggle(const wxTreeItemId& item)
 {
     DoExpand(item, TVE_TOGGLE);
 }
-
-#if WXWIN_COMPATIBILITY_2_4
-
-void wxTreeCtrl::ExpandItem(const wxTreeItemId& item, int action)
-{
-    DoExpand(item, action);
-}
-
-#endif
 
 void wxTreeCtrl::Unselect()
 {
