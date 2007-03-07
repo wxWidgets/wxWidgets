@@ -66,6 +66,7 @@ wxMSW
 
 wxMac
 
+- Fix position of the centered windows (didn't take menu bar size into account)
 - Added support for the wxFRAME_FLOAT_ON_PARENT style.
 
 wxX11:
