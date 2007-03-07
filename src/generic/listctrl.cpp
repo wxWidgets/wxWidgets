@@ -1590,12 +1590,17 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
 }
 
 void wxListLineData::DrawTextFormatted(wxDC *dc,
-                                       const wxString &text,
+                                       const wxString& textOrig,
                                        int col,
                                        int x,
                                        int yMid,
                                        int width)
 {
+    // we don't support displaying multiple lines currently (and neither does
+    // wxMSW FWIW) so just merge all the lines
+    wxString text(textOrig);
+    text.Replace(_T("\n"), _T(" "));
+
     wxCoord w, h;
     dc->GetTextExtent(text, &w, &h);
 
