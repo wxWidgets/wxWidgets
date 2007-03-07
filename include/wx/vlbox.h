@@ -189,6 +189,9 @@ public:
     // change the background colour of the selected cells
     void SetSelectionBackground(const wxColour& col);
 
+    // refreshes only the selected items
+    void RefreshSelected();
+
 
     virtual wxVisualAttributes GetDefaultAttributes() const
     {
@@ -235,7 +238,7 @@ protected:
     void OnKeyDown(wxKeyEvent& event);
     void OnLeftDown(wxMouseEvent& event);
     void OnLeftDClick(wxMouseEvent& event);
-
+    void OnSetOrKillFocus(wxFocusEvent& event);
 
     // common part of all ctors
     void Init();

@@ -36,6 +36,7 @@
 
 #include "wx/dcbuffer.h"
 #include "wx/selstore.h"
+#include "wx/renderer.h"
 
 // ----------------------------------------------------------------------------
 // event tables
@@ -47,6 +48,9 @@ BEGIN_EVENT_TABLE(wxVListBox, wxVScrolledWindow)
     EVT_KEY_DOWN(wxVListBox::OnKeyDown)
     EVT_LEFT_DOWN(wxVListBox::OnLeftDown)
     EVT_LEFT_DCLICK(wxVListBox::OnLeftDClick)
+
+    EVT_SET_FOCUS(wxVListBox::OnSetOrKillFocus)
+    EVT_KILL_FOCUS(wxVListBox::OnSetOrKillFocus)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -83,7 +87,10 @@ bool wxVListBox::Create(wxWindow *parent,
     // make sure the native widget has the right colour since we do
     // transparent drawing by default
     SetBackgroundColour(GetBackgroundColour());
-    m_colBgSel = wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHT);
+
+    // leave m_colBgSel in an invalid state: it means for OnDrawBackground()
+    // to use wxRendererNative instead of painting selection bg ourselves
+    m_colBgSel = wxNullColour;
 
     // flicker-free drawing requires this
     SetBackgroundStyle(wxBG_STYLE_CUSTOM);
@@ -299,6 +306,16 @@ int wxVListBox::GetNextSelected(unsigned long& cookie) const
     return wxNOT_FOUND;
 }
 
+void wxVListBox::RefreshSelected()
+{
+    // only refresh those items which are currently visible and selected:
+    for ( size_t n = GetVisibleBegin(), end = GetVisibleEnd(); n < end; n++ )
+    {
+        if ( IsSelected(n) )
+            RefreshLine(n);
+    }
+}
+
 // ----------------------------------------------------------------------------
 // wxVListBox appearance parameters
 // ----------------------------------------------------------------------------
@@ -335,25 +352,39 @@ void wxVListBox::OnDrawSeparator(wxDC& WXUNUSED(dc),
 
 void wxVListBox::OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const
 {
-    // we need to render selected and current items differently
-    const bool isSelected = IsSelected(n),
-               isCurrent = IsCurrent(n);
-    if ( isSelected || isCurrent )
+    if ( m_colBgSel.IsOk() )
     {
-        if ( isSelected )
+        // we need to render selected and current items differently
+        const bool isSelected = IsSelected(n),
+                   isCurrent = IsCurrent(n);
+        if ( isSelected || isCurrent )
         {
-            dc.SetBrush(wxBrush(m_colBgSel, wxSOLID));
+            if ( isSelected )
+            {
+                dc.SetBrush(wxBrush(m_colBgSel, wxSOLID));
+            }
+            else // !selected
+            {
+                dc.SetBrush(*wxTRANSPARENT_BRUSH);
+            }
+            dc.SetPen(*(isCurrent ? wxBLACK_PEN : wxTRANSPARENT_PEN));
+            dc.DrawRectangle(rect);
         }
-        else // !selected
-        {
-            dc.SetBrush(*wxTRANSPARENT_BRUSH);
-        }
-
-        dc.SetPen(*(isCurrent ? wxBLACK_PEN : wxTRANSPARENT_PEN));
-
-        dc.DrawRectangle(rect);
+        //else: do nothing for the normal items
     }
-    //else: do nothing for the normal items
+    else // use wxRendererNative for a more native look&feel:
+    {
+        int flags = 0;
+        if ( IsSelected(n) )
+            flags |= wxCONTROL_SELECTED;
+        if ( IsCurrent(n) )
+            flags |= wxCONTROL_CURRENT;
+        if ( wxWindow::FindFocus() == this )
+            flags |= wxCONTROL_FOCUSED;
+
+        wxRendererNative::Get().DrawItemSelectionRect(
+            wx_const_cast(wxVListBox *, this), dc, rect, flags);
+    }
 }
 
 void wxVListBox::OnPaint(wxPaintEvent& WXUNUSED(event))
@@ -409,6 +440,15 @@ void wxVListBox::OnPaint(wxPaintEvent& WXUNUSED(event))
         rectLine.y += hLine;
     }
 }
+
+void wxVListBox::OnSetOrKillFocus(wxFocusEvent& WXUNUSED(event))
+{
+    // we need to repaint the selection when we get the focus since
+    // wxRendererNative in general draws the focused selection differently
+    // from the unfocused selection (see OnDrawItem):
+    RefreshSelected();
+}
+
 
 // ============================================================================
 // wxVListBox keyboard/mouse handling

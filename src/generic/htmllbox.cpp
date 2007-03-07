@@ -365,17 +365,6 @@ void wxHtmlListBox::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const
 
     wxHtmlRenderingInfo htmlRendInfo;
 
-    // draw the selected cell in selected state
-    if ( IsSelected(n) )
-    {
-        wxHtmlSelection htmlSel;
-        htmlSel.Set(wxPoint(0,0), cell, wxPoint(INT_MAX, INT_MAX), cell);
-        htmlRendInfo.SetSelection(&htmlSel);
-        if ( m_htmlRendStyle )
-            htmlRendInfo.SetStyle(m_htmlRendStyle);
-        htmlRendInfo.GetState().SetSelectionState(wxHTML_SEL_IN);
-    }
-
     // note that we can't stop drawing exactly at the window boundary as then
     // even the visible cells part could be not drawn, so always draw the
     // entire cell
