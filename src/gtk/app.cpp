@@ -478,7 +478,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         {
             while ( strcmp(wxConvUTF8.cWX2MB(argv[i]), argvGTK[i]) != 0 )
             {
-                memmove(argv + i, argv + i + 1, argc - i);
+                memmove(argv + i, argv + i + 1, (argc - i)*sizeof(*argv));
             }
         }
 

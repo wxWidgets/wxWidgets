@@ -113,6 +113,10 @@ wxMSW
 - Fix lack of spin control update event when control lost focus.
 - Corrected drawing of bitmaps for disabled menu items.
 
+wxGTK
+
+- Fix hang on startup when using GTK+ options in Unicode build
+
 wxMac
 
 - Added support for the wxFRAME_FLOAT_ON_PARENT style.
