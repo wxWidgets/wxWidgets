@@ -59,10 +59,6 @@ public:
     void OnEndLabelEdit(wxListEvent& event);
     void OnDeleteItem(wxListEvent& event);
     void OnDeleteAllItems(wxListEvent& event);
-#if WXWIN_COMPATIBILITY_2_4
-    void OnGetInfo(wxListEvent& event);
-    void OnSetInfo(wxListEvent& event);
-#endif
     void OnSelected(wxListEvent& event);
     void OnDeselected(wxListEvent& event);
     void OnListKeyDown(wxListEvent& event);
