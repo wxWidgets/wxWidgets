@@ -1061,7 +1061,7 @@ bool wxString::Shrink()
 
 #if !wxUSE_STL
 // get the pointer to writable buffer of (at least) nLen bytes
-wxChar *wxString::GetWriteBuf(size_t nLen)
+wxChar *wxString::DoGetWriteBuf(size_t nLen)
 {
   if ( !AllocBeforeWrite(nLen) ) {
     // allocation failure handled by caller
@@ -1075,12 +1075,12 @@ wxChar *wxString::GetWriteBuf(size_t nLen)
 }
 
 // put string back in a reasonable state after GetWriteBuf
-void wxString::UngetWriteBuf()
+void wxString::DoUngetWriteBuf()
 {
-  UngetWriteBuf(wxStrlen(m_pchData));
+  DoUngetWriteBuf(wxStrlen(m_pchData));
 }
 
-void wxString::UngetWriteBuf(size_t nLen)
+void wxString::DoUngetWriteBuf(size_t nLen)
 {
   wxStringData * const pData = GetStringData();
 
@@ -1091,7 +1091,27 @@ void wxString::UngetWriteBuf(size_t nLen)
   pData->nDataLength = nLen;
   pData->Validate(true);
 }
+
+// deprecated compatibility code:
+#if WXWIN_COMPATIBILITY_2_8
+wxChar *wxString::GetWriteBuf(size_t nLen)
+{
+    return DoGetWriteBuf(nLen);
+}
+
+void wxString::UngetWriteBuf()
+{
+    DoUngetWriteBuf();
+}
+
+void wxString::UngetWriteBuf(size_t nLen)
+{
+    DoUngetWriteBuf(nLen);
+}
+#endif // WXWIN_COMPATIBILITY_2_8
+
 #endif // !wxUSE_STL
+
 
 // ---------------------------------------------------------------------------
 // data access

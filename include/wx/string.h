@@ -942,7 +942,7 @@ public:
       // string += string
   wxString& operator<<(const wxString& s)
   {
-#if !wxUSE_STL
+#if WXWIN_COMPATIBILITY_2_8 && !wxUSE_STL
     wxASSERT_MSG( s.GetStringData()->IsValid(),
                   _T("did you forget to call UngetWriteBuf()?") );
 #endif
@@ -1175,14 +1175,16 @@ public:
     // minimize the string's memory
     // only works if the data of this string is not shared
   bool Shrink();
-#if !wxUSE_STL
+#if WXWIN_COMPATIBILITY_2_8 && !wxUSE_STL
+    // These are deprecated, use wxStringBuffer or wxStringBufferLength instead
+    //
     // get writable buffer of at least nLen bytes. Unget() *must* be called
     // a.s.a.p. to put string back in a reasonable state!
-  wxChar *GetWriteBuf(size_t nLen);
+  wxDEPRECATED( wxChar *GetWriteBuf(size_t nLen) );
     // call this immediately after GetWriteBuf() has been used
-  void UngetWriteBuf();
-  void UngetWriteBuf(size_t nLen);
-#endif
+  wxDEPRECATED( void UngetWriteBuf() );
+  wxDEPRECATED( void UngetWriteBuf(size_t nLen) );
+#endif // WXWIN_COMPATIBILITY_2_8 && !wxUSE_STL
 
   // wxWidgets version 1 compatibility functions
 
@@ -1371,6 +1373,17 @@ public:
       // string += char
   wxString& operator+=(wxChar ch)
     { return (wxString&)wxStringBase::operator+=(ch); }
+
+private:
+#if !wxUSE_STL
+  // helpers for wxStringBuffer and wxStringBufferLength
+  wxChar *DoGetWriteBuf(size_t nLen);
+  void DoUngetWriteBuf();
+  void DoUngetWriteBuf(size_t nLen);
+
+  friend class WXDLLIMPEXP_BASE wxStringBuffer;
+  friend class WXDLLIMPEXP_BASE wxStringBufferLength;
+#endif
 };
 
 // notice that even though for many compilers the friend declarations above are
@@ -1459,9 +1472,9 @@ class WXDLLIMPEXP_BASE wxStringBuffer
 public:
     wxStringBuffer(wxString& str, size_t lenWanted = 1024)
         : m_str(str), m_buf(NULL)
-        { m_buf = m_str.GetWriteBuf(lenWanted); }
+        { m_buf = m_str.DoGetWriteBuf(lenWanted); }
 
-    ~wxStringBuffer() { m_str.UngetWriteBuf(); }
+    ~wxStringBuffer() { m_str.DoUngetWriteBuf(); }
 
     operator wxChar*() const { return m_buf; }
 
@@ -1478,14 +1491,14 @@ public:
     wxStringBufferLength(wxString& str, size_t lenWanted = 1024)
         : m_str(str), m_buf(NULL), m_len(0), m_lenSet(false)
     {
-        m_buf = m_str.GetWriteBuf(lenWanted);
+        m_buf = m_str.DoGetWriteBuf(lenWanted);
         wxASSERT(m_buf != NULL);
     }
 
     ~wxStringBufferLength()
     {
         wxASSERT(m_lenSet);
-        m_str.UngetWriteBuf(m_len);
+        m_str.DoUngetWriteBuf(m_len);
     }
 
     operator wxChar*() const { return m_buf; }
