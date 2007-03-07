@@ -2664,7 +2664,8 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_HDR =  \
 	wx/unix/joystick.h \
 	wx/unix/sound.h \
 	wx/unix/taskbarx11.h \
-	wx/gtk/animate.h
+	wx/gtk/animate.h \
+	wx/gtk/hyperlink.h
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@ADVANCED_PLATFORM_HDR = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_ADVANCED_PLATFORM_HDR)
 COND_TOOLKIT_MAC_ADVANCED_PLATFORM_HDR =  \
 	wx/mac/carbon/drawer.h \
@@ -2704,6 +2705,7 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/generic/gridctrl.h \
 	wx/generic/gridsel.h \
 	wx/generic/helpext.h \
+	wx/generic/hyperlink.h \
 	wx/generic/laywin.h \
 	wx/generic/propdlg.h \
 	wx/generic/sashwin.h \
@@ -2745,6 +2747,7 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/generic/gridctrl.h \
 	wx/generic/gridsel.h \
 	wx/generic/helpext.h \
+	wx/generic/hyperlink.h \
 	wx/generic/laywin.h \
 	wx/generic/propdlg.h \
 	wx/generic/sashwin.h \
@@ -4866,6 +4869,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_1 =  \
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	monodll_animatecmn.o \
 	monodll_datavcmn.o \
+	monodll_hyperlnkcmn.o \
 	monodll_aboutdlgg.o \
 	monodll_animateg.o \
 	monodll_bmpcboxg.o \
@@ -4876,7 +4880,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	monodll_gridctrl.o \
 	monodll_gridsel.o \
 	monodll_helpext.o \
-	monodll_hyperlink.o \
+	monodll_hyperlinkg.o \
 	monodll_laywin.o \
 	monodll_odcombo.o \
 	monodll_propdlg.o \
@@ -4890,6 +4894,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 	monodll_animatecmn.o \
 	monodll_datavcmn.o \
+	monodll_hyperlnkcmn.o \
 	monodll_aboutdlgg.o \
 	monodll_animateg.o \
 	monodll_bmpcboxg.o \
@@ -4900,7 +4905,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 	monodll_gridctrl.o \
 	monodll_gridsel.o \
 	monodll_helpext.o \
-	monodll_hyperlink.o \
+	monodll_hyperlinkg.o \
 	monodll_laywin.o \
 	monodll_odcombo.o \
 	monodll_propdlg.o \
@@ -6653,6 +6658,7 @@ COND_TOOLKIT_X11___LOWLEVEL_SRC_OBJECTS_3 =  \
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_animatecmn.o \
 	monolib_datavcmn.o \
+	monolib_hyperlnkcmn.o \
 	monolib_aboutdlgg.o \
 	monolib_animateg.o \
 	monolib_bmpcboxg.o \
@@ -6663,7 +6669,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_gridctrl.o \
 	monolib_gridsel.o \
 	monolib_helpext.o \
-	monolib_hyperlink.o \
+	monolib_hyperlinkg.o \
 	monolib_laywin.o \
 	monolib_odcombo.o \
 	monolib_propdlg.o \
@@ -6677,6 +6683,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_animatecmn.o \
 	monolib_datavcmn.o \
+	monolib_hyperlnkcmn.o \
 	monolib_aboutdlgg.o \
 	monolib_animateg.o \
 	monolib_bmpcboxg.o \
@@ -6687,7 +6694,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_gridctrl.o \
 	monolib_gridsel.o \
 	monolib_helpext.o \
-	monolib_hyperlink.o \
+	monolib_hyperlinkg.o \
 	monolib_laywin.o \
 	monolib_odcombo.o \
 	monolib_propdlg.o \
@@ -10179,6 +10186,7 @@ COND_USE_SOSYMLINKS_1___advdll___so_symlinks_uninst_cmd = rm -f \
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_animatecmn.o \
 	advdll_datavcmn.o \
+	advdll_hyperlnkcmn.o \
 	advdll_aboutdlgg.o \
 	advdll_animateg.o \
 	advdll_bmpcboxg.o \
@@ -10189,7 +10197,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_gridctrl.o \
 	advdll_gridsel.o \
 	advdll_helpext.o \
-	advdll_hyperlink.o \
+	advdll_hyperlinkg.o \
 	advdll_laywin.o \
 	advdll_odcombo.o \
 	advdll_propdlg.o \
@@ -10203,6 +10211,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_animatecmn.o \
 	advdll_datavcmn.o \
+	advdll_hyperlnkcmn.o \
 	advdll_aboutdlgg.o \
 	advdll_animateg.o \
 	advdll_bmpcboxg.o \
@@ -10213,7 +10222,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_gridctrl.o \
 	advdll_gridsel.o \
 	advdll_helpext.o \
-	advdll_hyperlink.o \
+	advdll_hyperlinkg.o \
 	advdll_laywin.o \
 	advdll_odcombo.o \
 	advdll_propdlg.o \
@@ -10244,6 +10253,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___advlib___depname = \
 COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_animatecmn.o \
 	advlib_datavcmn.o \
+	advlib_hyperlnkcmn.o \
 	advlib_aboutdlgg.o \
 	advlib_animateg.o \
 	advlib_bmpcboxg.o \
@@ -10254,7 +10264,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_gridctrl.o \
 	advlib_gridsel.o \
 	advlib_helpext.o \
-	advlib_hyperlink.o \
+	advlib_hyperlinkg.o \
 	advlib_laywin.o \
 	advlib_odcombo.o \
 	advlib_propdlg.o \
@@ -10268,6 +10278,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_animatecmn.o \
 	advlib_datavcmn.o \
+	advlib_hyperlnkcmn.o \
 	advlib_aboutdlgg.o \
 	advlib_animateg.o \
 	advlib_bmpcboxg.o \
@@ -10278,7 +10289,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_gridctrl.o \
 	advlib_gridsel.o \
 	advlib_helpext.o \
-	advlib_hyperlink.o \
+	advlib_hyperlinkg.o \
 	advlib_laywin.o \
 	advlib_odcombo.o \
 	advlib_propdlg.o \
@@ -11044,6 +11055,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS =  \
 	monodll_aboutdlg.o \
 	monodll_animate.o \
 	monodll_dataview.o \
+	monodll_hyperlink.o \
 	monodll_taskbar.o \
 	monodll_eggtrayicon.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS)
@@ -11107,6 +11119,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_0 =  \
 	monolib_aboutdlg.o \
 	monolib_animate.o \
 	monolib_dataview.o \
+	monolib_hyperlink.o \
 	monolib_taskbar.o \
 	monolib_eggtrayicon.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS_0 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_0)
@@ -11170,6 +11183,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_8 =  \
 	advdll_aboutdlg.o \
 	advdll_animate.o \
 	advdll_dataview.o \
+	advdll_hyperlink.o \
 	advdll_taskbar.o \
 	advdll_eggtrayicon.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS_8 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_8)
@@ -11221,6 +11235,7 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 	advlib_aboutdlg.o \
 	advlib_animate.o \
 	advlib_dataview.o \
+	advlib_hyperlink.o \
 	advlib_taskbar.o \
 	advlib_eggtrayicon.o
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__ADVANCED_PLATFORM_SRC_OBJECTS_9 = $(COND_TOOLKIT_GTK_TOOLKIT_VERSION_2___ADVANCED_PLATFORM_SRC_OBJECTS_9)
@@ -16450,6 +16465,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
 
+@COND_USE_GUI_1@monodll_hyperlnkcmn.o: $(srcdir)/src/common/hyperlnkcmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/hyperlnkcmn.cpp
+
 @COND_USE_GUI_1@monodll_aboutdlgg.o: $(srcdir)/src/generic/aboutdlgg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/aboutdlgg.cpp
 
@@ -16480,8 +16498,8 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_helpext.o: $(srcdir)/src/generic/helpext.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/helpext.cpp
 
-@COND_USE_GUI_1@monodll_hyperlink.o: $(srcdir)/src/generic/hyperlink.cpp $(MONODLL_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/hyperlink.cpp
+@COND_USE_GUI_1@monodll_hyperlinkg.o: $(srcdir)/src/generic/hyperlinkg.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/hyperlinkg.cpp
 
 @COND_USE_GUI_1@monodll_laywin.o: $(srcdir)/src/generic/laywin.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/laywin.cpp
@@ -16608,6 +16626,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CCC) -c -o $@ $(MONODLL_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
@@ -20575,6 +20596,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
 
+@COND_USE_GUI_1@monolib_hyperlnkcmn.o: $(srcdir)/src/common/hyperlnkcmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/hyperlnkcmn.cpp
+
 @COND_USE_GUI_1@monolib_aboutdlgg.o: $(srcdir)/src/generic/aboutdlgg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/aboutdlgg.cpp
 
@@ -20605,8 +20629,8 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_helpext.o: $(srcdir)/src/generic/helpext.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/helpext.cpp
 
-@COND_USE_GUI_1@monolib_hyperlink.o: $(srcdir)/src/generic/hyperlink.cpp $(MONOLIB_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/hyperlink.cpp
+@COND_USE_GUI_1@monolib_hyperlinkg.o: $(srcdir)/src/generic/hyperlinkg.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/hyperlinkg.cpp
 
 @COND_USE_GUI_1@monolib_laywin.o: $(srcdir)/src/generic/laywin.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/laywin.cpp
@@ -20733,6 +20757,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CCC) -c -o $@ $(MONOLIB_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
@@ -28012,6 +28039,9 @@ advdll_animatecmn.o: $(srcdir)/src/common/animatecmn.cpp $(ADVDLL_ODEP)
 advdll_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
 
+advdll_hyperlnkcmn.o: $(srcdir)/src/common/hyperlnkcmn.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/common/hyperlnkcmn.cpp
+
 advdll_aboutdlgg.o: $(srcdir)/src/generic/aboutdlgg.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/aboutdlgg.cpp
 
@@ -28042,8 +28072,8 @@ advdll_gridsel.o: $(srcdir)/src/generic/gridsel.cpp $(ADVDLL_ODEP)
 advdll_helpext.o: $(srcdir)/src/generic/helpext.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/helpext.cpp
 
-advdll_hyperlink.o: $(srcdir)/src/generic/hyperlink.cpp $(ADVDLL_ODEP)
-	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/hyperlink.cpp
+advdll_hyperlinkg.o: $(srcdir)/src/generic/hyperlinkg.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/hyperlinkg.cpp
 
 advdll_laywin.o: $(srcdir)/src/generic/laywin.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/laywin.cpp
@@ -28201,6 +28231,9 @@ advdll_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
 
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(ADVDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
+
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advdll_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(ADVDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CCC) -c -o $@ $(ADVDLL_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c
 
@@ -28221,6 +28254,9 @@ advlib_animatecmn.o: $(srcdir)/src/common/animatecmn.cpp $(ADVLIB_ODEP)
 
 advlib_datavcmn.o: $(srcdir)/src/common/datavcmn.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/common/datavcmn.cpp
+
+advlib_hyperlnkcmn.o: $(srcdir)/src/common/hyperlnkcmn.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/common/hyperlnkcmn.cpp
 
 advlib_aboutdlgg.o: $(srcdir)/src/generic/aboutdlgg.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/aboutdlgg.cpp
@@ -28252,8 +28288,8 @@ advlib_gridsel.o: $(srcdir)/src/generic/gridsel.cpp $(ADVLIB_ODEP)
 advlib_helpext.o: $(srcdir)/src/generic/helpext.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/helpext.cpp
 
-advlib_hyperlink.o: $(srcdir)/src/generic/hyperlink.cpp $(ADVLIB_ODEP)
-	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/hyperlink.cpp
+advlib_hyperlinkg.o: $(srcdir)/src/generic/hyperlinkg.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/hyperlinkg.cpp
 
 advlib_laywin.o: $(srcdir)/src/generic/laywin.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/laywin.cpp
@@ -28410,6 +28446,9 @@ advlib_wizard.o: $(srcdir)/src/generic/wizard.cpp $(ADVLIB_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_dataview.o: $(srcdir)/src/gtk/dataview.cpp $(ADVLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/dataview.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_hyperlink.o: $(srcdir)/src/gtk/hyperlink.cpp $(ADVLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/gtk/hyperlink.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@advlib_eggtrayicon.o: $(srcdir)/src/gtk/eggtrayicon.c $(ADVLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	$(CCC) -c -o $@ $(ADVLIB_CFLAGS) $(srcdir)/src/gtk/eggtrayicon.c

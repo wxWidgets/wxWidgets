@@ -8313,6 +8313,10 @@ SOURCE=..\..\include\wx\generic\helpext.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\generic\hyperlink.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\generic\laywin.h
 # End Source File
 # Begin Source File

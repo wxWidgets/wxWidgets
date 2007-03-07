@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        src/generic/hyperlink.cpp
+// Name:        src/generic/hyperlinkg.cpp
 // Purpose:     Hyperlink control
 // Author:      David Norris <danorris@gmail.com>, Otto Wyss
 // Modified by: Ryan Norton, Francesco Montorsi
@@ -46,60 +46,28 @@
 // implementation
 // ============================================================================
 
-IMPLEMENT_DYNAMIC_CLASS(wxHyperlinkCtrl, wxControl)
-IMPLEMENT_DYNAMIC_CLASS(wxHyperlinkEvent, wxCommandEvent)
-DEFINE_EVENT_TYPE(wxEVT_COMMAND_HYPERLINK)
+IMPLEMENT_DYNAMIC_CLASS(wxGenericHyperlinkCtrl, wxControl)
 
 // reserved for internal use only
-#define wxHYPERLINKCTRL_POPUP_COPY_ID           16384
-
-const wxChar wxHyperlinkCtrlNameStr[] = wxT("hyperlink");
+#define wxHYPERLINK_POPUP_COPY_ID           16384
 
 // ----------------------------------------------------------------------------
-// wxHyperlinkCtrl
+// wxGenericHyperlinkCtrl
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(wxHyperlinkCtrl, wxControl)
-    EVT_PAINT(wxHyperlinkCtrl::OnPaint)
-    EVT_LEFT_DOWN(wxHyperlinkCtrl::OnLeftDown)
-    EVT_LEFT_UP(wxHyperlinkCtrl::OnLeftUp)
-    EVT_RIGHT_UP(wxHyperlinkCtrl::OnRightUp)
-    EVT_MOTION(wxHyperlinkCtrl::OnMotion)
-    EVT_LEAVE_WINDOW(wxHyperlinkCtrl::OnLeaveWindow)
-    EVT_SIZE(wxHyperlinkCtrl::OnSize)
-
-    // for the context menu
-    EVT_MENU(wxHYPERLINKCTRL_POPUP_COPY_ID, wxHyperlinkCtrl::OnPopUpCopy)
-END_EVENT_TABLE()
-
-bool wxHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
+bool wxGenericHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
     const wxString& label, const wxString& url, const wxPoint& pos,
     const wxSize& size, long style, const wxString& name)
 {
-    wxASSERT_MSG(!url.empty() || !label.empty(),
-                 wxT("Both URL and label are empty ?"));
-
-#ifdef __WXDEBUG__
-    int alignment = (int)((style & wxHL_ALIGN_LEFT) != 0) +
-                    (int)((style & wxHL_ALIGN_CENTRE) != 0) +
-                    (int)((style & wxHL_ALIGN_RIGHT) != 0);
-    wxASSERT_MSG(alignment == 1, 
-        wxT("Specify exactly one align flag!")); 
-#endif
+    // do validation checks:
+    CheckParams(label, url, style);
 
     if (!wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name))
         return false;
 
     // set to non empty strings both the url and the label
-    if(url.empty())
-        SetURL(label);
-    else
-        SetURL(url);
-
-    if(label.empty())
-        SetLabel(url);
-    else
-        SetLabel(label);
+    SetURL(url.empty() ? label : url);
+    SetLabel(label.empty() ? url : label);
 
     m_rollover = false;
     m_clicking = false;
@@ -116,11 +84,31 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
     SetFont(f);
 
     SetInitialSize(size);
-    
+
+
+    // connect our event handlers:
+    // NOTE: since this class is the base class of the GTK+'s native implementation
+    //       of wxHyperlinkCtrl, we cannot use the static macros in BEGIN/END_EVENT_TABLE
+    //       blocks, otherwise the GTK+'s native impl of wxHyperlinkCtrl would not
+    //       behave correctly (as we intercept events doing things which interfere
+    //       with GTK+'s native handling):
+
+    Connect( wxEVT_PAINT, wxPaintEventHandler(wxGenericHyperlinkCtrl::OnPaint) );
+    Connect( wxEVT_SIZE, wxSizeEventHandler(wxGenericHyperlinkCtrl::OnSize) );
+    Connect( wxEVT_LEAVE_WINDOW, wxMouseEventHandler(wxGenericHyperlinkCtrl::OnLeaveWindow) );
+
+    Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler(wxGenericHyperlinkCtrl::OnLeftDown) );
+    Connect( wxEVT_LEFT_UP, wxMouseEventHandler(wxGenericHyperlinkCtrl::OnLeftUp) );
+    Connect( wxEVT_RIGHT_UP, wxMouseEventHandler(wxGenericHyperlinkCtrl::OnRightUp) );
+    Connect( wxEVT_MOTION, wxMouseEventHandler(wxGenericHyperlinkCtrl::OnMotion) );
+
+    Connect( wxHYPERLINK_POPUP_COPY_ID, wxEVT_COMMAND_MENU_SELECTED,
+             wxCommandEventHandler(wxGenericHyperlinkCtrl::OnPopUpCopy) );
+
     return true;
 }
 
-wxSize wxHyperlinkCtrl::DoGetBestSize() const
+wxSize wxGenericHyperlinkCtrl::DoGetBestSize() const
 {
     int w, h;
 
@@ -134,7 +122,7 @@ wxSize wxHyperlinkCtrl::DoGetBestSize() const
 }
 
 
-void wxHyperlinkCtrl::SetNormalColour(const wxColour &colour)
+void wxGenericHyperlinkCtrl::SetNormalColour(const wxColour &colour)
 {
     m_normalColour = colour;
     if (!m_visited)
@@ -144,7 +132,7 @@ void wxHyperlinkCtrl::SetNormalColour(const wxColour &colour)
     }
 }
 
-void wxHyperlinkCtrl::SetVisitedColour(const wxColour &colour)
+void wxGenericHyperlinkCtrl::SetVisitedColour(const wxColour &colour)
 {
     m_visitedColour = colour;
     if (m_visited)
@@ -154,15 +142,15 @@ void wxHyperlinkCtrl::SetVisitedColour(const wxColour &colour)
     }
 }
 
-void wxHyperlinkCtrl::DoContextMenu(const wxPoint &pos)
+void wxGenericHyperlinkCtrl::DoContextMenu(const wxPoint &pos)
 {
     wxMenu *menuPopUp = new wxMenu(wxEmptyString, wxMENU_TEAROFF);
-    menuPopUp->Append(wxHYPERLINKCTRL_POPUP_COPY_ID, wxT("Copy URL"));
+    menuPopUp->Append(wxHYPERLINK_POPUP_COPY_ID, wxT("Copy URL"));
     PopupMenu( menuPopUp, pos );
     delete menuPopUp;
 }
 
-wxRect wxHyperlinkCtrl::GetLabelRect() const
+wxRect wxGenericHyperlinkCtrl::GetLabelRect() const
 {
     // our best size is always the size of the label without borders
     wxSize c(GetClientSize()), b(GetBestSize());
@@ -183,10 +171,10 @@ wxRect wxHyperlinkCtrl::GetLabelRect() const
 
 
 // ----------------------------------------------------------------------------
-// wxHyperlinkCtrl - event handlers
+// wxGenericHyperlinkCtrl - event handlers
 // ----------------------------------------------------------------------------
 
-void wxHyperlinkCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
+void wxGenericHyperlinkCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
     wxPaintDC dc(this);
     dc.SetFont(GetFont());
@@ -196,13 +184,13 @@ void wxHyperlinkCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     dc.DrawText(GetLabel(), GetLabelRect().GetTopLeft());
 }
 
-void wxHyperlinkCtrl::OnLeftDown(wxMouseEvent& event)
+void wxGenericHyperlinkCtrl::OnLeftDown(wxMouseEvent& event)
 {
     // the left click must start from the hyperlink rect
     m_clicking = GetLabelRect().Contains(event.GetPosition());
 }
 
-void wxHyperlinkCtrl::OnLeftUp(wxMouseEvent& event)
+void wxGenericHyperlinkCtrl::OnLeftUp(wxMouseEvent& event)
 {
     // the click must be started and ended in the hyperlink rect
     if (!m_clicking || !GetLabelRect().Contains(event.GetPosition())) 
@@ -213,20 +201,17 @@ void wxHyperlinkCtrl::OnLeftUp(wxMouseEvent& event)
     m_clicking = false;
 
     // send the event
-    wxHyperlinkEvent linkEvent(this, GetId(), m_url);
-    if (!GetEventHandler()->ProcessEvent(linkEvent))     // was the event skipped ?
-        if (!wxLaunchDefaultBrowser(m_url))
-            wxLogWarning(wxT("Could not launch the default browser with url '%s' !"), m_url.c_str());
+    SendEvent();
 }
 
-void wxHyperlinkCtrl::OnRightUp(wxMouseEvent& event)
+void wxGenericHyperlinkCtrl::OnRightUp(wxMouseEvent& event)
 {
     if( GetWindowStyle() & wxHL_CONTEXTMENU )
         if ( GetLabelRect().Contains(event.GetPosition()) )
             DoContextMenu(wxPoint(event.m_x, event.m_y));
 }
 
-void wxHyperlinkCtrl::OnMotion(wxMouseEvent& event)
+void wxGenericHyperlinkCtrl::OnMotion(wxMouseEvent& event)
 {
     wxRect textrc = GetLabelRect();
 
@@ -246,7 +231,7 @@ void wxHyperlinkCtrl::OnMotion(wxMouseEvent& event)
     }
 }
 
-void wxHyperlinkCtrl::OnLeaveWindow(wxMouseEvent& WXUNUSED(event) )
+void wxGenericHyperlinkCtrl::OnLeaveWindow(wxMouseEvent& WXUNUSED(event) )
 {
     // NB: when the label rect and the client size rect have the same
     //     height this function is indispensable to remove the "rollover"
@@ -262,7 +247,7 @@ void wxHyperlinkCtrl::OnLeaveWindow(wxMouseEvent& WXUNUSED(event) )
     }
 }
 
-void wxHyperlinkCtrl::OnPopUpCopy( wxCommandEvent& WXUNUSED(event) )
+void wxGenericHyperlinkCtrl::OnPopUpCopy( wxCommandEvent& WXUNUSED(event) )
 {
 #if wxUSE_CLIPBOARD
     if (!wxTheClipboard->Open())
@@ -274,7 +259,7 @@ void wxHyperlinkCtrl::OnPopUpCopy( wxCommandEvent& WXUNUSED(event) )
 #endif // wxUSE_CLIPBOARD
 }
 
-void wxHyperlinkCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
+void wxGenericHyperlinkCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
 {
     // update the position of the label in the screen respecting
     // the selected align flag

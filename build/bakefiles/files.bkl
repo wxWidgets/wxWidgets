@@ -2657,6 +2657,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="ADVANCED_CMN_SRC" hints="files">
     src/common/animatecmn.cpp
     src/common/datavcmn.cpp
+    src/common/hyperlnkcmn.cpp
     src/generic/aboutdlgg.cpp
     src/generic/animateg.cpp
     src/generic/bmpcboxg.cpp
@@ -2667,7 +2668,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/gridctrl.cpp
     src/generic/gridsel.cpp
     src/generic/helpext.cpp
-    src/generic/hyperlink.cpp
+    src/generic/hyperlinkg.cpp
     src/generic/laywin.cpp
     src/generic/odcombo.cpp
     src/generic/propdlg.cpp
@@ -2696,6 +2697,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/gridctrl.h
     wx/generic/gridsel.h
     wx/generic/helpext.h
+    wx/generic/hyperlink.h
     wx/generic/laywin.h
     wx/generic/propdlg.h
     wx/generic/sashwin.h
@@ -2797,11 +2799,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/aboutdlg.cpp
     src/gtk/animate.cpp
     src/gtk/dataview.cpp
+    src/gtk/hyperlink.cpp
     src/gtk/taskbar.cpp
     src/gtk/eggtrayicon.c
 </set>
 <set var="ADVANCED_GTK_HDR" hints="files">
     wx/gtk/animate.h
+    wx/gtk/hyperlink.h
 </set>
 
 <set var="ADVANCED_GTK1_SRC" hints="files">

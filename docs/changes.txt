@@ -38,6 +38,7 @@ All:
 
 wxGTK:
 
+- Native implementation for wxHyperlinkCtrl (Francesco Montorsi)
 - Implemented support for underlined fonts in wxStaticText.
 - wxTopLevelWindow::SetSizeHints size increments now work.
 - wxTopLevelWindow::GetSize() returns the size including the WM decorations.
