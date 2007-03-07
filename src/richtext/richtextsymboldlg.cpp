@@ -391,7 +391,7 @@ void wxSymbolPickerDialog::CreateControls()
     itemBoxSizer4->Add(itemBoxSizer5, 1, wxGROW, 5);
 
     wxStaticText* itemStaticText6 = new wxStaticText( itemDialog1, wxID_STATIC, _("&Font:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxString* m_fontCtrlStrings = NULL;
     m_fontCtrl = new wxComboBox( itemDialog1, ID_SYMBOLPICKERDIALOG_FONT, wxEmptyString, wxDefaultPosition, wxSize(240, -1), 0, m_fontCtrlStrings, wxCB_READONLY );
@@ -404,7 +404,7 @@ void wxSymbolPickerDialog::CreateControls()
 
 #if defined(__UNICODE__)
     wxStaticText* itemStaticText9 = new wxStaticText( itemDialog1, wxID_STATIC, _("&Subset:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer5->Add(itemStaticText9, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemBoxSizer5->Add(itemStaticText9, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 #endif
 
@@ -425,12 +425,12 @@ void wxSymbolPickerDialog::CreateControls()
     itemBoxSizer3->Add(itemBoxSizer12, 0, wxGROW, 5);
 
     m_symbolStaticCtrl = new wxStaticText( itemDialog1, wxID_STATIC, _("xxxx"), wxDefaultPosition, wxSize(40, -1), wxALIGN_CENTRE );
-    itemBoxSizer12->Add(m_symbolStaticCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemBoxSizer12->Add(m_symbolStaticCtrl, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     itemBoxSizer12->Add(5, 5, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText15 = new wxStaticText( itemDialog1, wxID_STATIC, _("&Character code:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer12->Add(itemStaticText15, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemBoxSizer12->Add(itemStaticText15, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     m_characterCodeCtrl = new wxTextCtrl( itemDialog1, ID_SYMBOLPICKERDIALOG_CHARACTERCODE, wxEmptyString, wxDefaultPosition, wxSize(140, -1), wxTE_READONLY|wxTE_CENTRE );
     m_characterCodeCtrl->SetHelpText(_("The character code."));
@@ -442,7 +442,7 @@ void wxSymbolPickerDialog::CreateControls()
 
 #if defined(__UNICODE__)
     wxStaticText* itemStaticText18 = new wxStaticText( itemDialog1, wxID_STATIC, _("&From:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer12->Add(itemStaticText18, 0, wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemBoxSizer12->Add(itemStaticText18, 0, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
 #endif
 

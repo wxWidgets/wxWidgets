@@ -450,7 +450,7 @@ void wxFontDialog::CreateControls()
     itemBoxSizer3->Add(itemFlexGridSizer4, 1, wxGROW|wxALL, 5);
 
     wxStaticText* itemStaticText5 = new wxStaticText( itemDialog1, wxID_STATIC, _("Font:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer4->Add(itemStaticText5, 0, wxALIGN_RIGHT|wxALIGN_TOP|wxALL|wxADJUST_MINSIZE, 5);
+    itemFlexGridSizer4->Add(itemStaticText5, 0, wxALIGN_RIGHT|wxALIGN_TOP|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer6 = new wxBoxSizer(wxVERTICAL);
     itemFlexGridSizer4->Add(itemBoxSizer6, 0, wxGROW|wxGROW, 5);
@@ -460,7 +460,7 @@ void wxFontDialog::CreateControls()
     itemBoxSizer6->Add(m_facenameCtrl, 0, wxGROW|wxALL, 5);
 
     wxStaticText* itemStaticText8 = new wxStaticText( itemDialog1, wxID_STATIC, _("Size:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer4->Add(itemStaticText8, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemFlexGridSizer4->Add(itemStaticText8, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     m_sizeCtrl = new wxSpinCtrl( itemDialog1, wxID_FONTDIALOG_FONTSIZE, _T("12"), wxDefaultPosition, wxSize(60, -1), wxSP_ARROW_KEYS, 1, 300, 12 );
     m_sizeCtrl->SetHelpText(_("The font size in points."));
@@ -469,7 +469,7 @@ void wxFontDialog::CreateControls()
     itemFlexGridSizer4->Add(m_sizeCtrl, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText10 = new wxStaticText( itemDialog1, wxID_STATIC, _("Style:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer4->Add(itemStaticText10, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemFlexGridSizer4->Add(itemStaticText10, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer11 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer4->Add(itemBoxSizer11, 0, wxALIGN_LEFT|wxALIGN_CENTER_VERTICAL, 5);
@@ -501,7 +501,7 @@ void wxFontDialog::CreateControls()
     if (m_fontData.GetEnableEffects())
     {
         wxStaticText* itemStaticText15 = new wxStaticText( itemDialog1, wxID_STATIC, _("Colour:"), wxDefaultPosition, wxDefaultSize, 0 );
-        itemFlexGridSizer4->Add(itemStaticText15, 0, wxALIGN_RIGHT|wxALIGN_TOP|wxALL|wxADJUST_MINSIZE, 5);
+        itemFlexGridSizer4->Add(itemStaticText15, 0, wxALIGN_RIGHT|wxALIGN_TOP|wxALL, 5);
 
         m_colourCtrl = new wxFontColourSwatchCtrl( itemDialog1, wxID_FONTDIALOG_COLOUR, wxDefaultPosition, wxSize(-1, 30), wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
         m_colourCtrl->SetHelpText(_("Click to change the font colour."));
@@ -511,7 +511,7 @@ void wxFontDialog::CreateControls()
     }
 
     wxStaticText* itemStaticText17 = new wxStaticText( itemDialog1, wxID_STATIC, _("Preview:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer4->Add(itemStaticText17, 0, wxALIGN_RIGHT|wxALIGN_TOP|wxALL|wxADJUST_MINSIZE, 5);
+    itemFlexGridSizer4->Add(itemStaticText17, 0, wxALIGN_RIGHT|wxALIGN_TOP|wxALL, 5);
 
     m_previewCtrl = new wxFontPreviewCtrl( itemDialog1, wxID_FONTDIALOG_PREVIEW, wxDefaultPosition, wxSize(-1, 70), wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
     m_previewCtrl->SetHelpText(_("Shows a preview of the font."));

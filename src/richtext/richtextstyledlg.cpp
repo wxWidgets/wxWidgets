@@ -188,7 +188,7 @@ void wxRichTextStyleOrganiserDialog::CreateControls()
     m_buttonSizerParent->Add(itemBoxSizer5, 1, wxGROW, 5);
 
     wxStaticText* itemStaticText6 = new wxStaticText( itemDialog1, wxID_STATIC, _("&Styles:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
     m_stylesListBox = new wxRichTextStyleListCtrl( itemDialog1, ID_RICHTEXTSTYLEORGANISERDIALOG_STYLES, wxDefaultPosition, wxSize(200, 350), wxSIMPLE_BORDER|listCtrlStyle );
     m_stylesListBox->SetHelpText(_("The available styles."));
@@ -200,7 +200,7 @@ void wxRichTextStyleOrganiserDialog::CreateControls()
     m_buttonSizerParent->Add(itemBoxSizer8, 0, wxGROW, 5);
 
     wxStaticText* itemStaticText9 = new wxStaticText( itemDialog1, wxID_STATIC, _(" "), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer8->Add(itemStaticText9, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    itemBoxSizer8->Add(itemStaticText9, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
     m_previewCtrl = new wxRichTextCtrl( itemDialog1, ID_RICHTEXTSTYLEORGANISERDIALOG_PREVIEW, wxEmptyString, wxDefaultPosition, wxSize(310, 200), wxSIMPLE_BORDER|wxTE_READONLY );
     m_previewCtrl->SetHelpText(_("The style preview."));
@@ -212,7 +212,7 @@ void wxRichTextStyleOrganiserDialog::CreateControls()
     m_buttonSizerParent->Add(m_buttonSizer, 0, wxGROW, 5);
 
     wxStaticText* itemStaticText12 = new wxStaticText( itemDialog1, wxID_STATIC, _(" "), wxDefaultPosition, wxDefaultSize, 0 );
-    m_buttonSizer->Add(itemStaticText12, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    m_buttonSizer->Add(itemStaticText12, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
     m_newCharacter = new wxButton( itemDialog1, ID_RICHTEXTSTYLEORGANISERDIALOG_NEW_CHAR, _("New &Character Style..."), wxDefaultPosition, wxDefaultSize, 0 );
     m_newCharacter->SetHelpText(_("Click to create a new character style."));

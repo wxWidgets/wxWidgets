@@ -276,7 +276,7 @@ void wxGenericFontDialog::CreateWidgets()
     wxBoxSizer* itemBoxSizer5 = new wxBoxSizer(wxVERTICAL);
     itemGridSizer4->Add(itemBoxSizer5, 0, wxALIGN_CENTER_HORIZONTAL|wxGROW, 5);
     wxStaticText* itemStaticText6 = new wxStaticText( this, wxID_STATIC, _("&Font family:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
     wxChoice* itemChoice7 = new wxChoice( this, wxID_FONT_FAMILY, wxDefaultPosition, wxDefaultSize, 5, families, 0 );
     itemChoice7->SetHelpText(_("The font family."));
@@ -287,7 +287,7 @@ void wxGenericFontDialog::CreateWidgets()
     wxBoxSizer* itemBoxSizer8 = new wxBoxSizer(wxVERTICAL);
     itemGridSizer4->Add(itemBoxSizer8, 0, wxALIGN_CENTER_HORIZONTAL|wxGROW, 5);
     wxStaticText* itemStaticText9 = new wxStaticText( this, wxID_STATIC, _("&Style:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer8->Add(itemStaticText9, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    itemBoxSizer8->Add(itemStaticText9, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
     wxChoice* itemChoice10 = new wxChoice( this, wxID_FONT_STYLE, wxDefaultPosition, wxDefaultSize, 3, styles, 0 );
     itemChoice10->SetHelpText(_("The font style."));
@@ -298,7 +298,7 @@ void wxGenericFontDialog::CreateWidgets()
     wxBoxSizer* itemBoxSizer11 = new wxBoxSizer(wxVERTICAL);
     itemGridSizer4->Add(itemBoxSizer11, 0, wxALIGN_CENTER_HORIZONTAL|wxGROW, 5);
     wxStaticText* itemStaticText12 = new wxStaticText( this, wxID_STATIC, _("&Weight:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer11->Add(itemStaticText12, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    itemBoxSizer11->Add(itemStaticText12, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
     wxChoice* itemChoice13 = new wxChoice( this, wxID_FONT_WEIGHT, wxDefaultPosition, wxDefaultSize, 3, weights, 0 );
     itemChoice13->SetHelpText(_("The font weight."));
@@ -311,7 +311,7 @@ void wxGenericFontDialog::CreateWidgets()
     if (m_fontData.GetEnableEffects())
     {
         wxStaticText* itemStaticText15 = new wxStaticText( this, wxID_STATIC, _("C&olour:"), wxDefaultPosition, wxDefaultSize, 0 );
-        itemBoxSizer14->Add(itemStaticText15, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+        itemBoxSizer14->Add(itemStaticText15, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
         wxSize colourSize = wxDefaultSize;
         if (is_pda)
@@ -327,7 +327,7 @@ void wxGenericFontDialog::CreateWidgets()
     wxBoxSizer* itemBoxSizer17 = new wxBoxSizer(wxVERTICAL);
     itemGridSizer4->Add(itemBoxSizer17, 0, wxALIGN_CENTER_HORIZONTAL|wxGROW, 5);
     wxStaticText* itemStaticText18 = new wxStaticText( this, wxID_STATIC, _("&Point size:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer17->Add(itemStaticText18, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    itemBoxSizer17->Add(itemStaticText18, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
 #if USE_SPINCTRL_FOR_POINT_SIZE
     wxSpinCtrl* spinCtrl = new wxSpinCtrl(this, wxID_FONT_SIZE, wxT("12"), wxDefaultPosition, wxSize(80, wxDefaultCoord), wxSP_ARROW_KEYS, 1, 500, 12);
@@ -360,7 +360,7 @@ void wxGenericFontDialog::CreateWidgets()
         itemBoxSizer3->Add(5, 5, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
     wxStaticText* itemStaticText23 = new wxStaticText( this, wxID_STATIC, _("Preview:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer3->Add(itemStaticText23, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    itemBoxSizer3->Add(itemStaticText23, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
     wxFontPreviewer* itemWindow24 = new wxFontPreviewer( this );
     m_previewer = itemWindow24;

@@ -535,16 +535,11 @@ MyAutoScrollWindow::MyAutoScrollWindow( wxWindow *parent )
                              wxDefaultPosition,
                              SMALL_BUTTON );
 
-    // We need to do this here, because wxADJUST_MINSIZE below
-    // will cause the initial size to be ignored for Best/Min size.
-    // It would be nice to fix the sizers to handle this a little
-    // more cleanly.
-
     m_button->SetSizeHints( SMALL_BUTTON.GetWidth(), SMALL_BUTTON.GetHeight() );
 
     innersizer->Add( m_button,
                      0,
-                     wxALIGN_CENTER | wxALL | wxADJUST_MINSIZE,
+                     wxALIGN_CENTER | wxALL,
                      20 );
 
     innersizer->Add( new wxStaticText( this, wxID_ANY, _T("This is just") ),

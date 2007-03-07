@@ -126,7 +126,7 @@ void wxRichTextFontPage::CreateControls()
     itemBoxSizer4->Add(itemBoxSizer5, 1, wxGROW, 5);
 
     wxStaticText* itemStaticText6 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Font:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
     m_faceTextCtrl = new wxTextCtrl( itemPanel1, ID_RICHTEXTFONTPAGE_FACETEXTCTRL, _T(""), wxDefaultPosition, wxDefaultSize, 0 );
     m_faceTextCtrl->SetHelpText(_("Type a font name."));
@@ -144,7 +144,7 @@ void wxRichTextFontPage::CreateControls()
     itemBoxSizer4->Add(itemBoxSizer9, 0, wxGROW, 5);
 
     wxStaticText* itemStaticText10 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Size:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer9->Add(itemStaticText10, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    itemBoxSizer9->Add(itemStaticText10, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
     m_sizeTextCtrl = new wxTextCtrl( itemPanel1, ID_RICHTEXTFONTPAGE_SIZETEXTCTRL, _T(""), wxDefaultPosition, wxSize(50, -1), 0 );
     m_sizeTextCtrl->SetHelpText(_("Type a size in points."));
@@ -166,7 +166,7 @@ void wxRichTextFontPage::CreateControls()
     itemBoxSizer13->Add(itemBoxSizer14, 1, wxGROW, 5);
 
     wxStaticText* itemStaticText15 = new wxStaticText( itemPanel1, wxID_STATIC, _("Font st&yle:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer14->Add(itemStaticText15, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    itemBoxSizer14->Add(itemStaticText15, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
     wxString* m_styleCtrlStrings = NULL;
     m_styleCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTFONTPAGE_STYLECTRL, _T(""), wxDefaultPosition, wxDefaultSize, 0, m_styleCtrlStrings, wxCB_READONLY );
@@ -179,7 +179,7 @@ void wxRichTextFontPage::CreateControls()
     itemBoxSizer13->Add(itemBoxSizer17, 1, wxGROW, 5);
 
     wxStaticText* itemStaticText18 = new wxStaticText( itemPanel1, wxID_STATIC, _("Font &weight:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer17->Add(itemStaticText18, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    itemBoxSizer17->Add(itemStaticText18, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
     wxString* m_weightCtrlStrings = NULL;
     m_weightCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTFONTPAGE_WEIGHTCTRL, _T(""), wxDefaultPosition, wxDefaultSize, 0, m_weightCtrlStrings, wxCB_READONLY );
@@ -192,7 +192,7 @@ void wxRichTextFontPage::CreateControls()
     itemBoxSizer13->Add(itemBoxSizer20, 1, wxGROW, 5);
 
     wxStaticText* itemStaticText21 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Underlining:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer20->Add(itemStaticText21, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    itemBoxSizer20->Add(itemStaticText21, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
     wxString* m_underliningCtrlStrings = NULL;
     m_underliningCtrl = new wxComboBox( itemPanel1, ID_RICHTEXTFONTPAGE_UNDERLINING_CTRL, _T(""), wxDefaultPosition, wxDefaultSize, 0, m_underliningCtrlStrings, wxCB_READONLY );
@@ -205,7 +205,7 @@ void wxRichTextFontPage::CreateControls()
     itemBoxSizer13->Add(itemBoxSizer23, 0, wxGROW, 5);
 
     wxStaticText* itemStaticText24 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Colour:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer23->Add(itemStaticText24, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    itemBoxSizer23->Add(itemStaticText24, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
     m_colourCtrl = new wxRichTextColourSwatchCtrl( itemPanel1, ID_RICHTEXTFONTPAGE_COLOURCTRL, wxDefaultPosition, wxSize(40, 20), wxSIMPLE_BORDER );
     m_colourCtrl->SetHelpText(_("Click to change the text colour."));

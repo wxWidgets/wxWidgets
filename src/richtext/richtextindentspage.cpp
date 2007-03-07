@@ -136,7 +136,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     itemBoxSizer4->Add(itemBoxSizer5, 0, wxGROW, 5);
 
     wxStaticText* itemStaticText6 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Alignment"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    itemBoxSizer5->Add(itemStaticText6, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
     wxBoxSizer* itemBoxSizer7 = new wxBoxSizer(wxHORIZONTAL);
     itemBoxSizer5->Add(itemBoxSizer7, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
@@ -192,7 +192,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     itemBoxSizer4->Add(itemBoxSizer18, 0, wxGROW, 5);
 
     wxStaticText* itemStaticText19 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Indentation (tenths of a mm)"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer18->Add(itemStaticText19, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    itemBoxSizer18->Add(itemStaticText19, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
     wxBoxSizer* itemBoxSizer20 = new wxBoxSizer(wxHORIZONTAL);
     itemBoxSizer18->Add(itemBoxSizer20, 0, wxALIGN_LEFT|wxALL, 5);
@@ -203,7 +203,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     itemBoxSizer20->Add(itemFlexGridSizer22, 0, wxALIGN_CENTER_VERTICAL, 5);
 
     wxStaticText* itemStaticText23 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Left:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer22->Add(itemStaticText23, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemFlexGridSizer22->Add(itemStaticText23, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer24 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer22->Add(itemBoxSizer24, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5);
@@ -215,7 +215,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     itemBoxSizer24->Add(m_indentLeft, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText26 = new wxStaticText( itemPanel1, wxID_STATIC, _("Left (&first line):"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer22->Add(itemStaticText26, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemFlexGridSizer22->Add(itemStaticText26, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer27 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer22->Add(itemBoxSizer27, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5);
@@ -227,7 +227,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     itemBoxSizer27->Add(m_indentLeftFirst, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText29 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Right:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer22->Add(itemStaticText29, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemFlexGridSizer22->Add(itemStaticText29, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer30 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer22->Add(itemBoxSizer30, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5);
@@ -239,7 +239,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     itemBoxSizer30->Add(m_indentRight, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText32 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Outline level:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer22->Add(itemStaticText32, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemFlexGridSizer22->Add(itemStaticText32, 0, wxALIGN_CENTER_HORIZONTAL|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxString m_outlineLevelCtrlStrings[] = {
         _("Normal"),
@@ -271,7 +271,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     itemBoxSizer4->Add(itemBoxSizer37, 0, wxGROW, 5);
 
     wxStaticText* itemStaticText38 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Spacing (tenths of a mm)"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer37->Add(itemStaticText38, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    itemBoxSizer37->Add(itemStaticText38, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP, 5);
 
     wxBoxSizer* itemBoxSizer39 = new wxBoxSizer(wxHORIZONTAL);
     itemBoxSizer37->Add(itemBoxSizer39, 0, wxALIGN_LEFT|wxALL, 5);
@@ -283,7 +283,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     itemBoxSizer39->Add(itemFlexGridSizer41, 0, wxALIGN_CENTER_VERTICAL, 5);
 
     wxStaticText* itemStaticText42 = new wxStaticText( itemPanel1, wxID_STATIC, _("&Before a paragraph:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer41->Add(itemStaticText42, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemFlexGridSizer41->Add(itemStaticText42, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer43 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer41->Add(itemBoxSizer43, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5);
@@ -295,7 +295,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     itemBoxSizer43->Add(m_spacingBefore, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText45 = new wxStaticText( itemPanel1, wxID_STATIC, _("&After a paragraph:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer41->Add(itemStaticText45, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemFlexGridSizer41->Add(itemStaticText45, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer46 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer41->Add(itemBoxSizer46, 1, wxGROW|wxALIGN_CENTER_VERTICAL, 5);
@@ -306,7 +306,7 @@ void wxRichTextIndentsSpacingPage::CreateControls()
     itemBoxSizer46->Add(m_spacingAfter, 1, wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxStaticText* itemStaticText48 = new wxStaticText( itemPanel1, wxID_STATIC, _("L&ine spacing:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemFlexGridSizer41->Add(itemStaticText48, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL|wxADJUST_MINSIZE, 5);
+    itemFlexGridSizer41->Add(itemStaticText48, 0, wxALIGN_RIGHT|wxALIGN_CENTER_VERTICAL|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer49 = new wxBoxSizer(wxHORIZONTAL);
     itemFlexGridSizer41->Add(itemBoxSizer49, 0, wxGROW|wxALIGN_CENTER_VERTICAL, 5);
