@@ -106,6 +106,7 @@ All:
 - Fixed tab-related drawing and hit-testing bugs in wxRichTextCtrl.
 - Implemented background colour in wxRichTextCtrl.
 - Fixed crashes in helpview when opening a file.
+- Fixed detection of number of processors under Linux 2.6
 
 wxMSW
 
