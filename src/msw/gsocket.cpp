@@ -399,8 +399,9 @@ GSocketError GSocket::SetServer()
   /* allow a socket to re-bind if the socket is in the TIME_WAIT
      state after being previously closed.
    */
-  if (m_reusable) {
-    setsockopt(m_fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&arg, sizeof(u_long));
+  if (m_reusable)
+  {
+    setsockopt(m_fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&arg, sizeof(arg));
   }
 
   /* Bind to the local address,
@@ -596,7 +597,7 @@ GSocketError GSocket::Connect(GSocketStream stream)
   // If the reuse flag is set, use the applicable socket reuse flag
   if (m_reusable)
   {
-     setsockopt(m_fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&arg, sizeof(u_long));
+     setsockopt(m_fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&arg, sizeof(arg));
   }
 
   // If a local address has been set, then we need to bind to it before calling connect
@@ -700,6 +701,11 @@ GSocketError GSocket::SetNonOriented()
 
   ioctlsocket(m_fd, FIONBIO, (u_long FAR *) &arg);
   gs_gui_functions->Enable_Events(this);
+
+  if (m_reusable)
+  {
+    setsockopt(m_fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&arg, sizeof(arg));
+  }
 
   /* Bind to the local address,
    * and retrieve the actual address bound.

@@ -108,6 +108,7 @@ All:
 - Fixed crashes in helpview when opening a file.
 - Fixed detection of number of processors under Linux 2.6
 - Fixed Base64 computation in wxHTTP (p_michalczyk)
+- Fix handling of wxSOCKET_REUSEADDR in wxDatagramSocket (troelsk)
 
 wxMSW
 
