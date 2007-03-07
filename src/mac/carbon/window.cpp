@@ -937,10 +937,6 @@ void wxWindowMac::Init()
     m_frozenness = 0 ;
     m_macAlpha = 255 ;
 
-#if WXWIN_COMPATIBILITY_2_4
-    m_backgroundTransparent = false;
-#endif
-
 #if wxMAC_USE_CORE_GRAPHICS
     m_cgContextRef = NULL ;
 #endif

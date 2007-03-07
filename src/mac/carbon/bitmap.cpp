@@ -1286,17 +1286,6 @@ int wxBitmap::GetDepth() const
    return M_BITMAPDATA->GetDepth();
 }
 
-#if WXWIN_COMPATIBILITY_2_4
-int wxBitmap::GetQuality() const
-{
-    return 0;
-}
-
-void wxBitmap::SetQuality(int WXUNUSED(quality))
-{
-}
-#endif
-
 wxMask *wxBitmap::GetMask() const
 {
    wxCHECK_MSG( Ok(), (wxMask *) NULL, wxT("invalid bitmap") );

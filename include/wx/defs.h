@@ -1283,9 +1283,7 @@ enum wxStretch
     wxTILE                    = 0xc000,
 
     /* for compatibility only, default now, don't use explicitly any more */
-#if WXWIN_COMPATIBILITY_2_4
-    wxADJUST_MINSIZE          = 0x00100000
-#else
+#if WXWIN_COMPATIBILITY_2_6
     wxADJUST_MINSIZE          = 0
 #endif
 };
@@ -1889,12 +1887,6 @@ enum
     wxCAP_PROJECTING,
     wxCAP_BUTT
 };
-
-#if WXWIN_COMPATIBILITY_2_4
-    #define IS_HATCH(s)    ((s)>=wxFIRST_HATCH && (s)<=wxLAST_HATCH)
-#else
-    /* use wxBrush::IsHatch() instead thought wxMotif still uses it in src/motif/dcclient.cpp */
-#endif
 
 /*  Logical ops */
 typedef enum

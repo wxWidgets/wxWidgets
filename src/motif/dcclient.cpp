@@ -88,11 +88,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
 IMPLEMENT_DYNAMIC_CLASS(wxPaintDC, wxWindowDC)
 IMPLEMENT_DYNAMIC_CLASS(wxWindowDC, wxDC)
 
-#ifndef IS_HATCH
-    // IS_HATCH exists for WXWIN_COMPATIBILITY_2_4 only
-    // but wxMotif needs it for its internals here
-    #define IS_HATCH(s)    ((s)>=wxFIRST_HATCH && (s)<=wxLAST_HATCH)
-#endif
+#define IS_HATCH(s)    ((s)>=wxFIRST_HATCH && (s)<=wxLAST_HATCH)
 
 // FIXME: left over after removal of wxDC::GetOptimization()
 #define GET_OPTIMIZATION false

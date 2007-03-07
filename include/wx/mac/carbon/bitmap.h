@@ -144,13 +144,6 @@ public:
     void SetDepth(int d);
     void SetOk(bool isOk);
 
-#if WXWIN_COMPATIBILITY_2_4
-    // these functions do nothing and are only there for backwards
-    // compatibility
-    wxDEPRECATED( int GetQuality() const );
-    wxDEPRECATED( void SetQuality(int quality) );
-#endif // WXWIN_COMPATIBILITY_2_4
-
 #if wxUSE_PALETTE
     wxPalette* GetPalette() const;
     void SetPalette(const wxPalette& palette);

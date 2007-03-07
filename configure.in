@@ -937,7 +937,6 @@ WX_ARG_ENABLE(no_deps,       [  --enable-no_deps        create code without depe
 WX_ARG_ENABLE(vararg_macros, [  --disable-vararg_macros don't use vararg macros, even if they are supported], wxUSE_VARARG_MACROS)
 WX_ARG_ENABLE_PARAM(universal_binary, [[  --enable-universal_binary[=SDK] create Mac PowerPC and Intel Universal binary (not yet working)]], wxUSE_UNIVERSAL_BINARY)
 
-WX_ARG_ENABLE(compat24,      [  --enable-compat24       enable wxWidgets 2.4 compatibility], WXWIN_COMPATIBILITY_2_4, enable)
 WX_ARG_ENABLE(compat26,      [  --enable-compat26       enable wxWidgets 2.6 compatibility], WXWIN_COMPATIBILITY_2_6, enable)
 WX_ARG_ENABLE(compat28,      [  --disable-compat28      disable wxWidgets 2.8 compatibility], WXWIN_COMPATIBILITY_2_8, disable)
 
@@ -5552,12 +5551,6 @@ dnl ---------------------------------------------------------------------------
 dnl compatibility level
 dnl ---------------------------------------------------------------------------
 
-if test "x$WXWIN_COMPATIBILITY_2_4" = "xyes"; then
-    AC_DEFINE(WXWIN_COMPATIBILITY_2_4)
-
-    WXWIN_COMPATIBILITY_2_6="yes"
-fi
-
 if test "x$WXWIN_COMPATIBILITY_2_6" = "xyes"; then
     AC_DEFINE(WXWIN_COMPATIBILITY_2_6)
 
@@ -8132,7 +8125,6 @@ echo "  Should wxWidgets be linked as a shared library?         ${wxUSE_SHARED:-
 echo "  Should wxWidgets be compiled in Unicode mode?           ${wxUSE_UNICODE:-no}"
 
 echo "  What level of wxWidgets compatibility should be enabled?"
-echo "                                       wxWidgets 2.4      ${WXWIN_COMPATIBILITY_2_4:-no}"
 echo "                                       wxWidgets 2.6      ${WXWIN_COMPATIBILITY_2_6:-no}"
 echo "                                       wxWidgets 2.8      ${WXWIN_COMPATIBILITY_2_8:-yes}"
 

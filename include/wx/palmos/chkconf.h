@@ -14,10 +14,6 @@
 #ifndef _WX_PALMOS_CHKCONF_H_
 #define _WX_PALMOS_CHKCONF_H_
 
-#if WXWIN_COMPATIBILITY_2_4
-    #error "wxPalmOS port was introduced after 2.4.X"
-#endif
-
 /*
  * disable the settings which are not implemented yet
  */
