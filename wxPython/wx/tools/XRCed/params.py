@@ -37,9 +37,9 @@ class PPanel(wx.Panel):
         for w in self.GetChildren():
             w.Enable(value)
         #wx.Panel.Enable(self, value)
-    def SetModified(self):
-        self.modified = True
-        g.panel.SetModified(True)
+    def SetModified(self, state=True):
+        self.modified = state
+        if state: g.panel.SetModified(True)
     # Common method to set modified state
     def OnChange(self, evt):
         if self.freeze: return
@@ -320,7 +320,6 @@ class ParamFont(PPanel):
         dlg = wx.FontDialog(self, data)
         if dlg.ShowModal() == wx.ID_OK:
             font = dlg.GetFontData().GetChosenFont()
-            print font.GetEncoding()
             if font.GetEncoding() == wx.FONTENCODING_SYSTEM:
                 encName = ''
             else:
@@ -421,7 +420,7 @@ class ParamUnit(PPanel):
             self.SetModified()
         except:
             # !!! Strange, if I use wx.LogWarning, event is re-generated
-            print 'incorrect unit format'
+            print 'ERROR: incorrect unit format'
     def OnSpinUp(self, evt):
         self.Change(1)
     def OnSpinDown(self, evt):
@@ -625,8 +624,7 @@ class ParamContent(PPanel):
         if self.textModified:           # text has newer value
             try:
                 return self.text.GetValue().split('|')
-            except SyntaxError:
-                wx.LogError('Syntax error in parameter value: ' + self.GetName())
+            except ValueError:
                 return []
         return self.value
     def SetValue(self, value):
@@ -648,6 +646,9 @@ class ParamContent(PPanel):
             self.SetModified()
             self.textModified = False
         dlg.Destroy()
+    def SetModified(self, state=True):
+        PPanel.SetModified(self, state)
+        self.textModified = False
 
 # CheckList content
 class ParamContentCheckList(ParamContent):
@@ -728,8 +729,7 @@ class ParamIntList(ParamContent):
         if self.textModified:           # text has newer value
             try:
                 self.value = map(int, self.text.GetValue().split('|'))
-            except SyntaxError:
-                wx.LogError('Syntax error in parameter value: ' + self.GetName())
+            except ValueError:
                 self.value = []
         dlg = IntListDialog(self, self.value)
         if dlg.ShowModal() == wx.ID_OK:

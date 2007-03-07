@@ -314,6 +314,24 @@ class xxxObject:
         else: obj = self
         obj.name = name
         obj.element.setAttribute('name', name)
+    # Special processing for growablecols-like parameters
+    # represented by several nodes
+    def special(self, tag, node):
+        print 'special',tag
+        if not self.params.has_key(tag):
+            # Create new multi-group
+            self.params[tag] = xxxParamMulti(node)
+        self.params[tag].append(xxxParamInt(node))
+    def setSpecial(self, param, value):
+        # Straightforward implementation: remove, add again
+        self.params[param].remove()
+        del self.params[param]
+        for i in value:
+            node = g.tree.dom.createElement(param)
+            text = g.tree.dom.createTextNode(str(i))
+            node.appendChild(text)
+            self.element.appendChild(node)
+            self.special(param, node)
 
 # Imitation of FindResource/DoFindResource from xmlres.cpp
 def DoFindResource(parent, name, classname, recursive):
@@ -771,45 +789,11 @@ class xxxFlexGridSizer(xxxGridSizer):
     specials = ['growablecols', 'growablerows']
     allParams = ['cols', 'rows', 'vgap', 'hgap'] + specials
     paramDict = {'growablecols': ParamIntList, 'growablerows': ParamIntList}
-    # Special processing for growable* parameters
-    # (they are represented by several nodes)
-    def special(self, tag, node):
-        if not self.params.has_key(tag):
-            # Create new multi-group
-            self.params[tag] = xxxParamMulti(node)
-        self.params[tag].append(xxxParamInt(node))
-    def setSpecial(self, param, value):
-        # Straightforward implementation: remove, add again
-        self.params[param].remove()
-        del self.params[param]
-        for i in value:
-            node = g.tree.dom.createElement(param)
-            text = g.tree.dom.createTextNode(str(i))
-            node.appendChild(text)
-            self.element.appendChild(node)
-            self.special(param, node)
 
 class xxxGridBagSizer(xxxSizer):
     specials = ['growablecols', 'growablerows']
     allParams = ['vgap', 'hgap'] + specials
-    paramDict = {'growablecols':ParamIntList, 'growablerows':ParamIntList}
-    # Special processing for growable* parameters
-    # (they are represented by several nodes)
-    def special(self, tag, node):
-        if not self.params.has_key(tag):
-            # Create new multi-group
-            self.params[tag] = xxxParamMulti(node)
-        self.params[tag].append(xxxParamInt(node))
-    def setSpecial(self, param, value):
-        # Straightforward implementation: remove, add again
-        self.params[param].remove()
-        del self.params[param]
-        for i in value:
-            node = g.tree.dom.createElement(param)
-            text = g.tree.dom.createTextNode(str(i))
-            node.appendChild(text)
-            self.element.appendChild(node)
-            self.special(param, node)
+    paramDict = {'growablecols': ParamIntList, 'growablerows': ParamIntList}
 
 # Container with only one child.
 # Not shown in tree.

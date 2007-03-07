@@ -1,3 +1,10 @@
+0.1.8-2
+-------
+
+Fix for dealing with empty 'growable' property, using MiniFrame
+for properties panel, the panel is restored together with the
+main window.
+
 0.1.8-1
 -------
 

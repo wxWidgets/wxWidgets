@@ -218,7 +218,7 @@ class ParamPage(wx.Panel):
             xxx.params[param].remove()
             del xxx.params[param]
             w.SetValue('')
-            w.modified = False          # mark as not changed
+            w.SetModified(False)        # mark as not changed
             w.Enable(False)
         # Set modified flag (provokes undo storing is necessary)
         panel.SetModified(True)

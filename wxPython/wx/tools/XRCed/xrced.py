@@ -311,11 +311,10 @@ class Frame(wx.Frame):
 
         tree.RegisterKeyEvents()
 
-        # !!! frame styles are broken
-        # Miniframe for not embedded mode
-        miniFrame = wx.Frame(self, -1, 'Properties & Style',
-                            (conf.panelX, conf.panelY),
-                            (conf.panelWidth, conf.panelHeight))
+        # Miniframe for split mode
+        miniFrame = wx.MiniFrame(self, -1, 'Properties & Style',
+                                 (conf.panelX, conf.panelY),
+                                 (conf.panelWidth, conf.panelHeight))
         self.miniFrame = miniFrame
         sizer2 = wx.BoxSizer()
         miniFrame.SetAutoLayout(True)
@@ -910,6 +909,7 @@ class Frame(wx.Frame):
             self.miniFrame.Show(True)
             self.miniFrame.SetDimensions(conf.panelX, conf.panelY,
                                          conf.panelWidth, conf.panelHeight)
+            self.miniFrame.Layout()
             # Reduce width
             self.SetDimensions(pos.x, pos.y,
                                max(size.width - sizePanel.width, self.minWidth), size.height)
@@ -1285,14 +1285,18 @@ Homepage: http://xrced.sourceforge.net\
         return
 
     def OnIconize(self, evt):
-        conf.x, conf.y = self.GetPosition()
-        conf.width, conf.height = self.GetSize()
-        if conf.embedPanel:
-            conf.sashPos = self.splitter.GetSashPosition()
+        if evt.Iconized():
+            conf.x, conf.y = self.GetPosition()
+            conf.width, conf.height = self.GetSize()
+            if conf.embedPanel:
+                conf.sashPos = self.splitter.GetSashPosition()
+            else:
+                conf.panelX, conf.panelY = self.miniFrame.GetPosition()
+                conf.panelWidth, conf.panelHeight = self.miniFrame.GetSize()
+                self.miniFrame.Iconize()
         else:
-            conf.panelX, conf.panelY = self.miniFrame.GetPosition()
-            conf.panelWidth, conf.panelHeight = self.miniFrame.GetSize()
-            self.miniFrame.Iconize()
+            if not conf.embedPanel:
+                self.miniFrame.Iconize(False)
         evt.Skip()
 
     def OnCloseWindow(self, evt):
