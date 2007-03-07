@@ -9425,10 +9425,6 @@ SOURCE=..\..\include\wx\vscroll.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\wave.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\window.h
 # End Source File
 # Begin Source File

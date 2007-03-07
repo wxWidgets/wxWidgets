@@ -1301,10 +1301,6 @@ SOURCE=..\..\include\wx\tipdlg.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\wave.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\wizard.h
 # End Source File
 # End Group

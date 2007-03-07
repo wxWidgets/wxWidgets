@@ -2712,7 +2712,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/splash.h
     wx/taskbar.h
     wx/tipdlg.h
-    wx/wave.h
     wx/wizard.h
 </set>
 
