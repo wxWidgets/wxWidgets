@@ -919,7 +919,7 @@ void wxDataViewHeaderWindowBase::SendEvent(wxEventType type, unsigned int n)
 #if defined(__WXMSW__) && USE_NATIVE_HEADER_WINDOW
 
 // implemented in msw/listctrl.cpp:
-unsigned int wxMSWGetColumnClicked(NMHDR *nmhdr, POINT *ptClick);
+int WXDLLIMPEXP_CORE wxMSWGetColumnClicked(NMHDR *nmhdr, POINT *ptClick);
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewHeaderWindowMSW, wxWindow)
 

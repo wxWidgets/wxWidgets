@@ -1770,7 +1770,7 @@ bool wxListCtrl::MSWCommand(WXUINT cmd, WXWORD id)
 }
 
 // utility used by wxListCtrl::MSWOnNotify and by wxDataViewHeaderWindowMSW::MSWOnNotify
-int wxMSWGetColumnClicked(NMHDR *nmhdr, POINT *ptClick)
+int WXDLLIMPEXP_CORE wxMSWGetColumnClicked(NMHDR *nmhdr, POINT *ptClick)
 {
     wxASSERT(nmhdr && ptClick);
 
