@@ -125,7 +125,7 @@ public:
                                   wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE,
                                   wxHeaderButtonParams* params = NULL);
     virtual int GetHeaderButtonHeight(wxWindow *win);
-    
+
     virtual void DrawTreeItemButton(wxWindow *win,
                                     wxDC& dc,
                                     const wxRect& rect,
@@ -333,7 +333,7 @@ wxRendererXP::DrawHeaderButton(wxWindow *win,
     // NOTE: Using the theme to draw HP_HEADERSORTARROW doesn't do anything.
     // Why?  If this can be fixed then draw the sort arrows using the theme
     // and then clear those flags before calling DrawHeaderButtonContents.
-    
+
     // Add any extras that are specified in flags and params
     return DrawHeaderButtonContents(win, dc, rect, flags, sortArrow, params);
 }
@@ -347,10 +347,10 @@ wxRendererXP::GetHeaderButtonHeight(wxWindow *win)
     {
         return m_rendererNative.GetHeaderButtonHeight(win);
     }
-    
+
     HRESULT hr;
     int value = -1;
-    
+
     hr = wxUxThemeEngine::Get()->GetThemeMetric( hTheme,
                                                  NULL,
                                                  HP_HEADERITEM,

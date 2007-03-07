@@ -250,7 +250,7 @@ wxMDIChildFrame *wxMDIParentFrame::GetActiveChild() const
 
     gint i = gtk_notebook_get_current_page( notebook );
     if (i < 0) return (wxMDIChildFrame*) NULL;
-    
+
     GtkNotebookPage* page = (GtkNotebookPage*) (g_list_nth(notebook->children,i)->data);
     if (!page) return (wxMDIChildFrame*) NULL;
 
@@ -259,7 +259,7 @@ wxMDIChildFrame *wxMDIParentFrame::GetActiveChild() const
     {
         if ( wxPendingDelete.Member(node->GetData()) )
             return (wxMDIChildFrame*) NULL;
-        
+
         wxMDIChildFrame *child_frame = wxDynamicCast( node->GetData(), wxMDIChildFrame );
 
         if (!child_frame)
@@ -267,7 +267,7 @@ wxMDIChildFrame *wxMDIParentFrame::GetActiveChild() const
 
         if (child_frame->m_page == page)
             return child_frame;
-            
+
         node = node->GetNext();
     }
 

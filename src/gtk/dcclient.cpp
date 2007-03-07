@@ -324,7 +324,7 @@ wxWindowDC::wxWindowDC( wxWindow *window )
        standard (as e.g. wxStatusBar) */
 
     m_owner = window;
-    
+
     if (m_owner && m_owner->m_wxwindow && (m_owner->GetLayoutDirection() == wxLayout_RightToLeft))
     {
         // reverse sense
@@ -391,7 +391,7 @@ void wxWindowDC::SetUpDC()
     gdk_gc_set_background( m_textGC, m_textBackgroundColour.GetColor() );
 
     gdk_gc_set_fill( m_textGC, GDK_SOLID );
-    
+
     gdk_gc_set_colormap( m_textGC, m_cmap );
 
     /* m_penGC */
@@ -862,7 +862,7 @@ void wxWindowDC::DoDrawRectangle( wxCoord x, wxCoord y, wxCoord width, wxCoord h
                     gdk_draw_rectangle( m_window, m_penGC, FALSE, xx, yy, ww-2, hh-2 );
                     gdk_draw_rectangle( m_window, m_penGC, FALSE, xx-1, yy-1, ww, hh );
                 }
-                
+
                 // reset
                 gdk_gc_set_line_attributes( m_penGC, 2, GDK_LINE_SOLID, GDK_CAP_ROUND, GDK_JOIN_ROUND );
             }
@@ -1083,10 +1083,10 @@ void wxWindowDC::DoDrawBitmap( const wxBitmap &bitmap,
 
     int w = bitmap.GetWidth();
     int h = bitmap.GetHeight();
-    
+
     if (m_owner && m_owner->GetLayoutDirection() == wxLayout_RightToLeft)
         xx -= w;
-        
+
     CalcBoundingBox( x, y );
     CalcBoundingBox( x + w, y + h );
 
@@ -1219,7 +1219,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
 
     wxMemoryDC *memDC = wxDynamicCast(source, wxMemoryDC);
     wxBitmap selected = source->GetSelectedBitmap();
-    
+
     bool use_bitmap_method = false;
     bool is_mono = false;
 
@@ -1230,7 +1230,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
     }
 
     if (memDC && !selected.Ok()) return false;
-    
+
     if (selected.Ok())
     {
         is_mono = (selected.GetDepth() == 1);
@@ -1428,7 +1428,7 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
             GdkWindow* window = source->GetGDKWindow();
             if ( !window )
                 return false;
-            
+
             // copy including child window contents
             gdk_gc_set_subwindow( m_penGC, GDK_INCLUDE_INFERIORS );
             gdk_draw_drawable( m_window, m_penGC,
@@ -1579,7 +1579,7 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
             gdk_draw_rectangle(m_window, m_textGC, TRUE, x, y, w, h);
             gdk_gc_set_foreground(m_textGC, m_textForegroundColour.GetColor());
         }
-        
+
         // Draw layout.
         if (m_owner && m_owner->GetLayoutDirection() == wxLayout_RightToLeft)
             gdk_draw_layout( m_window, m_textGC, x-w, y, m_layout );
@@ -1796,7 +1796,7 @@ bool wxWindowDC::DoGetPartialTextExtents(const wxString& text,
     }
 
     pango_layout_set_text( m_layout, dataUTF8, strlen(dataUTF8) );
-    
+
     // Calculate the position of each character based on the widths of
     // the previous characters
 
@@ -2368,7 +2368,7 @@ void wxWindowDC::SetDeviceOrigin( wxCoord x, wxCoord y )
 {
     m_deviceOriginX = x;
     m_deviceOriginY = y;
-    
+
     ComputeScaleAndOrigin();
 }
 
@@ -2376,10 +2376,10 @@ void wxWindowDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
 {
     m_signX = (xLeftRight ?  1 : -1);
     m_signY = (yBottomUp  ? -1 :  1);
-    
+
     if (m_owner && m_owner->m_wxwindow && (m_owner->GetLayoutDirection() == wxLayout_RightToLeft))
-        m_signX = -m_signX;        
-        
+        m_signX = -m_signX;
+
     ComputeScaleAndOrigin();
 }
 

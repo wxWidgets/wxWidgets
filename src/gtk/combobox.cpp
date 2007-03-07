@@ -349,7 +349,7 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
 
         g_signal_connect_after (m_widget, "changed",
                             G_CALLBACK (gtkcombobox_changed_callback), this);
-                            
+
     }
     else
 #endif

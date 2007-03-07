@@ -278,7 +278,7 @@ bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *buf)
                     // skip the slashes
                     lenPrefix += 2;
                 }
-                
+
                 // It would probably be nicer to use a GTK or Glib
                 // function to unescape the 8-bit strings pointed to
                 // by buf, but this does the same in wx code.

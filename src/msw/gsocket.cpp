@@ -864,9 +864,9 @@ GSocketEventFlags GSocket::Select(GSocketEventFlags flags)
       result |= GSOCK_INPUT_FLAG;
 
       if (m_server && m_stream)
-      { 
-        /* This is a TCP server socket that detected a connection. 
-           While the INPUT_FLAG is also set, it doesn't matter on 
+      {
+        /* This is a TCP server socket that detected a connection.
+           While the INPUT_FLAG is also set, it doesn't matter on
            this kind of  sockets, as we can only Accept() from them. */
         result |= GSOCK_CONNECTION_FLAG;
         m_detected |= GSOCK_CONNECTION_FLAG;

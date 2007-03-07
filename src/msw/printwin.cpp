@@ -42,7 +42,7 @@
 #endif
 
 #include "wx/msw/printwin.h"
-#include "wx/msw/printdlg.h"	// RJL used Windows dialog?s
+#include "wx/msw/printdlg.h"
 #include "wx/msw/private.h"
 
 #include <stdlib.h>
@@ -368,7 +368,7 @@ void wxWindowsPrintPreview::DetermineScaling()
     int logPPIPrinterX;
     int logPPIPrinterY;
 
-	wxRect paperRect;
+    wxRect paperRect;
 
     if ( printerDC.Ok() )
     {
@@ -380,7 +380,7 @@ void wxWindowsPrintPreview::DetermineScaling()
         logPPIPrinterX = ::GetDeviceCaps(dc, LOGPIXELSX);
         logPPIPrinterY = ::GetDeviceCaps(dc, LOGPIXELSY);
 
-		paperRect = printerDC.GetPaperRect();
+        paperRect = printerDC.GetPaperRect();
 
         if ( logPPIPrinterX == 0 ||
                 logPPIPrinterY == 0 ||
@@ -400,7 +400,7 @@ void wxWindowsPrintPreview::DetermineScaling()
         logPPIPrinterX = 600;
         logPPIPrinterY = 600;
 
-		paperRect = wxRect(0, 0, printerXRes, printerYRes);
+        paperRect = wxRect(0, 0, printerXRes, printerYRes);
         m_isOk = false;
     }
     m_pageWidth = printerXRes;

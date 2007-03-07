@@ -77,7 +77,7 @@ typedef struct tagMENUINFO
 }   MENUINFO, FAR *LPMENUINFO;
 #endif
 
-#if wxUSE_OWNER_DRAWN 
+#if wxUSE_OWNER_DRAWN
     #include "wx/dynlib.h"
 #endif
 
@@ -451,14 +451,14 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                     !pItem->GetBackgroundColour().Ok() &&
                         !pItem->GetFont().Ok() )
         {
-            // try to use InsertMenuItem() as it's guaranteed to look correct      
+            // try to use InsertMenuItem() as it's guaranteed to look correct
             // while our owner-drawn code is not
-#ifndef __DMC__      
+#ifndef __DMC__
             // DMC at march 2007 doesn't have HBITMAP hbmpItem tagMENUITEMINFOA /W
             // MIIM_BITMAP only works under WinME/2000+
             WinStruct<MENUITEMINFO> mii;
             if ( wxGetWinVersion() >= wxWinVersion_98 )
-            { 
+            {
                 mii.fMask = MIIM_STRING | MIIM_DATA | MIIM_BITMAP;
                 if ( pItem->IsCheckable() )
                 {

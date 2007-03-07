@@ -1354,7 +1354,7 @@ wxMask::wxMask(const wxMask &mask)
     SelectObject(destDC, (HBITMAP) m_maskBitmap);
 
     BitBlt(destDC, 0, 0, w, h, srcDC, 0, 0, SRCCOPY);
-    
+
     SelectObject(srcDC, 0);
     DeleteDC(srcDC);
     SelectObject(destDC, 0);

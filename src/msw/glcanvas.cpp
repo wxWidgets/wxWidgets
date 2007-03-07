@@ -549,9 +549,9 @@ void wxGLCanvas::OnSize(wxSizeEvent& WXUNUSED(event))
 void wxGLCanvas::SetCurrent(const wxGLContext& RC) const
 {
     // although on MSW it works even if the window is still hidden, it doesn't
-  	// under wxGTK and documentation mentions that SetCurrent() can only be
-  	// called for a shown window, so check it
-  	wxASSERT_MSG( GetParent()->IsShown(), _T("can't make hidden GL canvas current") );
+    // under wxGTK and documentation mentions that SetCurrent() can only be
+    // called for a shown window, so check it
+    wxASSERT_MSG( GetParent()->IsShown(), _T("can't make hidden GL canvas current") );
 
     RC.SetCurrent(*this);
 }

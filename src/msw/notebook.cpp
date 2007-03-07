@@ -935,7 +935,7 @@ void wxNotebook::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     MSWDefWindowProc(WM_PAINT, (WPARAM)memdc.GetHDC(), 0);
 
-    // For some reason in RTL mode, source offset has to be -1, otherwise the 
+    // For some reason in RTL mode, source offset has to be -1, otherwise the
     // right border (physical) remains unpainted.
     const wxCoord ofs = dir == wxLayout_RightToLeft ? -1 : 0;
     dc.Blit(ofs, 0, rc.right, rc.bottom, &memdc, ofs, 0);

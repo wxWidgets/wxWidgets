@@ -209,7 +209,7 @@ static gint wxapp_idle_callback( gpointer WXUNUSED(data) )
 
         // Release lock again
         gdk_threads_leave();
-        
+
         {
             // If another idle source was added, remove it
 #if wxUSE_THREADS

@@ -1683,9 +1683,9 @@ gtk_window_button_release_callback( GtkWidget *widget,
     event.SetId( win->GetId() );
 
     bool ret = win->GTKProcessEvent(event);
-    
+
     g_lastMouseEvent = NULL;
-    
+
     return ret;
 }
 

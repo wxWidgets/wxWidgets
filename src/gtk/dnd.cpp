@@ -337,7 +337,7 @@ static gboolean target_drag_drop( GtkWidget *widget,
 #ifdef __WXDEBUG__
         wxLogTrace(TRACE_DND, wxT( "Drop target: OnDrop returned FALSE") );
 #endif
-       
+
         /* cancel the whole thing */
         gtk_drag_finish( context,
                           FALSE,        /* no success */
@@ -349,7 +349,7 @@ static gboolean target_drag_drop( GtkWidget *widget,
 #ifdef __WXDEBUG__
         wxLogTrace(TRACE_DND, wxT( "Drop target: OnDrop returned true") );
 #endif
-       
+
 #if wxUSE_THREADS
         /* disable GUI threads */
 #endif
@@ -419,7 +419,7 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
 #ifdef __WXDEBUG__
     wxLogTrace(TRACE_DND, wxT( "Drop target: data received event") );
 #endif
-   
+
     /* inform the wxDropTarget about the current GtkSelectionData.
        this is only valid for the duration of this call */
     drop_target->SetDragData( data );
@@ -431,7 +431,7 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
 #ifdef __WXDEBUG__
         wxLogTrace(TRACE_DND, wxT( "Drop target: OnData returned true") );
 #endif
-       
+
         /* tell GTK that data transfer was successful */
         gtk_drag_finish( context, TRUE, FALSE, time );
     }
@@ -440,7 +440,7 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
 #ifdef __WXDEBUG__
         wxLogTrace(TRACE_DND, wxT( "Drop target: OnData returned FALSE") );
 #endif
-       
+
         /* tell GTK that data transfer was not successful */
         gtk_drag_finish( context, FALSE, FALSE, time );
     }
@@ -615,7 +615,7 @@ source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
     wxLogTrace(TRACE_DND, wxT("Drop source: format requested: %s"),
                format.GetId().c_str());
 #endif
-   
+
     drop_source->m_retValue = wxDragCancel;
 
     wxDataObject *data = drop_source->GetDataObject();
@@ -859,7 +859,7 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     // don't start dragging if no button is down
     if (g_lastButtonNumber == 0)
         return wxDragNone;
-        
+
     // we can only start a drag after a mouse event
     if (g_lastMouseEvent == NULL)
         return wxDragNone;

@@ -516,7 +516,7 @@ int wxSystemSettingsNative::GetMetric( wxSystemMetric index, wxWindow* win )
             // since that is what the API wants. But the values
             // are much bigger under GNOME than under Windows and
             // just seem to much in many cases to be useful.
-            // drag_threshold *= 2;   
+            // drag_threshold *= 2;
 
             return drag_threshold;
 

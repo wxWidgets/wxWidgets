@@ -113,7 +113,7 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
 
         // wxWindowGTK will connect to the enter_notify and leave_notify GTK+ signals
         // thus overriding GTK+'s internal signal handlers which set the cursor of
-        // the widget - thus we need to manually set it here: 
+        // the widget - thus we need to manually set it here:
         SetCursor(wxCursor(wxCURSOR_HAND));
     }
     else

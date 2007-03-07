@@ -178,7 +178,7 @@ public :
     // gets the component valuess of the matrix
     virtual void Get(wxDouble* a=NULL, wxDouble* b=NULL,  wxDouble* c=NULL,
                      wxDouble* d=NULL, wxDouble* tx=NULL, wxDouble* ty=NULL) const;
-       
+
     // makes this the inverse matrix
     virtual void Invert();
 

@@ -1073,7 +1073,7 @@ bool wxToolBar::Realize()
     {
         // if not set yet, have one column
         m_maxRows = 1;
-        SetRows(m_nButtons);        
+        SetRows(m_nButtons);
     }
 
     InvalidateBestSize();
@@ -1340,7 +1340,7 @@ void wxToolBar::SetToolNormalBitmap( int id, const wxBitmap& bitmap )
 
         tool->SetNormalBitmap(bitmap);
         Realize();
-    }    
+    }
 }
 
 void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmap& bitmap )
@@ -1352,7 +1352,7 @@ void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmap& bitmap )
 
         tool->SetDisabledBitmap(bitmap);
         Realize();
-    }    
+    }
 }
 
 // ----------------------------------------------------------------------------

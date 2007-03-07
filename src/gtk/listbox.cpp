@@ -83,7 +83,7 @@ gtk_listbox_row_activated_callback(GtkTreeView        *treeview,
     if (listbox->IsSelected(sel))
     {
         GtkTreeEntry* entry = listbox->GtkGetEntry(sel);
-        
+
         if (entry)
         {
             event.SetInt(sel);
@@ -93,7 +93,7 @@ gtk_listbox_row_activated_callback(GtkTreeView        *treeview,
                 event.SetClientObject( (wxClientData*) gtk_tree_entry_get_userdata(entry) );
             else if ( listbox->HasClientUntypedData() )
                 event.SetClientData( gtk_tree_entry_get_userdata(entry) );
-                
+
             g_object_unref (entry);
         }
         else
@@ -148,9 +148,9 @@ static void
 gtk_listitem_changed_callback( GtkTreeSelection* selection, wxListBox *listbox )
 {
     if (g_blockEventsOnDrag) return;
-    
+
     if (listbox->m_blockEvent) return;
-    
+
     wxCommandEvent event(wxEVT_COMMAND_LISTBOX_SELECTED, listbox->GetId() );
     event.SetEventObject( listbox );
 
@@ -158,15 +158,15 @@ gtk_listitem_changed_callback( GtkTreeSelection* selection, wxListBox *listbox )
     {
         wxArrayInt selections;
         listbox->GetSelections( selections );
-        
+
         if (selections.GetCount() == 0)
         {
             // indicate that this is a deselection
             event.SetExtraLong( 0 );
             event.SetInt( -1 );
-        
+
             listbox->GetEventHandler()->ProcessEvent( event );
-        
+
             return;
         }
         else
@@ -174,7 +174,7 @@ gtk_listitem_changed_callback( GtkTreeSelection* selection, wxListBox *listbox )
             // indicate that this is a selection
             event.SetExtraLong( 1 );
             event.SetInt( selections[0] );
-        
+
             listbox->GetEventHandler()->ProcessEvent( event );
         }
     }
@@ -186,9 +186,9 @@ gtk_listitem_changed_callback( GtkTreeSelection* selection, wxListBox *listbox )
             // indicate that this is a deselection
             event.SetExtraLong( 0 );
             event.SetInt( -1 );
-        
+
             listbox->GetEventHandler()->ProcessEvent( event );
-        
+
             return;
         }
         else
@@ -406,7 +406,7 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
 
 
     GtkTreeSelection* selection = gtk_tree_view_get_selection( m_treeview );
-    
+
     g_signal_connect_after (selection, "changed",
                             G_CALLBACK (gtk_listitem_changed_callback), this);
 

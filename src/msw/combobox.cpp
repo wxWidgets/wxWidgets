@@ -265,7 +265,7 @@ bool wxComboBox::MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam)
             {
                 if (SendMessage(GetHwnd(), CB_GETDROPPEDSTATE, 0, 0))
                     return false;
-            
+
                 wxCommandEvent event(wxEVT_COMMAND_TEXT_ENTER, m_windowId);
 
                 const int sel = GetSelection();

@@ -5779,7 +5779,7 @@ static inline bool wxIsKeyDown(WXWORD vk)
     switch (vk)
     {
         case VK_LBUTTON:
-            if (GetSystemMetrics(SM_SWAPBUTTON)) vk = VK_RBUTTON; 
+            if (GetSystemMetrics(SM_SWAPBUTTON)) vk = VK_RBUTTON;
             break;
         case VK_RBUTTON:
             if (GetSystemMetrics(SM_SWAPBUTTON)) vk = VK_LBUTTON;

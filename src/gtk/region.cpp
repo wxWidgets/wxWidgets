@@ -459,7 +459,7 @@ wxRect wxRegionIterator::GetRect() const
 wxRegionIterator& wxRegionIterator::operator=(const wxRegionIterator& ri)
 {
     wxDELETEA(m_rects);
-    
+
     m_current = ri.m_current;
     m_numRects = ri.m_numRects;
     if ( m_numRects )

@@ -1780,10 +1780,10 @@ int WXDLLIMPEXP_CORE wxMSWGetColumnClicked(NMHDR *nmhdr, POINT *ptClick)
 
     // where did the click occur?
 #if defined(__WXWINCE__) && !defined(__HANDHELDPC__) && _WIN32_WCE < 400
-    if (nmhdr->code == GN_CONTEXTMENU) 
+    if (nmhdr->code == GN_CONTEXTMENU)
     {
         *ptClick = ((NMRGINFO*)nmhdr)->ptAction;
-    } 
+    }
     else
 #endif //__WXWINCE__
     if ( !::GetCursorPos(ptClick) )
