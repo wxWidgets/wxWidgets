@@ -88,6 +88,9 @@
 /* Define this if your version of GTK+ is greater than 2.6 */
 #define __WXGTK26__ 1
 
+/* Define this if your version of GTK+ is greater than 2.10 */
+#define __WXGTK210__ 0
+
 #include <types.h>
 typedef pid_t GPid;
 

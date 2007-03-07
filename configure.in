@@ -3158,45 +3158,70 @@ libraries returned by 'pkg-config gtk+-2.0 --libs' or 'gtk-config
                            [AC_DEFINE(NEED_GTK_ICON_SIZE_LOOKUP)],
                            [#include <gtk/gtk.h>])
 
-            dnl test if we have at least GTK+ 2.6:
-            AC_MSG_CHECKING([if GTK+ is version >= 2.6])
+
+            dnl test if we have at least GTK+ 2.10:
+            AC_MSG_CHECKING([if GTK+ is version >= 2.10])
             AC_TRY_COMPILE([
                             #include <gtk/gtk.h>
                            ],
                            [
-                            #if !GTK_CHECK_VERSION(2,6,0)
-                            Not GTK+ 2.6
+                            #if !GTK_CHECK_VERSION(2,10,0)
+                            Not GTK+ 2.10
                             #endif
                            ],
                            [
+                            AC_DEFINE(__WXGTK210__)
                             AC_DEFINE(__WXGTK26__)
                             AC_DEFINE(__WXGTK24__)
                             AC_MSG_RESULT([yes])
-                            ac_wxgtk26=1
+                            ac_wxgtk210=1
                            ],
                            [
                             AC_MSG_RESULT([no])
-                            ac_wxgtk26=0
+                            ac_wxgtk210=0
                            ])
 
+            if test "$ac_wxgtk210" = 0; then
+                dnl test if we have at least GTK+ 2.6:
+                AC_MSG_CHECKING([if GTK+ is version >= 2.6])
+                AC_TRY_COMPILE([
+                                #include <gtk/gtk.h>
+                            ],
+                            [
+                                #if !GTK_CHECK_VERSION(2,6,0)
+                                Not GTK+ 2.6
+                                #endif
+                            ],
+                            [
+                                AC_DEFINE(__WXGTK26__)
+                                AC_DEFINE(__WXGTK24__)
+                                AC_MSG_RESULT([yes])
+                                ac_wxgtk26=1
+                            ],
+                            [
+                                AC_MSG_RESULT([no])
+                                ac_wxgtk26=0
+                            ])
+            fi
+
             if test "$ac_wxgtk26" = 0; then
-            dnl test if we have at least GTK+ 2.4:
-            AC_MSG_CHECKING([if GTK+ is version >= 2.4])
-            AC_TRY_COMPILE([
-                            #include <gtk/gtk.h>
-                           ],
-                           [
-                            #if !GTK_CHECK_VERSION(2,4,0)
-                            Not GTK+ 2.4
-                            #endif
-                           ],
-                           [
-                            AC_DEFINE(__WXGTK24__)
-                            AC_MSG_RESULT([yes])
-                           ],
-                           [
-                            AC_MSG_RESULT([no])
-                           ])
+                dnl test if we have at least GTK+ 2.4:
+                AC_MSG_CHECKING([if GTK+ is version >= 2.4])
+                AC_TRY_COMPILE([
+                                #include <gtk/gtk.h>
+                            ],
+                            [
+                                #if !GTK_CHECK_VERSION(2,4,0)
+                                Not GTK+ 2.4
+                                #endif
+                            ],
+                            [
+                                AC_DEFINE(__WXGTK24__)
+                                AC_MSG_RESULT([yes])
+                            ],
+                            [
+                                AC_MSG_RESULT([no])
+                            ])
             fi
 
             CFLAGS="$save_CFLAGS"

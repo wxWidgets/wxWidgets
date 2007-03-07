@@ -13766,17 +13766,17 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 { echo "$as_me:$LINENO: result: $bakefile_cv_c_compiler___INTEL_COMPILER" >&5
 echo "${ECHO_T}$bakefile_cv_c_compiler___INTEL_COMPILER" >&6; }
-    if test "x$bakefile_cv_c_compiler___INTEL_COMPILER" = "xyes"; then
-        :; INTELCC=yes
-    else
-        :;
-    fi
     ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+    if test "x$bakefile_cv_c_compiler___INTEL_COMPILER" = "xyes"; then
+        :; INTELCC=yes
+    else
+        :;
+    fi
 
 
         if test "x$GCC" != "xyes"; then
@@ -14277,17 +14277,17 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 { echo "$as_me:$LINENO: result: $bakefile_cv_c_compiler__SGI_COMPILER_VERSION" >&5
 echo "${ECHO_T}$bakefile_cv_c_compiler__SGI_COMPILER_VERSION" >&6; }
-    if test "x$bakefile_cv_c_compiler__SGI_COMPILER_VERSION" = "xyes"; then
-        :; SGICC=yes
-    else
-        :;
-    fi
     ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+    if test "x$bakefile_cv_c_compiler__SGI_COMPILER_VERSION" = "xyes"; then
+        :; SGICC=yes
+    else
+        :;
+    fi
 
 
                 ;;
@@ -14357,17 +14357,17 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 { echo "$as_me:$LINENO: result: $bakefile_cv_c_compiler___HP_cc" >&5
 echo "${ECHO_T}$bakefile_cv_c_compiler___HP_cc" >&6; }
-    if test "x$bakefile_cv_c_compiler___HP_cc" = "xyes"; then
-        :; HPCC=yes
-    else
-        :;
-    fi
     ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+    if test "x$bakefile_cv_c_compiler___HP_cc" = "xyes"; then
+        :; HPCC=yes
+    else
+        :;
+    fi
 
 
                 ;;
@@ -14437,17 +14437,17 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 { echo "$as_me:$LINENO: result: $bakefile_cv_c_compiler___DECC" >&5
 echo "${ECHO_T}$bakefile_cv_c_compiler___DECC" >&6; }
-    if test "x$bakefile_cv_c_compiler___DECC" = "xyes"; then
-        :; COMPAQCC=yes
-    else
-        :;
-    fi
     ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+    if test "x$bakefile_cv_c_compiler___DECC" = "xyes"; then
+        :; COMPAQCC=yes
+    else
+        :;
+    fi
 
 
                 ;;
@@ -14517,17 +14517,17 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 { echo "$as_me:$LINENO: result: $bakefile_cv_c_compiler___SUNPRO_C" >&5
 echo "${ECHO_T}$bakefile_cv_c_compiler___SUNPRO_C" >&6; }
-    if test "x$bakefile_cv_c_compiler___SUNPRO_C" = "xyes"; then
-        :; SUNCC=yes
-    else
-        :;
-    fi
     ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+    if test "x$bakefile_cv_c_compiler___SUNPRO_C" = "xyes"; then
+        :; SUNCC=yes
+    else
+        :;
+    fi
 
 
                 ;;
@@ -15412,17 +15412,17 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 { echo "$as_me:$LINENO: result: $bakefile_cv_cxx_compiler___INTEL_COMPILER" >&5
 echo "${ECHO_T}$bakefile_cv_cxx_compiler___INTEL_COMPILER" >&6; }
-    if test "x$bakefile_cv_cxx_compiler___INTEL_COMPILER" = "xyes"; then
-        :; INTELCXX=yes
-    else
-        :;
-    fi
     ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+    if test "x$bakefile_cv_c_compiler___INTEL_COMPILER" = "xyes"; then
+        :; INTELCXX=yes
+    else
+        :;
+    fi
 
 
         if test "x$GCXX" != "xyes"; then
@@ -15923,17 +15923,17 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 { echo "$as_me:$LINENO: result: $bakefile_cv_cxx_compiler__SGI_COMPILER_VERSION" >&5
 echo "${ECHO_T}$bakefile_cv_cxx_compiler__SGI_COMPILER_VERSION" >&6; }
-    if test "x$bakefile_cv_cxx_compiler__SGI_COMPILER_VERSION" = "xyes"; then
-        :; SGICXX=yes
-    else
-        :;
-    fi
     ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+    if test "x$bakefile_cv_c_compiler__SGI_COMPILER_VERSION" = "xyes"; then
+        :; SGICXX=yes
+    else
+        :;
+    fi
 
 
                 ;;
@@ -16003,17 +16003,17 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 { echo "$as_me:$LINENO: result: $bakefile_cv_cxx_compiler___HP_aCC" >&5
 echo "${ECHO_T}$bakefile_cv_cxx_compiler___HP_aCC" >&6; }
-    if test "x$bakefile_cv_cxx_compiler___HP_aCC" = "xyes"; then
-        :; HPCXX=yes
-    else
-        :;
-    fi
     ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+    if test "x$bakefile_cv_c_compiler___HP_aCC" = "xyes"; then
+        :; HPCXX=yes
+    else
+        :;
+    fi
 
 
                 ;;
@@ -16083,17 +16083,17 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 { echo "$as_me:$LINENO: result: $bakefile_cv_cxx_compiler___DECCXX" >&5
 echo "${ECHO_T}$bakefile_cv_cxx_compiler___DECCXX" >&6; }
-    if test "x$bakefile_cv_cxx_compiler___DECCXX" = "xyes"; then
-        :; COMPAQCXX=yes
-    else
-        :;
-    fi
     ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+    if test "x$bakefile_cv_c_compiler___DECCXX" = "xyes"; then
+        :; COMPAQCXX=yes
+    else
+        :;
+    fi
 
 
                 ;;
@@ -16163,17 +16163,17 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 { echo "$as_me:$LINENO: result: $bakefile_cv_cxx_compiler___SUNPRO_CC" >&5
 echo "${ECHO_T}$bakefile_cv_cxx_compiler___SUNPRO_CC" >&6; }
-    if test "x$bakefile_cv_cxx_compiler___SUNPRO_CC" = "xyes"; then
-        :; SUNCXX=yes
-    else
-        :;
-    fi
     ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+    if test "x$bakefile_cv_c_compiler___SUNPRO_CC" = "xyes"; then
+        :; SUNCXX=yes
+    else
+        :;
+    fi
 
 
                 ;;
@@ -29963,8 +29963,9 @@ fi
 
 
 
-                        { echo "$as_me:$LINENO: checking if GTK+ is version >= 2.6" >&5
-echo $ECHO_N "checking if GTK+ is version >= 2.6... $ECHO_C" >&6; }
+
+                        { echo "$as_me:$LINENO: checking if GTK+ is version >= 2.10" >&5
+echo $ECHO_N "checking if GTK+ is version >= 2.10... $ECHO_C" >&6; }
             cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
@@ -29978,8 +29979,8 @@ int
 main ()
 {
 
-                            #if !GTK_CHECK_VERSION(2,6,0)
-                            Not GTK+ 2.6
+                            #if !GTK_CHECK_VERSION(2,10,0)
+                            Not GTK+ 2.10
                             #endif
 
   ;
@@ -30003,6 +30004,10 @@ eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
 	 test -z "$ac_c_werror_flag" ||
 	 test ! -s conftest.err
        } && test -s conftest.$ac_objext; then
+
+                            cat >>confdefs.h <<\_ACEOF
+#define __WXGTK210__ 1
+_ACEOF
 
                             cat >>confdefs.h <<\_ACEOF
 #define __WXGTK26__ 1
@@ -30014,7 +30019,7 @@ _ACEOF
 
                             { echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; }
-                            ac_wxgtk26=1
+                            ac_wxgtk210=1
 
 else
   echo "$as_me: failed program was:" >&5
@@ -30023,31 +30028,31 @@ sed 's/^/| /' conftest.$ac_ext >&5
 
                             { echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6; }
-                            ac_wxgtk26=0
+                            ac_wxgtk210=0
 
 fi
 
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-            if test "$ac_wxgtk26" = 0; then
-                        { echo "$as_me:$LINENO: checking if GTK+ is version >= 2.4" >&5
-echo $ECHO_N "checking if GTK+ is version >= 2.4... $ECHO_C" >&6; }
-            cat >conftest.$ac_ext <<_ACEOF
+            if test "$ac_wxgtk210" = 0; then
+                                { echo "$as_me:$LINENO: checking if GTK+ is version >= 2.6" >&5
+echo $ECHO_N "checking if GTK+ is version >= 2.6... $ECHO_C" >&6; }
+                cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 
-                            #include <gtk/gtk.h>
+                                #include <gtk/gtk.h>
 
 int
 main ()
 {
 
-                            #if !GTK_CHECK_VERSION(2,4,0)
-                            Not GTK+ 2.4
-                            #endif
+                                #if !GTK_CHECK_VERSION(2,6,0)
+                                Not GTK+ 2.6
+                                #endif
 
   ;
   return 0;
@@ -30071,11 +30076,79 @@ eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
 	 test ! -s conftest.err
        } && test -s conftest.$ac_objext; then
 
-                            cat >>confdefs.h <<\_ACEOF
+                                cat >>confdefs.h <<\_ACEOF
+#define __WXGTK26__ 1
+_ACEOF
+
+                                cat >>confdefs.h <<\_ACEOF
 #define __WXGTK24__ 1
 _ACEOF
 
-                            { echo "$as_me:$LINENO: result: yes" >&5
+                                { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+                                ac_wxgtk26=1
+
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+
+                                { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+                                ac_wxgtk26=0
+
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+            fi
+
+            if test "$ac_wxgtk26" = 0; then
+                                { echo "$as_me:$LINENO: checking if GTK+ is version >= 2.4" >&5
+echo $ECHO_N "checking if GTK+ is version >= 2.4... $ECHO_C" >&6; }
+                cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+                                #include <gtk/gtk.h>
+
+int
+main ()
+{
+
+                                #if !GTK_CHECK_VERSION(2,4,0)
+                                Not GTK+ 2.4
+                                #endif
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+
+                                cat >>confdefs.h <<\_ACEOF
+#define __WXGTK24__ 1
+_ACEOF
+
+                                { echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6; }
 
 else
@@ -30083,7 +30156,7 @@ else
 sed 's/^/| /' conftest.$ac_ext >&5
 
 
-                            { echo "$as_me:$LINENO: result: no" >&5
+                                { echo "$as_me:$LINENO: result: no" >&5
 echo "${ECHO_T}no" >&6; }
 
 fi
@@ -48433,9 +48506,13 @@ fi
 
 
     if test "x$SUNCXX" = "xyes"; then
-                                AR=${AR:-"$CXX"}
+                                AR=$CXX
+        AROPTIONS="-xar -o"
 
-        AROPTIONS=${AROPTIONS:-"-xar -o"}
+    elif test "x$SGICC" = "xyes"; then
+                AR=$CXX
+        AROPTIONS="-ar -o"
+
     else
         if test -n "$ac_tool_prefix"; then
   # Extract the first word of "${ac_tool_prefix}ar", so it can be a program name with args.
@@ -48831,10 +48908,7 @@ echo "${ECHO_T}$bakefile_cv_prog_makeisgnu" >&6; }
                 PLATFORM_BEOS=1
             ;;
             * )
-                { { echo "$as_me:$LINENO: error: Unknown platform: $BAKEFILE_FORCE_PLATFORM" >&5
-echo "$as_me: error: Unknown platform: $BAKEFILE_FORCE_PLATFORM" >&2;}
-   { (exit 1); exit 1; }; }
-            ;;
+                                            ;;
         esac
     fi
 
@@ -49797,7 +49871,10 @@ EOF
               ;;
 
       *)
-                    esac
+        { { echo "$as_me:$LINENO: error: unknown system type $BAKEFILE_HOST." >&5
+echo "$as_me: error: unknown system type $BAKEFILE_HOST." >&2;}
+   { (exit 1); exit 1; }; }
+    esac
 
     if test "x$PIC_FLAG" != "x" ; then
         PIC_FLAG="$PIC_FLAG -DPIC"
@@ -50221,10 +50298,10 @@ fi
 
 
 
-    BAKEFILE_BAKEFILE_M4_VERSION="0.2.1"
+    BAKEFILE_BAKEFILE_M4_VERSION="0.2.2"
 
 
-BAKEFILE_AUTOCONF_INC_M4_VERSION="0.2.1"
+BAKEFILE_AUTOCONF_INC_M4_VERSION="0.2.2"
 
 
 
