@@ -3704,6 +3704,19 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
     if (width == wxLIST_AUTOSIZE_USEHEADER)
     {
         width = GetTextLength(column->GetText());
+        width += 2*EXTRA_WIDTH;
+
+        // check for column header's image availability
+        const int image = column->GetImage();
+        if ( image != -1 )
+        {
+            if ( m_small_image_list )
+            {
+                int ix = 0, iy = 0;
+                m_small_image_list->GetSize(image, ix, iy);
+                width += ix + HEADER_IMAGE_MARGIN_IN_REPORT_MODE;
+            }
+        }
     }
     else if ( width == wxLIST_AUTOSIZE )
     {
