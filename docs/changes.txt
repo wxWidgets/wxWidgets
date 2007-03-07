@@ -116,6 +116,7 @@ wxMac
 
 - Added support for the wxFRAME_FLOAT_ON_PARENT style.
 - Now takes window variants into account when rendering buttons.
+- Fix position of the centered windows (didn't take menu bar size into account)
 
 wxX11:
 
