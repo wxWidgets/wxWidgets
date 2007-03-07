@@ -28816,8 +28816,8 @@ echo "$as_me: WARNING: Drag and Drop not supported under wxCocoa yet, disabled" 
             wxUSE_DRAG_AND_DROP=no
         fi
         if test "$wxUSE_DRAGIMAGE" = "yes"; then
-            { echo "$as_me:$LINENO: WARNING: Drag Image and DandD not supported under wxCocoa yet, disabled" >&5
-echo "$as_me: WARNING: Drag Image and DandD not supported under wxCocoa yet, disabled" >&2;}
+            { echo "$as_me:$LINENO: WARNING: wxDragImage not supported under wxCocoa yet, disabled" >&5
+echo "$as_me: WARNING: wxDragImage not supported under wxCocoa yet, disabled" >&2;}
             wxUSE_DRAGIMAGE=no
         fi
     fi

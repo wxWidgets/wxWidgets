@@ -3030,7 +3030,7 @@ if test "$wxUSE_GUI" = "yes"; then
             wxUSE_DRAG_AND_DROP=no
         fi
         if test "$wxUSE_DRAGIMAGE" = "yes"; then
-            AC_MSG_WARN([Drag Image and DandD not supported under wxCocoa yet, disabled])
+            AC_MSG_WARN([wxDragImage not supported under wxCocoa yet, disabled])
             wxUSE_DRAGIMAGE=no
         fi
     fi
