@@ -123,7 +123,7 @@ public:
 
         // set items label
     virtual void SetItemText(const wxTreeItemId& item, const wxString& text) = 0;
-        // get one of the images associated with the item (normal by default)
+        // set one of the images associated with the item (normal by default)
     virtual void SetItemImage(const wxTreeItemId& item,
                               int image,
                               wxTreeItemIcon which = wxTreeItemIcon_Normal) = 0;
