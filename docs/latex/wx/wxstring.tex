@@ -213,16 +213,15 @@ formatted value to a string:
 These are "advanced" functions and they will be needed quite rarely. 
 \helpref{Alloc}{wxstringalloc} and \helpref{Shrink}{wxstringshrink} are only
 interesting for optimization purposes. 
-\helpref{GetWriteBuf}{wxstringgetwritebuf} may be very useful when working with
-some external API which requires the caller to provide a writable buffer, but
-extreme care should be taken when using it: before performing any other
-operation on the string \helpref{UngetWriteBuf}{wxstringungetwritebuf} {\bf
-must} be called!
+\helpref{wxStringBuffer}{wxstringbuffer}
+and \helpref{wxStringBufferLength}{wxstringbufferlength} classes may be very
+useful when working with some external API which requires the caller to provide
+a writable buffer.
 
 \helpref{Alloc}{wxstringalloc}\\
 \helpref{Shrink}{wxstringshrink}\\
-\helpref{GetWriteBuf}{wxstringgetwritebuf}\\
-\helpref{UngetWriteBuf}{wxstringungetwritebuf}
+\helpref{wxStringBuffer}{wxstringbuffer}\\
+\helpref{wxStringBufferLength}{wxstringbufferlength}
 
 
 \membersection{Miscellaneous}\label{miscellaneousinwxstring}
@@ -463,13 +462,14 @@ In ANSI build, \arg{conv}'s
 \helpref{WC2MB}{wxmbconvwc2mb} method is called to
 convert \arg{psz} to wide string. It is ignored in Unicode build.
 
-\func{}{wxString}{\param{const char*}{ psz}, \param{wxMBConv\&}{ conv}, \param{size\_t}{ nLength = wxSTRING\_MAXLEN}}
+\func{}{wxString}{\param{const char*}{ psz}, \param{wxMBConv\&}{ conv = wxConvLibc}, \param{size\_t}{ nLength = wxSTRING\_MAXLEN}}
 
 Initializes the string from first \arg{nLength} characters of C string.
 The default value of {\tt wxSTRING\_MAXLEN} means take all the string.
 In Unicode build, \arg{conv}'s 
 \helpref{MB2WC}{wxmbconvmb2wc} method is called to
-convert \arg{psz} to wide string. It is ignored in ANSI build.
+convert \arg{psz} to wide string (the default converter uses current locale's
+charset). It is ignored in ANSI build.
 
 \wxheading{See also}
 
@@ -768,8 +768,12 @@ Returns a writable buffer of at least {\it len} bytes.
 It returns a pointer to a new memory block, and the
 existing data will not be copied.
 
-Call \helpref{wxString::UngetWriteBuf}{wxstringungetwritebuf} as soon as possible
-to put the string back into a reasonable state.
+Call \helpref{wxString::UngetWriteBuf}{wxstringungetwritebuf} as soon as
+possible to put the string back into a reasonable state.
+
+This method is deprecated, please use
+\helpref{wxStringBuffer}{wxstringbuffer} or
+\helpref{wxStringBufferLength}{wxstringbufferlength} instead.
 
 
 \membersection{wxString::Index}\label{wxstringindex}
@@ -923,9 +927,9 @@ Returns \true if the string contents matches a mask containing '*' and '?'.
 
 \membersection{wxString::mb\_str}\label{wxstringmbstr}
 
-\constfunc{const char*}{mb\_str}{\param{wxMBConv\&}{ conv}}
+\constfunc{const char*}{mb\_str}{\param{wxMBConv\&}{ conv = wxConvLibc}}
 
-\constfunc{const wxCharBuffer}{mb\_str}{\param{wxMBConv\&}{ conv}}
+\constfunc{const wxCharBuffer}{mb\_str}{\param{wxMBConv\&}{ conv = wxConvLibc}}
 
 Returns multibyte (C string) representation of the string.
 In Unicode build, converts using \arg{conv}'s \helpref{cWC2MB}{wxmbconvcwc2mb}
@@ -1230,6 +1234,10 @@ new string length itself assuming that the string is terminated by the first
 and thus is the only version which should be used with the strings with
 embedded {\tt NUL}s (it is also slightly more efficient as {\tt strlen()} 
 doesn't have to be called).
+
+This method is deprecated, please use
+\helpref{wxStringBuffer}{wxstringbuffer} or
+\helpref{wxStringBufferLength}{wxstringbufferlength} instead.
 
 
 \membersection{wxString::Upper}\label{wxstringupper}
