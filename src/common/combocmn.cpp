@@ -2191,16 +2191,18 @@ void wxComboCtrlBase::SetValueWithEvent(const wxString& value, bool withEvent)
             m_text->SelectAll();
     }
 
-    m_valueString = value;
-
-    Refresh();
-
     // Since wxComboPopup may want to paint the combo as well, we need
     // to set the string value here (as well as sometimes in ShowPopup).
-    if ( m_valueString != value && m_popupInterface )
+    if ( m_valueString != value )
     {
+        m_valueString = value;
+
+        EnsurePopupControl();
+
         m_popupInterface->SetStringValue(value);
     }
+
+    Refresh();
 }
 
 void wxComboCtrlBase::SetValue(const wxString& value)
