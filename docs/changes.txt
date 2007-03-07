@@ -64,6 +64,7 @@ All:
 - Added wxSearchCtrl::[Get|Set]DescriptiveText.
 - Fixed detection of number of processors under Linux 2.6
 - Fixed Base64 computation in wxHTTP (p_michalczyk)
+- Fix handling of wxSOCKET_REUSEADDR in wxDatagramSocket (troelsk)
 
 wxMSW
 
