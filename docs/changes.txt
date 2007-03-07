@@ -62,6 +62,7 @@ All:
 - Made wxTextFile work with unseekable files again (David Hart).
 - Added wxCONFIG_USE_SUBDIR flag to wxFileConfig (Giuseppe Bilotta).
 - Added wxSearchCtrl::[Get|Set]DescriptiveText.
+- Fixed detection of number of processors under Linux 2.6
 
 wxMSW
 
