@@ -146,6 +146,9 @@ bool wxBitmapComboBox::Create(wxWindow *parent,
 void wxBitmapComboBox::PostCreate()
 {
     m_fontHeight = GetCharHeight() + EXTRA_FONT_HEIGHT;
+
+    while ( m_bitmaps.GetCount() < GetCount() )
+        m_bitmaps.Add( new wxBitmap() );
 }
 
 wxBitmapComboBox::~wxBitmapComboBox()
@@ -159,7 +162,7 @@ wxBitmapComboBox::~wxBitmapComboBox()
 
 void wxBitmapComboBox::SetItemBitmap(unsigned int n, const wxBitmap& bitmap)
 {
-    wxCHECK_RET( n < m_bitmaps.size(), wxT("invalid item index") );
+    wxCHECK_RET( n < GetCount(), wxT("invalid item index") );
     OnAddBitmap(bitmap);
     *GetBitmapPtr(n) = bitmap;
 
@@ -169,7 +172,7 @@ void wxBitmapComboBox::SetItemBitmap(unsigned int n, const wxBitmap& bitmap)
 
 wxBitmap wxBitmapComboBox::GetItemBitmap(unsigned int n) const
 {
-    wxCHECK_MSG( n < m_bitmaps.size(), wxNullBitmap, wxT("invalid item index") );
+    wxCHECK_MSG( n < GetCount(), wxNullBitmap, wxT("invalid item index") );
     return *GetBitmapPtr(n);
 }
 
