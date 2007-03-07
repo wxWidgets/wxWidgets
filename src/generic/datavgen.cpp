@@ -63,14 +63,16 @@ static const int PADDING_TOPBOTTOM = 1;
 
 #define USE_NATIVE_HEADER_WINDOW    1
 
-class wxDataViewHeaderWindowBase : public wxControl
+// NB: for some reason, this class must be dllexport'ed or we get warnings from
+//     MSVC in DLL build
+class WXDLLIMPEXP_ADV wxDataViewHeaderWindowBase : public wxControl
 {
 public:
     wxDataViewHeaderWindowBase()
         { m_owner = NULL; }
 
     bool Create(wxDataViewCtrl *parent, wxWindowID id,
-                const wxPoint &pos, const wxSize &size, 
+                const wxPoint &pos, const wxSize &size,
                 const wxString &name)
     {
         return wxWindow::Create(parent, id, pos, size, wxNO_BORDER, name);
@@ -86,10 +88,10 @@ public:
     virtual wxDataViewColumn *GetColumn(unsigned int n)
     {
         wxASSERT(m_owner);
-        wxDataViewColumn *ret = m_owner->GetColumn(n); 
+        wxDataViewColumn *ret = m_owner->GetColumn(n);
         wxASSERT(ret);
 
-        return ret; 
+        return ret;
     }
 
 protected:
@@ -114,12 +116,12 @@ public:
                                const wxPoint &pos = wxDefaultPosition,
                                const wxSize &size = wxDefaultSize,
                                const wxString &name = wxT("wxdataviewctrlheaderwindow") )
-    { 
+    {
         Create(parent, id, pos, size, name);
     }
 
     bool Create(wxDataViewCtrl *parent, wxWindowID id,
-                const wxPoint &pos, const wxSize &size, 
+                const wxPoint &pos, const wxSize &size,
                 const wxString &name);
 
     ~wxDataViewHeaderWindowMSW();
@@ -159,13 +161,13 @@ public:
                                     const wxPoint &pos = wxDefaultPosition,
                                     const wxSize &size = wxDefaultSize,
                                     const wxString &name = wxT("wxdataviewctrlheaderwindow") )
-    { 
+    {
         Init();
         Create(parent, id, pos, size, name);
     }
 
     bool Create(wxDataViewCtrl *parent, wxWindowID id,
-                const wxPoint &pos, const wxSize &size, 
+                const wxPoint &pos, const wxSize &size,
                 const wxString &name);
 
     ~wxGenericDataViewHeaderWindow()
@@ -191,7 +193,7 @@ protected:
     bool                 m_dirty;     // needs refresh?
     int                  m_column;    // index of the column being resized
     int                  m_currentX;  // divider line position in logical (unscrolled) coords
-    int                  m_minX;      // minimal position beyond which the divider line 
+    int                  m_minX;      // minimal position beyond which the divider line
                                       // can't be dragged in logical coords
 
     // the pen used to draw the current column width drag line
@@ -284,7 +286,7 @@ private:
 // wxDataViewMainWindow
 //-----------------------------------------------------------------------------
 
-WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_SIZE_T(unsigned int, wxDataViewSelection, 
+WX_DEFINE_SORTED_USER_EXPORTED_ARRAY_SIZE_T(unsigned int, wxDataViewSelection,
                                             WXDLLIMPEXP_ADV);
 
 class wxDataViewMainWindow: public wxWindow
@@ -426,7 +428,7 @@ public:
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewRenderer, wxDataViewRendererBase)
 
-wxDataViewRenderer::wxDataViewRenderer( const wxString &varianttype, 
+wxDataViewRenderer::wxDataViewRenderer( const wxString &varianttype,
                                         wxDataViewCellMode mode,
                                         int align) :
     wxDataViewRendererBase( varianttype, mode, align )
@@ -475,7 +477,7 @@ wxDataViewCustomRenderer::wxDataViewCustomRenderer( const wxString &varianttype,
 
 IMPLEMENT_CLASS(wxDataViewTextRenderer, wxDataViewCustomRenderer)
 
-wxDataViewTextRenderer::wxDataViewTextRenderer( const wxString &varianttype, 
+wxDataViewTextRenderer::wxDataViewTextRenderer( const wxString &varianttype,
                                                 wxDataViewCellMode mode, int align ) :
     wxDataViewCustomRenderer( varianttype, mode, align )
 {
@@ -524,7 +526,7 @@ wxSize wxDataViewTextRenderer::GetSize() const
 
 IMPLEMENT_CLASS(wxDataViewBitmapRenderer, wxDataViewCustomRenderer)
 
-wxDataViewBitmapRenderer::wxDataViewBitmapRenderer( const wxString &varianttype, 
+wxDataViewBitmapRenderer::wxDataViewBitmapRenderer( const wxString &varianttype,
                                                     wxDataViewCellMode mode, int align ) :
     wxDataViewCustomRenderer( varianttype, mode, align )
 {
@@ -615,8 +617,8 @@ bool wxDataViewToggleRenderer::Render( wxRect cell, wxDC *dc, int WXUNUSED(state
     return true;
 }
 
-bool wxDataViewToggleRenderer::Activate( wxRect WXUNUSED(cell), 
-                                         wxDataViewListModel *model, 
+bool wxDataViewToggleRenderer::Activate( wxRect WXUNUSED(cell),
+                                         wxDataViewListModel *model,
                                          unsigned int col, unsigned int row )
 {
     bool value = !m_toggle;
@@ -781,7 +783,7 @@ wxSize wxDataViewDateRenderer::GetSize() const
     return wxSize(x,y+d);
 }
 
-bool wxDataViewDateRenderer::Activate( wxRect WXUNUSED(cell), wxDataViewListModel *model, 
+bool wxDataViewDateRenderer::Activate( wxRect WXUNUSED(cell), wxDataViewListModel *model,
                                        unsigned int col, unsigned int row )
 {
     wxVariant variant;
@@ -807,7 +809,7 @@ bool wxDataViewDateRenderer::Activate( wxRect WXUNUSED(cell), wxDataViewListMode
 
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewColumn, wxDataViewColumnBase)
 
-wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *cell, 
+wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *cell,
                                     unsigned int model_column,
                                     int width, wxAlignment align, int flags ) :
     wxDataViewColumnBase( title, cell, model_column, width, align, flags )
@@ -819,7 +821,7 @@ wxDataViewColumn::wxDataViewColumn( const wxString &title, wxDataViewRenderer *c
     Init(width < 0 ? wxDVC_DEFAULT_WIDTH : width);
 }
 
-wxDataViewColumn::wxDataViewColumn( const wxBitmap &bitmap, wxDataViewRenderer *cell, 
+wxDataViewColumn::wxDataViewColumn( const wxBitmap &bitmap, wxDataViewRenderer *cell,
                                     unsigned int model_column,
                                     int width, wxAlignment align, int flags ) :
     wxDataViewColumnBase( bitmap, cell, model_column, width, align, flags )
@@ -924,7 +926,7 @@ int WXDLLIMPEXP_CORE wxMSWGetColumnClicked(NMHDR *nmhdr, POINT *ptClick);
 IMPLEMENT_ABSTRACT_CLASS(wxDataViewHeaderWindowMSW, wxWindow)
 
 bool wxDataViewHeaderWindowMSW::Create( wxDataViewCtrl *parent, wxWindowID id,
-                                        const wxPoint &pos, const wxSize &size, 
+                                        const wxPoint &pos, const wxSize &size,
                                         const wxString &name )
 {
     m_owner = parent;
@@ -940,16 +942,16 @@ bool wxDataViewHeaderWindowMSW::Create( wxDataViewCtrl *parent, wxWindowID id,
     // create the native WC_HEADER window:
     WXHWND hwndParent = (HWND)parent->GetHandle();
     WXDWORD msStyle = WS_CHILD | HDS_BUTTONS | HDS_HORZ | HDS_HOTTRACK | HDS_FULLDRAG;
-    m_hWnd = CreateWindowEx(0, 
-                            WC_HEADER, 
-                            (LPCTSTR) NULL, 
+    m_hWnd = CreateWindowEx(0,
+                            WC_HEADER,
+                            (LPCTSTR) NULL,
                             msStyle,
                             x, y, w, h,
-                            (HWND)hwndParent, 
-                            (HMENU)-1, 
-                            wxGetInstance(), 
+                            (HWND)hwndParent,
+                            (HMENU)-1,
+                            wxGetInstance(),
                             (LPVOID) NULL);
-    if (m_hWnd == NULL) 
+    if (m_hWnd == NULL)
     {
         wxLogLastError(_T("CreateWindowEx"));
         return false;
@@ -959,7 +961,7 @@ bool wxDataViewHeaderWindowMSW::Create( wxDataViewCtrl *parent, wxWindowID id,
     // to call wxDataViewHeaderWindow::MSWOnNotify
     SubclassWin(m_hWnd);
 
-    // the following is required to get the default win's font for 
+    // the following is required to get the default win's font for
     // header windows and must be done befor sending the HDM_LAYOUT msg
     SetFont(GetFont());
 
@@ -967,24 +969,24 @@ bool wxDataViewHeaderWindowMSW::Create( wxDataViewCtrl *parent, wxWindowID id,
     HDLAYOUT hdl;
     WINDOWPOS wp;
 
-    // Retrieve the bounding rectangle of the parent window's 
-    // client area, and then request size and position values 
-    // from the header control. 
-    ::GetClientRect((HWND)hwndParent, &rcParent); 
-    
-    hdl.prc = &rcParent; 
-    hdl.pwpos = &wp; 
-    if (!SendMessage((HWND)m_hWnd, HDM_LAYOUT, 0, (LPARAM) &hdl)) 
+    // Retrieve the bounding rectangle of the parent window's
+    // client area, and then request size and position values
+    // from the header control.
+    ::GetClientRect((HWND)hwndParent, &rcParent);
+
+    hdl.prc = &rcParent;
+    hdl.pwpos = &wp;
+    if (!SendMessage((HWND)m_hWnd, HDM_LAYOUT, 0, (LPARAM) &hdl))
     {
         wxLogLastError(_T("SendMessage"));
         return false;
     }
-    
-    // Set the size, position, and visibility of the header control. 
-    SetWindowPos((HWND)m_hWnd, 
-                 wp.hwndInsertAfter, 
-                 wp.x, wp.y, 
-                 wp.cx, wp.cy, 
+
+    // Set the size, position, and visibility of the header control.
+    SetWindowPos((HWND)m_hWnd,
+                 wp.hwndInsertAfter,
+                 wp.x, wp.y,
+                 wp.cx, wp.cy,
                  wp.flags | SWP_SHOWWINDOW);
 
     // set our size hints: wxDataViewCtrl will put this wxWindow inside
@@ -1006,7 +1008,7 @@ void wxDataViewHeaderWindowMSW::UpdateDisplay()
     // remove old columns
     for (int j=0, max=Header_GetItemCount((HWND)m_hWnd); j < max; j++)
         Header_DeleteItem((HWND)m_hWnd, 0);
-    
+
     // add the updated array of columns to the header control
     unsigned int cols = GetOwner()->GetColumnCount();
     unsigned int added = 0;
@@ -1029,7 +1031,7 @@ void wxDataViewHeaderWindowMSW::UpdateDisplay()
         hdi.lParam = (LPARAM)i;
 
         // the native wxMSW implementation of the header window
-        // draws the column separator COLUMN_WIDTH_OFFSET pixels 
+        // draws the column separator COLUMN_WIDTH_OFFSET pixels
         // on the right: to correct this effect we make the column
         // exactly COLUMN_WIDTH_OFFSET wider (for the first column):
         if (i == 0)
@@ -1052,9 +1054,9 @@ void wxDataViewHeaderWindowMSW::UpdateDisplay()
             // such alignment is not allowed for the column header!
             wxFAIL;
         }
-        
-        SendMessage((HWND)m_hWnd, HDM_INSERTITEM, 
-                    (WPARAM)added, (LPARAM)&hdi); 
+
+        SendMessage((HWND)m_hWnd, HDM_INSERTITEM,
+                    (WPARAM)added, (LPARAM)&hdi);
         added++;
     }
 }
@@ -1106,13 +1108,13 @@ bool wxDataViewHeaderWindowMSW::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARA
             break;
 
         case HDN_ITEMCHANGING:
-            if (nmHDR->pitem != NULL && 
+            if (nmHDR->pitem != NULL &&
                 (nmHDR->pitem->mask & HDI_WIDTH) != 0)
             {
                 int minWidth = GetColumnFromHeader(nmHDR)->GetMinWidth();
                 if (nmHDR->pitem->cxy < minWidth)
                 {
-                    // do not allow the user to resize this column under 
+                    // do not allow the user to resize this column under
                     // its minimal width:
                     *result = TRUE;
                 }
@@ -1124,7 +1126,7 @@ bool wxDataViewHeaderWindowMSW::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARA
         case HDN_ENDDRAG:       // user has finished reordering a column
 
             // update the width of the modified column:
-            if (nmHDR->pitem != NULL && 
+            if (nmHDR->pitem != NULL &&
                 (nmHDR->pitem->mask & HDI_WIDTH) != 0)
             {
                 unsigned int idx = GetColumnIdxFromHeader(nmHDR);
@@ -1143,7 +1145,7 @@ bool wxDataViewHeaderWindowMSW::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARA
         case HDN_ITEMCLICK:
             {
                 unsigned int idx = GetColumnIdxFromHeader(nmHDR);
-                wxEventType evt = nmHDR->iButton == 0 ? 
+                wxEventType evt = nmHDR->iButton == 0 ?
                         wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK :
                         wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK;
                 SendEvent(evt, idx);
@@ -1187,7 +1189,7 @@ bool wxDataViewHeaderWindowMSW::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARA
                 ZeroMemory(&hd, sizeof(hd));
                 hd.mask = HDI_WIDTH;
                 hd.cxy = w;
-                Header_SetItem(GetHwnd(), 
+                Header_SetItem(GetHwnd(),
                                nmHDR->iItem,  // NOTE: we don't want 'idx' here!
                                &hd);
 
@@ -1203,7 +1205,7 @@ bool wxDataViewHeaderWindowMSW::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARA
     return true;
 }
 
-void wxDataViewHeaderWindowMSW::ScrollWindow(int WXUNUSED(dx), int WXUNUSED(dy), 
+void wxDataViewHeaderWindowMSW::ScrollWindow(int WXUNUSED(dx), int WXUNUSED(dy),
                                              const wxRect *WXUNUSED(rect))
 {
     wxSize ourSz = GetClientSize();
@@ -1213,14 +1215,14 @@ void wxDataViewHeaderWindowMSW::ScrollWindow(int WXUNUSED(dx), int WXUNUSED(dy),
     int x1 = 0, y1 = 0;
     m_owner->CalcUnscrolledPosition(0, 0, &x1, &y1);
 
-    // put this window on top of our parent and 
-    SetWindowPos((HWND)m_hWnd, HWND_TOP, -x1, 0, 
-                  ownerSz.GetWidth() + x1, ourSz.GetHeight(), 
+    // put this window on top of our parent and
+    SetWindowPos((HWND)m_hWnd, HWND_TOP, -x1, 0,
+                  ownerSz.GetWidth() + x1, ourSz.GetHeight(),
                   SWP_SHOWWINDOW);
 }
 
-void wxDataViewHeaderWindowMSW::DoSetSize(int WXUNUSED(x), int WXUNUSED(y), 
-                                          int WXUNUSED(w), int WXUNUSED(h), 
+void wxDataViewHeaderWindowMSW::DoSetSize(int WXUNUSED(x), int WXUNUSED(y),
+                                          int WXUNUSED(w), int WXUNUSED(h),
                                           int WXUNUSED(f))
 {
     // the wxDataViewCtrl's internal wxBoxSizer will call this function when
@@ -1241,8 +1243,8 @@ BEGIN_EVENT_TABLE(wxGenericDataViewHeaderWindow, wxWindow)
 END_EVENT_TABLE()
 
 bool wxGenericDataViewHeaderWindow::Create(wxDataViewCtrl *parent, wxWindowID id,
-                                           const wxPoint &pos, const wxSize &size, 
-                                           const wxString &name ) 
+                                           const wxPoint &pos, const wxSize &size,
+                                           const wxString &name )
 {
     m_owner = parent;
 
@@ -1327,7 +1329,7 @@ void wxGenericDataViewHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         // always center the title vertically:
         int y = wxMax((ch - titleSz.GetHeight()) / 2, HEADER_VERT_BORDER);
 
-        dc.SetClippingRegion( xpos+HEADER_HORIZ_BORDER, 
+        dc.SetClippingRegion( xpos+HEADER_HORIZ_BORDER,
                               HEADER_VERT_BORDER,
                               wxMax(cw - 2 * HEADER_HORIZ_BORDER, 1),  // width
                               wxMax(ch - 2 * HEADER_VERT_BORDER, 1));  // height
@@ -1353,7 +1355,7 @@ void wxGenericDataViewHeaderWindow::OnMouse( wxMouseEvent &event )
 
     if (m_isDragging)
     {
-        // we don't draw the line beyond our window, 
+        // we don't draw the line beyond our window,
         // but we allow dragging it there
         int w = 0;
         GetClientSize( &w, NULL );
@@ -1361,13 +1363,13 @@ void wxGenericDataViewHeaderWindow::OnMouse( wxMouseEvent &event )
         w -= 6;
 
         // erase the line if it was drawn
-        if (m_currentX < w) 
+        if (m_currentX < w)
             DrawCurrent();
 
-        if (event.ButtonUp()) 
+        if (event.ButtonUp())
         {
             m_isDragging = false;
-            if (HasCapture()) 
+            if (HasCapture())
                 ReleaseMouse();
 
             m_dirty = true;
@@ -1398,22 +1400,22 @@ void wxGenericDataViewHeaderWindow::OnMouse( wxMouseEvent &event )
 
         // find the column where this event occured
         int countCol = m_owner->GetColumnCount();
-        for (int column = 0; column < countCol; column++) 
+        for (int column = 0; column < countCol; column++)
         {
             wxDataViewColumn *p = GetColumn(column);
 
-            if (p->IsHidden()) 
+            if (p->IsHidden())
                 continue;   // skip if not shown
 
             xpos += p->GetWidth();
             m_column = column;
-            if ((abs(x-xpos) < 3) && (y < 22)) 
+            if ((abs(x-xpos) < 3) && (y < 22))
             {
                 hit_border = true;
                 break;
             }
 
-            if (x < xpos) 
+            if (x < xpos)
             {
                 // inside the column
                 break;
@@ -1433,7 +1435,7 @@ void wxGenericDataViewHeaderWindow::OnMouse( wxMouseEvent &event )
         }
         else if (event.LeftDown() || event.RightUp())
         {
-            if (hit_border && event.LeftDown() && resizeable) 
+            if (hit_border && event.LeftDown() && resizeable)
             {
                 m_isDragging = true;
                 CaptureMouse();
@@ -1442,7 +1444,7 @@ void wxGenericDataViewHeaderWindow::OnMouse( wxMouseEvent &event )
             }
             else    // click on a column
             {
-                wxEventType evt = event.LeftDown() ? 
+                wxEventType evt = event.LeftDown() ?
                         wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK :
                         wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK;
                 SendEvent(evt, m_column);
@@ -1450,7 +1452,7 @@ void wxGenericDataViewHeaderWindow::OnMouse( wxMouseEvent &event )
         }
         else if (event.Moving())
         {
-            if (hit_border && resizeable) 
+            if (hit_border && resizeable)
                 m_currentCursor = m_resizeCursor;
             else
                 m_currentCursor = wxSTANDARD_CURSOR;
@@ -1692,7 +1694,7 @@ wxDataViewMainWindow::wxDataViewMainWindow( wxDataViewCtrl *parent, wxWindowID i
     m_currentRow = 0;
 
     // TODO: we need to calculate this smartly
-    m_lineHeight = 
+    m_lineHeight =
 #ifdef __WXMSW__
         17;
 #else
@@ -1742,7 +1744,7 @@ void wxDataViewMainWindow::OnRenameTimer()
             break;
         xpos += c->GetWidth();
     }
-    wxRect labelRect( xpos, m_currentRow * m_lineHeight, 
+    wxRect labelRect( xpos, m_currentRow * m_lineHeight,
                       m_currentCol->GetWidth(), m_lineHeight );
 
     wxClassInfo *textControlClass = CLASSINFO(wxTextCtrl);
@@ -1867,7 +1869,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 
     // compute which items needs to be redrawn
     unsigned int item_start = wxMax( 0, (update.y / m_lineHeight) );
-    unsigned int item_count = 
+    unsigned int item_count =
         wxMin( (int)(((update.y + update.height) / m_lineHeight) - item_start + 1),
                (int)(model->GetRowCount() - item_start) );
     unsigned int item_last = item_start + item_count;
@@ -1936,7 +1938,7 @@ void wxDataViewMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         }
 
         // Draw last vertical rule
-        dc.DrawLine(x, item_start * m_lineHeight, 
+        dc.DrawLine(x, item_start * m_lineHeight,
                     x, item_last * m_lineHeight);
     }
 
@@ -2048,7 +2050,7 @@ int wxDataViewMainWindow::GetEndOfLastCol() const
     unsigned int i;
     for (i = 0; i < GetOwner()->GetColumnCount(); i++)
     {
-        const wxDataViewColumn *c = 
+        const wxDataViewColumn *c =
             wx_const_cast(wxDataViewCtrl*, GetOwner())->GetColumn( i );
 
         if (!c->IsHidden())
@@ -2069,7 +2071,7 @@ unsigned int wxDataViewMainWindow::GetFirstVisibleRow() const
 unsigned int wxDataViewMainWindow::GetLastVisibleRow() const
 {
     wxSize client_size = GetClientSize();
-    m_owner->CalcUnscrolledPosition( client_size.x, client_size.y, 
+    m_owner->CalcUnscrolledPosition( client_size.x, client_size.y,
                                      &client_size.x, &client_size.y );
 
     return wxMin( GetRowCount()-1, ((unsigned)client_size.y/m_lineHeight)+1 );
@@ -2452,7 +2454,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
                 wxVariant value;
                 model->GetValue( value, col->GetModelColumn(), current );
                 cell->SetValue( value );
-                wxRect cell_rect( xpos, current * m_lineHeight, 
+                wxRect cell_rect( xpos, current * m_lineHeight,
                                   col->GetWidth(), m_lineHeight );
                 cell->Activate( cell_rect, model, col->GetModelColumn(), current );
             }
@@ -2588,7 +2590,7 @@ void wxDataViewMainWindow::OnMouse( wxMouseEvent &event )
         // Update selection here...
         m_currentCol = col;
 
-        m_lastOnSame = !forceClick && ((col == oldCurrentCol) && 
+        m_lastOnSame = !forceClick && ((col == oldCurrentCol) &&
                         (current == oldCurrentRow)) && oldWasSelected;
     }
 }
@@ -2638,7 +2640,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
            const wxPoint& pos, const wxSize& size,
            long style, const wxValidator& validator )
 {
-    if (!wxControl::Create( parent, id, pos, size, 
+    if (!wxControl::Create( parent, id, pos, size,
                             style | wxScrolledWindowStyle|wxSUNKEN_BORDER, validator))
         return false;
 
