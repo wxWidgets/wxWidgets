@@ -69,6 +69,10 @@ wxMSW
 - Fix lack of spin control update event when control lost focus.
 - Corrected drawing of bitmaps for disabled menu items.
 
+wxGTK
+
+- Fix hang on startup when using GTK+ options in Unicode build
+
 wxMac
 
 - Fix position of the centered windows (didn't take menu bar size into account)
