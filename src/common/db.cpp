@@ -63,6 +63,7 @@ wxChar const *SQL_CATALOG_FILENAME     = wxT("catalog.txt");
 
 #ifdef __WXDEBUG__
     extern wxList TablesInUse;
+    extern wxCriticalSection csTablesInUse;
 #endif
 
 // SQL Log defaults to be used by GetDbConnection
@@ -1746,21 +1747,24 @@ void wxDb::Close(void)
     wxASSERT(nTables == 0);
 
 #ifdef __WXDEBUG__
-    wxTablesInUse *tiu;
-    wxList::compatibility_iterator pNode;
-    pNode = TablesInUse.GetFirst();
-    wxString s,s2;
-    while (pNode)
     {
-        tiu = (wxTablesInUse *)pNode->GetData();
-        if (tiu->pDb == this)
+        wxCriticalSectionLocker lock(csTablesInUse);
+        wxTablesInUse *tiu;
+        wxList::compatibility_iterator pNode;
+        pNode = TablesInUse.GetFirst();
+        wxString s,s2;
+        while (pNode)
         {
-            s.Printf(wxT("(%-20s)     tableID:[%6lu]     pDb:[%p]"),
-                     tiu->tableName, tiu->tableID, wx_static_cast(void*, tiu->pDb));
-            s2.Printf(wxT("Orphaned table found using pDb:[%p]"), wx_static_cast(void*, this));
-            wxLogDebug(s.c_str(),s2.c_str());
+            tiu = (wxTablesInUse *)pNode->GetData();
+            if (tiu->pDb == this)
+            {
+                s.Printf(wxT("(%-20s)     tableID:[%6lu]     pDb:[%p]"),
+                        tiu->tableName, tiu->tableID, wx_static_cast(void*, tiu->pDb));
+                s2.Printf(wxT("Orphaned table found using pDb:[%p]"), wx_static_cast(void*, this));
+                wxLogDebug(s.c_str(),s2.c_str());
+            }
+            pNode = pNode->GetNext();
         }
-        pNode = pNode->GetNext();
     }
 #endif
 
@@ -2306,7 +2310,6 @@ bool wxDb::ExecSql(const wxString &pSqlStmt, wxDbColInf** columns, short& numcol
             return false;
         }
 
-        pColInf[colNum].sqlDataType = Sqllen;
         switch (Sqllen)
         {
 #if wxUSE_UNICODE
