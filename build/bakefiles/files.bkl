@@ -928,7 +928,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/evtloop.cpp
     src/gtk/font.cpp
     src/gtk/gsockgtk.cpp
-    src/gtk/main.cpp
     src/gtk/minifram.cpp
     src/gtk/pen.cpp
     src/gtk/popupwin.cpp
