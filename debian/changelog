@@ -1,3 +1,24 @@
+wxwidgets2.8 (2.8.2.0-0) unstable; urgency=low
+
+  * Added wxSizerFlags::Shaped(), FixedMinSize(), Top() and Bottom() methods.
+  * Added wxCSConv::IsOk() (Manuel Martin).
+  * Added wxDateTime::GetDateOnly().
+  * Made wxTextFile work with unseekable files again (David Hart).
+  * Added wxCONFIG_USE_SUBDIR flag to wxFileConfig (Giuseppe Bilotta).
+  * Added wxSearchCtrl::[Get|Set]DescriptiveText.
+  * Added wxToolBar::SetTool[Normal|Disabled]Bitmap for wxMSW, wxGTK and wxMac.
+  * Added wxRICHTEXT_SETSTYLE_REMOVE flag for removing styles, and
+  * wxRICHTEXT_HITTEST_OUTSIDE for more accurate hit-testing.
+  * Fixed a crash when writing wxRichTextCtrl styles.
+  * wxPython: enhanced the widget inspection tool
+  * wxPython: Added wrappers for wx.SizerFlags and wx.Sizer methods using it
+  * Some missing methods of wxCairoGraphicsContext now implemented
+  * Fixed tab-related drawing and hit-testing bugs in wxRichTextCtrl.
+  * Implemented background colour in wxRichTextCtrl.
+  * Fixed crashes in helpview when opening a file.
+	
+ -- Robin Dunn <robin@alldunn.com>  Fri,  5 Mar 2007 14:15:03 -0800
+
 wxwidgets2.8 (2.8.1.1-0) unstable; urgency=low
 
   * Fix compilation with wxUSE_STL=1
