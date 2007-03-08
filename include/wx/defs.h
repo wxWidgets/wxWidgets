@@ -1274,18 +1274,18 @@ enum wxAlignment
 
 enum wxStretch
 {
+    /* for compatibility only, default now, don't use explicitly any more */
+#if WXWIN_COMPATIBILITY_2_6
+    wxADJUST_MINSIZE          = 0,
+#endif
+
     wxSTRETCH_NOT             = 0x0000,
     wxSHRINK                  = 0x1000,
     wxGROW                    = 0x2000,
     wxEXPAND                  = wxGROW,
     wxSHAPED                  = 0x4000,
     wxFIXED_MINSIZE           = 0x8000,
-    wxTILE                    = 0xc000,
-
-    /* for compatibility only, default now, don't use explicitly any more */
-#if WXWIN_COMPATIBILITY_2_6
-    wxADJUST_MINSIZE          = 0
-#endif
+    wxTILE                    = 0xc000
 };
 
 /*  border flags: the values are chosen for backwards compatibility */
