@@ -69,12 +69,8 @@ public:
     //       wxWindow::Get/SetFont, wxWindow::Get/SetCursor are important !
 
 protected:
-#ifdef __WXDEBUG__
     // checks for validity some of the ctor/Create() function parameters
     void CheckParams(const wxString& label, const wxString& url, long style);
-#else
-    void CheckParams() {}
-#endif
 
 public:
     // not part of the public API but needs to be public as used by
@@ -82,6 +78,9 @@ public:
     void SendEvent();
 };
 
+#ifndef __WXDEBUG__
+inline void wxHyperlinkCtrlBase::CheckParams(const wxString&, const wxString&, long) { }
+#endif
 
 // ----------------------------------------------------------------------------
 // wxHyperlinkEvent
