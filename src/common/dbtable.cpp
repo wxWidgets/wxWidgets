@@ -28,11 +28,6 @@
 #endif
 
 #ifdef DBDEBUG_CONSOLE
-#if wxUSE_IOSTREAMH
-    #include <iostream.h>
-#else
-    #include <iostream>
-#endif
     #include "wx/ioswrap.h"
 #endif
 
@@ -44,21 +39,12 @@
 
 #include "wx/dbtable.h"
 
-#ifdef __UNIX__
-// The HPUX preprocessor lines below were commented out on 8/20/97
-// because macros.h currently redefines DEBUG and is unneeded.
-// #  ifdef HPUX
-// #    include <macros.h>
-// #  endif
-#  ifdef LINUX
-#    include <sys/minmax.h>
-#  endif
-#endif
-
 ULONG lastTableID = 0;
 
 
 #ifdef __WXDEBUG__
+    #include "wx/thread.h"
+
     wxList TablesInUse;
     wxCriticalSection csTablesInUse;
 #endif
