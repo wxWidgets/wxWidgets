@@ -492,16 +492,16 @@ wxFileConfig::wxFileConfig(wxInputStream &inStream, const wxMBConv& conv)
     m_linesHead =
     m_linesTail = NULL;
 
-    // translate everything to the current (platform-dependent) line
-    // termination character
-    wxString strTrans;
+    // read the entire stream contents in memory
+    wxString str;
     {
-        wxString strTmp;
+        static const size_t chunkLen = 1024;
 
-        char buf[1024];
+        wxMemoryBuffer buf(chunkLen);
         do
         {
-            inStream.Read(buf, WXSIZEOF(buf)-1);  // leave room for the NULL
+            inStream.Read(buf.GetAppendBuf(chunkLen), chunkLen);
+            buf.UngetAppendBuf(inStream.LastRead());
 
             const wxStreamError err = inStream.GetLastError();
 
@@ -510,18 +510,26 @@ wxFileConfig::wxFileConfig(wxInputStream &inStream, const wxMBConv& conv)
                 wxLogError(_("Error reading config options."));
                 break;
             }
-
-            // FIXME: this is broken because if we have part of multibyte
-            //        character in the buffer (and another part hasn't been
-            //        read yet) we're going to lose data because of conversion
-            //        errors
-            buf[inStream.LastRead()] = '\0';
-            strTmp += conv.cMB2WX(buf);
         }
         while ( !inStream.Eof() );
 
-        strTrans = wxTextBuffer::Translate(strTmp);
+#if wxUSE_UNICODE
+        size_t len;
+        str = conv.cMB2WC((char *)buf.GetData(), buf.GetDataLen(), &len);
+        if ( !len && buf.GetDataLen() )
+        {
+            wxLogError(_("Failed to read config options."));
+        }
+#else // !wxUSE_UNICODE
+        // no need for conversion
+        str.assign((char *)buf.GetData(), buf.GetDataLen());
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
     }
+
+
+    // translate everything to the current (platform-dependent) line
+    // termination character
+    str = wxTextBuffer::Translate(str);
 
     wxMemoryText memText;
 
@@ -534,21 +542,21 @@ wxFileConfig::wxFileConfig(wxInputStream &inStream, const wxMBConv& conv)
     const wxChar *pEOL = wxTextBuffer::GetEOL(wxTextBuffer::typeDefault);
     const size_t EOLLen = wxStrlen(pEOL);
 
-    int posLineStart = strTrans.Find(pEOL);
+    int posLineStart = str.Find(pEOL);
     while ( posLineStart != -1 )
     {
-        wxString line(strTrans.Left(posLineStart));
+        wxString line(str.Left(posLineStart));
 
         memText.AddLine(line);
 
-        strTrans = strTrans.Mid(posLineStart + EOLLen);
+        str = str.Mid(posLineStart + EOLLen);
 
-        posLineStart = strTrans.Find(pEOL);
+        posLineStart = str.Find(pEOL);
     }
 
     // also add whatever we have left in the translated string.
-    if ( !strTrans.empty() )
-        memText.AddLine(strTrans);
+    if ( !str.empty() )
+        memText.AddLine(str);
 
     // Finally we can parse it all.
     Parse(memText, true /* local */);
