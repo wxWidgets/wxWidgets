@@ -187,12 +187,6 @@ void wxFontRefData::Init(int pointSize,
     m_style = style == wxDEFAULT ? wxFONTSTYLE_NORMAL : style;
     m_weight = weight == wxDEFAULT ? wxFONTWEIGHT_NORMAL : weight;
 
-    // and here, do we really want to forbid creation of the font of the size
-    // 90 (the value of wxDEFAULT)??
-    m_pointSize = pointSize == wxDEFAULT || pointSize == -1
-                    ? wxDEFAULT_FONT_SIZE
-                    : pointSize;
-
     m_underlined = underlined;
     m_encoding = encoding;
 
@@ -229,10 +223,11 @@ void wxFontRefData::Init(int pointSize,
     }
 
     m_nativeFontInfo.SetFaceName(m_faceName);
-    m_nativeFontInfo.SetPointSize(m_pointSize);
     m_nativeFontInfo.SetWeight((wxFontWeight)m_weight);
     m_nativeFontInfo.SetStyle((wxFontStyle)m_style);
 #endif // wxUSE_UNICODE
+
+    SetPointSize(pointSize);
 }
 
 void wxFontRefData::InitFromNative()
@@ -470,13 +465,12 @@ wxFontRefData::~wxFontRefData()
 
 void wxFontRefData::SetPointSize(int pointSize)
 {
-    m_pointSize = pointSize;
+    // NB: Pango doesn't support point sizes less than 1
+    m_pointSize = pointSize == wxDEFAULT || pointSize < 1 ? wxDEFAULT_FONT_SIZE
+                                                          : pointSize;
 
 #if wxUSE_UNICODE
-    // Get native info
-    PangoFontDescription *desc = m_nativeFontInfo.description;
-
-    pango_font_description_set_size( desc, m_pointSize * PANGO_SCALE );
+    m_nativeFontInfo.SetPointSize(m_pointSize);
 #endif
 }
 
