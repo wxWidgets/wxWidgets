@@ -57,6 +57,11 @@ wx.lib.customtreectrl patches from Andrea:
   4. UnselectAll bug fixed.
 
 
+Renamed the wx.lib.inspect and wx.lib.mixins.inspect modules to
+inspection, in order to avoid conflicts with the inspect module in the
+standard Python library.
+
+
 
 
 

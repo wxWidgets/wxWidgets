@@ -34,8 +34,8 @@ class TestPanel(wx.Panel):
         self.Fit()
         
 
-import wx.lib.mixins.inspect
-class TestApp(wx.App, wx.lib.mixins.inspect.InspectionMixin):
+import wx.lib.mixins.inspection
+class TestApp(wx.App, wx.lib.mixins.inspection.InspectionMixin):
     pass
 
 app = TestApp(False)

@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------
-# Name:        wx.lib.inspect
+# Name:        wx.lib.inspection
 # Purpose:     A widget inspection tool that allows easy introspection of
 #              all the live widgets and sizers in an application.
 #

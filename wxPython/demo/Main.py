@@ -1690,7 +1690,7 @@ class wxPythonDemo(wx.Frame):
 
     def OnOpenWidgetInspector(self, evt):
         # Activate the widget inspection tool
-        from wx.lib.inspect import InspectionTool
+        from wx.lib.inspection import InspectionTool
         if not InspectionTool().initialized:
             InspectionTool().Init()
 

@@ -39,7 +39,7 @@ class TestFrame(wx.Frame):
         print "result = %d" % result
             
 
-from wx.lib.mixins.inspect import InspectableApp
+from wx.lib.mixins.inspection import InspectableApp
 
 app = InspectableApp(False)
 app.Init()
