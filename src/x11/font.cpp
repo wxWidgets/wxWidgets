@@ -40,6 +40,7 @@
 
 #include "wx/fontutil.h"    // for wxNativeFontInfo
 #include "wx/tokenzr.h"
+#include "wx/fontenum.h"
 
 #include "wx/x11/private.h"
 
@@ -196,27 +197,42 @@ void wxFontRefData::Init(int pointSize,
     m_encoding = encoding;
 
 #if wxUSE_UNICODE
+    if ( m_nativeFontInfo.description )
+        pango_font_description_free(m_nativeFontInfo.description);
+
     // Create native font info
     m_nativeFontInfo.description = pango_font_description_new();
 
-    // And set its values
-    switch (m_family)
+    // if a face name is specified, use it if it's available, otherwise use
+    // just the family
+    if ( faceName.empty() || !wxFontEnumerator::IsValidFacename(faceName) )
     {
-        case wxFONTFAMILY_MODERN:
-        case wxFONTFAMILY_TELETYPE:
-           pango_font_description_set_family( m_nativeFontInfo.description, "monospace" );
-           break;
-        case wxFONTFAMILY_ROMAN:
-           pango_font_description_set_family( m_nativeFontInfo.description, "serif" );
-           break;
-        default:
-           pango_font_description_set_family( m_nativeFontInfo.description, "sans" );
-           break;
+        // TODO: scan system for valid fonts matching the given family instead
+        //       of hardcoding them here
+        switch ( m_family )
+        {
+            case wxFONTFAMILY_TELETYPE:
+                m_faceName = wxT("monospace");
+                break;
+
+            case wxFONTFAMILY_ROMAN:
+                m_faceName = wxT("serif");
+                break;
+
+            default:
+                m_faceName = wxT("sans");
+        }
     }
-    SetStyle( m_style );
-    SetPointSize( m_pointSize );
-    SetWeight( m_weight );
-#endif
+    else // specified face name is available, use it
+    {
+        m_faceName = faceName;
+    }
+
+    m_nativeFontInfo.SetFaceName(m_faceName);
+    m_nativeFontInfo.SetPointSize(m_pointSize);
+    m_nativeFontInfo.SetWeight((wxFontWeight)m_weight);
+    m_nativeFontInfo.SetStyle((wxFontStyle)m_style);
+#endif // wxUSE_UNICODE
 }
 
 void wxFontRefData::InitFromNative()
