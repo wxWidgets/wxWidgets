@@ -59,6 +59,8 @@ ULONG lastTableID = 0;
 
 
 #ifdef __WXDEBUG__
+    #include "wx/thread.h"
+
     wxList TablesInUse;
     wxCriticalSection csTablesInUse;
 #endif

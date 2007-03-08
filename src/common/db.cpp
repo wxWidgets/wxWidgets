@@ -62,6 +62,8 @@ wxChar const *SQL_LOG_FILENAME         = wxT("sqllog.txt");
 wxChar const *SQL_CATALOG_FILENAME     = wxT("catalog.txt");
 
 #ifdef __WXDEBUG__
+    #include "wx/thread.h"
+
     extern wxList TablesInUse;
     extern wxCriticalSection csTablesInUse;
 #endif
