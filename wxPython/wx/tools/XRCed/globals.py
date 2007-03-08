@@ -15,7 +15,7 @@ import sys
 # Global constants
 
 progname = 'XRCed'
-version = '0.1.8-2'
+version = '0.1.8-3'
 # Minimal wxWidgets version
 MinWxVersion = (2,6,0)
 if wx.VERSION[:3] < MinWxVersion:

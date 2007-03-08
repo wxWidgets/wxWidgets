@@ -1,3 +1,10 @@
+0.1.8-3
+-------
+
+Notebook page highlighting fix. Highlight resizes when the window 
+is resized. ParamUnit spin button detects event handler re-entry
+(wxGTK probably has a bug in wxSpinButton with repeated events).
+
 0.1.8-2
 -------
 

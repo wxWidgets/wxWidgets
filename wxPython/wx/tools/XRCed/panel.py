@@ -237,6 +237,7 @@ class ParamPage(wx.Panel):
                     xxx.setSpecial(param, value)
                 else:
                     paramObj.update(value)
+                
     # Save current state
     def SaveState(self):
         self.origChecks = map(lambda i: (i[0], i[1].GetValue()), self.checks.items())

@@ -612,6 +612,7 @@ class XML_Tree(wx.TreeCtrl):
         # Reset selection object
         self.selection = None
         return node
+    
     # Find position relative to the top-level window
     def FindNodePos(self, item, obj=None):
         # Root at (0,0)
@@ -631,15 +632,12 @@ class XML_Tree(wx.TreeCtrl):
                         if g.testWin.highLight:
                             g.testWin.highLight.Remove()
                     break
-        # Find first ancestor which is a wxWindow (not a sizer)
+        # For sizers and notebooks we must select the first window-like parent
         winParent = itemParent
-        while self.GetPyData(winParent).isSizer:
+        while self.GetPyData(winParent).isSizer or \
+                  self.GetPyData(winParent).treeObject().__class__ == xxxNotebook:
             winParent = self.GetItemParent(winParent)
-        # Notebook children are layed out in a little strange way
-        if self.GetPyData(itemParent).treeObject().__class__ == xxxNotebook:
-            parentPos = wx.Point(0,0)
-        else:
-            parentPos = self.FindNodePos(winParent)
+        parentPos = self.FindNodePos(winParent)
         # Position (-1,-1) is really (0,0)
         pos = obj.GetPosition()
         if pos == (-1,-1): pos = (0,0)
@@ -700,7 +698,6 @@ class XML_Tree(wx.TreeCtrl):
             # If some data was modified, apply changes
             if g.panel.IsModified():
                 self.Apply(xxx, oldItem)
-                #if conf.autoRefresh:
                 if g.testWin:
                     if g.testWin.highLight:
                         g.testWin.highLight.Remove()
@@ -959,9 +956,11 @@ class XML_Tree(wx.TreeCtrl):
                 testWin.toolBar = res.LoadToolBar(testWin, STD_NAME)
                 testWin.SetToolBar(testWin.toolBar)
                 testWin.Show(True)
+            # Catch some events, set highlight
             if testWin:
                 testWin.item = item
                 wx.EVT_CLOSE(testWin, self.OnCloseTestWin)
+                wx.EVT_SIZE(testWin, self.OnSizeTestWin)
                 testWin.highLight = None
                 if highLight and not self.pendingHighLight:
                     self.HighLight(highLight)
@@ -986,6 +985,11 @@ class XML_Tree(wx.TreeCtrl):
 
     def OnCloseTestWin(self, evt):
         self.CloseTestWindow()
+
+    def OnSizeTestWin(self, evt):
+        if g.testWin.highLight:
+            self.HighLight(g.testWin.highLight.item)
+        evt.Skip()
 
     # Return index in parent, for real window children
     def WindowIndex(self, item):

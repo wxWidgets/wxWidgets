@@ -57,8 +57,7 @@ class ParamBinaryOr(PPanel):
         self.button = wx.Button(self, self.ID_BUTTON_CHOICES, 'Edit...', size=buttonSize)
         sizer.Add(self.button, 0, wx.ALIGN_CENTER_VERTICAL)
         self.SetAutoLayout(True)
-        self.SetSizer(sizer)
-        sizer.Fit(self)
+        self.SetSizerAndFit(sizer)
         wx.EVT_BUTTON(self, self.ID_BUTTON_CHOICES, self.OnButtonChoices)
         wx.EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
     def GetValue(self):
@@ -192,8 +191,7 @@ class ParamColour(PPanel):
         self.button = wx.Panel(self, self.ID_BUTTON, wx.DefaultPosition, wx.Size(20, 20))
         sizer.Add(self.button, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 5)
         self.SetAutoLayout(True)
-        self.SetSizer(sizer)
-        sizer.Fit(self)
+        self.SetSizerAndFit(sizer)
         self.textModified = False
         wx.EVT_PAINT(self.button, self.OnPaintButton)
         wx.EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
@@ -254,8 +252,7 @@ class ParamFont(PPanel):
         self.button = wx.Button(self, self.ID_BUTTON_SELECT, 'Select...', size=buttonSize)
         sizer.Add(self.button, 0, wx.ALIGN_CENTER_VERTICAL)
         self.SetAutoLayout(True)
-        self.SetSizer(sizer)
-        sizer.Fit(self)
+        self.SetSizerAndFit(sizer)
         self.textModified = False
         wx.EVT_BUTTON(self, self.ID_BUTTON_SELECT, self.OnButtonSelect)
         wx.EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
@@ -348,8 +345,7 @@ class ParamInt(PPanel):
         self.spin.SetRange(-2147483648, 2147483647) # min/max integers
         sizer.Add(self.spin)
         self.SetAutoLayout(True)
-        self.SetSizer(sizer)
-        sizer.Fit(self)
+        self.SetSizerAndFit(sizer)
         wx.EVT_SPINCTRL(self, self.ID_SPIN_CTRL, self.OnChange)
     def GetValue(self):
         return str(self.spin.GetValue())
@@ -369,8 +365,7 @@ class ParamIntNN(PPanel):
         self.spin.SetRange(0, 10000) # min/max integers
         sizer.Add(self.spin)
         self.SetAutoLayout(True)
-        self.SetSizer(sizer)
-        sizer.Fit(self)
+        self.SetSizerAndFit(sizer)
         wx.EVT_SPINCTRL(self, self.ID_SPIN_CTRL, self.OnChange)
     def GetValue(self):
         return str(self.spin.GetValue())
@@ -387,26 +382,24 @@ class ParamUnit(PPanel):
         self.ID_TEXT_CTRL = wx.NewId()
         self.ID_SPIN_BUTTON = wx.NewId()
         sizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.spin = wx.SpinButton(self, self.ID_SPIN_BUTTON, style = wx.SP_VERTICAL, size=(-1,1))
+        self.spin = wx.SpinButton(self, self.ID_SPIN_BUTTON, style = wx.SP_VERTICAL)
         textW = 60 - self.spin.GetSize()[0]
         self.text = wx.TextCtrl(self, self.ID_TEXT_CTRL, size=(textW,-1))
         self.spin.SetRange(-10000, 10000)
         sizer.Add(self.text, 0, wx.EXPAND)
         sizer.Add(self.spin, 0, wx.EXPAND)
-        #sizer.SetMinSize((50,-1))
         self.SetAutoLayout(True)
-        self.SetSizer(sizer)
-        sizer.Fit(self)
-        wx.EVT_SPIN_UP(self, self.ID_SPIN_BUTTON, self.OnSpinUp)
-        wx.EVT_SPIN_DOWN(self, self.ID_SPIN_BUTTON, self.OnSpinDown)
+        self.SetSizerAndFit(sizer)
+        self.spin.Bind(wx.EVT_SPIN_UP, self.OnSpinUp)
+        self.spin.Bind(wx.EVT_SPIN_DOWN, self.OnSpinDown)
     def GetValue(self):
         return self.text.GetValue()
     def SetValue(self, value):
-        self.freeze = True
-        if not value: value = '0'
+        if not value: value = '0'        
         self.text.SetValue(value)
-        self.freeze = False
+        self.Change(0)
     def Change(self, x):
+        self.freeze = True
         # Check if we are working with dialog units
         value = self.text.GetValue()
         units = ''
@@ -416,14 +409,19 @@ class ParamUnit(PPanel):
         try:
             intValue = int(value) + x
             self.spin.SetValue(intValue)
-            self.text.SetValue(str(intValue) + units)
-            self.SetModified()
+            if x:                       # 0 can be passed to update spin value only
+                self.text.SetValue(str(intValue) + units)
+                self.SetModified()
         except:
             # !!! Strange, if I use wx.LogWarning, event is re-generated
             print 'ERROR: incorrect unit format'
+        self.freeze = False
     def OnSpinUp(self, evt):
+        self.freeze = True
         self.Change(1)
     def OnSpinDown(self, evt):
+        if self.freeze: return
+        self.freeze = True
         self.Change(-1)
 
 class ParamMultilineText(PPanel):
@@ -437,8 +435,7 @@ class ParamMultilineText(PPanel):
         self.button = wx.Button(self, self.ID_BUTTON_EDIT, 'Edit...', size=buttonSize)
         sizer.Add(self.button, 0, wx.ALIGN_CENTER_VERTICAL)
         self.SetAutoLayout(True)
-        self.SetSizer(sizer)
-        sizer.Fit(self)
+        self.SetSizerAndFit(sizer)
         wx.EVT_BUTTON(self, self.ID_BUTTON_EDIT, self.OnButtonEdit)
         wx.EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
     def GetValue(self):
@@ -467,8 +464,7 @@ class ParamText(PPanel):
         else: option = 0
         sizer.Add(self.text, option, wx.ALIGN_CENTER_VERTICAL | wx.TOP | wx.BOTTOM, 2)
         self.SetAutoLayout(True)
-        self.SetSizer(sizer)
-        sizer.Fit(self)
+        self.SetSizerAndFit(sizer)
         wx.EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
     def GetValue(self):
         return self.text.GetValue()
@@ -612,8 +608,7 @@ class ParamContent(PPanel):
         self.button = wx.Button(self, self.ID_BUTTON_EDIT, 'Edit...', size=buttonSize)
         sizer.Add(self.button, 0, wx.ALIGN_CENTER_VERTICAL)
         self.SetAutoLayout(True)
-        self.SetSizer(sizer)
-        sizer.Fit(self)
+        self.SetSizerAndFit(sizer)
         self.textModified = False
         wx.EVT_BUTTON(self, self.ID_BUTTON_EDIT, self.OnButtonEdit)
         wx.EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
@@ -753,8 +748,7 @@ class RadioBox(PPanel):
             topSizer.Add(button, 0, wx.RIGHT, 5)
             wx.EVT_RADIOBUTTON(self, button.GetId(), self.OnRadioChoice)
         self.SetAutoLayout(True)
-        self.SetSizer(topSizer)
-        topSizer.Fit(self)
+        self.SetSizerAndFit(topSizer)
     def SetStringSelection(self, value):
         self.freeze = True
         for i in self.choices:
@@ -813,8 +807,7 @@ class ParamFile(PPanel):
         self.button = wx.Button(self, self.ID_BUTTON_BROWSE, 'Browse...',size=buttonSize)
         sizer.Add(self.button, 0, wx.ALIGN_CENTER_VERTICAL)
         self.SetAutoLayout(True)
-        self.SetSizer(sizer)
-        sizer.Fit(self)
+        self.SetSizerAndFit(sizer)
         self.textModified = False
         wx.EVT_BUTTON(self, self.ID_BUTTON_BROWSE, self.OnButtonBrowse)
         wx.EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)

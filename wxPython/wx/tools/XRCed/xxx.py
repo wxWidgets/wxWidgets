@@ -317,7 +317,6 @@ class xxxObject:
     # Special processing for growablecols-like parameters
     # represented by several nodes
     def special(self, tag, node):
-        print 'special',tag
         if not self.params.has_key(tag):
             # Create new multi-group
             self.params[tag] = xxxParamMulti(node)
