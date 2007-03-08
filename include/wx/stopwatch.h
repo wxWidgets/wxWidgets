@@ -99,4 +99,14 @@ extern wxMilliClock_t WXDLLIMPEXP_BASE wxGetLocalTimeMillis();
 
 #define wxGetCurrentTime() wxGetLocalTime()
 
+// on some really old systems gettimeofday() doesn't have the second argument,
+// define wxGetTimeOfDay() to hide this difference
+#ifdef HAVE_GETTIMEOFDAY
+    #ifdef WX_GETTIMEOFDAY_NO_TZ
+        #define wxGetTimeOfDay(tv)      gettimeofday(tv)
+    #else
+        #define wxGetTimeOfDay(tv)      gettimeofday((tv), NULL)
+    #endif
+#endif // HAVE_GETTIMEOFDAY
+
 #endif // _WX_STOPWATCH_H_
