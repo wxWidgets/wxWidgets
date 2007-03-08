@@ -2373,7 +2373,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         return item.GetText()
     
 
-    def GetItemImage(self, item, which):
+    def GetItemImage(self, item, which=TreeItemIcon_Normal):
         """Returns the item image."""
 
         if not item:
