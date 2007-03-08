@@ -693,6 +693,13 @@ void wxGCDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y,
     if (w == 0 || h == 0)
         return;
 
+    if ( m_graphicContext->ShouldOffset() )
+    {
+        // if we are offsetting the entire rectangle is moved 0.5, so the
+        // border line gets off by 1
+        w -= 1;
+        h -= 1;
+    }
     m_graphicContext->DrawRoundedRectangle( x,y,w,h,radius);
 }
 
@@ -703,6 +710,13 @@ void wxGCDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord w, wxCoord h)
     if ( !m_logicalFunctionSupported )
         return;
 
+    if ( m_graphicContext->ShouldOffset() )
+    {
+        // if we are offsetting the entire rectangle is moved 0.5, so the
+        // border line gets off by 1
+        w -= 1;
+        h -= 1;
+    }
     m_graphicContext->DrawEllipse(x,y,w,h);
 }
 
