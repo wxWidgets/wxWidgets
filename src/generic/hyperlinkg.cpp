@@ -62,6 +62,9 @@ bool wxGenericHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
     // do validation checks:
     CheckParams(label, url, style);
 
+    if ((style & wxHL_ALIGN_LEFT) == 0)
+        style |= wxFULL_REPAINT_ON_RESIZE;
+
     if (!wxControl::Create(parent, id, pos, size, style, wxDefaultValidator, name))
         return false;
 
@@ -94,7 +97,6 @@ bool wxGenericHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
     //       with GTK+'s native handling):
 
     Connect( wxEVT_PAINT, wxPaintEventHandler(wxGenericHyperlinkCtrl::OnPaint) );
-    Connect( wxEVT_SIZE, wxSizeEventHandler(wxGenericHyperlinkCtrl::OnSize) );
     Connect( wxEVT_LEAVE_WINDOW, wxMouseEventHandler(wxGenericHyperlinkCtrl::OnLeaveWindow) );
 
     Connect( wxEVT_LEFT_DOWN, wxMouseEventHandler(wxGenericHyperlinkCtrl::OnLeftDown) );
@@ -257,13 +259,6 @@ void wxGenericHyperlinkCtrl::OnPopUpCopy( wxCommandEvent& WXUNUSED(event) )
     wxTheClipboard->SetData( data );
     wxTheClipboard->Close();
 #endif // wxUSE_CLIPBOARD
-}
-
-void wxGenericHyperlinkCtrl::OnSize(wxSizeEvent& WXUNUSED(event))
-{
-    // update the position of the label in the screen respecting
-    // the selected align flag
-    Refresh();
 }
 
 #endif // wxUSE_HYPERLINKCTRL

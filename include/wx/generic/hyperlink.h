@@ -9,12 +9,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GENERICHYPERLINKCTRLH__
-#define __GENERICHYPERLINKCTRLH__
-
-#include "wx/defs.h"
-#include "wx/control.h"
-
+#ifndef _WX_GENERICHYPERLINKCTRL_H_
+#define _WX_GENERICHYPERLINKCTRL_H_
 
 // ----------------------------------------------------------------------------
 // wxGenericHyperlinkCtrl
@@ -100,10 +96,6 @@ protected:
     // handles "Copy URL" menuitem
     void OnPopUpCopy(wxCommandEvent& event);
 
-    // Refreshes the control to update label's position if necessary
-    void OnSize(wxSizeEvent& event);
-
-
     // overridden base class virtuals
 
     // Returns the best size for the window, which is the size needed
@@ -139,4 +131,4 @@ private:
     DECLARE_DYNAMIC_CLASS(wxGenericHyperlinkCtrl)
 };
 
-#endif // __GENERICHYPERLINKCTRLH__
+#endif // _WX_GENERICHYPERLINKCTRL_H_
