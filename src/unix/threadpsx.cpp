@@ -257,27 +257,41 @@ wxMutexError wxMutexInternal::Lock(unsigned long ms)
 {
     static const long MSEC_IN_SEC   = 1000;
     static const long NSEC_IN_MSEC  = 1000000;
+    static const long NSEC_IN_USEC  = 1000;
     static const long NSEC_IN_SEC   = MSEC_IN_SEC * NSEC_IN_MSEC;
 
     time_t seconds = ms/MSEC_IN_SEC;
     long nanoseconds = (ms % MSEC_IN_SEC) * NSEC_IN_MSEC;
     timespec ts = { 0, 0 };
 
+    // normally we should use clock_gettime(CLOCK_REALTIME) here but this
+    // function is in librt and we don't link with it currently, so use
+    // gettimeofday() instead -- if it turns out that this is really too
+    // imprecise, we should modify configure to check if clock_gettime() is
+    // available and whether it requires -lrt and use it instead
+#if 0
     if ( clock_gettime(CLOCK_REALTIME, &ts) == 0 )
     {
-        ts.tv_sec += seconds;
-        ts.tv_nsec += nanoseconds;
-        if ( ts.tv_nsec > NSEC_IN_SEC )
-        {
-            ts.tv_sec += 1;
-            ts.tv_nsec -= NSEC_IN_SEC;
-        }
     }
+#else
+    struct timeval tv;
+    if ( wxGetTimeOfDay(&tv) != -1 )
+    {
+        ts.tv_sec = tv.tv_sec;
+        ts.tv_nsec = tv.tv_usec*NSEC_IN_USEC;
+    }
+#endif
     else // fall back on system timer
     {
-        wxLogDebug(_T("clock_gettime(CLOCK_REALTIME) failed"));
-        ts.tv_sec = time(NULL) + seconds;
-        ts.tv_nsec = nanoseconds;
+        ts.tv_sec = time(NULL);
+    }
+
+    ts.tv_sec += seconds;
+    ts.tv_nsec += nanoseconds;
+    if ( ts.tv_nsec > NSEC_IN_SEC )
+    {
+        ts.tv_sec += 1;
+        ts.tv_nsec -= NSEC_IN_SEC;
     }
 
     return HandleLockResult(pthread_mutex_timedlock(&m_mutex, &ts));
