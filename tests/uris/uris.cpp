@@ -358,9 +358,6 @@ void URITestCase::URLCompat()
     CPPUNIT_ASSERT( uricopy == url );
     CPPUNIT_ASSERT( uricopy == urlcopy );
     CPPUNIT_ASSERT( uricopy == uri );
-#if WXWIN_COMPATIBILITY_2_4
-    CPPUNIT_ASSERT( wxURL::ConvertFromURI(wxT("%20%41%20")) == wxT(" A ") );
-#endif
     CPPUNIT_ASSERT( wxURI::Unescape(wxT("%20%41%20")) == wxT(" A ") );
 
     wxURI test(wxT("file:\"myf\"ile.txt"));
