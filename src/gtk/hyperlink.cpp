@@ -37,7 +37,7 @@
 // local functions
 // ----------------------------------------------------------------------------
 
-inline bool UseNative()
+static inline bool UseNative()
 {
     // native gtk_link_button widget is only available in GTK+ 2.10 and later
     return !gtk_check_version(2, 10, 0);
@@ -172,21 +172,21 @@ void wxHyperlinkCtrl::SetNormalColour(const wxColour &colour)
 
 wxColour wxHyperlinkCtrl::GetNormalColour() const
 {
+    wxColour ret;
     if ( UseNative() )
     {
         GdkColor *link_color = NULL;
-        wxColour ret = wxNullColour;
 
         // convert GdkColor in wxColour
         gtk_widget_style_get(m_widget, "link-color", &link_color, NULL);
         if (link_color)
-            ret.Set(link_color->red, link_color->green, link_color->blue);
+            ret = wxColour(*link_color);
         gdk_color_free (link_color);
-
-        return ret;
     }
     else
-        return wxGenericHyperlinkCtrl::GetNormalColour();
+        ret = wxGenericHyperlinkCtrl::GetNormalColour();
+
+    return ret;
 }
 
 void wxHyperlinkCtrl::SetVisitedColour(const wxColour &colour)
@@ -201,21 +201,21 @@ void wxHyperlinkCtrl::SetVisitedColour(const wxColour &colour)
 
 wxColour wxHyperlinkCtrl::GetVisitedColour() const
 {
+    wxColour ret;
     if ( UseNative() )
     {
         GdkColor *link_color = NULL;
-        wxColour ret = wxNullColour;
 
         // convert GdkColor in wxColour
         gtk_widget_style_get(m_widget, "visited-link-color", &link_color, NULL);
         if (link_color)
-            ret.Set(link_color->red, link_color->green, link_color->blue);
+            ret = wxColour(*link_color);
         gdk_color_free (link_color);
-
-        return ret;
     }
     else
         return wxGenericHyperlinkCtrl::GetVisitedColour();
+
+    return ret;
 }
 
 void wxHyperlinkCtrl::SetHoverColour(const wxColour &colour)
