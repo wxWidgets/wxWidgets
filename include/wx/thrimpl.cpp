@@ -44,6 +44,14 @@ wxMutexError wxMutex::Lock()
     return m_internal->Lock();
 }
 
+wxMutexError wxMutex::LockTimeout(unsigned long ms)
+{
+    wxCHECK_MSG( m_internal, wxMUTEX_INVALID,
+                 _T("wxMutex::Lock(): not initialized") );
+
+    return m_internal->Lock(ms);
+}
+
 wxMutexError wxMutex::TryLock()
 {
     wxCHECK_MSG( m_internal, wxMUTEX_INVALID,

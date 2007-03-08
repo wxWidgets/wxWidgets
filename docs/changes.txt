@@ -35,6 +35,7 @@ All:
 - Fixed tab-related drawing and hit-testing bugs in wxRichTextCtrl.
 - Implemented background colour in wxRichTextCtrl.
 - Fixed crashes in helpview when opening a file.
+- Added wxMutex::LockTimeout() (Aleksandr Napylov)
 
 wxGTK:
 

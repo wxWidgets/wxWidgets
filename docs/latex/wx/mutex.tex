@@ -93,11 +93,13 @@ None.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxMutex::wxMutex}\label{wxmutexctor}
 
 \func{}{wxMutex}{\param{wxMutexType }{type = {\tt wxMUTEX\_DEFAULT}}}
 
 Default constructor.
+
 
 \membersection{wxMutex::\destruct{wxMutex}}\label{wxmutexdtor}
 
@@ -105,11 +107,13 @@ Default constructor.
 
 Destroys the wxMutex object.
 
+
 \membersection{wxMutex::Lock}\label{wxmutexlock}
 
 \func{wxMutexError}{Lock}{\void}
 
-Locks the mutex object.
+Locks the mutex object. This is equivalent to 
+\helpref{LockTimeout}{wxmutexlocktimeout} with infinite timeout.
 
 \wxheading{Return value}
 
@@ -120,6 +124,25 @@ One of:
 \twocolitem{{\bf wxMUTEX\_NO\_ERROR}}{There was no error.}
 \twocolitem{{\bf wxMUTEX\_DEAD\_LOCK}}{A deadlock situation was detected.}
 \end{twocollist}
+
+
+\membersection{wxMutex::LockTimeout}\label{wxmutexlocktimeout}
+
+\func{wxMutexError}{LockTimeout}{\param{unsigned long}{ msec}}
+
+Try to lock the mutex object during the specified time interval.
+
+\wxheading{Return value}
+
+One of:
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxMUTEX\_NO\_ERROR}}{Mutex successfully locked.}
+\twocolitem{{\bf wxMUTEX\_TIMEOUT}}{Mutex couldn't be acquired before timeout expiration.}
+\twocolitem{{\bf wxMUTEX\_DEAD\_LOCK}}{A deadlock situation was detected.}
+\end{twocollist}
+
 
 \membersection{wxMutex::TryLock}\label{wxmutextrylock}
 
@@ -136,6 +159,7 @@ One of:
 \twocolitem{{\bf wxMUTEX\_NO\_ERROR}}{There was no error.}
 \twocolitem{{\bf wxMUTEX\_BUSY}}{The mutex is already locked by another thread.}
 \end{twocollist}
+
 
 \membersection{wxMutex::Unlock}\label{wxmutexunlock}
 

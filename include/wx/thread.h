@@ -38,6 +38,7 @@ enum wxMutexError
     wxMUTEX_DEAD_LOCK,      // mutex is already locked by the calling thread
     wxMUTEX_BUSY,           // mutex is already locked by another thread
     wxMUTEX_UNLOCKED,       // attempt to unlock a mutex which is not locked
+    wxMUTEX_TIMEOUT,        // LockTimeout() has timed out
     wxMUTEX_MISC_ERROR      // any other error
 };
 
@@ -148,6 +149,10 @@ public:
     //
     // The caller must call Unlock() later if Lock() returned wxMUTEX_NO_ERROR.
     wxMutexError Lock();
+
+    // Same as Lock() but return wxMUTEX_TIMEOUT if the mutex can't be locked
+    // during the given number of milliseconds
+    wxMutexError LockTimeout(unsigned long ms);
 
     // Try to lock the mutex: if it is currently locked, return immediately
     // with an error. Otherwise the caller must call Unlock().

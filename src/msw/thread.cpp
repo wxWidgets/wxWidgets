@@ -178,7 +178,8 @@ public:
     bool IsOk() const { return m_mutex != NULL; }
 
     wxMutexError Lock() { return LockTimeout(INFINITE); }
-    wxMutexError TryLock() { return LockTimeout(0); }
+    wxMutexError Lock(unsigned long ms) { return LockTimeout(ms); }
+    wxMutexError TryLock();
     wxMutexError Unlock();
 
 private:
@@ -196,7 +197,7 @@ wxMutexInternal::wxMutexInternal(wxMutexType WXUNUSED(mutexType))
     m_mutex = ::CreateMutex
                 (
                     NULL,       // default secutiry attributes
-                    false,      // not initially locked
+                    FALSE,      // not initially locked
                     NULL        // no name
                 );
 
@@ -215,6 +216,14 @@ wxMutexInternal::~wxMutexInternal()
             wxLogLastError(_T("CloseHandle(mutex)"));
         }
     }
+}
+
+wxMutexError wxMutexInternal::TryLock()
+{
+    const wxMutexError rc = LockTimeout(0);
+
+    // we have a special return code for timeout in this case
+    return rc == wxMUTEX_TIMEOUT ? wxMUTEX_BUSY : rc;
 }
 
 wxMutexError wxMutexInternal::LockTimeout(DWORD milliseconds)
@@ -237,7 +246,7 @@ wxMutexError wxMutexInternal::LockTimeout(DWORD milliseconds)
             break;
 
         case WAIT_TIMEOUT:
-            return wxMUTEX_BUSY;
+            return wxMUTEX_TIMEOUT;
 
         case WAIT_ABANDONED:        // checked for above
         default:

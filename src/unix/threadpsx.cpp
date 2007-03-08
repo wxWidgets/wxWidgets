@@ -163,10 +163,15 @@ public:
     ~wxMutexInternal();
 
     wxMutexError Lock();
+    wxMutexError Lock(unsigned long ms);
     wxMutexError TryLock();
     wxMutexError Unlock();
 
     bool IsOk() const { return m_isOk; }
+
+private:
+    // convert the result of pthread_mutex_[timed]lock() call to wx return code
+    wxMutexError HandleLockResult(int err);
 
 private:
     pthread_mutex_t m_mutex;
@@ -245,7 +250,41 @@ wxMutexInternal::~wxMutexInternal()
 
 wxMutexError wxMutexInternal::Lock()
 {
-    int err = pthread_mutex_lock(&m_mutex);
+    return HandleLockResult(pthread_mutex_lock(&m_mutex));
+}
+
+wxMutexError wxMutexInternal::Lock(unsigned long ms)
+{
+    static const long MSEC_IN_SEC   = 1000;
+    static const long NSEC_IN_MSEC  = 1000000;
+    static const long NSEC_IN_SEC   = MSEC_IN_SEC * NSEC_IN_MSEC;
+
+    time_t seconds = ms/MSEC_IN_SEC;
+    long nanoseconds = (ms % MSEC_IN_SEC) * NSEC_IN_MSEC;
+    timespec ts = { 0, 0 };
+
+    if ( clock_gettime(CLOCK_REALTIME, &ts) == 0 )
+    {
+        ts.tv_sec += seconds;
+        ts.tv_nsec += nanoseconds;
+        if ( ts.tv_nsec > NSEC_IN_SEC )
+        {
+            ts.tv_sec += 1;
+            ts.tv_nsec -= NSEC_IN_SEC;
+        }
+    }
+    else // fall back on system timer
+    {
+        wxLogDebug(_T("clock_gettime(CLOCK_REALTIME) failed"));
+        ts.tv_sec = time(NULL) + seconds;
+        ts.tv_nsec = nanoseconds;
+    }
+
+    return HandleLockResult(pthread_mutex_timedlock(&m_mutex, &ts));
+}
+
+wxMutexError wxMutexInternal::HandleLockResult(int err)
+{
     switch ( err )
     {
         case EDEADLK:
@@ -255,18 +294,22 @@ wxMutexError wxMutexInternal::Lock()
             return wxMUTEX_DEAD_LOCK;
 
         case EINVAL:
-            wxLogDebug(_T("pthread_mutex_lock(): mutex not initialized."));
+            wxLogDebug(_T("pthread_mutex_[timed]lock(): mutex not initialized"));
             break;
+
+        case ETIMEDOUT:
+            return wxMUTEX_TIMEOUT;
 
         case 0:
             return wxMUTEX_NO_ERROR;
 
         default:
-            wxLogApiError(_T("pthread_mutex_lock()"), err);
+            wxLogApiError(_T("pthread_mutex_[timed]lock()"), err);
     }
 
     return wxMUTEX_MISC_ERROR;
 }
+
 
 wxMutexError wxMutexInternal::TryLock()
 {
