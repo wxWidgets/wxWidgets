@@ -81,9 +81,6 @@ public:
         WXTEST_WITH_GZIP_CONDITION(TestStream_GZip_BestComp);
         WXTEST_WITH_GZIP_CONDITION(TestStream_ZLibGZip);
         CPPUNIT_TEST(Decompress_BadData);
-#if WXWIN_COMPATIBILITY_2_4
-        CPPUNIT_TEST(Decompress_wx24Data);
-#endif
         CPPUNIT_TEST(Decompress_wx251_zlib114_Data_NoHeader);
         CPPUNIT_TEST(Decompress_wx251_zlib114_Data_ZLib);
         WXTEST_WITH_GZIP_CONDITION(Decompress_gzip135Data);
@@ -109,9 +106,6 @@ protected:
     // Decompress data that was compress by an external app.
     // (like test wx 2.4.2, 2.5.1 and gzip data)
     // Note: This test is limited in testing range!
-#if WXWIN_COMPATIBILITY_2_4
-    void Decompress_wx24Data();
-#endif
     void Decompress_wx251_zlib114_Data_NoHeader();
     void Decompress_wx251_zlib114_Data_ZLib();
     void Decompress_gzip135Data();
@@ -253,22 +247,6 @@ void zlibStream::Decompress_BadData()
     CPPUNIT_ASSERT(!zstream_in.IsOk());
 }
 
-#if WXWIN_COMPATIBILITY_2_4
-void zlibStream::Decompress_wx24Data()
-{
-    // The wx24_value was used in a wxWidgets 2.4(.2)
-    // application to produce wx24_data, using wxZlibOutputStream.
-    const unsigned char wx24_data[] = {120,156,242,72,205,201,201,87,40,207,47,202,73,97,0,0,0,0,255,255,0};
-    const char *wx24_value = "Hello world";
-    // Size of the value and date items.
-    const size_t data_size = sizeof(wx24_data);
-    const size_t value_size = strlen(wx24_value) + 1; // +1 because the wx24 app also did this.
-
-    // Perform a generic data test on the data.
-    doDecompress_ExternalData(wx24_data, wx24_value, data_size, value_size, wxZLIB_24COMPATIBLE);
-}
-#endif
-
 void zlibStream::Decompress_wx251_zlib114_Data_NoHeader()
 {
     const unsigned char data[] = {171,202,201,76,82,72,73,44,73,84,72,46,74,77,44,73,77,81,40,207,44,201,80,40,175,8,207,76,73,79,45,41,86,48,210,51,213,171,80,136,246,77,44,74,206,80,48,50,143,213,1,202,69,249,120,58,197,251,249,199,123,184,58,186,184,6,233,40,84,129,12,49,212,51,212,51,1,0,32};
@@ -398,9 +376,6 @@ void zlibStream::doDecompress_ExternalData(const unsigned char *data, const char
     {
     case wxZLIB_NO_HEADER:
         break;
-#if WXWIN_COMPATIBILITY_2_4
-    case wxZLIB_24COMPATIBLE:
-#endif
     case wxZLIB_ZLIB:
         if (!(data_size >= 1 && data[0] == 0x78))
             wxLogError(_T("zlib data seems to not be zlib data!"));
