@@ -418,10 +418,10 @@ public:
     wxMutexInternal( wxMutexType mutexType );
     virtual ~wxMutexInternal();
 
-    bool IsOk() const
-    { return m_isOk; }
+    bool IsOk() const { return m_isOk; }
 
-    wxMutexError Lock() ;
+    wxMutexError Lock() { return Lock(kDurationForever); }
+    wxMutexError Lock(unsigned long ms);
     wxMutexError TryLock();
     wxMutexError Unlock();
 
@@ -451,15 +451,23 @@ wxMutexInternal::~wxMutexInternal()
     MPYield();
 }
 
-wxMutexError wxMutexInternal::Lock()
+wxMutexError wxMutexInternal::Lock(unsigned long ms)
 {
     wxCHECK_MSG( m_isOk , wxMUTEX_MISC_ERROR , wxT("Invalid Mutex") );
 
-    OSStatus err = MPEnterCriticalRegion( m_critRegion, kDurationForever);
-    if (err != noErr)
+    OSStatus err = MPEnterCriticalRegion( m_critRegion, ms );
+    switch ( err )
     {
-        wxLogSysError(wxT("Could not lock mutex"));
-        return wxMUTEX_MISC_ERROR;
+        case noErr:
+            break;
+
+        case kMPTimeoutErr:
+            wxASSERT_MSG( ms != kDurationForever, wxT("unexpected timeout") );
+            return wxMUTEX_TIMEOUT;
+
+        default:
+            wxLogSysError(wxT("Could not lock mutex"));
+            return wxMUTEX_MISC_ERROR;
     }
 
     return wxMUTEX_NO_ERROR;
