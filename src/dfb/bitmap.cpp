@@ -267,7 +267,7 @@ bool wxBitmap::LoadFile(const wxString &name, wxBitmapType type)
         wxImage image;
         if ( !image.LoadFile(name, type) || !image.Ok() )
         {
-            wxLogError("no bitmap handler for type %d defined.", type);
+            wxLogError(_("No bitmap handler for type %d defined."), type);
             return false;
         }
         else
@@ -301,7 +301,7 @@ bool wxBitmap::SaveFile(const wxString& filename, wxBitmapType type, const wxPal
             return image.SaveFile(filename, type);
         else
         {
-            wxLogError("no bitmap handler for type %d defined.", type);
+            wxLogError(_("No bitmap handler for type %d defined."), type);
             return false;
         }
     }
