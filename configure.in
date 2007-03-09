@@ -1831,11 +1831,13 @@ dnl ------------------------------------------------------------------------
 dnl Check for headers
 dnl ------------------------------------------------------------------------
 
-AC_CHECK_HEADERS(stdlib.h fnmatch.h langinfo.h malloc.h unistd.h wchar.h)
+dnl Note: non-empty last parameter makes check compile-only,
+dnl   skipping worthless preprocessing check
+AC_CHECK_HEADERS(stdlib.h fnmatch.h langinfo.h malloc.h unistd.h wchar.h,,, [AC_INCLUDES_DEFAULT()])
 
 dnl maybe wchar_t is in wcstr.h if we don't have wchar.h?
 if test "$ac_cv_header_wchar_h" != "yes"; then
-    AC_CHECK_HEADERS(wcstr.h)
+    AC_CHECK_HEADER(wcstr.h,,, [AC_INCLUDES_DEFAULT()])
 fi
 
 case "${host}" in
@@ -1853,7 +1855,7 @@ esac
 
 dnl POSIX needs this for select(), but old systems don't have it
 if test "$USE_UNIX" = 1 ; then
-    AC_CHECK_HEADERS([sys/select.h])
+    AC_CHECK_HEADER([sys/select.h],,, [AC_INCLUDES_DEFAULT()])
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -2278,7 +2280,9 @@ if test "$wxUSE_STL" = "yes"; then
                 wx_cv_class_stdhashmapset=yes,
                 wx_cv_class_stdhashmapset=no)
             ]
-        )]
+        )],
+        [],
+        [ ]
     )
 
     if test "$wx_cv_class_stdhashmapset" = yes; then
@@ -2296,7 +2300,9 @@ if test "$wxUSE_STL" = "yes"; then
                 wx_cv_class_gnuhashmapset=yes,
                 wx_cv_class_gnuhashmapset=no)
             ]
-        )]
+        )],
+        [],
+        [ ]
     )
 
     if test "$wx_cv_class_gnuhashmapset" = yes; then
@@ -2591,7 +2597,7 @@ if test "$wxUSE_REGEX" != "no"; then
     if test "$wxUSE_REGEX" = "sys" -o "$wxUSE_REGEX" = "yes" ; then
         dnl according to Unix 98 specs, regcomp() is in libc but I believe that
         dnl on some old systems it may be in libregex - check for it too?
-        AC_CHECK_HEADER(regex.h, [AC_CHECK_FUNCS(regcomp re_search)])
+        AC_CHECK_HEADER(regex.h, [AC_CHECK_FUNCS(regcomp re_search)],, [ ])
 
         if test "x$ac_cv_func_regcomp" != "xyes"; then
             if test "$wxUSE_REGEX" = "sys" ; then
@@ -2659,7 +2665,7 @@ if test "$wxUSE_ZLIB" != "no" ; then
             )
             dnl If the test above did not come up with a value (e.g. cross
             dnl compiling) then this should give a definitive answer
-            AC_CHECK_HEADER(zlib.h)
+            AC_CHECK_HEADER(zlib.h,,, [ ])
 
             system_zlib_h_ok=$ac_cv_header_zlib_h
         fi
@@ -2730,7 +2736,7 @@ if test "$wxUSE_LIBPNG" != "no" ; then
                     unset ac_cv_header_png_h
                 )]
             )
-            AC_CHECK_HEADER(png.h)
+            AC_CHECK_HEADER(png.h,,, [ ])
 
             if test "$ac_cv_header_png_h" = "yes"; then
                 AC_CHECK_LIB(png, png_check_sig, PNG_LINK=" -lpng -lz", , [-lz -lm])
@@ -2855,7 +2861,9 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
                                          TIFF_LINK=" -ltiff",
                                          ,
                                          $TIFF_PREREQ_LINKS)
-                        ]
+                        ],
+                        [],
+                        [ ]
                        )
 
         if test "x$TIFF_LINK" = "x" ; then
@@ -2893,7 +2901,7 @@ if test "$wxUSE_EXPAT" != "no"; then
     AC_DEFINE(wxUSE_XML)
 
     if test "$wxUSE_EXPAT" = "sys" -o "$wxUSE_EXPAT" = "yes" ; then
-        AC_CHECK_HEADER([expat.h], [found_expat_h=1])
+        AC_CHECK_HEADER([expat.h], [found_expat_h=1],, [ ])
         if test "x$found_expat_h" = "x1"; then
             dnl Expat 1.95.6 comes with broken expat.h:
             AC_CACHE_CHECK([if expat.h is valid C++ header],
@@ -2935,7 +2943,7 @@ dnl Check for libmspack
 dnl ------------------------------------------------------------------------
 
 if test "$wxUSE_LIBMSPACK" != "no"; then
-    AC_CHECK_HEADER([mspack.h], [found_mspack_h=1])
+    AC_CHECK_HEADER([mspack.h], [found_mspack_h=1],, [ ])
     if test "x$found_mspack_h" = "x1"; then
         AC_CHECK_LIB(mspack, mspack_create_chm_decompressor,
                      MSPACK_LINK=" -lmspack")
@@ -2964,11 +2972,12 @@ WIDGET_SET=
 dnl are we building for a win32 target environment?
 dnl If so, setup common stuff needed for both GUI and Base libs.
 if test "$USE_WIN32" = 1 ; then
-    AC_CHECK_HEADERS(w32api.h)
-    AC_CHECK_HEADER(windows.h, [],
+    AC_CHECK_HEADER(w32api.h,,, [ ])
+    AC_CHECK_HEADER(windows.h,,
     [
         AC_MSG_ERROR(please set CFLAGS to contain the location of windows.h)
-    ])
+    ],
+    [ ])
 
     dnl --- FIXME: This is still a somewhat random list of libs,
     dnl ---        some of them should probably be included conditionally.
@@ -3007,7 +3016,7 @@ if test "$USE_WIN32" = 1 ; then
     WIN32INSTALL=win32install
 
     dnl pbt.h is missing on Wine at least
-    AC_CHECK_HEADERS(pbt.h, [], [AC_DEFINE(NEED_PBT_H)])
+    AC_CHECK_HEADER(pbt.h,, [AC_DEFINE(NEED_PBT_H)], [ ])
 fi
 
 if test "$wxUSE_GUI" = "yes"; then
@@ -3825,8 +3834,8 @@ dnl do this after test for X11 above so that we have a chance of finding Xlib.h
 if test "$wxUSE_GUI" = "yes"; then
     if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_PM" != 1; then
         dnl defines HAVE_X11_XKBLIB_H
-        AC_CHECK_HEADERS(X11/Xlib.h)
-        AC_CHECK_HEADERS([X11/XKBlib.h], [], [],
+        AC_CHECK_HEADER(X11/Xlib.h,,, [ ])
+        AC_CHECK_HEADER([X11/XKBlib.h],,,
                          [
                           #if HAVE_X11_XLIB_H
                             #include <X11/Xlib.h>
@@ -3850,7 +3859,7 @@ if test "$TOOLKIT" != "MSW" ; then
         dnl This is not ideal we really ough to use the unixodbc-config
         dnl  or iodbc-config if they exist.
 
-        AC_CHECK_HEADER([sql.h], [found_sql_h=1])
+        AC_CHECK_HEADER([sql.h], [found_sql_h=1],, [ ])
         if test "x$found_sql_h" = "x1" ; then
             AC_CHECK_LIB(iodbc, SQLAllocEnv, ODBC_LINK=" -liodbc",
             [
@@ -3909,7 +3918,7 @@ dnl ---------------------------------------------------------------------------
             WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],Xxf86vm)
             if test "$ac_find_libraries" != "" ; then
                 AC_MSG_RESULT([yes])
-                AC_CHECK_HEADERS([X11/extensions/xf86vmode.h],
+                AC_CHECK_HEADER([X11/extensions/xf86vmode.h],
                                  [
                                   GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXxf86vm"
                                  ],
@@ -3932,7 +3941,7 @@ dnl ---------------------------------------------------------------------------
 dnl ---------------------------------------------------------------------------
 dnl DirectDraw for MSW - optionally used by WxDisplay.
 dnl ---------------------------------------------------------------------------
-        AC_CHECK_HEADERS([ddraw.h], [], [], [#include <windows.h>])
+        AC_CHECK_HEADER([ddraw.h], [], [], [#include <windows.h>])
     fi
 fi
 
@@ -4036,7 +4045,9 @@ if test "$wxUSE_OPENGL" = "yes"; then
                     fi
                 fi
             ])
-        ])
+        ],
+        [],
+        [ ])
 
         if test "x$OPENGL_LIBS" = "x"; then
             dnl it should be an error and not a warning because OpenGL is not on
@@ -4651,7 +4662,7 @@ if test "$wxUSE_UNICODE" = yes; then
 #include <wchar.h>"
     case "${host}" in
         *-*-solaris2* )
-            AC_CHECK_HEADERS(widec.h)
+            AC_CHECK_HEADER(widec.h,,, [AC_INCLUDES_DEFAULT()])
             if test "$ac_cv_header_widec_h" = "yes"; then
                 wchar_headers="$wchar_headers
 #include <widec.h>"
@@ -5014,9 +5025,11 @@ dnl ------------------------------------------
 dnl Check for ESD:
 EXTRALIBS_ESD=
 AC_CHECK_LIB(esd, esd_close, [
-    AC_CHECK_HEADERS([esd.h], [
+    AC_CHECK_HEADER([esd.h], [
     EXTRALIBS_ESD="-lesd"
-  ])
+  ],
+  [],
+  [ ])
 ])
 AC_SUBST(EXTRALIBS_ESD)
 
@@ -5251,7 +5264,7 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
         AC_DEFINE(wxHAVE_PTHREAD_CLEANUP)
       fi
 
-      AC_CHECK_HEADERS(sched.h)
+      AC_CHECK_HEADER(sched.h,,, [AC_INCLUDES_DEFAULT()])
       if test "$ac_cv_header_sched_h" = "yes"; then
           AC_CHECK_FUNC(sched_yield,
             AC_DEFINE(HAVE_SCHED_YIELD),
@@ -6458,7 +6471,7 @@ if test "$wxUSE_GUI" = "yes" -a "$wxUSE_JOYSTICK" = "yes"; then
             dnl can't be compiled because of an error and with the default
             dnl AC_CHECK_HEADER semantics we'd still detect it in this case and
             dnl build would fail later
-            AC_CHECK_HEADER(linux/joystick.h, wxUSE_JOYSTICK=yes,,[#include <stdio.h>])
+            AC_CHECK_HEADER(linux/joystick.h, [wxUSE_JOYSTICK=yes],, [AC_INCLUDES_DEFAULT()])
         fi
     fi
 
@@ -6595,7 +6608,7 @@ if test "$USE_WIN32" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
                           -o "$wxUSE_CLIPBOARD"     = "yes" \
                           -o "$wxUSE_OLE"     = "yes" \
                           -o "$wxUSE_DRAG_AND_DROP" = "yes" \) ; then
-    AC_CHECK_HEADERS(ole2.h)
+    AC_CHECK_HEADER(ole2.h,,, [ ])
 
     if test "$ac_cv_header_ole2_h" = "yes" ; then
         if test "$GCC" = yes ; then
