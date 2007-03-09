@@ -18,6 +18,8 @@ Deprecated methods and their replacements
 -----------------------------------------
 
 - wxCreateGreyedImage() deprecated, use wxImage::ConvertToGreyscale() instead.
+- wxString::GetWriteBuf() and UngetWriteBuf() deprecated, using wxStringBuffer
+  or wxStringBufferLength instead.
 
 Major new features in this release
 ----------------------------------
