@@ -132,7 +132,7 @@ AC_DEFUN([WX_CPP_NEW_HEADERS],
     AC_LANG_SAVE
     AC_LANG_CPLUSPLUS
 
-    AC_CHECK_HEADERS(iostream)
+    AC_CHECK_HEADER(iostream,,, [ ])
 
     if test "$ac_cv_header_iostream" = "yes" ; then
       ifelse([$1], , :, [$1])
