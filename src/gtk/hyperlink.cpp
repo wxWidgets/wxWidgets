@@ -144,7 +144,7 @@ void wxHyperlinkCtrl::SetLabel(const wxString &label)
 void wxHyperlinkCtrl::SetURL(const wxString &uri)
 {
     if ( UseNative() )
-        gtk_link_button_set_uri(GTK_LINK_BUTTON(m_widget), uri.c_str());
+        gtk_link_button_set_uri(GTK_LINK_BUTTON(m_widget), wxGTK_CONV(uri));
     else
         wxGenericHyperlinkCtrl::SetURL(uri);
 }
