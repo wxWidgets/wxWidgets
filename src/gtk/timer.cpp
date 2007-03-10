@@ -14,7 +14,7 @@
 
 #include "wx/timer.h"
 
-#include "gtk/gtk.h"
+#include <gtk/gtk.h>
 
 // ----------------------------------------------------------------------------
 // wxTimer
@@ -23,7 +23,7 @@
 IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxEvtHandler)
 
 extern "C" {
-static gint timeout_callback( gpointer data )
+static gboolean timeout_callback(gpointer data)
 {
     wxTimer *timer = (wxTimer*)data;
 
@@ -45,42 +45,39 @@ static gint timeout_callback( gpointer data )
     // Release lock again.
     gdk_threads_leave();
 
-    if (timer->IsOneShot())
-        return FALSE;
-
-    return TRUE;
+    return !timer->IsOneShot();
 }
 }
 
 void wxTimer::Init()
 {
-    m_tag = -1;
+    m_sourceId = 0;
     m_milli = 1000;
 }
 
 wxTimer::~wxTimer()
 {
-    wxTimer::Stop();
+    Stop();
 }
 
 bool wxTimer::Start( int millisecs, bool oneShot )
 {
     (void)wxTimerBase::Start(millisecs, oneShot);
 
-    if (m_tag != -1)
-        g_source_remove( m_tag );
+    if (m_sourceId != 0)
+        g_source_remove(m_sourceId);
 
-    m_tag = g_timeout_add( m_milli, timeout_callback, this );
+    m_sourceId = g_timeout_add(m_milli, timeout_callback, this);
 
-    return TRUE;
+    return true;
 }
 
 void wxTimer::Stop()
 {
-    if (m_tag != -1)
+    if (m_sourceId != 0)
     {
-        g_source_remove( m_tag );
-        m_tag = -1;
+        g_source_remove(m_sourceId);
+        m_sourceId = 0;
     }
 }
 

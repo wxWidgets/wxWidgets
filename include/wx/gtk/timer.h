@@ -7,8 +7,8 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKTIMERH__
-#define __GTKTIMERH__
+#ifndef _WX_GTK_TIMER_H_
+#define _WX_GTK_TIMER_H_
 
 //-----------------------------------------------------------------------------
 // wxTimer
@@ -22,18 +22,17 @@ public:
         { Init(); }
     virtual ~wxTimer();
 
-    virtual bool Start( int millisecs = -1, bool oneShot = FALSE );
+    virtual bool Start(int millisecs = -1, bool oneShot = false);
     virtual void Stop();
 
-    virtual bool IsRunning() const { return m_tag != -1; }
-
-protected:
-    void Init();
-
-    int  m_tag;
+    virtual bool IsRunning() const { return m_sourceId != 0; }
 
 private:
+    void Init();
+
+    unsigned m_sourceId;
+
     DECLARE_ABSTRACT_CLASS(wxTimer)
 };
 
-#endif // __GTKTIMERH__
+#endif // _WX_GTK_TIMER_H_
