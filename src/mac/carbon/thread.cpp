@@ -837,7 +837,7 @@ wxCondError wxConditionInternal::WaitTimeout( unsigned long milliseconds )
 
     wxSemaError err = m_semaphore.WaitTimeout(milliseconds);
 
-    if ( err == wxSEMA_BUSY )
+    if ( err == wxSEMA_TIMEOUT )
     {
         // another potential race condition exists here it is caused when a
         // 'waiting' thread timesout, and returns from WaitForSingleObject, but
