@@ -30,9 +30,11 @@
 
 #if wxUSE_MENUS
 
+#include "wx/menu.h"
+
 #ifndef WX_PRECOMP
+    #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/frame.h"
-    #include "wx/menu.h"
     #include "wx/utils.h"
     #include "wx/intl.h"
     #include "wx/log.h"
@@ -50,7 +52,6 @@
 #include <tchar.h>
 #include <ole2.h>
 #include <shellapi.h>
-#include <commctrl.h>
 #if (_WIN32_WCE < 400) && !defined(__HANDHELDPC__)
 #include <aygshell.h>
 #endif
@@ -124,7 +125,7 @@ UINT GetMenuState(HMENU hMenu, UINT id, UINT flags)
 // implementation
 // ============================================================================
 
-#include <wx/listimpl.cpp>
+#include "wx/listimpl.cpp"
 
 WX_DEFINE_LIST( wxMenuInfoList )
 
@@ -404,28 +405,57 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
 
     BOOL ok = false;
 
+#if wxUSE_OWNER_DRAWN
+    // Currently, mixing owner-drawn and non-owner-drawn items results in
+    // inconsistent margins, so we force this to be owner-drawn if any other
+    // items already are. Later we might want to use a boolean in the wxMenu
+    // to avoid search. Also we might make this fix unnecessary by getting the correct
+    // margin using NONCLIENTMETRICS.
+    if ( !pItem->IsOwnerDrawn() && !pItem->IsSeparator() )
+    {
+        // Check if any other items are ownerdrawn, and make ownerdrawn if so
+        wxMenuItemList::compatibility_iterator node = GetMenuItems().GetFirst();
+        while (node)
+        {
+            if (node->GetData()->IsOwnerDrawn())
+            {
+                pItem->SetOwnerDrawn(true);
+                break;
+            }
+            node = node->GetNext();
+        }
+    }
+#endif
+
     // check if we have something more than a simple text item
 #if wxUSE_OWNER_DRAWN
     if ( pItem->IsOwnerDrawn() )
     {
-        // is the item owner-drawn just because of the bitmap?
-        if ( pItem->GetBitmap().Ok() &&
+        // is the item owner-drawn just because of the [checked] bitmap?
+        if ( (pItem->GetBitmap(false).Ok() || pItem->GetBitmap(true).Ok()) &&
                 !pItem->GetTextColour().Ok() &&
                     !pItem->GetBackgroundColour().Ok() &&
-                        !pItem->GetFont().Ok() &&
-                            !pItem->GetBitmap(true).Ok() )
+                        !pItem->GetFont().Ok() )
         {
-            // try to use InsertMenuItem() as it's guaranteed to look correctly
-            // while our owner-drawning code is not
+            // try to use InsertMenuItem() as it's guaranteed to look correct
+            // while our owner-drawn code is not
 
             // first compile-time check
-#ifdef MIIM_BITMAP
+
+#if defined(MIIM_BITMAP) && (_WIN32_WINNT >= 0x0500)
             WinStruct<MENUITEMINFO> mii;
 
             // now run-time one: MIIM_BITMAP only works under WinME/2000+
             if ( wxGetWinVersion() >= wxWinVersion_98 )
             {
                 mii.fMask = MIIM_STRING | MIIM_DATA | MIIM_BITMAP;
+                if ( pItem->IsCheckable() )
+                {
+                    // need to set checked/unchecked bitmaps as otherwise our
+                    // MSWOnDrawItem() item is not called
+                    mii.fMask |= MIIM_CHECKMARKS;
+                }
+
                 mii.cch = itemText.length();
                 mii.dwTypeData = wx_const_cast(wxChar *, itemText.c_str());
 
@@ -443,11 +473,16 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                 // we can't pass HBITMAP directly as hbmpItem for 2 reasons:
                 //  1. we can't draw it with transparency then (this is not
                 //     very important now but would be with themed menu bg)
-                //  2. worse, Windows inverses the bitmap for the selected
+                //  2. worse, Windows inverts the bitmap for the selected
                 //     item and this looks downright ugly
                 //
                 // so instead draw it ourselves in MSWOnDrawItem()
                 mii.dwItemData = wx_reinterpret_cast(ULONG_PTR, pItem);
+                if ( pItem->IsCheckable() )
+                {
+                    mii.hbmpChecked =
+                    mii.hbmpUnchecked = HBMMENU_CALLBACK;
+                }
                 mii.hbmpItem = HBMMENU_CALLBACK;
 
                 ok = ::InsertMenuItem(GetHmenu(), pos, TRUE /* by pos */, &mii);
@@ -495,7 +530,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     else
 #endif // wxUSE_OWNER_DRAWN
     {
-        // menu is just a normal string (passed in data parameter)
+        // item is just a normal string (passed in data parameter)
         flags |= MF_STRING;
 
 #ifdef __WXWINCE__
@@ -505,7 +540,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
         pData = (wxChar*)itemText.c_str();
     }
 
-    // item might have been already inserted by InsertMenuItem() above
+    // item might have already been inserted by InsertMenuItem() above
     if ( !ok )
     {
         if ( !::InsertMenu(GetHmenu(), pos, flags | MF_BYPOSITION, id, pData) )
@@ -606,7 +641,7 @@ wxMenuItem* wxMenu::DoInsert(size_t pos, wxMenuItem *item)
 
 wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 {
-    // we need to find the items position in the child list
+    // we need to find the item's position in the child list
     size_t pos;
     wxMenuItemList::compatibility_iterator node = GetMenuItems().GetFirst();
     for ( pos = 0; node; pos++ )
@@ -617,7 +652,7 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
         node = node->GetNext();
     }
 
-    // DoRemove() (unlike Remove) can only be called for existing item!
+    // DoRemove() (unlike Remove) can only be called for an existing item!
     wxCHECK_MSG( node, NULL, wxT("bug in wxMenu::Remove logic") );
 
 #if wxUSE_ACCEL
@@ -640,7 +675,7 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 
     if ( IsAttached() && GetMenuBar()->IsAttached() )
     {
-        // otherwise, the chane won't be visible
+        // otherwise, the change won't be visible
         GetMenuBar()->Refresh();
     }
 
@@ -654,7 +689,7 @@ wxMenuItem *wxMenu::DoRemove(wxMenuItem *item)
 
 #if wxUSE_ACCEL
 
-// create the wxAcceleratorEntries for our accels and put them into provided
+// create the wxAcceleratorEntries for our accels and put them into the provided
 // array - return the number of accels we have
 size_t wxMenu::CopyAccels(wxAcceleratorEntry *accels) const
 {
@@ -712,7 +747,7 @@ void wxMenu::SetTitle(const wxString& label)
             info.cbSize = sizeof(info);
             info.fMask = MIIM_TYPE;
             info.fType = MFT_STRING;
-            info.cch = m_title.Length();
+            info.cch = m_title.length();
             info.dwTypeData = (LPTSTR) m_title.c_str();
             if ( !SetMenuItemInfo(hMenu, 0, TRUE, & info) )
             {
@@ -848,6 +883,9 @@ wxMenuBar::~wxMenuBar()
 
 void wxMenuBar::Refresh()
 {
+    if ( IsFrozen() )
+        return;
+
     wxCHECK_RET( IsAttached(), wxT("can't refresh unattached menubar") );
 
 #if defined(WINCE_WITHOUT_COMMANDBAR)
@@ -865,7 +903,7 @@ void wxMenuBar::Refresh()
 
 WXHMENU wxMenuBar::Create()
 {
-    // Note: this totally doesn't work on Smartphone,
+    // Note: this doesn't work at all on Smartphone,
     // since you have to use resources.
     // We'll have to find another way to add a menu
     // by changing/adding menu items to an existing menu.
@@ -879,7 +917,7 @@ WXHMENU wxMenuBar::Create()
     HWND hCommandBar = (HWND) GetToolBar()->GetHWND();
     HMENU hMenu = (HMENU)::SendMessage(hCommandBar, SHCMBM_GETMENU, (WPARAM)0, (LPARAM)0);
 
-	// hMenu may be zero on Windows Mobile 5. So add the menus anyway.
+    // hMenu may be zero on Windows Mobile 5. So add the menus anyway.
     if (1) // (hMenu)
     {
         TBBUTTON tbButton;
@@ -1022,7 +1060,7 @@ void wxMenuBar::SetLabelTop(size_t pos, const wxString& label)
     info.cbSize = sizeof(info);
     info.fMask = MIIM_TYPE;
     info.fType = MFT_STRING;
-    info.cch = label.Length();
+    info.cch = label.length();
     info.dwTypeData = (LPTSTR) label.c_str();
     if ( !SetMenuItemInfo(GetHmenu(), id, TRUE, & info) )
     {
@@ -1107,6 +1145,7 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
 #else
         (GetHmenu() != 0);
 #endif
+
     int mswpos = (!isAttached || (pos == m_menus.GetCount()))
         ?   -1 // append the menu
         :   MSWPositionForWxMenu(GetMenu(pos),pos);
@@ -1138,6 +1177,7 @@ bool wxMenuBar::Insert(size_t pos, wxMenu *menu, const wxString& title)
             wxLogLastError(wxT("TB_INSERTBUTTON"));
             return false;
         }
+        wxUnusedVar(mswpos);
 #else
         if ( !::InsertMenu(GetHmenu(), mswpos,
                            MF_BYPOSITION | MF_POPUP | MF_STRING,
@@ -1259,7 +1299,6 @@ wxMenu *wxMenuBar::Remove(size_t pos)
         if (IsAttached())
             Refresh();
     }
-
 
     m_titles.RemoveAt(pos);
 
