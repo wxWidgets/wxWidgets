@@ -37,6 +37,10 @@
 // does not prepare the window DC
 #define wxBUFFER_CLIENT_AREA        0x02
 
+// Set when not using specific buffer bitmap. Note that this
+// is private style and not returned by GetStyle.
+#define wxBUFFER_USES_SHARED_BUFFER 0x04
+
 class WXDLLEXPORT wxBufferedDC : public wxMemoryDC
 {
 public:
@@ -98,25 +102,11 @@ public:
     // Usually called in the dtor or by the dtor of derived classes if the
     // BufferedDC must blit before the derived class (which may own the dc it's
     // blitting to) is destroyed.
-    void UnMask()
-    {
-        wxCHECK_RET( m_dc, _T("no underlying wxDC?") );
-        wxASSERT_MSG( m_buffer && m_buffer->IsOk(), _T("invalid backing store") );
-
-        wxCoord x = 0,
-                y = 0;
-
-        if ( m_style & wxBUFFER_CLIENT_AREA )
-            GetDeviceOrigin(&x, &y);
-
-        m_dc->Blit(0, 0, m_buffer->GetWidth(), m_buffer->GetHeight(),
-                   this, -x, -y );
-        m_dc = NULL;
-    }
+    void UnMask();
 
     // Set and get the style
     void SetStyle(int style) { m_style = style; }
-    int GetStyle() const { return m_style; }
+    int GetStyle() const { return m_style & ~wxBUFFER_USES_SHARED_BUFFER; }
 
 private:
     // common part of Init()s
