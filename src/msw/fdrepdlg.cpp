@@ -42,8 +42,8 @@
 // functions prototypes
 // ----------------------------------------------------------------------------
 
-LRESULT APIENTRY wxFindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
-                                       WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK wxFindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
+                                         WPARAM wParam, LPARAM lParam);
 
 UINT_PTR CALLBACK wxFindReplaceDialogHookProc(HWND hwnd,
                                               UINT uiMsg,
@@ -220,7 +220,7 @@ wxFindReplaceDialogImpl::~wxFindReplaceDialogImpl()
 // Window Proc for handling RegisterWindowMessage(FINDMSGSTRING)
 // ----------------------------------------------------------------------------
 
-LRESULT APIENTRY wxFindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
+LRESULT CALLBACK wxFindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
                                          WPARAM wParam, LPARAM lParam)
 {
 #if wxUSE_UNICODE_MSLU
