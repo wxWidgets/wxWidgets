@@ -152,7 +152,7 @@ pascal OSStatus wxMacCarbonFontPanelHandler(EventHandlerCallRef nextHandler, Eve
                             {
                                 if ( tagPtr[i] == kATSUColorTag && sizePtr[i] == sizeof(RGBColor))
                                 {
-                                    fontdata.m_fontColour.FromRGBColor(*(RGBColor *)valuesPtr);
+                                    fontdata.m_fontColour = *(RGBColor *)valuesPtr;
                                     break ;
                                 }
                                 bytePtr = (UInt32*)( (UInt8*)bytePtr + sizePtr[i]);
