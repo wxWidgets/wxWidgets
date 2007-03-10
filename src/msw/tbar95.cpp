@@ -56,6 +56,15 @@
 
 #include "wx/app.h"         // for GetComCtl32Version
 
+// this define controls whether the code for button colours remapping (only
+// useful for 16 or 256 colour images) is active at all, it's always turned off
+// for CE where it doesn't compile (and is probably not needed anyhow) and may
+// also be turned off for other systems if you always use 24bpp images and so
+// never need it
+#ifndef __WXWINCE__
+    #define wxREMAP_BUTTON_COLOURS
+#endif // !__WXWINCE__
+
 // ----------------------------------------------------------------------------
 // constants
 // ----------------------------------------------------------------------------
@@ -552,24 +561,27 @@ bool wxToolBar::Realize()
 
     const bool isVertical = HasFlag(wxTB_VERTICAL);
 
-    bool doRemap, doRemapBg, doTransparent;
-#ifdef __WXWINCE__
-    doRemapBg = false;
-    doRemap = false;
-    doTransparent = false;
-#else
-    if (wxSystemOptions::GetOptionInt(wxT("msw.remap")) == 2)
+#ifdef wxREMAP_BUTTON_COLOURS
+    // don't change the values of these constants, they can be set from the
+    // user code via wxSystemOptions
+    enum
     {
-        doRemapBg = doRemap = false;
-        doTransparent = true;
-    }
-    else
-    {   doRemap = !wxSystemOptions::HasOption(wxT("msw.remap"))
-            || wxSystemOptions::GetOptionInt(wxT("msw.remap")) == 1;
-        doRemapBg = !doRemap;
-        doTransparent = false;
-    }
-#endif
+        Remap_None = -1,
+        Remap_Bg,
+        Remap_Buttons,
+        Remap_TransparentBg
+    };
+
+    // the user-specified option overrides anything, but if it wasn't set, only
+    // remap the buttons on 8bpp displays as otherwise the bitmaps usually look
+    // much worse after remapping
+    static const wxChar *remapOption = wxT("msw.remap");
+    const int remapValue = wxSystemOptions::HasOption(remapOption)
+                                ? wxSystemOptions::GetOptionInt(remapOption)
+                                : wxDisplayDepth() <= 8 ? Remap_Buttons
+                                                        : Remap_None;
+
+#endif // wxREMAP_BUTTON_COLOURS
 
     // delete all old buttons, if any
     for ( size_t pos = 0; pos < m_nButtons; pos++ )
@@ -606,25 +618,31 @@ bool wxToolBar::Realize()
                                           wx_truncate_cast(wxCoord, nTools),
                       totalBitmapHeight = m_defaultHeight;
 
-        // Create a bitmap and copy all the tool bitmaps to it
+        // Create a bitmap and copy all the tool bitmaps into it
         wxMemoryDC dcAllButtons;
         wxBitmap bitmap(totalBitmapWidth, totalBitmapHeight);
         dcAllButtons.SelectObject(bitmap);
+
+#ifdef wxREMAP_BUTTON_COLOURS
+        if ( remapValue != Remap_TransparentBg )
+#endif // wxREMAP_BUTTON_COLOURS
+        {
+            // VZ: why do we hardcode grey colour for CE?
+            dcAllButtons.SetBackground(wxBrush(
 #ifdef __WXWINCE__
-        dcAllButtons.SetBackground(wxBrush(wxColour(192,192,192)));
-#else
-        if (doTransparent)
-            dcAllButtons.SetBackground(*wxTRANSPARENT_BRUSH);
-        else
-            dcAllButtons.SetBackground(wxBrush(GetBackgroundColour()));
-#endif
-        dcAllButtons.Clear();
+                                        wxColour(0xc0, 0xc0, 0xc0)
+#else // !__WXWINCE__
+                                        GetBackgroundColour()
+#endif // __WXWINCE__/!__WXWINCE__
+                                       ));
+            dcAllButtons.Clear();
+        }
 
         m_hBitmap = bitmap.GetHBITMAP();
         HBITMAP hBitmap = (HBITMAP)m_hBitmap;
 
-#ifndef __WXWINCE__
-        if (doRemapBg)
+#ifdef wxREMAP_BUTTON_COLOURS
+        if ( remapValue == Remap_Bg )
         {
             dcAllButtons.SelectObject(wxNullBitmap);
 
@@ -637,7 +655,7 @@ bool wxToolBar::Realize()
 
 
         }
-#endif // !__WXWINCE__
+#endif // wxREMAP_BUTTON_COLOURS
 
         // the button position
         wxCoord x = 0;
@@ -682,25 +700,33 @@ bool wxToolBar::Realize()
                         wxImage imgGreyed;
                         wxCreateGreyedImage(bmp.ConvertToImage(), imgGreyed);
 
-                        // we need to have light grey background colour for
-                        // MapBitmap() to work correctly
-                        for ( int y = 0; y < h; y++ )
+#ifdef wxREMAP_BUTTON_COLOURS
+                        if ( remapValue == Remap_Buttons )
                         {
-                            for ( int x = 0; x < w; x++ )
+                            // we need to have light grey background colour for
+                            // MapBitmap() to work correctly
+                            for ( int y = 0; y < h; y++ )
                             {
-                                if ( imgGreyed.IsTransparent(x, y) )
-                                    imgGreyed.SetRGB(x, y,
-                                                     wxLIGHT_GREY->Red(),
-                                                     wxLIGHT_GREY->Green(),
-                                                     wxLIGHT_GREY->Blue());
+                                for ( int x = 0; x < w; x++ )
+                                {
+                                    if ( imgGreyed.IsTransparent(x, y) )
+                                        imgGreyed.SetRGB(x, y,
+                                                         wxLIGHT_GREY->Red(),
+                                                         wxLIGHT_GREY->Green(),
+                                                         wxLIGHT_GREY->Blue());
+                                }
                             }
                         }
+#endif // wxREMAP_BUTTON_COLOURS
 
                         bmpDisabled = wxBitmap(imgGreyed);
                     }
 #endif // wxUSE_IMAGE
 
-                    MapBitmap(bmpDisabled.GetHBITMAP(), w, h);
+#ifdef wxREMAP_BUTTON_COLOURS
+                    if ( remapValue == Remap_Buttons )
+                        MapBitmap(bmpDisabled.GetHBITMAP(), w, h);
+#endif // wxREMAP_BUTTON_COLOURS
 
                     m_disabledImgList->Add(bmpDisabled);
                 }
@@ -718,14 +744,14 @@ bool wxToolBar::Realize()
         // don't delete this HBITMAP!
         bitmap.SetHBITMAP(0);
 
-        if (doRemap)
+#ifdef wxREMAP_BUTTON_COLOURS
+        if ( remapValue == Remap_Buttons )
         {
             // Map to system colours
             hBitmap = (HBITMAP)MapBitmap((WXHBITMAP) hBitmap,
-                totalBitmapWidth, totalBitmapHeight);
-
-
+                                         totalBitmapWidth, totalBitmapHeight);
         }
+#endif // wxREMAP_BUTTON_COLOURS
 
         bool addBitmap = true;
 
@@ -1596,6 +1622,8 @@ WXLRESULT wxToolBar::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam
 // private functions
 // ----------------------------------------------------------------------------
 
+#ifdef wxREMAP_BUTTON_COLOURS
+
 WXHBITMAP wxToolBar::MapBitmap(WXHBITMAP bitmap, int width, int height)
 {
     MemoryHDC hdcMem;
@@ -1631,7 +1659,8 @@ WXHBITMAP wxToolBar::MapBitmap(WXHBITMAP bitmap, int width, int height)
                      abs(GetGValue(pixel) - GetGValue(col)) < 10 &&
                      abs(GetBValue(pixel) - GetBValue(col)) < 10 )
                 {
-                    ::SetPixel(hdcMem, i, j, cmap[k].to);
+                    if ( cmap[k].to != pixel )
+                        ::SetPixel(hdcMem, i, j, cmap[k].to);
                     break;
                 }
             }
@@ -1702,5 +1731,6 @@ WXHBITMAP wxToolBar::MapBitmap(WXHBITMAP bitmap, int width, int height)
 #endif // 0
 }
 
+#endif // wxREMAP_BUTTON_COLOURS
 #endif // wxUSE_TOOLBAR && Win95
 
