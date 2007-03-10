@@ -236,6 +236,7 @@ private:
   bool m_isDirty;                       // if true, we have unsaved changes
 
   DECLARE_NO_COPY_CLASS(wxFileConfig)
+  DECLARE_ABSTRACT_CLASS(wxFileConfig)
 };
 
 #endif

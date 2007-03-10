@@ -90,6 +90,9 @@ private:
   wxString m_strLocalFilename;  // name of the private INI file
   wxString m_strGroup,    // current group in appname.ini file
            m_strPath;     // the rest of the path (no trailing '_'!)
+
+  DECLARE_NO_COPY_CLASS(wxIniConfig)
+  DECLARE_ABSTRACT_CLASS(wxIniConfig)
 };
 
 #endif  //_INICONF_H

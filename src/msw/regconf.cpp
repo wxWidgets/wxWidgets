@@ -60,6 +60,7 @@ bool TryGetValue(const wxRegKey& key, const wxString& str, long *plVal)
 // ----------------------------------------------------------------------------
 // ctor/dtor
 // ----------------------------------------------------------------------------
+IMPLEMENT_ABSTRACT_CLASS(wxRegConfig, wxConfigBase)
 
 // create the config object which stores its data under HKCU\vendor\app and, if
 // style & wxCONFIG_USE_GLOBAL_FILE, under HKLM\vendor\app

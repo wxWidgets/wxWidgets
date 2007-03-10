@@ -82,6 +82,7 @@ know structures of Preferences of other non wxW applications.
 // ----------------------------------------------------------------------------
 // ctor/dtor
 // ----------------------------------------------------------------------------
+IMPLEMENT_ABSTRACT_CLASS(wxPrefConfig, wxConfigBase)
 
 wxPrefConfig::wxPrefConfig(const wxString& appName, const wxString& vendorName,
                            const wxString& strLocal, const wxString& strGlobal,

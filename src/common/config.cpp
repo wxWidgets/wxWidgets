@@ -57,6 +57,7 @@ bool          wxConfigBase::ms_bAutoCreate = true;
 // ----------------------------------------------------------------------------
 // wxConfigBase
 // ----------------------------------------------------------------------------
+IMPLEMENT_ABSTRACT_CLASS(wxConfigBase, wxObject)
 
 // Not all args will always be used by derived classes, but including them all
 // in each class ensures compatibility.
