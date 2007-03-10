@@ -123,9 +123,11 @@ public:
     bool FreeResource(bool force = false);
     WXHANDLE GetResourceHandle() const;
     bool IsFree() const;
-    void Unshare();
 
-private:
+protected:
+    virtual wxObjectRefData* CreateRefData() const;
+    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const;
+
     DECLARE_DYNAMIC_CLASS(wxPen)
 };
 

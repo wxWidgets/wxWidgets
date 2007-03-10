@@ -270,24 +270,19 @@ bool wxPen::IsFree() const
     return (M_PENDATA && M_PENDATA->m_hPen == 0);
 }
 
-void wxPen::Unshare()
+wxObjectRefData* wxPen::CreateRefData() const
 {
-    // Don't change shared data
-    if (!m_refData)
-    {
-        m_refData = new wxPenRefData();
-    }
-    else
-    {
-        wxPenRefData* ref = new wxPenRefData(*(wxPenRefData*)m_refData);
-        UnRef();
-        m_refData = ref;
-    }
+    return new wxFontRefData;
+}
+
+wxObjectRefData* wxPen::CloneRefData(const wxObjectRefData* data) const
+{
+    return new wxFontRefData(*wx_static_cast(const wxPenRefData*, data));
 }
 
 void wxPen::SetColour(const wxColour& col)
 {
-    Unshare();
+    AllocExclusive();
 
     M_PENDATA->m_colour = col;
 
@@ -296,7 +291,7 @@ void wxPen::SetColour(const wxColour& col)
 
 void wxPen::SetColour(unsigned char r, unsigned char g, unsigned char b)
 {
-    Unshare();
+    AllocExclusive();
 
     M_PENDATA->m_colour.Set(r, g, b);
 
@@ -305,7 +300,7 @@ void wxPen::SetColour(unsigned char r, unsigned char g, unsigned char b)
 
 void wxPen::SetWidth(int Width)
 {
-    Unshare();
+    AllocExclusive();
 
     M_PENDATA->m_width = Width;
 
@@ -314,7 +309,7 @@ void wxPen::SetWidth(int Width)
 
 void wxPen::SetStyle(int Style)
 {
-    Unshare();
+    AllocExclusive();
 
     M_PENDATA->m_style = Style;
 
@@ -323,7 +318,7 @@ void wxPen::SetStyle(int Style)
 
 void wxPen::SetStipple(const wxBitmap& Stipple)
 {
-    Unshare();
+    AllocExclusive();
 
     M_PENDATA->m_stipple = Stipple;
     M_PENDATA->m_style = wxSTIPPLE;
@@ -333,7 +328,7 @@ void wxPen::SetStipple(const wxBitmap& Stipple)
 
 void wxPen::SetDashes(int nb_dashes, const wxDash *Dash)
 {
-    Unshare();
+    AllocExclusive();
 
     M_PENDATA->m_nbDash = nb_dashes;
     M_PENDATA->m_dash = (wxDash *)Dash;
@@ -343,7 +338,7 @@ void wxPen::SetDashes(int nb_dashes, const wxDash *Dash)
 
 void wxPen::SetJoin(int Join)
 {
-    Unshare();
+    AllocExclusive();
 
     M_PENDATA->m_join = Join;
 
@@ -352,7 +347,7 @@ void wxPen::SetJoin(int Join)
 
 void wxPen::SetCap(int Cap)
 {
-    Unshare();
+    AllocExclusive();
 
     M_PENDATA->m_cap = Cap;
 
