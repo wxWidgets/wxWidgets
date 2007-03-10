@@ -379,7 +379,7 @@ wxRendererMac::DrawItemSelectionRect(wxWindow *win,
             GetThemeBrushAsColor(kThemeBrushSecondaryHighlightColor, 32, true, &selColor);
     }
 
-    wxBrush selBrush = wxBrush( wxColour( selColor.red, selColor.green, selColor.blue ), wxSOLID );
+    wxBrush selBrush = wxBrush( wxColour( selColor.red >> 8, selColor.green >> 8, selColor.blue >> 8 ), wxSOLID );
 
     dc.SetPen( *wxTRANSPARENT_PEN );
     dc.SetBrush( selBrush );
