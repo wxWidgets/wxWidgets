@@ -61,7 +61,6 @@
 #define HAVE_VSNPRINTF_DECL 1
 #define HAVE_USLEEP 1
 #define HAVE_WCSLEN 1
-#define SIZEOF_CHAR 1
 #define SIZEOF_WCHAR_T 4
 #define SIZEOF_SHORT 2
 #define SIZEOF_INT 4

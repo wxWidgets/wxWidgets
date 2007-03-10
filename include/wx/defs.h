@@ -667,9 +667,6 @@ enum {  wxDefaultCoord = -1 };
 /*  practice) */
 
 /*  8bit */
-#ifndef SIZEOF_CHAR
-    #define SIZEOF_CHAR 1
-#endif
 typedef signed char wxInt8;
 typedef unsigned char wxUint8;
 typedef wxUint8 wxByte;
