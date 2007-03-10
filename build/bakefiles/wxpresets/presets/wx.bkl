@@ -97,6 +97,9 @@
 
 <makefile>
 
+    <requires version="0.2.2"/>
+
+
     <!-- this variable identifies the version of the wx presets.
          this is changed only when major changes to wxpresets take place. -->
     <set var="WX_PRESETS_VERSION">4</set>
