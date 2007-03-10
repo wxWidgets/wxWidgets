@@ -20,22 +20,6 @@ Format-specific notes:
 
 <makefile>
 
-    <!-- ============================================================== -->
-    <!--                           Options                              -->
-    <!-- ============================================================== -->
-
-    <!-- on Unix the WX_PORT is not a fixed value but rather an option -->
-    <if cond="not isdefined('WX_PORT')">
-        <set var="WX_PORT_DEFAULT" overwrite="0">auto</set>
-        <option name="WX_PORT">
-            <values>auto,gtk1,gtk2,msw,x11,motif,mgl,mac</values>
-            <default-value>$(WX_PORT_DEFAULT)</default-value>
-            <description>
-                Port of the wx library to build against
-            </description>
-        </option>
-    </if>
-
 
 
     <!-- ============================================================== -->
@@ -50,8 +34,9 @@ Format-specific notes:
         <option name="WX_RESCOMP"/>
         <option name="WX_VERSION_MAJOR"/>
         <option name="WX_VERSION_MINOR"/>
+        <option name="WX_PORT"/>
 
-        <!-- wxpresets.m4 macros will detect all WX_* options defined above -->
+        <!-- wxwin.m4 macros will detect all WX_* options defined above -->
 
 
         <!-- VERY IMPORTANT: <wx-lib>base</wx-lib> must be the last wx-lib tag
@@ -62,7 +47,7 @@ Format-specific notes:
                 <!-- all wx-dependent libraries should have been already listed
                      thus we can now add WX_LIBS to the linker line -->
                 <ldlibs>$(WX_LIBS)</ldlibs>
-    </if>
+            </if>
             <if cond="value not in ALLLIB_LIST.split()">
                 <error>Unknown wxWidgets library given in the wx-lib tag</error>
             </if>
@@ -94,10 +79,8 @@ Format-specific notes:
             $(DOLLAR)(shell $(WX_CONFIG) --selected-config | cut -d '-' -f 1)
         </set>
         <option name="WX_PORT">
-            <values>gtk1,gtk2,msw,x11,motif,mgl,mac,$(WX_PORT_DEFAULT)</values>
-            <default-value>
-                $(WX_PORT_DEFAULT)
-            </default-value>
+            <values>gtk1,gtk2,msw,x11,motif,mgl,mac,dfb</values>
+            <default-value force="1">$(WX_PORT_DEFAULT)</default-value>
             <description>
                 Port of the wx library to build against
             </description>
@@ -107,9 +90,9 @@ Format-specific notes:
             $(DOLLAR)(shell if test -z `$(WX_CONFIG) --selected-config | cut -d '-' -f 5`; then echo 1; else echo 0; fi)
         </set>
         <option name="WX_SHARED">
-            <values>0,1,$(WX_SHARED_DEFAULT)</values>
-            <values-description>Static,DLL,$(WX_SHARED_DEFAULT)</values-description>
-            <default-value>$(WX_SHARED_DEFAULT)</default-value>
+            <values>0,1</values>
+            <values-description>Static,DLL</values-description>
+            <default-value force="1">$(WX_SHARED_DEFAULT)</default-value>
             <description>
                 Use DLL build of wx library to use?
             </description>
@@ -119,9 +102,9 @@ Format-specific notes:
             $(DOLLAR)(shell $(WX_CONFIG) --selected-config | cut -d '-' -f 2 | sed 's/unicode/1/;s/ansi/0/')
         </set>
         <option name="WX_UNICODE">
-            <values>0,1,$(WX_UNICODE_DEFAULT)</values>
-            <values-description>ANSI,Unicode,$(WX_UNICODE_DEFAULT)</values-description>
-            <default-value>$(WX_UNICODE_DEFAULT)</default-value>
+            <values>0,1</values>
+            <values-description>ANSI,Unicode</values-description>
+            <default-value force="1">$(WX_UNICODE_DEFAULT)</default-value>
             <description>
                 Compile Unicode build of wxWidgets?
             </description>
@@ -131,9 +114,9 @@ Format-specific notes:
             $(DOLLAR)(shell $(WX_CONFIG) --selected-config | cut -d '-' -f 3 | sed 's/debug/1/;s/release/0/')
         </set>
         <option name="WX_DEBUG">
-            <values>0,1,$(WX_DEBUG_DEFAULT)</values>
-            <values-description>Release,Debug,$(WX_DEBUG_DEFAULT)</values-description>
-            <default-value>$(WX_DEBUG_DEFAULT)</default-value>
+            <values>0,1</values>
+            <values-description>Release,Debug</values-description>
+            <default-value force="1">$(WX_DEBUG_DEFAULT)</default-value>
             <description>
                 Use debug build of wxWidgets (define __WXDEBUG__)?
             </description>
