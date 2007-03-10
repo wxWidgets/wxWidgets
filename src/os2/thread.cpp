@@ -96,7 +96,8 @@ public:
     bool IsOk() const { return m_vMutex != NULL; }
 
     wxMutexError Lock() { return LockTimeout(SEM_INDEFINITE_WAIT); }
-    wxMutexError TryLock() { return LockTimeout(SEM_IMMEDIATE_RETURN); }
+    wxMutexError Lock(unsigned long ms) { return LockTimeout(ms); }
+    wxMutexError TryLock();
     wxMutexError Unlock();
 
 private:
@@ -127,6 +128,14 @@ wxMutexInternal::~wxMutexInternal()
     }
 }
 
+wxMutexError wxMutexInternal::TryLock()
+{
+    const wxMutexError rc = LockTimeout( SEM_IMMEDIATE_RETURN );
+
+    // we have a special return code for timeout in this case
+    return rc == wxMUTEX_TIMEOUT ? wxMUTEX_BUSY : rc;
+}
+
 wxMutexError wxMutexInternal::LockTimeout(ULONG ulMilliseconds)
 {
     APIRET                          ulrc;
@@ -136,6 +145,7 @@ wxMutexError wxMutexInternal::LockTimeout(ULONG ulMilliseconds)
     switch (ulrc)
     {
         case ERROR_TIMEOUT:
+            return wxMUTEX_TIMEOUT;
         case ERROR_TOO_MANY_SEM_REQUESTS:
             return wxMUTEX_BUSY;
 
