@@ -75,6 +75,12 @@ enum
     wxCC_POPUP_ON_MOUSE_UP          = 0x0002,
     // All text is not automatically selected on click
     wxCC_NO_TEXT_AUTO_SELECT        = 0x0004,
+    // Drop-button stays down as long as popup is displayed.
+    wxCC_BUTTON_STAYS_DOWN          = 0x0008,
+    // Drop-button covers the entire control.
+    wxCC_FULL_BUTTON                = 0x0010,
+    // Drop-button goes over the custom-border (used under WinVista).
+    wxCC_BUTTON_COVERS_BORDER       = 0x0020,
 
     // Internal use: signals creation is complete
     wxCC_IFLAG_CREATED              = 0x0100,
@@ -87,7 +93,10 @@ enum
     // Internal use: Secondary popup window type should be used (if available).
     wxCC_IFLAG_USE_ALT_POPUP        = 0x1000,
     // Internal use: Skip popup animation.
-    wxCC_IFLAG_DISABLE_POPUP_ANIM   = 0x2000
+    wxCC_IFLAG_DISABLE_POPUP_ANIM   = 0x2000,
+    // Internal use: Drop-button is a bitmap button or has non-default size
+    // (but can still be on either side of the control).
+    wxCC_IFLAG_HAS_NONSTANDARD_BUTTON   = 0x4000
 };
 
 
@@ -365,8 +374,8 @@ public:
     bool ShouldDrawFocus() const
     {
         const wxWindow* curFocus = FindFocus();
-        return ( !IsPopupShown() &&
-                 (curFocus == this || (m_btn && curFocus == m_btn)) &&
+        return ( IsPopupWindowState(Hidden) &&
+                 (curFocus == m_mainCtrlWnd || (m_btn && curFocus == m_btn)) &&
                  (m_windowStyle & wxCB_READONLY) );
     }
 
@@ -401,6 +410,10 @@ public:
     // Set value returned by GetMainWindowOfCompositeControl
     void SetCtrlMainWnd( wxWindow* wnd ) { m_mainCtrlWnd = wnd; }
 
+    // This is public so we can access it from wxComboCtrlTextCtrl
+    virtual wxWindow *GetMainWindowOfCompositeControl()
+        { return m_mainCtrlWnd; }
+
 protected:
 
     //
@@ -423,14 +436,16 @@ protected:
     // Installs standard input handler to combo (and optionally to the textctrl)
     void InstallInputHandlers();
 
-    // flags for DrawButton()
+    // Flags for DrawButton
     enum
     {
-        Draw_PaintBg = 1
+        Button_PaintBackground             = 0x0001, // Paints control background below the button
+        Button_BitmapOnly                  = 0x0002  // Only paints the bitmap
     };
 
     // Draws dropbutton. Using wxRenderer or bitmaps, as appropriate.
-    void DrawButton( wxDC& dc, const wxRect& rect, int flags = Draw_PaintBg );
+    // Flags are defined above.
+    void DrawButton( wxDC& dc, const wxRect& rect, int flags = Button_PaintBackground );
 
     // Call if cursor is on button area or mouse is captured for the button.
     //bool HandleButtonMouseEvent( wxMouseEvent& event, bool isInside );
@@ -505,9 +520,6 @@ protected:
 #if wxUSE_TOOLTIPS
     virtual void DoSetToolTip( wxToolTip *tip );
 #endif
-
-    virtual wxWindow *GetMainWindowOfCompositeControl()
-        { return m_mainCtrlWnd; }
 
     // This is used when m_text is hidden (readonly).
     wxString                m_valueString;

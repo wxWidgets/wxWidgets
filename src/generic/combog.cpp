@@ -159,7 +159,8 @@ bool wxGenericComboCtrl::Create(wxWindow *parent,
     border = wxBORDER_NONE;
 
     Customize( wxCC_BUTTON_OUTSIDE_BORDER |
-               wxCC_NO_TEXT_AUTO_SELECT );
+               wxCC_NO_TEXT_AUTO_SELECT |
+               wxCC_BUTTON_STAYS_DOWN );
 
 #endif
 
