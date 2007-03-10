@@ -1586,7 +1586,7 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
         wxWindow* focus = wxFindWinFromMacWindow( FrontWindow() ) ;
         if ( focus )
         {
-            if ( keyval == WXK_RETURN )
+            if ( keyval == WXK_RETURN || keyval == WXK_NUMPAD_ENTER )
             {
                 wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(focus), wxTopLevelWindow);
                 if ( tlw && tlw->GetDefaultItem() )
