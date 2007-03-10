@@ -181,12 +181,7 @@
             $(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
         </set>
         <set var="OBJS" make_var="1">
-            <if cond="FORMAT!='cbuilderx'">
-                $(COMPILER)_$(CFG_NAME_PART)$(DIR_SUFFIX_CPU)
-            </if>
-            <!-- FIXME: waiting for removal after CBX has better ../ dirs
-                 support -->
-            <if cond="FORMAT=='cbuilderx'">build_cbx_$(CFG_NAME_PART)</if>
+            $(COMPILER)_$(CFG_NAME_PART)$(DIR_SUFFIX_CPU)
         </set>
 
         <set var="BUILDDIR">$(OBJS)</set>

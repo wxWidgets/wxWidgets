@@ -425,12 +425,6 @@ Set the version of your Mingw installation here.
         <set var="EXTRACFLAGS">$(GCCFLAGS) -DHAVE_W32API_H</set>
     </if>
 
-    <if cond="FORMAT=='cbuilderx'">
-        <set var="EXTRACFLAGS">
-            <if cond="COMPILER=='gcc'">-DHAVE_W32API_H</if>
-        </set>
-    </if>
-
 
     <!-- ================================================================== -->
     <!--            Project files - hardcode some defaults                  -->
@@ -456,19 +450,6 @@ Set the version of your Mingw installation here.
         <set var="DEBUG_INFO">$(DEBUG_INFO_DEFAULT)</set>
         <set var="DEBUG_FLAG">default</set>
         <set var="MSLU">0</set>
-    </if>
-
-
-    <!-- FIXME:
-         C++BuilderX supports only wxMSW, monolithic (sic!) static build
-         and the project can't be put into build/msw and store objects in
-         build/msw/something. This *must* be fixed! -->
-    <if cond="FORMAT=='cbuilderx'">
-        <set var="WXUNIV">0</set>
-        <set var="MONOLITHIC">1</set>
-        <set var="SRCDIR">.</set>
-        <set var="TOP_SRCDIR">$(SRCDIR)/$(WXTOPDIR)</set>
-        <set var="SHARED">0</set>
     </if>
 
 

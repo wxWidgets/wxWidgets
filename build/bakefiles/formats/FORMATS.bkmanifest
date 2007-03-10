@@ -8,14 +8,5 @@
         </description>
         <default-filename>xxx.spec</default-filename>
     </format>
-
-    <format id="cbx_unix">
-        <description>
-            C++BuilderX projects for Unix (use configure)
-        </description>
-        <default-filename>
-            $(os.path.splitext(os.path.basename(INPUT_FILE))[0])Unix.cbx
-        </default-filename>
-    </format>
     
 </bakefile-manifest>

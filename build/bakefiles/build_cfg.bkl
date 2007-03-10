@@ -8,7 +8,7 @@
     the library.
     -->
 
-    <if cond="FORMAT not in ['autoconf','msvc6prj','msevc4prj','msvs2005prj','cbuilderx'] and
+    <if cond="FORMAT not in ['autoconf','msvc6prj','msevc4prj','msvs2005prj'] and
               TOOLKIT in ['PM','MSW','MGL','MOTIF']">
 
         <set var="BUILD_CFG_FILE" make_var="1">

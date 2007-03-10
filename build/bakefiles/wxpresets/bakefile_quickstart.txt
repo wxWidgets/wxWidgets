@@ -112,7 +112,6 @@ would like to build, separated by commas. Valid values are:
 
     autoconf      GNU autoconf Makefile.in files
     borland       Borland C/C++ makefiles
-    cbuilderx     C++ Builder X project files
     dmars         Digital Mars makefiles
     dmars_smake   Digital Mars makefiles for SMAKE
     gnu           GNU toolchain makefiles (Unix)
