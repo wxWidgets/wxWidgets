@@ -511,7 +511,7 @@ pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , Even
         charBuf[ numChars - 1 ] = 0;
 #if SIZEOF_WCHAR_T == 2
         uniChars = (wchar_t*) charBuf ;
-        memcpy( uniChars , charBuf , numChars * 2 ) ;
+/*        memcpy( uniChars , charBuf , numChars * 2 ) ;*/	// is there any point in copying charBuf over itself? (in fact, memcpy isn't even guaranteed to work correctly if the source and destination ranges overlap...)
 #else
         // the resulting string will never have more chars than the utf16 version, so this is safe
         wxMBConvUTF16 converter ;
@@ -531,7 +531,32 @@ pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , Even
                     WXEVENTHANDLERCALLREF formerHandler = wxTheApp->MacGetCurrentEventHandlerCallRef() ;
                     wxTheApp->MacSetCurrentEvent( event , handler ) ;
 
+                    UInt32 message = uniChars[pos] < 128 ? (char)uniChars[pos] : '?';
+/*
+	NB: faking a charcode here is problematic. The kEventTextInputUpdateActiveInputArea event is sent
+	multiple times to update the active range during inline input, so this handler will often receive
+	uncommited text, which should usually not trigger side effects. It might be a good idea to check the
+	kEventParamTextInputSendFixLen parameter and verify if input is being confirmed (see CarbonEvents.h).
+	On the other hand, it can be useful for some applications to react to uncommitted text (for example,
+	to update a status display), as long as it does not disrupt the inline input session. Ideally, wx
+	should add new event types to support advanced text input. For now, I would keep things as they are.
+	
+	However, the code that was being used caused additional problems:
                     UInt32 message = (0  << 8) + ((char)uniChars[pos] );
+	Since it simply truncated the unichar to the last byte, it ended up causing weird bugs with inline
+	input, such as switching to another field when one attempted to insert the character U+4E09 (the kanji
+	for "three"), because it was truncated to 09 (kTabCharCode), which was later "converted" to WXK_TAB
+	(still 09) in wxMacTranslateKey; or triggering the default button when one attempted to insert U+840D
+	(the kanji for "name"), which got truncated to 0D and interpreted as a carriage return keypress.
+	Note that even single-byte characters could have been misinterpreted, since MacRoman charcodes only
+	overlap with Unicode within the (7-bit) ASCII range.
+	But simply passing a NUL charcode would disable text updated events, because wxTextCtrl::OnChar checks
+	for codes within a specific range. Therefore I went for the solution seen above, which keeps ASCII
+	characters as they are and replaces the rest with '?', ensuring that update events are triggered.
+	It would be better to change wxTextCtrl::OnChar to look at the actual unicode character instead, but
+	I don't have time to look into that right now.
+		-- CL
+*/
                     if ( wxTheApp->MacSendCharEvent(
                                                     focus , message , 0 , when , 0 , 0 , uniChars[pos] ) )
                     {
