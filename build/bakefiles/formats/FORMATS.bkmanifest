@@ -1,13 +1,6 @@
 <?xml version="1.0" ?>
 
 <bakefile-manifest>
-
-    <format id="wx24dsp">
-        <description>
-            src/wxWindows.dsp which makes same files as 2.4 version
-        </description>
-        <default-filename>wxWindows.dsp</default-filename>
-    </format>
     
     <format id="rpmspec">
         <description>
