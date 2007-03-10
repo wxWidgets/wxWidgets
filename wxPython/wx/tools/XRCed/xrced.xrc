@@ -350,7 +350,7 @@
               <orient>wxVERTICAL</orient>
               <object class="sizeritem">
                 <object class="wxSpinCtrl" name="SPIN">
-                  <size>20,-1d</size>
+                  <size>60,-1</size>
                 </object>
                 <flag>wxBOTTOM</flag>
                 <border>5</border>

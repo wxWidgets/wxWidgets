@@ -634,12 +634,16 @@ class XML_Tree(wx.TreeCtrl):
                     break
         # For sizers and notebooks we must select the first window-like parent
         winParent = itemParent
-        while self.GetPyData(winParent).isSizer or \
-                  self.GetPyData(winParent).treeObject().__class__ == xxxNotebook:
+        while self.GetPyData(winParent).isSizer:
             winParent = self.GetItemParent(winParent)
+        # Notebook children are layed out in a little strange way
+        # wxGTK places NB panels relative to the NB parent
+        if wx.Platform == '__WXGTK__':
+            if self.GetPyData(itemParent).treeObject().__class__ == xxxNotebook:
+                winParent = self.GetItemParent(winParent)
         parentPos = self.FindNodePos(winParent)
-        # Position (-1,-1) is really (0,0)
         pos = obj.GetPosition()
+        # Position (-1,-1) is really (0,0)
         if pos == (-1,-1): pos = (0,0)
         return parentPos + pos
 
@@ -771,7 +775,7 @@ class XML_Tree(wx.TreeCtrl):
             return
         # Show item in bold
         if g.testWin:     # Reset old
-            self.Unselect()
+            self.UnselectAll()
             self.SetItemBold(g.testWin.item, False)
         try:
             wx.BeginBusyCursor()

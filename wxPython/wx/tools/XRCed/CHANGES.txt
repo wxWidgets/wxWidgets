@@ -1,3 +1,8 @@
+0.1.8-4
+-------
+
+Fixes for wxMSW (notebook highlighting, control sizes, tree Unselect).
+
 0.1.8-3
 -------
 

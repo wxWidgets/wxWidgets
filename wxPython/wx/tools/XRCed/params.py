@@ -382,7 +382,7 @@ class ParamUnit(PPanel):
         self.ID_TEXT_CTRL = wx.NewId()
         self.ID_SPIN_BUTTON = wx.NewId()
         sizer = wx.BoxSizer(wx.HORIZONTAL)
-        self.spin = wx.SpinButton(self, self.ID_SPIN_BUTTON, style = wx.SP_VERTICAL)
+        self.spin = wx.SpinButton(self, self.ID_SPIN_BUTTON, style = wx.SP_VERTICAL, size=(-1,0))
         textW = 60 - self.spin.GetSize()[0]
         self.text = wx.TextCtrl(self, self.ID_TEXT_CTRL, size=(textW,-1))
         self.spin.SetRange(-10000, 10000)
