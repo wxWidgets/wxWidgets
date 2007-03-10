@@ -746,7 +746,7 @@ bool wxDC::DoGetPixel( wxCoord x, wxCoord y, wxColour *col ) const
     GetCPixel( XLOG2DEVMAC(x), YLOG2DEVMAC(y), &colour );
 
     // convert from Mac colour to wx
-    col->Set( colour.red >> 8, colour.green >> 8, colour.blue >> 8);
+    *col = colour;
 
     return true ;
 }

@@ -15,6 +15,8 @@
 #include "wx/object.h"
 #include "wx/string.h"
 
+struct RGBColor;
+
 // Colour
 class WXDLLEXPORT wxColour: public wxColourBase
 {
@@ -50,6 +52,10 @@ public:
     bool operator != (const wxColour& colour) const { return !(*this == colour); }
 
     const WXCOLORREF& GetPixel() const { return m_pixel; };
+
+    // Mac-specific ctor and assignment operator from the native colour
+    wxColour(const RGBColor& col);
+    wxColour& operator=(const RGBColor& col);
 
 protected :
 

@@ -185,7 +185,7 @@ void wxBrush::MacSetTheme(ThemeBrush macThemeBrush)
 
     RGBColor color ;
     GetThemeBrushAsColor( macThemeBrush , 32, true, &color );
-    M_BRUSHDATA->m_colour.Set( color.red >> 8 , color.green >> 8 , color.blue >> 8 );
+    M_BRUSHDATA->m_colour = color;
 
     RealizeResource();
 }

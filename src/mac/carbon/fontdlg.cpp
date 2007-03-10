@@ -125,7 +125,9 @@ pascal OSStatus wxMacCarbonFontPanelHandler(EventHandlerCallRef nextHandler, Eve
 
             RGBColor fontColor ;
             if ( cEvent.GetParameter<RGBColor>(kEventParamFontColor, &fontColor) == noErr )
-                fontdata.m_fontColour.FromRGBColor((WXCOLORREF*) &fontColor);
+            {
+                fontdata.m_fontColour = fontColor;
+            }
             else
             {
                 CFDictionaryRef dict ;
@@ -150,7 +152,7 @@ pascal OSStatus wxMacCarbonFontPanelHandler(EventHandlerCallRef nextHandler, Eve
                             {
                                 if ( tagPtr[i] == kATSUColorTag && sizePtr[i] == sizeof(RGBColor))
                                 {
-                                    fontdata.m_fontColour.FromRGBColor((WXCOLORREF*) valuesPtr);
+                                    fontdata.m_fontColour.FromRGBColor(*(RGBColor *)valuesPtr);
                                     break ;
                                 }
                                 bytePtr = (UInt32*)( (UInt8*)bytePtr + sizePtr[i]);

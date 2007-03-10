@@ -68,7 +68,7 @@ int wxColourDialog::ShowModal()
         currentColor.red = info.theColor.color.rgb.red ;
         currentColor.green = info.theColor.color.rgb.green ;
         currentColor.blue = info.theColor.color.rgb.blue ;
-        m_colourData.m_dataColour.FromRGBColor((WXCOLORREF*) &currentColor);
+        m_colourData.m_dataColour = currentColor;
 
         return wxID_OK;
     }

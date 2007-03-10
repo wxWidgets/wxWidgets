@@ -370,16 +370,16 @@ wxRendererMac::DrawItemSelectionRect(wxWindow *win,
                                      const wxRect& rect,
                                      int flags )
 {
-    RGBColor selColor;
-    if (flags & wxCONTROL_SELECTED)
-    {
-        if (flags & wxCONTROL_FOCUSED)
-            GetThemeBrushAsColor(kThemeBrushAlternatePrimaryHighlightColor, 32, true, &selColor);
-        else
-            GetThemeBrushAsColor(kThemeBrushSecondaryHighlightColor, 32, true, &selColor);
-    }
+    if ( !(flags & wxCONTROL_SELECTED) )
+        return;
 
-    wxBrush selBrush = wxBrush( wxColour( selColor.red, selColor.green, selColor.blue ), wxSOLID );
+    RGBColor selColor;
+    GetThemeBrushAsColor(flags & wxCONTROL_FOCUSED
+                            ? kThemeBrushAlternatePrimaryHighlightColor
+                            : kThemeBrushSecondaryHighlightColor,
+                         32, true, &selColor);
+
+    wxBrush selBrush(selColor);
 
     dc.SetPen( *wxTRANSPARENT_PEN );
     dc.SetBrush( selBrush );

@@ -88,7 +88,7 @@ wxColour wxSystemSettingsNative::GetColour(wxSystemColour index)
 #endif
 
             GetThemeBrushAsColor( colorBrushID, 32, true, &macRGB );
-            resultColor = wxColor( macRGB.red >> 8, macRGB.green >> 8, macRGB.blue >> 8 );
+            resultColor = wxColor( macRGB );
             break ;
 
         case wxSYS_COLOUR_BTNHIGHLIGHT:

@@ -1593,7 +1593,7 @@ bool wxDC::DoGetPixel( wxCoord x, wxCoord y, wxColour *col ) const
         YLOG2DEVMAC(y) + m_macLocalOriginInPort.y - m_macLocalOrigin.y, &colour );
 #endif
     // convert from Mac colour to wx
-    col->Set( colour.red >> 8, colour.green >> 8, colour.blue >> 8 );
+    *col = colour;
 
     return true ;
 }
