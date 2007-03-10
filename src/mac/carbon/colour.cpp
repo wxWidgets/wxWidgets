@@ -71,6 +71,7 @@ void wxColour::FromRGBColor( WXCOLORREF* color )
 wxColour& wxColour::operator=(const RGBColor& col)
 {
     FromRGBColor((WXCOLORREF *)&col);
+    return *this;
 }
 
 bool wxColour::IsOk() const 
