@@ -856,6 +856,13 @@ public:
                                const wxFont *theFont = (const wxFont *) NULL)
                                const = 0;
 
+    wxSize GetTextExtent(const wxString& string) const
+    {
+        wxCoord w, h;
+        GetTextExtent(string, &w, &h);
+        return wxSize(w, h);
+    }
+
     // client <-> screen coords
     // ------------------------
 

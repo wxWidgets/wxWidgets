@@ -1294,20 +1294,25 @@ Return the sizer associated with the window by a previous call to
 
 \membersection{wxWindow::GetTextExtent}\label{wxwindowgettextextent}
 
-\constfunc{virtual void}{GetTextExtent}{\param{const wxString\& }{string}, \param{int* }{x}, \param{int* }{y},
+\constfunc{virtual void}{GetTextExtent}{\param{const wxString\& }{string}, \param{int* }{w}, \param{int* }{h},
  \param{int* }{descent = NULL}, \param{int* }{externalLeading = NULL},
  \param{const wxFont* }{font = NULL}, \param{bool}{ use16 = {\tt false}}}
 
+\constfunc{wxSize}{GetTextExtent}{\param{const wxString\& }{string}}
+
 Gets the dimensions of the string as it would be drawn on the
 window with the currently selected font.
+
+The text extent is returned in \arg{w} and \arg{h} pointers (first form) or as a 
+\helpref{wxSize}{wxsize} object (second form).
 
 \wxheading{Parameters}
 
 \docparam{string}{String whose extent is to be measured.}
 
-\docparam{x}{Return value for width.}
+\docparam{w}{Return value for width.}
 
-\docparam{y}{Return value for height.}
+\docparam{h}{Return value for height.}
 
 \docparam{descent}{Return value for descent (optional).}
 
