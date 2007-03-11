@@ -908,7 +908,7 @@ class XML_Tree(wx.TreeCtrl):
                 testWin.SetClientSize(testWin.GetBestSize())
                 testWin.Show(True)
             elif xxx.__class__ == xxxDialog:
-                testWin = g.testWin = res.LoadDialog(None, STD_NAME)
+                testWin = g.testWin = res.LoadDialog(g.frame, STD_NAME)
                 testWin.panel = testWin
                 testWin.Layout()
                 testWin.SetPosition(pos)
@@ -918,7 +918,7 @@ class XML_Tree(wx.TreeCtrl):
                 wx.EVT_BUTTON(testWin, wx.ID_CANCEL, self.OnCloseTestWin)
             elif xxx.__class__ == xxxWizard:
                 wiz = wx.wizard.PreWizard()
-                res.LoadOnObject(wiz, None, STD_NAME, 'wxWizard')
+                res.LoadOnObject(wiz, g.frame, STD_NAME, 'wxWizard')
                 # Find first page (don't know better way)
                 firstPage = None
                 for w in wiz.GetChildren():
