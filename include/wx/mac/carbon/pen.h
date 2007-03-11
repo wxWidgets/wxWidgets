@@ -43,6 +43,9 @@ public:
     }
 
 protected:
+    virtual wxObjectRefData* CreateRefData() const;
+    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const;
+
   int           m_width;
   int           m_style;
   int           m_join ;
