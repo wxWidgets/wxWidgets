@@ -60,7 +60,12 @@
                     follows the wxWidgets naming conventions, then this tag is
                     what you need to reference the wx-based additional library.
 
-    - <wxlike-paths>: if your library/application needs to cpmpile & link with both
+    - <wxlike-libdirname>: sets the output directory for the current target to $(value)
+                           when on Unix and to e.g. $(value)/vc_lib when on Windows,
+                           i.e. acts like <dirname> just following wxWidgets naming rules.
+                           Useful to allow multiple builds of the 
+
+    - <wxlike-paths>: if your library/application needs to compile & link with both
                       wxWidgets and some other wx-based library, which in turn
                       follows the wxWidgets naming conventions, then this tag is
                       what you need to add to the compiler and linker flags the paths
@@ -211,7 +216,7 @@
     </if>
 
     <if cond="not isdefined('WX_VERSION')">
-        <set var="WX_VERSION_DEFAULT" overwrite="0">290</set>
+        <set var="WX_VERSION_DEFAULT" overwrite="0">29</set>
         <option name="WX_VERSION">
             <default-value>$(WX_VERSION_DEFAULT)</default-value>
             <description>
@@ -366,25 +371,44 @@
                 <if cond="WX_SHARED=='1'">dll</if>
             </set>
             <set var="_DIRNAME">
-                lib/$(COMPILER)_$(_DIRNAME_SHARED_SUFFIX)
+                $(value)/$(COMPILER)_$(_DIRNAME_SHARED_SUFFIX)
             </set>
 
             <dirname>$(_DIRNAME)</dirname>
 
-            <add-target target="make_lib_dir_$(id)" type="action"/>
-            <modify-target target="make_lib_dir_$(id)">
-                <command cond="TOOLSET=='unix'">
-                    @mkdir -p $(_DIRNAME)
-                </command>
-                <command cond="TOOLSET in ['win32','os2','dos']">
-                    if not exist $(_DIRNAME) mkdir $(_DIRNAME)
-                </command>
-                <dependency-of>$(id)</dependency-of>
+            <if cond="FORMAT_SUPPORTS_ACTIONS=='1'">
+                <set var="__mkdir_tgt">make_lib_dir_$(id)</set>
+
+                <add-target target="$(__mkdir_tgt)" type="action"/>
+                <modify-target target="$(__mkdir_tgt)">
+                    <command cond="TOOLSET=='unix'">
+                        @mkdir -p $(_DIRNAME)
+                    </command>
+                    <command cond="TOOLSET in ['win32','os2','dos']">
+                        if not exist $(nativePaths(_DIRNAME)) mkdir $(nativePaths(_DIRNAME))
+                    </command>
             </modify-target>
 
+                <!-- the following code is mostly equivalent to a:
+                          <dependency-of>$(id)</dependency-of>
+                     put into the __mkdir_tgt target, except that it does _prepend_
+                     the __mkdir_tgt dependency instead of appending it.
+
+                     This is required because some compilers (e.g. MSVC) need to store in the
+                     output folder some files (e.g. the PDB file) while compiling and thus
+                     the library output folder must have been created before _any_ source file
+                     is compiled, not just before the library is linked.
+                -->
+                <modify-target target="$(id)">
+                    <set var="__deps" prepend="1">
+                        $(substitute(__mkdir_tgt, lambda x: ref('__depname', x), 'DEP'))
+                    </set>
+                </modify-target>
+            </if>
         </if>
         <if cond="FORMAT=='autoconf'">
-            <dirname>lib</dirname>
+            <set var="_DIRNAME">$(value)</set>
+            <dirname>$(_DIRNAME)</dirname>
         </if>
     </define-tag>
 
@@ -393,7 +417,7 @@
          located in $(value).
     -->
     <define-tag name="wxlike-paths" rules="exe,lib,dll,module">
-        <if cond="FORMAT!='autoconf'">
+        <if cond="FORMAT!='autoconf' and FORMAT!='gnu'">
             <!-- WXLIBPATH is a path like "/lib/vc_lib"
                  NOTE: even if this template is going to be used for a "lib"
                        target (which does not uses lib-paths at all), we can still

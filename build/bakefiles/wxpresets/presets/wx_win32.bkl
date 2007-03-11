@@ -306,7 +306,7 @@
                 @if not exist $(WX_DIR)$(WXLIBINCLUDE)$(DIRSEP)wx$(DIRSEP)setup.h \
                     echo ----------------------------------------------------------------------------
                 @if not exist $(WX_DIR)$(WXLIBINCLUDE)$(DIRSEP)wx$(DIRSEP)setup.h \
-                    echo Selected wxWidgets build is not available!
+                    echo The selected wxWidgets build is not available!
                 @if not exist $(WX_DIR)$(WXLIBINCLUDE)$(DIRSEP)wx$(DIRSEP)setup.h \
                     echo Please use the options prefixed with WX_ to select another wxWidgets build.
                 @if not exist $(WX_DIR)$(WXLIBINCLUDE)$(DIRSEP)wx$(DIRSEP)setup.h \
