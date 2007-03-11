@@ -25,17 +25,17 @@
     #include "wx/msw/private.h"
     #include "wx/font.h"
     #include "wx/bitmap.h"
-    #include "wx/image.h"
     #include "wx/dcmemory.h"
     #include "wx/menu.h"
     #include "wx/utils.h"
     #include "wx/settings.h"
     #include "wx/menuitem.h"
-    #include "wx/module.h"
 #endif
 
 #include "wx/ownerdrw.h"
 #include "wx/fontutil.h"
+#include "wx/image.h"
+#include "wx/module.h"
 
 #if wxUSE_OWNER_DRAWN
 
