@@ -165,7 +165,7 @@ class Frame(wx.Frame):
                     'Toggle auto-refresh mode', True)
         menu.Check(self.ID_AUTO_REFRESH, conf.autoRefresh)
         self.ID_TEST_HIDE = wx.NewId()
-        menu.Append(self.ID_TEST_HIDE, '&Hide\tCtrl-H', 'Close test window')
+        menu.Append(self.ID_TEST_HIDE, '&Hide\tF6', 'Close test window')
         menuBar.Append(menu, '&View')
 
         menu = wx.Menu()
