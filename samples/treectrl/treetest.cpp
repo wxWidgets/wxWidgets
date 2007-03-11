@@ -355,14 +355,20 @@ void MyFrame::OnIdle(wxIdleEvent& event)
     if ( m_treeCtrl )
     {
         wxTreeItemId idRoot = m_treeCtrl->GetRootItem();
+        wxString status;
+        if (idRoot.IsOk())
+        {
+            wxTreeItemId idLast = m_treeCtrl->GetLastChild(idRoot);
+            status = wxString::Format(
+                _T("Root/last item is %svisible/%svisible"),
+                m_treeCtrl->IsVisible(idRoot) ? _T("") : _T("not "),
+                idLast.IsOk() && m_treeCtrl->IsVisible(idLast)
+                    ? _T("") : _T("not "));
+        }
+        else
+            status = _T("No root item");
 
-        SetStatusText(wxString::Format
-                      (
-                        _T("Root/last item is %svisible/%svisible"),
-                        m_treeCtrl->IsVisible(idRoot) ? _T("") : _T("not "),
-                        m_treeCtrl->IsVisible(m_treeCtrl->GetLastChild(idRoot))
-                            ? _T("") : _T("not ")
-                      ), 1);
+        SetStatusText(status, 1);
     }
 #endif // wxUSE_STATUSBAR
 
