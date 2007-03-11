@@ -11,11 +11,12 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef   _WX_CONFBASE_H_
-#define   _WX_CONFBASE_H_
+#ifndef _WX_CONFBASE_H_
+#define _WX_CONFBASE_H_
 
 #include "wx/defs.h"
 #include "wx/string.h"
+#include "wx/object.h"
 
 class WXDLLIMPEXP_BASE wxArrayString;
 
@@ -359,7 +360,5 @@ WXDLLIMPEXP_BASE wxString wxExpandEnvVars(const wxString &sz);
  */
 WXDLLIMPEXP_BASE void wxSplitPath(wxArrayString& aParts, const wxChar *sz);
 
-
-#endif
-  // _WX_CONFIG_H_
+#endif // _WX_CONFBASE_H_
 
