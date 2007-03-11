@@ -711,7 +711,10 @@ bool wxTextCtrl::Create( wxWindow *parent,
         // create scrolled window
         m_widget = gtk_scrolled_window_new( NULL, NULL );
         gtk_scrolled_window_set_policy( GTK_SCROLLED_WINDOW( m_widget ),
-                                        GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC );
+                                        GTK_POLICY_AUTOMATIC,
+                                        style & wxTE_NO_VSCROLL
+                                            ? GTK_POLICY_NEVER
+                                            : GTK_POLICY_AUTOMATIC );
         // for ScrollLines/Pages
         m_scrollBar[1] = (GtkRange*)((GtkScrolledWindow*)m_widget)->vscrollbar;
 

@@ -45,6 +45,10 @@ doesn't show the selection when it doesn't have focus - use this style to force
 it to always show it. It doesn't do anything under other platforms.}
 \twocolitem{\windowstyle{wxHSCROLL}}{A horizontal scrollbar will be created and
 used, so that text won't be wrapped. No effect under wxGTK1.}
+\twocolitem{\windowstyle{wxTE\_NO\_VSCROLL}}{For multiline controls only:
+vertical scrollbar will never be created. This limits the amount of text which
+can be entered into the control to what can be displayed in it under MSW but
+not under GTK2. Currently not implemented for the other platforms.}
 \twocolitem{\windowstyle{wxTE\_LEFT}}{The text in the control will be left-justified (default).}
 \twocolitem{\windowstyle{wxTE\_CENTRE}}{The text in the control will be centered (currently wxMSW and wxGTK2 only).}
 \twocolitem{\windowstyle{wxTE\_RIGHT}}{The text in the control will be right-justified (currently wxMSW and wxGTK2 only).}
