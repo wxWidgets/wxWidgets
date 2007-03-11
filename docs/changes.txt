@@ -70,6 +70,10 @@ All:
 - Fixed Base64 computation in wxHTTP (p_michalczyk)
 - Fix handling of wxSOCKET_REUSEADDR in wxDatagramSocket (troelsk)
 
+Unix Ports:
+
+- Fixed crash in wxGetUserName() in Unicode build
+
 wxMSW
 
 - Fix lack of spin control update event when control lost focus.

@@ -521,10 +521,25 @@ extern WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvCurrent;
 #if wxUSE_UNICODE
     #define wxConvertWX2MB(s)   wxConvCurrent->cWX2MB(s)
     #define wxConvertMB2WX(s)   wxConvCurrent->cMB2WX(s)
+
+    // these functions should be used when the conversions really, really have
+    // to succeed (usually because we pass their results to a standard C
+    // function which would crash if we passed NULL to it), so these functions
+    // always return a valid pointer if their argument is non-NULL
+
+    // this function safety is achieved by trying wxConvLibc first, wxConvUTF8
+    // next if it fails and, finally, wxConvISO8859_1 which always succeeds
+    extern WXDLLIMPEXP_BASE wxWCharBuffer wxSafeConvertMB2WX(const char *s);
+
+    // this function uses wxConvLibc and wxConvUTF8(MAP_INVALID_UTF8_TO_OCTAL)
+    // if it fails
+    extern WXDLLIMPEXP_BASE wxCharBuffer wxSafeConvertWX2MB(const wchar_t *ws);
 #else // ANSI
     // no conversions to do
     #define wxConvertWX2MB(s)   (s)
     #define wxConvertMB2WX(s)   (s)
+    #define wxSafeConvertMB2WX(s) (s)
+    #define wxSafeConvertWX2MB(s) (s)
 #endif // Unicode/ANSI
 
 #endif // _WX_STRCONV_H_
