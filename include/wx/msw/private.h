@@ -824,7 +824,8 @@ enum wxWinVersion
     wxWinVersion_2003 = 0x0502,
 
     wxWinVersion_6 = 0x0600,
-    wxWinVersion_NT6 = 0x0600
+    wxWinVersion_Vista = wxWinVersion_6
+    wxWinVersion_NT6 = wxWinVersion_6
 };
 
 WXDLLIMPEXP_BASE wxWinVersion wxGetWinVersion();
