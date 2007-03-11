@@ -242,7 +242,7 @@ void wxHtmlHelpFrame::OnAbout(wxCommandEvent& event)
 // remains opened
 bool wxHtmlHelpFrame::ShouldPreventAppExit() const
 {
-    return (this == wxTheApp->GetTopWindow());
+    return (wx_const_cast(wxHtmlHelpFrame*, this) == wxTheApp->GetTopWindow());
 }
 
 #endif // wxUSE_WXHTML_HELP

@@ -379,7 +379,7 @@ void wxVListBox::OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const
             flags |= wxCONTROL_SELECTED;
         if ( IsCurrent(n) )
             flags |= wxCONTROL_CURRENT;
-        if ( wxWindow::FindFocus() == this )
+        if ( wxWindow::FindFocus() == wx_const_cast(wxVListBox*, this) )
             flags |= wxCONTROL_FOCUSED;
 
         wxRendererNative::Get().DrawItemSelectionRect(
