@@ -316,12 +316,12 @@ bool wxPen::IsFree() const
 
 wxObjectRefData* wxPen::CreateRefData() const
 {
-    return new wxFontRefData;
+    return new wxPenRefData;
 }
 
 wxObjectRefData* wxPen::CloneRefData(const wxObjectRefData* data) const
 {
-    return new wxFontRefData(*wx_static_cast(const wxPenRefData*, data));
+    return new wxPenRefData(*wx_static_cast(const wxPenRefData*, data));
 }
 
 void wxPen::SetColour(const wxColour& col)
