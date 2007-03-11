@@ -994,12 +994,12 @@ wxMemorySize wxGetFreeMemory()
 
         return (wxMemorySize)memFree;
     }
-#elif defined(__SUN__) && defined(_SC_AVPHYS_PAGES)
-    return (wxMemorySize)(sysconf(_SC_AVPHYS_PAGES)*sysconf(_SC_PAGESIZE));
 #elif defined(__SGI__)
     struct rminfo realmem;
     if ( sysmp(MP_SAGET, MPSA_RMINFO, &realmem, sizeof realmem) == 0 )
         return ((wxMemorySize)realmem.physmem * sysconf(_SC_PAGESIZE));
+#elif defined(_SC_AVPHYS_PAGES)
+    return ((wxMemorySize)sysconf(_SC_AVPHYS_PAGES))*sysconf(_SC_PAGESIZE);
 //#elif defined(__FREEBSD__) -- might use sysctl() to find it out, probably
 #endif
 
