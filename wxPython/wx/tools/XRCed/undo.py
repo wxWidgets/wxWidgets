@@ -134,11 +134,11 @@ class UndoReplace:
         item = g.tree.ItemAtFullIndex(self.itemIndex)
         xxx = g.tree.GetPyData(item)
         # Replace with old element
-        parent = xxx.parent.element
+        parent = xxx.parent.node
         if xxx is self.xxx:   # sizeritem or notebookpage - replace child
-            parent.replaceChild(self.xxx.child.element, xxx.child.element)
+            parent.replaceChild(self.xxx.child.node, xxx.child.node)
         else:
-            parent.replaceChild(self.xxx.element, xxx.element)
+            parent.replaceChild(self.xxx.node, xxx.node)
         self.xxx.parent = xxx.parent
         xxx = self.xxx
         g.tree.SetPyData(item, xxx)
@@ -191,9 +191,9 @@ class UndoMove:
            ((parent.isSizer and not isinstance(xxx, xxxSizerItem)) or \
             (isinstance(parent, xxxNotebook) and not isinstance(xxx, xxxNotebookPage)) or \
            not (parent.isSizer or isinstance(parent, xxxNotebook))):
-            elem.removeChild(xxx.child.element) # detach child
+            elem.removeChild(xxx.child.node) # detach child
             elem.unlink()           # delete child container
-            elem = xxx.child.element # replace
+            elem = xxx.child.node # replace
             # This may help garbage collection
             xxx.child.parent = None
             isChildContainer = False
@@ -227,9 +227,9 @@ class UndoMove:
            ((parent.isSizer and not isinstance(xxx, xxxSizerItem)) or \
             (isinstance(parent, xxxNotebook) and not isinstance(xxx, xxxNotebookPage)) or \
            not (parent.isSizer or isinstance(parent, xxxNotebook))):
-            elem.removeChild(xxx.child.element) # detach child
+            elem.removeChild(xxx.child.node) # detach child
             elem.unlink()           # delete child container
-            elem = xxx.child.element # replace
+            elem = xxx.child.node # replace
             # This may help garbage collection
             xxx.child.parent = None
             isChildContainer = False

@@ -189,6 +189,7 @@ class xxxObject:
     hasStyle = True                     # almost everyone
     hasName = True                      # has name attribute?
     isSizer = hasChild = False
+    isElement = True
     allParams = None                    # Some nodes have no parameters
     # Style parameters (all optional)
     styles = ['fg', 'bg', 'font', 'enabled', 'focused', 'hidden', 'tooltip']
@@ -210,7 +211,7 @@ class xxxObject:
     # parent is parent xxx object (or None if none), element is DOM element object
     def __init__(self, parent, element, refElem=None):
         self.parent = parent
-        self.element = element
+        self.node = element
         self.refElem = refElem
         self.undo = None
         # Reference are dereferenced
@@ -230,33 +231,32 @@ class xxxObject:
         if self.hasName: self.name = element.getAttribute('name')
         # Set parameters (text element children)
         self.params = {}
-        nodes = element.childNodes[:]
-        for node in nodes:
-            if node.nodeType == minidom.Node.ELEMENT_NODE:
-                tag = node.tagName
+        for n in element.childNodes[:]:
+            if n.nodeType == minidom.Node.ELEMENT_NODE:
+                tag = n.tagName
                 if tag in ['object', 'object_ref']:
                     continue            # do nothing for object children here
                 elif tag not in self.allParams and tag not in self.styles:
                     print 'WARNING: unknown parameter for %s: %s' % \
                           (self.className, tag)
                 elif tag in self.specials:
-                    self.special(tag, node)
+                    self.special(tag, n)
                 elif tag == 'content':
                     if self.className == 'wxCheckListBox':
-                        self.params[tag] = xxxParamContentCheckList(node)
+                        self.params[tag] = xxxParamContentCheckList(n)
                     else:
-                        self.params[tag] = xxxParamContent(node)
+                        self.params[tag] = xxxParamContent(n)
                 elif tag == 'font': # has children
-                    self.params[tag] = xxxParamFont(element, node)
+                    self.params[tag] = xxxParamFont(element, n)
                 elif tag in self.bitmapTags:
                     # Can have attributes
-                    self.params[tag] = xxxParamBitmap(node)
+                    self.params[tag] = xxxParamBitmap(n)
                 else:                   # simple parameter
-                    self.params[tag] = xxxParam(node)
-            elif node.nodeType == minidom.Node.TEXT_NODE and node.data.isspace():
+                    self.params[tag] = xxxParam(n)
+            elif n.nodeType == minidom.Node.TEXT_NODE and n.data.isspace():
                 # Remove empty text nodes
-                element.removeChild(node)
-                node.unlink()
+                element.removeChild(n)
+                n.unlink()
 
         # Check that all required params are set
         for param in self.required:
@@ -281,9 +281,9 @@ class xxxObject:
                             break
                     if found:
                         nextTextElem = self.params[p].node
-                        self.element.insertBefore(elem, nextTextElem)
+                        self.node.insertBefore(elem, nextTextElem)
                     else:
-                        self.element.appendChild(elem)
+                        self.node.appendChild(elem)
                 else:
                     wx.LogWarning('Required parameter %s of %s missing' %
                                  (param, self.className))
@@ -313,7 +313,7 @@ class xxxObject:
         if self.hasChild: obj = self.child
         else: obj = self
         obj.name = name
-        obj.element.setAttribute('name', name)
+        obj.node.setAttribute('name', name)
     # Special processing for growablecols-like parameters
     # represented by several nodes
     def special(self, tag, node):
@@ -329,7 +329,7 @@ class xxxObject:
             node = g.tree.dom.createElement(param)
             text = g.tree.dom.createTextNode(str(i))
             node.appendChild(text)
-            self.element.appendChild(node)
+            self.node.appendChild(node)
             self.special(param, node)
 
 # Imitation of FindResource/DoFindResource from xmlres.cpp
@@ -377,7 +377,7 @@ class xxxParamFont(xxxObject, xxxNode):
         self.data = v
     def update(self, value):
         # `value' is a list of strings corresponding to all parameters
-        elem = self.element
+        elem = self.node
         # Remove old elements first
         childNodes = elem.childNodes[:]
         for node in childNodes: elem.removeChild(node)
@@ -655,6 +655,16 @@ class xxxDateCtrl(xxxObject):
     winStyles = ['wxDP_DEFAULT', 'wxDP_SPIN', 'wxDP_DROPDOWN',
                  'wxDP_ALLOWNONE', 'wxDP_SHOWCENTURY']
 
+class xxxGrid(xxxObject):
+    allParams = ['pos', 'size', 'style']
+
+class xxxFilePickerCtrl(xxxObject):
+    allParams = ['value', 'message', 'wildcard', 'pos', 'size', 'style']
+    winStyles = ['wxFLP_OPEN', 'wxFLP_SAVE', 'wxFLP_OVERWRITE_PROMPT',
+                 'wxFLP_FILE_MUST_EXIST', 'wxFLP_CHANGE_DIR',
+                 'wxFLP_DEFAULT_STYLE']
+
+
 ################################################################################
 # Buttons
 
@@ -906,6 +916,31 @@ class xxxUnknown(xxxObject):
     winStyles = ['wxNO_FULL_REPAINT_ON_RESIZE']
 
 ################################################################################
+# Comment
+
+class xxxParamComment(xxxParam):
+    def __init__(self, node):
+        xxxNode.__init__(self, node)
+        self.textNode = node
+
+class xxxComment(xxxObject):
+    hasStyle = hasName = False
+    allParams = required = ['comment']
+    
+    def __init__(self, parent, node):
+        self.parent = parent
+        self.node = node
+        self.isElement = False
+        self.undo = None
+        self.className = 'comment'
+        self.ref = self.subclass = None
+        self.params = {'comment': xxxParamComment(node)}
+        
+    def treeName(self):
+        # Replace newlines by \n to avoid tree item resizing
+        return self.params['comment'].value().replace('\n', r'\n')
+
+################################################################################
 
 xxxDict = {
     'wxPanel': xxxPanel,
@@ -956,6 +991,8 @@ xxxDict = {
     'wxGenericDirCtrl': xxxGenericDirCtrl,
     'wxSpinCtrl': xxxSpinCtrl,
     'wxScrolledWindow': xxxScrolledWindow,
+    'wxGrid': xxxGrid,
+    'wxFilePickerCtrl': xxxFilePickerCtrl,
     'wxDatePickerCtrl': xxxDateCtrl,
 
     'wxBoxSizer': xxxBoxSizer,
@@ -973,13 +1010,15 @@ xxxDict = {
     'separator': xxxSeparator,
 
     'unknown': xxxUnknown,
+    'comment': xxxComment,
     }
 
 # Create IDs for all parameters of all classes
 paramIDs = {'fg': wx.NewId(), 'bg': wx.NewId(), 'exstyle': wx.NewId(), 'font': wx.NewId(),
             'enabled': wx.NewId(), 'focused': wx.NewId(), 'hidden': wx.NewId(),
             'tooltip': wx.NewId(), 'encoding': wx.NewId(),
-            'cellpos': wx.NewId(), 'cellspan': wx.NewId()
+            'cellpos': wx.NewId(), 'cellspan': wx.NewId(),
+            'text': wx.NewId()
             }
 for cl in xxxDict.values():
     if cl.allParams:
@@ -992,25 +1031,29 @@ for cl in xxxDict.values():
 
 # Test for object elements
 def IsObject(node):
-    return node.nodeType == minidom.Node.ELEMENT_NODE and node.tagName in ['object', 'object_ref']
+    return node.nodeType == minidom.Node.ELEMENT_NODE and \
+           node.tagName in ['object', 'object_ref'] or \
+           node.nodeType == minidom.Node.COMMENT_NODE
 
 # Make XXX object from some DOM object, selecting correct class
-def MakeXXXFromDOM(parent, element):
-    if element.tagName == 'object_ref':
-        ref = element.getAttribute('ref')
+def MakeXXXFromDOM(parent, node):
+    if node.nodeType == minidom.Node.COMMENT_NODE:
+        return xxxComment(parent, node)
+    if node.tagName == 'object_ref':
+        ref = node.getAttribute('ref')
         refElem = FindResource(ref)
         if refElem: cls = refElem.getAttribute('class')
-        else: return xxxUnknown(parent, element)
+        else: return xxxUnknown(parent, node)
     else:
         refElem = None
-        cls = element.getAttribute('class')
+        cls = node.getAttribute('class')
     try:
         klass = xxxDict[cls]
     except KeyError:
         # If we encounter a weird class, use unknown template
-        print 'WARNING: unsupported class:', element.getAttribute('class')
+        print 'WARNING: unsupported class:', node.getAttribute('class')
         klass = xxxUnknown
-    return klass(parent, element, refElem)
+    return klass(parent, node, refElem)
 
 # Make empty DOM element
 def MakeEmptyDOM(className):
@@ -1088,5 +1131,17 @@ def MakeEmptyRefXXX(parent, ref):
     # Label is not used for references
     xxx.allParams = xxx.allParams[:]
     #xxx.allParams.remove('label')
+    return xxx
+
+# Make empty comment node
+def MakeEmptyCommentDOM():
+    node = g.tree.dom.createComment('')
+    return node
+
+# Make empty xxxComment
+def MakeEmptyCommentXXX(parent):
+    node = MakeEmptyCommentDOM()
+    # Now just make object
+    xxx = MakeXXXFromDOM(parent, node)
     return xxx
 

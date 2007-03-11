@@ -25,7 +25,10 @@ genericExStyles = [
     'wxWS_EX_PROCESS_UI_UPDATES'
     ]
 
-buttonSize = (35,-1)    # in dialog units, transformed to pixels in panel ctor
+# Global var initialized in Panel.__init__ for button size in screen pixels
+buttonSize = None
+# Button size in dialog units
+buttonSizeD = (35,-1)
 
 # Class that can properly disable children
 class PPanel(wx.Panel):
@@ -56,8 +59,7 @@ class ParamBinaryOr(PPanel):
         sizer.Add(self.text, 0, wx.RIGHT | wx.ALIGN_CENTER_VERTICAL, 5)
         self.button = wx.Button(self, self.ID_BUTTON_CHOICES, 'Edit...', size=buttonSize)
         sizer.Add(self.button, 0, wx.ALIGN_CENTER_VERTICAL)
-        self.SetAutoLayout(True)
-        self.SetSizerAndFit(sizer)
+        self.SetSizer(sizer)
         wx.EVT_BUTTON(self, self.ID_BUTTON_CHOICES, self.OnButtonChoices)
         wx.EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
     def GetValue(self):
@@ -190,8 +192,7 @@ class ParamColour(PPanel):
         sizer.Add(self.text, 0, wx.ALIGN_CENTER_VERTICAL | wx.TOP | wx.BOTTOM, 2)
         self.button = wx.Panel(self, self.ID_BUTTON, wx.DefaultPosition, wx.Size(20, 20))
         sizer.Add(self.button, 0, wx.ALIGN_CENTER_VERTICAL | wx.LEFT, 5)
-        self.SetAutoLayout(True)
-        self.SetSizerAndFit(sizer)
+        self.SetSizer(sizer)
         self.textModified = False
         wx.EVT_PAINT(self.button, self.OnPaintButton)
         wx.EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
@@ -251,8 +252,7 @@ class ParamFont(PPanel):
         sizer.Add(self.text, 0, wx.RIGHT | wx.ALIGN_CENTER_VERTICAL, 5)
         self.button = wx.Button(self, self.ID_BUTTON_SELECT, 'Select...', size=buttonSize)
         sizer.Add(self.button, 0, wx.ALIGN_CENTER_VERTICAL)
-        self.SetAutoLayout(True)
-        self.SetSizerAndFit(sizer)
+        self.SetSizer(sizer)
         self.textModified = False
         wx.EVT_BUTTON(self, self.ID_BUTTON_SELECT, self.OnButtonSelect)
         wx.EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
@@ -344,8 +344,7 @@ class ParamInt(PPanel):
         self.spin = wx.SpinCtrl(self, self.ID_SPIN_CTRL, size=(60,-1))
         self.spin.SetRange(-2147483648, 2147483647) # min/max integers
         sizer.Add(self.spin)
-        self.SetAutoLayout(True)
-        self.SetSizerAndFit(sizer)
+        self.SetSizer(sizer)
         wx.EVT_SPINCTRL(self, self.ID_SPIN_CTRL, self.OnChange)
     def GetValue(self):
         return str(self.spin.GetValue())
@@ -364,8 +363,7 @@ class ParamIntNN(PPanel):
         self.spin = wx.SpinCtrl(self, self.ID_SPIN_CTRL, size=(60,-1))
         self.spin.SetRange(0, 10000) # min/max integers
         sizer.Add(self.spin)
-        self.SetAutoLayout(True)
-        self.SetSizerAndFit(sizer)
+        self.SetSizer(sizer)
         wx.EVT_SPINCTRL(self, self.ID_SPIN_CTRL, self.OnChange)
     def GetValue(self):
         return str(self.spin.GetValue())
@@ -388,8 +386,7 @@ class ParamUnit(PPanel):
         self.spin.SetRange(-10000, 10000)
         sizer.Add(self.text, 0, wx.EXPAND)
         sizer.Add(self.spin, 0, wx.EXPAND)
-        self.SetAutoLayout(True)
-        self.SetSizerAndFit(sizer)
+        self.SetSizer(sizer)
         self.spin.Bind(wx.EVT_SPIN_UP, self.OnSpinUp)
         self.spin.Bind(wx.EVT_SPIN_DOWN, self.OnSpinDown)
     def GetValue(self):
@@ -434,7 +431,6 @@ class ParamMultilineText(PPanel):
         sizer.Add(self.text, 0, wx.RIGHT | wx.ALIGN_CENTER_VERTICAL, 5)
         self.button = wx.Button(self, self.ID_BUTTON_EDIT, 'Edit...', size=buttonSize)
         sizer.Add(self.button, 0, wx.ALIGN_CENTER_VERTICAL)
-        self.SetAutoLayout(True)
         self.SetSizerAndFit(sizer)
         wx.EVT_BUTTON(self, self.ID_BUTTON_EDIT, self.OnButtonEdit)
         wx.EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
@@ -463,8 +459,7 @@ class ParamText(PPanel):
         if textWidth == -1: option = 1
         else: option = 0
         sizer.Add(self.text, option, wx.ALIGN_CENTER_VERTICAL | wx.TOP | wx.BOTTOM, 2)
-        self.SetAutoLayout(True)
-        self.SetSizerAndFit(sizer)
+        self.SetSizer(sizer)
         wx.EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
     def GetValue(self):
         return self.text.GetValue()
@@ -488,6 +483,10 @@ class ParamLabel(ParamText):
 class ParamEncoding(ParamText):
     def __init__(self, parent, name):
         ParamText.__init__(self, parent, name, 100)
+
+class ParamComment(ParamText):
+    def __init__(self, parent, name):
+        ParamText.__init__(self, parent, name, 330 + buttonSize[0])
 
 class ContentDialog(wx.Dialog):
     def __init__(self, parent, value):
@@ -607,8 +606,7 @@ class ParamContent(PPanel):
         sizer.Add(self.text, 0, wx.RIGHT | wx.ALIGN_CENTER_VERTICAL, 5)
         self.button = wx.Button(self, self.ID_BUTTON_EDIT, 'Edit...', size=buttonSize)
         sizer.Add(self.button, 0, wx.ALIGN_CENTER_VERTICAL)
-        self.SetAutoLayout(True)
-        self.SetSizerAndFit(sizer)
+        self.SetSizer(sizer)
         self.textModified = False
         wx.EVT_BUTTON(self, self.ID_BUTTON_EDIT, self.OnButtonEdit)
         wx.EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
@@ -747,8 +745,7 @@ class RadioBox(PPanel):
             button = wx.RadioButton(self, -1, i, size=(-1,buttonSize[1]), name=i)
             topSizer.Add(button, 0, wx.RIGHT, 5)
             wx.EVT_RADIOBUTTON(self, button.GetId(), self.OnRadioChoice)
-        self.SetAutoLayout(True)
-        self.SetSizerAndFit(topSizer)
+        self.SetSizer(topSizer)
     def SetStringSelection(self, value):
         self.freeze = True
         for i in self.choices:
@@ -806,8 +803,7 @@ class ParamFile(PPanel):
         sizer.Add(self.text, 0, wx.RIGHT | wx.ALIGN_CENTER_VERTICAL, 5)
         self.button = wx.Button(self, self.ID_BUTTON_BROWSE, 'Browse...',size=buttonSize)
         sizer.Add(self.button, 0, wx.ALIGN_CENTER_VERTICAL)
-        self.SetAutoLayout(True)
-        self.SetSizerAndFit(sizer)
+        self.SetSizer(sizer)
         self.textModified = False
         wx.EVT_BUTTON(self, self.ID_BUTTON_BROWSE, self.OnButtonBrowse)
         wx.EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
@@ -934,5 +930,6 @@ paramDict = {
     'fg': ParamColour, 'bg': ParamColour, 'font': ParamFont,
     'enabled': ParamBool, 'focused': ParamBool, 'hidden': ParamBool,
     'tooltip': ParamText, 'bitmap': ParamBitmap, 'icon': ParamBitmap,
-    'encoding': ParamEncoding, 'borders': ParamUnit
+    'encoding': ParamEncoding, 'borders': ParamUnit,
+    'comment': ParamComment
     }

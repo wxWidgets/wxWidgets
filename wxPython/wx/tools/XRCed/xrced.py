@@ -489,10 +489,14 @@ class Frame(wx.Frame):
         if not selected: return         # key pressed event
         xxx = tree.GetPyData(selected)
         if wx.TheClipboard.Open():
-            data = wx.CustomDataObject('XRCED')
-            # Set encoding in header
-            # (False,True)
-            s = xxx.element.toxml(encoding=expat.native_encoding)
+            if xxx.isElement:
+                data = wx.CustomDataObject('XRCED')
+                # Set encoding in header
+                # (False,True)
+                s = xxx.node.toxml(encoding=expat.native_encoding)
+            else:
+                data = wx.CustomDataObject('XRCED_node')
+                s = xxx.node.data
             data.SetData(cPickle.dumps(s))
             wx.TheClipboard.SetData(data)
             wx.TheClipboard.Close()
@@ -527,21 +531,28 @@ class Frame(wx.Frame):
         parent = tree.GetPyData(parentLeaf).treeObject()
 
         # Create a copy of clipboard pickled element
-        success = False
+        success = success_node = False
         if wx.TheClipboard.Open():
             data = wx.CustomDataObject('XRCED')
             if wx.TheClipboard.IsSupported(data.GetFormat()):
                 success = wx.TheClipboard.GetData(data)
+            if not success:             # try other format
+                data = wx.CustomDataObject('XRCED_node')
+                if wx.TheClipboard.IsSupported(data.GetFormat()):
+                    success_node = wx.TheClipboard.GetData(data)
             wx.TheClipboard.Close()
 
-        if not success:
+        if not success and not success_node:
             wx.MessageBox(
                 "There is no data in the clipboard in the required format",
                 "Error")
             return
 
         xml = cPickle.loads(data.GetData()) # xml representation of element
-        elem = minidom.parseString(xml).childNodes[0]
+        if success:
+            elem = minidom.parseString(xml).childNodes[0]
+        else:
+            elem = g.tree.dom.createComment(xml)
         
         # Tempopary xxx object to test things
         xxx = MakeXXXFromDOM(parent, elem)
@@ -558,9 +569,9 @@ class Frame(wx.Frame):
            ((parent.isSizer and not isinstance(xxx, xxxSizerItem)) or \
             (parentIsBook and not isinstance(xxx, xxxPage)) or \
            not (parent.isSizer or parentIsBook)):
-            elem.removeChild(xxx.child.element) # detach child
+            elem.removeChild(xxx.child.node) # detach child
             elem.unlink()           # delete child container
-            elem = xxx.child.element # replace
+            elem = xxx.child.node # replace
             # This may help garbage collection
             xxx.child.parent = None
             isChildContainer = False
@@ -605,6 +616,9 @@ class Frame(wx.Frame):
     def ItemsAreCompatible(self, parent, child):
         # Check compatibility
         error = False
+        # Comments are always compatible
+        if child.__class__ == xxxComment:
+            return True
         # Top-level
         if child.__class__ in [xxxDialog, xxxFrame, xxxWizard]:
             # Top-level classes
@@ -732,9 +746,9 @@ class Frame(wx.Frame):
            ((parent.isSizer and not isinstance(xxx, xxxSizerItem)) or \
             (isinstance(parent, xxxNotebook) and not isinstance(xxx, xxxNotebookPage)) or \
            not (parent.isSizer or isinstance(parent, xxxNotebook))):
-            elem.removeChild(xxx.child.element) # detach child
+            elem.removeChild(xxx.child.node) # detach child
             elem.unlink()           # delete child container
-            elem = xxx.child.element # replace
+            elem = xxx.child.node # replace
             # This may help garbage collection
             xxx.child.parent = None
             isChildContainer = False
@@ -789,9 +803,9 @@ class Frame(wx.Frame):
            ((parent.isSizer and not isinstance(xxx, xxxSizerItem)) or \
             (isinstance(parent, xxxNotebook) and not isinstance(xxx, xxxNotebookPage)) or \
            not (parent.isSizer or isinstance(parent, xxxNotebook))):
-            elem.removeChild(xxx.child.element) # detach child
+            elem.removeChild(xxx.child.node) # detach child
             elem.unlink()           # delete child container
-            elem = xxx.child.element # replace
+            elem = xxx.child.node # replace
             # This may help garbage collection
             xxx.child.parent = None
             isChildContainer = False
@@ -841,14 +855,19 @@ class Frame(wx.Frame):
         # Prepare undo data
         panel.Apply()
         index = tree.ItemFullIndex(selected)
+        xxx = tree.GetPyData(selected)
         parent = tree.GetPyData(tree.GetItemParent(selected)).treeObject()
         elem = tree.RemoveLeaf(selected)
         undoMan.RegisterUndo(UndoCutDelete(index, parent, elem))
         if evt.GetId() == wx.ID_CUT:
             if wx.TheClipboard.Open():
-                data = wx.CustomDataObject('XRCED')
-                # (False, True)
-                s = elem.toxml(encoding=expat.native_encoding)
+                if xxx.isElement:
+                    data = wx.CustomDataObject('XRCED')
+                    # (False, True)
+                    s = elem.toxml(encoding=expat.native_encoding)
+                else:
+                    data = wx.CustomDataObject('XRCED_node')
+                    s = xxx.node.data
                 data.SetData(cPickle.dumps(s))
                 wx.TheClipboard.SetData(data)
                 wx.TheClipboard.Close()
@@ -866,7 +885,7 @@ class Frame(wx.Frame):
     def OnSubclass(self, evt):
         selected = tree.selection
         xxx = tree.GetPyData(selected).treeObject()
-        elem = xxx.element
+        elem = xxx.node
         subclass = xxx.subclass
         dlg = wx.TextEntryDialog(self, 'Subclass:', defaultValue=subclass)
         if dlg.ShowModal() == wx.ID_OK:
@@ -1063,29 +1082,33 @@ Homepage: http://xrced.sourceforge.net\
             ref = wx.GetTextFromUser('Create reference to:', 'Create reference')
             if not ref: return
             xxx = MakeEmptyRefXXX(parent, ref)
+        elif evt.GetId() == ID_NEW.COMMENT:
+            xxx = MakeEmptyCommentXXX(parent)
         else:
             # Create empty element
             className = pullDownMenu.createMap[evt.GetId()]
             xxx = MakeEmptyXXX(parent, className)
 
-        # Set default name for top-level windows
-        if parent.__class__ == xxxMainNode:
-            cl = xxx.treeObject().__class__
-            frame.maxIDs[cl] += 1
-            xxx.setTreeName('%s%d' % (defaultIDs[cl], frame.maxIDs[cl]))
-        # And for some other standard controls
-        elif parent.__class__ == xxxStdDialogButtonSizer:
-            xxx.setTreeName(pullDownMenu.stdButtonIDs[evt.GetId()][0])
-            # We can even set label
-            obj = xxx.treeObject()
-            elem = g.tree.dom.createElement('label')
-            elem.appendChild(g.tree.dom.createTextNode(pullDownMenu.stdButtonIDs[evt.GetId()][1]))
-            obj.params['label'] = xxxParam(elem)
-            xxx.treeObject().element.appendChild(elem)
-
         # Insert new node, register undo
-        elem = xxx.element
-        newItem = tree.InsertNode(parentLeaf, parent, elem, nextItem)
+        if xxx.isElement:                 # true object
+            # Set default name for top-level windows
+            if parent.__class__ == xxxMainNode:
+                cl = xxx.treeObject().__class__
+                frame.maxIDs[cl] += 1
+                xxx.setTreeName('%s%d' % (defaultIDs[cl], frame.maxIDs[cl]))
+            # And for some other standard controls
+            elif parent.__class__ == xxxStdDialogButtonSizer:
+                xxx.setTreeName(pullDownMenu.stdButtonIDs[evt.GetId()][0])
+                # We can even set label
+                obj = xxx.treeObject()
+                elem = g.tree.dom.createElement('label')
+                elem.appendChild(g.tree.dom.createTextNode(pullDownMenu.stdButtonIDs[evt.GetId()][1]))
+                obj.params['label'] = xxxParam(elem)
+                xxx.treeObject().node.appendChild(elem)
+
+            newItem = tree.InsertNode(parentLeaf, parent, xxx.node, nextItem)
+        else:                           # comment node
+            newItem = tree.InsertNode(parentLeaf, parent, xxx.node, nextItem)
         undoMan.RegisterUndo(UndoPasteCreate(parentLeaf, parent, newItem, selected))
         tree.EnsureVisible(newItem)
         tree.SelectItem(newItem)
@@ -1093,7 +1116,7 @@ Homepage: http://xrced.sourceforge.net\
             tree.ScrollTo(newItem)
             tree.Refresh()
         # Update view?
-        if g.testWin and tree.IsHighlatable(newItem):
+        if xxx.isElement and g.testWin and tree.IsHighlatable(newItem):
             if conf.autoRefresh:
                 tree.needUpdate = True
                 tree.pendingHighLight = newItem
@@ -1106,7 +1129,7 @@ Homepage: http://xrced.sourceforge.net\
     def OnReplace(self, evt):
         selected = tree.selection
         xxx = tree.GetPyData(selected).treeObject()
-        elem = xxx.element
+        elem = xxx.node
         parent = elem.parentNode
         undoMan.RegisterUndo(UndoReplace(selected))
         # New class
@@ -1383,6 +1406,10 @@ Homepage: http://xrced.sourceforge.net\
         return True
 
     def Indent(self, node, indent = 0):
+        if node.nodeType == minidom.Node.COMMENT_NODE:
+            text = self.domCopy.createTextNode('\n' + ' ' * indent)
+            node.parentNode.insertBefore(text, node)
+            return                      # no children
         # Copy child list because it will change soon
         children = node.childNodes[:]
         # Main node doesn't need to be indented
@@ -1396,7 +1423,8 @@ Homepage: http://xrced.sourceforge.net\
                 node.appendChild(text)
             # Indent children which are elements
             for n in children:
-                if n.nodeType == minidom.Node.ELEMENT_NODE:
+                if n.nodeType == minidom.Node.ELEMENT_NODE or \
+                       n.nodeType == minidom.Node.COMMENT_NODE:
                     self.Indent(n, indent + 2)
 
     def Save(self, path):

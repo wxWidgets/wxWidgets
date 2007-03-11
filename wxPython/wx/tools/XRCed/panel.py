@@ -22,7 +22,7 @@ class Panel(wx.Notebook):
         # Set common button size for parameter buttons
         bTmp = wx.Button(self, -1, '')
         import params
-        params.buttonSize = (self.DLG_SZE(buttonSize)[0], bTmp.GetSize()[1])
+        params.buttonSize = (self.DLG_SZE(buttonSizeD)[0], bTmp.GetSize()[1])
         bTmp.Destroy()
         del bTmp
 
@@ -184,7 +184,7 @@ class ParamPage(wx.Panel):
         param = evt.GetEventObject().GetName()
         w = self.controls[param]
         w.Enable(True)
-        objElem = xxx.element
+        objElem = xxx.node
         if evt.IsChecked():
             # Ad  new text node in order of allParams
             w.SetValue('')              # set empty (default) value
@@ -192,7 +192,7 @@ class ParamPage(wx.Panel):
             elem = g.tree.dom.createElement(param)
             # Some classes are special
             if param == 'font':
-                xxx.params[param] = xxxParamFont(xxx.element, elem)
+                xxx.params[param] = xxxParamFont(xxx.node, elem)
             elif param in xxxObject.bitmapTags:
                 xxx.params[param] = xxxParamBitmap(elem)
             else:
@@ -228,7 +228,7 @@ class ParamPage(wx.Panel):
             name = self.controlName.GetValue()
             if xxx.name != name:
                 xxx.name = name
-                xxx.element.setAttribute('name', name)
+                xxx.node.setAttribute('name', name)
         for param, w in self.controls.items():
             if w.modified:
                 paramObj = xxx.params[param]
@@ -284,8 +284,11 @@ class PropPage(ParamPage):
         for param in xxx.allParams:
             present = xxx.params.has_key(param)
             if param in xxx.required:
-                label = wx.StaticText(self, paramIDs[param], param + ':',
-                                     size = (LABEL_WIDTH,-1), name = param)
+                if isinstance(xxx, xxxComment):
+                    label = None
+                else:
+                    label = wx.StaticText(self, paramIDs[param], param + ':',
+                                          size = (LABEL_WIDTH,-1), name = param)
             else:
                 # Notebook has one very loooooong parameter
                 if param == 'usenotebooksizer': sParam = 'usesizer:'
@@ -304,11 +307,14 @@ class PropPage(ParamPage):
                     typeClass = ParamText
             control = typeClass(self, param)
             control.Enable(present)
-            sizer.AddMany([ (label, 0, wx.ALIGN_CENTER_VERTICAL),
-                            (control, 0, wx.ALIGN_CENTER_VERTICAL | wx.GROW) ])
+            # Comment has only one parameter
+            if isinstance(xxx, xxxComment):
+                sizer.Add(control, 0, wx.ALIGN_CENTER_VERTICAL | wx.GROW)
+            else:
+                sizer.AddMany([ (label, 0, wx.ALIGN_CENTER_VERTICAL),
+                                (control, 0, wx.ALIGN_CENTER_VERTICAL | wx.GROW) ])
             self.controls[param] = control
         topSizer.Add(sizer, 1, wx.ALL | wx.EXPAND, 3)
-        self.SetAutoLayout(True)
         self.SetSizer(topSizer)
         topSizer.Fit(self)
     def SetValues(self, xxx):
