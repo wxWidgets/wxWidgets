@@ -3921,9 +3921,11 @@ bool wxRichTextParagraph::FindWrapPosition(const wxRichTextRange& range, wxDC& d
         else
         {
             int spacePos = plainText.Find(wxT(' '), true);
-            if (spacePos != wxNOT_FOUND)
+            int tabPos = plainText.Find(wxT('\t'), true);
+            int pos = wxMax(spacePos, tabPos);
+            if (pos != wxNOT_FOUND)
             {
-                int positionsFromEndOfString = plainText.length() - spacePos - 1;
+                int positionsFromEndOfString = plainText.length() - pos - 1;
                 breakPosition = breakPosition - positionsFromEndOfString;
             }
         }
