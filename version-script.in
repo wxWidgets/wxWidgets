@@ -14,6 +14,7 @@
         *wxString*rbegin*;
         *wxString*rend*;
         *wxString*reverse_iterator*;
+        *wxImage*ConvertToGreyscale*;
 };
 
 # public symbols added in release 2.6.3 (please keep in alphabetical order):

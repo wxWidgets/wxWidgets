@@ -20,6 +20,7 @@ All (GUI):
   total size if we've just used the total size as the best size.
 - Fixed problem with zoom setting in print preview.
 - Fixed middle click events generation in generic wxTreeCtrl (Olly Betts)
+- Backported wxImage::ConvertToGreyscale() from later versions
 
 wxGTK:
 
@@ -53,6 +54,9 @@ wxMSW:
 - Drag and drop now works inside wxStaticBox.
 - Implemented wxComboBox::SetEditable()
 - Respect wxBU_EXACTFIT in wxToggleButton
+- Fix display of bitmaps in disabled menu items
+- Fix indentation of bitmaps in menu items
+- Don't replace colours in toolbar bitmaps if they have more than 256 of them
 
 
 2.6.3
