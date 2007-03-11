@@ -72,7 +72,7 @@ enum
 // (long) type (TODO doubles and other types such as wxDate coming soon).
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxConfigBase
+class WXDLLIMPEXP_BASE wxConfigBase : public wxObject
 {
 public:
   // constants
@@ -295,6 +295,8 @@ private:
 
   // Style flag
   long              m_style;
+
+  DECLARE_ABSTRACT_CLASS(wxConfigBase)
 };
 
 // a handy little class which changes current path to the path of given entry
