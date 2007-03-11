@@ -1123,6 +1123,8 @@ Homepage: http://xrced.sourceforge.net\
             else:
                 tree.pendingHighLight = None
         tree.SetFocus()
+        if not xxx.isElement:
+            tree.EditLabel(newItem)
         self.SetModified()
 
     # Replace one object with another

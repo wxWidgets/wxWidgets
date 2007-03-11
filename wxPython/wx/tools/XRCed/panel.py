@@ -309,6 +309,8 @@ class PropPage(ParamPage):
             control.Enable(present)
             # Comment has only one parameter
             if isinstance(xxx, xxxComment):
+                # Bind char event to check Enter key
+                control.text.Bind(wx.EVT_CHAR, self.OnEnter)
                 sizer.Add(control, 0, wx.ALIGN_CENTER_VERTICAL | wx.GROW)
             else:
                 sizer.AddMany([ (label, 0, wx.ALIGN_CENTER_VERTICAL),
@@ -317,6 +319,7 @@ class PropPage(ParamPage):
         topSizer.Add(sizer, 1, wx.ALL | wx.EXPAND, 3)
         self.SetSizer(topSizer)
         topSizer.Fit(self)
+        
     def SetValues(self, xxx):
         self.xxx = xxx
         self.origChecks = []
@@ -342,6 +345,13 @@ class PropPage(ParamPage):
                 w.Enable(False)
                 self.origChecks.append((param, False))
                 self.origControls.append((param, '', False))
+
+    # This is called only for comment now
+    def OnEnter(self, evt):
+        if evt.GetKeyCode() == 13:
+            g.tree.Apply(self.xxx, g.tree.selection)
+        else:
+            evt.Skip()
 
 ################################################################################
 
@@ -369,6 +379,7 @@ class StylePage(ParamPage):
         self.SetAutoLayout(True)
         self.SetSizer(topSizer)
         topSizer.Fit(self)
+        
     # Set data for a cahced page
     def SetValues(self, xxx):
         self.xxx = xxx

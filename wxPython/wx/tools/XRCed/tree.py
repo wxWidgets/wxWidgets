@@ -435,10 +435,12 @@ class HighLightBox:
 
 class XML_Tree(wx.TreeCtrl):
     def __init__(self, parent, id):
-        wx.TreeCtrl.__init__(self, parent, id, style = wx.TR_HAS_BUTTONS | wx.TR_MULTIPLE)
+        wx.TreeCtrl.__init__(self, parent, id,
+                             style = wx.TR_HAS_BUTTONS | wx.TR_MULTIPLE | wx.TR_EDIT_LABELS)
         self.SetBackgroundColour(wx.Colour(224, 248, 224))
-        self.fontComment = wx.Font(g.sysFont().GetPointSize(), wx.DEFAULT,
-                                   wx.FONTSTYLE_ITALIC, wx.NORMAL)
+        self.fontComment = wx.FFont(self.GetFont().GetPointSize(),
+                                    self.GetFont().GetFamily(),
+                                    wx.FONTFLAG_ITALIC)
         # Register events
         wx.EVT_TREE_SEL_CHANGED(self, self.GetId(), self.OnSelChanged)
         # One works on Linux, another on Windows
@@ -449,6 +451,8 @@ class XML_Tree(wx.TreeCtrl):
         wx.EVT_RIGHT_DOWN(self, self.OnRightDown)
         wx.EVT_TREE_ITEM_EXPANDED(self, self.GetId(), self.OnItemExpandedCollapsed)
         wx.EVT_TREE_ITEM_COLLAPSED(self, self.GetId(), self.OnItemExpandedCollapsed)
+        self.Bind(wx.EVT_TREE_BEGIN_LABEL_EDIT, self.OnBeginLabelEdit)
+        self.Bind(wx.EVT_TREE_END_LABEL_EDIT, self.OnEndLabelEdit)
 
         self.selection = None
         self.selectionChanging = False
@@ -609,6 +613,7 @@ class XML_Tree(wx.TreeCtrl):
         # Different color for references and comments
         if xxx.className == 'comment':
             self.SetItemTextColour(newItem, 'Blue')
+            self.SetItemFont(newItem, self.fontComment)
         elif treeObj.ref:
             self.SetItemTextColour(newItem, 'DarkGreen')
         elif treeObj.hasStyle and treeObj.params.get('hidden', False):
@@ -1203,3 +1208,17 @@ class XML_Tree(wx.TreeCtrl):
         # Set global modified state
         g.frame.SetModified()
 
+    def OnBeginLabelEdit(self, evt):
+        xxx = self.GetPyData(evt.GetItem())
+        if xxx.isElement:
+            evt.Veto()
+        else:
+            evt.Skip()
+
+    def OnEndLabelEdit(self, evt):
+        xxx = self.GetPyData(evt.GetItem())
+        node = xxx.node
+        if not xxx.isElement:
+            node.data = evt.GetLabel()
+            g.panel.SetData(xxx)
+        evt.Skip()

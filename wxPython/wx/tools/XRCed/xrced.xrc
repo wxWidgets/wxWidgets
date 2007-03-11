@@ -1,6 +1,5 @@
 <?xml version="1.0" ?>
 <resource>
-  <!-- The beginning is here -->
   <object class="wxDialog" name="DIALOG_TEXT">
     <title>Text Dialog</title>
     <centered>1</centered>

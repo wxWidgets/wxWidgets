@@ -450,12 +450,12 @@ class ParamMultilineText(PPanel):
         dlg.Destroy()
 
 class ParamText(PPanel):
-    def __init__(self, parent, name, textWidth=-1):
+    def __init__(self, parent, name, textWidth=-1, style=0):
         PPanel.__init__(self, parent, name)
         self.ID_TEXT_CTRL = wx.NewId()
         # We use sizer even here to have the same size of text control
         sizer = wx.BoxSizer()
-        self.text = wx.TextCtrl(self, self.ID_TEXT_CTRL, size=wx.Size(textWidth,-1))
+        self.text = wx.TextCtrl(self, self.ID_TEXT_CTRL, size=wx.Size(textWidth,-1), style=style)
         if textWidth == -1: option = 1
         else: option = 0
         sizer.Add(self.text, option, wx.ALIGN_CENTER_VERTICAL | wx.TOP | wx.BOTTOM, 2)
@@ -486,7 +486,8 @@ class ParamEncoding(ParamText):
 
 class ParamComment(ParamText):
     def __init__(self, parent, name):
-        ParamText.__init__(self, parent, name, 330 + buttonSize[0])
+        ParamText.__init__(self, parent, name, 330 + buttonSize[0],
+                           style=wx.TE_PROCESS_ENTER)
 
 class ContentDialog(wx.Dialog):
     def __init__(self, parent, value):
