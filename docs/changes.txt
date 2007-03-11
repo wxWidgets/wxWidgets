@@ -47,6 +47,7 @@ wxGTK:
 - wxTopLevelWindow::GetSize() returns the size including the WM decorations.
 - wxTopLevelWindow::GetClientSize() returns 0x0 when the window is minimized.
 - Added support for colour cursors (Pascal Monasse).
+- Setting foreground colour of single line wxTextCtrl now works
 
 wxMSW:
 

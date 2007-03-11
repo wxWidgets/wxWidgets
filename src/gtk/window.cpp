@@ -3869,44 +3869,53 @@ GtkRcStyle *wxWindowGTK::CreateWidgetStyle(bool forceStyle)
             pango_font_description_copy( m_font.GetNativeFontInfo()->description );
     }
 
+    int flagsNormal = 0,
+        flagsPrelight = 0,
+        flagsActive = 0,
+        flagsInsensitive = 0;
+
     if ( m_foregroundColour.Ok() )
     {
         const GdkColor *fg = m_foregroundColour.GetColor();
 
-        style->fg[GTK_STATE_NORMAL] = *fg;
-        style->color_flags[GTK_STATE_NORMAL] = GTK_RC_FG;
+        style->fg[GTK_STATE_NORMAL] =
+        style->text[GTK_STATE_NORMAL] = *fg;
+        flagsNormal |= GTK_RC_FG | GTK_RC_TEXT;
 
-        style->fg[GTK_STATE_PRELIGHT] = *fg;
-        style->color_flags[GTK_STATE_PRELIGHT] = GTK_RC_FG;
+        style->fg[GTK_STATE_PRELIGHT] =
+        style->text[GTK_STATE_PRELIGHT] = *fg;
+        flagsPrelight |= GTK_RC_FG | GTK_RC_TEXT;
 
-        style->fg[GTK_STATE_ACTIVE] = *fg;
-        style->color_flags[GTK_STATE_ACTIVE] = GTK_RC_FG;
+        style->fg[GTK_STATE_ACTIVE] =
+        style->text[GTK_STATE_ACTIVE] = *fg;
+        flagsActive |= GTK_RC_FG | GTK_RC_TEXT;
     }
 
     if ( m_backgroundColour.Ok() )
     {
         const GdkColor *bg = m_backgroundColour.GetColor();
 
-        style->bg[GTK_STATE_NORMAL] = *bg;
+        style->bg[GTK_STATE_NORMAL] =
         style->base[GTK_STATE_NORMAL] = *bg;
-        style->color_flags[GTK_STATE_NORMAL] = (GtkRcFlags)
-            (style->color_flags[GTK_STATE_NORMAL] | GTK_RC_BG | GTK_RC_BASE);
+        flagsNormal |= GTK_RC_BG | GTK_RC_BASE;
 
-        style->bg[GTK_STATE_PRELIGHT] = *bg;
+        style->bg[GTK_STATE_PRELIGHT] =
         style->base[GTK_STATE_PRELIGHT] = *bg;
-        style->color_flags[GTK_STATE_PRELIGHT] = (GtkRcFlags)
-            (style->color_flags[GTK_STATE_PRELIGHT] | GTK_RC_BG | GTK_RC_BASE);
+        flagsPrelight |= GTK_RC_BG | GTK_RC_BASE;
 
-        style->bg[GTK_STATE_ACTIVE] = *bg;
+        style->bg[GTK_STATE_ACTIVE] =
         style->base[GTK_STATE_ACTIVE] = *bg;
-        style->color_flags[GTK_STATE_ACTIVE] = (GtkRcFlags)
-            (style->color_flags[GTK_STATE_ACTIVE] | GTK_RC_BG | GTK_RC_BASE);
+        flagsActive |= GTK_RC_BG | GTK_RC_BASE;
 
-        style->bg[GTK_STATE_INSENSITIVE] = *bg;
+        style->bg[GTK_STATE_INSENSITIVE] =
         style->base[GTK_STATE_INSENSITIVE] = *bg;
-        style->color_flags[GTK_STATE_INSENSITIVE] = (GtkRcFlags)
-            (style->color_flags[GTK_STATE_INSENSITIVE] | GTK_RC_BG | GTK_RC_BASE);
+        flagsInsensitive |= GTK_RC_BG | GTK_RC_BASE;
     }
+
+    style->color_flags[GTK_STATE_NORMAL] = (GtkRcFlags)flagsNormal;
+    style->color_flags[GTK_STATE_PRELIGHT] = (GtkRcFlags)flagsPrelight;
+    style->color_flags[GTK_STATE_ACTIVE] = (GtkRcFlags)flagsActive;
+    style->color_flags[GTK_STATE_INSENSITIVE] = (GtkRcFlags)flagsInsensitive;
 
     return style;
 }
