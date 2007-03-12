@@ -177,7 +177,10 @@ void wxAuiMDIParentFrame::SetChildMenuBar(wxAuiMDIChildFrame* pChild)
     if (!pChild)
     {
         // No Child, set Our menu bar back.
-        SetMenuBar(m_pMyMenuBar);
+        if (m_pMyMenuBar)
+            SetMenuBar(m_pMyMenuBar);
+             else
+            SetMenuBar(GetMenuBar());
 
         // Make sure we know our menu bar is in use
         m_pMyMenuBar = NULL;
