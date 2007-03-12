@@ -46,6 +46,8 @@
   #include  <signal.h>      // for SIGTRAP used by wxTrap()
 #endif  //Win/Unix
 
+#include <locale.h>
+
 #if wxUSE_FONTMAP
     #include "wx/fontmap.h"
 #endif // wxUSE_FONTMAP
