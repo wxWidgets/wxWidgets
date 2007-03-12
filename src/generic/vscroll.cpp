@@ -169,6 +169,13 @@ void wxVScrolledWindow::RemoveScrollbar()
 
 void wxVScrolledWindow::UpdateScrollbar()
 {
+    // if there is nothing to scroll, remove the scrollbar
+    if ( !m_lineMax )
+    {
+        RemoveScrollbar();
+        return;
+    }
+
     // see how many lines can we fit on screen
     const wxCoord hWindow = GetClientSize().y;
 
@@ -228,15 +235,15 @@ void wxVScrolledWindow::SetLineCount(size_t count)
     // and our estimate for their total height
     m_heightTotal = EstimateTotalHeight();
 
-    // recalculate the scrollbars parameters
-    if ( count )
+    // ScrollToLine() will update the scrollbar itself if it changes the line
+    // we pass to it because it's out of [new] range
+    size_t oldScrollPos = m_lineFirst;
+    ScrollToLine(m_lineFirst);
+    if ( oldScrollPos == m_lineFirst )
     {
-        m_lineFirst = 1;    // make sure it is != 0
-        ScrollToLine(0);
-    }
-    else // no items
-    {
-        RemoveScrollbar();
+        // but if it didn't do it, we still need to update the scrollbar to
+        // reflect the changed number of lines ourselves
+        UpdateScrollbar();
     }
 }
 
