@@ -89,7 +89,7 @@
 #define __WXGTK26__ 1
 
 /* Define this if your version of GTK+ is greater than 2.10 */
-#define __WXGTK210__ 0
+#define __WXGTK210__ 1
 
 #include <types.h>
 typedef pid_t GPid;
@@ -166,8 +166,6 @@ typedef pid_t GPid;
     #define wxUSE_GUI            1
 #endif
 
-
-#define WXWIN_COMPATIBILITY_2_4 1
 
 #define WXWIN_COMPATIBILITY_2_6 1
 
@@ -852,6 +850,9 @@ typedef pid_t GPid;
 
 /* Define if fsync() is available */
 #define HAVE_FSYNC 1
+
+/* Define if round() is available */
+/* #undef HAVE_ROUND */
 
 /* Define if you have ftime() */
 #define HAVE_FTIME
