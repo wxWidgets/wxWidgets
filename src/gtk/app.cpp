@@ -403,7 +403,8 @@ GdkVisual *wxApp::GetGdkVisual()
 
 bool wxApp::Initialize(int& argc, wxChar **argv)
 {
-    bool init_result;
+    if ( !wxAppBase::Initialize(argc, argv) )
+        return false;
 
 #if wxUSE_THREADS
     if (!g_thread_supported())
@@ -412,8 +413,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     wxgs_poll_func = g_main_context_get_poll_func(NULL);
     g_main_context_set_poll_func(NULL, wxapp_poll_func);
 #endif // wxUSE_THREADS
-
-    gtk_set_locale();
 
     // We should have the wxUSE_WCHAR_T test on the _outside_
 #if wxUSE_WCHAR_T
@@ -450,6 +449,9 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 #endif // wxUSE_INTL
     static wxConvBrokenFileNames fileconv(encName);
     wxConvFileName = &fileconv;
+
+
+    bool init_result;
 
 #if wxUSE_UNICODE
     // gtk_init() wants UTF-8, not wchar_t, so convert
@@ -506,13 +508,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 
     // we can not enter threads before gtk_init is done
     gdk_threads_enter();
-
-    if ( !wxAppBase::Initialize(argc, argv) )
-    {
-        gdk_threads_leave();
-
-        return false;
-    }
 
     wxSetDetectableAutoRepeat( true );
 

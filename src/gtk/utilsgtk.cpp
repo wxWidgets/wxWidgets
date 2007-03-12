@@ -329,6 +329,11 @@ static wxString GetSM()
 // wxGUIAppTraits
 //-----------------------------------------------------------------------------
 
+void wxGUIAppTraits::SetLocale()
+{
+    gtk_set_locale();
+}
+
 #ifdef __WXDEBUG__
 
 #if wxUSE_STACKWALKER

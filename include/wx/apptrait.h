@@ -40,7 +40,7 @@ public:
     // needed since this class declares virtual members
     virtual ~wxAppTraitsBase() { }
 
-    // hooks for creating the global objects, may be overridden by the user
+    // hooks for working with the global objects, may be overridden by the user
     // ------------------------------------------------------------------------
 
 #if wxUSE_LOG
@@ -68,6 +68,13 @@ public:
     // except in the case of wxMac and wxCocoa
     virtual wxStandardPathsBase& GetStandardPaths();
 #endif // wxUSE_STDPATHS
+
+#if wxUSE_INTL
+    // called during wxApp initialization to set the locale to correspond to
+    // the user default (i.e. system locale under Windows, LC_ALL under Unix)
+    virtual void SetLocale();
+#endif // wxUSE_INTL
+
 
     // functions abstracting differences between GUI and console modes
     // ------------------------------------------------------------------------
@@ -109,6 +116,10 @@ public:
     // table can be passed around
     virtual GSocketGUIFunctionsTable* GetSocketGUIFunctionsTable() = 0;
 #endif
+
+
+    // functions returning port-specific information
+    // ------------------------------------------------------------------------
 
     // return information about the (native) toolkit currently used and its
     // runtime (not compile-time) version.

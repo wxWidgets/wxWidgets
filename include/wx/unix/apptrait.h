@@ -41,6 +41,7 @@ public:
     virtual wxPortId GetToolkitVersion(int *majVer, int *minVer) const;
 
 #ifdef __WXGTK__
+    virtual void SetLocale();
     virtual wxString GetDesktopEnvironment() const;
 #endif
 
