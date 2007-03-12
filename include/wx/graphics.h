@@ -73,7 +73,7 @@ protected :
     virtual wxObjectRefData* CreateRefData() const;
     virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const;
 
-    DECLARE_DYNAMIC_CLASS(wxGraphicsObject);
+    DECLARE_DYNAMIC_CLASS(wxGraphicsObject)
 } ;
 
 class WXDLLIMPEXP_CORE wxGraphicsPen : public wxGraphicsObject
