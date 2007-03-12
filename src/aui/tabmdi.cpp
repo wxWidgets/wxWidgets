@@ -331,11 +331,6 @@ void wxAuiMDIParentFrame::DoHandleMenu(wxCommandEvent& event)
                 {
                     return; // failure
                 }
-                 else
-                {
-                    delete m_pActiveChild;
-                    m_pActiveChild = NULL;
-                }
             }
             break;
         case wxWINDOWNEXT:
