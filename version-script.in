@@ -29,6 +29,7 @@
     global:
         # wxFileHistory::Set/GetBaseId()
         *wxFileHistory*etBaseId*;
+        *wxSafeConvert*;
         *wxSearchCtrl*SetDescriptiveText*;
         *wxSearchCtrl*GetDescriptiveText*;
         *wxSizerFlags*Bottom*;
