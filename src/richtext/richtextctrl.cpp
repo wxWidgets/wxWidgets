@@ -781,7 +781,11 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                     GetId());
                 cmdEvent.SetEventObject(this);
                 cmdEvent.SetFlags(flags);
+#if wxUSE_UNICODE
+                cmdEvent.SetCharacter(event.GetUnicodeKey());
+#else
                 cmdEvent.SetCharacter((wxChar) keycode);
+#endif
                 cmdEvent.SetPosition(m_caretPosition+1);
 
                 if (keycode == wxT('\t'))
@@ -813,7 +817,11 @@ void wxRichTextCtrl::OnChar(wxKeyEvent& event)
                 long newPos = m_caretPosition;
                 DeleteSelectedContent(& newPos);
 
+#if wxUSE_UNICODE
+                wxString str = event.GetUnicodeKey();
+#else
                 wxString str = (wxChar) event.GetKeyCode();
+#endif
                 GetBuffer().InsertTextWithUndo(newPos+1, str, this, 0);
 
                 EndBatchUndo();
