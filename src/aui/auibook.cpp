@@ -1935,7 +1935,8 @@ void wxAuiTabContainer::DoShowHide()
     for (i = 0; i < page_count; ++i)
     {
         wxAuiNotebookPage& page = pages.Item(i);
-        ShowWnd(page.window, page.active);
+        if (!page.active)
+            ShowWnd(page.window, false);
     }
 }
 
