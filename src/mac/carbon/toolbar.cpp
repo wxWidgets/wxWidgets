@@ -168,10 +168,19 @@ public:
         m_toolbarItemRef = ref;
         if ( m_toolbarItemRef )
         {
+            wxFont f;
+            wxFontEncoding enc;
+            if ( GetToolBar() )
+                f = GetToolBar()->GetFont();
+            if ( f.IsOk() )
+                enc = f.GetEncoding();
+            else
+                enc = wxFont::GetDefaultEncoding();
+            
             HIToolbarItemSetHelpText(
                 m_toolbarItemRef,
-                wxMacCFStringHolder( GetShortHelp(), GetToolBar()->GetFont().GetEncoding() ),
-                wxMacCFStringHolder( GetLongHelp(), GetToolBar()->GetFont().GetEncoding() ) );
+                wxMacCFStringHolder( GetShortHelp(), enc ),
+                wxMacCFStringHolder( GetLongHelp(), enc ) );
         }
     }
 
@@ -1312,6 +1321,33 @@ void wxToolBar::MacSuperChangedPosition()
 #endif
 }
 
+void wxToolBar::SetToolNormalBitmap( int id, const wxBitmap& bitmap )
+{
+    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, FindById(id));
+    if ( tool )
+    {
+        wxCHECK_RET( tool->IsButton(), wxT("Can only set bitmap on button tools."));
+
+        tool->SetNormalBitmap(bitmap);
+
+        // a side-effect of the UpdateToggleImage function is that it always changes the bitmap used on the button.
+        tool->UpdateToggleImage( tool->CanBeToggled() && tool->IsToggled() );
+    }    
+}
+
+void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmap& bitmap )
+{
+    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, FindById(id));
+    if ( tool )
+    {
+        wxCHECK_RET( tool->IsButton(), wxT("Can only set bitmap on button tools."));
+
+        tool->SetDisabledBitmap(bitmap);
+        
+        // TODO:  what to do for this one?
+    }    
+}
+
 wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
 {
     wxToolBarTool *tool;
@@ -1365,6 +1401,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
     Rect toolrect = { 0, 0, toolSize.y, toolSize.x };
     ControlRef controlHandle = NULL;
     OSStatus err = 0;
+    tool->Attach( this );
 
     switch (tool->GetStyle())
     {
@@ -1494,7 +1531,6 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
             tool->UpdateToggleImage( true );
 
         // nothing special to do here - we relayout in Realize() later
-        tool->Attach( this );
         InvalidateBestSize();
     }
     else

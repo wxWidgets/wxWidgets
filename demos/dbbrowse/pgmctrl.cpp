@@ -169,7 +169,7 @@ void PgmCtrl::OnSelChanged(wxMouseEvent& WXUNUSED(event))
         //--------------------------------------------------------------------------------------
         if (Temp1.Contains(_T("ODBC-")))
         {
-            Temp1 = Temp1.Mid(5,wxSTRING_MAXLEN);
+            Temp1 = Temp1.Mid(5);
             for (i=0;i<pDoc->i_DSN;i++)
             {
                 if (Temp1 == (pDoc->p_DSN+i)->Dsn)
@@ -213,7 +213,7 @@ void PgmCtrl::OnRightSelect(wxTreeEvent& WXUNUSED(event))
         //--------------------------------------------------------------------------------------
         if (Temp1.Contains(_T("ODBC-")))
         {
-            Temp1 = Temp1.Mid(5,wxSTRING_MAXLEN);
+            Temp1 = Temp1.Mid(5);
             for (i=0;i<pDoc->i_DSN;i++)
             {
                 if (Temp1 == (pDoc->p_DSN+i)->Dsn)

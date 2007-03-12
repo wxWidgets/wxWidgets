@@ -863,6 +863,7 @@ void wxMacControl::Init()
 
 void wxMacControl::Dispose()
 {
+    wxASSERT_MSG( m_controlRef != NULL , wxT("Control Handle already NULL, Dispose called twice ?") );
     wxASSERT_MSG( IsValidControlHandle(m_controlRef) , wxT("Invalid Control Handle (maybe already released) in Dispose") );
 
     // we cannot check the ref count here anymore, as autorelease objects might delete their refs later

@@ -7393,7 +7393,7 @@ SOURCE=..\..\include\wx\msw\setup.h
 !ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswu\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
+InputPath=..\..\include\wx\msw\setup.h
 
 "..\..\lib\vc_dll\mswu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" ..\..\lib\vc_dll\mswu\wx\setup.h
@@ -7403,7 +7403,7 @@ InputPath=..\include\wx\msw\setup.h
 !ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswud\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
+InputPath=..\..\include\wx\msw\setup.h
 
 "..\..\lib\vc_dll\mswud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" ..\..\lib\vc_dll\mswud\wx\setup.h
@@ -7413,7 +7413,7 @@ InputPath=..\include\wx\msw\setup.h
 !ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\msw\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
+InputPath=..\..\include\wx\msw\setup.h
 
 "..\..\lib\vc_dll\msw\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" ..\..\lib\vc_dll\msw\wx\setup.h
@@ -7423,7 +7423,7 @@ InputPath=..\include\wx\msw\setup.h
 !ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswd\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
+InputPath=..\..\include\wx\msw\setup.h
 
 "..\..\lib\vc_dll\mswd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" ..\..\lib\vc_dll\mswd\wx\setup.h
@@ -7457,7 +7457,7 @@ InputPath=..\include\wx\msw\setup.h
 !ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswu\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
+InputPath=..\..\include\wx\msw\setup.h
 
 "..\..\lib\vc_lib\mswu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" ..\..\lib\vc_lib\mswu\wx\setup.h
@@ -7467,7 +7467,7 @@ InputPath=..\include\wx\msw\setup.h
 !ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswud\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
+InputPath=..\..\include\wx\msw\setup.h
 
 "..\..\lib\vc_lib\mswud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" ..\..\lib\vc_lib\mswud\wx\setup.h
@@ -7477,7 +7477,7 @@ InputPath=..\include\wx\msw\setup.h
 !ELSEIF  "$(CFG)" == "core - Win32 Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\msw\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
+InputPath=..\..\include\wx\msw\setup.h
 
 "..\..\lib\vc_lib\msw\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" ..\..\lib\vc_lib\msw\wx\setup.h
@@ -7487,7 +7487,7 @@ InputPath=..\include\wx\msw\setup.h
 !ELSEIF  "$(CFG)" == "core - Win32 Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswd\wx\setup.h
-InputPath=..\include\wx\msw\setup.h
+InputPath=..\..\include\wx\msw\setup.h
 
 "..\..\lib\vc_lib\mswd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" ..\..\lib\vc_lib\mswd\wx\setup.h
@@ -7504,7 +7504,7 @@ SOURCE=..\..\include\wx\univ\setup.h
 !IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivu\wx\setup.h
-InputPath=..\include\wx\univ\setup.h
+InputPath=..\..\include\wx\univ\setup.h
 
 "..\..\lib\vc_dll\mswunivu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" ..\..\lib\vc_dll\mswunivu\wx\setup.h
@@ -7514,7 +7514,7 @@ InputPath=..\include\wx\univ\setup.h
 !ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivud\wx\setup.h
-InputPath=..\include\wx\univ\setup.h
+InputPath=..\..\include\wx\univ\setup.h
 
 "..\..\lib\vc_dll\mswunivud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" ..\..\lib\vc_dll\mswunivud\wx\setup.h
@@ -7524,7 +7524,7 @@ InputPath=..\include\wx\univ\setup.h
 !ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswuniv\wx\setup.h
-InputPath=..\include\wx\univ\setup.h
+InputPath=..\..\include\wx\univ\setup.h
 
 "..\..\lib\vc_dll\mswuniv\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" ..\..\lib\vc_dll\mswuniv\wx\setup.h
@@ -7534,7 +7534,7 @@ InputPath=..\include\wx\univ\setup.h
 !ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivd\wx\setup.h
-InputPath=..\include\wx\univ\setup.h
+InputPath=..\..\include\wx\univ\setup.h
 
 "..\..\lib\vc_dll\mswunivd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" ..\..\lib\vc_dll\mswunivd\wx\setup.h
@@ -7568,7 +7568,7 @@ InputPath=..\include\wx\univ\setup.h
 !ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivu\wx\setup.h
-InputPath=..\include\wx\univ\setup.h
+InputPath=..\..\include\wx\univ\setup.h
 
 "..\..\lib\vc_lib\mswunivu\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" ..\..\lib\vc_lib\mswunivu\wx\setup.h
@@ -7578,7 +7578,7 @@ InputPath=..\include\wx\univ\setup.h
 !ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivud\wx\setup.h
-InputPath=..\include\wx\univ\setup.h
+InputPath=..\..\include\wx\univ\setup.h
 
 "..\..\lib\vc_lib\mswunivud\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" ..\..\lib\vc_lib\mswunivud\wx\setup.h
@@ -7588,7 +7588,7 @@ InputPath=..\include\wx\univ\setup.h
 !ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswuniv\wx\setup.h
-InputPath=..\include\wx\univ\setup.h
+InputPath=..\..\include\wx\univ\setup.h
 
 "..\..\lib\vc_lib\mswuniv\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" ..\..\lib\vc_lib\mswuniv\wx\setup.h
@@ -7598,7 +7598,7 @@ InputPath=..\include\wx\univ\setup.h
 !ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivd\wx\setup.h
-InputPath=..\include\wx\univ\setup.h
+InputPath=..\..\include\wx\univ\setup.h
 
 "..\..\lib\vc_lib\mswunivd\wx\setup.h" : $(SOURCE) "$(INTDIR)" "$(OUTDIR)"
 	copy "$(InputPath)" ..\..\lib\vc_lib\mswunivd\wx\setup.h
@@ -7819,8 +7819,9 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 !IF  "$(CFG)" == "core - Win32 DLL Universal Unicode Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivu\wx\msw\rcdefs.h
+InputPath=..\..\include\wx\msw\genrcdefs.h
 
-"..\..\lib\vc_dll\mswunivu\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
+"..\..\lib\vc_dll\mswunivu\wx\msw\rcdefs.h" : "$(SOURCE)" "..\..\lib\vc_dll\mswunivu\wx\msw"
 	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_dll\mswunivu\wx\msw\rcdefs.h"
 
 # End Custom Build
@@ -7828,8 +7829,9 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 !ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Unicode Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivud\wx\msw\rcdefs.h
+InputPath=..\..\include\wx\msw\genrcdefs.h
 
-"..\..\lib\vc_dll\mswunivud\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
+"..\..\lib\vc_dll\mswunivud\wx\msw\rcdefs.h" : "$(SOURCE)" "..\..\lib\vc_dll\mswunivud\wx\msw"
 	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_dll\mswunivud\wx\msw\rcdefs.h"
 
 # End Custom Build
@@ -7837,8 +7839,9 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 !ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswuniv\wx\msw\rcdefs.h
+InputPath=..\..\include\wx\msw\genrcdefs.h
 
-"..\..\lib\vc_dll\mswuniv\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
+"..\..\lib\vc_dll\mswuniv\wx\msw\rcdefs.h" : "$(SOURCE)" "..\..\lib\vc_dll\mswuniv\wx\msw"
 	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_dll\mswuniv\wx\msw\rcdefs.h"
 
 # End Custom Build
@@ -7846,8 +7849,9 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 !ELSEIF  "$(CFG)" == "core - Win32 DLL Universal Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswunivd\wx\msw\rcdefs.h
+InputPath=..\..\include\wx\msw\genrcdefs.h
 
-"..\..\lib\vc_dll\mswunivd\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
+"..\..\lib\vc_dll\mswunivd\wx\msw\rcdefs.h" : "$(SOURCE)" "..\..\lib\vc_dll\mswunivd\wx\msw"
 	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_dll\mswunivd\wx\msw\rcdefs.h"
 
 # End Custom Build
@@ -7855,8 +7859,9 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 !ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswu\wx\msw\rcdefs.h
+InputPath=..\..\include\wx\msw\genrcdefs.h
 
-"..\..\lib\vc_dll\mswu\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
+"..\..\lib\vc_dll\mswu\wx\msw\rcdefs.h" : "$(SOURCE)" "..\..\lib\vc_dll\mswu\wx\msw"
 	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_dll\mswu\wx\msw\rcdefs.h"
 
 # End Custom Build
@@ -7864,8 +7869,9 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 !ELSEIF  "$(CFG)" == "core - Win32 DLL Unicode Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswud\wx\msw\rcdefs.h
+InputPath=..\..\include\wx\msw\genrcdefs.h
 
-"..\..\lib\vc_dll\mswud\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
+"..\..\lib\vc_dll\mswud\wx\msw\rcdefs.h" : "$(SOURCE)" "..\..\lib\vc_dll\mswud\wx\msw"
 	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_dll\mswud\wx\msw\rcdefs.h"
 
 # End Custom Build
@@ -7873,8 +7879,9 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 !ELSEIF  "$(CFG)" == "core - Win32 DLL Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\msw\wx\msw\rcdefs.h
+InputPath=..\..\include\wx\msw\genrcdefs.h
 
-"..\..\lib\vc_dll\msw\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
+"..\..\lib\vc_dll\msw\wx\msw\rcdefs.h" : "$(SOURCE)" "..\..\lib\vc_dll\msw\wx\msw"
 	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_dll\msw\wx\msw\rcdefs.h"
 
 # End Custom Build
@@ -7882,8 +7889,9 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 !ELSEIF  "$(CFG)" == "core - Win32 DLL Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_dll\mswd\wx\msw\rcdefs.h
+InputPath=..\..\include\wx\msw\genrcdefs.h
 
-"..\..\lib\vc_dll\mswd\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
+"..\..\lib\vc_dll\mswd\wx\msw\rcdefs.h" : "$(SOURCE)" "..\..\lib\vc_dll\mswd\wx\msw"
 	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_dll\mswd\wx\msw\rcdefs.h"
 
 # End Custom Build
@@ -7891,8 +7899,9 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 !ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivu\wx\msw\rcdefs.h
+InputPath=..\..\include\wx\msw\genrcdefs.h
 
-"..\..\lib\vc_lib\mswunivu\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
+"..\..\lib\vc_lib\mswunivu\wx\msw\rcdefs.h" : "$(SOURCE)" "..\..\lib\vc_lib\mswunivu\wx\msw"
 	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_lib\mswunivu\wx\msw\rcdefs.h"
 
 # End Custom Build
@@ -7900,8 +7909,9 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 !ELSEIF  "$(CFG)" == "core - Win32 Universal Unicode Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivud\wx\msw\rcdefs.h
+InputPath=..\..\include\wx\msw\genrcdefs.h
 
-"..\..\lib\vc_lib\mswunivud\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
+"..\..\lib\vc_lib\mswunivud\wx\msw\rcdefs.h" : "$(SOURCE)" "..\..\lib\vc_lib\mswunivud\wx\msw"
 	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_lib\mswunivud\wx\msw\rcdefs.h"
 
 # End Custom Build
@@ -7909,8 +7919,9 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 !ELSEIF  "$(CFG)" == "core - Win32 Universal Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswuniv\wx\msw\rcdefs.h
+InputPath=..\..\include\wx\msw\genrcdefs.h
 
-"..\..\lib\vc_lib\mswuniv\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
+"..\..\lib\vc_lib\mswuniv\wx\msw\rcdefs.h" : "$(SOURCE)" "..\..\lib\vc_lib\mswuniv\wx\msw"
 	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_lib\mswuniv\wx\msw\rcdefs.h"
 
 # End Custom Build
@@ -7918,8 +7929,9 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 !ELSEIF  "$(CFG)" == "core - Win32 Universal Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswunivd\wx\msw\rcdefs.h
+InputPath=..\..\include\wx\msw\genrcdefs.h
 
-"..\..\lib\vc_lib\mswunivd\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
+"..\..\lib\vc_lib\mswunivd\wx\msw\rcdefs.h" : "$(SOURCE)" "..\..\lib\vc_lib\mswunivd\wx\msw"
 	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_lib\mswunivd\wx\msw\rcdefs.h"
 
 # End Custom Build
@@ -7927,8 +7939,9 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 !ELSEIF  "$(CFG)" == "core - Win32 Unicode Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswu\wx\msw\rcdefs.h
+InputPath=..\..\include\wx\msw\genrcdefs.h
 
-"..\..\lib\vc_lib\mswu\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
+"..\..\lib\vc_lib\mswu\wx\msw\rcdefs.h" : "$(SOURCE)" "..\..\lib\vc_lib\mswu\wx\msw"
 	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_lib\mswu\wx\msw\rcdefs.h"
 
 # End Custom Build
@@ -7936,8 +7949,9 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 !ELSEIF  "$(CFG)" == "core - Win32 Unicode Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswud\wx\msw\rcdefs.h
+InputPath=..\..\include\wx\msw\genrcdefs.h
 
-"..\..\lib\vc_lib\mswud\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
+"..\..\lib\vc_lib\mswud\wx\msw\rcdefs.h" : "$(SOURCE)" "..\..\lib\vc_lib\mswud\wx\msw"
 	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_lib\mswud\wx\msw\rcdefs.h"
 
 # End Custom Build
@@ -7945,8 +7959,9 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 !ELSEIF  "$(CFG)" == "core - Win32 Release"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\msw\wx\msw\rcdefs.h
+InputPath=..\..\include\wx\msw\genrcdefs.h
 
-"..\..\lib\vc_lib\msw\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
+"..\..\lib\vc_lib\msw\wx\msw\rcdefs.h" : "$(SOURCE)" "..\..\lib\vc_lib\msw\wx\msw"
 	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_lib\msw\wx\msw\rcdefs.h"
 
 # End Custom Build
@@ -7954,8 +7969,9 @@ SOURCE=..\..\include\wx\msw\genrcdefs.h
 !ELSEIF  "$(CFG)" == "core - Win32 Debug"
 
 # Begin Custom Build - Creating ..\..\lib\vc_lib\mswd\wx\msw\rcdefs.h
+InputPath=..\..\include\wx\msw\genrcdefs.h
 
-"..\..\lib\vc_lib\mswd\wx\msw\rcdefs.h" : "$(SOURCE)" "$(SETUPHDIR)\wx\msw"
+"..\..\lib\vc_lib\mswd\wx\msw\rcdefs.h" : "$(SOURCE)" "..\..\lib\vc_lib\mswd\wx\msw"
 	cl /EP /nologo "$(InputPath)" > "..\..\lib\vc_lib\mswd\wx\msw\rcdefs.h"
 
 # End Custom Build

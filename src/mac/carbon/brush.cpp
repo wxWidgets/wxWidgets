@@ -129,7 +129,7 @@ void wxBrush::Unshare()
     {
         m_refData = new wxBrushRefData();
     }
-    else
+    else if (m_refData->GetRefCount() > 1)
     {
         wxBrushRefData* ref = new wxBrushRefData(*(wxBrushRefData*)m_refData);
         UnRef();

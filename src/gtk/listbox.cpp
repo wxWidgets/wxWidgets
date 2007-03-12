@@ -552,12 +552,50 @@ void wxListBox::DoInsertItems(const wxArrayString& items, unsigned int pos)
 
 int wxListBox::DoAppend( const wxString& item )
 {
-    // Call DoInsertItems
-    unsigned int nWhere = wxListBox::GetCount();
-    wxArrayString aItems;
-    aItems.Add(item);
-    wxListBox::DoInsertItems(aItems, nWhere);
-    return nWhere;
+    wxCHECK_MSG( m_treeview != NULL, -1, wxT("invalid listbox") );
+
+    InvalidateBestSize();
+
+    GtkTreeEntry* entry = gtk_tree_entry_new();
+    gtk_tree_entry_set_label( entry, wxGTK_CONV(item) );
+    gtk_tree_entry_set_destroy_func(entry,
+                (GtkTreeEntryDestroy)gtk_tree_entry_destroy_cb,
+                            this);
+
+    GtkTreeIter itercur;
+    gtk_list_store_insert_before( m_liststore, &itercur, NULL );
+
+#if wxUSE_CHECKLISTBOX
+    if (m_hasCheckBoxes)
+    {
+            gtk_list_store_set(  m_liststore, &itercur,
+                                 0, FALSE, //FALSE == not toggled
+                                 1, entry, -1);
+    }
+    else
+#endif
+        gtk_list_store_set(m_liststore, &itercur,
+                                 0, entry, -1);
+
+    g_object_unref (entry); //liststore always refs :)
+
+    GtkTreePath* path = gtk_tree_model_get_path(
+                                GTK_TREE_MODEL(m_liststore),
+                                &itercur);
+
+    gint* pIntPath = gtk_tree_path_get_indices(path);
+
+    if (pIntPath == NULL)
+    {
+        wxLogSysError(wxT("internal wxListBox error in insertion"));
+        return wxNOT_FOUND;
+    }
+
+    int index = pIntPath[0];
+
+    gtk_tree_path_free( path );
+
+    return index;
 }
 
 void wxListBox::DoSetItems( const wxArrayString& items,

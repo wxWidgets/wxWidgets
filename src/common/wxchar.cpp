@@ -1199,7 +1199,11 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
         return lenMax+1;     // not enough space in the output buffer !
     }
 
-    wxASSERT(lenCur == wxStrlen(buf));
+    // Don't do:
+    //      wxASSERT(lenCur == wxStrlen(buf));
+    // in fact if we embedded NULLs in the output buffer (using %c with a '\0')
+    // such check would fail
+
     return lenCur;
 }
 

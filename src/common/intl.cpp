@@ -18,12 +18,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if defined(__BORLANDC__) && !defined(__WXDEBUG__)
-    // There's a bug in Borland's compiler that breaks wxLocale with -O2,
-    // so make sure that flag is not used for this file:
-    #pragma option -O1
-#endif
-
 #ifdef __EMX__
 // The following define is needed by Innotek's libc to
 // make the definition of struct localeconv available.
@@ -2505,7 +2499,9 @@ const wxLanguageInfo *wxLocale::GetLanguageInfo(int lang)
     {
         if ( ms_languagesDB->Item(i).Language == lang )
         {
-            return &ms_languagesDB->Item(i);
+            // We need to create a temporary here in order to make this work with BCC in final build mode
+            wxLanguageInfo *ptr = &ms_languagesDB->Item(i);
+            return ptr;
         }
     }
 

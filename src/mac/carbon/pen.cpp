@@ -93,7 +93,7 @@ void wxPen::Unshare()
     {
         m_refData = new wxPenRefData();
     }
-    else
+    else if (m_refData->GetRefCount() > 1)
     {
         wxPenRefData* ref = new wxPenRefData(*(wxPenRefData*)m_refData);
         UnRef();

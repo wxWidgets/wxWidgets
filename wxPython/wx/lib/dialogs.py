@@ -34,8 +34,8 @@ class ScrolledMessageDialog(wx.Dialog):
         if x == -1 and y == -1:
             self.CenterOnScreen(wx.BOTH)
 
-        text = wx.TextCtrl(self, -1, msg, 
-                           style=wx.TE_MULTILINE | wx.TE_READONLY)
+        self.text = text = wx.TextCtrl(self, -1, msg, 
+                                       style=wx.TE_MULTILINE | wx.TE_READONLY)
 
         ok = wx.Button(self, wx.ID_OK, "OK")
         ok.SetDefault()

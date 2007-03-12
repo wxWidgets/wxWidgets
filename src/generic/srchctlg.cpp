@@ -123,7 +123,7 @@ public:
     {
         if ( GetValue() == m_descriptiveText )
         {
-            SetValue(wxEmptyString);
+            ChangeValue(wxEmptyString);
         }
         
         m_descriptiveText = text;
@@ -163,7 +163,7 @@ protected:
     {
         if ( IsEmpty() && !(wxWindow::FindFocus() == this) )
         {
-            SetValue(m_descriptiveText);
+            ChangeValue(m_descriptiveText);
             SetInsertionPoint(0);
             SetForegroundColour(wxStepColour(m_defaultFG, LIGHT_STEP));
         }
@@ -174,7 +174,7 @@ protected:
         event.Skip();
         if ( GetValue() == m_descriptiveText )
         {
-            SetValue(wxEmptyString);
+            ChangeValue(wxEmptyString);
             SetForegroundColour(m_defaultFG);
         }
     }

@@ -22,6 +22,7 @@
 
 #include "wx/fontutil.h"
 #include "wx/graphics.h"
+#include "wx/log.h"
 
 #include "wx/mac/private.h"
 
@@ -253,6 +254,7 @@ void wxFontRefData::MacFindFont()
                         break ;
 
                     case wxMODERN :
+                    case wxTELETYPE:
                         m_faceName =  wxT("Monaco");
                         break ;
 
@@ -263,6 +265,11 @@ void wxFontRefData::MacFindFont()
 #ifndef __LP64__
                 wxMacStringToPascal( m_faceName , qdFontName );
                 m_macFontFamily = FMGetFontFamilyFromName( qdFontName );
+                if ( m_macFontFamily == kInvalidFontFamily )
+                {
+                    wxLogDebug( wxT("ATSFontFamilyFindFromName failed for %s"), m_faceName );
+                    m_macFontFamily = GetAppFont();
+                }
 #endif
             }
         }
@@ -283,8 +290,13 @@ void wxFontRefData::MacFindFont()
             {
                 wxMacCFStringHolder cf( m_faceName, wxLocale::GetSystemEncoding() );
                 ATSFontFamilyRef atsfamily = ATSFontFamilyFindFromName( cf , kATSOptionFlagsDefault );
-                wxASSERT_MSG( atsfamily != (ATSFontFamilyRef) -1 , wxT("ATSFontFamilyFindFromName failed") );
-                m_macFontFamily = FMGetFontFamilyFromATSFontFamilyRef( atsfamily );
+                if ( atsfamily == (ATSFontFamilyRef) -1 )
+                {
+                    wxLogDebug( wxT("ATSFontFamilyFindFromName failed for %s"), m_faceName );
+                    m_macFontFamily = GetAppFont();
+                }
+                else
+                    m_macFontFamily = FMGetFontFamilyFromATSFontFamilyRef( atsfamily );
             }
         }
 
@@ -444,7 +456,7 @@ void wxFont::Unshare()
     {
         m_refData = new wxFontRefData();
     }
-    else
+    else if (m_refData->GetRefCount() > 1)
     {
         wxFontRefData* ref = new wxFontRefData(*(wxFontRefData*)m_refData);
         UnRef();

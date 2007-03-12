@@ -94,10 +94,7 @@ class ParamBinaryOr(PPanel):
                     value.append(self.values[i])
             # Add ignored flags
             value.extend(ignored)
-            if value:
-                self.SetValue(reduce(lambda a,b: a+'|'+b, value))
-            else:
-                self.SetValue('')
+            self.SetValue('|'.join(value))
             self.SetModified()
         dlg.Destroy()
 
@@ -172,10 +169,7 @@ class ParamStyle(ParamBinaryOr):
                      [self.valuesGeneric[i]
                       for i in range(listBoxGeneric.GetCount())
                       if listBoxGeneric.IsChecked(i)] + ignored
-            if value:
-                self.SetValue(reduce(lambda a,b: a+'|'+b, value))
-            else:
-                self.SetValue('')
+            self.SetValue('|'.join(value))
             self.SetModified()
         dlg.Destroy()
 
@@ -555,7 +549,7 @@ class ContentCheckListDialog(wx.Dialog):
         pre = wx.PreDialog()
         g.frame.res.LoadOnDialog(pre, parent, 'DIALOG_CONTENT_CHECKLIST')
         self.PostCreate(pre)
-        self.list = xrc.XRCCTRL(self, 'CHECKLIST')
+        self.list = xrc.XRCCTRL(self, 'CHECK_LIST')
         # Set list items
         i = 0
         for v,ch in value:
@@ -639,10 +633,7 @@ class ParamContent(PPanel):
         self.freeze = True
         if not value: value = []
         self.value = value
-        if value:
-            repr_ = reduce(lambda a,b: '%s|%s' % (a,b), value)
-        else:
-            repr_ = ''
+        repr_ = '|'.join(map(str, value))
         self.text.SetValue(repr_)  # update text ctrl
         self.freeze = False
     def OnButtonEdit(self, evt):
@@ -674,6 +665,13 @@ class ParamContentCheckList(ParamContent):
             self.SetModified()
             self.textModified = False
         dlg.Destroy()
+    def SetValue(self, value):
+        self.freeze = True
+        if not value: value = []
+        self.value = value
+        repr_ = '|'.join(map(str,value))
+        self.text.SetValue(repr_)  # update text ctrl
+        self.freeze = False        
 
 class IntListDialog(wx.Dialog):
     def __init__(self, parent, value):
@@ -729,7 +727,7 @@ class ParamIntList(ParamContent):
     def OnButtonEdit(self, evt):
         if self.textModified:           # text has newer value
             try:
-                self.value = eval(self.text.GetValue())
+                self.value = map(int, self.text.GetValue().split('|'))
             except SyntaxError:
                 wx.LogError('Syntax error in parameter value: ' + self.GetName())
                 self.value = []

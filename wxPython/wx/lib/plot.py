@@ -567,6 +567,8 @@ class PlotCanvas(wx.Panel):
         self._pointLabelFunc= None
         self.canvas.Bind(wx.EVT_LEAVE_WINDOW, self.OnLeave)
 
+        self._useScientificNotation = False
+
         self.canvas.Bind(wx.EVT_PAINT, self.OnPaint)
         self.canvas.Bind(wx.EVT_SIZE, self.OnSize)
         # OnSize called to make sure the buffer is initialized.
@@ -745,6 +747,12 @@ class PlotCanvas(wx.Panel):
     def GetShowScrollbars(self):
         """Set True to show scrollbars"""
         return self.sb_vert.IsShown()
+
+    def SetUseScientificNotation(self, useScientificNotation):
+        self._useScientificNotation = useScientificNotation
+
+    def GetUseScientificNotation(self):
+        return self._useScientificNotation
 
     def SetEnableDrag(self, value):
         """Set True to enable drag."""
@@ -1565,7 +1573,7 @@ class PlotCanvas(wx.Panel):
                 error = e
                 factor = f
         grid = factor * 10.**power
-        if power > 4 or power < -4:
+        if self._useScientificNotation and (power > 4 or power < -4):
             format = '%+7.1e'        
         elif power >= 0:
             digits = max(1, int(power))

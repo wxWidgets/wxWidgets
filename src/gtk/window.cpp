@@ -1682,7 +1682,11 @@ gtk_window_button_release_callback( GtkWidget *widget,
     event.SetEventObject( win );
     event.SetId( win->GetId() );
 
-    return win->GTKProcessEvent(event);
+    bool ret = win->GTKProcessEvent(event);
+    
+    g_lastMouseEvent = NULL;
+    
+    return ret;
 }
 
 //-----------------------------------------------------------------------------
@@ -2133,16 +2137,11 @@ void gtk_window_size_callback( GtkWidget *WXUNUSED(widget),
     if ((client_width == win->m_oldClientWidth) && (client_height == win->m_oldClientHeight))
         return;
 
-#if 0
-        wxPrintf( wxT("size_allocate ") );
-        if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-            wxPrintf( win->GetClassInfo()->GetClassName() );
-        wxPrintf( wxT(" %d %d %d %d\n"),
-                alloc->x,
-                alloc->y,
-                alloc->width,
-                alloc->height );
-#endif
+    if ( !client_width && !client_height )
+    {
+        // the window is currently unmapped, don't generate size events
+        return;
+    }
 
     win->m_oldClientWidth = client_width;
     win->m_oldClientHeight = client_height;

@@ -64,7 +64,7 @@ getfilelist(){
   fi
   
   if [ $port = "dfb" ] || [ $port = "all" ]; then
-    filelist="$filelist dfb.rsp" 
+    filelist="$filelist univ.rsp dfb.rsp" 
   fi
   
   if [ $port = "gtk" ] || [ $port = "all" ]; then

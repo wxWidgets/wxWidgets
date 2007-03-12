@@ -932,10 +932,18 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
         evt.SetEventType(wxEVT_STC_PAINTED);
         break;
 
+    case SCN_AUTOCSELECTION:
+        evt.SetEventType(wxEVT_STC_AUTOCOMP_SELECTION);
+        evt.SetListType(scn.listType);
+        SetEventText(evt, scn.text, strlen(scn.text));
+        evt.SetPosition(scn.lParam);
+        break;
+        
     case SCN_USERLISTSELECTION:
         evt.SetEventType(wxEVT_STC_USERLISTSELECTION);
         evt.SetListType(scn.listType);
         SetEventText(evt, scn.text, strlen(scn.text));
+        evt.SetPosition(scn.lParam);
         break;
 
     case SCN_URIDROPPED:
@@ -970,11 +978,7 @@ void wxStyledTextCtrl::NotifyParent(SCNotification* _scn) {
     case SCN_CALLTIPCLICK:
         evt.SetEventType(wxEVT_STC_CALLTIP_CLICK);
         break;
-
-    case SCN_AUTOCSELECTION:
-        evt.SetEventType(wxEVT_STC_AUTOCOMP_SELECTION);
-        break;
-        
+       
     default:
         return;
     }
