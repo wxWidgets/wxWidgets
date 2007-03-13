@@ -5308,6 +5308,10 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
                     AC_DEFINE(HAVE_PTHREAD_CANCEL),
                     AC_MSG_WARN([wxThread::Kill() will not work properly]))
 
+      AC_CHECK_FUNC(pthread_mutex_timedlock,
+                    AC_DEFINE(HAVE_PTHREAD_MUTEX_TIMEDLOCK),
+                    AC_MSG_WARN([wxMutex::LockTimeout() will not work]))
+
       AC_CHECK_FUNC(pthread_attr_setstacksize,
                     AC_DEFINE(HAVE_PTHREAD_ATTR_SETSTACKSIZE))
 

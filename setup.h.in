@@ -837,6 +837,9 @@
 /* Define if you have pthread_cancel */
 #undef HAVE_PTHREAD_CANCEL
 
+/* Define if you have pthread_mutex_timedlock */
+#undef HAVE_PTHREAD_MUTEX_TIMEDLOCK
+
 /* Define if you have pthread_attr_setstacksize */
 #undef HAVE_PTHREAD_ATTR_SETSTACKSIZE
 

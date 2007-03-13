@@ -255,6 +255,7 @@ wxMutexError wxMutexInternal::Lock()
 
 wxMutexError wxMutexInternal::Lock(unsigned long ms)
 {
+#ifdef HAVE_PTHREAD_MUTEX_TIMEDLOCK
     static const long MSEC_IN_SEC   = 1000;
     static const long NSEC_IN_MSEC  = 1000000;
     static const long NSEC_IN_USEC  = 1000;
@@ -295,6 +296,11 @@ wxMutexError wxMutexInternal::Lock(unsigned long ms)
     }
 
     return HandleLockResult(pthread_mutex_timedlock(&m_mutex, &ts));
+#else // !HAVE_PTHREAD_MUTEX_TIMEDLOCK
+    wxUnusedVar(ms);
+
+    return wxMUTEX_MISC_ERROR;
+#endif // HAVE_PTHREAD_MUTEX_TIMEDLOCK/!HAVE_PTHREAD_MUTEX_TIMEDLOCK
 }
 
 wxMutexError wxMutexInternal::HandleLockResult(int err)

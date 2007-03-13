@@ -885,6 +885,9 @@ typedef pid_t GPid;
 /* Define if you have pthread_cancel */
 #define HAVE_PTHREAD_CANCEL 1
 
+/* Define if you have pthread_mutex_timedlock */
+#undef HAVE_PTHREAD_MUTEX_TIMEDLOCK
+
 /* Define if you have pthread_attr_setstacksize */
 #define HAVE_PTHREAD_ATTR_SETSTACKSIZE 1
 
