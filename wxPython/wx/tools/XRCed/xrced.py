@@ -1365,6 +1365,8 @@ Homepage: http://xrced.sourceforge.net\
                    xxxMenuBar, xxxMenu, xxxToolBar,
                    xxxWizard, xxxBitmap, xxxIcon]:
             self.maxIDs[cl] = 0
+        # Handlers
+        clearHandlers()
 
     def SetModified(self, state=True):
         self.modified = state

@@ -7,6 +7,7 @@
 from xml.dom import minidom
 from globals import *
 from params import *
+import traceback, types
 
 # Base class for interface parameter classes
 class xxxNode:
@@ -918,10 +919,69 @@ class xxxUnknown(xxxObject):
 ################################################################################
 # Comment
 
+_handlers = []
+_CFuncPtr = None
+
+def register(hndlr):
+    if _CFuncPtr and isinstance(hndlr, _CFuncPtr):
+        _handlers.append(hndlr)
+        return
+    if not isinstance(hndlr, type):
+        wx.LogError('handler is not a type: %s' % hndlr)
+    elif not issubclass(hndlr, wx.xrc.XmlResourceHandler):
+        wx.LogError('handler is not a XmlResourceHandler: %s' % hndlr)
+    else:
+        _handlers.append(hndlr)
+
+def load_dl(path, localname=''):
+    try:
+        import ctypes
+        global _CFuncPtr
+        _CFuncPtr = ctypes._CFuncPtr
+    except ImportError:
+        wx.LogError('ctypes module not found')
+        return
+    try:
+        dl = ctypes.CDLL(path)
+        if not localname:
+            localname = os.path.basename(os.path.splitext(dl._name)[0])
+        globals()[localname] = dl
+    except:
+        wx.LogError('error loading dynamic library: %s', path)
+        print traceback.print_exc()
+
+# Called when creating test window
+def addHandlers(res):
+    for h in _handlers:
+        if _CFuncPtr and isinstance(h, _CFuncPtr):
+            try:
+                apply(h, ())
+            except:
+                wx.LogError('error calling DL func: "%s"' % h)
+                print traceback.print_exc()
+        else:
+            try:
+                res.AddHandler(apply(h, ()))
+            except:
+                wx.LogError('error adding XmlHandler: "%s"' % h)
+                print traceback.print_exc()
+
+def clearHandlers():
+    global _handlers
+    _handlers = []
+
 class xxxParamComment(xxxParam):
     def __init__(self, node):
         xxxNode.__init__(self, node)
         self.textNode = node
+        # Parse "pragma" comments
+        if node.data and node.data[0] == '%':
+            try:
+                code = node.data[1:]
+                exec code in globals()
+            except:
+                wx.LogError('exec error: "%s"' % code)
+                print traceback.print_exc()
 
 class xxxComment(xxxObject):
     hasStyle = hasName = False

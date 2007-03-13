@@ -902,6 +902,18 @@ class XML_Tree(wx.TreeCtrl):
         if not g.currentEncoding:
             xmlFlags != xrc.XRC_USE_LOCALE
         res = xrc.XmlResource('', xmlFlags)
+        xrc.XmlResource.Set(res)        # set as global
+        # Register handlers
+        addHandlers(res)
+        # Test Test.py
+        #import Test
+        #res.InsertHandler(Test.TestXmlHandler())
+        # Test test.so
+        import ctypes
+        test = ctypes.CDLL('test.so')
+        addr = int(str(res.this).split('_')[1], 16)
+        #test._Z17AddTestXmlHandlerP13wxXmlResource(ctypes.c_void_p(addr))
+        #test.AddTestXmlHandler(ctypes.c_void_p(addr))
         res.Load('memory:xxx.xrc')
         try:
             if xxx.__class__ == xxxFrame:
