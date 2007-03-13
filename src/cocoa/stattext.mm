@@ -91,6 +91,12 @@ void wxStaticText::SetLabel(const wxString& label)
     [[GetNSTextField() superview] setNeedsDisplayInRect:newFrameRect];
 }
 
+wxString wxStaticText::GetLabel() const
+{
+    wxAutoNSAutoreleasePool pool;
+    return wxStringWithNSString([GetNSTextField() stringValue]);
+}
+
 void wxStaticText::Cocoa_didChangeText(void)
 {
 }
