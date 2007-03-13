@@ -806,9 +806,7 @@ bool wxFont::Create(const wxNativeFontInfo& info, WXHFONT hFont)
 
     m_refData = new wxFontRefData(info, hFont);
 
-    RealizeResource();
-
-    return true;
+    return RealizeResource();
 }
 
 wxFont::wxFont(const wxString& fontdesc)
@@ -818,9 +816,6 @@ wxFont::wxFont(const wxString& fontdesc)
         (void)Create(info);
 }
 
-/* Constructor for a font. Note that the real construction is done
- * in wxDC::SetFont, when information is available about scaling etc.
- */
 bool wxFont::DoCreate(int pointSize,
                       const wxSize& pixelSize,
                       bool sizeUsingPixels,
@@ -844,9 +839,7 @@ bool wxFont::DoCreate(int pointSize,
                                   family, style, weight,
                                   underlined, faceName, encoding);
 
-    RealizeResource();
-
-    return true;
+    return RealizeResource();
 }
 
 wxFont::~wxFont()
@@ -869,26 +862,21 @@ wxObjectRefData *wxFont::CloneRefData(const wxObjectRefData *data) const
 
 bool wxFont::RealizeResource()
 {
-    if ( GetResourceHandle() )
-    {
-        // VZ: the old code returned false in this case, but it doesn't seem
-        //     to make sense because the font _was_ created
+    // don't do anything if we already have a valid font
+    if ( GetHFONT() )
         return true;
-    }
 
     return M_FONTDATA->Alloc(this);
 }
 
 bool wxFont::FreeResource(bool WXUNUSED(force))
 {
-    if ( GetResourceHandle() )
-    {
-        M_FONTDATA->Free();
+    if ( !GetHFONT() )
+        return false;
 
-        return true;
-    }
+    M_FONTDATA->Free();
 
-    return false;
+    return true;
 }
 
 WXHANDLE wxFont::GetResourceHandle() const
@@ -906,6 +894,17 @@ bool wxFont::IsFree() const
     return M_FONTDATA && (M_FONTDATA->GetHFONT() == 0);
 }
 
+bool wxFont::Recreate()
+{
+    // this function can be used to recreate the font after its wxFontRefData
+    // changes and does it unconditionally, i.e. even if already had a valid
+    // font before
+    wxCHECK_MSG( M_FONTDATA, false, _T("no font to recreate") );
+
+    M_FONTDATA->Free();
+    return M_FONTDATA->Alloc(this);
+}
+
 // ----------------------------------------------------------------------------
 // change font attribute: we recreate font when doing it
 // ----------------------------------------------------------------------------
@@ -916,7 +915,7 @@ void wxFont::SetPointSize(int pointSize)
 
     M_FONTDATA->SetPointSize(pointSize);
 
-    RealizeResource();
+    Recreate();
 }
 
 void wxFont::SetPixelSize(const wxSize& pixelSize)
@@ -925,7 +924,7 @@ void wxFont::SetPixelSize(const wxSize& pixelSize)
 
     M_FONTDATA->SetPixelSize(pixelSize);
 
-    RealizeResource();
+    Recreate();
 }
 
 void wxFont::SetFamily(int family)
@@ -934,7 +933,7 @@ void wxFont::SetFamily(int family)
 
     M_FONTDATA->SetFamily(family);
 
-    RealizeResource();
+    Recreate();
 }
 
 void wxFont::SetStyle(int style)
@@ -943,7 +942,7 @@ void wxFont::SetStyle(int style)
 
     M_FONTDATA->SetStyle(style);
 
-    RealizeResource();
+    Recreate();
 }
 
 void wxFont::SetWeight(int weight)
@@ -952,7 +951,7 @@ void wxFont::SetWeight(int weight)
 
     M_FONTDATA->SetWeight(weight);
 
-    RealizeResource();
+    Recreate();
 }
 
 bool wxFont::SetFaceName(const wxString& faceName)
@@ -961,7 +960,7 @@ bool wxFont::SetFaceName(const wxString& faceName)
 
     bool refdataok = M_FONTDATA->SetFaceName(faceName);
 
-    RealizeResource();
+    Recreate();
 
     // NB: using win32's GetObject() API on M_FONTDATA->GetHFONT()
     //     to retrieve a LOGFONT and then compare lf.lfFaceName
@@ -979,7 +978,7 @@ void wxFont::SetUnderlined(bool underlined)
 
     M_FONTDATA->SetUnderlined(underlined);
 
-    RealizeResource();
+    Recreate();
 }
 
 void wxFont::SetEncoding(wxFontEncoding encoding)
@@ -988,7 +987,7 @@ void wxFont::SetEncoding(wxFontEncoding encoding)
 
     M_FONTDATA->SetEncoding(encoding);
 
-    RealizeResource();
+    Recreate();
 }
 
 void wxFont::DoSetNativeFontInfo(const wxNativeFontInfo& info)
@@ -997,7 +996,7 @@ void wxFont::DoSetNativeFontInfo(const wxNativeFontInfo& info)
 
     *M_FONTDATA = wxFontRefData(info);
 
-    RealizeResource();
+    Recreate();
 }
 
 // ----------------------------------------------------------------------------

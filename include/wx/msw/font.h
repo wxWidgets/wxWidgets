@@ -132,6 +132,9 @@ protected:
                   const wxString& face = wxEmptyString,
                   wxFontEncoding encoding = wxFONTENCODING_DEFAULT);
 
+    // this is the same as FreeResource() followed by RealizeResource()
+    bool Recreate();
+
     virtual void DoSetNativeFontInfo(const wxNativeFontInfo& info);
 
     // implement wxObject virtuals which are used by AllocExclusive()
