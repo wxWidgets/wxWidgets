@@ -63,3 +63,15 @@ void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
     if(nextBorder > *borderOther)
         *borderOther = nextBorder;
 }
+
+void wxStaticBox::SetLabel(const wxString& label)
+{
+   wxAutoNSAutoreleasePool pool;
+   [GetNSBox() setTitle:wxNSStringWithWxString(label)];
+}
+
+wxString wxStaticBox::GetLabel() const
+{
+   wxAutoNSAutoreleasePool pool;
+   return wxStringWithNSString([GetNSBox() title]);
+}
