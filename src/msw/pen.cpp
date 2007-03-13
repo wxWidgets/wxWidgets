@@ -2,12 +2,20 @@
 // Name:        src/msw/pen.cpp
 // Purpose:     wxPen
 // Author:      Julian Smart
-// Modified by:
+// Modified by: Vadim Zeitlin: refactored wxPen code to wxPenRefData
 // Created:     04/01/98
 // RCS-ID:      $Id$
 // Copyright:   (c) Julian Smart
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
@@ -25,17 +33,27 @@
 
 #include "wx/msw/private.h"
 
-typedef WXDWORD wxMSWDash;
-
-static int wx2msPenStyle(int wx_style);
-
 #define M_PENDATA ((wxPenRefData*)m_refData)
+
+// Win32 has ExtCreatePen() but WinCE doesn't
+#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
+    #define wxHAVE_EXT_CREATE_PEN
+#endif
+
+// ----------------------------------------------------------------------------
+// wxPenRefData: contains information about an HPEN and its handle
+// ----------------------------------------------------------------------------
 
 class WXDLLEXPORT wxPenRefData : public wxGDIRefData
 {
 public:
+    // ctors and dtor
+    // --------------
+
     wxPenRefData();
     wxPenRefData(const wxPenRefData& data);
+    wxPenRefData(const wxColour& col, int width, int style);
+    wxPenRefData(const wxBitmap& stipple, int width);
     virtual ~wxPenRefData();
 
     bool operator==(const wxPenRefData& data) const
@@ -52,6 +70,70 @@ public:
                     memcmp(m_dash, data.m_dash, m_nbDash*sizeof(wxDash)) == 0));
     }
 
+
+    // accessors and setters
+    // ---------------------
+
+    wxColour& GetColour() const { return wx_const_cast(wxColour&, m_colour); }
+    int GetWidth() const { return m_width; }
+    int GetStyle() const { return m_style; }
+    int GetJoin() const { return m_join; }
+    int GetCap() const { return m_cap; }
+    wxDash* GetDash() const { return m_dash; }
+    int GetDashCount() const { return m_nbDash; }
+    wxBitmap* GetStipple() const { return wx_const_cast(wxBitmap *, &m_stipple); }
+
+    void SetColour(const wxColour& col) { Free(); m_colour = col; }
+    void SetWidth(int width) { Free(); m_width = width; }
+    void SetStyle(int style) { Free(); m_style = style; }
+    void SetStipple(const wxBitmap& stipple)
+    {
+        Free();
+
+        m_style = wxSTIPPLE;
+        m_stipple = stipple;
+    }
+
+    void SetDashes(int nb_dashes, const wxDash *dash)
+    {
+        Free();
+
+        m_nbDash = nb_dashes;
+        m_dash = wx_const_cast(wxDash *, dash);
+    }
+
+    void SetJoin(int join) { Free(); m_join = join; }
+    void SetCap(int cap) { Free(); m_cap = cap; }
+
+
+    // HPEN management
+    // ---------------
+
+    // create the HPEN if we don't have it yet
+    bool Alloc();
+
+    // get the HPEN creating it on demand
+    WXHPEN GetHPEN() const;
+
+    // return true if we have a valid HPEN
+    bool HasHPEN() const { return m_hPen != 0; }
+
+    // return true if we had a valid handle before, false otherwise
+    bool Free();
+
+private:
+    // initialize the fields which have reasonable default values
+    //
+    // doesn't initialize m_width and m_style which must be initialize in ctor
+    void Init()
+    {
+        m_join = wxJOIN_ROUND;
+        m_cap = wxCAP_ROUND;
+        m_nbDash = 0;
+        m_dash = NULL;
+        m_hPen = 0;
+    }
+
     int           m_width;
     int           m_style;
     int           m_join;
@@ -60,20 +142,25 @@ public:
     int           m_nbDash;
     wxDash *      m_dash;
     wxColour      m_colour;
-    WXHPEN        m_hPen;
+    HPEN          m_hPen;
 
     DECLARE_NO_ASSIGN_CLASS(wxPenRefData)
 };
 
+// ============================================================================
+// implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxPenRefData ctors/dtor
+// ----------------------------------------------------------------------------
+
 wxPenRefData::wxPenRefData()
 {
-  m_style = wxSOLID;
-  m_width = 1;
-  m_join = wxJOIN_ROUND ;
-  m_cap = wxCAP_ROUND ;
-  m_nbDash = 0 ;
-  m_dash = (wxDash*)NULL;
-  m_hPen = 0;
+    Init();
+
+    m_style = wxSOLID;
+    m_width = 1;
 }
 
 wxPenRefData::wxPenRefData(const wxPenRefData& data)
@@ -89,377 +176,41 @@ wxPenRefData::wxPenRefData(const wxPenRefData& data)
     m_hPen = 0;
 }
 
+wxPenRefData::wxPenRefData(const wxColour& col, int width, int style)
+{
+    Init();
+
+    m_style = style;
+    m_width = width;
+
+    m_colour = col;
+}
+
+wxPenRefData::wxPenRefData(const wxBitmap& stipple, int width)
+{
+    Init();
+
+    m_style = wxSTIPPLE;
+    m_width = width;
+
+    m_stipple = stipple;
+}
+
 wxPenRefData::~wxPenRefData()
 {
     if ( m_hPen )
-        ::DeleteObject((HPEN) m_hPen);
+        ::DeleteObject(m_hPen);
 }
 
-// Pens
+// ----------------------------------------------------------------------------
+// wxPenRefData HPEN management
+// ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxPen, wxGDIObject)
+#ifdef wxHAVE_EXT_CREATE_PEN
 
-wxPen::wxPen()
+static int ConvertPenStyle(int style)
 {
-}
-
-wxPen::~wxPen()
-{
-}
-
-// Should implement Create
-wxPen::wxPen(const wxColour& col, int Width, int Style)
-{
-  m_refData = new wxPenRefData;
-
-  M_PENDATA->m_colour = col;
-//  M_PENDATA->m_stipple = NULL;
-  M_PENDATA->m_width = Width;
-  M_PENDATA->m_style = Style;
-  M_PENDATA->m_join = wxJOIN_ROUND ;
-  M_PENDATA->m_cap = wxCAP_ROUND ;
-  M_PENDATA->m_nbDash = 0 ;
-  M_PENDATA->m_dash = (wxDash*)NULL;
-  M_PENDATA->m_hPen = 0 ;
-
-  RealizeResource();
-}
-
-wxPen::wxPen(const wxBitmap& stipple, int Width)
-{
-    m_refData = new wxPenRefData;
-
-//  M_PENDATA->m_colour = col;
-    M_PENDATA->m_stipple = stipple;
-    M_PENDATA->m_width = Width;
-    M_PENDATA->m_style = wxSTIPPLE;
-    M_PENDATA->m_join = wxJOIN_ROUND ;
-    M_PENDATA->m_cap = wxCAP_ROUND ;
-    M_PENDATA->m_nbDash = 0 ;
-    M_PENDATA->m_dash = (wxDash*)NULL;
-    M_PENDATA->m_hPen = 0 ;
-
-    RealizeResource();
-}
-
-bool wxPen::operator==(const wxPen& pen) const
-{
-    const wxPenRefData *penData = wx_static_cast(const wxPenRefData*, pen.m_refData);
-
-    // an invalid pen is only equal to another invalid pen
-    return m_refData ? penData && *M_PENDATA == *penData : !penData;
-}
-
-bool wxPen::RealizeResource()
-{
-   if ( !M_PENDATA || M_PENDATA->m_hPen )
-       return false;
-
-   if (M_PENDATA->m_style==wxTRANSPARENT)
-   {
-       M_PENDATA->m_hPen = (WXHPEN) ::GetStockObject(NULL_PEN);
-       return true;
-   }
-
-   static const int os = wxGetOsVersion();
-   COLORREF ms_colour = M_PENDATA->m_colour.GetPixel();
-
-   // Join style, Cap style, Pen Stippling
-#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
-   // Only NT can display dashed or dotted lines with width > 1
-   if ( os != wxOS_WINDOWS_NT &&
-           (M_PENDATA->m_style == wxDOT ||
-            M_PENDATA->m_style == wxLONG_DASH ||
-            M_PENDATA->m_style == wxSHORT_DASH ||
-            M_PENDATA->m_style == wxDOT_DASH ||
-            M_PENDATA->m_style == wxUSER_DASH) &&
-            M_PENDATA->m_width > 1 )
-   {
-       M_PENDATA->m_width = 1;
-   }
-
-   if (M_PENDATA->m_join==wxJOIN_ROUND        &&
-       M_PENDATA->m_cap==wxCAP_ROUND          &&
-       M_PENDATA->m_style!=wxUSER_DASH        &&
-       M_PENDATA->m_style!=wxSTIPPLE          &&
-       M_PENDATA->m_width <= 1)
-   {
-       M_PENDATA->m_hPen =
-         (WXHPEN) CreatePen( wx2msPenStyle(M_PENDATA->m_style),
-                             M_PENDATA->m_width,
-                             ms_colour );
-   }
-   else
-   {
-       DWORD ms_style = PS_GEOMETRIC | wx2msPenStyle(M_PENDATA->m_style);
-
-       switch(M_PENDATA->m_join)
-       {
-           case wxJOIN_BEVEL: ms_style |= PS_JOIN_BEVEL; break;
-           case wxJOIN_MITER: ms_style |= PS_JOIN_MITER; break;
-           default:
-           case wxJOIN_ROUND: ms_style |= PS_JOIN_ROUND; break;
-       }
-
-       switch(M_PENDATA->m_cap)
-       {
-           case wxCAP_PROJECTING: ms_style |= PS_ENDCAP_SQUARE;  break;
-           case wxCAP_BUTT:       ms_style |= PS_ENDCAP_FLAT;    break;
-           default:
-           case wxCAP_ROUND:      ms_style |= PS_ENDCAP_ROUND;   break;
-       }
-
-       LOGBRUSH logb;
-
-       switch(M_PENDATA->m_style)
-       {
-           case wxSTIPPLE:
-               logb.lbStyle = BS_PATTERN ;
-               if (M_PENDATA->m_stipple.Ok())
-                   logb.lbHatch = (LONG)M_PENDATA->m_stipple.GetHBITMAP();
-               else
-                   logb.lbHatch = (LONG)0;
-               break;
-           case wxBDIAGONAL_HATCH:
-               logb.lbStyle = BS_HATCHED;
-               logb.lbHatch = HS_BDIAGONAL;
-               break;
-           case wxCROSSDIAG_HATCH:
-               logb.lbStyle = BS_HATCHED;
-               logb.lbHatch = HS_DIAGCROSS;
-               break;
-           case wxFDIAGONAL_HATCH:
-               logb.lbStyle = BS_HATCHED;
-               logb.lbHatch = HS_FDIAGONAL;
-               break;
-           case wxCROSS_HATCH:
-               logb.lbStyle = BS_HATCHED;
-               logb.lbHatch = HS_CROSS;
-               break;
-           case wxHORIZONTAL_HATCH:
-               logb.lbStyle = BS_HATCHED;
-               logb.lbHatch = HS_HORIZONTAL;
-               break;
-           case wxVERTICAL_HATCH:
-               logb.lbStyle = BS_HATCHED;
-               logb.lbHatch = HS_VERTICAL;
-               break;
-           default:
-               logb.lbStyle = BS_SOLID;
-#ifdef __WXDEBUG__
-               // this should be unnecessary (it's unused) but suppresses the Purify
-               // messages about uninitialized memory read
-               logb.lbHatch = 0;
-#endif
-               break;
-       }
-
-       logb.lbColor = ms_colour;
-
-       wxMSWDash *real_dash;
-       if (M_PENDATA->m_style==wxUSER_DASH && M_PENDATA->m_nbDash && M_PENDATA->m_dash)
-       {
-           real_dash = new wxMSWDash[M_PENDATA->m_nbDash];
-           int rw = M_PENDATA->m_width > 1 ? M_PENDATA->m_width : 1;
-           for ( int i = 0; i < M_PENDATA->m_nbDash; i++ )
-               real_dash[i] = M_PENDATA->m_dash[i] * rw;
-       }
-       else
-       {
-           real_dash = (wxMSWDash*)NULL;
-       }
-
-       M_PENDATA->m_hPen =
-         (WXHPEN) ExtCreatePen( ms_style,
-                                M_PENDATA->m_width,
-                                &logb,
-                                M_PENDATA->m_style == wxUSER_DASH
-                                  ? M_PENDATA->m_nbDash
-                                  : 0,
-                                (LPDWORD)real_dash );
-
-       delete [] real_dash;
-   }
-#else // WinCE
-   M_PENDATA->m_hPen =
-     (WXHPEN) CreatePen( wx2msPenStyle(M_PENDATA->m_style),
-                         M_PENDATA->m_width,
-                         ms_colour );
-#endif // !WinCE/WinCE
-
-   return true;
-}
-
-WXHANDLE wxPen::GetResourceHandle() const
-{
-    if ( !M_PENDATA )
-        return 0;
-    else
-        return (WXHANDLE)M_PENDATA->m_hPen;
-}
-
-bool wxPen::FreeResource(bool WXUNUSED(force))
-{
-    if (M_PENDATA && (M_PENDATA->m_hPen != 0))
-    {
-        DeleteObject((HPEN) M_PENDATA->m_hPen);
-        M_PENDATA->m_hPen = 0;
-        return true;
-    }
-    else return false;
-}
-
-bool wxPen::IsFree() const
-{
-    return (M_PENDATA && M_PENDATA->m_hPen == 0);
-}
-
-wxObjectRefData* wxPen::CreateRefData() const
-{
-    return new wxPenRefData;
-}
-
-wxObjectRefData* wxPen::CloneRefData(const wxObjectRefData* data) const
-{
-    return new wxPenRefData(*wx_static_cast(const wxPenRefData*, data));
-}
-
-void wxPen::SetColour(const wxColour& col)
-{
-    AllocExclusive();
-
-    M_PENDATA->m_colour = col;
-
-    RealizeResource();
-}
-
-void wxPen::SetColour(unsigned char r, unsigned char g, unsigned char b)
-{
-    AllocExclusive();
-
-    M_PENDATA->m_colour.Set(r, g, b);
-
-    RealizeResource();
-}
-
-void wxPen::SetWidth(int Width)
-{
-    AllocExclusive();
-
-    M_PENDATA->m_width = Width;
-
-    RealizeResource();
-}
-
-void wxPen::SetStyle(int Style)
-{
-    AllocExclusive();
-
-    M_PENDATA->m_style = Style;
-
-    RealizeResource();
-}
-
-void wxPen::SetStipple(const wxBitmap& Stipple)
-{
-    AllocExclusive();
-
-    M_PENDATA->m_stipple = Stipple;
-    M_PENDATA->m_style = wxSTIPPLE;
-
-    RealizeResource();
-}
-
-void wxPen::SetDashes(int nb_dashes, const wxDash *Dash)
-{
-    AllocExclusive();
-
-    M_PENDATA->m_nbDash = nb_dashes;
-    M_PENDATA->m_dash = (wxDash *)Dash;
-
-    RealizeResource();
-}
-
-void wxPen::SetJoin(int Join)
-{
-    AllocExclusive();
-
-    M_PENDATA->m_join = Join;
-
-    RealizeResource();
-}
-
-void wxPen::SetCap(int Cap)
-{
-    AllocExclusive();
-
-    M_PENDATA->m_cap = Cap;
-
-    RealizeResource();
-}
-
-wxColour& wxPen::GetColour() const
-{
-    return m_refData ? M_PENDATA->m_colour : wxNullColour;
-}
-
-int wxPen::GetWidth() const
-{
-    return m_refData ? M_PENDATA->m_width : 0;
-}
-
-int wxPen::GetStyle() const
-{
-    return m_refData ? M_PENDATA->m_style : 0;
-}
-
-int wxPen::GetJoin() const
-{
-    return m_refData ? M_PENDATA->m_join : 0;
-}
-
-int wxPen::GetCap() const
-{
-    return m_refData ? M_PENDATA->m_cap : 0;
-}
-
-int wxPen::GetDashes(wxDash** ptr) const
-{
-    *ptr = NULL;
-    int count = 0;
-    if (m_refData)
-    {
-        *ptr = M_PENDATA->m_dash;
-        count = M_PENDATA->m_nbDash;
-    }
-    return count;
-}
-
-wxDash* wxPen::GetDash() const
-{
-    wxDash* dash = NULL;
-    if (m_refData)
-        dash = M_PENDATA->m_dash;
-    return dash;
-}
-
-int wxPen::GetDashCount() const
-{
-    return m_refData ? M_PENDATA->m_nbDash : 0;
-}
-
-wxBitmap* wxPen::GetStipple() const
-{
-    wxBitmap* bitmap = NULL;
-    if (m_refData)
-        bitmap = &M_PENDATA->m_stipple;
-    return bitmap;
-}
-
-int wx2msPenStyle(int wx_style)
-{
-#if !defined(__WXMICROWIN__) && !defined(__WXWINCE__)
-    switch (wx_style)
+    switch ( style )
     {
         case wxDOT:
             return PS_DOT;
@@ -476,9 +227,357 @@ int wx2msPenStyle(int wx_style)
 
         case wxUSER_DASH:
             return PS_USERSTYLE;
+
+        default:
+            wxFAIL_MSG( _T("unknown pen style") );
+            // fall through
+
+        case wxSTIPPLE:
+        case wxBDIAGONAL_HATCH:
+        case wxCROSSDIAG_HATCH:
+        case wxFDIAGONAL_HATCH:
+        case wxCROSS_HATCH:
+        case wxHORIZONTAL_HATCH:
+        case wxVERTICAL_HATCH:
+        case wxSOLID:
+            return PS_SOLID;
     }
-#else
-    wxUnusedVar(wx_style);
+}
+
+static int ConvertJoinStyle(int join)
+{
+    switch( join )
+    {
+        case wxJOIN_BEVEL:
+            return PS_JOIN_BEVEL;
+
+        case wxJOIN_MITER:
+            return PS_JOIN_MITER;
+
+        default:
+            wxFAIL_MSG( _T("unknown pen join style") );
+            // fall through
+
+        case wxJOIN_ROUND:
+            return PS_JOIN_ROUND;
+    }
+}
+
+static int ConvertCapStyle(int cap)
+{
+    switch ( cap )
+    {
+        case wxCAP_PROJECTING:
+            return PS_ENDCAP_SQUARE;
+
+        case wxCAP_BUTT:
+            return PS_ENDCAP_FLAT;
+
+        default:
+            wxFAIL_MSG( _T("unknown pen cap style") );
+            // fall through
+
+        case wxCAP_ROUND:
+            return PS_ENDCAP_ROUND;
+    }
+}
+
+#endif // wxHAVE_EXT_CREATE_PEN
+
+bool wxPenRefData::Alloc()
+{
+   if ( m_hPen )
+       return false;
+
+   if ( m_style == wxTRANSPARENT )
+   {
+       m_hPen = (HPEN)::GetStockObject(NULL_PEN);
+       return true;
+   }
+
+   const COLORREF col = m_colour.GetPixel();
+
+#ifdef wxHAVE_EXT_CREATE_PEN
+   // Only NT can display dashed or dotted lines with width > 1
+   static const int os = wxGetOsVersion();
+   if ( os != wxOS_WINDOWS_NT &&
+           (m_style == wxDOT ||
+            m_style == wxLONG_DASH ||
+            m_style == wxSHORT_DASH ||
+            m_style == wxDOT_DASH ||
+            m_style == wxUSER_DASH) &&
+            m_width > 1 )
+   {
+       m_width = 1;
+   }
+
+   // check if it's a standard kind of pen which can be created with just
+   // CreatePen()
+   if ( m_join == wxJOIN_ROUND &&
+            m_cap == wxCAP_ROUND &&
+                m_style != wxUSER_DASH &&
+                    m_style != wxSTIPPLE &&
+                        (m_width <= 1 || m_style == wxSOLID) )
+#endif // !wxHAVE_EXT_CREATE_PEN
+   {
+       m_hPen = ::CreatePen(ConvertPenStyle(m_style), m_width, col);
+   }
+#ifdef wxHAVE_EXT_CREATE_PEN
+   else // need to use ExtCreatePen()
+   {
+       DWORD styleMSW = PS_GEOMETRIC |
+                        ConvertPenStyle(m_style) |
+                        ConvertJoinStyle(m_join) |
+                        ConvertCapStyle(m_cap);
+
+       LOGBRUSH lb;
+       switch( m_style )
+       {
+           case wxSTIPPLE:
+               lb.lbStyle = BS_PATTERN;
+               lb.lbHatch = (LONG)m_stipple.GetHBITMAP();
+               break;
+
+           case wxBDIAGONAL_HATCH:
+               lb.lbStyle = BS_HATCHED;
+               lb.lbHatch = HS_BDIAGONAL;
+               break;
+
+           case wxCROSSDIAG_HATCH:
+               lb.lbStyle = BS_HATCHED;
+               lb.lbHatch = HS_DIAGCROSS;
+               break;
+
+           case wxFDIAGONAL_HATCH:
+               lb.lbStyle = BS_HATCHED;
+               lb.lbHatch = HS_FDIAGONAL;
+               break;
+
+           case wxCROSS_HATCH:
+               lb.lbStyle = BS_HATCHED;
+               lb.lbHatch = HS_CROSS;
+               break;
+
+           case wxHORIZONTAL_HATCH:
+               lb.lbStyle = BS_HATCHED;
+               lb.lbHatch = HS_HORIZONTAL;
+               break;
+
+           case wxVERTICAL_HATCH:
+               lb.lbStyle = BS_HATCHED;
+               lb.lbHatch = HS_VERTICAL;
+               break;
+
+           default:
+               lb.lbStyle = BS_SOLID;
+#ifdef __WXDEBUG__
+               // this should be unnecessary (it's unused) but suppresses the
+               // Purify messages about uninitialized memory read
+               lb.lbHatch = 0;
 #endif
-    return PS_SOLID;
+               break;
+       }
+
+       lb.lbColor = col;
+
+       DWORD *dash;
+       if ( m_style == wxUSER_DASH && m_nbDash && m_dash )
+       {
+           dash = new DWORD[m_nbDash];
+           int rw = m_width > 1 ? m_width : 1;
+           for ( int i = 0; i < m_nbDash; i++ )
+               dash[i] = m_dash[i] * rw;
+       }
+       else
+       {
+           dash = NULL;
+       }
+
+       m_hPen = ::ExtCreatePen(styleMSW, m_width, &lb, m_nbDash, (LPDWORD)dash);
+
+       delete [] dash;
+   }
+#endif // wxHAVE_EXT_CREATE_PEN
+
+   return m_hPen != 0;
+}
+
+bool wxPenRefData::Free()
+{
+    if ( !m_hPen )
+        return false;
+
+    ::DeleteObject(m_hPen);
+    m_hPen = 0;
+
+    return true;
+}
+
+WXHPEN wxPenRefData::GetHPEN() const
+{
+    if ( !m_hPen )
+        wx_const_cast(wxPenRefData *, this)->Alloc();
+
+    return (WXHPEN)m_hPen;
+}
+
+// ----------------------------------------------------------------------------
+// wxPen
+// ----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxPen, wxGDIObject)
+
+wxPen::wxPen(const wxColour& col, int width, int style)
+{
+    m_refData = new wxPenRefData(col, width, style);
+}
+
+wxPen::wxPen(const wxBitmap& stipple, int width)
+{
+    m_refData = new wxPenRefData(stipple, width);
+}
+
+bool wxPen::operator==(const wxPen& pen) const
+{
+    const wxPenRefData *
+        penData = wx_static_cast(const wxPenRefData *, pen.m_refData);
+
+    // an invalid pen is only equal to another invalid pen
+    return m_refData ? penData && *M_PENDATA == *penData : !penData;
+}
+
+bool wxPen::RealizeResource()
+{
+    return M_PENDATA && M_PENDATA->Alloc();
+}
+
+WXHANDLE wxPen::GetResourceHandle() const
+{
+    return M_PENDATA ? M_PENDATA->GetHPEN() : 0;
+}
+
+bool wxPen::FreeResource(bool WXUNUSED(force))
+{
+    return M_PENDATA && M_PENDATA->Free();
+}
+
+bool wxPen::IsFree() const
+{
+    return M_PENDATA && !M_PENDATA->HasHPEN();
+}
+
+wxObjectRefData* wxPen::CreateRefData() const
+{
+    return new wxPenRefData;
+}
+
+wxObjectRefData* wxPen::CloneRefData(const wxObjectRefData* data) const
+{
+    return new wxPenRefData(*wx_static_cast(const wxPenRefData*, data));
+}
+
+void wxPen::SetColour(const wxColour& col)
+{
+    AllocExclusive();
+
+    M_PENDATA->SetColour(col);
+}
+
+void wxPen::SetColour(unsigned char r, unsigned char g, unsigned char b)
+{
+    SetColour(wxColour(r, g, b));
+}
+
+void wxPen::SetWidth(int width)
+{
+    AllocExclusive();
+
+    M_PENDATA->SetWidth(width);
+}
+
+void wxPen::SetStyle(int style)
+{
+    AllocExclusive();
+
+    M_PENDATA->SetStyle(style);
+}
+
+void wxPen::SetStipple(const wxBitmap& stipple)
+{
+    AllocExclusive();
+
+    M_PENDATA->SetStipple(stipple);
+}
+
+void wxPen::SetDashes(int nb_dashes, const wxDash *dash)
+{
+    AllocExclusive();
+
+    M_PENDATA->SetDashes(nb_dashes, dash);
+}
+
+void wxPen::SetJoin(int join)
+{
+    AllocExclusive();
+
+    M_PENDATA->SetJoin(join);
+}
+
+void wxPen::SetCap(int cap)
+{
+    AllocExclusive();
+
+    M_PENDATA->SetCap(cap);
+}
+
+wxColour& wxPen::GetColour() const
+{
+    return m_refData ? M_PENDATA->GetColour() : wxNullColour;
+}
+
+int wxPen::GetWidth() const
+{
+    return m_refData ? M_PENDATA->GetWidth() : 0;
+}
+
+int wxPen::GetStyle() const
+{
+    return m_refData ? M_PENDATA->GetStyle() : 0;
+}
+
+int wxPen::GetJoin() const
+{
+    return m_refData ? M_PENDATA->GetJoin() : 0;
+}
+
+int wxPen::GetCap() const
+{
+    return m_refData ? M_PENDATA->GetCap() : 0;
+}
+
+int wxPen::GetDashes(wxDash** ptr) const
+{
+    if ( !m_refData )
+    {
+        *ptr = NULL;
+        return 0;
+    }
+
+    *ptr = M_PENDATA->GetDash();
+    return M_PENDATA->GetDashCount();
+}
+
+wxDash* wxPen::GetDash() const
+{
+    return m_refData ? M_PENDATA->GetDash() : NULL;
+}
+
+int wxPen::GetDashCount() const
+{
+    return m_refData ? M_PENDATA->GetDashCount() : 0;
+}
+
+wxBitmap* wxPen::GetStipple() const
+{
+    return m_refData ? M_PENDATA->GetStipple() : NULL;
 }

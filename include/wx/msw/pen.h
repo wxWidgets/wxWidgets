@@ -22,10 +22,10 @@
 class WXDLLEXPORT wxPen : public wxGDIObject
 {
 public:
-    wxPen();
+    wxPen() { }
     wxPen(const wxColour& col, int width = 1, int style = wxSOLID);
     wxPen(const wxBitmap& stipple, int width);
-    virtual ~wxPen();
+    virtual ~wxPen() { }
 
     bool operator==(const wxPen& pen) const;
     bool operator!=(const wxPen& pen) const { return !(*this == pen); }
@@ -54,15 +54,18 @@ public:
     int GetDashCount() const;
     wxBitmap* GetStipple() const;
 
-    // Internal
-    bool RealizeResource();
-    bool FreeResource(bool force = false);
-    WXHANDLE GetResourceHandle() const;
-    bool IsFree() const;
+    // internal: wxGDIObject methods
+    virtual bool RealizeResource();
+    virtual bool FreeResource(bool force = false);
+    virtual WXHANDLE GetResourceHandle() const;
+    virtual bool IsFree() const;
 
 protected:
     virtual wxObjectRefData* CreateRefData() const;
     virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const;
+
+    // same as FreeResource() + RealizeResource()
+    bool Recreate();
 
     DECLARE_DYNAMIC_CLASS(wxPen)
 };
