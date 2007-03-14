@@ -863,10 +863,6 @@
 // wxDC cacheing implementation
 #define wxUSE_DC_CACHEING 1
 
-// Set this to 1 to enable the use of DIB's for wxBitmap to support
-// bitmaps > 16MB on Win95/98/Me.  Set to 0 to use DDB's only.
-#define wxUSE_DIB_FOR_BITMAP 0
-
 // ----------------------------------------------------------------------------
 // common dialogs
 // ----------------------------------------------------------------------------
