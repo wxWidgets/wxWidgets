@@ -13,8 +13,6 @@
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
-#if !wxUSE_MDI
-
 #ifdef __BORLANDC__
     #pragma hdrstop
 #endif
@@ -491,7 +489,7 @@ wxWindow *wxDynamicSashWindowImpl::FindFrame() const
 
     win = m_window->GetParent();
     while (win && !win->IsTopLevel()
-#ifdef __WXMSW__
+#if defined(__WXMSW__) && wxUSE_MDI
            && ! wxIsKindOf(win, wxMDIChildFrame)  // not top-level but still a frame
 #endif
         )
@@ -1471,4 +1469,3 @@ wxDynamicSashReparentEvent::wxDynamicSashReparentEvent(const wxDynamicSashRepare
 
 IMPLEMENT_DYNAMIC_CLASS(wxDynamicSashReparentEvent, wxEvent)
 
-#endif  // !wxUSE_MDI
