@@ -56,6 +56,13 @@ wxMSW:
 - Return the restored window size from GetSize() when window is minimized.
 
 
+2.8.3
+-----
+
+wxMac
+
+- Corrected top border size for wxStaticBox with empty label (nusi)
+
 2.8.2
 -----
 
