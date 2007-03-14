@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundleGetInfoString</key>
-	<string>minimal version 2.6.0, (c) 2005 wxWidgets</string>
+	<string>$(PRODUCT_NAME) version 2.9.0, (c) 2005-2007 wxWidgets</string>
 	<key>CFBundleIconFile</key>
 	<string>wxmac.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -17,7 +17,7 @@
 	<key>CFBundleLongVersionString</key>
 	<string>2.6.0, (c) 2005 wxWidgets</string>
 	<key>CFBundleName</key>
-	<string>minimal</string>
+	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
@@ -31,6 +31,6 @@
 	<key>LSRequiresCarbon</key>
 	<true/>
 	<key>NSHumanReadableCopyright</key>
-	<string>Copyright 2005 wxWidgets</string>
+	<string>Copyright 2005-2007 wxWidgets</string>
 </dict>
 </plist>
