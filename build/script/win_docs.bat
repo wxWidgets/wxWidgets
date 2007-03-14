@@ -1,5 +1,5 @@
 rem Uncomment the next line to set the version; used also in wxWidgets.iss
-SET WXW_VER=2.9.0
+SET WXW_VER=2.8.2
 if (%WXW_VER%)==() SET WXW_VER=CVS
 
 echo docs building for %WXW_VER%
@@ -79,7 +79,9 @@ echo Zipping
 cd %WXWIN%
 del %DAILY%\*.zip
 zip %DAILY%\wxWidgets-%WXW_VER%-CHM.zip docs\htmlhelp\wx.chm utils/tex2rtf/docs/*.chm docs/htmlhelp/*.chm
+zip %DAILY%\wxWidgets-%WXW_VER%-HTB.zip docs\htb\*.htb utils/tex2rtf/docs/*.htb 
 zip %DAILY%\wxWidgets-%WXW_VER%-HLP.zip docs\winhelp\wx.hlp docs\winhelp\wx.cnt utils/tex2rtf/docs/*.HLP utils/tex2rtf/docs/*.cnt docs/winhelp/*.hlp docs/winhelp/*.cnt
+zip -r %DAILY%\wxWidgets-%WXW_VER%-HTML.zip docs\html\* -x CVS -x *.con -x *.hh* -x *.ref -x *.htx -x *.cn1 -x docs\html\CVS\*
 
 cd %DAILY%\
 mkdir docs
