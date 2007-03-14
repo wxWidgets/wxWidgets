@@ -94,7 +94,14 @@ bool            UMAIsWindowModal( WindowRef inWindow ) ;
 
 void UMAHighlightAndActivateWindow( WindowRef inWindowRef , bool inActivate ) ;
 
+// Retrieves the Help menu handle. Warning: As a side-effect this functions also
+// creates the Help menu if it didn't exist yet.
 OSStatus UMAGetHelpMenu(
+  MenuRef *        outHelpMenu,
+  MenuItemIndex *  outFirstCustomItemIndex);      /* can be NULL */
+
+// Same as UMAGetHelpMenu, but doesn't create the Help menu if UMAGetHelpMenu hasn't been called yet.
+OSStatus UMAGetHelpMenuDontCreate(
   MenuRef *        outHelpMenu,
   MenuItemIndex *  outFirstCustomItemIndex);      /* can be NULL */
 

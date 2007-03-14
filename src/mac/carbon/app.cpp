@@ -451,16 +451,16 @@ wxMenu* wxFindMenuFromMacCommand( const HICommand &command , wxMenuItem* &item )
         id = wxMacCommandToId( command.commandID ) ;
         // make sure it is one of our own menus, or of the 'synthetic' apple and help menus , otherwise don't touch
         MenuItemIndex firstUserHelpMenuItem ;
-        static MenuHandle mh = NULL ;
-        if ( mh == NULL )
+        static MenuHandle helpMenuHandle = NULL ;
+        if ( helpMenuHandle == NULL )
         {
-            if ( UMAGetHelpMenu( &mh , &firstUserHelpMenuItem) != noErr )
-                mh = NULL ;
+            if ( UMAGetHelpMenuDontCreate( &helpMenuHandle , &firstUserHelpMenuItem) != noErr )
+                helpMenuHandle = NULL ;
         }
 
         // is it part of the application or the Help menu, then look for the id directly
         if ( ( GetMenuHandle( kwxMacAppleMenuId ) != NULL && command.menu.menuRef == GetMenuHandle( kwxMacAppleMenuId ) ) ||
-             ( mh != NULL && command.menu.menuRef == mh ) )
+             ( helpMenuHandle != NULL && command.menu.menuRef == helpMenuHandle ) )
         {
             wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar() ;
             if ( mbar )

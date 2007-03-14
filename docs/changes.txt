@@ -50,6 +50,10 @@ wxGTK:
 - Added support for colour cursors (Pascal Monasse).
 - Setting foreground colour of single line wxTextCtrl now works
 
+wxMac:
+
+- Fix duplicate (empty) help menu in non-English programs (Andreas Jacobs)
+
 wxMSW:
 
 - Fixed infinite loop in wxThread::Wait() in console applications.

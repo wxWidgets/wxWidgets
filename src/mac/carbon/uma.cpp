@@ -645,14 +645,29 @@ static OSStatus helpMenuStatus = noErr ;
 static MenuItemIndex firstCustomItemIndex = 0 ;
 #endif
 
-OSStatus UMAGetHelpMenu(
+static OSStatus UMAGetHelpMenu(
     MenuRef *        outHelpMenu,
-    MenuItemIndex *  outFirstCustomItemIndex)
+    MenuItemIndex *  outFirstCustomItemIndex,
+    bool             allowHelpMenuCreation);
+
+static OSStatus UMAGetHelpMenu(
+    MenuRef *        outHelpMenu,
+    MenuItemIndex *  outFirstCustomItemIndex,
+    bool             allowHelpMenuCreation)
 {
 #if TARGET_CARBON
-    return HMGetHelpMenu( outHelpMenu , outFirstCustomItemIndex ) ;
+    static bool s_createdHelpMenu = false ;
 
+    if ( !s_createdHelpMenu && !allowHelpMenuCreation )
+    {
+        return paramErr ;
+    }
+
+    OSStatus status = HMGetHelpMenu( outHelpMenu , outFirstCustomItemIndex ) ;
+    s_createdHelpMenu = ( status == noErr ) ;
+    return status ;
 #else
+    wxUnusedVar( allowHelpMenuCreation ) ;
     MenuRef helpMenuHandle ;
 
     helpMenuStatus = HMGetHelpMenuHandle( &helpMenuHandle ) ;
@@ -666,6 +681,20 @@ OSStatus UMAGetHelpMenu(
 
     return helpMenuStatus ;
 #endif
+}
+
+OSStatus UMAGetHelpMenu(
+    MenuRef *        outHelpMenu,
+    MenuItemIndex *  outFirstCustomItemIndex)
+{
+    return UMAGetHelpMenu( outHelpMenu , outFirstCustomItemIndex , true );
+}
+
+OSStatus UMAGetHelpMenuDontCreate(
+    MenuRef *        outHelpMenu,
+    MenuItemIndex *  outFirstCustomItemIndex)
+{
+    return UMAGetHelpMenu( outHelpMenu , outFirstCustomItemIndex , false );
 }
 
 #ifndef __LP64__
