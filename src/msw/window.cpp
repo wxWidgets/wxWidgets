@@ -650,6 +650,47 @@ wxWindow *wxWindowBase::DoFindFocus()
 
 bool wxWindowMSW::Enable(bool enable)
 {
+    // we shouldn't really enable the window if our parent is currently
+    // disabled because under MSW this would indeed show the window in enabled
+    // state but it still wouldn't respond to the input (as its parent is
+    // disabled), so just update the internal m_childrenDisabled list in this
+    // case and our state will be really changed when the parent is enabled
+
+    // the logic above doesn't apply to top level windows, of course
+    wxWindowMSW * const parent = IsTopLevel() ? NULL : GetParent();
+    if ( parent && !parent->IsEnabled() && !IsEnabled() )
+    {
+        // it's a reference as we can create it below
+        wxWindowList *& disabledSiblings = parent->m_childrenDisabled;
+
+        bool rc = false;
+        if ( enable )
+        {
+            // shouldn't be disabled when the parent is reenabled
+            if ( disabledSiblings )
+            {
+                wxWindowList::compatibility_iterator
+                    i = disabledSiblings->Find(this);
+                if ( i )
+                {
+                    disabledSiblings->Erase(i);
+                    rc = true;
+                }
+            }
+            //else: nothing to do
+        }
+        else // !enable
+        {
+            // should disable this window when the parent is enabled
+            if ( !disabledSiblings )
+                disabledSiblings = new wxWindowList;
+
+            disabledSiblings->Append(this);
+        }
+
+        return rc;
+    }
+
     if ( !wxWindowBase::Enable(enable) )
         return false;
 
