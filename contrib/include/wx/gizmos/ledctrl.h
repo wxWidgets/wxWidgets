@@ -20,7 +20,7 @@ enum wxLEDValueAlign
     wxLED_ALIGN_RIGHT  = 0x02,
     wxLED_ALIGN_CENTER = 0x04,
 
-    wxLED_ALIGN_MASK   = 0x04
+    wxLED_ALIGN_MASK   = 0x07
 };
 
 #define wxLED_DRAW_FADED 0x08
