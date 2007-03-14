@@ -848,19 +848,6 @@ class XML_Tree(wx.TreeCtrl):
         testWin = g.testWin
         # Create a window with this resource
         xxx = self.GetPyData(item).treeObject()
-
-        # If frame
-#        if xxx.__class__ == xxxFrame:
-            # Frame can't have many children,
-            # but it's first child possibly can...
-#            child = self.GetFirstChild(item)[0]
-#            if child.IsOk() and self.GetPyData(child).__class__ == xxxPanel:
-#                # Clean-up before recursive call or error
-#                wx.MemoryFSHandler.RemoveFile('xxx.xrc')
-#                wx.EndBusyCursor()
-#                self.CreateTestWin(child)
-#                return
-
         # Close old window, remember where it was
         highLight = None
         if testWin:
@@ -918,6 +905,7 @@ class XML_Tree(wx.TreeCtrl):
         xrc.XmlResource.Set(res)        # set as global
         # Register handlers
         addHandlers()
+        # Same module list
         res.Load('memory:xxx.xrc')
         try:
             if xxx.__class__ == xxxFrame:
@@ -1141,12 +1129,12 @@ class XML_Tree(wx.TreeCtrl):
                         m.Enable(ID_NEW.SPACER, False)
                     if xxx.__class__ is not xxxFrame:
                         m.Enable(ID_NEW.MENU_BAR, False)
-                m.AppendSeparator()
-                m.Append(ID_NEW.REF, 'reference...', 'Create object_ref node')
-                m.Append(ID_NEW.COMMENT, 'comment', 'Create comment node')
                 # Add custom controls menu
                 if pullDownMenu.customMap:
                     SetMenu(m, pullDownMenu.custom)
+                m.AppendSeparator()
+                m.Append(ID_NEW.REF, 'reference...', 'Create object_ref node')
+                m.Append(ID_NEW.COMMENT, 'comment', 'Create comment node')
             # Select correct label for create menu
             if not needInsert:
                 if self.shift:
