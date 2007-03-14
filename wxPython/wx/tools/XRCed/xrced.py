@@ -339,6 +339,9 @@ class Frame(wx.Frame):
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
 
+        # Save sys.modules names
+        self.modules = set(sys.modules.keys())
+        
         # Initialize
         self.Clear()
 
@@ -1381,6 +1384,8 @@ Homepage: http://xrced.sourceforge.net\
         # Handlers
         clearHandlers()
         g.pullDownMenu.clearCustom()
+        # Delete modules imported from comment directives
+        map(sys.modules.pop, [m for m in sys.modules if m not in self.modules])
 
     def SetModified(self, state=True):
         self.modified = state
