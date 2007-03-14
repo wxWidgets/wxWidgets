@@ -1873,8 +1873,7 @@ wxString* wxString_in_helper(PyObject* source) {
     target = new wxString();
     size_t len = PyUnicode_GET_SIZE(uni);
     if (len) {
-        PyUnicode_AsWideChar((PyUnicodeObject*)uni, target->GetWriteBuf(len), len);
-        target->UngetWriteBuf(len);
+        PyUnicode_AsWideChar((PyUnicodeObject*)uni, wxStringBuffer(*target, len), len);
     }
 
     if (PyString_Check(source))
@@ -1916,8 +1915,7 @@ wxString Py2wxString(PyObject* source)
     }
     size_t len = PyUnicode_GET_SIZE(uni);
     if (len) {
-        PyUnicode_AsWideChar((PyUnicodeObject*)uni, target.GetWriteBuf(len), len);
-        target.UngetWriteBuf();
+        PyUnicode_AsWideChar((PyUnicodeObject*)uni, wxStringBuffer(target, len), len);
     }
 
     if (!PyUnicode_Check(source))
