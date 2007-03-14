@@ -128,6 +128,9 @@ class ID_NEW:
     REF = wx.NewId()
     COMMENT = wx.NewId()
 
+    CUSTOM = wx.NewId()
+    for i in range(99): wx.NewId()   # reserve IDs for custom controls
+
     LAST = wx.NewId()
 
     
@@ -377,7 +380,17 @@ class PullDownMenu:
             ID_NEW.HELP_BUTTON: ('wxID_HELP', '&Help'),
             ID_NEW.CONTEXT_HELP_BUTTON: ('wxID_CONTEXT_HELP', '&Help'),
             }
-            
+        self.clearCustom()
+
+    def clearCustom(self):
+        # Custom controls
+        self.custom = [['custom', 'User-defined controls']]
+        self.customMap = {}        
+        
+    def addCustom(self, klass):
+        n = len(self.custom[0])-2
+        self.custom[0].append((ID_NEW.CUSTOM + n, klass))
+        self.customMap[ID_NEW.CUSTOM + n] = klass
 
 
 ################################################################################
@@ -904,16 +917,7 @@ class XML_Tree(wx.TreeCtrl):
         res = xrc.XmlResource('', xmlFlags)
         xrc.XmlResource.Set(res)        # set as global
         # Register handlers
-        addHandlers(res)
-        # Test Test.py
-        #import Test
-        #res.InsertHandler(Test.TestXmlHandler())
-        # Test test.so
-        import ctypes
-        test = ctypes.CDLL('test.so')
-        addr = int(str(res.this).split('_')[1], 16)
-        #test._Z17AddTestXmlHandlerP13wxXmlResource(ctypes.c_void_p(addr))
-        #test.AddTestXmlHandler(ctypes.c_void_p(addr))
+        addHandlers()
         res.Load('memory:xxx.xrc')
         try:
             if xxx.__class__ == xxxFrame:
@@ -1013,6 +1017,9 @@ class XML_Tree(wx.TreeCtrl):
             inf = sys.exc_info()
             wx.LogError(traceback.format_exception(inf[0], inf[1], None)[-1])
             wx.LogError('Error loading resource')
+        # Cleanup
+        res.Unload('xxx.xrc')
+        xrc.XmlResource.Set(None)
         wx.MemoryFSHandler.RemoveFile('xxx.xrc')
 
     def CloseTestWindow(self):
@@ -1137,6 +1144,9 @@ class XML_Tree(wx.TreeCtrl):
                 m.AppendSeparator()
                 m.Append(ID_NEW.REF, 'reference...', 'Create object_ref node')
                 m.Append(ID_NEW.COMMENT, 'comment', 'Create comment node')
+                # Add custom controls menu
+                if pullDownMenu.customMap:
+                    SetMenu(m, pullDownMenu.custom)
             # Select correct label for create menu
             if not needInsert:
                 if self.shift:

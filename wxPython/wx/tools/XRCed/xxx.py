@@ -919,10 +919,11 @@ class xxxUnknown(xxxObject):
 ################################################################################
 # Comment
 
-_handlers = []
-_CFuncPtr = None
+_handlers = []                          # custom handler classes/funcs
+_CFuncPtr = None                        # ctypes function type
 
 def register(hndlr):
+    """Register hndlr function or XmlResourceHandler class."""
     if _CFuncPtr and isinstance(hndlr, _CFuncPtr):
         _handlers.append(hndlr)
         return
@@ -934,24 +935,31 @@ def register(hndlr):
         _handlers.append(hndlr)
 
 def load_dl(path, localname=''):
+    """Load shared/dynamic library into xxx namespace."""
+    if not localname:
+        localname = os.path.basename(os.path.splitext(path)[0])
     try:
         import ctypes
         global _CFuncPtr
         _CFuncPtr = ctypes._CFuncPtr
     except ImportError:
         wx.LogError('ctypes module not found')
+        globals()[localname] = None
         return
     try:
         dl = ctypes.CDLL(path)
-        if not localname:
-            localname = os.path.basename(os.path.splitext(dl._name)[0])
         globals()[localname] = dl
+        # Register AddXmlHandlers() if exists
+        try:
+            register(dl.AddXmlHandlers)
+        except:
+            pass
     except:
-        wx.LogError('error loading dynamic library: %s', path)
+        wx.LogError('error loading dynamic library: %s' % path)
         print traceback.print_exc()
 
 # Called when creating test window
-def addHandlers(res):
+def addHandlers():
     for h in _handlers:
         if _CFuncPtr and isinstance(h, _CFuncPtr):
             try:
@@ -961,7 +969,7 @@ def addHandlers(res):
                 print traceback.print_exc()
         else:
             try:
-                res.AddHandler(apply(h, ()))
+                xrc.XmlResource.Get().AddHandler(apply(h, ()))
             except:
                 wx.LogError('error adding XmlHandler: "%s"' % h)
                 print traceback.print_exc()
@@ -969,6 +977,28 @@ def addHandlers(res):
 def clearHandlers():
     global _handlers
     _handlers = []
+
+def custom(klassName, klass='unknown'):
+    """Define custom control based on xrcClass.
+
+    klass: new object name
+    xrcClass: name of an existing XRC object class or
+              a class object defining class parameters.
+    """
+    if type(klass) is str:
+        # Copy correct xxx class under new name
+        kl = xxxDict[klass]
+        xxxClass = types.ClassType('xxx' + klassName, kl.__bases__, kl.__dict__)
+    else:
+        xxxClass = klass
+        # Register param IDs
+        for param in klass.allParams + klass.paramDict.keys():
+            if not paramIDs.has_key(param):
+                paramIDs[param] = wx.NewId()
+    # Insert in dictionaty
+    xxxDict[klassName] = xxxClass
+    # Add to menu
+    g.pullDownMenu.addCustom(klassName)
 
 class xxxParamComment(xxxParam):
     def __init__(self, node):
@@ -1002,6 +1032,7 @@ class xxxComment(xxxObject):
 
 ################################################################################
 
+# Mapping of XRC names to xxx classes
 xxxDict = {
     'wxPanel': xxxPanel,
     'wxDialog': xxxDialog,

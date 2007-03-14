@@ -40,6 +40,9 @@ if __name__ == '__main__':
 else:
     basePath = os.path.dirname(__file__)
 
+# Remember system path
+sys_path = sys.path
+
 # 1 adds CMD command to Help menu
 debug = 0
 
@@ -51,7 +54,7 @@ select "Append Child", and then any command.<P>
 Or just press one of the buttons on the tools palette.<P>
 Enter XML ID, change properties, create children.<P>
 To test your interface select Test command (View menu).<P>
-Consult README file for the details.</HTML>
+Consult README.txt file for the details.</HTML>
 """
 
 defaultIDs = {xxxPanel:'PANEL', xxxDialog:'DIALOG', xxxFrame:'FRAME',
@@ -71,13 +74,13 @@ class ScrolledMessageDialog(wx.Dialog):
                              wx.DefaultSize, wx.TE_MULTILINE | wx.TE_READONLY)
         text.SetFont(g.modernFont())
         dc = wx.WindowDC(text)
-        # !!! possible bug - GetTextExtent without font returns sysfont dims
         w, h = dc.GetFullTextExtent(' ', g.modernFont())[:2]
         ok = wx.Button(self, wx.ID_OK, "OK")
+        ok.SetDefault()
         text.SetConstraints(Layoutf('t=t5#1;b=t5#2;l=l5#1;r=r5#1', (self,ok)))
         text.SetSize((w * 80 + 30, h * 40))
-        text.ShowPosition(1)
-        ok.SetConstraints(Layoutf('b=b5#1;x%w50#1;w!80;h!25', (self,)))
+        text.ShowPosition(1)            # scroll to the first line
+        ok.SetConstraints(Layoutf('b=b5#1;x%w50#1;w!80;h!35', (self,)))
         self.SetAutoLayout(True)
         self.Fit()
         self.CenterOnScreen(wx.BOTH)
@@ -182,7 +185,7 @@ class Frame(wx.Frame):
         menu = wx.Menu()
         menu.Append(wx.ID_ABOUT, '&About...', 'About XCRed')
         self.ID_README = wx.NewId()
-        menu.Append(self.ID_README, '&Readme...', 'View the README file')
+        menu.Append(self.ID_README, '&Readme...\tF1', 'View the README file')
         if debug:
             self.ID_DEBUG_CMD = wx.NewId()
             menu.Append(self.ID_DEBUG_CMD, 'CMD', 'Python command line')
@@ -533,14 +536,21 @@ class Frame(wx.Frame):
         # Create a copy of clipboard pickled element
         success = success_node = False
         if wx.TheClipboard.Open():
-            data = wx.CustomDataObject('XRCED')
-            if wx.TheClipboard.IsSupported(data.GetFormat()):
-                success = wx.TheClipboard.GetData(data)
-            if not success:             # try other format
-                data = wx.CustomDataObject('XRCED_node')
+            try:
+                data = wx.CustomDataObject('XRCED')
                 if wx.TheClipboard.IsSupported(data.GetFormat()):
-                    success_node = wx.TheClipboard.GetData(data)
-            wx.TheClipboard.Close()
+                    try:
+                        success = wx.TheClipboard.GetData(data)
+                    except:
+                        # there is a problem if XRCED_node is in clipboard
+                        # but previous SetData was for XRCED
+                        pass
+                if not success:             # try other format
+                    data = wx.CustomDataObject('XRCED_node')
+                    if wx.TheClipboard.IsSupported(data.GetFormat()):
+                        success_node = wx.TheClipboard.GetData(data)
+            finally:
+                wx.TheClipboard.Close()
 
         if not success and not success_node:
             wx.MessageBox(
@@ -1086,7 +1096,10 @@ Homepage: http://xrced.sourceforge.net\
             xxx = MakeEmptyCommentXXX(parent)
         else:
             # Create empty element
-            className = pullDownMenu.createMap[evt.GetId()]
+            if evt.GetId() >= ID_NEW.CUSTOM:
+                className = pullDownMenu.customMap[evt.GetId()]
+            else:
+                className = pullDownMenu.createMap[evt.GetId()]
             xxx = MakeEmptyXXX(parent, className)
 
         # Insert new node, register undo
@@ -1367,6 +1380,7 @@ Homepage: http://xrced.sourceforge.net\
             self.maxIDs[cl] = 0
         # Handlers
         clearHandlers()
+        g.pullDownMenu.clearCustom()
 
     def SetModified(self, state=True):
         self.modified = state
@@ -1397,6 +1411,8 @@ Homepage: http://xrced.sourceforge.net\
             self.dataFile = path = os.path.abspath(path)
             dir = os.path.dirname(path)
             if dir: os.chdir(dir)
+            # Allow importing modules from the same directory
+            sys.path = sys_path + [dir]
             tree.SetData(dom)
             self.SetTitle(progname + ': ' + os.path.basename(path))
             conf.localconf = self.CreateLocalConf(self.dataFile)
