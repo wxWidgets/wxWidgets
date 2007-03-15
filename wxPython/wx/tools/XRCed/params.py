@@ -36,6 +36,7 @@ class PPanel(wx.Panel):
         wx.Panel.__init__(self, parent, -1, name=name)
         self.modified = self.freeze = False
     def Enable(self, value):
+        self.enabled = value
         # Something strange is going on with enable so we make sure...
         for w in self.GetChildren():
             w.Enable(value)

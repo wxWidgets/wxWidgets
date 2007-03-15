@@ -242,7 +242,7 @@ class ParamPage(wx.Panel):
     # Save current state
     def SaveState(self):
         self.origChecks = map(lambda i: (i[0], i[1].GetValue()), self.checks.items())
-        self.origControls = map(lambda i: (i[0], i[1].GetValue(), i[1].IsEnabled()),
+        self.origControls = map(lambda i: (i[0], i[1].GetValue(), i[1].enabled),
                             self.controls.items())
         if self.controlName:
             self.origName = self.controlName.GetValue()
