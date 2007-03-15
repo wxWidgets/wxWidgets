@@ -406,9 +406,6 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     // Set the range in the native control
     SetRange(min, max);
 
-    // Send the initial event
-    SendSpinUpdate(initial);
-
     if ( !value.empty() )
     {
         SetValue(value);
