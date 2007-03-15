@@ -93,19 +93,19 @@ Major new features in 2.8 release
 
 wxMac
 
-- Corrected top border size for wxStaticBox with empty label (nusi)
+- Corrected top border size for wxStaticBox with empty label (nusi).
+- Fixed wxFont, wxPen and wxBrush accessor bugs introduced in 2.8.2.
 
 wxMSW:
 
-- Fixed wxFileName::GetSize() for large files
+- Fixed wxFileName::GetSize() for large files.
+- Fixed wxFont and wxPen accessor bugs introduced in 2.8.2.
 
 
 2.8.2
 -----
 
 All:
-<<<<<<< changes.txt
-=======
 
 - Added wxSizerFlags::Shaped(), FixedMinSize(), Top() and Bottom() methods.
 - Added wxCSConv::IsOk() (Manuel Martin).
@@ -125,21 +125,9 @@ All:
 - Fix handling of wxSOCKET_REUSEADDR in wxDatagramSocket (troelsk)
 
 Unix Ports:
->>>>>>> 1.1006.2.13
 
-<<<<<<< changes.txt
-- Added wxSizerFlags::Shaped(), FixedMinSize(), Top() and Bottom() methods
-- Added wxCSConv::IsOk() (Manuel Martin)
-- Added wxDateTime::GetDateOnly()
-- Made wxTextFile work with unseekable files again (David Hart)
-- Added wxCONFIG_USE_SUBDIR flag to wxFileConfig (Giuseppe Bilotta)
-- Added wxSearchCtrl::[Get|Set]DescriptiveText
-- Added wxToolBar::SetTool[Normal|Disabled]Bitmap for wxMSW, wxGTK and wxMac
-
-=======
 - Fixed crash in wxGetUserName() in Unicode build
 
->>>>>>> 1.1006.2.13
 wxMSW
 
 - Fix lack of spin control update event when control lost focus.
