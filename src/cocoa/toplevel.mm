@@ -144,7 +144,7 @@ bool wxTopLevelWindowCocoa::Create(wxWindow *parent,
         [m_cocoaNSWindow setExcludedFromWindowsMenu: YES];
     if(style & wxSTAY_ON_TOP)
         [m_cocoaNSWindow setLevel:NSFloatingWindowLevel];
-    SetTitle(title);
+    [m_cocoaNSWindow setTitle:wxNSStringWithWxString(title)];
     return true;
 }
 
