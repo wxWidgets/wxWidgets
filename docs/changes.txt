@@ -67,6 +67,11 @@ wxMac
 
 - Corrected top border size for wxStaticBox with empty label (nusi)
 
+wxMSW:
+
+- Fixed wxFileName::GetSize() for large files
+
+
 2.8.2
 -----
 

@@ -2331,14 +2331,11 @@ wxULongLong wxFileName::GetSize(const wxString &filename)
 
     DWORD lpFileSizeHigh;
     DWORD ret = GetFileSize(f, &lpFileSizeHigh);
-    if (ret == INVALID_FILE_SIZE)
+    if ( ret == INVALID_FILE_SIZE && ::GetLastError() != NO_ERROR )
         return wxInvalidSize;
 
-    // compose the low-order and high-order byte sizes
-    return wxULongLong(ret | (lpFileSizeHigh << sizeof(WORD)*2));
-
-#else           // ! __WIN32__
-
+    return wxULongLong(lpFileSizeHigh, ret);
+#else // ! __WIN32__
     wxStructStat st;
 #ifndef wxNEED_WX_UNISTD_H
     if (wxStat( filename.fn_str() , &st) != 0)
