@@ -97,8 +97,6 @@
 		404DB2730ADD429D00687775 /* dcbufcmn.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 404DB2710ADD429D00687775 /* dcbufcmn.cpp */; };
 		4054154E0AB6A0B000450E09 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 405415210AB6A0B000450E09 /* WebKit.framework */; };
 		4054154F0AB6A0B000450E09 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 405415210AB6A0B000450E09 /* WebKit.framework */; };
-		4059FD640BA9617F001F6B1C /* socketevtdispatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4059FD620BA9617F001F6B1C /* socketevtdispatch.cpp */; };
-		4059FD660BA9617F001F6B1C /* socketevtdispatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4059FD620BA9617F001F6B1C /* socketevtdispatch.cpp */; };
 		405DD168063C2BFC00F579EE /* libiconv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 405DD167063C2BFC00F579EE /* libiconv.dylib */; };
 		40607C1607493C3F00DC0420 /* archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40607C1407493C3F00DC0420 /* archive.cpp */; };
 		40607C1A07493C3F00DC0420 /* archive.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 40607C1407493C3F00DC0420 /* archive.cpp */; };
@@ -1191,7 +1189,6 @@
 		4054137C0AB69C9300450E09 /* datavgen.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = datavgen.cpp; sourceTree = "<group>"; };
 		405415210AB6A0B000450E09 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = /System/Library/Frameworks/WebKit.framework; sourceTree = "<absolute>"; };
 		405415540AB6A0D900450E09 /* datavcmn.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = datavcmn.cpp; sourceTree = "<group>"; };
-		4059FD620BA9617F001F6B1C /* socketevtdispatch.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = socketevtdispatch.cpp; sourceTree = "<group>"; };
 		405DD167063C2BFC00F579EE /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = /usr/lib/libiconv.dylib; sourceTree = "<absolute>"; };
 		40607C1407493C3F00DC0420 /* archive.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; path = archive.cpp; sourceTree = "<group>"; };
 		40607C740749432A00DC0420 /* gsockosx.cpp */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.cpp.cpp; name = gsockosx.cpp; path = mac/corefoundation/gsockosx.cpp; sourceTree = SOURCE_ROOT; };
@@ -2882,7 +2879,6 @@
 				F5AC2EDE03803A3601000133 /* settcmn.cpp */,
 				F5A8604A01FA022C0175ACA7 /* sizer.cpp */,
 				F5A8604B01FA022C0175ACA7 /* socket.cpp */,
-				4059FD620BA9617F001F6B1C /* socketevtdispatch.cpp */,
 				408443F00B3274EF00485940 /* srchcmn.cpp */,
 				40670A9407377B1000F7C08C /* sstream.cpp */,
 				0A98CB6A07146A06007B4289 /* statbar.cpp */,
@@ -3941,7 +3937,6 @@
 				61048A650B2756CB009C253D /* srchctrl.cpp in Sources */,
 				61048BE90B27B7D0009C253D /* srchctlg.cpp in Sources */,
 				408443F20B3274EF00485940 /* srchcmn.cpp in Sources */,
-				4059FD640BA9617F001F6B1C /* socketevtdispatch.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4485,7 +4480,6 @@
 				61048A660B2756CB009C253D /* srchctrl.cpp in Sources */,
 				61048BEA0B27B7D0009C253D /* srchctlg.cpp in Sources */,
 				408443F10B3274EF00485940 /* srchcmn.cpp in Sources */,
-				4059FD660BA9617F001F6B1C /* socketevtdispatch.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
