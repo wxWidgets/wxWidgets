@@ -9409,7 +9409,13 @@ wxString wxGrid::GetColLabelValue( int col ) const
 
 void wxGrid::SetRowLabelSize( int width )
 {
-    width = wxMax( width, 0 );
+    wxASSERT( width >= 0 || width == wxGRID_AUTOSIZE );
+
+    if ( width == wxGRID_AUTOSIZE )
+    {
+        width = CalcColOrRowLabelAreaMinSize(wxGRID_ROW);
+    }
+
     if ( width != m_rowLabelWidth )
     {
         if ( width == 0 )
@@ -9432,7 +9438,13 @@ void wxGrid::SetRowLabelSize( int width )
 
 void wxGrid::SetColLabelSize( int height )
 {
-    height = wxMax( height, 0 );
+    wxASSERT( height >=0 || height == wxGRID_AUTOSIZE );
+
+    if ( height == wxGRID_AUTOSIZE )
+    {
+        height = CalcColOrRowLabelAreaMinSize(wxGRID_COLUMN);
+    }
+
     if ( height != m_colLabelHeight )
     {
         if ( height == 0 )
@@ -10479,8 +10491,11 @@ int  wxGrid::GetRowMinimalAcceptableHeight() const
 // auto sizing
 // ----------------------------------------------------------------------------
 
-void wxGrid::AutoSizeColOrRow( int colOrRow, bool setAsMin, bool column )
+void
+wxGrid::AutoSizeColOrRow(int colOrRow, bool setAsMin, wxGridDirection direction)
 {
+    const bool column = direction == wxGRID_COLUMN;
+
     wxClientDC dc(m_gridWin);
 
     // cancel editing of cell
@@ -10589,6 +10604,58 @@ void wxGrid::AutoSizeColOrRow( int colOrRow, bool setAsMin, bool column )
         else
             SetRowMinimalHeight(row, extentMax);
     }
+}
+
+wxCoord wxGrid::CalcColOrRowLabelAreaMinSize(wxGridDirection direction)
+{
+    // calculate size for the rows or columns?
+    const bool calcRows = direction == wxGRID_ROW;
+
+    wxClientDC dc(calcRows ? GetGridRowLabelWindow()
+                           : GetGridColLabelWindow());
+    dc.SetFont(GetLabelFont());
+
+    // which dimension should we take into account for calculations?
+    //
+    // for columns, the text can be only horizontal so it's easy but for rows
+    // we also have to take into account the text orientation
+    const bool
+        useWidth = calcRows || (GetColLabelTextOrientation() == wxVERTICAL);
+
+    wxArrayString lines;
+    wxCoord extentMax = 0;
+
+    const int numRowsOrCols = calcRows ? m_numRows : m_numCols;
+    for ( int rowOrCol = 0; rowOrCol < numRowsOrCols; rowOrCol++ )
+    {
+        lines.Clear();
+        StringToLines(calcRows ? GetRowLabelValue(rowOrCol)
+                               : GetColLabelValue(rowOrCol),
+                      lines);
+
+        long w, h;
+        GetTextBoxSize(dc, lines, &w, &h);
+
+        const wxCoord extent = useWidth ? w : h;
+        if ( extent > extentMax )
+            extentMax = extent;
+    }
+
+    if ( !extentMax )
+    {
+        // empty column - give default extent (notice that if extentMax is less
+        // than default extent but != 0, it's OK)
+        extentMax = calcRows ? GetDefaultRowLabelSize()
+                             : GetDefaultColLabelSize();
+    }
+
+    // leave some space around text (taken from AutoSizeColOrRow)
+    if ( calcRows )
+        extentMax += 10;
+    else
+        extentMax += 6;
+
+    return extentMax;
 }
 
 int wxGrid::SetOrCalcColumnSizes(bool calcOnly, bool setAsMin)

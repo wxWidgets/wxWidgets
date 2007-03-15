@@ -112,6 +112,14 @@ BEGIN_EVENT_TABLE( GridFrame, wxFrame )
     EVT_MENU( ID_SELECT_UNSELECT, GridFrame::OnAddToSelectToggle)
     EVT_MENU( ID_SHOW_SELECTION, GridFrame::OnShowSelection)
 
+    EVT_MENU( ID_SIZE_ROW, GridFrame::AutoSizeRow )
+    EVT_MENU( ID_SIZE_COL, GridFrame::AutoSizeCol )
+    EVT_MENU( ID_SIZE_ROW_LABEL, GridFrame::AutoSizeRowLabel )
+    EVT_MENU( ID_SIZE_COL_LABEL, GridFrame::AutoSizeColLabel )
+    EVT_MENU( ID_SIZE_LABELS_COL, GridFrame::AutoSizeLabelsCol )
+    EVT_MENU( ID_SIZE_LABELS_ROW, GridFrame::AutoSizeLabelsRow )
+    EVT_MENU( ID_SIZE_GRID, GridFrame::AutoSizeTable )
+
     EVT_MENU( ID_SET_HIGHLIGHT_WIDTH, GridFrame::OnSetHighlightWidth)
     EVT_MENU( ID_SET_RO_HIGHLIGHT_WIDTH, GridFrame::OnSetROHighlightWidth)
 
@@ -215,6 +223,14 @@ GridFrame::GridFrame()
     selectionMenu->Append( ID_SELROWS, _T("Select &Rows") );
     selectionMenu->Append( ID_SELCOLS, _T("Select C&ols") );
 
+    wxMenu *autosizeMenu = new wxMenu;
+    autosizeMenu->Append( ID_SIZE_ROW, _T("Selected &row data") );
+    autosizeMenu->Append( ID_SIZE_COL, _T("Selected &column data") );
+    autosizeMenu->Append( ID_SIZE_ROW_LABEL, _T("Selected row la&bel") );
+    autosizeMenu->Append( ID_SIZE_COL_LABEL, _T("Selected column &label") );
+    autosizeMenu->Append( ID_SIZE_LABELS_COL, _T("Column la&bels") );
+    autosizeMenu->Append( ID_SIZE_LABELS_ROW, _T("Row label&s") );
+    autosizeMenu->Append( ID_SIZE_GRID, _T("Entire &grid") );
 
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append( wxID_ABOUT, _T("&About wxGrid demo") );
@@ -225,6 +241,7 @@ GridFrame::GridFrame()
     menuBar->Append( colMenu,  _T("&Colours") );
     menuBar->Append( editMenu, _T("&Edit") );
     menuBar->Append( selectMenu, _T("&Select") );
+    menuBar->Append( autosizeMenu, _T("&Autosize") );
     menuBar->Append( helpMenu, _T("&Help") );
 
     SetMenuBar( menuBar );
@@ -677,6 +694,62 @@ void GridFrame::DeleteSelectedRows( wxCommandEvent& WXUNUSED(ev) )
                 n++;
         }
     }
+}
+
+
+void GridFrame::AutoSizeRow(wxCommandEvent& WXUNUSED(event))
+{
+    wxGridUpdateLocker locker(grid);
+    const wxArrayInt sels  = grid->GetSelectedRows();
+    for ( size_t n = 0, count = sels.size(); n < count; n++ )
+    {
+        grid->AutoSizeRow( sels[n], false );
+    }
+}
+
+void GridFrame::AutoSizeCol(wxCommandEvent& WXUNUSED(event))
+{
+    wxGridUpdateLocker locker(grid);
+    const wxArrayInt sels  = grid->GetSelectedCols();
+    for ( size_t n = 0, count = sels.size(); n < count; n++ )
+    {
+        grid->AutoSizeColumn( sels[n], false );
+    }
+}
+
+void GridFrame::AutoSizeRowLabel(wxCommandEvent& WXUNUSED(event))
+{
+    wxGridUpdateLocker locker(grid);
+    const wxArrayInt sels  = grid->GetSelectedRows();
+    for ( size_t n = 0, count = sels.size(); n < count; n++ )
+    {
+        grid->AutoSizeRowLabelSize( sels[n] );
+    }
+}
+
+void GridFrame::AutoSizeColLabel(wxCommandEvent& WXUNUSED(event))
+{
+    wxGridUpdateLocker locker(grid);
+    const wxArrayInt sels  = grid->GetSelectedCols();
+    for ( size_t n = 0, count = sels.size(); n < count; n++ )
+    {
+        grid->AutoSizeColLabelSize( sels[n] );
+    }
+}
+
+void GridFrame::AutoSizeLabelsCol(wxCommandEvent& WXUNUSED(event))
+{
+    grid->SetColLabelSize( wxGRID_AUTOSIZE );
+}
+
+void GridFrame::AutoSizeLabelsRow(wxCommandEvent& WXUNUSED(event))
+{
+    grid->SetRowLabelSize( wxGRID_AUTOSIZE );
+}
+
+void GridFrame::AutoSizeTable(wxCommandEvent& WXUNUSED(event))
+{
+    grid->AutoSize();
 }
 
 

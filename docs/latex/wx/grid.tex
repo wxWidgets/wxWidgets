@@ -183,11 +183,11 @@ The memory requirements for this could become prohibitive if your grid is very l
 
 
 
-\membersection{wxGrid::AutoSizeColOrRow}\label{wxgridautosizecolorrow}
+\membersection{wxGrid::AutoSizeColLabelSize}\label{wxgridautosizecollabelsize}
 
-\func{void}{AutoSizeColOrRow}{\param{int }{n}, \param{bool }{setAsMin}, \param{bool }{column}}
+\func{void}{AutoSizeColLabelSize}{\param{int }{col}}
 
-Common part of AutoSizeColumn/Row() or row?
+Automatically adjusts width of the column to fit its label.
 
 
 
@@ -227,6 +227,14 @@ also be set as the minimal height for the row.
 \wxheading{Note}\\
 wxGrid sets up arrays to store individual row and column sizes when non-default sizes are used.
 The memory requirements for this could become prohibitive if your grid is very large.
+
+
+
+\membersection{wxGrid::AutoSizeRowLabelSize}\label{wxgridautosizerowlabelsize}
+
+\func{void}{AutoSizeRowLabelSize}{\param{int }{col}}
+
+Automatically adjusts height of the row to fit its label.
 
 
 
@@ -1612,6 +1620,9 @@ Vertical alignment should be one of wxALIGN\_TOP, wxALIGN\_CENTRE or wxALIGN\_BO
 
 Sets the height of the column labels.
 
+If \arg{height} equals to \textt{wxGRID\_AUTOSIZE} then height is calculated automatically
+so that no label is truncated. Note that this could be slow for a large table.
+
 
 
 \membersection{wxGrid::SetColLabelValue}\label{wxgridsetcollabelvalue}
@@ -1850,6 +1861,9 @@ Vertical alignment should be one of wxALIGN\_TOP, wxALIGN\_CENTRE or wxALIGN\_BO
 \func{void}{SetRowLabelSize}{\param{int }{width}}
 
 Sets the width of the row labels.
+
+If \arg{width} equals \textt{wxGRID\_AUTOSIZE} then width is calculated automatically
+so that no label is truncated. Note that this could be slow for a large table.
 
 
 

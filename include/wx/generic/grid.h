@@ -51,6 +51,18 @@ extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxGridNameStr[];
 #define wxGRID_VALUE_TEXT wxGRID_VALUE_STRING
 #define wxGRID_VALUE_LONG wxGRID_VALUE_NUMBER
 
+// magic constant which tells (to some functions) to automatically calculate
+// the appropriate size
+#define wxGRID_AUTOSIZE (-1)
+
+// many wxGrid methods work either with columns or rows, this enum is used for
+// the parameter indicating which one should it be
+enum wxGridDirection
+{
+    wxGRID_COLUMN,
+    wxGRID_ROW,
+};
+
 // ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------
@@ -1408,9 +1420,9 @@ public:
     // setAsMin is true, this optimal width will also be set as minimal width
     // for this column
     void     AutoSizeColumn( int col, bool setAsMin = true )
-        { AutoSizeColOrRow(col, setAsMin, true); }
+        { AutoSizeColOrRow(col, setAsMin, wxGRID_COLUMN); }
     void     AutoSizeRow( int row, bool setAsMin = true )
-        { AutoSizeColOrRow(row, setAsMin, false); }
+        { AutoSizeColOrRow(row, setAsMin, wxGRID_ROW); }
 
     // auto size all columns (very ineffective for big grids!)
     void     AutoSizeColumns( bool setAsMin = true )
@@ -1423,6 +1435,10 @@ public:
     // and also set the grid size to just fit its contents
     void     AutoSize();
 
+    // Note for both AutoSizeRowLabelSize and AutoSizeColLabelSize:
+    // If col equals to wxGRID_AUTOSIZE value then function autosizes labels column
+    // instead of data column. Note that this operation may be slow for large
+    // tables.
     // autosize row height depending on label text
     void     AutoSizeRowLabelSize( int row );
 
@@ -1862,7 +1878,10 @@ protected:
     int SetOrCalcRowSizes(bool calcOnly, bool setAsMin = true);
 
     // common part of AutoSizeColumn/Row()
-    void AutoSizeColOrRow(int n, bool setAsMin, bool column /* or row? */);
+    void AutoSizeColOrRow(int n, bool setAsMin, wxGridDirection direction);
+
+    // Calculate the minimum acceptable size for labels area
+    wxCoord CalcColOrRowLabelAreaMinSize(wxGridDirection direction);
 
     // if a column has a minimal width, it will be the value for it in this
     // hash table
@@ -2006,7 +2025,6 @@ protected:
     DECLARE_NO_COPY_CLASS(wxGrid)
 };
 
-
 // ----------------------------------------------------------------------------
 // wxGridUpdateLocker prevents updates to a grid during its lifetime
 // ----------------------------------------------------------------------------
@@ -2125,7 +2143,7 @@ public:
         return ControlDown();
 #endif
     }
-    
+
     virtual wxEvent *Clone() const { return new wxGridSizeEvent(*this); }
 
 protected:
@@ -2182,7 +2200,7 @@ public:
         return ControlDown();
 #endif
     }
-    
+
     virtual wxEvent *Clone() const { return new wxGridRangeSelectEvent(*this); }
 
 protected:
@@ -2217,7 +2235,7 @@ public:
     void SetRow(int row)                { m_row = row; }
     void SetCol(int col)                { m_col = col; }
     void SetControl(wxControl* ctrl)    { m_ctrl = ctrl; }
-    
+
     virtual wxEvent *Clone() const { return new wxGridEditorCreatedEvent(*this); }
 
 private:
