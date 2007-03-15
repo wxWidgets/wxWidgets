@@ -1020,7 +1020,7 @@ void wxDataViewHeaderWindowMSW::UpdateDisplay()
 
         HDITEM hdi;
         hdi.mask = HDI_TEXT | HDI_FORMAT | HDI_WIDTH;
-        hdi.pszText = (wxChar *) col->GetTitle().c_str();
+        hdi.pszText = (wxChar *) col->GetTitle().wx_str();
         hdi.cxy = col->GetWidth();
         hdi.cchTextMax = sizeof(hdi.pszText)/sizeof(hdi.pszText[0]);
         hdi.fmt = HDF_LEFT | HDF_STRING;
