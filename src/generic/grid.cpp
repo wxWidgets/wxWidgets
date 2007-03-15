@@ -10595,8 +10595,9 @@ int wxGrid::SetOrCalcColumnSizes(bool calcOnly, bool setAsMin)
 {
     int width = m_rowLabelWidth;
 
-    if ( !calcOnly )
-        BeginBatch();
+    wxGridUpdateLocker locker;
+    if(!calcOnly)
+        locker.Create(this);
 
     for ( int col = 0; col < m_numCols; col++ )
     {
@@ -10606,9 +10607,6 @@ int wxGrid::SetOrCalcColumnSizes(bool calcOnly, bool setAsMin)
         width += GetColWidth(col);
     }
 
-    if ( !calcOnly )
-        EndBatch();
-
     return width;
 }
 
@@ -10616,8 +10614,9 @@ int wxGrid::SetOrCalcRowSizes(bool calcOnly, bool setAsMin)
 {
     int height = m_colLabelHeight;
 
-    if ( !calcOnly )
-        BeginBatch();
+    wxGridUpdateLocker locker;
+    if(!calcOnly)
+        locker.Create(this);
 
     for ( int row = 0; row < m_numRows; row++ )
     {
@@ -10627,15 +10626,12 @@ int wxGrid::SetOrCalcRowSizes(bool calcOnly, bool setAsMin)
         height += GetRowHeight(row);
     }
 
-    if ( !calcOnly )
-        EndBatch();
-
     return height;
 }
 
 void wxGrid::AutoSize()
 {
-    BeginBatch();
+    wxGridUpdateLocker locker(this);
 
     // we need to round up the size of the scrollable area to a multiple of
     // scroll step to ensure that we don't get the scrollbars when we're sized
@@ -10701,8 +10697,6 @@ void wxGrid::AutoSize()
     // client size but also leave space for (not needed any more) scrollbars
     SetScrollbars(0, 0, 0, 0, 0, 0, true);
     SetClientSize(sizeFit.x + m_rowLabelWidth, sizeFit.y + m_colLabelHeight);
-
-    EndBatch();
 }
 
 void wxGrid::AutoSizeRowLabelSize( int row )

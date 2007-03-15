@@ -39,6 +39,7 @@ All:
 - Fixed crashes in helpview when opening a file.
 - Added wxMutex::LockTimeout() (Aleksandr Napylov)
 - Set locale to the default in all ports, not just wxGTK
+- Added wxGridUpdateLocker helper class (Evgeniy Tarassov)
 
 wxGTK:
 

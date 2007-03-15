@@ -2008,6 +2008,47 @@ protected:
 
 
 // ----------------------------------------------------------------------------
+// wxGridUpdateLocker prevents updates to a grid during its lifetime
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_ADV wxGridUpdateLocker
+{
+public:
+    // if the pointer is NULL, Create() can be called later
+    wxGridUpdateLocker(wxGrid *grid = NULL)
+    {
+        Init(grid);
+    }
+
+    // can be called if ctor was used with a NULL pointer, must not be called
+    // more than once
+    void Create(wxGrid *grid)
+    {
+        wxASSERT_MSG( !m_grid, _T("shouldn't be called more than once") );
+
+        Init(grid);
+    }
+
+    ~wxGridUpdateLocker()
+    {
+        if ( m_grid )
+            m_grid->EndBatch();
+    }
+
+private:
+    void Init(wxGrid *grid)
+    {
+        m_grid = grid;
+        if ( m_grid )
+            m_grid->BeginBatch();
+    }
+
+    wxGrid *m_grid;
+
+    DECLARE_NO_COPY_CLASS(wxGridUpdateLocker)
+};
+
+// ----------------------------------------------------------------------------
 // Grid event class and event types
 // ----------------------------------------------------------------------------
 

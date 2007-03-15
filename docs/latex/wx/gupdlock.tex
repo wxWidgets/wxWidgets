@@ -1,0 +1,81 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        gupdlock.tex
+%% Purpose:     wxGridUpdateLocker documentation
+%% Author:      Evgeniy Tarassov
+%% Created:     2007-03-15
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2007 TT-Solutions SARL
+%% License:     wxWindows license
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxGridUpdateLocker}}\label{wxgridupdatelocker}
+
+This small class can be used to prevent \helpref{wxGrid}{wxgrid} from redrawing
+during its lifetime by calling \helpref{wxGrid::BeginBatch}{wxgridbeginbatch}
+in its constructor and \helpref{wxGrid::EndBatch}{wxgridendbatch} in its
+destructor. It is typically used in a function performing several operations
+with a grid which would otherwise result in flicker. For example:
+
+{\small
+\begin{verbatim}
+    void MyFrame::Foo()
+    {
+        m_grid = new wxGrid(this, ...);
+
+        wxGridUpdateLocker noUpdates(m_grid);
+        m_grid->AppendColumn();
+        ... many other operations with m_grid...
+        m_grid->AppendRow();
+
+        // destructor called, grid refreshed
+    }
+\end{verbatim}
+}
+
+Using this class is easier and safer than calling 
+\helpref{BeginBatch}{wxgridbeginbatch} and \helpref{EndBatch}{wxgridendbatch}
+because you don't risk not to call the latter (due to an exception for example).
+
+\wxheading{Derived from}
+
+None.
+
+\wxheading{Include files}
+
+<wx/grid.h>
+
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxGridUpdateLocker::wxGridUpdateLocker}\label{wxgridupdatelockerctor}
+
+\func{}{wxGridUpdateLocker}{\param{wxGrid *}{grid = \NULL}}
+
+Creates an object preventing the updates of the specified \arg{grid}. The
+parameter could be \NULL in which case nothing is done. If \arg{grid} is
+non-\NULL then the grid must exist for longer than wxGridUpdateLocker object
+itself.
+
+The default constructor could be followed by a call to 
+\helpref{wxGridUpdateLocker::Create}{wxgridupdatelockercreate} to set the
+grid object later.
+
+
+
+\membersection{wxGridUpdateLocker::\destruct{wxGridUpdateLocker}}\label{wxgridupdatelockerdtor}
+
+\func{}{\destruct{wxGridUpdateLocker}}{\void}
+
+Destructor reenables updates for the grid this object is associated with.
+
+
+
+\membersection{wxGridUpdateLocker::Create}\label{wxgridupdatelockercreate}
+
+\func{void}{Create}{\param{wxGrid* }{grid}}
+
+This method can be called if the object had been constructed using the default
+constructor. It must not be called more than once.
+
+

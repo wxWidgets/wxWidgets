@@ -253,6 +253,10 @@ the grid is suppressed. Each call to BeginBatch must be matched by a later call 
 modification can be enclosed between BeginBatch and EndBatch calls to avoid
 screen flicker. The final EndBatch will cause the grid to be repainted.
 
+\wxheading{See also}
+
+\helpref{wxGridUpdateLocker}{wxgridupdatelocker}
+
 
 
 \membersection{wxGrid::BlockToDeviceRect}\label{wxgridblocktodevicerect}
@@ -513,6 +517,10 @@ the grid is suppressed. Each previous call to
 EndBatch. Code that does a lot of grid modification can be enclosed between
 BeginBatch and EndBatch calls to avoid screen flicker. The final EndBatch will
 cause the grid to be repainted.
+
+\wxheading{See also}
+
+\helpref{wxGridUpdateLocker}{wxgridupdatelocker}
 
 
 

@@ -668,7 +668,7 @@ void GridFrame::DeleteSelectedRows( wxCommandEvent& WXUNUSED(ev) )
 {
     if ( grid->IsSelection() )
     {
-        grid->BeginBatch();
+        wxGridUpdateLocker locker(grid);
         for ( int n = 0; n < grid->GetNumberRows(); )
         {
             if ( grid->IsInSelection( n , 0 ) )
@@ -676,7 +676,6 @@ void GridFrame::DeleteSelectedRows( wxCommandEvent& WXUNUSED(ev) )
             else
                 n++;
         }
-        grid->EndBatch();
     }
 }
 
@@ -685,7 +684,7 @@ void GridFrame::DeleteSelectedCols( wxCommandEvent& WXUNUSED(ev) )
 {
     if ( grid->IsSelection() )
     {
-        grid->BeginBatch();
+        wxGridUpdateLocker locker(grid);
         for ( int n = 0; n < grid->GetNumberCols(); )
         {
             if ( grid->IsInSelection( 0 , n ) )
@@ -693,7 +692,6 @@ void GridFrame::DeleteSelectedCols( wxCommandEvent& WXUNUSED(ev) )
             else
                 n++;
         }
-        grid->EndBatch();
     }
 }
 
