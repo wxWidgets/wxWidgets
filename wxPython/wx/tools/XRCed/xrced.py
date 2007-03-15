@@ -339,12 +339,6 @@ class Frame(wx.Frame):
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
 
-        # Save sys.modules names
-        self.modules = set(sys.modules.keys())
-        
-        # Initialize
-        self.Clear()
-
         # Other events
         wx.EVT_IDLE(self, self.OnIdle)
         wx.EVT_CLOSE(self, self.OnCloseWindow)
@@ -1358,12 +1352,10 @@ Homepage: http://xrced.sourceforge.net\
                 conf.panelWidth, conf.panelHeight = self.miniFrame.GetSize()
         evt.Skip()
 
-
     def CreateLocalConf(self, path):
         name = os.path.splitext(path)[0]
         name += '.xcfg'
         return wx.FileConfig(localFilename=name)
-
 
     def Clear(self):
         self.dataFile = ''
@@ -1381,10 +1373,10 @@ Homepage: http://xrced.sourceforge.net\
                    xxxMenuBar, xxxMenu, xxxToolBar,
                    xxxWizard, xxxBitmap, xxxIcon]:
             self.maxIDs[cl] = 0
-        # Handlers
-        clearHandlers()
-        g.pullDownMenu.clearCustom()
-        # Delete modules imported from comment directives
+        # Restore handlers, menu, etc. to initial
+        setHandlers(self.handlers[:])
+        g.pullDownMenu.custom = self.custom[:]
+        # Remove modules imported from comment directives
         map(sys.modules.pop, [m for m in sys.modules if m not in self.modules])
 
     def SetModified(self, state=True):
@@ -1636,6 +1628,31 @@ Please upgrade wxWidgets to %d.%d.%d or higher.''' % MinWxVersion)
         # Create main frame
         frame = Frame(pos, size)
         frame.Show(True)
+        
+        # Load plugins
+        plugins = os.getenv('XRCEDPATH')
+        if plugins:
+            cwd = os.getcwd()
+            try:
+                for dir in plugins.split(':'):
+                    if os.path.isdir(dir):
+                        # Normalize
+                        dir = os.path.abspath(os.path.normpath(dir))
+                        sys.path = sys_path + [os.path.dirname(dir)]
+                        try:
+                            os.chdir(dir)
+                            __import__(os.path.basename(dir), globals(), locals(), ['*'])
+                        except:
+                            print traceback.print_exc()
+            finally:
+                os.chdir(cwd)
+        # Store important data
+        frame.handlers = getHandlers()[:]
+        frame.custom = g.pullDownMenu.custom[:]
+        frame.modules = set(sys.modules.keys())
+
+        # Initialize
+        frame.Clear()
 
         # Load file after showing
         if args:

@@ -380,16 +380,12 @@ class PullDownMenu:
             ID_NEW.HELP_BUTTON: ('wxID_HELP', '&Help'),
             ID_NEW.CONTEXT_HELP_BUTTON: ('wxID_CONTEXT_HELP', '&Help'),
             }
-        self.clearCustom()
-
-    def clearCustom(self):
-        # Custom controls
-        self.custom = [['custom', 'User-defined controls']]
+        self.custom = ['custom', 'User-defined controls']
         self.customMap = {}        
         
     def addCustom(self, klass):
-        n = len(self.custom[0])-2
-        self.custom[0].append((ID_NEW.CUSTOM + n, klass))
+        n = len(self.custom)-2
+        self.custom.append((ID_NEW.CUSTOM + n, klass))
         self.customMap[ID_NEW.CUSTOM + n] = klass
 
 
@@ -429,6 +425,7 @@ class HighLightBox:
         l4 = wx.Window(w, -1, wx.Point(pos.x, pos.y + size.height - 2), wx.Size(size.width, 2))
         l4.SetBackgroundColour(wx.RED)
         self.lines = [l1, l2, l3, l4]
+        self.size = size
     # Move highlight to a new position
     def Replace(self, pos, size):
         if size.width == -1: size.width = 0
@@ -437,6 +434,7 @@ class HighLightBox:
         self.lines[1].SetDimensions(pos.x, pos.y, 2, size.height)
         self.lines[2].SetDimensions(pos.x + size.width - 2, pos.y, 2, size.height)
         self.lines[3].SetDimensions(pos.x, pos.y + size.height - 2, size.width, 2)
+        self.size = size
     # Remove it
     def Remove(self):
         map(wx.Window.Destroy, self.lines)
@@ -785,16 +783,22 @@ class XML_Tree(wx.TreeCtrl):
         if not obj or xxx.hasStyle and xxx.params.get('hidden', False):
             if g.testWin.highLight: g.testWin.highLight.Remove()
             return
-        pos = self.FindNodePos(item, obj)
+        pos = self.FindNodePos(item, obj)         
         size = obj.GetSize()
         # Highlight
         # Negative positions are not working quite well
-        if g.testWin.highLight:
-            g.testWin.highLight.Replace(pos, size)
+        hl = g.testWin.highLight
+        # If highlight object has the same size SetDimension does not repaint it
+        # so we must remove the old HL window
+        if hl and hl.size == size:
+            hl.Remove()
+            hl = None
+        if hl:
+            hl.Replace(pos, size)
         else:
-            g.testWin.highLight = HighLightBox(pos, size)
-        g.testWin.highLight.Refresh()
-        g.testWin.highLight.item = item
+            g.testWin.highLight = hl = HighLightBox(pos, size)
+        hl.Refresh()
+        hl.item = item
 
     def ShowTestWindow(self, item):
         xxx = self.GetPyData(item)
@@ -1130,8 +1134,8 @@ class XML_Tree(wx.TreeCtrl):
                     if xxx.__class__ is not xxxFrame:
                         m.Enable(ID_NEW.MENU_BAR, False)
                 # Add custom controls menu
-                if pullDownMenu.customMap:
-                    SetMenu(m, pullDownMenu.custom)
+                if len(pullDownMenu.custom) > 2:
+                    SetMenu(m, [pullDownMenu.custom])
                 m.AppendSeparator()
                 m.Append(ID_NEW.REF, 'reference...', 'Create object_ref node')
                 m.Append(ID_NEW.COMMENT, 'comment', 'Create comment node')

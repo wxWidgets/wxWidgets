@@ -920,6 +920,11 @@ class xxxUnknown(xxxObject):
 # Comment
 
 _handlers = []                          # custom handler classes/funcs
+def getHandlers():
+    return _handlers
+def setHandlers(handlers):
+    global _handlers
+    _handlers = handlers
 _CFuncPtr = None                        # ctypes function type
 
 def register(hndlr):
@@ -935,13 +940,18 @@ def register(hndlr):
         _handlers.append(hndlr)
 
 def load_dl(path, localname=''):
-    """Load shared/dynamic library into xxx namespace."""
+    """Load shared/dynamic library into xxx namespace.
+
+    If path is not absolute or relative, try to find in the module's directory.
+    """
     if not localname:
         localname = os.path.basename(os.path.splitext(path)[0])
     try:
         import ctypes
         global _CFuncPtr
-        _CFuncPtr = ctypes._CFuncPtr
+        _CFuncPtr = ctypes._CFuncPtr    # use as a flag of loaded ctypes
+        #if not os.path.dirname(path) and os.path.isfile(path):
+            
     except ImportError:
         wx.LogError('ctypes module not found')
         globals()[localname] = None
@@ -973,10 +983,6 @@ def addHandlers():
             except:
                 wx.LogError('error adding XmlHandler: "%s"' % h)
                 print traceback.print_exc()
-
-def clearHandlers():
-    global _handlers
-    _handlers = []
 
 def custom(klassName, klass='unknown'):
     """Define custom control based on xrcClass.
