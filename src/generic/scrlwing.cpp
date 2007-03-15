@@ -1392,7 +1392,13 @@ bool wxScrolledWindow::Create(wxWindow *parent,
     MacSetClipChildren( true ) ;
 #endif
 
-    bool ok = wxPanel::Create(parent, id, pos, size, style|wxHSCROLL|wxVSCROLL, name);
+    // by default, we're scrollable in both directions (but if one of the
+    // styles is specified explicitly, we shouldn't add the other one
+    // automatically)
+    if ( !(style & (wxHSCROLL | wxVSCROLL)) )
+        style |= wxHSCROLL | wxVSCROLL;
+
+    bool ok = wxPanel::Create(parent, id, pos, size, style, name);
 
     return ok;
 }
