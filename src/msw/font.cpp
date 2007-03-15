@@ -903,7 +903,7 @@ void wxFont::Unshare()
     {
         m_refData = new wxFontRefData();
     }
-    else if (m_refData->GetRefCount() > 1)
+    else
     {
         wxFontRefData* ref = new wxFontRefData(*M_FONTDATA);
         UnRef();

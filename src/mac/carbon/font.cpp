@@ -456,7 +456,7 @@ void wxFont::Unshare()
     {
         m_refData = new wxFontRefData();
     }
-    else if (m_refData->GetRefCount() > 1)
+    else
     {
         wxFontRefData* ref = new wxFontRefData(*(wxFontRefData*)m_refData);
         UnRef();
