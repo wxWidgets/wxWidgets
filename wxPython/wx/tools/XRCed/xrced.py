@@ -479,10 +479,14 @@ class Frame(wx.Frame):
         # Extra check to not mess with idle updating
         if undoMan.CanUndo():
             undoMan.Undo()
+            g.panel.SetModified(False)
+            if not undoMan.CanUndo():
+                self.SetModified(False)
 
     def OnRedo(self, evt):
         if undoMan.CanRedo():
             undoMan.Redo()
+            self.SetModified(True)
 
     def OnCopy(self, evt):
         selected = tree.selection
@@ -1635,7 +1639,8 @@ Please upgrade wxWidgets to %d.%d.%d or higher.''' % MinWxVersion)
             cwd = os.getcwd()
             try:
                 for dir in plugins.split(':'):
-                    if os.path.isdir(dir):
+                    if os.path.isdir(dir) and \
+                       os.path.isfile(os.path.join(dir, '__init__.py')):
                         # Normalize
                         dir = os.path.abspath(os.path.normpath(dir))
                         sys.path = sys_path + [os.path.dirname(dir)]

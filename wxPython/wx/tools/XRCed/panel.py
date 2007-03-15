@@ -160,6 +160,7 @@ class Panel(wx.Notebook):
         # Register undo object when modifying first time
         if not self.modified and value:
            g.undoMan.RegisterUndo(UndoEdit())
+           g.frame.SetModified()
         self.modified = value
         
     def Apply(self):
@@ -258,7 +259,8 @@ class ParamPage(wx.Panel):
         for k,v,e in state[1]:
             self.controls[k].SetValue(v)
             self.controls[k].Enable(e)
-            if e: self.controls[k].modified = True
+            # Set all states to modified
+            if e and k in self.xxx.params: self.controls[k].modified = True            
         if self.controlName:
             self.controlName.SetValue(state[2])
 
@@ -290,8 +292,9 @@ class PropPage(ParamPage):
                     label = wx.StaticText(self, paramIDs[param], param + ':',
                                           size = (LABEL_WIDTH,-1), name = param)
             else:
-                # Notebook has one very loooooong parameter
+                # Rename some parameters
                 if param == 'usenotebooksizer': sParam = 'usesizer:'
+                elif param == 'option': sParam = 'proportion'
                 else: sParam = param + ':'
                 label = wx.CheckBox(self, paramIDs[param], sParam,
                                    size = (LABEL_WIDTH,-1), name = param)
