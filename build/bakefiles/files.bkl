@@ -1494,6 +1494,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/fontutil.cpp
     src/msw/gdiimage.cpp
     src/msw/gdiobj.cpp
+    src/msw/gdiplus.cpp
     src/msw/graphics.cpp
     src/msw/gsockmsw.cpp
     src/msw/icon.cpp
