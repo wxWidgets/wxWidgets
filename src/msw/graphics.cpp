@@ -17,6 +17,8 @@
 #pragma hdrstop
 #endif
 
+#if wxUSE_GRAPHICS_CONTEXT
+
 #ifndef WX_PRECOMP
 #include "wx/msw/wrapcdlg.h"
 #include "wx/image.h"
@@ -35,11 +37,11 @@
 
 #include "wx/graphics.h"
 
-#if wxUSE_GRAPHICS_CONTEXT
-
 #include <vector>
 
 using namespace std;
+
+#include "wx/msw/wrapgdip.h"
 
 //-----------------------------------------------------------------------------
 // constants
@@ -78,19 +80,6 @@ static inline double RadToDeg(double deg) { return (deg * 180.0) / M_PI; }
 #if wxUSE_COMMON_DIALOGS && !defined(__WXMICROWIN__)
 #include <commdlg.h>
 #endif
-
-// TODO remove this dependency (gdiplus needs the macros)
-
-#ifndef max
-#define max(a,b)            (((a) > (b)) ? (a) : (b))
-#endif
-
-#ifndef min
-#define min(a,b)            (((a) < (b)) ? (a) : (b))
-#endif
-
-#include "gdiplus.h"
-using namespace Gdiplus;
 
 class WXDLLIMPEXP_CORE wxGDIPlusPathData : public wxGraphicsPathData
 {
