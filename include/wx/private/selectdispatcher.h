@@ -30,6 +30,9 @@ public:
 
     // called when there is exception on descriptor
     virtual void OnExceptionWaiting(int fd) = 0;
+
+    // virtual dtor for the base class
+    virtual ~wxFDIOHandler() { }
 };
 
 // those flags describes sets where descriptor should be added
