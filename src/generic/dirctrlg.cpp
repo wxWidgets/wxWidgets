@@ -635,6 +635,9 @@ wxTreeCtrl* wxGenericDirCtrl::CreateTreeCtrl(wxWindow *parent, wxWindowID id, co
 
 void wxGenericDirCtrl::ShowHidden( bool show )
 {
+    if ( m_showHidden == show )
+        return;
+
     m_showHidden = show;
 
     wxString path = GetPath();
