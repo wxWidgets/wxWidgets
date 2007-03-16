@@ -86,6 +86,26 @@ wxPoint wxJoystick::GetPosition() const
         return wxPoint(0,0);
 }
 
+int wxJoystick::GetPosition(unsigned axis) const
+{
+    switch (axis) {
+    case 0:
+        return GetPosition().x;
+    case 1:
+        return GetPosition().y;
+    case 2:
+        return GetZPosition();
+    case 3:
+        return GetRudderPosition();
+    case 4:
+        return GetUPosition();
+    case 5:
+        return GetVPosition();
+    default:
+        return 0;
+    }
+}
+
 int wxJoystick::GetZPosition() const
 {
     JOYINFO joyInfo;
@@ -125,6 +145,14 @@ int wxJoystick::GetButtonState() const
     }
     else
         return 0;
+}
+
+bool wxJoystick::GetButtonState(unsigned id) const
+{
+    if (id > sizeof(int) * 8)
+        return false;
+
+    return (GetButtonState() & (1 << id)) != 0;
 }
 
 /**

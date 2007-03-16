@@ -28,6 +28,8 @@ class WXDLLIMPEXP_ADV wxJoystick: public wxObject
   ////////////////////////////////////////////////////////////////////////////
 
   wxPoint GetPosition(void) const;
+  int GetPosition(unsigned axis) const;
+  bool GetButtonState(unsigned button) const;
   int GetZPosition(void) const;
   int GetButtonState(void) const;
   int GetPOVPosition(void) const;

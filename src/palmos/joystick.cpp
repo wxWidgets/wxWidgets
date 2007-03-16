@@ -35,6 +35,18 @@ wxPoint wxJoystick::GetPosition() const
     return wxPoint(0, 0);
 }
 
+int wxJoystick::GetPosition(unsigned axis) const
+{
+    // TODO
+    return 0;
+}
+
+bool wxJoystick::GetButtonState(unsigned id) const
+{
+    // TODO
+    return false;
+}
+
 int wxJoystick::GetZPosition() const
 {
     return 0;
