@@ -30,7 +30,7 @@
     #include "wx/module.h"
 #endif
 
-#include "wx/private/socketevtdispatch.h"
+#include "wx/private/selectdispatcher.h"
 #include "wx/unix/private.h"
 #include "wx/x11/private.h"
 #include "X11/Xlib.h"
@@ -263,7 +263,7 @@ bool wxEventLoop::Dispatch()
 
 #if wxUSE_SOCKETS
     // handle any pending socket events:
-    wxSocketEventDispatcher::Get().RunLoop();
+    wxSelectDispatcher::Get().RunLoop(0);
 #endif
 
     (void) m_impl->ProcessEvent( &event );

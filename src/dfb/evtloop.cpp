@@ -27,7 +27,7 @@
 
 #include "wx/thread.h"
 #include "wx/timer.h"
-#include "wx/private/socketevtdispatch.h"
+#include "wx/private/selectdispatcher.h"
 #include "wx/dfb/private.h"
 #include "wx/nonownedwnd.h"
 
@@ -141,7 +141,7 @@ void wxEventLoop::OnNextIteration()
 
 #if wxUSE_SOCKETS
     // handle any pending socket events:
-    wxSocketEventDispatcher::Get().RunLoop();
+    wxSelectDispatcher::Get().RunLoop(0);
 #endif
 }
 

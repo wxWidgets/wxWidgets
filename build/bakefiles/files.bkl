@@ -1400,7 +1400,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="X11_LOWLEVEL_SRC" hints="files">
     $(XWIN_LOWLEVEL_SRC)
-    src/common/socketevtdispatch.cpp
+    src/common/gsocketiohandler.cpp
+    src/common/selectdispatcher.cpp
     src/generic/icon.cpp
     src/generic/timer.cpp
     src/x11/app.cpp
@@ -1820,7 +1821,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <set var="DFB_LOWLEVEL_SRC" hints="files">
     src/common/fontmgrcmn.cpp
-    src/common/socketevtdispatch.cpp
+    src/common/gsocketiohandler.cpp
+    src/common/selectdispatcher.cpp
     src/generic/caret.cpp
     src/generic/colour.cpp
     src/generic/icon.cpp
