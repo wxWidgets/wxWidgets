@@ -6114,6 +6114,46 @@ const wxChar *wxGetMessageName(int message)
         case 0x00A7: return wxT("WM_NCMBUTTONDOWN");
         case 0x00A8: return wxT("WM_NCMBUTTONUP");
         case 0x00A9: return wxT("WM_NCMBUTTONDBLCLK");
+
+        case 0x00B0: return wxT("EM_GETSEL");
+        case 0x00B1: return wxT("EM_SETSEL");
+        case 0x00B2: return wxT("EM_GETRECT");
+        case 0x00B3: return wxT("EM_SETRECT");
+        case 0x00B4: return wxT("EM_SETRECTNP");
+        case 0x00B5: return wxT("EM_SCROLL");
+        case 0x00B6: return wxT("EM_LINESCROLL");
+        case 0x00B7: return wxT("EM_SCROLLCARET");
+        case 0x00B8: return wxT("EM_GETMODIFY");
+        case 0x00B9: return wxT("EM_SETMODIFY");
+        case 0x00BA: return wxT("EM_GETLINECOUNT");
+        case 0x00BB: return wxT("EM_LINEINDEX");
+        case 0x00BC: return wxT("EM_SETHANDLE");
+        case 0x00BD: return wxT("EM_GETHANDLE");
+        case 0x00BE: return wxT("EM_GETTHUMB");
+        case 0x00C1: return wxT("EM_LINELENGTH");
+        case 0x00C2: return wxT("EM_REPLACESEL");
+        case 0x00C4: return wxT("EM_GETLINE");
+        case 0x00C5: return wxT("EM_LIMITTEXT/EM_SETLIMITTEXT"); /* ;win40 Name change */
+        case 0x00C6: return wxT("EM_CANUNDO");
+        case 0x00C7: return wxT("EM_UNDO");
+        case 0x00C8: return wxT("EM_FMTLINES");
+        case 0x00C9: return wxT("EM_LINEFROMCHAR");
+        case 0x00CB: return wxT("EM_SETTABSTOPS");
+        case 0x00CC: return wxT("EM_SETPASSWORDCHAR");
+        case 0x00CD: return wxT("EM_EMPTYUNDOBUFFER");
+        case 0x00CE: return wxT("EM_GETFIRSTVISIBLELINE");
+        case 0x00CF: return wxT("EM_SETREADONLY");
+        case 0x00D0: return wxT("EM_SETWORDBREAKPROC");
+        case 0x00D1: return wxT("EM_GETWORDBREAKPROC");
+        case 0x00D2: return wxT("EM_GETPASSWORDCHAR");
+        case 0x00D3: return wxT("EM_SETMARGINS");
+        case 0x00D4: return wxT("EM_GETMARGINS");
+        case 0x00D5: return wxT("EM_GETLIMITTEXT");
+        case 0x00D6: return wxT("EM_POSFROMCHAR");
+        case 0x00D7: return wxT("EM_CHARFROMPOS");
+        case 0x00D8: return wxT("EM_SETIMESTATUS");
+        case 0x00D9: return wxT("EM_GETIMESTATUS");
+
         case 0x0100: return wxT("WM_KEYDOWN");
         case 0x0101: return wxT("WM_KEYUP");
         case 0x0102: return wxT("WM_CHAR");
@@ -6139,6 +6179,16 @@ const wxChar *wxGetMessageName(int message)
         case 0x011F: return wxT("WM_MENUSELECT");
         case 0x0120: return wxT("WM_MENUCHAR");
         case 0x0121: return wxT("WM_ENTERIDLE");
+
+        case 0x0132: return wxT("WM_CTLCOLORMSGBOX");
+        case 0x0133: return wxT("WM_CTLCOLOREDIT");
+        case 0x0134: return wxT("WM_CTLCOLORLISTBOX");
+        case 0x0135: return wxT("WM_CTLCOLORBTN");
+        case 0x0136: return wxT("WM_CTLCOLORDLG");
+        case 0x0137: return wxT("WM_CTLCOLORSCROLLBAR");
+        case 0x0138: return wxT("WM_CTLCOLORSTATIC");
+        case 0x01E1: return wxT("MN_GETHMENU");
+
         case 0x0200: return wxT("WM_MOUSEMOVE");
         case 0x0201: return wxT("WM_LBUTTONDOWN");
         case 0x0202: return wxT("WM_LBUTTONUP");
@@ -6183,6 +6233,11 @@ const wxChar *wxGetMessageName(int message)
         case 0x0290: return wxT("WM_IME_KEYDOWN");
         case 0x0291: return wxT("WM_IME_KEYUP");
 
+        case 0x02A0: return wxT("WM_NCMOUSEHOVER");
+        case 0x02A1: return wxT("WM_MOUSEHOVER");
+        case 0x02A2: return wxT("WM_NCMOUSELEAVE");
+        case 0x02A3: return wxT("WM_MOUSELEAVE");
+
         case 0x0300: return wxT("WM_CUT");
         case 0x0301: return wxT("WM_COPY");
         case 0x0302: return wxT("WM_PASTE");
@@ -6201,9 +6256,10 @@ const wxChar *wxGetMessageName(int message)
         case 0x030F: return wxT("WM_QUERYNEWPALETTE");
         case 0x0310: return wxT("WM_PALETTEISCHANGING");
         case 0x0311: return wxT("WM_PALETTECHANGED");
-#if wxUSE_HOTKEY
         case 0x0312: return wxT("WM_HOTKEY");
-#endif
+
+        case 0x0317: return wxT("WM_PRINT");
+        case 0x0318: return wxT("WM_PRINTCLIENT");
 
         // common controls messages - although they're not strictly speaking
         // standard, it's nice to decode them nevertheless
