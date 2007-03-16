@@ -409,6 +409,12 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     if ( !value.empty() )
     {
         SetValue(value);
+        m_oldValue = (int) wxAtol(value);
+    }
+    else
+    {
+        SetValue(wxString::Format(wxT("%d"), initial));
+        m_oldValue = initial;
     }
 
     // do it after finishing with m_hwndBuddy creation to avoid generating
