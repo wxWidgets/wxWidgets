@@ -20,28 +20,27 @@
 #if wxUSE_GRAPHICS_CONTEXT
 
 #ifndef WX_PRECOMP
-#include "wx/msw/wrapcdlg.h"
-#include "wx/image.h"
-#include "wx/window.h"
-#include "wx/dc.h"
-#include "wx/utils.h"
-#include "wx/dialog.h"
-#include "wx/app.h"
-#include "wx/bitmap.h"
-#include "wx/dcmemory.h"
-#include "wx/log.h"
-#include "wx/icon.h"
-#include "wx/dcprint.h"
-#include "wx/module.h"
+    #include "wx/msw/wrapcdlg.h"
+    #include "wx/image.h"
+    #include "wx/window.h"
+    #include "wx/dc.h"
+    #include "wx/utils.h"
+    #include "wx/dialog.h"
+    #include "wx/app.h"
+    #include "wx/bitmap.h"
+    #include "wx/dcmemory.h"
+    #include "wx/log.h"
+    #include "wx/icon.h"
+    #include "wx/dcprint.h"
+    #include "wx/module.h"
 #endif
 
 #include "wx/graphics.h"
-
-#include <vector>
-
-using namespace std;
-
 #include "wx/msw/wrapgdip.h"
+
+#include "wx/stack.h"
+
+WX_DECLARE_STACK(GraphicsState, GraphicsStates);
 
 //-----------------------------------------------------------------------------
 // constants
@@ -310,7 +309,7 @@ private:
     void    SetDefaults();
 
     Graphics* m_context;
-    vector<GraphicsState> m_stateStack;
+    GraphicsStates m_stateStack;
     GraphicsState m_state1;
     GraphicsState m_state2;
 
@@ -953,13 +952,13 @@ void wxGDIPlusContext::Scale( wxDouble xScale , wxDouble yScale )
 void wxGDIPlusContext::PushState()
 {
     GraphicsState state = m_context->Save();
-    m_stateStack.push_back(state);
+    m_stateStack.push(state);
 }
 
 void wxGDIPlusContext::PopState()
 {
-    GraphicsState state = m_stateStack.back();
-    m_stateStack.pop_back();
+    GraphicsState state = m_stateStack.top();
+    m_stateStack.pop();
     m_context->Restore(state);
 }
 
