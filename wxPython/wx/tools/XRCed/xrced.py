@@ -105,7 +105,7 @@ class Frame(wx.Frame):
         self.inIdle = False
 
         # Load our own resources
-        self.res = xrc.XmlResource('')
+        self.res = xrc.EmptyXmlResource()
         # !!! Blocking of assert failure occurring in older unicode builds
         try:
             quietlog = wx.LogNull()

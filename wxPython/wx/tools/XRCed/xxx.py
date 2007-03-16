@@ -320,9 +320,11 @@ class xxxObject:
         try:
             self.params[param].update(value)
         except KeyError:
-            p = xxxParam(g.tree.dom.createElement(param))
+            elem = g.tree.dom.createElement(param)
+            p = xxxParam(elem)
             p.update(value)
             self.params[param] = p
+            self.node.appendChild(elem)
     # Special processing for growablecols-like parameters
     # represented by several nodes
     def special(self, tag, node):
@@ -856,13 +858,6 @@ class xxxSizerItem(xxxChildContainer):
         if 'pos' in self.child.allParams:
             self.child.allParams = self.child.allParams[:]
             self.child.allParams.remove('pos')
-        # Set defaults for some children types
-        if isinstance(self.child, xxxContainer) and not self.child.isSizer:
-            for param,v in self.defaults_panel.items():
-                self.set(param, v)
-        elif isinstance(self.child, xxxObject):
-            for param,v in self.defaults_control.items():
-                self.set(param, v)
     def resetChild(self, xxx):
         xxxChildContainer.resetChild(self, xxx)
         # Remove pos parameter - not needed for sizeritems
@@ -1205,7 +1200,8 @@ def MakeEmptyDOM(className):
 def MakeEmptyXXX(parent, className):
     # Make corresponding DOM object first
     elem = MakeEmptyDOM(className)
-    # If parent is a sizer, we should create sizeritem object, except for spacers
+    # Special handling, e.g. if parent is a sizer, we should create
+    # sizeritem object, except for spacers, etc.
     if parent:
         if parent.isSizer and className != 'spacer':
             sizerItemElem = MakeEmptyDOM(parent.itemTag)
@@ -1224,7 +1220,16 @@ def MakeEmptyXXX(parent, className):
             pageElem.appendChild(elem)
             elem = pageElem
     # Now just make object
-    return MakeXXXFromDOM(parent, elem)
+    xxx = MakeXXXFromDOM(parent, elem)
+    # Special defaults for new panels and controls
+    if isinstance(xxx, xxxSizerItem):
+        if isinstance(xxx.child, xxxContainer) and not xxx.child.isSizer:
+            for param,v in xxxSizerItem.defaults_panel.items():
+                xxx.set(param, v)
+        elif isinstance(xxx.child, xxxObject):
+            for param,v in xxxSizerItem.defaults_control.items():
+                xxx.set(param, v)
+    return xxx            
 
 # Make empty DOM element for reference
 def MakeEmptyRefDOM(ref):
