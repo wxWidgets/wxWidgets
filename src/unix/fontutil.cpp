@@ -48,11 +48,13 @@
     extern GtkWidget *wxGetRootWindow();
 
     #define wxPANGO_CONV wxGTK_CONV_SYS
+    #define wxPANGO_CONV_BACK wxGTK_CONV_BACK_SYS
 #else
     #include "wx/x11/private.h"
     #include "wx/gtk/private/string.h"
 
     #define wxPANGO_CONV(s) (wxConvUTF8.cWX2MB((s)))
+    #define wxPANGO_CONV_BACK(s) (wxConvUTF8.cMB2WX((s)))
 #endif
 
 // ----------------------------------------------------------------------------
@@ -136,7 +138,7 @@ bool wxNativeFontInfo::GetUnderlined() const
 
 wxString wxNativeFontInfo::GetFaceName() const
 {
-    return wxGTK_CONV_BACK_SYS(pango_font_description_get_family(description));
+    return wxPANGO_CONV_BACK(pango_font_description_get_family(description));
 }
 
 wxFontFamily wxNativeFontInfo::GetFamily() const
@@ -325,7 +327,7 @@ wxString wxNativeFontInfo::ToString() const
 {
     wxGtkString str(pango_font_description_to_string( description ));
 
-    return wxGTK_CONV_BACK_SYS(str);
+    return wxPANGO_CONV_BACK(str);
 }
 
 bool wxNativeFontInfo::FromUserString(const wxString& s)
