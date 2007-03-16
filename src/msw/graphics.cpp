@@ -1169,7 +1169,8 @@ void wxGDIPlusContext::GetPartialTextExtents(const wxString& text, wxArrayDouble
 
     CharacterRange* ranges = new CharacterRange[len] ;
     Region* regions = new Region[len];
-    for( size_t i = 0 ; i < len ; ++i)
+    size_t i;
+    for( i = 0 ; i < len ; ++i)
     {
         ranges[i].First = i ;
         ranges[i].Length = 1 ;
@@ -1178,7 +1179,7 @@ void wxGDIPlusContext::GetPartialTextExtents(const wxString& text, wxArrayDouble
     m_context->MeasureCharacterRanges(ws, -1 , f,layoutRect, &strFormat,1,regions) ;
 
     RectF bbox ;
-    for ( size_t i = 0 ; i < len ; ++i)
+    for ( i = 0 ; i < len ; ++i)
     {
         regions[i].GetBounds(&bbox,m_context);
         widths[i] = bbox.GetRight()-bbox.GetLeft();
