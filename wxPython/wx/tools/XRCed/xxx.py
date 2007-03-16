@@ -859,7 +859,6 @@ class xxxSizerItem(xxxChildContainer):
         # Set defaults for some children types
         if isinstance(self.child, xxxContainer) and not self.child.isSizer:
             for param,v in self.defaults_panel.items():
-                print param,v
                 self.set(param, v)
         elif isinstance(self.child, xxxObject):
             for param,v in self.defaults_control.items():

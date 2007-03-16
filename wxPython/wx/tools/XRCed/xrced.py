@@ -130,6 +130,9 @@ class Frame(wx.Frame):
         menu.Append(self.ID_GENERATE_PYTHON, '&Generate Python...', 
                     'Generate a Python module that uses this XRC')
         menu.AppendSeparator()
+        self.ID_PREFS = wx.NewId()
+        menu.Append(self.ID_PREFS, 'Preferences...', 'Change XRCed settings')
+        menu.AppendSeparator()
         menu.Append(wx.ID_EXIT, '&Quit\tCtrl-Q', 'Exit application')
 
         menuBar.Append(menu, '&File')
@@ -164,7 +167,7 @@ class Frame(wx.Frame):
         self.ID_REFRESH = wx.NewId()
         menu.Append(self.ID_REFRESH, '&Refresh\tCtrl-R', 'Refresh test window')
         self.ID_AUTO_REFRESH = wx.NewId()
-        menu.Append(self.ID_AUTO_REFRESH, '&Auto-refresh\tCtrl-A',
+        menu.Append(self.ID_AUTO_REFRESH, '&Auto-refresh\tAlt-A',
                     'Toggle auto-refresh mode', True)
         menu.Check(self.ID_AUTO_REFRESH, conf.autoRefresh)
         self.ID_TEST_HIDE = wx.NewId()
@@ -250,6 +253,7 @@ class Frame(wx.Frame):
         wx.EVT_MENU(self, wx.ID_SAVE, self.OnSaveOrSaveAs)
         wx.EVT_MENU(self, wx.ID_SAVEAS, self.OnSaveOrSaveAs)
         wx.EVT_MENU(self, self.ID_GENERATE_PYTHON, self.OnGeneratePython)
+        wx.EVT_MENU(self, self.ID_PREFS, self.OnPrefs)
         wx.EVT_MENU(self, wx.ID_EXIT, self.OnExit)
         # Edit
         wx.EVT_MENU(self, wx.ID_UNDO, self.OnUndo)
@@ -470,7 +474,17 @@ class Frame(wx.Frame):
         dlg = PythonOptions(self, conf.localconf, self.dataFile)
         dlg.ShowModal()
         dlg.Destroy()
-
+        
+    def OnPrefs(self, evt):
+        dlg = PrefsDialog(self)
+        if dlg.ShowModal() == wx.ID_OK:
+            # Fetch new preferences
+            for id,cdp in dlg.checkControls.items():
+                c,d,p = cdp
+                if dlg.FindWindowById(id).IsChecked():
+                    d[p] = str(c.GetValue())
+                elif p in d: del d[p]
+        dlg.Destroy()
         
     def OnExit(self, evt):
         self.Close()
@@ -1568,7 +1582,60 @@ class PythonOptions(wx.Dialog):
 
         self.EndModal(wx.ID_OK)
     
-        
+################################################################################
+
+class PrefsDialog(wx.Dialog):
+
+    def __init__(self, parent):
+        pre = wx.PreDialog()
+        g.frame.res.LoadOnDialog(pre, parent, "DIALOG_PREFS")
+        self.PostCreate(pre)
+        self.checkControls = {} # map of check IDs to (control,dict,param)
+
+        xxx = sys.modules['xxx']
+        d = xxx.xxxSizerItem.defaults_panel
+
+        self.check_proportion_panel = xrc.XRCCTRL(self, 'check_proportion_panel')
+        id = self.check_proportion_panel.GetId()
+        wx.EVT_CHECKBOX(self, id, self.OnCheck)
+        self.checkControls[id] = (xrc.XRCCTRL(self, 'spin_proportion_panel'),
+                                  d, 'option')
+
+        self.check_flag_panel = xrc.XRCCTRL(self, 'check_flag_panel')
+        id = self.check_flag_panel.GetId()
+        wx.EVT_CHECKBOX(self, id, self.OnCheck)
+        self.checkControls[id] = (xrc.XRCCTRL(self, 'text_flag_panel'),
+                                  d, 'flag')
+
+        d = xxx.xxxSizerItem.defaults_control
+
+        self.check_proportion_panel = xrc.XRCCTRL(self, 'check_proportion_control')
+        id = self.check_proportion_panel.GetId()
+        wx.EVT_CHECKBOX(self, id, self.OnCheck)
+        self.checkControls[id] = (xrc.XRCCTRL(self, 'spin_proportion_control'),
+                                  d, 'option')
+
+        self.check_flag_panel = xrc.XRCCTRL(self, 'check_flag_control')
+        id = self.check_flag_panel.GetId()
+        wx.EVT_CHECKBOX(self, id, self.OnCheck)
+        self.checkControls[id] = (xrc.XRCCTRL(self, 'text_flag_control'),
+                                  d, 'flag')
+
+        for id,cdp in self.checkControls.items():
+            c,d,p = cdp
+            try:
+                if isinstance(c, wx.SpinCtrl):
+                    c.SetValue(int(d[p]))
+                else:
+                    c.SetValue(d[p])
+                self.FindWindowById(id).SetValue(True)
+            except KeyError:
+                c.Enable(False)
+
+    def OnCheck(self, evt):
+        self.checkControls[evt.GetId()][0].Enable(evt.IsChecked())
+        evt.Skip()
+
 ################################################################################
 
 # Parse string in form var1=val1[,var2=val2]* as dictionary
@@ -1706,6 +1773,7 @@ Please upgrade wxWidgets to %d.%d.%d or higher.''' % MinWxVersion)
         wc.WriteInt('nopanic', True)
         wc.Write('recentFiles', '|'.join(conf.recentfiles.values()[-5:]))
         # Preferences
+        wc.DeleteGroup('Prefs')
         v = sys.modules['xxx'].xxxSizerItem.defaults_panel
         if v: wc.Write('Prefs/sizeritem_defaults_panel', DictToString(v))
         v = sys.modules['xxx'].xxxSizerItem.defaults_control

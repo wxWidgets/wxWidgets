@@ -10,6 +10,7 @@
           <orient>wxHORIZONTAL</orient>
           <object class="sizeritem">
             <object class="wxTextCtrl" name="TEXT">
+              <value></value>
               <size>250,100</size>
               <style>wxTE_MULTILINE</style>
             </object>
@@ -22,23 +23,17 @@
         <flag>wxEXPAND</flag>
       </object>
       <object class="sizeritem">
-        <object class="wxStaticLine"/>
-        <flag>wxEXPAND</flag>
-      </object>
-      <object class="sizeritem">
-        <object class="wxBoxSizer">
-          <orient>wxHORIZONTAL</orient>
-          <object class="sizeritem">
+        <object class="wxStdDialogButtonSizer">
+          <object class="button">
             <object class="wxButton" name="wxID_OK">
-              <label>OK</label>
-              <default>1</default>
+              <label></label>
+              <label>&amp;Ok</label>
             </object>
-            <flag>wxRIGHT</flag>
-            <border>10</border>
           </object>
-          <object class="sizeritem">
+          <object class="button">
             <object class="wxButton" name="wxID_CANCEL">
-              <label>Cancel</label>
+              <label></label>
+              <label>&amp;Cancel</label>
             </object>
           </object>
         </object>
@@ -191,24 +186,21 @@
         <option>1</option>
         <flag>wxEXPAND</flag>
       </object>
-      <object class="sizeritem">
-        <object class="wxStaticLine"/>
-        <flag>wxEXPAND</flag>
+      <object class="spacer">
+        <size>0,10</size>
       </object>
       <object class="sizeritem">
-        <object class="wxBoxSizer">
-          <orient>wxHORIZONTAL</orient>
-          <object class="sizeritem">
+        <object class="wxStdDialogButtonSizer">
+          <object class="button">
             <object class="wxButton" name="wxID_OK">
-              <label>OK</label>
-              <default>1</default>
+              <label></label>
+              <label>&amp;Ok</label>
             </object>
-            <flag>wxRIGHT</flag>
-            <border>10</border>
           </object>
-          <object class="sizeritem">
+          <object class="button">
             <object class="wxButton" name="wxID_CANCEL">
-              <label>Cancel</label>
+              <label></label>
+              <label>&amp;Cancel</label>
             </object>
           </object>
         </object>
@@ -233,24 +225,21 @@
         <flag>wxALL|wxEXPAND</flag>
         <border>5</border>
       </object>
-      <object class="sizeritem">
-        <object class="wxStaticLine"/>
-        <flag>wxEXPAND</flag>
+      <object class="spacer">
+        <size>0,10</size>
       </object>
       <object class="sizeritem">
-        <object class="wxBoxSizer">
-          <orient>wxHORIZONTAL</orient>
-          <object class="sizeritem">
+        <object class="wxStdDialogButtonSizer">
+          <object class="button">
             <object class="wxButton" name="wxID_OK">
-              <label>OK</label>
-              <default>1</default>
+              <label></label>
+              <label>&amp;Ok</label>
             </object>
-            <flag>wxRIGHT</flag>
-            <border>10</border>
           </object>
-          <object class="sizeritem">
+          <object class="button">
             <object class="wxButton" name="wxID_CANCEL">
-              <label>Cancel</label>
+              <label></label>
+              <label>&amp;Cancel</label>
             </object>
           </object>
         </object>
@@ -261,7 +250,7 @@
     <style>wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER</style>
   </object>
   <object class="wxDialog" name="DIALOG_STYLES">
-    <title>Window styles</title>
+    <title>Window Styles</title>
     <centered>1</centered>
     <object class="wxBoxSizer">
       <orient>wxVERTICAL</orient>
@@ -299,24 +288,21 @@
         <flag>wxBOTTOM|wxLEFT|wxRIGHT|wxEXPAND</flag>
         <border>5</border>
       </object>
-      <object class="sizeritem">
-        <object class="wxStaticLine"/>
-        <flag>wxEXPAND</flag>
+      <object class="spacer">
+        <size>0,10</size>
       </object>
       <object class="sizeritem">
-        <object class="wxBoxSizer">
-          <orient>wxHORIZONTAL</orient>
-          <object class="sizeritem">
+        <object class="wxStdDialogButtonSizer">
+          <object class="button">
             <object class="wxButton" name="wxID_OK">
-              <label>OK</label>
-              <default>1</default>
+              <label></label>
+              <label>&amp;Ok</label>
             </object>
-            <flag>wxRIGHT</flag>
-            <border>10</border>
           </object>
-          <object class="sizeritem">
+          <object class="button">
             <object class="wxButton" name="wxID_CANCEL">
-              <label>Cancel</label>
+              <label></label>
+              <label>&amp;Cancel</label>
             </object>
           </object>
         </object>
@@ -381,25 +367,23 @@
         </object>
         <option>1</option>
         <flag>wxEXPAND</flag>
+        <border>0</border>
+      </object>
+      <object class="spacer">
+        <size>0,10</size>
       </object>
       <object class="sizeritem">
-        <object class="wxStaticLine"/>
-        <flag>wxEXPAND</flag>
-      </object>
-      <object class="sizeritem">
-        <object class="wxBoxSizer">
-          <orient>wxHORIZONTAL</orient>
-          <object class="sizeritem">
+        <object class="wxStdDialogButtonSizer">
+          <object class="button">
             <object class="wxButton" name="wxID_OK">
-              <label>OK</label>
-              <default>1</default>
+              <label></label>
+              <label>&amp;Ok</label>
             </object>
-            <flag>wxRIGHT</flag>
-            <border>10</border>
           </object>
-          <object class="sizeritem">
+          <object class="button">
             <object class="wxButton" name="wxID_CANCEL">
-              <label>Cancel</label>
+              <label></label>
+              <label>&amp;Cancel</label>
             </object>
           </object>
         </object>
@@ -615,6 +599,103 @@
           </object>
         </object>
         <flag>wxALL|wxEXPAND|wxALIGN_CENTRE_HORIZONTAL</flag>
+        <border>10</border>
+      </object>
+    </object>
+  </object>
+  <object class="wxDialog" name="DIALOG_PREFS">
+    <title>XRCed Preferences</title>
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
+      <object class="sizeritem">
+        <object class="wxStaticBoxSizer">
+          <label>Defaults for new containes</label>
+          <orient>wxVERTICAL</orient>
+          <object class="sizeritem">
+            <object class="wxFlexGridSizer">
+              <cols>2</cols>
+              <rows>2</rows>
+              <object class="sizeritem">
+                <object class="wxCheckBox" name="check_proportion_panel">
+                  <label>proportion</label>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxSpinCtrl" name="spin_proportion_panel">
+                  <size>50,-1</size>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxCheckBox" name="check_flag_panel">
+                  <label>flag</label>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxTextCtrl" name="text_flag_panel">
+                  <size>150,-1</size>
+                </object>
+              </object>
+              <hgap>10</hgap>
+            </object>
+          </object>
+        </object>
+        <flag>wxALL</flag>
+        <border>5</border>
+      </object>
+      <object class="sizeritem">
+        <object class="wxStaticBoxSizer">
+          <label>Defaults for new controls</label>
+          <orient>wxVERTICAL</orient>
+          <object class="sizeritem">
+            <object class="wxFlexGridSizer">
+              <cols>2</cols>
+              <rows>2</rows>
+              <object class="sizeritem">
+                <object class="wxCheckBox" name="check_proportion_control">
+                  <label>proportion</label>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxSpinCtrl" name="spin_proportion_control">
+                  <size>50,-1</size>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxCheckBox" name="check_flag_control">
+                  <label>flag</label>
+                </object>
+              </object>
+              <object class="sizeritem">
+                <object class="wxTextCtrl" name="text_flag_control">
+                  <size>150,-1</size>
+                </object>
+              </object>
+              <hgap>10</hgap>
+            </object>
+          </object>
+        </object>
+        <flag>wxALL</flag>
+        <border>5</border>
+      </object>
+      <object class="spacer">
+        <size>0,10</size>
+      </object>
+      <object class="sizeritem">
+        <object class="wxStdDialogButtonSizer">
+          <object class="button">
+            <object class="wxButton" name="wxID_OK">
+              <label></label>
+              <label>&amp;Ok</label>
+            </object>
+          </object>
+          <object class="button">
+            <object class="wxButton" name="wxID_CANCEL">
+              <label></label>
+              <label>&amp;Cancel</label>
+            </object>
+          </object>
+        </object>
+        <flag>wxALL|wxALIGN_CENTRE_HORIZONTAL</flag>
         <border>10</border>
       </object>
     </object>
