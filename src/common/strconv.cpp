@@ -16,9 +16,6 @@
 #include "wx/wxprec.h"
 
 #ifndef WX_PRECOMP
-    #ifdef __WXMSW__
-        #include "wx/msw/missing.h"
-    #endif
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
@@ -29,10 +26,6 @@
 
 #if wxUSE_WCHAR_T
 
-#ifdef __WINDOWS__
-    #include "wx/msw/private.h"
-#endif
-
 #ifndef __WXWINCE__
 #include <errno.h>
 #endif
@@ -42,6 +35,8 @@
 #include <stdlib.h>
 
 #if defined(__WIN32__) && !defined(__WXMICROWIN__)
+    #include "wx/msw/private.h"
+    #include "wx/msw/missing.h"
     #define wxHAVE_WIN32_MB2WC
 #endif
 

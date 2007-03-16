@@ -27,7 +27,6 @@
 #include "wx/cursor.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/msw/missing.h" // IDC_HAND
     #include "wx/utils.h"
     #include "wx/app.h"
     #include "wx/bitmap.h"
@@ -39,6 +38,7 @@
 #endif
 
 #include "wx/msw/private.h"
+#include "wx/msw/missing.h" // IDC_HAND
 
 // define functions missing in MicroWin
 #ifdef __WXMICROWIN__

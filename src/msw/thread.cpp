@@ -26,7 +26,6 @@
 #include "wx/thread.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/msw/missing.h"
     #include "wx/intl.h"
     #include "wx/app.h"
     #include "wx/module.h"
@@ -36,6 +35,7 @@
 #include "wx/scopeguard.h"
 
 #include "wx/msw/private.h"
+#include "wx/msw/missing.h"
 #include "wx/msw/seh.h"
 
 #include "wx/except.h"

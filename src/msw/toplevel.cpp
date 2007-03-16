@@ -27,7 +27,6 @@
 #include "wx/toplevel.h"
 
 #ifndef WX_PRECOMP
-    #include "wx/msw/missing.h"
     #include "wx/app.h"
     #include "wx/dialog.h"
     #include "wx/string.h"
@@ -48,10 +47,10 @@
     #if _WIN32_WCE < 400 || !defined(__WINCE_STANDARDSDK__)
         #include <aygshell.h>
     #endif
-    #include "wx/msw/wince/missing.h"
 #endif
 
 #include "wx/msw/winundef.h"
+#include "wx/msw/missing.h"
 
 #include "wx/display.h"
 
