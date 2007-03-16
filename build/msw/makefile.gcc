@@ -1349,6 +1349,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_fontutil.o \
 	$(OBJS)\monodll_gdiimage.o \
 	$(OBJS)\monodll_gdiobj.o \
+	$(OBJS)\monodll_gdiplus.o \
 	$(OBJS)\monodll_graphics.o \
 	$(OBJS)\monodll_gsockmsw.o \
 	$(OBJS)\monodll_icon.o \
@@ -1574,6 +1575,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_fontutil.o \
 	$(OBJS)\monodll_gdiimage.o \
 	$(OBJS)\monodll_gdiobj.o \
+	$(OBJS)\monodll_gdiplus.o \
 	$(OBJS)\monodll_graphics.o \
 	$(OBJS)\monodll_gsockmsw.o \
 	$(OBJS)\monodll_icon.o \
@@ -1975,6 +1977,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_fontutil.o \
 	$(OBJS)\monolib_gdiimage.o \
 	$(OBJS)\monolib_gdiobj.o \
+	$(OBJS)\monolib_gdiplus.o \
 	$(OBJS)\monolib_graphics.o \
 	$(OBJS)\monolib_gsockmsw.o \
 	$(OBJS)\monolib_icon.o \
@@ -2200,6 +2203,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_fontutil.o \
 	$(OBJS)\monolib_gdiimage.o \
 	$(OBJS)\monolib_gdiobj.o \
+	$(OBJS)\monolib_gdiplus.o \
 	$(OBJS)\monolib_graphics.o \
 	$(OBJS)\monolib_gsockmsw.o \
 	$(OBJS)\monolib_icon.o \
@@ -2519,6 +2523,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_fontutil.o \
 	$(OBJS)\coredll_gdiimage.o \
 	$(OBJS)\coredll_gdiobj.o \
+	$(OBJS)\coredll_gdiplus.o \
 	$(OBJS)\coredll_graphics.o \
 	$(OBJS)\coredll_gsockmsw.o \
 	$(OBJS)\coredll_icon.o \
@@ -2744,6 +2749,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_fontutil.o \
 	$(OBJS)\coredll_gdiimage.o \
 	$(OBJS)\coredll_gdiobj.o \
+	$(OBJS)\coredll_gdiplus.o \
 	$(OBJS)\coredll_graphics.o \
 	$(OBJS)\coredll_gsockmsw.o \
 	$(OBJS)\coredll_icon.o \
@@ -2980,6 +2986,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_fontutil.o \
 	$(OBJS)\corelib_gdiimage.o \
 	$(OBJS)\corelib_gdiobj.o \
+	$(OBJS)\corelib_gdiplus.o \
 	$(OBJS)\corelib_graphics.o \
 	$(OBJS)\corelib_gsockmsw.o \
 	$(OBJS)\corelib_icon.o \
@@ -3205,6 +3212,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_fontutil.o \
 	$(OBJS)\corelib_gdiimage.o \
 	$(OBJS)\corelib_gdiobj.o \
+	$(OBJS)\corelib_gdiplus.o \
 	$(OBJS)\corelib_graphics.o \
 	$(OBJS)\corelib_gsockmsw.o \
 	$(OBJS)\corelib_icon.o \
@@ -5556,6 +5564,11 @@ $(OBJS)\monodll_gdiobj.o: ../../src/msw/gdiobj.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_gdiplus.o: ../../src/msw/gdiplus.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_graphics.o: ../../src/msw/graphics.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -7659,6 +7672,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_gdiobj.o: ../../src/msw/gdiobj.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_gdiplus.o: ../../src/msw/gdiplus.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -9794,6 +9812,11 @@ $(OBJS)\coredll_gdiobj.o: ../../src/msw/gdiobj.cpp
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_gdiplus.o: ../../src/msw/gdiplus.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_graphics.o: ../../src/msw/graphics.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -11170,6 +11193,11 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_gdiobj.o: ../../src/msw/gdiobj.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_gdiplus.o: ../../src/msw/gdiplus.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

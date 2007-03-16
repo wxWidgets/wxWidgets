@@ -2147,6 +2147,10 @@ SOURCE=..\..\src\msw\gdiobj.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\msw\gdiplus.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\msw\graphics.cpp
 # End Source File
 # Begin Source File
