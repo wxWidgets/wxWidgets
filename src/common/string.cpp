@@ -2097,14 +2097,12 @@ wxArrayString::wxArrayString(size_t sz, const wxString* a)
 #define   ARRAY_DEFAULT_INITIAL_SIZE    (16)
 #endif
 
-#define   STRING(p)   ((wxString *)(&(p)))
-
 // ctor
 void wxArrayString::Init(bool autoSort)
 {
   m_nSize  =
   m_nCount = 0;
-  m_pItems = (const wxChar **) NULL;
+  m_pItems = NULL;
   m_autoSort = autoSort;
 }
 
@@ -2154,7 +2152,7 @@ void wxArrayString::Grow(size_t nIncrement)
       m_nSize = ARRAY_DEFAULT_INITIAL_SIZE;
       if (m_nSize < nIncrement)
           m_nSize = nIncrement;
-      m_pItems = new const wxChar *[m_nSize];
+      m_pItems = new wxString[m_nSize];
     }
     else {
       // otherwise when it's called for the first time, nIncrement would be 0
@@ -2167,10 +2165,11 @@ void wxArrayString::Grow(size_t nIncrement)
       if ( nIncrement < ndefIncrement )
         nIncrement = ndefIncrement;
       m_nSize += nIncrement;
-      const wxChar **pNew = new const wxChar *[m_nSize];
+      wxString *pNew = new wxString[m_nSize];
 
       // copy data to new location
-      memcpy(pNew, m_pItems, m_nCount*sizeof(wxChar *));
+      for ( size_t j = 0; j < m_nCount; j++ )
+          pNew[j] = m_pItems[j];
 
       // delete old memory (but do not release the strings!)
       wxDELETEA(m_pItems);
@@ -2180,26 +2179,15 @@ void wxArrayString::Grow(size_t nIncrement)
   }
 }
 
-void wxArrayString::Free()
-{
-  for ( size_t n = 0; n < m_nCount; n++ ) {
-    STRING(m_pItems[n])->GetStringData()->Unlock();
-  }
-}
-
 // deletes all the strings from the list
 void wxArrayString::Empty()
 {
-  Free();
-
   m_nCount = 0;
 }
 
 // as Empty, but also frees memory
 void wxArrayString::Clear()
 {
-  Free();
-
   m_nSize  =
   m_nCount = 0;
 
@@ -2209,8 +2197,6 @@ void wxArrayString::Clear()
 // dtor
 wxArrayString::~wxArrayString()
 {
-  Free();
-
   wxDELETEA(m_pItems);
 }
 
@@ -2224,11 +2210,12 @@ void wxArrayString::Alloc(size_t nSize)
 {
   // only if old buffer was not big enough
   if ( nSize > m_nSize ) {
-    const wxChar **pNew = new const wxChar *[nSize];
+    wxString *pNew = new wxString[nSize];
     if ( !pNew )
         return;
 
-    memcpy(pNew, m_pItems, m_nCount*sizeof(wxChar *));
+    for ( size_t j = 0; j < m_nCount; j++ )
+        pNew[j] = m_pItems[j];
     delete [] m_pItems;
 
     m_pItems = pNew;
@@ -2242,10 +2229,11 @@ void wxArrayString::Shrink()
   // only do it if we have some memory to free
   if( m_nCount < m_nSize ) {
     // allocates exactly as much memory as we need
-    const wxChar **pNew = new const wxChar *[m_nCount];
+    wxString *pNew = new wxString[m_nCount];
 
     // copy data to new location
-    memcpy(pNew, m_pItems, m_nCount*sizeof(wxChar *));
+    for ( size_t j = 0; j < m_nCount; j++ )
+        pNew[j] = m_pItems[j];
     delete [] m_pItems;
     m_pItems = pNew;
   }
@@ -2283,7 +2271,7 @@ int wxArrayString::Index(const wxChar *sz, bool bCase, bool bFromEnd) const
       if ( m_nCount > 0 ) {
         size_t ui = m_nCount;
         do {
-          if ( STRING(m_pItems[--ui])->IsSameAs(sz, bCase) )
+          if ( m_pItems[--ui].IsSameAs(sz, bCase) )
             return ui;
         }
         while ( ui != 0 );
@@ -2291,7 +2279,7 @@ int wxArrayString::Index(const wxChar *sz, bool bCase, bool bFromEnd) const
     }
     else {
       for( size_t ui = 0; ui < m_nCount; ui++ ) {
-        if( STRING(m_pItems[ui])->IsSameAs(sz, bCase) )
+        if( m_pItems[ui].IsSameAs(sz, bCase) )
           return ui;
       }
     }
@@ -2330,17 +2318,12 @@ size_t wxArrayString::Add(const wxString& str, size_t nInsert)
     return (size_t)lo;
   }
   else {
-    wxASSERT( str.GetStringData()->IsValid() );
-
     Grow(nInsert);
 
     for (size_t i = 0; i < nInsert; i++)
     {
-        // the string data must not be deleted!
-        str.GetStringData()->Lock();
-
         // just append
-        m_pItems[m_nCount + i] = str.c_str();
+        m_pItems[m_nCount + i] = str;
     }
     size_t ret = m_nCount;
     m_nCount += nInsert;
@@ -2351,21 +2334,18 @@ size_t wxArrayString::Add(const wxString& str, size_t nInsert)
 // add item at the given position
 void wxArrayString::Insert(const wxString& str, size_t nIndex, size_t nInsert)
 {
-  wxASSERT( str.GetStringData()->IsValid() );
-
   wxCHECK_RET( nIndex <= m_nCount, wxT("bad index in wxArrayString::Insert") );
   wxCHECK_RET( m_nCount <= m_nCount + nInsert,
                wxT("array size overflow in wxArrayString::Insert") );
 
   Grow(nInsert);
 
-  memmove(&m_pItems[nIndex + nInsert], &m_pItems[nIndex],
-          (m_nCount - nIndex)*sizeof(wxChar *));
+  for (int j = m_nCount - nIndex - 1; j >= 0; j--)
+      m_pItems[nIndex + nInsert + j] = m_pItems[nIndex + j];
 
   for (size_t i = 0; i < nInsert; i++)
   {
-      str.GetStringData()->Lock();
-      m_pItems[nIndex + i] = str.c_str();
+      m_pItems[nIndex + i] = str;
   }
   m_nCount += nInsert;
 }
@@ -2401,7 +2381,7 @@ void wxArrayString::SetCount(size_t count)
 
     wxString s;
     while ( m_nCount < count )
-        m_pItems[m_nCount++] = s.c_str();
+        m_pItems[m_nCount++] = s;
 }
 
 // removes item from array (by index)
@@ -2411,12 +2391,9 @@ void wxArrayString::RemoveAt(size_t nIndex, size_t nRemove)
   wxCHECK_RET( nIndex + nRemove <= m_nCount,
                wxT("removing too many elements in wxArrayString::Remove") );
 
-  // release our lock
-  for (size_t i = 0; i < nRemove; i++)
-      Item(nIndex + i).GetStringData()->Unlock();
+  for ( size_t j =  0; j < m_nCount - nIndex -nRemove; j++)
+      m_pItems[nIndex + j] = m_pItems[nIndex + nRemove + j];
 
-  memmove(&m_pItems[nIndex], &m_pItems[nIndex + nRemove],
-          (m_nCount - nIndex - nRemove)*sizeof(wxChar *));
   m_nCount -= nRemove;
 }
 
@@ -2497,7 +2474,7 @@ extern "C"
 
 void wxArrayString::Sort(CompareFunction2 compareFunction)
 {
-  qsort(m_pItems, m_nCount, sizeof(wxChar *), (wxStringCompareFn)compareFunction);
+  qsort(m_pItems, m_nCount, sizeof(wxString), (wxStringCompareFn)compareFunction);
 }
 
 void wxArrayString::Sort(bool reverseOrder)
@@ -2509,9 +2486,7 @@ void wxArrayString::DoSort()
 {
   wxCHECK_RET( !m_autoSort, wxT("can't use this method with sorted arrays") );
 
-  // just sort the pointers using qsort() - of course it only works because
-  // wxString() *is* a pointer to its data
-  qsort(m_pItems, m_nCount, sizeof(wxChar *), wxStringCompareFunction);
+  qsort(m_pItems, m_nCount, sizeof(wxString), wxStringCompareFunction);
 }
 
 bool wxArrayString::operator==(const wxArrayString& a) const

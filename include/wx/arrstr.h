@@ -80,21 +80,6 @@ public:
 
 #else // if !wxUSE_STL
 
-// ----------------------------------------------------------------------------
-// The string array uses it's knowledge of internal structure of the wxString
-// class to optimize string storage. Normally, we would store pointers to
-// string, but as wxString is, in fact, itself a pointer (sizeof(wxString) is
-// sizeof(char *)) we store these pointers instead. The cast to "wxString *" is
-// really all we need to turn such pointer into a string!
-//
-// Of course, it can be called a dirty hack, but we use twice less memory and
-// this approach is also more speed efficient, so it's probably worth it.
-//
-// Usage notes: when a string is added/inserted, a new copy of it is created,
-// so the original string may be safely deleted. When a string is retrieved
-// from the array (operator[] or Item() method), a reference is returned.
-// ----------------------------------------------------------------------------
-
 class WXDLLIMPEXP_BASE wxArrayString
 {
 public:
@@ -154,7 +139,7 @@ public:
         wxASSERT_MSG( nIndex < m_nCount,
                       _T("wxArrayString: index out of bounds") );
 
-        return *(wxString *)&(m_pItems[nIndex]);
+        return m_pItems[nIndex];
     }
 
     // same as Item()
@@ -273,8 +258,8 @@ public:
     { clear(); Add(v, n); }
   reference back() { return *(end() - 1); }
   const_reference back() const { return *(end() - 1); }
-  iterator begin() { return (wxString *)&(m_pItems[0]); }
-  const_iterator begin() const { return (wxString *)&(m_pItems[0]); }
+  iterator begin() { return m_pItems; }
+  const_iterator begin() const { return m_pItems; }
   size_type capacity() const { return m_nSize; }
   void clear() { Clear(); }
   bool empty() const { return IsEmpty(); }
@@ -311,14 +296,13 @@ protected:
 
 private:
   void Grow(size_t nIncrement = 0);     // makes array bigger if needed
-  void Free();                          // free all the strings stored
 
   void DoSort();                        // common part of all Sort() variants
 
   size_t  m_nSize,    // current size of the array
           m_nCount;   // current number of elements
 
-  const wxChar  **m_pItems; // pointer to data
+  wxString *m_pItems; // pointer to data
 
   bool    m_autoSort; // if true, keep the array always sorted
 };
