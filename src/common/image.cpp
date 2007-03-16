@@ -2804,31 +2804,38 @@ wxRotatePoint(double x, double y, double cos_angle, double sin_angle,
     return wxRotatePoint (wxRealPoint(x,y), cos_angle, sin_angle, p0);
 }
 
-wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool interpolating, wxPoint * offset_after_rotation) const
+wxImage wxImage::Rotate(double angle,
+                        const wxPoint& centre_of_rotation,
+                        bool interpolating,
+                        wxPoint *offset_after_rotation) const
 {
-    int i;
-    angle = -angle;     // screen coordinates are a mirror image of "real" coordinates
+    // screen coordinates are a mirror image of "real" coordinates
+    angle = -angle;
 
-    bool has_alpha = HasAlpha();
+    const bool has_alpha = HasAlpha();
+
+    const int w = GetWidth();
+    const int h = GetHeight();
+
+    int i;
 
     // Create pointer-based array to accelerate access to wxImage's data
-    unsigned char ** data = new unsigned char * [GetHeight()];
+    unsigned char ** data = new unsigned char * [h];
     data[0] = GetData();
-    for (i = 1; i < GetHeight(); i++)
-        data[i] = data[i - 1] + (3 * GetWidth());
+    for (i = 1; i < h; i++)
+        data[i] = data[i - 1] + (3 * w);
 
     // Same for alpha channel
     unsigned char ** alpha = NULL;
     if (has_alpha)
     {
-        alpha = new unsigned char * [GetHeight()];
+        alpha = new unsigned char * [h];
         alpha[0] = GetAlpha();
-        for (i = 1; i < GetHeight(); i++)
-            alpha[i] = alpha[i - 1] + GetWidth();
+        for (i = 1; i < h; i++)
+            alpha[i] = alpha[i - 1] + w;
     }
 
     // precompute coefficients for rotation formula
-    // (sine and cosine of the angle)
     const double cos_angle = cos(angle);
     const double sin_angle = sin(angle);
 
@@ -2839,9 +2846,9 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
     const wxRealPoint p0(centre_of_rotation.x, centre_of_rotation.y);
 
     wxRealPoint p1 = wxRotatePoint (0, 0, cos_angle, sin_angle, p0);
-    wxRealPoint p2 = wxRotatePoint (0, GetHeight(), cos_angle, sin_angle, p0);
-    wxRealPoint p3 = wxRotatePoint (GetWidth(), 0, cos_angle, sin_angle, p0);
-    wxRealPoint p4 = wxRotatePoint (GetWidth(), GetHeight(), cos_angle, sin_angle, p0);
+    wxRealPoint p2 = wxRotatePoint (0, h, cos_angle, sin_angle, p0);
+    wxRealPoint p3 = wxRotatePoint (w, 0, cos_angle, sin_angle, p0);
+    wxRealPoint p4 = wxRotatePoint (w, h, cos_angle, sin_angle, p0);
 
     int x1a = (int) floor (wxMin (wxMin(p1.x, p2.x), wxMin(p3.x, p4.x)));
     int y1a = (int) floor (wxMin (wxMin(p1.y, p2.y), wxMin(p3.y, p4.y)));
@@ -2859,19 +2866,14 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
         *offset_after_rotation = wxPoint (x1a, y1a);
     }
 
-    // GRG: The rotated (destination) image is always accessed
-    //      sequentially, so there is no need for a pointer-based
-    //      array here (and in fact it would be slower).
-    //
-    unsigned char * dst = rotated.GetData();
+    // the rotated (destination) image is always accessed sequentially via this
+    // pointer, there is no need for pointer-based arrays here
+    unsigned char *dst = rotated.GetData();
 
-    unsigned char * alpha_dst = NULL;
-    if (has_alpha)
-        alpha_dst = rotated.GetAlpha();
+    unsigned char *alpha_dst = has_alpha ? rotated.GetAlpha() : NULL;
 
-    // GRG: if the original image has a mask, use its RGB values
-    //      as the blank pixel, else, fall back to default (black).
-    //
+    // if the original image has a mask, use its RGB values as the blank pixel,
+    // else, fall back to default (black).
     unsigned char blank_r = 0;
     unsigned char blank_g = 0;
     unsigned char blank_b = 0;
@@ -2888,27 +2890,28 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
     // performing an inverse rotation (a rotation of -angle) and getting the
     // pixel at those coordinates
 
-    // GRG: I've taken the (interpolating) test out of the loops, so that
-    //      it is done only once, instead of repeating it for each pixel.
+    const int rH = rotated.GetHeight();
+    const int rW = rotated.GetWidth();
 
-    int x;
+    // do the (interpolating) test outside of the loops, so that it is done
+    // only once, instead of repeating it for each pixel.
     if (interpolating)
     {
-        for (int y = 0; y < rotated.GetHeight(); y++)
+        for (int y = 0; y < rH; y++)
         {
-            for (x = 0; x < rotated.GetWidth(); x++)
+            for (int x = 0; x < rW; x++)
             {
                 wxRealPoint src = wxRotatePoint (x + x1a, y + y1a, cos_angle, -sin_angle, p0);
 
-                if (-0.25 < src.x && src.x < GetWidth() - 0.75 &&
-                    -0.25 < src.y && src.y < GetHeight() - 0.75)
+                if (-0.25 < src.x && src.x < w - 0.75 &&
+                    -0.25 < src.y && src.y < h - 0.75)
                 {
                     // interpolate using the 4 enclosing grid-points.  Those
                     // points can be obtained using floor and ceiling of the
                     // exact coordinates of the point
                     int x1, y1, x2, y2;
 
-                    if (0 < src.x && src.x < GetWidth() - 1)
+                    if (0 < src.x && src.x < w - 1)
                     {
                         x1 = wxRound(floor(src.x));
                         x2 = wxRound(ceil(src.x));
@@ -2918,7 +2921,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
                         x1 = x2 = wxRound (src.x);
                     }
 
-                    if (0 < src.y && src.y < GetHeight() - 1)
+                    if (0 < src.y && src.y < h - 1)
                     {
                         y1 = wxRound(floor(src.y));
                         y2 = wxRound(ceil(src.y));
@@ -3039,19 +3042,18 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
             }
         }
     }
-    else    // not interpolating
+    else // not interpolating
     {
-        for (int y = 0; y < rotated.GetHeight(); y++)
+        for (int y = 0; y < rH; y++)
         {
-            for (x = 0; x < rotated.GetWidth(); x++)
+            for (int x = 0; x < rW; x++)
             {
                 wxRealPoint src = wxRotatePoint (x + x1a, y + y1a, cos_angle, -sin_angle, p0);
 
                 const int xs = wxRound (src.x);      // wxRound rounds to the
                 const int ys = wxRound (src.y);      // closest integer
 
-                if (0 <= xs && xs < GetWidth() &&
-                    0 <= ys && ys < GetHeight())
+                if (0 <= xs && xs < w && 0 <= ys && ys < h)
                 {
                     unsigned char *p = data[ys] + (3 * xs);
                     *(dst++) = *(p++);
@@ -3075,9 +3077,7 @@ wxImage wxImage::Rotate(double angle, const wxPoint & centre_of_rotation, bool i
     }
 
     delete [] data;
-
-    if (has_alpha)
-        delete [] alpha;
+    delete [] alpha;
 
     return rotated;
 }
