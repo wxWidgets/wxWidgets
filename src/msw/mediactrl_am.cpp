@@ -1483,6 +1483,7 @@ public:
     LPAMGETERRORTEXT m_lpAMGetErrorText;
     wxString GetErrorString(HRESULT hrdsv);
 #endif // __WXDEBUG__
+    wxEvtHandler* m_evthandler;
 
     friend class wxAMMediaEvtHandler;
     DECLARE_DYNAMIC_CLASS(wxAMMediaBackend)
@@ -1573,6 +1574,7 @@ wxAMMediaBackend::wxAMMediaBackend()
 #endif
                   m_bestSize(wxDefaultSize)
 {
+   m_evthandler = NULL;
 }
 
 //---------------------------------------------------------------------------
@@ -1591,7 +1593,11 @@ wxAMMediaBackend::~wxAMMediaBackend()
         if (GetMP())
             GetMP()->Release();
 
-        m_ctrl->PopEventHandler(true);
+        if (m_evthandler)
+        {
+            m_ctrl->RemoveEventHandler(m_evthandler);
+            delete m_evthandler;
+        }
     }
 }
 
@@ -1683,7 +1689,8 @@ bool wxAMMediaBackend::CreateControl(wxControl* ctrl, wxWindow* parent,
 #endif
                                   );
     // Connect for events
-    m_ctrl->PushEventHandler(new wxAMMediaEvtHandler(this));
+    m_evthandler = new wxAMMediaEvtHandler(this);
+    m_ctrl->PushEventHandler(m_evthandler);
 
     //
     //  Here we set up wx-specific stuff for the default
