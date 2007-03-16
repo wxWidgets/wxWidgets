@@ -484,6 +484,7 @@ class Frame(wx.Frame):
                 if dlg.FindWindowById(id).IsChecked():
                     d[p] = str(c.GetValue())
                 elif p in d: del d[p]
+            g.conf.allowExec = ('ask', 'yes', 'no')[dlg.radio_allow_exec.GetSelection()]
         dlg.Destroy()
         
     def OnExit(self, evt):
@@ -1396,6 +1397,8 @@ Homepage: http://xrced.sourceforge.net\
         g.pullDownMenu.custom = self.custom[:]
         # Remove modules imported from comment directives
         map(sys.modules.pop, [m for m in sys.modules if m not in self.modules])
+        xxxParamComment.locals = {}     # clear local namespace
+        xxxParamComment.allow = None    # clear execution state
 
     def SetModified(self, state=True):
         self.modified = state
@@ -1513,9 +1516,6 @@ Homepage: http://xrced.sourceforge.net\
             return True
         return False
 
-    def SaveUndo(self):
-        pass                            # !!!
-
 ################################################################################
 
 class PythonOptions(wx.Dialog):
@@ -1632,6 +1632,13 @@ class PrefsDialog(wx.Dialog):
             except KeyError:
                 c.Enable(False)
 
+        self.radio_allow_exec = xrc.XRCCTRL(self, 'radio_allow_exec')
+        try:
+            radio = {'ask': 0, 'yes':1, 'no':2}[g.conf.allowExec]
+        except KeyError:
+            radio = 0
+        self.radio_allow_exec.SetSelection(radio)
+
     def OnCheck(self, evt):
         self.checkControls[evt.GetId()][0].Enable(evt.IsChecked())
         evt.Skip()
@@ -1707,6 +1714,7 @@ Please upgrade wxWidgets to %d.%d.%d or higher.''' % MinWxVersion)
         conf.panelHeight = conf.ReadInt('panelHeight', 200)
         conf.panic = not conf.HasEntry('nopanic')
         # Preferences
+        conf.allowExec = conf.Read('Prefs/allowExec', 'ask')
         p = 'Prefs/sizeritem_defaults_panel'
         if conf.HasEntry(p):
             sys.modules['xxx'].xxxSizerItem.defaults_panel = ReadDictFromString(conf.Read(p))
@@ -1770,14 +1778,16 @@ Please upgrade wxWidgets to %d.%d.%d or higher.''' % MinWxVersion)
         wc.WriteInt('sashPos', conf.sashPos)
         wc.WriteInt('panelWidth', conf.panelWidth)
         wc.WriteInt('panelHeight', conf.panelHeight)
-        wc.WriteInt('nopanic', True)
+        wc.WriteInt('nopanic', 1)
         wc.Write('recentFiles', '|'.join(conf.recentfiles.values()[-5:]))
         # Preferences
         wc.DeleteGroup('Prefs')
+        wc.Write('Prefs/allowExec', conf.allowExec)
         v = sys.modules['xxx'].xxxSizerItem.defaults_panel
         if v: wc.Write('Prefs/sizeritem_defaults_panel', DictToString(v))
         v = sys.modules['xxx'].xxxSizerItem.defaults_control
         if v: wc.Write('Prefs/sizeritem_defaults_control', DictToString(v))
+        
         wc.Flush()
 
 def main():

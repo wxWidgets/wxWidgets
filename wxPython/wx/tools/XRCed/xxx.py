@@ -1023,14 +1023,29 @@ def custom(klassName, klass='unknown'):
     g.pullDownMenu.addCustom(klassName)
 
 class xxxParamComment(xxxParam):
+    locals = {}                         # namespace for comment directives
+    allow = None                        # undefined initial state for current file
     def __init__(self, node):
         xxxNode.__init__(self, node)
         self.textNode = node
-        # Parse "pragma" comments
-        if node.data and node.data[0] == '%':
+        # Parse "pragma" comments if enabled
+        if node.data and node.data[0] == '%' and g.conf.allowExec != 'no' and \
+               xxxParamComment.allow is not False:
+            # Show warning
+            if g.conf.allowExec == 'ask' and xxxParamComment.allow is None:
+                flags = wx.ICON_EXCLAMATION | wx.YES_NO | wx.CENTRE
+                dlg = wx.MessageDialog(g.frame, '''
+This file contains executable %comment directives. Allow to execute?''',
+                                       'Warning', flags)
+                say = dlg.ShowModal()
+                dlg.Destroy()
+                if say == wx.ID_YES:
+                    xxxParamComment.allow = True
+                else:
+                    xxxParamComment.allow = False
             try:
                 code = node.data[1:]
-                exec code in globals()
+                exec code in globals(), self.locals
             except:
                 wx.LogError('exec error: "%s"' % code)
                 print traceback.print_exc()

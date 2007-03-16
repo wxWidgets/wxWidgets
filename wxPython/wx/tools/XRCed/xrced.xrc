@@ -677,6 +677,18 @@
         <flag>wxALL</flag>
         <border>5</border>
       </object>
+      <object class="sizeritem">
+        <object class="wxRadioBox" name="radio_allow_exec">
+          <label>Execution of comment directives</label>
+          <content>
+            <item>ask</item>
+            <item>always</item>
+            <item>never</item>
+          </content>
+        </object>
+        <flag>wxALL|wxALIGN_CENTRE_HORIZONTAL</flag>
+        <border>5</border>
+      </object>
       <object class="spacer">
         <size>0,10</size>
       </object>

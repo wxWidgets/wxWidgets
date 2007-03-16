@@ -1,8 +1,27 @@
-0.1.8-5
+0.1.8-5 (under construction)
 -------
 
-Implemented comment object for simple one-line comments. No 
-validation is performed.
+Preferences for default "sizeritem" parameters for new panels and
+controls can be configured ("File">"Preferences...").
+
+Implemented comment object for including simple one-line comments and
+comment directives as tree nodes. No validation is performed for a
+valid XML string so comments must not contain "-->". Comment directive
+is a special comment starting with '%' character, followed by a line
+of python code. It is executed using 'exec' when the resource file is
+opened. This is useful to import plugin modules containing custom
+handlers which are specific to the resource file, hovewer this is of
+course a security hole if you use foreign XRC files. A warning is
+displayed if the preference option 'ask' is selected (by default).
+
+Added support for custom controls and plugin modules. Refer to this
+wxPythonWiki for the details: 
+        http://wiki.wxpython.org/index.cgi/XRCed#custom
+
+Tool panel sections can be collapsed/expanded by clicking on the
+label of a tool group.
+
+Some undo/redo and other fixes.
 
 0.1.8-4
 -------
