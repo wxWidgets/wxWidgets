@@ -645,6 +645,10 @@ void wxToolBarBase::UpdateWindowUI(long flags)
 {
     wxWindowBase::UpdateWindowUI(flags);
 
+    // don't waste time updating state of tools in a hidden toolbar
+    if ( !IsShown() )
+        return;
+
     // There is no sense in updating the toolbar UI
     // if the parent window is about to get destroyed
     wxWindow *tlw = wxGetTopLevelParent( this );
