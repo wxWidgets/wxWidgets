@@ -48,6 +48,7 @@ class Globals:
     testWinPos = wx.DefaultPosition
     currentXXX = None
     currentEncoding = defaultEncoding
+    conf = None
 
     def _makeFonts(self):
         self._sysFont = wx.SystemSettings.GetFont(wx.SYS_SYSTEM_FONT)

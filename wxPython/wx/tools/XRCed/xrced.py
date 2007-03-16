@@ -1571,6 +1571,18 @@ class PythonOptions(wx.Dialog):
         
 ################################################################################
 
+# Parse string in form var1=val1[,var2=val2]* as dictionary
+def ReadDictFromString(s):
+    d = {}
+    for vv in s.split(','):
+        var,val = vv.split(':')
+        d[var.strip()] = val
+    return d
+
+# Transform dictionary with strings into one string
+def DictToString(d):
+    return ','.join(map(':'.join, d.items()))
+
 def usage():
     print >> sys.stderr, 'usage: xrced [-dhiv] [file]'
 
@@ -1627,6 +1639,14 @@ Please upgrade wxWidgets to %d.%d.%d or higher.''' % MinWxVersion)
         conf.panelWidth = conf.ReadInt('panelWidth', 200)
         conf.panelHeight = conf.ReadInt('panelHeight', 200)
         conf.panic = not conf.HasEntry('nopanic')
+        # Preferences
+        p = 'Prefs/sizeritem_defaults_panel'
+        if conf.HasEntry(p):
+            sys.modules['xxx'].xxxSizerItem.defaults_panel = ReadDictFromString(conf.Read(p))
+        p = 'Prefs/sizeritem_defaults_control'
+        if conf.HasEntry(p):
+            sys.modules['xxx'].xxxSizerItem.defaults_control = ReadDictFromString(conf.Read(p))
+
         # Add handlers
         wx.FileSystem.AddHandler(wx.MemoryFSHandler())
         # Create main frame
@@ -1685,6 +1705,11 @@ Please upgrade wxWidgets to %d.%d.%d or higher.''' % MinWxVersion)
         wc.WriteInt('panelHeight', conf.panelHeight)
         wc.WriteInt('nopanic', True)
         wc.Write('recentFiles', '|'.join(conf.recentfiles.values()[-5:]))
+        # Preferences
+        v = sys.modules['xxx'].xxxSizerItem.defaults_panel
+        if v: wc.Write('Prefs/sizeritem_defaults_panel', DictToString(v))
+        v = sys.modules['xxx'].xxxSizerItem.defaults_control
+        if v: wc.Write('Prefs/sizeritem_defaults_control', DictToString(v))
         wc.Flush()
 
 def main():

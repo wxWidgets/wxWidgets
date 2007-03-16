@@ -315,6 +315,14 @@ class xxxObject:
         else: obj = self
         obj.name = name
         obj.node.setAttribute('name', name)
+    # Set normal (text) params
+    def set(self, param, value):
+        try:
+            self.params[param].update(value)
+        except KeyError:
+            p = xxxParam(g.tree.dom.createElement(param))
+            p.update(value)
+            self.params[param] = p
     # Special processing for growablecols-like parameters
     # represented by several nodes
     def special(self, tag, node):
@@ -837,7 +845,8 @@ class xxxChildContainer(xxxObject):
 class xxxSizerItem(xxxChildContainer):
     allParams = ['option', 'flag', 'border', 'minsize', 'ratio']
     paramDict = {'option': ParamInt, 'minsize': ParamPosSize, 'ratio': ParamPosSize}
-    #default = {'cellspan': '1,1'}
+    defaults_panel = {}
+    defaults_control = {}
     def __init__(self, parent, element, refElem=None):
         # For GridBag sizer items, extra parameters added
         if isinstance(parent, xxxGridBagSizer):
@@ -847,6 +856,14 @@ class xxxSizerItem(xxxChildContainer):
         if 'pos' in self.child.allParams:
             self.child.allParams = self.child.allParams[:]
             self.child.allParams.remove('pos')
+        # Set defaults for some children types
+        if isinstance(self.child, xxxContainer) and not self.child.isSizer:
+            for param,v in self.defaults_panel.items():
+                print param,v
+                self.set(param, v)
+        elif isinstance(self.child, xxxObject):
+            for param,v in self.defaults_control.items():
+                self.set(param, v)
     def resetChild(self, xxx):
         xxxChildContainer.resetChild(self, xxx)
         # Remove pos parameter - not needed for sizeritems
