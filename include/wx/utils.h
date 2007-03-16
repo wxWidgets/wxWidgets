@@ -171,7 +171,7 @@ public:
     operator int() const { return (int) GetInteger(); }
     operator long() const { return GetInteger(); }
     operator double() const { return GetDouble(); }
-    operator const wxString() const { return GetString(); }
+    operator const wxString&() const { return GetString(); }
     operator const wxChar*() const { return (const wxChar*) GetString(); }
 
     static void AddPlatform(int platform);
