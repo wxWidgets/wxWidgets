@@ -15,6 +15,10 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif  //__BORLANDC__
+
 #ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
