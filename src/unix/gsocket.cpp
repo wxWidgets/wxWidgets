@@ -587,7 +587,7 @@ void GSocket::Shutdown()
   /* If socket has been created, shutdown it */
   if (m_fd != INVALID_SOCKET)
   {
-    shutdown(m_fd, 2);
+    shutdown(m_fd, 1);
     Close();
   }
 
