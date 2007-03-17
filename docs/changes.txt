@@ -91,6 +91,10 @@ Major new features in 2.8 release
 2.8.3
 -----
 
+All:
+
+- Shut down the sockets gracefully (Sergio Aguayo)
+
 wxMac
 
 - Corrected top border size for wxStaticBox with empty label (nusi).
