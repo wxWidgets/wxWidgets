@@ -424,7 +424,7 @@ wxString wxExpandEnvVars(const wxString& str)
             else {
               // skip closing bracket unless the variables wasn't expanded
               if ( pszValue == NULL )
-                strResult << (char)bracket;
+                strResult << (wxChar)bracket;
               m++;
             }
           }
