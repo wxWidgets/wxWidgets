@@ -94,6 +94,7 @@ Major new features in 2.8 release
 All:
 
 - Shut down the sockets gracefully (Sergio Aguayo)
+- Fix extra indentation in wxHTML_ALIGN_JUSTIFY display (Chacal)
 
 wxMac
 
