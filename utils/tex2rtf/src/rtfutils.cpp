@@ -3552,7 +3552,7 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
       if(tok.HasMoreTokens())
       {
         wxString token = tok.GetNextToken();
-        imageWidth = (int)(20*ParseUnitArgument((wxChar*)token.c_str()));
+        imageWidth = (int)(20*ParseUnitArgument(token));
       }
       else
       {
@@ -3563,7 +3563,7 @@ bool RTFOnArgument(int macroId, int arg_no, bool start)
       if(tok.HasMoreTokens())
       {
         wxString token = tok.GetNextToken();
-        imageHeight = (int)(20*ParseUnitArgument((wxChar*)token.c_str()));
+        imageHeight = (int)(20*ParseUnitArgument(token));
       }
       else
       {

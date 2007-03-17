@@ -1874,7 +1874,7 @@ static bool CheckTypeRef()
     label.Trim(true); label.Trim(false);
     wxString typeName = label;
     label.MakeLower();
-    TexRef *texRef = FindReference((wxChar*)label.c_str());
+    TexRef *texRef = FindReference(label);
 
     if (texRef && texRef->refFile && wxStrcmp(texRef->refFile, _T("??")) != 0) {
       int a = typeDecl.Find(typeName);
@@ -2150,7 +2150,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
             {
               wxString errBuf;
               errBuf.Printf(_T("Warning: unresolved reference '%s'"), refName);
-              OnInform((wxChar *)errBuf.c_str());
+              OnInform(errBuf);
             }
           }
         }
@@ -2302,7 +2302,7 @@ bool HTMLOnArgument(int macroId, int arg_no, bool start)
         if (f != _T(""))
         {
           // The default HTML file to go to is THIS file (so a no-op)
-          SHGToMap((wxChar *)f.c_str(), currentFileName);
+          SHGToMap(f, currentFileName);
         }
 
         wxChar *mapName = GetArgData();

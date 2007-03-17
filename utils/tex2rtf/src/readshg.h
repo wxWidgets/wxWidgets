@@ -58,7 +58,7 @@ struct HotSpot
 extern int ParseSHG( const wxChar* fileName, HotSpot **hotspots);
 
 // Converts Windows .SHG file to HTML map file
-extern bool SHGToMap(wxChar *filename, wxChar *defaultFile);
+extern bool SHGToMap(const wxChar *filename, const wxChar *defaultFile);
 
 #endif
 

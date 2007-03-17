@@ -107,7 +107,7 @@ int   ParseSHG( const wxChar* fileName, HotSpot **hotspots)
 
 // Convert Windows .SHG file to HTML map file
 
-bool SHGToMap(wxChar *filename, wxChar *defaultFile)
+bool SHGToMap(const wxChar *filename, const wxChar *defaultFile)
 {
   // Test the SHG parser
   HotSpot *hotspots = NULL;

@@ -356,10 +356,10 @@ void DefaultOnMacro(int macroId, int no_args, bool start);
 bool DefaultOnArgument(int macroId, int arg_no, bool start);
 
 // Called on error
-void OnError(const wxChar *msg);
+void OnError(const wxString& msg);
 
 // Called for information
-void OnInform(const wxChar *msg);
+void OnInform(const wxString& msg);
 
 // Special yield wrapper
 void Tex2RTFYield(bool force = false);
@@ -377,7 +377,7 @@ void ForceTopicName(const wxChar *name);
 void ResetTopicCounter(void);
 
 // Parse unit eg. 14, 12pt, 34cm and return value in points.
-int ParseUnitArgument(wxChar *unitArg);
+int ParseUnitArgument(const wxChar *unitArg);
 
 // Set small, large, normal etc. point sizes for reference size
 void SetFontSizes(int pointSize);
@@ -483,11 +483,11 @@ class BibEntry: public wxObject
 extern wxList BibList;
 extern wxStringList CitationList;
 
-bool ReadBib(wxChar *filename);
+bool ReadBib(const wxChar *filename);
 void OutputBib(void);
 void ResolveBibReferences(void);
-void AddCitation(wxChar *citeKey);
-TexRef *FindReference(wxChar *key);
+void AddCitation(const wxChar *citeKey);
+TexRef *FindReference(const wxChar *key);
 
 /*
  * Ability to customize, or at least suppress unknown macro errors

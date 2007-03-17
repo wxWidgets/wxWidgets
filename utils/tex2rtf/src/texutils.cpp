@@ -207,7 +207,7 @@ wxChar *FindTopicName(TexChunk *chunk)
  *
  */
 
-void StartSimulateArgument(wxChar *data)
+void StartSimulateArgument(const wxChar *data)
 {
   wxStrcpy(currentArgData, data);
   haveArgData = true;
@@ -223,8 +223,11 @@ void EndSimulateArgument(void)
  *
  */
 
-int ParseUnitArgument(wxChar *unitArg)
+int ParseUnitArgument(const wxChar *unitArg_)
 {
+  wxWxCharBuffer unitBuf(unitArg_);
+  wxChar *unitArg = unitBuf.data();
+
   float conversionFactor = 1.0;
   float unitValue = 0.0;
   int len = wxStrlen(unitArg);
@@ -470,7 +473,7 @@ void BibEatWhiteSpace(wxString& line)
 {
     while(!line.empty() && (line[0] == _T(' ') || line[0] == _T('\t') || line[0] == (wxChar)EOF))
     {
-        if (line[0] == 10)
+        if (line[0] == '\r')
             BibLine ++;
         line = line.substr(1);
     }
@@ -560,7 +563,7 @@ wxString BibReadToEOL(wxString& line)
     // If in quotes, read white space too. If not,
     // stop at white space or comment.
     while (!line.empty() && line[0] != _T('"') &&
-           (inQuotes || ((line[0] != _T(' ')) && (line[0] != 9) &&
+           (inQuotes || ((line[0] != _T(' ')) && (line[0] != '\t') &&
                           (line[0] != _T(';')) && (line[0] != _T('%')) && (line[0] != _T('#')))))
     {
         val << line[0];
@@ -704,7 +707,7 @@ void BibReadValue(wxSTD istream& istr, wxChar *buffer, bool ignoreBraces = true,
     wxUnusedVar(stopping);
 }
 
-bool ReadBib(wxChar *filename)
+bool ReadBib(const wxChar *filename)
 {
   if (!wxFileExists(filename))
       return false;
@@ -1156,7 +1159,7 @@ void ResolveBibReferences(void)
 }
 
 // Remember we need to resolve this citation
-void AddCitation(wxChar *citeKey)
+void AddCitation(const wxChar *citeKey)
 {
   if (!CitationList.Member(citeKey))
     CitationList.Add(citeKey);
@@ -1167,7 +1170,7 @@ void AddCitation(wxChar *citeKey)
   }
 }
 
-TexRef *FindReference(wxChar *key)
+TexRef *FindReference(const wxChar *key)
 {
   return (TexRef *)TexReferences.Get(key);
 }
