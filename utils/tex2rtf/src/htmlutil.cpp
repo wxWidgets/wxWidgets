@@ -251,9 +251,9 @@ void ReopenSectionContentsFile(void)
 struct textreplace
 {
     wxChar *text;
-    int text_length;
+    size_t text_length;
     wxChar *replace;
-    int replace_length;
+    size_t replace_length;
 };
 
 #define tr(x,y) {x, sizeof(x)-1, y, sizeof(y)-1}
@@ -285,7 +285,7 @@ void ProcessText2HTML(TexChunk *chunk)
   int ptr = 0;
   int i = 0;
   wxChar ch = 1;
-  int len = wxStrlen(chunk->value);
+  size_t len = wxStrlen(chunk->value);
   while (ch != 0)
   {
     ch = chunk->value[i];
@@ -313,24 +313,30 @@ void ProcessText2HTML(TexChunk *chunk)
       bool replaced = false;
       if (!inVerbatim)
       {
-          int x,y;
-          for (x = 0; x < sizeof (notverb_array) / sizeof(textreplace); x++)
+          for (size_t x = 0; x < WXSIZEOF(notverb_array); x++)
           {
               textreplace& tr = notverb_array[x];
-              if (ch != tr.text[0]) continue;
-              if (len < tr.text_length) continue;
+              if (ch != tr.text[0])
+                  continue;
+              if (len < tr.text_length)
+                  continue;
 
+              size_t y;
               for (y = 1; y < tr.text_length; y++)
               {
-                  if (chunk->value[y] != tr.text[y]) break;
+                  if (chunk->value[y] != tr.text[y])
+                      break;
               }
-              if (y != tr.text_length) continue;
+
+              if (y != tr.text_length)
+                  continue;
 
               // can now copy it over.
               for (y = 0; y < tr.replace_length; y++)
               {
                   BigBuffer[ptr++] = tr.replace[y];
               }
+
               len -= tr.text_length;
               i += tr.text_length;
               replaced = true;
