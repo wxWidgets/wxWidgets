@@ -109,7 +109,7 @@ public:
         return m_wdata;
     }
 
-    bool IsRealClass(const wxString& name)
+    bool CanBeUsedWithXRCCTRL(const wxString& name)
     {
         if (name == _T("tool") ||
             name == _T("unknown") ||
@@ -134,7 +134,7 @@ public:
         for(i=0;i<m_wdata.Count();++i)
         {
             const XRCWidgetData& w = m_wdata.Item(i);
-            if( !IsRealClass(w.GetClass()) ) continue;
+            if( !CanBeUsedWithXRCCTRL(w.GetClass()) ) continue;
             if( w.GetName().Length() == 0 ) continue;
             file.Write(
                 _T(" ") + w.GetClass() + _T("* ") + w.GetName()
@@ -149,7 +149,7 @@ public:
         for(i=0;i<m_wdata.Count();++i)
         {
             const XRCWidgetData& w = m_wdata.Item(i);
-            if( !IsRealClass(w.GetClass()) ) continue;
+            if( !CanBeUsedWithXRCCTRL(w.GetClass()) ) continue;
             if( w.GetName().Length() == 0 ) continue;
             file.Write( _T("  ")
                         + w.GetName()
