@@ -45,7 +45,7 @@ protected:
             :m_pCleanup(value)
         {}
         ~CleanupHelper()
-        { 
+        {
             m_pCleanup->DeleteInStream();
             m_pCleanup->DeleteOutStream();
         }
@@ -68,7 +68,7 @@ public:
         // Prevent mem leaks!
         delete m_pCurrentIn;
         delete m_pCurrentOut;
-    }   
+    }
 
 protected:
     /*
@@ -108,7 +108,7 @@ protected:
 
         // Note: the input stream should at least be of min size +10!
 
-        char buf[10];        
+        char buf[10];
         (void)stream_in.Read(buf, 10);
 
         CPPUNIT_ASSERT(!stream_in.Eof());
@@ -122,7 +122,7 @@ protected:
         CPPUNIT_ASSERT(stream_in.Eof());
     }
 
-    // Test and see what happens to the EOF when we 
+    // Test and see what happens to the EOF when we
     // read after EOF was encountered.
     void Input_Eof()
     {
@@ -150,7 +150,7 @@ protected:
         }
 
         // Check EOF stream state.
-        CPPUNIT_ASSERT_MESSAGE("EOF is not EOF?", stream_in.Eof());        
+        CPPUNIT_ASSERT_MESSAGE("EOF is not EOF?", stream_in.Eof());
 
         // Ok we found the end, lets see if we can go past it.
         for (size_t i = 0; i < 100; i++)
@@ -173,6 +173,19 @@ protected:
         CPPUNIT_ASSERT(stream_in.LastRead() == 5);
         (void)stream_in.GetC();
         CPPUNIT_ASSERT(stream_in.LastRead() == 1);
+    }
+
+    void Input_CanRead()
+    {
+        CleanupHelper cleanup(this);
+        TStreamIn &stream_in = CreateInStream();
+
+        CPPUNIT_ASSERT( stream_in.CanRead() );
+
+        // read the entire contents
+        (void)stream_in.Read(CreateOutStream());
+
+        CPPUNIT_ASSERT( !stream_in.CanRead() );
     }
 
     // Just try to perform a SeekI() on the input stream.
@@ -217,7 +230,7 @@ protected:
             CPPUNIT_ASSERT(stream_in.TellI() == pos);
         }
     }
-    
+
     // Just try to perform a Peek() on the input stream.
     void Input_Peek()
     {
@@ -240,7 +253,7 @@ protected:
         CleanupHelper cleanup(this);
         TStreamIn &stream_in = CreateInStream();
         CPPUNIT_ASSERT(!stream_in.Eof());
-        
+
         const char *ungetstr = "test";
         size_t ungetsize = stream_in.Ungetch(ungetstr, strlen(ungetstr) + 1);
         if (ungetsize != 0)
@@ -312,7 +325,7 @@ protected:
     {
         CleanupHelper cleanup(this);
         TStreamOut &stream_out = CreateOutStream();
-        
+
         // First put some data in the stream, so it is not empty.
         char *buf = "1234567890";
         (void)stream_out.Write(buf, 10);
@@ -344,7 +357,7 @@ protected:
             // First put some extra data in the stream, so it's not empty.
             char *buf = "1234567890";
             (void)stream_out.Write(buf, 10);
-            
+
             off_t pos = stream_out.SeekO(5, wxFromStart);
             CPPUNIT_ASSERT(stream_out.TellO() == pos);
             (void)stream_out.PutC('1');
@@ -358,9 +371,9 @@ protected:
 
 protected:
     // Some tests can be configured... here you can find the config settings
-    bool m_bSimpleTellITest;    // if true, no SeekI will be used by the TellI test. 
+    bool m_bSimpleTellITest;    // if true, no SeekI will be used by the TellI test.
                                 // Default false.
-    bool m_bSimpleTellOTest;    // if true, no SeekO will be used by the TellI test. 
+    bool m_bSimpleTellOTest;    // if true, no SeekO will be used by the TellI test.
                                 // Default false.
     bool m_bSeekInvalidBeyondEnd; // if true a SeekI|O beyond the end of the stream should return wxInvalidOffset
                                   // Default true.
@@ -368,7 +381,7 @@ protected:
                                 // Default true.
 protected:
     TStreamIn &CreateInStream()
-    { 
+    {
         if (m_pCurrentIn)
         {
             wxFAIL_MSG(_T("Error in test case, the previouse input stream needs to be delete first!"));
@@ -379,7 +392,7 @@ protected:
         return *m_pCurrentIn;
     }
     TStreamOut &CreateOutStream()
-    { 
+    {
         if (m_pCurrentOut)
         {
             wxFAIL_MSG(_T("Error in test case, the previouse output stream needs to be delete first!"));
@@ -389,7 +402,7 @@ protected:
         wxASSERT(m_pCurrentOut != NULL);
         return *m_pCurrentOut;
     }
-    
+
     void DeleteInStream()
     {
         if (m_pCurrentIn == NULL)
@@ -400,12 +413,12 @@ protected:
         DoDeleteInStream();
     }
     void DeleteOutStream()
-    {        
+    {
         if (m_pCurrentOut == NULL)
             return;
-        
+
         CPPUNIT_ASSERT(m_pCurrentOut->Close());
-        
+
         delete m_pCurrentOut;
         m_pCurrentOut = NULL;
         // Incase something extra needs to be done.

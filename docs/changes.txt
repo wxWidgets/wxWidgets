@@ -71,6 +71,7 @@ All:
 - Added wxGridUpdateLocker helper class (Evgeniy Tarassov)
 - Support wxGRID_AUTOSIZE in wxGrid::SetRow/ColLabelSize() (Evgeniy Tarassov)
 - Added wxMemoryInputStream(wxInputStream&) ctor (Stas Sergeev)
+- Implemented wxMemoryInputStream::CanRead()
 
 wxGTK:
 

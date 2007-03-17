@@ -39,7 +39,8 @@ public:
     virtual wxFileOffset GetLength() const { return m_length; }
     virtual bool IsSeekable() const { return true; }
 
-    char Peek();
+    virtual char Peek();
+    virtual bool CanRead() const;
 
     wxStreamBuffer *GetInputStreamBuffer() const { return m_i_streambuf; }
 

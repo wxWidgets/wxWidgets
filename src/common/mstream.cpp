@@ -97,6 +97,11 @@ wxMemoryInputStream::InitFromStream(wxInputStream& stream, wxFileOffset lenFile)
     m_length = stream.LastRead();
 }
 
+bool wxMemoryInputStream::CanRead() const
+{
+    return m_i_streambuf->GetIntPosition() != m_length;
+}
+
 wxMemoryInputStream::~wxMemoryInputStream()
 {
     delete m_i_streambuf;
