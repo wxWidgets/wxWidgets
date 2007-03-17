@@ -28,10 +28,8 @@
 #include <stdio.h>
 #define HTML_FILENAME_PATTERN _T("%s_%s.html")
 
-#if !WXWIN_COMPATIBILITY_2_4
 static inline wxChar* copystring(const wxChar* s)
     { return wxStrcpy(new wxChar[wxStrlen(s) + 1], s); }
-#endif
 
 extern wxHashTable TexReferences;
 

@@ -25,10 +25,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-#if !WXWIN_COMPATIBILITY_2_4
 static inline wxChar* copystring(const wxChar* s)
     { return wxStrcpy(new wxChar[wxStrlen(s) + 1], s); }
-#endif
 
 /*
  * Variables accessible from clients
