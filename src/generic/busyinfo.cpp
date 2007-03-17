@@ -118,6 +118,14 @@ wxBusyInfo::wxBusyInfo(const wxString& message, wxWindow *parent)
     m_InfoFrame->Show(true);
     m_InfoFrame->Refresh();
     m_InfoFrame->Update();
+
+#ifdef __WXGTK20__
+    // FIXME: this is pretty bad, as any call to Yield(), but without it, the
+    //         static text is never shown and neither gdk_display_flush() nor
+    //         gdk_display_sync() nor gdk_window_process_updates() helps
+    wxMilliSleep(100);
+    wxYield();
+#endif
 }
 
 wxBusyInfo::~wxBusyInfo()
