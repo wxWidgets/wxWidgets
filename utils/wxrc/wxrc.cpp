@@ -116,7 +116,9 @@ public:
             name == _T("notebookpage") ||
             name == _T("separator") ||
             name == _T("sizeritem") ||
-            name == _T("wxMenuItem"))
+            name == _T("wxMenuBar") ||
+            name == _T("wxMenuItem") ||
+            name == _T("wxStaticBoxSizer") )
         {
             return false;
         }
