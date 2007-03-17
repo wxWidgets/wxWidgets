@@ -116,9 +116,11 @@ protected:
 
     static void Normalize(wxChar* uri, bool bIgnoreLeads = false);
     static void UpTree(const wxChar* uristart, const wxChar*& uri);
+    static void UpTree(wxString::const_iterator uristart,
+                       wxString::const_iterator& uri);
 
-    static wxChar TranslateEscape(const wxChar* s);
-    static void Escape  (wxString& s, const wxChar& c);
+    static wxUniChar TranslateEscape(const wxString::const_iterator& s);
+    static void Escape(wxString& s, const wxChar& c);
     static bool IsEscape(const wxChar*& uri);
 
     static wxChar CharToHex(const wxChar& c);

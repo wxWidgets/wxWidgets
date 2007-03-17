@@ -35,7 +35,7 @@ static wxString LINKAGEMODE HtmlizeWhitespaces(const wxString& str)
     size_t linepos = 0;
     for (size_t i = 0; i < len; i++)
     {
-        switch (str[i])
+        switch ( str[i].GetValue() )
         {
             case wxT('<'):
                 while (i < len && str[i] != wxT('>'))

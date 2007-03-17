@@ -391,7 +391,7 @@ int wxFileDialog::ShowModal()
         }
     }
 
-    of.lpstrFilter  = (LPTSTR)filterBuffer.c_str();
+    of.lpstrFilter  = (LPTSTR)filterBuffer.wx_str();
     of.nFilterIndex = m_filterIndex + 1;
 
     //=== Setting defaultFileName >>=========================================

@@ -8201,8 +8201,8 @@ bool wxRichTextImageBlock::ReadHex(wxInputStream& stream, int length, int imageT
     int i;
     for (i = 0; i < dataSize; i ++)
     {
-        str[0] = stream.GetC();
-        str[1] = stream.GetC();
+        str[0] = (char)stream.GetC();
+        str[1] = (char)stream.GetC();
 
         m_data[i] = (unsigned char)wxHexToDec(str);
     }

@@ -95,12 +95,16 @@ extern const wxChar WXDLLIMPEXP_BASE *wxEmptyString = &g_strEmpty.dummy;
 
 wxSTD ostream& operator<<(wxSTD ostream& os, const wxString& str)
 {
-#ifdef __BORLANDC__
-    os << str.mb_str();
+    return os << str.c_str();
+}
+
+wxSTD ostream& operator<<(wxSTD ostream& os, const wxCStrData& str)
+{
+#if wxUSE_UNICODE && !defined(__BORLANDC__)
+    return os << str.AsWChar();
 #else
-    os << str.c_str();
+    return os << str.AsChar();
 #endif
-    return os;
 }
 
 #endif // wxUSE_STD_IOSTREAM
@@ -191,7 +195,7 @@ wxStringBase::wxStringBase(const void *pStart, const void *pEnd)
   }
 }
 
-wxStringBase::wxStringBase(size_type n, wxChar ch)
+wxStringBase::wxStringBase(size_type n, wxUniChar ch)
 {
   Init();
   append(n, ch);
@@ -300,7 +304,7 @@ bool wxStringBase::AllocBeforeWrite(size_t nLen)
   return true;
 }
 
-wxStringBase& wxStringBase::append(size_t n, wxChar ch)
+wxStringBase& wxStringBase::append(size_t n, wxUniChar ch)
 {
     size_type len = length();
 
@@ -314,7 +318,7 @@ wxStringBase& wxStringBase::append(size_t n, wxChar ch)
     return *this;
 }
 
-void wxStringBase::resize(size_t nSize, wxChar ch)
+void wxStringBase::resize(size_t nSize, wxUniChar ch)
 {
     size_t len = length();
 
@@ -495,7 +499,7 @@ size_t wxStringBase::find(const wxChar* sz, size_t nStart, size_t n) const
     return find(wxStringBase(sz, n), nStart);
 }
 
-size_t wxStringBase::find(wxChar ch, size_t nStart) const
+size_t wxStringBase::find(wxUniChar ch, size_t nStart) const
 {
     wxASSERT( nStart <= length() );
 
@@ -542,7 +546,7 @@ size_t wxStringBase::rfind(const wxChar* sz, size_t nStart, size_t n) const
     return rfind(wxStringBase(sz, n), nStart);
 }
 
-size_t wxStringBase::rfind(wxChar ch, size_t nStart) const
+size_t wxStringBase::rfind(wxUniChar ch, size_t nStart) const
 {
     if ( nStart == npos )
     {
@@ -650,14 +654,14 @@ size_t wxStringBase::find_first_not_of(const wxChar* sz, size_t nStart,
     return find_first_not_of(wxStringBase(sz, n), nStart);
 }
 
-size_t wxStringBase::find_first_not_of(wxChar ch, size_t nStart) const
+size_t wxStringBase::find_first_not_of(wxUniChar ch, size_t nStart) const
 {
     wxASSERT( nStart <= length() );
 
-    for ( const wxChar *p = c_str() + nStart; *p; p++ )
+    for ( const_iterator p = begin() + nStart; (bool)*p; ++p ) // FIXME-DMARS
     {
         if ( *p != ch )
-            return p - c_str();
+            return p - begin();
     }
 
     return npos;
@@ -691,7 +695,7 @@ size_t wxStringBase::find_last_not_of(const wxChar* sz, size_t nStart,
     return find_last_not_of(wxStringBase(sz, n), nStart);
 }
 
-size_t wxStringBase::find_last_not_of(wxChar ch, size_t nStart) const
+size_t wxStringBase::find_last_not_of(wxUniChar ch, size_t nStart) const
 {
     if ( nStart == npos )
     {
@@ -702,10 +706,10 @@ size_t wxStringBase::find_last_not_of(wxChar ch, size_t nStart) const
         wxASSERT( nStart <= length() );
     }
 
-    for ( const wxChar *p = c_str() + nStart; p >= c_str(); --p )
+    for ( const_iterator p = begin() + nStart; p != begin(); --p )
     {
         if ( *p != ch )
-            return p - c_str();
+            return p - begin();
     }
 
     return npos;
@@ -744,7 +748,7 @@ wxStringBase& wxStringBase::replace(size_t nStart, size_t nLen,
 }
 
 wxStringBase& wxStringBase::replace(size_t nStart, size_t nLen,
-                                    size_t nCount, wxChar ch)
+                                    size_t nCount, wxUniChar ch)
 {
   return replace(nStart, nLen, wxStringBase(nCount, ch).c_str());
 }
@@ -791,9 +795,10 @@ wxStringBase& wxStringBase::operator=(const wxStringBase& stringSrc)
 }
 
 // assigns a single character
-wxStringBase& wxStringBase::operator=(wxChar ch)
+wxStringBase& wxStringBase::operator=(wxUniChar ch)
 {
-  if ( !AssignCopy(1, &ch) ) {
+  wxChar c(ch);
+  if ( !AssignCopy(1, &c) ) {
     wxFAIL_MSG( _T("out of memory in wxStringBase::operator=(wxChar)") );
   }
   return *this;
@@ -1163,7 +1168,7 @@ wxString operator+(const wxString& str1, const wxString& str2)
     return s;
 }
 
-wxString operator+(const wxString& str, wxChar ch)
+wxString operator+(const wxString& str, wxUniChar ch)
 {
 #if !wxUSE_STL
     wxASSERT( str.GetStringData()->IsValid() );
@@ -1175,7 +1180,7 @@ wxString operator+(const wxString& str, wxChar ch)
     return s;
 }
 
-wxString operator+(wxChar ch, const wxString& str)
+wxString operator+(wxUniChar ch, const wxString& str)
 {
 #if !wxUSE_STL
     wxASSERT( str.GetStringData()->IsValid() );
@@ -1415,7 +1420,7 @@ bool wxString::EndsWith(const wxChar *suffix, wxString *rest) const
     wxASSERT_MSG( suffix, _T("invalid parameter in wxString::EndssWith") );
 
     int start = length() - wxStrlen(suffix);
-    if ( start < 0 || wxStrcmp(c_str() + start, suffix) != 0 )
+    if ( start < 0 || wxStrcmp(wx_str() + start, suffix) != 0 )
         return false;
 
     if ( rest )
@@ -1443,14 +1448,14 @@ wxString wxString::Right(size_t nCount) const
 
 // get all characters after the last occurence of ch
 // (returns the whole string if ch not found)
-wxString wxString::AfterLast(wxChar ch) const
+wxString wxString::AfterLast(wxUniChar ch) const
 {
   wxString str;
   int iPos = Find(ch, true);
   if ( iPos == wxNOT_FOUND )
     str = *this;
   else
-    str = c_str() + iPos + 1;
+    str = wx_str() + iPos + 1;
 
   return str;
 }
@@ -1470,7 +1475,7 @@ wxString wxString::Left(size_t nCount) const
 
 // get all characters before the first occurence of ch
 // (returns the whole string if ch not found)
-wxString wxString::BeforeFirst(wxChar ch) const
+wxString wxString::BeforeFirst(wxUniChar ch) const
 {
   int iPos = Find(ch);
   if ( iPos == wxNOT_FOUND ) iPos = length();
@@ -1479,7 +1484,7 @@ wxString wxString::BeforeFirst(wxChar ch) const
 
 /// get all characters before the last occurence of ch
 /// (returns empty string if ch not found)
-wxString wxString::BeforeLast(wxChar ch) const
+wxString wxString::BeforeLast(wxUniChar ch) const
 {
   wxString str;
   int iPos = Find(ch, true);
@@ -1491,12 +1496,12 @@ wxString wxString::BeforeLast(wxChar ch) const
 
 /// get all characters after the first occurence of ch
 /// (returns empty string if ch not found)
-wxString wxString::AfterFirst(wxChar ch) const
+wxString wxString::AfterFirst(wxUniChar ch) const
 {
   wxString str;
   int iPos = Find(ch);
   if ( iPos != wxNOT_FOUND )
-    str = c_str() + iPos + 1;
+    str = wx_str() + iPos + 1;
 
   return str;
 }
@@ -1653,7 +1658,7 @@ wxString& wxString::Trim(bool bFromRight)
 }
 
 // adds nCount characters chPad to the string from either side
-wxString& wxString::Pad(size_t nCount, wxChar chPad, bool bFromRight)
+wxString& wxString::Pad(size_t nCount, wxUniChar chPad, bool bFromRight)
 {
     wxString s(chPad, nCount);
 
@@ -1685,7 +1690,7 @@ wxString& wxString::Truncate(size_t uiLen)
 // ---------------------------------------------------------------------------
 
 // find a character
-int wxString::Find(wxChar ch, bool bFromEnd) const
+int wxString::Find(wxUniChar ch, bool bFromEnd) const
 {
     size_type idx = bFromEnd ? find_last_of(ch) : find_first_of(ch);
 
@@ -1734,18 +1739,18 @@ bool wxStringToIntType(const wxChar *start,
 
 bool wxString::ToLong(long *val, int base) const
 {
-    return wxStringToIntType(c_str(), val, base, wxStrtol);
+    return wxStringToIntType((const wxChar*)c_str(), val, base, wxStrtol);
 }
 
 bool wxString::ToULong(unsigned long *val, int base) const
 {
-    return wxStringToIntType(c_str(), val, base, wxStrtoul);
+    return wxStringToIntType((const wxChar*)c_str(), val, base, wxStrtoul);
 }
 
 bool wxString::ToLongLong(wxLongLong_t *val, int base) const
 {
 #ifdef wxHAS_STRTOLL
-    return wxStringToIntType(c_str(), val, base, wxStrtoll);
+    return wxStringToIntType((const wxChar*)c_str(), val, base, wxStrtoll);
 #else
     // TODO: implement this ourselves
     wxUnusedVar(val);
@@ -1757,7 +1762,7 @@ bool wxString::ToLongLong(wxLongLong_t *val, int base) const
 bool wxString::ToULongLong(wxULongLong_t *val, int base) const
 {
 #ifdef wxHAS_STRTOLL
-    return wxStringToIntType(c_str(), val, base, wxStrtoull);
+    return wxStringToIntType((const wxChar*)c_str(), val, base, wxStrtoull);
 #else
     // TODO: implement this ourselves
     wxUnusedVar(val);
@@ -1792,13 +1797,17 @@ bool wxString::ToDouble(double *val) const
 // ---------------------------------------------------------------------------
 
 /* static */
-wxString wxString::Format(const wxChar *pszFormat, ...)
+#ifdef wxNEEDS_WXSTRING_PRINTF_MIXIN
+wxString wxStringPrintfMixinBase::DoFormat(const wxChar *format, ...)
+#else
+wxString wxString::DoFormat(const wxChar *format, ...)
+#endif
 {
     va_list argptr;
-    va_start(argptr, pszFormat);
+    va_start(argptr, format);
 
     wxString s;
-    s.PrintfV(pszFormat, argptr);
+    s.PrintfV(format, argptr);
 
     va_end(argptr);
 
@@ -1806,26 +1815,39 @@ wxString wxString::Format(const wxChar *pszFormat, ...)
 }
 
 /* static */
-wxString wxString::FormatV(const wxChar *pszFormat, va_list argptr)
+wxString wxString::FormatV(const wxString& format, va_list argptr)
 {
     wxString s;
-    s.PrintfV(pszFormat, argptr);
+    s.PrintfV(format, argptr);
     return s;
 }
 
-int wxString::Printf(const wxChar *pszFormat, ...)
+#ifdef wxNEEDS_WXSTRING_PRINTF_MIXIN
+int wxStringPrintfMixinBase::DoPrintf(const wxChar *format, ...)
+#else
+int wxString::DoPrintf(const wxChar *format, ...)
+#endif
 {
     va_list argptr;
-    va_start(argptr, pszFormat);
+    va_start(argptr, format);
 
-    int iLen = PrintfV(pszFormat, argptr);
+#ifdef wxNEEDS_WXSTRING_PRINTF_MIXIN
+    // get a pointer to the wxString instance; we have to use dynamic_cast<>
+    // because it's the only cast that works safely for downcasting when
+    // multiple inheritance is used:
+    wxString *str = static_cast<wxString*>(this);
+#else
+    wxString *str = this;
+#endif
+
+    int iLen = str->PrintfV(format, argptr);
 
     va_end(argptr);
 
     return iLen;
 }
 
-int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
+int wxString::PrintfV(const wxString& format, va_list argptr)
 {
     int size = 1024;
 
@@ -1844,7 +1866,7 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
         // only a copy
         va_list argptrcopy;
         wxVaCopy(argptrcopy, argptr);
-        int len = wxVsnprintf(buf, size, pszFormat, argptrcopy);
+        int len = wxVsnprintf(buf, size, format, argptrcopy);
         va_end(argptrcopy);
 
         // some implementations of vsnprintf() don't NUL terminate
@@ -2036,7 +2058,7 @@ match:
 }
 
 // Count the number of chars
-int wxString::Freq(wxChar ch) const
+int wxString::Freq(wxUniChar ch) const
 {
     int count = 0;
     int len = length();
@@ -2054,15 +2076,6 @@ wxString wxString::Upper() const
 
 // convert to lower case, return the copy of the string
 wxString wxString::Lower() const { wxString s(*this); return s.MakeLower(); }
-
-int wxString::sprintf(const wxChar *pszFormat, ...)
-  {
-    va_list argptr;
-    va_start(argptr, pszFormat);
-    int iLen = PrintfV(pszFormat, argptr);
-    va_end(argptr);
-    return iLen;
-  }
 
 // ============================================================================
 // ArrayString

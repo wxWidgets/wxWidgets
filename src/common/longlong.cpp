@@ -1263,7 +1263,7 @@ WXDLLIMPEXP_BASE wxTextOutputStream& operator<< (wxTextOutputStream& o, const wx
     return o << ll.ToString();
 }
 
-#define READ_STRING_CHAR(s, idx, len) ((wxChar) ((idx!=len) ? s[idx++] : 0))
+#define READ_STRING_CHAR(s, idx, len) ((idx!=len) ? (wxChar)s[idx++] : _T('\0'))
 
 WXDLLIMPEXP_BASE class wxTextInputStream &operator>>(class wxTextInputStream &o, wxULongLong &ll)
 {

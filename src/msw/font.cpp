@@ -822,7 +822,7 @@ wxString wxNativeFontInfo::ToString() const
              lf.lfClipPrecision,
              lf.lfQuality,
              lf.lfPitchAndFamily,
-             lf.lfFaceName);
+             (const wxChar*)lf.lfFaceName);
 
     return s;
 }

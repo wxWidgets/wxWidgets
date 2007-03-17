@@ -223,6 +223,7 @@ wx/stopwatch.h
 wx/strconv.h
 wx/stream.h
 wx/string.h
+wx/strvararg.h
 wx/sysopt.h
 wx/tarstrm.h
 wx/textbuf.h

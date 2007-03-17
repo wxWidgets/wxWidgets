@@ -289,7 +289,10 @@ bool wxTarHeaderBlock::SetPath(const wxString& name, wxMBConv& conv)
         size_t len = name.length();
         wxCharBuffer approx(len);
         for (size_t i = 0; i < len; i++)
-            approx.data()[i] = name[i] & ~0x7F ? '_' : name[i];
+        {
+            wxChar c = name[i];
+            approx.data()[i] = c & ~0x7F ? '_' : c;
+        }
         nameBuf = approx;
     }
 
@@ -1265,7 +1268,7 @@ wxString wxTarOutputStream::PaxHeaderPath(const wxString& format,
         if (end == wxString::npos || end + 1 >= format.length())
             break;
         ret << format.substr(begin, end - begin);
-        switch (format[end + 1]) {
+        switch ( format[end + 1].GetValue() ) {
             case 'd': ret << d; break;
             case 'f': ret << f; break;
             case 'p': ret << wxGetProcessId(); break;

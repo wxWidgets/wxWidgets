@@ -675,6 +675,10 @@ SOURCE=..\..\src\common\string.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\strvararg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\sysopt.cpp
 # End Source File
 # Begin Source File
@@ -1752,6 +1756,10 @@ SOURCE=..\..\include\wx\stream.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\string.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\strvararg.h
 # End Source File
 # Begin Source File
 

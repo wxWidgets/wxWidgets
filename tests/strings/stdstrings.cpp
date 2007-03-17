@@ -451,19 +451,19 @@ void StdStringTestCase::StdRiter()
     const wxString s(_T("fozbar"));
 
     wxString::const_reverse_iterator ri(s.rbegin());
-    CPPUNIT_ASSERT_EQUAL( _T('r'), *ri );
-    CPPUNIT_ASSERT_EQUAL( _T('a'), *++ri );
-    CPPUNIT_ASSERT_EQUAL( _T('r'), *--ri );
+    CPPUNIT_ASSERT( _T('r') == *ri );
+    CPPUNIT_ASSERT( _T('a') == *++ri );
+    CPPUNIT_ASSERT( _T('r') == *--ri );
 
     ri = s.rend();
     ri--;
-    CPPUNIT_ASSERT_EQUAL( _T('f'), *ri );
+    CPPUNIT_ASSERT( _T('f') == *ri );
 
     --ri;
-    CPPUNIT_ASSERT_EQUAL( _T('o'), *ri );
+    CPPUNIT_ASSERT( _T('o') == *ri );
 
     wxString::const_iterator i = ri.base();
-    CPPUNIT_ASSERT_EQUAL( _T('z'), *i );
+    CPPUNIT_ASSERT( _T('z') == *i );
 }
 
 void StdStringTestCase::StdSubstr()

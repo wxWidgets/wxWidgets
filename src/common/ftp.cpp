@@ -434,19 +434,20 @@ wxString wxFTP::Pwd()
     if ( CheckCommand(wxT("PWD"), '2') )
     {
         // the result is at least that long if CheckCommand() succeeded
-        const wxChar *p = m_lastResult.c_str() + LEN_CODE + 1;
+        wxString::const_iterator p = m_lastResult.begin() + LEN_CODE + 1;
         if ( *p != _T('"') )
         {
-            wxLogDebug(_T("Missing starting quote in reply for PWD: %s"), p);
+            wxLogDebug(_T("Missing starting quote in reply for PWD: %s"),
+                       wxString(p, m_lastResult.end()));
         }
         else
         {
-            for ( p++; *p; p++ )
+            for ( ++p; (bool)*p; ++p ) // FIXME-DMARS
             {
                 if ( *p == _T('"') )
                 {
                     // check if the quote is doubled
-                    p++;
+                    ++p;
                     if ( !*p || *p != _T('"') )
                     {
                         // no, this is the end

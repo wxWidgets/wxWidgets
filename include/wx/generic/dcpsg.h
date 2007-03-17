@@ -21,6 +21,7 @@
 #include "wx/dialog.h"
 #include "wx/module.h"
 #include "wx/cmndata.h"
+#include "wx/strvararg.h"
 
 extern WXDLLIMPEXP_DATA_CORE(int) wxPageNumber;
 
@@ -85,7 +86,7 @@ public:
   static void SetResolution(int ppi);
   static int GetResolution();
 
-  void PsPrintf( const wxChar* fmt, ... );
+  WX_DEFINE_VARARG_FUNC_VOID(PsPrintf, DoPsPrintfFormat)
   void PsPrint( const char* psdata );
   void PsPrint( int ch );
 
@@ -94,6 +95,8 @@ public:
 #endif
 
 private:
+    void DoPsPrintfFormat(const wxChar *fmt, ... );
+
     static float ms_PSScaleFactor;
 
 protected:

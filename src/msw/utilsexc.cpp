@@ -723,13 +723,13 @@ long wxExecute(const wxString& cmd, int flags, wxProcess *handler)
                     // Win32 allows for null
 #ifdef __WXWINCE__
                  (wxChar *)
-                 moduleName.c_str(), // application name
+                 moduleName.wx_str(),// application name
                  (wxChar *)
-                 arguments.c_str(),  // arguments
+                 arguments.wx_str(), // arguments
 #else
                  NULL,               // application name (use only cmd line)
                  (wxChar *)
-                 command.c_str(),    // full command line
+                 command.wx_str(),   // full command line
 #endif
                  NULL,               // security attributes: defaults for both
                  NULL,               //   the process and its main thread

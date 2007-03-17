@@ -74,7 +74,7 @@ strStream::strStream()
     m_str.reserve(LEN);
     for ( size_t n = 0; n < LEN; n++ )
     {
-        m_str += _T('A') + n % (_T('Z') - _T('A') + 1);
+        m_str += wxChar(_T('A') + n % (_T('Z') - _T('A') + 1));
     }
 }
 

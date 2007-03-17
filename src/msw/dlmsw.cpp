@@ -191,7 +191,7 @@ wxString wxVersionDLL::GetFileVersion(const wxString& filename) const
     wxString ver;
     if ( m_dll.IsLoaded() )
     {
-        wxChar *pc = wx_const_cast(wxChar *, filename.c_str());
+        wxChar *pc = wx_const_cast(wxChar *, filename.wx_str());
 
         DWORD dummy;
         DWORD sizeVerInfo = m_pfnGetFileVersionInfoSize(pc, &dummy);

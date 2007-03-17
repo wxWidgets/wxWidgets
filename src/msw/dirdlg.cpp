@@ -134,7 +134,7 @@ int wxDirDialog::ShowModal()
 #endif
     bi.ulFlags        = BIF_RETURNONLYFSDIRS | BIF_STATUSTEXT;
     bi.lpfn           = BrowseCallbackProc;
-    bi.lParam         = (LPARAM)m_path.c_str();    // param for the callback
+    bi.lParam         = (LPARAM)m_path.wx_str(); // param for the callback
 
     static const int verComCtl32 = wxApp::GetComCtl32Version();
 
@@ -234,7 +234,7 @@ BrowseCallbackProc(HWND hwnd, UINT uMsg, LPARAM lp, LPARAM pData)
                     }
 
                     SendMessage(hwnd, BFFM_SETSTATUSTEXT,
-                                0, (LPARAM)strDir.c_str());
+                                0, (LPARAM)strDir.wx_str());
                 }
             }
             break;

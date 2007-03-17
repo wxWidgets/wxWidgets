@@ -18,6 +18,13 @@
 #include "wx/platform.h"
 #include "wx/dlimpexp.h"
 
+#ifdef __cplusplus
+    #include "wx/strvararg.h"
+#else
+    /* make the file compile without doing anything in C code: */
+    #define WX_DEFINE_VARARG_FUNC(rettype, name, impl)
+#endif
+
 #include <stdio.h>  /* we use FILE below */
 
 #if defined(HAVE_STRTOK_R) && defined(__DARWIN__) && defined(_MSL_USING_MW_C_HEADERS) && _MSL_USING_MW_C_HEADERS
@@ -114,6 +121,10 @@
 
     #ifdef HAVE_WIDEC_H
         #include <widec.h>
+    #endif
+
+    #if !defined(__GNUC__) || defined(__DARWIN__)
+        #define wxWINT_T_IS_TYPEDEF
     #endif
 #endif /* wxUSE_WCHAR_T */
 
@@ -212,13 +223,16 @@
         typedef wchar_t wxSChar;
         typedef wchar_t wxUChar;
     #else /* __WCHAR_TYPE__ and gcc < 2.96 */
-        /* VS: wxWidgets used to define wxChar as __WCHAR_TYPE__ here. However, */
-        /*     this doesn't work with new GCC 3.x compilers because wchar_t is */
-        /*     C++'s builtin type in the new standard. OTOH, old compilers (GCC */
-        /*     2.x) won't accept new definition of wx{S,U}Char, therefore we */
-        /*     have to define wxChar conditionally depending on detected */
-        /*     compiler & compiler version. */
+        /* VS: wxWidgets used to define wxChar as __WCHAR_TYPE__ here.   */
+        /*     However, this doesn't work with new GCC 3.x compilers because */
+        /*     wchar_t is C++'s builtin type in the new standard. OTOH, old  */
+        /*     compilers (GCC 2.x) won't accept new definition of            */
+        /*     wx{S,U}CharType, so we have to define wxChar              */
+        /*     conditionally depending on detected compiler & compiler       */
+        /*     version.                                                      */
+
         /*     with old definition of wxChar. */
+        #define wchar_t __WCHAR_TYPE__
         typedef __WCHAR_TYPE__ wxChar;
         typedef __WCHAR_TYPE__ wxSChar;
         typedef __WCHAR_TYPE__ wxUChar;
@@ -270,8 +284,8 @@
     define wxFoo() function for each standard foo() function whose signature
     (exceptionally including the return type) includes any mention of char:
     wxFoo() is going to be a Unicode-friendly version of foo(), i.e. will have
-    the same signature but with char replaced by wxChar which allows us to use
-    it in Unicode build as well
+    the same signature but with char replaced by wxChar which allows us to
+    use it in Unicode build as well
  */
 
 #ifdef wxHAVE_TCHAR_SUPPORT
@@ -300,8 +314,8 @@
        There is a bug in VC6 C RTL: toxxx() functions dosn't do anything with
        signed chars < 0, so "fix" it here.
      */
-    #define  wxTolower(c) _totlower((wxUChar)(c))
-    #define  wxToupper(c) _totupper((wxUChar)(c))
+    #define  wxTolower(c) _totlower((wxUChar)(wxChar)(c))
+    #define  wxToupper(c) _totupper((wxUChar)(wxChar)(c))
 
     /* locale.h functons */
     #define  wxSetlocale _tsetlocale
@@ -349,7 +363,7 @@
     #endif
     #define  wxFputc     _fputtc
     #define  wxFputchar  _fputtchar
-    #define  wxFprintf   _ftprintf
+    WX_DEFINE_VARARG_FUNC(int, wxFprintf, _ftprintf)
     #define  wxFputs     _fputts
     #define  wxFreopen   _tfreopen
     #define  wxFscanf    _ftscanf
@@ -357,7 +371,7 @@
     #define  wxGetchar   _gettchar
     #define  wxGets      _getts
     #define  wxPerror    _tperror
-    #define  wxPrintf    _tprintf
+    WX_DEFINE_VARARG_FUNC(int, wxPrintf, _tprintf)
     #define  wxPutc(c,f) _puttc(WXWCHAR_T_CAST(c),f)
     #define  wxPutchar   _puttchar
     #define  wxPuts      _putts
@@ -365,13 +379,14 @@
     #if defined(__DMC__)
         #if wxUSE_UNICODE
             /* Digital Mars adds count to _stprintf (C99) so prototype conversion see wxchar.cpp */
-            int wxSprintf (wchar_t * __RESTRICT s, const wchar_t * __RESTRICT format, ... ) ;
+            int wxDoSprintf (wchar_t * __RESTRICT s, const wchar_t * __RESTRICT format, ... ) ;
+            WX_DEFINE_VARARG_FUNC(int, wxSprintf, wxDoSprintf)
         #else
             /* and there is a bug in D Mars tchar.h prior to 8.39.4n, so define as sprintf */
-            #define wxSprintf sprintf
+            WX_DEFINE_VARARG_FUNC(int, wxSprintf, sprintf)
         #endif
     #else
-        #define  wxSprintf   _stprintf
+        WX_DEFINE_VARARG_FUNC(int, wxSprintf, _stprintf)
     #endif
 
     #define  wxSscanf    _stscanf
@@ -748,17 +763,17 @@
         #define  wxFputc     fputc
         #define  wxFputs     fputs
         #define  wxFputchar  fputchar
-        #define  wxFprintf   fprintf
+        WX_DEFINE_VARARG_FUNC(int, wxFprintf, fprintf)
         #define  wxFscanf    fscanf
         #define  wxGetc      getc
         #define  wxGetchar   getchar
         #define  wxGets      gets
-        #define  wxPrintf    printf
+        WX_DEFINE_VARARG_FUNC(int, wxPrintf, printf)
         #define  wxPutc      putc
         #define  wxPutchar   putchar
         #define  wxPuts      puts
         #define  wxScanf     scanf
-        #define  wxSprintf   sprintf
+        WX_DEFINE_VARARG_FUNC(int, wxSprintf, sprintf)
         #define  wxSscanf    sscanf
         #define  wxUngetc    ungetc
         #define  wxVfprintf  vfprintf
@@ -943,7 +958,7 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
         #if defined(__VISUALC__) || \
                 (defined(__BORLANDC__) && __BORLANDC__ >= 0x540)
             #define wxVsnprintf_    _vsntprintf
-            #define wxSnprintf_     _sntprintf
+            WX_DEFINE_VARARG_FUNC(int, wxSnprintf_, _sntprintf)
         #endif
     #endif
 
@@ -956,7 +971,7 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
                 #define wxVsnprintf_     vswprintf
             #elif defined(__WATCOMC__)
                 #define wxVsnprintf_    _vsnwprintf
-                #define wxSnprintf_     _snwprintf
+                WX_DEFINE_VARARG_FUNC(int, wxSnprintf_, _snwprintf)
             #endif
         #else /* ASCII */
             /*
@@ -966,7 +981,7 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
             #if defined(HAVE_SNPRINTF) \
                 || defined(__MWERKS__) || defined(__WATCOMC__)
                 #ifndef HAVE_BROKEN_SNPRINTF_DECL
-                    #define wxSnprintf_     snprintf
+                    WX_DEFINE_VARARG_FUNC(int, wxSnprintf_, snprintf)
                 #endif
             #endif
             #if defined(HAVE_VSNPRINTF) \
@@ -984,12 +999,15 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
 #ifndef wxSnprintf_
     /* no snprintf(), cook our own */
     WXDLLIMPEXP_BASE int
-    wxSnprintf_(wxChar *buf, size_t len, const wxChar *format, ...) ATTRIBUTE_PRINTF_3;
+    wxDoSnprintf_(wxChar *buf, size_t len,
+                  const wxChar *format, ...) ATTRIBUTE_PRINTF_3;
+    WX_DEFINE_VARARG_FUNC(int, wxSnprintf_, wxDoSnprintf_)
 #endif
 #ifndef wxVsnprintf_
     /* no (suitable) vsnprintf(), cook our own */
     WXDLLIMPEXP_BASE int
-    wxVsnprintf_(wxChar *buf, size_t len, const wxChar *format, va_list argptr);
+    wxVsnprintf_(wxChar *buf, size_t len,
+                 const wxChar *format, va_list argptr);
 
     #define wxUSE_WXVSNPRINTF 1
 #else
@@ -1024,13 +1042,25 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
         either because we don't have them at all or because they don't have the
         semantics we need
      */
-    int wxScanf( const wxChar *format, ... ) ATTRIBUTE_PRINTF_1;
-    int wxSscanf( const wxChar *str, const wxChar *format, ... ) ATTRIBUTE_PRINTF_2;
-    int wxFscanf( FILE *stream, const wxChar *format, ... ) ATTRIBUTE_PRINTF_2;
+    WX_DEFINE_VARARG_FUNC(int, wxScanf, wxDoScanf)
+    int wxDoScanf( const wxChar *format, ... ) ATTRIBUTE_PRINTF_1;
+
+    WX_DEFINE_VARARG_FUNC(int, wxSscanf, wxDoSscanf)
+    int wxDoSscanf( const wxChar *str, const wxChar *format, ... ) ATTRIBUTE_PRINTF_2;
+
+    WX_DEFINE_VARARG_FUNC(int, wxFscanf, wxDoFscanf)
+    int wxDoFscanf( FILE *stream, const wxChar *format, ... ) ATTRIBUTE_PRINTF_2;
+
+    WX_DEFINE_VARARG_FUNC(int, wxPrintf, wxDoPrintf)
+    int wxDoPrintf( const wxChar *format, ... ) ATTRIBUTE_PRINTF_1;
+
+    WX_DEFINE_VARARG_FUNC(int, wxSprintf, wxDoSprintf)
+    int wxDoSprintf( wxChar *str, const wxChar *format, ... ) ATTRIBUTE_PRINTF_2;
+
+    WX_DEFINE_VARARG_FUNC(int, wxFprintf, wxDoFprintf)
+    int wxDoFprintf( FILE *stream, const wxChar *format, ... ) ATTRIBUTE_PRINTF_2;
+
     int wxVsscanf( const wxChar *str, const wxChar *format, va_list ap );
-    int wxPrintf( const wxChar *format, ... ) ATTRIBUTE_PRINTF_1;
-    int wxSprintf( wxChar *str, const wxChar *format, ... ) ATTRIBUTE_PRINTF_2;
-    int wxFprintf( FILE *stream, const wxChar *format, ... ) ATTRIBUTE_PRINTF_2;
     int wxVfprintf( FILE *stream, const wxChar *format, va_list ap );
     int wxVprintf( const wxChar *format, va_list ap );
     int wxVsprintf( wxChar *str, const wxChar *format, va_list ap );
@@ -1043,7 +1073,8 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
    anything as our own wxVsnprintf_() already behaves as needed.
 */
 #if defined(wxNEED_PRINTF_CONVERSION) && defined(wxVsnprintf_)
-    int wxSnprintf( wxChar *str, size_t size, const wxChar *format, ... ) ATTRIBUTE_PRINTF_3;
+    WX_DEFINE_VARARG_FUNC(int, wxSnprintf, wxDoSnprintf)
+    int wxDoSnprintf( wxChar *str, size_t size, const wxChar *format, ... ) ATTRIBUTE_PRINTF_3;
     int wxVsnprintf( wxChar *str, size_t size, const wxChar *format, va_list ap );
 #else
     #define wxSnprintf wxSnprintf_
@@ -1078,7 +1109,7 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
 /* the file parsing -- this may be true for 5.0 as well, update #ifdef then */
 #if defined(__VISUALC__) && (__VISUALC__ >= 1200) && !wxUSE_UNICODE
     #undef wxIsspace
-    #define wxIsspace(c) ((((unsigned)c) < 128) && isspace(c))
+    #define wxIsspace(c) ((((unsigned)(wxChar)c) < 128) && isspace(c))
 #endif /* VC++ */
 
 /*
@@ -1233,7 +1264,8 @@ WXDLLIMPEXP_BASE int      wxSystem(const wxChar *psz);
     /*silent gabby compilers*/
     struct tm;
     WXDLLIMPEXP_BASE size_t wxStrftime(wxChar *s, size_t max,
-                                  const wxChar *fmt, const struct tm *tm);
+                                       const wxChar *fmt,
+                                       const struct tm *tm);
 #endif /* wxNEED_WX_TIME_H */
 
 #ifndef wxCtime
@@ -1348,6 +1380,352 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
 
 #endif /*__cplusplus*/
 
+/*
+   FIXME-UTF8: split this header into more:
+          wxchartype.h for wxChar definition (only this one will have to
+                       remain C header, the rest can be C++)
+          wxcrt.h      for CRT wrappers
+          wxchar.h     for wxChar+wxCharRef classes
+ */
+#ifdef __cplusplus
+class WXDLLIMPEXP_BASE wxString;
+class WXDLLIMPEXP_BASE wxUniCharRef;
+
+// This class represents single Unicode character. It can be converted to
+// and from char or wchar_t and implements commonly used character operations.
+class WXDLLIMPEXP_BASE wxUniChar
+{
+public:
+    // NB: this is not wchar_t on purpose, it needs to represent the entire
+    //     Unicode code points range and wchar_t may be too small for that
+    //     (e.g. on Win32 where wchar_t* is encoded in UTF-16)
+    typedef unsigned int unicode_type;
+
+    wxUniChar() : m_value(0) {}
+
+    // Create the character from 8bit character value encoded in the current
+    // locale's charset.
+    wxUniChar(char c) { m_value = From8bit(c); }
+
+    // Create the character from a wchar_t character value.
+    wxUniChar(wchar_t c) { m_value = c; }
+
+#ifndef wxWINT_T_IS_TYPEDEF
+    // Create the character from a wint_t character value.
+    wxUniChar(wint_t c) { m_value = c; }
+#endif
+
+    wxUniChar(int c) { m_value = c; }
+
+    wxUniChar(const wxUniCharRef& c);
+
+    // Returns Unicode code point value of the character
+    unicode_type GetValue() const { return m_value; }
+
+    // Casts to char and wchar_t types:
+    operator char() const { return To8bit(m_value); }
+    operator wchar_t() const { return m_value; }
+#ifndef wxWINT_T_IS_TYPEDEF
+    operator wint_t() const { return m_value; }
+#endif
+    operator int() const { return m_value; }
+
+    // We need this operator for the "*p" part of expressions like "for (
+    // const_iterator p = begin() + nStart; *p; ++p )". In this case,
+    // compilation would fail without it because the conversion to bool would
+    // be ambiguous (there are all these int types conversions...). (And adding
+    // operator unspecified_bool_type() would only makes the ambiguity worse.)
+    operator bool() const { return m_value != 0; }
+    bool operator!() const { return !((bool)*this); }
+#if (defined(__VISUALC__) && __VISUALC__ < 1400) || \
+    defined(__DIGITALMARS__) || defined(__BORLANDC__)
+    // We need this for VC++ < 8 or DigitalMars and expressions like
+    // "str[0] && *p":
+    bool operator&&(bool v) const { return (bool)*this && v; }
+#endif
+
+    // Assignment operators:
+    wxUniChar& operator=(const wxUniChar& c) { m_value = c.m_value; return *this; }
+    wxUniChar& operator=(char c) { m_value = From8bit(c); return *this; }
+    wxUniChar& operator=(wchar_t c) { m_value = c; return *this; }
+#ifndef wxWINT_T_IS_TYPEDEF
+    wxUniChar& operator=(wint_t c) { m_value = c; return *this; }
+#endif
+
+    // Comparision operators:
+    bool operator==(const wxUniChar& c) const { return m_value == c.m_value; }
+    bool operator==(char c) const { return m_value == From8bit(c); }
+    bool operator==(wchar_t c) const { return m_value == (unicode_type)c; }
+#ifndef wxWINT_T_IS_TYPEDEF
+    bool operator==(wint_t c) const { return m_value == (unicode_type)c; }
+#endif
+
+    bool operator!=(const wxUniChar& c) const { return m_value != c.m_value; }
+    bool operator!=(char c) const { return m_value != From8bit(c); }
+    bool operator!=(wchar_t c) const { return m_value != (unicode_type)c; }
+#ifndef wxWINT_T_IS_TYPEDEF
+    bool operator!=(wint_t c) const { return m_value != (unicode_type)c; }
+#endif
+
+    bool operator>(const wxUniChar& c) const { return m_value > c.m_value; }
+    bool operator>(char c) const { return m_value > (unicode_type)c; }
+    bool operator>(wchar_t c) const { return m_value > (unicode_type)c; }
+#ifndef wxWINT_T_IS_TYPEDEF
+    bool operator>(wint_t c) const { return m_value > (unicode_type)c; }
+#endif
+
+    bool operator<(const wxUniChar& c) const { return m_value < c.m_value; }
+    bool operator<(char c) const { return m_value < From8bit(c); }
+    bool operator<(wchar_t c) const { return m_value < (unicode_type)c; }
+#ifndef wxWINT_T_IS_TYPEDEF
+    bool operator<(wint_t c) const { return m_value < (unicode_type)c; }
+#endif
+
+    bool operator>=(const wxUniChar& c) const { return m_value >= c.m_value; }
+    bool operator>=(char c) const { return m_value >= From8bit(c); }
+    bool operator>=(wchar_t c) const { return m_value >= (unicode_type)c; }
+#ifndef wxWINT_T_IS_TYPEDEF
+    bool operator>=(wint_t c) const { return m_value >= (unicode_type)c; }
+#endif
+
+    bool operator<=(const wxUniChar& c) const { return m_value <= c.m_value; }
+    bool operator<=(char c) const { return m_value <= From8bit(c); }
+    bool operator<=(wchar_t c) const { return m_value <= (unicode_type)c; }
+#ifndef wxWINT_T_IS_TYPEDEF
+    bool operator<=(wint_t c) const { return m_value <= (unicode_type)c; }
+#endif
+
+    int operator-(const wxUniChar& c) const { return m_value - c.m_value; }
+    int operator-(char c) const { return m_value - From8bit(c); }
+    int operator-(wchar_t c) const { return m_value - (unicode_type)c; }
+#ifndef wxWINT_T_IS_TYPEDEF
+    int operator-(wint_t c) const { return m_value - (unicode_type)c; }
+#endif
+
+private:
+    static unicode_type From8bit(char c);
+    static char To8bit(unicode_type c);
+
+private:
+    unicode_type m_value;
+};
+
+
+// Writeable reference to a character in wxString.
+//
+// This class can be used in the same way wxChar is used, except that changing
+// its value updates the underlying string object.
+class WXDLLIMPEXP_BASE wxUniCharRef
+{
+private:
+    // create the reference
+    // FIXME: the interface will need changes for UTF-8 build
+    wxUniCharRef(wxChar *pos) : m_pos(pos) {}
+
+public:
+    // NB: we have to make this public, because we don't have wxString
+    //     declaration available here and so can't declare wxString::iterator
+    //     as friend; so at least don't use a ctor but a static function
+    //     that must be used explicitly (this is more than using 'explicit'
+    //     keyword on ctor!):
+    //
+    // FIXME: the interface will need changes for UTF-8 build
+    static wxUniCharRef CreateForString(wxChar *pos)
+        { return wxUniCharRef(pos); }
+
+    wxUniChar::unicode_type GetValue() const { return UniChar().GetValue(); }
+
+    // Assignment operators:
+    wxUniCharRef& operator=(const wxUniCharRef& c)
+    {
+        *m_pos = *c.m_pos;
+        return *this;
+    };
+
+    wxUniCharRef& operator=(const wxUniChar& c)
+    {
+        *m_pos = c;
+        return *this;
+    };
+
+    wxUniCharRef& operator=(char c) { return *this = wxUniChar(c); }
+    wxUniCharRef& operator=(wchar_t c) { return *this = wxUniChar(c); }
+
+    // Casts to wxUniChar type:
+    operator char() const { return UniChar(); }
+    operator wchar_t() const { return UniChar(); }
+#ifndef wxWINT_T_IS_TYPEDEF
+    operator wint_t() const { return UniChar(); }
+#endif
+    operator int() const { return UniChar(); }
+
+    // see wxUniChar::operator bool etc. for explanation
+    operator bool() const { return (bool)UniChar(); }
+    bool operator!() const { return !UniChar(); }
+#if (defined(__VISUALC__) && __VISUALC__ < 1400) || \
+    defined(__DIGITALMARS__) || defined(__BORLANDC__)
+    bool operator&&(bool v) const { return UniChar() && v; }
+#endif
+
+    // Comparision operators:
+    bool operator==(const wxUniCharRef& c) const { return m_pos == c.m_pos; }
+    bool operator==(const wxUniChar& c) const { return UniChar() == c; }
+    bool operator==(char c) const { return UniChar() == c; }
+    bool operator==(wchar_t c) const { return UniChar() == c; }
+#ifndef wxWINT_T_IS_TYPEDEF
+    bool operator==(wint_t c) const { return UniChar() == c; }
+#endif
+
+    bool operator!=(const wxUniCharRef& c) const { return m_pos != c.m_pos; }
+    bool operator!=(const wxUniChar& c) const { return UniChar() != c; }
+    bool operator!=(char c) const { return UniChar() != c; }
+    bool operator!=(wchar_t c) const { return UniChar() != c; }
+#ifndef wxWINT_T_IS_TYPEDEF
+    bool operator!=(wint_t c) const { return UniChar() != c; }
+#endif
+
+    bool operator>(const wxUniCharRef& c) const { return UniChar() > c.UniChar(); }
+    bool operator>(const wxUniChar& c) const { return UniChar() > c; }
+    bool operator>(char c) const { return UniChar() > c; }
+    bool operator>(wchar_t c) const { return UniChar() > c; }
+#ifndef wxWINT_T_IS_TYPEDEF
+    bool operator>(wint_t c) const { return UniChar() > c; }
+#endif
+
+    bool operator<(const wxUniCharRef& c) const { return UniChar() < c.UniChar(); }
+    bool operator<(const wxUniChar& c) const { return UniChar() < c; }
+    bool operator<(char c) const { return UniChar() < c; }
+    bool operator<(wchar_t c) const { return UniChar() < c; }
+#ifndef wxWINT_T_IS_TYPEDEF
+    bool operator<(wint_t c) const { return UniChar() < c; }
+#endif
+
+    bool operator>=(const wxUniCharRef& c) const { return UniChar() >= c.UniChar(); }
+    bool operator>=(const wxUniChar& c) const { return UniChar() >= c; }
+    bool operator>=(char c) const { return UniChar() >= c; }
+    bool operator>=(wchar_t c) const { return UniChar() >= c; }
+#ifndef wxWINT_T_IS_TYPEDEF
+    bool operator>=(wint_t c) const { return UniChar() >= c; }
+#endif
+
+    bool operator<=(const wxUniCharRef& c) const { return UniChar() <= c.UniChar(); }
+    bool operator<=(const wxUniChar& c) const { return UniChar() <= c; }
+    bool operator<=(char c) const { return UniChar() <= c; }
+    bool operator<=(wchar_t c) const { return UniChar() <= c; }
+#ifndef wxWINT_T_IS_TYPEDEF
+    bool operator<=(wint_t c) const { return UniChar() <= c; }
+#endif
+
+    int operator-(const wxUniCharRef& c) const { return UniChar() - c.UniChar(); }
+    int operator-(const wxUniChar& c) const { return UniChar() - c; }
+    int operator-(char c) const { return UniChar() - c; }
+    int operator-(wchar_t c) const { return UniChar() - c; }
+#ifndef wxWINT_T_IS_TYPEDEF
+    int operator-(wint_t c) const { return UniChar() - c; }
+#endif
+
+private:
+    wxUniChar UniChar() const { return *m_pos; }
+    friend class WXDLLIMPEXP_BASE wxUniChar;
+
+private:
+    // pointer to the character in string
+    wxChar *m_pos;
+};
+
+inline wxUniChar::wxUniChar(const wxUniCharRef& c)
+{
+    m_value = c.UniChar().m_value;
+}
+
+// Comparision operators for the case when wxUniChar(Ref) is the second operand:
+inline bool operator==(char c1, const wxUniChar& c2) { return c2 == c1; }
+inline bool operator==(wchar_t c1, const wxUniChar& c2) { return c2 == c1; }
+#ifndef wxWINT_T_IS_TYPEDEF
+inline bool operator==(wint_t c1, const wxUniChar& c2) { return c2 == c1; }
+#endif
+
+inline bool operator!=(char c1, const wxUniChar& c2) { return c2 != c1; }
+inline bool operator!=(wchar_t c1, const wxUniChar& c2) { return c2 != c1; }
+#ifndef wxWINT_T_IS_TYPEDEF
+inline bool operator!=(wint_t c1, const wxUniChar& c2) { return c2 != c1; }
+#endif
+
+inline bool operator>(char c1, const wxUniChar& c2) { return c2 < c1; }
+inline bool operator>(wchar_t c1, const wxUniChar& c2) { return c2 < c1; }
+#ifndef wxWINT_T_IS_TYPEDEF
+inline bool operator>(wint_t c1, const wxUniChar& c2) { return c2 < c1; }
+#endif
+
+inline bool operator<(char c1, const wxUniChar& c2) { return c2 > c1; }
+inline bool operator<(wchar_t c1, const wxUniChar& c2) { return c2 > c1; }
+#ifndef wxWINT_T_IS_TYPEDEF
+inline bool operator<(wint_t c1, const wxUniChar& c2) { return c2 > c1; }
+#endif
+
+inline bool operator>=(char c1, const wxUniChar& c2) { return c2 <= c1; }
+inline bool operator>=(wchar_t c1, const wxUniChar& c2) { return c2 <= c1; }
+#ifndef wxWINT_T_IS_TYPEDEF
+inline bool operator>=(wint_t c1, const wxUniChar& c2) { return c2 <= c1; }
+#endif
+
+inline bool operator<=(char c1, const wxUniChar& c2) { return c2 >= c1; }
+inline bool operator<=(wchar_t c1, const wxUniChar& c2) { return c2 >= c1; }
+#ifndef wxWINT_T_IS_TYPEDEF
+inline bool operator<=(wint_t c1, const wxUniChar& c2) { return c2 >= c1; }
+#endif
+
+
+inline bool operator==(char c1, const wxUniCharRef& c2) { return c2 == c1; }
+inline bool operator==(wchar_t c1, const wxUniCharRef& c2) { return c2 == c1; }
+#ifndef wxWINT_T_IS_TYPEDEF
+inline bool operator==(wint_t c1, const wxUniCharRef& c2) { return c2 == c1; }
+#endif
+inline bool operator==(const wxUniChar& c1, const wxUniCharRef& c2) { return c2 == c1; }
+
+inline bool operator!=(char c1, const wxUniCharRef& c2) { return c2 != c1; }
+inline bool operator!=(wchar_t c1, const wxUniCharRef& c2) { return c2 != c1; }
+#ifndef wxWINT_T_IS_TYPEDEF
+inline bool operator!=(wint_t c1, const wxUniCharRef& c2) { return c2 != c1; }
+#endif
+inline bool operator!=(const wxUniChar& c1, const wxUniCharRef& c2) { return c2 != c1; }
+
+inline bool operator>(char c1, const wxUniCharRef& c2) { return c2 < c1; }
+inline bool operator>(wchar_t c1, const wxUniCharRef& c2) { return c2 < c1; }
+#ifndef wxWINT_T_IS_TYPEDEF
+inline bool operator>(wint_t c1, const wxUniCharRef& c2) { return c2 < c1; }
+#endif
+inline bool operator>(const wxUniChar& c1, const wxUniCharRef& c2) { return c2 < c1; }
+
+inline bool operator<(char c1, const wxUniCharRef& c2) { return c2 > c1; }
+inline bool operator<(wchar_t c1, const wxUniCharRef& c2) { return c2 > c1; }
+#ifndef wxWINT_T_IS_TYPEDEF
+inline bool operator<(wint_t c1, const wxUniCharRef& c2) { return c2 > c1; }
+#endif
+inline bool operator<(const wxUniChar& c1, const wxUniCharRef& c2) { return c2 > c1; }
+
+inline bool operator>=(char c1, const wxUniCharRef& c2) { return c2 <= c1; }
+inline bool operator>=(wchar_t c1, const wxUniCharRef& c2) { return c2 <= c1; }
+#ifndef wxWINT_T_IS_TYPEDEF
+inline bool operator>=(wint_t c1, const wxUniCharRef& c2) { return c2 <= c1; }
+#endif
+inline bool operator>=(const wxUniChar& c1, const wxUniCharRef& c2) { return c2 <= c1; }
+
+inline bool operator<=(char c1, const wxUniCharRef& c2) { return c2 >= c1; }
+inline bool operator<=(wchar_t c1, const wxUniCharRef& c2) { return c2 >= c1; }
+#ifndef wxWINT_T_IS_TYPEDEF
+inline bool operator<=(wint_t c1, const wxUniCharRef& c2) { return c2 >= c1; }
+#endif
+inline bool operator<=(const wxUniChar& c1, const wxUniCharRef& c2) { return c2 >= c1; }
+
+inline int operator-(char c1, const wxUniCharRef& c2) { return -(c2 - c1); }
+inline int operator-(wchar_t c1, const wxUniCharRef& c2) { return -(c2 - c1); }
+#ifndef wxWINT_T_IS_TYPEDEF
+inline int operator-(wint_t c1, const wxUniCharRef& c2) { return -(c2 - c1); }
+#endif
+inline int operator-(const wxUniChar& c1, const wxUniCharRef& c2) { return -(c2 - c1); }
+
+#endif // __cplusplus
 
 #endif /* _WX_WXCHAR_H_ */
 

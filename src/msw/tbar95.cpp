@@ -856,7 +856,7 @@ bool wxToolBar::Realize()
                 {
                     const wxString& label = tool->GetLabel();
                     if ( !label.empty() )
-                        button.iString = (int)label.c_str();
+                        button.iString = (int)label.wx_str();
                 }
 
                 button.idCommand = tool->GetId();

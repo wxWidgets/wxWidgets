@@ -505,7 +505,7 @@ bool wxNotebook::SetPageText(size_t nPage, const wxString& strText)
 
     TC_ITEM tcItem;
     tcItem.mask = TCIF_TEXT;
-    tcItem.pszText = (wxChar *)strText.c_str();
+    tcItem.pszText = (wxChar *)strText.wx_str();
 
     if ( !HasFlag(wxNB_MULTILINE) )
         return TabCtrl_SetItem(GetHwnd(), nPage, &tcItem) != 0;
@@ -773,7 +773,7 @@ bool wxNotebook::InsertPage(size_t nPage,
     if ( !strText.empty() )
     {
         tcItem.mask |= TCIF_TEXT;
-        tcItem.pszText = (wxChar *)strText.c_str(); // const_cast
+        tcItem.pszText = (wxChar *)strText.wx_str(); // const_cast
     }
 
     // hide the page: unless it is selected, it shouldn't be shown (and if it

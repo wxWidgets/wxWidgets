@@ -45,6 +45,7 @@ typedef unsigned long wxLogLevel;
 // ----------------------------------------------------------------------------
 
 #include "wx/string.h"
+#include "wx/strvararg.h"
 
 #if wxUSE_LOG
 
@@ -470,33 +471,39 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
 // define wxLog<level>
 // ----------------------------------------------------------------------------
 
-#define DECLARE_LOG_FUNCTION(level)                                         \
-extern void WXDLLIMPEXP_BASE wxVLog##level(const wxChar *szFormat,          \
-                                           va_list argptr);                 \
-extern void WXDLLIMPEXP_BASE wxLog##level(const wxChar *szFormat,           \
-                                          ...) ATTRIBUTE_PRINTF_1
-#define DECLARE_LOG_FUNCTION2_EXP(level, argclass, arg, expdecl)            \
-extern void expdecl wxVLog##level(argclass arg,                             \
-                                  const wxChar *szFormat,                   \
-                                  va_list argptr);                          \
-extern void expdecl wxLog##level(argclass arg,                              \
-                                 const wxChar *szFormat,                    \
-                                 ...) ATTRIBUTE_PRINTF_2
+#define DECLARE_LOG_FUNCTION_PUBLIC(level)                                  \
+    /* void wxLog##level(const wxChar *szFormat, ...); */                   \
+    WX_DEFINE_VARARG_FUNC_VOID(wxLog##level, wxDoLog##level)
+
+#define DECLARE_LOG_FUNCTION_IMPL(level)                                    \
+    extern void WXDLLIMPEXP_BASE wxVLog##level(const wxChar *szFormat,      \
+                                               va_list argptr);             \
+    extern void WXDLLIMPEXP_BASE wxDoLog##level(const wxChar *szFormat,     \
+                                                ...) ATTRIBUTE_PRINTF_1
+
+#define DECLARE_LOG_FUNCTION2_EXP_IMPL(level, argclass, arg, expdecl)       \
+    extern void expdecl wxVLog##level(argclass arg,                         \
+                                      const wxChar *szFormat,               \
+                                      va_list argptr);                      \
+    extern void expdecl wxDoLog##level(argclass arg,                        \
+                                       const wxChar *szFormat,              \
+                                       ...) ATTRIBUTE_PRINTF_2
+
 #else // !wxUSE_LOG
 
 // log functions do nothing at all
-#define DECLARE_LOG_FUNCTION(level)                                         \
-inline void wxVLog##level(const wxChar *WXUNUSED(szFormat),                 \
-                          va_list WXUNUSED(argptr)) { }                     \
-inline void wxLog##level(const wxChar *WXUNUSED(szFormat),                  \
-                         ...) { }
-#define DECLARE_LOG_FUNCTION2_EXP(level, argclass, arg, expdecl)            \
-inline void wxVLog##level(argclass WXUNUSED(arg),                           \
-                          const wxChar *WXUNUSED(szFormat),                 \
-                          va_list WXUNUSED(argptr)) {}                      \
-inline void wxLog##level(argclass WXUNUSED(arg),                            \
-                         const wxChar *WXUNUSED(szFormat),                  \
-                         ...) { }
+#define DECLARE_LOG_FUNCTION_PUBLIC(level)                                  \
+    /* void wxLog##level(const wxChar *szFormat, ...) {} */                 \
+    WX_DEFINE_VARARG_FUNC_NOP(wxLog##level)
+
+#define DECLARE_LOG_FUNCTION_IMPL(level)                                    \
+    inline void wxVLog##level(const wxChar *WXUNUSED(szFormat),             \
+                              va_list WXUNUSED(argptr)) { }                 \
+
+#define DECLARE_LOG_FUNCTION2_EXP_IMPL(level, argclass, arg, expdecl)       \
+    inline void wxVLog##level(argclass WXUNUSED(arg),                       \
+                              const wxChar *WXUNUSED(szFormat),             \
+                              va_list WXUNUSED(argptr)) {}
 
 // Empty Class to fake wxLogNull
 class WXDLLIMPEXP_BASE wxLogNull
@@ -513,6 +520,21 @@ public:
 #define wxTRACE_OleCalls wxEmptyString // OLE interface calls
 
 #endif // wxUSE_LOG/!wxUSE_LOG
+
+#define DECLARE_LOG_FUNCTION(level)                                         \
+    DECLARE_LOG_FUNCTION_PUBLIC(level)                                      \
+    DECLARE_LOG_FUNCTION_IMPL(level)
+
+#define DECLARE_LOG_FUNCTION2_EXP(level, argclass, arg, expdecl)            \
+    DECLARE_LOG_FUNCTION_PUBLIC(level)                                      \
+    DECLARE_LOG_FUNCTION2_EXP_IMPL(level, argclass, arg, expdecl)
+
+#define DECLARE_LOG_FUNCTION2_EXP(level, argclass, arg, expdecl)            \
+    DECLARE_LOG_FUNCTION_PUBLIC(level)                                      \
+    DECLARE_LOG_FUNCTION2_EXP_IMPL(level, argclass, arg, expdecl)
+
+#define DECLARE_LOG_FUNCTION2_IMPL(level, argclass, arg)                    \
+    DECLARE_LOG_FUNCTION2_EXP_IMPL(level, argclass, arg, WXDLLIMPEXP_BASE)
 
 #define DECLARE_LOG_FUNCTION2(level, argclass, arg)                         \
     DECLARE_LOG_FUNCTION2_EXP(level, argclass, arg, WXDLLIMPEXP_BASE)
@@ -531,22 +553,26 @@ DECLARE_LOG_FUNCTION(Verbose);
 
 // this function sends the log message to the status line of the top level
 // application frame, if any
-DECLARE_LOG_FUNCTION(Status);
+DECLARE_LOG_FUNCTION_IMPL(Status);
 
 #if wxUSE_GUI
     // this one is the same as previous except that it allows to explicitly
     class WXDLLEXPORT wxFrame;
     // specify the frame to which the output should go
-    DECLARE_LOG_FUNCTION2_EXP(Status, wxFrame *, pFrame, WXDLLIMPEXP_CORE);
+    DECLARE_LOG_FUNCTION2_EXP_IMPL(Status, wxFrame *, pFrame, WXDLLIMPEXP_CORE);
 #endif // wxUSE_GUI
+
+DECLARE_LOG_FUNCTION_PUBLIC(Status);
 
 // additional one: as wxLogError, but also logs last system call error code
 // and the corresponding error message if available
-DECLARE_LOG_FUNCTION(SysError);
+DECLARE_LOG_FUNCTION_IMPL(SysError);
 
 // and another one which also takes the error code (for those broken APIs
 // that don't set the errno (like registry APIs in Win32))
-DECLARE_LOG_FUNCTION2(SysError, long, lErrCode);
+DECLARE_LOG_FUNCTION2_IMPL(SysError, long, lErrCode);
+
+DECLARE_LOG_FUNCTION_PUBLIC(SysError);
 
 // debug functions do nothing in release mode
 #if wxUSE_LOG && wxUSE_LOG_DEBUG
@@ -558,12 +584,12 @@ DECLARE_LOG_FUNCTION2(SysError, long, lErrCode);
 
     // this version only logs the message if the mask had been added to the
     // list of masks with AddTraceMask()
-    DECLARE_LOG_FUNCTION2(Trace, const wxChar *, mask);
-
+    DECLARE_LOG_FUNCTION2_IMPL(Trace, const wxChar*, mask);
     // and this one does nothing if all of level bits are not set in
     // wxLog::GetActive()->GetTraceMask() -- it's deprecated in favour of
     // string identifiers
-    DECLARE_LOG_FUNCTION2(Trace, wxTraceMask, mask);
+    DECLARE_LOG_FUNCTION2_IMPL(Trace, wxTraceMask, mask);
+    DECLARE_LOG_FUNCTION_PUBLIC(Trace);
 #else   //!debug || !wxUSE_LOG
     // these functions do nothing in release builds, but don't define them as
     // nothing as it could result in different code structure in debug and
@@ -586,11 +612,11 @@ DECLARE_LOG_FUNCTION2(SysError, long, lErrCode);
         #define wxLogDebug(fmt, ...) wxLogNop()
         #define wxLogTrace(mask, fmt, ...) wxLogNop()
     #else // !HAVE_VARIADIC_MACROS
-        // note that leaving out "fmt" in the vararg functions provokes a warning
-        // from SGI CC: "the last argument of the varargs function is unnamed"
-        inline void wxLogDebug(const wxChar *fmt, ...) { wxUnusedVar(fmt); }
-        inline void wxLogTrace(wxTraceMask, const wxChar *fmt, ...) { wxUnusedVar(fmt); }
-        inline void wxLogTrace(const wxChar *, const wxChar *fmt, ...) { wxUnusedVar(fmt); }
+        //inline void wxLogDebug(const wxString& fmt, ...) {}
+        WX_DEFINE_VARARG_FUNC_NOP(wxLogDebug, wxLogNopVararg)
+        //inline void wxLogTrace(wxTraceMask, const wxString& fmt, ...) {}
+        //inline void wxLogTrace(const wxString&, const wxString& fmt, ...) {}
+        WX_DEFINE_VARARG_FUNC_NOP(wxLogTrace, wxLogNopVararg)
     #endif // HAVE_VARIADIC_MACROS/!HAVE_VARIADIC_MACROS
 #endif // debug/!debug
 

@@ -46,7 +46,9 @@
             strings/strings.cpp
             strings/stdstrings.cpp
             strings/tokenizer.cpp
+            strings/unichar.cpp
             strings/unicode.cpp
+            strings/vararg.cpp
             strings/crt.cpp
             strings/vsnprintf.cpp
             streams/bstream.cpp

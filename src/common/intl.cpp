@@ -2632,8 +2632,9 @@ const wxChar *wxLocale::GetString(const wxChar *szOrigString,
             wxLogTrace(TRACE_I18N,
                        _T("string \"%s\"[%ld] not found in %slocale '%s'."),
                        szOrigString, (long)n,
-                       szDomain ? wxString::Format(_T("domain '%s' "), szDomain).c_str()
-                                : _T(""),
+                       szDomain
+                         ? (const wxChar*)wxString::Format(_T("domain '%s' "), szDomain).c_str()
+                         : _T(""),
                        m_strLocale.c_str());
         }
 #endif // __WXDEBUG__

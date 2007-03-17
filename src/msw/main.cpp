@@ -185,7 +185,7 @@ bool wxHandleFatalExceptions(bool doit)
         wxString name = wxString::Format
                         (
                             _T("%s_%s_%lu.dmp"),
-                            wxTheApp ? wxTheApp->GetAppName().c_str()
+                            wxTheApp ? (const wxChar*)wxTheApp->GetAppName().c_str()
                                      : _T("wxwindows"),
                             wxDateTime::Now().Format(_T("%Y%m%dT%H%M%S")).c_str(),
                             ::GetCurrentProcessId()

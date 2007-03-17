@@ -482,7 +482,9 @@ wxVideoMode wxDisplayImplWin32Base::GetCurrentMode() const
     // according to MSDN.  The version of GetName() we implement for Win95
     // returns an empty string.
     const wxString name = GetName();
-    const wxChar * const deviceName = name.empty() ? NULL : name.c_str();
+    const wxChar * const deviceName = name.empty()
+                                          ? (const wxChar*)NULL
+                                          : (const wxChar*)name.c_str();
 
     DEVMODE dm;
     dm.dmSize = sizeof(dm);
@@ -669,7 +671,9 @@ wxDisplayImplMultimon::GetModes(const wxVideoMode& modeMatch) const
     // according to MSDN.  The version of GetName() we implement for Win95
     // returns an empty string.
     const wxString name = GetName();
-    const wxChar * const deviceName = name.empty() ? NULL : name.c_str();
+    const wxChar * const deviceName = name.empty()
+                                            ? (const wxChar*)NULL
+                                            : (const wxChar*)name.c_str();
 
     DEVMODE dm;
     dm.dmSize = sizeof(dm);

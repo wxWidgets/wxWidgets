@@ -220,7 +220,8 @@ wxChoice::~wxChoice()
 
 int wxChoice::DoAppend(const wxString& item)
 {
-    int n = (int)SendMessage(GetHwnd(), CB_ADDSTRING, 0, (LPARAM)item.c_str());
+    int n = (int)SendMessage(GetHwnd(), CB_ADDSTRING, 0,
+                             (LPARAM)item.wx_str());
     if ( n == CB_ERR )
     {
         wxLogLastError(wxT("SendMessage(CB_ADDSTRING)"));
@@ -242,7 +243,8 @@ int wxChoice::DoInsert(const wxString& item, unsigned int pos)
     wxCHECK_MSG(!(GetWindowStyle() & wxCB_SORT), -1, wxT("can't insert into sorted list"));
     wxCHECK_MSG(IsValidInsert(pos), -1, wxT("invalid index"));
 
-    int n = (int)SendMessage(GetHwnd(), CB_INSERTSTRING, pos, (LPARAM)item.c_str());
+    int n = (int)SendMessage(GetHwnd(), CB_INSERTSTRING, pos,
+                             (LPARAM)item.wx_str());
     if ( n == CB_ERR )
     {
         wxLogLastError(wxT("SendMessage(CB_INSERTSTRING)"));
@@ -368,7 +370,7 @@ int wxChoice::FindString(const wxString& s, bool bCase) const
    else
    {
        int pos = (int)SendMessage(GetHwnd(), CB_FINDSTRINGEXACT,
-                                  (WPARAM)-1, (LPARAM)s.c_str());
+                                  (WPARAM)-1, (LPARAM)s.wx_str());
 
        return pos == LB_ERR ? wxNOT_FOUND : pos;
    }
@@ -394,7 +396,7 @@ void wxChoice::SetString(unsigned int n, const wxString& s)
     }
 
     ::SendMessage(GetHwnd(), CB_DELETESTRING, n, 0);
-    ::SendMessage(GetHwnd(), CB_INSERTSTRING, n, (LPARAM)s.c_str() );
+    ::SendMessage(GetHwnd(), CB_INSERTSTRING, n, (LPARAM)s.wx_str() );
 
     if ( data )
     {

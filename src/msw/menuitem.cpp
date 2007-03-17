@@ -392,7 +392,7 @@ void wxMenuItem::SetText(const wxString& txt)
 #endif  //owner drawn
         {
             flagsOld |= MF_STRING;
-            data = (wxChar*) m_text.c_str();
+            data = (wxChar*) m_text.wx_str();
         }
 
 #ifdef __WXWINCE__

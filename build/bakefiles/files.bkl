@@ -340,6 +340,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/strconv.cpp
     src/common/stream.cpp
     src/common/string.cpp
+    src/common/strvararg.cpp
     src/common/sysopt.cpp
     src/common/tarstrm.cpp
     src/common/textbuf.cpp
@@ -450,6 +451,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/strconv.h
     wx/stream.h
     wx/string.h
+    wx/strvararg.h
     wx/sysopt.h
     wx/tarstrm.h
     wx/textbuf.h

@@ -606,9 +606,9 @@ void wxDCBase::DrawLabel(const wxString& text,
 
     // split the string into lines and draw each of them separately
     wxString curLine;
-    for ( const wxChar *pc = text; ; pc++ )
+    for ( wxString::const_iterator pc = text.begin(); ; ++pc )
     {
-        if ( *pc == _T('\n') || *pc == _T('\0') )
+        if ( *pc == _T('\n') || pc == text.end() )
         {
             int xRealStart = x; // init it here to avoid compielr warnings
 
@@ -646,14 +646,14 @@ void wxDCBase::DrawLabel(const wxString& text,
                 endUnderscore += xRealStart;
             }
 
-            if ( *pc == _T('\0') )
+            if ( pc == text.end() )
                 break;
 
             curLine.clear();
         }
         else // not end of line
         {
-            if ( pc - text.c_str() == indexAccel )
+            if ( pc - text.begin() == indexAccel )
             {
                 // remeber to draw underscore here
                 GetTextExtent(curLine, &startUnderscore, NULL);

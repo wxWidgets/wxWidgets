@@ -3279,7 +3279,7 @@ wxMBConv *wxCSConv::DoCreate() const
     wxLogTrace(TRACE_STRCONV,
                wxT("creating conversion for %s"),
                (m_name ? m_name
-                       : wxFontMapperBase::GetEncodingName(m_encoding).c_str()));
+                       : (const wxChar*)wxFontMapperBase::GetEncodingName(m_encoding).c_str()));
 #endif // wxUSE_FONTMAP
 
     // check for the special case of ASCII or ISO8859-1 charset: as we have
@@ -3482,9 +3482,9 @@ wxMBConv *wxCSConv::DoCreate() const
                    m_name ? m_name
                       :
 #if wxUSE_FONTMAP
-                         wxFontMapperBase::GetEncodingDescription(m_encoding).c_str()
+                         (const wxChar*)wxFontMapperBase::GetEncodingDescription(m_encoding).c_str()
 #else // !wxUSE_FONTMAP
-                         wxString::Format(_("encoding %i"), m_encoding).c_str()
+                         (const wxChar*)wxString::Format(_("encoding %i"), m_encoding).c_str()
 #endif // wxUSE_FONTMAP/!wxUSE_FONTMAP
               );
 

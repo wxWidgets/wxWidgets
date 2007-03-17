@@ -95,7 +95,7 @@ static inline bool IsInConsole()
 
 #endif // __WINDOWS__
 
-void wxMessageOutputBest::Printf(const wxChar* format, ...)
+void wxMessageOutputBest::DoPrintf(const wxChar* format, ...)
 {
     va_list args;
     va_start(args, format);
@@ -120,7 +120,7 @@ void wxMessageOutputBest::Printf(const wxChar* format, ...)
 // wxMessageOutputStderr
 // ----------------------------------------------------------------------------
 
-void wxMessageOutputStderr::Printf(const wxChar* format, ...)
+void wxMessageOutputStderr::DoPrintf(const wxChar* format, ...)
 {
     va_list args;
     va_start(args, format);
@@ -136,7 +136,7 @@ void wxMessageOutputStderr::Printf(const wxChar* format, ...)
 // wxMessageOutputDebug
 // ----------------------------------------------------------------------------
 
-void wxMessageOutputDebug::Printf(const wxChar* format, ...)
+void wxMessageOutputDebug::DoPrintf(const wxChar* format, ...)
 {
     wxString out;
 
@@ -175,7 +175,7 @@ void wxMessageOutputDebug::Printf(const wxChar* format, ...)
 // wxMessageOutputLog
 // ----------------------------------------------------------------------------
 
-void wxMessageOutputLog::Printf(const wxChar* format, ...)
+void wxMessageOutputLog::DoPrintf(const wxChar* format, ...)
 {
     wxString out;
 
@@ -198,7 +198,7 @@ void wxMessageOutputLog::Printf(const wxChar* format, ...)
 
 #if wxUSE_GUI
 
-void wxMessageOutputMessageBox::Printf(const wxChar* format, ...)
+void wxMessageOutputMessageBox::DoPrintf(const wxChar* format, ...)
 {
     va_list args;
     va_start(args, format);

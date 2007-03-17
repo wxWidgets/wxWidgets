@@ -573,11 +573,19 @@ SOURCE=.\strings\tokenizer.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\strings\unichar.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\strings\unicode.cpp
 # End Source File
 # Begin Source File
 
 SOURCE=.\uris\uris.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\strings\vararg.cpp
 # End Source File
 # Begin Source File
 

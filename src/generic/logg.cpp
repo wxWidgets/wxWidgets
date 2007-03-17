@@ -211,7 +211,7 @@ void wxVLogStatus(wxFrame *pFrame, const wxChar *szFormat, va_list argptr)
   }
 }
 
-void wxLogStatus(wxFrame *pFrame, const wxChar *szFormat, ...)
+void wxDoLogStatus(wxFrame *pFrame, const wxChar *szFormat, ...)
 {
     va_list argptr;
     va_start(argptr, szFormat);

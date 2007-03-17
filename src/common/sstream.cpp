@@ -42,7 +42,7 @@ wxStringInputStream::wxStringInputStream(const wxString& s)
 #if wxUSE_UNICODE
     : m_str(s), m_buf(wxMBConvUTF8().cWX2MB(s).release()), m_len(strlen(m_buf))
 #else
-    : m_str(s), m_buf((char*)s.c_str()), m_len(s.length())
+    : m_str(s), m_buf((char*)(const char*)s.c_str()), m_len(s.length())
 #endif
 {
 #if wxUSE_UNICODE

@@ -3450,7 +3450,7 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
                        (
                         extendedStyle,
                         className,
-                        title ? title : m_windowName.c_str(),
+                        title ? title : (const wxChar*)m_windowName.c_str(),
                         style,
                         x, y, w, h,
                         (HWND)MSWGetParent(),

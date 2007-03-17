@@ -57,7 +57,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxEnhMetaFileDC, wxDC)
 
 // we must pass NULL if the string is empty to metafile functions
 static inline const wxChar *GetMetaFileName(const wxString& fn)
-    { return !fn ? (wxChar *)NULL : fn.c_str(); }
+    { return !fn ? (const wxChar *)NULL : (const wxChar*)fn.c_str(); }
 
 // ============================================================================
 // implementation

@@ -468,7 +468,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                 }
 
                 mii.cch = itemText.length();
-                mii.dwTypeData = wx_const_cast(wxChar *, itemText.c_str());
+                mii.dwTypeData = wx_const_cast(wxChar *, itemText.wx_str());
 
                 if (flags & MF_POPUP)
                 {
@@ -548,7 +548,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
         itemText = wxMenuItem::GetLabelFromText(itemText);
 #endif
 
-        pData = (wxChar*)itemText.c_str();
+        pData = (wxChar*)itemText.wx_str();
     }
 
     // item might have already been inserted by InsertMenuItem() above

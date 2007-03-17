@@ -394,7 +394,7 @@ int wxJoystick::GetNumberButtons() const
     if (m_device != -1)
         ioctl(m_device, JSIOCGBUTTONS, &nb);
 
-    if (nb > wxJS_MAX_BUTTONS)
+    if ((int)nb > wxJS_MAX_BUTTONS)
         nb = wxJS_MAX_BUTTONS;
 
     return nb;
@@ -407,7 +407,7 @@ int wxJoystick::GetNumberAxes() const
     if (m_device != -1)
         ioctl(m_device, JSIOCGAXES, &nb);
 
-    if (nb > wxJS_MAX_AXES)
+    if ((int)nb > wxJS_MAX_AXES)
         nb = wxJS_MAX_AXES;
 
     return nb;

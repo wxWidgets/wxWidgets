@@ -398,7 +398,7 @@ wxFSFile* wxFileSystem::OpenFile(const wxString& location, int flags)
     meta = 0;
     for (i = 0; i < ln; i++)
     {
-        switch (loc[i])
+        switch ( loc[i].GetValue() )
         {
             case wxT('/') : case wxT(':') : case wxT('#') :
                 meta = loc[i];

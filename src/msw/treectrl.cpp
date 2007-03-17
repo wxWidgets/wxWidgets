@@ -923,7 +923,7 @@ void wxTreeCtrl::SetItemText(const wxTreeItemId& item, const wxString& text)
         return;
 
     wxTreeViewItem tvItem(item, TVIF_TEXT);
-    tvItem.pszText = (wxChar *)text.c_str();  // conversion is ok
+    tvItem.pszText = (wxChar *)text.wx_str();  // conversion is ok
     DoSetItem(&tvItem);
 
     // when setting the text of the item being edited, the text control should
@@ -1434,7 +1434,7 @@ wxTreeItemId wxTreeCtrl::DoInsertAfter(const wxTreeItemId& parent,
     if ( !text.empty() )
     {
         mask |= TVIF_TEXT;
-        tvIns.item.pszText = (wxChar *)text.c_str();  // cast is ok
+        tvIns.item.pszText = (wxChar *)text.wx_str();  // cast is ok
     }
     else
     {

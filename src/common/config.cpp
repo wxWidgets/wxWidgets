@@ -346,7 +346,7 @@ wxString wxExpandEnvVars(const wxString& str)
 
   size_t m;
   for ( size_t n = 0; n < str.length(); n++ ) {
-    switch ( str[n] ) {
+    switch ( str[n].GetValue() ) {
 #ifdef  __WXMSW__
       case wxT('%'):
 #endif  //WINDOWS
@@ -362,7 +362,7 @@ wxString wxExpandEnvVars(const wxString& str)
             bracket = Bracket_None;
           }
           else {
-            switch ( str[n + 1] ) {
+            switch ( str[n + 1].GetValue() ) {
               case wxT('('):
                 bracket = Bracket_Normal;
                 n++;                   // skip the bracket
@@ -434,7 +434,7 @@ wxString wxExpandEnvVars(const wxString& str)
         }
         break;
 
-      case '\\':
+      case wxT('\\'):
         // backslash can be used to suppress special meaning of % and $
         if ( n != str.length() - 1 &&
                 (str[n + 1] == wxT('%') || str[n + 1] == wxT('$')) ) {

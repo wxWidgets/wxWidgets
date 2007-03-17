@@ -3040,7 +3040,7 @@ static void wxConvertToMSWListItem(const wxListCtrl *ctrl,
         else
         {
             // pszText is not const, hence the cast
-            lvItem.pszText = (wxChar *)info.m_text.c_str();
+            lvItem.pszText = (wxChar *)info.m_text.wx_str();
             if ( lvItem.pszText )
                 lvItem.cchTextMax = info.m_text.length();
             else
@@ -3061,7 +3061,7 @@ static void wxConvertToMSWListCol(HWND hwndList,
     if ( item.m_mask & wxLIST_MASK_TEXT )
     {
         lvCol.mask |= LVCF_TEXT;
-        lvCol.pszText = (wxChar *)item.m_text.c_str(); // cast is safe
+        lvCol.pszText = (wxChar *)item.m_text.wx_str(); // cast is safe
     }
 
     if ( item.m_mask & wxLIST_MASK_FORMAT )

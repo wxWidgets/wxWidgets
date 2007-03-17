@@ -389,7 +389,7 @@ public:
     static wxString GetPathTerminators(wxPathFormat format = wxPATH_NATIVE);
 
     // get the canonical path separator for this format
-    static wxChar GetPathSeparator(wxPathFormat format = wxPATH_NATIVE)
+    static wxUniChar GetPathSeparator(wxPathFormat format = wxPATH_NATIVE)
         { return GetPathSeparators(format)[0u]; }
 
     // is the char a path separator for this format?

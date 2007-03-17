@@ -643,7 +643,10 @@ bool wxWizard::ShowPage(wxWizardPage *page, bool goingForward)
     bool hasNext = HasNextPage(m_page);
     if ( btnLabelWasNext != hasNext )
     {
-        m_btnNext->SetLabel(hasNext ? _("&Next >") : _("&Finish"));
+        if ( hasNext )
+            m_btnNext->SetLabel(_("&Next >"));
+        else
+            m_btnNext->SetLabel(_("&Finish"));
     }
     // nothing to do: the label was already correct
 

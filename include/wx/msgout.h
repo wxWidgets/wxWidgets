@@ -18,19 +18,41 @@
 
 #include "wx/defs.h"
 #include "wx/wxchar.h"
+#include "wx/strvararg.h"
 
 // ----------------------------------------------------------------------------
 // wxMessageOutput is a class abstracting formatted output target, i.e.
 // something you can printf() to
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxMessageOutput
+// NB: VC6 has a bug that causes linker errors if you have template methods
+//     in a class using __declspec(dllimport). The solution is to split such
+//     class into two classes, one that contains the template methods and does
+//     *not* use WXDLLIMPEXP_BASE and another class that contains the rest
+//     (with DLL linkage).
+class wxMessageOutputBase
+{
+public:
+    virtual ~wxMessageOutputBase() { }
+
+    // show a message to the user
+    // void Printf(const wxChar* format, ...)  ATTRIBUTE_PRINTF_2 = 0;
+    WX_DEFINE_VARARG_FUNC_VOID(Printf, DoPrintf)
+
+protected:
+    virtual void DoPrintf(const wxChar* format, ...)  ATTRIBUTE_PRINTF_2 = 0;
+};
+
+#ifdef __VISUALC__
+    // "non dll-interface class 'wxStringPrintfMixin' used as base interface
+    // for dll-interface class 'wxString'" -- this is OK in our case
+    #pragma warning (disable:4275)
+#endif
+
+class WXDLLIMPEXP_BASE wxMessageOutput : public wxMessageOutputBase
 {
 public:
     virtual ~wxMessageOutput() { }
-
-    // show a message to the user
-    virtual void Printf(const wxChar* format, ...)  ATTRIBUTE_PRINTF_2 = 0;
 
     // gets the current wxMessageOutput object (may be NULL during
     // initialization or shutdown)
@@ -43,6 +65,10 @@ private:
     static wxMessageOutput* ms_msgOut;
 };
 
+#ifdef __VISUALC__
+    #pragma warning (default:4275)
+#endif
+
 // ----------------------------------------------------------------------------
 // implementation showing the message to the user in "best" possible way: uses
 // native message box if available (currently only under Windows) and stderr
@@ -54,7 +80,8 @@ class WXDLLIMPEXP_BASE wxMessageOutputBest : public wxMessageOutput
 public:
     wxMessageOutputBest() { }
 
-    virtual void Printf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
+protected:
+    virtual void DoPrintf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
 };
 
 // ----------------------------------------------------------------------------
@@ -66,7 +93,8 @@ class WXDLLIMPEXP_BASE wxMessageOutputStderr : public wxMessageOutput
 public:
     wxMessageOutputStderr() { }
 
-    virtual void Printf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
+protected:
+    virtual void DoPrintf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
 };
 
 // ----------------------------------------------------------------------------
@@ -80,7 +108,8 @@ class WXDLLIMPEXP_CORE wxMessageOutputMessageBox : public wxMessageOutput
 public:
     wxMessageOutputMessageBox() { }
 
-    virtual void Printf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
+protected:
+    virtual void DoPrintf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
 };
 
 #endif // wxUSE_GUI
@@ -94,7 +123,8 @@ class WXDLLIMPEXP_BASE wxMessageOutputDebug : public wxMessageOutput
 public:
     wxMessageOutputDebug() { }
 
-    virtual void Printf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
+protected:
+    virtual void DoPrintf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
 };
 
 // ----------------------------------------------------------------------------
@@ -106,7 +136,8 @@ class WXDLLIMPEXP_BASE wxMessageOutputLog : public wxMessageOutput
 public:
     wxMessageOutputLog() { }
 
-    virtual void Printf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
+protected:
+    virtual void DoPrintf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
 };
 
 #endif

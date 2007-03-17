@@ -967,7 +967,7 @@ bool wxRegKey::SetValue(const wxChar *szValue, const wxString& strValue)
 {
   if ( CONST_CAST Open() ) {
       m_dwLastError = RegSetValueEx((HKEY) m_hKey, szValue, (DWORD) RESERVED, REG_SZ,
-                                    (RegString)strValue.c_str(),
+                                    (RegString)strValue.wx_str(),
                                     (strValue.Len() + 1)*sizeof(wxChar));
       if ( m_dwLastError == ERROR_SUCCESS )
         return true;

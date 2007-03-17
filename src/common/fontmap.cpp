@@ -198,7 +198,7 @@ wxFontMapper::CharsetToEncoding(const wxString& charset, bool interactive)
 
         // the message
         wxString msg;
-        msg.Printf(_("The charset '%s' is unknown. You may select\nanother charset to replace it with or choose\n[Cancel] if it cannot be replaced"), charset.c_str());
+        msg.Printf(_("The charset '%s' is unknown. You may select\nanother charset to replace it with or choose\n[Cancel] if it cannot be replaced"), charset);
 
         // the list of choices
         const size_t count = GetSupportedEncodingsCount();
@@ -240,7 +240,7 @@ wxFontMapper::CharsetToEncoding(const wxString& charset, bool interactive)
             long value = n == -1 ? (long)wxFONTENCODING_UNKNOWN : (long)encoding;
             if ( !config->Write(charset, value) )
             {
-                wxLogError(_("Failed to remember the encoding for the charset '%s'."), charset.c_str());
+                wxLogError(_("Failed to remember the encoding for the charset '%s'."), charset);
             }
         }
 #endif // wxUSE_CONFIG
@@ -372,7 +372,7 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
             else
             {
                 wxLogDebug(wxT("corrupted config data: string '%s' is not a valid font encoding info"),
-                           fontinfo.c_str());
+                           fontinfo);
             }
         }
         //else: there is no information in config about this encoding
@@ -417,12 +417,12 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
         {
             // ask the user if he wants to override found alternative encoding
             msg.Printf(_("No font for displaying text in encoding '%s' found,\nbut an alternative encoding '%s' is available.\nDo you want to use this encoding (otherwise you will have to choose another one)?"),
-                       encDesc.c_str(), GetEncodingDescription(equivEncoding).c_str());
+                       encDesc, GetEncodingDescription(equivEncoding));
         }
         else
         {
             msg.Printf(_("No font for displaying text in encoding '%s' found.\nWould you like to select a font to be used for this encoding\n(otherwise the text in this encoding will not be shown correctly)?"),
-                       encDesc.c_str());
+                       encDesc);
         }
 
         // the question is different in 2 cases so the answer has to be
@@ -472,8 +472,9 @@ bool wxFontMapper::GetAltForEncoding(wxFontEncoding encoding,
                 GetConfig()->Write
                              (
                                 configEntry,
-                                foundEquivEncoding ? info->ToString().c_str()
-                                                   : FONTMAPPER_FONT_DONT_ASK
+                                foundEquivEncoding
+                                    ? (const wxChar*)info->ToString().c_str()
+                                    : FONTMAPPER_FONT_DONT_ASK
                              );
             }
 #endif // wxUSE_CONFIG

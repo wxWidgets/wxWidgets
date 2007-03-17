@@ -1233,10 +1233,12 @@ wxFileConfigLineList *wxFileConfig::LineListAppend(const wxString& str)
                 str.c_str() );
     wxLogTrace( FILECONF_TRACE_MASK,
                 _T("        head: %s"),
-                ((m_linesHead) ? m_linesHead->Text().c_str() : wxEmptyString) );
+                ((m_linesHead) ? (const wxChar*)m_linesHead->Text().c_str()
+                               : wxEmptyString) );
     wxLogTrace( FILECONF_TRACE_MASK,
                 _T("        tail: %s"),
-                ((m_linesTail) ? m_linesTail->Text().c_str() : wxEmptyString) );
+                ((m_linesTail) ? (const wxChar*)m_linesTail->Text().c_str()
+                               : wxEmptyString) );
 
     wxFileConfigLineList *pLine = new wxFileConfigLineList(str);
 
@@ -1256,10 +1258,12 @@ wxFileConfigLineList *wxFileConfig::LineListAppend(const wxString& str)
 
     wxLogTrace( FILECONF_TRACE_MASK,
                 _T("        head: %s"),
-                ((m_linesHead) ? m_linesHead->Text().c_str() : wxEmptyString) );
+                ((m_linesHead) ? (const wxChar*)m_linesHead->Text().c_str()
+                               : wxEmptyString) );
     wxLogTrace( FILECONF_TRACE_MASK,
                 _T("        tail: %s"),
-                ((m_linesTail) ? m_linesTail->Text().c_str() : wxEmptyString) );
+                ((m_linesTail) ? (const wxChar*)m_linesTail->Text().c_str()
+                               : wxEmptyString) );
 
     return m_linesTail;
 }
@@ -1271,13 +1275,16 @@ wxFileConfigLineList *wxFileConfig::LineListInsert(const wxString& str,
     wxLogTrace( FILECONF_TRACE_MASK,
                 _T("    ** Inserting Line '%s' after '%s'"),
                 str.c_str(),
-                ((pLine) ? pLine->Text().c_str() : wxEmptyString) );
+                ((pLine) ? (const wxChar*)pLine->Text().c_str()
+                         : wxEmptyString) );
     wxLogTrace( FILECONF_TRACE_MASK,
                 _T("        head: %s"),
-                ((m_linesHead) ? m_linesHead->Text().c_str() : wxEmptyString) );
+                ((m_linesHead) ? (const wxChar*)m_linesHead->Text().c_str()
+                               : wxEmptyString) );
     wxLogTrace( FILECONF_TRACE_MASK,
                 _T("        tail: %s"),
-                ((m_linesTail) ? m_linesTail->Text().c_str() : wxEmptyString) );
+                ((m_linesTail) ? (const wxChar*)m_linesTail->Text().c_str()
+                               : wxEmptyString) );
 
     if ( pLine == m_linesTail )
         return LineListAppend(str);
@@ -1302,10 +1309,12 @@ wxFileConfigLineList *wxFileConfig::LineListInsert(const wxString& str,
 
     wxLogTrace( FILECONF_TRACE_MASK,
                 _T("        head: %s"),
-                ((m_linesHead) ? m_linesHead->Text().c_str() : wxEmptyString) );
+                ((m_linesHead) ? (const wxChar*)m_linesHead->Text().c_str()
+                               : wxEmptyString) );
     wxLogTrace( FILECONF_TRACE_MASK,
                 _T("        tail: %s"),
-                ((m_linesTail) ? m_linesTail->Text().c_str() : wxEmptyString) );
+                ((m_linesTail) ? (const wxChar*)m_linesTail->Text().c_str()
+                               : wxEmptyString) );
 
     return pNewLine;
 }
@@ -1317,10 +1326,12 @@ void wxFileConfig::LineListRemove(wxFileConfigLineList *pLine)
                 pLine->Text().c_str() );
     wxLogTrace( FILECONF_TRACE_MASK,
                 _T("        head: %s"),
-                ((m_linesHead) ? m_linesHead->Text().c_str() : wxEmptyString) );
+                ((m_linesHead) ? (const wxChar*)m_linesHead->Text().c_str()
+                               : wxEmptyString) );
     wxLogTrace( FILECONF_TRACE_MASK,
                 _T("        tail: %s"),
-                ((m_linesTail) ? m_linesTail->Text().c_str() : wxEmptyString) );
+                ((m_linesTail) ? (const wxChar*)m_linesTail->Text().c_str()
+                               : wxEmptyString) );
 
     wxFileConfigLineList    *pPrev = pLine->Prev(),
                             *pNext = pLine->Next();
@@ -1344,10 +1355,12 @@ void wxFileConfig::LineListRemove(wxFileConfigLineList *pLine)
 
     wxLogTrace( FILECONF_TRACE_MASK,
                 _T("        head: %s"),
-                ((m_linesHead) ? m_linesHead->Text().c_str() : wxEmptyString) );
+                ((m_linesHead) ? (const wxChar*)m_linesHead->Text().c_str()
+                               : wxEmptyString) );
     wxLogTrace( FILECONF_TRACE_MASK,
                 _T("        tail: %s"),
-                ((m_linesTail) ? m_linesTail->Text().c_str() : wxEmptyString) );
+                ((m_linesTail) ? (const wxChar*)m_linesTail->Text().c_str()
+                               : wxEmptyString) );
 
     delete pLine;
 }
@@ -1715,7 +1728,8 @@ bool wxFileConfigGroup::DeleteSubgroup(wxFileConfigGroup *pGroup)
                 m_pLine ? wx_static_cast(void*, m_pLine->Next()) : 0 );
     wxLogTrace( FILECONF_TRACE_MASK,
                 _T("  text: '%s'"),
-                m_pLine ? m_pLine->Text().c_str() : wxEmptyString );
+                m_pLine ? (const wxChar*)m_pLine->Text().c_str()
+                        : wxEmptyString );
 
     // delete all entries...
     size_t nCount = pGroup->m_aEntries.Count();
@@ -1758,7 +1772,8 @@ bool wxFileConfigGroup::DeleteSubgroup(wxFileConfigGroup *pGroup)
         wxLogTrace( FILECONF_TRACE_MASK,
                     _T("  Removing from group '%s' : '%s'"),
                     Name().c_str(),
-                    ((m_pLine) ? m_pLine->Text().c_str() : wxEmptyString) );
+                    ((m_pLine) ? (const wxChar*)m_pLine->Text().c_str()
+                               : wxEmptyString) );
 
         // notice that we may do this test inside the previous "if"
         // because the last entry's line is surely !NULL
@@ -1990,7 +2005,7 @@ static wxString FilterInValue(const wxString& str)
 
   for ( size_t n = bQuoted ? 1 : 0; n < str.Len(); n++ ) {
     if ( str[n] == wxT('\\') ) {
-      switch ( str[++n] ) {
+      switch ( str[++n].GetValue() ) {
         case wxT('n'):
           strResult += wxT('\n');
           break;
@@ -2043,7 +2058,7 @@ static wxString FilterOutValue(const wxString& str)
 
   wxChar c;
   for ( size_t n = 0; n < str.Len(); n++ ) {
-    switch ( str[n] ) {
+    switch ( str[n].GetValue() ) {
       case wxT('\n'):
         c = wxT('n');
         break;

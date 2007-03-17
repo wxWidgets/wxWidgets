@@ -14,6 +14,34 @@ Changes in behaviour which may result in compilation errors
 - WXWIN_COMPATIBILITY_2_4 doesn't exist any more, please update your code if
   you still relied on features deprecated since version 2.4
 
+- Return type of wxString::operator[] and wxString::iterator::operator* is no
+  longer wxChar (i.e. char or wchar_t), but wxUniChar. This is not a problem
+  in vast majority of cases because of conversion operators, but it can break
+  code that depends on the result being wxChar.
+
+- The value returned by wxString::operator[] or wxString::iterator cannot be
+  used in switch statements anymore, because it's a class instance. Code like
+  this won't compile:
+     switch (str[i]) { ... }
+  and has to be replaced with this:
+     switch (str[i].GetValue()) { ... }
+
+- Return type of wxString::c_str() is now wxCStrData struct and not
+  const wxChar*. wxCStrData is implicitly convertible to const char* and
+  const wchar_t*, so this only presents a problem if the compiler cannot
+  convert the type. In particular, Borland C++ and DigitalMars compilers
+  don't correctly convert operator?: operands to the same type and fail with
+  compilation error instead. This can be worked around by explicitly casting
+  to const wxChar*:
+     wxLogError(_("error: %s"), !err.empty() ? (const wxChar*)err.c_str() : "")
+
+- DigitalMars compiler has a bug that prevents it from using
+  wxUniChar::operator bool in conditions and it erroneously reports type
+  conversion ambiguity in expressions such as this:
+     for ( wxString::const_iterator p = s.begin(); *p; ++p )
+  This can be worked around by explicitly casting to bool:
+     for ( wxString::const_iterator p = s.begin(); (bool)*p; ++p )
+
 Deprecated methods and their replacements
 -----------------------------------------
 
