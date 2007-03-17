@@ -613,10 +613,10 @@ DECLARE_LOG_FUNCTION_PUBLIC(SysError);
         #define wxLogTrace(mask, fmt, ...) wxLogNop()
     #else // !HAVE_VARIADIC_MACROS
         //inline void wxLogDebug(const wxString& fmt, ...) {}
-        WX_DEFINE_VARARG_FUNC_NOP(wxLogDebug, wxLogNopVararg)
+        WX_DEFINE_VARARG_FUNC_NOP(wxLogDebug)
         //inline void wxLogTrace(wxTraceMask, const wxString& fmt, ...) {}
         //inline void wxLogTrace(const wxString&, const wxString& fmt, ...) {}
-        WX_DEFINE_VARARG_FUNC_NOP(wxLogTrace, wxLogNopVararg)
+        WX_DEFINE_VARARG_FUNC_NOP(wxLogTrace)
     #endif // HAVE_VARIADIC_MACROS/!HAVE_VARIADIC_MACROS
 #endif // debug/!debug
 
