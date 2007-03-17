@@ -70,6 +70,7 @@ All:
 - Added wxJoystick::GetButtonState/Position() (Frank C Szczerba)
 - Added wxGridUpdateLocker helper class (Evgeniy Tarassov)
 - Support wxGRID_AUTOSIZE in wxGrid::SetRow/ColLabelSize() (Evgeniy Tarassov)
+- Added wxMemoryInputStream(wxInputStream&) ctor (Stas Sergeev)
 
 wxGTK:
 

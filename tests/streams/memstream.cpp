@@ -56,11 +56,13 @@ public:
         CPPUNIT_TEST(Output_TellO);
 
         // Other test specific for Memory stream test case.
+        CPPUNIT_TEST(Ctor_InFromIn);
         CPPUNIT_TEST(Ctor_InFromOut);
     CPPUNIT_TEST_SUITE_END();
 
 protected:
     // Add own test here.
+    void Ctor_InFromIn();
     void Ctor_InFromOut();
 
 private:
@@ -105,20 +107,53 @@ wxMemoryOutputStream *memStream::DoCreateOutStream()
     return pMemOutStream;
 }
 
+void memStream::Ctor_InFromIn()
+{
+    wxMemoryInputStream *pMemInStream1 = DoCreateInStream();
+    wxMemoryInputStream *pMemInStream2 = new wxMemoryInputStream(*pMemInStream1);
+    CPPUNIT_ASSERT(pMemInStream2->IsOk());
+    CPPUNIT_ASSERT_EQUAL(pMemInStream1->GetLength(), pMemInStream2->GetLength());
+    size_t len = pMemInStream2->GetLength();
+    char *dat = new char[len];
+    pMemInStream2->Read(dat, len);
+    CPPUNIT_ASSERT_EQUAL(len, pMemInStream2->LastRead());
+    wxStreamBuffer *buf = pMemInStream1->GetInputStreamBuffer();
+    void *pIn = buf->GetBufferStart();
+    CPPUNIT_ASSERT(memcmp(pIn, dat, len) == 0);
+    delete pMemInStream2;
+
+    size_t len2 = len / 2;
+    CPPUNIT_ASSERT(len2);
+    CPPUNIT_ASSERT(pMemInStream1->SeekI(-len2, wxFromCurrent) != wxInvalidOffset);
+    pIn = buf->GetBufferPos();
+    pMemInStream2 = new wxMemoryInputStream(*pMemInStream1, len2);
+    CPPUNIT_ASSERT(pMemInStream2->IsOk());
+    CPPUNIT_ASSERT_EQUAL((wxFileOffset)len2, pMemInStream2->GetLength());
+    pMemInStream2->Read(dat, len2);
+    CPPUNIT_ASSERT_EQUAL(len2, pMemInStream2->LastRead());
+    CPPUNIT_ASSERT(memcmp(pIn, dat, len2) == 0);
+
+    delete[] dat;
+    delete pMemInStream2;
+    delete pMemInStream1;
+}
+
 void memStream::Ctor_InFromOut()
 {
     wxMemoryOutputStream *pMemOutStream = DoCreateOutStream();
     pMemOutStream->Write(GetDataBuffer(), DATABUFFER_SIZE);
     wxMemoryInputStream *pMemInStream = new wxMemoryInputStream(*pMemOutStream);
     CPPUNIT_ASSERT(pMemInStream->IsOk());
-    CPPUNIT_ASSERT(pMemInStream->GetLength() == pMemOutStream->GetLength());
-    int len = pMemInStream->GetLength();
+    CPPUNIT_ASSERT_EQUAL(pMemInStream->GetLength(), pMemOutStream->GetLength());
+    size_t len = pMemInStream->GetLength();
     wxStreamBuffer *in = pMemInStream->GetInputStreamBuffer();
     wxStreamBuffer *out = pMemOutStream->GetOutputStreamBuffer();
     void *pIn = in->GetBufferStart();
     void *pOut = out->GetBufferStart();
     CPPUNIT_ASSERT(pIn != pOut);
     CPPUNIT_ASSERT(memcmp(pIn, pOut, len) == 0);
+    delete pMemInStream;
+    delete pMemOutStream;
 }
 
 // Register the stream sub suite, by using some stream helper macro.
