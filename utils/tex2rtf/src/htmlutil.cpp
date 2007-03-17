@@ -248,6 +248,33 @@ void ReopenSectionContentsFile(void)
 }
 
 
+
+
+struct textreplace
+{
+    wxChar *text;
+    int text_length;
+    wxChar *replace;
+    int replace_length;
+};
+
+#define tr(x,y) {x, sizeof(x)-1, y, sizeof(y)-1}
+
+static textreplace notverb_array[] =
+{
+    tr(_T("\r\n\r\n"),  _T("<P>\n\n")), // unix
+    tr(_T("\n\n"),      _T("<P>\n\n")), // dos
+    tr(_T("\r\r"),      _T("<P>\n\n")), // mac
+    tr(_T("``"),        _T("&#8220;")),
+    tr(_T("''"),        _T("&#8221;")),
+    tr(_T("`"),         _T("&#8216;")),
+    tr(_T("'"),         _T("&#8217;")),
+    tr(_T("---"),       _T("&#8212;")),
+    tr(_T("--"),        _T("&#8211;")),
+};
+
+#undef tr
+
 /*
  * Given a TexChunk with a string value, scans through the string
  * converting Latex-isms into HTML-isms, such as 2 newlines -> <P>.
@@ -265,33 +292,13 @@ void ProcessText2HTML(TexChunk *chunk)
   {
     ch = chunk->value[i];
 
-    // 2 newlines means \par
-    if (!inVerbatim && chunk->value[i] == 10 && ((len > i+1 && chunk->value[i+1] == 10) ||
-                        ((len > i+1 && chunk->value[i+1] == 13) &&
-                        (len > i+2 && chunk->value[i+2] == 10))))
-    {
-      BigBuffer[ptr] = 0; wxStrcat(BigBuffer, _T("<P>\n\n")); ptr += 5;
-      i += 2;
-      changed = true;
-    }
-    else if (!inVerbatim && ch == _T('`') && (len >= i+1 && chunk->value[i+1] == '`'))
-    {
-      BigBuffer[ptr] = '"'; ptr ++;
-      i += 2;
-      changed = true;
-    }
-    else if (!inVerbatim && ch == _T('`')) // Change ` to '
-    {
-      BigBuffer[ptr] = 39; ptr ++;
-      i += 1;
-      changed = true;
-    }
-    else if (ch == _T('<')) // Change < to &lt
+    if (ch == _T('<')) // Change < to &lt
     {
       BigBuffer[ptr] = 0;
       wxStrcat(BigBuffer, _T("&lt;"));
       ptr += 4;
       i += 1;
+      len--;
       changed = true;
     }
     else if (ch == _T('>')) // Change > to &gt
@@ -300,13 +307,47 @@ void ProcessText2HTML(TexChunk *chunk)
       wxStrcat(BigBuffer, _T("&gt;"));
       ptr += 4;
       i += 1;
+      len--;
       changed = true;
     }
     else
     {
-      BigBuffer[ptr] = ch;
-      i ++;
-      ptr ++;
+      bool replaced = false;
+      if (!inVerbatim)
+      {
+          int x,y;
+          for (x = 0; x < sizeof (notverb_array) / sizeof(textreplace); x++)
+          {
+              textreplace& tr = notverb_array[x];
+              if (ch != tr.text[0]) continue;
+              if (len < tr.text_length) continue;
+
+              for (y = 1; y < tr.text_length; y++)
+              {
+                  if (chunk->value[y] != tr.text[y]) break;
+              }
+              if (y != tr.text_length) continue;
+
+              // can now copy it over.
+              for (y = 0; y < tr.replace_length; y++)
+              {
+                  BigBuffer[ptr++] = tr.replace[y];
+              }
+              len -= tr.text_length;
+              i += tr.text_length;
+              replaced = true;
+              changed = true;
+              break;
+          }
+      }
+
+      if (!replaced)
+      {
+        BigBuffer[ptr] = ch;
+        i ++;
+        ptr ++;
+        len--;
+      }
     }
   }
   BigBuffer[ptr] = 0;
