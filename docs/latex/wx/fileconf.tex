@@ -44,6 +44,32 @@ as usual.
 \helpref{Save}{wxfileconfigsave}
 
 
+\membersection{wxFileName::GetGlobalFile}\label{wxfilenamegetglobalfile}
+
+\func{static wxFileName}{GetGlobalFile}{\param{const wxString\& }{basename}}
+
+Return the full path to the file which would be used by wxFileConfig as global,
+system-wide, file if it were constructed with \arg{basename} as ``global
+filename'' parameter in the constructor. Notice that this function cannot be
+used if \arg{basename} is already a full path name.
+
+
+\membersection{wxFileName::GetLocalFile}\label{wxfilenamegetlocalfile}
+
+\func{static wxFileName}{GetLocalFile}{\param{const wxString\& }{basename}, \param{int }{style = $0$}}
+
+Return the full path to the file which would be used by wxFileConfig as local,
+user-specific, file if it were constructed with \arg{basename} as ``local
+filename'' parameter in the constructor.
+
+\arg{style} has the same meaning as in \helpref{constructor}{wxconfigbasector} 
+and can contain any combination of styles but only wxCONFIG\_USE\_SUBDIR bit is
+examined by this function.
+
+Notice that this function cannot be used if \arg{basename} is already a full
+path name.
+
+
 \membersection{wxFileConfig::Save}\label{wxfileconfigsave}
 
 \func{bool}{Save}{\param{wxOutputStream\& }{os}, \param{wxMBConv\& }{conv = wxConvUTF8}}

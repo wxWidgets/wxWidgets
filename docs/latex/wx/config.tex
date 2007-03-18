@@ -393,8 +393,8 @@ However, this path may be also used as user data directory
 (see \helpref{wxStandardPaths::GetUserDataDir}{wxstandardpathsgetuserdatadir}) if
 the application has several data files. In this case wxCONFIG\_USE\_SUBDIR
 flag, which changes the default local configuration file to \tt{~/.appname/appname}
-should be used. Notice that this flag is ignored on non-Unix system, including
-VMS, or if a non-default \textit{localFilename} is provided. \newsince{2.8.2}
+should be used. Notice that this flag is ignored if \textit{localFilename} is
+provided. \newsince{2.8.2}
 
 For wxFileConfig, you can also add wxCONFIG\_USE\_NO\_ESCAPE\_CHARACTERS which
 will turn off character escaping for the values of entries stored in the config

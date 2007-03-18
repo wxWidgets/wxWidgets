@@ -20,6 +20,7 @@
 #include "wx/textfile.h"
 #include "wx/string.h"
 #include "wx/confbase.h"
+#include "wx/filename.h"
 
 // ----------------------------------------------------------------------------
 // wxFileConfig
@@ -111,8 +112,18 @@ public:
   //
   // where file is the basename of szFile, ext is its extension
   // or .conf (Unix) or .ini (Win) if it has none
-  static wxString GetGlobalFileName(const wxString& file);
-  static wxString GetLocalFileName(const wxString& file);
+  static wxFileName GetGlobalFile(const wxString& szFile);
+  static wxFileName GetLocalFile(const wxString& szFile, int style = 0);
+
+  static wxString GetGlobalFileName(const wxString& szFile)
+  {
+      return GetGlobalFile(szFile).GetFullPath();
+  }
+
+  static wxString GetLocalFileName(const wxString& szFile, int style = 0)
+  {
+      return GetLocalFile(szFile, style).GetFullPath();
+  }
 
   // ctor & dtor
     // New constructor: one size fits all. Specify wxCONFIG_USE_LOCAL_FILE or
@@ -190,7 +201,7 @@ protected:
 private:
   // GetXXXFileName helpers: return ('/' terminated) directory names
   static wxString GetGlobalDir();
-  static wxString GetLocalDir();
+  static wxString GetLocalDir(int style = 0);
 
   // common part of all ctors (assumes that m_str{Local|Global}File are already
   // initialized
@@ -220,8 +231,8 @@ private:
   wxFileConfigLineList *m_linesHead,    // head of the linked list
                        *m_linesTail;    // tail
 
-  wxString    m_strLocalFile,           // local  file name passed to ctor
-              m_strGlobalFile;          // global
+  wxFileName  m_fnLocalFile,            // local  file name passed to ctor
+              m_fnGlobalFile;           // global
   wxString    m_strPath;                // current path (not '/' terminated)
 
   wxFileConfigGroup *m_pRootGroup,      // the top (unnamed) group

@@ -8,6 +8,9 @@ INCOMPATIBLE CHANGES SINCE 2.8.x
 Changes in behaviour not resulting in compilation errors, please read this!
 ---------------------------------------------------------------------------
 
+- Default location of wxFileConfig files has changed under Windows, you will
+  need to update your code if you access these files directly.
+
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------
 
