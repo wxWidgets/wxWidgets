@@ -65,6 +65,7 @@ All:
 
 All (GUI):
 
+- Added wxDC::StretchBlit() for wxMac and wxMSW (Vince Harron)
 - Added wxEventBlocker class (Francesco Montorsi).
 - Added wxFile/DirPickerCtrl::Get/SetFile/DirName() (Francesco Montorsi).
 - Added wxSizerFlags::Top() and Bottom().

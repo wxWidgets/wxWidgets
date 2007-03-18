@@ -145,6 +145,14 @@ protected:
         wxDC *source, wxCoord xsrc, wxCoord ysrc,
         int rop = wxCOPY, bool useMask = false, wxCoord xsrcMask = -1, wxCoord ysrcMask = -1);
 
+    virtual bool DoStretchBlit(wxCoord xdest, wxCoord ydest,
+                               wxCoord dstWidth, wxCoord dstHeight,
+                               wxDC *source,
+                               wxCoord xsrc, wxCoord ysrc,
+                               wxCoord srcWidth, wxCoord srcHeight,
+                               int rop = wxCOPY, bool useMask = false,
+                               wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
+
     virtual void DoGetSize(int *,int *) const;
     virtual void DoGetSizeMM(int* width, int* height) const;
 

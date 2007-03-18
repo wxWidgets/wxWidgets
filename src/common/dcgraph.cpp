@@ -718,11 +718,22 @@ bool wxGCDC::CanDrawBitmap() const
 
 bool wxGCDC::DoBlit(
     wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height,
-    wxDC *source, wxCoord xsrc, wxCoord ysrc, int logical_func , bool WXUNUSED(useMask),
+    wxDC *source, wxCoord xsrc, wxCoord ysrc, int logical_func , bool useMask,
     wxCoord xsrcMask, wxCoord ysrcMask )
 {
-    wxCHECK_MSG( Ok(), false, wxT("wxGCDC(cg)::DoBlit - invalid DC") );
-    wxCHECK_MSG( source->Ok(), false, wxT("wxGCDC(cg)::DoBlit - invalid source DC") );
+    return DoStretchBlit( xdest, ydest, width, height,
+        source, xsrc, ysrc, width, height, logical_func, useMask,
+        xsrcMask,ysrcMask );
+}
+
+bool wxGCDC::DoStretchBlit(
+    wxCoord xdest, wxCoord ydest, wxCoord dstWidth, wxCoord dstHeight,
+    wxDC *source, wxCoord xsrc, wxCoord ysrc, wxCoord srcWidth, wxCoord srcHeight,
+    int logical_func , bool WXUNUSED(useMask),
+    wxCoord xsrcMask, wxCoord ysrcMask )
+{
+    wxCHECK_MSG( Ok(), false, wxT("wxGCDC(cg)::DoStretchBlit - invalid DC") );
+    wxCHECK_MSG( source->Ok(), false, wxT("wxGCDC(cg)::DoStretchBlit - invalid source DC") );
 
     if ( logical_func == wxNO_OP )
         return true;
@@ -740,8 +751,8 @@ bool wxGCDC::DoBlit(
 
     wxRect subrect(source->LogicalToDeviceX(xsrc),
                    source->LogicalToDeviceY(ysrc),
-                   source->LogicalToDeviceXRel(width),
-                   source->LogicalToDeviceYRel(height));
+                   source->LogicalToDeviceXRel(srcWidth),
+                   source->LogicalToDeviceYRel(srcHeight));
 
     // if needed clip the subrect down to the size of the source DC
     wxCoord sw, sh;
@@ -758,8 +769,7 @@ bool wxGCDC::DoBlit(
     if ( blit.Ok() )
     {
         m_graphicContext->DrawBitmap( blit, xdest, ydest,
-                                      wxMin(width, blit.GetWidth()),
-                                      wxMin(height, blit.GetHeight()));
+                                      dstWidth, dstHeight);
     }
     else
     {

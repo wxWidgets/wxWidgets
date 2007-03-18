@@ -313,7 +313,26 @@ public:
         return DoBlit(destPt.x, destPt.y, sz.x, sz.y,
                       source, srcPt.x, srcPt.y, rop, useMask, srcPtMask.x, srcPtMask.y);
     }
-    
+
+    bool StretchBlit(wxCoord dstX, wxCoord dstY, 
+                     wxCoord dstWidth, wxCoord dstHeight,
+                     wxDC *source, 
+                     wxCoord srcX, wxCoord srcY,
+                     wxCoord srcWidth, wxCoord srcHeight,
+                     int rop = wxCOPY, bool useMask = false, 
+                     wxCoord srcMaskX = wxDefaultCoord, wxCoord srcMaskY = wxDefaultCoord)
+    {
+        return DoStretchBlit(dstX, dstY, dstWidth, dstHeight,
+                      source, srcX, srcY, srcWidth, srcHeight, rop, useMask, srcMaskX, srcMaskY);
+    }
+    bool StretchBlit(const wxPoint& dstPt, const wxSize& dstSize,
+                     wxDC *source, const wxPoint& srcPt, const wxSize& srcSize,
+                     int rop = wxCOPY, bool useMask = false, const wxPoint& srcMaskPt = wxDefaultPosition)
+    {
+        return DoStretchBlit(dstPt.x, dstPt.y, dstSize.x, dstSize.y,
+                      source, srcPt.x, srcPt.y, srcSize.x, srcSize.y, rop, useMask, srcMaskPt.x, srcMaskPt.y);
+    }
+
     wxBitmap GetAsBitmap(const wxRect *subrect = (const wxRect *) NULL) const
     {
         return DoGetAsBitmap(subrect);
@@ -723,10 +742,25 @@ protected:
 
     virtual bool DoBlit(wxCoord xdest, wxCoord ydest,
                         wxCoord width, wxCoord height,
-                        wxDC *source, wxCoord xsrc, wxCoord ysrc,
-                        int rop = wxCOPY, bool useMask = false, wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord) = 0;
+                        wxDC *source,
+                        wxCoord xsrc, wxCoord ysrc,
+                        int rop = wxCOPY,
+                        bool useMask = false,
+                        wxCoord xsrcMask = wxDefaultCoord,
+                        wxCoord ysrcMask = wxDefaultCoord) = 0;
 
-    virtual wxBitmap DoGetAsBitmap(const wxRect *WXUNUSED(subrect)) const { return wxNullBitmap; }
+    virtual bool DoStretchBlit(wxCoord xdest, wxCoord ydest,
+                               wxCoord dstWidth, wxCoord dstHeight,
+                               wxDC *source,
+                               wxCoord xsrc, wxCoord ysrc,
+                               wxCoord srcWidth, wxCoord srcHeight,
+                               int rop = wxCOPY,
+                               bool useMask = false,
+                               wxCoord xsrcMask = wxDefaultCoord,
+                               wxCoord ysrcMask = wxDefaultCoord);
+
+    virtual wxBitmap DoGetAsBitmap(const wxRect *WXUNUSED(subrect)) const
+        { return wxNullBitmap; }
 
     virtual void DoGetSize(int *width, int *height) const = 0;
     virtual void DoGetSizeMM(int* width, int* height) const = 0;

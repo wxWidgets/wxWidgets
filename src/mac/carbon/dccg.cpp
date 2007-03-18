@@ -2021,8 +2021,22 @@ bool wxDC::DoBlit(
     wxDC *source, wxCoord xsrc, wxCoord ysrc, int logical_func , bool useMask,
     wxCoord xsrcMask, wxCoord ysrcMask )
 {
-    wxCHECK_MSG( Ok(), false, wxT("wxDC(cg)::DoBlit - invalid DC") );
-    wxCHECK_MSG( source->Ok(), false, wxT("wxDC(cg)::DoBlit - invalid source DC") );
+    return DoStretchBlit( xdest, ydest, width, height,
+                           source, xsrc, ysrc, width, height, 
+                           logical_func, useMask,
+                           xsrcMask, ysrcMask );
+}
+
+bool wxDC::DoStretchBlit(wxCoord xdest, wxCoord ydest,
+                         wxCoord dstWidth, wxCoord dstHeight,
+                         wxDC *source,
+                         wxCoord xsrc, wxCoord ysrc,
+                         wxCoord srcWidth, wxCoord srcHeight,
+                         int logical_func = wxCOPY, bool useMask = false,
+                         wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
+{
+    wxCHECK_MSG( Ok(), false, wxT("wxDC(cg)::DoStretchBlit - invalid DC") );
+    wxCHECK_MSG( source->Ok(), false, wxT("wxDC(cg)::DoStretchBlit - invalid source DC") );
 
     if ( logical_func == wxNO_OP )
         return true ;
@@ -2035,13 +2049,13 @@ bool wxDC::DoBlit(
 
     wxCoord yysrc = source->YLOG2DEVMAC(ysrc) ;
     wxCoord xxsrc = source->XLOG2DEVMAC(xsrc) ;
-    wxCoord wwsrc = source->XLOG2DEVREL(width) ;
-    wxCoord hhsrc = source->YLOG2DEVREL(height) ;
+    wxCoord wwsrc = source->XLOG2DEVREL(srcWidth) ;
+    wxCoord hhsrc = source->YLOG2DEVREL(srcHeight) ;
 
     wxCoord yydest = YLOG2DEVMAC(ydest) ;
     wxCoord xxdest = XLOG2DEVMAC(xdest) ;
-    wxCoord wwdest = XLOG2DEVREL(width) ;
-    wxCoord hhdest = YLOG2DEVREL(height) ;
+    wxCoord wwdest = XLOG2DEVREL(dstWidth) ;
+    wxCoord hhdest = YLOG2DEVREL(dstHeight) ;
 
     wxMemoryDC* memdc = dynamic_cast<wxMemoryDC*>(source) ;
     if ( memdc && logical_func == wxCOPY )

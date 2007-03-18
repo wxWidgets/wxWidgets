@@ -79,6 +79,27 @@ void wxDCBase::DoDrawCheckMark(wxCoord x1, wxCoord y1,
 }
 
 // ----------------------------------------------------------------------------
+// stubs for functions not implemented in all ports
+// ----------------------------------------------------------------------------
+
+bool
+wxDCBase::DoStretchBlit(wxCoord xdest, wxCoord ydest,
+                        wxCoord dstWidth, wxCoord dstHeight,
+                        wxDC *source,
+                        wxCoord xsrc, wxCoord ysrc,
+                        wxCoord WXUNUSED(srcWidth), wxCoord WXUNUSED(srcHeight),
+                        int rop,
+                        bool useMask,
+                        wxCoord xsrcMask,
+                        wxCoord ysrcMask)
+{
+    // temporary default implementation to avoid breaking platforms that don't
+    // have DoStretchBlit
+    return DoBlit(xdest, ydest, dstWidth, dstHeight, source,
+                  xsrc, ysrc, rop, useMask, xsrcMask, ysrcMask);
+}
+
+// ----------------------------------------------------------------------------
 // line/polygons
 // ----------------------------------------------------------------------------
 
@@ -734,7 +755,7 @@ void wxDCBase::DoGradientFillLinear(const wxRect& rect,
             else
                 nB = nB1 + (nB2-nB1)*(w-x)/w;
 
-	    wxColour colour(nR,nG,nB);
+            wxColour colour(nR,nG,nB);
             SetPen(wxPen(colour, 1, wxSOLID));
             SetBrush(wxBrush(colour));
             if(nDirection == wxEAST)
@@ -771,7 +792,7 @@ void wxDCBase::DoGradientFillLinear(const wxRect& rect,
             else
                 nB = nB1 + (nB2-nB1)*(w-y)/w;
 
-	    wxColour colour(nR,nG,nB);
+            wxColour colour(nR,nG,nB);
             SetPen(wxPen(colour, 1, wxSOLID));
             SetBrush(wxBrush(colour));
             if(nDirection == wxNORTH)
@@ -1156,4 +1177,4 @@ void wxDCBase::CalculateEllipticPoints( wxList* points,
     } // not iUseAngles
 } // CalculateEllipticPoints
 
-#endif
+#endif // __WXWINCE__

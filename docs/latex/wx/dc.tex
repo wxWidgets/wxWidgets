@@ -108,7 +108,7 @@ See \helpref{wxMemoryDC}{wxmemorydc} for typical usage.
 
 \wxheading{See also}
 
-\helpref{wxMemoryDC}{wxmemorydc}, \helpref{wxBitmap}{wxbitmap}, \helpref{wxMask}{wxmask}
+\helpref{wxDC::StretchBlit}{wxdcstretchblit}, \helpref{wxMemoryDC}{wxmemorydc}, \helpref{wxBitmap}{wxbitmap}, \helpref{wxMask}{wxmask}
 
 \begin{comment}
 
@@ -1197,4 +1197,85 @@ Message is a message to show while printing.
 \func{bool}{StartPage}{\void}
 
 Starts a document page (only relevant when outputting to a printer).
+
+
+\membersection{wxDC::StretchBlit}\label{wxdcstretchblit}
+
+\func{bool}{StretchBlit}{\param{wxCoord}{ xdest}, \param{wxCoord}{ ydest}, \param{wxCoord}{ dstWidth}, \param{wxCoord}{ dstHeight},
+  \param{wxDC* }{source}, \param{wxCoord}{ xsrc}, \param{wxCoord}{ ysrc}, \param{wxCoord}{ srcWidth}, \param{wxCoord}{ srcHeight}, 
+  \param{int}{ logicalFunc = wxCOPY}, \param{bool }{useMask = false}, \param{wxCoord}{ xsrcMask = -1}, \param{wxCoord}{ ysrcMask = -1}}
+
+Copy from a source DC to this DC, specifying the destination
+coordinates, destination size, source DC, source coordinates,
+size of source area to copy, logical function, whether to use a bitmap mask, 
+and mask source position.
+
+\wxheading{Parameters}
+
+\docparam{xdest}{Destination device context x position.}
+
+\docparam{ydest}{Destination device context y position.}
+
+\docparam{dstWidth}{Width of destination area.}
+
+\docparam{dstHeight}{Height of destination area.}
+
+\docparam{source}{Source device context.}
+
+\docparam{xsrc}{Source device context x position.}
+
+\docparam{ysrc}{Source device context y position.}
+
+\docparam{srcWidth}{Width of source area to be copied.}
+
+\docparam{srcHeight}{Height of source area to be copied.}
+
+\docparam{logicalFunc}{Logical function to use: see \helpref{wxDC::SetLogicalFunction}{wxdcsetlogicalfunction}.}
+
+\docparam{useMask}{If true, Blit does a transparent blit using the mask that is associated with the bitmap
+selected into the source device context. The Windows implementation does the following if \texttt{MaskBlt} cannot be used:
+
+\begin{enumerate}
+\item Creates a temporary bitmap and copies the destination area into it.
+\item Copies the source area into the temporary bitmap using the specified logical function.
+\item Sets the masked area in the temporary bitmap to BLACK by ANDing the
+mask bitmap with the temp bitmap with the foreground colour set to WHITE
+and the background colour set to BLACK.
+\item Sets the unmasked area in the destination area to BLACK by ANDing the
+mask bitmap with the destination area with the foreground colour set to BLACK
+and the background colour set to WHITE.
+\item ORs the temporary bitmap with the destination area.
+\item Deletes the temporary bitmap.
+\end{enumerate}
+
+This sequence of operations ensures that the source's transparent area need not be black,
+and logical functions are supported.
+
+{\bf Note:} on Windows, blitting with masks can be speeded up considerably by compiling
+wxWidgets with the \texttt{wxUSE\_DC\_CACHE} option enabled. You can also influence whether \texttt{MaskBlt}
+or the explicit mask blitting code above is used, by using \helpref{wxSystemOptions}{wxsystemoptions} and
+setting the {\bf no-maskblt} option to 1.
+
+}
+
+\docparam{xsrcMask}{Source x position on the mask. If both xsrcMask and ysrcMask are -1, xsrc and ysrc
+will be assumed for the mask source position. Currently only implemented on Windows.}
+
+\docparam{ysrcMask}{Source y position on the mask. If both xsrcMask and ysrcMask are -1, xsrc and ysrc
+will be assumed for the mask source position. Currently only implemented on Windows.}
+
+
+\wxheading{Remarks}
+
+There is partial support for Blit in wxPostScriptDC, under X.
+
+wxDC::StretchBlit is only implemented under wxMAC and wxMSW.
+
+See \helpref{wxMemoryDC}{wxmemorydc} for typical usage.
+
+\newsince{2.9.0}
+
+\wxheading{See also}
+
+\helpref{wxDC::Blit}{wxdcblit}, \helpref{wxMemoryDC}{wxmemorydc}, \helpref{wxBitmap}{wxbitmap}, \helpref{wxMask}{wxmask}
 
