@@ -151,6 +151,10 @@ public:
 private:
     CPPUNIT_TEST_SUITE( ArraysTestCase );
         CPPUNIT_TEST( wxStringArrayTest );
+        CPPUNIT_TEST( wxStringArraySplitTest );
+        CPPUNIT_TEST( wxStringArrayJoinTest );
+        CPPUNIT_TEST( wxStringArraySplitJoinTest );
+
         CPPUNIT_TEST( wxObjArrayTest );
         CPPUNIT_TEST( wxArrayUShortTest );
         CPPUNIT_TEST( wxArrayIntTest );
@@ -160,6 +164,9 @@ private:
     CPPUNIT_TEST_SUITE_END();
 
     void wxStringArrayTest();
+    void wxStringArraySplitTest();
+    void wxStringArrayJoinTest();
+    void wxStringArraySplitJoinTest();
     void wxObjArrayTest();
     void wxArrayUShortTest();
     void wxArrayIntTest();
@@ -294,6 +301,159 @@ void ArraysTestCase::wxStringArrayTest()
                                           _T("a") ,
                                           _T("a") ,
                                           _T("a") ) );
+}
+
+void ArraysTestCase::wxStringArraySplitTest()
+{
+    // test wxSplit:
+
+    {
+        wxString str = wxT(",,,,first,second,third,,");
+        const wxChar *expected[] =
+            { wxT(""), wxT(""), wxT(""), wxT(""), wxT("first"),
+              wxT("second"), wxT("third"), wxT(""), wxT("") };
+
+        wxArrayString exparr(WXSIZEOF(expected), expected);
+        wxArrayString realarr(wxSplit(str, wxT(',')));
+        CPPUNIT_ASSERT( exparr == realarr );
+    }
+
+    {
+        wxString str = wxT(",\\,first,second,third,");
+        const wxChar *expected[] =
+            { wxT(""), wxT(",first"), wxT("second"), wxT("third"), wxT("") };
+        const wxChar *expected2[] =
+            { wxT(""), wxT("\\"), wxT("first"), wxT("second"), wxT("third"), wxT("") };
+
+        // escaping on:
+        wxArrayString exparr(WXSIZEOF(expected), expected);
+        wxArrayString realarr(wxSplit(str, wxT(','), wxT('\\')));
+        CPPUNIT_ASSERT( exparr == realarr );
+
+        // escaping turned off:
+        wxArrayString exparr2(WXSIZEOF(expected2), expected2);
+        wxArrayString realarr2(wxSplit(str, wxT(','), wxT('\0')));
+        CPPUNIT_ASSERT( exparr2 == realarr2 );
+    }
+
+    {
+        // test is escape characters placed before non-separator character are
+        // just ignored as they should:
+        wxString str = wxT(",\\,,fir\\st,se\\cond\\,,\\third");
+        const wxChar *expected[] =
+            { wxT(""), wxT(","), wxT("fir\\st"), wxT("se\\cond,"), wxT("\\third") };
+        const wxChar *expected2[] =
+            { wxT(""), wxT("\\"), wxT(""), wxT("fir\\st"), wxT("se\\cond\\"),
+              wxT(""), wxT("\\third") };
+
+        // escaping on:
+        wxArrayString exparr(WXSIZEOF(expected), expected);
+        wxArrayString realarr(wxSplit(str, wxT(','), wxT('\\')));
+        CPPUNIT_ASSERT( exparr == realarr );
+
+        // escaping turned off:
+        wxArrayString exparr2(WXSIZEOF(expected2), expected2);
+        wxArrayString realarr2(wxSplit(str, wxT(','), wxT('\0')));
+        CPPUNIT_ASSERT( exparr2 == realarr2 );
+    }
+}
+
+void ArraysTestCase::wxStringArrayJoinTest()
+{
+    // test wxJoin:
+
+    {
+        const wxChar *arr[] = { wxT("first"), wxT(""), wxT("second"), wxT("third") };
+        wxString expected = wxT("first,,second,third");
+
+        wxArrayString arrstr(WXSIZEOF(arr), arr);
+        wxString result = wxJoin(arrstr, wxT(','));
+        CPPUNIT_ASSERT( expected == result );
+    }
+
+    {
+        const wxChar *arr[] = { wxT("first, word"), wxT(",,second"), wxT("third,,") };
+        wxString expected = wxT("first\\, word,\\,\\,second,third\\,\\,");
+        wxString expected2 = wxT("first, word,,,second,third,,");
+
+        // escaping on:
+        wxArrayString arrstr(WXSIZEOF(arr), arr);
+        wxString result = wxJoin(arrstr, wxT(','), wxT('\\'));
+        CPPUNIT_ASSERT( expected == result );
+
+        // escaping turned off:
+        wxString result2 = wxJoin(arrstr, wxT(','), wxT('\0'));
+        CPPUNIT_ASSERT( expected2 == result2 );
+    }
+
+    {
+        // test is escape characters placed in the original array are just ignored as they should:
+        const wxChar *arr[] = { wxT("first\\, wo\\rd"), wxT("seco\\nd"), wxT("\\third\\") };
+        wxString expected = wxT("first\\\\, wo\\rd,seco\\nd,\\third\\");
+        wxString expected2 = wxT("first\\, wo\\rd,seco\\nd,\\third\\");
+
+        // escaping on:
+        wxArrayString arrstr(WXSIZEOF(arr), arr);
+        wxString result = wxJoin(arrstr, wxT(','), wxT('\\'));
+        CPPUNIT_ASSERT( expected == result );
+
+        // escaping turned off:
+        wxString result2 = wxJoin(arrstr, wxT(','), wxT('\0'));
+        CPPUNIT_ASSERT( expected2 == result2 );
+    }
+}
+
+void ArraysTestCase::wxStringArraySplitJoinTest()
+{
+    wxChar separators[] = { wxT('a'), wxT(','), wxT('_'), wxT(' '), wxT('\\'),
+                            wxT('&'), wxT('{'), wxT('A'), wxT('<'), wxT('>'),
+                            wxT('\''), wxT('\n'), wxT('!'), wxT('-') };
+
+    // test with a string: split it and then rejoin it:
+
+    wxString str = wxT("This is a long, long test; if wxSplit and wxJoin do work ")
+                   wxT("correctly, then splitting and joining this 'text' _multiple_ ")
+                   wxT("times shouldn't cause any loss of content.\n")
+                   wxT("This is some latex code: ")
+                   wxT("\\func{wxString}{wxJoin}{")
+                   wxT("\\param{const wxArray String\\&}{ arr}, ")
+                   wxT("\\param{const wxChar}{ sep}, ")
+                   wxT("\\param{const wxChar}{ escape = '\\'}}.\n")
+                   wxT("This is some HTML code: ")
+                   wxT("<html><head><meta http-equiv=\"content-type\">")
+                   wxT("<title>Initial page of Mozilla Firefox</title>")
+                   wxT("</meta></head></html>");
+
+    for (size_t i=0; i < WXSIZEOF(separators); i++)
+    {
+        wxArrayString arr = wxSplit(str, separators[i]);
+        CPPUNIT_ASSERT( str == wxJoin(arr, separators[i]) );
+    }
+
+
+    // test with an array: join it and then resplit it:
+
+    const wxChar *arr[] =
+        {
+            wxT("first, second!"), wxT("this is the third!!"),
+            wxT("\nThat's the fourth token\n\n"), wxT(" - fifth\ndummy\ntoken - "),
+            wxT("_sixth__token__with_underscores"), wxT("The! Last! One!")
+        };
+    wxArrayString theArr(WXSIZEOF(arr), arr);
+
+    for (size_t i=0; i < WXSIZEOF(separators); i++)
+    {
+        wxString string = wxJoin(theArr, separators[i]);
+        CPPUNIT_ASSERT( theArr == wxSplit(string, separators[i]) );
+    }
+
+    wxArrayString emptyArray;
+    wxString string = wxJoin(emptyArray, _T(';'));
+    CPPUNIT_ASSERT( string.empty() );
+
+    CPPUNIT_ASSERT( wxSplit(string, _T(';')).empty() );
+
+    CPPUNIT_ASSERT_EQUAL( (size_t)2, wxSplit(_T(";"), _T(';')).size() );
 }
 
 void ArraysTestCase::wxObjArrayTest()

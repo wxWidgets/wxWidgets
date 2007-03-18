@@ -56,7 +56,7 @@ public:
         wxArrayStringBase::Add(string, copies);
         return size() - copies;
     }
-};
+}
 
 class WXDLLIMPEXP_BASE wxSortedArrayString : public wxSortedArrayStringBase
 {
@@ -343,4 +343,21 @@ private:
     wxString* m_strings;
 };
 
-#endif
+
+// ----------------------------------------------------------------------------
+// helper functions for working with arrays
+// ----------------------------------------------------------------------------
+
+// by default, these functions use the escape character to escape the
+// separators occuring inside the string to be joined, this can be disabled by
+// passing '\0' as escape
+
+WXDLLIMPEXP_BASE wxString wxJoin(const wxArrayString& arr,
+                                 const wxChar sep,
+                                 const wxChar escape = wxT('\\'));
+
+WXDLLIMPEXP_BASE wxArrayString wxSplit(const wxString& str,
+                                       const wxChar sep,
+                                       const wxChar escape = wxT('\\'));
+
+#endif // _WX_ARRSTR_H

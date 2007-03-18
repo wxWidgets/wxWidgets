@@ -179,6 +179,7 @@ the corresponding topic.
 \helpref{wxIsPlatformLittleEndian}{wxisplatformlittleendian}\\
 \helpref{wxIsPlatform64Bit}{wxisplatform64bit}\\
 \helpref{wxIsWild}{wxiswild}\\
+\helpref{wxJoin}{wxjoin}\\
 \helpref{wxKill}{wxkill}\\
 \helpref{wxLaunchDefaultBrowser}{wxlaunchdefaultbrowser}\\
 \helpref{wxLEAVE\_CRIT\_SECT}{wxleavecritsect}\\
@@ -238,6 +239,7 @@ the corresponding topic.
 \helpref{wxShutdown}{wxshutdown}\\
 \helpref{wxSleep}{wxsleep}\\
 \helpref{wxSnprintf}{wxsnprintf}\\
+\helpref{wxSplit}{wxsplit}\\
 \helpref{wxSplitPath}{wxsplitfunction}\\
 \helpref{wxStartTimer}{wxstarttimer}\\
 \helpref{wxStaticCast}{wxstaticcast}\\
@@ -692,6 +694,23 @@ application. See \helpref{wxCloseEvent}{wxcloseevent} and \helpref{wxApp}{wxapp}
 \wxheading{Include files}
 
 <wx/app.h>
+
+
+\membersection{::wxJoin}\label{wxjoin}
+
+\func{wxString}{wxJoin}{\param{const wxArrayString\&}{ arr}, \param{const wxChar}{ sep}, \param{const wxChar}{ escape = '\\'}}
+
+Concatenate all lines of the given \helpref{wxArrayString}{wxarraystring} object using the separator \arg{sep} and returns
+the result as a \helpref{wxString}{string}.
+
+If the \arg{escape} character is non-\NULL, then it's used as prefix for each occurrence of \arg{sep}
+in the strings contained in \arg{arr} before joining them which is necessary
+in order to be able to recover the original array contents from the string
+later using \helpref{wxSplit}{wxsplit}.
+
+\wxheading{Include files}
+
+<wx/arrstr.h>
 
 
 \membersection{::wxKill}\label{wxkill}
@@ -1285,6 +1304,27 @@ confuse these two functions.
 
 Sets the current working directory, returning true if the operation succeeded.
 Under MS Windows, the current drive is also changed if {\it dir} contains a drive specification.
+
+
+\membersection{::wxSplit}\label{wxsplit}
+
+\func{wxArrayString}{wxSplit}{\param{const wxString\&}{ str}, \param{const wxChar}{ sep}, \param{const wxChar}{ escape = '\\'}}
+
+Splits the given \helpref{wxString}{wxstring} object using the separator \arg{sep} and returns the
+result as a \helpref{wxArrayString}{wxarraystring}.
+
+If the \arg{escape} character is non-\NULL, then the occurrences of \arg{sep} immediately prefixed
+with \arg{escape} are not considered as separators.
+
+Note that empty tokens will be generated if there are two or more adjacent separators.
+
+\wxheading{See also}
+
+\helpref{wxJoin}{wxjoin}
+
+\wxheading{Include files}
+
+<wx/arrstr.h>
 
 
 \membersection{::wxSplitPath}\label{wxsplitfunction}
