@@ -1523,7 +1523,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
     {
         // strip mnemonics from the label for compatibility
         // with the usual labels in wxStaticText sense
-        label = wxStaticText(label);
+        label = wxStripMenuCodes(label);
 
         HIToolbarItemSetLabel(item,
                               wxMacCFStringHolder(label, m_font.GetEncoding()));
