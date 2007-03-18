@@ -337,7 +337,8 @@ void GetVolumeInfo(const wxString& path)
     }
 
     // NULL means the current volume
-    const wxChar *pVol = vol.empty() ? NULL : vol.c_str();
+    const wxChar *pVol = vol.empty() ? (wxChar *)NULL
+                                     : vol.c_str();
 
     if (!::GetVolumeInformation(pVol, NULL, 0, NULL, NULL,
                                 &volumeFlags, 

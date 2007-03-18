@@ -323,7 +323,7 @@ wxString RegExTestCase::quote(const wxString& arg)
     wxString str;
 
     for (size_t i = 0; i < arg.length(); i++) {
-        wxUChar ch = arg[i];
+        wxChar ch = arg[i];
         const wxChar *p = wxStrchr(needEscape, ch);
 
         if (p)
