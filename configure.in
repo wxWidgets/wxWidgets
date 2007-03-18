@@ -6644,84 +6644,40 @@ if test "$wxUSE_WIZARDDLG" = "yes"; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS wizard"
 fi
 
-dnl ---------------------------------------------------------------------------
+dnl ----------------------------------------------------------------------------
 dnl wxMediaCtrl 
-dnl ---------------------------------------------------------------------------
+dnl ----------------------------------------------------------------------------
 
 if test "$wxUSE_MEDIACTRL" = "yes"; then
-    dnl -----------------------------------------------------------------------
+     dnl ----------------------------------------------------------------------
     dnl GStreamer 
-    dnl -----------------------------------------------------------------------
+     dnl ----------------------------------------------------------------------
     if test "$wxUSE_GTK" = 1; then
         wxUSE_GSTREAMER="yes"
         
-        dnl -------------------------------------------------------------------
+         dnl ------------------------------------------------------------------
         dnl Test for gstreamer module from pkg-config
-        dnl -------------------------------------------------------------------
-        PKG_CHECK_MODULES(GSTREAMER, gstreamer-0.8,
-        [
-            CPPFLAGS="$CPPFLAGS $GSTREAMER_CFLAGS"
-            LIBS="$LIBS $GSTREAMER_LIBS -lgstplay-0.8"
-        ],
-        [
-            AC_MSG_WARN([GStreamer installation not found])
-            wxUSE_GSTREAMER="no"
-        ])
+         dnl ------------------------------------------------------------------
         
-        dnl -------------------------------------------------------------------
-        dnl Perform a check for a GStreamer element using gst-inspect
-        dnl Thomas Vander Stichele <thomas at apestaart dot org>
-        dnl Last modification: 25/01/2005
-        dnl
-        dnl AM_GST_ELEMENT_CHECK(ELEMENT-NAME, ACTION-IF-FOUND, ACTION-IF-NOT-FOUND)
-        dnl -------------------------------------------------------------------
-        AC_DEFUN([AM_GST_ELEMENT_CHECK],
+         GST_VERSION_MAJOR=0
+         GST_VERSION_MINOR=8
+         GST_VERSION_RELEASE=0
+          
+         GSTREAMER_REQ=$GST_VERSION_MAJOR.$GST_VERSION_MINOR.$GST_VERSION_RELEASE
+         GST_MAJORMINOR=$GST_VERSION_MAJOR.$GST_VERSION_MINOR
+
+             PKG_CHECK_MODULES(GST, gstreamer-$GST_MAJORMINOR
+                 gstreamer-interfaces-$GST_MAJORMINOR
+                 gstreamer-gconf-$GST_MAJORMINOR,
         [
-        if test "x$GST_INSPECT" == "x"; then
-            AC_CHECK_PROG(GST_INSPECT, gst-inspect, gst-inspect, [])
-        fi
-        
-        if test "x$GST_INSPECT" != "x"; then
-            AC_MSG_CHECKING(GStreamer element $1)
-            if [ $GST_INSPECT $1 > /dev/null 2> /dev/null ]; then
-            AC_MSG_RESULT(found.)
-            $2
-            else
-            AC_MSG_RESULT(not found.)
-            $3
-            fi
-        fi
-        ])
-        
-        dnl -------------------------------------------------------------------
-        dnl Test for x video sink (video useless without)
-        dnl -------------------------------------------------------------------
-        AM_GST_ELEMENT_CHECK(xvimagesink,[], 
+                     CPPFLAGS="$GST_CFLAGS $CPPFLAGS"
+                     LIBS="$LIBS $GST_LIBS"
+                 ],
                         [
+                     AC_MSG_WARN([Proper GStreamer .8 installation not found])
                             wxUSE_GSTREAMER="no"
-                            AC_MSG_WARN([x video sink not found - cannot use GStreamer])
                         ])
                             
-        dnl -------------------------------------------------------------------
-        dnl Check for gstplay-0.8 lib and corresponding x overlay header
-        dnl -------------------------------------------------------------------        
-        AC_CHECK_HEADER(gst/xoverlay/xoverlay.h, [], 
-                        [
-                            wxUSE_GSTREAMER="no"
-                            AC_MSG_WARN([xoverlay header not found, cannot use GStreamer])
-                        ],
-                        [#include <gst/gst.h>])
-        
-        AC_MSG_CHECKING([for gstplay 0.8])
-        WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],gstplay-0.8)           
-        
-        if test "$ac_find_libraries" = "" ; then
-            AC_MSG_RESULT([no])
-            wxUSE_GSTREAMER="no"
-        else
-            AC_MSG_RESULT([yes])        
-        fi
-        
         if test "$wxUSE_GSTREAMER" = "yes"; then
             AC_DEFINE(wxUSE_GSTREAMER)
             AC_MSG_RESULT([GStreamer detection successful])
