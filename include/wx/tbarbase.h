@@ -91,7 +91,10 @@ public:
                                            : wxTOOL_STYLE_BUTTON;
     }
 
-    wxToolBarToolBase(wxToolBarBase *tbar, wxControl *control)
+    wxToolBarToolBase(wxToolBarBase *tbar,
+                      wxControl *control,
+                      const wxString& label)
+        : m_label(label)
     {
         m_tbar = tbar;
         m_control = control;
@@ -316,13 +319,17 @@ public:
     virtual wxToolBarToolBase *AddTool (wxToolBarToolBase *tool);
     virtual wxToolBarToolBase *InsertTool (size_t pos, wxToolBarToolBase *tool);
 
-    // add an arbitrary control to the toolbar (notice that
-    // the control will be deleted by the toolbar and that it will also adjust
-    // its position/size)
+    // add an arbitrary control to the toolbar (notice that the control will be
+    // deleted by the toolbar and that it will also adjust its position/size)
     //
+    // the label is optional and, if specified, will be shown near the control
     // NB: the control should have toolbar as its parent
-    virtual wxToolBarToolBase *AddControl(wxControl *control);
-    virtual wxToolBarToolBase *InsertControl(size_t pos, wxControl *control);
+    virtual wxToolBarToolBase *
+    AddControl(wxControl *control, const wxString& label = wxEmptyString);
+
+    virtual wxToolBarToolBase *
+    InsertControl(size_t pos, wxControl *control,
+                  const wxString& label = wxEmptyString);
 
     // get the control with the given id or return NULL
     virtual wxControl *FindControl( int toolid );
@@ -565,7 +572,8 @@ protected:
                                           const wxString& shortHelp,
                                           const wxString& longHelp) = 0;
 
-    virtual wxToolBarToolBase *CreateTool(wxControl *control) = 0;
+    virtual wxToolBarToolBase *CreateTool(wxControl *control,
+                                          const wxString& label) = 0;
 
     // helper functions
     // ----------------

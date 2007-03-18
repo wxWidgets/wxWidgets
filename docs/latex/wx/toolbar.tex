@@ -165,11 +165,19 @@ Toolbar destructor.
 
 \membersection{wxToolBar::AddControl}\label{wxtoolbaraddcontrol}
 
-\func{bool}{AddControl}{\param{wxControl*}{ control}}
+\func{bool}{AddControl}{\param{wxControl*}{ control}, \param{const wxString&}{ label = ""}}
 
 Adds any control to the toolbar, typically e.g. a combobox.
 
 \docparam{control}{The control to be added.}
+
+\docparam{label}{Text to be displayed near the control.}
+
+\wxheading{Remarks}
+
+wxMSW: the label is only displayed if there is enough space available below the embedded control.
+
+wxMac: labels are only displayed if wxWidgets is built with wxMAC_USE_NATIVE_TOOLBAR set to 1
 
 
 \membersection{wxToolBar::AddSeparator}\label{wxtoolbaraddseparator}

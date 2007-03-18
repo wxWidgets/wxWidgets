@@ -98,7 +98,8 @@ protected:
                                           wxObject *clientData,
                                           const wxString& shortHelp,
                                           const wxString& longHelp);
-    virtual wxToolBarToolBase *CreateTool(wxControl *control);
+    virtual wxToolBarToolBase *CreateTool(wxControl *control,
+                                          const wxString& label);
 
     virtual wxSize DoGetBestClientSize() const;
     virtual void DoSetSize(int x, int y,

@@ -66,8 +66,10 @@ public:
         m_button = NULL;
     }
 
-    wxButtonToolBarTool(wxButtonToolBar *tbar, wxControl *control)
-        : wxToolBarToolBase(tbar, control)
+    wxButtonToolBarTool(wxButtonToolBar *tbar,
+                        wxControl *control,
+                        const wxString& label)
+        : wxToolBarToolBase(tbar, control, label)
     {
         m_x = m_y = wxDefaultCoord;
         m_width =
@@ -271,9 +273,10 @@ wxToolBarToolBase *wxButtonToolBar::CreateTool(int id,
                              clientData, shortHelp, longHelp);
 }
 
-wxToolBarToolBase *wxButtonToolBar::CreateTool(wxControl *control)
+wxToolBarToolBase *wxButtonToolBar::CreateTool(wxControl *control,
+                                               const wxString& label)
 {
-    return new wxButtonToolBarTool(this, control);
+    return new wxButtonToolBarTool(this, control, label);
 }
 
 // ----------------------------------------------------------------------------

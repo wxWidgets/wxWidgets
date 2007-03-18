@@ -197,12 +197,16 @@ wxToolBarBase::InsertTool(size_t pos, wxToolBarToolBase *tool)
     return tool;
 }
 
-wxToolBarToolBase *wxToolBarBase::AddControl(wxControl *control)
+wxToolBarToolBase *
+wxToolBarBase::AddControl(wxControl *control, const wxString& label)
 {
-    return InsertControl(GetToolsCount(), control);
+    return InsertControl(GetToolsCount(), control, label);
 }
 
-wxToolBarToolBase *wxToolBarBase::InsertControl(size_t pos, wxControl *control)
+wxToolBarToolBase *
+wxToolBarBase::InsertControl(size_t pos,
+                             wxControl *control,
+                             const wxString& label)
 {
     wxCHECK_MSG( control, (wxToolBarToolBase *)NULL,
                  _T("toolbar: can't insert NULL control") );
@@ -213,7 +217,7 @@ wxToolBarToolBase *wxToolBarBase::InsertControl(size_t pos, wxControl *control)
     wxCHECK_MSG( pos <= GetToolsCount(), (wxToolBarToolBase *)NULL,
                  _T("invalid position in wxToolBar::InsertControl()") );
 
-    wxToolBarToolBase *tool = CreateTool(control);
+    wxToolBarToolBase *tool = CreateTool(control, label);
 
     if ( !InsertTool(pos, tool) )
     {

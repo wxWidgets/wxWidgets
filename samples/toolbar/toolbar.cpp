@@ -402,14 +402,14 @@ void MyFrame::RecreateToolbar()
         combo->Append(_T("combobox"));
         combo->Append(_T("in a"));
         combo->Append(_T("toolbar"));
-        toolBar->AddControl(combo);
+        toolBar->AddControl(combo, _T("Combo Label"));
 
         wxSpinCtrl *spin = new wxSpinCtrl( toolBar, ID_SPIN, wxT("0"), wxDefaultPosition, wxSize(80,wxDefaultCoord), 0, 0, 100 );
         toolBar->AddControl( spin );
-        
+
         wxTextCtrl *text = new wxTextCtrl( toolBar, -1, wxT("text"), wxDefaultPosition, wxSize(80,wxDefaultCoord) );
         toolBar->AddControl( text );
-        
+
         wxSearchCtrl *srch = new wxSearchCtrl( toolBar, -1, wxT("xx"), wxDefaultPosition, wxSize(80,wxDefaultCoord), wxSUNKEN_BORDER );
         toolBar->AddControl( srch );
     }
