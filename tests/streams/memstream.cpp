@@ -114,16 +114,16 @@ void memStream::Ctor_InFromIn()
     wxMemoryInputStream *pMemInStream2 = new wxMemoryInputStream(*pMemInStream1);
     CPPUNIT_ASSERT(pMemInStream2->IsOk());
     CPPUNIT_ASSERT_EQUAL(pMemInStream1->GetLength(), pMemInStream2->GetLength());
-    size_t len = pMemInStream2->GetLength();
+    wxFileOffset len = pMemInStream2->GetLength();
     char *dat = new char[len];
     pMemInStream2->Read(dat, len);
-    CPPUNIT_ASSERT_EQUAL(len, pMemInStream2->LastRead());
+    CPPUNIT_ASSERT_EQUAL(len, (wxFileOffset)pMemInStream2->LastRead());
     wxStreamBuffer *buf = pMemInStream1->GetInputStreamBuffer();
     void *pIn = buf->GetBufferStart();
     CPPUNIT_ASSERT(memcmp(pIn, dat, len) == 0);
     delete pMemInStream2;
 
-    size_t len2 = len / 2;
+    wxFileOffset len2 = len / 2;
     CPPUNIT_ASSERT(len2);
     CPPUNIT_ASSERT(pMemInStream1->SeekI(-len2, wxFromCurrent) != wxInvalidOffset);
     pIn = buf->GetBufferPos();
@@ -131,7 +131,7 @@ void memStream::Ctor_InFromIn()
     CPPUNIT_ASSERT(pMemInStream2->IsOk());
     CPPUNIT_ASSERT_EQUAL((wxFileOffset)len2, pMemInStream2->GetLength());
     pMemInStream2->Read(dat, len2);
-    CPPUNIT_ASSERT_EQUAL(len2, pMemInStream2->LastRead());
+    CPPUNIT_ASSERT_EQUAL(len2, (wxFileOffset)pMemInStream2->LastRead());
     CPPUNIT_ASSERT(memcmp(pIn, dat, len2) == 0);
 
     delete[] dat;
