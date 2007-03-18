@@ -344,7 +344,7 @@ void wxFileConfig::Init()
     // It's not an error if (one of the) file(s) doesn't exist.
 
     // parse the global file
-    if ( m_fnGlobalFile.FileExists() )
+    if ( m_fnGlobalFile.IsOk() && m_fnGlobalFile.FileExists() )
     {
         wxTextFile fileGlobal(m_fnGlobalFile.GetFullPath());
 
@@ -360,7 +360,7 @@ void wxFileConfig::Init()
     }
 
     // parse the local file
-    if ( m_fnLocalFile.FileExists() )
+    if ( m_fnLocalFile.IsOk() && m_fnLocalFile.FileExists() )
     {
         wxTextFile fileLocal(m_fnLocalFile.GetFullPath());
         if ( fileLocal.Open(*m_conv/*ignored in ANSI build*/) )
