@@ -3505,7 +3505,7 @@ void wxCSConv::CreateConvIfNeeded() const
         if ( !m_name && m_encoding == wxFONTENCODING_SYSTEM )
         {
 #if wxUSE_INTL
-            self->m_name = wxStrdup(wxLocale::GetSystemEncodingName());
+            self->m_encoding = wxLocale::GetSystemEncoding();
 #else
             // fallback to some reasonable default:
             self->m_encoding = wxFONTENCODING_ISO8859_1;
