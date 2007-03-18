@@ -1,5 +1,4 @@
 samples/.cvsignore
-samples/Info.plist
 samples/sample.ico
 samples/sample.r
 samples/sample.rc
@@ -977,7 +976,6 @@ samples/minifram/bitmaps/open.xpm
 samples/minifram/bitmaps/preview.xpm
 samples/minifram/bitmaps/print.xpm
 samples/minifram/bitmaps/save.xpm
-samples/minimal/Info.plist
 samples/minimal/Minimal.icc
 samples/minimal/MinimalClassicM8.xml
 samples/minimal/MinimalM8.xml
