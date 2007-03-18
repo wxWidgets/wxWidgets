@@ -139,8 +139,8 @@ public:
 
     wxXmString(const wxString& str)
     {
-        m_string = XmStringCreateLtoR((char *)str.c_str(),
-            XmSTRING_DEFAULT_CHARSET);
+        m_string = XmStringCreateLtoR((char *)str.mb_str(),
+                                      XmSTRING_DEFAULT_CHARSET);
     }
 
     // just to avoid calling XmStringFree()
