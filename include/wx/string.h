@@ -789,10 +789,12 @@ public:
     wxUniChar operator[](unsigned int n) const { return operator[](size_t(n)); }
 #endif // size_t != unsigned int
 
-    // this operator is needed to emulate the pointer semantics of c_str():
+    // these operators are needed to emulate the pointer semantics of c_str():
     // expressions like "wxChar *p = str.c_str() + 1;" should continue to work
     // (we need both versions to resolve ambiguities):
     wxCStrData operator+(int n) const
+        { return wxCStrData(m_str, m_offset + n, m_owned); }
+    wxCStrData operator+(long n) const
         { return wxCStrData(m_str, m_offset + n, m_owned); }
     wxCStrData operator+(size_t n) const
         { return wxCStrData(m_str, m_offset + n, m_owned); }
