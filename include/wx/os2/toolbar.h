@@ -165,7 +165,8 @@ protected:
                                           ,const wxString& rsShortHelp
                                           ,const wxString& rsLongHelp
                                          );
-    virtual wxToolBarToolBase* CreateTool(wxControl* pControl);
+    virtual wxToolBarToolBase* CreateTool(wxControl* pControl,
+                                          const wxString& label);
 
     //
     // Helpers

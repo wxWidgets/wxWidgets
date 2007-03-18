@@ -54,10 +54,10 @@ public:
 
     virtual void SetToolNormalBitmap(int id, const wxBitmap& bitmap);
     virtual void SetToolDisabledBitmap(int id, const wxBitmap& bitmap);
-    
+
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
-    
+
     // implementation from now on
     // --------------------------
 
@@ -75,7 +75,7 @@ protected:
     void GtkSetStyle();
 
     virtual GdkWindow *GTKGetWindow(wxArrayGdkWindows& windows) const;
-    
+
     // implement base class pure virtuals
     virtual bool DoInsertTool(size_t pos, wxToolBarToolBase *tool);
     virtual bool DoDeleteTool(size_t pos, wxToolBarToolBase *tool);
@@ -92,7 +92,8 @@ protected:
                                           wxObject *clientData,
                                           const wxString& shortHelpString,
                                           const wxString& longHelpString);
-    virtual wxToolBarToolBase *CreateTool(wxControl *control);
+    virtual wxToolBarToolBase *CreateTool(wxControl *control,
+                                          const wxString& label);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxToolBar)

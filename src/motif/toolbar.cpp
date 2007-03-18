@@ -97,8 +97,8 @@ public:
         Init();
     }
 
-    wxToolBarTool(wxToolBar *tbar, wxControl *control)
-        : wxToolBarToolBase(tbar, control)
+    wxToolBarTool(wxToolBar *tbar, wxControl *control, const wxString& label)
+        : wxToolBarToolBase(tbar, control, label)
     {
         Init();
     }
@@ -159,9 +159,10 @@ wxToolBarToolBase *wxToolBar::CreateTool(int id,
 }
 
 
-wxToolBarToolBase *wxToolBar::CreateTool(wxControl *control)
+wxToolBarToolBase *
+wxToolBar::CreateTool(wxControl *control, const wxString& label)
 {
-    return new wxToolBarTool(this, control);
+    return new wxToolBarTool(this, control, label);
 }
 
 void wxToolBarTool::Init()
