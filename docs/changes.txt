@@ -119,6 +119,10 @@ wxMSW:
 
 - Fixed wxFileName::GetSize() for large files
 
+wxGTK:
+
+- Fixed handling of accelerators using PageUp/Down keys
+
 
 2.8.2
 -----
