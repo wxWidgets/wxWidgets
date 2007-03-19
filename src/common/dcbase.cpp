@@ -87,16 +87,31 @@ wxDCBase::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                         wxCoord dstWidth, wxCoord dstHeight,
                         wxDC *source,
                         wxCoord xsrc, wxCoord ysrc,
-                        wxCoord WXUNUSED(srcWidth), wxCoord WXUNUSED(srcHeight),
+                        wxCoord srcWidth, wxCoord srcHeight,
                         int rop,
                         bool useMask,
                         wxCoord xsrcMask,
                         wxCoord ysrcMask)
 {
-    // temporary default implementation to avoid breaking platforms that don't
-    // have DoStretchBlit
-    return DoBlit(xdest, ydest, dstWidth, dstHeight, source,
-                  xsrc, ysrc, rop, useMask, xsrcMask, ysrcMask);
+    wxCHECK_MSG( srcWidth && srcHeight && dstWidth && dstHeight, false,
+                 _T("invalid blit size") );
+
+    // emulate the stretching by modifying the DC scale
+    double xscale = (double)srcWidth/dstWidth,
+           yscale = (double)srcHeight/dstHeight;
+
+    double xscaleOld, yscaleOld;
+    GetUserScale(&xscaleOld, &yscaleOld);
+    SetUserScale(xscaleOld/xscale, yscaleOld/yscale);
+
+    bool rc = DoBlit(wxCoord(xdest*xscale), wxCoord(ydest*yscale),
+                     wxCoord(dstWidth*xscale), wxCoord(dstHeight*yscale),
+                     source,
+                     xsrc, ysrc, rop, useMask, xsrcMask, ysrcMask);
+
+    SetUserScale(xscaleOld, yscaleOld);
+
+    return rc;
 }
 
 // ----------------------------------------------------------------------------
