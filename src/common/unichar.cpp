@@ -26,7 +26,7 @@
 // ===========================================================================
 
 /* static */
-wxUniChar::unicode_type wxUniChar::From8bit(char c)
+wxUniChar::value_type wxUniChar::From8bit(char c)
 {
     // all supported charsets have the first 128 characters same as ASCII:
     if ( (unsigned char)c < 0x80 )
@@ -39,7 +39,7 @@ wxUniChar::unicode_type wxUniChar::From8bit(char c)
 }
 
 /* static */
-char wxUniChar::To8bit(wxUniChar::unicode_type c)
+char wxUniChar::To8bit(wxUniChar::value_type c)
 {
     // all supported charsets have the first 128 characters same as ASCII:
     if ( c < 0x80 )

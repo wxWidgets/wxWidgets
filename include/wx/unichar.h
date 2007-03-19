@@ -23,7 +23,7 @@ public:
     // NB: this is not wchar_t on purpose, it needs to represent the entire
     //     Unicode code points range and wchar_t may be too small for that
     //     (e.g. on Win32 where wchar_t* is encoded in UTF-16)
-    typedef unsigned int unicode_type;
+    typedef unsigned int value_type;
 
     wxUniChar() : m_value(0) {}
 
@@ -44,7 +44,7 @@ public:
     wxUniChar(const wxUniCharRef& c);
 
     // Returns Unicode code point value of the character
-    unicode_type GetValue() const { return m_value; }
+    value_type GetValue() const { return m_value; }
 
     // Casts to char and wchar_t types:
     operator char() const { return To8bit(m_value); }
@@ -79,59 +79,59 @@ public:
     // Comparision operators:
     bool operator==(const wxUniChar& c) const { return m_value == c.m_value; }
     bool operator==(char c) const { return m_value == From8bit(c); }
-    bool operator==(wchar_t c) const { return m_value == (unicode_type)c; }
+    bool operator==(wchar_t c) const { return m_value == (value_type)c; }
 #ifndef wxWINT_T_IS_TYPEDEF
-    bool operator==(wint_t c) const { return m_value == (unicode_type)c; }
+    bool operator==(wint_t c) const { return m_value == (value_type)c; }
 #endif
 
     bool operator!=(const wxUniChar& c) const { return m_value != c.m_value; }
     bool operator!=(char c) const { return m_value != From8bit(c); }
-    bool operator!=(wchar_t c) const { return m_value != (unicode_type)c; }
+    bool operator!=(wchar_t c) const { return m_value != (value_type)c; }
 #ifndef wxWINT_T_IS_TYPEDEF
-    bool operator!=(wint_t c) const { return m_value != (unicode_type)c; }
+    bool operator!=(wint_t c) const { return m_value != (value_type)c; }
 #endif
 
     bool operator>(const wxUniChar& c) const { return m_value > c.m_value; }
-    bool operator>(char c) const { return m_value > (unicode_type)c; }
-    bool operator>(wchar_t c) const { return m_value > (unicode_type)c; }
+    bool operator>(char c) const { return m_value > (value_type)c; }
+    bool operator>(wchar_t c) const { return m_value > (value_type)c; }
 #ifndef wxWINT_T_IS_TYPEDEF
-    bool operator>(wint_t c) const { return m_value > (unicode_type)c; }
+    bool operator>(wint_t c) const { return m_value > (value_type)c; }
 #endif
 
     bool operator<(const wxUniChar& c) const { return m_value < c.m_value; }
     bool operator<(char c) const { return m_value < From8bit(c); }
-    bool operator<(wchar_t c) const { return m_value < (unicode_type)c; }
+    bool operator<(wchar_t c) const { return m_value < (value_type)c; }
 #ifndef wxWINT_T_IS_TYPEDEF
-    bool operator<(wint_t c) const { return m_value < (unicode_type)c; }
+    bool operator<(wint_t c) const { return m_value < (value_type)c; }
 #endif
 
     bool operator>=(const wxUniChar& c) const { return m_value >= c.m_value; }
     bool operator>=(char c) const { return m_value >= From8bit(c); }
-    bool operator>=(wchar_t c) const { return m_value >= (unicode_type)c; }
+    bool operator>=(wchar_t c) const { return m_value >= (value_type)c; }
 #ifndef wxWINT_T_IS_TYPEDEF
-    bool operator>=(wint_t c) const { return m_value >= (unicode_type)c; }
+    bool operator>=(wint_t c) const { return m_value >= (value_type)c; }
 #endif
 
     bool operator<=(const wxUniChar& c) const { return m_value <= c.m_value; }
     bool operator<=(char c) const { return m_value <= From8bit(c); }
-    bool operator<=(wchar_t c) const { return m_value <= (unicode_type)c; }
+    bool operator<=(wchar_t c) const { return m_value <= (value_type)c; }
 #ifndef wxWINT_T_IS_TYPEDEF
-    bool operator<=(wint_t c) const { return m_value <= (unicode_type)c; }
+    bool operator<=(wint_t c) const { return m_value <= (value_type)c; }
 #endif
 
     int operator-(const wxUniChar& c) const { return m_value - c.m_value; }
     int operator-(char c) const { return m_value - From8bit(c); }
-    int operator-(wchar_t c) const { return m_value - (unicode_type)c; }
+    int operator-(wchar_t c) const { return m_value - (value_type)c; }
 #ifndef wxWINT_T_IS_TYPEDEF
-    int operator-(wint_t c) const { return m_value - (unicode_type)c; }
+    int operator-(wint_t c) const { return m_value - (value_type)c; }
 #endif
 
 private:
-    static unicode_type From8bit(char c);
-    static char To8bit(unicode_type c);
+    static value_type From8bit(char c);
+    static char To8bit(value_type c);
 
 private:
-    unicode_type m_value;
+    value_type m_value;
 };
 
 
@@ -157,7 +157,7 @@ public:
     static wxUniCharRef CreateForString(wxChar *pos)
         { return wxUniCharRef(pos); }
 
-    wxUniChar::unicode_type GetValue() const { return UniChar().GetValue(); }
+    wxUniChar::value_type GetValue() const { return UniChar().GetValue(); }
 
     // Assignment operators:
     wxUniCharRef& operator=(const wxUniCharRef& c)
