@@ -2466,6 +2466,12 @@ __basedll___depname = \
 __baselib___depname = \
 	$(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).lib
 !endif
+!if "$(SHARED)" == "1"
+____wxbase_namedll_DEP = $(__basedll___depname)
+!endif
+!if "$(SHARED)" == "0"
+____wxbase_namelib_DEP = $(__baselib___depname)
+!endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1"
 __netdll___depname = \
 	$(LIBDIRNAME)\wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net_bcc$(VENDORTAG).dll
@@ -2473,6 +2479,12 @@ __netdll___depname = \
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0"
 __netlib___depname = \
 	$(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net.lib
+!endif
+!if "$(SHARED)" == "1"
+____wxnet_namedll_DEP = $(__netdll___depname)
+!endif
+!if "$(SHARED)" == "0"
+____wxnet_namelib_DEP = $(__netlib___depname)
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1"
 __coredll___depname = \
@@ -3384,6 +3396,12 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_vlbox.obj \
 	$(OBJS)\corelib_vscroll.obj
 !endif
+!if "$(SHARED)" == "1"
+____wxcore_namedll_DEP = $(__coredll___depname)
+!endif
+!if "$(SHARED)" == "0"
+____wxcore_namelib_DEP = $(__corelib___depname)
+!endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1"
 __advdll___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv_bcc$(VENDORTAG).dll
@@ -3510,6 +3528,12 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_taskbar.obj \
 	$(OBJS)\advlib_joystick.obj
 !endif
+!if "$(SHARED)" == "1"
+____wxadv_namedll_DEP = $(__advdll___depname)
+!endif
+!if "$(SHARED)" == "0"
+____wxadv_namelib_DEP = $(__advlib___depname)
+!endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_MEDIA)" == "1"
 __mediadll___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media_bcc$(VENDORTAG).dll
@@ -3517,6 +3541,12 @@ __mediadll___depname = \
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_GUI)" == "1" && "$(USE_MEDIA)" == "1"
 __medialib___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media.lib
+!endif
+!if "$(SHARED)" == "1"
+____wxmedia_namedll_DEP = $(__mediadll___depname)
+!endif
+!if "$(SHARED)" == "0"
+____wxmedia_namelib_DEP = $(__medialib___depname)
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_ODBC)" == "1"
 __odbcdll___depname = \
@@ -3534,6 +3564,12 @@ __dbgriddll___depname = \
 __dbgridlib___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_dbgrid.lib
 !endif
+!if "$(SHARED)" == "1"
+____wxdbgrid_namedll_DEP = $(__dbgriddll___depname)
+!endif
+!if "$(SHARED)" == "0"
+____wxdbgrid_namelib_DEP = $(__dbgridlib___depname)
+!endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_HTML)" == "1"
 __htmldll___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html_bcc$(VENDORTAG).dll
@@ -3541,6 +3577,12 @@ __htmldll___depname = \
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_GUI)" == "1" && "$(USE_HTML)" == "1"
 __htmllib___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html.lib
+!endif
+!if "$(SHARED)" == "1"
+____wxhtml_namedll_DEP = $(__htmldll___depname)
+!endif
+!if "$(SHARED)" == "0"
+____wxhtml_namelib_DEP = $(__htmllib___depname)
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_QA)" == "1"
 __qadll___depname = \
@@ -3550,6 +3592,12 @@ __qadll___depname = \
 __qalib___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_qa.lib
 !endif
+!if "$(SHARED)" == "1"
+____wxqa_namedll_DEP = $(__qadll___depname)
+!endif
+!if "$(SHARED)" == "0"
+____wxqa_namelib_DEP = $(__qalib___depname)
+!endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1"
 __xmldll___depname = \
 	$(LIBDIRNAME)\wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml_bcc$(VENDORTAG).dll
@@ -3557,6 +3605,12 @@ __xmldll___depname = \
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0"
 __xmllib___depname = \
 	$(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.lib
+!endif
+!if "$(SHARED)" == "1"
+____wxxml_namedll_DEP = $(__xmldll___depname)
+!endif
+!if "$(SHARED)" == "0"
+____wxxml_namelib_DEP = $(__xmllib___depname)
 !endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_XRC)" == "1"
 __xrcdll___depname = \
@@ -3566,6 +3620,12 @@ __xrcdll___depname = \
 __xrclib___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xrc.lib
 !endif
+!if "$(SHARED)" == "1"
+____wxxrc_namedll_DEP = $(__xrcdll___depname)
+!endif
+!if "$(SHARED)" == "0"
+____wxxrc_namelib_DEP = $(__xrclib___depname)
+!endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_AUI)" == "1"
 __auidll___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui_bcc$(VENDORTAG).dll
@@ -3574,6 +3634,12 @@ __auidll___depname = \
 __auilib___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui.lib
 !endif
+!if "$(SHARED)" == "1"
+____wxaui_namedll_DEP = $(__auidll___depname)
+!endif
+!if "$(SHARED)" == "0"
+____wxaui_namelib_DEP = $(__auilib___depname)
+!endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_RICHTEXT)" == "1"
 __richtextdll___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext_bcc$(VENDORTAG).dll
@@ -3581,6 +3647,12 @@ __richtextdll___depname = \
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "0" && "$(USE_RICHTEXT)" == "1"
 __richtextlib___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext.lib
+!endif
+!if "$(SHARED)" == "1"
+____wxrichtext_namedll_DEP = $(__richtextdll___depname)
+!endif
+!if "$(SHARED)" == "0"
+____wxrichtext_namelib_DEP = $(__richtextlib___depname)
 !endif
 !if "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_OPENGL)" == "1"
 __gldll___depname = \
@@ -3947,6 +4019,10 @@ $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FL
 |
 !endif
 
+!if "$(MONOLITHIC)" == "0"
+wxbase: $(____wxbase_namedll_DEP) $(____wxbase_namelib_DEP)
+!endif
+
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1"
 $(LIBDIRNAME)\wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net_bcc$(VENDORTAG).dll: $(OBJS)\netdll_dummy.obj  $(NETDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  $(OBJS)\netdll_version.res $(__basedll___depname)
 	ilink32 -Tpd -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
@@ -3961,6 +4037,10 @@ $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FL
 	tlib /a /p4096 $@ @&&|
 	$(NETLIB_OBJECTS)
 |
+!endif
+
+!if "$(MONOLITHIC)" == "0"
+wxnet: $(____wxnet_namedll_DEP) $(____wxnet_namelib_DEP)
 !endif
 
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1"
@@ -3979,6 +4059,10 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 |
 !endif
 
+!if "$(MONOLITHIC)" == "0" && "$(USE_GUI)" == "1"
+wxcore: $(____wxcore_namedll_DEP) $(____wxcore_namelib_DEP)
+!endif
+
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_adv_bcc$(VENDORTAG).dll: $(OBJS)\advdll_dummy.obj  $(ADVDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  $(OBJS)\advdll_version.res $(__coredll___depname) $(__basedll___depname)
 	ilink32 -Tpd -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
@@ -3995,6 +4079,10 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 |
 !endif
 
+!if "$(MONOLITHIC)" == "0" && "$(USE_GUI)" == "1"
+wxadv: $(____wxadv_namedll_DEP) $(____wxadv_namelib_DEP)
+!endif
+
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_MEDIA)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_media_bcc$(VENDORTAG).dll: $(OBJS)\mediadll_dummy.obj  $(MEDIADLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  $(OBJS)\mediadll_version.res $(__coredll___depname) $(__basedll___depname)
 	ilink32 -Tpd -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
@@ -4009,6 +4097,10 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 	tlib /a /p4096 $@ @&&|
 	$(MEDIALIB_OBJECTS)
 |
+!endif
+
+!if "$(MONOLITHIC)" == "0" && "$(USE_GUI)" == "1" && "$(USE_MEDIA)" == "1"
+wxmedia: $(____wxmedia_namedll_DEP) $(____wxmedia_namelib_DEP)
 !endif
 
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_ODBC)" == "1"
@@ -4043,6 +4135,10 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 |
 !endif
 
+!if "$(MONOLITHIC)" == "0" && "$(USE_GUI)" == "1" && "$(USE_ODBC)" == "1"
+wxdbgrid: $(____wxdbgrid_namedll_DEP) $(____wxdbgrid_namelib_DEP)
+!endif
+
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_HTML)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_html_bcc$(VENDORTAG).dll: $(OBJS)\htmldll_dummy.obj  $(HTMLDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  $(OBJS)\htmldll_version.res $(__coredll___depname) $(__basedll___depname)
 	ilink32 -Tpd -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
@@ -4057,6 +4153,10 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 	tlib /a /p4096 $@ @&&|
 	$(HTMLLIB_OBJECTS)
 |
+!endif
+
+!if "$(MONOLITHIC)" == "0" && "$(USE_HTML)" == "1"
+wxhtml: $(____wxhtml_namedll_DEP) $(____wxhtml_namelib_DEP)
 !endif
 
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_QA)" == "1"
@@ -4075,6 +4175,10 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 |
 !endif
 
+!if "$(MONOLITHIC)" == "0" && "$(USE_QA)" == "1"
+wxqa: $(____wxqa_namedll_DEP) $(____wxqa_namelib_DEP)
+!endif
+
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1"
 $(LIBDIRNAME)\wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml_bcc$(VENDORTAG).dll: $(OBJS)\xmldll_dummy.obj  $(XMLDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  $(OBJS)\xmldll_version.res $(__basedll___depname)
 	ilink32 -Tpd -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
@@ -4089,6 +4193,10 @@ $(LIBDIRNAME)\wxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FL
 	tlib /a /p4096 $@ @&&|
 	$(XMLLIB_OBJECTS)
 |
+!endif
+
+!if "$(MONOLITHIC)" == "0"
+wxxml: $(____wxxml_namedll_DEP) $(____wxxml_namelib_DEP)
 !endif
 
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_XRC)" == "1"
@@ -4107,6 +4215,10 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 |
 !endif
 
+!if "$(MONOLITHIC)" == "0" && "$(USE_XRC)" == "1"
+wxxrc: $(____wxxrc_namedll_DEP) $(____wxxrc_namelib_DEP)
+!endif
+
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_AUI)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_aui_bcc$(VENDORTAG).dll: $(OBJS)\auidll_dummy.obj  $(AUIDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  $(OBJS)\auidll_version.res $(__advdll___depname) $(__coredll___depname) $(__basedll___depname)
 	ilink32 -Tpd -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
@@ -4123,6 +4235,10 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 |
 !endif
 
+!if "$(MONOLITHIC)" == "0" && "$(USE_AUI)" == "1"
+wxaui: $(____wxaui_namedll_DEP) $(____wxaui_namelib_DEP)
+!endif
+
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_RICHTEXT)" == "1"
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext_bcc$(VENDORTAG).dll: $(OBJS)\richtextdll_dummy.obj  $(RICHTEXTDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\wxexpat$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxzlib$(WXDEBUGFLAG).lib $(LIBDIRNAME)\wxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).lib  $(OBJS)\richtextdll_version.res $(__advdll___depname) $(__htmldll_library_link_DEP) $(__xmldll___depname) $(__coredll___depname) $(__basedll___depname)
 	ilink32 -Tpd -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) @&&|
@@ -4137,6 +4253,10 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 	tlib /a /p4096 $@ @&&|
 	$(RICHTEXTLIB_OBJECTS)
 |
+!endif
+
+!if "$(MONOLITHIC)" == "0" && "$(USE_RICHTEXT)" == "1"
+wxrichtext: $(____wxrichtext_namedll_DEP) $(____wxrichtext_namelib_DEP)
 !endif
 
 !if "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_OPENGL)" == "1"

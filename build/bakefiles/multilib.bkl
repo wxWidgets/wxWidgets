@@ -3,6 +3,20 @@
 
 <makefile>
 
+    <define-rule name="wxshortcut" extends="phony">
+        <template>
+            <set var="name">$(id.replace('wx',''))</set>
+            <set var="namedll">
+                <if cond="SHARED=='1'">$(name)dll</if>
+            </set>
+            <set var="namelib">
+                <if cond="SHARED=='0'">$(name)lib</if>
+            </set>
+            <depends>$(namedll)</depends>
+            <depends>$(namelib)</depends>
+        </template>
+    </define-rule>
+
     <!-- ================================================================= -->
     <!--                            wxBase library                         -->
     <!-- ================================================================= -->
@@ -21,6 +35,8 @@
         <sources>$(BASE_SRC) $(BASE_AND_GUI_SRC)</sources>
         <msvc-headers>$(BASE_CMN_HDR) $(BASE_PLATFORM_HDR)</msvc-headers>
     </lib>
+
+    <wxshortcut id="wxbase" cond="MONOLITHIC=='0'"/>
 
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">base=baselib+basedll</set>
 
@@ -43,6 +59,8 @@
         <sources>$(NET_SRC)</sources>
         <msvc-headers>$(NET_CMN_HDR) $(NET_PLATFORM_HDR)</msvc-headers>
     </lib>
+
+    <wxshortcut id="wxnet" cond="MONOLITHIC=='0'"/>
 
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">net=netlib+netdll</set>
 
@@ -68,6 +86,8 @@
         <msvc-headers>$(ALL_GUI_HEADERS)</msvc-headers>
     </lib>
 
+    <wxshortcut id="wxcore" cond="MONOLITHIC=='0' and USE_GUI=='1'"/>
+
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">core=corelib+coredll</set>
 
 
@@ -92,6 +112,8 @@
         <msvc-headers>$(ADVANCED_HDR)</msvc-headers>
     </lib>
 
+    <wxshortcut id="wxadv" cond="MONOLITHIC=='0' and USE_GUI=='1'"/>
+
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">adv=advlib+advdll</set>
 
 
@@ -114,6 +136,8 @@
         <sources>$(MEDIA_SRC)</sources>
         <msvc-headers>$(MEDIA_HDR)</msvc-headers>
     </lib>
+
+    <wxshortcut id="wxmedia" cond="MONOLITHIC=='0' and USE_GUI=='1' and USE_MEDIA=='1'"/>
 
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">media=medialib+mediadll</set>
 
@@ -138,7 +162,6 @@
         <msvc-headers>$(ODBC_HDR)</msvc-headers>
     </lib>
 
-
     <dll id="dbgriddll" template="wx_dll"
          cond="SHARED=='1' and USE_GUI=='1' and USE_ODBC=='1' and MONOLITHIC=='0'">
         <define>WXUSINGDLL</define>
@@ -156,6 +179,9 @@
         <sources>$(DBGRID_SRC)</sources>
         <msvc-headers>$(DBGRID_HDR)</msvc-headers>
     </lib>
+
+    <!-- <wxshortcut id="wxodbc" cond="MONOLITHIC=='0' and USE_ODBC=='1'"/> -->
+    <wxshortcut id="wxdbgrid" cond="MONOLITHIC=='0' and USE_GUI=='1' and USE_ODBC=='1'"/>
 
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">odbc=odbclib+odbcdll</set>
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">dbgrid=dbgridlib+dbgriddll</set>
@@ -186,6 +212,8 @@
         <sources>$(HTML_SRC)</sources>
         <msvc-headers>$(HTML_HDR)</msvc-headers>
     </lib>
+
+    <wxshortcut id="wxhtml" cond="MONOLITHIC=='0' and USE_HTML=='1'"/>
 
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">html=htmllib+htmldll</set>
 
@@ -219,6 +247,8 @@
         <msvc-headers>$(QA_HDR)</msvc-headers>
     </lib>
 
+    <wxshortcut id="wxqa" cond="MONOLITHIC=='0' and USE_QA=='1'"/>
+
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">qa=qalib+qadll</set>
 
     <!-- ================================================================ -->
@@ -240,6 +270,8 @@
         <sources>$(XML_SRC)</sources>
         <msvc-headers>$(XML_HDR)</msvc-headers>
     </lib>
+
+    <wxshortcut id="wxxml" cond="MONOLITHIC=='0'"/>
 
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">xml=xmllib+xmldll</set>
 
@@ -266,6 +298,8 @@
         <msvc-headers>$(XRC_HDR)</msvc-headers>
     </lib>
 
+    <wxshortcut id="wxxrc" cond="MONOLITHIC=='0' and USE_XRC=='1'"/>
+
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">xrc=xrclib+xrcdll</set>
 
     <!-- ================================================================ -->
@@ -288,6 +322,8 @@
         <sources>$(AUI_SRC)</sources>
         <msvc-headers>$(AUI_HDR)</msvc-headers>
     </lib>
+    
+    <wxshortcut id="wxaui" cond="MONOLITHIC=='0' and USE_AUI=='1'"/>
 
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">aui=auilib+auidll</set>
 
@@ -313,6 +349,8 @@
         <sources>$(RICHTEXT_SRC)</sources>
         <msvc-headers>$(RICHTEXT_HDR)</msvc-headers>
     </lib>
+    
+    <wxshortcut id="wxrichtext" cond="MONOLITHIC=='0' and USE_RICHTEXT=='1'"/>
 
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">richtext=richtextlib+richtextdll</set>
 

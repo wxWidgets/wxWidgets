@@ -2489,6 +2489,12 @@ __baselib___depname = \
 	$(LIBDIRNAME)\libwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).a
 endif
 endif
+ifeq ($(SHARED),1)
+____wxbase_namedll_DEP = $(__basedll___depname)
+endif
+ifeq ($(SHARED),0)
+____wxbase_namelib_DEP = $(__baselib___depname)
+endif
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
 __netdll___depname = \
@@ -2500,6 +2506,12 @@ ifeq ($(SHARED),0)
 __netlib___depname = \
 	$(LIBDIRNAME)\libwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net.a
 endif
+endif
+ifeq ($(SHARED),1)
+____wxnet_namedll_DEP = $(__netdll___depname)
+endif
+ifeq ($(SHARED),0)
+____wxnet_namelib_DEP = $(__netlib___depname)
 endif
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
@@ -3427,6 +3439,12 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_vscroll.o
 endif
 endif
+ifeq ($(SHARED),1)
+____wxcore_namedll_DEP = $(__coredll___depname)
+endif
+ifeq ($(SHARED),0)
+____wxcore_namelib_DEP = $(__corelib___depname)
+endif
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
 ifeq ($(USE_GUI),1)
@@ -3561,6 +3579,12 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_taskbar.o \
 	$(OBJS)\advlib_joystick.o
 endif
+ifeq ($(SHARED),1)
+____wxadv_namedll_DEP = $(__advdll___depname)
+endif
+ifeq ($(SHARED),0)
+____wxadv_namelib_DEP = $(__advlib___depname)
+endif
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
 ifeq ($(USE_GUI),1)
@@ -3580,6 +3604,12 @@ __medialib___depname = \
 endif
 endif
 endif
+endif
+ifeq ($(SHARED),1)
+____wxmedia_namedll_DEP = $(__mediadll___depname)
+endif
+ifeq ($(SHARED),0)
+____wxmedia_namelib_DEP = $(__medialib___depname)
 endif
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
@@ -3617,6 +3647,12 @@ endif
 endif
 endif
 endif
+ifeq ($(SHARED),1)
+____wxdbgrid_namedll_DEP = $(__dbgriddll___depname)
+endif
+ifeq ($(SHARED),0)
+____wxdbgrid_namelib_DEP = $(__dbgridlib___depname)
+endif
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
 ifeq ($(USE_GUI),1)
@@ -3636,6 +3672,12 @@ __htmllib___depname = \
 endif
 endif
 endif
+endif
+ifeq ($(SHARED),1)
+____wxhtml_namedll_DEP = $(__htmldll___depname)
+endif
+ifeq ($(SHARED),0)
+____wxhtml_namelib_DEP = $(__htmllib___depname)
 endif
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
@@ -3657,6 +3699,12 @@ endif
 endif
 endif
 endif
+ifeq ($(SHARED),1)
+____wxqa_namedll_DEP = $(__qadll___depname)
+endif
+ifeq ($(SHARED),0)
+____wxqa_namelib_DEP = $(__qalib___depname)
+endif
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
 __xmldll___depname = \
@@ -3668,6 +3716,12 @@ ifeq ($(SHARED),0)
 __xmllib___depname = \
 	$(LIBDIRNAME)\libwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.a
 endif
+endif
+ifeq ($(SHARED),1)
+____wxxml_namedll_DEP = $(__xmldll___depname)
+endif
+ifeq ($(SHARED),0)
+____wxxml_namelib_DEP = $(__xmllib___depname)
 endif
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
@@ -3685,6 +3739,12 @@ __xrclib___depname = \
 endif
 endif
 endif
+ifeq ($(SHARED),1)
+____wxxrc_namedll_DEP = $(__xrcdll___depname)
+endif
+ifeq ($(SHARED),0)
+____wxxrc_namelib_DEP = $(__xrclib___depname)
+endif
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
 ifeq ($(USE_AUI),1)
@@ -3701,6 +3761,12 @@ __auilib___depname = \
 endif
 endif
 endif
+ifeq ($(SHARED),1)
+____wxaui_namedll_DEP = $(__auidll___depname)
+endif
+ifeq ($(SHARED),0)
+____wxaui_namelib_DEP = $(__auilib___depname)
+endif
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
 ifeq ($(USE_RICHTEXT),1)
@@ -3716,6 +3782,12 @@ __richtextlib___depname = \
 	$(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext.a
 endif
 endif
+endif
+ifeq ($(SHARED),1)
+____wxrichtext_namedll_DEP = $(__richtextdll___depname)
+endif
+ifeq ($(SHARED),0)
+____wxrichtext_namelib_DEP = $(__richtextlib___depname)
 endif
 ifeq ($(SHARED),1)
 ifeq ($(USE_GUI),1)
@@ -4020,6 +4092,10 @@ endif
 endif
 
 ifeq ($(MONOLITHIC),0)
+wxbase: $(____wxbase_namedll_DEP) $(____wxbase_namelib_DEP)
+endif
+
+ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
 $(LIBDIRNAME)\wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net_gcc$(VENDORTAG).dll: $(NETDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).a $(OBJS)\netdll_version_rc.o $(__basedll___depname)
 	$(CXX) -shared -fPIC -o $@ $(NETDLL_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--out-implib=$(LIBDIRNAME)\libwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_net.a  -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32 $(LIBDIRNAME)\libwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).a
@@ -4033,6 +4109,10 @@ $(LIBDIRNAME)\libwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB
 	ar rcu $@ $(NETLIB_OBJECTS)
 	ranlib $@
 endif
+endif
+
+ifeq ($(MONOLITHIC),0)
+wxnet: $(____wxnet_namedll_DEP) $(____wxnet_namelib_DEP)
 endif
 
 ifeq ($(MONOLITHIC),0)
@@ -4052,6 +4132,12 @@ $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(
 	ar rcu $@ $(CORELIB_OBJECTS)
 	ranlib $@
 endif
+endif
+endif
+
+ifeq ($(MONOLITHIC),0)
+ifeq ($(USE_GUI),1)
+wxcore: $(____wxcore_namedll_DEP) $(____wxcore_namelib_DEP)
 endif
 endif
 
@@ -4076,6 +4162,12 @@ endif
 endif
 
 ifeq ($(MONOLITHIC),0)
+ifeq ($(USE_GUI),1)
+wxadv: $(____wxadv_namedll_DEP) $(____wxadv_namelib_DEP)
+endif
+endif
+
+ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
 ifeq ($(USE_GUI),1)
 ifeq ($(USE_MEDIA),1)
@@ -4095,6 +4187,14 @@ $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(
 	ar rcu $@ $(MEDIALIB_OBJECTS)
 	ranlib $@
 endif
+endif
+endif
+endif
+
+ifeq ($(MONOLITHIC),0)
+ifeq ($(USE_GUI),1)
+ifeq ($(USE_MEDIA),1)
+wxmedia: $(____wxmedia_namedll_DEP) $(____wxmedia_namelib_DEP)
 endif
 endif
 endif
@@ -4144,6 +4244,14 @@ endif
 endif
 
 ifeq ($(MONOLITHIC),0)
+ifeq ($(USE_GUI),1)
+ifeq ($(USE_ODBC),1)
+wxdbgrid: $(____wxdbgrid_namedll_DEP) $(____wxdbgrid_namelib_DEP)
+endif
+endif
+endif
+
+ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
 ifeq ($(USE_GUI),1)
 ifeq ($(USE_HTML),1)
@@ -4164,6 +4272,12 @@ $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(
 	ranlib $@
 endif
 endif
+endif
+endif
+
+ifeq ($(MONOLITHIC),0)
+ifeq ($(USE_HTML),1)
+wxhtml: $(____wxhtml_namedll_DEP) $(____wxhtml_namelib_DEP)
 endif
 endif
 
@@ -4192,6 +4306,12 @@ endif
 endif
 
 ifeq ($(MONOLITHIC),0)
+ifeq ($(USE_QA),1)
+wxqa: $(____wxqa_namedll_DEP) $(____wxqa_namelib_DEP)
+endif
+endif
+
+ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
 $(LIBDIRNAME)\wxbase$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml_gcc$(VENDORTAG).dll: $(XMLDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).a $(OBJS)\xmldll_version_rc.o $(__basedll___depname)
 	$(CXX) -shared -fPIC -o $@ $(XMLDLL_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME) -Wl,--out-implib=$(LIBDIRNAME)\libwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_xml.a  -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32 $(LIBDIRNAME)\libwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR).a
@@ -4205,6 +4325,10 @@ $(LIBDIRNAME)\libwxbase$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB
 	ar rcu $@ $(XMLLIB_OBJECTS)
 	ranlib $@
 endif
+endif
+
+ifeq ($(MONOLITHIC),0)
+wxxml: $(____wxxml_namedll_DEP) $(____wxxml_namelib_DEP)
 endif
 
 ifeq ($(MONOLITHIC),0)
@@ -4224,6 +4348,12 @@ $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(
 	ar rcu $@ $(XRCLIB_OBJECTS)
 	ranlib $@
 endif
+endif
+endif
+
+ifeq ($(MONOLITHIC),0)
+ifeq ($(USE_XRC),1)
+wxxrc: $(____wxxrc_namedll_DEP) $(____wxxrc_namelib_DEP)
 endif
 endif
 
@@ -4248,6 +4378,12 @@ endif
 endif
 
 ifeq ($(MONOLITHIC),0)
+ifeq ($(USE_AUI),1)
+wxaui: $(____wxaui_namedll_DEP) $(____wxaui_namelib_DEP)
+endif
+endif
+
+ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
 ifeq ($(USE_RICHTEXT),1)
 $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_richtext_gcc$(VENDORTAG).dll: $(RICHTEXTDLL_OBJECTS) $(__wxtiff___depname) $(__wxjpeg___depname) $(__wxpng___depname) $(LIBDIRNAME)\libwxexpat$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxzlib$(WXDEBUGFLAG).a $(LIBDIRNAME)\libwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG).a $(OBJS)\richtextdll_version_rc.o $(__advdll___depname) $(__htmldll_library_link_DEP) $(__xmldll___depname) $(__coredll___depname) $(__basedll___depname)
@@ -4264,6 +4400,12 @@ $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(
 	ar rcu $@ $(RICHTEXTLIB_OBJECTS)
 	ranlib $@
 endif
+endif
+endif
+
+ifeq ($(MONOLITHIC),0)
+ifeq ($(USE_RICHTEXT),1)
+wxrichtext: $(____wxrichtext_namedll_DEP) $(____wxrichtext_namelib_DEP)
 endif
 endif
 
@@ -13246,7 +13388,7 @@ $(OBJS)\gllib_dummy.o: ../../src/common/dummy.cpp
 $(OBJS)\gllib_glcanvas.o: ../../src/msw/glcanvas.cpp
 	$(CXX) -c -o $@ $(GLLIB_CXXFLAGS) $(CPPDEPS) $<
 
-.PHONY: all clean setup_h samples build_cfg_file
+.PHONY: all clean setup_h wxbase wxnet wxcore wxadv wxmedia wxdbgrid wxhtml wxqa wxxml wxxrc wxaui wxrichtext samples build_cfg_file
 
 
 # Dependencies tracking:
