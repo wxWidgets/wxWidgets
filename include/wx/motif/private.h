@@ -131,16 +131,25 @@ XmString wxStringToXmString( const char* string );
 // cleaning up automatically)
 class wxXmString
 {
-public:
-    wxXmString(const char* str)
+    void Init(const char *str)
     {
         m_string = XmStringCreateLtoR((char *)str, XmSTRING_DEFAULT_CHARSET);
     }
 
+public:
+    wxXmString(const char* str)
+    {
+        Init(str);
+    }
+
     wxXmString(const wxString& str)
     {
-        m_string = XmStringCreateLtoR((char *)str.mb_str(),
-                                      XmSTRING_DEFAULT_CHARSET);
+        Init(str.mb_str());
+    }
+
+    wxXmString(const wxCStrData& str)
+    {
+        Init(str);
     }
 
     // just to avoid calling XmStringFree()
