@@ -50,7 +50,7 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
     wxXmString text( GetLabelText( label ) );
 
     m_labelWidget =
-        XtVaCreateManagedWidget (wxConstCast(name.c_str(), char),
+        XtVaCreateManagedWidget (wxConstCast(name.mb_str(), char),
             xmLabelWidgetClass,
             borderWidget ? borderWidget : parentWidget,
             wxFont::GetFontTag(), m_font.GetFontTypeC(XtDisplay(parentWidget)),

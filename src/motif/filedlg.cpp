@@ -234,7 +234,7 @@ int wxFileDialog::ShowModal()
 
     if (!m_message.IsNull())
         XtVaSetValues(shell,
-                      XmNtitle, wxConstCast(m_message.c_str(), char),
+                      XmNtitle, wxConstCast(m_message.mb_str(), char),
                       NULL);
 
     if (!m_wildCard.empty())
@@ -247,7 +247,7 @@ int wxFileDialog::ShowModal()
         else
             filter = wildCard;
 
-        XmTextSetString(filterWidget, wxConstCast(filter.c_str(), char));
+        XmTextSetString(filterWidget, wxConstCast(filter.mb_str(), char));
         XmFileSelectionDoSearch(fileSel, NULL);
     }
 
@@ -276,7 +276,7 @@ int wxFileDialog::ShowModal()
     if (!entirePath.empty())
     {
         XmTextSetString(selectionWidget,
-                        wxConstCast(entirePath.c_str(), char));
+                        wxConstCast(entirePath.mb_str(), char));
     }
 
     XtAddCallback(fileSel, XmNcancelCallback,

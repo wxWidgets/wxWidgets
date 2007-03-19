@@ -280,7 +280,7 @@ bool wxFont::Create(const wxString& fontname, wxFontEncoding enc)
     tmp = tn.GetNextToken();                     // pointsize
     if (tmp != wxT("*"))
     {
-        long num = wxStrtol (tmp.c_str(), (wxChar **) NULL, 10);
+        long num = wxStrtol (tmp.mb_str(), (wxChar **) NULL, 10);
         M_FONTDATA->m_pointSize = (int)(num / 10);
     }
 
@@ -550,7 +550,7 @@ wxXFont* wxFont::GetInternalFont(double scale, WXDisplay* display) const
     int count = 0;
 
 #if wxMOTIF_NEW_FONT_HANDLING
-    wxChar* fontSpec = wxStrdup( xFontSpec.c_str() );
+    wxChar* fontSpec = wxStrdup( xFontSpec.mb_str() );
     XtSetArg( args[count], XmNfontName, fontSpec ); ++count;
     XtSetArg( args[count], XmNfontType, XmFONT_IS_FONTSET ); ++count;
 #else
@@ -659,7 +659,7 @@ void wxGetTextExtent(WXDisplay* display, const wxFont& font, double scale,
     XRectangle ink, logical;
     WXFontSet fset = font.GetFontSet(scale, display);
 
-    XmbTextExtents( (XFontSet)fset, str.c_str(), str.length(), &ink, &logical);
+    XmbTextExtents( (XFontSet)fset, str.mb_str(), str.length(), &ink, &logical);
 
     if( width ) *width = logical.width;
     if( height ) *height = logical.height;
@@ -679,7 +679,7 @@ void wxGetTextExtent(WXDisplay* display, const wxFont& font,
     XCharStruct overall;
     int slen = str.length();
 
-    XTextExtents((XFontStruct*) pFontStruct, (char*) str.c_str(), slen,
+    XTextExtents((XFontStruct*) pFontStruct, (char*) str.mb_str(), slen,
                  &direction, &ascent2, &descent2, &overall);
 
     if ( width )

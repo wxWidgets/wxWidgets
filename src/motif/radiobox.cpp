@@ -82,7 +82,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
     {
         wxXmString text(label1);
         m_labelWidget = (WXWidget)
-            XtVaCreateManagedWidget( label1.c_str(),
+            XtVaCreateManagedWidget( label1.mb_str(),
 #if wxUSE_GADGETS
                 style & wxCOLOURED ? xmLabelWidgetClass
                                    : xmLabelGadgetClass,
@@ -123,7 +123,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
         wxString str(GetLabelText(choices[i]));
         m_radioButtonLabels.push_back(str);
         Widget radioItem =  XtVaCreateManagedWidget (
-                                wxConstCast(str.c_str(), char),
+                                wxConstCast(str.mb_str(), char),
 #if wxUSE_GADGETS
                                 xmToggleButtonGadgetClass, radioBoxWidget,
 #else

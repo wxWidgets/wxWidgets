@@ -345,7 +345,7 @@ wxTextPos wxComboBox::GetLastPosition() const
 void wxComboBox::Replace(long from, long to, const wxString& value)
 {
     XmTextReplace( GetXmText(this), (XmTextPosition)from, (XmTextPosition)to,
-                   wxConstCast(value.c_str(), char) );
+                   wxConstCast(value.mb_str(), char) );
 }
 
 void wxComboBox::Remove(long from, long to)

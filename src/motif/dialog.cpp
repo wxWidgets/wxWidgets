@@ -162,7 +162,7 @@ bool wxDialog::XmDoCreateTLW(wxWindow* parent,
     XtSetArg (args[1], XmNautoUnmanage, False);
     Widget dialogShell =
         XmCreateBulletinBoardDialog( parentWidget,
-                                     wxConstCast(name.c_str(), char),
+                                     wxConstCast(name.mb_str(), char),
                                      args, 2);
     m_mainWidget = (WXWidget) dialogShell;
 
@@ -243,9 +243,9 @@ void wxDialog::SetTitle(const wxString& title)
     {
         wxXmString str( title );
         XtVaSetValues( (Widget)m_mainWidget,
-                       XmNtitle, title.c_str(),
-                       XmNdialogTitle, str(), // Roberto Cocchi
-                       XmNiconName, title.c_str(),
+                       XmNtitle, title.mb_str(),
+                       XmNdialogTitle, str(),
+                       XmNiconName, title.mb_str(),
                        NULL );
     }
 }
