@@ -19,6 +19,10 @@
     #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/strconv.h"  // wxConvLibc
+#endif
+
 #include "wx/unichar.h"
 
 // ===========================================================================
