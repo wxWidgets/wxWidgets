@@ -177,8 +177,18 @@ inline int Stricmp(const char *psz1, const char *psz2)
 // deal with STL/non-STL/non-STL-but-wxUSE_STD_STRING
 // ----------------------------------------------------------------------------
 
+// FIXME-UTF8: using std::string as wxString base class is currently broken,
+//             so we use the standard wxString with std::string conversion
+//             enabled, this is API-compatible.
+#define wxUSE_STL_BASED_WXSTRING 0
+#if wxUSE_STL
+    #undef wxUSE_STD_STRING
+    #define wxUSE_STD_STRING 1
+#endif
+//#define wxUSE_STL_BASED_WXSTRING  wxUSE_STL
+
 // in both cases we need to define wxStdString
-#if wxUSE_STL || wxUSE_STD_STRING
+#if wxUSE_STL_BASED_WXSTRING || wxUSE_STD_STRING
 
 #include "wx/beforestd.h"
 #include <string>
@@ -196,7 +206,7 @@ inline int Stricmp(const char *psz1, const char *psz2)
 
 #endif // need <string>
 
-#if wxUSE_STL
+#if wxUSE_STL_BASED_WXSTRING
 
     // we don't need an extra ctor from std::string when copy ctor already does
     // the work
@@ -209,10 +219,10 @@ inline int Stricmp(const char *psz1, const char *psz2)
     #endif
 
     typedef wxStdString wxStringBase;
-#else // if !wxUSE_STL
+#else // if !wxUSE_STL_BASED_WXSTRING
 
 #if !defined(HAVE_STD_STRING_COMPARE) && \
-    (!defined(__WX_SETUP_H__) || wxUSE_STL == 0)
+    (!defined(__WX_SETUP_H__) || wxUSE_STL_BASED_WXSTRING == 0)
     #define HAVE_STD_STRING_COMPARE
 #endif
 
@@ -751,7 +761,7 @@ public:
   wxStringBase& operator+=(wchar_t ch) { return append(1, ch); }
 };
 
-#endif // !wxUSE_STL
+#endif // !wxUSE_STL_BASED_WXSTRING
 
 // ----------------------------------------------------------------------------
 // wxCStrData
@@ -1163,7 +1173,7 @@ public:
     { return (wxString&)wxStringBase::operator=(wxUniChar(ch)); }
     // from a C string - STL probably will crash on NULL,
     // so we need to compensate in that case
-#if wxUSE_STL
+#if wxUSE_STL_BASED_WXSTRING
   wxString& operator=(const wxChar *psz)
     { if(psz) wxStringBase::operator=(psz); else Clear(); return *this; }
 #else
@@ -1663,7 +1673,7 @@ public:
   wxString& operator+=(wchar_t ch) { return *this += wxUniChar(ch); }
 
 private:
-#if !wxUSE_STL
+#if !wxUSE_STL_BASED_WXSTRING
   // helpers for wxStringBuffer and wxStringBufferLength
   wxChar *DoGetWriteBuf(size_t nLen);
   void DoUngetWriteBuf();
@@ -1708,22 +1718,22 @@ inline wxString operator+(wchar_t ch, const wxString& string)
     { return wxUniChar(ch) + string; }
 
 
-#if wxUSE_STL
+#if wxUSE_STL_BASED_WXSTRING
     // return an empty wxString (not very useful with wxUSE_STL == 1)
     inline const wxString wxGetEmptyString() { return wxString(); }
-#else // !wxUSE_STL
+#else // !wxUSE_STL_BASED_WXSTRING
     // return an empty wxString (more efficient than wxString() here)
     inline const wxString& wxGetEmptyString()
     {
         return *(wxString *)&wxEmptyString;
     }
-#endif // wxUSE_STL/!wxUSE_STL
+#endif // wxUSE_STL_BASED_WXSTRING/!wxUSE_STL_BASED_WXSTRING
 
 // ----------------------------------------------------------------------------
 // wxStringBuffer: a tiny class allowing to get a writable pointer into string
 // ----------------------------------------------------------------------------
 
-#if wxUSE_STL
+#if wxUSE_STL_BASED_WXSTRING
 
 class WXDLLIMPEXP_BASE wxStringBuffer
 {
@@ -1776,7 +1786,7 @@ private:
     DECLARE_NO_COPY_CLASS(wxStringBufferLength)
 };
 
-#else // if !wxUSE_STL
+#else // if !wxUSE_STL_BASED_WXSTRING
 
 class WXDLLIMPEXP_BASE wxStringBuffer
 {
@@ -1824,16 +1834,16 @@ private:
     DECLARE_NO_COPY_CLASS(wxStringBufferLength)
 };
 
-#endif // !wxUSE_STL
+#endif // !wxUSE_STL_BASED_WXSTRING
 
 // ---------------------------------------------------------------------------
 // wxString comparison functions: operator versions are always case sensitive
 // ---------------------------------------------------------------------------
 
-// note that when wxUSE_STL == 1 the comparison operators taking std::string
-// are used and defining them also for wxString would only result in
-// compilation ambiguities when comparing std::string and wxString
-#if !wxUSE_STL
+// note that when wxUSE_STL_BASED_WXSTRING == 1 the comparison operators taking
+// std::string are used and defining them also for wxString would only result
+// in compilation ambiguities when comparing std::string and wxString
+#if !wxUSE_STL_BASED_WXSTRING
 
 inline bool operator==(const wxString& s1, const wxString& s2)
     { return (s1.Len() == s2.Len()) && (s1.Cmp(s2) == 0); }
@@ -1904,7 +1914,7 @@ inline wxString operator+(const wxCharBuffer& buf, const wxString& string)
     { return (const char *)buf + string; }
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
-#endif // !wxUSE_STL
+#endif // !wxUSE_STL_BASED_WXSTRING
 
 // comparison with char (those are not defined by std::[w]string and so should
 // be always available)

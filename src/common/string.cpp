@@ -56,7 +56,7 @@
 // static class variables definition
 // ---------------------------------------------------------------------------
 
-#if !wxUSE_STL
+#if !wxUSE_STL_BASED_WXSTRING
   //According to STL _must_ be a -1 size_t
   const size_t wxStringBase::npos = (size_t) -1;
 #endif
@@ -65,7 +65,7 @@
 // static data
 // ----------------------------------------------------------------------------
 
-#if wxUSE_STL
+#if wxUSE_STL_BASED_WXSTRING
 
 extern const wxChar WXDLLIMPEXP_BASE *wxEmptyString = _T("");
 
@@ -138,7 +138,7 @@ wxSTD ostream& operator<<(wxSTD ostream& os, const wxCStrData& str)
   #define STATISTICS_ADD(av, val)
 #endif // WXSTRING_STATISTICS
 
-#if !wxUSE_STL
+#if !wxUSE_STL_BASED_WXSTRING
 
 // ===========================================================================
 // wxStringData class deallocation
@@ -911,11 +911,11 @@ bool wxStringBase::AllocCopy(wxString& dest, int nCopyLen, int nCopyIndex) const
   return true;
 }
 
-#endif // !wxUSE_STL
+#endif // !wxUSE_STL_BASED_WXSTRING
 
-#if !wxUSE_STL || !defined(HAVE_STD_STRING_COMPARE)
+#if !wxUSE_STL_BASED_WXSTRING || !defined(HAVE_STD_STRING_COMPARE)
 
-#if !wxUSE_STL
+#if !wxUSE_STL_BASED_WXSTRING
     #define STRINGCLASS wxStringBase
 #else
     #define STRINGCLASS wxString
@@ -985,7 +985,7 @@ int STRINGCLASS::compare(size_t nStart, size_t nLen,
 
 #undef STRINGCLASS
 
-#endif // !wxUSE_STL || !defined(HAVE_STD_STRING_COMPARE)
+#endif // !wxUSE_STL_BASED_WXSTRING || !defined(HAVE_STD_STRING_COMPARE)
 
 // ===========================================================================
 // wxString class core
@@ -1064,7 +1064,7 @@ bool wxString::Shrink()
   return tmp.length() == length();
 }
 
-#if !wxUSE_STL
+#if !wxUSE_STL_BASED_WXSTRING
 // get the pointer to writable buffer of (at least) nLen bytes
 wxChar *wxString::DoGetWriteBuf(size_t nLen)
 {
@@ -1157,7 +1157,7 @@ wxString& wxString::operator=(const wchar_t *pwz)
 
 wxString operator+(const wxString& str1, const wxString& str2)
 {
-#if !wxUSE_STL
+#if !wxUSE_STL_BASED_WXSTRING
     wxASSERT( str1.GetStringData()->IsValid() );
     wxASSERT( str2.GetStringData()->IsValid() );
 #endif
@@ -1170,7 +1170,7 @@ wxString operator+(const wxString& str1, const wxString& str2)
 
 wxString operator+(const wxString& str, wxUniChar ch)
 {
-#if !wxUSE_STL
+#if !wxUSE_STL_BASED_WXSTRING
     wxASSERT( str.GetStringData()->IsValid() );
 #endif
 
@@ -1182,7 +1182,7 @@ wxString operator+(const wxString& str, wxUniChar ch)
 
 wxString operator+(wxUniChar ch, const wxString& str)
 {
-#if !wxUSE_STL
+#if !wxUSE_STL_BASED_WXSTRING
     wxASSERT( str.GetStringData()->IsValid() );
 #endif
 
@@ -1194,7 +1194,7 @@ wxString operator+(wxUniChar ch, const wxString& str)
 
 wxString operator+(const wxString& str, const wxChar *psz)
 {
-#if !wxUSE_STL
+#if !wxUSE_STL_BASED_WXSTRING
     wxASSERT( str.GetStringData()->IsValid() );
 #endif
 
@@ -1210,7 +1210,7 @@ wxString operator+(const wxString& str, const wxChar *psz)
 
 wxString operator+(const wxChar *psz, const wxString& str)
 {
-#if !wxUSE_STL
+#if !wxUSE_STL_BASED_WXSTRING
     wxASSERT( str.GetStringData()->IsValid() );
 #endif
 
