@@ -37,6 +37,8 @@
 #include "wx/gtk/private.h"
 #include "wx/gtk/win_gtk.h"
 
+static bool IsSameDouble(double x, double y) { return x == y; }
+
 // ----------------------------------------------------------------------------
 // event tables
 // ----------------------------------------------------------------------------
@@ -496,7 +498,7 @@ void wxScrolledWindow::DoAdjustScrollbars(GtkAdjustment* adj,
         adj->value = adj->upper - adj->page_size;
     if (adj->value < 0)
         adj->value = 0;
-    if (!wxIsSameDouble(value, adj->value))
+    if (!IsSameDouble(value, adj->value))
         gtk_adjustment_value_changed(adj);
     gtk_adjustment_changed(adj);
 }

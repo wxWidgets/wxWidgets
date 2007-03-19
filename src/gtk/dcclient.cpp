@@ -34,6 +34,10 @@
 #include <gdk/gdkprivate.h>
 #include <gtk/gtk.h>
 
+// Work around for linking problem
+static bool IsSameDouble(double x, double y) { return x == y; }
+static bool IsNullDouble(double x) { return IsSameDouble(x, 0.); }
+
 //-----------------------------------------------------------------------------
 // local defines
 //-----------------------------------------------------------------------------
@@ -1615,7 +1619,7 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
 
     wxCHECK_RET( Ok(), wxT("invalid window dc") );
 
-    if (wxIsNullDouble(angle))
+    if (IsNullDouble(angle))
     {
         DrawText(text, x, y);
         return;
