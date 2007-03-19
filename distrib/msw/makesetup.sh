@@ -25,7 +25,7 @@ PROGNAME=$0
 SCRIPTDIR=$WXWIN/distrib/msw
 WEBFILES=c:/wx2dev/wxWebSite
 # Set this to the required version
-VERSION=2.6.3
+VERSION=2.6.4
 
 . $SCRIPTDIR/setup.var
 
@@ -643,15 +643,15 @@ makesetup()
     fi
 
     # Copy FAQ from wxWebSite CVS
-    if [ ! -d $WEBFILES ]; then
-        echo Error - $WEBFILES does not exist
-        exit
-    fi
+#    if [ ! -d $WEBFILES ]; then
+#        echo Error - $WEBFILES does not exist
+#        exit
+#    fi
 
-    echo Copying FAQ and other files from $WEBFILES
-    cp $WEBFILES/site/faq*.htm $APPDIR/docs/html
-    cp $WEBFILES/site/platform.htm $APPDIR/docs/html
-    cp $WEBFILES/site/i18n.htm $APPDIR/docs/html
+#    echo Copying FAQ and other files from $WEBFILES
+#    cp $WEBFILES/site/faq*.htm $APPDIR/docs/html
+#    cp $WEBFILES/site/platform.htm $APPDIR/docs/html
+#    cp $WEBFILES/site/i18n.htm $APPDIR/docs/html
 
     # Copy setup0.h files to setup.h
     # OS/2 always built with configure now
