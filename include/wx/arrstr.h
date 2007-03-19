@@ -56,7 +56,7 @@ public:
         wxArrayStringBase::Add(string, copies);
         return size() - copies;
     }
-}
+};
 
 class WXDLLIMPEXP_BASE wxSortedArrayString : public wxSortedArrayStringBase
 {
