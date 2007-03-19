@@ -30,6 +30,8 @@ public:                                                                     \
     {                                                                       \
     }                                                                       \
                                                                             \
+    classname(const wxCStrData& cstr);                                      \
+                                                                            \
     classname(size_t len)                                                   \
         : m_str((chartype *)malloc((len + 1)*sizeof(chartype)))             \
     {                                                                       \

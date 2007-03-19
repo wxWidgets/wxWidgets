@@ -2013,4 +2013,24 @@ inline wxUniChar wxCStrData::operator[](size_t n) const
     return m_str->at(m_offset + n);
 }
 
+// ----------------------------------------------------------------------------
+// implementation of wx[W]CharBuffer inline methods using wxCStrData
+// ----------------------------------------------------------------------------
+
+#if wxUSE_UNICODE
+
+inline wxWCharBuffer::wxWCharBuffer(const wxCStrData& cstr)
+    : m_str(wxStrdupW(cstr))
+{
+}
+
+#else // !wxUSE_UNICODE
+
+inline wxCharBuffer::wxCharBuffer(const wxCStrData& cstr)
+    : m_str(wxStrdupA(cstr))
+{
+}
+
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
+
 #endif  // _WX_WXSTRINGH__
