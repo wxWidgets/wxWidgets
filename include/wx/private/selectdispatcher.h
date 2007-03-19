@@ -75,7 +75,7 @@ public:
     void RunLoop(int timeout = wxSELECT_TIMEOUT_INFINITE);
 
 protected:
-    wxSelectDispatcher() { }
+    wxSelectDispatcher() { m_maxFD = -1; }
 
 private:
     void ProcessSets(fd_set* readset, fd_set* writeset, fd_set* exeptset, int max_fd);
