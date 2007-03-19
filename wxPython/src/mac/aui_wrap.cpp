@@ -18145,11 +18145,33 @@ SWIGINTERN PyObject *AuiMDIClientWindow_swiginit(PyObject *SWIGUNUSEDPARM(self),
   return SWIG_Python_InitShadowInstance(args);
 }
 
+SWIGINTERN PyObject *_wrap_new_PyAuiDockArt(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPyAuiDockArt *result = 0 ;
+  
+  if (!SWIG_Python_UnpackTuple(args,"new_PyAuiDockArt",0,0,0)) SWIG_fail;
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxPyAuiDockArt *)new wxPyAuiDockArt();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxPyAuiDockArt, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *PyAuiDockArt_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
   SWIG_TypeNewClientData(SWIGTYPE_p_wxPyAuiDockArt, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *PyAuiDockArt_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  return SWIG_Python_InitShadowInstance(args);
 }
 
 SWIGINTERN PyObject *_wrap_new_PyAuiTabArt(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
@@ -18613,7 +18635,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"AuiMDIClientWindow_SetSelection", (PyCFunction) _wrap_AuiMDIClientWindow_SetSelection, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"AuiMDIClientWindow_swigregister", AuiMDIClientWindow_swigregister, METH_VARARGS, NULL},
 	 { (char *)"AuiMDIClientWindow_swiginit", AuiMDIClientWindow_swiginit, METH_VARARGS, NULL},
+	 { (char *)"new_PyAuiDockArt", (PyCFunction)_wrap_new_PyAuiDockArt, METH_NOARGS, NULL},
 	 { (char *)"PyAuiDockArt_swigregister", PyAuiDockArt_swigregister, METH_VARARGS, NULL},
+	 { (char *)"PyAuiDockArt_swiginit", PyAuiDockArt_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_PyAuiTabArt", (PyCFunction)_wrap_new_PyAuiTabArt, METH_NOARGS, NULL},
 	 { (char *)"PyAuiTabArt_swigregister", PyAuiTabArt_swigregister, METH_VARARGS, NULL},
 	 { (char *)"PyAuiTabArt_swiginit", PyAuiTabArt_swiginit, METH_VARARGS, NULL},

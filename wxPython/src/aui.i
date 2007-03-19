@@ -482,7 +482,7 @@ class wxPyAuiDockArt :  public wxAuiDefaultDockArt
 {
 public:
     %pythonAppend wxPyAuiDockArt     setCallbackInfo(PyAuiDockArt)
-    wxPyAuiDocArt();
+    wxPyAuiDockArt();
 
 };
 
