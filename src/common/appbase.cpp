@@ -721,7 +721,8 @@ static wxString GetAssertStackTrace()
     protected:
         virtual void OnStackFrame(const wxStackFrame& frame)
         {
-            m_stackTrace << wxString::Format(_T("[%02d] "), frame.GetLevel());
+            m_stackTrace << wxString::Format(_T("[%02lu] "),
+                                             (unsigned long)frame.GetLevel());
 
             wxString name = frame.GetName();
             if ( !name.empty() )
