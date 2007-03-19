@@ -28,6 +28,7 @@ from xml.parsers import expat
 from tree import *                      # imports xxx which imports params
 from panel import *
 from tools import *
+from params import genericStyles
 # Cleanup recursive import sideeffects, otherwise we can't create undoMan
 import undo
 undo.ParamPage = ParamPage
@@ -168,6 +169,17 @@ class Frame(wx.Frame):
         menuBar.Append(menu, '&View')
 
         menu = wx.Menu()
+        self.ID_MOVEUP = wx.NewId()
+        menu.Append(self.ID_MOVEUP, '&Up', 'Move before previous sibling')
+        self.ID_MOVEDOWN = wx.NewId()
+        menu.Append(self.ID_MOVEDOWN, '&Down', 'Move after next sibling')
+        self.ID_MOVELEFT = wx.NewId()
+        menu.Append(self.ID_MOVELEFT, '&Make sibling', 'Make sibling of parent')
+        self.ID_MOVERIGHT = wx.NewId()
+        menu.Append(self.ID_MOVERIGHT, '&Make child', 'Make child of previous sibling')
+        menuBar.Append(menu, '&Move')
+
+        menu = wx.Menu()
         menu.Append(wx.ID_ABOUT, '&About...', 'About XCRed')
         self.ID_README = wx.NewId()
         menu.Append(self.ID_README, '&Readme...', 'View the README file')
@@ -212,6 +224,15 @@ class Frame(wx.Frame):
                          'Refresh', 'Refresh view')
         tb.AddSimpleTool(self.ID_AUTO_REFRESH, images.getAutoRefreshBitmap(),
                          'Auto-refresh', 'Toggle auto-refresh mode', True)
+        tb.AddControl(wx.StaticLine(tb, -1, size=(-1,23), style=wx.LI_VERTICAL))
+        tb.AddSimpleTool(self.ID_MOVEUP, images.getToolMoveUpBitmap(),
+                         'Up', 'Move before previous sibling')
+        tb.AddSimpleTool(self.ID_MOVEDOWN, images.getToolMoveDownBitmap(),
+                         'Down', 'Move after next sibling')
+        tb.AddSimpleTool(self.ID_MOVELEFT, images.getToolMoveLeftBitmap(),
+                         'Make Sibling', 'Make sibling of parent')
+        tb.AddSimpleTool(self.ID_MOVERIGHT, images.getToolMoveRightBitmap(),
+                         'Make Child', 'Make child of previous sibling')
 #        if wx.Platform == '__WXGTK__':
 #            tb.AddSeparator()   # otherwise auto-refresh sticks in status line
         tb.ToggleTool(self.ID_AUTO_REFRESH, conf.autoRefresh)
@@ -244,6 +265,11 @@ class Frame(wx.Frame):
         wx.EVT_MENU(self, self.ID_REFRESH, self.OnRefresh)
         wx.EVT_MENU(self, self.ID_AUTO_REFRESH, self.OnAutoRefresh)
         wx.EVT_MENU(self, self.ID_TEST_HIDE, self.OnTestHide)
+        # Move
+        wx.EVT_MENU(self, self.ID_MOVEUP, self.OnMoveUp)
+        wx.EVT_MENU(self, self.ID_MOVEDOWN, self.OnMoveDown)
+        wx.EVT_MENU(self, self.ID_MOVELEFT, self.OnMoveLeft)
+        wx.EVT_MENU(self, self.ID_MOVERIGHT, self.OnMoveRight)        
         # Help
         wx.EVT_MENU(self, wx.ID_ABOUT, self.OnAbout)
         wx.EVT_MENU(self, self.ID_README, self.OnReadme)
@@ -517,45 +543,12 @@ class Frame(wx.Frame):
 
         xml = cPickle.loads(data.GetData()) # xml representation of element
         elem = minidom.parseString(xml).childNodes[0]
+        
         # Tempopary xxx object to test things
         xxx = MakeXXXFromDOM(parent, elem)
+        
         # Check compatibility
-        error = False
-        # Top-level
-        x = xxx.treeObject()
-        if x.__class__ in [xxxDialog, xxxFrame, xxxWizard]:
-            # Top-level classes
-            if parent.__class__ != xxxMainNode: error = True
-        elif x.__class__ == xxxMenuBar:
-            # Menubar can be put in frame or dialog
-            if parent.__class__ not in [xxxMainNode, xxxFrame, xxxDialog]: error = True
-        elif x.__class__ == xxxToolBar:
-            # Toolbar can be top-level of child of panel or frame
-            if parent.__class__ not in [xxxMainNode, xxxPanel, xxxFrame] and \
-               not parent.isSizer: error = True
-        elif x.__class__ == xxxPanel and parent.__class__ == xxxMainNode:
-            pass
-        elif x.__class__ == xxxSpacer:
-            if not parent.isSizer: error = True
-        elif x.__class__ == xxxSeparator:
-            if not parent.__class__ in [xxxMenu, xxxToolBar]: error = True
-        elif x.__class__ == xxxTool:
-            if parent.__class__ != xxxToolBar: error = True
-        elif x.__class__ == xxxMenu:
-            if not parent.__class__ in [xxxMainNode, xxxMenuBar, xxxMenu]: error = True
-        elif x.__class__ == xxxMenuItem:
-            if not parent.__class__ in [xxxMenuBar, xxxMenu]: error = True
-        elif x.isSizer and parent.__class__ in [xxxNotebook, xxxChoicebook, xxxListbook]:
-            error = True
-        else:                           # normal controls can be almost anywhere
-            if parent.__class__ == xxxMainNode or \
-               parent.__class__ in [xxxMenuBar, xxxMenu]: error = True
-        if error:
-            if parent.__class__ == xxxMainNode: parentClass = 'root'
-            else: parentClass = parent.className
-            wx.LogError('Incompatible parent/child: parent is %s, child is %s!' %
-                       (parentClass, x.className))
-            return
+        if not self.ItemsAreCompatible(parent, xxx.treeObject()): return
 
         # Check parent and child relationships.
         # If parent is sizer or notebook, child is of wrong class or
@@ -608,6 +601,221 @@ class Frame(wx.Frame):
                 tree.pendingHighLight = None
         self.SetModified()
         self.SetStatusText('Pasted')
+
+
+    def ItemsAreCompatible(self, parent, child):
+        # Check compatibility
+        error = False
+        # Top-level
+        if child.__class__ in [xxxDialog, xxxFrame, xxxWizard]:
+            # Top-level classes
+            if parent.__class__ != xxxMainNode: error = True
+        elif child.__class__ == xxxMenuBar:
+            # Menubar can be put in frame or dialog
+            if parent.__class__ not in [xxxMainNode, xxxFrame, xxxDialog]: error = True
+        elif child.__class__ == xxxToolBar:
+            # Toolbar can be top-level of child of panel or frame
+            if parent.__class__ not in [xxxMainNode, xxxPanel, xxxFrame] and \
+               not parent.isSizer: error = True
+        elif child.__class__ == xxxPanel and parent.__class__ == xxxMainNode:
+            pass
+        elif child.__class__ == xxxSpacer:
+            if not parent.isSizer: error = True
+        elif child.__class__ == xxxSeparator:
+            if not parent.__class__ in [xxxMenu, xxxToolBar]: error = True
+        elif child.__class__ == xxxTool:
+            if parent.__class__ != xxxToolBar: error = True
+        elif child.__class__ == xxxMenu:
+            if not parent.__class__ in [xxxMainNode, xxxMenuBar, xxxMenu]: error = True
+        elif child.__class__ == xxxMenuItem:
+            if not parent.__class__ in [xxxMenuBar, xxxMenu]: error = True
+        elif child.isSizer and parent.__class__ in [xxxNotebook, xxxChoicebook, xxxListbook]:
+            error = True
+        else:                           # normal controls can be almost anywhere
+            if parent.__class__ == xxxMainNode or \
+               parent.__class__ in [xxxMenuBar, xxxMenu]: error = True
+        if error:
+            if parent.__class__ == xxxMainNode: parentClass = 'root'
+            else: parentClass = parent.className
+            wx.LogError('Incompatible parent/child: parent is %s, child is %s!' %
+                       (parentClass, child.className))
+            return False
+        return True
+
+    def OnMoveUp(self, evt):
+        selected = tree.selection
+        if not selected: return
+
+        index = tree.ItemIndex(selected)
+        if index == 0: return # No previous sibling found
+
+        # Undo info
+        self.lastOp = 'MOVEUP'
+        status = 'Moved before previous sibling'
+
+        # Prepare undo data
+        panel.Apply()
+
+        parent = tree.GetItemParent(selected)
+        elem = tree.RemoveLeaf(selected)
+        nextItem = tree.GetFirstChild(parent)[0]
+        for i in range(index - 1): nextItem = tree.GetNextSibling(nextItem)
+        selected = tree.InsertNode(parent, tree.GetPyData(parent).treeObject(), elem, nextItem)
+        newIndex = tree.ItemIndex(selected)
+        tree.SelectItem(selected)
+
+        undoMan.RegisterUndo(UndoMove(parent, index, parent, newIndex))
+
+        self.modified = True
+        self.SetStatusText(status)
+
+        return
+
+    def OnMoveDown(self, evt):
+        selected = tree.selection
+        if not selected: return
+
+        index = tree.ItemIndex(selected)
+        next = tree.GetNextSibling(selected)
+        if not next: return
+
+        # Undo info
+        self.lastOp = 'MOVEDOWN'
+        status = 'Moved after next sibling'
+
+        # Prepare undo data
+        panel.Apply()
+
+        parent = tree.GetItemParent(selected)
+        elem = tree.RemoveLeaf(selected)
+        nextItem = tree.GetFirstChild(parent)[0]
+        for i in range(index + 1): nextItem = tree.GetNextSibling(nextItem)
+        selected = tree.InsertNode(parent, tree.GetPyData(parent).treeObject(), elem, nextItem)
+        newIndex = tree.ItemIndex(selected)
+        tree.SelectItem(selected)
+
+        undoMan.RegisterUndo(UndoMove(parent, index, parent, newIndex))
+
+        self.modified = True
+        self.SetStatusText(status)
+
+        return
+    
+    def OnMoveLeft(self, evt):
+        selected = tree.selection
+        if not selected: return
+
+        oldParent = tree.GetItemParent(selected)
+        if not oldParent: return
+        pparent = tree.GetItemParent(oldParent)
+        if not pparent: return
+
+        # Check compatibility
+        if not self.ItemsAreCompatible(tree.GetPyData(pparent).treeObject(), tree.GetPyData(selected).treeObject()): return
+
+        # Undo info
+        self.lastOp = 'MOVELEFT'
+        status = 'Made next sibling of parent'
+
+        oldIndex = tree.ItemIndex(selected)
+        elem = tree.RemoveLeaf(selected)
+        nextItem = tree.GetFirstChild(pparent)[0]
+        parentIndex = tree.ItemIndex(oldParent)
+        for i in range(parentIndex + 1): nextItem = tree.GetNextSibling(nextItem)
+
+        # Check parent and child relationships.
+        # If parent is sizer or notebook, child is of wrong class or
+        # parent is normal window, child is child container then detach child.
+        parent = tree.GetPyData(pparent).treeObject()
+        xxx = MakeXXXFromDOM(parent, elem)
+        isChildContainer = isinstance(xxx, xxxChildContainer)
+        if isChildContainer and \
+           ((parent.isSizer and not isinstance(xxx, xxxSizerItem)) or \
+            (isinstance(parent, xxxNotebook) and not isinstance(xxx, xxxNotebookPage)) or \
+           not (parent.isSizer or isinstance(parent, xxxNotebook))):
+            elem.removeChild(xxx.child.element) # detach child
+            elem.unlink()           # delete child container
+            elem = xxx.child.element # replace
+            # This may help garbage collection
+            xxx.child.parent = None
+            isChildContainer = False
+        # Parent is sizer or notebook, child is not child container
+        if parent.isSizer and not isChildContainer and not isinstance(xxx, xxxSpacer):
+            # Create sizer item element
+            sizerItemElem = MakeEmptyDOM('sizeritem')
+            sizerItemElem.appendChild(elem)
+            elem = sizerItemElem
+        elif isinstance(parent, xxxNotebook) and not isChildContainer:
+            pageElem = MakeEmptyDOM('notebookpage')
+            pageElem.appendChild(elem)
+            elem = pageElem
+
+        selected = tree.InsertNode(pparent, tree.GetPyData(pparent).treeObject(), elem, nextItem)
+        newIndex = tree.ItemIndex(selected)
+        tree.SelectItem(selected)
+
+        undoMan.RegisterUndo(UndoMove(oldParent, oldIndex, pparent, newIndex))
+        
+        self.modified = True
+        self.SetStatusText(status)
+
+    def OnMoveRight(self, evt):
+        selected = tree.selection
+        if not selected: return
+
+        oldParent = tree.GetItemParent(selected)
+        if not oldParent: return
+        
+        newParent = tree.GetPrevSibling(selected)
+        if not newParent: return
+
+        parent = tree.GetPyData(newParent).treeObject()
+
+        # Check compatibility
+        if not self.ItemsAreCompatible(parent, tree.GetPyData(selected).treeObject()): return
+
+        # Undo info
+        self.lastOp = 'MOVERIGHT'
+        status = 'Made last child of previous sibling'
+
+        oldIndex = tree.ItemIndex(selected)
+        elem = tree.RemoveLeaf(selected)
+
+        # Check parent and child relationships.
+        # If parent is sizer or notebook, child is of wrong class or
+        # parent is normal window, child is child container then detach child.
+        xxx = MakeXXXFromDOM(parent, elem)
+        isChildContainer = isinstance(xxx, xxxChildContainer)
+        if isChildContainer and \
+           ((parent.isSizer and not isinstance(xxx, xxxSizerItem)) or \
+            (isinstance(parent, xxxNotebook) and not isinstance(xxx, xxxNotebookPage)) or \
+           not (parent.isSizer or isinstance(parent, xxxNotebook))):
+            elem.removeChild(xxx.child.element) # detach child
+            elem.unlink()           # delete child container
+            elem = xxx.child.element # replace
+            # This may help garbage collection
+            xxx.child.parent = None
+            isChildContainer = False
+        # Parent is sizer or notebook, child is not child container
+        if parent.isSizer and not isChildContainer and not isinstance(xxx, xxxSpacer):
+            # Create sizer item element
+            sizerItemElem = MakeEmptyDOM('sizeritem')
+            sizerItemElem.appendChild(elem)
+            elem = sizerItemElem
+        elif isinstance(parent, xxxNotebook) and not isChildContainer:
+            pageElem = MakeEmptyDOM('notebookpage')
+            pageElem.appendChild(elem)
+            elem = pageElem
+
+        selected = tree.InsertNode(newParent, tree.GetPyData(newParent).treeObject(), elem, wx.TreeItemId())
+
+        newIndex = tree.ItemIndex(selected)
+        tree.SelectItem(selected)
+
+        undoMan.RegisterUndo(UndoMove(oldParent, oldIndex, newParent, newIndex))
+        
+        self.modified = True
+        self.SetStatusText(status)
 
         
     def OnCutDelete(self, evt):
@@ -903,6 +1111,7 @@ Homepage: http://xrced.sourceforge.net\
         undoMan.RegisterUndo(UndoReplace(selected))
         # New class
         className = pullDownMenu.createMap[evt.GetId() - 1000]
+        
         # Create temporary empty node (with default values)
         dummy = MakeEmptyDOM(className)
         if className == 'spacer' and xxx.className != 'spacer':
@@ -938,7 +1147,7 @@ Homepage: http://xrced.sourceforge.net\
             sizeritem.removeChild(elem)
             elem.unlink()
             elem = sizeritem
-            tree.GetPyData(selected).hasChild = false
+            tree.GetPyData(selected).hasChild = False
         elif xxx.className == 'spacer' and className != 'spacer':
             # Create sizeritem element
             assert xxx.parent.isSizer
@@ -962,6 +1171,17 @@ Homepage: http://xrced.sourceforge.net\
             elem.removeAttribute('subclass') # clear subclassing
         # Re-create xxx element
         xxx = MakeXXXFromDOM(xxx.parent, elem)
+        # Remove incompatible style flags
+        if 'style' in xxx.params:
+            styles = map(string.strip, xxx.params['style'].value().split('|'))
+            newStyles = [s for s in styles if s in klass.winStyles or s in genericStyles]
+            if newStyles != styles:
+                if newStyles:
+                    value = reduce(lambda a,b: a+'|'+b, newStyles)
+                else:
+                    value = ''
+                xxx.params['style'].update(value)
+
         # Update parent in child objects
         if tree.ItemHasChildren(selected):
             i, cookie = tree.GetFirstChild(selected)
@@ -974,9 +1194,7 @@ Homepage: http://xrced.sourceforge.net\
         # Update tree
         if tree.GetPyData(selected).hasChild: # child container
             container = tree.GetPyData(selected)
-            container.child = xxx
-            container.hasChildren = xxx.hasChildren
-            container.isSizer = xxx.isSizer
+            container.resetChild(xxx)
             xxx = container
         else:
             tree.SetPyData(selected, xxx)

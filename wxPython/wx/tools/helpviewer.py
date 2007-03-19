@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------
-# Name:        wxPython.tools.helpviewer
+# Name:        wx.tools.helpviewer
 # Purpose:     HTML Help viewer
 #
 # Author:      Robin Dunn
@@ -25,6 +25,12 @@ Usage:
 import sys, os
 
 #---------------------------------------------------------------------------
+
+def makeOtherFrame(helpctrl):
+    import wx
+    parent = helpctrl.GetFrame()
+    otherFrame = wx.Frame(parent)
+    
 
 def main(args=sys.argv):
     if len(args) < 2:
@@ -65,6 +71,14 @@ def main(args=sys.argv):
     for helpfile in args:
         print "Adding %s..." % helpfile
         helpctrl.AddBook(helpfile, 1)
+
+    # The frame used by the HtmlHelpController is set to not prevent
+    # app exit, so in the case of a standalone helpviewer like this
+    # when the about box or search box is closed the help frame will
+    # be the only one left and the app will close unexpectedly.  To
+    # work around this we'll create another frame that is never shown,
+    # but which will be closed when the helpviewer frame is closed.
+    wx.CallAfter(makeOtherFrame, helpctrl)
 
     # start it up!
     helpctrl.DisplayContents()

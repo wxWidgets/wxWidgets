@@ -352,7 +352,7 @@ wxEvent::wxEvent(int theId, wxEventType commandType )
 }
 
 wxEvent::wxEvent(const wxEvent &src)
-    : wxObject()
+    : wxObject(src)
     , m_eventObject(src.m_eventObject)
     , m_eventType(src.m_eventType)
     , m_timeStamp(src.m_timeStamp)

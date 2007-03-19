@@ -4381,7 +4381,7 @@ class PageContainer(wx.Panel):
                            
         elif self.GetParent().GetWindowStyleFlag() & FNB_ALLOW_FOREIGN_DND:
         
-            if wx.Platform in ["__WXMSW__", "__WXGTK__"]:
+            if wx.Platform in ["__WXMSW__", "__WXGTK__", "__WXMAC__"]:
                 if nTabPage >= 0:
                 
                     window = oldNotebook.GetPage(nTabPage)

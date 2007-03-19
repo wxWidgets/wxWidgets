@@ -319,7 +319,7 @@ the ``type`` parameter.", "");
     %extend {
         DocStr(CopyFromBuffer,
                "Copy data from a RGB buffer object to replace the bitmap pixel data.
-See `wxBitmapFromBuffer` for more details.", "");
+See `wx.BitmapFromBuffer` for more details.", "");
         void CopyFromBuffer(buffer data, int DATASIZE)
         {
             int height=self->GetHeight();
@@ -352,7 +352,7 @@ See `wxBitmapFromBuffer` for more details.", "");
 
         DocStr(CopyFromBufferRGBA,
                "Copy data from a RGBA buffer object to replace the bitmap pixel data.
-See `wxBitmapFromBufferRGBA` for more details.", "");
+See `wx.BitmapFromBufferRGBA` for more details.", "");
         void CopyFromBufferRGBA(buffer data, int DATASIZE)
         {
             int height=self->GetHeight();

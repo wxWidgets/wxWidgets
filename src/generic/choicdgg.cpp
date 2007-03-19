@@ -40,6 +40,7 @@
 #endif
 
 #include "wx/statline.h"
+#include "wx/settings.h"
 #include "wx/generic/choicdgg.h"
 
 // ----------------------------------------------------------------------------
@@ -263,7 +264,7 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
         m_listbox->SetSelection(0);
 
     topsizer->
-        Add(m_listbox, wxSizerFlags().Expand().TripleBorder(wxLEFT | wxRIGHT));
+        Add(m_listbox, wxSizerFlags().Expand().Proportion(1).TripleBorder(wxLEFT | wxRIGHT));
 
     // 3) buttons if any
     wxSizer *
@@ -301,8 +302,11 @@ bool wxAnyChoiceDialog::Create(wxWindow *parent,
 
 wxListBoxBase *wxAnyChoiceDialog::CreateList(int n, const wxString *choices, long styleLbox)
 {
+	wxSize size = wxDefaultSize;
+	if (wxSystemSettings::GetScreenType() > wxSYS_SCREEN_PDA)
+		size = wxSize(300, 200);
     return new wxListBox( this, wxID_LISTBOX,
-                          wxDefaultPosition, wxDefaultSize,
+                          wxDefaultPosition, size,
                           n, choices,
                           styleLbox );
 }
@@ -441,7 +445,7 @@ bool wxMultiChoiceDialog::Create( wxWindow *parent,
 #else
     styleLbox = wxLB_ALWAYS_SB | wxLB_EXTENDED;
 #endif
-    
+
     if ( !wxAnyChoiceDialog::Create(parent, message, caption,
                                     n, choices,
                                     style, pos,
@@ -484,11 +488,11 @@ void wxMultiChoiceDialog::SetSelections(const wxArrayInt& selections)
         {
             checkListBox->Check(selections[n]);
         }
-        
+
         return;
     }
 #endif
-    
+
     // first clear all currently selected items
     size_t n,
            count = m_listbox->GetCount();
@@ -537,8 +541,12 @@ bool wxMultiChoiceDialog::TransferDataFromWindow()
 
 wxListBoxBase *wxMultiChoiceDialog::CreateList(int n, const wxString *choices, long styleLbox)
 {
+	wxSize size = wxDefaultSize;
+	if (wxSystemSettings::GetScreenType() > wxSYS_SCREEN_PDA)
+		size = wxSize(300, 200);
+
     return new wxCheckListBox( this, wxID_LISTBOX,
-                               wxDefaultPosition, wxDefaultSize,
+                               wxDefaultPosition, size,
                                n, choices,
                                styleLbox );
 }

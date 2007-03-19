@@ -2929,6 +2929,7 @@ SWIG_From_size_t  (size_t value)
 // A wxDocArt class that knows how to forward virtuals to Python methods
 class wxPyAuiDockArt :  public wxAuiDefaultDockArt
 {
+public:
     wxPyAuiDockArt() : wxAuiDefaultDockArt() {}
 
     DEC_PYCALLBACK_INT_INT(GetMetric);
@@ -3097,6 +3098,7 @@ IMP_PYCALLBACK__INTCOLOUR(wxPyAuiDockArt, wxAuiDefaultDockArt, SetColour);
 // A wxTabArt class that knows how to forward virtuals to Python methods
 class wxPyAuiTabArt :  public wxAuiDefaultTabArt
 {
+public:
     wxPyAuiTabArt() : wxAuiDefaultTabArt() {}
 
     
@@ -18150,11 +18152,33 @@ SWIGINTERN PyObject *PyAuiDockArt_swigregister(PyObject *SWIGUNUSEDPARM(self), P
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *_wrap_new_PyAuiTabArt(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPyAuiTabArt *result = 0 ;
+  
+  if (!SWIG_Python_UnpackTuple(args,"new_PyAuiTabArt",0,0,0)) SWIG_fail;
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxPyAuiTabArt *)new wxPyAuiTabArt();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxPyAuiTabArt, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *PyAuiTabArt_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
   SWIG_TypeNewClientData(SWIGTYPE_p_wxPyAuiTabArt, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *PyAuiTabArt_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  return SWIG_Python_InitShadowInstance(args);
 }
 
 static PyMethodDef SwigMethods[] = {
@@ -18590,7 +18614,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"AuiMDIClientWindow_swigregister", AuiMDIClientWindow_swigregister, METH_VARARGS, NULL},
 	 { (char *)"AuiMDIClientWindow_swiginit", AuiMDIClientWindow_swiginit, METH_VARARGS, NULL},
 	 { (char *)"PyAuiDockArt_swigregister", PyAuiDockArt_swigregister, METH_VARARGS, NULL},
+	 { (char *)"new_PyAuiTabArt", (PyCFunction)_wrap_new_PyAuiTabArt, METH_NOARGS, NULL},
 	 { (char *)"PyAuiTabArt_swigregister", PyAuiTabArt_swigregister, METH_VARARGS, NULL},
+	 { (char *)"PyAuiTabArt_swiginit", PyAuiTabArt_swiginit, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
 

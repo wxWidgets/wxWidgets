@@ -88,30 +88,74 @@ Major new features in 2.8 release
   wxSearchCtrl, wxAboutBox, wxTreebook, tar streams.
 
 
+2.8.3
+-----
+
+All:
+
+- Shut down the sockets gracefully (Sergio Aguayo)
+- Fix extra indentation in wxHTML_ALIGN_JUSTIFY display (Chacal)
+
+wxMac
+
+- Corrected top border size for wxStaticBox with empty label (nusi).
+- Fixed wxFont, wxPen and wxBrush accessor bugs introduced in 2.8.2.
+
+wxMSW:
+
+- Fixed wxFileName::GetSize() for large files.
+- Fixed wxFont and wxPen accessor bugs introduced in 2.8.2.
+
+
 2.8.2
 -----
 
 All:
 
-- Added wxSizerFlags::Shaped() and FixedMinSize() methods
-- Added wxCSConv::IsOk() (Manuel Martin)
-- Added wxDateTime::GetDateOnly()
-- Made wxTextFile work with unseekable files again (David Hart)
-- Added wxCONFIG_USE_SUBDIR flag to wxFileConfig (Giuseppe Bilotta)
-- Added wxSearchCtrl::[Get|Set]DescriptiveText
+- Added wxSizerFlags::Shaped(), FixedMinSize(), Top() and Bottom() methods.
+- Added wxCSConv::IsOk() (Manuel Martin).
+- Added wxDateTime::GetDateOnly().
+- Made wxTextFile work with unseekable files again (David Hart).
+- Added wxCONFIG_USE_SUBDIR flag to wxFileConfig (Giuseppe Bilotta).
+- Added wxSearchCtrl::[Get|Set]DescriptiveText.
+- Added wxToolBar::SetTool[Normal|Disabled]Bitmap for wxMSW, wxGTK and wxMac.
+- Added wxRICHTEXT_SETSTYLE_REMOVE flag for removing styles, and
+  wxRICHTEXT_HITTEST_OUTSIDE for more accurate hit-testing.
+- Fixed a crash when writing wxRichTextCtrl styles.
+- Fixed tab-related drawing and hit-testing bugs in wxRichTextCtrl.
+- Implemented background colour in wxRichTextCtrl.
+- Fixed crashes in helpview when opening a file.
+- Fixed detection of number of processors under Linux 2.6
+- Fixed Base64 computation in wxHTTP (p_michalczyk)
+- Fix handling of wxSOCKET_REUSEADDR in wxDatagramSocket (troelsk)
+
+Unix Ports:
+
+- Fixed crash in wxGetUserName() in Unicode build
 
 wxMSW
 
-- Fix lack of spin control update event when control lost focus
-- Corrected drawing of bitmaps for disabled menu items
+- Fix lack of spin control update event when control lost focus.
+- Corrected drawing of bitmaps for disabled menu items.
+
+wxGTK
+
+- Fix hang on startup when using GTK+ options in Unicode build
 
 wxMac
 
-- Added support for the wxFRAME_FLOAT_ON_PARENT style
+- Added support for the wxFRAME_FLOAT_ON_PARENT style.
+- Now takes window variants into account when rendering buttons.
+- Fix position of the centered windows (didn't take menu bar size into account)
 
 wxX11:
 
-- Don't crash in wxWindow dtor if the window hadn't been really Create()d
+- Don't crash in wxWindow dtor if the window hadn't been really Create()d.
+- Update wxChoice value when SetSelection() is called.
+
+wxUniv:
+
+- Fixed wxComboBox always sorted.
 
 
 2.8.1
@@ -119,25 +163,25 @@ wxX11:
 
 All:
 
-- Fix compilation with wxUSE_STL=1
-- wxGrid::GetBestSize() returns same size the grid would have after AutoSize()
-- Added wxTreeCtrl::CollapseAll[Children]() and IsEmpty() (Francesco Montorsi)
-- Several RTL-related positioning fixes (Diaa Sami)
-- Fix wxConfig::DeleteGroup() for arguments with trailing slash (David Hart)
-- Fix memory leak in wxGrid::ShowCellEditControl() (Christian Sturmlechner)
+- Fix compilation with wxUSE_STL=1.
+- wxGrid::GetBestSize() returns same size the grid would have after AutoSize().
+- Added wxTreeCtrl::CollapseAll[Children]() and IsEmpty() (Francesco Montorsi).
+- Several RTL-related positioning fixes (Diaa Sami).
+- Fix wxConfig::DeleteGroup() for arguments with trailing slash (David Hart).
+- Fix memory leak in wxGrid::ShowCellEditControl() (Christian Sturmlechner).
 
 wxMSW:
 
-- Fixed compilation with Borland C++ in Unicode mode but without MSLU
-- Show taskbar icon menu on right button release, not press
+- Fixed compilation with Borland C++ in Unicode mode but without MSLU.
+- Show taskbar icon menu on right button release, not press.
 
 wxGTK:
 
-- Don't crash if command line is not valid UTF-8 (Unicode build only)
+- Don't crash if command line is not valid UTF-8 (Unicode build only).
 
 wxUniv:
 
-- It is now possible to set background colour of wxStaticText
+- It is now possible to set background colour of wxStaticText.
 
 
 2.8.0
@@ -145,27 +189,27 @@ wxUniv:
 
 All:
 
-- Added wxSearchCtrl (Vince Harron)
-- wxCSConv("UTF-16/32") now behaves correctly, i.e. same as wxMBConvUTF16/32
+- Added wxSearchCtrl (Vince Harron).
+- wxCSConv("UTF-16/32") now behaves correctly, i.e. same as wxMBConvUTF16/32.
 - wxArrayString::Alloc() now works as reserve() and doesn't clear array contents
 - Fixed long standing bug in wxFileConfig groups renaming (Antti Koivisto).
 - New option wxFS_READ | wxFS_SEEKABLE for wxFileSystem::OpenFile() to return
   a stream that is seekable.
-- Fixed bug in wxCalendarCtrl::HitTest() when clicking on month change arrows
+- Fixed bug in wxCalendarCtrl::HitTest() when clicking on month change arrows.
 - Added wxWindow::GetWindowBorderSize() and corrected wxTreeCtrl::GetBestSize()
-  for a control with borders (Tim Kosse)
+  for a control with borders (Tim Kosse).
 
 wxMSW:
 
 - Fixed version script problems when using configure with cygwin/mingw32.
 - Use system default paper size for printing instead of A4.
-- Fix (harmless) assert in virtual list control under Vista
+- Fix (harmless) assert in virtual list control under Vista.
 - Fix colours when converting wxBitmap with alpha to wxImage (nusi).
 
 wxGTK:
 
-- Allow dynamically changing most of text control styles
-- Enable use of libgnomeprintui by default in configure
+- Allow dynamically changing most of text control styles.
+- Enable use of libgnomeprintui by default in configure.
 
 
 2.7.2

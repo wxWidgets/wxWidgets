@@ -63,6 +63,7 @@ public:
     }
 
     virtual wxRect GetGeometry() const;
+    virtual wxRect GetClientArea() const;
     virtual wxString GetName() const { return wxString(); }
 
     virtual wxArrayVideoModes GetModes(const wxVideoMode& mode) const;
@@ -171,6 +172,17 @@ wxRect wxDisplayImplMacOSX::GetGeometry() const
                    (int)theRect.origin.y,
                    (int)theRect.size.width,
                    (int)theRect.size.height ); //floats
+}
+
+wxRect wxDisplayImplMacOSX::GetClientArea() const
+{
+    // VZ: I don't know how to get client area for arbitrary display but
+    //     wxGetClientDisplayRect() does work correctly for at least the main
+    //     one (TODO: do it correctly for the other displays too)
+    if ( IsPrimary() )
+        return wxGetClientDisplayRect();
+
+    return wxDisplayImpl::GetClientArea();
 }
 
 static int wxCFDictKeyToInt( CFDictionaryRef desc, CFStringRef key )

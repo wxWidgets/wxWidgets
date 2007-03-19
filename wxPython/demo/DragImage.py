@@ -58,6 +58,11 @@ class DragCanvas(wx.ScrolledWindow):
         shape.fullscreen = True
         self.shapes.append(shape)
 
+        bmp = images.getTheKidBitmap()
+        shape = DragShape(bmp)
+        shape.pos = (200, 5)
+        self.shapes.append(shape)
+
         # Make a shape from some text
         text = "Some Text"
         bg_colour = wx.Colour(57, 115, 57)  # matches the bg image
@@ -83,11 +88,6 @@ class DragCanvas(wx.ScrolledWindow):
         shape.text = "Some dragging text"
         self.shapes.append(shape)
 
-
-        bmp = images.getTheKidBitmap()
-        shape = DragShape(bmp)
-        shape.pos = (200, 5)
-        self.shapes.append(shape)
 
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
         self.Bind(wx.EVT_PAINT, self.OnPaint)

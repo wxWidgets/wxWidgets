@@ -811,13 +811,15 @@ bool wxGetKeyState(wxKeyCode key)
     Window       wDummy1, wDummy2;
     int          iDummy3, iDummy4, iDummy5, iDummy6;
     unsigned int iMask;
-    XModifierKeymap* map = XGetModifierMapping(pDisplay);
     KeyCode keyCode = XKeysymToKeycode(pDisplay,iKey);
     if (keyCode == NoSymbol)
         return false;
 
     if ( IsModifierKey(iKey) )  // If iKey is a modifier key, use a different method
     {
+        XModifierKeymap *map = XGetModifierMapping(pDisplay);
+        wxCHECK_MSG( map, false, _T("failed to get X11 modifiers map") );
+
         for (int i = 0; i < 8; ++i)
         {
             if ( map->modifiermap[map->max_keypermod * i] == keyCode)
@@ -833,13 +835,13 @@ bool wxGetKeyState(wxKeyCode key)
     }
 
     // From the XLib manual:
-    // The XQueryKeymap() function returns a bit vector for the logical state of the keyboard, 
-    // where each bit set to 1 indicates that the corresponding key is currently pressed down. 
-    // The vector is represented as 32 bytes. Byte N (from 0) contains the bits for keys 8N to 8N + 7 
+    // The XQueryKeymap() function returns a bit vector for the logical state of the keyboard,
+    // where each bit set to 1 indicates that the corresponding key is currently pressed down.
+    // The vector is represented as 32 bytes. Byte N (from 0) contains the bits for keys 8N to 8N + 7
     // with the least-significant bit in the byte representing key 8N.
     char key_vector[32];
     XQueryKeymap(pDisplay, key_vector);
-    return key_vector[keyCode >> 3] & (1 << (keyCode & 7)); 
+    return key_vector[keyCode >> 3] & (1 << (keyCode & 7));
 }
 
 #endif // __WXX11__ || __WXGTK__ || __WXMOTIF__

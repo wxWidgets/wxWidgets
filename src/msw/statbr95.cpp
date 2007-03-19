@@ -189,6 +189,12 @@ void wxStatusBar95::SetStatusText(const wxString& strText, int nField)
     wxCHECK_RET( (nField >= 0) && (nField < m_nFields),
                  _T("invalid statusbar field index") );
 
+    if ( strText == GetStatusText(nField) )
+    {
+       // don't call StatusBar_SetText() to avoid flicker
+       return;
+    }
+
     // Get field style, if any
     int style;
     if (m_statusStyles)

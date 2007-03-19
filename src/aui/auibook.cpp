@@ -1935,7 +1935,8 @@ void wxAuiTabContainer::DoShowHide()
     for (i = 0; i < page_count; ++i)
     {
         wxAuiNotebookPage& page = pages.Item(i);
-        ShowWnd(page.window, page.active);
+        if (!page.active)
+            ShowWnd(page.window, false);
     }
 }
 
@@ -2598,7 +2599,8 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
     // select is false, it must become the "current page"
     // (though no select events will be fired)
     if (!select && m_tabs.GetPageCount() == 1)
-        m_curpage = GetPageIndex(page);
+        select = true;
+        //m_curpage = GetPageIndex(page);
 
     wxAuiTabCtrl* active_tabctrl = GetActiveTabCtrl();
     if (page_idx >= active_tabctrl->GetPageCount())

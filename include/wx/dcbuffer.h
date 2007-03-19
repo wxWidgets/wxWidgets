@@ -173,7 +173,7 @@ public:
         if( buffer.IsOk() )
             Init(&m_paintdc, buffer, style);
         else
-            Init(&m_paintdc, window->GetClientSize(), style);
+            Init(&m_paintdc, GetBufferedSize(window, style), style);
     }
 
     // If no bitmap is supplied by the user, a temporary one will be created.
@@ -184,7 +184,7 @@ public:
         if (style & wxBUFFER_VIRTUAL_AREA)
             window->PrepareDC( m_paintdc );
 
-        Init(&m_paintdc, window->GetClientSize(), style);
+        Init(&m_paintdc, GetBufferedSize(window, style), style);
     }
 
     // default copy ctor ok.
@@ -194,6 +194,15 @@ public:
         // We must UnMask here, else by the time the base class
         // does it, the PaintDC will have already been destroyed.
         UnMask();
+    }
+
+protected:
+    // return the size needed by the buffer: this depends on whether we're
+    // buffering just the currently shown part or the total (scrolled) window
+    static wxSize GetBufferedSize(wxWindow *window, int style)
+    {
+        return style & wxBUFFER_VIRTUAL_AREA ? window->GetVirtualSize()
+                                             : window->GetClientSize();
     }
 
 private:

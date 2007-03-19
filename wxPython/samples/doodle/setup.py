@@ -21,5 +21,10 @@ setup( name = "superdoodle",
        #console = ["superdoodle.py"]
        windows = ["superdoodle.py"],
        #data_files = DATA,
+       options = {"py2exe" : { "compressed": 0,
+                               "optimize": 2,
+                               "bundle_files": 1,
+                               }},
+       zipfile = None
        )
 
