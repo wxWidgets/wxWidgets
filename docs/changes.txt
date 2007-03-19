@@ -106,6 +106,10 @@ wxMSW:
 - Fixed wxFileName::GetSize() for large files.
 - Fixed wxFont and wxPen accessor bugs introduced in 2.8.2.
 
+wxGTK:
+
+- Fixed handling of accelerators using PageUp/Down keys
+
 
 2.8.2
 -----
