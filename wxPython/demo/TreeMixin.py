@@ -1,5 +1,5 @@
 import wx, wx.lib.customtreectrl, wx.gizmos
-import wx.lib.mixins.treemixin as treemixin
+import treemixin
 
 
 class TreeModel(object):
@@ -35,11 +35,11 @@ class TreeModel(object):
             children.append(('item %d'%self.itemCounter, []))
             self.itemCounter += 1
 
-    def MoveItem(self, itemToMoveIndices, newParentIndices):
-        itemToMove = self.GetItem(itemToMoveIndices)
-        newParentChildren = self.GetChildren(newParentIndices)
+    def MoveItem(self, itemToMoveIndex, newParentIndex):
+        itemToMove = self.GetItem(itemToMoveIndex)
+        newParentChildren = self.GetChildren(newParentIndex)
         newParentChildren.append(itemToMove)
-        oldParentChildren = self.GetChildren(itemToMoveIndices[:-1])
+        oldParentChildren = self.GetChildren(itemToMoveIndex[:-1])
         oldParentChildren.remove(itemToMove)
 
 
@@ -104,13 +104,13 @@ class DemoTreeMixin(treemixin.VirtualTree, treemixin.DragAndDrop,
             return 1
 
     def OnDrop(self, dropTarget, dragItem):
-        dropIndices = self.ItemIndices(dropTarget)
-        dropText = self.model.GetText(dropIndices)
-        dragIndices = self.ItemIndices(dragItem)
-        dragText = self.model.GetText(dragIndices)
-        self.log.write('drop %s %s on %s %s'%(dragText, dragIndices,
-            dropText, dropIndices))
-        self.model.MoveItem(dragIndices, dropIndices)
+        dropIndex = self.ItemIndex(dropTarget)
+        dropText = self.model.GetText(dropIndex)
+        dragIndex = self.ItemIndex(dragItem)
+        dragText = self.model.GetText(dragIndex)
+        self.log.write('drop %s %s on %s %s'%(dragText, dragIndex,
+            dropText, dropIndex))
+        self.model.MoveItem(dragIndex, dropIndex)
         self.GetParent().RefreshItems()
 
 
@@ -164,16 +164,16 @@ class VirtualCustomTreeCtrl(DemoTreeMixin,
             return 0
 
     def OnGetItemChecked(self, indices):
-        return self.checked.get(tuple(indices), False)
+        return self.checked.get(indices, False)
 
     def OnItemChecked(self, event):
         item = event.GetItem()
-        indices = tuple(self.ItemIndices(item))
+        itemIndex = self.ItemIndex(item)
         if self.GetItemType(item) == 2: 
             # It's a radio item; reset other items on the same level
-            for index in range(self.GetChildrenCount(self.GetItemParent(item))):
-                self.checked[indices[:-1]+(index,)] = False
-        self.checked[indices] = True
+            for nr in range(self.GetChildrenCount(self.GetItemParent(item))):
+                self.checked[itemIndex[:-1]+(nr,)] = False
+        self.checked[itemIndex] = True
 
 
 
@@ -194,14 +194,14 @@ class TreeNotebook(wx.Notebook):
     def OnPageChanged(self, event):
         oldTree = self.GetPage(event.OldSelection)
         newTree = self.GetPage(event.Selection)
-        newTree.SetExpansionState(oldTree.GetExpansionState())
         newTree.RefreshItems()
+        newTree.SetExpansionState(oldTree.GetExpansionState())
         event.Skip()
 
     def GetIndicesOfSelectedItems(self):
         tree = self.trees[self.GetSelection()]
         if tree.GetSelections():
-            return [tree.ItemIndices(item) for item in tree.GetSelections()]
+            return [tree.ItemIndex(item) for item in tree.GetSelections()]
         else:
             return [()]
 
