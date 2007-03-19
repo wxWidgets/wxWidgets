@@ -40,6 +40,7 @@
     #include "wx/control.h"
     #include "wx/app.h"         // for GetComCtl32Version
     #include "wx/image.h"
+    #include "wx/stattext.h"
 #endif
 
 #include "wx/sysopt.h"
