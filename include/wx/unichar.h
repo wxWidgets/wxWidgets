@@ -11,6 +11,7 @@
 #ifndef _WX_UNICHAR_H_
 #define _WX_UNICHAR_H_
 
+#include "wx/defs.h"
 #include "wx/chartype.h"
 
 class WXDLLIMPEXP_BASE wxUniCharRef;
@@ -23,7 +24,7 @@ public:
     // NB: this is not wchar_t on purpose, it needs to represent the entire
     //     Unicode code points range and wchar_t may be too small for that
     //     (e.g. on Win32 where wchar_t* is encoded in UTF-16)
-    typedef unsigned int value_type;
+    typedef wxUint32 value_type;
 
     wxUniChar() : m_value(0) {}
 
