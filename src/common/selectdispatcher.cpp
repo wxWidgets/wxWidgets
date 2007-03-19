@@ -198,13 +198,19 @@ void wxSelectDispatcher::RunLoop(int timeout)
         fd_set writeset = m_writeset;
         fd_set exeptset = m_exeptset;
         wxStopWatch sw;
-        if ( ptv )
+        if ( ptv && timeout )
           sw.Start(ptv->tv_usec/10);
         ret = select(m_maxFD+1, &readset, &writeset, &exeptset, ptv);
         switch ( ret )
         {
             // TODO: handle unix signals here
             case -1:
+                if ( !timeout )
+                {
+                    // it doesn't make sense to remain here
+                    return;
+                }
+
                 if ( ptv )
                 {
                     ptv->tv_sec = 0;
