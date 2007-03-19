@@ -99,17 +99,21 @@ extern WXDLLIMPEXP_DATA_BASE(const wxChar*) wxEmptyString;
 // strlen() and portable strcasecmp()
 //---------------------------------------------------------------------------
 
+#if WXWIN_COMPATIBILITY_2_8
 // Use wxXXX() functions from wxcrt.h instead! These functions are for
 // backwards compatibility only.
 
 // checks whether the passed in pointer is NULL and if the string is empty
+wxDEPRECATED( inline bool IsEmpty(const char *p) );
 inline bool IsEmpty(const char *p) { return (!p || !*p); }
 
 // safe version of strlen() (returns 0 if passed NULL pointer)
+wxDEPRECATED( inline size_t Strlen(const char *psz) );
 inline size_t Strlen(const char *psz)
   { return psz ? strlen(psz) : 0; }
 
 // portable strcasecmp/_stricmp
+wxDEPRECATED( inline int Stricmp(const char *psz1, const char *psz2) );
 inline int Stricmp(const char *psz1, const char *psz2)
 {
 #if defined(__VISUALC__) && defined(__WXWINCE__)
@@ -166,6 +170,8 @@ inline int Stricmp(const char *psz1, const char *psz2)
   #error  "Please define string case-insensitive compare for your OS/compiler"
 #endif  // OS/compiler
 }
+
+#endif // WXWIN_COMPATIBILITY_2_8
 
 // ----------------------------------------------------------------------------
 // deal with STL/non-STL/non-STL-but-wxUSE_STD_STRING
