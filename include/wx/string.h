@@ -785,6 +785,7 @@ public:
     // allow expressions like "c_str()[0]":
     wxUniChar operator[](int n) const { return operator[](size_t(n)); }
     wxUniChar operator[](size_t n) const;
+    wxUniChar operator[](long n) const { return operator[](size_t(n)); }
 #ifndef wxSIZE_T_IS_UINT
     wxUniChar operator[](unsigned int n) const { return operator[](size_t(n)); }
 #endif // size_t != unsigned int
@@ -1046,6 +1047,8 @@ public:
      */
     wxUniChar operator[](int n) const
       { return wxStringBase::at(n); }
+    wxUniChar operator[](long n) const
+      { return wxStringBase::at(n); }
     wxUniChar operator[](size_t n) const
       { return wxStringBase::at(n); }
 #ifndef wxSIZE_T_IS_UINT
@@ -1055,6 +1058,8 @@ public:
 
     // operator versions of GetWriteableChar()
     wxUniCharRef operator[](int n)
+      { return wxStringBase::at(n); }
+    wxUniCharRef operator[](long n)
       { return wxStringBase::at(n); }
     wxUniCharRef operator[](size_t n)
       { return wxStringBase::at(n); }
