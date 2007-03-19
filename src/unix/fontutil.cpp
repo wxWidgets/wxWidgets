@@ -642,7 +642,7 @@ wxFontStyle wxNativeFontInfo::GetStyle() const
         return wxFONTSTYLE_NORMAL;
     }
 
-    switch ( s[0] )
+    switch ( s[0].GetValue() )
     {
         default:
             // again, unknown but consider normal by default
