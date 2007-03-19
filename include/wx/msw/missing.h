@@ -337,6 +337,34 @@ typedef struct _OSVERSIONINFOEX {
     #define LVM_GETHEADER (LVM_FIRST+31)
 #endif
 
+#ifndef HDLAYOUT
+    #define HDLAYOUT HD_LAYOUT
+#endif
+
+#ifndef HDITEM
+    #define HDITEM HD_ITEM
+#endif
+
+#ifndef NMHEADER
+    #define NMHEADER HD_NOTIFY
+#endif
+
+#ifndef HDS_HOTTRACK
+    #define HDS_HOTTRACK 4
+#endif
+
+#ifndef HDS_FULLDRAG
+    #define HDS_FULLDRAG 128
+#endif
+
+#ifndef HDN_BEGINDRAG
+    #define HDN_BEGINDRAG (HDN_FIRST - 11)
+#endif
+
+#ifndef HDN_ENDDRAG
+    #define HDN_ENDDRAG (HDN_FIRST - 10)
+#endif
+
 #ifndef LVSICF_NOSCROLL
     #define LVSICF_NOINVALIDATEALL  0x0001
     #define LVSICF_NOSCROLL         0x0002
