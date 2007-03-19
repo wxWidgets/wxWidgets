@@ -1144,6 +1144,7 @@ public:
     // from another wxString
   wxString& operator=(const wxStringBase& stringSrc)
     { return (wxString&)wxStringBase::operator=(stringSrc); }
+  wxString& operator=(const wxCStrData& cstr);
     // from a character
   wxString& operator=(wxUniChar ch)
     { return (wxString&)wxStringBase::operator=(ch); }
@@ -2011,6 +2012,15 @@ inline wxUniChar wxCStrData::operator*() const
 inline wxUniChar wxCStrData::operator[](size_t n) const
 {
     return m_str->at(m_offset + n);
+}
+
+// ----------------------------------------------------------------------------
+// implementation of wxString inline methods using wxCStrData
+// ----------------------------------------------------------------------------
+
+inline wxString& wxString::operator=(const wxCStrData& cstr)
+{
+    return *this = cstr.AsString();
 }
 
 // ----------------------------------------------------------------------------
