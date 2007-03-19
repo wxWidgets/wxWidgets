@@ -26,7 +26,7 @@ disturb existing code.  For example, instead of writing::
 
 you can now write::
 
-    sizer.AddF(ctrl, wx.SizerFlags().Expand().Border(10))
+    sizer.AddF(ctrl, wx.SizerFlags().Expand().Border(wx.ALL,10))
 
 
 Will Sadkin provided a patch for the wx.lib.masked package that fixes

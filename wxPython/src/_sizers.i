@@ -31,13 +31,13 @@ parameters using the named methods instead. For example, instead of::
 
 you can now write::
 
-    sizer.AddF(ctrl, wx.SizerFlags().Expand().Border(10))
+    sizer.AddF(ctrl, wx.SizerFlags().Expand().Border(wx.ALL, 10))
 
 This is more readable and also allows you to create wx.SizerFlags
 objects which can be reused for several sizer items.::
 
     flagsExpand = wx.SizerFlags(1)
-    flagsExpand.Expand().Border(10)
+    flagsExpand.Expand().Border(wx.ALL, 10)
     sizer.AddF(ctrl1, flagsExpand)
     sizer.AddF(ctrl2, flagsExpand)
 
