@@ -14,7 +14,7 @@
 
 #include "wx/defs.h"
 #include "wx/utils.h"
-#include "wx/wxchar.h"
+#include "wx/chartype.h"
 
 #if !wxUSE_UNICODE_MSLU
 inline bool wxUsingUnicowsDll() { return false; }

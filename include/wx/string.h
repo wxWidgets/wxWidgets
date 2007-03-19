@@ -51,7 +51,8 @@
     #include <StringMgr.h>
 #endif
 
-#include "wx/wxchar.h"      // for wxChar
+#include "wx/wxchar.h"      // for wxChar, wxStrlen() etc.
+#include "wx/unichar.h"
 #include "wx/strvararg.h"
 #include "wx/buffer.h"      // for wxCharBuffer
 #include "wx/strconv.h"     // for wxConvertXXX() macros and wxMBConv classes
@@ -98,7 +99,7 @@ extern WXDLLIMPEXP_DATA_BASE(const wxChar*) wxEmptyString;
 // strlen() and portable strcasecmp()
 //---------------------------------------------------------------------------
 
-// Use wxXXX() functions from wxchar.h instead! These functions are for
+// Use wxXXX() functions from wxcrt.h instead! These functions are for
 // backwards compatibility only.
 
 // checks whether the passed in pointer is NULL and if the string is empty

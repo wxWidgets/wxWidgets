@@ -19,7 +19,7 @@
 #endif
 #include  <limits.h>            /*  for CHAR_BIT used below */
 
-#include  "wx/wxchar.h"         /*  for __TFILE__ and wxChar */
+#include  "wx/chartype.h"     /*  for __TFILE__ and wxChar */
 
 /*  ---------------------------------------------------------------------------- */
 /*  Defines controlling the debugging macros */

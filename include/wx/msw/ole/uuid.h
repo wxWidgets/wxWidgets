@@ -14,7 +14,7 @@
 #ifndef   _WX_OLEUUID_H
 #define   _WX_OLEUUID_H
 
-#include "wx/wxchar.h"
+#include "wx/chartype.h"
 // ------------------------------------------------------------------
 // UUID (Universally Unique IDentifier) definition
 // ------------------------------------------------------------------

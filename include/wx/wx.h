@@ -30,6 +30,7 @@
 #include "wx/math.h"
 #include "wx/stopwatch.h"
 #include "wx/module.h"
+#include "wx/wxcrt.h"
 
 #if wxUSE_GUI
 

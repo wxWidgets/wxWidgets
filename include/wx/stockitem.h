@@ -13,7 +13,7 @@
 #define _WX_STOCKITEM_H_
 
 #include "wx/defs.h"
-#include "wx/wxchar.h"
+#include "wx/chartype.h"
 #include "wx/string.h"
 #include "wx/accel.h"
 

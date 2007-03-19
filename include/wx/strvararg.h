@@ -16,13 +16,7 @@
     #error "OpenWatcom version >= 1.4 is required to compile this code"
 #endif
 
-// include wchar_t definition if needed:
-#if defined(__WATCOMC__)
-#include <inttypes.h>
-#elif defined(__VISUALC__)
-#include <stdlib.h>
-#endif
-
+#include "wx/chartype.h"
 
 class WXDLLIMPEXP_BASE wxCStrData;
 class WXDLLIMPEXP_BASE wxString;
@@ -95,7 +89,7 @@ struct wxArgNormalizer
 
 // special cases for converting strings:
 
-// FIXME-UTF8: move this to wxchartype.h!
+// FIXME-UTF8: move this to chartype.h!
 #if wxUSE_UNICODE
     /* for now, all Unicode builds are wchar_t* based: */
     #define wxUSE_UNICODE_WCHAR 1
@@ -103,7 +97,7 @@ struct wxArgNormalizer
     #define wxUSE_UNICODE_WCHAR 0
 #endif
 
-// FIXME-UTF8: include wx/wxchartype.h and use wxChar after headers split
+// FIXME-UTF8: include wx/chartype.h and use wxChar after headers split
 // FIXME-UTF8: this will be char* in UTF-8 build and wchar_t* on Windows
 #if wxUSE_UNICODE_WCHAR
     typedef wchar_t wxArgNativeCharType;

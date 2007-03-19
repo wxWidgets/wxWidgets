@@ -14,7 +14,7 @@
 #define _WX_STRCONV_H_
 
 #include "wx/defs.h"
-#include "wx/wxchar.h"
+#include "wx/chartype.h"
 #include "wx/buffer.h"
 
 #ifdef __DIGITALMARS__

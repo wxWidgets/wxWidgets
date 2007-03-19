@@ -18,7 +18,7 @@
 
 
 #include "wx/object.h"
-#include "wx/wxchar.h"
+#include "wx/chartype.h"
 
 class WXDLLEXPORT wxDataFormat;
 class WXDLLEXPORT wxDataObject;
