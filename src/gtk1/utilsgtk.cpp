@@ -201,3 +201,9 @@ wxString wxGUIAppTraits::GetDesktopEnvironment() const
 {
     return wxEmptyString;
 }
+
+void wxGUIAppTraits::SetLocale()
+{
+    gtk_set_locale();
+}
+
