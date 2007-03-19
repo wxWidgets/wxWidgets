@@ -68,7 +68,7 @@ getfilelist(){
   fi
   
   if [ $port = "gtk" ] || [ $port = "all" ]; then
-    filelist="$filelist gtk.rsp"
+    filelist="$filelist gtk.rsp gtk1.rsp"
   fi
 
   if [ $port = "motif" ] || [ $port = "all" ]; then
