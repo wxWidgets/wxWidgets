@@ -1,4 +1,4 @@
-wxwidgets2.8 (2.8.2.0-0) unstable; urgency=low
+wxwidgets2.8 (2.8.3.0-0) unstable; urgency=low
 
   * Added wxSizerFlags::Shaped(), FixedMinSize(), Top() and Bottom() methods.
   * Added wxCSConv::IsOk() (Manuel Martin).
@@ -8,7 +8,7 @@ wxwidgets2.8 (2.8.2.0-0) unstable; urgency=low
   * Added wxSearchCtrl::[Get|Set]DescriptiveText.
   * Added wxToolBar::SetTool[Normal|Disabled]Bitmap for wxMSW, wxGTK and wxMac.
   * Added wxRICHTEXT_SETSTYLE_REMOVE flag for removing styles, and
-  * wxRICHTEXT_HITTEST_OUTSIDE for more accurate hit-testing.
+    wxRICHTEXT_HITTEST_OUTSIDE for more accurate hit-testing.
   * Fixed a crash when writing wxRichTextCtrl styles.
   * wxPython: enhanced the widget inspection tool
   * wxPython: Added wrappers for wx.SizerFlags and wx.Sizer methods using it
@@ -16,7 +16,15 @@ wxwidgets2.8 (2.8.2.0-0) unstable; urgency=low
   * Fixed tab-related drawing and hit-testing bugs in wxRichTextCtrl.
   * Implemented background colour in wxRichTextCtrl.
   * Fixed crashes in helpview when opening a file.
-	
+  * Fixed detection of number of processors under Linux 2.6
+  * Fixed Base64 computation in wxHTTP (p_michalczyk)
+  * Fix handling of wxSOCKET_REUSEADDR in wxDatagramSocket (troelsk)
+  * Fixed crash in wxGetUserName() in Unicode build
+  * Fix hang on startup when using GTK+ options in Unicode build
+  * Shut down the sockets gracefully (Sergio Aguayo)
+  * Fix extra indentation in wxHTML_ALIGN_JUSTIFY display (Chacal)
+  * Fixed handling of accelerators using PageUp/Down keys
+
  -- Robin Dunn <robin@alldunn.com>  Fri,  5 Mar 2007 14:15:03 -0800
 
 wxwidgets2.8 (2.8.1.1-0) unstable; urgency=low
