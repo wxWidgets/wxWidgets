@@ -79,7 +79,6 @@
 
     <if cond="FORMAT=='msvc'">
         <option name="TARGET_CPU">
-            <values>AMD64,IA64</values>
             <default-value>$(DOLLAR)(CPU)</default-value>
             <description>
 The target processor architecture must be specified when it is not X86.
