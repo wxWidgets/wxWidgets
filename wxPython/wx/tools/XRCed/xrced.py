@@ -1662,10 +1662,8 @@ def DictToString(d):
 def usage():
     print >> sys.stderr, 'usage: xrced [-dhiv] [file]'
 
-from wx.lib.mixins.inspection import InspectableApp
-class App(InspectableApp):
+class App(wx.App):
     def OnInit(self):
-        self.Init()
         # Check version
         if wx.VERSION[:3] < MinWxVersion:
             wx.LogWarning('''\
