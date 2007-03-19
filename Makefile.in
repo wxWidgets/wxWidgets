@@ -232,6 +232,7 @@ ALL_BASE_HEADERS =  \
 	wx/beforestd.h \
 	wx/buffer.h \
 	wx/build.h \
+	wx/chartype.h \
 	wx/chkconf.h \
 	wx/clntdata.h \
 	wx/cmdline.h \
@@ -322,6 +323,7 @@ ALL_BASE_HEADERS =  \
 	wx/tokenzr.h \
 	wx/txtstrm.h \
 	wx/types.h \
+	wx/unichar.h \
 	wx/uri.h \
 	wx/utils.h \
 	wx/variant.h \
@@ -331,6 +333,7 @@ ALL_BASE_HEADERS =  \
 	wx/wfstream.h \
 	wx/wx.h \
 	wx/wxchar.h \
+	wx/wxcrt.h \
 	wx/wxprec.h \
 	wx/xti.h \
 	wx/xtistrm.h \
@@ -367,6 +370,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/beforestd.h \
 	wx/buffer.h \
 	wx/build.h \
+	wx/chartype.h \
 	wx/chkconf.h \
 	wx/clntdata.h \
 	wx/cmdline.h \
@@ -457,6 +461,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/tokenzr.h \
 	wx/txtstrm.h \
 	wx/types.h \
+	wx/unichar.h \
 	wx/uri.h \
 	wx/utils.h \
 	wx/variant.h \
@@ -466,6 +471,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/wfstream.h \
 	wx/wx.h \
 	wx/wxchar.h \
+	wx/wxcrt.h \
 	wx/wxprec.h \
 	wx/xti.h \
 	wx/xtistrm.h \
@@ -588,10 +594,12 @@ ALL_BASE_SOURCES =  \
 	src/common/textfile.cpp \
 	src/common/tokenzr.cpp \
 	src/common/txtstrm.cpp \
+	src/common/unichar.cpp \
 	src/common/uri.cpp \
 	src/common/variant.cpp \
 	src/common/wfstream.cpp \
-	src/common/wxchar.cpp \
+	src/common/wxcrt.cpp \
+	src/common/wxprintf.cpp \
 	src/common/xti.cpp \
 	src/common/xtistrm.cpp \
 	src/common/zipstrm.cpp \
@@ -744,10 +752,12 @@ MONODLL_OBJECTS =  \
 	monodll_textfile.o \
 	monodll_tokenzr.o \
 	monodll_txtstrm.o \
+	monodll_unichar.o \
 	monodll_uri.o \
 	monodll_variant.o \
 	monodll_wfstream.o \
-	monodll_wxchar.o \
+	monodll_wxcrt.o \
+	monodll_wxprintf.o \
 	monodll_xti.o \
 	monodll_xtistrm.o \
 	monodll_zipstrm.o \
@@ -844,10 +854,12 @@ MONOLIB_OBJECTS =  \
 	monolib_textfile.o \
 	monolib_tokenzr.o \
 	monolib_txtstrm.o \
+	monolib_unichar.o \
 	monolib_uri.o \
 	monolib_variant.o \
 	monolib_wfstream.o \
-	monolib_wxchar.o \
+	monolib_wxcrt.o \
+	monolib_wxprintf.o \
 	monolib_xti.o \
 	monolib_xtistrm.o \
 	monolib_zipstrm.o \
@@ -946,10 +958,12 @@ BASEDLL_OBJECTS =  \
 	basedll_textfile.o \
 	basedll_tokenzr.o \
 	basedll_txtstrm.o \
+	basedll_unichar.o \
 	basedll_uri.o \
 	basedll_variant.o \
 	basedll_wfstream.o \
-	basedll_wxchar.o \
+	basedll_wxcrt.o \
+	basedll_wxprintf.o \
 	basedll_xti.o \
 	basedll_xtistrm.o \
 	basedll_zipstrm.o \
@@ -1031,10 +1045,12 @@ BASELIB_OBJECTS =  \
 	baselib_textfile.o \
 	baselib_tokenzr.o \
 	baselib_txtstrm.o \
+	baselib_unichar.o \
 	baselib_uri.o \
 	baselib_variant.o \
 	baselib_wfstream.o \
-	baselib_wxchar.o \
+	baselib_wxcrt.o \
+	baselib_wxprintf.o \
 	baselib_xti.o \
 	baselib_xtistrm.o \
 	baselib_zipstrm.o \
@@ -12761,6 +12777,9 @@ monodll_tokenzr.o: $(srcdir)/src/common/tokenzr.cpp $(MONODLL_ODEP)
 monodll_txtstrm.o: $(srcdir)/src/common/txtstrm.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/txtstrm.cpp
 
+monodll_unichar.o: $(srcdir)/src/common/unichar.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/unichar.cpp
+
 monodll_uri.o: $(srcdir)/src/common/uri.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/uri.cpp
 
@@ -12770,8 +12789,11 @@ monodll_variant.o: $(srcdir)/src/common/variant.cpp $(MONODLL_ODEP)
 monodll_wfstream.o: $(srcdir)/src/common/wfstream.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/wfstream.cpp
 
-monodll_wxchar.o: $(srcdir)/src/common/wxchar.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/wxchar.cpp
+monodll_wxcrt.o: $(srcdir)/src/common/wxcrt.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/wxcrt.cpp
+
+monodll_wxprintf.o: $(srcdir)/src/common/wxprintf.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/wxprintf.cpp
 
 monodll_xti.o: $(srcdir)/src/common/xti.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/xti.cpp
@@ -16904,6 +16926,9 @@ monolib_tokenzr.o: $(srcdir)/src/common/tokenzr.cpp $(MONOLIB_ODEP)
 monolib_txtstrm.o: $(srcdir)/src/common/txtstrm.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/txtstrm.cpp
 
+monolib_unichar.o: $(srcdir)/src/common/unichar.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/unichar.cpp
+
 monolib_uri.o: $(srcdir)/src/common/uri.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/uri.cpp
 
@@ -16913,8 +16938,11 @@ monolib_variant.o: $(srcdir)/src/common/variant.cpp $(MONOLIB_ODEP)
 monolib_wfstream.o: $(srcdir)/src/common/wfstream.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/wfstream.cpp
 
-monolib_wxchar.o: $(srcdir)/src/common/wxchar.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/wxchar.cpp
+monolib_wxcrt.o: $(srcdir)/src/common/wxcrt.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/wxcrt.cpp
+
+monolib_wxprintf.o: $(srcdir)/src/common/wxprintf.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/wxprintf.cpp
 
 monolib_xti.o: $(srcdir)/src/common/xti.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/xti.cpp
@@ -21050,6 +21078,9 @@ basedll_tokenzr.o: $(srcdir)/src/common/tokenzr.cpp $(BASEDLL_ODEP)
 basedll_txtstrm.o: $(srcdir)/src/common/txtstrm.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/txtstrm.cpp
 
+basedll_unichar.o: $(srcdir)/src/common/unichar.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/unichar.cpp
+
 basedll_uri.o: $(srcdir)/src/common/uri.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/uri.cpp
 
@@ -21059,8 +21090,11 @@ basedll_variant.o: $(srcdir)/src/common/variant.cpp $(BASEDLL_ODEP)
 basedll_wfstream.o: $(srcdir)/src/common/wfstream.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/wfstream.cpp
 
-basedll_wxchar.o: $(srcdir)/src/common/wxchar.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/wxchar.cpp
+basedll_wxcrt.o: $(srcdir)/src/common/wxcrt.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/wxcrt.cpp
+
+basedll_wxprintf.o: $(srcdir)/src/common/wxprintf.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/wxprintf.cpp
 
 basedll_xti.o: $(srcdir)/src/common/xti.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/xti.cpp
@@ -21641,6 +21675,9 @@ baselib_tokenzr.o: $(srcdir)/src/common/tokenzr.cpp $(BASELIB_ODEP)
 baselib_txtstrm.o: $(srcdir)/src/common/txtstrm.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/txtstrm.cpp
 
+baselib_unichar.o: $(srcdir)/src/common/unichar.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/unichar.cpp
+
 baselib_uri.o: $(srcdir)/src/common/uri.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/uri.cpp
 
@@ -21650,8 +21687,11 @@ baselib_variant.o: $(srcdir)/src/common/variant.cpp $(BASELIB_ODEP)
 baselib_wfstream.o: $(srcdir)/src/common/wfstream.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/wfstream.cpp
 
-baselib_wxchar.o: $(srcdir)/src/common/wxchar.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/wxchar.cpp
+baselib_wxcrt.o: $(srcdir)/src/common/wxcrt.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/wxcrt.cpp
+
+baselib_wxprintf.o: $(srcdir)/src/common/wxprintf.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/wxprintf.cpp
 
 baselib_xti.o: $(srcdir)/src/common/xti.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/xti.cpp

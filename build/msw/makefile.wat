@@ -3038,10 +3038,12 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_textfile.obj &
 	$(OBJS)\monodll_tokenzr.obj &
 	$(OBJS)\monodll_txtstrm.obj &
+	$(OBJS)\monodll_unichar.obj &
 	$(OBJS)\monodll_uri.obj &
 	$(OBJS)\monodll_variant.obj &
 	$(OBJS)\monodll_wfstream.obj &
-	$(OBJS)\monodll_wxchar.obj &
+	$(OBJS)\monodll_wxcrt.obj &
+	$(OBJS)\monodll_wxprintf.obj &
 	$(OBJS)\monodll_xti.obj &
 	$(OBJS)\monodll_xtistrm.obj &
 	$(OBJS)\monodll_zipstrm.obj &
@@ -3159,10 +3161,12 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_textfile.obj &
 	$(OBJS)\monolib_tokenzr.obj &
 	$(OBJS)\monolib_txtstrm.obj &
+	$(OBJS)\monolib_unichar.obj &
 	$(OBJS)\monolib_uri.obj &
 	$(OBJS)\monolib_variant.obj &
 	$(OBJS)\monolib_wfstream.obj &
-	$(OBJS)\monolib_wxchar.obj &
+	$(OBJS)\monolib_wxcrt.obj &
+	$(OBJS)\monolib_wxprintf.obj &
 	$(OBJS)\monolib_xti.obj &
 	$(OBJS)\monolib_xtistrm.obj &
 	$(OBJS)\monolib_zipstrm.obj &
@@ -3282,10 +3286,12 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_textfile.obj &
 	$(OBJS)\basedll_tokenzr.obj &
 	$(OBJS)\basedll_txtstrm.obj &
+	$(OBJS)\basedll_unichar.obj &
 	$(OBJS)\basedll_uri.obj &
 	$(OBJS)\basedll_variant.obj &
 	$(OBJS)\basedll_wfstream.obj &
-	$(OBJS)\basedll_wxchar.obj &
+	$(OBJS)\basedll_wxcrt.obj &
+	$(OBJS)\basedll_wxprintf.obj &
 	$(OBJS)\basedll_xti.obj &
 	$(OBJS)\basedll_xtistrm.obj &
 	$(OBJS)\basedll_zipstrm.obj &
@@ -3389,10 +3395,12 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_textfile.obj &
 	$(OBJS)\baselib_tokenzr.obj &
 	$(OBJS)\baselib_txtstrm.obj &
+	$(OBJS)\baselib_unichar.obj &
 	$(OBJS)\baselib_uri.obj &
 	$(OBJS)\baselib_variant.obj &
 	$(OBJS)\baselib_wfstream.obj &
-	$(OBJS)\baselib_wxchar.obj &
+	$(OBJS)\baselib_wxcrt.obj &
+	$(OBJS)\baselib_wxprintf.obj &
 	$(OBJS)\baselib_xti.obj &
 	$(OBJS)\baselib_xtistrm.obj &
 	$(OBJS)\baselib_zipstrm.obj &
@@ -5097,6 +5105,9 @@ $(OBJS)\monodll_tokenzr.obj :  .AUTODEPEND ..\..\src\common\tokenzr.cpp
 $(OBJS)\monodll_txtstrm.obj :  .AUTODEPEND ..\..\src\common\txtstrm.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_unichar.obj :  .AUTODEPEND ..\..\src\common\unichar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_uri.obj :  .AUTODEPEND ..\..\src\common\uri.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
@@ -5106,7 +5117,10 @@ $(OBJS)\monodll_variant.obj :  .AUTODEPEND ..\..\src\common\variant.cpp
 $(OBJS)\monodll_wfstream.obj :  .AUTODEPEND ..\..\src\common\wfstream.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
-$(OBJS)\monodll_wxchar.obj :  .AUTODEPEND ..\..\src\common\wxchar.cpp
+$(OBJS)\monodll_wxcrt.obj :  .AUTODEPEND ..\..\src\common\wxcrt.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_wxprintf.obj :  .AUTODEPEND ..\..\src\common\wxprintf.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_xti.obj :  .AUTODEPEND ..\..\src\common\xti.cpp
@@ -7212,6 +7226,9 @@ $(OBJS)\monolib_tokenzr.obj :  .AUTODEPEND ..\..\src\common\tokenzr.cpp
 $(OBJS)\monolib_txtstrm.obj :  .AUTODEPEND ..\..\src\common\txtstrm.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_unichar.obj :  .AUTODEPEND ..\..\src\common\unichar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_uri.obj :  .AUTODEPEND ..\..\src\common\uri.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -7221,7 +7238,10 @@ $(OBJS)\monolib_variant.obj :  .AUTODEPEND ..\..\src\common\variant.cpp
 $(OBJS)\monolib_wfstream.obj :  .AUTODEPEND ..\..\src\common\wfstream.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
-$(OBJS)\monolib_wxchar.obj :  .AUTODEPEND ..\..\src\common\wxchar.cpp
+$(OBJS)\monolib_wxcrt.obj :  .AUTODEPEND ..\..\src\common\wxcrt.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_wxprintf.obj :  .AUTODEPEND ..\..\src\common\wxprintf.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_xti.obj :  .AUTODEPEND ..\..\src\common\xti.cpp
@@ -9330,6 +9350,9 @@ $(OBJS)\basedll_tokenzr.obj :  .AUTODEPEND ..\..\src\common\tokenzr.cpp
 $(OBJS)\basedll_txtstrm.obj :  .AUTODEPEND ..\..\src\common\txtstrm.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_unichar.obj :  .AUTODEPEND ..\..\src\common\unichar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_uri.obj :  .AUTODEPEND ..\..\src\common\uri.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
@@ -9339,7 +9362,10 @@ $(OBJS)\basedll_variant.obj :  .AUTODEPEND ..\..\src\common\variant.cpp
 $(OBJS)\basedll_wfstream.obj :  .AUTODEPEND ..\..\src\common\wfstream.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
-$(OBJS)\basedll_wxchar.obj :  .AUTODEPEND ..\..\src\common\wxchar.cpp
+$(OBJS)\basedll_wxcrt.obj :  .AUTODEPEND ..\..\src\common\wxcrt.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
+$(OBJS)\basedll_wxprintf.obj :  .AUTODEPEND ..\..\src\common\wxprintf.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
 $(OBJS)\basedll_xti.obj :  .AUTODEPEND ..\..\src\common\xti.cpp
@@ -9600,6 +9626,9 @@ $(OBJS)\baselib_tokenzr.obj :  .AUTODEPEND ..\..\src\common\tokenzr.cpp
 $(OBJS)\baselib_txtstrm.obj :  .AUTODEPEND ..\..\src\common\txtstrm.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
+$(OBJS)\baselib_unichar.obj :  .AUTODEPEND ..\..\src\common\unichar.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
 $(OBJS)\baselib_uri.obj :  .AUTODEPEND ..\..\src\common\uri.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
@@ -9609,7 +9638,10 @@ $(OBJS)\baselib_variant.obj :  .AUTODEPEND ..\..\src\common\variant.cpp
 $(OBJS)\baselib_wfstream.obj :  .AUTODEPEND ..\..\src\common\wfstream.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
-$(OBJS)\baselib_wxchar.obj :  .AUTODEPEND ..\..\src\common\wxchar.cpp
+$(OBJS)\baselib_wxcrt.obj :  .AUTODEPEND ..\..\src\common\wxcrt.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_wxprintf.obj :  .AUTODEPEND ..\..\src\common\wxprintf.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_xti.obj :  .AUTODEPEND ..\..\src\common\xti.cpp

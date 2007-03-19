@@ -347,10 +347,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/textfile.cpp
     src/common/tokenzr.cpp
     src/common/txtstrm.cpp
+    src/common/unichar.cpp
     src/common/uri.cpp
     src/common/variant.cpp
     src/common/wfstream.cpp
-    src/common/wxchar.cpp
+    src/common/wxcrt.cpp
+    src/common/wxprintf.cpp
     src/common/xti.cpp
     src/common/xtistrm.cpp
     src/common/zipstrm.cpp
@@ -372,6 +374,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/beforestd.h
     wx/buffer.h
     wx/build.h
+    wx/chartype.h
     wx/chkconf.h
     wx/clntdata.h
     wx/cmdline.h
@@ -462,6 +465,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/tokenzr.h
     wx/txtstrm.h
     wx/types.h
+    wx/unichar.h
     wx/uri.h
     wx/utils.h
     wx/variant.h
@@ -471,6 +475,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/wfstream.h
     wx/wx.h
     wx/wxchar.h
+    wx/wxcrt.h
     wx/wxprec.h
     wx/xti.h
     wx/xtistrm.h

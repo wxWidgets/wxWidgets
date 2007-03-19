@@ -703,6 +703,10 @@ SOURCE=..\..\src\common\txtstrm.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\unichar.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\uri.cpp
 # End Source File
 # Begin Source File
@@ -719,7 +723,11 @@ SOURCE=..\..\src\common\wfstream.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\wxchar.cpp
+SOURCE=..\..\src\common\wxcrt.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\wxprintf.cpp
 # End Source File
 # Begin Source File
 
@@ -1451,6 +1459,10 @@ SOURCE=..\..\include\wx\build.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\chartype.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\chkconf.h
 # End Source File
 # Begin Source File
@@ -1799,6 +1811,10 @@ SOURCE=..\..\include\wx\types.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\unichar.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\uri.h
 # End Source File
 # Begin Source File
@@ -1832,6 +1848,10 @@ SOURCE=..\..\include\wx\wx.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\wxchar.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\wxcrt.h
 # End Source File
 # Begin Source File
 
