@@ -245,7 +245,8 @@ class InspectionFrame(wx.Frame):
 
     def OnRefreshTree(self, evt):
         self.RefreshTree()
-
+        self.UpdateInfo()
+        
 
     def OnFindWidget(self, evt):
         self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
