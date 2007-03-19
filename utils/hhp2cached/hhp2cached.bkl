@@ -3,7 +3,7 @@
 
 <makefile>
 
-    <include file="../../../build/bakefiles/common_samples.bkl"/>
+    <include file="../../build/bakefiles/common_samples.bkl"/>
 
     <exe id="hhp2cached" template="wx_util" template_append="wx_append">
         <sources>
