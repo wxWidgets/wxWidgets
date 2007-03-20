@@ -25,7 +25,7 @@ wxwidgets2.8 (2.8.3.0-0) unstable; urgency=low
   * Fix extra indentation in wxHTML_ALIGN_JUSTIFY display (Chacal)
   * Fixed handling of accelerators using PageUp/Down keys
 
- -- Robin Dunn <robin@alldunn.com>  Fri, 20 Mar 2007 14:00:50 -0800
+ -- Robin Dunn <robin@alldunn.com>  Tue, 20 Mar 2007 14:00:50 -0800
 
 wxwidgets2.8 (2.8.1.1-0) unstable; urgency=low
 
