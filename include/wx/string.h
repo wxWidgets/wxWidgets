@@ -1461,7 +1461,7 @@ public:
     // minimize the string's memory
     // only works if the data of this string is not shared
   bool Shrink();
-#if WXWIN_COMPATIBILITY_2_8 && !wxUSE_STL
+#if WXWIN_COMPATIBILITY_2_8 && !wxUSE_STL_BASED_WXSTRING
     // These are deprecated, use wxStringBuffer or wxStringBufferLength instead
     //
     // get writable buffer of at least nLen bytes. Unget() *must* be called
@@ -1470,7 +1470,7 @@ public:
     // call this immediately after GetWriteBuf() has been used
   wxDEPRECATED( void UngetWriteBuf() );
   wxDEPRECATED( void UngetWriteBuf(size_t nLen) );
-#endif // WXWIN_COMPATIBILITY_2_8 && !wxUSE_STL
+#endif // WXWIN_COMPATIBILITY_2_8 && !wxUSE_STL_BASED_WXSTRING
 
   // wxWidgets version 1 compatibility functions
 

@@ -1115,7 +1115,7 @@ void wxString::UngetWriteBuf(size_t nLen)
 }
 #endif // WXWIN_COMPATIBILITY_2_8
 
-#endif // !wxUSE_STL
+#endif // !wxUSE_STL_BASED_WXSTRING
 
 
 // ---------------------------------------------------------------------------
