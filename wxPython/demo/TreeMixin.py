@@ -1,5 +1,5 @@
 import wx, wx.lib.customtreectrl, wx.gizmos
-import treemixin
+from wx.lib.mixins import treemixin
 
 
 class TreeModel(object):
