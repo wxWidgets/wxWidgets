@@ -509,10 +509,12 @@ GSocketGUIFunctionsTable* wxConsoleAppTraitsBase::GetSocketGUIFunctionsTable()
 // wxAppTraits
 // ----------------------------------------------------------------------------
 
+#if wxUSE_INTL
 void wxAppTraitsBase::SetLocale()
 {
     setlocale(LC_ALL, "");
 }
+#endif
 
 #ifdef __WXDEBUG__
 

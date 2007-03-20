@@ -329,10 +329,12 @@ static wxString GetSM()
 // wxGUIAppTraits
 //-----------------------------------------------------------------------------
 
+#if wxUSE_INTL
 void wxGUIAppTraits::SetLocale()
 {
     gtk_set_locale();
 }
+#endif
 
 #ifdef __WXDEBUG__
 

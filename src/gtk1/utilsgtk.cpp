@@ -202,8 +202,10 @@ wxString wxGUIAppTraits::GetDesktopEnvironment() const
     return wxEmptyString;
 }
 
+#if wxUSE_INTL
 void wxGUIAppTraits::SetLocale()
 {
     gtk_set_locale();
 }
+#endif
 
