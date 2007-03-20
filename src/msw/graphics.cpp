@@ -80,7 +80,7 @@ static inline double RadToDeg(double deg) { return (deg * 180.0) / M_PI; }
 #include <commdlg.h>
 #endif
 
-class WXDLLIMPEXP_CORE wxGDIPlusPathData : public wxGraphicsPathData
+class wxGDIPlusPathData : public wxGraphicsPathData
 {
 public :
     wxGDIPlusPathData(wxGraphicsRenderer* renderer, GraphicsPath* path = NULL);
@@ -148,7 +148,7 @@ private :
     GraphicsPath* m_path;
 };
 
-class WXDLLIMPEXP_CORE wxGDIPlusMatrixData : public wxGraphicsMatrixData
+class wxGDIPlusMatrixData : public wxGraphicsMatrixData
 {
 public :
     wxGDIPlusMatrixData(wxGraphicsRenderer* renderer, Matrix* matrix = NULL) ;
@@ -205,7 +205,7 @@ private:
     Matrix* m_matrix ;
 } ;
 
-class WXDLLIMPEXP_CORE wxGDIPlusPenData : public wxGraphicsObjectRefData
+class wxGDIPlusPenData : public wxGraphicsObjectRefData
 {
 public:
     wxGDIPlusPenData( wxGraphicsRenderer* renderer, const wxPen &pen );
@@ -224,7 +224,7 @@ protected :
     wxDouble m_width;
 };
 
-class WXDLLIMPEXP_CORE wxGDIPlusBrushData : public wxGraphicsObjectRefData
+class wxGDIPlusBrushData : public wxGraphicsObjectRefData
 {
 public:
     wxGDIPlusBrushData( wxGraphicsRenderer* renderer );
@@ -246,7 +246,7 @@ private :
     GraphicsPath* m_brushPath;
 };
 
-class WXDLLIMPEXP_CORE wxGDIPlusFontData : public wxGraphicsObjectRefData
+class wxGDIPlusFontData : public wxGraphicsObjectRefData
 {
 public:
     wxGDIPlusFontData( wxGraphicsRenderer* renderer, const wxFont &font, const wxColour& col );
@@ -259,7 +259,7 @@ private :
     Font* m_font;
 };
 
-class WXDLLIMPEXP_CORE wxGDIPlusContext : public wxGraphicsContext
+class wxGDIPlusContext : public wxGraphicsContext
 {
 public:
     wxGDIPlusContext( wxGraphicsRenderer* renderer, HDC hdc );
@@ -1213,7 +1213,7 @@ wxGraphicsMatrix wxGDIPlusContext::GetTransform() const
 // wxGDIPlusRenderer declaration
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxGDIPlusRenderer : public wxGraphicsRenderer
+class wxGDIPlusRenderer : public wxGraphicsRenderer
 {
 public :
     wxGDIPlusRenderer()
