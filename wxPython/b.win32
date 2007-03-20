@@ -18,7 +18,7 @@ case $1 in
     24 | 2.4) VER=24; shift ;;
     25 | 2.5) VER=25; shift ;;
 
-    *) 	VER=24
+    *) 	VER=25
 esac
 
 PYTHON=$TOOLS/python$VER/python.exe

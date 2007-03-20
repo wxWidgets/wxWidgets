@@ -1431,147 +1431,148 @@ SWIG_Python_SetModule(swig_module_info *swig_module) {
 
 /* -------- TYPES TABLE (BEGIN) -------- */
 
-#define SWIGTYPE_p_char swig_types[0]
-#define SWIGTYPE_p_double swig_types[1]
-#define SWIGTYPE_p_form_ops_t swig_types[2]
-#define SWIGTYPE_p_int swig_types[3]
-#define SWIGTYPE_p_unsigned_char swig_types[4]
-#define SWIGTYPE_p_unsigned_int swig_types[5]
-#define SWIGTYPE_p_unsigned_long swig_types[6]
-#define SWIGTYPE_p_wxANIHandler swig_types[7]
-#define SWIGTYPE_p_wxAcceleratorTable swig_types[8]
-#define SWIGTYPE_p_wxActivateEvent swig_types[9]
-#define SWIGTYPE_p_wxBMPHandler swig_types[10]
-#define SWIGTYPE_p_wxBitmap swig_types[11]
-#define SWIGTYPE_p_wxBoxSizer swig_types[12]
-#define SWIGTYPE_p_wxBrush swig_types[13]
-#define SWIGTYPE_p_wxBrushList swig_types[14]
-#define SWIGTYPE_p_wxBufferedDC swig_types[15]
-#define SWIGTYPE_p_wxBufferedPaintDC swig_types[16]
-#define SWIGTYPE_p_wxCURHandler swig_types[17]
-#define SWIGTYPE_p_wxChildFocusEvent swig_types[18]
-#define SWIGTYPE_p_wxClientDC swig_types[19]
-#define SWIGTYPE_p_wxCloseEvent swig_types[20]
-#define SWIGTYPE_p_wxColour swig_types[21]
-#define SWIGTYPE_p_wxColourDatabase swig_types[22]
-#define SWIGTYPE_p_wxCommandEvent swig_types[23]
-#define SWIGTYPE_p_wxConfigBase swig_types[24]
-#define SWIGTYPE_p_wxContextMenuEvent swig_types[25]
-#define SWIGTYPE_p_wxControl swig_types[26]
-#define SWIGTYPE_p_wxControlWithItems swig_types[27]
-#define SWIGTYPE_p_wxCursor swig_types[28]
-#define SWIGTYPE_p_wxDC swig_types[29]
-#define SWIGTYPE_p_wxDash swig_types[30]
-#define SWIGTYPE_p_wxDateEvent swig_types[31]
-#define SWIGTYPE_p_wxDisplayChangedEvent swig_types[32]
-#define SWIGTYPE_p_wxDropFilesEvent swig_types[33]
-#define SWIGTYPE_p_wxDuplexMode swig_types[34]
-#define SWIGTYPE_p_wxEffects swig_types[35]
-#define SWIGTYPE_p_wxEncodingConverter swig_types[36]
-#define SWIGTYPE_p_wxEraseEvent swig_types[37]
-#define SWIGTYPE_p_wxEvent swig_types[38]
-#define SWIGTYPE_p_wxEvtHandler swig_types[39]
-#define SWIGTYPE_p_wxFSFile swig_types[40]
-#define SWIGTYPE_p_wxFileSystem swig_types[41]
-#define SWIGTYPE_p_wxFlexGridSizer swig_types[42]
-#define SWIGTYPE_p_wxFocusEvent swig_types[43]
-#define SWIGTYPE_p_wxFont swig_types[44]
-#define SWIGTYPE_p_wxFontList swig_types[45]
-#define SWIGTYPE_p_wxFontMapper swig_types[46]
-#define SWIGTYPE_p_wxGBSizerItem swig_types[47]
-#define SWIGTYPE_p_wxGDIObject swig_types[48]
-#define SWIGTYPE_p_wxGIFHandler swig_types[49]
-#define SWIGTYPE_p_wxGridBagSizer swig_types[50]
-#define SWIGTYPE_p_wxGridSizer swig_types[51]
-#define SWIGTYPE_p_wxICOHandler swig_types[52]
-#define SWIGTYPE_p_wxIcon swig_types[53]
-#define SWIGTYPE_p_wxIconBundle swig_types[54]
-#define SWIGTYPE_p_wxIconLocation swig_types[55]
-#define SWIGTYPE_p_wxIconizeEvent swig_types[56]
-#define SWIGTYPE_p_wxIdleEvent swig_types[57]
-#define SWIGTYPE_p_wxImage swig_types[58]
-#define SWIGTYPE_p_wxImageHandler swig_types[59]
-#define SWIGTYPE_p_wxImageList swig_types[60]
-#define SWIGTYPE_p_wxIndividualLayoutConstraint swig_types[61]
-#define SWIGTYPE_p_wxInitDialogEvent swig_types[62]
-#define SWIGTYPE_p_wxJPEGHandler swig_types[63]
-#define SWIGTYPE_p_wxKeyEvent swig_types[64]
-#define SWIGTYPE_p_wxLanguageInfo swig_types[65]
-#define SWIGTYPE_p_wxLayoutConstraints swig_types[66]
-#define SWIGTYPE_p_wxLocale swig_types[67]
-#define SWIGTYPE_p_wxMask swig_types[68]
-#define SWIGTYPE_p_wxMaximizeEvent swig_types[69]
-#define SWIGTYPE_p_wxMemoryDC swig_types[70]
-#define SWIGTYPE_p_wxMenu swig_types[71]
-#define SWIGTYPE_p_wxMenuBar swig_types[72]
-#define SWIGTYPE_p_wxMenuEvent swig_types[73]
-#define SWIGTYPE_p_wxMenuItem swig_types[74]
-#define SWIGTYPE_p_wxMetaFile swig_types[75]
-#define SWIGTYPE_p_wxMetaFileDC swig_types[76]
-#define SWIGTYPE_p_wxMirrorDC swig_types[77]
-#define SWIGTYPE_p_wxMouseCaptureChangedEvent swig_types[78]
-#define SWIGTYPE_p_wxMouseEvent swig_types[79]
-#define SWIGTYPE_p_wxMoveEvent swig_types[80]
-#define SWIGTYPE_p_wxNativeEncodingInfo swig_types[81]
-#define SWIGTYPE_p_wxNativeFontInfo swig_types[82]
-#define SWIGTYPE_p_wxNavigationKeyEvent swig_types[83]
-#define SWIGTYPE_p_wxNcPaintEvent swig_types[84]
-#define SWIGTYPE_p_wxNotifyEvent swig_types[85]
-#define SWIGTYPE_p_wxObject swig_types[86]
-#define SWIGTYPE_p_wxPCXHandler swig_types[87]
-#define SWIGTYPE_p_wxPNGHandler swig_types[88]
-#define SWIGTYPE_p_wxPNMHandler swig_types[89]
-#define SWIGTYPE_p_wxPaintDC swig_types[90]
-#define SWIGTYPE_p_wxPaintEvent swig_types[91]
-#define SWIGTYPE_p_wxPalette swig_types[92]
-#define SWIGTYPE_p_wxPaletteChangedEvent swig_types[93]
-#define SWIGTYPE_p_wxPaperSize swig_types[94]
-#define SWIGTYPE_p_wxPen swig_types[95]
-#define SWIGTYPE_p_wxPenList swig_types[96]
-#define SWIGTYPE_p_wxPoint swig_types[97]
-#define SWIGTYPE_p_wxPostScriptDC swig_types[98]
-#define SWIGTYPE_p_wxPrintData swig_types[99]
-#define SWIGTYPE_p_wxPrinterDC swig_types[100]
-#define SWIGTYPE_p_wxPyApp swig_types[101]
-#define SWIGTYPE_p_wxPyCommandEvent swig_types[102]
-#define SWIGTYPE_p_wxPyEvent swig_types[103]
-#define SWIGTYPE_p_wxPyFontEnumerator swig_types[104]
-#define SWIGTYPE_p_wxPyImageHandler swig_types[105]
-#define SWIGTYPE_p_wxPySizer swig_types[106]
-#define SWIGTYPE_p_wxPyValidator swig_types[107]
-#define SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[108]
-#define SWIGTYPE_p_wxRect swig_types[109]
-#define SWIGTYPE_p_wxRegion swig_types[110]
-#define SWIGTYPE_p_wxRegionIterator swig_types[111]
-#define SWIGTYPE_p_wxRendererNative swig_types[112]
-#define SWIGTYPE_p_wxRendererVersion swig_types[113]
-#define SWIGTYPE_p_wxScreenDC swig_types[114]
-#define SWIGTYPE_p_wxScrollEvent swig_types[115]
-#define SWIGTYPE_p_wxScrollWinEvent swig_types[116]
-#define SWIGTYPE_p_wxSetCursorEvent swig_types[117]
-#define SWIGTYPE_p_wxShowEvent swig_types[118]
-#define SWIGTYPE_p_wxSize swig_types[119]
-#define SWIGTYPE_p_wxSizeEvent swig_types[120]
-#define SWIGTYPE_p_wxSizer swig_types[121]
-#define SWIGTYPE_p_wxSizerItem swig_types[122]
-#define SWIGTYPE_p_wxSplitterRenderParams swig_types[123]
-#define SWIGTYPE_p_wxStaticBoxSizer swig_types[124]
-#define SWIGTYPE_p_wxStdDialogButtonSizer swig_types[125]
-#define SWIGTYPE_p_wxString swig_types[126]
-#define SWIGTYPE_p_wxSysColourChangedEvent swig_types[127]
-#define SWIGTYPE_p_wxTIFFHandler swig_types[128]
-#define SWIGTYPE_p_wxUpdateUIEvent swig_types[129]
-#define SWIGTYPE_p_wxValidator swig_types[130]
-#define SWIGTYPE_p_wxWindow swig_types[131]
-#define SWIGTYPE_p_wxWindowCreateEvent swig_types[132]
-#define SWIGTYPE_p_wxWindowDC swig_types[133]
-#define SWIGTYPE_p_wxWindowDestroyEvent swig_types[134]
-#define SWIGTYPE_p_wxXPMHandler swig_types[135]
-#define SWIGTYPE_ptrdiff_t swig_types[136]
-#define SWIGTYPE_std__ptrdiff_t swig_types[137]
-#define SWIGTYPE_unsigned_int swig_types[138]
-static swig_type_info *swig_types[140];
-static swig_module_info swig_module = {swig_types, 139, 0, 0, 0, 0};
+#define SWIGTYPE_p_buffer swig_types[0]
+#define SWIGTYPE_p_char swig_types[1]
+#define SWIGTYPE_p_double swig_types[2]
+#define SWIGTYPE_p_form_ops_t swig_types[3]
+#define SWIGTYPE_p_int swig_types[4]
+#define SWIGTYPE_p_unsigned_char swig_types[5]
+#define SWIGTYPE_p_unsigned_int swig_types[6]
+#define SWIGTYPE_p_unsigned_long swig_types[7]
+#define SWIGTYPE_p_wxANIHandler swig_types[8]
+#define SWIGTYPE_p_wxAcceleratorTable swig_types[9]
+#define SWIGTYPE_p_wxActivateEvent swig_types[10]
+#define SWIGTYPE_p_wxBMPHandler swig_types[11]
+#define SWIGTYPE_p_wxBitmap swig_types[12]
+#define SWIGTYPE_p_wxBoxSizer swig_types[13]
+#define SWIGTYPE_p_wxBrush swig_types[14]
+#define SWIGTYPE_p_wxBrushList swig_types[15]
+#define SWIGTYPE_p_wxBufferedDC swig_types[16]
+#define SWIGTYPE_p_wxBufferedPaintDC swig_types[17]
+#define SWIGTYPE_p_wxCURHandler swig_types[18]
+#define SWIGTYPE_p_wxChildFocusEvent swig_types[19]
+#define SWIGTYPE_p_wxClientDC swig_types[20]
+#define SWIGTYPE_p_wxCloseEvent swig_types[21]
+#define SWIGTYPE_p_wxColour swig_types[22]
+#define SWIGTYPE_p_wxColourDatabase swig_types[23]
+#define SWIGTYPE_p_wxCommandEvent swig_types[24]
+#define SWIGTYPE_p_wxConfigBase swig_types[25]
+#define SWIGTYPE_p_wxContextMenuEvent swig_types[26]
+#define SWIGTYPE_p_wxControl swig_types[27]
+#define SWIGTYPE_p_wxControlWithItems swig_types[28]
+#define SWIGTYPE_p_wxCursor swig_types[29]
+#define SWIGTYPE_p_wxDC swig_types[30]
+#define SWIGTYPE_p_wxDash swig_types[31]
+#define SWIGTYPE_p_wxDateEvent swig_types[32]
+#define SWIGTYPE_p_wxDisplayChangedEvent swig_types[33]
+#define SWIGTYPE_p_wxDropFilesEvent swig_types[34]
+#define SWIGTYPE_p_wxDuplexMode swig_types[35]
+#define SWIGTYPE_p_wxEffects swig_types[36]
+#define SWIGTYPE_p_wxEncodingConverter swig_types[37]
+#define SWIGTYPE_p_wxEraseEvent swig_types[38]
+#define SWIGTYPE_p_wxEvent swig_types[39]
+#define SWIGTYPE_p_wxEvtHandler swig_types[40]
+#define SWIGTYPE_p_wxFSFile swig_types[41]
+#define SWIGTYPE_p_wxFileSystem swig_types[42]
+#define SWIGTYPE_p_wxFlexGridSizer swig_types[43]
+#define SWIGTYPE_p_wxFocusEvent swig_types[44]
+#define SWIGTYPE_p_wxFont swig_types[45]
+#define SWIGTYPE_p_wxFontList swig_types[46]
+#define SWIGTYPE_p_wxFontMapper swig_types[47]
+#define SWIGTYPE_p_wxGBSizerItem swig_types[48]
+#define SWIGTYPE_p_wxGDIObject swig_types[49]
+#define SWIGTYPE_p_wxGIFHandler swig_types[50]
+#define SWIGTYPE_p_wxGridBagSizer swig_types[51]
+#define SWIGTYPE_p_wxGridSizer swig_types[52]
+#define SWIGTYPE_p_wxICOHandler swig_types[53]
+#define SWIGTYPE_p_wxIcon swig_types[54]
+#define SWIGTYPE_p_wxIconBundle swig_types[55]
+#define SWIGTYPE_p_wxIconLocation swig_types[56]
+#define SWIGTYPE_p_wxIconizeEvent swig_types[57]
+#define SWIGTYPE_p_wxIdleEvent swig_types[58]
+#define SWIGTYPE_p_wxImage swig_types[59]
+#define SWIGTYPE_p_wxImageHandler swig_types[60]
+#define SWIGTYPE_p_wxImageList swig_types[61]
+#define SWIGTYPE_p_wxIndividualLayoutConstraint swig_types[62]
+#define SWIGTYPE_p_wxInitDialogEvent swig_types[63]
+#define SWIGTYPE_p_wxJPEGHandler swig_types[64]
+#define SWIGTYPE_p_wxKeyEvent swig_types[65]
+#define SWIGTYPE_p_wxLanguageInfo swig_types[66]
+#define SWIGTYPE_p_wxLayoutConstraints swig_types[67]
+#define SWIGTYPE_p_wxLocale swig_types[68]
+#define SWIGTYPE_p_wxMask swig_types[69]
+#define SWIGTYPE_p_wxMaximizeEvent swig_types[70]
+#define SWIGTYPE_p_wxMemoryDC swig_types[71]
+#define SWIGTYPE_p_wxMenu swig_types[72]
+#define SWIGTYPE_p_wxMenuBar swig_types[73]
+#define SWIGTYPE_p_wxMenuEvent swig_types[74]
+#define SWIGTYPE_p_wxMenuItem swig_types[75]
+#define SWIGTYPE_p_wxMetaFile swig_types[76]
+#define SWIGTYPE_p_wxMetaFileDC swig_types[77]
+#define SWIGTYPE_p_wxMirrorDC swig_types[78]
+#define SWIGTYPE_p_wxMouseCaptureChangedEvent swig_types[79]
+#define SWIGTYPE_p_wxMouseEvent swig_types[80]
+#define SWIGTYPE_p_wxMoveEvent swig_types[81]
+#define SWIGTYPE_p_wxNativeEncodingInfo swig_types[82]
+#define SWIGTYPE_p_wxNativeFontInfo swig_types[83]
+#define SWIGTYPE_p_wxNavigationKeyEvent swig_types[84]
+#define SWIGTYPE_p_wxNcPaintEvent swig_types[85]
+#define SWIGTYPE_p_wxNotifyEvent swig_types[86]
+#define SWIGTYPE_p_wxObject swig_types[87]
+#define SWIGTYPE_p_wxPCXHandler swig_types[88]
+#define SWIGTYPE_p_wxPNGHandler swig_types[89]
+#define SWIGTYPE_p_wxPNMHandler swig_types[90]
+#define SWIGTYPE_p_wxPaintDC swig_types[91]
+#define SWIGTYPE_p_wxPaintEvent swig_types[92]
+#define SWIGTYPE_p_wxPalette swig_types[93]
+#define SWIGTYPE_p_wxPaletteChangedEvent swig_types[94]
+#define SWIGTYPE_p_wxPaperSize swig_types[95]
+#define SWIGTYPE_p_wxPen swig_types[96]
+#define SWIGTYPE_p_wxPenList swig_types[97]
+#define SWIGTYPE_p_wxPoint swig_types[98]
+#define SWIGTYPE_p_wxPostScriptDC swig_types[99]
+#define SWIGTYPE_p_wxPrintData swig_types[100]
+#define SWIGTYPE_p_wxPrinterDC swig_types[101]
+#define SWIGTYPE_p_wxPyApp swig_types[102]
+#define SWIGTYPE_p_wxPyCommandEvent swig_types[103]
+#define SWIGTYPE_p_wxPyEvent swig_types[104]
+#define SWIGTYPE_p_wxPyFontEnumerator swig_types[105]
+#define SWIGTYPE_p_wxPyImageHandler swig_types[106]
+#define SWIGTYPE_p_wxPySizer swig_types[107]
+#define SWIGTYPE_p_wxPyValidator swig_types[108]
+#define SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[109]
+#define SWIGTYPE_p_wxRect swig_types[110]
+#define SWIGTYPE_p_wxRegion swig_types[111]
+#define SWIGTYPE_p_wxRegionIterator swig_types[112]
+#define SWIGTYPE_p_wxRendererNative swig_types[113]
+#define SWIGTYPE_p_wxRendererVersion swig_types[114]
+#define SWIGTYPE_p_wxScreenDC swig_types[115]
+#define SWIGTYPE_p_wxScrollEvent swig_types[116]
+#define SWIGTYPE_p_wxScrollWinEvent swig_types[117]
+#define SWIGTYPE_p_wxSetCursorEvent swig_types[118]
+#define SWIGTYPE_p_wxShowEvent swig_types[119]
+#define SWIGTYPE_p_wxSize swig_types[120]
+#define SWIGTYPE_p_wxSizeEvent swig_types[121]
+#define SWIGTYPE_p_wxSizer swig_types[122]
+#define SWIGTYPE_p_wxSizerItem swig_types[123]
+#define SWIGTYPE_p_wxSplitterRenderParams swig_types[124]
+#define SWIGTYPE_p_wxStaticBoxSizer swig_types[125]
+#define SWIGTYPE_p_wxStdDialogButtonSizer swig_types[126]
+#define SWIGTYPE_p_wxString swig_types[127]
+#define SWIGTYPE_p_wxSysColourChangedEvent swig_types[128]
+#define SWIGTYPE_p_wxTIFFHandler swig_types[129]
+#define SWIGTYPE_p_wxUpdateUIEvent swig_types[130]
+#define SWIGTYPE_p_wxValidator swig_types[131]
+#define SWIGTYPE_p_wxWindow swig_types[132]
+#define SWIGTYPE_p_wxWindowCreateEvent swig_types[133]
+#define SWIGTYPE_p_wxWindowDC swig_types[134]
+#define SWIGTYPE_p_wxWindowDestroyEvent swig_types[135]
+#define SWIGTYPE_p_wxXPMHandler swig_types[136]
+#define SWIGTYPE_ptrdiff_t swig_types[137]
+#define SWIGTYPE_std__ptrdiff_t swig_types[138]
+#define SWIGTYPE_unsigned_int swig_types[139]
+static swig_type_info *swig_types[141];
+static swig_module_info swig_module = {swig_types, 140, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -1944,6 +1945,9 @@ static void wxPen__SetDashes(wxPen *self,PyObject *_self,PyObject *pyDashes){
 static bool wxPen___eq__(wxPen *self,wxPen const *other){ return other ? (*self == *other) : false; }
 static bool wxPen___ne__(wxPen *self,wxPen const *other){ return other ? (*self != *other) : true;  }
 
+#include <wx/rawbmp.h>
+
+
 #include <wx/image.h>
     
     static char** ConvertListOfStrings(PyObject* listOfStrings) {
@@ -2018,6 +2022,126 @@ static void wxBitmap_SetSize(wxBitmap *self,wxSize const &size){
         }
 static bool wxBitmap___eq__(wxBitmap *self,wxBitmap const *other){ return other ? (*self == *other) : false; }
 static bool wxBitmap___ne__(wxBitmap *self,wxBitmap const *other){ return other ? (*self != *other) : true;  }
+
+// See http://tinyurl.com/e5adr for what premultiplying alpha means.  It
+// appears to me that the other platforms are already doing it, so I'll just
+// automatically do it for wxMSW here.
+#ifdef __WXMSW__
+#define wxPy_premultiply(p, a)   ((p) * (a) / 256)
+#define wxPy_unpremultiply(p, a) ((a) ? ((p) * 256 / (a)) : (p))    
+#else
+#define wxPy_premultiply(p, a)   (p)
+#define wxPy_unpremultiply(p, a) (p)    
+#endif
+
+
+    wxBitmap* _BitmapFromBufferAlpha(int width, int height,
+                                    buffer data, int DATASIZE,
+                                    buffer alpha, int ALPHASIZE)
+    {
+        if (DATASIZE != width*height*3) {
+            wxPyErr_SetString(PyExc_ValueError, "Invalid data buffer size.");
+            return NULL;
+        }
+
+        if (ALPHASIZE != width*height) {
+            wxPyErr_SetString(PyExc_ValueError, "Invalid alpha buffer size.");
+            return NULL;
+        }
+
+        wxBitmap* bmp = new wxBitmap(width, height, 32);
+        wxAlphaPixelData pixData(*bmp, wxPoint(0,0), wxSize(width,height));
+        if (! pixData) {
+            // raise an exception...
+            wxPyErr_SetString(PyExc_RuntimeError,
+                              "Failed to gain raw access to bitmap data.");
+            return NULL;
+        }
+                
+        pixData.UseAlpha();
+        wxAlphaPixelData::Iterator p(pixData);
+        for (int y=0; y<height; y++) {
+            wxAlphaPixelData::Iterator rowStart = p;
+            for (int x=0; x<width; x++) {
+                byte a = *(alpha++);
+                p.Red()   = wxPy_premultiply(*(data++), a);
+                p.Green() = wxPy_premultiply(*(data++), a);
+                p.Blue()  = wxPy_premultiply(*(data++), a);
+                p.Alpha() = a;
+                ++p; 
+            }
+            p = rowStart;
+            p.OffsetY(pixData, 1);
+        }
+        return bmp;
+    }        
+        
+    wxBitmap* _BitmapFromBuffer(int width, int height, buffer data, int DATASIZE)
+    {
+        if (DATASIZE != width*height*3) {
+            wxPyErr_SetString(PyExc_ValueError, "Invalid data buffer size.");
+            return NULL;
+        }
+
+        wxBitmap* bmp = new wxBitmap(width, height, 24);
+        wxNativePixelData pixData(*bmp, wxPoint(0,0), wxSize(width,height));
+        if (! pixData) {
+            // raise an exception...
+            wxPyErr_SetString(PyExc_RuntimeError,
+                              "Failed to gain raw access to bitmap data.");
+            return NULL;
+        }
+                
+        wxNativePixelData::Iterator p(pixData);
+        for (int y=0; y<height; y++) {
+            wxNativePixelData::Iterator rowStart = p;
+            for (int x=0; x<width; x++) {
+                p.Red()   = *(data++);
+                p.Green() = *(data++);
+                p.Blue()  = *(data++);
+                ++p; 
+            }
+            p = rowStart;
+            p.OffsetY(pixData, 1);
+        }
+        return bmp;
+    }
+
+
+    wxBitmap* _BitmapFromBufferRGBA(int width, int height, buffer data, int DATASIZE)
+    {
+        if (DATASIZE != width*height*4) {
+            wxPyErr_SetString(PyExc_ValueError, "Invalid data buffer size.");
+            return NULL;
+        }
+
+        wxBitmap* bmp = new wxBitmap(width, height, 32);
+        wxAlphaPixelData pixData(*bmp, wxPoint(0,0), wxSize(width,height));
+        if (! pixData) {
+            // raise an exception...
+            wxPyErr_SetString(PyExc_RuntimeError,
+                              "Failed to gain raw access to bitmap data.");
+            return NULL;
+        }
+               
+        pixData.UseAlpha();
+        wxAlphaPixelData::Iterator p(pixData);
+        for (int y=0; y<height; y++) {
+            wxAlphaPixelData::Iterator rowStart = p;
+            for (int x=0; x<width; x++) {
+                byte a = data[3];
+                p.Red()   = wxPy_premultiply(*(data++), a);
+                p.Green() = wxPy_premultiply(*(data++), a);
+                p.Blue()  = wxPy_premultiply(*(data++), a);
+                p.Alpha() = a; data++;
+                ++p; 
+            }
+            p = rowStart;
+            p.OffsetY(pixData, 1);
+        }
+        return bmp;
+    }        
+
 static wxMask *new_wxMask(wxBitmap const &bitmap,wxColour const &colour=wxNullColour){
             if ( !colour.Ok() )
                 return new wxMask(bitmap, *wxBLACK);
@@ -5316,6 +5440,134 @@ static PyObject * Bitmap_swigregister(PyObject *, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static PyObject *_wrap__BitmapFromBufferAlpha(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    int arg1 ;
+    int arg2 ;
+    buffer arg3 ;
+    int arg4 ;
+    buffer arg5 ;
+    int arg6 ;
+    wxBitmap *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    char *kwnames[] = {
+        (char *) "width",(char *) "height",(char *) "data",(char *) "alpha", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOOO:_BitmapFromBufferAlpha",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    {
+        arg1 = static_cast<int >(SWIG_As_int(obj0)); 
+        if (SWIG_arg_fail(1)) SWIG_fail;
+    }
+    {
+        arg2 = static_cast<int >(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &arg4) == -1) SWIG_fail;
+    }
+    {
+        if (obj3 != Py_None) {
+            if (PyObject_AsReadBuffer(obj3, (const void**)(&arg5), &arg6) == -1) SWIG_fail;
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxBitmap *)_BitmapFromBufferAlpha(arg1,arg2,arg3,arg4,arg5,arg6);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBitmap, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap__BitmapFromBuffer(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    int arg1 ;
+    int arg2 ;
+    buffer arg3 ;
+    int arg4 ;
+    wxBitmap *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "width",(char *) "height",(char *) "data", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:_BitmapFromBuffer",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    {
+        arg1 = static_cast<int >(SWIG_As_int(obj0)); 
+        if (SWIG_arg_fail(1)) SWIG_fail;
+    }
+    {
+        arg2 = static_cast<int >(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &arg4) == -1) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxBitmap *)_BitmapFromBuffer(arg1,arg2,arg3,arg4);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBitmap, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
+static PyObject *_wrap__BitmapFromBufferRGBA(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    int arg1 ;
+    int arg2 ;
+    buffer arg3 ;
+    int arg4 ;
+    wxBitmap *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    char *kwnames[] = {
+        (char *) "width",(char *) "height",(char *) "data", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:_BitmapFromBufferRGBA",kwnames,&obj0,&obj1,&obj2)) goto fail;
+    {
+        arg1 = static_cast<int >(SWIG_As_int(obj0)); 
+        if (SWIG_arg_fail(1)) SWIG_fail;
+    }
+    {
+        arg2 = static_cast<int >(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &arg4) == -1) SWIG_fail;
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxBitmap *)_BitmapFromBufferRGBA(arg1,arg2,arg3,arg4);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    resultobj = SWIG_NewPointerObj((void*)(result), SWIGTYPE_p_wxBitmap, 1);
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static PyObject *_wrap_new_Mask(PyObject *, PyObject *args, PyObject *kwargs) {
     PyObject *resultobj = NULL;
     wxBitmap *arg1 = 0 ;
@@ -22745,6 +22997,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Bitmap___eq__", (PyCFunction) _wrap_Bitmap___eq__, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Bitmap___ne__", (PyCFunction) _wrap_Bitmap___ne__, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Bitmap_swigregister", Bitmap_swigregister, METH_VARARGS, NULL},
+	 { (char *)"_BitmapFromBufferAlpha", (PyCFunction) _wrap__BitmapFromBufferAlpha, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"_BitmapFromBuffer", (PyCFunction) _wrap__BitmapFromBuffer, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"_BitmapFromBufferRGBA", (PyCFunction) _wrap__BitmapFromBufferRGBA, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_Mask", (PyCFunction) _wrap_new_Mask, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Mask_swigregister", Mask_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_Icon", (PyCFunction) _wrap_new_Icon, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -23637,6 +23892,7 @@ static void *_p_wxControlWithItemsTo_p_wxWindow(void *x) {
 static void *_p_wxMenuBarTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *)  ((wxMenuBar *) x));
 }
+static swig_type_info _swigt__p_buffer = {"_p_buffer", "buffer *", 0, 0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, 0};
 static swig_type_info _swigt__p_double = {"_p_double", "double *", 0, 0, 0};
 static swig_type_info _swigt__p_form_ops_t = {"_p_form_ops_t", "enum form_ops_t *|form_ops_t *", 0, 0, 0};
@@ -23778,6 +24034,7 @@ static swig_type_info _swigt__std__ptrdiff_t = {"_std__ptrdiff_t", "std::ptrdiff
 static swig_type_info _swigt__unsigned_int = {"_unsigned_int", "unsigned int|std::size_t", 0, 0, 0};
 
 static swig_type_info *swig_type_initial[] = {
+  &_swigt__p_buffer,
   &_swigt__p_char,
   &_swigt__p_double,
   &_swigt__p_form_ops_t,
@@ -23919,6 +24176,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__unsigned_int,
 };
 
+static swig_cast_info _swigc__p_buffer[] = {  {&_swigt__p_buffer, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_form_ops_t[] = {  {&_swigt__p_form_ops_t, 0, 0, 0},{0, 0, 0, 0}};
@@ -24060,6 +24318,7 @@ static swig_cast_info _swigc__std__ptrdiff_t[] = {  {&_swigt__std__ptrdiff_t, 0,
 static swig_cast_info _swigc__unsigned_int[] = {  {&_swigt__unsigned_int, 0, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
+  _swigc__p_buffer,
   _swigc__p_char,
   _swigc__p_double,
   _swigc__p_form_ops_t,

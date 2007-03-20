@@ -2832,11 +2832,23 @@ class Image(Object):
         return _core_.Image_SetAlphaData(*args, **kwargs)
 
     def GetAlphaBuffer(*args, **kwargs):
-        """GetAlphaBuffer(self) -> PyObject"""
+        """
+        GetAlphaBuffer(self) -> PyObject
+
+        Returns a writable Python buffer object that is pointing at the Alpha
+        data buffer inside the wx.Image. You need to ensure that you do not
+        use this buffer object after the image has been destroyed.
+        """
         return _core_.Image_GetAlphaBuffer(*args, **kwargs)
 
     def SetAlphaBuffer(*args, **kwargs):
-        """SetAlphaBuffer(self, buffer alpha)"""
+        """
+        SetAlphaBuffer(self, buffer alpha)
+
+        Sets the internal image alpha pointer to point at a Python buffer
+        object.  This can save making an extra copy of the data but you must
+        ensure that the buffer object lives as long as the wx.Image does.
+        """
         return _core_.Image_SetAlphaBuffer(*args, **kwargs)
 
     def SetMaskColour(*args, **kwargs):
@@ -3223,6 +3235,40 @@ def Image_HSVtoRGB(*args, **kwargs):
     Converts a color in HSV color space to RGB color space.
     """
     return _core_.Image_HSVtoRGB(*args, **kwargs)
+
+
+def _ImageFromBuffer(*args, **kwargs):
+    """_ImageFromBuffer(int width, int height, buffer data, buffer alpha=None) -> Image"""
+    return _core_._ImageFromBuffer(*args, **kwargs)
+def ImageFromBuffer(width, height, dataBuffer, alphaBuffer=None):
+    """
+    Creates a `wx.Image` from the data in dataBuffer.  The dataBuffer
+    parameter must be a Python object that implements the buffer interface,
+    such as a string, array, etc.  The dataBuffer object is expected to
+    contain a series of RGB bytes and be width*height*3 bytes long.  A buffer
+    object can optionally be supplied for the image's alpha channel data, and
+    it is expected to be width*height bytes long.
+
+    The wx.Image will be created with its data and alpha pointers initialized
+    to the memory address pointed to by the buffer objects, thus saving the
+    time needed to copy the image data from the buffer object to the wx.Image.
+    While this has advantages, it also has the shoot-yourself-in-the-foot
+    risks associated with sharing a C pointer between two objects.
+
+    To help alleviate the risk a reference to the data and alpha buffer
+    objects are kept with the wx.Image, so that they won't get deleted until
+    after the wx.Image is deleted.  However please be aware that it is not
+    guaranteed that an object won't move its memory buffer to a new location
+    when it needs to resize its contents.  If that happens then the wx.Image
+    will end up referring to an invalid memory location and could cause the
+    application to crash.  Therefore care should be taken to not manipulate
+    the objects used for the data and alpha buffers in a way that would cause
+    them to change size.
+    """
+    image = _core_._ImageFromBuffer(width, height, dataBuffer, alphaBuffer)
+    image._buffer = dataBuffer
+    image._alpha = alphaBuffer
+    return image
 
 def InitAllImageHandlers():
     """
@@ -3678,6 +3724,15 @@ class PyEventBinder(object):
         return success != 0
 
     
+    def _getEvtType(self):
+        """
+        Make it easy to get to the default wxEventType typeID for this
+        event binder.
+        """
+        return self.evtType[0]
+    
+    typeId = property(_getEvtType)
+
     def __call__(self, *args):
         """
         For backwards compatibility with the old EVT_* functions.
@@ -13669,6 +13724,14 @@ class __DocFilter:
             return False
         if name.startswith('_') or name.endswith('Ptr') or name.startswith('EVT'):
             return False
+
+        # skip functions that are duplicates of static functions in a class
+        if name.find('_') != -1:
+            cls = self._globals.get(name.split('_')[0], None)
+            methname = name.split('_')[1]
+            if hasattr(cls, methname) and type(getattr(cls, methname)) is types.FunctionType:
+                return False
+
         return True
 
 #----------------------------------------------------------------------------

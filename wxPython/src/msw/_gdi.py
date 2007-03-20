@@ -754,7 +754,7 @@ def EmptyBitmap(*args, **kwargs):
 
     Creates a new bitmap of the given size.  A depth of -1 indicates the
     depth of the current screen or visual. Some platforms only support 1
-    for monochrome and -1 for the current colour setting.
+    for monochrome and -1 for the current display depth.
     """
     val = _gdi_.new_EmptyBitmap(*args, **kwargs)
     val.thisown = 1
@@ -806,6 +806,64 @@ def BitmapFromBits(*args, **kwargs):
     val = _gdi_.new_BitmapFromBits(*args, **kwargs)
     val.thisown = 1
     return val
+
+
+def _BitmapFromBufferAlpha(*args, **kwargs):
+    """_BitmapFromBufferAlpha(int width, int height, buffer data, buffer alpha) -> Bitmap"""
+    return _gdi_._BitmapFromBufferAlpha(*args, **kwargs)
+
+def _BitmapFromBuffer(*args, **kwargs):
+    """_BitmapFromBuffer(int width, int height, buffer data) -> Bitmap"""
+    return _gdi_._BitmapFromBuffer(*args, **kwargs)
+def BitmapFromBuffer(width, height, dataBuffer, alphaBuffer=None):
+    """
+    Creates a `wx.Bitmap` from the data in dataBuffer.  The dataBuffer
+    parameter must be a Python object that implements the buffer interface,
+    such as a string, array, etc.  The dataBuffer object is expected to
+    contain a series of RGB bytes and be width*height*3 bytes long.  A buffer
+    object can optionally be supplied for the image's alpha channel data, and
+    it is expected to be width*height bytes long.  On Windows the RGB values
+    are 'premultiplied' by the alpha values.  (The other platforms do the
+    multiplication themselves.)
+
+    Unlike `wx.ImageFromBuffer` the bitmap created with this function does not
+    share the memory buffer with the buffer object.  This is because the
+    native pixel buffer format varies on different platforms, and so instead
+    an efficient as possible copy of the data is made from the buffer objects
+    to the bitmap's native pixel buffer.  
+
+    :see: `wx.Bitmap`, `wx.BitmapFromBufferRGBA`, `wx.ImageFromBuffer`
+    """
+    if alphaBuffer is not None:
+        return _gdi_._BitmapFromBufferAlpha(width, height, dataBuffer, alphaBuffer)
+    else:
+        return _gdi_._BitmapFromBuffer(width, height, dataBuffer)
+
+
+def _BitmapFromBufferRGBA(*args, **kwargs):
+    """_BitmapFromBufferRGBA(int width, int height, buffer data) -> Bitmap"""
+    return _gdi_._BitmapFromBufferRGBA(*args, **kwargs)
+def BitmapFromBufferRGBA(width, height, dataBuffer):
+    """
+    Creates a `wx.Bitmap` from the data in dataBuffer.  The dataBuffer
+    parameter must be a Python object that implements the buffer interface,
+    such as a string, array, etc.  The dataBuffer object is expected to
+    contain a series of RGBA bytes (red, green, blue and alpha) and be
+    width*height*4 bytes long.  On Windows the RGB values are 'premultiplied'
+    by the alpha values.  (The other platforms do the multiplication
+    themselves.)
+
+    Unlike `wx.ImageFromBuffer` the bitmap created with this function does not
+    share the memory buffer with the buffer object.  This is because the
+    native pixel buffer format varies on different platforms, and so instead
+    an efficient as possible copy of the data is made from the buffer object
+    to the bitmap's native pixel buffer. 
+
+    :see: `wx.Bitmap`, `wx.BitmapFromBuffer`, `wx.ImageFromBuffer`
+    """
+    if not isinstance(dataBuffer, buffer):
+        dataBuffer = buffer(dataBuffer)
+    return _gdi_._BitmapFromBufferRGBA(width, height, dataBuffer)
 
 class Mask(_core.Object):
     """
