@@ -318,8 +318,8 @@ int regexec _ANSI_ARGS_((regex_t *, __REG_CONST char *, size_t, regmatch_t [], i
 #ifdef __REG_WIDE_T
 int __REG_WIDE_EXEC _ANSI_ARGS_((regex_t *, __REG_CONST __REG_WIDE_T *, size_t, rm_detail_t *, size_t, regmatch_t [], int));
 #endif
-re_void regfree _ANSI_ARGS_((regex_t *));
-extern size_t regerror _ANSI_ARGS_((int, __REG_CONST regex_t *, char *, size_t));
+re_void wx_regfree _ANSI_ARGS_((regex_t *));
+extern size_t wx_regerror _ANSI_ARGS_((int, __REG_CONST regex_t *, char *, size_t));
 /* automatically gathered by fwd; do not hand-edit */
 /* =====^!^===== end forwards =====^!^===== */
 

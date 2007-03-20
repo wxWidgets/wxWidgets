@@ -18,8 +18,8 @@ CallTip::CallTip() {
 	inCallTipMode = false;
 	posStartCallTip = 0;
 	val = 0;
-	xUp = -100;
-	xDown = -100;
+	rectUp = PRectangle(0,0,0,0);
+	rectDown = PRectangle(0,0,0,0);
 	lineHeight = 1;
 	startHighlight = 0;
 	endHighlight = 0;
@@ -75,12 +75,12 @@ void CallTip::DrawChunk(Surface *surface, int &x, const char *s,
 			if (IsArrowCharacter(s[startSeg])) {
 				xEnd = x + widthArrow;
 				offsetMain = xEnd;
+				rcClient.left = x;
+				rcClient.right = xEnd;
 				if (draw) {
 					const int halfWidth = widthArrow / 2 - 3;
 					const int centreX = x + widthArrow / 2 - 1;
 					const int centreY = (rcClient.top + rcClient.bottom) / 2;
-					rcClient.left = x;
-					rcClient.right = xEnd;
 					surface->FillRectangle(rcClient, colourBG.allocated);
 					PRectangle rcClientInner(rcClient.left+1, rcClient.top+1, rcClient.right-2, rcClient.bottom-1);
 					surface->FillRectangle(rcClientInner, colourUnSel.allocated);
@@ -104,12 +104,11 @@ void CallTip::DrawChunk(Surface *surface, int &x, const char *s,
 						surface->Polygon(pts, sizeof(pts) / sizeof(pts[0]),
                  						colourBG.allocated, colourBG.allocated);
 					}
-				} else {
-					if (s[startSeg] == '\001') {
-						xUp = x+1;
-					} else {
-						xDown = x+1;
-					}
+				}
+				if (s[startSeg] == '\001') {
+					rectUp = rcClient;
+				} else if (s[startSeg] == '\002') {
+					rectDown = rcClient;
 				}
 			} else {
 				xEnd = x + surface->WidthText(font, s+startSeg, endSeg - startSeg);
@@ -203,13 +202,10 @@ void CallTip::PaintCT(Surface *surfaceWindow) {
 
 void CallTip::MouseClick(Point pt) {
 	clickPlace = 0;
-	if (pt.y < lineHeight) {
-		if ((pt.x > xUp) && (pt.x < xUp + widthArrow - 2)) {
-			clickPlace = 1;
-		} else if ((pt.x > xDown) && (pt.x < xDown + widthArrow - 2)) {
-			clickPlace = 2;
-		}
-	}
+	if (rectUp.Contains(pt))
+		clickPlace = 1;
+	if (rectDown.Contains(pt))
+		clickPlace = 2;
 }
 
 PRectangle CallTip::CallTipStart(int pos, Point pt, const char *defn,
@@ -240,8 +236,8 @@ PRectangle CallTip::CallTipStart(int pos, Point pt, const char *defn,
 	int numLines = 1;
 	const char *newline;
 	const char *look = val;
-	xUp = -100;
-	xDown = -100;
+	rectUp = PRectangle(0,0,0,0);
+	rectDown = PRectangle(0,0,0,0);
 	offsetMain = 5;
 	int width = PaintContents(surfaceMeasure, false) + 5;
 	while ((newline = strchr(look, '\n')) != NULL) {

@@ -22,7 +22,6 @@ if os.access(basePath, os.W_OK):
     args = ['',
         '--cache='+basePath,
         os.path.join(basePath, 'wx.zip'),
-        os.path.join(basePath, 'ogl.zip'),
         ]
 
     # add any other .zip files found

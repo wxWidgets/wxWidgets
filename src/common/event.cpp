@@ -369,7 +369,7 @@ wxEvent::wxEvent(int theId, wxEventType commandType )
 }
 
 wxEvent::wxEvent(const wxEvent &src)
-    : wxObject()
+    : wxObject(src)
     , m_eventObject(src.m_eventObject)
     , m_eventType(src.m_eventType)
     , m_timeStamp(src.m_timeStamp)
@@ -1085,7 +1085,7 @@ void wxEvtHandler::ClearEventLocker()
     delete m_eventsLocker;
     m_eventsLocker = NULL;
 #endif
-};
+}
 
 #endif // wxUSE_THREADS
 
@@ -1154,7 +1154,7 @@ void wxEvtHandler::ProcessPendingEvents()
 
         wxENTER_CRIT_SECT( Lock() );
 
-        if ( !--n )
+        if ( --n == 0 )
             break;
     }
 
@@ -1378,7 +1378,7 @@ bool wxEvtHandler::SearchDynamicEventTable( wxEvent& event )
     }
 
     return false;
-};
+}
 
 void wxEvtHandler::DoSetClientObject( wxClientData *data )
 {

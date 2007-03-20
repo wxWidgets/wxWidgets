@@ -21,8 +21,8 @@
 #define __stc_h__
 
 
-#include <wx/wx.h>
-#include <wx/dnd.h>
+#include "wx/wx.h"
+#include "wx/dnd.h"
 
 
 #ifdef WXMAKINGDLL_STC
@@ -106,6 +106,7 @@
 #define wxSTC_MARK_DOTDOTDOT 23
 #define wxSTC_MARK_ARROWS 24
 #define wxSTC_MARK_PIXMAP 25
+#define wxSTC_MARK_FULLRECT 26
 #define wxSTC_MARK_CHARACTER 10000
 
 // Markers used for outlining column.
@@ -144,6 +145,7 @@
 #define wxSTC_CHARSET_MAC 77
 #define wxSTC_CHARSET_OEM 255
 #define wxSTC_CHARSET_RUSSIAN 204
+#define wxSTC_CHARSET_CYRILLIC 1251
 #define wxSTC_CHARSET_SHIFTJIS 128
 #define wxSTC_CHARSET_SYMBOL 2
 #define wxSTC_CHARSET_TURKISH 162
@@ -152,6 +154,7 @@
 #define wxSTC_CHARSET_ARABIC 178
 #define wxSTC_CHARSET_VIETNAMESE 163
 #define wxSTC_CHARSET_THAI 222
+#define wxSTC_CHARSET_8859_15 1000
 #define wxSTC_CASE_MIXED 0
 #define wxSTC_CASE_UPPER 1
 #define wxSTC_CASE_LOWER 2
@@ -204,6 +207,7 @@
 #define wxSTC_TIME_FOREVER 10000000
 #define wxSTC_WRAP_NONE 0
 #define wxSTC_WRAP_WORD 1
+#define wxSTC_WRAP_CHAR 2
 #define wxSTC_WRAPVISUALFLAG_NONE 0x0000
 #define wxSTC_WRAPVISUALFLAG_END 0x0001
 #define wxSTC_WRAPVISUALFLAG_START 0x0002
@@ -269,11 +273,13 @@
 #define wxSTC_PERFORMED_USER 0x10
 #define wxSTC_PERFORMED_UNDO 0x20
 #define wxSTC_PERFORMED_REDO 0x40
+#define wxSTC_MULTISTEPUNDOREDO 0x80
 #define wxSTC_LASTSTEPINUNDOREDO 0x100
 #define wxSTC_MOD_CHANGEMARKER 0x200
 #define wxSTC_MOD_BEFOREINSERT 0x400
 #define wxSTC_MOD_BEFOREDELETE 0x800
-#define wxSTC_MODEVENTMASKALL 0xF77
+#define wxSTC_MULTILINEUNDOREDO 0x1000
+#define wxSTC_MODEVENTMASKALL 0x1FFF
 
 // Symbolic key codes and modifier flags.
 // ASCII and other printable characters below 256.
@@ -295,6 +301,7 @@
 #define wxSTC_KEY_ADD 310
 #define wxSTC_KEY_SUBTRACT 311
 #define wxSTC_KEY_DIVIDE 312
+#define wxSTC_SCMOD_NORM 0
 #define wxSTC_SCMOD_SHIFT 1
 #define wxSTC_SCMOD_CTRL 2
 #define wxSTC_SCMOD_ALT 4
@@ -329,8 +336,6 @@
 #define wxSTC_LEX_NNCRONTAB 26
 #define wxSTC_LEX_BULLANT 27
 #define wxSTC_LEX_VBSCRIPT 28
-#define wxSTC_LEX_ASP 29
-#define wxSTC_LEX_PHP 30
 #define wxSTC_LEX_BAAN 31
 #define wxSTC_LEX_MATLAB 32
 #define wxSTC_LEX_SCRIPTOL 33
@@ -365,6 +370,21 @@
 #define wxSTC_LEX_BASH 62
 #define wxSTC_LEX_ASN1 63
 #define wxSTC_LEX_VHDL 64
+#define wxSTC_LEX_CAML 65
+#define wxSTC_LEX_BLITZBASIC 66
+#define wxSTC_LEX_PUREBASIC 67
+#define wxSTC_LEX_HASKELL 68
+#define wxSTC_LEX_PHPSCRIPT 69
+#define wxSTC_LEX_TADS3 70
+#define wxSTC_LEX_REBOL 71
+#define wxSTC_LEX_SMALLTALK 72
+#define wxSTC_LEX_FLAGSHIP 73
+#define wxSTC_LEX_CSOUND 74
+#define wxSTC_LEX_FREEBASIC 75
+
+// These are deprecated, STC_LEX_HTML should be used instead.
+#define wxSTC_LEX_ASP 29
+#define wxSTC_LEX_PHP 30
 
 // When a lexer specifies its language as SCLEX_AUTOMATIC it receives a
 // value assigned in sequence from SCLEX_AUTOMATIC+1.
@@ -385,6 +405,8 @@
 #define wxSTC_P_IDENTIFIER 11
 #define wxSTC_P_COMMENTBLOCK 12
 #define wxSTC_P_STRINGEOL 13
+#define wxSTC_P_WORD2 14
+#define wxSTC_P_DECORATOR 15
 
 // Lexical states for SCLEX_CPP
 #define wxSTC_C_DEFAULT 0
@@ -562,6 +584,7 @@
 #define wxSTC_PL_ARRAY 13
 #define wxSTC_PL_HASH 14
 #define wxSTC_PL_SYMBOLTABLE 15
+#define wxSTC_PL_VARIABLE_INDEXER 16
 #define wxSTC_PL_REGEX 17
 #define wxSTC_PL_REGSUBST 18
 #define wxSTC_PL_LONGQUOTE 19
@@ -576,6 +599,43 @@
 #define wxSTC_PL_STRING_QX 28
 #define wxSTC_PL_STRING_QR 29
 #define wxSTC_PL_STRING_QW 30
+#define wxSTC_PL_POD_VERB 31
+
+// Lexical states for SCLEX_RUBY
+#define wxSTC_RB_DEFAULT 0
+#define wxSTC_RB_ERROR 1
+#define wxSTC_RB_COMMENTLINE 2
+#define wxSTC_RB_POD 3
+#define wxSTC_RB_NUMBER 4
+#define wxSTC_RB_WORD 5
+#define wxSTC_RB_STRING 6
+#define wxSTC_RB_CHARACTER 7
+#define wxSTC_RB_CLASSNAME 8
+#define wxSTC_RB_DEFNAME 9
+#define wxSTC_RB_OPERATOR 10
+#define wxSTC_RB_IDENTIFIER 11
+#define wxSTC_RB_REGEX 12
+#define wxSTC_RB_GLOBAL 13
+#define wxSTC_RB_SYMBOL 14
+#define wxSTC_RB_MODULE_NAME 15
+#define wxSTC_RB_INSTANCE_VAR 16
+#define wxSTC_RB_CLASS_VAR 17
+#define wxSTC_RB_BACKTICKS 18
+#define wxSTC_RB_DATASECTION 19
+#define wxSTC_RB_HERE_DELIM 20
+#define wxSTC_RB_HERE_Q 21
+#define wxSTC_RB_HERE_QQ 22
+#define wxSTC_RB_HERE_QX 23
+#define wxSTC_RB_STRING_Q 24
+#define wxSTC_RB_STRING_QQ 25
+#define wxSTC_RB_STRING_QX 26
+#define wxSTC_RB_STRING_QR 27
+#define wxSTC_RB_STRING_QW 28
+#define wxSTC_RB_WORD_DEMOTED 29
+#define wxSTC_RB_STDIN 30
+#define wxSTC_RB_STDOUT 31
+#define wxSTC_RB_STDERR 40
+#define wxSTC_RB_UPPER_BOUND 41
 
 // Lexical states for SCLEX_VB, SCLEX_VBSCRIPT, SCLEX_POWERBASIC
 #define wxSTC_B_DEFAULT 0
@@ -593,6 +653,10 @@
 #define wxSTC_B_KEYWORD4 12
 #define wxSTC_B_CONSTANT 13
 #define wxSTC_B_ASM 14
+#define wxSTC_B_LABEL 15
+#define wxSTC_B_ERROR 16
+#define wxSTC_B_HEXNUMBER 17
+#define wxSTC_B_BINNUMBER 18
 
 // Lexical states for SCLEX_PROPERTIES
 #define wxSTC_PROPS_DEFAULT 0
@@ -742,10 +806,14 @@
 #define wxSTC_LISP_COMMENT 1
 #define wxSTC_LISP_NUMBER 2
 #define wxSTC_LISP_KEYWORD 3
+#define wxSTC_LISP_KEYWORD_KW 4
+#define wxSTC_LISP_SYMBOL 5
 #define wxSTC_LISP_STRING 6
 #define wxSTC_LISP_STRINGEOL 8
 #define wxSTC_LISP_IDENTIFIER 9
 #define wxSTC_LISP_OPERATOR 10
+#define wxSTC_LISP_SPECIAL 11
+#define wxSTC_LISP_MULTI_COMMENT 12
 
 // Lexical states for SCLEX_EIFFEL and SCLEX_EIFFELKW
 #define wxSTC_EIFFEL_DEFAULT 0
@@ -867,6 +935,7 @@
 #define wxSTC_CSS_DOUBLESTRING 13
 #define wxSTC_CSS_SINGLESTRING 14
 #define wxSTC_CSS_IDENTIFIER2 15
+#define wxSTC_CSS_ATTRIBUTE 16
 
 // Lexical states for SCLEX_POV
 #define wxSTC_POV_DEFAULT 0
@@ -948,6 +1017,10 @@
 #define wxSTC_NSIS_MACRODEF 12
 #define wxSTC_NSIS_STRINGVAR 13
 #define wxSTC_NSIS_NUMBER 14
+#define wxSTC_NSIS_SECTIONGROUP 15
+#define wxSTC_NSIS_PAGEEX 16
+#define wxSTC_NSIS_FUNCTIONDEF 17
+#define wxSTC_NSIS_COMMENTBOX 18
 
 // Lexical states for SCLEX_MMIXAL
 #define wxSTC_MMIXAL_LEADWS 0
@@ -980,11 +1053,13 @@
 #define wxSTC_CLW_PICTURE_STRING 7
 #define wxSTC_CLW_KEYWORD 8
 #define wxSTC_CLW_COMPILER_DIRECTIVE 9
-#define wxSTC_CLW_BUILTIN_PROCEDURES_FUNCTION 10
-#define wxSTC_CLW_STRUCTURE_DATA_TYPE 11
-#define wxSTC_CLW_ATTRIBUTE 12
-#define wxSTC_CLW_STANDARD_EQUATE 13
-#define wxSTC_CLW_ERROR 14
+#define wxSTC_CLW_RUNTIME_EXPRESSIONS 10
+#define wxSTC_CLW_BUILTIN_PROCEDURES_FUNCTION 11
+#define wxSTC_CLW_STRUCTURE_DATA_TYPE 12
+#define wxSTC_CLW_ATTRIBUTE 13
+#define wxSTC_CLW_STANDARD_EQUATE 14
+#define wxSTC_CLW_ERROR 15
+#define wxSTC_CLW_DEPRECATED 16
 
 // Lexical states for SCLEX_LOT
 #define wxSTC_LOT_DEFAULT 0
@@ -1131,6 +1206,8 @@
 #define wxSTC_AU3_SENT 10
 #define wxSTC_AU3_PREPROCESSOR 11
 #define wxSTC_AU3_SPECIAL 12
+#define wxSTC_AU3_EXPAND 13
+#define wxSTC_AU3_COMOBJ 14
 
 // Lexical states for SCLEX_APDL
 #define wxSTC_APDL_DEFAULT 0
@@ -1192,6 +1269,182 @@
 #define wxSTC_VHDL_STDPACKAGE 12
 #define wxSTC_VHDL_STDTYPE 13
 #define wxSTC_VHDL_USERWORD 14
+
+// Lexical states for SCLEX_CAML
+#define wxSTC_CAML_DEFAULT 0
+#define wxSTC_CAML_IDENTIFIER 1
+#define wxSTC_CAML_TAGNAME 2
+#define wxSTC_CAML_KEYWORD 3
+#define wxSTC_CAML_KEYWORD2 4
+#define wxSTC_CAML_KEYWORD3 5
+#define wxSTC_CAML_LINENUM 6
+#define wxSTC_CAML_OPERATOR 7
+#define wxSTC_CAML_NUMBER 8
+#define wxSTC_CAML_CHAR 9
+#define wxSTC_CAML_STRING 11
+#define wxSTC_CAML_COMMENT 12
+#define wxSTC_CAML_COMMENT1 13
+#define wxSTC_CAML_COMMENT2 14
+#define wxSTC_CAML_COMMENT3 15
+
+// Lexical states for SCLEX_HASKELL
+#define wxSTC_HA_DEFAULT 0
+#define wxSTC_HA_IDENTIFIER 1
+#define wxSTC_HA_KEYWORD 2
+#define wxSTC_HA_NUMBER 3
+#define wxSTC_HA_STRING 4
+#define wxSTC_HA_CHARACTER 5
+#define wxSTC_HA_CLASS 6
+#define wxSTC_HA_MODULE 7
+#define wxSTC_HA_CAPITAL 8
+#define wxSTC_HA_DATA 9
+#define wxSTC_HA_IMPORT 10
+#define wxSTC_HA_OPERATOR 11
+#define wxSTC_HA_INSTANCE 12
+#define wxSTC_HA_COMMENTLINE 13
+#define wxSTC_HA_COMMENTBLOCK 14
+#define wxSTC_HA_COMMENTBLOCK2 15
+#define wxSTC_HA_COMMENTBLOCK3 16
+
+// Lexical states of SCLEX_TADS3
+#define wxSTC_T3_DEFAULT 0
+#define wxSTC_T3_X_DEFAULT 1
+#define wxSTC_T3_PREPROCESSOR 2
+#define wxSTC_T3_BLOCK_COMMENT 3
+#define wxSTC_T3_LINE_COMMENT 4
+#define wxSTC_T3_OPERATOR 5
+#define wxSTC_T3_KEYWORD 6
+#define wxSTC_T3_NUMBER 7
+#define wxSTC_T3_IDENTIFIER 8
+#define wxSTC_T3_S_STRING 9
+#define wxSTC_T3_D_STRING 10
+#define wxSTC_T3_X_STRING 11
+#define wxSTC_T3_LIB_DIRECTIVE 12
+#define wxSTC_T3_MSG_PARAM 13
+#define wxSTC_T3_HTML_TAG 14
+#define wxSTC_T3_HTML_DEFAULT 15
+#define wxSTC_T3_HTML_STRING 16
+#define wxSTC_T3_USER1 17
+#define wxSTC_T3_USER2 18
+#define wxSTC_T3_USER3 19
+
+// Lexical states for SCLEX_REBOL
+#define wxSTC_REBOL_DEFAULT 0
+#define wxSTC_REBOL_COMMENTLINE 1
+#define wxSTC_REBOL_COMMENTBLOCK 2
+#define wxSTC_REBOL_PREFACE 3
+#define wxSTC_REBOL_OPERATOR 4
+#define wxSTC_REBOL_CHARACTER 5
+#define wxSTC_REBOL_QUOTEDSTRING 6
+#define wxSTC_REBOL_BRACEDSTRING 7
+#define wxSTC_REBOL_NUMBER 8
+#define wxSTC_REBOL_PAIR 9
+#define wxSTC_REBOL_TUPLE 10
+#define wxSTC_REBOL_BINARY 11
+#define wxSTC_REBOL_MONEY 12
+#define wxSTC_REBOL_ISSUE 13
+#define wxSTC_REBOL_TAG 14
+#define wxSTC_REBOL_FILE 15
+#define wxSTC_REBOL_EMAIL 16
+#define wxSTC_REBOL_URL 17
+#define wxSTC_REBOL_DATE 18
+#define wxSTC_REBOL_TIME 19
+#define wxSTC_REBOL_IDENTIFIER 20
+#define wxSTC_REBOL_WORD 21
+#define wxSTC_REBOL_WORD2 22
+#define wxSTC_REBOL_WORD3 23
+#define wxSTC_REBOL_WORD4 24
+#define wxSTC_REBOL_WORD5 25
+#define wxSTC_REBOL_WORD6 26
+#define wxSTC_REBOL_WORD7 27
+#define wxSTC_REBOL_WORD8 28
+
+// Lexical states for SCLEX_SQL
+#define wxSTC_SQL_DEFAULT 0
+#define wxSTC_SQL_COMMENT 1
+#define wxSTC_SQL_COMMENTLINE 2
+#define wxSTC_SQL_COMMENTDOC 3
+#define wxSTC_SQL_NUMBER 4
+#define wxSTC_SQL_WORD 5
+#define wxSTC_SQL_STRING 6
+#define wxSTC_SQL_CHARACTER 7
+#define wxSTC_SQL_SQLPLUS 8
+#define wxSTC_SQL_SQLPLUS_PROMPT 9
+#define wxSTC_SQL_OPERATOR 10
+#define wxSTC_SQL_IDENTIFIER 11
+#define wxSTC_SQL_SQLPLUS_COMMENT 13
+#define wxSTC_SQL_COMMENTLINEDOC 15
+#define wxSTC_SQL_WORD2 16
+#define wxSTC_SQL_COMMENTDOCKEYWORD 17
+#define wxSTC_SQL_COMMENTDOCKEYWORDERROR 18
+#define wxSTC_SQL_USER1 19
+#define wxSTC_SQL_USER2 20
+#define wxSTC_SQL_USER3 21
+#define wxSTC_SQL_USER4 22
+#define wxSTC_SQL_QUOTEDIDENTIFIER 23
+
+// Lexical states for SCLEX_SMALLTALK
+#define wxSTC_ST_DEFAULT 0
+#define wxSTC_ST_STRING 1
+#define wxSTC_ST_NUMBER 2
+#define wxSTC_ST_COMMENT 3
+#define wxSTC_ST_SYMBOL 4
+#define wxSTC_ST_BINARY 5
+#define wxSTC_ST_BOOL 6
+#define wxSTC_ST_SELF 7
+#define wxSTC_ST_SUPER 8
+#define wxSTC_ST_NIL 9
+#define wxSTC_ST_GLOBAL 10
+#define wxSTC_ST_RETURN 11
+#define wxSTC_ST_SPECIAL 12
+#define wxSTC_ST_KWSEND 13
+#define wxSTC_ST_ASSIGN 14
+#define wxSTC_ST_CHARACTER 15
+#define wxSTC_ST_SPEC_SEL 16
+
+// Lexical states for SCLEX_FLAGSHIP (clipper)
+#define wxSTC_FS_DEFAULT 0
+#define wxSTC_FS_COMMENT 1
+#define wxSTC_FS_COMMENTLINE 2
+#define wxSTC_FS_COMMENTDOC 3
+#define wxSTC_FS_COMMENTLINEDOC 4
+#define wxSTC_FS_COMMENTDOCKEYWORD 5
+#define wxSTC_FS_COMMENTDOCKEYWORDERROR 6
+#define wxSTC_FS_KEYWORD 7
+#define wxSTC_FS_KEYWORD2 8
+#define wxSTC_FS_KEYWORD3 9
+#define wxSTC_FS_KEYWORD4 10
+#define wxSTC_FS_NUMBER 11
+#define wxSTC_FS_STRING 12
+#define wxSTC_FS_PREPROCESSOR 13
+#define wxSTC_FS_OPERATOR 14
+#define wxSTC_FS_IDENTIFIER 15
+#define wxSTC_FS_DATE 16
+#define wxSTC_FS_STRINGEOL 17
+#define wxSTC_FS_CONSTANT 18
+#define wxSTC_FS_ASM 19
+#define wxSTC_FS_LABEL 20
+#define wxSTC_FS_ERROR 21
+#define wxSTC_FS_HEXNUMBER 22
+#define wxSTC_FS_BINNUMBER 23
+
+// Lexical states for SCLEX_CSOUND
+#define wxSTC_CSOUND_DEFAULT 0
+#define wxSTC_CSOUND_COMMENT 1
+#define wxSTC_CSOUND_NUMBER 2
+#define wxSTC_CSOUND_OPERATOR 3
+#define wxSTC_CSOUND_INSTR 4
+#define wxSTC_CSOUND_IDENTIFIER 5
+#define wxSTC_CSOUND_OPCODE 6
+#define wxSTC_CSOUND_HEADERSTMT 7
+#define wxSTC_CSOUND_USERKEYWORD 8
+#define wxSTC_CSOUND_COMMENTBLOCK 9
+#define wxSTC_CSOUND_PARAM 10
+#define wxSTC_CSOUND_ARATE_VAR 11
+#define wxSTC_CSOUND_KRATE_VAR 12
+#define wxSTC_CSOUND_IRATE_VAR 13
+#define wxSTC_CSOUND_GLOBAL_VAR 14
+#define wxSTC_CSOUND_STRINGEOL 15
 
 
 //-----------------------------------------
@@ -1679,6 +1932,9 @@ public:
     // Define a marker from a bitmap
     void MarkerDefineBitmap(int markerNumber, const wxBitmap& bmp);
 
+    // Add a set of markers to a line.
+    void MarkerAddSet(int line, int set);
+
     // Set a margin to be either numeric or symbolic.
     void SetMarginType(int margin, int marginType);
 
@@ -1913,6 +2169,20 @@ public:
     // Change the type-separator character in the string setting up an auto-completion list.
     // Default is '?' but can be changed if items contain '?'.
     void AutoCompSetTypeSeparator(int separatorCharacter);
+
+    // Set the maximum width, in characters, of auto-completion and user lists.
+    // Set to 0 to autosize to fit longest item, which is the default.
+    void AutoCompSetMaxWidth(int characterCount);
+
+    // Get the maximum width, in characters, of auto-completion and user lists.
+    int AutoCompGetMaxWidth();
+
+    // Set the maximum height, in rows, of auto-completion and user lists.
+    // The default is 5 rows.
+    void AutoCompSetMaxHeight(int rowCount);
+
+    // Set the maximum height, in rows, of auto-completion and user lists.
+    int AutoCompGetMaxHeight();
 
     // Set the number of spaces used for one level of indentation.
     void SetIndent(int indentSize);
@@ -2176,6 +2446,9 @@ public:
     // Find the document line of a display line taking hidden lines into account.
     int DocLineFromVisible(int lineDisplay);
 
+    // The number of display lines needed to wrap a document line
+    int WrapCount(int line);
+
     // Set the fold level of a line.
     // This encodes an integer level along with flags indicating whether the
     // line is a header and whether it is effectively white space.
@@ -2290,7 +2563,7 @@ public:
 
     // Retrieve whether the maximum scroll position has the last
     // line at the bottom of the view.
-    int GetEndAtLastLine();
+    bool GetEndAtLastLine();
 
     // Retrieve the height of a particular line of text in pixels.
     int TextHeight(int line);
@@ -2773,9 +3046,27 @@ public:
     // Enlarge the document to a particular size of text bytes.
     void Allocate(int bytes);
 
-    // Find the position of a column on a line taking into account tabs and 
+    // Find the position of a column on a line taking into account tabs and
     // multi-byte characters. If beyond end of line, return line end position.
     int FindColumn(int line, int column);
+
+    // Can the caret preferred x position only be changed by explicit movement commands?
+    bool GetCaretSticky();
+
+    // Stop the caret preferred x position changing when the user types.
+    void SetCaretSticky(bool useCaretStickyBehaviour);
+
+    // Switch between sticky and non-sticky: meant to be bound to a key.
+    void ToggleCaretSticky();
+
+    // Enable/Disable convert-on-paste for line endings
+    void SetPasteConvertEndings(bool convert);
+
+    // Get convert-on-paste setting
+    bool GetPasteConvertEndings();
+
+    // Duplicate the selection. If selection empty duplicate the line containing the caret.
+    void SelectionDuplicate();
 
     // Start notifying the container of all key presses and commands.
     void StartRecord();
@@ -2800,6 +3091,20 @@ public:
 
     // Set the lexing language of the document based on string name.
     void SetLexerLanguage(const wxString& language);
+
+    // Retrieve a 'property' value previously set with SetProperty.
+    wxString GetProperty(const wxString& key);
+
+    // Retrieve a 'property' value previously set with SetProperty,
+    // with '$()' variable replacement on returned buffer.
+    wxString GetPropertyExpanded(const wxString& key);
+
+    // Retrieve a 'property' value previously set with SetProperty,
+    // interpreted as an int AFTER any '$()' variable replacement.
+    int GetPropertyInt(const wxString& key);
+
+    // Retrieve the number of bits the current lexer needs for styling.
+    int GetStyleBitsNeeded();
 
 // END of generated section
 //----------------------------------------------------------------------
@@ -3131,6 +3436,7 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_HOTSPOT_CLICK,      1673)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_HOTSPOT_DCLICK,     1674)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_CALLTIP_CLICK,      1675)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_STC, wxEVT_STC_AUTOCOMP_SELECTION, 1676)
 END_DECLARE_EVENT_TYPES()
 #else
     enum {
@@ -3158,7 +3464,8 @@ END_DECLARE_EVENT_TYPES()
         wxEVT_STC_ZOOM,
         wxEVT_STC_HOTSPOT_CLICK,
         wxEVT_STC_HOTSPOT_DCLICK,
-        wxEVT_STC_CALLTIP_CLICK
+        wxEVT_STC_CALLTIP_CLICK,
+        wxEVT_STC_AUTOCOMP_SELECTION
     };
 #endif
 
@@ -3192,7 +3499,7 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 #define EVT_STC_HOTSPOT_CLICK(id, fn)      DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_HOTSPOT_CLICK,         id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
 #define EVT_STC_HOTSPOT_DCLICK(id, fn)     DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_HOTSPOT_DCLICK,        id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
 #define EVT_STC_CALLTIP_CLICK(id, fn))     DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_CALLTIP_CLICK          id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
-
+#define EVT_STC_AUTOCOMP_SELECTION(id, fn) DECLARE_EVENT_TABLE_ENTRY( wxEVT_STC_AUTOCOMP_SELECTION     id, wxID_ANY, (wxObjectEventFunction) (wxEventFunction)  wxStaticCastEvent( wxStyledTextEventFunction, & fn ), (wxObject *) NULL ),
 #endif
 
 //----------------------------------------------------------------------
@@ -3201,9 +3508,9 @@ typedef void (wxEvtHandler::*wxStyledTextEventFunction)(wxStyledTextEvent&);
 #ifndef SWIG
 #if wxUSE_UNICODE
 
-wxString stc2wx(const char* str);
-wxString stc2wx(const char* str, size_t len);
-const wxWX2MBbuf wx2stc(const wxString& str);
+WXDLLIMPEXP_STC wxString stc2wx(const char* str);
+WXDLLIMPEXP_STC wxString stc2wx(const char* str, size_t len);
+WXDLLIMPEXP_STC const wxWX2MBbuf wx2stc(const wxString& str);
 
 #else // not UNICODE
 

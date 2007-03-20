@@ -17,6 +17,10 @@ import CodeEditor
 import OutlineService
 import os
 import re
+import FindInDirService
+import activegrid.util.appdirs as appdirs
+import activegrid.util.sysutils as sysutils
+_ = wx.GetTranslation
 
 
 class PHPDocument(CodeEditor.CodeDocument):
@@ -153,10 +157,44 @@ class PHPCtrl(CodeEditor.CodeCtrl):
 
     def __init__(self, parent, id=-1, style=wx.NO_FULL_REPAINT_ON_RESIZE):
         CodeEditor.CodeCtrl.__init__(self, parent, id, style)
-        self.SetLexer(wx.stc.STC_LEX_PHP)
+        self.SetLexer(wx.stc.STC_LEX_HTML)
         self.SetStyleBits(7)
         self.SetKeyWords(4, string.join(PHPKEYWORDS))
         self.SetProperty("fold.html", "1")
+
+
+    def CreatePopupMenu(self):
+        FINDCLASS_ID = wx.NewId()
+        FINDDEF_ID = wx.NewId()
+        
+        menu = CodeEditor.CodeCtrl.CreatePopupMenu(self)
+
+        self.Bind(wx.EVT_MENU, self.OnPopFindDefinition, id=FINDDEF_ID)
+        menu.Insert(1, FINDDEF_ID, _("Find 'function'"))
+
+        self.Bind(wx.EVT_MENU, self.OnPopFindClass, id=FINDCLASS_ID)
+        menu.Insert(2, FINDCLASS_ID, _("Find 'class'"))
+
+        return menu
+        
+
+    def OnPopFindDefinition(self, event):
+        view = wx.GetApp().GetDocumentManager().GetCurrentView()
+        if hasattr(view, "GetCtrl") and view.GetCtrl() and hasattr(view.GetCtrl(), "GetSelectedText"):
+            pattern = view.GetCtrl().GetSelectedText().strip()
+            if pattern:
+                searchPattern = "function\s+%s" % pattern
+                wx.GetApp().GetService(FindInDirService.FindInDirService).FindInProject(searchPattern)
+
+
+    def OnPopFindClass(self, event):
+        view = wx.GetApp().GetDocumentManager().GetCurrentView()
+        if hasattr(view, "GetCtrl") and view.GetCtrl() and hasattr(view.GetCtrl(), "GetSelectedText"):
+            definition = "class\s+%s"
+            pattern = view.GetCtrl().GetSelectedText().strip()
+            if pattern:
+                searchPattern = definition % pattern
+                wx.GetApp().GetService(FindInDirService.FindInDirService).FindInProject(searchPattern)
 
 
     def CanWordWrap(self):
@@ -164,7 +202,7 @@ class PHPCtrl(CodeEditor.CodeCtrl):
 
 
     def SetViewDefaults(self):
-        CodeEditor.CodeCtrl.SetViewDefaults(self, configPrefix = "PHP", hasWordWrap = True, hasTabs = True)
+        CodeEditor.CodeCtrl.SetViewDefaults(self, configPrefix = "PHP", hasWordWrap = True, hasTabs = True, hasFolding=True)
 
 
     def GetFontAndColorFromConfig(self):
@@ -216,7 +254,113 @@ class PHPCtrl(CodeEditor.CodeCtrl):
 class PHPOptionsPanel(STCTextEditor.TextOptionsPanel):
 
     def __init__(self, parent, id):
-        STCTextEditor.TextOptionsPanel.__init__(self, parent, id, configPrefix = "PHP", label = "PHP", hasWordWrap = True, hasTabs = True)
+        wx.Panel.__init__(self, parent, id)
+        mainSizer = wx.BoxSizer(wx.VERTICAL)                
+
+        config = wx.ConfigBase_Get()
+
+        pathLabel = wx.StaticText(self, -1, _("PHP Executable Path:"))
+        path = config.Read("ActiveGridPHPLocation")
+        self._pathTextCtrl = wx.TextCtrl(self, -1, path, size = (150, -1))
+        self._pathTextCtrl.SetToolTipString(self._pathTextCtrl.GetValue())
+        self._pathTextCtrl.SetInsertionPointEnd()
+        choosePathButton = wx.Button(self, -1, _("Browse..."))
+        pathSizer = wx.BoxSizer(wx.HORIZONTAL)
+        HALF_SPACE = 5
+        SPACE = 10
+        pathSizer.Add(pathLabel, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT|wx.TOP, HALF_SPACE)
+        pathSizer.Add(self._pathTextCtrl, 1, wx.EXPAND|wx.LEFT|wx.TOP, HALF_SPACE)
+        pathSizer.Add(choosePathButton, 0, wx.ALIGN_RIGHT|wx.LEFT|wx.RIGHT|wx.TOP, HALF_SPACE)
+        wx.EVT_BUTTON(self, choosePathButton.GetId(), self.OnChoosePath)
+        mainSizer.Add(pathSizer, 0, wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, SPACE)
+
+        iniLabel = wx.StaticText(self, -1, _("php.ini Path:"))
+        ini = config.Read("ActiveGridPHPINILocation")
+        if not ini:
+            if sysutils.isRelease():
+                ini = os.path.normpath(os.path.join(appdirs.getSystemDir(), "php.ini"))
+            else:
+                tmp = self._pathTextCtrl.GetValue().strip()
+                if tmp and len(tmp) > 0:
+                    ini = os.path.normpath(os.path.join(os.path.dirname(tmp), "php.ini"))
+
+        self._iniTextCtrl = wx.TextCtrl(self, -1, ini, size = (150, -1))
+        self._iniTextCtrl.SetToolTipString(self._iniTextCtrl.GetValue())
+        self._iniTextCtrl.SetInsertionPointEnd()
+        chooseIniButton = wx.Button(self, -1, _("Browse..."))
+        iniSizer = wx.BoxSizer(wx.HORIZONTAL)
+        HALF_SPACE = 5
+        SPACE = 10
+        iniSizer.Add(iniLabel, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT|wx.TOP, HALF_SPACE)
+        iniSizer.Add(self._iniTextCtrl, 1, wx.EXPAND|wx.LEFT|wx.TOP, HALF_SPACE)
+        iniSizer.Add(chooseIniButton, 0, wx.ALIGN_RIGHT|wx.LEFT|wx.RIGHT|wx.TOP, HALF_SPACE)
+        wx.EVT_BUTTON(self, chooseIniButton.GetId(), self.OnChooseIni)
+        mainSizer.Add(iniSizer, 0, wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, SPACE)
+
+        self._otherOptions = STCTextEditor.TextOptionsPanel(self, -1, configPrefix = "PHP", label = "PHP", hasWordWrap = True, hasTabs = True, addPage=False, hasFolding=False)
+        #STCTextEditor.TextOptionsPanel.__init__(self, parent, id, configPrefix = "PHP", label = "PHP", hasWordWrap = True, hasTabs = True)
+        mainSizer.Add(self._otherOptions, 0, wx.EXPAND|wx.BOTTOM, SPACE)
+
+        self.SetSizer(mainSizer)
+        parent.AddPage(self, _("PHP"))
+
+    def OnChoosePath(self, event):
+        defaultDir = os.path.dirname(self._pathTextCtrl.GetValue().strip())
+        defaultFile = os.path.basename(self._pathTextCtrl.GetValue().strip())
+        if wx.Platform == '__WXMSW__':
+            wildcard = _("Executable (*.exe)|*.exe|All|*.*")
+            if not defaultFile:
+                defaultFile = "php-cgi.exe"
+        else:
+            wildcard = _("*")
+        dlg = wx.FileDialog(wx.GetApp().GetTopWindow(),
+                               _("Select a File"),
+                               defaultDir=defaultDir,
+                               defaultFile=defaultFile,
+                               wildcard=wildcard,
+                               style=wx.OPEN|wx.FILE_MUST_EXIST|wx.HIDE_READONLY)
+        # dlg.CenterOnParent()  # wxBug: caused crash with wx.FileDialog
+        if dlg.ShowModal() == wx.ID_OK:
+            path = dlg.GetPath()
+            if path:  
+                self._pathTextCtrl.SetValue(path)
+                self._pathTextCtrl.SetToolTipString(self._pathTextCtrl.GetValue())
+                self._pathTextCtrl.SetInsertionPointEnd()
+        dlg.Destroy()            
+
+    def OnChooseIni(self, event):
+        defaultDir = os.path.dirname(self._iniTextCtrl.GetValue().strip())
+        defaultFile = os.path.basename(self._iniTextCtrl.GetValue().strip())
+        if wx.Platform == '__WXMSW__':
+            wildcard = _("Ini (*.ini)|*.ini|All|*.*")
+            if not defaultFile:
+                defaultFile = "php.ini"
+        else:
+            wildcard = _("*")
+        dlg = wx.FileDialog(wx.GetApp().GetTopWindow(),
+                               _("Select a File"),
+                               defaultDir=defaultDir,
+                               defaultFile=defaultFile,
+                               wildcard=wildcard,
+                               style=wx.OPEN|wx.FILE_MUST_EXIST|wx.HIDE_READONLY)
+        # dlg.CenterOnParent()  # wxBug: caused crash with wx.FileDialog
+        if dlg.ShowModal() == wx.ID_OK:
+            ini = dlg.GetPath()
+            if ini:  
+                self._iniTextCtrl.SetValue(ini)
+                self._iniTextCtrl.SetToolTipString(self._iniTextCtrl.GetValue())
+                self._iniTextCtrl.SetInsertionPointEnd()
+        dlg.Destroy()            
+
+    def OnOK(self, optionsDialog):
+        config = wx.ConfigBase_Get()
+        config.Write("ActiveGridPHPLocation", self._pathTextCtrl.GetValue().strip())
+        config.Write("ActiveGridPHPINILocation", self._iniTextCtrl.GetValue().strip())
+
+        self._otherOptions.OnOK(optionsDialog)
+
+    def GetIcon(self):
+        return getPHPIcon()
 
 
 PHPKEYWORDS = [
@@ -274,14 +418,22 @@ import cStringIO
 
 def getPHPData():
     return \
-'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
+"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
 \x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
-\x00\x00{IDAT8\x8dclh8\xf0\x9f\x81\x02\xc0D\x89f\xaa\x18\xc0\x82M0<\\\x1c\
-\xce^\xb9\xf2%y.\xd0\xd4\xd4$\xde\x05\xf8l\x0c\x0f\x17\x87\x8baS\xc7x\xfd\
-\xfa\xf5\xff\xc8\xb6]\xbf~\x1d\xc3\x05\xf8\xc4\x98\x90\x05\xae_\xbf\x8e\xa1\
-\x88\x90\xd8 \x8aF\x98\x93`~\xc3\x05\xd0\xd5\xc1\r\x80\t\xc0B\xf7\xfa\xf5\
-\xeb(l\\\xeaP\xbc\x80\x1c\x85\xb8\xd8\xe8|&b\x9c\x8dn;2`\x1c\xf0\xdc\x08\x00\
-\x8e\xf2S\xed\xb0\xbe\xaa\xbc\x00\x00\x00\x00IEND\xaeB`\x82' 
+\x00\x01GIDAT8\x8d\x8d\x931O\xc2@\x14\xc7\x7fW\xfa\x11\x1c\xe430\xb88\x18'\
+\x8c\x89\x0e\x0c\xc4\xd9\xdd\x85\xc9\xc5`\x82\x1b\t\x84\x98\x98\xe0\xa4_\x01\
+cd`t$\xb8h\xd0\xb8\xabD0\xd4\xd0\xb4%H $\xe7P\x0e{@\xa9\xff\xe4\r\xf7\xee~\
+\xff\xf7\xee^+\x1a\xcd\x8ed*\xab\xef\x02\xd0\xea\xda\x00\xb8\xce\x90\xb3\xa3\
+}\xc1*5\x9a\x1d\xf9\xf6#g\xf1\xea\xf9qyS\x97\xf5o)\x8f\xcfo\xa50b\x84\x85\
+\xb1\xca\xdc\x9b\xc0\xde\xe1\x01'\xa7U\x19v\xc6\xb4\xfa.\xeb\xc4\x01\x18L\
+\xfc\xa4;\xf2\xdb\x7f\xac\xdd\xd3s<\xda\x03+\xb4\x88\x19\x04\x15\x0c\xb0\x93\
+\xde\xc5\x9b\x80=\x86\xf6\xc5U\xa8\x81v\x05\x05\xab\xf6\xedq(\xf7\xd7A\xabk\
+\xb36\xd2\x93A\xd8\x1aF\x18\xcc\x83\xb0\x08\x7f\xbc\xb7\xc2\r\\g8\x03\x97\
+\xc1Q2{\x8e\xa7\x81/\xd7\xb5\x85C\xc9\xc46\xc9\x84>\xcaR!-`\xfa\x88\xab\xe0b\
+>\xb5\xb4\xb2\xfa6\xcc\xf6\xa7\xc5f\x00V\xc0\xc3\xf3\x17w\x95\xa7YN\xad\x83\
+\xfbP\x95\x06@un\xce\xd9\\\x8d\xad\x8d\xf8\xbf\xd6F\xa5\x9c\x11\x95rF\xfbaT\
+\xc50\x15\xf3)\xb29\xbfc!\x8c\x98v\xaf\xe0f\x14\\*\xa4\x85f\x10|\x9c(\xa9)\
+\xfc\x02?r\xb8\xfc~J.\xd0\x00\x00\x00\x00IEND\xaeB`\x82" 
 
 def getPHPBitmap():
     return BitmapFromImage(getPHPImage())

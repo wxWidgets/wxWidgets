@@ -31,8 +31,8 @@ Returns the HTTP response code returned by the server. Please refer to the RFC
 
 Creates a new input stream on the specified path. You can use all except the seek
 functionality of wxStream. Seek isn't available on all streams. For example,
-http or ftp streams doesn't deal with it. Other functions like Tell and SeekI
-for this sort of stream.
+HTTP or FTP streams don't deal with it. Other functions like Tell and SeekI
+aren't available for the moment for this sort of stream.
 You will be notified when the EOF is reached by an error.
 
 \wxheading{Note}

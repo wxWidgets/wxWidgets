@@ -59,6 +59,9 @@ public:
   void Command(wxCommandEvent& event);
     virtual void  MacHandleControlClick( WXWidget control , wxInt16 controlpart , bool mouseStillDown ) ;
     virtual wxInt32 MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF mevent ) ;
+
+    wxSize DoGetBestSize() const;
+    
 protected:
     int m_pageSize;
     int m_viewSize;

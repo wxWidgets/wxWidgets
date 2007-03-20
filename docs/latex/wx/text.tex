@@ -70,23 +70,6 @@ for a text control.
 \end{verbatim}
 }
 
-The values below are the possible return codes of the
-\helpref{HitTest}{wxtextctrlhittest} method:
-{\small
-\begin{verbatim}
-// the point asked is ...
-enum wxTextCtrlHitTestResult
-{
-    wxTE_HT_UNKNOWN = -2,   // this means HitTest() is simply not implemented
-    wxTE_HT_BEFORE,         // either to the left or upper
-    wxTE_HT_ON_TEXT,        // directly on
-    wxTE_HT_BELOW,          // below [the last line]
-    wxTE_HT_BEYOND          // after [the end of line]
-};
-// ... the character returned
-\end{verbatim}
-}
-
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -442,6 +425,25 @@ you may just do
 
 See \helpref{wxStreamToTextRedirector}{wxstreamtotextredirector} for more
 details.
+
+\wxheading{Constants}
+
+The values below are the possible return codes of the \helpref{HitTest}{wxtextctrlhittest} method:
+
+{\small
+\begin{verbatim}
+// the point asked is ...
+enum wxTextCtrlHitTestResult
+{
+    wxTE_HT_UNKNOWN = -2,   // this means HitTest() is simply not implemented
+    wxTE_HT_BEFORE,         // either to the left or upper
+    wxTE_HT_ON_TEXT,        // directly on
+    wxTE_HT_BELOW,          // below [the last line]
+    wxTE_HT_BEYOND          // after [the end of line]
+};
+// ... the character returned
+\end{verbatim}
+}
 
 \wxheading{Event handling}
 

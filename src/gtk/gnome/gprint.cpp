@@ -25,11 +25,12 @@
 
 #include "wx/math.h"
 #include "wx/fontutil.h"
-#include "wx/printdlg.h"
 #include "wx/gtk/private.h"
 #include "wx/module.h"
-#include "wx/generic/prntdlgg.h"
 #include "wx/dynlib.h"
+#include "wx/dcmemory.h"
+#include "wx/log.h"
+#include "wx/icon.h"
 
 #include <libgnomeprint/gnome-print.h>
 #include <libgnomeprint/gnome-print-pango.h>
@@ -1158,30 +1159,59 @@ void wxGnomePrintDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width,
     }
 }
 
+void wxGnomePrintDC::makeEllipticalPath(wxCoord x, wxCoord y, 
+                                        wxCoord width, wxCoord height)
+{
+    double r = 4 * (sqrt (2) - 1) / 3;
+    double  halfW = 0.5 * width,
+            halfH = 0.5 * height,
+            halfWR = r * halfW,
+            halfHR = r * halfH;
+    wxCoord halfWI = (wxCoord) halfW,
+            halfHI = (wxCoord) halfH;
+            
+    gs_lgp->gnome_print_newpath( m_gpc );
+    
+    // Approximate an ellipse using four cubic splines, clockwise from 0 deg */
+    gs_lgp->gnome_print_moveto( m_gpc,
+                XLOG2DEV(x + width), 
+                YLOG2DEV(y + halfHI) );
+    gs_lgp->gnome_print_curveto( m_gpc,
+                XLOG2DEV(x + width),
+                YLOG2DEV(y + (wxCoord) rint (halfH + halfHR)),
+                XLOG2DEV(x + (wxCoord) rint(halfW + halfWR)), 
+                YLOG2DEV(y + height),
+                XLOG2DEV(x + halfWI), 
+                YLOG2DEV(y + height) );
+    gs_lgp->gnome_print_curveto( m_gpc,
+                XLOG2DEV(x + (wxCoord) rint(halfW - halfWR)), 
+                YLOG2DEV(y + height),
+                XLOG2DEV(x),
+                YLOG2DEV(y + (wxCoord) rint (halfH + halfHR)),
+                XLOG2DEV(x), YLOG2DEV(y+halfHI) );
+    gs_lgp->gnome_print_curveto( m_gpc,
+                XLOG2DEV(x),
+                YLOG2DEV(y + (wxCoord) rint (halfH - halfHR)),
+                XLOG2DEV(x + (wxCoord) rint (halfW - halfWR)),
+                YLOG2DEV(y),
+                XLOG2DEV(x+halfWI), YLOG2DEV(y) );
+    gs_lgp->gnome_print_curveto( m_gpc,
+                XLOG2DEV(x + (wxCoord) rint(halfW + halfWR)),
+                YLOG2DEV(y),
+                XLOG2DEV(x + width),
+                YLOG2DEV(y + (wxCoord) rint(halfH - halfHR)),
+                XLOG2DEV(x + width), YLOG2DEV(y + halfHI) );
+                
+    gs_lgp->gnome_print_closepath(m_gpc);
+}
+
 void wxGnomePrintDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
     if (m_brush.GetStyle () != wxTRANSPARENT)
     {
         SetBrush( m_brush );
-
-        gs_lgp->gnome_print_newpath( m_gpc );
-        gs_lgp->gnome_print_moveto( m_gpc,
-                            XLOG2DEV(x), YLOG2DEV(y+height/2) );
-
-        // start with top half
-        gs_lgp->gnome_print_curveto( m_gpc,
-                            XLOG2DEV(x), YLOG2DEV(y),
-                            XLOG2DEV(x+width), YLOG2DEV(y),
-                            XLOG2DEV(x+width), YLOG2DEV(y+height/2) );
-        // lower half
-        gs_lgp->gnome_print_curveto( m_gpc,
-                            XLOG2DEV(x+width), YLOG2DEV(y+height),
-                            XLOG2DEV(x), YLOG2DEV(y+height),
-                            XLOG2DEV(x), YLOG2DEV(y+height/2) );
-
-        gs_lgp->gnome_print_closepath( m_gpc );
+        makeEllipticalPath( x, y, width, height );
         gs_lgp->gnome_print_fill( m_gpc );
-
         CalcBoundingBox( x, y );
         CalcBoundingBox( x + width, y + height );
     }
@@ -1189,25 +1219,8 @@ void wxGnomePrintDC::DoDrawEllipse(wxCoord x, wxCoord y, wxCoord width, wxCoord 
     if (m_pen.GetStyle () != wxTRANSPARENT)
     {
         SetPen (m_pen);
-
-        gs_lgp->gnome_print_newpath( m_gpc );
-        gs_lgp->gnome_print_moveto( m_gpc,
-                            XLOG2DEV(x), YLOG2DEV(y+height/2) );
-
-        // start with top half
-        gs_lgp->gnome_print_curveto( m_gpc,
-                            XLOG2DEV(x), YLOG2DEV(y),
-                            XLOG2DEV(x+width), YLOG2DEV(y),
-                            XLOG2DEV(x+width), YLOG2DEV(y+height/2) );
-        // lower half
-        gs_lgp->gnome_print_curveto( m_gpc,
-                            XLOG2DEV(x+width), YLOG2DEV(y+height),
-                            XLOG2DEV(x), YLOG2DEV(y+height),
-                            XLOG2DEV(x), YLOG2DEV(y+height/2) );
-
-        gs_lgp->gnome_print_closepath( m_gpc );
+        makeEllipticalPath( x, y, width, height );
         gs_lgp->gnome_print_stroke( m_gpc );
-
         CalcBoundingBox( x, y );
         CalcBoundingBox( x + width, y + height );
     }
@@ -1520,6 +1533,22 @@ void wxGnomePrintDC::SetPen( const wxPen& pen )
         case wxSHORT_DASH:    gs_lgp->gnome_print_setdash( m_gpc, 2, short_dashed, 0 ); break;
         case wxLONG_DASH:     gs_lgp->gnome_print_setdash( m_gpc, 2, wxCoord_dashed, 0 ); break;
         case wxDOT_DASH:      gs_lgp->gnome_print_setdash( m_gpc, 4, dotted_dashed, 0 );  break;
+        case wxUSER_DASH: 
+        {
+            // It may be noted that libgnomeprint between at least
+            // versions 2.8.0 and 2.12.1 makes a copy of the dashes
+            // and then leak the memory since it doesn't set the
+            // internal flag "privatedash" to 0.
+            wxDash *wx_dashes;
+            int num = m_pen.GetDashes (&wx_dashes);
+            gdouble *g_dashes = g_new( gdouble, num );
+            int i;
+            for (i = 0; i < num; ++i)
+                g_dashes[i] = (gdouble) wx_dashes[i];
+            gs_lgp -> gnome_print_setdash( m_gpc, num, g_dashes, 0);
+            g_free( g_dashes );
+        }
+        break;
         case wxSOLID:
         case wxTRANSPARENT:
         default:              gs_lgp->gnome_print_setdash( m_gpc, 0, NULL, 0 );   break;

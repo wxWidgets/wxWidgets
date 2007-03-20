@@ -8,31 +8,32 @@ set -o errexit
 
 
 host=$2
-flavor=$3
-pyver=$4
+pyver=$3
+chartype=$4
+flags=$5
 
 if [ $skiposx != yes ]; then
     # test if the target machine is online
     if ping -q -c1 -w1 $host > /dev/null; then
-	echo " The $host machine is online, OSX-$flavor build continuing..."
+	echo " The $host machine is online, OSX build continuing..."
     else
-	echo "The $host machine is **OFFLINE**, skipping the OSX-$flavor build."
+	echo "The $host machine is **OFFLINE**, skipping the OSX build."
 	exit 0
     fi
 
     echo "Copying source files and build script..."
     ssh root@$host "mkdir -p $OSX_BUILD && rm -rf $OSX_BUILD/* || true"
     
-    scp $STAGING_DIR/wxPython-src-$VERSION.tar.gz \
-	$STAGING_DIR/wxPython-docs-$VERSION.tar.gz \
-	$STAGING_DIR/wxPython-demo-$VERSION.tar.gz \
+    scp $STAGING_DIR/wxPython-src-$VERSION.tar.bz2 \
+	$STAGING_DIR/wxPython-docs-$VERSION.tar.bz2 \
+	$STAGING_DIR/wxPython-demo-$VERSION.tar.bz2 \
 	distrib/all/do-build-osx \
 	root@$host:$OSX_BUILD
 
     echo "Running build script on $host..."
     wxdir=$OSX_BUILD/wxPython-src-$VERSION
     cmd=./do-build-osx
-    ssh root@$host "cd $OSX_BUILD && $cmd $wxdir $OSX_BUILD $skipclean $VERSION $flavor $pyver && rm $cmd"
+    ssh root@$host "cd $OSX_BUILD && $cmd $wxdir $OSX_BUILD $skipclean $VERSION $pyver $chartype $flags && rm $cmd"
     
     echo "Fetching the results..."
     scp "root@$host:$OSX_BUILD/wxPython*-osx*"  $STAGING_DIR

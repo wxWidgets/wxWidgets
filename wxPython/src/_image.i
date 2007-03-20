@@ -59,6 +59,43 @@ public:
 
 //---------------------------------------------------------------------------
 
+
+DocStr(wxPyImageHandler,
+"This is the base class for implementing image file loading/saving, and
+image creation from data, all written in Python.  To create a custom
+image handler derive a new class from wx.PyImageHandler and provide
+the following methods::
+
+    def DoCanRead(self, stream) --> bool
+        '''Check if this handler can read the image on the stream'''
+
+    def LoadFile(self, image, stream, verbose, index) --> bool
+        '''Load image data from the stream and load it into image.'''
+
+    def SaveFile(self, image, stream, verbose) --> bool
+        '''Save the iamge data in image to the stream using
+           this handler's image file format.'''
+
+    def GetImageCount(self, stream) --> int
+        '''If this image format can hold more than one image,
+           how many does the image on the stream have?'''
+
+To activate your handler create an instance of it and pass it to
+`wx.Image_AddHandler`.  Be sure to call `SetName`, `SetType`, and
+`SetExtension` from your constructor.
+
+", "");
+class wxPyImageHandler: public wxImageHandler {
+public:
+    %pythonAppend wxPyImageHandler() "self._SetSelf(self)"
+    wxPyImageHandler();
+    void _SetSelf(PyObject *self);
+};
+
+
+//---------------------------------------------------------------------------
+
+
 class wxImageHistogram /* : public wxImageHistogramBase */
 {
 public:
@@ -116,18 +153,6 @@ key value from a RGB tripple.", "");
 
 //---------------------------------------------------------------------------
 
-%{
-    typedef unsigned char* buffer;
-%}    
-
-%typemap(in) (buffer data, int DATASIZE)
-    { if (!PyArg_Parse($input, "t#", &$1, &$2)) SWIG_fail; }
-
-%typemap(in) (buffer alpha, int ALPHASIZE)
-    { if (!PyArg_Parse($input, "t#", &$1, &$2)) SWIG_fail; }
-
-//---------------------------------------------------------------------------
-
 
 DocStr(wxImage,
 "A platform-independent image class.  An image can be created from
@@ -155,25 +180,41 @@ Unlike RGB data, not all images have an alpha channel and before using
 with `HasAlpha`. Note that currently only images loaded from PNG files
 with transparency information will have an alpha channel.", "");
 
+
 %{
 // Pull the nested class out to the top level for SWIG's sake
 #define wxImage_RGBValue wxImage::RGBValue
 #define wxImage_HSVValue wxImage::HSVValue
 %}
- 
+
+DocStr(wxImage_RGBValue,
+"An object that contains values for red, green and blue which represent
+the value of a color. It is used by `wx.Image.HSVtoRGB` and
+`wx.Image.RGBtoHSV`, which converts between HSV color space and RGB
+color space.", "");       
 class wxImage_RGBValue
 {
 public:
-    wxImage_RGBValue(byte r=0, byte g=0, byte b=0);    
+    DocCtorStr(
+        wxImage_RGBValue(byte r=0, byte g=0, byte b=0),
+        "Constructor.", "");
     byte red;  
     byte green;
     byte blue;
 };
-    
+
+
+DocStr(wxImage_HSVValue,
+"An object that contains values for hue, saturation and value which
+represent the value of a color.  It is used by `wx.Image.HSVtoRGB` and
+`wx.Image.RGBtoHSV`, which +converts between HSV color space and RGB
+color space.", "");
 class wxImage_HSVValue
 {
 public:
-    wxImage_HSVValue(double h=0.0, double s=0.0, double v=0.0);
+    DocCtorStr(
+        wxImage_HSVValue(double h=0.0, double s=0.0, double v=0.0),
+        "Constructor.", "");
     double hue;  
     double saturation;
     double value;
@@ -215,8 +256,8 @@ public:
         largest and most colourful one by the ICO handler.
 
 :see: `wx.ImageFromMime`, `wx.ImageFromStream`, `wx.ImageFromStreamMime`,
-      `wx.EmptyImage`, `wx.ImageFromBitmap`, `wx.ImageFromData`,
-      `wx.ImageFromDataWithAlpha`
+      `wx.EmptyImage`, `wx.ImageFromBitmap`, `wx.ImageFromBuffer`,
+      `wx.ImageFromData`, `wx.ImageFromDataWithAlpha`
 ");
     
     ~wxImage();
@@ -339,7 +380,7 @@ alpha data must be width*height bytes.", "
 
     // TODO: wxImage( char** xpmData );
 
-    // Turn it back on again
+    // Turn the typemap back on again
     %typemap(out) wxImage* { $result = wxPyMake_wxObject($1, $owner); }
 
 
@@ -726,7 +767,7 @@ data must be width*height.", "");
 
 
         
-        DocStr(GetDataBuffer,
+        DocStr(GetAlphaBuffer,
                "Returns a writable Python buffer object that is pointing at the Alpha
 data buffer inside the wx.Image. You need to ensure that you do not
 use this buffer object after the image has been destroyed.", "");
@@ -740,7 +781,7 @@ use this buffer object after the image has been destroyed.", "");
         }
 
         
-        DocStr(SetDataBuffer,
+        DocStr(SetAlphaBuffer,
                "Sets the internal image alpha pointer to point at a Python buffer
 object.  This can save making an extra copy of the data but you must
 ensure that the buffer object lives as long as the wx.Image does.", "");
@@ -886,6 +927,12 @@ option is not present, the function returns 0.", "
     static void AddHandler( wxImageHandler *handler );
     static void InsertHandler( wxImageHandler *handler );
     static bool RemoveHandler( const wxString& name );
+    %extend {
+        static PyObject* GetHandlers() {
+            wxList& list = wxImage::GetHandlers();
+            return wxPy_ConvertList(&list);
+        }
+    }
     
     DocDeclStr(
         static wxString , GetImageExtWildcard(),
@@ -919,12 +966,76 @@ MustHaveApp(ConvertToMonoBitmap);
         "Rotates the hue of each pixel of the image. Hue is a double in the
 range -1.0..1.0 where -1.0 is -360 degrees and 1.0 is 360 degrees", "");
         
-    static wxImage_HSVValue RGBtoHSV(wxImage_RGBValue rgb);
-    static wxImage_RGBValue HSVtoRGB(wxImage_HSVValue hsv);
+    DocDeclStr(
+        static wxImage_HSVValue , RGBtoHSV(wxImage_RGBValue rgb),
+        "Converts a color in RGB color space to HSV color space.", "");
+    
+    DocDeclStr(
+        static wxImage_RGBValue , HSVtoRGB(wxImage_HSVValue hsv),
+        "Converts a color in HSV color space to RGB color space.", "");
+    
 
     %pythoncode { def __nonzero__(self): return self.Ok() }
 };
 
+
+// Make an image from buffer objects.  Not that this is here instead of in the
+// wxImage class (as a constructor) because there is already another one with
+// the exact same signature, so there would be ambiguities in the generated
+// C++.  Doing it as an independent factory function like this accomplishes
+// the same thing however.
+%newobject _ImageFromBuffer;
+%inline %{
+    wxImage* _ImageFromBuffer(int width, int height,
+                              buffer data, int DATASIZE,
+                              buffer alpha=NULL, int ALPHASIZE=0)
+    {
+        if (DATASIZE != width*height*3) {
+            wxPyErr_SetString(PyExc_ValueError, "Invalid data buffer size.");
+            return NULL;
+        }
+        if (alpha != NULL) {
+            if (ALPHASIZE != width*height) {
+                wxPyErr_SetString(PyExc_ValueError, "Invalid alpha buffer size.");
+                return NULL;
+            }
+            return new wxImage(width, height, data, alpha, true);
+        }                
+        return new wxImage(width, height, data, true);
+    }                              
+%}
+
+%pythoncode {
+def ImageFromBuffer(width, height, dataBuffer, alphaBuffer=None):
+    """
+    Creates a `wx.Image` from the data in dataBuffer.  The dataBuffer
+    parameter must be a Python object that implements the buffer interface,
+    such as a string, array, etc.  The dataBuffer object is expected to
+    contain a series of RGB bytes and be width*height*3 bytes long.  A buffer
+    object can optionally be supplied for the image's alpha channel data, and
+    it is expected to be width*height bytes long.
+
+    The wx.Image will be created with its data and alpha pointers initialized
+    to the memory address pointed to by the buffer objects, thus saving the
+    time needed to copy the image data from the buffer object to the wx.Image.
+    While this has advantages, it also has the shoot-yourself-in-the-foot
+    risks associated with sharing a C pointer between two objects.
+
+    To help alleviate the risk a reference to the data and alpha buffer
+    objects are kept with the wx.Image, so that they won't get deleted until
+    after the wx.Image is deleted.  However please be aware that it is not
+    guaranteed that an object won't move its memory buffer to a new location
+    when it needs to resize its contents.  If that happens then the wx.Image
+    will end up referring to an invalid memory location and could cause the
+    application to crash.  Therefore care should be taken to not manipulate
+    the objects used for the data and alpha buffers in a way that would cause
+    them to change size.
+    """
+    image = _core_._ImageFromBuffer(width, height, dataBuffer, alphaBuffer)
+    image._buffer = dataBuffer
+    image._alpha = alphaBuffer
+    return image
+}
 
 
 ///void wxInitAllImageHandlers();

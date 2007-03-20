@@ -3,7 +3,7 @@
 # wx.StaticText, wx.Button, and a wx.BoxSizer, but it shows the basic
 # structure of any wxPython application.
 #----------------------------------------------------------------------
-
+ 
 import wx
 
 

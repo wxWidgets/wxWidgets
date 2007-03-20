@@ -2168,7 +2168,7 @@ size_t bufsize;
 	if (t->retry != 0)
 		sprintf(buf, "%d", t->retry);
 	else
-		sprintf(buf, "0x%x", (int)t);	/* may lose bits, that's okay */
+		sprintf(buf, "0x%x", (int)(wxUIntPtr)(t));	/* may lose bits, that's okay */
 	return buf;
 }
 

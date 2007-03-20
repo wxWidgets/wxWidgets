@@ -355,14 +355,20 @@ wxSemaError wxSemaphoreInternal::Post()
 {
 #if !defined(_WIN32_WCE) || (_WIN32_WCE >= 300)
     if ( !::ReleaseSemaphore(m_semaphore, 1, NULL /* ptr to previous count */) )
-#endif
+    {
+        if (GetLastError() == ERROR_TOO_MANY_POSTS)
+            return wxSEMA_OVERFLOW;
+    }
+    else
     {
         wxLogLastError(_T("ReleaseSemaphore"));
-
         return wxSEMA_MISC_ERROR;
     }
 
     return wxSEMA_NO_ERROR;
+#else
+    return wxSEMA_MISC_ERROR;
+#endif
 }
 
 // ----------------------------------------------------------------------------
@@ -929,7 +935,7 @@ bool wxThread::SetConcurrency(size_t WXUNUSED_IN_WINCE(level))
             dwProcMask |= bit;
 
             // another process added
-            if ( !--level )
+            if ( --level == 0 )
             {
                 // and that's enough
                 break;

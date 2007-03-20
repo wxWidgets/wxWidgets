@@ -66,6 +66,7 @@ public:
     virtual void SetLabel( const wxString &label );
     virtual bool SetFont(const wxFont& font);
 
+#if WX_USE_RESERVED_VIRTUALS
     // Reserved for future use
     virtual void ReservedControlFunc1() {}
     virtual void ReservedControlFunc2() {}
@@ -76,6 +77,7 @@ public:
     virtual void ReservedControlFunc7() {}
     virtual void ReservedControlFunc8() {}
     virtual void ReservedControlFunc9() {}
+#endif
 
 protected:
     // creates the control (calls wxWindowBase::CreateBase inside) and adds it

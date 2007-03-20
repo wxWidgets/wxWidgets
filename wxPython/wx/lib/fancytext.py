@@ -350,6 +350,9 @@ def GetFullExtent(str, dc=None, enclose=True):
 def RenderToBitmap(str, background=None, enclose=1):
     "Return str rendered on a minumum size bitmap"
     dc = wx.MemoryDC()
+    # Chicken and egg problem, we need a bitmap in the DC in order to
+    # measure how big the bitmap should be...
+    dc.SelectObject(wx.EmptyBitmap(1,1))
     width, height, dy = GetFullExtent(str, dc, enclose)
     bmp = wx.EmptyBitmap(width, height)
     dc.SelectObject(bmp)

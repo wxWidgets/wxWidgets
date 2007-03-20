@@ -247,6 +247,12 @@ public:
     void Replace( unsigned char r1, unsigned char g1, unsigned char b1,
                   unsigned char r2, unsigned char g2, unsigned char b2 );
 
+#if wxABI_VERSION >= 20604
+    // Convert to greyscale image. Uses the luminance component (Y) of the image.
+    // The luma value (YUV) is calculated using (R * lr) + (G * lg) + (B * lb), defaults to ITU-T BT.601
+    wxImage ConvertToGreyscale( double lr = 0.299, double lg = 0.587, double lb = 0.114 ) const;
+#endif // wxABI_VERSION >= 2.6.2
+
     // convert to monochrome image (<r,g,b> will be replaced by white,
     // everything else by black)
     wxImage ConvertToMono( unsigned char r, unsigned char g, unsigned char b ) const;

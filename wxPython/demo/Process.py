@@ -22,7 +22,8 @@ class TestPanel(wx.Panel):
         self.cmd = wx.TextCtrl(self, -1, 'python -u data/echo.py')
         self.exBtn = wx.Button(self, -1, 'Execute')
 
-        self.out = wx.TextCtrl(self, -1, '', style=wx.TE_MULTILINE|wx.TE_READONLY)
+        self.out = wx.TextCtrl(self, -1, '',
+                               style=wx.TE_MULTILINE|wx.TE_READONLY|wx.TE_RICH2)
 
         self.inp = wx.TextCtrl(self, -1, '', style=wx.TE_PROCESS_ENTER)
         self.sndBtn = wx.Button(self, -1, 'Send')

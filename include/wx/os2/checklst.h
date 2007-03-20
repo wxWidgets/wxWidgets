@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        checklst.h
+// Name:        wx/os2/checklst.h
 // Purpose:     wxCheckListBox class - a listbox with checkable items
 //              Note: this is an optional class.
 // Author:      David Webster
@@ -15,13 +15,11 @@
 
 #include <stddef.h>
 
-#include "wx/setup.h"
+#include "wx/defs.h"
 
 class wxOwnerDrawn; // so the compiler knows, it is a class.
 
-class wxCheckListBoxItem; // fwd decl, define in checklst.cpp
-
-class WXDLLEXPORT wxCheckListBox : public wxListBox
+class WXDLLEXPORT wxCheckListBox : public wxCheckListBoxBase
 {
 public:
     //
@@ -52,10 +50,6 @@ public:
     // Override base class virtuals
     //
     virtual void Delete(int n);
-    virtual void InsertItems( int            nItems
-                             ,const wxString asItems[]
-                             ,int            nPos
-                            );
 
     virtual bool SetFont(const wxFont &rFont);
 
@@ -64,7 +58,7 @@ public:
     //
     bool IsChecked(size_t uiIndex) const;
     void Check( size_t uiIndex
-               ,bool   bCheck = TRUE
+               ,bool   bCheck = true
               );
 
     //
@@ -80,6 +74,8 @@ protected:
     virtual wxOwnerDrawn* CreateItem(size_t n);
     virtual long          OS2OnMeasure(WXMEASUREITEMSTRUCT* pItem);
 
+    virtual void DoInsertItems(const wxArrayString& items, int pos);
+
     //
     // Pressing space or clicking the check box toggles the item
     //
@@ -91,7 +87,7 @@ private:
 
     DECLARE_DYNAMIC_CLASS(wxCheckListBox)
     DECLARE_EVENT_TABLE()
-}; // end of CLASS wxCheckListBoxItem
+}; // end of CLASS wxCheckListBox
 
 #endif
    // _WX_CHECKLST_H_

@@ -889,7 +889,7 @@ void MyApp::DoUnicodeDemo(wxCommandEvent& WXUNUSED(event))
     textCtrl << _T("\nTest wchar_t to char (Unicode to ANSI/Multibyte) converions:");
 
     wxString str;
-    str = _T("Robert Röbling\n");
+    str = _T("Robert R\366bling\n");
 
     printf( "\n\nConversion with wxConvLocal:\n" );
     wxConvCurrent = &wxConvLocal;

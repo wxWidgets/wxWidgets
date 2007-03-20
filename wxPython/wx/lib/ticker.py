@@ -12,12 +12,16 @@
 
 """News-ticker style scrolling text control
 
-    Can scroll from right to left or left to right.
-    Speed of the ticking is controlled by two parameters:
-        Frames per Second(FPS): How many times per second the ticker updates
-        Pixels per Frame(PPF): How many pixels the text moves each update
-    Low FPS with high PPF will result in "jumpy" text, lower PPF with higher FPS
-    is smoother (but blurrier and more CPU intensive) text.
+    * Can scroll from right to left or left to right.
+    
+    * Speed of the ticking is controlled by two parameters:
+    
+      - Frames per Second(FPS): How many times per second the ticker updates
+      
+      - Pixels per Frame(PPF): How many pixels the text moves each update
+
+Low FPS with high PPF will result in "jumpy" text, lower PPF with higher FPS
+is smoother (but blurrier and more CPU intensive) text.
 """
 
 import wx

@@ -437,13 +437,13 @@ window's *best size* values.  Also set's the minsize for use with sizers.", "");
     
     DocDeclStr(
         virtual void , Raise(),
-        "Raises the window to the top of the window hierarchy if it is a
-managed window (dialog or frame).", "");
+        "Raises the window to the top of the window hierarchy.  In current
+version of wxWidgets this works both for manage and child windows.", "");
     
     DocDeclStr(
         virtual void , Lower(),
-        "Lowers the window to the bottom of the window hierarchy if it is a
-managed window (dialog or frame).", "");
+        "Lowers the window to the bottom of the window hierarchy.  In current
+version of wxWidgets this works both for manage and child windows.", "");
     
 
     
@@ -568,6 +568,7 @@ relative to the screen.", "");
     DocDeclStr(
         void , CenterOnScreen(int dir = wxBOTH),
         "Center on screen (only works for top level windows)", "");
+    %pythoncode { CenterOnScreen = wx._deprecated(CenterOnScreen) }
     %pythoncode { CentreOnScreen = CenterOnScreen }
 
 
@@ -1964,6 +1965,11 @@ wxControl where it returns true.", "");
         if hasattr(self, '_setCallbackInfo'):
             self._setCallbackInfo(self, self.__class__)
     }
+
+    %pythoncode {
+    def SendSizeEvent(self):
+        self.GetEventhandler().ProcessEvent(wx.SizeEvent((-1,-1)))
+    }
 };
 
 
@@ -2061,7 +2067,8 @@ wxWindow* wxFindWindowByLabel( const wxString& label,
         WXHWND hWnd = (WXHWND)_hWnd;
         long id = wxGetWindowId(hWnd);
         wxWindow* win = new wxWindow;
-        parent->AddChild(win);
+        if (parent)
+            parent->AddChild(win);
         win->SetEventHandler(win);
         win->SetHWND(hWnd);
         win->SetId(id);

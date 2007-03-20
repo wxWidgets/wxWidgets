@@ -3,13 +3,13 @@
 0. Purpose
 ----------
 
-This is broad technote covering all aspects of binary compatability with 
+This is broad technote covering all aspects of binary compatability with
 wxWidgets.
 
 1. Releases
 -----------
 
-General overview of releases can be found in tn0012.txt, but for 
+General overview of releases can be found in tn0012.txt, but for
 completeness the wxWidgets release version number is as follows:
 
 2.6.2
@@ -21,8 +21,8 @@ Major  Minor Release
 
 (I.E. Major.Minor.Release).
 
-All Release versions where the Minor is EVEN (2.4.x,2.6.x 
-etc.  ODD minors are development versions)  are expected to be binary 
+All Release versions where the Minor is EVEN (2.4.x,2.6.x
+etc.  ODD minors are development versions)  are expected to be binary
 compatable.  Note that this means FORWARD binary compatability only -
 new methods to classes are ok as long as they arn't virtual, etc.
 
@@ -35,7 +35,7 @@ http://developer.kde.org/documentation/other/binarycompatibility.html
 The changes that are NOT binary compatable:
 - Adding a virtual function
 - Changing the name of a any function or variable
-- Changing the signature of a virtual function (adding a parameter, 
+- Changing the signature of a virtual function (adding a parameter,
 even a default one)
 - Changing the order of the virtual functions in a class
 ["switching" them, etc.]
@@ -48,11 +48,13 @@ even a default one)
 3. wxABI_VERSION and BACKWARD binary compatability
 --------------------------------------------------
 
-As mentioned we do not support BACKWARD binary compatability. 
+As mentioned we do not support BACKWARD binary compatability.
 
 However, for this purpose we have the macro wxABI_VERSION.  All
 new symbols added to binary compatable releases are to be ifed
-with wxABI_VERSION.
+with wxABI_VERSION: this allows the user code to avoid using them
+by defining wxABI_VERSION to the value corresponding to an older
+release.
 
 The layout of wxABI_VERSION is as follows:
 
@@ -81,9 +83,13 @@ bool    ShowPlayerControls(
 //helpers for the wxPython people
 bool LoadURI(const wxString& fileName)
 {   return Load(wxURI(fileName));       }
-bool LoadURIWithProxy(const wxString& fileName, const wxString& proxy)     
+bool LoadURIWithProxy(const wxString& fileName, const wxString& proxy)
 {   return Load(wxURI(fileName), wxURI(proxy));       }
 #endif
+
+Note that it only makes sense to use wxABI_VERSION in the headers as the
+new function should always be compiled into the library, wxABI_VERSION
+only controls its visibility to the user code.
 
 
 4. Workarounds for adding virtual functions
@@ -107,7 +113,7 @@ wxShadowObject resides in include/wx/clntdata.h.
 
 To use wxShadowObject, you first call AddMethod or AddField with
 the first parameter being the name of the field and/or method
-you want, and the second parameter being the value of the 
+you want, and the second parameter being the value of the
 field and/or method.
 
 In the case of fields this is a void*, and in the case of method
@@ -118,15 +124,15 @@ After you add a field, you can set it via SetField with the same
 params as AddField, the second param being the value to set
 the field to.  You can get the field after you call AddField
 via GetField, with the parameters as the other two field functions,
-only in the case the second parameter is the fallback 
-value for the field in the case of it not being found in the 
-hash map.  
+only in the case the second parameter is the fallback
+value for the field in the case of it not being found in the
+hash map.
 
 You can call a method after you add it via InvokeMethod, which
 returns a bool indicating whether or not the method was found
 in the hash map, and has 4 parameters.  The first parameter is
 the name of the method you wish to call, the second is the first
-parameter passed to the wxShadowObjectMethod, the third is the 
+parameter passed to the wxShadowObjectMethod, the third is the
 second parameter passed to that wxShadowObjectMethod, and the
 fourth is the return value of the wxShadowObjectMethod.
 
@@ -151,7 +157,7 @@ The file has the layout as follows:
 Where X is the current Release as mentioned earlier, i.e. 2.  This
 is following by an opening bracket "{", followed by "global:",
 followed by patterns matching added symbols, then followed by "}", and then
-the file is either followed by earlier Releases or ended by 
+the file is either followed by earlier Releases or ended by
 a @WX_VERSION_TAG@ block without the period or Release.
 
 The patterns used to specify added symbols are globbing patters and can

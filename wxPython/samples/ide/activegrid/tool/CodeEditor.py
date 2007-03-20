@@ -19,8 +19,8 @@ import os
 import re
 import string
 import sys
-import DebuggerService
 import MarkerService
+from UICommon import CaseInsensitiveCompare
 _ = wx.GetTranslation
 if wx.Platform == '__WXMSW__':
     _WINDOWS = True
@@ -119,16 +119,27 @@ class CodeView(STCTextEditor.TextView):
             return False
         id = event.GetId()
         if id == EXPAND_TEXT_ID:
-            event.Enable(self.GetCtrl().CanLineExpand(self.GetCtrl().GetCurrentLine()))
+            if self.GetCtrl().GetViewFolding():
+                event.Enable(self.GetCtrl().CanLineExpand(self.GetCtrl().GetCurrentLine()))
+            else:
+                event.Enable(False)
             return True
         elif id == COLLAPSE_TEXT_ID:
-            event.Enable(self.GetCtrl().CanLineCollapse(self.GetCtrl().GetCurrentLine()))
+            if self.GetCtrl().GetViewFolding():
+                event.Enable(self.GetCtrl().CanLineCollapse(self.GetCtrl().GetCurrentLine()))
+            else:
+                event.Enable(False)
             return True
         elif (id == EXPAND_TOP_ID
         or id == COLLAPSE_TOP_ID
         or id == EXPAND_ALL_ID
-        or id == COLLAPSE_ALL_ID
-        or id == AUTO_COMPLETE_ID
+        or id == COLLAPSE_ALL_ID):
+            if self.GetCtrl().GetViewFolding():
+                event.Enable(self.GetCtrl().GetTextLength() > 0)
+            else:
+                event.Enable(False)
+            return True            
+        elif (id == AUTO_COMPLETE_ID
         or id == CLEAN_WHITESPACE
         or id == INDENT_LINES_ID
         or id == DEDENT_LINES_ID
@@ -139,9 +150,11 @@ class CodeView(STCTextEditor.TextView):
         elif id == CHECK_CODE_ID:
             event.Enable(False)
             return True
-        elif (id == SET_INDENT_WIDTH_ID
-        or id == FOLDING_ID):
+        elif id == SET_INDENT_WIDTH_ID:
             event.Enable(True)
+            return True
+        elif id == FOLDING_ID:
+            event.Enable(self.GetCtrl().GetViewFolding())
             return True
         elif id == USE_TABS_ID:
             event.Enable(True)
@@ -209,7 +222,7 @@ class CodeView(STCTextEditor.TextView):
         filename = document.GetFilename()
         if filename:
             rootItem = treeCtrl.AddRoot(os.path.basename(filename))
-            treeCtrl.SetDoSelectCallback(rootItem, self, None)
+            treeCtrl.SetDoSelectCallback(rootItem, self, (0,0))
         else:
             return True
 
@@ -231,11 +244,13 @@ class CodeView(STCTextEditor.TextView):
             if classLine:
                 indent = classLine.start(0)
                 itemStr = classLine.string[classLine.start(0):classLine.end(0)-1]  # don't take the closing ':'
+                itemStr = itemStr.replace("\n", "").replace("\r", "").replace(",\\", ",").replace("  ", "")  # remove line continuations and spaces from outline view
             else:
                 defLine = defPat.search(line)
                 if defLine:
                     indent = defLine.start(0)
                     itemStr = defLine.string[defLine.start(0):defLine.end(0)]
+                    itemStr = itemStr.replace("\n", "").replace("\r", "").replace(",\\", ",").replace("  ", "")  # remove line continuations and spaces from outline view
 
             if indent == 0:
                 parentItem = rootItem
@@ -354,18 +369,6 @@ class CodeView(STCTextEditor.TextView):
         return ['Put', 'Editor Specific', 'Keywords', 'Here']
 
 
-    def CaseInsensitiveCompare(self, s1, s2):
-        """ GetAutoCompleteKeywordList() method used to show keywords in case insensitive order """
-        s1L = s1.lower()
-        s2L = s2.lower()
-        if s1L == s2L:
-            return 0
-        elif s1L < s2L:
-            return -1
-        else:
-            return 1
-
-
     def GetAutoCompleteKeywordList(self, context, hint):            
         """ Replace this method with Editor specific keywords """
         kw = self.GetAutoCompleteDefaultKeywords()
@@ -380,7 +383,7 @@ class CodeView(STCTextEditor.TextView):
         else:
             replaceLen = 0
             
-        kw.sort(self.CaseInsensitiveCompare)
+        kw.sort(CaseInsensitiveCompare)
         return " ".join(kw), replaceLen
         
 
@@ -410,6 +413,7 @@ class CodeView(STCTextEditor.TextView):
 
     def OnSetIndentWidth(self):
         dialog = wx.TextEntryDialog(self._GetParentFrame(), _("Enter new indent width (2-10):"), _("Set Indent Width"), "%i" % self.GetCtrl().GetIndent())
+        dialog.CenterOnParent()
         if dialog.ShowModal() == wx.ID_OK:
             try:
                 indent = int(dialog.GetValue())
@@ -477,13 +481,17 @@ class CodeView(STCTextEditor.TextView):
 
 
     def OnUpdate(self, sender = None, hint = None):
+        if wx.lib.docview.View.OnUpdate(self, sender, hint):
+            return
+
         if hint == "ViewStuff":
             self.GetCtrl().SetViewDefaults()
         elif hint == "Font":
-            font, color = self.GetFontAndColorFromConfig()
+            font, color = self.GetCtrl().GetFontAndColorFromConfig()
             self.GetCtrl().SetFont(font)
             self.GetCtrl().SetFontColor(color)
         else:
+            import DebuggerService
             dbg_service = wx.GetApp().GetService(DebuggerService.DebuggerService)
             if dbg_service:
                 dbg_service.SetCurrentBreakpointMarkers(self)
@@ -633,7 +641,7 @@ class CodeCtrl(STCTextEditor.TextCtrl):
     BREAKPOINT_MARKER_MASK = 0x2
     
             
-    def __init__(self, parent, id=-1, style = wx.NO_FULL_REPAINT_ON_RESIZE):
+    def __init__(self, parent, id=-1, style = wx.NO_FULL_REPAINT_ON_RESIZE, clearTab=True):
         STCTextEditor.TextCtrl.__init__(self, parent, id, style)
         
         self.UsePopUp(False)
@@ -645,7 +653,6 @@ class CodeCtrl(STCTextEditor.TextCtrl):
         self.SetMarginType(2, wx.stc.STC_MARGIN_SYMBOL)
         self.SetMarginMask(2, wx.stc.STC_MASK_FOLDERS)
         self.SetMarginSensitive(2, True)
-        self.SetMarginWidth(2, 12)
         
         self.SetMarginSensitive(1, False)
         self.SetMarginMask(1, 0x4)
@@ -667,7 +674,7 @@ class CodeCtrl(STCTextEditor.TextCtrl):
         # Define the breakpoint marker
         self.MarkerDefine(CodeCtrl.BREAKPOINT_MARKER_NUM, wx.stc.STC_MARK_CIRCLE, wx.BLACK, (255,0,0))
         
-        if _WINDOWS:  # should test to see if menu item exists, if it does, add this workaround
+        if _WINDOWS and clearTab:  # should test to see if menu item exists, if it does, add this workaround
             self.CmdKeyClear(wx.stc.STC_KEY_TAB, 0)  # menu item "Indent Lines" from CodeService.InstallControls() generates another INDENT_LINES_ID event, so we'll explicitly disable the tab processing in the editor
 
         wx.stc.EVT_STC_MARGINCLICK(self, self.GetId(), self.OnMarginClick)
@@ -703,7 +710,7 @@ class CodeCtrl(STCTextEditor.TextCtrl):
         item = wx.MenuItem(menu, TOGGLEBREAKPOINT_ID, _("Toggle Breakpoint"))
         menu.AppendItem(item)
         self.Bind(wx.EVT_MENU, self.OnPopToggleMarker, id=TOGGLEMARKER_ID)
-        item = wx.MenuItem(menu, TOGGLEMARKER_ID, _("Toggle Marker"))
+        item = wx.MenuItem(menu, TOGGLEMARKER_ID, _("Toggle Bookmark"))
         menu.AppendItem(item)
         menu.AppendSeparator()
                 
@@ -725,6 +732,7 @@ class CodeCtrl(STCTextEditor.TextCtrl):
 
     def OnPopToggleBP(self, event):
         """ Toggle break point on right click line, not current line """
+        import DebuggerService
         wx.GetApp().GetService(DebuggerService.DebuggerService).OnToggleBreakpoint(event, line=self._rightClickLine)
       
   
@@ -869,6 +877,7 @@ class CodeCtrl(STCTextEditor.TextCtrl):
 
         elif evt.GetMargin() == 0:
             #This is used to toggle breakpoints via the debugger service.
+            import DebuggerService
             db_service = wx.GetApp().GetService(DebuggerService.DebuggerService)
             if db_service:
                 db_service.OnToggleBreakpoint(evt, line=self.LineFromPosition(evt.GetPosition()))

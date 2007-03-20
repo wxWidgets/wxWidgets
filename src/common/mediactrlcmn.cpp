@@ -48,12 +48,12 @@
 // RTTI and Event implementations
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-IMPLEMENT_CLASS(wxMediaCtrl, wxControl);
-IMPLEMENT_CLASS(wxMediaBackend, wxObject);
-IMPLEMENT_DYNAMIC_CLASS(wxMediaEvent, wxEvent);
-DEFINE_EVENT_TYPE(wxEVT_MEDIA_FINISHED);
-DEFINE_EVENT_TYPE(wxEVT_MEDIA_LOADED);
-DEFINE_EVENT_TYPE(wxEVT_MEDIA_STOP);
+IMPLEMENT_CLASS(wxMediaCtrl, wxControl)
+IMPLEMENT_CLASS(wxMediaBackend, wxObject)
+IMPLEMENT_DYNAMIC_CLASS(wxMediaEvent, wxEvent)
+DEFINE_EVENT_TYPE(wxEVT_MEDIA_FINISHED)
+DEFINE_EVENT_TYPE(wxEVT_MEDIA_LOADED)
+DEFINE_EVENT_TYPE(wxEVT_MEDIA_STOP)
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //
@@ -512,7 +512,7 @@ void wxMediaBackendCommonBase::QueueEvent(wxEventType evtType)
 }
 
 #include "wx/html/forcelnk.h"
-FORCE_LINK(basewxmediabackends);
+FORCE_LINK(basewxmediabackends)
 
 //---------------------------------------------------------------------------
 // End of compilation guard and of file

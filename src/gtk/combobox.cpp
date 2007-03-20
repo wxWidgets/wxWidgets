@@ -80,17 +80,29 @@ gtk_popup_hide_callback(GtkCombo *WXUNUSED(gtk_combo), wxComboBox *combo)
     // when the popup is hidden, throw a SELECTED event only if the combobox
     // selection changed.
     int curSelection = combo->GetCurrentSelection();
-    if (g_SelectionBeforePopup != curSelection)
+
+    const bool hasChanged = curSelection != g_SelectionBeforePopup;
+
+    // reset the selection flag to value meaning that it is hidden and do it
+    // now, before generating the events, so that GetSelection() returns the
+    // new value from the event handler
+    g_SelectionBeforePopup = wxID_NONE;
+
+    if ( hasChanged )
     {
         wxCommandEvent event( wxEVT_COMMAND_COMBOBOX_SELECTED, combo->GetId() );
         event.SetInt( curSelection );
         event.SetString( combo->GetStringSelection() );
         event.SetEventObject( combo );
         combo->GetEventHandler()->ProcessEvent( event );
+
+        // for consistency with the other ports, send TEXT event
+        wxCommandEvent event2( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
+        event2.SetString( combo->GetStringSelection() );
+        event2.SetEventObject( combo );
+        combo->GetEventHandler()->ProcessEvent( event2 );
     }
 
-    // reset the selection flag to value meaning that it is hidden
-    g_SelectionBeforePopup = wxID_NONE;
 }
 }
 
@@ -148,7 +160,7 @@ gtk_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUSED(wi
         event.SetEventObject( combo );
         combo->GetEventHandler()->ProcessEvent( event );
 
-        // for consistencu with the other ports, don't generate text update
+        // for consistency with the other ports, don't generate text update
         // events while the user is browsing the combobox neither
         wxCommandEvent event2( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
         event2.SetString( combo->GetValue() );

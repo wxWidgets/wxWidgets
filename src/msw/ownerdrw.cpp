@@ -1,5 +1,5 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        msw/ownerdrw.cpp
+// Name:        src/msw/ownerdrw.cpp
 // Purpose:     implementation of wxOwnerDrawn class
 // Author:      Vadim Zeitlin
 // Modified by:
@@ -15,26 +15,27 @@
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
-#include "wx/msw/private.h"
 
 #ifdef __BORLANDC__
-#pragma hdrstop
+    #pragma hdrstop
+    #include "wx/msw/private.h"
 #endif
 
 #ifndef WX_PRECOMP
-  #include "wx/window.h"
-  #include "wx/msw/private.h"
-  #include "wx/font.h"
-  #include "wx/bitmap.h"
-  #include "wx/dcmemory.h"
-  #include "wx/menu.h"
-  #include "wx/utils.h"
+    #include "wx/window.h"
+    #include "wx/msw/private.h"
+    #include "wx/font.h"
+    #include "wx/bitmap.h"
+    #include "wx/dcmemory.h"
+    #include "wx/menu.h"
+    #include "wx/utils.h"
+    #include "wx/settings.h"
+    #include "wx/menuitem.h"
 #endif
 
-#include "wx/settings.h"
 #include "wx/ownerdrw.h"
-#include "wx/menuitem.h"
 #include "wx/fontutil.h"
+#include "wx/image.h"
 #include "wx/module.h"
 
 #if wxUSE_OWNER_DRAWN
@@ -96,7 +97,6 @@ bool wxMSWSystemMenuFontModule::ms_showCues = true;
 
 IMPLEMENT_DYNAMIC_CLASS(wxMSWSystemMenuFontModule, wxModule)
 
-
 // temporary hack to implement wxOwnerDrawn::IsMenuItem() without breaking
 // backwards compatibility
 #if wxCHECK_VERSION(2, 7, 0)
@@ -110,12 +110,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxMSWSystemMenuFontModule, wxModule)
 //      a UDT.  Will produce errors if applied using infix notation.
 //
 // shut it down
-#ifdef __VISUALC__
-    #if __VISUALC__ <= 1300
+#if defined __VISUALC__ && __VISUALC__ <= 1300
+    #if __VISUALC__ >= 1200
         #pragma warning(push)
-        #pragma warning(disable: 4284)
         #define POP_WARNINGS
     #endif
+    #pragma warning(disable: 4284)
 #endif
 
 #include "wx/hashset.h"
@@ -138,7 +138,7 @@ wxOwnerDrawn::wxOwnerDrawn(const wxString& str,
                            bool bMenuItem)
             : m_strName(str)
 {
-    if (ms_nDefaultMarginWidth == 0)
+    if ( ms_nDefaultMarginWidth == 0 )
     {
        ms_nDefaultMarginWidth = ::GetSystemMetrics(SM_CXMENUCHECK) +
                                 wxSystemSettings::GetMetric(wxSYS_EDGE_X);
@@ -159,6 +159,7 @@ wxOwnerDrawn::wxOwnerDrawn(const wxString& str,
     {
         gs_menuItems.insert(this);
     }
+
 }
 
 wxOwnerDrawn::~wxOwnerDrawn()
@@ -217,7 +218,7 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
         // placed on top of each other.
         if ( !m_strAccel.empty() )
         {
-            str.Pad(str.Length()%8);
+            str.Pad(str.length()%8);
             str += m_strAccel;
         }
 
@@ -378,7 +379,7 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
         xText += 3; // separate text from the highlight rectangle
 
         SIZE sizeRect;
-        ::GetTextExtentPoint32(hdc, strMenuText.c_str(), strMenuText.Length(), &sizeRect);
+        ::GetTextExtentPoint32(hdc, strMenuText.c_str(), strMenuText.length(), &sizeRect);
         ::DrawState(hdc, NULL, NULL,
                     (LPARAM)strMenuText.c_str(), strMenuText.length(),
                     xText, rc.y + (int) ((rc.GetHeight()-sizeRect.cy)/2.0), // centre text vertically
@@ -447,9 +448,20 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
 
         if ( !bmp.Ok() )
         {
-            // for not checkable bitmaps we should always use unchecked one because
-            // their checked bitmap is not set
+            // for not checkable bitmaps we should always use unchecked one
+            // because their checked bitmap is not set
             bmp = GetBitmap(!IsCheckable() || (st & wxODChecked));
+
+#if wxUSE_IMAGE
+            if ( bmp.Ok() && st & wxODDisabled )
+            {
+                // we need to grey out the bitmap as we don't have any specific
+                // disabled bitmap
+                wxImage imgGrey = bmp.ConvertToImage().ConvertToGreyscale();
+                if ( imgGrey.Ok() )
+                    bmp = wxBitmap(imgGrey);
+            }
+#endif // wxUSE_IMAGE
         }
 
         if ( bmp.Ok() )
@@ -488,6 +500,4 @@ bool wxOwnerDrawn::OnDrawItem(wxDC& dc,
     return true;
 }
 
-
 #endif // wxUSE_OWNER_DRAWN
-

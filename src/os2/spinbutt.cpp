@@ -122,20 +122,17 @@ bool wxSpinButton::Create(
 
     ::WinQueryWindowPos(m_hWnd, &vSwp);
     SetXComp(vSwp.x);
-    SetYComp(vSwp.y);
-    wxFont*                          pTextFont = new wxFont( 10
-                                                            ,wxMODERN
-                                                            ,wxNORMAL
-                                                            ,wxNORMAL
-                                                           );
-    SetFont(*pTextFont);
+    SetYComp(vSwp.y-5); // compensate for the associated TextControl border
+
+    SetFont(*wxSMALL_FONT);
     //
     // For OS/2 we want to hide the text portion so we can substitute an
-    // independent text ctrl in its place.  10 device units does this
+    // independent text ctrl in its place.
+    // Therefore we must override any user given width with our best guess.
     //
-    SetSize( nX
-            ,nY
-            ,10L
+    SetSize( nX - GetXComp()
+            ,nY - GetYComp()
+            ,nWidth
             ,nHeight
            );
     wxAssociateWinWithHandle( m_hWnd
@@ -148,7 +145,6 @@ bool wxSpinButton::Create(
     ::WinSetWindowULong(GetHwnd(), QWL_USER, (LONG)this);
     fnWndProcSpinCtrl = (WXFARPROC)::WinSubclassWindow(m_hWnd, (PFNWP)wxSpinCtrlWndProc);
 #endif
-    delete pTextFont;
     return TRUE;
 } // end of wxSpinButton::Create
 
@@ -163,12 +159,12 @@ wxSpinButton::~wxSpinButton()
 wxSize wxSpinButton::DoGetBestSize() const
 {
     //
-    // OS/2 PM does not really have system metrics so we'll just set  it to
-    // 24x20 which is the size of the buttons and the borders.
-    // Also we have no horizontal spin buttons.
+    // OS/2 PM does not really have system metrics so we'll just set it to
+    // a square based on its height.
     //
-    wxSize best(24,20);
-    return best;
+    RECTL   vRect;
+    ::WinQueryWindowRect(GetHwnd(),&vRect);
+    return wxSize(vRect.yTop,vRect.yTop);
 } // end of wxSpinButton::DoGetBestSize
 
 // ----------------------------------------------------------------------------

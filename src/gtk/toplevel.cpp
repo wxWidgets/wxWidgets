@@ -105,7 +105,7 @@ static void wxgtk_window_set_urgency_hint (GtkWindow *win,
     XFree(wm_hints);
 }
 
-static gint gtk_frame_urgency_timer_callback( GtkWidget *win )
+static gboolean gtk_frame_urgency_timer_callback( GtkWidget *win )
 {
 #if defined(__WXGTK20__) && GTK_CHECK_VERSION(2,7,0)
     if(!gtk_check_version(2,7,0))
@@ -125,7 +125,7 @@ static gint gtk_frame_urgency_timer_callback( GtkWidget *win )
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint gtk_frame_focus_in_callback( GtkWidget *widget,
+static gboolean gtk_frame_focus_in_callback( GtkWidget *widget,
                                          GdkEvent *WXUNUSED(event),
                                          wxTopLevelWindowGTK *win )
 {
@@ -190,7 +190,7 @@ static gint gtk_frame_focus_in_callback( GtkWidget *widget,
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint gtk_frame_focus_out_callback( GtkWidget *widget,
+static gboolean gtk_frame_focus_out_callback( GtkWidget *widget,
                                           GdkEventFocus *WXUNUSED(gdk_event),
                                           wxTopLevelWindowGTK *win )
 {
@@ -225,7 +225,7 @@ static gint gtk_frame_focus_out_callback( GtkWidget *widget,
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static gint gtk_frame_focus_callback( GtkWidget *widget, GtkDirectionType WXUNUSED(d), wxWindow *WXUNUSED(win) )
+static gboolean gtk_frame_focus_callback( GtkWidget *widget, GtkDirectionType WXUNUSED(d), wxWindow *WXUNUSED(win) )
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
@@ -598,9 +598,6 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     }
 #endif
 
-    if (!name.empty())
-        gtk_window_set_wmclass( GTK_WINDOW(m_widget), wxGTK_CONV( name ), wxGTK_CONV( name ) );
-
     gtk_window_set_title( GTK_WINDOW(m_widget), wxGTK_CONV( title ) );
     GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
 
@@ -666,9 +663,9 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
         GTK_SIGNAL_FUNC(gtk_frame_focus_callback), (gpointer)this );
 
     // activation
-    gtk_signal_connect( GTK_OBJECT(m_widget), "focus_in_event",
+    gtk_signal_connect_after( GTK_OBJECT(m_widget), "focus_in_event",
         GTK_SIGNAL_FUNC(gtk_frame_focus_in_callback), (gpointer)this );
-    gtk_signal_connect( GTK_OBJECT(m_widget), "focus_out_event",
+    gtk_signal_connect_after( GTK_OBJECT(m_widget), "focus_out_event",
         GTK_SIGNAL_FUNC(gtk_frame_focus_out_callback), (gpointer)this );
 
     // decorations

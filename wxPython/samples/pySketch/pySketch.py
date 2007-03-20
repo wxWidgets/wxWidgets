@@ -793,14 +793,14 @@ class DrawingFrame(wx.Frame):
         menu.Enable(menu_MOVE_BACKWARD, obj != self.contents[-1])
         menu.Enable(menu_MOVE_TO_BACK,  obj != self.contents[-1])
 
-        EVT_MENU(self, menu_DUPLICATE,     self.doDuplicate)
-        EVT_MENU(self, menu_EDIT_TEXT,     self.doEditText)
-        EVT_MENU(self, menu_DELETE,        self.doDelete)
-        EVT_MENU(self, menu_MOVE_FORWARD,  self.doMoveForward)
-        EVT_MENU(self, menu_MOVE_TO_FRONT, self.doMoveToFront)
-        EVT_MENU(self, menu_MOVE_BACKWARD, self.doMoveBackward)
-        EVT_MENU(self, menu_MOVE_TO_BACK,  self.doMoveToBack)
-
+        self.Bind(wx.EVT_MENU, self.doDuplicate, id=menu_DUPLICATE)
+        self.Bind(wx.EVT_MENU, self.doEditText, id=menu_EDIT_TEXT)
+        self.Bind(wx.EVT_MENU, self.doDelete, id=menu_DELETE)
+        self.Bind(wx.EVT_MENU, self.doMoveForward, id=menu_MOVE_FORWARD)
+        self.Bind(wx.EVT_MENU, self.doMoveToFront, id=menu_MOVE_TO_FRONT)
+        self.Bind(wx.EVT_MENU, self.doMoveBackward, id=menu_MOVE_BACKWARD)
+        self.Bind(wx.EVT_MENU, self.doMoveToBack, id=menu_MOVE_TO_BACK)  
+                            
         # Show the pop-up menu.
 
         clickPt = wx.Point(mousePt.x + self.drawPanel.GetPosition().x,

@@ -65,10 +65,13 @@ class ScrolledPanel( wx.PyScrolledWindow ):
             if rate_y:
                 h += rate_y - (h % rate_y)
             self.SetVirtualSize( (w, h) )
-            self.SetVirtualSizeHints( w, h )
+        self.SetScrollRate(rate_x, rate_y)        
+        wx.CallAfter(self._SetupAfter) # scroll back to top after initial events
 
-        self.SetScrollRate(rate_x, rate_y)
-        wx.CallAfter(self.Scroll, 0, 0) # scroll back to top after initial events
+
+    def _SetupAfter(self):
+        self.SetVirtualSize(self.GetBestVirtualSize())
+        self.Scroll(0,0)
 
 
     def OnChildFocus(self, evt):

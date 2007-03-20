@@ -1,12 +1,16 @@
+from __future__ import division
+
 try:
-    from Numeric import array,asarray,Float,cos, sin, pi,sum,minimum,maximum,Int32,zeros, ones, concatenate, sqrt, argmin, power, absolute, matrixmultiply, transpose, sometrue
+    from Numeric import array,asarray,Float,cos, sin, pi,sum,minimum,maximum,Int32,zeros, ones, concatenate, sqrt, argmin, power, absolute, matrixmultiply, transpose, sometrue, arange, hypot
 except ImportError:
     try:
-        from numarray import array, asarray, Float, cos, sin, pi, sum, minimum, maximum, Int32, zeros, concatenate, matrixmultiply, transpose, sometrue
+        from numarray import array, asarray, Float, cos, sin, pi, sum, minimum, maximum, Int32, zeros, concatenate, matrixmultiply, transpose, sometrue, arange, hypot
     except ImportError:
         raise ImportError("I could not import either Numeric or numarray")
 
 from time import clock, sleep
+
+import Resources # A file with icons, etc for FloatCanvas
 
 import wx
 
@@ -15,7 +19,7 @@ import os
 
 ## A global variable to hold the Pixels per inch that wxWindows thinks is in use
 ## This is used for scaling fonts.
-## This can't be computed on module __init__, because a wx.App might not have iniitalized yet.
+## This can't be computed on module __init__, because a wx.App might not have initialized yet.
 global ScreenPPI
 
 ## a custom Exceptions:
@@ -144,8 +148,8 @@ def _colorGenerator():
 
 
 #### I don't know if the Set objects are useful, beyond the pointset
-#### object The problem is that when zoomed in, the BB is checked to see
-#### whether to draw the object.  A Set object can defeat this. ONe day
+#### object. The problem is that when zoomed in, the BB is checked to see
+#### whether to draw the object.  A Set object can defeat this. One day
 #### I plan to write some custon C++ code to draw sets of objects
 
 ##class ObjectSetMixin:
@@ -212,7 +216,7 @@ class DrawObject:
 
     """
 
-    def __init__(self,InForeground  = False):
+    def __init__(self, InForeground  = False, IsVisible = True):
         self.InForeground = InForeground
 
         self._Canvas = None
@@ -232,6 +236,8 @@ class DrawObject:
 
         self.FillStyle = "Solid"
         
+        self.Visible = IsVisible
+
     # I pre-define all these as class variables to provide an easier
     # interface, and perhaps speed things up by caching all the Pens
     # and Brushes, although that may not help, as I think wx now
@@ -313,6 +319,7 @@ class DrawObject:
     def SetBrush(self,FillColor,FillStyle):
         if FillColor is None or FillStyle is None:
             self.Brush = wx.TRANSPARENT_BRUSH
+            ##fixme: should I really re-set the style?
             self.FillStyle = "Transparent"
         else:
             self.Brush = self.BrushList.setdefault( (FillColor,FillStyle),  wx.Brush(FillColor,self.FillStyleList[FillStyle] ) )
@@ -349,6 +356,12 @@ class DrawObject:
             self._Canvas._DrawList.remove(self)
             self._Canvas._BackgroundDirty = True
             self.InForeground = True
+
+    def Hide(self):
+        self.Visible = False
+
+    def Show(self):
+        self.Visible = True
 
 class ColorOnlyMixin:
     """
@@ -393,7 +406,7 @@ class LineAndFillMixin(LineOnlyMixin):
     """
     def SetFillColor(self, FillColor):
         self.FillColor = FillColor
-        self.SetBrush(FillColor,self.FillStyle)
+        self.SetBrush(FillColor, self.FillStyle)
 
     def SetFillStyle(self, FillStyle):
         self.FillStyle = FillStyle
@@ -418,21 +431,25 @@ class XYObjectMixin:
         Delta = asarray(Delta, Float)
         self.XY += Delta
         self.BoundingBox = self.BoundingBox + Delta
+        
         if self._Canvas:
             self._Canvas.BoundingBoxDirty = True      
-
-    def SetXY(self, x, y):
-        self.XY = array( (x, y), Float)
-        self.CalcBoundingBox()
 
     def CalcBoundingBox(self):
         ## This may get overwritten in some subclasses
         self.BoundingBox = array( (self.XY, self.XY), Float )
 
     def SetPoint(self, xy):
-        self.XY = array( xy, Float)
-        self.XY.shape = (2,)
-        self.CalcBoundingBox()
+        xy = array( xy, Float)
+        xy.shape = (2,)
+        Delta = xy - self.XY
+        
+        self.XY = xy
+        self.BoundingBox = self.BoundingBox + Delta
+
+        #self.CalcBoundingBox()
+        if self._Canvas:
+            self._Canvas.BoundingBoxDirty = True     
 
 class PointsObjectMixin:
     """
@@ -529,7 +546,7 @@ class Polygon(DrawObject,PointsObjectMixin,LineAndFillMixin):
         self.SetBrush(FillColor,FillStyle)
 
     def _Draw(self, dc , WorldToPixel, ScaleWorldToPixel = None, HTdc=None):
-        Points = WorldToPixel(self.Points)
+        Points = WorldToPixel(self.Points)#.tolist()
         dc.SetPen(self.Pen)
         dc.SetBrush(self.Brush)
         dc.DrawPolygon(Points)
@@ -677,6 +694,7 @@ class Arrow(DrawObject,XYObjectMixin,LineOnlyMixin):
         self.Length = Length
         self.CalcArrowPoints()
 
+    ## fixme: cache this?
     def CalcArrowPoints(self):
         L = self.Length
         S = self.ArrowHeadSize
@@ -768,7 +786,6 @@ class PointSet(DrawObject,PointsObjectMixin, ColorOnlyMixin):
     def SetDiameter(self,Diameter):
             self.Diameter = Diameter
             
-
     def FindClosestPoint(self, XY):
         """
         
@@ -781,12 +798,9 @@ class PointSet(DrawObject,PointsObjectMixin, ColorOnlyMixin):
         lot of separate points.
 
         """
-        ## kind of ugly to minimize data copying
         d = self.Points - XY
-        d = sum( power(d,2,d), 1 )
-        d = absolute( d, d ) # don't need the real distance, just which is smallest
-        #dist = sqrt( sum( (self.Points - XY)**2), 1) )
-        return argmin(d)
+        return argmin(hypot(d[:,0],d[:,1]))
+    
 
     def DrawD2(self, dc, Points):
         # A Little optimization for a diameter2 - point
@@ -805,6 +819,7 @@ class PointSet(DrawObject,PointsObjectMixin, ColorOnlyMixin):
         else:
             dc.SetBrush(self.Brush)
             radius = int(round(self.Diameter/2))
+            ##fixme: I really should add a DrawCircleList to wxPython
             if len(Points) > 100:
                 xy = Points
                 xywh = concatenate((xy-radius, ones(xy.shape) * self.Diameter ), 1 )
@@ -843,7 +858,7 @@ class Point(DrawObject,XYObjectMixin,ColorOnlyMixin):
     """
     def __init__(self, XY, Color = "Black", Diameter =  1, InForeground = False):
         DrawObject.__init__(self, InForeground)
-
+ 
         self.XY = array(XY, Float)
         self.XY.shape = (2,) # Make sure it is a 1X2 array, even if there is only one point
         self.CalcBoundingBox()
@@ -873,8 +888,55 @@ class Point(DrawObject,XYObjectMixin,ColorOnlyMixin):
                 HTdc.SetBrush(self.HitBrush)
                 HTdc.DrawCircle(xy[0],xy[1], radius)
 
-class RectEllipse(DrawObject, XYObjectMixin,LineAndFillMixin):
-    def __init__(self,x,y,width,height,
+class SquarePoint(DrawObject,XYObjectMixin,ColorOnlyMixin):
+    """
+    
+    The SquarePoint class takes a 2-tuple, or a (2,) NumPy array of point
+    coordinates. It produces a square dot, centered on Point
+
+    The Size is in screen points, not world coordinates, so the
+    Bounding box is just the point, and doesn't include the Size.
+
+    The HitLineWidth is used as diameter for the
+    Hit Test.
+
+    """
+    def __init__(self, Point, Color = "Black", Size =  4, InForeground = False):
+        DrawObject.__init__(self, InForeground)
+ 
+        self.XY = array(Point, Float)
+        self.XY.shape = (2,) # Make sure it is a 1X2 array, even if there is only one point
+        self.CalcBoundingBox()
+        self.SetColor(Color)
+        self.Size = Size
+
+        self.HitLineWidth = self.MinHitLineWidth
+
+    def SetSize(self,Size):
+            self.Size = Size
+
+    def _Draw(self, dc , WorldToPixel, ScaleWorldToPixel, HTdc=None):
+        Size = self.Size
+        dc.SetPen(self.Pen)
+        xc,yc = WorldToPixel(self.XY)
+        
+        if self.Size <= 1:
+            dc.DrawPoint(xc, yc)
+        else:
+            x = xc - Size/2.0
+            y = yc - Size/2.0
+            dc.SetBrush(self.Brush)
+            dc.DrawRectangle(x, y, Size, Size)
+        if HTdc and self.HitAble:
+            HTdc.SetPen(self.HitPen)
+            if self.Size <= 1:
+                HTdc.DrawPoint(xc, xc)
+            else:
+                HTdc.SetBrush(self.HitBrush)
+                HTdc.DrawRectangle(x, y, Size, Size)
+
+class RectEllipse(DrawObject, XYObjectMixin, LineAndFillMixin):
+    def __init__(self, XY, WH,
                  LineColor = "Black",
                  LineStyle = "Solid",
                  LineWidth    = 1,
@@ -884,9 +946,11 @@ class RectEllipse(DrawObject, XYObjectMixin,LineAndFillMixin):
         
         DrawObject.__init__(self,InForeground)
 
-        self.XY = array( (x, y), Float)
-        self.WH = array( (width, height), Float )
-        self.BoundingBox = array(((x,y), (self.XY + self.WH)), Float)
+        self.XY = array( XY, Float)
+        self.XY.shape = (2,)
+        self.WH = array( WH, Float )
+        self.WH.shape = (2,)
+        self.BoundingBox = array((self.XY, (self.XY + self.WH)), Float)
         self.LineColor = LineColor
         self.LineStyle = LineStyle
         self.LineWidth = LineWidth
@@ -898,9 +962,9 @@ class RectEllipse(DrawObject, XYObjectMixin,LineAndFillMixin):
         self.SetPen(LineColor,LineStyle,LineWidth)
         self.SetBrush(FillColor,FillStyle)
 
-    def SetShape(self,x,y,width,height):
-        self.XY = array( (x, y), Float)
-        self.WH = array( (width, height), Float )
+    def SetShape(self, XY, WH):
+        self.XY = array( XY, Float)
+        self.WH = array( WH, Float )
         self.CalcBoundingBox()
 
 
@@ -930,8 +994,6 @@ class Rectangle(RectEllipse):
             HTdc.DrawRectanglePointSize(XY, WH)
 
 class Ellipse(RectEllipse):
-#    def __init__(*args, **kwargs):
-#        RectEllipse.__init__(*args, **kwargs)
 
     def _Draw(self, dc , WorldToPixel, ScaleWorldToPixel, HTdc=None):
         ( XY, WH ) = self.SetUpDraw(dc,
@@ -943,21 +1005,21 @@ class Ellipse(RectEllipse):
             HTdc.DrawEllipsePointSize(XY, WH)
 
 class Circle(Ellipse):
-    def __init__(self, x ,y, Diameter, **kwargs):
-        self.Center = array((x,y),Float)
+
+    def __init__(self, XY, Diameter, **kwargs):
+        self.Center = array(XY, Float)
+        Diameter = float(Diameter)
         RectEllipse.__init__(self ,
-                             x-Diameter/2.,
-                             y-Diameter/2.,
-                             Diameter,
-                             Diameter,
+                             self.Center - Diameter/2.0,
+                             (Diameter, Diameter),
                              **kwargs)
 
     def SetDiameter(self, Diameter):
-        x,y = self.Center - (Diameter/2.)
-        self.SetShape(x,
-                      y,
-                      Diameter,
-                      Diameter)
+        Diameter = float(Diameter)
+        XY = self.Center - (Diameter/2.0)
+        self.SetShape(XY,
+                      (Diameter, Diameter)
+                      )
         
 class TextObjectMixin(XYObjectMixin):
     """
@@ -972,6 +1034,8 @@ class TextObjectMixin(XYObjectMixin):
     ## on to a bunch of large fonts takes a massive amount of memory.
 
     FontList = {}
+
+    LayoutFontSize = 12 # font size used for calculating layout
 
     def SetFont(self, Size, Family, Style, Weight, Underline, FaceName):
         self.Font = self.FontList.setdefault( (Size,
@@ -994,18 +1058,42 @@ class TextObjectMixin(XYObjectMixin):
     def SetBackgroundColor(self, BackgroundColor):
         self.BackgroundColor = BackgroundColor
 
+    def SetText(self, String):
+        """
+        Re-sets the text displayed by the object
+
+        In the case of the ScaledTextBox, it will re-do the layout as appropriate
+
+        Note: only tested with the ScaledTextBox
+
+        """
+
+        self.String = String
+        self.LayoutText()
+
+    def LayoutText(self):
+        """
+        A dummy method to re-do the layout of the text.
+
+        A derived object needs to override this if required.
+
+        """
+        pass
+
     ## store the function that shift the coords for drawing text. The
     ## "c" parameter is the correction for world coordinates, rather
     ## than pixel coords as the y axis is reversed
-    ShiftFunDict = {'tl': lambda x, y, w, h, world=0: (x, y) ,
-                    'tc': lambda x, y, w, h, world=0: (x - w/2, y) , 
-                    'tr': lambda x, y, w, h, world=0: (x - w, y) , 
-                    'cl': lambda x, y, w, h, world=0: (x, y - h/2 + world*h) , 
-                    'cc': lambda x, y, w, h, world=0: (x - w/2, y - h/2 + world*h) , 
-                    'cr': lambda x, y, w, h, world=0: (x - w, y - h/2 + world*h) ,
-                    'bl': lambda x, y, w, h, world=0: (x, y - h + 2*world*h) ,
-                    'bc': lambda x, y, w, h, world=0: (x - w/2, y - h + 2*world*h) , 
-                    'br': lambda x, y, w, h, world=0: (x - w, y - h + 2*world*h)}
+    ## pad is the extra space around the text
+    ## if world = 1, the vertical shift is done in y-up coordinates
+    ShiftFunDict = {'tl': lambda x, y, w, h, world=0, pad=0: (x + pad,     y + pad - 2*world*pad),
+                    'tc': lambda x, y, w, h, world=0, pad=0: (x - w/2,     y + pad - 2*world*pad), 
+                    'tr': lambda x, y, w, h, world=0, pad=0: (x - w - pad, y + pad - 2*world*pad), 
+                    'cl': lambda x, y, w, h, world=0, pad=0: (x + pad,     y - h/2 + world*h), 
+                    'cc': lambda x, y, w, h, world=0, pad=0: (x - w/2,     y - h/2 + world*h), 
+                    'cr': lambda x, y, w, h, world=0, pad=0: (x - w - pad, y - h/2 + world*h),
+                    'bl': lambda x, y, w, h, world=0, pad=0: (x + pad,     y - h + 2*world*h - pad + world*2*pad) ,
+                    'bc': lambda x, y, w, h, world=0, pad=0: (x - w/2,     y - h + 2*world*h - pad + world*2*pad) , 
+                    'br': lambda x, y, w, h, world=0, pad=0: (x - w - pad, y - h + 2*world*h - pad + world*2*pad)}
 
 class Text(DrawObject, TextObjectMixin):
     """
@@ -1040,7 +1128,8 @@ class Text(DrawObject, TextObjectMixin):
         The value can be True or False. At present this may have an an
         effect on Windows only.
 
-    Alternatively, you can set the kw arg: Font, to a wx.Font, and the above will be ignored.
+    Alternatively, you can set the kw arg: Font, to a wx.Font, and the
+    above will be ignored.
     
     The size is fixed, and does not scale with the drawing.
 
@@ -1048,7 +1137,7 @@ class Text(DrawObject, TextObjectMixin):
 
     """
     
-    def __init__(self,String,x,y,
+    def __init__(self,String, xy,
                  Size =  12,
                  Color = "Black",
                  BackgroundColor = None,
@@ -1081,9 +1170,10 @@ class Text(DrawObject, TextObjectMixin):
             Weight             =  Font.GetWeight()
         self.SetFont(Size, Family, Style, Weight, Underline, FaceName)
 
-        self.BoundingBox = array(((x,y),(x,y)),Float)
+        self.BoundingBox = array((xy, xy),Float)
 
-        self.XY = ( x,y )
+        self.XY = asarray(xy)
+        self.XY.shape = (2,)
 
         (self.TextWidth, self.TextHeight) = (None, None)
         self.ShiftFun = self.ShiftFunDict[Position]
@@ -1140,7 +1230,7 @@ class ScaledText(DrawObject, TextObjectMixin):
 
     Alternatively, you can set the kw arg: Font, to a wx.Font, and the
     above will be ignored. The size of the font you specify will be
-    ignored, but the rest of it's attributes will be preserved.
+    ignored, but the rest of its attributes will be preserved.
     
     The size will scale as the drawing is zoomed.
 
@@ -1159,11 +1249,11 @@ class ScaledText(DrawObject, TextObjectMixin):
     zoom limit at that point.
 
     The hit-test is done on the entire text extent. This could be made
-    optional, but I havn't gotten around to it.
+    optional, but I haven't gotten around to it.
 
     """
     
-    def __init__(self, String, x, y , Size,
+    def __init__(self, String, XY , Size,
                  Color = "Black",
                  BackgroundColor = None,
                  Family = wx.MODERN,
@@ -1177,7 +1267,8 @@ class ScaledText(DrawObject, TextObjectMixin):
         DrawObject.__init__(self,InForeground)
 
         self.String = String
-        self.XY = array( (x, y), Float)
+        self.XY = array( XY, Float)
+        self.XY.shape = (2,)
         self.Size = Size     
         self.Color = Color
         self.BackgroundColor = BackgroundColor
@@ -1210,6 +1301,10 @@ class ScaledText(DrawObject, TextObjectMixin):
 
         self.CalcBoundingBox()
 
+    def LayoutText(self):
+        # This will be called when the text is re-set
+        # nothing much to be done here
+        self.CalcBoundingBox()
 
     def CalcBoundingBox(self):
         ## this isn't exact, as fonts don't scale exactly.
@@ -1253,9 +1348,420 @@ class ScaledText(DrawObject, TextObjectMixin):
             HTdc.SetBrush(self.HitBrush)
             HTdc.DrawRectanglePointSize(xy, (w, h) )
 
+class ScaledTextBox(DrawObject, TextObjectMixin):
+    """
+    This class creates a TextBox object that is scaled when zoomed.  It is
+    placed at the coordinates, x,y.
+
+    If the Width parameter is defined, the text will be wrapped to the width given.
+
+    A Box can be drawn around the text, be specifying:
+    LineWidth and/or  FillColor 
+
+    A space(margin) can be put all the way around the text, be specifying:
+    the PadSize argument in world coordinates.
+
+    The spacing between lines can be adjusted with the:
+    LineSpacing argument.
+
+    The "Position" argument is a two character string, indicating where
+    in relation to the coordinates the Box should be oriented.
+    -The first letter is: t, c, or b, for top, center and bottom.
+    -The second letter is: l, c, or r, for left, center and right The
+    position refers to the position relative to the text itself. It
+    defaults to "tl" (top left).
+
+    Size is the size of the font in world coordinates.
+
+    Family:
+        Font family, a generic way of referring to fonts without
+        specifying actual facename. One of:
+            wx.DEFAULT:  Chooses a default font. 
+            wx.DECORATIVE: A decorative font. 
+            wx.ROMAN: A formal, serif font. 
+            wx.SCRIPT: A handwriting font. 
+            wx.SWISS: A sans-serif font. 
+            wx.MODERN: A fixed pitch font.
+        NOTE: these are only as good as the wxWindows defaults, which aren't so good.
+    Style:
+        One of wx.NORMAL, wx.SLANT and wx.ITALIC.
+    Weight:
+        One of wx.NORMAL, wx.LIGHT and wx.BOLD.
+    Underline:
+        The value can be True or False. At present this may have an an
+        effect on Windows only.
+
+    Alternatively, you can set the kw arg: Font, to a wx.Font, and the
+    above will be ignored. The size of the font you specify will be
+    ignored, but the rest of its attributes will be preserved.
+    
+    The size will scale as the drawing is zoomed.
+
+    Bugs/Limitations:
+
+    As fonts are scaled, they do end up a little different, so you don't
+    get exactly the same picture as you scale up and down, but it's
+    pretty darn close.
+    
+    On wxGTK1 on my Linux system, at least, using a font of over about
+    1000 pts. brings the system to a halt. It's the Font Server using
+    huge amounts of memory. My work around is to max the font size to
+    1000 points, so it won't scale past there. GTK2 uses smarter font
+    drawing, so that may not be an issue in future versions, so feel
+    free to test. Another smarter way to do it would be to set a global
+    zoom limit at that point.
+
+    The hit-test is done on the entire box. This could be made
+    optional, but I haven't gotten around to it.
+
+    """
+        
+    def __init__(self, String,
+                 Point,
+                 Size,
+                 Color = "Black",
+                 BackgroundColor = None,
+                 LineColor = 'Black',
+                 LineStyle = 'Solid',
+                 LineWidth = 1,
+                 Width = None,
+                 PadSize = None,
+                 Family = wx.MODERN,
+                 Style = wx.NORMAL,
+                 Weight = wx.NORMAL,
+                 Underline = False,
+                 Position = 'tl',
+                 Alignment = "left",
+                 Font = None,
+                 LineSpacing = 1.0,
+                 InForeground = False):
+        
+        DrawObject.__init__(self,InForeground)
+
+        self.XY = array(Point, Float)
+        self.Size = Size     
+        self.Color = Color
+        self.BackgroundColor = BackgroundColor
+        self.LineColor = LineColor
+        self.LineStyle = LineStyle
+        self.LineWidth = LineWidth
+        self.Width = Width
+        if PadSize is None: # the default is just a little bit of padding
+            self.PadSize = Size/10.0
+        else:
+            self.PadSize = float(PadSize)
+        self.Family = Family   
+        self.Style = Style    
+        self.Weight = Weight   
+        self.Underline = Underline
+        self.Alignment = Alignment.lower()
+        self.LineSpacing = float(LineSpacing)
+        self.Position = Position
+        
+        if not Font:
+            self.FaceName = ''
+        else:
+            self.FaceName           =  Font.GetFaceName()           
+            self.Family             =  Font.GetFamily()    
+            self.Style              =  Font.GetStyle()     
+            self.Underlined         =  Font.GetUnderlined()         
+            self.Weight             =  Font.GetWeight()    
+
+        # Experimental max font size value on wxGTK2: this works OK on
+        # my system. If it's a lot  larger, there is a crash, with the
+        # message:
+        #
+        # The application 'FloatCanvasDemo.py' lost its
+        # connection to the display :0.0; most likely the X server was
+        # shut down or you killed/destroyed the application.
+        #
+        # Windows and OS-X seem to be better behaved in this regard.
+        # They may not draw it, but they don't crash either!
+
+        self.MaxFontSize = 1000
+        self.ShiftFun = self.ShiftFunDict[Position]
+
+        self.String = String
+        self.LayoutText()
+        self.CalcBoundingBox()
+
+        self.SetPen(LineColor,LineStyle,LineWidth)
+        self.SetBrush(BackgroundColor, "Solid")
+
+
+    def WrapToWidth(self):
+        dc = wx.MemoryDC()
+        bitmap = wx.EmptyBitmap(1, 1)
+        dc.SelectObject(bitmap) #wxMac needs a Bitmap selected for GetTextExtent to work.
+        DrawingSize = self.LayoutFontSize # pts This effectively determines the resolution that the BB is computed to.
+        ScaleFactor = float(self.Size) / DrawingSize
+        Width = (self.Width - 2*self.PadSize) / ScaleFactor #Width to wrap to
+        dc.SetFont(self.SetFont(DrawingSize, self.Family, self.Style, self.Weight, self.Underline, self.FaceName) )
+
+        NewStrings = []
+        for s in self.Strings:
+            #beginning = True
+            text = s.split(" ")
+            text.reverse()
+            LineLength = 0
+            NewText = text[-1]
+            del text[-1]
+            while text:
+                w  = dc.GetTextExtent(' ' + text[-1])[0]
+                if LineLength + w <= Width:
+                    NewText += ' '
+                    NewText += text[-1]
+                    LineLength = dc.GetTextExtent(NewText)[0]
+                else:
+                    NewStrings.append(NewText)
+                    NewText = text[-1]
+                    LineLength = dc.GetTextExtent(text[-1])[0]
+                del text[-1]
+            NewStrings.append(NewText)
+        self.Strings = NewStrings
+
+    def ReWrap(self, Width):
+        self.Width = Width
+        self.LayoutText()
+
+    def LayoutText(self):
+        """
+
+        Calculates the positions of the words of text.
+
+        This isn't exact, as fonts don't scale exactly.
+        To help this, the position of each individual word
+        is stored separately, so that the general layout stays
+        the same in world coordinates, as the fonts scale.
+
+        """
+        self.Strings = self.String.split("\n")
+        if self.Width:
+            self.WrapToWidth()
+
+        dc = wx.MemoryDC()
+        bitmap = wx.EmptyBitmap(1, 1)
+        dc.SelectObject(bitmap) #wxMac needs a Bitmap selected for GetTextExtent to work.
+
+        DrawingSize = self.LayoutFontSize # pts This effectively determines the resolution that the BB is computed to.
+        ScaleFactor = float(self.Size) / DrawingSize
+
+        dc.SetFont(self.SetFont(DrawingSize, self.Family, self.Style, self.Weight, self.Underline, self.FaceName) )
+
+        TextHeight = dc.GetTextExtent("X")[1]
+        SpaceWidth = dc.GetTextExtent(" ")[0]
+        LineHeight = TextHeight * self.LineSpacing
+
+        LineWidths = zeros((len(self.Strings),), Float)
+        y = 0
+        Words = []
+        AllLinePoints = []
+
+        for i, s in enumerate(self.Strings):
+            LineWidths[i] = 0
+            LineWords = s.split(" ")
+            LinePoints = zeros((len(LineWords),2), Float)
+            for j, word in enumerate(LineWords):
+                if j > 0:
+                    LineWidths[i] += SpaceWidth
+                Words.append(word)
+                LinePoints[j] = (LineWidths[i], y)
+                w = dc.GetTextExtent(word)[0]
+                LineWidths[i] += w
+            y -= LineHeight
+            AllLinePoints.append(LinePoints)
+        TextWidth = maximum.reduce(LineWidths)
+        self.Words = Words
+
+        if self.Width is None:
+            BoxWidth = TextWidth * ScaleFactor + 2*self.PadSize
+        else: # use the defined Width
+            BoxWidth = self.Width
+        Points = zeros((0,2), Float)
+
+        for i, LinePoints in enumerate(AllLinePoints):
+            ## Scale to World Coords.
+            LinePoints *= (ScaleFactor, ScaleFactor)
+            if self.Alignment == 'left':
+                LinePoints[:,0] += self.PadSize
+            elif self.Alignment == 'center':
+                LinePoints[:,0] += (BoxWidth - LineWidths[i]*ScaleFactor)/2.0
+            elif self.Alignment == 'right':
+                LinePoints[:,0] += (BoxWidth - LineWidths[i]*ScaleFactor-self.PadSize)
+            Points = concatenate((Points, LinePoints))
+
+        BoxHeight = -(Points[-1,1] - (TextHeight * ScaleFactor)) + 2*self.PadSize
+        (x,y) = self.ShiftFun(self.XY[0], self.XY[1], BoxWidth, BoxHeight, world=1)
+        Points += (0, -self.PadSize)
+        self.Points = Points
+        self.BoxWidth = BoxWidth
+        self.BoxHeight = BoxHeight
+        self.CalcBoundingBox()
+
+    def CalcBoundingBox(self):
+
+        """
+        
+        Calculates the Bounding Box
+
+        """
+
+        w, h = self.BoxWidth, self.BoxHeight
+        x, y = self.ShiftFun(self.XY[0], self.XY[1], w, h, world=1)
+        self.BoundingBox = array(((x, y-h ),(x + w, y)),Float)
+
+    def GetBoxRect(self):
+        wh = (self.BoxWidth, self.BoxHeight)
+        xy = (self.BoundingBox[0,0], self.BoundingBox[1,1])
+
+        return (xy, wh)
+
+    def _Draw(self, dc , WorldToPixel, ScaleWorldToPixel, HTdc=None):
+        xy, wh = self.GetBoxRect()
+        
+        Points = self.Points + xy 
+        Points = WorldToPixel(Points) 
+        xy = WorldToPixel(xy)
+        wh = ScaleWorldToPixel(wh) * (1,-1)
+
+        # compute the font size:
+        Size = abs( ScaleWorldToPixel( (self.Size, self.Size) )[1] ) # only need a y coordinate length
+        ## Check to see if the font size is large enough to blow up the X font server
+        ## If so, limit it. Would it be better just to not draw it?
+        ## note that this limit is dependent on how much memory you have, etc.
+        Size = min(Size, self.MaxFontSize)
+        
+        font = self.SetFont(Size, self.Family, self.Style, self.Weight, self.Underline, self.FaceName)
+        dc.SetFont(font)
+        dc.SetTextForeground(self.Color)
+        dc.SetBackgroundMode(wx.TRANSPARENT)
+
+        # Draw The Box
+        if (self.LineStyle and self.LineColor) or self.BackgroundColor:
+            dc.SetBrush(self.Brush)
+            dc.SetPen(self.Pen)
+            dc.DrawRectanglePointSize(xy , wh)
+            
+        # Draw the Text
+        dc.DrawTextList(self.Words, Points)
+
+        # Draw the hit box.
+        if HTdc and self.HitAble:
+            HTdc.SetPen(self.HitPen)
+            HTdc.SetBrush(self.HitBrush)
+            HTdc.DrawRectanglePointSize(xy, wh)
+
+class Bitmap(DrawObject, TextObjectMixin):
+    """
+    This class creates a bitmap object, placed at the coordinates,
+    x,y. the "Position" argument is a two charactor string, indicating
+    where in relation to the coordinates the bitmap should be oriented.
+
+    The first letter is: t, c, or b, for top, center and bottom The
+    second letter is: l, c, or r, for left, center and right The
+    position refers to the position relative to the text itself. It
+    defaults to "tl" (top left).
+
+    The size is fixed, and does not scale with the drawing.
+
+    """
+    
+    def __init__(self,Bitmap,XY,
+                 Position = 'tl',
+                 InForeground = False):
+        
+        DrawObject.__init__(self,InForeground)
+
+        if type(Bitmap) == wx._gdi.Bitmap:
+            self.Bitmap = Bitmap
+        elif type(Bitmap) == wx._core.Image:
+            self.Bitmap = wx.BitmapFromImage(Bitmap)
+        
+        # Note the BB is just the point, as the size in World coordinates is not fixed
+        self.BoundingBox = array((XY,XY),Float)
+
+        self.XY = XY
+
+        (self.Width, self.Height) = self.Bitmap.GetWidth(), self.Bitmap.GetHeight()
+        self.ShiftFun = self.ShiftFunDict[Position]
+
+    def _Draw(self, dc , WorldToPixel, ScaleWorldToPixel, HTdc=None):
+        XY = WorldToPixel(self.XY)
+        XY = self.ShiftFun(XY[0], XY[1], self.Width, self.Height)
+        dc.DrawBitmapPoint(self.Bitmap, XY, True)
+        if HTdc and self.HitAble:
+            HTdc.SetPen(self.HitPen)
+            HTdc.SetBrush(self.HitBrush)
+            HTdc.DrawRectanglePointSize(XY, (self.Width, self.Height) )
+
+class ScaledBitmap(DrawObject, TextObjectMixin):
+    """
+    
+    This class creates a bitmap object, placed at the coordinates, XY,
+    of Height, H, in World coorsinates. The width is calculated from the
+    aspect ratio of the bitmap.
+    
+    the "Position" argument is a two charactor string, indicating
+    where in relation to the coordinates the bitmap should be oriented.
+
+    The first letter is: t, c, or b, for top, center and bottom The
+    second letter is: l, c, or r, for left, center and right The
+    position refers to the position relative to the text itself. It
+    defaults to "tl" (top left).
+
+    The size scales with the drawing
+
+    """
+    
+    def __init__(self,
+                 Bitmap,
+                 XY,
+                 Height,
+                 Position = 'tl',
+                 InForeground = False):
+        
+        DrawObject.__init__(self,InForeground)
+
+        if type(Bitmap) == wx._gdi.Bitmap:
+            self.Image = Bitmap.ConvertToImage()
+        elif type(Bitmap) == wx._core.Image:
+            self.Image = Bitmap
+            
+        self.XY = XY
+        self.Height = Height 
+        (self.bmpWidth, self.bmpHeight) = self.Image.GetWidth(), self.Image.GetHeight()
+        self.Width = self.bmpWidth / self.bmpHeight * Height
+        self.ShiftFun = self.ShiftFunDict[Position]
+        self.CalcBoundingBox()
+        self.ScaledBitmap = None
+        self.ScaledHeight = None
+
+    def CalcBoundingBox(self):
+        ## this isn't exact, as fonts don't scale exactly.
+        w,h = self.Width, self.Height
+        x, y = self.ShiftFun(self.XY[0], self.XY[1], w, h, world = 1)
+        self.BoundingBox = array(((x, y-h ),(x + w, y)),Float)
+
+    def _Draw(self, dc , WorldToPixel, ScaleWorldToPixel, HTdc=None):
+        XY = WorldToPixel(self.XY)
+        H = ScaleWorldToPixel(self.Height)[0]
+        W = H * (self.bmpWidth / self.bmpHeight)
+        if (self.ScaledBitmap is None) or (H <> self.ScaledHeight) :
+            self.ScaledHeight = H
+            Img = self.Image.Scale(W, H)
+            self.ScaledBitmap = wx.BitmapFromImage(Img)
+
+        XY = self.ShiftFun(XY[0], XY[1], W, H)
+        dc.DrawBitmapPoint(self.ScaledBitmap, XY, True)
+        if HTdc and self.HitAble:
+            HTdc.SetPen(self.HitPen)
+            HTdc.SetBrush(self.HitBrush)
+            HTdc.DrawRectanglePointSize(XY, (W, H) )
+
 
 #---------------------------------------------------------------------------
 class FloatCanvas(wx.Panel):
+    ## fixme: could this be a wx.Window?
     """
     FloatCanvas.py
 
@@ -1343,7 +1849,7 @@ class FloatCanvas(wx.Panel):
         
         global ScreenPPI ## A global variable to hold the Pixels per inch that wxWindows thinks is in use.
         dc = wx.ScreenDC()
-        ScreenPPI = dc.GetPPI()[0] # Assume square pixels
+        ScreenPPI = dc.GetPPI()[1] # Pixel height
         del dc
 
         self.HitColorGenerator = None
@@ -1376,7 +1882,7 @@ class FloatCanvas(wx.Panel):
 
         ## create the Hit Test Dicts:
         self.HitDict = None
-
+        self._HTdc = None
 
         self._DrawList = []
         self._ForeDrawList = []
@@ -1400,26 +1906,73 @@ class FloatCanvas(wx.Panel):
         self.ObjectUnderMouse = None
         
         # called just to make sure everything is initialized
-        self.OnSize(None)
-
+        # this is a bug on OS-X, maybe it's not required?
+        self.SizeTimer = wx.PyTimer(self.OnSizeTimer) # timer to give a delay when re-sizing so that bufferes aren't re-built too many times.
+        
+        self.InitializePanel()
+        self.MakeNewBuffers()
+        
         self.InHereNum = 0
+
+        self.CreateCursors()
+        
+    def CreateCursors(self):
+
+        ## create all the Cursors, so they don't need to be created each time.
+        ##
+        if "wxMac" in wx.PlatformInfo: # use 16X16 cursors for wxMac
+            self.HandCursor = wx.CursorFromImage(Resources.getHand16Image())
+            self.GrabHandCursor = wx.CursorFromImage(Resources.getGrabHand16Image())
+
+            img = Resources.getMagPlus16Image()
+            img.SetOptionInt(wx.IMAGE_OPTION_CUR_HOTSPOT_X, 6)
+            img.SetOptionInt(wx.IMAGE_OPTION_CUR_HOTSPOT_Y, 6)
+            self.MagPlusCursor = wx.CursorFromImage(img)
+
+            img = Resources.getMagMinus16Image()
+            img.SetOptionInt(wx.IMAGE_OPTION_CUR_HOTSPOT_X, 6)
+            img.SetOptionInt(wx.IMAGE_OPTION_CUR_HOTSPOT_Y, 6)
+            self.MagMinusCursor = wx.CursorFromImage(img)
+        else: # use 24X24 cursors for GTK and Windows
+            self.HandCursor = wx.CursorFromImage(Resources.getHandImage())
+            self.GrabHandCursor = wx.CursorFromImage(Resources.getGrabHandImage())
+
+            img = Resources.getMagPlusImage()
+            img.SetOptionInt(wx.IMAGE_OPTION_CUR_HOTSPOT_X, 9)
+            img.SetOptionInt(wx.IMAGE_OPTION_CUR_HOTSPOT_Y, 9)
+            self.MagPlusCursor = wx.CursorFromImage(img)
+
+            img = Resources.getMagMinusImage()
+            img.SetOptionInt(wx.IMAGE_OPTION_CUR_HOTSPOT_X, 9)
+            img.SetOptionInt(wx.IMAGE_OPTION_CUR_HOTSPOT_Y, 9)
+            self.MagMinusCursor = wx.CursorFromImage(img)
 
     def SetProjectionFun(self,ProjectionFun):
         if ProjectionFun == 'FlatEarth':
             self.ProjectionFun = self.FlatEarthProjection 
-        elif type(ProjectionFun) == types.FunctionType:
+        elif callable(ProjectionFun):
             self.ProjectionFun = ProjectionFun 
         elif ProjectionFun is None:
             self.ProjectionFun = lambda x=None: array( (1,1), Float)
         else:
-            raise FloatCanvasError('Projectionfun must be either: "FlatEarth", None, or a function that takes the ViewPortCenter and returns a MapProjectionVector')
+            raise FloatCanvasError('Projectionfun must be either: "FlatEarth", None, or a callable object (function, for instance) that takes the ViewPortCenter and returns a MapProjectionVector')
 
-    def FlatEarthProjection(self,CenterPoint):
+    def FlatEarthProjection(self, CenterPoint):
         return array((cos(pi*CenterPoint[1]/180),1),Float)
 
     def SetMode(self,Mode):
-        if Mode in ["ZoomIn","ZoomOut","Move","Mouse",None]:
+        if Mode in ["ZoomIn","ZoomOut","Move","Mouse", None]:
+            if Mode == "Move":
+                self.SetCursor(self.HandCursor)
+            elif Mode == "ZoomIn":
+                self.SetCursor(self.MagPlusCursor) 
+            elif Mode == "ZoomOut":
+                self.SetCursor(self.MagMinusCursor) 
+            else:
+                self.SetCursor(wx.NullCursor)
+                
             self.GUIMode = Mode
+            
         else:
             raise FloatCanvasError('"%s" is Not a valid Mode'%Mode)
 
@@ -1461,6 +2014,7 @@ class FloatCanvas(wx.Panel):
                     Object = self.HitDict[ HitEvent ][color]
                     ## Add the hit coords to the Object
                     Object.HitCoords = self.PixelToWorld( xy )
+                    Object.HitCoordsPixel = xy
                     Object.CallBackFuncs[HitEvent](Object)
                     return True
             return False
@@ -1524,7 +2078,6 @@ class FloatCanvas(wx.Panel):
             if not self.HitTest(event, EventType):
                 self._RaiseMouseEvent(event, EventType)
 
-
     def MiddleDownEvent(self,event):
         if self.GUIMode == "Mouse":
             EventType = EVT_FC_MIDDLE_DOWN
@@ -1571,6 +2124,7 @@ class FloatCanvas(wx.Panel):
                 Center = self.PixelToWorld( event.GetPosition() )
                 self.Zoom(1/1.5,Center)
             elif self.GUIMode == "Move":
+                self.SetCursor(self.GrabHandCursor)
                 self.StartMove = array( event.GetPosition() )
                 self.PrevMoveXY = (0,0)
             elif self.GUIMode == "Mouse":
@@ -1581,7 +2135,7 @@ class FloatCanvas(wx.Panel):
             pass
 
     def LeftUpEvent(self,event):
-        if self.HasCapture():
+    	if self.HasCapture():
             self.ReleaseMouse()
         if self.GUIMode:
             if self.GUIMode == "ZoomIn":
@@ -1604,7 +2158,8 @@ class FloatCanvas(wx.Panel):
                         self.Zoom(1.5,Center)
                     self.StartRBBox = None
             elif self.GUIMode == "Move":
-                if not self.StartMove is None:
+                self.SetCursor(self.HandCursor)
+                if self.StartMove is not None:
                     StartMove = self.StartMove
                     EndMove = array((event.GetX(),event.GetY()))
                     if sum((StartMove-EndMove)**2) > 16:
@@ -1647,6 +2202,7 @@ class FloatCanvas(wx.Panel):
                     x1,y1 = self.PrevMoveXY
                     x2,y2 = xy_tl
                     w,h = self.PanelSize
+                    ##fixme: This sure could be cleaner!
                     if x2 > x1 and y2 > y1:
                         xa = xb = x1
                         ya = yb = y1
@@ -1681,13 +2237,14 @@ class FloatCanvas(wx.Panel):
                         yb = y2 + h
                         wb = w
                         hb = y1 - y2
-                    
+               
                     dc.SetPen(wx.TRANSPARENT_PEN)
                     dc.SetBrush(self.BackgroundBrush)
                     dc.DrawRectangle(xa, ya, wa, ha)
                     dc.DrawRectangle(xb, yb, wb, hb)
                     self.PrevMoveXY = xy_tl
-                    if self._ForegroundBuffer:
+                    if self._ForeDrawList:
+                    ##if self._ForegroundBuffer:
                         dc.DrawBitmapPoint(self._ForegroundBuffer,xy_tl)
                     else:
                         dc.DrawBitmapPoint(self._Buffer,xy_tl)
@@ -1754,15 +2311,25 @@ class FloatCanvas(wx.Panel):
         else:
            self._ForegroundHTdc = None 
     
-    def OnSize(self,event):
-        self.PanelSize  = array(self.GetClientSizeTuple(),Int32)
+    def OnSize(self, event=None):
+        self.InitializePanel()
+        self.SizeTimer.Start(50, oneShot=True)
+
+    def OnSizeTimer(self, event=None):
+        self.MakeNewBuffers()
+        self.Draw()
+
+    def InitializePanel(self):
+        self.PanelSize = self.GetClientSizeTuple()
+        if self.PanelSize == (0,0):
+            ## OS-X sometimes gives a Size event when the panel is size (0,0)
+            self.PanelSize = (2,2)
+        self.PanelSize  = array(self.PanelSize,  Int32)
         self.HalfPanelSize = self.PanelSize / 2 # lrk: added for speed in WorldToPixel
         if self.PanelSize[0] == 0 or self.PanelSize[1] == 0:
             self.AspectRatio = 1.0
         else:
             self.AspectRatio = float(self.PanelSize[0]) / self.PanelSize[1]
-        self.MakeNewBuffers()
-        self.Draw()
         
     def OnPaint(self, event):
         dc = wx.PaintDC(self)
@@ -1786,9 +2353,7 @@ class FloatCanvas(wx.Panel):
         animation, for instance.
         
         """
-#        print "in Draw", self.PanelSize
-        if sometrue(self.PanelSize < 1 ): # it's possible for this to get called before being properly initialized.
-#        if self.PanelSize < (1,1): # it's possible for this to get called before being properly initialized.
+        if sometrue(self.PanelSize <= 2 ): # it's possible for this to get called before being properly initialized.
             return
         if self.Debug: start = clock()
         ScreenDC =  wx.ClientDC(self)
@@ -1901,8 +2466,6 @@ class FloatCanvas(wx.Panel):
             pass
         else:
             raise FloatCanvasError('CoordType must be either "Panel", "Pixel", or "World"')
-
-        #print "shifting by:", shift
         
         self.ViewPortCenter = self.ViewPortCenter + shift 
         self.MapProjectionVector = self.ProjectionFun(self.ViewPortCenter)
@@ -1982,6 +2545,9 @@ class FloatCanvas(wx.Panel):
         ##fixme: Using the list.remove method is kind of slow
         if Object.InForeground:
             self._ForeDrawList.remove(Object)
+            if not self._ForeDrawList:
+                self._ForegroundBuffer = None
+                self._ForegroundHTdc = None
         else:
             self._DrawList.remove(Object)
             self._BackgroundDirty = True
@@ -2032,7 +2598,7 @@ class FloatCanvas(wx.Panel):
             self.BoundingBox = None
             self.ViewPortCenter= array( (0,0), Float)
             self.TransformVector = array( (1,-1), Float)
-            self.MapProjectionVector = array( (1,1), Float)                     
+            self.MapProjectionVector = array( (1,1), Float)			
             self.Scale = 1        
         self.BoundingBoxDirty = False
 
@@ -2105,33 +2671,32 @@ class FloatCanvas(wx.Panel):
         Blit = ScreenDC.Blit # for speed
         NumBetweenBlits = self.NumBetweenBlits # for speed
         for i, Object in enumerate(self._ShouldRedraw(DrawList, ViewPortBB)):
-            Object._Draw(dc, WorldToPixel, ScaleWorldToPixel, HTdc)
-            if i+1 % NumBetweenBlits == 0:
-                Blit(0, 0, PanelSize0, PanelSize1, dc, 0, 0)
+            if Object.Visible:
+                Object._Draw(dc, WorldToPixel, ScaleWorldToPixel, HTdc)
+                if (i+1) % NumBetweenBlits == 0:
+                    Blit(0, 0, PanelSize0, PanelSize1, dc, 0, 0)
         dc.EndDrawing()
 
-##    ## This is a way to automatically add a AddObject method for each
-##    ## object type This code has been replaced by Leo's code above, so
-##    ## that it happens at module init, rather than as needed. The
-##    ## primary advantage of this is that dir(FloatCanvas) will have
-##    ## them, and docstrings are preserved. Probably more useful
-##    ## exceptions if there is a problem, as well.
-##    def __getattr__(self, name):
-##        if name[:3] == "Add":
-##            func=globals()[name[3:]]
-##            def AddFun(*args, **kwargs):
-##                Object = func(*args, **kwargs)
-##                self.AddObject(Object)
-##                return Object
-##            ## add it to FloatCanvas' dict for future calls.
-##            self.__dict__[name] = AddFun
-##            return AddFun
-##        else:
-##            raise AttributeError("FloatCanvas has no attribute '%s'"%name)
+    def SaveAsImage(self, filename, ImageType=wx.BITMAP_TYPE_PNG):
+        """
+        
+        Saves the current image as an image file. The default is in the
+        PNG format. Other formats can be spcified using the wx flags:
+
+        wx.BITMAP_TYPE_BMP
+        wx.BITMAP_TYPE_XBM
+        wx.BITMAP_TYPE_XPM
+        etc. (see the wx docs for the complete list)
+
+        """
+        
+        self._Buffer.SaveFile(filename, ImageType)
+
 
 def _makeFloatCanvasAddMethods(): ## lrk's code for doing this in module __init__
     classnames = ["Circle", "Ellipse", "Rectangle", "ScaledText", "Polygon",
-               "Line", "Text", "PointSet","Point", "Arrow"]
+                  "Line", "Text", "PointSet","Point", "Arrow","ScaledTextBox",
+                  "SquarePoint","Bitmap", "ScaledBitmap"]
     for classname in classnames:
         klass = globals()[classname]
         def getaddshapemethod(klass=klass):

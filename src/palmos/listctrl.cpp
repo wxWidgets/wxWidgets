@@ -289,6 +289,14 @@ bool wxListCtrl::SetItemImage(long item, int image, int WXUNUSED(selImage))
     return false;
 }
 
+#if wxABI_VERSION >= 20603
+// Sets the item image
+bool wxListCtrl::SetItemColumnImage(long item, long column, int image)
+{
+    return false;
+}
+#endif
+
 // Gets the item text
 wxString wxListCtrl::GetItemText(long item) const
 {

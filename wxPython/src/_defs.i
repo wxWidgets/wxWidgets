@@ -16,6 +16,9 @@
 
 %feature("autodoc", "1");  // 0 == no param types, 1 == show param types
 
+// Turn on kwargs by default
+%feature("kwargs", "1");
+
 //---------------------------------------------------------------------------
 // Tell SWIG to wrap all the wrappers with our thread protection by default
 
@@ -39,8 +42,16 @@
 }
 %enddef
 
-    
 
+// This macro can be used to disable the releasing of the GIL when calling the
+// C++ function.
+%define KeepGIL(name)
+%exception name {
+    $action
+    if (PyErr_Occurred()) SWIG_fail;
+}
+%enddef
+        
 //---------------------------------------------------------------------------
 // some type definitions to simplify things for SWIG
 
@@ -62,13 +73,9 @@ typedef unsigned long   wxUIntPtr;
 #define %pythonAppend   %feature("pythonappend")
 #define %pythonPrepend  %feature("pythonprepend")
 #define %kwargs         %feature("kwargs")
-#define %nokwargs       %feature("nokwargs")
-#define %noautodoc %feature("noautodoc")
+#define %nokwargs       %feature("kwargs", "0")
+#define %noautodoc      %feature("noautodoc")
 
-
-//#ifndef %shadow
-//#define %shadow         %insert("shadow")
-//#endif
 
 #ifndef %pythoncode
 #define %pythoncode     %insert("python")
@@ -497,6 +504,7 @@ enum {
     wxSIZE_AUTO,
     wxSIZE_USE_EXISTING,
     wxSIZE_ALLOW_MINUS_ONE,
+    wxSIZE_FORCE,
     wxPORTRAIT,
     wxLANDSCAPE,
     wxPRINT_QUALITY_HIGH,
@@ -506,6 +514,7 @@ enum {
 
     wxID_ANY,
     wxID_SEPARATOR,
+    wxID_NONE,
 
     wxID_LOWEST,
     wxID_OPEN,

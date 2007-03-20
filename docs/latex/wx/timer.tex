@@ -4,13 +4,13 @@ The wxTimer class allows you to execute code at specified intervals. Its
 precision is platform-dependent, but in general will not be better than 1ms nor
 worse than 1s.
 
-There are two different ways to use this class:
+There are three different ways to use this class:
 
 \begin{enumerate}
 \item You may derive a new class from wxTimer and override the 
 \helpref{Notify}{wxtimernotify} member to perform the required action.
 \item Or you may redirect the notifications to any 
-\helpref{wxEvtHandler}{wxevthandler} derived object by using the non default
+\helpref{wxEvtHandler}{wxevthandler} derived object by using the non-default
 constructor or \helpref{SetOwner}{wxtimersetowner}. Then use the {\tt EVT\_TIMER} 
 macro to connect it to the event handler which will receive 
 \helpref{wxTimerEvent}{wxtimerevent} notifications.
@@ -24,7 +24,7 @@ In any case, you must start the timer with \helpref{Start}{wxtimerstart}
 after constructing it before it actually starts sending notifications. It can
 be stopped later with \helpref{Stop}{wxtimerstop}.
 
-{\bf NB:} note that timer can only be used from the main thread currently.
+{\bf Note:} A timer can only be used from the main thread.
 
 \wxheading{Derived from}
 
@@ -156,6 +156,10 @@ void MyFrame::OnTimer(wxTimerEvent& event)
 }
 
 \end{verbatim}
+
+\wxheading{Derived from}
+
+\helpref{wxEvent}{wxevent}
 
 \wxheading{Include files}
 

@@ -56,7 +56,7 @@ class GenButton(wx.PyControl):
 
     labelDelta = 1
 
-    def __init__(self, parent, ID, label,
+    def __init__(self, parent, ID=-1, label='',
                  pos = wx.DefaultPosition, size = wx.DefaultSize,
                  style = 0, validator = wx.DefaultValidator,
                  name = "genbutton"):
@@ -312,8 +312,9 @@ class GenButton(wx.PyControl):
             if not self.up:    # if the button was down when the mouse was released...
                 self.Notify()
             self.up = True
-            self.Refresh()
-            event.Skip()
+            if self:           # in case the button was destroyed in the eventhandler
+                self.Refresh()
+                event.Skip()
 
 
     def OnMotion(self, event):
@@ -335,18 +336,14 @@ class GenButton(wx.PyControl):
 
     def OnGainFocus(self, event):
         self.hasFocus = True
-        dc = wx.ClientDC(self)
-        w, h = self.GetClientSizeTuple()
-        if self.useFocusInd:
-            self.DrawFocusIndicator(dc, w, h)
+        self.Refresh()
+        self.Update()
 
 
     def OnLoseFocus(self, event):
         self.hasFocus = False
-        dc = wx.ClientDC(self)
-        w, h = self.GetClientSizeTuple()
-        if self.useFocusInd:
-            self.DrawFocusIndicator(dc, w, h)
+        self.Refresh()
+        self.Update()
 
 
     def OnKeyDown(self, event):
@@ -369,7 +366,7 @@ class GenButton(wx.PyControl):
 class GenBitmapButton(GenButton):
     """A generic bitmap button."""
 
-    def __init__(self, parent, ID, bitmap,
+    def __init__(self, parent, ID=-1, bitmap=wx.NullBitmap,
                  pos = wx.DefaultPosition, size = wx.DefaultSize,
                  style = 0, validator = wx.DefaultValidator,
                  name = "genbutton"):
@@ -444,7 +441,7 @@ class GenBitmapButton(GenButton):
 
 class GenBitmapTextButton(GenBitmapButton):
     """A generic bitmapped button with text label"""
-    def __init__(self, parent, ID, bitmap, label,
+    def __init__(self, parent, ID=-1, bitmap=wx.NullBitmap, label='',
                  pos = wx.DefaultPosition, size = wx.DefaultSize,
                  style = 0, validator = wx.DefaultValidator,
                  name = "genbutton"):
@@ -529,10 +526,10 @@ class __ToggleMixin:
         if not self.IsEnabled() or not self.HasCapture():
             return
         if self.HasCapture():
-            if self.up != self.saveUp:
-                self.Notify()
             self.ReleaseMouse()
             self.Refresh()
+            if self.up != self.saveUp:
+                self.Notify()
 
     def OnKeyDown(self, event):
         event.Skip()

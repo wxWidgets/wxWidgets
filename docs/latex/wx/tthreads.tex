@@ -15,7 +15,7 @@ well.
 
 These classes will hopefully make writing MT programs easier and they also
 provide some extra error checking (compared to the native (be it Win32 or Posix)
-thread API), however it is still an non-trivial undertaking especially for large
+thread API), however it is still a non-trivial undertaking especially for large
 projects. Before starting an MT application (or starting to add MT features to
 an existing one) it is worth asking oneself if there is no easier and safer way
 to implement the same functionality. Of course, in some situations threads
@@ -41,7 +41,7 @@ itself and not by the other threads).
 For communication between secondary threads and the main thread, you may use 
 \helpref{wxEvtHandler::AddPendingEvent}{wxevthandleraddpendingevent}
 or its short version \helpref{wxPostEvent}{wxpostevent}. These functions
-have thread safe implementation so that they can be used as they are for
+have a thread-safe implementation so that they can be used as they are for
 sending events from one thread to another. However there is no built in method
 to send messages to the worker threads and you will need to use the available
 synchronization classes to implement the solution which suits your needs

@@ -414,7 +414,7 @@ MyFrame::MyFrame()
 
     wxMenu* subMenu = new wxMenu;
     subMenu->Append(Menu_SubMenu_Normal, _T("&Normal submenu item"), _T("Disabled submenu item"));
-    subMenu->AppendCheckItem(Menu_SubMenu_Check, _T("&Unchecked submenu item"), _T("Unchecked submenu item"));
+    subMenu->AppendCheckItem(Menu_SubMenu_Check, _T("&Check submenu item"), _T("Check submenu item"));
     subMenu->AppendRadioItem(Menu_SubMenu_Radio1, _T("Radio item &1"), _T("Radio item"));
     subMenu->AppendRadioItem(Menu_SubMenu_Radio2, _T("Radio item &2"), _T("Radio item"));
     subMenu->AppendRadioItem(Menu_SubMenu_Radio3, _T("Radio item &3"), _T("Radio item"));
@@ -495,6 +495,9 @@ MyFrame::MyFrame()
                  _T("The commands from \"Menubar\" menu work with the ")
                  _T("menubar itself.\n\n")
                  _T("Right click the band below to test popup menus.\n"));
+#endif
+#ifdef __POCKETPC__
+    EnableContextMenu();
 #endif
 }
 
@@ -930,7 +933,7 @@ void MyFrame::OnFindMenuItem(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::ShowContextMenu(const wxPoint& pos)
 {
-    wxMenu menu(_T("Test popup"));
+    wxMenu menu;
 
     menu.Append(Menu_Help_About, _T("&About"));
     menu.Append(Menu_Popup_Submenu, _T("&Submenu"), CreateDummyMenu(NULL));
@@ -994,7 +997,6 @@ void MyFrame::OnUpdateSubMenuNormal(wxUpdateUIEvent& event)
 void MyFrame::OnUpdateSubMenuCheck(wxUpdateUIEvent& event)
 {
     event.Enable(true);
-    event.Check(true);
 }
 
 void MyFrame::OnUpdateSubMenuRadio(wxUpdateUIEvent& event)

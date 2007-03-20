@@ -77,6 +77,7 @@
 #    define WXMAKINGDLL_NET
 #    define WXMAKINGDLL_CORE
 #    define WXMAKINGDLL_ADV
+#    define WXMAKINGDLL_QA
 #    define WXMAKINGDLL_ODBC
 #    define WXMAKINGDLL_DBGRID
 #    define WXMAKINGDLL_HTML

@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG.
+# This file was created automatically by SWIG 1.3.27.
 # Don't modify this file, modify the SWIG interface instead.
 
 """
@@ -95,6 +95,7 @@ STC_MARK_BACKGROUND = _stc.STC_MARK_BACKGROUND
 STC_MARK_DOTDOTDOT = _stc.STC_MARK_DOTDOTDOT
 STC_MARK_ARROWS = _stc.STC_MARK_ARROWS
 STC_MARK_PIXMAP = _stc.STC_MARK_PIXMAP
+STC_MARK_FULLRECT = _stc.STC_MARK_FULLRECT
 STC_MARK_CHARACTER = _stc.STC_MARK_CHARACTER
 STC_MARKNUM_FOLDEREND = _stc.STC_MARKNUM_FOLDEREND
 STC_MARKNUM_FOLDEROPENMID = _stc.STC_MARKNUM_FOLDEROPENMID
@@ -125,6 +126,7 @@ STC_CHARSET_HANGUL = _stc.STC_CHARSET_HANGUL
 STC_CHARSET_MAC = _stc.STC_CHARSET_MAC
 STC_CHARSET_OEM = _stc.STC_CHARSET_OEM
 STC_CHARSET_RUSSIAN = _stc.STC_CHARSET_RUSSIAN
+STC_CHARSET_CYRILLIC = _stc.STC_CHARSET_CYRILLIC
 STC_CHARSET_SHIFTJIS = _stc.STC_CHARSET_SHIFTJIS
 STC_CHARSET_SYMBOL = _stc.STC_CHARSET_SYMBOL
 STC_CHARSET_TURKISH = _stc.STC_CHARSET_TURKISH
@@ -133,6 +135,7 @@ STC_CHARSET_HEBREW = _stc.STC_CHARSET_HEBREW
 STC_CHARSET_ARABIC = _stc.STC_CHARSET_ARABIC
 STC_CHARSET_VIETNAMESE = _stc.STC_CHARSET_VIETNAMESE
 STC_CHARSET_THAI = _stc.STC_CHARSET_THAI
+STC_CHARSET_8859_15 = _stc.STC_CHARSET_8859_15
 STC_CASE_MIXED = _stc.STC_CASE_MIXED
 STC_CASE_UPPER = _stc.STC_CASE_UPPER
 STC_CASE_LOWER = _stc.STC_CASE_LOWER
@@ -175,6 +178,7 @@ STC_FOLDFLAG_BOX = _stc.STC_FOLDFLAG_BOX
 STC_TIME_FOREVER = _stc.STC_TIME_FOREVER
 STC_WRAP_NONE = _stc.STC_WRAP_NONE
 STC_WRAP_WORD = _stc.STC_WRAP_WORD
+STC_WRAP_CHAR = _stc.STC_WRAP_CHAR
 STC_WRAPVISUALFLAG_NONE = _stc.STC_WRAPVISUALFLAG_NONE
 STC_WRAPVISUALFLAG_END = _stc.STC_WRAPVISUALFLAG_END
 STC_WRAPVISUALFLAG_START = _stc.STC_WRAPVISUALFLAG_START
@@ -207,10 +211,12 @@ STC_MOD_CHANGEFOLD = _stc.STC_MOD_CHANGEFOLD
 STC_PERFORMED_USER = _stc.STC_PERFORMED_USER
 STC_PERFORMED_UNDO = _stc.STC_PERFORMED_UNDO
 STC_PERFORMED_REDO = _stc.STC_PERFORMED_REDO
+STC_MULTISTEPUNDOREDO = _stc.STC_MULTISTEPUNDOREDO
 STC_LASTSTEPINUNDOREDO = _stc.STC_LASTSTEPINUNDOREDO
 STC_MOD_CHANGEMARKER = _stc.STC_MOD_CHANGEMARKER
 STC_MOD_BEFOREINSERT = _stc.STC_MOD_BEFOREINSERT
 STC_MOD_BEFOREDELETE = _stc.STC_MOD_BEFOREDELETE
+STC_MULTILINEUNDOREDO = _stc.STC_MULTILINEUNDOREDO
 STC_MODEVENTMASKALL = _stc.STC_MODEVENTMASKALL
 STC_KEY_DOWN = _stc.STC_KEY_DOWN
 STC_KEY_UP = _stc.STC_KEY_UP
@@ -229,6 +235,7 @@ STC_KEY_RETURN = _stc.STC_KEY_RETURN
 STC_KEY_ADD = _stc.STC_KEY_ADD
 STC_KEY_SUBTRACT = _stc.STC_KEY_SUBTRACT
 STC_KEY_DIVIDE = _stc.STC_KEY_DIVIDE
+STC_SCMOD_NORM = _stc.STC_SCMOD_NORM
 STC_SCMOD_SHIFT = _stc.STC_SCMOD_SHIFT
 STC_SCMOD_CTRL = _stc.STC_SCMOD_CTRL
 STC_SCMOD_ALT = _stc.STC_SCMOD_ALT
@@ -261,8 +268,6 @@ STC_LEX_TCL = _stc.STC_LEX_TCL
 STC_LEX_NNCRONTAB = _stc.STC_LEX_NNCRONTAB
 STC_LEX_BULLANT = _stc.STC_LEX_BULLANT
 STC_LEX_VBSCRIPT = _stc.STC_LEX_VBSCRIPT
-STC_LEX_ASP = _stc.STC_LEX_ASP
-STC_LEX_PHP = _stc.STC_LEX_PHP
 STC_LEX_BAAN = _stc.STC_LEX_BAAN
 STC_LEX_MATLAB = _stc.STC_LEX_MATLAB
 STC_LEX_SCRIPTOL = _stc.STC_LEX_SCRIPTOL
@@ -297,6 +302,19 @@ STC_LEX_APDL = _stc.STC_LEX_APDL
 STC_LEX_BASH = _stc.STC_LEX_BASH
 STC_LEX_ASN1 = _stc.STC_LEX_ASN1
 STC_LEX_VHDL = _stc.STC_LEX_VHDL
+STC_LEX_CAML = _stc.STC_LEX_CAML
+STC_LEX_BLITZBASIC = _stc.STC_LEX_BLITZBASIC
+STC_LEX_PUREBASIC = _stc.STC_LEX_PUREBASIC
+STC_LEX_HASKELL = _stc.STC_LEX_HASKELL
+STC_LEX_PHPSCRIPT = _stc.STC_LEX_PHPSCRIPT
+STC_LEX_TADS3 = _stc.STC_LEX_TADS3
+STC_LEX_REBOL = _stc.STC_LEX_REBOL
+STC_LEX_SMALLTALK = _stc.STC_LEX_SMALLTALK
+STC_LEX_FLAGSHIP = _stc.STC_LEX_FLAGSHIP
+STC_LEX_CSOUND = _stc.STC_LEX_CSOUND
+STC_LEX_FREEBASIC = _stc.STC_LEX_FREEBASIC
+STC_LEX_ASP = _stc.STC_LEX_ASP
+STC_LEX_PHP = _stc.STC_LEX_PHP
 STC_LEX_AUTOMATIC = _stc.STC_LEX_AUTOMATIC
 STC_P_DEFAULT = _stc.STC_P_DEFAULT
 STC_P_COMMENTLINE = _stc.STC_P_COMMENTLINE
@@ -312,6 +330,8 @@ STC_P_OPERATOR = _stc.STC_P_OPERATOR
 STC_P_IDENTIFIER = _stc.STC_P_IDENTIFIER
 STC_P_COMMENTBLOCK = _stc.STC_P_COMMENTBLOCK
 STC_P_STRINGEOL = _stc.STC_P_STRINGEOL
+STC_P_WORD2 = _stc.STC_P_WORD2
+STC_P_DECORATOR = _stc.STC_P_DECORATOR
 STC_C_DEFAULT = _stc.STC_C_DEFAULT
 STC_C_COMMENT = _stc.STC_C_COMMENT
 STC_C_COMMENTLINE = _stc.STC_C_COMMENTLINE
@@ -459,6 +479,7 @@ STC_PL_SCALAR = _stc.STC_PL_SCALAR
 STC_PL_ARRAY = _stc.STC_PL_ARRAY
 STC_PL_HASH = _stc.STC_PL_HASH
 STC_PL_SYMBOLTABLE = _stc.STC_PL_SYMBOLTABLE
+STC_PL_VARIABLE_INDEXER = _stc.STC_PL_VARIABLE_INDEXER
 STC_PL_REGEX = _stc.STC_PL_REGEX
 STC_PL_REGSUBST = _stc.STC_PL_REGSUBST
 STC_PL_LONGQUOTE = _stc.STC_PL_LONGQUOTE
@@ -473,6 +494,41 @@ STC_PL_STRING_QQ = _stc.STC_PL_STRING_QQ
 STC_PL_STRING_QX = _stc.STC_PL_STRING_QX
 STC_PL_STRING_QR = _stc.STC_PL_STRING_QR
 STC_PL_STRING_QW = _stc.STC_PL_STRING_QW
+STC_PL_POD_VERB = _stc.STC_PL_POD_VERB
+STC_RB_DEFAULT = _stc.STC_RB_DEFAULT
+STC_RB_ERROR = _stc.STC_RB_ERROR
+STC_RB_COMMENTLINE = _stc.STC_RB_COMMENTLINE
+STC_RB_POD = _stc.STC_RB_POD
+STC_RB_NUMBER = _stc.STC_RB_NUMBER
+STC_RB_WORD = _stc.STC_RB_WORD
+STC_RB_STRING = _stc.STC_RB_STRING
+STC_RB_CHARACTER = _stc.STC_RB_CHARACTER
+STC_RB_CLASSNAME = _stc.STC_RB_CLASSNAME
+STC_RB_DEFNAME = _stc.STC_RB_DEFNAME
+STC_RB_OPERATOR = _stc.STC_RB_OPERATOR
+STC_RB_IDENTIFIER = _stc.STC_RB_IDENTIFIER
+STC_RB_REGEX = _stc.STC_RB_REGEX
+STC_RB_GLOBAL = _stc.STC_RB_GLOBAL
+STC_RB_SYMBOL = _stc.STC_RB_SYMBOL
+STC_RB_MODULE_NAME = _stc.STC_RB_MODULE_NAME
+STC_RB_INSTANCE_VAR = _stc.STC_RB_INSTANCE_VAR
+STC_RB_CLASS_VAR = _stc.STC_RB_CLASS_VAR
+STC_RB_BACKTICKS = _stc.STC_RB_BACKTICKS
+STC_RB_DATASECTION = _stc.STC_RB_DATASECTION
+STC_RB_HERE_DELIM = _stc.STC_RB_HERE_DELIM
+STC_RB_HERE_Q = _stc.STC_RB_HERE_Q
+STC_RB_HERE_QQ = _stc.STC_RB_HERE_QQ
+STC_RB_HERE_QX = _stc.STC_RB_HERE_QX
+STC_RB_STRING_Q = _stc.STC_RB_STRING_Q
+STC_RB_STRING_QQ = _stc.STC_RB_STRING_QQ
+STC_RB_STRING_QX = _stc.STC_RB_STRING_QX
+STC_RB_STRING_QR = _stc.STC_RB_STRING_QR
+STC_RB_STRING_QW = _stc.STC_RB_STRING_QW
+STC_RB_WORD_DEMOTED = _stc.STC_RB_WORD_DEMOTED
+STC_RB_STDIN = _stc.STC_RB_STDIN
+STC_RB_STDOUT = _stc.STC_RB_STDOUT
+STC_RB_STDERR = _stc.STC_RB_STDERR
+STC_RB_UPPER_BOUND = _stc.STC_RB_UPPER_BOUND
 STC_B_DEFAULT = _stc.STC_B_DEFAULT
 STC_B_COMMENT = _stc.STC_B_COMMENT
 STC_B_NUMBER = _stc.STC_B_NUMBER
@@ -488,6 +544,10 @@ STC_B_KEYWORD3 = _stc.STC_B_KEYWORD3
 STC_B_KEYWORD4 = _stc.STC_B_KEYWORD4
 STC_B_CONSTANT = _stc.STC_B_CONSTANT
 STC_B_ASM = _stc.STC_B_ASM
+STC_B_LABEL = _stc.STC_B_LABEL
+STC_B_ERROR = _stc.STC_B_ERROR
+STC_B_HEXNUMBER = _stc.STC_B_HEXNUMBER
+STC_B_BINNUMBER = _stc.STC_B_BINNUMBER
 STC_PROPS_DEFAULT = _stc.STC_PROPS_DEFAULT
 STC_PROPS_COMMENT = _stc.STC_PROPS_COMMENT
 STC_PROPS_SECTION = _stc.STC_PROPS_SECTION
@@ -613,10 +673,14 @@ STC_LISP_DEFAULT = _stc.STC_LISP_DEFAULT
 STC_LISP_COMMENT = _stc.STC_LISP_COMMENT
 STC_LISP_NUMBER = _stc.STC_LISP_NUMBER
 STC_LISP_KEYWORD = _stc.STC_LISP_KEYWORD
+STC_LISP_KEYWORD_KW = _stc.STC_LISP_KEYWORD_KW
+STC_LISP_SYMBOL = _stc.STC_LISP_SYMBOL
 STC_LISP_STRING = _stc.STC_LISP_STRING
 STC_LISP_STRINGEOL = _stc.STC_LISP_STRINGEOL
 STC_LISP_IDENTIFIER = _stc.STC_LISP_IDENTIFIER
 STC_LISP_OPERATOR = _stc.STC_LISP_OPERATOR
+STC_LISP_SPECIAL = _stc.STC_LISP_SPECIAL
+STC_LISP_MULTI_COMMENT = _stc.STC_LISP_MULTI_COMMENT
 STC_EIFFEL_DEFAULT = _stc.STC_EIFFEL_DEFAULT
 STC_EIFFEL_COMMENTLINE = _stc.STC_EIFFEL_COMMENTLINE
 STC_EIFFEL_NUMBER = _stc.STC_EIFFEL_NUMBER
@@ -720,6 +784,7 @@ STC_CSS_DIRECTIVE = _stc.STC_CSS_DIRECTIVE
 STC_CSS_DOUBLESTRING = _stc.STC_CSS_DOUBLESTRING
 STC_CSS_SINGLESTRING = _stc.STC_CSS_SINGLESTRING
 STC_CSS_IDENTIFIER2 = _stc.STC_CSS_IDENTIFIER2
+STC_CSS_ATTRIBUTE = _stc.STC_CSS_ATTRIBUTE
 STC_POV_DEFAULT = _stc.STC_POV_DEFAULT
 STC_POV_COMMENT = _stc.STC_POV_COMMENT
 STC_POV_COMMENTLINE = _stc.STC_POV_COMMENTLINE
@@ -791,6 +856,10 @@ STC_NSIS_IFDEFINEDEF = _stc.STC_NSIS_IFDEFINEDEF
 STC_NSIS_MACRODEF = _stc.STC_NSIS_MACRODEF
 STC_NSIS_STRINGVAR = _stc.STC_NSIS_STRINGVAR
 STC_NSIS_NUMBER = _stc.STC_NSIS_NUMBER
+STC_NSIS_SECTIONGROUP = _stc.STC_NSIS_SECTIONGROUP
+STC_NSIS_PAGEEX = _stc.STC_NSIS_PAGEEX
+STC_NSIS_FUNCTIONDEF = _stc.STC_NSIS_FUNCTIONDEF
+STC_NSIS_COMMENTBOX = _stc.STC_NSIS_COMMENTBOX
 STC_MMIXAL_LEADWS = _stc.STC_MMIXAL_LEADWS
 STC_MMIXAL_COMMENT = _stc.STC_MMIXAL_COMMENT
 STC_MMIXAL_LABEL = _stc.STC_MMIXAL_LABEL
@@ -819,11 +888,13 @@ STC_CLW_REAL_CONSTANT = _stc.STC_CLW_REAL_CONSTANT
 STC_CLW_PICTURE_STRING = _stc.STC_CLW_PICTURE_STRING
 STC_CLW_KEYWORD = _stc.STC_CLW_KEYWORD
 STC_CLW_COMPILER_DIRECTIVE = _stc.STC_CLW_COMPILER_DIRECTIVE
+STC_CLW_RUNTIME_EXPRESSIONS = _stc.STC_CLW_RUNTIME_EXPRESSIONS
 STC_CLW_BUILTIN_PROCEDURES_FUNCTION = _stc.STC_CLW_BUILTIN_PROCEDURES_FUNCTION
 STC_CLW_STRUCTURE_DATA_TYPE = _stc.STC_CLW_STRUCTURE_DATA_TYPE
 STC_CLW_ATTRIBUTE = _stc.STC_CLW_ATTRIBUTE
 STC_CLW_STANDARD_EQUATE = _stc.STC_CLW_STANDARD_EQUATE
 STC_CLW_ERROR = _stc.STC_CLW_ERROR
+STC_CLW_DEPRECATED = _stc.STC_CLW_DEPRECATED
 STC_LOT_DEFAULT = _stc.STC_LOT_DEFAULT
 STC_LOT_HEADER = _stc.STC_LOT_HEADER
 STC_LOT_BREAK = _stc.STC_LOT_BREAK
@@ -949,6 +1020,8 @@ STC_AU3_VARIABLE = _stc.STC_AU3_VARIABLE
 STC_AU3_SENT = _stc.STC_AU3_SENT
 STC_AU3_PREPROCESSOR = _stc.STC_AU3_PREPROCESSOR
 STC_AU3_SPECIAL = _stc.STC_AU3_SPECIAL
+STC_AU3_EXPAND = _stc.STC_AU3_EXPAND
+STC_AU3_COMOBJ = _stc.STC_AU3_COMOBJ
 STC_APDL_DEFAULT = _stc.STC_APDL_DEFAULT
 STC_APDL_COMMENT = _stc.STC_APDL_COMMENT
 STC_APDL_COMMENTBLOCK = _stc.STC_APDL_COMMENTBLOCK
@@ -1002,6 +1075,166 @@ STC_VHDL_STDFUNCTION = _stc.STC_VHDL_STDFUNCTION
 STC_VHDL_STDPACKAGE = _stc.STC_VHDL_STDPACKAGE
 STC_VHDL_STDTYPE = _stc.STC_VHDL_STDTYPE
 STC_VHDL_USERWORD = _stc.STC_VHDL_USERWORD
+STC_CAML_DEFAULT = _stc.STC_CAML_DEFAULT
+STC_CAML_IDENTIFIER = _stc.STC_CAML_IDENTIFIER
+STC_CAML_TAGNAME = _stc.STC_CAML_TAGNAME
+STC_CAML_KEYWORD = _stc.STC_CAML_KEYWORD
+STC_CAML_KEYWORD2 = _stc.STC_CAML_KEYWORD2
+STC_CAML_KEYWORD3 = _stc.STC_CAML_KEYWORD3
+STC_CAML_LINENUM = _stc.STC_CAML_LINENUM
+STC_CAML_OPERATOR = _stc.STC_CAML_OPERATOR
+STC_CAML_NUMBER = _stc.STC_CAML_NUMBER
+STC_CAML_CHAR = _stc.STC_CAML_CHAR
+STC_CAML_STRING = _stc.STC_CAML_STRING
+STC_CAML_COMMENT = _stc.STC_CAML_COMMENT
+STC_CAML_COMMENT1 = _stc.STC_CAML_COMMENT1
+STC_CAML_COMMENT2 = _stc.STC_CAML_COMMENT2
+STC_CAML_COMMENT3 = _stc.STC_CAML_COMMENT3
+STC_HA_DEFAULT = _stc.STC_HA_DEFAULT
+STC_HA_IDENTIFIER = _stc.STC_HA_IDENTIFIER
+STC_HA_KEYWORD = _stc.STC_HA_KEYWORD
+STC_HA_NUMBER = _stc.STC_HA_NUMBER
+STC_HA_STRING = _stc.STC_HA_STRING
+STC_HA_CHARACTER = _stc.STC_HA_CHARACTER
+STC_HA_CLASS = _stc.STC_HA_CLASS
+STC_HA_MODULE = _stc.STC_HA_MODULE
+STC_HA_CAPITAL = _stc.STC_HA_CAPITAL
+STC_HA_DATA = _stc.STC_HA_DATA
+STC_HA_IMPORT = _stc.STC_HA_IMPORT
+STC_HA_OPERATOR = _stc.STC_HA_OPERATOR
+STC_HA_INSTANCE = _stc.STC_HA_INSTANCE
+STC_HA_COMMENTLINE = _stc.STC_HA_COMMENTLINE
+STC_HA_COMMENTBLOCK = _stc.STC_HA_COMMENTBLOCK
+STC_HA_COMMENTBLOCK2 = _stc.STC_HA_COMMENTBLOCK2
+STC_HA_COMMENTBLOCK3 = _stc.STC_HA_COMMENTBLOCK3
+STC_T3_DEFAULT = _stc.STC_T3_DEFAULT
+STC_T3_X_DEFAULT = _stc.STC_T3_X_DEFAULT
+STC_T3_PREPROCESSOR = _stc.STC_T3_PREPROCESSOR
+STC_T3_BLOCK_COMMENT = _stc.STC_T3_BLOCK_COMMENT
+STC_T3_LINE_COMMENT = _stc.STC_T3_LINE_COMMENT
+STC_T3_OPERATOR = _stc.STC_T3_OPERATOR
+STC_T3_KEYWORD = _stc.STC_T3_KEYWORD
+STC_T3_NUMBER = _stc.STC_T3_NUMBER
+STC_T3_IDENTIFIER = _stc.STC_T3_IDENTIFIER
+STC_T3_S_STRING = _stc.STC_T3_S_STRING
+STC_T3_D_STRING = _stc.STC_T3_D_STRING
+STC_T3_X_STRING = _stc.STC_T3_X_STRING
+STC_T3_LIB_DIRECTIVE = _stc.STC_T3_LIB_DIRECTIVE
+STC_T3_MSG_PARAM = _stc.STC_T3_MSG_PARAM
+STC_T3_HTML_TAG = _stc.STC_T3_HTML_TAG
+STC_T3_HTML_DEFAULT = _stc.STC_T3_HTML_DEFAULT
+STC_T3_HTML_STRING = _stc.STC_T3_HTML_STRING
+STC_T3_USER1 = _stc.STC_T3_USER1
+STC_T3_USER2 = _stc.STC_T3_USER2
+STC_T3_USER3 = _stc.STC_T3_USER3
+STC_REBOL_DEFAULT = _stc.STC_REBOL_DEFAULT
+STC_REBOL_COMMENTLINE = _stc.STC_REBOL_COMMENTLINE
+STC_REBOL_COMMENTBLOCK = _stc.STC_REBOL_COMMENTBLOCK
+STC_REBOL_PREFACE = _stc.STC_REBOL_PREFACE
+STC_REBOL_OPERATOR = _stc.STC_REBOL_OPERATOR
+STC_REBOL_CHARACTER = _stc.STC_REBOL_CHARACTER
+STC_REBOL_QUOTEDSTRING = _stc.STC_REBOL_QUOTEDSTRING
+STC_REBOL_BRACEDSTRING = _stc.STC_REBOL_BRACEDSTRING
+STC_REBOL_NUMBER = _stc.STC_REBOL_NUMBER
+STC_REBOL_PAIR = _stc.STC_REBOL_PAIR
+STC_REBOL_TUPLE = _stc.STC_REBOL_TUPLE
+STC_REBOL_BINARY = _stc.STC_REBOL_BINARY
+STC_REBOL_MONEY = _stc.STC_REBOL_MONEY
+STC_REBOL_ISSUE = _stc.STC_REBOL_ISSUE
+STC_REBOL_TAG = _stc.STC_REBOL_TAG
+STC_REBOL_FILE = _stc.STC_REBOL_FILE
+STC_REBOL_EMAIL = _stc.STC_REBOL_EMAIL
+STC_REBOL_URL = _stc.STC_REBOL_URL
+STC_REBOL_DATE = _stc.STC_REBOL_DATE
+STC_REBOL_TIME = _stc.STC_REBOL_TIME
+STC_REBOL_IDENTIFIER = _stc.STC_REBOL_IDENTIFIER
+STC_REBOL_WORD = _stc.STC_REBOL_WORD
+STC_REBOL_WORD2 = _stc.STC_REBOL_WORD2
+STC_REBOL_WORD3 = _stc.STC_REBOL_WORD3
+STC_REBOL_WORD4 = _stc.STC_REBOL_WORD4
+STC_REBOL_WORD5 = _stc.STC_REBOL_WORD5
+STC_REBOL_WORD6 = _stc.STC_REBOL_WORD6
+STC_REBOL_WORD7 = _stc.STC_REBOL_WORD7
+STC_REBOL_WORD8 = _stc.STC_REBOL_WORD8
+STC_SQL_DEFAULT = _stc.STC_SQL_DEFAULT
+STC_SQL_COMMENT = _stc.STC_SQL_COMMENT
+STC_SQL_COMMENTLINE = _stc.STC_SQL_COMMENTLINE
+STC_SQL_COMMENTDOC = _stc.STC_SQL_COMMENTDOC
+STC_SQL_NUMBER = _stc.STC_SQL_NUMBER
+STC_SQL_WORD = _stc.STC_SQL_WORD
+STC_SQL_STRING = _stc.STC_SQL_STRING
+STC_SQL_CHARACTER = _stc.STC_SQL_CHARACTER
+STC_SQL_SQLPLUS = _stc.STC_SQL_SQLPLUS
+STC_SQL_SQLPLUS_PROMPT = _stc.STC_SQL_SQLPLUS_PROMPT
+STC_SQL_OPERATOR = _stc.STC_SQL_OPERATOR
+STC_SQL_IDENTIFIER = _stc.STC_SQL_IDENTIFIER
+STC_SQL_SQLPLUS_COMMENT = _stc.STC_SQL_SQLPLUS_COMMENT
+STC_SQL_COMMENTLINEDOC = _stc.STC_SQL_COMMENTLINEDOC
+STC_SQL_WORD2 = _stc.STC_SQL_WORD2
+STC_SQL_COMMENTDOCKEYWORD = _stc.STC_SQL_COMMENTDOCKEYWORD
+STC_SQL_COMMENTDOCKEYWORDERROR = _stc.STC_SQL_COMMENTDOCKEYWORDERROR
+STC_SQL_USER1 = _stc.STC_SQL_USER1
+STC_SQL_USER2 = _stc.STC_SQL_USER2
+STC_SQL_USER3 = _stc.STC_SQL_USER3
+STC_SQL_USER4 = _stc.STC_SQL_USER4
+STC_SQL_QUOTEDIDENTIFIER = _stc.STC_SQL_QUOTEDIDENTIFIER
+STC_ST_DEFAULT = _stc.STC_ST_DEFAULT
+STC_ST_STRING = _stc.STC_ST_STRING
+STC_ST_NUMBER = _stc.STC_ST_NUMBER
+STC_ST_COMMENT = _stc.STC_ST_COMMENT
+STC_ST_SYMBOL = _stc.STC_ST_SYMBOL
+STC_ST_BINARY = _stc.STC_ST_BINARY
+STC_ST_BOOL = _stc.STC_ST_BOOL
+STC_ST_SELF = _stc.STC_ST_SELF
+STC_ST_SUPER = _stc.STC_ST_SUPER
+STC_ST_NIL = _stc.STC_ST_NIL
+STC_ST_GLOBAL = _stc.STC_ST_GLOBAL
+STC_ST_RETURN = _stc.STC_ST_RETURN
+STC_ST_SPECIAL = _stc.STC_ST_SPECIAL
+STC_ST_KWSEND = _stc.STC_ST_KWSEND
+STC_ST_ASSIGN = _stc.STC_ST_ASSIGN
+STC_ST_CHARACTER = _stc.STC_ST_CHARACTER
+STC_ST_SPEC_SEL = _stc.STC_ST_SPEC_SEL
+STC_FS_DEFAULT = _stc.STC_FS_DEFAULT
+STC_FS_COMMENT = _stc.STC_FS_COMMENT
+STC_FS_COMMENTLINE = _stc.STC_FS_COMMENTLINE
+STC_FS_COMMENTDOC = _stc.STC_FS_COMMENTDOC
+STC_FS_COMMENTLINEDOC = _stc.STC_FS_COMMENTLINEDOC
+STC_FS_COMMENTDOCKEYWORD = _stc.STC_FS_COMMENTDOCKEYWORD
+STC_FS_COMMENTDOCKEYWORDERROR = _stc.STC_FS_COMMENTDOCKEYWORDERROR
+STC_FS_KEYWORD = _stc.STC_FS_KEYWORD
+STC_FS_KEYWORD2 = _stc.STC_FS_KEYWORD2
+STC_FS_KEYWORD3 = _stc.STC_FS_KEYWORD3
+STC_FS_KEYWORD4 = _stc.STC_FS_KEYWORD4
+STC_FS_NUMBER = _stc.STC_FS_NUMBER
+STC_FS_STRING = _stc.STC_FS_STRING
+STC_FS_PREPROCESSOR = _stc.STC_FS_PREPROCESSOR
+STC_FS_OPERATOR = _stc.STC_FS_OPERATOR
+STC_FS_IDENTIFIER = _stc.STC_FS_IDENTIFIER
+STC_FS_DATE = _stc.STC_FS_DATE
+STC_FS_STRINGEOL = _stc.STC_FS_STRINGEOL
+STC_FS_CONSTANT = _stc.STC_FS_CONSTANT
+STC_FS_ASM = _stc.STC_FS_ASM
+STC_FS_LABEL = _stc.STC_FS_LABEL
+STC_FS_ERROR = _stc.STC_FS_ERROR
+STC_FS_HEXNUMBER = _stc.STC_FS_HEXNUMBER
+STC_FS_BINNUMBER = _stc.STC_FS_BINNUMBER
+STC_CSOUND_DEFAULT = _stc.STC_CSOUND_DEFAULT
+STC_CSOUND_COMMENT = _stc.STC_CSOUND_COMMENT
+STC_CSOUND_NUMBER = _stc.STC_CSOUND_NUMBER
+STC_CSOUND_OPERATOR = _stc.STC_CSOUND_OPERATOR
+STC_CSOUND_INSTR = _stc.STC_CSOUND_INSTR
+STC_CSOUND_IDENTIFIER = _stc.STC_CSOUND_IDENTIFIER
+STC_CSOUND_OPCODE = _stc.STC_CSOUND_OPCODE
+STC_CSOUND_HEADERSTMT = _stc.STC_CSOUND_HEADERSTMT
+STC_CSOUND_USERKEYWORD = _stc.STC_CSOUND_USERKEYWORD
+STC_CSOUND_COMMENTBLOCK = _stc.STC_CSOUND_COMMENTBLOCK
+STC_CSOUND_PARAM = _stc.STC_CSOUND_PARAM
+STC_CSOUND_ARATE_VAR = _stc.STC_CSOUND_ARATE_VAR
+STC_CSOUND_KRATE_VAR = _stc.STC_CSOUND_KRATE_VAR
+STC_CSOUND_IRATE_VAR = _stc.STC_CSOUND_IRATE_VAR
+STC_CSOUND_GLOBAL_VAR = _stc.STC_CSOUND_GLOBAL_VAR
+STC_CSOUND_STRINGEOL = _stc.STC_CSOUND_STRINGEOL
 STC_CMD_REDO = _stc.STC_CMD_REDO
 STC_CMD_SELECTALL = _stc.STC_CMD_SELECTALL
 STC_CMD_UNDO = _stc.STC_CMD_UNDO
@@ -1509,6 +1742,14 @@ class StyledTextCtrl(_core.Control):
         Define a marker from a bitmap
         """
         return _stc.StyledTextCtrl_MarkerDefineBitmap(*args, **kwargs)
+
+    def MarkerAddSet(*args, **kwargs):
+        """
+        MarkerAddSet(self, int line, int set)
+
+        Add a set of markers to a line.
+        """
+        return _stc.StyledTextCtrl_MarkerAddSet(*args, **kwargs)
 
     def SetMarginType(*args, **kwargs):
         """
@@ -2114,6 +2355,40 @@ class StyledTextCtrl(_core.Control):
         Default is '?' but can be changed if items contain '?'.
         """
         return _stc.StyledTextCtrl_AutoCompSetTypeSeparator(*args, **kwargs)
+
+    def AutoCompSetMaxWidth(*args, **kwargs):
+        """
+        AutoCompSetMaxWidth(self, int characterCount)
+
+        Set the maximum width, in characters, of auto-completion and user lists.
+        Set to 0 to autosize to fit longest item, which is the default.
+        """
+        return _stc.StyledTextCtrl_AutoCompSetMaxWidth(*args, **kwargs)
+
+    def AutoCompGetMaxWidth(*args, **kwargs):
+        """
+        AutoCompGetMaxWidth(self) -> int
+
+        Get the maximum width, in characters, of auto-completion and user lists.
+        """
+        return _stc.StyledTextCtrl_AutoCompGetMaxWidth(*args, **kwargs)
+
+    def AutoCompSetMaxHeight(*args, **kwargs):
+        """
+        AutoCompSetMaxHeight(self, int rowCount)
+
+        Set the maximum height, in rows, of auto-completion and user lists.
+        The default is 5 rows.
+        """
+        return _stc.StyledTextCtrl_AutoCompSetMaxHeight(*args, **kwargs)
+
+    def AutoCompGetMaxHeight(*args, **kwargs):
+        """
+        AutoCompGetMaxHeight(self) -> int
+
+        Set the maximum height, in rows, of auto-completion and user lists.
+        """
+        return _stc.StyledTextCtrl_AutoCompGetMaxHeight(*args, **kwargs)
 
     def SetIndent(*args, **kwargs):
         """
@@ -2777,6 +3052,14 @@ class StyledTextCtrl(_core.Control):
         """
         return _stc.StyledTextCtrl_DocLineFromVisible(*args, **kwargs)
 
+    def WrapCount(*args, **kwargs):
+        """
+        WrapCount(self, int line) -> int
+
+        The number of display lines needed to wrap a document line
+        """
+        return _stc.StyledTextCtrl_WrapCount(*args, **kwargs)
+
     def SetFoldLevel(*args, **kwargs):
         """
         SetFoldLevel(self, int line, int level)
@@ -3066,7 +3349,7 @@ class StyledTextCtrl(_core.Control):
 
     def GetEndAtLastLine(*args, **kwargs):
         """
-        GetEndAtLastLine(self) -> int
+        GetEndAtLastLine(self) -> bool
 
         Retrieve whether the maximum scroll position has the last
         line at the bottom of the view.
@@ -4327,10 +4610,58 @@ class StyledTextCtrl(_core.Control):
         """
         FindColumn(self, int line, int column) -> int
 
-        Find the position of a column on a line taking into account tabs and 
+        Find the position of a column on a line taking into account tabs and
         multi-byte characters. If beyond end of line, return line end position.
         """
         return _stc.StyledTextCtrl_FindColumn(*args, **kwargs)
+
+    def GetCaretSticky(*args, **kwargs):
+        """
+        GetCaretSticky(self) -> bool
+
+        Can the caret preferred x position only be changed by explicit movement commands?
+        """
+        return _stc.StyledTextCtrl_GetCaretSticky(*args, **kwargs)
+
+    def SetCaretSticky(*args, **kwargs):
+        """
+        SetCaretSticky(self, bool useCaretStickyBehaviour)
+
+        Stop the caret preferred x position changing when the user types.
+        """
+        return _stc.StyledTextCtrl_SetCaretSticky(*args, **kwargs)
+
+    def ToggleCaretSticky(*args, **kwargs):
+        """
+        ToggleCaretSticky(self)
+
+        Switch between sticky and non-sticky: meant to be bound to a key.
+        """
+        return _stc.StyledTextCtrl_ToggleCaretSticky(*args, **kwargs)
+
+    def SetPasteConvertEndings(*args, **kwargs):
+        """
+        SetPasteConvertEndings(self, bool convert)
+
+        Enable/Disable convert-on-paste for line endings
+        """
+        return _stc.StyledTextCtrl_SetPasteConvertEndings(*args, **kwargs)
+
+    def GetPasteConvertEndings(*args, **kwargs):
+        """
+        GetPasteConvertEndings(self) -> bool
+
+        Get convert-on-paste setting
+        """
+        return _stc.StyledTextCtrl_GetPasteConvertEndings(*args, **kwargs)
+
+    def SelectionDuplicate(*args, **kwargs):
+        """
+        SelectionDuplicate(self)
+
+        Duplicate the selection. If selection empty duplicate the line containing the caret.
+        """
+        return _stc.StyledTextCtrl_SelectionDuplicate(*args, **kwargs)
 
     def StartRecord(*args, **kwargs):
         """
@@ -4395,6 +4726,40 @@ class StyledTextCtrl(_core.Control):
         Set the lexing language of the document based on string name.
         """
         return _stc.StyledTextCtrl_SetLexerLanguage(*args, **kwargs)
+
+    def GetProperty(*args, **kwargs):
+        """
+        GetProperty(self, String key) -> String
+
+        Retrieve a 'property' value previously set with SetProperty.
+        """
+        return _stc.StyledTextCtrl_GetProperty(*args, **kwargs)
+
+    def GetPropertyExpanded(*args, **kwargs):
+        """
+        GetPropertyExpanded(self, String key) -> String
+
+        Retrieve a 'property' value previously set with SetProperty,
+        with '$()' variable replacement on returned buffer.
+        """
+        return _stc.StyledTextCtrl_GetPropertyExpanded(*args, **kwargs)
+
+    def GetPropertyInt(*args, **kwargs):
+        """
+        GetPropertyInt(self, String key) -> int
+
+        Retrieve a 'property' value previously set with SetProperty,
+        interpreted as an int AFTER any '$()' variable replacement.
+        """
+        return _stc.StyledTextCtrl_GetPropertyInt(*args, **kwargs)
+
+    def GetStyleBitsNeeded(*args, **kwargs):
+        """
+        GetStyleBitsNeeded(self) -> int
+
+        Retrieve the number of bits the current lexer needs for styling.
+        """
+        return _stc.StyledTextCtrl_GetStyleBitsNeeded(*args, **kwargs)
 
     def GetCurrentLine(*args, **kwargs):
         """
@@ -5033,6 +5398,7 @@ wxEVT_STC_ZOOM = _stc.wxEVT_STC_ZOOM
 wxEVT_STC_HOTSPOT_CLICK = _stc.wxEVT_STC_HOTSPOT_CLICK
 wxEVT_STC_HOTSPOT_DCLICK = _stc.wxEVT_STC_HOTSPOT_DCLICK
 wxEVT_STC_CALLTIP_CLICK = _stc.wxEVT_STC_CALLTIP_CLICK
+wxEVT_STC_AUTOCOMP_SELECTION = _stc.wxEVT_STC_AUTOCOMP_SELECTION
 EVT_STC_CHANGE = wx.PyEventBinder( wxEVT_STC_CHANGE, 1 )
 EVT_STC_STYLENEEDED = wx.PyEventBinder( wxEVT_STC_STYLENEEDED, 1 )
 EVT_STC_CHARADDED = wx.PyEventBinder( wxEVT_STC_CHARADDED, 1 )
@@ -5058,5 +5424,6 @@ EVT_STC_ZOOM = wx.PyEventBinder( wxEVT_STC_ZOOM, 1 )
 EVT_STC_HOTSPOT_CLICK = wx.PyEventBinder( wxEVT_STC_HOTSPOT_CLICK, 1 )
 EVT_STC_HOTSPOT_DCLICK = wx.PyEventBinder( wxEVT_STC_HOTSPOT_DCLICK, 1 )
 EVT_STC_CALLTIP_CLICK = wx.PyEventBinder( wxEVT_STC_CALLTIP_CLICK, 1 )
+
 
 

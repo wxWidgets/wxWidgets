@@ -68,6 +68,10 @@ public:
 protected:
     int                             m_nRangeMax;
     int                             m_nGaugePos;
+    int                             m_nWidth;
+    int                             m_nHeight;
+
+    wxSize wxGauge::DoGetBestSize(void) const;
 
 private:
     DECLARE_DYNAMIC_CLASS(wxGauge)

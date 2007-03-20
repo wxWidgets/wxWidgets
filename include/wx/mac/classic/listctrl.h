@@ -227,7 +227,10 @@ class WXDLLEXPORT wxListCtrl: public wxControl
 
   // Sets the item image
   bool SetItemImage(long item, int image, int selImage) ;
-
+#if wxABI_VERSION >= 20603
+  bool SetItemColumnImage(long item, long column, int image);
+#endif
+    
   // Gets the item text
   wxString GetItemText(long item) const ;
 

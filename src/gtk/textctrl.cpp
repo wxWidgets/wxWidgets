@@ -96,6 +96,19 @@ static void wxGtkTextApplyTagsFromAttr(GtkTextBuffer *text_buffer,
                                               NULL );
         gtk_text_buffer_apply_tag (text_buffer, tag, start, end);
         g_free (font_string);
+
+        if (attr.GetFont().GetUnderlined())
+        {
+            g_snprintf(buf, sizeof(buf), "WXFONTUNDERLINE");
+            tag = gtk_text_tag_table_lookup( gtk_text_buffer_get_tag_table( text_buffer ),
+                                             buf );
+            if (!tag)
+                tag = gtk_text_buffer_create_tag( text_buffer, buf,
+                                                  "underline-set", TRUE,
+                                                  "underline", PANGO_UNDERLINE_SINGLE,
+                                                  NULL );
+            gtk_text_buffer_apply_tag (text_buffer, tag, start, end);
+        }
     }
 
     if (attr.HasTextColour())
@@ -1158,12 +1171,16 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
     {
 #ifdef __WXGTK20__
         GtkTextIter iter;
-        gtk_text_buffer_get_iter_at_offset(m_buffer, &iter, pos);
-        if (gtk_text_iter_is_end(&iter))
+
+        if (pos > GetLastPosition())
             return false;
 
-        *y = gtk_text_iter_get_line(&iter);
-        *x = gtk_text_iter_get_line_offset(&iter);
+        gtk_text_buffer_get_iter_at_offset(m_buffer, &iter, pos);
+
+        if ( y )
+            *y = gtk_text_iter_get_line(&iter);
+        if ( x )
+            *x = gtk_text_iter_get_line_offset(&iter);
 #else
         wxString text = GetValue();
 
@@ -1191,8 +1208,10 @@ bool wxTextCtrl::PositionToXY(long pos, long *x, long *y ) const
     {
         if ( pos <= GTK_ENTRY(m_text)->text_length )
         {
-            *y = 0;
-            *x = pos;
+            if ( y )
+                *y = 0;
+            if ( x )
+                *x = pos;
         }
         else
         {
@@ -2157,7 +2176,10 @@ void wxTextCtrl::Freeze()
                 GTK_SIGNAL_FUNC(gtk_text_exposed_callback), (gpointer)this);
             gtk_widget_set_sensitive(m_widget, false);
             g_object_ref(m_buffer);
-            gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_text), gtk_text_buffer_new(NULL));
+            GtkTextBuffer* buf_new = gtk_text_buffer_new(NULL);
+            gtk_text_view_set_buffer(GTK_TEXT_VIEW(m_text), buf_new);
+            // FIXME: this leaks the new buffer, since gtk_text_view_set_buffer
+            // adds its own reference, but unrefing it here can cause a crash later
         }
 #else
         gtk_text_freeze(GTK_TEXT(m_text));

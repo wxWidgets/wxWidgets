@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -e
+
+PACKAGE="python-wxgtk=V"
+dpkg --listfiles $PACKAGE | awk '$0~/\.py$/ {print $0"c\n" $0"o"}' | xargs rm -f >&2
+
+update-alternatives --remove wx.pth /usr/lib/wx/python/wx=V.pth
+
+#DEBHELPER#
+

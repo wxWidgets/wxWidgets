@@ -376,8 +376,11 @@ void zlibStream::doTestStreamData(int input_flag, int output_flag, int compress_
     // Check state of the verify action.
     if (fail_pos != DATABUFFER_SIZE || !bWasEOF)
     {
-        wxString msg(wxString::Format(_T("Wrong data item at pos %d (Org_val %d != Zlib_val %d), with compression level %d"),
-                                            fail_pos, GetDataBuffer()[fail_pos], last_value, compress_level));
+        wxString msg;
+        msg << _T("Wrong data item at pos ") << fail_pos
+            << _T(" (Org_val ") << GetDataBuffer()[fail_pos]
+            << _T(" != Zlib_val ") << last_value
+            << _T("), with compression level ") << compress_level;
         CPPUNIT_FAIL(string(msg.mb_str()));
     }
 }

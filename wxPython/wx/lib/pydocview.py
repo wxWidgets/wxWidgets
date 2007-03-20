@@ -2,11 +2,11 @@
 # Name:         pydocview.py
 # Purpose:      Python extensions to the wxWindows docview framework
 #
-# Author:       Peter Yared, Morgan Hua
+# Author:       Peter Yared, Morgan Hua, Matt Fryer
 #
 # Created:      5/15/03
 # CVS-ID:       $Id$
-# Copyright:    (c) 2003-2005 ActiveGrid, Inc.
+# Copyright:    (c) 2003-2006 ActiveGrid, Inc.
 # License:      wxWindows license
 #----------------------------------------------------------------------------
 
@@ -57,7 +57,7 @@ class DocFrameMixIn:
     Class with common code used by DocMDIParentFrame, DocTabbedParentFrame, and
     DocSDIFrame.
     """
-    
+
 
     def GetDocumentManager(self):
         """
@@ -132,7 +132,7 @@ class DocFrameMixIn:
         if sdi:
             if self.GetDocument() and self.GetDocument().GetCommandProcessor():
                 self.GetDocument().GetCommandProcessor().SetEditMenu(editMenu)
-            
+
         viewMenu = wx.Menu()
         viewMenu.AppendCheckItem(VIEW_TOOLBAR_ID, _("&Toolbar"), _("Shows or hides the toolbar"))
         wx.EVT_MENU(self, VIEW_TOOLBAR_ID, self.OnViewToolBar)
@@ -151,7 +151,7 @@ class DocFrameMixIn:
 
         if sdi:  # TODO: Is this really needed?
             wx.EVT_COMMAND_FIND_CLOSE(self, -1, self.ProcessEvent)
-            
+
         return menuBar
 
 
@@ -194,8 +194,16 @@ class DocFrameMixIn:
         Saves all of the currently open documents.
         """
         docs = wx.GetApp().GetDocumentManager().GetDocuments()
+
+        # save child documents first
         for doc in docs:
-            doc.Save()
+            if isinstance(doc, wx.lib.pydocview.ChildDocument):
+                doc.Save()
+
+        # save parent and other documents later
+        for doc in docs:
+            if not isinstance(doc, wx.lib.pydocview.ChildDocument):
+                doc.Save()
 
 
     def OnAbout(self, event):
@@ -250,7 +258,7 @@ class DocMDIParentFrameMixIn:
     """
     Class with common code used by DocMDIParentFrame and DocTabbedParentFrame.
     """
-    
+
 
     def _GetPosSizeFromConfig(self, pos, size):
         """
@@ -267,13 +275,13 @@ class DocMDIParentFrameMixIn:
 
             if wx.Display_GetFromPoint(pos) == -1:  # Check if the frame position is offscreen
                 pos = wx.DefaultPosition
-                
+
             if size == wx.DefaultSize:
                 size = wx.Size(config.ReadInt("MDIFrameXSize", 450), config.ReadInt("MDIFrameYSize", 300))
         return pos, size
 
 
-    def _InitFrame(self, embeddedWindows):
+    def _InitFrame(self, embeddedWindows, minSize):
         """
         Initializes the frame and creates the default menubar, toolbar, and status bar.
         """
@@ -298,7 +306,7 @@ class DocMDIParentFrameMixIn:
             # wxBug: On maximize, statusbar leaves a residual that needs to be refereshed, happens even when user does it
             self.Maximize()
 
-        self.CreateEmbeddedWindows(embeddedWindows)
+        self.CreateEmbeddedWindows(embeddedWindows, minSize)
         self._LayoutFrame()
 
         if wx.Platform == '__WXMAC__':
@@ -325,7 +333,7 @@ class DocMDIParentFrameMixIn:
         if id == SAVEALL_ID:
             self.OnFileSaveAll(event)
             return True
-            
+
         return wx.GetApp().ProcessEvent(event)
 
 
@@ -359,24 +367,24 @@ class DocMDIParentFrameMixIn:
                 if doc.IsModified():
                     filesModified = True
                     break
-                
+
             event.Enable(filesModified)
             return True
         else:
             return wx.GetApp().ProcessUpdateUIEvent(event)
 
 
-    def CreateEmbeddedWindows(self, windows=0):
+    def CreateEmbeddedWindows(self, windows=0, minSize=20):
         """
         Create the specified embedded windows around the edges of the frame.
         """
         frameSize = self.GetSize()   # TODO: GetClientWindow.GetSize is still returning 0,0 since the frame isn't fully constructed yet, so using full frame size
-        defaultHSize = int(frameSize[0] / 6)
-        defaultVSize = int(frameSize[1] / 7)
+        defaultHSize = max(minSize, int(frameSize[0] / 6))
+        defaultVSize = max(minSize, int(frameSize[1] / 7))
         defaultSubVSize = int(frameSize[1] / 2)
         config = wx.ConfigBase_Get()
         if windows & (EMBEDDED_WINDOW_LEFT | EMBEDDED_WINDOW_TOPLEFT | EMBEDDED_WINDOW_BOTTOMLEFT):
-            self._leftEmbWindow = self._CreateEmbeddedWindow(self, (config.ReadInt("MDIEmbedLeftSize", defaultHSize), -1), wx.LAYOUT_VERTICAL, wx.LAYOUT_LEFT, visible = config.ReadInt("MDIEmbedLeftVisible", 1), sash = wx.SASH_RIGHT)
+            self._leftEmbWindow = self._CreateEmbeddedWindow(self, (max(minSize,config.ReadInt("MDIEmbedLeftSize", defaultHSize)), -1), wx.LAYOUT_VERTICAL, wx.LAYOUT_LEFT, visible = config.ReadInt("MDIEmbedLeftVisible", 1), sash = wx.SASH_RIGHT)
         else:
             self._leftEmbWindow = None
         if windows & EMBEDDED_WINDOW_TOPLEFT:
@@ -388,7 +396,7 @@ class DocMDIParentFrameMixIn:
         else:
             self._bottomLeftEmbWindow = None
         if windows & (EMBEDDED_WINDOW_RIGHT | EMBEDDED_WINDOW_TOPRIGHT | EMBEDDED_WINDOW_BOTTOMRIGHT):
-            self._rightEmbWindow = self._CreateEmbeddedWindow(self, (config.ReadInt("MDIEmbedRightSize", defaultHSize), -1), wx.LAYOUT_VERTICAL, wx.LAYOUT_RIGHT, visible = config.ReadInt("MDIEmbedRightVisible", 1), sash = wx.SASH_LEFT)
+            self._rightEmbWindow = self._CreateEmbeddedWindow(self, (max(minSize,config.ReadInt("MDIEmbedRightSize", defaultHSize)), -1), wx.LAYOUT_VERTICAL, wx.LAYOUT_RIGHT, visible = config.ReadInt("MDIEmbedRightVisible", 1), sash = wx.SASH_LEFT)
         else:
             self._rightEmbWindow = None
         if windows & EMBEDDED_WINDOW_TOPRIGHT:
@@ -400,11 +408,11 @@ class DocMDIParentFrameMixIn:
         else:
             self._bottomRightEmbWindow = None
         if windows & EMBEDDED_WINDOW_TOP:
-            self._topEmbWindow = self._CreateEmbeddedWindow(self, (-1, config.ReadInt("MDIEmbedTopSize", defaultVSize)), wx.LAYOUT_HORIZONTAL, wx.LAYOUT_TOP, visible = config.ReadInt("MDIEmbedTopVisible", 1), sash = wx.SASH_BOTTOM)
+            self._topEmbWindow = self._CreateEmbeddedWindow(self, (-1, max(minSize,config.ReadInt("MDIEmbedTopSize", defaultVSize))), wx.LAYOUT_HORIZONTAL, wx.LAYOUT_TOP, visible = config.ReadInt("MDIEmbedTopVisible", 1), sash = wx.SASH_BOTTOM)
         else:
             self._topEmbWindow = None
         if windows & EMBEDDED_WINDOW_BOTTOM:
-            self._bottomEmbWindow = self._CreateEmbeddedWindow(self, (-1, config.ReadInt("MDIEmbedBottomSize", defaultVSize)), wx.LAYOUT_HORIZONTAL, wx.LAYOUT_BOTTOM, visible = config.ReadInt("MDIEmbedBottomVisible", 1), sash = wx.SASH_TOP)
+            self._bottomEmbWindow = self._CreateEmbeddedWindow(self, (-1, max(minSize,config.ReadInt("MDIEmbedBottomSize", defaultVSize))), wx.LAYOUT_HORIZONTAL, wx.LAYOUT_BOTTOM, visible = config.ReadInt("MDIEmbedBottomVisible", 1), sash = wx.SASH_TOP)
         else:
             self._bottomEmbWindow = None
 
@@ -490,7 +498,7 @@ class DocMDIParentFrameMixIn:
 
     def _CreateEmbeddedWindow(self, parent, size, orientation, alignment, visible=True, sash=None):
         """
-        Creates the embedded window with the specified size, orientation, and alignment.  If the 
+        Creates the embedded window with the specified size, orientation, and alignment.  If the
         window is not visible it will retain the size with which it was last viewed.
         """
         window = wx.SashLayoutWindow(parent, wx.NewId(), style = wx.NO_BORDER | wx.SW_3D)
@@ -535,7 +543,7 @@ class DocMDIParentFrameMixIn:
         if isinstance(window.GetParent(), wx.SashLayoutWindow):  # It is a parent sashwindow with multiple embedded sashwindows
             parentSashWindow = window.GetParent()
             if show:  # Make sure it is visible in case all of the subwindows were hidden
-                parentSashWindow.Show()                
+                parentSashWindow.Show()
             if show and window._sizeBeforeHidden:
                 if window._sizeBeforeHidden[1] == parentSashWindow.GetClientSize()[1]:
                     if window == self.GetEmbeddedWindow(EMBEDDED_WINDOW_BOTTOMLEFT) and self.GetEmbeddedWindow(EMBEDDED_WINDOW_TOPLEFT).IsShown():
@@ -559,7 +567,7 @@ class DocMDIParentFrameMixIn:
                             self.GetEmbeddedWindow(EMBEDDED_WINDOW_TOPRIGHT).SetDefaultSize(otherWindowSize)
                         elif window == self.GetEmbeddedWindow(EMBEDDED_WINDOW_TOPRIGHT):
                             self.GetEmbeddedWindow(EMBEDDED_WINDOW_BOTTOMRIGHT).SetDefaultSize(otherWindowSize)
-                    
+
             if not show:
                 if window == self.GetEmbeddedWindow(EMBEDDED_WINDOW_BOTTOMRIGHT) and not self.GetEmbeddedWindow(EMBEDDED_WINDOW_TOPRIGHT).IsShown() \
                     or window == self.GetEmbeddedWindow(EMBEDDED_WINDOW_TOPRIGHT) and not self.GetEmbeddedWindow(EMBEDDED_WINDOW_BOTTOMRIGHT).IsShown() \
@@ -572,11 +580,11 @@ class DocMDIParentFrameMixIn:
         self._LayoutFrame()
 
 
-    def HideEmbeddedWindow(self):
+    def HideEmbeddedWindow(self, window):
         """
         Hides the embedded window specified by the embedded window location constant.
         """
-        self.ShowEmbeddedWindow(show = False)
+        self.ShowEmbeddedWindow(window, show=False)
 
 
 class DocTabbedChildFrame(wx.Panel):
@@ -609,7 +617,7 @@ class DocTabbedChildFrame(wx.Panel):
         Dummy method since the icon of tabbed frames are managed by the notebook.
         """
         return None
-        
+
 
     def SetIcon(self, icon):
         """
@@ -645,7 +653,7 @@ class DocTabbedChildFrame(wx.Panel):
         """
         Returns the frame's title.
         """
-        wx.GetApp().GetTopWindow().GetNotebookPageTitle(self)
+        return wx.GetApp().GetTopWindow().GetNotebookPageTitle(self)
 
 
     def SetTitle(self, title):
@@ -654,6 +662,23 @@ class DocTabbedChildFrame(wx.Panel):
         """
         wx.GetApp().GetTopWindow().SetNotebookPageTitle(self, title)
 
+
+    def OnTitleIsModified(self):
+        """
+        Add/remove to the frame's title an indication that the document is dirty.
+        If the document is dirty, an '*' is appended to the title
+        """
+        title = self.GetTitle()
+        if title:
+            if self.GetDocument().IsModified():
+                if not title.endswith("*"):
+                    title = title + "*"
+                    self.SetTitle(title)
+            else:
+                if title.endswith("*"):
+                    title = title[:-1]
+                    self.SetTitle(title)
+        
 
     def ProcessEvent(event):
         """
@@ -710,7 +735,7 @@ class DocTabbedParentFrame(wx.Frame, DocFrameMixIn, DocMDIParentFrameMixIn):
     """
 
 
-    def __init__(self, docManager, frame, id, title, pos = wx.DefaultPosition, size = wx.DefaultSize, style = wx.DEFAULT_FRAME_STYLE, name = "DocTabbedParentFrame", embeddedWindows = 0):
+    def __init__(self, docManager, frame, id, title, pos = wx.DefaultPosition, size = wx.DefaultSize, style = wx.DEFAULT_FRAME_STYLE, name = "DocTabbedParentFrame", embeddedWindows = 0, minSize=20):
         """
         Constructor.  Note that the event table must be rebuilt for the
         frame since the EvtHandler is not virtual.
@@ -755,25 +780,36 @@ class DocTabbedParentFrame(wx.Frame, DocFrameMixIn, DocMDIParentFrameMixIn):
         # End From docview.MDIParentFrame
 
         self.CreateNotebook()
-        self._InitFrame(embeddedWindows)
-        
+        self._InitFrame(embeddedWindows, minSize)
+
 
     def _LayoutFrame(self):
         """
         Lays out the frame.
         """
         wx.LayoutAlgorithm().LayoutFrame(self, self._notebook)
-        
+
 
     def CreateNotebook(self):
         """
         Creates the notebook to use for the tabbed document interface.
-        """     
-        self._notebook = wx.Notebook(self, wx.NewId())
+        """
+        if wx.Platform != "__WXMAC__":
+            self._notebook = wx.Notebook(self, wx.NewId())
+        else:
+            self._notebook = wx.Listbook(self, wx.NewId(), style=wx.LB_LEFT)
         # self._notebook.SetSizer(wx.NotebookSizer(self._notebook))
-        wx.EVT_NOTEBOOK_PAGE_CHANGED(self, self._notebook.GetId(), self.OnNotebookPageChanged)
+        if wx.Platform != "__WXMAC__":
+            wx.EVT_NOTEBOOK_PAGE_CHANGED(self, self._notebook.GetId(), self.OnNotebookPageChanged)
+        else:
+            wx.EVT_LISTBOOK_PAGE_CHANGED(self, self._notebook.GetId(), self.OnNotebookPageChanged)
         wx.EVT_RIGHT_DOWN(self._notebook, self.OnNotebookRightClick)
-        wx.EVT_MOTION(self._notebook, self.OnNotebookMouseOver)
+        wx.EVT_MIDDLE_DOWN(self._notebook, self.OnNotebookMiddleClick)
+
+        # wxBug: wx.Listbook does not implement HitTest the same way wx.Notebook
+        # does, so for now don't fire MouseOver events.
+        if wx.Platform != "__WXMAC__":
+            wx.EVT_MOTION(self._notebook, self.OnNotebookMouseOver)
 
         templates = wx.GetApp().GetDocumentManager().GetTemplates()
         iconList = wx.ImageList(16, 16, initialCount = len(templates))
@@ -788,7 +824,7 @@ class DocTabbedParentFrame(wx.Frame, DocFrameMixIn, DocMDIParentFrameMixIn):
                         print "Warning: icon for '%s' isn't 16x16, not crossplatform" % template._docTypeName
                 iconIndex = iconList.AddIcon(icon)
                 self._iconIndexLookup.append((template, iconIndex))
-                
+
         icon = getBlankIcon()
         if icon.GetHeight() != 16 or icon.GetWidth() != 16:
             icon.SetHeight(16)
@@ -804,7 +840,7 @@ class DocTabbedParentFrame(wx.Frame, DocFrameMixIn, DocMDIParentFrameMixIn):
         Returns the notebook used by the tabbed document interface.
         """
         return self._notebook
-        
+
 
     def GetActiveChild(self):
         """
@@ -829,13 +865,27 @@ class DocTabbedParentFrame(wx.Frame, DocFrameMixIn, DocMDIParentFrameMixIn):
     def OnNotebookMouseOver(self, event):
         # wxBug: On Windows XP the tooltips don't automatically disappear when you move the mouse and it is on a notebook tab, has nothing to do with this code!!!
         index, type = self._notebook.HitTest(event.GetPosition())
+
         if index > -1:
             doc = self._notebook.GetPage(index).GetView().GetDocument()
-            self._notebook.SetToolTip(wx.ToolTip(doc.GetFilename()))
+            # wxBug: Tooltips no longer appearing on tabs except on
+            # about a 2 pixel area between tab top and contents that will show tip.
+            self._notebook.GetParent().SetToolTip(wx.ToolTip(doc.GetFilename()))
         else:
             self._notebook.SetToolTip(wx.ToolTip(""))
         event.Skip()
-            
+
+
+    def OnNotebookMiddleClick(self, event):
+        """
+        Handles middle clicks for the notebook, closing the document whose tab was
+        clicked on.
+        """
+        index, type = self._notebook.HitTest(event.GetPosition())
+        if index > -1:
+            doc = self._notebook.GetPage(index).GetView().GetDocument()
+            if doc:
+                doc.DeleteAllViews()
 
     def OnNotebookRightClick(self, event):
         """
@@ -879,11 +929,11 @@ class DocTabbedParentFrame(wx.Frame, DocFrameMixIn, DocMDIParentFrameMixIn):
                 def OnRightMenuSelect(event):
                     self._notebook.SetSelection(selectIDs[event.GetId()])
                 wx.EVT_MENU(self, id, OnRightMenuSelect)
-        
+
         self._notebook.PopupMenu(menu, wx.Point(x, y))
         menu.Destroy()
-            
-            
+
+
     def AddNotebookPage(self, panel, title):
         """
         Adds a document page to the notebook.
@@ -902,7 +952,20 @@ class DocTabbedParentFrame(wx.Frame, DocFrameMixIn, DocMDIParentFrameMixIn):
                     break
         if not found:
             self._notebook.SetPageImage(index, self._blankIconIndex)
+
+        # wxBug: the wxListbook used on Mac needs its tabs list resized
+        # whenever a new tab is added, but the only way to do this is
+        # to resize the entire control
+        if wx.Platform == "__WXMAC__":
+            content_size = self._notebook.GetSize()
+            self._notebook.SetSize((content_size.x+2, -1))
+            self._notebook.SetSize((content_size.x, -1))
+
         self._notebook.Layout()
+
+        windowMenuService = wx.GetApp().GetService(WindowMenuService)
+        if windowMenuService:
+            windowMenuService.BuildWindowMenu(wx.GetApp().GetTopWindow())  # build file menu list when we open a file
 
 
     def RemoveNotebookPage(self, panel):
@@ -911,7 +974,18 @@ class DocTabbedParentFrame(wx.Frame, DocFrameMixIn, DocMDIParentFrameMixIn):
         """
         index = self.GetNotebookPageIndex(panel)
         if index > -1:
+            if self._notebook.GetPageCount() == 1 or index < 2:
+                pass
+            elif index >= 1:
+                self._notebook.SetSelection(index - 1)
+            elif index < self._notebook.GetPageCount():
+                self._notebook.SetSelection(index + 1)
             self._notebook.DeletePage(index)
+            self._notebook.GetParent().SetToolTip(wx.ToolTip(""))
+
+        windowMenuService = wx.GetApp().GetService(WindowMenuService)
+        if windowMenuService:
+            windowMenuService.BuildWindowMenu(wx.GetApp().GetTopWindow())  # build file menu list when we open a file
 
 
     def ActivateNotebookPage(self, panel):
@@ -922,15 +996,19 @@ class DocTabbedParentFrame(wx.Frame, DocFrameMixIn, DocMDIParentFrameMixIn):
         if index > -1:
             self._notebook.SetFocus()
             self._notebook.SetSelection(index)
-        
+
 
     def GetNotebookPageTitle(self, panel):
-        self._notebook.GetPageText(self.GetNotebookPageIndex(panel))
-        
+        index = self.GetNotebookPageIndex(panel)
+        if index != -1:
+            return self._notebook.GetPageText(self.GetNotebookPageIndex(panel))
+        else:
+            return None
+
 
     def SetNotebookPageTitle(self, panel, title):
         self._notebook.SetPageText(self.GetNotebookPageIndex(panel), title)
-        
+
 
     def GetNotebookPageIndex(self, panel):
         """
@@ -942,7 +1020,7 @@ class DocTabbedParentFrame(wx.Frame, DocFrameMixIn, DocMDIParentFrameMixIn):
                 index = i
                 break
         return index
-        
+
 
     def ProcessEvent(self, event):
         """
@@ -1023,7 +1101,7 @@ class DocTabbedParentFrame(wx.Frame, DocFrameMixIn, DocMDIParentFrameMixIn):
             self.Destroy()
         else:
             event.Veto()
-            
+
 
 class DocMDIChildFrame(wx.MDIChildFrame):
     """
@@ -1077,6 +1155,27 @@ class DocMDIChildFrame(wx.MDIChildFrame):
         """
         if self._childView:
             self._childView.Activate(True)
+
+
+    def OnTitleIsModified(self):
+        """
+        Add/remove to the frame's title an indication that the document is dirty.
+        If the document is dirty, an '*' is appended to the title
+        """
+        title = self.GetTitle()
+        if title:
+            if self.GetDocument().IsModified():
+                if title.endswith("*"):
+                    return
+                else:
+                    title = title + "*"
+                    self.SetTitle(title)
+            else:
+                if title.endswith("*"):
+                    title = title[:-1]
+                    self.SetTitle(title)                
+                else:
+                    return
 
 
     def ProcessEvent(event):
@@ -1174,9 +1273,6 @@ class DocMDIChildFrame(wx.MDIChildFrame):
         self._childView = view
 
 
-
-
-
 class DocService(wx.EvtHandler):
     """
     An abstract class used to add reusable services to a docview application.
@@ -1205,7 +1301,7 @@ class DocService(wx.EvtHandler):
 
     def ProcessEventBeforeWindows(self, event):
         """
-        Processes an event before the main window has a chance to process the window. 
+        Processes an event before the main window has a chance to process the window.
         Override this method for a particular service.
         """
         return False
@@ -1296,7 +1392,7 @@ class DocOptionsService(DocService):
         DocService.__init__(self)
         self.ClearOptionsPanels()
         self._supportedModes = supportedModes
-        self._toolOptionsID = wx.NewId()
+        self._toolOptionsID = wx.ID_PREFERENCES
         if showGeneralOptions:
             self.AddOptionsPanel(GeneralOptionsPanel)
 
@@ -1318,7 +1414,7 @@ class DocOptionsService(DocService):
                 toolsMenu.AppendSeparator()
             toolsMenu.Append(self._toolOptionsID, _("&Options..."), _("Sets options"))
             wx.EVT_MENU(frame, self._toolOptionsID, frame.ProcessEvent)
-            
+
 
     def ProcessEvent(self, event):
         """
@@ -1337,7 +1433,7 @@ class DocOptionsService(DocService):
         Return the modes supported by the application.  Use docview.DOC_SDI and
         docview.DOC_MDI flags to check if SDI and/or MDI modes are supported.
         """
-        return self._supportedModes        
+        return self._supportedModes
 
 
     def SetSupportedModes(self, _supportedModessupportedModes):
@@ -1358,7 +1454,7 @@ class DocOptionsService(DocService):
 
     def AddOptionsPanel(self, optionsPanel):
         """
-        Adds an options panel to the options dialog. 
+        Adds an options panel to the options dialog.
         """
         self._optionsPanels.append(optionsPanel)
 
@@ -1370,6 +1466,7 @@ class DocOptionsService(DocService):
         if len(self._optionsPanels) == 0:
             return
         optionsDialog = OptionsDialog(wx.GetApp().GetTopWindow(), self._optionsPanels, self._docManager)
+        optionsDialog.CenterOnParent()
         if optionsDialog.ShowModal() == wx.ID_OK:
             optionsDialog.OnOK(optionsDialog)  # wxBug: wxDialog should be calling this automatically but doesn't
         optionsDialog.Destroy()
@@ -1387,7 +1484,7 @@ class OptionsDialog(wx.Dialog):
         Initializes the options dialog with a notebook page that contains new
         instances of the passed optionsPanelClasses.
         """
-        wx.Dialog.__init__(self, parent, -1, _("Options"), size = (570, 365))
+        wx.Dialog.__init__(self, parent, -1, _("Options"))
 
         self._optionsPanels = []
         self._docManager = docManager
@@ -1397,16 +1494,54 @@ class OptionsDialog(wx.Dialog):
 
         sizer = wx.BoxSizer(wx.VERTICAL)
 
-        optionsNotebook = wx.Notebook(self, -1, size=(560, 325))
+        if wx.Platform == "__WXMAC__":
+            optionsNotebook = wx.Listbook(self, wx.NewId(), style=wx.LB_DEFAULT)
+        else:
+            optionsNotebook = wx.Notebook(self, wx.NewId(), style=wx.NB_MULTILINE)  # NB_MULTILINE is windows platform only
         sizer.Add(optionsNotebook, 0, wx.ALL | wx.EXPAND, SPACE)
-        for optionsPanelClass in optionsPanelClasses:
-            optionsPanel = optionsPanelClass(optionsNotebook, -1)
-            self._optionsPanels.append(optionsPanel)
+
+        if wx.Platform == "__WXMAC__":
+            iconList = wx.ImageList(16, 16, initialCount = len(optionsPanelClasses))
+            self._iconIndexLookup = []
+
+            for optionsPanelClass in optionsPanelClasses:
+                optionsPanel = optionsPanelClass(optionsNotebook, -1)
+                self._optionsPanels.append(optionsPanel)
+
+                # We need to populate the image list before setting notebook images
+                if hasattr(optionsPanel, "GetIcon"):
+                    icon = optionsPanel.GetIcon()
+                else:
+                    icon = None
+                if icon:
+                    if icon.GetHeight() != 16 or icon.GetWidth() != 16:
+                        icon.SetHeight(16)
+                        icon.SetWidth(16)
+                        if wx.GetApp().GetDebug():
+                            print "Warning: icon for '%s' isn't 16x16, not crossplatform" % template._docTypeName
+                    iconIndex = iconList.AddIcon(icon)
+                    self._iconIndexLookup.append((optionsPanel, iconIndex))
+
+                else:
+                    # use -1 to represent that this panel has no icon
+                    self._iconIndexLookup.append((optionsPanel, -1))
+
+            optionsNotebook.AssignImageList(iconList)
+
+            # Add icons to notebook
+            for index in range(0, len(optionsPanelClasses)-1):
+                iconIndex = self._iconIndexLookup[index][1]
+                if iconIndex >= 0:
+                    optionsNotebook.SetPageImage(index, iconIndex)
+        else:
+            for optionsPanelClass in optionsPanelClasses:
+                optionsPanel = optionsPanelClass(optionsNotebook, -1)
+                self._optionsPanels.append(optionsPanel)
+
         sizer.Add(self.CreateButtonSizer(wx.OK | wx.CANCEL), 0, wx.ALIGN_RIGHT | wx.RIGHT | wx.BOTTOM, HALF_SPACE)
         self.SetSizer(sizer)
         self.Layout()
-        if wx.Platform != '__WXMAC__' or len(optionsPanelClasses) < 6:  # wxBug: Notebook tabs are truncated and user can't get to them on the Mac
-            self.Fit()
+        self.Fit()
         wx.CallAfter(self.DoRefresh)
 
 
@@ -1444,7 +1579,7 @@ class GeneralOptionsPanel(wx.Panel):
     def __init__(self, parent, id):
         """
         Initializes the panel by adding an "Options" folder tab to the parent notebook and
-        populating the panel with the generic properties of a pydocview application. 
+        populating the panel with the generic properties of a pydocview application.
         """
         wx.Panel.__init__(self, parent, id)
         SPACE = 10
@@ -1463,7 +1598,7 @@ class GeneralOptionsPanel(wx.Panel):
             choices.append(self._mdiChoice)
             if wx.Platform == "__WXMSW__":
                 choices.append(self._winMdiChoice)
-            self._documentRadioBox = wx.RadioBox(self, -1, _("Document Interface"),
+            self._documentRadioBox = wx.RadioBox(self, -1, _("Document Display Style"),
                                           choices = choices,
                                           majorDimension=1,
                                           )
@@ -1493,7 +1628,7 @@ class GeneralOptionsPanel(wx.Panel):
         self.SetSizer(optionsBorderSizer)
         self.Layout()
         self._documentInterfaceMessageShown = False
-        parent.AddPage(self, _("Options"))
+        parent.AddPage(self, _("General"))
 
 
     def _AllowModeChanges(self):
@@ -1510,6 +1645,11 @@ class GeneralOptionsPanel(wx.Panel):
         if self._AllowModeChanges():
             config.WriteInt("UseMDI", (self._documentRadioBox.GetStringSelection() == self._mdiChoice))
             config.WriteInt("UseWinMDI", (self._documentRadioBox.GetStringSelection() == self._winMdiChoice))
+
+
+    def GetIcon(self):
+        """ Return icon for options panel on the Mac. """
+        return wx.GetApp().GetDefaultIcon()
 
 
 class DocApp(wx.PySimpleApp):
@@ -1533,7 +1673,7 @@ class DocApp(wx.PySimpleApp):
             self._debug = False
         if not hasattr(self, "_singleInstance"):  # only set if not already initialized
             self._singleInstance = True
-            
+
         # if _singleInstance is TRUE only allow one single instance of app to run.
         # When user tries to run a second instance of the app, abort startup,
         # But if user also specifies files to open in command line, send message to running app to open those files
@@ -1569,14 +1709,14 @@ class DocApp(wx.PySimpleApp):
                         break
                     else:
                         time.sleep(1)  # give enough time for buffer to be available
-                        
+
                 return False
             else:
                 self._timer = wx.PyTimer(self.DoBackgroundListenAndLoad)
                 self._timer.Start(250)
 
         return True
-        
+
 
     def OpenMainFrame(self):
         docManager = self.GetDocumentManager()
@@ -1584,10 +1724,19 @@ class DocApp(wx.PySimpleApp):
             if self.GetUseTabbedMDI():
                 frame = wx.lib.pydocview.DocTabbedParentFrame(docManager, None, -1, self.GetAppName())
             else:
-                frame = wx.lib.pydocview.DocMDIParentFrame(docManager, None, -1, self.GetAppName())                
+                frame = wx.lib.pydocview.DocMDIParentFrame(docManager, None, -1, self.GetAppName())
             frame.Show(True)
 
-        
+    def MacOpenFile(self, filename):
+        self.GetDocumentManager().CreateDocument(os.path.normpath(filename), wx.lib.docview.DOC_SILENT)
+
+        # force display of running app
+        topWindow = wx.GetApp().GetTopWindow()
+        if topWindow.IsIconized():
+            topWindow.Iconize(False)
+        else:
+            topWindow.Raise()
+
     def DoBackgroundListenAndLoad(self):
         """
         Open any files specified in the given command line argument passed in via shared memory
@@ -1602,17 +1751,17 @@ class DocApp(wx.PySimpleApp):
             self._sharedMemory.flush()
             args = pickle.loads(data)
             for arg in args:
-                if arg[0] != '/' and arg[0] != '-' and os.path.exists(arg):
+                if (wx.Platform != "__WXMSW__" or arg[0] != "/") and arg[0] != '-' and os.path.exists(arg):
                     self.GetDocumentManager().CreateDocument(os.path.normpath(arg), wx.lib.docview.DOC_SILENT)
-            
+
             # force display of running app
             topWindow = wx.GetApp().GetTopWindow()
             if topWindow.IsIconized():
                 topWindow.Iconize(False)
             else:
                 topWindow.Raise()
-            
-        
+
+
         self._timer.Start(1000) # 1 second interval
 
 
@@ -1623,7 +1772,7 @@ class DocApp(wx.PySimpleApp):
         """
         args = sys.argv[1:]
         for arg in args:
-            if arg[0] != '/' and arg[0] != '-' and os.path.exists(arg):
+            if (wx.Platform != "__WXMSW__" or arg[0] != "/") and arg[0] != '-' and os.path.exists(arg):
                 self.GetDocumentManager().CreateDocument(os.path.normpath(arg), wx.lib.docview.DOC_SILENT)
 
 
@@ -1647,7 +1796,7 @@ class DocApp(wx.PySimpleApp):
     def ProcessEventBeforeWindows(self, event):
         """
         Enables services to process an event before the main window has a chance to
-        process the window. 
+        process the window.
         """
         for service in self._services:
             if service.ProcessEventBeforeWindows(event):
@@ -1729,11 +1878,11 @@ class DocApp(wx.PySimpleApp):
             service.OnExit()
         config = wx.ConfigBase_Get()
         self._docManager.FileHistorySave(config)
-        
+
         if hasattr(self, "_singleInstanceChecker"):
             del self._singleInstanceChecker
 
-    
+
     def GetDefaultDocManagerFlags(self):
         """
         Returns the default flags to use when creating the DocManager.
@@ -1780,7 +1929,7 @@ class DocApp(wx.PySimpleApp):
         Returns True if Windows MDI should use folder tabs instead of child windows.
         """
         return self._useTabbedMDI
-        
+
 
     def SetUseTabbedMDI(self, useTabbedMDI):
         """
@@ -1791,7 +1940,7 @@ class DocApp(wx.PySimpleApp):
 
     def CreateDocumentFrame(self, view, doc, flags, id = -1, title = "", pos = wx.DefaultPosition, size = wx.DefaultSize, style = wx.DEFAULT_FRAME_STYLE):
         """
-        Called by the DocManager to create and return a new Frame for a Document. 
+        Called by the DocManager to create and return a new Frame for a Document.
         Chooses whether to create an MDIChildFrame or SDI Frame based on the
         DocManager's flags.
         """
@@ -1962,7 +2111,7 @@ class DocApp(wx.PySimpleApp):
         """
         Creates a child window of a document that edits an object.  The child window
         is managed by the parent document frame, so it will be prompted to close if its
-        parent is closed, etc.  Child Documents are useful when there are complicated 
+        parent is closed, etc.  Child Documents are useful when there are complicated
         Views of a Document and users will need to tunnel into the View.
         """
         for document in self.GetDocumentManager().GetDocuments()[:]:  # Cloning list to make sure we go through all docs even as they are deleted
@@ -2022,7 +2171,7 @@ class DocApp(wx.PySimpleApp):
             splash_bmp = image
         else:
             splash_bmp = wx.Image(image).ConvertToBitmap()
-        self._splash = wx.SplashScreen(splash_bmp,wx.SPLASH_CENTRE_ON_SCREEN | wx.SPLASH_NO_TIMEOUT,0, None, -1) 
+        self._splash = wx.SplashScreen(splash_bmp, wx.SPLASH_CENTRE_ON_SCREEN|wx.SPLASH_NO_TIMEOUT, 0, None, -1, style=wx.SIMPLE_BORDER|wx.FRAME_NO_TASKBAR)
         self._splash.Show()
 
 
@@ -2032,8 +2181,8 @@ class DocApp(wx.PySimpleApp):
         """
         if self._splash:
             self._splash.Close(True)
-        
-    
+
+
 class _DocFrameFileDropTarget(wx.FileDropTarget):
     """
     Class used to handle drops into the document frame.
@@ -2060,7 +2209,7 @@ class _DocFrameFileDropTarget(wx.FileDropTarget):
             msgTitle = wx.GetApp().GetAppName()
             if not msgTitle:
                 msgTitle = _("File Error")
-            wx.MessageBox("Could not open '%s'.  '%s'" % (docview.FileNameFromPath(file), sys.exc_value),
+            wx.MessageBox("Could not open '%s'.  '%s'" % (wx.lib.docview.FileNameFromPath(file), sys.exc_value),
                           msgTitle,
                           wx.OK | wx.ICON_EXCLAMATION,
                           self._docManager.FindSuitableParent())
@@ -2072,9 +2221,9 @@ class DocMDIParentFrame(wx.lib.docview.DocMDIParentFrame, DocFrameMixIn, DocMDIP
     features such as a default menubar, toolbar, and status bar, and a mechanism to manage embedded windows
     on the edges of the DocMDIParentFrame.
     """
-    
 
-    def __init__(self, docManager, parent, id, title, pos=wx.DefaultPosition, size=wx.DefaultSize, style=wx.DEFAULT_FRAME_STYLE, name="DocMDIFrame", embeddedWindows=0):
+
+    def __init__(self, docManager, parent, id, title, pos=wx.DefaultPosition, size=wx.DefaultSize, style=wx.DEFAULT_FRAME_STYLE, name="DocMDIFrame", embeddedWindows=0, minSize=20):
         """
         Initializes the DocMDIParentFrame with the default menubar, toolbar, and status bar.  Use the
         optional embeddedWindows parameter with the embedded window constants to create embedded
@@ -2082,7 +2231,7 @@ class DocMDIParentFrame(wx.lib.docview.DocMDIParentFrame, DocFrameMixIn, DocMDIP
         """
         pos, size = self._GetPosSizeFromConfig(pos, size)
         wx.lib.docview.DocMDIParentFrame.__init__(self, docManager, parent, id, title, pos, size, style, name)
-        self._InitFrame(embeddedWindows)
+        self._InitFrame(embeddedWindows, minSize)
 
 
     def _LayoutFrame(self):
@@ -2091,7 +2240,7 @@ class DocMDIParentFrame(wx.lib.docview.DocMDIParentFrame, DocFrameMixIn, DocMDIP
         """
         wx.LayoutAlgorithm().LayoutMDIFrame(self)
         self.GetClientWindow().Refresh()
-        
+
 
     def ProcessEvent(self, event):
         """
@@ -2144,7 +2293,7 @@ class DocMDIParentFrame(wx.lib.docview.DocMDIParentFrame, DocFrameMixIn, DocMDIP
                 wx.IDM_WINDOWPREV = 4006  # wxBug: Not defined for some reason
                 windowMenu.Enable(wx.IDM_WINDOWPREV, has2OrMoreWindows)
                 windowMenu.Enable(wx.IDM_WINDOWNEXT, has2OrMoreWindows)
-                
+
 
 
     def OnSize(self, event):
@@ -2177,7 +2326,7 @@ class DocSDIFrame(wx.lib.docview.DocChildFrame, DocFrameMixIn):
     The DocSDIFrame host DocManager Document windows.  It offers features such as a default menubar,
     toolbar, and status bar.
     """
-    
+
 
     def __init__(self, doc, view, parent, id, title, pos=wx.DefaultPosition, size=wx.DefaultSize, style=wx.DEFAULT_FRAME_STYLE, name="DocSDIFrame"):
         """
@@ -2213,7 +2362,7 @@ class DocSDIFrame(wx.lib.docview.DocChildFrame, DocFrameMixIn):
         Lays out the Frame.
         """
         self.Layout()
-        
+
 
     def OnExit(self, event):
         """
@@ -2308,7 +2457,7 @@ class DocSDIFrame(wx.lib.docview.DocChildFrame, DocFrameMixIn):
                 if doc.IsModified():
                     filesModified = True
                     break
-                
+
             event.Enable(filesModified)
             return True
         else:
@@ -2341,7 +2490,7 @@ class AboutService(DocService):
         else:
             self._dlg = AboutDialog  # use default AboutDialog
             self._image = image
-        
+
 
     def ShowAbout(self):
         """
@@ -2351,7 +2500,7 @@ class AboutService(DocService):
             dlg = self._dlg(wx.GetApp().GetTopWindow(), self._image)
         else:
             dlg = self._dlg(wx.GetApp().GetTopWindow())
-        dlg.CenterOnScreen()
+        dlg.CenterOnParent()
         dlg.ShowModal()
         dlg.Destroy()
 
@@ -2367,7 +2516,7 @@ class AboutDialog(wx.Dialog):
     """
     Opens an AboutDialog.  Shared by DocMDIParentFrame and DocSDIFrame.
     """
-    
+
     def __init__(self, parent, image=None):
         """
         Initializes the about dialog.
@@ -2379,14 +2528,13 @@ class AboutDialog(wx.Dialog):
             imageItem = wx.StaticBitmap(self, -1, image.ConvertToBitmap(), (0,0), (image.GetWidth(), image.GetHeight()))
             sizer.Add(imageItem, 0, wx.ALIGN_CENTER|wx.ALL, 0)
         sizer.Add(wx.StaticText(self, -1, wx.GetApp().GetAppName()), 0, wx.ALIGN_CENTRE|wx.ALL, 5)
-    
+
         btn = wx.Button(self, wx.ID_OK)
         sizer.Add(btn, 0, wx.ALIGN_CENTRE|wx.ALL, 5)
-    
+
         self.SetSizer(sizer)
-        self.SetAutoLayout(True)
         sizer.Fit(self)
-    
+
 
 
 class FilePropertiesService(DocService):
@@ -2457,6 +2605,7 @@ class FilePropertiesService(DocService):
             filename = wx.GetApp().GetDocumentManager().GetCurrentDocument().GetFilename()
 
         filePropertiesDialog = FilePropertiesDialog(wx.GetApp().GetTopWindow(), filename)
+        filePropertiesDialog.CenterOnParent()
         if filePropertiesDialog.ShowModal() == wx.ID_OK:
             pass  # Handle OK
         filePropertiesDialog.Destroy()
@@ -2585,7 +2734,7 @@ class ChildDocument(wx.lib.docview.Document):
     """
     A ChildDocument is a document that represents a portion of a Document.  The child
     document is managed by the parent document, so it will be prompted to close if its
-    parent is closed, etc.  Child Documents are useful when there are complicated 
+    parent is closed, etc.  Child Documents are useful when there are complicated
     Views of a Document and users will need to tunnel into the View.
     """
 
@@ -2614,7 +2763,7 @@ class ChildDocument(wx.lib.docview.Document):
     def SetParentDocument(self, parentDocument):
         """
         Sets the parent Document of the ChildDocument.
-        """        
+        """
         self._parentDocument = parentDocument
 
 
@@ -2654,7 +2803,7 @@ class ChildDocument(wx.lib.docview.Document):
         Called when the ChildDocument is saved and does the minimum such that the
         ChildDocument looks like a real Document to the framework.
         """
-        return self.OnSaveDocument(self._documentFile)        
+        return self.OnSaveDocument(self._documentFile)
 
 
 class ChildDocTemplate(wx.lib.docview.DocTemplate):
@@ -2663,7 +2812,7 @@ class ChildDocTemplate(wx.lib.docview.DocTemplate):
     that represents a portion of a Document.  The child document is managed by the parent document,
     so it will be prompted to close if its parent is closed, etc.  Child Documents are useful
     when there are complicated  Views of a Document and users will need to tunnel into the View.
-    """    
+    """
 
 
     def __init__(self, manager, description, filter, dir, ext, docTypeName, viewTypeName, docType, viewType, flags=wx.lib.docview.TEMPLATE_INVISIBLE, icon=None):
@@ -2699,23 +2848,24 @@ class WindowMenuService(DocService):
     by the DocSDIFrame.  The MDIFrame automatically includes a Window menu and does not use
     the WindowMenuService.
     """
-    
+
+    #----------------------------------------------------------------------------
+    # Constants
+    #----------------------------------------------------------------------------
+    ARRANGE_WINDOWS_ID = wx.NewId()
+    SELECT_MORE_WINDOWS_ID = wx.NewId()
+    SELECT_NEXT_WINDOW_ID = wx.NewId()
+    SELECT_PREV_WINDOW_ID = wx.NewId()
+    CLOSE_CURRENT_WINDOW_ID = wx.NewId()
+
 
     def __init__(self):
         """
         Initializes the WindowMenu and its globals.
         """
-        self.ARRANGE_WINDOWS_ID = wx.NewId()
-        self.SELECT_WINDOW_1_ID = wx.NewId()
-        self.SELECT_WINDOW_2_ID = wx.NewId()
-        self.SELECT_WINDOW_3_ID = wx.NewId()
-        self.SELECT_WINDOW_4_ID = wx.NewId()
-        self.SELECT_WINDOW_5_ID = wx.NewId()
-        self.SELECT_WINDOW_6_ID = wx.NewId()
-        self.SELECT_WINDOW_7_ID = wx.NewId()
-        self.SELECT_WINDOW_8_ID = wx.NewId()
-        self.SELECT_WINDOW_9_ID = wx.NewId()
-        self.SELECT_MORE_WINDOWS_ID = wx.NewId()
+        self._selectWinIds = []
+        for i in range(0, 9):
+            self._selectWinIds.append(wx.NewId())
 
 
     def InstallControls(self, frame, menuBar=None, toolBar=None, statusBar=None, document=None):
@@ -2723,33 +2873,54 @@ class WindowMenuService(DocService):
         Installs the Window menu.
         """
 
-        if not self.GetDocumentManager().GetFlags() & wx.lib.docview.DOC_SDI:
-            return  # Only need windows menu for SDI mode, MDI frame automatically creates one
-
-        if not _WINDOWS:  # Arrange All and window navigation doesn't work on Linux
-            return
+        windowMenu = None
+        if hasattr(frame, "GetWindowMenu"):
+            windowMenu = frame.GetWindowMenu()
+        if not windowMenu:
+            needWindowMenu = True
+            windowMenu = wx.Menu()
+        else:
+            needWindowMenu = False
             
-        windowMenu = wx.Menu()
-        item = windowMenu.Append(self.ARRANGE_WINDOWS_ID, _("&Arrange All"), _("Arrange the open windows"))
-        windowMenu.AppendSeparator()
+        if self.GetDocumentManager().GetFlags() & wx.lib.docview.DOC_SDI:
+            if not _WINDOWS:  # Arrange All and window navigation doesn't work on Linux
+                return
+                
+            item = windowMenu.Append(self.ARRANGE_WINDOWS_ID, _("&Arrange All"), _("Arrange the open windows"))
+            wx.EVT_MENU(frame, self.ARRANGE_WINDOWS_ID, frame.ProcessEvent)
+            wx.EVT_UPDATE_UI(frame, self.ARRANGE_WINDOWS_ID, frame.ProcessUpdateUIEvent)
+            windowMenu.AppendSeparator()
 
-        wx.EVT_MENU(frame, self.ARRANGE_WINDOWS_ID, frame.ProcessEvent)
-        wx.EVT_UPDATE_UI(frame, self.ARRANGE_WINDOWS_ID, frame.ProcessUpdateUIEvent)
-        wx.EVT_MENU(frame, self.SELECT_WINDOW_1_ID, frame.ProcessEvent)  # wxNewId may have been nonsequential, so can't use EVT_MENU_RANGE
-        wx.EVT_MENU(frame, self.SELECT_WINDOW_2_ID, frame.ProcessEvent)
-        wx.EVT_MENU(frame, self.SELECT_WINDOW_3_ID, frame.ProcessEvent)
-        wx.EVT_MENU(frame, self.SELECT_WINDOW_4_ID, frame.ProcessEvent)
-        wx.EVT_MENU(frame, self.SELECT_WINDOW_5_ID, frame.ProcessEvent)
-        wx.EVT_MENU(frame, self.SELECT_WINDOW_6_ID, frame.ProcessEvent)
-        wx.EVT_MENU(frame, self.SELECT_WINDOW_7_ID, frame.ProcessEvent)
-        wx.EVT_MENU(frame, self.SELECT_WINDOW_8_ID, frame.ProcessEvent)
-        wx.EVT_MENU(frame, self.SELECT_WINDOW_9_ID, frame.ProcessEvent)
-        wx.EVT_MENU(frame, self.SELECT_MORE_WINDOWS_ID, frame.ProcessEvent)
+            for i, id in enumerate(self._selectWinIds):
+                wx.EVT_MENU(frame, id, frame.ProcessEvent)
+            wx.EVT_MENU(frame, self.SELECT_MORE_WINDOWS_ID, frame.ProcessEvent)
+        elif wx.GetApp().GetUseTabbedMDI():
+            item = windowMenu.Append(self.SELECT_PREV_WINDOW_ID, _("Previous"), _("Previous Tab"))
+            wx.EVT_MENU(frame, self.SELECT_PREV_WINDOW_ID, frame.ProcessEvent)
+            wx.EVT_UPDATE_UI(frame, self.SELECT_PREV_WINDOW_ID, frame.ProcessUpdateUIEvent)
+            item = windowMenu.Append(self.SELECT_NEXT_WINDOW_ID, _("Next"), _("Next Tab"))
+            wx.EVT_MENU(frame, self.SELECT_NEXT_WINDOW_ID, frame.ProcessEvent)
+            wx.EVT_UPDATE_UI(frame, self.SELECT_NEXT_WINDOW_ID, frame.ProcessUpdateUIEvent)
+            item = windowMenu.Append(self.CLOSE_CURRENT_WINDOW_ID, _("Close Current\tCtrl+F4"), _("Close Current Tab"))
+            wx.EVT_MENU(frame, self.CLOSE_CURRENT_WINDOW_ID, frame.ProcessEvent)
+            wx.EVT_UPDATE_UI(frame, self.CLOSE_CURRENT_WINDOW_ID, frame.ProcessUpdateUIEvent)
+            self._sep = None
 
-        helpMenuIndex = menuBar.FindMenu(_("&Help"))
-        menuBar.Insert(helpMenuIndex, windowMenu, _("&Window"))
+            for i, id in enumerate(self._selectWinIds):
+                wx.EVT_MENU(frame, id, self.OnCtrlKeySelect)
+
+        if needWindowMenu:
+            helpMenuIndex = menuBar.FindMenu(_("&Help"))
+            menuBar.Insert(helpMenuIndex, windowMenu, _("&Window"))
 
         self._lastFrameUpdated = None
+
+
+    def OnCtrlKeySelect(self, event):
+        i = self._selectWinIds.index(event.GetId())
+        notebook = wx.GetApp().GetTopWindow()._notebook
+        if i < notebook.GetPageCount():
+            notebook.SetSelection(i)
 
 
     def ProcessEvent(self, event):
@@ -2763,9 +2934,27 @@ class WindowMenuService(DocService):
         elif id == self.SELECT_MORE_WINDOWS_ID:
             self.OnSelectMoreWindows(event)
             return True
-        elif id == self.SELECT_WINDOW_1_ID or id == self.SELECT_WINDOW_2_ID or id == self.SELECT_WINDOW_3_ID or id == self.SELECT_WINDOW_4_ID or id == self.SELECT_WINDOW_5_ID or id == self.SELECT_WINDOW_6_ID or id == self.SELECT_WINDOW_7_ID or id == self.SELECT_WINDOW_8_ID or id == self.SELECT_WINDOW_9_ID:
+        elif id in self._selectWinIds:
             self.OnSelectWindowMenu(event)
             return True
+        elif wx.GetApp().GetUseTabbedMDI():
+            if id == self.SELECT_NEXT_WINDOW_ID:
+                notebook = wx.GetApp().GetTopWindow()._notebook
+                i = notebook.GetSelection()
+                notebook.SetSelection(i+1)
+                return True
+            elif id == self.SELECT_PREV_WINDOW_ID:
+                notebook = wx.GetApp().GetTopWindow()._notebook
+                i = notebook.GetSelection()
+                notebook.SetSelection(i-1)
+                return True
+            elif id == self.CLOSE_CURRENT_WINDOW_ID:
+                notebook = wx.GetApp().GetTopWindow()._notebook
+                i = notebook.GetSelection()
+                if i != -1:
+                    doc = notebook.GetPage(i).GetView().GetDocument()
+                    wx.GetApp().GetDocumentManager().CloseDocument(doc, False)
+                return True
         else:
             return False
 
@@ -2781,6 +2970,38 @@ class WindowMenuService(DocService):
                 self.BuildWindowMenu(frame)  # It's a new frame, so update the windows menu... this is as if the View::OnActivateMethod had been invoked
                 self._lastFrameUpdated = frame
             return True
+        elif wx.GetApp().GetUseTabbedMDI():
+            if id == self.SELECT_NEXT_WINDOW_ID:
+                self.BuildWindowMenu(event.GetEventObject())  # build file list only when we are updating the windows menu
+                
+                notebook = wx.GetApp().GetTopWindow()._notebook
+                i = notebook.GetSelection()
+                if i == -1:
+                    event.Enable(False)
+                    return True
+                i += 1
+                if i >= notebook.GetPageCount():
+                    event.Enable(False)
+                    return True
+                event.Enable(True)
+                return True
+            elif id == self.SELECT_PREV_WINDOW_ID:
+                notebook = wx.GetApp().GetTopWindow()._notebook
+                i = notebook.GetSelection()
+                if i == -1:
+                    event.Enable(False)
+                    return True
+                i -= 1
+                if i < 0:
+                    event.Enable(False)
+                    return True
+                event.Enable(True)
+                return True
+            elif id == self.CLOSE_CURRENT_WINDOW_ID:
+                event.Enable(wx.GetApp().GetTopWindow()._notebook.GetSelection() != -1)
+                return True
+
+            return False
         else:
             return False
 
@@ -2789,42 +3010,70 @@ class WindowMenuService(DocService):
         """
         Builds the Window menu and adds menu items for all of the open documents in the DocManager.
         """
+        if wx.GetApp().GetUseTabbedMDI():
+            currentFrame = wx.GetApp().GetTopWindow()
+
         windowMenuIndex = currentFrame.GetMenuBar().FindMenu(_("&Window"))
         windowMenu = currentFrame.GetMenuBar().GetMenu(windowMenuIndex)
-        ids = self._GetWindowMenuIDList()
-        frames = self._GetWindowMenuFrameList(currentFrame)
-        max = WINDOW_MENU_NUM_ITEMS
-        if max > len(frames):
-            max = len(frames)
-        i = 0
-        for i in range(0, max):
-            frame = frames[i]
-            item = windowMenu.FindItemById(ids[i])
-            label = '&' + str(i + 1) + ' ' + frame.GetTitle()
-            if not item:
-                item = windowMenu.AppendCheckItem(ids[i], label)
-            else:
-                windowMenu.SetLabel(ids[i], label)
-            windowMenu.Check(ids[i], (frame == currentFrame))
-        if len(frames) > WINDOW_MENU_NUM_ITEMS:  # Add the more items item
-            if not windowMenu.FindItemById(self.SELECT_MORE_WINDOWS_ID):
-                windowMenu.Append(self.SELECT_MORE_WINDOWS_ID, _("&More Windows..."))
-        else:  # Remove any extra items
-            if windowMenu.FindItemById(self.SELECT_MORE_WINDOWS_ID):
-                windowMenu.Remove(self.SELECT_MORE_WINDOWS_ID)
 
+        if self.GetDocumentManager().GetFlags() & wx.lib.docview.DOC_SDI:
+            frames = self._GetWindowMenuFrameList(currentFrame)
+            max = WINDOW_MENU_NUM_ITEMS
+            if max > len(frames):
+                max = len(frames)
+            i = 0
+            for i in range(0, max):
+                frame = frames[i]
+                item = windowMenu.FindItemById(self._selectWinIds[i])
+                label = '&' + str(i + 1) + ' ' + frame.GetTitle()
+                if not item:
+                    item = windowMenu.AppendCheckItem(self._selectWinIds[i], label)
+                else:
+                    windowMenu.SetLabel(self._selectWinIds[i], label)
+                windowMenu.Check(self._selectWinIds[i], (frame == currentFrame))
+            if len(frames) > WINDOW_MENU_NUM_ITEMS:  # Add the more items item
+                if not windowMenu.FindItemById(self.SELECT_MORE_WINDOWS_ID):
+                    windowMenu.Append(self.SELECT_MORE_WINDOWS_ID, _("&More Windows..."))
+            else:  # Remove any extra items
+                if windowMenu.FindItemById(self.SELECT_MORE_WINDOWS_ID):
+                    windowMenu.Remove(self.SELECT_MORE_WINDOWS_ID)
 
+                for j in range(i + 1, WINDOW_MENU_NUM_ITEMS):
+                    if windowMenu.FindItemById(self._selectWinIds[j]):
+                        windowMenu.Remove(self._selectWinIds[j])
 
-            for j in range(i + 1, WINDOW_MENU_NUM_ITEMS):
-                if windowMenu.FindItemById(ids[j]):
-                    windowMenu.Remove(ids[j])
+        elif wx.GetApp().GetUseTabbedMDI():
+            notebook = wx.GetApp().GetTopWindow()._notebook
+            numPages = notebook.GetPageCount()
+
+            for id in self._selectWinIds:
+                item = windowMenu.FindItemById(id)
+                if item:
+                    windowMenu.DeleteItem(item)
+            if numPages == 0 and self._sep:
+                windowMenu.DeleteItem(self._sep)
+                self._sep = None
+
+            if numPages > len(self._selectWinIds):
+                for i in range(len(self._selectWinIds), numPages):
+                    self._selectWinIds.append(wx.NewId())
+                    wx.EVT_MENU(currentFrame, self._selectWinIds[i], self.OnCtrlKeySelect)                    
+            
+            for i in range(0, numPages):
+                if i == 0 and not self._sep:
+                    self._sep = windowMenu.AppendSeparator()
+                if i < 9:
+                    menuLabel = "%s\tCtrl+%s" % (notebook.GetPageText(i), i+1)
+                else:
+                    menuLabel = notebook.GetPageText(i)
+                windowMenu.Append(self._selectWinIds[i], menuLabel)
 
 
     def _GetWindowMenuIDList(self):
         """
         Returns a list of the Window menu item IDs.
         """
-        return [self.SELECT_WINDOW_1_ID, self.SELECT_WINDOW_2_ID, self.SELECT_WINDOW_3_ID, self.SELECT_WINDOW_4_ID, self.SELECT_WINDOW_5_ID, self.SELECT_WINDOW_6_ID, self.SELECT_WINDOW_7_ID, self.SELECT_WINDOW_8_ID, self.SELECT_WINDOW_9_ID]
+        return self._selectWinIds
 
 
     def _GetWindowMenuFrameList(self, currentFrame=None):
@@ -2893,7 +3142,7 @@ class WindowMenuService(DocService):
         Frame to the front of the desktop.
         """
         id = event.GetId()
-        index = self._GetWindowMenuIDList().index(id)
+        index = self._selectWinIds.index(id)
         if index > -1:
             currentFrame = event.GetEventObject()
             frame = self._GetWindowMenuFrameList(currentFrame)[index]
@@ -2928,13 +3177,20 @@ import cStringIO
 #----------------------------------------------------------------------
 def getNewData():
     return \
-'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
+"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
 \x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
-\x00\x00[IDAT8\x8d\xed\x93\xb1\n\x001\x08C\x13{\xff\xff\xc7mn\xb8El\x91\x16\
-\x97\x0e\x97M\x90\x97\x88JZCE\x8f/4\xba\xb2fZc\n\x00\x00i\xcd \t\x8d\xae\x08\
-\xb1\xad\x9c\x0e\x1eS\x1e\x01\xc8\xcf\xdcC\xa6\x112\xf7\x08:N\xb0\xd2\x0f\
-\xb8\x010\xdd\x81\xdf\xf1\x8eX\xfd\xc6\xf2\x08/D\xbd\x19(\xc8\xa5\xd9\xfa\
-\x00\x00\x00\x00IEND\xaeB`\x82' 
+\x00\x01\x04IDAT8\x8d\xa5\x93\xbdj\x02A\x10\xc7\x7f{gme\xe5c\xe4\t\x82\x85\
+\x85\x85oa\xe5+\xd8Z\xd8'e\xfa\x80\xd8\xd8X\x19R\xc4\x07\x90\x04\xd1J\x08\
+\x17\x0cr\\V\xe1\xe4\xfc\x80\xb58\xf7\xd8\xbd\x0f\xa280\xec\xec2\xbf\xff\xce\
+\xcc\xb2B8.\xf7X\xc9\xdc|L\x97J\xc7\xbe\x0c\x01\xf0\xd6\x01\x00RFtZu\x91Q\
+\x10\x8e\x9b\xf8\xe4\xf3[-w*\xf1\xafm\xec\xcf\x83\x89\x1a\xad\x94\xea\xbe\
+\x8c\x95\x99/\x1c\x17\xe7\xdaR\xcb%xh\xd4hw_\x95yn\xb5\xe0\xcb\x90\xea%\x0eO\
+\xf1\xba\xd9\xc7\xe5\xbf\x0f\xdfX]\xda)\x140A\r\x03<6klO\xf0w\x84~\xef\xc9\
+\xca/lA\xc3@\x02\xe7\x99U\x81\xb7\x0e\xa8\xec\xed\x04\x13\xde\x1c\xfe\x11\
+\x902\xb2@\xc8\xc2\x8b\xd9\xbcX\xc0\x045\xac\xc1 Jg\xe6\x08\xe8)\xa7o\xd5\
+\xb0\xbf\xcb\nd\x86x\x0b\x9c+p\x0b\x0c\xa9\x16~\xbc_\xeb\x9d\xd3\x03\xcb3q\
+\xefo\xbc\xfa/\x14\xd9\x19\x1f\xfb\x8aa\x87\xf2\xf7\x16\x00\x00\x00\x00IEND\
+\xaeB`\x82"
 
 def getNewBitmap():
     return BitmapFromImage(getNewImage())
@@ -2948,13 +3204,21 @@ def getOpenData():
     return \
 '\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
 \x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
-\x00\x00\x95IDAT8\x8d\xa5\x92\xc1\x12\x03!\x08C\x13\xec\x87\xfb\xe3B\x0f.]\
-\xb0\x8e[m.\xea\x0c/\x06\x06R\n\xfe\xd1\xeb\xd7B\xd5f~\x17)\xdc2Pm\x16!\x7f\
-\xab6\xe3i\x0b\x9e\xe8\x93\xc0BD\x86\xdfV0\x00\x90R`\xda\xcc\x0c\x00\x0c\x00\
-\xc1\x05>\x9a\x87\x19t\x180\x981\xbd\xfd\xe4\xc4Y\x82\xf7\x14\xca\xe7\xb7\
-\xa6\t\xee6\x1c\xba\xe18\xab\xc1 \xc3\xb5N?L\xaa5\xb5\xd0\x8dw`JaJ\xb0\x0b\
-\x03!\xc1\t\xdc\xb9k\x0f\x9e\xd1\x0b\x18\xf6\xe0x\x95]\xf2\\\xb2\xd6\x1b}\
-\x14BL\xb9{t\xc7\x00\x00\x00\x00IEND\xaeB`\x82' 
+\x00\x01gIDAT8\x8d\xa5\x93=KBQ\x18\xc7\x7fWo)5\x1594DC\x04!\xd1\x0bM-\xd1\
+\xd0T\x81\xba\xb7\xf8\x01Z\x9a\xdb\xfa\x08AC\x10\x0e\xb5\x86\xbaDC`CMaN\xd9\
+\x0bQF7\xe2z\xc1kz\xcd\xc4\x97\xd3\xa0\xde\xbc\\oE\xfd\xa7s\xce\xf3\xfc\x7f\
+\xe7y\xce\x8b$\xb9\xdc\xfcG2@\xf1bC\x00\x18%\xcd\x12\x1c^\xdc\x97~\x04\x18\
+\xe7K\xa2of\x05\x80\xfe\x8e@\xc3\xc8\xf2zJ\x13\xac+\xe6\xfax(a\x81\xca\xa2w\
+\x8a\x86\x91\x85\xaanE\xf7\x0c\xe0\xf3\xcf\x03P}|3\x97\x93\x11U\xcc\x85\xd3&\
+D\xee\xf4\x88\xb2\xfa5)\xab(\x99"\x00\xb9\x87c\x0b;\x19\xf1\x0b\x80\xb9pZ\
+\xb2\x00\x00\xd3T\xcb\xa5\x00(\xe4Uf\xd7\xb6m\xbd\xa7\x0e\xd6\x89\xc7\xa2\
+\xc2\x04<_\xdf\xe3\x15\x1a\xb5V\xbfc\xab\x9b6S7\xc9FIC\xbf\xcb\xe0\x15\x1a\
+\xbe\xe9e|\xad@C\xbfu4\x9d\xecnQ\x99\xdci\x02\x00\xea\x1f\x1a\x15]a\xa8pcK\
+\xae\xbf?9\x82\x02\xc1\x90$\x1b\xba\x82<\xe8\xeb\x9a\\\xcb)\xdd|\x14r\x15<\
+\xad\xb1\xab\x99\x98bdb\xd4q\xa7\xefd\xbb\x05\xa7\xdd\x8f\x0e/\x9d\x01\x85\
+\xbc\nX+8K\\\x99\xe5\x02x\x16\xf6\xba\x02$\xc9\xe56\x1fF[\xda\x8bn\x9er\xa7\
+\x02\xc1\x90\xedoH\xed\xdf\x18\x8fE\xc5o\x0c\x8e\x80\xbf\xea\x13\xa8\x18\x89\
+5\xe7L\xb3:\x00\x00\x00\x00IEND\xaeB`\x82'
 
 def getOpenBitmap():
     return BitmapFromImage(getOpenImage())
@@ -2968,13 +3232,20 @@ def getCopyData():
     return \
 '\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
 \x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
-\x00\x00\x9fIDAT8\x8d\xa5\x93\xdb\x0e\x830\x0cC\xed\x84\xdfF\xeb\xb4\xef\xa6\
-\xde\x030z\t\x94\tK\x91z\xcb\x01\xbb*i\x8e\'\x9a\x00@yQ\xb4Is\x8e\x00\xb6\
-\x0f$Uu\x05\x0e\x01\x91$\r!\xa49\x94\x17I\x02\xc9_\xe3:Nq\x93}XL|\xeb\xe9\
-\x05\xa4p\rH\xa29h^[ Y\xd5\xb9\xb5\x17\x94gu\x19DA\x96\xe0c\xfe^\xcf\xe7Y\
-\x95\x05\x00M\xf5\x16Z;\x7f\xfdAd\xcf\xee\x1cj\xc1%|\xdan"LL\x19\xda\xe1}\
-\x90:\x00#\x95_l5\x04\xec\x89\x9f\xef?|\x8d\x97o\xe1\x8e\xbeJ\xfc\xb1\xde\
-\xea\xf8\xb9\xc4\x00\x00\x00\x00IEND\xaeB`\x82' 
+\x00\x01_IDAT8\x8d\x8d\x92\xbfK\x02a\x18\xc7?w\xfa\'\xd8\xd0\xa0\xe4v\xd0$M\
+\x8dB\x11\x11\xa5B\x7f@C\xd0RC{k8E\x834\xb45\n\x15\xfd\x80hhh\xd2\xadI\x82\
+\xa4!\xb8\x84\xca\xd4;\xa5\xf2R\xe1m\xd0\xfb\xf5^\x1e~\xe1\xe5^\x9e{\xbe\x9f\
+\xf7\xfb\xbcwJ\xa9\xa2\x0bFj\x98\xdf\x00\xd4\xea\x06\x00f\xdbbosQ!L\xa5\x8a.\
+\xaa_"\xb0\x8e\xce\xcb\xa2\xfc)\xc4N\xfeT(j\x84\xb1\xabT\xd1E,\x19w\x80\x8d\
+\x97Ww?A"\xd5n\xf2*\x96\x8c\x13K\xc6\xd1R\x1aZJcai\x1e\x80\xf4j\x9a\xed\xfd\
+\xa2\xf0\x01B\xe7\x1b\xa9\xd9\x1d>;\x03X\xd9X\xf7AToC\xb3\xeb\xc6\x96e\xb6-\
+\x1en\xef\xb999\x03\xe0\xea\xf2B\x00Dku\x83)\xcd\x85\x8c;}n9\r\x80\xd1\x87b\
+\xbe\x00\xb33\xc3\x04f\xdbr\x9a;\x03\xbfI\x86\x1a\xfd\xe0\x01\xaam\xec\x0c\
+\x86\r\xf6\x8d{\xcd\xf6;\x00\xb3\'\x01\xde?\x9a>\xba\x9cH6\xb7,x~\xaa:=Q\x9f\
+\xb9\xe7\x1fE\xae\xb7\\\xb6\x1f\xe0\x8d\x15H$\x99\x1b?\x12@\xd7\xdf\xd0\x0f\
+\nN!\x91\x98\x9e\xd8\x0c\x10\xbd>\xdeU\xeco\np\xf7\xf8\xebK\x14fvF\xc8ds\xce\
+\xff\xbd\xb6u(\xbc\x89\xbc\x17\xf6\x9f\x14E\x8d\x04\x8a\xdeDa\xcads\xca\x1f\
+\x0cI\xd4\xda\x88E\x9d\xc4\x00\x00\x00\x00IEND\xaeB`\x82'
 
 def getCopyBitmap():
     return BitmapFromImage(getCopyImage())
@@ -2988,13 +3259,22 @@ def getPasteData():
     return \
 "\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
 \x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
-\x00\x00\xa1IDAT8\x8d\xa5\x93\xd9\x0e\xc3 \x0c\x04\xc7\xa6\xbf]\xc5U\xbf\xbb\
-\xd9>$4\\9\xaa\xacd\t\x0c\x1e/H6\xf3\xc4\x1d=FI\xcd\x1f\x95{\xf3d{\x003O]\
-\x01\x80\x94/\x0c\x8a\n\xa0\x01\x8a\x88\xdfaD m\x85y\xdd\xde\xc9\x10/\xc9\
-\xf9\xc0S2\xf3%\xf2\xba\x04\x94\xea\xfe`\xf4\x9c#U\x80\xbd.\x97\x015\xec&\
-\x00@\x9a\xba\x9c\xd9\x0b\x08\xe0\r4\x9fxU\xd2\x84\xe6\xa7N\x1dl\x1dkGe\xee\
-\x14\xd0>\xa3\x85\xfc\xe5`\x08]\x87I}\x84\x8e\x04!\xf3\xb48\x18\r\x8bf4\xea\
-\xde;\xbc9\xce_!\\\\T\xf75'\xd6\x00\x00\x00\x00IEND\xaeB`\x82" 
+\x00\x01\x90IDAT8\x8d\x8d\x93?H\x02a\x18\x87\x9fSw\xb1\xa9!q\xc8\xb0?B\xd0\
+\x98\x10DS\x10\x98\x82C\xd1\x12\x1a\xcd\rb&\xad\x1a\x144F`[\xd4 hBPKC\x83P\
+\x8b4\xe4\xa9tP\x82\x98\x88`$\x82\x8b\xd8p\xddu\xa7\xa5\xfd\x96{\xbf\xef\xfd\
+\xbd\xcf\xf7~w\xf7\n\x82\xc1\x08@M\xect\xd1(x\x12ef\xcaN./\x11\\\xdc\xd3\xa6\
+pz\x8d\x82\x12\x0b\x82\xc1HM\xect-c\xf7\xaa!\x10\xc9\xe0]rR\xac\xb4\x01\xc8\
+\xe5%\xe2\xbbF5_|\x0c\xa9\x10\x03=\nD2\x00$\xef\x9e\xc9\xe5%ryI\xde?\xe8\xe8\
+|\xe9\xabT\x17\xc0\xd4\x0b\xd8\nl\xa8q\xfd\xa3%\xb7\xd9x\xe1\xad=\xc2q\xba\
+\xc2\x8e\xfbU\xe7\xef\x03\x00\x98m\xd6\xef\xa7\xb23\xc9\xdbm\x06\xfb\x8a\x8f\
+\xe0y\x8a\xc0\xc4\x10\x00\xc0\xcdEB\x8d\x97\xd7}j\xbc\xb0\xe6!~\x99d\xd11\
+\x04\xa0-R$]'\xa84M4\xca\x05p8\x7f\x07\xd4?Z\x98mr\x07\x95\xa6\x9c\xf6o{\xb0\
+\xce\xbb\x00\xb0\x03\xe9\xc3\xd8\xf0+h;x\xf9\xfc\xcb\xd5\x0bh>Pzw1>\x0bg\xa7\
+)]\xaaQ.\x00`\xdb\x0c\x0f\x00hN\xf4o{~=\xf9\xa9\x0eY\xb1\x8awI\xf3\x0ej\x05\
+\xb0\x98\x1f\x00x-\xd5\xb0\xce\xc3\xd1~LW\x98\x15\xab\xccM\x8f\xfe\xaf\x03\
+\x00w0\xccS\xfdgm\xfb\xc3\xd7\xf7++w\xd5\x16\x0f\x92\t\xe4\xe9zN\x86\xbe\xa7\
+1\xaa\xfbLY\xb1:\x10 (\xe3\x0c?\x03\xf2_\xb9W=\xc2\x17\x1c\xf8\x87\x9a\x03\
+\x12\xd7\xb9\x00\x00\x00\x00IEND\xaeB`\x82"
 
 def getPasteBitmap():
     return BitmapFromImage(getPasteImage())
@@ -3008,11 +3288,19 @@ def getSaveData():
     return \
 '\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
 \x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
-\x00\x00lIDAT8\x8d\xc5\x93\xe1\n\xc0 \x08\x84=\xed\xc1}\xf1\xcd\xfd\x18B\x98\
-mX\x83\x1d\x04\x11\xfayV\x02,\xb4#\xde\xca&\xa2\xe6\x1b;\x0f\xab$\x82\x05\
-\x83\x03U\xbdaf\xe9\xea\x13]\xe5\x16\xa2\xd32\xc0].\x03\xa2Z<PU\x02\x90\xc5\
-\x0e\xd5S\xc0,p\xa6\xef[xs\xb0t\x89`A|\xff\x12\xe0\x11\xde\x0fS\xe5;\xbb#\
-\xfc>\x8d\x17\x18\xfd(\xb72\xc2\x06\x00\x00\x00\x00\x00IEND\xaeB`\x82' 
+\x00\x01\x1dIDAT8\x8d\x9d\x93=N\xc3@\x10\x85\xbf\xf5\xa2-\xf1\x11\xa0\x8dC\
+\x8f\x82\xa0\xe5\xa7\xa6\xe2\x04\xb4p\x00\x1a\xfb\x02\x11T\xf4\xa4\xa0\xc1\
+\xc1\\\x01\x90R"\xc5\xa4\x89RD\x14\x04$\xa2@\x01\xb1\x04C\xe1\xc8\xb1`\x1dC^\
+5;?\xef\xcd\x8cv\x94r4\xf1\xc5\xa7P\x82a\xff\xb7o\xfd@+\x94\xa3\xb9o"2\xa8K\
+\x18\x86R\x84\xc1\x87\xc8\xdd\xf3X|\xdf\x17\x11\x91\x9bc$\x8a"q\xf2\x8cZk\
+\xab\xfa\xd3\x18\x1e\xdf\x12\xba\xef\x06\x80\xdb\x13\x95\xc5\x1ckE\t\xd6\xb6\
+\xf7\xec\x04I\x92\x94\xaa\xff\xc4\\\x1d\xf0\xd2\xfd\x1bA\x99:\xc0B\xfe\xb1\
+\xbb\xf1@\x10\x043\xc5\x8f6\xaf\x00\xe8u\xc0]\x9e\x10\x0c\xfb@m\x92\xb0\xbf8\
+\xcd\x1e\xb5\xacm\xdb;\x18\xb5\xc0]%8}\xcd\x85+\x99\xd5\x8e\xbf2\xfb\xfc\xb0\
+g\x1f!U\xac\xe0y^\xe62\xc6p\xd6h\x14\x8e4s\x89\xc6\xa4\xcb[\xa9V\xffG\xa0\
+\xb5\xce\x8a\x97j[\xb4\xe3\xb8\x90@)\'\xfd\xbe\xd7\xf5\xe2\x83\xeau\xec~w\'\
+\x9a\x12\x00\\6\xc3\xd2\xab,\xec`^|\x03\xb6\xdf|Q.\xa7\x15\x89\x00\x00\x00\
+\x00IEND\xaeB`\x82'
 
 def getSaveBitmap():
     return BitmapFromImage(getSaveImage())
@@ -3026,17 +3314,20 @@ def getSaveAllData():
     return \
 '\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
 \x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
-\x00\x01\tIDAT8\x8d\xa5\x93\xe1m\x830\x10\x85\xdfA\xd7H\x827\xf0\x02\xado\
-\x04\x8f`Fh\xfb\xb7\xad\xcd&$Y\x80\x11\xcc\x06\x8c\xe0E\xd2\xeb\x8f\x16\x04!\
-8R\xf3\xa4\x93Nw\xd2\xf3\xa7g\x9b\xa8(\xf1\x88\x9er\xcb\xc3~\')%x\xef\xa7Y\
-\x8c\x11J)\x00\xc0\xf1t&PQn\x163\x0b\x00\x99\xcb{/\x00\xc49\'T\x94(\xfe\x83\
-\x1dB\x98\xfa\x95\xc1a\xbf\x13\xf9\xbe\xc8\xd7\xe7\x87\x18c\xe0\xbd\x073\xa3\
-\xaek\x10\x11\xfa\xbe\xcfgPU\x15RJ\x8bSB\x08h\x9af1\xdb$\xc8aw]\x87\xae\xeb\
-\xd6\x04\xd7i\x1bc\xc0\xccPJ\xa1m[03\x98\x19Z\xeb\x951QQ\xc2\xbc<K\x8c\x11"\
-\x92\xc5N)M\xbd\xd6\x1a\xafo\xef\x94}\x07#6\x00Xk\x7f\xef\xfdO\xc7\xd3\x19\
-\xc0,\x83\x10\x02\x88h\xaa1m\xad\xf5M\xf4E\x06s\x93-\xcd\xf1\xef\x1a\x8c\'^c\
-\xdf5\x18\x95C\xbei`\xad\xc50\x0cp\xce-\x96[\xd8s\xd1\xa3\xdf\xf9\x075\xf1v>\
-\x92\xcb\xbc\xdd\x00\x00\x00\x00IEND\xaeB`\x82' 
+\x00\x01UIDAT8\x8d\x9d\x93\xbfK\xc3@\x1c\xc5\xdf%\x01g\xeb \x1d\x8a\x8b\x83M\
+\x11\xe9\x16\x8a\x8b\xff@\xa0\xdd\x14\'\x17\x17A2\xe9,\x08\xc9\x14\x82n.nn\
+\x9a\xde?\xe0R;\xb88\x99v\xe8`\x86\n."\x81\xb6\xb4\xb4~\x1d\xd2\xc4^\x92j\
+\xf5\x03\xc7\xfd~\xf7\xeeq\xc7<\x17\x84)\xa3\x1e\x04\x863\xfd\xf10\xac\xb7\
+\x8fe&,\xf2\\\x10\xf9\x06q\xce)I\x7fL\xf4\xda\'2M\x93\x88\x88\x1e.@\x9csb\
+\x92\x8c\xb8x.\xa8X6\xd0z\xb2c\xd1?9\x89\x1c\xfc\xd7\x89\x82\x04\xeb\x9f:Z\
+\xf5l\';9\xe0\xf1\xea\x14\xca\x12\xb0\xe2\xebh8 ))\x00\x00\xc5\xb2\x81\x8e\
+\xc4\xb1\xb5GB\xd9< \x14\xf6\t\xf7\xef&*Ga\xf6\x99\x02Y\x0c&\xc0\xc7\x08x\
+\xe9\x01A\x10\xa0y\xc9\x16\x17\x98\xdd\x1cQ\xd1\x8d\x9f\x05<\xcf\x136\xcf#\
+\x15b\xc4\xc9\xee\x1b,\xcb\x8a\xfbA\x10\xc4\xed\xf3\xc3\x01\x00\xc0o\x03J\
+\xa9&\xb3\x86c\xd3r![\xe47\x14 |\x14\xcf\xb7\x13JNZ7\xab\xc2\xe9\xddn7\x9e\
+\xbb>\xcb\x01\x98\xc9\xa0T\x93Y\x93\xdbH\xa2\xaa*4MC\xb5Z\xcdt \x84\x98\xfa(\
+S\xf2\xf9\xfc\xdc+0&\xc9\xa9\xc1\x86\xf3}\x1d\xbf\r\xacm\x84\xf5\xc2\x02\x00\
+Pw\xefR\x99d\xf1\x05z\x94\xd0b\xcb S\xf3\x00\x00\x00\x00IEND\xaeB`\x82'
 
 def getSaveAllBitmap():
     return BitmapFromImage(getSaveAllImage())
@@ -3048,16 +3339,25 @@ def getSaveAllImage():
 #----------------------------------------------------------------------
 def getPrintData():
     return \
-"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
+'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
 \x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
-\x00\x00\xa1IDAT8\x8d\xa5S[\x0e\x02!\x0c\xec\xd0\xbd\xb6\x1a\xf5\xda\x96\xd9\
-\x0f\xa1V\x96\x00\xbaMHI\xd3y\xf0(\x90T\xce\xc4\xd6+2\x1bg@$E\x97\x80\xd9H\
-\x8e\xf1\x00\xc6\x0e\xda&''\x05\x80\xab\x1f\x08\xa2\xfa\xcc\xc5\xd0\xc1H\xbd\
-\n\x89\xbc\xef\xc1\tV\xd5\x91\x14\xcc\xc6\x9a\xa5<#WV\xed\x8d\x18\x94\xc2\
-\xd1s'\xa2\xb2\xe7\xc2\xf4STAf\xe3\x16\x0bm\xdc\xae\x17'\xbf?\x9e\x0e\x8an\
-\x86G\xc8\xf6\xf9\x91I\xf5\x8b\xa0\n\xff}\x04w\x80\xa4ng\x06l/QD\x04u\x1aW\
-\x06(:\xf0\xfd\x99q\xce\xf6\xe2\x0e\xa5\xa2~.\x00=\xb5t\x00\x00\x00\x00IEND\
-\xaeB`\x82" 
+\x00\x01\xa7IDAT8\x8d\xa5S=K\xc3P\x14=\xef\xb5 \x0e\xf6\x17\xb8$X\x10\xa7\
+\x82\xb4\n]\x05A\x07\xebd%\xfe\x02\x97\x82\xe0\xa0\x83\xa3\x88\xb5E\xfd\x07j\
+\x0bq\xea\x07\x18(8:5\x16\xa2H\xf1\x8bN\x12\tt\xe9\x8b\xddZ\x9eC|i\x93\xd4\
+\x0f\xf0\xc0\xe1\xe6\xbe\xdc{\xde\xb9\xc9{\x84\xd0\x10\xfe\x83\xb0x8m\xf6\
+\xb8i\xf7=/\xfb\xad\x07O\x9e]\x9f%\x01\x05BC 4\x84\x1d\xbd\xc7\xfdx\xb2\x1d^\
+\x99\x9c\x1f\xe6\x8ey\xb5Z\xe5\xa2^\x90\n\xa1\x83\xb91\xb2{;p\xf0\xfc\xe1\
+\xc4W\xdb\x89\xe3\xcb\x19\xa8\xaa\x8aJ\xb9\xc4\x87\r\xd0\xe1\xc4o\xf9/\x08\
+\x03\xc0\xc5\xf9\x19\x07\x80\xfb\xaf\x9d\xc5\xae-6(4\xed>\x9aoA\x01zq~\xc6\
+\x15E\x81\xa2(\xee\xe2\xd4\x84\x13\xe5H\xb0\xc1?\x06\x05\x80b\xb1\xe8\x16\
+\xbc\xda\x0e[\xcc\xa1i\xf71\xfcw\xf2\xf9\xbcG\x84\x14\n\x05\x1e\x8b\xc5\xa0\
+\xd5\xae\xb1\xbd\x95\x81eY#gm\xb7\xdb\x9e|cs\x1fw7\x97$lZm\xc4\x00,-. \x9b?\
+\xc1tT\x1e)\xc0\x18C$\x12\x01c\xce\x87\xe9\xbe\xeb\xa8\x94K\x9cNGeh\xb5k\x00\
+\x80\xd1\xa8#\x91H@\x96\xe5\x00%I\xc2\xe3K\x0b\x9a\xa6A\x92$W8\xbc\x92Z%\xeb\
+\xe95n4\xea\x01\xab\x9dN\xc7\xe3"9\x1fGr>\xeeYs\x8fr:\x9d\x06c\x0c\x86ax\nL\
+\xcb;\xbb\x1f\x84\xd0\x10*\xe5\x12WU\x15\xcd7`f\xf2\xc7z\x00\x80\xae\xeb\xc8\
+\xe5rXI\xad\x12"nc\xa5\\\xe2{G*\xba\xef\xfa\xaf\x02\xa2\xd9u \xe0?\xe7\xdfA4\
+\x03\xc0\'\xe3\x82\xc9\x18g\x90\x8e]\x00\x00\x00\x00IEND\xaeB`\x82'
 
 def getPrintBitmap():
     return BitmapFromImage(getPrintImage())
@@ -3071,14 +3371,20 @@ def getPrintPreviewData():
     return \
 '\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
 \x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
-\x00\x00\xa8IDAT8\x8d\x9d\x93K\x0e\xc30\x08Dg \xd7n\xcd\xc1\x9b\xd2E\x83E\\\
-\xffT$/\x82\xc5\x83\x19\x13\x02p,\x82\xa2\x1c\xde\x01p\xf71\x83\xe4\x14"\xab\
-\xeeQ\xec\xef\xb3\xdbe{\x82\x0c\xcb\xdf\xc7\xaa{\x86\xb7\xb0-@\xaf(\xc7\xd4\
-\x03\x9203P\x94\x14\xa5\x99\xa1\xf5b\x08\x88b+\x05~\xbejQ\x0f\xe2\xbd\x00\
-\xe0\x14\x05\xdc\x9d\xa2\xa0(\xcc\xec\x9b\xbb\xee(\xba~F\xea15a\n(\xcfG\x1d5\
-d\xe4\xdcTB\xc8\x88\xb1CB\x9b\x9b\x02\x02\x92O@\xaa\x0fXl\xe2\xcd\x0f\xf2g\
-\xad\x89\x8d\xbf\xf1\x06\xb9V9 \x0c\x1d\xff\xc6\x07\x8aF\x9e\x04\x12\xb5\xf9\
-O\x00\x00\x00\x00IEND\xaeB`\x82' 
+\x00\x01mIDAT8\x8d\x8d\x92\xbdK\x02a\x1c\xc7?w\x1a\x85E\x04588XHa\xd1\x14!AB\
+\r.\xbd\x07m-By.M\xfe\x03N\x05\x0e\xed\xf9\x124\x045\x04\x15\xdc\xda&4\xb5DC\
+J\x8a\x81E\t.\x82\x918\xd8\xf0pOw\xde\x19}\xe1\xe1w\xf7;>\xdf\xdf\xcbs\xca\
+\xddC\xb9C\x97\x1e\x8bU\xf9\x9c\xd8]V\xba\xbf\x9b\xa5\x02\xf8\xa6\xc6-ge=\
+\x0c@p)\xcc\xc1\xe1\xa5\xad\x80\xcd\xa0\x97\x86\xfb`5\xba\xf3\xa7\x89\xdb)Y\
+\xff\x16\xf1"{%s\xb77\xd7\x9d\xcd\xadm\xdb86\x03\x03\x0eE\xc2\x04\xdbPk\xc1y\
+2Edf\xday\x84\xe6\xdb\x93\x84\x8c\xd8h\x8bSk\xf5j\xdcdPj\x8eX`C\x06\x9c?\x8a\
+\xe3\xef/\xa3\xeb:\xb1\xfd=\xdb.,#4\xdav\x18-m\x01b\xd0\xc9\xe6N\xe5.Ts\xcbN\
+pz\x0e\xa2~\x91\x0bx\x00-m\xe9D-W>%h\xc0\x1f_\xbf\x15\xef\xeb\x90\xaf\xc1\
+\xe2\x18x="\x82\xb8\x15\xd9\x81yYf\x18\xe0\xac"\xc0\xc0\x10\x84\xc6D4\xcb\
+\xf2#u\xc3\xb2m`t\x00&\x07E4\xcb]x.QH\xa6\xec$\x13\xf83q^\xb44^\x8f\xb8\xa5"\
+p\x9c\x88\xa3\x91\xe1\x9d5\x00\x14Eu\xc9y\x9c\xa4\xeb\xba\xe5}\xb6\x9a\x01`\
+\xc1\x07\xf39\x97\xa2(\xaa\xab\x17+\xd5]\xe0\xf5dC\x9a\xfc\xcb\xc0\xc9\xd00\
+\xf9\x011\xc9\x87\xf3\xb4\xd1t\xaf\x00\x00\x00\x00IEND\xaeB`\x82'
 
 def getPrintPreviewBitmap():
     return BitmapFromImage(getPrintPreviewImage())
@@ -3090,13 +3396,22 @@ def getPrintPreviewImage():
 #----------------------------------------------------------------------
 def getCutData():
     return \
-"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
+'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
 \x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
-\x00\x00rIDAT8\x8d\xad\x93\xc1\x0e\xc0 \x08CW\xdco{\xf2\xbb';\xb18\x07\x9d\
-\x0b\xe3\xa2\x98\xe6\xb5$\x02H\xd92%\xde\xa3\xf6CY\xff\nH'\xf8\x05`\xb1Y\xfc\
-\x10\x00)`\xfdR\x82\x15w\n0W\xe6N\x01\xda\xab\x8e\xe7g\xc0\xe8\xae\xbdj\x04\
-\xda#\xe7;\xa8] \xbb\xbb\tL0\x8bX\xa5?\xd2c\x84\xb9 \r6\x96\x97\x0c\xf362\
-\xb1k\x90]\xe7\x13\x85\xca7&\xcf\xda\xcdU\x00\x00\x00\x00IEND\xaeB`\x82" 
+\x00\x01HIDAT8\x8d\x85\x92OK\x02Q\x14\xc5\x7f\xa3\x05}\x1b\xa1\xc0\x9d\xb4\
+\xaaf6\x93a\x10\xe3^\x83l\xdf\xc6\xa5\x1bIA\xb4\xa0\x9cM\xe5"\x84\x18\xff\
+\x108\xbb\xf0\x93\xb4v\x15h\xa9\xaf\x16\xaf\x85\xbcat^\xd3\x81\xb79\xf7\xdc\
+\xf3\xce{\xf7b$\x92\x84O\xa7\xd3\x91\x9b\\\xf8\xd4\xeb\xb5\xb5z\x02\r\x9e\
+\x1e\x1f\xa4\x8eo5\x1b\x12`\xd0\xef\x05u\xadA.\x97\xc3u\xef\xd7LZ\xcd\x86\
+\xb4\xedlD\xab5\xd0A\x08\xc1l6e>_\xc4\x1b\x88o\x01@\xde\xc9\x07\x91k\xd7Ui\
+\x9a\x96\xd6xk\x93(\x14\xce\r@\x1e\x1e\x1cE\xc4\x9e\xe7\x91J\xa58\xce\x9e\
+\x18\x7f\x1a\x00,\x17\xab\x98\xb6\x9dE\x08!M\xd3\x8aDW0\x8cDR[P\xb1U\xa3\xef\
+\x8f"\xb7C\xcc\'\xee\xbdw\xf1</h\xceL\x86Z\x9d\xf6\to\x17\xbb2m90z\xc6\xf7!3\
+\x19\x92\xb6\x1c\xc6\xdd\xab\x886v\x8ci\xcb\t\x9a\x15\xc2K\xa45P\xb7\x17o+\
+\x00,\xa6\x9f\x00\x14o+\xec\x9f\x15X\xba\x97\xf1\tTC\x1c\xfe]e\x80v\xa9\xcc\
+\xb8\xeb2\xfb\xf8\xe2\xf5\xaeA\xbbT\xd6\xea"c\x1c\xf4{r\xfbe\xf5Y?\xa7\xd5\
+\x80W\xd1w\n7k\xa3\xd4\xee\x81\x8a\x18\x16\xea8\x80_\\\xa2\x8b\x88!\xd2S\x08\
+\x00\x00\x00\x00IEND\xaeB`\x82'
 
 def getCutBitmap():
     return BitmapFromImage(getCutImage())
@@ -3110,12 +3425,24 @@ def getUndoData():
     return \
 "\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
 \x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
-\x00\x00lIDAT8\x8d\xed\x92Q\x0b\x800\x08\x84\xd5\xf5\xb7\x07W\xfdo\xed!\xaca\
-\xb2\x11{\xe9!a\xa0\xc7\xeec\x1ec\x96B3%S\xeeO\x00\x96\xd1\x05\xd3j\xed\x0c\
-\x10\xad\xdb\xce\x97\xc0R\xe8\x0c\x12\xe6\xbd\xcfQs\x1d\xb8\xf5\xd4\x90\x19#\
-\xc4\xfbG\x06\xa6\xd5X\x9a'\x0e*\r1\xee\xfd\x1a\xd0\x83\x98V\x03\x1a\xa1\xb7\
-k<@\x12\xec\xff\x95\xe7\x01\x07L\x0e(\xe5\xa4\xff\x1c\x88\x00\x00\x00\x00IEN\
-D\xaeB`\x82" 
+\x00\x01\xa7IDAT8\x8d\xa5\x90\xbfK[Q\x18\x86\x9fs#\x8d\x7fBu\xc8\xd6\xc9\xc1\
+\xa1\x83\xd0\x16\xa1C@*\x98\xc4\xa2\x12\xda\x8e5\x9b\x83\x04\x07Aph\x17)\x16\
+\xdd\xd4\xc1\xa1Z\x1b\xc5&9\xa6P\xbaw\xa8\x9b\x9b\xa0S\xb0\xe2\x8f\\%1^\x8d\
+\xde\xfa9\x84s\xf1\xea\xa5\x06<p\x86\xc3\xf9\x9e\xe7\xbc\xefQ\xca\n\xf1\x90\
+\xd5t\xdf@\xba\x10\x95r\xcd\x01`\xee\xf5o\xd5\xb0 ]\x88\n@\xd7\xb3^\x00.\xaf\
+\xce\xd8\x9d>\x10\x80\x1fC[\x9eH\x05UH\x17\xa2r\x13\xac\x9d_Pq\x8f\x01(96\
+\xdf\x16\xd7X\xff\xb8\xaf\x02\x05\x066\xa0+5\xe6\xb3\x0b\x1c\xeeW\x00x\xd1\
+\xf3\x14\x80\xaf\x93\xbf\xd8\xcb\xb8\xeaN\x05\xd3\xd7\xbc\x9a\xd1\xdf\x19\
+\x8cL@\xa4~\x9f\x9a\xec\xa3\xb3\xa7\r\x80|.+>\xc1\xfb\xd5\xe72\xf0\xf2-U\xa7\
+\xec\x83c\xf1\x84\xd79\x9f\xcbJj\xa9/\xf8\x13\xcb\xe7U.\xaf\xcep\xa5\x06P\
+\x8f\x1d\xf1'\x8c\xc5\x13*\x9f\xcb\x8a'\xe8_l\x17\x80\xe57\x1b\xea\xd4\xae\
+\xc7w\xfe9\x94\x1c\xdb\x83\x1e\x0f4\t\xc0^\xc6UFb\xee\xacS\xdba\xf8\xd5\x08\
+\xdd\xd3O\xc4t7\xab\xb8m\x93Z\xf2w\xbe\xfdgJk-\xb3\xc5\x11\xc6\xde\x8dS\x95\
+\x8a\xd7\xbf\xe4\xd8\xec\x9c\xecr\xb2Sfm\xf9\x0f3\xc9\x15\xdf\xcb^\x82X<\xa1\
+\x06#\x13\x0c}\x1a\x06 \xdc\xfc\xc87\xf0?\xb8\x1e\xc1\n\xa1\xac\x10Zk\xe9\
+\x18k\x95\x9fGS\xf2\xa58*\x9f7S\xd2\x92\x0c\x8b\xd6Z\xccL\xd0\xf6\x1d\xb4\
+\xd6\xd2\x92\x0c\xcb\xea\xdf\x0f\r\xc1w\x047%\x8d\xc0\x81\x02#i\x04VV\x88k\
+\x82\xbe\xde\xc2\xb0\xb2\xea\xa7\x00\x00\x00\x00IEND\xaeB`\x82"
 
 def getUndoBitmap():
     return BitmapFromImage(getUndoImage())
@@ -3129,12 +3456,22 @@ def getRedoData():
     return \
 "\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
 \x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
-\x00\x00jIDAT8\x8d\xed\x92\xcd\n\xc0 \x0c\x83\x9bv\xaf\xed\x16\xf0\xbd\xd7]&\
-\xf8\x8f\xe0e\x87\t9$\xb6\x1f\xb5\x08\xa8\xc9\xce\xd1\xad\xeeO\x00\x8e\xdc\\\
-gp\xb2,\x80FL\tP\x13\xa8\tI\x17\xa1'\x9f$\xd2\xe6\xb9\xef\x86=\xa5\xfb\x1a\
-\xb8\xbc\x03h\x84\xdf\xc1\xeb|\x19\xd0k.\x00\xe4\xb8h\x94\xbf\xa3\x95\xef$\
-\xe7\xbbh\xf4\x7f\xe5}\xc0\x03&\x1b&\xe5\xc2\x03!\xa6\x00\x00\x00\x00IEND\
-\xaeB`\x82" 
+\x00\x01\x88IDAT8\x8d\xa5\x92\xc1K\x02A\x14\xc6\xbfQ\t\xbc\x14tJ\xfb\x0f2\
+\x08\xbaD\xdd:\xe5!\xd2\xad$/\x82FP\x06\x99\x87\x04\xa1\x83D\x10\x0b\x85\xd4\
+\xa9\x8c (\x82<\xad\xce\xa9\xff\xc0[\xd2)\xbcu\t\xb2\xd0\xa5\xb5\x94\x14z\
+\x1dd\x87]\x1bBh\xe0\xc1\xf0\xde\xfb~3\xef\x9ba\xcc\xe1\xc4\x7f\x96K\x96\xdc\
+\xd6\xfcd\xeeO\x94;\xd67\xc0\x14Fg\xd7E\xae~\xa5S\xe3\xd3@!\xfe(\x051s\x84m\
+\xcdOV!\x004\xbf\r\x00\x80\xde\xae\xe2B\xbb\x94B\\\x00\x10\xb9\x9a\x12\xe2,W\
+Eqc~S\xec\xd7\x94\x18\xaa\xafY*e^l\x10\x87\xf5\xb4,W\xb1<\x98\x16q\x98W\xa1\
+\xb7\xab\x00\x80F\xa7\x0e\x00(\x164\xb2\x02\xc0\x1cN(\xb9qRr\xe3\xc49'\xe6p\
+\xc2\x1a3\xfb\xa3t\xfb\xbcK\xe7O[\xa4V\xc2\xe4K\x0e\xdb\xfa\\\x00\x10\xf3\
+\x1c\x00\x00\x02AEj\x94\xd11P\xffz\x93\x95\xba\x80^\xe1\xf4\xde\x08\x01@)\
+\xf3\xc2\xdek-!\xae5u\xe8\xcf-\x00\x80gi\x80l\x1e\xf4\xae\xc4j\x14c\x89!1o\
+\xad\xa9\x8b\xda\xc6\xf5\n\x16v&\xbb\x16\xc8~b\xb1\xa0\x91\xfa\x10G4\xb2h;\
+\xbd\xd1\xfe\x10=\xfc\xe8\x1eg\x91\xbc\xfc\x06\x81\xa0\xc2\xd2\x13\xa789\xbe\
+\x91\xde\xce\x14\x07\x82\nC\xaf\xeb\xd6\xe0\x9c\x93/9Lj%L\xa9\xf2\x1c\xa5\
+\xcas\xe4\r\xb9m\xaf\xf0'\xc0\x84xCnR+\xe1_\xe2\xbe\x00V\x88\xec\x9f\xf4\x05\
+0!\xb2\xfc\x0f\xe0\xc4\xb6\xad\x97R\xe5z\x00\x00\x00\x00IEND\xaeB`\x82"
 
 def getRedoBitmap():
     return BitmapFromImage(getRedoImage())
@@ -3142,7 +3479,7 @@ def getRedoBitmap():
 def getRedoImage():
     stream = cStringIO.StringIO(getRedoData())
     return ImageFromStream(stream)
-    
+
 #----------------------------------------------------------------------------
 
 def getBlankData():
@@ -3153,7 +3490,7 @@ def getBlankData():
 \xa8X:\xd4\x13\x03:\x1b\x01\xa45T\xd4\xefBsh\xd7Hk\xdc\x02\x00@\x8a\x19$\xa1\
 9\x14A,\x95\xf3\x82G)\xd3\x00\xf24\xf7\x90\x1ev\x07\xee\x1e\xf4:\xc1J?\xe0\
 \x0b\x80\xc7\x1d\xf8\x1dg\xc4\xea7\x96G8\x00\xa8\x91\x19(\x85#P\x7f\x00\x00\
-\x00\x00IEND\xaeB`\x82' 
+\x00\x00IEND\xaeB`\x82'
 
 
 def getBlankBitmap():
@@ -3165,5 +3502,5 @@ def getBlankImage():
 
 def getBlankIcon():
     return wx.IconFromBitmap(getBlankBitmap())
-    
+
 

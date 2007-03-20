@@ -873,14 +873,14 @@ void wxPostScriptDC::DoDrawBitmap( const wxBitmap& bitmap, wxCoord x, wxCoord y,
 
     unsigned char* data = image.GetData();
 
-    /* buffer = line = width*rgb(3)*hexa(2)+'\n'(1)+null(1) */
-    char* buffer = new char[ w*6+2 ];
+    // size of the buffer = width*rgb(3)*hexa(2)+'\n'
+    wxCharBuffer buffer(w*6 + 1);
     int firstDigit, secondDigit;
 
     //rows
     for (int j = 0; j < h; j++)
     {
-        char* bufferindex = buffer;
+        char* bufferindex = buffer.data();
 
         //cols
         for (int i = 0; i < w*3; i++)
@@ -1038,12 +1038,26 @@ void wxPostScriptDC::SetPen( const wxPen& pen )
         case wxSHORT_DASH:    psdash = short_dashed;   break;
         case wxLONG_DASH:     psdash = wxCoord_dashed; break;
         case wxDOT_DASH:      psdash = dotted_dashed;  break;
+        case wxUSER_DASH:
+        {
+            wxDash *dashes;
+            int nDashes = m_pen.GetDashes (&dashes);
+            PsPrint ("[");
+            for (int i = 0; i < nDashes; ++i)
+            {
+                sprintf( buffer, "%d ", dashes [i] );
+                PsPrint( buffer );
+            }
+            PsPrint ("] 0 setdash\n");
+            psdash = 0; 
+        } 
+        break;
         case wxSOLID:
         case wxTRANSPARENT:
         default:              psdash = "[] 0";         break;
     }
 
-    if ( (oldStyle != m_pen.GetStyle()) )
+    if (psdash && (oldStyle != m_pen.GetStyle()) )
     {
         PsPrint( psdash );
         PsPrint( " setdash\n" );
@@ -1974,9 +1988,9 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
         //     it just crashes
 #ifndef __WIN32__
         wxPostScriptPrintNativeData *data =
-            (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
+            wxDynamicCast(m_printData.GetNativeData(), wxPostScriptPrintNativeData);
 
-        if (!data->GetFontMetricPath().empty())
+        if (data && !data->GetFontMetricPath().empty())
         {
             afmName = data->GetFontMetricPath();
             afmName << wxFILE_SEP_PATH << name;

@@ -410,6 +410,7 @@ class xxxMainNode(xxxContainer):
 
 class xxxPanel(xxxContainer):
     allParams = ['pos', 'size', 'style']
+    winStyles = ['wxNO_3D', 'wxTAB_TRAVERSAL']
     styles = ['fg', 'bg', 'font', 'enabled', 'focused', 'hidden', 'exstyle',
               'tooltip']
 
@@ -418,11 +419,13 @@ class xxxDialog(xxxContainer):
     paramDict = {'centered': ParamBool}
     required = ['title']
     default = {'title': ''}
-    winStyles = ['wxDEFAULT_DIALOG_STYLE', 
-                 'wxCAPTION', 'wxMINIMIZE_BOX', 'wxMAXIMIZE_BOX', 'wxCLOSE_BOX',
-                 'wxSTAY_ON_TOP',
-                 'wxTHICK_FRAME',
-                 'wxNO_3D', 'wxDIALOG_NO_PARENT']
+    winStyles = ['wxDEFAULT_DIALOG_STYLE', 'wxCAPTION', 
+                 'wxSTAY_ON_TOP', 'wxSYSTEM_MENU', 'wxTHICK_FRAME',
+                 'wxRESIZE_BORDER', 'wxRESIZE_BOX', 'wxCLOSE_BOX',
+                 'wxMAXIMIZE_BOX', 'wxMINIMIZE_BOX',
+                 'wxDIALOG_MODAL', 'wxDIALOG_MODELESS', 'wxDIALOG_NO_PARENT'
+                 'wxNO_3D', 'wxTAB_TRAVERSAL']                 
+    exStyles = ['wxWS_EX_VALIDATE_RECURSIVELY', 'wxDIALOG_EX_METAL']
     styles = ['fg', 'bg', 'font', 'enabled', 'focused', 'hidden', 'exstyle',
               'tooltip']
 
@@ -431,13 +434,14 @@ class xxxFrame(xxxContainer):
     paramDict = {'centered': ParamBool}
     required = ['title']
     default = {'title': ''}
-    winStyles = ['wxDEFAULT_FRAME_STYLE',
-                 'wxCAPTION', 'wxMINIMIZE_BOX', 'wxMAXIMIZE_BOX', 'wxCLOSE_BOX',
-                 'wxSTAY_ON_TOP',
-                 'wxSYSTEM_MENU', 'wxRESIZE_BORDER',
-                 'wxFRAME_TOOL_WINDOW', 'wxFRAME_NO_TASKBAR',
-                 'wxFRAME_FLOAT_ON_PARENT', 'wxFRAME_SHAPED'
-                 ]
+    winStyles = ['wxDEFAULT_FRAME_STYLE', 'wxDEFAULT_DIALOG_STYLE', 'wxCAPTION', 
+                 'wxSTAY_ON_TOP', 'wxSYSTEM_MENU', 'wxTHICK_FRAME',
+                 'wxRESIZE_BORDER', 'wxRESIZE_BOX', 'wxCLOSE_BOX',
+                 'wxMAXIMIZE_BOX', 'wxMINIMIZE_BOX',
+                 'wxFRAME_NO_TASKBAR', 'wxFRAME_SHAPED', 'wxFRAME_TOOL_WINDOW',
+                 'wxFRAME_FLOAT_ON_PARENT',
+                 'wxNO_3D', 'wxTAB_TRAVERSAL']                 
+    exStyles = ['wxWS_EX_VALIDATE_RECURSIVELY', 'wxFRAME_EX_METAL']
     styles = ['fg', 'bg', 'font', 'enabled', 'focused', 'hidden', 'exstyle',
               'tooltip']
 
@@ -452,11 +456,18 @@ class xxxToolBar(xxxContainer):
                  'pos', 'size', 'style']
     hasStyle = False
     paramDict = {'bitmapsize': ParamPosSize, 'margins': ParamPosSize,
-                 'packing': ParamInt, 'separation': ParamInt,
+                 'packing': ParamUnit, 'separation': ParamUnit,
                  'dontattachtoframe': ParamBool, 'style': ParamNonGenericStyle}
     winStyles = ['wxTB_FLAT', 'wxTB_DOCKABLE', 'wxTB_VERTICAL', 'wxTB_HORIZONTAL',
                  'wxTB_3DBUTTONS','wxTB_TEXT', 'wxTB_NOICONS', 'wxTB_NODIVIDER',
                  'wxTB_NOALIGN', 'wxTB_HORZ_LAYOUT', 'wxTB_HORZ_TEXT']
+
+class xxxStatusBar(xxxObject):
+    hasStyle = False
+    allParams = ['fields', 'widths', 'styles', 'style']
+    paramDict = {'fields': ParamIntNN, 'widths': ParamText, 'styles': ParamText,
+                 'style': ParamNonGenericStyle}
+    winStyles = ['wxST_SIZEGRIP']
 
 class xxxWizard(xxxContainer):
     allParams = ['title', 'bitmap', 'pos']
@@ -505,8 +516,24 @@ class xxxStaticBitmap(xxxObject):
 
 class xxxTextCtrl(xxxObject):
     allParams = ['value', 'pos', 'size', 'style']
-    winStyles = ['wxTE_PROCESS_ENTER', 'wxTE_PROCESS_TAB', 'wxTE_MULTILINE',
-              'wxTE_PASSWORD', 'wxTE_READONLY', 'wxHSCROLL']
+    winStyles = ['wxTE_NO_VSCROLL',
+                 'wxTE_AUTO_SCROLL',
+                 'wxTE_PROCESS_ENTER',
+                 'wxTE_PROCESS_TAB',
+                 'wxTE_MULTILINE',
+                 'wxTE_PASSWORD',
+                 'wxTE_READONLY',
+                 'wxHSCROLL',
+                 'wxTE_RICH',
+                 'wxTE_RICH2',
+                 'wxTE_AUTO_URL',
+                 'wxTE_NOHIDESEL',
+                 'wxTE_LEFT',
+                 'wxTE_CENTRE',
+                 'wxTE_RIGHT',
+                 'wxTE_DONTWRAP',
+                 'wxTE_LINEWRAP',
+                 'wxTE_WORDWRAP']
     paramDict = {'value': ParamMultilineText}
 
 class xxxChoice(xxxObject):
@@ -519,8 +546,8 @@ class xxxSlider(xxxObject):
     allParams = ['value', 'min', 'max', 'pos', 'size', 'style',
                  'tickfreq', 'pagesize', 'linesize', 'thumb', 'tick',
                  'selmin', 'selmax']
-    paramDict = {'value': ParamInt, 'tickfreq': ParamInt, 'pagesize': ParamInt,
-                 'linesize': ParamInt, 'thumb': ParamInt, 'thumb': ParamInt,
+    paramDict = {'value': ParamInt, 'tickfreq': ParamIntNN, 'pagesize': ParamIntNN,
+                 'linesize': ParamIntNN, 'thumb': ParamUnit, 
                  'tick': ParamInt, 'selmin': ParamInt, 'selmax': ParamInt}
     required = ['value', 'min', 'max']
     winStyles = ['wxSL_HORIZONTAL', 'wxSL_VERTICAL', 'wxSL_AUTOTICKS', 'wxSL_LABELS',
@@ -529,57 +556,86 @@ class xxxSlider(xxxObject):
 
 class xxxGauge(xxxObject):
     allParams = ['range', 'pos', 'size', 'style', 'value', 'shadow', 'bezel']
-    paramDict = {'range': ParamInt, 'value': ParamInt,
-                 'shadow': ParamInt, 'bezel': ParamInt}
+    paramDict = {'range': ParamIntNN, 'value': ParamIntNN,
+                 'shadow': ParamIntNN, 'bezel': ParamIntNN}
     winStyles = ['wxGA_HORIZONTAL', 'wxGA_VERTICAL', 'wxGA_PROGRESSBAR', 'wxGA_SMOOTH']
 
 class xxxScrollBar(xxxObject):
     allParams = ['pos', 'size', 'style', 'value', 'thumbsize', 'range', 'pagesize']
-    paramDict = {'value': ParamInt, 'range': ParamInt, 'thumbsize': ParamInt,
-                 'pagesize': ParamInt}
+    paramDict = {'value': ParamIntNN, 'range': ParamIntNN, 'thumbsize': ParamIntNN,
+                 'pagesize': ParamIntNN}
     winStyles = ['wxSB_HORIZONTAL', 'wxSB_VERTICAL']
 
 class xxxListCtrl(xxxObject):
     allParams = ['pos', 'size', 'style']
     winStyles = ['wxLC_LIST', 'wxLC_REPORT', 'wxLC_ICON', 'wxLC_SMALL_ICON',
-              'wxLC_ALIGN_TOP', 'wxLC_ALIGN_LEFT', 'wxLC_AUTOARRANGE',
-              'wxLC_USER_TEXT', 'wxLC_EDIT_LABELS', 'wxLC_NO_HEADER',
-              'wxLC_SINGLE_SEL', 'wxLC_SORT_ASCENDING', 'wxLC_SORT_DESCENDING']
+                 'wxLC_ALIGN_TOP', 'wxLC_ALIGN_LEFT', 'wxLC_AUTOARRANGE',
+                 'wxLC_USER_TEXT', 'wxLC_EDIT_LABELS', 'wxLC_NO_HEADER',
+                 'wxLC_SINGLE_SEL', 'wxLC_SORT_ASCENDING', 'wxLC_SORT_DESCENDING',
+                 'wxLC_VIRTUAL', 'wxLC_HRULES', 'wxLC_VRULES', 'wxLC_NO_SORT_HEADER']
 
 class xxxTreeCtrl(xxxObject):
     allParams = ['pos', 'size', 'style']
-    winStyles = ['wxTR_HAS_BUTTONS', 'wxTR_NO_LINES', 'wxTR_LINES_AT_ROOT',
-              'wxTR_EDIT_LABELS', 'wxTR_MULTIPLE']
+    winStyles = ['wxTR_EDIT_LABELS',
+                 'wxTR_NO_BUTTONS',
+                 'wxTR_HAS_BUTTONS',
+                 'wxTR_TWIST_BUTTONS',
+                 'wxTR_NO_LINES',
+                 'wxTR_FULL_ROW_HIGHLIGHT',
+                 'wxTR_LINES_AT_ROOT',
+                 'wxTR_HIDE_ROOT',
+                 'wxTR_ROW_LINES',
+                 'wxTR_HAS_VARIABLE_ROW_HEIGHT',
+                 'wxTR_SINGLE',
+                 'wxTR_MULTIPLE',
+                 'wxTR_EXTENDED',
+                 'wxTR_DEFAULT_STYLE']
 
 class xxxHtmlWindow(xxxObject):
     allParams = ['pos', 'size', 'style', 'borders', 'url', 'htmlcode']
-    paramDict = {'borders': ParamInt, 'htmlcode':ParamMultilineText}
-    winStyles = ['wxHW_SCROLLBAR_NEVER', 'wxHW_SCROLLBAR_AUTO']
+    paramDict = {'htmlcode':ParamMultilineText}
+    winStyles = ['wxHW_SCROLLBAR_NEVER', 'wxHW_SCROLLBAR_AUTO', 'wxHW_NO_SELECTION']
 
 class xxxCalendarCtrl(xxxObject):
     allParams = ['pos', 'size', 'style']
+    winStyles = ['wxCAL_SUNDAY_FIRST', 'wxCAL_MONDAY_FIRST', 'wxCAL_SHOW_HOLIDAYS',
+                 'wxCAL_NO_YEAR_CHANGE', 'wxCAL_NO_MONTH_CHANGE',
+                 'wxCAL_SEQUENTIAL_MONTH_SELECTION', 'wxCAL_SHOW_SURROUNDING_WEEKS']
 
 class xxxNotebook(xxxContainer):
-    allParams = ['usenotebooksizer', 'pos', 'size', 'style']
-    paramDict = {'usenotebooksizer': ParamBool}
-    winStyles = ['wxNB_FIXEDWIDTH', 'wxNB_LEFT', 'wxNB_RIGHT', 'wxNB_BOTTOM']
+    allParams = ['pos', 'size', 'style']
+    winStyles = ['wxNB_DEFAULT', 'wxNB_LEFT', 'wxNB_RIGHT', 'wxNB_BOTTOM',
+                 'wxNB_FIXEDWIDTH', 'wxNB_MULTILINE', 'wxNB_NOPAGETHEME']
 
+class xxxChoicebook(xxxContainer):
+    allParams = ['pos', 'size', 'style']
+    winStyles = ['wxCHB_DEFAULT', 'wxCHB_LEFT', 'wxCHB_RIGHT', 'wxCHB_TOP', 'wxCHB_BOTTOM']
+    
+class xxxListbook(xxxContainer):
+    allParams = ['pos', 'size', 'style']
+    winStyles = ['wxLB_DEFAULT', 'wxLB_LEFT', 'wxLB_RIGHT', 'wxLB_TOP', 'wxLB_BOTTOM']
+    
 class xxxSplitterWindow(xxxContainer):
     allParams = ['orientation', 'sashpos', 'minsize', 'pos', 'size', 'style']
     paramDict = {'orientation': ParamOrientation, 'sashpos': ParamUnit, 'minsize': ParamUnit }
-    winStyles = ['wxSP_3D', 'wxSP_3DSASH', 'wxSP_3DBORDER', 'wxSP_BORDER',
-                         'wxSP_NOBORDER', 'wxSP_PERMIT_UNSPLIT', 'wxSP_LIVE_UPDATE',
-                         'wxSP_NO_XP_THEME' ]
+    winStyles = ['wxSP_3D', 'wxSP_3DSASH', 'wxSP_3DBORDER', 
+                 'wxSP_FULLSASH', 'wxSP_NOBORDER', 'wxSP_PERMIT_UNSPLIT', 'wxSP_LIVE_UPDATE',
+                 'wxSP_NO_XP_THEME' ]
 
 class xxxGenericDirCtrl(xxxObject):
     allParams = ['defaultfolder', 'filter', 'defaultfilter', 'pos', 'size', 'style']
-    paramDict = {'defaultfilter': ParamInt}
+    paramDict = {'defaultfilter': ParamIntNN}
     winStyles = ['wxDIRCTRL_DIR_ONLY', 'wxDIRCTRL_3D_INTERNAL', 'wxDIRCTRL_SELECT_FIRST',
-                 'wxDIRCTRL_SHOW_FILTERS', 'wxDIRCTRL_EDIT_LABELS']
+                 'wxDIRCTRL_SHOW_FILTERS']
 
 class xxxScrolledWindow(xxxContainer):
     allParams = ['pos', 'size', 'style']
-    winStyles = ['wxHSCROLL', 'wxVSCROLL']
+    winStyles = ['wxHSCROLL', 'wxVSCROLL', 'wxNO_3D', 'wxTAB_TRAVERSAL']
+
+class xxxDateCtrl(xxxObject):
+    allParams = ['pos', 'size', 'style', 'borders']
+    winStyles = ['wxDP_DEFAULT', 'wxDP_SPIN', 'wxDP_DROPDOWN',
+                 'wxDP_ALLOWNONE', 'wxDP_SHOWCENTURY']
 
 ################################################################################
 # Buttons
@@ -588,20 +644,20 @@ class xxxButton(xxxObject):
     allParams = ['label', 'default', 'pos', 'size', 'style']
     paramDict = {'default': ParamBool}
     required = ['label']
-    winStyles = ['wxBU_LEFT', 'wxBU_TOP', 'wxBU_RIGHT', 'wxBU_BOTTOM']
+    winStyles = ['wxBU_LEFT', 'wxBU_TOP', 'wxBU_RIGHT', 'wxBU_BOTTOM', 'wxBU_EXACTFIT']
 
 class xxxBitmapButton(xxxObject):
     allParams = ['bitmap', 'selected', 'focus', 'disabled', 'default',
                  'pos', 'size', 'style']
     required = ['bitmap']
-    winStyles = ['wxBU_AUTODRAW', 'wxBU_LEFT', 'wxBU_TOP',
-                 'wxBU_RIGHT', 'wxBU_BOTTOM']
+    winStyles = ['wxBU_AUTODRAW', 'wxBU_LEFT', 'wxBU_RIGHT',
+                 'wxBU_TOP', 'wxBU_BOTTOM', 'wxBU_EXACTFIT']
 
 class xxxRadioButton(xxxObject):
     allParams = ['label', 'value', 'pos', 'size', 'style']
     paramDict = {'value': ParamBool}
     required = ['label']
-    winStyles = ['wxRB_GROUP']
+    winStyles = ['wxRB_GROUP', 'wxRB_SINGLE']
 
 class xxxSpinButton(xxxObject):
     allParams = ['value', 'min', 'max', 'pos', 'size', 'style']
@@ -627,10 +683,11 @@ class xxxStaticBox(xxxObject):
 
 class xxxRadioBox(xxxObject):
     allParams = ['label', 'content', 'selection', 'dimension', 'pos', 'size', 'style']
-    paramDict = {'dimension': ParamInt}
+    paramDict = {'dimension': ParamIntNN}
     required = ['label', 'content']
     default = {'content': '[]'}
-    winStyles = ['wxRA_SPECIFY_ROWS', 'wxRA_SPECIFY_COLS']
+    winStyles = ['wxRA_SPECIFY_ROWS', 'wxRA_SPECIFY_COLS', 'wxRA_HORIZONTAL',
+                 'wxRA_VERTICAL']
 
 class xxxCheckBox(xxxObject):
     allParams = ['label', 'checked', 'pos', 'size', 'style']
@@ -650,16 +707,14 @@ class xxxListBox(xxxObject):
     required = ['content']
     default = {'content': '[]'}
     winStyles = ['wxLB_SINGLE', 'wxLB_MULTIPLE', 'wxLB_EXTENDED', 'wxLB_HSCROLL',
-              'wxLB_ALWAYS_SB', 'wxLB_NEEDED_SB', 'wxLB_SORT']
+                 'wxLB_ALWAYS_SB', 'wxLB_NEEDED_SB', 'wxLB_SORT']
 
 class xxxCheckList(xxxObject):
     allParams = ['content', 'pos', 'size', 'style']
     required = ['content']
     default = {'content': '[]'}
-    winStyles = ['wxLC_LIST', 'wxLC_REPORT', 'wxLC_ICON', 'wxLC_SMALL_ICON',
-              'wxLC_ALIGN_TOP', 'wxLC_ALIGN_LEFT', 'wxLC_AUTOARRANGE',
-              'wxLC_USER_TEXT', 'wxLC_EDIT_LABELS', 'wxLC_NO_HEADER',
-              'wxLC_SINGLE_SEL', 'wxLC_SORT_ASCENDING', 'wxLC_SORT_DESCENDING']
+    winStyles = ['wxLB_SINGLE', 'wxLB_MULTIPLE', 'wxLB_EXTENDED', 'wxLB_HSCROLL',
+                 'wxLB_ALWAYS_SB', 'wxLB_NEEDED_SB', 'wxLB_SORT']
     paramDict = {'content': ParamContentCheckList}
 
 ################################################################################
@@ -711,7 +766,7 @@ class xxxParamMulti:
 class xxxFlexGridSizer(xxxGridSizer):
     specials = ['growablecols', 'growablerows']
     allParams = ['cols', 'rows', 'vgap', 'hgap'] + specials
-    paramDict = {'growablecols':ParamIntList, 'growablerows':ParamIntList}
+    paramDict = {'growablecols': ParamIntList, 'growablerows': ParamIntList}
     # Special processing for growable* parameters
     # (they are represented by several nodes)
     def special(self, tag, node):
@@ -800,7 +855,7 @@ class xxxSizerItemButton(xxxSizerItem):
             self.child.allParams = self.child.allParams[:]
             self.child.allParams.remove('pos')
 
-class xxxNotebookPage(xxxChildContainer):
+class xxxPage(xxxChildContainer):
     allParams = ['label', 'selected']
     paramDict = {'selected': ParamBool}
     required = ['label']
@@ -819,6 +874,11 @@ class xxxSpacer(xxxObject):
     allParams = ['size', 'option', 'flag', 'border']
     paramDict = {'option': ParamInt}
     default = {'size': '0,0'}
+    def __init__(self, parent, element, refElem=None):
+        # For GridBag sizer items, extra parameters added
+        if isinstance(parent, xxxGridBagSizer):
+            self.allParams = self.allParams + ['cellpos', 'cellspan']
+        xxxObject.__init__(self, parent, element, refElem)
 
 class xxxMenuBar(xxxContainer):
     allParams = ['style']
@@ -845,7 +905,7 @@ class xxxSeparator(xxxObject):
 
 class xxxUnknown(xxxObject):
     allParams = ['pos', 'size', 'style']
-    paramDict = {'style': ParamNonGenericStyle}    # no generic styles
+    winStyles = ['wxNO_FULL_REPAINT_ON_RESIZE']
 
 ################################################################################
 
@@ -855,6 +915,7 @@ xxxDict = {
     'wxFrame': xxxFrame,
     'tool': xxxTool,
     'wxToolBar': xxxToolBar,
+    'wxStatusBar': xxxStatusBar,
     'wxWizard': xxxWizard,
     'wxWizardPage': xxxWizardPage,
     'wxWizardPageSimple': xxxWizardPageSimple,
@@ -885,14 +946,19 @@ xxxDict = {
     'wxTreeCtrl': xxxTreeCtrl,
     'wxListCtrl': xxxListCtrl,
     'wxCheckListBox': xxxCheckList,
+    'notebookpage': xxxPage,
+    'choicebookpage': xxxPage,
+    'listbookpage': xxxPage,
     'wxNotebook': xxxNotebook,
+    'wxChoicebook': xxxChoicebook,
+    'wxListbook': xxxListbook,
     'wxSplitterWindow': xxxSplitterWindow,
-    'notebookpage': xxxNotebookPage,
     'wxHtmlWindow': xxxHtmlWindow,
     'wxCalendarCtrl': xxxCalendarCtrl,
     'wxGenericDirCtrl': xxxGenericDirCtrl,
     'wxSpinCtrl': xxxSpinCtrl,
     'wxScrolledWindow': xxxScrolledWindow,
+    'wxDatePickerCtrl': xxxDateCtrl,
 
     'wxBoxSizer': xxxBoxSizer,
     'wxStaticBoxSizer': xxxStaticBoxSizer,
@@ -980,6 +1046,14 @@ def MakeEmptyXXX(parent, className):
             pageElem = MakeEmptyDOM('notebookpage')
             pageElem.appendChild(elem)
             elem = pageElem
+        elif isinstance(parent, xxxChoicebook):
+            pageElem = MakeEmptyDOM('choicebookpage')
+            pageElem.appendChild(elem)
+            elem = pageElem
+        elif isinstance(parent, xxxListbook):
+            pageElem = MakeEmptyDOM('listbookpage')
+            pageElem.appendChild(elem)
+            elem = pageElem
     # Now just make object
     return MakeXXXFromDOM(parent, elem)
 
@@ -1001,6 +1075,14 @@ def MakeEmptyRefXXX(parent, ref):
             elem = sizerItemElem
         elif isinstance(parent, xxxNotebook):
             pageElem = MakeEmptyDOM('notebookpage')
+            pageElem.appendChild(elem)
+            elem = pageElem
+        elif isinstance(parent, xxxChoicebook):
+            pageElem = MakeEmptyDOM('choicebookpage')
+            pageElem.appendChild(elem)
+            elem = pageElem
+        elif isinstance(parent, xxxListbook):
+            pageElem = MakeEmptyDOM('listbookpage')
             pageElem.appendChild(elem)
             elem = pageElem
     # Now just make object

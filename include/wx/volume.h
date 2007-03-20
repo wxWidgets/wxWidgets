@@ -121,7 +121,7 @@ enum wxFSIconType
 };
 
 // wxFSVolume adds GetIcon() to wxFSVolumeBase
-class wxFSVolume : public wxFSVolumeBase
+class WXDLLIMPEXP_CORE wxFSVolume : public wxFSVolumeBase
 {
 public:
     wxFSVolume() : wxFSVolumeBase() { InitIcons(); }

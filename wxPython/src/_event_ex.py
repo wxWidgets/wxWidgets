@@ -32,6 +32,15 @@ class PyEventBinder(object):
         return success != 0
 
     
+    def _getEvtType(self):
+        """
+        Make it easy to get to the default wxEventType typeID for this
+        event binder.
+        """
+        return self.evtType[0]
+    
+    typeId = property(_getEvtType)
+
     def __call__(self, *args):
         """
         For backwards compatibility with the old EVT_* functions.

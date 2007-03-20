@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------
-# Name:        wxPython.tools.helpviewer
+# Name:        wx.tools.helpviewer
 # Purpose:     HTML Help viewer
 #
 # Author:      Robin Dunn
@@ -11,7 +11,7 @@
 #----------------------------------------------------------------------
 
 """
-helpviewer.py   --  Displays HTML Help in a wxHtmlHelpController window.
+helpviewer.py   --  Displays HTML Help in a wx.html.HtmlHelpController window.
 
 Usage:
     helpviewer [--cache=path] helpfile [helpfile(s)...]

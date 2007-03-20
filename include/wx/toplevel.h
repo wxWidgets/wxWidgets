@@ -206,6 +206,7 @@ public:
     // do the window-specific processing after processing the update event
     virtual void DoUpdateWindowUI(wxUpdateUIEvent& event) ;
 
+#if WX_USE_RESERVED_VIRTUALS
     // Reserved for future use
     virtual void ReservedTopLevelWindowFunc1() {}
     virtual void ReservedTopLevelWindowFunc2() {}
@@ -216,6 +217,7 @@ public:
     virtual void ReservedTopLevelWindowFunc7() {}
     virtual void ReservedTopLevelWindowFunc8() {}
     virtual void ReservedTopLevelWindowFunc9() {}
+#endif
 
 protected:
     // the frame client to screen translation should take account of the

@@ -152,6 +152,9 @@ DocStr(wxStyledTextCtrl::MarkerPrevious,
 DocStr(wxStyledTextCtrl::MarkerDefineBitmap,
 "Define a marker from a bitmap", "");
 
+DocStr(wxStyledTextCtrl::MarkerAddSet,
+"Add a set of markers to a line.", "");
+
 DocStr(wxStyledTextCtrl::SetMarginType,
 "Set a margin to be either numeric or symbolic.", "");
 
@@ -386,6 +389,20 @@ DocStr(wxStyledTextCtrl::AutoCompGetTypeSeparator,
 DocStr(wxStyledTextCtrl::AutoCompSetTypeSeparator,
 "Change the type-separator character in the string setting up an auto-completion list.
 Default is '?' but can be changed if items contain '?'.", "");
+
+DocStr(wxStyledTextCtrl::AutoCompSetMaxWidth,
+"Set the maximum width, in characters, of auto-completion and user lists.
+Set to 0 to autosize to fit longest item, which is the default.", "");
+
+DocStr(wxStyledTextCtrl::AutoCompGetMaxWidth,
+"Get the maximum width, in characters, of auto-completion and user lists.", "");
+
+DocStr(wxStyledTextCtrl::AutoCompSetMaxHeight,
+"Set the maximum height, in rows, of auto-completion and user lists.
+The default is 5 rows.", "");
+
+DocStr(wxStyledTextCtrl::AutoCompGetMaxHeight,
+"Set the maximum height, in rows, of auto-completion and user lists.", "");
 
 DocStr(wxStyledTextCtrl::SetIndent,
 "Set the number of spaces used for one level of indentation.", "");
@@ -642,6 +659,9 @@ DocStr(wxStyledTextCtrl::VisibleFromDocLine,
 
 DocStr(wxStyledTextCtrl::DocLineFromVisible,
 "Find the document line of a display line taking hidden lines into account.", "");
+
+DocStr(wxStyledTextCtrl::WrapCount,
+"The number of display lines needed to wrap a document line", "");
 
 DocStr(wxStyledTextCtrl::SetFoldLevel,
 "Set the fold level of a line.
@@ -1261,8 +1281,26 @@ DocStr(wxStyledTextCtrl::Allocate,
 "Enlarge the document to a particular size of text bytes.", "");
 
 DocStr(wxStyledTextCtrl::FindColumn,
-"Find the position of a column on a line taking into account tabs and 
+"Find the position of a column on a line taking into account tabs and
 multi-byte characters. If beyond end of line, return line end position.", "");
+
+DocStr(wxStyledTextCtrl::GetCaretSticky,
+"Can the caret preferred x position only be changed by explicit movement commands?", "");
+
+DocStr(wxStyledTextCtrl::SetCaretSticky,
+"Stop the caret preferred x position changing when the user types.", "");
+
+DocStr(wxStyledTextCtrl::ToggleCaretSticky,
+"Switch between sticky and non-sticky: meant to be bound to a key.", "");
+
+DocStr(wxStyledTextCtrl::SetPasteConvertEndings,
+"Enable/Disable convert-on-paste for line endings", "");
+
+DocStr(wxStyledTextCtrl::GetPasteConvertEndings,
+"Get convert-on-paste setting", "");
+
+DocStr(wxStyledTextCtrl::SelectionDuplicate,
+"Duplicate the selection. If selection empty duplicate the line containing the caret.", "");
 
 DocStr(wxStyledTextCtrl::StartRecord,
 "Start notifying the container of all key presses and commands.", "");
@@ -1287,3 +1325,17 @@ DocStr(wxStyledTextCtrl::SetKeyWords,
 
 DocStr(wxStyledTextCtrl::SetLexerLanguage,
 "Set the lexing language of the document based on string name.", "");
+
+DocStr(wxStyledTextCtrl::GetProperty,
+"Retrieve a 'property' value previously set with SetProperty.", "");
+
+DocStr(wxStyledTextCtrl::GetPropertyExpanded,
+"Retrieve a 'property' value previously set with SetProperty,
+with '$()' variable replacement on returned buffer.", "");
+
+DocStr(wxStyledTextCtrl::GetPropertyInt,
+"Retrieve a 'property' value previously set with SetProperty,
+interpreted as an int AFTER any '$()' variable replacement.", "");
+
+DocStr(wxStyledTextCtrl::GetStyleBitsNeeded,
+"Retrieve the number of bits the current lexer needs for styling.", "");

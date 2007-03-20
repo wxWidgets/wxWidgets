@@ -21,6 +21,7 @@
 #include "wx/os2/private.h"
 #include "wx/intl.h"
 #include "wx/apptrait.h"
+#include "wx/filename.h"
 
 #include <ctype.h>
 #ifdef __EMX__
@@ -84,7 +85,8 @@ bool wxGetHostName(
     wxChar*                         zSysname;
     const wxChar*                   zDefaultHost = _T("noname");
 
-    if ((zSysname = wxGetenv(_T("SYSTEM_NAME"))) == NULL)
+    if ((zSysname = wxGetenv(_T("SYSTEM_NAME"))) == NULL &&
+	(zSysname = wxGetenv(_T("HOSTNAME"))) == NULL)
     {
         ::PrfQueryProfileString( HINI_PROFILE
                                 ,(PSZ)WX_SECTION
@@ -365,19 +367,18 @@ void wxBell()
 wxString wxGetOsDescription()
 {
     wxString strVer(_T("OS/2"));
-    ULONG ulSysInfo[QSV_MAX] = {0};
+    ULONG ulSysInfo = 0;
 
-    if (::DosQuerySysInfo( 1L,
-                           QSV_MAX,
-                           (PVOID)ulSysInfo,
-                           sizeof(ULONG) * QSV_MAX
+    if (::DosQuerySysInfo( QSV_VERSION_MINOR,
+                           QSV_VERSION_MINOR,
+                           (PVOID)&ulSysInfo,
+                           sizeof(ULONG)
                          ) == 0L )
     {
         wxString ver;
-        ver.Printf( _T(" ver. %d.%d rev. %c"),
-                    int(ulSysInfo[QSV_VERSION_MAJOR] / 10),
-                    int(ulSysInfo[QSV_VERSION_MINOR]),
-                    char(ulSysInfo[QSV_VERSION_REVISION])
+        ver.Printf( _T(" ver. %d.%d"),
+                    int(ulSysInfo / 10),
+                    int(ulSysInfo % 10)
                   );
         strVer += ver;
     }
@@ -396,19 +397,19 @@ void wxAppTraits::TerminateGui(unsigned long WXUNUSED(ulHab))
 wxToolkitInfo & wxConsoleAppTraits::GetToolkitInfo()
 {
     static wxToolkitInfo  vInfo;
-    ULONG                 ulSysInfo[QSV_MAX] = {0};
+    ULONG                 ulSysInfo = 0;
     APIRET                ulrc;
 
     vInfo.name = _T("wxBase");
-    ulrc = ::DosQuerySysInfo( 1L
-                             ,QSV_MAX
-                             ,(PVOID)ulSysInfo
-                             ,sizeof(ULONG) * QSV_MAX
+    ulrc = ::DosQuerySysInfo( QSV_VERSION_MINOR,
+                              QSV_VERSION_MINOR,
+                              (PVOID)&ulSysInfo,
+                              sizeof(ULONG)
                             );
     if (ulrc == 0L)
     {
-        vInfo.versionMajor = ulSysInfo[QSV_VERSION_MAJOR] / 10;
-        vInfo.versionMinor = ulSysInfo[QSV_VERSION_MINOR];
+        vInfo.versionMajor = ulSysInfo / 10;
+        vInfo.versionMinor = ulSysInfo % 10;
     }
     vInfo.os = wxOS2_PM;
     return vInfo;
@@ -498,6 +499,51 @@ wxChar* wxGetUserHome ( const wxString &rUser )
     return (wxChar*)wxEmptyString; // No home known!
 }
 
+bool wxGetDiskSpace(const wxString& path,
+                    wxDiskspaceSize_t *pTotal,
+                    wxDiskspaceSize_t *pFree)
+{
+    if (path.empty())
+        return false;
+
+    wxFileName fn(path);
+    FSALLOCATE fsaBuf = {0};
+    APIRET rc = NO_ERROR;
+    ULONG disknum = 0;
+
+    fn.MakeAbsolute();
+
+    if (wxDirExists(fn.GetFullPath()) == false)
+        return false;
+
+    disknum = 1 + wxToupper(fn.GetVolume().GetChar(0)) - _T('A');
+
+    rc = ::DosQueryFSInfo(disknum,             // 1 = A, 2 = B, 3 = C, ...
+                          FSIL_ALLOC,          // allocation info
+                          (PVOID)&fsaBuf,
+                          sizeof(FSALLOCATE));
+
+    if (rc != NO_ERROR)
+        return false;
+    else
+    {
+        if(pTotal)
+        {
+           // to try to avoid 32-bit overflow, let's not multiply right away
+            // (num of alloc units)
+            *pTotal = fsaBuf.cUnit;  
+            // * (num of sectors per alloc unit) * (num of bytes per sector)
+            (*pTotal) *= fsaBuf.cSectorUnit * fsaBuf.cbSector;
+        }
+        if(pFree)
+        {
+            *pFree = fsaBuf.cUnitAvail;
+            (*pFree) *= fsaBuf.cSectorUnit * fsaBuf.cbSector;
+        }
+        return true;
+    }
+}
+ 
 wxString WXDLLEXPORT wxPMErrorToStr(ERRORID vError)
 {
     wxString                        sError;
@@ -546,6 +592,106 @@ wxString WXDLLEXPORT wxPMErrorToStr(ERRORID vError)
 
         case PMERR_ATOM_NAME_NOT_FOUND:
             sError = wxT("Valid name format, but cannot find name in atom table");
+            break;
+
+        case PMERR_INV_HPS:
+            sError = wxT("PMERR_INV_HPS");
+            break;
+
+        case PMERR_PS_BUSY:
+            sError = wxT("PMERR_PS_BUSY");
+            break;
+
+        case PMERR_INV_PRIMITIVE_TYPE:
+            sError = wxT("PMERR_INV_PRIMITIVE_TYPE");
+            break;
+
+        case PMERR_UNSUPPORTED_ATTR:
+            sError = wxT("PMERR_UNSUPPORTED_ATTR");
+            break;
+
+        case PMERR_INV_COLOR_ATTR:
+            sError = wxT("PMERR_INV_COLOR_ATTR");
+            break;
+
+        case PMERR_INV_BACKGROUND_COL_ATTR:
+            sError = wxT("PMERR_INV_BACKGROUND_COL_ATTR");
+            break;
+
+        case PMERR_INV_MIX_ATTR:
+            sError = wxT("PMERR_INV_MIX_ATTR");
+            break;
+
+        case PMERR_INV_LINE_WIDTH_ATTR:
+            sError = wxT("PMERR_INV_LINE_WIDTH_ATTR");
+            break;
+
+        case PMERR_INV_GEOM_LINE_WIDTH_ATTR:
+            sError = wxT("PMERR_INV_GEOM_LINE_WIDTH_ATTR");
+            break;
+
+        case PMERR_INV_LINE_TYPE_ATTR:
+            sError = wxT("PMERR_INV_LINE_TYPE_ATTR");
+            break;
+
+        case PMERR_INV_LINE_END_ATTR:
+            sError = wxT("PMERR_INV_LINE_END_ATTR");
+            break;
+
+        case PMERR_INV_LINE_JOIN_ATTR:
+            sError = wxT("PMERR_INV_LINE_JOIN_ATTR");
+            break;
+
+        case PMERR_INV_CHAR_SET_ATTR:
+            sError = wxT("PMERR_INV_CHAR_SET_ATTR");
+            break;
+
+        case PMERR_INV_CHAR_MODE_ATTR:
+            sError = wxT("PMERR_INV_CHAR_MODE_ATTR");
+            break;
+
+        case PMERR_INV_CHAR_DIRECTION_ATTR:
+            sError = wxT("PMERR_INV_CHAR_DIRECTION_ATTR");
+            break;
+
+        case PMERR_INV_CHAR_SHEAR_ATTR:
+            sError = wxT("PMERR_INV_CHAR_SHEAR_ATTR");
+            break;
+
+        case PMERR_INV_CHAR_ANGLE_ATTR:
+            sError = wxT("PMERR_INV_CHAR_ANGLE_ATTR");
+            break;
+
+        case PMERR_INV_MARKER_SET_ATTR:
+            sError = wxT("PMERR_INV_MARKER_SET_ATTR");
+            break;
+
+        case PMERR_INV_MARKER_SYMBOL_ATTR:
+            sError = wxT("PMERR_INV_MARKER_SYMBOL_ATTR");
+            break;
+
+        case PMERR_INV_PATTERN_SET_ATTR:
+            sError = wxT("PMERR_INV_PATTERN_SET_ATTR");
+            break;
+
+        case PMERR_INV_PATTERN_ATTR:
+            sError = wxT("PMERR_INV_PATTERN_ATTR");
+            break;
+
+        case PMERR_INV_COORDINATE:
+            sError = wxT("PMERR_INV_COORDINATE");
+            break;
+
+        case PMERR_UNSUPPORTED_ATTR_VALUE:
+            sError = wxT("PMERR_UNSUPPORTED_ATTR_VALUE");
+            break;
+
+        case PMERR_INV_PATTERN_SET_FONT:
+            sError = wxT("PMERR_INV_PATTERN_SET_FONT");
+            break;
+
+        case PMERR_HUGE_FONTS_NOT_SUPPORTED:
+            sError = wxT("PMERR_HUGE_FONTS_NOT_SUPPORTED");
             break;
 
         default:

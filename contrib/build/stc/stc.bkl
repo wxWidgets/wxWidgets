@@ -31,19 +31,24 @@
         scintilla/src/LexAsn1.cxx
         scintilla/src/LexBaan.cxx
         scintilla/src/LexBash.cxx
+        scintilla/src/LexBasic.cxx
         scintilla/src/LexBullant.cxx
         scintilla/src/LexCLW.cxx
         scintilla/src/LexCPP.cxx
         scintilla/src/LexCSS.cxx
+        scintilla/src/LexCaml.cxx
+        scintilla/src/LexCsound.cxx
         scintilla/src/LexConf.cxx
         scintilla/src/LexCrontab.cxx
         scintilla/src/LexEScript.cxx
         scintilla/src/LexEiffel.cxx
         scintilla/src/LexErlang.cxx
+        scintilla/src/LexFlagship.cxx
         scintilla/src/LexForth.cxx
         scintilla/src/LexFortran.cxx
         scintilla/src/LexGui4Cli.cxx
         scintilla/src/LexHTML.cxx
+        scintilla/src/LexHaskell.cxx
         scintilla/src/LexKix.cxx
         scintilla/src/LexLisp.cxx
         scintilla/src/LexLout.cxx
@@ -61,8 +66,11 @@
         scintilla/src/LexPascal.cxx
         scintilla/src/LexPerl.cxx
         scintilla/src/LexPython.cxx
+        scintilla/src/LexRebol.cxx
         scintilla/src/LexRuby.cxx
         scintilla/src/LexSQL.cxx
+        scintilla/src/LexSmalltalk.cxx
+        scintilla/src/LexTADS3.cxx
         scintilla/src/LexScriptol.cxx
         scintilla/src/LexSpecman.cxx
         scintilla/src/LexTeX.cxx

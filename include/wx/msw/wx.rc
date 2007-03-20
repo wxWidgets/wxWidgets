@@ -20,6 +20,8 @@
     #include "wx/msw/wince/wince.rc"
 #endif
 
+#include "wx/msw/rcdefs.h"
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // This is the MDI Window menu
@@ -75,6 +77,10 @@ wxICON_SMALL_CDROM              ICON "wx/msw/cdrom.ico"
 wxICON_SMALL_FLOPPY             ICON "wx/msw/floppy.ico"
 wxICON_SMALL_REMOVEABLE         ICON "wx/msw/removble.ico"
 
+// Low alphabetically to make it the default, but not so low as to
+// affect applications that use 'a'
+bICON                           ICON "wx/msw/std.ico"
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // Bitmaps
@@ -91,9 +97,16 @@ wxBITMAP_STD_COLOURS    BITMAP "wx/msw/colours.bmp"
 // Manifest file for Windows XP
 //
 
-#if !defined(__WIN64__)
 #if !defined(wxUSE_NO_MANIFEST) || (wxUSE_NO_MANIFEST == 0)
+#if !defined(WX_MSC_FULL_VER) || WX_MSC_FULL_VER < 140040130
+
+#if defined(WX_CPU_AMD64)
+1 24 "wx/msw/amd64.manifest"
+#elif defined(WX_CPU_IA64)
+1 24 "wx/msw/ia64.manifest"
+#elif defined(WX_CPU_X86)
 1 24 "wx/msw/wx.manifest"
 #endif
-#endif
 
+#endif // !defined(WX_MSC_FULL_VER) || WX_MSC_FULL_VER < 140040130
+#endif // !defined(wxUSE_NO_MANIFEST) || (wxUSE_NO_MANIFEST == 0)

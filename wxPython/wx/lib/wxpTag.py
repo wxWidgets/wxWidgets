@@ -25,7 +25,7 @@ You don\'t need to use anything in this module directly, just
 importing it will create the tag handler and add it to any
 wxHtmlWinParsers created from that time forth.
 
-Tags of the following form are recognised:
+Tags of the following form are recognised::
 
     <WXP class="classname" [module="modulename"] [width="num"] [height="num"]>
         <PARAM name="parameterName" value="parameterValue>
@@ -46,7 +46,7 @@ The name-value pairs in all the nested PARAM tags are packaged up as
 strings into a python dictionary and passed to the __init__ method of
 the class as keyword arguments.  This means that they are all
 accessible from the __init__ method as regular parameters, or you use
-the special Python **kw syntax in your __init__ method to get the
+the special Python \*\*kw syntax in your __init__ method to get the
 dictionary directly.
 
 Some parameter values are special and if they are present then they will
@@ -71,7 +71,7 @@ be converted from strings to alternate datatypes.  They are:
                  object and if it fails then the original string value
                  will be used instead.
 
-An example:
+An example::
 
     <wxp module="wx" class="Button">
         <param name="label" value="Click here">

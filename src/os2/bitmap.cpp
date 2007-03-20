@@ -1624,3 +1624,80 @@ HBITMAP wxInvertMask(
 
     return hBmpInvMask;
 } // end of WxWinGdi_InvertMask
+
+HBITMAP wxFlipBmp( HBITMAP hBmp, int nWidth, int nHeight )
+{
+    wxCHECK_MSG( hBmp, 0, _T("invalid bitmap in wxFlipBmp") );
+
+    //
+    // Get width/height from the bitmap if not given
+    //
+    if (!nWidth || !nHeight)
+    {
+        BITMAPINFOHEADER2 vBmhdr;
+
+        vBmhdr.cbFix  = 16;
+        ::GpiQueryBitmapInfoHeader( hBmp,
+                                    &vBmhdr );
+        nWidth        = (int)vBmhdr.cx;
+        nHeight       = (int)vBmhdr.cy;
+    }
+
+    BITMAPINFOHEADER2 vBmih;
+    SIZEL             vSize     = {0, 0};
+    DEVOPENSTRUC      vDop      = {0L, "DISPLAY", NULL, 0L, 0L, 0L, 0L, 0L, 0L};
+    HDC               hDCSrc    = ::DevOpenDC(  vHabmain,
+                                                OD_MEMORY,
+                                                "*",
+                                                5L,
+                                                (PDEVOPENDATA)&vDop,
+                                                NULLHANDLE  );
+    HDC               hDCDst    = ::DevOpenDC(  vHabmain,
+                                                OD_MEMORY,
+                                                "*",
+                                                5L,
+                                                (PDEVOPENDATA)&vDop,
+                                                NULLHANDLE  );
+    HPS               hPSSrc    = ::GpiCreatePS(  vHabmain,
+                                                  hDCSrc,
+                                                  &vSize,
+                                                  PU_PELS | GPIA_ASSOC  );
+    HPS               hPSDst    = ::GpiCreatePS(  vHabmain,
+                                                  hDCDst,
+                                                  &vSize,
+                                                  PU_PELS | GPIA_ASSOC  );
+    POINTL            vPoint[4] = { {0,      nHeight},
+                                    {nWidth, 0},
+                                    {0,      0},
+                                    {nWidth, nHeight} };
+
+    memset(&vBmih, '\0', 16);
+    vBmih.cbFix     = 16;
+    vBmih.cx        = nWidth;
+    vBmih.cy        = nHeight;
+    vBmih.cPlanes   = 1;
+    vBmih.cBitCount = 24;
+
+    HBITMAP hInvBmp = ::GpiCreateBitmap(  hPSDst,
+                                          &vBmih,
+                                          0L,
+                                          NULL,
+                                          NULL  );
+
+    ::GpiSetBitmap(hPSSrc, (HBITMAP) hBmp);
+    ::GpiSetBitmap(hPSDst, (HBITMAP) hInvBmp);
+
+    ::GpiBitBlt(  hPSDst,
+                  hPSSrc,
+                  4L,
+                  vPoint,
+                  ROP_SRCCOPY,
+                  BBO_IGNORE  );
+
+    ::GpiDestroyPS(hPSSrc);
+    ::GpiDestroyPS(hPSDst);
+    ::DevCloseDC(hDCSrc);
+    ::DevCloseDC(hDCDst);
+
+    return hInvBmp;
+} // end of wxFlipBmp

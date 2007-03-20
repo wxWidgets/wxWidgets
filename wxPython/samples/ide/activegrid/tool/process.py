@@ -407,7 +407,13 @@ _SaferCreateProcess(appName=%r,
                 elif env:
                     uenv = {}
                     for key, val in env.items():
-                        uenv[unicode(key)] = unicode(val)
+                        try:
+                            uenv[unicode(key)] = unicode(val)   # default encoding
+                        except UnicodeError:
+                            try:
+                                uenv[unicode(key, 'iso-8859-1')] = unicode(val, 'iso-8859-1')   # backup encoding
+                            except UnicodeError:
+                                log.warn('Skipping environment variable "%s" in execution process: unable to convert to unicode using either the default encoding or ISO-8859-1' % (key))
                     env = uenv
                 hProcess, hThread, processId, threadId\
                     = win32process.CreateProcess(appName, cmd, processSA,

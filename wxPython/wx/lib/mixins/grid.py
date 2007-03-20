@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------
-# Name:        wxPython.lib.mixins.grid
+# Name:        wx.lib.mixins.grid
 # Purpose:     Helpful mix-in classes for wx.Grid
 #
 # Author:      Robin Dunn
@@ -34,20 +34,15 @@ class GridAutoEditMixin:
     """
 
     def __init__(self):
-        self.__enableEdit = 0
-        self.Bind(wx.EVT_IDLE, self.__OnIdle)
         self.Bind(wx.grid.EVT_GRID_SELECT_CELL, self.__OnSelectCell)
 
 
-    def __OnIdle(self, evt):
-        if self.__enableEdit:
-            if self.CanEnableCellControl():
-                self.EnableCellEditControl()
-            self.__enableEdit = 0
-        evt.Skip()
+    def __DoEnableEdit(self):
+        if self.CanEnableCellControl():
+            self.EnableCellEditControl()
 
 
     def __OnSelectCell(self, evt):
-        self.__enableEdit = 1
+        wx.CallAfter(self.__DoEnableEdit)
         evt.Skip()
 

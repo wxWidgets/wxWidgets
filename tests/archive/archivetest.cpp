@@ -42,7 +42,7 @@ using std::auto_ptr;
     (__GNUC__ >= 3 || (__GNUC__ == 2 && __GNUC_MINOR__ >= 95))
 #   define WXARC_MEMBER_TEMPLATES
 #endif
-#if defined _MSC_VER && _MSC_VER >= 1310
+#if defined _MSC_VER && _MSC_VER >= 1310 && !defined __WIN64__
 #   define WXARC_MEMBER_TEMPLATES
 #endif
 #if defined __BORLANDC__ && __BORLANDC__ >= 0x530
@@ -196,7 +196,8 @@ TestInputStream::TestInputStream(const TestInputStream& in)
   : wxInputStream(),
     m_options(in.m_options),
     m_pos(in.m_pos),
-    m_size(in.m_size)
+    m_size(in.m_size),
+    m_eoftype(in.m_eoftype)
 {
     m_data = new char[m_size];
     memcpy(m_data, in.m_data, m_size);
@@ -215,6 +216,8 @@ void TestInputStream::Rewind()
         m_wbacksize = 0;
         m_wbackcur = 0;
     }
+
+    Reset();
 }
 
 void TestInputStream::SetData(TestOutputStream& out)
@@ -223,7 +226,6 @@ void TestInputStream::SetData(TestOutputStream& out)
     m_options = out.GetOptions();
     out.GetData(m_data, m_size);
     Rewind();
-    Reset();
 }
 
 wxFileOffset TestInputStream::OnSysSeek(wxFileOffset pos, wxSeekMode mode)
@@ -251,16 +253,26 @@ size_t TestInputStream::OnSysRead(void *buffer, size_t size)
 {
     if (!IsOk() || !size)
         return 0;
-    if (m_size <= m_pos) {
-        m_lasterror = wxSTREAM_EOF;
-        return 0;
+
+    size_t count;
+
+    if (m_pos >= m_size)
+        count = 0;
+    else if (m_size - m_pos < size)
+        count = m_size - m_pos;
+    else
+        count = size;
+
+    if (count) {
+        memcpy(buffer, m_data + m_pos, count);
+        m_pos += count;
     }
 
-    if (m_size - m_pos < size)
-        size = m_size - m_pos;
-    memcpy(buffer, m_data + m_pos, size);
-    m_pos += size;
-    return size;
+    if (((m_eoftype & AtLast) != 0 && m_pos >= m_size) || count < size)
+        m_lasterror = (m_eoftype & WithError) != 0 ?
+                        wxSTREAM_READ_ERROR : wxSTREAM_EOF;
+
+    return count;
 }
 
 
@@ -424,17 +436,16 @@ PFileOutputStream::~PFileOutputStream()
 template <class ClassFactoryT>
 ArchiveTestCase<ClassFactoryT>::ArchiveTestCase(
     string name,
-    int id,
     ClassFactoryT *factory,
     int options,
     const wxString& archiver,
     const wxString& unarchiver)
   :
-    CppUnit::TestCase(name),
+    CppUnit::TestCase(TestId::MakeId() + name),
     m_factory(factory),
     m_options(options),
     m_timeStamp(1, wxDateTime::Mar, 2004, 12, 0),
-    m_id(id),
+    m_id(TestId::GetId()),
     m_archiver(archiver),
     m_unarchiver(unarchiver)
 {
@@ -464,7 +475,7 @@ void ArchiveTestCase<ClassFactoryT>::runTest()
     // check archive could be created
     CPPUNIT_ASSERT(out.GetLength() > 0);
 
-    TestInputStream in(out);
+    TestInputStream in(out, (m_options & PipeIn) ? m_id % 3 : 0);
 
     TestIterator(in);
     in.Rewind();
@@ -929,7 +940,7 @@ void ArchiveTestCase<ClassFactoryT>::VerifyDir(wxString& path,
 
             const TestEntry& testEntry = *it->second;
 
-#ifndef __WXMSW__
+#if 0 //ndef __WXMSW__
             CPPUNIT_ASSERT_MESSAGE("timestamp check" + error_context,
                                    testEntry.GetDateTime() ==
                                    wxFileName(path).GetModificationTime());
@@ -1157,11 +1168,107 @@ void ArchiveTestCase<ClassFactoryT>::OnSetNotifier(EntryT& entry)
 
 
 ///////////////////////////////////////////////////////////////////////////////
+// An additional case to check that reading corrupt archives doesn't crash
+
+class CorruptionTestCase : public CppUnit::TestCase
+{
+public:
+    CorruptionTestCase(std::string name,
+                       wxArchiveClassFactory *factory,
+                       int options)
+      : CppUnit::TestCase(TestId::MakeId() + name),
+        m_factory(factory),
+        m_options(options)
+    { }
+
+protected:
+    // the entry point for the test
+    void runTest();
+
+    void CreateArchive(wxOutputStream& out);
+    void ExtractArchive(wxInputStream& in);
+
+    auto_ptr<wxArchiveClassFactory> m_factory;  // factory to make classes
+    int m_options;                              // test options
+};
+
+void CorruptionTestCase::runTest()
+{
+    TestOutputStream out(m_options);
+    CreateArchive(out);
+    TestInputStream in(out, 0);
+    wxFileOffset len = in.GetLength();
+
+    // try flipping one byte in the archive
+    for (int pos = 0; pos < len; pos++) {
+        char n = in[pos];
+        in[pos] = ~n;
+        ExtractArchive(in);
+        in.Rewind();
+        in[pos] = n;
+    }
+
+    // try zeroing one byte in the archive
+    for (int pos = 0; pos < len; pos++) {
+        char n = in[pos];
+        in[pos] = 0;
+        ExtractArchive(in);
+        in.Rewind();
+        in[pos] = n;
+    }
+
+    // try chopping the archive off
+    for (int size = 1; size <= len; size++) {
+        in.Chop(size);
+        ExtractArchive(in);
+        in.Rewind();
+    }
+}
+
+void CorruptionTestCase::CreateArchive(wxOutputStream& out)
+{
+    auto_ptr<wxArchiveOutputStream> arc(m_factory->NewStream(out));
+
+    arc->PutNextDirEntry(_T("dir"));
+    arc->PutNextEntry(_T("file"));
+    arc->Write(_T("foo"), 3);
+}
+
+void CorruptionTestCase::ExtractArchive(wxInputStream& in)
+{
+    auto_ptr<wxArchiveInputStream> arc(m_factory->NewStream(in));
+    auto_ptr<wxArchiveEntry> entry(arc->GetNextEntry());
+        
+    while (entry.get() != NULL) {
+        wxString name = entry->GetName();
+        char buf[1024];
+        
+        while (arc->IsOk())
+            arc->Read(buf, sizeof(buf));
+
+        entry = auto_ptr<wxArchiveEntry>(arc->GetNextEntry());
+    }
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
+// Make the ids
+
+int TestId::m_seed = 6219;
+
+// static
+string TestId::MakeId()
+{
+    m_seed = (m_seed * 171) % 30269;
+    return string(wxString::Format(_T("%-6d"), m_seed).mb_str());
+}
+
+
+///////////////////////////////////////////////////////////////////////////////
 // Suite base
 
 ArchiveTestSuite::ArchiveTestSuite(string name)
   : CppUnit::TestSuite("archive/" + name),
-    m_id(0),
     m_name(name.c_str(), *wxConvCurrent)
 {
     m_name = _T("wx") + m_name.Left(1).Upper() + m_name.Mid(1).Lower();
@@ -1209,21 +1316,35 @@ ArchiveTestSuite *ArchiveTestSuite::makeSuite()
                     string descr = Description(m_name, options,
                                                generic != 0, *j, *i);
 
-                    CppUnit::Test *test = makeTest(descr, m_id, options,
+                    CppUnit::Test *test = makeTest(descr, options,
                                                    generic != 0, *j, *i);
 
-                    if (test) {
+                    if (test)
                         addTest(test);
-                        m_id++;
-                    }
                 }
+
+    for (int options = 0; options <= PipeIn; options += PipeIn) 
+    {
+        wxObject *pObj = wxCreateDynamicObject(m_name + _T("ClassFactory"));
+        wxArchiveClassFactory *factory;
+        factory = wxDynamicCast(pObj, wxArchiveClassFactory);
+
+        if (factory) {
+            string descr(m_name.mb_str());
+            descr = "CorruptionTestCase (" + descr + ")";
+
+            if (options)
+                descr += " (PipeIn)";
+
+            addTest(new CorruptionTestCase(descr, factory, options));
+        }
+    }
 
     return this;
 }
 
 CppUnit::Test *ArchiveTestSuite::makeTest(
     string WXUNUSED(descr),
-    int WXUNUSED(id),
     int WXUNUSED(options),
     bool WXUNUSED(genericInterface),
     const wxString& WXUNUSED(archiver),
@@ -1241,7 +1362,6 @@ string ArchiveTestSuite::Description(const wxString& type,
                                      const wxString& unarchiver)
 {
     wxString descr;
-    descr << m_id << _T(" ");
 
     if (genericInterface)
         descr << _T("wxArchive (") << type << _T(")");
@@ -1270,7 +1390,7 @@ string ArchiveTestSuite::Description(const wxString& type,
 
     descr << optstr;
 
-    return (const char*)descr.mb_str();
+    return string(descr.mb_str());
 }
 
 

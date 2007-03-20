@@ -128,12 +128,8 @@ public:
 
            virtual int      GetColumnCount(void) const;
            virtual int      GetCount(void) const;
-    inline         int      GetNumberOfRowsOrCols(void) const { return m_nNoRowsOrCols; }
                    int      GetNumHor(void) const;
                    int      GetNumVer(void) const;
-                   void     GetPosition( int* pnX
-                                        ,int* pnY
-                                       ) const;
     inline         WXHWND*  GetRadioButtons(void) const { return m_ahRadioButtons; }
            virtual int      GetRowCount(void) const;
                    int      GetSelection(void) const;
@@ -141,12 +137,6 @@ public:
                                     ,int* pnY
                                    ) const;
     inline         int      GetSizeFlags(void) const { return m_nSizeFlags; }
-                   void     AdjustButtons( int nX
-                                          ,int nY
-                                          ,int nWidth
-                                          ,int nHeight
-                                          ,int nSizeFlags
-                                         );
                    wxString GetString(int nIndex) const;
            virtual wxString GetStringSelection(void) const;
 
@@ -154,7 +144,6 @@ public:
                    void     SetFocus(void);
            virtual bool     SetFont(const wxFont& rFont);
     inline         void     SetLabelFont(const wxFont& WXUNUSED(font)) {};
-    inline         void     SetNumberOfRowsOrCols(int nNum) { m_nNoRowsOrCols = nNum; }
                    void     SetSelection(int nIndex);
            virtual void     SetString( int             nNum
                                       ,const wxString& rsLabel
@@ -188,7 +177,6 @@ protected:
     int*                            m_pnRadioWidth;  // for bitmaps
     int*                            m_pnRadioHeight;
     int                             m_nNoItems;
-    int                             m_nNoRowsOrCols;
     int                             m_nSelectedButton;
     int                             m_nSizeFlags;
 

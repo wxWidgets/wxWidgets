@@ -77,7 +77,7 @@ init_destination (j_compress_ptr cinfo)
  * write it out when emptying the buffer externally.
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 empty_output_buffer (j_compress_ptr cinfo)
 {
   my_dest_ptr dest = (my_dest_ptr) cinfo->dest;

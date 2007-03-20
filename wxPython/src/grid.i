@@ -633,6 +633,7 @@ public:
                     rval = *ptr;
                 }
                 else if (PySequence_Check(ro) && PyObject_Length(ro) == 2) {
+                    PyErr_Clear();  // Clear the exception left over from wxPyConvertSwigPtr
                     PyObject* o1 = PySequence_GetItem(ro, 0);
                     PyObject* o2 = PySequence_GetItem(ro, 1);
                     if (PyNumber_Check(o1) && PyNumber_Check(o2))
@@ -1544,8 +1545,33 @@ public:
     void SetCol( int n );
     void Set( int row, int col );
 
-    bool operator==( const wxGridCellCoords& other ) const;
-    bool operator!=( const wxGridCellCoords& other ) const;
+    %extend {
+        KeepGIL(__eq__);
+        DocStr(__eq__, "Test for equality of GridCellCoords objects.", "");
+        bool __eq__(PyObject* other) {
+            wxGridCellCoords  temp, *obj = &temp;
+            if ( other == Py_None ) return false;
+            if ( ! wxGridCellCoords_helper(other, &obj) ) {
+                PyErr_Clear();
+                return false;
+            }
+            return self->operator==(*obj);
+        }
+
+        
+        KeepGIL(__ne__);
+        DocStr(__ne__, "Test for inequality of GridCellCoords objects.", "");
+        bool __ne__(PyObject* other) {
+            wxGridCellCoords  temp, *obj = &temp;
+            if ( other == Py_None ) return true;
+            if ( ! wxGridCellCoords_helper(other, &obj)) {
+                PyErr_Clear();
+                return true;
+            }
+            return self->operator!=(*obj);
+        }
+    }
+
 
     %extend {
         PyObject* Get() {

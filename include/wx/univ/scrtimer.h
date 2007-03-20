@@ -9,6 +9,9 @@
 // Licence:     wxWindows licence
 ///////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_UNIV_SCRTIMER_H
+#define _WX_UNIV_SCRTIMER_H
+
 // NB: this class is implemented in scrolbar.cpp
 
 #include "wx/timer.h"
@@ -39,3 +42,4 @@ protected:
     bool m_skipNext;
 };
 
+#endif // _WX_UNIV_SCRTIMER_H

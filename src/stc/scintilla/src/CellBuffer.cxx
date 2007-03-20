@@ -254,13 +254,14 @@ void LineVector::Remove(int pos) {
 		linesData[i] = linesData[i + 1];
 	}
 	if (levels) {
-		// Level information merges back onto previous line
-		int posAbove = pos - 1;
-		if (posAbove < 0)
-			posAbove = 0;
-		for (int j = posAbove; j < lines; j++) {
+		// Move up following lines but merge header flag from this line
+		// to line before to avoid a temporary disappearence causing expansion.
+		int firstHeader = levels[pos] & SC_FOLDLEVELHEADERFLAG;
+		for (int j = pos; j < lines; j++) {
 			levels[j] = levels[j + 1];
 		}
+		if (pos > 0)
+			levels[pos-1] |= firstHeader;
 	}
 	lines--;
 }
@@ -464,7 +465,7 @@ void UndoHistory::AppendAction(actionType at, int position, char *data, int leng
 			} else if (currentAction == savePoint) {
 				currentAction++;
 			} else if ((at == insertAction) &&
-			           (position != (actPrevious.position + actPrevious.lenData*2))) {
+			           (position != (actPrevious.position + actPrevious.lenData))) {
 				// Insertions must be immediately after to coalesce
 				currentAction++;
 			} else if (!actions[currentAction].mayCoalesce) {
@@ -472,7 +473,7 @@ void UndoHistory::AppendAction(actionType at, int position, char *data, int leng
 				currentAction++;
 			} else if (at == removeAction) {
 				if ((lengthData == 1) || (lengthData == 2)){
-					if ((position + lengthData * 2) == actPrevious.position) {
+					if ((position + lengthData) == actPrevious.position) {
 						; // Backspace -> OK
 					} else if (position == actPrevious.position) {
 						; // Delete -> OK
@@ -724,19 +725,12 @@ const char *CellBuffer::InsertString(int position, char *s, int insertLength) {
 			for (int i = 0; i < insertLength / 2; i++) {
 				data[i] = s[i * 2];
 			}
-			uh.AppendAction(insertAction, position, data, insertLength / 2);
+			uh.AppendAction(insertAction, position / 2, data, insertLength / 2);
 		}
 
 		BasicInsertString(position, s, insertLength);
 	}
 	return data;
-}
-
-void CellBuffer::InsertCharStyle(int position, char ch, char style) {
-	char s[2];
-	s[0] = ch;
-	s[1] = style;
-	InsertString(position*2, s, 2);
 }
 
 bool CellBuffer::SetStyleAt(int position, char style, char mask) {
@@ -768,6 +762,7 @@ bool CellBuffer::SetStyleFor(int position, int lengthStyle, char style, char mas
 
 const char *CellBuffer::DeleteChars(int position, int deleteLength) {
 	// InsertString and DeleteChars are the bottleneck though which all changes occur
+	PLATFORM_ASSERT(deleteLength > 0);
 	char *data = 0;
 	if (!readOnly) {
 		if (collectingUndo) {
@@ -776,7 +771,7 @@ const char *CellBuffer::DeleteChars(int position, int deleteLength) {
 			for (int i = 0; i < deleteLength / 2; i++) {
 				data[i] = ByteAt(position + i * 2);
 			}
-			uh.AppendAction(removeAction, position, data, deleteLength / 2);
+			uh.AppendAction(removeAction, position / 2, data, deleteLength / 2);
 		}
 
 		BasicDeleteChars(position, deleteLength);
@@ -874,6 +869,7 @@ void CellBuffer::BasicInsertString(int position, char *s, int insertLength) {
 	//Platform::DebugPrintf("Inserting at %d for %d\n", position, insertLength);
 	if (insertLength == 0)
 		return ;
+	PLATFORM_ASSERT(insertLength > 0);
 	RoomFor(insertLength);
 	GapTo(position);
 
@@ -1028,7 +1024,7 @@ void CellBuffer::DeleteUndoHistory() {
 }
 
 bool CellBuffer::CanUndo() {
-	return (!readOnly) && (uh.CanUndo());
+	return uh.CanUndo();
 }
 
 int CellBuffer::StartUndo() {
@@ -1042,21 +1038,21 @@ const Action &CellBuffer::GetUndoStep() const {
 void CellBuffer::PerformUndoStep() {
 	const Action &actionStep = uh.GetUndoStep();
 	if (actionStep.at == insertAction) {
-		BasicDeleteChars(actionStep.position, actionStep.lenData*2);
+		BasicDeleteChars(actionStep.position*2, actionStep.lenData*2);
 	} else if (actionStep.at == removeAction) {
 		char *styledData = new char[actionStep.lenData * 2];
 		for (int i = 0; i < actionStep.lenData; i++) {
 			styledData[i*2] = actionStep.data[i];
 			styledData[i*2 + 1] = 0;
 		}
-		BasicInsertString(actionStep.position, styledData, actionStep.lenData*2);
+		BasicInsertString(actionStep.position*2, styledData, actionStep.lenData*2);
 		delete []styledData;
 	}
 	uh.CompletedUndoStep();
 }
 
 bool CellBuffer::CanRedo() {
-	return (!readOnly) && (uh.CanRedo());
+	return uh.CanRedo();
 }
 
 int CellBuffer::StartRedo() {
@@ -1075,10 +1071,10 @@ void CellBuffer::PerformRedoStep() {
 			styledData[i*2] = actionStep.data[i];
 			styledData[i*2 + 1] = 0;
 		}
-		BasicInsertString(actionStep.position, styledData, actionStep.lenData*2);
+		BasicInsertString(actionStep.position*2, styledData, actionStep.lenData*2);
 		delete []styledData;
 	} else if (actionStep.at == removeAction) {
-		BasicDeleteChars(actionStep.position, actionStep.lenData*2);
+		BasicDeleteChars(actionStep.position*2, actionStep.lenData*2);
 	}
 	uh.CompletedRedoStep();
 }

@@ -86,8 +86,11 @@ wxSockAddress::~wxSockAddress()
 
 void wxSockAddress::SetAddress(GAddress *address)
 {
-  GAddress_destroy(m_address);
-  m_address = GAddress_copy(address);
+  if (address != m_address)
+  {
+    GAddress_destroy(m_address);
+    m_address = GAddress_copy(address);
+  }
 }
 
 wxSockAddress& wxSockAddress::operator=(const wxSockAddress& addr)

@@ -41,6 +41,7 @@
 #include "wx/textctrl.h"
 
 #include "wx/calctrl.h"
+#include "wx/settings.h"
 
 #if wxUSE_DATEPICKCTRL
     #include "wx/datectrl.h"
@@ -50,6 +51,8 @@
 #endif // wxUSE_DATEPICKCTRL
 
 #include "../sample.xpm"
+
+#define USE_SIZABLE_CALENDAR 0
 
 // ----------------------------------------------------------------------------
 // private classes
@@ -101,7 +104,7 @@ class MyFrame : public wxFrame
 {
 public:
     // ctor(s)
-    MyFrame(const wxString& title, const wxPoint& pos, const wxSize& size);
+    MyFrame(const wxString& title, const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize);
 
     // event handlers (these functions should _not_ be virtual)
     void OnQuit(wxCommandEvent& event);
@@ -254,8 +257,11 @@ IMPLEMENT_APP(MyApp)
 bool MyApp::OnInit()
 {
     // Create the main application window
-    MyFrame *frame = new MyFrame(_T("Calendar wxWidgets sample"),
-                                 wxPoint(50, 50), wxSize(450, 340));
+    MyFrame *frame = new MyFrame(_T("Calendar wxWidgets sample")
+#ifndef __WXWINCE__
+                                 ,wxPoint(50, 50), wxSize(450, 340)
+#endif
+								 );
 
     frame->Show(true);
 
@@ -489,10 +495,20 @@ MyPanel::MyPanel(wxFrame *frame)
                                     wxCAL_SHOW_HOLIDAYS |
                                     wxRAISED_BORDER);
 
-    wxBoxSizer *m_sizer = new wxBoxSizer( wxHORIZONTAL );
+#if USE_SIZABLE_CALENDAR
+    wxCalendarCtrl *sizableCalendar = new wxCalendarCtrl(this, wxID_ANY);
+#endif
+
+    // adjust to vertical/horizontal display, check mostly dedicated to WinCE
+    bool horizontal = ( wxSystemSettings::GetMetric(wxSYS_SCREEN_X) > wxSystemSettings::GetMetric(wxSYS_SCREEN_Y) );
+    wxBoxSizer *m_sizer = new wxBoxSizer( horizontal ? wxHORIZONTAL : wxVERTICAL );
 
     m_sizer->Add(m_date, 0, wxALIGN_CENTER | wxALL, 10 );
     m_sizer->Add(m_calendar, 0, wxALIGN_CENTER | wxALIGN_LEFT);
+
+#if USE_SIZABLE_CALENDAR
+    m_sizer->Add(sizableCalendar, 1, wxEXPAND);
+#endif
 
     SetSizer( m_sizer );
     m_sizer->SetSizeHints( this );
@@ -639,4 +655,3 @@ void MyDialog::OnDateChange(wxDateEvent& event)
 }
 
 #endif // wxUSE_DATEPICKCTRL
-

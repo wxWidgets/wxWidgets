@@ -35,8 +35,6 @@ int wxMessageDialog::ShowModal()
 {
     int resultbutton = wxID_CANCEL ;
 
-    short result ;
-
     const long style = GetMessageDialogStyle();
 
     wxASSERT_MSG( ( style & 0x3F ) != wxYES , wxT("this style is not supported on mac") ) ;
@@ -50,6 +48,65 @@ int wxMessageDialog::ShowModal()
         alertType = kAlertNoteAlert ;
     else if (style & wxICON_QUESTION)
         alertType = kAlertCautionAlert ;
+
+#if TARGET_API_MAC_OSX
+    CFStringRef defaultButtonTitle = NULL ;
+    CFStringRef alternateButtonTitle = NULL ;
+    CFStringRef otherButtonTitle = NULL ;
+
+    wxMacCFStringHolder cfTitle(m_caption , m_font.GetEncoding());
+    wxMacCFStringHolder cfText(m_message , m_font.GetEncoding());
+
+    wxMacCFStringHolder cfNoString(_("No") , m_font.GetEncoding()) ;
+    wxMacCFStringHolder cfYesString( _("Yes") , m_font.GetEncoding()) ;
+    wxMacCFStringHolder cfOKString( _("OK") , m_font.GetEncoding()) ;    
+    wxMacCFStringHolder cfCancelString( _("Cancel") , m_font.GetEncoding()) ;    
+    
+    int buttonId[4] = { 0 , 0 , 0 , wxID_CANCEL /* time-out */ } ;
+    
+    if (style & wxYES_NO)
+    {
+        if ( style & wxNO_DEFAULT )
+        {
+            defaultButtonTitle = cfNoString ;
+            alternateButtonTitle = cfYesString ;
+            buttonId[0] = wxID_NO ;
+            buttonId[1] = wxID_YES ;
+        }
+        else
+        {
+            defaultButtonTitle = cfYesString ;
+            alternateButtonTitle = cfNoString ;
+            buttonId[0] = wxID_YES ;
+            buttonId[1] = wxID_NO ;
+        }
+        if (style & wxCANCEL)
+        {
+            otherButtonTitle = cfCancelString ;
+            buttonId[2] = wxID_CANCEL ;
+        }
+    }
+    else
+    {
+        // the msw implementation even shows an ok button if it is not specified, we'll do the same
+        buttonId[0] = wxID_OK ;
+        // using null as default title does not work on earlier systems
+        defaultButtonTitle = cfOKString;
+        if (style & wxCANCEL)
+        {
+            alternateButtonTitle = cfCancelString ;
+            buttonId[1] = wxID_CANCEL ;
+        }
+    }
+
+    CFOptionFlags exitButton ;
+    OSStatus err = CFUserNotificationDisplayAlert ( 0 , alertType , NULL , NULL , NULL , cfTitle , cfText ,
+                                                    defaultButtonTitle , alternateButtonTitle , otherButtonTitle , &exitButton );
+    if ( err == noErr )
+        resultbutton = buttonId[exitButton] ;
+
+#else
+    short result ;
 
 #if TARGET_CARBON
     if ( UMAGetSystemVersion() >= 0x1000 )
@@ -259,6 +316,7 @@ int wxMessageDialog::ShowModal()
             }
         }
     }
+#endif
 
     return resultbutton ;
 }

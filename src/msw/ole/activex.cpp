@@ -24,8 +24,13 @@
 #endif
 
 #include "wx/dcclient.h"
-#include "wx/msw/ole/activex.h"
+#include "wx/math.h"
 
+// I don't know why members of tagVARIANT aren't found when compiling
+// with Wine
+#ifndef __WINE__
+
+#include "wx/msw/ole/activex.h"
 
 //+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //
@@ -58,21 +63,21 @@
         if (! ppvObject)\
         {\
             return E_FAIL;\
-        };\
+        }\
         const char *desc = NULL;\
         cls::_GetInterface(this, iid, ppvObject, desc);\
         if (! *ppvObject)\
         {\
             return E_NOINTERFACE;\
-        };\
+        }\
         ((IUnknown * )(*ppvObject))->AddRef();\
         return S_OK;\
-    };\
+    }\
     ULONG STDMETHODCALLTYPE cls::AddRef()\
     {\
         InterlockedIncrement(&refCount.l);\
         return refCount.l;\
-    };\
+    }\
     ULONG STDMETHODCALLTYPE cls::Release()\
     {\
         if (refCount.l > 0)\
@@ -82,7 +87,7 @@
             {\
                 delete this;\
                 return 0;\
-            };\
+            }\
             return refCount.l;\
         }\
         else\
@@ -92,7 +97,7 @@
     {\
         InterlockedIncrement(&lockCount.l);\
         return lockCount.l;\
-    };\
+    }\
     ULONG STDMETHODCALLTYPE cls::ReleaseLock()\
     {\
         if (lockCount.l > 0)\
@@ -325,7 +330,7 @@ public:
         if (! SUCCEEDED(hr))
         {
             return E_UNEXPECTED;
-        };
+        }
 
         hr = QueryInterface(IID_IOleInPlaceUIWindow, (void **) ppDoc);
         if (! SUCCEEDED(hr))
@@ -333,7 +338,7 @@ public:
             (*ppFrame)->Release();
             *ppFrame = NULL;
             return E_UNEXPECTED;
-        };
+        }
 
         RECT rect;
         ::GetClientRect(m_hWndParent, &rect);
@@ -342,13 +347,13 @@ public:
             lprcPosRect->left = lprcPosRect->top = 0;
             lprcPosRect->right = rect.right;
             lprcPosRect->bottom = rect.bottom;
-        };
+        }
         if (lprcClipRect)
         {
             lprcClipRect->left = lprcClipRect->top = 0;
             lprcClipRect->right = rect.right;
             lprcClipRect->bottom = rect.bottom;
-        };
+        }
 
         memset(lpFrameInfo, 0, sizeof(OLEINPLACEFRAMEINFO));
         lpFrameInfo->cb = sizeof(OLEINPLACEFRAMEINFO);
@@ -375,7 +380,17 @@ public:
     //*************************IOleInPlaceSiteEx***********************
     HRESULT STDMETHODCALLTYPE OnInPlaceActivateEx(BOOL * pfNoRedraw, DWORD)
     {
+#ifdef __WXWINCE__
+        IRunnableObject* runnable = NULL;
+        HRESULT hr = QueryInterface(
+            IID_IRunnableObject, (void**)(& runnable));
+        if (SUCCEEDED(hr))
+        {
+            runnable->LockRunning(TRUE, FALSE);
+        }
+#else
         OleLockRunning(m_window->m_ActiveX, TRUE, FALSE);
+#endif
         if (pfNoRedraw)
             (*pfNoRedraw) = FALSE;
         return S_OK;
@@ -383,7 +398,17 @@ public:
 
     HRESULT STDMETHODCALLTYPE OnInPlaceDeactivateEx(BOOL)
     {
+#ifdef __WXWINCE__
+        IRunnableObject* runnable = NULL;
+        HRESULT hr = QueryInterface(
+            IID_IRunnableObject, (void**)(& runnable));
+        if (SUCCEEDED(hr))
+        {
+            runnable->LockRunning(FALSE, FALSE);
+        }
+#else
         OleLockRunning(m_window->m_ActiveX, FALSE, FALSE);
+#endif
         return S_OK;
     }
     STDMETHOD(RequestUIActivate)(){ return S_OK;}
@@ -437,7 +462,9 @@ public:
     HRESULT STDMETHODCALLTYPE LockContainer(BOOL){return S_OK;}
     //********************IOleItemContainer***************************
     HRESULT STDMETHODCALLTYPE
-    #ifdef _UNICODE
+    #if 0 // defined(__WXWINCE__) && __VISUALC__ < 1400
+    GetObject
+    #elif defined(_UNICODE)
     GetObjectW
     #else
     GetObjectA
@@ -535,11 +562,11 @@ public:
                 return E_FAIL;
 
             m_window->m_docView->SetInPlaceSite(inPlaceSite);
-        };
+        }
 
         m_window->m_docView->UIActivate(TRUE);
         return S_OK;
-    };
+    }
 
 
 protected:
@@ -578,7 +605,7 @@ DEFINE_OLE_TABLE(FrameSite)
     OLE_IINTERFACE(IOleDocumentSite)
     OLE_IINTERFACE(IAdviseSink)
     OLE_IINTERFACE(IOleControlSite)
-END_OLE_TABLE;
+END_OLE_TABLE
 
 
 wxActiveXContainer::wxActiveXContainer(wxWindow * parent, REFIID iid, IUnknown* pUnk)
@@ -741,7 +768,7 @@ static void PixelsToHimetric(SIZEL &sz)
     };
 
 #define HIMETRIC_INCH   2540
-#define CONVERT(x, logpixels)   MulDiv(HIMETRIC_INCH, (x), (logpixels))
+#define CONVERT(x, logpixels)   wxMulDivInt32(HIMETRIC_INCH, (x), (logpixels))
 
     sz.cx = CONVERT(sz.cx, logX);
     sz.cy = CONVERT(sz.cy, logY);
@@ -799,7 +826,11 @@ void wxActiveXContainer::OnPaint(wxPaintEvent& WXUNUSED(event))
         posRect.right = w;
         posRect.bottom = h;
 
+#if !(defined(_WIN32_WCE) && _WIN32_WCE < 400)
         ::RedrawWindow(m_oleObjectHWND, NULL, NULL, RDW_INTERNALPAINT);
+#else
+        ::InvalidateRect(m_oleObjectHWND, NULL, false);
+#endif
         RECTL *prcBounds = (RECTL *) &posRect;
         m_viewObject->Draw(DVASPECT_CONTENT, -1, NULL, NULL, NULL,
             (HDC)dc.GetHDC(), prcBounds, NULL, NULL, 0);
@@ -826,3 +857,6 @@ void wxActiveXContainer::OnKillFocus(wxFocusEvent& event)
 
     event.Skip();
 }
+
+#endif
+// __WINE__

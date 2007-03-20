@@ -678,6 +678,7 @@ class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
 ##            dbg("old_decimalchar: '%s'" % old_decimalchar)
             groupchar = old_groupchar
             decimalchar = old_decimalchar
+            old_numvalue = self._GetNumValue(self._GetValue())
 
             if kwargs.has_key('groupChar'):
                 maskededit_kwargs['groupChar'] = kwargs['groupChar']
@@ -762,12 +763,6 @@ class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
         if maskededit_kwargs.keys():
             self.SetCtrlParameters(**maskededit_kwargs)
 
-        # Record end of integer and place cursor there:
-        integerEnd = self._fields[0]._extent[1]
-        self.SetInsertionPoint(0)
-        self.SetInsertionPoint(integerEnd)
-        self.SetSelection(integerEnd, integerEnd)
-
         # Go ensure all the format codes necessary are present:
         orig_intformat = intformat = self.GetFieldParameter(0, 'formatcodes')
         if 'r' not in intformat:
@@ -779,6 +774,17 @@ class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
                 self.SetFieldParameters(0, formatcodes=intformat)
             else:
                 self.SetCtrlParameters(formatcodes=intformat)
+
+        # Record end of integer and place cursor there unless selecting, or select entire field:
+        integerStart, integerEnd = self._fields[0]._extent
+        if not self._fields[0]._selectOnFieldEntry:
+            self.SetInsertionPoint(0)
+            self.SetInsertionPoint(integerEnd)
+            self.SetSelection(integerEnd, integerEnd)
+        else:
+            self.SetInsertionPoint(0)   # include any sign
+            self.SetSelection(0, integerEnd)
+
 
         # Set min and max as appropriate:
         if kwargs.has_key('min'):
@@ -824,12 +830,20 @@ class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
         # Ensure current value of control obeys any new restrictions imposed:
         text = self._GetValue()
 ##        dbg('text value: "%s"' % text)
-        if kwargs.has_key('groupChar') and text.find(old_groupchar) != -1:
-            text = text.replace(old_groupchar, self._groupChar)
-        if kwargs.has_key('decimalChar') and text.find(old_decimalchar) != -1:
-            text = text.replace(old_decimalchar, self._decimalChar)
+        if kwargs.has_key('groupChar') and self._groupChar != old_groupchar and text.find(old_groupchar) != -1:
+            text = old_numvalue
+##            dbg('old_groupchar: "%s" newgroupchar: "%s"' % (old_groupchar, self._groupChar))
+        if kwargs.has_key('decimalChar') and self._decimalChar != old_decimalchar and text.find(old_decimalchar) != -1:
+            text = old_numvalue
+        
         if text != self._GetValue():
-            wx.TextCtrl.SetValue(self, text)
+            if self._decimalChar != '.':
+                # ensure latest decimal char is in "numeric value" so it won't be removed
+                # when going to the GUI:
+                text = text.replace('.', self._decimalChar)
+            newtext = self._toGUI(text)
+##            dbg('calling wx.TextCtrl.SetValue(self, %s)' % newtext)
+            wx.TextCtrl.SetValue(self, newtext)
 
         value = self.GetValue()
 
@@ -933,6 +947,7 @@ class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
 ##                dbg('calling base BaseMaskedTextCtrl._SetValue(self, "%s")' % value)
                 BaseMaskedTextCtrl._SetValue(self, value)
                 self.Refresh()
+##                dbg(indent=0)
                 return
             elif self._min > 0 and self.IsLimited():
                 replacement = self._min
@@ -950,6 +965,11 @@ class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
 
 ##            dbg('integer: "%s"' % int)
             try:
+                # if a float value, this will implicitly verify against limits,
+                # and generate an exception if out-of-bounds and limited
+                # if not a float, it will just return 0.0, and we therefore
+                # have to test against the limits explicitly after testing
+                # special cases for handling -0 and empty controls...
                 fracval = self.GetFraction(value)
             except ValueError, e:
 ##                dbg('Exception:', e, 'must be out of bounds; disallow value')
@@ -957,13 +977,20 @@ class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
 ##                dbg(indent=0)
                 return
 
-            if fracval == 0.0:
+            if fracval == 0.0: # (can be 0 for floats as well as integers)
+                # we have to do special testing to account for emptying controls, or -0
+                # and/or just leaving the sign character or changing the sign,
+                # so we can do appropriate things to the value of the control,
+                # we can't just immediately test to see if the value is valid
+                # If all of these special cases are not in play, THEN we can do 
+                # a limits check and see if the value is otherwise ok...
+
 ##                dbg('self._isNeg?', self._isNeg)
                 if int == '-' and self._oldvalue < 0 and not self._typedSign:
 ##                    dbg('just a negative sign; old value < 0; setting replacement of 0')
                     replacement = 0
                     self._isNeg = False
-                elif int[:2] == '-0' and self._fractionWidth == 0:
+                elif int[:2] == '-0': 
                     if self._oldvalue < 0:
 ##                        dbg('-0; setting replacement of 0')
                         replacement = 0
@@ -978,7 +1005,7 @@ class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
 ##                        dbg(indent=0)
                         return
 
-                elif int == '-' and (self._oldvalue >= 0 or self._typedSign) and self._fractionWidth == 0:
+                elif int == '-' and (self._oldvalue >= 0 or self._typedSign):
                     if not self._limited or (self._min < -1 and self._max >= -1):
 ##                        dbg('just a negative sign; setting replacement of -1')
                         replacement = -1
@@ -1016,13 +1043,21 @@ class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
 ##                        dbg(indent=0)
                         return
 
-                    if int[0] == '0' and len(int) > 1:
-##                        dbg('numvalue: "%s"' % numvalue.replace(' ', ''))
+##                    dbg('numvalue: "%s"' % numvalue.replace(' ', ''))
+                    # finally, (potentially re) verify that numvalue will pass any limits imposed:
+                    try:
                         if self._fractionWidth:
                             value = self._toGUI(string.atof(numvalue))
                         else:
                             value = self._toGUI(string.atol(numvalue))
+                    except ValueError, e:
+##                        dbg('Exception:', e, 'must be out of bounds; disallow value')
+                        self._disallowValue()
+##                        dbg(indent=0)
+                        return
+
 ##                        dbg('modified value: "%s"' % value)
+
 
         self._typedSign = False     # reset state var
 
@@ -1563,7 +1598,12 @@ class NumCtrl(BaseMaskedTextCtrl, NumCtrlAccessorsMixin):
         #
         field = self._FindField(sel_start)
         edit_start, edit_end = field._extent
-        paste_text = paste_text.replace(self._groupChar, '').replace('(', '-').replace(')','')
+
+        # handle possibility of groupChar being a space:
+        newtext = paste_text.lstrip()
+        lspace_count = len(paste_text) - len(newtext)
+        paste_text = ' ' * lspace_count  + newtext.replace(self._groupChar, '').replace('(', '-').replace(')','')
+
         if field._insertRight and self._groupDigits:
             # want to paste to the left; see if it will fit:
             left_text = old_value[edit_start:sel_start].lstrip()
@@ -1753,6 +1793,9 @@ __i=0
 ## =============================##
 ##   1. Add support for printf-style format specification.
 ##   2. Add option for repositioning on 'illegal' insertion point.
+##
+## Version 1.3
+##   1. fixed to allow space for a group char.
 ##
 ## Version 1.2
 ##   1. Allowed select/replace digits.

@@ -21,7 +21,8 @@ some simplifications, enhancements, and differences in
 behaviour.
 
 For building instructions, see docs/msw/wince in the
-distribution. The rest of this section documents issues you
+distribution, also the section about Visual Studio 2005 project
+files below. The rest of this section documents issues you
 need to be aware of when programming for Windows CE devices.
 
 \subsubsection{General issues for wxWinCE programming}
@@ -228,6 +229,14 @@ the Ctrl+Q accelerator can be used to quit the application, so wxWidgets
 defines this accelerator by default and if your application handles
 wxID\_EXIT, it will do the right thing.
 
+\subsubsection{Context menus in wxWinCE}
+
+To enable context menus in PocketPC, you currently need to call wxWindow::EnableContextMenu,
+a wxWinCE-only function. Otherwise the context menu event (wxContextMenuEvent) will
+never be sent. This API is subject to change.
+
+Context menus are not supported in Smartphone.
+
 \subsubsection{Control differences on wxWinCE}
 
 These controls and styles are specific to wxWinCE:
@@ -242,8 +251,6 @@ These controls are missing from wxWinCE:
 
 \itemsep=0pt
 \begin{itemize}
-\item {\bf wxCheckListBox} This can be implemented using a wxListCtrl in report mode
-with checked/unchecked images.
 \item {\bf MDI classes} MDI is not supported under Windows CE.
 \item {\bf wxMiniFrame} Not supported under Windows CE.
 \end{itemize}
@@ -302,8 +309,11 @@ Allowing the user to access files on memory cards, or on arbitrary
 parts of the filesystem, is a pain; the standard file dialog only
 shows folders under My Documents or folders on memory cards
 (not the system or card root directory, for example). This is
-a known problem for PocketPC developers, and a wxFileDialog
-replacement will need to be written.
+a known problem for PocketPC developers.
+
+If you need a file dialog that allows access to all folders,
+you can use wxGenericFileDialog instead. You will need to include 
+{\tt wx/generic/filedlgg.h}.
 
 \subsubsection{Embedded Visual C++ Issues}
 
@@ -323,6 +333,29 @@ Otherwise you will get linker errors similar to this:
 wxwince26d.lib(control.obj) : error LNK2001: unresolved external symbol "const type_info::`vftable'" (??_7type_info@@6B@)
 \end{verbatim}
 
+\wxheading{Windows Mobile 5.0 emulator}
+
+Note that there is no separate emulator configuration for Windows Mobile 5.0: the
+emulator runs the ARM code directly.
+
+\wxheading{Visual Studio 2005 project files}
+
+Unfortunately, Visual Studio 2005, required to build Windows Mobile 5.0 applications,
+doesn't do a perfect job of converting the project files from eVC++ format.
+
+When you have converted the wxWidgets workspace, edit the configuration properties
+for each configuration and in the Librarian, add a relative path ..$\backslash$..$\backslash$lib to
+each library path. For example: {\tt ..$\backslash$\$(PlatformName)$\backslash$\$(ConfigurationName)$\backslash$wx\_mono.lib}.
+
+Then, for a sample you want to compile, edit the configuration properties
+and make sure {\tt ..$\backslash$..$\backslash$lib$\backslash$\$(PlatformName)$\backslash$\$(ConfigurationName)} is in the Linker/General/Additional
+Library Directories property. Also change the Linker/Input/Additional Dependencies
+property to something like {\tt coredll.lib wx\_mono.lib wx\_wxjpeg.lib wx\_wxpng.lib wx\_wxzlib.lib wx\_wxexpat.lib commctrl.lib winsock.lib wininet.lib}\rtfsp
+(since the library names in the wxWidgets workspace were changed by VS 2005).
+
+Alternately, you could could edit all the names to be identical to the original eVC++
+names, but this will probably be more fiddly.
+
 \subsubsection{Remaining issues}
 
 These are some of the remaining problems to be sorted out, and features
@@ -330,8 +363,13 @@ to be supported.
 
 \itemsep=0pt
 \begin{itemize}
+\item {\bf Windows Mobile 5 issues.} It is not possible to get the HMENU for
+the command bar on Mobile 5, so the menubar functions need to be rewritten
+to get the individual menus without use of a menubar handle. Also the
+new Mobile 5 convention of using only two menus (and no bitmap buttons) needs to be
+considered.
 \item {\bf Font dialog.} The generic font dialog is currently used, which
-needs to be simplified (and speeded up).
+needs to be simplified (and speeded up). (Note that this has been improved in 2.7.)
 \item {\bf Sizer speed.} Particularly for dialogs containing notebooks,
 layout seems slow. Some analysis is required.
 \item {\bf Notification boxes.} The balloon-like notification messages, and their
@@ -345,11 +383,6 @@ show the SIP automatically using the WC\_SIPREF control.
 the correct size on the emulator, but too small on a VGA Pocket Loox device.
 \item {\bf wxStaticLine.} Lines don't show up, and the documentation suggests that
 missing styles are implemented with WM\_PAINT.
-\item {\bf wxCheckListBox.} This class needs to be implemented in terms of a wxListCtrl
-in report mode, using icons for checkbox states. This is necessary because owner-draw listboxes
-are not supported on Windows CE.
-\item {\bf wxFileDialog.} A more flexible dialog needs to be written (probably using wxGenericFileDialog)
-that can access arbitrary locations.
 \item {\bf HTML control.} PocketPC has its own HTML control which can be used for showing
 local pages or navigating the web. We should create a version of wxHtmlWindow that uses this
 control, or have a separately-named control (wxHtmlCtrl), with a syntax as close as possible to wxHtmlWindow.
@@ -378,5 +411,8 @@ options to display information in a particular way using icons and text from
 a specified location.
 \item {\bf Further abstraction.} We should be able to abstract away more of the differences
 between desktop and mobile applications, in particular for sizer layout.
+\item {\bf Dialog captions.} The blue, bold captions on dialogs - with optional help button -
+should be catered for, either by hard-wiring the capability into all dialogs and panels,
+or by providing a standard component and sizer.
 \end{itemize}
 

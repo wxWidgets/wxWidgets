@@ -107,6 +107,25 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 				if (lastState == SCE_CSS_DEFAULT)
 					sc.SetState(SCE_CSS_DIRECTIVE);
 				break;
+			case '*':
+				if (lastState == SCE_CSS_DEFAULT)
+					sc.SetState(SCE_CSS_TAG);
+				break;
+			case '>':
+			case '+':
+				if (lastState == SCE_CSS_TAG || lastState == SCE_CSS_PSEUDOCLASS || lastState == SCE_CSS_CLASS
+					|| lastState == SCE_CSS_ID || lastState == SCE_CSS_UNKNOWN_PSEUDOCLASS)
+					sc.SetState(SCE_CSS_DEFAULT);
+				break;
+			case '[':
+				if (lastState == SCE_CSS_TAG || lastState == SCE_CSS_PSEUDOCLASS || lastState == SCE_CSS_DEFAULT ||
+					lastState == SCE_CSS_CLASS || lastState == SCE_CSS_ID || lastState == SCE_CSS_UNKNOWN_PSEUDOCLASS)
+					sc.SetState(SCE_CSS_ATTRIBUTE);
+				break;
+			case ']':
+				if (lastState == SCE_CSS_ATTRIBUTE)
+					sc.SetState(SCE_CSS_TAG);
+				break;
 			case '{':
 				if (lastState == SCE_CSS_DIRECTIVE)
 					sc.SetState(SCE_CSS_DEFAULT);
@@ -126,11 +145,13 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 					sc.SetState(SCE_CSS_VALUE);
 				break;
 			case '.':
-				if (lastState == SCE_CSS_TAG || lastState == SCE_CSS_DEFAULT)
+				if (lastState == SCE_CSS_TAG || lastState == SCE_CSS_PSEUDOCLASS || lastState == SCE_CSS_DEFAULT ||
+					lastState == SCE_CSS_CLASS || lastState == SCE_CSS_ID || lastState == SCE_CSS_UNKNOWN_PSEUDOCLASS)
 					sc.SetState(SCE_CSS_CLASS);
 				break;
 			case '#':
-				if (lastState == SCE_CSS_TAG || lastState == SCE_CSS_DEFAULT)
+				if (lastState == SCE_CSS_TAG || lastState == SCE_CSS_PSEUDOCLASS || lastState == SCE_CSS_DEFAULT ||
+					lastState == SCE_CSS_CLASS || lastState == SCE_CSS_ID || lastState == SCE_CSS_UNKNOWN_PSEUDOCLASS)
 					sc.SetState(SCE_CSS_ID);
 				break;
 			case ',':
@@ -208,6 +229,7 @@ static void ColouriseCssDoc(unsigned int startPos, int length, int initStyle, Wo
 		} else if (sc.state == SCE_CSS_VALUE && (sc.ch == '\"' || sc.ch == '\'')) {
 			sc.SetState((sc.ch == '\"' ? SCE_CSS_DOUBLESTRING : SCE_CSS_SINGLESTRING));
 		} else if (IsCssOperator(static_cast<char>(sc.ch))
+			&& (sc.state != SCE_CSS_ATTRIBUTE || sc.ch == ']')
 			&& (sc.state != SCE_CSS_VALUE || sc.ch == ';' || sc.ch == '}' || sc.ch == '!')
 			&& (sc.state != SCE_CSS_DIRECTIVE || sc.ch == ';' || sc.ch == '{')
 		) {

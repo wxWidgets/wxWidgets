@@ -142,7 +142,8 @@ normal clipboard, if primary is True.", "");
             self._instance = None
         def _checkInstance(self):
             if self._instance is None:
-                self._instance = self._initfunc(*self._args, **self._kwargs)        
+                if wx.GetApp():
+                    self._instance = self._initfunc(*self._args, **self._kwargs)        
         def __getattr__(self, name):
             self._checkInstance()
             return getattr(self._instance, name)

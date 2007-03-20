@@ -60,7 +60,30 @@
 // compilers
 #include <windows.h>
 
-#include <multimon.h>
+#ifndef __WXWINCE__
+    // Older versions of windef.h don't define HMONITOR.  Unfortunately, we
+    // can't directly test whether HMONITOR is defined or not in windef.h as
+    // it's not a macro but a typedef, so we test for an unrelated symbol which
+    // is only defined in winuser.h if WINVER >= 0x0500
+    #if !defined(HMONITOR_DECLARED) && !defined(MNS_NOCHECK)
+        DECLARE_HANDLE(HMONITOR);
+        typedef BOOL(CALLBACK * MONITORENUMPROC )(HMONITOR, HDC, LPRECT, LPARAM);
+        typedef struct tagMONITORINFO
+        {
+            DWORD   cbSize;
+            RECT    rcMonitor;
+            RECT    rcWork;
+            DWORD   dwFlags;
+        } MONITORINFO, *LPMONITORINFO;
+        typedef struct tagMONITORINFOEX : public tagMONITORINFO
+        {
+            TCHAR       szDevice[CCHDEVICENAME];
+        } MONITORINFOEX, *LPMONITORINFOEX;
+        #define MONITOR_DEFAULTTONULL       0x00000000
+        #define MONITORINFOF_PRIMARY        0x00000001
+        #define HMONITOR_DECLARED
+    #endif
+#endif // !__WXWINCE__
 
 #ifdef _MSC_VER
     #pragma warning(default:4706)

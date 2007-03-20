@@ -127,6 +127,7 @@ public:
 private:
     int                             m_nXComp;
     int                             m_nYComp;
+    WXDWORD  m_dwStyle;
    DECLARE_EVENT_TABLE()
 }; // end of wxControl
 

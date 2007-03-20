@@ -257,7 +257,7 @@ void wxGetMousePosition( int* x, int* y )
     GetCursorPos( & pt );
     if ( x ) *x = pt.x;
     if ( y ) *y = pt.y;
-};
+}
 
 // Return true if we have a colour display
 bool wxColourDisplay()

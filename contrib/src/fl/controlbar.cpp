@@ -370,26 +370,7 @@ bool wxFrameLayout::CanReparent()
 
 void wxFrameLayout::ReparentWindow( wxWindow* pChild, wxWindow* pNewParent )
 {
-#ifdef __WXMSW__
-#if 0
-
-    if ( pChild->GetParent() )
-    {
-        bool success = pChild->GetParent()->GetChildren().DeleteObject( pChild );
-
-        wxASSERT( success ); // DBG::
-    }
-
-    ::SetParent( (HWND)pChild->m_hWnd, (HWND)pNewParent->m_hWnd  );
-
-    pNewParent->GetChildren().Append( pChild );
-
-    pChild->SetParent( pNewParent );
-#endif
-    pChild->Reparent(pNewParent);
-
-    return;
-#elif defined(__WXGTK20__)
+#if defined(__WXMSW__) || defined(__WXGTK20__) || defined(__WXMAC__)
     pChild->Reparent(pNewParent);
 
     return;
@@ -404,7 +385,7 @@ void wxFrameLayout::ReparentWindow( wxWindow* pChild, wxWindow* pNewParent )
 #else
     wxUnusedVar(pChild);
     wxUnusedVar(pNewParent);
-    wxMessageBox( "Sorry, docking is not supported for ports other than MSW and wxGTK" );
+    wxMessageBox( _("Sorry, docking is not supported for ports other than wxMSW, wxMac and wxGTK") );
 #endif
 }
 

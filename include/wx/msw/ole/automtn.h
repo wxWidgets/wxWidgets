@@ -9,12 +9,12 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_AUTOMTN_H_
+#define _WX_AUTOMTN_H_
+
 #if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
 #pragma interface "automtn.h"
 #endif
-
-#ifndef _WX_AUTOMTN_H_
-#define _WX_AUTOMTN_H_
 
 #include "wx/object.h"
 #include "wx/variant.h"

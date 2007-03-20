@@ -92,6 +92,7 @@ public:
     virtual void Lower();
     virtual void SetTitle( const wxString& title);
     virtual bool Show( bool show = TRUE );
+    virtual void SetExtraStyle(long exStyle) ;
 
     virtual void MacSetBackgroundBrush( const wxBrush &brush ) ;
 

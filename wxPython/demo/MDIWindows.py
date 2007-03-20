@@ -1,8 +1,7 @@
 
 import  wx
-
-import  MDIDemo
-import  MDISashDemo
+import os
+import sys
 
 #----------------------------------------------------------------------
 
@@ -25,16 +24,33 @@ class TestPanel(wx.Panel):
         self.SetSizer(box)
 
 
+    # These are spawned as new processes because on Mac there can be
+    # some problems related to having regular frames and MDI frames in
+    # the same app.
     def ShowMDIDemo(self, evt):
-        frame = MDIDemo.MyParentFrame()
-        frame.Show()
+        exe, spawn = self.GetPyExecutable()
+        spawn(os.P_NOWAIT, exe, exe, "MDIDemo.py")
 
     def ShowMDISashDemo(self, evt):
-        frame = MDISashDemo.MyParentFrame()
-        frame.Show()
+        exe, spawn = self.GetPyExecutable()
+        spawn(os.P_NOWAIT, exe, exe, "MDISashDemo.py")
 
-
-
+    # TODO: This hack can be removed once we fix the way the Python
+    # app bundles are generated so that they are not bundling and 
+    # pointing to an otherwise unused and non-GUI-friendly version of
+    # Python on OS X.
+    def GetPyExecutable(self):
+        if 'wxMac' in wx.PlatformInfo:
+            # sys.executable will be wrong if running the demo from
+            # an app bundle.  But the bundle is always using a system
+            # framework so just hardcode the path to it.
+            if sys.version[:3] == "2.4":
+                return '/usr/local/bin/pythonw', os.spawnl
+            else:
+                return '/usr/bin/pythonw', os.spawnl    
+        else:
+            return sys.executable, os.spawnl
+        
 #----------------------------------------------------------------------
 
 def runTest(frame, nb, log):

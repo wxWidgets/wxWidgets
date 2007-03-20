@@ -91,7 +91,7 @@ BEGIN_EVENT_TABLE(wxApp, wxEvtHandler)
     EVT_IDLE(wxAppBase::OnIdle)
 END_EVENT_TABLE()
 
-bool wxApp::Initialize(int& argc, wxChar **argv)
+bool wxApp::Initialize(int& argC, wxChar **argV)
 {
 #if defined(__WXDEBUG__) && !wxUSE_NANOX
     // install the X error handler
@@ -101,66 +101,66 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     wxString displayName;
     bool syncDisplay = FALSE;
 
-    int argcOrig = argc;
-    for ( int i = 0; i < argcOrig; i++ )
+    int argCOrig = argC;
+    for ( int i = 0; i < argCOrig; i++ )
     {
-        if (wxStrcmp( argv[i], _T("-display") ) == 0)
+        if (wxStrcmp( argV[i], _T("-display") ) == 0)
         {
-            if (i < (argc - 1))
+            if (i < (argC - 1))
             {
-                argv[i++] = NULL;
+                argV[i++] = NULL;
 
-                displayName = argv[i];
+                displayName = argV[i];
 
-                argv[i] = NULL;
-                argc -= 2;
+                argV[i] = NULL;
+                argC -= 2;
             }
         }
-        else if (wxStrcmp( argv[i], _T("-geometry") ) == 0)
+        else if (wxStrcmp( argV[i], _T("-geometry") ) == 0)
         {
-            if (i < (argc - 1))
+            if (i < (argC - 1))
             {
-                argv[i++] = NULL;
+                argV[i++] = NULL;
 
                 int w, h;
-                if (wxSscanf(argv[i], _T("%dx%d"), &w, &h) != 2)
+                if (wxSscanf(argV[i], _T("%dx%d"), &w, &h) != 2)
                 {
                     wxLogError( _("Invalid geometry specification '%s'"),
-                                wxString(argv[i]).c_str() );
+                                wxString(argV[i]).c_str() );
                 }
                 else
                 {
                     g_initialSize = wxSize(w, h);
                 }
 
-                argv[i] = NULL;
-                argc -= 2;
+                argV[i] = NULL;
+                argC -= 2;
             }
         }
-        else if (wxStrcmp( argv[i], _T("-sync") ) == 0)
+        else if (wxStrcmp( argV[i], _T("-sync") ) == 0)
         {
             syncDisplay = TRUE;
 
-            argv[i] = NULL;
-            argc--;
+            argV[i] = NULL;
+            argC--;
         }
-        else if (wxStrcmp( argv[i], _T("-iconic") ) == 0)
+        else if (wxStrcmp( argV[i], _T("-iconic") ) == 0)
         {
             g_showIconic = TRUE;
 
-            argv[i] = NULL;
-            argc--;
+            argV[i] = NULL;
+            argC--;
         }
     }
 
-    if ( argc != argcOrig )
+    if ( argC != argCOrig )
     {
         // remove the argumens we consumed
-        for ( int i = 0; i < argc; i++ )
+        for ( int i = 0; i < argC; i++ )
         {
-            while ( !argv[i] )
+            while ( !argV[i] )
             {
-                memmove(argv + i, argv + i + 1, argcOrig - i);
+                memmove(argV + i, argV + i + 1, argCOrig - i);
             }
         }
     }
@@ -187,7 +187,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     // Misc.
     wxSetDetectableAutoRepeat( TRUE );
 
-    if ( !wxAppBase::Initialize(argc, argv) )
+    if ( !wxAppBase::Initialize(argC, argV) )
     {
         XCloseDisplay(xdisplay);
 

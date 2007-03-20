@@ -27,10 +27,11 @@ if len(sys.argv) > 1:
 from CreateBatchFiles import scripts
 repltxt = "#!/usr/bin/env python"
 
-
 # use the existing pythonw as a template
-gui_template = open(pythonw, "r").read().replace('"$@"', '"%s.py" "$@"')
-
+gui_template = """
+#!/bin/sh
+exec "%s" %%s.py "$@"
+""" % (sys.executable) 
 
 def main():
     for script, usegui in scripts:

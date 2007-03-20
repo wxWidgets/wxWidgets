@@ -112,6 +112,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/dde.h
     wx/msw/debughlp.h
     wx/msw/gccpriv.h
+    wx/msw/libraries.h
     wx/msw/mimetype.h
     wx/msw/stackwalk.h
     wx/msw/stdpaths.h
@@ -228,7 +229,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/os2/apptbase.h
     wx/os2/apptrait.h
     wx/os2/mimetype.h
+    wx/os2/private.h
     wx/os2/stdpaths.h
+    wx/os2/wxrsc.h
 </set>
 
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
@@ -1296,7 +1299,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/bmpbuttn.cpp
     src/msw/button.cpp
     src/msw/checkbox.cpp
-    src/msw/checklst.cpp
     src/msw/choice.cpp
     src/msw/colordlg.cpp
     src/msw/combobox.cpp
@@ -1346,7 +1348,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/button.h
     wx/msw/caret.h
     wx/msw/checkbox.h
-    wx/msw/checklst.h
     wx/msw/choice.h
     wx/msw/clipbrd.h
     wx/msw/colordlg.h
@@ -1403,6 +1404,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/regconf.h
     wx/msw/region.h
     wx/msw/registry.h
+    wx/msw/rcdefs.h
     wx/msw/scrolbar.h
     wx/msw/setup0.h
     wx/msw/slider95.h
@@ -1426,6 +1428,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
     <!-- Resources must be installed together with headers: -->
     wx/msw/wx.manifest
+    wx/msw/amd64.manifest
+    wx/msw/ia64.manifest
     wx/msw/wx.rc
     <!-- bitmaps -->
     wx/msw/colours.bmp
@@ -1459,10 +1463,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 
 <!-- Files used only by desktop MSW port, but *not* WindowsCE one: -->
 <set var="MSW_DESKTOP_SRC" hints="files">
+    src/msw/checklst.cpp
     src/msw/fdrepdlg.cpp
     src/msw/fontdlg.cpp
 </set>
 <set var="MSW_DESKTOP_HDR" hints="files">
+    wx/msw/checklst.h
     wx/msw/fdrepdlg.h
     wx/msw/fontdlg.h
     wx/msw/helpbest.h
@@ -1474,7 +1480,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="WINCE_SRC" hints="files">
     src/generic/dirdlgg.cpp
     src/generic/fdrepdlg.cpp
+    src/generic/filedlgg.cpp
     src/generic/fontdlgg.cpp
+    src/msw/wince/checklst.cpp
     src/msw/wince/choicece.cpp
     src/msw/wince/crt.cpp
     src/msw/wince/filedlgwce.cpp
@@ -1486,7 +1494,9 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="WINCE_HDR" hints="files">
     wx/generic/fdrepdlg.h
+    wx/generic/filedlgg.h
     wx/generic/fontdlgg.h
+    wx/msw/wince/checklst.h
     wx/msw/wince/choicece.h
     wx/msw/wince/helpwce.h
     wx/msw/wince/libraries.h
@@ -2271,6 +2281,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/univ/stattext.cpp
     src/univ/statusbr.cpp
     src/univ/textctrl.cpp
+    src/univ/tglbtn.cpp
     src/univ/theme.cpp
     src/univ/toolbar.cpp
     src/univ/topluniv.cpp
@@ -2796,6 +2807,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         <if cond="PLATFORM_MACOSX=='1'">$(BASE_MACOSX_HDR)</if>
         <if cond="PLATFORM_PALMOS=='1'">$(BASE_PALMOS_HDR)</if>
         <if cond="PLATFORM_MSDOS=='1'">$(BASE_MSDOS_HDR)</if>
+        <if cond="PLATFORM_OS2=='1'">$(BASE_OS2_HDR)</if>
     </set>
 
     <set var="BASE_SRC" hints="files">
@@ -2906,9 +2918,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- wxAdv files not used by wxUniv -->
     <set var="ADVANCED_PLATFORM_NATIVE_SRC" hints="files">
         <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_NATIVE_SRC)</if>
+        <if cond="TOOLKIT=='WINCE'">$(ADVANCED_MSW_NATIVE_SRC)</if>
     </set>
     <set var="ADVANCED_PLATFORM_NATIVE_HDR" hints="files">
         <if cond="TOOLKIT=='MSW'">$(ADVANCED_MSW_NATIVE_HDR)</if>
+        <if cond="TOOLKIT=='WINCE'">$(ADVANCED_MSW_NATIVE_HDR)</if>
     </set>
 
     <set var="ADVANCED_SRC" hints="files">
@@ -2960,17 +2974,35 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
         </if>
     </set>
 
-
+    <!-- for 'make install', only the headers needed for the installed port -->
     <set var="ALL_BASE_HEADERS" make_var="1" hints="files">
         $(BASE_CMN_HDR) $(BASE_PLATFORM_HDR)
         $(NET_CMN_HDR) $(NET_PLATFORM_HDR)
         $(XML_HDR) $(ODBC_HDR)
     </set>
-
     <set var="ALL_HEADERS" make_var="1" hints="files">
         $(ALL_BASE_HEADERS) $(ALL_GUI_HEADERS)
     </set>
 
+
+    <!-- used by 'make dist', should include wxBase headers for all ports -->
+    <set var="ALL_PORTS_BASE_HEADERS" make_var="1" hints="files">
+        $(BASE_CMN_HDR)
+        $(BASE_UNIX_HDR)
+        $(BASE_WIN32_HDR) $(BASE_WINCE_HDR)
+        $(BASE_MACOSX_HDR)
+        $(BASE_PALMOS_HDR)
+        $(BASE_MSDOS_HDR)
+        $(NET_CMN_HDR)
+        $(NET_UNIX_HDR)
+        $(NET_WIN32_HDR) $(NET_WINCE_HDR)
+        $(NET_OS2_HDR)
+        $(NET_UNIX_HDR)
+        $(NET_MAC_CARBONLIB_HDR)
+        $(XML_HDR) $(ODBC_HDR)
+    </set>
+
+    <!-- used by 'make dist', should include wxBase sources for all ports -->
     <set var="ALL_BASE_SOURCES" make_var="1" hints="files">
         $(BASE_CMN_SRC)
         $(BASE_UNIX_SRC) $(BASE_WIN32_SRC) $(BASE_WINCE_SRC)

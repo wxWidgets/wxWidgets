@@ -28,14 +28,15 @@
 #include "wx/log.h"
 #include "wx/app.h"
 
-// NB: Some compilers define boolean type in Windows headers
-//     (e.g. Watcom C++, but not Open Watcom).
-//     This causes a conflict with jmorecfg.h header from libjpeg, so we have
-//     to make sure libjpeg won't try to define boolean itself. This is done by
-//     defining HAVE_BOOLEAN.
-#if defined(__WXMSW__) && (defined(__MWERKS__) || defined(__DIGITALMARS__) || (defined(__WATCOMC__) && __WATCOMC__ < 1200))
+// A hack based on one from tif_jpeg.c to overcome the problem on Windows
+// of rpcndr.h defining boolean with a different type to the jpeg headers.
+// 
+// This hack is only necessary for an external jpeg library, the builtin one
+// usually used on Windows doesn't use the type boolean, so always works.
+//
+#ifdef wxHACK_BOOLEAN
     #define HAVE_BOOLEAN
-    #include "wx/msw/wrapwin.h"
+    #define boolean wxHACK_BOOLEAN
 #endif
 
 extern "C"
@@ -45,6 +46,10 @@ extern "C"
     #endif
     #include "jpeglib.h"
 }
+
+#ifndef HAVE_WXJPEG_BOOLEAN
+typedef boolean wxjpeg_boolean;
+#endif
 
 #include "wx/filefn.h"
 #include "wx/wfstream.h"
@@ -103,7 +108,7 @@ CPP_METHODDEF(void) wx_init_source ( j_decompress_ptr WXUNUSED(cinfo) )
 {
 }
 
-CPP_METHODDEF(boolean) wx_fill_input_buffer ( j_decompress_ptr cinfo )
+CPP_METHODDEF(wxjpeg_boolean) wx_fill_input_buffer ( j_decompress_ptr cinfo )
 {
     wx_src_ptr src = (wx_src_ptr) cinfo->src;
 
@@ -167,10 +172,20 @@ CPP_METHODDEF(void) wx_error_exit (j_common_ptr cinfo)
 
   /* Always display the message. */
   /* We could postpone this until after returning, if we chose. */
-  if (cinfo->err->output_message) (*cinfo->err->output_message) (cinfo);
+  (*cinfo->err->output_message) (cinfo);
 
   /* Return control to the setjmp point */
   longjmp(myerr->setjmp_buffer, 1);
+}
+
+/*
+ * This will replace the standard output_message method when the user
+ * wants us to be silent (verbose==false). We must have such method instead of
+ * simply using NULL for cinfo->err->output_message because it's called
+ * unconditionally from within libjpeg when there's "garbage input".
+ */
+CPP_METHODDEF(void) wx_ignore_message (j_common_ptr WXUNUSED(cinfo))
+{
 }
 
 void wx_jpeg_io_src( j_decompress_ptr cinfo, wxInputStream& infile )
@@ -214,7 +229,8 @@ bool wxJPEGHandler::LoadFile( wxImage *image, wxInputStream& stream, bool verbos
     cinfo.err = jpeg_std_error( &jerr.pub );
     jerr.pub.error_exit = wx_error_exit;
 
-    if (!verbose) cinfo.err->output_message=NULL;
+    if (!verbose)
+        cinfo.err->output_message = wx_ignore_message;
 
     /* Establish the setjmp return context for wx_error_exit to use. */
     if (setjmp(jerr.setjmp_buffer)) {
@@ -280,7 +296,7 @@ CPP_METHODDEF(void) wx_init_destination (j_compress_ptr cinfo)
     dest->pub.free_in_buffer = OUTPUT_BUF_SIZE;
 }
 
-CPP_METHODDEF(boolean) wx_empty_output_buffer (j_compress_ptr cinfo)
+CPP_METHODDEF(wxjpeg_boolean) wx_empty_output_buffer (j_compress_ptr cinfo)
 {
     wx_dest_ptr dest = (wx_dest_ptr) cinfo->dest;
 
@@ -327,7 +343,8 @@ bool wxJPEGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbo
     cinfo.err = jpeg_std_error(&jerr.pub);
     jerr.pub.error_exit = wx_error_exit;
 
-    if (!verbose) cinfo.err->output_message=NULL;
+    if (!verbose)
+        cinfo.err->output_message = wx_ignore_message;
 
     /* Establish the setjmp return context for wx_error_exit to use. */
     if (setjmp(jerr.setjmp_buffer))

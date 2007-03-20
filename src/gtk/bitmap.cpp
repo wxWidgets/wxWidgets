@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        bitmap.cpp
+// Name:        src/gtk/bitmap.cpp
 // Purpose:
 // Author:      Robert Roebling
 // RCS-ID:      $Id$
@@ -75,11 +75,13 @@ wxMask::wxMask( const wxBitmap& bitmap, const wxColour& colour )
     Create( bitmap, colour );
 }
 
+#if wxUSE_PALETTE
 wxMask::wxMask( const wxBitmap& bitmap, int paletteIndex )
 {
     m_bitmap = (GdkBitmap *) NULL;
     Create( bitmap, paletteIndex );
 }
+#endif // wxUSE_PALETTE
 
 wxMask::wxMask( const wxBitmap& bitmap )
 {
@@ -186,6 +188,7 @@ bool wxMask::Create( const wxBitmap& bitmap,
     return true;
 }
 
+#if wxUSE_PALETTE
 bool wxMask::Create( const wxBitmap& bitmap, int paletteIndex )
 {
     unsigned char r,g,b;
@@ -197,6 +200,7 @@ bool wxMask::Create( const wxBitmap& bitmap, int paletteIndex )
 
     return Create(bitmap, wxColour(r, g, b));
 }
+#endif // wxUSE_PALETTE
 
 bool wxMask::Create( const wxBitmap& bitmap )
 {
@@ -275,7 +279,9 @@ wxBitmapRefData::~wxBitmapRefData()
         gdk_pixbuf_unref( m_pixbuf );
 #endif
     delete m_mask;
+#if wxUSE_PALETTE
     delete m_palette;
+#endif // wxUSE_PALETTE
 }
 
 //-----------------------------------------------------------------------------
@@ -1286,7 +1292,7 @@ wxBitmap wxBitmap::GetSubBitmap( const wxRect& rect) const
     {
         GdkPixbuf *pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB,
                                            gdk_pixbuf_get_has_alpha(GetPixbuf()),
-                                           8, GetWidth(), GetHeight());
+                                           8, rect.width, rect.height);
         ret.SetPixbuf(pixbuf);
         gdk_pixbuf_copy_area(GetPixbuf(),
                              rect.x, rect.y, rect.width, rect.height,
@@ -1392,6 +1398,7 @@ bool wxBitmap::LoadFile( const wxString &name, wxBitmapType type )
     return true;
 }
 
+#if wxUSE_PALETTE
 wxPalette *wxBitmap::GetPalette() const
 {
     if (!Ok())
@@ -1404,6 +1411,7 @@ void wxBitmap::SetPalette(const wxPalette& WXUNUSED(palette))
 {
     // TODO
 }
+#endif // wxUSE_PALETTE
 
 void wxBitmap::SetHeight( int height )
 {
@@ -1645,5 +1653,3 @@ bool wxBitmapHandler::SaveFile(const wxBitmap *bitmap, const wxString& name, int
 {
     // TODO: Insert handler based on GdkPixbufs handler later
 }
-
-

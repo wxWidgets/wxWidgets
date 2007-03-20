@@ -61,6 +61,7 @@
 
 #ifndef __DARWIN__
 #include <InternetConfig.h> //For mime types
+#include <CoreServices.h>
 #endif
 
 /*   START CODE SAMPLE FROM TECHNOTE 1002 (http://developer.apple.com/technotes/tn/tn1002.html) */
@@ -102,10 +103,10 @@ OSErr IsRemoteVolume(short vRefNum, Boolean *isRemote, long *vMAttrib) {
 OSErr BuildVolumeList(Boolean includeRemote, short *vols,
         long *count, long vMAttribMask) {
     HParamBlockRec volPB;
-    Boolean isRemote;
+    Boolean isRemote = false ;
     OSErr err = noErr;
     long nlocal, nremote;
-    long vMAttrib;
+    long vMAttrib = 0;
 
         /* set up and check parameters */
     volPB.volumeParam.ioNamePtr = NULL;
@@ -422,8 +423,9 @@ wxString wxFileTypeImpl::GetCommand(const wxString& verb) const
             CFRelease(cfurlAppPath);
 
             //PHEW!  Success!
+            //Since a filename might have spaces in it, surround it with quotes
             if(cfsUnixPath)
-                return wxMacCFStringHolder(cfsUnixPath).AsString(wxLocale::GetSystemEncoding());
+                return wxString(wxT("'")) + wxMacCFStringHolder(cfsUnixPath).AsString(wxLocale::GetSystemEncoding()) + wxString(wxT("'"));
         }
         else
         {

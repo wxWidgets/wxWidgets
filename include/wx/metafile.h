@@ -28,16 +28,19 @@
         #if defined(__WXPALMOS__)
             #include "wx/palmos/enhmeta.h"
         #else
-        #include "wx/msw/enhmeta.h"
+            #include "wx/msw/enhmeta.h"
         #endif
 
-        // map all metafile classes to enh metafile
-        #if !wxUSE_WIN_METAFILES_ALWAYS
+        #if wxUSE_WIN_METAFILES_ALWAYS
+            // use normal metafiles as well
+            #include "wx/msw/metafile.h"
+        #else // also map all metafile classes to enh metafile
             typedef wxEnhMetaFile wxMetafile;
             typedef wxEnhMetaFileDC wxMetafileDC;
-#if wxUSE_DRAG_AND_DROP
-            typedef wxEnhMetaFileDataObject wxMetafileDataObject;
-#endif
+            #if wxUSE_DRAG_AND_DROP
+                typedef wxEnhMetaFileDataObject wxMetafileDataObject;
+            #endif
+
             // this flag will be set if wxMetafile class is wxEnhMetaFile
             #define wxMETAFILE_IS_ENH
         #endif // wxUSE_WIN_METAFILES_ALWAYS
@@ -45,8 +48,8 @@
         #if defined(__WXPALMOS__)
             #include "wx/palmos/metafile.h"
         #else
-        #include "wx/msw/metafile.h"
-    #endif
+            #include "wx/msw/metafile.h"
+        #endif
     #endif
 #elif defined(__WXPM__)
     #include "wx/os2/metafile.h"
@@ -55,5 +58,5 @@
 #endif
 
 #endif // wxUSE_METAFILE
-#endif
-    // _WX_METAFILE_H_BASE_
+
+#endif // _WX_METAFILE_H_BASE_

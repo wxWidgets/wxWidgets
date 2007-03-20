@@ -36,6 +36,8 @@ class TestToolBar(wx.Frame):
         open_bmp = wx.ArtProvider.GetBitmap(wx.ART_FILE_OPEN, wx.ART_TOOLBAR, tsize)
         copy_bmp = wx.ArtProvider.GetBitmap(wx.ART_COPY, wx.ART_TOOLBAR, tsize)
         paste_bmp= wx.ArtProvider.GetBitmap(wx.ART_PASTE, wx.ART_TOOLBAR, tsize)
+
+        tb.SetToolBitmapSize(tsize)
         
         tb.AddSimpleTool(10, new_bmp, "New", "Long help for 'New'")
         #tb.AddLabelTool(10, "New", new_bmp, shortHelp="New", longHelp="Long help for 'New'")

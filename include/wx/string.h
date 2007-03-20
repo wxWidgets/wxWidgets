@@ -299,6 +299,53 @@ public:
   typedef value_type *iterator;
   typedef const value_type *const_iterator;
 
+#if wxABI_VERSION >= 20604
+
+#define wxSTRING_REVERSE_ITERATOR(name, const_or_not)                         \
+  class name                                                                  \
+  {                                                                           \
+  public:                                                                     \
+      typedef wxChar value_type;                                              \
+      typedef const_or_not value_type& reference;                             \
+      typedef const_or_not value_type *pointer;                               \
+      typedef const_or_not value_type *iterator_type;                         \
+                                                                              \
+      name(iterator_type i) : m_cur(i) { }                                    \
+      name(const name& ri) : m_cur(ri.m_cur) { }                              \
+                                                                              \
+      iterator_type base() const { return m_cur; }                            \
+                                                                              \
+      reference operator*() const { return *(m_cur - 1); }                    \
+                                                                              \
+      name& operator++() { --m_cur; return *this; }                           \
+      name operator++(int) { name tmp = *this; --m_cur; return tmp; }         \
+      name& operator--() { ++m_cur; return *this; }                           \
+      name operator--(int) { name tmp = *this; ++m_cur; return tmp; }         \
+                                                                              \
+      bool operator==(name ri) const { return m_cur == ri.m_cur; }            \
+      bool operator!=(name ri) const { return !(*this == ri); }               \
+                                                                              \
+  private:                                                                    \
+      iterator_type m_cur;                                                    \
+  }
+
+  wxSTRING_REVERSE_ITERATOR(const_reverse_iterator, const);
+
+  #define wxSTRING_CONST
+  wxSTRING_REVERSE_ITERATOR(reverse_iterator, wxSTRING_CONST);
+  #undef wxSTRING_CONST
+
+  #undef wxSTRING_REVERSE_ITERATOR
+
+    // first element of the reversed string
+  const_reverse_iterator rbegin() const { return const_reverse_iterator(end()); }
+  reverse_iterator rbegin() { return reverse_iterator(end()); }
+    // one beyond the end of the reversed string
+  const_reverse_iterator rend() const { return const_reverse_iterator(begin()); }
+  reverse_iterator rend() { return reverse_iterator(begin()); }
+
+#endif // ABI >= 2.6.4
+
   // constructors and destructor
     // ctor for an empty string
   wxStringBase() { Init(); }
@@ -955,6 +1002,22 @@ public:
       // insert an unsigned long into string
   wxString& operator<<(unsigned long ul)
     { return (*this) << Format(_T("%lu"), ul); }
+#if wxABI_VERSION >= 20603
+#if defined wxLongLong_t && !defined wxLongLongIsLong
+      // insert a long long if they exist and aren't longs
+  wxString& operator<<(wxLongLong_t ll)
+    {
+      const wxChar *fmt = _T("%") wxLongLongFmtSpec _T("d");
+      return (*this) << Format(fmt, ll);
+    }
+      // insert an unsigned long long
+  wxString& operator<<(wxULongLong_t ull)
+    {
+      const wxChar *fmt = _T("%") wxLongLongFmtSpec _T("u");
+      return (*this) << Format(fmt , ull);
+    }
+#endif
+#endif
       // insert a float into string
   wxString& operator<<(float f)
     { return (*this) << Format(_T("%f"), f); }
@@ -1275,16 +1338,15 @@ public:
     { return (wxString&)wxStringBase::operator+=(ch); }
 };
 
-// IBM xlC compiler needs these operators to be declared in global scope,
-// although this shouldn't be a problem for the other compilers we prefer to
-// only do it for it in stable 2.6 branch
-#ifdef __IBMCPP__
+// notice that even though for many compilers the friend declarations above are
+// enough, from the point of view of C++ standard we must have the declarations
+// here as friend ones are not injected in the enclosing namespace and without
+// them the code fails to compile with conforming compilers such as xlC or g++4
 wxString WXDLLIMPEXP_BASE operator+(const wxString& string1,  const wxString& string2);
 wxString WXDLLIMPEXP_BASE operator+(const wxString& string, wxChar ch);
 wxString WXDLLIMPEXP_BASE operator+(wxChar ch, const wxString& string);
 wxString WXDLLIMPEXP_BASE operator+(const wxString& string, const wxChar *psz);
 wxString WXDLLIMPEXP_BASE operator+(const wxChar *psz, const wxString& string);
-#endif // __IBMCPP__
 
 // define wxArrayString, for compatibility
 #if WXWIN_COMPATIBILITY_2_4 && !wxUSE_STL

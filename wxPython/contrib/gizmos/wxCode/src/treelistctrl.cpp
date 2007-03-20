@@ -19,10 +19,6 @@
 // headers
 // ---------------------------------------------------------------------------
 
-#if defined(__GNUG__) && !defined(__APPLE__)
-  #pragma implementation "treelistctrl.h"
-#endif
-
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
@@ -572,6 +568,8 @@ public:
     // implementation helpers
     void SendDeleteEvent(wxTreeListItem *itemBeingDeleted);
 
+    void DoDirtyProcessing();
+    
     void DrawBorder(const wxTreeItemId& item);
     void DrawLine(const wxTreeItemId& item, bool below);
 
@@ -1074,7 +1072,7 @@ void wxTreeListTextCtrl::OnKillFocus( wxFocusEvent &event )
 //  wxTreeListHeaderWindow
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxTreeListHeaderWindow,wxWindow);
+IMPLEMENT_DYNAMIC_CLASS(wxTreeListHeaderWindow,wxWindow)
 
 BEGIN_EVENT_TABLE(wxTreeListHeaderWindow,wxWindow)
     EVT_ERASE_BACKGROUND  (wxTreeListHeaderWindow::OnEraseBackground)
@@ -1201,26 +1199,21 @@ void wxTreeListHeaderWindow::OnEraseBackground( wxEraseEvent& event )
 void wxTreeListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
 {
 #ifdef __WXGTK__
-    wxClientDC real_dc( this );
+    wxClientDC dc( this );
 #else
-    wxPaintDC real_dc( this );
+    wxPaintDC dc( this );
 #endif
 
-    AdjustDC( real_dc );
+    AdjustDC( dc );
 
     // width and height of the entire header window
     int w, h;
     GetClientSize( &w, &h );
     m_owner->CalcUnscrolledPosition(w, 0, &w, NULL);
 
-    // Setup double buffering to eliminate the flicker
-    wxMemoryDC dc;
-    wxBitmap   buffer(w, h);
-    dc.SelectObject(buffer);
     dc.SetBackground(wxBrush(GetBackgroundColour()));
     dc.Clear();
     
-    dc.BeginDrawing();
     dc.SetFont( GetFont() );
     dc.SetBackgroundMode(wxTRANSPARENT);
 
@@ -1309,11 +1302,6 @@ void wxTreeListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             this, dc, wxRect(x, HEADER_OFFSET_Y, more_w, h-2),
             m_parent->IsEnabled() ? 0 : wxCONTROL_DISABLED);
     }
-
-    // Finish up by drawing the buffer to the real dc
-    dc.EndDrawing();
-    dc.SelectObject(wxNullBitmap);
-    real_dc.DrawBitmap(buffer, 0, 0, false);
 }
 
 void wxTreeListHeaderWindow::DrawCurrent()
@@ -2463,7 +2451,7 @@ wxTreeItemId wxTreeListMainWindow::DoInsertItem(const wxTreeItemId& parentId,
 
     if ( data != NULL )
     {
-        data->SetId((long)item);
+        data->SetId((void*)item);
     }
 
     parent->Insert( item, previous );
@@ -2500,7 +2488,7 @@ wxTreeItemId wxTreeListMainWindow::AddRoot(const wxString& text,
 #endif
     if ( data != NULL )
     {
-        data->SetId((long)m_anchor);
+        data->SetId((void*)m_anchor);
     }
 
     if (!HasFlag(wxTR_MULTIPLE))
@@ -2575,7 +2563,7 @@ wxTreeItemId wxTreeListMainWindow::AppendItem(const wxTreeItemId& parentId,
 void wxTreeListMainWindow::SendDeleteEvent(wxTreeListItem *item)
 {
     wxTreeEvent event( wxEVT_COMMAND_TREE_DELETE_ITEM, m_owner->GetId() );
-    event.SetItem((long) item);
+    event.SetItem((void*)item);
     event.SetEventObject( /*this*/m_owner );
     m_owner->ProcessEvent( event );
 }
@@ -2652,7 +2640,7 @@ void wxTreeListMainWindow::Expand(const wxTreeItemId& itemId)
         return;
 
     wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_EXPANDING, m_owner->GetId() );
-    event.SetItem( (long) item );
+    event.SetItem( (void*)item );
     event.SetEventObject( /*this*/m_owner );
 
     if ( m_owner->ProcessEvent( event ) && !event.IsAllowed() )
@@ -2698,7 +2686,7 @@ void wxTreeListMainWindow::Collapse(const wxTreeItemId& itemId)
         return;
 
     wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_COLLAPSING, m_owner->GetId() );
-    event.SetItem( (long) item );
+    event.SetItem( (void*)item );
     event.SetEventObject( /*this*/m_owner );
     if ( m_owner->ProcessEvent( event ) && !event.IsAllowed() )
     {
@@ -2876,8 +2864,8 @@ void wxTreeListMainWindow::SelectItem(const wxTreeItemId& itemId,
     }
 
     wxTreeEvent event( wxEVT_COMMAND_TREE_SEL_CHANGING, m_owner->GetId() );
-    event.SetItem( (long) item );
-    event.SetOldItem( (long) m_current );
+    event.SetItem( (void*)item );
+    event.SetOldItem( (void*)m_current );
     event.SetEventObject( /*this*/m_owner );
     // TODO : Here we don't send any selection mode yet !
 
@@ -2932,11 +2920,11 @@ void wxTreeListMainWindow::SelectItem(const wxTreeItemId& itemId,
 
 void wxTreeListMainWindow::SelectAll(bool extended_select)
 {
-    wxCHECK_RET( GetWindowStyleFlag() & wxTR_MULTIPLE, wxT("invalid tree style") );
+    wxCHECK_RET( GetWindowStyleFlag() & wxTR_MULTIPLE, wxT("invalid tree style, must have wxTR_MULTIPLE style to select all items") );
 
     wxTreeEvent event( wxEVT_COMMAND_TREE_SEL_CHANGING, m_owner->GetId() );
     event.SetItem( GetRootItem() );
-    event.SetOldItem( (long) m_current );
+    event.SetOldItem( (void*) m_current );
     event.SetEventObject( /*this*/m_owner );
     // TODO : Here we don't send any selection mode yet !
 
@@ -2960,6 +2948,7 @@ void wxTreeListMainWindow::SelectAll(bool extended_select)
     wxTreeItemId root = GetRootItem();
     wxTreeListItem *first = (wxTreeListItem *)GetFirstChild (root, cookie).m_pItem;
     wxTreeListItem *last = (wxTreeListItem *)GetLastChild (GetRootItem()).m_pItem;
+    if (!first || !last) return;
     if (TagAllChildrenUntilLast (first, last, true)) return;
     TagNextChildren (first, last, true);
 
@@ -3021,7 +3010,8 @@ void wxTreeListMainWindow::ScrollTo(const wxTreeItemId &item)
     // We have to call this here because the label in
     // question might just have been added and no screen
     // update taken place.
-    if (m_dirty) wxYieldIfNeeded();
+    if (m_dirty) 
+        DoDirtyProcessing();
 
     wxTreeListItem *gitem = (wxTreeListItem*) item.m_pItem;
 
@@ -3455,8 +3445,8 @@ void wxTreeListMainWindow::PaintLevel (wxTreeListItem *item, wxDC &dc,
             int total_width = m_owner->GetHeaderWindow()->GetWidth();
             // if the background colour is white, choose a
             // contrasting color for the lines
-            dc.SetPen (*((GetBackgroundColour() == *wxWHITE)?
-                        wxMEDIUM_GREY_PEN : wxWHITE_PEN));
+            dc.SetPen(((GetBackgroundColour() == *wxWHITE) ?
+                       wxSystemSettings::GetColour(wxSYS_COLOUR_3DLIGHT) : *wxWHITE_PEN));
             dc.DrawLine(0, y_top, total_width, y_top);
             dc.DrawLine(0, y, total_width, y);
         }
@@ -3801,7 +3791,7 @@ void wxTreeListMainWindow::OnChar( wxKeyEvent &event )
             {
                 wxTreeEvent event( wxEVT_COMMAND_TREE_ITEM_ACTIVATED,
                                    m_owner->GetId() );
-                event.SetItem( (long) m_current);
+                event.SetItem( (void*) m_current);
                 event.SetEventObject( /*this*/m_owner );
                 m_owner->GetEventHandler()->ProcessEvent( event );
             }
@@ -4072,7 +4062,7 @@ void wxTreeListMainWindow::Edit( const wxTreeItemId& item )
     m_currentEdit = (wxTreeListItem*) item.m_pItem;
 
     wxTreeEvent te( wxEVT_COMMAND_TREE_BEGIN_LABEL_EDIT, m_owner->GetId() );
-    te.SetItem( (long) m_currentEdit);
+    te.SetItem( (void*) m_currentEdit);
     te.SetEventObject( /*this*/m_owner );
     m_owner->GetEventHandler()->ProcessEvent( te );
 
@@ -4081,7 +4071,8 @@ void wxTreeListMainWindow::Edit( const wxTreeItemId& item )
     // We have to call this here because the label in
     // question might just have been added and no screen
     // update taken place.
-    if (m_dirty) wxYieldIfNeeded();
+    if (m_dirty) 
+        DoDirtyProcessing();
 
     wxString s = m_currentEdit->GetText(/*ALB*/m_main_column);
     int x = m_currentEdit->GetX() + m_imgWidth2;
@@ -4113,7 +4104,7 @@ void wxTreeListMainWindow::OnRenameAccept()
 {
     // TODO if the validator fails this causes a crash
     wxTreeEvent le( wxEVT_COMMAND_TREE_END_LABEL_EDIT, m_owner->GetId() );
-    le.SetItem( (long) m_currentEdit );
+    le.SetItem( (void*)m_currentEdit );
     le.SetEventObject( /*this*/m_owner );
     le.SetLabel( m_renameRes );
     m_owner->GetEventHandler()->ProcessEvent( le );
@@ -4223,7 +4214,7 @@ void wxTreeListMainWindow::OnMouse( wxMouseEvent &event )
                               : wxEVT_COMMAND_TREE_BEGIN_DRAG;
 
         wxTreeEvent nevent( command,/*ALB*/ m_owner->GetId() );
-        nevent.SetItem( (long) m_current);
+        nevent.SetItem( (void*)m_current);
         nevent.SetEventObject(/*this*/m_owner); // ALB
         nevent.SetPoint(pt);
 
@@ -4268,7 +4259,7 @@ void wxTreeListMainWindow::OnMouse( wxMouseEvent &event )
             // highlight the current drop target if any
             DrawDropEffect(m_dropTarget);
 
-            wxYieldIfNeeded();
+            DoDirtyProcessing();
         }
     }
     else if ( (event.LeftUp() || event.RightUp()) && m_isDragging )
@@ -4286,7 +4277,7 @@ void wxTreeListMainWindow::OnMouse( wxMouseEvent &event )
         // generate the drag end event
         wxTreeEvent event(wxEVT_COMMAND_TREE_END_DRAG,/*ALB*/m_owner->GetId());
 
-        event.SetItem( (long) item );
+        event.SetItem( (void*)item );
         event.SetPoint( wxPoint(x, y) );
         event.SetEventObject(/*this*/m_owner);
 
@@ -4299,7 +4290,7 @@ void wxTreeListMainWindow::OnMouse( wxMouseEvent &event )
 
         SetCursor(m_oldCursor);
 
-        wxYieldIfNeeded();
+        DoDirtyProcessing();
     }
     else
     {
@@ -4314,7 +4305,7 @@ void wxTreeListMainWindow::OnMouse( wxMouseEvent &event )
             SetFocus();
             wxTreeEvent nevent(wxEVT_COMMAND_TREE_ITEM_RIGHT_CLICK,
                                m_owner->GetId());
-            nevent.SetItem( (long) item );
+            nevent.SetItem( (void*)item );
             int nx, ny;
             CalcScrolledPosition(x, y, &nx, &ny);
             nevent.SetPoint( wxPoint(nx, ny));
@@ -4381,7 +4372,7 @@ void wxTreeListMainWindow::OnMouse( wxMouseEvent &event )
                 // send activate event first
                 wxTreeEvent nevent( wxEVT_COMMAND_TREE_ITEM_ACTIVATED,
                                     m_owner->GetId() );
-                nevent.SetItem( (long) item );
+                nevent.SetItem( (void*)item );
                 int nx, ny;
                 CalcScrolledPosition(x, y, &nx, &ny);
                 nevent.SetPoint( wxPoint(nx, ny) );
@@ -4402,6 +4393,11 @@ void wxTreeListMainWindow::OnMouse( wxMouseEvent &event )
 }
 
 void wxTreeListMainWindow::OnIdle( wxIdleEvent &WXUNUSED(event) )
+{
+    DoDirtyProcessing();
+}
+
+void wxTreeListMainWindow::DoDirtyProcessing()
 {
     /* after all changes have been done to the tree control,
      * we actually redraw the tree when everything is over */
@@ -4629,7 +4625,7 @@ void wxTreeListMainWindow::SetFocus()
 //  wxTreeListCtrl
 //-----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxTreeListCtrl, wxControl);
+IMPLEMENT_DYNAMIC_CLASS(wxTreeListCtrl, wxControl)
 
 BEGIN_EVENT_TABLE(wxTreeListCtrl, wxControl)
     EVT_SIZE(wxTreeListCtrl::OnSize)

@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG.
+# This file was created automatically by SWIG 1.3.27.
 # Don't modify this file, modify the SWIG interface instead.
 
 """
@@ -183,5 +183,6 @@ class WebKitStateChangedEventPtr(WebKitStateChangedEvent):
 _webkit.WebKitStateChangedEvent_swigregister(WebKitStateChangedEventPtr)
 
 EVT_WEBKIT_STATE_CHANGED = wx.PyEventBinder(wxEVT_WEBKIT_STATE_CHANGED)
+
 
 

@@ -71,7 +71,7 @@
     }
  */
 
-#ifdef __VISUALC__
+#if defined __VISUALC__ && __VISUALC__ >= 1200
     // VC++ gives an absolutely harmless warning for wxPixelData<wxBitmap> ctor
     #pragma warning(push)
     #pragma warning(disable: 4355) // 'this' used in initializer list
@@ -171,7 +171,7 @@ typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxImagePixelFormat;
     #define wxPIXEL_FORMAT_ALPHA 3
 #elif defined(__WXGTK__)
     // Under GTK+ 2.X we use GdkPixbuf, which should be RGBA
-    typedef wxPixelFormat<unsigned char, 24, 0, 1, 2> wxNativePixelFormat;
+    typedef wxPixelFormat<unsigned char, 32, 0, 1, 2> wxNativePixelFormat;
 
     #define wxPIXEL_FORMAT_ALPHA 3
 #endif
@@ -717,7 +717,7 @@ struct wxPixelIterator : public wxPixelData<Image, PixelFormat>::Iterator
 {
 };
 
-#ifdef __VISUALC__
+#if defined __VISUALC__ && __VISUALC__ >= 1200
     #pragma warning(pop)
 #endif
 

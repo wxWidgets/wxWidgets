@@ -15,7 +15,7 @@ GROUPNUM = 4
 GROUP_WINDOWS, GROUP_MENUS, GROUP_SIZERS, GROUP_CONTROLS = range(GROUPNUM)
 
 # States depending on current selection and Control/Shift keys
-STATE_ROOT, STATE_MENUBAR, STATE_TOOLBAR, STATE_MENU, STATE_ELSE = range(5)
+STATE_ROOT, STATE_MENUBAR, STATE_TOOLBAR, STATE_MENU, STATE_STDDLGBTN, STATE_ELSE = range(6)
 
 # Left toolbar for GUI elements
 class Tools(wxPanel):
@@ -210,6 +210,8 @@ class Tools(wxPanel):
                 state = STATE_TOOLBAR
             elif xxx.__class__ in [xxxMenu, xxxMenuItem]:
                 state = STATE_MENU
+            elif xxx.__class__ == xxxStdDialogButtonSizer:
+                state = STATE_STDDLGBTN
             else:
                 state = STATE_ELSE
 
@@ -228,6 +230,8 @@ class Tools(wxPanel):
                                         ID_NEW.MENU_ITEM,
                                         ID_NEW.SEPARATOR ],
                                       False)
+            elif state == STATE_STDDLGBTN:
+                pass                    # nothing can be added from toolbar
             elif state == STATE_MENUBAR:
                 self.EnableGroup(GROUP_MENUS)
                 self.EnableGroupItems(GROUP_MENUS,
@@ -273,13 +277,15 @@ class Tools(wxPanel):
                                       False)
                 self.EnableGroup(GROUP_SIZERS)
                 self.EnableGroup(GROUP_CONTROLS)
-        # Special case for notebook (always executed)
+        # Special case for *book (always executed)
         if state == STATE_ELSE:
-            if xxx.__class__ == xxxNotebook:
+            if xxx.__class__ in [xxxNotebook, xxxChoicebook, xxxListbook]:
                 self.EnableGroup(GROUP_SIZERS, False)
             else:
                 self.EnableGroup(GROUP_SIZERS)
                 if not (xxx.isSizer or xxx.parent and xxx.parent.isSizer):
                     self.EnableGroupItem(GROUP_SIZERS, ID_NEW.SPACER, False)
+            if xxx.__class__ == xxxFrame:
+                self.EnableGroupItem(GROUP_MENUS, ID_NEW.MENU_BAR)
         # Save state
         self.state = state

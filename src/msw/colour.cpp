@@ -22,6 +22,7 @@
 
 #include "wx/gdicmn.h"
 #include "wx/msw/private.h"
+#include "wx/colour.h"
 
 #include <string.h>
 

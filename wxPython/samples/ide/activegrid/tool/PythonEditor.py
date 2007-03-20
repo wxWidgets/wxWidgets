@@ -25,6 +25,8 @@ import keyword # for GetAutoCompleteKeywordList
 import sys # for GetAutoCompleteKeywordList
 import MessageService # for OnCheckCode
 import OutlineService
+import FindInDirService
+from UICommon import CaseInsensitiveCompare
 try:
     import checker # for pychecker
     _CHECKER_INSTALLED = True
@@ -69,8 +71,11 @@ class PythonView(CodeEditor.CodeView):
 
     def OnActivateView(self, activate, activeView, deactiveView):
         STCTextEditor.TextView.OnActivateView(self, activate, activeView, deactiveView)
-        if activate:
-            wx.CallAfter(self.LoadOutline)  # need CallAfter because document isn't loaded yet
+        if activate and self.GetCtrl():
+            if self.GetDocumentManager().GetFlags() & wx.lib.docview.DOC_SDI:
+                self.LoadOutline()
+            else:
+                wx.CallAfter(self.LoadOutline)  # need CallAfter because document isn't loaded yet
         
 
     def OnClose(self, deleteWindow = True):
@@ -99,7 +104,7 @@ class PythonView(CodeEditor.CodeView):
             filterkw = filter(lambda item: item.lower().startswith(lowerHint), kw)  # remove variables and methods that don't match hint
             kw = filterkw
 
-        kw.sort(self.CaseInsensitiveCompare)
+        kw.sort(CaseInsensitiveCompare)
 
         if hint:
             replaceLen = len(hint)
@@ -119,6 +124,7 @@ class PythonView(CodeEditor.CodeView):
         # pychecker only works on files, doesn't take a stream or string input
         if self.GetDocument().IsModified():
             dlg = wx.MessageDialog(self.GetFrame(), _("'%s' has been modfied and must be saved first.  Save file and check code?") % filename, _("Check Code"))
+            dlg.CenterOnParent()
             val = dlg.ShowModal()
             dlg.Destroy()
             if val == wx.ID_OK:
@@ -138,11 +144,13 @@ class PythonView(CodeEditor.CodeView):
         # Set cursor to Wait cursor
         wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_WAIT))
 
-        # This takes a while for involved code
-        checker.checkSyntax(self.GetDocument().GetFilename(), view)
+        try:
+            # This takes a while for involved code
+            checker.checkSyntax(self.GetDocument().GetFilename(), view)
 
-        # Set cursor to Default cursor
-        wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_DEFAULT))
+        finally:
+            # Set cursor to Default cursor
+            wx.GetApp().GetTopWindow().SetCursor(wx.StockCursor(wx.CURSOR_DEFAULT))
 
 
     def OnJumpToFoundLine(self, event):
@@ -167,7 +175,7 @@ class PythonView(CodeEditor.CodeView):
                 break
 
         if not foundView:
-            doc = wx.GetApp().GetDocumentManager().CreateDocument(filename, wx.lib.docview.DOC_SILENT)
+            doc = wx.GetApp().GetDocumentManager().CreateDocument(filename, wx.lib.docview.DOC_SILENT|wx.lib.docview.DOC_OPEN_ONCE)
             foundView = doc.GetFirstView()
 
         if foundView:
@@ -269,11 +277,29 @@ class PythonInterpreterView(wx.lib.docview.View):
         return True
 
 
+class PythonInterpreterDocument(wx.lib.docview.Document):
+    """ Generate Unique Doc Type """
+    pass
+    
+
 class PythonService(CodeEditor.CodeService):
 
 
     def __init__(self):
         CodeEditor.CodeService.__init__(self)
+        docManager = wx.GetApp().GetDocumentManager()
+        pythonInterpreterTemplate = wx.lib.docview.DocTemplate(docManager,
+                                          _("Python Interpreter"),
+                                          "*.Foobar",
+                                          "Foobar",
+                                          ".Foobar",
+                                          _("Python Interpreter Document"),
+                                          _("Python Interpreter View"),
+                                          PythonInterpreterDocument,
+                                          PythonInterpreterView,
+                                          flags = wx.lib.docview.TEMPLATE_INVISIBLE,
+                                          icon = getPythonIcon())
+        docManager.AssociateTemplate(pythonInterpreterTemplate)
 
 
     def InstallControls(self, frame, menuBar = None, toolBar = None, statusBar = None, document = None):
@@ -308,7 +334,7 @@ class PythonService(CodeEditor.CodeService):
             docManager = wx.GetApp().GetDocumentManager()
             event.Check(False)
             for doc in docManager.GetDocuments():
-                if isinstance(doc.GetFirstView(), PythonInterpreterView):
+                if isinstance(doc, PythonInterpreterDocument):
                     event.Check(True)
                     break
             return True
@@ -318,28 +344,20 @@ class PythonService(CodeEditor.CodeService):
 
     def OnViewPythonInterpreter(self, event):
         for doc in wx.GetApp().GetDocumentManager().GetDocuments():
-            if isinstance(doc.GetFirstView(), PythonInterpreterView):
-                doc.GetFirstView().GetDocument().DeleteAllViews()
+            if isinstance(doc, PythonInterpreterDocument):
+                doc.DeleteAllViews()
                 return
                 
-        docManager = self.GetDocumentManager()
-        template = wx.lib.docview.DocTemplate(docManager,
-                                          _("Python Interpreter"),
-                                          "*.Foobar",
-                                          "Foobar",
-                                          ".Foobar",
-                                          _("Python Interpreter Document"),
-                                          _("Python Interpreter View"),
-                                          wx.lib.docview.Document,
-                                          PythonInterpreterView,
-                                          flags = wx.lib.docview.TEMPLATE_INVISIBLE)
-        newDoc = template.CreateDocument('', wx.lib.docview.DOC_SILENT)
-        if newDoc:
-            newDoc.SetDocumentName(template.GetDocumentName())
-            newDoc.SetDocumentTemplate(template)
-            newDoc.OnNewDocument()
-            newDoc.SetWriteable(False)
-            newDoc.GetFirstView().GetFrame().SetTitle(_("Python Interpreter"))
+        for template in self.GetDocumentManager().GetTemplates():
+            if template.GetDocumentType() == PythonInterpreterDocument:
+                newDoc = template.CreateDocument('', wx.lib.docview.DOC_SILENT|wx.lib.docview.DOC_OPEN_ONCE)
+                if newDoc:
+                    newDoc.SetDocumentName(template.GetDocumentName())
+                    newDoc.SetDocumentTemplate(template)
+                    newDoc.OnNewDocument()
+                    newDoc.SetWriteable(False)
+                    newDoc.GetFirstView().GetFrame().SetTitle(_("Python Interpreter"))
+                break
 
 
 class PythonCtrl(CodeEditor.CodeCtrl):
@@ -354,8 +372,42 @@ class PythonCtrl(CodeEditor.CodeCtrl):
         self.SetKeyWords(0, string.join(keyword.kwlist))
 
 
+    def CreatePopupMenu(self):
+        FINDCLASS_ID = wx.NewId()
+        FINDDEF_ID = wx.NewId()
+
+        menu = CodeEditor.CodeCtrl.CreatePopupMenu(self)
+
+        self.Bind(wx.EVT_MENU, self.OnPopFindDefinition, id=FINDDEF_ID)
+        menu.Insert(1, FINDDEF_ID, _("Find 'def'"))
+
+        self.Bind(wx.EVT_MENU, self.OnPopFindClass, id=FINDCLASS_ID)
+        menu.Insert(2, FINDCLASS_ID, _("Find 'class'"))
+
+        return menu
+
+
+    def OnPopFindDefinition(self, event):
+        view = wx.GetApp().GetDocumentManager().GetCurrentView()
+        if hasattr(view, "GetCtrl") and view.GetCtrl() and hasattr(view.GetCtrl(), "GetSelectedText"):
+            pattern = view.GetCtrl().GetSelectedText().strip()
+            if pattern:
+                searchPattern = "def\s+%s" % pattern
+                wx.GetApp().GetService(FindInDirService.FindInDirService).FindInProject(searchPattern)
+
+
+    def OnPopFindClass(self, event):
+        view = wx.GetApp().GetDocumentManager().GetCurrentView()
+        if hasattr(view, "GetCtrl") and view.GetCtrl() and hasattr(view.GetCtrl(), "GetSelectedText"):
+            definition = "class\s+%s"
+            pattern = view.GetCtrl().GetSelectedText().strip()
+            if pattern:
+                searchPattern = definition % pattern
+                wx.GetApp().GetService(FindInDirService.FindInDirService).FindInProject(searchPattern)
+
+
     def SetViewDefaults(self):
-        CodeEditor.CodeCtrl.SetViewDefaults(self, configPrefix = "Python", hasWordWrap = False, hasTabs = True)
+        CodeEditor.CodeCtrl.SetViewDefaults(self, configPrefix="Python", hasWordWrap=True, hasTabs=True, hasFolding=True)
 
 
     def GetFontAndColorFromConfig(self):
@@ -544,40 +596,56 @@ class PythonOptionsPanel(wx.Panel):
         choosePathButton = wx.Button(self, -1, _("Browse..."))
         pathSizer = wx.BoxSizer(wx.HORIZONTAL)
         HALF_SPACE = 5
-        pathSizer.Add(pathLabel, 0, wx.ALIGN_LEFT | wx.LEFT | wx.RIGHT | wx.TOP, HALF_SPACE)
-        pathSizer.Add(self._pathTextCtrl, 0, wx.ALIGN_LEFT | wx.EXPAND | wx.RIGHT, HALF_SPACE)
-        pathSizer.Add(choosePathButton, 0, wx.ALIGN_RIGHT | wx.LEFT, HALF_SPACE)
+        SPACE = 10
+        pathSizer.Add(pathLabel, 0, wx.ALIGN_CENTER_VERTICAL|wx.LEFT|wx.TOP, HALF_SPACE)
+        pathSizer.Add(self._pathTextCtrl, 1, wx.EXPAND|wx.LEFT|wx.TOP, HALF_SPACE)
+        pathSizer.Add(choosePathButton, 0, wx.ALIGN_RIGHT|wx.LEFT|wx.RIGHT|wx.TOP, HALF_SPACE)
         wx.EVT_BUTTON(self, choosePathButton.GetId(), self.OnChoosePath)
         mainSizer = wx.BoxSizer(wx.VERTICAL)                
-        mainSizer.Add(pathSizer, 0, wx.LEFT | wx.RIGHT | wx.TOP, 10)
+        mainSizer.Add(pathSizer, 0, wx.EXPAND|wx.LEFT|wx.RIGHT|wx.TOP, SPACE)
 
-        self._otherOptions = STCTextEditor.TextOptionsPanel(self, -1, configPrefix = "Python", label = "Python", hasWordWrap = False, hasTabs = True, addPage=False)
-        mainSizer.Add(self._otherOptions)
+        self._otherOptions = STCTextEditor.TextOptionsPanel(self, -1, configPrefix = "Python", label = "Python", hasWordWrap = True, hasTabs = True, addPage=False, hasFolding=True)
+        mainSizer.Add(self._otherOptions, 0, wx.EXPAND|wx.BOTTOM, SPACE)
         self.SetSizer(mainSizer)
         parent.AddPage(self, _("Python"))
         
+
     def OnChoosePath(self, event):
+        defaultDir = os.path.dirname(self._pathTextCtrl.GetValue().strip())
+        defaultFile = os.path.basename(self._pathTextCtrl.GetValue().strip())
         if _WINDOWS:
-            wildcard = _("*.exe")
+            wildcard = _("Executable (*.exe)|*.exe|All|*.*")
+            if not defaultFile:
+                defaultFile = "python.exe"
         else:
             wildcard = _("*")
-        path = wx.FileSelector(_("Select a File"),
-                               _(""),
-                               _(""),
-                               wildcard = wildcard ,
-                               flags = wx.HIDE_READONLY,
-                               parent = wx.GetApp().GetTopWindow())
-        if path:  
-            self._pathTextCtrl.SetValue(path)
-            self._pathTextCtrl.SetToolTipString(self._pathTextCtrl.GetValue())
-            self._pathTextCtrl.SetInsertionPointEnd()
+        dlg = wx.FileDialog(wx.GetApp().GetTopWindow(),
+                               _("Select a File"),
+                               defaultDir=defaultDir,
+                               defaultFile=defaultFile,
+                               wildcard=wildcard,
+                               style=wx.OPEN|wx.FILE_MUST_EXIST|wx.HIDE_READONLY)
+        # dlg.CenterOnParent()  # wxBug: caused crash with wx.FileDialog
+        if dlg.ShowModal() == wx.ID_OK:
+            path = dlg.GetPath()
+            if path:  
+                self._pathTextCtrl.SetValue(path)
+                self._pathTextCtrl.SetToolTipString(self._pathTextCtrl.GetValue())
+                self._pathTextCtrl.SetInsertionPointEnd()
+        dlg.Destroy()            
+
 
     def OnOK(self, optionsDialog):
-        if len(self._pathTextCtrl.GetValue()) > 0:
-            config = wx.ConfigBase_Get()
-            config.Write("ActiveGridPythonLocation", self._pathTextCtrl.GetValue())
+        config = wx.ConfigBase_Get()
+        config.Write("ActiveGridPythonLocation", self._pathTextCtrl.GetValue().strip())
 
         self._otherOptions.OnOK(optionsDialog)
+        
+
+    def GetIcon(self):
+        return getPythonIcon()
+        
+
 #----------------------------------------------------------------------------
 # Icon Bitmaps - generated by encode_bitmaps.py
 #----------------------------------------------------------------------------
@@ -587,18 +655,28 @@ import cStringIO
 
 def getPythonData():
     return \
-"\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
+'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
 \x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
-\x00\x00\xd5IDAT8\x8d\x8d\x93Y\x0e\xc3 \x0cD\x9fM\xcf\xddNr2.\x96\xb8\x1f\
-\x05\n\x84.#Y\x10\xa3\x19o\xb1\x99'*\xe2<\x82\x0e\xe6\xc9\xf8\x01\xef?\xa4\
-\xf7)]\x05\x970O\xcdr\xce!\x119\xe7\x00\x02\x88\xfe}i\xb5\x848\x8f\xa8\x19\
-\xcc\x19}+\xc5\xcc\xd3\x92<CZ\x0b\x99\xc4\xb2N\x01<\x80\xad\xdc?\x88\xf8\x1c\
-X\x8f7\xe1\x1f\xdc*\xa9a+\xe1\xa3\xdc\xe7\xb4\xf6\xd1\xe5\xb6'\xc3@\xc5\xa0#\
-\xab\x94\xd1\x0bL\xf0\xe6\x17\xa8v\xc3\x8aS\xa0.\x8be\x13\xe3\x15\x8f\xe1\
-\xa5D\xee\xc9\xdb~%\xc7y\x84\xbb'sO\xd6\xd4\x17\xe4~\xc4\xf5\xef\xac\xa7\r\
-\xbbp?b&\x0f\x89i\x14\x93\xca\x14z\xc5oh\x02E\xc4<\xd92\x03\xe0:B^\xc4K#\xe7\
-\xe5\x00\x02\xfd\xb9H\x9ex\x02\x9a\x05a\xd2\xd3c\xc0\xcc\x00\x00\x00\x00IEND\
-\xaeB`\x82" 
+\x00\x01\xe7IDAT8\x8d}\x921h\x13Q\x18\xc7\x7fw\xb9\x0ei\x9d*\xbd\xeb\x10\x8f\
+,\x99\x1c*A[\xaa\x19B\xe8\xd0\xb1\x0e%K\x87\x88T2\x88Cqp\tD\x14i\xe9\xe0V\
+\xdaQ\xb7\xe0P\xa1\x8b\xa0(\x95$z\xd5Q1\x90\xa2\xd7\x9a4^\x87\xa0`\x92!w9\
+\x87\xf8.\xb9\xa6\xc97\xbd\xef{\xef\xfb\xbd\xff\xfb\xbfO*~;v\xf9\x1f\xad\xba\
+\x05@\xf9\xd4\x06\xc0::$\xbb\x96\x92\x18\x11\n@(4\xdd\xcdB\xd3\xd4\x1d\x85\
+\x8b\x97\xe1\xe3;\x83\x99\xe5\x15\xb2\xe0\x8e\x82\xc8\xa3\xe8\x003\xcb+\xac\
+\xaee\xdda\xfb\xb2\x90\rPw\x14\x00\x9a\xb5\n\xbf\xfflSz\x9d\xa2Y\xdc"zca\xe8\
+\x05\xb2h\x14\xcd\xd0\xf3B\x9f\x98\xe5\xf9\xde\x13"\xaaB\xc7\xb1\xcfU!\x0b\
+\xc3D4k\x15\xac\x93\x03\xf4\x89Y\xaf\x96\xffT\x028\x17\xa2\xf4\'\xcdZ\x85\
+\xf7F\x06{\xaa\x80ev\xc1\x91\xb91>\x18\x0f\xb8\xb7\x95a\xe9\xca\x0b:\x8e\xed\
+\xca\x01E\x1a\x00\x98\r\x89\x92\x91\xa1\xda\xd8\x87\x06ha\x1f\x1b\x80\xcd\
+\x9d%\xe0\xa5\x0f"[G\x87\x98\x8d\xde/ia\x05-\xac`\x996\xf9\\\x0b\xcb\xb4)\
+\x1bmOMn\xf7\xd5\xf0\'\\\x8b\xdces\xe7\x8d\xef\x80h\xd6\xc2\n\xf9\\\x0b]\xf5\
+\xab\xf2\xcdApR#\xf1kp4b\xc9 \xf9\\\x0b\x80\xe4\xcdE\xaf\xdeqlW\xaeVL\xaf`~\
+\xd9\x03@W\xd3\x00\xc4\x13\x0b\xc4\x92A\xcf\xd0\xf9\xe8:\x89\xebW\x01(|\xfd\
+\xe1\xbe-~F\xbas\xff\x91\xf75\x82n\x9d\x1c\xf0}\xfciw\xdd\xe7A<\xd1\x1b\xa8j\
+c\x9f\xb2\xd1F\x92\xe4\x80O\x12\xc0\xc6\xb3\x14\xf6Ta\xe0)g\x81\xba\x9a\xf6\
+\x9b(\x07\x14I@\x84lq\xb8?\xe6\xa3\xeb\x00\xdc\xba\x9d\xf4+\x10*~\xfem\xf3\
+\xf8\xe1\x06\xc7\xa7\xdb\xe8j\x9a\xf8\xdc\xa4\xb7\x1f[\\\xe5\xd2\x851/\xff\
+\x07\xac\x9b\xd1e\x12\x96\x0f\xfd\x00\x00\x00\x00IEND\xaeB`\x82' 
 
 
 def getPythonBitmap():

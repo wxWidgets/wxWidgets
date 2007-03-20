@@ -228,8 +228,9 @@ bool wxConfigBase::DoWriteBool(const wxString& key, bool value)
 // ----------------------------------------------------------------------------
 
 wxConfigPathChanger::wxConfigPathChanger(const wxConfigBase *pContainer,
-                                 const wxString& strEntry)
+                                         const wxString& strEntry)
 {
+  m_bChanged = false;
   m_pContainer = (wxConfigBase *)pContainer;
 
   // the path is everything which precedes the last slash
@@ -246,7 +247,7 @@ wxConfigPathChanger::wxConfigPathChanger(const wxConfigBase *pContainer,
   {
     if ( m_pContainer->GetPath() != strPath )
     {
-        // do change the path
+        // we do change the path so restore it later
         m_bChanged = true;
 
         /* JACS: work around a memory bug that causes an assert
@@ -271,7 +272,6 @@ wxConfigPathChanger::wxConfigPathChanger(const wxConfigBase *pContainer,
   }
   else {
     // it's a name only, without path - nothing to do
-    m_bChanged = false;
     m_strName = strEntry;
   }
 }

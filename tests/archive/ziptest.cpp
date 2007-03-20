@@ -34,12 +34,11 @@ class ZipTestCase : public ArchiveTestCase<wxZipClassFactory>
 {
 public:
     ZipTestCase(string name,
-                int id,
                 int options,
                 const wxString& archiver = wxEmptyString,
                 const wxString& unarchiver = wxEmptyString)
     :
-        ArchiveTestCase<wxZipClassFactory>(name, id, new wxZipClassFactory,
+        ArchiveTestCase<wxZipClassFactory>(name, new wxZipClassFactory,
                                            options, archiver, unarchiver),
         m_count(0)
     { }
@@ -161,11 +160,15 @@ class ZipPipeTestCase : public CppUnit::TestCase
 {
 public:
     ZipPipeTestCase(string name, int options) :
-        CppUnit::TestCase(name), m_options(options) { }
+        CppUnit::TestCase(TestId::MakeId() + name),
+        m_options(options),
+        m_id(TestId::GetId())
+    { }
 
 protected:
     void runTest();
     int m_options;
+    int m_id;
 };
 
 void ZipPipeTestCase::runTest()
@@ -181,7 +184,7 @@ void ZipPipeTestCase::runTest()
             out.Write(in);
     }
 
-    TestInputStream in(out);
+    TestInputStream in(out, (m_options & PipeIn) ? m_id % 3 : 0);
     wxZipInputStream zip(in);
 
     auto_ptr<wxZipEntry> entry(zip.GetNextEntry());
@@ -214,7 +217,7 @@ public:
 protected:
     ArchiveTestSuite *makeSuite();
 
-    CppUnit::Test *makeTest(string descr, int id, int options,
+    CppUnit::Test *makeTest(string descr, int options,
                             bool genericInterface, const wxString& archiver,
                             const wxString& unarchiver);
 };
@@ -237,7 +240,6 @@ ArchiveTestSuite *ziptest::makeSuite()
             string name = Description(_T("ZipPipeTestCase"), options,
                                       false, _T(""), _T("zip -q - -"));
             addTest(new ZipPipeTestCase(name, options));
-            m_id++;
         }
 #endif
 
@@ -246,7 +248,6 @@ ArchiveTestSuite *ziptest::makeSuite()
 
 CppUnit::Test *ziptest::makeTest(
     string descr,
-    int   id,
     int   options,
     bool  genericInterface,
     const wxString& archiver,
@@ -258,10 +259,10 @@ CppUnit::Test *ziptest::makeTest(
 
     if (genericInterface)
         return new ArchiveTestCase<wxArchiveClassFactory>(
-                            descr, id, new wxZipClassFactory,
+                            descr, new wxZipClassFactory,
                             options, archiver, unarchiver);
     else
-        return new ZipTestCase(descr, id, options, archiver, unarchiver);
+        return new ZipTestCase(descr, options, archiver, unarchiver);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ziptest);

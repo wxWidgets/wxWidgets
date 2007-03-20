@@ -210,8 +210,12 @@ wxCursor::wxCursor(const wxImage& image)
         imageSized = image.Scale(w, h);
     }
 
+#if wxUSE_WXDIB
     HCURSOR hcursor = wxBitmapToHCURSOR( wxBitmap(imageSized),
                                          hotSpotX, hotSpotY );
+#else
+    HCURSOR hcursor = 0;
+#endif                                         
 
     if ( !hcursor )
     {

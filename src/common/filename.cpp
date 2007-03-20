@@ -608,11 +608,25 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     // use the directory specified by the prefix
     SplitPath(prefix, &dir, &name, NULL /* extension */);
 
+    if (dir.empty())
+    {
+        dir = wxGetenv(_T("TMPDIR"));
+        if (dir.empty())
+        {
+            dir = wxGetenv(_T("TMP"));
+            if (dir.empty())
+            {
+                dir = wxGetenv(_T("TEMP"));
+            }
+        }
+    }
+
 #if defined(__WXWINCE__)
     if (dir.empty())
     {
         // FIXME. Create \temp dir?
-        dir = wxT("\\");
+        if (DirExists(wxT("\\temp")))
+            dir = wxT("\\temp");
     }
     path = dir + wxT("\\") + name;
     int i = 1;
@@ -655,25 +669,14 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
 #else // !Windows
     if ( dir.empty() )
     {
-#if defined(__WXMAC__) && !defined(__DARWIN__)
-        dir = wxMacFindFolder(  (short) kOnSystemDisk, kTemporaryFolderType, kCreateFolder ) ;
-#else // !Mac
-        dir = wxGetenv(_T("TMP"));
-        if ( dir.empty() )
-        {
-            dir = wxGetenv(_T("TEMP"));
-        }
-
-        if ( dir.empty() )
-        {
-            // default
-            #if defined(__DOS__) || defined(__OS2__)
-                dir = _T(".");
-            #else
-                dir = _T("/tmp");
-            #endif
-        }
-#endif // Mac/!Mac
+        // default
+#if defined(__DOS__) || defined(__OS2__)
+        dir = _T(".");
+#elif defined(__WXMAC__)
+        dir = wxMacFindFolder(short(kOnSystemDisk), kTemporaryFolderType, kCreateFolder);
+#else
+        dir = _T("/tmp");
+#endif
     }
 
     path = dir;
@@ -754,9 +757,6 @@ wxFileName::CreateTempFileName(const wxString& prefix, wxFile *fileTemp)
     path = pathTry;
 #endif // HAVE_MKTEMP/!HAVE_MKTEMP
 
-    if ( !path.empty() )
-    {
-    }
 #endif // HAVE_MKSTEMP/!HAVE_MKSTEMP
 
 #endif // Windows/!Windows
@@ -1243,8 +1243,11 @@ wxString wxFileName::GetForbiddenChars(wxPathFormat format)
 }
 
 /* static */
-wxString wxFileName::GetVolumeSeparator(wxPathFormat format)
+wxString wxFileName::GetVolumeSeparator(wxPathFormat WXUNUSED_IN_WINCE(format))
 {
+#ifdef __WXWINCE__
+    return wxEmptyString;
+#else
     wxString sepVol;
 
     if ( (GetFormat(format) == wxPATH_DOS) ||
@@ -1255,6 +1258,7 @@ wxString wxFileName::GetVolumeSeparator(wxPathFormat format)
     //else: leave empty
 
     return sepVol;
+#endif
 }
 
 /* static */
@@ -1894,6 +1898,8 @@ bool wxFileName::SetTimes(const wxDateTime *dtAccess,
         }
     }
 #elif defined(__UNIX_LIKE__) || (defined(__DOS__) && defined(__WATCOMC__))
+    wxUnusedVar(dtCreate);
+
     if ( !dtAccess && !dtMod )
     {
         // can't modify the creation time anyhow, don't try
@@ -1989,7 +1995,7 @@ bool wxFileName::GetTimes(wxDateTime *dtAccess,
 
         return true;
     }
-#elif defined(__UNIX_LIKE__) || defined(__WXMAC__) || (defined(__DOS__) && defined(__WATCOMC__))
+#elif defined(__UNIX_LIKE__) || defined(__WXMAC__) || defined(__OS2__) || (defined(__DOS__) && defined(__WATCOMC__))
     wxStructStat stBuf;
     if ( wxStat( GetFullPath().c_str(), &stBuf) == 0 )
     {

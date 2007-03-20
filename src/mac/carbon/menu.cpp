@@ -204,7 +204,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                 pos += 1 ;
             }
 
-            SetMenuItemCommandID( MAC_WXHMENU(m_hMenu) , pos , pItem->GetId() ) ;
+            SetMenuItemCommandID( MAC_WXHMENU(m_hMenu) , pos , wxIdToMacCommand ( pItem->GetId() ) ) ;
             SetMenuItemRefCon( MAC_WXHMENU(m_hMenu) , pos , (UInt32) pItem ) ;
             pItem->UpdateItemText() ;
             pItem->UpdateItemBitmap() ;
@@ -718,7 +718,7 @@ void wxMenuBar::MacInstallMenuBar()
                             if ( mh )
                             {
                                 UMAAppendMenuItem(mh, item->GetText()  , wxFont::GetDefaultEncoding(), entry);
-                                SetMenuItemCommandID( mh , CountMenuItems(mh) , item->GetId() ) ;
+                                SetMenuItemCommandID( mh , CountMenuItems(mh) , wxIdToMacCommand ( item->GetId() ) ) ;
                                 SetMenuItemRefCon( mh , CountMenuItems(mh) , (UInt32)item ) ;
                             }
                         }
@@ -744,7 +744,7 @@ void wxMenuBar::MacInstallMenuBar()
             wxAcceleratorEntry* entry = wxGetAccelFromString( aboutMenuItem->GetText() ) ;
             UMASetMenuItemText( GetMenuHandle( kwxMacAppleMenuId ) , 1 , aboutMenuItem->GetText() , wxFont::GetDefaultEncoding() );
             UMAEnableMenuItem( GetMenuHandle( kwxMacAppleMenuId ) , 1 , true );
-            SetMenuItemCommandID( GetMenuHandle( kwxMacAppleMenuId ) , 1 , aboutMenuItem->GetId() ) ;
+            SetMenuItemCommandID( GetMenuHandle( kwxMacAppleMenuId ) , 1 , kHICommandAbout ) ;
             SetMenuItemRefCon(GetMenuHandle( kwxMacAppleMenuId ) , 1 , (UInt32)aboutMenuItem ) ;
             UMASetMenuItemShortcut( GetMenuHandle( kwxMacAppleMenuId ) , 1 , entry ) ;
         }

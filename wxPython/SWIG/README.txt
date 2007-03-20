@@ -8,20 +8,47 @@ wxPython.  These have been submitted to SWIG's SourceForge patch
 tracker, so hopefully they will get incorporated into the main SWIG
 source tree soon.
 
-wxPython currently uses the 1.3.24 version of SWIG, which you can get
-from https://sourceforge.net/projects/swig/, plus the patch(es) in this
-directory.  Download the SWIG sources, apply the patch(es) here and
-then build as normal.  If you want to use both the patched version of
-SWIG and the stock version, then you can configure the patched version
-to use a different --prefix and then specify that executable when
-running setup.py, like this:
+wxPython currently uses the 1.3.27 version of SWIG, which you can get
+from https://sourceforge.net/projects/swig/, plus the patch(es) in
+this directory.  Download the SWIG sources, apply the patch(es) here
+and then build as normal.  I have also have made available a tarball
+containing the patched SWIG sources, plus a win32 binary, located
+here:
+
+	http://starship.python.net/crew/robind/wxPython/tools/
+
+If you want to use the patched version of SWIG and still have the
+stock version available for other projects, then you can configure the
+patched version to use a different --prefix and then specify that
+executable when running setup.py, like this:
 
 	python setup.py SWIG=/path/to/my/swig [other params]
 
 
+
 ------------------------------------------------------------------------
 
-swig-1.3.24.patch
+swig-1.3.27.patch
+
+    SWIG changed slightly how the runtime type_info data is structured
+    in order to optimize load time and runtime access.  wxPython
+    uncovered a bug in the implementation, so this patch includes the
+    fix that was checked in to CVS for 1.3.28.
+
+    SWIG changed how the import statments are output to the proxy
+    file, but this also caused the order to change (they all moved to
+    the very top of the file) so this broke the module docstring, as
+    well as some behavior that Chandler development is depending upon,
+    so this patch changes back to how it was done in prior releases.
+
+    Bug fix for SWIG's definition of the %makedefault macro.
+
+    Fixes to allow compiling with Python 2.5 headers.
+    
+
+------------------------------------------------------------------------
+
+swig-1.3.24.patch (now obsolete)
 
     A bug was introduced in SWIG 1.3.23 and remains in 1.3.24 that
     causes compilation problems with wxPython (copies are being made

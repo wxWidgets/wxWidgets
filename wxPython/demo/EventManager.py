@@ -72,7 +72,7 @@ class TestPanel(wx.Panel):
         sizer.Add(message0,    0, wx.ALIGN_CENTER | wx.ALL, 6)
         sizer.Add(title2,      0, wx.ALIGN_CENTER | wx.LEFT | wx.TOP    | wx.RIGHT, 16)
         sizer.Add(message1,    0, wx.ALIGN_CENTER | wx.ALL, 6)
-        sizer.Add(buttonPanel, 0, wx.EXPAND       | wx.LEFT | wx.BOTTOM | wx.RIGHT, 16)
+        sizer.Add(buttonPanel, 0, wx.EXPAND       | wx.ALL, 16)
         sizer.Add(title3,      0, wx.ALIGN_CENTER | wx.LEFT | wx.RIGHT, 16)
         sizer.Add(message2,    0, wx.ALIGN_CENTER | wx.ALL, 6)
         sizer.Add(targetPanel, 2, wx.EXPAND       | wx.LEFT | wx.BOTTOM | wx.RIGHT, 16)
@@ -144,6 +144,7 @@ class InnerTile(wx.Window):
     """
     def __init__(self, parent, log, factor, thingToWatch=None, bgColor=None):
         wx.Window.__init__(self, parent, -1)
+        self.SetMinSize((20,20))
         self.log=log
         if bgColor:
             self.SetBackgroundColour(bgColor)
