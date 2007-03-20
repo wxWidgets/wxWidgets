@@ -153,22 +153,6 @@ key value from a RGB tripple.", "");
 
 //---------------------------------------------------------------------------
 
-%{
-    typedef unsigned char* buffer;
-%}    
-
-%typemap(in) (buffer data, int DATASIZE)
-{ if ($input != Py_None) {
-        if (!PyArg_Parse($input, "t#", &$1, &$2)) SWIG_fail;
-}}
-
-%typemap(in) (buffer alpha, int ALPHASIZE)
-{ if ($input != Py_None) {
-        if (!PyArg_Parse($input, "t#", &$1, &$2)) SWIG_fail;
-}}
-
-//---------------------------------------------------------------------------
-
 
 DocStr(wxImage,
 "A platform-independent image class.  An image can be created from
@@ -997,7 +981,7 @@ range -1.0..1.0 where -1.0 is -360 degrees and 1.0 is 360 degrees", "");
 
 // Make an image from buffer objects.  Not that this is here instead of in the
 // wxImage class (as a constructor) because there is already another one with
-// the exact same signature, so there woudl be ambiguities in the generated
+// the exact same signature, so there would be ambiguities in the generated
 // C++.  Doing it as an independent factory function like this accomplishes
 // the same thing however.
 %newobject _ImageFromBuffer;
@@ -1025,12 +1009,11 @@ range -1.0..1.0 where -1.0 is -360 degrees and 1.0 is 360 degrees", "");
 def ImageFromBuffer(width, height, dataBuffer, alphaBuffer=None):
     """
     Creates a `wx.Image` from the data in dataBuffer.  The dataBuffer
-    parameter must be a Python object that implements the buffer interface, or
-    is convertable to a buffer object, such as a string, array, etc.  The
-    dataBuffer object is expected to contain a series of RGB bytes and be
-    width*height*3 bytes long.  A buffer object can optionally be supplied for
-    the image's alpha channel data, and it is expected to be width*height
-    bytes long.
+    parameter must be a Python object that implements the buffer interface,
+    such as a string, array, etc.  The dataBuffer object is expected to
+    contain a series of RGB bytes and be width*height*3 bytes long.  A buffer
+    object can optionally be supplied for the image's alpha channel data, and
+    it is expected to be width*height bytes long.
 
     The wx.Image will be created with its data and alpha pointers initialized
     to the memory address pointed to by the buffer objects, thus saving the
@@ -1048,10 +1031,6 @@ def ImageFromBuffer(width, height, dataBuffer, alphaBuffer=None):
     the objects used for the data and alpha buffers in a way that would cause
     them to change size.
     """
-    if not isinstance(dataBuffer, buffer):
-        dataBuffer = buffer(dataBuffer)
-    if alphaBuffer is not None and not isinstance(alphaBuffer, buffer):
-        alphaBuffer = buffer(alphaBuffer)
     image = _core_._ImageFromBuffer(width, height, dataBuffer, alphaBuffer)
     image._buffer = dataBuffer
     image._alpha = alphaBuffer
