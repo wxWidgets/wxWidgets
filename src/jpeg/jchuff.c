@@ -86,11 +86,11 @@ typedef struct {
 
 
 /* Forward declarations */
-METHODDEF(boolean) encode_mcu_huff JPP((j_compress_ptr cinfo,
+METHODDEF(wxjpeg_boolean) encode_mcu_huff JPP((j_compress_ptr cinfo,
 					JBLOCKROW *MCU_data));
 METHODDEF(void) finish_pass_huff JPP((j_compress_ptr cinfo));
 #ifdef ENTROPY_OPT_SUPPORTED
-METHODDEF(boolean) encode_mcu_gather JPP((j_compress_ptr cinfo,
+METHODDEF(wxjpeg_boolean) encode_mcu_gather JPP((j_compress_ptr cinfo,
 					  JBLOCKROW *MCU_data));
 METHODDEF(void) finish_pass_gather JPP((j_compress_ptr cinfo));
 #endif
@@ -103,7 +103,7 @@ METHODDEF(void) finish_pass_gather JPP((j_compress_ptr cinfo));
  */
 
 METHODDEF(void)
-start_pass_huff (j_compress_ptr cinfo, boolean gather_statistics)
+start_pass_huff (j_compress_ptr cinfo, wxjpeg_boolean gather_statistics)
 {
   huff_entropy_ptr entropy = (huff_entropy_ptr) cinfo->entropy;
   int ci, dctbl, actbl;
@@ -176,7 +176,7 @@ start_pass_huff (j_compress_ptr cinfo, boolean gather_statistics)
  */
 
 GLOBAL(void)
-jpeg_make_c_derived_tbl (j_compress_ptr cinfo, boolean isDC, int tblno,
+jpeg_make_c_derived_tbl (j_compress_ptr cinfo, wxjpeg_boolean isDC, int tblno,
 			 c_derived_tbl ** pdtbl)
 {
   JHUFF_TBL *htbl;
@@ -274,7 +274,7 @@ jpeg_make_c_derived_tbl (j_compress_ptr cinfo, boolean isDC, int tblno,
 	      { action; } }
 
 
-LOCAL(boolean)
+LOCAL(wxjpeg_boolean)
 dump_buffer (working_state * state)
 /* Empty the output buffer; return TRUE if successful, FALSE if must suspend */
 {
@@ -298,7 +298,7 @@ dump_buffer (working_state * state)
  */
 
 INLINE
-LOCAL(boolean)
+LOCAL(wxjpeg_boolean)
 emit_bits (working_state * state, unsigned int code, int size)
 /* Emit some bits; return TRUE if successful, FALSE if must suspend */
 {
@@ -336,7 +336,7 @@ emit_bits (working_state * state, unsigned int code, int size)
 }
 
 
-LOCAL(boolean)
+LOCAL(wxjpeg_boolean)
 flush_bits (working_state * state)
 {
   if (! emit_bits(state, 0x7F, 7)) /* fill any partial byte with ones */
@@ -349,7 +349,7 @@ flush_bits (working_state * state)
 
 /* Encode a single block's worth of coefficients */
 
-LOCAL(boolean)
+LOCAL(wxjpeg_boolean)
 encode_one_block (working_state * state, JCOEFPTR block, int last_dc_val,
 		  c_derived_tbl *dctbl, c_derived_tbl *actbl)
 {
@@ -447,7 +447,7 @@ encode_one_block (working_state * state, JCOEFPTR block, int last_dc_val,
  * Emit a restart marker & resynchronize predictions.
  */
 
-LOCAL(boolean)
+LOCAL(wxjpeg_boolean)
 emit_restart (working_state * state, int restart_num)
 {
   int ci;
@@ -472,7 +472,7 @@ emit_restart (working_state * state, int restart_num)
  * Encode and output one MCU's worth of Huffman-compressed coefficients.
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 encode_mcu_huff (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
 {
   huff_entropy_ptr entropy = (huff_entropy_ptr) cinfo->entropy;
@@ -641,7 +641,7 @@ htest_one_block (j_compress_ptr cinfo, JCOEFPTR block, int last_dc_val,
  * No data is actually output, so no suspension return is possible.
  */
 
-METHODDEF(boolean)
+METHODDEF(wxjpeg_boolean)
 encode_mcu_gather (j_compress_ptr cinfo, JBLOCKROW *MCU_data)
 {
   huff_entropy_ptr entropy = (huff_entropy_ptr) cinfo->entropy;
@@ -849,8 +849,8 @@ finish_pass_gather (j_compress_ptr cinfo)
   int ci, dctbl, actbl;
   jpeg_component_info * compptr;
   JHUFF_TBL **htblptr;
-  boolean did_dc[NUM_HUFF_TBLS];
-  boolean did_ac[NUM_HUFF_TBLS];
+  wxjpeg_boolean did_dc[NUM_HUFF_TBLS];
+  wxjpeg_boolean did_ac[NUM_HUFF_TBLS];
 
   /* It's important not to apply jpeg_gen_optimal_table more than once
    * per table, because it clobbers the input frequency counts!

@@ -169,11 +169,8 @@ void wxPanel::OnSize(wxSizeEvent& event)
         else
         {
             SWP                     vSwp;
-            int                     nYDiff;
 
             ::WinQueryWindowPos(GetHWND(), &vSwp);
-            nYDiff = pWinSwp->cy - vSwp.cy;
-            MoveChildren(nYDiff);
             pWinSwp->cx = vSwp.cx;
             pWinSwp->cy = vSwp.cy;
         }

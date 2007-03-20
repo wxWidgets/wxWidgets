@@ -70,7 +70,7 @@
 
 #    undef wxUSE_STACKWALKER
 #    define wxUSE_STACKWALKER 0
-#endif // compiler doesn't support SEH
+#endif /* compiler doesn't support SEH */
 
 /* wxUSE_DEBUG_NEW_ALWAYS doesn't work with CodeWarrior */
 #if defined(__MWERKS__)
@@ -229,6 +229,7 @@
 #        ifdef wxABORT_ON_CONFIG_ERROR
 #            error "wxUSE_MS_HTML_HELP requires wxUSE_DYNAMIC_LOADER."
 #        else
+#            undef wxUSE_MS_HTML_HELP
 #            define wxUSE_MS_HTML_HELP 0
 #        endif
 #    endif
@@ -242,5 +243,23 @@
 #    endif
 #endif  /* wxUSE_DYNAMIC_LOADER */
 
-#endif /* _WX_MSW_CHKCONF_H_ */
+#if !wxUSE_DYNLIB_CLASS
+#   if wxUSE_UXTHEME
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_UXTHEME requires wxUSE_DYNLIB_CLASS"
+#       else
+#           undef wxUSE_UXTHEME
+#           define wxUSE_UXTHEME 0
+#       endif
+#   endif
+#   if wxUSE_MEDIACTRL
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxUSE_MEDIACTRL requires wxUSE_DYNLIB_CLASS"
+#       else
+#           undef wxUSE_MEDIACTRL
+#           define wxUSE_MEDIACTRL 0
+#       endif
+#   endif
+#endif  /* wxUSE_DYNLIB_CLASS */
 
+#endif /* _WX_MSW_CHKCONF_H_ */

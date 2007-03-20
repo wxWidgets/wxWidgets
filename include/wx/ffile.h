@@ -20,10 +20,8 @@
 
 #if wxUSE_FFILE
 
-#ifndef WX_PRECOMP
-  #include  "wx/string.h"
-  #include  "wx/filefn.h"
-#endif
+#include  "wx/string.h"
+#include  "wx/filefn.h"
 
 #include <stdio.h>
 

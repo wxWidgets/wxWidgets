@@ -301,4 +301,3 @@ void wxBitmapButton::EndSelect()
 }
 
 #endif // wxUSE_BMPBUTTON
-

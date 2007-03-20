@@ -9,8 +9,9 @@
 #    2. the path of where to put the resulting installers
 #    3. skipclean flag (yes|no)
 #    4. the VERSION
-#    5. the KIND (panther or jaguar)
-#    *. the remaining args are the versions of Python to build for
+#    5. the version of Python to build for
+#    6. the character type (ansi|unicode|both)
+#    7. optional flags to pass on to the build script
 #
 # ---------------------------------------------------------------------------
 
@@ -20,7 +21,7 @@ set -o errexit
 echo "-=-=-=-  Hello from $HOSTNAME  -=-=-=-"
 
 if [ $# -lt 6 ]; then
-    echo "Usage: $0 WXDIR DESTDIR SKIPCLEAN VERSION KIND PYVER"
+    echo "Usage: $0 WXDIR DESTDIR SKIPCLEAN VERSION PYVER CHARTYPE [FLAGS]"
     exit 1
 fi
 
@@ -28,8 +29,9 @@ WXDIR=$1
 DESTDIR=$2
 SKIPCLEAN=$3
 VERSION=$4
-KIND=$5
-PYVER=$6
+PYVER=$5
+CHARTYPE=$6
+FLAGS=$7
 
 
 #export PATH=/sw/bin:/usr/local/bin:$PATH
@@ -39,21 +41,22 @@ echo "which gcc = " `which gcc`
 #exit 0
 
 # untar the source 
-echo "Unarchiving wxPython-src-$VERSION.tar.gz"
+echo "Unarchiving wxPython-src-$VERSION.tar.bz2"
 cd $DESTDIR
-tar xzf wxPython-src-$VERSION.tar.gz 
-rm wxPython-src-$VERSION.tar.gz
+tar xjf wxPython-src-$VERSION.tar.bz2
+rm wxPython-src-$VERSION.tar.bz2
 
 
 echo "Invoking wxPythonOSX build script..."
 cd $WXDIR/wxPython
 export TARBALLDIR=$DESTDIR
 mkdir -p dist
-if [ $KIND = panther ]; then
-    distrib/mac/wxPythonOSX/build $PYVER $KIND inplace unicode
+if [ $CHARTYPE = both ]; then
+    distrib/mac/wxPythonOSX/build $PYVER inplace unicode $FLAGS
+    distrib/mac/wxPythonOSX/build $PYVER inplace ansi $FLAGS
+else
+    distrib/mac/wxPythonOSX/build $PYVER inplace $CHARTYPE $FLAGS
 fi
-distrib/mac/wxPythonOSX/build $PYVER $KIND inplace 
-
 
 echo "Copying installers to $DESTDIR..."
 cp dist/*.dmg $DESTDIR
@@ -63,8 +66,8 @@ cd $DESTDIR
 if [ $SKIPCLEAN != yes ]; then 
     echo "Cleaning up..."
     rm -r $WXDIR || true
-    rm wxPython-docs-$VERSION.tar.gz
-    rm wxPython-demo-$VERSION.tar.gz
+    rm wxPython-docs-$VERSION.tar.bz2
+    rm wxPython-demo-$VERSION.tar.bz2
 fi
 
 echo "-=-=-=-  Goodbye!  -=-=-=-"

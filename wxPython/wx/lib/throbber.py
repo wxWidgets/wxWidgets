@@ -59,7 +59,12 @@ class Throbber(wx.PyPanel):
                  overlay = None,  # optional image to overlay on animation
                  reverse = 0,     # reverse direction at end of animation
                  style = 0,       # window style
-                 name = "throbber"):
+                 name = "throbber",
+                 rest = 0,
+                 current = 0,
+                 direction = 1,
+                 sequence = None
+                 ):
         wx.PyPanel.__init__(self, parent, id, pos, size, style, name)
         self.name = name
         self.label = label
@@ -89,8 +94,9 @@ class Throbber(wx.PyPanel):
             self.labelX = (width - extentX)/2
             self.labelY = (height - extentY)/2
         self.frameDelay = frameDelay
-        self.current = 0
-        self.direction = 1
+        self.rest = rest
+        self.current = current
+        self.direction = direction
         self.autoReverse = reverse
         self.overlay = overlay
         if overlay is not None:
@@ -116,14 +122,14 @@ class Throbber(wx.PyPanel):
         # while the throbber is running.  self.sequence[0] should always
         # refer to whatever frame is to be shown when 'resting' and be sure
         # that no item in self.sequence >= self.frames or < 0!!!
-        self.sequence = range(self.frames)
+        self.SetSequence(sequence)
 
         self.SetClientSize((width, height))
 
         timerID  = wx.NewId()
         self.timer = wx.Timer(self, timerID)
 
-        self.Bind(EVT_UPDATE_THROBBER, self.Rotate)
+        self.Bind(EVT_UPDATE_THROBBER, self.Update)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
         self.Bind(wx.EVT_TIMER, self.OnTimer, self.timer)
         self.Bind(wx.EVT_WINDOW_DESTROY, self.OnDestroyWindow)
@@ -157,18 +163,21 @@ class Throbber(wx.PyPanel):
         event.Skip()
 
 
-    def Rotate(self, event):
-        self.current += self.direction
+    def Update(self, event):
+        self.Next()
+
+
+    def Wrap(self):
         if self.current >= len(self.sequence):
             if self.autoReverse:
                 self.Reverse()
                 self.current = len(self.sequence) - 1
             else:
-                self.current = 1
-        if self.current < 1:
+                self.current = 0
+        if self.current < 0:
             if self.autoReverse:
                 self.Reverse()
-                self.current = 1
+                self.current = 0
             else:
                 self.current = len(self.sequence) - 1
         self.Draw(wx.ClientDC(self))
@@ -185,7 +194,7 @@ class Throbber(wx.PyPanel):
     def Rest(self):
         """Stop the animation and return to frame 0"""
         self.Stop()
-        self.current = 0
+        self.current = self.rest
         self.Draw(wx.ClientDC(self))
 
 
@@ -211,6 +220,65 @@ class Throbber(wx.PyPanel):
         if self.running:
             self.timer.Stop()
             self.running = not self.running
+
+
+    def SetCurrent(self, current):
+        """Set current image"""
+        running = self.Running()
+        if not running:
+            #FIXME: need to make sure value is within range!!!
+            self.current = current
+            self.Draw(wx.ClientDC(self))
+
+
+    def SetRest(self, rest):
+        """Set rest image"""
+        self.rest = rest
+
+
+    def SetSequence(self, sequence = None):
+        """Order to display images"""
+
+        # self.sequence can be changed, but it's not recommended doing it
+        # while the throbber is running.  self.sequence[0] should always
+        # refer to whatever frame is to be shown when 'resting' and be sure
+        # that no item in self.sequence >= self.frames or < 0!!!
+
+        running = self.Running()
+        self.Stop()
+
+        if sequence is not None:
+            #FIXME: need to make sure values are within range!!!
+            self.sequence = sequence
+        else:
+            self.sequence = range(self.frames)
+
+        if running:
+            self.Start()
+            
+
+    def Increment(self):
+        """Display next image in sequence"""
+        self.current += 1
+        self.Wrap()
+
+
+    def Decrement(self):
+        """Display previous image in sequence"""
+        self.current -= 1
+        self.Wrap()
+
+
+    def Next(self):
+        """Display next image in sequence according to direction"""
+        self.current += self.direction
+        self.Wrap()
+
+
+    def Previous(self):
+        """Display previous image in sequence according to direction"""
+        self.current -= self.direction
+        self.Wrap()
 
 
     def SetFrameDelay(self, frameDelay = 0.05):

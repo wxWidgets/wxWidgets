@@ -356,6 +356,15 @@ wxConfigBase *wxFontMapperBase::GetConfig()
         //        wxApp::OnInit(), before any real interaction with the user takes
         //        place...
     }
+    // KH: Always update the config object to the current one (if one exists), otherwise
+    // if a new config object is created, we continue to use the old one (which was
+    // almost certainly deleted).
+    // Caching of the config object was removed in 2.7, but added and removed
+    // member variables. This solution is convoluted but does not change any headers.
+    else if ( wxConfig::Get(false) != NULL )
+    {
+        m_config = wxConfig::Get();
+    }
 
     return m_config;
 }

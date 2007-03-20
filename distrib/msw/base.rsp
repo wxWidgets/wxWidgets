@@ -25,6 +25,8 @@ src/common/unzip.h
 src/common/*.inc
 src/common/base.rc
 
+src/msdos/*.cpp
+
 src/msw/*.cpp
 src/msw/*.h
 src/msw/makefile.*
@@ -88,6 +90,8 @@ include/wx/msw/*.ico
 include/wx/msw/*.bmp
 
 include/wx/msw/wince/*.h
+
+include/wx/msdos/*.h
 
 samples/console/testdata.fc
 samples/console/*.cpp

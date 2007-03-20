@@ -115,7 +115,8 @@ bool wxHIDDevice::Create (int nClass, int nType, int nDev)
     //Now get the maching services
     io_iterator_t pIterator;
     wxIOCHECK(IOServiceGetMatchingServices(m_pPort, pDictionary, &pIterator), "No Matching HID Services");
-    wxASSERT_MSG(pIterator != 0, wxT("No devices found!"));
+    if(pIterator == 0)
+        return false; // No devices found
 
     //Now we iterate through them
     io_object_t pObject;

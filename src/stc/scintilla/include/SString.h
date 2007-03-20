@@ -197,7 +197,7 @@ public:
 	bool operator!=(const char *sOther) const {
 		return !operator==(sOther);
 	}
-	bool contains(char ch) {
+	bool contains(char ch) const {
 		return (s && *s) ? strchr(s, ch) != 0 : false;
 	}
 	void setsizegrowth(lenpos_t sizeGrowth_) {
@@ -253,7 +253,7 @@ public:
 	bool startswith(const char *prefix);
 	bool endswith(const char *suffix);
 	int search(const char *sFind, lenpos_t start=0) const;
-	bool contains(const char *sFind) {
+	bool contains(const char *sFind) const {
 		return search(sFind) >= 0;
 	}
 	int substitute(char chFind, char chReplace);

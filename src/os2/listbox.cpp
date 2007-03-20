@@ -192,11 +192,11 @@ bool wxListBox::Create(
     SetFont(*pTextFont);
 
     //
-    // Set standard wxWidgets colors for Listbox items and highlighting
+    // Set OS/2 system colours for Listbox items and highlighting
     //
     wxColour                        vColour;
 
-    vColour.Set(wxString(wxT("WHITE")));
+    vColour = wxSystemSettingsNative::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT);
 
     LONG                            lColor = (LONG)vColour.GetPixel();
 
@@ -205,7 +205,7 @@ bool wxListBox::Create(
                       ,sizeof(LONG)
                       ,(PVOID)&lColor
                      );
-    vColour.Set(wxString(wxT("NAVY")));
+    vColour = wxSystemSettingsNative::GetColour(wxSYS_COLOUR_HIGHLIGHT);
     lColor = (LONG)vColour.GetPixel();
     ::WinSetPresParam( m_hWnd
                       ,PP_HILITEBACKGROUNDCOLOR
@@ -772,7 +772,7 @@ bool wxListBox::OS2Command(
     {
         eEvtType = wxEVT_COMMAND_LISTBOX_SELECTED;
     }
-    if (uParam == LN_ENTER)
+    else if (uParam == LN_ENTER)
     {
         eEvtType = wxEVT_COMMAND_LISTBOX_DOUBLECLICKED;
     }

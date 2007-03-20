@@ -140,7 +140,7 @@ const KeyToCommand KeyMap::MapDefault[] = {
     {'L', 			SCI_CSHIFT,	SCI_LINEDELETE},
     {'T', 			SCI_CSHIFT,	SCI_LINECOPY},
     {'T', 			SCI_CTRL,	SCI_LINETRANSPOSE},
-    {'D', 			SCI_CTRL,	SCI_LINEDUPLICATE},
+    {'D', 			SCI_CTRL,	SCI_SELECTIONDUPLICATE},
     {'U', 			SCI_CTRL,	SCI_LOWERCASE},
     {'U', 			SCI_CSHIFT,	SCI_UPPERCASE},
     {0,0,0},

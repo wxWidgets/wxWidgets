@@ -1,7 +1,6 @@
-
 <html>
 <head>
-   <title>Platforms supported by wxWindows 2.4</title>
+   <title>Platforms supported by wxWindows 2</title>
    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
    <meta name="Author" content="Vadim Zeitlin">
 </head>
@@ -124,40 +123,42 @@ often don&#39;t work.
 </tr>
 
 <tr>
-<td align=center valign=center rowspan=4>AIX</td>
+<td align=center valign=center rowspan=5>AIX</td>
      <td>wxGTK 2.2.9 with gcc 3.0.4</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Ian Brown</td><td>Shared library building doesn&#39;t work, use <tt>--disable-shared</tt></td>
 <tr> <td>wxGTK 2.3.3 with xlC (AIX 4.3.2)</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Irvin Probst</td><td>Both static and shared wxGTK libraries work, but only with static GTK+ and GLib</td>
+<tr> <td>wxX11 2.4.2 with xlC 6 (AIX 5.1)</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Swengtoo</td><td>In 2.4.2 you need to remove parentheses from the configure line containing AIX_CXX_LD; you should also use GNU make</td>
 <tr> <td>wxMotif with xlC 3.1.4.0 (AIX 4.2)</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td>
                                  <td>Bernhard Eck</td>
                                  <td>Some problems with OpenGL and native X server</td>
-<tr> <td>wxX11 2.4.2 with xlC 6 (AIX 5.1)</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Swengtoo</td><td>In 2.4.2 you need to remove parentheses from the configure line containing AIX_CXX_LD; you should also use GNU make</td>
+<tr> <td>wxMotif 2.6.2 with gcc 3.3 (AIX 5.2)</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>VZ</td><td>Because of the bugs in gcc standard headers I had to use <tt>--disable-largefile<br>Both static and shared libraries work</tt></td>
 </tr>
 
 <tr bgcolor="#f0f0f0">
-<td align=center valign=center rowspan=5>HP-UX</td>
+<td align=center valign=center rowspan=6>HP-UX</td>
 <tr bgcolor="#f0f0f0">
      <td>HP-UX 10.20 wxGTK with HP CC A.10.22<br>or HP aCC B3910B A.01.18</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Staf Verhaegen</td>
      <td>you need to add <tt>-Aa -D_HPUX_SOURCE</tt> to <tt>CFLAGS</tt></td>
 <tr bgcolor="#f0f0f0"> <td>HP-UX 10.20 wxGTK with gcc</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Julian Albo Garcia</td><td><br></td>
+<tr bgcolor="#f0f0f0"> <td>HP-UX B.11.00 wxGTK 2.6.2 with gcc 3.3.1</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Christoph Haller</td><td>remove <tt>/opt/imake/bin</tt> and <tt>/usr/sbin</tt> from <tt>PATH</tt> because they contain versions of <tt>install</tt> which don't work</td>'
 <tr bgcolor="#f0f0f0"> <td>HP-UX 11i v1 PA-RISC, wxMotif 2.5.4, tried aCC A.03.57 and g++ 3.4.2</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Ian, Mike</td>
-        <td>For a 32-bit PA-RISC build, if you want to use <tt>SHLIB_PATH</tt> to make it easier to use 
+        <td>For a 32-bit PA-RISC build, if you want to use <tt>SHLIB_PATH</tt> to make it easier to use
         wxWidgets without installing it, then add <tt>LDFLAGS=-Wl,+s</tt><br>
         If you want to compile the test suite then aCC A.03.57 requires <tt>CXX='aCC -AA'</tt><br>
         aCC can also be used as the C compiler instead of cc by adding <tt>CC='aCC -Ae'</tt>
         </td>
-<tr bgcolor="#f0f0f0"> <td>HP-UX 11i v2 IA64, wxMotif 2.5.4, aCC A.06.00</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Mike</td><td><br></td>
+<tr bgcolor="#f0f0f0"> <td>HP-UX 11i v2 IA64<br>wxMotif and wxGTK1 2.7.0<br>aCC A.06.05 or g++ 3.4</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Mike, VZ</td><td><br></td>
 </tr>
 
 <tr>
 <td align=center valign=center rowspan=6>IRIX</td>
 <tr> <td bgcolor="#fafafa" colspan=5>
-         Note that all entries use MIPSPro 7.3 compiler on IRIX 6.5 with <tt>-mips3 -n32</tt> flags if not mentioned otherwise.
+         Note that all entries use MIPSPro 7.3 compiler on IRIX 6.5 with default flags (i.e. in n32 mode) if not mentioned otherwise.
          Also note that you need to set <tt>LD_LIBRARYN32_PATH</tt> under IRIX to run wxWindows programs.
      </td>
 <tr> <td>wxGTK 2.2</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Ian</td><td>You may need to use <tt>--disable-catch_segvs</tt> if you get compiler error in utilsunx.cpp</td>
 <tr> <td>wxGTK 2.5</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Carl Godkin</td><td><br></td>
-<tr> <td rowspan=2>wxMotif</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>David Marshall</td><td>On IRIX 6.5.6 (Indigo2, 64bit), with SGI Motif 1.2</td>
-<tr> <td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Ian</td><td><br></td>
+<tr> <td>wxMotif 2.5</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>David Marshall</td><td>On IRIX 6.5.6 (Indigo2, 64bit), with SGI Motif 1.2</td>
+<tr> <td>wxMotif 2.6.2</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>VZ</td><td>IRIX 6.5.27m, both 32 and 64 bit; with SGI Motif 2.1; using CC 7.4.4m</td>
 </tr>
 
 <tr bgcolor="#f0f0f0">
@@ -166,9 +167,11 @@ often don&#39;t work.
 </tr>
 
 <tr>
-<td align=center valign=center rowspan=1>DEC OSF/1</td>
-    <td>wxGTK with gcc</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Fabrice Didierjean</td><td>OSF1 4.0 on Dec Alpha<br>
+<td align=center valign=center rowspan=2>DEC OSF/1 (a.k.a. Tru64)</td>
+     <td>wxGTK with gcc</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>Fabrice Didierjean</td><td>OSF1 4.0 on Dec Alpha<br>
                                                                                      you may need to run configure with <tt>--host=alpha-dec-osf switch</tt></td>
+<tr> <td>wxMotif1 2.7.0<br>(with Compaq/HP cxx 7.1)</td><td align=center><IMG SRC="images/yes.gif" ALT=Ok></td><td>VZ</td><td>OSF1 5.1B on AlphaServer ES45<br>
+                                                                                     You must set <tt>BIN_SH</tt> to "xpg4" to use wx-config</td>
 </tr>
 
 <tr bgcolor="#f0f0f0">

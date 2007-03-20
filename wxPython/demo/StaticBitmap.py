@@ -45,9 +45,6 @@ def runTest(frame, nb, log):
 overview = """\
 A StaticBitmap control displays a bitmap.
 
-The bitmap to be displayed should have a small number of colours, such as 16, 
-to avoid palette problems.
-
 A bitmap can be derived from most image formats using the wx.Image class.
 
 """

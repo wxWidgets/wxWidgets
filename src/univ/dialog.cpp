@@ -31,6 +31,8 @@
     #include "wx/app.h"
 #endif
 
+#include "wx/settings.h"
+
 #include "wx/evtloop.h"
 
 //-----------------------------------------------------------------------------
@@ -69,7 +71,13 @@ bool wxDialog::Create(wxWindow *parent,
     // all dialogs should have tab traversal enabled
     style |= wxTAB_TRAVERSAL;
 
-    return wxTopLevelWindow::Create(parent, id, title, pos, size, style, name);
+    if (!wxTopLevelWindow::Create(parent, id, title, pos, size, style, name))
+        return false;
+
+    if ( !m_hasFont )
+        SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
+
+    return true;
 }
 
 void wxDialog::OnApply(wxCommandEvent &WXUNUSED(event))

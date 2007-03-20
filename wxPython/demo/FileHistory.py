@@ -79,7 +79,7 @@ class TestPanel(wx.Panel):
 
 
     def OnRightClick(self, evt):
-        self.PopupMenu(self.menu, evt.GetPosition())
+        self.PopupMenu(self.menu)
 
 
     def OnFileOpenDialog(self, evt):

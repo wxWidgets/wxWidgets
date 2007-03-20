@@ -1,5 +1,5 @@
-wxWidgets 2.6.2
----------------------------------------------------------
+wxWidgets 2.6.4
+---------------
 
 Welcome to wxWidgets, a sophisticated cross-platform C++
 framework for writing advanced GUI applications using
@@ -146,12 +146,7 @@ The main wxWidgets ftp site is at:
 
   ftp://biolpc22.york.ac.uk/pub
 
-A wxWidgets CD-ROM with the latest distribution plus an HTML
-front-end and hundreds of MB of compilers, utilities and other
-material may be ordered from the CD-ROM page: see the wxWidgets
-web site.
-
 Have fun!
 
-The wxWidgets Team, September 2005
+The wxWidgets Team, March 2007
 

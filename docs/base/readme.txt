@@ -59,6 +59,10 @@ b) Cygwin
 
    Please refer to the Unix section below.
 
+   Note that gcc's precompiled headers do not work on current versions of
+   Cygwin. If your version of Cygwin is affected you will need to use the
+   --disable-precomp-headers configure option.
+
 c) Borland
 
    Please refer to the docs/msw/install.txt. The console sample compiles and

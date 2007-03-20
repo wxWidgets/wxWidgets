@@ -42,7 +42,7 @@
 
 #include "wx/listimpl.cpp"
 WX_DECLARE_LIST(wxArtProvider, wxArtProvidersList);
-WX_DEFINE_LIST(wxArtProvidersList);
+WX_DEFINE_LIST(wxArtProvidersList)
 
 // ----------------------------------------------------------------------------
 // Cache class - stores already requested bitmaps
@@ -169,7 +169,7 @@ wxArtProviderCache *wxArtProvider::sm_cache = NULL;
             bmp = node->GetData()->CreateBitmap(id, client, size);
             if ( bmp.Ok() )
             {
-#if wxUSE_IMAGE
+#if wxUSE_IMAGE && (!defined(__WXMSW__) || wxUSE_WXDIB)
                 if ( size != wxDefaultSize &&
                      (bmp.GetWidth() != size.x || bmp.GetHeight() != size.y) )
                 {

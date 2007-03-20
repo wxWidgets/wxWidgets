@@ -345,7 +345,7 @@ public:
 
     // return instance of the wxFontMapper singleton
     static wxFontMapper *Get();
-    // set the sigleton to 'mapper' instance and return previous one
+    // set the singleton to 'mapper' instance and return previous one
     static wxFontMapper *Set(wxFontMapper *mapper);
 
 
@@ -364,10 +364,13 @@ public:
     // get the n-th supported encoding
     static wxFontEncoding GetEncoding(size_t n);
 
-    // return internal string identifier for the encoding (see also
-    // GetEncodingDescription())
+    // return canonical name of this encoding (this is a short string,
+    // GetEncodingDescription() returns a longer one)
     static wxString GetEncodingName(wxFontEncoding encoding);
 
+//     // return a list of all names of this encoding (see GetEncodingName)
+//     static const wxChar** GetAllEncodingNames(wxFontEncoding encoding);
+    
     // return user-readable string describing the given encoding
     //
     // NB: hard-coded now, but might change later (read it from config?)
@@ -382,6 +385,11 @@ public:
 
     // set the config object to use (may be NULL to use default)
     void SetConfig(wxConfigBase *config);
+    %pythoncode {
+        SetConfig = wx._deprecated(SetConfig,
+            "Set a config object for the whole app instead, with `wx.Config.Set`.")
+    }
+
 
     // set the root config path to use (should be an absolute path)
     void SetConfigPath(const wxString& prefix);

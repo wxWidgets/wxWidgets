@@ -51,6 +51,12 @@ _treeList = [
         'GIFAnimationCtrl',
         'HyperLinkCtrl',
         'MultiSplitterWindow',
+        'Throbber',
+        'GetMouseState',
+        'FloatCanvas',
+        'AnalogClock',
+        'CheckListCtrlMixin',
+        'ComboTreeBox',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -81,7 +87,6 @@ _treeList = [
     # dialogs from libraries
     ('More Dialogs', [
         'ImageBrowser',
-        'MultipleChoiceDialog',
         'ScrolledMessageDialog',
         ]),
 
@@ -127,8 +132,9 @@ _treeList = [
         ]),
 
     ('Custom Controls', [
-        'AnalogClockWindow',
+        'AnalogClock',
         'ColourSelect',
+        'ComboTreeBox',
         'Editor',
         'GenericButtons',
         'GenericDirCtrl',
@@ -147,6 +153,7 @@ _treeList = [
         #'RightTextCtrl',     deprecated as we have wxTE_RIGHT now.
         'Calendar',
         'CalendarCtrl',
+        'CheckListCtrlMixin',
         'ContextHelp',
         'DatePickerCtrl',
         'DynamicSashWindow',
@@ -160,12 +167,11 @@ _treeList = [
         'HtmlWindow',
         'HyperLinkCtrl',
         'IntCtrl',
-        'MediaCtrl',
-        'MultiSplitterWindow',
         'MVCTree',   
         'MaskedEditControls',
         'MaskedNumCtrl',
-        'MimeTypesManager',
+        'MediaCtrl',
+        'MultiSplitterWindow',
         'PyCrust',
         'PyPlot',
         'PyShell',
@@ -232,7 +238,9 @@ _treeList = [
         'DrawXXXList',
         'FileHistory',
         'FontEnumerator',
+        'GLCanvas',
         'Joystick',
+        'MimeTypesManager',
         'MouseGestures',
         'OGL',
         'PrintFramework',
@@ -240,11 +248,6 @@ _treeList = [
         'Sound',
         'StandardPaths',
         'Unicode',
-        ]),
-
-    # need libs not coming with the demo
-    ('Samples using an external library', [
-        'GLCanvas',
         ]),
 
 
@@ -803,7 +806,8 @@ class DemoModules:
     def LoadDict(self, modID):
         if self.name != __name__:
             source = self.modules[modID][1]
-            description = self.modules[modID][3]
+            #description = self.modules[modID][3]
+            description = self.modules[modID][2]
 
             try:
                 self.modules[modID][0] = {}
@@ -1120,7 +1124,10 @@ class wxPythonDemo(wx.Frame):
         icon = images.getWXPdemoIcon()
         self.SetIcon(icon)
 
-        self.tbicon = DemoTaskBarIcon(self)
+        try:
+            self.tbicon = DemoTaskBarIcon(self)
+        except:
+            self.tbicon = None
 
         wx.CallAfter(self.ShowTip)
 
@@ -1195,7 +1202,7 @@ class wxPythonDemo(wx.Frame):
         shellItem = menu.Append(-1, 'Open Py&Shell Window\tF5',
                                 'An interactive interpreter window with the demo app and frame objects in the namesapce')
         menu.AppendSeparator()
-        helpItem = menu.Append(-1, '&About\tCtrl-H', 'wxPython RULES!!!')
+        helpItem = menu.Append(-1, '&About wxPython Demo', 'wxPython RULES!!!')
         wx.App.SetMacAboutMenuItemId(helpItem.GetId())
 
         self.Bind(wx.EVT_MENU, self.OnOpenShellWindow, shellItem)
@@ -1211,6 +1218,7 @@ class wxPythonDemo(wx.Frame):
         self.SetMenuBar(self.mainmenu)
 
         self.finddata = wx.FindReplaceData()
+        self.finddata.SetFlags(wx.FR_DOWN)
 
         if 0:
             # This is another way to set Accelerators, in addition to
@@ -1528,9 +1536,7 @@ class wxPythonDemo(wx.Frame):
         
         self.nb.SetSelection(1)
         self.finddlg = wx.FindReplaceDialog(self, self.finddata, "Find",
-                        wx.FR_NOUPDOWN |
-                        wx.FR_NOMATCHCASE |
-                        wx.FR_NOWHOLEWORD)
+                        wx.FR_NOMATCHCASE | wx.FR_NOWHOLEWORD)
         self.finddlg.Show(True)
 
 
@@ -1543,13 +1549,22 @@ class wxPythonDemo(wx.Frame):
         self.nb.SetSelection(1)
         end = editor.GetLastPosition()
         textstring = editor.GetRange(0, end).lower()
-        start = editor.GetSelection()[1]
         findstring = self.finddata.GetFindString().lower()
-        loc = textstring.find(findstring, start)
+        backward = not (self.finddata.GetFlags() & wx.FR_DOWN)
+        if backward:
+            start = editor.GetSelection()[0]
+            loc = textstring.rfind(findstring, 0, start)
+        else:
+            start = editor.GetSelection()[1]
+            loc = textstring.find(findstring, start)
         if loc == -1 and start != 0:
             # string not found, start at beginning
-            start = 0
-            loc = textstring.find(findstring, start)
+            if backward:
+                start = end
+                loc = textstring.rfind(findstring, 0, start)
+            else:
+                start = 0
+                loc = textstring.find(findstring, start)
         if loc == -1:
             dlg = wx.MessageDialog(self, 'Find String Not Found',
                           'Find String Not Found in Demo File',
@@ -1612,7 +1627,8 @@ class wxPythonDemo(wx.Frame):
         self.demoPage = None
         self.codePage = None
         self.mainmenu = None
-        self.tbicon.Destroy()
+        if self.tbicon is not None:
+            self.tbicon.Destroy()
         self.Destroy()
 
 

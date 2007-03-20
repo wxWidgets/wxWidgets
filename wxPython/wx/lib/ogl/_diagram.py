@@ -78,6 +78,7 @@ class Diagram(object):
         for shape in self._shapeList[:]:
             if not shape.GetParent():
                 self.RemoveShape(shape)
+                shape.Delete()
                 
     def ShowAll(self, show):
         """Call Show for each shape in the diagram."""

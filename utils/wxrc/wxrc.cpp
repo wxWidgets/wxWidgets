@@ -48,7 +48,7 @@ private:
 
 #include "wx/arrimpl.cpp"
 WX_DECLARE_OBJARRAY(XRCWidgetData,ArrayOfXRCWidgetData);
-WX_DEFINE_OBJARRAY(ArrayOfXRCWidgetData);
+WX_DEFINE_OBJARRAY(ArrayOfXRCWidgetData)
 
 class XRCWndClassData
 {
@@ -153,7 +153,7 @@ public:
     };
 };
 WX_DECLARE_OBJARRAY(XRCWndClassData,ArrayOfXRCWndClassData);
-WX_DEFINE_OBJARRAY(ArrayOfXRCWndClassData);
+WX_DEFINE_OBJARRAY(ArrayOfXRCWndClassData)
 
 
 class XmlResApp : public wxAppConsole

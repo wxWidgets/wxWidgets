@@ -1,6 +1,6 @@
 """Easy generation of new events classes and binder objects"""
 
-__author__ = "Miki Tebeka <tebeka@cs.bgu.ac.il>"
+__author__ = "Miki Tebeka <miki.tebeka@gmail.com>"
 
 import wx
 

@@ -812,6 +812,7 @@ extern "C" void wxPthreadCleanup(void *ptr)
 
 void wxThreadInternal::Cleanup(wxThread *thread)
 {
+    if (pthread_getspecific(gs_keySelf) == 0) return;
     {
         wxCriticalSectionLocker lock(thread->m_critsect);
         if ( thread->m_internal->GetState() == STATE_EXITED )
@@ -1483,6 +1484,7 @@ void wxThread::Exit(ExitCode status)
         //       we make it a global object, but this would mean that we can
         //       only call one thread function at a time :-(
         DeleteThread(this);
+        pthread_setspecific(gs_keySelf, 0);
     }
     else
     {

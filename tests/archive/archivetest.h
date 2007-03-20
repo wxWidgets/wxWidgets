@@ -60,8 +60,16 @@ private:
 class TestInputStream : public wxInputStream
 {
 public:
+    // various streams have implemented eof differently, so check the archive
+    // stream works with all the possibilities (bit flags that can be ORed)
+    enum EofTypes {
+        AtLast    = 0x01,   // eof before an attempt to read past the last byte
+        WithError = 0x02    // give an error instead of eof
+    };
+    
     // ctor takes the data from the output stream, which is then empty
-    TestInputStream(TestOutputStream& out) : m_data(NULL) { SetData(out); }
+    TestInputStream(TestOutputStream& out, int eoftype)
+        : m_data(NULL), m_eoftype(eoftype) { SetData(out); }
     // this ctor 'dups'
     TestInputStream(const TestInputStream& in);
     ~TestInputStream() { delete [] m_data; }
@@ -70,6 +78,9 @@ public:
     wxFileOffset GetLength() const { return m_size; }
     bool IsSeekable() const { return (m_options & PipeIn) == 0; }
     void SetData(TestOutputStream& out);
+
+    void Chop(size_t size) { m_size = size; }
+    char& operator [](size_t pos) { return m_data[pos]; }
 
 private:
     wxFileOffset OnSysSeek(wxFileOffset pos, wxSeekMode mode);
@@ -80,6 +91,7 @@ private:
     size_t m_pos;
     size_t m_size;
     char *m_data;
+    int m_eoftype;
 };
 
 
@@ -137,7 +149,6 @@ class ArchiveTestCase : public CppUnit::TestCase
 {
 public:
     ArchiveTestCase(std::string name,
-                    int id,
                     ClassFactoryT *factory,
                     int options,
                     const wxString& archiver = wxEmptyString,
@@ -210,6 +221,22 @@ protected:
 
 
 ///////////////////////////////////////////////////////////////////////////////
+// Make ids
+
+class TestId
+{
+public:
+    // make a new id and return it as a string
+    static std::string MakeId();
+    // get the current id
+    static int GetId() { return m_seed; }
+private:
+    // seed for generating the ids
+    static int m_seed;
+};
+
+
+///////////////////////////////////////////////////////////////////////////////
 // Base class for the archive test suites
 
 class ArchiveTestSuite : public CppUnit::TestSuite
@@ -218,12 +245,9 @@ public:
     ArchiveTestSuite(std::string name);
 
 protected:
-    int m_id;
-
     virtual ArchiveTestSuite *makeSuite();
 
     virtual CppUnit::Test *makeTest(std::string descr,
-                                    int id,
                                     int options,
                                     bool genericInterface,
                                     const wxString& archiver,

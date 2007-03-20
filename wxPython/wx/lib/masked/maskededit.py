@@ -1,10 +1,10 @@
 #----------------------------------------------------------------------------
 # Name:         maskededit.py
 # Authors:      Jeff Childers, Will Sadkin
-# Email:        jchilders_98@yahoo.com, wsadkin@nameconnector.com
+# Email:        jchilders_98@yahoo.com, wsadkin@parlancecorp.com
 # Created:      02/11/2003
 # Copyright:    (c) 2003 by Jeff Childers, Will Sadkin, 2003
-# Portions:     (c) 2002 by Will Sadkin, 2002-2003
+# Portions:     (c) 2002 by Will Sadkin, 2002-2006
 # RCS-ID:       $Id$
 # License:      wxWindows license
 #----------------------------------------------------------------------------
@@ -50,7 +50,9 @@
 # o wxTimeCtrl -> TimeCtrl
 #
 
-"""\
+__doc__ = """\
+contains MaskedEditMixin class that drives all the other masked controls.
+
 ====================
 Masked Edit Overview
 ====================
@@ -88,11 +90,11 @@ masked.Ctrl:
     will be masked.TextCtrl.
 
     Each of the above classes has its own set of arguments, but masked.Ctrl
-    provides a single "unified" interface for masked controls.  Those for
-    masked.TextCtrl, masked.ComboBox and masked.IpAddrCtrl are all documented
-    below; the others have their own demo pages and interface descriptions.
-    (See end of following discussion for how to configure the wx.MaskedCtrl()
-    to select the above control types.)
+    provides a single "unified" interface for masked controls.
+
+What follows is a description of how to configure the generic masked.TextCtrl
+and masked.ComboBox;  masked.NumCtrl and masked.TimeCtrl have their own demo 
+pages and interface descriptions.
 
 =========================
 
@@ -110,8 +112,12 @@ mask
         a       Allow lowercase letters only
         C       Allow any letter, upper or lower
         X       Allow string.letters, string.punctuation, string.digits
-        &       Allow string.punctuation only
-        \*       Allow any ansi character
+        &       Allow string.punctuation only (doesn't include all unicode symbols)
+        \*       Allow any visible character
+        |       explicit field boundary (takes no space in the control; allows mix
+                of adjacent mask characters to be treated as separate fields,
+                eg: '&|###' means "field 0 = '&', field 1 = '###'", but there's
+                no fixed characters in between.
     =========  ==========================================================
 
 
@@ -127,8 +133,13 @@ mask
       import locale
       locale.setlocale(locale.LC_ALL, '')
 
-    The controls now also support (by popular demand) all "ansi" chars,
-    that is, all ascii codes between 32 and 255, by use of the * mask character.
+    The controls now also support (by popular demand) all "visible" characters,
+    by use of the * mask character, including unicode characters above
+    the standard ANSI keycode range.
+    Note:  As string.punctuation doesn't typically include all unicode
+    symbols, you will have to use includechars to get some of these into 
+    otherwise restricted positions in your control, such as those specified
+    with &.
 
   Using these mask characters, a variety of template masks can be built. See
   the demo for some other common examples include date+time, social security
@@ -323,6 +334,9 @@ to individual fields:
                                of the nature of the validation and control of input.  However,
                                you can supply one to provide data transfer routines for the
                                controls.
+        raiseOnInvalidPaste    False by default; normally a bad paste simply is ignored with a bell;
+                               if True, this will cause a ValueError exception to be thrown,
+                               with the .value attribute of the exception containing the bad value.
         =====================  ==================================================================
 
 
@@ -696,6 +710,8 @@ Event Handling
                             self._SetKeycodeHandler(WXK_UP, self.IncrementValue)
                             self._SetKeyHandler('-', self._OnChangeSign)
 
+        (Setting a func of None removes any keyhandler for the given key.)
+        
         "Navigation" keys are assumed to change the cursor position, and
         therefore don't cause automatic motion of the cursor as insertable
         characters do.
@@ -825,25 +841,65 @@ WXK_CTRL_Z = (ord('Z')+1) - ord('A')
 
 nav = (
     wx.WXK_BACK, wx.WXK_LEFT, wx.WXK_RIGHT, wx.WXK_UP, wx.WXK_DOWN, wx.WXK_TAB,
-    wx.WXK_HOME, wx.WXK_END, wx.WXK_RETURN, wx.WXK_PRIOR, wx.WXK_NEXT
+    wx.WXK_HOME, wx.WXK_END, wx.WXK_RETURN, wx.WXK_PRIOR, wx.WXK_NEXT,
+    wx.WXK_NUMPAD_LEFT, wx.WXK_NUMPAD_RIGHT, wx.WXK_NUMPAD_UP, wx.WXK_NUMPAD_DOWN,
+    wx.WXK_NUMPAD_HOME, wx.WXK_NUMPAD_END, wx.WXK_NUMPAD_ENTER, wx.WXK_NUMPAD_PRIOR, wx.WXK_NUMPAD_NEXT
     )
 
 control = (
-    wx.WXK_BACK, wx.WXK_DELETE, WXK_CTRL_A, WXK_CTRL_C, WXK_CTRL_S, WXK_CTRL_V,
+    wx.WXK_BACK, wx.WXK_DELETE, wx.WXK_INSERT,
+    wx.WXK_NUMPAD_DELETE, wx.WXK_NUMPAD_INSERT,
+    WXK_CTRL_A, WXK_CTRL_C, WXK_CTRL_S, WXK_CTRL_V,
     WXK_CTRL_X, WXK_CTRL_Z
     )
 
+# Because unicode can go over the ansi character range, we need to explicitly test
+# for all non-visible keystrokes, rather than just assuming a particular range for
+# visible characters:
+wx_control_keycodes = range(32) + list(nav) + list(control) + [
+    wx.WXK_START, wx.WXK_LBUTTON, wx.WXK_RBUTTON, wx.WXK_CANCEL, wx.WXK_MBUTTON,
+    wx.WXK_CLEAR, wx.WXK_SHIFT, wx.WXK_CONTROL, wx.WXK_MENU, wx.WXK_PAUSE, 
+    wx.WXK_CAPITAL, wx.WXK_SELECT, wx.WXK_PRINT, wx.WXK_EXECUTE, wx.WXK_SNAPSHOT,
+    wx.WXK_HELP, wx.WXK_NUMPAD0, wx.WXK_NUMPAD1, wx.WXK_NUMPAD2, wx.WXK_NUMPAD3,
+    wx.WXK_NUMPAD4, wx.WXK_NUMPAD5, wx.WXK_NUMPAD6, wx.WXK_NUMPAD7, wx.WXK_NUMPAD8,
+    wx.WXK_NUMPAD9, wx.WXK_MULTIPLY, wx.WXK_ADD, wx.WXK_SEPARATOR, wx.WXK_SUBTRACT,
+    wx.WXK_DECIMAL, wx.WXK_DIVIDE, wx.WXK_F1, wx.WXK_F2, wx.WXK_F3, wx.WXK_F4, 
+    wx.WXK_F5, wx.WXK_F6, wx.WXK_F7, wx.WXK_F8, wx.WXK_F9, wx.WXK_F10, wx.WXK_F11,
+    wx.WXK_F12, wx.WXK_F13, wx.WXK_F14, wx.WXK_F15, wx.WXK_F16, wx.WXK_F17,
+    wx.WXK_F18, wx.WXK_F19, wx.WXK_F20, wx.WXK_F21, wx.WXK_F22, wx.WXK_F23,
+    wx.WXK_F24, wx.WXK_NUMLOCK, wx.WXK_SCROLL, wx.WXK_PAGEUP, wx.WXK_PAGEDOWN,
+    wx.WXK_NUMPAD_SPACE, wx.WXK_NUMPAD_TAB, wx.WXK_NUMPAD_ENTER, wx.WXK_NUMPAD_F1,
+    wx.WXK_NUMPAD_F2, wx.WXK_NUMPAD_F3, wx.WXK_NUMPAD_F4, wx.WXK_NUMPAD_HOME,
+    wx.WXK_NUMPAD_LEFT, wx.WXK_NUMPAD_UP, wx.WXK_NUMPAD_RIGHT, wx.WXK_NUMPAD_DOWN,
+    wx.WXK_NUMPAD_PRIOR, wx.WXK_NUMPAD_PAGEUP, wx.WXK_NUMPAD_NEXT, wx.WXK_NUMPAD_PAGEDOWN,
+    wx.WXK_NUMPAD_END, wx.WXK_NUMPAD_BEGIN, wx.WXK_NUMPAD_INSERT, wx.WXK_NUMPAD_DELETE,
+    wx.WXK_NUMPAD_EQUAL, wx.WXK_NUMPAD_MULTIPLY, wx.WXK_NUMPAD_ADD, wx.WXK_NUMPAD_SEPARATOR,
+    wx.WXK_NUMPAD_SUBTRACT, wx.WXK_NUMPAD_DECIMAL, wx.WXK_NUMPAD_DIVIDE, wx.WXK_WINDOWS_LEFT,
+    wx.WXK_WINDOWS_RIGHT, wx.WXK_WINDOWS_MENU, wx.WXK_COMMAND,
+    # Hardware-specific buttons
+    wx.WXK_SPECIAL1, wx.WXK_SPECIAL2, wx.WXK_SPECIAL3, wx.WXK_SPECIAL4, wx.WXK_SPECIAL5,
+    wx.WXK_SPECIAL6, wx.WXK_SPECIAL7, wx.WXK_SPECIAL8, wx.WXK_SPECIAL9, wx.WXK_SPECIAL10,
+    wx.WXK_SPECIAL11, wx.WXK_SPECIAL12, wx.WXK_SPECIAL13, wx.WXK_SPECIAL14, wx.WXK_SPECIAL15,
+    wx.WXK_SPECIAL16, wx.WXK_SPECIAL17, wx.WXK_SPECIAL18, wx.WXK_SPECIAL19, wx.WXK_SPECIAL20
+    ]
+    
 
 ## ---------- ---------- ---------- ---------- ---------- ---------- ----------
 
 ## Constants for masking. This is where mask characters
 ## are defined.
 ##  maskchars used to identify valid mask characters from all others
-##   #- allow numeric 0-9 only
-##   A- allow uppercase only. Combine with forceupper to force lowercase to upper
-##   a- allow lowercase only. Combine with forcelower to force upper to lowercase
-##   X- allow any character (string.letters, string.punctuation, string.digits)
+##   # - allow numeric 0-9 only
+##   A - allow uppercase only. Combine with forceupper to force lowercase to upper
+##   a - allow lowercase only. Combine with forcelower to force upper to lowercase
+##   C - allow any letter, upper or lower
+##   X - allow string.letters, string.punctuation, string.digits
+##   & - allow string.punctuation only (doesn't include all unicode symbols)
+##   * - allow any visible character
+
 ## Note: locale settings affect what "uppercase", lowercase, etc comprise.
+## Note: '|' is not a maskchar, in that it is a mask processing directive, and so
+## does not appear here.
 ##
 maskchars = ("#","A","a","X","C","N",'*','&')
 ansichars = ""
@@ -1270,12 +1326,13 @@ class Field:
               'validRequired': False,           ## Set to True to disallow input that results in an invalid value
               'emptyInvalid':  False,           ## Set to True to make EMPTY = INVALID
               'description': "",                ## primarily for autoformats, but could be useful elsewhere
+              'raiseOnInvalidPaste': False,     ## if True, paste into field will cause ValueError
               }
 
     # This list contains all parameters that when set at the control level should
     # propagate down to each field:
     propagating_params = ('fillChar', 'groupChar', 'decimalChar','useParensForNegatives',
-                          'compareNoCase', 'emptyInvalid', 'validRequired')
+                          'compareNoCase', 'emptyInvalid', 'validRequired', 'raiseOnInvalidPaste')
 
     def __init__(self, **kwargs):
         """
@@ -1287,7 +1344,9 @@ class Field:
         for key in kwargs.keys():
             if key not in Field.valid_params.keys():
 ####                dbg(indent=0)
-                raise TypeError('invalid parameter "%s"' % (key))
+                ae = AttributeError('invalid parameter "%s"' % (key))
+                ae.attribute = key
+                raise ae
 
         # Set defaults for each parameter for this instance, and fully
         # populate initial parameter list for configuration:
@@ -1314,7 +1373,9 @@ class Field:
         for key in kwargs.keys():
             if key not in Field.valid_params.keys():
 ##                dbg(indent=0, suspend=0)
-                raise AttributeError('invalid keyword argument "%s"' % key)
+                ae = AttributeError('invalid keyword argument "%s"' % key)
+                ae.attribute = key
+                raise ae
 
 ##        if self._index is not None: dbg('field index:', self._index)
 ##        dbg('parameters:', indent=1)
@@ -1382,7 +1443,9 @@ class Field:
         # Verify proper numeric format params:
         if self._groupdigits and self._groupChar == self._decimalChar:
 ##            dbg(indent=0, suspend=0)
-            raise AttributeError("groupChar '%s' cannot be the same as decimalChar '%s'" % (self._groupChar, self._decimalChar))
+            ae = AttributeError("groupChar '%s' cannot be the same as decimalChar '%s'" % (self._groupChar, self._decimalChar))
+            ae.attribute = self._groupChar
+            raise ae
 
 
         # Now go do validation, semantic and inter-dependency parameter processing:
@@ -1455,7 +1518,9 @@ class Field:
                             continue
                         if not self.IsValid(choice):
 ##                            dbg(indent=0, suspend=0)
-                            raise ValueError('%s: "%s" is not a valid value for the control as specified.' % (str(self._index), choice))
+                            ve = ValueError('%s: "%s" is not a valid value for the control as specified.' % (str(self._index), choice))
+                            ve.value = choice
+                            raise ve
                 self._hasList = True
 
 ####        dbg("kwargs.has_key('fillChar')?", kwargs.has_key('fillChar'), "len(self._choices) > 0?", len(self._choices) > 0)
@@ -1700,26 +1765,39 @@ class MaskedEditMixin:
         ## Initially populated with navigation and function control keys:
         self._keyhandlers = {
             # default navigation keys and handlers:
-            wx.WXK_BACK:   self._OnErase,
-            wx.WXK_LEFT:   self._OnArrow,
-            wx.WXK_RIGHT:  self._OnArrow,
-            wx.WXK_UP:     self._OnAutoCompleteField,
-            wx.WXK_DOWN:   self._OnAutoCompleteField,
-            wx.WXK_TAB:    self._OnChangeField,
-            wx.WXK_HOME:   self._OnHome,
-            wx.WXK_END:    self._OnEnd,
-            wx.WXK_RETURN: self._OnReturn,
-            wx.WXK_PRIOR:  self._OnAutoCompleteField,
-            wx.WXK_NEXT:   self._OnAutoCompleteField,
+            wx.WXK_BACK:            self._OnErase,
+            wx.WXK_LEFT:            self._OnArrow,
+            wx.WXK_NUMPAD_LEFT:     self._OnArrow,
+            wx.WXK_RIGHT:           self._OnArrow,
+            wx.WXK_NUMPAD_RIGHT:    self._OnArrow,
+            wx.WXK_UP:              self._OnAutoCompleteField,
+            wx.WXK_NUMPAD_UP:       self._OnAutoCompleteField,
+            wx.WXK_DOWN:            self._OnAutoCompleteField,
+            wx.WXK_NUMPAD_DOWN:     self._OnAutoCompleteField,
+            wx.WXK_TAB:             self._OnChangeField,
+            wx.WXK_HOME:            self._OnHome,
+            wx.WXK_NUMPAD_HOME:     self._OnHome,
+            wx.WXK_END:             self._OnEnd,
+            wx.WXK_NUMPAD_END:      self._OnEnd,
+            wx.WXK_RETURN:          self._OnReturn,
+            wx.WXK_NUMPAD_ENTER:    self._OnReturn,
+            wx.WXK_PRIOR:           self._OnAutoCompleteField,
+            wx.WXK_NUMPAD_PRIOR:    self._OnAutoCompleteField,
+            wx.WXK_NEXT:            self._OnAutoCompleteField,
+            wx.WXK_NUMPAD_NEXT:     self._OnAutoCompleteField,
 
             # default function control keys and handlers:
-            wx.WXK_DELETE: self._OnErase,
-            WXK_CTRL_A: self._OnCtrl_A,
-            WXK_CTRL_C: self._OnCtrl_C,
-            WXK_CTRL_S: self._OnCtrl_S,
-            WXK_CTRL_V: self._OnCtrl_V,
-            WXK_CTRL_X: self._OnCtrl_X,
-            WXK_CTRL_Z: self._OnCtrl_Z,
+            wx.WXK_DELETE:          self._OnDelete,
+            wx.WXK_NUMPAD_DELETE:   self._OnDelete,
+            wx.WXK_INSERT:          self._OnInsert,
+            wx.WXK_NUMPAD_INSERT:   self._OnInsert,
+            
+            WXK_CTRL_A:             self._OnCtrl_A,
+            WXK_CTRL_C:             self._OnCtrl_C,
+            WXK_CTRL_S:             self._OnCtrl_S,
+            WXK_CTRL_V:             self._OnCtrl_V,
+            WXK_CTRL_X:             self._OnCtrl_X,
+            WXK_CTRL_Z:             self._OnCtrl_Z,
             }
 
         ## bind standard navigational and control keycodes to this instance,
@@ -1739,7 +1817,7 @@ class MaskedEditMixin:
             'C': string.letters,
             'N': string.letters + string.digits,
             '&': string.punctuation,
-            '*': ansichars
+            '*': ansichars  # to give it a value, but now allows any non-wxcontrol character
         }
 
         ## self._ignoreChange is used by MaskedComboBox, because
@@ -1787,7 +1865,9 @@ class MaskedEditMixin:
             key = key.replace('Color', 'Colour')    # for b-c, and standard wxPython spelling
             if key not in MaskedEditMixin.valid_ctrl_params.keys() + Field.valid_params.keys():
 ##                dbg(indent=0, suspend=0)
-                raise TypeError('Invalid keyword argument "%s" for control "%s"' % (key, self.name))
+                ae = AttributeError('Invalid keyword argument "%s" for control "%s"' % (key, self.name))
+                ae.attribute = key
+                raise ae
             elif key in Field.valid_params.keys():
                 constraint_kwargs[key] = value
             else:
@@ -1815,7 +1895,9 @@ class MaskedEditMixin:
                 constraint_kwargs[param] = value
 
         elif autoformat and not autoformat in masktags.keys():
-            raise AttributeError('invalid value for autoformat parameter: %s' % repr(autoformat))
+            ae = AttributeError('invalid value for autoformat parameter: %s' % repr(autoformat))
+            ae.attribute = autoformat
+            raise ae
         else:
 ##            dbg('autoformat not selected')
             if kwargs.has_key('mask'):
@@ -1844,18 +1926,18 @@ class MaskedEditMixin:
                     field = fields[i]
                     if not isinstance(field, Field):
 ##                        dbg(indent=0, suspend=0)
-                        raise AttributeError('invalid type for field parameter: %s' % repr(field))
+                        raise TypeError('invalid type for field parameter: %s' % repr(field))
                     self._fields[i] = field
 
             elif type(fields) == types.DictionaryType:
                 for index, field in fields.items():
                     if not isinstance(field, Field):
 ##                        dbg(indent=0, suspend=0)
-                        raise AttributeError('invalid type for field parameter: %s' % repr(field))
+                        raise TypeError('invalid type for field parameter: %s' % repr(field))
                     self._fields[index] = field
             else:
 ##                dbg(indent=0, suspend=0)
-                raise AttributeError('fields parameter must be a list or dictionary; not %s' % repr(fields))
+                raise TypeError('fields parameter must be a list or dictionary; not %s' % repr(fields))
 
         # Assign constraint parameters for entire control:
 ####        dbg('control constraints:', indent=1)
@@ -2052,7 +2134,9 @@ class MaskedEditMixin:
         parameters.)
         """
         if field_index not in self._field_indices:
-            raise IndexError('%s is not a valid field for control "%s".' % (str(field_index), self.name))
+            ie = IndexError('%s is not a valid field for control "%s".' % (str(field_index), self.name))
+            ie.index = field_index
+            raise ie
         # set parameters as requested:
         self._fields[field_index]._SetParameters(**kwargs)
 
@@ -2093,11 +2177,15 @@ class MaskedEditMixin:
         Routine provided for getting a parameter of an individual field.
         """
         if field_index not in self._field_indices:
-            raise IndexError('%s is not a valid field for control "%s".' % (str(field_index), self.name))
+            ie = IndexError('%s is not a valid field for control "%s".' % (str(field_index), self.name))
+            ie.index = field_index
+            raise ie
         elif Field.valid_params.has_key(paramname):
             return self._fields[field_index]._GetParameter(paramname)
         else:
-            TypeError('"%s".GetFieldParameter: invalid parameter "%s"' % (self.name, paramname))
+            ae = AttributeError('"%s".GetFieldParameter: invalid parameter "%s"' % (self.name, paramname))
+            ae.attribute = paramname
+            raise ae
 
 
     def _SetKeycodeHandler(self, keycode, func):
@@ -2106,7 +2194,10 @@ class MaskedEditMixin:
         used by the control.  <func> should take the event as argument
         and return False if no further action on the key is necessary.
         """
-        self._keyhandlers[keycode] = func
+        if func:
+            self._keyhandlers[keycode] = func
+        elif self._keyhandlers.has_key(keycode):
+            del self._keyhandlers[keycode]
 
 
     def _SetKeyHandler(self, char, func):
@@ -2126,6 +2217,9 @@ class MaskedEditMixin:
         self._nav.append(keycode)
         if handler:
             self._keyhandlers[keycode] = handler
+        elif self.keyhandlers.has_key(keycode):
+            del self._keyhandlers[keycode]
+
 
 
     def _AddNavKey(self, char, handler=None):
@@ -2154,6 +2248,8 @@ class MaskedEditMixin:
             self._nav.append(keycode)
             if func:
                 self._keyhandlers[keycode] = func
+            elif self.keyhandlers.has_key(keycode):
+                del self._keyhandlers[keycode]
 
 
     def _processMask(self, mask):
@@ -2197,9 +2293,13 @@ class MaskedEditMixin:
                 s += ' '
                 self._ctrl_constraints._defaultValue += ' '
 
+
         # Now, go build up a dictionary of booleans, indexed by position,
-        # indicating whether or not a given position is masked or not
+        # indicating whether or not a given position is masked or not.
+        # Also, strip out any '|' chars, adjusting the mask as necessary,
+        # marking the appropriate positions for field boundaries:
         ismasked = {}
+        explicit_field_boundaries = []
         i = 0
         while i < len(s):
             if s[i] == '\\':            # if escaped character:
@@ -2209,14 +2309,19 @@ class MaskedEditMixin:
                     if i+2 < len(s) and s[i+1] == '\\':
                         # if next char also a '\', char is a literal '\'
                         s = s[:i] + s[i+1:]     # elide the 2nd '\' as well
+                i += 1                      # increment to next char
+            elif s[i] == '|':
+                s = s[:i] + s[i+1:] #         elide the '|'
+                explicit_field_boundaries.append(i)
+                # keep index where it is:
             else:                       # else if special char, mark position accordingly
                 ismasked[i] = s[i] in maskchars
-####            dbg('ismasked[%d]:' % i, ismasked[i], s)
-            i += 1                      # increment to next char
+####                dbg('ismasked[%d]:' % i, ismasked[i], s)
+                i += 1                      # increment to next char
 ####        dbg('ismasked:', ismasked)
 ##        dbg('new mask: "%s"' % s, indent=0)
 
-        return s, ismasked
+        return s, ismasked, explicit_field_boundaries
 
 
     def _calcFieldExtents(self):
@@ -2300,6 +2405,8 @@ class MaskedEditMixin:
                         while i < len(self._mask) and self._isMaskChar(i):
                             self._lookupField[i] = field_index
                             i += 1
+                            if i in self._explicit_field_boundaries:
+                                break
 ####                        dbg('edit_end =', i)
                         edit_end = i
                         self._lookupField[i] = field_index
@@ -2317,6 +2424,7 @@ class MaskedEditMixin:
                                                                 mask=self._mask[edit_start:edit_end])
                     pos = i
                     i = self._findNextEntry(pos, adjustInsert=False)  # go to next field:
+####                    dbg('next entry:', i)
                     if i > pos:
                         for j in range(pos, i+1):
                             self._lookupField[j] = field_index
@@ -2337,7 +2445,10 @@ class MaskedEditMixin:
         # Verify that all field indices specified are valid for mask:
         for index in self._fields.keys():
             if index not in [-1] + self._lookupField.values():
-                raise IndexError('field %d is not a valid field for mask "%s"' % (index, self._mask))
+                ie = IndexError('field %d is not a valid field for mask "%s"' % (index, self._mask))
+                ie.index = index
+                raise ie
+
 
 
     def _calcTemplate(self, reset_fillchar, reset_default):
@@ -2441,7 +2552,9 @@ class MaskedEditMixin:
 ##            dbg('self._defaultValue:', self._defaultValue)
             if not self.IsEmpty(self._defaultValue) and not self.IsValid(self._defaultValue):
 ####                dbg(indent=0)
-                raise ValueError('Default value of "%s" is not a valid value for control "%s"' % (self._defaultValue, self.name))
+                ve = ValueError('Default value of "%s" is not a valid value for control "%s"' % (self._defaultValue, self.name))
+                ve.value = self._defaultValue
+                raise ve
 
             # if no fillchar change, but old value == old template, replace it:
             if newvalue == old_template:
@@ -2529,10 +2642,17 @@ class MaskedEditMixin:
                     valid_paste, ignore, replace_to = self._validatePaste(choice, start, end)
                     if not valid_paste:
 ####                        dbg(indent=0)
-                        raise ValueError('"%s" could not be entered into field %d of control "%s"' % (choice, index, self.name))
+                        ve = ValueError('"%s" could not be entered into field %d of control "%s"' % (choice, index, self.name))
+                        ve.value = choice
+                        ve.index = index
+                        raise ve
                     elif replace_to > end:
 ####                        dbg(indent=0)
-                        raise ValueError('"%s" will not fit into field %d of control "%s"' (choice, index, self.name))
+                        ve = ValueError('"%s" will not fit into field %d of control "%s"' (choice, index, self.name))
+                        ve.value = choice
+                        ve.index = index
+                        raise ve
+
 ####                    dbg(choice, 'valid in field', index)
 
 
@@ -2557,7 +2677,7 @@ class MaskedEditMixin:
         # Preprocess specified mask to expand {n} syntax, handle escaped
         # mask characters, etc and build the resulting positionally keyed
         # dictionary for which positions are mask vs. template characters:
-        self._mask, self.ismasked = self._processMask(mask)
+        self._mask, self._ismasked, self._explicit_field_boundaries = self._processMask(mask)
         self._masklength = len(self._mask)
 ####        dbg('processed mask:', self._mask)
 
@@ -2611,6 +2731,12 @@ class MaskedEditMixin:
                 keycode = ord(key)
                 if not self._keyhandlers.has_key(keycode):
                     self._SetKeyHandler(key, self._OnChangeSign)
+        elif self._isInt or self._isFloat:
+            signkeys = ['-', '+', ' ', '(', ')']
+            for key in signkeys:
+                keycode = ord(key)
+                if self._keyhandlers.has_key(keycode) and self._keyhandlers[keycode] == self._OnChangeSign:
+                    self._SetKeyHandler(key, None)
 
 
 
@@ -2670,18 +2796,23 @@ class MaskedEditMixin:
 ####            dbg('Registering numeric navigation and control handlers (if not already set)')
             if not self._keyhandlers.has_key(wx.WXK_DOWN):
                 self._SetKeycodeHandler(wx.WXK_DOWN, self._OnChangeField)
+            if not self._keyhandlers.has_key(wx.WXK_NUMPAD_DOWN):
+                self._SetKeycodeHandler(wx.WXK_DOWN, self._OnChangeField)
             if not self._keyhandlers.has_key(wx.WXK_UP):
+                self._SetKeycodeHandler(wx.WXK_UP, self._OnUpNumeric)  # (adds "shift" to up arrow, and calls _OnChangeField)
+            if not self._keyhandlers.has_key(wx.WXK_NUMPAD_UP):
                 self._SetKeycodeHandler(wx.WXK_UP, self._OnUpNumeric)  # (adds "shift" to up arrow, and calls _OnChangeField)
 
             # On ., truncate contents right of cursor to decimal point (if any)
-            # leaves cusor after decimal point if floating point, otherwise at 0.
-            if not self._keyhandlers.has_key(ord(self._decimalChar)):
+            # leaves cursor after decimal point if floating point, otherwise at 0.
+            if not self._keyhandlers.has_key(ord(self._decimalChar)) or self._keyhandlers[ord(self._decimalChar)] != self._OnDecimalPoint:
                 self._SetKeyHandler(self._decimalChar, self._OnDecimalPoint)
-            if not self._keyhandlers.has_key(ord(self._shiftDecimalChar)):
+    
+            if not self._keyhandlers.has_key(ord(self._shiftDecimalChar)) or self._keyhandlers[ord(self._shiftDecimalChar)] != self._OnChangeField:
                 self._SetKeyHandler(self._shiftDecimalChar, self._OnChangeField)   # (Shift-'.' == '>' on US keyboards)
 
             # Allow selective insert of groupchar in numbers:
-            if not self._keyhandlers.has_key(ord(self._fields[0]._groupChar)):
+            if not self._keyhandlers.has_key(ord(self._fields[0]._groupChar)) or self._keyhandlers[ord(self._fields[0]._groupChar)] != self._OnGroupChar:
                 self._SetKeyHandler(self._fields[0]._groupChar, self._OnGroupChar)
 
 ##        dbg(indent=0, suspend=0)
@@ -2865,13 +2996,6 @@ class MaskedEditMixin:
 ##            dbg("field length exceeded:",pos)
             keep_processing = False
 
-        if keep_processing:
-            if self._isMaskChar(pos):  ## Get string of allowed characters for validation
-                okchars = self._getAllowedChars(pos)
-            else:
-##                dbg('Not a valid position: pos = ', pos,"chars=",maskchars)
-                okchars = ""
-
         key = self._adjustKey(pos, key)     # apply formatting constraints to key:
 
         if self._keyhandlers.has_key(key):
@@ -2884,29 +3008,34 @@ class MaskedEditMixin:
 ##                dbg(indent=0)
                 return
             # else skip default processing, but do final formatting
-        if key < wx.WXK_SPACE or key > 255:
-##            dbg('key < WXK_SPACE or key > 255')
-            event.Skip()                # non alphanumeric
+        if key in wx_control_keycodes:
+##            dbg('key in wx_control_keycodes')
+            event.Skip()                # non-printable; let base control handle it
             keep_processing = False
         else:
             field = self._FindField(pos)
 
-##            dbg("key ='%s'" % chr(key))
-            if chr(key) == ' ':
-##                dbg('okSpaces?', field._okSpaces)
-                pass
-
-            char = chr(key) # (must work if we got this far)
-
             if 'unicode' in wx.PlatformInfo:
-                char = char.decode(self._defaultEncoding)
+                if key < 256:
+                    char = chr(key) # (must work if we got this far)
+                    char = char.decode(self._defaultEncoding)
+                else:
+                    char = unichr(event.GetUnicodeKey())
+                    dbg('unicode char:', char)
                 excludes = u''
                 if type(field._excludeChars) != types.UnicodeType:
                     excludes += field._excludeChars.decode(self._defaultEncoding)
                 if type(self._ctrl_constraints) != types.UnicodeType:
                     excludes += self._ctrl_constraints._excludeChars.decode(self._defaultEncoding)
             else:
+                char = chr(key) # (must work if we got this far)
                 excludes = field._excludeChars + self._ctrl_constraints._excludeChars
+
+##                dbg("key ='%s'" % chr(key))
+                if chr(key) == ' ':
+##                dbg('okSpaces?', field._okSpaces)
+                    pass
+
 
             if char in excludes:
                 keep_processing = False
@@ -3096,25 +3225,25 @@ class MaskedEditMixin:
         keycode = event.GetKeyCode()
         sel_start, sel_to = self._GetSelection()
         entry_end = self._goEnd(getPosOnly=True)
-        if keycode in (wx.WXK_RIGHT, wx.WXK_DOWN):
+        if keycode in (wx.WXK_RIGHT, wx.WXK_DOWN, wx.WXK_NUMPAD_RIGHT, wx.WXK_NUMPAD_DOWN):
             if( ( not self._isTemplateChar(pos) and pos+1 > entry_end)
                 or ( self._isTemplateChar(pos) and pos >= entry_end) ):
 ##                dbg("can't advance", indent=0)
                 return False
             elif self._isTemplateChar(pos):
                 self._AdjustField(pos)
-        elif keycode in (wx.WXK_LEFT,wx.WXK_UP) and sel_start == sel_to and pos > 0 and self._isTemplateChar(pos-1):
+        elif keycode in (wx.WXK_LEFT, wx.WXK_UP, wx.WXK_NUMPAD_LEFT, wx.WXK_NUMPAD_UP) and sel_start == sel_to and pos > 0 and self._isTemplateChar(pos-1):
 ##            dbg('adjusting field')
             self._AdjustField(pos)
 
         # treat as shifted up/down arrows as tab/reverse tab:
-        if event.ShiftDown() and keycode in (wx.WXK_UP, wx.WXK_DOWN):
+        if event.ShiftDown() and keycode in (wx.WXK_UP, wx.WXK_DOWN, wx.WXK_NUMPAD_UP, wx.WXK_NUMPAD_DOWN):
             # remove "shifting" and treat as (forward) tab:
             event.m_shiftDown = False
             keep_processing = self._OnChangeField(event)
 
         elif self._FindField(pos)._selectOnFieldEntry:
-            if( keycode in (wx.WXK_UP, wx.WXK_LEFT)
+            if( keycode in (wx.WXK_UP, wx.WXK_LEFT, wx.WXK_NUMPAD_UP, wx.WXK_NUMPAD_LEFT)
                 and sel_start != 0
                 and self._isTemplateChar(sel_start-1)
                 and sel_start != self._masklength
@@ -3125,7 +3254,7 @@ class MaskedEditMixin:
                 event.m_shiftDown = True
                 event.m_ControlDown = True
                 keep_processing = self._OnChangeField(event)
-            elif( keycode in (wx.WXK_DOWN, wx.WXK_RIGHT)
+            elif( keycode in (wx.WXK_DOWN, wx.WXK_RIGHT, wx.WXK_NUMPAD_DOWN, wx.WXK_NUMPAD_RIGHT)
                   and sel_to != self._masklength
                   and self._isTemplateChar(sel_to)):
 
@@ -3138,8 +3267,8 @@ class MaskedEditMixin:
 ##                dbg('using base ctrl event processing')
                 event.Skip()
         else:
-            if( (sel_to == self._fields[0]._extent[0] and keycode == wx.WXK_LEFT)
-                or (sel_to == self._masklength and keycode == wx.WXK_RIGHT) ):
+            if( (sel_to == self._fields[0]._extent[0] and keycode in (wx.WXK_LEFT, wx.WXK_NUMPAD_LEFT) )
+                or (sel_to == self._masklength and keycode in (wx.WXK_RIGHT, wx.WXK_NUMPAD_RIGHT) ) ):
                 if not wx.Validator_IsSilent():
                     wx.Bell()
             else:
@@ -3185,6 +3314,32 @@ class MaskedEditMixin:
 ##        dbg(indent=0)
         return False
 
+    def _OnInsert(self, event=None):
+        """ Handles shift-insert and control-insert operations (paste and copy, respectively)"""
+##        dbg("MaskedEditMixin::_OnInsert", indent=1)
+        if event and isinstance(event, wx.KeyEvent):
+            if event.ShiftDown():
+                self.Paste()
+            elif event.ControlDown():
+                self.Copy()
+            # (else do nothing)
+        # (else do nothing)
+##        dbg(indent=0)
+        return False
+
+    def _OnDelete(self, event=None):
+        """ Handles shift-delete and delete operations (cut and erase, respectively)"""
+##        dbg("MaskedEditMixin::_OnDelete", indent=1)
+        if event and isinstance(event, wx.KeyEvent):
+            if event.ShiftDown():
+                self.Cut()
+            else:
+                self._OnErase(event)
+        else:
+            self._OnErase(event)
+##        dbg(indent=0)
+        return False
+
     def _OnCtrl_Z(self, event=None):
         """ Handles ctrl-Z keypress in control and Undo operation on context menu.
             Should return False to skip other processing. """
@@ -3223,11 +3378,11 @@ class MaskedEditMixin:
         # If trying to erase beyond "legal" bounds, disallow operation:
         if( (sel_to == 0 and key == wx.WXK_BACK)
             or (self._signOk and sel_to == 1 and value[0] == ' ' and key == wx.WXK_BACK)
-            or (sel_to == self._masklength and sel_start == sel_to and key == wx.WXK_DELETE and not field._insertRight)
+            or (sel_to == self._masklength and sel_start == sel_to and key in (wx.WXK_DELETE, wx.WXK_NUMPAD_DELETE) and not field._insertRight)
             or (self._signOk and self._useParens
                 and sel_start == sel_to
                 and sel_to == self._masklength - 1
-                and value[sel_to] == ' ' and key == wx.WXK_DELETE and not field._insertRight) ):
+                and value[sel_to] == ' ' and key in (wx.WXK_DELETE, wx.WXK_NUMPAD_DELETE) and not field._insertRight) ):
             if not wx.Validator_IsSilent():
                 wx.Bell()
 ##            dbg(indent=0)
@@ -3239,7 +3394,7 @@ class MaskedEditMixin:
             and sel_start >= start                              # and selection starts in field
             and ((sel_to == sel_start                           # and no selection
                   and sel_to == end                             # and cursor at right edge
-                  and key in (wx.WXK_BACK, wx.WXK_DELETE))            # and either delete or backspace key
+                  and key in (wx.WXK_BACK, wx.WXK_DELETE, wx.WXK_NUMPAD_DELETE))    # and either delete or backspace key
                  or                                             # or
                  (key == wx.WXK_BACK                               # backspacing
                     and (sel_to == end                          # and selection ends at right edge
@@ -3784,13 +3939,17 @@ class MaskedEditMixin:
         value = self._eraseSelection()
         integer = self._fields[0]
         start, end = integer._extent
+        sel_start, sel_to = self._GetSelection()
 
 ####        dbg('adjusted pos:', pos)
         if chr(key) in ('-','+','(', ')') or (chr(key) == " " and pos == self._signpos):
             cursign = self._isNeg
 ##            dbg('cursign:', cursign)
             if chr(key) in ('-','(', ')'):
-                self._isNeg = (not self._isNeg)   ## flip value
+                if sel_start <= self._signpos:
+                    self._isNeg = True
+                else:
+                    self._isNeg = (not self._isNeg)   ## flip value
             else:
                 self._isNeg = False
 ##            dbg('isNeg?', self._isNeg)
@@ -3862,7 +4021,8 @@ class MaskedEditMixin:
 
     def _findNextEntry(self,pos, adjustInsert=True):
         """ Find the insertion point for the next valid entry character position."""
-        if self._isTemplateChar(pos):   # if changing fields, pay attn to flag
+##        dbg('MaskedEditMixin::_findNextEntry', indent=1)        
+        if self._isTemplateChar(pos) or pos in self._explicit_field_boundaries:   # if changing fields, pay attn to flag
             adjustInsert = adjustInsert
         else:                           # else within a field; flag not relevant
             adjustInsert = False
@@ -3879,6 +4039,7 @@ class MaskedEditMixin:
             slice = self._GetValue()[start:end]
             if field._insertRight and field.IsEmpty(slice):
                 pos = end
+##        dbg('final pos:', pos, indent=0)
         return pos
 
 
@@ -3909,21 +4070,21 @@ class MaskedEditMixin:
 ##            dbg('choices:', field._choices)
 ##            dbg('compareChoices:', field._compareChoices)
             choices, choice_required = field._compareChoices, field._choiceRequired
-            if keycode in (wx.WXK_PRIOR, wx.WXK_UP):
+            if keycode in (wx.WXK_PRIOR, wx.WXK_UP, wx.WXK_NUMPAD_PRIOR, wx.WXK_NUMPAD_UP):
                 direction = -1
             else:
                 direction = 1
             match_index, partial_match = self._autoComplete(direction, choices, text, compareNoCase=field._compareNoCase, current_index = field._autoCompleteIndex)
             if( match_index is None
-                and (keycode in self._autoCompleteKeycodes + [wx.WXK_PRIOR, wx.WXK_NEXT]
-                     or (keycode in [wx.WXK_UP, wx.WXK_DOWN] and event.ShiftDown() ) ) ):
+                and (keycode in self._autoCompleteKeycodes + [wx.WXK_PRIOR, wx.WXK_NEXT, wx.WXK_NUMPAD_PRIOR, wx.WXK_NUMPAD_NEXT]
+                     or (keycode in [wx.WXK_UP, wx.WXK_DOWN, wx.WXK_NUMPAD_UP, wx.WXK_NUMPAD_DOWN] and event.ShiftDown() ) ) ):
                 # Select the 1st thing from the list:
                 match_index = 0
 
             if( match_index is not None
-                and ( keycode in self._autoCompleteKeycodes + [wx.WXK_PRIOR, wx.WXK_NEXT]
-                      or (keycode in [wx.WXK_UP, wx.WXK_DOWN] and event.ShiftDown())
-                      or (keycode == wx.WXK_DOWN and partial_match) ) ):
+                and ( keycode in self._autoCompleteKeycodes + [wx.WXK_PRIOR, wx.WXK_NEXT, wx.WXK_NUMPAD_PRIOR, wx.WXK_NUMPAD_NEXT]
+                      or (keycode in [wx.WXK_UP, wx.WXK_DOWN, wx.WXK_NUMPAD_UP, wx.WXK_NUMPAD_DOWN] and event.ShiftDown())
+                      or (keycode in [wx.WXK_DOWN, wx.WXK_NUMPAD_DOWN] and partial_match) ) ):
 
                 # We're allowed to auto-complete:
 ##                dbg('match found')
@@ -3936,10 +4097,11 @@ class MaskedEditMixin:
                 self._CheckValid()  # recolor as appopriate
 
 
-        if keycode in (wx.WXK_UP, wx.WXK_DOWN, wx.WXK_LEFT, wx.WXK_RIGHT):
+        if keycode in (wx.WXK_UP, wx.WXK_DOWN, wx.WXK_LEFT, wx.WXK_RIGHT, 
+                       wx.WXK_NUMPAD_UP, wx.WXK_NUMPAD_DOWN, wx.WXK_NUMPAD_LEFT, wx.WXK_NUMPAD_RIGHT):
             # treat as left right arrow if unshifted, tab/shift tab if shifted.
             if event.ShiftDown():
-                if keycode in (wx.WXK_DOWN, wx.WXK_RIGHT):
+                if keycode in (wx.WXK_DOWN, wx.WXK_RIGHT, wx.WXK_NUMPAD_DOWN, wx.WXK_NUMPAD_RIGHT):
                     # remove "shifting" and treat as (forward) tab:
                     event.m_shiftDown = False
                 keep_processing = self._OnChangeField(event)
@@ -4098,7 +4260,7 @@ class MaskedEditMixin:
         # first space for sign, and last one if using parens.
         if( self._signOk
             and ((pos == self._signpos and key in (ord('-'), ord('+'), ord(' ')) )
-                 or self._useParens and pos == self._masklength -1)):
+                 or (self._useParens and pos == self._masklength -1))):
 ##            dbg('adjusted pos:', pos, indent=0)
             return pos
 
@@ -4106,6 +4268,7 @@ class MaskedEditMixin:
             field = self._FindField(pos)
 
 ##            dbg('field._insertRight?', field._insertRight)
+##            if self._signOk: dbg('self._signpos:', self._signpos)
             if field._insertRight:              # if allow right-insert
                 start, end = field._extent
                 slice = self._GetValue()[start:end].strip()
@@ -4140,12 +4303,14 @@ class MaskedEditMixin:
 ##                        # restore selection
 ##                        self._SetSelection(sel_start, pos)
 
-                    elif self._signOk and sel_start == 0:   # if selected to beginning and signed,
+                    # if selected to beginning and signed, and not changing sign explicitly:
+                    elif self._signOk and sel_start == 0 and key not in (ord('-'), ord('+'), ord(' ')):
                         # adjust to past reserved sign position:
                         pos = self._fields[0]._extent[0]
+##                        dbg('adjusting field to ', pos)
                         self._SetInsertionPoint(pos)
-                        # restore selection
-                        self._SetSelection(pos, sel_to)
+                        # but keep original selection, to allow replacement of any sign: 
+                        self._SetSelection(0, sel_to)
                     else:
                         pass    # leave position/selection alone
 
@@ -4396,7 +4561,7 @@ class MaskedEditMixin:
         """ Returns True if the char at position pos is a special mask character (e.g. NCXaA#)
         """
         if pos < self._masklength:
-            return self.ismasked[pos]
+            return self._ismasked[pos]
         else:
             return False
 
@@ -4482,7 +4647,7 @@ class MaskedEditMixin:
                     okChars += ')'
 
 ####            dbg('%s in %s?' % (char, okChars), char in okChars)
-            approved = char in okChars
+            approved = (self.maskdict[pos] == '*' or char in okChars)
 
             if approved and checkRegex:
 ##                dbg("checking appropriate regex's")
@@ -4526,11 +4691,11 @@ class MaskedEditMixin:
         if self._signOk:
             text, signpos, right_signpos = self._getSignedValue()
 ##            dbg('text: "%s", signpos:' % text, signpos)
+            if text and signpos != self._signpos:
+                self._signpos = signpos
             if not text or text[signpos] not in ('-','('):
                 self._isNeg = False
 ##                dbg('no valid sign found; new sign:', self._isNeg)
-                if text and signpos != self._signpos:
-                    self._signpos = signpos
             elif text and self._valid and not self._isNeg and text[signpos] in ('-', '('):
 ##                dbg('setting _isNeg to True')
                 self._isNeg = True
@@ -5352,6 +5517,8 @@ class MaskedEditMixin:
             field = self._FindField(self._GetInsertionPoint())
             edit_start, edit_end = field._extent
             if field._selectOnFieldEntry:
+                if self._isFloat or self._isInt and field == self._fields[0]:
+                    edit_start = 0
                 self._SetInsertionPoint(edit_start)
                 self._SetSelection(edit_start, edit_end)
 
@@ -5368,8 +5535,8 @@ class MaskedEditMixin:
 
                 if integer._selectOnFieldEntry:
 ##                    dbg('select on field entry:')
-                    self._SetInsertionPoint(edit_start)
-                    self._SetSelection(edit_start, edit_end)
+                    self._SetInsertionPoint(0)
+                    self._SetSelection(0, edit_end)
 
                 elif integer._insertRight:
 ##                    dbg('moving insertion point to end')
@@ -5505,9 +5672,13 @@ class MaskedEditMixin:
             if raise_on_invalid:
 ##                dbg(indent=0, suspend=0)
                 if item == 'control':
-                    raise ValueError('"%s" will not fit into the control "%s"' % (paste_text, self.name))
+                    ve = ValueError('"%s" will not fit into the control "%s"' % (paste_text, self.name))
+                    ve.value = paste_text
+                    raise ve
                 else:
-                    raise ValueError('"%s" will not fit into the selection' % paste_text)
+                    ve = ValueError('"%s" will not fit into the selection' % paste_text)
+                    ve.value = paste_text
+                    raise ve
             else:
 ##                dbg(indent=0, suspend=0)
                 return False, None, None
@@ -5562,13 +5733,18 @@ class MaskedEditMixin:
 
         if not valid_paste and raise_on_invalid:
 ##            dbg('raising exception', indent=0, suspend=0)
-            raise ValueError('"%s" cannot be inserted into the control "%s"' % (paste_text, self.name))
+            ve = ValueError('"%s" cannot be inserted into the control "%s"' % (paste_text, self.name))
+            ve.value = paste_text
+            raise ve
+
 
         elif i < len(paste_text):
             valid_paste = False
             if raise_on_invalid:
 ##                dbg('raising exception', indent=0, suspend=0)
-                raise ValueError('"%s" will not fit into the control "%s"' % (paste_text, self.name))
+                ve = ValueError('"%s" will not fit into the control "%s"' % (paste_text, self.name))
+                ve.value = paste_text
+                raise ve
 
 ##        dbg('valid_paste?', valid_paste)
         if valid_paste:
@@ -5682,6 +5858,7 @@ class MaskedEditMixin:
                     sel_start = 0
 ##                dbg('adjusted selection:', (sel_start, sel_to))
 
+            raise_on_invalid = raise_on_invalid or field._raiseOnInvalidPaste
             try:
                 valid_paste, replacement_text, replace_to = self._validatePaste(paste_text, sel_start, sel_to, raise_on_invalid)
             except:
@@ -6546,6 +6723,42 @@ __i=0
 
 ## CHANGELOG:
 ## ====================
+##  Version 1.12
+##  1. Added proper support for NUMPAD keypad keycodes for navigation and control.
+##
+##  Version 1.11
+##  1. Added value member to ValueError exceptions, so that people can catch them
+##     and then display their own errors, and added attribute raiseOnInvalidPaste,
+##     so one doesn't have to subclass the controls simply to force generation of
+##     a ValueError on a bad paste operation.
+##  2. Fixed handling of unicode charsets by converting to explicit control char
+##     set testing for passing those keystrokes to the base control, and then 
+##     changing the semantics of the * maskchar to indicate any visible char.
+##  3. Added '|' mask specification character, which allows splitting of contiguous
+##     mask characters into separate fields, allowing finer control of behavior
+##     of a control.
+##     
+##
+##  Version 1.10
+##  1. Added handling for WXK_DELETE and WXK_INSERT, such that shift-delete
+##     cuts, shift-insert pastes, and ctrl-insert copies.
+##
+##  Version 1.9
+##  1. Now ignores kill focus events when being destroyed.
+##  2. Added missing call to set insertion point on changing fields.
+##  3. Modified SetKeyHandler() to accept None as means of removing one.
+##  4. Fixed keyhandler processing for group and decimal character changes.
+##  5. Fixed a problem that prevented input into the integer digit of a 
+##     integerwidth=1 numctrl, if the current value was 0.
+##  6. Fixed logic involving processing of "_signOk" flag, to remove default
+##     sign key handlers if false, so that SetAllowNegative(False) in the
+##     NumCtrl works properly.
+##  7. Fixed selection logic for numeric controls so that if selectOnFieldEntry
+##     is true, and the integer portion of an integer format control is selected
+##     and the sign position is selected, the sign keys will always result in a
+##     negative value, rather than toggling the previous sign.
+##
+##
 ##  Version 1.8
 ##  1. Fixed bug involving incorrect variable name, causing combobox autocomplete to fail.
 ##  2. Added proper support for unicode version of wxPython

@@ -42,6 +42,15 @@ IMPLEMENT_DYNAMIC_CLASS(wxSpinEvent, wxNotifyEvent)
 #include "wx/msw/private.h"
 #include "wx/msw/wrapcctl.h"
 
+#ifndef UDM_SETRANGE32
+    #define UDM_SETRANGE32 (WM_USER+111)
+#endif
+
+#ifndef UDM_SETPOS32
+    #define UDM_SETPOS32 (WM_USER+113)
+    #define UDM_GETPOS32 (WM_USER+114)
+#endif
+
 // ============================================================================
 // implementation
 // ============================================================================

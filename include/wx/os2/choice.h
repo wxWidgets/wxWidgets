@@ -20,6 +20,7 @@ class WXDLLEXPORT wxChoice: public wxChoiceBase
 public:
     // ctors
     inline wxChoice() { }
+    virtual ~wxChoice();
 
     inline wxChoice( wxWindow*          pParent
                     ,wxWindowID         vId
@@ -96,6 +97,9 @@ public:
 
     virtual int      GetCount(void) const;
     virtual int      GetSelection(void) const ;
+#if wxABI_VERSION >= 20602
+    virtual int GetCurrentSelection() const {return GetSelection();}
+#endif
     virtual void     SetSelection(int n);
 
     virtual int      FindString(const wxString& rsStr) const;

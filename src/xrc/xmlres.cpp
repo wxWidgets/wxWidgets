@@ -46,7 +46,7 @@
 #include "wx/xrc/xmlres.h"
 
 #include "wx/arrimpl.cpp"
-WX_DEFINE_OBJARRAY(wxXmlResourceDataRecords);
+WX_DEFINE_OBJARRAY(wxXmlResourceDataRecords)
 
 
 wxXmlResource *wxXmlResource::ms_instance = NULL;
@@ -683,7 +683,7 @@ wxObject *wxXmlResource::CreateResFromNode(wxXmlNode *node, wxObject *parent,
 
 #include "wx/listimpl.cpp"
 WX_DECLARE_LIST(wxXmlSubclassFactory, wxXmlSubclassFactoriesList);
-WX_DEFINE_LIST(wxXmlSubclassFactoriesList);
+WX_DEFINE_LIST(wxXmlSubclassFactoriesList)
 
 wxXmlSubclassFactoriesList *wxXmlResource::ms_subclassFactories = NULL;
 
@@ -780,19 +780,24 @@ void wxXmlResourceHandler::AddStyle(const wxString& name, int value)
 void wxXmlResourceHandler::AddWindowStyles()
 {
     XRC_ADD_STYLE(wxCLIP_CHILDREN);
-    XRC_ADD_STYLE(wxSIMPLE_BORDER);
-    XRC_ADD_STYLE(wxSUNKEN_BORDER);
-    XRC_ADD_STYLE(wxDOUBLE_BORDER);
-    XRC_ADD_STYLE(wxRAISED_BORDER);
-    XRC_ADD_STYLE(wxSTATIC_BORDER);
-    XRC_ADD_STYLE(wxNO_BORDER);
+
+    // the border styles all have the old and new names, recognize both for now
+    XRC_ADD_STYLE(wxSIMPLE_BORDER); XRC_ADD_STYLE(wxBORDER_SIMPLE);
+    XRC_ADD_STYLE(wxSUNKEN_BORDER); XRC_ADD_STYLE(wxBORDER_SUNKEN);
+    XRC_ADD_STYLE(wxDOUBLE_BORDER); XRC_ADD_STYLE(wxBORDER_DOUBLE);
+    XRC_ADD_STYLE(wxRAISED_BORDER); XRC_ADD_STYLE(wxBORDER_RAISED);
+    XRC_ADD_STYLE(wxSTATIC_BORDER); XRC_ADD_STYLE(wxBORDER_STATIC);
+    XRC_ADD_STYLE(wxNO_BORDER);     XRC_ADD_STYLE(wxBORDER_NONE);
+
     XRC_ADD_STYLE(wxTRANSPARENT_WINDOW);
     XRC_ADD_STYLE(wxWANTS_CHARS);
     XRC_ADD_STYLE(wxTAB_TRAVERSAL);
     XRC_ADD_STYLE(wxNO_FULL_REPAINT_ON_RESIZE);
     XRC_ADD_STYLE(wxFULL_REPAINT_ON_RESIZE);
+    XRC_ADD_STYLE(wxALWAYS_SHOW_SB);
     XRC_ADD_STYLE(wxWS_EX_BLOCK_EVENTS);
     XRC_ADD_STYLE(wxWS_EX_VALIDATE_RECURSIVELY);
+    XRC_ADD_STYLE(wxALWAYS_SHOW_SB);
 }
 
 
@@ -1094,8 +1099,11 @@ wxBitmap wxXmlResourceHandler::GetBitmap(const wxString& param,
         return wxNullBitmap;
     }
     if (!(size == wxDefaultSize)) img.Rescale(size.x, size.y);
+#if !defined(__WXMSW__) || wxUSE_WXDIB
     return wxBitmap(img);
-
+#else
+    return wxBitmap();
+#endif
 }
 
 

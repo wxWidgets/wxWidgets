@@ -84,7 +84,7 @@ private:
 // IDs for the controls and the menu commands
 enum
 {
-    Minimal_Run = wxID_HIGHEST + 1,
+    Minimal_Run = wxID_HIGHEST + 1
 };
 
 // ----------------------------------------------------------------------------

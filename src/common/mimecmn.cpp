@@ -114,7 +114,7 @@ wxFileTypeInfo::wxFileTypeInfo(const wxArrayString& sArray)
 }
 
 #include "wx/arrimpl.cpp"
-WX_DEFINE_OBJARRAY(wxArrayFileTypeInfo);
+WX_DEFINE_OBJARRAY(wxArrayFileTypeInfo)
 
 // ============================================================================
 // implementation of the wrapper classes
@@ -494,6 +494,8 @@ wxMimeTypesManager::~wxMimeTypesManager()
 
 bool wxMimeTypesManager::Unassociate(wxFileType *ft)
 {
+    EnsureImpl();
+
 #if defined(__UNIX__) && !defined(__CYGWIN__) && !defined(__WINE__)
     return m_impl->Unassociate(ft);
 #else

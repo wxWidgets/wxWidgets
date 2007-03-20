@@ -192,6 +192,22 @@ protected:
     HANDLE m_handle;
 };
 
+// a template to make initializing Windows styructs less painful: it zeroes all
+// the struct fields and also sets cbSize member to the correct value (and so
+// can be only used with structures which have this member...)
+template <class T>
+struct WinStruct : public T
+{
+    WinStruct()
+    {
+        ::ZeroMemory(this, sizeof(T));
+
+        // explicit qualification is required here for this to be valid C++
+        this->cbSize = sizeof(T);
+    }
+};
+
+
 #if wxUSE_GUI
 
 #include <wx/gdicmn.h>
@@ -341,22 +357,6 @@ inline RECT wxGetClientRect(HWND hwnd)
 // ---------------------------------------------------------------------------
 // small helper classes
 // ---------------------------------------------------------------------------
-
-// a template to make initializing Windows styructs less painful: it zeroes all
-// the struct fields and also sets cbSize member to the correct value (and so
-// can be only used with structures which have this member...)
-template <class T>
-struct WinStruct : public T
-{
-    WinStruct()
-    {
-        ::ZeroMemory(this, sizeof(T));
-
-        // explicit qualification is required here for this to be valid C++
-        this->cbSize = sizeof(T);
-    }
-};
-
 
 // create an instance of this class and use it as the HDC for screen, will
 // automatically release the DC going out of scope
@@ -859,37 +859,27 @@ inline void *wxSetWindowUserData(HWND hwnd, void *data)
 
 #else // __WIN32__
 
-#ifdef __VISUALC__
-    // strangely enough, VC++ 7.1 gives warnings about 32 -> 64 bit conversions
-    // in the functions below, even in spite of the explicit casts
-    #pragma warning(disable:4311)
-    #pragma warning(disable:4312)
-#endif
-
-inline void *wxGetWindowProc(HWND hwnd)
+// note that the casts to LONG_PTR here are required even on 32-bit machines
+// for the 64-bit warning mode of later versions of MSVC (C4311/4312)
+inline WNDPROC wxGetWindowProc(HWND hwnd)
 {
-    return (void *)::GetWindowLong(hwnd, GWL_WNDPROC);
+    return (WNDPROC)(LONG_PTR)::GetWindowLong(hwnd, GWL_WNDPROC);
 }
 
 inline void *wxGetWindowUserData(HWND hwnd)
 {
-    return (void *)::GetWindowLong(hwnd, GWL_USERDATA);
+    return (void *)(LONG_PTR)::GetWindowLong(hwnd, GWL_USERDATA);
 }
 
 inline WNDPROC wxSetWindowProc(HWND hwnd, WNDPROC func)
 {
-    return (WNDPROC)::SetWindowLong(hwnd, GWL_WNDPROC, (LONG)func);
+    return (WNDPROC)(LONG_PTR)::SetWindowLong(hwnd, GWL_WNDPROC, (LONG_PTR)func);
 }
 
 inline void *wxSetWindowUserData(HWND hwnd, void *data)
 {
-    return (void *)::SetWindowLong(hwnd, GWL_USERDATA, (LONG)data);
+    return (void *)(LONG_PTR)::SetWindowLong(hwnd, GWL_USERDATA, (LONG_PTR)data);
 }
-
-#ifdef __VISUALC__
-    #pragma warning(default:4311)
-    #pragma warning(default:4312)
-#endif
 
 #endif // __WIN64__/__WIN32__
 

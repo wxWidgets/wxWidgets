@@ -3,9 +3,291 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<meta name="generator" content="Docutils 0.3.7: http://docutils.sourceforge.net/" />
+<meta name="generator" content="Docutils 0.4: http://docutils.sourceforge.net/" />
 <title>wxPython 2.6 Migration Guide</title>
-<link rel="stylesheet" href="default.css" type="text/css" />
+<style type="text/css">
+
+/*
+:Author: David Goodger
+:Contact: goodger@users.sourceforge.net
+:Date: $Date$
+:Revision: $Revision$
+:Copyright: This stylesheet has been placed in the public domain.
+
+Default cascading style sheet for the HTML output of Docutils.
+
+See http://docutils.sf.net/docs/howto/html-stylesheets.html for how to
+customize this style sheet.
+*/
+
+/* used to remove borders from tables and images */
+.borderless, table.borderless td, table.borderless th {
+  border: 0 }
+
+table.borderless td, table.borderless th {
+  /* Override padding for "table.docutils td" with "! important".
+     The right padding separates the table cells. */
+  padding: 0 0.5em 0 0 ! important }
+
+.first {
+  /* Override more specific margin styles with "! important". */
+  margin-top: 0 ! important }
+
+.last, .with-subtitle {
+  margin-bottom: 0 ! important }
+
+.hidden {
+  display: none }
+
+a.toc-backref {
+  text-decoration: none ;
+  color: black }
+
+blockquote.epigraph {
+  margin: 2em 5em ; }
+
+dl.docutils dd {
+  margin-bottom: 0.5em }
+
+/* Uncomment (and remove this text!) to get bold-faced definition list terms
+dl.docutils dt {
+  font-weight: bold }
+*/
+
+div.abstract {
+  margin: 2em 5em }
+
+div.abstract p.topic-title {
+  font-weight: bold ;
+  text-align: center }
+
+div.admonition, div.attention, div.caution, div.danger, div.error,
+div.hint, div.important, div.note, div.tip, div.warning {
+  margin: 2em ;
+  border: medium outset ;
+  padding: 1em }
+
+div.admonition p.admonition-title, div.hint p.admonition-title,
+div.important p.admonition-title, div.note p.admonition-title,
+div.tip p.admonition-title {
+  font-weight: bold ;
+  font-family: sans-serif }
+
+div.attention p.admonition-title, div.caution p.admonition-title,
+div.danger p.admonition-title, div.error p.admonition-title,
+div.warning p.admonition-title {
+  color: red ;
+  font-weight: bold ;
+  font-family: sans-serif }
+
+/* Uncomment (and remove this text!) to get reduced vertical space in
+   compound paragraphs.
+div.compound .compound-first, div.compound .compound-middle {
+  margin-bottom: 0.5em }
+
+div.compound .compound-last, div.compound .compound-middle {
+  margin-top: 0.5em }
+*/
+
+div.dedication {
+  margin: 2em 5em ;
+  text-align: center ;
+  font-style: italic }
+
+div.dedication p.topic-title {
+  font-weight: bold ;
+  font-style: normal }
+
+div.figure {
+  margin-left: 2em ;
+  margin-right: 2em }
+
+div.footer, div.header {
+  clear: both;
+  font-size: smaller }
+
+div.line-block {
+  display: block ;
+  margin-top: 1em ;
+  margin-bottom: 1em }
+
+div.line-block div.line-block {
+  margin-top: 0 ;
+  margin-bottom: 0 ;
+  margin-left: 1.5em }
+
+div.sidebar {
+  margin-left: 1em ;
+  border: medium outset ;
+  padding: 1em ;
+  background-color: #ffffee ;
+  width: 40% ;
+  float: right ;
+  clear: right }
+
+div.sidebar p.rubric {
+  font-family: sans-serif ;
+  font-size: medium }
+
+div.system-messages {
+  margin: 5em }
+
+div.system-messages h1 {
+  color: red }
+
+div.system-message {
+  border: medium outset ;
+  padding: 1em }
+
+div.system-message p.system-message-title {
+  color: red ;
+  font-weight: bold }
+
+div.topic {
+  margin: 2em }
+
+h1.section-subtitle, h2.section-subtitle, h3.section-subtitle,
+h4.section-subtitle, h5.section-subtitle, h6.section-subtitle {
+  margin-top: 0.4em }
+
+h1.title {
+  text-align: center }
+
+h2.subtitle {
+  text-align: center }
+
+hr.docutils {
+  width: 75% }
+
+img.align-left {
+  clear: left }
+
+img.align-right {
+  clear: right }
+
+ol.simple, ul.simple {
+  margin-bottom: 1em }
+
+ol.arabic {
+  list-style: decimal }
+
+ol.loweralpha {
+  list-style: lower-alpha }
+
+ol.upperalpha {
+  list-style: upper-alpha }
+
+ol.lowerroman {
+  list-style: lower-roman }
+
+ol.upperroman {
+  list-style: upper-roman }
+
+p.attribution {
+  text-align: right ;
+  margin-left: 50% }
+
+p.caption {
+  font-style: italic }
+
+p.credits {
+  font-style: italic ;
+  font-size: smaller }
+
+p.label {
+  white-space: nowrap }
+
+p.rubric {
+  font-weight: bold ;
+  font-size: larger ;
+  color: maroon ;
+  text-align: center }
+
+p.sidebar-title {
+  font-family: sans-serif ;
+  font-weight: bold ;
+  font-size: larger }
+
+p.sidebar-subtitle {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+p.topic-title {
+  font-weight: bold }
+
+pre.address {
+  margin-bottom: 0 ;
+  margin-top: 0 ;
+  font-family: serif ;
+  font-size: 100% }
+
+pre.literal-block, pre.doctest-block {
+  margin-left: 2em ;
+  margin-right: 2em ;
+  background-color: #eeeeee }
+
+span.classifier {
+  font-family: sans-serif ;
+  font-style: oblique }
+
+span.classifier-delimiter {
+  font-family: sans-serif ;
+  font-weight: bold }
+
+span.interpreted {
+  font-family: sans-serif }
+
+span.option {
+  white-space: nowrap }
+
+span.pre {
+  white-space: pre }
+
+span.problematic {
+  color: red }
+
+span.section-subtitle {
+  /* font-size relative to parent (h1..h6 element) */
+  font-size: 80% }
+
+table.citation {
+  border-left: solid 1px gray;
+  margin-left: 1px }
+
+table.docinfo {
+  margin: 2em 4em }
+
+table.docutils {
+  margin-top: 0.5em ;
+  margin-bottom: 0.5em }
+
+table.footnote {
+  border-left: solid 1px black;
+  margin-left: 1px }
+
+table.docutils td, table.docutils th,
+table.docinfo td, table.docinfo th {
+  padding-left: 0.5em ;
+  padding-right: 0.5em ;
+  vertical-align: top }
+
+table.docutils th.field-name, table.docinfo th.docinfo-name {
+  font-weight: bold ;
+  text-align: left ;
+  white-space: nowrap ;
+  padding-left: 0 }
+
+h1 tt.docutils, h2 tt.docutils, h3 tt.docutils,
+h4 tt.docutils, h5 tt.docutils, h6 tt.docutils {
+  font-size: 100% }
+
+tt.docutils {
+  background-color: #eeeeee }
+
+ul.auto-toc {
+  list-style-type: none }
+
+</style>
 </head>
 <body>
 <div class="document" id="wxpython-2-6-migration-guide">
@@ -15,8 +297,8 @@
 your programs to those changes.  Be sure to also check in the <a class="reference" href="CHANGES.html">CHANGES</a>
 file like usual to see info about the not so major changes and other
 things that have been added to wxPython.</p>
-<div class="section" id="wxname-change">
-<h1><a name="wxname-change">wxName Change</a></h1>
+<div class="section">
+<h1><a id="wxname-change" name="wxname-change">wxName Change</a></h1>
 <p>The <strong>wxWindows</strong> project and library is now known as
 <strong>wxWidgets</strong>.  Please see <a class="reference" href="http://www.wxwidgets.org/name.htm">here</a> for more details.</p>
 <p>This won't really affect wxPython all that much, other than the fact
@@ -25,8 +307,8 @@ so mail list, CVS, and etc. addresses have also changed.  We're going
 to try and smooth the transition as much as possible, but I wanted you
 all to be aware of this change if you run into any issues.</p>
 </div>
-<div class="section" id="module-initialization">
-<h1><a name="module-initialization">Module Initialization</a></h1>
+<div class="section">
+<h1><a id="module-initialization" name="module-initialization">Module Initialization</a></h1>
 <p>The import-startup-bootstrap process employed by wxPython was changed
 such that wxWidgets and the underlying gui toolkit are <strong>not</strong>
 initialized until the wx.App object is created (but before wx.App.OnInit
@@ -51,8 +333,8 @@ class constructors and also many toplevel functions and static methods
 will now check that a wx.App object has already been created and will
 raise a wx.PyNoAppError exception if not.</p>
 </div>
-<div class="section" id="swig-1-3">
-<h1><a name="swig-1-3">SWIG 1.3</a></h1>
+<div class="section">
+<h1><a id="swig-1-3" name="swig-1-3">SWIG 1.3</a></h1>
 <p>wxPython is now using SWIG 1.3.x from CVS (with several of my own
 customizations added that I hope to get folded back into the main SWIG
 distribution.)  This has some far reaching ramifications:</p>
@@ -79,8 +361,8 @@ class type using something like isinstance(obj, wx.FooPtr) you will
 need to change it to isinstance(obj, wx.Foo).</p>
 </blockquote>
 </div>
-<div class="section" id="binding-events">
-<h1><a name="binding-events">Binding Events</a></h1>
+<div class="section">
+<h1><a id="binding-events" name="binding-events">Binding Events</a></h1>
 <p>All of the EVT_* functions are now instances of the wx.PyEventBinder
 class.  They have a __call__ method so they can still be used as
 functions like before, but making them instances adds some
@@ -132,11 +414,11 @@ values:</p>
   item = menu.Append(-1, &quot;E&amp;xit&quot;, &quot;Terminate the App&quot;)
   self.Bind(wx.EVT_MENU, self.OnExit, item)
 
-2. 
+2.
   item = menu.Append(wx.ID_EXIT, &quot;E&amp;xit&quot;, &quot;Terminate the App&quot;)
   self.Bind(wx.EVT_MENU, self.OnExit, item)
 
-3. 
+3.
   menu.Append(wx.ID_EXIT, &quot;E&amp;xit&quot;, &quot;Terminate the App&quot;)
   self.Bind(wx.EVT_MENU, self.OnExit, id=wx.ID_EXIT)
 </pre>
@@ -167,8 +449,8 @@ def Unbind(self, event, source=None, id=wx.ID_ANY, id2=wx.ID_ANY):
     &quot;&quot;&quot;
 </pre>
 </div>
-<div class="section" id="the-wx-namespace">
-<h1><a name="the-wx-namespace">The wx Namespace</a></h1>
+<div class="section">
+<h1><a id="the-wx-namespace" name="the-wx-namespace">The wx Namespace</a></h1>
 <p>The second phase of the wx Namespace Transition has begun.  That means
 that the real names of the classes and other symbols do not have the
 'wx' prefix and the modules are located in a Python package named
@@ -225,8 +507,8 @@ you rewrote the above sample using &quot;from wxPython.wx import * &quot;, the
 old wxNames, and the old style of event binding it will still work
 just fine.</p>
 </div>
-<div class="section" id="new-wx-dc-methods">
-<h1><a name="new-wx-dc-methods">New wx.DC Methods</a></h1>
+<div class="section">
+<h1><a id="new-wx-dc-methods" name="new-wx-dc-methods">New wx.DC Methods</a></h1>
 <p><strong>[Changed in 2.5.2.x]</strong> In wxPython 2.5.1.5 there was a new
 implementation of the wx.DC Draw and other methods that broke
 backwards compatibility in the name of consistency.  That change has
@@ -240,7 +522,7 @@ FloodFill(self, x, y, colour, style = wx.FLOOD_SURFACE)
 FoodFillPoint(self, pt, colour, style = wx.FLOOD_SURFACE)
 
 GetPixel(self, x,y)
-GetPixelPoint(self, pt) 
+GetPixelPoint(self, pt)
 
 DrawLine(self, x1, y1, x2, y2)
 DrawLinePoint(self, pt1, pt2)
@@ -289,7 +571,7 @@ DrawRotatedTextPoint(self, text, pt, angle)
 
 bool Blit(self, xdest, ydest, width, height, sourceDC, xsrc, ysrc,
           rop = wx.COPY, useMask = False, xsrcMask = -1, ysrcMask = -1)
-BlitPointSize(self, destPt, sz, sourceDC, srcPt, rop = wx.COPY, 
+BlitPointSize(self, destPt, sz, sourceDC, srcPt, rop = wx.COPY,
               useMask = False, srcPtMask = wxDefaultPosition)
 
 
@@ -299,8 +581,8 @@ SetClippingRegionAsRegion(self, region)
 SetClippingRect(self, rect)
 </pre>
 </div>
-<div class="section" id="building-extending-and-embedding-wxpython">
-<h1><a name="building-extending-and-embedding-wxpython">Building, Extending and Embedding wxPython</a></h1>
+<div class="section">
+<h1><a id="building-extending-and-embedding-wxpython" name="building-extending-and-embedding-wxpython">Building, Extending and Embedding wxPython</a></h1>
 <p>wxPython's setup.py script now expects to use existing libraries for
 the contribs (gizmos, stc, xrc, etc.) rather than building local
 copies of them.  If you build your own copies of wxPython please be
@@ -339,8 +621,8 @@ are wrapped in the standard Py_(BEGIN|END)_ALLOW_THERADS may result in
 wx event handlers being called (such as during the call to
 os.startfile.)</p>
 </div>
-<div class="section" id="two-or-three-phase-create">
-<h1><a name="two-or-three-phase-create">Two (or Three!) Phase Create</a></h1>
+<div class="section">
+<h1><a id="two-or-three-phase-create" name="two-or-three-phase-create">Two (or Three!) Phase Create</a></h1>
 <p>If you use the Precreate/Create method of instantiating a window, (for
 example, to set an extended style flag, or for XRC handlers) then
 there is now a new method named PostCreate to help with transplanting
@@ -355,8 +637,8 @@ class MyDialog(wx.Dialog):
         self.PostCreate(pre)
 </pre>
 </div>
-<div class="section" id="sizers">
-<h1><a name="sizers">Sizers</a></h1>
+<div class="section">
+<h1><a id="sizers" name="sizers">Sizers</a></h1>
 <p>The hack allowing the old &quot;option&quot; keyword parameter has been removed.
 If you use keyword args with wx.Sizer Add, Insert, or Prepend methods
 then you will need to use the <tt class="docutils literal"><span class="pre">proportion</span></tt> name instead of
@@ -473,8 +755,8 @@ This can be done by calling <tt class="docutils literal"><span class="pre">SetBe
 </ul>
 </blockquote>
 </div>
-<div class="section" id="platforminfo">
-<h1><a name="platforminfo">PlatformInfo</a></h1>
+<div class="section">
+<h1><a id="platforminfo" name="platforminfo">PlatformInfo</a></h1>
 <p>Added wx.PlatformInfo which is a tuple containing strings that
 describe the platform and build options of wxPython.  This lets you
 know more about the build than just the __WXPORT__ value that
@@ -495,8 +777,8 @@ way.  If there are any other platform/toolkit/build flags that make
 sense to add to this tuple please let me know.</p>
 <p>BTW, wx.Platform will probably be deprecated in the future.</p>
 </div>
-<div class="section" id="activex">
-<h1><a name="activex">ActiveX</a></h1>
+<div class="section">
+<h1><a id="activex" name="activex">ActiveX</a></h1>
 <p>Lindsay Mathieson's newest <a class="reference" href="http://members.optusnet.com.au/~blackpaw1/wxactivex.html">wxActiveX</a> class has been wrapped into a new
 extension module called wx.activex.  It is very generic and dynamic
 and should allow hosting of arbitray ActiveX controls within your
@@ -585,7 +867,7 @@ new window from being opened by the IE web browser control you can do
 this in the handler for the iewin.EVT_NewWindow2 event:</p>
 <pre class="literal-block">
 def OnNewWindow2(self, evt):
-    evt.Cancel = True   
+    evt.Cancel = True
 </pre>
 <p>So how do you know what methods, events and properties that an ActiveX
 control supports?  There is a funciton in wx.activex named GetAXInfo
@@ -596,8 +878,8 @@ output appended as a comment to the modules produced by the
 genaxmodule tool.  Beyond that you'll need to consult the docs
 provided by the makers of the ActiveX control that you are using.</p>
 </div>
-<div class="section" id="png-images">
-<h1><a name="png-images">PNG Images</a></h1>
+<div class="section">
+<h1><a id="png-images" name="png-images">PNG Images</a></h1>
 <p>Prior to 2.5 the PNG image handler would convert all alpha channel
 information to a mask when the image was loaded.  Pixels that were
 more than halfway transparent would be made fully transparent by the
@@ -619,8 +901,8 @@ fully transparent.</li>
 </ul>
 </blockquote>
 </div>
-<div class="section" id="ogl-is-dead-long-live-ogl">
-<h1><a name="ogl-is-dead-long-live-ogl">OGL is dead! LONG LIVE OGL!</a></h1>
+<div class="section">
+<h1><a id="ogl-is-dead-long-live-ogl" name="ogl-is-dead-long-live-ogl">OGL is dead! LONG LIVE OGL!</a></h1>
 <p><strong>[Changed in 2.5.2.x]</strong></p>
 <p>The wx.ogl module was deprecated in version 2.5.2 in favor of the new
 Python port of the OGL library located at wx.lib.ogl contributed by
@@ -664,11 +946,11 @@ class MyDividedShape(ogl.DividedShape):
     ...
     def OnSizingEndDragLeft(self, pt, x, y, keys, attch):
         ogl.DividedShape.OnSizingEndDragLeft(self, pt, x, y, keys, attch)
-        ...    
+        ...
 </pre>
 </div>
-<div class="section" id="obsolete-modules">
-<h1><a name="obsolete-modules">Obsolete Modules</a></h1>
+<div class="section">
+<h1><a id="obsolete-modules" name="obsolete-modules">Obsolete Modules</a></h1>
 <p>Instead of over a dozen separate extension modules linked together
 into a single extension module, the &quot;core&quot; module is now just a few
 extensions that are linked independently, and then merged together
@@ -718,8 +1000,8 @@ the objects in these modules only via the wx or wxPython.wx packages:</p>
 <p>The help module no longer exists and the classes therein are now part
 of the core module imported with wxPython.wx or the wx package.</p>
 </div>
-<div class="section" id="wx-taskbaricon">
-<h1><a name="wx-taskbaricon">wx.TaskBarIcon</a></h1>
+<div class="section">
+<h1><a id="wx-taskbaricon" name="wx-taskbaricon">wx.TaskBarIcon</a></h1>
 <p><strong>[Changed in 2.5.3.x]</strong></p>
 <p>wx.TaskbarIcon now works on all three platforms, although for wxGTK it
 depends on support from the Window Manager.  On OS X the icon replaces
@@ -747,8 +1029,8 @@ wx.Dialogs.)  If you don't destroy it then wxWidgets will assume that
 you want the app to keep running with just the icon in the task bar
 and the MainLoop will not exit.</p>
 </div>
-<div class="section" id="version-number-change">
-<h1><a name="version-number-change">Version Number Change</a></h1>
+<div class="section">
+<h1><a id="version-number-change" name="version-number-change">Version Number Change</a></h1>
 <p><strong>[Changed in 2.5.3.x]</strong></p>
 <p>Starting with 2.5.3.0 the Unicode versions of wxPython will no longer
 have a 'u' appended to the fourth component of the version number.
@@ -761,8 +1043,8 @@ if &quot;unicode&quot; in wx.PlatformInfo:
     ...
 </pre>
 </div>
-<div class="section" id="multi-version-installs">
-<h1><a name="multi-version-installs">Multi-Version Installs</a></h1>
+<div class="section">
+<h1><a id="multi-version-installs" name="multi-version-installs">Multi-Version Installs</a></h1>
 <p><strong>[Changed in 2.5.3.x]</strong></p>
 <p>Starting with 2.5.3.0 the wx and wxPython package directories will be
 installed in a subdirectory of the site-packages directory, instead of
@@ -803,8 +1085,8 @@ version of wxPython that supports this, but there will be.</p>
 <p>Please see this wiki page for more details, HowTo's and FAQ's:
 <a class="reference" href="http://wiki.wxpython.org/index.cgi/MultiVersionInstalls">http://wiki.wxpython.org/index.cgi/MultiVersionInstalls</a></p>
 </div>
-<div class="section" id="miscellaneous-stuff">
-<h1><a name="miscellaneous-stuff">Miscellaneous Stuff</a></h1>
+<div class="section">
+<h1><a id="miscellaneous-stuff" name="miscellaneous-stuff">Miscellaneous Stuff</a></h1>
 <p>wxPyDefaultPosition and wxPyDefaultSize are gone.  Use the
 wxDefaultPosition and wxDefaultSize objects instead.</p>
 <p>Similarly, the wxSystemSettings backwards compatibiility aliases for

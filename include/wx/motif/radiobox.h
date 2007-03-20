@@ -12,7 +12,7 @@
 #ifndef _WX_MOTIF_RADIOBOX_H_
 #define _WX_MOTIF_RADIOBOX_H_
 
-#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA)
+#if defined(__GNUG__) && !defined(NO_GCC_PRAGMA) && !defined(__EMX__)
     #pragma interface "radiobox.h"
 #endif
 

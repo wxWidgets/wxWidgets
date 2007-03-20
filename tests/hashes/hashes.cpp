@@ -2,9 +2,10 @@
 // Name:        tests/hashes/hashes.cpp
 // Purpose:     wxHashTable, wxHashMap, wxHashSet unit test
 // Author:      Vadim Zeitlin, Mattia Barbon
+// Modified:    Mike Wetherell
 // Created:     2004-05-16
 // RCS-ID:      $Id$
-// Copyright:   (c) 2004 Vadim Zeitlin, Mattia Barbon
+// Copyright:   (c) 2004 Vadim Zeitlin, Mattia Barbon, 2005 M. Wetherell
 ///////////////////////////////////////////////////////////////////////////////
 
 // ----------------------------------------------------------------------------
@@ -24,6 +25,11 @@
 #include "wx/hash.h"
 #include "wx/hashmap.h"
 #include "wx/hashset.h"
+
+#if defined wxLongLong_t && !defined wxLongLongIsLong && \
+        (!defined __VISUALC__ || __VISUALC__ > 1100)    // doesn't work on VC5
+    #define TEST_LONGLONG
+#endif
 
 // --------------------------------------------------------------------------
 // helper class for typed/untyped wxHashTable
@@ -67,14 +73,36 @@ private:
         CPPUNIT_TEST( wxHashTableTest );
         CPPUNIT_TEST( wxUntypedHashTableDeleteContents );
         CPPUNIT_TEST( wxTypedHashTableTest );
-        CPPUNIT_TEST( wxHashMapTest );
+        CPPUNIT_TEST( StringHashMapTest );
+        CPPUNIT_TEST( PtrHashMapTest );
+        CPPUNIT_TEST( LongHashMapTest );
+        CPPUNIT_TEST( ULongHashMapTest );
+        CPPUNIT_TEST( UIntHashMapTest );
+        CPPUNIT_TEST( IntHashMapTest );
+        CPPUNIT_TEST( ShortHashMapTest );
+        CPPUNIT_TEST( UShortHashMapTest );
+#ifdef TEST_LONGLONG
+        CPPUNIT_TEST( LLongHashMapTest );
+        CPPUNIT_TEST( ULLongHashMapTest );
+#endif
         CPPUNIT_TEST( wxHashSetTest );
     CPPUNIT_TEST_SUITE_END();
 
     void wxHashTableTest();
     void wxUntypedHashTableDeleteContents();
     void wxTypedHashTableTest();
-    void wxHashMapTest();
+    void StringHashMapTest();
+    void PtrHashMapTest();
+    void LongHashMapTest();
+    void ULongHashMapTest();
+    void UIntHashMapTest();
+    void IntHashMapTest();
+    void ShortHashMapTest();
+    void UShortHashMapTest();
+#ifdef TEST_LONGLONG
+    void LLongHashMapTest();
+    void ULLongHashMapTest();
+#endif
     void wxHashSetTest();
 
     DECLARE_NO_COPY_CLASS(HashesTestCase)
@@ -314,20 +342,72 @@ WX_DECLARE_HASH_MAP( unsigned short, unsigned, wxIntegerHash, wxIntegerEqual,
 //                      myStringHashMap );
 WX_DECLARE_STRING_HASH_MAP(wxString, myStringHashMap);
 
-typedef myStringHashMap::iterator Itor;
+#ifdef TEST_LONGLONG
+    WX_DECLARE_HASH_MAP( wxLongLong_t, wxLongLong_t,
+                         wxIntegerHash, wxIntegerEqual, myLLongHashMap );
+    WX_DECLARE_HASH_MAP( wxULongLong_t, wxULongLong_t,
+                         wxIntegerHash, wxIntegerEqual, myULLongHashMap );
+#endif
 
-void HashesTestCase::wxHashMapTest()
+// Helpers to generate a key value pair for item 'i', out of a total of 'count'
+void MakeKeyValuePair(size_t i, size_t /*count*/, wxString& key, wxString& val)
 {
-    myStringHashMap sh(0); // as small as possible
-    wxString buf;
+    key.clear();
+    key << i;
+    val = wxT("A") + key + wxT("C");
+}
+
+// for integral keys generate a range of keys that will use all the bits of
+// the key type
+template <class IntT, class KeyT>
+IntT MakeKey(size_t i, size_t count)
+{
+    IntT max = 1;
+    max <<= sizeof(KeyT) * 8 - 2;
+    max -= count / 4 + 1;
+     
+    return max / count * 4 * i + i / 3;
+}
+
+// make key/value pairs for integer types
+template <class KeyT, class ValueT>
+void MakeKeyValuePair(size_t i, size_t count, KeyT& key, ValueT& value)
+{
+    key = MakeKey<KeyT, KeyT>(i, count);
+    value = wx_truncate_cast(ValueT, key);
+}
+
+// make key/values paris for pointer types
+template <class T, class ValueT>
+void MakeKeyValuePair(size_t i, size_t count, T*& key, ValueT& value)
+{
+    key = (T*)wxUIntToPtr(MakeKey<wxUIntPtr, T*>(i, count));
+    value = wx_truncate_cast(ValueT, key);
+}
+
+// the test
+template <class HashMapT>
+void HashMapTest()
+{
+#if wxUSE_STL && defined HAVE_STL_HASH_MAP
+    typedef typename HashMapT::value_type::second_type value_type;
+#else
+    typedef typename HashMapT::value_type::t2 value_type;
+#endif
+    typedef typename HashMapT::key_type key_type;
+    typedef typename HashMapT::iterator Itor;
+
+    HashMapT sh(0); // as small as possible
+    key_type buf;
+    value_type value;
     size_t i;
     const size_t count = 10000;
 
     // init with some data
     for( i = 0; i < count; ++i )
     {
-        buf.Printf(wxT("%d"), i );
-        sh[buf] = wxT("A") + buf + wxT("C");
+        MakeKeyValuePair(i, count, buf, value);
+        sh[buf] = value;
     }
 
     // test that insertion worked
@@ -335,8 +415,8 @@ void HashesTestCase::wxHashMapTest()
 
     for( i = 0; i < count; ++i )
     {
-        buf.Printf(wxT("%d"), i );
-        CPPUNIT_ASSERT( sh[buf] == wxT("A") + buf + wxT("C") );
+        MakeKeyValuePair(i, count, buf, value);
+        CPPUNIT_ASSERT( sh[buf] == value );
     }
 
     // check that iterators work
@@ -350,7 +430,7 @@ void HashesTestCase::wxHashMapTest()
     CPPUNIT_ASSERT( sh.size() == i );
 
     // test copy ctor, assignment operator
-    myStringHashMap h1( sh ), h2( 0 );
+    HashMapT h1( sh ), h2( 0 );
     h2 = sh;
 
     for( i = 0, it = sh.begin(); it != sh.end(); ++it, ++i )
@@ -362,7 +442,7 @@ void HashesTestCase::wxHashMapTest()
     // other tests
     for( i = 0; i < count; ++i )
     {
-        buf.Printf(wxT("%d"), i );
+        MakeKeyValuePair(i, count, buf, value);
         size_t sz = sh.size();
 
         // test find() and erase(it)
@@ -387,6 +467,20 @@ void HashesTestCase::wxHashMapTest()
         CPPUNIT_ASSERT( sh.size() == sz - 1 );
     }
 }
+
+void HashesTestCase::StringHashMapTest() { HashMapTest<myStringHashMap>();   }
+void HashesTestCase::PtrHashMapTest()    { HashMapTest<myPtrHashMap>();      }
+void HashesTestCase::LongHashMapTest()   { HashMapTest<myLongHashMap>();     }
+void HashesTestCase::ULongHashMapTest()  { HashMapTest<myUnsignedHashMap>(); }
+void HashesTestCase::UIntHashMapTest()   { HashMapTest<myTestHashMap1>();    }
+void HashesTestCase::IntHashMapTest()    { HashMapTest<myTestHashMap2>();    }
+void HashesTestCase::ShortHashMapTest()  { HashMapTest<myTestHashMap3>();    }
+void HashesTestCase::UShortHashMapTest() { HashMapTest<myTestHashMap4>();    }
+
+#ifdef TEST_LONGLONG
+void HashesTestCase::LLongHashMapTest()  { HashMapTest<myLLongHashMap>();    }
+void HashesTestCase::ULLongHashMapTest() { HashMapTest<myULLongHashMap>();   }
+#endif
 
 // test compilation of basic set types
 WX_DECLARE_HASH_SET( int*, wxPointerHash, wxPointerEqual, myPtrHashSet );

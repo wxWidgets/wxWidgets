@@ -517,6 +517,6 @@ void ClookUpDlg::OnCommand(wxWindow& win, wxCommandEvent& WXUNUSED(event))
 
     }
 
-};  // ClookUpDlg::OnCommand
+}  // ClookUpDlg::OnCommand
 
 // *********************************** listdb.cpp **********************************

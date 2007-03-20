@@ -235,14 +235,14 @@ private:
 // Convert variants
 class WXDLLIMPEXP_BASE wxVariant;
 
-bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant) ;
-bool wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant) ;
+WXDLLEXPORT bool wxConvertVariantToOle(const wxVariant& variant, VARIANTARG& oleVariant) ;
+WXDLLEXPORT bool wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& variant) ;
 
 // Convert string to Unicode
-BSTR wxConvertStringToOle(const wxString& str);
+WXDLLEXPORT BSTR wxConvertStringToOle(const wxString& str);
 
 // Convert string from BSTR to wxString
-wxString wxConvertStringFromOle(BSTR bStr);
+WXDLLEXPORT wxString wxConvertStringFromOle(BSTR bStr);
 
 #else // !wxUSE_OLE
 

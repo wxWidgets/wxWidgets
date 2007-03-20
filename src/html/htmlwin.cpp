@@ -141,10 +141,10 @@ private:
 //-----------------------------------------------------------------------------
 
 WX_DECLARE_OBJARRAY(wxHtmlHistoryItem, wxHtmlHistoryArray);
-WX_DEFINE_OBJARRAY(wxHtmlHistoryArray);
+WX_DEFINE_OBJARRAY(wxHtmlHistoryArray)
 
 WX_DECLARE_LIST(wxHtmlProcessor, wxHtmlProcessorList);
-WX_DEFINE_LIST(wxHtmlProcessorList);
+WX_DEFINE_LIST(wxHtmlProcessorList)
 
 //-----------------------------------------------------------------------------
 // wxHtmlWindow
@@ -1312,8 +1312,7 @@ void wxHtmlWindow::OnMouseLeave(wxMouseEvent& event)
 
 void wxHtmlWindow::OnKeyUp(wxKeyEvent& event)
 {
-    if ( IsSelectionEnabled() &&
-         event.GetKeyCode() == 'C' && event.ControlDown() )
+    if ( IsSelectionEnabled() && event.GetKeyCode() == 'C' && event.CmdDown() )
     {
         (void) CopySelection();
     }

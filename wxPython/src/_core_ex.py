@@ -268,6 +268,14 @@ class __DocFilter:
             return False
         if name.startswith('_') or name.endswith('Ptr') or name.startswith('EVT'):
             return False
+
+        # skip functions that are duplicates of static functions in a class
+        if name.find('_') != -1:
+            cls = self._globals.get(name.split('_')[0], None)
+            methname = name.split('_')[1]
+            if hasattr(cls, methname) and type(getattr(cls, methname)) is types.FunctionType:
+                return False
+
         return True
 
 #----------------------------------------------------------------------------

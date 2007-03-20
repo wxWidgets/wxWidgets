@@ -150,8 +150,6 @@ class MyCellEditor(gridlib.PyGridCellEditor):
 
         elif key < 256 and key >= 0 and chr(key) in string.printable:
             ch = chr(key)
-            if not evt.ShiftDown():
-                ch = ch.lower()
 
         if ch is not None:
             # For this example, replace the text.  Normally we would append it.

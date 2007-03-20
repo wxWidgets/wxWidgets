@@ -80,6 +80,7 @@ class MyCanvasBase(glcanvas.GLCanvas):
         # initial mouse position
         self.lastx = self.x = 30
         self.lasty = self.y = 30
+        self.size = None
         self.Bind(wx.EVT_ERASE_BACKGROUND, self.OnEraseBackground)
         self.Bind(wx.EVT_SIZE, self.OnSize)
         self.Bind(wx.EVT_PAINT, self.OnPaint)
@@ -93,7 +94,7 @@ class MyCanvasBase(glcanvas.GLCanvas):
 
 
     def OnSize(self, event):
-        size = self.GetClientSize()
+        size = self.size = self.GetClientSize()
         if self.GetContext():
             self.SetCurrent()
             glViewport(0, 0, size.width, size.height)
@@ -111,6 +112,7 @@ class MyCanvasBase(glcanvas.GLCanvas):
 
     def OnMouseDown(self, evt):
         self.CaptureMouse()
+        self.x, self.y = self.lastx, self.lasty = evt.GetPosition()
 
 
     def OnMouseUp(self, evt):
@@ -119,7 +121,7 @@ class MyCanvasBase(glcanvas.GLCanvas):
 
     def OnMouseMotion(self, evt):
         if evt.Dragging() and evt.LeftIsDown():
-            self.x, self.y = self.lastx, self.lasty
+            self.lastx, self.lasty = self.x, self.y
             self.x, self.y = evt.GetPosition()
             self.Refresh(False)
 
@@ -129,25 +131,25 @@ class MyCanvasBase(glcanvas.GLCanvas):
 class CubeCanvas(MyCanvasBase):
     def InitGL(self):
         # set viewing projection
-        glMatrixMode(GL_PROJECTION);
-        glFrustum(-0.5, 0.5, -0.5, 0.5, 1.0, 3.0);
+        glMatrixMode(GL_PROJECTION)
+        glFrustum(-0.5, 0.5, -0.5, 0.5, 1.0, 3.0)
 
         # position viewer
-        glMatrixMode(GL_MODELVIEW);
-        glTranslatef(0.0, 0.0, -2.0);
+        glMatrixMode(GL_MODELVIEW)
+        glTranslatef(0.0, 0.0, -2.0)
 
         # position object
-        glRotatef(self.y, 1.0, 0.0, 0.0);
-        glRotatef(self.x, 0.0, 1.0, 0.0);
+        glRotatef(self.y, 1.0, 0.0, 0.0)
+        glRotatef(self.x, 0.0, 1.0, 0.0)
 
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_LIGHTING);
-        glEnable(GL_LIGHT0);
+        glEnable(GL_DEPTH_TEST)
+        glEnable(GL_LIGHTING)
+        glEnable(GL_LIGHT0)
 
 
     def OnDraw(self):
         # clear color and depth buffers
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
         # draw six faces of a cube
         glBegin(GL_QUADS)
@@ -188,8 +190,15 @@ class CubeCanvas(MyCanvasBase):
         glVertex3f(-0.5, 0.5,-0.5)
         glEnd()
 
-        glRotatef((self.lasty - self.y)/100., 1.0, 0.0, 0.0);
-        glRotatef((self.lastx - self.x)/100., 0.0, 1.0, 0.0);
+        if self.size is None:
+            self.size = self.GetClientSize()
+        w, h = self.size
+        w = max(w, 1.0)
+        h = max(h, 1.0)
+        xScale = 180.0 / w
+        yScale = 180.0 / h
+        glRotatef((self.y - self.lasty) * yScale, 1.0, 0.0, 0.0);
+        glRotatef((self.x - self.lastx) * xScale, 0.0, 1.0, 0.0);
 
         self.SwapBuffers()
 
@@ -199,9 +208,9 @@ class CubeCanvas(MyCanvasBase):
 
 class ConeCanvas(MyCanvasBase):
     def InitGL( self ):
-        glMatrixMode(GL_PROJECTION);
+        glMatrixMode(GL_PROJECTION)
         # camera frustrum setup
-        glFrustum(-0.5, 0.5, -0.5, 0.5, 1.0, 3.0);
+        glFrustum(-0.5, 0.5, -0.5, 0.5, 1.0, 3.0)
         glMaterial(GL_FRONT, GL_AMBIENT, [0.2, 0.2, 0.2, 1.0])
         glMaterial(GL_FRONT, GL_DIFFUSE, [0.8, 0.8, 0.8, 1.0])
         glMaterial(GL_FRONT, GL_SPECULAR, [1.0, 0.0, 1.0, 1.0])
@@ -209,7 +218,7 @@ class ConeCanvas(MyCanvasBase):
         glLight(GL_LIGHT0, GL_AMBIENT, [0.0, 1.0, 0.0, 1.0])
         glLight(GL_LIGHT0, GL_DIFFUSE, [1.0, 1.0, 1.0, 1.0])
         glLight(GL_LIGHT0, GL_SPECULAR, [1.0, 1.0, 1.0, 1.0])
-        glLight(GL_LIGHT0, GL_POSITION, [1.0, 1.0, 1.0, 0.0]);
+        glLight(GL_LIGHT0, GL_POSITION, [1.0, 1.0, 1.0, 0.0])
         glLightModel(GL_LIGHT_MODEL_AMBIENT, [0.2, 0.2, 0.2, 1.0])
         glEnable(GL_LIGHTING)
         glEnable(GL_LIGHT0)
@@ -217,25 +226,28 @@ class ConeCanvas(MyCanvasBase):
         glEnable(GL_DEPTH_TEST)
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         # position viewer
-        glMatrixMode(GL_MODELVIEW);
+        glMatrixMode(GL_MODELVIEW)
+        # position viewer
+        glTranslatef(0.0, 0.0, -2.0);
+
 
 
     def OnDraw(self):
         # clear color and depth buffers
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
         # use a fresh transformation matrix
         glPushMatrix()
         # position object
-        glTranslate(0.0, 0.0, -2.0);
-        glRotate(30.0, 1.0, 0.0, 0.0);
-        glRotate(30.0, 0.0, 1.0, 0.0);
+        #glTranslate(0.0, 0.0, -2.0)
+        glRotate(30.0, 1.0, 0.0, 0.0)
+        glRotate(30.0, 0.0, 1.0, 0.0)
 
         glTranslate(0, -1, 0)
         glRotate(250, 1, 0, 0)
         glutSolidCone(0.5, 1, 30, 5)
         glPopMatrix()
-        glRotatef((self.lasty - self.y)/100., 0.0, 0.0, 1.0);
-        glRotatef(0.0, (self.lastx - self.x)/100., 1.0, 0.0);
+        glRotatef((self.y - self.lasty), 0.0, 0.0, 1.0);
+        glRotatef((self.x - self.lastx), 1.0, 0.0, 0.0);
         # push into visible buffer
         self.SwapBuffers()
 

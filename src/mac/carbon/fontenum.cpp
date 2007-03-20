@@ -39,6 +39,7 @@
 #include "wx/fontmap.h"
 #include "wx/fontutil.h"
 #include "wx/encinfo.h"
+#include "wx/intl.h"
 
 #include "wx/mac/private.h"
 
@@ -107,7 +108,6 @@ bool wxFontEnumeratorHelper::SetEncoding(wxFontEncoding encoding)
 void wxFontEnumeratorHelper::DoEnumerate()
 {
     MenuHandle    menu ;
-    Str255        p_name ;
 
     short         lines ;
     
@@ -117,9 +117,19 @@ void wxFontEnumeratorHelper::DoEnumerate()
 
     for ( int i = 1 ; i < lines+1  ; i ++ )
     {
+        wxString c_name ;
+#if TARGET_API_MAC_CARBON
+        CFStringRef menutext ;
+        c_name = wxEmptyString ;
+        if ( CopyMenuItemTextAsCFString (menu, i, &menutext) == noErr )
+        {
+            c_name = wxMacCFStringHolder(menutext).AsString(wxLocale::GetSystemEncoding());
+        }
+#else
+        Str255        p_name;
         GetMenuItemText( menu , i , p_name ) ;
-        wxString c_name = wxMacMakeStringFromPascal(p_name) ;
-
+        c_name = wxMacMakeStringFromPascal( p_name );
+#endif
         /*
           
           if ( m_fixedOnly )

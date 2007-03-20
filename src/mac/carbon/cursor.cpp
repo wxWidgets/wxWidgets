@@ -195,6 +195,13 @@ CursHandle wxGetStockCursor( int number )
     wxASSERT_MSG( number >= 0 && number <=kwxCursorLast , wxT("invalid stock cursor id") ) ;
     CursHandle c = (CursHandle) NewHandle( sizeof(Cursor) ) ;
     memcpy( *c , &gMacCursors[number] , sizeof( Cursor ) ) ;
+#ifndef WORDS_BIGENDIAN
+    short *sptr = (short*) *c ;
+    for ( int i = 0 ; i < 2 * 16 /* image and mask */ ; ++i, ++sptr )
+    {
+        *sptr = CFSwapInt16( *sptr ) ;
+    }
+#endif
     return c ;    
 }
 
@@ -415,8 +422,13 @@ void wxCursor::CreateFromImage(const wxImage & image)
             *((*(**ch).crsrData) + y * bytesPerRow + x) = 
                 GetCTabIndex( newColors , &col) ;
         }
+#ifdef WORDS_BIGENDIAN
         (**ch).crsr1Data[y] = rowbits ;
         (**ch).crsrMask[y] = maskbits ;
+#else
+        (**ch).crsr1Data[y] = CFSwapInt16(rowbits) ;
+        (**ch).crsrMask[y] = CFSwapInt16(maskbits) ;
+#endif
     }
     if ( !bHasMask )
     {

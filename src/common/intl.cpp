@@ -506,7 +506,7 @@ private:
     wxPluralFormsNodePtr m_plural;
 };
 
-wxDEFINE_SCOPED_PTR_TYPE(wxPluralFormsCalculator);
+wxDEFINE_SCOPED_PTR_TYPE(wxPluralFormsCalculator)
 
 void wxPluralFormsCalculator::init(wxPluralFormsToken::Number nplurals,
                                    wxPluralFormsNode* plural)
@@ -1260,9 +1260,14 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
             inputConv =
             csConv = new wxCSConv(m_charset);
     }
-    else // no conversion needed
+    else // no need to convert the encoding
     {
+        // we still need the conversion for Unicode build
+#if wxUSE_UNICODE
+        inputConv = wxConvCurrent;
+#else // !wxUSE_UNICODE
         inputConv = NULL;
+#endif
     }
 
     // conversion to apply to msgid strings before looking them up: we only
@@ -1309,7 +1314,7 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
 #endif // wxUSE_WCHAR_T/!wxUSE_WCHAR_T
     (void)convertEncoding; // get rid of warnings about unused parameter
 
-    for (size_t i = 0; i < m_numStrings; i++)
+    for (size_t32 i = 0; i < m_numStrings; i++)
     {
         const char *data = StringAtOfs(m_pOrigTable, i);
 #if wxUSE_UNICODE
@@ -1416,7 +1421,7 @@ const wxChar *wxMsgCatalog::GetString(const wxChar *sz, size_t n) const
 
 #include "wx/arrimpl.cpp"
 WX_DECLARE_EXPORTED_OBJARRAY(wxLanguageInfo, wxLanguageInfoArray);
-WX_DEFINE_OBJARRAY(wxLanguageInfoArray);
+WX_DEFINE_OBJARRAY(wxLanguageInfoArray)
 
 wxLanguageInfoArray *wxLocale::ms_languagesDB = NULL;
 
@@ -1772,7 +1777,7 @@ bool wxLocale::Init(int language, int flags)
 
 #ifndef WX_NO_LOCALE_SUPPORT
     wxChar *szLocale = retloc ? wxStrdup(retloc) : NULL;
-    bool ret = Init(name, canonical, retloc,
+    bool ret = Init(name, canonical, szLocale,
                     (flags & wxLOCALE_LOAD_DEFAULT) != 0,
                     (flags & wxLOCALE_CONV_ENCODING) != 0);
     free(szLocale);
@@ -2363,9 +2368,10 @@ wxFontEncoding wxLocale::GetSystemEncoding()
         wxFontEncoding enc = wxFontMapperBase::GetEncodingFromName(encname);
 
         // on some modern Linux systems (RedHat 8) the default system locale
-        // is UTF8 -- but it isn't supported by wxGTK in ANSI build at all so
+        // is UTF8 -- but it isn't supported by wxGTK1 in ANSI build at all so
         // don't even try to use it in this case
-#if !wxUSE_UNICODE && defined(__WXGTK__)
+#if !wxUSE_UNICODE && \
+        ((defined(__WXGTK__) && !defined(__WXGTK20__)) || defined(__WXMOTIF__))
         if ( enc == wxFONTENCODING_UTF8 )
         {
             // the most similar supported encoding...
@@ -3540,7 +3546,7 @@ void wxLocale::InitLanguagesDB()
    LNG(wxLANGUAGE_ZHUANG,                     "za"   , 0              , 0                                 , "Zhuang")
    LNG(wxLANGUAGE_ZULU,                       "zu"   , 0              , 0                                 , "Zulu")
 
-};
+}
 #undef LNG
 
 // --- --- --- generated code ends here --- --- ---

@@ -45,7 +45,7 @@ public:
 		currentPos(startPos),
 		atLineStart(true),
 		atLineEnd(false),
-		state(initStyle),
+		state(initStyle & chMask), // Mask off all bits which aren't in the chMask.
 		chPrev(0),
 		ch(0),
 		chNext(0) {
@@ -104,7 +104,7 @@ public:
 		return currentPos - styler.GetStartSegment();
 	}
 	int GetRelative(int n) {
-		return styler.SafeGetCharAt(currentPos+n);
+		return static_cast<unsigned char>(styler.SafeGetCharAt(currentPos+n));
 	}
 	bool Match(char ch0) {
 		return ch == ch0;
@@ -134,7 +134,8 @@ public:
 			return false;
 		s++;
 		for (int n=2; *s; n++) {
-			if (*s != tolower((styler.SafeGetCharAt(currentPos+n))))
+			if (*s !=
+				tolower(static_cast<unsigned char>(styler.SafeGetCharAt(currentPos+n))))
 				return false;
 			s++;
 		}

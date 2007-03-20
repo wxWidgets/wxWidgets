@@ -64,10 +64,8 @@ void *wxGetClipboardData(wxDataFormat dataFormat, long *len)
     case wxDF_METAFILE :
         break ;
     default:
-        {
-            wxLogError(_("Unsupported clipboard format."));
-            return NULL;
-        }
+        // custom data type
+        break ;
     }
 
 #if TARGET_CARBON
@@ -230,20 +228,29 @@ bool wxClipboard::AddData( wxDataObject *data )
 
     wxCHECK_MSG( data, false, wxT("data is invalid") );
 
-    /* we can only store one wxDataObject */
+    // we can only store one wxDataObject
     Clear();
 
     m_data = data;
 
-    /* get formats from wxDataObjects */
+    // get formats from wxDataObjects
     wxDataFormat *array = new wxDataFormat[ m_data->GetFormatCount() ];
     m_data->GetAllFormats( array );
 
     for (size_t i = 0; i < m_data->GetFormatCount(); i++)
     {
-        wxLogTrace( TRACE_CLIPBOARD,
-                    wxT("wxClipboard now supports atom %s"),
-                    array[i].GetId().c_str() );
+        if (array[i].IsStandard())
+        {
+            wxLogTrace( TRACE_CLIPBOARD,
+                        wxT("wxClipboard now supports standard atom type %d"),
+                        array[i].GetType() );
+        }
+        else
+        {
+            wxLogTrace( TRACE_CLIPBOARD,
+                        wxT("wxClipboard now supports atom %s"),
+                        array[i].GetId().c_str() );
+        }
 
         size_t sz = data->GetDataSize( array[i] ) ;
         void* buf = malloc( sz + 1 ) ;
@@ -276,6 +283,7 @@ bool wxClipboard::AddData( wxDataObject *data )
                     mactype = kScrapFlavorTypePicture ;
                     break ;
                default:
+                    mactype = (OSType)(array[i].GetFormatId());
                     break ;
             }
             UMAPutScrap( sz , mactype , buf ) ;
@@ -301,7 +309,6 @@ void wxClipboard::Close()
         delete m_data;
         m_data = (wxDataObject*) NULL;
     }
-
 }
 
 bool wxClipboard::IsSupported( const wxDataFormat &dataFormat )
@@ -325,6 +332,16 @@ bool wxClipboard::IsSupported( const wxDataFormat &dataFormat )
             if (( err = GetScrapFlavorSize( scrapRef, dataFormat.GetFormatId(), &byteCount )) == noErr)
             {
                 return true ;
+            }
+        }
+        else if ( dataFormat.GetType() == wxDF_UNICODETEXT )
+        {
+            if (( err = GetScrapFlavorFlags( scrapRef, 'TEXT', &flavorFlags )) == noErr)
+            {
+                if (( err = GetScrapFlavorSize( scrapRef, 'TEXT', &byteCount )) == noErr)
+                {
+                    return true ;
+                }
             }
         }
     }
@@ -377,7 +394,8 @@ bool wxClipboard::GetData( wxDataObject& data )
           }
        }
     }
-    /* get formats from wxDataObjects */
+
+    // get formats from wxDataObjects
     if ( !transferred )
     {
       for (size_t i = 0; !transferred && i < formatcount ; i++)
@@ -386,11 +404,13 @@ bool wxClipboard::GetData( wxDataObject& data )
 
           switch ( format.GetType() )
           {
+              // NOTE: this is usable for all data types
               case wxDF_TEXT :
               case wxDF_UNICODETEXT:
               case wxDF_OEMTEXT :
               case wxDF_BITMAP :
               case wxDF_METAFILE :
+              default :
               {
                   long len ;
                   char* s = (char*)wxGetClipboardData(format, &len );
@@ -402,10 +422,7 @@ bool wxClipboard::GetData( wxDataObject& data )
                     transferred = true ;
                   }
               }
-                            break ;
-
-              default :
-                break ;
+              break ;
           }
        }
     }

@@ -105,6 +105,7 @@ static bool DoRegionUnion(wxRegion& region,
 
 bool wxRegion::Union(const wxBitmap& bmp)
 {
+#if (!defined(__WXMSW__) || wxUSE_WXDIB)
     if (bmp.GetMask())
     {
         wxImage image = bmp.ConvertToImage();
@@ -116,6 +117,7 @@ bool wxRegion::Union(const wxBitmap& bmp)
                              0);
     }
     else
+#endif
     {
         return Union(0, 0, bmp.GetWidth(), bmp.GetHeight());
     }
@@ -125,12 +127,16 @@ bool wxRegion::Union(const wxBitmap& bmp,
                      const wxColour& transColour,
                      int   tolerance)
 {
+#if (!defined(__WXMSW__) || wxUSE_WXDIB)
     wxImage image = bmp.ConvertToImage();
     return DoRegionUnion(*this, image,
                          transColour.Red(),
                          transColour.Green(),
                          transColour.Blue(),
                          tolerance);
+#else
+    return false;
+#endif                         
 }
 
 #else

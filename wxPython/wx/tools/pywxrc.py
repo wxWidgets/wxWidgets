@@ -170,10 +170,10 @@ class XmlResApp:
             if opt in ["-o", "--output"]:
                 self.parOutput = val
 
-        if self.flagCPP + self.flagPython + self.flagGettext == 0:
-            print __doc__
-            print "\nYou must specify one of -c, -p or -g!\n"
-            sys.exit(1)
+##         if self.flagCPP + self.flagPython + self.flagGettext == 0:
+##             print __doc__
+##             print "\nYou must specify one of -c, -p or -g!\n"
+##             sys.exit(1)
 
         if self.flagCPP + self.flagPython + self.flagGettext > 1:
             print __doc__
@@ -309,7 +309,7 @@ class XmlResApp:
         parent = node.GetParent()
         if parent != None and \
            parent.GetPropVal("class", "") == "wxBitmapButton" and \
-           (node.GetName() == "focus" or node.etName() == "disabled" or
+           (node.GetName() == "focus" or node.GetName() == "disabled" or
             node.GetName() == "selected"):
             return True
 
@@ -350,8 +350,8 @@ class XmlResApp:
                 if filename not in flist:
                     flist.append(filename)
                     
-                inp = open(fullname)
-                out = open(os.path.join(self.parOutputPath, filename), "w")
+                inp = open(fullname, "rb")
+                out = open(os.path.join(self.parOutputPath, filename), "wb")
                 out.write(inp.read())
 
             # subnodes:
@@ -572,9 +572,7 @@ import wx.xrc
     fsys = wx.FileSystem()
     f = fsys.OpenFile('memory:XRC_resource/dummy_file')
     wx.MemoryFSHandler.RemoveFile('XRC_resource/dummy_file')
-    if f is not None:
-        f.Destroy()
-    else:
+    if f is None:
         wx.FileSystem.AddHandler(wx.MemoryFSHandler())
 
     # load all the strings as memory files and load into XmlRes

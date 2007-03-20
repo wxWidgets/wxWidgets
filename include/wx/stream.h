@@ -95,6 +95,7 @@ public:
 #endif // WXWIN_COMPATIBILITY_2_2
 
 
+#if WX_USE_RESERVED_VIRTUALS
     // Reserved for future use
     virtual void ReservedStreamFunc1() {}
     virtual void ReservedStreamFunc2() {}
@@ -105,6 +106,7 @@ public:
     virtual void ReservedStreamFunc7() {}
     virtual void ReservedStreamFunc8() {}
     virtual void ReservedStreamFunc9() {}
+#endif
 
 protected:
     virtual wxFileOffset OnSysSeek(wxFileOffset seek, wxSeekMode mode);

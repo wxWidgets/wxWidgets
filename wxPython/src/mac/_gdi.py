@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG.
+# This file was created automatically by SWIG 1.3.27.
 # Don't modify this file, modify the SWIG interface instead.
 
 import _gdi_
@@ -93,13 +93,15 @@ class Colour(_core.Object):
     window colours, etc.  Valid RGB values are in the range 0 to 255.
 
     In wxPython there are typemaps that will automatically convert from a
-    colour name, or from a '#RRGGBB' colour hex value string to a
-    wx.Colour object when calling C++ methods that expect a wxColour.
-    This means that the following are all equivallent::
+    colour name, from a '#RRGGBB' colour hex value string, or from a 3
+    integer tuple to a wx.Colour object when calling C++ methods that
+    expect a wxColour.  This means that the following are all
+    equivallent::
 
         win.SetBackgroundColour(wxColour(0,0,255))
         win.SetBackgroundColour('BLUE')
         win.SetBackgroundColour('#0000FF')
+        win.SetBackgroundColour((0,0,255))
 
     Additional colour names and their coresponding values can be added
     using `wx.ColourDatabase`.  Various system colours (as set in the
@@ -198,17 +200,17 @@ class Colour(_core.Object):
 
     def __eq__(*args, **kwargs):
         """
-        __eq__(self, Colour colour) -> bool
+        __eq__(self, PyObject other) -> bool
 
-        Compare colours for equality
+        Compare colours for equality.
         """
         return _gdi_.Colour___eq__(*args, **kwargs)
 
     def __ne__(*args, **kwargs):
         """
-        __ne__(self, Colour colour) -> bool
+        __ne__(self, PyObject other) -> bool
 
-        Compare colours for inequality
+        Compare colours for inequality.
         """
         return _gdi_.Colour___ne__(*args, **kwargs)
 
@@ -722,7 +724,7 @@ def EmptyBitmap(*args, **kwargs):
 
     Creates a new bitmap of the given size.  A depth of -1 indicates the
     depth of the current screen or visual. Some platforms only support 1
-    for monochrome and -1 for the current colour setting.
+    for monochrome and -1 for the current display depth.
     """
     val = _gdi_.new_EmptyBitmap(*args, **kwargs)
     val.thisown = 1
@@ -774,6 +776,64 @@ def BitmapFromBits(*args, **kwargs):
     val = _gdi_.new_BitmapFromBits(*args, **kwargs)
     val.thisown = 1
     return val
+
+
+def _BitmapFromBufferAlpha(*args, **kwargs):
+    """_BitmapFromBufferAlpha(int width, int height, buffer data, buffer alpha) -> Bitmap"""
+    return _gdi_._BitmapFromBufferAlpha(*args, **kwargs)
+
+def _BitmapFromBuffer(*args, **kwargs):
+    """_BitmapFromBuffer(int width, int height, buffer data) -> Bitmap"""
+    return _gdi_._BitmapFromBuffer(*args, **kwargs)
+def BitmapFromBuffer(width, height, dataBuffer, alphaBuffer=None):
+    """
+    Creates a `wx.Bitmap` from the data in dataBuffer.  The dataBuffer
+    parameter must be a Python object that implements the buffer interface,
+    such as a string, array, etc.  The dataBuffer object is expected to
+    contain a series of RGB bytes and be width*height*3 bytes long.  A buffer
+    object can optionally be supplied for the image's alpha channel data, and
+    it is expected to be width*height bytes long.  On Windows the RGB values
+    are 'premultiplied' by the alpha values.  (The other platforms do the
+    multiplication themselves.)
+
+    Unlike `wx.ImageFromBuffer` the bitmap created with this function does not
+    share the memory buffer with the buffer object.  This is because the
+    native pixel buffer format varies on different platforms, and so instead
+    an efficient as possible copy of the data is made from the buffer objects
+    to the bitmap's native pixel buffer.  
+
+    :see: `wx.Bitmap`, `wx.BitmapFromBufferRGBA`, `wx.ImageFromBuffer`
+    """
+    if alphaBuffer is not None:
+        return _gdi_._BitmapFromBufferAlpha(width, height, dataBuffer, alphaBuffer)
+    else:
+        return _gdi_._BitmapFromBuffer(width, height, dataBuffer)
+
+
+def _BitmapFromBufferRGBA(*args, **kwargs):
+    """_BitmapFromBufferRGBA(int width, int height, buffer data) -> Bitmap"""
+    return _gdi_._BitmapFromBufferRGBA(*args, **kwargs)
+def BitmapFromBufferRGBA(width, height, dataBuffer):
+    """
+    Creates a `wx.Bitmap` from the data in dataBuffer.  The dataBuffer
+    parameter must be a Python object that implements the buffer interface,
+    such as a string, array, etc.  The dataBuffer object is expected to
+    contain a series of RGBA bytes (red, green, blue and alpha) and be
+    width*height*4 bytes long.  On Windows the RGB values are 'premultiplied'
+    by the alpha values.  (The other platforms do the multiplication
+    themselves.)
+
+    Unlike `wx.ImageFromBuffer` the bitmap created with this function does not
+    share the memory buffer with the buffer object.  This is because the
+    native pixel buffer format varies on different platforms, and so instead
+    an efficient as possible copy of the data is made from the buffer object
+    to the bitmap's native pixel buffer. 
+
+    :see: `wx.Bitmap`, `wx.BitmapFromBuffer`, `wx.ImageFromBuffer`
+    """
+    if not isinstance(dataBuffer, buffer):
+        dataBuffer = buffer(dataBuffer)
+    return _gdi_._BitmapFromBufferRGBA(width, height, dataBuffer)
 
 class Mask(_core.Object):
     """
@@ -1600,6 +1660,9 @@ class FontMapper(object):
     def SetConfig(*args, **kwargs):
         """SetConfig(self, ConfigBase config)"""
         return _gdi_.FontMapper_SetConfig(*args, **kwargs)
+
+    SetConfig = wx._deprecated(SetConfig,
+        "Set a config object for the whole app instead, with `wx.Config.Set`.")
 
     def SetConfigPath(*args, **kwargs):
         """SetConfigPath(self, String prefix)"""
@@ -4209,7 +4272,10 @@ class BufferedDC(MemoryDC):
     def __init__(self, *args):
         """
         __init__(self, DC dc, Bitmap buffer=NullBitmap, int style=BUFFER_CLIENT_AREA) -> BufferedDC
+        __init__(self, DC dc, Bitmap buffer=NullBitmap) -> BufferedDC
+        __init__(self, DC dc) -> BufferedDC
         __init__(self, DC dc, Size area, int style=BUFFER_CLIENT_AREA) -> BufferedDC
+        __init__(self, DC dc, Size area) -> BufferedDC
 
         Constructs a buffered DC.
         """
@@ -5220,7 +5286,7 @@ class RendererNative(object):
         Return the generic implementation of the renderer. Under some
         platforms, this is the default renderer implementation, others have
         platform-specific default renderer which can be retrieved by calling
-        `GetDefault`.
+        `wx.RendererNative.GetDefault`.
         """
         return _gdi_.RendererNative_GetGeneric(*args, **kwargs)
 
@@ -5230,9 +5296,9 @@ class RendererNative(object):
         GetDefault() -> RendererNative
 
         Return the default (native) implementation for this platform -- this
-        is also the one used by default but this may be changed by calling `Set`
-        in which case the return value of this method may be different from
-        the return value of `Get`.
+        is also the one used by default but this may be changed by calling
+        `wx.RendererNative.Set` in which case the return value of this method
+        may be different from the return value of `wx.RendererNative.Get`.
         """
         return _gdi_.RendererNative_GetDefault(*args, **kwargs)
 
@@ -5279,7 +5345,7 @@ def RendererNative_GetGeneric(*args, **kwargs):
     Return the generic implementation of the renderer. Under some
     platforms, this is the default renderer implementation, others have
     platform-specific default renderer which can be retrieved by calling
-    `GetDefault`.
+    `wx.RendererNative.GetDefault`.
     """
     return _gdi_.RendererNative_GetGeneric(*args, **kwargs)
 
@@ -5288,9 +5354,9 @@ def RendererNative_GetDefault(*args, **kwargs):
     RendererNative_GetDefault() -> RendererNative
 
     Return the default (native) implementation for this platform -- this
-    is also the one used by default but this may be changed by calling `Set`
-    in which case the return value of this method may be different from
-    the return value of `Get`.
+    is also the one used by default but this may be changed by calling
+    `wx.RendererNative.Set` in which case the return value of this method
+    may be different from the return value of `wx.RendererNative.Get`.
     """
     return _gdi_.RendererNative_GetDefault(*args, **kwargs)
 
@@ -5302,5 +5368,6 @@ def RendererNative_Set(*args, **kwargs):
     renderer.  Returns the previous renderer used with Set or None.
     """
     return _gdi_.RendererNative_Set(*args, **kwargs)
+
 
 

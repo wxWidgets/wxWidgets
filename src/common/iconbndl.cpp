@@ -60,7 +60,7 @@ void wxIconBundle::AddIcon( const wxString& file, long type )
 void wxIconBundle::AddIcon( const wxString& WXUNUSED(file), long WXUNUSED(type) )
 #endif
 {
-#if wxUSE_IMAGE
+#if wxUSE_IMAGE && (!defined(__WXMSW__) || wxUSE_WXDIB)
     size_t count = wxImage::GetImageCount( file, type );
     size_t i;
     wxImage image;

@@ -67,7 +67,7 @@ void wxBell()
 
 /* Don't synthesize KeyUp events holding down a key and producing
    KeyDown events with autorepeat. */
-#ifdef HAVE_X11_XKBLIB_H
+#if defined(HAVE_X11_XKBLIB_H) && !(defined(__WXGPE__))
 bool wxSetDetectableAutoRepeat( bool flag )
 {
     Bool result;

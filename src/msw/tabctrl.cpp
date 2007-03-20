@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        tabctrl.cpp
+// Name:        src/msw/tabctrl.cpp
 // Purpose:     wxTabCtrl
 // Author:      Julian Smart
 // Modified by:
@@ -319,7 +319,7 @@ int wxTabCtrl::SetSelection(int item)
 void wxTabCtrl::SetImageList(wxImageList* imageList)
 {
     m_imageList = imageList;
-    TabCtrl_SetImageList( (HWND) GetHWND(), (HIMAGELIST) imageList->GetHIMAGELIST() );
+    (void) TabCtrl_SetImageList( (HWND) GetHWND(), (HIMAGELIST) imageList->GetHIMAGELIST() );
 }
 
 // Set the text for an item
@@ -434,5 +434,4 @@ void wxMapBitmap(HBITMAP hBitmap, int width, int height)
 }
 #endif
 
-#endif
-    // __WIN95__
+#endif // __WIN95__

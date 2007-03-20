@@ -401,7 +401,7 @@ jinit_upsampler (j_decompress_ptr cinfo)
   my_upsample_ptr upsample;
   int ci;
   jpeg_component_info * compptr;
-  boolean need_buffer, do_fancy;
+  wxjpeg_boolean need_buffer, do_fancy;
   int h_in_group, v_in_group, h_out_group, v_out_group;
 
   upsample = (my_upsample_ptr)

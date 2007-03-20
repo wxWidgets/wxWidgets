@@ -164,7 +164,7 @@ wxSize wxStaticBox::DoGetBestSize() const
     wxGetCharSize(GetHWND(), &cx, &cy, GetFont());
 
     int wBox;
-    GetTextExtent(wxGetWindowText(m_hWnd), &wBox, &cy);
+    GetTextExtent(wxStripMenuCodes(wxGetWindowText(m_hWnd)), &wBox, &cy);
 
     wBox += 3*cx;
     int hBox = EDIT_HEIGHT_FROM_CHAR_HEIGHT(cy);
@@ -390,7 +390,7 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT& WXUNUSED(rc))
         const int x = 9;
 
         // TODO: RTL?
-        RECT rc = { x, 0, GetSize().x - x, y };
+        RECT rc = { x, 0, GetSize().x, y };
 
         const wxString label = GetLabel();
         ::DrawText(hdc, label, label.length(), &rc, DT_SINGLELINE | DT_VCENTER);

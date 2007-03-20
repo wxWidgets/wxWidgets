@@ -43,6 +43,10 @@
     #include   <unistd.h>
 #endif
 
+#ifdef __WINDOWS__
+#include "wx/msw/mslu.h"
+#endif
+
 #ifdef __WXMSW__
 #include <windows.h>
 #include "wx/msw/winundef.h"

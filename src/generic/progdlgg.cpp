@@ -145,7 +145,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
 
     wxClientDC dc(this);
     dc.SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
-    long widthText;
+    long widthText = 0;
     dc.GetTextExtent(message, &widthText, NULL, NULL, NULL, NULL);
 
     wxBoxSizer *sizer = new wxBoxSizer(wxVERTICAL);

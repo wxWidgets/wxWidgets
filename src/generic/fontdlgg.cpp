@@ -45,6 +45,10 @@
 #include "wx/generic/fontdlgg.h"
 #include "wx/settings.h"
 
+#if USE_SPINCTRL_FOR_POINT_SIZE
+#include "wx/spinctrl.h"
+#endif
+
 //-----------------------------------------------------------------------------
 // helper class - wxFontPreviewer
 //-----------------------------------------------------------------------------
@@ -80,7 +84,7 @@ void wxFontPreviewer::OnPaint(wxPaintEvent& WXUNUSED(event))
     {
         dc.SetFont(font);
         // Calculate vertical centre
-        long w, h;
+        long w = 0, h = 0;
         dc.GetTextExtent( wxT("X"), &w, &h);
         dc.SetTextForeground(GetForegroundColour());
         dc.SetClippingRegion(2, 2, size.x-4, size.y-4);
@@ -102,7 +106,12 @@ BEGIN_EVENT_TABLE(wxGenericFontDialog, wxDialog)
     EVT_CHOICE(wxID_FONT_WEIGHT, wxGenericFontDialog::OnChangeFont)
     EVT_CHOICE(wxID_FONT_FAMILY, wxGenericFontDialog::OnChangeFont)
     EVT_CHOICE(wxID_FONT_COLOUR, wxGenericFontDialog::OnChangeFont)
+#if USE_SPINCTRL_FOR_POINT_SIZE
+    EVT_SPINCTRL(wxID_FONT_SIZE, wxGenericFontDialog::OnChangeSize)
+    EVT_TEXT(wxID_FONT_SIZE, wxGenericFontDialog::OnChangeFont)
+#else
     EVT_CHOICE(wxID_FONT_SIZE, wxGenericFontDialog::OnChangeFont)
+#endif
     EVT_CLOSE(wxGenericFontDialog::OnCloseWindow)
 END_EVENT_TABLE()
 
@@ -236,6 +245,7 @@ void wxGenericFontDialog::CreateWidgets()
     weights[1] = _("Light");
     weights[2] = _("Bold");
 
+#if !USE_SPINCTRL_FOR_POINT_SIZE
     wxString *pointSizes = new wxString[40];
     int i;
     for ( i = 0; i < 40; i++)
@@ -244,6 +254,7 @@ void wxGenericFontDialog::CreateWidgets()
         wxSprintf(buf, wxT("%d"), i + 1);
         pointSizes[i] = buf;
     }
+#endif
 
     // layout
 
@@ -324,11 +335,20 @@ void wxGenericFontDialog::CreateWidgets()
     wxStaticText* itemStaticText18 = new wxStaticText( this, wxID_STATIC, _("&Point size:"), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer17->Add(itemStaticText18, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
 
+#if USE_SPINCTRL_FOR_POINT_SIZE
+    wxSpinCtrl* spinCtrl = new wxSpinCtrl(this, wxID_FONT_SIZE, wxT("12"), wxDefaultPosition, wxSize(80, -1), wxSP_ARROW_KEYS, 1, 500, 12);
+    spinCtrl->SetHelpText(_("The font point size."));
+    if (ShowToolTips())
+        spinCtrl->SetToolTip(_("The font point size."));
+    
+    itemBoxSizer17->Add(spinCtrl, 0, wxALIGN_LEFT|wxALL, 5);
+#else
     wxChoice* itemChoice19 = new wxChoice( this, wxID_FONT_SIZE, wxDefaultPosition, wxDefaultSize, 40, pointSizes, 0 );
     itemChoice19->SetHelpText(_("The font point size."));
     if (ShowToolTips())
         itemChoice19->SetToolTip(_("The font point size."));
     itemBoxSizer17->Add(itemChoice19, 0, wxALIGN_LEFT|wxALL, 5);
+#endif
 
     if (m_fontData.GetEnableEffects())
     {
@@ -345,15 +365,18 @@ void wxGenericFontDialog::CreateWidgets()
     if (!is_pda)
         itemBoxSizer3->Add(5, 5, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
 
-    wxStaticText* itemStaticText23 = new wxStaticText( this, wxID_STATIC, _("Preview:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer3->Add(itemStaticText23, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    if (!is_pda)
+    {
+        wxStaticText* itemStaticText23 = new wxStaticText( this, wxID_STATIC, _("Preview:"), wxDefaultPosition, wxDefaultSize, 0 );
+        itemBoxSizer3->Add(itemStaticText23, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxTOP|wxADJUST_MINSIZE, 5);
+    }
     
     wxFontPreviewer* itemWindow24 = new wxFontPreviewer( this );
     m_previewer = itemWindow24;
     itemWindow24->SetHelpText(_("Shows the font preview."));
     if (ShowToolTips())
         itemWindow24->SetToolTip(_("Shows the font preview."));
-    itemBoxSizer3->Add(itemWindow24, 0, wxGROW|wxALL, 5);
+    itemBoxSizer3->Add(itemWindow24, 1, wxGROW|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer25 = new wxBoxSizer(wxHORIZONTAL);
     itemBoxSizer3->Add(itemBoxSizer25, 0, wxGROW, 5);
@@ -389,7 +412,6 @@ void wxGenericFontDialog::CreateWidgets()
     styleChoice = (wxChoice*) FindWindow(wxID_FONT_STYLE);
     weightChoice = (wxChoice*) FindWindow(wxID_FONT_WEIGHT);
     colourChoice = (wxChoice*) FindWindow(wxID_FONT_COLOUR);
-    pointSizeChoice = (wxChoice*) FindWindow(wxID_FONT_SIZE);
     underLineCheckBox = (wxCheckBox*) FindWindow(wxID_FONT_UNDERLINE);
     
     familyChoice->SetStringSelection( wxFontFamilyIntToString(dialogFont.GetFamily()) );
@@ -410,7 +432,12 @@ void wxGenericFontDialog::CreateWidgets()
         underLineCheckBox->SetValue(dialogFont.GetUnderlined());
     }
 
+#if USE_SPINCTRL_FOR_POINT_SIZE
+    spinCtrl->SetValue(dialogFont.GetPointSize());
+#else
+    pointSizeChoice = (wxChoice*) FindWindow(wxID_FONT_SIZE);
     pointSizeChoice->SetSelection(dialogFont.GetPointSize()-1);
+#endif
 
 #if !defined(__SMARTPHONE__) && !defined(__POCKETPC__)
     GetSizer()->SetItemMinSize(m_previewer, is_pda ? 100 : 430, is_pda ? 40 : 100);
@@ -423,7 +450,9 @@ void wxGenericFontDialog::CreateWidgets()
     delete[] families;
     delete[] styles;
     delete[] weights;
+#if !USE_SPINCTRL_FOR_POINT_SIZE
     delete[] pointSizes;
+#endif
 
     // Don't block events any more
     m_useEvents = true;
@@ -461,10 +490,15 @@ void wxGenericFontDialog::OnChangeFont(wxCommandEvent& WXUNUSED(event))
     int fontFamily = wxFontFamilyStringToInt(WXSTRINGCAST familyChoice->GetStringSelection());
     int fontWeight = wxFontWeightStringToInt(WXSTRINGCAST weightChoice->GetStringSelection());
     int fontStyle = wxFontStyleStringToInt(WXSTRINGCAST styleChoice->GetStringSelection());
-    int fontSize = wxAtoi(pointSizeChoice->GetStringSelection());
     // Start with previous underline setting, we want to retain it even if we can't edit it
     // dialogFont is always initialized because of the call to InitializeFont
     int fontUnderline = dialogFont.GetUnderlined();
+#if USE_SPINCTRL_FOR_POINT_SIZE
+    wxSpinCtrl* fontSizeCtrl = wxDynamicCast(FindWindow(wxID_FONT_SIZE), wxSpinCtrl);
+    int fontSize = fontSizeCtrl->GetValue();
+#else
+    int fontSize = wxAtoi(pointSizeChoice->GetStringSelection());
+#endif
 
     if (underLineCheckBox)
     {
@@ -492,6 +526,14 @@ void wxGenericFontDialog::OnChangeFont(wxCommandEvent& WXUNUSED(event))
         
     m_previewer->Refresh();
 }
+
+#if USE_SPINCTRL_FOR_POINT_SIZE
+void wxGenericFontDialog::OnChangeSize(wxSpinEvent& WXUNUSED(event))
+{
+    wxCommandEvent cmdEvent;
+    OnChangeFont(cmdEvent);
+}
+#endif
 
 const wxChar *wxFontWeightIntToString(int weight)
 {

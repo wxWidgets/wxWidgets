@@ -41,7 +41,7 @@ cd ..
 rem *** bundle it all up
 cd _distrib_zip
 tar cvf ../dist/wxPythonWIN32-preview-%1.tar wxPython-%1
-gzip -9 ../dist/wxPythonWIN32-preview-%1.tar
+bzip2 -9 ../dist/wxPythonWIN32-preview-%1.tar
 mv ../dist/wxPythonWIN32-preview-%1.tar.gz ../dist/wxPythonWIN32-preview-%1.tgz
 
 rem *** cleanup

@@ -131,7 +131,7 @@ class LabelShape(RectangleShape):
         RectangleShape.__init__(self, w, h)
         self._lineShape = parent
         self._shapeRegion = region
-        self.SetPen(wx.ThePenList.FindOrCreatePen(wx.Colour(0, 0, 0), 1, wx.DOT))
+        self.SetPen(wx.Pen(wx.Colour(0, 0, 0), 1, wx.DOT))
 
     def OnDraw(self, dc):
         if self._lineShape and not self._lineShape.GetDrawHandles():
@@ -1027,7 +1027,7 @@ class LineShape(Shape):
         # Problem with pen - if not a solid pen, does strange things
         # to the arrowhead. So make (get) a new pen that's solid.
         if self._pen and self._pen.GetStyle() != wx.SOLID:
-            solid_pen = wx.ThePenList.FindOrCreatePen(self._pen.GetColour(), 1, wx.SOLID)
+            solid_pen = wx.Pen(self._pen.GetColour(), 1, wx.SOLID)
             if solid_pen:
                 dc.SetPen(solid_pen)
 

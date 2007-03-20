@@ -853,9 +853,9 @@ wxImageList *wxTreeCtrl::GetStateImageList() const
 void wxTreeCtrl::SetAnyImageList(wxImageList *imageList, int which)
 {
     // no error return
-    TreeView_SetImageList(GetHwnd(),
-                          imageList ? imageList->GetHIMAGELIST() : 0,
-                          which);
+    (void) TreeView_SetImageList(GetHwnd(),
+                                 imageList ? imageList->GetHIMAGELIST() : 0,
+                                 which);
 }
 
 void wxTreeCtrl::SetImageList(wxImageList *imageList)
@@ -2093,7 +2093,7 @@ wxTreeItemId wxTreeCtrl::HitTest(const wxPoint& point, int& flags)
     hitTestInfo.pt.x = (int)point.x;
     hitTestInfo.pt.y = (int)point.y;
 
-    TreeView_HitTest(GetHwnd(), &hitTestInfo);
+    (void) TreeView_HitTest(GetHwnd(), &hitTestInfo);
 
     flags = 0;
 
@@ -2289,12 +2289,12 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
         int x = GET_X_LPARAM(lParam),
             y = GET_Y_LPARAM(lParam);
         HTREEITEM htItem = GetItemFromPoint(GetHwnd(), x, y);
-        
+
         TV_HITTESTINFO tvht;
         tvht.pt.x = x;
         tvht.pt.y = y;
-    
-        TreeView_HitTest(GetHwnd(), &tvht);
+
+        (void) TreeView_HitTest(GetHwnd(), &tvht);
 
         switch ( nMsg )
         {
@@ -2319,7 +2319,7 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                 {
                     m_htClickedItem = (WXHTREEITEM) htItem;
                     m_ptClick = wxPoint(x, y);
-                    
+
                     if ( wParam & MK_CONTROL )
                     {
                         SetFocus();
@@ -2359,7 +2359,7 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                     {
                         // avoid doing anything if we click on the only
                         // currently selected item
-                        
+
                         SetFocus();
 
                         wxArrayTreeItemIds selections;
@@ -2413,29 +2413,29 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                             tv.hdr.hwndFrom = GetHwnd();
                             tv.hdr.idFrom = ::GetWindowLong( GetHwnd(), GWL_ID );
                             tv.hdr.code = TVN_BEGINDRAG;
-            
+
                             tv.itemNew.hItem = HITEM(m_htClickedItem);
-                            
+
                             TVITEM tviAux;
                             ZeroMemory(&tviAux, sizeof(tviAux));
                             tviAux.hItem = HITEM(m_htClickedItem);
                             tviAux.mask = TVIF_STATE | TVIF_PARAM;
                             tviAux.stateMask = 0xffffffff;
                             TreeView_GetItem( GetHwnd(), &tviAux );
-                            
+
                             tv.itemNew.state = tviAux.state;
                             tv.itemNew.lParam = tviAux.lParam;
-            
+
                             tv.ptDrag.x = x;
                             tv.ptDrag.y = y;
-            
+
                             ::SendMessage( pWnd, WM_NOTIFY, tv.hdr.idFrom, (LPARAM)&tv );
                         }
                         m_htClickedItem.Unset();
                     }
                 }
 #endif // __WXWINCE__
-                
+
                 if ( m_dragImage )
                 {
                     m_dragImage->Move(wxPoint(x, y));
@@ -3240,4 +3240,3 @@ wxTreeItemId wxTreeCtrl::GetParent(const wxTreeItemId& item) const
 #endif  // WXWIN_COMPATIBILITY_2_2
 
 #endif // wxUSE_TREECTRL
-

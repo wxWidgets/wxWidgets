@@ -69,7 +69,7 @@ for dir in SPECS BUILD RPMS SOURCES SRPMS tmp; do
     fi
 done
 
-cp wxPython-src-$VERSION.tar.gz $rpmtop/SOURCES
+cp wxPython-src-$VERSION.tar.bz2 $rpmtop/SOURCES
 
 echo "******************** PYVER = " $PYVER
 for ver in $PYVER; do 
@@ -93,7 +93,7 @@ if [ $SKIPCLEAN != yes ]; then
     rm -rf $rpmtop
 
     echo "Cleaning up..."
-    rm *.spec *.tar.gz
+    rm *.spec *.tar.bz2
 fi
 
 echo "-=-=-=-  Goodbye!  -=-=-=-"

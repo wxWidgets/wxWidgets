@@ -52,6 +52,9 @@
 #include "wx/toplevel.h"
 #include "wx/artprov.h"
 #include "wx/image.h"
+#ifdef wxUSE_TOGGLEBTN
+#include "wx/tglbtn.h"
+#endif // wxUSE_TOGGLEBTN
 
 #include "wx/univ/renderer.h"
 #include "wx/univ/inphand.h"
@@ -2815,8 +2818,15 @@ void wxGTKRenderer::AdjustSize(wxSize *size, const wxWindow *window)
         size->y += 4;
     } else
 #endif // wxUSE_BMPBUTTON
-#if wxUSE_BUTTON
-    if ( wxDynamicCast(window, wxButton) )
+#if wxUSE_BUTTON || wxUSE_TOGGLEBTN
+    if ( 0 
+#  if wxUSE_BUTTON
+         || wxDynamicCast(window, wxButton) 
+#  endif // wxUSE_BUTTON
+#  if wxUSE_TOGGLEBTN
+         || wxDynamicCast(window, wxToggleButton) 
+#  endif // wxUSE_TOGGLEBTN
+        )
     {
         if ( !(window->GetWindowStyle() & wxBU_EXACTFIT) )
         {
@@ -2830,7 +2840,7 @@ void wxGTKRenderer::AdjustSize(wxSize *size, const wxWindow *window)
             size->y += 4;
         }
     } else
-#endif //wxUSE_BUTTON
+#endif // wxUSE_BUTTON || wxUSE_TOGGLEBTN
     if ( wxDynamicCast(window, wxScrollBar) )
     {
         // we only set the width of vert scrollbars and height of the

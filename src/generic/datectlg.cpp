@@ -570,14 +570,18 @@ void wxDatePickerCtrlGeneric::DoMoveWindow(int x, int y, int w, int h)
     wxControl::DoMoveWindow(x, y, w, h);
 
     if (m_dropped)
-        DropDown(true);
+        DropDown(false);
 }
 
 wxSize wxDatePickerCtrlGeneric::DoGetBestSize() const
 {
-    int bh=m_btn->GetBestSize().y;
-    int eh=m_txt->GetBestSize().y;
-    return wxSize(DEFAULT_ITEM_WIDTH, bh > eh ? bh : eh);
+    if (m_btn && m_txt)
+    {
+        int bh=m_btn->GetBestSize().y;
+        int eh=m_txt->GetBestSize().y;
+        return wxSize(DEFAULT_ITEM_WIDTH, bh > eh ? bh : eh);
+    }
+    return wxControl::DoGetBestSize();
 }
 
 
@@ -737,7 +741,7 @@ bool wxDatePickerCtrlGeneric::GetRange(wxDateTime *dt1, wxDateTime *dt2) const
 {
     if (dt1)
         *dt1 = m_cal->GetLowerDateLimit();
-    if (dt1)
+    if (dt2)
         *dt2 = m_cal->GetUpperDateLimit();
     return true;
 }

@@ -3,7 +3,7 @@
  ** Lexer for POV-Ray SDL (Persistance of Vision Raytracer, Scene Description Language).
  ** Written by Philippe Lhoste but this is mostly a derivative of LexCPP...
  **/
-// Copyright 1998-2003 by Neil Hodgson <neilh@scintilla.org>
+// Copyright 1998-2005 by Neil Hodgson <neilh@scintilla.org>
 // The License.txt file describes the conditions under which this software may be distributed.
 
 // Some points that distinguish from a simple C lexer:
@@ -29,15 +29,15 @@
 #include "Scintilla.h"
 #include "SciLexer.h"
 
-static inline bool IsAWordChar(const int ch) {
+static inline bool IsAWordChar(int ch) {
 	return ch < 0x80 && (isalnum(ch) || ch == '_');
 }
 
-static inline bool IsAWordStart(const int ch) {
+static inline bool IsAWordStart(int ch) {
 	return ch < 0x80 && isalpha(ch);
 }
 
-static inline bool IsANumberChar(const int ch) {
+static inline bool IsANumberChar(int ch) {
 	// Not exactly following number definition (several dots are seen as OK, etc.)
 	// but probably enough in most cases.
 	return (ch < 0x80) &&
@@ -69,12 +69,13 @@ static void ColourisePovDoc(
 	}
 
 	// Do not leak onto next line
-	if (initStyle == SCE_POV_STRINGEOL) {
+	if (initStyle == SCE_POV_STRINGEOL || initStyle == SCE_POV_COMMENTLINE) {
 		initStyle = SCE_POV_DEFAULT;
 	}
 
-	StyleContext sc(startPos, length, initStyle, styler);
 	short stringLen = 0;
+
+	StyleContext sc(startPos, length, initStyle, styler);
 
 	for (; sc.More(); sc.Forward()) {
 		if (sc.atLineEnd) {
@@ -125,7 +126,8 @@ static void ColourisePovDoc(
 			}
 		} else if (sc.state == SCE_POV_DIRECTIVE) {
 			if (!IsAWordChar(sc.ch)) {
-				char s[100], *p;
+				char s[100];
+				char *p;
 				sc.GetCurrent(s, sizeof(s));
 				p = s;
 				// Skip # and whitespace between # and directive word
@@ -150,7 +152,7 @@ static void ColourisePovDoc(
 			}
 		} else if (sc.state == SCE_POV_COMMENTLINE) {
 			if (sc.atLineEnd) {
-				sc.SetState(SCE_POV_DEFAULT);
+				sc.ForwardSetState(SCE_POV_DEFAULT);
 			}
 		} else if (sc.state == SCE_POV_STRING) {
 			if (sc.ch == '\\') {

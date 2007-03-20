@@ -11,7 +11,7 @@ IMPORTANT NOTE:
 
   When sending bug reports tell us what version of wxWidgets you are
   using (including the beta) and what compiler on what system. One
-  example: wxGTK 2.6.2, gcc 2.95.4, Redhat 6.2
+  example: wxGTK 2.6.3, gcc 3.4.5, Fedora Core 4
 
 * The simplest case
 -------------------
@@ -118,8 +118,9 @@ g++ myfoo.cpp `wx-config --libs --cxxflags` -o myfoo
 ---------------
 
 wxWidgets/GTK+ requires the GTK+ library to be installed on your system. It has
-to be a stable version, preferably version 1.2.10 (at least 1.2.3 is required,
-1.2.7 is strongly recommended).
+to be a stable version, preferably GTK+ 2.x.y, where x is an even number.
+GTK+ version 1.2 is highly discouraged, but if you decide to still use it,
+please use version 1.2.10 (at least 1.2.3 is required, 1.2.7 is strongly recommended).
 
 You can get the newest version of the GTK+ from the GTK+ homepage at:
 

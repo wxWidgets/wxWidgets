@@ -95,12 +95,14 @@ public:
     virtual wxColour GetThemeBackgroundColour() const { return wxNullColour; }
 
 
+#if WX_USE_RESERVED_VIRTUALS
     // Reserved for future use
     virtual void ReservedNotebookFunc1() {}
     virtual void ReservedNotebookFunc2() {}
     virtual void ReservedNotebookFunc3() {}
     virtual void ReservedNotebookFunc4() {}
     virtual void ReservedNotebookFunc5() {}
+#endif
 
 protected:
     DECLARE_NO_COPY_CLASS(wxNotebookBase)

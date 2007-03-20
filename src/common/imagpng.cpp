@@ -172,20 +172,25 @@ void PNGLINKAGEMODE wx_PNG_stream_writer( png_structp png_ptr, png_bytep data,
     WX_PNG_INFO(png_ptr)->stream.out->Write(data, length);
 }
 
-// from pngerror.c
-// so that the libpng doesn't send anything on stderr
-void
-PNGLINKAGEMODE wx_png_error(png_structp WXUNUSED(png_ptr), png_const_charp message)
-{
-    wxLogFatalError( wxString::FromAscii(message) );
-}
-
 void
 PNGLINKAGEMODE wx_png_warning(png_structp png_ptr, png_const_charp message)
 {
     wxPNGInfoStruct *info = png_ptr ? WX_PNG_INFO(png_ptr) : NULL;
     if ( !info || info->verbose )
         wxLogWarning( wxString::FromAscii(message) );
+}
+
+// from pngerror.c
+// so that the libpng doesn't send anything on stderr
+void
+PNGLINKAGEMODE wx_png_error(png_structp png_ptr, png_const_charp message)
+{
+    wx_png_warning(NULL, message);
+
+    // we're not using libpng built-in jump buffer (see comment before
+    // wxPNGInfoStruct above) so we have to return ourselves, otherwise libpng
+    // would just abort
+    longjmp(WX_PNG_INFO(png_ptr)->jmpbuf, 1);
 }
 
 } // extern "C"
@@ -511,6 +516,7 @@ wxPNGHandler::LoadFile(wxImage *image,
     //     method is to use goto (setjmp is not really C++ dtors friendly...)
 
     unsigned char **lines = NULL;
+    png_uint_32 height = 0;
     png_infop info_ptr = (png_infop) NULL;
     wxPNGInfoStruct wxinfo;
 
@@ -540,7 +546,7 @@ wxPNGHandler::LoadFile(wxImage *image,
     if (setjmp(wxinfo.jmpbuf))
         goto error;
 
-    png_uint_32 i, width, height;
+    png_uint_32 i, width;
     int bit_depth, color_type, interlace_type;
 
     png_read_info( png_ptr, info_ptr );
@@ -602,6 +608,9 @@ error:
 
     if ( lines )
     {
+        for ( unsigned int n = 0; n < height; n++ )
+            free( lines[n] );
+
         free( lines );
     }
 

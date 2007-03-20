@@ -430,7 +430,7 @@ enum {
     GBS_MOVE_BTN1,
     GBS_MOVE_BTN2,
 
-    GBS_MAX,
+    GBS_MAX
 };
 
 

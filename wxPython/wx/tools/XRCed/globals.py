@@ -15,7 +15,16 @@ import sys
 # Global constants
 
 progname = 'XRCed'
-version = '0.1.6-4'
+version = '0.1.7-4'
+# Minimal wxWindows version
+MinWxVersion = (2,6,0)
+if wxVERSION[:3] < MinWxVersion:
+    print '''\
+******************************* WARNING **************************************
+  This version of XRCed may not work correctly on your version of wxWindows.
+  Please upgrade wxWindows to %d.%d.%d or higher.
+******************************************************************************''' % MinWxVersion    
+
 # Can be changed to set other default encoding different
 #defaultEncoding = ''
 # you comment above and can uncomment this:

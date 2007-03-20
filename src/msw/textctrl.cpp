@@ -813,7 +813,10 @@ wxTextCtrl::StreamIn(const wxString& value,
                   (selectionOnly ? SFF_SELECTION : 0),
                   (LPARAM)&eds);
 
-    wxASSERT_MSG( ucf.GotUpdate(), _T("EM_STREAMIN didn't send EN_UPDATE?") );
+    // It's okay for EN_UPDATE to not be sent if the selection is empty and
+    // the text is empty, otherwise warn the programmer about it.
+    wxASSERT_MSG( ucf.GotUpdate() || ( !HasSelection() && value.empty() ),
+                  _T("EM_STREAMIN didn't send EN_UPDATE?") );
 
     if ( eds.dwError )
     {
@@ -965,7 +968,8 @@ void wxTextCtrl::DoWriteText(const wxString& value, bool selectionOnly)
         UpdatesCountFilter ucf(m_updatesCount);
 
         ::SendMessage(GetHwnd(), selectionOnly ? EM_REPLACESEL : WM_SETTEXT,
-                      0, (LPARAM)valueDos.c_str());
+                      // EM_REPLACESEL takes 1 to indicate the operation should be redoable
+                      selectionOnly ? 1 : 0, (LPARAM)valueDos.c_str());
 
         if ( !ucf.GotUpdate() )
         {
@@ -1261,10 +1265,14 @@ void wxTextCtrl::DoSetSelection(long from, long to, bool scrollCaret)
         // ES_DISABLENOSCROLL
         //
         // this is very ugly but I don't see any other way to make this work
+        long style = 0;
         if ( GetRichVersion() > 1 )
         {
             if ( !HasFlag(wxTE_NOHIDESEL) )
             {
+                // setting ECO_NOHIDESEL also sets WS_VISIBLE and possibly
+                // others, remember the style so we can reset it later if needed
+                style = ::GetWindowLong(GetHwnd(), GWL_STYLE);
                 ::SendMessage(GetHwnd(), EM_SETOPTIONS,
                               ECOOP_OR, ECO_NOHIDESEL);
             }
@@ -1280,6 +1288,8 @@ void wxTextCtrl::DoSetSelection(long from, long to, bool scrollCaret)
         {
             ::SendMessage(GetHwnd(), EM_SETOPTIONS,
                           ECOOP_AND, ~ECO_NOHIDESEL);
+            if ( style != ::GetWindowLong(GetHwnd(), GWL_STYLE) )
+                ::SetWindowLong(GetHwnd(), GWL_STYLE, style);
         }
 #endif // wxUSE_RICHEDIT
     }
@@ -1776,6 +1786,7 @@ void wxTextCtrl::OnChar(wxKeyEvent& event)
                 // Insert tab since calling the default Windows handler
                 // doesn't seem to do it
                 WriteText(wxT("\t"));
+                return;
             }
             break;
     }
@@ -1962,7 +1973,7 @@ wxSize wxTextCtrl::DoGetBestSize() const
     int hText = cy;
     if ( m_windowStyle & wxTE_MULTILINE )
     {
-        hText *= wxMax(wxMin(GetNumberOfLines(), 10), 2); 
+        hText *= wxMax(wxMin(GetNumberOfLines(), 10), 2);
     }
     //else: for single line control everything is ok
 
@@ -2523,7 +2534,7 @@ bool wxTextCtrl::GetStyle(long position, wxTextAttr& style)
 
     if ( changeSel )
     {
-        DoSetSelection(position, position, false /* don't scroll caret into view */);
+        DoSetSelection(position, position+1, false /* don't scroll caret into view */);
     }
 
     // get the selection formatting

@@ -92,11 +92,10 @@ class EditWindow(stc.StyledTextCtrl):
             size = 0
         self.SetZoom(size)
 
-    def __config(self):
-        """Configure shell based on user preferences."""
-        self.SetMarginType(1, stc.STC_MARGIN_NUMBER)
-        self.SetMarginWidth(1, 40)
 
+    def __config(self):
+        self.setDisplayLineNumbers(False)
+        
         self.SetLexer(stc.STC_LEX_PYTHON)
         self.SetKeyWords(0, ' '.join(keyword.kwlist))
 
@@ -116,6 +115,7 @@ class EditWindow(stc.StyledTextCtrl):
         self.AutoCompStops(' .,;:([)]}\'"\\<>%^&+-=*/|`')
         # Do we want to automatically pop up command argument help?
         self.autoCallTip = True
+        self.callTipInsert = True
         self.CallTipSetBackground(FACES['calltipbg'])
         self.CallTipSetForeground(FACES['calltipfg'])
         self.SetWrapMode(False)
@@ -124,6 +124,16 @@ class EditWindow(stc.StyledTextCtrl):
         except AttributeError:
             pass
 
+    def setDisplayLineNumbers(self, state):
+        self.lineNumbers = state
+        if state:
+            self.SetMarginType(1, stc.STC_MARGIN_NUMBER)
+            self.SetMarginWidth(1, 40)
+        else:
+            # Leave a small margin so the feature hidden lines marker can be seen
+            self.SetMarginType(1, 0)
+            self.SetMarginWidth(1, 10)
+        
     def setStyles(self, faces):
         """Configure font size, typeface and color for lexer."""
 
@@ -136,7 +146,7 @@ class EditWindow(stc.StyledTextCtrl):
 
         # Built in styles
         self.StyleSetSpec(stc.STC_STYLE_LINENUMBER,
-                          "back:#C0C0C0,face:%(mono)s,size:%(lnsize)d" % faces)
+                          "back:#C0C0C0,face:%(mono)s,size:%(lnsize)d" % FACES)
         self.StyleSetSpec(stc.STC_STYLE_CONTROLCHAR,
                           "face:%(mono)s" % faces)
         self.StyleSetSpec(stc.STC_STYLE_BRACELIGHT,
@@ -223,3 +233,61 @@ class EditWindow(stc.StyledTextCtrl):
     def CanPaste(self):
         """Return True if pasting should succeed."""
         return stc.StyledTextCtrl.CanPaste(self) and self.CanEdit()
+
+
+    def GetLastPosition(self):
+        return self.GetLength()
+
+    def GetRange(self, start, end):
+        return self.GetTextRange(start, end)
+
+    def GetSelection(self):
+        return self.GetAnchor(), self.GetCurrentPos()
+
+    def ShowPosition(self, pos):
+        line = self.LineFromPosition(pos)
+        #self.EnsureVisible(line)
+        self.GotoLine(line)
+
+    def DoFindNext(self, findData, findDlg=None):
+        backward = not (findData.GetFlags() & wx.FR_DOWN)
+        matchcase = (findData.GetFlags() & wx.FR_MATCHCASE) != 0
+        end = self.GetLastPosition()
+        textstring = self.GetRange(0, end)
+        findstring = findData.GetFindString()
+        if not matchcase:
+            textstring = textstring.lower()
+            findstring = findstring.lower()
+        if backward:
+            start = self.GetSelection()[0]
+            loc = textstring.rfind(findstring, 0, start)
+        else:
+            start = self.GetSelection()[1]
+            loc = textstring.find(findstring, start)
+
+        # if it wasn't found then restart at begining
+        if loc == -1 and start != 0:
+            if backward:
+                start = end
+                loc = textstring.rfind(findstring, 0, start)
+            else:
+                start = 0
+                loc = textstring.find(findstring, start)
+
+        # was it still not found?
+        if loc == -1:
+            dlg = wx.MessageDialog(self, 'Unable to find the search text.',
+                          'Not found!',
+                          wx.OK | wx.ICON_INFORMATION)
+            dlg.ShowModal()
+            dlg.Destroy()
+        if findDlg:
+            if loc == -1:
+                wx.CallAfter(findDlg.SetFocus)
+                return
+            else:
+                findDlg.Close()
+
+        # show and select the found text
+        self.ShowPosition(loc)
+        self.SetSelection(loc, loc + len(findstring))

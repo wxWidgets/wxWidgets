@@ -633,9 +633,11 @@ def RunStandalone():
     app.MainLoop()
 #----------------------------------------------------------------------------
 import wx.lib.masked.maskededit as maskededit
+# strip out module header used for pydoc:
+demodoc = '\n'.join(maskededit.__doc__.split('\n')[2:])
 overview = """<html>
 <PRE><FONT SIZE=-1>
-""" + maskededit.__doc__ + """
+""" + demodoc + """
 </FONT></PRE>
 """
 

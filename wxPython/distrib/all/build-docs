@@ -22,14 +22,14 @@ if [ $skipdocs != yes ]; then
     # build the doc and demo tarballs
     distrib/makedemo
     distrib/makedocs
-    mv dist/wxPython-docs-$VERSION.tar.gz $STAGING_DIR
-    mv dist/wxPython-demo-$VERSION.tar.gz $STAGING_DIR
+    mv dist/wxPython-docs-$VERSION.tar.bz2 $STAGING_DIR
+    mv dist/wxPython-demo-$VERSION.tar.bz2 $STAGING_DIR
 
 
     # build the new docs too
     if [ $skipnewdocs != yes ]; then
 	docs/bin/everything
-	mv dist/wxPython-newdocs-$VERSION.tar.gz $STAGING_DIR
+	mv dist/wxPython-newdocs-$VERSION.tar.bz2 $STAGING_DIR
     fi
 fi
 

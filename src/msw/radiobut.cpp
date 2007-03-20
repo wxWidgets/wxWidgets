@@ -300,7 +300,7 @@ wxSize wxRadioButton::DoGetBestSize() const
     int wRadio, hRadio;
     if ( !str.empty() )
     {
-        GetTextExtent(str, &wRadio, &hRadio);
+        GetTextExtent(wxStripMenuCodes(str), &wRadio, &hRadio);
         wRadio += s_radioSize + GetCharWidth();
 
         if ( hRadio < s_radioSize )

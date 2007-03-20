@@ -76,6 +76,20 @@ static gint gtk_radiobox_keypress_callback( GtkWidget *widget, GdkEventKey *gdk_
     if (!rb->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
 
+    if ( ((gdk_event->keyval == GDK_Tab) || 
+          (gdk_event->keyval == GDK_ISO_Left_Tab)) &&
+         rb->GetParent() && (rb->GetParent()->HasFlag( wxTAB_TRAVERSAL)) )
+    {
+        wxNavigationKeyEvent new_event;
+        new_event.SetEventObject( rb->GetParent() );
+        // GDK reports GDK_ISO_Left_Tab for SHIFT-TAB
+        new_event.SetDirection( (gdk_event->keyval == GDK_Tab) );
+        // CTRL-TAB changes the (parent) window, i.e. switch notebook page
+        new_event.SetWindowChange( (gdk_event->state & GDK_CONTROL_MASK) );
+        new_event.SetCurrentFocus( rb );
+        return rb->GetParent()->GetEventHandler()->ProcessEvent( new_event );
+    }
+
     if ((gdk_event->keyval != GDK_Up) &&
         (gdk_event->keyval != GDK_Down) &&
         (gdk_event->keyval != GDK_Left) &&

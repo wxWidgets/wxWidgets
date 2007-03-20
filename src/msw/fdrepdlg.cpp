@@ -42,8 +42,8 @@
 // functions prototypes
 // ----------------------------------------------------------------------------
 
-LRESULT APIENTRY wxFindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
-                                       WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK wxFindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
+                                         WPARAM wParam, LPARAM lParam);
 
 UINT_PTR CALLBACK wxFindReplaceDialogHookProc(HWND hwnd,
                                               UINT uiMsg,
@@ -194,14 +194,14 @@ void wxFindReplaceDialogImpl::SubclassDialog(HWND hwnd)
 
     // check that we don't subclass the parent twice: this would be a bad idea
     // as then we'd have infinite recursion in wxFindReplaceWindowProc
-    if ( !wxCheckWindowWndProc((WXHWND)hwnd, (WXFARPROC)wxFindReplaceWindowProc) )
-    {
-        // set the new one and save the old as user data to allow access to it
-        // from wxFindReplaceWindowProc
-        m_oldParentWndProc = wxSetWindowProc(hwnd, wxFindReplaceWindowProc);
+    wxCHECK_RET( wxGetWindowProc(hwnd) != &wxFindReplaceWindowProc,
+                 _T("can't have more than one find dialog currently") );
 
-        wxSetWindowUserData(hwnd, (void *)m_oldParentWndProc);
-    }
+    // set the new one and save the old as user data to allow access to it
+    // from wxFindReplaceWindowProc
+    m_oldParentWndProc = wxSetWindowProc(hwnd, wxFindReplaceWindowProc);
+
+    wxSetWindowUserData(hwnd, (void *)m_oldParentWndProc);
 }
 
 wxFindReplaceDialogImpl::~wxFindReplaceDialogImpl()
@@ -220,7 +220,7 @@ wxFindReplaceDialogImpl::~wxFindReplaceDialogImpl()
 // Window Proc for handling RegisterWindowMessage(FINDMSGSTRING)
 // ----------------------------------------------------------------------------
 
-LRESULT APIENTRY wxFindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
+LRESULT CALLBACK wxFindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
                                          WPARAM wParam, LPARAM lParam)
 {
 #if wxUSE_UNICODE_MSLU
@@ -242,7 +242,7 @@ LRESULT APIENTRY wxFindReplaceWindowProc(HWND hwnd, WXUINT nMsg,
         // of UNICOWS.DLL send the correct UNICODE item after button press
         // and a bogus ANSI mode item right after this, so lets ignore
         // the second bogus message
-        if ( s_lastMsgFlags == pFR->Flags )
+        if ( wxUsingUnicowsDll() && s_lastMsgFlags == pFR->Flags )
         {
             s_lastMsgFlags = 0;
             return 0;

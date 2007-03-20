@@ -121,7 +121,10 @@ wxStreamBuffer::wxStreamBuffer(const wxStreamBuffer& buffer)
 void wxStreamBuffer::FreeBuffer()
 {
     if ( m_destroybuf )
+    {
         free(m_buffer_start);
+        m_buffer_start = NULL;
+    }
 }
 
 wxStreamBuffer::~wxStreamBuffer()
@@ -167,15 +170,15 @@ void wxStreamBuffer::SetBufferIO(void *start,
 
 void wxStreamBuffer::SetBufferIO(size_t bufsize)
 {
-    // start by freeing the old buffer
-    FreeBuffer();
-
     if ( bufsize )
     {
+        // this will free the old buffer and allocate the new one
         SetBufferIO(malloc(bufsize), bufsize, true /* take ownership */);
     }
     else // no buffer size => no buffer
     {
+        // still free the old one
+        FreeBuffer();
         InitBuffer();
     }
 }

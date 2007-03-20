@@ -118,6 +118,7 @@
 %rename(TextEntryDialogStyle)               wxTextEntryDialogStyle;
 %rename(TextEntryDialog)                    wxTextEntryDialog;
 %rename(PasswordEntryDialog)                wxPasswordEntryDialog;
+%rename(NumberEntryDialog)                  wxNumberEntryDialog;
 %rename(FontData)                           wxFontData;
 %rename(FontDialog)                         wxFontDialog;
 %rename(MessageDialog)                      wxMessageDialog;

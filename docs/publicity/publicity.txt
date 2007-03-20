@@ -73,8 +73,16 @@ http://sal.kachinatech.com/index.shtml: SAL (Scientific Applications on Linux)
 
 MacDev developers list
 
-To submit a posting to MacDev-1, mailto:press_releases@mactech.com.  To
-subscribe to MacDev-1, send mail to listserv@listmail.xplain.com with
+To submit a posting to MacDev-1, mailto:press_releases@mactech.com.
+Also supply:
+- Your name
+- Your title
+- Your email
+- Your company
+- Your physical address (e.g., street, city, state, zip/postal code, country)
+- Your phone and fax
+
+To subscribe to MacDev-1, send mail to listserv@listmail.xplain.com with
 the SUBJECT line reading "SUBSCRIBE MACDEV-1".  To unsubscribe, the
 SUBJECT line should read "UNSUBSCRIBE MACDEV-1".
 
@@ -147,4 +155,25 @@ http://www.egovos.org/ The Center of Open Source & Government
 
 http://www.opensector.org/
 (nothing submitted yet)
+
+=== Submitted for 2.6.3
+
+Subject:
+ANN: wxWidgets 2.6.3 GUI toolkit
+
+comp.os.linux.development.apps
+
+comp.os.ms-windows.programmer.misc
+comp.os.ms-windows.programmer.tools
+comp.os.ms-windows.programmer.tools.mfc
+comp.os.ms-windows.programmer.tools.misc
+comp.os.ms-windows.programmer.win32
+microsoft.public.win32.programmer.tools
+microsoft.public.win32.programmer.ui
+microsoft.public.win32.programmer.3rdparty
+microsoft.public.win32.programmer.wince
+microsoft.public.pocketpc.developer
+microsoft.public.smartphone.developer
+
+comp.sys.mac.programmer.tools
 

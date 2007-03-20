@@ -69,8 +69,7 @@
 
 #define NONAME _("<untitled>")
 
-class AppBook;
-
+class AppFrame;
 
 //----------------------------------------------------------------------------
 //! global application name
@@ -110,7 +109,6 @@ DECLARE_APP (App);
 //! frame of the application APP_VENDOR-APP_NAME.
 class AppFrame: public wxFrame {
     friend class App;
-    friend class AppBook;
     friend class AppAbout;
 
 public:

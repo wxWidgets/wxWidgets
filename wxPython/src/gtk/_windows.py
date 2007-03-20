@@ -1,4 +1,4 @@
-# This file was created automatically by SWIG.
+# This file was created automatically by SWIG 1.3.27.
 # Don't modify this file, modify the SWIG interface instead.
 
 import _windows_
@@ -448,6 +448,15 @@ class TopLevelWindow(_core.Window):
         """MacGetMetalAppearance(self) -> bool"""
         return _windows_.TopLevelWindow_MacGetMetalAppearance(*args, **kwargs)
 
+    def CenterOnScreen(*args, **kwargs):
+        """
+        CenterOnScreen(self, int dir=BOTH)
+
+        Center the window on screen
+        """
+        return _windows_.TopLevelWindow_CenterOnScreen(*args, **kwargs)
+
+    CentreOnScreen = CenterOnScreen 
 
 class TopLevelWindowPtr(TopLevelWindow):
     def __init__(self, this):
@@ -488,13 +497,7 @@ class Frame(TopLevelWindow):
         return _windows_.Frame_Create(*args, **kwargs)
 
     def GetClientAreaOrigin(*args, **kwargs):
-        """
-        GetClientAreaOrigin(self) -> Point
-
-        Get the origin of the client area of the window relative to the
-        window's top left corner (the client area may be shifted because of
-        the borders, scrollbars, other decorations...)
-        """
+        """GetClientAreaOrigin(self) -> Point"""
         return _windows_.Frame_GetClientAreaOrigin(*args, **kwargs)
 
     def SendSizeEvent(*args, **kwargs):
@@ -2116,6 +2119,14 @@ class VListBox(VScrolledWindow):
         """SetSelectionBackground(self, Colour col)"""
         return _windows_.VListBox_SetSelectionBackground(*args, **kwargs)
 
+    def base_OnDrawSeparator(*args, **kwargs):
+        """base_OnDrawSeparator(self, DC dc, Rect rect, size_t n)"""
+        return _windows_.VListBox_base_OnDrawSeparator(*args, **kwargs)
+
+    def base_OnDrawBackground(*args, **kwargs):
+        """base_OnDrawBackground(self, DC dc, Rect rect, size_t n)"""
+        return _windows_.VListBox_base_OnDrawBackground(*args, **kwargs)
+
 
 class VListBoxPtr(VListBox):
     def __init__(self, this):
@@ -2814,6 +2825,35 @@ class PasswordEntryDialogPtr(PasswordEntryDialog):
         self.__class__ = PasswordEntryDialog
 _windows_.PasswordEntryDialog_swigregister(PasswordEntryDialogPtr)
 GetPasswordFromUserPromptStr = cvar.GetPasswordFromUserPromptStr
+
+class NumberEntryDialog(Dialog):
+    """A dialog with spin control, ok and cancel buttons."""
+    def __repr__(self):
+        return "<%s.%s; proxy of C++ wxNumberEntryDialog instance at %s>" % (self.__class__.__module__, self.__class__.__name__, self.this,)
+    def __init__(self, *args, **kwargs):
+        """
+        __init__(self, Window parent, String message, String prompt, String caption, 
+            long value, long min, long max, Point pos=DefaultPosition) -> NumberEntryDialog
+
+        Constructor.  Use ShowModal method to show the dialog.
+        """
+        newobj = _windows_.new_NumberEntryDialog(*args, **kwargs)
+        self.this = newobj.this
+        self.thisown = 1
+        del newobj.thisown
+        self._setOORInfo(self)
+
+    def GetValue(*args, **kwargs):
+        """GetValue(self) -> long"""
+        return _windows_.NumberEntryDialog_GetValue(*args, **kwargs)
+
+
+class NumberEntryDialogPtr(NumberEntryDialog):
+    def __init__(self, this):
+        self.this = this
+        if not hasattr(self,"thisown"): self.thisown = 0
+        self.__class__ = NumberEntryDialog
+_windows_.NumberEntryDialog_swigregister(NumberEntryDialogPtr)
 
 class FontData(_core.Object):
     """
@@ -4790,6 +4830,7 @@ class PrintPreview(_core.Object):
     def __init__(self, *args):
         """
         __init__(self, Printout printout, Printout printoutForPrinting, PrintDialogData data=None) -> PrintPreview
+        __init__(self, Printout printout, Printout printoutForPrinting) -> PrintPreview
         __init__(self, Printout printout, Printout printoutForPrinting, PrintData data) -> PrintPreview
         """
         newobj = _windows_.new_PrintPreview(*args)
@@ -4900,6 +4941,7 @@ class PyPrintPreview(PrintPreview):
     def __init__(self, *args):
         """
         __init__(self, Printout printout, Printout printoutForPrinting, PrintDialogData data=None) -> PyPrintPreview
+        __init__(self, Printout printout, Printout printoutForPrinting) -> PyPrintPreview
         __init__(self, Printout printout, Printout printoutForPrinting, PrintData data) -> PyPrintPreview
         """
         newobj = _windows_.new_PyPrintPreview(*args)
@@ -5035,5 +5077,6 @@ class PyPreviewControlBarPtr(PyPreviewControlBar):
         if not hasattr(self,"thisown"): self.thisown = 0
         self.__class__ = PyPreviewControlBar
 _windows_.PyPreviewControlBar_swigregister(PyPreviewControlBarPtr)
+
 
 

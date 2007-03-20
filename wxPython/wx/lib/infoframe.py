@@ -32,23 +32,25 @@ Please note that, like wxPyOnDemandOutputWindow, the instance is not
 itself a subclass of wxWindow: when the window is open (and ONLY
 then), it's "frame" attribute is the actual instance of wFrame...
 
-Typical usage:
+Typical usage::
+
     from wxPython.lib.infoframe import *
     ... # ... modify your wxApp as follows:
     class myApp(wxApp):
         outputWindowClass = PyInformationalMessagesFrame
         ...
+        
 If you're running on Linux, you'll also have to supply an argument 1 to your
 constructor of myApp to redirect stdout/stderr to this window (it's done
 automatically for you on Windows).
 
 If you don't want to redirect stdout/stderr, but use the class directly: do
-it this way:
+it this way::
 
  InformationalMessagesFrame = PyInformationalMessagesFrame\
                                          ([options from progname (default ""),
-                                           txt (default "informational
-                                                         messages"])
+                                           txt (default "informational messages"])
+                                          
 #^^^^ early in the program
 ...
 InformationalMessagesFrame([comma-separated list of items to

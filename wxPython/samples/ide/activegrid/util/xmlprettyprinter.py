@@ -9,8 +9,10 @@
 # Copyright:    (c) 2004-2005 ActiveGrid, Inc.
 # License:      wxWindows License
 #----------------------------------------------------------------------------
-import xml.sax
 from activegrid.util.lang import *
+ifDefPy()
+import xml.sax
+endIfDef()
 
 class XMLPrettyPrinter(xml.sax.ContentHandler):
     def __init__(self, indentationChar='    ', newlineChar='\n'):

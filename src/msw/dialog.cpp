@@ -147,7 +147,7 @@ private:
     wxModalEventLoop m_evtLoop;
 };
 
-wxDEFINE_TIED_SCOPED_PTR_TYPE(wxDialogModalData);
+wxDEFINE_TIED_SCOPED_PTR_TYPE(wxDialogModalData)
 
 // ============================================================================
 // implementation

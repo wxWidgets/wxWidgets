@@ -170,8 +170,8 @@ WX_DECLARE_OBJARRAY(wxCmdLineParam, wxArrayParams);
 
 #include "wx/arrimpl.cpp"
 
-WX_DEFINE_OBJARRAY(wxArrayOptions);
-WX_DEFINE_OBJARRAY(wxArrayParams);
+WX_DEFINE_OBJARRAY(wxArrayOptions)
+WX_DEFINE_OBJARRAY(wxArrayParams)
 
 // the parser internal state
 struct wxCmdLineParserData

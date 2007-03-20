@@ -256,16 +256,18 @@ void RegExTestCase::doTest(int flavor)
         return;
 
     // check wxRegEx has correctly counted the number of subexpressions
-    failIf(m_expected.size() != re.GetMatchCount(),
-           wxString::Format(_T("GetMatchCount() == %d, expected %d"),
-                            re.GetMatchCount(), m_expected.size()));
-
-    wxString result;
-    size_t start, len;
+    wxString msg;
+    msg << _T("GetMatchCount() == ") << re.GetMatchCount()
+        << _T(", expected ") << m_expected.size();
+    failIf(m_expected.size() != re.GetMatchCount(), msg);
 
     for (size_t i = 0; i < m_expected.size(); i++) {
-        failIf(!re.GetMatch(&start, &len, i), wxString::Format(
-                _T("wxRegEx::GetMatch failed for match %d"), i));
+        wxString result;
+        size_t start, len;
+
+        msg.clear();
+        msg << _T("wxRegEx::GetMatch failed for match ") << i;
+        failIf(!re.GetMatch(&start, &len, i), msg);
 
         // m - check the match returns the strings given
         if (m_mode == 'm')
@@ -276,14 +278,17 @@ void RegExTestCase::doTest(int flavor)
 
         // i - check the match returns the offsets given
         else if (m_mode == 'i')
-            if (start < INT_MAX)
-                result = wxString::Format(_T("%d %d"), start, start + len - 1);
-            else
+            if (start > INT_MAX)
                 result = _T("-1 -1");
+            else if (start + len > 0)
+                result << start << _T(" ") << start + len - 1;
+            else
+                result << start << _T(" -1");
 
-        failIf(result != m_expected[i], wxString::Format(
-                _T("match(%d) == %s, expected == %s"), i,
-                quote(result).c_str(), quote(m_expected[i]).c_str()));
+        msg.clear();
+        msg << _T("match(") << i << _T(") == ") << quote(result)
+            << _T(", expected == ") << quote(m_expected[i]);
+        failIf(result != m_expected[i], msg);
     }
 }
 

@@ -1925,7 +1925,21 @@ void wxDC::MacInstallBrush() const
     int brushStyle = m_brush.GetStyle();
     if (brushStyle == wxSOLID)
     {
-        ::PenPat(GetQDGlobalsBlack(&blackColor));
+        switch ( m_brush.MacGetBrushKind() )
+        {
+            case kwxMacBrushTheme :
+                {
+                    Pattern whiteColor ;
+                    ::BackPat(GetQDGlobalsWhite(&whiteColor));
+                    ::SetThemePen( m_brush.MacGetTheme() , wxDisplayDepth() , true ) ;
+                }   
+            break ;
+        
+            default :
+                ::PenPat(GetQDGlobalsBlack(&blackColor));
+                break ;
+                
+        }
     }
     else if (m_brush.IsHatch())
     {

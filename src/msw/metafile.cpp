@@ -201,9 +201,9 @@ wxMetafileDC::wxMetafileDC(const wxString& file, int xext, int yext, int xorg, i
     m_minY = 10000;
     m_maxX = -10000;
     m_maxY = -10000;
-    if ( !file.IsEmpty() && wxFileExists(file))
+    if ( !file.IsEmpty() && wxFileExists(file) )
         wxRemoveFile(file);
-    m_hDC = (WXHDC) CreateMetaFile(file);
+    m_hDC = (WXHDC) CreateMetaFile(file.empty() ? NULL : file.c_str());
 
     m_ok = true;
 

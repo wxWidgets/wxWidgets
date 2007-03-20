@@ -8,14 +8,7 @@ two such groups of classes: this one is based on \helpref{wxFFile}{wxffile}
 whereas \helpref{wxFileInputStream}{wxfileinputstream} is based in
 the \helpref{wxFile}{wxfile} class.
 
-Note that \helpref{wxFile}{wxfile} and \helpref{wxFFile}{wxffile} differ
-in one aspect, namely when to report that the end of the file has been
-reached. This is documented in \helpref{wxFile::Eof}{wxfileeof} and 
-\helpref{wxFFile::Eof}{wxffileeof} and the behaviour of the stream
-classes reflects this difference, i.e. wxFileInputStream will report
-wxSTREAM\_EOF after having read the last byte whereas wxFFileInputStream
-will report wxSTREAM\_EOF after trying to read {\it past} the last byte.
-Related to EOF behavior, note that \helpref{SeekI()}{wxinputstreamseeki} 
+Note that \helpref{SeekI()}{wxinputstreamseeki} 
 can seek beyond the end of the stream (file) and will thus not return 
 {\it wxInvalidOffset} for that.
 
@@ -72,14 +65,7 @@ two such groups of classes: this one is based on \helpref{wxFFile}{wxffile}
 whereas \helpref{wxFileInputStream}{wxffileinputstream} is based in
 the \helpref{wxFile}{wxfile} class.
 
-Note that \helpref{wxFile}{wxfile} and \helpref{wxFFile}{wxffile} differ
-in one aspect, namely when to report that the end of the file has been
-reached. This is documented in \helpref{wxFile::Eof}{wxfileeof} and 
-\helpref{wxFFile::Eof}{wxffileeof} and the behaviour of the stream
-classes reflects this difference, i.e. wxFileInputStream will report
-wxSTREAM\_EOF after having read the last byte whereas wxFFileInputStream
-will report wxSTREAM\_EOF after trying to read {\it past} the last byte.
-Related to EOF behavior, note that \helpref{SeekO()}{wxoutputstreamseeko} 
+Note that \helpref{SeekO()}{wxoutputstreamseeko} 
 can seek beyond the end of the stream (file) and will thus not return 
 {\it wxInvalidOffset} for that.
 

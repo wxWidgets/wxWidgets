@@ -82,7 +82,7 @@ wxSize wxPrintPaperType::GetSizeDeviceUnits() const
 
 WX_DECLARE_LIST(wxPrintPaperType, wxPrintPaperTypeList);
 #include "wx/listimpl.cpp"
-WX_DEFINE_LIST(wxPrintPaperTypeList);
+WX_DEFINE_LIST(wxPrintPaperTypeList)
 
 wxPrintPaperDatabase* wxThePrintPaperDatabase = (wxPrintPaperDatabase*) NULL;
 

@@ -74,7 +74,7 @@ found at: http://wiki.wxpython.org/index.cgi/MultiVersionInstalls
 
 """
 
-import sys, os, glob, fnmatch
+import re, sys, os, glob, fnmatch
 
 
 _selected = None
@@ -149,6 +149,10 @@ def select(versions, optionsRequired=False):
         raise VersionError("Requested version of wxPython not found")
 
     sys.path.insert(0, bestMatch.pathname)
+    # q.v. Bug #1409256
+    path64 = re.sub('/lib/','/lib64/',bestMatch.pathname)
+    if os.path.isdir(path64):
+        sys.path.insert(0, path64)
     _selected = bestMatch
         
 #----------------------------------------------------------------------
@@ -215,6 +219,10 @@ def ensureMinimal(minVersion, optionsRequired=False):
         sys.exit()
 
     sys.path.insert(0, bestMatch.pathname)
+    # q.v. Bug #1409256
+    path64 = re.sub('/lib/','/lib64/',bestMatch.pathname)
+    if os.path.isdir(path64):
+        sys.path.insert(0, path64)
     global _selected
     _selected = bestMatch
         

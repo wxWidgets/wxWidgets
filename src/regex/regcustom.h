@@ -36,6 +36,7 @@
 #include <string.h>
 
 /* must include this after ctype.h inclusion for CodeWarrior/Mac */
+#include "wx/defs.h"
 #include "wx/wxchar.h"
 
 /*

@@ -9,6 +9,8 @@ Some of the files have been compressed in accordance with Debian policy
 regarding documentation, you will need to uncompress such files before
 building or executing them.
 
+The unpack_examples.sh script is provided to assist with that.
+
 The examples provided here typically show a minimal implementation of
 the feature(s) they are demonstrating.  There are examples of more
 complete (mini) applications, available in the /wxPython/samples and

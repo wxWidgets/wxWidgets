@@ -1,3 +1,81 @@
+0.9.5 (12/23/2005)
+-------------------
+
+Applied a series of enhancments by Franz Steinaeusler, Adi Sieker, and
+Sebastian Haase, up until their 7-31-2005 version.  (Their next
+version broke some existing functionality, and added some confusing
+hacks, and I didn't feel that the incremental gains were worth the
+loss at that point so I stopped at 7-31-2005.)
+
+Their changes include the following:
+
+* The Autocomplete and Calltip windows can now be opened manually with
+  Ctrl-Space and Ctrl-Shift-Space.
+
+* In the stand alone PyCrust app the various option settings, window
+  size and position, and etc. are saved and restored at the next run.
+
+* Added a help dialog bound to the F1 key that shows the key bindings.
+
+* Added a new text completion function that suggests words from the
+  history.  Bound to Shift-Return.
+
+* F11 will toggle the maximized state of the frame.
+
+* switched to Bind() from wx.EVT_*().
+
+* Display of line numbers can be toggled.
+
+* F12 toggles a "free edit" mode of the shell buffer.  This mode is
+  useful, for example, if you would like to remove some output or
+  errors or etc. from the buffer before doing a copy/paste.  The free
+  edit mode is designated by the use of a red, non-flashing caret.
+
+* Ctrl-Shift-F will fold/unfold (hide/show) the selected lines.
+
+
+
+On top of these changes I (Robin Dunn) added the following:
+
+* General code cleanup and fixes.
+
+* Use wx.StandardPaths to determine the location of the config files.
+
+* Remove Orbtech attributions from the UI, they've been there long
+  enough.
+
+* Use wx.SP_LIVE_UPDATE on crust and filling windows.
+
+* Extended the saving of the config info and other new features to the
+  PyShell app too.  Additionally, other apps that embed a PyCrust or a
+  PyShell can pass their own wx.Config object and have the Py code
+  save/restore its settings to/from there.
+
+* All of the classes with config info get an opportunity to save/load
+  their own settings instead of putting all the save/load code in one
+  place that then has to reach all over the place to do anything.
+
+* Enable editing of the startup python code, which will either be the
+  file pointed to by PYTHONSTARTUP or a file in the config dir if
+  PYTHONSTARTUP is not set in the environment.
+
+* Added an option to skip the running of the startup code when 
+  PyShell or PyCrust starts.
+
+* PyCrust adds a pp(item) function to the shell's namespace that
+  pretty prints the item in the Display tab of the notebook.  Added
+  code to raise that tab when pp() is called.
+
+* Added an option for whether to insert text for function parameters
+  when popping up the call tip.
+
+* Added Find and Find-Next functions that use the wx.FindReplaceDialog.
+
+
+
+
+
+
 0.9.4 (1/25/2004 to //2004)
 ------------------------------
 

@@ -154,9 +154,9 @@ IMPLEMENT_DYNAMIC_CLASS(wxColour,wxGDIObject)
 wxColour::wxColour( unsigned char red, unsigned char green, unsigned char blue )
 {
     m_refData = new wxColourRefData();
-    M_COLDATA->m_color.red = ((unsigned short)red) << SHIFT;
-    M_COLDATA->m_color.green = ((unsigned short)green) << SHIFT;
-    M_COLDATA->m_color.blue = ((unsigned short)blue) << SHIFT;
+    M_COLDATA->m_color.red = (((unsigned short)red) << SHIFT) + red;
+    M_COLDATA->m_color.green = (((unsigned short)green) << SHIFT) + green;
+    M_COLDATA->m_color.blue = (((unsigned short)blue) << SHIFT) + blue;
     M_COLDATA->m_color.pixel = 0;
 }
 
@@ -234,9 +234,9 @@ void wxColour::Set( unsigned char red, unsigned char green, unsigned char blue )
 {
     AllocExclusive();
 
-    M_COLDATA->m_color.red = ((unsigned short)red) << SHIFT;
-    M_COLDATA->m_color.green = ((unsigned short)green) << SHIFT;
-    M_COLDATA->m_color.blue = ((unsigned short)blue) << SHIFT;
+    M_COLDATA->m_color.red = (((unsigned short)red) << SHIFT) + red;
+    M_COLDATA->m_color.green = (((unsigned short)green) << SHIFT) + green;
+    M_COLDATA->m_color.blue = (((unsigned short)blue) << SHIFT) + blue;
     M_COLDATA->m_color.pixel = 0;
 
     M_COLDATA->m_colormap = (GdkColormap*) NULL;

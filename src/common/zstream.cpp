@@ -139,6 +139,7 @@ size_t wxZlibInputStream::OnSysRead(void *buffer, size_t size)
       // any additional data can be read from the underlying stream (the crc
       // in a gzip for example)
       if (m_inflate->avail_in) {
+        m_parent_i_stream->Reset();
         m_parent_i_stream->Ungetch(m_inflate->next_in, m_inflate->avail_in);
         m_inflate->avail_in = 0;
       }

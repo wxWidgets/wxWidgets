@@ -64,6 +64,7 @@ public:
 	int edgeColumn;
 	char *chars;
 	unsigned char *styles;
+	int styleBitsSet;
 	char *indicators;
 	int *positions;
 	char bracePreviousStyles[2];
@@ -105,6 +106,7 @@ class LineLayoutCache {
 	LineLayout **cache;
 	bool allInvalidated;
 	int styleClock;
+	int useCount;
 	void Allocate(int length_);
 	void AllocateForLevel(int linesOnScreen, int linesInDoc);
 public:
@@ -218,6 +220,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	int scrollWidth;
 	bool verticalScrollBarVisible;
 	bool endAtLastLine;
+	bool caretSticky;
 
 	Surface *pixmapLine;
 	Surface *pixmapSelMargin;
@@ -301,7 +304,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	int hsEnd;
 
 	// Wrapping support
-	enum { eWrapNone, eWrapWord } wrapState;
+	enum { eWrapNone, eWrapWord, eWrapChar } wrapState;
 	bool backgroundWrapEnabled;
 	int wrapWidth;
 	int docLineLastWrapped;
@@ -310,6 +313,8 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	int wrapVisualFlagsLocation;
 	int wrapVisualStartIndent;
 	int actualWrapVisualStartIndent;
+
+	bool convertPastes;
 
 	Document *pdoc;
 
@@ -341,7 +346,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	bool AbandonPaint();
 	void RedrawRect(PRectangle rc);
 	void Redraw();
-	void RedrawSelMargin();
+	void RedrawSelMargin(int line=-1);
 	PRectangle RectangleFromRange(int start, int end);
 	void InvalidateRange(int start, int end);
 
@@ -349,6 +354,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	bool SelectionEmpty();
 	int SelectionStart();
 	int SelectionEnd();
+	void SetRectangularRange();
 	void InvalidateSelection(int currentPos_, int anchor_);
 	void SetSelection(int currentPos_, int anchor_);
 	void SetSelection(int currentPos_);
@@ -450,10 +456,11 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void PageMove(int direction, selTypes sel=noSel, bool stuttered = false);
 	void ChangeCaseOfSelection(bool makeUpperCase);
 	void LineTranspose();
-	void LineDuplicate();
+	void Duplicate(bool forLine);
 	virtual void CancelModes();
 	void NewLine();
 	void CursorUpOrDown(int direction, selTypes sel=noSel);
+	void ParaUpOrDown(int direction, selTypes sel=noSel);
 	int StartEndDisplayLine(int pos, bool start);
 	virtual int KeyCommand(unsigned int iMessage);
 	virtual int KeyDefault(int /* key */, int /*modifiers*/);
@@ -499,8 +506,9 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	virtual bool HaveMouseCapture() = 0;
 	void SetFocusState(bool focusState);
 
+	virtual bool PaintContains(PRectangle rc);
+	bool PaintContainsMargin();
 	void CheckForChangeOutsidePaint(Range r);
-	int BraceMatch(int position, int maxReStyle);
 	void SetBraceHighlight(Position pos0, Position pos1, int matchStyle);
 
 	void SetDocPointer(Document *document);
@@ -516,6 +524,7 @@ protected:	// ScintillaBase subclass needs access to much of Editor
 	void GetHotSpotRange(int& hsStart, int& hsEnd);
 
 	int CodePage() const;
+	int WrapCount(int line);
 
 	virtual sptr_t DefWndProc(unsigned int iMessage, uptr_t wParam, sptr_t lParam) = 0;
 

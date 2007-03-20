@@ -71,8 +71,9 @@ bool wxChoice::Create(
               WS_TABSTOP       |
               WS_VISIBLE;
 
-    if (lStyle & wxCLIP_SIBLINGS )
-        lSstyle |= WS_CLIPSIBLINGS;
+    // clipping siblings does not yet work
+    // if (lStyle & wxCLIP_SIBLINGS )
+    //     lSstyle |= WS_CLIPSIBLINGS;
 
     wxASSERT_MSG( !(lStyle & wxCB_DROPDOWN) &&
                   !(lStyle & wxCB_READONLY) &&
@@ -94,20 +95,26 @@ bool wxChoice::Create(
     {
         Append(asChoices[i]);
     }
-    wxFont*                          pTextFont = new wxFont( 10
-                                                            ,wxMODERN
-                                                            ,wxNORMAL
-                                                            ,wxNORMAL
-                                                           );
-    SetFont(*pTextFont);
     SetSize( rPos.x
             ,rPos.y
             ,rSize.x
             ,rSize.y
            );
-    delete pTextFont;
+
+    // Set height to use with sizers i.e. without the dropdown listbox
+    wxFont vFont = GetFont();
+    int  nEditHeight;
+    wxGetCharSize( GetHWND(), NULL, &nEditHeight, &vFont );
+    nEditHeight = EDIT_HEIGHT_FROM_CHAR_HEIGHT(nEditHeight);
+    SetBestFittingSize(wxSize(-1,nEditHeight+4));   // +2x2 for the border
+
     return true;
 } // end of wxChoice::Create
+
+wxChoice::~wxChoice()
+{
+    Free();
+}
 
 // ----------------------------------------------------------------------------
 // adding/deleting items to/from the list
@@ -119,8 +126,7 @@ int wxChoice::DoAppend(
 {
     int                             nIndex;
     LONG                            nIndexType = 0;
-
-    if (m_windowStyle & wxLB_SORT)
+    if (m_windowStyle & wxCB_SORT)
         nIndexType = LIT_SORTASCENDING;
     else
         nIndexType = LIT_END;
@@ -146,7 +152,7 @@ int wxChoice::DoInsert(
     int                             nIndex;
     LONG                            nIndexType = 0;
 
-    if (m_windowStyle & wxLB_SORT)
+    if (m_windowStyle & wxCB_SORT)
         nIndexType = LIT_SORTASCENDING;
     else
         nIndexType = pos;
@@ -245,7 +251,7 @@ void wxChoice::SetString(
 
     ::WinSendMsg(GetHwnd(), LM_DELETEITEM, (MPARAM)n, 0);
 
-    if (m_windowStyle & wxLB_SORT)
+    if (m_windowStyle & wxCB_SORT)
         nIndexType = LIT_SORTASCENDING;
     else
         nIndexType = LIT_END;
@@ -274,7 +280,7 @@ wxString wxChoice::GetString(
     nLen = (size_t)LONGFROMMR(::WinSendMsg(GetHwnd(), LM_QUERYITEMTEXTLENGTH, (MPARAM)n, (MPARAM)0));
     if (nLen != LIT_ERROR && nLen > 0)
     {
-        zBuf = new wxChar[nLen + 1];
+        zBuf = new wxChar[++nLen];
         ::WinSendMsg( GetHwnd()
                      ,LM_QUERYITEMTEXT
                      ,MPFROM2SHORT((SHORT)n, (SHORT)nLen)

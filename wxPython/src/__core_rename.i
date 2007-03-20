@@ -91,6 +91,7 @@
 %rename(SIZE_AUTO)                          wxSIZE_AUTO;
 %rename(SIZE_USE_EXISTING)                  wxSIZE_USE_EXISTING;
 %rename(SIZE_ALLOW_MINUS_ONE)               wxSIZE_ALLOW_MINUS_ONE;
+%rename(SIZE_FORCE)                         wxSIZE_FORCE;
 %rename(PORTRAIT)                           wxPORTRAIT;
 %rename(LANDSCAPE)                          wxLANDSCAPE;
 %rename(PRINT_QUALITY_HIGH)                 wxPRINT_QUALITY_HIGH;
@@ -99,6 +100,7 @@
 %rename(PRINT_QUALITY_DRAFT)                wxPRINT_QUALITY_DRAFT;
 %rename(ID_ANY)                             wxID_ANY;
 %rename(ID_SEPARATOR)                       wxID_SEPARATOR;
+%rename(ID_NONE)                            wxID_NONE;
 %rename(ID_LOWEST)                          wxID_LOWEST;
 %rename(ID_OPEN)                            wxID_OPEN;
 %rename(ID_CLOSE)                           wxID_CLOSE;
@@ -554,6 +556,7 @@
 %rename(IMAGE_ALPHA_THRESHOLD)              wxIMAGE_ALPHA_THRESHOLD;
 %rename(IMAGE_ALPHA_OPAQUE)                 wxIMAGE_ALPHA_OPAQUE;
 %rename(ImageHandler)                       wxImageHandler;
+%rename(PyImageHandler)                     wxPyImageHandler;
 %rename(ImageHistogram)                     wxImageHistogram;
 %rename(Image_RGBValue)                     wxImage_RGBValue;
 %rename(Image_HSVValue)                     wxImage_HSVValue;

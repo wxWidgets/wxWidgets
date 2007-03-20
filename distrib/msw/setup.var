@@ -41,7 +41,7 @@ VERSIONSYMBOL=wxVERSION
 # The top-level directory of the application source tree
 #-------------------------------------------------------------------------
 
-APPDIR=c:/wx2dev/wxWindows
+APPDIR=c:/wx26/wxWindows
 
 #-------------------------------------------------------------------------
 # The destination directory of the setup

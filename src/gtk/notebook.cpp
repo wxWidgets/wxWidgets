@@ -599,7 +599,6 @@ wxNotebookPage *wxNotebook::DoRemovePage( size_t page )
 
     gtk_widget_ref( client->m_widget );
     gtk_widget_unrealize( client->m_widget );
-    gtk_widget_unparent( client->m_widget );
 
     // gtk_notebook_remove_page() sends "switch_page" signal with some strange
     // new page index (when deleting selected page 0, new page is 1 although,
@@ -752,7 +751,15 @@ int wxNotebook::HitTest(const wxPoint& pt, long *flags) const
     const gint y = m_widget->allocation.y;
 
     const size_t count = GetPageCount();
-    for ( size_t i = 0; i < count; i++ )
+    size_t i = 0;
+
+#ifdef __WXGTK20__
+    GtkNotebook * notebook = GTK_NOTEBOOK(m_widget);
+    if (gtk_notebook_get_scrollable(notebook))
+        i = g_list_position( notebook->children, notebook->first_tab );
+#endif
+
+    for ( ; i < count; i++ )
     {
         wxGtkNotebookPage* nb_page = GetNotebookPage(i);
         GtkWidget *box = nb_page->m_box;

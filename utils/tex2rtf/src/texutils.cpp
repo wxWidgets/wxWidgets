@@ -487,130 +487,242 @@ void ReadTexReferences(wxChar *filename)
  *
  */
 
+void BibEatWhiteSpace(wxString& line)
+{
+    while(!line.empty() && (line[0] == _T(' ') || line[0] == _T('\t') || line[0] == (wxChar)EOF))
+    {
+        if (line[0] == 10)
+            BibLine ++;
+        line = line.substr(1);
+    }
+
+    // Ignore end-of-line comments
+    if (line[0] == _T('%') || line[0] == _T(';') || line[0] == _T('#'))
+    {
+        line = wxEmptyString;
+    }
+}
+
 void BibEatWhiteSpace(wxSTD istream& str)
 {
-  char ch = (char)str.peek();
+    char ch = (char)str.peek();
 
-  while (!str.eof() && (ch == ' ' || ch == '\t' || ch == 13 || ch == 10 || ch == (char)EOF))
-  {
-    if (ch == 10)
-      BibLine ++;
-    str.get(ch);
-    if ((ch == (char)EOF) || str.eof()) return;
-    ch = (char)str.peek();
-  }
-
-  // Ignore end-of-line comments
-  if (ch == '%' || ch == ';' || ch == '#')
-  {
-    str.get(ch);
-    ch = (char)str.peek();
-    while (ch != 10 && ch != 13 && !str.eof())
+    while (!str.eof() && (ch == ' ' || ch == '\t' || ch == 13 || ch == 10 || ch == (char)EOF))
     {
-      str.get(ch);
-      ch = (char)str.peek();
+        if (ch == 10)
+            BibLine ++;
+        str.get(ch);
+        if ((ch == (char)EOF) || str.eof()) return;
+        ch = (char)str.peek();
     }
-    BibEatWhiteSpace(str);
-  }
+
+    // Ignore end-of-line comments
+    if (ch == '%' || ch == ';' || ch == '#')
+    {
+        str.get(ch);
+        ch = (char)str.peek();
+        while (ch != 10 && ch != 13 && !str.eof())
+        {
+            str.get(ch);
+            ch = (char)str.peek();
+        }
+        BibEatWhiteSpace(str);
+    }
 }
 
 // Read word up to { or , or space
+wxString BibReadWord(wxString& line)
+{
+    wxString val;
+
+    while (!line.empty() &&
+           line[0] != _T('\t') &&
+           line[0] != _T(' ') &&
+           line[0] != _T('{') &&
+           line[0] != _T('(') &&
+           line[0] != _T(',') &&
+           line[0] != _T('='))
+    {
+        val << line[0];
+        line = line.substr(1);
+    }
+    return val;
+}
+
 void BibReadWord(wxSTD istream& istr, wxChar *buffer)
 {
-  int i = 0;
-  buffer[i] = 0;
-  char ch = (char)istr.peek();
-  while (!istr.eof() && ch != ' ' && ch != '{' && ch != '(' && ch != 13 && ch != 10 && ch != '\t' &&
-         ch != ',' && ch != '=')
-  {
-    istr.get(ch);
-    buffer[i] = ch;
-    i ++;
-    ch = (char)istr.peek();
-  }
-  buffer[i] = 0;
+    int i = 0;
+    buffer[i] = 0;
+    char ch = (char)istr.peek();
+    while (!istr.eof() && ch != ' ' && ch != '{' && ch != '(' && ch != 13 && ch != 10 && ch != '\t' &&
+           ch != ',' && ch != '=')
+    {
+        istr.get(ch);
+        buffer[i] = ch;
+        i ++;
+        ch = (char)istr.peek();
+    }
+    buffer[i] = 0;
 }
 
 // Read string (double-quoted or not) to end quote or EOL
+wxString BibReadToEOL(wxString& line)
+{
+    if(line.empty())
+        return wxEmptyString;
+
+    wxString val;
+    bool inQuotes = false;
+    if (line[0] == _T('"'))
+    {
+        line = line.substr(1);
+        inQuotes = true;
+    }
+    // If in quotes, read white space too. If not,
+    // stop at white space or comment.
+    while (!line.empty() && line[0] != _T('"') &&
+           (inQuotes || ((line[0] != _T(' ')) && (line[0] != 9) &&
+                          (line[0] != _T(';')) && (line[0] != _T('%')) && (line[0] != _T('#')))))
+    {
+        val << line[0];
+        line = line.substr(1);
+    }
+    if (line[0] == '"')
+        line = line.substr(1);
+
+    return val;
+}
+
 void BibReadToEOL(wxSTD istream& istr, wxChar *buffer)
 {
-  int i = 0;
-  buffer[i] = 0;
-  char ch = (char)istr.peek();
-  bool inQuotes = false;
-  if (ch == '"')
-  {
-    istr.get(ch);
-    ch = (char)istr.peek();
-    inQuotes = true;
-  }
-  // If in quotes, read white space too. If not,
-  // stop at white space or comment.
-  while (!istr.eof() && ch != 13 && ch != 10 && ch != _T('"') &&
-         (inQuotes || ((ch != _T(' ')) && (ch != 9) &&
-                        (ch != _T(';')) && (ch != _T('%')) && (ch != _T('#')))))
-  {
-    istr.get(ch);
-    buffer[i] = ch;
-    i ++;
-    ch = (char)istr.peek();
-  }
-  if (ch == '"')
-    istr.get(ch);
-  buffer[i] = 0;
+    int i = 0;
+    buffer[i] = 0;
+    char ch = (char)istr.peek();
+    bool inQuotes = false;
+    if (ch == '"')
+    {
+        istr.get(ch);
+        ch = (char)istr.peek();
+        inQuotes = true;
+    }
+    // If in quotes, read white space too. If not,
+    // stop at white space or comment.
+    while (!istr.eof() && ch != 13 && ch != 10 && ch != _T('"') &&
+           (inQuotes || ((ch != _T(' ')) && (ch != 9) &&
+                          (ch != _T(';')) && (ch != _T('%')) && (ch != _T('#')))))
+    {
+        istr.get(ch);
+        buffer[i] = ch;
+        i ++;
+        ch = (char)istr.peek();
+    }
+    if (ch == '"')
+        istr.get(ch);
+    buffer[i] = 0;
 }
 
 // Read }-terminated value, taking nested braces into account.
+wxString BibReadValue(wxString& line,
+                      bool ignoreBraces = true,
+                      bool quotesMayTerminate = true)
+{
+    wxString val;
+    int braceCount = 1;
+    bool stopping = false;
+
+    if (line.length() >= 4000)
+    {
+        wxChar buf[100];
+        wxSnprintf(buf, sizeof(buf), _T("Sorry, value > 4000 chars in bib file at line %ld."), BibLine);
+        wxLogError(buf, "Tex2RTF Fatal Error");
+        return wxEmptyString;
+    }
+
+    while (!line.empty() && !stopping)
+    {
+        wxChar ch = line[0];
+        line = line.substr(1);
+
+        if (ch == _T('{'))
+            braceCount ++;
+
+        if (ch == _T('}'))
+        {
+            braceCount --;
+            if (braceCount == 0)
+            {
+                stopping = true;
+                break;
+            }
+        }
+        else if (quotesMayTerminate && ch == _T('"'))
+        {
+            stopping = true;
+            break;
+        }
+
+        if (!stopping)
+        {
+            if (!ignoreBraces || (ch != _T('{') && ch != _T('}')))
+            {
+                val << ch;
+            }
+        }
+    }
+
+    return val;
+}
+
 void BibReadValue(wxSTD istream& istr, wxChar *buffer, bool ignoreBraces = true,
                   bool quotesMayTerminate = true)
 {
-  int braceCount = 1;
-  int i = 0;
-  buffer[i] = 0;
-  char ch = (char)istr.peek();
-  bool stopping = false;
-  while (!istr.eof() && !stopping)
-  {
-//    i ++;
-    if (i >= 4000)
+    int braceCount = 1;
+    int i = 0;
+    buffer[i] = 0;
+    char ch = (char)istr.peek();
+    bool stopping = false;
+    while (!istr.eof() && !stopping)
     {
-      wxChar buf[100];
-      wxSnprintf(buf, sizeof(buf), _T("Sorry, value > 4000 chars in bib file at line %ld."), BibLine);
-      wxLogError(buf, "Tex2RTF Fatal Error");
-      return;
-    }
-    istr.get(ch);
+//      i ++;
+        if (i >= 4000)
+        {
+            wxChar buf[100];
+            wxSnprintf(buf, sizeof(buf), _T("Sorry, value > 4000 chars in bib file at line %ld."), BibLine);
+            wxLogError(buf, "Tex2RTF Fatal Error");
+            return;
+        }
+        istr.get(ch);
 
-    if (ch == '{')
-      braceCount ++;
+        if (ch == '{')
+            braceCount ++;
 
-    if (ch == '}')
-    {
-      braceCount --;
-      if (braceCount == 0)
-      {
-        stopping = true;
-        break;
-      }
+        if (ch == '}')
+        {
+            braceCount --;
+            if (braceCount == 0)
+            {
+                stopping = true;
+                break;
+            }
+        }
+        else if (quotesMayTerminate && ch == '"')
+        {
+            stopping = true;
+            break;
+        }
+        if (!stopping)
+        {
+            if (!ignoreBraces || (ch != '{' && ch != '}'))
+            {
+                buffer[i] = ch;
+                i ++;
+            }
+        }
+        if (ch == 10)
+            BibLine ++;
     }
-    else if (quotesMayTerminate && ch == '"')
-    {
-      stopping = true;
-      break;
-    }
-    if (!stopping)
-    {
-      if (!ignoreBraces || (ch != '{' && ch != '}'))
-      {
-        buffer[i] = ch;
-        i ++;
-      }
-    }
-    if (ch == 10)
-      BibLine ++;
-  }
-  buffer[i] = 0;
-  wxUnusedVar(stopping);
+    buffer[i] = 0;
+    wxUnusedVar(stopping);
 }
 
 bool ReadBib(wxChar *filename)
@@ -1086,15 +1198,18 @@ TexRef *FindReference(wxChar *key)
  *
  */
 
-bool StringTobool(wxChar *val)
+bool StringTobool(const wxString& val)
 {
-  if (wxStrncmp(val, _T("yes"), 3) == 0 || wxStrncmp(val, _T("YES"), 3) == 0 ||
-      wxStrncmp(val, _T("on"), 2) == 0 || wxStrncmp(val, _T("ON"), 2) == 0 ||
-      wxStrncmp(val, _T("true"), 4) == 0 || wxStrncmp(val, _T("true"), 4) == 0 ||
-      wxStrncmp(val, _T("ok"), 2) == 0 || wxStrncmp(val, _T("OK"), 2) == 0 ||
-      wxStrncmp(val, _T("1"), 1) == 0)
-    return true;
-  else
+    wxString up(val);
+    up.MakeUpper();
+
+    if (up.IsSameAs(_T("YES")) ||
+        up.IsSameAs(_T("TRUE")) ||
+        up.IsSameAs(_T("ON")) ||
+        up.IsSameAs(_T("OK")) |
+        up.IsSameAs(_T("1")))
+        return true;
+
     return false;
 }
 
@@ -1109,7 +1224,7 @@ void RegisterIntSetting (const wxString& s, int *number)
 }
 
 // Define a variable value from the .ini file
-wxChar *RegisterSetting(wxChar *settingName, wxChar *settingValue, bool interactive)
+wxChar *RegisterSetting(const wxString& settingName, const wxString& settingValue, bool interactive)
 {
     wxString settingValueStr( settingValue );
 
@@ -1355,7 +1470,7 @@ wxChar *RegisterSetting(wxChar *settingName, wxChar *settingValue, bool interact
     else
     {
         wxChar buf[200];
-        wxSnprintf(buf, sizeof(buf), _T("Initialisation file error: unrecognised setting %s."), settingName);
+        wxSnprintf(buf, sizeof(buf), _T("Initialisation file error: unrecognised setting %s."), settingName.c_str());
         if (interactive)
             OnInform(buf);
         wxStrcpy(errorCode, buf);
@@ -1363,87 +1478,81 @@ wxChar *RegisterSetting(wxChar *settingName, wxChar *settingValue, bool interact
     return errorCode;
 }
 
-bool ReadCustomMacros(wxChar *filename)
+bool ReadCustomMacros(const wxString& filename)
 {
-  if (!wxFileExists(filename))
-      return false;
+    if (!wxFileExists(filename))
+        return false;
 
-  wxString name = filename;
-  wxSTD ifstream istr((char const *)name.fn_str(), wxSTD ios::in);
+    wxFileInputStream input( filename );
+    if(!input.Ok()) return false;
+    wxTextInputStream ini( input );
 
-  if (istr.bad()) return false;
+    CustomMacroList.Clear();
 
-  CustomMacroList.Clear();
-  char ch;
-  wxChar macroName[100];
-  wxChar macroBody[1000];
-  int noArgs;
-
-  while (!istr.eof())
-  {
-    BibEatWhiteSpace(istr);
-    istr.get(ch);
-    if (istr.eof())
-      break;
-
-    if (ch != '\\') // Not a macro definition, so must be NAME=VALUE
+    while (!input.Eof())
     {
-      wxChar settingName[100];
-      settingName[0] = ch;
-      BibReadWord(istr, (settingName+1));
-      BibEatWhiteSpace(istr);
-      istr.get(ch);
-      if (ch != '=')
-      {
-        OnError(_T("Expected = following name: malformed tex2rtf.ini file."));
-        return false;
-      }
-      else
-      {
-        wxChar settingValue[200];
-        BibEatWhiteSpace(istr);
-        BibReadToEOL(istr, settingValue);
-        RegisterSetting(settingName, settingValue);
-      }
-    }
-    else
-    {
-      BibReadWord(istr, macroName);
-      BibEatWhiteSpace(istr);
-      istr.get(ch);
-      if (ch != '[')
-      {
-        OnError(_T("Expected [ followed by number of arguments: malformed tex2rtf.ini file."));
-        return false;
-      }
-      istr >> noArgs;
-      istr.get(ch);
-      if (ch != ']')
-      {
-        OnError(_T("Expected ] following number of arguments: malformed tex2rtf.ini file."));
-        return false;
-      }
-      BibEatWhiteSpace(istr);
-      istr.get(ch);
-      if (ch != '{')
-      {
-        OnError(_T("Expected { followed by macro body: malformed tex2rtf.ini file."));
-        return false;
-      }
-      CustomMacro *macro = new CustomMacro(macroName, noArgs, NULL);
-      BibReadValue(istr, macroBody, false, false); // Don't ignore extra braces
-      if (wxStrlen(macroBody) > 0)
-        macro->macroBody = copystring(macroBody);
+        wxString line = ini.ReadLine();
+        BibEatWhiteSpace(line);
+        if (line.empty()) continue;
 
-      BibEatWhiteSpace(istr);
-      CustomMacroList.Append(macroName, macro);
-      AddMacroDef(ltCUSTOM_MACRO, macroName, noArgs);
+        if (line[0] != _T('\\')) // Not a macro definition, so must be NAME=VALUE
+        {
+            wxString settingName = BibReadWord(line);
+            BibEatWhiteSpace(line);
+            if (line.empty() || line[0] != _T('='))
+            {
+                OnError(_T("Expected = following name: malformed tex2rtf.ini file."));
+                return false;
+            }
+            else
+            {
+                line = line.substr(1);
+                BibEatWhiteSpace(line);
+                wxString settingValue = BibReadToEOL(line);
+                RegisterSetting(settingName, settingValue);
+            }
+        }
+        else
+        {
+            line = line.substr(1);
+            wxString macroName = BibReadWord(line);
+            BibEatWhiteSpace(line);
+            if (line[0] != _T('['))
+            {
+                OnError(_T("Expected [ followed by number of arguments: malformed tex2rtf.ini file."));
+                return false;
+            }
+            line = line.substr(1);
+            wxString noAargStr = line.BeforeFirst(_T(']'));
+            line = line.AfterFirst(_T(']'));
+            long noArgs;
+            if (!noAargStr.ToLong(&noArgs) || line.empty())
+            {
+                OnError(_T("Expected ] following number of arguments: malformed tex2rtf.ini file."));
+                return false;
+            }
+            BibEatWhiteSpace(line);
+            if (line[0] != _T('{'))
+            {
+                OnError(_T("Expected { followed by macro body: malformed tex2rtf.ini file."));
+                return false;
+            }
+
+            CustomMacro *macro = new CustomMacro(macroName.c_str(), noArgs, NULL);
+            wxString macroBody = BibReadValue(line, false, false); // Don't ignore extra braces
+            if (!macroBody.empty())
+                macro->macroBody = copystring(macroBody.c_str());
+
+            BibEatWhiteSpace(line);
+            CustomMacroList.Append(macroName.c_str(), macro);
+            AddMacroDef(ltCUSTOM_MACRO, macroName.c_str(), noArgs);
+        }
+
     }
-  }
-  wxChar mbuf[200];
-  wxSnprintf(mbuf, sizeof(mbuf), _T("Read initialization file %s."), filename);
-  OnInform(mbuf);
-  return true;
+    wxChar mbuf[200];
+    wxSnprintf(mbuf, sizeof(mbuf), _T("Read initialization file %s."), filename.c_str());
+    OnInform(mbuf);
+    return true;
 }
 
 CustomMacro *FindCustomMacro(wxChar *name)

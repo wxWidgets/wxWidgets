@@ -39,10 +39,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#ifndef __WXMSW__
-#include <errno.h>
-#endif
-
 #ifdef __SALFORDC__
   #include <clib.h>
 #endif
@@ -1646,38 +1642,37 @@ inline int wxSafeIsspace(wxChar ch) { return (ch < 127) && wxIsspace(ch); }
 // trims spaces (in the sense of isspace) from left or right side
 wxString& wxString::Trim(bool bFromRight)
 {
-  // first check if we're going to modify the string at all
-  if ( !empty() &&
-       (
-        (bFromRight && wxSafeIsspace(GetChar(Len() - 1))) ||
-        (!bFromRight && wxSafeIsspace(GetChar(0u)))
+    // first check if we're going to modify the string at all
+    if ( !empty() &&
+         (
+          (bFromRight && wxSafeIsspace(GetChar(length() - 1))) ||
+          (!bFromRight && wxSafeIsspace(GetChar(0u)))
+         )
        )
-     )
-  {
-    if ( bFromRight )
     {
-      // find last non-space character
-      iterator psz = begin() + length() - 1;
-      while ( wxSafeIsspace(*psz) && (psz >= begin()) )
-        psz--;
+        if ( bFromRight )
+        {
+            // find last non-space character
+            reverse_iterator psz = rbegin();
+            while ( (psz != rend()) && wxSafeIsspace(*psz) )
+                psz++;
 
-      // truncate at trailing space start
-      *++psz = wxT('\0');
-      erase(psz, end());
+            // truncate at trailing space start
+            erase(psz.base(), end());
+        }
+        else
+        {
+            // find first non-space character
+            iterator psz = begin();
+            while ( (psz != end()) && wxSafeIsspace(*psz) )
+                psz++;
+
+            // fix up data and length
+            erase(begin(), psz);
+        }
     }
-    else
-    {
-      // find first non-space character
-      iterator psz = begin();
-      while ( wxSafeIsspace(*psz) )
-        psz++;
 
-      // fix up data and length
-      erase(begin(), psz);
-    }
-  }
-
-  return *this;
+    return *this;
 }
 
 // adds nCount characters chPad to the string from either side
@@ -1839,22 +1834,12 @@ int wxString::PrintfV(const wxChar* pszFormat, va_list argptr)
 
         // vsnprintf() may return either -1 (traditional Unix behaviour) or the
         // total number of characters which would have been written if the
-        // buffer were large enough
+        // buffer were large enough (newer standards such as Unix98)
         if ( len >= 0 && len <= size )
         {
             // ok, there was enough space
             break;
         }
-
-#ifdef EOVERFLOW
-        // if the error is not due to not having enough space (it could be e.g.
-        // EILSEQ), break too -- we'd just eat all available memory uselessly
-        if ( errno != EOVERFLOW )
-        {
-            // no sense in continuing
-            break;
-        }
-#endif // EOVERFLOW
 
         // still not enough, double it again
         size *= 2;

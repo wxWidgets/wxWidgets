@@ -108,9 +108,9 @@ static wxAtomMap wxAtomTable;
 
 #include "wx/listimpl.cpp"
 
-WX_DEFINE_LIST(wxDDEClientList);
-WX_DEFINE_LIST(wxDDEServerList);
-WX_DEFINE_LIST(wxDDEConnectionList);
+WX_DEFINE_LIST(wxDDEClientList)
+WX_DEFINE_LIST(wxDDEServerList)
+WX_DEFINE_LIST(wxDDEConnectionList)
 
 static wxDDEClientList wxDDEClientObjects;
 static wxDDEServerList wxDDEServerObjects;

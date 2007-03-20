@@ -242,6 +242,9 @@ gtk_listbox_button_press_callback( GtkWidget *widget,
     }
 #endif // wxUSE_CHECKLISTBOX
 
+    /* emit wxEVT_COMMAND_LISTBOX_DOUBLECLICKED later */
+    g_hasDoubleClicked = (gdk_event->type == GDK_2BUTTON_PRESS);
+
     if ((gdk_event->state == 0) &&
          (((listbox->GetWindowStyleFlag() & wxLB_MULTIPLE) != 0) ||
           ((listbox->GetWindowStyleFlag() & wxLB_EXTENDED) != 0)) )
@@ -257,9 +260,6 @@ gtk_listbox_button_press_callback( GtkWidget *widget,
             
             return false;
     }
-
-    /* emit wxEVT_COMMAND_LISTBOX_DOUBLECLICKED later */
-    g_hasDoubleClicked = (gdk_event->type == GDK_2BUTTON_PRESS);
 
     return FALSE;
 }

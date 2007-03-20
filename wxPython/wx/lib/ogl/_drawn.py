@@ -90,7 +90,7 @@ class OpSetGDI(DrawOp):
             if self._gdiIndex in self._image._outlineColours:
                 # Need to construct a brush to match the outline pen's colour
                 if self._image._outlinePen:
-                    br = wx.TheBrushList.FindOrCreateBrush(self._image._outlinePen, wx.SOLID)
+                    br = wx.Brush(self._image._outlinePen, wx.SOLID)
                     if br:
                         dc.SetBrush(br)
             elif self._gdiIndex in self._image._fillColours:

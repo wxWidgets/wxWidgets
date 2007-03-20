@@ -13,8 +13,8 @@ recursive by default. The reason for this is that recursive mutexes are not
 supported by all Unix flavours and, worse, they cannot be used with 
 \helpref{wxCondition}{wxcondition}.
 
-For example, when several thread use the data stored in the linked list,
-modifications to the list should be only allowed to one thread at a time
+For example, when several threads use the data stored in the linked list,
+modifications to the list should only be allowed to one thread at a time
 because during a new node addition the list integrity is temporarily broken
 (this is also called {\it program invariant}).
 

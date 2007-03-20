@@ -255,7 +255,7 @@ wxOutputStream *LargeFileTest_wxFFile::MakeOutStream(const wxString& name) const
 
 bool LargeFileTest_wxFFile::HasLFS() const
 {
-#if HAVE_FSEEKO
+#ifdef HAVE_FSEEKO
     return (wxFileOffset)0xffffffff > 0;
 #else
     return false;

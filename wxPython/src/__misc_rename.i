@@ -105,7 +105,6 @@
 %rename(Bell)                               wxBell;
 %rename(EndBusyCursor)                      wxEndBusyCursor;
 %rename(GetElapsedTime)                     wxGetElapsedTime;
-%rename(GetMousePosition)                   wxGetMousePosition;
 %rename(IsBusy)                             wxIsBusy;
 %rename(Now)                                wxNow;
 %rename(Shell)                              wxShell;
@@ -152,12 +151,15 @@
 %rename(SetCursor)                          wxSetCursor;
 %rename(GetXDisplay)                        wxGetXDisplay;
 %rename(BeginBusyCursor)                    wxBeginBusyCursor;
+%rename(GetMousePosition)                   wxGetMousePosition;
 %rename(GetActiveWindow)                    wxGetActiveWindow;
 %rename(GenericFindWindowAtPoint)           wxGenericFindWindowAtPoint;
 %rename(FindWindowAtPoint)                  wxFindWindowAtPoint;
 %rename(GetTopLevelParent)                  wxGetTopLevelParent;
 %rename(LaunchDefaultBrowser)               wxLaunchDefaultBrowser;
 %rename(GetKeyState)                        wxGetKeyState;
+%rename(MouseState)                         wxMouseState;
+%rename(GetMouseState)                      wxGetMouseState;
 %rename(WakeUpMainThread)                   wxWakeUpMainThread;
 %rename(MutexGuiEnter)                      wxMutexGuiEnter;
 %rename(MutexGuiLeave)                      wxMutexGuiLeave;

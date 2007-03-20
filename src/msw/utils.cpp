@@ -31,6 +31,7 @@
     #include "wx/log.h"
 #endif  //WX_PRECOMP
 
+#include "wx/msw/registry.h"
 #include "wx/apptrait.h"
 #include "wx/dynlib.h"
 #include "wx/dynload.h"
@@ -278,12 +279,21 @@ bool wxGetUserId(wxChar *WXUNUSED_IN_WINCE(buf),
 }
 
 // Get user name e.g. Julian Smart
-bool wxGetUserName(wxChar *WXUNUSED_IN_WINCE(buf),
-                   int WXUNUSED_IN_WINCE(maxSize))
+bool wxGetUserName(wxChar *buf, int maxSize)
 {
+    wxCHECK_MSG( buf && ( maxSize > 0 ), false,
+                    _T("empty buffer in wxGetUserName") );
 #if defined(__WXWINCE__)
-    // TODO-CE
-    return false;
+    wxLogNull noLog;
+    wxRegKey key(wxRegKey::HKCU, wxT("ControlPanel\\Owner"));
+    if(!key.Open(wxRegKey::Read))
+        return false;
+    wxString name;
+    if(!key.QueryValue(wxT("Owner"),name))
+        return false;
+    wxStrncpy(buf, name.c_str(), maxSize-1);
+    buf[maxSize-1] = _T('\0');
+    return true;
 #elif defined(USE_NET_API)
     CHAR szUserName[256];
     if ( !wxGetUserId(szUserName, WXSIZEOF(szUserName)) )
@@ -1374,10 +1384,10 @@ extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding)
         case wxFONTENCODING_ISO8859_8:      ret = 28598; break;
         case wxFONTENCODING_ISO8859_9:      ret = 28599; break;
         case wxFONTENCODING_ISO8859_10:     ret = 28600; break;
-        case wxFONTENCODING_ISO8859_11:     ret = 28601; break;
+        case wxFONTENCODING_ISO8859_11:     ret = 874; break;
         // case wxFONTENCODING_ISO8859_12,      // doesn't exist currently, but put it
         case wxFONTENCODING_ISO8859_13:     ret = 28603; break;
-        case wxFONTENCODING_ISO8859_14:     ret = 28604; break;
+        // case wxFONTENCODING_ISO8859_14:     ret = 28604; break; // no correspondence on Windows
         case wxFONTENCODING_ISO8859_15:     ret = 28605; break;
         case wxFONTENCODING_KOI8:           ret = 20866; break;
         case wxFONTENCODING_KOI8_U:         ret = 21866; break;

@@ -44,7 +44,7 @@
  * Ignoring invocation with NULL is a convenience.
  */
 VOID
-regfree(re)
+wx_regfree(re)
 regex_t *re;
 {
 	if (re == NULL)

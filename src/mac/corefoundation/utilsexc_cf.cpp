@@ -18,8 +18,104 @@
 #include "wx/unix/execute.h"
 #include "wx/stdpaths.h"
 #include "wx/apptrait.h"
+#include "wx/process.h"
 
+// Use polling instead of Mach ports, which doesn't work on Intel
+// due to task_for_pid security issues.
 
+// What's a better test for Intel vs PPC?
+#ifdef WORDS_BIGENDIAN
+#define USE_POLLING 0
+#else
+#define USE_POLLING 1
+#endif
+
+#if USE_POLLING
+
+class wxProcessTerminationEventHandler: public wxEvtHandler
+{
+  public:
+    wxProcessTerminationEventHandler(wxEndProcessData* data)
+    {
+        m_data = data;
+        Connect(-1, wxEVT_END_PROCESS, wxProcessEventHandler(wxProcessTerminationEventHandler::OnTerminate));
+    }
+
+    void OnTerminate(wxProcessEvent& event)
+    {
+        Disconnect(-1, wxEVT_END_PROCESS, wxProcessEventHandler(wxProcessTerminationEventHandler::OnTerminate));
+        wxHandleProcessTermination(m_data);
+        delete this;
+    }
+
+    wxEndProcessData* m_data;
+};
+
+class wxProcessTerminationThread: public wxThread
+{
+  public:
+    wxProcessTerminationThread(wxEndProcessData* data, wxProcessTerminationEventHandler* handler): wxThread(wxTHREAD_DETACHED)
+    {
+        m_data = data;
+        m_handler = handler;
+    }
+
+    virtual void* Entry();
+
+    wxProcessTerminationEventHandler* m_handler;
+    wxEndProcessData* m_data;
+};
+
+// The problem with this is that we may be examining the
+// process e.g. in OnIdle at the point this cleans up the process,
+// so we need to delay until it's safe.
+
+void* wxProcessTerminationThread::Entry()
+{
+    while (true)
+    {
+        usleep(100);
+        int status = 0;
+        int rc = waitpid(abs(m_data->pid), & status, WNOHANG);
+        if (rc != 0)
+        {
+            if ((rc != -1) && WIFEXITED(status))
+                m_data->exitcode = WEXITSTATUS(status);
+            else
+                m_data->exitcode = -1;
+
+            wxProcessEvent event;
+            wxPostEvent(m_handler, event);
+
+            break;
+        }
+    }
+    
+    return NULL;
+}
+
+int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid)
+{
+    if (pid < 1)
+        return -1;
+
+    wxProcessTerminationEventHandler* handler = new wxProcessTerminationEventHandler(proc_data);    
+    wxProcessTerminationThread* thread = new wxProcessTerminationThread(proc_data, handler);
+    
+    if (thread->Create() != wxTHREAD_NO_ERROR)
+    {
+        wxLogDebug(wxT("Could not create termination detection thread."));
+        delete thread;
+        delete handler;
+        return -1;
+    }
+
+    thread->Run();
+    
+    return 0;
+}
+
+#else
 
 #include <CoreFoundation/CFMachPort.h>
 #include <sys/wait.h>
@@ -112,6 +208,9 @@ int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid)
     wxLogDebug(wxT("Successfully added notification to the runloop"));
     return 0;
 }
+
+#endif
+  // USE_POLLING
 
 // NOTE: This doens't really belong here but this was a handy file to
 // put it in because it's already compiled for wxCocoa and wxMac GUI lib.

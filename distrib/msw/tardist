@@ -173,6 +173,7 @@ dospinwxmac()
 echo Tarring wxMac...
 ### wxMac
 cp $WXSRC/include/wx/mac/setup0.h $WXSRC/include/wx/setup.h
+cp $WXSRC/include/wx/mac/setup0.h $WXSRC/include/wx/mac/setup.h
 cd $WXSRC
 cat $WXSRC/distrib/msw/mac.rsp $WXSRC/distrib/msw/cocoa.rsp $WXSRC/distrib/msw/generic.rsp $WXSRC/distrib/msw/cw_mac.rsp $WXSRC/distrib/msw/tex2rtf.rsp $WXSRC/distrib/msw/utils.rsp $WXSRC/distrib/msw/ogl.rsp $WXSRC/distrib/msw/stc.rsp $WXSRC/distrib/msw/xml.rsp $WXSRC/distrib/msw/contrib.rsp $WXSRC/distrib/msw/deprecated.rsp $WXSRC/distrib/msw/makefile.rsp $WXSRC/distrib/msw/tiff.rsp $WXSRC/distrib/msw/jpeg.rsp > /tmp/wxmac_in.txt
 expandlines /tmp/wxmac_in.txt /tmp/wxmac.txt
@@ -330,7 +331,7 @@ domakedocs()
 dospinwxdocs()
 {
   # First make the docs
-  domakedocs
+#  domakedocs
 
 echo Tarring wxDocs...
 
