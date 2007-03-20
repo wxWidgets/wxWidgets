@@ -2556,9 +2556,6 @@ static unsigned long wxImageHistogram_GetCountColour(wxImageHistogram *self,wxCo
             return e.value;
         }
 
-    typedef unsigned char* buffer;
-
-
 // Pull the nested class out to the top level for SWIG's sake
 #define wxImage_RGBValue wxImage::RGBValue
 #define wxImage_HSVValue wxImage::HSVValue
@@ -2705,6 +2702,25 @@ static wxBitmap wxImage_ConvertToMonoBitmap(wxImage *self,byte red,byte green,by
             wxBitmap bitmap( mono, 1 );
             return bitmap;
         }
+
+    wxImage* _ImageFromBuffer(int width, int height,
+                              buffer data, int DATASIZE,
+                              buffer alpha=NULL, int ALPHASIZE=0)
+    {
+        if (DATASIZE != width*height*3) {
+            wxPyErr_SetString(PyExc_ValueError, "Invalid data buffer size.");
+            return NULL;
+        }
+        if (alpha != NULL) {
+            if (ALPHASIZE != width*height) {
+                wxPyErr_SetString(PyExc_ValueError, "Invalid alpha buffer size.");
+                return NULL;
+            }
+            return new wxImage(width, height, data, alpha, true);
+        }                
+        return new wxImage(width, height, data, true);
+    }                              
+
  static const wxString wxPyIMAGE_OPTION_FILENAME(wxIMAGE_OPTION_FILENAME); 
  static const wxString wxPyIMAGE_OPTION_BMP_FORMAT(wxIMAGE_OPTION_BMP_FORMAT); 
  static const wxString wxPyIMAGE_OPTION_CUR_HOTSPOT_X(wxIMAGE_OPTION_CUR_HOTSPOT_X); 
@@ -11564,7 +11580,7 @@ static PyObject *_wrap_new_ImageFromData(PyObject *, PyObject *args, PyObject *k
         if (SWIG_arg_fail(2)) SWIG_fail;
     }
     {
-        if (!PyArg_Parse(obj2, "t#", &arg3, &arg4)) SWIG_fail; 
+        if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &arg4) == -1) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -11607,10 +11623,12 @@ static PyObject *_wrap_new_ImageFromDataWithAlpha(PyObject *, PyObject *args, Py
         if (SWIG_arg_fail(2)) SWIG_fail;
     }
     {
-        if (!PyArg_Parse(obj2, "t#", &arg3, &arg4)) SWIG_fail; 
+        if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &arg4) == -1) SWIG_fail;
     }
     {
-        if (!PyArg_Parse(obj3, "t#", &arg5, &arg6)) SWIG_fail; 
+        if (obj3 != Py_None) {
+            if (PyObject_AsReadBuffer(obj3, (const void**)(&arg5), &arg6) == -1) SWIG_fail;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13360,7 +13378,7 @@ static PyObject *_wrap_Image_SetData(PyObject *, PyObject *args, PyObject *kwarg
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImage, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
-        if (!PyArg_Parse(obj1, "t#", &arg2, &arg3)) SWIG_fail; 
+        if (PyObject_AsReadBuffer(obj1, (const void**)(&arg2), &arg3) == -1) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13417,7 +13435,7 @@ static PyObject *_wrap_Image_SetDataBuffer(PyObject *, PyObject *args, PyObject 
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImage, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
-        if (!PyArg_Parse(obj1, "t#", &arg2, &arg3)) SWIG_fail; 
+        if (PyObject_AsReadBuffer(obj1, (const void**)(&arg2), &arg3) == -1) SWIG_fail;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13474,7 +13492,9 @@ static PyObject *_wrap_Image_SetAlphaData(PyObject *, PyObject *args, PyObject *
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImage, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
-        if (!PyArg_Parse(obj1, "t#", &arg2, &arg3)) SWIG_fail; 
+        if (obj1 != Py_None) {
+            if (PyObject_AsReadBuffer(obj1, (const void**)(&arg2), &arg3) == -1) SWIG_fail;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13531,7 +13551,9 @@ static PyObject *_wrap_Image_SetAlphaBuffer(PyObject *, PyObject *args, PyObject
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImage, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
-        if (!PyArg_Parse(obj1, "t#", &arg2, &arg3)) SWIG_fail; 
+        if (obj1 != Py_None) {
+            if (PyObject_AsReadBuffer(obj1, (const void**)(&arg2), &arg3) == -1) SWIG_fail;
+        }
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -14676,6 +14698,58 @@ static PyObject * Image_swigregister(PyObject *, PyObject *args) {
     Py_INCREF(obj);
     return Py_BuildValue((char *)"");
 }
+static PyObject *_wrap__ImageFromBuffer(PyObject *, PyObject *args, PyObject *kwargs) {
+    PyObject *resultobj = NULL;
+    int arg1 ;
+    int arg2 ;
+    buffer arg3 ;
+    int arg4 ;
+    buffer arg5 = (buffer) NULL ;
+    int arg6 = (int) 0 ;
+    wxImage *result;
+    PyObject * obj0 = 0 ;
+    PyObject * obj1 = 0 ;
+    PyObject * obj2 = 0 ;
+    PyObject * obj3 = 0 ;
+    char *kwnames[] = {
+        (char *) "width",(char *) "height",(char *) "data",(char *) "alpha", NULL 
+    };
+    
+    if(!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:_ImageFromBuffer",kwnames,&obj0,&obj1,&obj2,&obj3)) goto fail;
+    {
+        arg1 = static_cast<int >(SWIG_As_int(obj0)); 
+        if (SWIG_arg_fail(1)) SWIG_fail;
+    }
+    {
+        arg2 = static_cast<int >(SWIG_As_int(obj1)); 
+        if (SWIG_arg_fail(2)) SWIG_fail;
+    }
+    {
+        if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &arg4) == -1) SWIG_fail;
+    }
+    if (obj3) {
+        {
+            if (obj3 != Py_None) {
+                if (PyObject_AsReadBuffer(obj3, (const void**)(&arg5), &arg6) == -1) SWIG_fail;
+            }
+        }
+    }
+    {
+        PyThreadState* __tstate = wxPyBeginAllowThreads();
+        result = (wxImage *)_ImageFromBuffer(arg1,arg2,arg3,arg4,arg5,arg6);
+        
+        wxPyEndAllowThreads(__tstate);
+        if (PyErr_Occurred()) SWIG_fail;
+    }
+    {
+        resultobj = wxPyMake_wxObject(result, 1); 
+    }
+    return resultobj;
+    fail:
+    return NULL;
+}
+
+
 static int _wrap_NullImage_set(PyObject *) {
     PyErr_SetString(PyExc_TypeError,"Variable NullImage is read-only.");
     return 1;
@@ -46626,6 +46700,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Image_RGBtoHSV", (PyCFunction) _wrap_Image_RGBtoHSV, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_HSVtoRGB", (PyCFunction) _wrap_Image_HSVtoRGB, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Image_swigregister", Image_swigregister, METH_VARARGS, NULL},
+	 { (char *)"_ImageFromBuffer", (PyCFunction) _wrap__ImageFromBuffer, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_BMPHandler", (PyCFunction) _wrap_new_BMPHandler, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"BMPHandler_swigregister", BMPHandler_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_ICOHandler", (PyCFunction) _wrap_new_ICOHandler, METH_VARARGS | METH_KEYWORDS, NULL},
