@@ -446,6 +446,12 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 #else
     if (encName.empty())
         encName = _T("UTF-8");
+
+    // if wxUSE_INTL==0 it probably indicates that only "C" locale is supported
+    // by the program anyhow so prevent GTK+ from calling setlocale(LC_ALL, "")
+    // from gtk_init_check() as it does by default
+    gtk_disable_setlocale();
+
 #endif // wxUSE_INTL
     static wxConvBrokenFileNames fileconv(encName);
     wxConvFileName = &fileconv;
