@@ -231,7 +231,7 @@ void wxTopLevelWindowBase::DoCentre(int dir)
 
     if ( rectParent.IsEmpty() )
     {
-        // we were explicitely asked to centre this window on the entire screen
+        // we were explicitly asked to centre this window on the entire screen
         // or if we have no parent anyhow and so can't centre on it
         rectParent = rectDisplay;
     }
@@ -250,11 +250,11 @@ void wxTopLevelWindowBase::DoCentre(int dir)
     {
         if ( !rectDisplay.Contains(rect.GetBottomRight()) )
         {
-            // check if we can move the window so that the bottom right corner
-            // is visible without hiding the top left one
+            // move the window just enough for the bottom right corner to
+            // become visible
             int dx = rectDisplay.GetRight() - rect.GetRight();
             int dy = rectDisplay.GetBottom() - rect.GetBottom();
-            rect.Offset(dx, dy);
+            rect.Offset(dx < 0 ? dx : 0, dy < 0 ? dy : 0);
         }
         //else: the window top left and bottom right corner are both visible,
         //      although the window might still be not entirely on screen (with
