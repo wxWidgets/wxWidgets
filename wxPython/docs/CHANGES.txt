@@ -61,6 +61,38 @@ Renamed the wx.lib.inspect and wx.lib.mixins.inspect modules to
 inspection, in order to avoid conflicts with the inspect module in the
 standard Python library.
 
+Lots of changes to XRCed from Roman Rolinsky:
+
+  *  Preferences for default "sizeritem" parameters for new panels and
+     controls can be configured ("File">"Preferences...").
+
+  *  Implemented comment object for including simple one-line comments and
+     comment directives as tree nodes. No validation is performed for a
+     valid XML string so comments must not contain "-->". Comment directive
+     is a special comment starting with '%' character, followed by a line
+     of python code. It is executed using 'exec' when the resource file is
+     opened. This is useful to import plugin modules containing custom
+     handlers which are specific to the resource file, hovewer this is of
+     course a security hole if you use foreign XRC files. A warning is
+     displayed if the preference option 'ask' is selected (by default).
+
+  *  Added support for custom controls and plugin modules. Refer to this
+     wxPythonWiki for the details:  http://wiki.wxpython.org/index.cgi/XRCed#custom
+
+  *  Tool panel sections can be collapsed/expanded by clicking on the
+     label of a tool group.
+
+  *  Some undo/redo and other fixes.
+
+  *  Fixes for wxMSW (notebook highlighting, control sizes, tree Unselect).
+
+  *  Notebook page highlighting fix. Highlight resizes when the window
+     is resized. ParamUnit spin button detects event handler re-entry
+     (wxGTK probably has a bug in wxSpinButton with repeated events).
+
+  *  Fix for dealing with empty 'growable' property, using MiniFrame
+     for properties panel, the panel is restored together with the
+     main window.
 
 
 
