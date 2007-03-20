@@ -18,6 +18,7 @@
 
 #ifdef __BORLANDC__
     #pragma hdrstop
+    #include "wx/msw/private.h"
 #endif
 
 #ifndef WX_PRECOMP
