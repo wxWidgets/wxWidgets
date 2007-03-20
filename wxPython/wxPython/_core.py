@@ -762,6 +762,7 @@ wxImage_GetHandlers = wx._core.Image_GetHandlers
 wxImage_GetImageExtWildcard = wx._core.Image_GetImageExtWildcard
 wxImage_RGBtoHSV = wx._core.Image_RGBtoHSV
 wxImage_HSVtoRGB = wx._core.Image_HSVtoRGB
+_ImageFromBuffer = wx._core._ImageFromBuffer
 wxNullImage = wx._core.NullImage
 wxIMAGE_OPTION_FILENAME = wx._core.IMAGE_OPTION_FILENAME
 wxIMAGE_OPTION_BMP_FORMAT = wx._core.IMAGE_OPTION_BMP_FORMAT

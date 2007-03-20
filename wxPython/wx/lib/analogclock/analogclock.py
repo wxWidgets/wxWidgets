@@ -559,7 +559,7 @@ class AnalogClockWindow(AnalogClock):
         if m:
             self.SetHandSize(m, MINUTE)
         if s:
-            self.SetHandSize(h, SECOND)
+            self.SetHandSize(s, SECOND)
 
     def SetHandColours(self, h=None, m=None, s=None):
         if h and not m and not s:
@@ -572,8 +572,8 @@ class AnalogClockWindow(AnalogClock):
             self.SetHandBorderColour(m, MINUTE)
             self.SetHandFillColour(m, MINUTE)
         if s:
-            self.SetHandBorderColour(h, SECOND)
-            self.SetHandFillColour(h, SECOND)
+            self.SetHandBorderColour(s, SECOND)
+            self.SetHandFillColour(s, SECOND)
 
     def SetTickColours(self, h=None, m=None):
         if not m:
@@ -589,13 +589,13 @@ class AnalogClockWindow(AnalogClock):
         if h:
             self.SetTickSize(h, HOUR)
         if m:
-            self.SetTickSize(h, MINUTE)
+            self.SetTickSize(m, MINUTE)
 
     def SetTickFontss(self, h=None, m=None):
         if h:
             self.SetTickFont(h, HOUR)
         if m:
-            self.SetTickFont(h, MINUTE)
+            self.SetTickFont(m, MINUTE)
 
 
     def SetMinutesOffset(self, o):

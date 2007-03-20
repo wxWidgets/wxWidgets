@@ -841,11 +841,15 @@ WXK_CTRL_Z = (ord('Z')+1) - ord('A')
 
 nav = (
     wx.WXK_BACK, wx.WXK_LEFT, wx.WXK_RIGHT, wx.WXK_UP, wx.WXK_DOWN, wx.WXK_TAB,
-    wx.WXK_HOME, wx.WXK_END, wx.WXK_RETURN, wx.WXK_PRIOR, wx.WXK_NEXT
+    wx.WXK_HOME, wx.WXK_END, wx.WXK_RETURN, wx.WXK_PRIOR, wx.WXK_NEXT,
+    wx.WXK_NUMPAD_LEFT, wx.WXK_NUMPAD_RIGHT, wx.WXK_NUMPAD_UP, wx.WXK_NUMPAD_DOWN,
+    wx.WXK_NUMPAD_HOME, wx.WXK_NUMPAD_END, wx.WXK_NUMPAD_ENTER, wx.WXK_NUMPAD_PRIOR, wx.WXK_NUMPAD_NEXT
     )
 
 control = (
-    wx.WXK_BACK, wx.WXK_DELETE, wx.WXK_INSERT, WXK_CTRL_A, WXK_CTRL_C, WXK_CTRL_S, WXK_CTRL_V,
+    wx.WXK_BACK, wx.WXK_DELETE, wx.WXK_INSERT,
+    wx.WXK_NUMPAD_DELETE, wx.WXK_NUMPAD_INSERT,
+    WXK_CTRL_A, WXK_CTRL_C, WXK_CTRL_S, WXK_CTRL_V,
     WXK_CTRL_X, WXK_CTRL_Z
     )
 
@@ -1761,27 +1765,39 @@ class MaskedEditMixin:
         ## Initially populated with navigation and function control keys:
         self._keyhandlers = {
             # default navigation keys and handlers:
-            wx.WXK_BACK:   self._OnErase,
-            wx.WXK_LEFT:   self._OnArrow,
-            wx.WXK_RIGHT:  self._OnArrow,
-            wx.WXK_UP:     self._OnAutoCompleteField,
-            wx.WXK_DOWN:   self._OnAutoCompleteField,
-            wx.WXK_TAB:    self._OnChangeField,
-            wx.WXK_HOME:   self._OnHome,
-            wx.WXK_END:    self._OnEnd,
-            wx.WXK_RETURN: self._OnReturn,
-            wx.WXK_PRIOR:  self._OnAutoCompleteField,
-            wx.WXK_NEXT:   self._OnAutoCompleteField,
+            wx.WXK_BACK:            self._OnErase,
+            wx.WXK_LEFT:            self._OnArrow,
+            wx.WXK_NUMPAD_LEFT:     self._OnArrow,
+            wx.WXK_RIGHT:           self._OnArrow,
+            wx.WXK_NUMPAD_RIGHT:    self._OnArrow,
+            wx.WXK_UP:              self._OnAutoCompleteField,
+            wx.WXK_NUMPAD_UP:       self._OnAutoCompleteField,
+            wx.WXK_DOWN:            self._OnAutoCompleteField,
+            wx.WXK_NUMPAD_DOWN:     self._OnAutoCompleteField,
+            wx.WXK_TAB:             self._OnChangeField,
+            wx.WXK_HOME:            self._OnHome,
+            wx.WXK_NUMPAD_HOME:     self._OnHome,
+            wx.WXK_END:             self._OnEnd,
+            wx.WXK_NUMPAD_END:      self._OnEnd,
+            wx.WXK_RETURN:          self._OnReturn,
+            wx.WXK_NUMPAD_ENTER:    self._OnReturn,
+            wx.WXK_PRIOR:           self._OnAutoCompleteField,
+            wx.WXK_NUMPAD_PRIOR:    self._OnAutoCompleteField,
+            wx.WXK_NEXT:            self._OnAutoCompleteField,
+            wx.WXK_NUMPAD_NEXT:     self._OnAutoCompleteField,
 
             # default function control keys and handlers:
-            wx.WXK_DELETE: self._OnDelete,
-            wx.WXK_INSERT: self._OnInsert,
-            WXK_CTRL_A: self._OnCtrl_A,
-            WXK_CTRL_C: self._OnCtrl_C,
-            WXK_CTRL_S: self._OnCtrl_S,
-            WXK_CTRL_V: self._OnCtrl_V,
-            WXK_CTRL_X: self._OnCtrl_X,
-            WXK_CTRL_Z: self._OnCtrl_Z,
+            wx.WXK_DELETE:          self._OnDelete,
+            wx.WXK_NUMPAD_DELETE:   self._OnDelete,
+            wx.WXK_INSERT:          self._OnInsert,
+            wx.WXK_NUMPAD_INSERT:   self._OnInsert,
+            
+            WXK_CTRL_A:             self._OnCtrl_A,
+            WXK_CTRL_C:             self._OnCtrl_C,
+            WXK_CTRL_S:             self._OnCtrl_S,
+            WXK_CTRL_V:             self._OnCtrl_V,
+            WXK_CTRL_X:             self._OnCtrl_X,
+            WXK_CTRL_Z:             self._OnCtrl_Z,
             }
 
         ## bind standard navigational and control keycodes to this instance,
@@ -2780,7 +2796,11 @@ class MaskedEditMixin:
 ####            dbg('Registering numeric navigation and control handlers (if not already set)')
             if not self._keyhandlers.has_key(wx.WXK_DOWN):
                 self._SetKeycodeHandler(wx.WXK_DOWN, self._OnChangeField)
+            if not self._keyhandlers.has_key(wx.WXK_NUMPAD_DOWN):
+                self._SetKeycodeHandler(wx.WXK_DOWN, self._OnChangeField)
             if not self._keyhandlers.has_key(wx.WXK_UP):
+                self._SetKeycodeHandler(wx.WXK_UP, self._OnUpNumeric)  # (adds "shift" to up arrow, and calls _OnChangeField)
+            if not self._keyhandlers.has_key(wx.WXK_NUMPAD_UP):
                 self._SetKeycodeHandler(wx.WXK_UP, self._OnUpNumeric)  # (adds "shift" to up arrow, and calls _OnChangeField)
 
             # On ., truncate contents right of cursor to decimal point (if any)
@@ -3205,25 +3225,25 @@ class MaskedEditMixin:
         keycode = event.GetKeyCode()
         sel_start, sel_to = self._GetSelection()
         entry_end = self._goEnd(getPosOnly=True)
-        if keycode in (wx.WXK_RIGHT, wx.WXK_DOWN):
+        if keycode in (wx.WXK_RIGHT, wx.WXK_DOWN, wx.WXK_NUMPAD_RIGHT, wx.WXK_NUMPAD_DOWN):
             if( ( not self._isTemplateChar(pos) and pos+1 > entry_end)
                 or ( self._isTemplateChar(pos) and pos >= entry_end) ):
 ##                dbg("can't advance", indent=0)
                 return False
             elif self._isTemplateChar(pos):
                 self._AdjustField(pos)
-        elif keycode in (wx.WXK_LEFT,wx.WXK_UP) and sel_start == sel_to and pos > 0 and self._isTemplateChar(pos-1):
+        elif keycode in (wx.WXK_LEFT, wx.WXK_UP, wx.WXK_NUMPAD_LEFT, wx.WXK_NUMPAD_UP) and sel_start == sel_to and pos > 0 and self._isTemplateChar(pos-1):
 ##            dbg('adjusting field')
             self._AdjustField(pos)
 
         # treat as shifted up/down arrows as tab/reverse tab:
-        if event.ShiftDown() and keycode in (wx.WXK_UP, wx.WXK_DOWN):
+        if event.ShiftDown() and keycode in (wx.WXK_UP, wx.WXK_DOWN, wx.WXK_NUMPAD_UP, wx.WXK_NUMPAD_DOWN):
             # remove "shifting" and treat as (forward) tab:
             event.m_shiftDown = False
             keep_processing = self._OnChangeField(event)
 
         elif self._FindField(pos)._selectOnFieldEntry:
-            if( keycode in (wx.WXK_UP, wx.WXK_LEFT)
+            if( keycode in (wx.WXK_UP, wx.WXK_LEFT, wx.WXK_NUMPAD_UP, wx.WXK_NUMPAD_LEFT)
                 and sel_start != 0
                 and self._isTemplateChar(sel_start-1)
                 and sel_start != self._masklength
@@ -3234,7 +3254,7 @@ class MaskedEditMixin:
                 event.m_shiftDown = True
                 event.m_ControlDown = True
                 keep_processing = self._OnChangeField(event)
-            elif( keycode in (wx.WXK_DOWN, wx.WXK_RIGHT)
+            elif( keycode in (wx.WXK_DOWN, wx.WXK_RIGHT, wx.WXK_NUMPAD_DOWN, wx.WXK_NUMPAD_RIGHT)
                   and sel_to != self._masklength
                   and self._isTemplateChar(sel_to)):
 
@@ -3247,8 +3267,8 @@ class MaskedEditMixin:
 ##                dbg('using base ctrl event processing')
                 event.Skip()
         else:
-            if( (sel_to == self._fields[0]._extent[0] and keycode == wx.WXK_LEFT)
-                or (sel_to == self._masklength and keycode == wx.WXK_RIGHT) ):
+            if( (sel_to == self._fields[0]._extent[0] and keycode in (wx.WXK_LEFT, wx.WXK_NUMPAD_LEFT) )
+                or (sel_to == self._masklength and keycode in (wx.WXK_RIGHT, wx.WXK_NUMPAD_RIGHT) ) ):
                 if not wx.Validator_IsSilent():
                     wx.Bell()
             else:
@@ -3358,11 +3378,11 @@ class MaskedEditMixin:
         # If trying to erase beyond "legal" bounds, disallow operation:
         if( (sel_to == 0 and key == wx.WXK_BACK)
             or (self._signOk and sel_to == 1 and value[0] == ' ' and key == wx.WXK_BACK)
-            or (sel_to == self._masklength and sel_start == sel_to and key == wx.WXK_DELETE and not field._insertRight)
+            or (sel_to == self._masklength and sel_start == sel_to and key in (wx.WXK_DELETE, wx.WXK_NUMPAD_DELETE) and not field._insertRight)
             or (self._signOk and self._useParens
                 and sel_start == sel_to
                 and sel_to == self._masklength - 1
-                and value[sel_to] == ' ' and key == wx.WXK_DELETE and not field._insertRight) ):
+                and value[sel_to] == ' ' and key in (wx.WXK_DELETE, wx.WXK_NUMPAD_DELETE) and not field._insertRight) ):
             if not wx.Validator_IsSilent():
                 wx.Bell()
 ##            dbg(indent=0)
@@ -3374,7 +3394,7 @@ class MaskedEditMixin:
             and sel_start >= start                              # and selection starts in field
             and ((sel_to == sel_start                           # and no selection
                   and sel_to == end                             # and cursor at right edge
-                  and key in (wx.WXK_BACK, wx.WXK_DELETE))            # and either delete or backspace key
+                  and key in (wx.WXK_BACK, wx.WXK_DELETE, wx.WXK_NUMPAD_DELETE))    # and either delete or backspace key
                  or                                             # or
                  (key == wx.WXK_BACK                               # backspacing
                     and (sel_to == end                          # and selection ends at right edge
@@ -4050,21 +4070,21 @@ class MaskedEditMixin:
 ##            dbg('choices:', field._choices)
 ##            dbg('compareChoices:', field._compareChoices)
             choices, choice_required = field._compareChoices, field._choiceRequired
-            if keycode in (wx.WXK_PRIOR, wx.WXK_UP):
+            if keycode in (wx.WXK_PRIOR, wx.WXK_UP, wx.WXK_NUMPAD_PRIOR, wx.WXK_NUMPAD_UP):
                 direction = -1
             else:
                 direction = 1
             match_index, partial_match = self._autoComplete(direction, choices, text, compareNoCase=field._compareNoCase, current_index = field._autoCompleteIndex)
             if( match_index is None
-                and (keycode in self._autoCompleteKeycodes + [wx.WXK_PRIOR, wx.WXK_NEXT]
-                     or (keycode in [wx.WXK_UP, wx.WXK_DOWN] and event.ShiftDown() ) ) ):
+                and (keycode in self._autoCompleteKeycodes + [wx.WXK_PRIOR, wx.WXK_NEXT, wx.WXK_NUMPAD_PRIOR, wx.WXK_NUMPAD_NEXT]
+                     or (keycode in [wx.WXK_UP, wx.WXK_DOWN, wx.WXK_NUMPAD_UP, wx.WXK_NUMPAD_DOWN] and event.ShiftDown() ) ) ):
                 # Select the 1st thing from the list:
                 match_index = 0
 
             if( match_index is not None
-                and ( keycode in self._autoCompleteKeycodes + [wx.WXK_PRIOR, wx.WXK_NEXT]
-                      or (keycode in [wx.WXK_UP, wx.WXK_DOWN] and event.ShiftDown())
-                      or (keycode == wx.WXK_DOWN and partial_match) ) ):
+                and ( keycode in self._autoCompleteKeycodes + [wx.WXK_PRIOR, wx.WXK_NEXT, wx.WXK_NUMPAD_PRIOR, wx.WXK_NUMPAD_NEXT]
+                      or (keycode in [wx.WXK_UP, wx.WXK_DOWN, wx.WXK_NUMPAD_UP, wx.WXK_NUMPAD_DOWN] and event.ShiftDown())
+                      or (keycode in [wx.WXK_DOWN, wx.WXK_NUMPAD_DOWN] and partial_match) ) ):
 
                 # We're allowed to auto-complete:
 ##                dbg('match found')
@@ -4077,10 +4097,11 @@ class MaskedEditMixin:
                 self._CheckValid()  # recolor as appopriate
 
 
-        if keycode in (wx.WXK_UP, wx.WXK_DOWN, wx.WXK_LEFT, wx.WXK_RIGHT):
+        if keycode in (wx.WXK_UP, wx.WXK_DOWN, wx.WXK_LEFT, wx.WXK_RIGHT, 
+                       wx.WXK_NUMPAD_UP, wx.WXK_NUMPAD_DOWN, wx.WXK_NUMPAD_LEFT, wx.WXK_NUMPAD_RIGHT):
             # treat as left right arrow if unshifted, tab/shift tab if shifted.
             if event.ShiftDown():
-                if keycode in (wx.WXK_DOWN, wx.WXK_RIGHT):
+                if keycode in (wx.WXK_DOWN, wx.WXK_RIGHT, wx.WXK_NUMPAD_DOWN, wx.WXK_NUMPAD_RIGHT):
                     # remove "shifting" and treat as (forward) tab:
                     event.m_shiftDown = False
                 keep_processing = self._OnChangeField(event)
@@ -6702,6 +6723,9 @@ __i=0
 
 ## CHANGELOG:
 ## ====================
+##  Version 1.12
+##  1. Added proper support for NUMPAD keypad keycodes for navigation and control.
+##
 ##  Version 1.11
 ##  1. Added value member to ValueError exceptions, so that people can catch them
 ##     and then display their own errors, and added attribute raiseOnInvalidPaste,

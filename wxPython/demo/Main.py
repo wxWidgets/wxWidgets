@@ -1124,7 +1124,10 @@ class wxPythonDemo(wx.Frame):
         icon = images.getWXPdemoIcon()
         self.SetIcon(icon)
 
-        self.tbicon = DemoTaskBarIcon(self)
+        try:
+            self.tbicon = DemoTaskBarIcon(self)
+        except:
+            self.tbicon = None
 
         wx.CallAfter(self.ShowTip)
 
@@ -1624,7 +1627,8 @@ class wxPythonDemo(wx.Frame):
         self.demoPage = None
         self.codePage = None
         self.mainmenu = None
-        self.tbicon.Destroy()
+        if self.tbicon is not None:
+            self.tbicon.Destroy()
         self.Destroy()
 
 
