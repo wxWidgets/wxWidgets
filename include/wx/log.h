@@ -562,7 +562,7 @@ DECLARE_LOG_FUNCTION_IMPL(Status);
     DECLARE_LOG_FUNCTION2_EXP_IMPL(Status, wxFrame *, pFrame, WXDLLIMPEXP_CORE);
 #endif // wxUSE_GUI
 
-DECLARE_LOG_FUNCTION_PUBLIC(Status);
+DECLARE_LOG_FUNCTION_PUBLIC(Status)
 
 // additional one: as wxLogError, but also logs last system call error code
 // and the corresponding error message if available
@@ -572,7 +572,7 @@ DECLARE_LOG_FUNCTION_IMPL(SysError);
 // that don't set the errno (like registry APIs in Win32))
 DECLARE_LOG_FUNCTION2_IMPL(SysError, long, lErrCode);
 
-DECLARE_LOG_FUNCTION_PUBLIC(SysError);
+DECLARE_LOG_FUNCTION_PUBLIC(SysError)
 
 // debug functions do nothing in release mode
 #if wxUSE_LOG && wxUSE_LOG_DEBUG
@@ -589,7 +589,7 @@ DECLARE_LOG_FUNCTION_PUBLIC(SysError);
     // wxLog::GetActive()->GetTraceMask() -- it's deprecated in favour of
     // string identifiers
     DECLARE_LOG_FUNCTION2_IMPL(Trace, wxTraceMask, mask);
-    DECLARE_LOG_FUNCTION_PUBLIC(Trace);
+    DECLARE_LOG_FUNCTION_PUBLIC(Trace)
 #else   //!debug || !wxUSE_LOG
     // these functions do nothing in release builds, but don't define them as
     // nothing as it could result in different code structure in debug and
