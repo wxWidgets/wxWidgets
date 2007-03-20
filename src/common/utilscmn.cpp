@@ -597,7 +597,37 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig)
         wxLogDebug(wxT("ICStart error %d"), (int) err);
         return false;
     }
-#elif wxUSE_MIMETYPE
+#elif defined(__UNIX__)
+    wxArrayString errors;
+    wxArrayString output;
+
+    // gconf will tell us the application to use as browser under GNOME
+    long res = wxExecute
+               (
+                wxT("gconftool-2 --get /desktop/gnome/applications/browser/exec"),
+                output,
+                errors,
+                wxEXEC_NODISABLE
+               );
+
+    if ( res != -1 && errors.empty() && !output.empty() )
+    {
+        wxString cmd = output[0];
+        cmd << _T(' ') << url;
+        if ( wxExecute(cmd) )
+            return true;
+    }
+    else // try the KDE way if gconf didn't work
+    {
+        // kfmclient directly opens the given URL
+        if ( wxExecute(wxT("kfmclient openURL ") + url) )
+            return true;
+    }
+#endif // platform
+
+    // if we got here, the platform-specific way of opening URLs failed, try
+    // the generic one
+#if wxUSE_MIMETYPE
     // Non-windows way
     bool ok = false;
     wxString cmd;
@@ -626,7 +656,6 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig)
 
     // no file type for HTML extension
     wxLogError(_T("No default application configured for HTML files."));
-
 #endif // !wxUSE_MIMETYPE && !__WXMSW__
 
     wxLogSysError(_T("Failed to open URL \"%s\" in default browser."),

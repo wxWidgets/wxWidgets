@@ -13,6 +13,7 @@ All:
 - Fixed crash in wxDb::Open() in Unicode build (Massimiliano Marretta)
 - Fixed bug where wxDateTime::Now() would sometimes return an incorrect value
   the first time it was called.
+- Improve wxLaunchDefaultBrowser() behaviour under GNOME/KDE
 
 All (GUI):
 
