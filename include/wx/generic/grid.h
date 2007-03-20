@@ -60,7 +60,7 @@ extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxGridNameStr[];
 enum wxGridDirection
 {
     wxGRID_COLUMN,
-    wxGRID_ROW,
+    wxGRID_ROW
 };
 
 // ----------------------------------------------------------------------------
