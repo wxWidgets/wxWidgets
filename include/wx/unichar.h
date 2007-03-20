@@ -31,6 +31,7 @@ public:
     // Create the character from 8bit character value encoded in the current
     // locale's charset.
     wxUniChar(char c) { m_value = From8bit(c); }
+    wxUniChar(unsigned char c) { m_value = From8bit((char)c); }
 
     // Create the character from a wchar_t character value.
     wxUniChar(wchar_t c) { m_value = c; }
@@ -49,6 +50,7 @@ public:
 
     // Casts to char and wchar_t types:
     operator char() const { return To8bit(m_value); }
+    operator unsigned char() const { return (unsigned char)To8bit(m_value); }
     operator wchar_t() const { return m_value; }
 #ifndef wxWINT_T_IS_TYPEDEF
     operator wint_t() const { return m_value; }
@@ -178,6 +180,7 @@ public:
 
     // Casts to wxUniChar type:
     operator char() const { return UniChar(); }
+    operator unsigned char() const { return UniChar(); }
     operator wchar_t() const { return UniChar(); }
 #ifndef wxWINT_T_IS_TYPEDEF
     operator wint_t() const { return UniChar(); }
