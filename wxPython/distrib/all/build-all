@@ -89,7 +89,8 @@ def getTasks(config_env):
           ])
 
     xavierTask = Task([
-        Job("xavier", "distrib/all/build-deb", ["xavier", "/work/chroot/dapper", "dapper"], env=config_env),
+        Job("xavier.d", "distrib/all/build-deb", ["xavier", "/work/chroot/dapper", "dapper"], env=config_env),
+        Job("xavier.f", "distrib/all/build-deb", ["xavier", "/work/chroot/feisty", "feisty"], env=config_env),
         ])
 
     buildTasks = [ #jaguarTask,
