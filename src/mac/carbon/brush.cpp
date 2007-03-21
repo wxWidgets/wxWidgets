@@ -122,19 +122,24 @@ wxBrush::wxBrush( ThemeBrush macThemeBrush )
     RealizeResource();
 }
 
-wxObjectRefData* wxBrush::CreateRefData() const
+void wxBrush::Unshare()
 {
-    return new wxBrushRefData;
-}
-
-wxObjectRefData* wxBrush::CloneRefData(const wxObjectRefData* data) const
-{
-    return new wxBrushRefData(*wx_static_cast(const wxBrushRefData*, data));
+    // Don't change shared data
+    if (!m_refData)
+    {
+        m_refData = new wxBrushRefData();
+    }
+    else
+    {
+        wxBrushRefData* ref = new wxBrushRefData(*(wxBrushRefData*)m_refData);
+        UnRef();
+        m_refData = ref;
+    }
 }
 
 void wxBrush::SetColour(const wxColour& col)
 {
-    AllocExclusive();
+    Unshare();
     M_BRUSHDATA->m_macBrushKind = kwxMacBrushColour;
     M_BRUSHDATA->m_colour = col;
 
@@ -143,7 +148,7 @@ void wxBrush::SetColour(const wxColour& col)
 
 void wxBrush::SetColour(unsigned char r, unsigned char g, unsigned char b)
 {
-    AllocExclusive();
+    Unshare();
 
     M_BRUSHDATA->m_macBrushKind = kwxMacBrushColour;
     M_BRUSHDATA->m_colour.Set(r, g, b);
@@ -153,7 +158,7 @@ void wxBrush::SetColour(unsigned char r, unsigned char g, unsigned char b)
 
 void wxBrush::SetStyle(int Style)
 {
-    AllocExclusive();
+    Unshare();
 
     M_BRUSHDATA->m_macBrushKind = kwxMacBrushColour;
     M_BRUSHDATA->m_style = Style;
@@ -163,7 +168,7 @@ void wxBrush::SetStyle(int Style)
 
 void wxBrush::SetStipple(const wxBitmap& Stipple)
 {
-    AllocExclusive();
+    Unshare();
 
     M_BRUSHDATA->m_macBrushKind = kwxMacBrushColour;
     M_BRUSHDATA->m_stipple = Stipple;
@@ -173,7 +178,7 @@ void wxBrush::SetStipple(const wxBitmap& Stipple)
 
 void wxBrush::MacSetTheme(ThemeBrush macThemeBrush)
 {
-    AllocExclusive();
+    Unshare();
 
     M_BRUSHDATA->m_macBrushKind = kwxMacBrushTheme;
     M_BRUSHDATA->m_macThemeBrush = macThemeBrush;
@@ -187,7 +192,7 @@ void wxBrush::MacSetTheme(ThemeBrush macThemeBrush)
 
 void wxBrush::MacSetThemeBackground(unsigned long macThemeBackground, const WXRECTPTR extent)
 {
-    AllocExclusive();
+    Unshare();
 
     M_BRUSHDATA->m_macBrushKind = kwxMacBrushThemeBackground;
     M_BRUSHDATA->m_macThemeBackground = macThemeBackground;

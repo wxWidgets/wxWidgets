@@ -108,9 +108,8 @@ public:
   // Useful helper: create the brush resource
   bool RealizeResource();
 
-protected:
-    virtual wxObjectRefData* CreateRefData() const;
-    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const;
+private:
+    void Unshare();
 };
 
 #endif

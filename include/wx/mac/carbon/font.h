@@ -98,9 +98,8 @@ public:
     // Returns an ATSUStyle not ATSUStyle*
     void* MacGetATSUStyle() const ; 
     
-protected:
-    virtual wxObjectRefData* CreateRefData() const;
-    virtual wxObjectRefData* CloneRefData(const wxObjectRefData* data) const;
+private:
+    void Unshare();
 
     DECLARE_DYNAMIC_CLASS(wxFont)
 };
