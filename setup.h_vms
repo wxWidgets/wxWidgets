@@ -242,6 +242,7 @@ typedef pid_t GPid;
 #define wxUSE_TEXTFILE      1
 
 #define wxUSE_INTL          1
+#include <locale.h>
 
 #define wxUSE_DATETIME      1
 

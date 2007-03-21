@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 26 February 2007                                                    *
+# Date : 13 March 2007                                                       *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -116,6 +116,7 @@ OBJECTS1=fs_inet.obj,\
 		hashmap.obj,\
 		helpbase.obj,\
 		http.obj,\
+		hyperlnkcmn.obj,\
 		iconbndl.obj,\
 		init.obj,\
 		imagall.obj,\
@@ -279,6 +280,7 @@ SOURCES = \
 		hashmap.cpp,\
 		helpbase.cpp,\
 		http.cpp,\
+		hyperlnkcmn.cpp,\
 		iconbndl.cpp,\
 		init.cpp,\
 		imagall.cpp,\
@@ -485,6 +487,7 @@ hash.obj : hash.cpp
 hashmap.obj : hashmap.cpp
 helpbase.obj : helpbase.cpp
 http.obj : http.cpp
+hyperlnkcmn.obj : hyperlnkcmn.cpp
 iconbndl.obj : iconbndl.cpp
 init.obj : init.cpp
 imagall.obj : imagall.cpp
