@@ -261,11 +261,11 @@ bool wxIniConfig::IsEmpty() const
 
     GetPrivateProfileString(m_strGroup, NULL, "",
                             szBuf, WXSIZEOF(szBuf), m_strLocalFilename);
-    if ( !::IsEmpty(szBuf) )
+    if ( !wxIsEmpty(szBuf) )
         return false;
 
     GetProfileString(m_strGroup, NULL, "", szBuf, WXSIZEOF(szBuf));
-    if ( !::IsEmpty(szBuf) )
+    if ( !wxIsEmpty(szBuf) )
         return false;
 
     return true;
@@ -287,13 +287,13 @@ bool wxIniConfig::DoReadString(const wxString& szKey, wxString *pstr) const
   // NB: the lpDefault param to GetPrivateProfileString can't be NULL
   GetPrivateProfileString(m_strGroup, strKey, "",
                           szBuf, WXSIZEOF(szBuf), m_strLocalFilename);
-  if ( ::IsEmpty(szBuf) ) {
+  if ( wxIsEmpty(szBuf) ) {
     // now look in win.ini
     wxString strKey = GetKeyName(path.Name());
     GetProfileString(m_strGroup, strKey, "", szBuf, WXSIZEOF(szBuf));
   }
 
-  if ( ::IsEmpty(szBuf) )
+  if ( wxIsEmpty(szBuf) )
     return false;
 
   *pstr = szBuf;
