@@ -798,6 +798,7 @@ public:
     const char* AsChar() const;
     const unsigned char* AsUnsignedChar() const
         { return (const unsigned char *) AsChar(); }
+    operator const void*() const { return AsChar(); }
     operator const char*() const { return AsChar(); }
     operator const unsigned char*() const { return AsUnsignedChar(); }
 #endif
