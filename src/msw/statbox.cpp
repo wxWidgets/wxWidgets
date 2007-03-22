@@ -402,37 +402,6 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT& rc)
 
         // Get dimensions of the label
         const wxString label = GetLabel();
-        int width, height;
-        dc.GetTextExtent(wxStripMenuCodes(label, wxStrip_Mnemonics),
-                         &width, &height);
-
-        int x;
-        int y = height;
-
-        // first we need to correctly paint the background of the label
-        // as Windows ignores the brush offset when doing it
-        //
-        // FIXME: value of x is hardcoded as this is what it is on my system,
-        //        no idea if it's true everywhere
-        RECT dimensions = {0, 0, 0, y};
-        if ( !rtl )
-        {
-            x = 9;
-            dimensions.left = x;
-            dimensions.right = x + width;
-        }
-        else
-        {
-            x = rc.right - 7;
-            dimensions.left = x - width;
-            dimensions.right = x;
-        }
-
-        // need to adjust the rectangle to cover all the label background
-        dimensions.left -= 2;
-        dimensions.right += 2;
-        dimensions.bottom += 2;
-        PaintBackground(dc, dimensions);
 
         // choose the correct font
         AutoHFONT font;
@@ -481,6 +450,40 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT& rc)
                 }
             }
         }
+
+        // Get the font extent
+        int width, height;
+        dc.GetTextExtent(wxStripMenuCodes(label, wxStrip_Mnemonics),
+                         &width, &height);
+
+        int x;
+        int y = height;
+
+        // first we need to correctly paint the background of the label
+        // as Windows ignores the brush offset when doing it
+        //
+        // FIXME: value of x is hardcoded as this is what it is on my system,
+        //        no idea if it's true everywhere
+        RECT dimensions = {0, 0, 0, y};
+        if ( !rtl )
+        {
+            x = 9;
+            dimensions.left = x;
+            dimensions.right = x + width;
+        }
+        else
+        {
+            x = rc.right - 7;
+            dimensions.left = x - width;
+            dimensions.right = x;
+        }
+
+        // need to adjust the rectangle to cover all the label background
+        dimensions.left -= 2;
+        dimensions.right += 2;
+        dimensions.bottom += 2;
+
+        PaintBackground(dc, dimensions);
 
         // now draw the text
         if ( !rtl )
