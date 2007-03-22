@@ -761,6 +761,17 @@ and not the eventual size of the tool button.
 Sets the client data associated with the tool.
 
 
+\membersection{wxToolBar::SetToolDisabledBitmap}\label{wxtoolbarsettooldisabledbitmap}
+
+\func{void}{SetToolDisabledBitmap}{\param{int }{id}, \param{const wxBitmap\& }{bitmap}}
+
+Sets the bitmap to be used by the tool with the given ID when the tool
+is in a disabled state.  This can only be used on Button tools, not
+controls.  NOTE: The native toolbar classes on the main platforms all
+synthesize the disabled bitmap from the normal bitmap, so this
+function will have no effect on those platforms.
+
+
 \membersection{wxToolBar::SetToolLongHelp}\label{wxtoolbarsettoollonghelp}
 
 \func{void}{SetToolLongHelp}{\param{int }{toolId}, \param{const wxString\& }{helpString}}
@@ -822,6 +833,15 @@ An application might use short help for identifying the tool purpose in a toolti
 \wxheading{See also}
 
 \helpref{wxToolBar::GetToolShortHelp}{wxtoolbargettoolshorthelp}, \helpref{wxToolBar::SetToolLongHelp}{wxtoolbarsettoollonghelp}
+
+
+\membersection{wxToolBar::SetToolNormalBitmap}\label{wxtoolbarsettoolnormalbitmap}
+
+\func{void}{SetToolNormalBitmap}{\param{int }{id}, \param{const wxBitmap\& }{bitmap}}
+
+Sets the bitmap to be used by the tool with the given ID.  This can
+only be used on Button tools, not controls.
+
 
 
 \membersection{wxToolBar::SetToolSeparation}\label{wxtoolbarsettoolseparation}

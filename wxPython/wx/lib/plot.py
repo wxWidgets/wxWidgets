@@ -567,6 +567,8 @@ class PlotCanvas(wx.Panel):
         self._pointLabelFunc= None
         self.canvas.Bind(wx.EVT_LEAVE_WINDOW, self.OnLeave)
 
+        self._useScientificNotation = False
+
         self.canvas.Bind(wx.EVT_PAINT, self.OnPaint)
         self.canvas.Bind(wx.EVT_SIZE, self.OnSize)
         # OnSize called to make sure the buffer is initialized.
@@ -745,6 +747,12 @@ class PlotCanvas(wx.Panel):
     def GetShowScrollbars(self):
         """Set True to show scrollbars"""
         return self.sb_vert.IsShown()
+
+    def SetUseScientificNotation(self, useScientificNotation):
+        self._useScientificNotation = useScientificNotation
+
+    def GetUseScientificNotation(self):
+        return self._useScientificNotation
 
     def SetEnableDrag(self, value):
         """Set True to enable drag."""
@@ -1131,7 +1139,7 @@ class PlotCanvas(wx.Panel):
             l.append(cn)
         return l
 
-    def GetClosetPoint(self, pntXY, pointScaled= True):
+    def GetClosestPoint(self, pntXY, pointScaled= True):
         """Returns list with
             [curveNumber, legend, index of closest point, pointXY, scaledXY, distance]
             list for only the closest curve.
@@ -1151,6 +1159,8 @@ class PlotCanvas(wx.Panel):
         mdist = min(dists)  #Min dist
         i = dists.index(mdist)  #index for min dist
         return closestPts[i]  #this is the closest point on closest curve
+    
+    GetClosetPoint = GetClosestPoint
 
     def UpdatePointLabel(self, mDataDict):
         """Updates the pointLabel point on screen with data contained in
@@ -1565,7 +1575,7 @@ class PlotCanvas(wx.Panel):
                 error = e
                 factor = f
         grid = factor * 10.**power
-        if power > 4 or power < -4:
+        if self._useScientificNotation and (power > 4 or power < -4):
             format = '%+7.1e'        
         elif power >= 0:
             digits = max(1, int(power))
@@ -2021,7 +2031,7 @@ class TestFrame(wx.Frame):
         if self.client.GetEnablePointLabel() == True:
             #make up dict with info for the pointLabel
             #I've decided to mark the closest point on the closest curve
-            dlst= self.client.GetClosetPoint( self.client._getXY(event), pointScaled= True)
+            dlst= self.client.GetClosestPoint( self.client._getXY(event), pointScaled= True)
             if dlst != []:    #returns [] if none
                 curveNum, legend, pIndex, pointXY, scaledXY, distance = dlst
                 #make up dictionary to pass to my user function (see DrawPointLabel) 

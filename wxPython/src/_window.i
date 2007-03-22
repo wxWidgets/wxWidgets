@@ -973,8 +973,16 @@ do not change.", "");
         wxWindow *, GetGrandParent() const,
         "Returns the parent of the parent of this window, or None if there
 isn't one.", "");
-    
 
+    
+    %extend {
+        DocDeclStr(wxWindow *, GetTopLevelParent(),
+                   "Returns the first frame or dialog in this window's parental hierarchy.", "")
+        {
+            return wxGetTopLevelParent(self);
+        }
+    }
+    
 
     DocDeclStr(
         virtual bool , IsTopLevel() const,
@@ -2072,9 +2080,15 @@ opaque.", "");
         self.thisown = pre.thisown
         pre.thisown = 0
         if hasattr(self, '_setOORInfo'):
-            self._setOORInfo(self)
+            try:
+                self._setOORInfo(self)
+            except TypeError:
+                pass
         if hasattr(self, '_setCallbackInfo'):
-            self._setCallbackInfo(self, pre.__class__)
+            try:
+                self._setCallbackInfo(self, pre.__class__)
+            except TypeError:
+                pass
     }
 
     %pythoncode {
@@ -2108,6 +2122,7 @@ opaque.", "");
     %property(Font, GetFont, SetFont, doc="See `GetFont` and `SetFont`");
     %property(ForegroundColour, GetForegroundColour, SetForegroundColour, doc="See `GetForegroundColour` and `SetForegroundColour`");
     %property(GrandParent, GetGrandParent, doc="See `GetGrandParent`");
+    %property(TopLevelParent, GetTopLevelParent, doc="See `GetTopLevelParent`");
     %property(Handle, GetHandle, doc="See `GetHandle`");
     %property(HelpText, GetHelpText, SetHelpText, doc="See `GetHelpText` and `SetHelpText`");
     %property(Id, GetId, SetId, doc="See `GetId` and `SetId`");

@@ -1,3 +1,66 @@
+0.1.8-5 (under construction)
+-------
+
+Preferences for default "sizeritem" parameters for new panels and
+controls can be configured ("File">"Preferences...").
+
+Implemented comment object for including simple one-line comments and
+comment directives as tree nodes. No validation is performed for a
+valid XML string so comments must not contain "-->". Comment directive
+is a special comment starting with '%' character, followed by a line
+of python code. It is executed using 'exec' when the resource file is
+opened. This is useful to import plugin modules containing custom
+handlers which are specific to the resource file, hovewer this is of
+course a security hole if you use foreign XRC files. A warning is
+displayed if the preference option 'ask' is selected (by default).
+
+Added support for custom controls and plugin modules. Refer to this
+wxPythonWiki for the details: 
+        http://wiki.wxpython.org/index.cgi/XRCed#custom
+
+Tool panel sections can be collapsed/expanded by clicking on the
+label of a tool group.
+
+Some undo/redo and other fixes.
+
+0.1.8-4
+-------
+
+Fixes for wxMSW (notebook highlighting, control sizes, tree Unselect).
+
+0.1.8-3
+-------
+
+Notebook page highlighting fix. Highlight resizes when the window 
+is resized. ParamUnit spin button detects event handler re-entry
+(wxGTK probably has a bug in wxSpinButton with repeated events).
+
+0.1.8-2
+-------
+
+Fix for dealing with empty 'growable' property, using MiniFrame
+for properties panel, the panel is restored together with the
+main window.
+
+0.1.8-1
+-------
+
+Fixed SetItemBold and editing 'growable' properties of 
+wxFlexGridSizer.
+
+0.1.8-0
+-------
+
+New feature added from a patch submitted on sourceforge by botg:
+moving of tree items. 
+
+Bugs fixed:
+- ChecklistBox content editing;
+- Window styles more in sync with the docs;
+- Replacing items;
+- Reference property page created correctly (every property is
+  optional).
+
 0.1.7-5
 -------
 

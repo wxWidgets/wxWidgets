@@ -98,6 +98,9 @@ static const int WIDTH_COL_DEFAULT = 80;
 // the space between the image and the text in the report mode
 static const int IMAGE_MARGIN_IN_REPORT_MODE = 5;
 
+// the space between the image and the text in the report mode in header
+static const int HEADER_IMAGE_MARGIN_IN_REPORT_MODE = 2;
+
 // ============================================================================
 // private classes
 // ============================================================================
@@ -1590,12 +1593,17 @@ void wxListLineData::DrawInReportMode( wxDC *dc,
 }
 
 void wxListLineData::DrawTextFormatted(wxDC *dc,
-                                       const wxString &text,
+                                       const wxString& textOrig,
                                        int col,
                                        int x,
                                        int yMid,
                                        int width)
 {
+    // we don't support displaying multiple lines currently (and neither does
+    // wxMSW FWIW) so just merge all the lines
+    wxString text(textOrig);
+    text.Replace(_T("\n"), _T(" "));
+
     wxCoord w, h;
     dc->GetTextExtent(text, &w, &h);
 
@@ -1841,7 +1849,6 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         wLabel += 2 * EXTRA_WIDTH;
 
         // and the width of the icon, if any
-        static const int MARGIN_BETWEEN_TEXT_AND_ICON = 2;
         int ix = 0, iy = 0;    // init them just to suppress the compiler warnings
         const int image = item.m_image;
         wxImageList *imageList;
@@ -1851,7 +1858,7 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             if ( imageList )
             {
                 imageList->GetSize(image, ix, iy);
-                wLabel += ix + MARGIN_BETWEEN_TEXT_AND_ICON;
+                wLabel += ix + HEADER_IMAGE_MARGIN_IN_REPORT_MODE;
             }
         }
         else
@@ -1880,6 +1887,10 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                 break;
         }
 
+        // draw the text and image clipping them so that they
+        // don't overwrite the column boundary
+        wxDCClipper clipper(dc, x, HEADER_OFFSET_Y, cw, h - 4 );
+
         // if we have an image, draw it on the right of the label
         if ( imageList )
         {
@@ -1887,17 +1898,11 @@ void wxListHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
                        (
                         image,
                         dc,
-                        xAligned + wLabel - ix - MARGIN_BETWEEN_TEXT_AND_ICON,
+                        xAligned + wLabel - ix - HEADER_IMAGE_MARGIN_IN_REPORT_MODE,
                         HEADER_OFFSET_Y + (h - 4 - iy)/2,
                         wxIMAGELIST_DRAW_TRANSPARENT
                        );
-
-            cw -= ix + MARGIN_BETWEEN_TEXT_AND_ICON;
         }
-
-        // draw the text clipping it so that it doesn't overwrite the column
-        // boundary
-        wxDCClipper clipper(dc, x, HEADER_OFFSET_Y, cw, h - 4 );
 
         dc.DrawText( item.GetText(),
                      xAligned + EXTRA_WIDTH, h / 2 - hLabel / 2 ); //HEADER_OFFSET_Y + EXTRA_HEIGHT );
@@ -3699,6 +3704,19 @@ void wxListMainWindow::SetColumnWidth( int col, int width )
     if (width == wxLIST_AUTOSIZE_USEHEADER)
     {
         width = GetTextLength(column->GetText());
+        width += 2*EXTRA_WIDTH;
+
+        // check for column header's image availability
+        const int image = column->GetImage();
+        if ( image != -1 )
+        {
+            if ( m_small_image_list )
+            {
+                int ix = 0, iy = 0;
+                m_small_image_list->GetSize(image, ix, iy);
+                width += ix + HEADER_IMAGE_MARGIN_IN_REPORT_MODE;
+            }
+        }
     }
     else if ( width == wxLIST_AUTOSIZE )
     {

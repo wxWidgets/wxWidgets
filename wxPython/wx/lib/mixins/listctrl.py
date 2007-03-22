@@ -120,6 +120,15 @@ class ColumnSorterMixin:
         if wx.Platform != "__WXMAC__" or wx.SystemOptions.GetOptionInt("mac.listctrl.always_use_generic") == 1:
             self.__updateImages(oldCol)
         evt.Skip()
+        self.OnSortOrderChanged()
+        
+        
+    def OnSortOrderChanged(self):
+        """
+        Callback called after sort order has changed (whenever user
+        clicked column header).
+        """
+        pass
 
 
     def __ColumnSorter(self, key1, key2):

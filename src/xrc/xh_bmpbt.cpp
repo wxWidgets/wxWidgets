@@ -58,6 +58,8 @@ wxObject *wxBitmapButtonXmlHandler::DoCreateResource()
         button->SetBitmapFocus(GetBitmap(wxT("focus")));
     if (GetParamNode(wxT("disabled")))
         button->SetBitmapDisabled(GetBitmap(wxT("disabled")));
+    if (GetParamNode(wxT("hover")))
+        button->SetBitmapHover(GetBitmap(wxT("hover")));
 
     return button;
 }

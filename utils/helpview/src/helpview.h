@@ -50,14 +50,19 @@ public:
     wxList& GetConnections() { return m_connections; }
 #endif
 
+    /// Respond to idle event
+    void OnIdle(wxIdleEvent& event);
+
 private:
     wxHtmlHelpController*   m_helpController;
+    bool                    m_exitIfNoMainWindow;
 
 #if wxUSE_IPC
     wxList                  m_connections;
     hvServer*               m_server;
 #endif
 
+DECLARE_EVENT_TABLE()
 };
 
 #if wxUSE_IPC

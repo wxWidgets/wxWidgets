@@ -68,7 +68,10 @@ void wxStaticBox::GetBordersForSizer(int *borderTop, int *borderOther) const
         }
     }
 
-    *borderTop = extraTop + GetCharHeight();
+    *borderTop = extraTop;
+    if ( !m_label.empty() )
+        *borderTop += GetCharHeight();
+
     *borderOther = other;
 }
 

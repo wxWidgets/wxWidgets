@@ -1,7 +1,7 @@
 %define pref /usr
-%define ver 2.8.1
+%define ver  2.8.3
 %define ver2 2.8
-%define rel 1
+%define rel  3
 
 Summary: The SciTech MGL port of the wxWindows library
 Name: wxMGL

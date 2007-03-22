@@ -59,7 +59,25 @@
 // other standard headers
 #include <string.h>
 
-#if wxUSE_OWNER_DRAWN && defined(MIIM_BITMAP)
+//VC6 needs these defining, though they are in winuser.h
+#ifndef MIIM_BITMAP
+#define MIIM_STRING      0x00000040
+#define MIIM_BITMAP      0x00000080
+#define MIIM_FTYPE       0x00000100
+#define HBMMENU_CALLBACK            ((HBITMAP) -1)
+typedef struct tagMENUINFO
+{
+    DWORD   cbSize;
+    DWORD   fMask;
+    DWORD   dwStyle;
+    UINT    cyMax;
+    HBRUSH  hbrBack;
+    DWORD   dwContextHelpID;
+    DWORD   dwMenuData;
+}   MENUINFO, FAR *LPMENUINFO;
+#endif
+
+#if wxUSE_OWNER_DRAWN 
     #include "wx/dynlib.h"
 #endif
 
@@ -433,16 +451,14 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                     !pItem->GetBackgroundColour().Ok() &&
                         !pItem->GetFont().Ok() )
         {
-            // try to use InsertMenuItem() as it's guaranteed to look correct
+            // try to use InsertMenuItem() as it's guaranteed to look correct      
             // while our owner-drawn code is not
-
-            // first compile-time check
-#if defined(MIIM_BITMAP) && (_WIN32_WINNT >= 0x0500)
+#ifndef __DMC__      
+            // DMC at march 2007 doesn't have HBITMAP hbmpItem tagMENUITEMINFOA /W
+            // MIIM_BITMAP only works under WinME/2000+
             WinStruct<MENUITEMINFO> mii;
-
-            // now run-time one: MIIM_BITMAP only works under WinME/2000+
             if ( wxGetWinVersion() >= wxWinVersion_98 )
-            {
+            { 
                 mii.fMask = MIIM_STRING | MIIM_DATA | MIIM_BITMAP;
                 if ( pItem->IsCheckable() )
                 {
@@ -512,7 +528,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                     pItem->ResetOwnerDrawn();
                 }
             }
-#endif // MIIM_BITMAP
+#endif // __DMC__
         }
 
         if ( !ok )
@@ -777,7 +793,12 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id)
     // ignore commands from the menu title
     if ( id != (WXWORD)idMenuTitle )
     {
-        // get the checked status of the command: notice that menuState is the
+        // update the check item when it's clicked
+        wxMenuItem * const item = FindItem(id);
+        if ( item && item->IsCheckable() )
+            item->Toggle();
+
+        // get the checked status of the menu item: note that menuState is the
         // old state of the menu, so the test for MF_CHECKED must be inverted
         UINT menuState = ::GetMenuState(GetHmenu(), id, MF_BYCOMMAND);
         SendEvent(id, !(menuState & MF_CHECKED));

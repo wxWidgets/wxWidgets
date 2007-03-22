@@ -869,6 +869,7 @@ char wxInputStream::Peek()
 
 wxInputStream& wxInputStream::Read(wxOutputStream& stream_out)
 {
+    size_t lastcount = 0;
     char buf[BUF_TEMP_SIZE];
 
     for ( ;; )
@@ -879,7 +880,11 @@ wxInputStream& wxInputStream::Read(wxOutputStream& stream_out)
 
         if ( stream_out.Write(buf, bytes_read).LastWrite() != bytes_read )
             break;
+
+        lastcount += bytes_read;
     }
+
+    m_lastcount = lastcount;
 
     return *this;
 }

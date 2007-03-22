@@ -17,6 +17,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
+    #include "wx/dcmemory.h"
     #include "wx/log.h"
     #include "wx/region.h"
 #endif
@@ -2013,7 +2014,16 @@ wxGraphicsRenderer* wxGraphicsRenderer::GetDefaultRenderer()
 
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxWindowDC& dc)
 {
-   return new wxMacCoreGraphicsContext(this,(CGContextRef)dc.GetWindow()->MacGetCGContextRef() );
+    wxMemoryDC* mdc = wxDynamicCast(&dc, wxMemoryDC);
+    if ( mdc )
+    {
+        return new wxMacCoreGraphicsContext(this, 
+            (CGContextRef)mdc->GetGraphicsContext()->GetNativeContext());
+    }
+    else
+    {
+        return new wxMacCoreGraphicsContext(this,(CGContextRef)dc.GetWindow()->MacGetCGContextRef() );
+    }
 }
 
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContextFromNativeContext( void * context )

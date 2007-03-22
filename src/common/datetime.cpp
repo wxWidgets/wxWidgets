@@ -660,7 +660,7 @@ void wxDateTime::Tm::ComputeWeekDay()
     // compute the week day from day/month/year: we use the dumbest algorithm
     // possible: just compute our JDN and then use the (simple to derive)
     // formula: weekday = (JDN + 1.5) % 7
-    wday = (wxDateTime::wxDateTime_t)((wxDateTime::WeekDay)(GetTruncatedJDN(mday, mon, year) + 2) % 7);
+    wday = (wxDateTime::wxDateTime_t)((GetTruncatedJDN(mday, mon, year) + 2) % 7);
 }
 
 void wxDateTime::Tm::AddMonths(int monDiff)

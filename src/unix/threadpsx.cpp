@@ -988,7 +988,14 @@ void wxThread::Sleep(unsigned long milliseconds)
 
 int wxThread::GetCPUCount()
 {
-#if defined(__LINUX__) && wxUSE_FFILE
+#if defined(_SC_NPROCESSORS_ONLN)
+    // this works for Solaris and Linux 2.6
+    int rc = sysconf(_SC_NPROCESSORS_ONLN);
+    if ( rc != -1 )
+    {
+        return rc;
+    }
+#elif defined(__LINUX__) && wxUSE_FFILE
     // read from proc (can't use wxTextFile here because it's a special file:
     // it has 0 size but still can be read from)
     wxLogNull nolog;
@@ -1013,13 +1020,6 @@ int wxThread::GetCPUCount()
         {
             wxLogDebug(_T("failed to read /proc/cpuinfo"));
         }
-    }
-#elif defined(_SC_NPROCESSORS_ONLN)
-    // this works for Solaris
-    int rc = sysconf(_SC_NPROCESSORS_ONLN);
-    if ( rc != -1 )
-    {
-        return rc;
     }
 #endif // different ways to get number of CPUs
 

@@ -646,7 +646,7 @@ class Frame(wx.Frame):
 
 
     def LoadSettings(self, config):
-        """Called be derived classes to load settings specific to the Frame"""
+        """Called by derived classes to load settings specific to the Frame"""
         pos  = wx.Point(config.ReadInt('Window/PosX', -1),
                         config.ReadInt('Window/PosY', -1))
                         

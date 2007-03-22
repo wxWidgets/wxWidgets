@@ -87,11 +87,11 @@ class Tools(wx.Panel):
 
              (ID_NEW.UNKNOWN, images.getToolUnknownBitmap())]
             ]
+        self.boxes = {}
         for grp in groups:
             self.AddGroup(grp[0])
             for b in grp[1:]:
                 self.AddButton(b[0], b[1], g.pullDownMenu.createMap[b[0]])
-        self.SetAutoLayout(True)
         self.SetSizerAndFit(self.sizer)
         # Allow to be resized in vertical direction only
         self.SetSizeHints(self.GetSize()[0], -1)
@@ -114,13 +114,19 @@ class Tools(wx.Panel):
 
     def AddGroup(self, name):
         # Each group is inside box
-        box = wx.StaticBox(self, -1, name, style=wx.WANTS_CHARS)
+        id = wx.NewId()
+        box = wx.StaticBox(self, id, '[+] '+name, style=wx.WANTS_CHARS)
+        box.show = True
+        box.name = name
+        box.gnum = len(self.groups)
         box.SetFont(g.smallerFont())
+        box.Bind(wx.EVT_LEFT_DOWN, self.OnClickBox)
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         boxSizer.Add((0, 4))
+        self.boxes[id] = box
         self.curSizer = wx.GridSizer(0, 3)
         boxSizer.Add(self.curSizer)
-        self.sizer.Add(boxSizer, 0, wx.TOP | wx.LEFT | wx.RIGHT, 4)
+        self.sizer.Add(boxSizer, 0, wx.TOP | wx.LEFT | wx.RIGHT | wx.EXPAND, 4)
         self.groups.append((box,{}))
 
     # Enable/disable group
@@ -128,6 +134,12 @@ class Tools(wx.Panel):
         grp = self.groups[gnum]
         grp[0].Enable(enable)
         for b in grp[1].values(): b.Enable(enable)
+
+    # Show/hide group
+    def ShowGroup(self, gnum, show = True):
+        grp = self.groups[gnum]
+        grp[0].show = show
+        for b in grp[1].values(): b.Show(show)
 
     # Enable/disable group item
     def EnableGroupItem(self, gnum, id, enable = True):
@@ -139,6 +151,14 @@ class Tools(wx.Panel):
         grp = self.groups[gnum]
         for id in ids:
             grp[1][id].Enable(enable)
+
+    def OnClickBox(self, evt):
+        box = self.boxes[evt.GetId()]
+        # Collapse/restore static box, change label
+        self.ShowGroup(box.gnum, not box.show)
+        if box.show: box.SetLabel('[+] ' + box.name)
+        else: box.SetLabel('[-] ' + box.name)
+        self.Layout()
 
     # Process key events
     def OnKeyDown(self, evt):

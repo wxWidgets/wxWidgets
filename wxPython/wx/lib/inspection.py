@@ -1,98 +1,114 @@
 #----------------------------------------------------------------------------
-# Name:        wx.lib.mixins.inspect
-# Purpose:     A mix-in class that can add PyCrust-based inspection of the
-#              app's widgets and sizers.
+# Name:        wx.lib.inspection
+# Purpose:     A widget inspection tool that allows easy introspection of
+#              all the live widgets and sizers in an application.
 #
 # Author:      Robin Dunn
 #
-# Created:     21-Nov-2006
+# Created:     26-Jan-2007
 # RCS-ID:      $Id$
-# Copyright:   (c) 2006 by Total Control Software
+# Copyright:   (c) 2007 by Total Control Software
 # Licence:     wxWindows license
 #----------------------------------------------------------------------------
 
 # NOTE: This class was originally based on ideas sent to the
-# wxPython-users mail list by Dan Eloff.
+# wxPython-users mail list by Dan Eloff.  See also
+# wx.lib.mixins.inspect for a class that can be mixed-in with wx.App
+# to provide Hot-Key access to the inspection tool.
 
 import wx
 import wx.py
 import wx.stc
+import wx.aui
 import sys
 
+#----------------------------------------------------------------------------
 
-class InspectionMixin(object):
+class InspectionTool:
     """
-    This class is intended to be used as a mix-in with the wx.App
-    class.  When used it will add the ability to popup a
-    InspectionFrame window where the widget under the mouse cursor
-    will be selected in the tree and loaded into the shell's namespace
-    as 'obj'.  The default key sequence to activate the inspector is
-    Ctrl-Alt-I (or Cmd-Alt-I on Mac) but this can be changed via
-    parameters to the `Init` method, or the application can call
-    `ShowInspectionTool` from other event handlers if desired.
+    The InspectionTool is a singleton that manages creating and
+    showing an InspectionFrame.
+    """
 
-    To use this class simply derive a class from wx.App and
-    InspectionMixin and then call the `Init` method from the app's
-    OnInit.
-    """
-    def Init(self, pos=(-1, -1), size=(850,700), config=None, locals=None,
-             alt=True, cmd=True, shift=False, keyCode=ord('I')):
+    # Note: This is the Borg design pattern which ensures that all
+    # instances of this class are actually using the same set of
+    # instance data.  See
+    # http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/66531
+    __shared_state = {}
+    def __init__(self):
+        self.__dict__ = self.__shared_state
+        if not hasattr(self, 'initialized'):
+            self.initialized = False
+
+    def Init(self, pos=wx.DefaultPosition, size=wx.Size(850,700),
+             config=None, locals=None, app=None):
         """
-        Make the event binding that will activate the InspectionFrame window.
+        Init is used to set some parameters that will be used later
+        when the inspection tool is shown.  Suitable defaults will be
+        used for all of these parameters if they are not provided.
+
+        :param pos:   The default position to show the frame at
+        :param size:  The default size of the frame
+        :param config: A wx.Config object to be used to store layout
+            and other info to when the inspection frame is closed.
+            This info will be restored the next time the inspection
+            frame is used.
+        :param locals: A dictionary of names to be added to the PyCrust
+            namespace.
+        :param app:  A reference to the wx.App object.
         """
-        self.Bind(wx.EVT_KEY_DOWN, self._OnKeyPress)
-        self._tool = None
+        self._frame = None
         self._pos = pos
         self._size = size
         self._config = config
         self._locals = locals
-        self._alt = alt
-        self._cmd = cmd
-        self._shift = shift
-        self._keyCode = keyCode
-
-
-    def _OnKeyPress(self, evt):
+        self._app = app
+        if not self._app:
+            self._app = wx.GetApp()
+        self.initialized = True
+            
+        
+    def Show(self, selectObj=None, refreshTree=False):
         """
-        Event handler, check for our hot-key.  Normally it is
-        Ctrl-Alt-I but that can be changed by what is passed to the
-        Init method.
+        Creates the inspection frame if it hasn't been already, and
+        raises it if neccessary.  Pass a widget or sizer in selectObj
+        to have that object be preselected in widget tree.  If
+        refreshTree is True then the widget tree will be rebuilt,
+        otherwise if the tree has already been built it will be left
+        alone.
         """
-        if evt.AltDown() == self._alt  and \
-               evt.CmdDown() == self._cmd and \
-               evt.ShiftDown() == self._shift and \
-               evt.GetKeyCode() == self._keyCode:
-            self.ShowInspectionTool()
-        else:
-            evt.Skip()
+        if not self.initialized:
+            self.Init()
 
+        parent = self._app.GetTopWindow()
+        if not selectObj:
+            selectObj = parent
+        if not self._frame:
+            self._frame = InspectionFrame( parent=parent,
+                                           pos=self._pos,
+                                           size=self._size,
+                                           config=self._config,
+                                           locals=self._locals,
+                                           app=self._app)
+        if selectObj:
+            self._frame.SetObj(selectObj)
+        if refreshTree:
+            self._frame.RefreshTree()
+        self._frame.Show()
+        if self._frame.IsIconized():
+            self._frame.Iconize(False)
+        self._frame.Raise()
 
-    def ShowInspectionTool(self):
-        """
-        Show the Inspection tool, creating it if neccesary.
-        """
-        if not self._tool:
-            self._tool = InspectionFrame(parent=self.GetTopWindow(),
-                                         pos=self._pos,
-                                         size=self._size,
-                                         config=self._config,
-                                         locals=self._locals,
-                                         app=self)
-        # get the current widget under the mouse
-        wnd = wx.FindWindowAtPointer()
-        self._tool.SetObj(wnd)
+        
+#----------------------------------------------------------------------------
 
-        self._tool.Show()
-        self._tool.Raise()
-
-
-#---------------------------------------------------------------------------
 
 class InspectionFrame(wx.Frame):
     """
     This class is the frame that holds the wxPython inspection tools.
-    The toolbar and splitter windows are also managed here.  The
-    contents of the splitter windows are handled by other classes.
+    The toolbar and AUI splitters/floating panes are also managed
+    here.  The contents of the tool windows are handled by other
+    classes.
     """
     def __init__(self, wnd=None, locals=None, config=None,
                  app=None, title="wxPython Widget Inspection Tool",
@@ -103,24 +119,33 @@ class InspectionFrame(wx.Frame):
         self.includeSizers = False
         self.started = False
 
+        self.SetIcon(getIconIcon())
         self.MacSetMetalAppearance(True)
         self.MakeToolBar()
+        panel = wx.Panel(self, size=self.GetClientSize())
+        
+        # tell FrameManager to manage this frame        
+        self.mgr = wx.aui.AuiManager(panel,
+                                     wx.aui.AUI_MGR_DEFAULT
+                                     | wx.aui.AUI_MGR_TRANSPARENT_DRAG
+                                     | wx.aui.AUI_MGR_ALLOW_ACTIVE_PANE)
 
-        self.outerSplitter = wx.SplitterWindow(self,style=wx.SP_LIVE_UPDATE)
-        self.innerSplitter = wx.SplitterWindow(self.outerSplitter,style=wx.SP_LIVE_UPDATE)
-        self.tree = InspectionTree(self.outerSplitter)
-        self.info = InspectionInfoPanel(self.innerSplitter)
+        # make the child tools        
+        self.tree = InspectionTree(panel)
+        self.info = InspectionInfoPanel(panel,
+                                        style=wx.NO_BORDER,
+                                        )
 
         if not locals:
             locals = {}
         myIntroText = (
-            "Python %s on %s\nNOTE: The 'obj' variable refers to the selected object."
+            "Python %s on %s\nNOTE: The 'obj' variable refers to the object selected in the tree."
             % (sys.version.split()[0], sys.platform))
-        self.crust = wx.py.crust.Crust(self.innerSplitter, locals=locals,
+        self.crust = wx.py.crust.Crust(panel, locals=locals,
                                        intro=myIntroText,
                                        showInterpIntro=False,
+                                       style=wx.NO_BORDER,
                                        )
-        self.crust.shell.SetMarginWidth(1, 0)
         self.locals = self.crust.shell.interp.locals
         self.crust.shell.interp.introText = ''
         self.locals['obj'] = self.obj = wnd
@@ -128,11 +153,34 @@ class InspectionFrame(wx.Frame):
         self.locals['wx'] = wx
         wx.CallAfter(self._postStartup)
 
-        self.innerSplitter.SplitHorizontally(self.info, self.crust, -225)
-        self.outerSplitter.SplitVertically(self.tree, self.innerSplitter, 280)
-        self.outerSplitter.SetMinimumPaneSize(20)
-        self.innerSplitter.SetMinimumPaneSize(20)
+        # put the chlid tools in AUI panes
+        self.mgr.AddPane(self.info,
+                         wx.aui.AuiPaneInfo().Name("info").Caption("Object Info").
+                         CenterPane().CaptionVisible(True).
+                         CloseButton(False).MaximizeButton(True)
+                         )
+        self.mgr.AddPane(self.tree,
+                         wx.aui.AuiPaneInfo().Name("tree").Caption("Widget Tree").
+                         CaptionVisible(True).Left().Dockable(True).Floatable(True).
+                         BestSize((280,200)).CloseButton(False).MaximizeButton(True)
+                         )
+        self.mgr.AddPane(self.crust,
+                         wx.aui.AuiPaneInfo().Name("crust").Caption("PyCrust").
+                         CaptionVisible(True).Bottom().Dockable(True).Floatable(True).
+                         BestSize((400,200)).CloseButton(False).MaximizeButton(True)
+                         )
 
+        self.mgr.Update()
+
+        if config is None:
+            config = wx.Config('wxpyinspector')
+        self.config = config
+        self.Bind(wx.EVT_CLOSE, self.OnClose)
+        self.LoadSettings(self.config)
+        self.crust.shell.lineNumbers = False
+        self.crust.shell.setDisplayLineNumbers(False)
+        self.crust.shell.SetMarginWidth(1, 0)
+        
 
     def MakeToolBar(self):
         tbar = self.CreateToolBar(wx.TB_HORIZONTAL | wx.TB_FLAT | wx.TB_TEXT | wx.NO_BORDER )
@@ -170,8 +218,15 @@ class InspectionFrame(wx.Frame):
         self.UpdateInfo()
         self.started = True
 
+
+    def OnClose(self, evt):
+        self.SaveSettings(self.config)
+        evt.Skip()
+        
+
     def UpdateInfo(self):
         self.info.Update(self.obj)
+
 
     def SetObj(self, obj):
         if self.obj is obj:
@@ -190,13 +245,15 @@ class InspectionFrame(wx.Frame):
 
     def OnRefreshTree(self, evt):
         self.RefreshTree()
-
+        self.UpdateInfo()
+        
 
     def OnFindWidget(self, evt):
         self.Bind(wx.EVT_LEFT_DOWN, self.OnLeftDown)
         self.Bind(wx.EVT_MOUSE_CAPTURE_LOST, self.OnCaptureLost)
         self.CaptureMouse()
         self.finding = wx.BusyInfo("Click on any widget in the app...")
+
 
     def OnCaptureLost(self, evt):
         self.Unbind(wx.EVT_LEFT_DOWN)
@@ -231,7 +288,39 @@ class InspectionFrame(wx.Frame):
             evt.Check(self.crust.ToolsShown())
 
 
+    def LoadSettings(self, config):
+        self.crust.LoadSettings(config)
 
+        pos  = wx.Point(config.ReadInt('Window/PosX', -1),
+                        config.ReadInt('Window/PosY', -1))
+                        
+        size = wx.Size(config.ReadInt('Window/Width', -1),
+                       config.ReadInt('Window/Height', -1))
+        self.SetSize(size)
+        self.Move(pos)
+
+        perspective = config.Read('perspective', '')
+        if perspective:
+            self.mgr.LoadPerspective(perspective)
+        self.includeSizers = config.ReadBool('includeSizers', False)
+            
+
+    def SaveSettings(self, config):
+        self.crust.SaveSettings(config)
+
+        if not self.IsIconized() and not self.IsMaximized():
+            w, h = self.GetSize()
+            config.WriteInt('Window/Width', w)
+            config.WriteInt('Window/Height', h)
+            
+            px, py = self.GetPosition()
+            config.WriteInt('Window/PosX', px)
+            config.WriteInt('Window/PosY', py)
+
+        perspective = self.mgr.SavePerspective()
+        config.Write('perspective', perspective)
+        config.WriteBool('includeSizers', self.includeSizers)
+        
 #---------------------------------------------------------------------------
 
 # should inspection frame (and children) be includeed in the tree?
@@ -249,7 +338,10 @@ class InspectionTree(wx.TreeCtrl):
         self.roots = []
         self.built = False
         self.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnSelectionChanged)
-
+        self.toolFrame = wx.GetTopLevelParent(self)
+        if 'wxMac' in wx.PlatformInfo:
+            self.SetWindowVariant(wx.WINDOW_VARIANT_SMALL)
+        
 
     def BuildTree(self, startWidget, includeSizers=False):
         if self.GetCount():
@@ -360,8 +452,7 @@ class InspectionTree(wx.TreeCtrl):
 
     def OnSelectionChanged(self, evt):
         obj = self.GetItemPyData(evt.GetItem())
-        toolFrm = wx.GetTopLevelParent(self)
-        toolFrm.SetObj(obj)
+        self.toolFrame.SetObj(obj)
 
 
 #---------------------------------------------------------------------------
@@ -543,6 +634,7 @@ flexmodeFlags = {
 
 #---------------------------------------------------------------------------
 from wx import ImageFromStream, BitmapFromImage
+from wx import EmptyIcon
 import cStringIO
 
 
@@ -778,3 +870,32 @@ def getShowFillingImage():
     return ImageFromStream(stream)
 
 #---------------------------------------------------------------------------
+
+def getIconData():
+    return \
+'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00 \x00\x00\x00 \x08\x06\x00\
+\x00\x00szz\xf4\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\x00\x00\
+\xb8IDATX\x85\xed\x97\xcd\x12\x83 \x0c\x84w\x91\xf7\xd6>x\x9b\x1e,\x07Gl\x93\
+4N8\xb07gH\xf8\xc8\x1fB\x96\x05\x99*\xa9\xbbO\x80\x11\x00\xea\xaf\x05\xf2z\
+\x8a\xc71\xcb\xc2\x10\x80]\x9bq{\xfd\xfa\xf4\x14\xa8\x01DV\x88\xacy\x00w)\
+\x1d@Y\x84\x1am\x87/m\xf7\x04\x02\x00blX\x12\xa8\xde>\x8fR\x05\x80o\x04\xaai\
+rP\xf3\xa6\xb3\x1c\xa8\x08[\x02\xd9\'\'\x1f\xb7\x00\xa4G\x80hg\xbf\x88\x80\
+\xa5\x06>\x8e\xd4\x96\xa4\xe66\xec\x19\xe2|\xdby\xbb)=\x05\xe9\x00\xa1\x93p\
+\x97mr\x0c\x14\x81\x8b\xfe\xb7\xc8\xe3",\x05\xda\x7f\xc0.\xc0\xffg\xf7\x8b\
+\xf3i6\x01\xb2\x01\xde\x86\xde%]y\x9b\xef$\x00\x00\x00\x00IEND\xaeB`\x82'
+
+def getIconBitmap():
+    return BitmapFromImage(getIconImage())
+
+def getIconImage():
+    stream = cStringIO.StringIO(getIconData())
+    return ImageFromStream(stream)
+
+def getIconIcon():
+    icon = EmptyIcon()
+    icon.CopyFromBitmap(getIconBitmap())
+    return icon
+
+#---------------------------------------------------------------------------
+
+
