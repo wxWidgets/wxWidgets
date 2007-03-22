@@ -89,10 +89,6 @@
     #ifdef HAVE_WIDEC_H
         #include <widec.h>
     #endif
-
-    #if !defined(__GNUC__) || defined(__DARWIN__)
-        #define wxWINT_T_IS_TYPEDEF
-    #endif
 #endif /* wxUSE_WCHAR_T */
 
 /* -------------------------------------------------------------------------- */

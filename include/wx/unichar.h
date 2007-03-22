@@ -36,11 +36,6 @@ public:
     // Create the character from a wchar_t character value.
     wxUniChar(wchar_t c) { m_value = c; }
 
-#ifndef wxWINT_T_IS_TYPEDEF
-    // Create the character from a wint_t character value.
-    wxUniChar(wint_t c) { m_value = c; }
-#endif
-
     wxUniChar(int c) { m_value = c; }
 
     wxUniChar(const wxUniCharRef& c);
@@ -52,9 +47,6 @@ public:
     operator char() const { return To8bit(m_value); }
     operator unsigned char() const { return (unsigned char)To8bit(m_value); }
     operator wchar_t() const { return m_value; }
-#ifndef wxWINT_T_IS_TYPEDEF
-    operator wint_t() const { return m_value; }
-#endif
     operator int() const { return m_value; }
     operator unsigned int() const { return m_value; }
 
@@ -76,38 +68,23 @@ public:
     wxUniChar& operator=(const wxUniChar& c) { m_value = c.m_value; return *this; }
     wxUniChar& operator=(char c) { m_value = From8bit(c); return *this; }
     wxUniChar& operator=(wchar_t c) { m_value = c; return *this; }
-#ifndef wxWINT_T_IS_TYPEDEF
-    wxUniChar& operator=(wint_t c) { m_value = c; return *this; }
-#endif
 
     // Comparison operators:
 
     // define the given comparison operator for all the types
-#define wxDEFINE_UNICHAR_OPERATOR_NO_WINT(op)                                 \
+#define wxDEFINE_UNICHAR_OPERATOR(op)                                         \
     bool operator op(const wxUniChar& c) const { return m_value op c.m_value; }\
     bool operator op(char c) const { return m_value op From8bit(c); }         \
     bool operator op(wchar_t c) const { return m_value op (value_type)c; }
 
-#ifdef wxWINT_T_IS_TYPEDEF
-    #define wxDEFINE_UNICHAR_OPERATOR wxDEFINE_UNICHAR_OPERATOR_NO_WINT
-#else // wint_t is a separate type, need to overload for it too
-    #define wxDEFINE_UNICHAR_OPERATOR(op)                                     \
-        wxDEFINE_UNICHAR_OPERATOR_NO_WINT(op)                                 \
-        bool operator op(wint_t c) const { return m_value op (value_type)c; }
-#endif
-
     wxFOR_ALL_COMPARISONS(wxDEFINE_UNICHAR_OPERATOR)
 
-#undef wxDEFINE_UNICHAR_OPERATOR_NO_WINT
 #undef wxDEFINE_UNICHAR_OPERATOR
 
     // this is needed for expressions like 'Z'-c
     int operator-(const wxUniChar& c) const { return m_value - c.m_value; }
     int operator-(char c) const { return m_value - From8bit(c); }
     int operator-(wchar_t c) const { return m_value - (value_type)c; }
-#ifndef wxWINT_T_IS_TYPEDEF
-    int operator-(wint_t c) const { return m_value - (value_type)c; }
-#endif
 
 private:
     static value_type From8bit(char c);
@@ -162,9 +139,6 @@ public:
     operator char() const { return UniChar(); }
     operator unsigned char() const { return UniChar(); }
     operator wchar_t() const { return UniChar(); }
-#ifndef wxWINT_T_IS_TYPEDEF
-    operator wint_t() const { return UniChar(); }
-#endif
     operator int() const { return UniChar(); }
     operator unsigned int() const { return UniChar(); }
 
@@ -177,23 +151,14 @@ public:
 #endif
 
     // Comparison operators:
-#define wxDEFINE_UNICHARREF_OPERATOR_NO_WINT(op)                              \
+#define wxDEFINE_UNICHARREF_OPERATOR(op)                                      \
     bool operator op(const wxUniCharRef& c) const { return UniChar() op c.UniChar(); }\
     bool operator op(const wxUniChar& c) const { return UniChar() op c; }     \
     bool operator op(char c) const { return UniChar() op c; }                 \
     bool operator op(wchar_t c) const { return UniChar() op c; }
 
-#ifdef wxWINT_T_IS_TYPEDEF
-    #define wxDEFINE_UNICHARREF_OPERATOR wxDEFINE_UNICHARREF_OPERATOR_NO_WINT
-#else // wint_t is a separate type, need to overload for it too
-    #define wxDEFINE_UNICHARREF_OPERATOR(op)                                  \
-        wxDEFINE_UNICHARREF_OPERATOR_NO_WINT(op)                              \
-        bool operator op(wint_t c) const { return UniChar() op c; }
-#endif
-
     wxFOR_ALL_COMPARISONS(wxDEFINE_UNICHARREF_OPERATOR)
 
-#undef wxDEFINE_UNICHARREF_OPERATOR_NO_WINT
 #undef wxDEFINE_UNICHARREF_OPERATOR
 
     // for expressions like c-'A':
@@ -201,9 +166,6 @@ public:
     int operator-(const wxUniChar& c) const { return UniChar() - c; }
     int operator-(char c) const { return UniChar() - c; }
     int operator-(wchar_t c) const { return UniChar() - c; }
-#ifndef wxWINT_T_IS_TYPEDEF
-    int operator-(wint_t c) const { return UniChar() - c; }
-#endif
 
 private:
     wxUniChar UniChar() const { return *m_pos; }
@@ -230,11 +192,6 @@ wxDEFINE_COMPARISONS(char, const wxUniCharRef&, wxCMP_REVERSE)
 wxDEFINE_COMPARISONS(wchar_t, const wxUniChar&, wxCMP_REVERSE)
 wxDEFINE_COMPARISONS(wchar_t, const wxUniCharRef&, wxCMP_REVERSE)
 
-#ifndef wxWINT_T_IS_TYPEDEF
-wxDEFINE_COMPARISONS(wint_t, const wxUniChar&, wxCMP_REVERSE)
-wxDEFINE_COMPARISONS(wint_t, const wxUniCharRef&, wxCMP_REVERSE)
-#endif
-
 wxDEFINE_COMPARISONS(const wxUniChar&, const wxUniCharRef&, wxCMP_REVERSE)
 
 #undef wxCMP_REVERSE
@@ -242,9 +199,6 @@ wxDEFINE_COMPARISONS(const wxUniChar&, const wxUniCharRef&, wxCMP_REVERSE)
 // for expressions like c-'A':
 inline int operator-(char c1, const wxUniCharRef& c2) { return -(c2 - c1); }
 inline int operator-(wchar_t c1, const wxUniCharRef& c2) { return -(c2 - c1); }
-#ifndef wxWINT_T_IS_TYPEDEF
-inline int operator-(wint_t c1, const wxUniCharRef& c2) { return -(c2 - c1); }
-#endif
 inline int operator-(const wxUniChar& c1, const wxUniCharRef& c2) { return -(c2 - c1); }
 
 #endif /* _WX_UNICHAR_H_ */
