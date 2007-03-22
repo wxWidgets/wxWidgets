@@ -722,6 +722,13 @@ bool wxChoice::MSWCommand(WXUINT param, WXWORD WXUNUSED(id))
             // need to reset the selection back to it if it's eventually
             // cancelled by user
             m_lastAcceptedSelection = GetCurrentSelection();
+            if ( m_lastAcceptedSelection == -1 )
+            {
+                // no current selection so no need to restore it later (this
+                // happens when opening a combobox containing text not from its
+                // list of items and we shouldn't erase this text)
+                m_lastAcceptedSelection = wxID_NONE;
+            }
             break;
 
         case CBN_CLOSEUP:
