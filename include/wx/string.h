@@ -761,6 +761,9 @@ public:
   wxStringBase& operator+=(wchar_t ch) { return append(1, ch); }
 };
 
+// don't pollute the library user's name space
+#undef wxASSERT_VALID_INDEX
+
 #endif // !wxUSE_STL_BASED_WXSTRING
 
 // ----------------------------------------------------------------------------
@@ -1859,42 +1862,26 @@ private:
 // in compilation ambiguities when comparing std::string and wxString
 #if !wxUSE_STL_BASED_WXSTRING
 
+#define wxCMP_WXCHAR_STRING(p, s, op) s.Cmp(p) op 0
+
+wxDEFINE_ALL_COMPARISONS(const wxChar *, const wxString&, wxCMP_WXCHAR_STRING)
+
+#undef wxCMP_WXCHAR_STRING
+
+// note that there is an optimization in operator==() and !=(): we (quickly)
+// checks the strings length first, before comparing their data
 inline bool operator==(const wxString& s1, const wxString& s2)
     { return (s1.Len() == s2.Len()) && (s1.Cmp(s2) == 0); }
-inline bool operator==(const wxString& s1, const wxChar  * s2)
-    { return s1.Cmp(s2) == 0; }
-inline bool operator==(const wxChar  * s1, const wxString& s2)
-    { return s2.Cmp(s1) == 0; }
 inline bool operator!=(const wxString& s1, const wxString& s2)
     { return (s1.Len() != s2.Len()) || (s1.Cmp(s2) != 0); }
-inline bool operator!=(const wxString& s1, const wxChar  * s2)
-    { return s1.Cmp(s2) != 0; }
-inline bool operator!=(const wxChar  * s1, const wxString& s2)
-    { return s2.Cmp(s1) != 0; }
 inline bool operator< (const wxString& s1, const wxString& s2)
     { return s1.Cmp(s2) < 0; }
-inline bool operator< (const wxString& s1, const wxChar  * s2)
-    { return s1.Cmp(s2) <  0; }
-inline bool operator< (const wxChar  * s1, const wxString& s2)
-    { return s2.Cmp(s1) >  0; }
 inline bool operator> (const wxString& s1, const wxString& s2)
     { return s1.Cmp(s2) >  0; }
-inline bool operator> (const wxString& s1, const wxChar  * s2)
-    { return s1.Cmp(s2) >  0; }
-inline bool operator> (const wxChar  * s1, const wxString& s2)
-    { return s2.Cmp(s1) <  0; }
 inline bool operator<=(const wxString& s1, const wxString& s2)
     { return s1.Cmp(s2) <= 0; }
-inline bool operator<=(const wxString& s1, const wxChar  * s2)
-    { return s1.Cmp(s2) <= 0; }
-inline bool operator<=(const wxChar  * s1, const wxString& s2)
-    { return s2.Cmp(s1) >= 0; }
 inline bool operator>=(const wxString& s1, const wxString& s2)
     { return s1.Cmp(s2) >= 0; }
-inline bool operator>=(const wxString& s1, const wxChar  * s2)
-    { return s1.Cmp(s2) >= 0; }
-inline bool operator>=(const wxChar  * s1, const wxString& s2)
-    { return s2.Cmp(s1) <= 0; }
 
 #if wxUSE_UNICODE
 inline bool operator==(const wxString& s1, const wxWCharBuffer& s2)
@@ -1953,38 +1940,36 @@ inline bool operator!=(const wxString& s, wchar_t c) { return !s.IsSameAs(c); }
 
 // comparison with C string in Unicode build
 #if wxUSE_UNICODE
-inline bool operator==(const wxString& s1, const char* s2)
-    { return s1 == wxString(s2); }
-inline bool operator==(const char* s1, const wxString& s2)
-    { return wxString(s1) == s2; }
-inline bool operator!=(const wxString& s1, const char* s2)
-    { return s1 != wxString(s2); }
-inline bool operator!=(const char* s1, const wxString& s2)
-    { return wxString(s1) != s2; }
-inline bool operator< (const wxString& s1, const char* s2)
-    { return s1 < wxString(s2); }
-inline bool operator< (const char* s1, const wxString& s2)
-    { return wxString(s1) < s2; }
-inline bool operator> (const wxString& s1, const char* s2)
-    { return s1 > wxString(s2); }
-inline bool operator> (const char* s1, const wxString& s2)
-    { return wxString(s1) > s2; }
-inline bool operator<=(const wxString& s1, const char* s2)
-    { return s1 <= wxString(s2); }
-inline bool operator<=(const char* s1, const wxString& s2)
-    { return wxString(s1) <= s2; }
-inline bool operator>=(const wxString& s1, const char* s2)
-    { return s1 >= wxString(s2); }
-inline bool operator>=(const char* s1, const wxString& s2)
-    { return wxString(s1) >= s2; }
+
+#define wxCMP_CHAR_STRING(p, s, op) wxString(p) op s
+
+wxDEFINE_ALL_COMPARISONS(const char *, const wxString&, wxCMP_CHAR_STRING)
+
+#undef wxCMP_CHAR_STRING
+
 #endif // wxUSE_UNICODE
+
+// we also need to provide the operators for comparison with wxCStrData to
+// resolve ambiguity between operator(const wxChar *,const wxString &) and
+// operator(const wxChar *, const wxChar *) for "p == s.c_str()"
+//
+// notice that these are (shallow) pointer comparisons, not (deep) string ones
+#define wxCMP_CHAR_CSTRDATA(p, s, op) p op s.AsChar()
+#define wxCMP_WCHAR_CSTRDATA(p, s, op) p op s.AsWChar()
+
+// FIXME: these ifdefs must be removed when wxCStrData has both conversions
+#if wxUSE_UNICODE
+    wxDEFINE_ALL_COMPARISONS(const wchar_t *, const wxCStrData&, wxCMP_WCHAR_CSTRDATA)
+#else
+    wxDEFINE_ALL_COMPARISONS(const char *, const wxCStrData&, wxCMP_CHAR_CSTRDATA)
+#endif
+
+#undef wxCMP_CHAR_CSTRDATA
+#undef wxCMP_WCHAR_CSTRDATA
 
 // ---------------------------------------------------------------------------
 // Implementation only from here until the end of file
 // ---------------------------------------------------------------------------
-
-// don't pollute the library user's name space
-#undef wxASSERT_VALID_INDEX
 
 #if wxUSE_STD_IOSTREAM
 

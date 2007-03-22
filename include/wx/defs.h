@@ -548,6 +548,52 @@ typedef int wxWindowID;
 #define wxNOT_FOUND       (-1)
 
 /*  ---------------------------------------------------------------------------- */
+/*  macros dealing with comparison operators */
+/*  ---------------------------------------------------------------------------- */
+
+/*
+    Expands into m(op, args...) for each op in the set { ==, !=, <, <=, >, >= }.
+ */
+#define wxFOR_ALL_COMPARISONS(m) \
+    m(==) m(!=) m(>=) m(<=) m(>) m(<)
+
+#define wxFOR_ALL_COMPARISONS_1(m, x) \
+    m(==,x) m(!=,x) m(>=,x) m(<=,x) m(>,x) m(<,x)
+
+#define wxFOR_ALL_COMPARISONS_2(m, x, y) \
+    m(==,x,y) m(!=,x,y) m(>=,x,y) m(<=,x,y) m(>,x,y) m(<,x,y)
+
+#define wxFOR_ALL_COMPARISONS_3(m, x, y, z) \
+    m(==,x,y,z) m(!=,x,y,z) m(>=,x,y,z) m(<=,x,y,z) m(>,x,y,z) m(<,x,y,z)
+
+
+#define wxDEFINE_COMPARISON(op, T1, T2, cmp) \
+    inline bool operator op(T1 x, T2 y) { return cmp(x, y, op); }
+
+#define wxDEFINE_COMPARISON_REV(op, T1, T2, cmp) \
+    inline bool operator op(T2 y, T1 x) { return cmp(x, y, op); }
+
+/*
+    Define all 6 comparison operators (==, !=, <, <=, >, >=) for the given
+    types in the specified order. The implementation is provided by the cmp
+    macro. Normally wxDEFINE_ALL_COMPARISONS should be used as comparison
+    operators are usually symmetric.
+ */
+#define wxDEFINE_COMPARISONS(T1, T2, cmp) \
+    wxFOR_ALL_COMPARISONS_3(wxDEFINE_COMPARISON, T1, T2, cmp)
+
+/*
+    This macro allows to define all 12 comparison operators (6 operators for
+    both orders of arguments) for the given types using the provided "cmp"
+    macro to implement the actual comparison: the macro is called with the 2
+    arguments names, the first of type T1 and the second of type T2, and the
+    comparison operator being implemented.
+ */
+#define wxDEFINE_ALL_COMPARISONS(T1, T2, cmp) \
+    wxFOR_ALL_COMPARISONS_3(wxDEFINE_COMPARISON, T1, T2, cmp) \
+    wxFOR_ALL_COMPARISONS_3(wxDEFINE_COMPARISON_REV, T1, T2, cmp)
+
+/*  ---------------------------------------------------------------------------- */
 /*  macros to avoid compiler warnings */
 /*  ---------------------------------------------------------------------------- */
 

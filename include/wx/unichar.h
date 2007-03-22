@@ -80,49 +80,28 @@ public:
     wxUniChar& operator=(wint_t c) { m_value = c; return *this; }
 #endif
 
-    // Comparision operators:
-    bool operator==(const wxUniChar& c) const { return m_value == c.m_value; }
-    bool operator==(char c) const { return m_value == From8bit(c); }
-    bool operator==(wchar_t c) const { return m_value == (value_type)c; }
-#ifndef wxWINT_T_IS_TYPEDEF
-    bool operator==(wint_t c) const { return m_value == (value_type)c; }
+    // Comparison operators:
+
+    // define the given comparison operator for all the types
+#define wxDEFINE_UNICHAR_OPERATOR_NO_WINT(op)                                 \
+    bool operator op(const wxUniChar& c) const { return m_value op c.m_value; }\
+    bool operator op(char c) const { return m_value op From8bit(c); }         \
+    bool operator op(wchar_t c) const { return m_value op (value_type)c; }
+
+#ifdef wxWINT_T_IS_TYPEDEF
+    #define wxDEFINE_UNICHAR_OPERATOR wxDEFINE_UNICHAR_OPERATOR_NO_WINT
+#else // wint_t is a separate type, need to overload for it too
+    #define wxDEFINE_UNICHAR_OPERATOR(op)                                     \
+        wxDEFINE_UNICHAR_OPERATOR_NO_WINT(op)                                 \
+        bool operator op(wint_t c) const { return m_value op (value_type)c; }
 #endif
 
-    bool operator!=(const wxUniChar& c) const { return m_value != c.m_value; }
-    bool operator!=(char c) const { return m_value != From8bit(c); }
-    bool operator!=(wchar_t c) const { return m_value != (value_type)c; }
-#ifndef wxWINT_T_IS_TYPEDEF
-    bool operator!=(wint_t c) const { return m_value != (value_type)c; }
-#endif
+    wxFOR_ALL_COMPARISONS(wxDEFINE_UNICHAR_OPERATOR)
 
-    bool operator>(const wxUniChar& c) const { return m_value > c.m_value; }
-    bool operator>(char c) const { return m_value > (value_type)c; }
-    bool operator>(wchar_t c) const { return m_value > (value_type)c; }
-#ifndef wxWINT_T_IS_TYPEDEF
-    bool operator>(wint_t c) const { return m_value > (value_type)c; }
-#endif
+#undef wxDEFINE_UNICHAR_OPERATOR_NO_WINT
+#undef wxDEFINE_UNICHAR_OPERATOR
 
-    bool operator<(const wxUniChar& c) const { return m_value < c.m_value; }
-    bool operator<(char c) const { return m_value < From8bit(c); }
-    bool operator<(wchar_t c) const { return m_value < (value_type)c; }
-#ifndef wxWINT_T_IS_TYPEDEF
-    bool operator<(wint_t c) const { return m_value < (value_type)c; }
-#endif
-
-    bool operator>=(const wxUniChar& c) const { return m_value >= c.m_value; }
-    bool operator>=(char c) const { return m_value >= From8bit(c); }
-    bool operator>=(wchar_t c) const { return m_value >= (value_type)c; }
-#ifndef wxWINT_T_IS_TYPEDEF
-    bool operator>=(wint_t c) const { return m_value >= (value_type)c; }
-#endif
-
-    bool operator<=(const wxUniChar& c) const { return m_value <= c.m_value; }
-    bool operator<=(char c) const { return m_value <= From8bit(c); }
-    bool operator<=(wchar_t c) const { return m_value <= (value_type)c; }
-#ifndef wxWINT_T_IS_TYPEDEF
-    bool operator<=(wint_t c) const { return m_value <= (value_type)c; }
-#endif
-
+    // this is needed for expressions like 'Z'-c
     int operator-(const wxUniChar& c) const { return m_value - c.m_value; }
     int operator-(char c) const { return m_value - From8bit(c); }
     int operator-(wchar_t c) const { return m_value - (value_type)c; }
@@ -197,54 +176,25 @@ public:
     bool operator&&(bool v) const { return UniChar() && v; }
 #endif
 
-    // Comparision operators:
-    bool operator==(const wxUniCharRef& c) const { return m_pos == c.m_pos; }
-    bool operator==(const wxUniChar& c) const { return UniChar() == c; }
-    bool operator==(char c) const { return UniChar() == c; }
-    bool operator==(wchar_t c) const { return UniChar() == c; }
-#ifndef wxWINT_T_IS_TYPEDEF
-    bool operator==(wint_t c) const { return UniChar() == c; }
+    // Comparison operators:
+#define wxDEFINE_UNICHARREF_OPERATOR_NO_WINT(op)                              \
+    bool operator op(const wxUniCharRef& c) const { return UniChar() op c.UniChar(); }\
+    bool operator op(const wxUniChar& c) const { return UniChar() op c; }     \
+    bool operator op(char c) const { return UniChar() op c; }                 \
+    bool operator op(wchar_t c) const { return UniChar() op c; }
+
+#ifdef wxWINT_T_IS_TYPEDEF
+    #define wxDEFINE_UNICHARREF_OPERATOR wxDEFINE_UNICHARREF_OPERATOR_NO_WINT
+#else // wint_t is a separate type, need to overload for it too
+    #define wxDEFINE_UNICHARREF_OPERATOR(op)                                  \
+        wxDEFINE_UNICHARREF_OPERATOR_NO_WINT(op)                              \
+        bool operator op(wint_t c) const { return UniChar() op c; }
 #endif
 
-    bool operator!=(const wxUniCharRef& c) const { return m_pos != c.m_pos; }
-    bool operator!=(const wxUniChar& c) const { return UniChar() != c; }
-    bool operator!=(char c) const { return UniChar() != c; }
-    bool operator!=(wchar_t c) const { return UniChar() != c; }
-#ifndef wxWINT_T_IS_TYPEDEF
-    bool operator!=(wint_t c) const { return UniChar() != c; }
-#endif
+    wxFOR_ALL_COMPARISONS(wxDEFINE_UNICHARREF_OPERATOR)
 
-    bool operator>(const wxUniCharRef& c) const { return UniChar() > c.UniChar(); }
-    bool operator>(const wxUniChar& c) const { return UniChar() > c; }
-    bool operator>(char c) const { return UniChar() > c; }
-    bool operator>(wchar_t c) const { return UniChar() > c; }
-#ifndef wxWINT_T_IS_TYPEDEF
-    bool operator>(wint_t c) const { return UniChar() > c; }
-#endif
-
-    bool operator<(const wxUniCharRef& c) const { return UniChar() < c.UniChar(); }
-    bool operator<(const wxUniChar& c) const { return UniChar() < c; }
-    bool operator<(char c) const { return UniChar() < c; }
-    bool operator<(wchar_t c) const { return UniChar() < c; }
-#ifndef wxWINT_T_IS_TYPEDEF
-    bool operator<(wint_t c) const { return UniChar() < c; }
-#endif
-
-    bool operator>=(const wxUniCharRef& c) const { return UniChar() >= c.UniChar(); }
-    bool operator>=(const wxUniChar& c) const { return UniChar() >= c; }
-    bool operator>=(char c) const { return UniChar() >= c; }
-    bool operator>=(wchar_t c) const { return UniChar() >= c; }
-#ifndef wxWINT_T_IS_TYPEDEF
-    bool operator>=(wint_t c) const { return UniChar() >= c; }
-#endif
-
-    bool operator<=(const wxUniCharRef& c) const { return UniChar() <= c.UniChar(); }
-    bool operator<=(const wxUniChar& c) const { return UniChar() <= c; }
-    bool operator<=(char c) const { return UniChar() <= c; }
-    bool operator<=(wchar_t c) const { return UniChar() <= c; }
-#ifndef wxWINT_T_IS_TYPEDEF
-    bool operator<=(wint_t c) const { return UniChar() <= c; }
-#endif
+#undef wxDEFINE_UNICHARREF_OPERATOR_NO_WINT
+#undef wxDEFINE_UNICHARREF_OPERATOR
 
     // for expressions like c-'A':
     int operator-(const wxUniCharRef& c) const { return UniChar() - c.UniChar(); }
@@ -269,85 +219,25 @@ inline wxUniChar::wxUniChar(const wxUniCharRef& c)
     m_value = c.UniChar().m_value;
 }
 
-// Comparision operators for the case when wxUniChar(Ref) is the second operand:
-inline bool operator==(char c1, const wxUniChar& c2) { return c2 == c1; }
-inline bool operator==(wchar_t c1, const wxUniChar& c2) { return c2 == c1; }
+// Comparison operators for the case when wxUniChar(Ref) is the second operand
+// implemented in terms of member comparison functions
+
+#define wxCMP_REVERSE(c1, c2, op) c2 op c1
+
+wxDEFINE_COMPARISONS(char, const wxUniChar&, wxCMP_REVERSE)
+wxDEFINE_COMPARISONS(char, const wxUniCharRef&, wxCMP_REVERSE)
+
+wxDEFINE_COMPARISONS(wchar_t, const wxUniChar&, wxCMP_REVERSE)
+wxDEFINE_COMPARISONS(wchar_t, const wxUniCharRef&, wxCMP_REVERSE)
+
 #ifndef wxWINT_T_IS_TYPEDEF
-inline bool operator==(wint_t c1, const wxUniChar& c2) { return c2 == c1; }
+wxDEFINE_COMPARISONS(wint_t, const wxUniChar&, wxCMP_REVERSE)
+wxDEFINE_COMPARISONS(wint_t, const wxUniCharRef&, wxCMP_REVERSE)
 #endif
 
-inline bool operator!=(char c1, const wxUniChar& c2) { return c2 != c1; }
-inline bool operator!=(wchar_t c1, const wxUniChar& c2) { return c2 != c1; }
-#ifndef wxWINT_T_IS_TYPEDEF
-inline bool operator!=(wint_t c1, const wxUniChar& c2) { return c2 != c1; }
-#endif
+wxDEFINE_COMPARISONS(const wxUniChar&, const wxUniCharRef&, wxCMP_REVERSE)
 
-inline bool operator>(char c1, const wxUniChar& c2) { return c2 < c1; }
-inline bool operator>(wchar_t c1, const wxUniChar& c2) { return c2 < c1; }
-#ifndef wxWINT_T_IS_TYPEDEF
-inline bool operator>(wint_t c1, const wxUniChar& c2) { return c2 < c1; }
-#endif
-
-inline bool operator<(char c1, const wxUniChar& c2) { return c2 > c1; }
-inline bool operator<(wchar_t c1, const wxUniChar& c2) { return c2 > c1; }
-#ifndef wxWINT_T_IS_TYPEDEF
-inline bool operator<(wint_t c1, const wxUniChar& c2) { return c2 > c1; }
-#endif
-
-inline bool operator>=(char c1, const wxUniChar& c2) { return c2 <= c1; }
-inline bool operator>=(wchar_t c1, const wxUniChar& c2) { return c2 <= c1; }
-#ifndef wxWINT_T_IS_TYPEDEF
-inline bool operator>=(wint_t c1, const wxUniChar& c2) { return c2 <= c1; }
-#endif
-
-inline bool operator<=(char c1, const wxUniChar& c2) { return c2 >= c1; }
-inline bool operator<=(wchar_t c1, const wxUniChar& c2) { return c2 >= c1; }
-#ifndef wxWINT_T_IS_TYPEDEF
-inline bool operator<=(wint_t c1, const wxUniChar& c2) { return c2 >= c1; }
-#endif
-
-
-inline bool operator==(char c1, const wxUniCharRef& c2) { return c2 == c1; }
-inline bool operator==(wchar_t c1, const wxUniCharRef& c2) { return c2 == c1; }
-#ifndef wxWINT_T_IS_TYPEDEF
-inline bool operator==(wint_t c1, const wxUniCharRef& c2) { return c2 == c1; }
-#endif
-inline bool operator==(const wxUniChar& c1, const wxUniCharRef& c2) { return c2 == c1; }
-
-inline bool operator!=(char c1, const wxUniCharRef& c2) { return c2 != c1; }
-inline bool operator!=(wchar_t c1, const wxUniCharRef& c2) { return c2 != c1; }
-#ifndef wxWINT_T_IS_TYPEDEF
-inline bool operator!=(wint_t c1, const wxUniCharRef& c2) { return c2 != c1; }
-#endif
-inline bool operator!=(const wxUniChar& c1, const wxUniCharRef& c2) { return c2 != c1; }
-
-inline bool operator>(char c1, const wxUniCharRef& c2) { return c2 < c1; }
-inline bool operator>(wchar_t c1, const wxUniCharRef& c2) { return c2 < c1; }
-#ifndef wxWINT_T_IS_TYPEDEF
-inline bool operator>(wint_t c1, const wxUniCharRef& c2) { return c2 < c1; }
-#endif
-inline bool operator>(const wxUniChar& c1, const wxUniCharRef& c2) { return c2 < c1; }
-
-inline bool operator<(char c1, const wxUniCharRef& c2) { return c2 > c1; }
-inline bool operator<(wchar_t c1, const wxUniCharRef& c2) { return c2 > c1; }
-#ifndef wxWINT_T_IS_TYPEDEF
-inline bool operator<(wint_t c1, const wxUniCharRef& c2) { return c2 > c1; }
-#endif
-inline bool operator<(const wxUniChar& c1, const wxUniCharRef& c2) { return c2 > c1; }
-
-inline bool operator>=(char c1, const wxUniCharRef& c2) { return c2 <= c1; }
-inline bool operator>=(wchar_t c1, const wxUniCharRef& c2) { return c2 <= c1; }
-#ifndef wxWINT_T_IS_TYPEDEF
-inline bool operator>=(wint_t c1, const wxUniCharRef& c2) { return c2 <= c1; }
-#endif
-inline bool operator>=(const wxUniChar& c1, const wxUniCharRef& c2) { return c2 <= c1; }
-
-inline bool operator<=(char c1, const wxUniCharRef& c2) { return c2 >= c1; }
-inline bool operator<=(wchar_t c1, const wxUniCharRef& c2) { return c2 >= c1; }
-#ifndef wxWINT_T_IS_TYPEDEF
-inline bool operator<=(wint_t c1, const wxUniCharRef& c2) { return c2 >= c1; }
-#endif
-inline bool operator<=(const wxUniChar& c1, const wxUniCharRef& c2) { return c2 >= c1; }
+#undef wxCMP_REVERSE
 
 // for expressions like c-'A':
 inline int operator-(char c1, const wxUniCharRef& c2) { return -(c2 - c1); }
