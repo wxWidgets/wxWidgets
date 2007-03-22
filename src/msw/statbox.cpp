@@ -483,7 +483,18 @@ void wxStaticBox::PaintForeground(wxDC& dc, const RECT& rc)
         dimensions.right += 2;
         dimensions.bottom += 2;
 
-        PaintBackground(dc, dimensions);
+        if ( UseBgCol() )
+        {
+            // our own background colour should be used for the background of
+            // the label: this is consistent with the behaviour under pre-XP
+            // systems (i.e. without visual themes) and generally makes sense
+            wxBrush brush = wxBrush(GetBackgroundColour());
+            ::FillRect(GetHdcOf(dc), &dimensions, GetHbrushOf(brush));
+        }
+        else // paint parent background
+        {
+            PaintBackground(dc, dimensions);
+        }
 
         // now draw the text
         if ( !rtl )
