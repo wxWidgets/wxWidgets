@@ -60,10 +60,10 @@
                     follows the wxWidgets naming conventions, then this tag is
                     what you need to reference the wx-based additional library.
 
-    - <wxlike-libdirname>: sets the output directory for the current target to $(value)
-                           when on Unix and to e.g. $(value)/vc_lib when on Windows,
-                           i.e. acts like <dirname> just following wxWidgets naming rules.
-                           Useful to allow multiple builds of the 
+    - <wxlike-dirname>: sets the output directory for the current target to $(value)
+                        when on Unix and to e.g. $(value)/vc_lib when on Windows,
+                        i.e. acts like <dirname> just following wxWidgets naming rules.
+                        Useful to allow multiple builds of the 
 
     - <wxlike-paths>: if your library/application needs to compile & link with both
                       wxWidgets and some other wx-based library, which in turn
@@ -184,7 +184,7 @@
             <values-description>Static,DLL</values-description>
             <default-value>$(WX_SHARED_DEFAULT)</default-value>
             <description>
-                Use DLL build of wx library to use?
+                Use DLL build of wx library?
             </description>
         </option>
     </if>
@@ -198,7 +198,7 @@
             <values-description>ANSI,Unicode</values-description>
             <default-value>$(WX_UNICODE_DEFAULT)</default-value>
             <description>
-                Compile Unicode build of wxWidgets?
+                Use Unicode build of wxWidgets?
             </description>
         </option>
     </if>
@@ -321,7 +321,7 @@
     <!--                                                            -->
 
     <!-- private helper tag -->
-    <define-tag name="__setlibname" rules="lib,dll,module">
+    <define-tag name="__setlibname" rules="lib,dll,module,exe">
         <set var="__temp">
             <if cond="FORMAT!='autoconf' and FORMAT!='gnu'">
                 $(attributes['prefix'])_$(WX_PORT)$(WX_VERSION)$(WXLIBPOSTFIX)_$(value)
@@ -359,12 +359,12 @@
         <sys-lib>$(__temp)</sys-lib>
     </define-tag>
 
-    <!-- Sets as output folder for the generated lib/dll a directory
-         called "lib/$(COMPILER)_lib|dll", just like wxWidgets does.
-         This makes it possible to keep separed the libraries compiled with
+    <!-- Sets as output folder for the current target a directory
+         called "$(value)/$(COMPILER)_lib|dll", just like wxWidgets does.
+         This makes it possible to keep separed the libraries/exes compiled with
          different compilers and with a different value for WX_SHARED.
     -->
-    <define-tag name="wxlike-libdirname" rules="lib,dll">
+    <define-tag name="wxlike-dirname" rules="lib,dll,exe,module">
         <if cond="FORMAT!='autoconf'">
             <set var="_DIRNAME_SHARED_SUFFIX">
                 <if cond="WX_SHARED=='0'">lib</if>
@@ -377,7 +377,7 @@
             <dirname>$(_DIRNAME)</dirname>
 
             <if cond="FORMAT_SUPPORTS_ACTIONS=='1'">
-                <set var="__mkdir_tgt">make_lib_dir_$(id)</set>
+                <set var="__mkdir_tgt">make_dir_$(id)</set>
 
                 <add-target target="$(__mkdir_tgt)" type="action"/>
                 <modify-target target="$(__mkdir_tgt)">
