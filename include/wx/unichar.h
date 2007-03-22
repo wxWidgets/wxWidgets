@@ -56,6 +56,7 @@ public:
     operator wint_t() const { return m_value; }
 #endif
     operator int() const { return m_value; }
+    operator unsigned int() const { return m_value; }
 
     // We need this operator for the "*p" part of expressions like "for (
     // const_iterator p = begin() + nStart; *p; ++p )". In this case,
@@ -186,6 +187,7 @@ public:
     operator wint_t() const { return UniChar(); }
 #endif
     operator int() const { return UniChar(); }
+    operator unsigned int() const { return UniChar(); }
 
     // see wxUniChar::operator bool etc. for explanation
     operator bool() const { return (bool)UniChar(); }
