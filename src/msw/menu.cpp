@@ -798,10 +798,10 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id)
         if ( item && item->IsCheckable() )
             item->Toggle();
 
-        // get the checked status of the menu item: note that menuState is the
-        // old state of the menu, so the test for MF_CHECKED must be inverted
+        // get the status of the menu item: note that it has been just changed
+        // by Toggle() above so here we already get the new state of the item
         UINT menuState = ::GetMenuState(GetHmenu(), id, MF_BYCOMMAND);
-        SendEvent(id, !(menuState & MF_CHECKED));
+        SendEvent(id, menuState & MF_CHECKED);
     }
 
     return true;
