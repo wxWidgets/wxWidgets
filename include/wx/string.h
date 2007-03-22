@@ -2044,20 +2044,11 @@ inline wxString& wxString::operator=(const wxCStrData& cstr)
 // implementation of wx[W]CharBuffer inline methods using wxCStrData
 // ----------------------------------------------------------------------------
 
-#if wxUSE_UNICODE
-
-inline wxWCharBuffer::wxWCharBuffer(const wxCStrData& cstr)
-    : m_str(wxStrdupW(cstr))
+// FIXME-UTF8: move this to buffer.h; provide versions for both variants
+template<>
+inline void wxCharTypeBuffer<wxChar>::FromCStrData(const wxCStrData& cstr)
 {
+    m_str = wxStrDup(cstr.AsString());
 }
-
-#else // !wxUSE_UNICODE
-
-inline wxCharBuffer::wxCharBuffer(const wxCStrData& cstr)
-    : m_str(wxStrdupA(cstr))
-{
-}
-
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
 #endif  // _WX_WXSTRINGH__
