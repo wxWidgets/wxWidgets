@@ -817,7 +817,7 @@ public:
     wxCStrData operator+(size_t n) const
         { return wxCStrData(m_str, m_offset + n, m_owned); }
 
-    // this operator is need to make expressions like "*c_str()" or
+    // this operator is needed to make expressions like "*c_str()" or
     // "*(c_str() + 2)" work
     wxUniChar operator*() const;
 
@@ -988,6 +988,16 @@ public:
     // from part of C string (for compilers using unsigned char)
   wxString(const unsigned char* psz, size_t nLength)
       : wxStringBase((const char*)psz, nLength) { }
+
+    // as we provide both ctors with this signature for both char and unsigned
+    // char string, we need to provide one for wxCStrData to resolve ambiguity
+  wxString(const wxCStrData& cstr, size_t nLength)
+      : wxStringBase(cstr.AsChar(), nLength) { }
+
+    // and because wxString is convertible to wxCStrData and const wxChar *
+    // we also need to provide this one
+  wxString(const wxString& str, size_t nLength)
+      : wxStringBase(str, 0, nLength) { }
 
 #if wxUSE_WCHAR_T
     // from wide (Unicode) string
@@ -1670,6 +1680,7 @@ public:
     { return (wxString&)wxStringBase::operator+=(ch); }
   wxString& operator+=(wxUniCharRef ch) { return *this += wxUniChar(ch); }
   wxString& operator+=(char ch) { return *this += wxUniChar(ch); }
+  wxString& operator+=(unsigned char ch) { return *this += wxUniChar(ch); }
   wxString& operator+=(wchar_t ch) { return *this += wxUniChar(ch); }
 
 private:
