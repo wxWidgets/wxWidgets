@@ -858,18 +858,55 @@ bool wxWindowBase::Show(bool show)
     }
 }
 
+bool wxWindowBase::IsEnabled() const
+{
+    return IsThisEnabled() && (IsTopLevel() || !GetParent() || GetParent()->IsEnabled());
+}
+
+void wxWindowBase::NotifyWindowOnEnableChange(bool enabled)
+{
+#ifndef wxHAS_NATIVE_ENABLED_MANAGEMENT
+    DoEnable(enabled);
+#endif // !defined(wxHAS_NATIVE_ENABLED_MANAGEMENT)
+
+    OnEnabled(enabled);
+
+    // If we are top-level then the logic doesn't apply - otherwise
+    // showing a modal dialog would result in total greying out (and ungreying
+    // out later) of everything which would be really ugly
+    if ( IsTopLevel() )
+        return;
+
+    for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxWindowBase * const child = node->GetData();
+        if ( !child->IsTopLevel() && child->IsThisEnabled() )
+            child->NotifyWindowOnEnableChange(enabled);
+    }
+}
+
 bool wxWindowBase::Enable(bool enable)
 {
-    if ( enable != m_isEnabled )
-    {
-        m_isEnabled = enable;
+    if ( enable == IsThisEnabled() )
+        return false;
 
+    m_isEnabled = enable;
+
+#ifdef wxHAS_NATIVE_ENABLED_MANAGEMENT
+    DoEnable(enable);
+#else // !defined(wxHAS_NATIVE_ENABLED_MANAGEMENT)
+    wxWindowBase * const parent = GetParent();
+    if( !IsTopLevel() && parent && !parent->IsEnabled() )
+    {
         return true;
     }
-    else
-    {
-        return false;
-    }
+#endif // !defined(wxHAS_NATIVE_ENABLED_MANAGEMENT)
+
+    NotifyWindowOnEnableChange(enable);
+
+    return true;
 }
 
 bool wxWindowBase::IsShownOnScreen() const
@@ -921,6 +958,8 @@ bool wxWindowBase::Reparent(wxWindowBase *newParent)
         return false;
     }
 
+    const bool oldEnabledState = IsEnabled();
+
     // unlink this window from the existing parent.
     if ( oldParent )
     {
@@ -939,6 +978,14 @@ bool wxWindowBase::Reparent(wxWindowBase *newParent)
     else
     {
         wxTopLevelWindows.Append((wxWindow *)this);
+    }
+
+    // We need to notify window (and its subwindows) if by changing the parent
+    // we also change our enabled/disabled status.
+    const bool newEnabledState = IsEnabled();
+    if ( newEnabledState != oldEnabledState )
+    {
+        NotifyWindowOnEnableChange(newEnabledState);
     }
 
     return true;

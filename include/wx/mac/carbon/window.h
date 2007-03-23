@@ -55,7 +55,8 @@ public:
     virtual void Lower();
 
     virtual bool Show( bool show = true );
-    virtual bool Enable( bool enable = true );
+    virtual void DoEnable( bool enable );
+    virtual void OnEnabled( bool enabled );
 
     virtual void SetFocus();
 
@@ -310,7 +311,6 @@ protected:
     void                MacUpdateControlFont() ;
 
     void                MacPropagateVisibilityChanged() ;
-    void                MacPropagateEnabledStateChanged() ;
     void                MacPropagateHiliteChanged() ;
 
     // implement the base class pure virtuals

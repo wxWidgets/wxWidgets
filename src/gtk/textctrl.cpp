@@ -1288,9 +1288,9 @@ bool wxTextCtrl::Enable( bool enable )
 }
 
 // wxGTK-specific: called recursively by Enable,
-// to give widgets an oppprtunity to correct their colours after they
+// to give widgets an opportunity to correct their colours after they
 // have been changed by Enable
-void wxTextCtrl::OnParentEnable( bool enable )
+void wxTextCtrl::OnEnabled( bool enable )
 {
     // If we have a custom background colour, we use this colour in both
     // disabled and enabled mode, or we end up with a different colour under the

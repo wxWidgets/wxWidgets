@@ -484,7 +484,6 @@ void wxWindowMSW::Init()
     m_mouseInWindow = false;
     m_lastKeydownProcessed = false;
 
-    m_childrenDisabled = NULL;
     m_frozenness = 0;
 
     m_hWnd = 0;
@@ -544,8 +543,6 @@ wxWindowMSW::~wxWindowMSW()
         // remove hWnd <-> wxWindow association
         wxRemoveHandleAssociation(this);
     }
-
-    delete m_childrenDisabled;
 
 }
 
@@ -648,110 +645,11 @@ wxWindow *wxWindowBase::DoFindFocus()
     return NULL;
 }
 
-bool wxWindowMSW::Enable(bool enable)
+void wxWindowMSW::DoEnable( bool enable )
 {
-    // we shouldn't really enable the window if our parent is currently
-    // disabled because under MSW this would indeed show the window in enabled
-    // state but it still wouldn't respond to the input (as its parent is
-    // disabled), so just update the internal m_childrenDisabled list in this
-    // case and our state will be really changed when the parent is enabled
-
-    // the logic above doesn't apply to top level windows, of course
-    wxWindowMSW * const parent = IsTopLevel() ? NULL : GetParent();
-    if ( parent && !parent->IsEnabled() && !IsEnabled() )
-    {
-        // it's a reference as we can create it below
-        wxWindowList *& disabledSiblings = parent->m_childrenDisabled;
-
-        bool rc = false;
-        if ( enable )
-        {
-            // shouldn't be disabled when the parent is reenabled
-            if ( disabledSiblings )
-            {
-                wxWindowList::compatibility_iterator
-                    i = disabledSiblings->Find(this);
-                if ( i )
-                {
-                    disabledSiblings->Erase(i);
-                    rc = true;
-                }
-            }
-            //else: nothing to do
-        }
-        else // !enable
-        {
-            // should disable this window when the parent is enabled
-            if ( !disabledSiblings )
-                disabledSiblings = new wxWindowList;
-
-            disabledSiblings->Append(this);
-        }
-
-        return rc;
-    }
-
-    if ( !wxWindowBase::Enable(enable) )
-        return false;
-
     HWND hWnd = GetHwnd();
     if ( hWnd )
         ::EnableWindow(hWnd, (BOOL)enable);
-
-    // the logic below doesn't apply to the top level windows -- otherwise
-    // showing a modal dialog would result in total greying out (and ungreying
-    // out later) of everything which would be really ugly
-    if ( IsTopLevel() )
-        return true;
-
-    // when the parent is disabled, all of its children should be disabled as
-    // well but when it is enabled back, only those of the children which
-    // hadn't been already disabled in the beginning should be enabled again,
-    // so we have to keep the list of those children
-    for ( wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
-          node;
-          node = node->GetNext() )
-    {
-        wxWindow *child = node->GetData();
-        if ( child->IsTopLevel() )
-        {
-            // the logic below doesn't apply to top level children
-            continue;
-        }
-
-        if ( enable )
-        {
-            // re-enable the child unless it had been disabled before us
-            if ( !m_childrenDisabled || !m_childrenDisabled->Find(child) )
-                child->Enable();
-        }
-        else // we're being disabled
-        {
-            if ( child->IsEnabled() )
-            {
-                // disable it as children shouldn't stay enabled while the
-                // parent is not
-                child->Disable();
-            }
-            else // child already disabled, remember it
-            {
-                // have we created the list of disabled children already?
-                if ( !m_childrenDisabled )
-                    m_childrenDisabled = new wxWindowList;
-
-                m_childrenDisabled->Append(child);
-            }
-        }
-    }
-
-    if ( enable && m_childrenDisabled )
-    {
-        // we don't need this list any more, don't keep unused memory
-        delete m_childrenDisabled;
-        m_childrenDisabled = NULL;
-    }
-
-    return true;
 }
 
 bool wxWindowMSW::Show(bool show)

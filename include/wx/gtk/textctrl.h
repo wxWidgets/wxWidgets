@@ -155,7 +155,7 @@ public:
     // wxGTK-specific: called recursively by Enable,
     // to give widgets an oppprtunity to correct their colours after they
     // have been changed by Enable
-    virtual void OnParentEnable( bool enable ) ;
+    virtual void OnEnabled( bool enable ) ;
 
     // tell the control to ignore next text changed signal
     void IgnoreNextTextUpdate(int n = 1) { m_countUpdatesToIgnore = n; }

@@ -1532,7 +1532,13 @@ and transferred to the screen all at once later.
 
 \constfunc{virtual bool}{IsEnabled}{\void}
 
-Returns {\tt true} if the window is enabled for input, {\tt false} otherwise.
+Returns \true if the window is enabled, i.e. if it accepts user input, \false 
+otherwise.
+
+Notice that this method can return \false even if this window itself hadn't
+been explicitly disabled when one of its parent windows is disabled. To get the
+intrinsic status of this window, use 
+\helpref{IsThisEnabled}{wxwindowisthisenabled}
 
 \wxheading{See also}
 
@@ -1606,6 +1612,16 @@ is shown and all its parents up to the toplevel window are shown as well.
 \wxheading{See also}
 
 \helpref{wxWindow::IsShown}{wxwindowisshown}
+
+
+\membersection{wxWindow::IsThisEnabled}\label{wxwindowisthisenabled}
+
+\constfunc{bool}{IsThisEnabled}{\void}
+
+Returns \true if this window is intrinsically enabled, \false otherwise, i.e.
+if \helpref{Enable(false)}{wxwindowenable} had been called. This method is
+mostly used for wxWidgets itself, user code should normally use 
+\helpref{IsEnabled}{wxwindowisenabled} instead.
 
 
 \membersection{wxWindow::IsTopLevel}\label{wxwindowistoplevel}

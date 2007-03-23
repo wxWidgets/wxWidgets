@@ -196,7 +196,7 @@ void wxBitmapButton::OnSetBitmap()
     InvalidateBestSize();
 
     wxBitmap the_one;
-    if (!m_isEnabled)
+    if (!IsThisEnabled())
         the_one = m_bmpDisabled;
     else if (m_isSelected)
         the_one = m_bmpSelected;

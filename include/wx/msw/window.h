@@ -60,7 +60,7 @@ public:
     virtual void Lower();
 
     virtual bool Show( bool show = true );
-    virtual bool Enable( bool enable = true );
+    virtual void DoEnable( bool enable );
 
     virtual void SetFocus();
     virtual void SetFocusFromKbd();
@@ -500,8 +500,6 @@ private:
     bool HandleJoystickEvent(WXUINT msg, int x, int y, WXUINT flags);
     bool HandleNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result);
 
-    // list of disabled children before last call to our Disable()
-    wxWindowList *m_childrenDisabled;
 
     // number of calls to Freeze() minus number of calls to Thaw()
     unsigned int m_frozenness;

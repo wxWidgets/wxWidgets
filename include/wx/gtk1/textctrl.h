@@ -106,7 +106,7 @@ public:
     virtual void SetSelection(long from, long to);
     virtual void SetEditable(bool editable);
 
-    virtual bool Enable( bool enable = true );
+    virtual void DoEnable( bool enable );
 
     // Implementation from now on
     void OnDropFiles( wxDropFilesEvent &event );
@@ -153,7 +153,7 @@ public:
     // wxGTK-specific: called recursively by Enable,
     // to give widgets an oppprtunity to correct their colours after they
     // have been changed by Enable
-    virtual void OnParentEnable( bool enable ) ;
+    virtual void OnEnabled( bool enabled ) ;
 
     // tell the control to ignore next text changed signal
     void IgnoreNextTextUpdate();

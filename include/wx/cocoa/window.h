@@ -81,13 +81,8 @@ public:
     WX_NSAffineTransform CocoaGetWxToBoundsTransform();
 #endif //def __OBJC__
 protected:
-    // enable==false: disables the control
-    // enable==true: enables the control IF it should be enabled
-    bool EnableSelfAndChildren(bool enable);
     // actually enable/disable the cocoa control, overridden by subclasses
     virtual void CocoaSetEnabled(bool enable) { }
-    // Reflects the state for THIS window (ignoring disables by parents)
-    bool m_shouldBeEnabled;
 
     void CocoaCreateNSScrollView();
     void InitMouseEvent(wxMouseEvent &event, WX_NSEvent cocoaEvent);
@@ -198,7 +193,7 @@ public:
     // NOTE: typically Close() is not virtual, but we want this for Cocoa
     virtual bool Close( bool force = false );
     virtual bool Show( bool show = true );
-    virtual bool Enable( bool enable = true );
+    virtual void DoEnable( bool enable );
 
     virtual bool IsDoubleBuffered() const { return true; }
 };

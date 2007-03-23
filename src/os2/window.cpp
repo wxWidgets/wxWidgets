@@ -295,7 +295,6 @@ void wxWindowOS2::Init()
     m_bUseCtl3D             = false;
     m_bMouseInWindow        = false;
     m_bLastKeydownProcessed = false;
-    m_pChildrenDisabled     = NULL;
 
     //
     // wxWnd
@@ -357,7 +356,6 @@ wxWindowOS2::~wxWindowOS2()
         //
         wxRemoveHandleAssociation(this);
     }
-    delete m_pChildrenDisabled;
 } // end of wxWindowOS2::~wxWindowOS2
 
 // real construction (Init() must have been called before!)
@@ -479,70 +477,12 @@ wxWindow* wxWindowBase::DoFindFocus()
     return NULL;
 } // wxWindowBase::DoFindFocus
 
-bool wxWindowOS2::Enable( bool bEnable )
+void wxWindowOS2::DoEnable( bool bEnable )
 {
-    if (!wxWindowBase::Enable(bEnable))
-        return false;
-
     HWND                            hWnd = GetHwnd();
-
     if ( hWnd )
         ::WinEnableWindow(hWnd, (BOOL)bEnable);
-
-    //
-    // The logic below doesn't apply to the top level windows -- otherwise
-    // showing a modal dialog would result in total greying out (and ungreying
-    // out later) of everything which would be really ugly
-    //
-    if (IsTopLevel())
-        return true;
-
-    wxWindowList::compatibility_iterator     node = GetChildren().GetFirst();
-
-    while (node)
-    {
-        wxWindow*                   pChild = node->GetData();
-
-        if (bEnable)
-        {
-            //
-            // Enable the child back unless it had been disabled before us
-            //
-            if (!m_pChildrenDisabled || !m_pChildrenDisabled->Find(pChild))
-                pChild->Enable();
-        }
-        else // we're being disabled
-        {
-            if (pChild->IsEnabled())
-            {
-                //
-                // Disable it as children shouldn't stay enabled while the
-                // parent is not
-                //
-                pChild->Disable();
-            }
-            else // child already disabled, remember it
-            {
-                //
-                // Have we created the list of disabled children already?
-                //
-                if (!m_pChildrenDisabled)
-                    m_pChildrenDisabled = new wxWindowList;
-                m_pChildrenDisabled->Append(pChild);
-            }
-        }
-        node = node->GetNext();
-    }
-    if (bEnable && m_pChildrenDisabled)
-    {
-        //
-        // We don't need this list any more, don't keep unused memory
-        //
-        delete m_pChildrenDisabled;
-        m_pChildrenDisabled = NULL;
-    }
-    return true;
-} // end of wxWindowOS2::Enable
+}
 
 bool wxWindowOS2::Show( bool bShow )
 {

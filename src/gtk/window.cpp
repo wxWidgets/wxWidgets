@@ -3021,40 +3021,13 @@ bool wxWindowGTK::Show( bool show )
     return true;
 }
 
-static void wxWindowNotifyEnable(wxWindowGTK* win, bool enable)
+void wxWindowGTK::DoEnable( bool enable )
 {
-    win->OnParentEnable(enable);
-
-    // Recurse, so that children have the opportunity to Do The Right Thing
-    // and reset colours that have been messed up by a parent's (really ancestor's)
-    // Enable call
-    for ( wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
-          node;
-          node = node->GetNext() )
-    {
-        wxWindow *child = node->GetData();
-        if (!child->IsKindOf(CLASSINFO(wxDialog)) && !child->IsKindOf(CLASSINFO(wxFrame)))
-            wxWindowNotifyEnable(child, enable);
-    }
-}
-
-bool wxWindowGTK::Enable( bool enable )
-{
-    wxCHECK_MSG( (m_widget != NULL), false, wxT("invalid window") );
-
-    if (!wxWindowBase::Enable(enable))
-    {
-        // nothing to do
-        return false;
-    }
+    wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
 
     gtk_widget_set_sensitive( m_widget, enable );
     if ( m_wxwindow )
         gtk_widget_set_sensitive( m_wxwindow, enable );
-
-    wxWindowNotifyEnable(this, enable);
-
-    return true;
 }
 
 int wxWindowGTK::GetCharHeight() const

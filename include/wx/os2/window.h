@@ -82,7 +82,7 @@ public:
     virtual void     Raise(void);
     virtual void     Lower(void);
     virtual bool     Show(bool bShow = true);
-    virtual bool     Enable(bool bEnable = true);
+    virtual void     DoEnable(bool bEnable);
     virtual void     SetFocus(void);
     virtual void     SetFocusFromKbd(void);
     virtual bool     Reparent(wxWindow* pNewParent);
@@ -528,7 +528,6 @@ private:
                               ,WXWPARAM    wParam = 0
                              ) const;
 
-    wxWindowList*                   m_pChildrenDisabled;
     HWND                            m_hWndScrollBarHorz;
     HWND                            m_hWndScrollBarVert;
     SWP                             m_vWinSwp;

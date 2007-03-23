@@ -190,6 +190,8 @@ public:
 #endif // wxUSE_TOOLTIPS
 
     void OnEnableAll(wxCommandEvent& event);
+    void OnHideAll(wxCommandEvent& event);
+    void OnHideList(wxCommandEvent& event);
     void OnContextHelp(wxCommandEvent& event);
 
     void OnIdle( wxIdleEvent& event );
@@ -381,6 +383,8 @@ enum
 
     // panel menu
     CONTROLS_ENABLE_ALL,
+    CONTROLS_HIDE_ALL,
+    CONTROLS_HIDE_LIST,
     CONTROLS_CONTEXT_HELP
 };
 
@@ -1739,6 +1743,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 #endif // wxUSE_TOOLTIPS
 
     EVT_MENU(CONTROLS_ENABLE_ALL, MyFrame::OnEnableAll)
+    EVT_MENU(CONTROLS_HIDE_ALL,   MyFrame::OnHideAll)
+    EVT_MENU(CONTROLS_HIDE_LIST,   MyFrame::OnHideList)
     EVT_MENU(CONTROLS_CONTEXT_HELP, MyFrame::OnContextHelp)
 
     EVT_ICONIZE(MyFrame::OnIconized)
@@ -1785,6 +1791,10 @@ MyFrame::MyFrame(const wxChar *title, int x, int y)
 
     wxMenu *panel_menu = new wxMenu;
     panel_menu->Append(CONTROLS_ENABLE_ALL, _T("&Disable all\tCtrl-E"),
+                       _T("Enable/disable all panel controls"), true);
+    panel_menu->Append(CONTROLS_HIDE_ALL, _T("&Hide all\tCtrl-I"),
+                       _T("Show/hide thoe whole panel controls"), true);
+    panel_menu->Append(CONTROLS_HIDE_LIST, _T("Hide &list ctrl\tCtrl-S"),
                        _T("Enable/disable all panel controls"), true);
     panel_menu->Append(CONTROLS_CONTEXT_HELP, _T("&Context help...\tCtrl-H"),
                        _T("Get context help for a control"));
@@ -1857,6 +1867,31 @@ void MyFrame::OnEnableAll(wxCommandEvent& WXUNUSED(event))
 
     s_enable = !s_enable;
     m_panel->Enable(s_enable);
+    static bool s_enableCheckbox = true;
+    if ( !s_enable )
+    {
+        // this is a test for correct behaviour of either enabling or disabling
+        // a child when its parent is disabled: the checkbox should have the
+        // correct state when the parent is enabled back
+        m_panel->m_checkbox->Enable(s_enableCheckbox);
+        s_enableCheckbox = !s_enableCheckbox;
+    }
+}
+
+void MyFrame::OnHideAll(wxCommandEvent& WXUNUSED(event))
+{
+    static bool s_show = true;
+
+    s_show = !s_show;
+    m_panel->Show(s_show);
+}
+
+void MyFrame::OnHideList(wxCommandEvent& WXUNUSED(event))
+{
+    static bool s_show = true;
+
+    s_show = !s_show;
+    m_panel->m_listbox->Show(s_show);
 }
 
 void MyFrame::OnContextHelp(wxCommandEvent& WXUNUSED(event))

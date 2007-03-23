@@ -313,7 +313,6 @@ void wxWindowCocoa::Init()
     m_wxCocoaScrollView = NULL;
     m_isBeingDeleted = false;
     m_isInPaint = false;
-    m_shouldBeEnabled = true;
 }
 
 // Constructor
@@ -601,32 +600,9 @@ void wxWindow::CocoaReplaceView(WX_NSView oldView, WX_NSView newView)
     [[oldView superview] replaceSubview:oldView with:newView];
 }
 
-bool wxWindow::EnableSelfAndChildren(bool enable)
+void wxWindow::DoEnable(bool enable)
 {
-    // If the state isn't changing, don't do anything
-    if(!wxWindowBase::Enable(enable && m_shouldBeEnabled))
-        return false;
-    // Set the state of the Cocoa window
-    CocoaSetEnabled(m_isEnabled);
-    // Disable all children or (if enabling) return them to their proper state
-    for(wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
-        node; node = node->GetNext())
-    {
-        node->GetData()->EnableSelfAndChildren(enable);
-    }
-    return true;
-}
-
-bool wxWindow::Enable(bool enable)
-{
-    // Keep track of what the window SHOULD be doing
-    m_shouldBeEnabled = enable;
-    // If the parent is disabled for any reason, then this window will be too.
-    if(!IsTopLevel() && GetParent())
-    {
-        enable = enable && GetParent()->IsEnabled();
-    }
-    return EnableSelfAndChildren(enable);
+	CocoaSetEnabled(enable);
 }
 
 bool wxWindow::Show(bool show)

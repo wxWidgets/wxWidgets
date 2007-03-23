@@ -2139,19 +2139,9 @@ bool wxWindowMac::Show(bool show)
     return true;
 }
 
-bool wxWindowMac::Enable(bool enable)
+void wxWindowMac::DoEnable(bool enable)
 {
-    wxASSERT( m_peer->Ok() ) ;
-    bool former = MacIsReallyEnabled() ;
-    if ( !wxWindowBase::Enable(enable) )
-        return false;
-
     m_peer->Enable( enable ) ;
-
-    if ( former != MacIsReallyEnabled() )
-        MacPropagateEnabledStateChanged() ;
-
-    return true;
 }
 
 //
@@ -2176,21 +2166,10 @@ void wxWindowMac::MacPropagateVisibilityChanged()
 #endif
 }
 
-void wxWindowMac::MacPropagateEnabledStateChanged()
+void wxWindowMac::OnEnabled(bool enabled)
 {
 #if !TARGET_API_MAC_OSX
     MacEnabledStateChanged() ;
-
-    wxWindowMac *child;
-    wxWindowList::compatibility_iterator node = GetChildren().GetFirst();
-    while ( node )
-    {
-        child = node->GetData();
-        if ( child->IsEnabled() )
-            child->MacPropagateEnabledStateChanged() ;
-
-        node = node->GetNext();
-    }
 #endif
 }
 
