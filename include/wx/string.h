@@ -380,7 +380,7 @@ public:
                                                                             \
           friend class WXDLLIMPEXP_BASE wxString;                           \
           friend class WXDLLIMPEXP_BASE wxStringBase;                       \
-          friend class WXDLLIMPEXP_BASE wxCStrData;                         \
+          friend class wxCStrData;                                          \
                                                                             \
       protected:                                                            \
           pointer m_cur;
