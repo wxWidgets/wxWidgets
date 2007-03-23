@@ -52,11 +52,13 @@ public:
 
     // More conversions needed for other standard functions: uchar is for VC++
     // _mbxxx() ones (to which toxxx/isxxx() are mapped when _MBCS is defined)
-    // and wint_t is either uint or ushort and it's easier for us to just
-    // define both at this stage than have a separate test for what wint_t is
+    // and some wide character functions take wint_t which happens to be the
+    // same as wchar_t for Windows compilers but not for g++ (except for the
+    // special Apple version)
     operator unsigned char() const { return (unsigned char)To8bit(m_value); }
-    operator unsigned short() const { return m_value; }
-    operator unsigned int() const { return m_value; }
+#if defined(__GNUC__) && !defined(__DARWIN__)
+    operator wint_t() const { return m_value; }
+#endif
 
     // We need this operator for the "*p" part of expressions like "for (
     // const_iterator p = begin() + nStart; *p; ++p )". In this case,
@@ -148,8 +150,9 @@ public:
     operator wchar_t() const { return UniChar(); }
     operator int() const { return UniChar(); }
     operator unsigned char() const { return UniChar(); }
-    operator unsigned short() const { return UniChar(); }
-    operator unsigned int() const { return UniChar(); }
+#if defined(__GNUC__) && !defined(__DARWIN__)
+    operator wint_t() const { return UniChar(); }
+#endif
 
     // see wxUniChar::operator bool etc. for explanation
     operator bool() const { return (bool)UniChar(); }
