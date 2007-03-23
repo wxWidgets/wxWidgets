@@ -197,10 +197,8 @@ void wxComboBox::SetValue(const wxString& value)
 {
     m_inSetValue = true;
 
-    // Fix crash; probably an OpenMotif bug
-    const char* val = value.c_str() ? value.c_str() : "";
     XtVaSetValues( GetXmText(this),
-                   XmNvalue, wxConstCast(val, char),
+                   XmNvalue, value.mb_str(),
                    NULL);
 
     m_inSetValue = false;
