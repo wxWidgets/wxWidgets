@@ -25,6 +25,7 @@
 #endif
 
 #include "wx/evtloop.h"
+#include "wx/ptr_scpd.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -55,6 +56,8 @@ private:
 // wxEventLoop implementation
 // ============================================================================
 
+wxDEFINE_TIED_SCOPED_PTR_TYPE(wxEventLoopImpl)
+
 // ----------------------------------------------------------------------------
 // wxEventLoop running and exiting
 // ----------------------------------------------------------------------------
@@ -71,17 +74,13 @@ int wxEventLoop::Run()
 
     wxEventLoopActivator activate(this);
 
-    m_impl = new wxEventLoopImpl;
+    wxEventLoopImplTiedPtr impl(&m_impl, new wxEventLoopImpl);
 
     gtk_main();
 
     OnExit();
 
-    int exitcode = m_impl->GetExitCode();
-    delete m_impl;
-    m_impl = NULL;
-
-    return exitcode;
+    return m_impl->GetExitCode();
 }
 
 void wxEventLoop::Exit(int rc)
