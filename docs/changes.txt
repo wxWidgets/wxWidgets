@@ -89,6 +89,7 @@ Major new features in 2.8 release
 
 
 2.8.4
+-----
 
 wxMSW:
 
@@ -96,6 +97,7 @@ wxMSW:
   it didn't respect font size nor background colour then (Juan Antonio Ortega)
 - Don't lose combobox text when it's opened and closed (Kolya Kosenko)
 - Corrected GetChecked() for events from checkable menu items (smanders)
+- Fixed popup menus under Windows NT 4
 
 
 2.8.3
