@@ -3205,7 +3205,7 @@ bool wxWindowGTK::Show( bool show )
 
 void wxWindowGTK::DoEnable( bool enable )
 {
-    wxCHECK_MSG( (m_widget != NULL), false, wxT("invalid window") );
+    wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
 
     gtk_widget_set_sensitive( m_widget, enable );
     if ( m_wxwindow )
