@@ -81,6 +81,54 @@ void wxRemoveMacMenuAssociation(wxMenu *menu)
     }
 }
 
+void wxInsertMenuItemsInMenu(wxMenu* menu, MenuRef wm, MenuItemIndex insertAfter)
+{
+    wxMenuItemList::compatibility_iterator node;
+    wxMenuItem *item;
+    wxMenu *subMenu = NULL ;
+    bool newItems = false;
+
+    for (node = menu->GetMenuItems().GetFirst(); node; node = node->GetNext())
+    {
+        item = (wxMenuItem *)node->GetData();
+        subMenu = item->GetSubMenu() ;
+        if (subMenu)
+        {
+            wxInsertMenuItemsInMenu(subMenu, (MenuRef)subMenu->GetHMenu(), 0); 
+        }
+        if ( item->IsSeparator() )
+        {
+            if ( wm && newItems)
+                InsertMenuItemTextWithCFString( wm,
+                    CFSTR(""), insertAfter, kMenuItemAttrSeparator, 0); 
+        
+            newItems = false;
+        }
+        else
+        {
+            wxAcceleratorEntry*
+                entry = wxAcceleratorEntry::Create( item->GetText() ) ;
+
+            MenuItemIndex winListPos = -1;
+            OSStatus err = GetIndMenuItemWithCommandID(wm, 
+                        wxIdToMacCommand ( item->GetId() ), 1, NULL, &winListPos);
+            
+            if ( wm && err == menuItemNotFoundErr )
+            {
+                // NB: the only way to determine whether or not we should add
+                // a separator is to know if we've added menu items to the menu
+                // before the separator.
+                newItems = true;
+                UMAInsertMenuItem(wm, wxStripMenuCodes(item->GetText()) , wxFont::GetDefaultEncoding(), insertAfter, entry);
+                SetMenuItemCommandID( wm , insertAfter+1 , wxIdToMacCommand ( item->GetId() ) ) ;
+                SetMenuItemRefCon( wm , insertAfter+1 , (URefCon) item ) ;
+            }
+
+            delete entry ;
+        }
+    }  
+}
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -717,10 +765,42 @@ void wxMenuBar::MacInstallMenuBar()
                 }
             }
         }
+        
+        else if ( ( m_titles[i] == wxT("Window") || m_titles[i] == wxT("&Window") ) 
+                && GetAutoWindowMenu() )
+        {           
+            if ( MacGetWindowMenuHMenu() == NULL )
+            {
+                CreateStandardWindowMenu( 0 , (MenuHandle*) &s_macWindowMenuHandle ) ;
+            }
+            
+            MenuRef wm = (MenuRef)MacGetWindowMenuHMenu();
+            if ( wm == NULL )
+                break;
+            
+            // get the insertion point in the standard menu
+            MenuItemIndex winListStart;
+            GetIndMenuItemWithCommandID(wm, 
+                        kHICommandWindowListSeparator, 1, NULL, &winListStart);
+            
+            // add a separator so that the standard items and the custom items
+            // aren't mixed together, but only if this is the first run
+            OSStatus err = GetIndMenuItemWithCommandID(wm, 
+                        'WXWM', 1, NULL, NULL);
+            
+            if ( err == menuItemNotFoundErr )
+            {
+                InsertMenuItemTextWithCFString( wm,
+                        CFSTR(""), winListStart-1, kMenuItemAttrSeparator, 'WXWM');
+            }
+            
+            wxInsertMenuItemsInMenu(menu, wm, winListStart);    
+        }
         else
         {
             UMASetMenuTitle( MAC_WXHMENU(menu->GetHMenu()) , m_titles[i], m_font.GetEncoding()  ) ;
             menu->MacBeforeDisplay(false) ;
+            
             ::InsertMenu(MAC_WXHMENU(_wxMenuAt(m_menus, i)->GetHMenu()), 0);
         }
     }
