@@ -81,7 +81,7 @@ typedef unsigned long wxLogLevel;
 // ----------------------------------------------------------------------------
 
 // different standard log levels (you may also define your own)
-enum
+enum wxLogLevelValues
 {
     wxLOG_FatalError, // program can't continue, abort immediately
     wxLOG_Error,      // a serious error, user must be informed about it
