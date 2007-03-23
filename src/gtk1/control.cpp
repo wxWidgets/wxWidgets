@@ -120,7 +120,7 @@ void wxControl::GTKSetLabelForFrame(GtkFrame *w, const wxString& label)
 
     const wxString labelGTK = GTKRemoveMnemonics(label);
 
-    gtk_frame_set_label(w, labelGTK.empty() ? (char *)NULL
+    gtk_frame_set_label(w, labelGTK.empty() ? (const char *)NULL
                                             : wxGTK_CONV(labelGTK));
 }
 
