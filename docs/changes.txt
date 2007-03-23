@@ -107,6 +107,16 @@ wxMSW:
 - Return the restored window size from GetSize() when window is minimized.
 
 
+2.8.4
+-----
+
+wxMSW:
+
+- Corrected wxStaticBox label appearance when its foreground colour was set:
+  it didn't respect font size nor background colour then (Juan Antonio Ortega)
+- Fixed popup menus under Windows NT 4
+
+
 2.8.3
 -----
 

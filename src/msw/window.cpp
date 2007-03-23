@@ -2043,10 +2043,22 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
     ::ClientToScreen(hWnd, &point);
     wxCurrentPopupMenu = menu;
 #if defined(__WXWINCE__)
-    UINT flags = 0;
-#else
-    UINT flags = TPM_RIGHTBUTTON | TPM_RECURSE;
-#endif
+    static const UINT flags = 0;
+#else // !__WXWINCE__
+    UINT flags = TPM_RIGHTBUTTON;
+    // NT4 doesn't support TPM_RECURSE and simply doesn't show the menu at all
+    // when it's use, I'm not sure about Win95/98 but prefer to err on the safe
+    // side and not to use it there neither -- modify the test if it does work
+    // on these systems
+    if ( wxGetWinVersion() >= wxWinVersion_5 )
+    {
+        // using TPM_RECURSE allows us to show a popup menu while another menu
+        // is opened which can be useful and is supported by the other
+        // platforms, so allow it under Windows too
+        flags |= TPM_RECURSE;
+    }
+#endif // __WXWINCE__/!__WXWINCE__
+
     ::TrackPopupMenu(hMenu, flags, point.x, point.y, 0, hWnd, NULL);
 
     // we need to do it right now as otherwise the events are never going to be
