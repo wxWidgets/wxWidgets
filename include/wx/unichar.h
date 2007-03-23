@@ -43,11 +43,19 @@ public:
     // Returns Unicode code point value of the character
     value_type GetValue() const { return m_value; }
 
-    // Casts to char and wchar_t types:
+    // Conversions to char and wchar_t types: all of those are needed to be
+    // able to pass wxUniChars to verious standard narrow and wide character
+    // functions
     operator char() const { return To8bit(m_value); }
-    operator unsigned char() const { return (unsigned char)To8bit(m_value); }
     operator wchar_t() const { return m_value; }
     operator int() const { return m_value; }
+
+    // More conversions needed for other standard functions: uchar is for VC++
+    // _mbxxx() ones (to which toxxx/isxxx() are mapped when _MBCS is defined)
+    // and wint_t is either uint or ushort and it's easier for us to just
+    // define both at this stage than have a separate test for what wint_t is
+    operator unsigned char() const { return (unsigned char)To8bit(m_value); }
+    operator unsigned short() const { return m_value; }
     operator unsigned int() const { return m_value; }
 
     // We need this operator for the "*p" part of expressions like "for (
@@ -135,11 +143,12 @@ public:
     wxUniCharRef& operator=(char c) { return *this = wxUniChar(c); }
     wxUniCharRef& operator=(wchar_t c) { return *this = wxUniChar(c); }
 
-    // Casts to wxUniChar type:
+    // Conversions to the same types as wxUniChar is convertible too:
     operator char() const { return UniChar(); }
-    operator unsigned char() const { return UniChar(); }
     operator wchar_t() const { return UniChar(); }
     operator int() const { return UniChar(); }
+    operator unsigned char() const { return UniChar(); }
+    operator unsigned short() const { return UniChar(); }
     operator unsigned int() const { return UniChar(); }
 
     // see wxUniChar::operator bool etc. for explanation
