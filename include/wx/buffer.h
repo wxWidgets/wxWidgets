@@ -27,7 +27,7 @@ inline char *wxStrDup(const char *s) { return wxStrdupA(s); }
 // ----------------------------------------------------------------------------
 
 template <typename T>
-class WXDLLIMPEXP_BASE wxCharTypeBuffer
+class wxCharTypeBuffer
 {
 public:
     typedef T CharType;
@@ -35,11 +35,6 @@ public:
     wxCharTypeBuffer(const CharType *str = NULL)
         : m_str(str ? wxStrDup(str) : NULL)
     {
-    }
-
-    wxCharTypeBuffer(const wxCStrData& cstr)
-    {
-        FromCStrData(cstr);
     }
 
     wxCharTypeBuffer(size_t len)
@@ -120,39 +115,46 @@ public:
     CharType operator[](size_t n) const { return m_str[n]; }
 
 private:
-    void FromCStrData(const wxCStrData& cstr);
-
-private:
     CharType *m_str;
 };
 
 class WXDLLIMPEXP_BASE wxCharBuffer : public wxCharTypeBuffer<char>
 {
 public:
-    wxCharBuffer(const CharType *str = NULL) : wxCharTypeBuffer<char>(str) {}
-    wxCharBuffer(const wxCStrData& cstr) : wxCharTypeBuffer<char>(cstr) {}
-    wxCharBuffer(size_t len) : wxCharTypeBuffer<char>(len) {}
+    typedef wxCharTypeBuffer<char> wxCharTypeBufferBase;
+
+    wxCharBuffer(const CharType *str = NULL) : wxCharTypeBufferBase(str) {}
+    wxCharBuffer(size_t len) : wxCharTypeBufferBase(len) {}
+
+#if !wxUSE_UNICODE
+    wxCharBuffer(const wxCStrData& cstr);
+#endif
 };
 
 #if wxUSE_WCHAR_T
 class WXDLLIMPEXP_BASE wxWCharBuffer : public wxCharTypeBuffer<wchar_t>
 {
 public:
-    wxWCharBuffer(const CharType *str = NULL) : wxCharTypeBuffer<wchar_t>(str) {}
-    wxWCharBuffer(const wxCStrData& cstr) : wxCharTypeBuffer<wchar_t>(cstr) {}
-    wxWCharBuffer(size_t len) : wxCharTypeBuffer<wchar_t>(len) {}
+    typedef wxCharTypeBuffer<wchar_t> wxCharTypeBufferBase;
+
+    wxWCharBuffer(const CharType *str = NULL) : wxCharTypeBufferBase(str) {}
+    wxWCharBuffer(size_t len) : wxCharTypeBufferBase(len) {}
+
+#if wxUSE_UNICODE
+    wxWCharBuffer(const wxCStrData& cstr);
+#endif
 };
 #endif // wxUSE_WCHAR_T
 
 #if wxUSE_UNICODE
-    typedef wxWCharBuffer wxWxCharBuffer;
+    #define wxWxCharBuffer wxWCharBuffer
 
     #define wxMB2WXbuf wxWCharBuffer
     #define wxWX2MBbuf wxCharBuffer
     #define wxWC2WXbuf wxChar*
     #define wxWX2WCbuf wxChar*
 #else // ANSI
-    typedef wxCharBuffer wxWxCharBuffer;
+    #define wxWxCharBuffer wxCharBuffer
 
     #define wxMB2WXbuf wxChar*
     #define wxWX2MBbuf wxChar*

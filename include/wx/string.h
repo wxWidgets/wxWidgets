@@ -2045,10 +2045,9 @@ inline wxString& wxString::operator=(const wxCStrData& cstr)
 // ----------------------------------------------------------------------------
 
 // FIXME-UTF8: move this to buffer.h; provide versions for both variants
-template<>
-inline void wxCharTypeBuffer<wxChar>::FromCStrData(const wxCStrData& cstr)
+inline wxWxCharBuffer::wxWxCharBuffer(const wxCStrData& cstr)
+                    : wxCharTypeBufferBase((const wxChar *)cstr)
 {
-    m_str = wxStrDup(cstr.AsString());
 }
 
 #endif  // _WX_WXSTRINGH__
