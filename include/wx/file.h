@@ -100,8 +100,13 @@ public:
   bool Write(const wxString& s, const wxMBConv& conv = wxConvUTF8)
   {
       const wxWX2MBbuf buf = s.mb_str(conv);
-      size_t size = strlen(buf);
-      return Write((const char *) buf, size) == size;
+      if (buf)
+      {
+  	      size_t size = strlen(buf);
+  	      return Write((const char *) buf, size) == size;
+	  }
+      else
+          return false;
   }
     // flush data not yet written
   bool Flush();
