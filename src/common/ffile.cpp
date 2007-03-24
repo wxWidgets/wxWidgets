@@ -161,13 +161,21 @@ size_t wxFFile::Write(const void *pBuf, size_t nCount)
     return nWritten;
 }
 
+bool wxFFile::Write(const wxString& s, const wxMBConv& conv)
+{
+  const wxWX2MBbuf buf = s.mb_str(conv);
+  if ( !buf )
+      return false;
+
+  const size_t size = strlen(buf); // FIXME: use buf.length() when available
+  return Write(buf, size) == size;
+}
+
 bool wxFFile::Flush()
 {
     if ( IsOpened() )
     {
-        // fflush returns non-zero on error
-        //
-        if ( fflush(m_fp) )
+        if ( fflush(m_fp) != 0 )
         {
             wxLogSysError(_("failed to flush the file '%s'"), m_name.c_str());
 
