@@ -1933,24 +1933,30 @@ void MyFrame::OnSize( wxSizeEvent& event )
 void MyFrame::OnIdle( wxIdleEvent& WXUNUSED(event) )
 {
     // track the window which has the focus in the status bar
-    static wxWindow *s_windowFocus = (wxWindow *)NULL;
+    static wxWindow *s_windowFocus = NULL;
     wxWindow *focus = wxWindow::FindFocus();
-    if ( focus && (focus != s_windowFocus) )
+    if ( focus != s_windowFocus )
     {
         s_windowFocus = focus;
 
         wxString msg;
-        msg.Printf(
+        if ( focus )
+        {
+            msg.Printf(
+                    _T("Focus: %s")
 #ifdef __WXMSW__
-                _T("Focus: %s, HWND = %08x"),
-#else
-                _T("Focus: %s"),
+                    _T(", HWND = %08x"),
 #endif
-                s_windowFocus->GetClassInfo()->GetClassName()
+                    , s_windowFocus->GetName().c_str()
 #ifdef __WXMSW__
-                , (unsigned int) s_windowFocus->GetHWND()
+                    , (unsigned int) s_windowFocus->GetHWND()
 #endif
-                  );
+                      );
+        }
+        else
+        {
+            msg = _T("No focus");
+        }
 
 #if wxUSE_STATUSBAR
         SetStatusText(msg);
