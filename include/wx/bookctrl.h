@@ -159,6 +159,7 @@ public:
     // returns the sizer containing the control, if any
     wxSizer* GetControlSizer() const { return m_controlSizer; }
 
+
     // operations
     // ----------
 
@@ -229,6 +230,8 @@ public:
     // we do have multiple pages
     virtual bool HasMultiplePages() const { return true; }
 
+    // we don't want focus for ourselves
+    virtual bool AcceptsFocus() const { return false; }
 
 protected:
     // flags for DoSetSelection()
