@@ -27,12 +27,15 @@ XGETTEXT_ARGS=-C -k_ -kwxPLURAL:1,2 -kwxTRANSLATE -s -j
 %.po: wxstd.po
 	if [ -f $@ ]; then $(MSGMERGE) $@ wxstd.po > $@.new && mv $@.new $@; else cp wxstd.po $@; fi
 
+# note the extra -kAddToPopUp used for Scintilla files: this is a hack to
+# translate the popup menu items
 wxstd.po:
 	touch $@
 	find ../include -name "*.h" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o wxstd.po
 	find ../src -name "*.cpp" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o wxstd.po
 	find ../contrib/include -name "*.h" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o wxstd.po
 	find ../contrib/src -name "*.cpp" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -o wxstd.po
+	find ../contrib/src/stc/scintilla/src -name "*.cxx" | $(XARGS) $(XGETTEXT) $(XGETTEXT_ARGS) -kAddToPopUp -o wxstd.po
 
 allpo: force-update
 	@-for t in $(WX_LINGUAS_UPDATE); do $(MAKE) $$t.po; done
