@@ -544,7 +544,7 @@ bool wxApp::ProcessXEvent(WXEvent* _event)
 
             if (event->type == ButtonPress)
             {
-                if ((win != wxWindow::FindFocus()) && win->AcceptsFocus())
+                if ((win != wxWindow::FindFocus()) && win->CanAcceptFocus())
                 {
                     // This might actually be done in wxWindow::SetFocus()
                     // and not here. TODO.

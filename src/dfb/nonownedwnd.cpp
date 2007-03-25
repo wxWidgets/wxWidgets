@@ -249,7 +249,7 @@ bool wxNonOwnedWindow::Show(bool show)
         {
             SetDfbFocus();
         }
-        else if ( AcceptsFocus() )
+        else if ( CanAcceptFocus() )
         {
             // FIXME: we should probably always call SetDfbFocus instead
             // and call SetFocus() from wxActivateEvent/DWET_GOTFOCUS

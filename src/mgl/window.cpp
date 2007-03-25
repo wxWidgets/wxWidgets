@@ -184,7 +184,7 @@ static ibool MGLAPI wxWindowMouseHandler(window_t *wnd, event_t *e)
     {
         case EVT_MOUSEDOWN:
             // Change focus if the user clicks outside focused window:
-            if ( win->AcceptsFocus() && wxWindow::FindFocus() != win )
+            if ( win->CanAcceptFocus() && wxWindow::FindFocus() != win )
                 win->SetFocus();
 
             if ( e->message & EVT_DBLCLICK )

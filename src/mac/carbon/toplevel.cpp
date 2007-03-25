@@ -591,7 +591,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
             if ( wxevent.GetEventType() == wxEVT_LEFT_DOWN )
             {
                 // ... that is set focus to this window
-                if (currentMouseWindow->AcceptsFocus() && wxWindow::FindFocus()!=currentMouseWindow)
+                if (currentMouseWindow->CanAcceptFocus() && wxWindow::FindFocus()!=currentMouseWindow)
                     currentMouseWindow->SetFocus();
             }
 

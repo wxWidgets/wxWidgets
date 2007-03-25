@@ -2331,7 +2331,7 @@ bool wxWindowMSW::MSWShouldPreProcessMessage(WXMSG* msg)
               node = node->GetNext() )
         {
             wxWindow * const win = node->GetData();
-            if ( win->AcceptsFocus() &&
+            if ( win->CanAcceptFocus() &&
                     !(::GetWindowLong(GetHwndOf(win), GWL_EXSTYLE) &
                         WS_EX_CONTROLPARENT) )
             {
@@ -2741,7 +2741,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                     // problems, so don't do it for them (unnecessary anyhow)
                     if ( !win->IsOfStandardClass() )
                     {
-                        if ( message == WM_LBUTTONDOWN && win->AcceptsFocus() )
+                        if ( message == WM_LBUTTONDOWN && win->CanAcceptFocus() )
                             win->SetFocus();
                     }
                 }

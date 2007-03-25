@@ -571,13 +571,26 @@ public:
 
     static wxWindow *DoFindFocus() /* = 0: implement in derived classes */;
 
-        // can this window have focus?
-    virtual bool AcceptsFocus() const { return IsShown() && IsEnabled(); }
+        // can this window have focus in principle?
+        //
+        // the difference between AcceptsFocus[FromKeyboard]() and CanAcceptFocus
+        // [FromKeyboard]() is that the former functions are meant to be
+        // overridden in the derived classes to simply return false if the
+        // control can't have focus, while the latter are meant to be used by
+        // this class clients and take into account the current window state
+    virtual bool AcceptsFocus() const { return true; }
+
+        // can this window have focus right now?
+    bool CanAcceptFocus() const { return AcceptsFocus() && IsShown() && IsEnabled(); }
 
         // can this window be given focus by keyboard navigation? if not, the
         // only way to give it focus (provided it accepts it at all) is to
         // click it
     virtual bool AcceptsFocusFromKeyboard() const { return AcceptsFocus(); }
+
+        // can this window be assigned focus from keyboard right now?
+    bool CanAcceptFocusFromKeyboard() const
+        { return AcceptsFocusFromKeyboard() && CanAcceptFocus(); }
 
         // navigates in the specified direction by sending a wxNavigationKeyEvent
     virtual bool Navigate(int flags = wxNavigationKeyEvent::IsForward);

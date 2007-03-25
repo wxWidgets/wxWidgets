@@ -2358,7 +2358,7 @@ MRESULT wxWindowOS2::OS2WindowProc( WXUINT uMsg,
                                                                   );
                     if (!pWin->IsOfStandardClass())
                     {
-                        if (uMsg == WM_BUTTON1DOWN && pWin->AcceptsFocus() )
+                        if (uMsg == WM_BUTTON1DOWN && pWin->CanAcceptFocus() )
                             pWin->SetFocus();
                     }
                     bProcessed = pWin->HandleMouseEvent( uMsg

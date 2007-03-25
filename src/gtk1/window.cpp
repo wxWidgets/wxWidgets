@@ -1475,7 +1475,7 @@ static gint gtk_window_button_press_callback( GtkWidget *widget,
 
     g_lastButtonNumber = gdk_event->button;
 
-    if (win->m_wxwindow && (g_focusWindow != win) && win->AcceptsFocus())
+    if (win->m_wxwindow && (g_focusWindow != win) && win->CanAcceptFocus())
     {
         gtk_widget_grab_focus( win->m_wxwindow );
 /*

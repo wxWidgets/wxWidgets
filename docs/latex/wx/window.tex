@@ -171,6 +171,29 @@ can delete a window only when it is safe to do so, in idle time.
 \helpref{wxCloseEvent}{wxcloseevent}
 
 
+\membersection{wxWindow::AcceptsFocus}\label{wxwindowacceptsfocus}
+
+\constfunc{bool}{AcceptsFocus}{\void}
+
+This method may be overridden in the derived classes to return \false to
+indicate that this control doesn't accept input at all (i.e. behaves like e.g.
+\helpref{wxStaticText}{wxstatictext}) and so doesn't need focus.
+
+\wxheading{See also}
+
+\helpref{AcceptsFocusFromKeyboard}{wxwindowacceptsfocusfromkeyboard}
+
+
+\membersection{wxWindow::AcceptsFocusFromKeyboard}\label{wxwindowacceptsfocusfromkeyboard}
+
+\constfunc{bool}{AcceptsFocusFromKeyboard}{\void}
+
+This method may be overridden in the derived classes to return \false to
+indicate that while this control can, in principle, have focus if the user
+clicks it with the mouse, it shouldn't be included in the TAB traversal chain
+when using the keyboard.
+
+
 \membersection{wxWindow::AddChild}\label{wxwindowaddchild}
 
 \func{virtual void}{AddChild}{\param{wxWindow* }{child}}

@@ -237,7 +237,7 @@ WXDWORD wxControl::MSWGetStyle(long style, WXDWORD *exstyle) const
 {
     long msStyle = wxWindow::MSWGetStyle(style, exstyle);
 
-    if ( AcceptsFocus() )
+    if ( AcceptsFocusFromKeyboard() )
     {
         msStyle |= WS_TABSTOP;
     }

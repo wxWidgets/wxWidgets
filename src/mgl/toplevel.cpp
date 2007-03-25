@@ -155,7 +155,7 @@ bool wxTopLevelWindowMGL::Show(bool show)
         GetEventHandler()->ProcessEvent(event);
     }
 
-    if ( ret && show && AcceptsFocus() )
+    if ( ret && show && CanAcceptFocus() )
         SetFocus();
         // FIXME_MGL -- don't do this for popup windows?
     return ret;

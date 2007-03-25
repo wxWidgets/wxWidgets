@@ -3196,10 +3196,9 @@ bool wxWin32InputHandler::HandleMouse(wxInputConsumer *control,
     // clicking on the control gives it focus
     if ( event.ButtonDown() )
     {
-        wxWindow *win = control->GetInputWindow();
+        wxWindow * const win = control->GetInputWindow();
 
-        if ( (wxWindow::FindFocus() != control->GetInputWindow()) &&
-             win->AcceptsFocus() )
+        if ( win->CanAcceptFocus() && wxWindow::FindFocus() != win )
         {
             win->SetFocus();
 
