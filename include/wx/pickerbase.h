@@ -37,7 +37,7 @@ class WXDLLIMPEXP_CORE wxPickerBase : public wxControl
 public:
     // ctor: text is the associated text control
     wxPickerBase() : m_text(NULL), m_picker(NULL), m_sizer(NULL)
-        { m_container.SetContainerWindow(this); }
+        { WX_INIT_CONTROL_CONTAINER(); }
     virtual ~wxPickerBase() {}
 
 

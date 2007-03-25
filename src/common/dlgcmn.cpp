@@ -121,7 +121,7 @@ void wxDialogBase::Init()
     // undesirable and can lead to unexpected and hard to find bugs
     SetExtraStyle(GetExtraStyle() | wxWS_EX_BLOCK_EVENTS);
 
-    m_container.SetContainerWindow(this);
+    WX_INIT_CONTROL_CONTAINER();
 }
 
 #if wxUSE_STATTEXT

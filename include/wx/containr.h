@@ -13,6 +13,23 @@
 #ifndef _WX_CONTAINR_H_
 #define _WX_CONTAINR_H_
 
+// use native tab traversal logic under GTK+ 2 (doesn't work yet)
+#if 0 // def __WXGTK20__
+    #define wxHAS_NATIVE_TAB_TRAVERSAL
+#endif
+
+#ifdef wxHAS_NATIVE_TAB_TRAVERSAL
+
+#define WX_DECLARE_CONTROL_CONTAINER() \
+    virtual bool AcceptsFocus() const { return false; } \
+    void SetFocusIgnoringChildren() { SetFocus(); }
+
+#define WX_INIT_CONTROL_CONTAINER()
+#define WX_EVENT_TABLE_CONTROL_CONTAINER(classname)
+#define WX_DELEGATE_TO_CONTROL_CONTAINER(classname, basename)
+
+#else // !wxHAS_NATIVE_TAB_TRAVERSAL
+
 class WXDLLEXPORT wxFocusEvent;
 class WXDLLEXPORT wxNavigationKeyEvent;
 class WXDLLEXPORT wxWindow;
@@ -20,7 +37,7 @@ class WXDLLEXPORT wxWindowBase;
 
 /*
    Implementation note: wxControlContainer is not a real mix-in but rather
-   a class meant to be agregated with (and not inherited from). Although
+   a class meant to be aggregated with (and not inherited from). Although
    logically it should be a mix-in, doing it like this has no advantage from
    the point of view of the existing code but does have some problems (we'd
    need to play tricks with event handlers which may be difficult to do
@@ -92,6 +109,10 @@ public: \
 protected: \
     wxControlContainer m_container
 
+// this macro must be used in the derived class ctor
+#define WX_INIT_CONTROL_CONTAINER() \
+    m_container.SetContainerWindow(this)
+
 // implement the event table entries for wxControlContainer
 #define WX_EVENT_TABLE_CONTROL_CONTAINER(classname) \
     EVT_SET_FOCUS(classname::OnFocus) \
@@ -137,5 +158,6 @@ bool classname::AcceptsFocus() const \
     return m_container.AcceptsFocus(); \
 }
 
+#endif // wxHAS_NATIVE_TAB_TRAVERSAL/!wxHAS_NATIVE_TAB_TRAVERSAL
 
 #endif // _WX_CONTAINR_H_

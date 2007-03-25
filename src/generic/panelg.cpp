@@ -105,7 +105,7 @@ WX_DELEGATE_TO_CONTROL_CONTAINER(wxPanel, wxWindow)
 
 void wxPanel::Init()
 {
-    m_container.SetContainerWindow(this);
+    WX_INIT_CONTROL_CONTAINER();
 }
 
 bool wxPanel::Create(wxWindow *parent, wxWindowID id,

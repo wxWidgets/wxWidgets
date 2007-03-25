@@ -334,7 +334,7 @@ void wxComboBox::DelegateChoice( const wxString& value )
 
 void wxComboBox::Init()
 {
-    m_container.SetContainerWindow(this);
+    WX_INIT_CONTROL_CONTAINER();
 }
 
 bool wxComboBox::Create(wxWindow *parent,
