@@ -118,6 +118,10 @@ wxMSW:
 - Corrected GetChecked() for events from checkable menu items (smanders)
 - Fixed popup menus under Windows NT 4
 
+wxGTK:
+
+- Fix wxNO_BORDER style for wxRadioBox (David Hart)
+
 
 2.8.3
 -----
