@@ -24,34 +24,6 @@
 # and once released its version cannot be changed.
 
 
-# public symbols added in 2.8.2 (please keep in alphabetical order):
-@WX_VERSION_TAG@.2 {
-    global:
-        # wxFileHistory::Set/GetBaseId()
-        *wxFileHistory*etBaseId*;
-        *wxSizerFlags*Shaped*;
-        *wxSizerFlags*FixedMinSize*;
-	*wxSearchCtrl*SetDescriptiveText*;
-	*wxSearchCtrl*GetDescriptiveText*;
-};
-
-# public symbols added in 2.8.1 (please keep in alphabetical order):
-@WX_VERSION_TAG@.1 {
-    global:
-        # wx{Dir|File}Dialog::Get/SetStyle()
-        *wxFileDialog*etStyle*;
-        *wxDirDialog*etStyle*;
-        # Mac OS X only, but it still must go in IIUC
-        *wxListCtrl*SetFocus*;
-		*wxListCtrl*OnChar*;
-		*wxListCtrl*OnRightDown*;
-		*wxListCtrl*OnMiddleDown*;
-		*wxListCtrl*FireMouseEvent*;
-        # wxTreeCtrl::CollapseAll[Children]() and IsEmpty
-        *wxTreeCtrl*CollapseAll*;
-        *wxTreeCtrl*IsEmpty*;
-};
-
 # symbols available since the beginning of this branch are only given
 # generic branch tag (don't remove this!):
 
