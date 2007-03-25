@@ -891,26 +891,6 @@ bool wxStringBase::ConcatSelf(size_t nSrcLen, const wxChar *pszSrcData,
   return true;
 }
 
-// ---------------------------------------------------------------------------
-// simple sub-string extraction
-// ---------------------------------------------------------------------------
-
-// helper function: clone the data attached to this string
-bool wxStringBase::AllocCopy(wxString& dest, int nCopyLen, int nCopyIndex) const
-{
-  if ( nCopyLen == 0 ) {
-    dest.Init();
-  }
-  else {
-    if ( !dest.AllocBuffer(nCopyLen) ) {
-      // allocation failure handled by caller
-      return false;
-    }
-    memcpy(dest.m_pchData, m_pchData + nCopyIndex, nCopyLen*sizeof(wxChar));
-  }
-  return true;
-}
-
 #endif // !wxUSE_STL_BASED_WXSTRING
 
 #if !wxUSE_STL_BASED_WXSTRING || !defined(HAVE_STD_STRING_COMPARE)

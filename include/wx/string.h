@@ -291,8 +291,6 @@ protected:
   // memory allocation
     // allocates memory for string of length nLen
   bool AllocBuffer(size_t nLen);
-    // copies data to another string
-  bool AllocCopy(wxString&, int, int) const;
     // effectively copies data to string
   bool AssignCopy(size_t, const wxChar *);
 
