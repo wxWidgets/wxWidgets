@@ -1003,7 +1003,13 @@ void wxTextCtrl::DoSetValue( const wxString &value, int flags )
     m_modified = false;
     DontMarkDirtyOnNextChange();
 
-    const wxCharBuffer buffer(wxGTK_CONV_ENC(value, GetTextEncoding()));
+    wxFontEncoding enc = m_defaultStyle.HasFont()
+                            ? m_defaultStyle.GetFont().GetEncoding()
+                            : wxFONTENCODING_SYSTEM;
+    if ( enc == wxFONTENCODING_SYSTEM )
+        enc = GetTextEncoding();
+
+    const wxCharBuffer buffer(wxGTK_CONV_ENC(value, enc));
     if ( !buffer )
     {
         // see comment in WriteText() as to why we must warn the user about
@@ -1024,6 +1030,14 @@ void wxTextCtrl::DoSetValue( const wxString &value, int flags )
     if ( IsMultiLine() )
     {
         gtk_text_buffer_set_text( m_buffer, buffer, strlen(buffer) );
+
+        if ( !m_defaultStyle.IsDefault() )
+        {
+            GtkTextIter start, end;
+            gtk_text_buffer_get_bounds( m_buffer, &start, &end );
+            wxGtkTextApplyTagsFromAttr(m_widget, m_buffer, m_defaultStyle,
+                                       &start, &end);
+        }
     }
     else // single line
     {
