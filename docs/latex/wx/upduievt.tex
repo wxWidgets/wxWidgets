@@ -52,7 +52,7 @@ your application, you can do one or both of the following:
 \begin{enumerate}
 \item Call \helpref{wxUpdateUIEvent::SetMode}{wxupdateuieventsetmode} with
 a value of wxUPDATE\_UI\_PROCESS\_SPECIFIED, and set the extra style
-wxWS\_EX\_PROCESS\_UPDATE\_EVENTS for every window that should receive update events.
+wxWS\_EX\_PROCESS\_UI\_UPDATES for every window that should receive update events.
 No other windows will receive update events.
 \item Call \helpref{wxUpdateUIEvent::SetUpdateInterval}{wxupdateuieventsetupdateinterval} with
 a millisecond value to set the delay between updates. You may need
@@ -89,7 +89,7 @@ Returns {\tt true} if it is appropriate to update (send UI update events to)
 this window.
 
 This function looks at the mode used (see \helpref{wxUpdateUIEvent::SetMode}{wxupdateuieventsetmode}),
-the wxWS\_EX\_PROCESS\_UPDATE\_EVENTS flag in {\it window},
+the wxWS\_EX\_PROCESS\_UI\_UPDATES flag in {\it window},
 the time update events were last sent in idle time, and
 the update interval, to determine whether events should be sent to
 this window now. By default this will always return {\tt true} because
