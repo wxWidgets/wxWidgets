@@ -106,6 +106,9 @@ public:
     // new is -1)
     void SendPageChangedEvent(int nPageOld, int nPageNew = -1);
 
+    // wxBookCtrlBase overrides this method to return false but we do need
+    // focus because we have tabs
+    virtual bool AcceptsFocus() const { return wxControl::AcceptsFocus(); }
 
 protected:
     DECLARE_NO_COPY_CLASS(wxNotebookBase)
