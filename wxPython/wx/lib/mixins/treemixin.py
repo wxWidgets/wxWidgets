@@ -25,8 +25,8 @@ The VirtualTree and DragAndDrop mixins force the wx.TR_HIDE_ROOT style.
 
 Author: Frank Niessink <frank@niessink.com>
 License: wxWidgets license
-Version: 0.9
-Date: 18 March 2007
+Version: 0.9.1
+Date: 26 March 2007
 
 ExpansionState is based on code and ideas from Karsten Hilbert.
 Andrea Gavana provided help with the CustomTreeCtrl integration.
@@ -148,7 +148,7 @@ class TreeAPIHarmonizer(object):
             else:
                 selections = []
         # If the root item is hidden, it should never be selected, 
-        # unfortunately, CustomTreeCtrl allows it to be selected.
+        # unfortunately, CustomTreeCtrl and TreeCtrl allow it to be selected.
         if self.HasFlag(wx.TR_HIDE_ROOT):
             rootItem = self.GetRootItem()
             if rootItem and rootItem in selections:
@@ -197,7 +197,7 @@ class TreeAPIHarmonizer(object):
                 super(TreeAPIHarmonizer, self).ExpandAll(item)
 
     def ExpandAllChildren(self, item):
-        # TreeListCtrl and CustomTreeCtrl don't have ExpandallChildren
+        # TreeListCtrl doesn't have ExpandallChildren
         try:
             super(TreeAPIHarmonizer, self).ExpandAllChildren(item)
         except AttributeError:

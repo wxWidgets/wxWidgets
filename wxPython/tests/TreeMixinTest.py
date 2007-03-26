@@ -1,5 +1,8 @@
 import wx, wx.gizmos, wx.lib.customtreectrl, unittest
-from wx.lib.mixins import treemixin
+try:
+    import treemixin
+except ImportError:
+    from wx.lib.mixins import treemixin
 
 
 # VirtualTree tests
@@ -719,6 +722,33 @@ class VanillaTreeListCtrlTestCase(VanillaTreeCommonTests, VanillaTreeTestCase):
 class VanillaCustomTreeCtrlTestCase(VanillaTreeCommonTests, 
         VanillaTreeTestCase):
     TreeClass = wx.lib.customtreectrl.CustomTreeCtrl
+
+
+# Tests of the tree controls without any mixin, to document behaviour
+# that is either different between tree control widgets or undesired
+# behaviour. 
+
+class TreeCtrlTestCase(unittest.TestCase):
+    def setUp(self):
+        self.frame = wx.Frame(None)
+        self.tree = wx.TreeCtrl(self.frame, style=wx.TR_HIDE_ROOT)
+
+    def testSelectHiddenRootItem(self):
+        root = self.tree.AddRoot('Hidden root')
+        self.tree.SelectItem(root)
+        self.assertEqual(root, self.tree.GetSelection())
+
+
+class CustomTreeCtrlTestCase(unittest.TestCase):
+    def setUp(self):
+        self.frame = wx.Frame(None)
+        self.tree = wx.lib.customtreectrl.CustomTreeCtrl(self.frame, 
+            style=wx.TR_HIDE_ROOT)
+
+    def testSelectHiddenRootItem(self):
+        root = self.tree.AddRoot('Hidden root')
+        self.tree.SelectItem(root)
+        self.assertEqual(root, self.tree.GetSelection())
 
 
 if __name__ == '__main__':

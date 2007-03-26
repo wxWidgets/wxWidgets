@@ -7,7 +7,7 @@ Recent Changes for wxPython
 
 wxGTK: Make wx.NO_BORDER style work with wx.RadioBox (patch 1525406)
 
-Update to 0.9 of TreeMixin.
+Update to 0.9.1 of TreeMixin.
 
 
 
