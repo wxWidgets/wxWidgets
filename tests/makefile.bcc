@@ -49,6 +49,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_fontmaptest.obj \
 	$(OBJS)\test_formatconvertertest.obj \
 	$(OBJS)\test_hashes.obj \
+	$(OBJS)\test_intltest.obj \
 	$(OBJS)\test_lists.obj \
 	$(OBJS)\test_longlongtest.obj \
 	$(OBJS)\test_convautotest.obj \
@@ -280,7 +281,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\test.exe $(__test_gui___depname) data $(OBJS)\printfbench.exe
+all: $(OBJS)\test.exe $(__test_gui___depname) data fr $(OBJS)\printfbench.exe
 
 clean: 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -320,6 +321,10 @@ $(OBJS)\test_gui.exe: $(OBJS)\test_gui_dummy.obj  $(TEST_GUI_OBJECTS)  $(OBJS)\t
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
 	for %f in (testdata.fc) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+
+fr: 
+	if not exist $(OBJS)\intl\fr mkdir $(OBJS)\intl\fr
+	for %f in (internat.po internat.mo) do if not exist $(OBJS)\intl\fr\%f copy .\intl\fr\%f $(OBJS)\intl\fr
 
 $(OBJS)\printfbench.exe: $(OBJS)\printfbench_dummy.obj  $(PRINTFBENCH_OBJECTS)
 	ilink32 -Tpe -q $(LDFLAGS) -L$(BCCDIR)\lib -L$(BCCDIR)\lib\psdk $(__DEBUGINFO)  -L$(LIBDIRNAME) -ap $(CPPUNIT_LIBS) @&&|
@@ -366,6 +371,9 @@ $(OBJS)\test_formatconvertertest.obj: .\formatconverter\formatconvertertest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_hashes.obj: .\hashes\hashes.cpp
+	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
+
+$(OBJS)\test_intltest.obj: .\intl\intltest.cpp
 	$(CXX) -q -c -P -o$@ $(TEST_CXXFLAGS) $**
 
 $(OBJS)\test_lists.obj: .\lists\lists.cpp

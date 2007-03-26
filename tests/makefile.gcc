@@ -41,6 +41,7 @@ TEST_OBJECTS =  \
 	$(OBJS)\test_fontmaptest.o \
 	$(OBJS)\test_formatconvertertest.o \
 	$(OBJS)\test_hashes.o \
+	$(OBJS)\test_intltest.o \
 	$(OBJS)\test_lists.o \
 	$(OBJS)\test_longlongtest.o \
 	$(OBJS)\test_convautotest.o \
@@ -280,7 +281,7 @@ $(OBJS):
 
 ### Targets: ###
 
-all: $(OBJS)\test.exe $(__test_gui___depname) data $(OBJS)\printfbench.exe
+all: $(OBJS)\test.exe $(__test_gui___depname) data fr $(OBJS)\printfbench.exe
 
 clean: 
 	-if exist $(OBJS)\*.o del $(OBJS)\*.o
@@ -300,6 +301,10 @@ endif
 data: 
 	if not exist $(OBJS) mkdir $(OBJS)
 	for %%f in (testdata.fc) do if not exist $(OBJS)\%%f copy .\%%f $(OBJS)
+
+fr: 
+	if not exist $(OBJS)\intl\fr mkdir $(OBJS)\intl\fr
+	for %%f in (internat.po internat.mo) do if not exist $(OBJS)\intl\fr\%%f copy .\intl\fr\%%f $(OBJS)\intl\fr
 
 $(OBJS)\printfbench.exe: $(PRINTFBENCH_OBJECTS)
 	$(CXX) -o $@ $(PRINTFBENCH_OBJECTS) $(LDFLAGS) $(__DEBUGINFO) $(__THREADSFLAG) -L$(LIBDIRNAME)  $(CPPUNIT_LIBS)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) -lwxzlib$(WXDEBUGFLAG)  -lwxregex$(WXUNICODEFLAG)$(WXDEBUGFLAG) -lwxexpat$(WXDEBUGFLAG) $(EXTRALIBS_FOR_BASE) $(__UNICOWS_LIB_p) $(__GDIPLUS_LIB_p) -lkernel32 -luser32 -lgdi32 -lcomdlg32 -lwinspool -lwinmm -lshell32 -lcomctl32 -lole32 -loleaut32 -luuid -lrpcrt4 -ladvapi32 -lwsock32 -lodbc32
@@ -344,6 +349,9 @@ $(OBJS)\test_formatconvertertest.o: ./formatconverter/formatconvertertest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_hashes.o: ./hashes/hashes.cpp
+	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\test_intltest.o: ./intl/intltest.cpp
 	$(CXX) -c -o $@ $(TEST_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\test_lists.o: ./lists/lists.cpp
@@ -454,7 +462,7 @@ $(OBJS)\printfbench_dummy.o: ./dummy.cpp
 $(OBJS)\printfbench_printfbench.o: ./benchmarks/printfbench.cpp
 	$(CXX) -c -o $@ $(PRINTFBENCH_CXXFLAGS) $(CPPDEPS) $<
 
-.PHONY: all clean data
+.PHONY: all clean data fr
 
 
 # Dependencies tracking:

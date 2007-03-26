@@ -246,6 +246,7 @@ TEST_OBJECTS =  &
 	$(OBJS)\test_fontmaptest.obj &
 	$(OBJS)\test_formatconvertertest.obj &
 	$(OBJS)\test_hashes.obj &
+	$(OBJS)\test_intltest.obj &
 	$(OBJS)\test_lists.obj &
 	$(OBJS)\test_longlongtest.obj &
 	$(OBJS)\test_convautotest.obj &
@@ -305,7 +306,7 @@ $(OBJS) :
 
 ### Targets: ###
 
-all : .SYMBOLIC $(OBJS)\test.exe $(__test_gui___depname) data $(OBJS)\printfbench.exe
+all : .SYMBOLIC $(OBJS)\test.exe $(__test_gui___depname) data fr $(OBJS)\printfbench.exe
 
 clean : .SYMBOLIC 
 	-if exist $(OBJS)\*.obj del $(OBJS)\*.obj
@@ -346,6 +347,10 @@ $(OBJS)\test_gui.exe :  $(TEST_GUI_OBJECTS) $(OBJS)\test_gui_sample.res
 data : .SYMBOLIC 
 	if not exist $(OBJS) mkdir $(OBJS)
 	for %f in (testdata.fc) do if not exist $(OBJS)\%f copy .\%f $(OBJS)
+
+fr : .SYMBOLIC 
+	if not exist $(OBJS)\intl\fr mkdir $(OBJS)\intl\fr
+	for %f in (internat.po internat.mo) do if not exist $(OBJS)\intl\fr\%f copy .\intl\fr\%f $(OBJS)\intl\fr
 
 $(OBJS)\printfbench.exe :  $(PRINTFBENCH_OBJECTS)
 	@%create $(OBJS)\printfbench.lbc
@@ -399,6 +404,9 @@ $(OBJS)\test_formatconvertertest.obj :  .AUTODEPEND .\formatconverter\formatconv
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_hashes.obj :  .AUTODEPEND .\hashes\hashes.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
+
+$(OBJS)\test_intltest.obj :  .AUTODEPEND .\intl\intltest.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(TEST_CXXFLAGS) $<
 
 $(OBJS)\test_lists.obj :  .AUTODEPEND .\lists\lists.cpp

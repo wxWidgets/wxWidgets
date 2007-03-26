@@ -254,6 +254,8 @@ tests/fontmap/*.cpp
 tests/formatconverter/*.cpp
 tests/geometry/*.cpp
 tests/hashes/*.cpp
+tests/intl/*.cpp
+tests/intl/fr/internat.*
 tests/lists/*.cpp
 tests/longlong/*.cpp
 tests/mbconv/*.cpp

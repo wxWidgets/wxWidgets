@@ -36,6 +36,7 @@
             fontmap/fontmaptest.cpp
             formatconverter/formatconvertertest.cpp
             hashes/hashes.cpp
+            intl/intltest.cpp
             lists/lists.cpp
             longlong/longlongtest.cpp
             mbconv/convautotest.cpp
@@ -92,6 +93,13 @@
         <files>testdata.fc</files>
     </wx-data>
 
+    <template id="catalog">
+        <dstdir>$(BUILDDIR)/intl/$(id)</dstdir>
+        <srcdir>$(SRCDIR)/intl/$(id)</srcdir>
+        <files>internat.po internat.mo</files>
+    </template>
+
+    <wx-data id="fr" template="catalog"/>
 
 
     <!-- BENCHMARKS -->

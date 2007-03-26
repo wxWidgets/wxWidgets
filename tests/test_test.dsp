@@ -509,6 +509,10 @@ SOURCE=.\hashes\hashes.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\intl\intltest.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\streams\largefile.cpp
 # End Source File
 # Begin Source File

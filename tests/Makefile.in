@@ -61,6 +61,7 @@ TEST_OBJECTS =  \
 	test_fontmaptest.o \
 	test_formatconvertertest.o \
 	test_hashes.o \
+	test_intltest.o \
 	test_lists.o \
 	test_longlongtest.o \
 	test_convautotest.o \
@@ -213,7 +214,7 @@ COND_WXUSE_REGEX_BUILTIN___LIB_REGEX_p = \
 
 ### Targets: ###
 
-all: test$(EXEEXT) $(__test_gui___depname) $(__test_gui_bundle___depname) data printfbench$(EXEEXT)
+all: test$(EXEEXT) $(__test_gui___depname) $(__test_gui_bundle___depname) data fr printfbench$(EXEEXT)
 
 install: all
 
@@ -284,6 +285,18 @@ data:
 	esac; \
 	done
 
+fr: 
+	@mkdir -p ./intl/fr
+	@for f in internat.po internat.mo; do \
+	if test ! -f ./intl/fr/$$f -a ! -d ./intl/fr/$$f ; \
+	then x=yep ; \
+	else x=`find $(srcdir)/intl/fr/$$f -newer ./intl/fr/$$f -print` ; \
+	fi; \
+	case "$$x" in ?*) \
+	cp -pRf $(srcdir)/intl/fr/$$f ./intl/fr ;; \
+	esac; \
+	done
+
 printfbench$(EXEEXT): $(PRINTFBENCH_OBJECTS)
 	$(CXX) -o $@ $(PRINTFBENCH_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME)  $(SAMPLES_RPATH_FLAG) $(CPPUNIT_LIBS)  $(LIBS) $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
 	
@@ -331,6 +344,9 @@ test_formatconvertertest.o: $(srcdir)/formatconverter/formatconvertertest.cpp $(
 
 test_hashes.o: $(srcdir)/hashes/hashes.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/hashes/hashes.cpp
+
+test_intltest.o: $(srcdir)/intl/intltest.cpp $(TEST_ODEP)
+	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/intl/intltest.cpp
 
 test_lists.o: $(srcdir)/lists/lists.cpp $(TEST_ODEP)
 	$(CXXC) -c -o $@ $(TEST_CXXFLAGS) $(srcdir)/lists/lists.cpp
@@ -438,4 +454,4 @@ printfbench_printfbench.o: $(srcdir)/benchmarks/printfbench.cpp $(PRINTFBENCH_OD
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all install uninstall clean distclean test_gui_bundle data
+.PHONY: all install uninstall clean distclean test_gui_bundle data fr
