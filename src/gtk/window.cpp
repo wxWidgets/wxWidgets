@@ -2330,6 +2330,24 @@ bool wxWindowGTK::Create( wxWindow *parent,
     GtkScrolledWindowClass *scroll_class = GTK_SCROLLED_WINDOW_CLASS( GTK_OBJECT_GET_CLASS(m_widget) );
     scroll_class->scrollbar_spacing = 0;
 
+    // we create a GtkScrolledWindow for all windows, even those which don't
+    // use scrollbars, but there is a conflict with default bindings at GTK+
+    // level between scrolled windows and notebooks both of which want to use
+    // Ctrl-PageUp/Down: scrolled windows for scrolling in the horizontal
+    // direction and notebooks for changing pages -- we decide that if we don't
+    // have wxHSCROLL style we can safely sacrifice horizontal scrolling if it
+    // means we can get working keyboard navigation in notebooks
+    if ( !HasFlag(wxHSCROLL) )
+    {
+        GtkBindingSet *
+            bindings = gtk_binding_set_by_class(G_OBJECT_GET_CLASS(m_widget));
+        if ( bindings )
+        {
+            gtk_binding_entry_remove(bindings, GDK_Page_Up, GDK_CONTROL_MASK);
+            gtk_binding_entry_remove(bindings, GDK_Page_Down, GDK_CONTROL_MASK);
+        }
+    }
+
     if (HasFlag(wxALWAYS_SHOW_SB))
     {
         gtk_scrolled_window_set_policy( scrolledWindow, GTK_POLICY_ALWAYS, GTK_POLICY_ALWAYS );
