@@ -22,8 +22,18 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/wx.h"
+    #include "wx/app.h"
+    #include "wx/frame.h"
+    #include "wx/menu.h"
+
+    #include "wx/panel.h"
+
+    #include "wx/button.h"
+    #include "wx/listbox.h"
+    #include "wx/textctrl.h"
 #endif
+
+#include "wx/notebook.h"
 
 // ----------------------------------------------------------------------------
 // constants
@@ -33,8 +43,8 @@
 enum
 {
     // file menu
-    TabOrder_Quit = 100,
-    TabOrder_About,
+    TabOrder_Quit = wxID_EXIT,
+    TabOrder_About = wxID_ABOUT,
 
     // navigation menu
     TabOrder_TabForward = 200,
@@ -88,7 +98,6 @@ private:
             wxLogStatus(this, _T("Navigation event ignored"));
     }
 
-
     wxPanel *m_panel;
 
     DECLARE_EVENT_TABLE()
@@ -99,6 +108,44 @@ class MyPanel : public wxPanel
 {
 public:
     MyPanel(wxWindow *parent);
+
+private:
+    wxWindow *CreateButtonPage(wxWindow *parent);
+    wxWindow *CreateTextPage(wxWindow *parent);
+};
+
+// a text control which checks if processing Tab presses in controls with
+// wxTE_PROCESS_TAB style really works
+class MyTabTextCtrl : public wxTextCtrl
+{
+public:
+    MyTabTextCtrl(wxWindow *parent, const wxString& value, int flags = 0)
+        : wxTextCtrl(parent, wxID_ANY, value,
+                     wxDefaultPosition, wxDefaultSize,
+                     wxTE_PROCESS_TAB)
+    {
+        Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(MyTabTextCtrl::OnKeyDown));
+    }
+
+private:
+    void OnKeyDown(wxKeyEvent& event)
+    {
+        if ( event.GetKeyCode() == WXK_TAB &&
+                wxMessageBox
+                (
+                    _T("Let the Tab be used for navigation?"),
+                    _T("wxWidgets TabOrder sample: Tab key pressed"),
+                    wxICON_QUESTION | wxYES_NO,
+                    this
+                ) != wxYES )
+        {
+            // skip Skip() below: we consume the Tab press ourselves and so the
+            // focus shouldn't change
+            return;
+        }
+
+        event.Skip();
+    }
 };
 
 // ============================================================================
@@ -141,9 +188,9 @@ MyFrame::MyFrame()
                  wxDefaultPosition, wxSize(700, 450))
 {
     wxMenu *menuFile = new wxMenu;
-    menuFile->Append(TabOrder_About, _T("&About...\tF1"));
+    menuFile->Append(TabOrder_About);
     menuFile->AppendSeparator();
-    menuFile->Append(TabOrder_Quit, _T("E&xit\tAlt-X"), _T("Quit the sample"));
+    menuFile->Append(TabOrder_Quit);
 
     wxMenu *menuNav = new wxMenu;
     menuNav->Append(TabOrder_TabForward, _T("Tab &forward\tCtrl-F"),
@@ -213,15 +260,58 @@ void MyFrame::OnIdle( wxIdleEvent& WXUNUSED(event) )
 MyPanel::MyPanel(wxWindow *parent)
        : wxPanel(parent, wxID_ANY)
 {
-    wxSizerFlags flagsBorder = wxSizerFlags().Border();
-
-    wxSizer *sizerH = new wxBoxSizer(wxHORIZONTAL);
-    sizerH->Add(new wxButton(this, wxID_ANY, _T("&First")), flagsBorder);
-    sizerH->Add(new wxButton(this, wxID_ANY, _T("&Second")), flagsBorder);
+    wxNotebook *notebook = new wxNotebook(this, wxID_ANY);
+    notebook->AddPage(CreateButtonPage(notebook), _T("Button"));
+    notebook->AddPage(CreateTextPage(notebook), _T("Text"));
 
     wxSizer *sizerV = new wxBoxSizer(wxVERTICAL);
-    sizerV->Add(sizerH, wxSizerFlags(1).Expand());
-    sizerV->Add(new wxListBox(this, wxID_ANY), wxSizerFlags(1).Expand());
+    sizerV->Add(notebook, wxSizerFlags(1).Expand());
+
+    wxListBox *lbox = new wxListBox(this, wxID_ANY);
+    lbox->AppendString(_T("Just a"));
+    lbox->AppendString(_T("simple"));
+    lbox->AppendString(_T("listbox"));
+    sizerV->Add(lbox, wxSizerFlags(1).Expand());
+
     SetSizerAndFit(sizerV);
+}
+
+wxWindow *MyPanel::CreateButtonPage(wxWindow *parent)
+{
+    wxSizerFlags flagsBorder = wxSizerFlags().Border().Centre();
+
+    wxPanel *page = new wxPanel(parent);
+    wxSizer *sizerPage = new wxBoxSizer(wxHORIZONTAL);
+    sizerPage->Add(new wxButton(page, wxID_ANY, _T("&First")), flagsBorder);
+    sizerPage->Add(new wxStaticText(page, wxID_ANY, _T("[st&atic]")),
+                   flagsBorder);
+    sizerPage->Add(new wxButton(page, wxID_ANY, _T("&Second")), flagsBorder);
+
+    page->SetSizer(sizerPage);
+
+    return page;
+}
+
+wxWindow *MyPanel::CreateTextPage(wxWindow *parent)
+{
+    wxSizerFlags flagsBorder = wxSizerFlags().Border();
+
+    wxSizer *sizerPage = new wxBoxSizer(wxVERTICAL);
+    wxPanel *page = new wxPanel(parent);
+
+    wxSizer *sizerH = new wxBoxSizer(wxHORIZONTAL);
+    sizerH->Add(new wxStaticText(page, wxID_ANY, _T("&Label:")), flagsBorder);
+    sizerH->Add(new MyTabTextCtrl(page, _T("TAB ignored here")), flagsBorder);
+    sizerPage->Add(sizerH, wxSizerFlags(1).Expand());
+
+    sizerH = new wxBoxSizer(wxHORIZONTAL);
+    sizerH->Add(new wxStaticText(page, wxID_ANY, _T("&Another one::")), flagsBorder);
+    sizerH->Add(new MyTabTextCtrl(page, _T("press Tab here"), wxTE_PROCESS_TAB),
+                flagsBorder);
+    sizerPage->Add(sizerH, wxSizerFlags(1).Expand());
+
+    page->SetSizer(sizerPage);
+
+    return page;
 }
 
