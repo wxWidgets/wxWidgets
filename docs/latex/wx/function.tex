@@ -1620,11 +1620,11 @@ This function is deprecated, use \helpref{wxString}{wxstring} class instead.
 
 \membersection{::wxGetTranslation}\label{wxgettranslation}
 
-\func{const wxChar *}{wxGetTranslation}{\param{const wxChar* }{str},
-  \param{const wxChar* }{domain = NULL}}
+\func{const wxString\& }{wxGetTranslation}{\param{const wxString\& }{str},
+  \param{const wxString\&  }{domain = wxEmptyString}}
 
-\func{const wxChar *}{wxGetTranslation}{\param{const wxChar* }{str}, \param{const wxChar* }{strPlural}, \param{size\_t }{n},
-  \param{const wxChar* }{domain = NULL}}
+\func{const wxString\& }{wxGetTranslation}{\param{const wxString\& }{str}, \param{const wxString\& }{strPlural}, \param{size\_t }{n},
+  \param{const wxString\&  }{domain = wxEmptyString}}
 
 This function returns the translation of string {\it str} in the current
 \helpref{locale}{wxlocale}. If the string is not found in any of the loaded
@@ -1844,7 +1844,7 @@ even when \texttt{wxUSE\_PRINTF\_POS\_PARAMS} is 1.
 
 \membersection{\_}\label{underscore}
 
-\func{const wxChar *}{\_}{\param{const char *}{s}}
+\func{const wxString\&}{\_}{\param{const wxString\&}{s}}
 
 This macro expands into a call to \helpref{wxGetTranslation}{wxgettranslation}
 function, so it marks the message for the extraction by {\tt xgettext} just as
@@ -1856,7 +1856,7 @@ Don't confuse this macro with \helpref{\_T()}{underscoret}!
 
 \membersection{wxPLURAL}\label{wxplural}
 
-\func{const wxChar *}{wxPLURAL}{\param{const char *}{sing}, \param{const char *}{plur}, \param{size\_t}{n}}
+\func{const wxString\&}{wxPLURAL}{\param{const wxString\&}{sing}, \param{const wxString\&}{plur}, \param{size\_t}{n}}
 
 This macro is identical to \helpref{\_()}{underscore} but for the plural variant
 of \helpref{wxGetTranslation}{wxgettranslation}.

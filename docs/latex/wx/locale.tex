@@ -80,7 +80,7 @@ This is the default constructor and it does nothing to initialize the object:
 
 See \helpref{Init()}{wxlocaleinit} for parameters description.
 
-\func{}{wxLocale}{\param{const char }{*szName}, \param{const char }{*szShort = NULL}, \param{const char }{*szLocale = NULL}, \param{bool }{bLoadDefault = true}, \param{bool }{bConvertEncoding = false}}
+\func{}{wxLocale}{\param{const wxString\& }{name}, \param{const wxString\& }{short = wxEmptyString}, \param{const wxString\& }{locale = wxEmptyString}, \param{bool }{bLoadDefault = true}, \param{bool }{bConvertEncoding = false}}
 
 See \helpref{Init()}{wxlocaleinit} for parameters description.
 
@@ -104,9 +104,9 @@ set locale is restored and so the changes described in
 
 \membersection{wxLocale::AddCatalog}\label{wxlocaleaddcatalog}
 
-\func{bool}{AddCatalog}{\param{const char }{*szDomain}}
+\func{bool}{AddCatalog}{\param{const wxString\& }{domain}}
 
-\func{bool}{AddCatalog}{\param{const char }{*szDomain}, \param{wxLanguage}{msgIdLanguage}, \param{const char }{*msgIdCharset}}
+\func{bool}{AddCatalog}{\param{const wxString\& }{domain}, \param{wxLanguage}{msgIdLanguage}, \param{const wxString\& }{msgIdCharset}}
 
 Add a catalog for use with the current locale: it is searched for in standard
 places (current directory first, then the system one), but you may also prepend
@@ -255,7 +255,7 @@ special meaning of \texttt{wxLANGUAGE\_DEFAULT}.
 
 \membersection{wxLocale::GetLocale}\label{wxlocalegetlocale}
 
-\constfunc{const char*}{GetLocale}{\void}
+\constfunc{const wxString\& }{GetLocale}{\void}
 
 Returns the locale name as passed to the constructor or 
 \helpref{Init()}{wxlocaleinit}. This is full, human-readable name,
@@ -265,7 +265,7 @@ e.g. "English" or "French".
 
 \membersection{wxLocale::GetName}\label{wxlocalegetname}
 
-\constfunc{const wxString\&}{GetName}{\void}
+\constfunc{const wxString\& }{GetName}{\void}
 
 Returns the current short name for the locale (as given to the constructor or
 the Init() function).
@@ -273,9 +273,9 @@ the Init() function).
 
 \membersection{wxLocale::GetString}\label{wxlocalegetstring}
 
-\constfunc{const char*}{GetString}{\param{const char }{*szOrigString}, \param{const char }{*szDomain = NULL}}
+\constfunc{const wxString\& }{GetString}{\param{const wxString\& }{origString}, \param{const wxString\& }{domain = wxEmptyString}}
 
-\constfunc{const char*}{GetString}{\param{const char }{*szOrigString}, \param{const char }{*szOrigString2}, \param{size\_t }{n}, \param{const char }{*szDomain = NULL}}
+\constfunc{const wxString\& }{GetString}{\param{const wxString\& }{origString}, \param{const wxString\& }{origString2}, \param{size\_t }{n}, \param{const wxString\& }{domain = NULL}}
 
 Retrieves the translation for a string in all loaded domains unless the szDomain
 parameter is specified (and then only this catalog/domain is searched).
@@ -286,14 +286,14 @@ a string is not found; use \helpref{wxLogNull}{wxlogoverview} to suppress it).
 
 The second form is used when retrieving translation of string that has
 different singular and plural form in English or different plural forms in some
-other language. It takes two extra arguments: \arg{szOrigString}
+other language. It takes two extra arguments: \arg{origString}
 parameter must contain the singular form of the string to be converted.
 It is also used as the key for the search in the catalog.
-The \arg{szOrigString2} parameter is the plural form (in English).
+The \arg{origString2} parameter is the plural form (in English).
 The parameter \arg{n} is used to determine the plural form.  If no
-message catalog is found \arg{szOrigString} is returned if `n == 1',
-otherwise \arg{szOrigString2}.
-See \urlref{GNU gettext manual}{http://www.gnu.org/software/gettext/manual/html\_chapter/gettext\_10.html\#SEC150} for additional information on plural forms handling.
+message catalog is found \arg{origString} is returned if `n == 1',
+otherwise \arg{origString2}.
+See \urlref{GNU gettext manual}{http://www.gnu.org/manual/gettext/html\_chapter/gettext\_10.html\#SEC150} for additional information on plural forms handling.
 
 This method is called by the \helpref{wxGetTranslation}{wxgettranslation}
 function and \helpref{\_()}{underscore} macro.
@@ -306,9 +306,9 @@ added later override those added before.
 
 \membersection{wxLocale::GetHeaderValue}\label{wxlocalegetheadervalue}
 
-\constfunc{wxString}{GetHeaderValue}{\param{const char }{*szHeader}, \param{const char }{*szDomain = NULL}}
+\constfunc{wxString}{GetHeaderValue}{\param{const wxString\& }{header}, \param{const wxString\& }{domain = wxEmptyString}}
 
-Returns the header value for header \arg{szHeader}. The search for \arg{szHeader} is case sensitive. If an \arg{szDomain}
+Returns the header value for header \arg{header}. The search for \arg{header} is case sensitive. If an \arg{domain}
 is passed, this domain is searched. Else all domains will be searched until a header has been found.
 The return value is the value of the header if found. Else this will be empty.
 
@@ -360,7 +360,7 @@ Returns \helpref{wxLanguage}{wxlanguage} value or
 \func{bool}{Init}{\param{int }{language = wxLANGUAGE\_DEFAULT}, \param{int }{flags =
                           wxLOCALE\_LOAD\_DEFAULT | wxLOCALE\_CONV\_ENCODING}}
 
-\func{bool}{Init}{\param{const char }{*szName}, \param{const char }{*szShort = NULL}, \param{const char }{*szLocale = NULL}, \param{bool }{bLoadDefault = true}, \param{bool }{bConvertEncoding = false}}
+\func{bool}{Init}{\param{const wxString\& }{name}, \param{const wxString\& }{short = wxEmptyString}, \param{const wxString\& }{locale = wxEmptyString}, \param{bool }{bLoadDefault = true}, \param{bool }{bConvertEncoding = false}}
 
 The second form is deprecated, use the first one unless you know what you are
 doing. 
@@ -387,12 +387,12 @@ description of this behaviour. Note that this flag is meaningless in Unicode bui
 \end{twocollist}
 }
 
-\docparam{szName}{The name of the locale. Only used in diagnostic messages.}
+\docparam{name}{The name of the locale. Only used in diagnostic messages.}
 
-\docparam{szShort}{The standard 2 letter locale abbreviation; it is used as the
+\docparam{short}{The standard 2 letter locale abbreviation; it is used as the
 directory prefix when looking for the message catalog files.}
 
-\docparam{szLocale}{The parameter for the call to setlocale(). Note that it is
+\docparam{locale}{The parameter for the call to setlocale(). Note that it is
 platform-specific.}
 
 \docparam{bLoadDefault}{May be set to false to prevent loading of the message catalog
