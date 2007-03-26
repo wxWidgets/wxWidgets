@@ -15,6 +15,10 @@ Changes in behaviour not resulting in compilation errors, please read this!
   necessarily the window itself) is disabled, new function IsThisEnabled()
   with the same behaviour as old IsEnabled() was added.
 
+- Generating wxNavigationKeyEvent events doesn't work any more under wxGTK (and
+  other platforms in the future), use wxWindow::Navigate() or NavigateIn()
+  instead.
+
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------
 
@@ -85,11 +89,13 @@ All (GUI):
 - Added wxJoystick::GetButtonState/Position() (Frank C Szczerba)
 - Added wxGridUpdateLocker helper class (Evgeniy Tarassov)
 - Support wxGRID_AUTOSIZE in wxGrid::SetRow/ColLabelSize() (Evgeniy Tarassov)
+- Added wxWindow::NavigateIn() in addition to existing Navigate()
 - Add support for <data> tags to wxrc
 
 wxGTK:
 
 - Native implementation for wxHyperlinkCtrl (Francesco Montorsi)
+- Native keyboard navigation implementation
 - Implemented support for underlined fonts in wxStaticText.
 - wxTopLevelWindow::SetSizeHints size increments now work.
 - wxTopLevelWindow::GetSize() returns the size including the WM decorations.

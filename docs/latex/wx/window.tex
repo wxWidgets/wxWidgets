@@ -1771,12 +1771,18 @@ it.
 
 \func{bool}{Navigate}{\param{int}{ flags = wxNavigationKeyEvent::IsForward}}
 
-Does keyboard navigation from this window to another, by sending
-a wxNavigationKeyEvent.
+Performs a keyboard navigation action starting from this window. This method is
+equivalent to calling \helpref{NavigateIn()}{wxwindownavigatein} method on the
+parent window.
 
 \wxheading{Parameters}
 
 \docparam{flags}{A combination of wxNavigationKeyEvent::IsForward and wxNavigationKeyEvent::WinChange.}
+
+\wxheading{Return value}
+
+Returns \true if the focus was moved to another window or \false if nothing
+changed.
 
 \wxheading{Remarks}
 
@@ -1784,6 +1790,15 @@ You may wish to call this from a text control custom keypress handler to do the 
 navigation behaviour for the tab key, since the standard default behaviour for
 a multiline text control with the wxTE\_PROCESS\_TAB style is to insert a tab
 and not navigate to the next control.
+
+
+\membersection{wxWindow::NavigateIn}\label{wxwindownavigatein}
+
+\func{bool}{NavigateIn}{\param{int}{ flags = wxNavigationKeyEvent::IsForward}}
+
+Performs a keyboard navigation action inside this window.
+
+See \helpref{Navigate}{wxwindownavigate} for more information.
 
 
 \membersection{wxWindow::NextControlId}\label{wxwindownextcontrolid}

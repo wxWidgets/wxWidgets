@@ -344,6 +344,8 @@ protected:
     void Init();
 
     virtual void DoMoveInTabOrder(wxWindow *win, MoveKind move);
+    virtual bool DoNavigateIn(int flags);
+
 
     // Copies m_children tab order to GTK focus chain:
     void RealizeTabOrder();

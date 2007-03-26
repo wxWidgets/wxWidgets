@@ -2651,17 +2651,18 @@ bool wxWindowBase::TryParent(wxEvent& event)
 // keyboard navigation
 // ----------------------------------------------------------------------------
 
-// Navigates in the specified direction.
-bool wxWindowBase::Navigate(int flags)
+// Navigates in the specified direction inside this window
+bool wxWindowBase::DoNavigateIn(int flags)
 {
+#ifdef wxHAS_NATIVE_TAB_TRAVERSAL
+    // native code doesn't process our wxNavigationKeyEvents anyhow
+    return false;
+#else // !wxHAS_NATIVE_TAB_TRAVERSAL
     wxNavigationKeyEvent eventNav;
     eventNav.SetFlags(flags);
-    eventNav.SetEventObject(this);
-    if ( GetParent()->GetEventHandler()->ProcessEvent(eventNav) )
-    {
-        return true;
-    }
-    return false;
+    eventNav.SetEventObject(FindFocus());
+    return GetEventHandler()->ProcessEvent(eventNav);
+#endif // wxHAS_NATIVE_TAB_TRAVERSAL/!wxHAS_NATIVE_TAB_TRAVERSAL
 }
 
 void wxWindowBase::DoMoveInTabOrder(wxWindow *win, MoveKind move)

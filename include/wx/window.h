@@ -62,6 +62,12 @@
     #define wxHAS_NATIVE_ENABLED_MANAGEMENT
 #endif
 
+// This is defined when the underlying toolkit handles tab traversal natively
+// (currently this only works under GTK+ 2)
+#ifdef __WXGTK20__
+    #define wxHAS_NATIVE_TAB_TRAVERSAL
+#endif
+
 // ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------
@@ -592,8 +598,14 @@ public:
     bool CanAcceptFocusFromKeyboard() const
         { return AcceptsFocusFromKeyboard() && CanAcceptFocus(); }
 
-        // navigates in the specified direction by sending a wxNavigationKeyEvent
-    virtual bool Navigate(int flags = wxNavigationKeyEvent::IsForward);
+        // navigates inside this window
+    bool NavigateIn(int flags = wxNavigationKeyEvent::IsForward)
+        { return DoNavigateIn(flags); }
+
+        // navigates in the specified direction from this window, this is
+        // equivalent to GetParent()->NavigateIn()
+    bool Navigate(int flags = wxNavigationKeyEvent::IsForward)
+        { return m_parent && ((wxWindowBase *)m_parent)->DoNavigateIn(flags); }
 
         // move this window just before/after the specified one in tab order
         // (the other window must be our sibling!)
@@ -1199,6 +1211,10 @@ protected:
         MoveAfter       // insert after the given window
     };
     virtual void DoMoveInTabOrder(wxWindow *win, MoveKind move);
+
+    // implementation of Navigate() and NavigateIn()
+    virtual bool DoNavigateIn(int flags);
+
 
 #if wxUSE_CONSTRAINTS
     // satisfy the constraints for the windows but don't set the window sizes
