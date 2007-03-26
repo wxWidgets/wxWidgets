@@ -1336,7 +1336,7 @@ int wxTreeListHeaderWindow::XToCol(int x)
 
 void wxTreeListHeaderWindow::RefreshColLabel(int col)
 {
-    if ( col > GetColumnCount() )
+    if ( col >= GetColumnCount() )
         return;
     
     int x = 0;
