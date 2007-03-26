@@ -184,6 +184,31 @@
 #endif /* ASCII/Unicode */
 
 /* ------------------------------------------------------------------------- */
+/* define wxStringCharType                                                   */
+/* ------------------------------------------------------------------------- */
+
+/* depending on the platform, Unicode build can either store wxStrings as
+   wchar_t* or UTF-8 encoded char*: */
+#if wxUSE_UNICODE
+    /* for now, all Unicode builds are wchar_t* based: */
+    #define wxUSE_UNICODE_WCHAR 1
+    #define wxUSE_UNICODE_UTF8  0
+#else
+    #define wxUSE_UNICODE_WCHAR 0
+    #define wxUSE_UNICODE_UTF8  0
+#endif
+
+/* define char type used by wxString internal representation: */
+#if wxUSE_UNICODE_UTF8
+    typedef char wxStringCharType;
+#elif wxUSE_UNICODE_WCHAR
+    typedef wchar_t wxStringCharType;
+#else
+    typedef char wxStringCharType;
+#endif
+
+
+/* ------------------------------------------------------------------------- */
 /* define _T() and related macros                                            */
 /* ------------------------------------------------------------------------- */
 

@@ -89,27 +89,11 @@ struct wxArgNormalizer
 
 // special cases for converting strings:
 
-// FIXME-UTF8: move this to chartype.h!
-#if wxUSE_UNICODE
-    /* for now, all Unicode builds are wchar_t* based: */
-    #define wxUSE_UNICODE_WCHAR 1
-#else
-    #define wxUSE_UNICODE_WCHAR 0
-#endif
-
-// FIXME-UTF8: include wx/chartype.h and use wxChar after headers split
-// FIXME-UTF8: this will be char* in UTF-8 build and wchar_t* on Windows
-#if wxUSE_UNICODE_WCHAR
-    typedef wchar_t wxArgNativeCharType;
-#else
-    typedef char wxArgNativeCharType;
-#endif
-
 template<>
 struct WXDLLIMPEXP_BASE wxArgNormalizer<const wxCStrData&>
 {
     wxArgNormalizer(const wxCStrData& value) : m_value(value) {}
-    const wxArgNativeCharType *get() const;
+    const wxStringCharType *get() const;
 
     const wxCStrData& m_value;
 };
@@ -125,7 +109,7 @@ template<>
 struct WXDLLIMPEXP_BASE wxArgNormalizer<const wxString&>
 {
     wxArgNormalizer(const wxString& value) : m_value(value) {}
-    const wxArgNativeCharType *get() const;
+    const wxStringCharType *get() const;
 
     const wxString& m_value;
 };

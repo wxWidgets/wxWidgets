@@ -32,14 +32,14 @@
 // implementation
 // ============================================================================
 
-const wxArgNativeCharType *wxArgNormalizer<const wxCStrData&>::get() const
+const wxStringCharType *wxArgNormalizer<const wxCStrData&>::get() const
 {
     return m_value;
 }
 
-const wxArgNativeCharType *wxArgNormalizer<const wxString&>::get() const
+const wxStringCharType *wxArgNormalizer<const wxString&>::get() const
 {
-    return m_value.c_str();
+    return m_value.wx_str();
 }
 
 #if wxUSE_UNICODE_WCHAR
