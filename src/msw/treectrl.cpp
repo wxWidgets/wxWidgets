@@ -1481,9 +1481,10 @@ wxTreeItemId wxTreeCtrl::AddRoot(const wxString& text,
                                  int image, int selectedImage,
                                  wxTreeItemData *data)
 {
-
     if ( HasFlag(wxTR_HIDE_ROOT) )
     {
+        wxASSERT_MSG( !m_pVirtualRoot, _T("tree can have only a single root") );
+
         // create a virtual root item, the parent for all the others
         wxTreeItemParam *param = new wxTreeItemParam;
         param->SetData(data);
