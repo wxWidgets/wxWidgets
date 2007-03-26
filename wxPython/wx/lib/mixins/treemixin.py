@@ -25,8 +25,8 @@ The VirtualTree and DragAndDrop mixins force the wx.TR_HIDE_ROOT style.
 
 Author: Frank Niessink <frank@niessink.com>
 License: wxWidgets license
-Version: 0.8
-Date: 13 March 2007
+Version: 0.9
+Date: 18 March 2007
 
 ExpansionState is based on code and ideas from Karsten Hilbert.
 Andrea Gavana provided help with the CustomTreeCtrl integration.
@@ -179,21 +179,45 @@ class TreeAPIHarmonizer(object):
 
     def ExpandAll(self, item=None):
         # TreeListCtrl wants an item as argument. That's an inconsistency with
-        # the TreeCtrl API. 
+        # the TreeCtrl API. Also, TreeCtrl doesn't allow invoking ExpandAll 
+        # on a tree with hidden root node, so prevent that.
+        if self.HasFlag(wx.TR_HIDE_ROOT):
+            rootItem = self.GetRootItem()
+            if rootItem:
+                child, cookie = self.GetFirstChild(rootItem)
+                while child:
+                    self.ExpandAllChildren(child)
+                    child, cookie = self.GetNextChild(rootItem, cookie)
+        else:
+            try:
+                super(TreeAPIHarmonizer, self).ExpandAll()
+            except TypeError:
+                if item is None:
+                    item = self.GetRootItem()
+                super(TreeAPIHarmonizer, self).ExpandAll(item)
+
+    def ExpandAllChildren(self, item):
+        # TreeListCtrl and CustomTreeCtrl don't have ExpandallChildren
         try:
-            super(TreeAPIHarmonizer, self).ExpandAll()
-        except TypeError:
-            if item is None:
-                item = self.GetRootItem()
-            super(TreeAPIHarmonizer, self).ExpandAll(item)
+            super(TreeAPIHarmonizer, self).ExpandAllChildren(item)
+        except AttributeError:
+            self.Expand(item)
+            child, cookie = self.GetFirstChild(item) 
+            while child:
+                self.ExpandAllChildren(child)
+                child, cookie = self.GetNextChild(item, cookie)
 
 
 class TreeHelper(object):
     ''' This class provides methods that are not part of the API of any 
     tree control, but are convenient to have available. '''
 
-    def GetItemChildren(self, item, recursively=False):
+    def GetItemChildren(self, item=None, recursively=False):
         ''' Return the children of item as a list. '''
+        if not item:
+            item = self.GetRootItem()
+            if not item:
+                return []
         children = []
         child, cookie = self.GetFirstChild(item)
         while child:
@@ -203,29 +227,23 @@ class TreeHelper(object):
             child, cookie = self.GetNextChild(item, cookie)
         return children
 
-    def ItemIndex(self, item, tupleIndex=True):
-        ''' Return the index of item. If tupleIndex is True, return a
-        an tuple-based index else return an integer-based index for item. '''
-        if tupleIndex:
-            parent = self.GetItemParent(item)
-            if parent:
-                parentIndices = self.ItemIndex(parent)
-                ownIndex = self.GetItemChildren(parent).index(item)
-                return parentIndices + (ownIndex,)
-            else:
-                return ()
+    def GetIndexOfItem(self, item):
+        ''' Return the index of item. '''
+        parent = self.GetItemParent(item)
+        if parent:
+            parentIndices = self.GetIndexOfItem(parent)
+            ownIndex = self.GetItemChildren(parent).index(item)
+            return parentIndices + (ownIndex,)
         else:
-            rootItem = self.GetRootItem()
-            if self.HasFlag(wx.TR_HIDE_ROOT):
-                if item == rootItem:
-                    return None
-                countRoot = 0
-            else:
-                if item == rootItem:
-                    return 0
-                countRoot = 1
-            return self.GetItemChildren(rootItem, 
-                recursively=True).index(item) + countRoot
+            return ()
+
+    def GetItemByIndex(self, index):
+        ''' Return the item specified by index. '''
+        item = self.GetRootItem()
+        for i in index:
+            children = self.GetItemChildren(item)
+            item = children[i]
+        return item
 
 
 class VirtualTree(TreeAPIHarmonizer, TreeHelper):
@@ -241,73 +259,44 @@ class VirtualTree(TreeAPIHarmonizer, TreeHelper):
     VirtualTree uses several callbacks (such as OnGetItemText) to 
     retrieve information needed to construct the tree and render the 
     items. To specify what item the callback needs information about,
-    the callback passes an item index. VirtualTree supports two types of
-    indices: a tuple-based index (the default) and an integer based index. 
-    See below for a more detailed explanation of the two index types.
+    the callback passes an item index. Whereas for list controls a simple
+    integer index can be used, for tree controls indicating a specific
+    item is a little bit more complicated. See below for a more detailed 
+    explanation of the how index works.
 
     Note that VirtualTree forces the wx.TR_HIDE_ROOT style.
 
-    In your subclass you *must* override OnGetItemText and either
-    OnGetChildrenCount if you use the tuple-based index or 
-    OnGetChildrenIndices if you use the integer-based index. These
-    methods are the minimum needed to construct the tree and render
-    the item labels. If you want to add images, change fonts our colours, 
-    etc., you need to override the appropriate OnGetXXX method as well.
+    In your subclass you *must* override OnGetItemText and 
+    OnGetChildrenCount. These two methods are the minimum needed to 
+    construct the tree and render the item labels. If you want to add 
+    images, change fonts our colours, etc., you need to override the 
+    appropriate OnGetXXX method as well.
 
-    About the index types: VirtualTree supports two types of indices that
-    are passed to the several callbacks to retrieve information about 
-    items in the tree.  The default index type is tuple-based, the second
-    type is integer-based. 
-    
-    If you use tuple-based indices, your callbacks are passed a tuple of 
-    integers that identifies the item the VirtualTree wants information 
-    about. An empty tuple, i.e. (), represents the hidden root item. 
-    A tuple with one integer, e.g. (3,), represents a visible root item, 
-    in this case the fourth one. A tuple with two integers, e.g. (3,0), 
-    represents a child of a visible root item, in this case the first 
-    child of the fourth root item. The tuple-based index is best suited 
-    if your underlying data structure is organized as a tree and allows 
-    for easy navigation to the right object in your tree data structure.
-
-    If you use integer-based indices, your callbacks are passed a simple 
-    integer (or None) that identifies the item the VirtualTree wants 
-    information about. None represents the hidden root item. Zero (0) 
-    represents the first visible root item. If the first visible root 
-    item has children 1 represents the first child of the first visible 
-    root item. If that child has children 2 represents the first grand 
-    child of the first visible root item. If the first child has no 
-    children, 2 would represent the second child of the first visible 
-    root item, etc. Basically, the integer is the row number of the item 
-    (when the tree is completely expanded). Integer-based indices are 
-    more convenient when your underlying data structure is organized as 
-    a list that is in the same order as the tree items in the tree need 
-    to be.
+    About indices: your callbacks are passed a tuple of integers that 
+    identifies the item the VirtualTree wants information about. An 
+    empty tuple, i.e. (), represents the hidden root item.  A tuple with 
+    one integer, e.g. (3,), represents a visible root item, in this case 
+    the fourth one. A tuple with two integers, e.g. (3,0), represents a 
+    child of a visible root item, in this case the first child of the 
+    fourth root item. 
     '''
 
     def __init__(self, *args, **kwargs):
-        self._tupleIndex = kwargs.pop('tupleIndex', True)
         kwargs['style'] = kwargs.get('style', wx.TR_DEFAULT_STYLE) | \
                           wx.TR_HIDE_ROOT
         super(VirtualTree, self).__init__(*args, **kwargs)
         self.Bind(wx.EVT_TREE_ITEM_EXPANDING, self.OnItemExpanding)
         self.Bind(wx.EVT_TREE_ITEM_COLLAPSED, self.OnItemCollapsed)
 
-    def OnGetChildrenCount(self, tupleIndex):
-        ''' This function must be overloaded in the derived class, if
-        you use the tuple-based indices. It should return the number 
-        of child items of the item with the provided tupleIndex. If 
-        tupleIndex == () it should return the number of root items. '''
-        raise NotImplementedError
-
-    def OnGetChildrenIndices(self, integerIndex=None):
-        ''' This function must be overloaded in the derived class, if
-        you want to use the integer-based index. The overridden method 
-        should return a list containing the (integer) indices of the 
-        children of the specified item. '''
+    def OnGetChildrenCount(self, index):
+        ''' This function *must* be overloaded in the derived class.
+        It should return the number of child items of the item with the 
+        provided index. If index == () it should return the number of 
+        root items. '''
         raise NotImplementedError
 
     def OnGetItemText(self, index, column=0):
-        ''' This function must be overloaded in the derived class. It 
+        ''' This function *must* be overloaded in the derived class. It 
         should return the string containing the text of the specified
         item. '''
         raise NotImplementedError
@@ -361,11 +350,17 @@ class VirtualTree(TreeAPIHarmonizer, TreeHelper):
             rootItem = self.AddRoot('Hidden root')
         self.RefreshChildrenRecursively(rootItem)
 
+    def RefreshItem(self, index):
+        ''' Redraws the item with the specified index. '''
+        item = self.GetItemByIndex(index)
+        hasChildren = bool(self.OnGetChildrenCount(index))
+        self.DoRefreshItem(item, index, hasChildren)
+
     def RefreshChildrenRecursively(self, item, itemIndex=None):
         ''' Refresh the children of item, reusing as much of the
         existing items in the tree as possible. '''
         if itemIndex is None:
-            itemIndex = self.ItemIndex(item, tupleIndex=self._tupleIndex)
+            itemIndex = self.GetIndexOfItem(item)
         reusableChildren = self.GetItemChildren(item)
         for childIndex in self.ChildIndices(itemIndex):
             if reusableChildren: 
@@ -378,8 +373,8 @@ class VirtualTree(TreeAPIHarmonizer, TreeHelper):
 
     def RefreshItemRecursively(self, item, itemIndex):
         ''' Refresh the item and its children recursively. '''
-        hasChildren = bool(self.ChildIndices(itemIndex))
-        self.RefreshItem(item, itemIndex, hasChildren)
+        hasChildren = bool(self.OnGetChildrenCount(itemIndex))
+        item = self.DoRefreshItem(item, itemIndex, hasChildren)
         # We need to refresh the children when the item is expanded and
         # when the item has no children, because in the latter case we
         # might have to delete old children from the tree:
@@ -387,7 +382,7 @@ class VirtualTree(TreeAPIHarmonizer, TreeHelper):
             self.RefreshChildrenRecursively(item, itemIndex)
         self.SetItemHasChildren(item, hasChildren)
  
-    def RefreshItem(self, item, index, hasChildren):
+    def DoRefreshItem(self, item, index, hasChildren):
         ''' Refresh one item. '''
         item = self.RefreshItemType(item, index)
         self.RefreshItemText(item, index)
@@ -397,6 +392,7 @@ class VirtualTree(TreeAPIHarmonizer, TreeHelper):
         self.RefreshBackgroundColour(item, index)
         self.RefreshItemImage(item, index, hasChildren)
         self.RefreshCheckedState(item, index)
+        return item
 
     def RefreshItemText(self, item, index):
         self.__refreshAttribute(item, index, 'ItemText')
@@ -441,12 +437,9 @@ class VirtualTree(TreeAPIHarmonizer, TreeHelper):
         self.__refreshAttribute(item, index, 'ItemChecked')
 
     def ChildIndices(self, itemIndex):
-        if self._tupleIndex:
-            childrenCount = self.OnGetChildrenCount(itemIndex) 
-            return [itemIndex + (childNumber,) for childNumber \
-                    in range(childrenCount)]
-        else:
-            return self.OnGetChildrenIndices(itemIndex)
+        childrenCount = self.OnGetChildrenCount(itemIndex) 
+        return [itemIndex + (childNumber,) for childNumber \
+                in range(childrenCount)]
 
     def OnItemExpanding(self, event):
         self.RefreshChildrenRecursively(event.GetItem())
@@ -601,7 +594,7 @@ class ExpansionState(TreeAPIHarmonizer, TreeHelper):
         (if you know that labels are unique and don't change), or return 
         something that represents the underlying domain object, e.g. 
         a database key. ''' 
-        return self.ItemIndex(item)
+        return self.GetIndexOfItem(item)
  
     def GetExpansionState(self):
         ''' GetExpansionState() -> list of expanded items. Expanded items 

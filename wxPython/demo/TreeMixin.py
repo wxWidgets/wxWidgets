@@ -104,9 +104,9 @@ class DemoTreeMixin(treemixin.VirtualTree, treemixin.DragAndDrop,
             return 1
 
     def OnDrop(self, dropTarget, dragItem):
-        dropIndex = self.ItemIndex(dropTarget)
+        dropIndex = self.GetIndoxOfItem(dropTarget)
         dropText = self.model.GetText(dropIndex)
-        dragIndex = self.ItemIndex(dragItem)
+        dragIndex = self.GetIndexOfItem(dragItem)
         dragText = self.model.GetText(dragIndex)
         self.log.write('drop %s %s on %s %s'%(dragText, dragIndex,
             dropText, dropIndex))
@@ -168,7 +168,7 @@ class VirtualCustomTreeCtrl(DemoTreeMixin,
 
     def OnItemChecked(self, event):
         item = event.GetItem()
-        itemIndex = self.ItemIndex(item)
+        itemIndex = self.GetIndexOfItem(item)
         if self.GetItemType(item) == 2: 
             # It's a radio item; reset other items on the same level
             for nr in range(self.GetChildrenCount(self.GetItemParent(item))):
@@ -201,7 +201,7 @@ class TreeNotebook(wx.Notebook):
     def GetIndicesOfSelectedItems(self):
         tree = self.trees[self.GetSelection()]
         if tree.GetSelections():
-            return [tree.ItemIndex(item) for item in tree.GetSelections()]
+            return [tree.GetIndexOfItem(item) for item in tree.GetSelections()]
         else:
             return [()]
 

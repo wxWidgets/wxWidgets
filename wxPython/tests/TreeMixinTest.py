@@ -1,4 +1,5 @@
-import wx, wx.gizmos, wx.lib.customtreectrl, unittest, treemixin
+import wx, wx.gizmos, wx.lib.customtreectrl, unittest
+from wx.lib.mixins import treemixin
 
 
 # VirtualTree tests
@@ -51,12 +52,8 @@ class TreeCtrl(object):
         self.checked[index] = checked
 
 
-class VirtualTreeCtrlWithTreeIndices(TreeCtrl, treemixin.VirtualTree, 
+class VirtualTreeCtrl(TreeCtrl, treemixin.VirtualTree, 
         wx.lib.customtreectrl.CustomTreeCtrl):
-
-    def __init__(self, *args, **kwargs):
-        kwargs['tupleIndex'] = True
-        super(VirtualTreeCtrlWithTreeIndices, self).__init__(*args, **kwargs)
 
     def OnGetItemText(self, indices):
         return 'item %s'%'.'.join([str(index) for index in indices])
@@ -69,27 +66,11 @@ class VirtualTreeCtrlWithTreeIndices(TreeCtrl, treemixin.VirtualTree,
         self.children[index] = childrenCount 
 
 
-class VirtualTreeCtrlWithListIndices(TreeCtrl, treemixin.VirtualTree, 
-        wx.lib.customtreectrl.CustomTreeCtrl):
 
-    def __init__(self, *args, **kwargs):
-        kwargs['tupleIndex'] = False
-        super(VirtualTreeCtrlWithListIndices, self).__init__(*args, **kwargs)
-
-    def OnGetItemText(self, index):
-        return 'item %d'%index
-
-    def OnGetChildrenIndices(self, index=None):
-        return self.children.get(index, [])
-
-    def PrepareChildrenIndices(self, index, indices):
-        self.children[index] = indices 
-
-
-class VirtualTreeCtrlTestWithTreeIndices_NoRootItems(unittest.TestCase):
+class VirtualTreeCtrlTest_NoRootItems(unittest.TestCase):
     def setUp(self):
         self.frame = wx.Frame(None)
-        self.tree = VirtualTreeCtrlWithTreeIndices(self.frame)
+        self.tree = VirtualTreeCtrl(self.frame)
         self.tree.RefreshItems()
 
     def testNoRootItems(self):
@@ -115,39 +96,11 @@ class VirtualTreeCtrlTestWithTreeIndices_NoRootItems(unittest.TestCase):
         self.assertEqual(3, self.tree.GetCount())
 
 
-class VirtualTreeCtrlWithListIndicesTest_NoRootItems(unittest.TestCase):
+
+class VirtualTreeCtrlTest_OneRoot(unittest.TestCase):
     def setUp(self):
         self.frame = wx.Frame(None)
-        self.tree = VirtualTreeCtrlWithListIndices(self.frame)
-        self.tree.RefreshItems()
-
-    def testNoRootItems(self):
-        self.assertEqual(0, self.tree.GetCount())
-
-    def testAddTwoRootItems(self):
-        self.tree.PrepareChildrenIndices(None, [0,1])
-        self.tree.RefreshItems()
-        self.assertEqual(2, self.tree.GetCount())
-
-    def testAddOneRootItemAndOneChild(self):
-        self.tree.PrepareChildrenIndices(None, [0])
-        self.tree.PrepareChildrenIndices(0, [1])
-        self.tree.RefreshItems()
-        self.tree.ExpandAll()
-        self.assertEqual(2, self.tree.GetCount())
-
-    def testAddOneRootItemAndTwoChildren(self):
-        self.tree.PrepareChildrenIndices(None, [0])
-        self.tree.PrepareChildrenIndices(0, [1,2])
-        self.tree.RefreshItems()
-        self.tree.ExpandAll()
-        self.assertEqual(3, self.tree.GetCount())
-
-
-class VirtualTreeCtrlTestWithTreeIndices_OneRoot(unittest.TestCase):
-    def setUp(self):
-        self.frame = wx.Frame(None)
-        self.tree = VirtualTreeCtrlWithTreeIndices(self.frame)
+        self.tree = VirtualTreeCtrl(self.frame)
         self.tree.PrepareChildrenCount((), 1)
         self.tree.RefreshItems()
 
@@ -202,64 +155,18 @@ class VirtualTreeCtrlTestWithTreeIndices_OneRoot(unittest.TestCase):
         item, cookie = self.tree.GetFirstChild(self.tree.GetRootItem())
         self.failUnless(self.tree.IsItemChecked(item))
 
-
-class VirtualTreeCtrlWithListIndicesTest_OneRoot(unittest.TestCase):
-    def setUp(self):
-        self.frame = wx.Frame(None)
-        self.tree = VirtualTreeCtrlWithListIndices(self.frame)
-        self.tree.PrepareChildrenIndices(None, [0])
-        self.tree.RefreshItems()
-
-    def testOneRoot(self):
-        self.assertEqual(1, self.tree.GetCount())
-
-    def testDeleteRootItem(self):
-        self.tree.PrepareChildrenIndices(None, [])
-        self.tree.RefreshItems()
-        self.assertEqual(0, self.tree.GetCount())
-
-    def testAddOneChild(self):
-        self.tree.PrepareChildrenIndices(0, [1])
-        self.tree.RefreshItems()
-        self.tree.ExpandAll()
-        self.assertEqual(2, self.tree.GetCount())
-
-    def testAddTwoChildren(self):
-        self.tree.PrepareChildrenIndices(0, [1,2])
-        self.tree.RefreshItems()
-        self.tree.ExpandAll()
-        self.assertEqual(3, self.tree.GetCount())
-
-    def testChangeFont(self):
-        self.tree.PrepareItemFont(0, wx.SMALL_FONT)
+    def testChangeTypeAndAddChildren(self):
+        self.tree.PrepareType((0,), 1)
+        self.tree.PrepareChildrenCount((0,), 1)
         self.tree.RefreshItems()
         item, cookie = self.tree.GetFirstChild(self.tree.GetRootItem())
-        self.assertEqual(wx.SMALL_FONT, self.tree.GetItemFont(item))
+        self.failUnless(self.tree.ItemHasChildren(item))
 
-    def testChangeColour(self):
-        self.tree.PrepareItemColour(0, wx.RED)
-        self.tree.RefreshItems()
+    def testRefreshItem(self):
+        self.tree.PrepareItemColour((0,), wx.RED)
+        self.tree.RefreshItem((0,))
         item, cookie = self.tree.GetFirstChild(self.tree.GetRootItem())
         self.assertEqual(wx.RED, self.tree.GetItemTextColour(item))
-
-    def testChangeBackgroundColour(self):
-        self.tree.PrepareItemBackgroundColour(0, wx.RED)
-        self.tree.RefreshItems()
-        item, cookie = self.tree.GetFirstChild(self.tree.GetRootItem())
-        self.assertEqual(wx.RED, self.tree.GetItemBackgroundColour(item))
-
-    def testChangeImage(self):
-        self.tree.PrepareImage(0, 0)
-        self.tree.RefreshItems()
-        item, cookie = self.tree.GetFirstChild(self.tree.GetRootItem())
-        self.assertEqual(0, self.tree.GetItemImage(item))
-
-    def testChangeType(self):
-        self.tree.PrepareType(0, 2)
-        self.tree.PrepareChecked(0, True)
-        self.tree.RefreshItems()
-        item, cookie = self.tree.GetFirstChild(self.tree.GetRootItem())
-        self.failUnless(self.tree.IsItemChecked(item))
 
 
 # TreeAPIHarmonizer tests
@@ -272,12 +179,16 @@ class TreeAPIHarmonizerTestCase(unittest.TestCase):
         class HarmonizedTreeCtrl(treemixin.TreeAPIHarmonizer, self.TreeClass):
             pass
         self.tree = HarmonizedTreeCtrl(self.frame, style=self.style)
+        self.eventsReceived = []
         self.populateTree()
 
     def populateTree(self):
         self.root = self.tree.AddRoot('Root')
         self.item = self.tree.AppendItem(self.root, 'Item')
         self.items = [self.root, self.item]
+
+    def onEvent(self, event):
+        self.eventsReceived.append(event)
 
 
 class TreeAPIHarmonizerCommonTests(object):
@@ -317,6 +228,14 @@ class TreeAPIHarmonizerCommonTests(object):
         self.tree.SetItemImage(self.item, -1, wx.TreeItemIcon_Selected, 1)
         self.assertEqual(-1, 
             self.tree.GetItemImage(self.item, wx.TreeItemIcon_Selected, 1))
+
+    def testExpandAll(self):
+        self.tree.ExpandAll()
+
+    def testExpandAllChildren(self):
+        self.tree.AppendItem(self.item, 'child')
+        self.tree.ExpandAllChildren(self.item)
+        self.failUnless(self.tree.IsExpanded(self.item))
 
 
 class TreeAPIHarmonizerNoTreeListCtrlCommonTests(object):
@@ -378,7 +297,6 @@ class TreeAPIHarmonizerMultipleSelectionTests(object):
         self.assertEqual([self.item, item2], self.tree.GetSelections())
 
 
-
 class TreeAPIHarmonizerVisibleRootTests(object):
     ''' Tests that should succeed for all tree controls when the root item
         is not hidden. '''
@@ -403,7 +321,6 @@ class TreeAPIHarmonizerHiddenRootTests(object):
     def testSelectRoot(self):
         self.tree.SelectItem(self.root)
         self.assertEqual([], self.tree.GetSelections())
-
 
 
 class TreeAPIHarmonizerWithTreeCtrlTestCase(TreeAPIHarmonizerTestCase):
@@ -564,63 +481,64 @@ class TreeHelperTestCase(unittest.TestCase):
         self.child = self.tree.AppendItem(self.item, 'Child')
 
 
-class TreeHelperVisibleRootTests(object):
-    def testIntegerIndexRootItem(self):
-        self.assertEqual(0, self.tree.ItemIndex(self.root, tupleIndex=False))
+class TreeHelperCommonTests(object):
+    def testGetItemChildren_EmptyTree(self):
+        self.tree.DeleteAllItems()
+        self.assertEqual([], self.tree.GetItemChildren())
 
-    def testIntegerIndexRegularItem(self):
-        self.assertEqual(1, self.tree.ItemIndex(self.item, tupleIndex=False))
+    def testGetItemChildren_NoParent(self):
+        self.assertEqual([self.item], self.tree.GetItemChildren())
 
-    def testIntegerIndexChild(self):
-        self.assertEqual(2, self.tree.ItemIndex(self.child, tupleIndex=False))
+    def testGetItemChildren_RootItem(self):
+        self.assertEqual([self.item], self.tree.GetItemChildren(self.root))
 
-    def testTupleIndexRootItem(self):
-        self.assertEqual((), self.tree.ItemIndex(self.root))
+    def testGetItemChildren_RegularItem(self):
+        self.assertEqual([self.child], self.tree.GetItemChildren(self.item))
 
-    def testTupleIndexRegularItem(self):
-        self.assertEqual((0,), self.tree.ItemIndex(self.item))
+    def testGetItemChildren_ItemWithoutChildren(self):
+        self.assertEqual([], self.tree.GetItemChildren(self.child))
 
-    def testTupleIndexChild(self):
-        self.assertEqual((0,0), self.tree.ItemIndex(self.child))
+    def testGetItemChildren_NoParent_Recursively(self):
+        self.assertEqual([self.item, self.child], 
+                         self.tree.GetItemChildren(recursively=True))
+
+    def testGetItemChildren_RootItem_Recursively(self):
+        self.assertEqual([self.item, self.child], 
+                         self.tree.GetItemChildren(self.root, True))
+
+    def testGetItemChildren_RegularItem_Recursively(self):
+        self.assertEqual([self.child], 
+                         self.tree.GetItemChildren(self.item, True))
+
+    def testGetItemChildren_ItemWithoutChildren_Recursively(self):
+        self.assertEqual([], self.tree.GetItemChildren(self.child, True))
+
+    def testGetItemByIndex_RootItem(self):
+        self.assertEqual(self.root, self.tree.GetItemByIndex(()))
+    
+    def testGetItemByIndex_RegularItem(self):
+        self.assertEqual(self.item, self.tree.GetItemByIndex((0,)))
+
+    def testGetItemByIndex_Child(self):
+        self.assertEqual(self.child, self.tree.GetItemByIndex((0,0)))
+
+    def testGetIndexOfItemRootItem(self):
+        self.assertEqual((), self.tree.GetIndexOfItem(self.root))
+
+    def testGetIndexOfItemRegularItem(self):
+        self.assertEqual((0,), self.tree.GetIndexOfItem(self.item))
+
+    def testGetIndexOfItemChild(self):
+        self.assertEqual((0,0), self.tree.GetIndexOfItem(self.child))
 
 
-class TreeHelperHiddenRootTests(object):
-    style = wx.TR_HIDE_ROOT
-
-    def testIntegerIndexRootItem(self):
-        self.assertEqual(None, self.tree.ItemIndex(self.root, tupleIndex=False))
-
-    def testIntegerIndexRegularItem(self):
-        self.assertEqual(0, self.tree.ItemIndex(self.item, tupleIndex=False))
-
-    def testIntegerIndexChild(self):
-        self.assertEqual(1, self.tree.ItemIndex(self.child, tupleIndex=False))
-
-    def testTupleIndexRootItem(self):
-        self.assertEqual((), self.tree.ItemIndex(self.root))
-
-    def testTupleIndexRegularItem(self):
-        self.assertEqual((0,), self.tree.ItemIndex(self.item))
-
-    def testTupleIndexChild(self):
-        self.assertEqual((0,0), self.tree.ItemIndex(self.child))
-
-
-class TreeHelperWithTreeCtrlTestCase(TreeHelperTestCase):
+class TreeHelperWithTreeCtrlTestCase(TreeHelperCommonTests, 
+        TreeHelperTestCase):
     TreeClass = wx.TreeCtrl
 
 
-class TreeHelperWithTreeCtrl_VisibleRoot(TreeHelperVisibleRootTests, 
-        TreeHelperWithTreeCtrlTestCase):
-    pass
-
-
-class TreeHelperWithTreeCtrl_HiddenRoot(TreeHelperHiddenRootTests, 
-        TreeHelperWithTreeCtrlTestCase):
-    pass
-
-
-class TreeHelperWithTreeListCtrlTestCase(TreeHelperTestCase):
+class TreeHelperWithTreeListCtrlTestCase(TreeHelperCommonTests, 
+        TreeHelperTestCase):
     TreeClass = wx.gizmos.TreeListCtrl
 
     def populateTree(self):
@@ -628,27 +546,9 @@ class TreeHelperWithTreeListCtrlTestCase(TreeHelperTestCase):
         super(TreeHelperWithTreeListCtrlTestCase, self).populateTree()
 
 
-class TreeHelperWithTreeListCtrl_VisibleRoot(TreeHelperVisibleRootTests, 
-        TreeHelperWithTreeListCtrlTestCase):
-    pass
-
-
-class TreeHelperWithTreeListCtrl_HiddenRoot(TreeHelperHiddenRootTests, 
-        TreeHelperWithTreeListCtrlTestCase):
-    pass
-
-class TreeHelperWithCustomTreeCtrlTestCase(TreeHelperTestCase):
+class TreeHelperWithCustomTreeCtrlTestCase(TreeHelperCommonTests, 
+        TreeHelperTestCase):
     TreeClass = wx.lib.customtreectrl.CustomTreeCtrl
-
-
-class TreeHelperWithCustomTreeCtrl_VisibleRoot(TreeHelperVisibleRootTests, 
-        TreeHelperWithCustomTreeCtrlTestCase):
-    pass
-
-
-class TreeHelperWithCustomTreeCtrl_HiddenRoot(TreeHelperHiddenRootTests, 
-        TreeHelperWithCustomTreeCtrlTestCase):
-    pass
 
 
 # ExpansionState tests
@@ -767,6 +667,58 @@ class SetExpansionStateTestCase(unittest.TestCase):
         grandGrandChild = self.tree.AppendItem(grandChild, 'Grandgrandchild')
         self.tree.SetExpansionState([(), (0,), (0,0)])
         self.failUnless(self.tree.IsExpanded(grandChild))
+
+
+# Tests of the tree controls without any mixin, to document behaviour that
+# already works, and works the same, for all tree control widgets
+
+class VanillaTreeTestCase(unittest.TestCase):
+    style = wx.TR_DEFAULT_STYLE
+
+    def setUp(self):
+        self.frame = wx.Frame(None)
+        self.tree = self.TreeClass(self.frame, style=self.style)
+        self.eventsReceived = []
+        self.populateTree()
+
+    def populateTree(self):
+        self.root = self.tree.AddRoot('Root')
+        self.item = self.tree.AppendItem(self.root, 'Item')
+        self.items = [self.root, self.item]
+
+    def onEvent(self, event):
+        self.eventsReceived.append(event)
+
+
+class VanillaTreeCommonTests(object):
+    ''' Tests that should succeed for all tree controls and all styles. '''
+
+    def testSetItemHasChildren(self):
+        self.tree.SetItemHasChildren(self.item, True)
+        self.failUnless(self.tree.ItemHasChildren(self.item))
+
+    def testExpandItemWithPlus(self):
+        self.tree.Bind(wx.EVT_TREE_ITEM_EXPANDING, self.onEvent)
+        self.tree.SetItemHasChildren(self.item, True)
+        self.tree.Expand(self.item)
+        self.assertEqual(1, len(self.eventsReceived))
+
+
+class VanillaTreeCtrlTestCase(VanillaTreeCommonTests, VanillaTreeTestCase):
+    TreeClass = wx.TreeCtrl
+
+
+class VanillaTreeListCtrlTestCase(VanillaTreeCommonTests, VanillaTreeTestCase):
+    TreeClass = wx.gizmos.TreeListCtrl
+
+    def populateTree(self):
+        self.tree.AddColumn('Column 0')
+        super(VanillaTreeListCtrlTestCase, self).populateTree()
+
+
+class VanillaCustomTreeCtrlTestCase(VanillaTreeCommonTests, 
+        VanillaTreeTestCase):
+    TreeClass = wx.lib.customtreectrl.CustomTreeCtrl
 
 
 if __name__ == '__main__':
