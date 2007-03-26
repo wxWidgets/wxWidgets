@@ -841,8 +841,16 @@ COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1
 COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1
 COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1
 COND_MONOLITHIC_0_SHARED_1_USE_XRC_1
+COND_MONOLITHIC_0_USE_AUI_1
+COND_MONOLITHIC_0_USE_GUI_1
+COND_MONOLITHIC_0_USE_GUI_1_USE_MEDIA_1
+COND_MONOLITHIC_0_USE_GUI_1_USE_ODBC_1
+COND_MONOLITHIC_0_USE_HTML_1
 COND_MONOLITHIC_0_USE_MEDIA_1
 COND_MONOLITHIC_0_USE_ODBC_1
+COND_MONOLITHIC_0_USE_QA_1
+COND_MONOLITHIC_0_USE_RICHTEXT_1
+COND_MONOLITHIC_0_USE_XRC_1
 COND_MONOLITHIC_1
 COND_MONOLITHIC_1_SHARED_0
 COND_MONOLITHIC_1_SHARED_1
@@ -45387,7 +45395,7 @@ if test "$wxUSE_GUI" = "yes"; then
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS artprov controls dialogs drawing \
                      dynamic erase event exec font image minimal mobile \
                      mobile/wxedit mobile/styles propsize render \
-                     rotate shaped vscroll widgets"
+                     rotate shaped taborder vscroll widgets"
 
     if test "$wxUSE_MONOLITHIC" != "yes"; then
         SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS console"
@@ -48109,6 +48117,31 @@ EOF
         COND_MONOLITHIC_0_SHARED_1_USE_XRC_1=""
     fi
 
+    COND_MONOLITHIC_0_USE_AUI_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$USE_AUI" = "x1" ; then
+        COND_MONOLITHIC_0_USE_AUI_1=""
+    fi
+
+    COND_MONOLITHIC_0_USE_GUI_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$USE_GUI" = "x1" ; then
+        COND_MONOLITHIC_0_USE_GUI_1=""
+    fi
+
+    COND_MONOLITHIC_0_USE_GUI_1_USE_MEDIA_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$USE_GUI" = "x1" -a "x$USE_MEDIA" = "x1" ; then
+        COND_MONOLITHIC_0_USE_GUI_1_USE_MEDIA_1=""
+    fi
+
+    COND_MONOLITHIC_0_USE_GUI_1_USE_ODBC_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$USE_GUI" = "x1" -a "x$USE_ODBC" = "x1" ; then
+        COND_MONOLITHIC_0_USE_GUI_1_USE_ODBC_1=""
+    fi
+
+    COND_MONOLITHIC_0_USE_HTML_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$USE_HTML" = "x1" ; then
+        COND_MONOLITHIC_0_USE_HTML_1=""
+    fi
+
     COND_MONOLITHIC_0_USE_MEDIA_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$USE_MEDIA" = "x1" ; then
         COND_MONOLITHIC_0_USE_MEDIA_1=""
@@ -48117,6 +48150,21 @@ EOF
     COND_MONOLITHIC_0_USE_ODBC_1="#"
     if test "x$MONOLITHIC" = "x0" -a "x$USE_ODBC" = "x1" ; then
         COND_MONOLITHIC_0_USE_ODBC_1=""
+    fi
+
+    COND_MONOLITHIC_0_USE_QA_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$USE_QA" = "x1" ; then
+        COND_MONOLITHIC_0_USE_QA_1=""
+    fi
+
+    COND_MONOLITHIC_0_USE_RICHTEXT_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$USE_RICHTEXT" = "x1" ; then
+        COND_MONOLITHIC_0_USE_RICHTEXT_1=""
+    fi
+
+    COND_MONOLITHIC_0_USE_XRC_1="#"
+    if test "x$MONOLITHIC" = "x0" -a "x$USE_XRC" = "x1" ; then
+        COND_MONOLITHIC_0_USE_XRC_1=""
     fi
 
     COND_MONOLITHIC_1="#"
@@ -50016,8 +50064,16 @@ COND_MONOLITHIC_0_SHARED_1_USE_GUI_1_USE_QA_1!$COND_MONOLITHIC_0_SHARED_1_USE_GU
 COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1!$COND_MONOLITHIC_0_SHARED_1_USE_ODBC_1$ac_delim
 COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1!$COND_MONOLITHIC_0_SHARED_1_USE_RICHTEXT_1$ac_delim
 COND_MONOLITHIC_0_SHARED_1_USE_XRC_1!$COND_MONOLITHIC_0_SHARED_1_USE_XRC_1$ac_delim
+COND_MONOLITHIC_0_USE_AUI_1!$COND_MONOLITHIC_0_USE_AUI_1$ac_delim
+COND_MONOLITHIC_0_USE_GUI_1!$COND_MONOLITHIC_0_USE_GUI_1$ac_delim
+COND_MONOLITHIC_0_USE_GUI_1_USE_MEDIA_1!$COND_MONOLITHIC_0_USE_GUI_1_USE_MEDIA_1$ac_delim
+COND_MONOLITHIC_0_USE_GUI_1_USE_ODBC_1!$COND_MONOLITHIC_0_USE_GUI_1_USE_ODBC_1$ac_delim
+COND_MONOLITHIC_0_USE_HTML_1!$COND_MONOLITHIC_0_USE_HTML_1$ac_delim
 COND_MONOLITHIC_0_USE_MEDIA_1!$COND_MONOLITHIC_0_USE_MEDIA_1$ac_delim
 COND_MONOLITHIC_0_USE_ODBC_1!$COND_MONOLITHIC_0_USE_ODBC_1$ac_delim
+COND_MONOLITHIC_0_USE_QA_1!$COND_MONOLITHIC_0_USE_QA_1$ac_delim
+COND_MONOLITHIC_0_USE_RICHTEXT_1!$COND_MONOLITHIC_0_USE_RICHTEXT_1$ac_delim
+COND_MONOLITHIC_0_USE_XRC_1!$COND_MONOLITHIC_0_USE_XRC_1$ac_delim
 COND_MONOLITHIC_1!$COND_MONOLITHIC_1$ac_delim
 COND_MONOLITHIC_1_SHARED_0!$COND_MONOLITHIC_1_SHARED_0$ac_delim
 COND_MONOLITHIC_1_SHARED_1!$COND_MONOLITHIC_1_SHARED_1$ac_delim
@@ -50074,14 +50130,6 @@ COND_TOOLKIT_GTK!$COND_TOOLKIT_GTK$ac_delim
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_!$COND_TOOLKIT_GTK_TOOLKIT_VERSION_$ac_delim
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2!$COND_TOOLKIT_GTK_TOOLKIT_VERSION_2$ac_delim
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1!$COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1$ac_delim
-COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0!$COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0$ac_delim
-COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1!$COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1$ac_delim
-COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0!$COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0$ac_delim
-COND_TOOLKIT_GTK_USE_GUI_1!$COND_TOOLKIT_GTK_USE_GUI_1$ac_delim
-COND_TOOLKIT_MAC!$COND_TOOLKIT_MAC$ac_delim
-COND_TOOLKIT_MAC_USE_GUI_1!$COND_TOOLKIT_MAC_USE_GUI_1$ac_delim
-COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0!$COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0$ac_delim
-COND_TOOLKIT_MGL!$COND_TOOLKIT_MGL$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -50123,6 +50171,14 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0!$COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0$ac_delim
+COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1!$COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1$ac_delim
+COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0!$COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1_WXUNIV_0$ac_delim
+COND_TOOLKIT_GTK_USE_GUI_1!$COND_TOOLKIT_GTK_USE_GUI_1$ac_delim
+COND_TOOLKIT_MAC!$COND_TOOLKIT_MAC$ac_delim
+COND_TOOLKIT_MAC_USE_GUI_1!$COND_TOOLKIT_MAC_USE_GUI_1$ac_delim
+COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0!$COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0$ac_delim
+COND_TOOLKIT_MGL!$COND_TOOLKIT_MGL$ac_delim
 COND_TOOLKIT_MGL_USE_GUI_1!$COND_TOOLKIT_MGL_USE_GUI_1$ac_delim
 COND_TOOLKIT_MOTIF!$COND_TOOLKIT_MOTIF$ac_delim
 COND_TOOLKIT_MOTIF_USE_GUI_1!$COND_TOOLKIT_MOTIF_USE_GUI_1$ac_delim
@@ -50212,16 +50268,9 @@ RESFLAGS!$RESFLAGS$ac_delim
 RESPROGRAMOBJ!$RESPROGRAMOBJ$ac_delim
 WX_RESOURCES_MACOSX_ASCII!$WX_RESOURCES_MACOSX_ASCII$ac_delim
 WX_RESOURCES_MACOSX_DATA!$WX_RESOURCES_MACOSX_DATA$ac_delim
-LIBWXMACRES!$LIBWXMACRES$ac_delim
-POSTLINK_COMMAND!$POSTLINK_COMMAND$ac_delim
-MACSETFILE!$MACSETFILE$ac_delim
-GCC!$GCC$ac_delim
-CPPUNIT_CONFIG!$CPPUNIT_CONFIG$ac_delim
-LIBOBJS!$LIBOBJS$ac_delim
-LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 96; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
@@ -50253,6 +50302,56 @@ N; s/^.*\n//; s/[,\\&]/\\&/g; s/@/@|#_!!_#|/g; b n
 ' >>$CONFIG_STATUS <conf$$subs.sed
 rm -f conf$$subs.sed
 cat >>$CONFIG_STATUS <<_ACEOF
+CEOF$ac_eof
+_ACEOF
+
+
+ac_delim='%!_!# '
+for ac_last_try in false false false false false :; do
+  cat >conf$$subs.sed <<_ACEOF
+LIBWXMACRES!$LIBWXMACRES$ac_delim
+POSTLINK_COMMAND!$POSTLINK_COMMAND$ac_delim
+MACSETFILE!$MACSETFILE$ac_delim
+GCC!$GCC$ac_delim
+CPPUNIT_CONFIG!$CPPUNIT_CONFIG$ac_delim
+LIBOBJS!$LIBOBJS$ac_delim
+LTLIBOBJS!$LTLIBOBJS$ac_delim
+_ACEOF
+
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 7; then
+    break
+  elif $ac_last_try; then
+    { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
+echo "$as_me: error: could not make $CONFIG_STATUS" >&2;}
+   { (exit 1); exit 1; }; }
+  else
+    ac_delim="$ac_delim!$ac_delim _$ac_delim!! "
+  fi
+done
+
+ac_eof=`sed -n '/^CEOF[0-9]*$/s/CEOF/0/p' conf$$subs.sed`
+if test -n "$ac_eof"; then
+  ac_eof=`echo "$ac_eof" | sort -nru | sed 1q`
+  ac_eof=`expr $ac_eof + 1`
+fi
+
+cat >>$CONFIG_STATUS <<_ACEOF
+cat >"\$tmp/subs-5.sed" <<\CEOF$ac_eof
+/@[a-zA-Z_][a-zA-Z_0-9]*@/!b end
+_ACEOF
+sed '
+s/[,\\&]/\\&/g; s/@/@|#_!!_#|/g
+s/^/s,@/; s/!/@,|#_!!_#|/
+:n
+t n
+s/'"$ac_delim"'$/,g/; t
+s/$/\\/; p
+N; s/^.*\n//; s/[,\\&]/\\&/g; s/@/@|#_!!_#|/g; b n
+' >>$CONFIG_STATUS <conf$$subs.sed
+rm -f conf$$subs.sed
+cat >>$CONFIG_STATUS <<_ACEOF
+:end
+s/|#_!!_#|//g
 CEOF$ac_eof
 _ACEOF
 
@@ -50500,7 +50599,7 @@ s&@abs_builddir@&$ac_abs_builddir&;t t
 s&@abs_top_builddir@&$ac_abs_top_builddir&;t t
 s&@INSTALL@&$ac_INSTALL&;t t
 $ac_datarootdir_hack
-" $ac_file_inputs | sed -f "$tmp/subs-1.sed" | sed -f "$tmp/subs-2.sed" | sed -f "$tmp/subs-3.sed" | sed -f "$tmp/subs-4.sed" | sed 's/|#_!!_#|//g' >$tmp/out
+" $ac_file_inputs | sed -f "$tmp/subs-1.sed" | sed -f "$tmp/subs-2.sed" | sed -f "$tmp/subs-3.sed" | sed -f "$tmp/subs-4.sed" | sed -f "$tmp/subs-5.sed" >$tmp/out
 
 test -z "$ac_datarootdir_hack$ac_datarootdir_seen" &&
   { ac_out=`sed -n '/\${datarootdir}/p' "$tmp/out"`; test -n "$ac_out"; } &&
