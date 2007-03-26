@@ -4414,6 +4414,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         if wnd:
             wndx = wcheck + image_w + item.GetX() + text_w + 4
             xa, ya = self.CalcScrolledPosition((0, item.GetY()))
+            wndx += xa
             if not wnd.IsShown():
                 wnd.Show()
             if wnd.GetPosition() != (wndx, ya):
