@@ -111,7 +111,6 @@ bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
       long style, const wxValidator& validator, const wxString &name )
 {
     m_needParent = true;
-    m_acceptsFocus = true;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))

@@ -66,21 +66,6 @@ static gint gtk_popup_button_press (GtkWidget *widget, GdkEvent *gdk_event, wxPo
 }
 
 //-----------------------------------------------------------------------------
-// "focus" from m_window
-//-----------------------------------------------------------------------------
-
-extern "C" {
-static gint gtk_dialog_focus_callback( GtkWidget *widget, GtkDirectionType WXUNUSED(d), wxWindow *WXUNUSED(win) )
-{
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
-    /* This disables GTK's tab traversal */
-    return TRUE;
-}
-}
-
-//-----------------------------------------------------------------------------
 // "delete_event"
 //-----------------------------------------------------------------------------
 
@@ -208,10 +193,6 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
         been realized, so we do this directly after realization */
     g_signal_connect (m_widget, "realize",
                       G_CALLBACK (gtk_dialog_realized_callback), this);
-
-    // disable native tab traversal
-    g_signal_connect (m_widget, "focus",
-                      G_CALLBACK (gtk_dialog_focus_callback), this);
 
     m_time = gtk_get_current_event_time();
 

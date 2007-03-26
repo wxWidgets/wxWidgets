@@ -125,7 +125,6 @@ bool wxBitmapButton::Create( wxWindow *parent,
                              const wxString &name )
 {
     m_needParent = true;
-    m_acceptsFocus = true;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))

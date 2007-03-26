@@ -68,7 +68,6 @@ public:
     virtual bool IsRetained() const;
 
     virtual void SetFocus();
-    virtual bool AcceptsFocus() const;
 
     virtual bool Reparent( wxWindowBase *newParent );
 
@@ -183,7 +182,7 @@ public:
 
 protected:
     // Override GTKWidgetNeedsMnemonic and return true if your
-    // needs to set its mnemonic widget, such as for a 
+    // needs to set its mnemonic widget, such as for a
     // GtkLabel for wxStaticText, then do the actual
     // setting of the widget inside GTKWidgetDoSetMnemonic
     virtual bool GTKWidgetNeedsMnemonic() const;
@@ -219,13 +218,13 @@ public:
     // the layouting functions have to be called later on
     // (i.e. in idle time, implemented in OnInternalIdle() ).
     void GtkUpdateSize() { m_sizeSet = false; }
-    
-    
+
+
     // Called when a window should delay showing itself
     // until idle time. This partly mimmicks defered
     // sizing under MSW.
     void GtkShowOnIdle() { m_showOnIdle = true; }
-    
+
     // This is called from the various OnInternalIdle methods
     bool GtkShowFromOnIdle();
 
@@ -299,7 +298,6 @@ public:
     bool                 m_hasVMT:1;
     bool                 m_sizeSet:1;
     bool                 m_resizing:1;
-    bool                 m_acceptsFocus:1;      // true if not static
     bool                 m_hasFocus:1;          // true if == FindFocus()
     bool                 m_isScrolling:1;       // dragging scrollbar thumb?
     bool                 m_clipPaintRegion:1;   // true after ScrollWindow()
@@ -310,7 +308,7 @@ public:
                                                 // background style until OnIdle
     bool                 m_mouseButtonDown:1;
     bool                 m_blockScrollEvent:1;
-    
+
     bool                 m_showOnIdle:1;        // postpone showing the window until idle
 
     // C++ has no virtual methods in the constrcutor of any class but we need

@@ -198,23 +198,6 @@ static gboolean gtk_frame_focus_out_callback( GtkWidget *widget,
 }
 
 //-----------------------------------------------------------------------------
-// "focus" from m_window
-//-----------------------------------------------------------------------------
-
-extern "C" {
-static gboolean gtk_frame_focus_callback( GtkWidget *WXUNUSED(widget),
-                                          GtkDirectionType WXUNUSED(d),
-                                          wxWindow *WXUNUSED(win) )
-{
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
-    // This disables GTK's tab traversal
-    return TRUE;
-}
-}
-
-//-----------------------------------------------------------------------------
 // "size_allocate"
 //-----------------------------------------------------------------------------
 
@@ -627,10 +610,6 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     // the only way to get the window size is to connect to this event
     g_signal_connect (m_widget, "configure_event",
                       G_CALLBACK (gtk_frame_configure_callback), this);
-
-    // disable native tab traversal
-    g_signal_connect (m_widget, "focus",
-                      G_CALLBACK (gtk_frame_focus_callback), this);
 
     // activation
     g_signal_connect_after (m_widget, "focus_in_event",

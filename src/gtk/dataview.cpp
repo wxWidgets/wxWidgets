@@ -1882,7 +1882,6 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
     Init();
 
     m_needParent = true;
-    m_acceptsFocus = true;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator ))

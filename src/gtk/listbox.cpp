@@ -335,7 +335,6 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
                         const wxString &name )
 {
     m_needParent = true;
-    m_acceptsFocus = true;
     m_blockEvent = false;
 
     if (!PreCreation( parent, pos, size ) ||

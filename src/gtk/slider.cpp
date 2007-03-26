@@ -288,7 +288,6 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
         const wxPoint& pos, const wxSize& size,
         long style, const wxValidator& validator, const wxString& name )
 {
-    m_acceptsFocus = true;
     m_needParent = true;
 
     if (!PreCreation( parent, pos, size ) ||

@@ -1114,30 +1114,6 @@ gtk_window_key_press_callback( GtkWidget *widget,
         }
     }
 
-    // win is a control: tab can be propagated up
-    if ( !ret &&
-         ((gdk_event->keyval == GDK_Tab) || (gdk_event->keyval == GDK_ISO_Left_Tab)) &&
-// VZ: testing for wxTE_PROCESS_TAB shouldn't be done here - the control may
-//     have this style, yet choose not to process this particular TAB in which
-//     case TAB must still work as a navigational character
-// JS: enabling again to make consistent with other platforms
-//     (with wxTE_PROCESS_TAB you have to call Navigate to get default
-//     navigation behaviour)
-#if wxUSE_TEXTCTRL
-         (! (win->HasFlag(wxTE_PROCESS_TAB) && win->IsKindOf(CLASSINFO(wxTextCtrl)) )) &&
-#endif
-         win->GetParent() && (win->GetParent()->HasFlag( wxTAB_TRAVERSAL)) )
-    {
-        wxNavigationKeyEvent new_event;
-        new_event.SetEventObject( win->GetParent() );
-        // GDK reports GDK_ISO_Left_Tab for SHIFT-TAB
-        new_event.SetDirection( (gdk_event->keyval == GDK_Tab) );
-        // CTRL-TAB changes the (parent) window, i.e. switch notebook page
-        new_event.SetWindowChange( (gdk_event->state & GDK_CONTROL_MASK) );
-        new_event.SetCurrentFocus( win );
-        ret = win->GetParent()->GetEventHandler()->ProcessEvent( new_event );
-    }
-
     return ret;
 }
 }
@@ -1928,6 +1904,25 @@ gtk_window_focus_out_callback( GtkWidget *widget,
     return FALSE;
 }
 
+static gboolean
+wx_window_focus_callback(GtkWidget *widget,
+                         GtkDirectionType direction,
+                         wxWindowGTK *win)
+{
+    // the default handler for focus signal in GtkPizza (or, rather, in
+    // GtkScrolledWindow from which GtkPizza inherits this behaviour) sets
+    // focus to the window itself even if it doesn't accept focus, i.e. has no
+    // GTK_CAN_FOCUS in its style -- work around this by forcibly preventing
+    // the signal from reaching gtk_scrolled_window_focus() if we don't have
+    // any children which might accept focus (we know we don't accept the focus
+    // ourselves as this signal is only connected in this case)
+    if ( win->GetChildren().empty() )
+        g_signal_stop_emission_by_name(widget, "focus");
+
+    // we didn't change the focus
+    return FALSE;
+}
+
 //-----------------------------------------------------------------------------
 // "enter_notify_event"
 //-----------------------------------------------------------------------------
@@ -2283,7 +2278,6 @@ void wxWindowGTK::Init()
 
     m_insertCallback = (wxInsertChildFunction) NULL;
 
-    m_acceptsFocus = false;
     m_hasFocus = false;
 
     m_clipPaintRegion = false;
@@ -2330,7 +2324,6 @@ bool wxWindowGTK::Create( wxWindow *parent,
     m_insertCallback = wxInsertChildInWindow;
 
     m_widget = gtk_scrolled_window_new( (GtkAdjustment *) NULL, (GtkAdjustment *) NULL );
-    GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
 
     GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(m_widget);
 
@@ -2364,9 +2357,6 @@ bool wxWindowGTK::Create( wxWindow *parent,
 #endif // __WXUNIVERSAL__
 
     gtk_container_add( GTK_CONTAINER(m_widget), m_wxwindow );
-
-    GTK_WIDGET_SET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
-    m_acceptsFocus = true;
 
     // connect various scroll-related events
     for ( int dir = 0; dir < ScrollDir_Max; dir++ )
@@ -2514,6 +2504,16 @@ void wxWindowGTK::PostCreation()
             g_signal_connect_after (m_focusWidget, "focus_out_event",
                                 G_CALLBACK (gtk_window_focus_out_callback), this);
         }
+    }
+
+    if ( !AcceptsFocusFromKeyboard() )
+    {
+        GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
+        if ( m_wxwindow )
+            GTK_WIDGET_UNSET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
+
+        g_signal_connect(m_widget, "focus",
+                            G_CALLBACK(wx_window_focus_callback), this);
     }
 
     // connect to the various key and mouse handlers
@@ -3216,11 +3216,6 @@ void wxWindowGTK::SetFocus()
                       GetClassInfo()->GetClassName(), GetLabel().c_str());
         }
     }
-}
-
-bool wxWindowGTK::AcceptsFocus() const
-{
-    return m_acceptsFocus && wxWindowBase::AcceptsFocus();
 }
 
 bool wxWindowGTK::Reparent( wxWindowBase *newParentBase )

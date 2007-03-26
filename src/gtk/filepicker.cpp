@@ -47,7 +47,6 @@ bool wxFileButton::Create( wxWindow *parent, wxWindowID id,
         //                 if you find a problem here, fix it also in wxDirButton !
 
         m_needParent = true;
-        m_acceptsFocus = true;
 
         if (!PreCreation( parent, pos, size ) ||
             !wxControl::CreateBase(parent, id, pos, size, style & wxWINDOW_STYLE_MASK,
@@ -197,7 +196,6 @@ bool wxDirButton::Create( wxWindow *parent, wxWindowID id,
         //                 if you find a problem here, fix it also in wxFileButton !
 
         m_needParent = true;
-        m_acceptsFocus = true;
 
         if (!PreCreation( parent, pos, size ) ||
             !wxControl::CreateBase(parent, id, pos, size, style & wxWINDOW_STYLE_MASK,

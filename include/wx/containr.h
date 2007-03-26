@@ -14,7 +14,7 @@
 #define _WX_CONTAINR_H_
 
 // use native tab traversal logic under GTK+ 2 (doesn't work yet)
-#if 0 // def __WXGTK20__
+#ifdef __WXGTK20__
     #define wxHAS_NATIVE_TAB_TRAVERSAL
 #endif
 

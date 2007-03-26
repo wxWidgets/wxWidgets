@@ -199,7 +199,6 @@ bool wxCollapsiblePane::Create(wxWindow *parent,
                                                 pos, size, style, val, name);
 
     m_needParent = true;
-    m_acceptsFocus = true;
     m_bIgnoreNextChange = false;
 
     if ( !PreCreation( parent, pos, size ) ||

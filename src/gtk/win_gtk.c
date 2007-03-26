@@ -198,6 +198,7 @@ gtk_pizza_child_type (GtkContainer     *container)
 static void
 gtk_pizza_init (GtkPizza *pizza)
 {
+    GTK_WIDGET_SET_FLAGS (pizza, GTK_CAN_FOCUS);
     GTK_WIDGET_UNSET_FLAGS (pizza, GTK_NO_WINDOW);
 
     pizza->children = NULL;

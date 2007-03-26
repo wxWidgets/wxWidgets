@@ -62,7 +62,6 @@ bool wxRadioButton::Create( wxWindow *parent,
                             const wxValidator& validator,
                             const wxString& name )
 {
-    m_acceptsFocus = TRUE;
     m_needParent = TRUE;
 
     m_blockEvent = FALSE;

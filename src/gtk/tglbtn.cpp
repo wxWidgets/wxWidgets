@@ -59,7 +59,6 @@ bool wxToggleBitmapButton::Create(wxWindow *parent, wxWindowID id,
                             const wxString &name)
 {
     m_needParent = true;
-    m_acceptsFocus = true;
 
     m_blockEvent = false;
 
@@ -202,7 +201,6 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
                             const wxString &name)
 {
     m_needParent = true;
-    m_acceptsFocus = true;
 
     m_blockEvent = false;
 
