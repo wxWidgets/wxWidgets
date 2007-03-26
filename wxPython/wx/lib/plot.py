@@ -554,6 +554,7 @@ class PlotCanvas(wx.Panel):
         self._ySpec= 'auto'
         self._gridEnabled= False
         self._legendEnabled= False
+        self._titleEnabled= True
         
         # Fonts
         self._fontCache = {}
@@ -807,6 +808,17 @@ class PlotCanvas(wx.Panel):
         """True if Legend enabled."""
         return self._legendEnabled
 
+    def SetEnableTitle(self, value):
+        """Set True to enable title."""
+        if value not in [True,False]:
+            raise TypeError, "Value should be True or False"
+        self._titleEnabled= value 
+        self.Redraw()
+
+    def GetEnableTitle(self):
+        """True if title enabled."""
+        return self._titleEnabled
+
     def SetEnablePointLabel(self, value):
         """Set True to enable pointLabel."""
         if value not in [True,False]:
@@ -1046,11 +1058,14 @@ class PlotCanvas(wx.Panel):
         textSize_scale= _Numeric.array([rhsW+lhsW,bottomH+topH]) # make plot area smaller by text size
         textSize_shift= _Numeric.array([lhsW, bottomH])          # shift plot area by this amount
 
-        # drawing title and labels text
-        dc.SetFont(self._getFont(self._fontSizeTitle))
-        titlePos= (self.plotbox_origin[0]+ lhsW + (self.plotbox_size[0]-lhsW-rhsW)/2.- titleWH[0]/2.,
-                 self.plotbox_origin[1]- self.plotbox_size[1])
-        dc.DrawText(graphics.getTitle(),titlePos[0],titlePos[1])
+        # draw title if requested
+        if self._titleEnabled:
+            dc.SetFont(self._getFont(self._fontSizeTitle))
+            titlePos= (self.plotbox_origin[0]+ lhsW + (self.plotbox_size[0]-lhsW-rhsW)/2.- titleWH[0]/2.,
+                       self.plotbox_origin[1]- self.plotbox_size[1])
+            dc.DrawText(graphics.getTitle(),titlePos[0],titlePos[1])
+
+        # draw label text
         dc.SetFont(self._getFont(self._fontSizeAxis))
         xLabelPos= (self.plotbox_origin[0]+ lhsW + (self.plotbox_size[0]-lhsW-rhsW)/2.- xLabelWH[0]/2.,
                  self.plotbox_origin[1]- xLabelWH[1])
@@ -1365,8 +1380,11 @@ class PlotCanvas(wx.Panel):
         """Draws Title and labels and returns width and height for each"""
         # TextExtents for Title and Axis Labels
         dc.SetFont(self._getFont(self._fontSizeTitle))
-        title= graphics.getTitle()
-        titleWH= dc.GetTextExtent(title)
+        if self._titleEnabled:
+            title= graphics.getTitle()
+            titleWH= dc.GetTextExtent(title)
+        else:
+            titleWH= (0,0)
         dc.SetFont(self._getFont(self._fontSizeAxis))
         xLabel, yLabel= graphics.getXLabel(),graphics.getYLabel()
         xLabelWH= dc.GetTextExtent(xLabel)
