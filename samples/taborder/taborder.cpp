@@ -23,13 +23,17 @@
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
+    #include "wx/log.h"
     #include "wx/frame.h"
     #include "wx/menu.h"
+    #include "wx/sizer.h"
 
     #include "wx/panel.h"
+    #include "wx/msgdlg.h"
 
     #include "wx/button.h"
     #include "wx/listbox.h"
+    #include "wx/stattext.h"
     #include "wx/textctrl.h"
 #endif
 
@@ -122,7 +126,7 @@ public:
     MyTabTextCtrl(wxWindow *parent, const wxString& value, int flags = 0)
         : wxTextCtrl(parent, wxID_ANY, value,
                      wxDefaultPosition, wxDefaultSize,
-                     wxTE_PROCESS_TAB)
+                     flags)
     {
         Connect(wxEVT_KEY_DOWN, wxKeyEventHandler(MyTabTextCtrl::OnKeyDown));
     }
@@ -305,7 +309,8 @@ wxWindow *MyPanel::CreateTextPage(wxWindow *parent)
     sizerPage->Add(sizerH, wxSizerFlags(1).Expand());
 
     sizerH = new wxBoxSizer(wxHORIZONTAL);
-    sizerH->Add(new wxStaticText(page, wxID_ANY, _T("&Another one::")), flagsBorder);
+    sizerH->Add(new wxStaticText(page, wxID_ANY, _T("&Another one:")),
+                flagsBorder);
     sizerH->Add(new MyTabTextCtrl(page, _T("press Tab here"), wxTE_PROCESS_TAB),
                 flagsBorder);
     sizerPage->Add(sizerH, wxSizerFlags(1).Expand());
