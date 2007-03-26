@@ -432,10 +432,39 @@ public:
       reverse_iterator_impl operator--(int)
         { reverse_iterator_impl tmp = *this; ++m_cur; return tmp; }
 
+      reverse_iterator_impl operator+(int n) const
+        { return reverse_iterator_impl(m_cur - n); }
+      reverse_iterator_impl operator+(size_t n) const
+        { return reverse_iterator_impl(m_cur - n); }
+      reverse_iterator_impl operator-(int n) const
+        { return reverse_iterator_impl(m_cur + n); }
+      reverse_iterator_impl operator-(size_t n) const
+        { return reverse_iterator_impl(m_cur + n); }
+      reverse_iterator_impl operator+=(int n)
+        { m_cur -= n; return *this; }
+      reverse_iterator_impl operator+=(size_t n)
+        { m_cur -= n; return *this; }
+      reverse_iterator_impl operator-=(int n)
+        { m_cur += n; return *this; }
+      reverse_iterator_impl operator-=(size_t n)
+        { m_cur += n; return *this; }
+
+      unsigned operator-(const reverse_iterator_impl& i) const
+        { return i.m_cur - m_cur; }
+
       bool operator==(const reverse_iterator_impl& ri) const
         { return m_cur == ri.m_cur; }
       bool operator!=(const reverse_iterator_impl& ri) const
         { return !(*this == ri); }
+
+      bool operator<(const reverse_iterator_impl& i) const
+        { return m_cur > i.m_cur; }
+      bool operator>(const reverse_iterator_impl& i) const
+        { return m_cur < i.m_cur; }
+      bool operator<=(const reverse_iterator_impl& i) const
+        { return m_cur >= i.m_cur; }
+      bool operator>=(const reverse_iterator_impl& i) const
+        { return m_cur <= i.m_cur; }
 
   private:
       iterator_type m_cur;
