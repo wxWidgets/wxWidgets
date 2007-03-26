@@ -82,11 +82,14 @@ private:
     {
         wxNavigationKeyEvent event;
         event.SetFlags(flags);
-        if ( ProcessEvent(event) )
+        if ( m_panel->ProcessEvent(event) )
             wxLogStatus(this, _T("Navigation event processed"));
         else
             wxLogStatus(this, _T("Navigation event ignored"));
     }
+
+
+    wxPanel *m_panel;
 
     DECLARE_EVENT_TABLE()
 };
@@ -154,7 +157,7 @@ MyFrame::MyFrame()
 
     SetMenuBar(mbar);
 
-    new MyPanel(this);
+    m_panel = new MyPanel(this);
 
     CreateStatusBar(StatusPane_Max);
 }
