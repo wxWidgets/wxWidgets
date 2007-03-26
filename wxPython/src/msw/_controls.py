@@ -579,7 +579,7 @@ class ComboBox(Choice):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(Window parent, int id, String value=EmptyString,
+        __init__(Window parent, int id=-1, String value=EmptyString,
             Point pos=DefaultPosition, Size size=DefaultSize,
             List choices=EmptyList, long style=0, Validator validator=DefaultValidator,
             String name=ComboBoxNameStr) -> ComboBox
@@ -591,7 +591,7 @@ class ComboBox(Choice):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id, String value=EmptyString,
+        Create(Window parent, int id=-1, String value=EmptyString,
             Point pos=DefaultPosition, Size size=DefaultSize,
             List choices=EmptyList, long style=0, Validator validator=DefaultValidator,
             String name=ChoiceNameStr) -> bool
@@ -3980,6 +3980,14 @@ class ToolBar(ToolBarBase):
             String name=wxPyToolBarNameStr) -> bool
         """
         return _controls_.ToolBar_Create(*args, **kwargs)
+
+    def SetToolNormalBitmap(*args, **kwargs):
+        """SetToolNormalBitmap(self, int id, Bitmap bitmap)"""
+        return _controls_.ToolBar_SetToolNormalBitmap(*args, **kwargs)
+
+    def SetToolDisabledBitmap(*args, **kwargs):
+        """SetToolDisabledBitmap(self, int id, Bitmap bitmap)"""
+        return _controls_.ToolBar_SetToolDisabledBitmap(*args, **kwargs)
 
     def GetClassDefaultAttributes(*args, **kwargs):
         """

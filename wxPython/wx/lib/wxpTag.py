@@ -163,16 +163,13 @@ class wxpTagHandler(wx.html.HtmlWinTagHandler):
         # create the object
         parent = self.GetParser().GetWindowInterface().GetHTMLWindow()
         if parent:
-            obj = apply(self.ctx.classObj,
-                        (parent,),
-                        self.ctx.kwargs)
+            obj = self.ctx.classObj(parent, **self.ctx.kwargs)
             obj.Show(True)
 
             # add it to the HtmlWindow
             self.GetParser().GetContainer().InsertCell(
                 wx.html.HtmlWidgetCell(obj, self.ctx.floatWidth))
             self.ctx = None
-
         return True
 
 

@@ -1336,7 +1336,7 @@ int wxTreeListHeaderWindow::XToCol(int x)
 
 void wxTreeListHeaderWindow::RefreshColLabel(int col)
 {
-    if ( col > GetColumnCount() )
+    if ( col >= GetColumnCount() )
         return;
     
     int x = 0;
@@ -4681,6 +4681,18 @@ int wxTreeListCtrl::GetColumnCount() const
 
 void wxTreeListCtrl::SetColumnWidth(int column, int width)
 {
+    if (width == wxLIST_AUTOSIZE_USEHEADER)
+    {
+        wxFont font = m_header_win->GetFont();
+        m_header_win->GetTextExtent(m_header_win->GetColumnText(column), &width, NULL, NULL, NULL, font.Ok()? &font: NULL);
+        //search wxTreeListHeaderWindow::OnPaint to understand this:
+        width += 2*EXTRA_WIDTH + MARGIN;
+    }
+    else if (width == wxLIST_AUTOSIZE)
+    {
+        width = m_main_win->GetBestColumnWidth(column);
+    }
+    
     m_header_win->SetColumnWidth (column, width);
     m_header_win->Refresh();
 }

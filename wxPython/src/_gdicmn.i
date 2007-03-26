@@ -572,7 +572,7 @@ public:
 
 
     DocDeclStr(
-        wxRect&, Inflate(wxCoord dx, wxCoord dy),
+        wxRect, Inflate(wxCoord dx, wxCoord dy),
         "Increases the size of the rectangle.
 
 The left border is moved farther left and the right border is moved

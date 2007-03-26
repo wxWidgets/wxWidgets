@@ -310,7 +310,9 @@ def runTest(frame, nb, log):
     win = TestPanel(nb, log)
     return win
 
-if __name__ == "__main__":  
-    app = wx.PySimpleApp()
-    dlg = FormDialog()
-    dlg.ShowModal()
+
+if __name__ == '__main__':
+    import sys,os
+    import run
+    run.main(['', os.path.basename(sys.argv[0])] + sys.argv[1:])
+

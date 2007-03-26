@@ -73,7 +73,7 @@ def getTasks(config_env):
 
     
     beastTask1 = Task(
-        [ #Job("beast.23",     "distrib/all/build-windows", ["2.3"], env=config_env),
+        [ Job("beast.23",     "distrib/all/build-windows", ["2.3"], env=config_env),
 #          Job("co-rh9.23",    "distrib/all/build-rpm", ["beast", "co-rh9",   "rh9",   "2.3"], env=config_env),
           Job("beast.24",     "distrib/all/build-windows", ["2.4"], env=config_env),
 #          Job("co-rh9.24",    "distrib/all/build-rpm", ["beast", "co-rh9",   "rh9",   "2.4"], env=config_env),
@@ -89,7 +89,8 @@ def getTasks(config_env):
           ])
 
     xavierTask = Task([
-        Job("xavier", "distrib/all/build-deb", ["xavier", "/work/chroot/dapper", "dapper"], env=config_env),
+        Job("xavier.d", "distrib/all/build-deb", ["xavier", "/work/chroot/dapper", "dapper"], env=config_env),
+        Job("xavier.f", "distrib/all/build-deb", ["xavier", "/work/chroot/feisty", "feisty"], env=config_env),
         ])
 
     buildTasks = [ #jaguarTask,

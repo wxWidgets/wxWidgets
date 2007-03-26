@@ -67,9 +67,6 @@ class ShapeEvtHandler(object):
         self._previousHandler = prev
         self._handlerShape = shape
 
-    def __del__(self):
-        pass
-
     def SetShape(self, sh):
         self._handlerShape = sh
 
@@ -311,9 +308,6 @@ class Shape(ShapeEvtHandler):
             self.GetEventHandler().OnDelete()
         self._eventHandler = None
         
-    def __del__(self):
-        ShapeEvtHandler.__del__(self)
-
     def Draggable(self):
         """TRUE if the shape may be dragged by the user."""
         return True

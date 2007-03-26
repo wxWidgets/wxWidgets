@@ -19,7 +19,13 @@ class TestPanel(wx.Panel):
 
     def OnPaint(self, evt):
         dc = wx.PaintDC(self)
-        gc = wx.GraphicsContext.Create(dc)
+        try:
+            gc = wx.GraphicsContext.Create(dc)
+        except NotImplementedError:
+            dc.DrawText("This build of wxPython does not support the wx.GraphicsContext "
+                        "family of classes.",
+                        25, 25)
+            return
 
         font = wx.SystemSettings.GetFont(wx.SYS_DEFAULT_GUI_FONT)
         font.SetWeight(wx.BOLD)
@@ -64,6 +70,13 @@ class TestPanel(wx.Panel):
         gc.DrawText("Scale", 0, -BASE2)
         gc.Translate(0, 20)
 
+        # for testing clipping
+        #gc.Clip(0, 0, 100, 100)
+        #rgn = wx.RegionFromPoints([ (0,0), (75,0), (75,25,), (100, 25),
+        #                            (100,100), (0,100), (0,0)  ])
+        #gc.ClipRegion(rgn)
+        #gc.ResetClip()
+        
         gc.SetBrush(wx.Brush(wx.Colour(178,  34,  34, 128)))   # 128 == half transparent
         for cnt in range(8):
             gc.Scale(1.08, 1.08)    # increase scale by 8%
@@ -75,7 +88,7 @@ class TestPanel(wx.Panel):
         gc.PushState()             # save it again
         gc.Translate(400, 200)
         gc.DrawText("Rotate", 0, -BASE2)
-
+        
         gc.Translate(0, 75)
         for angle in range(0, 360, 30):
             gc.PushState()         # save this new current state so we can pop back to 

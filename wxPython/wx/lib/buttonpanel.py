@@ -1584,7 +1584,7 @@ class ButtonPanel(wx.PyPanel):
 
     def OnPaint(self, event):
         """ Handles the wx.EVT_PAINT event for ButtonPanel. """
-        
+
         dc = wx.BufferedPaintDC(self) 
         rect = self.GetClientRect()
 
@@ -1744,7 +1744,7 @@ class ButtonPanel(wx.PyPanel):
         
     def OnMouseMove(self, event):
         """ Handles the wx.EVT_MOTION event for ButtonPanel. """
-        
+
         # Check to see if we are hovering a button
         tabId, flags = self.HitTest(event.GetPosition())
 
@@ -1765,7 +1765,8 @@ class ButtonPanel(wx.PyPanel):
             self.RepaintOldSelection()
         
         if btn.GetRect().Contains(event.GetPosition()):
-            btn.SetStatus("Hover")
+            if btn.GetStatus() != "Pressed":
+                btn.SetStatus("Hover")
         else:
             btn.SetStatus("Normal")
 
@@ -1808,21 +1809,21 @@ class ButtonPanel(wx.PyPanel):
                 btn.SetFocus(False)
                 
         if hit.GetStatus() == "Pressed": 
-            # Fire a button click event 
-            btnEvent = wx.CommandEvent(wx.wxEVT_COMMAND_BUTTON_CLICKED, hit.GetId())
-            self.GetEventHandler().ProcessEvent(btnEvent) 
-
             hit.SetToggled(not hit.GetToggled())
             
             # Update the button status to be hovered 
             hit.SetStatus("Hover")
             hit.SetFocus()
             self._currentButton = tabId
+
+            # Fire a button click event 
+            btnEvent = wx.CommandEvent(wx.wxEVT_COMMAND_BUTTON_CLICKED, hit.GetId())
+            self.GetEventHandler().ProcessEvent(btnEvent) 
             
 
     def OnMouseLeave(self, event):
         """ Handles the wx.EVT_LEAVE_WINDOW event for ButtonPanel. """
-        
+
         # Reset all buttons statuses
         for btn in self._vButtons:
             if not btn.IsEnabled():
