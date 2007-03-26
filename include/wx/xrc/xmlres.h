@@ -113,7 +113,7 @@ public:
     //              don't check the modification time of the XRC files and
     //              reload them if they have changed on disk
     wxXmlResource(int flags = wxXRC_USE_LOCALE,
-                  const wxString& domain=wxEmptyString);
+                  const wxString& domain = wxEmptyString);
 
     // Constructor.
     // Flags: wxXRC_USE_LOCALE
@@ -123,13 +123,13 @@ public:
     //              subclass property of object nodes will be ignored
     //              (useful for previews in XRC editors)
     wxXmlResource(const wxString& filemask, int flags = wxXRC_USE_LOCALE,
-                  const wxString& domain=wxEmptyString);
+                  const wxString& domain = wxEmptyString);
 
     // Destructor.
     virtual ~wxXmlResource();
 
     wxXmlNode *GetFirstRoot();
-    
+
     // Loads resources from XML files that match given filemask.
     // This method understands VFS (see filesys.h).
     bool Load(const wxString& filemask);
@@ -249,10 +249,11 @@ public:
     // Set flags after construction.
     void SetFlags(int flags) { m_flags = flags; }
 
-    // Get/Set the domain to be passed to the translation functions, defaults to NULL.
-    wxChar* GetDomain() const { return m_domain; }
-    void SetDomain(const wxChar* domain);
-    
+    // Get/Set the domain to be passed to the translation functions, defaults
+    // to empty string (no domain).
+    const wxString& GetDomain() const { return m_domain; }
+    void SetDomain(const wxString& domain);
+
 protected:
     // Scans the resources list for unloaded files and loads them. Also reloads
     // files that have been modified since last loading.
@@ -293,8 +294,8 @@ private:
 #endif
 
     // domain to pass to translation functions, if any.
-    wxChar* m_domain;
-    
+    wxString m_domain;
+
     friend class wxXmlResourceHandler;
     friend class wxXmlResourceModule;
 

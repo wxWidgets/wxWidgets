@@ -69,35 +69,25 @@ wxXmlResource::wxXmlResource(int flags, const wxString& domain)
 {
     m_flags = flags;
     m_version = -1;
-    m_domain = NULL;
-    if (! domain.empty() )
-        SetDomain(domain);
+    SetDomain(domain);
 }
 
 wxXmlResource::wxXmlResource(const wxString& filemask, int flags, const wxString& domain)
 {
     m_flags = flags;
     m_version = -1;
-    m_domain = NULL;
-    if (! domain.empty() )
-        SetDomain(domain);
+    SetDomain(domain);
     Load(filemask);
 }
 
 wxXmlResource::~wxXmlResource()
 {
-    if (m_domain)
-        free(m_domain);
     ClearHandlers();
 }
 
-void wxXmlResource::SetDomain(const wxChar* domain)
+void wxXmlResource::SetDomain(const wxString& domain)
 {
-    if (m_domain)
-        free(m_domain);
-    m_domain = NULL;
-    if (domain && wxStrlen(domain))
-        m_domain = wxStrdup(domain);
+    m_domain = domain;
 }
 
 
