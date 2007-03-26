@@ -92,11 +92,9 @@ private:
 
     void OnIdle(wxIdleEvent& event);
 
-    void DoNavigate(long flags)
+    void DoNavigate(int flags)
     {
-        wxNavigationKeyEvent event;
-        event.SetFlags(flags);
-        if ( m_panel->ProcessEvent(event) )
+        if ( m_panel->NavigateIn(flags) )
             wxLogStatus(this, _T("Navigation event processed"));
         else
             wxLogStatus(this, _T("Navigation event ignored"));
