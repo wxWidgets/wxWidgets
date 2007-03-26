@@ -2022,7 +2022,8 @@ void wxStdDialogButtonSizer::Realize()
             if (m_buttonAffirmative->GetId() == wxID_SAVE){
                 // these buttons have set labels under Mac so we should use them
                 m_buttonAffirmative->SetLabel(_("Save"));
-                m_buttonNegative->SetLabel(_("Don't Save"));
+                if (m_buttonNegative)
+                    m_buttonNegative->SetLabel(_("Don't Save"));
             }
         }
 

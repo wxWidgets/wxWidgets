@@ -303,6 +303,7 @@ public:
     virtual void GetTextExtent( const wxString &str, wxDouble *width, wxDouble *height,
         wxDouble *descent, wxDouble *externalLeading ) const;
     virtual void GetPartialTextExtents(const wxString& text, wxArrayDouble& widths) const;
+    virtual bool ShouldOffset() const;
 
 private:
     void    Init();
@@ -1183,6 +1184,18 @@ void wxGDIPlusContext::GetPartialTextExtents(const wxString& text, wxArrayDouble
         regions[i].GetBounds(&bbox,m_context);
         widths[i] = bbox.GetRight()-bbox.GetLeft();
     }
+}
+
+bool wxGDIPlusContext::ShouldOffset() const
+{     
+    int penwidth = 0 ;
+    if ( !m_pen.IsNull() )
+    {
+        penwidth = (int)((wxGDIPlusPenData*)m_pen.GetRefData())->GetWidth();
+        if ( penwidth == 0 )
+            penwidth = 1;
+    }
+    return ( penwidth % 2 ) == 1;
 }
 
 void* wxGDIPlusContext::GetNativeContext()

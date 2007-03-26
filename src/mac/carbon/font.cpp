@@ -254,6 +254,7 @@ void wxFontRefData::MacFindFont()
                         break ;
 
                     case wxMODERN :
+                    case wxTELETYPE:
                         m_faceName =  wxT("Monaco");
                         break ;
 
