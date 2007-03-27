@@ -539,6 +539,12 @@ public:
 #define DECLARE_LOG_FUNCTION2(level, argclass, arg)                         \
     DECLARE_LOG_FUNCTION2_EXP(level, argclass, arg, WXDLLIMPEXP_BASE)
 
+// VC6 produces a warning if we a macro expanding to nothing to
+// DECLARE_LOG_FUNCTION2_IMPL:
+#if defined(__VISUALC__) && __VISUALC__ < 1300
+    // "not enough actual parameters for macro 'DECLARE_LOG_FUNCTION2_EXP_IMPL'"
+    #pragma warning(disable:4003)
+#endif
 
 // a generic function for all levels (level is passes as parameter)
 DECLARE_LOG_FUNCTION2(Generic, wxLogLevel, level);
@@ -619,6 +625,10 @@ DECLARE_LOG_FUNCTION_PUBLIC(SysError)
         WX_DEFINE_VARARG_FUNC_NOP(wxLogTrace)
     #endif // HAVE_VARIADIC_MACROS/!HAVE_VARIADIC_MACROS
 #endif // debug/!debug
+
+#if defined(__VISUALC__) && __VISUALC__ < 1300
+    #pragma warning(default:4003)
+#endif
 
 // wxLogFatalError helper: show the (fatal) error to the user in a safe way,
 // i.e. without using wxMessageBox() for example because it could crash
