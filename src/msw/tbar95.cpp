@@ -400,6 +400,9 @@ wxSize wxToolBar::DoGetBestSize() const
         sizeBest.y = size.cy;
     }
 
+    if (!IsVertical() && !(GetWindowStyle() & wxTB_NODIVIDER))
+        sizeBest.y += 1;
+
     CacheBestSize(sizeBest);
 
     return sizeBest;
