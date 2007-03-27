@@ -2801,6 +2801,23 @@ SWIG_AsVal_int (PyObject * obj, int *val)
  static const wxString wxPyFileSelectorDefaultWildcardStr(wxFileSelectorDefaultWildcardStr); 
  static const wxString wxPyDirSelectorPromptStr(wxDirSelectorPromptStr); 
 
+    wxMemorySize wxGetFreeMemory()
+        { wxPyRaiseNotImplemented(); return 0; }
+
+
+SWIGINTERN int 
+SWIG_AsVal_unsigned_SS_long (PyObject* obj, unsigned long* val)
+{
+    long v = 0;
+    if (SWIG_AsVal_long(obj, &v) && v < 0) {
+        return SWIG_TypeError;
+    }
+    else if (val)
+        *val = (unsigned long)v;
+    return SWIG_OK;
+}
+
+
 SWIGINTERN int
 SWIG_AsVal_bool (PyObject *obj, bool *val)
 {
@@ -2816,23 +2833,6 @@ SWIG_AsVal_bool (PyObject *obj, bool *val)
     if (SWIG_IsOK(res) && val) *val = v ? true : false;
     return res;
   }
-}
-
-
-    wxMemorySize wxGetFreeMemory()
-        { wxPyRaiseNotImplemented(); return 0; }
-
-
-SWIGINTERN int 
-SWIG_AsVal_unsigned_SS_long (PyObject* obj, unsigned long* val)
-{
-    long v = 0;
-    if (SWIG_AsVal_long(obj, &v) && v < 0) {
-        return SWIG_TypeError;
-    }
-    else if (val)
-        *val = (unsigned long)v;
-    return SWIG_OK;
 }
 
 
@@ -4937,38 +4937,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_GetElapsedTime(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  bool arg1 = (bool) true ;
-  long result;
-  bool val1 ;
-  int ecode1 = 0 ;
-  PyObject * obj0 = 0 ;
-  char *  kwnames[] = {
-    (char *) "resetTimer", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|O:GetElapsedTime",kwnames,&obj0)) SWIG_fail;
-  if (obj0) {
-    ecode1 = SWIG_AsVal_bool(obj0, &val1);
-    if (!SWIG_IsOK(ecode1)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "GetElapsedTime" "', expected argument " "1"" of type '" "bool""'");
-    } 
-    arg1 = static_cast< bool >(val1);
-  }
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (long)wxGetElapsedTime(arg1);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_From_long(static_cast< long >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_IsBusy(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   bool result;
@@ -5051,23 +5019,6 @@ fail:
     if (temp1)
     delete arg1;
   }
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_StartTimer(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  
-  if (!SWIG_Python_UnpackTuple(args,"StartTimer",0,0,0)) SWIG_fail;
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    wxStartTimer();
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
   return NULL;
 }
 
@@ -22974,6 +22925,103 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_FileConfig_GetGlobalFileName(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxString *arg1 = 0 ;
+  wxString result;
+  bool temp1 = false ;
+  PyObject * obj0 = 0 ;
+  char *  kwnames[] = {
+    (char *) "szFile", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:FileConfig_GetGlobalFileName",kwnames,&obj0)) SWIG_fail;
+  {
+    arg1 = wxString_in_helper(obj0);
+    if (arg1 == NULL) SWIG_fail;
+    temp1 = true;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = wxFileConfig::GetGlobalFileName((wxString const &)*arg1);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+#if wxUSE_UNICODE
+    resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+    resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+  }
+  {
+    if (temp1)
+    delete arg1;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp1)
+    delete arg1;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_FileConfig_GetLocalFileName(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxString *arg1 = 0 ;
+  int arg2 = (int) 0 ;
+  wxString result;
+  bool temp1 = false ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "szFile",(char *) "style", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:FileConfig_GetLocalFileName",kwnames,&obj0,&obj1)) SWIG_fail;
+  {
+    arg1 = wxString_in_helper(obj0);
+    if (arg1 == NULL) SWIG_fail;
+    temp1 = true;
+  }
+  if (obj1) {
+    ecode2 = SWIG_AsVal_int(obj1, &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "FileConfig_GetLocalFileName" "', expected argument " "2"" of type '" "int""'");
+    } 
+    arg2 = static_cast< int >(val2);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = wxFileConfig::GetLocalFileName((wxString const &)*arg1,arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+#if wxUSE_UNICODE
+    resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+    resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+  }
+  {
+    if (temp1)
+    delete arg1;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp1)
+    delete arg1;
+  }
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *FileConfig_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
@@ -25234,130 +25282,6 @@ SWIGINTERN PyObject *_wrap_DateTime_GetLastWeekDay(PyObject *SWIGUNUSEDPARM(self
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = (arg1)->GetLastWeekDay(arg2,arg3,arg4);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_NewPointerObj((new wxDateTime(static_cast< const wxDateTime& >(result))), SWIGTYPE_p_wxDateTime, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_DateTime_SetToTheWeek(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxDateTime *arg1 = (wxDateTime *) 0 ;
-  int arg2 ;
-  wxDateTime::WeekDay arg3 = (wxDateTime::WeekDay) wxDateTime::Mon ;
-  wxDateTime::WeekFlags arg4 = (wxDateTime::WeekFlags) wxDateTime::Monday_First ;
-  bool result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  int val3 ;
-  int ecode3 = 0 ;
-  int val4 ;
-  int ecode4 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "numWeek",(char *) "weekday",(char *) "flags", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OO:DateTime_SetToTheWeek",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxDateTime, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "DateTime_SetToTheWeek" "', expected argument " "1"" of type '" "wxDateTime *""'"); 
-  }
-  arg1 = reinterpret_cast< wxDateTime * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "DateTime_SetToTheWeek" "', expected argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  if (obj2) {
-    ecode3 = SWIG_AsVal_int(obj2, &val3);
-    if (!SWIG_IsOK(ecode3)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "DateTime_SetToTheWeek" "', expected argument " "3"" of type '" "wxDateTime::WeekDay""'");
-    } 
-    arg3 = static_cast< wxDateTime::WeekDay >(val3);
-  }
-  if (obj3) {
-    ecode4 = SWIG_AsVal_int(obj3, &val4);
-    if (!SWIG_IsOK(ecode4)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "DateTime_SetToTheWeek" "', expected argument " "4"" of type '" "wxDateTime::WeekFlags""'");
-    } 
-    arg4 = static_cast< wxDateTime::WeekFlags >(val4);
-  }
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->SetToTheWeek(arg2,arg3,arg4);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  {
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_DateTime_GetWeek(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxDateTime *arg1 = (wxDateTime *) 0 ;
-  int arg2 ;
-  wxDateTime::WeekDay arg3 = (wxDateTime::WeekDay) wxDateTime::Mon ;
-  wxDateTime::WeekFlags arg4 = (wxDateTime::WeekFlags) wxDateTime::Monday_First ;
-  wxDateTime result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  int val3 ;
-  int ecode3 = 0 ;
-  int val4 ;
-  int ecode4 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  PyObject * obj3 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "numWeek",(char *) "weekday",(char *) "flags", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OO:DateTime_GetWeek",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxDateTime, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "DateTime_GetWeek" "', expected argument " "1"" of type '" "wxDateTime *""'"); 
-  }
-  arg1 = reinterpret_cast< wxDateTime * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "DateTime_GetWeek" "', expected argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  if (obj2) {
-    ecode3 = SWIG_AsVal_int(obj2, &val3);
-    if (!SWIG_IsOK(ecode3)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "DateTime_GetWeek" "', expected argument " "3"" of type '" "wxDateTime::WeekDay""'");
-    } 
-    arg3 = static_cast< wxDateTime::WeekDay >(val3);
-  }
-  if (obj3) {
-    ecode4 = SWIG_AsVal_int(obj3, &val4);
-    if (!SWIG_IsOK(ecode4)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "DateTime_GetWeek" "', expected argument " "4"" of type '" "wxDateTime::WeekFlags""'");
-    } 
-    arg4 = static_cast< wxDateTime::WeekFlags >(val4);
-  }
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (arg1)->GetWeek(arg2,arg3,arg4);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -36547,12 +36471,12 @@ SWIGINTERN PyObject *_wrap_Display_GetFromWindow(PyObject *SWIGUNUSEDPARM(self),
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:Display_GetFromWindow",kwnames,&obj0)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxWindow, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Display_GetFromWindow" "', expected argument " "1"" of type '" "wxWindow *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Display_GetFromWindow" "', expected argument " "1"" of type '" "wxWindow const *""'"); 
   }
   arg1 = reinterpret_cast< wxWindow * >(argp1);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (int)wxDisplay::GetFromWindow(arg1);
+    result = (int)wxDisplay::GetFromWindow((wxWindow const *)arg1);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -39198,11 +39122,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GetStockHelpString", (PyCFunction) _wrap_GetStockHelpString, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Bell", (PyCFunction)_wrap_Bell, METH_NOARGS, NULL},
 	 { (char *)"EndBusyCursor", (PyCFunction)_wrap_EndBusyCursor, METH_NOARGS, NULL},
-	 { (char *)"GetElapsedTime", (PyCFunction) _wrap_GetElapsedTime, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"IsBusy", (PyCFunction)_wrap_IsBusy, METH_NOARGS, NULL},
 	 { (char *)"Now", (PyCFunction)_wrap_Now, METH_NOARGS, NULL},
 	 { (char *)"Shell", (PyCFunction) _wrap_Shell, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"StartTimer", (PyCFunction)_wrap_StartTimer, METH_NOARGS, NULL},
 	 { (char *)"GetOsVersion", (PyCFunction)_wrap_GetOsVersion, METH_NOARGS, NULL},
 	 { (char *)"GetOsDescription", (PyCFunction)_wrap_GetOsDescription, METH_NOARGS, NULL},
 	 { (char *)"IsPlatformLittleEndian", (PyCFunction)_wrap_IsPlatformLittleEndian, METH_NOARGS, NULL},
@@ -39720,6 +39642,8 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Config_swiginit", Config_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_FileConfig", (PyCFunction) _wrap_new_FileConfig, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"delete_FileConfig", (PyCFunction)_wrap_delete_FileConfig, METH_O, NULL},
+	 { (char *)"FileConfig_GetGlobalFileName", (PyCFunction) _wrap_FileConfig_GetGlobalFileName, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"FileConfig_GetLocalFileName", (PyCFunction) _wrap_FileConfig_GetLocalFileName, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"FileConfig_swigregister", FileConfig_swigregister, METH_VARARGS, NULL},
 	 { (char *)"FileConfig_swiginit", FileConfig_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_ConfigPathChanger", (PyCFunction) _wrap_new_ConfigPathChanger, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -39777,8 +39701,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"DateTime_SetToWeekDay", (PyCFunction) _wrap_DateTime_SetToWeekDay, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DateTime_SetToLastWeekDay", (PyCFunction) _wrap_DateTime_SetToLastWeekDay, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DateTime_GetLastWeekDay", (PyCFunction) _wrap_DateTime_GetLastWeekDay, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"DateTime_SetToTheWeek", (PyCFunction) _wrap_DateTime_SetToTheWeek, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"DateTime_GetWeek", (PyCFunction) _wrap_DateTime_GetWeek, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DateTime_SetToWeekOfYear", (PyCFunction) _wrap_DateTime_SetToWeekOfYear, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DateTime_SetToLastMonthDay", (PyCFunction) _wrap_DateTime_SetToLastMonthDay, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"DateTime_GetLastMonthDay", (PyCFunction) _wrap_DateTime_GetLastMonthDay, METH_VARARGS | METH_KEYWORDS, NULL},

@@ -198,8 +198,8 @@ FNB_DEFAULT_STYLE = FNB_MOUSE_MIDDLE_CLOSES_TABS | FNB_HIDE_ON_SINGLE_TAB
 # wxEVT_FLATNOTEBOOK_PAGE_CLOSED: Event Fired When A Page Is Closed.
 # wxEVT_FLATNOTEBOOK_PAGE_CONTEXT_MENU: Event Fired When A Menu Pops-up In A Tab.
 
-wxEVT_FLATNOTEBOOK_PAGE_CHANGED = wx.NewEventType()
-wxEVT_FLATNOTEBOOK_PAGE_CHANGING = wx.NewEventType()
+wxEVT_FLATNOTEBOOK_PAGE_CHANGED = wx.wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGED
+wxEVT_FLATNOTEBOOK_PAGE_CHANGING = wx.wxEVT_COMMAND_NOTEBOOK_PAGE_CHANGING
 wxEVT_FLATNOTEBOOK_PAGE_CLOSING = wx.NewEventType()
 wxEVT_FLATNOTEBOOK_PAGE_CLOSED = wx.NewEventType()
 wxEVT_FLATNOTEBOOK_PAGE_CONTEXT_MENU = wx.NewEventType()
@@ -208,10 +208,10 @@ wxEVT_FLATNOTEBOOK_PAGE_CONTEXT_MENU = wx.NewEventType()
 #        FlatNotebookEvent
 #-----------------------------------#
 
-EVT_FLATNOTEBOOK_PAGE_CHANGED = wx.PyEventBinder(wxEVT_FLATNOTEBOOK_PAGE_CHANGED, 1)
+EVT_FLATNOTEBOOK_PAGE_CHANGED = wx.EVT_NOTEBOOK_PAGE_CHANGED
 """Notify client objects when the active page in L{FlatNotebook} 
 has changed."""
-EVT_FLATNOTEBOOK_PAGE_CHANGING = wx.PyEventBinder(wxEVT_FLATNOTEBOOK_PAGE_CHANGING, 1)
+EVT_FLATNOTEBOOK_PAGE_CHANGING = wx.EVT_NOTEBOOK_PAGE_CHANGING
 """Notify client objects when the active page in L{FlatNotebook} 
 is about to change."""
 EVT_FLATNOTEBOOK_PAGE_CLOSING = wx.PyEventBinder(wxEVT_FLATNOTEBOOK_PAGE_CLOSING, 1)
@@ -2955,12 +2955,15 @@ class FlatNotebook(wx.Panel):
 
 
     def SetImageList(self, imageList):
-        """
-        Sets the image list for the page control. It does not take ownership
-        of the image list, you must delete it yourself.
-        """
+        """ Sets the image list for the page control. """
 
         self._pages.SetImageList(imageList)
+
+
+    def AssignImageList(self, imageList):
+        """ Assigns the image list for the page control. """
+
+        self._pages.AssignImageList(imageList)
 
 
     def GetImageList(self):
@@ -4381,7 +4384,7 @@ class PageContainer(wx.Panel):
                            
         elif self.GetParent().GetWindowStyleFlag() & FNB_ALLOW_FOREIGN_DND:
         
-            if wx.Platform in ["__WXMSW__", "__WXGTK__"]:
+            if wx.Platform in ["__WXMSW__", "__WXGTK__", "__WXMAC__"]:
                 if nTabPage >= 0:
                 
                     window = oldNotebook.GetPage(nTabPage)
@@ -4619,6 +4622,12 @@ class PageContainer(wx.Panel):
 
     def SetImageList(self, imglist):
         """ Sets the image list for the page control. """
+
+        self._ImageList = imglist
+
+
+    def AssignImageList(self, imglist):
+        """ Assigns the image list for the page control. """
 
         self._ImageList = imglist
 

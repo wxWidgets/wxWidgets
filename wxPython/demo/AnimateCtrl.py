@@ -25,10 +25,10 @@ class TestPanel(wx.Panel):
             ctrl = wx.animate.AnimationCtrl(self, -1, ani)
             ctrl.SetUseWindowBackgroundColour()
             ctrl.Play()
-            sizer.Add(ctrl, 0, wx.ALL, 10)
+            sizer.AddF(ctrl, wx.SizerFlags().Border(wx.ALL, 10))
 
         border = wx.BoxSizer()
-        border.Add(sizer, 1, wx.EXPAND|wx.ALL, 20)
+        border.AddF(sizer, wx.SizerFlags(1).Expand().Border(wx.ALL, 20))
         self.SetSizer(border)
         
 

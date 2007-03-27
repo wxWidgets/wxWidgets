@@ -24190,18 +24190,22 @@ SWIGINTERN PyObject *_wrap_ToolBarBase_AddControl(PyObject *SWIGUNUSEDPARM(self)
   PyObject *resultobj = 0;
   wxToolBarBase *arg1 = (wxToolBarBase *) 0 ;
   wxControl *arg2 = (wxControl *) 0 ;
+  wxString const &arg3_defvalue = wxEmptyString ;
+  wxString *arg3 = (wxString *) &arg3_defvalue ;
   wxToolBarToolBase *result = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
+  bool temp3 = false ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "control", NULL 
+    (char *) "self",(char *) "control",(char *) "label", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:ToolBarBase_AddControl",kwnames,&obj0,&obj1)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:ToolBarBase_AddControl",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxToolBarBase, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ToolBarBase_AddControl" "', expected argument " "1"" of type '" "wxToolBarBase *""'"); 
@@ -24212,17 +24216,32 @@ SWIGINTERN PyObject *_wrap_ToolBarBase_AddControl(PyObject *SWIGUNUSEDPARM(self)
     SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ToolBarBase_AddControl" "', expected argument " "2"" of type '" "wxControl *""'"); 
   }
   arg2 = reinterpret_cast< wxControl * >(argp2);
+  if (obj2) {
+    {
+      arg3 = wxString_in_helper(obj2);
+      if (arg3 == NULL) SWIG_fail;
+      temp3 = true;
+    }
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxToolBarToolBase *)(arg1)->AddControl(arg2);
+    result = (wxToolBarToolBase *)(arg1)->AddControl(arg2,(wxString const &)*arg3);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
     resultobj = wxPyMake_wxObject(result, (bool)0); 
   }
+  {
+    if (temp3)
+    delete arg3;
+  }
   return resultobj;
 fail:
+  {
+    if (temp3)
+    delete arg3;
+  }
   return NULL;
 }
 
@@ -24232,6 +24251,8 @@ SWIGINTERN PyObject *_wrap_ToolBarBase_InsertControl(PyObject *SWIGUNUSEDPARM(se
   wxToolBarBase *arg1 = (wxToolBarBase *) 0 ;
   size_t arg2 ;
   wxControl *arg3 = (wxControl *) 0 ;
+  wxString const &arg4_defvalue = wxEmptyString ;
+  wxString *arg4 = (wxString *) &arg4_defvalue ;
   wxToolBarToolBase *result = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
@@ -24239,14 +24260,16 @@ SWIGINTERN PyObject *_wrap_ToolBarBase_InsertControl(PyObject *SWIGUNUSEDPARM(se
   int ecode2 = 0 ;
   void *argp3 = 0 ;
   int res3 = 0 ;
+  bool temp4 = false ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "pos",(char *) "control", NULL 
+    (char *) "self",(char *) "pos",(char *) "control",(char *) "label", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:ToolBarBase_InsertControl",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO|O:ToolBarBase_InsertControl",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxToolBarBase, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "ToolBarBase_InsertControl" "', expected argument " "1"" of type '" "wxToolBarBase *""'"); 
@@ -24262,17 +24285,32 @@ SWIGINTERN PyObject *_wrap_ToolBarBase_InsertControl(PyObject *SWIGUNUSEDPARM(se
     SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "ToolBarBase_InsertControl" "', expected argument " "3"" of type '" "wxControl *""'"); 
   }
   arg3 = reinterpret_cast< wxControl * >(argp3);
+  if (obj3) {
+    {
+      arg4 = wxString_in_helper(obj3);
+      if (arg4 == NULL) SWIG_fail;
+      temp4 = true;
+    }
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxToolBarToolBase *)(arg1)->InsertControl(arg2,arg3);
+    result = (wxToolBarToolBase *)(arg1)->InsertControl(arg2,arg3,(wxString const &)*arg4);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
     resultobj = wxPyMake_wxObject(result, (bool)0); 
   }
+  {
+    if (temp4)
+    delete arg4;
+  }
   return resultobj;
 fail:
+  {
+    if (temp4)
+    delete arg4;
+  }
   return NULL;
 }
 

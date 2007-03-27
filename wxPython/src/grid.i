@@ -455,6 +455,20 @@ class wxGridCellAttr;
 #define wxGRID_VALUE_DATETIME   "datetime"
 
 
+// magic constant which tells (to some functions) to automatically calculate
+// the appropriate size
+enum { wxGRID_AUTOSIZE };
+
+
+// many wxGrid methods work either with columns or rows, this enum is used for
+// the parameter indicating which one should it be
+enum wxGridDirection
+{
+    wxGRID_COLUMN,
+    wxGRID_ROW
+};
+
+
 %immutable;
 const wxGridCellCoords wxGridNoCellCoords;
 const wxRect           wxGridNoCellRect;
@@ -2142,6 +2156,23 @@ public:
     
 };
 
+
+// ----------------------------------------------------------------------------
+// wxGridUpdateLocker prevents updates to a grid during its lifetime
+// ----------------------------------------------------------------------------
+
+class wxGridUpdateLocker
+{
+public:
+    // if the pointer is NULL, Create() can be called later
+    wxGridUpdateLocker(wxGrid *grid = NULL);
+    ~wxGridUpdateLocker();
+
+    // can be called if ctor was used with a NULL pointer, must not be called
+    // more than once
+    void Create(wxGrid *grid);
+    
+};
 
 //---------------------------------------------------------------------------
 //---------------------------------------------------------------------------

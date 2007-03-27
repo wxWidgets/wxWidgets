@@ -676,7 +676,7 @@ class Bitmap(GDIObject):
         CopyFromBuffer(self, buffer data)
 
         Copy data from a RGB buffer object to replace the bitmap pixel data.
-        See `wxBitmapFromBuffer` for more .
+        See `wx.BitmapFromBuffer` for more .
         """
         return _gdi_.Bitmap_CopyFromBuffer(*args, **kwargs)
 
@@ -685,7 +685,7 @@ class Bitmap(GDIObject):
         CopyFromBufferRGBA(self, buffer data)
 
         Copy data from a RGBA buffer object to replace the bitmap pixel data.
-        See `wxBitmapFromBufferRGBA` for more .
+        See `wx.BitmapFromBufferRGBA` for more .
         """
         return _gdi_.Bitmap_CopyFromBufferRGBA(*args, **kwargs)
 
@@ -2633,9 +2633,8 @@ class Locale(object):
     __del__ = lambda self : None;
     def Init1(*args, **kwargs):
         """
-        Init1(self, String szName, String szShort=EmptyString, String szLocale=EmptyString, 
-            bool bLoadDefault=True, 
-            bool bConvertEncoding=False) -> bool
+        Init1(self, String name, String shortName=EmptyString, String locale=EmptyString, 
+            bool bLoadDefault=True, bool bConvertEncoding=False) -> bool
         """
         return _gdi_.Locale_Init1(*args, **kwargs)
 
@@ -2692,7 +2691,7 @@ class Locale(object):
 
     AddCatalogLookupPathPrefix = staticmethod(AddCatalogLookupPathPrefix)
     def AddCatalog(*args, **kwargs):
-        """AddCatalog(self, String szDomain) -> bool"""
+        """AddCatalog(self, String domain) -> bool"""
         return _gdi_.Locale_AddCatalog(*args, **kwargs)
 
     def IsAvailable(*args, **kwargs):
@@ -2701,7 +2700,7 @@ class Locale(object):
 
     IsAvailable = staticmethod(IsAvailable)
     def IsLoaded(*args, **kwargs):
-        """IsLoaded(self, String szDomain) -> bool"""
+        """IsLoaded(self, String domain) -> bool"""
         return _gdi_.Locale_IsLoaded(*args, **kwargs)
 
     def GetLanguageInfo(*args, **kwargs):
@@ -2725,7 +2724,7 @@ class Locale(object):
 
     AddLanguage = staticmethod(AddLanguage)
     def GetString(*args, **kwargs):
-        """GetString(self, String szOrigString, String szDomain=EmptyString) -> String"""
+        """GetString(self, String origString, String domain=EmptyString) -> String"""
         return _gdi_.Locale_GetString(*args, **kwargs)
 
     def GetName(*args, **kwargs):
@@ -2792,14 +2791,11 @@ class PyLocale(Locale):
         return _gdi_.PyLocale__setCallbackInfo(*args, **kwargs)
 
     def GetSingularString(*args, **kwargs):
-        """GetSingularString(self, wxChar szOrigString, wxChar szDomain=None) -> wxChar"""
+        """GetSingularString(self, String origString, String domain=EmptyString) -> String"""
         return _gdi_.PyLocale_GetSingularString(*args, **kwargs)
 
     def GetPluralString(*args, **kwargs):
-        """
-        GetPluralString(self, wxChar szOrigString, wxChar szOrigString2, size_t n, 
-            wxChar szDomain=None) -> wxChar
-        """
+        """GetPluralString(self, String origString, String origString2, size_t n, String domain=EmptyString) -> String"""
         return _gdi_.PyLocale_GetPluralString(*args, **kwargs)
 
 _gdi_.PyLocale_swigregister(PyLocale)
@@ -3383,6 +3379,35 @@ class DC(_core.Object):
         position.
         """
         return _gdi_.DC_BlitPointSize(*args, **kwargs)
+
+    def StretchBlit(*args, **kwargs):
+        """
+        StretchBlit(self, int dstX, int dstY, int dstWidth, int dstHeight, DC source, 
+            int srcX, int srcY, int srcWidth, int srcHeight, 
+            int rop=COPY, bool useMask=False, 
+            int srcMaskX=wxDefaultCoord, int srcMaskY=wxDefaultCoord) -> bool
+
+        Copy from a source DC to this DC, specifying the destination
+        coordinates, destination size, source DC, source coordinates, size of
+        source area to copy, logical function, whether to use a bitmap mask,
+        and mask source position.
+        """
+        return _gdi_.DC_StretchBlit(*args, **kwargs)
+
+    def StretchBlitPointSize(*args, **kwargs):
+        """
+        StretchBlitPointSize(self, Point dstPt, Size dstSize, DC source, Point srcPt, 
+            Size srcSize, int rop=COPY, bool useMask=False, 
+            Point srcMaskPt=DefaultPosition) -> bool
+
+        Copy from a source DC to this DC, specifying the destination
+        coordinates, destination size, source DC, source coordinates, size of
+        source area to copy, logical function, whether to use a bitmap mask,
+        and mask source position.  This version is the same as `StretchBlit`
+        except `wx.Point` and `wx.Size` objects are used instead of individual
+        position and size components.
+        """
+        return _gdi_.DC_StretchBlitPointSize(*args, **kwargs)
 
     def GetAsBitmap(*args, **kwargs):
         """GetAsBitmap(self, Rect subrect=None) -> Bitmap"""
@@ -4692,6 +4717,7 @@ def MemoryDCFromDC(*args, **kwargs):
 
 BUFFER_VIRTUAL_AREA = _gdi_.BUFFER_VIRTUAL_AREA
 BUFFER_CLIENT_AREA = _gdi_.BUFFER_CLIENT_AREA
+BUFFER_USES_SHARED_BUFFER = _gdi_.BUFFER_USES_SHARED_BUFFER
 class BufferedDC(MemoryDC):
     """
     This simple class provides a simple way to avoid flicker: when drawing
@@ -5418,7 +5444,8 @@ class GraphicsContext(GraphicsObject):
 
         Creates a wx.GraphicsContext from a native context. This native
         context must be eg a CGContextRef for Core Graphics, a Graphics
-        pointer for GDIPlus or a cairo_t pointer for Cairo.
+        pointer for GDIPlus or a cairo_t pointer for Cairo.  NOTE: For
+        wxPython we still need a way to make this value usable.
         """
         return _gdi_.GraphicsContext_CreateFromNative(*args, **kwargs)
 
@@ -5427,7 +5454,8 @@ class GraphicsContext(GraphicsObject):
         """
         CreateFromNativeWindow(void window) -> GraphicsContext
 
-        Creates a wx.GraphicsContext from a native window.
+        Creates a wx.GraphicsContext from a native window.  NOTE: For wxPython
+        we still need a way to make this value usable.
         """
         return _gdi_.GraphicsContext_CreateFromNativeWindow(*args, **kwargs)
 
@@ -5746,7 +5774,7 @@ class GraphicsContext(GraphicsObject):
 
     def StrokeLineSegements(*args, **kwargs):
         """
-        StrokeLineSegements(self, PyObject beginPoints, PyObject endPoints)
+        StrokeLineSegments(self, List beginPoints, List endPoints)
 
         Stroke disconnected lines from begin to end points
         """
@@ -5827,7 +5855,8 @@ def GraphicsContext_CreateFromNative(*args, **kwargs):
 
     Creates a wx.GraphicsContext from a native context. This native
     context must be eg a CGContextRef for Core Graphics, a Graphics
-    pointer for GDIPlus or a cairo_t pointer for Cairo.
+    pointer for GDIPlus or a cairo_t pointer for Cairo.  NOTE: For
+    wxPython we still need a way to make this value usable.
     """
   return _gdi_.GraphicsContext_CreateFromNative(*args, **kwargs)
 
@@ -5835,7 +5864,8 @@ def GraphicsContext_CreateFromNativeWindow(*args, **kwargs):
   """
     GraphicsContext_CreateFromNativeWindow(void window) -> GraphicsContext
 
-    Creates a wx.GraphicsContext from a native window.
+    Creates a wx.GraphicsContext from a native window.  NOTE: For wxPython
+    we still need a way to make this value usable.
     """
   return _gdi_.GraphicsContext_CreateFromNativeWindow(*args, **kwargs)
 
@@ -6265,17 +6295,6 @@ class PenList(GDIObjListBase):
         """FindOrCreatePen(self, Colour colour, int width, int style) -> Pen"""
         return _gdi_.PenList_FindOrCreatePen(*args, **kwargs)
 
-    def AddPen(*args, **kwargs):
-        """AddPen(self, Pen pen)"""
-        return _gdi_.PenList_AddPen(*args, **kwargs)
-
-    def RemovePen(*args, **kwargs):
-        """RemovePen(self, Pen pen)"""
-        return _gdi_.PenList_RemovePen(*args, **kwargs)
-
-    AddPen = wx._deprecated(AddPen)
-    RemovePen = wx._deprecated(RemovePen)
-
 _gdi_.PenList_swigregister(PenList)
 
 class BrushList(GDIObjListBase):
@@ -6286,17 +6305,6 @@ class BrushList(GDIObjListBase):
     def FindOrCreateBrush(*args, **kwargs):
         """FindOrCreateBrush(self, Colour colour, int style=SOLID) -> Brush"""
         return _gdi_.BrushList_FindOrCreateBrush(*args, **kwargs)
-
-    def AddBrush(*args, **kwargs):
-        """AddBrush(self, Brush brush)"""
-        return _gdi_.BrushList_AddBrush(*args, **kwargs)
-
-    def RemoveBrush(*args, **kwargs):
-        """RemoveBrush(self, Brush brush)"""
-        return _gdi_.BrushList_RemoveBrush(*args, **kwargs)
-
-    AddBrush = wx._deprecated(AddBrush)
-    RemoveBrush = wx._deprecated(RemoveBrush)
 
 _gdi_.BrushList_swigregister(BrushList)
 
@@ -6312,17 +6320,6 @@ class FontList(GDIObjListBase):
             int encoding=FONTENCODING_DEFAULT) -> Font
         """
         return _gdi_.FontList_FindOrCreateFont(*args, **kwargs)
-
-    def AddFont(*args, **kwargs):
-        """AddFont(self, Font font)"""
-        return _gdi_.FontList_AddFont(*args, **kwargs)
-
-    def RemoveFont(*args, **kwargs):
-        """RemoveFont(self, Font font)"""
-        return _gdi_.FontList_RemoveFont(*args, **kwargs)
-
-    AddFont = wx._deprecated(AddFont)
-    RemoveFont = wx._deprecated(RemoveFont)
 
 _gdi_.FontList_swigregister(FontList)
 

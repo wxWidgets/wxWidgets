@@ -11169,94 +11169,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_SashWindow_SetSashBorder(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxSashWindow *arg1 = (wxSashWindow *) 0 ;
-  wxSashEdgePosition arg2 ;
-  bool arg3 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  bool val3 ;
-  int ecode3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "edge",(char *) "border", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:SashWindow_SetSashBorder",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxSashWindow, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SashWindow_SetSashBorder" "', expected argument " "1"" of type '" "wxSashWindow *""'"); 
-  }
-  arg1 = reinterpret_cast< wxSashWindow * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SashWindow_SetSashBorder" "', expected argument " "2"" of type '" "wxSashEdgePosition""'");
-  } 
-  arg2 = static_cast< wxSashEdgePosition >(val2);
-  ecode3 = SWIG_AsVal_bool(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "SashWindow_SetSashBorder" "', expected argument " "3"" of type '" "bool""'");
-  } 
-  arg3 = static_cast< bool >(val3);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->SetSashBorder(arg2,arg3);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_SashWindow_HasBorder(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxSashWindow *arg1 = (wxSashWindow *) 0 ;
-  wxSashEdgePosition arg2 ;
-  bool result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "edge", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:SashWindow_HasBorder",kwnames,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxSashWindow, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "SashWindow_HasBorder" "', expected argument " "1"" of type '" "wxSashWindow const *""'"); 
-  }
-  arg1 = reinterpret_cast< wxSashWindow * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "SashWindow_HasBorder" "', expected argument " "2"" of type '" "wxSashEdgePosition""'");
-  } 
-  arg2 = static_cast< wxSashEdgePosition >(val2);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)((wxSashWindow const *)arg1)->HasBorder(arg2);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  {
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_SashWindow_GetEdgeMargin(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxSashWindow *arg1 = (wxSashWindow *) 0 ;
@@ -15287,6 +15199,33 @@ SWIGINTERN PyObject *_wrap_VListBox_SetSelectionBackground(PyObject *SWIGUNUSEDP
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->SetSelectionBackground((wxColour const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VListBox_RefreshSelected(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPyVListBox *arg1 = (wxPyVListBox *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyVListBox, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VListBox_RefreshSelected" "', expected argument " "1"" of type '" "wxPyVListBox *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyVListBox * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->RefreshSelected();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -31844,8 +31783,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"SashWindow_Create", (PyCFunction) _wrap_SashWindow_Create, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"SashWindow_SetSashVisible", (PyCFunction) _wrap_SashWindow_SetSashVisible, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"SashWindow_GetSashVisible", (PyCFunction) _wrap_SashWindow_GetSashVisible, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"SashWindow_SetSashBorder", (PyCFunction) _wrap_SashWindow_SetSashBorder, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"SashWindow_HasBorder", (PyCFunction) _wrap_SashWindow_HasBorder, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"SashWindow_GetEdgeMargin", (PyCFunction) _wrap_SashWindow_GetEdgeMargin, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"SashWindow_SetDefaultBorderSize", (PyCFunction) _wrap_SashWindow_SetDefaultBorderSize, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"SashWindow_GetDefaultBorderSize", (PyCFunction)_wrap_SashWindow_GetDefaultBorderSize, METH_O, NULL},
@@ -31968,6 +31905,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"VListBox_SetMargins", (PyCFunction) _wrap_VListBox_SetMargins, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"VListBox_SetMarginsXY", (PyCFunction) _wrap_VListBox_SetMarginsXY, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"VListBox_SetSelectionBackground", (PyCFunction) _wrap_VListBox_SetSelectionBackground, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VListBox_RefreshSelected", (PyCFunction)_wrap_VListBox_RefreshSelected, METH_O, NULL},
 	 { (char *)"VListBox_OnDrawSeparator", (PyCFunction) _wrap_VListBox_OnDrawSeparator, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"VListBox_OnDrawBackground", (PyCFunction) _wrap_VListBox_OnDrawBackground, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"VListBox_swigregister", VListBox_swigregister, METH_VARARGS, NULL},
@@ -34727,13 +34665,11 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "MINIMIZE",SWIG_From_int(static_cast< int >(wxMINIMIZE)));
   SWIG_Python_SetConstant(d, "MAXIMIZE",SWIG_From_int(static_cast< int >(wxMAXIMIZE)));
   SWIG_Python_SetConstant(d, "CLOSE_BOX",SWIG_From_int(static_cast< int >(wxCLOSE_BOX)));
-  SWIG_Python_SetConstant(d, "THICK_FRAME",SWIG_From_int(static_cast< int >(wxTHICK_FRAME)));
   SWIG_Python_SetConstant(d, "SYSTEM_MENU",SWIG_From_int(static_cast< int >(wxSYSTEM_MENU)));
   SWIG_Python_SetConstant(d, "MINIMIZE_BOX",SWIG_From_int(static_cast< int >(wxMINIMIZE_BOX)));
   SWIG_Python_SetConstant(d, "MAXIMIZE_BOX",SWIG_From_int(static_cast< int >(wxMAXIMIZE_BOX)));
   SWIG_Python_SetConstant(d, "TINY_CAPTION_HORIZ",SWIG_From_int(static_cast< int >(wxTINY_CAPTION_HORIZ)));
   SWIG_Python_SetConstant(d, "TINY_CAPTION_VERT",SWIG_From_int(static_cast< int >(wxTINY_CAPTION_VERT)));
-  SWIG_Python_SetConstant(d, "RESIZE_BOX",SWIG_From_int(static_cast< int >(wxRESIZE_BOX)));
   SWIG_Python_SetConstant(d, "RESIZE_BORDER",SWIG_From_int(static_cast< int >(wxRESIZE_BORDER)));
   SWIG_Python_SetConstant(d, "DIALOG_NO_PARENT",SWIG_From_int(static_cast< int >(wxDIALOG_NO_PARENT)));
   SWIG_Python_SetConstant(d, "DEFAULT_FRAME_STYLE",SWIG_From_int(static_cast< int >(wxDEFAULT_FRAME_STYLE)));
@@ -34747,10 +34683,6 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "FRAME_EX_METAL",SWIG_From_int(static_cast< int >(wxFRAME_EX_METAL)));
   SWIG_Python_SetConstant(d, "DIALOG_EX_METAL",SWIG_From_int(static_cast< int >(wxDIALOG_EX_METAL)));
   SWIG_Python_SetConstant(d, "WS_EX_CONTEXTHELP",SWIG_From_int(static_cast< int >(wxWS_EX_CONTEXTHELP)));
-  SWIG_Python_SetConstant(d, "DIALOG_MODAL",SWIG_From_int(static_cast< int >(wxDIALOG_MODAL)));
-  SWIG_Python_SetConstant(d, "DIALOG_MODELESS",SWIG_From_int(static_cast< int >(wxDIALOG_MODELESS)));
-  SWIG_Python_SetConstant(d, "USER_COLOURS",SWIG_From_int(static_cast< int >(wxUSER_COLOURS)));
-  SWIG_Python_SetConstant(d, "NO_3D",SWIG_From_int(static_cast< int >(wxNO_3D)));
   SWIG_Python_SetConstant(d, "FRAME_EX_CONTEXTHELP",SWIG_From_int(static_cast< int >(wxFRAME_EX_CONTEXTHELP)));
   SWIG_Python_SetConstant(d, "DIALOG_EX_CONTEXTHELP",SWIG_From_int(static_cast< int >(wxDIALOG_EX_CONTEXTHELP)));
   SWIG_Python_SetConstant(d, "FULLSCREEN_NOMENUBAR",SWIG_From_int(static_cast< int >(wxFULLSCREEN_NOMENUBAR)));
@@ -34846,16 +34778,10 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_addvarlink(SWIG_globals(),(char*)"FileSelectorDefaultWildcardStr",FileSelectorDefaultWildcardStr_get, FileSelectorDefaultWildcardStr_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"GetTextFromUserPromptStr",GetTextFromUserPromptStr_get, GetTextFromUserPromptStr_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"MessageBoxCaptionStr",MessageBoxCaptionStr_get, MessageBoxCaptionStr_set);
+  SWIG_Python_SetConstant(d, "DD_CHANGE_DIR",SWIG_From_int(static_cast< int >(wxDD_CHANGE_DIR)));
+  SWIG_Python_SetConstant(d, "DD_DIR_MUST_EXIST",SWIG_From_int(static_cast< int >(wxDD_DIR_MUST_EXIST)));
   SWIG_Python_SetConstant(d, "DD_NEW_DIR_BUTTON",SWIG_From_int(static_cast< int >(wxDD_NEW_DIR_BUTTON)));
   SWIG_Python_SetConstant(d, "DD_DEFAULT_STYLE",SWIG_From_int(static_cast< int >(wxDD_DEFAULT_STYLE)));
-  SWIG_Python_SetConstant(d, "DD_CHANGE_DIR",SWIG_From_int(static_cast< int >(wxDD_CHANGE_DIR)));
-  SWIG_Python_SetConstant(d, "OPEN",SWIG_From_int(static_cast< int >(wxOPEN)));
-  SWIG_Python_SetConstant(d, "SAVE",SWIG_From_int(static_cast< int >(wxSAVE)));
-  SWIG_Python_SetConstant(d, "OVERWRITE_PROMPT",SWIG_From_int(static_cast< int >(wxOVERWRITE_PROMPT)));
-  SWIG_Python_SetConstant(d, "FILE_MUST_EXIST",SWIG_From_int(static_cast< int >(wxFILE_MUST_EXIST)));
-  SWIG_Python_SetConstant(d, "MULTIPLE",SWIG_From_int(static_cast< int >(wxMULTIPLE)));
-  SWIG_Python_SetConstant(d, "CHANGE_DIR",SWIG_From_int(static_cast< int >(wxCHANGE_DIR)));
-  SWIG_Python_SetConstant(d, "HIDE_READONLY",SWIG_From_int(static_cast< int >(wxHIDE_READONLY)));
   SWIG_Python_SetConstant(d, "FD_OPEN",SWIG_From_int(static_cast< int >(wxFD_OPEN)));
   SWIG_Python_SetConstant(d, "FD_SAVE",SWIG_From_int(static_cast< int >(wxFD_SAVE)));
   SWIG_Python_SetConstant(d, "FD_OVERWRITE_PROMPT",SWIG_From_int(static_cast< int >(wxFD_OVERWRITE_PROMPT)));

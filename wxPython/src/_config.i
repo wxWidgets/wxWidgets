@@ -419,8 +419,11 @@ public:
                      const wxString& globalFilename = wxPyEmptyString,
                      long style = wxCONFIG_USE_LOCAL_FILE | wxCONFIG_USE_GLOBAL_FILE),
         "", "");
-    
     ~wxFileConfig();
+    
+    static wxString GetGlobalFileName(const wxString& szFile);
+    static wxString GetLocalFileName(const wxString& szFile, int style = 0);
+    
 };
 
 

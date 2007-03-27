@@ -165,6 +165,11 @@ const wxAcceleratorTable wxNullAcceleratorTable;
 %mutable;
 
 
-wxAcceleratorEntry *wxGetAccelFromString(const wxString& label);
+%pythoncode {
+    def GetAccelFromString(label):
+        entry = AcceleratorEntry()
+        entry.FromString(label)
+        return entry
+}
 
 //---------------------------------------------------------------------------

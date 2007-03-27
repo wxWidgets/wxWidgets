@@ -70,6 +70,12 @@ enum {
 
 %pythoncode { TE_LINEWRAP = TE_CHARWRAP }
 
+// deprecated synonymns
+%pythoncode {
+PROCESS_ENTER = TE_PROCESS_ENTER
+PASSWORD = TE_PASSWORD
+}
+
 
 
 enum wxTextAttrAlignment

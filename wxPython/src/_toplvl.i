@@ -30,13 +30,11 @@ enum
     wxMINIMIZE,
     wxMAXIMIZE,
     wxCLOSE_BOX,
-    wxTHICK_FRAME,
     wxSYSTEM_MENU,
     wxMINIMIZE_BOX,
     wxMAXIMIZE_BOX,
     wxTINY_CAPTION_HORIZ,
     wxTINY_CAPTION_VERT,
-    wxRESIZE_BOX,
     wxRESIZE_BORDER,
 
     wxDIALOG_NO_PARENT,
@@ -54,16 +52,22 @@ enum
     wxFRAME_EX_METAL,
     wxDIALOG_EX_METAL,
     wxWS_EX_CONTEXTHELP,
-    
-    // Obsolete
-    wxDIALOG_MODAL,
-    wxDIALOG_MODELESS,
-    wxUSER_COLOURS,
-    wxNO_3D,
 
     wxFRAME_EX_CONTEXTHELP,
     wxDIALOG_EX_CONTEXTHELP,
-};    
+};
+
+%pythoncode {
+    %# deprecated
+    RESIZE_BOX  = MAXIMIZE_BOX
+    THICK_FRAME = RESIZE_BORDER
+         
+    %# Obsolete
+    wxDIALOG_MODAL = 0
+    wxDIALOG_MODELESS = 0
+    wxUSER_COLOURS = 0
+    wxNO_3D = 0
+}
 
 
 enum

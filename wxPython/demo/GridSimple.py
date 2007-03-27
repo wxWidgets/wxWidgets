@@ -242,7 +242,8 @@ class TestFrame(wx.Frame):
 
 if __name__ == '__main__':
     import sys
-    app = wx.PySimpleApp()
+    from wx.lib.mixins.inspect import InspectableApp
+    app = InspectableApp(False)
     frame = TestFrame(None, sys.stdout)
     frame.Show(True)
     #import wx.py

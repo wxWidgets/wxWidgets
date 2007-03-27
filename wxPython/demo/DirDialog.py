@@ -15,7 +15,10 @@ class TestPanel(wx.Panel):
     def OnButton(self, evt):
         # In this case we include a "New directory" button. 
         dlg = wx.DirDialog(self, "Choose a directory:",
-                          style=wx.DD_DEFAULT_STYLE|wx.DD_NEW_DIR_BUTTON)
+                          style=wx.DD_DEFAULT_STYLE
+                           #| wx.DD_DIR_MUST_EXIST
+                           #| wx.DD_CHANGE_DIR
+                           )
 
         # If the user selects OK, then we process the dialog's data.
         # This is done by getting the path data from the dialog - BEFORE

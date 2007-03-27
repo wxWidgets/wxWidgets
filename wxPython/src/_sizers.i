@@ -21,6 +21,155 @@
 //---------------------------------------------------------------------------
 %newgroup;
 
+DocStr(wxSizerFlags,
+"Normally, when you add an item to a sizer via `wx.Sizer.Add`, you have
+to specify a lot of flags and parameters which can be unwieldy. This
+is where wx.SizerFlags comes in: it allows you to specify all
+parameters using the named methods instead. For example, instead of::
+
+    sizer.Add(ctrl, 0, wx.EXPAND | wx.ALL, 10)
+
+you can now write::
+
+    sizer.AddF(ctrl, wx.SizerFlags().Expand().Border(wx.ALL, 10))
+
+This is more readable and also allows you to create wx.SizerFlags
+objects which can be reused for several sizer items.::
+
+    flagsExpand = wx.SizerFlags(1)
+    flagsExpand.Expand().Border(wx.ALL, 10)
+    sizer.AddF(ctrl1, flagsExpand)
+    sizer.AddF(ctrl2, flagsExpand)
+
+Note that by specification, all methods of wx.SizerFlags return the
+wx.SizerFlags object itself allowing chaining multiple method calls
+like in the examples above.", "");
+
+class wxSizerFlags
+{
+public:
+    // construct the flags object initialized with the given proportion (0 by
+    // default)
+    DocCtorStr(
+        wxSizerFlags(int proportion = 0),
+        "Constructs the flags object with the specified proportion.", "");
+    
+    ~wxSizerFlags();
+
+    // This typemap ensures that the returned object is the same
+    // Python instance as what was passed in as `self`, instead of
+    // creating a new proxy as SWIG would normally do.
+    %typemap(out) wxSizerFlags& { $result = $self; Py_INCREF($result); }
+
+    DocDeclStr(
+        wxSizerFlags& , Proportion(int proportion),
+        "Sets the item's proportion value.", "");
+    
+    DocDeclStr(
+        wxSizerFlags& , Align(int alignment),
+        "Sets the item's alignment", "");
+    
+    DocDeclStr(
+        wxSizerFlags& , Expand(),
+        "Sets the wx.EXPAND flag, which will cause the item to be expanded to
+fill as much space as it is given by the sizer.", "");
+    
+    DocDeclStr(
+        wxSizerFlags& , Centre(),
+        "Same as `Center` for those with an alternate dialect of English.", "");
+    
+    DocDeclStr(
+        wxSizerFlags& , Center(),
+        "Sets the centering alignment flags.", "");
+    
+    DocDeclStr(
+        wxSizerFlags& , Left(),
+        "Aligns the object to the left, a shortcut for calling
+Align(wx.ALIGN_LEFT)", "");
+    
+    DocDeclStr(
+        wxSizerFlags& , Right(),
+        "Aligns the object to the right, a shortcut for calling
+Align(wx.ALIGN_RIGHT)", "");
+    
+    DocDeclStr(
+        wxSizerFlags& , Top(),
+        "Aligns the object to the top of the available space, a shortcut for
+calling Align(wx.ALIGN_TOP)", "");
+    
+    DocDeclStr(
+        wxSizerFlags& , Bottom(),
+        "Aligns the object to the bottom of the available space, a shortcut for
+calling Align(wx.ALIGN_BOTTOM)", "");
+    
+    DocDeclStr(
+        wxSizerFlags& , Shaped(),
+        "Sets the wx.SHAPED flag.", "");
+    
+    DocDeclStr(
+        wxSizerFlags& , FixedMinSize(),
+        "Sets the wx.FIXED_MINSIZE flag.", "");
+    
+
+    
+    %extend {
+        DocDeclStr(
+            wxSizerFlags& , Border(int direction=wxALL, int borderInPixels=-1),
+            "Sets the border of the item in the direction(s) or sides given by the
+direction parameter.  If the borderInPixels value is not given then
+the default border size (see `GetDefaultBorder`) will be used.", "")
+        {
+            if (borderInPixels == -1)
+                return self->Border(direction);
+            else
+                return self->Border(direction, borderInPixels);
+        }
+    }
+
+    DocDeclStr(
+        wxSizerFlags& , DoubleBorder(int direction = wxALL),
+        "Sets the border in the given direction to twice the default border
+size.", "");
+    
+    DocDeclStr(
+        wxSizerFlags& , TripleBorder(int direction = wxALL),
+        "Sets the border in the given direction to three times the default
+border size.", "");
+    
+    DocDeclStr(
+        wxSizerFlags& , HorzBorder(),
+        "Sets the left and right borders to the default border size.", "");
+    
+    DocDeclStr(
+        wxSizerFlags& , DoubleHorzBorder(),
+        "Sets the left and right borders to twice the default border size.", "");
+    
+
+    // Clear the typemap
+    %typemap(out) wxSizerFlags& ;
+    
+
+    
+    DocDeclStr(
+        static int , GetDefaultBorder(),
+        "Returns the default border size used by the other border methods", "");
+    
+
+    DocDeclStr(
+        int , GetProportion() const,
+        "Returns the proportion value to be used in the sizer item.", "");
+    
+    DocDeclStr(
+        int , GetFlags() const,
+        "Returns the flags value to be used in the sizer item.", "");
+    
+    DocDeclStr(
+        int , GetBorderInPixels() const,
+        "Returns the border value in pixels to be used in the sizer item.", "");
+};
+
+//---------------------------------------------------------------------------
+
 DocStr(wxSizerItem,
 "The wx.SizerItem class is used to track the position, size and other
 attributes of each item managed by a `wx.Sizer`. It is not usually
@@ -444,7 +593,7 @@ public:
 
         - **sizer**: The (child-)sizer to be added to the sizer. This
           allows placing a child sizer in a sizer and thus to create
-          hierarchies of sizers (typically a vertical box as the top
+          hierarchies of sizers (for example a vertical box as the top
           sizer and several horizontal boxes on the level beneath).
 
         - **size**: A `wx.Size` or a 2-element sequence of integers
@@ -552,8 +701,34 @@ public:
                 return NULL;
         }
 
-//    virtual wxSizerItem* AddSpacer(int size);
-//    virtual wxSizerItem* AddStretchSpacer(int prop = 1);
+
+        DocAStr(AddF,
+                "AddF(self, item, wx.SizerFlags flags) -> wx.SizerItem",
+                "Similar to `Add` but uses the `wx.SizerFlags` convenience class for
+setting the various flags, options and borders.", "");
+        wxSizerItem* AddF(PyObject* item, wxSizerFlags& flags) {
+            
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, true, false);
+            if ( info.sizer )
+                PyObject_SetAttrString(item,"thisown",Py_False);
+            wxPyEndBlockThreads(blocked);
+
+            // Now call the real Add method if a valid item type was found
+            if ( info.window )
+                return self->Add(info.window, flags);
+            else if ( info.sizer )
+                return self->Add(info.sizer, flags);
+            else if (info.gotSize)
+                return self->Add(info.size.GetWidth(), info.size.GetHeight(),
+                                 flags.GetProportion(),
+                                 flags.GetFlags(),
+                                 flags.GetBorderInPixels());
+            else
+                return NULL;
+        }
+
+        
 
         DocAStr(Insert,
                 "Insert(self, int before, item, int proportion=0, int flag=0, int border=0,
@@ -586,8 +761,35 @@ the item at index *before*.  See `Add` for a description of the parameters.", ""
         }
 
 
-//    virtual wxSizerItem* InsertSpacer(size_t index, int size);
-//    virtual wxSizerItem* InsertStretchSpacer(size_t index, int prop = 1);
+        
+        DocAStr(InsertF,
+                "InsertF(self, int before, item, wx.SizerFlags flags) -> wx.SizerItem",
+                "Similar to `Insert`, but uses the `wx.SizerFlags` convenience class
+for setting the various flags, options and borders.", "");
+        wxSizerItem* InsertF(int before, PyObject* item, wxSizerFlags& flags) {
+
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, true, false);
+            if ( info.sizer )
+                PyObject_SetAttrString(item,"thisown",Py_False);
+            wxPyEndBlockThreads(blocked);
+
+            // Now call the real Insert method if a valid item type was found
+            if ( info.window )
+                return self->Insert(before, info.window, flags);
+            else if ( info.sizer )
+                return self->Insert(before, info.sizer, flags);
+            else if (info.gotSize)
+                return self->Insert(before, info.size.GetWidth(), info.size.GetHeight(),
+                                    flags.GetProportion(),
+                                    flags.GetFlags(),
+                                    flags.GetBorderInPixels());
+            else
+                return NULL;
+        }
+
+
+        
 
         DocAStr(Prepend,
                 "Prepend(self, item, int proportion=0, int flag=0, int border=0,
@@ -619,10 +821,36 @@ this sizer.  See `Add` for a description of the parameters.", "");
                 return NULL;
         }
 
-//    virtual wxSizerItem* PrependSpacer(int size);
-//    virtual wxSizerItem* PrependStretchSpacer(int prop = 1);
 
         
+        DocAStr(PrependF,
+                "PrependF(self, item, wx.SizerFlags flags) -> wx.SizerItem",
+                "Similar to `Prepend` but uses the `wx.SizerFlags` convenience class
+for setting the various flags, options and borders.", "");
+        wxSizerItem* PrependF(PyObject* item, wxSizerFlags& flags) {
+            
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
+            wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, true, false);
+            if ( info.sizer )
+                PyObject_SetAttrString(item,"thisown",Py_False);
+            wxPyEndBlockThreads(blocked);
+
+            // Now call the real Add method if a valid item type was found
+            if ( info.window )
+                return self->Prepend(info.window, flags);
+            else if ( info.sizer )
+                return self->Prepend(info.sizer, flags);
+            else if (info.gotSize)
+                return self->Prepend(info.size.GetWidth(), info.size.GetHeight(),
+                                     flags.GetProportion(),
+                                     flags.GetFlags(),
+                                     flags.GetBorderInPixels());
+            else
+                return NULL;
+        }
+
+
+
         DocAStr(Remove,
                 "Remove(self, item) -> bool",
                 "Removes an item from the sizer and destroys it.  This method does not
@@ -642,7 +870,7 @@ and removed.", "
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
             wxPyEndBlockThreads(blocked);
             if ( info.window )
-                return self->Remove(info.window);
+                return false; //self->Remove(info.window);
             else if ( info.sizer )
                 return self->Remove(info.sizer);
             else if ( info.gotPos )
@@ -675,18 +903,18 @@ was found and detached.", "");
 
 
         DocAStr(GetItem,
-                "GetItem(self, item) -> wx.SizerItem",
+                "GetItem(self, item, recursive=False) -> wx.SizerItem",
                 "Returns the `wx.SizerItem` which holds the *item* given.  The *item*
 parameter can be either a window, a sizer, or the zero-based index of
 the item to be found.", "");
-        wxSizerItem* GetItem(PyObject* item) {
+        wxSizerItem* GetItem(PyObject* item, bool recursive=false) {
             wxPyBlock_t blocked = wxPyBeginBlockThreads();
             wxPySizerItemInfo info = wxPySizerItemTypeHelper(item, false, true);
             wxPyEndBlockThreads(blocked);
             if ( info.window )
-                return self->GetItem(info.window);
+                return self->GetItem(info.window, recursive);
             else if ( info.sizer )
-                return self->GetItem(info.sizer);
+                return self->GetItem(info.sizer, recursive);
             else if ( info.gotPos )
                 return self->GetItem(info.pos);
             else
@@ -731,9 +959,9 @@ the item to be found.", "");
             """
             if isinstance(olditem, wx.Window):
                 return self._ReplaceWin(olditem, item, recursive)
-            elif isinstnace(olditem, wx.Sizer):
+            elif isinstance(olditem, wx.Sizer):
                 return self._ReplaceSizer(olditem, item, recursive)
-            elif isinstnace(olditem, int):
+            elif isinstance(olditem, int):
                 return self._ReplaceItem(olditem, item)
             else:
                 raise TypeError("Expected Window, Sizer, or integer for first parameter.")

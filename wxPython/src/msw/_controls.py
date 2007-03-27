@@ -1500,6 +1500,9 @@ TE_BESTWRAP = _controls_.TE_BESTWRAP
 TE_RICH2 = _controls_.TE_RICH2
 TE_CAPITALIZE = _controls_.TE_CAPITALIZE
 TE_LINEWRAP = TE_CHARWRAP 
+PROCESS_ENTER = TE_PROCESS_ENTER
+PASSWORD = TE_PASSWORD
+
 TEXT_ALIGNMENT_DEFAULT = _controls_.TEXT_ALIGNMENT_DEFAULT
 TEXT_ALIGNMENT_LEFT = _controls_.TEXT_ALIGNMENT_LEFT
 TEXT_ALIGNMENT_CENTRE = _controls_.TEXT_ALIGNMENT_CENTRE
@@ -3786,11 +3789,11 @@ class ToolBarBase(_core.Control):
         return _controls_.ToolBarBase_InsertToolItem(*args, **kwargs)
 
     def AddControl(*args, **kwargs):
-        """AddControl(self, Control control) -> ToolBarToolBase"""
+        """AddControl(self, Control control, String label=wxEmptyString) -> ToolBarToolBase"""
         return _controls_.ToolBarBase_AddControl(*args, **kwargs)
 
     def InsertControl(*args, **kwargs):
-        """InsertControl(self, size_t pos, Control control) -> ToolBarToolBase"""
+        """InsertControl(self, size_t pos, Control control, String label=wxEmptyString) -> ToolBarToolBase"""
         return _controls_.ToolBarBase_InsertControl(*args, **kwargs)
 
     def FindControl(*args, **kwargs):

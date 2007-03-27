@@ -305,13 +305,11 @@ ICONIZE = _windows_.ICONIZE
 MINIMIZE = _windows_.MINIMIZE
 MAXIMIZE = _windows_.MAXIMIZE
 CLOSE_BOX = _windows_.CLOSE_BOX
-THICK_FRAME = _windows_.THICK_FRAME
 SYSTEM_MENU = _windows_.SYSTEM_MENU
 MINIMIZE_BOX = _windows_.MINIMIZE_BOX
 MAXIMIZE_BOX = _windows_.MAXIMIZE_BOX
 TINY_CAPTION_HORIZ = _windows_.TINY_CAPTION_HORIZ
 TINY_CAPTION_VERT = _windows_.TINY_CAPTION_VERT
-RESIZE_BOX = _windows_.RESIZE_BOX
 RESIZE_BORDER = _windows_.RESIZE_BORDER
 DIALOG_NO_PARENT = _windows_.DIALOG_NO_PARENT
 DEFAULT_FRAME_STYLE = _windows_.DEFAULT_FRAME_STYLE
@@ -325,12 +323,18 @@ FRAME_DRAWER = _windows_.FRAME_DRAWER
 FRAME_EX_METAL = _windows_.FRAME_EX_METAL
 DIALOG_EX_METAL = _windows_.DIALOG_EX_METAL
 WS_EX_CONTEXTHELP = _windows_.WS_EX_CONTEXTHELP
-DIALOG_MODAL = _windows_.DIALOG_MODAL
-DIALOG_MODELESS = _windows_.DIALOG_MODELESS
-USER_COLOURS = _windows_.USER_COLOURS
-NO_3D = _windows_.NO_3D
 FRAME_EX_CONTEXTHELP = _windows_.FRAME_EX_CONTEXTHELP
 DIALOG_EX_CONTEXTHELP = _windows_.DIALOG_EX_CONTEXTHELP
+# deprecated
+RESIZE_BOX  = MAXIMIZE_BOX
+THICK_FRAME = RESIZE_BORDER
+     
+# Obsolete
+wxDIALOG_MODAL = 0
+wxDIALOG_MODELESS = 0
+wxUSER_COLOURS = 0
+wxNO_3D = 0
+
 FULLSCREEN_NOMENUBAR = _windows_.FULLSCREEN_NOMENUBAR
 FULLSCREEN_NOTOOLBAR = _windows_.FULLSCREEN_NOTOOLBAR
 FULLSCREEN_NOSTATUSBAR = _windows_.FULLSCREEN_NOSTATUSBAR
@@ -1418,14 +1422,6 @@ class SashWindow(_core.Window):
         """GetSashVisible(self, int edge) -> bool"""
         return _windows_.SashWindow_GetSashVisible(*args, **kwargs)
 
-    def SetSashBorder(*args, **kwargs):
-        """SetSashBorder(self, int edge, bool border)"""
-        return _windows_.SashWindow_SetSashBorder(*args, **kwargs)
-
-    def HasBorder(*args, **kwargs):
-        """HasBorder(self, int edge) -> bool"""
-        return _windows_.SashWindow_HasBorder(*args, **kwargs)
-
     def GetEdgeMargin(*args, **kwargs):
         """GetEdgeMargin(self, int edge) -> int"""
         return _windows_.SashWindow_GetEdgeMargin(*args, **kwargs)
@@ -2011,6 +2007,10 @@ class VListBox(VScrolledWindow):
         """SetSelectionBackground(self, Colour col)"""
         return _windows_.VListBox_SetSelectionBackground(*args, **kwargs)
 
+    def RefreshSelected(*args, **kwargs):
+        """RefreshSelected(self)"""
+        return _windows_.VListBox_RefreshSelected(*args, **kwargs)
+
     def OnDrawSeparator(*args, **kwargs):
         """OnDrawSeparator(self, DC dc, Rect rect, size_t n)"""
         return _windows_.VListBox_OnDrawSeparator(*args, **kwargs)
@@ -2305,9 +2305,10 @@ def GetColourFromUser(*args, **kwargs):
         String caption=EmptyString) -> Colour
     """
   return _windows_.GetColourFromUser(*args, **kwargs)
+DD_CHANGE_DIR = _windows_.DD_CHANGE_DIR
+DD_DIR_MUST_EXIST = _windows_.DD_DIR_MUST_EXIST
 DD_NEW_DIR_BUTTON = _windows_.DD_NEW_DIR_BUTTON
 DD_DEFAULT_STYLE = _windows_.DD_DEFAULT_STYLE
-DD_CHANGE_DIR = _windows_.DD_CHANGE_DIR
 class DirDialog(Dialog):
     """
     wx.DirDialog allows the user to select a directory by browising the
@@ -2363,13 +2364,6 @@ class DirDialog(Dialog):
     Path = property(GetPath,SetPath,doc="See `GetPath` and `SetPath`") 
 _windows_.DirDialog_swigregister(DirDialog)
 
-OPEN = _windows_.OPEN
-SAVE = _windows_.SAVE
-OVERWRITE_PROMPT = _windows_.OVERWRITE_PROMPT
-FILE_MUST_EXIST = _windows_.FILE_MUST_EXIST
-MULTIPLE = _windows_.MULTIPLE
-CHANGE_DIR = _windows_.CHANGE_DIR
-HIDE_READONLY = _windows_.HIDE_READONLY
 FD_OPEN = _windows_.FD_OPEN
 FD_SAVE = _windows_.FD_SAVE
 FD_OVERWRITE_PROMPT = _windows_.FD_OVERWRITE_PROMPT
@@ -2378,6 +2372,14 @@ FD_MULTIPLE = _windows_.FD_MULTIPLE
 FD_CHANGE_DIR = _windows_.FD_CHANGE_DIR
 FD_PREVIEW = _windows_.FD_PREVIEW
 FD_DEFAULT_STYLE = _windows_.FD_DEFAULT_STYLE
+# deprecated names
+OPEN              = FD_OPEN,
+SAVE              = FD_SAVE,
+OVERWRITE_PROMPT  = FD_OVERWRITE_PROMPT,
+FILE_MUST_EXIST   = FD_FILE_MUST_EXIST,
+MULTIPLE          = FD_MULTIPLE,
+CHANGE_DIR        = FD_CHANGE_DIR
+
 class FileDialog(Dialog):
     """
     wx.FileDialog allows the user to select one or more files from the

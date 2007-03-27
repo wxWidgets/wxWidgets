@@ -116,8 +116,6 @@ LB_MULTIPLE = _core_.LB_MULTIPLE
 LB_EXTENDED = _core_.LB_EXTENDED
 LB_OWNERDRAW = _core_.LB_OWNERDRAW
 LB_HSCROLL = _core_.LB_HSCROLL
-PROCESS_ENTER = _core_.PROCESS_ENTER
-PASSWORD = _core_.PASSWORD
 CB_SIMPLE = _core_.CB_SIMPLE
 CB_DROPDOWN = _core_.CB_DROPDOWN
 CB_SORT = _core_.CB_SORT
@@ -334,7 +332,7 @@ EXPAND = _core_.EXPAND
 SHAPED = _core_.SHAPED
 FIXED_MINSIZE = _core_.FIXED_MINSIZE
 TILE = _core_.TILE
-ADJUST_MINSIZE = _core_.ADJUST_MINSIZE
+ADJUST_MINSIZE = 0 
 BORDER_DEFAULT = _core_.BORDER_DEFAULT
 BORDER_NONE = _core_.BORDER_NONE
 BORDER_STATIC = _core_.BORDER_STATIC
@@ -416,8 +414,6 @@ WXK_CONTROL = _core_.WXK_CONTROL
 WXK_MENU = _core_.WXK_MENU
 WXK_PAUSE = _core_.WXK_PAUSE
 WXK_CAPITAL = _core_.WXK_CAPITAL
-WXK_PRIOR = _core_.WXK_PRIOR
-WXK_NEXT = _core_.WXK_NEXT
 WXK_END = _core_.WXK_END
 WXK_HOME = _core_.WXK_HOME
 WXK_LEFT = _core_.WXK_LEFT
@@ -486,9 +482,7 @@ WXK_NUMPAD_LEFT = _core_.WXK_NUMPAD_LEFT
 WXK_NUMPAD_UP = _core_.WXK_NUMPAD_UP
 WXK_NUMPAD_RIGHT = _core_.WXK_NUMPAD_RIGHT
 WXK_NUMPAD_DOWN = _core_.WXK_NUMPAD_DOWN
-WXK_NUMPAD_PRIOR = _core_.WXK_NUMPAD_PRIOR
 WXK_NUMPAD_PAGEUP = _core_.WXK_NUMPAD_PAGEUP
-WXK_NUMPAD_NEXT = _core_.WXK_NUMPAD_NEXT
 WXK_NUMPAD_PAGEDOWN = _core_.WXK_NUMPAD_PAGEDOWN
 WXK_NUMPAD_END = _core_.WXK_NUMPAD_END
 WXK_NUMPAD_BEGIN = _core_.WXK_NUMPAD_BEGIN
@@ -525,6 +519,11 @@ WXK_SPECIAL17 = _core_.WXK_SPECIAL17
 WXK_SPECIAL18 = _core_.WXK_SPECIAL18
 WXK_SPECIAL19 = _core_.WXK_SPECIAL19
 WXK_SPECIAL20 = _core_.WXK_SPECIAL20
+WXK_PRIOR = WXK_PAGEUP
+WXK_NEXT  = WXK_PAGEDOWN
+WXK_NUMPAD_PRIOR = WXK_NUMPAD_PAGEUP
+WXK_NUMPAD_NEXT  = WXK_NUMPAD_PAGEDOWN    
+
 PAPER_NONE = _core_.PAPER_NONE
 PAPER_LETTER = _core_.PAPER_LETTER
 PAPER_LEGAL = _core_.PAPER_LEGAL
@@ -4581,7 +4580,7 @@ class ScrollEvent(CommandEvent):
     """
     A scroll event holds information about events sent from stand-alone
     scrollbars and sliders. Note that scrolled windows do not send
-    instnaces of this event class, but send the `wx.ScrollWinEvent`
+    instances of this event class, but send the `wx.ScrollWinEvent`
     instead.
     """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -8124,10 +8123,11 @@ class AcceleratorTable(Object):
     Ok = IsOk 
 _core_.AcceleratorTable_swigregister(AcceleratorTable)
 
+def GetAccelFromString(label):
+    entry = AcceleratorEntry()
+    entry.FromString(label)
+    return entry
 
-def GetAccelFromString(*args, **kwargs):
-  """GetAccelFromString(String label) -> AcceleratorEntry"""
-  return _core_.GetAccelFromString(*args, **kwargs)
 #---------------------------------------------------------------------------
 
 class VisualAttributes(object):
@@ -8909,8 +8909,20 @@ class Window(EvtHandler):
         IsEnabled(self) -> bool
 
         Returns true if the window is enabled for input, false otherwise.
+        This method takes into account the enabled state of parent windows up
+        to the top-level window.
         """
         return _core_.Window_IsEnabled(*args, **kwargs)
+
+    def IsThisEnabled(*args, **kwargs):
+        """
+        IsThisEnabled(self) -> bool
+
+        Returns the internal enabled state independent of the parent(s) state,
+        i.e. the state in which the window would be if all of its parents are
+        enabled.  Use `IsEnabled` to get the effective window state.
+        """
+        return _core_.Window_IsThisEnabled(*args, **kwargs)
 
     def IsShownOnScreen(*args, **kwargs):
         """
@@ -9056,6 +9068,14 @@ class Window(EvtHandler):
         """
         return _core_.Window_AcceptsFocus(*args, **kwargs)
 
+    def CanAcceptFocus(*args, **kwargs):
+        """
+        CanAcceptFocus(self) -> bool
+
+        Can this window have focus right now?
+        """
+        return _core_.Window_CanAcceptFocus(*args, **kwargs)
+
     def AcceptsFocusFromKeyboard(*args, **kwargs):
         """
         AcceptsFocusFromKeyboard(self) -> bool
@@ -9066,12 +9086,28 @@ class Window(EvtHandler):
         """
         return _core_.Window_AcceptsFocusFromKeyboard(*args, **kwargs)
 
+    def CanAcceptFocusFromKeyboard(*args, **kwargs):
+        """
+        CanAcceptFocusFromKeyboard(self) -> bool
+
+        Can this window be assigned focus from keyboard right now?
+        """
+        return _core_.Window_CanAcceptFocusFromKeyboard(*args, **kwargs)
+
+    def NavigateIn(*args, **kwargs):
+        """
+        NavigateIn(self, int flags=NavigationKeyEvent.IsForward) -> bool
+
+        Navigates inside this window.
+        """
+        return _core_.Window_NavigateIn(*args, **kwargs)
+
     def Navigate(*args, **kwargs):
         """
         Navigate(self, int flags=NavigationKeyEvent.IsForward) -> bool
 
-        Does keyboard navigation from this window to another, by sending a
-        `wx.NavigationKeyEvent`.
+        Does keyboard navigation starting from this window to another.  This is
+        equivalient to self.GetParent().NavigateIn().
         """
         return _core_.Window_Navigate(*args, **kwargs)
 
@@ -9126,6 +9162,14 @@ class Window(EvtHandler):
         isn't one.
         """
         return _core_.Window_GetGrandParent(*args, **kwargs)
+
+    def GetTopLevelParent(*args, **kwargs):
+        """
+        GetTopLevelParent(self) -> Window
+
+        Returns the first frame or dialog in this window's parental hierarchy.
+        """
+        return _core_.Window_GetTopLevelParent(*args, **kwargs)
 
     def IsTopLevel(*args, **kwargs):
         """
@@ -10423,6 +10467,7 @@ class Window(EvtHandler):
     Font = property(GetFont,SetFont,doc="See `GetFont` and `SetFont`") 
     ForegroundColour = property(GetForegroundColour,SetForegroundColour,doc="See `GetForegroundColour` and `SetForegroundColour`") 
     GrandParent = property(GetGrandParent,doc="See `GetGrandParent`") 
+    TopLevelParent = property(GetTopLevelParent,doc="See `GetTopLevelParent`") 
     Handle = property(GetHandle,doc="See `GetHandle`") 
     HelpText = property(GetHelpText,SetHelpText,doc="See `GetHelpText` and `SetHelpText`") 
     Id = property(GetId,SetId,doc="See `GetId` and `SetId`") 
@@ -11066,7 +11111,6 @@ class MenuBar(Window):
             self.Append(m, l)
 
     Frame = property(GetFrame,doc="See `GetFrame`") 
-    Menu = property(GetMenu,doc="See `GetMenu`") 
     MenuCount = property(GetMenuCount,doc="See `GetMenuCount`") 
     Menus = property(GetMenus,SetMenus,doc="See `GetMenus` and `SetMenus`") 
 _core_.MenuBar_swigregister(MenuBar)
@@ -11601,6 +11645,222 @@ _core_.ControlWithItems_swigregister(ControlWithItems)
 
 #---------------------------------------------------------------------------
 
+class SizerFlags(object):
+    """
+    Normally, when you add an item to a sizer via `wx.Sizer.Add`, you have
+    to specify a lot of flags and parameters which can be unwieldy. This
+    is where wx.SizerFlags comes in: it allows you to specify all
+    parameters using the named methods instead. For example, instead of::
+
+        sizer.Add(ctrl, 0, wx.EXPAND | wx.ALL, 10)
+
+    you can now write::
+
+        sizer.AddF(ctrl, wx.SizerFlags().Expand().Border(wx.ALL, 10))
+
+    This is more readable and also allows you to create wx.SizerFlags
+    objects which can be reused for several sizer items.::
+
+        flagsExpand = wx.SizerFlags(1)
+        flagsExpand.Expand().Border(wx.ALL, 10)
+        sizer.AddF(ctrl1, flagsExpand)
+        sizer.AddF(ctrl2, flagsExpand)
+
+    Note that by specification, all methods of wx.SizerFlags return the
+    wx.SizerFlags object itself allowing chaining multiple method calls
+    like in the examples above.
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, int proportion=0) -> SizerFlags
+
+        Constructs the flags object with the specified proportion.
+        """
+        _core_.SizerFlags_swiginit(self,_core_.new_SizerFlags(*args, **kwargs))
+    __swig_destroy__ = _core_.delete_SizerFlags
+    __del__ = lambda self : None;
+    def Proportion(*args, **kwargs):
+        """
+        Proportion(self, int proportion) -> SizerFlags
+
+        Sets the item's proportion value.
+        """
+        return _core_.SizerFlags_Proportion(*args, **kwargs)
+
+    def Align(*args, **kwargs):
+        """
+        Align(self, int alignment) -> SizerFlags
+
+        Sets the item's alignment
+        """
+        return _core_.SizerFlags_Align(*args, **kwargs)
+
+    def Expand(*args, **kwargs):
+        """
+        Expand(self) -> SizerFlags
+
+        Sets the wx.EXPAND flag, which will cause the item to be expanded to
+        fill as much space as it is given by the sizer.
+        """
+        return _core_.SizerFlags_Expand(*args, **kwargs)
+
+    def Centre(*args, **kwargs):
+        """
+        Centre(self) -> SizerFlags
+
+        Same as `Center` for those with an alternate dialect of English.
+        """
+        return _core_.SizerFlags_Centre(*args, **kwargs)
+
+    def Center(*args, **kwargs):
+        """
+        Center(self) -> SizerFlags
+
+        Sets the centering alignment flags.
+        """
+        return _core_.SizerFlags_Center(*args, **kwargs)
+
+    def Left(*args, **kwargs):
+        """
+        Left(self) -> SizerFlags
+
+        Aligns the object to the left, a shortcut for calling
+        Align(wx.ALIGN_LEFT)
+        """
+        return _core_.SizerFlags_Left(*args, **kwargs)
+
+    def Right(*args, **kwargs):
+        """
+        Right(self) -> SizerFlags
+
+        Aligns the object to the right, a shortcut for calling
+        Align(wx.ALIGN_RIGHT)
+        """
+        return _core_.SizerFlags_Right(*args, **kwargs)
+
+    def Top(*args, **kwargs):
+        """
+        Top(self) -> SizerFlags
+
+        Aligns the object to the top of the available space, a shortcut for
+        calling Align(wx.ALIGN_TOP)
+        """
+        return _core_.SizerFlags_Top(*args, **kwargs)
+
+    def Bottom(*args, **kwargs):
+        """
+        Bottom(self) -> SizerFlags
+
+        Aligns the object to the bottom of the available space, a shortcut for
+        calling Align(wx.ALIGN_BOTTOM)
+        """
+        return _core_.SizerFlags_Bottom(*args, **kwargs)
+
+    def Shaped(*args, **kwargs):
+        """
+        Shaped(self) -> SizerFlags
+
+        Sets the wx.SHAPED flag.
+        """
+        return _core_.SizerFlags_Shaped(*args, **kwargs)
+
+    def FixedMinSize(*args, **kwargs):
+        """
+        FixedMinSize(self) -> SizerFlags
+
+        Sets the wx.FIXED_MINSIZE flag.
+        """
+        return _core_.SizerFlags_FixedMinSize(*args, **kwargs)
+
+    def Border(*args, **kwargs):
+        """
+        Border(self, int direction=ALL, int borderInPixels=-1) -> SizerFlags
+
+        Sets the border of the item in the direction(s) or sides given by the
+        direction parameter.  If the borderInPixels value is not given then
+        the default border size (see `GetDefaultBorder`) will be used.
+        """
+        return _core_.SizerFlags_Border(*args, **kwargs)
+
+    def DoubleBorder(*args, **kwargs):
+        """
+        DoubleBorder(self, int direction=ALL) -> SizerFlags
+
+        Sets the border in the given direction to twice the default border
+        size.
+        """
+        return _core_.SizerFlags_DoubleBorder(*args, **kwargs)
+
+    def TripleBorder(*args, **kwargs):
+        """
+        TripleBorder(self, int direction=ALL) -> SizerFlags
+
+        Sets the border in the given direction to three times the default
+        border size.
+        """
+        return _core_.SizerFlags_TripleBorder(*args, **kwargs)
+
+    def HorzBorder(*args, **kwargs):
+        """
+        HorzBorder(self) -> SizerFlags
+
+        Sets the left and right borders to the default border size.
+        """
+        return _core_.SizerFlags_HorzBorder(*args, **kwargs)
+
+    def DoubleHorzBorder(*args, **kwargs):
+        """
+        DoubleHorzBorder(self) -> SizerFlags
+
+        Sets the left and right borders to twice the default border size.
+        """
+        return _core_.SizerFlags_DoubleHorzBorder(*args, **kwargs)
+
+    def GetDefaultBorder(*args, **kwargs):
+        """
+        GetDefaultBorder() -> int
+
+        Returns the default border size used by the other border methods
+        """
+        return _core_.SizerFlags_GetDefaultBorder(*args, **kwargs)
+
+    GetDefaultBorder = staticmethod(GetDefaultBorder)
+    def GetProportion(*args, **kwargs):
+        """
+        GetProportion(self) -> int
+
+        Returns the proportion value to be used in the sizer item.
+        """
+        return _core_.SizerFlags_GetProportion(*args, **kwargs)
+
+    def GetFlags(*args, **kwargs):
+        """
+        GetFlags(self) -> int
+
+        Returns the flags value to be used in the sizer item.
+        """
+        return _core_.SizerFlags_GetFlags(*args, **kwargs)
+
+    def GetBorderInPixels(*args, **kwargs):
+        """
+        GetBorderInPixels(self) -> int
+
+        Returns the border value in pixels to be used in the sizer item.
+        """
+        return _core_.SizerFlags_GetBorderInPixels(*args, **kwargs)
+
+_core_.SizerFlags_swigregister(SizerFlags)
+
+def SizerFlags_GetDefaultBorder(*args):
+  """
+    SizerFlags_GetDefaultBorder() -> int
+
+    Returns the default border size used by the other border methods
+    """
+  return _core_.SizerFlags_GetDefaultBorder(*args)
+
 class SizerItem(Object):
     """
     The wx.SizerItem class is used to track the position, size and other
@@ -11996,6 +12256,15 @@ class Sizer(Object):
         """
         return _core_.Sizer_Add(*args, **kwargs)
 
+    def AddF(*args, **kwargs):
+        """
+        AddF(self, item, wx.SizerFlags flags) -> wx.SizerItem
+
+        Similar to `Add` but uses the `wx.SizerFlags` convenience class for
+        setting the various flags, options and borders.
+        """
+        return _core_.Sizer_AddF(*args, **kwargs)
+
     def Insert(*args, **kwargs):
         """
         Insert(self, int before, item, int proportion=0, int flag=0, int border=0,
@@ -12006,6 +12275,15 @@ class Sizer(Object):
         """
         return _core_.Sizer_Insert(*args, **kwargs)
 
+    def InsertF(*args, **kwargs):
+        """
+        InsertF(self, int before, item, wx.SizerFlags flags) -> wx.SizerItem
+
+        Similar to `Insert`, but uses the `wx.SizerFlags` convenience class
+        for setting the various flags, options and borders.
+        """
+        return _core_.Sizer_InsertF(*args, **kwargs)
+
     def Prepend(*args, **kwargs):
         """
         Prepend(self, item, int proportion=0, int flag=0, int border=0,
@@ -12015,6 +12293,15 @@ class Sizer(Object):
         this sizer.  See `Add` for a description of the parameters.
         """
         return _core_.Sizer_Prepend(*args, **kwargs)
+
+    def PrependF(*args, **kwargs):
+        """
+        PrependF(self, item, wx.SizerFlags flags) -> wx.SizerItem
+
+        Similar to `Prepend` but uses the `wx.SizerFlags` convenience class
+        for setting the various flags, options and borders.
+        """
+        return _core_.Sizer_PrependF(*args, **kwargs)
 
     def Remove(*args, **kwargs):
         """
@@ -12043,7 +12330,7 @@ class Sizer(Object):
 
     def GetItem(*args, **kwargs):
         """
-        GetItem(self, item) -> wx.SizerItem
+        GetItem(self, item, recursive=False) -> wx.SizerItem
 
         Returns the `wx.SizerItem` which holds the *item* given.  The *item*
         parameter can be either a window, a sizer, or the zero-based index of
@@ -12083,9 +12370,9 @@ class Sizer(Object):
         """
         if isinstance(olditem, wx.Window):
             return self._ReplaceWin(olditem, item, recursive)
-        elif isinstnace(olditem, wx.Sizer):
+        elif isinstance(olditem, wx.Sizer):
             return self._ReplaceSizer(olditem, item, recursive)
-        elif isinstnace(olditem, int):
+        elif isinstance(olditem, int):
             return self._ReplaceItem(olditem, item)
         else:
             raise TypeError("Expected Window, Sizer, or integer for first parameter.")

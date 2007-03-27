@@ -68,6 +68,9 @@ GRID_VALUE_TEXT = _grid.GRID_VALUE_TEXT
 GRID_VALUE_LONG = _grid.GRID_VALUE_LONG
 GRID_VALUE_CHOICEINT = _grid.GRID_VALUE_CHOICEINT
 GRID_VALUE_DATETIME = _grid.GRID_VALUE_DATETIME
+GRID_AUTOSIZE = _grid.GRID_AUTOSIZE
+GRID_COLUMN = _grid.GRID_COLUMN
+GRID_ROW = _grid.GRID_ROW
 GRID_DEFAULT_NUMBER_ROWS = _grid.GRID_DEFAULT_NUMBER_ROWS
 GRID_DEFAULT_NUMBER_COLS = _grid.GRID_DEFAULT_NUMBER_COLS
 GRID_DEFAULT_ROW_HEIGHT = _grid.GRID_DEFAULT_ROW_HEIGHT
@@ -2093,6 +2096,21 @@ def Grid_GetClassDefaultAttributes(*args, **kwargs):
     this.
     """
   return _grid.Grid_GetClassDefaultAttributes(*args, **kwargs)
+
+class GridUpdateLocker(object):
+    """Proxy of C++ GridUpdateLocker class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """__init__(self, Grid grid=None) -> GridUpdateLocker"""
+        _grid.GridUpdateLocker_swiginit(self,_grid.new_GridUpdateLocker(*args, **kwargs))
+    __swig_destroy__ = _grid.delete_GridUpdateLocker
+    __del__ = lambda self : None;
+    def Create(*args, **kwargs):
+        """Create(self, Grid grid)"""
+        return _grid.GridUpdateLocker_Create(*args, **kwargs)
+
+_grid.GridUpdateLocker_swigregister(GridUpdateLocker)
 
 class GridEvent(_core.NotifyEvent):
     """Proxy of C++ GridEvent class"""

@@ -1,5 +1,5 @@
 #----------------------------------------------------------------------------
-# Name:        wx.lib.mixins.inspect
+# Name:        wx.lib.mixins.inspection
 # Purpose:     A mix-in class that can add PyCrust-based inspection of the
 #              app's widgets and sizers.
 #
@@ -15,7 +15,7 @@
 # wxPython-users mail list by Dan Eloff.
 
 import wx
-from wx.lib.inspect import InspectionTool
+from wx.lib.inspection import InspectionTool
 
 
 #----------------------------------------------------------------------------

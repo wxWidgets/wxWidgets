@@ -196,8 +196,6 @@ public:
     wxDC* GetDC();
     int GetCharHeight();
     int GetCharWidth();
-    wxPyHtmlWindow* GetWindow();
-    %pythoncode { GetWindow = wx._deprecated(GetWindow) }
 
     wxHtmlWindowInterface *GetWindowInterface();
 
@@ -576,10 +574,6 @@ public:
     // Returns cursor to be used when mouse is over the cell:
     virtual wxCursor GetMouseCursor(wxHtmlWindowInterface *window) const;
 
-    // Returns cursor to be used when mouse is over the cell:
-    wxCursor GetCursor() const;
-    %pythoncode { GetCursor = wx._deprecated(GetCursor) }
-
     // Formatting cells are not visible on the screen, they only alter
     // renderer's state.
     bool IsFormattingCell() const;
@@ -651,7 +645,6 @@ public:
     // only part of the cell inside the selection is converted.
     wxString ConvertToText(wxHtmlSelection *sel) const;
 
-    %property(Cursor, GetCursor, doc="See `GetCursor`");
     %property(Depth, GetDepth, doc="See `GetDepth`");
     %property(Descent, GetDescent, doc="See `GetDescent`");
     %property(FirstChild, GetFirstChild, doc="See `GetFirstChild`");

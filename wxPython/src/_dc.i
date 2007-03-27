@@ -355,6 +355,57 @@ position.", "
 
 
     DocDeclStr(
+        bool , StretchBlit(wxCoord dstX, wxCoord dstY, 
+                           wxCoord dstWidth, wxCoord dstHeight,
+                           wxDC *source, 
+                           wxCoord srcX, wxCoord srcY,
+                           wxCoord srcWidth, wxCoord srcHeight,
+                           int rop = wxCOPY, bool useMask = false, 
+                           wxCoord srcMaskX = wxDefaultCoord,
+                           wxCoord srcMaskY = wxDefaultCoord),
+        "Copy from a source DC to this DC, specifying the destination
+coordinates, destination size, source DC, source coordinates, size of
+source area to copy, logical function, whether to use a bitmap mask,
+and mask source position.", "
+
+    :param xdest:       Destination device context x position.
+    :param ydest:       Destination device context y position.
+    :param dstWidth:    Width of destination area.
+    :param dstHeight:   Height of destination area.
+    :param source:      Source device context.
+    :param xsrc:        Source device context x position.
+    :param ysrc:        Source device context y position.
+    :param srcWidth:    Width of source area to be copied.
+    :param srcHeight:   Height of source area to be copied.
+    :param logicalFunc: Logical function to use: see `SetLogicalFunction`.
+    :param useMask:     If true, StretchBlit does a transparent blit using
+                        the mask that is associated with the bitmap selected
+                        into the source device context.
+    :param xsrcMask:    Source x position on the mask. If both xsrcMask and
+                        ysrcMask are -1, xsrc and ysrc will be assumed for
+                        the mask source position. Currently only implemented
+                        on Windows.
+    :param ysrcMask:    Source y position on the mask. 
+");
+    
+
+
+    DocDeclStrName(
+        bool , StretchBlit(const wxPoint& dstPt, const wxSize& dstSize,
+                           wxDC *source, const wxPoint& srcPt, const wxSize& srcSize,
+                           int rop = wxCOPY, bool useMask = false,
+                           const wxPoint& srcMaskPt = wxDefaultPosition),
+        "Copy from a source DC to this DC, specifying the destination
+coordinates, destination size, source DC, source coordinates, size of
+source area to copy, logical function, whether to use a bitmap mask,
+and mask source position.  This version is the same as `StretchBlit`
+except `wx.Point` and `wx.Size` objects are used instead of individual
+position and size components.", "",
+        StretchBlitPointSize);
+    
+   
+
+    DocDeclStr(
         wxBitmap , GetAsBitmap(const wxRect *subrect = NULL) const,
         "", "");
     
@@ -1487,7 +1538,8 @@ destroyed safely.", "");
 
 enum {
     wxBUFFER_VIRTUAL_AREA,
-    wxBUFFER_CLIENT_AREA
+    wxBUFFER_CLIENT_AREA,
+    wxBUFFER_USES_SHARED_BUFFER
 };
 
 MustHaveApp(wxBufferedDC);

@@ -113,9 +113,10 @@ wxColour wxGetColourFromUser(wxWindow *parent = (wxWindow *)NULL,
 //--------------------------------------------------------------------------------
 
 enum {
+    wxDD_CHANGE_DIR,
+    wxDD_DIR_MUST_EXIST,
     wxDD_NEW_DIR_BUTTON,
     wxDD_DEFAULT_STYLE,
-    wxDD_CHANGE_DIR,
 };
 
 DocStr(wxDirDialog,
@@ -129,10 +130,12 @@ Window  Styles
                           wx.DEFAULT_DIALOG_STYLE, wx.DD_NEW_DIR_BUTTON
                           and wx.RESIZE_BORDER.
 
-    wx.DD_NEW_DIR_BUTTON  Add 'Create new directory' button and allow
-                          directory names to be editable. On Windows
-                          the new directory button is only available
-                          with recent versions of the common dialogs.
+    wx.DD_DIR_MUST_EXIST  The dialog will allow the user to choose only an
+                          existing folder. When this style is not given, a
+                          'Create new directory' button is added to the dialog
+                          (on Windows) or some other way is provided to the
+                          user to type the name of a new folder.
+                          Use this instead of deprecated wx.DD_NEW_DIR_BUTTON.
 
     wx.DD_CHANGE_DIR      Change the current working directory to the
                           directory chosen by the user.
@@ -195,15 +198,6 @@ public:
 %}
 
 enum {
-    // These will dissappear in 2.8
-    wxOPEN,
-    wxSAVE,
-    wxOVERWRITE_PROMPT,
-    wxFILE_MUST_EXIST,
-    wxMULTIPLE,
-    wxCHANGE_DIR,
-    wxHIDE_READONLY,
-
     wxFD_OPEN,
     wxFD_SAVE,
     wxFD_OVERWRITE_PROMPT,
@@ -213,6 +207,17 @@ enum {
     wxFD_PREVIEW,
     wxFD_DEFAULT_STYLE,
 };
+
+%pythoncode {
+    %# deprecated names
+    OPEN              = FD_OPEN,
+    SAVE              = FD_SAVE,
+    OVERWRITE_PROMPT  = FD_OVERWRITE_PROMPT,
+    FILE_MUST_EXIST   = FD_FILE_MUST_EXIST,
+    MULTIPLE          = FD_MULTIPLE,
+    CHANGE_DIR        = FD_CHANGE_DIR
+}
+         
 
 DocStr(wxFileDialog,
 "wx.FileDialog allows the user to select one or more files from the

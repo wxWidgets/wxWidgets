@@ -663,7 +663,7 @@ false otherwise (if it was).", "");
 DocStr(wxScrollEvent,
 "A scroll event holds information about events sent from stand-alone
 scrollbars and sliders. Note that scrolled windows do not send
-instnaces of this event class, but send the `wx.ScrollWinEvent`
+instances of this event class, but send the `wx.ScrollWinEvent`
 instead.", "
 
 Events

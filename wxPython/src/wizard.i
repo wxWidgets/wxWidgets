@@ -103,9 +103,9 @@ public:
         bool Create(wxWizard *parent,
                     const wxBitmap& bitmap = wxNullBitmap,
                     const wxString& resource = wxPyEmptyString) {
-            wxChar* res = NULL;
+            const wxChar* res = NULL;
             if (resource.length())
-                res = (wxChar*)resource.c_str();
+                res = (const wxChar*)resource.c_str();
             return self->Create(parent, bitmap, res);
         }
     }
@@ -222,9 +222,9 @@ public:
         wxPyWizardPage(wxWizard *parent,
                        const wxBitmap* bitmap = &wxNullBitmap,
                        const wxString* resource = &wxPyEmptyString) {
-            wxChar* res = NULL;
+            const wxChar* res = NULL;
             if (resource->length())
-                res = (wxChar*)resource->c_str();
+                res = (const wxChar*)resource->c_str();
             return new wxPyWizardPage(parent, *bitmap, res);
         }
     }
@@ -238,9 +238,9 @@ public:
         bool Create(wxWizard *parent,
                     const wxBitmap& bitmap = wxNullBitmap,
                     const wxString& resource = wxPyEmptyString) {
-            wxChar* res = NULL;
+            const wxChar* res = NULL;
             if (resource.length())
-                res = (wxChar*)resource.c_str();
+                res = (const wxChar*)resource.c_str();
             return self->Create(parent, bitmap, res);
         }
     }

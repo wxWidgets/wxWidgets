@@ -325,8 +325,10 @@ public:
     %Rename(AddToolItem,  wxToolBarToolBase*, AddTool (wxToolBarToolBase *tool));
     %Rename(InsertToolItem,  wxToolBarToolBase*, InsertTool (size_t pos, wxToolBarToolBase *tool));
 
-    wxToolBarToolBase *AddControl(wxControl *control);
-    wxToolBarToolBase *InsertControl(size_t pos, wxControl *control);
+    wxToolBarToolBase *AddControl(wxControl *control,
+                                  const wxString& label = wxEmptyString);
+    wxToolBarToolBase *InsertControl(size_t pos, wxControl *control,
+                                     const wxString& label = wxEmptyString);
     wxControl *FindControl( int id );
 
     wxToolBarToolBase *AddSeparator();

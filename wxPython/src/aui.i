@@ -202,6 +202,11 @@ The following example shows a simple implementation that utilizes
 %ignore wxAuiMDIParentFrame::~wxAuiMDIParentFrame;
 %rename(PreAuiMDIParentFrame) wxAuiMDIParentFrame::wxAuiMDIParentFrame();
 
+// Ignore these for now because they need a typemap for the return value, see below.
+%ignore wxAuiMDIParentFrame::GetNotebook;
+%ignore wxAuiMDIParentFrame::GetActiveChild;
+%ignore wxAuiMDIParentFrame::GetClientWindow;
+
 %pythonAppend wxAuiMDIChildFrame::wxAuiMDIChildFrame    "self._setOORInfo(self)";
 %pythonAppend wxAuiMDIChildFrame::wxAuiMDIChildFrame()  "val._setOORInfo(val)";
 %ignore wxAuiMDIChildFrame::~wxAuiMDIChildFrame;
@@ -212,6 +217,8 @@ The following example shows a simple implementation that utilizes
 %ignore wxAuiMDIClientWindow::~wxAuiMDIClientWindow;
 %rename(PreAuiMDIClientWindow) wxAuiMDIClientWindow::wxAuiMDIClientWindow();
 
+
+%typemap(out) wxEvtHandler*             { $result = wxPyMake_wxObject($1, $owner); }
 
 //---------------------------------------------------------------------------
 // Get all our defs from the REAL header files.
@@ -300,6 +307,36 @@ The following example shows a simple implementation that utilizes
     ~wxAuiPaneButton() {}
 }
 
+%extend wxAuiMDIParentFrame {
+    %typemap(out) wxAuiNotebook*          { $result = wxPyMake_wxObject($1, $owner); }
+    %typemap(out) wxAuiMDIChildFrame*     { $result = wxPyMake_wxObject($1, $owner); }
+    %typemap(out) wxAuiMDIClientWindow*   { $result = wxPyMake_wxObject($1, $owner); }
+
+    %rename(GetNotebook) _GetNotebook;
+    %rename(GetActiveChild) _GetActiveChild;
+    %rename(GetClientWindow) _GetClientWindow;
+     
+    wxAuiNotebook* _GetNotebook() const
+    {
+        return self->GetNotebook();
+    }
+    
+    wxAuiMDIChildFrame* _GetActiveChild() const
+    {
+        return self->GetActiveChild();
+    }
+    
+    wxAuiMDIClientWindow* _GetClientWindow() const
+    {
+        return self->GetClientWindow();
+    }
+
+    %typemap(out) wxAuiNotebook*;       
+    %typemap(out) wxAuiMDIChildFrame*;  
+    %typemap(out) wxAuiMDIClientWindow*;
+}
+     
+     
 //---------------------------------------------------------------------------
 
 %{
@@ -482,7 +519,7 @@ class wxPyAuiDockArt :  public wxAuiDefaultDockArt
 {
 public:
     %pythonAppend wxPyAuiDockArt     setCallbackInfo(PyAuiDockArt)
-    wxPyAuiDocArt();
+    wxPyAuiDockArt();
 
 };
 

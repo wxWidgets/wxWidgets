@@ -9335,6 +9335,9 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "CC_BUTTON_OUTSIDE_BORDER",SWIG_From_int(static_cast< int >(wxCC_BUTTON_OUTSIDE_BORDER)));
   SWIG_Python_SetConstant(d, "CC_POPUP_ON_MOUSE_UP",SWIG_From_int(static_cast< int >(wxCC_POPUP_ON_MOUSE_UP)));
   SWIG_Python_SetConstant(d, "CC_NO_TEXT_AUTO_SELECT",SWIG_From_int(static_cast< int >(wxCC_NO_TEXT_AUTO_SELECT)));
+  SWIG_Python_SetConstant(d, "CC_BUTTON_STAYS_DOWN",SWIG_From_int(static_cast< int >(wxCC_BUTTON_STAYS_DOWN)));
+  SWIG_Python_SetConstant(d, "CC_FULL_BUTTON",SWIG_From_int(static_cast< int >(wxCC_FULL_BUTTON)));
+  SWIG_Python_SetConstant(d, "CC_BUTTON_COVERS_BORDER",SWIG_From_int(static_cast< int >(wxCC_BUTTON_COVERS_BORDER)));
   SWIG_Python_SetConstant(d, "CC_MF_ON_BUTTON",SWIG_From_int(static_cast< int >(wxCC_MF_ON_BUTTON)));
   SWIG_Python_SetConstant(d, "CC_MF_ON_CLICK_AREA",SWIG_From_int(static_cast< int >(wxCC_MF_ON_CLICK_AREA)));
   SWIG_Python_SetConstant(d, "ComboCtrlFeatures_MovableButton",SWIG_From_int(static_cast< int >(wxComboCtrlFeatures::MovableButton)));

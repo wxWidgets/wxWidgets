@@ -775,7 +775,16 @@ window had already been in the specified state.", "");
     
     DocDeclStr(
         bool , IsEnabled() const,
-        "Returns true if the window is enabled for input, false otherwise.", "");
+        "Returns true if the window is enabled for input, false otherwise.
+This method takes into account the enabled state of parent windows up
+to the top-level window.", "");
+
+    DocDeclStr(
+        bool , IsThisEnabled() const,
+        "Returns the internal enabled state independent of the parent(s) state,
+i.e. the state in which the window would be if all of its parents are
+enabled.  Use `IsEnabled` to get the effective window state.", "");
+    
 
     DocDeclStr(
         virtual bool , IsShownOnScreen() const,
@@ -893,19 +902,36 @@ or None.", "");
     
 
     DocDeclStr(
+        bool , CanAcceptFocus() const,
+        "Can this window have focus right now?", "");
+    
+ 
+
+    DocDeclStr(
         virtual bool , AcceptsFocusFromKeyboard() const,
         "Can this window be given focus by keyboard navigation? if not, the
 only way to give it focus (provided it accepts it at all) is to click
 it.", "");
     
 
+    
+    DocDeclStr(
+        bool , CanAcceptFocusFromKeyboard() const,
+        "Can this window be assigned focus from keyboard right now?", "");
+    
+
+
+    DocDeclAStr(
+        virtual bool , NavigateIn(int flags = wxNavigationKeyEvent::IsForward),
+        "NavigateIn(self, int flags=NavigationKeyEvent.IsForward) -> bool",
+        "Navigates inside this window.", "");
 
 
     DocDeclAStr(
         virtual bool , Navigate(int flags = wxNavigationKeyEvent::IsForward),
         "Navigate(self, int flags=NavigationKeyEvent.IsForward) -> bool",
-        "Does keyboard navigation from this window to another, by sending a
-`wx.NavigationKeyEvent`.", "
+        "Does keyboard navigation starting from this window to another.  This is
+equivalient to self.GetParent().NavigateIn().", "
  
     :param flags: A combination of the ``IsForward`` or ``IsBackward``
         and the ``WinChange`` values in the `wx.NavigationKeyEvent`
@@ -973,8 +999,16 @@ do not change.", "");
         wxWindow *, GetGrandParent() const,
         "Returns the parent of the parent of this window, or None if there
 isn't one.", "");
-    
 
+    
+    %extend {
+        DocDeclStr(wxWindow *, GetTopLevelParent(),
+                   "Returns the first frame or dialog in this window's parental hierarchy.", "")
+        {
+            return wxGetTopLevelParent(self);
+        }
+    }
+    
 
     DocDeclStr(
         virtual bool , IsTopLevel() const,
@@ -2114,6 +2148,7 @@ opaque.", "");
     %property(Font, GetFont, SetFont, doc="See `GetFont` and `SetFont`");
     %property(ForegroundColour, GetForegroundColour, SetForegroundColour, doc="See `GetForegroundColour` and `SetForegroundColour`");
     %property(GrandParent, GetGrandParent, doc="See `GetGrandParent`");
+    %property(TopLevelParent, GetTopLevelParent, doc="See `GetTopLevelParent`");
     %property(Handle, GetHandle, doc="See `GetHandle`");
     %property(HelpText, GetHelpText, SetHelpText, doc="See `GetHelpText` and `SetHelpText`");
     %property(Id, GetId, SetId, doc="See `GetId` and `SetId`");

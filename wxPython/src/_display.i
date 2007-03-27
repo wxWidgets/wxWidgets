@@ -121,7 +121,7 @@ doesn't belong to any display", "");
            "Find the display where the given window lies, return wx.NOT_FOUND if
 it is not shown at all.", "");
 
-    static int GetFromWindow(wxWindow *window);
+    static int GetFromWindow(const wxWindow *window);
 
 
     DocDeclStr(

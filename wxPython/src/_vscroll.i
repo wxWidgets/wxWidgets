@@ -469,6 +469,9 @@ public:
     // change the background colour of the selected cells
     void SetSelectionBackground(const wxColour& col);
 
+    // refreshes only the selected items
+    void RefreshSelected();
+ 
     virtual void OnDrawSeparator(wxDC& dc, wxRect& rect, size_t n) const;
     virtual void OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const;
 

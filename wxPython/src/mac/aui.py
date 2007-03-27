@@ -1495,10 +1495,6 @@ class AuiMDIParentFrame(_windows.Frame):
         """GetArtProvider(self) -> AuiTabArt"""
         return _aui.AuiMDIParentFrame_GetArtProvider(*args, **kwargs)
 
-    def GetNotebook(*args, **kwargs):
-        """GetNotebook(self) -> AuiNotebook"""
-        return _aui.AuiMDIParentFrame_GetNotebook(*args, **kwargs)
-
     def GetWindowMenu(*args, **kwargs):
         """GetWindowMenu(self) -> Menu"""
         return _aui.AuiMDIParentFrame_GetWindowMenu(*args, **kwargs)
@@ -1515,17 +1511,9 @@ class AuiMDIParentFrame(_windows.Frame):
         """ProcessEvent(self, Event event) -> bool"""
         return _aui.AuiMDIParentFrame_ProcessEvent(*args, **kwargs)
 
-    def GetActiveChild(*args, **kwargs):
-        """GetActiveChild(self) -> AuiMDIChildFrame"""
-        return _aui.AuiMDIParentFrame_GetActiveChild(*args, **kwargs)
-
     def SetActiveChild(*args, **kwargs):
         """SetActiveChild(self, AuiMDIChildFrame pChildFrame)"""
         return _aui.AuiMDIParentFrame_SetActiveChild(*args, **kwargs)
-
-    def GetClientWindow(*args, **kwargs):
-        """GetClientWindow(self) -> AuiMDIClientWindow"""
-        return _aui.AuiMDIParentFrame_GetClientWindow(*args, **kwargs)
 
     def OnCreateClient(*args, **kwargs):
         """OnCreateClient(self) -> AuiMDIClientWindow"""
@@ -1550,6 +1538,18 @@ class AuiMDIParentFrame(_windows.Frame):
     def ActivatePrevious(*args, **kwargs):
         """ActivatePrevious(self)"""
         return _aui.AuiMDIParentFrame_ActivatePrevious(*args, **kwargs)
+
+    def GetNotebook(*args, **kwargs):
+        """GetNotebook(self) -> AuiNotebook"""
+        return _aui.AuiMDIParentFrame_GetNotebook(*args, **kwargs)
+
+    def GetActiveChild(*args, **kwargs):
+        """GetActiveChild(self) -> AuiMDIChildFrame"""
+        return _aui.AuiMDIParentFrame_GetActiveChild(*args, **kwargs)
+
+    def GetClientWindow(*args, **kwargs):
+        """GetClientWindow(self) -> AuiMDIClientWindow"""
+        return _aui.AuiMDIParentFrame_GetClientWindow(*args, **kwargs)
 
 _aui.AuiMDIParentFrame_swigregister(AuiMDIParentFrame)
 
@@ -1719,8 +1719,18 @@ class PyAuiDockArt(AuiDefaultDockArt):
     methods to the Python methods implemented in the derived class.
     """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self) -> PyAuiDockArt
+
+        This version of the `AuiDockArt` class has been instrumented to be
+        subclassable in Python and to reflect all calls to the C++ base class
+        methods to the Python methods implemented in the derived class.
+        """
+        _aui.PyAuiDockArt_swiginit(self,_aui.new_PyAuiDockArt(*args, **kwargs))
+        PyAuiDockArt._setCallbackInfo(self, self, PyAuiDockArt)
+
 _aui.PyAuiDockArt_swigregister(PyAuiDockArt)
 
 class PyAuiTabArt(AuiDefaultTabArt):

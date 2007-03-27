@@ -670,13 +670,15 @@ public:
         static wxGraphicsContext* , CreateFromNative( void * context ) ,
         "Creates a wx.GraphicsContext from a native context. This native
 context must be eg a CGContextRef for Core Graphics, a Graphics
-pointer for GDIPlus or a cairo_t pointer for Cairo.", "");
+pointer for GDIPlus or a cairo_t pointer for Cairo.  NOTE: For
+wxPython we still need a way to make this value usable.", "");
     
 
     %newobject CreateFromNative;
     DocDeclStr(
         static wxGraphicsContext* , CreateFromNativeWindow( void * window ) ,
-        "Creates a wx.GraphicsContext from a native window.", "");
+        "Creates a wx.GraphicsContext from a native window.  NOTE: For wxPython
+we still need a way to make this value usable.", "");
     
 
 
@@ -799,8 +801,7 @@ this context.", "");
     DocDeclStr(
         virtual wxGraphicsMatrix , GetTransform() const,
         "Gets the current transformation matrix of this context.", "");
-    
-    
+        
 
 
     DocStr(SetPen, "Sets the stroke pen", "");
@@ -937,8 +938,9 @@ and the current brush is used for filling.", "");
 
 
     %extend {
-        DocStr(StrokeLineSegements,
-               "Stroke disconnected lines from begin to end points", "");
+        DocAStr(StrokeLineSegements,
+                "StrokeLineSegments(self, List beginPoints, List endPoints)",
+                "Stroke disconnected lines from begin to end points", "");
         void StrokeLineSegements(PyObject* beginPoints, PyObject* endPoints)
         {
             size_t c1, c2, count;

@@ -2799,9 +2799,9 @@ SWIG_AsVal_bool (PyObject *obj, bool *val)
 }
 
 SWIGINTERN bool wxWizardPage_Create(wxWizardPage *self,wxWizard *parent,wxBitmap const &bitmap=wxNullBitmap,wxString const &resource=wxPyEmptyString){
-            wxChar* res = NULL;
+            const wxChar* res = NULL;
             if (resource.length())
-                res = (wxChar*)resource.c_str();
+                res = (const wxChar*)resource.c_str();
             return self->Create(parent, bitmap, res);
         }
   // C++ Version of a Python aware class
@@ -2878,15 +2878,15 @@ IMP_PYCALLBACK_VOID_WXWINBASE(wxPyWizardPage, wxWizardPage, RemoveChild);
 
 
 SWIGINTERN wxPyWizardPage *new_wxPyWizardPage(wxWizard *parent,wxBitmap const *bitmap=&wxNullBitmap,wxString const *resource=&wxPyEmptyString){
-            wxChar* res = NULL;
+            const wxChar* res = NULL;
             if (resource->length())
-                res = (wxChar*)resource->c_str();
+                res = (const wxChar*)resource->c_str();
             return new wxPyWizardPage(parent, *bitmap, res);
         }
 SWIGINTERN bool wxPyWizardPage_Create(wxPyWizardPage *self,wxWizard *parent,wxBitmap const &bitmap=wxNullBitmap,wxString const &resource=wxPyEmptyString){
-            wxChar* res = NULL;
+            const wxChar* res = NULL;
             if (resource.length())
-                res = (wxChar*)resource.c_str();
+                res = (const wxChar*)resource.c_str();
             return self->Create(parent, bitmap, res);
         }
 #ifdef __cplusplus

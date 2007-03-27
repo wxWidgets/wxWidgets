@@ -255,11 +255,6 @@ class HtmlWinParser(HtmlParser):
         """GetCharWidth(self) -> int"""
         return _html.HtmlWinParser_GetCharWidth(*args, **kwargs)
 
-    def GetWindow(*args, **kwargs):
-        """GetWindow(self) -> HtmlWindow"""
-        return _html.HtmlWinParser_GetWindow(*args, **kwargs)
-
-    GetWindow = wx._deprecated(GetWindow) 
     def GetWindowInterface(*args, **kwargs):
         """GetWindowInterface(self) -> HtmlWindowInterface"""
         return _html.HtmlWinParser_GetWindowInterface(*args, **kwargs)
@@ -676,11 +671,6 @@ class HtmlCell(_core.Object):
         """GetMouseCursor(self, HtmlWindowInterface window) -> Cursor"""
         return _html.HtmlCell_GetMouseCursor(*args, **kwargs)
 
-    def GetCursor(*args, **kwargs):
-        """GetCursor(self) -> Cursor"""
-        return _html.HtmlCell_GetCursor(*args, **kwargs)
-
-    GetCursor = wx._deprecated(GetCursor) 
     def IsFormattingCell(*args, **kwargs):
         """IsFormattingCell(self) -> bool"""
         return _html.HtmlCell_IsFormattingCell(*args, **kwargs)
@@ -765,7 +755,6 @@ class HtmlCell(_core.Object):
         """ConvertToText(self, HtmlSelection sel) -> String"""
         return _html.HtmlCell_ConvertToText(*args, **kwargs)
 
-    Cursor = property(GetCursor,doc="See `GetCursor`") 
     Depth = property(GetDepth,doc="See `GetDepth`") 
     Descent = property(GetDescent,doc="See `GetDescent`") 
     FirstChild = property(GetFirstChild,doc="See `GetFirstChild`") 

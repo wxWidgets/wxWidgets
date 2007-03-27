@@ -4451,36 +4451,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_HtmlWinParser_GetWindow(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
-  wxPyHtmlWindow *result = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxHtmlWinParser, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HtmlWinParser_GetWindow" "', expected argument " "1"" of type '" "wxHtmlWinParser *""'"); 
-  }
-  arg1 = reinterpret_cast< wxHtmlWinParser * >(argp1);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxPyHtmlWindow *)(arg1)->GetWindow();
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  {
-    resultobj = wxPyMake_wxObject(result, (bool)0); 
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_HtmlWinParser_GetWindowInterface(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxHtmlWinParser *arg1 = (wxHtmlWinParser *) 0 ;
@@ -7270,34 +7240,6 @@ SWIGINTERN PyObject *_wrap_HtmlCell_GetMouseCursor(PyObject *SWIGUNUSEDPARM(self
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = ((wxHtmlCell const *)arg1)->GetMouseCursor(arg2);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_NewPointerObj((new wxCursor(static_cast< const wxCursor& >(result))), SWIGTYPE_p_wxCursor, SWIG_POINTER_OWN |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_HtmlCell_GetCursor(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxHtmlCell *arg1 = (wxHtmlCell *) 0 ;
-  wxCursor result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxHtmlCell, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HtmlCell_GetCursor" "', expected argument " "1"" of type '" "wxHtmlCell const *""'"); 
-  }
-  arg1 = reinterpret_cast< wxHtmlCell * >(argp1);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = ((wxHtmlCell const *)arg1)->GetCursor();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -17780,7 +17722,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"HtmlWinParser_GetDC", (PyCFunction)_wrap_HtmlWinParser_GetDC, METH_O, NULL},
 	 { (char *)"HtmlWinParser_GetCharHeight", (PyCFunction)_wrap_HtmlWinParser_GetCharHeight, METH_O, NULL},
 	 { (char *)"HtmlWinParser_GetCharWidth", (PyCFunction)_wrap_HtmlWinParser_GetCharWidth, METH_O, NULL},
-	 { (char *)"HtmlWinParser_GetWindow", (PyCFunction)_wrap_HtmlWinParser_GetWindow, METH_O, NULL},
 	 { (char *)"HtmlWinParser_GetWindowInterface", (PyCFunction)_wrap_HtmlWinParser_GetWindowInterface, METH_O, NULL},
 	 { (char *)"HtmlWinParser_SetFonts", (PyCFunction) _wrap_HtmlWinParser_SetFonts, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"HtmlWinParser_SetStandardFonts", (PyCFunction) _wrap_HtmlWinParser_SetStandardFonts, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -17878,7 +17819,6 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"HtmlCell_GetParent", (PyCFunction)_wrap_HtmlCell_GetParent, METH_O, NULL},
 	 { (char *)"HtmlCell_GetFirstChild", (PyCFunction)_wrap_HtmlCell_GetFirstChild, METH_O, NULL},
 	 { (char *)"HtmlCell_GetMouseCursor", (PyCFunction) _wrap_HtmlCell_GetMouseCursor, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"HtmlCell_GetCursor", (PyCFunction)_wrap_HtmlCell_GetCursor, METH_O, NULL},
 	 { (char *)"HtmlCell_IsFormattingCell", (PyCFunction)_wrap_HtmlCell_IsFormattingCell, METH_O, NULL},
 	 { (char *)"HtmlCell_SetLink", (PyCFunction) _wrap_HtmlCell_SetLink, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"HtmlCell_SetNext", (PyCFunction) _wrap_HtmlCell_SetNext, METH_VARARGS | METH_KEYWORDS, NULL},

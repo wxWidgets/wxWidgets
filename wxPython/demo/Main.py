@@ -47,29 +47,6 @@ import images
 _treeList = [
     # new stuff
     ('Recent Additions/Updates', [
-        'RichTextCtrl',
-        'Treebook',
-        'Toolbook',
-        'BitmapFromBuffer',
-        'RawBitmapAccess',
-        'DragScroller',
-        'DelayedResult',
-        'ExpandoTextCtrl',
-        'ButtonPanel',
-        'FlatNotebook',
-        'CustomTreeCtrl',
-        'AboutBox',
-        'AlphaDrawing',
-        'GraphicsContext',
-        'CollapsiblePane',
-        'ComboCtrl',
-        'OwnerDrawnComboBox',
-        'BitmapComboBox',
-        'I18N',
-        'Img2PyArtProvider',
-        'SearchCtrl',
-        'SizedControls',
-        'AUI_MDI',
         ]),
 
     # managed windows == things with a (optional) caption you can close
@@ -214,6 +191,7 @@ _treeList = [
         'Throbber',
         'Ticker',
         'TimeCtrl',
+        'TreeMixin',
         'VListBox',
         ]),
 
@@ -1688,7 +1666,7 @@ class wxPythonDemo(wx.Frame):
 
     def OnOpenWidgetInspector(self, evt):
         # Activate the widget inspection tool
-        from wx.lib.inspect import InspectionTool
+        from wx.lib.inspection import InspectionTool
         if not InspectionTool().initialized:
             InspectionTool().Init()
 

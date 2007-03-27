@@ -351,8 +351,8 @@ class DirBrowseButton(FileBrowseButton):
     def OnBrowse(self, ev = None):
         style=0
 
-        if self.newDirectory:
-          style|=wx.DD_NEW_DIR_BUTTON
+        if not self.newDirectory:
+          style |= wx.DD_DIR_MUST_EXIST
 
         dialog = self.dialogClass(self,
                                   message = self.dialogTitle,

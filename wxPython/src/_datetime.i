@@ -510,10 +510,6 @@ public:
                       int n = 1,
                       Month month = Inv_Month,
                       int year = Inv_Year);
-//      wxDateTime GetWeekDay(WeekDay weekday,
-//                            int n = 1,
-//                            Month month = Inv_Month,
-//                            int year = Inv_Year);
 
         // sets to the last weekday in the given month, year
     bool SetToLastWeekDay(WeekDay weekday,
@@ -523,17 +519,6 @@ public:
                               Month month = Inv_Month,
                               int year = Inv_Year);
 
-        // sets the date to the given day of the given week in the year,
-        // returns True on success and False if given date doesn't exist (e.g.
-        // numWeek is > 53)
-    bool SetToTheWeek(wxDateTime_t numWeek, WeekDay weekday = Mon, WeekFlags flags = Monday_First);
-    wxDateTime GetWeek(wxDateTime_t numWeek, WeekDay weekday = Mon, WeekFlags flags = Monday_First);
-
-    %pythoncode {
-        SetToTheWeek = wx._deprecated(SetToTheWeek, "SetToTheWeek is deprecated, use (static) SetToWeekOfYear instead")
-        GetWeek = wx._deprecated(GetWeek, "GetWeek is deprecated, use GetWeekOfYear instead")
-    }
-            
         // returns the date corresponding to the given week day of the given
         // week (in ISO notation) of the specified year
     static wxDateTime SetToWeekOfYear(int year,
@@ -911,7 +896,6 @@ public:
     %property(RataDie, GetRataDie, doc="See `GetRataDie`");
     %property(Second, GetSecond, SetSecond, doc="See `GetSecond` and `SetSecond`");
     %property(Ticks, GetTicks, doc="See `GetTicks`");
-    %property(Week, GetWeek, doc="See `GetWeek`");
     %property(WeekDay, GetWeekDay, doc="See `GetWeekDay`");
     %property(WeekDayInSameWeek, GetWeekDayInSameWeek, doc="See `GetWeekDayInSameWeek`");
     %property(WeekOfMonth, GetWeekOfMonth, doc="See `GetWeekOfMonth`");

@@ -316,11 +316,6 @@ def EndBusyCursor(*args):
   """EndBusyCursor()"""
   return _misc_.EndBusyCursor(*args)
 
-def GetElapsedTime(*args, **kwargs):
-  """GetElapsedTime(bool resetTimer=True) -> long"""
-  return _misc_.GetElapsedTime(*args, **kwargs)
-GetElapsedTime = wx._deprecated(GetElapsedTime) 
-
 def IsBusy(*args):
   """IsBusy() -> bool"""
   return _misc_.IsBusy(*args)
@@ -332,10 +327,6 @@ def Now(*args):
 def Shell(*args, **kwargs):
   """Shell(String command=EmptyString) -> bool"""
   return _misc_.Shell(*args, **kwargs)
-
-def StartTimer(*args):
-  """StartTimer()"""
-  return _misc_.StartTimer(*args)
 
 def GetOsVersion(*args):
   """GetOsVersion() -> (platform, major, minor)"""
@@ -3307,7 +3298,25 @@ class FileConfig(ConfigBase):
         _misc_.FileConfig_swiginit(self,_misc_.new_FileConfig(*args, **kwargs))
     __swig_destroy__ = _misc_.delete_FileConfig
     __del__ = lambda self : None;
+    def GetGlobalFileName(*args, **kwargs):
+        """GetGlobalFileName(String szFile) -> String"""
+        return _misc_.FileConfig_GetGlobalFileName(*args, **kwargs)
+
+    GetGlobalFileName = staticmethod(GetGlobalFileName)
+    def GetLocalFileName(*args, **kwargs):
+        """GetLocalFileName(String szFile, int style=0) -> String"""
+        return _misc_.FileConfig_GetLocalFileName(*args, **kwargs)
+
+    GetLocalFileName = staticmethod(GetLocalFileName)
 _misc_.FileConfig_swigregister(FileConfig)
+
+def FileConfig_GetGlobalFileName(*args, **kwargs):
+  """FileConfig_GetGlobalFileName(String szFile) -> String"""
+  return _misc_.FileConfig_GetGlobalFileName(*args, **kwargs)
+
+def FileConfig_GetLocalFileName(*args, **kwargs):
+  """FileConfig_GetLocalFileName(String szFile, int style=0) -> String"""
+  return _misc_.FileConfig_GetLocalFileName(*args, **kwargs)
 
 class ConfigPathChanger(object):
     """
@@ -3707,17 +3716,6 @@ class DateTime(object):
         """GetLastWeekDay(self, int weekday, int month=Inv_Month, int year=Inv_Year) -> DateTime"""
         return _misc_.DateTime_GetLastWeekDay(*args, **kwargs)
 
-    def SetToTheWeek(*args, **kwargs):
-        """SetToTheWeek(self, int numWeek, int weekday=Mon, int flags=Monday_First) -> bool"""
-        return _misc_.DateTime_SetToTheWeek(*args, **kwargs)
-
-    def GetWeek(*args, **kwargs):
-        """GetWeek(self, int numWeek, int weekday=Mon, int flags=Monday_First) -> DateTime"""
-        return _misc_.DateTime_GetWeek(*args, **kwargs)
-
-    SetToTheWeek = wx._deprecated(SetToTheWeek, "SetToTheWeek is deprecated, use (static) SetToWeekOfYear instead")
-    GetWeek = wx._deprecated(GetWeek, "GetWeek is deprecated, use GetWeekOfYear instead")
-
     def SetToWeekOfYear(*args, **kwargs):
         """SetToWeekOfYear(int year, int numWeek, int weekday=Mon) -> DateTime"""
         return _misc_.DateTime_SetToWeekOfYear(*args, **kwargs)
@@ -4036,7 +4034,6 @@ class DateTime(object):
     RataDie = property(GetRataDie,doc="See `GetRataDie`") 
     Second = property(GetSecond,SetSecond,doc="See `GetSecond` and `SetSecond`") 
     Ticks = property(GetTicks,doc="See `GetTicks`") 
-    Week = property(GetWeek,doc="See `GetWeek`") 
     WeekDay = property(GetWeekDay,doc="See `GetWeekDay`") 
     WeekDayInSameWeek = property(GetWeekDayInSameWeek,doc="See `GetWeekDayInSameWeek`") 
     WeekOfMonth = property(GetWeekOfMonth,doc="See `GetWeekOfMonth`") 
