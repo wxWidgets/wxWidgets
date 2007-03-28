@@ -14,6 +14,10 @@
 #include "wx/defs.h"
 #include "wx/chartype.h"
 
+// NB: this header is included from string.h as well, but from the place
+//     where wxStringImpl is already declared and that's all we need
+#include "wx/string.h"
+
 class WXDLLIMPEXP_BASE wxUniCharRef;
 
 // This class represents single Unicode character. It can be converted to
@@ -112,9 +116,10 @@ private:
 class WXDLLIMPEXP_BASE wxUniCharRef
 {
 private:
+    typedef wxStringImpl::iterator iterator;
+
     // create the reference
-    // FIXME-UTF8: the interface will need changes for UTF-8 build
-    wxUniCharRef(wxChar *pos) : m_pos(pos) {}
+    wxUniCharRef(iterator pos) : m_pos(pos) {}
 
 public:
     // NB: we have to make this public, because we don't have wxString
@@ -122,9 +127,7 @@ public:
     //     as friend; so at least don't use a ctor but a static function
     //     that must be used explicitly (this is more than using 'explicit'
     //     keyword on ctor!):
-    //
-    // FIXME-UTF8: the interface will need changes for UTF-8 build
-    static wxUniCharRef CreateForString(wxChar *pos)
+    static wxUniCharRef CreateForString(iterator pos)
         { return wxUniCharRef(pos); }
 
     wxUniChar::value_type GetValue() const { return UniChar().GetValue(); }
@@ -185,7 +188,7 @@ private:
 
 private:
     // pointer to the character in string
-    wxChar *m_pos;
+    iterator m_pos;
 };
 
 inline wxUniChar::wxUniChar(const wxUniCharRef& c)

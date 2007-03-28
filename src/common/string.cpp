@@ -814,7 +814,7 @@ int wxString::compare(size_t nStart, size_t nLen,
     size_t pos, len;
     PosLenToImpl(nStart, nLen, &pos, &len);
 
-    SubstrBufFromMB str(sz, nCount);
+    SubstrBufFromMB str(ImplStr(sz, nCount));
 
     return m_impl.compare(pos, len, str.data, str.len);
 }
@@ -825,7 +825,7 @@ int wxString::compare(size_t nStart, size_t nLen,
     size_t pos, len;
     PosLenToImpl(nStart, nLen, &pos, &len);
 
-    SubstrBufFromWC str(sz, nCount);
+    SubstrBufFromWC str(ImplStr(sz, nCount));
 
     return m_impl.compare(pos, len, str.data, str.len);
 }

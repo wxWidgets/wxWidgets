@@ -176,18 +176,7 @@ inline int Stricmp(const char *psz1, const char *psz2)
 // deal with STL/non-STL/non-STL-but-wxUSE_STD_STRING
 // ----------------------------------------------------------------------------
 
-// FIXME-UTF8: using std::string as wxString base class is currently broken,
-//             so we use the standard wxString with std::string conversion
-//             enabled, this is API-compatible.
-#if 1
-#define wxUSE_STL_BASED_WXSTRING 0
-#if wxUSE_STL
-    #undef wxUSE_STD_STRING
-    #define wxUSE_STD_STRING 1
-#endif
-#else
 #define wxUSE_STL_BASED_WXSTRING  wxUSE_STL
-#endif
 
 // in both cases we need to define wxStdString
 #if wxUSE_STL_BASED_WXSTRING || wxUSE_STD_STRING
@@ -619,7 +608,6 @@ public:
 #endif
 
     wxString AsString() const;
-    operator wxString() const;
 
     // allow expressions like "c_str()[0]":
     wxUniChar operator[](int n) const { return operator[](size_t(n)); }
@@ -735,10 +723,8 @@ class WXDLLIMPEXP_BASE wxString
   //     that all inline functions can be effectively inlined, verify that all
   //     performance critical functions are still inlined if you change order!
 public:
-#if !wxUSE_STL_BASED_WXSTRING
   // an 'invalid' value for string index, moved to this place due to a CW bug
   static const size_t npos;
-#endif
 
 private:
   // if we hadn't made these operators private, it would be possible to
@@ -776,11 +762,9 @@ private:
 #elif wxUSE_UNICODE_WCHAR
   typedef SubstrBufFromType<const wchar_t*>  SubstrBufFromWC;
   typedef SubstrBufFromType<wxWCharBuffer>   SubstrBufFromMB;
-  typedef SubstrBufFromWC SubstrBufFrom;
 #else
   typedef SubstrBufFromType<const char*>     SubstrBufFromMB;
   typedef SubstrBufFromType<wxCharBuffer>    SubstrBufFromWC;
-  typedef SubstrBufFromMB SubstrBufFrom;
 #endif
 
 
@@ -792,27 +776,28 @@ private:
 #if wxUSE_UNICODE
   // FIXME-UTF8: This will need changes when UTF8 build is introduced
   static SubstrBufFromMB ConvertStr(const char *psz, size_t nLength,
-                                const wxMBConv& conv);
+                                    const wxMBConv& conv);
 #else
   static SubstrBufFromWC ConvertStr(const wchar_t *pwz, size_t nLength,
-                                const wxMBConv& conv);
+                                    const wxMBConv& conv);
 #endif
 
 #if !wxUSE_UNICODE_UTF8 // wxUSE_UNICODE_WCHAR or !wxUSE_UNICODE
-  // returns C string encoded as the implementation expects (version for
-  // the same char type as used internally)
-  static const wxStringCharType* ImplStr(const wxStringCharType* str)
-    { return str; }
-  static const SubstrBufFrom ImplStr(const wxStringCharType* str, size_t n)
-    { return SubstrBufFrom(str, n); }
+  // returns C string encoded as the implementation expects:
   #if wxUSE_UNICODE
-  // returns C string encoded as the implementation expects (version for
-  // the other char type than the one used internally)
+  static const wchar_t* ImplStr(const wchar_t* str)
+    { return str; }
+  static const SubstrBufFromWC ImplStr(const wchar_t* str, size_t n)
+    { return SubstrBufFromWC(str, n == npos ? wxWcslen(str) : n); }
   static wxWCharBuffer ImplStr(const char* str)
     { return ConvertStr(str, npos, wxConvLibc).data; }
   static SubstrBufFromMB ImplStr(const char* str, size_t n)
     { return ConvertStr(str, n, wxConvLibc); }
   #else
+  static const char* ImplStr(const char* str)
+    { return str; }
+  static const SubstrBufFromMB ImplStr(const char* str, size_t n)
+    { return SubstrBufFromMB(str, n == npos ? wxStrlen(str) : n); }
   static wxCharBuffer ImplStr(const wchar_t* str)
     { return ConvertStr(str, npos, wxConvLibc).data; }
   static SubstrBufFromWC ImplStr(const wchar_t* str, size_t n)
@@ -922,10 +907,10 @@ public:
   // unconditionally add this ctor as it would make wx lib dependent on
   // libstdc++ on some Linux versions which is bad, so instead we ask the
   // client code to define this wxUSE_STD_STRING symbol if they need it
-#if wxUSE_STD_STRING
+#if wxUSE_STD_STRING && !wxUSE_STL_BASED_WXSTRING
   wxString(const wxStdString& s)
-      : m_impl(s.c_str()) { }
-#endif // wxUSE_STD_STRING
+      : m_impl(s.c_str()) { } // FIXME-UTF8: this is broken for embedded 0s
+#endif // wxUSE_STD_STRING && !wxUSE_STL_BASED_WXSTRING
 
 #if wxUSE_UNICODE
     // from multibyte string
@@ -958,6 +943,9 @@ public:
       : m_impl(psz) { }
 #endif // Unicode/ANSI
 
+  wxString(const wxCStrData& cstr)
+      : m_impl(cstr.AsString().m_impl) { }
+
     // as we provide both ctors with this signature for both char and unsigned
     // char string, we need to provide one for wxCStrData to resolve ambiguity
   wxString(const wxCStrData& cstr, size_t nLength)
@@ -979,18 +967,27 @@ public:
   typedef size_t size_type;
   typedef wxUniChar const_reference;
 
+#if wxUSE_STL
+  #define WX_STR_ITERATOR_TAG std::random_access_iterator_tag
+#else
+  #define WX_STR_ITERATOR_TAG void /* dummy type */
+#endif
+
   #define WX_STR_ITERATOR_IMPL(iterator_name, pointer_type,                 \
                                reference_type, reference_ctor)              \
       private:                                                              \
           typedef wxStringImpl::iterator_name underlying_iterator;          \
       public:                                                               \
+          typedef WX_STR_ITERATOR_TAG iterator_category;                    \
           typedef wxUniChar value_type;                                     \
+          typedef int difference_type;                                      \
           typedef reference_type reference;                                 \
           typedef pointer_type pointer;                                     \
                                                                             \
           iterator_name(const iterator_name& i) : m_cur(i.m_cur) {}         \
                                                                             \
           reference operator*() const { return reference_ctor; }            \
+          reference operator[](size_t n) const { return *(*this + n); }     \
                                                                             \
           iterator_name& operator++()                                       \
             { wxString::IncIter(m_cur); return *this; }                     \
@@ -1049,7 +1046,6 @@ public:
           operator underlying_iterator() const { return m_cur; }            \
                                                                             \
           friend class WXDLLIMPEXP_BASE wxString;                           \
-          friend class WXDLLIMPEXP_BASE wxStringImpl;                       \
           friend class WXDLLIMPEXP_BASE wxCStrData;                         \
                                                                             \
       private:                                                              \
@@ -1076,6 +1072,7 @@ public:
       const_iterator(const iterator& i) : m_cur(i.m_cur) {}
   };
 
+  #undef WX_STR_ITERATOR_TAG
   #undef WX_STR_ITERATOR_IMPL
 
   friend class iterator;
@@ -1086,7 +1083,10 @@ public:
   {
   public:
       typedef T iterator_type;
+
+      typedef typename T::iterator_category iterator_category;
       typedef typename T::value_type value_type;
+      typedef typename T::difference_type difference_type;
       typedef typename T::reference reference;
       typedef typename T::pointer *pointer;
 
@@ -1097,6 +1097,7 @@ public:
       iterator_type base() const { return m_cur; }
 
       reference operator*() const { return *(m_cur-1); }
+      reference operator[](size_t n) const { return *(*this + n); }
 
       reverse_iterator_impl& operator++()
         { --m_cur; return *this; }
@@ -2103,20 +2104,20 @@ public:
   //             sizeof(wchar_t)==2 and surrogates are present in the string;
   //             should we care? Probably not.
   size_t find_first_of(const wxString& str, size_t nStart = 0) const
-    { return m_impl.find_first_of(str.impl, nStart); }
+    { return m_impl.find_first_of(str.m_impl, nStart); }
   size_t find_first_of(const char* sz, size_t nStart = 0) const
     { return m_impl.find_first_of(ImplStr(sz), nStart); }
   size_t find_first_of(const wchar_t* sz, size_t nStart = 0) const
     { return m_impl.find_first_of(ImplStr(sz), nStart); }
-  size_t find_first_of(const char* sz, size_t nStart, size_t n) const;
+  size_t find_first_of(const char* sz, size_t nStart, size_t n) const
     { return m_impl.find_first_of(ImplStr(sz), nStart, n); }
-  size_t find_first_of(const wchar_t* sz, size_t nStart, size_t n) const;
+  size_t find_first_of(const wchar_t* sz, size_t nStart, size_t n) const
     { return m_impl.find_first_of(ImplStr(sz), nStart, n); }
   size_t find_first_of(wxUniChar c, size_t nStart = 0) const
     { return m_impl.find_first_of((wxChar)c, nStart); }
 
-  size_t find_last_of(const wxStringImpl& str, size_t nStart = npos) const
-    { return m_impl.find_last_of(str.impl, nStart); }
+  size_t find_last_of(const wxString& str, size_t nStart = npos) const
+    { return m_impl.find_last_of(str.m_impl, nStart); }
   size_t find_last_of(const char* sz, size_t nStart = npos) const
     { return m_impl.find_last_of(ImplStr(sz), nStart); }
   size_t find_last_of(const wchar_t* sz, size_t nStart = npos) const
@@ -2128,30 +2129,30 @@ public:
   size_t find_last_of(wxUniChar c, size_t nStart = npos) const
     { return m_impl.find_last_of((wxChar)c, nStart); }
 
-  size_t find_first_not_of(const wxStringImpl& str, size_t nStart = 0) const
+  size_t find_first_not_of(const wxString& str, size_t nStart = 0) const
     { return m_impl.find_first_not_of(str.m_impl, nStart); }
-  size_t find_first_not_of(const char* sz, size_t nStart = 0) const;
+  size_t find_first_not_of(const char* sz, size_t nStart = 0) const
     { return m_impl.find_first_not_of(ImplStr(sz), nStart); }
-  size_t find_first_not_of(const wchar_t* sz, size_t nStart = 0) const;
+  size_t find_first_not_of(const wchar_t* sz, size_t nStart = 0) const
     { return m_impl.find_first_not_of(ImplStr(sz), nStart); }
-  size_t find_first_not_of(const char* sz, size_t nStart, size_t n) const;
+  size_t find_first_not_of(const char* sz, size_t nStart, size_t n) const
     { return m_impl.find_first_not_of(ImplStr(sz), nStart, n); }
-  size_t find_first_not_of(const wchar_t* sz, size_t nStart, size_t n) const;
+  size_t find_first_not_of(const wchar_t* sz, size_t nStart, size_t n) const
     { return m_impl.find_first_not_of(ImplStr(sz), nStart, n); }
-  size_t find_first_not_of(wxUniChar c, size_t nStart = 0) const;
+  size_t find_first_not_of(wxUniChar c, size_t nStart = 0) const
     { return m_impl.find_first_not_of((wxChar)c, nStart); }
 
-  size_t find_last_not_of(const wxStringImpl& str, size_t nStart = npos) const
+  size_t find_last_not_of(const wxString& str, size_t nStart = npos) const
     { return m_impl.find_last_not_of(str.m_impl, nStart); }
-  size_t find_last_not_of(const char* sz, size_t nStart = npos) const;
+  size_t find_last_not_of(const char* sz, size_t nStart = npos) const
     { return m_impl.find_last_not_of(ImplStr(sz), nStart); }
-  size_t find_last_not_of(const wchar_t* sz, size_t nStart = npos) const;
+  size_t find_last_not_of(const wchar_t* sz, size_t nStart = npos) const
     { return m_impl.find_last_not_of(ImplStr(sz), nStart); }
-  size_t find_last_not_of(const char* sz, size_t nStart, size_t n) const;
+  size_t find_last_not_of(const char* sz, size_t nStart, size_t n) const
     { return m_impl.find_last_not_of(ImplStr(sz), nStart, n); }
-  size_t find_last_not_of(const wchar_t* sz, size_t nStart, size_t n) const;
+  size_t find_last_not_of(const wchar_t* sz, size_t nStart, size_t n) const
     { return m_impl.find_last_not_of(ImplStr(sz), nStart, n); }
-  size_t find_last_not_of(wxUniChar c, size_t nStart = npos) const;
+  size_t find_last_not_of(wxUniChar c, size_t nStart = npos) const
     { return m_impl.find_last_not_of((wxChar)c, nStart); }
 #else
   // we can't use std::string implementation in UTF-8 build, because the
@@ -2280,6 +2281,25 @@ private:
 #ifdef wxNEEDS_WXSTRING_PRINTF_MIXIN
     #pragma warning (default:4275)
 #endif
+
+// string iterator operators that satisfy STL Random Access Iterator
+// requirements:
+inline wxString::iterator operator+(int n, wxString::iterator i)
+  { return i + n; }
+inline wxString::iterator operator+(size_t n, wxString::iterator i)
+  { return i + n; }
+inline wxString::const_iterator operator+(int n, wxString::const_iterator i)
+  { return i + n; }
+inline wxString::const_iterator operator+(size_t n, wxString::const_iterator i)
+  { return i + n; }
+inline wxString::reverse_iterator operator+(int n, wxString::reverse_iterator i)
+  { return i + n; }
+inline wxString::reverse_iterator operator+(size_t n, wxString::reverse_iterator i)
+  { return i + n; }
+inline wxString::const_reverse_iterator operator+(int n, wxString::const_reverse_iterator i)
+  { return i + n; }
+inline wxString::const_reverse_iterator operator+(size_t n, wxString::const_reverse_iterator i)
+  { return i + n; }
 
 // notice that even though for many compilers the friend declarations above are
 // enough, from the point of view of C++ standard we must have the declarations
@@ -2430,11 +2450,6 @@ private:
 // wxString comparison functions: operator versions are always case sensitive
 // ---------------------------------------------------------------------------
 
-// note that when wxUSE_STL_BASED_WXSTRING == 1 the comparison operators taking
-// std::string are used and defining them also for wxString would only result
-// in compilation ambiguities when comparing std::string and wxString
-#if !wxUSE_STL_BASED_WXSTRING
-
 #define wxCMP_WXCHAR_STRING(p, s, op) s.Cmp(p) op 0
 
 wxDEFINE_ALL_COMPARISONS(const wxChar *, const wxString&, wxCMP_WXCHAR_STRING)
@@ -2488,10 +2503,7 @@ inline wxString operator+(const wxCharBuffer& buf, const wxString& string)
     { return (const char *)buf + string; }
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
-#endif // !wxUSE_STL_BASED_WXSTRING
-
-// comparison with char (those are not defined by std::[w]string and so should
-// be always available)
+// comparison with char
 inline bool operator==(const wxUniChar& c, const wxString& s) { return s.IsSameAs(c); }
 inline bool operator==(const wxUniCharRef& c, const wxString& s) { return s.IsSameAs(c); }
 inline bool operator==(char c, const wxString& s) { return s.IsSameAs(c); }
@@ -2574,10 +2586,8 @@ inline const wchar_t* wxCStrData::AsWChar() const
 inline const char* wxCStrData::AsChar() const
 #endif
 {
-    if ( m_offset == 0 )
-        return m_str->wx_str(); // FIXME-UTF8
-    else
-        return (const wxChar*)(m_str->begin() + m_offset);
+    // FIXME-UTF8: incorrect position, incorrect charset
+    return m_str->wx_str() + m_offset;
 }
 
 inline wxString wxCStrData::AsString() const
@@ -2587,8 +2597,6 @@ inline wxString wxCStrData::AsString() const
     else
         return m_str->Mid(m_offset);
 }
-
-inline wxCStrData::operator wxString() const { return AsString(); }
 
 inline wxUniChar wxCStrData::operator*() const
 {
