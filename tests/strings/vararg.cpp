@@ -53,15 +53,26 @@ void VarArgTestCase::StringPrintf()
 {
     wxString s, s2;
 
+    // test passing literals:
     s.Printf("%s %i", "foo", 42);
     CPPUNIT_ASSERT( s == "foo 42" );
     s.Printf("%s %s %i", _T("bar"), "=", 11);
+
+    // test passing c_str():
     CPPUNIT_ASSERT( s == "bar = 11" );
     s2.Printf("(%s)", s.c_str());
     CPPUNIT_ASSERT( s2 == "(bar = 11)" );
     s2.Printf(_T("[%s](%s)"), s.c_str(), "str");
     CPPUNIT_ASSERT( s2 == "[bar = 11](str)" );
 
+    // test passing wxString directly:
     s2.Printf(_T("[%s](%s)"), s, "str");
     CPPUNIT_ASSERT( s2 == "[bar = 11](str)" );
+
+    // test passing wxCharBufferType<T>:
+    s = "FooBar";
+    s2.Printf(_T("(%s)"), s.mb_str());
+    CPPUNIT_ASSERT( s2 == "(FooBar)" );
+    s2.Printf(_T("value=%s;"), s.wc_str());
+    CPPUNIT_ASSERT( s2 == "value=FooBar;" );
 }

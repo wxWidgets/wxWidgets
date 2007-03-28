@@ -77,3 +77,16 @@ const char *wxArgNormalizer<const wchar_t*>::get() const
 }
 
 #endif // wxUSE_UNICODE_WCHAR / !wxUSE_UNICODE_WCHAR && wxUSE_WCHAR_T
+
+// FIXME-UTF8: move this to the header once it's possible to include buffer.h
+//             without including wxcrt.h
+
+wxArgNormalizer<wxCharBuffer>::wxArgNormalizer(const wxCharBuffer& buf)
+    : wxArgNormalizer<const char*>(buf.data())
+{
+}
+
+wxArgNormalizer<wxWCharBuffer>::wxArgNormalizer(const wxWCharBuffer& buf)
+    : wxArgNormalizer<const wchar_t*>(buf.data())
+{
+}

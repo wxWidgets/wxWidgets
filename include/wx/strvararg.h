@@ -161,6 +161,23 @@ struct wxArgNormalizer<wchar_t*> : public wxArgNormalizer<const wchar_t*>
 
 #endif // wxUSE_UNICODE_WCHAR / !wxUSE_UNICODE_WCHAR && wxUSE_WCHAR_T
 
+// versions for passing wx[W]CharBuffer:
+template<>
+struct WXDLLIMPEXP_BASE wxArgNormalizer<wxCharBuffer>
+            : public wxArgNormalizer<const char*>
+{
+    wxArgNormalizer(const wxCharBuffer& buf);
+};
+
+template<>
+struct WXDLLIMPEXP_BASE wxArgNormalizer<wxWCharBuffer>
+            : public wxArgNormalizer<const wchar_t*>
+{
+    wxArgNormalizer(const wxWCharBuffer& buf);
+};
+
+
+
 // NB: The vararg emulation code is limited to 30 arguments at the moment.
 //     If you need more, you need to
 //        1) increase the value of _WX_VARARG_MAX_ARGS
