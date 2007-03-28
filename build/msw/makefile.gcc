@@ -192,6 +192,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_arcall.o \
 	$(OBJS)\monodll_arcfind.o \
 	$(OBJS)\monodll_archive.o \
+	$(OBJS)\monodll_arrstr.o \
 	$(OBJS)\monodll_clntdata.o \
 	$(OBJS)\monodll_cmdline.o \
 	$(OBJS)\monodll_config.o \
@@ -239,6 +240,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_strconv.o \
 	$(OBJS)\monodll_stream.o \
 	$(OBJS)\monodll_string.o \
+	$(OBJS)\monodll_stringimpl.o \
 	$(OBJS)\monodll_strvararg.o \
 	$(OBJS)\monodll_sysopt.o \
 	$(OBJS)\monodll_tarstrm.o \
@@ -315,6 +317,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_arcall.o \
 	$(OBJS)\monolib_arcfind.o \
 	$(OBJS)\monolib_archive.o \
+	$(OBJS)\monolib_arrstr.o \
 	$(OBJS)\monolib_clntdata.o \
 	$(OBJS)\monolib_cmdline.o \
 	$(OBJS)\monolib_config.o \
@@ -362,6 +365,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_strconv.o \
 	$(OBJS)\monolib_stream.o \
 	$(OBJS)\monolib_string.o \
+	$(OBJS)\monolib_stringimpl.o \
 	$(OBJS)\monolib_strvararg.o \
 	$(OBJS)\monolib_sysopt.o \
 	$(OBJS)\monolib_tarstrm.o \
@@ -440,6 +444,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_arcall.o \
 	$(OBJS)\basedll_arcfind.o \
 	$(OBJS)\basedll_archive.o \
+	$(OBJS)\basedll_arrstr.o \
 	$(OBJS)\basedll_clntdata.o \
 	$(OBJS)\basedll_cmdline.o \
 	$(OBJS)\basedll_config.o \
@@ -487,6 +492,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_strconv.o \
 	$(OBJS)\basedll_stream.o \
 	$(OBJS)\basedll_string.o \
+	$(OBJS)\basedll_stringimpl.o \
 	$(OBJS)\basedll_strvararg.o \
 	$(OBJS)\basedll_sysopt.o \
 	$(OBJS)\basedll_tarstrm.o \
@@ -548,6 +554,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_arcall.o \
 	$(OBJS)\baselib_arcfind.o \
 	$(OBJS)\baselib_archive.o \
+	$(OBJS)\baselib_arrstr.o \
 	$(OBJS)\baselib_clntdata.o \
 	$(OBJS)\baselib_cmdline.o \
 	$(OBJS)\baselib_config.o \
@@ -595,6 +602,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_strconv.o \
 	$(OBJS)\baselib_stream.o \
 	$(OBJS)\baselib_string.o \
+	$(OBJS)\baselib_stringimpl.o \
 	$(OBJS)\baselib_strvararg.o \
 	$(OBJS)\baselib_sysopt.o \
 	$(OBJS)\baselib_tarstrm.o \
@@ -4855,6 +4863,9 @@ $(OBJS)\monodll_arcfind.o: ../../src/common/arcfind.cpp
 $(OBJS)\monodll_archive.o: ../../src/common/archive.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_arrstr.o: ../../src/common/arrstr.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_clntdata.o: ../../src/common/clntdata.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -4994,6 +5005,9 @@ $(OBJS)\monodll_stream.o: ../../src/common/stream.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_string.o: ../../src/common/string.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monodll_stringimpl.o: ../../src/common/stringimpl.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_strvararg.o: ../../src/common/strvararg.cpp
@@ -6976,6 +6990,9 @@ $(OBJS)\monolib_arcfind.o: ../../src/common/arcfind.cpp
 $(OBJS)\monolib_archive.o: ../../src/common/archive.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monolib_arrstr.o: ../../src/common/arrstr.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monolib_clntdata.o: ../../src/common/clntdata.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -7115,6 +7132,9 @@ $(OBJS)\monolib_stream.o: ../../src/common/stream.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_string.o: ../../src/common/string.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_stringimpl.o: ../../src/common/stringimpl.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_strvararg.o: ../../src/common/strvararg.cpp
@@ -9100,6 +9120,9 @@ $(OBJS)\basedll_arcfind.o: ../../src/common/arcfind.cpp
 $(OBJS)\basedll_archive.o: ../../src/common/archive.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\basedll_arrstr.o: ../../src/common/arrstr.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\basedll_clntdata.o: ../../src/common/clntdata.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -9241,6 +9264,9 @@ $(OBJS)\basedll_stream.o: ../../src/common/stream.cpp
 $(OBJS)\basedll_string.o: ../../src/common/string.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\basedll_stringimpl.o: ../../src/common/stringimpl.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\basedll_strvararg.o: ../../src/common/strvararg.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -9374,6 +9400,9 @@ $(OBJS)\baselib_arcfind.o: ../../src/common/arcfind.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_archive.o: ../../src/common/archive.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\baselib_arrstr.o: ../../src/common/arrstr.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_clntdata.o: ../../src/common/clntdata.cpp
@@ -9515,6 +9544,9 @@ $(OBJS)\baselib_stream.o: ../../src/common/stream.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_string.o: ../../src/common/string.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\baselib_stringimpl.o: ../../src/common/stringimpl.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_strvararg.o: ../../src/common/strvararg.cpp

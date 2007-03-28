@@ -13,10 +13,7 @@
 
 #include "wx/defs.h"
 #include "wx/chartype.h"
-
-// NB: this header is included from string.h as well, but from the place
-//     where wxStringImpl is already declared and that's all we need
-#include "wx/string.h"
+#include "wx/stringimpl.h"
 
 class WXDLLIMPEXP_BASE wxUniCharRef;
 

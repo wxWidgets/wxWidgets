@@ -312,6 +312,7 @@ ALL_BASE_HEADERS =  \
 	wx/strconv.h \
 	wx/stream.h \
 	wx/string.h \
+	wx/stringimpl.h \
 	wx/strvararg.h \
 	wx/sysopt.h \
 	wx/tarstrm.h \
@@ -450,6 +451,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/strconv.h \
 	wx/stream.h \
 	wx/string.h \
+	wx/stringimpl.h \
 	wx/strvararg.h \
 	wx/sysopt.h \
 	wx/tarstrm.h \
@@ -540,6 +542,7 @@ ALL_BASE_SOURCES =  \
 	src/common/arcall.cpp \
 	src/common/arcfind.cpp \
 	src/common/archive.cpp \
+	src/common/arrstr.cpp \
 	src/common/clntdata.cpp \
 	src/common/cmdline.cpp \
 	src/common/config.cpp \
@@ -587,6 +590,7 @@ ALL_BASE_SOURCES =  \
 	src/common/strconv.cpp \
 	src/common/stream.cpp \
 	src/common/string.cpp \
+	src/common/stringimpl.cpp \
 	src/common/strvararg.cpp \
 	src/common/sysopt.cpp \
 	src/common/tarstrm.cpp \
@@ -698,6 +702,7 @@ MONODLL_OBJECTS =  \
 	monodll_arcall.o \
 	monodll_arcfind.o \
 	monodll_archive.o \
+	monodll_arrstr.o \
 	monodll_clntdata.o \
 	monodll_cmdline.o \
 	monodll_config.o \
@@ -745,6 +750,7 @@ MONODLL_OBJECTS =  \
 	monodll_strconv.o \
 	monodll_stream.o \
 	monodll_string.o \
+	monodll_stringimpl.o \
 	monodll_strvararg.o \
 	monodll_sysopt.o \
 	monodll_tarstrm.o \
@@ -800,6 +806,7 @@ MONOLIB_OBJECTS =  \
 	monolib_arcall.o \
 	monolib_arcfind.o \
 	monolib_archive.o \
+	monolib_arrstr.o \
 	monolib_clntdata.o \
 	monolib_cmdline.o \
 	monolib_config.o \
@@ -847,6 +854,7 @@ MONOLIB_OBJECTS =  \
 	monolib_strconv.o \
 	monolib_stream.o \
 	monolib_string.o \
+	monolib_stringimpl.o \
 	monolib_strvararg.o \
 	monolib_sysopt.o \
 	monolib_tarstrm.o \
@@ -904,6 +912,7 @@ BASEDLL_OBJECTS =  \
 	basedll_arcall.o \
 	basedll_arcfind.o \
 	basedll_archive.o \
+	basedll_arrstr.o \
 	basedll_clntdata.o \
 	basedll_cmdline.o \
 	basedll_config.o \
@@ -951,6 +960,7 @@ BASEDLL_OBJECTS =  \
 	basedll_strconv.o \
 	basedll_stream.o \
 	basedll_string.o \
+	basedll_stringimpl.o \
 	basedll_strvararg.o \
 	basedll_sysopt.o \
 	basedll_tarstrm.o \
@@ -991,6 +1001,7 @@ BASELIB_OBJECTS =  \
 	baselib_arcall.o \
 	baselib_arcfind.o \
 	baselib_archive.o \
+	baselib_arrstr.o \
 	baselib_clntdata.o \
 	baselib_cmdline.o \
 	baselib_config.o \
@@ -1038,6 +1049,7 @@ BASELIB_OBJECTS =  \
 	baselib_strconv.o \
 	baselib_stream.o \
 	baselib_string.o \
+	baselib_stringimpl.o \
 	baselib_strvararg.o \
 	baselib_sysopt.o \
 	baselib_tarstrm.o \
@@ -12663,6 +12675,9 @@ monodll_arcfind.o: $(srcdir)/src/common/arcfind.cpp $(MONODLL_ODEP)
 monodll_archive.o: $(srcdir)/src/common/archive.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/archive.cpp
 
+monodll_arrstr.o: $(srcdir)/src/common/arrstr.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/arrstr.cpp
+
 monodll_clntdata.o: $(srcdir)/src/common/clntdata.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/clntdata.cpp
 
@@ -12803,6 +12818,9 @@ monodll_stream.o: $(srcdir)/src/common/stream.cpp $(MONODLL_ODEP)
 
 monodll_string.o: $(srcdir)/src/common/string.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/string.cpp
+
+monodll_stringimpl.o: $(srcdir)/src/common/stringimpl.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/stringimpl.cpp
 
 monodll_strvararg.o: $(srcdir)/src/common/strvararg.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/strvararg.cpp
@@ -16812,6 +16830,9 @@ monolib_arcfind.o: $(srcdir)/src/common/arcfind.cpp $(MONOLIB_ODEP)
 monolib_archive.o: $(srcdir)/src/common/archive.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/archive.cpp
 
+monolib_arrstr.o: $(srcdir)/src/common/arrstr.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/arrstr.cpp
+
 monolib_clntdata.o: $(srcdir)/src/common/clntdata.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/clntdata.cpp
 
@@ -16952,6 +16973,9 @@ monolib_stream.o: $(srcdir)/src/common/stream.cpp $(MONOLIB_ODEP)
 
 monolib_string.o: $(srcdir)/src/common/string.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/string.cpp
+
+monolib_stringimpl.o: $(srcdir)/src/common/stringimpl.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/stringimpl.cpp
 
 monolib_strvararg.o: $(srcdir)/src/common/strvararg.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/strvararg.cpp
@@ -20964,6 +20988,9 @@ basedll_arcfind.o: $(srcdir)/src/common/arcfind.cpp $(BASEDLL_ODEP)
 basedll_archive.o: $(srcdir)/src/common/archive.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/archive.cpp
 
+basedll_arrstr.o: $(srcdir)/src/common/arrstr.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/arrstr.cpp
+
 basedll_clntdata.o: $(srcdir)/src/common/clntdata.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/clntdata.cpp
 
@@ -21104,6 +21131,9 @@ basedll_stream.o: $(srcdir)/src/common/stream.cpp $(BASEDLL_ODEP)
 
 basedll_string.o: $(srcdir)/src/common/string.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/string.cpp
+
+basedll_stringimpl.o: $(srcdir)/src/common/stringimpl.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/stringimpl.cpp
 
 basedll_strvararg.o: $(srcdir)/src/common/strvararg.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/strvararg.cpp
@@ -21561,6 +21591,9 @@ baselib_arcfind.o: $(srcdir)/src/common/arcfind.cpp $(BASELIB_ODEP)
 baselib_archive.o: $(srcdir)/src/common/archive.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/archive.cpp
 
+baselib_arrstr.o: $(srcdir)/src/common/arrstr.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/arrstr.cpp
+
 baselib_clntdata.o: $(srcdir)/src/common/clntdata.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/clntdata.cpp
 
@@ -21701,6 +21734,9 @@ baselib_stream.o: $(srcdir)/src/common/stream.cpp $(BASELIB_ODEP)
 
 baselib_string.o: $(srcdir)/src/common/string.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/string.cpp
+
+baselib_stringimpl.o: $(srcdir)/src/common/stringimpl.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/stringimpl.cpp
 
 baselib_strvararg.o: $(srcdir)/src/common/strvararg.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/strvararg.cpp

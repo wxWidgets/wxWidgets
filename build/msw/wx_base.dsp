@@ -468,6 +468,10 @@ SOURCE=..\..\src\common\archive.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\arrstr.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\clntdata.cpp
 # End Source File
 # Begin Source File
@@ -672,6 +676,10 @@ SOURCE=..\..\src\common\stream.cpp
 # Begin Source File
 
 SOURCE=..\..\src\common\string.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\stringimpl.cpp
 # End Source File
 # Begin Source File
 
@@ -1768,6 +1776,10 @@ SOURCE=..\..\include\wx\stream.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\string.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\stringimpl.h
 # End Source File
 # Begin Source File
 

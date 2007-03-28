@@ -293,6 +293,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/arcall.cpp
     src/common/arcfind.cpp
     src/common/archive.cpp
+    src/common/arrstr.cpp
     src/common/clntdata.cpp
     src/common/cmdline.cpp
     src/common/config.cpp
@@ -340,6 +341,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/strconv.cpp
     src/common/stream.cpp
     src/common/string.cpp
+    src/common/stringimpl.cpp
     src/common/strvararg.cpp
     src/common/sysopt.cpp
     src/common/tarstrm.cpp
@@ -454,6 +456,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/strconv.h
     wx/stream.h
     wx/string.h
+    wx/stringimpl.h
     wx/strvararg.h
     wx/sysopt.h
     wx/tarstrm.h
