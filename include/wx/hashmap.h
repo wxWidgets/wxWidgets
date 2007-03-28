@@ -561,21 +561,29 @@ public:
     wxPointerEqual& operator=(const wxPointerEqual&) { return *this; }
 };
 
-// wxString, char*, wxChar*
+// wxString, char*, wchar_t*
 class WXDLLIMPEXP_BASE wxStringHash
 {
 public:
     wxStringHash() {}
     unsigned long operator()( const wxString& x ) const
-        { return wxCharStringHash( x.c_str() ); }
-    unsigned long operator()( const wxChar* x ) const
-        { return wxCharStringHash( x ); }
-    static unsigned long wxCharStringHash( const wxChar* );
-#if wxUSE_UNICODE
+        { return stringHash( x.wx_str() ); }
+    unsigned long operator()( const wchar_t* x ) const
+        { return stringHash( x ); }
     unsigned long operator()( const char* x ) const
-        { return charStringHash( x ); }
-    static unsigned long charStringHash( const char* );
-#endif // wxUSE_UNICODE
+        { return stringHash( x ); }
+
+#if WXWIN_COMPATIBILITY_2_8
+    static unsigned long wxCharStringHash( const wxChar* x )
+        { return stringHash(x); }
+    #if wxUSE_UNICODE
+    static unsigned long charStringHash( const char* x )
+        { return stringHash(x); }
+    #endif
+#endif // WXWIN_COMPATIBILITY_2_8
+
+    static unsigned long stringHash( const wchar_t* );
+    static unsigned long stringHash( const char* );
 
     wxStringHash& operator=(const wxStringHash&) { return *this; }
 };

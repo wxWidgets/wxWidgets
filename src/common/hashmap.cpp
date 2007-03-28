@@ -22,7 +22,8 @@
 /* from requirements by Colin Plumb. */
 /* (http://burtleburtle.net/bob/hash/doobs.html) */
 /* adapted from Perl sources ( hv.h ) */
-unsigned long wxStringHash::wxCharStringHash( const wxChar* k )
+template<typename T>
+static unsigned long DoStringHash(T *k)
 {
     unsigned long hash = 0;
 
@@ -38,23 +39,12 @@ unsigned long wxStringHash::wxCharStringHash( const wxChar* k )
     return hash + (hash << 15);
 }
 
-#if wxUSE_UNICODE
-unsigned long wxStringHash::charStringHash( const char* k )
-{
-    unsigned long hash = 0;
+unsigned long wxStringHash::stringHash( const char* k )
+  { return DoStringHash(k); }
 
-    while( *k )
-    {
-        hash += *k++;
-        hash += (hash << 10);
-        hash ^= (hash >> 6);
-    }
-    hash += (hash << 3);
-    hash ^= (hash >> 11);
+unsigned long wxStringHash::stringHash( const wchar_t* k )
+  { return DoStringHash(k); }
 
-    return hash + (hash << 15);
-}
-#endif
 
 #if !wxUSE_STL || !defined(HAVE_STL_HASH_MAP)
 
