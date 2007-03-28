@@ -1839,6 +1839,7 @@ public:
   wxString& operator+=(wxUniChar ch)
     { m_impl += EncodeChar(ch); return *this; }
   wxString& operator+=(wxUniCharRef ch) { return *this += wxUniChar(ch); }
+  wxString& operator+=(int ch) { return *this += wxUniChar(ch); }
   wxString& operator+=(char ch) { return *this += wxUniChar(ch); }
   wxString& operator+=(unsigned char ch) { return *this += wxUniChar(ch); }
   wxString& operator+=(wchar_t ch) { return *this += wxUniChar(ch); }
