@@ -53,6 +53,7 @@ private:
 #endif // wxLongLong_t
         CPPUNIT_TEST( ToDouble );
         CPPUNIT_TEST( WriteBuf );
+        CPPUNIT_TEST( CStrData );
     CPPUNIT_TEST_SUITE_END();
 
     void String();
@@ -76,6 +77,8 @@ private:
 #endif // wxLongLong_t
     void ToDouble();
     void WriteBuf();
+    void CStrData();
+    void DoCStrData(bool cond);
 
     DECLARE_NO_COPY_CLASS(StringTestCase)
 };
@@ -652,3 +655,39 @@ void StringTestCase::WriteBuf()
     CPPUNIT_ASSERT_EQUAL( 0, wxStrcmp(_T("barr"), s) );
 }
 
+
+
+void StringTestCase::CStrData()
+{
+    DoCStrData(true);
+    DoCStrData(false);
+}
+
+template<typename T> bool CheckStr(const wxString& expected, T s)
+{
+    return expected == wxString(s);
+}
+
+void StringTestCase::DoCStrData(bool cond)
+{
+    // test compilation of wxCStrData when used with operator?: (the asserts
+    // are not very important, we're testing if the code compiles at all):
+
+    wxString s("foo");
+    const char *mbStr = "foo";
+    const wchar_t *wcStr = L"foo";
+
+    // FIXME-UTF8: when wxCStrData can handle both conversions, this should
+    //             be changed to always test all versions, both MB and WC
+#if wxUSE_UNICODE
+    CPPUNIT_ASSERT( CheckStr(s, (cond ? s.c_str() : wcStr)) );
+    CPPUNIT_ASSERT( CheckStr(s, (cond ? s.c_str() : L"bar")) );
+    CPPUNIT_ASSERT( CheckStr(s, (cond ? wcStr : s.c_str())) );
+    CPPUNIT_ASSERT( CheckStr(s, (cond ? L"bar" : s.c_str())) );
+#else
+    CPPUNIT_ASSERT( CheckStr(s, (cond ? s.c_str() : mbStr)) );
+    CPPUNIT_ASSERT( CheckStr(s, (cond ? s.c_str() : "foo")) );
+    CPPUNIT_ASSERT( CheckStr(s, (cond ? mbStr : s.c_str())) );
+    CPPUNIT_ASSERT( CheckStr(s, (cond ? "foo" : s.c_str())) );
+#endif
+}
