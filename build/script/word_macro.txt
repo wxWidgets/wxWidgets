@@ -5,11 +5,6 @@
 Sub wx_ps()
     swxWIN = Environ("WXWIN")
     do_ps swxWIN & "\docs\pdf\", "wx"
-    do_ps swxWIN & "\contrib\docs\latex\svg", "svg"
-    do_ps swxWIN & "\contrib\docs\latex\ogl", "ogl"
-    do_ps swxWIN & "\contrib\docs\latex\mmedia", "mmedia"
-    do_ps swxWIN & "\contrib\docs\latex\gizmos", "gizmos"
-    do_ps swxWIN & "\contrib\docs\latex\fl", "fl"
     do_ps swxWIN & "\utils\tex2rtf\docs", "tex2rtf"
 
     bye_bye
