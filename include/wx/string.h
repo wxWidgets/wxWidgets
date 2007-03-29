@@ -220,6 +220,26 @@ public:
     wxCStrData operator+(size_t n) const
         { return wxCStrData(m_str, m_offset + n, m_owned); }
 
+    // and these for "str.c_str() + n - 2":
+    wxCStrData operator-(int n) const
+    {
+        wxASSERT_MSG( n <= (int)m_offset,
+                      _T("attempt to construct address before the beginning of the string") );
+        return wxCStrData(m_str, m_offset - n, m_owned);
+    }
+    wxCStrData operator-(long n) const
+    {
+        wxASSERT_MSG( n <= (int)m_offset,
+                      _T("attempt to construct address before the beginning of the string") );
+        return wxCStrData(m_str, m_offset - n, m_owned);
+    }
+    wxCStrData operator-(size_t n) const
+    {
+        wxASSERT_MSG( n <= (int)m_offset,
+                      _T("attempt to construct address before the beginning of the string") );
+        return wxCStrData(m_str, m_offset - n, m_owned);
+    }
+
     // this operator is needed to make expressions like "*c_str()" or
     // "*(c_str() + 2)" work
     wxUniChar operator*() const;
