@@ -156,12 +156,12 @@ rm ${WORKDIR}/archives/htb/*.*
 
 ######### dir index.tex rootdir
 do_texrtf wx manual.tex
-do_texrtf book book.tex
-do_texrtf svg dcsvg.tex contrib
-do_texrtf ogl ogl.tex contrib
-do_texrtf mmedia mmedia.tex contrib
-do_texrtf gizmos manual.tex contrib
-do_texrtf fl fl.tex contrib
+#do_texrtf book book.tex
+#do_texrtf svg dcsvg.tex contrib
+#do_texrtf ogl ogl.tex contrib
+#do_texrtf mmedia mmedia.tex contrib
+#do_texrtf gizmos manual.tex contrib
+#do_texrtf fl fl.tex contrib
 do_util_texrtf tex2rtf tex2rtf.tex 
 
 cd ${WORKDIR}/archives/
