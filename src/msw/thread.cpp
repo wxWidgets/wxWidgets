@@ -771,7 +771,7 @@ wxThreadInternal::WaitForTerminate(wxCriticalSection& cs,
             // loop to process them as otherwise we'd enter an infinite loop
             // with MsgWaitForMultipleObjects() always returning WAIT_OBJECT_0
             // + 1 because the message would remain forever in the queue
-            result = ::WaitForSingleObject(&m_hThread, INFINITE);
+            result = ::WaitForSingleObject(m_hThread, INFINITE);
         }
         else // wait for thread termination without blocking the GUI
         {

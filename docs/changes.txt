@@ -98,6 +98,7 @@ wxMSW:
 - Don't lose combobox text when it's opened and closed (Kolya Kosenko)
 - Corrected GetChecked() for events from checkable menu items (smanders)
 - Fixed popup menus under Windows NT 4
+- Fixed bug in wxThread::Wait() in console applications introduced in 2.8.3
 
 wxGTK:
 
