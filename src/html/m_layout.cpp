@@ -346,12 +346,12 @@ TAG_HANDLER_BEGIN(BODY, "BODY")
                 wxInputStream *is = fileBgImage->GetStream();
                 if ( is )
                 {
-#if !defined(__WXMSW__) || wxUSE_WXDIB
                     wxImage image(*is);
                     if ( image.Ok() )
                         winIface->SetHTMLBackgroundImage(image);
-#endif
                 }
+
+                delete fileBgImage;
             }
         }
 
