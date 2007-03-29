@@ -21,12 +21,11 @@
 #endif
 
 #include "wx/arrstr.h"
+#include "wx/thread.h" 
 
 // ============================================================================
 // ArrayString
 // ============================================================================
-
-#include "wx/arrstr.h"
 
 wxArrayString::wxArrayString(size_t sz, const wxChar** a)
 {
