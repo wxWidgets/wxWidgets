@@ -39,6 +39,9 @@ tex2rtf.html:         $(DOCSOURCES) tex2rtf.ini
         -erase *.ref
         -erase *.con
         -erase *.ref
+        -mkdir html
+	-copy *.html html
+	-copy *.gif  html
 
 tex2rtf.htb:         tex2rtf_contents.html
         -zip tex2rtf.htb tex2rtf*.html *.hhp *.hhk *.hhc *.gif
