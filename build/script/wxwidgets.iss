@@ -3,13 +3,13 @@
 
 #if GetEnv("WXW_VER") == "CVS"
     #define INFOFILE  "C:\wx\inno\wxWidgets\BuildCVS.txt"
-    #define SETUPFILENAME  "wxMSW-cvs-Setup"
     #define WX_VERSION "CVS"
 #else
     #define INFOFILE "C:\wx\inno\wxWidgets\docs\msw\install.txt"
-    #define SETUPFILENAME  "wxMSW-" + GetENV("WXW_VER") + "-Setup"
     #define WX_VERSION GetENV("WXW_VER")
 #endif
+
+#define SETUPFILENAME  "wxMSW-" + GetENV("WXW_VER") + "-Setup"
 
 
 
