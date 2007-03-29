@@ -144,6 +144,7 @@ wx/arrstr.h
 wx/beforestd.h
 wx/buffer.h
 wx/build.h
+wx/chartype.h
 wx/chkconf.h
 wx/clntdata.h
 wx/cmdline.h
@@ -223,6 +224,7 @@ wx/stopwatch.h
 wx/strconv.h
 wx/stream.h
 wx/string.h
+wx/stringimpl.h
 wx/strvararg.h
 wx/sysopt.h
 wx/tarstrm.h
@@ -234,6 +236,7 @@ wx/timer.h
 wx/tokenzr.h
 wx/txtstrm.h
 wx/types.h
+wx/unichar.h
 wx/uri.h
 wx/utils.h
 wx/variant.h
@@ -243,6 +246,7 @@ wx/volume.h
 wx/wfstream.h
 wx/wx.h
 wx/wxchar.h
+wx/wxcrt.h
 wx/wxprec.h
 wx/xti.h
 wx/xtistrm.h
