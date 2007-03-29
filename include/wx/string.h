@@ -235,7 +235,7 @@ public:
     }
     wxCStrData operator-(size_t n) const
     {
-        wxASSERT_MSG( n <= (int)m_offset,
+        wxASSERT_MSG( n <= m_offset,
                       _T("attempt to construct address before the beginning of the string") );
         return wxCStrData(m_str, m_offset - n, m_owned);
     }
