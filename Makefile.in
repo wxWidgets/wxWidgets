@@ -2022,6 +2022,7 @@ COND_TOOLKIT_COCOA_GUI_HDR =  \
 	wx/cocoa/textctrl.h \
 	wx/cocoa/timer.h \
 	wx/cocoa/toolbar.h \
+	wx/cocoa/tooltip.h \
 	wx/cocoa/toplevel.h \
 	wx/cocoa/window.h \
 	wx/generic/caret.h \
