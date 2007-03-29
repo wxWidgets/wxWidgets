@@ -40,5 +40,5 @@ tex2rtf.html:         $(DOCSOURCES) tex2rtf.ini
         -erase *.ref
 
 tex2rtf.htb:         tex2rtf_contents.html
-        -zip32 tex2rtf.htb tex2rtf*.html *.hhp *.hhk *.hhc *.gif
+        -zip tex2rtf.htb tex2rtf*.html *.hhp *.hhk *.hhc *.gif
 
