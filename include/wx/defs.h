@@ -491,25 +491,20 @@ typedef int wxWindowID;
 /*  ---------------------------------------------------------------------------- */
 
 /*  Printf-like attribute definitions to obtain warnings with GNU C/C++ */
-#if defined(__GNUC__) && !wxUSE_UNICODE
-#  ifndef ATTRIBUTE_PRINTF
-#    define ATTRIBUTE_PRINTF(m, n) __attribute__ ((__format__ (__printf__, m, n)))
-#    define ATTRIBUTE_PRINTF_1 ATTRIBUTE_PRINTF(1, 2)
-#    define ATTRIBUTE_PRINTF_2 ATTRIBUTE_PRINTF(2, 3)
-#    define ATTRIBUTE_PRINTF_3 ATTRIBUTE_PRINTF(3, 4)
-#    define ATTRIBUTE_PRINTF_4 ATTRIBUTE_PRINTF(4, 5)
-#    define ATTRIBUTE_PRINTF_5 ATTRIBUTE_PRINTF(5, 6)
-#  endif /* ATTRIBUTE_PRINTF */
-#else
-#  ifndef ATTRIBUTE_PRINTF
-#    define ATTRIBUTE_PRINTF
-#    define ATTRIBUTE_PRINTF_1
-#    define ATTRIBUTE_PRINTF_2
-#    define ATTRIBUTE_PRINTF_3
-#    define ATTRIBUTE_PRINTF_4
-#    define ATTRIBUTE_PRINTF_5
-#  endif /* ATTRIBUTE_PRINTF */
-#endif
+#ifndef ATTRIBUTE_PRINTF
+#   if defined(__GNUC__) && !wxUSE_UNICODE
+#       define ATTRIBUTE_PRINTF(m, n) __attribute__ ((__format__ (__printf__, m, n)))
+#   else
+#       define ATTRIBUTE_PRINTF(m, n)
+#   endif
+
+#   define ATTRIBUTE_PRINTF_1 ATTRIBUTE_PRINTF(1, 2)
+#   define ATTRIBUTE_PRINTF_2 ATTRIBUTE_PRINTF(2, 3)
+#   define ATTRIBUTE_PRINTF_3 ATTRIBUTE_PRINTF(3, 4)
+#   define ATTRIBUTE_PRINTF_4 ATTRIBUTE_PRINTF(4, 5)
+#   define ATTRIBUTE_PRINTF_5 ATTRIBUTE_PRINTF(5, 6)
+#endif /* !defined(ATTRIBUTE_PRINTF) */
+
 
 /*  Macro to issue warning when using deprecated functions with gcc3 or MSVC7: */
 #if wxCHECK_GCC_VERSION(3, 1)
