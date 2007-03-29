@@ -180,11 +180,11 @@ add_win_files ()
 {
 ### starts with wx***.zip
 
-for f in `find ${WINSRCDIR}/ -name wx\*.zip ` ; do       
+for f in `find ${WINSRCDIR}/ -maxdepth 0 -name wx\*.zip ` ; do       
        cp $f ${WORKDIR}/archives/win/`basename $f | sed -e "s/.zip//"`-${CURDATE}.zip
        done
 
-for f in `find ${WINSRCDIR}/ -name wx\*.exe ` ; do       
+for f in `find ${WINSRCDIR}/ -maxdepth 0 -name wx\*.exe ` ; do       
        cp $f ${WORKDIR}/archives/win/`basename $f | sed -e "s/.exe//"`-${CURDATE}.exe
        done
 
