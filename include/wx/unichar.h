@@ -98,6 +98,7 @@ public:
     wxUniChar& operator=(const wxUniChar& c) { m_value = c.m_value; return *this; }
     wxUniChar& operator=(char c) { m_value = From8bit(c); return *this; }
     wxUniChar& operator=(wchar_t c) { m_value = c; return *this; }
+    wxUniChar& operator=(int c) { m_value = c; return *this; }
 #ifdef wxWINT_T_IS_SEPARATE_TYPE
     wxUniChar& operator=(wint_t c) { m_value = c; return *this; }
 #endif
@@ -170,6 +171,7 @@ public:
 
     wxUniCharRef& operator=(char c) { return *this = wxUniChar(c); }
     wxUniCharRef& operator=(wchar_t c) { return *this = wxUniChar(c); }
+    wxUniCharRef& operator=(int c) { return *this = wxUniChar(c); }
 #ifdef wxWINT_T_IS_SEPARATE_TYPE
     wxUniCharRef& operator=(wint_t c) { return *this = wxUniChar(c); }
 #endif
