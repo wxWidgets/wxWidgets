@@ -11,10 +11,11 @@ LOCALDOCDIR=.
 
 DOCSOURCES=tex2rtf.tex
 
-all: tex2rtf.chm tex2rtf.htb
+all: chm htb hlp html htmlhelp pdfrtf
 
-hlp: tex2rtf.hlp
-htb: tex2rtf.htb
+chm:  tex2rtf.chm
+hlp:  tex2rtf.hlp
+htb:  tex2rtf.htb
 html: tex2rtf.html
 htmlhelp: tex2rtf.chm
 pdfrtf: tex2rtf_rtf.rtf

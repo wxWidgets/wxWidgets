@@ -22,7 +22,10 @@ htb:	$(DOCDIR)\htb\wx.htb
 wxhtml:	$(DOCDIR)\html\wx\wx_contents.html
 htmlhelp: $(DOCDIR)\htmlhelp\wx.chm
 
-
+tex2rtf:
+	cd $(WXWIN)\utils\tex2rtf\docs
+	nmake -f makefile.vc
+	cd $(THISDIR)
 
 
 $(DOCDIR)/winhelp/wx.hlp:         $(DOCDIR)/latex/wx/wx.rtf $(DOCDIR)/latex/wx/wx.hpj
@@ -75,37 +78,7 @@ $(DOCDIR)\htmlhelp\wx.chm : $(DOCDIR)\html\wx\wx_contents.html $(DOCDIR)\mshtml\
     	move wx.chm ..\..\htmlhelp
 	cd $(THISDIR)
 
-#$(WXDIR)\docs\latex\wx\manual.dvi:	$(DOCDIR)/latex/wx/body.tex $(DOCDIR)/latex/wx/manual.tex
-#	cd $(WXDIR)\docs\latex\wx
-#        -latex manual
-#        -latex manual
-#        -makeindx manual
-#        -bibtex manual
-#        -latex manual
-#        -latex manual
-#        cd $(THISDIR)
 
-#$(WXDIR)\docs\ps\wx.ps:	$(WXDIR)\docs\latex\wx\manual.dvi
-#	cd $(WXDIR)\docs\latex\wx
-#        -dvips32 -o wx.ps manual
-#        move wx.ps $(WXDIR)\docs\ps\wx.ps
-#        cd $(THISDIR)
-
-#$(WXDIR)\docs\latex\wx\referenc.dvi:	$(DOCDIR)/latex/wx/classes.tex $(DOCDIR)/latex/wx/topics.tex $(DOCDIR)/latex/wx/referenc.tex
-#	cd $(WXDIR)\docs\latex\wx
-#        -latex referenc
-#        -latex referenc
-#        -makeindx referenc
-#        -bibtex referenc
-#        -latex referenc
-#        -latex referenc
-#        cd $(THISDIR)
-
-#$(WXDIR)\docs\ps\referenc.ps:	$(WXDIR)\docs\latex\wx\referenc.dvi
-#	cd $(WXDIR)\docs\latex\wx
-#        -dvips32 -o referenc.ps referenc
-#        move referenc.ps $(WXDIR)\docs\ps\referenc.ps
-#        cd $(THISDIR)
 
 # An htb file is a zip file containing the .htm, .gif, .hhp, .hhc and .hhk
 # files, renamed to htb.
@@ -152,87 +125,4 @@ cleanonlinehelp:
     -erase $(DOCDIR)\htb\wx.htb
 
 
-# Start Word, running the GeneratePDF macro. MakeManual.dot should be in the
-# Office StartUp folder, and PDFMaker should be installed.
-#updatepdf:  # touchmanual pdfrtf
-#    start $(WAITFLAG) "\progra~1\micros~3\office\winword.exe c:\wx\wxWidgets\docs\pdf\wx.rtf /mGeneratePDF"
-
-
-
-######################
-# Tex2RTF
-######################
-
-TEX2RTFDOCDIR=$(WXDIR)\utils\tex2rtf\docs
-
-tex2rtfhtml: $(DOCDIR)\html\tex2rtf\t2rtf.htm
-tex2rtfhtmlhelp: $(DOCDIR)\htmlhelp\tex2rtf.chm
-tex2rtfhtb:	$(DOCDIR)\htb\tex2rtf.htb
-tex2rtfhlp: $(DOCDIR)\winhelp\tex2rtf.hlp
-tex2rtfpdfrtf: $(DOCDIR)\pdf\tex2rtf.rtf
-tex2rtfps: $(WXDIR)\docs\ps\tex2rtf.ps
-
-$(DOCDIR)\winhelp\tex2rtf.hlp:         $(TEX2RTFDOCDIR)\tex2rtf.rtf $(TEX2RTFDOCDIR)\tex2rtf.hpj
-        cd $(TEX2RTFDOCDIR)
-        -erase tex2rtf.ph
-        hcw /c /e tex2rtf
-        copy tex2rtf.hlp $(DOCDIR)\winhelp\tex2rtf.hlp
-        copy tex2rtf.cnt $(DOCDIR)\winhelp\tex2rtf.cnt
-        cd $(THISDIR)
-
-$(TEX2RTFDOCDIR)\tex2rtf.rtf: $(DOCSOURCES)
-        cd $(TEX2RTFDOCDIR)
-        -start /w tex2rtf $(TEX2RTFDOCDIR)\tex2rtf.tex $(TEX2RTFDOCDIR)\tex2rtf.rtf -twice -winhelp
-        cd $(THISDIR)
-
-$(DOCDIR)\pdf\tex2rtf.rtf: $(DOCSOURCES)
-        cd $(TEX2RTFDOCDIR)
-        -copy *.wmf $(DOCDIR)\pdf
-        -copy *.bmp $(DOCDIR)\pdf
-        -start /w tex2rtf $(TEX2RTFDOCDIR)\tex2rtf.tex $(DOCDIR)\pdf\tex2rtf.rtf -twice -rtf
-        cd $(THISDIR)
-
-$(DOCDIR)\html\tex2rtf\t2rtf.htm:         $(DOCSOURCES)
-        cd $(TEX2RTFDOCDIR)
-        -mkdir $(DOCDIR)\html\tex2rtf
-        -copy *.gif $(DOCDIR)\html\tex2rtf
-        -start /w tex2rtf $(TEX2RTFDOCDIR)\tex2rtf.tex $(DOCDIR)\html\tex2rtf\t2rtf.htm -twice -html
-        -erase $(DOCDIR)\html\tex2rtf\*.con
-        -erase $(DOCDIR)\html\tex2rtf\*.ref
-        cd $(THISDIR)
-
-$(DOCDIR)\htmlhelp\tex2rtf.chm : $(DOCDIR)\html\tex2rtf\t2rtf.htm $(DOCDIR)\html\tex2rtf\t2rtf.hhp
-	cd $(DOCDIR)\html\tex2rtf
-	-hhc t2rtf.hhp
-    	move t2rtf.chm $(DOCDIR)\htmlhelp\tex2rtf.chm
-	cd $(THISDIR)
-
-# An htb file is a zip file containing the .htm, .gif, .hhp, .hhc and .hhk
-# files, renamed to htb.
-# This can then be used with e.g. helpview.
-# Optionally, a cached version of the .hhp file can be generated with hhp2cached.
-$(DOCDIR)\htb\tex2rtf.htb: $(DOCDIR)\html\tex2rtf\t2rtf.htm
-	cd $(DOCDIR)\html\tex2rtf
-    -erase tex2rtf.zip tex2rtf.htb
-    zip tex2rtf.zip *.htm *.gif *.hhp *.hhc *.hhk
-    -mkdir $(DOCDIR)\htb
-    move tex2rtf.zip $(DOCDIR)\htb\tex2rtf.htb
-    cd $(THISDIR)
-
-#$(TEX2RTFDOCDIR)\tex2rtf.dvi:	$(DOCSOURCES)
-#	cd $(TEX2RTFDOCDIR)
-#        -latex tex2rtf
-#        -latex tex2rtf
-#        -makeindx tex2rtf
-#        -bibtex tex2rtf
-#        -latex tex2rtf
-#        -latex tex2rtf
-#        cd $(THISDIR)
-
-#$(WXDIR)\docs\ps\tex2rtf.ps:	$(TEX2RTFDOCDIR)\tex2rtf.dvi
-#	cd $(TEX2RTFDOCDIR)
-#        -dvips32 -o tex2rtf.ps tex2rtf
-#        copy tex2rtf.ps $(WXDIR)\docs\ps\tex2rtf.ps
-#        cd $(THISDIR)
-#
 
