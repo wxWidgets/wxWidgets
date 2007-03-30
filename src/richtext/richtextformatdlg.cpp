@@ -335,20 +335,18 @@ int wxRichTextFormattingDialogFactory::GetPageIdCount() const
 /// Set the sheet style, called at the start of wxRichTextFormattingDialog::Create
 bool wxRichTextFormattingDialogFactory::SetSheetStyle(wxRichTextFormattingDialog* dialog)
 {
-    bool useToolBook = wxRICHTEXT_USE_TOOLBOOK;
-    if (useToolBook)
-    {
-        int sheetStyle = wxPROPSHEET_SHRINKTOFIT;
+#if wxRICHTEXT_USE_TOOLBOOK
+    int sheetStyle = wxPROPSHEET_SHRINKTOFIT;
 #ifdef __WXMAC__
-        sheetStyle |= wxPROPSHEET_BUTTONTOOLBOOK;
+    sheetStyle |= wxPROPSHEET_BUTTONTOOLBOOK;
 #else
-        sheetStyle |= wxPROPSHEET_TOOLBOOK;
+    sheetStyle |= wxPROPSHEET_TOOLBOOK;
 #endif
 
-        dialog->SetSheetStyle(sheetStyle);
-        dialog->SetSheetInnerBorder(0);
-        dialog->SetSheetOuterBorder(0);
-    }
+    dialog->SetSheetStyle(sheetStyle);
+    dialog->SetSheetInnerBorder(0);
+    dialog->SetSheetOuterBorder(0);
+#endif // wxRICHTEXT_USE_TOOLBOOK
 
     return true;
 }
@@ -356,17 +354,16 @@ bool wxRichTextFormattingDialogFactory::SetSheetStyle(wxRichTextFormattingDialog
 /// Create the main dialog buttons
 bool wxRichTextFormattingDialogFactory::CreateButtons(wxRichTextFormattingDialog* dialog)
 {
-    bool useToolBook = wxRICHTEXT_USE_TOOLBOOK;
-
-    // If using a toolbook, also follow Mac style and don't create buttons
     int flags = wxOK|wxCANCEL;
 #ifndef __WXWINCE__
     if (dialog->GetWindowStyleFlag() & wxRICHTEXT_FORMAT_HELP_BUTTON)
         flags |= wxHELP;
 #endif
 
-    if (!useToolBook)
-        dialog->CreateButtons(flags);
+    // If using a toolbook, also follow Mac style and don't create buttons
+#if !wxRICHTEXT_USE_TOOLBOOK
+    dialog->CreateButtons(flags);
+#endif
 
     return true;
 }
