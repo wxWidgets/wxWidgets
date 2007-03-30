@@ -525,7 +525,7 @@ private:
     bool             getDataTypeInfo(SWORD fSqlType, wxDbSqlTypeInfo &structSQLTypeInfo);
     bool             setConnectionOptions(void);
     void             logError(const wxString &errMsg, const wxString &SQLState);
-    const wxChar    *convertUserID(const wxChar *userID, wxString &UserID);
+    void             convertUserID(const wxChar *userID, wxString &UserID);
     bool             determineDataTypes(bool failOnDataTypeUnsupported);
     void             initialize();
     bool             open(bool failOnDataTypeUnsupported=true);
