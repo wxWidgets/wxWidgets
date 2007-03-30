@@ -1120,18 +1120,17 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
 
     // copy contents of file1 to file2
     char buf[4096];
-    size_t count;
     for ( ;; )
     {
-        count = fileIn.Read(buf, WXSIZEOF(buf));
-        if ( fileIn.Error() )
+        ssize_t count = fileIn.Read(buf, WXSIZEOF(buf));
+        if ( count == wxInvalidOffset )
             return false;
 
         // end of file?
         if ( !count )
             break;
 
-        if ( fileOut.Write(buf, count) < count )
+        if ( fileOut.Write(buf, count) < (size_t)count )
             return false;
     }
 
