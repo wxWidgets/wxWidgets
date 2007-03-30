@@ -178,8 +178,11 @@ wxSize wxStaticText::DoGetBestSize() const
     // Do not return any arbitrary default value...
     wxASSERT_MSG( m_widget, wxT("wxStaticText::DoGetBestSize called before creation") );
 
-    // GetBestSize is supposed to return unwrapped size
-    gtk_label_set_line_wrap( GTK_LABEL(m_widget), FALSE );
+    // GetBestSize is supposed to return unwrapped size but calling
+    // gtk_label_set_line_wrap() from here is a bad idea as it queues another
+    // size request by calling gtk_widget_queue_resize() and we end up in
+    // infinite loop sometimes (notably when the control is in a toolbar)
+    GTK_LABEL(m_widget)->wrap = FALSE;
 
     GtkRequisition req;
     req.width = -1;
@@ -187,7 +190,7 @@ wxSize wxStaticText::DoGetBestSize() const
     (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(m_widget) )->size_request )
         (m_widget, &req );
 
-    gtk_label_set_line_wrap( GTK_LABEL(m_widget), TRUE );
+    GTK_LABEL(m_widget)->wrap = TRUE; // restore old value
 
     // Adding 1 to width to workaround GTK sometimes wrapping the text needlessly
     return wxSize (req.width+1, req.height);
