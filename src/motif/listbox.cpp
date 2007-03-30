@@ -272,11 +272,10 @@ int wxDoFindStringInList(Widget w, const wxString& s)
     bool success = XmListGetMatchPos (w, str(),
                                       &positions, &no_positions);
 
-    if (success)
+    if (success && positions)
     {
         int pos = positions[0];
-        if (positions)
-            XtFree ((char *) positions);
+        XtFree ((char *) positions);
         return pos - 1;
     }
     else
