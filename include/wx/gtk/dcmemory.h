@@ -35,14 +35,17 @@ public:
     virtual void SetTextBackground( const wxColour &col );
 
     // implementation
-    virtual wxBitmap GetSelectedBitmap() const { return m_selected; }        
+    wxBitmap GetSelectedBitmap() const { return m_selected; }
     wxBitmap  m_selected;
 
 protected:
     void DoGetSize( int *width, int *height ) const;
     virtual void DoSelect(const wxBitmap& bitmap);
-    virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const 
-    { return subrect == NULL ? GetSelectedBitmap() : GetSelectedBitmap().GetSubBitmap(*subrect); }
+    virtual wxBitmap DoGetAsBitmap(const wxRect *subrect) const
+    {
+        wxBitmap bmp = GetSelectedBitmap();
+        return subrect ? bmp.GetSubBitmap(*subrect) : bmp;
+    }
 
 private:
     void Init();

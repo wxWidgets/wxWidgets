@@ -95,7 +95,6 @@ public:
     virtual void ComputeScaleAndOrigin();
 
     virtual GdkWindow* GetGDKWindow() const { return NULL; }
-    virtual wxBitmap GetSelectedBitmap() const { return wxNullBitmap; }        
 
 protected:
     // implementation

@@ -1217,8 +1217,14 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
     xsrc = source->LogicalToDeviceX(xsrc);
     ysrc = source->LogicalToDeviceY(ysrc);
 
+    wxBitmap selected;
     wxMemoryDC *memDC = wxDynamicCast(source, wxMemoryDC);
-    wxBitmap selected = source->GetSelectedBitmap();
+    if ( memDC )
+    {
+        selected = memDC->GetSelectedBitmap();
+        if ( !selected.IsOk() )
+            return false;
+    }
 
     bool use_bitmap_method = false;
     bool is_mono = false;
@@ -1228,8 +1234,6 @@ bool wxWindowDC::DoBlit( wxCoord xdest, wxCoord ydest,
         xsrcMask = xsrc;
         ysrcMask = ysrc;
     }
-
-    if (memDC && !selected.Ok()) return false;
 
     if (selected.Ok())
     {
