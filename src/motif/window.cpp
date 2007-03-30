@@ -1212,9 +1212,11 @@ void wxWindow::DoScreenToClient(int *x, int *y) const
     Window thisWindow = XtWindow(widget);
 
     Window childWindow;
-    int xx = *x;
-    int yy = *y;
-    XTranslateCoordinates(display, rootWindow, thisWindow, xx, yy, x, y, &childWindow);
+    int xx = x ? *x : 0;
+    int yy = y ? *y : 0;
+    XTranslateCoordinates(display, rootWindow, thisWindow,
+                          xx, yy, x ? x : &xx, y ? y : &yy,
+                          &childWindow);
 }
 
 void wxWindow::DoClientToScreen(int *x, int *y) const
@@ -1225,9 +1227,11 @@ void wxWindow::DoClientToScreen(int *x, int *y) const
     Window thisWindow = XtWindow(widget);
 
     Window childWindow;
-    int xx = *x;
-    int yy = *y;
-    XTranslateCoordinates(display, thisWindow, rootWindow, xx, yy, x, y, &childWindow);
+    int xx = x ? *x : 0;
+    int yy = y ? *y : 0;
+    XTranslateCoordinates(display, thisWindow, rootWindow,
+                          xx, yy, x ? x : &xx, y ? y : &yy,
+                          &childWindow);
 }
 
 

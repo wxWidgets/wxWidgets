@@ -805,9 +805,11 @@ void wxWindowX11::DoScreenToClient(int *x, int *y) const
     Window thisWindow = (Window) m_clientWindow;
 
     Window childWindow;
-    int xx = *x;
-    int yy = *y;
-    XTranslateCoordinates(display, rootWindow, thisWindow, xx, yy, x, y, &childWindow);
+    int xx = x ? *x : 0;
+    int yy = y ? *y : 0;
+    XTranslateCoordinates(display, rootWindow, thisWindow,
+                          xx, yy, x ? x : &xx, y ? y : &yy,
+                          &childWindow);
 }
 
 void wxWindowX11::DoClientToScreen(int *x, int *y) const
@@ -816,10 +818,11 @@ void wxWindowX11::DoClientToScreen(int *x, int *y) const
     Window rootWindow = RootWindowOfScreen(DefaultScreenOfDisplay(display));
     Window thisWindow = (Window) m_clientWindow;
 
-    Window childWindow;
-    int xx = *x;
-    int yy = *y;
-    XTranslateCoordinates(display, thisWindow, rootWindow, xx, yy, x, y, &childWindow);
+    int xx = x ? *x : 0;
+    int yy = y ? *y : 0;
+    XTranslateCoordinates(display, thisWindow, rootWindow,
+                          xx, yy, x ? x : &xx, y ? y : &yy,
+                          &childWindow);
 }
 
 
