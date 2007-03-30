@@ -181,18 +181,23 @@ void gtk_assert_dialog_save_backtrace_callback (GtkWidget *widget, GtkAssertDial
         FILE *fp;
 
         filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
-        msg = gtk_assert_dialog_get_message (dlg);
-        backtrace = gtk_assert_dialog_get_backtrace (dlg);
+        if ( filename )
+        {
+            msg = gtk_assert_dialog_get_message (dlg);
+            backtrace = gtk_assert_dialog_get_backtrace (dlg);
 
-        /* open the file and write all info inside it */
-        fp = fopen (filename, "w");
-        if (fp)
-            fprintf (fp, "ASSERT INFO:\n%s\n\nBACKTRACE:\n%s", msg, backtrace);
+            /* open the file and write all info inside it */
+            fp = fopen (filename, "w");
+            if (fp)
+            {
+                fprintf (fp, "ASSERT INFO:\n%s\n\nBACKTRACE:\n%s", msg, backtrace);
+                fclose (fp);
+            }
 
-        g_free (filename);
-        g_free (msg);
-        g_free (backtrace);
-        fclose (fp);
+            g_free (filename);
+            g_free (msg);
+            g_free (backtrace);
+        }
     }
 
     gtk_widget_destroy (dialog);
