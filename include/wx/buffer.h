@@ -148,7 +148,7 @@ public:
 
 // wxCharTypeBuffer<T> implicitly convertible to T*
 template <typename T>
-class wxWritableCharTypeBuffer : wxCharTypeBuffer<T>
+class wxWritableCharTypeBuffer : public wxCharTypeBuffer<T>
 {
 public:
     typedef typename wxCharTypeBuffer<T>::CharType CharType;
