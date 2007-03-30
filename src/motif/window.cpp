@@ -2088,6 +2088,8 @@ static void wxScrollBarCallback(Widget scrollbar,
                                 XmScrollBarCallbackStruct *cbs)
 {
     wxWindow *win = wxGetWindowFromTable(scrollbar);
+    wxCHECK_RET( win, _T("invalid widget in scrollbar callback") );
+
     wxOrientation orientation = (wxOrientation)wxPtrToUInt(clientData);
 
     wxEventType eventType = wxEVT_NULL;
