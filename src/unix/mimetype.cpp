@@ -1451,22 +1451,27 @@ bool wxFileTypeImpl::SetDefaultIcon(const wxString& strIcon, int WXUNUSED(index)
         return false;
 
     wxMimeTypeCommands *entry = new wxMimeTypeCommands();
-    bool ok = true;
+    bool ok = false;
     size_t nCount = strTypes.GetCount();
     for ( size_t i = 0; i < nCount; i++ )
     {
-        if ( !m_manager->DoAssociation
-                         (
+        if ( m_manager->DoAssociation
+                        (
                             strTypes[i],
                             strIcon,
                             entry,
                             strExtensions,
                             strDesc
-                         ) )
+                        ) )
         {
-            ok = false;
+            // we don't need to free entry now, DoAssociation() took ownership
+            // of it
+            ok = true;
         }
     }
+
+    if ( !ok )
+        delete entry;
 
     return ok;
 }
