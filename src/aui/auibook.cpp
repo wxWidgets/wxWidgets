@@ -2965,16 +2965,16 @@ bool wxAuiNotebook::FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx)
 void wxAuiNotebook::Split(size_t page, int direction)
 {
     wxSize cli_size = GetClientSize();
-    
+
     // get the page's window pointer
     wxWindow* wnd = GetPage(page);
     if (!wnd)
         return;
-    
+
     // notebooks with 1 or less pages can't be split
     if (GetPageCount() < 2)
         return;
-        
+
     // find out which tab control the page currently belongs to
     wxAuiTabCtrl *src_tabs, *dest_tabs;
     int src_idx = -1;
@@ -2983,7 +2983,7 @@ void wxAuiNotebook::Split(size_t page, int direction)
         return;
     if (!src_tabs || src_idx == -1)
         return;
-    
+
     // choose a split size
     wxSize split_size;
     if (GetPageCount() > 2)
@@ -2998,8 +2998,8 @@ void wxAuiNotebook::Split(size_t page, int direction)
         split_size.x /= 2;
         split_size.y /= 2;
     }
-    
-    
+
+
     // create a new tab frame
     wxTabFrame* new_tabs = new wxTabFrame;
     new_tabs->m_rect = wxRect(wxPoint(0,0), split_size);
@@ -3017,7 +3017,7 @@ void wxAuiNotebook::Split(size_t page, int direction)
     // about where the pane should be added
     wxAuiPaneInfo pane_info = wxAuiPaneInfo().Bottom().CaptionVisible(false);
     wxPoint mouse_pt;
-        
+
     if (direction == wxLEFT)
     {
         pane_info.Left();
@@ -3038,10 +3038,10 @@ void wxAuiNotebook::Split(size_t page, int direction)
         pane_info.Bottom();
         mouse_pt = wxPoint(cli_size.x/2, cli_size.y);
     }
-        
+
     m_mgr.AddPane(new_tabs, pane_info, mouse_pt);
     m_mgr.Update();
-            
+
     // remove the page from the source tabs
     wxAuiNotebookPage page_info = src_tabs->GetPage(src_idx);
     page_info.active = false;
@@ -3068,10 +3068,10 @@ void wxAuiNotebook::Split(size_t page, int direction)
 
     // force the set selection function reset the selection
     m_curpage = -1;
-    
+
     // set the active page to the one we just split off
     SetSelection(m_tabs.GetIdxFromWindow(page_info.window));
-    
+
     UpdateHintWindowSize();
 }
 
@@ -3243,12 +3243,9 @@ void wxAuiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
 
 
     wxAuiTabCtrl* src_tabs = (wxAuiTabCtrl*)evt.GetEventObject();
-    wxAuiTabCtrl* dest_tabs = NULL;
-    if (src_tabs)
-    {
-        // set cursor back to an arrow
-        src_tabs->SetCursor(wxCursor(wxCURSOR_ARROW));
-    }
+    wxCHECK_RET( src_tabs, _T("no source object?") );
+
+    src_tabs->SetCursor(wxCursor(wxCURSOR_ARROW));
 
     // get the mouse position, which will be used to determine the drop point
     wxPoint mouse_screen_pt = ::wxGetMousePosition();
@@ -3344,6 +3341,8 @@ void wxAuiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
 
 
     // only perform a tab split if it's allowed
+    wxAuiTabCtrl* dest_tabs = NULL;
+
     if ((m_flags & wxAUI_NB_TAB_SPLIT) && m_tabs.GetPageCount() >= 2)
     {
         // If the pointer is in an existing tab frame, do a tab insert
@@ -3366,7 +3365,7 @@ void wxAuiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
                 insert_idx = dest_tabs->GetIdxFromWindow(target);
             }
         }
-         else
+        else
         {
             wxPoint zero(0,0);
             wxRect rect = m_mgr.CalculateHintRect(m_dummy_wnd,
