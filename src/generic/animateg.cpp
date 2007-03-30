@@ -147,16 +147,17 @@ bool wxAnimation::Load(wxInputStream &stream, wxAnimationType type)
 
     handler = FindHandler(type);
 
-    // do a copy of the handler from the static list which we will own
-    // as our reference data
-    m_refData = handler->Clone();
-
     if (handler == NULL)
     {
         wxLogWarning( _("No animation handler for type %ld defined."), type );
 
         return false;
     }
+
+
+    // do a copy of the handler from the static list which we will own
+    // as our reference data
+    m_refData = handler->Clone();
 
     if (stream.IsSeekable() && !M_ANIMDATA->CanRead(stream))
     {
