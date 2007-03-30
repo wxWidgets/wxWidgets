@@ -103,12 +103,10 @@ wxSizerItem::wxSizerItem()
     m_proportion = 0;
     m_border = 0;
     m_flag = 0;
-
-    m_kind = Item_None;
 }
 
 // window item
-void wxSizerItem::SetWindow(wxWindow *window)
+void wxSizerItem::DoSetWindow(wxWindow *window)
 {
     wxCHECK_RET( window, _T("NULL window in wxSizerItem::SetWindow()") );
 
@@ -130,16 +128,17 @@ wxSizerItem::wxSizerItem(wxWindow *window,
                          int flag,
                          int border,
                          wxObject* userData)
-           : m_proportion(proportion),
+           : m_kind(Item_None),
+             m_proportion(proportion),
              m_border(border),
              m_flag(flag),
              m_userData(userData)
 {
-    SetWindow(window);
+    DoSetWindow(window);
 }
 
 // sizer item
-void wxSizerItem::SetSizer(wxSizer *sizer)
+void wxSizerItem::DoSetSizer(wxSizer *sizer)
 {
     m_kind = Item_Sizer;
     m_sizer = sizer;
@@ -150,19 +149,21 @@ wxSizerItem::wxSizerItem(wxSizer *sizer,
                          int flag,
                          int border,
                          wxObject* userData)
-           : m_proportion(proportion),
+           : m_kind(Item_None),
+             m_sizer(NULL),
+             m_proportion(proportion),
              m_border(border),
              m_flag(flag),
              m_ratio(0.0),
              m_userData(userData)
 {
-    SetSizer(sizer);
+    DoSetSizer(sizer);
 
     // m_minSize is set later
 }
 
 // spacer item
-void wxSizerItem::SetSpacer(const wxSize& size)
+void wxSizerItem::DoSetSpacer(const wxSize& size)
 {
     m_kind = Item_Spacer;
     m_spacer = new wxSizerSpacer(size);
@@ -176,19 +177,25 @@ wxSizerItem::wxSizerItem(int width,
                          int flag,
                          int border,
                          wxObject* userData)
-           : m_minSize(width, height), // minimal size is the initial size
+           : m_kind(Item_None),
+             m_sizer(NULL),
+             m_minSize(width, height), // minimal size is the initial size
              m_proportion(proportion),
              m_border(border),
              m_flag(flag),
              m_userData(userData)
 {
-    SetSpacer(width, height);
+    DoSetSpacer(wxSize(width, height));
 }
 
 wxSizerItem::~wxSizerItem()
 {
     delete m_userData;
+    Free();
+}
 
+void wxSizerItem::Free()
+{
     switch ( m_kind )
     {
         case Item_None:
@@ -210,6 +217,8 @@ wxSizerItem::~wxSizerItem()
         default:
             wxFAIL_MSG( _T("unexpected wxSizerItem::m_kind") );
     }
+
+    m_kind = Item_None;
 }
 
 wxSize wxSizerItem::GetSpacer() const

@@ -224,7 +224,7 @@ public:
     {
         Init(flags);
 
-        SetWindow(window);
+        DoSetWindow(window);
     }
 
     // subsizer
@@ -239,7 +239,7 @@ public:
     {
         Init(flags);
 
-        SetSizer(sizer);
+        DoSetSizer(sizer);
     }
 
     // spacer
@@ -255,7 +255,7 @@ public:
     {
         Init(flags);
 
-        SetSpacer(width, height);
+        DoSetSpacer(wxSize(width, height));
     }
 
     wxSizerItem();
@@ -340,20 +340,51 @@ public:
     wxPoint GetPosition() const
         { return m_pos; }
 
+    // these functions delete the current contents of the item if it's a sizer
+    // or a spacer but not if it is a window
+    void AssignWindow(wxWindow *window)
+    {
+        Free();
+        DoSetWindow(window);
+    }
 
-    // these functions do not free old sizer/spacer
-    void SetWindow(wxWindow *window);
-    void SetSizer(wxSizer *sizer);
-    void SetSpacer(const wxSize& size);
-    void SetSpacer(int width, int height) { SetSpacer(wxSize(width, height)); }
+    void AssignSizer(wxSizer *sizer)
+    {
+        Free();
+        DoSetSizer(sizer);
+    }
+
+    void AssignSpacer(const wxSize& size)
+    {
+        Free();
+        DoSetSpacer(size);
+    }
+
+    void AssignSpacer(int w, int h) { AssignSpacer(wxSize(w, h)); }
+
+#if WXWIN_COMPATIBILITY_2_8
+    // these functions do not free the old sizer/spacer and so can easily
+    // provoke the memory leaks and so shouldn't be used, use Assign() instead
+    wxDEPRECATED( void SetWindow(wxWindow *window) );
+    wxDEPRECATED( void SetSizer(wxSizer *sizer) );
+    wxDEPRECATED( void SetSpacer(const wxSize& size) );
+    wxDEPRECATED( void SetSpacer(int width, int height) );
+#endif // WXWIN_COMPATIBILITY_2_8
 
 protected:
     // common part of several ctors
-    void Init() { m_userData = NULL; }
+    void Init() { m_userData = NULL; m_kind = Item_None; }
 
     // common part of ctors taking wxSizerFlags
     void Init(const wxSizerFlags& flags);
 
+    // free current contents
+    void Free();
+
+    // common parts of Set/AssignXXX()
+    void DoSetWindow(wxWindow *window);
+    void DoSetSizer(wxSizer *sizer);
+    void DoSetSpacer(const wxSize& size);
 
     // discriminated union: depending on m_kind one of the fields is valid
     enum
@@ -848,6 +879,31 @@ private:
 // inline functions implementation
 // ----------------------------------------------------------------------------
 
+#if WXWIN_COMPATIBILITY_2_8
+
+inline void wxSizerItem::SetWindow(wxWindow *window)
+{
+    DoSetWindow(window);
+}
+
+inline void wxSizerItem::SetSizer(wxSizer *sizer)
+{
+    DoSetSizer(sizer);
+}
+
+inline void wxSizerItem::SetSpacer(const wxSize& size)
+{
+    DoSetSpacer(size);
+}
+
+inline void wxSizerItem::SetSpacer(int width, int height)
+{ 
+    DoSetSpacer(wxSize(width, height)); 
+} 
+
+#endif // WXWIN_COMPATIBILITY_2_8
+
+
 inline wxSizerItem*
 wxSizer::Add( wxSizerItem *item )
 {
@@ -1001,6 +1057,5 @@ wxSizer::InsertStretchSpacer(size_t index, int prop)
 {
     return Insert(index, 0, 0, prop);
 }
-
 
 #endif // __WXSIZER_H__
