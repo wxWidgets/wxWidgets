@@ -1437,14 +1437,14 @@ wxWindow* wxAuiTabContainer::GetWindowFromIdx(size_t idx) const
 
 int wxAuiTabContainer::GetIdxFromWindow(wxWindow* wnd) const
 {
-    size_t i, page_count = m_pages.GetCount();
-    for (i = 0; i < page_count; ++i)
+    const size_t page_count = m_pages.GetCount();
+    for ( size_t i = 0; i < page_count; ++i )
     {
         wxAuiNotebookPage& page = m_pages.Item(i);
         if (page.window == wnd)
             return i;
     }
-    return -1;
+    return wxNOT_FOUND;
 }
 
 wxAuiNotebookPage& wxAuiTabContainer::GetPage(size_t idx)
@@ -2614,10 +2614,7 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
 
     if (select)
     {
-        int idx = m_tabs.GetIdxFromWindow(page);
-        wxASSERT_MSG(idx != -1, wxT("Invalid Page index returned on wxAuiNotebook::InsertPage()"));
-
-        SetSelection(idx);
+        SetSelectionToWindow(page);
     }
 
     return true;
@@ -2703,7 +2700,7 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
     if (new_active)
     {
         m_curpage = -1;
-        SetSelection(m_tabs.GetIdxFromWindow(new_active));
+        SetSelectionToWindow(new_active);
     }
 
     return true;
@@ -2856,6 +2853,14 @@ size_t wxAuiNotebook::SetSelection(size_t new_page)
     }
 
     return m_curpage;
+}
+
+void wxAuiNotebook::SetSelectionToWindow(wxWindow *win)
+{
+    const int idx = m_tabs.GetIdxFromWindow(win);
+    wxCHECK_RET( idx != wxNOT_FOUND, _T("invalid notebook page") );
+
+    SetSelection(idx);
 }
 
 // GetPageCount() returns the total number of
@@ -3070,15 +3075,7 @@ void wxAuiNotebook::Split(size_t page, int direction)
     m_curpage = -1;
 
     // set the active page to the one we just split off
-    int idx = m_tabs.GetIdxFromWindow(page_info.window);
-    if ( idx != wxNOT_FOUND )
-    {
-        SetSelection(idx);
-    }
-    else
-    {
-        wxFAIL_MSG( _T("just inserted window not found") );
-    }
+    SetSelectionToPage(page_info);
 
     UpdateHintWindowSize();
 }
@@ -3101,10 +3098,7 @@ void wxAuiNotebook::OnTabClicked(wxCommandEvent& command_evt)
     wxWindow* wnd = ctrl->GetWindowFromIdx(evt.GetSelection());
     wxASSERT(wnd != NULL);
 
-    int idx = m_tabs.GetIdxFromWindow(wnd);
-    wxASSERT(idx != -1);
-
-    SetSelection(idx);
+    SetSelectionToWindow(wnd);
 }
 
 void wxAuiNotebook::OnTabBeginDrag(wxCommandEvent&)
@@ -3303,9 +3297,11 @@ void wxAuiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
 
                 // get main index of the page
                 int main_idx = m_tabs.GetIdxFromWindow(src_page);
+                wxCHECK_RET( main_idx != wxNOT_FOUND, _T("no source page?") );
+
 
                 // make a copy of the page info
-                wxAuiNotebookPage page_info = m_tabs.GetPage((size_t)main_idx);
+                wxAuiNotebookPage page_info = m_tabs.GetPage(main_idx);
 
                 // remove the page from the source notebook
                 RemovePage(main_idx);
@@ -3338,7 +3334,7 @@ void wxAuiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
                 dest_tabs->Refresh();
 
                 // set the selection in the destination tab control
-                nb->SetSelection(nb->m_tabs.GetIdxFromWindow(page_info.window));
+                nb->SetSelectionToPage(page_info);
 
                 return;
             }
@@ -3437,7 +3433,7 @@ void wxAuiNotebook::OnTabEndDrag(wxCommandEvent& command_evt)
         m_curpage = -1;
 
         // set the active page to the one we just split off
-        SetSelection(m_tabs.GetIdxFromWindow(page_info.window));
+        SetSelectionToPage(page_info);
 
         UpdateHintWindowSize();
     }

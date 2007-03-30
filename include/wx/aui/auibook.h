@@ -562,6 +562,14 @@ protected:
     void OnTabEndDrag(wxCommandEvent& evt);
     void OnTabButton(wxCommandEvent& evt);
 
+    // set selection to the given window (which must be non-NULL and be one of
+    // our pages, otherwise an assert is raised)
+    void SetSelectionToWindow(wxWindow *win);
+    void SetSelectionToPage(const wxAuiNotebookPage& page)
+    {
+        SetSelectionToWindow(page.window);
+    }
+
 protected:
 
     wxAuiManager m_mgr;
