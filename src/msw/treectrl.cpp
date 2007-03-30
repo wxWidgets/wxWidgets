@@ -1667,6 +1667,8 @@ void wxTreeCtrl::UnselectAll()
 
 void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
 {
+    wxCHECK_RET( !IsHiddenRoot(item), _T("can't select hidden root item") );
+
     if ( m_windowStyle & wxTR_MULTIPLE )
     {
         ::SelectItem(GetHwnd(), HITEM(item), select);
