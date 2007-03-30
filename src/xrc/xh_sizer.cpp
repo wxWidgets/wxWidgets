@@ -144,9 +144,9 @@ wxObject* wxSizerXmlHandler::Handle_sizeritem()
         wxWindow *wnd = wxDynamicCast(item, wxWindow);
 
         if (sizer)
-            sitem->SetSizer(sizer);
+            sitem->AssignSizer(sizer);
         else if (wnd)
-            sitem->SetWindow(wnd);
+            sitem->AssignWindow(wnd);
         else
             wxLogError(wxT("Error in resource."));
 
@@ -170,7 +170,7 @@ wxObject* wxSizerXmlHandler::Handle_spacer()
 
     wxSizerItem* sitem = MakeSizerItem();
     SetSizerItemAttributes(sitem);
-    sitem->SetSpacer(GetSize());
+    sitem->AssignSpacer(GetSize());
     AddSizerItem(sitem);
     return NULL;
 }

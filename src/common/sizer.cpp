@@ -587,13 +587,9 @@ bool wxSizer::Remove( int index )
 
     wxCHECK_MSG( node, false, _T("Failed to find child node") );
 
-    wxSizerItem *item = node->GetData();
-
-    if ( item->IsWindow() )
-        item->GetWindow()->SetContainingSizer( NULL );
-
-    delete item;
+    delete node->GetData();
     m_children.Erase( node );
+
     return true;
 }
 
@@ -630,7 +626,6 @@ bool wxSizer::Detach( wxWindow *window )
 
         if (item->GetWindow() == window)
         {
-            item->GetWindow()->SetContainingSizer( NULL );
             delete item;
             m_children.Erase( node );
             return true;
@@ -655,8 +650,6 @@ bool wxSizer::Detach( int index )
 
     if ( item->IsSizer() )
         item->DetachSizer();
-    else if ( item->IsWindow() )
-        item->GetWindow()->SetContainingSizer( NULL );
 
     delete item;
     m_children.Erase( node );
@@ -675,8 +668,7 @@ bool wxSizer::Replace( wxWindow *oldwin, wxWindow *newwin, bool recursive )
 
         if (item->GetWindow() == oldwin)
         {
-            item->GetWindow()->SetContainingSizer( NULL );
-            item->SetWindow(newwin);
+            item->AssignWindow(newwin);
             newwin->SetContainingSizer( this );
             return true;
         }
@@ -704,9 +696,7 @@ bool wxSizer::Replace( wxSizer *oldsz, wxSizer *newsz, bool recursive )
 
         if (item->GetSizer() == oldsz)
         {
-            wxSizer *old = item->GetSizer();
-            item->SetSizer(newsz);
-            delete old;
+            item->AssignSizer(newsz);
             return true;
         }
         else if (recursive && item->IsSizer())
