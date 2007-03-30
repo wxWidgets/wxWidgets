@@ -698,10 +698,10 @@ application. See \helpref{wxCloseEvent}{wxcloseevent} and \helpref{wxApp}{wxapp}
 
 \membersection{::wxJoin}\label{wxjoin}
 
-\func{wxString}{wxJoin}{\param{const wxArrayString\&}{ arr}, \param{const wxChar}{ sep}, \param{const wxChar}{ escape = '\\'}}
+\func{wxString}{wxJoin}{\param{const wxArrayString\&}{ arr}, \param{const wxChar}{ sep}, \param{const wxChar}{ escape = '$\backslash$'}}
 
 Concatenate all lines of the given \helpref{wxArrayString}{wxarraystring} object using the separator \arg{sep} and returns
-the result as a \helpref{wxString}{string}.
+the result as a \helpref{wxString}{wxstring}.
 
 If the \arg{escape} character is non-\NULL, then it's used as prefix for each occurrence of \arg{sep}
 in the strings contained in \arg{arr} before joining them which is necessary
