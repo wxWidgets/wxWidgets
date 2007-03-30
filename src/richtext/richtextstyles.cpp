@@ -1088,9 +1088,19 @@ bool wxRichTextStyleComboCtrl::Create(wxWindow* parent, wxWindowID id, const wxP
 
 void wxRichTextStyleComboCtrl::OnIdle(wxIdleEvent& event)
 {
-    if (GetRichTextCtrl() && !IsPopupShown() && m_stylePopup && wxWindow::FindFocus() != this)
+    event.Skip();
+
+    if ( !m_stylePopup )
+        return;
+
+    wxRichTextCtrl * const richtext = GetRichTextCtrl();
+    if ( !richtext )
+        return;
+
+    if ( !IsPopupShown() && wxWindow::FindFocus() != this )
     {
-        wxString styleName = wxRichTextStyleListBox::GetStyleToShowInIdleTime(GetRichTextCtrl(), m_stylePopup->GetStyleType());
+        wxString styleName =
+            wxRichTextStyleListBox::GetStyleToShowInIdleTime(richtext, m_stylePopup->GetStyleType());
 
         wxString currentValue = GetValue();
         if (!styleName.IsEmpty())
@@ -1104,7 +1114,6 @@ void wxRichTextStyleComboCtrl::OnIdle(wxIdleEvent& event)
         else if (!currentValue.IsEmpty())
             SetValue(wxEmptyString);
     }
-    event.Skip();
 }
 
 #endif
