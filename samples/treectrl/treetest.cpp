@@ -330,6 +330,9 @@ void MyFrame::CreateTree(long style)
     m_treeCtrl = new MyTreeCtrl(m_panel, TreeTest_Ctrl,
                                 wxDefaultPosition, wxDefaultSize,
                                 style);
+
+    GetMenuBar()->Enable(TreeTest_SelectRoot, !(style & wxTR_HIDE_ROOT));
+
     Resize();
 }
 
@@ -522,7 +525,8 @@ void MyFrame::OnSelect(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnSelectRoot(wxCommandEvent& WXUNUSED(event))
 {
-    m_treeCtrl->SelectItem(m_treeCtrl->GetRootItem());
+    if ( !m_treeCtrl->HasFlag(wxTR_HIDE_ROOT) )
+        m_treeCtrl->SelectItem(m_treeCtrl->GetRootItem());
 }
 
 void MyFrame::OnUnselect(wxCommandEvent& WXUNUSED(event))
@@ -865,7 +869,7 @@ void MyTreeCtrl::AddTestItemsToTree(size_t numChildren,
     wxTreeItemId rootId = AddRoot(wxT("Root"),
                                   image, image,
                                   new MyTreeItemData(wxT("Root item")));
-    if ( image != -1 )
+    if ( !HasFlag(wxTR_HIDE_ROOT) && image != -1 )
     {
         SetItemImage(rootId, TreeCtrlIcon_FolderOpened, wxTreeItemIcon_Expanded);
     }
@@ -873,7 +877,8 @@ void MyTreeCtrl::AddTestItemsToTree(size_t numChildren,
     AddItemsRecursively(rootId, numChildren, depth, 0);
 
     // set some colours/fonts for testing
-    SetItemFont(rootId, *wxITALIC_FONT);
+    if ( !HasFlag(wxTR_HIDE_ROOT) )
+        SetItemFont(rootId, *wxITALIC_FONT);
 
     wxTreeItemIdValue cookie;
     wxTreeItemId id = GetFirstChild(rootId, cookie);
