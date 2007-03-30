@@ -381,8 +381,13 @@ bool wxTCPConnection::Disconnect ()
       return true;
   // Send the the disconnect message to the peer.
   m_codeco->Write8(IPC_DISCONNECT);
-  m_sock->Notify(false);
-  m_sock->Close();
+
+  if ( m_sock )
+  {
+      m_sock->Notify(false);
+      m_sock->Close();
+  }
+
   SetConnected(false);
 
   return true;
