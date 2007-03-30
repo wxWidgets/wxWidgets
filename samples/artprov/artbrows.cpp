@@ -79,7 +79,6 @@ static void FillBitmaps(wxImageList *images, wxListCtrl *list,
     ART_ICON(wxART_GO_DOWN)
     ART_ICON(wxART_GO_TO_PARENT)
     ART_ICON(wxART_GO_HOME)
-    ART_ICON(wxART_FILE_OPEN)
     ART_ICON(wxART_PRINT)
     ART_ICON(wxART_HELP)
     ART_ICON(wxART_TIP)
@@ -87,14 +86,18 @@ static void FillBitmaps(wxImageList *images, wxListCtrl *list,
     ART_ICON(wxART_LIST_VIEW)
     ART_ICON(wxART_NEW_DIR)
     ART_ICON(wxART_FOLDER)
+    ART_ICON(wxART_FOLDER_OPEN);
     ART_ICON(wxART_GO_DIR_UP)
     ART_ICON(wxART_EXECUTABLE_FILE)
     ART_ICON(wxART_NORMAL_FILE)
     ART_ICON(wxART_TICK_MARK)
     ART_ICON(wxART_CROSS_MARK)
     ART_ICON(wxART_MISSING_IMAGE)
+    ART_ICON(wxART_NEW);
+    ART_ICON(wxART_FILE_OPEN)
     ART_ICON(wxART_FILE_SAVE)
     ART_ICON(wxART_FILE_SAVE_AS)
+    ART_ICON(wxART_DELETE);
     ART_ICON(wxART_COPY)
     ART_ICON(wxART_CUT)
     ART_ICON(wxART_PASTE)
@@ -103,7 +106,10 @@ static void FillBitmaps(wxImageList *images, wxListCtrl *list,
     ART_ICON(wxART_QUIT)
     ART_ICON(wxART_FIND)
     ART_ICON(wxART_FIND_AND_REPLACE)
-
+    ART_ICON(wxART_HARDDISK)
+    ART_ICON(wxART_FLOPPY)
+    ART_ICON(wxART_CDROM)
+    ART_ICON(wxART_REMOVABLE)
 }
 
 
