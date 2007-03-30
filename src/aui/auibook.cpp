@@ -3070,7 +3070,15 @@ void wxAuiNotebook::Split(size_t page, int direction)
     m_curpage = -1;
 
     // set the active page to the one we just split off
-    SetSelection(m_tabs.GetIdxFromWindow(page_info.window));
+    int idx = m_tabs.GetIdxFromWindow(page_info.window);
+    if ( idx != wxNOT_FOUND )
+    {
+        SetSelection(idx);
+    }
+    else
+    {
+        wxFAIL_MSG( _T("just inserted window not found") );
+    }
 
     UpdateHintWindowSize();
 }
