@@ -189,6 +189,8 @@ bool wxArrowButton::Create( wxSpinButton* parent,
                             ArrowDirection d,
                             const wxPoint& pos, const wxSize& size )
 {
+    wxCHECK_MSG( parent, false, _T("must have a valid parent") );
+
     int arrow_dir = XmARROW_UP;
 
     switch( d )
@@ -207,7 +209,7 @@ bool wxArrowButton::Create( wxSpinButton* parent,
         break;
     }
 
-    if( parent ) parent->AddChild( this );
+    parent->AddChild( this );
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
     m_mainWidget = (WXWidget) XtVaCreateManagedWidget( "XmArrowButton",
