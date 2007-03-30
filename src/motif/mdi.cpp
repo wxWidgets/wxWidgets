@@ -349,9 +349,9 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
 
     wxMDIClientWindow* clientWindow = parent->GetClientWindow();
 
-    wxASSERT_MSG( (clientWindow != (wxWindow*) NULL), "Missing MDI client window.");
+    wxCHECK_MSG( clientWindow, false, "Missing MDI client window." );
 
-    if (clientWindow) clientWindow->AddChild(this);
+    clientWindow->AddChild(this);
 
     SetMDIParentFrame(parent);
 

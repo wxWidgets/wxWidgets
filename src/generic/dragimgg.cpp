@@ -236,7 +236,7 @@ bool wxGenericDragImage::BeginDrag(const wxPoint& hotspot,
                                    bool fullScreen,
                                    wxRect* rect)
 {
-    wxASSERT_MSG( (window != 0), wxT("Window must not be null in BeginDrag."));
+    wxCHECK_MSG( window, false, wxT("Window must not be null in BeginDrag."));
 
     // The image should be offset by this amount
     m_offset = hotspot;
@@ -249,15 +249,12 @@ bool wxGenericDragImage::BeginDrag(const wxPoint& hotspot,
     m_isDirty = false;
     m_isDirty = false;
 
-    if (window)
-    {
-        window->CaptureMouse();
+    window->CaptureMouse();
 
-        if (m_cursor.Ok())
-        {
-            m_oldCursor = window->GetCursor();
-            window->SetCursor(m_cursor);
-        }
+    if (m_cursor.Ok())
+    {
+        m_oldCursor = window->GetCursor();
+        window->SetCursor(m_cursor);
     }
 
     // Make a copy of the window so we can repair damage done as the image is
