@@ -915,9 +915,9 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
     // get OS version
     int major, minor;
     wxString release = wxGetCommandOutput(wxT("uname -r"));
-    if ( !release.empty() && wxSscanf(release, wxT("%d.%d"), &major, &minor) != 2 )
+    if ( release.empty() || wxSscanf(release, wxT("%d.%d"), &major, &minor) != 2 )
     {
-        // unrecognized uname string format
+        // failed to get version string or unrecognized format
         major =
         minor = -1;
     }
