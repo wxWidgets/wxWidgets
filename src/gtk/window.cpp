@@ -2924,8 +2924,8 @@ void wxWindowGTK::DoGetPosition( int *x, int *y ) const
             int org_y = 0;
             gdk_window_get_origin( source, &org_x, &org_y );
 
-            if (GetParent())
-                GetParent()->ScreenToClient(&org_x, &org_y);
+            if (m_parent)
+                m_parent->ScreenToClient(&org_x, &org_y);
 
             wx_const_cast(wxWindowGTK*, this)->m_x = org_x;
             wx_const_cast(wxWindowGTK*, this)->m_y = org_y;
