@@ -260,9 +260,6 @@ struct textreplace
 
 static textreplace notverb_array[] =
 {
-    tr(_T("\r\n\r\n"),  _T("<P>\n\n")), // unix
-    tr(_T("\n\n"),      _T("<P>\n\n")), // dos
-    tr(_T("\r\r"),      _T("<P>\n\n")), // mac
     tr(_T("``"),        _T("&#8220;")),
     tr(_T("''"),        _T("&#8221;")),
     tr(_T("`"),         _T("&#8216;")),
