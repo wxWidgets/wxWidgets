@@ -2219,7 +2219,7 @@ install:
         XPutImage(dest_display, dest, destgc, destimage, 0, 0, destx, desty, w, h);
         XDestroyImage(destimage);
 
-        if (more)
+        if (more && cache)
             *cache = image;
         else
             XDestroyImage(image);
