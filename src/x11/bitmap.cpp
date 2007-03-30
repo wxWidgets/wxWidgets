@@ -593,10 +593,11 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
 
         M_BMPDATA->m_pixmap = XCreatePixmap( xdisplay, xroot, width, height, depth );
 
-        // Create mask
+        // Create mask if necessary
+        const bool hasMask = image.HasMask();
 
         XImage *mask_image = (XImage*) NULL;
-        if (image.HasMask())
+        if ( hasMask )
         {
             mask_image = XCreateImage( xdisplay, xvisual, 1, ZPixmap, 0, 0, width, height, 32, 0 );
             mask_image->data = (char*) malloc( mask_image->bytes_per_line * mask_image->height );
@@ -645,8 +646,6 @@ bool wxBitmap::CreateFromImage( const wxImage& image, int depth )
 
         unsigned char *colorCube =
             wxTheApp->GetVisualInfo(M_BMPDATA->m_display)->m_colorCube;
-
-        bool hasMask = image.HasMask();
 
         int index = 0;
         for (int y = 0; y < height; y++)
