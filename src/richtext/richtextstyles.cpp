@@ -955,8 +955,10 @@ wxRichTextCtrl* wxRichTextStyleListCtrl::GetRichTextCtrl() const
 /// Set/get the style type to display
 void wxRichTextStyleListCtrl::SetStyleType(wxRichTextStyleListBox::wxRichTextStyleType styleType)
 {
-    if (m_styleListBox)
-        m_styleListBox->SetStyleType(styleType);
+    if ( !m_styleListBox )
+        return;
+
+    m_styleListBox->SetStyleType(styleType);
 
     m_dontUpdate = true;
 
