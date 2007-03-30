@@ -3572,9 +3572,11 @@ void wxAuiNotebook::OnTabButton(wxCommandEvent& command_evt)
             {
                 close_wnd->Close();
             }
-             else
+            else
             {
                 int main_idx = m_tabs.GetIdxFromWindow(close_wnd);
+                wxCHECK_RET( main_idx != wxNOT_FOUND, _T("no page to delete?") );
+
                 DeletePage(main_idx);
             }
         }
