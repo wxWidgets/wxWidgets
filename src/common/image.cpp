@@ -754,19 +754,16 @@ wxImage wxImage::BlurHorizontal(int blurRadius)
     unsigned char* dst_alpha = NULL;
 
     // Check for a mask or alpha
-    if ( M_IMGDATA->m_hasMask )
+    if ( src_alpha )
+    {
+        ret_image.SetAlpha();
+        dst_alpha = ret_image.GetAlpha();
+    }
+    else if ( M_IMGDATA->m_hasMask )
     {
         ret_image.SetMaskColour(M_IMGDATA->m_maskRed,
                                 M_IMGDATA->m_maskGreen,
                                 M_IMGDATA->m_maskBlue);
-    }
-    else
-    {
-        if ( src_alpha )
-        {
-            ret_image.SetAlpha();
-            dst_alpha = ret_image.GetAlpha();
-        }
     }
 
     // number of pixels we average over
@@ -872,19 +869,16 @@ wxImage wxImage::BlurVertical(int blurRadius)
     unsigned char* dst_alpha = NULL;
 
     // Check for a mask or alpha
-    if ( M_IMGDATA->m_hasMask )
+    if ( src_alpha )
+    {
+        ret_image.SetAlpha();
+        dst_alpha = ret_image.GetAlpha();
+    }
+    else if ( M_IMGDATA->m_hasMask )
     {
         ret_image.SetMaskColour(M_IMGDATA->m_maskRed,
                                 M_IMGDATA->m_maskGreen,
                                 M_IMGDATA->m_maskBlue);
-    }
-    else
-    {
-        if ( src_alpha )
-        {
-            ret_image.SetAlpha();
-            dst_alpha = ret_image.GetAlpha();
-        }
     }
 
     // number of pixels we average over
