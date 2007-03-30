@@ -24,6 +24,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "wx/gifdecod.h"
+#include "wx/ptr_scpd.h"
+#include "wx/scopeguard.h"
 
 
 
@@ -52,6 +54,8 @@ public:
     DECLARE_NO_COPY_CLASS(GIFImage)
 };
 
+wxDECLARE_SCOPED_PTR(GIFImage, GIFImagePtr)
+wxDEFINE_SCOPED_PTR(GIFImage, GIFImagePtr)
 
 
 //---------------------------------------------------------------------------
@@ -730,22 +734,18 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
         if (type == 0x2C)
         {
             // allocate memory for IMAGEN struct
-            GIFImage *pimg = new GIFImage();
+            GIFImagePtr pimg(new GIFImage());
 
-            if (pimg == NULL)
-            {
-                Destroy();
+            wxScopeGuard guardDestroy = wxMakeObjGuard(*this, &wxGIFDecoder::Destroy);
+
+            if ( !pimg.get() )
                 return wxGIF_MEMERR;
-            }
 
             // fill in the data
             static const unsigned int idbSize = (2 + 2 + 2 + 2 + 1);
             stream.Read(buf, idbSize);
             if (stream.LastRead() != idbSize)
-            {
-                Destroy();
                 return wxGIF_INVFORMAT;
-            }
 
             pimg->left = buf[0] + 256 * buf[1];
             pimg->top = buf[2] + 256 * buf[3];
@@ -756,12 +756,9 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
             pimg->w = buf[4] + 256 * buf[5];
             pimg->h = buf[6] + 256 * buf[7];
 
-            if (anim && ((pimg->w == 0) || (pimg->w > (unsigned int)m_szAnimation.GetWidth()) || 
-			 (pimg->h == 0) || (pimg->h > (unsigned int)m_szAnimation.GetHeight())))
-            {
-                Destroy();
+            if ( anim && ((pimg->w == 0) || (pimg->w > (unsigned int)m_szAnimation.GetWidth()) || 
+			     (pimg->h == 0) || (pimg->h > (unsigned int)m_szAnimation.GetHeight())) )
                 return wxGIF_INVFORMAT;
-            }
 
             interl = ((buf[8] & 0x40)? 1 : 0);
             size = pimg->w * pimg->h;
@@ -775,10 +772,7 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
             pimg->pal = (unsigned char *) malloc(768);
 
             if ((!pimg->p) || (!pimg->pal))
-            {
-                Destroy();
                 return wxGIF_MEMERR;
-            }
 
             // load local color map if available, else use global map
             if ((buf[8] & 0x80) == 0x80)
@@ -788,10 +782,7 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
                 stream.Read(pimg->pal, numBytes);
                 pimg->ncolours = local_ncolors;
                 if (stream.LastRead() != numBytes)
-                {
-                    Destroy();
                     return wxGIF_INVFORMAT;
-                }
             }
             else
             {
@@ -802,21 +793,17 @@ wxGIFErrorCode wxGIFDecoder::LoadGIF(wxInputStream& stream)
             // get initial code size from first byte in raster data
             bits = (unsigned char)stream.GetC();
             if (bits == 0)
-            {
-                Destroy();
                 return wxGIF_INVFORMAT;
-            }
 
             // decode image
-            wxGIFErrorCode result = dgif(stream, pimg, interl, bits);
+            wxGIFErrorCode result = dgif(stream, pimg.get(), interl, bits);
             if (result != wxGIF_OK)
-            {
-                Destroy();
                 return result;
-            }
+
+            guardDestroy.Dismiss();
 
             // add the image to our frame array
-            m_frames.Add((void*)pimg);
+            m_frames.Add(pimg.release());
             m_nFrames++;
 
             // if this is not an animated GIF, exit after first image
