@@ -66,5 +66,11 @@
     #define wxHAS_UTF8_FONTS
 #endif
 
+/* This is defined when the underlying toolkit handles tab traversal natively.
+   Otherwise we implement it ourselves in wxControlContainer. */
+#ifdef __WXGTK20__
+    #define wxHAS_NATIVE_TAB_TRAVERSAL
+#endif
+
 #endif /*  _WX_FEATURES_H_ */
 

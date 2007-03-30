@@ -13,6 +13,8 @@
 #ifndef _WX_CONTAINR_H_
 #define _WX_CONTAINR_H_
 
+#include "wx/defs.h"
+
 #ifdef wxHAS_NATIVE_TAB_TRAVERSAL
 
 #define WX_DECLARE_CONTROL_CONTAINER() \

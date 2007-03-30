@@ -62,12 +62,6 @@
     #define wxHAS_NATIVE_ENABLED_MANAGEMENT
 #endif
 
-// This is defined when the underlying toolkit handles tab traversal natively
-// (currently this only works under GTK+ 2)
-#ifdef __WXGTK20__
-    #define wxHAS_NATIVE_TAB_TRAVERSAL
-#endif
-
 // ----------------------------------------------------------------------------
 // forward declarations
 // ----------------------------------------------------------------------------
