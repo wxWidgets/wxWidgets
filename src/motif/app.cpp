@@ -132,8 +132,6 @@ void wxApp::CleanUp()
 #endif
         delete it->second;
     }
-
-    delete m_perDisplayData;
 }
 
 void wxApp::Exit()
@@ -161,7 +159,7 @@ wxApp::wxApp()
 
 wxApp::~wxApp()
 {
-    wxApp::SetInstance(NULL);
+    delete m_perDisplayData;
 }
 
 int wxApp::MainLoop()
