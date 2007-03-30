@@ -2,12 +2,13 @@
 
 if [ "$VERSION" = "" ]; then
     echo "Including build-environ.cfg"
-    . scripts/build-environ.cfg
+    . `dirname $0`/build-environ.cfg
 fi 
 
 echo "temp dir is $WX_TEMP_DIR"
-
 START_DIR="$PWD"
+echo "start dir is $START_DIR"
+
 SCRIPTDIR=${START_DIR}/scripts
 WX_WEB_DIR=$WX_TEMP_DIR/wxWebSite
 WX_SRC_DIR=$WX_TEMP_DIR/wxWidgets
