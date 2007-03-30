@@ -78,6 +78,9 @@
                              to keep object files compiled with different
                              settings separate.
 
+    - <set-wxlike>: sets a variable with the name of a library named with the same
+                    wxWidgets rules.
+
 
  NOTE: as a reference here is a list of all wxWidgets libraries satisfying
        the dependency constraints mentioned in <wx-lib> description:
@@ -320,7 +323,10 @@
     <!--                       UTILITY TAGS                         -->
     <!--                                                            -->
 
-    <!-- private helper tag -->
+    <!-- private helper tag: does the same thing as for <set-wxlike> except that:
+         - the variable created is always named "__temp"
+         - can be used (only) inside targets as this is a non-global tag
+    -->
     <define-tag name="__setlibname" rules="lib,dll,module,exe">
         <set var="__temp">
             <if cond="FORMAT!='autoconf' and FORMAT!='gnu'">
@@ -436,6 +442,11 @@
         -->
     </define-tag>
 
+
+
+    <!--                   UTILITY GLOBAL TAGS                      -->
+    <!--                                                            -->
+
     <!-- Sets the BUILDDIR variable using the same rules used by wxWidgets itself.
          This makes it possible to keep separed the object files compiled with
          different configuration settings.
@@ -451,6 +462,62 @@
             <set var="BUILDDIR">
                 $(COMPILER)$(WX_PORT)$(WXLIBPOSTFIX)$(_BUILDDIR_SHARED_SUFFIX)
             </set>
+        </if>
+    </define-global-tag>
+
+    <!-- Sets a variable with the name of the 'var' attribute value using the
+         same rules used for wxWidgets library naming.
+         E.g.
+
+            <set-wxlike var='MYMODULE_LIBNAME' prefix='mylib'>
+                mymodule
+            </set-wxlike>
+
+         This tag also supports a 'cond' attribute making it very powerful
+         for conditional linking a wx-based library:
+
+            <option name="USE_MYMODULE">
+                <values>0,1</values>
+            </option>
+            <set-wxlike var='MYMODULE_DEP'
+                        prefix='mylib'
+                        cond="USE_MYMODULE=='1'">
+                mymodule
+            </set-wxlike>
+            ...
+            <exe id="myexe">
+                <sys-lib>$(MYMODULE_DEP)</sys-lib>
+            </exe>
+    -->
+    <define-global-tag name="set-wxlike">
+        <if cond="FORMAT!='autoconf' and FORMAT!='gnu'">
+            <if cond="'cond' not in attributes">
+                <set var="$(attributes['var'])">
+                    $(attributes['prefix'])_$(WX_PORT)$(WX_VERSION)$(WXLIBPOSTFIX)_$(value)
+                </set>
+            </if>
+            <if cond="'cond' in attributes">
+                <set var="$(attributes['var'])">
+                    <if cond="$(attributes['cond'])">
+                        $(attributes['prefix'])_$(WX_PORT)$(WX_VERSION)$(WXLIBPOSTFIX)_$(value)
+                    </if>
+                </set>
+            </if>
+        </if>
+
+        <if cond="FORMAT=='autoconf' or FORMAT=='gnu'">
+            <if cond="'cond' not in attributes">
+                <set var="$(attributes['var'])">
+                    $(attributes['prefix'])_$(WX_PORT)$(WXLIBPOSTFIX)_$(value)-$(WX_VERSION_MAJOR).$(WX_VERSION_MINOR)
+                </set>
+            </if>
+            <if cond="'cond' in attributes">
+                <set var="$(attributes['var'])">
+                    <if cond="$(attributes['cond'])">
+                        $(attributes['prefix'])_$(WX_PORT)$(WXLIBPOSTFIX)_$(value)-$(WX_VERSION_MAJOR).$(WX_VERSION_MINOR)
+                    </if>
+                </set>
+            </if>
         </if>
     </define-global-tag>
 
