@@ -395,27 +395,30 @@ wxFSFile* wxArchiveFSHandler::OpenFile(
     }
 
     wxArchiveInputStream *s = factory->NewStream(leftStream);
+    if ( !s )
+        return NULL;
+
     s->OpenEntry(*entry);
 
-    if (s && s->IsOk())
+    if (!s->IsOk())
     {
-#if WXWIN_COMPATIBILITY_2_6
-        if (factory->IsKindOf(CLASSINFO(wxZipClassFactory)))
-            ((wxZipInputStream*)s)->m_allowSeeking = true;
-#endif // WXWIN_COMPATIBILITY_2_6
-
-        return new wxFSFile(s,
-                            key + right,
-                            GetMimeTypeFromExt(location),
-                            GetAnchor(location)
-#if wxUSE_DATETIME
-                            , entry->GetDateTime()
-#endif // wxUSE_DATETIME
-                            );
+        delete s;
+        return NULL;
     }
 
-    delete s;
-    return NULL;
+#if WXWIN_COMPATIBILITY_2_6
+    if (factory->IsKindOf(CLASSINFO(wxZipClassFactory)))
+        ((wxZipInputStream*)s)->m_allowSeeking = true;
+#endif // WXWIN_COMPATIBILITY_2_6
+
+    return new wxFSFile(s,
+                        key + right,
+                        GetMimeTypeFromExt(location),
+                        GetAnchor(location)
+#if wxUSE_DATETIME
+                        , entry->GetDateTime()
+#endif // wxUSE_DATETIME
+                        );
 }
 
 wxString wxArchiveFSHandler::FindFirst(const wxString& spec, int flags)
