@@ -573,10 +573,32 @@ Returns the empty string if {\it ch} is not found.
 Returns a pointer to the string data ({\tt const char*} in ANSI build,
 {\tt const wchar\_t*} in Unicode build).
 
+Note that the returned value is not convertible to {\tt char*} or
+{\tt wchar\_t*}, use \helpref{char\_str}{wxstringcharstr} or
+\helpref{wchar\_string}{wxstringwcharstr} if you need to pass string value
+to a function expecting non-const pointer.
+
 \wxheading{See also}
 
 \helpref{mb\_str}{wxstringmbstr}, \helpref{wc\_str}{wxstringwcstr},
-\helpref{fn\_str}{wxstringfnstr}
+\helpref{fn\_str}{wxstringfnstr}, \helpref{char\_str}{wxstringcharstr},
+\helpref{wchar\_string}{wxstringwcharstr}
+
+\membersection{wxString::char\_str}\label{wxstringcharstr}
+
+\constfunc{wxWritableCharBuffer}{char\_str}{\void}
+
+Returns an object with string data that is implicitly convertible to
+{\tt char*} pointer. Note that any change to the returned buffer is lost and so
+this function is only usable for passing strings to legacy libraries that
+don't have const-correct API. Use \helpref{wxStringBuffer}{wxstringbuffer} if
+you want to modify the string.
+
+\wxheading{See also}
+
+\helpref{mb\_str}{wxstringmbstr}, \helpref{wc\_str}{wxstringwcstr},
+\helpref{fn\_str}{wxstringfnstr}, \helpref{c\_str}{wxstringcstr},
+\helpref{wchar\_str}{wxstringwcharstr}
 
 
 \membersection{wxString::Clear}\label{wxstringclear}
@@ -941,7 +963,7 @@ The macro wxWX2MBbuf is defined as the correct return type (without const).
 
 \helpref{wxMBConv}{wxmbconv},
 \helpref{c\_str}{wxstringcstr}, \helpref{wc\_str}{wxstringwcstr},
-\helpref{fn\_str}{wxstringfnstr}
+\helpref{fn\_str}{wxstringfnstr}, \helpref{char\_str}{wxstringcharstr}
 
 
 \membersection{wxString::Mid}\label{wxstringmid}
@@ -1272,7 +1294,23 @@ The macro wxWX2WCbuf is defined as the correct return type (without const).
 
 \helpref{wxMBConv}{wxmbconv},
 \helpref{c\_str}{wxstringcstr}, \helpref{mb\_str}{wxstringwcstr},
-\helpref{fn\_str}{wxstringfnstr}
+\helpref{fn\_str}{wxstringfnstr}, \helpref{wchar\_str}{wxstringwcharstr}
+
+\membersection{wxString::wchar\_str}\label{wxstringwcharstr}
+
+\constfunc{wxWritableWCharBuffer}{wchar\_str}{\void}
+
+Returns an object with string data that is implicitly convertible to
+{\tt char*} pointer. Note that any change to the returned buffer is lost and so
+this function is only usable for passing strings to legacy libraries that
+don't have const-correct API. Use \helpref{wxStringBuffer}{wxstringbuffer} if
+you want to modify the string.
+
+\wxheading{See also}
+
+\helpref{mb\_str}{wxstringmbstr}, \helpref{wc\_str}{wxstringwcstr},
+\helpref{fn\_str}{wxstringfnstr}, \helpref{c\_str}{wxstringcstr},
+\helpref{char\_str}{wxstringcharstr}
 
 
 \membersection{wxString::operator!}\label{wxstringoperatornot}

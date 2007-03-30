@@ -53,7 +53,9 @@ private:
 #endif // wxLongLong_t
         CPPUNIT_TEST( ToDouble );
         CPPUNIT_TEST( WriteBuf );
-        CPPUNIT_TEST( CStrData );
+        CPPUNIT_TEST( CStrDataTernaryOperator );
+        CPPUNIT_TEST( CStrDataImplicitConversion );
+        CPPUNIT_TEST( ExplicitConversion );
     CPPUNIT_TEST_SUITE_END();
 
     void String();
@@ -77,8 +79,10 @@ private:
 #endif // wxLongLong_t
     void ToDouble();
     void WriteBuf();
-    void CStrData();
-    void DoCStrData(bool cond);
+    void CStrDataTernaryOperator();
+    void DoCStrDataTernaryOperator(bool cond);
+    void CStrDataImplicitConversion();
+    void ExplicitConversion();
 
     DECLARE_NO_COPY_CLASS(StringTestCase)
 };
@@ -657,10 +661,10 @@ void StringTestCase::WriteBuf()
 
 
 
-void StringTestCase::CStrData()
+void StringTestCase::CStrDataTernaryOperator()
 {
-    DoCStrData(true);
-    DoCStrData(false);
+    DoCStrDataTernaryOperator(true);
+    DoCStrDataTernaryOperator(false);
 }
 
 template<typename T> bool CheckStr(const wxString& expected, T s)
@@ -668,7 +672,7 @@ template<typename T> bool CheckStr(const wxString& expected, T s)
     return expected == wxString(s);
 }
 
-void StringTestCase::DoCStrData(bool cond)
+void StringTestCase::DoCStrDataTernaryOperator(bool cond)
 {
     // test compilation of wxCStrData when used with operator?: (the asserts
     // are not very important, we're testing if the code compiles at all):
@@ -690,4 +694,41 @@ void StringTestCase::DoCStrData(bool cond)
     CPPUNIT_ASSERT( CheckStr(s, (cond ? mbStr : s.c_str())) );
     CPPUNIT_ASSERT( CheckStr(s, (cond ? "foo" : s.c_str())) );
 #endif
+}
+
+bool CheckStrChar(const wxString& expected, char *s)
+    { return CheckStr(expected, s); }
+bool CheckStrWChar(const wxString& expected, wchar_t *s)
+    { return CheckStr(expected, s); }
+bool CheckStrConstChar(const wxString& expected, const char *s)
+    { return CheckStr(expected, s); }
+bool CheckStrConstWChar(const wxString& expected, const wchar_t *s)
+    { return CheckStr(expected, s); }
+
+void StringTestCase::CStrDataImplicitConversion()
+{
+    wxString s("foo");
+
+    // FIXME-UTF8: when wxCStrData can handle both conversions, this should
+    //             be changed to always test all versions, both MB and WC
+#if wxUSE_UNICODE
+    CPPUNIT_ASSERT( CheckStrConstWChar(s, s.c_str()) );
+    CPPUNIT_ASSERT( CheckStrConstWChar(s, s) );
+#else
+    CPPUNIT_ASSERT( CheckStrConstChar(s, s.c_str()) );
+    CPPUNIT_ASSERT( CheckStrConstChar(s, s) );
+#endif
+}
+
+void StringTestCase::ExplicitConversion()
+{
+    wxString s("foo");
+
+    CPPUNIT_ASSERT( CheckStr(s, s.mb_str()) );
+    CPPUNIT_ASSERT( CheckStrConstChar(s, s.mb_str()) );
+    CPPUNIT_ASSERT( CheckStrChar(s, s.char_str()) );
+
+    CPPUNIT_ASSERT( CheckStr(s, s.wc_str()) );
+    CPPUNIT_ASSERT( CheckStrConstWChar(s, s.wc_str()) );
+    CPPUNIT_ASSERT( CheckStrWChar(s, s.wchar_str()) );
 }

@@ -923,6 +923,12 @@ public:
     // wchar_t*, UTF-8-encoded char*, depending on the build):
     const_pointer wx_str() const { return m_impl.c_str(); }
 
+    // conversion to *non-const* multibyte or widestring buffer; modifying
+    // returned buffer won't affect the string, these methods are only useful
+    // for passing values to const-incorrect functions
+    wxWritableCharBuffer char_str() const { return mb_str(); }
+    wxWritableWCharBuffer wchar_str() const { return wc_str(); }
+
     // conversion to/from plain (i.e. 7 bit) ASCII: this is useful for
     // converting numbers or strings which are certain not to contain special
     // chars (typically system functions, X atoms, environment variables etc.)
@@ -972,7 +978,7 @@ public:
     const wxWX2MBbuf mbc_str() const { return mb_str(); }
 
 #if wxUSE_WCHAR_T
-    const wxWCharBuffer wc_str(const wxMBConv& conv) const;
+    const wxWCharBuffer wc_str(const wxMBConv& conv = wxConvLibc) const;
 #endif // wxUSE_WCHAR_T
 #ifdef __WXOSX__
     const wxCharBuffer fn_str() const { return wxConvFile.cWC2WX( wc_str( wxConvLocal ) ); }

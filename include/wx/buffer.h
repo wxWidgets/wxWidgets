@@ -146,6 +146,27 @@ public:
 };
 #endif // wxUSE_WCHAR_T
 
+// wxCharTypeBuffer<T> implicitly convertible to T*
+template <typename T>
+class wxWritableCharTypeBuffer : wxCharTypeBuffer<T>
+{
+public:
+    typedef typename wxCharTypeBuffer<T>::CharType CharType;
+
+    wxWritableCharTypeBuffer(const wxCharTypeBuffer<T>& src)
+        : wxCharTypeBuffer<T>(src) {}
+    // FIXME-UTF8: this won't be needed after converting mb_str()/wc_str() to
+    //             always return a buffer
+    wxWritableCharTypeBuffer(const CharType *str = NULL)
+        : wxCharTypeBuffer<T>(str) {}
+
+    operator CharType*() { return this->data(); }
+};
+
+typedef wxWritableCharTypeBuffer<char> wxWritableCharBuffer;
+typedef wxWritableCharTypeBuffer<wchar_t> wxWritableWCharBuffer;
+
+
 #if wxUSE_UNICODE
     #define wxWxCharBuffer wxWCharBuffer
 

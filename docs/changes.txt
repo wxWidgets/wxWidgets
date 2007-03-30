@@ -30,6 +30,12 @@ Changes in behaviour which may result in compilation errors
   in vast majority of cases because of conversion operators, but it can break
   code that depends on the result being wxChar.
 
+- The value returned by wxString::c_str() cannot be casted to non-const char*
+  or wchar_t* anymore. The solution is to use newly added wxString methods
+  char_str() (which returns a buffer convertible to char*) or wchar_str()
+  (which returns a buffer convertible to wchar_t*). These methods are
+  available in wxWidgets 2.8 series beginning with 2.8.4 as well.
+
 - The value returned by wxString::operator[] or wxString::iterator cannot be
   used in switch statements anymore, because it's a class instance. Code like
   this won't compile:
