@@ -1168,17 +1168,16 @@ int GSocket::Read(char *buffer, int size)
     else
       ret = Recv_Dgram(buffer, size);
 
-    /* If recv returned zero, then the connection is lost, and errno is not set.
+    /* If recv returned zero, then the connection has been gracefully closed.
      * Otherwise, recv has returned an error (-1), in which case we have lost the
      * socket only if errno does _not_ indicate that there may be more data to read.
      */
     if (ret == 0)
     {
-      m_error = GSOCK_IOERR;
+      /* Make sure wxSOCKET_LOST event gets sent and shut down the socket */
       m_detected = GSOCK_LOST_FLAG;
-      Close();
-      // Signal an error for return
-      return -1;
+      Detected_Read();
+      return 0;
     }
     else if (ret == -1)
     {
