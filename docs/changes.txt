@@ -102,6 +102,7 @@ wxGTK:
 
 - Native implementation for wxHyperlinkCtrl (Francesco Montorsi)
 - Native keyboard navigation implementation
+- Don't overwrite primary selection with clipboard and vice versa
 - Implemented support for underlined fonts in wxStaticText.
 - wxTopLevelWindow::SetSizeHints size increments now work.
 - wxTopLevelWindow::GetSize() returns the size including the WM decorations.

@@ -1,9 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        clipboard.h
-// Purpose:
-// Author:      Robert Roebling
+// Name:        wx/gtk/clipboard.h
+// Purpose:     wxClipboard for wxGTK
+// Author:      Robert Roebling, Vadim Zeitlin
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
+//              (c) 2007 Vadim Zeitlin
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -17,6 +18,13 @@
 class WXDLLIMPEXP_CORE wxClipboard : public wxClipboardBase
 {
 public:
+    // there are several clipboards in X11 (and in GDK)
+    enum Kind
+    {
+        Primary,
+        Clipboard
+    };
+
     wxClipboard();
     virtual ~wxClipboard();
 
@@ -53,20 +61,60 @@ public:
     // implementation from now on
     // --------------------------
 
-    bool              m_open;
-    bool              m_ownsClipboard;
-    bool              m_ownsPrimarySelection;
-    wxDataObject     *m_data;
+    // get our clipboard item (depending on m_usePrimary value)
+    GdkAtom GTKGetClipboardAtom() const;
 
-    GtkWidget        *m_clipboardWidget;  /* for getting and offering data */
-    GtkWidget        *m_targetsWidget;    /* for getting list of supported formats */
+    // get the data object currently being used
+    wxDataObject *GTKGetDataObject() { return Data(); }
 
-    bool              m_formatSupported;
-    GdkAtom           m_targetRequested;
-    bool              m_usePrimary;
-    wxDataObject     *m_receivedData;
+    // clear the data for the given clipboard kind
+    void GTKClearData(Kind kind);
+
+    // called when selection data is received
+    void GTKOnSelectionReceived(const GtkSelectionData& sel);
+
+    // called when available target information is received
+    bool GTKOnTargetReceived(const wxDataFormat& format);
 
 private:
+    // the data object we're currently using
+    wxDataObject *& Data()
+    {
+        return m_usePrimary ? m_dataPrimary : m_dataClipboard;
+    }
+
+    // set or unset selection ownership
+    bool SetSelectionOwner(bool set = true);
+
+    // add atom to the list of supported targets
+    void AddSupportedTarget(GdkAtom atom);
+
+    // check if the given format is supported
+    bool DoIsSupported(const wxDataFormat& format);
+
+
+    // both of these pointers can be non-NULL simultaneously but we only use
+    // one of them at any moment depending on m_usePrimary value, use Data()
+    // (from inside) or GTKGetDataObject() (from outside) accessors
+    wxDataObject *m_dataPrimary,
+                 *m_dataClipboard;
+
+    // this is used to temporarily hold the object passed to our GetData() so
+    // that GTK callbacks could access it
+    wxDataObject *m_receivedData;
+
+    // used to pass information about the format we need from DoIsSupported()
+    // to GTKOnTargetReceived()
+    GdkAtom m_targetRequested;
+
+    GtkWidget *m_clipboardWidget;  // for getting and offering data
+    GtkWidget *m_targetsWidget;    // for getting list of supported formats
+
+    bool m_open;
+    bool m_usePrimary;
+    bool m_formatSupported;
+
+
     DECLARE_DYNAMIC_CLASS(wxClipboard)
 };
 
