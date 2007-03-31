@@ -72,6 +72,7 @@ gtk_changed(GtkSpinButton* spinbutton, wxSpinCtrl* win)
 
     wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, win->GetId() );
     event.SetEventObject( win );
+    event.SetString( GTK_ENTRY(spinbutton)->text );
 
     // see above
     event.SetInt(win->m_pos);
