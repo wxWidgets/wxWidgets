@@ -96,6 +96,7 @@ protected:
     void OnSpinBtnUp(wxSpinEvent& event);
     void OnSpinBtnDown(wxSpinEvent& event);
     void OnSpinCtrl(wxSpinEvent& event);
+    void OnSpinText(wxCommandEvent& event);
 
     void OnUpdateUIValueButton(wxUpdateUIEvent& event);
     void OnUpdateUIMinMaxButton(wxUpdateUIEvent& event);
@@ -160,6 +161,7 @@ BEGIN_EVENT_TABLE(SpinBtnWidgetsPage, WidgetsPage)
     EVT_SPIN_UP(SpinBtnPage_SpinBtn, SpinBtnWidgetsPage::OnSpinBtnUp)
     EVT_SPIN_DOWN(SpinBtnPage_SpinBtn, SpinBtnWidgetsPage::OnSpinBtnDown)
     EVT_SPINCTRL(SpinBtnPage_SpinCtrl, SpinBtnWidgetsPage::OnSpinCtrl)
+    EVT_TEXT(SpinBtnPage_SpinCtrl, SpinBtnWidgetsPage::OnSpinText)
 
     EVT_CHECKBOX(wxID_ANY, SpinBtnWidgetsPage::OnCheckOrRadioBox)
     EVT_RADIOBOX(wxID_ANY, SpinBtnWidgetsPage::OnCheckOrRadioBox)
@@ -432,8 +434,6 @@ void SpinBtnWidgetsPage::OnSpinBtnDown(wxSpinEvent& event)
 
 void SpinBtnWidgetsPage::OnSpinCtrl(wxSpinEvent& event)
 {
-    if (!m_spinctrl)
-        return;
     int value = event.GetInt();
 
     wxASSERT_MSG( value == m_spinctrl->GetValue(),
@@ -441,5 +441,11 @@ void SpinBtnWidgetsPage::OnSpinCtrl(wxSpinEvent& event)
 
     wxLogMessage(_T("Spin control value changed, now %d"), value);
 }
-#endif
-    // wxUSE_SPINBTN
+
+void SpinBtnWidgetsPage::OnSpinText(wxCommandEvent& event)
+{
+    wxLogMessage(_T("Text changed in spin control, now \"%s\""),
+                 event.GetString().c_str());
+}
+
+#endif // wxUSE_SPINBTN
