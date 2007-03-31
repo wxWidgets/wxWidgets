@@ -157,6 +157,8 @@ void wxFontRefData::Init(int pointSize,
 
     m_underlined = underlined;
     m_encoding = encoding;
+    if ( m_encoding == wxFONTENCODING_DEFAULT )
+        m_encoding = wxFont::GetDefaultEncoding();
 
     m_noAA = false;
 
