@@ -49,7 +49,10 @@ public:
     virtual void UsePrimarySelection(bool primary = TRUE)
         { m_usePrimary = primary; }
     
+
     // implementation from now on
+    // --------------------------
+
     bool              m_open;
     bool              m_ownsClipboard;
     bool              m_ownsPrimarySelection;
@@ -57,7 +60,6 @@ public:
 
     GtkWidget        *m_clipboardWidget;  /* for getting and offering data */
     GtkWidget        *m_targetsWidget;    /* for getting list of supported formats */
-    bool              m_waiting;          /* querying data or formats is asynchronous */
 
     bool              m_formatSupported;
     GdkAtom           m_targetRequested;
