@@ -547,6 +547,9 @@ wxClipboard::~wxClipboard()
 
 void wxClipboard::Clear()
 {
+    if ( IsUsingPrimarySelection() )
+        return;
+
 #if wxUSE_OLE_CLIPBOARD
     if (m_lastDataObject)
     {
@@ -613,6 +616,9 @@ bool wxClipboard::IsOpened() const
 
 bool wxClipboard::SetData( wxDataObject *data )
 {
+    if ( IsUsingPrimarySelection() )
+        return false;
+
 #if !wxUSE_OLE_CLIPBOARD
     (void)wxEmptyClipboard();
 #endif // wxUSE_OLE_CLIPBOARD
@@ -625,6 +631,9 @@ bool wxClipboard::SetData( wxDataObject *data )
 
 bool wxClipboard::AddData( wxDataObject *data )
 {
+    if ( IsUsingPrimarySelection() )
+        return false;
+
     wxCHECK_MSG( data, false, wxT("data is invalid") );
 
 #if wxUSE_OLE_CLIPBOARD
@@ -718,11 +727,14 @@ void wxClipboard::Close()
 
 bool wxClipboard::IsSupported( const wxDataFormat& format )
 {
-    return wxIsClipboardFormatAvailable(format);
+    return !IsUsingPrimarySelection() && wxIsClipboardFormatAvailable(format);
 }
 
 bool wxClipboard::GetData( wxDataObject& data )
 {
+    if ( IsUsingPrimarySelection() )
+        return false;
+
 #if wxUSE_OLE_CLIPBOARD
     IDataObject *pDataObject = NULL;
     HRESULT hr = OleGetClipboard(&pDataObject);

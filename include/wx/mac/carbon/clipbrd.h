@@ -63,9 +63,6 @@ public:
     // eating memory), otherwise the clipboard will be emptied on exit
     virtual bool Flush();
 
-    // X11 has two clipboards which get selected by this call. Empty on MSW.
-    void UsePrimarySelection( bool WXUNUSED(primary) = FALSE ) { }
-
 private:
     wxDataObject     *m_data;
     bool              m_open;
@@ -73,5 +70,4 @@ private:
 
 #endif // wxUSE_CLIPBOARD
 
-#endif
-    // _WX_CLIPBRD_H_
+#endif // _WX_CLIPBRD_H_

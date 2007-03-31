@@ -52,11 +52,7 @@ public:
     // clears wxTheClipboard and the system's clipboard if possible
     virtual void Clear();
 
-    // If primary == TRUE, use primary selection in all further ops,
-    // primary == FALSE resets it.
-    virtual void UsePrimarySelection(bool primary = TRUE)
-        { m_usePrimary = primary; }
-    
+
 
     // implementation from now on
     // --------------------------
@@ -111,7 +107,6 @@ private:
     GtkWidget *m_targetsWidget;    // for getting list of supported formats
 
     bool m_open;
-    bool m_usePrimary;
     bool m_formatSupported;
 
 

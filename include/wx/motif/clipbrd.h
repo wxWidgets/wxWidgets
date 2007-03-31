@@ -67,13 +67,9 @@ public:
     // clears wxTheClipboard and the system's clipboard if possible
     virtual void Clear();
 
-    virtual void UsePrimarySelection(bool primary = true)
-    { m_usePrimary = primary; }
-
     // implementation from now on
     bool              m_open;
     wxDataObjectList  m_data;
-    bool              m_usePrimary;
     wxDataIdToDataObjectList m_idToObject;
 
 private:
@@ -82,5 +78,4 @@ private:
 
 #endif // wxUSE_CLIPBOARD
 
-#endif
-// _WX_CLIPBRD_H_
+#endif // _WX_CLIPBRD_H_

@@ -347,8 +347,6 @@ wxClipboard::wxClipboard()
 
     m_formatSupported = false;
     m_targetRequested = 0;
-
-    m_usePrimary = false;
 }
 
 wxClipboard::~wxClipboard()

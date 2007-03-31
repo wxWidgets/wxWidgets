@@ -347,8 +347,6 @@ wxClipboard::wxClipboard()
     m_formatSupported = false;
     m_targetRequested = 0;
 
-    m_usePrimary = false;
-
     // we use m_targetsWidget to query what formats are available
     m_targetsWidget = gtk_window_new( GTK_WINDOW_POPUP );
     gtk_widget_realize( m_targetsWidget );

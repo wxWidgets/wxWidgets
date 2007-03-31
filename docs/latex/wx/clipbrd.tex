@@ -52,17 +52,20 @@ For example:
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxClipboard::wxClipboard}\label{wxclipboardctor}
 
 \func{}{wxClipboard}{\void}
 
 Constructor.
 
+
 \membersection{wxClipboard::\destruct{wxClipboard}}\label{wxclipboarddtor}
 
 \func{}{\destruct{wxClipboard}}{\void}
 
 Destructor.
+
 
 \membersection{wxClipboard::AddData}\label{wxclipboardadddata}
 
@@ -78,17 +81,20 @@ the data explicitly.
 
 \helpref{wxClipboard::SetData}{wxclipboardsetdata}
 
+
 \membersection{wxClipboard::Clear}\label{wxclipboardclear}
 
 \func{void}{Clear}{\void}
 
 Clears the global clipboard object and the system's clipboard if possible.
 
+
 \membersection{wxClipboard::Close}\label{wxclipboardclose}
 
 \func{void}{Close}{\void}
 
 Call this function to close the clipboard, having opened it with \helpref{wxClipboard::Open}{wxclipboardopen}.
+
 
 \membersection{wxClipboard::Flush}\label{wxclipboardflush}
 
@@ -99,6 +105,7 @@ clipboard will stay available even after the application exits (possibly
 eating memory), otherwise the clipboard will be emptied on exit.
 Returns false if the operation is unsuccessful for any reason.
 
+
 \membersection{wxClipboard::GetData}\label{wxclipboardgetdata}
 
 \func{bool}{GetData}{\param{wxDataObject\&}{ data}}
@@ -106,17 +113,28 @@ Returns false if the operation is unsuccessful for any reason.
 Call this function to fill {\it data} with data on the clipboard, if available in the required
 format. Returns true on success.
 
+
 \membersection{wxClipboard::IsOpened}\label{wxclipboardisopened}
 
 \constfunc{bool}{IsOpened}{\void}
 
 Returns true if the clipboard has been opened.
 
+
 \membersection{wxClipboard::IsSupported}\label{wxclipboardissupported}
 
 \func{bool}{IsSupported}{\param{const wxDataFormat\&}{ format}}
 
 Returns true if there is data which matches the data format of the given data object currently {\bf available} (IsSupported sounds like a misnomer, FIXME: better deprecate this name?) on the clipboard.
+
+
+\membersection{wxClipboard::IsUsingPrimarySelection}\label{wxclipboardisusingprimaryselection}
+
+\constfunc{bool}{IsUsingPrimarySelection}{\void}
+
+Returns \true if we are using the primary selection, \false if clipboard one.
+See \helpref{UsePrimarySelection}{wxclipboarduseprimary} for more information.
+
 
 \membersection{wxClipboard::Open}\label{wxclipboardopen}
 
@@ -129,6 +147,7 @@ Call \helpref{wxClipboard::Close}{wxclipboardclose} when you have finished with 
 should keep the clipboard open for only a very short time.
 
 Returns true on success. This should be tested (as in the sample shown above).
+
 
 \membersection{wxClipboard::SetData}\label{wxclipboardsetdata}
 
@@ -145,12 +164,21 @@ the data explicitly.
 
 \helpref{wxClipboard::AddData}{wxclipboardadddata}
 
+
 \membersection{wxClipboard::UsePrimarySelection}\label{wxclipboarduseprimary}
 
 \func{void}{UsePrimarySelection}{\param{bool}{ primary = true}}
 
-On platforms supporting it (currently only GTK), selects the so called
-PRIMARY SELECTION as the clipboard as opposed to the normal clipboard,
-if {\it primary} is true.
+On platforms supporting it (all X11-based ports), wxClipboard uses the
+CLIPBOARD X11 selection by default. When this function is called with \true
+argument, all subsequent clipboard operations will use PRIMARY selection until
+this function is called again with \false.
 
+On the other platforms, there is no PRIMARY selection and so all clipboard
+operations will fail. This allows to implement the standard X11 handling of the
+clipboard which consists in copying data to the CLIPBOARD selection only when
+the user explicitly requests it (i.e. by selection \texttt{"Copy"} menu
+command) but putting the currently selected text into the PRIMARY selection
+automatically, without overwriting the normal clipboard contents with the
+currently selected text on the other platforms.
 

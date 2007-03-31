@@ -173,6 +173,9 @@ wxClipboard::~wxClipboard()
 
 void wxClipboard::Clear()
 {
+    if ( IsUsingPrimarySelection() )
+        return;
+
     if (m_data != NULL)
     {
         delete m_data;
@@ -214,6 +217,9 @@ bool wxClipboard::IsOpened() const
 
 bool wxClipboard::SetData( wxDataObject *data )
 {
+    if ( IsUsingPrimarySelection() )
+        return false;
+
     wxCHECK_MSG( m_open, false, wxT("clipboard not open") );
     wxCHECK_MSG( data, false, wxT("data is invalid") );
 
@@ -226,6 +232,9 @@ bool wxClipboard::SetData( wxDataObject *data )
 
 bool wxClipboard::AddData( wxDataObject *data )
 {
+    if ( IsUsingPrimarySelection() )
+        return false;
+
     wxCHECK_MSG( m_open, false, wxT("clipboard not open") );
     wxCHECK_MSG( data, false, wxT("data is invalid") );
 
@@ -320,6 +329,9 @@ void wxClipboard::Close()
 
 bool wxClipboard::IsSupported( const wxDataFormat &dataFormat )
 {
+    if ( IsUsingPrimarySelection() )
+        return false;
+
     if ( m_data )
         return m_data->IsSupported( dataFormat );
 
@@ -370,6 +382,9 @@ bool wxClipboard::IsSupported( const wxDataFormat &dataFormat )
 
 bool wxClipboard::GetData( wxDataObject& data )
 {
+    if ( IsUsingPrimarySelection() )
+        return false;
+
     wxCHECK_MSG( m_open, false, wxT("clipboard not open") );
 
     size_t formatcount = data.GetFormatCount() + 1;
