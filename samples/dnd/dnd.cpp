@@ -227,6 +227,8 @@ public:
 
     void OnCopyFiles(wxCommandEvent& event);
 
+    void OnUsePrimary(wxCommandEvent& event);
+
     void OnLeftDown(wxMouseEvent& event);
     void OnRightDown(wxMouseEvent& event);
 
@@ -801,6 +803,7 @@ enum
     Menu_PasteBitmap,
     Menu_PasteMFile,
     Menu_CopyFiles,
+    Menu_UsePrimary,
     Menu_Shape_New = 500,
     Menu_Shape_Edit,
     Menu_Shape_Clear,
@@ -828,6 +831,7 @@ BEGIN_EVENT_TABLE(DnDFrame, wxFrame)
     EVT_MENU(Menu_PasteMFile, DnDFrame::OnPasteMetafile)
 #endif // wxUSE_METAFILE
     EVT_MENU(Menu_CopyFiles,  DnDFrame::OnCopyFiles)
+    EVT_MENU(Menu_UsePrimary, DnDFrame::OnUsePrimary)
 
     EVT_UPDATE_UI(Menu_DragMoveDef, DnDFrame::OnUpdateUIMoveByDefault)
 
@@ -900,10 +904,6 @@ bool DnDApp::OnInit()
     wxImage::AddHandler( new wxPNGHandler );
 #endif
 
-    // under X we usually want to use the primary selection by default (which
-    // is shared with other apps)
-    wxTheClipboard->UsePrimarySelection();
-
     // create the main frame window
     DnDFrame *frame = new DnDFrame((wxFrame  *) NULL,
                                    _T("Drag-and-Drop/Clipboard wxWidgets Sample"),
@@ -967,6 +967,8 @@ DnDFrame::DnDFrame(wxFrame *frame, const wxChar *title, int x, int y, int w, int
 #endif // wxUSE_METAFILE
     clip_menu->AppendSeparator();
     clip_menu->Append(Menu_CopyFiles, _T("Copy &files\tCtrl-F"));
+    clip_menu->AppendSeparator();
+    clip_menu->AppendCheckItem(Menu_UsePrimary, _T("Use &primary selection\tCtrl-P"));
 
     wxMenuBar *menu_bar = new wxMenuBar;
     menu_bar->Append(file_menu, _T("&File"));
@@ -1219,6 +1221,15 @@ DnDFrame::~DnDFrame()
             delete m_pLog;
     }
 #endif // wxUSE_LOG
+}
+
+void DnDFrame::OnUsePrimary(wxCommandEvent& event)
+{
+    const bool usePrimary = event.IsChecked();
+    wxTheClipboard->UsePrimarySelection(usePrimary);
+
+    wxLogStatus(_T("Now using %s selection"), usePrimary ? _T("primary")
+                                                         : _T("clipboard"));
 }
 
 // ---------------------------------------------------------------------------
