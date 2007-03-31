@@ -33,6 +33,19 @@ Setting this to 0 causes more flicker, but allows applications to paint graphics
 used.}
 \end{twocollist}
 
+\wxheading{GTK}
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf Option}}{{\bf Value}}
+\twocolitem{gtk.tlw.can-set-transparent}{\helpref{wxTopLevelWindow::CanSetTransparent()}{wxtoplevelwindowcansettransparent} 
+method normally tries to detect automatically whether transparency for top
+level windows is currently supported, however this may sometimes fail and this
+option allows to override the automatic detection. Setting it to $1$ makes the
+transparency be always available (setting it can still fail, of course) and
+setting it to $0$ makes it always unavailable.}
+\end{twocollist}
+
 \wxheading{Mac}
 
 \twocolwidtha{7cm}

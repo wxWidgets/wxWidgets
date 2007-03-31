@@ -33,6 +33,7 @@
 
 #include "wx/gtk/private.h"
 #include "wx/evtloop.h"
+#include "wx/sysopt.h"
 
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
@@ -1415,6 +1416,13 @@ bool wxTopLevelWindowGTK::SetTransparent(wxByte alpha)
 
 bool wxTopLevelWindowGTK::CanSetTransparent()
 {
+    // allow to override automatic detection as it's far from perfect
+    static const wxChar *SYSOPT_TRANSPARENT = wxT("gtk.tlw.can-set-transparent");
+    if ( wxSystemOptions::HasOption(SYSOPT_TRANSPARENT) )
+    {
+        return wxSystemOptions::GetOptionInt(SYSOPT_TRANSPARENT) != 0;
+    }
+
 #if GTK_CHECK_VERSION(2,10,0)
     if (!gtk_check_version(2,10,0))
     {
