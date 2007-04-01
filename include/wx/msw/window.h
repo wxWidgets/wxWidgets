@@ -160,7 +160,7 @@ public:
     // that the window object is passed instead of window handle) and should
     // return true if it handled the message or false if it should be passed to
     // DefWindowProc()
-    typedef bool (*MSWMessageHandler)(wxWindow *win,
+    typedef bool (*MSWMessageHandler)(wxWindowMSW *win,
                                       WXUINT nMsg,
                                       WXWPARAM wParam,
                                       WXLPARAM lParam);
