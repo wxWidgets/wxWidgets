@@ -157,13 +157,14 @@ public:
     // Attributes
     ////////////////////////////////////////////////////////////////////////////
 
+#ifdef wxHAS_NATIVE_OVERLAY
+    // backing store is not used when native overlays are
+    void SetBackingBitmap(wxBitmap* WXUNUSED(bitmap)) { }
+#else
     // For efficiency, tell wxGenericDragImage to use a bitmap that's already
     // created (e.g. from last drag)
-    void SetBackingBitmap(wxBitmap* bitmap) { 
-#ifndef wxHAS_NATIVE_OVERLAY
-        m_pBackingBitmap = bitmap; 
-#endif
-    }
+    void SetBackingBitmap(wxBitmap* bitmap) { m_pBackingBitmap = bitmap; }
+#endif // wxHAS_NATIVE_OVERLAY/!wxHAS_NATIVE_OVERLAY
 
     // Operations
     ////////////////////////////////////////////////////////////////////////////
