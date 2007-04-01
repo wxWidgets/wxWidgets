@@ -748,6 +748,7 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
     #ifndef wxVsnprintf_
         #if defined(__VISUALC__) || \
                 (defined(__BORLANDC__) && __BORLANDC__ >= 0x540)
+            #define wxSnprintf_     _sntprintf
             #define wxVsnprintf_    _vsntprintf
             WX_DEFINE_VARARG_FUNC(int, wxSnprintf_, _sntprintf)
         #endif
