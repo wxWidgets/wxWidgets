@@ -42,6 +42,9 @@ public:
 
 protected :
 
+    virtual wxString DoGetLabel() const;
+    virtual void DoSetLabel(const wxString& str);
+
   virtual wxSize DoGetBestSize() const ;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxStaticText)

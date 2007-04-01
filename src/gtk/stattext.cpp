@@ -41,7 +41,7 @@ wxStaticText::wxStaticText(wxWindow *parent,
                            long style,
                            const wxString &name)
 {
-  Create( parent, id, label, pos, size, style, name );
+    Create( parent, id, label, pos, size, style, name );
 }
 
 bool wxStaticText::Create(wxWindow *parent,
@@ -61,9 +61,7 @@ bool wxStaticText::Create(wxWindow *parent,
         return FALSE;
     }
 
-    const wxString labelGTK = GTKConvertMnemonics(label);
-    m_label = label;
-    m_widget = gtk_label_new_with_mnemonic(wxGTK_CONV(labelGTK));
+    m_widget = gtk_label_new(NULL);
 
     GtkJustification justify;
     if ( style & wxALIGN_CENTER )
@@ -89,6 +87,24 @@ bool wxStaticText::Create(wxWindow *parent,
 
     gtk_label_set_line_wrap( GTK_LABEL(m_widget), TRUE );
 
+#ifdef __WXGTK26__
+    if (!gtk_check_version(2,6,0))
+    {
+        // set ellipsize mode
+        PangoEllipsizeMode ellipsizeMode = PANGO_ELLIPSIZE_NONE;
+        if ( style & wxST_ELLIPSIZE_START )
+            ellipsizeMode = PANGO_ELLIPSIZE_START;
+        else if ( style & wxST_ELLIPSIZE_MIDDLE )
+            ellipsizeMode = PANGO_ELLIPSIZE_MIDDLE;
+        else if ( style & wxST_ELLIPSIZE_END )
+            ellipsizeMode = PANGO_ELLIPSIZE_END;
+
+        gtk_label_set_ellipsize( GTK_LABEL(m_widget), ellipsizeMode );
+    }
+#endif // __WXGTK26__
+
+    SetLabel(label);
+
     m_parent->DoAddChild( this );
 
     PostCreation(size);
@@ -110,20 +126,39 @@ bool wxStaticText::Create(wxWindow *parent,
 
 wxString wxStaticText::GetLabel() const
 {
-    GtkLabel *label = GTK_LABEL(m_widget);
-    wxString str = wxGTK_CONV_BACK( gtk_label_get_text( label ) );
-
-    return wxString(str);
+    // we need to return the label just like it was passed to the last call
+    // to SetLabel(): i.e. with wx-style mnemonics and with markup
+    return wxControl::GetLabel();
 }
 
-void wxStaticText::SetLabel( const wxString &label )
+void wxStaticText::SetLabel( const wxString& str )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid static text") );
 
-    GTKSetLabelForLabel(GTK_LABEL(m_widget), label);
+    // save the label inside m_labelOrig in case user calls GetLabel() later
+    m_labelOrig = str;
+
+    wxString label(str);
+    if (gtk_check_version(2,6,0) &&
+        IsEllipsized())
+    {
+        // GTK+ < 2.6 does not support ellipsization:
+        // since we need to use our generic code for ellipsization (which does not
+        // behaves well in conjunction with markup; i.e. it may break the markup
+        // validity erasing portions of the string), we also need to strip out
+        // the markup (if present) from the label.
+
+        label = GetEllipsizedLabelWithoutMarkup();
+    }
+
+    if ( HasFlag(wxST_MARKUP) )
+        GTKSetLabelWithMarkupForLabel(GTK_LABEL(m_widget), label);
+    else
+        GTKSetLabelForLabel(GTK_LABEL(m_widget), label);
 
     // adjust the label size to the new label unless disabled
-    if ( !HasFlag(wxST_NO_AUTORESIZE) )
+    if ( !HasFlag(wxST_NO_AUTORESIZE) && 
+         !IsEllipsized() )  // if ellipsize is ON, then we don't want to get resized!
         SetSize( GetBestSize() );
 }
 
@@ -171,6 +206,13 @@ void wxStaticText::DoSetSize(int x, int y,
                            int sizeFlags )
 {
     wxControl::DoSetSize( x, y, width, height, sizeFlags );
+
+    if (gtk_check_version(2,6,0))
+    {
+        // GTK+ < 2.6 does not support ellipsization - we need to run our
+        // generic code (actually it will be run only if IsEllipsized() == true)
+        UpdateLabel();
+    }
 }
 
 wxSize wxStaticText::DoGetBestSize() const
@@ -213,6 +255,20 @@ bool wxStaticText::GTKWidgetNeedsMnemonic() const
 void wxStaticText::GTKWidgetDoSetMnemonic(GtkWidget* w)
 {
     gtk_label_set_mnemonic_widget(GTK_LABEL(m_widget), w);
+}
+
+
+// These functions should be used only when GTK+ < 2.6 by wxStaticTextBase::UpdateLabel()
+
+wxString wxStaticText::DoGetLabel() const
+{
+    GtkLabel *label = GTK_LABEL(m_widget);
+    return wxGTK_CONV_BACK( gtk_label_get_text( label ) );
+}
+
+void wxStaticText::DoSetLabel(const wxString& str)
+{
+    GTKSetLabelForLabel(GTK_LABEL(m_widget), str);
 }
 
 // static

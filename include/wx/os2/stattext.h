@@ -67,6 +67,9 @@ protected:
                             );
     virtual wxSize DoGetBestSize(void) const;
 
+    virtual void DoSetLabel(const wxString& str);
+    virtual wxString DoGetLabel() const;
+
 private:
     DECLARE_DYNAMIC_CLASS(wxStaticText)
 }; // end of CLASS wxStaticText

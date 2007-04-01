@@ -47,14 +47,12 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
     Widget borderWidget =
         (Widget) wxCreateBorderWidget( (WXWidget)parentWidget, style );
-    wxXmString text( GetLabelText( label ) );
 
     m_labelWidget =
         XtVaCreateManagedWidget (wxConstCast(name.mb_str(), char),
             xmLabelWidgetClass,
             borderWidget ? borderWidget : parentWidget,
             wxFont::GetFontTag(), m_font.GetFontTypeC(XtDisplay(parentWidget)),
-            XmNlabelString, text(),
             XmNalignment, ((style & wxALIGN_RIGHT)  ? XmALIGNMENT_END :
                           ((style & wxALIGN_CENTRE) ? XmALIGNMENT_CENTER :
                                                       XmALIGNMENT_BEGINNING)),
@@ -68,12 +66,33 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
     ChangeBackgroundColour ();
 
+    SetLabel(label);
+
     return true;
 }
 
 void wxStaticText::SetLabel(const wxString& label)
 {
-    wxXmString label_str(GetLabelText(label));
+    m_labelOrig = label;       // save original label
+
+    // Motif does not support neither ellipsize nor markup in static text:
+    DoSetLabel(GetEllipsizedLabelWithoutMarkup());
+}
+
+// for wxST_ELLIPSIZE_* support:
+
+wxString wxStaticText::DoGetLabel() const
+{
+    XmString label = NULL;
+    XtVaGetValues((Widget)m_labelWidget, XmNlabelString, &label, NULL);
+
+    return wxXmStringToString(label);
+}
+
+void wxStaticText::DoSetLabel(const wxString& str)
+{
+    // build our own cleaned label
+    wxXmString label_str(RemoveMnemonics(str));
 
     // This variable means we don't need so many casts later.
     Widget widget = (Widget) m_labelWidget;
@@ -83,5 +102,10 @@ void wxStaticText::SetLabel(const wxString& label)
             XmNlabelType, XmSTRING,
             NULL);
 }
+
+/*
+   FIXME: UpdateLabel() should be called on size events to allow correct
+          dynamic ellipsizing of the label
+*/
 
 #endif // wxUSE_STATTEXT

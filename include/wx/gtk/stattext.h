@@ -14,7 +14,7 @@
 // wxStaticText
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxStaticText : public wxControl
+class WXDLLIMPEXP_CORE wxStaticText : public wxStaticTextBase
 {
 public:
     wxStaticText();
@@ -43,8 +43,7 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
-    // see wx/stattext.h
-    void Wrap(int width);
+
 
     // implementation
     // --------------
@@ -58,6 +57,9 @@ protected:
                            int sizeFlags = wxSIZE_AUTO);
 
     virtual wxSize DoGetBestSize() const;
+
+    virtual wxString DoGetLabel() const;
+    virtual void DoSetLabel(const wxString& str);
 
     DECLARE_DYNAMIC_CLASS(wxStaticText)
 };

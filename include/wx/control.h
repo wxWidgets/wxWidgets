@@ -46,11 +46,36 @@ public:
     // get the control alignment (left/right/centre, top/bottom/centre)
     int GetAlignment() const { return m_windowStyle & wxALIGN_MASK; }
 
+    // get just the text of the label, without mnemonic characters ('&')
+    wxString GetLabelText() const { return GetLabelText(GetLabel()); }
+
+    virtual void SetLabel(const wxString& label)
+    {
+        m_labelOrig = label;
+
+        InvalidateBestSize();
+
+        wxWindow::SetLabel(label);
+    }
+
+    virtual wxString GetLabel() const
+    {
+        // return the original string, as it was passed to SetLabel()
+        // (i.e. with wx-style mnemonics)
+        return m_labelOrig;
+    }
+
+    // static utilities:
+
     // get the string without mnemonic characters ('&')
     static wxString GetLabelText(const wxString& label);
 
-    // get just the text of the label, without mnemonic characters ('&')
-    wxString GetLabelText() const { return GetLabelText(GetLabel()); }
+    // removes the mnemonics characters
+    static wxString RemoveMnemonics(const wxString& str);
+
+    // escapes the mnemonics characters ('&') by doubling them
+    static wxString EscapeMnemonics(const wxString& str);
+
 
     // controls by default inherit the colours of their parents, if a
     // particular control class doesn't want to do it, it can override
@@ -64,7 +89,6 @@ public:
     // if the button was clicked)
     virtual void Command(wxCommandEvent &event);
 
-    virtual void SetLabel( const wxString &label );
     virtual bool SetFont(const wxFont& font);
 
     // wxControl-specific processing after processing the update event
@@ -83,6 +107,9 @@ protected:
 
     // initialize the common fields of wxCommandEvent
     void InitCommandEvent(wxCommandEvent& event) const;
+
+    // this field contains the label in wx format, i.e. with '&' mnemonics
+    wxString m_labelOrig;
 
     DECLARE_NO_COPY_CLASS(wxControlBase)
 };

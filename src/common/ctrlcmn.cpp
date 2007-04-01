@@ -120,13 +120,6 @@ void wxControlBase::InitCommandEvent(wxCommandEvent& event) const
     }
 }
 
-
-void wxControlBase::SetLabel( const wxString &label )
-{
-    InvalidateBestSize();
-    wxWindow::SetLabel(label);
-}
-
 bool wxControlBase::SetFont(const wxFont& font)
 {
     InvalidateBestSize();
@@ -157,6 +150,12 @@ void wxControlBase::DoUpdateWindowUI(wxUpdateUIEvent& event)
             radiobtn->SetValue(event.GetChecked());
     }
 #endif // wxUSE_RADIOBTN
+}
+
+/* static */
+wxString wxControlBase::RemoveMnemonics(const wxString& str)
+{
+    return wxStripMenuCodes(str, wxStrip_Mnemonics);
 }
 
 // ----------------------------------------------------------------------------

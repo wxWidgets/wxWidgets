@@ -60,6 +60,9 @@ protected:
     // draw the control
     virtual void DoDraw(wxControlRenderer *renderer);
 
+    virtual void DoSetLabel(const wxString& str);
+    virtual wxString DoGetLabel() const;
+
     DECLARE_ABSTRACT_CLASS(wxStaticText)
 };
 

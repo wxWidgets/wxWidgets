@@ -26,6 +26,14 @@ adjust its size to exactly fit to the size of the text when
 given, the control will not change its size (this style is especially useful
 with controls which also have wxALIGN\_RIGHT or CENTER style because otherwise
 they won't make sense any longer after a call to SetLabel)}
+\twocolitem{\windowstyle{wxST\_ELLIPSIZE\_START}}{If the text width exceeds the
+control width, replace the beginning of the text with an ellipsis}
+\twocolitem{\windowstyle{wxST\_ELLIPSIZE\_MIDDLE}}{Same as above, but replace
+the text in the middle of the control with an ellipsis}
+\twocolitem{\windowstyle{wxST\_ELLIPSIZE\_END}}{Same as above, but replace the
+end of the text with an ellipsis}
+\twocolitem{\windowstyle{wxST_MARKUP}}{Support markup in the label; see
+\helpref{SetLabel}{wxstatictextsetlabel} for more information}
 \end{twocollist}
 
 See also \helpref{window styles overview}{windowstyles}.
@@ -85,6 +93,22 @@ Creation function, for two-step construction. For details see \helpref{wxStaticT
 
 Returns the contents of the control.
 
+Note that the returned string contains both the mnemonics (\texttt{\&} characters),
+if any, and markup tags, if any.
+
+Use \helpref{wxStaticText::GetLabelText}{wxstatictextgetlabeltext} if only the
+label text is needed.
+
+
+\membersection{wxStaticText::GetLabelText}\label{wxstatictextgetlabeltext}
+
+\constfunc{const wxString\&}{GetLabelText}{\void}
+
+Returns the control's label or the given \arg{label} string for the static
+version without the mnemonics characters (if any) and without the markup
+(if the control has \texttt{wxST_MARKUP} style).
+
+
 
 \membersection{wxStaticText::SetLabel}\label{wxstatictextsetlabel}
 
@@ -93,12 +117,70 @@ Returns the contents of the control.
 Sets the static text label and updates the controls size to exactly fit the
 label unless the control has wxST\_NO\_AUTORESIZE flag.
 
+This function allows to set decorated static label text on platforms which
+support it (currently only GTK+ 2). For the other platforms, the markup is
+ignored.
+
+The supported tags are:
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{<b>}{bold text}
+\twocolitem{<big>}{bigger text}
+\twocolitem{<i>}{italic text}
+\twocolitem{<s>}{strike-through text}
+\twocolitem{<sub>}{subscript text}
+\twocolitem{<sup>}{superscript text}
+\twocolitem{<small>}{smaller text}
+\twocolitem{<tt>}{monospaced text}
+\twocolitem{<u>}{underlined text}
+\twocolitem{<span>}{generic formatter tag; see \urlref{Pango Markup}{http://developer.gnome.org/doc/API/2.0/pango/PangoMarkupFormat.html} for more information.}
+\end{twocollist}
+
+Note that the string must be well-formed (e.g. all tags must be correctly closed)
+otherwise it can be not shown correctly or at all.
+
+Also note that you need to escape the following special characters:
+
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\textbf{Special character}}{\textbf{Escape as}}
+\twocolitem{\texttt{&}}{\texttt{&amp;} or as \texttt{&&}}
+\twocolitem{\texttt{'}}{\texttt{&apos;}}
+\twocolitem{\texttt{"}}{\texttt{&quot;}}
+\twocolitem{\texttt{<}}{\texttt{&lt;}}
+\twocolitem{\texttt{>}}{\texttt{&gt;}}
+\end{twocollist}
+
+The non-escaped ampersand \texttt{&} characters are interpreted as
+mnemonics; see \helpref{wxControl::SetLabel}{wxcontrolsetlabel}.
+
+
+Example:
+
+%% TEX NOTE: in the following block we need to write the (ugly) &&amp;amp;
+%%           string in order to force Tex2rtf to show the &&amp; string
+\begin{verbatim}
+    // this will set the wxStaticText to show the "Hello world!" string
+    // with the "Hello" world in bold on platforms which support markup
+    pStaticText->SetLabelWithMarkup(wxT("<b>Hello</b> world!"));
+
+    // this will make wxStaticText show the string:
+    //
+    //              Specials: & ' " < >"
+    //
+    // with "Specials" in smaller size font if markup is supported
+    pStaticText->SetLabelWithMarkup(
+        wxT("<small>Specials</small>: &amp;amp; &amp;apos; &amp;quot;; &amp;lt; &amp;gt;"));
+\end{verbatim}
+
 \wxheading{Parameters}
 
-\docparam{label}{The new label to set. It may contain newline characters.}
+\docparam{label}{The new label to set. It may contain newline characters and the markup tags described above.}
 
 
-\membersection{wxStaticText::Wrap}\label{wxstatictextwrpa}
+
+\membersection{wxStaticText::Wrap}\label{wxstatictextwrap}
 
 \func{void}{Wrap}{\param{int }{width}}
 

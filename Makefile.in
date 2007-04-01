@@ -3549,6 +3549,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_sizer.o \
 	monodll_srchcmn.o \
 	monodll_statbar.o \
+	monodll_stattextcmn.o \
 	monodll_stockitem.o \
 	monodll_tbarbase.o \
 	monodll_textcmn.o \
@@ -3725,6 +3726,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_sizer.o \
 	monodll_srchcmn.o \
 	monodll_statbar.o \
+	monodll_stattextcmn.o \
 	monodll_stockitem.o \
 	monodll_tbarbase.o \
 	monodll_textcmn.o \
@@ -5342,6 +5344,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_sizer.o \
 	monolib_srchcmn.o \
 	monolib_statbar.o \
+	monolib_stattextcmn.o \
 	monolib_stockitem.o \
 	monolib_tbarbase.o \
 	monolib_textcmn.o \
@@ -5518,6 +5521,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_sizer.o \
 	monolib_srchcmn.o \
 	monolib_statbar.o \
+	monolib_stattextcmn.o \
 	monolib_stockitem.o \
 	monolib_tbarbase.o \
 	monolib_textcmn.o \
@@ -7369,6 +7373,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_sizer.o \
 	coredll_srchcmn.o \
 	coredll_statbar.o \
+	coredll_stattextcmn.o \
 	coredll_stockitem.o \
 	coredll_tbarbase.o \
 	coredll_textcmn.o \
@@ -7545,6 +7550,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_sizer.o \
 	coredll_srchcmn.o \
 	coredll_statbar.o \
+	coredll_stattextcmn.o \
 	coredll_stockitem.o \
 	coredll_tbarbase.o \
 	coredll_textcmn.o \
@@ -8834,6 +8840,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_sizer.o \
 	corelib_srchcmn.o \
 	corelib_statbar.o \
+	corelib_stattextcmn.o \
 	corelib_stockitem.o \
 	corelib_tbarbase.o \
 	corelib_textcmn.o \
@@ -9010,6 +9017,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_sizer.o \
 	corelib_srchcmn.o \
 	corelib_statbar.o \
+	corelib_stattextcmn.o \
 	corelib_stockitem.o \
 	corelib_tbarbase.o \
 	corelib_textcmn.o \
@@ -16465,6 +16473,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_statbar.o: $(srcdir)/src/common/statbar.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/statbar.cpp
 
+@COND_USE_GUI_1@monodll_stattextcmn.o: $(srcdir)/src/common/stattextcmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/stattextcmn.cpp
+
 @COND_USE_GUI_1@monodll_stockitem.o: $(srcdir)/src/common/stockitem.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/stockitem.cpp
 
@@ -20619,6 +20630,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_statbar.o: $(srcdir)/src/common/statbar.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/statbar.cpp
+
+@COND_USE_GUI_1@monolib_stattextcmn.o: $(srcdir)/src/common/stattextcmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/stattextcmn.cpp
 
 @COND_USE_GUI_1@monolib_stockitem.o: $(srcdir)/src/common/stockitem.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/stockitem.cpp
@@ -25135,6 +25149,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_statbar.o: $(srcdir)/src/common/statbar.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/statbar.cpp
 
+@COND_USE_GUI_1@coredll_stattextcmn.o: $(srcdir)/src/common/stattextcmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/stattextcmn.cpp
+
 @COND_USE_GUI_1@coredll_stockitem.o: $(srcdir)/src/common/stockitem.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/stockitem.cpp
 
@@ -28104,6 +28121,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_statbar.o: $(srcdir)/src/common/statbar.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/statbar.cpp
+
+@COND_USE_GUI_1@corelib_stattextcmn.o: $(srcdir)/src/common/stattextcmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/stattextcmn.cpp
 
 @COND_USE_GUI_1@corelib_stockitem.o: $(srcdir)/src/common/stockitem.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/stockitem.cpp

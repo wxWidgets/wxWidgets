@@ -64,13 +64,15 @@ public:
 
     // this function will filter out '&' characters and will put the
     // accelerator char (the one immediately after '&') into m_chAccel
-    virtual void SetLabel(const wxString &label);
-    virtual wxString GetLabel() const;
+    virtual void SetLabel(const wxString& label);
+
+    // return the current label
+    virtual wxString GetLabel() const { return m_label; }
 
     // wxUniversal-specific methods
 
     // return the accel index in the string or -1 if none and puts the modified
-    // string intosecond parameter if non NULL
+    // string into second parameter if non NULL
     static int FindAccelIndex(const wxString& label,
                               wxString *labelOnly = NULL);
 
@@ -88,6 +90,11 @@ public:
 protected:
     // common part of all ctors
     void Init();
+
+    // set m_label and m_indexAccel and refresh the control to show the new
+    // label (but, unlike SetLabel(), don't call the base class SetLabel() thus
+    // avoiding to change wxControlBase::m_labelOrig)
+    void UnivDoSetLabel(const wxString& label);
 
 private:
     // label and accel info

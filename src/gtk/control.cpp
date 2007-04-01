@@ -22,6 +22,9 @@
 #include "wx/fontutil.h"
 #include "wx/gtk/private.h"
 
+#include "wx/private/stattext.h"
+
+
 // ============================================================================
 // wxControl implementation
 // ============================================================================
@@ -89,29 +92,21 @@ void wxControl::PostCreation(const wxSize& size)
 // wxControl dealing with labels
 // ----------------------------------------------------------------------------
 
-void wxControl::SetLabel( const wxString &label )
-{
-    // keep the original string internally to be able to return it later (for
-    // consistency with the other ports)
-    m_label = label;
-
-    InvalidateBestSize();
-}
-
-wxString wxControl::GetLabel() const
-{
-    return m_label;
-}
-
 void wxControl::GTKSetLabelForLabel(GtkLabel *w, const wxString& label)
 {
-    // don't call the virtual function which might call this one back again
-    wxControl::SetLabel(label);
+    // save the original label
+    wxControlBase::SetLabel(label);
 
     const wxString labelGTK = GTKConvertMnemonics(label);
-
     gtk_label_set_text_with_mnemonic(w, wxGTK_CONV(labelGTK));
 }
+
+void wxControl::GTKSetLabelWithMarkupForLabel(GtkLabel *w, const wxString& label)
+{
+    const wxString labelGTK = GTKConvertMnemonicsWithMarkup(label);
+    gtk_label_set_markup_with_mnemonic(w, wxGTK_CONV(labelGTK));
+}
+
 
 // ----------------------------------------------------------------------------
 // GtkFrame helpers
@@ -130,8 +125,8 @@ GtkWidget* wxControl::GTKCreateFrame(const wxString& label)
     GtkWidget* framewidget = gtk_frame_new(NULL);
     gtk_frame_set_label_widget(GTK_FRAME(framewidget), labelwidget);
 
-    return framewidget; //note that the label is already set so you'll
-                        //only need to call wxControl::SetLabel afterwards
+    return framewidget; // note that the label is already set so you'll
+                        // only need to call wxControl::SetLabel afterwards
 }
 
 void wxControl::GTKSetLabelForFrame(GtkFrame *w, const wxString& label)
@@ -154,22 +149,19 @@ void wxControl::GTKFrameSetMnemonicWidget(GtkFrame* w, GtkWidget* widget)
 }
 
 // ----------------------------------------------------------------------------
-// worker function implementing both GTKConvert/RemoveMnemonics()
-//
-// notice that under GTK+ 1 we only really need to support MNEMONICS_REMOVE as
-// it doesn't support mnemonics anyhow but this would make the code so ugly
-// that we do the same thing for GKT+ 1 and 2
+// worker function implementing GTK*Mnemonics() functions
 // ----------------------------------------------------------------------------
 
 enum MnemonicsFlag
 {
     MNEMONICS_REMOVE,
-    MNEMONICS_CONVERT
+    MNEMONICS_CONVERT,
+    MNEMONICS_CONVERT_MARKUP
 };
 
-static wxString GTKProcessMnemonics(const wxString& label, MnemonicsFlag flag)
+static wxString GTKProcessMnemonics(const wxChar* label, MnemonicsFlag flag)
 {
-    const size_t len = label.length();
+    const size_t len = wxStrlen(label);
     wxString labelGTK;
     labelGTK.reserve(len);
     for ( size_t i = 0; i < len; i++ )
@@ -182,8 +174,34 @@ static wxString GTKProcessMnemonics(const wxString& label, MnemonicsFlag flag)
                 if ( i == len - 1 )
                 {
                     // "&" at the end of string is an error
-                    wxLogDebug(wxT("Invalid label \"%s\"."), label.c_str());
+                    wxLogDebug(wxT("Invalid label \"%s\"."), label);
                     break;
+                }
+
+                if ( flag == MNEMONICS_CONVERT_MARKUP )
+                {
+                    bool isMnemonic = true;
+
+                    // is this ampersand introducing a mnemonic or rather an entity?
+                    for (size_t j=0; j < wxMARKUP_ENTITY_MAX; j++)
+                    {
+                        const wxChar *entity = wxMarkupEntities[wxMARKUP_ELEMENT_NAME][j];
+                        size_t entityLen = wxStrlen(entity);
+
+                        if (len - i >= entityLen &&
+                            wxStrncmp(entity, &label[i], entityLen) == 0)
+                        {
+                            labelGTK << entity;
+                            i += entityLen - 1;     // the -1 is because main for()
+                                                    // loop already increments i
+                            isMnemonic = false;
+
+                            break;
+                        }
+                    }
+
+                    if (!isMnemonic)
+                        continue;
                 }
 
                 ch = label[++i]; // skip '&' itself
@@ -192,11 +210,14 @@ static wxString GTKProcessMnemonics(const wxString& label, MnemonicsFlag flag)
                     case wxT('&'):
                         // special case: "&&" is not a mnemonic at all but just
                         // an escaped "&"
-                        labelGTK += wxT('&');
+                        if ( flag == MNEMONICS_CONVERT_MARKUP )
+                            labelGTK += wxT("&amp;");
+                        else
+                            labelGTK += wxT('&');
                         break;
 
                     case wxT('_'):
-                        if ( flag == MNEMONICS_CONVERT )
+                        if ( flag != MNEMONICS_REMOVE )
                         {
                             // '_' can't be a GTK mnemonic apparently so
                             // replace it with something similar
@@ -206,14 +227,14 @@ static wxString GTKProcessMnemonics(const wxString& label, MnemonicsFlag flag)
                         //else: fall through
 
                     default:
-                        if ( flag == MNEMONICS_CONVERT )
+                        if ( flag != MNEMONICS_REMOVE )
                             labelGTK += wxT('_');
                         labelGTK += ch;
                 }
                 break;
 
             case wxT('_'):
-                if ( flag == MNEMONICS_CONVERT )
+                if ( flag != MNEMONICS_REMOVE )
                 {
                     // escape any existing underlines in the string so that
                     // they don't become mnemonics accidentally
@@ -240,6 +261,12 @@ wxString wxControl::GTKRemoveMnemonics(const wxString& label)
 wxString wxControl::GTKConvertMnemonics(const wxString& label)
 {
     return GTKProcessMnemonics(label, MNEMONICS_CONVERT);
+}
+
+/* static */
+wxString wxControl::GTKConvertMnemonicsWithMarkup(const wxString& label)
+{
+    return GTKProcessMnemonics(label, MNEMONICS_CONVERT_MARKUP);
 }
 
 // ----------------------------------------------------------------------------

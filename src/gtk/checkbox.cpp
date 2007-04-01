@@ -203,6 +203,9 @@ void wxCheckBox::SetLabel( const wxString& label )
 {
     wxCHECK_RET( m_widgetLabel != NULL, wxT("invalid checkbox") );
 
+    // save the label inside m_label in case user calls GetLabel() later
+    wxControl::SetLabel(label);
+
     GTKSetLabelForLabel(GTK_LABEL(m_widgetLabel), label);
 }
 

@@ -100,6 +100,7 @@ All (GUI):
 
 wxGTK:
 
+- Support for markup and ellipsization in wxStaticText (Francesco Montorsi)
 - Native implementation for wxHyperlinkCtrl (Francesco Montorsi)
 - Native keyboard navigation implementation
 - Don't overwrite primary selection with clipboard and vice versa

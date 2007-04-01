@@ -1515,6 +1515,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_sizer.obj \
 	$(OBJS)\monodll_srchcmn.obj \
 	$(OBJS)\monodll_statbar.obj \
+	$(OBJS)\monodll_stattextcmn.obj \
 	$(OBJS)\monodll_stockitem.obj \
 	$(OBJS)\monodll_tbarbase.obj \
 	$(OBJS)\monodll_textcmn.obj \
@@ -1742,6 +1743,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_sizer.obj \
 	$(OBJS)\monodll_srchcmn.obj \
 	$(OBJS)\monodll_statbar.obj \
+	$(OBJS)\monodll_stattextcmn.obj \
 	$(OBJS)\monodll_stockitem.obj \
 	$(OBJS)\monodll_tbarbase.obj \
 	$(OBJS)\monodll_textcmn.obj \
@@ -2137,6 +2139,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_sizer.obj \
 	$(OBJS)\monolib_srchcmn.obj \
 	$(OBJS)\monolib_statbar.obj \
+	$(OBJS)\monolib_stattextcmn.obj \
 	$(OBJS)\monolib_stockitem.obj \
 	$(OBJS)\monolib_tbarbase.obj \
 	$(OBJS)\monolib_textcmn.obj \
@@ -2364,6 +2367,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_sizer.obj \
 	$(OBJS)\monolib_srchcmn.obj \
 	$(OBJS)\monolib_statbar.obj \
+	$(OBJS)\monolib_stattextcmn.obj \
 	$(OBJS)\monolib_stockitem.obj \
 	$(OBJS)\monolib_tbarbase.obj \
 	$(OBJS)\monolib_textcmn.obj \
@@ -2679,6 +2683,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_sizer.obj \
 	$(OBJS)\coredll_srchcmn.obj \
 	$(OBJS)\coredll_statbar.obj \
+	$(OBJS)\coredll_stattextcmn.obj \
 	$(OBJS)\coredll_stockitem.obj \
 	$(OBJS)\coredll_tbarbase.obj \
 	$(OBJS)\coredll_textcmn.obj \
@@ -2906,6 +2911,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_sizer.obj \
 	$(OBJS)\coredll_srchcmn.obj \
 	$(OBJS)\coredll_statbar.obj \
+	$(OBJS)\coredll_stattextcmn.obj \
 	$(OBJS)\coredll_stockitem.obj \
 	$(OBJS)\coredll_tbarbase.obj \
 	$(OBJS)\coredll_textcmn.obj \
@@ -3134,6 +3140,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_sizer.obj \
 	$(OBJS)\corelib_srchcmn.obj \
 	$(OBJS)\corelib_statbar.obj \
+	$(OBJS)\corelib_stattextcmn.obj \
 	$(OBJS)\corelib_stockitem.obj \
 	$(OBJS)\corelib_tbarbase.obj \
 	$(OBJS)\corelib_textcmn.obj \
@@ -3361,6 +3368,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_sizer.obj \
 	$(OBJS)\corelib_srchcmn.obj \
 	$(OBJS)\corelib_statbar.obj \
+	$(OBJS)\corelib_stattextcmn.obj \
 	$(OBJS)\corelib_stockitem.obj \
 	$(OBJS)\corelib_tbarbase.obj \
 	$(OBJS)\corelib_textcmn.obj \
@@ -6385,6 +6393,11 @@ $(OBJS)\monodll_statbar.obj: ..\..\src\common\statbar.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_stattextcmn.obj: ..\..\src\common\stattextcmn.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_stockitem.obj: ..\..\src\common\stockitem.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 !endif
@@ -8408,6 +8421,11 @@ $(OBJS)\monolib_srchcmn.obj: ..\..\src\common\srchcmn.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_statbar.obj: ..\..\src\common\statbar.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_stattextcmn.obj: ..\..\src\common\stattextcmn.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 !endif
 
@@ -10478,6 +10496,11 @@ $(OBJS)\coredll_statbar.obj: ..\..\src\common\statbar.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_stattextcmn.obj: ..\..\src\common\stattextcmn.cpp
+	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_stockitem.obj: ..\..\src\common\stockitem.cpp
 	$(CXX) -q -c -P -o$@ $(COREDLL_CXXFLAGS) $**
 !endif
@@ -11759,6 +11782,11 @@ $(OBJS)\corelib_srchcmn.obj: ..\..\src\common\srchcmn.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_statbar.obj: ..\..\src\common\statbar.cpp
+	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_stattextcmn.obj: ..\..\src\common\stattextcmn.cpp
 	$(CXX) -q -c -P -o$@ $(CORELIB_CXXFLAGS) $**
 !endif
 

@@ -790,6 +790,10 @@ SOURCE=..\..\src\common\statbar.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\stattextcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\stockitem.cpp
 # End Source File
 # Begin Source File

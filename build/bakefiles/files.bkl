@@ -651,6 +651,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/sizer.cpp
     src/common/srchcmn.cpp
     src/common/statbar.cpp
+    src/common/stattextcmn.cpp
     src/common/stockitem.cpp
     src/common/tbarbase.cpp
     src/common/textcmn.cpp
