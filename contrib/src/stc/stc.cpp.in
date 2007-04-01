@@ -756,6 +756,13 @@ void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
 #endif
     bool skip = ((ctrl || alt) && ! (ctrl && alt));
 
+#if wxUSE_UNICODE
+    // apparently if we don't do this, Unicode keys pressed after non-char
+    // ASCII ones (e.g. Enter, Tab) are not taken into account (patch 1615989)
+    if (m_lastKeyDownConsumed && evt.GetUnicodeKey() > 255)
+        m_lastKeyDownConsumed = false;
+#endif
+
     if (!m_lastKeyDownConsumed && !skip) {
 #if wxUSE_UNICODE
         int key = evt.GetUnicodeKey();
