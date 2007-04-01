@@ -424,6 +424,29 @@ bool wxToolBar::Realize()
     m_needsLayout = true;
     DoLayout();
 
+    // the first item in the radio group is checked by default to be consistent
+    // with wxGTK and the menu radio items
+    int radioGroupCount = 0;
+
+    for ( wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
+          node;
+          node = node->GetNext() )
+    {
+        wxToolBarTool *tool = (wxToolBarTool*) node->GetData();
+
+        if ( !tool->IsButton() || tool->GetKind() != wxITEM_RADIO )
+        {
+            radioGroupCount = 0;
+            continue;
+        }
+
+        bool toggle = !radioGroupCount++;
+        if ( tool->Toggle(toggle) )
+        {
+            DoToggleTool(tool, toggle);
+        }
+    }
+
     SetInitialSize(wxDefaultSize);
 
     return true;
@@ -721,18 +744,6 @@ bool wxToolBar::PerformAction(const wxControlAction& action,
 
         PerformAction( wxACTION_BUTTON_CLICK, numArg );
 
-        // Write by Danny Raynor to change state again.
-        // Check button still pressed or not
-        if ( tool->CanBeToggled() && tool->IsToggled() )
-        {
-            tool->Toggle(false);
-        }
-
-        if( tool->IsInverted() )
-        {
-            PerformAction( wxACTION_TOOLBAR_RELEASE, numArg );
-        }
-
         // Set mouse leave toolbar button range (If still in the range,
         // toolbar button would get focus again
         PerformAction( wxACTION_TOOLBAR_LEAVE, numArg );
@@ -751,7 +762,10 @@ bool wxToolBar::PerformAction(const wxControlAction& action,
 
         wxASSERT_MSG( tool->IsInverted(), _T("release unpressed button?") );
 
-        tool->Invert();
+        if(tool->IsInverted())
+        {
+            tool->Invert();
+        }
 
         RefreshTool( tool );
     }
@@ -760,7 +774,15 @@ bool wxToolBar::PerformAction(const wxControlAction& action,
         bool isToggled;
         if ( tool->CanBeToggled() )
         {
-            tool->Toggle();
+            if ( tool->IsButton() && tool->GetKind() == wxITEM_RADIO )
+            {
+                UnToggleRadioGroup(tool);
+                tool->Toggle(true);
+            }
+            else
+            {
+                tool->Toggle();
+            }
 
             RefreshTool( tool );
 
