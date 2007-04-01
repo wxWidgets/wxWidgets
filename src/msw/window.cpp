@@ -57,6 +57,7 @@
     #include "wx/ownerdrw.h"
 #endif
 
+#include "wx/hashmap.h"
 #include "wx/evtloop.h"
 #include "wx/power.h"
 #include "wx/sysopt.h"
@@ -171,6 +172,13 @@ static struct MouseEventInfoDummy
     wxEventType type;
 } gs_lastMouseEvent;
 #endif // wxUSE_MOUSEEVENT_HACK
+
+// hash containing the registered handlers for the custom messages
+WX_DECLARE_HASH_MAP(int, wxWindow::MSWMessageHandler,
+                    wxIntegerHash, wxIntegerEqual,
+                    MSWMessageHandlers);
+
+static MSWMessageHandlers gs_messageHandlers;
 
 // ---------------------------------------------------------------------------
 // private functions
@@ -3173,6 +3181,15 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             }
             break;
 #endif // __WXWINCE__
+
+        default:
+            // try a custom message handler
+            const MSWMessageHandlers::const_iterator
+                i = gs_messageHandlers.find(message);
+            if ( i != gs_messageHandlers.end() )
+            {
+                processed = (*i->second)(this, message, wParam, lParam);
+            }
     }
 
     if ( !processed )
@@ -5437,6 +5454,30 @@ bool wxWindowMSW::MSWOnScroll(int orientation, WXWORD wParam,
     }
 
     return GetEventHandler()->ProcessEvent(event);
+}
+
+// ----------------------------------------------------------------------------
+// custom message handlers
+// ----------------------------------------------------------------------------
+
+/* static */ bool
+wxWindowMSW::MSWRegisterMessageHandler(int msg, MSWMessageHandler handler)
+{
+    wxCHECK_MSG( gs_messageHandlers.find(msg) == gs_messageHandlers.end(),
+                 false, _T("registering handler for the same message twice") );
+
+    gs_messageHandlers[msg] = handler;
+    return true;
+}
+
+/* static */ void
+wxWindowMSW::MSWUnregisterMessageHandler(int msg, MSWMessageHandler handler)
+{
+    const MSWMessageHandlers::iterator i = gs_messageHandlers.find(msg);
+    wxCHECK_RET( i != gs_messageHandlers.end() && i->second == handler,
+                 _T("unregistering non-registered handler?") );
+
+    gs_messageHandlers.erase(i);
 }
 
 // ===========================================================================

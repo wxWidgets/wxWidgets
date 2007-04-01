@@ -148,6 +148,29 @@ public:
     // does this window have deferred position and/or size?
     bool IsSizeDeferred() const;
 
+    // these functions allow to register a global handler for the given Windows
+    // message: it will be called from MSWWindowProc() of any window which gets
+    // this event if it's not processed before (i.e. unlike a hook procedure it
+    // does not override the normal processing)
+    //
+    // notice that if you want to process a message for a given window only you
+    // should override its MSWWindowProc() instead
+
+    // type of the handler: it is called with the message parameters (except
+    // that the window object is passed instead of window handle) and should
+    // return true if it handled the message or false if it should be passed to
+    // DefWindowProc()
+    typedef bool (*MSWMessageHandler)(wxWindow *win,
+                                      WXUINT nMsg,
+                                      WXWPARAM wParam,
+                                      WXLPARAM lParam);
+
+    // install a handler, shouldn't be called more than one for the same message
+    static bool MSWRegisterMessageHandler(int msg, MSWMessageHandler handler);
+
+    // unregister a previously registered handler
+    static void MSWUnregisterMessageHandler(int msg, MSWMessageHandler handler);
+
 
     // implementation from now on
     // ==========================
