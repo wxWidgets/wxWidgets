@@ -296,6 +296,53 @@ bool wxStatusBar95::GetFieldRect(int i, wxRect& rect) const
     return true;
 }
 
+// no idea for a default width, just choose something
+#define DEFAULT_FIELD_WIDTH 25
+
+wxSize wxStatusBar95::DoGetBestSize() const
+{
+    int borders[3];
+    SendMessage(GetHwnd(), SB_GETBORDERS, 0, (LPARAM)borders);
+
+    // calculate width
+    int width = 0;
+    for ( int i = 0; i < m_nFields; ++i )
+    {
+        int widthField = m_statusWidths ? m_statusWidths[i]
+                                        : DEFAULT_FIELD_WIDTH;
+        if ( widthField >= 0 )
+        {
+            width += m_statusWidths[i];
+        }
+        else
+        {
+            // variable width field, its width is really a proportion
+            // related to the other fields
+            width += -widthField*DEFAULT_FIELD_WIDTH;
+        }
+
+        // add the space between fields
+        width += borders[2];
+    }
+
+    if ( !width )
+    {
+        // still need something even for an empty status bar
+        width = 2*DEFAULT_FIELD_WIDTH;
+    }
+
+
+    // calculate height
+    int height;
+    wxGetCharSize(GetHWND(), NULL, &height, GetFont());
+    height = EDIT_HEIGHT_FROM_CHAR_HEIGHT(height);
+    height += borders[1];
+
+    wxSize best(width, height);
+    CacheBestSize(best);
+    return best;
+}
+
 void wxStatusBar95::DoMoveWindow(int x, int y, int width, int height)
 {
     if ( GetParent()->IsSizeDeferred() )

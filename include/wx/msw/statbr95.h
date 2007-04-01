@@ -64,8 +64,9 @@ protected:
     void CopyFieldsWidth(const int widths[]);
     void SetFieldsWidth();
 
-    // override base class virtual
-    void DoMoveWindow(int x, int y, int width, int height);
+    // override some base class virtuals
+    virtual wxSize DoGetBestSize() const;
+    virtual void DoMoveWindow(int x, int y, int width, int height);
 
 private:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxStatusBar95)
