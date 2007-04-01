@@ -12,6 +12,8 @@
 #ifndef _WX_PRIVATE_STATTEXT_H_
 #define _WX_PRIVATE_STATTEXT_H_
 
+#include "wx/window.h"
+
 #if wxUSE_STATTEXT
 
 // ----------------------------------------------------------------------------
