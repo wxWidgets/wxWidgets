@@ -88,6 +88,17 @@ public:
         ms_clipboard = NULL;
     }
 
+    // this method should be called if it's possible that no async clipboard
+    // operation is currently in progress (like it can be the case when the
+    // clipboard is cleared but not because we asked about it), it should only
+    // be called if such situation is expected -- otherwise call OnDone() which
+    // would assert in this case
+    static void OnDoneIfInProgress(wxClipboard *clipboard)
+    {
+        if ( ms_clipboard )
+            OnDone(clipboard);
+    }
+
 private:
     static wxClipboard *ms_clipboard;
 
@@ -199,7 +210,12 @@ selection_clear_clip( GtkWidget *WXUNUSED(widget), GdkEventSelection *event )
     if ( !clipboard )
         return TRUE;
 
-    wxON_BLOCK_EXIT1(wxClipboardSync::OnDone, clipboard);
+    // notice the use of OnDoneIfInProgress() here instead of just OnDone():
+    // it's perfectly possible that we're receiving this notification from GTK+
+    // even though we hadn't cleared the clipboard ourselves but because
+    // another application (or even another window in the same program)
+    // acquired it
+    wxON_BLOCK_EXIT1(wxClipboardSync::OnDoneIfInProgress, clipboard);
 
     wxClipboard::Kind kind;
     if (event->selection == GDK_SELECTION_PRIMARY)
