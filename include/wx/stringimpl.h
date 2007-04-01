@@ -25,6 +25,8 @@
 #include "wx/defs.h"        // everybody should include this
 #include "wx/wxchar.h"      // for wxChar, wxStrlen() etc.
 
+#include <stdlib.h>
+
 // ---------------------------------------------------------------------------
 // macros
 // ---------------------------------------------------------------------------
