@@ -818,6 +818,7 @@ void wxWindowX11::DoClientToScreen(int *x, int *y) const
     Window rootWindow = RootWindowOfScreen(DefaultScreenOfDisplay(display));
     Window thisWindow = (Window) m_clientWindow;
 
+    Window childWindow;
     int xx = x ? *x : 0;
     int yy = y ? *y : 0;
     XTranslateCoordinates(display, thisWindow, rootWindow,
