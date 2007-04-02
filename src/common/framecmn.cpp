@@ -365,9 +365,7 @@ bool wxFrameBase::ShowMenuHelp(wxStatusBar *WXUNUSED(statbar), int menuId)
 #if wxUSE_MENUS
     // if no help string found, we will clear the status bar text
     wxString helpString;
-    bool show = menuId != wxID_SEPARATOR && menuId != -2 /* wxID_TITLE */;
-
-    if ( show )
+    if ( menuId != wxID_SEPARATOR && menuId != -3 /* wxID_TITLE */ )
     {
         wxMenuBar *menuBar = GetMenuBar();
         if ( menuBar )
@@ -380,7 +378,7 @@ bool wxFrameBase::ShowMenuHelp(wxStatusBar *WXUNUSED(statbar), int menuId)
         }
     }
 
-    DoGiveHelp(helpString, show);
+    DoGiveHelp(helpString);
 
     return !helpString.empty();
 #else // !wxUSE_MENUS
@@ -404,7 +402,7 @@ void wxFrameBase::SetStatusBar(wxStatusBar *statBar)
 #endif // wxUSE_STATUSBAR
 
 #if wxUSE_MENUS || wxUSE_TOOLBAR
-void wxFrameBase::DoGiveHelp(const wxString& text, bool show)
+void wxFrameBase::DoGiveHelp(const wxString& help)
 {
 #if wxUSE_STATUSBAR
     if ( m_statusBarPane < 0 )
@@ -417,39 +415,25 @@ void wxFrameBase::DoGiveHelp(const wxString& text, bool show)
     if ( !statbar )
         return;
 
-    wxString help;
-    if ( show )
+    // remember the old status bar text if this is the first time we're
+    // called since the menu has been opened as we're going to overwrite it
+    // in our DoGiveHelp() and we want to restore it when the menu is
+    // closed
+    //
+    // note that it would be logical to do this in OnMenuOpen() but under
+    // MSW we get an EVT_MENU_HIGHLIGHT before EVT_MENU_OPEN, strangely
+    // enough, and so this doesn't work and instead we use the ugly trick
+    // with using special m_oldStatusText value as "menu opened" (but it is
+    // arguably better than adding yet another member variable to wxFrame
+    // on all platforms)
+    if ( m_oldStatusText.empty() )
     {
-        help = text;
-
-        // remember the old status bar text if this is the first time we're
-        // called since the menu has been opened as we're going to overwrite it
-        // in our DoGiveHelp() and we want to restore it when the menu is
-        // closed
-        //
-        // note that it would be logical to do this in OnMenuOpen() but under
-        // MSW we get an EVT_MENU_HIGHLIGHT before EVT_MENU_OPEN, strangely
-        // enough, and so this doesn't work and instead we use the ugly trick
-        // with using special m_oldStatusText value as "menu opened" (but it is
-        // arguably better than adding yet another member variable to wxFrame
-        // on all platforms)
+        m_oldStatusText = statbar->GetStatusText(m_statusBarPane);
         if ( m_oldStatusText.empty() )
         {
-            m_oldStatusText = statbar->GetStatusText(m_statusBarPane);
-            if ( m_oldStatusText.empty() )
-            {
-                // use special value to prevent us from doing this the next time
-                m_oldStatusText += _T('\0');
-            }
+            // use special value to prevent us from doing this the next time
+            m_oldStatusText += _T('\0');
         }
-    }
-    else // hide the status bar text
-    {
-        // i.e. restore the old one
-        help = m_oldStatusText;
-
-        // make sure we get the up to date text when showing it the next time
-        m_oldStatusText.clear();
     }
 
     statbar->SetStatusText(help, m_statusBarPane);

@@ -631,10 +631,16 @@ void wxToolBarBase::OnMouseEnter(int id)
     if( frame )
     {
         wxString help;
-        wxToolBarToolBase* tool = id == wxID_ANY ? (wxToolBarToolBase*)NULL : FindById(id);
-        if(tool)
-            help = tool->GetLongHelp();
-        frame->DoGiveHelp( help, id != wxID_ANY );
+        if ( id != wxID_ANY )
+        {
+           const wxToolBarToolBase * const tool = FindById(id);
+           if ( tool )
+               help = tool->GetLongHelp();
+        }
+
+        // do it even if help string is empty to avoid showing the help for the
+        // previously selected tool when another one is selected
+        frame->DoGiveHelp(help);
     }
 
     (void)GetEventHandler()->ProcessEvent(event);

@@ -1055,7 +1055,7 @@ bool wxFrame::HandleMenuSelect( WXWORD nItem,
         }
         else
         {
-            DoGiveHelp(wxEmptyString, false);
+            DoGiveHelp(wxEmptyString);
             return false;
         }
     }

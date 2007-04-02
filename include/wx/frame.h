@@ -169,9 +169,9 @@ public:
 #endif // no wxTopLevelWindowNative
 
 #if wxUSE_MENUS || wxUSE_TOOLBAR
-    // show help text (typically in the statusbar); show is false
-    // if you are hiding the help, true otherwise
-    virtual void DoGiveHelp(const wxString& text, bool show);
+    // show help text for the currently selected menu or toolbar item
+    // (typically in the status bar)
+    virtual void DoGiveHelp(const wxString& text);
 #endif
 
 protected:
