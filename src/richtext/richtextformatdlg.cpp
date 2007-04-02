@@ -65,9 +65,9 @@
 #endif
 
 #if 0 // def __WXMAC__
-#define wxRICHTEXT_USE_TOOLBOOK true
+#define wxRICHTEXT_USE_TOOLBOOK 1
 #else
-#define wxRICHTEXT_USE_TOOLBOOK false
+#define wxRICHTEXT_USE_TOOLBOOK 0
 #endif
 
 bool wxRichTextFormattingDialog::sm_showToolTips = false;
@@ -346,6 +346,8 @@ bool wxRichTextFormattingDialogFactory::SetSheetStyle(wxRichTextFormattingDialog
     dialog->SetSheetStyle(sheetStyle);
     dialog->SetSheetInnerBorder(0);
     dialog->SetSheetOuterBorder(0);
+#else
+	wxUnusedVar(dialog);
 #endif // wxRICHTEXT_USE_TOOLBOOK
 
     return true;
@@ -415,13 +417,13 @@ void wxRichTextFontPreviewCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
         dc.SetTextForeground(GetForegroundColour());
         dc.SetClippingRegion(2, 2, size.x-4, size.y-4);
         dc.DrawText(text, cx, cy);
-        
+
         if (GetTextEffects() & wxTEXT_ATTR_EFFECT_STRIKETHROUGH)
         {
             dc.SetPen(wxPen(GetForegroundColour(), 1));
             dc.DrawLine(cx, (int) (cy + h/2 + 0.5), cx + w, (int) (cy + h/2 + 0.5));
         }
-        
+
         dc.DestroyClippingRegion();
     }
 }
