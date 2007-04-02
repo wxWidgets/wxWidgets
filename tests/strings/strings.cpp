@@ -694,6 +694,10 @@ void StringTestCase::DoCStrDataTernaryOperator(bool cond)
     CPPUNIT_ASSERT( CheckStr(s, (cond ? mbStr : s.c_str())) );
     CPPUNIT_ASSERT( CheckStr(s, (cond ? "foo" : s.c_str())) );
 #endif
+
+    wxString empty("");
+    CPPUNIT_ASSERT( CheckStr(empty, (cond ? empty.c_str() : wxEmptyString)) );
+    CPPUNIT_ASSERT( CheckStr(empty, (cond ? wxEmptyString : empty.c_str())) );
 }
 
 bool CheckStrChar(const wxString& expected, char *s)
