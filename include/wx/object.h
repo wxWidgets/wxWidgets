@@ -99,7 +99,7 @@ public:
     int                      m_objectSize;
     wxObjectConstructorFn    m_objectConstructor;
 
-        // Pointers to base wxClassInfos: set in InitializeClasses
+        // Pointers to base wxClassInfos
 
     const wxClassInfo       *m_baseInfo1;
     const wxClassInfo       *m_baseInfo2;
@@ -114,16 +114,12 @@ public:
     //        many clients)
     static wxHashTable      *sm_classTable;
 
-private:
-    // InitializeClasses() helper
-    static wxClassInfo *GetBaseByName(const wxChar *name);
-
-    DECLARE_NO_COPY_CLASS(wxClassInfo)
-
 protected:
     // registers the class
     void Register();
     void Unregister();
+
+    DECLARE_NO_COPY_CLASS(wxClassInfo)
 };
 
 WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);

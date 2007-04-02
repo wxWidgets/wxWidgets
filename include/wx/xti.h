@@ -1810,10 +1810,6 @@ private:
     wxObjectStreamingCallback m_streamingCallback ;
     const wxPropertyAccessor *FindAccessor (const wxChar *propertyName) const ;
 
-
-    // InitializeClasses() helper
-    static wxClassInfo *GetBaseByName(const wxChar *name) ;
-
 protected:
     // registers the class
     void Register();
