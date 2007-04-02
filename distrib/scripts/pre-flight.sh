@@ -18,7 +18,7 @@ if [ ! -d $WX_WEB_DIR ]; then
   cvs -d:pserver:anoncvs@cvs.wxwidgets.org:/pack/cvsroots/wxwidgets checkout wxWebSite
 else
     cd $WX_WEB_DIR
-####    cvs update -d -P
+    cvs update -d -P
 fi
 
 if [ ! -d $WX_SRC_DIR ]; then
@@ -29,7 +29,7 @@ if [ ! -d $WX_SRC_DIR ]; then
   cd $WX_SRC_DIR
 else
   cd $WX_SRC_DIR
-####  cvs update -d -P
+  cvs update -d -P
 fi
 
 # this is where we will store the wxAll tarball we create
@@ -49,7 +49,7 @@ if [ $rebake = "yes" ]; then
   ## better to not use unix2dos on the wxWidgets tree so we don't get the conflicts
   ##fix this -B gave an option not recognised  error (sf bug 1537221)...
   rm .ba*
-#####  bakefile_gen -d ../../distrib/scripts/Bakefiles.release.bkgen
+  bakefile_gen -d ../../distrib/scripts/Bakefiles.release.bkgen
 fi
 
 # Now generate the mega tarball with everything. We will push this to our build machines.
