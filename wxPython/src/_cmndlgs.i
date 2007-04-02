@@ -210,11 +210,11 @@ enum {
 
 %pythoncode {
     %# deprecated names
-    OPEN              = FD_OPEN,
-    SAVE              = FD_SAVE,
-    OVERWRITE_PROMPT  = FD_OVERWRITE_PROMPT,
-    FILE_MUST_EXIST   = FD_FILE_MUST_EXIST,
-    MULTIPLE          = FD_MULTIPLE,
+    OPEN              = FD_OPEN
+    SAVE              = FD_SAVE
+    OVERWRITE_PROMPT  = FD_OVERWRITE_PROMPT
+    FILE_MUST_EXIST   = FD_FILE_MUST_EXIST
+    MULTIPLE          = FD_MULTIPLE
     CHANGE_DIR        = FD_CHANGE_DIR
 }
          
