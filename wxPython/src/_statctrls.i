@@ -95,6 +95,16 @@ public:
 
 MustHaveApp(wxStaticText);
 
+enum {
+    wxST_NO_AUTORESIZE,
+    wxST_MARKUP,
+
+    wxST_ELLIPSIZE_START,
+    wxST_ELLIPSIZE_MIDDLE,
+    wxST_ELLIPSIZE_END
+};
+
+
 class wxStaticText : public wxControl {
 public:
     %pythonAppend wxStaticText         "self._setOORInfo(self)"
@@ -121,8 +131,23 @@ public:
 becomes at most ``width`` pixels wide if possible (the lines are
 broken at words boundaries so it might not be the case if words are
 too long). If ``width`` is negative, no wrapping is done.", "");
+
+    bool IsEllipsized() const;
     
+    DocDeclStr(
+        static wxString , RemoveMarkup(const wxString& str),
+        "Removes the markup accepted by wx.StaticText when wx.ST_MARKUP is
+used, and then returns the cleaned string.
+    ", "");
     
+
+    DocDeclStr(
+        static wxString , EscapeMarkup(const wxString& str),
+        "Escapes the alls special symbols (<>\"\'&) present inside the given
+string using the corresponding entities (&lt; &gt; &quot; &apos;
+&amp;)", "");
+    
+
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };

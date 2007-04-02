@@ -99,7 +99,19 @@ __init__ as a plain old wx.Control is not very useful.", "");
 
 // :see: `GetAdjustMinSizeFlag`
 // ");
+
+ 
+    DocDeclStr(
+        static wxString , RemoveMnemonics(const wxString& str),
+        "removes the mnemonics characters", "");
+
     
+// Link error...
+//     DocDeclStr(
+//         static wxString , EscapeMnemonics(const wxString& str),
+//         "escapes the mnemonics characters ('&') by doubling them", "");
+    
+     
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 
