@@ -94,6 +94,8 @@ Major new features in 2.8 release
 All (Unix):
 
 - Handle socket shutdown by the peer correctly in wxSocket (Tim Kosse)
+- Added wxString::char_str() and wchar_str() methods for forward
+  compatiblity with wxWidgets 3
 
 wxMSW:
 

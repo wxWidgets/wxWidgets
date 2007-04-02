@@ -24,6 +24,16 @@
 # and once released its version cannot be changed.
 
 
+# public symbols added in 2.8.4 (please keep in alphabetical order):
+@WX_VERSION_TAG@.4 {
+    global:
+        # wxString::[w]char_str()
+        *wxString*char_str*;
+        # wxWritable[W]CharBuffer
+        *wxWritableCharBuffer*;
+        *wxWritableWCharBuffer*;
+};
+
 # public symbols added in 2.8.2 (please keep in alphabetical order):
 @WX_VERSION_TAG@.2 {
     global:
