@@ -92,12 +92,12 @@ $WXWIN/build/msw/.mymake $BUILD_TYPE $@
 if [ ! $? = 0 ]; then error 2; fi
 
 
-echo ------------------
-echo cd ../../contrib/build/gizmos
-cd ../../contrib/build/gizmos
-$WXWIN/build/msw/.mymake $BUILD_TYPE $@
-if [ ! $? = 0 ]; then error 2; fi
-cd -
+# echo ------------------
+# echo cd ../../contrib/build/gizmos
+# cd ../../contrib/build/gizmos
+# $WXWIN/build/msw/.mymake $BUILD_TYPE $@
+# if [ ! $? = 0 ]; then error 2; fi
+# cd -
 
 
 # echo ------------------

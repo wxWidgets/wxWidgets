@@ -718,13 +718,19 @@ if BUILD_GIZMOS:
                             [ '%s/_treelist.i' % location])
 
     ext = Extension('_gizmos',
-                    [ '%s/treelistctrl.cpp' % opj(location, 'wxCode/src') ] + swig_sources,
+                    [ '%s/treelistctrl.cpp'        % opj(location, 'wxCode/src'),
+                      '%s/gizmos/dynamicsash.cpp'  % opj(location, 'wxCode/src'),
+                      '%s/gizmos/editlbox.cpp'     % opj(location, 'wxCode/src'),
+                      '%s/gizmos/ledctrl.cpp'      % opj(location, 'wxCode/src'),
+                      '%s/gizmos/splittree.cpp'    % opj(location, 'wxCode/src'),
+                      '%s/gizmos/statpict.cpp'     % opj(location, 'wxCode/src'),
+                      ] + swig_sources,
 
                     include_dirs =  includes + [ location, opj(location, 'wxCode/include') ] + CONTRIBS_INC,
                     define_macros = defines,
 
                     library_dirs = libdirs,
-                    libraries = libs + makeLibName('gizmos'),
+                    libraries = libs,
 
                     extra_compile_args = cflags,
                     extra_link_args = lflags,

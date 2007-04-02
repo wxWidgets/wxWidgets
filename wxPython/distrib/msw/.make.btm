@@ -77,12 +77,12 @@ call %WXWIN%\build\msw\.mymake.btm %BUILD_TYPE% %$
 if %? != 0 goto done
 
 
-echo ------------------
-echo cd ..\..\contrib\build\gizmos
-cd ..\..\contrib\build\gizmos
-call %WXWIN%\build\msw\.mymake.btm %BUILD_TYPE% %$
-if %? != 0 goto done
-cd -
+REM echo ------------------
+REM echo cd ..\..\contrib\build\gizmos
+REM cd ..\..\contrib\build\gizmos
+REM call %WXWIN%\build\msw\.mymake.btm %BUILD_TYPE% %$
+REM if %? != 0 goto done
+REM cd -
 
 REM echo ------------------
 REM echo cd ..\..\contrib\build\animate

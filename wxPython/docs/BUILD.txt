@@ -145,7 +145,6 @@ place, then do the same for wxPython.
    like::
 
         make $* \
-            && make -C contrib/src/gizmos $* \
             && make -C contrib/src/stc $* 
    
    So you just use .make as if it where make, but don't forget to set
