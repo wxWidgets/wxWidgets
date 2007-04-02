@@ -158,9 +158,7 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
                               long style,
                               const wxString& name)
 {
-#ifdef __WXMAC__
     style |= wxVSCROLL | wxHSCROLL;
-#endif
     if (!wxControl::Create(parent, id, pos, size,
                            style | wxWANTS_CHARS | wxCLIP_CHILDREN,
                            wxDefaultValidator, name))

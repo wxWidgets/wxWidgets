@@ -158,9 +158,7 @@ bool wxStyledTextCtrl::Create(wxWindow *parent,
                               long style,
                               const wxString& name)
 {
-#ifdef __WXMAC__
     style |= wxVSCROLL | wxHSCROLL;
-#endif
     if (!wxControl::Create(parent, id, pos, size,
                            style | wxWANTS_CHARS | wxCLIP_CHILDREN,
                            wxDefaultValidator, name))
@@ -3117,6 +3115,13 @@ void wxStyledTextCtrl::OnChar(wxKeyEvent& evt) {
     bool alt  = evt.AltDown();
 #endif
     bool skip = ((ctrl || alt) && ! (ctrl && alt));
+
+#if wxUSE_UNICODE
+    // apparently if we don't do this, Unicode keys pressed after non-char
+    // ASCII ones (e.g. Enter, Tab) are not taken into account (patch 1615989)
+    if (m_lastKeyDownConsumed && evt.GetUnicodeKey() > 255)
+        m_lastKeyDownConsumed = false;
+#endif
 
     if (!m_lastKeyDownConsumed && !skip) {
 #if wxUSE_UNICODE
