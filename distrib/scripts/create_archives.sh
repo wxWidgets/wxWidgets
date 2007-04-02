@@ -20,7 +20,7 @@ VERBOSE=0
 ZIPFLAGS=
 
 PROGNAME=$0
-##SCRIPTDIR=$WXWIN/distrib/scripts
+
 . $SCRIPTDIR/utils.inc
 
 MANIFESTDIR=$WXWIN/distrib/scripts/manifests
@@ -160,11 +160,11 @@ dospinport(){
         popd
     fi
     echo "Creating wx$portname-$VERSION.zip..."
-    zip $ZIPFLAGS -r -9 $APPDIR/deliver/wx$portname-$VERSION.zip .
+    zip $ZIPFLAGS -r -9 $DIST_DIR/wx$portname-$VERSION.zip .
     echo "Creating wx$portname-$VERSION.tar.gz..."
-    tar czf $APPDIR/deliver/wx$portname-$VERSION.tar.gz wx$portname-$VERSION
+    tar czf $DIST_DIR/wx$portname-$VERSION.tar.gz wx$portname-$VERSION
     echo "Creating wx$portname-$VERSION.tar.bz2..."
-    tar ch wx$portname-$VERSION | bzip2 -f9 > $APPDIR/deliver/wx$portname-$VERSION.tar.bz2
+    tar ch wx$portname-$VERSION | bzip2 -f9 > $DIST_DIR//wx$portname-$VERSION.tar.bz2
     popd
     rm -rf /tmp/wx$port
     rm ${portfiles}
