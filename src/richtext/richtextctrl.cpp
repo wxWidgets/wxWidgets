@@ -392,30 +392,39 @@ void wxRichTextCtrl::OnLeftUp(wxMouseEvent& event)
 
         if (hit != wxRICHTEXT_HITTEST_NONE)
         {
-            wxTextAttrEx attr;
-            if (GetStyle(position, attr))
+            wxRichTextEvent cmdEvent(
+                wxEVT_COMMAND_RICHTEXT_LEFT_CLICK,
+                GetId());
+            cmdEvent.SetEventObject(this);
+            cmdEvent.SetPosition(m_caretPosition+1);
+
+            if (!GetEventHandler()->ProcessEvent(cmdEvent))
             {
-                if (attr.HasFlag(wxTEXT_ATTR_URL))
+                wxTextAttrEx attr;
+                if (GetStyle(position, attr))
                 {
-                    wxString urlTarget = attr.GetURL();
-                    if (!urlTarget.IsEmpty())
+                    if (attr.HasFlag(wxTEXT_ATTR_URL))
                     {
-                        wxMouseEvent mouseEvent(event);
-
-                        long startPos = 0, endPos = 0;
-                        wxRichTextObject* obj = GetBuffer().GetLeafObjectAtPosition(position);
-                        if (obj)
+                        wxString urlTarget = attr.GetURL();
+                        if (!urlTarget.IsEmpty())
                         {
-                            startPos = obj->GetRange().GetStart();
-                            endPos = obj->GetRange().GetEnd();
+                            wxMouseEvent mouseEvent(event);
+                            
+                            long startPos = 0, endPos = 0;
+                            wxRichTextObject* obj = GetBuffer().GetLeafObjectAtPosition(position);
+                            if (obj)
+                            {
+                                startPos = obj->GetRange().GetStart();
+                                endPos = obj->GetRange().GetEnd();
+                            }
+                            
+                            wxTextUrlEvent urlEvent(GetId(), mouseEvent, startPos, endPos);
+                            InitCommandEvent(urlEvent);
+                            
+                            urlEvent.SetString(urlTarget);
+                            
+                            GetEventHandler()->ProcessEvent(urlEvent);
                         }
-
-                        wxTextUrlEvent urlEvent(GetId(), mouseEvent, startPos, endPos);
-                        InitCommandEvent(urlEvent);
-
-                        urlEvent.SetString(urlTarget);
-
-                        GetEventHandler()->ProcessEvent(urlEvent);
                     }
                 }
             }
@@ -495,23 +504,45 @@ void wxRichTextCtrl::OnMoveMouse(wxMouseEvent& event)
 }
 
 /// Right-click
-void wxRichTextCtrl::OnRightClick(wxMouseEvent& event)
+void wxRichTextCtrl::OnRightClick(wxMouseEvent& WXUNUSED(event))
 {
     SetFocus();
-    event.Skip();
+
+    wxRichTextEvent cmdEvent(
+        wxEVT_COMMAND_RICHTEXT_RIGHT_CLICK,
+        GetId());
+    cmdEvent.SetEventObject(this);
+    cmdEvent.SetPosition(m_caretPosition+1);
+    
+    GetEventHandler()->ProcessEvent(cmdEvent);
 }
 
 /// Left-double-click
-void wxRichTextCtrl::OnLeftDClick(wxMouseEvent& event)
+void wxRichTextCtrl::OnLeftDClick(wxMouseEvent& WXUNUSED(event))
 {
-    SelectWord(GetCaretPosition()+1);
-    event.Skip();
+    wxRichTextEvent cmdEvent(
+        wxEVT_COMMAND_RICHTEXT_LEFT_DCLICK,
+        GetId());
+    cmdEvent.SetEventObject(this);
+    cmdEvent.SetPosition(m_caretPosition+1);
+    
+    if (!GetEventHandler()->ProcessEvent(cmdEvent))
+    {
+        SelectWord(GetCaretPosition()+1);
+    }
 }
 
 /// Middle-click
 void wxRichTextCtrl::OnMiddleClick(wxMouseEvent& event)
 {
-    event.Skip();
+    wxRichTextEvent cmdEvent(
+        wxEVT_COMMAND_RICHTEXT_MIDDLE_CLICK,
+        GetId());
+    cmdEvent.SetEventObject(this);
+    cmdEvent.SetPosition(m_caretPosition+1);
+    
+    if (!GetEventHandler()->ProcessEvent(cmdEvent))
+        event.Skip();
 }
 
 /// Key press
