@@ -508,8 +508,8 @@ void ScintillaWX::Paste() {
     wxTextDataObject data;
     bool gotData = false;
 
+    wxTheClipboard->UsePrimarySelection(false);
     if (wxTheClipboard->Open()) {
-        wxTheClipboard->UsePrimarySelection(false);
         gotData = wxTheClipboard->GetData(data);
         wxTheClipboard->Close();
     }
@@ -537,8 +537,8 @@ void ScintillaWX::Paste() {
 
 void ScintillaWX::CopyToClipboard(const SelectionText& st) {
 #if wxUSE_CLIPBOARD
+    wxTheClipboard->UsePrimarySelection(false);
     if (wxTheClipboard->Open()) {
-        wxTheClipboard->UsePrimarySelection(false);
         wxString text = wxTextBuffer::Translate(stc2wx(st.s, st.len-1));
         wxTheClipboard->SetData(new wxTextDataObject(text));
         wxTheClipboard->Close();
@@ -555,12 +555,12 @@ bool ScintillaWX::CanPaste() {
     bool didOpen;
 
     if (Editor::CanPaste()) {
+        wxTheClipboard->UsePrimarySelection(false);
         didOpen = !wxTheClipboard->IsOpened();
         if ( didOpen )
             wxTheClipboard->Open();
 
         if (wxTheClipboard->IsOpened()) {
-            wxTheClipboard->UsePrimarySelection(false);
             canPaste = wxTheClipboard->IsSupported(wxUSE_UNICODE ? wxDF_UNICODETEXT : wxDF_TEXT);
             if (didOpen)
                 wxTheClipboard->Close();
@@ -591,27 +591,23 @@ void ScintillaWX::AddToPopUp(const char *label, int cmd, bool enabled) {
 }
 
 
-// This is called by the Editor base class whenever something is selected
+// This is called by the Editor base class whenever something is selected.
+// For wxGTK we can put this text in the primary selection and then other apps
+// can paste with the middle button.
 void ScintillaWX::ClaimSelection() {
-#if 0
-    // Until wxGTK is able to support using both the primary selection and the
-    // clipboard at the same time I think it causes more problems than it is
-    // worth to implement this method.  Selecting text should not clear the
-    // clipboard.  --Robin
 #ifdef __WXGTK__
     // Put the selected text in the PRIMARY selection
     if (currentPos != anchor) {
         SelectionText st;
         CopySelectionRange(&st);
+        wxTheClipboard->UsePrimarySelection(true);
         if (wxTheClipboard->Open()) {
-            wxTheClipboard->UsePrimarySelection(true);
             wxString text = stc2wx(st.s, st.len);
             wxTheClipboard->SetData(new wxTextDataObject(text));
-            wxTheClipboard->UsePrimarySelection(false);
             wxTheClipboard->Close();
         }
+        wxTheClipboard->UsePrimarySelection(false);
     }
-#endif
 #endif
 }
 
@@ -891,12 +887,12 @@ void ScintillaWX::DoMiddleButtonUp(Point pt) {
     pdoc->BeginUndoAction();
     wxTextDataObject data;
     bool gotData = false;
+    wxTheClipboard->UsePrimarySelection(true);
     if (wxTheClipboard->Open()) {
-        wxTheClipboard->UsePrimarySelection(true);
         gotData = wxTheClipboard->GetData(data);
-        wxTheClipboard->UsePrimarySelection(false);
         wxTheClipboard->Close();
     }
+    wxTheClipboard->UsePrimarySelection(false);
     if (gotData) {
         wxString   text = wxTextBuffer::Translate(data.GetText(),
                                                   wxConvertEOLMode(pdoc->eolMode));
