@@ -1000,6 +1000,8 @@ public:
     { return operator=((wxUniChar)ch); }
   wxString& operator=(char ch)
     { return operator=(wxUniChar(ch)); }
+  wxString& operator=(unsigned char ch)
+    { return operator=(wxUniChar(ch)); }
   wxString& operator=(wchar_t ch)
     { return operator=(wxUniChar(ch)); }
     // from a C string - STL probably will crash on NULL,
@@ -1060,6 +1062,7 @@ public:
   wxString& operator<<(wxUniChar ch) { append(1, ch); return *this; }
   wxString& operator<<(wxUniCharRef ch) { append(1, ch); return *this; }
   wxString& operator<<(char ch) { append(1, ch); return *this; }
+  wxString& operator<<(unsigned char ch) { append(1, ch); return *this; }
   wxString& operator<<(wchar_t ch) { append(1, ch); return *this; }
 
       // string += buffer (i.e. from wxGetString)
@@ -1095,6 +1098,8 @@ public:
   wxString& Append(wxUniCharRef ch, size_t count = 1u)
     { append(count, ch); return *this; }
   wxString& Append(char ch, size_t count = 1u)
+    { append(count, ch); return *this; }
+  wxString& Append(unsigned char ch, size_t count = 1u)
     { append(count, ch); return *this; }
   wxString& Append(wchar_t ch, size_t count = 1u)
     { append(count, ch); return *this; }
@@ -1357,6 +1362,7 @@ public:
     // use Find()
   int First( wxUniChar ch ) const { return Find(ch); }
   int First( char ch ) const { return Find(ch); }
+  int First( unsigned char ch ) const { return Find(ch); }
   int First( wchar_t ch ) const { return Find(ch); }
   int First( const wxChar* psz ) const { return Find(psz); }
   int First( const wxString &str ) const { return Find(str); }
@@ -1687,6 +1693,8 @@ public:
     {  return find(wxUniChar(ch), nStart); }
   size_t find(char ch, size_t nStart = 0) const
     {  return find(wxUniChar(ch), nStart); }
+  size_t find(unsigned char ch, size_t nStart = 0) const
+    {  return find(wxUniChar(ch), nStart); }
   size_t find(wchar_t ch, size_t nStart = 0) const
     {  return find(wxUniChar(ch), nStart); }
 
@@ -1713,6 +1721,8 @@ public:
   size_t rfind(wxUniCharRef ch, size_t nStart = npos) const
     {  return rfind(wxUniChar(ch), nStart); }
   size_t rfind(char ch, size_t nStart = npos) const
+    {  return rfind(wxUniChar(ch), nStart); }
+  size_t rfind(unsigned char ch, size_t nStart = npos) const
     {  return rfind(wxUniChar(ch), nStart); }
   size_t rfind(wchar_t ch, size_t nStart = npos) const
     {  return rfind(wxUniChar(ch), nStart); }
@@ -1830,11 +1840,15 @@ public:
     {  return find_first_of(wxUniChar(ch), nStart); }
   size_t find_first_of(char ch, size_t nStart = 0) const
     {  return find_first_of(wxUniChar(ch), nStart); }
+  size_t find_first_of(unsigned char ch, size_t nStart = 0) const
+    {  return find_first_of(wxUniChar(ch), nStart); }
   size_t find_first_of(wchar_t ch, size_t nStart = 0) const
     {  return find_first_of(wxUniChar(ch), nStart); }
   size_t find_last_of(wxUniCharRef ch, size_t nStart = npos) const
     {  return find_last_of(wxUniChar(ch), nStart); }
   size_t find_last_of(char ch, size_t nStart = npos) const
+    {  return find_last_of(wxUniChar(ch), nStart); }
+  size_t find_last_of(unsigned char ch, size_t nStart = npos) const
     {  return find_last_of(wxUniChar(ch), nStart); }
   size_t find_last_of(wchar_t ch, size_t nStart = npos) const
     {  return find_last_of(wxUniChar(ch), nStart); }
@@ -1842,11 +1856,15 @@ public:
     {  return find_first_not_of(wxUniChar(ch), nStart); }
   size_t find_first_not_of(char ch, size_t nStart = 0) const
     {  return find_first_not_of(wxUniChar(ch), nStart); }
+  size_t find_first_not_of(unsigned char ch, size_t nStart = 0) const
+    {  return find_first_not_of(wxUniChar(ch), nStart); }
   size_t find_first_not_of(wchar_t ch, size_t nStart = 0) const
     {  return find_first_not_of(wxUniChar(ch), nStart); }
   size_t find_last_not_of(wxUniCharRef ch, size_t nStart = npos) const
     {  return find_last_not_of(wxUniChar(ch), nStart); }
   size_t find_last_not_of(char ch, size_t nStart = npos) const
+    {  return find_last_not_of(wxUniChar(ch), nStart); }
+  size_t find_last_not_of(unsigned char ch, size_t nStart = npos) const
     {  return find_last_not_of(wxUniChar(ch), nStart); }
   size_t find_last_not_of(wchar_t ch, size_t nStart = npos) const
     {  return find_last_not_of(wxUniChar(ch), nStart); }
