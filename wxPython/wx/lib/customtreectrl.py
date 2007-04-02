@@ -3,7 +3,7 @@
 # Inspired By And Heavily Based On wxGenericTreeCtrl.
 #
 # Andrea Gavana, @ 17 May 2006
-# Latest Revision: 02 Mar 2007, 22.30 CET
+# Latest Revision: 01 Apr 2007, 22.30 CET
 #
 #
 # TODO List
@@ -134,8 +134,8 @@ CustomTreeCtrl has been tested on the following platforms:
   * Mac OS (Thanks to John Jackson).
 
 
-Latest Revision: Andrea Gavana @ 02 Mar 2007, 22.30 CET
-Version 0.9
+Latest Revision: Andrea Gavana @ 01 Apr 2007, 22.30 CET
+Version 1.0
 
 """
 
@@ -3308,7 +3308,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         event = TreeEvent(wxEVT_TREE_DELETE_ITEM, self.GetId())
         event._item = item
         event.SetEventObject(self)
-        self.ProcessEvent(event)
+        self.GetEventHandler().ProcessEvent(event)
 
 
     def IsDescendantOf(self, parent, item):
@@ -3453,7 +3453,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         event._item = item
         event.SetEventObject(self)
 
-        if self.ProcessEvent(event) and not event.IsAllowed():
+        if self.GetEventHandler().ProcessEvent(event) and not event.IsAllowed():
             # cancelled by program
             return
     
@@ -3467,7 +3467,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
             self.HideWindows()
             
         event.SetEventType(wxEVT_TREE_ITEM_EXPANDED)
-        self.ProcessEvent(event)
+        self.GetEventHandler().ProcessEvent(event)
 
 
     def ExpandAllChildren(self, item):
@@ -3513,7 +3513,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         event = TreeEvent(wxEVT_TREE_ITEM_COLLAPSING, self.GetId())
         event._item = item
         event.SetEventObject(self)
-        if self.ProcessEvent(event) and not event.IsAllowed():
+        if self.GetEventHandler().ProcessEvent(event) and not event.IsAllowed():
             # cancelled by program
             return
     
@@ -3527,7 +3527,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
             self.HideWindows()
             
         event.SetEventType(wxEVT_TREE_ITEM_COLLAPSED)
-        self.ProcessEvent(event)
+        self.GetEventHandler().ProcessEvent(event)
 
 
     def CollapseAndReset(self, item):
@@ -4453,7 +4453,10 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
                     # draw line down to last child
                     origY += self.GetLineHeight(children[0])>>1
                     oldY += self.GetLineHeight(children[n-1])>>1
+                    oldPen = dc.GetPen()
+                    dc.SetPen(self._dottedPen)
                     dc.DrawLine(3, origY, 3, oldY)
+                    dc.SetPen(oldPen)
                 
             return y
         
