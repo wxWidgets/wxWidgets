@@ -131,9 +131,6 @@ SB_HORIZONTAL = _core_.SB_HORIZONTAL
 SB_VERTICAL = _core_.SB_VERTICAL
 RB_USE_CHECKBOX = _core_.RB_USE_CHECKBOX
 ST_SIZEGRIP = _core_.ST_SIZEGRIP
-ST_NO_AUTORESIZE = _core_.ST_NO_AUTORESIZE
-ST_DOTS_MIDDLE = _core_.ST_DOTS_MIDDLE
-ST_DOTS_END = _core_.ST_DOTS_END
 FLOOD_SURFACE = _core_.FLOOD_SURFACE
 FLOOD_BORDER = _core_.FLOOD_BORDER
 ODDEVEN_RULE = _core_.ODDEVEN_RULE
@@ -11393,6 +11390,15 @@ class Control(Window):
         """
         return _core_.Control_Command(*args, **kwargs)
 
+    def RemoveMnemonics(*args, **kwargs):
+        """
+        RemoveMnemonics(String str) -> String
+
+        removes the mnemonics characters
+        """
+        return _core_.Control_RemoveMnemonics(*args, **kwargs)
+
+    RemoveMnemonics = staticmethod(RemoveMnemonics)
     def GetClassDefaultAttributes(*args, **kwargs):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
@@ -11424,6 +11430,14 @@ def PreControl(*args, **kwargs):
     """
     val = _core_.new_PreControl(*args, **kwargs)
     return val
+
+def Control_RemoveMnemonics(*args, **kwargs):
+  """
+    Control_RemoveMnemonics(String str) -> String
+
+    removes the mnemonics characters
+    """
+  return _core_.Control_RemoveMnemonics(*args, **kwargs)
 
 def Control_GetClassDefaultAttributes(*args, **kwargs):
   """
@@ -12080,14 +12094,6 @@ class SizerItem(Object):
         """
         return _core_.SizerItem_GetWindow(*args, **kwargs)
 
-    def SetWindow(*args, **kwargs):
-        """
-        SetWindow(self, Window window)
-
-        Set the window to be managed by this sizer item.
-        """
-        return _core_.SizerItem_SetWindow(*args, **kwargs)
-
     def GetSizer(*args, **kwargs):
         """
         GetSizer(self) -> Sizer
@@ -12095,14 +12101,6 @@ class SizerItem(Object):
         Get the subsizer (if any) that is managed by this sizer item.
         """
         return _core_.SizerItem_GetSizer(*args, **kwargs)
-
-    def SetSizer(*args, **kwargs):
-        """
-        SetSizer(self, Sizer sizer)
-
-        Set the subsizer to be managed by this sizer item.
-        """
-        return _core_.SizerItem_SetSizer(*args, **kwargs)
 
     def GetSpacer(*args, **kwargs):
         """
@@ -12112,6 +12110,22 @@ class SizerItem(Object):
         """
         return _core_.SizerItem_GetSpacer(*args, **kwargs)
 
+    def SetWindow(*args, **kwargs):
+        """
+        SetWindow(self, Window window)
+
+        Set the window to be managed by this sizer item.
+        """
+        return _core_.SizerItem_SetWindow(*args, **kwargs)
+
+    def SetSizer(*args, **kwargs):
+        """
+        SetSizer(self, Sizer sizer)
+
+        Set the subsizer to be managed by this sizer item.
+        """
+        return _core_.SizerItem_SetSizer(*args, **kwargs)
+
     def SetSpacer(*args, **kwargs):
         """
         SetSpacer(self, Size size)
@@ -12119,6 +12133,34 @@ class SizerItem(Object):
         Set the size of the spacer to be managed by this sizer item.
         """
         return _core_.SizerItem_SetSpacer(*args, **kwargs)
+
+    SetWindow = wx._deprecated(SetWindow, "Use `AssignWindow` instead.")
+    SetSizer = wx._deprecated(SetSizer,   "Use `AssignSizer` instead.")
+    SetSpacer = wx._deprecated(SetSpacer, "Use `AssignSpacer` instead.")
+
+    def AssignWindow(*args, **kwargs):
+        """
+        AssignWindow(self, Window window)
+
+        Set the window to be managed by this sizer item.
+        """
+        return _core_.SizerItem_AssignWindow(*args, **kwargs)
+
+    def AssignSizer(*args, **kwargs):
+        """
+        AssignSizer(self, Sizer sizer)
+
+        Set the subsizer to be managed by this sizer item.
+        """
+        return _core_.SizerItem_AssignSizer(*args, **kwargs)
+
+    def AssignSpacer(*args, **kwargs):
+        """
+        AssignSpacer(self, Size size)
+
+        Set the size of the spacer to be managed by this sizer item.
+        """
+        return _core_.SizerItem_AssignSpacer(*args, **kwargs)
 
     def Show(*args, **kwargs):
         """
@@ -12172,10 +12214,10 @@ class SizerItem(Object):
     Ratio = property(GetRatio,SetRatio,doc="See `GetRatio` and `SetRatio`") 
     Rect = property(GetRect,doc="See `GetRect`") 
     Size = property(GetSize,doc="See `GetSize`") 
-    Sizer = property(GetSizer,SetSizer,doc="See `GetSizer` and `SetSizer`") 
-    Spacer = property(GetSpacer,SetSpacer,doc="See `GetSpacer` and `SetSpacer`") 
+    Sizer = property(GetSizer,AssignSizer,doc="See `GetSizer` and `AssignSizer`") 
+    Spacer = property(GetSpacer,AssignSpacer,doc="See `GetSpacer` and `AssignSpacer`") 
     UserData = property(GetUserData,SetUserData,doc="See `GetUserData` and `SetUserData`") 
-    Window = property(GetWindow,SetWindow,doc="See `GetWindow` and `SetWindow`") 
+    Window = property(GetWindow,AssignWindow,doc="See `GetWindow` and `AssignWindow`") 
 _core_.SizerItem_swigregister(SizerItem)
 
 def SizerItemWindow(*args, **kwargs):

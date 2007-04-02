@@ -2634,9 +2634,8 @@ class Locale(object):
     __del__ = lambda self : None;
     def Init1(*args, **kwargs):
         """
-        Init1(self, String szName, String szShort=EmptyString, String szLocale=EmptyString, 
-            bool bLoadDefault=True, 
-            bool bConvertEncoding=False) -> bool
+        Init1(self, String name, String shortName=EmptyString, String locale=EmptyString, 
+            bool bLoadDefault=True, bool bConvertEncoding=False) -> bool
         """
         return _gdi_.Locale_Init1(*args, **kwargs)
 
@@ -2693,7 +2692,7 @@ class Locale(object):
 
     AddCatalogLookupPathPrefix = staticmethod(AddCatalogLookupPathPrefix)
     def AddCatalog(*args, **kwargs):
-        """AddCatalog(self, String szDomain) -> bool"""
+        """AddCatalog(self, String domain) -> bool"""
         return _gdi_.Locale_AddCatalog(*args, **kwargs)
 
     def IsAvailable(*args, **kwargs):
@@ -2702,7 +2701,7 @@ class Locale(object):
 
     IsAvailable = staticmethod(IsAvailable)
     def IsLoaded(*args, **kwargs):
-        """IsLoaded(self, String szDomain) -> bool"""
+        """IsLoaded(self, String domain) -> bool"""
         return _gdi_.Locale_IsLoaded(*args, **kwargs)
 
     def GetLanguageInfo(*args, **kwargs):
@@ -2726,7 +2725,7 @@ class Locale(object):
 
     AddLanguage = staticmethod(AddLanguage)
     def GetString(*args, **kwargs):
-        """GetString(self, String szOrigString, String szDomain=EmptyString) -> String"""
+        """GetString(self, String origString, String domain=EmptyString) -> String"""
         return _gdi_.Locale_GetString(*args, **kwargs)
 
     def GetName(*args, **kwargs):
@@ -2793,14 +2792,11 @@ class PyLocale(Locale):
         return _gdi_.PyLocale__setCallbackInfo(*args, **kwargs)
 
     def GetSingularString(*args, **kwargs):
-        """GetSingularString(self, wxChar szOrigString, wxChar szDomain=None) -> wxChar"""
+        """GetSingularString(self, String origString, String domain=EmptyString) -> String"""
         return _gdi_.PyLocale_GetSingularString(*args, **kwargs)
 
     def GetPluralString(*args, **kwargs):
-        """
-        GetPluralString(self, wxChar szOrigString, wxChar szOrigString2, size_t n, 
-            wxChar szDomain=None) -> wxChar
-        """
+        """GetPluralString(self, String origString, String origString2, size_t n, String domain=EmptyString) -> String"""
         return _gdi_.PyLocale_GetPluralString(*args, **kwargs)
 
 _gdi_.PyLocale_swigregister(PyLocale)

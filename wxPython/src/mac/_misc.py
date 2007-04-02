@@ -5669,11 +5669,22 @@ class Clipboard(_core.Object):
         """
         UsePrimarySelection(self, bool primary=True)
 
-        On platforms supporting it (the X11 based platforms), selects the
-        so called PRIMARY SELECTION as the clipboard as opposed to the
-        normal clipboard, if primary is True.
+        On platforms supporting it (the X11 based platforms), selects the so
+        called PRIMARY SELECTION as the clipboard as opposed to the normal
+        clipboard, if primary is True.  On other platforms all clipboard
+        operations fail when using the primary selection.  This allows code
+        supporting the primary selection to be written without ill effects on
+        the other platforms.
         """
         return _misc_.Clipboard_UsePrimarySelection(*args, **kwargs)
+
+    def IsUsingPrimarySelection(*args, **kwargs):
+        """
+        IsUsingPrimarySelection(self) -> bool
+
+        Return true if we're using primary selection
+        """
+        return _misc_.Clipboard_IsUsingPrimarySelection(*args, **kwargs)
 
     def Get(*args, **kwargs):
         """

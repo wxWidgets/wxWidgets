@@ -8350,6 +8350,122 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_StaticText_IsEllipsized(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxStaticText *arg1 = (wxStaticText *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxStaticText, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "StaticText_IsEllipsized" "', expected argument " "1"" of type '" "wxStaticText const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxStaticText * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxStaticText const *)arg1)->IsEllipsized();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_StaticText_RemoveMarkup(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxString *arg1 = 0 ;
+  wxString result;
+  bool temp1 = false ;
+  PyObject * obj0 = 0 ;
+  char *  kwnames[] = {
+    (char *) "str", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StaticText_RemoveMarkup",kwnames,&obj0)) SWIG_fail;
+  {
+    arg1 = wxString_in_helper(obj0);
+    if (arg1 == NULL) SWIG_fail;
+    temp1 = true;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = wxStaticText::RemoveMarkup((wxString const &)*arg1);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+#if wxUSE_UNICODE
+    resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+    resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+  }
+  {
+    if (temp1)
+    delete arg1;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp1)
+    delete arg1;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_StaticText_EscapeMarkup(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxString *arg1 = 0 ;
+  wxString result;
+  bool temp1 = false ;
+  PyObject * obj0 = 0 ;
+  char *  kwnames[] = {
+    (char *) "str", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O:StaticText_EscapeMarkup",kwnames,&obj0)) SWIG_fail;
+  {
+    arg1 = wxString_in_helper(obj0);
+    if (arg1 == NULL) SWIG_fail;
+    temp1 = true;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = wxStaticText::EscapeMarkup((wxString const &)*arg1);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+#if wxUSE_UNICODE
+    resultobj = PyUnicode_FromWideChar((&result)->c_str(), (&result)->Len());
+#else
+    resultobj = PyString_FromStringAndSize((&result)->c_str(), (&result)->Len());
+#endif
+  }
+  {
+    if (temp1)
+    delete arg1;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp1)
+    delete arg1;
+  }
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_StaticText_GetClassDefaultAttributes(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxWindowVariant arg1 = (wxWindowVariant) wxWINDOW_VARIANT_NORMAL ;
@@ -47052,6 +47168,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_PreStaticText", (PyCFunction)_wrap_new_PreStaticText, METH_NOARGS, NULL},
 	 { (char *)"StaticText_Create", (PyCFunction) _wrap_StaticText_Create, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StaticText_Wrap", (PyCFunction) _wrap_StaticText_Wrap, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StaticText_IsEllipsized", (PyCFunction)_wrap_StaticText_IsEllipsized, METH_O, NULL},
+	 { (char *)"StaticText_RemoveMarkup", (PyCFunction) _wrap_StaticText_RemoveMarkup, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"StaticText_EscapeMarkup", (PyCFunction) _wrap_StaticText_EscapeMarkup, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StaticText_GetClassDefaultAttributes", (PyCFunction) _wrap_StaticText_GetClassDefaultAttributes, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"StaticText_swigregister", StaticText_swigregister, METH_VARARGS, NULL},
 	 { (char *)"StaticText_swiginit", StaticText_swiginit, METH_VARARGS, NULL},
@@ -50515,6 +50634,11 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_addvarlink(SWIG_globals(),(char*)"StaticBoxNameStr",StaticBoxNameStr_get, StaticBoxNameStr_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"StaticTextNameStr",StaticTextNameStr_get, StaticTextNameStr_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"StaticLineNameStr",StaticLineNameStr_get, StaticLineNameStr_set);
+  SWIG_Python_SetConstant(d, "ST_NO_AUTORESIZE",SWIG_From_int(static_cast< int >(wxST_NO_AUTORESIZE)));
+  SWIG_Python_SetConstant(d, "ST_MARKUP",SWIG_From_int(static_cast< int >(wxST_MARKUP)));
+  SWIG_Python_SetConstant(d, "ST_ELLIPSIZE_START",SWIG_From_int(static_cast< int >(wxST_ELLIPSIZE_START)));
+  SWIG_Python_SetConstant(d, "ST_ELLIPSIZE_MIDDLE",SWIG_From_int(static_cast< int >(wxST_ELLIPSIZE_MIDDLE)));
+  SWIG_Python_SetConstant(d, "ST_ELLIPSIZE_END",SWIG_From_int(static_cast< int >(wxST_ELLIPSIZE_END)));
   SWIG_addvarlink(SWIG_globals(),(char*)"ListBoxNameStr",ListBoxNameStr_get, ListBoxNameStr_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"TextCtrlNameStr",TextCtrlNameStr_get, TextCtrlNameStr_set);
   SWIG_Python_SetConstant(d, "TE_NO_VSCROLL",SWIG_From_int(static_cast< int >(wxTE_NO_VSCROLL)));

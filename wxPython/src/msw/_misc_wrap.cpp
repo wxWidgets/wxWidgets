@@ -35712,6 +35712,36 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Clipboard_IsUsingPrimarySelection(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxClipboard *arg1 = (wxClipboard *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxClipboard, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Clipboard_IsUsingPrimarySelection" "', expected argument " "1"" of type '" "wxClipboard const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxClipboard * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxClipboard const *)arg1)->IsUsingPrimarySelection();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Clipboard_Get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxClipboard *result = 0 ;
@@ -40053,6 +40083,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Clipboard_Clear", (PyCFunction)_wrap_Clipboard_Clear, METH_O, NULL},
 	 { (char *)"Clipboard_Flush", (PyCFunction)_wrap_Clipboard_Flush, METH_O, NULL},
 	 { (char *)"Clipboard_UsePrimarySelection", (PyCFunction) _wrap_Clipboard_UsePrimarySelection, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Clipboard_IsUsingPrimarySelection", (PyCFunction)_wrap_Clipboard_IsUsingPrimarySelection, METH_O, NULL},
 	 { (char *)"Clipboard_Get", (PyCFunction)_wrap_Clipboard_Get, METH_NOARGS, NULL},
 	 { (char *)"Clipboard_swigregister", Clipboard_swigregister, METH_VARARGS, NULL},
 	 { (char *)"Clipboard_swiginit", Clipboard_swiginit, METH_VARARGS, NULL},
