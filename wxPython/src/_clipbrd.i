@@ -114,10 +114,18 @@ exit.  Returns False if the operation is unsuccesful for any reason.", "");
 
     DocDeclStr(
         virtual void , UsePrimarySelection( bool primary = true ),
-        "On platforms supporting it (the X11 based platforms), selects the
-so called PRIMARY SELECTION as the clipboard as opposed to the
-normal clipboard, if primary is True.", "");
+        "On platforms supporting it (the X11 based platforms), selects the so
+called PRIMARY SELECTION as the clipboard as opposed to the normal
+clipboard, if primary is True.  On other platforms all clipboard
+operations fail when using the primary selection.  This allows code
+supporting the primary selection to be written without ill effects on
+the other platforms.", "");
 
+    
+    DocDeclStr(
+        bool , IsUsingPrimarySelection() const,
+        "Return true if we're using primary selection", "");
+    
 
     DocDeclStr(
         static wxClipboard *, Get(),
