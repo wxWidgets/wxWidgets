@@ -73,11 +73,11 @@ del %DAILY%\*.zip
 zip %DAILY%\wxWidgets-%WXW_VER%-CHM.zip docs\htmlhelp\wx.chm utils/tex2rtf/docs/*.chm 
 zip %DAILY%\wxWidgets-%WXW_VER%-HTB.zip docs\htb\*.htb utils/tex2rtf/docs/*.htb 
 zip %DAILY%\wxWidgets-%WXW_VER%-HLP.zip docs\winhelp\wx.hlp docs\winhelp\wx.cnt utils/tex2rtf/docs/*.HLP utils/tex2rtf/docs/*.cnt 
-zip -r %DAILY%\wxWidgets-%WXW_VER%-HTML.zip docs\html\* -x CVS -x *.con -x *.hh* -x *.ref -x *.htx -x *.cn1 -x docs\html\CVS\*
+zip -r %DAILY%\wxWidgets-%WXW_VER%-HTML.zip docs\html\* utils\tex2rtf\docs\html\* -x CVS -x *.con -x *.hh* -x *.ref -x *.htx -x *.cn1 -x docs\html\CVS\*
 
 del %DAILY%\*.tar.gz
 bsdtar zcvf %DAILY%\wxWidgets-%WXW_VER%-HTB.tar.gz docs/htb/*.htb utils/tex2rtf/docs/*.htb 
-bsdtar zcvf %DAILY%\wxWidgets-%WXW_VER%-HTML.tar.gz  --exclude CVS --exclude *.con --exclude *.hh* --exclude *.ref --exclude *.htx --exclude *.cn1 --exclude docs/html/CVS/* docs/html/*
+bsdtar zcvf %DAILY%\wxWidgets-%WXW_VER%-HTML.tar.gz  --exclude CVS --exclude *.con --exclude *.hh* --exclude *.ref --exclude *.htx --exclude *.cn1 --exclude docs/html/CVS/* docs/html/* utils/tex2rtf/docs/html/*
 
 cd %DAILY%\
 mkdir docs
