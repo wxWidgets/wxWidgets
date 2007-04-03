@@ -393,10 +393,8 @@ wxClipboard::~wxClipboard()
 {
     Clear();
 
-    if ( m_clipboardWidget )
-        gtk_widget_destroy( m_clipboardWidget );
-    if ( m_targetsWidget )
-        gtk_widget_destroy( m_targetsWidget );
+    gtk_widget_destroy( m_clipboardWidget );
+    gtk_widget_destroy( m_targetsWidget );
 }
 
 // ----------------------------------------------------------------------------
