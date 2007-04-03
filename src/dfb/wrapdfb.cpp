@@ -113,6 +113,13 @@ wxIDirectFBSurfacePtr wxIDirectFB::GetPrimarySurface()
 // wxIDirectFBSurface
 //-----------------------------------------------------------------------------
 
+DFBSurfacePixelFormat wxIDirectFBSurface::GetPixelFormat()
+{
+    DFBSurfacePixelFormat format = DSPF_UNKNOWN;
+    GetPixelFormat(&format);
+    return format;
+}
+
 int wxIDirectFBSurface::GetDepth()
 {
     DFBSurfacePixelFormat format = DSPF_UNKNOWN;

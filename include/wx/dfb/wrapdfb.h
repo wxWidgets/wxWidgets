@@ -207,6 +207,9 @@ struct wxIDirectFBSurface : public wxDfbWrapper<IDirectFBSurface>
     bool GetPixelFormat(DFBSurfacePixelFormat *caps)
         { return Check(m_ptr->GetPixelFormat(m_ptr, caps)); }
 
+    // convenience version of GetPixelFormat, returns DSPF_UNKNOWN if fails
+    DFBSurfacePixelFormat GetPixelFormat();
+
     bool SetClip(const DFBRegion *clip)
         { return Check(m_ptr->SetClip(m_ptr, clip)); }
 
@@ -285,7 +288,6 @@ struct wxIDirectFBSurface : public wxDfbWrapper<IDirectFBSurface>
                                         source_rect, dest_rect));
     }
 
-
     /// Returns bit depth used by the surface or -1 on error
     int GetDepth();
 
@@ -314,6 +316,36 @@ struct wxIDirectFBSurface : public wxDfbWrapper<IDirectFBSurface>
      */
     wxIDirectFBSurfacePtr CreateCompatible(const wxSize& size = wxDefaultSize,
                                            int flags = 0);
+
+    bool Lock(DFBSurfaceLockFlags flags, void **ret_ptr, int *ret_pitch)
+        { return Check(m_ptr->Lock(m_ptr, flags, ret_ptr, ret_pitch)); }
+
+    bool Unlock()
+        { return Check(m_ptr->Unlock(m_ptr)); }
+
+    /// Helper struct for safe locking & unlocking of surfaces
+    struct Locked
+    {
+        Locked(const wxIDirectFBSurfacePtr& surface, DFBSurfaceLockFlags flags)
+            : m_surface(surface)
+        {
+            if ( !surface->Lock(flags, &ptr, &pitch) )
+                ptr = NULL;
+        }
+
+        ~Locked()
+        {
+            if ( ptr )
+                m_surface->Unlock();
+        }
+
+        void *ptr;
+        int pitch;
+
+    private:
+        wxIDirectFBSurfacePtr m_surface;
+    };
+
 
 private:
     // this is private because we want user code to use FlipToFront()

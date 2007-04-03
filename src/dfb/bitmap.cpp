@@ -30,6 +30,55 @@
 // helpers
 //-----------------------------------------------------------------------------
 
+// pitch = stride = # of bytes between the start of N-th line and (N+1)-th line
+static void CopyPixelsAndSwapRGB(unsigned w, unsigned h,
+                                 const unsigned char *src,
+                                 unsigned src_pitch,
+                                 unsigned char *dst,
+                                 unsigned dst_pitch)
+{
+    unsigned src_advance = src_pitch - 3 * w;
+    unsigned dst_advance = dst_pitch - 3 * w;
+    for ( unsigned y = 0; y < h; y++, src += src_advance, dst += dst_advance )
+    {
+        for ( unsigned x = 0; x < w; x++, src += 3, dst += 3 )
+        {
+            // copy with RGB -> BGR translation:
+            dst[0] = src[2];
+            dst[1] = src[1];
+            dst[2] = src[0];
+        }
+    }
+}
+
+static void CopySurfaceToImage(const wxIDirectFBSurfacePtr& surface,
+                               const wxImage& image)
+{
+    wxCHECK_RET( surface->GetPixelFormat() == DSPF_RGB24,
+                 _T("unexpected pixel format") );
+
+    wxIDirectFBSurface::Locked locked(surface, DSLF_READ);
+    wxCHECK_RET( locked.ptr, _T("failed to lock surface") );
+
+    CopyPixelsAndSwapRGB(image.GetWidth(), image.GetHeight(),
+                         (unsigned char*)locked.ptr, locked.pitch,
+                         image.GetData(), image.GetWidth() * 3);
+}
+
+static void CopyImageToSurface(const wxImage& image,
+                               const wxIDirectFBSurfacePtr& surface)
+{
+    wxCHECK_RET( surface->GetPixelFormat() == DSPF_RGB24,
+                 _T("unexpected pixel format") );
+
+    wxIDirectFBSurface::Locked locked(surface, DSLF_WRITE);
+    wxCHECK_RET( locked.ptr, _T("failed to lock surface") );
+
+    CopyPixelsAndSwapRGB(image.GetWidth(), image.GetHeight(),
+                         image.GetData(), image.GetWidth() * 3,
+                         (unsigned char*)locked.ptr, locked.pitch);
+}
+
 // Creates a surface that will use wxImage's pixel data (RGB only)
 static wxIDirectFBSurfacePtr CreateSurfaceForImage(const wxImage& image)
 {
@@ -38,16 +87,16 @@ static wxIDirectFBSurfacePtr CreateSurfaceForImage(const wxImage& image)
     //            into a temporary RGBA surface
     wxCHECK_MSG( !image.HasAlpha(), NULL, _T("alpha channel not supported") );
 
+    // NB: wxImage uses RGB order of bytes while DirectFB uses BGR, so we
+    //     cannot use preallocated surface that shares data with wxImage, we
+    //     have to copy the data to temporary surface instead
     DFBSurfaceDescription desc;
     desc.flags = (DFBSurfaceDescriptionFlags)
-        (DSDESC_CAPS | DSDESC_WIDTH | DSDESC_HEIGHT | DSDESC_PIXELFORMAT |
-         DSDESC_PREALLOCATED);
+        (DSDESC_CAPS | DSDESC_WIDTH | DSDESC_HEIGHT | DSDESC_PIXELFORMAT);
     desc.caps = DSCAPS_NONE;
     desc.width = image.GetWidth();
     desc.height = image.GetHeight();
     desc.pixelformat = DSPF_RGB24;
-    desc.preallocated[0].data = image.GetData();
-    desc.preallocated[0].pitch = 3 * desc.width;
 
     return wxIDirectFB::Get()->CreateSurface(&desc);
 }
@@ -144,13 +193,24 @@ wxBitmap::wxBitmap(const wxImage& image, int depth)
         return;
 
     // then copy the image to it:
-    wxIDirectFBSurfacePtr src(CreateSurfaceForImage(image));
     wxIDirectFBSurfacePtr dst = M_BITMAP->m_surface;
 
-    if ( !dst->SetBlittingFlags(DSBLIT_NOFX) )
-        return;
-    if ( !dst->Blit(src->GetRaw(), NULL, 0, 0) )
-        return;
+    if ( dst->GetPixelFormat() == DSPF_RGB24 )
+    {
+        CopyImageToSurface(image, dst);
+    }
+    else
+    {
+        // wxBitmap uses different pixel format, so we have to use a temporary
+        // surface and blit to the bitmap via it:
+        wxIDirectFBSurfacePtr src(CreateSurfaceForImage(image));
+        CopyImageToSurface(image, src);
+
+        if ( !dst->SetBlittingFlags(DSBLIT_NOFX) )
+            return;
+        if ( !dst->Blit(src->GetRaw(), NULL, 0, 0) )
+            return;
+    }
 
     // FIXME: implement mask creation from image's mask (or alpha channel?)
     wxASSERT_MSG( !image.HasMask(), _T("image masks are ignored for now") );
@@ -161,13 +221,25 @@ wxImage wxBitmap::ConvertToImage() const
     wxCHECK_MSG( Ok(), wxNullImage, wxT("invalid bitmap") );
 
     wxImage img(GetWidth(), GetHeight());
-    wxIDirectFBSurfacePtr dst(CreateSurfaceForImage(img));
     wxIDirectFBSurfacePtr src = M_BITMAP->m_surface;
 
-    if ( !dst->SetBlittingFlags(DSBLIT_NOFX) )
-        return wxNullImage;
-    if ( !dst->Blit(src->GetRaw(), NULL, 0, 0) )
-        return wxNullImage;
+    if ( src->GetPixelFormat() == DSPF_RGB24 )
+    {
+        CopySurfaceToImage(src, img);
+    }
+    else
+    {
+        // wxBitmap uses different pixel format, so we have to use a temporary
+        // surface and blit to the bitmap via it:
+        wxIDirectFBSurfacePtr dst(CreateSurfaceForImage(img));
+
+        if ( !dst->SetBlittingFlags(DSBLIT_NOFX) )
+            return wxNullImage;
+        if ( !dst->Blit(src->GetRaw(), NULL, 0, 0) )
+            return wxNullImage;
+
+        CopySurfaceToImage(dst, img);
+    }
 
     // FIXME: implement mask setting in the image
     wxASSERT_MSG( GetMask() == NULL, _T("bitmap masks are ignored for now") );
