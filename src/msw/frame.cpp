@@ -1004,7 +1004,7 @@ bool wxFrame::HandleMenuSelect(WXWORD nItem, WXWORD flags, WXHMENU hMenu)
         // items opening popup menus (they don't have them anyhow) but do clear
         // the status line - otherwise, we would be left with the help message
         // for the previous item which doesn't apply any more
-        DoGiveHelp(wxEmptyString);
+        DoGiveHelp(wxEmptyString, true);
 
         return false;
     }

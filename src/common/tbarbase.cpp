@@ -628,7 +628,7 @@ void wxToolBarBase::OnMouseEnter(int id)
     event.SetInt(id);
 
     wxFrame *frame = wxDynamicCast(GetParent(), wxFrame);
-    if( frame )
+    if ( frame )
     {
         wxString help;
         if ( id != wxID_ANY )
@@ -638,9 +638,9 @@ void wxToolBarBase::OnMouseEnter(int id)
                help = tool->GetLongHelp();
         }
 
-        // do it even if help string is empty to avoid showing the help for the
-        // previously selected tool when another one is selected
-        frame->DoGiveHelp(help);
+        // call DoGiveHelp() even if help string is empty to avoid showing the
+        // help for the previously selected tool when another one is selected
+        frame->DoGiveHelp(help, id != wxID_ANY);
     }
 
     (void)GetEventHandler()->ProcessEvent(event);
