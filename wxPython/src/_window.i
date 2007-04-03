@@ -34,15 +34,27 @@ struct wxVisualAttributes
         ~wxVisualAttributes() { delete self; }
     } 
     
-    // the font used for control label/text inside it
-    wxFont font;
+//     // the font used for control label/text inside it
+//     wxFont font;
+//     // the foreground colour
+//     wxColour colFg;
+//     // the background colour, may be wxNullColour if the controls background
+//     // colour is not solid
+//     wxColour colBg;
 
-    // the foreground colour
-    wxColour colFg;
+    // Use our own getters and properties instead of the ones that SWIG will
+    // generate, so copies of the attributes will be made when they are
+    // accessed, instead of using a pointer to the one in the object which may
+    // be temporary.
+    %extend {
+        wxFont   _get_font()      { return self->font; }
+        wxColour _get_colFg()     { return self->colFg; }
+        wxColour _get_colBg()     { return self->colBg; }
+    }
 
-    // the background colour, may be wxNullColour if the controls background
-    // colour is not solid
-    wxColour colBg;
+    %property(font,  _get_font)
+    %property(colFg, _get_colFg)
+    %property(colBg, _get_colBg)
 };
 
 
