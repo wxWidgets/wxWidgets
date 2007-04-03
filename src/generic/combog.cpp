@@ -392,6 +392,7 @@ void wxGenericComboCtrl::SetCustomPaintWidth( int width )
             tc->RemoveEventHandler(m_textEvtHandler);
             delete m_textEvtHandler;
 
+#if wxUSE_VALIDATORS
             wxValidator* pValidator = tc->GetValidator();
             if ( pValidator )
             {
@@ -400,6 +401,7 @@ void wxGenericComboCtrl::SetCustomPaintWidth( int width )
                 delete pValidator;
             }
             else
+#endif
             {
                 CreateTextCtrl( tcCreateStyle, wxDefaultValidator );
             }
