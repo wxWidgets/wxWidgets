@@ -1042,6 +1042,8 @@ dnl Deprecated macro wrappers
 dnl ---------------------------------------------------------------------------
 
 AC_DEFUN([AM_OPTIONS_WXCONFIG], [WX_CONFIG_OPTIONS])
-AC_DEFUN([AM_PATH_WXCONFIG], [WX_CONFIG_CHECK])
+AC_DEFUN([AM_PATH_WXCONFIG], [
+    WX_CONFIG_CHECK([$1],[$2],[$3],[$4],[$5])
+])
 
 
