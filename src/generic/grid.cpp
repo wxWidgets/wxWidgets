@@ -10629,9 +10629,10 @@ wxCoord wxGrid::CalcColOrRowLabelAreaMinSize(wxGridDirection direction)
     for ( int rowOrCol = 0; rowOrCol < numRowsOrCols; rowOrCol++ )
     {
         lines.Clear();
-        StringToLines(calcRows ? GetRowLabelValue(rowOrCol)
-                               : GetColLabelValue(rowOrCol),
-                      lines);
+
+        wxString label = calcRows ? GetRowLabelValue(rowOrCol)
+                                  : GetColLabelValue(rowOrCol);
+        StringToLines(label, lines);
 
         long w, h;
         GetTextBoxSize(dc, lines, &w, &h);
