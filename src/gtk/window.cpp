@@ -2322,20 +2322,19 @@ bool wxWindowGTK::Create( wxWindow *parent,
     }
 
     m_insertCallback = wxInsertChildInWindow;
-    
-    if (!HasFlag(wxHSCROLL) && !HasFlag(wxVSCROLL))
-    {
-        m_widget = gtk_pizza_new();
-        
-        m_wxwindow = m_widget;
-        
+
+    m_wxwindow = gtk_pizza_new();
+
 #ifndef __WXUNIVERSAL__
-        if (HasFlag(wxSIMPLE_BORDER))
-            gtk_container_set_border_width((GtkContainer*)m_wxwindow, 1);
-        else if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
-            gtk_container_set_border_width((GtkContainer*)m_wxwindow, 2);
+    if (HasFlag(wxSIMPLE_BORDER))
+        gtk_container_set_border_width((GtkContainer*)m_wxwindow, 1);
+    else if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
+        gtk_container_set_border_width((GtkContainer*)m_wxwindow, 2);
 #endif // __WXUNIVERSAL__
 
+    if (!HasFlag(wxHSCROLL) && !HasFlag(wxVSCROLL))
+    {
+        m_widget = m_wxwindow;
     }
     else
     {
@@ -2379,15 +2378,6 @@ bool wxWindowGTK::Create( wxWindow *parent,
         m_scrollBar[ScrollDir_Vert] = GTK_RANGE(scrolledWindow->vscrollbar);
         if (GetLayoutDirection() == wxLayout_RightToLeft)
             gtk_range_set_inverted( m_scrollBar[ScrollDir_Horz], TRUE );
-
-        m_wxwindow = gtk_pizza_new();
-
-#ifndef __WXUNIVERSAL__
-        if (HasFlag(wxSIMPLE_BORDER))
-            gtk_container_set_border_width((GtkContainer*)m_wxwindow, 1);
-        else if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
-            gtk_container_set_border_width((GtkContainer*)m_wxwindow, 2);
-#endif // __WXUNIVERSAL__
 
         gtk_container_add( GTK_CONTAINER(m_widget), m_wxwindow );
 
@@ -4169,6 +4159,7 @@ void wxWindowGTK::SetScrollPos(int orient, int pos, bool WXUNUSED(refresh))
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
     wxCHECK_RET( m_wxwindow != NULL, wxT("window needs client area for scrolling") );
+    wxCHECK_RET( m_wxwindow != m_widget, wxT("no scrolling for this wxWindow, use wxHSCROLL or wxVSCROLL") );
 
     // This check is more than an optimization. Without it, the slider
     //   will not move smoothly while tracking when using wxScrollHelper.
@@ -4195,6 +4186,7 @@ int wxWindowGTK::GetScrollThumb(int orient) const
 {
     wxCHECK_MSG( m_widget != NULL, 0, wxT("invalid window") );
     wxCHECK_MSG( m_wxwindow != NULL, 0, wxT("window needs client area for scrolling") );
+    wxCHECK_MSG( m_wxwindow != m_widget, 0, wxT("no scrolling for this wxWindow, use wxHSCROLL or wxVSCROLL") );
 
     return int(m_scrollBar[ScrollDirFromOrient(orient)]->adjustment->page_size);
 }
@@ -4203,6 +4195,7 @@ int wxWindowGTK::GetScrollPos( int orient ) const
 {
     wxCHECK_MSG( m_widget != NULL, 0, wxT("invalid window") );
     wxCHECK_MSG( m_wxwindow != NULL, 0, wxT("window needs client area for scrolling") );
+    wxCHECK_MSG( m_wxwindow != m_widget, 0, wxT("no scrolling for this wxWindow, use wxHSCROLL or wxVSCROLL") );
 
     return int(m_scrollBar[ScrollDirFromOrient(orient)]->adjustment->value + 0.5);
 }
@@ -4211,6 +4204,7 @@ int wxWindowGTK::GetScrollRange( int orient ) const
 {
     wxCHECK_MSG( m_widget != NULL, 0, wxT("invalid window") );
     wxCHECK_MSG( m_wxwindow != NULL, 0, wxT("window needs client area for scrolling") );
+    wxCHECK_MSG( m_wxwindow != m_widget, 0, wxT("no scrolling for this wxWindow, use wxHSCROLL or wxVSCROLL") );
 
     return int(m_scrollBar[ScrollDirFromOrient(orient)]->adjustment->upper);
 }
