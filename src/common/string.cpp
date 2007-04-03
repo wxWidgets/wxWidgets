@@ -75,19 +75,32 @@ const size_t wxString::npos = (size_t) -1;
 
 #include <iostream>
 
-wxSTD ostream& operator<<(wxSTD ostream& os, const wxString& str)
-{
-    return os << str.c_str();
-}
-
 wxSTD ostream& operator<<(wxSTD ostream& os, const wxCStrData& str)
 {
+// FIXME-UTF8: always, not only if wxUSE_UNICODE
 #if wxUSE_UNICODE && !defined(__BORLANDC__)
     return os << str.AsWChar();
 #else
     return os << str.AsChar();
 #endif
 }
+
+wxSTD ostream& operator<<(wxSTD ostream& os, const wxString& str)
+{
+    return os << str.c_str();
+}
+
+wxSTD ostream& operator<<(wxSTD ostream& os, const wxCharBuffer& str)
+{
+    return os << str.data();
+}
+
+#ifndef __BORLANDC__
+wxSTD ostream& operator<<(wxSTD ostream& os, const wxWCharBuffer& str)
+{
+    return os << str.data();
+}
+#endif
 
 #endif // wxUSE_STD_IOSTREAM
 
@@ -102,7 +115,7 @@ wxSTD ostream& operator<<(wxSTD ostream& os, const wxCStrData& str)
 #if wxUSE_UNICODE
 /* static */
 wxString::SubstrBufFromMB wxString::ConvertStr(const char *psz, size_t nLength,
-                                           const wxMBConv& conv)
+                                               const wxMBConv& conv)
 {
     // anything to do?
     if ( !psz || nLength == 0 )
@@ -121,7 +134,7 @@ wxString::SubstrBufFromMB wxString::ConvertStr(const char *psz, size_t nLength,
 #else
 /* static */
 wxString::SubstrBufFromWC wxString::ConvertStr(const wchar_t *pwz, size_t nLength,
-                                           const wxMBConv& conv)
+                                               const wxMBConv& conv)
 {
     // anything to do?
     if ( !pwz || nLength == 0 )
@@ -142,32 +155,6 @@ wxString::SubstrBufFromWC wxString::ConvertStr(const wchar_t *pwz, size_t nLengt
 
 #if wxUSE_UNICODE
 
-// from multibyte string
-wxString::wxString(const char *psz, const wxMBConv& conv, size_t nLength)
-{
-    // FIXME-UTF8: this will need changes
-
-    // anything to do?
-    if ( psz && nLength != 0 )
-    {
-        if ( nLength == npos )
-        {
-            nLength = wxNO_LEN;
-        }
-
-        size_t nLenWide;
-        wxWCharBuffer wbuf = conv.cMB2WC(psz, nLength, &nLenWide);
-
-        if ( nLenWide )
-            assign(wbuf, nLenWide);
-    }
-}
-
-wxString::wxString(const char *psz, size_t nLength)
-{
-    assign(psz, nLength);
-}
-
 //Convert wxString in Unicode mode to a multi-byte string
 const wxCharBuffer wxString::mb_str(const wxMBConv& conv) const
 {
@@ -177,33 +164,6 @@ const wxCharBuffer wxString::mb_str(const wxMBConv& conv) const
 #else // ANSI
 
 #if wxUSE_WCHAR_T
-
-// from wide string
-wxString::wxString(const wchar_t *pwz, const wxMBConv& conv, size_t nLength)
-{
-    // FIXME-UTF8: this will need changes
-
-    // anything to do?
-    if ( pwz && nLength != 0 )
-    {
-        if ( nLength == npos )
-        {
-            nLength = wxNO_LEN;
-        }
-
-        size_t nLenMB;
-        wxCharBuffer buf = conv.cWC2MB(pwz, nLength, &nLenMB);
-
-        if ( nLenMB )
-            assign(buf, nLenMB);
-    }
-
-}
-
-wxString::wxString(const wchar_t *pwz, size_t nLength)
-{
-    assign(pwz, nLength);
-}
 
 //Converts this string to a wide character string if unicode
 //mode is not enabled and wxUSE_WCHAR_T is enabled

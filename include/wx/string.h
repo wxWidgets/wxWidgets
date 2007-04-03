@@ -483,78 +483,69 @@ public:
   // constructors and destructor
     // ctor for an empty string
   wxString() {}
+
     // copy ctor
   wxString(const wxStringImpl& stringSrc) : m_impl(stringSrc) { }
-  wxString(const wxString& stringSrc) : m_impl(stringSrc) { }
+  wxString(const wxString& stringSrc) : m_impl(stringSrc.m_impl) { }
+
     // string containing nRepeat copies of ch
   wxString(wxUniChar ch, size_t nRepeat = 1)
-      : m_impl(nRepeat, ch) { }
+    { assign(nRepeat, ch); }
   wxString(size_t nRepeat, wxUniChar ch)
-      : m_impl(nRepeat, ch) { }
+    { assign(nRepeat, ch); }
   wxString(wxUniCharRef ch, size_t nRepeat = 1)
-      : m_impl(nRepeat, ch) { }
+    { assign(nRepeat, ch); }
   wxString(size_t nRepeat, wxUniCharRef ch)
-      : m_impl(nRepeat, ch) { }
+    { assign(nRepeat, ch); }
   wxString(char ch, size_t nRepeat = 1)
-      : m_impl(nRepeat, ch) { }
+    { assign(nRepeat, ch); }
   wxString(size_t nRepeat, char ch)
-      : m_impl(nRepeat, ch) { }
+    { assign(nRepeat, ch); }
   wxString(wchar_t ch, size_t nRepeat = 1)
-      : m_impl(nRepeat, ch) { }
+    { assign(nRepeat, ch); }
   wxString(size_t nRepeat, wchar_t ch)
-      : m_impl(nRepeat, ch) { }
-    // ctor takes first nLength characters from C string
-    // (default value of npos means take all the string)
-  wxString(const wxChar *psz)
-      : m_impl(psz ? psz : wxT("")) { }
-  wxString(const wxChar *psz, size_t nLength)
-      : m_impl(psz, nLength) { }
-  wxString(const wxChar *psz,
-           const wxMBConv& WXUNUSED(conv),
-           size_t nLength = npos)
-      : m_impl(psz, nLength == npos ? wxStrlen(psz) : nLength) { }
+    { assign(nRepeat, ch); }
 
-  // even if we're not built with wxUSE_STL == 1 it is very convenient to allow
-  // implicit conversions from std::string to wxString as this allows to use
-  // the same strings in non-GUI and GUI code, however we don't want to
-  // unconditionally add this ctor as it would make wx lib dependent on
-  // libstdc++ on some Linux versions which is bad, so instead we ask the
-  // client code to define this wxUSE_STD_STRING symbol if they need it
-#if wxUSE_STD_STRING && !wxUSE_STL_BASED_WXSTRING
-  wxString(const wxStdString& s)
-      : m_impl(s.c_str()) { } // FIXME-UTF8: this is broken for embedded 0s
-#endif // wxUSE_STD_STRING && !wxUSE_STL_BASED_WXSTRING
+    // ctors from char* strings:
+  wxString(const char *psz)
+    : m_impl(ImplStr(psz)) {}
+  wxString(const char *psz, const wxMBConv& conv)
+    : m_impl(ImplStr(psz, conv)) {}
+  wxString(const char *psz, size_t nLength)
+    { assign(psz, nLength); }
+  wxString(const char *psz, const wxMBConv& conv, size_t nLength)
+  {
+    SubstrBufFromMB str(ImplStr(psz, nLength, conv));
+    m_impl.assign(str.data, str.len);
+  }
 
-#if wxUSE_UNICODE
-    // from multibyte string
-  wxString(const char *psz,
-           const wxMBConv& conv = wxConvLibc,
-           size_t nLength = npos);
-    // from multibyte string for ANSI compatibility, with wxConvLibc
-  wxString(const char *psz, size_t nLength);
-    // from wxWCharBuffer (i.e. return from wxGetString)
-  wxString(const wxWCharBuffer& psz) : m_impl(psz.data()) { }
-#else // ANSI
-    // from C string (for compilers using unsigned char)
-  wxString(const unsigned char* psz)
-      : m_impl((const char*)psz) { }
-    // from part of C string (for compilers using unsigned char)
-  wxString(const unsigned char* psz, size_t nLength)
-      : m_impl((const char*)psz, nLength) { }
+    // and unsigned char*:
+  wxString(const unsigned char *psz)
+    : m_impl(ImplStr((const char*)psz)) {}
+  wxString(const unsigned char *psz, const wxMBConv& conv)
+    : m_impl(ImplStr((const char*)psz, conv)) {}
+  wxString(const unsigned char *psz, size_t nLength)
+    { assign((const char*)psz, nLength); }
+  wxString(const unsigned char *psz, const wxMBConv& conv, size_t nLength)
+  {
+    SubstrBufFromMB str(ImplStr((const char*)psz, nLength, conv));
+    m_impl.assign(str.data, str.len);
+  }
 
-#if wxUSE_WCHAR_T
-    // from wide (Unicode) string
-  wxString(const wchar_t *pwz,
-           const wxMBConv& conv = wxConvLibc,
-           size_t nLength = npos);
-    // from wide string for Unicode compatibility, with wxConvLibc
-  wxString(const wchar_t *pwz, size_t nLength);
-#endif // !wxUSE_WCHAR_T
+    // ctors from wchar_t* strings:
+  wxString(const wchar_t *pwz)
+    : m_impl(ImplStr(pwz)) {}
+  wxString(const wchar_t *pwz, const wxMBConv& WXUNUSED(conv))
+    : m_impl(ImplStr(pwz)) {}
+  wxString(const wchar_t *pwz, size_t nLength)
+    { assign(pwz, nLength); }
+  wxString(const wchar_t *pwz, const wxMBConv& WXUNUSED(conv), size_t nLength)
+    { assign(pwz, nLength); }
 
-    // from wxCharBuffer
-  wxString(const wxCharBuffer& psz)
-      : m_impl(psz) { }
-#endif // Unicode/ANSI
+  wxString(const wxCharBuffer& buf)
+    { assign(buf.data()); } // FIXME-UTF8: fix for embedded NUL and buffer length
+  wxString(const wxWCharBuffer& buf)
+    { assign(buf.data()); } // FIXME-UTF8: fix for embedded NUL and buffer length
 
   wxString(const wxCStrData& cstr)
       : m_impl(cstr.AsString().m_impl) { }
@@ -990,8 +981,8 @@ public:
 
   // overloaded assignment
     // from another wxString
-  wxString& operator=(const wxStringImpl& stringSrc)
-    { m_impl = stringSrc; return *this; }
+  wxString& operator=(const wxString& stringSrc)
+    { m_impl = stringSrc.m_impl; return *this; }
   wxString& operator=(const wxCStrData& cstr)
     { return *this = cstr.AsString(); }
     // from a character
@@ -1008,31 +999,25 @@ public:
     // from a C string - STL probably will crash on NULL,
     // so we need to compensate in that case
 #if wxUSE_STL_BASED_WXSTRING
-  wxString& operator=(const wxChar *psz)
-    { if(psz) m_impl = psz; else Clear(); return *this; }
+  wxString& operator=(const char *psz)
+    { if (psz) m_impl = ImplStr(psz); else Clear(); return *this; }
+  wxString& operator=(const wchar_t *pwz)
+    { if (pwz) m_impl = ImplStr(pwz); else Clear(); return *this; }
 #else
-  wxString& operator=(const wxChar *psz)
-    { m_impl = psz; return *this; }
+  wxString& operator=(const char *psz)
+    { m_impl = ImplStr(psz); return *this; }
+  wxString& operator=(const wchar_t *pwz)
+    { m_impl = ImplStr(pwz); return *this; }
 #endif
+  wxString& operator=(const unsigned char *psz)
+    { return operator=((const char*)psz); }
 
-#if wxUSE_UNICODE
     // from wxWCharBuffer
   wxString& operator=(const wxWCharBuffer& s)
-    { (void) operator=((const wchar_t *)s); return *this; }
-    // from C string
-  wxString& operator=(const char* psz)
-    {  return operator=(wxString(psz)); }
-#else // ANSI
-    // from another kind of C string
-  wxString& operator=(const unsigned char* psz);
-#if wxUSE_WCHAR_T
-    // from a wide string
-  wxString& operator=(const wchar_t *pwz);
-#endif
+    { return operator=(s.data()); } // FIXME-UTF8: fix for embedded NULs
     // from wxCharBuffer
-  wxString& operator=(const wxCharBuffer& psz)
-    { (void) operator=((const char *)psz); return *this; }
-#endif // Unicode/ANSI
+  wxString& operator=(const wxCharBuffer& s)
+    { return operator=(s.data()); } // FIXME-UTF8: fix for embedded NULs
 
   // string concatenation
     // in place concatenation
@@ -2201,6 +2186,10 @@ wxDEFINE_ALL_COMPARISONS(const char *, const wxString&, wxCMP_CHAR_STRING)
 
 WXDLLIMPEXP_BASE wxSTD ostream& operator<<(wxSTD ostream&, const wxString&);
 WXDLLIMPEXP_BASE wxSTD ostream& operator<<(wxSTD ostream&, const wxCStrData&);
+WXDLLIMPEXP_BASE wxSTD ostream& operator<<(wxSTD ostream&, const wxCharBuffer&);
+#ifndef __BORLANDC__
+WXDLLIMPEXP_BASE wxSTD ostream& operator<<(wxSTD ostream&, const wxWCharBuffer&);
+#endif
 
 #endif  // wxSTD_STRING_COMPATIBILITY
 
