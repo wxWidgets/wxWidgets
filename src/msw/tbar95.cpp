@@ -258,7 +258,7 @@ void wxToolBar::Init()
     m_defaultWidth = DEFAULTBITMAPX;
     m_defaultHeight = DEFAULTBITMAPY;
 
-    m_pInTool = 0;
+    m_pInTool = NULL;
 }
 
 bool wxToolBar::Create(wxWindow *parent,
@@ -1455,9 +1455,14 @@ void wxToolBar::OnSysColourChanged(wxSysColourChangedEvent& event)
 
 void wxToolBar::OnMouseEvent(wxMouseEvent& event)
 {
-    if (event.Leaving() && m_pInTool)
+    if ( event.Leaving() )
     {
-        OnMouseEnter( -1 );
+        if ( m_pInTool )
+        {
+            OnMouseEnter(wxID_ANY);
+            m_pInTool = NULL;
+        }
+
         event.Skip();
         return;
     }
@@ -1688,18 +1693,11 @@ void wxToolBar::HandleMouseMove(WXWPARAM WXUNUSED(wParam), WXLPARAM lParam)
             y = GET_Y_LPARAM(lParam);
     wxToolBarToolBase* tool = FindToolForPosition( x, y );
 
-    // cursor left current tool
-    if ( tool != m_pInTool && !tool )
-    {
-        m_pInTool = 0;
-        OnMouseEnter( -1 );
-    }
-
-    // cursor entered a tool
-    if ( tool != m_pInTool && tool )
+    // has the current tool changed?
+    if ( tool != m_pInTool )
     {
         m_pInTool = tool;
-        OnMouseEnter( tool->GetId() );
+        OnMouseEnter(tool ? tool->GetId() : wxID_ANY);
     }
 }
 
