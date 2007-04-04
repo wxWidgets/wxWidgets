@@ -210,28 +210,8 @@ void wxString::UngetWriteBuf(size_t nLen)
 // all functions are inline in string.h
 
 // ---------------------------------------------------------------------------
-// assignment operators
+// concatenation operators
 // ---------------------------------------------------------------------------
-
-#if !wxUSE_UNICODE
-
-// same as 'signed char' variant
-wxString& wxString::operator=(const unsigned char* psz)
-{
-  *this = (const char *)psz;
-  return *this;
-}
-
-#if wxUSE_WCHAR_T
-wxString& wxString::operator=(const wchar_t *pwz)
-{
-  wxString str(pwz);
-  swap(str);
-  return *this;
-}
-#endif
-
-#endif
 
 /*
  * concatenation functions come in 5 flavours:

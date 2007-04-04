@@ -399,18 +399,22 @@ private:
   // returns C string encoded as the implementation expects:
   #if wxUSE_UNICODE
   static const wchar_t* ImplStr(const wchar_t* str)
-    { return str; }
+    { return str ? str : wxT(""); }
   static const SubstrBufFromWC ImplStr(const wchar_t* str, size_t n)
-    { return SubstrBufFromWC(str, n == npos ? wxWcslen(str) : n); }
-  static wxWCharBuffer ImplStr(const char* str)
-    { return ConvertStr(str, npos, wxConvLibc).data; }
-  static SubstrBufFromMB ImplStr(const char* str, size_t n)
-    { return ConvertStr(str, n, wxConvLibc); }
+    { return SubstrBufFromWC(str, (str && n == npos) ? wxWcslen(str) : n); }
+  static wxWCharBuffer ImplStr(const char* str,
+                               const wxMBConv& conv = wxConvLibc)
+    { return ConvertStr(str, npos, conv).data; }
+  static SubstrBufFromMB ImplStr(const char* str, size_t n,
+                                 const wxMBConv& conv = wxConvLibc)
+    { return ConvertStr(str, n, conv); }
   #else
-  static const char* ImplStr(const char* str)
-    { return str; }
-  static const SubstrBufFromMB ImplStr(const char* str, size_t n)
-    { return SubstrBufFromMB(str, n == npos ? wxStrlen(str) : n); }
+  static const char* ImplStr(const char* str,
+                             const wxMBConv& WXUNUSED(conv) = wxConvLibc)
+    { return str ? str : ""; }
+  static const SubstrBufFromMB ImplStr(const char* str, size_t n,
+                                       const wxMBConv& WXUNUSED(conv) = wxConvLibc)
+    { return SubstrBufFromMB(str, (str && n == npos) ? wxStrlen(str) : n); }
   static wxCharBuffer ImplStr(const wchar_t* str)
     { return ConvertStr(str, npos, wxConvLibc).data; }
   static SubstrBufFromWC ImplStr(const wchar_t* str, size_t n)
