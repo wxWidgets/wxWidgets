@@ -953,6 +953,7 @@ bool wxHtmlWindow::CopySelection(ClipboardType t)
 void wxHtmlWindow::OnLinkClicked(const wxHtmlLinkInfo& link)
 {
     wxHtmlLinkEvent event(GetId(), link);
+    event.SetEventObject(this);
     if (!GetEventHandler()->ProcessEvent(event))
     {
         // the default behaviour is to load the URL in this window
