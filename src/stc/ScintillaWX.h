@@ -49,6 +49,13 @@
 #include "Editor.h"
 #include "ScintillaBase.h"
 
+#ifdef __WXMSW__
+#include "wx/msw/wrapwin.h"                     // HBITMAP
+#endif
+#if wxUSE_DRAG_AND_DROP
+#include "wx/timer.h"
+#endif
+
 //----------------------------------------------------------------------
 
 #ifdef WXMAKINGDLL_STC
