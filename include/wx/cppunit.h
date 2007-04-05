@@ -77,6 +77,9 @@
 #define WXTEST_FAIL_WITH_CONDITION(suiteName, Condition, testMethod) \
     WXTEST_ANY_WITH_CONDITION(suiteName, Condition, testMethod, CPPUNIT_TEST_FAIL(testMethod))
 
+// Use this macro to compare a wxString with a literal string.
+#define WX_ASSERT_STR_EQUAL(p, s) CPPUNIT_ASSERT_EQUAL(wxString(p), s)
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // stream inserter for wxString
