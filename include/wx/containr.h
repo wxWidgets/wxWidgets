@@ -15,6 +15,9 @@
 
 #include "wx/defs.h"
 
+class WXDLLEXPORT wxWindow;
+class WXDLLEXPORT wxWindowBase;
+
 /*
    Implementation note: wxControlContainer is not a real mix-in but rather
    a class meant to be aggregated with (and not inherited from). Although
@@ -61,10 +64,10 @@ protected:
     // return true if we should be focusable
     bool ShouldAcceptFocus() const;
 
-private:
     // the parent window we manage the children for
     wxWindow *m_winParent;
 
+private:
     // value returned by AcceptsFocus(), should be changed using SetCanFocus()
     // only
     bool m_acceptsFocus;
@@ -140,8 +143,6 @@ class WXDLLEXPORT wxControlContainer : public wxControlContainerBase
 
 class WXDLLEXPORT wxFocusEvent;
 class WXDLLEXPORT wxNavigationKeyEvent;
-class WXDLLEXPORT wxWindow;
-class WXDLLEXPORT wxWindowBase;
 
 // ----------------------------------------------------------------------------
 // wxControlContainer for TAB navigation implemented in wx itself
