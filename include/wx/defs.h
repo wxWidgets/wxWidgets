@@ -739,7 +739,7 @@ typedef wxUint16 wxWord;
   |short      | 16    16    16    16    16 |
   |int        | 32    64    32    32    16 |
   |long       | 64    64    32    32    32 |
-  |long long  |             64             |
+  |long long  | 64    64    64    --    -- |
   |void *     | 64    64    64    32    32 |
   +-----------+----------------------------+
 
@@ -861,6 +861,23 @@ typedef wxUint16 wxWord;
         #endif /*  wxUSE_WCHAR_T */
     #endif
 #endif /*  Win/!Win */
+
+/* also define C99-like sized MIN/MAX constants */
+#define wxINT8_MIN CHAR_MIN
+#define wxINT8_MAX CHAR_MAX
+
+#define wxINT16_MIN SHRT_MIN
+#define wxINT16_MAX SHRT_MAX
+
+#if SIZEOF_INT == 4
+    #define wxINT32_MIN INT_MIN
+    #define wxINT32_MAX INT_MAX
+#elif SIZEOF_LONG == 4
+    #define wxINT32_MIN LONG_MIN
+    #define wxINT32_MAX LONG_MAX
+#else
+    #error "Unknown 32 bit type"
+#endif
 
 typedef wxUint32 wxDword;
 
