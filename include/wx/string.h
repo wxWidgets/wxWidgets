@@ -622,13 +622,13 @@ public:
             { return iterator_name(wxString::AddToIter(m_cur, -n)); }       \
           iterator_name operator-(size_t n) const                           \
             { return iterator_name(wxString::AddToIter(m_cur, -(int)n)); }  \
-          iterator_name operator+=(int n)                                   \
+          iterator_name& operator+=(int n)                                  \
             { m_cur = wxString::AddToIter(m_cur, n); return *this; }        \
-          iterator_name operator+=(size_t n)                                \
+          iterator_name& operator+=(size_t n)                               \
             { m_cur = wxString::AddToIter(m_cur, (int)n); return *this; }   \
-          iterator_name operator-=(int n)                                   \
+          iterator_name& operator-=(int n)                                  \
             { m_cur = wxString::AddToIter(m_cur, -n); return *this; }       \
-          iterator_name operator-=(size_t n)                                \
+          iterator_name& operator-=(size_t n)                               \
             { m_cur = wxString::AddToIter(m_cur, -(int)n); return *this; }  \
                                                                             \
           unsigned operator-(const iterator_name& i) const                  \
