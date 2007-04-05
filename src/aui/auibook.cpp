@@ -666,7 +666,14 @@ int wxAuiDefaultTabArt::ShowDropDown(wxWindow* wnd,
     for (i = 0; i < count; ++i)
     {
         const wxAuiNotebookPage& page = pages.Item(i);
-        menuPopup.AppendCheckItem(1000+i, page.caption);
+        wxString caption = page.caption;
+
+        // if there is no caption, make it a space.  This will prevent
+        // an assert in the menu code.
+        if (caption.IsEmpty())
+            caption = wxT(" ");
+
+        menuPopup.AppendCheckItem(1000+i, caption);
     }
 
     if (active_idx != -1)
