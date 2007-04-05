@@ -1,12 +1,3 @@
-// biol75@york.ac.uk (Chris Elliott) March 2000
-
-#ifdef __BIDE__
-#define _NO_VCL
-#include "condefs.h"
-USERC("svg.rc");
-//---------------------------------------------------------------------------
-#define WinMain WinMain
-#endif
 /////////////////////////////////////////////////////////////////////////////
 // Name:        svgtest.cpp
 // Purpose:     SVG sample
@@ -37,7 +28,7 @@ USERC("svg.rc");
 #endif
 
 #include "wx/toolbar.h"
-#include "wx/svg/dcsvg.h"
+#include "wx/dcsvg.h"
 
 #include "mondrian.xpm"
 

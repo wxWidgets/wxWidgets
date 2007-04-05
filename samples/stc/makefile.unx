@@ -100,7 +100,7 @@ test_for_selected_wxbuild:
 	@$(WX_CONFIG) $(WX_CONFIG_FLAGS)
 
 stctest: $(STCTEST_OBJECTS)
-	$(CXX) -o $@ $(STCTEST_OBJECTS) $(LDFLAGS)   `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs stc,core,base`
+	$(CXX) -o $@ $(STCTEST_OBJECTS) $(LDFLAGS)   -lwxscintilla `$(WX_CONFIG) $(WX_CONFIG_FLAGS) --libs stc,core,base`
 
 stctest_stctest.o: ./stctest.cpp
 	$(CXX) -c -o $@ $(STCTEST_CXXFLAGS) $(CPPDEPS) $<

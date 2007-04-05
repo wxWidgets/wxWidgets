@@ -195,13 +195,7 @@
         <if cond="value=='stc'"><sys-lib>$(WXLIB_STC_NAME)</sys-lib></if>
         <if cond="value=='richtext'"><sys-lib>$(WXLIB_RICHTEXT_NAME)</sys-lib></if>
 
-        <!-- wx-lib can be used also to link against contrib libraries
-             (which always have the same name, regardless of WX_MONOLITHIC value) -->
-        <if cond="value in CONTRIBLIB_LIST.split()">
-            <sys-lib>wx$(WX_PORT)$(WX_VERSION)$(WXLIBPOSTFIX)_$(value)</sys-lib>
-        </if>
-
-        <if cond="value not in ALLLIB_LIST.split()">
+        <if cond="value not in WX_LIB_LIST.split()">
             <error>Unknown wxWidgets library given in the wx-lib tag</error>
         </if>
     </define-tag>

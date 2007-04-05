@@ -20,20 +20,15 @@
 #endif
 
 #include "wx/dcsvg.h"
-
 #include "wx/image.h"
 
 #define wxSVG_DEBUG FALSE
 // or TRUE to see the calls being executed
-#define newline    wxString(wxT("\n"))
-#define space      wxString(wxT(" "))
-#define semicolon  wxString(wxT(";"))
-#define     wx_round(a)    (int)((a)+.5)
 
-#ifdef __BORLANDC__
-#pragma warn -rch
-#pragma warn -ccc
-#endif
+#define newline        wxString(wxT("\n"))
+#define space          wxString(wxT(" "))
+#define semicolon      wxString(wxT(";"))
+#define wx_round(a)    (int)((a)+.5)
 
 static inline double DegToRad(double deg) { return (deg * M_PI) / 180.0; } ;
 

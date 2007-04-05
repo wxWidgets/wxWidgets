@@ -10,6 +10,7 @@
 	    prefs.cpp
         </sources>
         <wx-lib>stc</wx-lib>
+        <sys-lib>wxscintilla</sys-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
         <win32-res>../sample.rc</win32-res>

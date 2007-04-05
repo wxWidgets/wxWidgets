@@ -1,13 +1,21 @@
+/////////////////////////////////////////////////////////////////////////////
+// Name:        wx/dcsvg.h
+// Purpose:     wxSVGFileDC
+// Author:      Chris Elliott
+// Modified by:
+// Created:
+// Copyright:   (c) Chris Elliott
+// RCS-ID:      $Id$
+// Licence:     wxWindows licence
+/////////////////////////////////////////////////////////////////////////////
+
 #ifndef __DCSVG_H
 #define __DCSVG_H
+
 #include "wx/wfstream.h"
 #include "wx/string.h"
 
 #define wxSVGVersion wxT("v0100")
-#ifdef __BORLANDC__
-#pragma warn -rch
-#pragma warn -ccc
-#endif
 
 class WXDLLIMPEXP_CORE wxSVGFileDC : public wxDC
 {
@@ -296,12 +304,6 @@ class WXDLLIMPEXP_CORE wxSVGFileDC : public wxDC
 
         void StartPage()
             {  return ; };
-
-
 };
 
-#ifdef __BORLANDC__
-#pragma warn .rch
-#pragma warn .ccc
-#endif
-#endif
+#endif      // __DCSVG_H

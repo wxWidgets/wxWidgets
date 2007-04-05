@@ -110,24 +110,17 @@
 
 
     <!-- this variable identifies the version of the wx presets.
-         this is changed only when major changes to wxpresets take place. -->
+         this is changed only when major changes to wxpresets take place. 
+    -->
     <set var="WX_PRESETS_VERSION">4</set>
 
     <!-- list of known libraries used by wx-lib tag defined in wx_unix.bkl and wx_win32.bkl
          VERY IMPORTANT: when updating this list also update the <wx-lib> and <wx-all-libs>
                          tag definitions.
     -->
-    <set var="LIB_LIST">
+    <set var="WX_LIB_LIST">
         base core net xml odbc xrc html adv media gl dbgrid qa aui richtext stc
     </set>
-
-    <!-- NOTE: refer to the NET contrib using NETUTILS instead of NET
-               (which is already in LIB_LIST)
-    -->
-    <set var="CONTRIBLIB_LIST">
-        applet deprecated fl foldbar gizmos mmedia netutils ogl plot stc svg
-    </set>
-    <set var="ALLLIB_LIST">$(LIB_LIST) $(CONTRIBLIB_LIST)</set>
 
     <!-- this is a temporary variable until there is non general    -->
     <!-- function in bakefiles for returning native markup for      -->

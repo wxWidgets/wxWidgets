@@ -7,7 +7,6 @@
         <sources>
             svgtest.cpp
         </sources>
-        <wx-lib>svg</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
     </exe>

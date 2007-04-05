@@ -15,7 +15,8 @@
         $(TOP_SRCDIR)src/stc/scintilla/include
     </set>
 
-    <lib id="wxscintilla" template="3rdparty_lib">
+    <lib id="wxscintilla" template="3rdparty_lib"
+         cond="BUILDING_LIB=='1'">
         <include>$(TOP_SRCDIR)src/stc/scintilla/include</include>
         <include>$(TOP_SRCDIR)src/stc/scintilla/src</include>
         <define>__WX__</define>

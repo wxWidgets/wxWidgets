@@ -48,7 +48,7 @@ Format-specific notes:
                      thus we can now add WX_LIBS to the linker line -->
                 <ldlibs>$(WX_LIBS)</ldlibs>
             </if>
-            <if cond="value not in ALLLIB_LIST.split()">
+            <if cond="value not in WX_LIB_LIST.split()">
                 <error>Unknown wxWidgets library given in the wx-lib tag</error>
             </if>
         </define-tag>
@@ -192,7 +192,6 @@ Format-specific notes:
             <command>@$(DOLLAR)(WX_CONFIG) $(WX_CONFIG_FLAGS)</command>
         </action>
 
-
         <!-- we need this but the trick used in default-values above
              prevents bakefile from detecting it: -->
         <set var="FORMAT_OUTPUT_VARIABLES" append="1">WX_CONFIG WX_VERSION</set>
@@ -211,7 +210,7 @@ Format-specific notes:
             <if cond="value!='base'">
                 <set var="__liblist" append="1">$(value)</set>
             </if>
-            <if cond="value not in ALLLIB_LIST.split()">
+            <if cond="value not in WX_LIB_LIST.split()">
                 <error>Unknown wxWidgets library given in the wx-lib tag</error>
             </if>
         </define-tag>
