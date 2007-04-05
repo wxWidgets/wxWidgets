@@ -1241,16 +1241,40 @@ public:
   // searching and replacing
       // searching (return starting index, or -1 if not found)
   int Find(wxUniChar ch, bool bFromEnd = false) const;   // like strchr/strrchr
+  int Find(wxUniCharRef ch, bool bFromEnd = false) const
+    { return Find(wxUniChar(ch), bFromEnd); }
+  int Find(char ch, bool bFromEnd = false) const
+    { return Find(wxUniChar(ch), bFromEnd); }
+  int Find(unsigned char ch, bool bFromEnd = false) const
+    { return Find(wxUniChar(ch), bFromEnd); }
+  int Find(wchar_t ch, bool bFromEnd = false) const
+    { return Find(wxUniChar(ch), bFromEnd); }
       // searching (return starting index, or -1 if not found)
-  int Find(const wxChar *pszSub) const;               // like strstr
+  // FIXME-UTF8: keep wxString overload only
+  int Find(const wxString& sub) const               // like strstr
+  {
+    size_type idx = find(sub);
+    return (idx == npos) ? wxNOT_FOUND : (int)idx;
+  }
+  int Find(const char *sub) const               // like strstr
+  {
+    size_type idx = find(sub);
+    return (idx == npos) ? wxNOT_FOUND : (int)idx;
+  }
+  int Find(const wchar_t *sub) const               // like strstr
+  {
+    size_type idx = find(sub);
+    return (idx == npos) ? wxNOT_FOUND : (int)idx;
+  }
+
       // replace first (or all of bReplaceAll) occurences of substring with
       // another string, returns the number of replacements made
-  size_t Replace(const wxChar *szOld,
-                 const wxChar *szNew,
+  size_t Replace(const wxString& strOld,
+                 const wxString& strNew,
                  bool bReplaceAll = true);
 
     // check if the string contents matches a mask containing '*' and '?'
-  bool Matches(const wxChar *szMask) const;
+  bool Matches(const wxString& mask) const;
 
     // conversion to numbers: all functions return true only if the whole
     // string is a number and put the value of this number into the pointer
@@ -1351,11 +1375,12 @@ public:
 
     // use Find()
   int First( wxUniChar ch ) const { return Find(ch); }
+  int First( wxUniCharRef ch ) const { return Find(ch); }
   int First( char ch ) const { return Find(ch); }
   int First( unsigned char ch ) const { return Find(ch); }
   int First( wchar_t ch ) const { return Find(ch); }
   int First( const wxChar* psz ) const { return Find(psz); }
-  int First( const wxString &str ) const { return Find(str); }
+  int First( const wxString& str ) const { return Find(str); }
   int Last( wxUniChar ch ) const { return Find(ch, true); }
   bool Contains(const wxString& str) const { return Find(str) != wxNOT_FOUND; }
 

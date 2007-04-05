@@ -941,32 +941,32 @@ wxString wxString::AfterFirst(wxUniChar ch) const
 }
 
 // replace first (or all) occurences of some substring with another one
-size_t wxString::Replace(const wxChar *szOld,
-                  const wxChar *szNew, bool bReplaceAll)
+size_t wxString::Replace(const wxString& strOld,
+                         const wxString& strNew, bool bReplaceAll)
 {
     // if we tried to replace an empty string we'd enter an infinite loop below
-    wxCHECK_MSG( szOld && *szOld && szNew, 0,
+    wxCHECK_MSG( !strOld.empty(), 0,
                  _T("wxString::Replace(): invalid parameter") );
 
     size_t uiCount = 0;   // count of replacements made
 
-    size_t uiOldLen = wxStrlen(szOld);
-    size_t uiNewLen = wxStrlen(szNew);
+    size_t uiOldLen = strOld.length();
+    size_t uiNewLen = strNew.length();
 
     size_t dwPos = 0;
 
-    while ( this->c_str()[dwPos] != wxT('\0') )
+    while ( (*this)[dwPos] != wxT('\0') )
     {
         //DO NOT USE STRSTR HERE
         //this string can contain embedded null characters,
         //so strstr will function incorrectly
-        dwPos = find(szOld, dwPos);
+        dwPos = find(strOld, dwPos);
         if ( dwPos == npos )
             break;                  // exit the loop
         else
         {
             //replace this occurance of the old string with the new one
-            replace(dwPos, uiOldLen, szNew, uiNewLen);
+            replace(dwPos, uiOldLen, strNew, uiNewLen);
 
             //move up pos past the string that was replaced
             dwPos += uiNewLen;
@@ -1127,14 +1127,6 @@ wxString& wxString::Truncate(size_t uiLen)
 int wxString::Find(wxUniChar ch, bool bFromEnd) const
 {
     size_type idx = bFromEnd ? find_last_of(ch) : find_first_of(ch);
-
-    return (idx == npos) ? wxNOT_FOUND : (int)idx;
-}
-
-// find a sub-string (like strstr)
-int wxString::Find(const wxChar *pszSub) const
-{
-    size_type idx = find(pszSub);
 
     return (idx == npos) ? wxNOT_FOUND : (int)idx;
 }
@@ -1356,7 +1348,7 @@ int wxString::PrintfV(const wxString& format, va_list argptr)
 // returns true if the string matches the pattern which may contain '*' and
 // '?' metacharacters (as usual, '?' matches any character and '*' any number
 // of them)
-bool wxString::Matches(const wxChar *pszMask) const
+bool wxString::Matches(const wxString& mask) const
 {
     // I disable this code as it doesn't seem to be faster (in fact, it seems
     // to be much slower) than the old, hand-written code below and using it
@@ -1407,8 +1399,17 @@ bool wxString::Matches(const wxChar *pszMask) const
 #else // !wxUSE_REGEX
   // TODO: this is, of course, awfully inefficient...
 
+  // FIXME-UTF8: implement using iterators, remove #if
+#if wxUSE_UNICODE_UTF8
+  wxWCharBuffer maskBuf = mask.wc_str();
+  wxWCharBuffer txtBuf = wc_str();
+  const wxChar *pszMask = maskBuf.data();
+  const wxChar *pszTxt = txtBuf.data();
+#else
+  const wxChar *pszMask = mask.wx_str();
   // the char currently being checked
-  const wxChar *pszTxt = c_str();
+  const wxChar *pszTxt = wx_str();
+#endif
 
   // the last location where '*' matched
   const wxChar *pszLastStarInText = NULL;

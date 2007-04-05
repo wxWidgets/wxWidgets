@@ -673,11 +673,11 @@ See also: \helpref{Clear()}{wxstringclear}.
 
 \membersection{wxString::Find}\label{wxstringfind}
 
-\constfunc{int}{Find}{\param{wxChar}{ ch}, \param{bool}{ fromEnd = false}}
+\constfunc{int}{Find}{\param{wxUniChar}{ ch}, \param{bool}{ fromEnd = false}}
 
 Searches for the given character. Returns the starting index, or {\tt wxNOT\_FOUND} if not found.
 
-\constfunc{int}{Find}{\param{const wxChar*}{ sz}}
+\constfunc{int}{Find}{\param{const wxString\&}{ sub}}
 
 Searches for the given string. Returns the starting index, or {\tt wxNOT\_FOUND} if not found.
 
@@ -942,7 +942,7 @@ Converts all characters to upper case and returns the result.
 
 \membersection{wxString::Matches}\label{wxstringmatches}
 
-\constfunc{bool}{Matches}{\param{const wxChar*}{ szMask}}
+\constfunc{bool}{Matches}{\param{const wxString\&}{ mask}}
 
 Returns \true if the string contents matches a mask containing '*' and '?'.
 
@@ -1046,7 +1046,7 @@ Removes the last character.
 
 \membersection{wxString::Replace}\label{wxstringreplace}
 
-\func{size\_t}{Replace}{\param{const wxChar*}{ szOld}, \param{const wxChar*}{ szNew}, \param{bool}{ replaceAll = true}}
+\func{size\_t}{Replace}{\param{const wxString\&}{ strOld}, \param{const wxString\&}{ strNew}, \param{bool}{ replaceAll = true}}
 
 Replace first (or all) occurrences of substring with another one.
 
