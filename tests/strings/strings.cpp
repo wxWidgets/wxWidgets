@@ -679,11 +679,11 @@ void StringTestCase::DoCStrDataTernaryOperator(bool cond)
 
     wxString s("foo");
     const char *mbStr = "foo";
-    const wchar_t *wcStr = L"foo";
 
     // FIXME-UTF8: when wxCStrData can handle both conversions, this should
     //             be changed to always test all versions, both MB and WC
 #if wxUSE_UNICODE
+    const wchar_t *wcStr = L"foo";
     CPPUNIT_ASSERT( CheckStr(s, (cond ? s.c_str() : wcStr)) );
     CPPUNIT_ASSERT( CheckStr(s, (cond ? s.c_str() : L"bar")) );
     CPPUNIT_ASSERT( CheckStr(s, (cond ? wcStr : s.c_str())) );
