@@ -498,7 +498,7 @@ bool wxAutomationObject::GetInstance(const wxString& classId) const
     CLSID clsId;
     IUnknown * pUnk = NULL;
 
-    wxBasicString unicodeName(classId.mb_str());
+    wxBasicString unicodeName(classId);
 
     if (FAILED(CLSIDFromProgID((BSTR) unicodeName, &clsId)))
     {
@@ -530,7 +530,7 @@ bool wxAutomationObject::CreateInstance(const wxString& classId) const
 
     CLSID clsId;
 
-    wxBasicString unicodeName(classId.mb_str());
+    wxBasicString unicodeName(classId);
 
     if (FAILED(CLSIDFromProgID((BSTR) unicodeName, &clsId)))
     {
