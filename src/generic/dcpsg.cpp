@@ -2211,7 +2211,7 @@ void wxPostScriptDC::DoPsPrintfFormat(const wxChar *fmt, ... )
 
 void wxPostScriptDC::PsPrint( const wxString& str )
 {
-    wxWX2MBbuf psdata(str.mb_str(wxConvUTF8));
+    const wxWX2MBbuf psdata(str.mb_str(wxConvUTF8));
 
     wxPostScriptPrintNativeData *data =
         (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
