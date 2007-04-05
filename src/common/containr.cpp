@@ -28,8 +28,6 @@
     #include "wx/containr.h"
 #endif
 
-#ifndef wxHAS_NATIVE_TAB_TRAVERSAL
-
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/event.h"
@@ -45,14 +43,25 @@
 // implementation
 // ============================================================================
 
-wxControlContainer::wxControlContainer(wxWindow *winParent)
+// ----------------------------------------------------------------------------
+// wxControlContainerBase
+// ----------------------------------------------------------------------------
+
+void wxControlContainerBase::SetCanFocus(bool acceptsFocus)
 {
-    m_winParent = winParent;
-    m_winLastFocused = NULL;
-    m_inSetFocus = false;
+    if ( acceptsFocus == m_acceptsFocus )
+        return;
+
+    m_acceptsFocus = acceptsFocus;
+
+    m_winParent->SetCanFocus(m_acceptsFocus);
 }
 
-bool wxControlContainer::AcceptsFocus() const
+// if the window has a focusable child, it shouldn't be focusable itself (think
+// of wxPanel used for grouping different controls) but if it doesn't have any
+// (focusable) children, then it should be possible to give it focus (think of
+// wxGrid or generic wxListCtrl)
+bool wxControlContainerBase::ShouldAcceptFocus() const
 {
     // we can accept focus either if we have no children at all (in this case
     // we're probably not used as a container) or only when at least one child
@@ -60,12 +69,6 @@ bool wxControlContainer::AcceptsFocus() const
     wxWindowList::compatibility_iterator node = m_winParent->GetChildren().GetFirst();
     if ( !node )
         return true;
-
-#ifdef __WXMAC__
-    // wxMac has eventually the two scrollbars as children, they don't count
-    // as real children in the algorithm mentioned above
-    bool hasRealChildren = false ;
-#endif
 
     while ( node )
     {
@@ -75,20 +78,25 @@ bool wxControlContainer::AcceptsFocus() const
 #ifdef __WXMAC__
         if ( m_winParent->MacIsWindowScrollbar( child ) )
             continue;
-        hasRealChildren = true ;
 #endif
+
         if ( child->CanAcceptFocus() )
-        {
-            return true;
-        }
+            return false;
     }
 
-#ifdef __WXMAC__
-    if ( !hasRealChildren )
-        return true ;
-#endif
+    return true;
+}
 
-    return false;
+#ifndef wxHAS_NATIVE_TAB_TRAVERSAL
+
+// ----------------------------------------------------------------------------
+// generic wxControlContainer
+// ----------------------------------------------------------------------------
+
+wxControlContainer::wxControlContainer()
+{
+    m_winLastFocused = NULL;
+    m_inSetFocus = false;
 }
 
 void wxControlContainer::SetLastFocus(wxWindow *win)

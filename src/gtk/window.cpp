@@ -2532,9 +2532,7 @@ void wxWindowGTK::PostCreation()
 
     if ( !AcceptsFocusFromKeyboard() )
     {
-        GTK_WIDGET_UNSET_FLAGS( m_widget, GTK_CAN_FOCUS );
-        if (m_wxwindow && (m_widget != m_wxwindow))
-            GTK_WIDGET_UNSET_FLAGS( m_wxwindow, GTK_CAN_FOCUS );
+        SetCanFocus(false);
 
         g_signal_connect(m_widget, "focus",
                             G_CALLBACK(wx_window_focus_callback), this);
@@ -3239,6 +3237,22 @@ void wxWindowGTK::SetFocus()
                       _T("Can't set focus to %s(%s)"),
                       GetClassInfo()->GetClassName(), GetLabel().c_str());
         }
+    }
+}
+
+void wxWindowGTK::SetCanFocus(bool canFocus)
+{
+    if ( canFocus )
+        GTK_WIDGET_SET_FLAGS(m_widget, GTK_CAN_FOCUS);
+    else
+        GTK_WIDGET_UNSET_FLAGS(m_widget, GTK_CAN_FOCUS);
+
+    if ( m_wxwindow && (m_widget != m_wxwindow) )
+    {
+        if ( canFocus )
+            GTK_WIDGET_SET_FLAGS(m_wxwindow, GTK_CAN_FOCUS);
+        else
+            GTK_WIDGET_UNSET_FLAGS(m_wxwindow, GTK_CAN_FOCUS);
     }
 }
 

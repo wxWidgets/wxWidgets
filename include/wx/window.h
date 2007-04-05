@@ -592,6 +592,9 @@ public:
     bool CanAcceptFocusFromKeyboard() const
         { return AcceptsFocusFromKeyboard() && CanAcceptFocus(); }
 
+        // call this when the return value of AcceptsFocus() changes
+    virtual void SetCanFocus(bool WXUNUSED(canFocus)) { }
+
         // navigates inside this window
     bool NavigateIn(int flags = wxNavigationKeyEvent::IsForward)
         { return DoNavigateIn(flags); }
