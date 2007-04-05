@@ -177,8 +177,87 @@ public:
   typedef const value_type& const_reference;
   typedef value_type* pointer;
   typedef const value_type* const_pointer;
-  typedef value_type *iterator;
-  typedef const value_type *const_iterator;
+
+  // macro to define the bulk of iterator and const_iterator classes
+  #define WX_DEFINE_STRINGIMPL_ITERATOR(iterator_name, ref_type, ptr_type)    \
+    public:                                                                   \
+        typedef wxStringCharType value_type;                                  \
+        typedef ref_type reference;                                           \
+        typedef ptr_type pointer;                                             \
+                                                                              \
+        iterator_name(pointer ptr) : m_ptr(ptr) { }                           \
+                                                                              \
+        reference operator*() const { return *m_ptr; }                        \
+                                                                              \
+        iterator_name& operator++() { m_ptr++; return *this; }                \
+        iterator_name operator++(int)                                         \
+        {                                                                     \
+            const iterator_name tmp(*this);                                   \
+            m_ptr++;                                                          \
+            return tmp;                                                       \
+        }                                                                     \
+                                                                              \
+        iterator_name& operator--() { m_ptr--; return *this; }                \
+        iterator_name operator--(int)                                         \
+        {                                                                     \
+            const iterator_name tmp(*this);                                   \
+            m_ptr--;                                                          \
+            return tmp;                                                       \
+        }                                                                     \
+                                                                              \
+        iterator_name operator+(int n) const                                  \
+            { return iterator_name(m_ptr + n); }                              \
+        iterator_name operator-(int n) const                                  \
+            { return iterator_name(m_ptr - n); }                              \
+        iterator_name& operator+=(int n)                                      \
+            { m_ptr += n; return *this; }                                     \
+        iterator_name& operator-=(int n)                                      \
+            { m_ptr -= n; return *this; }                                     \
+                                                                              \
+        size_t operator-(const iterator_name& i) const                        \
+            { return m_ptr - i.m_ptr; }                                       \
+                                                                              \
+        bool operator==(const iterator_name& i) const                         \
+          { return m_ptr == i.m_ptr; }                                        \
+        bool operator!=(const iterator_name& i) const                         \
+          { return m_ptr != i.m_ptr; }                                        \
+                                                                              \
+        bool operator<(const iterator_name& i) const                          \
+          { return m_ptr < i.m_ptr; }                                         \
+        bool operator>(const iterator_name& i) const                          \
+          { return m_ptr > i.m_ptr; }                                         \
+        bool operator<=(const iterator_name& i) const                         \
+          { return m_ptr <= i.m_ptr; }                                        \
+        bool operator>=(const iterator_name& i) const                         \
+          { return m_ptr >= i.m_ptr; }                                        \
+                                                                              \
+    private:                                                                  \
+        /* for wxStringImpl use only */                                       \
+        operator pointer() const { return m_ptr; }                            \
+                                                                              \
+        friend class WXDLLIMPEXP_BASE wxStringImpl;                           \
+                                                                              \
+        pointer m_ptr
+
+  class iterator
+  {
+    WX_DEFINE_STRINGIMPL_ITERATOR(iterator,
+                                  wxStringCharType&,
+                                  wxStringCharType*);
+
+    friend class const_iterator;
+  };
+
+  class const_iterator
+  {
+  public:
+      const_iterator(iterator i) : m_ptr(i.m_ptr) { }
+
+      WX_DEFINE_STRINGIMPL_ITERATOR(const_iterator,
+                                    const wxStringCharType&,
+                                    const wxStringCharType*);
+  };
+
 
   // constructors and destructor
     // ctor for an empty string
@@ -215,8 +294,8 @@ public:
     size_t strLen = str.length() - nPos; nLen = strLen < nLen ? strLen : nLen;
     InitWith(str.c_str(), nPos, nLen);
   }
-    // take all characters from pStart to pEnd
-  wxStringImpl(const void *pStart, const void *pEnd);
+    // take everything between start and end
+  wxStringImpl(const_iterator start, const_iterator end);
 
     // dtor is not virtual, this class must not be inherited from!
   ~wxStringImpl()
@@ -397,7 +476,7 @@ public:
     // find first n characters of sz
   size_t find(const wxStringCharType* sz, size_t nStart = 0, size_t n = npos) const;
 
-    // find the first occurence of character ch after nStart
+    // find the first occurrence of character ch after nStart
   size_t find(wxStringCharType ch, size_t nStart = 0) const;
 
     // rfind() family is exactly like find() but works right to left

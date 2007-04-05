@@ -634,7 +634,7 @@ public:
           unsigned operator-(const iterator_name& i) const                  \
             { return wxString::DiffIters(m_cur, i.m_cur); }                 \
                                                                             \
-          bool operator==(const iterator_name&i) const                      \
+          bool operator==(const iterator_name& i) const                     \
             { return m_cur == i.m_cur; }                                    \
           bool operator!=(const iterator_name& i) const                     \
             { return m_cur != i.m_cur; }                                    \
@@ -1406,13 +1406,19 @@ public:
     // take nLen chars starting at nPos
   wxString(const wxString& str, size_t nPos, size_t nLen)
       : m_impl(str.m_impl, nPos, nLen) { }
-    // take all characters from pStart to pEnd
-  wxString(const void *pStart, const void *pEnd)
-      : m_impl((const wxChar*)pStart, (const wxChar*)pEnd) { }
+    // take all characters from first to last
   wxString(const_iterator first, const_iterator last)
       : m_impl(first, last) { }
-  wxString(iterator first, iterator last)
-      : m_impl(first, last) { }
+  wxString(const char *first, const char *last)
+  {
+      SubstrBufFromMB str(ImplStr(first, last - first));
+      m_impl.assign(str.data, str.len);
+  }
+  wxString(const wchar_t *first, const wchar_t *last)
+  {
+      SubstrBufFromWC str(ImplStr(first, last - first));
+      m_impl.assign(str.data, str.len);
+  }
 
   // lib.string.modifiers
     // append elements str[pos], ..., str[pos+n]
@@ -1459,6 +1465,10 @@ public:
     // append from first to last
   wxString& append(const_iterator first, const_iterator last)
     { m_impl.append(first, last); return *this; }
+  wxString& append(const char *first, const char *last)
+    { return append(first, last - first); }
+  wxString& append(const wchar_t *first, const wchar_t *last)
+    { return append(first, last - first); }
 
     // same as `this_string = str'
   wxString& assign(const wxString& str)
@@ -1517,6 +1527,10 @@ public:
     // assign from first to last
   wxString& assign(const_iterator first, const_iterator last)
     { m_impl.assign(first, last); return *this; }
+  wxString& assign(const char *first, const char *last)
+    { return assign(first, last - first); }
+  wxString& assign(const wchar_t *first, const wchar_t *last)
+    { return assign(first, last - first); }
 
     // string comparison
   int compare(const wxString& str) const;
@@ -1577,6 +1591,10 @@ public:
     { return iterator(m_impl.insert(it, EncodeChar(ch))); }
   void insert(iterator it, const_iterator first, const_iterator last)
     { m_impl.insert(it, first, last); }
+  void insert(iterator it, const char *first, const char *last)
+    { insert(it - begin(), first, last - first); }
+  void append(iterator it, const wchar_t *first, const wchar_t *last)
+    { insert(it - begin(), first, last - first); }
   void insert(iterator it, size_type n, wxUniChar ch)
   {
 #if wxUSE_UNICODE_UTF8
@@ -1595,6 +1613,7 @@ public:
     m_impl.erase(from, len);
     return *this;
   }
+    // delete characters from first up to last
   iterator erase(iterator first, iterator last)
     { return iterator(m_impl.erase(first, last)); }
   iterator erase(iterator first)
@@ -1718,6 +1737,12 @@ public:
   wxString& replace(iterator first, iterator last,
                     const_iterator first1, const_iterator last1)
     { m_impl.replace(first, last, first1, last1); return *this; }
+  wxString& replace(iterator first, iterator last,
+                    const char *first1, const char *last1)
+    { replace(first, last, first1, last1 - first1); return *this; }
+  wxString& replace(iterator first, iterator last,
+                    const wchar_t *first1, const wchar_t *last1)
+    { replace(first, last, first1, last1 - first1); return *this; }
 
   // swap two strings
   void swap(wxString& str)

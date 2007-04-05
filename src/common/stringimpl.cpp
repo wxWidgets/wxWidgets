@@ -170,17 +170,15 @@ void wxStringImpl::InitWith(const wxChar *psz, size_t nPos, size_t nLength)
   }
 }
 
-// poor man's iterators are "void *" pointers
-wxStringImpl::wxStringImpl(const void *pStart, const void *pEnd)
+wxStringImpl::wxStringImpl(const_iterator first, const_iterator last)
 {
-  if ( pEnd >= pStart )
+  if ( last >= first )
   {
-    InitWith((const wxChar *)pStart, 0,
-             (const wxChar *)pEnd - (const wxChar *)pStart);
+    InitWith(first, 0, last - first);
   }
   else
   {
-    wxFAIL_MSG( _T("pStart is not before pEnd") );
+    wxFAIL_MSG( _T("first must be before last") );
     Init();
   }
 }

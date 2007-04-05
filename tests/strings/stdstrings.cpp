@@ -94,13 +94,19 @@ void StdStringTestCase::StdConstructors()
     CPPUNIT_ASSERT( s6 == s1 );
     CPPUNIT_ASSERT( s7 == s1 );
     CPPUNIT_ASSERT( s8 == _T("efgh") );
+
+    const char *pc = s1;
+    WX_ASSERT_STR_EQUAL( "bcd", wxString(pc + 1, pc + 4) );
+
+    const wchar_t *pw = s2.c_str();
+    WX_ASSERT_STR_EQUAL( "a", wxString(pw, pw + 1) );
 }
 
 void StdStringTestCase::StdAppend()
 {
     wxString s1, s2, s3, s4, s5, s6, s7, s8;
 
-    s1 = s2 = s3 = s4 = s5 = s6 = s7 = _T("abc");
+    s1 = s2 = s3 = s4 = s5 = s6 = _T("abc");
     s1.append(_T("def"));
     s2.append(_T("defgh"), 3);
     s3.append(wxString(_T("abcdef")), 3, 6);
@@ -116,6 +122,14 @@ void StdStringTestCase::StdAppend()
     CPPUNIT_ASSERT( s4 == _T("abcabcdef") );
     CPPUNIT_ASSERT( s5 == _T("abcaaaxxy") );
     CPPUNIT_ASSERT( s6 == _T("abcdef") );
+
+    const char *pc = s1.c_str() + 2;
+    s7.append(pc, pc + 4);
+    WX_ASSERT_STR_EQUAL( "cdef", s7 );
+
+    const wchar_t *pw = s2.c_str() + 2;
+    s8.append(pw, pw + 4);
+    WX_ASSERT_STR_EQUAL( "cdef", s8 );
 
     s7 = s8 = wxString(_T("null\0time"), 9);
 
@@ -144,6 +158,14 @@ void StdStringTestCase::StdAssign()
     CPPUNIT_ASSERT( s4 == _T("def") );
     CPPUNIT_ASSERT( s5 == _T("aaa") );
     CPPUNIT_ASSERT( s6 == _T("ef") );
+
+    const char *pc = s1;
+    s7.assign(pc, pc + 2);
+    WX_ASSERT_STR_EQUAL( "de", s7 );
+
+    const wchar_t *pw = s1.c_str();
+    s8.assign(pw + 2, pw + 3);
+    WX_ASSERT_STR_EQUAL( "f", s8 );
 }
 
 void StdStringTestCase::StdCompare()
