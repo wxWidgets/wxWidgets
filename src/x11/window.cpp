@@ -1120,7 +1120,7 @@ void wxWindowX11::GetTextExtent(const wxString& string,
     XCharStruct overall;
     int slen = string.length();
 
-    XTextExtents((XFontStruct*) pFontStruct, (char*) string.c_str(), slen,
+    XTextExtents((XFontStruct*) pFontStruct, (const char*) string.c_str(), slen,
                  &direction, &ascent, &descent2, &overall);
 
     if ( x )
