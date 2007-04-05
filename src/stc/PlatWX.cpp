@@ -4,9 +4,19 @@
 //                        Robin Dunn <robin@aldunn.com>
 // The License.txt file describes the conditions under which this software may be distributed.
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+
+#ifndef WX_PRECOMP
+#endif // WX_PRECOMP
+
 #include <ctype.h>
 
-#include "wx/wx.h"
 #include "wx/encconv.h"
 #include "wx/listctrl.h"
 #include "wx/mstream.h"

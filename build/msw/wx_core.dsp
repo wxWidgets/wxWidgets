@@ -540,6 +540,10 @@ SOURCE=..\..\src\common\dcgraph.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\dcsvg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\dlgcmn.cpp
 # End Source File
 # Begin Source File
@@ -8849,6 +8853,10 @@ SOURCE=..\..\include\wx\dcscreen.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\dcsvg.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\debugrpt.h
 # End Source File
 # Begin Source File
@@ -9338,6 +9346,10 @@ SOURCE=..\..\include\wx\stattext.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\statusbr.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\stc\stc.h
 # End Source File
 # Begin Source File
 

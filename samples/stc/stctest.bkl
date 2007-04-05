@@ -1,18 +1,18 @@
 <?xml version="1.0" ?>
 <makefile>
 
-    <include file="../../../build/bakefiles/common_samples.bkl"/>
-    <include file="../../../build/bakefiles/common_contrib.bkl"/>
+    <include file="../../build/bakefiles/common_samples.bkl"/>
 
-    <exe id="stctest" template="wx_contrib_sample" template_append="wx_append">
+    <exe id="stctest" template="wx_sample" template_append="wx_append">
         <sources>
             stctest.cpp
 	    edit.cpp
 	    prefs.cpp
         </sources>
-        <contrib-lib>stc</contrib-lib>
+        <wx-lib>stc</wx-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
+        <win32-res>../sample.rc</win32-res>
     </exe>
 
     <wx-data id="data">   

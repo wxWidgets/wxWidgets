@@ -150,6 +150,7 @@
     <define-wxlib-name>dbgrid</define-wxlib-name>
     <define-wxlib-name>gl</define-wxlib-name>
     <define-wxlib-name>aui</define-wxlib-name>
+    <define-wxlib-name>stc</define-wxlib-name>
     <define-wxlib-name>richtext</define-wxlib-name>
 
 
@@ -191,6 +192,7 @@
         <if cond="value=='dbgrid'"><sys-lib>$(WXLIB_DBGRID_NAME)</sys-lib></if>
         <if cond="value=='qa'"><sys-lib>$(WXLIB_QA_NAME)</sys-lib></if>
         <if cond="value=='aui'"><sys-lib>$(WXLIB_AUI_NAME)</sys-lib></if>
+        <if cond="value=='stc'"><sys-lib>$(WXLIB_STC_NAME)</sys-lib></if>
         <if cond="value=='richtext'"><sys-lib>$(WXLIB_RICHTEXT_NAME)</sys-lib></if>
 
         <!-- wx-lib can be used also to link against contrib libraries

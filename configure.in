@@ -505,6 +505,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_RICHTEXT=no
   DEFAULT_wxUSE_XRC=no
   DEFAULT_wxUSE_AUI=no
+  DEFAULT_wxUSE_STC=no
   DEFAULT_wxUSE_WEBKIT=no
   DEFAULT_wxUSE_FILESYSTEM=no
   DEFAULT_wxUSE_FS_INET=no
@@ -729,6 +730,7 @@ else
   DEFAULT_wxUSE_RICHTEXT=yes
   DEFAULT_wxUSE_XRC=yes
   DEFAULT_wxUSE_AUI=yes
+  DEFAULT_wxUSE_STC=yes
   DEFAULT_wxUSE_WEBKIT=yes
   DEFAULT_wxUSE_FILESYSTEM=yes
   DEFAULT_wxUSE_FS_INET=yes
@@ -1029,6 +1031,7 @@ WX_ARG_ENABLE(html,        [  --enable-html           use wxHTML sub-library], w
 WX_ARG_ENABLE(htmlhelp,    [  --enable-htmlhelp       use wxHTML-based help], wxUSE_WXHTML_HELP)
 WX_ARG_ENABLE(xrc,         [  --enable-xrc            use XRC resources sub-library], wxUSE_XRC)
 WX_ARG_ENABLE(aui,         [  --enable-aui            use AUI docking library], wxUSE_AUI)
+WX_ARG_ENABLE(stc,         [  --enable-stc            use wxStyledTextCtrl library], wxUSE_STC)
 WX_ARG_ENABLE(constraints, [  --enable-constraints    use layout-constraints system], wxUSE_CONSTRAINTS)
 WX_ARG_ENABLE(printarch,   [  --enable-printarch      use printing architecture], wxUSE_PRINTING_ARCHITECTURE)
 WX_ARG_ENABLE(mdi,         [  --enable-mdi            use multiple document interface architecture], wxUSE_MDI)
@@ -7168,6 +7171,13 @@ if test "$wxUSE_AUI" = "yes"; then
    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS aui"
 fi
 
+USE_STC=0
+if test "$wxUSE_STC" = "yes"; then
+   AC_DEFINE(wxUSE_STC)
+   USE_STC=1
+   SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS stc"
+fi
+
 if test "$wxUSE_MENUS" = "yes"; then
     AC_DEFINE(wxUSE_MENUS)
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS menu"
@@ -7483,6 +7493,9 @@ if test "$wxUSE_XRC" = "yes" ; then
 fi
 if test "$wxUSE_AUI" = "yes" ; then
     CORE_GUI_LIBS="aui $CORE_GUI_LIBS"
+fi
+if test "$wxUSE_STC" = "yes" ; then
+    CORE_GUI_LIBS="stc $CORE_GUI_LIBS"
 fi
 
 if test "$wxUSE_GUI" != "yes"; then

@@ -15,9 +15,19 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+
+#ifndef WX_PRECOMP
+#endif // WX_PRECOMP
+
 #include <ctype.h>
 
-#include "wx/wx.h"
 #include "wx/tokenzr.h"
 #include "wx/mstream.h"
 #include "wx/image.h"

@@ -87,6 +87,7 @@
 
         <wx-lib>richtext</wx-lib>
         <wx-lib>aui</wx-lib>
+        <wx-lib>stc</wx-lib>
         <wx-lib>qa</wx-lib>
         <wx-lib>dbgrid</wx-lib>
         <wx-lib>gl</wx-lib>
@@ -117,7 +118,7 @@
                          tag definitions.
     -->
     <set var="LIB_LIST">
-        base core net xml odbc xrc html adv media gl dbgrid qa aui richtext
+        base core net xml odbc xrc html adv media gl dbgrid qa aui richtext stc
     </set>
 
     <!-- NOTE: refer to the NET contrib using NETUTILS instead of NET

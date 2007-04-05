@@ -19,7 +19,7 @@
 #include "wx/wx.h"
 #endif
 
-#include "wx/svg/dcsvg.h"
+#include "wx/dcsvg.h"
 
 #include "wx/image.h"
 

@@ -5,7 +5,7 @@
     <set var="MONOLIB_GUI_SRC">
         <if cond="USE_GUI=='1'">
             $(CORE_SRC) $(ADVANCED_SRC) $(MEDIA_SRC) $(HTML_SRC) $(ODBC_SRC) $(QA_SRC)
-            $(DBGRID_SRC) $(XRC_SRC) $(AUI_SRC) $(RICHTEXT_SRC)
+            $(DBGRID_SRC) $(XRC_SRC) $(AUI_SRC) $(RICHTEXT_SRC) $(STC_SRC)
         </if>
     </set>
     <set var="MONOLIB_SRC">
@@ -22,6 +22,13 @@
         <ldlibs>$(EXTRALIBS_ODBC)</ldlibs>
         <ldlibs>$(PLUGIN_MONOLIB_EXTRALIBS)</ldlibs>
         <msvc-headers>$(ALL_HEADERS)</msvc-headers>
+	<!-- STC stuff, should this be conditionalized? -->
+        <include>$(TOP_SRCDIR)src/stc/scintilla/include</include>
+        <include>$(TOP_SRCDIR)src/stc/scintilla/src</include>
+        <define>__WX__</define>
+        <define>SCI_LEXER</define>
+        <define>LINK_LEXERS</define>
+	<library>wxscintilla</library>
     </dll>
 
     <lib id="monolib" template="wx_lib"
@@ -32,6 +39,12 @@
         <if cond="FORMAT=='watcom'">
             <set var="LIB_PAGESIZE" overwrite="1">8192</set>
         </if>
+	<!-- STC stuff, should this be conditionalized? -->
+        <include>$(TOP_SRCDIR)src/stc/scintilla/include</include>
+        <include>$(TOP_SRCDIR)src/stc/scintilla/src</include>
+        <define>__WX__</define>
+        <define>SCI_LEXER</define>
+        <define>LINK_LEXERS</define>
     </lib>
 
 

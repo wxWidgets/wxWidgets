@@ -155,6 +155,9 @@
     <set var="WXLIB_RICHTEXT">
         <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('richtext')))</if>
     </set>
+    <set var="WXLIB_STC">
+        <if cond="MONOLITHIC=='0'">$(mk.evalExpr(wxwin.mkLibName('stc')))</if>
+    </set>
 
     <set var="WXLIB_MONO">
         <if cond="MONOLITHIC=='1'">$(mk.evalExpr(wxwin.mkLibName('mono')))</if>
@@ -441,6 +444,7 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
     <include file="tiff.bkl"/>
     <include file="odbc.bkl"/>
     <include file="expat.bkl"/>
+    <include file="scintilla.bkl"/>
 
 
     <!-- =============================================================== -->
@@ -656,6 +660,7 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
         <depends>wxzlib</depends>
         <depends cond="FORMAT=='autoconf'">wxodbc</depends>
         <depends>wxregex</depends>
+        <depends>wxscintilla</depends>
     </template>
 
     <template id="wx_3rdparty_includes_gui" cond="USE_GUI=='1'">

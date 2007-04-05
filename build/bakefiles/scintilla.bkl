@@ -1,0 +1,110 @@
+<?xml version="1.0" ?>
+<makefile>
+
+    <if cond="FORMAT=='autoconf'">
+        <set var="LIB_SCINTILLA">
+          wxscintilla$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX)
+        </set>
+    </if>
+    <if cond="FORMAT!='autoconf'">
+        <set var="LIB_SCINTILLA">
+            wxscintilla$(WXDEBUGFLAG)$(HOST_SUFFIX)
+        </set>
+    </if>
+    <set var="INC_SCINTILLA">
+        $(TOP_SRCDIR)src/stc/scintilla/include
+    </set>
+
+    <lib id="wxscintilla" template="3rdparty_lib">
+        <include>$(TOP_SRCDIR)src/stc/scintilla/include</include>
+        <include>$(TOP_SRCDIR)src/stc/scintilla/src</include>
+        <define>__WX__</define>
+        <define>SCI_LEXER</define>
+        <define>LINK_LEXERS</define>
+        <dirname>$(LIBDIRNAME)</dirname>
+        <sources>
+	    src/stc/scintilla/src/AutoComplete.cxx
+	    src/stc/scintilla/src/CallTip.cxx
+	    src/stc/scintilla/src/CellBuffer.cxx
+	    src/stc/scintilla/src/CharClassify.cxx
+	    src/stc/scintilla/src/ContractionState.cxx
+	    src/stc/scintilla/src/Document.cxx
+	    src/stc/scintilla/src/DocumentAccessor.cxx
+	    src/stc/scintilla/src/Editor.cxx
+	    src/stc/scintilla/src/ExternalLexer.cxx
+	    src/stc/scintilla/src/Indicator.cxx
+	    src/stc/scintilla/src/KeyMap.cxx
+	    src/stc/scintilla/src/KeyWords.cxx
+	    src/stc/scintilla/src/LexAPDL.cxx
+	    src/stc/scintilla/src/LexAU3.cxx
+	    src/stc/scintilla/src/LexAVE.cxx
+	    src/stc/scintilla/src/LexAda.cxx
+	    src/stc/scintilla/src/LexAsm.cxx
+	    src/stc/scintilla/src/LexAsn1.cxx
+	    src/stc/scintilla/src/LexBaan.cxx
+	    src/stc/scintilla/src/LexBash.cxx
+	    src/stc/scintilla/src/LexBasic.cxx
+	    src/stc/scintilla/src/LexBullant.cxx
+	    src/stc/scintilla/src/LexCLW.cxx
+	    src/stc/scintilla/src/LexCPP.cxx
+	    src/stc/scintilla/src/LexCSS.cxx
+	    src/stc/scintilla/src/LexCaml.cxx
+	    src/stc/scintilla/src/LexCsound.cxx
+	    src/stc/scintilla/src/LexConf.cxx
+	    src/stc/scintilla/src/LexCrontab.cxx
+	    src/stc/scintilla/src/LexEScript.cxx
+	    src/stc/scintilla/src/LexEiffel.cxx
+	    src/stc/scintilla/src/LexErlang.cxx
+	    src/stc/scintilla/src/LexFlagship.cxx
+	    src/stc/scintilla/src/LexForth.cxx
+	    src/stc/scintilla/src/LexFortran.cxx
+	    src/stc/scintilla/src/LexGui4Cli.cxx
+	    src/stc/scintilla/src/LexHTML.cxx
+	    src/stc/scintilla/src/LexHaskell.cxx
+	    src/stc/scintilla/src/LexInno.cxx
+	    src/stc/scintilla/src/LexKix.cxx
+	    src/stc/scintilla/src/LexLisp.cxx
+	    src/stc/scintilla/src/LexLout.cxx
+	    src/stc/scintilla/src/LexLua.cxx
+	    src/stc/scintilla/src/LexMMIXAL.cxx
+	    src/stc/scintilla/src/LexMPT.cxx
+	    src/stc/scintilla/src/LexMSSQL.cxx
+	    src/stc/scintilla/src/LexMatlab.cxx
+	    src/stc/scintilla/src/LexMetapost.cxx
+	    src/stc/scintilla/src/LexNsis.cxx
+	    src/stc/scintilla/src/LexOpal.cxx
+	    src/stc/scintilla/src/LexOthers.cxx
+	    src/stc/scintilla/src/LexPB.cxx
+	    src/stc/scintilla/src/LexPOV.cxx
+	    src/stc/scintilla/src/LexPS.cxx
+	    src/stc/scintilla/src/LexPascal.cxx
+	    src/stc/scintilla/src/LexPerl.cxx
+	    src/stc/scintilla/src/LexPython.cxx
+	    src/stc/scintilla/src/LexRebol.cxx
+	    src/stc/scintilla/src/LexRuby.cxx
+	    src/stc/scintilla/src/LexSQL.cxx
+	    src/stc/scintilla/src/LexSmalltalk.cxx
+	    src/stc/scintilla/src/LexTADS3.cxx
+	    src/stc/scintilla/src/LexScriptol.cxx
+	    src/stc/scintilla/src/LexSpecman.cxx
+	    src/stc/scintilla/src/LexSpice.cxx
+	    src/stc/scintilla/src/LexTCL.cxx
+	    src/stc/scintilla/src/LexTeX.cxx
+	    src/stc/scintilla/src/LexVB.cxx
+	    src/stc/scintilla/src/LexVHDL.cxx
+	    src/stc/scintilla/src/LexVerilog.cxx
+	    src/stc/scintilla/src/LexYAML.cxx
+	    src/stc/scintilla/src/LineMarker.cxx
+	    src/stc/scintilla/src/PropSet.cxx
+	    src/stc/scintilla/src/RESearch.cxx
+	    src/stc/scintilla/src/ScintillaBase.cxx
+	    src/stc/scintilla/src/Style.cxx
+	    src/stc/scintilla/src/StyleContext.cxx
+	    src/stc/scintilla/src/UniConversion.cxx
+	    src/stc/scintilla/src/ViewStyle.cxx
+	    src/stc/scintilla/src/WindowAccessor.cxx
+	    src/stc/scintilla/src/XPM.cxx
+        </sources>
+    </lib>
+
+</makefile>

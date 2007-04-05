@@ -593,6 +593,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/dcbase.cpp
     src/common/dcbufcmn.cpp
     src/common/dcgraph.cpp
+    src/common/dcsvg.cpp
     src/common/dlgcmn.cpp
     src/common/dndcmn.cpp
     src/common/dobjcmn.cpp
@@ -716,6 +717,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/dcmemory.h
     wx/dcprint.h
     wx/dcscreen.h
+    wx/dcsvg.h
     wx/dialog.h
     wx/dirdlg.h
     wx/dragimag.h
@@ -2678,6 +2680,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/calctrl.cpp
     src/generic/datavgen.cpp
     src/generic/datectlg.cpp
+<!--     src/generic/editlbox.cpp -->
     src/generic/grid.cpp
     src/generic/gridctrl.cpp
     src/generic/gridsel.cpp
@@ -2700,6 +2703,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/dataview.h
     wx/dateevt.h
     wx/dcbuffer.h
+<!--     wx/editlbox.h -->
     wx/aboutdlg.h
     wx/generic/aboutdlgg.h
     wx/generic/animate.h
@@ -3200,6 +3204,21 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/richtext/richtextprint.h
 </set>
 
+
+<!-- ====================================================================== -->
+<!--                                wxSTC                                   -->
+<!-- ====================================================================== -->
+
+<set var="STC_SRC" hints="files">
+    src/stc/stc.cpp
+    src/stc/PlatWX.cpp
+    src/stc/ScintillaWX.cpp
+</set>
+
+<set var="STC_HDR" hints="files">
+    wx/stc/stc.h
+</set>
+
 <!-- ====================================================================== -->
 <!--                    Define sources for specific libraries:              -->
 <!-- ====================================================================== -->
@@ -3436,6 +3455,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
             $(GUI_CORE_HEADERS)
             $(ADVANCED_HDR) $(MEDIA_HDR) $(HTML_HDR)
             $(OPENGL_HDR) $(QA_HDR) $(DBGRID_HDR) $(XRC_HDR) $(AUI_HDR) $(RICHTEXT_HDR)
+	    $(STC_HDR)
         </if>
     </set>
 

@@ -502,7 +502,7 @@ void AppFrame::CreateMenu ()
     menuEdit->Enable (myID_GOTO, false);
     menuEdit->AppendSeparator();
     menuEdit->Append (myID_INDENTINC, _("&Indent increase\tTab"));
-    menuEdit->Append (myID_INDENTRED, _("I&ndent reduce\tBksp"));
+    menuEdit->Append (myID_INDENTRED, _("I&ndent reduce\tBackspace"));
     menuEdit->AppendSeparator();
     menuEdit->Append (wxID_SELECTALL, _("&Select all\tCtrl+A"));
     menuEdit->Append (myID_SELECTLINE, _("Select &line\tCtrl+L"));

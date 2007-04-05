@@ -14,7 +14,17 @@
 // Licence:     wxWindows license
 /////////////////////////////////////////////////////////////////////////////
 
-#include "wx/wx.h"
+// For compilers that support precompilation, includes "wx.h".
+#include "wx/wxprec.h"
+
+#ifdef __BORLANDC__
+    #pragma hdrstop
+#endif
+
+
+#ifndef WX_PRECOMP
+#endif // WX_PRECOMP
+
 #include "wx/textbuf.h"
 #include "wx/dataobj.h"
 #include "wx/clipbrd.h"

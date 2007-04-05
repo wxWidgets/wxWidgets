@@ -118,6 +118,11 @@ USE_AUI = 1
 USE_RICHTEXT = 1
 !endif
 
+# Build wxStyledTextCtrl library (USE_GUI must be 1)? [0,1]
+!ifndef USE_STC
+USE_STC = 1
+!endif
+
 # Build OpenGL canvas library (USE_GUI must be 1)? [0,1]
 !ifndef USE_OPENGL
 USE_OPENGL = 0

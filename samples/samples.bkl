@@ -80,6 +80,7 @@
     <subproject id="splash" template="sub"/>
     <subproject id="splitter" template="sub"/>
     <subproject id="statbar" template="sub"/>
+    <subproject id="stc" template="sub"/>
     <subproject id="taskbar" template="sub"/>
     <subproject id="text" template="sub"/>
     <subproject id="thread" template="sub"/>

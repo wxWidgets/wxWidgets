@@ -213,6 +213,14 @@ Acts according to BUILD by default.
         </description>
     </option>
 
+    <option name="USE_STC">
+        <values>0,1</values>
+        <default-value>1</default-value>
+        <description>
+            Build wxStyledTextCtrl library (USE_GUI must be 1)?
+        </description>
+    </option>
+
     <option name="USE_OPENGL">
         <values>0,1</values>
         <default-value>0</default-value>
@@ -435,6 +443,7 @@ Set the version of your Mingw installation here.
         <set var="OFFICIAL_BUILD">0</set>
         <set var="USE_AUI">1</set>
         <set var="USE_RICHTEXT">1</set>
+        <set var="USE_STC">1</set>
         <set var="USE_HTML">1</set>
         <set var="USE_MEDIA">1</set>
         <set var="USE_XRC">1</set>

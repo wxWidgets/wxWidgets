@@ -354,4 +354,38 @@
 
     <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">richtext=richtextlib+richtextdll</set>
 
+    <!-- ================================================================ -->
+    <!--                            STC                                   -->
+    <!-- ================================================================ -->
+
+    <template id="stc_base">
+        <include>$(TOP_SRCDIR)src/stc/scintilla/include</include>
+        <include>$(TOP_SRCDIR)src/stc/scintilla/src</include>
+        <define>__WX__</define>
+        <define>SCI_LEXER</define>
+        <define>LINK_LEXERS</define>
+        <cppflags-borland>-w-8027</cppflags-borland>
+        <library>wxscintilla</library>
+    </template>
+
+    <dll id="stcdll" template="wx_dll,stc_base"
+         cond="SHARED=='1' and USE_STC=='1' and MONOLITHIC=='0'">
+        <define>WXUSINGDLL</define>
+        <define>WXMAKINGDLL_STC</define>
+        <sources>$(STC_SRC)</sources>
+        <library>coredll</library>
+        <library>basedll</library>
+        <msvc-headers>$(STC_HDR)</msvc-headers>
+    </dll>
+
+    <lib id="stclib" template="wx_lib,stc_base"
+         cond="SHARED=='0' and USE_STC=='1' and MONOLITHIC=='0'">
+        <sources>$(STC_SRC)</sources>
+        <msvc-headers>$(STC_HDR)</msvc-headers>
+    </lib>
+    
+    <wxshortcut id="wxstc" cond="MONOLITHIC=='0' and USE_STC=='1'"/>
+
+    <set var="MSVC6PRJ_MERGED_TARGETS_MULTILIB" append="1">stc=stclib+stcdll</set>
+
 </makefile>

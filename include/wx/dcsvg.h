@@ -3,21 +3,13 @@
 #include "wx/wfstream.h"
 #include "wx/string.h"
 
-#ifdef WXMAKINGDLL_SVG
-    #define WXDLLIMPEXP_SVG WXEXPORT
-#elif defined(WXUSINGDLL)
-    #define WXDLLIMPEXP_SVG WXIMPORT
-#else // not making nor using DLL
-    #define WXDLLIMPEXP_SVG
-#endif
-
 #define wxSVGVersion wxT("v0100")
 #ifdef __BORLANDC__
 #pragma warn -rch
 #pragma warn -ccc
 #endif
 
-class WXDLLIMPEXP_SVG wxSVGFileDC : public wxDC
+class WXDLLIMPEXP_CORE wxSVGFileDC : public wxDC
 {
 
     private:
