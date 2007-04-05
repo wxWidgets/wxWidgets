@@ -126,9 +126,7 @@ public:
     wxCharBuffer(const CharType *str = NULL) : wxCharTypeBufferBase(str) {}
     wxCharBuffer(size_t len) : wxCharTypeBufferBase(len) {}
 
-#if !wxUSE_UNICODE
     wxCharBuffer(const wxCStrData& cstr);
-#endif
 };
 
 #if wxUSE_WCHAR_T
@@ -140,9 +138,7 @@ public:
     wxWCharBuffer(const CharType *str = NULL) : wxCharTypeBufferBase(str) {}
     wxWCharBuffer(size_t len) : wxCharTypeBufferBase(len) {}
 
-#if wxUSE_UNICODE
     wxWCharBuffer(const wxCStrData& cstr);
-#endif
 };
 #endif // wxUSE_WCHAR_T
 

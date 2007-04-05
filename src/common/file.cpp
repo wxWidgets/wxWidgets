@@ -184,12 +184,12 @@ bool wxFile::Access(const wxChar *name, OpenMode mode)
 // ----------------------------------------------------------------------------
 
 // ctors
-wxFile::wxFile(const wxChar *szFileName, OpenMode mode)
+wxFile::wxFile(const wxString& fileName, OpenMode mode)
 {
     m_fd = fd_invalid;
     m_error = false;
 
-    Open(szFileName, mode);
+    Open(fileName, mode);
 }
 
 // create the file, fail if it already exists and bOverwrite

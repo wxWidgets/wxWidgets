@@ -45,6 +45,7 @@
     #include <clib.h>
 #endif
 
+#include <wx/hashmap.h>
 
 // string handling functions used by wxString:
 #if wxUSE_UNICODE_UTF8
@@ -104,6 +105,74 @@ wxSTD ostream& operator<<(wxSTD ostream& os, const wxWCharBuffer& str)
 
 #endif // wxUSE_STD_IOSTREAM
 
+// ----------------------------------------------------------------------------
+// wxCStrData converted strings caching
+// ----------------------------------------------------------------------------
+
+// For backward compatibility reasons, it must be possible to assign the value
+// returned by wxString::c_str() to a char* or wchar_t* variable and work with
+// it. Returning wxCharBuffer from (const char*)c_str() wouldn't do the trick,
+// because the memory would be freed immediately, but it has to be valid as long
+// as the string is not modified, so that code like this still works:
+//
+// const wxChar *s = str.c_str();
+// while ( s ) { ... }
+
+// FIXME-UTF8: not thread safe!
+// FIXME-UTF8: we currently clear the cached conversion only when the string is
+//             destroyed, but we should do it when the string is modified, to
+//             keep memory usage down
+// FIXME-UTF8: we do the conversion every time As[W]Char() is called, but if we
+//             invalidated the cache on every change, we could keep the previous
+//             conversion
+// FIXME-UTF8: add tracing of usage of these two methods - new code is supposed
+//             to use mb_str() or wc_str() instead of (const [w]char*)c_str()
+
+template<typename T>
+static inline void DeleteStringFromConversionCache(T& hash, const wxString *s)
+{
+    typename T::iterator i = hash.find(s);
+    if ( i != hash.end() )
+    {
+        free(i->second);
+        hash.erase(i);
+    }
+}
+
+#if wxUSE_UNICODE
+WX_DECLARE_HASH_MAP(wxString*, char*, wxPointerHash, wxPointerEqual,
+                    wxStringCharConversionCache);
+static wxStringCharConversionCache gs_stringsCharCache;
+
+const char* wxCStrData::AsChar() const
+{
+    // remove previously cache value, if any (see FIXMEs above):
+    DeleteStringFromConversionCache(gs_stringsCharCache, m_str);
+
+    // convert the string and keep it:
+    const char *s = gs_stringsCharCache[m_str] = m_str->mb_str().release();
+
+    return s + m_offset;
+}
+#endif // wxUSE_UNICODE
+
+#if !wxUSE_UNICODE_WCHAR
+WX_DECLARE_HASH_MAP(wxString*, wchar_t*, wxPointerHash, wxPointerEqual,
+                    wxStringWCharConversionCache);
+static wxStringWCharConversionCache gs_stringsWCharCache;
+
+const wchar_t* wxCStrData::AsWChar() const
+{
+    // remove previously cache value, if any (see FIXMEs above):
+    DeleteStringFromConversionCache(gs_stringsWCharCache, m_str);
+
+    // convert the string and keep it:
+    const wchar_t *s = gs_stringsWCharCache[m_str] = m_str->wc_str().release();
+
+    return s + m_offset;
+}
+#endif // !wxUSE_UNICODE_WCHAR
+
 // ===========================================================================
 // wxString class core
 // ===========================================================================
@@ -111,6 +180,17 @@ wxSTD ostream& operator<<(wxSTD ostream& os, const wxWCharBuffer& str)
 // ---------------------------------------------------------------------------
 // construction and conversion
 // ---------------------------------------------------------------------------
+
+wxString::~wxString()
+{
+#if wxUSE_UNICODE
+    // FIXME-UTF8: do this only if locale is not UTF8 if wxUSE_UNICODE_UTF8
+    DeleteStringFromConversionCache(gs_stringsCharCache, this);
+#endif
+#if !wxUSE_UNICODE_WCHAR
+    DeleteStringFromConversionCache(gs_stringsWCharCache, this);
+#endif
+}
 
 #if wxUSE_UNICODE
 /* static */
@@ -1510,4 +1590,3 @@ wxString wxString::Upper() const
 
 // convert to lower case, return the copy of the string
 wxString wxString::Lower() const { wxString s(*this); return s.MakeLower(); }
-

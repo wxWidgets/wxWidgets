@@ -2206,11 +2206,13 @@ void wxPostScriptDC::DoPsPrintfFormat(const wxChar *fmt, ... )
     va_list argptr;
     va_start(argptr, fmt);
 
-    PsPrint( wxString::FormatV( fmt, argptr ).c_str() );
+    PsPrint( wxString::FormatV( fmt, argptr ) );
 }
 
-void wxPostScriptDC::PsPrint( const char* psdata )
+void wxPostScriptDC::PsPrint( const wxString& str )
 {
+    wxWX2MBbuf psdata(str.mb_str(wxConvUTF8));
+
     wxPostScriptPrintNativeData *data =
         (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
 

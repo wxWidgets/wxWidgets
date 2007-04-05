@@ -87,12 +87,8 @@ public:
   static int GetResolution();
 
   WX_DEFINE_VARARG_FUNC_VOID(PsPrintf, DoPsPrintfFormat)
-  void PsPrint( const char* psdata );
+  void PsPrint( const wxString& psdata );
   void PsPrint( int ch );
-
-#if wxUSE_UNICODE
-  void PsPrint( const wxChar* psdata ) { PsPrint( wxConvUTF8.cWX2MB( psdata ) ); }
-#endif
 
 private:
     void DoPsPrintfFormat(const wxChar *fmt, ... );

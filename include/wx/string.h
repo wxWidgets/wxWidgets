@@ -184,21 +184,18 @@ public:
 
     ~wxCStrData();
 
-    // FIXME: we'll need convertors for both char* and wchar_t* and NONE
-    //        for wxChar*, but that's after completing the transition to
-    //        "smart" wxUniChar class. For now, just have conversion to
-    //        char* in ANSI build and wchar_t in Unicode build.
-#if wxUSE_UNICODE
     const wchar_t* AsWChar() const;
     operator const wchar_t*() const { return AsWChar(); }
-#else
+
+    operator bool() const;
+
     const char* AsChar() const;
     const unsigned char* AsUnsignedChar() const
         { return (const unsigned char *) AsChar(); }
-    operator const void*() const { return AsChar(); }
     operator const char*() const { return AsChar(); }
     operator const unsigned char*() const { return AsUnsignedChar(); }
-#endif
+
+    operator const void*() const { return AsChar(); }
 
     wxString AsString() const;
 
@@ -448,6 +445,7 @@ private:
   static void PosLenToImpl(size_t pos, size_t len,
                            size_t *implPos, size_t *implLen)
     { *implPos = pos; *implLen = len; }
+  static size_t LenToImpl(size_t len) { return len; }
   static size_t PosFromImpl(size_t pos) { return pos; }
 
 #else // wxUSE_UNICODE_UTF8
@@ -557,12 +555,14 @@ public:
     // as we provide both ctors with this signature for both char and unsigned
     // char string, we need to provide one for wxCStrData to resolve ambiguity
   wxString(const wxCStrData& cstr, size_t nLength)
-    { assign(cstr.AsString(), nLength); }
+      : m_impl(cstr.AsString().Mid(0, nLength).m_impl) {}
 
     // and because wxString is convertible to wxCStrData and const wxChar *
     // we also need to provide this one
   wxString(const wxString& str, size_t nLength)
-    { assign(str, nLength); }
+      : m_impl(str.Mid(0, nLength).m_impl) {}
+
+  ~wxString();
 
 public:
   // standard types
@@ -910,7 +910,8 @@ public:
 
     // implicit conversion to C string
     operator wxCStrData() const { return c_str(); }
-    operator const wxChar*() const { return c_str(); }
+    operator const char*() const { return c_str(); }
+    operator const wchar_t*() const { return c_str(); }
 
     // identical to c_str(), for MFC compatibility
     const wxCStrData GetData() const { return c_str(); }
@@ -1171,16 +1172,29 @@ public:
     { return CmpNoCase(wxString(pwz)); }
     // test for the string equality, either considering case or not
     // (if compareWithCase then the case matters)
-  bool IsSameAs(const char *psz, bool compareWithCase = true) const
-    { return (compareWithCase ? Cmp(psz) : CmpNoCase(psz)) == 0; }
-  bool IsSameAs(const wchar_t *pwz, bool compareWithCase = true) const
-    { return (compareWithCase ? Cmp(pwz) : CmpNoCase(pwz)) == 0; }
+  bool IsSameAs(const wxString& str, bool compareWithCase = true) const
+    { return (compareWithCase ? Cmp(str) : CmpNoCase(str)) == 0; }
+  bool IsSameAs(const char *str, bool compareWithCase = true) const
+    { return (compareWithCase ? Cmp(str) : CmpNoCase(str)) == 0; }
+  bool IsSameAs(const wchar_t *str, bool compareWithCase = true) const
+    { return (compareWithCase ? Cmp(str) : CmpNoCase(str)) == 0; }
     // comparison with a single character: returns true if equal
   bool IsSameAs(wxUniChar c, bool compareWithCase = true) const
     {
       return (length() == 1) && (compareWithCase ? GetChar(0u) == c
                               : wxToupper(GetChar(0u)) == wxToupper(c));
     }
+  // FIXME-UTF8: remove these overloads
+  bool IsSameAs(wxUniCharRef c, bool compareWithCase = true) const
+    { return IsSameAs(wxUniChar(c), compareWithCase); }
+  bool IsSameAs(char c, bool compareWithCase = true) const
+    { return IsSameAs(wxUniChar(c), compareWithCase); }
+  bool IsSameAs(unsigned char c, bool compareWithCase = true) const
+    { return IsSameAs(wxUniChar(c), compareWithCase); }
+  bool IsSameAs(wchar_t c, bool compareWithCase = true) const
+    { return IsSameAs(wxUniChar(c), compareWithCase); }
+  bool IsSameAs(int c, bool compareWithCase = true) const
+    { return IsSameAs(wxUniChar(c), compareWithCase); }
 
   // simple sub-string extraction
       // return substring starting at nFirst of length nCount (or till the end
@@ -1449,6 +1463,11 @@ public:
     // same as `this_string = str'
   wxString& assign(const wxString& str)
     { m_impl = str.m_impl; return *this; }
+  wxString& assign(const wxString& str, size_t len)
+  {
+    m_impl.assign(str.m_impl, 0, str.LenToImpl(len));
+    return *this;
+  }
     // same as ` = str[pos..pos + n]
   wxString& assign(const wxString& str, size_t pos, size_t n)
   {
@@ -1485,6 +1504,16 @@ public:
         m_impl.assign(n, (wxStringCharType)ch);
     return *this;
   }
+
+  wxString& assign(size_t n, wxUniCharRef ch)
+    { return assign(n, wxUniChar(ch)); }
+  wxString& assign(size_t n, char ch)
+    { return assign(n, wxUniChar(ch)); }
+  wxString& assign(size_t n, unsigned char ch)
+    { return assign(n, wxUniChar(ch)); }
+  wxString& assign(size_t n, wchar_t ch)
+    { return assign(n, wxUniChar(ch)); }
+
     // assign from first to last
   wxString& assign(const_iterator first, const_iterator last)
     { m_impl.assign(first, last); return *this; }
@@ -1649,6 +1678,15 @@ public:
     m_impl.replace(from, len, str.data, str.len);
     return *this;
   }
+  wxString& replace(size_t nStart, size_t nLen,
+                    const wxString& s, size_t nCount)
+  {
+    size_t from, len;
+    PosLenToImpl(nStart, nLen, &from, &len);
+    m_impl.replace(from, len, s.m_impl.c_str(), s.LenToImpl(nCount));
+    return *this;
+  }
+
   wxString& replace(iterator first, iterator last, const char* s)
     { m_impl.replace(first, last, ImplStr(s)); return *this; }
   wxString& replace(iterator first, iterator last, const wchar_t* s)
@@ -2195,12 +2233,8 @@ wxDEFINE_ALL_COMPARISONS(const char *, const wxString&, wxCMP_CHAR_STRING)
 #define wxCMP_CHAR_CSTRDATA(p, s, op) p op s.AsChar()
 #define wxCMP_WCHAR_CSTRDATA(p, s, op) p op s.AsWChar()
 
-// FIXME: these ifdefs must be removed when wxCStrData has both conversions
-#if wxUSE_UNICODE
-    wxDEFINE_ALL_COMPARISONS(const wchar_t *, const wxCStrData&, wxCMP_WCHAR_CSTRDATA)
-#else
-    wxDEFINE_ALL_COMPARISONS(const char *, const wxCStrData&, wxCMP_CHAR_CSTRDATA)
-#endif
+wxDEFINE_ALL_COMPARISONS(const wchar_t *, const wxCStrData&, wxCMP_WCHAR_CSTRDATA)
+wxDEFINE_ALL_COMPARISONS(const char *, const wxCStrData&, wxCMP_CHAR_CSTRDATA)
 
 #undef wxCMP_CHAR_CSTRDATA
 #undef wxCMP_WCHAR_CSTRDATA
@@ -2237,15 +2271,26 @@ inline wxCStrData::~wxCStrData()
         delete m_str;
 }
 
-#if wxUSE_UNICODE
-inline const wchar_t* wxCStrData::AsWChar() const
-#else
-inline const char* wxCStrData::AsChar() const
-#endif
+inline wxCStrData::operator bool() const
 {
-    // FIXME-UTF8: incorrect position, incorrect charset
+    return !m_str->empty();
+};
+
+// simple cases for AsChar() and AsWChar(), the complicated ones are
+// in string.cpp
+#if wxUSE_UNICODE_WCHAR
+inline const wchar_t* wxCStrData::AsWChar() const
+{
     return m_str->wx_str() + m_offset;
 }
+#endif // wxUSE_UNICODE_WCHAR
+
+#if !wxUSE_UNICODE
+inline const char* wxCStrData::AsChar() const
+{
+    return m_str->wx_str() + m_offset;
+}
+#endif // !wxUSE_UNICODE
 
 inline wxString wxCStrData::AsString() const
 {
@@ -2272,10 +2317,15 @@ inline wxUniChar wxCStrData::operator[](size_t n) const
 // implementation of wx[W]CharBuffer inline methods using wxCStrData
 // ----------------------------------------------------------------------------
 
-// FIXME-UTF8: move this to buffer.h; provide versions for both variants
-inline wxWxCharBuffer::wxWxCharBuffer(const wxCStrData& cstr)
-                    : wxCharTypeBufferBase((const wxChar *)cstr)
+// FIXME-UTF8: move this to buffer.h
+inline wxCharBuffer::wxCharBuffer(const wxCStrData& cstr)
+                    : wxCharTypeBufferBase(cstr.AsChar())
 {
 }
 
-#endif  // _WX_WXSTRING_H__
+inline wxWCharBuffer::wxWCharBuffer(const wxCStrData& cstr)
+                    : wxCharTypeBufferBase(cstr.AsWChar())
+{
+}
+
+#endif  // _WX_WXSTRING_H_

@@ -705,9 +705,9 @@ bool wxGenericPrintSetupDialog::TransferDataToWindow()
     wxPostScriptPrintNativeData *data =
         (wxPostScriptPrintNativeData *) m_printData.GetNativeData();
 
-    if (m_printerCommandText && data->GetPrinterCommand())
+    if (m_printerCommandText && !data->GetPrinterCommand().empty())
         m_printerCommandText->SetValue(data->GetPrinterCommand());
-    if (m_printerOptionsText && data->GetPrinterOptions())
+    if (m_printerOptionsText && !data->GetPrinterOptions().empty())
         m_printerOptionsText->SetValue(data->GetPrinterOptions());
     if (m_colourCheckBox)
         m_colourCheckBox->SetValue(m_printData.GetColour());

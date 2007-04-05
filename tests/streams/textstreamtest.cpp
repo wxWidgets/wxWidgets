@@ -265,7 +265,7 @@ void TextStreamTestCase::TestInput(const wxMBConv& conv,
 
     CPPUNIT_ASSERT_EQUAL( WXSIZEOF(txtWchar), temp.length() );
 
-    CPPUNIT_ASSERT_EQUAL( 0, memcmp(txtWchar, temp.c_str(), sizeof(txtWchar)) );
+    CPPUNIT_ASSERT_EQUAL( 0, memcmp(txtWchar, temp.wc_str(), sizeof(txtWchar)) );
 }
 
 #endif // wxUSE_UNICODE

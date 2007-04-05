@@ -1125,7 +1125,7 @@ static inline bool WriteAsciiString(wxOutputStream& ostr, const wxString& s)
     wxCharBuffer name(s.mb_str());
     ostr.Write(name, strlen(name));
 #else
-    ostr.Write(s, s.length());
+    ostr.Write(s.mb_str(), s.length());
 #endif
 
     return ostr.IsOk();

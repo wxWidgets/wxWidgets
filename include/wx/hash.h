@@ -269,6 +269,9 @@ public:
         { DoPut( value, lhash, object ); }
     void Put(const wxChar *value, wxObject *object)
         { DoPut( value, MakeKey( value ), object ); }
+    // FIXME-UTF8: have only wxString forms here
+    void Put(const wxString& value, wxObject *object)
+        { DoPut( value, MakeKey( value ), object ); }
     void Put(long lhash, const wxChar *value, wxObject *object)
         { DoPut( value, lhash, object ); }
 
@@ -279,6 +282,9 @@ public:
         { return (wxObject*)DoGet( value, lhash ); }
     wxObject *Get(const wxChar *value) const
         { return (wxObject*)DoGet( value, MakeKey( value ) ); }
+    // FIXME-UTF8: have only wxString forms here
+    wxObject *Get(const wxString& value) const
+        { return (wxObject*)DoGet( value, MakeKey( value ) ); }
     wxObject *Get(long lhash, const wxChar *value) const
         { return (wxObject*)DoGet( value, lhash ); }
 
@@ -288,6 +294,9 @@ public:
     wxObject *Delete(long lhash, long key)
         { return (wxObject*)DoDelete( key, lhash ); }
     wxObject *Delete(const wxChar *key)
+        { return (wxObject*)DoDelete( key, MakeKey( key ) ); }
+    // FIXME-UTF8: have only wxString forms here
+    wxObject *Delete(const wxString& key)
         { return (wxObject*)DoDelete( key, MakeKey( key ) ); }
     wxObject *Delete(long lhash, const wxChar *key)
         { return (wxObject*)DoDelete( key, lhash ); }

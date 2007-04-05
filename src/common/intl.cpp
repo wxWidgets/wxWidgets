@@ -1534,7 +1534,8 @@ bool wxLocale::Init(const wxString& name,
     // the argument to setlocale()
     szLocale = shortName;
 
-    wxCHECK_MSG( szLocale, false, _T("no locale to set in wxLocale::Init()") );
+    wxCHECK_MSG( !szLocale.empty(), false,
+                 _T("no locale to set in wxLocale::Init()") );
   }
 
 #ifdef __WXWINCE__

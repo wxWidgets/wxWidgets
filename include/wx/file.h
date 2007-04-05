@@ -73,7 +73,7 @@ public:
     // def ctor
   wxFile() { m_fd = fd_invalid; m_error = false; }
     // open specified file (may fail, use IsOpened())
-  wxFile(const wxChar *szFileName, OpenMode mode = read);
+  wxFile(const wxString& fileName, OpenMode mode = read);
     // attach to (already opened) file
   wxFile(int lfd) { m_fd = lfd; m_error = false; }
 
