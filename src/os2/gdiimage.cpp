@@ -300,7 +300,7 @@ wxGDIImageHandler* wxGDIImage::FindHandler(
     {
         wxGDIImageHandler*          pHandler = pNode->GetData();
 
-        if ( (pHandler->GetExtension() = rExtension) &&
+        if ( (pHandler->GetExtension() == rExtension) &&
              (lType == -1 || pHandler->GetType() == lType) )
         {
             return pHandler;
@@ -469,7 +469,7 @@ bool wxICOResourceHandler::LoadIcon( wxIcon*         pIcon,
 {
     HPOINTER                        hIcon;
 
-    hIcon = ::WinLoadFileIcon( (PSZ)rName.c_str()
+    hIcon = ::WinLoadFileIcon( rName.c_str()
                               ,TRUE // load for private use
                              );
 
