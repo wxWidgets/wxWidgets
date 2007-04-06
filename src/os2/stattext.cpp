@@ -283,10 +283,6 @@ void wxStaticText::DoSetLabel(const wxString& str)
 
 wxString wxStaticText::DoGetLabel() const
 {
-    HWND hwnd = GetHwnd();
-    LONG textLen = ::WinQueryWindowTextLength(hwnd);
-    wxCharBuffer buffer(textLen+1);
-    ::WinQueryWindowText(hwnd, textLen+1, buffer.data());
-    return buffer;
+    return wxGetWindowText(GetHwnd());
 }
 
