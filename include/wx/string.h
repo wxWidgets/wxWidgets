@@ -2348,6 +2348,22 @@ inline wxUniChar wxCStrData::operator[](size_t n) const
 }
 
 // ----------------------------------------------------------------------------
+// more wxCStrData operators
+// ----------------------------------------------------------------------------
+
+// we need to define those to allow "size_t pos = p - s.c_str()" where p is
+// some pointer into the string
+inline size_t operator-(const char *p, const wxCStrData& cs)
+{
+    return p - cs.AsChar();
+}
+
+inline size_t operator-(const wchar_t *p, const wxCStrData& cs)
+{
+    return p - cs.AsWChar();
+}
+
+// ----------------------------------------------------------------------------
 // implementation of wx[W]CharBuffer inline methods using wxCStrData
 // ----------------------------------------------------------------------------
 
