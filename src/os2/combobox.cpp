@@ -193,7 +193,7 @@ void wxComboBox::SetValue(
     if ( HasFlag(wxCB_READONLY) )
         SetStringSelection(rsValue);
     else
-        ::WinSetWindowText(GetHwnd(), (PSZ)rsValue.c_str());
+        ::WinSetWindowText(GetHwnd(), rsValue.c_str());
 } // end of wxComboBox::SetValue
 
 //
@@ -299,7 +299,7 @@ void wxComboBox::Replace( long lFrom,
     // Now replace with 'value', by pasting.
     //
     wxSetClipboardData( wxDF_TEXT
-                       ,(wxObject *)rsValue.c_str()
+                       ,rsValue.c_str()
                        ,0
                        ,0
                       );

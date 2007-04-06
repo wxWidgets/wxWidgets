@@ -75,7 +75,7 @@ wxAcceleratorTable::wxAcceleratorTable(
 
     m_refData = new wxAcceleratorRefData;
 
-    ulId = atol((char*)rResource.c_str());
+    ulId = atol(rResource.c_str());
     hAccel = ::WinLoadAccelTable( vHabmain
                                  ,NULL // resources always in .exe
                                  ,(ULONG)ulId

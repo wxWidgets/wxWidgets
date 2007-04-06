@@ -80,7 +80,7 @@ bool wxButton::Create( wxWindow*          pParent,
 
     m_hWnd = (WXHWND)::WinCreateWindow( GetHwndOf(pParent)   // Parent handle
                                        ,WC_BUTTON            // A Button class window
-                                       ,(PSZ)sLabel.c_str()  // Button text
+                                       ,sLabel.c_str()  // Button text
                                        ,lStyle               // Button style
                                        ,0, 0, 0, 0           // Location and size
                                        ,GetHwndOf(pParent)   // Owner handle

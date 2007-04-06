@@ -222,7 +222,7 @@ bool wxDialog::Show( bool bShow )
 
     wxString title = GetTitle();
     if (!title.empty())
-        ::WinSetWindowText((HWND)GetHwnd(), (PSZ)title.c_str());
+        ::WinSetWindowText((HWND)GetHwnd(), title.c_str());
 
     if ( bShow )
     {
