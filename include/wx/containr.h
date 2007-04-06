@@ -163,9 +163,6 @@ public:
     // the focus and the default processing should take place
     bool DoSetFocus();
 
-    // can our child get the focus?
-    bool AcceptsFocus() const;
-
     // called from OnChildFocus() handler, i.e. when one of our (grand)
     // children gets the focus
     void SetLastFocus(wxWindow *win);
@@ -192,18 +189,14 @@ extern bool wxSetFocusToChild(wxWindow *win, wxWindow **child);
 // ----------------------------------------------------------------------------
 
 // declare the methods to be forwarded
-#define WX_DECLARE_CONTROL_CONTAINER() \
-public: \
-    void OnNavigationKey(wxNavigationKeyEvent& event); \
-    void OnFocus(wxFocusEvent& event); \
-    void SetFocusIgnoringChildren(); \
-    virtual void OnChildFocus(wxChildFocusEvent& event); \
-    virtual void SetFocus(); \
-    virtual void RemoveChild(wxWindowBase *child); \
-    virtual bool AcceptsFocus() const; \
-\
-protected: \
-    wxControlContainer m_container
+#define WX_DECLARE_CONTROL_CONTAINER()                                        \
+    WX_DECLARE_CONTROL_CONTAINER_BASE();                                      \
+                                                                              \
+public:                                                                       \
+    void OnNavigationKey(wxNavigationKeyEvent& event);                        \
+    void OnFocus(wxFocusEvent& event);                                        \
+    virtual void OnChildFocus(wxChildFocusEvent& event);                      \
+    virtual void SetFocus()
 
 // implement the event table entries for wxControlContainer
 #define WX_EVENT_TABLE_CONTROL_CONTAINER(classname) \
