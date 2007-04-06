@@ -75,7 +75,7 @@ static inline FIND_DATA FindFirst(
     FIND_DATA                   hDir = HDIR_CREATE;
     FIND_ATTR                   rc;
 
-    rc = ::DosFindFirst( (PSZ)rsSpec.c_str()
+    rc = ::DosFindFirst( rsSpec.c_str()
                         ,&hDir
                         ,0x37 // was: FILE_NORMAL
                         ,pFinddata
