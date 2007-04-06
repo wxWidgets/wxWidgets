@@ -126,7 +126,7 @@ void MakeUserDataRec(OpenUserDataRec *myData , const wxString& filter )
     myData->currentfilter = 0 ;
     myData->saveMode = false ;
 
-    if ( filter && filter[0] )
+    if ( !filter.empty() )
     {
         wxString filter2(filter) ;
         int filterIndex = 0;
