@@ -207,11 +207,19 @@ public:
                                                                               \
         iterator_name operator+(int n) const                                  \
             { return iterator_name(m_ptr + n); }                              \
+        iterator_name operator+(size_t n) const                               \
+            { return iterator_name(m_ptr + n); }                              \
         iterator_name operator-(int n) const                                  \
+            { return iterator_name(m_ptr - n); }                              \
+        iterator_name operator-(size_t n) const                               \
             { return iterator_name(m_ptr - n); }                              \
         iterator_name& operator+=(int n)                                      \
             { m_ptr += n; return *this; }                                     \
+        iterator_name& operator+=(size_t n)                                   \
+            { m_ptr += n; return *this; }                                     \
         iterator_name& operator-=(int n)                                      \
+            { m_ptr -= n; return *this; }                                     \
+        iterator_name& operator-=(size_t n)                                   \
             { m_ptr -= n; return *this; }                                     \
                                                                               \
         size_t operator-(const iterator_name& i) const                        \
