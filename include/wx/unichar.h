@@ -31,6 +31,12 @@
     #define wxIF_WINT_T_TYPE(x)
 #endif // wxWINT_T_IS_SEPARATE_TYPE/!wxWINT_T_IS_SEPARATE_TYPE
 
+// wchar_t seems to be defined as unsigned short by all Windows compilers but
+// unsigned int everywhere else
+#ifndef __WIN32__
+    #define wxWCHAR_T_IS_UINT
+#endif
+
 class WXDLLIMPEXP_BASE wxUniCharRef;
 
 // This class represents single Unicode character. It can be converted to
@@ -69,6 +75,9 @@ public:
     operator char() const { return To8bit(m_value); }
     operator wchar_t() const { return m_value; }
     operator int() const { return m_value; }
+#ifndef wxWCHAR_T_IS_UINT
+    operator unsigned int() const { return m_value; }
+#endif
 
     // More conversions needed for other standard functions: uchar is for VC++
     // _mbxxx() ones (to which toxxx/isxxx() are mapped when _MBCS is defined)
@@ -183,6 +192,9 @@ public:
     operator wchar_t() const { return UniChar(); }
 #ifdef wxWINT_T_IS_SEPARATE_TYPE
     operator wint_t() const { return UniChar(); }
+#endif
+#ifndef wxWCHAR_T_IS_UINT
+    operator unsigned int() const { return UniChar(); }
 #endif
 
     // see wxUniChar::operator bool etc. for explanation
