@@ -94,14 +94,14 @@ void wxInsertMenuItemsInMenu(wxMenu* menu, MenuRef wm, MenuItemIndex insertAfter
         subMenu = item->GetSubMenu() ;
         if (subMenu)
         {
-            wxInsertMenuItemsInMenu(subMenu, (MenuRef)subMenu->GetHMenu(), 0); 
+            wxInsertMenuItemsInMenu(subMenu, (MenuRef)subMenu->GetHMenu(), 0);
         }
         if ( item->IsSeparator() )
         {
             if ( wm && newItems)
                 InsertMenuItemTextWithCFString( wm,
-                    CFSTR(""), insertAfter, kMenuItemAttrSeparator, 0); 
-        
+                    CFSTR(""), insertAfter, kMenuItemAttrSeparator, 0);
+
             newItems = false;
         }
         else
@@ -109,10 +109,10 @@ void wxInsertMenuItemsInMenu(wxMenu* menu, MenuRef wm, MenuItemIndex insertAfter
             wxAcceleratorEntry*
                 entry = wxAcceleratorEntry::Create( item->GetText() ) ;
 
-            MenuItemIndex winListPos = -1;
-            OSStatus err = GetIndMenuItemWithCommandID(wm, 
+            MenuItemIndex winListPos = (MenuItemIndex)-1;
+            OSStatus err = GetIndMenuItemWithCommandID(wm,
                         wxIdToMacCommand ( item->GetId() ), 1, NULL, &winListPos);
-            
+
             if ( wm && err == menuItemNotFoundErr )
             {
                 // NB: the only way to determine whether or not we should add
@@ -126,7 +126,7 @@ void wxInsertMenuItemsInMenu(wxMenu* menu, MenuRef wm, MenuItemIndex insertAfter
 
             delete entry ;
         }
-    }  
+    }
 }
 
 // ============================================================================
@@ -210,10 +210,10 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
     {
         if ( pos == (size_t)-1 )
             AppendMenuItemTextWithCFString( MAC_WXHMENU(m_hMenu),
-                CFSTR(""), kMenuItemAttrSeparator, 0,NULL); 
+                CFSTR(""), kMenuItemAttrSeparator, 0,NULL);
         else
             InsertMenuItemTextWithCFString( MAC_WXHMENU(m_hMenu),
-                CFSTR(""), pos, kMenuItemAttrSeparator, 0); 
+                CFSTR(""), pos, kMenuItemAttrSeparator, 0);
     }
     else
     {
@@ -655,10 +655,10 @@ void wxMenuBar::MacInstallMenuBar()
     // However, the change from 10.2 to 10.3 suggests it is preferred
 #if TARGET_API_MAC_OSX
     InsertMenuItemTextWithCFString( appleMenu,
-                CFSTR(""), 0, kMenuItemAttrSeparator, 0); 
+                CFSTR(""), 0, kMenuItemAttrSeparator, 0);
 #endif
     InsertMenuItemTextWithCFString( appleMenu,
-                CFSTR("About..."), 0, 0, 0); 
+                CFSTR("About..."), 0, 0, 0);
     MacInsertMenu( appleMenu , 0 ) ;
 
     // if we have a mac help menu, clean it up before adding new items
@@ -739,7 +739,7 @@ void wxMenuBar::MacInstallMenuBar()
                     {
                         if ( helpMenuHandle )
                             AppendMenuItemTextWithCFString( helpMenuHandle,
-                                CFSTR(""), kMenuItemAttrSeparator, 0,NULL); 
+                                CFSTR(""), kMenuItemAttrSeparator, 0,NULL);
                     }
                     else
                     {
@@ -765,42 +765,42 @@ void wxMenuBar::MacInstallMenuBar()
                 }
             }
         }
-        
-        else if ( ( m_titles[i] == wxT("Window") || m_titles[i] == wxT("&Window") ) 
+
+        else if ( ( m_titles[i] == wxT("Window") || m_titles[i] == wxT("&Window") )
                 && GetAutoWindowMenu() )
-        {           
+        {
             if ( MacGetWindowMenuHMenu() == NULL )
             {
                 CreateStandardWindowMenu( 0 , (MenuHandle*) &s_macWindowMenuHandle ) ;
             }
-            
+
             MenuRef wm = (MenuRef)MacGetWindowMenuHMenu();
             if ( wm == NULL )
                 break;
-            
+
             // get the insertion point in the standard menu
             MenuItemIndex winListStart;
-            GetIndMenuItemWithCommandID(wm, 
+            GetIndMenuItemWithCommandID(wm,
                         kHICommandWindowListSeparator, 1, NULL, &winListStart);
-            
+
             // add a separator so that the standard items and the custom items
             // aren't mixed together, but only if this is the first run
-            OSStatus err = GetIndMenuItemWithCommandID(wm, 
+            OSStatus err = GetIndMenuItemWithCommandID(wm,
                         'WXWM', 1, NULL, NULL);
-            
+
             if ( err == menuItemNotFoundErr )
             {
                 InsertMenuItemTextWithCFString( wm,
                         CFSTR(""), winListStart-1, kMenuItemAttrSeparator, 'WXWM');
             }
-            
-            wxInsertMenuItemsInMenu(menu, wm, winListStart);    
+
+            wxInsertMenuItemsInMenu(menu, wm, winListStart);
         }
         else
         {
             UMASetMenuTitle( MAC_WXHMENU(menu->GetHMenu()) , m_titles[i], m_font.GetEncoding()  ) ;
             menu->MacBeforeDisplay(false) ;
-            
+
             ::InsertMenu(MAC_WXHMENU(_wxMenuAt(m_menus, i)->GetHMenu()), 0);
         }
     }
