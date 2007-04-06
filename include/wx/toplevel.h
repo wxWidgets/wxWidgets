@@ -295,6 +295,11 @@ protected:
     static int WidthDefault(int w) { return w == wxDefaultCoord ? GetDefaultSize().x : w; }
     static int HeightDefault(int h) { return h == wxDefaultCoord ? GetDefaultSize().y : h; }
 
+    // reset m_winDefault and m_winTmpDefault if they point to the window being
+    // destroyed
+    void OnChildDestroy(wxWindowDestroyEvent& event);
+
+
     // the frame icon
     wxIconBundle m_icons;
 

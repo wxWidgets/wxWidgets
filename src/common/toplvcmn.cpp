@@ -39,6 +39,7 @@
 BEGIN_EVENT_TABLE(wxTopLevelWindowBase, wxWindow)
     EVT_CLOSE(wxTopLevelWindowBase::OnCloseWindow)
     EVT_SIZE(wxTopLevelWindowBase::OnSize)
+    EVT_WINDOW_DESTROY(wxTopLevelWindowBase::OnChildDestroy)
 END_EVENT_TABLE()
 
 // ============================================================================
@@ -367,6 +368,17 @@ void wxTopLevelWindowBase::DoLayout()
 void wxTopLevelWindowBase::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
 {
     Destroy();
+}
+
+void wxTopLevelWindowBase::OnChildDestroy(wxWindowDestroyEvent& event)
+{
+    event.Skip();
+
+    wxWindow * const win = event.GetWindow();
+    if ( win == m_winDefault )
+        m_winDefault = NULL;
+    if ( win == m_winTmpDefault )
+        m_winTmpDefault = NULL;
 }
 
 bool wxTopLevelWindowBase::SendIconizeEvent(bool iconized)
