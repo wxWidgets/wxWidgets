@@ -387,7 +387,7 @@ wxDataFormat wxDropTarget::GetSupportedFormat (
         for (i = 0; i < ulItems; i++)
         {
             pDragItem = ::DrgQueryDragitemPtr(pDataSource, i);
-            if (::DrgVerifyRMF(pDragItem, (PSZ)sMechanism.c_str(), (PSZ)sFormat.c_str()))
+            if (::DrgVerifyRMF(pDragItem, sMechanism.c_str(), sFormat.c_str()))
             {
                 bValid = true;
                 break;

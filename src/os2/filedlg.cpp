@@ -193,7 +193,7 @@ int wxFileDialog::ShowModal()
     else
         sTheFilter = m_wildCard;
 
-    wxStrtok((wxChar*)sTheFilter.c_str(), wxT("|"), &pzFilterBuffer);
+    wxStrtok(sTheFilter.char_str(), wxT("|"), &pzFilterBuffer);
     while(pzFilterBuffer != NULL)
     {
         if (nCount > 0 && !(nCount % 2))

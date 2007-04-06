@@ -415,19 +415,19 @@ void wxMenuItem::SetText( const wxString& rText )
             uFlagsOld |= MIS_SUBMENU;
         }
 
-        BYTE*                       pData;
+        char*                       pData;
 
 #if wxUSE_OWNER_DRAWN
         if (IsOwnerDrawn())
         {
             uFlagsOld |= MIS_OWNERDRAW;
-            pData = (BYTE*)this;
+            pData = (char*)this;
         }
         else
 #endif  //owner drawn
         {
             uFlagsOld |= MIS_TEXT;
-            pData = (BYTE*)m_text.c_str();
+            pData = m_text.char_str();
         }
 
         //

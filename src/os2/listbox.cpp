@@ -281,7 +281,7 @@ int wxListBox::DoAppend(const wxString& rsItem)
     else
         lIndexType = LIT_END;
 
-    lIndex = (long)::WinSendMsg(GetHwnd(), LM_INSERTITEM, (MPARAM)lIndexType, (MPARAM)rsItem.c_str());
+    lIndex = (long)::WinSendMsg(GetHwnd(), LM_INSERTITEM, (MPARAM)lIndexType, (MPARAM)rsItem.char_str());
     m_nNumItems++;
 
 #if wxUSE_OWNER_DRAWN
@@ -318,7 +318,7 @@ void wxListBox::DoSetItems( const wxArrayString& raChoices,
             lIndexType = LIT_SORTASCENDING;
         else
             lIndexType = LIT_END;
-        ::WinSendMsg(GetHwnd(), LM_INSERTITEM, (MPARAM)lIndexType, (MPARAM)raChoices[i].c_str());
+        ::WinSendMsg(GetHwnd(), LM_INSERTITEM, (MPARAM)lIndexType, (MPARAM)raChoices[i].char_str());
 
         if (ppClientData)
         {
@@ -563,7 +563,7 @@ void wxListBox::DoInsertItems(const wxArrayString& asItems, unsigned int nPos)
         int nIndex = (int)::WinSendMsg( GetHwnd(),
                                         LM_INSERTITEM,
                                         MPFROMLONG((LONG)(i + nPos)),
-                                        (MPARAM)asItems[i].c_str() );
+                                        (MPARAM)asItems[i].char_str() );
 
         wxOwnerDrawn* pNewItem = CreateItem(nIndex);
 
@@ -613,7 +613,7 @@ void wxListBox::SetString(unsigned int n, const wxString& rsString)
     ::WinSendMsg( GetHwnd()
                  ,LM_INSERTITEM
                  ,(MPARAM)nNewN
-                 ,(MPARAM)rsString.c_str()
+                 ,(MPARAM)rsString.char_str()
                 );
 
     //
