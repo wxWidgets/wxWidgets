@@ -283,7 +283,10 @@ void wxStaticText::DoSetLabel(const wxString& str)
 
 wxString wxStaticText::DoGetLabel() const
 {
-    // FIXME: how to retrieve the text?
-    //return wxGetWindowText(GetHWND());
+    HWND hwnd = GetHwnd();
+    LONG textLen = ::WinQueryWindowTextLength(hwnd);
+    wxCharBuffer buffer(textLen+1);
+    ::WinQueryWindowText(hwnd, textLen+1, buffer.data());
+    return buffer;
 }
 
