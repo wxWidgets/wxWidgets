@@ -169,7 +169,7 @@ inline int Stricmp(const char *psz1, const char *psz2)
 
 // Lightweight object returned by wxString::c_str() and implicitly convertible
 // to either const char* or const wchar_t*.
-class wxCStrData
+class WXDLLIMPEXP_BASE wxCStrData
 {
 private:
     // Ctors; for internal use by wxString and wxCStrData only
@@ -182,13 +182,22 @@ public:
     wxCStrData(char *buf);
     wxCStrData(wchar_t *buf);
 
-    ~wxCStrData();
+    inline ~wxCStrData();
 
+    // methods defined inline below must be declared inline or mingw32 3.4.5
+    // warns about "<symbol> defined locally after being referenced with
+    // dllimport linkage"
+#if wxUSE_UNICODE_WCHAR
+    inline
+#endif
     const wchar_t* AsWChar() const;
     operator const wchar_t*() const { return AsWChar(); }
 
-    operator bool() const;
+    inline operator bool() const;
 
+#if !wxUSE_UNICODE
+    inline
+#endif
     const char* AsChar() const;
     const unsigned char* AsUnsignedChar() const
         { return (const unsigned char *) AsChar(); }
@@ -197,11 +206,11 @@ public:
 
     operator const void*() const { return AsChar(); }
 
-    wxString AsString() const;
+    inline wxString AsString() const;
 
     // allow expressions like "c_str()[0]":
+    inline wxUniChar operator[](size_t n) const;
     wxUniChar operator[](int n) const { return operator[](size_t(n)); }
-    wxUniChar operator[](size_t n) const;
     wxUniChar operator[](long n) const { return operator[](size_t(n)); }
 #ifndef wxSIZE_T_IS_UINT
     wxUniChar operator[](unsigned int n) const { return operator[](size_t(n)); }
@@ -239,7 +248,7 @@ public:
 
     // this operator is needed to make expressions like "*c_str()" or
     // "*(c_str() + 2)" work
-    wxUniChar operator*() const;
+    inline wxUniChar operator*() const;
 
 private:
     const wxString *m_str;
