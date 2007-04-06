@@ -1804,15 +1804,6 @@
 #   endif
 #endif /* wxUSE_CLIPBOARD */
 
-#if wxUSE_WX_RESOURCES && !wxUSE_PROLOGIO
-#   ifdef wxABORT_ON_CONFIG_ERROR
-#       error "wxr resources require PrologIO"
-#   else
-#       undef wxUSE_PROLOGIO
-#       define wxUSE_PROLOGIO 1
-#   endif
-#endif /* wxUSE_WX_RESOURCES */
-
 #if wxUSE_XRC && !wxUSE_XML
 #   ifdef wxABORT_ON_CONFIG_ERROR
 #       error "wxUSE_XRC requires wxUSE_XML"

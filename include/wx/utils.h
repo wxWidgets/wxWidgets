@@ -639,23 +639,6 @@ public:
     static const wxCursor GetBusyCursor();
 };
 
-
-// ----------------------------------------------------------------------------
-// Reading and writing resources (eg WIN.INI, .Xdefaults)
-// ----------------------------------------------------------------------------
-
-#if wxUSE_RESOURCES
-WXDLLEXPORT bool wxWriteResource(const wxString& section, const wxString& entry, const wxString& value, const wxString& file = wxEmptyString);
-WXDLLEXPORT bool wxWriteResource(const wxString& section, const wxString& entry, float value, const wxString& file = wxEmptyString);
-WXDLLEXPORT bool wxWriteResource(const wxString& section, const wxString& entry, long value, const wxString& file = wxEmptyString);
-WXDLLEXPORT bool wxWriteResource(const wxString& section, const wxString& entry, int value, const wxString& file = wxEmptyString);
-
-WXDLLEXPORT bool wxGetResource(const wxString& section, const wxString& entry, wxChar **value, const wxString& file = wxEmptyString);
-WXDLLEXPORT bool wxGetResource(const wxString& section, const wxString& entry, float *value, const wxString& file = wxEmptyString);
-WXDLLEXPORT bool wxGetResource(const wxString& section, const wxString& entry, long *value, const wxString& file = wxEmptyString);
-WXDLLEXPORT bool wxGetResource(const wxString& section, const wxString& entry, int *value, const wxString& file = wxEmptyString);
-#endif // wxUSE_RESOURCES
-
 void WXDLLEXPORT wxGetMousePosition( int* x, int* y );
 
 // MSW only: get user-defined resource from the .res file.

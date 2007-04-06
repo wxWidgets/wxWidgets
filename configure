@@ -696,7 +696,6 @@ REZ
 DEREZ
 SETFILE
 LIBICONV
-EXTRALIBS_ESD
 SDL_CONFIG
 SDL_CFLAGS
 SDL_LIBS
@@ -1713,8 +1712,6 @@ Optional Features:
   --enable-richtext       use wxRichTextCtrl
   --enable-graphics_ctx   use graphics context 2D drawing API
   --enable-postscript     use wxPostscriptDC device context (default for gtk+)
-  --enable-prologio       not available; see contrib
-  --enable-resources      not available; see contrib
   --enable-clipboard      use wxClipboard class
   --enable-dnd            use Drag'n'Drop classes
   --enable-metafile       use win32 metafiles
@@ -2980,7 +2977,6 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_DOC_VIEW_ARCHITECTURE=no
   DEFAULT_wxUSE_PRINTING_ARCHITECTURE=no
 
-  DEFAULT_wxUSE_RESOURCES=no
   DEFAULT_wxUSE_CONSTRAINTS=no
   DEFAULT_wxUSE_IPC=no
   DEFAULT_wxUSE_HELP=no
@@ -3205,7 +3201,6 @@ else
   DEFAULT_wxUSE_DOC_VIEW_ARCHITECTURE=yes
   DEFAULT_wxUSE_PRINTING_ARCHITECTURE=yes
 
-  DEFAULT_wxUSE_RESOURCES=no
   DEFAULT_wxUSE_CONSTRAINTS=yes
   DEFAULT_wxUSE_IPC=yes
   DEFAULT_wxUSE_HELP=yes
@@ -8454,90 +8449,6 @@ echo "${ECHO_T}yes" >&6; }
 echo "${ECHO_T}no" >&6; }
           fi
 
-
-
-
-
-          enablestring=
-          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-prologio" >&5
-echo $ECHO_N "checking for --${enablestring:-enable}-prologio... $ECHO_C" >&6; }
-          no_cache=0
-          # Check whether --enable-prologio was given.
-if test "${enable_prologio+set}" = set; then
-  enableval=$enable_prologio;
-                          if test "$enableval" = yes; then
-                            ac_cv_use_prologio='wxUSE_PROLOGIO=yes'
-                          else
-                            ac_cv_use_prologio='wxUSE_PROLOGIO=no'
-                          fi
-
-else
-
-                          LINE=`grep "wxUSE_PROLOGIO" ${wx_arg_cache_file}`
-                          if test "x$LINE" != x ; then
-                            eval "DEFAULT_$LINE"
-                          else
-                            no_cache=1
-                          fi
-
-                          ac_cv_use_prologio='wxUSE_PROLOGIO='$DEFAULT_wxUSE_PROLOGIO
-
-fi
-
-
-          eval "$ac_cv_use_prologio"
-          if test "$no_cache" != 1; then
-            echo $ac_cv_use_prologio >> ${wx_arg_cache_file}.tmp
-          fi
-
-          if test "$wxUSE_PROLOGIO" = yes; then
-            { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-          else
-            { echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-          fi
-
-
-          enablestring=
-          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-resources" >&5
-echo $ECHO_N "checking for --${enablestring:-enable}-resources... $ECHO_C" >&6; }
-          no_cache=0
-          # Check whether --enable-resources was given.
-if test "${enable_resources+set}" = set; then
-  enableval=$enable_resources;
-                          if test "$enableval" = yes; then
-                            ac_cv_use_resources='wxUSE_RESOURCES=yes'
-                          else
-                            ac_cv_use_resources='wxUSE_RESOURCES=no'
-                          fi
-
-else
-
-                          LINE=`grep "wxUSE_RESOURCES" ${wx_arg_cache_file}`
-                          if test "x$LINE" != x ; then
-                            eval "DEFAULT_$LINE"
-                          else
-                            no_cache=1
-                          fi
-
-                          ac_cv_use_resources='wxUSE_RESOURCES='$DEFAULT_wxUSE_RESOURCES
-
-fi
-
-
-          eval "$ac_cv_use_resources"
-          if test "$no_cache" != 1; then
-            echo $ac_cv_use_resources >> ${wx_arg_cache_file}.tmp
-          fi
-
-          if test "$wxUSE_RESOURCES" = yes; then
-            { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-          else
-            { echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-          fi
 
 
 
@@ -41970,234 +41881,6 @@ fi
 
 
 
-
-EXTRALIBS_ESD=
-{ echo "$as_me:$LINENO: checking for esd_close in -lesd" >&5
-echo $ECHO_N "checking for esd_close in -lesd... $ECHO_C" >&6; }
-if test "${ac_cv_lib_esd_esd_close+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  ac_check_lib_save_LIBS=$LIBS
-LIBS="-lesd  $LIBS"
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-/* Override any GCC internal prototype to avoid an error.
-   Use char because int might match the return type of a GCC
-   builtin and then its argument prototype would still apply.  */
-#ifdef __cplusplus
-extern "C"
-#endif
-char esd_close ();
-int
-main ()
-{
-return esd_close ();
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext conftest$ac_exeext
-if { (ac_try="$ac_link"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_link") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag" || test ! -s conftest.err'
-  { (case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_try") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest$ac_exeext'
-  { (case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_try") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_lib_esd_esd_close=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_cv_lib_esd_esd_close=no
-fi
-
-rm -f core conftest.err conftest.$ac_objext \
-      conftest$ac_exeext conftest.$ac_ext
-LIBS=$ac_check_lib_save_LIBS
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_lib_esd_esd_close" >&5
-echo "${ECHO_T}$ac_cv_lib_esd_esd_close" >&6; }
-if test $ac_cv_lib_esd_esd_close = yes; then
-
-    { echo "$as_me:$LINENO: checking for esd.h" >&5
-echo $ECHO_N "checking for esd.h... $ECHO_C" >&6; }
-if test "${ac_cv_header_esd_h+set}" = set; then
-  echo $ECHO_N "(cached) $ECHO_C" >&6
-else
-  cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-
-
-#include <esd.h>
-_ACEOF
-rm -f conftest.$ac_objext
-if { (ac_try="$ac_compile"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_compile") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag" || test ! -s conftest.err'
-  { (case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_try") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest.$ac_objext'
-  { (case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_try") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  ac_cv_header_esd_h=yes
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	ac_cv_header_esd_h=no
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-fi
-{ echo "$as_me:$LINENO: result: $ac_cv_header_esd_h" >&5
-echo "${ECHO_T}$ac_cv_header_esd_h" >&6; }
-if test $ac_cv_header_esd_h = yes; then
-
-    EXTRALIBS_ESD="-lesd"
-
-fi
-
-
-
-fi
-
-
-
-{ echo "$as_me:$LINENO: checking for known CD-ROM interface" >&5
-echo $ECHO_N "checking for known CD-ROM interface... $ECHO_C" >&6; }
-cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#ifdef __linux__
-                #include <linux/cdrom.h>
-                #else
-                /* For Solaris */
-                #include <sys/cdio.h>
-                #endif
-
-int
-main ()
-{
-struct cdrom_tocentry entry, old_entry;
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext
-if { (ac_try="$ac_compile"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_compile") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } &&
-	 { ac_try='test -z "$ac_c_werror_flag" || test ! -s conftest.err'
-  { (case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_try") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; } &&
-	 { ac_try='test -s conftest.$ac_objext'
-  { (case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_try") 2>&5
-  ac_status=$?
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); }; }; then
-  { echo "$as_me:$LINENO: result: yes" >&5
-echo "${ECHO_T}yes" >&6; }
-                cat >>confdefs.h <<\_ACEOF
-#define HAVE_KNOWN_CDROM_INTERFACE 1
-_ACEOF
-
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
-	{ echo "$as_me:$LINENO: result: no" >&5
-echo "${ECHO_T}no" >&6; }
-fi
-
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-
-
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -46182,8 +45865,6 @@ echo "${ECHO_T}$ac_cv_header_sys_soundcard" >&6; }
 #define HAVE_SYS_SOUNDCARD_H 1
 _ACEOF
 
-    else
-        DISABLED_CONTRIB="$DISABLED_CONTRIB mmedia"
     fi
 fi
 
@@ -49278,11 +48959,6 @@ _ACEOF
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS printing"
 fi
 
-if test "$wxUSE_PROLOGIO" = "yes" -o  "$wxUSE_RESOURCES" = "yes"; then
-    { { echo "$as_me:$LINENO: error: wxExpr and old-style resources are now available in contrib only" >&5
-echo "$as_me: error: wxExpr and old-style resources are now available in contrib only" >&2;}
-   { (exit 1); exit 1; }; }
-fi
 
 
 if test "$wxUSE_METAFILE" = "yes"; then
@@ -50999,6 +50675,7 @@ EXTRALIBS="$LDFLAGS $LDFLAGS_VERSIONING $LIBS $DMALLOC_LIBS"
 EXTRALIBS_XML="$EXPAT_LINK"
 EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_ODBC="$ODBC_LINK"
+EXTRALIBS_STC="-lwxscintilla${lib_debug_suffix}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 if test "$wxUSE_GUI" = "yes"; then
     EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $WEBKIT_LINK $EXTRALIBS_HILDON $EXTRALIBS_GNOMEVFS $EXTRALIBS_GNOMEPRINT`
 fi
@@ -54565,7 +54242,7 @@ ac_config_commands="$ac_config_commands wx-config"
 
 if test "$wxWITH_SUBDIRS" != "no"; then
 if test "$wxUSE_GUI" = "yes"; then
-    SUBDIRS="samples demos utils contrib"
+    SUBDIRS="samples demos utils"
 else         SUBDIRS="samples utils"
 fi
 
@@ -54698,10 +54375,6 @@ echo "${ECHO_T}no" >&6; }
 
 
 
-
-if test "$USE_UNIX" != "1" -a "$USE_WIN32" != "1"; then
-    DISABLED_CONTRIB="$DISABLED_CONTRIB net"
-fi
 
 for subdir in `echo $SUBDIRS`; do
     if test -d ${srcdir}/${subdir} ; then
@@ -55466,8 +55139,8 @@ REZ!$REZ$ac_delim
 DEREZ!$DEREZ$ac_delim
 SETFILE!$SETFILE$ac_delim
 LIBICONV!$LIBICONV$ac_delim
-EXTRALIBS_ESD!$EXTRALIBS_ESD$ac_delim
 SDL_CONFIG!$SDL_CONFIG$ac_delim
+SDL_CFLAGS!$SDL_CFLAGS$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -55509,7 +55182,6 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
-SDL_CFLAGS!$SDL_CFLAGS$ac_delim
 SDL_LIBS!$SDL_LIBS$ac_delim
 LIBGNOMEPRINTUI_CFLAGS!$LIBGNOMEPRINTUI_CFLAGS$ac_delim
 LIBGNOMEPRINTUI_LIBS!$LIBGNOMEPRINTUI_LIBS$ac_delim
@@ -55606,6 +55278,7 @@ COND_BUILD_DEBUG_DEBUG_INFO_DEFAULT!$COND_BUILD_DEBUG_DEBUG_INFO_DEFAULT$ac_deli
 COND_BUILD_DEBUG_UNICODE_0!$COND_BUILD_DEBUG_UNICODE_0$ac_delim
 COND_BUILD_DEBUG_UNICODE_1!$COND_BUILD_DEBUG_UNICODE_1$ac_delim
 COND_BUILD_RELEASE!$COND_BUILD_RELEASE$ac_delim
+COND_BUILD_RELEASE_DEBUG_INFO_DEFAULT!$COND_BUILD_RELEASE_DEBUG_INFO_DEFAULT$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -55647,7 +55320,6 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
-COND_BUILD_RELEASE_DEBUG_INFO_DEFAULT!$COND_BUILD_RELEASE_DEBUG_INFO_DEFAULT$ac_delim
 COND_BUILD_RELEASE_UNICODE_0!$COND_BUILD_RELEASE_UNICODE_0$ac_delim
 COND_BUILD_RELEASE_UNICODE_1!$COND_BUILD_RELEASE_UNICODE_1$ac_delim
 COND_DEBUG_FLAG_1!$COND_DEBUG_FLAG_1$ac_delim
@@ -55744,6 +55416,7 @@ COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0!$COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0$ac_
 COND_TOOLKIT_DFB!$COND_TOOLKIT_DFB$ac_delim
 COND_TOOLKIT_DFB_USE_GUI_1!$COND_TOOLKIT_DFB_USE_GUI_1$ac_delim
 COND_TOOLKIT_GTK!$COND_TOOLKIT_GTK$ac_delim
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_!$COND_TOOLKIT_GTK_TOOLKIT_VERSION_$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -55785,7 +55458,6 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
-COND_TOOLKIT_GTK_TOOLKIT_VERSION_!$COND_TOOLKIT_GTK_TOOLKIT_VERSION_$ac_delim
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2!$COND_TOOLKIT_GTK_TOOLKIT_VERSION_2$ac_delim
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1!$COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1$ac_delim
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0!$COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0$ac_delim
@@ -55882,6 +55554,7 @@ DMALLOC_LIBS!$DMALLOC_LIBS$ac_delim
 WX_VERSION_TAG!$WX_VERSION_TAG$ac_delim
 RESCOMP!$RESCOMP$ac_delim
 RESFLAGS!$RESFLAGS$ac_delim
+RESPROGRAMOBJ!$RESPROGRAMOBJ$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -55923,7 +55596,6 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
-RESPROGRAMOBJ!$RESPROGRAMOBJ$ac_delim
 WX_RESOURCES_MACOSX_ASCII!$WX_RESOURCES_MACOSX_ASCII$ac_delim
 WX_RESOURCES_MACOSX_DATA!$WX_RESOURCES_MACOSX_DATA$ac_delim
 LIBWXMACRES!$LIBWXMACRES$ac_delim
@@ -55935,7 +55607,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 10; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 9; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5

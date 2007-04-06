@@ -466,7 +466,6 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_DOC_VIEW_ARCHITECTURE=no
   DEFAULT_wxUSE_PRINTING_ARCHITECTURE=no
 
-  DEFAULT_wxUSE_RESOURCES=no
   DEFAULT_wxUSE_CONSTRAINTS=no
   DEFAULT_wxUSE_IPC=no
   DEFAULT_wxUSE_HELP=no
@@ -691,7 +690,6 @@ else
   DEFAULT_wxUSE_DOC_VIEW_ARCHITECTURE=yes
   DEFAULT_wxUSE_PRINTING_ARCHITECTURE=yes
 
-  DEFAULT_wxUSE_RESOURCES=no
   DEFAULT_wxUSE_CONSTRAINTS=yes
   DEFAULT_wxUSE_IPC=yes
   DEFAULT_wxUSE_HELP=yes
@@ -1051,13 +1049,6 @@ WX_ARG_ENABLE(postscript,  [  --enable-postscript     use wxPostscriptDC device 
 dnl VZ: these options seem to be always on, if someone wants to change it please do
 dnl WX_ARG_ENABLE(PS-normalized,    [  --enable-PS-normalized  use normalized PS fonts], dnl             wxUSE_NORMALIZED_PS_FONTS)
 dnl WX_ARG_ENABLE(afmfonts,        [  --enable-afmfonts       use Adobe Font Metric Font table], dnl             wxUSE_AFM_FOR_POSTSCRIPT)
-
-dnl ---------------------------------------------------------------------------
-dnl resources
-dnl ---------------------------------------------------------------------------
-
-WX_ARG_ENABLE(prologio,    [  --enable-prologio       not available; see contrib], wxUSE_PROLOGIO)
-WX_ARG_ENABLE(resources,   [  --enable-resources      not available; see contrib], wxUSE_RESOURCES)
 
 dnl ---------------------------------------------------------------------------
 dnl IPC &c
@@ -5017,37 +5008,6 @@ WX_CHECK_FUNCS(fdopen)
 
 fi
 
-dnl if !MSW
-
-
-dnl ------------------------------------------
-dnl Checks specific to contrib libs (MMedia)
-dnl ------------------------------------------
-
-dnl Check for ESD:
-EXTRALIBS_ESD=
-AC_CHECK_LIB(esd, esd_close, [
-    AC_CHECK_HEADER([esd.h], [
-    EXTRALIBS_ESD="-lesd"
-  ],
-  [],
-  [ ])
-])
-AC_SUBST(EXTRALIBS_ESD)
-
-dnl check for known CD-ROM interface
-AC_MSG_CHECKING([for known CD-ROM interface])
-AC_TRY_COMPILE([#ifdef __linux__
-                #include <linux/cdrom.h>
-                #else
-                /* For Solaris */
-                #include <sys/cdio.h>
-                #endif
-                ],
-               [struct cdrom_tocentry entry, old_entry;],
-               [AC_MSG_RESULT([yes])
-                AC_DEFINE(HAVE_KNOWN_CDROM_INTERFACE)],
-               [AC_MSG_RESULT([no])])
 
 dnl ===========================================================================
 dnl Now we have all the info we need - use it!
@@ -5791,8 +5751,6 @@ if test "$USE_UNIX" = "1" ; then
 
     if test "$ac_cv_header_sys_soundcard" = "yes"; then
         AC_DEFINE(HAVE_SYS_SOUNDCARD_H)
-    else
-        DISABLED_CONTRIB="$DISABLED_CONTRIB mmedia"
     fi
 fi
 
@@ -6589,9 +6547,6 @@ if test "$wxUSE_PRINTING_ARCHITECTURE" = "yes" ; then
     SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS printing"
 fi
 
-if test "$wxUSE_PROLOGIO" = "yes" -o  "$wxUSE_RESOURCES" = "yes"; then
-    AC_MSG_ERROR([wxExpr and old-style resources are now available in contrib only])
-fi
 
 dnl ---------------------------------------------------------------------------
 dnl wxMetafile availability
@@ -7651,6 +7606,7 @@ EXTRALIBS="$LDFLAGS $LDFLAGS_VERSIONING $LIBS $DMALLOC_LIBS"
 EXTRALIBS_XML="$EXPAT_LINK"
 EXTRALIBS_HTML="$MSPACK_LINK"
 EXTRALIBS_ODBC="$ODBC_LINK"
+EXTRALIBS_STC="-lwxscintilla${lib_debug_suffix}${WX_LIB_FLAVOUR}-${WX_RELEASE}${HOST_SUFFIX}"
 if test "$wxUSE_GUI" = "yes"; then
     EXTRALIBS_GUI=`echo $GUI_TK_LIBRARY $PNG_LINK $JPEG_LINK $TIFF_LINK $WEBKIT_LINK $EXTRALIBS_HILDON $EXTRALIBS_GNOMEVFS $EXTRALIBS_GNOMEPRINT`
 fi
@@ -8100,22 +8056,17 @@ dnl resembles an installed wx in prefix=$builddir.  It is troublesome
 dnl though in this form because AC_CONFIG_LINKS will fail for directories
 dnl on platforms that do not have symlinks.
 dnl AC_CONFIG_LINKS([ include/wx-$WX_RELEASE$WX_FLAVOUR:include ])
-dnl AC_CONFIG_LINKS([ contrib/include ])
 
 if test "$wxWITH_SUBDIRS" != "no"; then
-dnl Configure samples, contrib etc. directories, but only if they are present:
+dnl Configure samples, demos etc. directories, but only if they are present:
 if test "$wxUSE_GUI" = "yes"; then
-    SUBDIRS="samples demos utils contrib"
+    SUBDIRS="samples demos utils"
 else dnl we build wxBase only
-    dnl there are no wxBase programs in contrib nor demos
+    dnl there are no wxBase programs in demos
     SUBDIRS="samples utils"
 fi
 dnl Add tests to the list of subdirs if cppunit 1.8.0+ is detected
 AM_PATH_CPPUNIT(1.8.0, [SUBDIRS="$SUBDIRS tests"])
-
-if test "$USE_UNIX" != "1" -a "$USE_WIN32" != "1"; then
-    DISABLED_CONTRIB="$DISABLED_CONTRIB net"
-fi
 
 for subdir in `echo $SUBDIRS`; do
     if test -d ${srcdir}/${subdir} ; then
@@ -8132,7 +8083,7 @@ for subdir in `echo $SUBDIRS`; do
             else
                 dnl assume that everything compiles for utils &c
                 dnl any that shouldn't be built can be added to
-                dnl DISABLED_UTILS, DISABLED_CONTRIB or DISABLED_DEMOS
+                dnl DISABLED_UTILS, DISABLED_DEMOS
                 disabled_var=DISABLED_`echo $subdir | tr [[a-z]] [[A-Z]]`;
                 eval "disabled=\$$disabled_var"
                 disabled=/`echo X $disabled | sed 's@ @/|/@g'`/

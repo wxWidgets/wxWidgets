@@ -148,7 +148,6 @@ the corresponding topic.
 \helpref{wxGetPrinterScaling}{wxgetprinterscaling}\\
 \helpref{wxGetPrinterTranslation}{wxgetprintertranslation}\\
 \helpref{wxGetProcessId}{wxgetprocessid}\\
-\helpref{wxGetResource}{wxgetresource}\\
 \helpref{wxGetSingleChoiceData}{wxgetsinglechoicedata}\\
 \helpref{wxGetSingleChoiceIndex}{wxgetsinglechoiceindex}\\
 \helpref{wxGetSingleChoice}{wxgetsinglechoice}\\
@@ -271,7 +270,6 @@ the corresponding topic.
 \helpref{wxVaCopy}{wxvacopy}\\
 \helpref{wxVsnprintf}{wxvsnprintf}\\
 \helpref{wxWakeUpIdle}{wxwakeupidle}\\
-\helpref{wxWriteResource}{wxwriteresource}\\
 \helpref{wxYield}{wxyield}\\
 \helpref{wx\_const\_cast}{wxconstcastraw}\\
 \helpref{wx\_reinterpret\_cast}{wxreinterpretcastraw}\\
@@ -3216,40 +3214,6 @@ public:
 \end{verbatim}
 
 
-\membersection{::wxGetResource}\label{wxgetresource}
-
-\func{bool}{wxGetResource}{\param{const wxString\& }{section}, \param{const wxString\& }{entry},
- \param{const wxString\& *}{value}, \param{const wxString\& }{file = NULL}}
-
-\func{bool}{wxGetResource}{\param{const wxString\& }{section}, \param{const wxString\& }{entry},
- \param{float *}{value}, \param{const wxString\& }{file = NULL}}
-
-\func{bool}{wxGetResource}{\param{const wxString\& }{section}, \param{const wxString\& }{entry},
- \param{long *}{value}, \param{const wxString\& }{file = NULL}}
-
-\func{bool}{wxGetResource}{\param{const wxString\& }{section}, \param{const wxString\& }{entry},
- \param{int *}{value}, \param{const wxString\& }{file = NULL}}
-
-Gets a resource value from the resource database (for example, WIN.INI, or
-.Xdefaults). If {\it file} is NULL, WIN.INI or .Xdefaults is used,
-otherwise the specified file is used.
-
-Under X, if an application class (wxApp::GetClassName) has been defined,
-it is appended to the string /usr/lib/X11/app-defaults/ to try to find
-an applications default file when merging all resource databases.
-
-The reason for passing the result in an argument is that it
-can be convenient to define a default value, which gets overridden
-if the value exists in the resource file. It saves a separate
-test for that resource's existence, and it also allows
-the overloading of the function for different types.
-
-See also \helpref{wxWriteResource}{wxwriteresource}, \helpref{wxConfigBase}{wxconfigbase}.
-
-\wxheading{Include files}
-
-<wx/utils.h>
-
 
 \membersection{::wxGetStockLabel}\label{wxgetstocklabel}
 
@@ -3484,37 +3448,6 @@ passing it to another function because it can be modified by the latter.
 As with \texttt{va\_start}, each call to \texttt{wxVaCopy} must have a matching
 \texttt{va\_end}.
 
-
-\membersection{::wxWriteResource}\label{wxwriteresource}
-
-\func{bool}{wxWriteResource}{\param{const wxString\& }{section}, \param{const wxString\& }{entry},
- \param{const wxString\& }{value}, \param{const wxString\& }{file = NULL}}
-
-\func{bool}{wxWriteResource}{\param{const wxString\& }{section}, \param{const wxString\& }{entry},
- \param{float }{value}, \param{const wxString\& }{file = NULL}}
-
-\func{bool}{wxWriteResource}{\param{const wxString\& }{section}, \param{const wxString\& }{entry},
- \param{long }{value}, \param{const wxString\& }{file = NULL}}
-
-\func{bool}{wxWriteResource}{\param{const wxString\& }{section}, \param{const wxString\& }{entry},
- \param{int }{value}, \param{const wxString\& }{file = NULL}}
-
-Writes a resource value into the resource database (for example, WIN.INI, or
-.Xdefaults). If {\it file} is NULL, WIN.INI or .Xdefaults is used,
-otherwise the specified file is used.
-
-Under X, the resource databases are cached until the internal function
-\rtfsp{\bf wxFlushResources} is called automatically on exit, when
-all updated resource databases are written to their files.
-
-Note that it is considered bad manners to write to the .Xdefaults
-file under Unix, although the WIN.INI file is fair game under Windows.
-
-See also \helpref{wxGetResource}{wxgetresource}, \helpref{wxConfigBase}{wxconfigbase}.
-
-\wxheading{Include files}
-
-<wx/utils.h>
 
 
 \membersection{\_\_WXFUNCTION\_\_}\label{wxfunction}

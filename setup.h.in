@@ -474,8 +474,6 @@
 
 #define wxUSE_WXHTML_HELP 0
 
-#define wxUSE_RESOURCES   0
-
 #define wxUSE_CONSTRAINTS 0
 
 
@@ -731,9 +729,6 @@
 #define wxUSE_OLE 0
 #define wxUSE_OLE_AUTOMATION 0
 #define wxUSE_ACTIVEX 0
-
-/* for compatibility */
-#define wxUSE_WX_RESOURCES wxUSE_RESOURCES
 
 /*
  * Use MS HTML Help via libmspack (Unix)
@@ -1080,14 +1075,8 @@
 /* Define if you have the <w32api.h> header file (mingw,cygwin).  */
 #undef HAVE_W32API_H
 
-/* Define if you have the <esd.h> header file.  */
-#undef HAVE_ESD_H
-
 /* Define if you have the <sys/soundcard.h> header file. */
 #undef HAVE_SYS_SOUNDCARD_H
-
-/* Define if you have a CD-ROM interface known to mmedia.  */
-#undef HAVE_KNOWN_CDROM_INTERFACE
 
 /* Define if you have wcsrtombs() function */
 #undef HAVE_WCSRTOMBS

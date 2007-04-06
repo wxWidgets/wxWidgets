@@ -54,12 +54,10 @@ public:
     // that no other parameters are needed because the wizard will resize and
     // reposition the page anyhow
     wxWizardPage(wxWizard *parent,
-                 const wxBitmap& bitmap = wxNullBitmap,
-                 const wxChar* resource = NULL);
+                 const wxBitmap& bitmap = wxNullBitmap);
 
     bool Create(wxWizard *parent,
-                const wxBitmap& bitmap = wxNullBitmap,
-                const wxChar* resource = NULL);
+                const wxBitmap& bitmap = wxNullBitmap);
 
     // these functions are used by the wizard to show another page when the
     // user chooses "Back" or "Next" button
@@ -121,21 +119,19 @@ public:
     wxWizardPageSimple(wxWizard *parent,
                        wxWizardPage *prev = (wxWizardPage *)NULL,
                        wxWizardPage *next = (wxWizardPage *)NULL,
-                       const wxBitmap& bitmap = wxNullBitmap,
-                       const wxChar* resource = NULL)
+                       const wxBitmap& bitmap = wxNullBitmap)
     {
-        Create(parent, prev, next, bitmap, resource);
+        Create(parent, prev, next, bitmap);
     }
 
     bool Create(wxWizard *parent = NULL, // let it be default ctor too
                 wxWizardPage *prev = (wxWizardPage *)NULL,
                 wxWizardPage *next = (wxWizardPage *)NULL,
-                const wxBitmap& bitmap = wxNullBitmap,
-                const wxChar* resource = NULL)
+                const wxBitmap& bitmap = wxNullBitmap)
     {
         m_prev = prev;
         m_next = next;
-        return wxWizardPage::Create(parent, bitmap, resource);
+        return wxWizardPage::Create(parent, bitmap);
     }
 
     // the pointers may be also set later - but before starting the wizard

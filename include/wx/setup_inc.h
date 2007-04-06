@@ -1068,8 +1068,6 @@
 // Use wxHTML-based help controller?
 #define wxUSE_WXHTML_HELP 1
 
-#define wxUSE_RESOURCES   0
-                                // 0 for no wxGetResource/wxWriteResource
 #define wxUSE_CONSTRAINTS 1
                                 // 0 for no window layout constraint system
 

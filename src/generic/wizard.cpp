@@ -125,30 +125,16 @@ void wxWizardPage::Init()
 }
 
 wxWizardPage::wxWizardPage(wxWizard *parent,
-                           const wxBitmap& bitmap,
-                           const wxChar *resource)
+                           const wxBitmap& bitmap)
 {
-    Create(parent, bitmap, resource);
+    Create(parent, bitmap);
 }
 
 bool wxWizardPage::Create(wxWizard *parent,
-                          const wxBitmap& bitmap,
-                          const wxChar *resource)
+                          const wxBitmap& bitmap)
 {
     if ( !wxPanel::Create(parent, wxID_ANY) )
         return false;
-
-    if ( resource != NULL )
-    {
-#if wxUSE_WX_RESOURCES
-#if 0
-       if ( !LoadFromResource(this, resource) )
-        {
-            wxFAIL_MSG(wxT("wxWizardPage LoadFromResource failed!!!!"));
-        }
-#endif
-#endif // wxUSE_RESOURCES
-    }
 
     m_bitmap = bitmap;
 

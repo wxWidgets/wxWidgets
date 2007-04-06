@@ -751,11 +751,13 @@ int GetIndex()
 // Read preferences
 void MainWindow::ReadPreferences()
 {
+/* TODO: convert this code to use wxConfig
 #if wxUSE_RESOURCES
     wxGetResource(_T("wxPoem"), _T("FontSize"), &pointSize);
     wxGetResource(_T("wxPoem"), _T("X"), &XPos);
     wxGetResource(_T("wxPoem"), _T("Y"), &YPos);
 #endif
+*/
 }
 
 // Write preferences to disk
@@ -763,11 +765,13 @@ void MainWindow::WritePreferences()
 {
 #ifdef __WXMSW__
     TheMainWindow->GetPosition(&XPos, &YPos);
+/* TODO: convert this code to use wxConfig
 #if wxUSE_RESOURCES
     wxWriteResource(_T("wxPoem"), _T("FontSize"), pointSize);
     wxWriteResource(_T("wxPoem"), _T("X"), XPos);
     wxWriteResource(_T("wxPoem"), _T("Y"), YPos);
 #endif
+*/
 #endif
 }
 

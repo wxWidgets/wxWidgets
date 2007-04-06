@@ -181,7 +181,7 @@ remove_field()
 }
 
 # validate_arg _domain _set _name _value
-# Boilerplate to validate an argument and initialise a psuedo-hash.
+# Boilerplate to validate an argument and initialise a pseudo-hash.
 # This one is almost reduction into absurdity, and perhaps makes the
 # precise action of the argument parser below just a little more
 # obscure, but oh so neat and compact to use for multiple option
@@ -948,6 +948,7 @@ ldlibs_html="@EXTRALIBS_HTML@"
 ldlibs_xml="@EXTRALIBS_XML@"
 ldlibs_odbc="@EXTRALIBS_ODBC@"
 ldlibs_adv="@EXTRALIBS_SDL@"
+ldlibs_stc="@EXTRALIBS_STC@"
 
 
 # lib_flags_for _liblist
