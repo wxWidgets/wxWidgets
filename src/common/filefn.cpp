@@ -1075,7 +1075,7 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
         return false;
     }
 #elif defined(__OS2__)
-    if ( ::DosCopy((PSZ)file1.c_str(), (PSZ)file2.c_str(), overwrite ? DCPY_EXISTING : 0) != 0 )
+    if ( ::DosCopy(file1.c_str(), file2.c_str(), overwrite ? DCPY_EXISTING : 0) != 0 )
         return false;
 #elif defined(__PALMOS__)
     // TODO with http://www.palmos.com/dev/support/docs/protein_books/Memory_Databases_Files/
@@ -1267,7 +1267,7 @@ bool wxRmdir(const wxString& dir, int WXUNUSED(flags))
 #if defined(__VMS__)
     return false; //to be changed since rmdir exists in VMS7.x
 #elif defined(__OS2__)
-    return (::DosDeleteDir((PSZ)dir.c_str()) == 0);
+    return (::DosDeleteDir(dir.c_str()) == 0);
 #elif defined(__WXWINCE__)
     return (RemoveDirectory(dir) != 0);
 #elif defined(__WXPALMOS__)
@@ -1582,7 +1582,7 @@ bool wxSetWorkingDirectory(const wxString& d)
 	if (d.length() == 2)
 	    return true;
     }
-    return (::DosSetCurrentDir((PSZ)d.c_str()) == 0);
+    return (::DosSetCurrentDir(d.c_str()) == 0);
 #elif defined(__UNIX__) || defined(__WXMAC__) || defined(__DOS__)
     return (chdir(wxFNSTRINGCAST d.fn_str()) == 0);
 #elif defined(__WINDOWS__)

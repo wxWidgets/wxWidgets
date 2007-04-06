@@ -120,7 +120,7 @@ bool wxDynamicLibrary::Load(const wxString& libnameOrig, int flags)
 
 #elif defined(__WXPM__) || defined(__EMX__)
     char err[256] = "";
-    DosLoadModule(err, sizeof(err), (PSZ)libname.c_str(), &m_handle);
+    DosLoadModule(err, sizeof(err), libname.c_str(), &m_handle);
 #else // this should be the only remaining branch eventually
     m_handle = RawLoad(libname, flags);
 #endif
@@ -177,7 +177,7 @@ void *wxDynamicLibrary::DoGetSymbol(const wxString &name, bool *success) const
     if( FindSymbol( m_handle, symName, &symAddress, &symClass ) == noErr )
         symbol = (void *)symAddress;
 #elif defined(__WXPM__) || defined(__EMX__)
-    DosQueryProcAddr( m_handle, 1L, (PSZ)name.c_str(), (PFN*)symbol );
+    DosQueryProcAddr( m_handle, 1L, name.c_str(), (PFN*)symbol );
 #else
     symbol = RawGetSymbol(m_handle, name);
 #endif
