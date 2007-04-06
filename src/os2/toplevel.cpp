@@ -484,8 +484,8 @@ bool wxTopLevelWindowOS2::CreateFrame( const wxString& rsTitle,
      hFrame = ::WinCreateStdWindow( hParent
                                    ,ulStyleFlags          // frame-window style
                                    ,(PULONG)&lFlags       // window style
-                                   ,(PSZ)wxFrameClassName // class name
-                                   ,(PSZ)rsTitle.c_str()  // window title
+                                   ,wxFrameClassName // class name
+                                   ,rsTitle.c_str()  // window title
                                    ,0L                    // default client style
                                    ,NULLHANDLE            // resource in executable file
                                    ,0                     // resource id
@@ -553,7 +553,7 @@ bool wxTopLevelWindowOS2::CreateFrame( const wxString& rsTitle,
     //
     if (nWidth == (int)CW_USEDEFAULT)
     {
-       //
+        //
         // The exact number doesn't matter, the dialog will be resized
         // again soon anyhow but it should be big enough to allow
         // calculation relying on "totalSize - clientSize > 0" work, i.e.

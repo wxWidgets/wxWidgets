@@ -61,7 +61,7 @@ void wxToolTip::Create(
 
     m_hWnd = ::WinCreateWindow( HWND_DESKTOP
                                ,WC_ENTRYFIELD
-                               ,(PSZ)rsTip.c_str()
+                               ,rsTip.c_str()
                                ,lStyle
                                ,0, 0, 0, 0
                                ,NULLHANDLE

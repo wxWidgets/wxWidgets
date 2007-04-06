@@ -160,7 +160,7 @@ bool wxTextCtrl::Create(
     {
         m_hWnd = (WXHWND)::WinCreateWindow( (HWND)GetHwndOf(pParent) // Parent window handle
                                            ,WC_MLE                   // Window class
-                                           ,(PSZ)rsValue.c_str()     // Initial Text
+                                           ,rsValue.c_str()     // Initial Text
                                            ,(ULONG)lSstyle           // Style flags
                                            ,(LONG)0                  // X pos of origin
                                            ,(LONG)0                  // Y pos of origin
@@ -177,7 +177,7 @@ bool wxTextCtrl::Create(
     {
         m_hWnd = (WXHWND)::WinCreateWindow( (HWND)GetHwndOf(pParent) // Parent window handle
                                            ,WC_ENTRYFIELD            // Window class
-                                           ,(PSZ)rsValue.c_str()     // Initial Text
+                                           ,rsValue.c_str()     // Initial Text
                                            ,(ULONG)lSstyle           // Style flags
                                            ,(LONG)0                  // X pos of origin
                                            ,(LONG)0                  // Y pos of origin
@@ -329,7 +329,7 @@ void wxTextCtrl::SetupColours()
 wxString wxTextCtrl::GetValue() const
 {
     wxString                        sStr = wxGetWindowText(GetHWND());
-    char*                           zStr = (char*)sStr.c_str();
+    char*                           zStr = sStr.char_str();
 
     for ( ; *zStr; zStr++ )
     {
@@ -341,7 +341,7 @@ wxString wxTextCtrl::GetValue() const
         if (*zStr == '\r')
             *zStr = '\n';
     }
-    return sStr;
+    return zStr;
 } // end of wxTextCtrl::GetValue
 
 void wxTextCtrl::DoSetValue(
@@ -360,7 +360,7 @@ void wxTextCtrl::DoSetValue(
         if ( flags & SetValue_SendEvent )
             m_bSkipUpdate = true;
 
-        ::WinSetWindowText(GetHwnd(), (PSZ)rsValue.c_str());
+        ::WinSetWindowText(GetHwnd(), rsValue.c_str());
         AdjustSpaceLimit();
     }
 } // end of wxTextCtrl::SetValue
@@ -370,9 +370,9 @@ void wxTextCtrl::WriteText(
 )
 {
     if (m_bIsMLE)
-        ::WinSendMsg(GetHwnd(), MLM_INSERT, MPARAM((PCHAR)rsValue.c_str()), MPARAM(0));
+        ::WinSendMsg(GetHwnd(), MLM_INSERT, MPARAM(rsValue.char_str()), MPARAM(0));
     else
-        ::WinSetWindowText(GetHwnd(), (PSZ)rsValue.c_str());
+        ::WinSetWindowText(GetHwnd(), rsValue.c_str());
     AdjustSpaceLimit();
 } // end of wxTextCtrl::WriteText
 
@@ -1170,11 +1170,17 @@ void wxTextCtrl::AdjustSpaceLimit()
     }
     if (uLen >= uLimit)
     {
-        uLimit = uLen + 0x8000;    // 32Kb
-        if (uLimit > 0xffff)
+        if (m_bIsMLE)
         {
-            uLimit = 0L;
+            uLimit = uLen + 0x8000;    // 32Kb
+            if (uLimit > 0xffff)
+            {
+                uLimit = 0L;
+            }
         }
+        else
+            uLimit = 0x7fff;
+
         if (m_bIsMLE)
             ::WinSendMsg(GetHwnd(), MLM_SETTEXTLIMIT, MPFROMLONG(uLimit), 0);
         else

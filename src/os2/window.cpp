@@ -512,7 +512,7 @@ void wxWindowOS2::Lower()
 
 void wxWindowOS2::SetLabel( const wxString& label )
 {
-    ::WinSetWindowText(GetHwnd(), (PSZ)label.c_str());
+    ::WinSetWindowText(GetHwnd(), label.c_str());
 } // end of wxWindowOS2::SetLabel
 
 wxString wxWindowOS2::GetLabel() const
@@ -1681,7 +1681,7 @@ void wxWindowOS2::GetTextExtent( const wxString& rString,
     l = rString.length();
     if (l > 0L)
     {
-        pStr = (PCH)rString.c_str();
+        pStr = rString.char_str();
 
         //
         // In world coordinates.
@@ -2971,8 +2971,8 @@ bool wxWindowOS2::OS2Create( PSZ            zClass,
         sClassName += wxT("NR");
     }
     m_hWnd = (WXHWND)::WinCreateWindow( (HWND)OS2GetParent()
-                                       ,(PSZ)sClassName.c_str()
-                                       ,(PSZ)(zTitle ? zTitle : wxEmptyString)
+                                       ,sClassName.c_str()
+                                       ,(zTitle ? zTitle : wxEmptyString)
                                        ,(ULONG)dwStyle
                                        ,(LONG)0L
                                        ,(LONG)0L

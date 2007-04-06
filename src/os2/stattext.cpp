@@ -236,7 +236,8 @@ void wxStaticText::SetLabel(
     m_labelOrig = rsLabel;       // save original label
 
     // OS/2 does not support neither ellipsize nor markup in static text:
-    DoSetLabel(GetEllipsizedLabelWithoutMarkup(label));
+    DoSetLabel(rsLabel);
+    DoSetLabel(GetEllipsizedLabelWithoutMarkup());
 
     //
     // Adjust the size of the window to fit to the label unless autoresizing is
@@ -277,7 +278,7 @@ MRESULT wxStaticText::OS2WindowProc(
 void wxStaticText::DoSetLabel(const wxString& str)
 {
     wxString sLabel = ::wxPMTextToLabel(str);
-    ::WinSetWindowText(GetHwnd(), (PSZ)sLabel.c_str());
+    ::WinSetWindowText(GetHwnd(), sLabel.c_str());
 }
 
 wxString wxStaticText::DoGetLabel() const
