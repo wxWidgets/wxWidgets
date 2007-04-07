@@ -158,7 +158,7 @@ WXDLLEXPORT int wxOpen( const wxChar *pathname, int flags, mode_t mode )
 // BCC 5.5 and 5.5.1 have a bug in _wopen where files are created read only
 // regardless of the mode parameter. This hack works around the problem by
 // setting the mode with _wchmod.
-// 
+//
 int wxOpen(const wchar_t *pathname, int flags, mode_t mode)
 {
     int moreflags = 0;
@@ -1058,6 +1058,51 @@ wxConcatFiles (const wxString& file1, const wxString& file2, const wxString& fil
 #endif
 }
 
+// helper of generic implementation of wxCopyFile()
+#if !(defined(__WIN32__) || defined(__OS2__) || defined(__PALMOS__)) && \
+    wxUSE_FILE
+
+static bool
+wxDoCopyFile(wxFile& fileIn,
+             const wxStructStat& fbuf,
+             const wxString& filenameDst,
+             bool overwrite)
+{
+    // reset the umask as we want to create the file with exactly the same
+    // permissions as the original one
+    wxCHANGE_UMASK(0);
+
+    // create file2 with the same permissions than file1 and open it for
+    // writing
+
+    wxFile fileOut;
+    if ( !fileOut.Create(filenameDst, overwrite, fbuf.st_mode & 0777) )
+        return false;
+
+    // copy contents of file1 to file2
+    char buf[4096];
+    for ( ;; )
+    {
+        ssize_t count = fileIn.Read(buf, WXSIZEOF(buf));
+        if ( count == wxInvalidOffset )
+            return false;
+
+        // end of file?
+        if ( !count )
+            break;
+
+        if ( fileOut.Write(buf, count) < (size_t)count )
+            return false;
+    }
+
+    // we can expect fileIn to be closed successfully, but we should ensure
+    // that fileOut was closed as some write errors (disk full) might not be
+    // detected before doing this
+    return fileIn.Close() && fileOut.Close();
+}
+
+#endif // generic implementation of wxCopyFile
+
 // Copy files
 bool
 wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
@@ -1107,38 +1152,49 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
         return false;
     }
 
-    // reset the umask as we want to create the file with exactly the same
-    // permissions as the original one
-    wxCHANGE_UMASK(0);
+    wxDoCopyFile(fileIn, fbuf, file2, overwrite);
 
-    // create file2 with the same permissions than file1 and open it for
-    // writing
+#if defined(__WXMAC__) || defined(__WXCOCOA__)
+    // copy the resource fork of the file too if it's present
+    wxString pathRsrcOut;
+    wxFile fileRsrcIn;
 
-    wxFile fileOut;
-    if ( !fileOut.Create(file2, overwrite, fbuf.st_mode & 0777) )
-        return false;
-
-    // copy contents of file1 to file2
-    char buf[4096];
-    for ( ;; )
     {
-        ssize_t count = fileIn.Read(buf, WXSIZEOF(buf));
-        if ( count == wxInvalidOffset )
-            return false;
+        // suppress error messages from this block as resource forks don't have
+        // to exist
+        wxLogNull noLog;
 
-        // end of file?
-        if ( !count )
-            break;
+        // it's not enough to check for file existence: it always does on HFS
+        // but is empty for files without resources
+        if ( fileRsrcIn.Open(file1 + wxT("/..namedfork/rsrc")) &&
+                fileRsrcIn.Length() > 0 )
+        {
+            // we must be using HFS or another filesystem with resource fork
+            // support, suppose that destination file system also is HFS[-like]
+            pathRsrcOut = file2 + wxT("/..namedfork/rsrc");
+        }
+        else // check if we have resource fork in separate file (non-HFS case)
+        {
+            wxFileName fnRsrc(file1);
+            fnRsrc.SetName(wxT("._") + fnRsrc.GetName());
 
-        if ( fileOut.Write(buf, count) < (size_t)count )
-            return false;
+            fileRsrcIn.Close();
+            if ( fileRsrcIn.Open( fnRsrc.GetFullPath() ) )
+            {
+                fnRsrc = file2;
+                fnRsrc.SetName(wxT("._") + fnRsrc.GetName());
+
+                pathRsrcOut = fnRsrc.GetFullPath();
+            }
+        }
     }
 
-    // we can expect fileIn to be closed successfully, but we should ensure
-    // that fileOut was closed as some write errors (disk full) might not be
-    // detected before doing this
-    if ( !fileIn.Close() || !fileOut.Close() )
-        return false;
+    if ( !pathRsrcOut.empty() )
+    {
+        if ( !wxDoCopyFile(fileRsrcIn, fbuf, pathRsrcOut, overwrite) )
+            return false;
+    }
+#endif // wxMac || wxCocoa
 
 #if !defined(__VISAGECPP__) && !defined(__WXMAC__) || defined(__UNIX__)
     // no chmod in VA.  Should be some permission API for HPFS386 partitions

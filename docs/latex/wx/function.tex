@@ -1178,9 +1178,11 @@ true if successful.
 \func{bool}{wxCopyFile}{\param{const wxString\& }{file1}, \param{const wxString\& }{file2}, \param{bool }{overwrite = true}}
 
 Copies {\it file1} to {\it file2}, returning true if successful. If
-{\it overwrite} parameter is true (default), the destination file is overwritten
-if it exists, but if {\it overwrite} is false, the functions fails in this
+{\it overwrite} parameter is \true (default), the destination file is overwritten
+if it exists, but if {\it overwrite} is \false, the functions fails in this
 case.
+
+This function supports resources forks under Mac OS.
 
 
 \membersection{::wxGetCwd}\label{wxgetcwd}
