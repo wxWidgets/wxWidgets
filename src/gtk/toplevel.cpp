@@ -332,7 +332,7 @@ gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget),
 
     // reset the icon
     wxIconBundle iconsOld = win->GetIcons();
-    if ( iconsOld.GetIcon(-1).Ok() )
+    if ( !iconsOld.IsEmpty() )
     {
         win->SetIcon( wxNullIcon );
         win->SetIcons( iconsOld );
