@@ -1540,8 +1540,18 @@ bool wxApp::MacSendKeyDownEvent( wxWindow* focus , long keymessage , long modifi
             int command = ancestor->GetAcceleratorTable()->GetCommand( event );
             if (command != -1)
             {
+                wxEvtHandler * const handler = ancestor->GetEventHandler();
+
                 wxCommandEvent command_event( wxEVT_COMMAND_MENU_SELECTED, command );
-                handled = ancestor->GetEventHandler()->ProcessEvent( command_event );
+                handled = handler->ProcessEvent( command_event );
+
+                if ( !handled )
+                {
+                    // accelerators can also be used with buttons, try them too
+                    command_event.SetEventType(wxEVT_COMMAND_BUTTON_CLICKED);
+                    handled = handler->ProcessEvent( command_event );
+                }
+
                 break;
             }
 

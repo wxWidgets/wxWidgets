@@ -116,6 +116,7 @@ wxGTK:
 wxMac:
 
 - Fix duplicate (empty) help menu in non-English programs (Andreas Jacobs)
+- Allow accelerators to be used with buttons too (Ryan Wilcox)
 
 wxMSW:
 
