@@ -149,11 +149,7 @@ void wxIconBundle::AddIcon(const wxString& file, long type)
 
 wxIcon wxIconBundle::GetIcon(const wxSize& size) const
 {
-    wxCHECK_MSG( IsOk(), wxNullIcon, _T("invalid icon bundle") );
-
-    const wxIconArray& iconArray = M_ICONBUNDLEDATA->m_icons;
-
-    const size_t count = iconArray.size();
+    const size_t count = GetIconCount();
 
     // optimize for the common case of icon bundles containing one icon only
     wxIcon iconBest;
@@ -164,7 +160,7 @@ wxIcon wxIconBundle::GetIcon(const wxSize& size) const
             break;
 
         case 1:
-            iconBest = iconArray[0];
+            iconBest = M_ICONBUNDLEDATA->m_icons[0];
             break;
 
         default:
@@ -172,6 +168,7 @@ wxIcon wxIconBundle::GetIcon(const wxSize& size) const
             wxCoord sysX = wxSystemSettings::GetMetric( wxSYS_ICON_X ),
                     sysY = wxSystemSettings::GetMetric( wxSYS_ICON_Y );
 
+            const wxIconArray& iconArray = M_ICONBUNDLEDATA->m_icons;
             for ( size_t i = 0; i < count; i++ )
             {
                 const wxIcon& icon = iconArray[i];
@@ -227,11 +224,13 @@ void wxIconBundle::AddIcon(const wxIcon& icon)
 
 size_t wxIconBundle::GetIconCount() const
 {
-    return M_ICONBUNDLEDATA->m_icons.size();
+    return IsOk() ? M_ICONBUNDLEDATA->m_icons.size() : 0;
 }
 
 wxIcon wxIconBundle::GetIconByIndex(size_t n) const
 {
+    wxCHECK_MSG( n < GetIconCount(), wxNullIcon, _T("invalid index") );
+
     return M_ICONBUNDLEDATA->m_icons[n];
 }
 
