@@ -67,7 +67,6 @@ public:
     virtual void Maximize(bool bMaximize = true);
     virtual void Restore(void);
     virtual void SendSizeEvent(void);
-    virtual void SetIcon(const wxIcon& rIcon);
     virtual void SetIcons(const wxIconBundle& rIcons);
 
     virtual bool Show(bool bShow = true);

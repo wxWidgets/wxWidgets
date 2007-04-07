@@ -470,11 +470,6 @@ void wxFrame::DoSetIcon(const wxIcon& icon)
                   NULL);
 }
 
-void wxFrame::SetIcon(const wxIcon& icon)
-{
-    SetIcons( wxIconBundle( icon ) );
-}
-
 void wxFrame::SetIcons(const wxIconBundle& icons)
 {
     wxFrameBase::SetIcons( icons );

@@ -133,8 +133,6 @@ public:
 #endif // wxUSE_TOOLBAR
 
     // no icon
-    virtual void SetIcon(const wxIcon& icon)
-        { wxTopLevelWindowBase::SetIcon(icon); }
     virtual void SetIcons(const wxIconBundle& icons )
         { wxTopLevelWindowBase::SetIcons(icons); }
 

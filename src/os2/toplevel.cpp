@@ -995,13 +995,6 @@ bool wxTopLevelWindowOS2::ShowFullScreen( bool bShow,
 // wxTopLevelWindowOS2 misc
 // ----------------------------------------------------------------------------
 
-void wxTopLevelWindowOS2::SetIcon(
-  const wxIcon&                     rIcon
-)
-{
-    SetIcons(wxIconBundle(rIcon));
-} // end of wxTopLevelWindowOS2::SetIcon
-
 void wxTopLevelWindowOS2::SetIcons(
   const wxIconBundle&               rIcons
 )
@@ -1011,7 +1004,7 @@ void wxTopLevelWindowOS2::SetIcons(
     //
     wxTopLevelWindowBase::SetIcons(rIcons);
 
-    const wxIcon&                   vIcon = rIcons.GetIcon(wxSize(32, 32));
+    const wxIcon& vIcon = rIcons.GetIcon(32);
 
     if (vIcon.Ok() && vIcon.GetWidth() == 32 && vIcon.GetHeight() == 32)
     {

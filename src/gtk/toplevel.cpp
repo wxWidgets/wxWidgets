@@ -1173,17 +1173,6 @@ void wxTopLevelWindowGTK::SetTitle( const wxString &title )
     gtk_window_set_title( GTK_WINDOW(m_widget), wxGTK_CONV( title ) );
 }
 
-void wxTopLevelWindowGTK::SetIcon( const wxIcon &icon )
-{
-    // passing wxNullIcon to SetIcon() is possible (it means that we shouldn't
-    // have any icon), but adding an invalid icon to wxIconBundle is not
-    wxIconBundle icons;
-    if ( icon.Ok() )
-        icons.AddIcon(icon);
-
-    SetIcons(icons);
-}
-
 void wxTopLevelWindowGTK::SetIcons( const wxIconBundle &icons )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );

@@ -1031,12 +1031,6 @@ wxPoint wxTopLevelWindowMac::GetClientAreaOrigin() const
     return wxPoint(0, 0) ;
 }
 
-void wxTopLevelWindowMac::SetIcon(const wxIcon& icon)
-{
-    // this sets m_icon
-    wxTopLevelWindowBase::SetIcon(icon);
-}
-
 void  wxTopLevelWindowMac::MacSetBackgroundBrush( const wxBrush &brush )
 {
     wxTopLevelWindowBase::MacSetBackgroundBrush( brush ) ;

@@ -145,16 +145,16 @@ public:
     virtual bool IsIconized() const = 0;
 
     // get the frame icon
-    wxIcon GetIcon() const { return m_icons.GetIcon( -1 ); }
+    wxIcon GetIcon() const;
 
     // get the frame icons
     const wxIconBundle& GetIcons() const { return m_icons; }
 
-    // set the frame icon
-    virtual void SetIcon(const wxIcon& icon) { m_icons = wxIconBundle( icon ); }
+    // set the frame icon: implemented in terms of SetIcons()
+    void SetIcon(const wxIcon& icon);
 
     // set the frame icons
-    virtual void SetIcons(const wxIconBundle& icons ) { m_icons = icons; }
+    virtual void SetIcons(const wxIconBundle& icons) { m_icons = icons; }
 
     // maximize the window to cover entire screen
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL) = 0;

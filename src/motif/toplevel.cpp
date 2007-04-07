@@ -72,8 +72,6 @@ void wxTopLevelWindowMotif::PreDestroy()
 {
     wxModelessWindows.DeleteObject(this);
 
-    m_icons.m_icons.Empty();
-
     DestroyChildren();
 
     // MessageDialog and FileDialog do not have a client widget

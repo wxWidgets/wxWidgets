@@ -130,7 +130,6 @@ public:
     // implement base class pure virtuals
     virtual bool ShowFullScreen(bool show, long style = wxFULLSCREEN_ALL);
     virtual wxPoint GetClientAreaOrigin() const;
-    virtual void SetIcon(const wxIcon& icon) { SetIcons( wxIconBundle( icon ) ); }
     virtual void SetIcons(const wxIconBundle& icons);
 
     // implementation from now on

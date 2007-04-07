@@ -977,24 +977,19 @@ wxString wxTopLevelWindowMSW::GetTitle() const
     return GetLabel();
 }
 
-void wxTopLevelWindowMSW::SetIcon(const wxIcon& icon)
-{
-    SetIcons( wxIconBundle( icon ) );
-}
-
 void wxTopLevelWindowMSW::SetIcons(const wxIconBundle& icons)
 {
     wxTopLevelWindowBase::SetIcons(icons);
 
 #if !defined(__WXMICROWIN__)
-    const wxIcon& sml = icons.GetIcon( wxSize( 16, 16 ) );
+    const wxIcon& sml = icons.GetIcon(16);
     if( sml.Ok() && sml.GetWidth() == 16 && sml.GetHeight() == 16 )
     {
         ::SendMessage( GetHwndOf( this ), WM_SETICON, ICON_SMALL,
                        (LPARAM)GetHiconOf(sml) );
     }
 
-    const wxIcon& big = icons.GetIcon( wxSize( 32, 32 ) );
+    const wxIcon& big = icons.GetIcon(32);
     if( big.Ok() && big.GetWidth() == 32 && big.GetHeight() == 32 )
     {
         ::SendMessage( GetHwndOf( this ), WM_SETICON, ICON_BIG,

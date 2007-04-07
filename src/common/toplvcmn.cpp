@@ -316,6 +316,26 @@ bool wxTopLevelWindowBase::IsAlwaysMaximized() const
 }
 
 // ----------------------------------------------------------------------------
+// icons
+// ----------------------------------------------------------------------------
+
+wxIcon wxTopLevelWindowBase::GetIcon() const
+{
+    return m_icons.IsEmpty() ? wxIcon() : m_icons.GetIcon( -1 );
+}
+
+void wxTopLevelWindowBase::SetIcon(const wxIcon& icon)
+{
+    // passing wxNullIcon to SetIcon() is possible (it means that we shouldn't
+    // have any icon), but adding an invalid icon to wxIconBundle is not
+    wxIconBundle icons;
+    if ( icon.Ok() )
+        icons.AddIcon(icon);
+
+    SetIcons(icons);
+}
+
+// ----------------------------------------------------------------------------
 // event handlers
 // ----------------------------------------------------------------------------
 
