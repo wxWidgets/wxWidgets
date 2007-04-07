@@ -334,6 +334,9 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 }
 #endif
 
+                if ( thisWindow->MacIsUserPane() )
+                    result = noErr ;
+
                 if ( controlPart == kControlFocusNoPart )
                 {
 #if wxUSE_CARET
@@ -367,9 +370,6 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                     event.SetEventObject(thisWindow);
                     thisWindow->GetEventHandler()->ProcessEvent(event) ;
                 }
-
-                if ( thisWindow->MacIsUserPane() )
-                    result = noErr ;
             }
             break ;
 

@@ -1880,12 +1880,14 @@ gtk_window_focus_out_callback( GtkWidget *widget,
     }
 #endif // wxUSE_CARET
 
-    gboolean ret = FALSE;
-
     // don't send the window a kill focus event if it thinks that it doesn't
     // have focus already
     if ( win->m_hasFocus )
     {
+        // the event handler might delete the window when it loses focus, so
+        // check whether this is a custom window before calling it
+        const bool has_wxwindow = win->m_wxwindow != NULL;
+
         win->m_hasFocus = false;
 
         wxFocusEvent event( wxEVT_KILL_FOCUS, win->GetId() );
@@ -1893,14 +1895,13 @@ gtk_window_focus_out_callback( GtkWidget *widget,
 
         (void)win->GTKProcessEvent( event );
 
-        ret = TRUE;
+        // Disable default focus handling for custom windows
+        // since the default GTK+ handler issues a repaint
+        if ( has_wxwindow )
+            return TRUE;
     }
 
-    // Disable default focus handling for custom windows
-    // since the default GTK+ handler issues a repaint
-    if (win->m_wxwindow)
-        return ret;
-
+    // continue with normal processing
     return FALSE;
 }
 
