@@ -112,6 +112,7 @@ public:
     bool    MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar ) ;
     void    MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymessage , long modifiers , long when , short wherex , short wherey , wxChar uniChar ) ;
     virtual short         MacHandleAEODoc(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
+    virtual short         MacHandleAEGURL(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
     virtual short         MacHandleAEPDoc(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
     virtual short         MacHandleAEOApp(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
     virtual short         MacHandleAEQuit(const WXAPPLEEVENTREF event , WXAPPLEEVENTREF reply) ;
@@ -119,6 +120,8 @@ public:
 
     // in response of an open-document apple event
     virtual void         MacOpenFile(const wxString &fileName) ;
+    // in response of a get-url apple event
+    virtual void         MacOpenURL(const wxString &url) ;
     // in response of a print-document apple event
     virtual void         MacPrintFile(const wxString &fileName) ;
     // in response of a open-application apple event

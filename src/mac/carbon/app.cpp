@@ -133,6 +133,12 @@ pascal OSErr AEHandleRApp( const AppleEvent *event , AppleEvent *reply , SRefCon
     return wxTheApp->MacHandleAERApp( (AppleEvent*) event , reply) ;
 }
 
+pascal OSErr AEHandleGURL( const AppleEvent *event , AppleEvent *reply , long WXUNUSED(refcon) )
+{
+    return wxTheApp->MacHandleAEGURL((WXEVENTREF *)event , reply) ;
+}
+
+
 // AEODoc Calls MacOpenFile on each of the files passed
 
 short wxApp::MacHandleAEODoc(const WXEVENTREF event, WXEVENTREF WXUNUSED(reply))
@@ -170,6 +176,31 @@ short wxApp::MacHandleAEODoc(const WXEVENTREF event, WXEVENTREF WXUNUSED(reply))
 
         MacOpenFile(fName);
     }
+
+    return noErr;
+}
+
+// AEODoc Calls MacOpenURL on the url passed
+
+short wxApp::MacHandleAEGURL(const WXEVENTREF event, WXEVENTREF WXUNUSED(reply))
+{
+    DescType returnedType;
+    Size actualSize;
+    char url[255];
+    OSErr err = AEGetParamPtr((AppleEvent *)event, keyDirectObject, typeChar,
+                              &returnedType, url, sizeof(url)-1,
+                              &actualSize);
+    if (err != noErr)
+        return err;
+
+    url[actualSize] = '\0';    // Terminate the C string 
+
+    ProcessSerialNumber PSN ;
+    PSN.highLongOfPSN = 0 ;
+    PSN.lowLongOfPSN = kCurrentProcess ;
+    SetFrontProcess( &PSN ) ;
+
+    MacOpenURL(wxString(url, wxConvUTF8));
 
     return noErr;
 }
@@ -264,6 +295,9 @@ void wxApp::MacOpenFile(const wxString & fileName )
 #endif
 }
 
+void wxApp::MacOpenURL(const wxString & url )
+{
+}
 
 void wxApp::MacPrintFile(const wxString & fileName )
 {
@@ -860,6 +894,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 }
 
 AEEventHandlerUPP sODocHandler = NULL ;
+AEEventHandlerUPP sGURLHandler = NULL ;
 AEEventHandlerUPP sOAppHandler = NULL ;
 AEEventHandlerUPP sPDocHandler = NULL ;
 AEEventHandlerUPP sRAppHandler = NULL ;
@@ -882,6 +917,7 @@ bool wxApp::OnInitGui()
     if (!sm_isEmbedded)
     {
         sODocHandler = NewAEEventHandlerUPP(AEHandleODoc) ;
+        sGURLHandler = NewAEEventHandlerUPP(AEHandleGURL) ;
         sOAppHandler = NewAEEventHandlerUPP(AEHandleOApp) ;
         sPDocHandler = NewAEEventHandlerUPP(AEHandlePDoc) ;
         sRAppHandler = NewAEEventHandlerUPP(AEHandleRApp) ;
@@ -889,6 +925,8 @@ bool wxApp::OnInitGui()
 
         AEInstallEventHandler( kCoreEventClass , kAEOpenDocuments ,
                                sODocHandler , 0 , FALSE ) ;
+        AEInstallEventHandler( kInternetEventClass, kAEGetURL,
+                               sGURLHandler , 0 , FALSE ) ;
         AEInstallEventHandler( kCoreEventClass , kAEOpenApplication ,
                                sOAppHandler , 0 , FALSE ) ;
         AEInstallEventHandler( kCoreEventClass , kAEPrintDocuments ,
@@ -937,6 +975,8 @@ void wxApp::CleanUp()
     {
         AERemoveEventHandler( kCoreEventClass , kAEOpenDocuments ,
                                sODocHandler , FALSE ) ;
+        AERemoveEventHandler( kInternetEventClass, kAEGetURL,
+                               sGURLHandler , FALSE ) ;
         AERemoveEventHandler( kCoreEventClass , kAEOpenApplication ,
                                sOAppHandler , FALSE ) ;
         AERemoveEventHandler( kCoreEventClass , kAEPrintDocuments ,
@@ -947,6 +987,7 @@ void wxApp::CleanUp()
                                sQuitHandler , FALSE ) ;
 
         DisposeAEEventHandlerUPP( sODocHandler ) ;
+        DisposeAEEventHandlerUPP( sGURLHandler ) ;
         DisposeAEEventHandlerUPP( sOAppHandler ) ;
         DisposeAEEventHandlerUPP( sPDocHandler ) ;
         DisposeAEEventHandlerUPP( sRAppHandler ) ;
