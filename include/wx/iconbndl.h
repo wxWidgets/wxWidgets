@@ -64,10 +64,15 @@ public:
     // returns the first icon in the bundle
     wxIcon GetIcon(const wxSize& size) const;
 
-    // equivalent to GetIcon( wxSize( size, size ) )
+    // equivalent to GetIcon(wxSize(size, size))
     wxIcon GetIcon(wxCoord size = wxDefaultCoord) const
-        { return GetIcon( wxSize( size, size ) ); }
+        { return GetIcon(wxSize(size, size)); }
 
+    // returns the icon exactly of the specified size or wxNullIcon if no icon
+    // of exactly given size are available
+    wxIcon GetIconOfExactSize(const wxSize& size) const;
+    wxIcon GetIconOfExactSize(wxCoord size) const
+        { return GetIconOfExactSize(wxSize(size, size)); }
 
     // enumerate all icons in the bundle: don't use these functions if ti can
     // be avoided, using GetIcon() directly is better

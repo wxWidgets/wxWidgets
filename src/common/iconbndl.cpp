@@ -191,6 +191,18 @@ wxIcon wxIconBundle::GetIcon(const wxSize& size) const
 #endif
 }
 
+wxIcon wxIconBundle::GetIconOfExactSize(const wxSize& size) const
+{
+    wxIcon icon = GetIcon(size);
+    if ( icon.Ok() &&
+            (icon.GetWidth() != size.x || icon.GetHeight() != size.y) )
+    {
+        icon = wxNullIcon;
+    }
+
+    return icon;
+}
+
 void wxIconBundle::AddIcon(const wxIcon& icon)
 {
     wxCHECK_RET( icon.IsOk(), _T("invalid icon") );

@@ -72,6 +72,14 @@ returns the icon with size wxSYS\_ICON\_X/wxSYS\_ICON\_Y.
 Same as GetIcon( wxSize( size, size ) ).
 
 
+\membersection{wxIconBundle::GetIconOfExactSize}\label{wxiconbundlegeticonofexactsize}
+
+\constfunc{wxIcon}{GetIconOfExactSize}{\param{const wxSize\& }{size}}
+
+Returns the icon with exactly the given size or \texttt{wxNullIcon} if this
+size is not available.
+
+
 \membersection{wxIconBundle::IsEmpty}\label{wxiconbundleisempty}
 
 \constfunc{bool}{IsEmpty}{\void}
