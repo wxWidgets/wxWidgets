@@ -56,8 +56,7 @@ int, long and their unsigned variants) or pointers (of any kind). An attempt
 to use with objects of sizeof() greater than sizeof(long) will provoke a
 runtime assertion failure, however declaring a wxArray of floats will not (on
 the machines where sizeof(float) <= sizeof(long)), yet it will {\bf not} work,
-please use wxObjArray for storing floats and doubles (NB: a more efficient
-wxArrayDouble class is scheduled for the next release of wxWidgets).
+please use wxObjArray for storing floats and doubles.
 
 wxSortedArray is a wxArray variant which should be used when searching in the
 array is a frequently used operation. It requires you to define an additional
@@ -299,8 +298,9 @@ class MyClass;
 WX_DEFINE_ARRAY(MyClass *, ArrayOfMyClass);
 \end{verbatim}
 
-Note that wxWidgets predefines the following standard array classes: wxArrayInt,
-wxArrayLong and wxArrayPtrVoid.
+Note that wxWidgets predefines the following standard array classes: {\bf wxArrayInt},
+{\bf wxArrayLong}, {\bf wxArrayShort}, {\bf wxArrayDouble},  {\bf wxArrayPtrVoid}.
+
 
 \membersection{WX\_DEFINE\_SORTED\_ARRAY}\label{wxdefinesortedarray}
 
