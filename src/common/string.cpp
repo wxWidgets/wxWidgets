@@ -131,7 +131,7 @@ wxSTD ostream& operator<<(wxSTD ostream& os, const wxWCharBuffer& str)
 template<typename T>
 static inline void DeleteStringFromConversionCache(T& hash, const wxString *s)
 {
-    typename T::iterator i = hash.find(s);
+    typename T::iterator i = hash.find(wxConstCast(s, wxString));
     if ( i != hash.end() )
     {
         free(i->second);
@@ -140,6 +140,8 @@ static inline void DeleteStringFromConversionCache(T& hash, const wxString *s)
 }
 
 #if wxUSE_UNICODE
+// NB: non-STL implementation doesn't compile with "const wxString*" key type,
+//     so we have to use wxString* here and const-cast when used
 WX_DECLARE_HASH_MAP(wxString*, char*, wxPointerHash, wxPointerEqual,
                     wxStringCharConversionCache);
 static wxStringCharConversionCache gs_stringsCharCache;
@@ -150,7 +152,8 @@ const char* wxCStrData::AsChar() const
     DeleteStringFromConversionCache(gs_stringsCharCache, m_str);
 
     // convert the string and keep it:
-    const char *s = gs_stringsCharCache[m_str] = m_str->mb_str().release();
+    const char *s = gs_stringsCharCache[wxConstCast(m_str, wxString)] =
+        m_str->mb_str().release();
 
     return s + m_offset;
 }
@@ -167,7 +170,8 @@ const wchar_t* wxCStrData::AsWChar() const
     DeleteStringFromConversionCache(gs_stringsWCharCache, m_str);
 
     // convert the string and keep it:
-    const wchar_t *s = gs_stringsWCharCache[m_str] = m_str->wc_str().release();
+    const wchar_t *s = gs_stringsWCharCache[wxConstCast(m_str, wxString)] =
+        m_str->wc_str().release();
 
     return s + m_offset;
 }
