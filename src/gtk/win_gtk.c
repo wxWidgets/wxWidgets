@@ -215,6 +215,20 @@ gtk_pizza_new ()
     GtkPizza *pizza;
 
     pizza = g_object_new (gtk_pizza_get_type (), NULL);
+    
+    pizza->m_noscroll = FALSE;
+
+    return GTK_WIDGET (pizza);
+}
+
+GtkWidget*
+gtk_pizza_new_no_scroll ()
+{
+    GtkPizza *pizza;
+
+    pizza = g_object_new (gtk_pizza_get_type (), NULL);
+
+    pizza->m_noscroll = TRUE;
 
     return GTK_WIDGET (pizza);
 }
@@ -555,7 +569,20 @@ gtk_pizza_size_allocate (GtkWidget     *widget,
     if (h < 0)
         h = 0;
 
-    if (GTK_WIDGET_REALIZED (widget))
+    if (!GTK_WIDGET_REALIZED (widget))
+        return;
+        
+    if (pizza->m_noscroll)
+    {
+        if (only_resize)
+            gdk_window_resize( widget->window, allocation->width, allocation->height );
+        else
+            gdk_window_move_resize( widget->window, allocation->x, allocation->y, 
+                                                    allocation->width, allocation->height );
+
+        gdk_window_move_resize( pizza->bin_window, border, border, w, h );
+    }
+    else
     {
         if (only_resize)
             gdk_window_resize( widget->window, w, h );

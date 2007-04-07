@@ -2324,21 +2324,31 @@ bool wxWindowGTK::Create( wxWindow *parent,
 
     m_insertCallback = wxInsertChildInWindow;
 
-    m_wxwindow = gtk_pizza_new();
-
-#ifndef __WXUNIVERSAL__
-    if (HasFlag(wxSIMPLE_BORDER))
-        gtk_container_set_border_width((GtkContainer*)m_wxwindow, 1);
-    else if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
-        gtk_container_set_border_width((GtkContainer*)m_wxwindow, 2);
-#endif // __WXUNIVERSAL__
 
     if (!HasFlag(wxHSCROLL) && !HasFlag(wxVSCROLL))
     {
+        m_wxwindow = gtk_pizza_new_no_scroll();
+
+#ifndef __WXUNIVERSAL__
+        if (HasFlag(wxSIMPLE_BORDER))
+            gtk_container_set_border_width((GtkContainer*)m_wxwindow, 1);
+        else if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
+            gtk_container_set_border_width((GtkContainer*)m_wxwindow, 2);
+#endif // __WXUNIVERSAL__
+
         m_widget = m_wxwindow;
     }
     else
     {
+        m_wxwindow = gtk_pizza_new();
+
+#ifndef __WXUNIVERSAL__
+        if (HasFlag(wxSIMPLE_BORDER))
+            gtk_container_set_border_width((GtkContainer*)m_wxwindow, 1);
+        else if (HasFlag(wxRAISED_BORDER) || HasFlag(wxSUNKEN_BORDER))
+            gtk_container_set_border_width((GtkContainer*)m_wxwindow, 2);
+#endif // __WXUNIVERSAL__
+
         m_widget = gtk_scrolled_window_new( (GtkAdjustment *) NULL, (GtkAdjustment *) NULL );
 
         GtkScrolledWindow *scrolledWindow = GTK_SCROLLED_WINDOW(m_widget);
