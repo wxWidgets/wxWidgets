@@ -1,12 +1,20 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/common/iconbndl.cpp
 // Purpose:     wxIconBundle
-// Author:      Mattia Barbon
+// Author:      Mattia Barbon, Vadim Zeitlin
 // Created:     23.03.2002
 // RCS-ID:      $Id$
 // Copyright:   (c) Mattia barbon
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
+
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
@@ -30,113 +38,200 @@
 
 WX_DEFINE_OBJARRAY(wxIconArray)
 
-const wxIconBundle& wxIconBundle::operator =( const wxIconBundle& ic )
+IMPLEMENT_DYNAMIC_CLASS(wxIconBundle, wxGDIObject)
+
+#define M_ICONBUNDLEDATA ((wxIconBundleRefData *)m_refData)
+
+// ----------------------------------------------------------------------------
+// wxIconBundleRefData
+// ----------------------------------------------------------------------------
+
+class WXDLLEXPORT wxIconBundleRefData : public wxGDIRefData
 {
-    if( this == &ic ) return *this;
+public:
+    // default and copy ctors and assignment operators are ok
 
-    size_t i, max = ic.m_icons.GetCount();
+protected:
+    wxIconArray m_icons;
 
-    DeleteIcons();
-    for( i = 0; i < max; ++i )
-        m_icons.Add( ic.m_icons[i] );
+    friend class WXDLLEXPORT wxIconBundle;
+};
 
-    return *this;
+// ============================================================================
+// wxIconBundle implementation
+// ============================================================================
+
+wxIconBundle::wxIconBundle()
+            : wxGDIObject()
+{
+    m_refData = new wxIconBundleRefData;
+}
+
+wxIconBundle::wxIconBundle(const wxString& file, long type)
+            : wxGDIObject()
+{
+    m_refData = new wxIconBundleRefData;
+    AddIcon(file, type);
+}
+
+wxIconBundle::wxIconBundle(const wxIconBundle& icon)
+            : wxGDIObject()
+{
+    Ref(icon);
+}
+
+wxIconBundle::wxIconBundle(const wxIcon& icon)
+            : wxGDIObject()
+{
+    m_refData = new wxIconBundleRefData;
+    AddIcon(icon);
+}
+
+wxObjectRefData *wxIconBundle::CreateRefData() const
+{
+    return new wxIconBundleRefData;
+}
+
+wxObjectRefData *wxIconBundle::CloneRefData(const wxObjectRefData *data) const
+{
+    return new wxIconBundleRefData(*wx_static_cast(const wxIconBundleRefData *, data));
 }
 
 void wxIconBundle::DeleteIcons()
 {
-    m_icons.Empty();
+    wxIconBundleRefData* ref = new wxIconBundleRefData();
+    UnRef();
+    m_refData = ref;
 }
 
-#if wxUSE_IMAGE
-void wxIconBundle::AddIcon( const wxString& file, long type )
-#else
-void wxIconBundle::AddIcon( const wxString& WXUNUSED(file), long WXUNUSED(type) )
-#endif
+bool wxIconBundle::IsOk() const
 {
+    return M_ICONBUNDLEDATA && !M_ICONBUNDLEDATA->m_icons.IsEmpty();
+}
+
+void wxIconBundle::AddIcon(const wxString& file, long type)
+{
+#ifdef __WXMAC__
+    // Deal with standard icons
+    if ( type == wxBITMAP_TYPE_ICON_RESOURCE )
+    {
+        wxIcon tmp(file, type);
+        if (tmp.Ok())
+        {
+            AddIcon(tmp);
+            return;
+        }
+    }
+#endif // __WXMAC__
+
 #if wxUSE_IMAGE && (!defined(__WXMSW__) || wxUSE_WXDIB)
-    size_t count = wxImage::GetImageCount( file, type );
-    size_t i;
     wxImage image;
 
-    for( i = 0; i < count; ++i )
+    const size_t count = wxImage::GetImageCount( file, type );
+    for ( size_t i = 0; i < count; ++i )
     {
-        if( !image.LoadFile( file, type, i ) )
+        if ( !image.LoadFile( file, type, i ) )
         {
             wxLogError( _("Failed to load image %d from file '%s'."),
                         i, file.c_str() );
             continue;
         }
 
-        wxIcon* tmp = new wxIcon();
-        tmp->CopyFromBitmap( wxBitmap( image ) );
-        AddIcon( *tmp );
-        delete tmp;
+        wxIcon tmp;
+        tmp.CopyFromBitmap(wxBitmap(image));
+        AddIcon(tmp);
     }
+#else // !wxUSE_IMAGE
+    wxUnusedVar(file);
+    wxUnusedVar(type);
+#endif // wxUSE_IMAGE/!wxUSE_IMAGE
+}
+
+wxIcon wxIconBundle::GetIcon(const wxSize& size) const
+{
+    wxCHECK_MSG( IsOk(), wxNullIcon, _T("invalid icon bundle") );
+
+    const wxIconArray& iconArray = M_ICONBUNDLEDATA->m_icons;
+
+    const size_t count = iconArray.size();
+
+    // optimize for the common case of icon bundles containing one icon only
+    wxIcon iconBest;
+    switch ( count )
+    {
+        case 0:
+            // nothing to do, iconBest is already invalid
+            break;
+
+        case 1:
+            iconBest = iconArray[0];
+            break;
+
+        default:
+            // there is more than one icon, find the best match:
+            wxCoord sysX = wxSystemSettings::GetMetric( wxSYS_ICON_X ),
+                    sysY = wxSystemSettings::GetMetric( wxSYS_ICON_Y );
+
+            for ( size_t i = 0; i < count; i++ )
+            {
+                const wxIcon& icon = iconArray[i];
+                wxCoord sx = icon.GetWidth(),
+                        sy = icon.GetHeight();
+
+                // if we got an icon of exactly the requested size, we're done
+                if ( sx == size.x && sy == size.y )
+                {
+                    iconBest = icon;
+                    break;
+                }
+
+                // the best icon is by default (arbitrarily) the first one but
+                // if we find a system-sized icon, take it instead
+                if ( sx == sysX && sy == sysY || !iconBest.IsOk() )
+                    iconBest = icon;
+            }
+    }
+
+#ifdef __WXMAC__
+    return wxIcon(iconBest.GetHICON(), size);
+#else
+    return iconBest;
 #endif
 }
 
-const wxIcon& wxIconBundle::GetIcon( const wxSize& size ) const
+void wxIconBundle::AddIcon(const wxIcon& icon)
 {
-    // temp. variable needed to fix Borland C++ 5.5.1 problem
-    // with passing a return value through two functions
-    wxIcon *tmp;
+    wxCHECK_RET( icon.IsOk(), _T("invalid icon") );
 
-    size_t max = m_icons.GetCount();
+    AllocExclusive();
 
-    // if we have one or no icon, we can return now without doing more work:
-    if ( max <= 1 )
+    wxIconArray& iconArray = M_ICONBUNDLEDATA->m_icons;
+
+    // replace existing icon with the same size if we already have it
+    const size_t count = iconArray.size();
+    for ( size_t i = 0; i < count; ++i )
     {
-        if ( max == 1 ) // fix for broken BCC
-            tmp = &m_icons[0];
-        else // max == 0
-            tmp = &wxNullIcon;
-        return *tmp;
-    }
-
-    // there are more icons, find the best match:
-    wxCoord sysX = wxSystemSettings::GetMetric( wxSYS_ICON_X ),
-            sysY = wxSystemSettings::GetMetric( wxSYS_ICON_Y );
-
-    wxIcon *sysIcon = 0;
-
-    for( size_t i = 0; i < max; i++ )
-    {
-        if( !m_icons[i].Ok() )
-            continue;
-        wxCoord sx = m_icons[i].GetWidth(), sy = m_icons[i].GetHeight();
-        // requested size
-        if( sx == size.x && sy == size.y )
-        {
-            tmp = &m_icons[i]; // fix for broken BCC
-            return *tmp;
-        }
-        // keep track if there is a system-size icon
-        if( sx == sysX && sy == sysY )
-            sysIcon = &m_icons[i];
-    }
-
-    // return the system-sized icon if we've got one
-    if( sysIcon ) return *sysIcon;
-    // we certainly have at least one icon thanks to the <=1 check above
-    tmp = &m_icons[0];
-    return *tmp;
-}
-
-void wxIconBundle::AddIcon( const wxIcon& icon )
-{
-    size_t i, max = m_icons.GetCount();
-
-    for( i = 0; i < max; ++i )
-    {
-        wxIcon& tmp = m_icons[i];
-        if( tmp.Ok() && tmp.GetWidth() == icon.GetWidth() &&
-            tmp.GetHeight() == icon.GetHeight() )
+        wxIcon& tmp = iconArray[i];
+        if ( tmp.Ok() &&
+                tmp.GetWidth() == icon.GetWidth() &&
+                tmp.GetHeight() == icon.GetHeight() )
         {
             tmp = icon;
             return;
         }
     }
 
-    m_icons.Add( icon );
+    // if we don't, add an icon with new size
+    iconArray.Add(icon);
 }
+
+size_t wxIconBundle::GetIconCount() const
+{
+    return M_ICONBUNDLEDATA->m_icons.size();
+}
+
+wxIcon wxIconBundle::GetIconByIndex(size_t n) const
+{
+    return M_ICONBUNDLEDATA->m_icons[n];
+}
+

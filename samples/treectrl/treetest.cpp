@@ -24,6 +24,7 @@
 #include "wx/colordlg.h"
 #include "wx/numdlg.h"
 
+#include "wx/artprov.h"
 #include "wx/image.h"
 #include "wx/imaglist.h"
 #include "wx/treectrl.h"
@@ -96,6 +97,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     MENU_LINK(DeleteAll)
     MENU_LINK(Recreate)
     MENU_LINK(ToggleImages)
+    MENU_LINK(ToggleAlternateImages)
     MENU_LINK(ToggleButtons)
     MENU_LINK(SetImageSize)
     MENU_LINK(CollapseAndReset)
@@ -209,6 +211,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     style_menu->AppendCheckItem(TreeTest_ToggleSel, wxT("Toggle &selection mode"));
 #endif // NO_MULTIPLE_SELECTION
     style_menu->AppendCheckItem(TreeTest_ToggleImages, wxT("Toggle show ima&ges"));
+    style_menu->AppendCheckItem(TreeTest_ToggleAlternateImages, wxT("Toggle alternate images"));
     style_menu->Append(TreeTest_SetImageSize, wxT("Set image si&ze..."));
     style_menu->AppendSeparator();
     style_menu->Append(TreeTest_SetFgColour, wxT("Set &foreground colour..."));
@@ -276,6 +279,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     CreateTreeWithDefStyle();
 
     menu_bar->Check(TreeTest_ToggleImages, true);
+    menu_bar->Check(TreeTest_ToggleAlternateImages, false);
 
 #if wxUSE_STATUSBAR
     // create a status bar
@@ -601,6 +605,14 @@ void MyFrame::OnToggleImages(wxCommandEvent& WXUNUSED(event))
     }
 }
 
+void MyFrame::OnToggleAlternateImages(wxCommandEvent& WXUNUSED(event))
+{
+    bool alternateImages = m_treeCtrl->AlternateImages();
+
+    m_treeCtrl->SetAlternateImages(!alternateImages);
+    m_treeCtrl->CreateImageList(0);
+}
+
 void MyFrame::OnToggleButtons(wxCommandEvent& WXUNUSED(event))
 {
 #if USE_GENERIC_TREECTRL || !defined(__WXMSW__)
@@ -706,7 +718,8 @@ IMPLEMENT_DYNAMIC_CLASS(MyTreeCtrl, wxTreeCtrl)
 MyTreeCtrl::MyTreeCtrl(wxWindow *parent, const wxWindowID id,
                        const wxPoint& pos, const wxSize& size,
                        long style)
-          : wxTreeCtrl(parent, id, pos, size, style)
+          : wxTreeCtrl(parent, id, pos, size, style),
+            m_alternateImages(false)
 {
     m_reverseSort = false;
 
@@ -734,15 +747,29 @@ void MyTreeCtrl::CreateImageList(int size)
     // should correspond to TreeCtrlIcon_xxx enum
     wxBusyCursor wait;
     wxIcon icons[5];
-    icons[0] = wxIcon(icon1_xpm);
-    icons[1] = wxIcon(icon2_xpm);
-    icons[2] = wxIcon(icon3_xpm);
-    icons[3] = wxIcon(icon4_xpm);
-    icons[4] = wxIcon(icon5_xpm);
 
-    int sizeOrig = icons[0].GetWidth();
+    if (m_alternateImages)
+    {
+        icons[TreeCtrlIcon_File] = wxIcon(icon1_xpm);
+        icons[TreeCtrlIcon_FileSelected] = wxIcon(icon2_xpm);
+        icons[TreeCtrlIcon_Folder] = wxIcon(icon3_xpm);
+        icons[TreeCtrlIcon_FolderSelected] = wxIcon(icon4_xpm);
+        icons[TreeCtrlIcon_FolderOpened] = wxIcon(icon5_xpm);
+    }
+    else
+    {
+        wxSize iconSize(size, size);
+
+        icons[TreeCtrlIcon_File] =
+        icons[TreeCtrlIcon_FileSelected] = wxArtProvider::GetIcon(wxART_NORMAL_FILE, wxART_LIST, iconSize);
+        icons[TreeCtrlIcon_Folder] =
+        icons[TreeCtrlIcon_FolderSelected] =
+        icons[TreeCtrlIcon_FolderOpened] = wxArtProvider::GetIcon(wxART_FOLDER, wxART_LIST, iconSize);
+    }
+
     for ( size_t i = 0; i < WXSIZEOF(icons); i++ )
     {
+        int sizeOrig = icons[0].GetWidth();
         if ( size == sizeOrig )
         {
             images->Add(icons[i]);
@@ -771,12 +798,25 @@ void MyTreeCtrl::CreateButtonsImageList(int size)
     // should correspond to TreeCtrlIcon_xxx enum
     wxBusyCursor wait;
     wxIcon icons[4];
-    icons[0] = wxIcon(icon3_xpm);   // closed
-    icons[1] = wxIcon(icon3_xpm);   // closed, selected
-    icons[2] = wxIcon(icon5_xpm);   // open
-    icons[3] = wxIcon(icon5_xpm);   // open, selected
 
-    for ( size_t i = 0; i < WXSIZEOF(icons); i++ )
+    if (m_alternateImages)
+    {
+        icons[0] = wxIcon(icon3_xpm);   // closed
+        icons[1] = wxIcon(icon3_xpm);   // closed, selected
+        icons[2] = wxIcon(icon5_xpm);   // open
+        icons[3] = wxIcon(icon5_xpm);   // open, selected
+    }
+    else
+    {
+        wxSize iconSize(size, size);
+
+        icons[0] =                                                                 // closed
+        icons[1] = wxArtProvider::GetIcon(wxART_FOLDER, wxART_LIST, iconSize);     // closed, selected
+        icons[2] =                                                                 // open
+        icons[3] = wxArtProvider::GetIcon(wxART_FOLDER_OPEN, wxART_LIST, iconSize);// open, selected
+    }
+
+   for ( size_t i = 0; i < WXSIZEOF(icons); i++ )
     {
         int sizeOrig = icons[i].GetWidth();
         if ( size == sizeOrig )

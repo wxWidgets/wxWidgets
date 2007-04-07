@@ -53,6 +53,18 @@ wxIcon::wxIcon(
     LoadFile( icon_file, (wxBitmapType) flags, desiredWidth, desiredHeight );
 }
 
+wxIcon::wxIcon(WXHICON icon, const wxSize& size)
+      : wxGDIObject()
+{
+    // as the icon owns that ref, we have to acquire it as well
+    if (icon)
+        AcquireIconRef( (IconRef) icon ) ;
+
+    m_refData = new wxIconRefData( icon ) ;
+    M_ICONDATA->SetWidth( size.x ) ;
+    M_ICONDATA->SetHeight( size.y ) ;
+}
+
 wxIcon::~wxIcon()
 {
 }
@@ -125,6 +137,18 @@ bool wxIcon::LoadFile(
         else if ( filename == wxT("wxICON_ERROR") )
         {
             theId = kAlertStopIcon ;
+        }
+        else if ( filename == wxT("wxICON_FOLDER") )
+        {
+            theId = kGenericFolderIcon ;
+        }
+        else if ( filename == wxT("wxICON_FOLDER_OPEN") )
+        {
+            theId = kOpenFolderIcon ;
+        }
+        else if ( filename == wxT("wxICON_NORMAL_FILE") )
+        {
+            theId = kGenericDocumentIcon ;
         }
         else
         {

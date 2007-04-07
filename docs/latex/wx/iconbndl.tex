@@ -6,7 +6,12 @@ see also \helpref{wxDialog::SetIcons}{wxdialogseticons} and
 
 \wxheading{Derived from}
 
-No base class
+\helpref{wxGDIObject}{wxgdiobject}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Predefined objects}
+
+{\bf wxNullIconBundle}
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
@@ -50,7 +55,7 @@ replaced by the new one.
 
 \membersection{wxIconBundle::GetIcon}\label{wxiconbundlegeticon}
 
-\constfunc{const wxIcon\&}{GetIcon}{\param{const wxSize\& }{size}}
+\constfunc{wxIcon}{GetIcon}{\param{const wxSize\& }{size}}
 
 Returns the icon with the given size; if no such icon exists,
 returns the icon with size wxSYS\_ICON\_X/wxSYS\_ICON\_Y;
@@ -58,13 +63,24 @@ if no such icon exists,
 returns the first icon in the bundle. If size = wxSize( -1, -1 ),
 returns the icon with size wxSYS\_ICON\_X/wxSYS\_ICON\_Y.
 
-\constfunc{const wxIcon\&}{GetIcon}{\param{wxCoord }{size = -1}}
+\constfunc{wxIcon}{GetIcon}{\param{wxCoord }{size = -1}}
 
 Same as GetIcon( wxSize( size, size ) ).
 
-\membersection{wxIconBundle::operator=}\label{wxiconbundleoperatorassign}
+\membersection{wxIconBundle::operator $=$}\label{wxiconbundleoperatorassign}
 
-\func{const wxIconBundle\&}{operator=}{\param{const wxIconBundle\& }{ic}}
+\func{wxIconBundle\&}{operator $=$}{\param{const wxIconBundle\& }{ic}}
 
-Assignment operator.
+Assignment operator, using \helpref{reference counting}{trefcount}.
 
+\membersection{wxIconBundle::operator $==$}\label{wxiconbundleoperatorequals}
+
+\func{bool}{operator $==$}{\param{const wxIconBundle\& }{ic}}
+
+Equality operator. This returns \true if two icon bundles are equal.
+
+\membersection{wxIconBundle::operator $!=$}\label{wxiconbundleoperatornotequals}
+
+\func{bool}{operator $!=$}{\param{const wxIconBundle\& }{ic}}
+
+Inequality operator. This returns \true if two icon bundles are not equal.

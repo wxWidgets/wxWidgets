@@ -29,6 +29,9 @@ public:
     {
       LoadFile(loc.GetFileName(), wxBITMAP_TYPE_ICON);
     }
+
+    wxIcon(WXHICON icon, const wxSize& size);
+
     virtual ~wxIcon();
 
     bool LoadFile(const wxString& name, wxBitmapType flags /* = wxBITMAP_TYPE_ICON_RESOURCE */ ,

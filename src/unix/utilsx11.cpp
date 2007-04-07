@@ -106,31 +106,32 @@ private:
 // Setting icons for window manager:
 // ----------------------------------------------------------------------------
 
-void wxSetIconsX11( WXDisplay* display, WXWindow window,
-                    const wxIconBundle& ib )
+void
+wxSetIconsX11(WXDisplay* display, WXWindow window, const wxIconBundle& ib)
 {
 #if !wxUSE_NANOX
     size_t size = 0;
-    size_t i, max = ib.m_icons.GetCount();
 
-    for( i = 0; i < max; ++i )
-        if( ib.m_icons[i].Ok() )
-            size += 2 + ib.m_icons[i].GetWidth() * ib.m_icons[i].GetHeight();
+    const size_t numIcons = ib.GetIconCount();
+    for ( size_t i = 0; i < numIcons; ++i )
+    {
+        const wxIcon icon = ib.GetIconByIndex(i);
+
+        size += 2 + icon.GetWidth() * icon.GetHeight();
+    }
 
     wxMAKE_ATOM(_NET_WM_ICON, (Display*)display);
 
-    if( size > 0 )
+    if ( size > 0 )
     {
-//       The code below is correct for 64-bit machines also.
-//       wxUint32* data = new wxUint32[size];
-//       wxUint32* ptr = data;
         unsigned long* data = new unsigned long[size];
         unsigned long* ptr = data;
 
-        for( i = 0; i < max; ++i )
+        for ( size_t i = 0; i < numIcons; ++i )
         {
-            const wxImage image = ib.m_icons[i].ConvertToImage();
-            int width = image.GetWidth(), height = image.GetHeight();
+            const wxImage image = ib.GetIconByIndex(i).ConvertToImage();
+            int width = image.GetWidth(),
+                height = image.GetHeight();
             unsigned char* imageData = image.GetData();
             unsigned char* imageDataEnd = imageData + ( width * height * 3 );
             bool hasMask = image.HasMask();
@@ -153,7 +154,8 @@ void wxSetIconsX11( WXDisplay* display, WXWindow window,
             *ptr++ = width;
             *ptr++ = height;
 
-            while( imageData < imageDataEnd ) {
+            while ( imageData < imageDataEnd )
+            {
                 r = imageData[0];
                 g = imageData[1];
                 b = imageData[2];

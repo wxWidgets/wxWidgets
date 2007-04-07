@@ -61,7 +61,7 @@ public:
         TreeCtrlIcon_FolderOpened
     };
 
-    MyTreeCtrl() { }
+    MyTreeCtrl() { m_alternateImages = false; }
     MyTreeCtrl(wxWindow *parent, const wxWindowID id,
                const wxPoint& pos, const wxSize& size,
                long style);
@@ -111,6 +111,9 @@ public:
 
     void SetLastItem(wxTreeItemId id) { m_lastItem = id; }
 
+    void SetAlternateImages(bool show) { m_alternateImages = show; }
+    bool AlternateImages() const { return m_alternateImages; }
+
 protected:
     virtual int OnCompareItems(const wxTreeItemId& i1, const wxTreeItemId& i2);
 
@@ -133,6 +136,7 @@ private:
     bool         m_reverseSort;             // flag for OnCompareItems
     wxTreeItemId m_lastItem,                // for OnEnsureVisible()
                  m_draggedItem;             // item being dragged right now
+    bool         m_alternateImages;
 
     // NB: due to an ugly wxMSW hack you _must_ use DECLARE_DYNAMIC_CLASS()
     //     if you want your overloaded OnCompareItems() to be called.
@@ -193,6 +197,7 @@ public:
     void OnRecreate(wxCommandEvent& event);
     void OnToggleButtons(wxCommandEvent& event);
     void OnToggleImages(wxCommandEvent& event);
+    void OnToggleAlternateImages(wxCommandEvent& event);
     void OnSetImageSize(wxCommandEvent& event);
     void OnCollapseAndReset(wxCommandEvent& event);
 
@@ -274,6 +279,7 @@ enum
     TreeTest_DeleteAll,
     TreeTest_Recreate,
     TreeTest_ToggleImages,
+    TreeTest_ToggleAlternateImages,
     TreeTest_ToggleButtons,
     TreeTest_SetImageSize,
     TreeTest_ToggleSel,

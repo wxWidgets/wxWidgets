@@ -37,6 +37,7 @@ class WXDLLIMPEXP_CORE wxPalette;
 class WXDLLIMPEXP_CORE wxPen;
 class WXDLLIMPEXP_CORE wxRegion;
 class WXDLLIMPEXP_BASE wxString;
+class WXDLLIMPEXP_CORE wxIconBundle;
 
 // ---------------------------------------------------------------------------
 // constants
@@ -712,9 +713,10 @@ extern WXDLLEXPORT_DATA(wxIcon)       wxNullIcon;
 extern WXDLLEXPORT_DATA(wxCursor)     wxNullCursor;
 extern WXDLLEXPORT_DATA(wxPen)        wxNullPen;
 extern WXDLLEXPORT_DATA(wxBrush)      wxNullBrush;
-extern WXDLLEXPORT_DATA(wxPalette)     wxNullPalette;
+extern WXDLLEXPORT_DATA(wxPalette)    wxNullPalette;
 extern WXDLLEXPORT_DATA(wxFont)       wxNullFont;
 extern WXDLLEXPORT_DATA(wxColour)     wxNullColour;
+extern WXDLLEXPORT_DATA(wxIconBundle) wxNullIconBundle;
 
 extern WXDLLEXPORT_DATA(wxColourDatabase*)  wxTheColourDatabase;
 

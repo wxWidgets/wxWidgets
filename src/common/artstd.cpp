@@ -77,7 +77,7 @@ protected:
     wxArtProvider::Push(new wxDefaultArtProvider);
 }
 
-#if !defined(__WXGTK20__) || defined(__WXUNIVERSAL__)
+#if !(defined(__WXGTK20__) || defined(__WXMAC__)) || defined(__WXUNIVERSAL__)
 /*static*/ void wxArtProvider::InitNativeProvider()
 {
 }

@@ -25,6 +25,7 @@
     #include "wx/brush.h"
     #include "wx/palette.h"
     #include "wx/icon.h"
+    #include "wx/iconbndl.h"
     #include "wx/cursor.h"
     #include "wx/settings.h"
     #include "wx/bitmap.h"
@@ -52,6 +53,7 @@ WXDLLIMPEXP_DATA_CORE(wxPen)     wxNullPen;
 #if wxUSE_PALETTE
 WXDLLIMPEXP_DATA_CORE(wxPalette) wxNullPalette;
 #endif
+WXDLLIMPEXP_DATA_CORE(wxIconBundle) wxNullIconBundle;
 
 const wxSize wxDefaultSize(wxDefaultCoord, wxDefaultCoord);
 const wxPoint wxDefaultPosition(wxDefaultCoord, wxDefaultCoord);

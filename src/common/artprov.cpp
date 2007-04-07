@@ -43,6 +43,7 @@ WX_DEFINE_LIST(wxArtProvidersList)
 // ----------------------------------------------------------------------------
 
 WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxBitmap, wxArtProviderBitmapsHash);
+WX_DECLARE_EXPORTED_STRING_HASH_MAP(wxIconBundle, wxArtProviderIconBundlesHash);
 
 class WXDLLEXPORT wxArtProviderCache
 {
@@ -51,14 +52,22 @@ public:
     void PutBitmap(const wxString& full_id, const wxBitmap& bmp)
         { m_bitmapsHash[full_id] = bmp; }
 
+    bool GetIconBundle(const wxString& full_id, wxIconBundle* bmp);
+    void PutIconBundle(const wxString& full_id, const wxIconBundle& iconbundle)
+        { m_iconBundlesHash[full_id] = iconbundle; }
+
     void Clear();
 
     static wxString ConstructHashID(const wxArtID& id,
                                     const wxArtClient& client,
                                     const wxSize& size);
 
+    static wxString ConstructHashID(const wxArtID& id,
+                                    const wxArtClient& client);
+
 private:
-    wxArtProviderBitmapsHash m_bitmapsHash;
+    wxArtProviderBitmapsHash m_bitmapsHash;         // cache of wxBitmaps
+    wxArtProviderIconBundlesHash m_iconBundlesHash; // cache of wxIconBundles
 };
 
 bool wxArtProviderCache::GetBitmap(const wxString& full_id, wxBitmap* bmp)
@@ -75,20 +84,42 @@ bool wxArtProviderCache::GetBitmap(const wxString& full_id, wxBitmap* bmp)
     }
 }
 
+bool wxArtProviderCache::GetIconBundle(const wxString& full_id, wxIconBundle* bmp)
+{
+    wxArtProviderIconBundlesHash::iterator entry = m_iconBundlesHash.find(full_id);
+    if ( entry == m_iconBundlesHash.end() )
+    {
+        return false;
+    }
+    else
+    {
+        *bmp = entry->second;
+        return true;
+    }
+}
+
 void wxArtProviderCache::Clear()
 {
     m_bitmapsHash.clear();
+    m_iconBundlesHash.clear();
 }
 
-/*static*/ wxString wxArtProviderCache::ConstructHashID(
-                                const wxArtID& id, const wxArtClient& client,
-                                const wxSize& size)
+/* static */ wxString
+wxArtProviderCache::ConstructHashID(const wxArtID& id,
+                                    const wxArtClient& client)
 {
-    wxString str;
-    str.Printf(wxT("%s-%s-%i-%i"), id.c_str(), client.c_str(), size.x, size.y);
-    return str;
+    return id + _T('-') + client;
 }
 
+
+/* static */ wxString
+wxArtProviderCache::ConstructHashID(const wxArtID& id,
+                                    const wxArtClient& client,
+                                    const wxSize& size)
+{
+    return ConstructHashID(id, client) + _T('-') +
+            wxString::Format(_T("%d-%d"), size.x, size.y);
+}
 
 // ============================================================================
 // wxArtProvider class
@@ -216,12 +247,39 @@ wxArtProvider::~wxArtProvider()
 #endif
                 break;
             }
+            // We could try the IconBundles here and convert what we find
+            // to a bitmap.
+        }
+        sm_cache->PutBitmap(hashId, bmp);
         }
 
-        sm_cache->PutBitmap(hashId, bmp);
+    return bmp;
+}
+
+/*static*/ wxIconBundle wxArtProvider::GetIconBundle(const wxArtID& id, const wxArtClient& client)
+{
+    // safety-check against writing client,id,size instead of id,client,size:
+    wxASSERT_MSG( client.Last() == _T('C'), _T("invalid 'client' parameter") );
+
+    wxCHECK_MSG( sm_providers, wxNullIconBundle, _T("no wxArtProvider exists") );
+
+    wxString hashId = wxArtProviderCache::ConstructHashID(id, client);
+
+    wxIconBundle iconbundle;
+    if ( !sm_cache->GetIconBundle(hashId, &iconbundle) )
+    {
+        for (wxArtProvidersList::compatibility_iterator node = sm_providers->GetFirst();
+             node; node = node->GetNext())
+        {
+            iconbundle = node->GetData()->CreateIconBundle(id, client);
+            if ( iconbundle.IsOk() )
+                break;
+        }
+
+        sm_cache->PutIconBundle(hashId, iconbundle);
     }
 
-    return bmp;
+    return iconbundle;
 }
 
 /*static*/ wxIcon wxArtProvider::GetIcon(const wxArtID& id,
@@ -230,6 +288,12 @@ wxArtProvider::~wxArtProvider()
 {
     wxCHECK_MSG( sm_providers, wxNullIcon, _T("no wxArtProvider exists") );
 
+    // First look for an appropriate icon bundle - this will give us the best icon
+    wxIconBundle iconBundle = GetIconBundle(id, client);
+    if ( iconBundle.IsOk() )
+        return iconBundle.GetIcon(size);
+
+    // If there is no icon bundle then look for a bitmap
     wxBitmap bmp = GetBitmap(id, client, size);
     if ( !bmp.Ok() )
         return wxNullIcon;

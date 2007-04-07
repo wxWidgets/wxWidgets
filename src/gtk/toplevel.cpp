@@ -1175,7 +1175,13 @@ void wxTopLevelWindowGTK::SetTitle( const wxString &title )
 
 void wxTopLevelWindowGTK::SetIcon( const wxIcon &icon )
 {
-    SetIcons( wxIconBundle( icon ) );
+    // passing wxNullIcon to SetIcon() is possible (it means that we shouldn't
+    // have any icon), but adding an invalid icon to wxIconBundle is not
+    wxIconBundle icons;
+    if ( icon.Ok() )
+        icons.AddIcon(icon);
+
+    SetIcons(icons);
 }
 
 void wxTopLevelWindowGTK::SetIcons( const wxIconBundle &icons )
@@ -1185,15 +1191,13 @@ void wxTopLevelWindowGTK::SetIcons( const wxIconBundle &icons )
     wxTopLevelWindowBase::SetIcons( icons );
 
     GList *list = NULL;
-    size_t max = icons.m_icons.GetCount();
 
-    for (size_t i = 0; i < max; i++)
+    const size_t numIcons = icons.GetIconCount();
+    for ( size_t i = 0; i < numIcons; i++ )
     {
-        if (icons.m_icons[i].Ok())
-        {
-            list = g_list_prepend(list, icons.m_icons[i].GetPixbuf());
-        }
+        list = g_list_prepend(list, icons.GetIconByIndex(i).GetPixbuf());
     }
+
     gtk_window_set_icon_list(GTK_WINDOW(m_widget), list);
     g_list_free(list);
 }

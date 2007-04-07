@@ -10,9 +10,10 @@ When wxWidgets needs to display an icon or a bitmap (e.g. in the standard file
 dialog), it does not use a hard-coded resource but asks wxArtProvider for it
 instead. This way users can plug in their own wxArtProvider class and easily
 replace standard art with their own version. All
-that is needed is to derive a class from wxArtProvider, override its
-\helpref{CreateBitmap}{wxartprovidercreatebitmap} method and register the
-provider with
+that is needed is to derive a class from wxArtProvider, override either its
+\helpref{CreateBitmap}{wxartprovidercreatebitmap} and/or its
+\helpref{CreateIconBundle}{wxartprovidercreateiconbundle} methods
+and register the provider with
 \helpref{wxArtProvider::Push}{wxartproviderpush}:
 
 \begin{verbatim}
@@ -22,11 +23,19 @@ provider with
     wxBitmap CreateBitmap(const wxArtID& id, 
                           const wxArtClient& client,
                           const wxSize size)
+
+    // optionally override this one as well
+    wxIconBundle CreateIconBundle(const wxArtID& id,
+                                  const wxArtClient& client)
     { ... }
   };
   ...
   wxArtProvider::Push(new MyProvider);
 \end{verbatim}
+
+If you need bitmap images (of the same artwork) that should be displayed at different sizes
+you should probably consider overriding \helpref{CreateIconBundle()}{wxartprovidercreateiconbundle} 
+and supplying icon bundles that contain different bitmap sizes.
 
 There's another way of taking advantage of this class: you can use it in your code and use
 platform native icons as provided by \helpref{wxArtProvider::GetBitmap}{wxartprovidergetbitmap} or 
@@ -37,7 +46,7 @@ small).
 
 \membersection{Identifying art resources}\label{artprovideridentifying}
 
-Every bitmap is known to wxArtProvider under an unique ID that is used by when
+Every bitmap and icon bundle are known to wxArtProvider under an unique ID that is used when
 requesting a resource from it. The ID is represented by wxArtID type and can
 have one of these predefined values (you can see bitmaps represented by these
 constants in the \helpref{artprov}{sampleartprovider} sample):
@@ -159,10 +168,10 @@ by \helpref{GetBitmap}{wxartprovidergetbitmap}.
 
 \func{wxBitmap}{CreateBitmap}{\param{const wxArtID\& }{id}, \param{const wxArtClient\& }{client}, \param{const wxSize\& }{size}}
 
-Derived art provider classes must override this method to create requested 
-art resource. Note that returned bitmaps are cached by wxArtProvider and it is therefore
-not necessary to optimize CreateBitmap for speed (e.g. you may create wxBitmap objects
-from XPMs here).
+Derived art provider classes must override this method or the CreateIconBundle() method
+to create requested art resource. Note that returned bitmaps are cached by wxArtProvider
+and it is therefore not necessary to optimize CreateBitmap() for speed (e.g. you may create
+wxBitmap objects from XPMs here).
 
 \wxheading{Parameters}
 
@@ -178,9 +187,32 @@ dimensions, it will be automatically rescaled to meet client's request.}
 
 This is {\bf not} part of wxArtProvider's public API, use
 \helpref{wxArtProvider::GetBitmap}{wxartprovidergetbitmap} or 
+\helpref{wxArtProvider::GetIconBundle}{wxartprovidergeticonbundle} or
 \helpref{wxArtProvider::GetIcon}{wxartprovidergeticon}
 to query wxArtProvider for a resource.
 
+
+\func{wxIconBundle}{CreateIconBundle}{\param{const wxArtID\& }{id}, \param{const wxArtClient\& }{client}}
+
+Derived art provider classes must override this method or the CreateIconBundle method
+to create requested art resource. Note that returned icon bundles are cached by wxArtProvider
+and it is therefore not necessary to optimize CreateIconBundle for speed (e.g. you may create icon bundles
+from artwork resources here).
+
+\wxheading{Parameters}
+
+\docparam{id}{wxArtID unique identifier of the icon bundle.}
+
+\docparam{client}{wxArtClient identifier of the client (i.e. who is asking for the icon bundle).
+This only servers as a hint.}
+
+\wxheading{Note}
+
+This is {\bf not} part of wxArtProvider's public API, use
+\helpref{wxArtProvider::GetBitmap}{wxartprovidergetbitmap} or 
+\helpref{wxArtProvider::GetIconBundle}{wxartprovidergeticonbundle} or
+\helpref{wxArtProvider::GetIcon}{wxartprovidergeticon}
+to query wxArtProvider for a resource.
 
 \membersection{wxArtProvider::Delete}\label{wxartproviderdelete}
 
@@ -206,6 +238,23 @@ Query registered providers for bitmap with given ID.
 \wxheading{Return value}
 
 The bitmap if one of registered providers recognizes the ID or wxNullBitmap otherwise.
+
+
+\membersection{wxArtProvider::GetIconBundle}\label{wxartprovidergeticonbundle}
+
+\func{static wxIconBundle}{GetIconBundle}{\param{const wxArtID\& }{id}, \param{const wxArtClient\& }{client = wxART\_OTHER}}
+
+Query registered providers for icon bundle with given ID.
+
+\wxheading{Parameters}
+
+\docparam{id}{wxArtID unique identifier of the icon bundle.}
+
+\docparam{client}{wxArtClient identifier of the client (i.e. who is asking for the icon bundle).}
+
+\wxheading{Return value}
+
+The icon bundle if one of registered providers recognizes the ID or wxNullIconBundle otherwise.
 
 
 \membersection{wxArtProvider::GetIcon}\label{wxartprovidergeticon}

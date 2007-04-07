@@ -2100,6 +2100,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/carbon/accel.cpp
     src/mac/carbon/aga.cpp
     src/mac/carbon/app.cpp
+    src/mac/carbon/artmac.cpp
     src/mac/carbon/bitmap.cpp
     src/mac/carbon/bmpbuttn.cpp
     src/mac/carbon/brush.cpp

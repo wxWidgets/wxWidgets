@@ -145,7 +145,7 @@ public:
     virtual bool IsIconized() const = 0;
 
     // get the frame icon
-    const wxIcon& GetIcon() const { return m_icons.GetIcon( -1 ); }
+    wxIcon GetIcon() const { return m_icons.GetIcon( -1 ); }
 
     // get the frame icons
     const wxIconBundle& GetIcons() const { return m_icons; }

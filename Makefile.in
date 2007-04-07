@@ -4391,6 +4391,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS =  \
 	monodll_accel.o \
 	monodll_aga.o \
 	monodll_app.o \
+	monodll_artmac.o \
 	monodll_bitmap.o \
 	monodll_bmpbuttn.o \
 	monodll_brush.o \
@@ -6193,6 +6194,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_1 =  \
 	monolib_accel.o \
 	monolib_aga.o \
 	monolib_app.o \
+	monolib_artmac.o \
 	monolib_bitmap.o \
 	monolib_bmpbuttn.o \
 	monolib_brush.o \
@@ -8224,6 +8226,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_2 =  \
 	coredll_accel.o \
 	coredll_aga.o \
 	coredll_app.o \
+	coredll_artmac.o \
 	coredll_bitmap.o \
 	coredll_bmpbuttn.o \
 	coredll_brush.o \
@@ -9693,6 +9696,7 @@ COND_TOOLKIT_MAC___GUI_SRC_OBJECTS_3 =  \
 	corelib_accel.o \
 	corelib_aga.o \
 	corelib_app.o \
+	corelib_artmac.o \
 	corelib_bitmap.o \
 	corelib_bmpbuttn.o \
 	corelib_brush.o \
@@ -13557,6 +13561,9 @@ monodll_textctrlce.o: $(srcdir)/src/msw/wince/textctrlce.cpp $(MONODLL_ODEP)
 
 monodll_aga.o: $(srcdir)/src/mac/carbon/aga.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/aga.cpp
+
+monodll_artmac.o: $(srcdir)/src/mac/carbon/artmac.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/artmac.cpp
 
 monodll_dccg.o: $(srcdir)/src/mac/carbon/dccg.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/dccg.cpp
@@ -17730,6 +17737,9 @@ monolib_textctrlce.o: $(srcdir)/src/msw/wince/textctrlce.cpp $(MONOLIB_ODEP)
 
 monolib_aga.o: $(srcdir)/src/mac/carbon/aga.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/aga.cpp
+
+monolib_artmac.o: $(srcdir)/src/mac/carbon/artmac.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/artmac.cpp
 
 monolib_dccg.o: $(srcdir)/src/mac/carbon/dccg.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/dccg.cpp
@@ -22915,6 +22925,9 @@ coredll_textctrlce.o: $(srcdir)/src/msw/wince/textctrlce.cpp $(COREDLL_ODEP)
 coredll_aga.o: $(srcdir)/src/mac/carbon/aga.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/aga.cpp
 
+coredll_artmac.o: $(srcdir)/src/mac/carbon/artmac.cpp $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/artmac.cpp
+
 coredll_dccg.o: $(srcdir)/src/mac/carbon/dccg.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/dccg.cpp
 
@@ -25890,6 +25903,9 @@ corelib_textctrlce.o: $(srcdir)/src/msw/wince/textctrlce.cpp $(CORELIB_ODEP)
 
 corelib_aga.o: $(srcdir)/src/mac/carbon/aga.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/aga.cpp
+
+corelib_artmac.o: $(srcdir)/src/mac/carbon/artmac.cpp $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/artmac.cpp
 
 corelib_dccg.o: $(srcdir)/src/mac/carbon/dccg.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/dccg.cpp
