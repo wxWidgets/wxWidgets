@@ -1673,7 +1673,6 @@ void wxWindowOS2::GetTextExtent( const wxString& rString,
     int         l;
     FONTMETRICS vFM; // metrics structure
     BOOL        bRc = FALSE;
-    char*       pStr;
     HPS         hPS;
 
     hPS = ::WinGetPS(GetHwnd());
@@ -1681,14 +1680,12 @@ void wxWindowOS2::GetTextExtent( const wxString& rString,
     l = rString.length();
     if (l > 0L)
     {
-        pStr = rString.char_str();
-
         //
         // In world coordinates.
         //
         bRc = ::GpiQueryTextBox( hPS,
                                  l,
-                                 pStr,
+                                 (char*) rString.wx_str(),
                                  TXTBOX_COUNT,// return maximum information
                                  avPoint      // array of coordinates points
                                 );

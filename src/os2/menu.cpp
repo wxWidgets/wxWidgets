@@ -323,7 +323,7 @@ bool wxMenu::DoInsertOrAppend( wxMenuItem* pItem,
             //
             rItem.afStyle |= MIS_TEXT;
         }
-        pData = pItem->GetText().char_str();
+        pData = (char*) pItem->GetText().wx_str();
     }
 
     if (nPos == (size_t)-1)
@@ -804,7 +804,7 @@ WXHMENU wxMenuBar::Create()
 
             (*it)->m_vMenuData.iPosition = (SHORT)i;
 
-            rc = (APIRET)::WinSendMsg(m_hMenu, MM_INSERTITEM, (MPARAM)&(*it)->m_vMenuData, (MPARAM)m_titles[i].char_str());
+            rc = (APIRET)::WinSendMsg(m_hMenu, MM_INSERTITEM, (MPARAM)&(*it)->m_vMenuData, (MPARAM)m_titles[i].wx_str());
             if (rc == (APIRET)MIT_MEMERROR || rc == (APIRET)MIT_ERROR)
             {
                 vError = ::WinGetLastError(vHabmain);
@@ -879,7 +879,7 @@ void wxMenuBar::SetLabelTop(
     }
     nId = vItem.id;
 
-    if (::WinSendMsg(GetHmenu(), MM_SETITEMTEXT, MPFROMSHORT(nId), (MPARAM)rLabel.char_str()));
+    if (::WinSendMsg(GetHmenu(), MM_SETITEMTEXT, MPFROMSHORT(nId), (MPARAM)rLabel.wx_str()));
     {
         wxLogLastError(wxT("ModifyMenu"));
     }
@@ -925,7 +925,7 @@ wxMenu* wxMenuBar::Replace(
     if (IsAttached())
     {
         ::WinSendMsg((HWND)m_hMenu, MM_REMOVEITEM, MPFROM2SHORT(nId, TRUE), (MPARAM)0);
-        ::WinSendMsg((HWND)m_hMenu, MM_INSERTITEM, (MPARAM)&pMenu->m_vMenuData, (MPARAM)sTitle.char_str());
+        ::WinSendMsg((HWND)m_hMenu, MM_INSERTITEM, (MPARAM)&pMenu->m_vMenuData, (MPARAM)sTitle.wx_str());
 
 #if wxUSE_ACCEL
         if (pMenuOld->HasAccels() || pMenu->HasAccels())
@@ -958,7 +958,7 @@ bool wxMenuBar::Insert( size_t          nPos,
         ::WinSendMsg( (HWND)m_hMenu
                      ,MM_INSERTITEM
                      ,(MPARAM)&pMenu->m_vMenuData
-                     ,(MPARAM)sTitle.char_str()
+                     ,(MPARAM)sTitle.wx_str()
                     );
 #if wxUSE_ACCEL
         if (pMenu->HasAccels())
@@ -990,7 +990,7 @@ bool wxMenuBar::Append( wxMenu* pMenu,
     if ( IsAttached() )
     {
         pMenu->m_vMenuData.iPosition = MIT_END;
-        ::WinSendMsg((HWND)m_hMenu, MM_INSERTITEM, (MPARAM)&pMenu->m_vMenuData, (MPARAM)sTitle.char_str());
+        ::WinSendMsg((HWND)m_hMenu, MM_INSERTITEM, (MPARAM)&pMenu->m_vMenuData, (MPARAM)sTitle.wx_str());
 #if wxUSE_ACCEL
         if (pMenu->HasAccels())
         {

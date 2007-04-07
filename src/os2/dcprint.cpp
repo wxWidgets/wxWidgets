@@ -41,8 +41,8 @@ wxPrinterDC::wxPrinterDC( const wxString& rsDriverName,
                           bool bInteractive,
                           int nOrientation )
 {
-    DEVOPENSTRUC    vDevOpen = { rsDeviceName.char_str()
-                                ,rsDriverName.char_str()
+    DEVOPENSTRUC    vDevOpen = { (char*)rsDeviceName.wx_str()
+                                ,(char*)rsDriverName.wx_str()
                                 ,NULL
                                 ,NULL
                                 ,NULL

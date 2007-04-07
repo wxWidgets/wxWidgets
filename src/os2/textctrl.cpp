@@ -329,7 +329,8 @@ void wxTextCtrl::SetupColours()
 wxString wxTextCtrl::GetValue() const
 {
     wxString                        sStr = wxGetWindowText(GetHWND());
-    char*                           zStr = sStr.char_str();
+    wxCharBuffer                    buf(sStr.char_str());
+    char*                           zStr = buf.data();
 
     for ( ; *zStr; zStr++ )
     {
@@ -370,7 +371,7 @@ void wxTextCtrl::WriteText(
 )
 {
     if (m_bIsMLE)
-        ::WinSendMsg(GetHwnd(), MLM_INSERT, MPARAM(rsValue.char_str()), MPARAM(0));
+        ::WinSendMsg(GetHwnd(), MLM_INSERT, MPARAM(rsValue.wx_str()), MPARAM(0));
     else
         ::WinSetWindowText(GetHwnd(), rsValue.c_str());
     AdjustSpaceLimit();

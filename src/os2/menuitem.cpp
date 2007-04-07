@@ -427,7 +427,7 @@ void wxMenuItem::SetText( const wxString& rText )
 #endif  //owner drawn
         {
             uFlagsOld |= MIS_TEXT;
-            pData = m_text.char_str();
+            pData = (char*) m_text.wx_str();
         }
 
         //

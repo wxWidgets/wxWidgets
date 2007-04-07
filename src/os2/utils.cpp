@@ -157,7 +157,7 @@ bool wxShell( const wxString& rCommand )
     SData.PgmName  = (char*)zShell;
 
     sInputs = _T("/C ") + rCommand;
-    SData.PgmInputs     = (BYTE*)sInputs.char_str();
+    SData.PgmInputs     = (BYTE*)sInputs.wx_str();
     SData.TermQ         = 0;
     SData.Environment   = 0;
     SData.InheritOpt    = SSF_INHERTOPT_SHELL;

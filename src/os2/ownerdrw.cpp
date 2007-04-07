@@ -351,7 +351,7 @@ bool wxOwnerDrawn::OnDrawItem( wxDC& rDC,
     ::GpiCharStringAt( rDC.GetHPS()
                       ,&vPntStart
                       ,sFullString.length()
-                      ,sFullString.char_str()
+                      ,sFullString.wx_str()
                      );
     if (bFoundMnemonic)
     {
@@ -389,7 +389,7 @@ bool wxOwnerDrawn::OnDrawItem( wxDC& rDC,
         ::GpiCharStringAt( rDC.GetHPS()
                           ,&vPntStart
                           ,sAccel.length()
-                          ,sAccel.char_str()
+                          ,sAccel.wx_str()
                          );
     }
 
