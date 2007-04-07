@@ -1491,8 +1491,8 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 
 #if wxMAC_USE_NATIVE_TOOLBAR
             {
-                wxASSERT( tool->GetControl() != NULL );
-                HIToolbarItemRef    item;
+                wxCHECK_MSG( tool->GetControl(), false, _T("control must be non-NULL") );
+
                 HIViewRef viewRef = (HIViewRef) tool->GetControl()->GetHandle() ;
                 // as this control now is part of both the wxToolBar children and the native toolbar, we have to increase the
                 // reference count to make sure we are not dealing with zombie controls after the native toolbar has released its views
