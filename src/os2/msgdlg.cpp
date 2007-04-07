@@ -109,8 +109,8 @@ int wxMessageDialog::ShowModal()
 
     ULONG                           ulAns = ::WinMessageBox( hWnd
                                                             ,hWnd
-                                                            ,(PSZ)m_sMessage.c_str()
-                                                            ,(PSZ)m_sCaption.c_str()
+                                                            ,m_sMessage.c_str()
+                                                            ,m_sCaption.c_str()
                                                             ,0L
                                                             ,ulStyle);
     switch (ulAns)
