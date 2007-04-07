@@ -982,15 +982,15 @@ void wxTopLevelWindowMSW::SetIcons(const wxIconBundle& icons)
     wxTopLevelWindowBase::SetIcons(icons);
 
 #if !defined(__WXMICROWIN__)
-    const wxIcon& sml = icons.GetIcon(16);
-    if( sml.Ok() && sml.GetWidth() == 16 && sml.GetHeight() == 16 )
+    const wxIcon& sml = icons.GetIconOfExactSize(16);
+    if( sml.Ok() )
     {
         ::SendMessage( GetHwndOf( this ), WM_SETICON, ICON_SMALL,
                        (LPARAM)GetHiconOf(sml) );
     }
 
-    const wxIcon& big = icons.GetIcon(32);
-    if( big.Ok() && big.GetWidth() == 32 && big.GetHeight() == 32 )
+    const wxIcon& big = icons.GetIconOfExactSize(32);
+    if( big.Ok() )
     {
         ::SendMessage( GetHwndOf( this ), WM_SETICON, ICON_BIG,
                        (LPARAM)GetHiconOf(big) );
