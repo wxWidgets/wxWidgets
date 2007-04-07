@@ -101,7 +101,11 @@ static pascal void NavEventProc(
             if ( data->saveMode )
             {
                 int i = menu->menuType ;
-                wxString extension =  data->extensions[i].AfterLast('.') ;
+
+                // isolate the first extension string
+                wxString firstExtension = data->extensions[i].BeforeFirst('|').BeforeFirst(';');
+
+                wxString extension = firstExtension.AfterLast('.') ;
                 extension.MakeLower() ;
                 wxString sfilename ;
 
@@ -277,8 +281,8 @@ pascal Boolean CrossPlatformFilterCallback(
         NavFileOrFolderInfo* theInfo = (NavFileOrFolderInfo*) info ;
         if ( !theInfo->isFolder )
         {
-            AECoerceDesc (theItem, typeFSRef, theItem); 
-            
+            AECoerceDesc (theItem, typeFSRef, theItem);
+
             FSRef fsref ;
             if ( AEGetDescData (theItem, &fsref, sizeof (FSRef)) == noErr )
             {
