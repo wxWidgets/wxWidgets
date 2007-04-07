@@ -458,9 +458,10 @@ WidgetsFrame::WidgetsFrame(const wxString& title)
 void WidgetsFrame::InitBook()
 {
 #if USE_ICONS_IN_BOOK
-    wxImageList *imageList = new wxImageList(32, 32);
+    wxImageList *imageList = new wxImageList(ICON_SIZE, ICON_SIZE);
 
-    imageList->Add(wxBitmap(sample_xpm));
+    wxImage img(sample_xpm);
+    imageList->Add(wxBitmap(img.Scale(ICON_SIZE, ICON_SIZE)));
 #else
     wxImageList *imageList = NULL;
 #endif
@@ -929,7 +930,7 @@ WidgetsPage::WidgetsPage(WidgetsBookCtrl *book,
                      wxTAB_TRAVERSAL)
 {
 #if USE_ICONS_IN_BOOK
-    imaglist->Add(wxBitmap(icon));
+    imaglist->Add(wxBitmap(wxImage(icon).Scale(ICON_SIZE, ICON_SIZE)));
 #else
     wxUnusedVar(imaglist);
     wxUnusedVar(icon);

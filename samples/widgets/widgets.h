@@ -40,6 +40,7 @@
     #define USE_ICONS_IN_BOOK 0
 #else
     #define USE_ICONS_IN_BOOK 1
+    #define ICON_SIZE         16
 #endif
 
 class WXDLLEXPORT wxCheckBox;
