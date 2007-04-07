@@ -507,7 +507,112 @@ END_EVENT_TABLE()
 
 \end{verbatim}
 
+
+
 \subsection{Adding new resource handlers}\label{newresourcehandlers}
 
-Coming soon.
+Adding a new resource handler is pretty easy.
+Typically, to add an handler for the {\tt MyControl} class, you'll want to create
+the {\tt xh_mycontrol.h} {\tt xh_mycontrol.cpp} files.
+
+The header needs to contains the {\tt MyControlXmlHandler} class definition:
+
+\begin{verbatim}
+class MyControlXmlHandler : public wxXmlResourceHandler
+{
+public:
+
+    // Constructor.
+    MyControlXmlHandler();
+
+    // Creates the control and returns a pointer to it.
+    virtual wxObject *DoCreateResource();
+
+    // Returns true if we know how to create a control for the given node.
+    virtual bool CanHandle(wxXmlNode *node);
+
+    // Register with wxWidgets' dynamic class subsystem.
+    DECLARE_DYNAMIC_CLASS(MyControlXmlHandler)
+};
+\end{verbatim}
+
+The implementation of your custom XML handler will typically look as:
+
+\begin{verbatim}
+// Register with wxWidgets' dynamic class subsystem.
+IMPLEMENT_DYNAMIC_CLASS(MyControlXmlHandler, wxXmlResourceHandler)
+
+MyControlXmlHandler::MyControlXmlHandler()
+{
+    // this call adds support for all wxWindows class styles
+    // (e.g. wxSIMPLE_BORDER, wxSUNKEN_BORDER, wxWS_EX_* etc etc)
+    AddWindowStyles();
+
+    // if MyControl class supports e.g. MYCONTROL_DEFAULT_STYLE
+    // you should use:
+    //     XRC_ADD_STYLE(MYCONTROL_DEFAULT_STYLE);
+}
+
+wxObject *MyControlXmlHandler::DoCreateResource()
+{
+    // the following macro will init a pointer named "control"
+    // with a new instance of the MyControl class, but will NOT
+    // Create() it!
+    XRC_MAKE_INSTANCE(control, MyControl)
+
+    // this is the point where you'll typically need to do the most
+    // important changes: here the control is created and initialized.
+    // You'll want to use the wxXmlResourceHandler's getters to
+    // do most of your work.
+    // If e.g. the MyControl::Create function looks like:
+    //
+    //    bool MyControl::Create(wxWindow *parent, int id, 
+    //                           const wxBitmap &first, const wxPoint &posFirst,
+    //                           const wxBitmap &second, const wxPoint &posSecond,
+    //                           const wxString &theTitle, const wxFont &titleFont,
+    //                           const wxPoint &pos, const wxSize &size,
+    //                           long style = MYCONTROL_DEFAULT_STYLE,
+    //                           const wxString &name = wxT("MyControl"));
+    //
+    // then the XRC for your component should look like:
+    //
+    //    <object class="MyControl" name="some_name">
+    //        <first-bitmap>first.xpm</first-bitmap>
+    //        <second-bitmap>text.xpm</second-bitmap>
+    //        <first-pos>3,3</first-pos>
+    //        <second-pos>4,4</second-pos>
+    //        <the-title>a title</the-title>
+    //        <title-font>
+    //           <!-- the standard XRC tags for describing a font: <size>, <style>, <weight>, etc -->
+    //        </title-font>
+    //        <!-- XRC also accepts other usual tags for wxWindow-derived classes:
+    //             like e.g. <name>, <style>, <size>, <position>, etc -->
+    //    </object>
+    //
+    // and the code to read your custom tags from the XRC file is just:
+    control->Create(m_parentAsWindow, GetID(),
+                    GetBitmap(wxT("first-bitmap")),
+                    GetPosition(wxT("first-pos")),
+                    GetBitmap(wxT("second-bitmap")),
+                    GetPosition(wxT("second-pos")),
+                    GetText(wxT("the-title")),
+                    GetFont(wxT("title-font")),
+                    GetPosition(), GetSize(), GetStyle(), GetName());
+
+    SetupWindow(control);
+
+    return control;
+}
+
+bool MyControlXmlHandler::CanHandle(wxXmlNode *node)
+{
+    // this function tells XRC system that this handler can parse
+    // the <object class="MyControl"> tags
+    return IsOfClass(node, wxT("MyControl"));
+}
+\end{verbatim}
+
+You may want to check the \helpref{wxXmlResourceHandler}{wxxmlresourcehandler} documentation
+to see how many built-in getters it contains. It's very easy to retrieve also complex structures
+out of XRC files using them.
 
