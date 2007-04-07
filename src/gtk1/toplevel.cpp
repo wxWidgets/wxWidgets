@@ -327,7 +327,7 @@ gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget),
 
     // reset the icon
     wxIconBundle iconsOld = win->GetIcons();
-    if ( iconsOld.GetIcon(-1).Ok() )
+    if ( !iconsOld.IsEmpty() )
     {
         win->SetIcon( wxNullIcon );
         win->SetIcons( iconsOld );
@@ -1088,7 +1088,13 @@ void wxTopLevelWindowGTK::SetTitle( const wxString &title )
 
 void wxTopLevelWindowGTK::SetIcon( const wxIcon &icon )
 {
-    SetIcons( wxIconBundle( icon ) );
+    // passing wxNullIcon to SetIcon() is possible (it means that we shouldn't
+    // have any icon), but adding an invalid icon to wxIconBundle is not
+    wxIconBundle icons;
+    if ( icon.Ok() )
+        icons.AddIcon(icon);
+
+    SetIcons(icons);
 }
 
 void wxTopLevelWindowGTK::SetIcons( const wxIconBundle &icons )
@@ -1096,6 +1102,9 @@ void wxTopLevelWindowGTK::SetIcons( const wxIconBundle &icons )
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
     wxTopLevelWindowBase::SetIcons( icons );
+
+    if ( icons.IsEmpty() )
+        return;
 
     GdkWindow* window = m_widget->window;
     if (!window)
