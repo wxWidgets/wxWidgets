@@ -64,13 +64,11 @@ protected:
 wxIconBundle::wxIconBundle()
             : wxGDIObject()
 {
-    m_refData = new wxIconBundleRefData;
 }
 
 wxIconBundle::wxIconBundle(const wxString& file, long type)
             : wxGDIObject()
 {
-    m_refData = new wxIconBundleRefData;
     AddIcon(file, type);
 }
 
@@ -83,7 +81,6 @@ wxIconBundle::wxIconBundle(const wxIconBundle& icon)
 wxIconBundle::wxIconBundle(const wxIcon& icon)
             : wxGDIObject()
 {
-    m_refData = new wxIconBundleRefData;
     AddIcon(icon);
 }
 
@@ -99,9 +96,7 @@ wxObjectRefData *wxIconBundle::CloneRefData(const wxObjectRefData *data) const
 
 void wxIconBundle::DeleteIcons()
 {
-    wxIconBundleRefData* ref = new wxIconBundleRefData();
     UnRef();
-    m_refData = ref;
 }
 
 bool wxIconBundle::IsOk() const
