@@ -78,6 +78,9 @@ public:
     // return the icon at index (must be < GetIconCount())
     wxIcon GetIconByIndex(size_t n) const;
 
+    // check if we have any icons at all
+    bool IsEmpty() const { return GetIconCount() == 0; }
+
 protected:
     virtual wxObjectRefData *CreateRefData() const;
     virtual wxObjectRefData *CloneRefData(const wxObjectRefData *data) const;
