@@ -110,12 +110,11 @@ bool wxTextCtrl::Create(wxWindow *parent,
 {
     if( !CreateControl( parent, id, pos, size, style, validator, name ) )
         return false;
+    PreCreation();
 
     m_tempCallbackStruct = (void*) NULL;
     m_modified = false;
     m_processedDefault = false;
-
-    m_backgroundColour = *wxWHITE;
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
@@ -135,8 +134,9 @@ bool wxTextCtrl::Create(wxWindow *parent,
         Arg args[8];
         int count = 0;
         XtSetArg (args[count], XmNscrollHorizontal, wantHorizScroll); ++count;
-        XtSetArg (args[count], (String) wxFont::GetFontTag(),
-                  m_font.GetFontType( XtDisplay(parentWidget) ) ); ++count;
+        if( m_font.IsOk() )
+            XtSetArg (args[count], (String) wxFont::GetFontTag(),
+                      m_font.GetFontType( XtDisplay(parentWidget) ) ); ++count;
         XtSetArg (args[count], XmNwordWrap, wantWordWrap); ++count;
         XtSetArg (args[count], XmNvalue, value.mb_str()); ++count;
         XtSetArg (args[count], XmNeditable,
@@ -194,10 +194,9 @@ bool wxTextCtrl::Create(wxWindow *parent,
 
     XtAddCallback((Widget) m_mainWidget, XmNlosingFocusCallback, (XtCallbackProc)wxTextWindowLoseFocusProc, (XtPointer)this);
 
+    PostCreation();
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL,
                   pos.x, pos.y, size.x, size.y);
-
-    ChangeBackgroundColour();
 
     return true;
 }
@@ -667,8 +666,8 @@ wxSize wxDoGetSingleTextCtrlBestSize( Widget textWidget,
     int x, y;
     window->GetTextExtent( value, &x, &y );
 
-    if( x < 100 )
-        x = 100;
+    if( x < 90 )
+        x = 90;
 
     return wxSize( x + 2 * xmargin + 2 * highlight + 2 * shadow,
                    // MBN: +2 necessary: Lesstif bug or mine?
@@ -680,10 +679,16 @@ wxSize wxTextCtrl::DoGetBestSize() const
     if( IsSingleLine() )
     {
         wxSize best = wxControl::DoGetBestSize();
-
-        if( best.x < 110 ) best.x = 110;
+#if wxCHECK_MOTIF_VERSION( 2, 3 )
+        // OpenMotif 2.3 gives way too big X sizes
+        wxSize other_best = wxDoGetSingleTextCtrlBestSize
+                                ( (Widget) GetTopWidget(), this );
+        return wxSize( other_best.x, best.y );
+#else
+        if( best.x < 90 ) best.x = 90;
 
         return best;
+#endif
     }
     else
         return wxWindow::DoGetBestSize();

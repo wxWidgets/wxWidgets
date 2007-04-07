@@ -179,8 +179,16 @@ wxWindowDC::wxWindowDC( wxWindow *window )
     gcvalues.graphics_exposures = False;
     gcvalues.subwindow_mode = IncludeInferiors;
     gcvalues.line_width = 1;
+#if !wxMOTIF_NEW_FONT_HANDLING
+    WXFontStructPtr pFontStruct = m_font.GetFontStruct(m_userScaleY*m_logicalScaleY, m_display);
+    gcvalues.font = ((XFontStruct*)pFontStruct)->fid;
+#endif
     m_gc = (WXGC) XCreateGC (display, RootWindow (display, DefaultScreen (display)),
-        GCForeground | GCBackground | GCGraphicsExposures | GCLineWidth | GCSubwindowMode,
+        GCForeground | GCBackground | GCGraphicsExposures | GCLineWidth | GCSubwindowMode
+#if !wxMOTIF_NEW_FONT_HANDLING
+        | GCFont
+#endif
+                             ,
         &gcvalues);
 
     if (m_window->GetBackingPixmap())
@@ -1685,7 +1693,7 @@ void wxWindowDC::SetPen( const wxPen &pen )
         if (m_window && m_window->GetBackingPixmap())
             XSetStipple ((Display*) m_display,(GC) m_gcBacking, myStipple);
     }
-    else if (m_currentStipple.Ok()
+    else if (m_currentStyle == wxSTIPPLE && m_currentStipple.Ok()
         && ((!m_currentStipple.IsSameAs(oldStipple)) || !GET_OPTIMIZATION))
     {
         XSetStipple ((Display*) m_display, (GC) m_gc, (Pixmap) m_currentStipple.GetDrawable());

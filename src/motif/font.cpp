@@ -59,7 +59,7 @@ public:
 #if !wxMOTIF_NEW_FONT_HANDLING
     WXFontStructPtr     m_fontStruct;   // XFontStruct
 #endif
-#if !wxMOTIF_USE_RENDER_TABLE && !wxMOTIF_NEW_FONT_HANDLING
+#if !wxMOTIF_USE_RENDER_TABLE
     WXFontList          m_fontList;     // Motif XmFontList
 #else // if wxUSE_RENDER_TABLE
     WXRenderTable       m_renderTable;  // Motif XmRenderTable
@@ -131,7 +131,7 @@ wxXFont::wxXFont()
 #if !wxMOTIF_NEW_FONT_HANDLING
     m_fontStruct = (WXFontStructPtr) 0;
 #endif
-#if !wxMOTIF_USE_RENDER_TABLE && !wxMOTIF_NEW_FONT_HANDLING
+#if !wxMOTIF_USE_RENDER_TABLE
     m_fontList = (WXFontList) 0;
 #else // if wxMOTIF_USE_RENDER_TABLE
     m_renderTable = (WXRenderTable) 0;
@@ -635,7 +635,7 @@ WXFontType wxFont::GetFontTypeC(WXDisplay* display) const
 #endif
 }
 
-#if wxMOTIF_NEW_FONT_HANDLING
+#if wxMOTIF_USE_RENDER_TABLE
 
 WXFontSet wxFont::GetFontSet(double scale, WXDisplay* display) const
 {
@@ -667,7 +667,7 @@ void wxGetTextExtent(WXDisplay* display, const wxFont& font, double scale,
     if( descent ) *descent = logical.height + logical.y;
 }
 
-#else // if !wxMOTIF_NEW_FONT_HANDLING
+#else // if !wxMOTIF_USE_RENDER_TABLE
 
 void wxGetTextExtent(WXDisplay* display, const wxFont& font,
                      double scale, const wxString& str,
@@ -692,4 +692,4 @@ void wxGetTextExtent(WXDisplay* display, const wxFont& font,
         *ascent = ascent2;
 }
 
-#endif // !wxMOTIF_NEW_FONT_HANDLING
+#endif // !wxMOTIF_USE_RENDER_TABLE

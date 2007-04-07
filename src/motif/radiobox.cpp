@@ -51,6 +51,7 @@ void wxRadioBox::Init()
     m_selectedButton = -1;
     m_noItems = 0;
     m_noRowsOrCols = 0;
+    m_labelWidget = (WXWidget) 0;
 }
 
 bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
@@ -61,6 +62,7 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
 {
     if( !CreateControl( parent, id, pos, size, style, val, name ) )
         return false;
+    PreCreation();
 
     m_noItems = (unsigned int)n;
     m_noRowsOrCols = majorDim;
@@ -137,17 +139,14 @@ bool wxRadioBox::Create(wxWindow *parent, wxWindowID id, const wxString& title,
                        (XtPointer) this);
     }
 
-    ChangeFont(false);
-
     SetSelection (0);
 
     XtRealizeWidget((Widget)m_mainWidget);
     XtManageChild (radioBoxWidget);
     XtManageChild ((Widget)m_mainWidget);
 
+    PostCreation();
     AttachWidget (parent, m_mainWidget, NULL, pos.x, pos.y, size.x, size.y);
-
-    ChangeBackgroundColour();
 
     return true;
 }

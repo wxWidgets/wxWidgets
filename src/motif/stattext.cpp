@@ -42,6 +42,8 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
     if( !CreateControl( parent, id, pos, size, style,
                         wxDefaultValidator, name ) )
         return false;
+    m_labelWidget = (WXWidget) 0;
+    PreCreation();
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
@@ -61,12 +63,15 @@ bool wxStaticText::Create(wxWindow *parent, wxWindowID id,
 
     m_mainWidget = borderWidget ? borderWidget : m_labelWidget;
 
-    AttachWidget (parent, m_mainWidget, (WXWidget) NULL,
-                  pos.x, pos.y, size.x, size.y);
-
-    ChangeBackgroundColour ();
-
     SetLabel(label);
+
+    wxSize best = GetBestSize();
+    if( size.x != -1 ) best.x = size.x;
+    if( size.y != -1 ) best.y = size.y;
+
+    PostCreation();
+    AttachWidget (parent, m_mainWidget, (WXWidget) NULL,
+                  pos.x, pos.y, best.x, best.y);
 
     return true;
 }
@@ -107,5 +112,13 @@ void wxStaticText::DoSetLabel(const wxString& str)
    FIXME: UpdateLabel() should be called on size events to allow correct
           dynamic ellipsizing of the label
 */
+
+wxSize wxStaticText::DoGetBestSize() const
+{
+    int w, h;
+    GetTextExtent(GetLabelText(), &w, &h, NULL, NULL, NULL);
+
+    return wxSize(w, h);
+}
 
 #endif // wxUSE_STATTEXT

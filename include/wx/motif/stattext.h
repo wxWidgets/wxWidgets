@@ -55,6 +55,7 @@ public:
     virtual void DoSetLabel(const wxString& str);
     virtual wxString DoGetLabel() const;
 
+    virtual wxSize DoGetBestSize() const;
 protected:
     WXWidget              m_labelWidget;
 };

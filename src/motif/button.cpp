@@ -57,6 +57,7 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& lbl,
 
     if( !CreateControl( parent, id, pos, size, style, validator, name ) )
         return false;
+    PreCreation();
 
     wxXmString text( GetLabelText(label) );
 
@@ -89,10 +90,9 @@ bool wxButton::Create(wxWindow *parent, wxWindowID id, const wxString& lbl,
     if( size.x != -1 ) best.x = size.x;
     if( size.y != -1 ) best.y = size.y;
 
+    PostCreation();
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL,
                   pos.x, pos.y, best.x, best.y);
-
-    ChangeBackgroundColour();
 
     return true;
 }

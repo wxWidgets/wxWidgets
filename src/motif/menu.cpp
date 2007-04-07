@@ -82,10 +82,6 @@ void wxMenu::Init()
         Append(-3, m_title) ;
         AppendSeparator() ;
     }
-
-    m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_MENU);
-    m_foregroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_MENUTEXT);
-    m_font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
 }
 
 // The wxWindow destructor will take care of deleting the submenus.
@@ -190,9 +186,6 @@ void wxMenuBar::Init()
     m_eventHandler = this;
     m_menuBarFrame = NULL;
     m_mainWidget = (WXWidget) NULL;
-    m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_MENU);
-    m_foregroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_MENUTEXT);
-    m_font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
 }
 
 wxMenuBar::wxMenuBar(size_t n, wxMenu *menus[], const wxArrayString& titles, long WXUNUSED(style))
@@ -349,6 +342,10 @@ wxMenuItem *wxMenuBar::FindItem(int id, wxMenu ** itemMenu) const
 // Create menubar
 bool wxMenuBar::CreateMenuBar(wxFrame* parent)
 {
+    m_parent = parent; // bleach... override it!
+    PreCreation();
+    m_parent = NULL;
+
     if (m_mainWidget)
     {
         XtVaSetValues((Widget) parent->GetMainWidget(), XmNmenuBar, (Widget) m_mainWidget, NULL);
@@ -388,9 +385,7 @@ bool wxMenuBar::CreateMenuBar(wxFrame* parent)
         }
     }
 
-    SetBackgroundColour(m_backgroundColour);
-    SetForegroundColour(m_foregroundColour);
-    SetFont(m_font);
+    PostCreation();
 
     XtVaSetValues((Widget) parent->GetMainWidget(), XmNmenuBar, (Widget) m_mainWidget, NULL);
     XtRealizeWidget ((Widget) menuBarW);
@@ -474,13 +469,24 @@ WXWidget wxMenu::CreateMenu (wxMenuBar * menuBar,
 {
     Widget menu = (Widget) 0;
     Widget buttonWidget = (Widget) 0;
+    Display* dpy = XtDisplay((Widget)parent);
     Arg args[5];
     XtSetArg (args[0], XmNnumColumns, m_numColumns);
     XtSetArg (args[1], XmNpacking, (m_numColumns > 1) ? XmPACK_COLUMN : XmPACK_TIGHT);
 
+    if ( !m_font.Ok() )
+    {
+        if ( menuBar )
+            m_font = menuBar->GetFont();
+        else if ( GetInvokingWindow() )
+            m_font = GetInvokingWindow()->GetFont();
+    }
+
+    XtSetArg (args[2], (String)wxFont::GetFontTag(), m_font.GetFontTypeC(dpy) );
+
     if (!pullDown)
     {
-        menu = XmCreatePopupMenu ((Widget) parent, wxMOTIF_STR("popup"), args, 2);
+        menu = XmCreatePopupMenu ((Widget) parent, wxMOTIF_STR("popup"), args, 3);
 #if 0
         XtAddCallback(menu,
             XmNunmapCallback,
@@ -491,7 +497,7 @@ WXWidget wxMenu::CreateMenu (wxMenuBar * menuBar,
     else
     {
         char mnem = wxFindMnemonic (title);
-        menu = XmCreatePulldownMenu ((Widget) parent, wxMOTIF_STR("pulldown"), args, 2);
+        menu = XmCreatePulldownMenu ((Widget) parent, wxMOTIF_STR("pulldown"), args, 3);
 
         wxString title2(wxStripMenuCodes(title));
         wxXmString label_str(title2);
@@ -503,6 +509,8 @@ WXWidget wxMenu::CreateMenu (wxMenuBar * menuBar,
 #endif
             XmNlabelString, label_str(),
             XmNsubMenuId, menu,
+            (String)wxFont::GetFontTag(), m_font.GetFontTypeC(dpy),
+            XmNpositionIndex, index,
             NULL);
 
         if (mnem != 0)
@@ -523,9 +531,7 @@ WXWidget wxMenu::CreateMenu (wxMenuBar * menuBar,
         item->CreateItem(menu, menuBar, topMenu, i);
     }
 
-    SetBackgroundColour(m_backgroundColour);
-    SetForegroundColour(m_foregroundColour);
-    SetFont(m_font);
+    ChangeFont();
 
     return buttonWidget;
 }
@@ -600,6 +606,8 @@ WXWidget wxMenu::FindMenuItem (int id, wxMenuItem ** it) const
 void wxMenu::SetBackgroundColour(const wxColour& col)
 {
     m_backgroundColour = col;
+    if (!col.Ok())
+        return;
     if (m_menuWidget)
         wxDoChangeBackgroundColour(m_menuWidget, (wxColour&) col);
     if (m_buttonWidget)
@@ -623,6 +631,8 @@ void wxMenu::SetBackgroundColour(const wxColour& col)
 void wxMenu::SetForegroundColour(const wxColour& col)
 {
     m_foregroundColour = col;
+    if (!col.Ok())
+        return;
     if (m_menuWidget)
         wxDoChangeForegroundColour(m_menuWidget, (wxColour&) col);
     if (m_buttonWidget)
@@ -689,7 +699,10 @@ void wxMenu::SetFont(const wxFont& font)
 
 bool wxMenuBar::SetBackgroundColour(const wxColour& col)
 {
-    m_backgroundColour = col;
+    if (!wxWindowBase::SetBackgroundColour(col))
+        return false;
+    if (!col.Ok())
+        return false;
     if (m_mainWidget)
         wxDoChangeBackgroundColour(m_mainWidget, (wxColour&) col);
 
@@ -702,7 +715,10 @@ bool wxMenuBar::SetBackgroundColour(const wxColour& col)
 
 bool wxMenuBar::SetForegroundColour(const wxColour& col)
 {
-    m_foregroundColour = col;
+    if (!wxWindowBase::SetForegroundColour(col))
+        return false;
+    if (!col.Ok())
+        return false;
     if (m_mainWidget)
         wxDoChangeForegroundColour(m_mainWidget, (wxColour&) col);
 

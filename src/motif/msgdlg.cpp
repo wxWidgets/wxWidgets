@@ -167,12 +167,15 @@ int wxMessageDialog::ShowModal()
 
     Display* dpy = XtDisplay(wParent);
 
-    wxComputeColours (dpy, & m_backgroundColour, (wxColour*) NULL);
+    if (m_backgroundColour.Ok())
+    {
+        wxComputeColours (dpy, & m_backgroundColour, (wxColour*) NULL);
 
-    XtSetArg(args[ac], XmNbackground, g_itemColors[wxBACK_INDEX].pixel); ac++;
-    XtSetArg(args[ac], XmNtopShadowColor, g_itemColors[wxTOPS_INDEX].pixel); ac++;
-    XtSetArg(args[ac], XmNbottomShadowColor, g_itemColors[wxBOTS_INDEX].pixel); ac++;
-    XtSetArg(args[ac], XmNforeground, g_itemColors[wxFORE_INDEX].pixel); ac++;
+        XtSetArg(args[ac], XmNbackground, g_itemColors[wxBACK_INDEX].pixel); ac++;
+        XtSetArg(args[ac], XmNtopShadowColor, g_itemColors[wxTOPS_INDEX].pixel); ac++;
+        XtSetArg(args[ac], XmNbottomShadowColor, g_itemColors[wxBOTS_INDEX].pixel); ac++;
+        XtSetArg(args[ac], XmNforeground, g_itemColors[wxFORE_INDEX].pixel); ac++;
+    }
 
     wxFont font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
 

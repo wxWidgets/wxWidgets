@@ -13,12 +13,11 @@
 #define _WX_FONT_H_
 
 #if __WXMOTIF20__ && !__WXLESSTIF__
-    #define wxMOTIF_NEW_FONT_HANDLING 1
     #define wxMOTIF_USE_RENDER_TABLE 1
 #else
-    #define wxMOTIF_NEW_FONT_HANDLING 0
     #define wxMOTIF_USE_RENDER_TABLE 0
 #endif
+#define wxMOTIF_NEW_FONT_HANDLING wxMOTIF_USE_RENDER_TABLE
 
 class wxXFont;
 
@@ -93,18 +92,15 @@ public:
         WXDisplay* display = NULL) const;
 
     // These two are helper functions for convenient access of the above.
-#if wxMOTIF_NEW_FONT_HANDLING
-    WXFontSet GetFontSet(double scale, WXDisplay* display = NULL) const;
-#else // if !wxMOTIF_NEW_FONT_HANDLING
-    WXFontStructPtr GetFontStruct(double scale = 1.0,
-        WXDisplay* display = NULL) const;
-#endif // wxMOTIF_NEW_FONT_HANDLING
 #if wxMOTIF_USE_RENDER_TABLE
+    WXFontSet GetFontSet(double scale, WXDisplay* display = NULL) const;
     WXRenderTable GetRenderTable(WXDisplay* display) const;
 #else // if !wxMOTIF_USE_RENDER_TABLE
+    WXFontStructPtr GetFontStruct(double scale = 1.0,
+        WXDisplay* display = NULL) const;
     WXFontList GetFontList(double scale = 1.0,
         WXDisplay* display = NULL) const;
-#endif // wxMOTIF_USE_RENDER_TABLE
+#endif // !wxMOTIF_USE_RENDER_TABLE
     // returns either a XmFontList or XmRenderTable, depending
     // on Motif version
     WXFontType GetFontType(WXDisplay* display) const;

@@ -204,10 +204,9 @@ bool wxToolBar::Create(wxWindow *parent,
     if( !wxControl::CreateControl( parent, id, pos, size, style,
                                    wxDefaultValidator, name ) )
         return false;
+    PreCreation();
 
     FixupStyle();
-
-    m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
@@ -232,8 +231,6 @@ bool wxToolBar::Create(wxWindow *parent,
 
     m_mainWidget = (WXWidget) toolbar;
 
-    ChangeFont(false);
-
     wxPoint rPos = pos;
     wxSize  rSize = size;
 
@@ -242,10 +239,9 @@ bool wxToolBar::Create(wxWindow *parent,
     if( rSize.x == -1 && GetParent() )
         rSize.x = GetParent()->GetSize().x;
 
+    PostCreation();
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL,
                   rPos.x, rPos.y, rSize.x, rSize.y);
-
-    ChangeBackgroundColour();
 
     return true;
 }

@@ -71,6 +71,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 {
     if ( !CreateControl(parent, id, pos, size, style, validator, name) )
         return false;
+    PreCreation();
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
@@ -138,9 +139,7 @@ bool wxChoice::Create(wxWindow *parent, wxWindowID id,
 
     XtVaSetValues((Widget) m_formWidget, XmNresizePolicy, XmRESIZE_NONE, NULL);
 
-    ChangeFont(false);
-    ChangeBackgroundColour();
-
+    PostCreation();
     AttachWidget (parent, m_buttonWidget, m_formWidget,
                   pos.x, pos.y, bestSize.x, bestSize.y);
 
@@ -450,7 +449,7 @@ void wxChoice::ChangeFont(bool keepOriginalSize)
     // Note that this causes the widget to be resized back
     // to its original size! We therefore have to set the size
     // back again. TODO: a better way in Motif?
-    if (m_font.Ok())
+    if (m_mainWidget && m_font.Ok())
     {
         Display* dpy = XtDisplay((Widget) m_mainWidget);
         int width, height, width1, height1;

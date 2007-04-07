@@ -130,11 +130,6 @@ bool wxFrame::Create(wxWindow *parent,
                                    name ) )
         return false;
 
-    m_backgroundColour =
-        wxSystemSettings::GetColour(wxSYS_COLOUR_APPWORKSPACE);
-    m_foregroundColour = *wxBLACK;
-    m_font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
-
     int x = pos.x, y = pos.y;
     int width = size.x, height = size.y;
 
@@ -180,10 +175,7 @@ bool wxFrame::Create(wxWindow *parent,
     if (height > -1)
         XtVaSetValues((Widget) m_frameShell, XmNheight, height, NULL);
 
-    ChangeFont(false);
-
-    ChangeBackgroundColour();
-
+    PostCreation();
     PreResize();
 
     wxSize newSize(width, height);
@@ -398,6 +390,12 @@ void wxFrame::DoSetClientSize(int width, int height)
 
 void wxFrame::DoGetSize(int *width, int *height) const
 {
+    if (!m_frameShell)
+    {
+        *width = -1; *height = -1;
+        return;
+    }
+
     Dimension xx, yy;
     XtVaGetValues((Widget) m_frameShell, XmNwidth, &xx, XmNheight, &yy, NULL);
     *width = xx; *height = yy;

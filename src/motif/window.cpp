@@ -235,9 +235,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
     CreateBase(parent, id, pos, size, style, wxDefaultValidator, name);
 
     parent->AddChild(this);
-
-    m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-    m_foregroundColour = *wxBLACK;
+    PreCreation();
 
     //// TODO: we should probably optimize by only creating a
     //// a drawing area if we have one or more scrollbars (wxVSCROLL/wxHSCROLL).
@@ -330,21 +328,16 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID id,
                        (XtPointer) this
                      );
 
-    // Scrolled widget needs to have its colour changed or we get a little blue
-    // square where the scrollbars abutt
-    wxColour backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-    wxDoChangeBackgroundColour(m_scrolledWindow, backgroundColour, true);
-    wxDoChangeBackgroundColour(m_drawingArea, backgroundColour, true);
-
     XmScrolledWindowSetAreas(
                              (Widget)m_scrolledWindow,
                              (Widget) 0, (Widget) 0,
                              (Widget) m_drawingArea);
 
+    PostCreation();
+
     // Without this, the cursor may not be restored properly (e.g. in splitter
     // sample).
     SetCursor(*wxSTANDARD_CURSOR);
-    SetFont(wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT));
     DoSetSizeIntr(pos.x, pos.y, size.x,size.y, wxSIZE_AUTO, true);
     return true;
 }
@@ -1173,12 +1166,13 @@ void wxWindow::DoGetSize(int *x, int *y) const
                                 m_drawingArea ) );
     Dimension xx, yy;
 
-    XtVaGetValues( widget,
-                   XmNwidth, &xx,
-                   XmNheight, &yy,
-                   NULL );
-    if(x) *x = xx;
-    if(y) *y = yy;
+    if (widget)
+        XtVaGetValues( widget,
+                       XmNwidth, &xx,
+                       XmNheight, &yy,
+                       NULL );
+    if(x) *x = widget ? xx : -1; 
+    if(y) *y = widget ? yy : -1;
 }
 
 void wxWindow::DoGetPosition(int *x, int *y) const
@@ -1260,6 +1254,11 @@ void wxWindow::DoSetSizeIntr(int x, int y, int width, int height,
         GetSize(& oldW, & oldH);
         GetPosition(& oldX, & oldY);
     }
+
+    if (x == -1)
+        x = oldX;
+    if (x == -1)
+        x = oldY;
 
     if ( !(sizeFlags & wxSIZE_ALLOW_MINUS_ONE) )
     {
@@ -1457,24 +1456,26 @@ void wxWindow::DoMoveWindow(int x, int y, int width, int height)
 
 int wxWindow::GetCharHeight() const
 {
-    wxCHECK_MSG( m_font.Ok(), 0, "valid window font needed" );
-
     int height;
 
-    wxGetTextExtent (GetXDisplay(), m_font, 1.0,
-                     "x", NULL, &height, NULL, NULL);
+    if (m_font.Ok())
+        wxGetTextExtent (GetXDisplay(), m_font, 1.0,
+                         "x", NULL, &height, NULL, NULL);
+    else
+        wxGetTextExtent (this, "x", NULL, &height, NULL, NULL);
 
     return height;
 }
 
 int wxWindow::GetCharWidth() const
 {
-    wxCHECK_MSG( m_font.Ok(), 0, "valid window font needed" );
-
     int width;
 
-    wxGetTextExtent (GetXDisplay(), m_font, 1.0,
-                     "x", &width, NULL, NULL, NULL);
+    if (m_font.Ok())
+        wxGetTextExtent (GetXDisplay(), m_font, 1.0,
+                         "x", &width, NULL, NULL, NULL);
+    else
+        wxGetTextExtent (this, "x", &width, NULL, NULL, NULL);
 
     return width;
 }
@@ -1486,12 +1487,13 @@ void wxWindow::GetTextExtent(const wxString& string,
 {
     const wxFont *fontToUse = theFont ? theFont : &m_font;
 
-    wxCHECK_RET( fontToUse->Ok(), "valid window font needed" );
-
     if (externalLeading)
         *externalLeading = 0;
-    wxGetTextExtent (GetXDisplay(), *fontToUse, 1.0,
-                     string, x, y, NULL, descent);
+    if (fontToUse->Ok())
+        wxGetTextExtent (GetXDisplay(), *fontToUse, 1.0,
+                         string, x, y, NULL, descent);
+    else
+        wxGetTextExtent (this, string, x, y, NULL, descent);
 }
 
 // ----------------------------------------------------------------------------
@@ -1505,9 +1507,12 @@ void wxWindow::AddUpdateRect(int x, int y, int w, int h)
 
 void wxWindow::Refresh(bool eraseBack, const wxRect *rect)
 {
+    Widget widget = (Widget) GetMainWidget();
+    if (!widget)
+        return;
     m_needsRefresh = true;
-    Display *display = XtDisplay((Widget) GetMainWidget());
-    Window thisWindow = XtWindow((Widget) GetMainWidget());
+    Display *display = XtDisplay(widget);
+    Window thisWindow = XtWindow(widget);
 
     XExposeEvent dummyEvent;
     int width, height;
@@ -2494,7 +2499,7 @@ void wxWindow::ChangeFont(bool keepOriginalSize)
         int width, height, width1, height1;
         GetSize(& width, & height);
 
-        wxDoChangeFont( GetLabelWidget(), m_font );
+        wxDoChangeFont( w, m_font );
 
         GetSize(& width1, & height1);
         if (keepOriginalSize && (width != width1 || height != height1))
@@ -2502,6 +2507,20 @@ void wxWindow::ChangeFont(bool keepOriginalSize)
             SetSize(wxDefaultCoord, wxDefaultCoord, width, height);
         }
     }
+}
+
+// Post-creation
+void wxWindow::PostCreation()
+{
+    ChangeFont();
+    ChangeForegroundColour();
+    ChangeBackgroundColour();
+}
+
+// Pre-creation
+void wxWindow::PreCreation()
+{
+    InheritAttributes();
 }
 
 // ----------------------------------------------------------------------------
@@ -2577,6 +2596,104 @@ wxMouseState wxGetMouseState()
     return ms;
 }
 
+
+#if wxMOTIF_NEW_FONT_HANDLING
+
+#include <Xm/XmP.h>
+
+void wxGetTextExtent(const wxWindow* window, const wxString& str,
+                     int* width, int* height, int* ascent, int* descent)
+{
+    Arg args[2];
+    int count = 0;
+    XmRendition rendition = NULL;
+    XmRenderTable table = NULL;
+    Widget w = (Widget) window->GetLabelWidget();
+
+    XtVaGetValues( w, XmNrenderTable, &table, NULL );
+    if (table == NULL)
+        table = XmeGetDefaultRenderTable(w, XmTEXT_RENDER_TABLE);
+
+    rendition = XmRenderTableGetRendition( table, "" );
+    XtSetArg( args[count], XmNfont, 0 ); ++count;
+    XtSetArg( args[count], XmNfontType, 0 ); ++count;
+    XmRenditionRetrieve( rendition, args, count );
+
+    if (args[1].value == XmFONT_IS_FONTSET)
+    {
+        XRectangle ink, logical;
+        WXFontSet fset = (WXFontSet) args[0].value;
+    
+        XmbTextExtents( (XFontSet)fset, str.c_str(), str.length(),
+                        &ink, &logical);
+
+        if( width ) *width = logical.width;
+        if( height ) *height = logical.height;
+        if( ascent ) *ascent = -logical.y;    
+        if( descent ) *descent = logical.height + logical.y;    
+    }
+    else
+    {
+        int direction, ascent2, descent2;
+        XCharStruct overall;
+        XFontStruct* fontStruct;
+
+        XmeRenderTableGetDefaultFont( table, &fontStruct );
+        XTextExtents(fontStruct, (const char*)str.c_str(), str.length(),
+                     &direction, &ascent2, &descent2, &overall);
+
+        if ( width ) *width = overall.width;
+        if ( height ) *height = ascent2 + descent2;
+        if ( descent ) *descent = descent2;
+        if ( ascent ) *ascent = ascent2;
+    }
+}
+
+#else // if !wxMOTIF_NEW_FONT_HANDLING
+
+void wxGetTextExtent(const wxWindow* window, const wxString& str,
+                     int* width, int* height, int* ascent, int* descent)
+{
+    XmFontList list = NULL;
+    XmFontContext cxt;
+    XmFontType type;
+    Widget w = (Widget) window->GetLabelWidget();
+
+    XtVaGetValues( w, XmNfontList, &list, NULL );
+    XmFontListInitFontContext( &cxt, list );
+
+    XmFontListEntry entry = XmFontListNextEntry( cxt );
+    XmFontListFreeFontContext( cxt );
+    XtPointer thing = XmFontListEntryGetFont( entry, &type );
+
+    if (type == XmFONT_IS_FONTSET)
+    {
+        XRectangle ink, logical;
+    
+        XmbTextExtents( (XFontSet)thing, str.c_str(), str.length(),
+                        &ink, &logical);
+
+        if( width ) *width = logical.width;
+        if( height ) *height = logical.height;
+        if( ascent ) *ascent = -logical.y;    
+        if( descent ) *descent = logical.height + logical.y;    
+    }
+    else
+    {
+        int direction, ascent2, descent2;
+        XCharStruct overall;
+
+        XTextExtents( (XFontStruct*)thing, (char*)(const char*)str.c_str(), str.length(),
+                     &direction, &ascent2, &descent2, &overall);
+
+        if ( width ) *width = overall.width;
+        if ( height ) *height = ascent2 + descent2;
+        if ( descent ) *descent = descent2;
+        if ( ascent ) *ascent = ascent2;
+    }
+}
+
+#endif // !wxMOTIF_NEW_FONT_HANDLING
 
 // ----------------------------------------------------------------------------
 // wxNoOptimize: switch off size optimization

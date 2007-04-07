@@ -42,6 +42,7 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
     if( !CreateControl( parent, id, pos, size, style, wxDefaultValidator,
                         name ) )
         return false;
+    PreCreation();
 
     m_messageBitmap = bitmap;
     m_messageBitmapOriginal = bitmap;
@@ -57,18 +58,15 @@ bool wxStaticBitmap::Create(wxWindow *parent, wxWindowID id,
                     XmNalignment, XmALIGNMENT_BEGINNING,
                     NULL);
 
-    ChangeBackgroundColour ();
-
-    DoSetBitmap();
-
-    ChangeFont(false);
-
     wxSize actualSize(size);
     // work around the cases where the bitmap is a wxNull(Icon/Bitmap)
     if (actualSize.x == -1)
         actualSize.x = bitmap.Ok() ? bitmap.GetWidth() : 1;
     if (actualSize.y == -1)
         actualSize.y = bitmap.Ok() ? bitmap.GetHeight() : 1;
+
+    PostCreation();
+    DoSetBitmap();
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL,
                   pos.x, pos.y, actualSize.x, actualSize.y);
 

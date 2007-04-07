@@ -106,6 +106,9 @@ extern void wxGetTextExtent(WXDisplay* display, const wxFont& font,
                             double scale,
                             const wxString& string, int* width, int* height,
                             int* ascent, int* descent);
+extern void wxGetTextExtent(const wxWindow* window, const wxString& str,
+                            int* width, int* height,
+                            int* ascent, int* descent);
 
 #define wxNO_COLORS   0x00
 #define wxBACK_COLORS 0x01

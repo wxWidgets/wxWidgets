@@ -21,6 +21,8 @@
 #include "wx/wxprec.h"
 
 #include "wx/toplevel.h"
+#include "wx/settings.h"
+#include "wx/app.h"
 
 #ifndef WX_PRECOMP
     #include "wx/app.h"
@@ -112,6 +114,9 @@ bool wxTopLevelWindowMotif::Create( wxWindow *parent, wxWindowID id,
     wxTopLevelWindows.Append(this);
 
     m_windowId = ( id > -1 ) ? id : NewControlId();
+    // MBN: More backward compatible, but uglier
+    m_font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
+    m_inheritFont = true;
 
     bool retval = XmDoCreateTLW( parent, id, title, pos, size, style, name );
 

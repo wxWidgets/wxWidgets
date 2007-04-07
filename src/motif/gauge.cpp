@@ -109,6 +109,7 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
 {
     if( !CreateControl( parent, id, pos, size, style, validator, name ) )
         return false;
+    PreCreation();
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
 
@@ -147,12 +148,9 @@ bool wxGauge::Create(wxWindow *parent, wxWindowID id,
     if( size.x != wxDefaultCoord ) best.x = size.x;
     if( size.y != wxDefaultCoord ) best.y = size.y;
 
-    ChangeFont(false);
-
+    PostCreation();
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, x, y,
                   best.x, best.y);
-
-    ChangeBackgroundColour();
 
     return true;
 }

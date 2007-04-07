@@ -51,6 +51,7 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 {
     if( !CreateControl( parent, id, pos, size, style, validator, name ) )
         return false;
+    PreCreation();
 
     m_noStrings = n;
 
@@ -80,16 +81,13 @@ bool wxComboBox::Create(wxWindow *parent, wxWindowID id,
 
     SetValue(value);
 
-    ChangeFont(false);
-
     XtAddCallback (buttonWidget, XmNselectionCallback, (XtCallbackProc) wxComboBoxCallback,
         (XtPointer) this);
     XtAddCallback (buttonWidget, XmNvalueChangedCallback, (XtCallbackProc) wxComboBoxCallback,
         (XtPointer) this);
 
+    PostCreation();
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
-
-    ChangeBackgroundColour();
 
     return true;
 }

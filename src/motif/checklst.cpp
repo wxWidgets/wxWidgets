@@ -134,7 +134,7 @@ void wxCheckListBox::Check(unsigned int uiIndex, bool bCheck)
 
 void wxCheckListBox::DoToggleItem( int n, int x )
 {
-    if( x < 23 )
+    if( x > 0 && x < 23 )
     {
         wxString label = wxListBox::GetString(n);
         label[1u] = (!::IsChecked(label)) ? checkChar : uncheckChar;

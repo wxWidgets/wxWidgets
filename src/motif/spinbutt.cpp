@@ -210,6 +210,7 @@ bool wxArrowButton::Create( wxSpinButton* parent,
     }
 
     parent->AddChild( this );
+    PreCreation();
 
     Widget parentWidget = (Widget) parent->GetClientWidget();
     m_mainWidget = (WXWidget) XtVaCreateManagedWidget( "XmArrowButton",
@@ -230,10 +231,9 @@ bool wxArrowButton::Create( wxSpinButton* parent,
                    XmNactivateCallback, (XtCallbackProc) StopTimerCallback,
                    (XtPointer) this );
 
+    PostCreation();
     AttachWidget( parent, m_mainWidget, (WXWidget) NULL,
                   pos.x, pos.y, size.x, size.y );
-
-    SetForegroundColour( parent->GetBackgroundColour() );
 
     return true;
 }

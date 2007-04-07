@@ -64,6 +64,7 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
 
     if( !CreateControl( parent, id, pos, size, style, validator, name ) )
         return false;
+    PreCreation();
 
     m_lineSize = 1;
     m_windowStyle = style;
@@ -93,10 +94,8 @@ bool wxSlider::Create(wxWindow *parent, wxWindowID id,
     XtAddCallback (sliderWidget, XmNvalueChangedCallback, (XtCallbackProc) wxSliderCallback, (XtPointer) this);
     XtAddCallback (sliderWidget, XmNdragCallback, (XtCallbackProc) wxSliderCallback, (XtPointer) this);
 
-    ChangeFont(false);
+    PostCreation();
     AttachWidget (parent, m_mainWidget, (WXWidget) NULL, pos.x, pos.y, size.x, size.y);
-
-    ChangeBackgroundColour();
 
     return true;
 }

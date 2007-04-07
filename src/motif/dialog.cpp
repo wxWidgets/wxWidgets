@@ -75,7 +75,6 @@ wxDialog::wxDialog()
 {
     m_modalShowing = false;
     m_eventLoop = NULL;
-    m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
 }
 
 bool wxDialog::Create(wxWindow *parent, wxWindowID id,
@@ -94,15 +93,9 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
     m_modalShowing = false;
     m_eventLoop = NULL;
 
-    m_backgroundColour = wxSystemSettings::GetColour(wxSYS_COLOUR_3DFACE);
-    m_foregroundColour = *wxBLACK;
-
     Widget dialogShell = (Widget) m_mainWidget;
 
     SetTitle( title );
-
-    m_font = wxSystemSettings::GetFont(wxSYS_DEFAULT_GUI_FONT);
-    ChangeFont(false);
 
     // Can't remember what this was about... but I think it's necessary.
 #if wxUSE_INVISIBLE_RESIZE
@@ -135,7 +128,7 @@ bool wxDialog::Create(wxWindow *parent, wxWindowID id,
     XtAddEventHandler(dialogShell,ExposureMask,False,
         wxUniversalRepaintProc, (XtPointer) this);
 
-    ChangeBackgroundColour();
+    PostCreation();
 
     return true;
 }
