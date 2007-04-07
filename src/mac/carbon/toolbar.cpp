@@ -1103,6 +1103,8 @@ bool wxToolBar::Realize()
 #if wxMAC_USE_NATIVE_TOOLBAR
     CFIndex currentPosition = 0;
     bool insertAll = false;
+
+    HIToolbarRef refTB = (HIToolbarRef)m_macHIToolbarRef;
 #endif
 
     node = m_tools.GetFirst();
@@ -1142,9 +1144,9 @@ bool wxToolBar::Realize()
 
 #if wxMAC_USE_NATIVE_TOOLBAR
         // install in native HIToolbar
-        if ( m_macHIToolbarRef != NULL )
+        if ( refTB )
         {
-            HIToolbarItemRef    hiItemRef = tool->GetToolbarItemRef();
+            HIToolbarItemRef hiItemRef = tool->GetToolbarItemRef();
             if ( hiItemRef != NULL )
             {
                 if ( insertAll || (tool->GetIndex() != currentPosition) )
@@ -1156,25 +1158,32 @@ bool wxToolBar::Realize()
 
                         // if this is the first tool that gets newly inserted or repositioned
                         // first remove all 'old' tools from here to the right, because of this
-                        // all following tools will have to be reinserted (insertAll). i = 100 because there's
-                        // no way to determine how many there are in a toolbar, so just a high number :-(
-                        for ( CFIndex i = 100; i >= currentPosition; --i )
+                        // all following tools will have to be reinserted (insertAll).
+                        for ( wxToolBarToolsList::compatibility_iterator node2 = m_tools.GetLast();
+                              node2 != node;
+                              node2 = node2->GetPrevious() )
                         {
-                            err = HIToolbarRemoveItemAtIndex( (HIToolbarRef) m_macHIToolbarRef, i );
-                        }
+                            wxToolBarTool *tool2 = (wxToolBarTool*) node2->GetData();
 
-                        if (err != noErr)
-                        {
-                            wxString errMsg = wxString::Format( wxT("HIToolbarRemoveItemAtIndex failed [%ld]"), (long)err );
-                            wxFAIL_MSG( errMsg.c_str() );
+                            const long idx = tool2->GetIndex();
+                            if ( idx != -1 )
+                            {
+                                err = HIToolbarRemoveItemAtIndex(refTB, idx);
+                                if ( err != noErr )
+                                {
+                                    wxLogDebug(wxT("HIToolbarRemoveItemAtIndex(%ld) failed [%ld]"),
+                                               idx, (long)err);
+                                }
+
+                                tool2->SetIndex(-1);
+                            }
                         }
                     }
 
-                    err = HIToolbarInsertItemAtIndex( (HIToolbarRef) m_macHIToolbarRef, hiItemRef, currentPosition );
+                    err = HIToolbarInsertItemAtIndex( refTB, hiItemRef, currentPosition );
                     if (err != noErr)
                     {
-                        wxString errMsg = wxString::Format( wxT("HIToolbarInsertItemAtIndex failed [%ld]"), (long)err );
-                        wxFAIL_MSG( errMsg.c_str() );
+                        wxLogDebug( wxT("HIToolbarInsertItemAtIndex failed [%ld]"), (long)err );
                     }
 
                     tool->SetIndex( currentPosition );
