@@ -824,7 +824,7 @@ void MyFrame::FileSave(wxCommandEvent& WXUNUSED(event) )
                         _T("Testing save file dialog"),
                         wxEmptyString,
                         _T("myletter.doc"),
-                        _T("Text files (*.txt)|*.txt|Document files (*.doc)|*.doc"),
+                        _T("Text files (*.txt)|*.txt|Document files (*.doc;*.ods)|*.doc;*.ods"),
                         wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 
     dialog.SetFilterIndex(1);
@@ -909,7 +909,7 @@ void MyFrame::FileSaveGeneric(wxCommandEvent& WXUNUSED(event) )
                         _T("Testing save file dialog"),
                         wxEmptyString,
                         _T("myletter.doc"),
-                        _T("Text files (*.txt)|*.txt|Document files (*.doc)|*.doc"),
+                        _T("Text files (*.txt)|*.txt|Document files (*.doc;*.ods)|*.doc;*.ods"),
                         wxFD_SAVE|wxFD_OVERWRITE_PROMPT);
 
     dialog.SetFilterIndex(1);
