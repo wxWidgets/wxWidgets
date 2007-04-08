@@ -1463,6 +1463,22 @@ bool wxTranslateMouseEvent(wxMouseEvent& wxevent, wxWindow *win, Window window, 
                     eventType = wxEVT_RIGHT_DOWN;
                     button = 3;
                 }
+                else if ( xevent->xbutton.button == Button4 ||
+                            xevent->xbutton.button == Button5 )
+                {
+                    // this is the same value as used under wxMSW
+                    static const int WHEEL_DELTA = 120;
+
+                    eventType = wxEVT_MOUSEWHEEL;
+                    button = xevent->xbutton.button;
+
+                    wxevent.m_linesPerAction = 3;
+                    wxevent.m_wheelDelta = WHEEL_DELTA;
+
+                    // Button 4 means mousewheel up, 5 means down
+                    wxevent.m_wheelRotation = button == Button4 ? WHEEL_DELTA
+                                                                : -WHEEL_DELTA;
+                }
 
                 // check for a double click
                 // TODO: where can we get this value from?
