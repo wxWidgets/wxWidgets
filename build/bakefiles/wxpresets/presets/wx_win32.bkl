@@ -291,7 +291,7 @@
         <__wx-syslibs/>
     </template>
 
-    <if cond="FORMAT_SUPPORTS_ACTIONS=='1'">
+    <if cond="FORMAT_SUPPORTS_ACTIONS=='1' and WX_TEST_FOR_SELECTED_WXBUILD=='1'">
 
         <!--
             VERY IMPORTANT: before starting to build all targets of the generated makefile,

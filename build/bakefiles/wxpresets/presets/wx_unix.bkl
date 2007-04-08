@@ -185,12 +185,14 @@ Format-specific notes:
                          that simply creating the following target; if it fails the make
                          program will halt with the wx-config error message...
         -->
-        <action id="test_for_selected_wxbuild">
-            <dependency-of>all</dependency-of>
+        <if cond="WX_TEST_FOR_SELECTED_WXBUILD=='1'">
+            <action id="test_for_selected_wxbuild">
+                <dependency-of>all</dependency-of>
 
-            <!-- Use @ to hide to the user that we're running wx-config... -->
-            <command>@$(DOLLAR)(WX_CONFIG) $(WX_CONFIG_FLAGS)</command>
-        </action>
+                <!-- Use @ to hide to the user that we're running wx-config... -->
+                <command>@$(DOLLAR)(WX_CONFIG) $(WX_CONFIG_FLAGS)</command>
+            </action>
+        </if>
 
         <!-- we need this but the trick used in default-values above
              prevents bakefile from detecting it: -->

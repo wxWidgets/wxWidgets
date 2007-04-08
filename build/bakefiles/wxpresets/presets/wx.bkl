@@ -122,6 +122,16 @@
         base core net xml odbc xrc html adv media gl dbgrid qa aui richtext stc
     </set>
 
+    <!-- if you define this variable to 0 before including wx presets, the
+         "test_for_selected_wxbuild" target which is added by default in win32 and GNU 
+         makefiles, won't be added.
+         This is useful when e.g. you want to have wxWidgets as an optional
+         dependency and thus you don't want to perform that check unconditionally.
+    -->
+    <set var="WX_TEST_FOR_SELECTED_WXBUILD" overwrite="0">
+        1
+    </set>
+
     <!-- this is a temporary variable until there is non general    -->
     <!-- function in bakefiles for returning native markup for      -->
     <!-- reading envrionment variables                              -->
