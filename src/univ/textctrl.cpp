@@ -650,6 +650,7 @@ void wxTextCtrl::Init()
 
     m_isModified = false;
     m_isEditable = true;
+    m_wrapLines = false;
 
     m_posLast =
     m_curPos =
@@ -695,9 +696,18 @@ bool wxTextCtrl::Create(wxWindow *parent,
         // create data object for normal multiline or for controls with line
         // wrap as needed
         if ( style & wxHSCROLL )
+        {
             m_data.mdata = new wxTextMultiLineData;
-        else
+        }
+        else // we must wrap lines if we don't have horizontal scrollbar
+        {
+            // NB: we can't rely on HasFlag(wxHSCROLL) as the flags can change
+            //     later and even wxWindow::Create() itself temporarily resets
+            //     wxHSCROLL in wxUniv, so remember that we have a wrapped data
+            //     and not just a multi line data in a separate variable
+            m_wrapLines = true;
             m_data.wdata = new wxTextWrappedData;
+        }
     }
     else
     {
