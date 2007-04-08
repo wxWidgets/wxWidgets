@@ -109,6 +109,11 @@ wxSTD ostream& operator<<(wxSTD ostream& os, const wxWCharBuffer& str)
 // wxCStrData converted strings caching
 // ----------------------------------------------------------------------------
 
+// FIXME-UTF8: temporarily disabled because it doesn't work with global
+//             string objects; re-enable after fixing this bug and benchmarking
+//             performance to see if using a hash is a good idea at all
+#if 0
+
 // For backward compatibility reasons, it must be possible to assign the value
 // returned by wxString::c_str() to a char* or wchar_t* variable and work with
 // it. Returning wxCharBuffer from (const char*)c_str() wouldn't do the trick,
@@ -177,14 +182,6 @@ const wchar_t* wxCStrData::AsWChar() const
 }
 #endif // !wxUSE_UNICODE_WCHAR
 
-// ===========================================================================
-// wxString class core
-// ===========================================================================
-
-// ---------------------------------------------------------------------------
-// construction and conversion
-// ---------------------------------------------------------------------------
-
 wxString::~wxString()
 {
 #if wxUSE_UNICODE
@@ -195,6 +192,35 @@ wxString::~wxString()
     DeleteStringFromConversionCache(gs_stringsWCharCache, this);
 #endif
 }
+#endif
+
+#if wxUSE_UNICODE
+const char* wxCStrData::AsChar() const
+{
+    wxString *str = wxConstCast(m_str, wxString);
+    // convert the string and keep it:
+    str->m_convertedToChar = str->mb_str().release();
+    return str->m_convertedToChar + m_offset;
+}
+#endif // wxUSE_UNICODE
+
+#if !wxUSE_UNICODE_WCHAR
+const wchar_t* wxCStrData::AsWChar() const
+{
+    wxString *str = wxConstCast(m_str, wxString);
+    // convert the string and keep it:
+    str->m_convertedToWChar = str->wc_str().release();
+    return str->m_convertedToWChar + m_offset;
+}
+#endif // !wxUSE_UNICODE_WCHAR
+
+// ===========================================================================
+// wxString class core
+// ===========================================================================
+
+// ---------------------------------------------------------------------------
+// construction and conversion
+// ---------------------------------------------------------------------------
 
 #if wxUSE_UNICODE
 /* static */

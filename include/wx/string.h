@@ -571,8 +571,6 @@ public:
   wxString(const wxString& str, size_t nLength)
       : m_impl(str.Mid(0, nLength).m_impl) {}
 
-  ~wxString();
-
 public:
   // standard types
   typedef wxUniChar value_type;
@@ -2001,6 +1999,35 @@ private:
 
 private:
   wxStringImpl m_impl;
+
+  // buffers for compatibility conversion from (char*)c_str() and
+  // (wchar_t*)c_str():
+  // FIXME-UTF8: bechmark various approaches to keeping compatibility buffers
+  template<typename T>
+  struct ConvertedBuffer
+  {
+      ConvertedBuffer() : m_buf(NULL) {}
+      ~ConvertedBuffer()
+          { free(m_buf); }
+
+      operator const T*() const { return m_buf; }
+
+      ConvertedBuffer& operator=(T *str)
+      {
+          free(m_buf);
+          m_buf = str;
+          return *this;
+      }
+
+      T *m_buf;
+  };
+#if wxUSE_UNICODE
+  ConvertedBuffer<char> m_convertedToChar;
+#endif
+#if !wxUSE_UNICODE_WCHAR
+  ConvertedBuffer<wchar_t> m_convertedToWChar;
+#endif
+  friend class WXDLLIMPEXP_BASE wxCStrData;
 };
 
 #ifdef wxNEEDS_WXSTRING_PRINTF_MIXIN
