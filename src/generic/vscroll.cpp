@@ -25,6 +25,7 @@
 #endif
 
 #ifndef WX_PRECOMP
+    #include "wx/dc.h"
     #include "wx/sizer.h"
 #endif
 
