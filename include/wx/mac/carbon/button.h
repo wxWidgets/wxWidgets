@@ -20,33 +20,39 @@ WXDLLEXPORT_DATA(extern const wxChar) wxButtonNameStr[];
 // Pushbutton
 class WXDLLEXPORT wxButton: public wxButtonBase
 {
-  DECLARE_DYNAMIC_CLASS(wxButton)
- public:
-  inline wxButton() {}
-  inline wxButton(wxWindow *parent, wxWindowID id,
-           const wxString& label = wxEmptyString,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, long style = 0,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxButtonNameStr)
-  {
-      Create(parent, id, label, pos, size, style, validator, name);
-  }
+public:
+    wxButton() {}
+    wxButton(wxWindow *parent,
+             wxWindowID id,
+             const wxString& label = wxEmptyString,
+             const wxPoint& pos = wxDefaultPosition,
+             const wxSize& size = wxDefaultSize,
+             long style = 0,
+             const wxValidator& validator = wxDefaultValidator,
+             const wxString& name = wxButtonNameStr)
+    {
+        Create(parent, id, label, pos, size, style, validator, name);
+    }
 
-  bool Create(wxWindow *parent, wxWindowID id,
-           const wxString& label = wxEmptyString,
-           const wxPoint& pos = wxDefaultPosition,
-           const wxSize& size = wxDefaultSize, long style = 0,
-           const wxValidator& validator = wxDefaultValidator,
-           const wxString& name = wxButtonNameStr);
-    
+    bool Create(wxWindow *parent,
+                wxWindowID id,
+                const wxString& label = wxEmptyString,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxValidator& validator = wxDefaultValidator,
+                const wxString& name = wxButtonNameStr);
+
     virtual wxInt32 MacControlHit( WXEVENTHANDLERREF handler , WXEVENTREF event ) ;
     static wxSize GetDefaultSize();
 
-  virtual void SetDefault();
-  virtual void Command(wxCommandEvent& event);
+    virtual wxWindow *SetDefault();
+    virtual void Command(wxCommandEvent& event);
+
 protected:
     virtual wxSize DoGetBestSize() const ;
+
+    DECLARE_DYNAMIC_CLASS(wxButton)
 };
 
 #endif

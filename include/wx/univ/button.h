@@ -89,7 +89,7 @@ public:
 
     virtual void SetImageLabel(const wxBitmap& bitmap);
     virtual void SetImageMargins(wxCoord x, wxCoord y);
-    virtual void SetDefault();
+    virtual wxWindow *SetDefault();
 
     virtual bool IsPressed() const { return m_isPressed; }
     virtual bool IsDefault() const { return m_isDefault; }

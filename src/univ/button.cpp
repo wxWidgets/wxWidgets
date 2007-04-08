@@ -330,9 +330,11 @@ void wxButton::SetImageMargins(wxCoord x, wxCoord y)
     SetInitialSize(wxDefaultSize);
 }
 
-void wxButton::SetDefault()
+wxWindow *wxButton::SetDefault()
 {
     m_isDefault = true;
+
+    return wxButtonBase::SetDefault();
 }
 
 // ============================================================================

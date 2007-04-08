@@ -125,11 +125,9 @@ void wxButton::SetDefaultShadowThicknessAndResize()
 }
 
 
-void wxButton::SetDefault()
+wxWindow *wxButton::SetDefault()
 {
-    wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
-    if ( tlw )
-        tlw->SetDefaultItem(this);
+    wxWindow *oldDefault = wxButtonBase::SetDefault();
 
     // We initially do not set XmNdefaultShadowThickness, to have
     // small buttons.  Unfortunately, buttons are now mis-aligned. We
@@ -151,6 +149,8 @@ void wxButton::SetDefault()
     XtVaSetValues ((Widget) parent->GetMainWidget(),
                    XmNdefaultButton, (Widget) GetMainWidget(),
                    NULL);
+
+    return oldDefault;
 }
 
 static inline bool wxMotifLargeButtons()

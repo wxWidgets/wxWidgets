@@ -64,9 +64,10 @@ public:
     // set the margins around the image
     virtual void SetImageMargins(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y)) { }
 
-    // this wxButton method is called when the button becomes the default one
-    // on its panel
-    virtual void SetDefault() { }
+    // make this button the default button in its top level window
+    //
+    // returns the old default item (possibly NULL)
+    virtual wxWindow *SetDefault();
 
     // Buttons on MSW can look bad if they are not native colours, because
     // then they become owner-drawn and not theme-drawn.  Disable it here

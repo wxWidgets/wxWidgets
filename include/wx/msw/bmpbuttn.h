@@ -44,7 +44,6 @@ public:
 
     // Implementation
     virtual bool SetBackgroundColour(const wxColour& colour);
-    virtual void SetDefault();
     virtual bool MSWOnDraw(WXDRAWITEMSTRUCT *item);
     virtual void DrawFace( WXHDC dc, int left, int top, int right, int bottom, bool sel );
     virtual void DrawButtonFocus( WXHDC dc, int left, int top, int right, int bottom, bool sel );

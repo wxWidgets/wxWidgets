@@ -172,14 +172,6 @@ bool wxBitmapButton::Create( wxWindow *parent,
     return true;
 }
 
-void wxBitmapButton::SetDefault()
-{
-    GTK_WIDGET_SET_FLAGS( m_widget, GTK_CAN_DEFAULT );
-    gtk_widget_grab_default( m_widget );
-
-    SetSize( m_x, m_y, m_width, m_height );
-}
-
 void wxBitmapButton::SetLabel( const wxString &label )
 {
     wxCHECK_RET( m_widget != NULL, wxT("invalid button") );

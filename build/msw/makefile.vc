@@ -1749,6 +1749,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_artstd.obj \
 	$(OBJS)\monodll_bmpbase.obj \
 	$(OBJS)\monodll_bookctrl.obj \
+	$(OBJS)\monodll_btncmn.obj \
 	$(OBJS)\monodll_choiccmn.obj \
 	$(OBJS)\monodll_clipcmn.obj \
 	$(OBJS)\monodll_clrpickercmn.obj \
@@ -1978,6 +1979,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_artstd.obj \
 	$(OBJS)\monodll_bmpbase.obj \
 	$(OBJS)\monodll_bookctrl.obj \
+	$(OBJS)\monodll_btncmn.obj \
 	$(OBJS)\monodll_choiccmn.obj \
 	$(OBJS)\monodll_clipcmn.obj \
 	$(OBJS)\monodll_clrpickercmn.obj \
@@ -2384,6 +2386,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_artstd.obj \
 	$(OBJS)\monolib_bmpbase.obj \
 	$(OBJS)\monolib_bookctrl.obj \
+	$(OBJS)\monolib_btncmn.obj \
 	$(OBJS)\monolib_choiccmn.obj \
 	$(OBJS)\monolib_clipcmn.obj \
 	$(OBJS)\monolib_clrpickercmn.obj \
@@ -2613,6 +2616,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_artstd.obj \
 	$(OBJS)\monolib_bmpbase.obj \
 	$(OBJS)\monolib_bookctrl.obj \
+	$(OBJS)\monolib_btncmn.obj \
 	$(OBJS)\monolib_choiccmn.obj \
 	$(OBJS)\monolib_clipcmn.obj \
 	$(OBJS)\monolib_clrpickercmn.obj \
@@ -2960,6 +2964,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_artstd.obj \
 	$(OBJS)\coredll_bmpbase.obj \
 	$(OBJS)\coredll_bookctrl.obj \
+	$(OBJS)\coredll_btncmn.obj \
 	$(OBJS)\coredll_choiccmn.obj \
 	$(OBJS)\coredll_clipcmn.obj \
 	$(OBJS)\coredll_clrpickercmn.obj \
@@ -3189,6 +3194,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_artstd.obj \
 	$(OBJS)\coredll_bmpbase.obj \
 	$(OBJS)\coredll_bookctrl.obj \
+	$(OBJS)\coredll_btncmn.obj \
 	$(OBJS)\coredll_choiccmn.obj \
 	$(OBJS)\coredll_clipcmn.obj \
 	$(OBJS)\coredll_clrpickercmn.obj \
@@ -3425,6 +3431,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_artstd.obj \
 	$(OBJS)\corelib_bmpbase.obj \
 	$(OBJS)\corelib_bookctrl.obj \
+	$(OBJS)\corelib_btncmn.obj \
 	$(OBJS)\corelib_choiccmn.obj \
 	$(OBJS)\corelib_clipcmn.obj \
 	$(OBJS)\corelib_clrpickercmn.obj \
@@ -3654,6 +3661,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_artstd.obj \
 	$(OBJS)\corelib_bmpbase.obj \
 	$(OBJS)\corelib_bookctrl.obj \
+	$(OBJS)\corelib_btncmn.obj \
 	$(OBJS)\corelib_choiccmn.obj \
 	$(OBJS)\corelib_clipcmn.obj \
 	$(OBJS)\corelib_clrpickercmn.obj \
@@ -4489,7 +4497,7 @@ clean:
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl.lib
 	cd ..\..\samples
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
-	cd $(MAKEDIR)
+	cd "$(MAKEDIR)"
 
 setup_h: $(SETUPHDIR)\wx ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES)\setup.h $(SETUPHDIR)\wx\setup.h $(SETUPHDIR)\wx\msw\rcdefs.h
 
@@ -4838,7 +4846,7 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 sub_samples: 
 	cd ..\..\samples
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
-	cd $(MAKEDIR)
+	cd "$(MAKEDIR)"
 
 $(LIBDIRNAME): 
 	if not exist $(LIBDIRNAME) mkdir $(LIBDIRNAME)
@@ -6816,6 +6824,11 @@ $(OBJS)\monodll_bmpbase.obj: ..\..\src\common\bmpbase.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_bookctrl.obj: ..\..\src\common\bookctrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_btncmn.obj: ..\..\src\common\btncmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONODLL_CXXFLAGS) $**
 !endif
 
@@ -8865,6 +8878,11 @@ $(OBJS)\monolib_bmpbase.obj: ..\..\src\common\bmpbase.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_bookctrl.obj: ..\..\src\common\bookctrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_btncmn.obj: ..\..\src\common\btncmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(MONOLIB_CXXFLAGS) $**
 !endif
 
@@ -10945,6 +10963,11 @@ $(OBJS)\coredll_bookctrl.obj: ..\..\src\common\bookctrl.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\coredll_btncmn.obj: ..\..\src\common\btncmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\coredll_choiccmn.obj: ..\..\src\common\choiccmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(COREDLL_CXXFLAGS) $**
 !endif
@@ -12236,6 +12259,11 @@ $(OBJS)\corelib_bmpbase.obj: ..\..\src\common\bmpbase.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\corelib_bookctrl.obj: ..\..\src\common\bookctrl.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\corelib_btncmn.obj: ..\..\src\common\btncmn.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(CORELIB_CXXFLAGS) $**
 !endif
 

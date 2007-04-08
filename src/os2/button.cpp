@@ -233,17 +233,15 @@ bool wxButton::SendClickEvent()
 
 void wxButton::SetDefault()
 {
-    wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
-
-    wxCHECK_RET( tlw, _T("button without top level window?") );
-
     //
     // Set this one as the default button both for wxWidgets and Windows
     //
-    wxWindow*                       pWinOldDefault = tlw->SetDefaultItem(this);
+    wxWindow* pWinOldDefault = wxButtonBase::Set();
 
     SetDefaultStyle( wxDynamicCast(pWinOldDefault, wxButton), false);
     SetDefaultStyle( this, true );
+
+    return pWinOldDefault;
 } // end of wxButton::SetDefault
 
 void wxButton::SetTmpDefault()

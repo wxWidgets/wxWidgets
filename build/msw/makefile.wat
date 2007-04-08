@@ -321,6 +321,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_artstd.obj &
 	$(OBJS)\monodll_bmpbase.obj &
 	$(OBJS)\monodll_bookctrl.obj &
+	$(OBJS)\monodll_btncmn.obj &
 	$(OBJS)\monodll_choiccmn.obj &
 	$(OBJS)\monodll_clipcmn.obj &
 	$(OBJS)\monodll_clrpickercmn.obj &
@@ -552,6 +553,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_artstd.obj &
 	$(OBJS)\monodll_bmpbase.obj &
 	$(OBJS)\monodll_bookctrl.obj &
+	$(OBJS)\monodll_btncmn.obj &
 	$(OBJS)\monodll_choiccmn.obj &
 	$(OBJS)\monodll_clipcmn.obj &
 	$(OBJS)\monodll_clrpickercmn.obj &
@@ -960,6 +962,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_artstd.obj &
 	$(OBJS)\monolib_bmpbase.obj &
 	$(OBJS)\monolib_bookctrl.obj &
+	$(OBJS)\monolib_btncmn.obj &
 	$(OBJS)\monolib_choiccmn.obj &
 	$(OBJS)\monolib_clipcmn.obj &
 	$(OBJS)\monolib_clrpickercmn.obj &
@@ -1191,6 +1194,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_artstd.obj &
 	$(OBJS)\monolib_bmpbase.obj &
 	$(OBJS)\monolib_bookctrl.obj &
+	$(OBJS)\monolib_btncmn.obj &
 	$(OBJS)\monolib_choiccmn.obj &
 	$(OBJS)\monolib_clipcmn.obj &
 	$(OBJS)\monolib_clrpickercmn.obj &
@@ -1533,6 +1537,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_artstd.obj &
 	$(OBJS)\coredll_bmpbase.obj &
 	$(OBJS)\coredll_bookctrl.obj &
+	$(OBJS)\coredll_btncmn.obj &
 	$(OBJS)\coredll_choiccmn.obj &
 	$(OBJS)\coredll_clipcmn.obj &
 	$(OBJS)\coredll_clrpickercmn.obj &
@@ -1764,6 +1769,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_artstd.obj &
 	$(OBJS)\coredll_bmpbase.obj &
 	$(OBJS)\coredll_bookctrl.obj &
+	$(OBJS)\coredll_btncmn.obj &
 	$(OBJS)\coredll_choiccmn.obj &
 	$(OBJS)\coredll_clipcmn.obj &
 	$(OBJS)\coredll_clrpickercmn.obj &
@@ -2002,6 +2008,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_artstd.obj &
 	$(OBJS)\corelib_bmpbase.obj &
 	$(OBJS)\corelib_bookctrl.obj &
+	$(OBJS)\corelib_btncmn.obj &
 	$(OBJS)\corelib_choiccmn.obj &
 	$(OBJS)\corelib_clipcmn.obj &
 	$(OBJS)\corelib_clrpickercmn.obj &
@@ -2233,6 +2240,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_artstd.obj &
 	$(OBJS)\corelib_bmpbase.obj &
 	$(OBJS)\corelib_bookctrl.obj &
+	$(OBJS)\corelib_btncmn.obj &
 	$(OBJS)\corelib_choiccmn.obj &
 	$(OBJS)\corelib_clipcmn.obj &
 	$(OBJS)\corelib_clrpickercmn.obj &
@@ -6996,6 +7004,11 @@ $(OBJS)\monodll_bookctrl.obj :  .AUTODEPEND ..\..\src\common\bookctrl.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\monodll_btncmn.obj :  .AUTODEPEND ..\..\src\common\btncmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\monodll_choiccmn.obj :  .AUTODEPEND ..\..\src\common\choiccmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -9141,6 +9154,11 @@ $(OBJS)\monolib_bmpbase.obj :  .AUTODEPEND ..\..\src\common\bmpbase.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_bookctrl.obj :  .AUTODEPEND ..\..\src\common\bookctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\monolib_btncmn.obj :  .AUTODEPEND ..\..\src\common\btncmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -11321,6 +11339,11 @@ $(OBJS)\coredll_bookctrl.obj :  .AUTODEPEND ..\..\src\common\bookctrl.cpp
 !endif
 
 !ifeq USE_GUI 1
+$(OBJS)\coredll_btncmn.obj :  .AUTODEPEND ..\..\src\common\btncmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
 $(OBJS)\coredll_choiccmn.obj :  .AUTODEPEND ..\..\src\common\choiccmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -12712,6 +12735,11 @@ $(OBJS)\corelib_bmpbase.obj :  .AUTODEPEND ..\..\src\common\bmpbase.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_bookctrl.obj :  .AUTODEPEND ..\..\src\common\bookctrl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+!endif
+
+!ifeq USE_GUI 1
+$(OBJS)\corelib_btncmn.obj :  .AUTODEPEND ..\..\src\common\btncmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 

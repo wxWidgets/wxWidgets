@@ -196,12 +196,14 @@ wxSize wxButtonBase::GetDefaultSize()
     return wxSize(36,12);
 }
 
-void wxButton::SetDefault()
+wxWindow *wxButton::SetDefault()
 {
     FormType* form = (FormType* )GetParentForm();
     if(form==NULL)
         return;
     FrmSetDefaultButtonID(form,GetId());
+
+    return wxButtonBase::SetDefault();
 }
 
 void wxButton::SetTmpDefault()

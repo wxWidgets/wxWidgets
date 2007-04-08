@@ -3606,6 +3606,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_artstd.o \
 	monodll_bmpbase.o \
 	monodll_bookctrl.o \
+	monodll_btncmn.o \
 	monodll_choiccmn.o \
 	monodll_clipcmn.o \
 	monodll_clrpickercmn.o \
@@ -3784,6 +3785,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_artstd.o \
 	monodll_bmpbase.o \
 	monodll_bookctrl.o \
+	monodll_btncmn.o \
 	monodll_choiccmn.o \
 	monodll_clipcmn.o \
 	monodll_clrpickercmn.o \
@@ -5408,6 +5410,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_artstd.o \
 	monolib_bmpbase.o \
 	monolib_bookctrl.o \
+	monolib_btncmn.o \
 	monolib_choiccmn.o \
 	monolib_clipcmn.o \
 	monolib_clrpickercmn.o \
@@ -5586,6 +5589,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_artstd.o \
 	monolib_bmpbase.o \
 	monolib_bookctrl.o \
+	monolib_btncmn.o \
 	monolib_choiccmn.o \
 	monolib_clipcmn.o \
 	monolib_clrpickercmn.o \
@@ -7440,6 +7444,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_artstd.o \
 	coredll_bmpbase.o \
 	coredll_bookctrl.o \
+	coredll_btncmn.o \
 	coredll_choiccmn.o \
 	coredll_clipcmn.o \
 	coredll_clrpickercmn.o \
@@ -7618,6 +7623,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_artstd.o \
 	coredll_bmpbase.o \
 	coredll_bookctrl.o \
+	coredll_btncmn.o \
 	coredll_choiccmn.o \
 	coredll_clipcmn.o \
 	coredll_clrpickercmn.o \
@@ -8910,6 +8916,7 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_artstd.o \
 	corelib_bmpbase.o \
 	corelib_bookctrl.o \
+	corelib_btncmn.o \
 	corelib_choiccmn.o \
 	corelib_clipcmn.o \
 	corelib_clrpickercmn.o \
@@ -9088,6 +9095,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_artstd.o \
 	corelib_bmpbase.o \
 	corelib_bookctrl.o \
+	corelib_btncmn.o \
 	corelib_choiccmn.o \
 	corelib_clipcmn.o \
 	corelib_clrpickercmn.o \
@@ -16772,6 +16780,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_bookctrl.o: $(srcdir)/src/common/bookctrl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/bookctrl.cpp
 
+@COND_USE_GUI_1@monodll_btncmn.o: $(srcdir)/src/common/btncmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/btncmn.cpp
+
 @COND_USE_GUI_1@monodll_choiccmn.o: $(srcdir)/src/common/choiccmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/choiccmn.cpp
 
@@ -20947,6 +20958,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_bookctrl.o: $(srcdir)/src/common/bookctrl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/bookctrl.cpp
+
+@COND_USE_GUI_1@monolib_btncmn.o: $(srcdir)/src/common/btncmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/btncmn.cpp
 
 @COND_USE_GUI_1@monolib_choiccmn.o: $(srcdir)/src/common/choiccmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/choiccmn.cpp
@@ -25472,6 +25486,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_bookctrl.o: $(srcdir)/src/common/bookctrl.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/bookctrl.cpp
 
+@COND_USE_GUI_1@coredll_btncmn.o: $(srcdir)/src/common/btncmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/btncmn.cpp
+
 @COND_USE_GUI_1@coredll_choiccmn.o: $(srcdir)/src/common/choiccmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/choiccmn.cpp
 
@@ -28450,6 +28467,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_bookctrl.o: $(srcdir)/src/common/bookctrl.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/bookctrl.cpp
+
+@COND_USE_GUI_1@corelib_btncmn.o: $(srcdir)/src/common/btncmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/btncmn.cpp
 
 @COND_USE_GUI_1@corelib_choiccmn.o: $(srcdir)/src/common/choiccmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/choiccmn.cpp

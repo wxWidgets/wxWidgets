@@ -44,7 +44,6 @@ public:
                 const wxString& name = wxButtonNameStr);
 
     // Implementation
-    virtual void SetDefault();
     virtual void DrawFace( WXHDC dc, int left, int top, int right, int bottom, bool sel );
     virtual void DrawButtonFocus( WXHDC dc, int left, int top, int right, int bottom, bool sel );
     virtual void DrawButtonDisable( WXHDC dc, int left, int top, int right, int bottom, bool with_marg );
