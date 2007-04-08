@@ -474,7 +474,7 @@ It is usually a good idea to prepend a description before passing the result to 
 Example:
 
 \begin{verbatim}
-    wxFileDialog FileDlg( this, "Choose Image", ::wxGetCwd(), "", _("Image Files ") + wxImage::GetImageExtWildcard(), wxOPEN );
+    wxFileDialog FileDlg( this, "Choose Image", ::wxGetCwd(), "", _("Image Files ") + wxImage::GetImageExtWildcard(), wxFD_OPEN );
 \end{verbatim}
 
 \wxheading{See also}
