@@ -9189,6 +9189,10 @@ SOURCE=..\..\include\wx\popupwin.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\position.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\print.h
 # End Source File
 # Begin Source File

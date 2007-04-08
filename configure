@@ -891,6 +891,7 @@ COND_SHARED_0_USE_GUI_1_USE_OPENGL_1
 COND_SHARED_0_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN
 COND_SHARED_0_USE_GUI_1_WXUSE_LIBPNG_BUILTIN
 COND_SHARED_0_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN
+COND_SHARED_0_USE_STC_1
 COND_SHARED_0_USE_XRC_1
 COND_SHARED_0_WXUSE_EXPAT_BUILTIN
 COND_SHARED_0_WXUSE_ODBC_BUILTIN
@@ -955,6 +956,7 @@ COND_USE_SOVERCYGWIN_1_USE_SOVERSION_1
 COND_USE_SOVERLINUX_1
 COND_USE_SOVERSION_0
 COND_USE_SOVERSOLARIS_1
+COND_USE_STC_1
 COND_USE_THREADS_0
 COND_USE_THREADS_1
 COND_USE_XRC_1
@@ -22377,13 +22379,11 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <sys/types.h> /* for off_t */
-     #include <stdio.h>
+#include <stdio.h>
 int
 main ()
 {
-int (*fp) (FILE *, off_t, int) = fseeko;
-     return fseeko (stdin, 0, 0) && fp (stdin, 0, 0);
+return fseeko (stdin, 0, 0) && (fseeko) (stdin, 0, 0);
   ;
   return 0;
 }
@@ -22423,13 +22423,11 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #define _LARGEFILE_SOURCE 1
-#include <sys/types.h> /* for off_t */
-     #include <stdio.h>
+#include <stdio.h>
 int
 main ()
 {
-int (*fp) (FILE *, off_t, int) = fseeko;
-     return fseeko (stdin, 0, 0) && fp (stdin, 0, 0);
+return fseeko (stdin, 0, 0) && (fseeko) (stdin, 0, 0);
   ;
   return 0;
 }
@@ -39265,7 +39263,6 @@ echo $ECHO_N "checking how many arguments gethostbyname_r() takes... $ECHO_C" >&
 else
 
 
-################################################################
 
 ac_cv_func_which_gethostbyname_r=unknown
 
@@ -39495,7 +39492,6 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
 fi
 
-################################################################
 
 
 fi
@@ -39644,19 +39640,94 @@ _ACEOF
 fi
 
       fi
-
-{ echo "$as_me:$LINENO: checking how many arguments getservbyname_r() takes" >&5
-echo $ECHO_N "checking how many arguments getservbyname_r() takes... $ECHO_C" >&6; }
+                              { echo "$as_me:$LINENO: checking for getservbyname_r" >&5
+echo $ECHO_N "checking for getservbyname_r... $ECHO_C" >&6; }
 if test "${ac_cv_func_which_getservbyname_r+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
 
-                ac_ext=cpp
-ac_cpp='$CXXCPP $CPPFLAGS'
-ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+{ echo "$as_me:$LINENO: checking for getservbyname_r" >&5
+echo $ECHO_N "checking for getservbyname_r... $ECHO_C" >&6; }
+if test "${ac_cv_func_getservbyname_r+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+/* Define getservbyname_r to an innocuous variant, in case <limits.h> declares getservbyname_r.
+   For example, HP-UX 11i <limits.h> declares gettimeofday.  */
+#define getservbyname_r innocuous_getservbyname_r
 
+/* System header to define __stub macros and hopefully few prototypes,
+    which can conflict with char getservbyname_r (); below.
+    Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
+    <limits.h> exists even on freestanding compilers.  */
+
+#ifdef __STDC__
+# include <limits.h>
+#else
+# include <assert.h>
+#endif
+
+#undef getservbyname_r
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char getservbyname_r ();
+/* The GNU C library defines this for functions which it implements
+    to always fail with ENOSYS.  Some functions are actually named
+    something starting with __ and the normal name is an alias.  */
+#if defined __stub_getservbyname_r || defined __stub___getservbyname_r
+choke me
+#endif
+
+int
+main ()
+{
+return getservbyname_r ();
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest$ac_exeext &&
+       $as_test_x conftest$ac_exeext; then
+  ac_cv_func_getservbyname_r=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_cv_func_getservbyname_r=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
+      conftest$ac_exeext conftest.$ac_ext
+fi
+{ echo "$as_me:$LINENO: result: $ac_cv_func_getservbyname_r" >&5
+echo "${ECHO_T}$ac_cv_func_getservbyname_r" >&6; }
+if test $ac_cv_func_getservbyname_r = yes; then
 
         cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
@@ -39664,17 +39735,20 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <netdb.h>
+
+#               include <netdb.h>
+
 int
 main ()
 {
 
-                char *name;
-                char *proto;
-                struct servent *se, *res;
-                char buffer[2048];
-                int buflen = 2048;
-                (void) getservbyname_r(name, proto, se, buffer, buflen, &res)
+
+        char *name;
+        char *proto;
+        struct servent *se;
+        struct servent_data data;
+        (void) getservbyname_r(name, proto, se, &data);
+
 
   ;
   return 0;
@@ -39694,7 +39768,54 @@ eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } && {
-	 test -z "$ac_cxx_werror_flag" ||
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  ac_cv_func_which_getservbyname_r=four
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+
+  cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+#   include <netdb.h>
+
+int
+main ()
+{
+
+        char *name;
+        char *proto;
+        struct servent *se, *res;
+        char buffer[2048];
+        int buflen = 2048;
+        (void) getservbyname_r(name, proto, se, buffer, buflen, &res)
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
 	 test ! -s conftest.err
        } && test -s conftest.$ac_objext; then
   ac_cv_func_which_getservbyname_r=six
@@ -39703,23 +39824,25 @@ else
 sed 's/^/| /' conftest.$ac_ext >&5
 
 
-                cat >conftest.$ac_ext <<_ACEOF
+  cat >conftest.$ac_ext <<_ACEOF
 /* confdefs.h.  */
 _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <netdb.h>
+
+#   include <netdb.h>
+
 int
 main ()
 {
 
-                        char *name;
-                        char *proto;
-                        struct servent *se;
-                        char buffer[2048];
-                        int buflen = 2048;
-                        (void) getservbyname_r(name, proto, se, buffer, buflen)
+        char *name;
+        char *proto;
+        struct servent *se;
+        char buffer[2048];
+        int buflen = 2048;
+        (void) getservbyname_r(name, proto, se, buffer, buflen)
 
   ;
   return 0;
@@ -39739,7 +39862,7 @@ eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
   cat conftest.err >&5
   echo "$as_me:$LINENO: \$? = $ac_status" >&5
   (exit $ac_status); } && {
-	 test -z "$ac_cxx_werror_flag" ||
+	 test -z "$ac_c_werror_flag" ||
 	 test ! -s conftest.err
        } && test -s conftest.$ac_objext; then
   ac_cv_func_which_getservbyname_r=five
@@ -39747,51 +39870,13 @@ else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-
-                        cat >conftest.$ac_ext <<_ACEOF
-/* confdefs.h.  */
-_ACEOF
-cat confdefs.h >>conftest.$ac_ext
-cat >>conftest.$ac_ext <<_ACEOF
-/* end confdefs.h.  */
-#include <netdb.h>
-int
-main ()
-{
-
-                                char *name;
-                                char *proto;
-                                struct servent *se;
-                                struct servent_data data;
-                                (void) getservbyname_r(name, proto, se, &data);
-
-  ;
-  return 0;
-}
-_ACEOF
-rm -f conftest.$ac_objext
-if { (ac_try="$ac_compile"
-case "(($ac_try" in
-  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
-  *) ac_try_echo=$ac_try;;
-esac
-eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
-  (eval "$ac_compile") 2>conftest.er1
-  ac_status=$?
-  grep -v '^ *+' conftest.er1 >conftest.err
-  rm -f conftest.er1
-  cat conftest.err >&5
-  echo "$as_me:$LINENO: \$? = $ac_status" >&5
-  (exit $ac_status); } && {
-	 test -z "$ac_cxx_werror_flag" ||
-	 test ! -s conftest.err
-       } && test -s conftest.$ac_objext; then
-  ac_cv_func_which_getservbyname_r=four
-else
-  echo "$as_me: failed program was:" >&5
-sed 's/^/| /' conftest.$ac_ext >&5
-
 	ac_cv_func_which_getservbyname_r=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+
+
 
 fi
 
@@ -39802,17 +39887,9 @@ fi
 
 rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 
-
+else
+  ac_cv_func_which_getservbyname_r=no
 fi
-
-rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
-        ac_ext=c
-ac_cpp='$CPP $CPPFLAGS'
-ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
-ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
-ac_compiler_gnu=$ac_cv_c_compiler_gnu
-
-
 
 fi
 { echo "$as_me:$LINENO: result: $ac_cv_func_which_getservbyname_r" >&5
@@ -39832,6 +39909,7 @@ elif test $ac_cv_func_which_getservbyname_r = four; then
   cat >>confdefs.h <<\_ACEOF
 #define HAVE_FUNC_GETSERVBYNAME_R_4 1
 _ACEOF
+
 
 fi
 
@@ -46110,7 +46188,10 @@ echo "${ECHO_T}$bakefile_cv_prog_makeisgnu" >&6; }
                 PLATFORM_BEOS=1
             ;;
             * )
-                                            ;;
+                { { echo "$as_me:$LINENO: error: Unknown platform: $BAKEFILE_FORCE_PLATFORM" >&5
+echo "$as_me: error: Unknown platform: $BAKEFILE_FORCE_PLATFORM" >&2;}
+   { (exit 1); exit 1; }; }
+            ;;
         esac
     fi
 
@@ -48159,6 +48240,11 @@ EOF
         COND_SHARED_0_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN=""
     fi
 
+    COND_SHARED_0_USE_STC_1="#"
+    if test "x$SHARED" = "x0" -a "x$USE_STC" = "x1" ; then
+        COND_SHARED_0_USE_STC_1=""
+    fi
+
     COND_SHARED_0_USE_XRC_1="#"
     if test "x$SHARED" = "x0" -a "x$USE_XRC" = "x1" ; then
         COND_SHARED_0_USE_XRC_1=""
@@ -48477,6 +48563,11 @@ EOF
     COND_USE_SOVERSOLARIS_1="#"
     if test "x$USE_SOVERSOLARIS" = "x1" ; then
         COND_USE_SOVERSOLARIS_1=""
+    fi
+
+    COND_USE_STC_1="#"
+    if test "x$USE_STC" = "x1" ; then
+        COND_USE_STC_1=""
     fi
 
     COND_USE_THREADS_0="#"
@@ -48839,10 +48930,21 @@ echo "${ECHO_T}no" >&6; }
 
     cppunit_major_min=`echo $cppunit_version_min | \
            sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\1/'`
+    if test "x${cppunit_major_min}" = "x" ; then
+       cppunit_major_min=0
+    fi
+
     cppunit_minor_min=`echo $cppunit_version_min | \
            sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\2/'`
+    if test "x${cppunit_minor_min}" = "x" ; then
+       cppunit_minor_min=0
+    fi
+
     cppunit_micro_min=`echo $cppunit_version_min | \
            sed 's/\([0-9]*\).\([0-9]*\).\([0-9]*\)/\3/'`
+    if test "x${cppunit_micro_min}" = "x" ; then
+       cppunit_micro_min=0
+    fi
 
     cppunit_version_proper=`expr \
         $cppunit_major_version \> $cppunit_major_min \| \
@@ -49912,6 +50014,7 @@ COND_SHARED_0_USE_GUI_1_USE_OPENGL_1!$COND_SHARED_0_USE_GUI_1_USE_OPENGL_1$ac_de
 COND_SHARED_0_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN!$COND_SHARED_0_USE_GUI_1_WXUSE_LIBJPEG_BUILTIN$ac_delim
 COND_SHARED_0_USE_GUI_1_WXUSE_LIBPNG_BUILTIN!$COND_SHARED_0_USE_GUI_1_WXUSE_LIBPNG_BUILTIN$ac_delim
 COND_SHARED_0_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN!$COND_SHARED_0_USE_GUI_1_WXUSE_LIBTIFF_BUILTIN$ac_delim
+COND_SHARED_0_USE_STC_1!$COND_SHARED_0_USE_STC_1$ac_delim
 COND_SHARED_0_USE_XRC_1!$COND_SHARED_0_USE_XRC_1$ac_delim
 COND_SHARED_0_WXUSE_EXPAT_BUILTIN!$COND_SHARED_0_WXUSE_EXPAT_BUILTIN$ac_delim
 COND_SHARED_0_WXUSE_ODBC_BUILTIN!$COND_SHARED_0_WXUSE_ODBC_BUILTIN$ac_delim
@@ -49927,7 +50030,6 @@ COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0!$COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0$ac_
 COND_TOOLKIT_DFB!$COND_TOOLKIT_DFB$ac_delim
 COND_TOOLKIT_DFB_USE_GUI_1!$COND_TOOLKIT_DFB_USE_GUI_1$ac_delim
 COND_TOOLKIT_GTK!$COND_TOOLKIT_GTK$ac_delim
-COND_TOOLKIT_GTK_TOOLKIT_VERSION_!$COND_TOOLKIT_GTK_TOOLKIT_VERSION_$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -49969,6 +50071,7 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+COND_TOOLKIT_GTK_TOOLKIT_VERSION_!$COND_TOOLKIT_GTK_TOOLKIT_VERSION_$ac_delim
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2!$COND_TOOLKIT_GTK_TOOLKIT_VERSION_2$ac_delim
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1!$COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1$ac_delim
 COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0!$COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1_WXUNIV_0$ac_delim
@@ -50017,6 +50120,7 @@ COND_USE_SOVERCYGWIN_1_USE_SOVERSION_1!$COND_USE_SOVERCYGWIN_1_USE_SOVERSION_1$a
 COND_USE_SOVERLINUX_1!$COND_USE_SOVERLINUX_1$ac_delim
 COND_USE_SOVERSION_0!$COND_USE_SOVERSION_0$ac_delim
 COND_USE_SOVERSOLARIS_1!$COND_USE_SOVERSOLARIS_1$ac_delim
+COND_USE_STC_1!$COND_USE_STC_1$ac_delim
 COND_USE_THREADS_0!$COND_USE_THREADS_0$ac_delim
 COND_USE_THREADS_1!$COND_USE_THREADS_1$ac_delim
 COND_USE_XRC_1!$COND_USE_XRC_1$ac_delim
@@ -50064,8 +50168,6 @@ OPENGL_LIBS!$OPENGL_LIBS$ac_delim
 DMALLOC_LIBS!$DMALLOC_LIBS$ac_delim
 WX_VERSION_TAG!$WX_VERSION_TAG$ac_delim
 RESCOMP!$RESCOMP$ac_delim
-RESFLAGS!$RESFLAGS$ac_delim
-RESPROGRAMOBJ!$RESPROGRAMOBJ$ac_delim
 _ACEOF
 
   if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 97; then
@@ -50107,6 +50209,8 @@ _ACEOF
 ac_delim='%!_!# '
 for ac_last_try in false false false false false :; do
   cat >conf$$subs.sed <<_ACEOF
+RESFLAGS!$RESFLAGS$ac_delim
+RESPROGRAMOBJ!$RESPROGRAMOBJ$ac_delim
 WX_RESOURCES_MACOSX_ASCII!$WX_RESOURCES_MACOSX_ASCII$ac_delim
 WX_RESOURCES_MACOSX_DATA!$WX_RESOURCES_MACOSX_DATA$ac_delim
 LIBWXMACRES!$LIBWXMACRES$ac_delim
@@ -50118,7 +50222,7 @@ LIBOBJS!$LIBOBJS$ac_delim
 LTLIBOBJS!$LTLIBOBJS$ac_delim
 _ACEOF
 
-  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 9; then
+  if test `sed -n "s/.*$ac_delim\$/X/p" conf$$subs.sed | grep -c X` = 11; then
     break
   elif $ac_last_try; then
     { { echo "$as_me:$LINENO: error: could not make $CONFIG_STATUS" >&5
