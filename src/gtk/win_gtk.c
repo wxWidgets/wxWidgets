@@ -408,6 +408,7 @@ gtk_pizza_realize (GtkWidget *widget)
     GtkPizzaChild *child;
     GList *children;
     int border;
+    int w, h;
 
     g_return_if_fail (widget != NULL);
     g_return_if_fail (GTK_IS_PIZZA (widget));
@@ -422,15 +423,23 @@ gtk_pizza_realize (GtkWidget *widget)
     attributes.width = widget->allocation.width;
     attributes.height = widget->allocation.height;
 
-    border = pizza->container.border_width;
-    attributes.x += border;
-    attributes.y += border;
-    attributes.width -= 2 * border;
-    attributes.height -= 2 * border;
-
     /* minimal size */
     if (attributes.width < 2) attributes.width = 2;
     if (attributes.height < 2) attributes.height = 2;
+
+    border = pizza->container.border_width;
+    w = attributes.width  - 2 * border;
+    h = attributes.height - 2 * border;
+    if (w < 2) w = 2;
+    if (h < 2) h = 2;
+
+    if (!pizza->m_noscroll)
+    {
+        attributes.x += border;
+        attributes.y += border;
+        attributes.width  = w;
+        attributes.height = h;
+    }
 
     attributes.wclass = GDK_INPUT_OUTPUT;
     attributes.visual = gtk_widget_get_visual (widget);
@@ -444,6 +453,13 @@ gtk_pizza_realize (GtkWidget *widget)
 
     attributes.x = 0;
     attributes.y = 0;
+    if (pizza->m_noscroll)
+    {
+        attributes.x = border;
+        attributes.y = border;
+        attributes.width  = w;
+        attributes.height = h;
+    }
 
     attributes.event_mask = gtk_widget_get_events (widget);
     attributes.event_mask |= GDK_EXPOSURE_MASK              |
@@ -558,38 +574,38 @@ gtk_pizza_size_allocate (GtkWidget     *widget,
                    (widget->allocation.y == allocation->y));
     widget->allocation = *allocation;
 
-    border = pizza->container.border_width;
-
-    x = allocation->x + border;
-    y = allocation->y + border;
-    w = allocation->width - border*2;
-    h = allocation->height - border*2;
-    if (w < 0)
-        w = 0;
-    if (h < 0)
-        h = 0;
-
-    if (!GTK_WIDGET_REALIZED (widget))
-        return;
-        
-    if (pizza->m_noscroll)
+    if (GTK_WIDGET_REALIZED(widget))
     {
-        if (only_resize)
-            gdk_window_resize( widget->window, allocation->width, allocation->height );
-        else
-            gdk_window_move_resize( widget->window, allocation->x, allocation->y, 
-                                                    allocation->width, allocation->height );
+        border = pizza->container.border_width;
 
-        gdk_window_move_resize( pizza->bin_window, border, border, w, h );
-    }
-    else
-    {
-        if (only_resize)
-            gdk_window_resize( widget->window, w, h );
-        else
-            gdk_window_move_resize( widget->window, x, y, w, h );
+        x = allocation->x + border;
+        y = allocation->y + border;
+        w = allocation->width - border*2;
+        h = allocation->height - border*2;
+        if (w < 0)
+            w = 0;
+        if (h < 0)
+            h = 0;
 
-        gdk_window_resize( pizza->bin_window, w, h );
+        if (pizza->m_noscroll)
+        {
+            if (only_resize)
+                gdk_window_resize( widget->window, allocation->width, allocation->height );
+            else
+                gdk_window_move_resize( widget->window, allocation->x, allocation->y, 
+                                                        allocation->width, allocation->height );
+
+            gdk_window_move_resize( pizza->bin_window, border, border, w, h );
+        }
+        else
+        {
+            if (only_resize)
+                gdk_window_resize( widget->window, w, h );
+            else
+                gdk_window_move_resize( widget->window, x, y, w, h );
+
+            gdk_window_resize( pizza->bin_window, w, h );
+        }
     }
 
     children = pizza->children;
