@@ -226,11 +226,11 @@ protected:
     // current
     virtual void OnDrawBackground(wxDC& dc, const wxRect& rect, size_t n) const;
 
-    // we implement OnGetLineHeight() in terms of OnMeasureItem() because this
+    // we implement OnGetRowHeight() in terms of OnMeasureItem() because this
     // allows us to add borders to the items easily
     //
     // this function is not supposed to be overridden by the derived classes
-    virtual wxCoord OnGetLineHeight(size_t line) const;
+    virtual wxCoord OnGetRowHeight(size_t line) const;
 
 
     // event handlers

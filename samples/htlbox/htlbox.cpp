@@ -470,7 +470,7 @@ void MyFrame::OnHtmlLinkClicked(wxHtmlLinkEvent &event)
     if (GetMyBox())
     {
         GetMyBox()->m_linkClicked = true;
-        GetMyBox()->RefreshLine(1);
+        GetMyBox()->RefreshRow(1);
     }
 }
 
@@ -618,5 +618,5 @@ void MyHtmlListBox::UpdateFirstItem()
 {
     m_firstItemUpdated = !m_firstItemUpdated;
 
-    RefreshLine(0);
+    RefreshRow(0);
 }

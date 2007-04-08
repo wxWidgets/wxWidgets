@@ -284,7 +284,7 @@ protected:
     virtual void OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) const;
 
     // gets the line height
-    virtual wxCoord OnGetLineHeight(size_t line) const;
+    virtual wxCoord OnGetRowHeight(size_t line) const;
 
     // event handlers
     void OnPaint(wxPaintEvent& event);

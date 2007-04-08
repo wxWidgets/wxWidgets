@@ -850,8 +850,8 @@ bool wxSymbolListCtrl::DoSetCurrent(int current)
         {
             // it is, indeed, only partly visible, so scroll it into view to
             // make it entirely visible
-            while ( unsigned(lineNo) == GetLastVisibleLine() &&
-                    ScrollToRow(GetVisibleBegin()+1) )
+            while ( (unsigned)lineNo + 1 == GetVisibleEnd() &&
+                    ScrollToRow(GetVisibleBegin() + 1) )
                 ;
 
             // but in any case refresh it as even if it was only partly visible
@@ -904,7 +904,7 @@ void wxSymbolListCtrl::SetSelectionBackground(const wxColour& col)
 // wxSymbolListCtrl painting
 // ----------------------------------------------------------------------------
 
-wxCoord wxSymbolListCtrl::OnGetLineHeight(size_t WXUNUSED(line)) const
+wxCoord wxSymbolListCtrl::OnGetRowHeight(size_t WXUNUSED(line)) const
 {
     return m_cellSize.y + 2*m_ptMargins.y + 1 /* for divider */ ;
 }
@@ -985,8 +985,8 @@ void wxSymbolListCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     dc.SetFont(GetFont());
 
     // the bounding rectangle of the current line
-    wxRect rectLine;
-    rectLine.width = clientSize.x;
+    wxRect rectRow;
+    rectRow.width = clientSize.x;
 
     dc.SetPen(wxPen(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT)));
     dc.SetTextForeground(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
@@ -994,25 +994,25 @@ void wxSymbolListCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
 
     // iterate over all visible lines
     const size_t lineMax = GetVisibleEnd();
-    for ( size_t line = GetFirstVisibleLine(); line < lineMax; line++ )
+    for ( size_t line = GetVisibleBegin(); line < lineMax; line++ )
     {
-        const wxCoord hLine = OnGetLineHeight(line);
+        const wxCoord hRow = OnGetRowHeight(line);
 
-        rectLine.height = hLine;
+        rectRow.height = hRow;
 
         // and draw the ones which intersect the update rect
-        if ( rectLine.Intersects(rectUpdate) )
+        if ( rectRow.Intersects(rectUpdate) )
         {
             // don't allow drawing outside of the lines rectangle
-            wxDCClipper clip(dc, rectLine);
+            wxDCClipper clip(dc, rectRow);
 
-            wxRect rect = rectLine;
+            wxRect rect = rectRow;
             rect.Deflate(m_ptMargins.x, m_ptMargins.y);
             OnDrawItem(dc, rect, line);
         }
         else // no intersection
         {
-            if ( rectLine.GetTop() > rectUpdate.GetBottom() )
+            if ( rectRow.GetTop() > rectUpdate.GetBottom() )
             {
                 // we are already below the update rect, no need to continue
                 // further
@@ -1021,7 +1021,7 @@ void wxSymbolListCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
             //else: the next line may intersect the update rect
         }
 
-        rectLine.y += hLine;
+        rectRow.y += hRow;
     }
 }
 
@@ -1222,7 +1222,7 @@ void wxSymbolListCtrl::EnsureVisible(int item)
 // hit testing
 int wxSymbolListCtrl::HitTest(const wxPoint& pt)
 {
-    wxCoord lineHeight = OnGetLineHeight(0);
+    wxCoord lineHeight = OnGetRowHeight(0);
 
     int atLine = GetVisibleBegin() + (pt.y/lineHeight);
     int symbol = (atLine*m_symbolsPerLine) + (pt.x/(m_cellSize.x+1));

@@ -135,7 +135,7 @@ bool wxVListBox::Select(size_t item, bool select)
     if ( changed )
     {
         // selection really changed
-        RefreshLine(item);
+        RefreshRow(item);
     }
 
     DoSetCurrent(item);
@@ -164,7 +164,7 @@ bool wxVListBox::SelectRange(size_t from, size_t to)
     {
         // too many items have changed, we didn't record them in changed array
         // so we have no choice but to refresh everything between from and to
-        RefreshLines(from, to);
+        RefreshRows(from, to);
     }
     else // we've got the indices of the changed items
     {
@@ -178,7 +178,7 @@ bool wxVListBox::SelectRange(size_t from, size_t to)
         // refresh just the lines which have really changed
         for ( size_t n = 0; n < count; n++ )
         {
-            RefreshLine(changed[n]);
+            RefreshRow(changed[n]);
         }
     }
 
@@ -221,7 +221,7 @@ bool wxVListBox::DoSetCurrent(int current)
     }
 
     if ( m_current != wxNOT_FOUND )
-        RefreshLine(m_current);
+        RefreshRow(m_current);
 
     m_current = current;
 
@@ -231,18 +231,18 @@ bool wxVListBox::DoSetCurrent(int current)
         // don't need to refresh it -- it will be redrawn anyhow
         if ( !IsVisible(m_current) )
         {
-            ScrollToLine(m_current);
+            ScrollToRow(m_current);
         }
         else // line is at least partly visible
         {
             // it is, indeed, only partly visible, so scroll it into view to
             // make it entirely visible
-            while ( (size_t)m_current == GetLastVisibleLine() &&
-                    ScrollToLine(GetVisibleBegin()+1) ) ;
+            while ( (size_t)m_current + 1 == GetVisibleRowsEnd() &&
+                    ScrollToRow(GetVisibleBegin() + 1) ) ;
 
             // but in any case refresh it as even if it was only partly visible
             // before we need to redraw it entirely as its background changed
-            RefreshLine(m_current);
+            RefreshRow(m_current);
         }
     }
 
@@ -339,7 +339,7 @@ void wxVListBox::SetSelectionBackground(const wxColour& col)
 // wxVListBox painting
 // ----------------------------------------------------------------------------
 
-wxCoord wxVListBox::OnGetLineHeight(size_t line) const
+wxCoord wxVListBox::OnGetRowHeight(size_t line) const
 {
     return OnMeasureItem(line) + 2*m_ptMargins.y;
 }
@@ -401,24 +401,24 @@ void wxVListBox::OnPaint(wxPaintEvent& WXUNUSED(event))
     dc.Clear();
 
     // the bounding rectangle of the current line
-    wxRect rectLine;
-    rectLine.width = clientSize.x;
+    wxRect rectRow;
+    rectRow.width = clientSize.x;
 
     // iterate over all visible lines
     const size_t lineMax = GetVisibleEnd();
-    for ( size_t line = GetFirstVisibleLine(); line < lineMax; line++ )
+    for ( size_t line = GetVisibleBegin(); line < lineMax; line++ )
     {
-        const wxCoord hLine = OnGetLineHeight(line);
+        const wxCoord hRow = OnGetRowHeight(line);
 
-        rectLine.height = hLine;
+        rectRow.height = hRow;
 
         // and draw the ones which intersect the update rect
-        if ( rectLine.Intersects(rectUpdate) )
+        if ( rectRow.Intersects(rectUpdate) )
         {
             // don't allow drawing outside of the lines rectangle
-            wxDCClipper clip(dc, rectLine);
+            wxDCClipper clip(dc, rectRow);
 
-            wxRect rect = rectLine;
+            wxRect rect = rectRow;
             OnDrawBackground(dc, rect, line);
 
             OnDrawSeparator(dc, rect, line);
@@ -428,7 +428,7 @@ void wxVListBox::OnPaint(wxPaintEvent& WXUNUSED(event))
         }
         else // no intersection
         {
-            if ( rectLine.GetTop() > rectUpdate.GetBottom() )
+            if ( rectRow.GetTop() > rectUpdate.GetBottom() )
             {
                 // we are already below the update rect, no need to continue
                 // further
@@ -437,7 +437,7 @@ void wxVListBox::OnPaint(wxPaintEvent& WXUNUSED(event))
             //else: the next line may intersect the update rect
         }
 
-        rectLine.y += hLine;
+        rectRow.y += hRow;
     }
 }
 
@@ -552,11 +552,11 @@ void wxVListBox::OnKeyDown(wxKeyEvent& event)
             break;
 
         case WXK_END:
-            current = GetLineCount() - 1;
+            current = GetRowCount() - 1;
             break;
 
         case WXK_DOWN:
-            if ( m_current == (int)GetLineCount() - 1 )
+            if ( m_current == (int)GetRowCount() - 1 )
                 return;
 
             current = m_current + 1;
@@ -564,7 +564,7 @@ void wxVListBox::OnKeyDown(wxKeyEvent& event)
 
         case WXK_UP:
             if ( m_current == wxNOT_FOUND )
-                current = GetLineCount() - 1;
+                current = GetRowCount() - 1;
             else if ( m_current != 0 )
                 current = m_current - 1;
             else // m_current == 0
@@ -573,16 +573,16 @@ void wxVListBox::OnKeyDown(wxKeyEvent& event)
 
         case WXK_PAGEDOWN:
             PageDown();
-            current = GetFirstVisibleLine();
+            current = GetVisibleBegin();
             break;
 
         case WXK_PAGEUP:
-            if ( m_current == (int)GetFirstVisibleLine() )
+            if ( m_current == (int)GetVisibleBegin() )
             {
                 PageUp();
             }
 
-            current = GetFirstVisibleLine();
+            current = GetVisibleBegin();
             break;
 
         case WXK_SPACE:

@@ -399,7 +399,7 @@ void wxVListBoxComboPopup::OnMouseMove(wxMouseEvent& event)
     const size_t lineMax = GetVisibleEnd();
     for ( size_t line = GetVisibleBegin(); line < lineMax; line++ )
     {
-        y -= OnGetLineHeight(line);
+        y -= OnGetRowHeight(line);
         if ( y < 0 )
         {
             // Only change selection if item is fully visible

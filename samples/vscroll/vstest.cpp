@@ -105,7 +105,7 @@ public:
     {
         m_frame = frame;
 
-        SetLineCount(MAX_LINES);
+        SetRowCount(MAX_LINES);
 
         int i;
         for ( i = 0; i < MAX_LINES; ++i )
@@ -146,7 +146,7 @@ public:
         {
             dc.DrawLine(0, y, clientSize.GetWidth(), y);
 
-            wxCoord hLine = OnGetLineHeight(line);
+            wxCoord hLine = OnGetRowHeight(line);
             dc.DrawText(wxString::Format(_T("Line %lu"), (unsigned long)line),
                         2, y + (hLine - hText) / 2);
 
@@ -171,9 +171,9 @@ public:
         event.Skip();
     }
 
-    virtual wxCoord OnGetLineHeight(size_t n) const
+    virtual wxCoord OnGetRowHeight(size_t n) const
     {
-        wxASSERT( n < GetLineCount() );
+        wxASSERT( n < GetRowCount() );
 
         return m_heights[n];
     }
@@ -300,7 +300,7 @@ public:
         m_frame = frame;
 
         SetRowColumnCount(MAX_LINES, MAX_LINES);
-        
+
         int i;
         for ( i = 0; i < MAX_LINES; ++i )
         {
@@ -338,7 +338,7 @@ public:
                      rowLast = GetVisibleRowsEnd();
         const size_t columnFirst = GetVisibleColumnsBegin(),
                      columnLast = GetVisibleColumnsEnd();
-        
+
         const wxCoord hText = dc.GetCharHeight();
 
         wxSize clientSize = GetClientSize();
@@ -362,12 +362,12 @@ public:
                             x + 2, y + rowHeight / 2 - hText);
                 dc.DrawText(wxString::Format(_T("Col %lu"), (unsigned long)col),
                             x + 2, y + rowHeight / 2);
-                
+
                 x += colWidth;
                 if ( row == rowFirst)
                     dc.DrawLine(x, 0, x, clientSize.GetHeight());
             }
-            
+
             y += rowHeight;
             dc.DrawLine(0, y, clientSize.GetWidth(), y);
         }
@@ -578,7 +578,7 @@ void VarScrollFrame::OnModeVScroll(wxCommandEvent& WXUNUSED(event))
 {
     if ( m_scrollWindow )
         m_scrollWindow->Destroy();
-    
+
     m_scrollWindow = new VScrollWindow(this);
     SendSizeEvent();
 }
@@ -587,7 +587,7 @@ void VarScrollFrame::OnModeHScroll(wxCommandEvent& WXUNUSED(event))
 {
     if ( m_scrollWindow )
         m_scrollWindow->Destroy();
-    
+
     m_scrollWindow = new HScrollWindow(this);
     SendSizeEvent();
 }

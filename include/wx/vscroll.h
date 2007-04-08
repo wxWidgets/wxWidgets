@@ -660,9 +660,9 @@ protected:
 #else // !WXWIN_COMPATIBILITY_2_8
 
 // shortcut to avoid checking compatibility modes later
-// remove this and all references to wxVarVScrollLegacyAdapter once
+// remove this and all references to wxVarVScrollLegacyAdaptor once
 // wxWidgets 2.6 and 2.8 compatibility is removed
-typedef wxVarVScrollLegacyAdapter wxVarVScrollHelper;
+typedef wxVarVScrollHelper wxVarVScrollLegacyAdaptor;
 
 #endif // WXWIN_COMPATIBILITY_2_8/!WXWIN_COMPATIBILITY_2_8
 

@@ -323,14 +323,14 @@ void wxHtmlListBox::OnSize(wxSizeEvent& event)
     event.Skip();
 }
 
-void wxHtmlListBox::RefreshLine(size_t line)
+void wxHtmlListBox::RefreshRow(size_t line)
 {
     m_cache->InvalidateRange(line, line);
 
     wxVListBox::RefreshRow(line);
 }
 
-void wxHtmlListBox::RefreshLines(size_t from, size_t to)
+void wxHtmlListBox::RefreshRows(size_t from, size_t to)
 {
     m_cache->InvalidateRange(from, to);
 
@@ -458,7 +458,7 @@ wxPoint wxHtmlListBox::GetRootCellCoords(size_t n) const
 {
     wxPoint pos(CELL_BORDER, CELL_BORDER);
     pos += GetMargins();
-    pos.y += GetLinesHeight(GetFirstVisibleLine(), n);
+    pos.y += GetRowsHeight(GetVisibleBegin(), n);
     return pos;
 }
 
@@ -645,7 +645,7 @@ void wxSimpleHtmlListBox::SetString(unsigned int n, const wxString& s)
                  wxT("invalid index in wxSimpleHtmlListBox::SetString") );
 
     m_items[n]=s; 
-    RefreshLine(n);
+    RefreshRow(n);
 }
 
 wxString wxSimpleHtmlListBox::GetString(unsigned int n) const
