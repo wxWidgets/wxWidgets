@@ -79,6 +79,7 @@ All:
 - Added wxMutex::LockTimeout() (Aleksandr Napylov)
 - Added wxMemoryInputStream(wxInputStream&) ctor (Stas Sergeev)
 - Implemented wxMemoryInputStream::CanRead()
+- Added wxEXEC_BLOCK flag (Hank Schultz)
 
 All (GUI):
 

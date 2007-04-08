@@ -38,6 +38,7 @@
 #include "wx/unix/private.h"
 
 #include <pwd.h>
+#include <sys/wait.h>       // waitpid()
 
 #ifdef HAVE_SYS_SELECT_H
 #   include <sys/select.h>
@@ -1237,55 +1238,93 @@ int wxGUIAppTraits::WaitForChild(wxExecuteData& execData)
     }
 
 
+    if ( !(flags & wxEXEC_NOEVENTS) )
+    {
 #if defined(__DARWIN__) && (defined(__WXMAC__) || defined(__WXCOCOA__))
-    endProcData->tag = wxAddProcessCallbackForPid(endProcData, execData.pid);
+        endProcData->tag = wxAddProcessCallbackForPid(endProcData, execData.pid);
 #else
-    endProcData->tag = wxAddProcessCallback
-                (
-                    endProcData,
-                    execData.pipeEndProcDetect.Detach(wxPipe::Read)
-                );
+        endProcData->tag = wxAddProcessCallback
+                           (
+                             endProcData,
+                             execData.pipeEndProcDetect.Detach(wxPipe::Read)
+                           );
 
-    execData.pipeEndProcDetect.Close();
+        execData.pipeEndProcDetect.Close();
 #endif // defined(__DARWIN__) && (defined(__WXMAC__) || defined(__WXCOCOA__))
+    }
 
     if ( flags & wxEXEC_SYNC )
     {
         wxBusyCursor bc;
-        wxWindowDisabler *wd = flags & wxEXEC_NODISABLE ? NULL
-                                                        : new wxWindowDisabler;
+        int exitcode = 0;
 
-        // endProcData->pid will be set to 0 from GTK_EndProcessDetector when the
-        // process terminates
-        while ( endProcData->pid != 0 )
+        wxWindowDisabler *wd = flags & (wxEXEC_NODISABLE | wxEXEC_NOEVENTS)
+                                    ? NULL
+                                    : new wxWindowDisabler;
+
+        if ( flags & wxEXEC_NOEVENTS )
         {
-            bool idle = true;
+            // just block waiting for the child to exit
+            int status = 0;
+
+            int result = waitpid(execData.pid, &status, 0);
+
+            if ( result == -1 )
+            {
+                wxLogLastError(_T("waitpid"));
+                exitcode = -1;
+            }
+            else
+            {
+                wxASSERT_MSG( result == execData.pid,
+                              _T("unexpected waitpid() return value") );
+
+                if ( WIFEXITED(status) )
+                {
+                    exitcode = WEXITSTATUS(status);
+                }
+                else // abnormal termination?
+                {
+                    wxASSERT_MSG( WIFSIGNALED(status),
+                                  _T("unexpected child wait status") );
+                    exitcode = -1;
+                }
+            }
+        }
+        else // !wxEXEC_NOEVENTS
+        {
+            // endProcData->pid will be set to 0 from GTK_EndProcessDetector when the
+            // process terminates
+            while ( endProcData->pid != 0 )
+            {
+                bool idle = true;
 
 #if HAS_PIPE_INPUT_STREAM
-            if ( execData.bufOut )
-            {
-                execData.bufOut->Update();
-                idle = false;
-            }
+                if ( execData.bufOut )
+                {
+                    execData.bufOut->Update();
+                    idle = false;
+                }
 
-            if ( execData.bufErr )
-            {
-                execData.bufErr->Update();
-                idle = false;
-            }
+                if ( execData.bufErr )
+                {
+                    execData.bufErr->Update();
+                    idle = false;
+                }
 #endif // HAS_PIPE_INPUT_STREAM
 
-            // don't consume 100% of the CPU while we're sitting in this
-            // loop
-            if ( idle )
-                wxMilliSleep(1);
+                // don't consume 100% of the CPU while we're sitting in this
+                // loop
+                if ( idle )
+                    wxMilliSleep(1);
 
-            // give GTK+ a chance to call GTK_EndProcessDetector here and
-            // also repaint the GUI
-            wxYield();
+                // give GTK+ a chance to call GTK_EndProcessDetector here and
+                // also repaint the GUI
+                wxYield();
+            }
+
+            exitcode = endProcData->exitcode;
         }
-
-        int exitcode = endProcData->exitcode;
 
         delete wd;
         delete endProcData;

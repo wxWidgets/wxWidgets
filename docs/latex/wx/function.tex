@@ -647,6 +647,13 @@ needed). Calling \helpref{wxKill}{wxkill} passing wxKILL\_CHILDREN will
 kill this process as well as all of its children (except those which have
 started their own session).
 
+The {\tt wxEXEC\_NOEVENTS} flag prevents processing of any events from taking
+place while the child process is running. It should be only used for very
+short-lived processes as otherwise the application windows risk becoming
+unresponsive from the users point of view. As this flag only makes sense with
+{\tt wxEXEC\_SYNC}, {\tt wxEXEC\_BLOCK} equal to the sum of both of these flags
+is provided as a convenience.
+
 Finally, you may use the third overloaded version of this function to execute
 a process (always synchronously, the contents of \arg{flags} is or'd with
 \texttt{wxEXEC\_SYNC}) and capture its output in the array \arg{output}. The
