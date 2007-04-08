@@ -28,6 +28,7 @@
 
 #include <ctype.h>
 
+#include "wx/wx.h"
 #include "wx/tokenzr.h"
 #include "wx/mstream.h"
 #include "wx/image.h"
@@ -2561,7 +2562,7 @@ void wxStyledTextCtrl::SetLexerLanguage(const wxString& language) {
 
 // Retrieve a 'property' value previously set with SetProperty.
 wxString wxStyledTextCtrl::GetProperty(const wxString& key) {
-         int len = SendMsg(SCI_GETPROPERTY, (long)(const char*)wx2stc(key), (long)NULL);
+         int len = SendMsg(SCI_GETPROPERTY, (long)(const char*)wx2stc(key), 0);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
@@ -2575,7 +2576,7 @@ wxString wxStyledTextCtrl::GetProperty(const wxString& key) {
 // Retrieve a 'property' value previously set with SetProperty,
 // with '$()' variable replacement on returned buffer.
 wxString wxStyledTextCtrl::GetPropertyExpanded(const wxString& key) {
-         int len = SendMsg(SCI_GETPROPERTYEXPANDED, (long)(const char*)wx2stc(key), (long)NULL);
+         int len = SendMsg(SCI_GETPROPERTYEXPANDED, (long)(const char*)wx2stc(key), 0);
          if (!len) return wxEmptyString;
 
          wxMemoryBuffer mbuf(len+1);
