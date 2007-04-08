@@ -327,14 +327,14 @@ void wxHtmlListBox::RefreshLine(size_t line)
 {
     m_cache->InvalidateRange(line, line);
 
-    wxVListBox::RefreshLine(line);
+    wxVListBox::RefreshRow(line);
 }
 
 void wxHtmlListBox::RefreshLines(size_t from, size_t to)
 {
     m_cache->InvalidateRange(from, to);
 
-    wxVListBox::RefreshLines(from, to);
+    wxVListBox::RefreshRows(from, to);
 }
 
 void wxHtmlListBox::RefreshAll()

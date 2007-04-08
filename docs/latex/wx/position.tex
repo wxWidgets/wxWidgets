@@ -1,0 +1,108 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        position.tex (moved from gbposition.tex)
+%% Purpose:     wxPosition Documentation
+%% Author:      Robin Dunn, Bryan Petty
+%% Modified by: 
+%% Created:     2003-11-06, modified 2007-04-05
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2003, 2007 wxWidgets Team
+%% License:     wxWindows Licence
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxPosition}}\label{wxposition}
+
+This class represents the position of an item in any kind of grid of rows and
+columns such as \helpref{wxGridBagSizer}{wxgridbagsizer}, or
+\helpref{wxHVScrolledWindow}{wxhvscrolledwindow}.
+
+\wxheading{Derived from}
+
+No base class
+
+\wxheading{Include files}
+
+<wx/position.h>
+
+\wxheading{See also}
+
+\helpref{wxPoint}{wxpoint}, \helpref{wxSize}{wxsize}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxPosition::wxPosition}\label{wxpositionwxposition}
+
+\func{}{wxPosition}{\void}
+
+\func{}{wxPosition}{\param{int }{row}, \param{int }{col}}
+
+Construct a new wxPosition, optionally setting the row and column. The
+default value is $(0, 0)$.
+
+
+\membersection{wxPosition::GetCol}\label{wxpositiongetcol}
+
+\constfunc{int}{GetCol}{\void}
+
+A synonym for \helpref{GetColumn()}{wxpositiongetcolumn}.
+
+
+\membersection{wxPosition::GetColumn}\label{wxpositiongetcolumn}
+
+\constfunc{int}{GetColumn}{\void}
+
+Get the current row value.
+
+
+\membersection{wxPosition::GetRow}\label{wxpositiongetrow}
+
+\constfunc{int}{GetRow}{\void}
+
+Get the current row value.
+
+
+\membersection{wxPosition::SetCol}\label{wxpositionsetcol}
+
+\func{void}{SetCol}{\param{int }{column}}
+
+A synonym for \helpref{SetColumn()}{wxpositionsetcolumn}.
+
+
+\membersection{wxPosition::SetColumn}\label{wxpositionsetcolumn}
+
+\func{void}{SetColumn}{\param{int }{column}}
+
+Set a new column value.
+
+
+\membersection{wxPosition::SetRow}\label{wxpositionsetrow}
+
+\func{void}{SetRow}{\param{int }{row}}
+
+Set a new row value.
+
+
+\membersection{Operators}\label{wxpositionoperators}
+
+\constfunc{bool}{operator $==$}{\param{const wxPosition\& }{p}}
+
+\constfunc{bool}{operator $!=$}{\param{const wxPosition\& }{p}}
+
+Compare equality of two wxPositions.
+
+\func{wxPosition\&}{operator $+=$}{\param{const wxPosition\& }{p}}
+
+\func{wxPosition\&}{operator $-=$}{\param{const wxPosition\& }{p}}
+
+\func{wxPosition\&}{operator $+=$}{\param{const wxSize\& }{s}}
+
+\func{wxPosition\&}{operator $-=$}{\param{const wxSize\& }{s}}
+
+\constfunc{wxPosition}{operator $+$}{\param{const wxPosition\& }{p}}
+
+\constfunc{wxPosition}{operator $-$}{\param{const wxPosition\& }{p}}
+
+\constfunc{wxPosition}{operator $+$}{\param{const wxSize\& }{s}}
+
+\constfunc{wxPosition}{operator $-$}{\param{const wxSize\& }{s}}
+

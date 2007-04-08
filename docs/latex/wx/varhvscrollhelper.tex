@@ -1,0 +1,173 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        varhvscrollhelper.tex
+%% Purpose:     wxVarHVScrollHelper Documentation
+%% Author:      Bryan Petty
+%% Modified by: 
+%% Created:     2007-04-04
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2007 wxWidgets Team
+%% License:     wxWindows Licence
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxVarHVScrollHelper}}\label{wxvarhvscrollhelper}
+
+This class provides functions wrapping the 
+\helpref{wxVarHScrollHelper}{wxvarhscrollhelper} and
+\helpref{wxVarVScrollHelper}{wxvarvscrollhelper} classes, targeted for
+scrolling a window in both axis using
+\helpref{wxHVScrolledWindow}{wxhvscrolledwindow}. Since this class is also
+the join class of the horizontal and vertical scrolling functionality, it
+also addresses some wrappers that help avoid the need to specify class scope
+in your wxHVScrolledWindow-derived class when using wxVarScrollHelperBase
+functionality.
+
+Like all three of it's scroll helper base classes, this class is mostly only
+useful to those classes built into wxWidgets deriving from here, and this
+documentation is mostly only provided for referencing those functions
+provided. You will likely want to derive your window from wxHVScrolledWindow
+rather than from here directly.
+
+\wxheading{Derived from}
+
+\helpref{wxVarVScrollHelper}{wxvarvscrollhelper}\\
+\helpref{wxVarScrollHelperBase}{wxvarscrollhelperbase}
+
+\helpref{wxVarHScrollHelper}{wxvarhscrollhelper}\\
+\helpref{wxVarScrollHelperBase}{wxvarscrollhelperbase}
+
+\wxheading{Include files}
+
+<wx/vscroll.h>
+
+\wxheading{See also}
+
+\helpref{wxHScrolledWindow}{wxhscrolledwindow},
+\rtfsp\helpref{wxHVScrolledWindow}{wxhvscrolledwindow},
+\rtfsp\helpref{wxVScrolledWindow}{wxvscrolledwindow}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxVarHVScrollHelper::wxVarHVScrollHelper}\label{wxvarhvscrollhelperwxvarhvscrollhelper}
+
+\func{}{wxVarHVScrollHelper}{\param{wxWindow* }{winToScroll}}
+
+Constructor taking the target window to be scrolled by this helper class.
+This will attach scroll event handlers to the target window to catch and
+handle scroll events appropriately.
+
+
+\membersection{wxVarHVScrollHelper::EnablePhysicalScrolling}\label{wxvarhvscrollhelperenablephysicalscrolling}
+
+\func{void}{EnablePhysicalScrolling}{\param{bool }{vscrolling = true}, \param{bool }{hscrolling = true}}
+
+With physical scrolling on (when this is {\tt true}), the device origin is
+changed properly when a \rtfsp\helpref{wxPaintDC}{wxpaintdc} is prepared,
+children are actually moved and laid out properly, and the contents of the
+window (pixels) are actually moved. When this is {\tt false}, you are
+responsible for repainting any invalidated areas of the window yourself to
+account for the new scroll position.
+
+\wxheading{Parameters}
+
+\docparam{vscrolling}{Specifies if physical scrolling should be turned on when scrolling vertically.}
+
+\docparam{hscrolling}{Specifies if physical scrolling should be turned on when scrolling horizontally.}
+
+
+\membersection{wxVarHVScrollHelper::GetRowColumnCount}\label{wxvarhvscrollhelpergetrowcolumncount}
+
+\constfunc{wxSize}{GetRowColumnCount}{\void}
+
+Returns the number of columns and rows the target window contains.
+
+\wxheading{See also}
+
+\helpref{SetRowColumnCount()}{wxvarhvscrollhelpersetrowcolumncount}
+
+
+\membersection{wxVarHVScrollHelper::GetVisibleBegin}\label{wxvarhvscrollhelpergetvisiblebegin}
+
+\constfunc{wxPosition}{GetVisibleBegin}{\void}
+
+Returns the index of the first visible column and row based on the current
+scroll position.
+
+
+\membersection{wxVarHVScrollHelper::GetVisibleEnd}\label{wxvarhvscrollhelpergetvisibleend}
+
+\constfunc{wxPosition}{GetVisibleEnd}{\void}
+
+Returns the index of the last visible column and row based on the scroll
+position. This includes any partially visible columns or rows.
+
+
+\membersection{wxVarHVScrollHelper::HitTest}\label{wxvarhvscrollhelperhittest}
+
+\constfunc{virtual wxPosition}{HitTest}{\param{wxCoord }{x}, \param{wxCoord }{y}}
+
+\constfunc{virtual wxPosition}{HitTest}{\param{const wxPoint\& }{pos}}
+
+Returns the scroll unit under the device unit given accounting for scroll
+position or {\tt wxNOT\_FOUND} (for the row, column, or possibly both values)
+if none.
+
+
+\membersection{wxVarHVScrollHelper::IsVisible}\label{wxvarhvscrollhelperisvisible}
+
+\constfunc{bool}{IsVisible}{\param{size\_t }{row}, \param{size\_t }{column}}
+
+\constfunc{bool}{IsVisible}{\param{const wxPosition\& }{pos}}
+
+Returns {\tt true} if both the given row and column are currently visible
+(even if only partially visible) or {\tt false} otherwise.
+
+
+\membersection{wxVarHVScrollHelper::RefreshRowColumn}\label{wxvarhvscrollhelperrefreshrowcolumn}
+
+\func{virtual void}{RefreshRowColumn}{\param{size\_t }{row}, \param{size\_t }{column}}
+
+\func{virtual void}{RefreshRowColumn}{\param{const wxPosition\& }{pos}}
+
+Triggers a refresh for just the area shared between the given row and column
+of the window if it is visible.
+
+
+\membersection{wxVarHVScrollHelper::RefreshRowsColumns}\label{wxvarhvscrollhelperrefreshrowscolumns}
+
+\func{virtual void}{RefreshRowsColumns}{\param{size\_t }{fromRow}, \param{size\_t }{toRow}, \param{size\_t }{fromColumn}, \param{size\_t }{toColumn}}
+
+\func{virtual void}{RefreshRowsColumns}{\param{const wxPosition\& }{from}, \param{const wxPosition\& }{to}}
+
+Triggers a refresh for the visible area shared between all given rows and
+columns (inclusive) of the window. If the target window for both orientations
+is the same, the rectangle of cells is refreshed; if the target windows
+differ, the entire client size opposite the orientation direction is
+refreshed between the specified limits.
+
+
+\membersection{wxVarHVScrollHelper::ScrollToRowColumn}\label{wxvarhvscrollhelperscrolltorowcolumn}
+
+\func{bool}{ScrollToRowColumn}{\param{size\_t }{row}, \param{size\_t }{column}}
+
+\func{bool}{ScrollToRowColumn}{\param{const wxPosition\& }{pos}}
+
+Scroll to the specified row and column. It will become the first visible row
+and column in the window. Returns {\tt true} if we scrolled the window,
+{\tt false} if nothing was done.
+
+
+\membersection{wxVarHVScrollHelper::SetRowColumnCount}\label{wxvarhvscrollhelpersetrowcolumncount}
+
+\func{void}{SetRowColumnCount}{\param{size\_t }{rowCount}, \param{size\_t }{columnCount}}
+
+Set the number of rows and columns the target window will contain. The
+derived class must provide the sizes for all rows and columns with indices up
+to the ones given here in it's \helpref{OnGetRowHeight()}{wxvarvscrollhelperongetrowheight}
+and \helpref{OnGetColumnWidth()}{wxvarhscrollhelperongetcolumnwidth} implementations,
+respectively.
+
+\wxheading{See also}
+
+\helpref{GetRowColumnCount()}{wxvarhvscrollhelpergetrowcolumncount}
+

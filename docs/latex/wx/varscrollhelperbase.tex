@@ -1,0 +1,243 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        varscrollhelperbase.tex
+%% Purpose:     wxVarScrollHelperBase Documentation
+%% Author:      Bryan Petty
+%% Modified by: 
+%% Created:     2007-04-04
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2007 wxWidgets Team
+%% License:     wxWindows Licence
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxVarScrollHelperBase}}\label{wxvarscrollhelperbase}
+
+This class provides all common base functionality for scroll calculations
+shared among all variable scrolled window implementations as well as
+automatic scrollbar functionality, saved scroll positions, controlling
+target windows to be scrolled, as well as defining all required virtual
+functions that need to be implemented for any orientation specific work.
+
+Documentation of this class is provided specifically for referencing use
+of the functions provided by this class for use with the variable scrolled
+windows that derive from here. You will likely want to derive your window
+from one of the already implemented variable scrolled windows rather than
+from wxVarScrollHelperBase directly.
+
+\wxheading{Include files}
+
+<wx/vscroll.h>
+
+\wxheading{See also}
+
+\helpref{wxHScrolledWindow}{wxhscrolledwindow},
+\rtfsp\helpref{wxHVScrolledWindow}{wxhvscrolledwindow},
+\rtfsp\helpref{wxVScrolledWindow}{wxvscrolledwindow}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxVarScrollHelperBase::wxVarScrollHelperBase}\label{wxvarscrollhelperbasewxvarscrollhelperbase}
+
+\func{}{wxVarScrollHelperBase}{\param{wxWindow* }{winToScroll}}
+
+Constructor taking the target window to be scrolled by this helper class.
+This will attach scroll event handlers to the target window to catch and
+handle scroll events appropriately.
+
+
+\membersection{wxVarScrollHelperBase::\destruct{wxVarScrollHelperBase}}\label{wxvarscrollhelperbasedtor}
+
+\func{virtual }{\destruct{wxVarScrollHelperBase}}{\void}
+
+Virtual destructor for detaching scroll event handlers attached with this
+helper class.
+
+
+\membersection{wxVarScrollHelperBase::CalcScrolledPosition}\label{wxvarscrollhelperbasecalcscrolledposition}
+
+\constfunc{int}{CalcScrolledPosition}{\param{int }{coord}}
+
+Translates the logical coordinate given to the current device coordinate.
+For example, if the window is scrolled 10 units and each scroll unit
+represents 10 device units (which may not be the case since this class allows
+for variable scroll unit sizes), a call to this function with a coordinate of
+15 will return -85.
+
+\wxheading{See also}
+
+\helpref{CalcUnscrolledPosition()}{wxvarscrollhelperbasecalcunscrolledposition}
+
+
+\membersection{wxVarScrollHelperBase::CalcUnscrolledPosition}\label{wxvarscrollhelperbasecalcunscrolledposition}
+
+\constfunc{int}{CalcUnscrolledPosition}{\param{int }{coord}}
+
+Translates the device coordinate given to the corresponding logical
+coordinate. For example, if the window is scrolled 10 units and each scroll
+unit represents 10 device units (which may not be the case since this class
+allows for variable scroll unit sizes), a call to this function with a
+coordinate of 15 will return 115.
+
+\wxheading{See also}
+
+\helpref{CalcScrolledPosition()}{wxvarscrollhelperbasecalcscrolledposition}
+
+
+\membersection{wxVarScrollHelperBase::EnablePhysicalScrolling}\label{wxvarscrollhelperbaseenablephysicalscrolling}
+
+\func{void}{EnablePhysicalScrolling}{\param{bool }{scrolling = true}}
+
+With physical scrolling on (when this is {\tt true}), the device origin is
+changed properly when a \rtfsp\helpref{wxPaintDC}{wxpaintdc} is prepared,
+children are actually moved and laid out properly, and the contents of the
+window (pixels) are actually moved. When this is {\tt false}, you are
+responsible for repainting any invalidated areas of the window yourself to
+account for the new scroll position.
+
+
+\membersection{wxVarScrollHelperBase::EstimateTotalSize}\label{wxvarscrollhelperbaseestimatetotalsize}
+
+\constfunc{virtual wxCoord}{EstimateTotalSize}{\void}
+
+When the number of scroll units change, we try to estimate the total size of
+all units when the full window size is needed (i.e. to calculate the scrollbar
+thumb size). This is a rather expensive operation in terms of unit access, so
+if the user code may estimate the average size better or faster than we do, it
+should override this function to implement its own logic. This function should
+return the best guess for the total virtual window size.
+
+Note that although returning a totally wrong value would still work, it risks
+resulting in very strange scrollbar behaviour so this function should really
+try to make the best guess possible.
+
+
+\membersection{wxVarScrollHelperBase::GetNonOrientationTargetSize}\label{wxvarscrollhelperbasegetnonorientationtargetsize}
+
+\constfunc{virtual int}{GetNonOrientationTargetSize}{\void}
+
+This function needs to be overridden in the in the derived class to return the
+window size with respect to the opposing orientation. If this is a vertical
+scrolled window, it should return the height.
+
+\wxheading{See also}
+
+\helpref{GetOrientationTargetSize()}{wxvarscrollhelperbasegetorientationtargetsize}
+
+
+\membersection{wxVarScrollHelperBase::GetOrientation}\label{wxvarscrollhelperbasegetorientation}
+
+\constfunc{virtual wxOrientation}{GetOrientation}{\void}
+
+This function need to be overridden to return the orientation that this helper
+is working with, either {\tt wxHORIZONTAL} or {\tt wxVERTICAL}.
+
+
+\membersection{wxVarScrollHelperBase::GetOrientationTargetSize}\label{wxvarscrollhelperbasegetorientationtargetsize}
+
+\constfunc{virtual int}{GetOrientationTargetSize}{\void}
+
+This function needs to be overridden in the in the derived class to return the
+window size with respect to the orientation this helper is working with. If
+this is a vertical scrolled window, it should return the width.
+
+\wxheading{See also}
+
+\helpref{GetNonOrientationTargetSize()}{wxvarscrollhelperbasegetnonorientationtargetsize}
+
+
+\membersection{wxVarScrollHelperBase::GetTargetWindow}\label{wxvarscrollhelperbasegettargetwindow}
+
+\constfunc{wxWindow*}{GetTargetWindow}{\void}
+
+This function will return the target window this helper class is currently
+scrolling.
+
+\wxheading{See also}
+
+\helpref{SetTargetWindow()}{wxvarscrollhelperbasesettargetwindow}
+
+
+\membersection{wxVarScrollHelperBase::GetVisibleBegin}\label{wxvarscrollhelperbasegetvisiblebegin}
+
+\constfunc{size\_t}{GetVisibleBegin}{\void}
+
+Returns the index of the first visible unit based on the scroll position.
+
+
+\membersection{wxVarScrollHelperBase::GetVisibleEnd}\label{wxvarscrollhelperbasegetvisibleend}
+
+\constfunc{size\_t}{GetVisibleEnd}{\void}
+
+Returns the index of the last visible unit based on the scroll position. This
+includes the last unit even if it is only partially visible.
+
+
+\membersection{wxVarScrollHelperBase::HitTest}\label{wxvarscrollhelperbasehittest}
+
+\constfunc{virtual int}{HitTest}{\param{wxCoord }{coord}}
+
+Returns the scroll unit under the device unit given accounting for scroll
+position or {\tt wxNOT\_FOUND} if none (i.e. if it is below the last item).
+
+
+\membersection{wxVarScrollHelperBase::IsVisible}\label{wxvarscrollhelperbaseisvisible}
+
+\constfunc{bool}{IsVisible}{\param{size\_t }{unit}}
+
+Returns {\tt true} if the given scroll unit is currently visible (even if only
+partially visible) or {\tt false} otherwise.
+
+
+\membersection{wxVarScrollHelperBase::OnGetUnitSize}\label{wxvarscrollhelperbaseongetunitsize}
+
+\constfunc{virtual wxCoord}{OnGetUnitSize}{\param{size\_t }{unit}}
+
+This function must be overridden in the derived class, and should return the
+size of the given unit in pixels.
+
+
+\membersection{wxVarScrollHelperBase::OnGetUnitsSizeHint}\label{wxvarscrollhelperbaseongetunitssizehint}
+
+\constfunc{virtual void}{OnGetUnitsSizeHint}{\param{size\_t }{unitMin}, \param{size\_t }{unitMax}}
+
+This function doesn't have to be overridden but it may be useful to do so if
+calculating the units' sizes is a relatively expensive operation as it gives
+your code a chance to calculate several of them at once and cache the result
+if necessary.
+
+{\tt OnGetUnitsSizeHint()} is normally called just before
+\helpref{OnGetUnitSize()}{wxvarscrollhelperbaseongetunitsize} but you
+shouldn't rely on the latter being called for all units in the interval
+specified here. It is also possible that OnGetUnitSize() will be called for
+units outside of this interval, so this is really just a hint, not a promise.
+
+Finally, note that unitMin is inclusive, while unitMax is exclusive.
+
+
+\membersection{wxVarScrollHelperBase::RefreshAll}\label{wxvarscrollhelperbaserefreshall}
+
+\func{virtual void}{RefreshAll}{\void}
+
+Recalculate all parameters and repaint all units.
+
+
+\membersection{wxVarScrollHelperBase::SetTargetWindow}\label{wxvarscrollhelperbasesettargetwindow}
+
+\func{void}{SetTargetWindow}{\param{wxWindow* }{target}}
+
+Normally the window will scroll itself, but in some rare occasions you might
+want it to scroll (part of) another window (e.g. a child of it in order to
+scroll only a portion the area between the scrollbars like a spreadsheet where
+only the cell area will move).
+
+\wxheading{See also}
+
+\helpref{GetTargetWindow()}{wxvarscrollhelperbasegettargetwindow}
+
+
+\membersection{wxVarScrollHelperBase::UpdateScrollbar}\label{wxvarscrollhelperbaseupdatescrollbar}
+
+\func{virtual void}{UpdateScrollbar}{\void}
+
+Update the thumb size shown by the scrollbar.
+

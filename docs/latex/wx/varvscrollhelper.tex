@@ -1,0 +1,178 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        varvscrollhelper.tex
+%% Purpose:     wxVarVScrollHelper Documentation
+%% Author:      Bryan Petty
+%% Modified by: 
+%% Created:     2007-04-04
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2007 wxWidgets Team
+%% License:     wxWindows Licence
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxVarVScrollHelper}}\label{wxvarvscrollhelper}
+
+This class provides functions wrapping the 
+\helpref{wxVarScrollHelperBase}{wxvarscrollhelperbase} class, targeted for
+vertical-specific scrolling using \helpref{wxVScrolledWindow}{wxvscrolledwindow}.
+
+Like wxVarScrollHelperBase, this class is mostly only useful to those classes
+built into wxWidgets deriving from here, and this documentation is mostly
+only provided for referencing those functions provided. You will likely want
+to derive your window from wxVScrolledWindow rather than from here directly.
+
+\wxheading{Derived from}
+
+\helpref{wxVarScrollHelperBase}{wxvarscrollhelperbase}
+
+\wxheading{Include files}
+
+<wx/vscroll.h>
+
+\wxheading{See also}
+
+\helpref{wxHScrolledWindow}{wxhscrolledwindow},
+\rtfsp\helpref{wxHVScrolledWindow}{wxhvscrolledwindow},
+\rtfsp\helpref{wxVScrolledWindow}{wxvscrolledwindow}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxVarVScrollHelper::wxVarVScrollHelper}\label{wxvarvscrollhelperwxvarvscrollhelper}
+
+\func{}{wxVarVScrollHelper}{\param{wxWindow* }{winToScroll}}
+
+Constructor taking the target window to be scrolled by this helper class.
+This will attach scroll event handlers to the target window to catch and
+handle scroll events appropriately.
+
+
+\membersection{wxVarVScrollHelper::EstimateTotalHeight}\label{wxvarvscrollhelperestimatetotalheight}
+
+\constfunc{virtual wxCoord}{EstimateTotalHeight}{\void}
+
+This class forwards calls from
+\helpref{wxVarScrollHelperBase::EstimateTotalSize}{wxvarscrollhelperbaseestimatetotalsize}
+to this function so derived classes can override either just the height or
+the width estimation, or just estimate both differently if desired in any
+\helpref{wxHVScrolledWindow}{wxhvscrolledwindow} derived class.
+
+Please note that this function will not be called if {\tt EstimateTotalSize()}
+is overridden in your derived class.
+
+
+\membersection{wxVarVScrollHelper::GetRowCount}\label{wxvarvscrollhelpergetrowcount}
+
+\constfunc{size\_t}{GetRowCount}{\void}
+
+Returns the number of rows the target window contains.
+
+\wxheading{See also}
+
+\helpref{SetRowCount()}{wxvarvscrollhelpersetrowcount}
+
+
+\membersection{wxVarVScrollHelper::GetVisibleRowsBegin}\label{wxvarvscrollhelpergetvisiblerowsbegin}
+
+\constfunc{size\_t}{GetVisibleRowsBegin}{\void}
+
+Returns the index of the first visible row based on the scroll position.
+
+
+\membersection{wxVarVScrollHelper::GetVisibleRowsEnd}\label{wxvarvscrollhelpergetvisiblerowsend}
+
+\constfunc{size\_t}{GetVisibleRowsEnd}{\void}
+
+Returns the index of the last visible row based on the scroll position. This
+includes the last row even if it is only partially visible.
+
+
+\membersection{wxVarVScrollHelper::IsRowVisible}\label{wxvarvscrollhelperisrowvisible}
+
+\constfunc{bool}{IsRowVisible}{\param{size\_t }{row}}
+
+Returns {\tt true} if the given row is currently visible (even if only
+partially visible) or {\tt false} otherwise.
+
+
+\membersection{wxVarVScrollHelper::OnGetRowHeight}\label{wxvarvscrollhelperongetrowheight}
+
+\constfunc{virtual wxCoord}{OnGetRowHeight}{\param{size\_t }{row}}
+
+This function must be overridden in the derived class, and should return the
+height of the given row in pixels.
+
+
+\membersection{wxVarVScrollHelper::OnGetRowsHeightHint}\label{wxvarvscrollhelperongetrowsheighthint}
+
+\constfunc{virtual void}{OnGetRowsHeightHint}{\param{size\_t }{rowMin}, \param{size\_t }{rowMax}}
+
+This function doesn't have to be overridden but it may be useful to do so if
+calculating the rows' sizes is a relatively expensive operation as it gives
+your code a chance to calculate several of them at once and cache the result
+if necessary.
+
+{\tt OnGetRowsHeightHint()} is normally called just before
+\helpref{OnGetRowHeight()}{wxvarvscrollhelperongetrowheight} but you
+shouldn't rely on the latter being called for all rows in the interval
+specified here. It is also possible that OnGetRowHeight() will be called for
+units outside of this interval, so this is really just a hint, not a promise.
+
+Finally, note that rowMin is inclusive, while rowMax is exclusive.
+
+
+\membersection{wxVarVScrollHelper::RefreshRow}\label{wxvarvscrollhelperrefreshrow}
+
+\func{virtual void}{RefreshRow}{\param{size\_t }{row}}
+
+Triggers a refresh for just the given row's area of the window if it's visible.
+
+
+\membersection{wxVarVScrollHelper::RefreshRows}\label{wxvarvscrollhelperrefreshrows}
+
+\func{virtual void}{RefreshRows}{\param{size\_t }{from}, \param{size\_t }{to}}
+
+Triggers a refresh for the area between the specified range of rows given
+(inclusively).
+
+
+\membersection{wxVarVScrollHelper::ScrollRowPages}\label{wxvarvscrollhelperscrollrowpages}
+
+\func{virtual bool}{ScrollRowPages}{\param{int }{pages}}
+
+Scroll by the specified number of pages which may be positive (to scroll down)
+or negative (to scroll up).
+
+
+\membersection{wxVarVScrollHelper::ScrollRows}\label{wxvarvscrollhelperscrollrows}
+
+\func{virtual bool}{ScrollRows}{\param{int }{rows}}
+
+Scroll by the specified number of rows which may be positive (to scroll down)
+or negative (to scroll up).
+
+Returns {\tt true} if the window was scrolled, {\tt false} otherwise (for
+example, if we're trying to scroll down but we are already showing the last
+row).
+
+
+\membersection{wxVarVScrollHelper::ScrollToRow}\label{wxvarvscrollhelperscrolltorow}
+
+\func{bool}{ScrollToRow}{\param{size\_t }{row}}
+
+Scroll to the specified row. It will become the first visible row in the window.
+
+Returns {\tt true} if we scrolled the window, {\tt false} if nothing was done.
+
+
+\membersection{wxVarVScrollHelper::SetRowCount}\label{wxvarvscrollhelpersetrowcount}
+
+\func{void}{SetRowCount}{\param{size\_t }{rowCount}}
+
+Set the number of rows the window contains. The derived class must provide the
+heights for all rows with indices up to the one given here in it's
+\helpref{OnGetRowHeight()}{wxvarvscrollhelperongetrowheight} implementation.
+
+\wxheading{See also}
+
+\helpref{GetRowCount()}{wxvarvscrollhelpergetrowcount}
+

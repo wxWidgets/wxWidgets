@@ -1,0 +1,99 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        hscrolledwindow.tex
+%% Purpose:     wxHScrolledWindow Documentation
+%% Author:      Bryan Petty
+%% Modified by: 
+%% Created:     2007-04-04
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2007 wxWidgets Team
+%% License:     wxWindows Licence
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxHScrolledWindow}}\label{wxhscrolledwindow}
+
+In the name of this class, "H" stands for "horizontal" because it can be
+used for scrolling columns of variable widths. It is not necessary to know
+the widths of all columns in advance -- only those which are shown on the
+screen need to be measured.
+
+In any case, this is a generalization of the
+\helpref{wxScrolledWindow}{wxscrolledwindow} class which can be only used when
+all columns have the same widths. It lacks some other wxScrolledWindow features
+however, notably it can't scroll only a rectangle of the window and not its
+entire client area.
+
+To use this class, you need to derive from it and implement the
+\helpref{OnGetColumnWidth()}{wxvarhscrollhelperongetcolumnwidth} pure virtual
+method. You also must call \helpref{SetColumnCount()}{wxvarhscrollhelpersetcolumncount}
+to let the base class know how many columns it should display, but from that
+moment on the scrolling is handled entirely by wxHScrolledWindow. You only
+need to draw the visible part of contents in your {\tt OnPaint()} method as
+usual. You should use \helpref{GetVisibleColumnsBegin()}{wxvarhscrollhelpergetvisiblecolumnsbegin}
+and \helpref{GetVisibleColumnsEnd()}{wxvarhscrollhelpergetvisiblecolumnsend} to
+select the lines to display. Note that the device context origin is not shifted
+so the first visible column always appears at the point $(0, 0)$ in physical as
+well as logical coordinates.
+
+\wxheading{Derived from}
+
+\helpref{wxPanel}{wxpanel}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\helpref{wxVarHScrollHelper}{wxvarhscrollhelper}\\
+\helpref{wxVarScrollHelperBase}{wxvarscrollhelperbase}
+
+\wxheading{Include files}
+
+<wx/vscroll.h>
+
+\wxheading{See also}
+
+\helpref{wxHVScrolledWindow}{wxhvscrolledwindow},
+\rtfsp\helpref{wxVScrolledWindow}{wxvscrolledwindow}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxHScrolledWindow::wxHScrolledWindow}\label{wxhscrolledwindowwxhscrolledwindow}
+
+\func{}{wxHScrolledWindow}{\void}
+
+Default constructor, you must call \helpref{Create()}{wxhscrolledwindowcreate}
+later.
+
+\func{}{wxHScrolledWindow}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = 0}, \param{const wxString\& }{name = wxPanelNameStr}}
+
+This is the normal constructor, no need to call {\tt Create()} after using this one.
+
+Note that {\tt wxHSCROLL} is always automatically added to our style, there is
+no need to specify it explicitly.
+
+\wxheading{Parameters}
+
+\docparam{parent}{The parent window, must not be {\tt NULL}}
+
+\docparam{id}{The identifier of this window, {\tt wxID\_ANY} by default}
+
+\docparam{pos}{The initial window position}
+
+\docparam{size}{The initial window size}
+
+\docparam{style}{The window style. There are no special style bits defined for
+this class.}
+
+\docparam{name}{The name for this window; usually not used}
+
+
+\membersection{wxHScrolledWindow::Create}\label{wxhscrolledwindowcreate}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = 0}, \param{const wxString\& }{name = wxPanelNameStr}}
+
+Same as the \helpref{non-default constuctor}{wxhscrolledwindowwxhscrolledwindow}
+but returns status code: {\tt true} if ok, {\tt false} if the window couldn't
+be created.
+
+Just as with the constructor above, the {\tt wxHSCROLL} style is always used,
+there is no need to specify it explicitly.
+

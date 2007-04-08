@@ -1,0 +1,105 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        hvscrolledwindow.tex
+%% Purpose:     wxHVScrolledWindow Documentation
+%% Author:      Bryan Petty
+%% Modified by: 
+%% Created:     2007-04-04
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2007 wxWidgets Team
+%% License:     wxWindows Licence
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxHVScrolledWindow}}\label{wxhvscrolledwindow}
+
+This window inherits all functionality of both vertical and horizontal,
+variable scrolled windows. It automatically handles everything needed to
+scroll both axis simultaneously with both variable row heights and variable
+column widths.
+
+This is a generalization of the \helpref{wxScrolledWindow}{wxscrolledwindow}
+class which can be only used when all rows and columns are the same size. It
+lacks some other wxScrolledWindow features however, notably it can't scroll
+only a rectangle of the window and not its entire client area.
+
+To use this class, you must derive from it and implement both the
+\helpref{OnGetRowHeight()}{wxvarvscrollhelperongetrowheight} and
+\helpref{OnGetColumnWidth()}{wxvarhscrollhelperongetcolumnwidth} pure virtual
+methods to let the base class know how many rows and columns it should
+display. You also need to set the total rows and columns the window contains,
+but from that moment on the scrolling is handled entirely by
+wxHVScrolledWindow. You only need to draw the visible part of contents in
+your {\tt OnPaint()} method as usual. You should use
+\helpref{GetVisibleBegin()}{wxvarhvscrollhelpergetvisiblebegin}
+and \helpref{GetVisibleEnd()}{wxvarhvscrollhelpergetvisibleend} to select the
+lines to display. Note that the device context origin is not shifted so the
+first visible row and column always appear at the point $(0, 0)$ in physical
+as well as logical coordinates.
+
+\wxheading{Derived from}
+
+\helpref{wxPanel}{wxpanel}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\helpref{wxVarHVScrollHelper}{wxvarhvscrollhelper}
+
+\helpref{wxVarVScrollHelper}{wxvarvscrollhelper}\\
+\helpref{wxVarScrollHelperBase}{wxvarscrollhelperbase}
+
+\helpref{wxVarHScrollHelper}{wxvarhscrollhelper}\\
+\helpref{wxVarScrollHelperBase}{wxvarscrollhelperbase}
+
+\wxheading{Include files}
+
+<wx/vscroll.h>
+
+\wxheading{See also}
+
+\helpref{wxHScrolledWindow}{wxhscrolledwindow},
+\rtfsp\helpref{wxVScrolledWindow}{wxvscrolledwindow}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxHVScrolledWindow::wxHVScrolledWindow}\label{wxhvscrolledwindowwxhvscrolledwindow}
+
+\func{}{wxHVScrolledWindow}{\void}
+
+Default constructor, you must call \helpref{Create()}{wxhvscrolledwindowcreate}
+later.
+
+\func{}{wxHVScrolledWindow}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = 0}, \param{const wxString\& }{name = wxPanelNameStr}}
+
+This is the normal constructor, no need to call {\tt Create()} after using this one.
+
+Note that {\tt wxHSCROLL} and {\tt wxVSCROLL} are always automatically added
+to our styles, there is no need to specify it explicitly.
+
+\wxheading{Parameters}
+
+\docparam{parent}{The parent window, must not be {\tt NULL}}
+
+\docparam{id}{The identifier of this window, {\tt wxID\_ANY} by default}
+
+\docparam{pos}{The initial window position}
+
+\docparam{size}{The initial window size}
+
+\docparam{style}{The window style. There are no special style bits defined for
+this class.}
+
+\docparam{name}{The name for this window; usually not used}
+
+
+\membersection{wxHVScrolledWindow::Create}\label{wxhvscrolledwindowcreate}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = 0}, \param{const wxString\& }{name = wxPanelNameStr}}
+
+Same as the \helpref{non-default constuctor}{wxhvscrolledwindowwxhvscrolledwindow}
+but returns status code: {\tt true} if ok, {\tt false} if the window couldn't
+be created.
+
+Just as with the constructor above, the {\tt wxHSCROLL} and {\tt wxVSCROLL}
+styles are always used, there is no need to specify it explicitly.
+

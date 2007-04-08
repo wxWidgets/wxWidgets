@@ -622,7 +622,7 @@ void wxRichTextFontPage::OnFaceTextCtrlUpdated( wxCommandEvent& WXUNUSED(event) 
             {
                 if (arr[i].Mid(0, facename.Length()).Lower() == facename.Lower())
                 {
-                    m_faceListBox->ScrollToLine(i);
+                    m_faceListBox->ScrollToRow(i);
                     break;
                 }
             }

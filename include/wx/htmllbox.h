@@ -305,8 +305,8 @@ protected:
     // wxSimpleHtmlListBox shouldn't be allowed to call them directly!
     virtual void SetItemCount(size_t count)
         { wxHtmlListBox::SetItemCount(count); }
-    virtual void SetLineCount(size_t count)
-        { wxHtmlListBox::SetLineCount(count); }
+    virtual void SetRowCount(size_t count)
+        { wxHtmlListBox::SetRowCount(count); }
 
     virtual wxString OnGetItem(size_t n) const
         { return m_items[n]; }

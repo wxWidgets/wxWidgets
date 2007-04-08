@@ -832,7 +832,7 @@ bool wxSymbolListCtrl::DoSetCurrent(int current)
     }
 
     if ( m_current != wxNOT_FOUND )
-        RefreshLine(SymbolValueToLineNumber(m_current));
+        RefreshRow(SymbolValueToLineNumber(m_current));
 
     m_current = current;
 
@@ -844,19 +844,19 @@ bool wxSymbolListCtrl::DoSetCurrent(int current)
         // don't need to refresh it -- it will be redrawn anyhow
         if ( !IsVisible(lineNo) )
         {
-            ScrollToLine(lineNo);
+            ScrollToRow(lineNo);
         }
         else // line is at least partly visible
         {
             // it is, indeed, only partly visible, so scroll it into view to
             // make it entirely visible
             while ( unsigned(lineNo) == GetLastVisibleLine() &&
-                    ScrollToLine(GetVisibleBegin()+1) )
+                    ScrollToRow(GetVisibleBegin()+1) )
                 ;
 
             // but in any case refresh it as even if it was only partly visible
             // before we need to redraw it entirely as its background changed
-            RefreshLine(lineNo);
+            RefreshRow(lineNo);
         }
     }
 
@@ -1200,12 +1200,12 @@ void wxSymbolListCtrl::SetupCtrl(bool scrollToSelection)
     m_symbolsPerLine = sz.x/(m_cellSize.x+m_ptMargins.x);
     int noLines = (1 + SymbolValueToLineNumber(m_maxSymbolValue));
 
-    SetLineCount(noLines);
+    SetRowCount(noLines);
     Refresh();
 
     if (scrollToSelection && m_current != wxNOT_FOUND && m_current >= m_minSymbolValue && m_current <= m_maxSymbolValue)
     {
-        ScrollToLine(SymbolValueToLineNumber(m_current));
+        ScrollToRow(SymbolValueToLineNumber(m_current));
     }
 }
 
@@ -1214,7 +1214,7 @@ void wxSymbolListCtrl::EnsureVisible(int item)
 {
     if (item != wxNOT_FOUND && item >= m_minSymbolValue && item <= m_maxSymbolValue)
     {
-        ScrollToLine(SymbolValueToLineNumber(item));
+        ScrollToRow(SymbolValueToLineNumber(item));
     }
 }
 

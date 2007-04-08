@@ -75,7 +75,7 @@ public:
     // ---------
 
     // get the number of items in the control
-    size_t GetItemCount() const { return GetLineCount(); }
+    size_t GetItemCount() const { return GetRowCount(); }
 
     // does this control use multiple selection?
     bool HasMultipleSelection() const { return m_selStore != NULL; }
@@ -133,7 +133,7 @@ public:
 
     // set the number of items to be shown in the control
     //
-    // this is just a synonym for wxVScrolledWindow::SetLineCount()
+    // this is just a synonym for wxVScrolledWindow::SetRowCount()
     virtual void SetItemCount(size_t count);
 
     // delete all items from the control

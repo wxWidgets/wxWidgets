@@ -1,0 +1,178 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        varhscrollhelper.tex
+%% Purpose:     wxVarHScrollHelper Documentation
+%% Author:      Bryan Petty
+%% Modified by: 
+%% Created:     2007-04-04
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2007 wxWidgets Team
+%% License:     wxWindows Licence
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxVarHScrollHelper}}\label{wxvarhscrollhelper}
+
+This class provides functions wrapping the 
+\helpref{wxVarScrollHelperBase}{wxvarscrollhelperbase} class, targeted for
+horizontal-specific scrolling using \helpref{wxHScrolledWindow}{wxhscrolledwindow}.
+
+Like wxVarScrollHelperBase, this class is mostly only useful to those classes
+built into wxWidgets deriving from here, and this documentation is mostly
+only provided for referencing those functions provided. You will likely want
+to derive your window from wxHScrolledWindow rather than from here directly.
+
+\wxheading{Derived from}
+
+\helpref{wxVarScrollHelperBase}{wxvarscrollhelperbase}
+
+\wxheading{Include files}
+
+<wx/vscroll.h>
+
+\wxheading{See also}
+
+\helpref{wxHScrolledWindow}{wxhscrolledwindow},
+\rtfsp\helpref{wxHVScrolledWindow}{wxhvscrolledwindow},
+\rtfsp\helpref{wxVScrolledWindow}{wxvscrolledwindow}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+\membersection{wxVarHScrollHelper::wxVarHScrollHelper}\label{wxvarhscrollhelperwxvarhscrollhelper}
+
+\func{}{wxVarHScrollHelper}{\param{wxWindow* }{winToScroll}}
+
+Constructor taking the target window to be scrolled by this helper class.
+This will attach scroll event handlers to the target window to catch and
+handle scroll events appropriately.
+
+
+\membersection{wxVarHScrollHelper::EstimateTotalWidth}\label{wxvarhscrollhelperestimatetotalwidth}
+
+\constfunc{virtual wxCoord}{EstimateTotalWidth}{\void}
+
+This class forwards calls from
+\helpref{wxVarScrollHelperBase::EstimateTotalSize}{wxvarscrollhelperbaseestimatetotalsize}
+to this function so derived classes can override either just the height or
+the width estimation, or just estimate both differently if desired in any
+\helpref{wxHVScrolledWindow}{wxhvscrolledwindow} derived class.
+
+Please note that this function will not be called if {\tt EstimateTotalSize()}
+is overridden in your derived class.
+
+
+\membersection{wxVarHScrollHelper::GetColumnCount}\label{wxvarhscrollhelpergetcolumncount}
+
+\constfunc{size\_t}{GetColumnCount}{\void}
+
+Returns the number of columns the target window contains.
+
+\wxheading{See also}
+
+\helpref{SetColumnCount()}{wxvarhscrollhelpersetcolumncount}
+
+
+\membersection{wxVarHScrollHelper::GetVisibleColumnsBegin}\label{wxvarhscrollhelpergetvisiblecolumnsbegin}
+
+\constfunc{size\_t}{GetVisibleColumnsBegin}{\void}
+
+Returns the index of the first visible column based on the scroll position.
+
+
+\membersection{wxVarHScrollHelper::GetVisibleColumnsEnd}\label{wxvarhscrollhelpergetvisiblecolumnsend}
+
+\constfunc{size\_t}{GetVisibleColumnsEnd}{\void}
+
+Returns the index of the last visible column based on the scroll position. This
+includes the last column even if it is only partially visible.
+
+
+\membersection{wxVarHScrollHelper::IsColumnVisible}\label{wxvarhscrollhelperiscolumnvisible}
+
+\constfunc{bool}{IsColumnVisible}{\param{size\_t }{column}}
+
+Returns {\tt true} if the given column is currently visible (even if only
+partially visible) or {\tt false} otherwise.
+
+
+\membersection{wxVarHScrollHelper::OnGetColumnWidth}\label{wxvarhscrollhelperongetcolumnwidth}
+
+\constfunc{virtual wxCoord}{OnGetColumnWidth}{\param{size\_t }{column}}
+
+This function must be overridden in the derived class, and should return the
+width of the given column in pixels.
+
+
+\membersection{wxVarHScrollHelper::OnGetColumnsWidthHint}\label{wxvarhscrollhelperongetcolumnswidthhint}
+
+\constfunc{virtual void}{OnGetColumnsWidthHint}{\param{size\_t }{columnMin}, \param{size\_t }{columnMax}}
+
+This function doesn't have to be overridden but it may be useful to do so if
+calculating the columns' sizes is a relatively expensive operation as it gives
+your code a chance to calculate several of them at once and cache the result
+if necessary.
+
+{\tt OnGetColumnsWidthHint()} is normally called just before
+\helpref{OnGetColumnWidth()}{wxvarhscrollhelperongetcolumnwidth} but you
+shouldn't rely on the latter being called for all columns in the interval
+specified here. It is also possible that OnGetColumnWidth() will be called for
+units outside of this interval, so this is really just a hint, not a promise.
+
+Finally, note that columnMin is inclusive, while columnMax is exclusive.
+
+
+\membersection{wxVarHScrollHelper::RefreshColumn}\label{wxvarhscrollhelperrefreshcolumn}
+
+\func{virtual void}{RefreshColumn}{\param{size\_t }{column}}
+
+Triggers a refresh for just the given column's area of the window if it's visible.
+
+
+\membersection{wxVarHScrollHelper::RefreshColumns}\label{wxvarhscrollhelperrefreshcolumns}
+
+\func{virtual void}{RefreshColumns}{\param{size\_t }{from}, \param{size\_t }{to}}
+
+Triggers a refresh for the area between the specified range of columns given
+(inclusively).
+
+
+\membersection{wxVarHScrollHelper::ScrollColumnPages}\label{wxvarhscrollhelperscrollcolumnpages}
+
+\func{virtual bool}{ScrollColumnPages}{\param{int }{pages}}
+
+Scroll by the specified number of pages which may be positive (to scroll right)
+or negative (to scroll left).
+
+
+\membersection{wxVarHScrollHelper::ScrollColumns}\label{wxvarhscrollhelperscrollcolumns}
+
+\func{virtual bool}{ScrollColumns}{\param{int }{columns}}
+
+Scroll by the specified number of columns which may be positive (to scroll right)
+or negative (to scroll left).
+
+Returns {\tt true} if the window was scrolled, {\tt false} otherwise (for
+example, if we're trying to scroll right but we are already showing the last
+column).
+
+
+\membersection{wxVarHScrollHelper::ScrollToColumn}\label{wxvarhscrollhelperscrolltocolumn}
+
+\func{bool}{ScrollToColumn}{\param{size\_t }{column}}
+
+Scroll to the specified column. It will become the first visible column in the window.
+
+Returns {\tt true} if we scrolled the window, {\tt false} if nothing was done.
+
+
+\membersection{wxVarHScrollHelper::SetColumnCount}\label{wxvarhscrollhelpersetcolumncount}
+
+\func{void}{SetColumnCount}{\param{size\_t }{columnCount}}
+
+Set the number of columns the window contains. The derived class must provide
+the widths for all columns with indices up to the one given here in it's
+\helpref{OnGetColumnWidth()}{wxvarhscrollhelperongetcolumnwidth} implementation.
+
+\wxheading{See also}
+
+\helpref{GetColumnCount()}{wxvarhscrollhelpergetcolumncount}
+

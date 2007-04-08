@@ -111,7 +111,7 @@ void wxVListBox::SetItemCount(size_t count)
         m_selStore->SetItemCount(count);
     }
 
-    SetLineCount(count);
+    SetRowCount(count);
 }
 
 // ----------------------------------------------------------------------------
@@ -312,7 +312,7 @@ void wxVListBox::RefreshSelected()
     for ( size_t n = GetVisibleBegin(), end = GetVisibleEnd(); n < end; n++ )
     {
         if ( IsSelected(n) )
-            RefreshLine(n);
+            RefreshRow(n);
     }
 }
 

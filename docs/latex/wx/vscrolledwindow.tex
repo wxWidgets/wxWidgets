@@ -1,0 +1,173 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Name:        vscrolledwindow.tex (moved from vscroll.tex)
+%% Purpose:     wxVScrolledWindow Documentation
+%% Author:      Vadim Zeitlin, Bryan Petty
+%% Modified by: 
+%% Created:     2003-05-30, modified 2007-04-04
+%% RCS-ID:      $Id$
+%% Copyright:   (c) 2003, 2007 wxWidgets Team
+%% License:     wxWindows Licence
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxVScrolledWindow}}\label{wxvscrolledwindow}
+
+In the name of this class, "V" may stand for "variable" because it can be
+used for scrolling rows of variable heights; "virtual", because it is not
+necessary to know the heights of all rows in advance -- only those which
+are shown on the screen need to be measured; or even "vertical", because
+this class only supports scrolling vertically.
+
+In any case, this is a generalization of the
+\helpref{wxScrolledWindow}{wxscrolledwindow} class which can be only used when
+all rows have the same heights. It lacks some other wxScrolledWindow features
+however, notably it can't scroll only a rectangle of the window and not its
+entire client area.
+
+To use this class, you need to derive from it and implement the
+\helpref{OnGetRowHeight()}{wxvarvscrollhelperongetrowheight} pure virtual
+method. You also must call \helpref{SetRowCount}{wxvarvscrollhelpersetrowcount}
+to let the base class know how many rows it should display, but from that
+moment on the scrolling is handled entirely by wxVScrolledWindow. You only
+need to draw the visible part of contents in your {\tt OnPaint()} method as
+usual. You should use \helpref{GetVisibleRowsBegin()}{wxvarvscrollhelpergetvisiblerowsbegin}
+and \helpref{GetVisibleRowsEnd()}{wxvarvscrollhelpergetvisiblerowsend} to
+select the lines to display. Note that the device context origin is not shifted
+so the first visible row always appears at the point $(0, 0)$ in physical as
+well as logical coordinates.
+
+\wxheading{Derived from}
+
+\helpref{wxPanel}{wxpanel}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\helpref{wxVarVScrollHelper}{wxvarvscrollhelper}\\
+\helpref{wxVarScrollHelperBase}{wxvarscrollhelperbase}
+
+\wxheading{Include files}
+
+<wx/vscroll.h>
+
+\wxheading{See also}
+
+\helpref{wxHScrolledWindow}{wxhscrolledwindow},
+\rtfsp\helpref{wxHVScrolledWindow}{wxhvscrolledwindow}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% wxVarVScrollLegacyAdapter Compatibility Functions
+%% This section will need to be removed when 2.8 compatibility is removed.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\membersection{wxWidgets 2.6 and 2.8 Compatibility Functions}\label{wxvscrolledwindowbackwardcompatibility}
+
+The following functions provide backwards compatibility for applications
+originally built using wxVScrolledWindow in 2.6 or 2.8. Originally,
+wxVScrolledWindow referred to scrolling "lines". We now use "units" in
+wxVarScrollHelperBase to avoid implying any orientation (since the functions
+are used for both horizontal and vertical scrolling in derived classes). And
+in the new wxVScrolledWindow and wxHScrolledWindow classes, we refer to them
+as "rows" and "columns", respectively. This is to help clear some confusion
+in not only those classes, but also in wxHVScrolledWindow where functions
+are inherited from both.
+
+You are encouraged to update any existing code using these function to use
+the new replacements mentioned below, and avoid using these functions for
+any new code as they are deprecated.
+
+\constfunc{size\_t}{GetFirstVisibleLine}{\void}
+
+Deprecated for \helpref{GetVisibleRowsBegin()}{wxvarvscrollhelpergetvisiblerowsbegin}.
+
+\constfunc{size\_t}{GetLastVisibleLine}{\void}
+
+Deprecated for \helpref{GetVisibleRowsEnd()}{wxvarvscrollhelpergetvisiblerowsend}.
+
+This function originally had a slight design flaw in that it was possible to
+return \texttt{(size\_t)-1} (ie: a large positive number) if the scroll
+position was 0 and the first line wasn't completely visible.
+
+\constfunc{size\_t}{GetLineCount}{\void}
+
+Deprecated for \helpref{GetRowCount()}{wxvarvscrollhelpergetrowcount}.
+
+\constfunc{virtual wxCoord}{OnGetLineHeight}{\param{size\_t }{line}}
+
+Deprecated for \helpref{OnGetRowHeight()}{wxvarvscrollhelperongetrowheight}.
+
+\constfunc{virtual void}{OnGetLinesHint}{\param{size\_t }{lineMin}, \param{size\_t }{lineMax}}
+
+Deprecated for \helpref{OnGetRowsHeightHint()}{wxvarvscrollhelperongetrowsheighthint}.
+
+\func{virtual void}{RefreshLine}{\param{size\_t }{line}}
+
+Deprecated for \helpref{RefreshRow()}{wxvarvscrollhelperrefreshrow}.
+
+\func{virtual void}{RefreshLines}{\param{size\_t }{from}, \param{size\_t }{to}}
+
+Deprecated for \helpref{RefreshRows()}{wxvarvscrollhelperrefreshrows}.
+
+\func{virtual bool}{ScrollLines}{\param{int }{lines}}
+
+Deprecated for \helpref{ScrollRows()}{wxvarvscrollhelperscrollrows}.
+
+\func{virtual bool}{ScrollPages}{\param{int }{pages}}
+
+Deprecated for \helpref{ScrollRowPages()}{wxvarvscrollhelperscrollrowpages}.
+
+\func{bool}{ScrollToLine}{\param{size\_t }{line}}
+
+Deprecated for \helpref{ScrollToRow()}{wxvarvscrollhelperscrolltorow}.
+
+\func{void}{SetLineCount}{\param{size\_t }{count}}
+
+Deprecated for \helpref{SetRowCount()}{wxvarvscrollhelpersetrowcount}.
+
+%%%%%%%%%%%%%%%%%%%%%%% END COMPATIBILITY FUNCTIONS %%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\membersection{wxVScrolledWindow::wxVScrolledWindow}\label{wxvscrolledwindowwxvscrolledwindow}
+
+\func{}{wxVScrolledWindow}{\void}
+
+Default constructor, you must call \helpref{Create()}{wxvscrolledwindowcreate}
+later.
+
+\func{}{wxVScrolledWindow}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = 0}, \param{const wxString\& }{name = wxPanelNameStr}}
+
+This is the normal constructor, no need to call {\tt Create()} after using this one.
+
+Note that {\tt wxVSCROLL} is always automatically added to our style, there is
+no need to specify it explicitly.
+
+\wxheading{Parameters}
+
+\docparam{parent}{The parent window, must not be {\tt NULL}}
+
+\docparam{id}{The identifier of this window, {\tt wxID\_ANY} by default}
+
+\docparam{pos}{The initial window position}
+
+\docparam{size}{The initial window size}
+
+\docparam{style}{The window style. There are no special style bits defined for
+this class.}
+
+\docparam{name}{The name for this window; usually not used}
+
+
+\membersection{wxVScrolledWindow::Create}\label{wxvscrolledwindowcreate}
+
+\func{bool}{Create}{\param{wxWindow* }{parent}, \param{wxWindowID }{id = wxID\_ANY}, \param{const wxPoint\& }{pos = wxDefaultPosition}, \param{const wxSize\& }{size = wxDefaultSize}, \param{long }{style = 0}, \param{const wxString\& }{name = wxPanelNameStr}}
+
+Same as the \helpref{non-default constuctor}{wxvscrolledwindowwxvscrolledwindow}
+but returns status code: {\tt true} if ok, {\tt false} if the window couldn't
+be created.
+
+Just as with the constructor above, the {\tt wxVSCROLL} style is always used,
+there is no need to specify it explicitly.
+

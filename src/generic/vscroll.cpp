@@ -2,7 +2,7 @@
 // Name:        src/generic/vscroll.cpp
 // Purpose:     wxVScrolledWindow implementation
 // Author:      Vadim Zeitlin
-// Modified by:
+// Modified by: Brad Anderson
 // Created:     30.05.03
 // RCS-ID:      $Id$
 // Copyright:   (c) 2003 Vadim Zeitlin <vadim@wxwindows.org>
@@ -30,401 +30,632 @@
 
 #include "wx/vscroll.h"
 
-// ----------------------------------------------------------------------------
-// event tables
-// ----------------------------------------------------------------------------
-
-BEGIN_EVENT_TABLE(wxVScrolledWindow, wxPanel)
-    EVT_SIZE(wxVScrolledWindow::OnSize)
-    EVT_SCROLLWIN(wxVScrolledWindow::OnScroll)
-#if wxUSE_MOUSEWHEEL
-    EVT_MOUSEWHEEL(wxVScrolledWindow::OnMouseWheel)
-#endif
-END_EVENT_TABLE()
-
-
 // ============================================================================
-// implementation
+// wxVarScrollHelperEvtHandler declaration
 // ============================================================================
 
-IMPLEMENT_ABSTRACT_CLASS(wxVScrolledWindow, wxPanel)
-
 // ----------------------------------------------------------------------------
-// initialization
+// wxScrollHelperEvtHandler: intercept the events from the window and forward
+// them to wxVarScrollHelperBase
 // ----------------------------------------------------------------------------
 
-void wxVScrolledWindow::Init()
+class WXDLLEXPORT wxVarScrollHelperEvtHandler : public wxEvtHandler
 {
-    // we're initially empty
-    m_lineMax =
-    m_lineFirst = 0;
+public:
+    wxVarScrollHelperEvtHandler(wxVarScrollHelperBase *scrollHelper)
+    {
+        m_scrollHelper = scrollHelper;
+    }
 
-    // this one should always be strictly positive
-    m_nVisible = 1;
+    virtual bool ProcessEvent(wxEvent& event);
 
-    m_heightTotal = 0;
+private:
+    wxVarScrollHelperBase *m_scrollHelper;
+
+    DECLARE_NO_COPY_CLASS(wxVarScrollHelperEvtHandler)
+};
+
+// ============================================================================
+// wxVarScrollHelperEvtHandler implementation
+// ============================================================================
+
+bool wxVarScrollHelperEvtHandler::ProcessEvent(wxEvent& event)
+{
+    wxEventType evType = event.GetEventType();
+
+    // pass it on to the real handler
+    bool processed = wxEvtHandler::ProcessEvent(event);
+
+    // always process the size events ourselves, even if the user code handles
+    // them as well, as we need to AdjustScrollbars()
+    //
+    // NB: it is important to do it after processing the event in the normal
+    //     way as HandleOnSize() may generate a wxEVT_SIZE itself if the
+    //     scrollbar[s] (dis)appear and it should be seen by the user code
+    //     after this one
+    if ( evType == wxEVT_SIZE )
+    {
+        m_scrollHelper->HandleOnSize((wxSizeEvent &)event);
+
+        return !event.GetSkipped();
+    }
+
+    if ( processed )
+    {
+        // normally, nothing more to do here - except if we have a command
+        // event
+        if ( event.IsCommandEvent() )
+        {
+            return true;
+        }
+    }
+
+    // reset the skipped flag (which might have been set to true in
+    // ProcessEvent() above) to be able to test it below
+    bool wasSkipped = event.GetSkipped();
+    if ( wasSkipped )
+        event.Skip(false);
+
+    // reset the skipped flag to false as it might have been set to true in
+    // ProcessEvent() above
+    event.Skip(false);
+
+    if ( evType == wxEVT_SCROLLWIN_TOP ||
+         evType == wxEVT_SCROLLWIN_BOTTOM ||
+         evType == wxEVT_SCROLLWIN_LINEUP ||
+         evType == wxEVT_SCROLLWIN_LINEDOWN ||
+         evType == wxEVT_SCROLLWIN_PAGEUP ||
+         evType == wxEVT_SCROLLWIN_PAGEDOWN ||
+         evType == wxEVT_SCROLLWIN_THUMBTRACK ||
+         evType == wxEVT_SCROLLWIN_THUMBRELEASE )
+    {
+        m_scrollHelper->HandleOnScroll((wxScrollWinEvent &)event);
+        if ( !event.GetSkipped() )
+        {
+            // it makes sense to indicate that we processed the message as we
+            // did scroll the window (and also notice that wxAutoScrollTimer
+            // relies on our return value for continuous scrolling)
+            processed = true;
+            wasSkipped = false;
+        }
+    }
+#if wxUSE_MOUSEWHEEL
+    else if ( evType == wxEVT_MOUSEWHEEL )
+    {
+        m_scrollHelper->HandleOnMouseWheel((wxMouseEvent &)event);
+    }
+#endif // wxUSE_MOUSEWHEEL
+
+    if ( processed )
+        event.Skip(wasSkipped);
+
+    return processed;
+}
+
+
+// ============================================================================
+// wxVarScrollHelperBase implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxVarScrollHelperBase initialization
+// ----------------------------------------------------------------------------
+
+wxVarScrollHelperBase::wxVarScrollHelperBase(wxWindow *win)
+{
+    wxASSERT_MSG( win, _T("associated window can't be NULL in wxVarScrollHelperBase") );
 
 #if wxUSE_MOUSEWHEEL
     m_sumWheelRotation = 0;
 #endif
+
+    m_unitMax = 0;
+    m_sizeTotal = 0;
+    m_unitFirst = 0;
+
+    m_win =
+    m_targetWindow = (wxWindow *)NULL;
+
+    m_handler = NULL;
+
+    m_win = win;
+
+    // by default, the associated window is also the target window
+    DoSetTargetWindow(win);
+
+}
+
+wxVarScrollHelperBase::~wxVarScrollHelperBase()
+{
+    DeleteEvtHandler();
 }
 
 // ----------------------------------------------------------------------------
-// various helpers
+// wxVarScrollHelperBase various helpers
 // ----------------------------------------------------------------------------
 
-wxCoord wxVScrolledWindow::EstimateTotalHeight() const
+void
+wxVarScrollHelperBase::AssignOrient(wxCoord& x,
+                                    wxCoord& y,
+                                    wxCoord first,
+                                    wxCoord second)
+{
+    if ( GetOrientation() == wxVERTICAL )
+    {
+        x = first;
+        y = second;
+    }
+    else // horizontal
+    {
+        x = second;
+        y = first;
+    }
+}
+
+void
+wxVarScrollHelperBase::IncOrient(wxCoord& x, wxCoord& y, wxCoord inc)
+{
+    if ( GetOrientation() == wxVERTICAL )
+        y += inc;
+    else
+        x += inc;
+}
+
+wxCoord wxVarScrollHelperBase::DoEstimateTotalSize() const
 {
     // estimate the total height: it is impossible to call
-    // OnGetLineHeight() for every line because there may be too many of
-    // them, so we just make a guess using some lines in the beginning,
+    // OnGetUnitSize() for every unit because there may be too many of
+    // them, so we just make a guess using some units in the beginning,
     // some in the end and some in the middle
-    static const size_t NUM_LINES_TO_SAMPLE = 10;
+    static const size_t NUM_UNITS_TO_SAMPLE = 10;
 
-    wxCoord heightTotal;
-    if ( m_lineMax < 3*NUM_LINES_TO_SAMPLE )
+    wxCoord sizeTotal;
+    if ( m_unitMax < 3*NUM_UNITS_TO_SAMPLE )
     {
-        // in this case calculating exactly is faster and more correct than
+        // in this case, full calculations are faster and more correct than
         // guessing
-        heightTotal = GetLinesHeight(0, m_lineMax);
+        sizeTotal = GetUnitsSize(0, m_unitMax);
     }
-    else // too many lines to calculate exactly
+    else // too many units to calculate exactly
     {
-        // look at some lines in the beginning/middle/end
-        heightTotal =
-            GetLinesHeight(0, NUM_LINES_TO_SAMPLE) +
-                GetLinesHeight(m_lineMax - NUM_LINES_TO_SAMPLE, m_lineMax) +
-                    GetLinesHeight(m_lineMax/2 - NUM_LINES_TO_SAMPLE/2,
-                                   m_lineMax/2 + NUM_LINES_TO_SAMPLE/2);
+        // look at some units in the beginning/middle/end
+        sizeTotal =
+            GetUnitsSize(0, NUM_UNITS_TO_SAMPLE) +
+                GetUnitsSize(m_unitMax - NUM_UNITS_TO_SAMPLE,
+                             m_unitMax) +
+                    GetUnitsSize(m_unitMax/2 - NUM_UNITS_TO_SAMPLE/2,
+                                 m_unitMax/2 + NUM_UNITS_TO_SAMPLE/2);
 
-        // use the height of the lines we looked as the average
-        heightTotal = (wxCoord)
-                (((float)heightTotal / (3*NUM_LINES_TO_SAMPLE)) * m_lineMax);
+        // use the height of the units we looked as the average
+        sizeTotal = (wxCoord)
+                (((float)sizeTotal / (3*NUM_UNITS_TO_SAMPLE)) * m_unitMax);
     }
 
-    return heightTotal;
+    return sizeTotal;
 }
 
-wxCoord wxVScrolledWindow::GetLinesHeight(size_t lineMin, size_t lineMax) const
+wxCoord wxVarScrollHelperBase::GetUnitsSize(size_t unitMin, size_t unitMax) const
 {
-    if ( lineMin == lineMax )
+    if ( unitMin == unitMax )
         return 0;
-    else if ( lineMin > lineMax )
-        return -GetLinesHeight(lineMax, lineMin);
-    //else: lineMin < lineMax
+    else if ( unitMin > unitMax )
+        return -GetUnitsSize(unitMax, unitMin);
+    //else: unitMin < unitMax
 
-    // let the user code know that we're going to need all these lines
-    OnGetLinesHint(lineMin, lineMax);
+    // let the user code know that we're going to need all these units
+    OnGetUnitsSizeHint(unitMin, unitMax);
 
-    // do sum up their heights
-    wxCoord height = 0;
-    for ( size_t line = lineMin; line < lineMax; line++ )
+    // sum up their sizes
+    wxCoord size = 0;
+    for ( size_t unit = unitMin; unit < unitMax; ++unit )
     {
-        height += OnGetLineHeight(line);
+        size += OnGetUnitSize(unit);
     }
 
-    return height;
+    return size;
 }
 
-size_t wxVScrolledWindow::FindFirstFromBottom(size_t lineLast, bool full)
+size_t wxVarScrollHelperBase::FindFirstVisibleFromLast(size_t unitLast, bool full) const
 {
-    const wxCoord hWindow = GetClientSize().y;
+    const wxCoord sWindow = GetOrientationTargetSize();
 
-    // go upwards until we arrive at a line such that lineLast is not visible
+    // go upwards until we arrive at a unit such that unitLast is not visible
     // any more when it is shown
-    size_t lineFirst = lineLast;
-    wxCoord h = 0;
+    size_t unitFirst = unitLast;
+    wxCoord s = 0;
     for ( ;; )
     {
-        h += OnGetLineHeight(lineFirst);
+        s += OnGetUnitSize(unitFirst);
 
-        if ( h > hWindow )
+        if ( s > sWindow )
         {
-            // for this line to be fully visible we need to go one line
+            // for this unit to be fully visible we need to go one unit
             // down, but if it is enough for it to be only partly visible then
-            // this line will do as well
+            // this unit will do as well
             if ( full )
             {
-                lineFirst++;
+                ++unitFirst;
             }
 
             break;
         }
 
-        if ( !lineFirst )
+        if ( !unitFirst )
             break;
 
-        lineFirst--;
+        --unitFirst;
     }
 
-    return lineFirst;
+    return unitFirst;
 }
 
-void wxVScrolledWindow::RemoveScrollbar()
+size_t wxVarScrollHelperBase::GetNewScrollPosition(wxScrollWinEvent& event) const
 {
-    m_lineFirst = 0;
-    m_nVisible = m_lineMax;
-    SetScrollbar(wxVERTICAL, 0, 0, 0);
+    wxEventType evtType = event.GetEventType();
+
+    if ( evtType == wxEVT_SCROLLWIN_TOP )
+    {
+        return 0;
+    }
+    else if ( evtType == wxEVT_SCROLLWIN_BOTTOM )
+    {
+        return m_unitMax;
+    }
+    else if ( evtType == wxEVT_SCROLLWIN_LINEUP )
+    {
+        return m_unitFirst ? m_unitFirst - 1 : 0;
+    }
+    else if ( evtType == wxEVT_SCROLLWIN_LINEDOWN )
+    {
+        return m_unitFirst + 1;
+    }
+    else if ( evtType == wxEVT_SCROLLWIN_PAGEUP )
+    {
+        return FindFirstVisibleFromLast(m_unitFirst);
+    }
+    else if ( evtType == wxEVT_SCROLLWIN_PAGEDOWN )
+    {
+        if ( GetVisibleEnd() )
+            return GetVisibleEnd() - 1;
+        else
+            return GetVisibleEnd();
+    }
+    else if ( evtType == wxEVT_SCROLLWIN_THUMBRELEASE )
+    {
+        return event.GetPosition();
+    }
+    else if ( evtType == wxEVT_SCROLLWIN_THUMBTRACK )
+    {
+        return event.GetPosition();
+    }
+
+    // unknown scroll event?
+    wxFAIL_MSG( _T("unknown scroll event type?") );
+    return 0;
 }
 
-void wxVScrolledWindow::UpdateScrollbar()
+void wxVarScrollHelperBase::UpdateScrollbar()
 {
     // if there is nothing to scroll, remove the scrollbar
-    if ( !m_lineMax )
+    if ( !m_unitMax )
     {
         RemoveScrollbar();
         return;
     }
 
-    // see how many lines can we fit on screen
-    const wxCoord hWindow = GetClientSize().y;
+    // see how many units can we fit on screen
+    const wxCoord sWindow = GetOrientationTargetSize();
 
-    wxCoord h = 0;
-    size_t line;
-    for ( line = m_lineFirst; line < m_lineMax; line++ )
+    // do vertical calculations
+    wxCoord s = 0;
+    size_t unit;
+    for ( unit = m_unitFirst; unit < m_unitMax; ++unit )
     {
-        if ( h > hWindow )
+        if ( s > sWindow )
             break;
 
-        h += OnGetLineHeight(line);
+        s += OnGetUnitSize(unit);
     }
 
-    // if we still have remaining space below, maybe we can fit everything?
-    if ( h < hWindow )
+    m_nUnitsVisible = unit - m_unitFirst;
+
+    int unitsPageSize = m_nUnitsVisible;
+    if ( s > sWindow )
     {
-        wxCoord hAll = h;
-        for ( size_t lineFirst = m_lineFirst; lineFirst > 0; lineFirst-- )
-        {
-            hAll += OnGetLineHeight(m_lineFirst - 1);
-            if ( hAll > hWindow )
-                break;
-        }
-
-        if ( hAll < hWindow )
-        {
-            // we don't need scrollbar at all
-            RemoveScrollbar();
-            return;
-        }
-    }
-
-    m_nVisible = line - m_lineFirst;
-
-    int pageSize = m_nVisible;
-    if ( h > hWindow )
-    {
-        // last line is only partially visible, we still need the scrollbar and
-        // so we have to "fix" pageSize because if it is equal to m_lineMax the
-        // scrollbar is not shown at all under MSW
-        pageSize--;
+        // last unit is only partially visible, we still need the scrollbar and
+        // so we have to "fix" pageSize because if it is equal to m_unitMax
+        // the scrollbar is not shown at all under MSW
+        --unitsPageSize;
     }
 
     // set the scrollbar parameters to reflect this
-    SetScrollbar(wxVERTICAL, m_lineFirst, pageSize, m_lineMax);
+    m_win->SetScrollbar(GetOrientation(), m_unitFirst, unitsPageSize, m_unitMax);
+}
+
+void wxVarScrollHelperBase::RemoveScrollbar()
+{
+    m_unitFirst = 0;
+    m_nUnitsVisible = m_unitMax;
+    m_win->SetScrollbar(GetOrientation(), 0, 0, 0);
+}
+
+void wxVarScrollHelperBase::DeleteEvtHandler()
+{
+    // search for m_handler in the handler list
+    if ( m_win && m_handler )
+    {
+        if ( m_win->RemoveEventHandler(m_handler) )
+        {
+            delete m_handler;
+        }
+        //else: something is very wrong, so better [maybe] leak memory than
+        //      risk a crash because of double deletion
+
+        m_handler = NULL;
+    }
+}
+
+void wxVarScrollHelperBase::DoSetTargetWindow(wxWindow *target)
+{
+    m_targetWindow = target;
+#ifdef __WXMAC__
+    target->MacSetClipChildren( true ) ;
+#endif
+
+    // install the event handler which will intercept the events we're
+    // interested in (but only do it for our real window, not the target window
+    // which we scroll - we don't need to hijack its events)
+    if ( m_targetWindow == m_win )
+    {
+        // if we already have a handler, delete it first
+        DeleteEvtHandler();
+
+        m_handler = new wxVarScrollHelperEvtHandler(this);
+        m_targetWindow->PushEventHandler(m_handler);
+    }
 }
 
 // ----------------------------------------------------------------------------
-// operations
+// wxVarScrollHelperBase operations
 // ----------------------------------------------------------------------------
 
-void wxVScrolledWindow::SetLineCount(size_t count)
+void wxVarScrollHelperBase::SetTargetWindow(wxWindow *target)
 {
-    // save the number of lines
-    m_lineMax = count;
+    wxCHECK_RET( target, wxT("target window must not be NULL") );
+
+    if ( target == m_targetWindow )
+        return;
+
+    DoSetTargetWindow(target);
+}
+
+void wxVarScrollHelperBase::SetUnitCount(size_t count)
+{
+    // save the number of units
+    m_unitMax = count;
 
     // and our estimate for their total height
-    m_heightTotal = EstimateTotalHeight();
+    m_sizeTotal = EstimateTotalSize();
 
-    // ScrollToLine() will update the scrollbar itself if it changes the line
+    // ScrollToUnit() will update the scrollbar itself if it changes the unit
     // we pass to it because it's out of [new] range
-    size_t oldScrollPos = m_lineFirst;
-    ScrollToLine(m_lineFirst);
-    if ( oldScrollPos == m_lineFirst )
+    size_t oldScrollPos = m_unitFirst;
+    DoScrollToUnit(m_unitFirst);
+    if ( oldScrollPos == m_unitFirst )
     {
         // but if it didn't do it, we still need to update the scrollbar to
-        // reflect the changed number of lines ourselves
+        // reflect the changed number of units ourselves
         UpdateScrollbar();
     }
 }
 
-void wxVScrolledWindow::RefreshLine(size_t line)
+void wxVarScrollHelperBase::RefreshUnit(size_t unit)
 {
-    // is this line visible?
-    if ( !IsVisible(line) )
+    // is this unit visible?
+    if ( !IsVisible(unit) )
     {
         // no, it is useless to do anything
         return;
     }
 
-    // calculate the rect occupied by this line on screen
+    // calculate the rect occupied by this unit on screen
     wxRect rect;
-    rect.width = GetClientSize().x;
-    rect.height = OnGetLineHeight(line);
-    for ( size_t n = GetVisibleBegin(); n < line; n++ )
+    AssignOrient(rect.width, rect.height,
+                 GetNonOrientationTargetSize(), OnGetUnitSize(unit));
+
+    for ( size_t n = GetVisibleBegin(); n < unit; ++n )
     {
-        rect.y += OnGetLineHeight(n);
+        IncOrient(rect.x, rect.y, OnGetUnitSize(n));
     }
 
     // do refresh it
-    RefreshRect(rect);
+    m_targetWindow->RefreshRect(rect);
 }
 
-void wxVScrolledWindow::RefreshLines(size_t from, size_t to)
+void wxVarScrollHelperBase::RefreshUnits(size_t from, size_t to)
 {
-    wxASSERT_MSG( from <= to, _T("RefreshLines(): empty range") );
+    wxASSERT_MSG( from <= to, _T("RefreshUnits(): empty range") );
 
-    // clump the range to just the visible lines -- it is useless to refresh
+    // clump the range to just the visible units -- it is useless to refresh
     // the other ones
     if ( from < GetVisibleBegin() )
         from = GetVisibleBegin();
 
-    if ( to >= GetVisibleEnd() )
+    if ( to > GetVisibleEnd() )
         to = GetVisibleEnd();
-    else
-        to++;
 
-    // calculate the rect occupied by these lines on screen
+    // calculate the rect occupied by these units on screen
+    int orient_size, nonorient_size, orient_pos;
+    orient_size = nonorient_size = orient_pos = 0;
+
+    nonorient_size = GetNonOrientationTargetSize();
+
+    for ( size_t nBefore = GetVisibleBegin();
+          nBefore < from;
+          nBefore++ )
+    {
+        orient_pos += OnGetUnitSize(nBefore);
+    }
+
+    for ( size_t nBetween = from; nBetween <= to; nBetween++ )
+    {
+        orient_size += OnGetUnitSize(nBetween);
+    }
+
     wxRect rect;
-    rect.width = GetClientSize().x;
-    for ( size_t nBefore = GetVisibleBegin(); nBefore < from; nBefore++ )
-    {
-        rect.y += OnGetLineHeight(nBefore);
-    }
-
-    for ( size_t nBetween = from; nBetween < to; nBetween++ )
-    {
-        rect.height += OnGetLineHeight(nBetween);
-    }
+    AssignOrient(rect.x, rect.y, 0, orient_pos);
+    AssignOrient(rect.width, rect.height, nonorient_size, orient_size);
 
     // do refresh it
-    RefreshRect(rect);
+    m_targetWindow->RefreshRect(rect);
 }
 
-void wxVScrolledWindow::RefreshAll()
+void wxVarScrollHelperBase::RefreshAll()
 {
     UpdateScrollbar();
 
-    Refresh();
+    m_targetWindow->Refresh();
 }
 
-bool wxVScrolledWindow::Layout()
+bool wxVarScrollHelperBase::ScrollLayout()
 {
-    if ( GetSizer() )
+    if ( m_targetWindow->GetSizer() && m_physicalScrolling )
     {
         // adjust the sizer dimensions/position taking into account the
         // virtual size and scrolled position of the window.
 
-        int w = 0, h = 0;
-        GetVirtualSize(&w, &h);
+        int x, y;
+        AssignOrient(x, y, 0, -GetScrollOffset());
 
-        // x is always 0 so no variable needed
-        int y = -GetLinesHeight(0, GetFirstVisibleLine());
+        int w, h;
+        m_targetWindow->GetVirtualSize(&w, &h);
 
-        GetSizer()->SetDimension(0, y, w, h);
+        m_targetWindow->GetSizer()->SetDimension(x, y, w, h);
         return true;
     }
 
     // fall back to default for LayoutConstraints
-    return wxPanel::Layout();
+    return m_targetWindow->wxWindow::Layout();
 }
 
-int wxVScrolledWindow::HitTest(wxCoord WXUNUSED(x), wxCoord y) const
+int wxVarScrollHelperBase::HitTest(wxCoord coord) const
 {
-    const size_t lineMax = GetVisibleEnd();
-    for ( size_t line = GetVisibleBegin(); line < lineMax; line++ )
+    const size_t unitMax = GetVisibleEnd();
+    for ( size_t unit = GetVisibleBegin(); unit < unitMax; ++unit )
     {
-        y -= OnGetLineHeight(line);
-        if ( y < 0 )
-            return line;
+        coord -= OnGetUnitSize(unit);
+        if ( coord < 0 )
+            return unit;
     }
 
     return wxNOT_FOUND;
 }
 
 // ----------------------------------------------------------------------------
-// scrolling
+// wxVarScrollHelperBase scrolling
 // ----------------------------------------------------------------------------
 
-bool wxVScrolledWindow::ScrollToLine(size_t line)
+bool wxVarScrollHelperBase::DoScrollToUnit(size_t unit)
 {
-    if ( !m_lineMax )
+    if ( !m_unitMax )
     {
         // we're empty, code below doesn't make sense in this case
         return false;
     }
 
-    // determine the real first line to scroll to: we shouldn't scroll beyond
+    // determine the real first unit to scroll to: we shouldn't scroll beyond
     // the end
-    size_t lineFirstLast = FindFirstFromBottom(m_lineMax - 1, true);
-    if ( line > lineFirstLast )
-        line = lineFirstLast;
+    size_t unitFirstLast = FindFirstVisibleFromLast(m_unitMax - 1, true);
+    if ( unit > unitFirstLast )
+        unit = unitFirstLast;
 
     // anything to do?
-    if ( line == m_lineFirst )
+    if ( unit == m_unitFirst )
     {
         // no
         return false;
     }
 
 
-    // remember the currently shown lines for the refresh code below
-    size_t lineFirstOld = GetVisibleBegin(),
-           lineLastOld = GetVisibleEnd();
+    // remember the currently shown units for the refresh code below
+    size_t unitFirstOld = GetVisibleBegin(),
+           unitLastOld = GetVisibleEnd();
 
-    m_lineFirst = line;
+    m_unitFirst = unit;
 
 
     // the size of scrollbar thumb could have changed
     UpdateScrollbar();
 
-
-    // finally refresh the display -- but only redraw as few lines as possible
-    // to avoid flicker
-    if ( GetVisibleBegin() >= lineLastOld ||
-            GetVisibleEnd() <= lineFirstOld )
+    // finally refresh the display -- but only redraw as few units as possible
+    // to avoid flicker.  We can't do this if we have children because they
+    // won't be scrolled
+    if ( m_targetWindow->GetChildren().empty() &&
+         GetVisibleBegin() >= unitLastOld || GetVisibleEnd() <= unitFirstOld )
     {
-        // the simplest case: we don't have any old lines left, just redraw
+        // the simplest case: we don't have any old units left, just redraw
         // everything
-        Refresh();
+        m_targetWindow->Refresh();
     }
-    else // overlap between the lines we showed before and should show now
+    else // scroll the window
     {
-        ScrollWindow(0, GetLinesHeight(GetVisibleBegin(), lineFirstOld));
+        if ( m_physicalScrolling )
+        {
+            wxCoord dx = 0,
+                    dy = GetUnitsSize(GetVisibleBegin(), unitFirstOld);
+
+            if ( GetOrientation() == wxHORIZONTAL )
+            {
+                wxCoord tmp = dx;
+                dx = dy;
+                dy = tmp;
+            }
+
+            m_targetWindow->ScrollWindow(dx, dy);
+        }
+        else // !m_physicalScrolling
+        {
+            // we still need to invalidate but we can't use ScrollWindow
+            // because physical scrolling is disabled (the user either didn't
+            // want children scrolled and/or doesn't want pixels to be
+            // physically scrolled).
+            m_targetWindow->Refresh();
+        }
     }
 
     return true;
 }
 
-bool wxVScrolledWindow::ScrollLines(int lines)
+bool wxVarScrollHelperBase::DoScrollUnits(int units)
 {
-    lines += m_lineFirst;
-    if ( lines < 0 )
-        lines = 0;
+    units += m_unitFirst;
+    if ( units < 0 )
+        units = 0;
 
-    return ScrollToLine(lines);
+    return DoScrollToUnit(units);
 }
 
-bool wxVScrolledWindow::ScrollPages(int pages)
+bool wxVarScrollHelperBase::DoScrollPages(int pages)
 {
     bool didSomething = false;
 
     while ( pages )
     {
-        int line;
+        int unit;
         if ( pages > 0 )
         {
-            line = GetVisibleEnd();
-            if ( line )
-                line--;
-            pages--;
+            unit = GetVisibleEnd();
+            if ( unit )
+                --unit;
+            --pages;
         }
         else // pages < 0
         {
-            line = FindFirstFromBottom(GetVisibleBegin());
-            pages++;
+            unit = FindFirstVisibleFromLast(GetVisibleEnd());
+            ++pages;
         }
 
-        didSomething = ScrollToLine(line);
+        didSomething = DoScrollToUnit(unit);
     }
 
     return didSomething;
@@ -434,71 +665,61 @@ bool wxVScrolledWindow::ScrollPages(int pages)
 // event handling
 // ----------------------------------------------------------------------------
 
-void wxVScrolledWindow::OnSize(wxSizeEvent& event)
+void wxVarScrollHelperBase::HandleOnSize(wxSizeEvent& event)
 {
     UpdateScrollbar();
 
     event.Skip();
 }
 
-void wxVScrolledWindow::OnScroll(wxScrollWinEvent& event)
+void wxVarScrollHelperBase::HandleOnScroll(wxScrollWinEvent& event)
 {
-    size_t lineFirstNew;
-
-    const wxEventType evtType = event.GetEventType();
-
-    if ( evtType == wxEVT_SCROLLWIN_TOP )
+    if (GetOrientation() != event.GetOrientation())
     {
-        lineFirstNew = 0;
-    }
-    else if ( evtType == wxEVT_SCROLLWIN_BOTTOM )
-    {
-        lineFirstNew = m_lineMax;
-    }
-    else if ( evtType == wxEVT_SCROLLWIN_LINEUP )
-    {
-        lineFirstNew = m_lineFirst ? m_lineFirst - 1 : 0;
-    }
-    else if ( evtType == wxEVT_SCROLLWIN_LINEDOWN )
-    {
-        lineFirstNew = m_lineFirst + 1;
-    }
-    else if ( evtType == wxEVT_SCROLLWIN_PAGEUP )
-    {
-        lineFirstNew = FindFirstFromBottom(m_lineFirst);
-    }
-    else if ( evtType == wxEVT_SCROLLWIN_PAGEDOWN )
-    {
-        lineFirstNew = GetVisibleEnd();
-        if ( lineFirstNew )
-            lineFirstNew--;
-    }
-    else if ( evtType == wxEVT_SCROLLWIN_THUMBRELEASE )
-    {
-        lineFirstNew = event.GetPosition();
-    }
-    else if ( evtType == wxEVT_SCROLLWIN_THUMBTRACK )
-    {
-        lineFirstNew = event.GetPosition();
-    }
-
-    else // unknown scroll event?
-    {
-        wxFAIL_MSG( _T("unknown scroll event type?") );
+        event.Skip();
         return;
     }
 
-    ScrollToLine(lineFirstNew);
+    DoScrollToUnit(GetNewScrollPosition(event));
 
 #ifdef __WXMAC__
-    Update();
+    UpdateMacScrollWindow();
 #endif // __WXMAC__
+}
+
+void wxVarScrollHelperBase::DoPrepareDC(wxDC& dc)
+{
+    if ( m_physicalScrolling )
+    {
+        wxPoint pt = dc.GetDeviceOrigin();
+
+        IncOrient(pt.x, pt.y, -GetScrollOffset());
+
+        dc.SetDeviceOrigin(pt.x, pt.y);
+    }
+}
+
+int wxVarScrollHelperBase::DoCalcScrolledPosition(int coord) const
+{
+    return coord - GetScrollOffset();
+}
+
+int wxVarScrollHelperBase::DoCalcUnscrolledPosition(int coord) const
+{
+    return coord + GetScrollOffset();
 }
 
 #if wxUSE_MOUSEWHEEL
 
-void wxVScrolledWindow::OnMouseWheel(wxMouseEvent& event)
+void wxVarScrollHelperBase::HandleOnMouseWheel(wxMouseEvent& event)
 {
+    // we only want to process wheel events for vertical implementations.
+    // There is no way to determine wheel orientation (and on MSW horizontal
+    // wheel rotation just fakes scroll events, rather than sending a MOUSEWHEEL
+    // event).
+    if ( GetOrientation() != wxVERTICAL )
+        return;
+
     m_sumWheelRotation += event.GetWheelRotation();
     int delta = event.GetWheelDelta();
 
@@ -510,11 +731,194 @@ void wxVScrolledWindow::OnMouseWheel(wxMouseEvent& event)
     m_sumWheelRotation += units_to_scroll*delta;
 
     if ( !event.IsPageScroll() )
-        ScrollLines( units_to_scroll*event.GetLinesPerAction() );
-    else
-        // scroll pages instead of lines
-        ScrollPages( units_to_scroll );
+        DoScrollUnits( units_to_scroll*event.GetLinesPerAction() );
+    else // scroll pages instead of units
+        DoScrollPages( units_to_scroll );
 }
 
 #endif // wxUSE_MOUSEWHEEL
+
+
+// ============================================================================
+// wxVarHVScrollHelper implementation
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxVarHVScrollHelper operations
+// ----------------------------------------------------------------------------
+
+void wxVarHVScrollHelper::SetRowColumnCount(size_t rowCount, size_t columnCount)
+{
+    SetRowCount(rowCount);
+    SetColumnCount(columnCount);
+}
+
+bool wxVarHVScrollHelper::ScrollToRowColumn(size_t row, size_t column)
+{
+    bool result = false;
+    result |= ScrollToRow(row);
+    result |= ScrollToColumn(column);
+    return result;
+}
+
+void wxVarHVScrollHelper::RefreshRowColumn(size_t row, size_t column)
+{
+    // is this unit visible?
+    if ( !IsRowVisible(row) || !IsColumnVisible(column) )
+    {
+        // no, it is useless to do anything
+        return;
+    }
+
+    // calculate the rect occupied by this cell on screen
+    wxRect v_rect, h_rect;
+    v_rect.height = OnGetRowHeight(row);
+    h_rect.width = OnGetColumnWidth(column);
+
+    size_t n;
+
+    for ( n = GetVisibleRowsBegin(); n < row; n++ )
+    {
+        v_rect.y += OnGetRowHeight(n);
+    }
+
+    for ( n = GetVisibleColumnsBegin(); n < column; n++ )
+    {
+        h_rect.x += OnGetColumnWidth(n);
+    }
+
+    // refresh but specialize the behavior if we have a single target window
+    if ( wxVarVScrollHelper::GetTargetWindow() == wxVarHScrollHelper::GetTargetWindow() )
+    {
+        v_rect.x = h_rect.x;
+        v_rect.width = h_rect.width;
+        wxVarVScrollHelper::GetTargetWindow()->RefreshRect(v_rect);
+    }
+    else
+    {
+        v_rect.x = 0;
+        v_rect.width = wxVarVScrollHelper::GetNonOrientationTargetSize();
+        h_rect.y = 0;
+        h_rect.width = wxVarHScrollHelper::GetNonOrientationTargetSize();
+
+        wxVarVScrollHelper::GetTargetWindow()->RefreshRect(v_rect);
+        wxVarHScrollHelper::GetTargetWindow()->RefreshRect(h_rect);
+    }
+}
+
+void wxVarHVScrollHelper::RefreshRowsColumns(size_t fromRow, size_t toRow,
+                                             size_t fromColumn, size_t toColumn)
+{
+    wxASSERT_MSG( fromRow <= toRow || fromColumn <= toColumn,
+        _T("RefreshRowsColumns(): empty range") );
+
+    // clump the range to just the visible units -- it is useless to refresh
+    // the other ones
+    if ( fromRow < GetVisibleRowsBegin() )
+        fromRow = GetVisibleRowsBegin();
+
+    if ( toRow > GetVisibleRowsEnd() )
+        toRow = GetVisibleRowsEnd();
+
+    if ( fromColumn < GetVisibleColumnsBegin() )
+        fromColumn = GetVisibleColumnsBegin();
+
+    if ( toColumn > GetVisibleColumnsEnd() )
+        toColumn = GetVisibleColumnsEnd();
+
+    // calculate the rect occupied by these units on screen
+    wxRect v_rect, h_rect;
+    size_t nBefore, nBetween;
+
+    for ( nBefore = GetVisibleRowsBegin();
+          nBefore < fromRow;
+          nBefore++ )
+    {
+        v_rect.y += OnGetRowHeight(nBefore);
+    }
+
+    for ( nBetween = fromRow; nBetween <= toRow; nBetween++ )
+    {
+        v_rect.height += OnGetRowHeight(nBetween);
+    }
+
+    for ( nBefore = GetVisibleColumnsBegin();
+          nBefore < fromColumn;
+          nBefore++ )
+    {
+        h_rect.x += OnGetColumnWidth(nBefore);
+    }
+
+    for ( nBetween = fromColumn; nBetween <= toColumn; nBetween++ )
+    {
+        h_rect.width += OnGetColumnWidth(nBetween);
+    }
+
+    // refresh but specialize the behavior if we have a single target window
+    if ( wxVarVScrollHelper::GetTargetWindow() == wxVarHScrollHelper::GetTargetWindow() )
+    {
+        v_rect.x = h_rect.x;
+        v_rect.width = h_rect.width;
+        wxVarVScrollHelper::GetTargetWindow()->RefreshRect(v_rect);
+    }
+    else
+    {
+        v_rect.x = 0;
+        v_rect.width = wxVarVScrollHelper::GetNonOrientationTargetSize();
+        h_rect.y = 0;
+        h_rect.width = wxVarHScrollHelper::GetNonOrientationTargetSize();
+
+        wxVarVScrollHelper::GetTargetWindow()->RefreshRect(v_rect);
+        wxVarHScrollHelper::GetTargetWindow()->RefreshRect(h_rect);
+    }
+}
+
+wxPosition wxVarHVScrollHelper::HitTest(wxCoord x, wxCoord y) const
+{
+    return wxPosition(wxVarVScrollHelper::HitTest(y),
+                        wxVarHScrollHelper::HitTest(x));
+}
+
+void wxVarHVScrollHelper::DoPrepareDC(wxDC& dc)
+{
+    wxVarVScrollHelper::DoPrepareDC(dc);
+    wxVarHScrollHelper::DoPrepareDC(dc);
+}
+
+bool wxVarHVScrollHelper::ScrollLayout()
+{
+    bool layout_result = false;
+    layout_result |= wxVarVScrollHelper::ScrollLayout();
+    layout_result |= wxVarHScrollHelper::ScrollLayout();
+    return layout_result;
+}
+
+wxSize wxVarHVScrollHelper::GetRowColumnCount() const
+{
+    return wxSize(GetColumnCount(), GetRowCount());
+}
+
+wxPosition wxVarHVScrollHelper::GetVisibleBegin() const
+{
+    return wxPosition(GetVisibleRowsBegin(), GetVisibleColumnsBegin());
+}
+
+wxPosition wxVarHVScrollHelper::GetVisibleEnd() const
+{
+    return wxPosition(GetVisibleRowsEnd(), GetVisibleColumnsEnd());
+}
+
+bool wxVarHVScrollHelper::IsVisible(size_t row, size_t column) const
+{
+    return IsRowVisible(row) && IsColumnVisible(column);
+}
+
+
+// ============================================================================
+// wx[V/H/HV]ScrolledWindow implementations
+// ============================================================================
+
+IMPLEMENT_ABSTRACT_CLASS(wxVScrolledWindow, wxPanel)
+IMPLEMENT_ABSTRACT_CLASS(wxHScrolledWindow, wxPanel)
+IMPLEMENT_ABSTRACT_CLASS(wxHVScrolledWindow, wxPanel)
 
