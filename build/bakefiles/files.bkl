@@ -769,6 +769,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/palette.h
     wx/panel.h
     wx/pen.h
+    wx/position.h
     wx/radiobox.h
     wx/radiobut.h
     wx/renderer.h
