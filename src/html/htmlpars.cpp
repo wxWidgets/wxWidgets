@@ -171,29 +171,11 @@ void wxHtmlParser::CreateDOMSubTree(wxHtmlTag *cur,
                     wxHtmlTextPiece(textBeginning, i - textBeginning));
 
             // if it is a comment, skip it:
-            if (i < end_pos-6 && m_Source.GetChar(i+1) == wxT('!') &&
-                                 m_Source.GetChar(i+2) == wxT('-') &&
-                                 m_Source.GetChar(i+3) == wxT('-'))
+            wxString::const_iterator iter = m_Source.begin() + i;
+            if ( SkipCommentTag(iter, m_Source.end()) )
             {
-                // Comments begin with "<!--" and end with "--[ \t\r\n]*>"
-                // according to HTML 4.0
-                int dashes = 0;
-                i += 4;
-                while (i < end_pos)
-                {
-                    c = m_Source.GetChar(i++);
-                    if ((c == wxT(' ') || c == wxT('\n') ||
-                        c == wxT('\r') || c == wxT('\t')) && dashes >= 2) {}
-                    else if (c == wxT('>') && dashes >= 2)
-                    {
-                        textBeginning = i;
-                        break;
-                    }
-                    else if (c == wxT('-'))
-                        dashes++;
-                    else
-                        dashes = 0;
-                }
+                textBeginning =
+                i = iter - m_Source.begin() + 1; // skip closing '>' too
             }
 
             // add another tag to the tree:
@@ -951,4 +933,55 @@ wxString wxHtmlParser::ExtractCharsetInformation(const wxString& markup)
     return charset;
 }
 
-#endif
+/* static */
+bool
+wxHtmlParser::SkipCommentTag(wxString::const_iterator& start,
+                             wxString::const_iterator end)
+{
+    wxASSERT_MSG( *start == '<', _T("should be called on the tag start") );
+
+    wxString::const_iterator p = start;
+
+    // comments begin with "<!--" in HTML 4.0
+    if ( end - p < 3 || *++p != '!' || *++p != '-' || *++p != '-' )
+    {
+        // not a comment at all
+        return false;
+    }
+
+    // skip the start of the comment tag in any case, if we don't find the
+    // closing tag we should ignore broken markup
+    start = p;
+
+    // comments end with "--[ \t\r\n]*>", i.e. white space is allowed between
+    // comment delimiter and the closing tag character (section 3.2.4 of
+    // http://www.w3.org/TR/html401/)
+    int dashes = 0;
+    while ( ++p < end )
+    {
+        const wxChar c = *p;
+
+        if ( (c == wxT(' ') || c == wxT('\n') ||
+              c == wxT('\r') || c == wxT('\t')) && dashes >= 2 )
+        {
+            // ignore white space before potential tag end
+            continue;
+        }
+
+        if ( c == wxT('>') && dashes >= 2 )
+        {
+            // found end of comment
+            start = p;
+            break;
+        }
+
+        if ( c == wxT('-') )
+            dashes++;
+        else
+            dashes = 0;
+    }
+
+    return true;
+}
+
+#endif // wxUSE_HTML

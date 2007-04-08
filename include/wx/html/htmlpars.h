@@ -128,6 +128,13 @@ public:
     // Returns entity parser object, used to substitute HTML &entities;
     wxHtmlEntitiesParser *GetEntitiesParser() const { return m_entitiesParser; }
 
+    // Returns true if the tag starting at the given position is a comment tag
+    //
+    // p should point to '<' character and is modified to point to the closing
+    // '>' of the end comment tag if this is indeed a comment
+    static bool
+    SkipCommentTag(wxString::const_iterator& p, wxString::const_iterator end);
+
 protected:
     // DOM structure
     void CreateDOMTree();
