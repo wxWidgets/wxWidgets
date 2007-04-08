@@ -613,49 +613,36 @@ int wxScrollHelper::CalcScrollInc(wxScrollWinEvent& event)
 
     if (orient == wxHORIZONTAL)
     {
-        if (m_xScrollPixelsPerLine > 0)
+        if ( m_xScrollPosition + nScrollInc < 0 )
         {
-            if ( m_xScrollPosition + nScrollInc < 0 )
+            // As -ve as we can go
+            nScrollInc = -m_xScrollPosition;
+        }
+        else // check for the other bound
+        {
+            const int posMax = m_xScrollLines - m_xScrollLinesPerPage;
+            if ( m_xScrollPosition + nScrollInc > posMax )
             {
-                // As -ve as we can go
-                nScrollInc = -m_xScrollPosition;
-            }
-            else // check for the other bound
-            {
-                const int posMax = m_xScrollLines - m_xScrollLinesPerPage;
-                if ( m_xScrollPosition + nScrollInc > posMax )
-                {
-                    // As +ve as we can go
-                    nScrollInc = posMax - m_xScrollPosition;
-                }
+                // As +ve as we can go
+                nScrollInc = posMax - m_xScrollPosition;
             }
         }
-        else
-            m_targetWindow->Refresh(true, GetScrollRect());
     }
-    else
+    else // wxVERTICAL
     {
-        if ( m_yScrollPixelsPerLine > 0 )
+        if ( m_yScrollPosition + nScrollInc < 0 )
         {
-            if ( m_yScrollPosition + nScrollInc < 0 )
-            {
-                // As -ve as we can go
-                nScrollInc = -m_yScrollPosition;
-            }
-            else // check for the other bound
-            {
-                const int posMax = m_yScrollLines - m_yScrollLinesPerPage;
-                if ( m_yScrollPosition + nScrollInc > posMax )
-                {
-                    // As +ve as we can go
-                    nScrollInc = posMax - m_yScrollPosition;
-                }
-            }
+            // As -ve as we can go
+            nScrollInc = -m_yScrollPosition;
         }
-        else
+        else // check for the other bound
         {
-            // VZ: why do we do this? (FIXME)
-            m_targetWindow->Refresh(true, GetScrollRect());
+            const int posMax = m_yScrollLines - m_yScrollLinesPerPage;
+            if ( m_yScrollPosition + nScrollInc > posMax )
+            {
+                // As +ve as we can go
+                nScrollInc = posMax - m_yScrollPosition;
+            }
         }
     }
 
