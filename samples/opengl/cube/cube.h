@@ -18,7 +18,18 @@
 class MyApp: public wxApp
 {
 public:
-    bool OnInit();
+    MyApp() { m_glContext = NULL; }
+
+    // set the specified canvas for current output
+    void SetCurrent(wxGLCanvas *canvas);
+
+    // virtual wxApp methods
+    virtual bool OnInit();
+    virtual int OnExit();
+
+private:
+    // the GL context we use for all our windows
+    wxGLContext *m_glContext;
 };
 
 // Define a new frame type
@@ -27,7 +38,7 @@ class TestGLCanvas;
 class MyFrame: public wxFrame
 {
 public:
-    static MyFrame *Create(MyFrame *parentFrame, bool isCloneWindow = false);
+    MyFrame();
 
     void OnExit(wxCommandEvent& event);
     void OnNewWindow(wxCommandEvent& event);
@@ -35,70 +46,33 @@ public:
     void OnDefRotateRightKey(wxCommandEvent& event);
 
 private:
-
-    MyFrame(wxWindow *parent, const wxString& title, const wxPoint& pos,
-            const wxSize& size, long style = wxDEFAULT_FRAME_STYLE);
-
-
     TestGLCanvas *m_canvas;
 
     DECLARE_EVENT_TABLE()
 };
 
-#if wxUSE_GLCANVAS
-
-class TestGLCanvas: public wxGLCanvas
+class TestGLCanvas : public wxGLCanvas
 {
-    friend class MyFrame;
 public:
-    TestGLCanvas( wxWindow *parent, wxWindowID id = wxID_ANY,
-        const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize,
-        long style = 0, const wxString& name = _T("TestGLCanvas") );
-
-    TestGLCanvas( wxWindow *parent, const TestGLCanvas *other,
-        wxWindowID id = wxID_ANY, const wxPoint& pos = wxDefaultPosition,
-        const wxSize& size = wxDefaultSize, long style = 0,
-        const wxString& name = _T("TestGLCanvas") );
-
-    ~TestGLCanvas();
+    TestGLCanvas(wxWindow *parent);
 
     void OnPaint(wxPaintEvent& event);
     void OnSize(wxSizeEvent& event);
-    void OnEraseBackground(wxEraseEvent& event);
     void OnKeyDown(wxKeyEvent& event);
-    void OnKeyUp(wxKeyEvent& event);
-    void OnEnterWindow(wxMouseEvent& event);
-
-    void Render();
-    void InitGL();
-    void Rotate(GLfloat deg);
-    static GLfloat CalcRotateSpeed(unsigned long acceltime);
-    static GLfloat CalcRotateAngle( unsigned long lasttime,
-        unsigned long acceltime );
-    void Action( long code, unsigned long lasttime,
-        unsigned long acceltime );
 
 private:
-    bool   m_init;
+    // one-time OpenGL initialization
+    void InitGL();
+
+    // render to window
+    void Render();
+
+
+    // the list of commands to draw the cube
     GLuint m_gllist;
-    long   m_rleft;
-    long   m_rright;
 
-    static unsigned long  m_secbase;
-    static int            m_TimeInitialized;
-    static unsigned long  m_xsynct;
-    static unsigned long  m_gsynct;
-
-    long           m_Key;
-    unsigned long  m_StartTime;
-    unsigned long  m_LastTime;
-    unsigned long  m_LastRedraw;
-
-DECLARE_EVENT_TABLE()
+    DECLARE_EVENT_TABLE()
 };
 
-#endif // #if wxUSE_GLCANVAS
-
-#endif // #ifndef _WX_CUBE_H_
+#endif // _WX_CUBE_H_
 
