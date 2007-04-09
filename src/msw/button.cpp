@@ -351,6 +351,8 @@ wxWindow *wxButton::SetDefault()
     // ... and Windows
     SetDefaultStyle(wxDynamicCast(winOldDefault, wxButton), false);
     SetDefaultStyle(this, true);
+
+    return winOldDefault;
 }
 
 // set this button as being currently default
