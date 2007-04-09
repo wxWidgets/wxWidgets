@@ -231,12 +231,12 @@ bool wxButton::SendClickEvent()
     return ProcessCommand(vEvent);
 } // end of wxButton::SendClickEvent
 
-void wxButton::SetDefault()
+wxWindow *wxButton::SetDefault()
 {
     //
     // Set this one as the default button both for wxWidgets and Windows
     //
-    wxWindow* pWinOldDefault = wxButtonBase::Set();
+    wxWindow* pWinOldDefault = wxButtonBase::SetDefault();
 
     SetDefaultStyle( wxDynamicCast(pWinOldDefault, wxButton), false);
     SetDefaultStyle( this, true );
