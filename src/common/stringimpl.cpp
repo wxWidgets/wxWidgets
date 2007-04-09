@@ -298,6 +298,7 @@ wxStringImpl& wxStringImpl::append(size_t n, wxStringCharType ch)
 
     if ( !Alloc(len + n) || !CopyBeforeWrite() ) {
       wxFAIL_MSG( _T("out of memory in wxStringImpl::append") );
+      return *this;
     }
     GetStringData()->nDataLength = len + n;
     m_pchData[len + n] = '\0';
@@ -419,6 +420,7 @@ wxStringImpl& wxStringImpl::insert(size_t nPos, const wxChar *sz, size_t n)
 
     if ( !Alloc(length() + n) || !CopyBeforeWrite() ) {
         wxFAIL_MSG( _T("out of memory in wxStringImpl::insert") );
+        return *this;
     }
 
     memmove(m_pchData + nPos + n, m_pchData + nPos,
