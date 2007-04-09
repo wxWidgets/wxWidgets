@@ -30,6 +30,7 @@
     #include "wx/log.h"
     #include "wx/frame.h"
     #include "wx/menu.h"
+    #include "wx/image.h"
 
     #include "wx/button.h"
     #include "wx/checkbox.h"
