@@ -451,7 +451,7 @@ void ReadTexReferences(wxChar *filename)
         // were massive memory leaks
         TexReferences.DeleteContents(true);
         TexReferences.Put(
-            labelStr.c_str(),
+            labelStr,
             new TexRef(
                 labelStr.c_str(),
                 fileStr.c_str(),
@@ -1526,7 +1526,7 @@ bool ReadCustomMacros(const wxString& filename)
                 macro->macroBody = copystring(macroBody.c_str());
 
             BibEatWhiteSpace(line);
-            CustomMacroList.Append(macroName.c_str(), macro);
+            CustomMacroList.Append(macroName, macro);
             AddMacroDef(ltCUSTOM_MACRO, macroName.c_str(), noArgs);
         }
 
