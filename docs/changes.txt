@@ -153,6 +153,7 @@ wxGTK:
 
 - Fix infinite loop when adding a wxStaticText control to a toolbar
 - Fix wxNO_BORDER style for wxRadioBox (David Hart)
+- Fix wxTextCtrl::GetLineText() for empty lines (Marcin Wojdyr)
 
 
 2.8.3

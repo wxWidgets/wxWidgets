@@ -1139,8 +1139,12 @@ wxString wxTextCtrl::GetLineText( long lineNo ) const
     {
         GtkTextIter line;
         gtk_text_buffer_get_iter_at_line(m_buffer,&line,lineNo);
+
         GtkTextIter end = line;
-        gtk_text_iter_forward_to_line_end(&end);
+        // avoid skipping to the next line end if this one is empty
+        if ( !gtk_text_iter_ends_line(&line) )
+            gtk_text_iter_forward_to_line_end(&end);
+
         wxGtkString text(gtk_text_buffer_get_text(m_buffer, &line, &end, true));
         result = wxGTK_CONV_BACK(text);
     }
