@@ -1412,6 +1412,25 @@ void wxWindow::OnChar(wxKeyEvent& event)
         }
     }
 
+    // if Return was pressed, see if there's a default button to activate
+    if ( !event.HasModifiers() && event.GetKeyCode() == WXK_RETURN )
+    {
+        wxTopLevelWindow *
+            tlw = wxDynamicCast(wxTopLevelWindow *, wxGetTopLevelParent());
+        if ( tlw )
+        {
+            wxButton *btn = wxDynamicCast(wxButton *, tlw->GetDefaultItem());
+            if ( btn )
+            {
+                wxCommandEvent evt(wxEVT_COMMAND_BUTTON_CLICKED, btn->GetId());
+                evt.SetEventObject(btn);
+                btn->Command(evt);
+                return;
+            }
+        }
+    }
+
+
     event.Skip();
 }
 

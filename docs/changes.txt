@@ -130,6 +130,7 @@ wxMSW:
 wxX11:
 
 - Added mouse wheel support (David Hart)
+- Make Enter key activate the default button (David Hart)
 
 
 2.8.4
