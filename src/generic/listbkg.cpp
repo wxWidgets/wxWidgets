@@ -329,7 +329,7 @@ wxListbook::InsertPage(size_t n,
     if (GetPageCount() == 1)
     {
         wxSizeEvent sz(GetSize(), GetId());
-        ProcessEvent(sz);
+        GetEventHandler()->ProcessEvent(sz);
     }
     return true;
 }
@@ -363,7 +363,7 @@ wxWindow *wxListbook::DoRemovePage(size_t page)
         if (GetPageCount() == 0)
         {
             wxSizeEvent sz(GetSize(), GetId());
-            ProcessEvent(sz);
+            GetEventHandler()->ProcessEvent(sz);
         }
     }
 
@@ -380,7 +380,7 @@ bool wxListbook::DeleteAllPages()
     m_selection = -1;
 
     wxSizeEvent sz(GetSize(), GetId());
-    ProcessEvent(sz);
+    GetEventHandler()->ProcessEvent(sz);
 
     return true;
 }

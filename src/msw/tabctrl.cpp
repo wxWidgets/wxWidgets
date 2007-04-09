@@ -149,7 +149,7 @@ bool wxTabCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
     event.SetInt(idCtrl) ;
     event.SetSelection(idCtrl);
 
-    return ProcessEvent(event);
+    return GetEventHandler()->ProcessEvent(event);
 }
 
 // Responds to colour changes, and passes event on to children.

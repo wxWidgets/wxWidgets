@@ -549,7 +549,7 @@ void wxButtonToolBar::OnLeftUp(wxMouseEvent& event)
         {
             wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, tool->GetId());
             event.SetEventObject(tool->GetButton());
-            if (!ProcessEvent(event))
+            if (!GetEventHandler()->ProcessEvent(event))
                 event.Skip();
         }
     }

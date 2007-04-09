@@ -1480,7 +1480,7 @@ wxTreeItemId wxGenericTreeCtrl::DoInsertAfter(const wxTreeItemId& parentId,
 void wxGenericTreeCtrl::SendDeleteEvent(wxGenericTreeItem *item)
 {
     wxTreeEvent event(wxEVT_COMMAND_TREE_DELETE_ITEM, this, item);
-    ProcessEvent( event );
+    GetEventHandler()->ProcessEvent( event );
 }
 
 // Don't leave edit or selection on a child which is about to disappear
@@ -1599,7 +1599,7 @@ void wxGenericTreeCtrl::Expand(const wxTreeItemId& itemId)
 
     wxTreeEvent event(wxEVT_COMMAND_TREE_ITEM_EXPANDING, this, item);
 
-    if ( ProcessEvent( event ) && !event.IsAllowed() )
+    if ( GetEventHandler()->ProcessEvent( event ) && !event.IsAllowed() )
     {
         // cancelled by program
         return;
@@ -1611,7 +1611,7 @@ void wxGenericTreeCtrl::Expand(const wxTreeItemId& itemId)
     RefreshSubtree(item);
 
     event.SetEventType(wxEVT_COMMAND_TREE_ITEM_EXPANDED);
-    ProcessEvent( event );
+    GetEventHandler()->ProcessEvent( event );
 }
 
 void wxGenericTreeCtrl::Collapse(const wxTreeItemId& itemId)
@@ -1625,7 +1625,7 @@ void wxGenericTreeCtrl::Collapse(const wxTreeItemId& itemId)
         return;
 
     wxTreeEvent event(wxEVT_COMMAND_TREE_ITEM_COLLAPSING, this, item);
-    if ( ProcessEvent( event ) && !event.IsAllowed() )
+    if ( GetEventHandler()->ProcessEvent( event ) && !event.IsAllowed() )
     {
         // cancelled by program
         return;
@@ -1648,7 +1648,7 @@ void wxGenericTreeCtrl::Collapse(const wxTreeItemId& itemId)
     RefreshSubtree(item);
 
     event.SetEventType(wxEVT_COMMAND_TREE_ITEM_COLLAPSED);
-    ProcessEvent( event );
+    GetEventHandler()->ProcessEvent( event );
 }
 
 void wxGenericTreeCtrl::CollapseAndReset(const wxTreeItemId& item)

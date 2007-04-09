@@ -199,10 +199,10 @@ public:
         cev.SetEventObject(datePicker);
         cev.SetId(datePicker->GetId());
         cev.SetDate(dt);
-        GetParent()->ProcessEvent(cev);
+        GetParent()->GetEventHandler()->ProcessEvent(cev);
 
         wxDateEvent event(datePicker, dt, wxEVT_DATE_CHANGED);
-        datePicker->GetParent()->ProcessEvent(event);
+        datePicker->GetParent()->GetEventHandler()->ProcessEvent(event);
     }
 
 private:
@@ -515,7 +515,7 @@ void wxDatePickerCtrlGeneric::OnText(wxCommandEvent &ev)
 {
     ev.SetEventObject(this);
     ev.SetId(GetId());
-    GetParent()->ProcessEvent(ev);
+    GetParent()->GetEventHandler()->ProcessEvent(ev);
 
     // We'll create an additional event if the date is valid.
     // If the date isn't valid, the user's probably in the middle of typing
