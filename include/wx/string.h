@@ -2335,7 +2335,7 @@ inline wxCStrData::~wxCStrData()
 inline wxCStrData::operator bool() const
 {
     return !m_str->empty();
-};
+}
 
 // simple cases for AsChar() and AsWChar(), the complicated ones are
 // in string.cpp
