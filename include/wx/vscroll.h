@@ -621,7 +621,7 @@ protected:
     // unless the code has been updated to override OnGetRowHeight() instead,
     // this function must be overridden in the derived class and it should
     // return the height of the given row in pixels
-    virtual wxCoord OnGetLineHeight(size_t n) const
+    virtual wxCoord OnGetLineHeight(size_t WXUNUSED(n)) const
     {
         wxFAIL_MSG( _T("must be overridden if OnGetRowHeight() isn't!") );
 
