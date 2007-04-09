@@ -168,10 +168,10 @@ by \helpref{GetBitmap}{wxartprovidergetbitmap}.
 
 \func{wxBitmap}{CreateBitmap}{\param{const wxArtID\& }{id}, \param{const wxArtClient\& }{client}, \param{const wxSize\& }{size}}
 
-Derived art provider classes must override this method or the CreateIconBundle() method
-to create requested art resource. Note that returned bitmaps are cached by wxArtProvider
-and it is therefore not necessary to optimize CreateBitmap() for speed (e.g. you may create
-wxBitmap objects from XPMs here).
+Derived art provider classes must override this method to create requested art
+resource. Note that returned bitmaps are cached by wxArtProvider and it is
+therefore not necessary to optimize CreateBitmap() for speed (e.g. you may
+create wxBitmap objects from XPMs here).
 
 \wxheading{Parameters}
 
@@ -191,28 +191,19 @@ This is {\bf not} part of wxArtProvider's public API, use
 \helpref{wxArtProvider::GetIcon}{wxartprovidergeticon}
 to query wxArtProvider for a resource.
 
+\wxheading{See also}
+
+\helpref{CreateIconBundle}{wxartprovidercreateiconbundle}
+
+
+\membersection{wxArtProvider::CreateIconBundle}\label{wxartprovidercreateiconbundle}
 
 \func{wxIconBundle}{CreateIconBundle}{\param{const wxArtID\& }{id}, \param{const wxArtClient\& }{client}}
 
-Derived art provider classes must override this method or the CreateIconBundle method
-to create requested art resource. Note that returned icon bundles are cached by wxArtProvider
-and it is therefore not necessary to optimize CreateIconBundle for speed (e.g. you may create icon bundles
-from artwork resources here).
+This method is similar to \helpref{CreateBitmap}{wxartprovidercreatebitmap} but
+can be used when a bitmap (or an icon) exists in several sizes.
 
-\wxheading{Parameters}
 
-\docparam{id}{wxArtID unique identifier of the icon bundle.}
-
-\docparam{client}{wxArtClient identifier of the client (i.e. who is asking for the icon bundle).
-This only servers as a hint.}
-
-\wxheading{Note}
-
-This is {\bf not} part of wxArtProvider's public API, use
-\helpref{wxArtProvider::GetBitmap}{wxartprovidergetbitmap} or 
-\helpref{wxArtProvider::GetIconBundle}{wxartprovidergeticonbundle} or
-\helpref{wxArtProvider::GetIcon}{wxartprovidergeticon}
-to query wxArtProvider for a resource.
 
 \membersection{wxArtProvider::Delete}\label{wxartproviderdelete}
 
