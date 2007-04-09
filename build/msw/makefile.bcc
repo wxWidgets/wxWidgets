@@ -3852,6 +3852,12 @@ __WXLIB_MONO_p = \
 __gllib___depname = \
 	$(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl.lib
 !endif
+!if "$(SHARED)" == "1"
+____wxgl_namedll_DEP = $(__gldll___depname)
+!endif
+!if "$(SHARED)" == "0"
+____wxgl_namelib_DEP = $(__gllib___depname)
+!endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_HTML)" == "1"
 __htmldll_library_link_DEP = $(__htmldll___depname)
 !endif
@@ -4488,6 +4494,10 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 	tlib /a /p4096 $@ @&&|
 	$(GLLIB_OBJECTS)
 |
+!endif
+
+!if "$(USE_GUI)" == "1" && "$(USE_OPENGL)" == "1"
+wxgl: $(____wxgl_namedll_DEP) $(____wxgl_namelib_DEP)
 !endif
 
 samples: 

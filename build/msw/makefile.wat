@@ -2811,6 +2811,14 @@ __gllib___depname = &
 !endif
 !endif
 !endif
+____wxgl_namedll_DEP =
+!ifeq SHARED 1
+____wxgl_namedll_DEP = $(__gldll___depname)
+!endif
+____wxgl_namelib_DEP =
+!ifeq SHARED 0
+____wxgl_namelib_DEP = $(__gllib___depname)
+!endif
 __htmldll_library_link_DEP =
 !ifeq MONOLITHIC 0
 !ifeq SHARED 1
@@ -4916,6 +4924,12 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 	@for %i in ($(GLLIB_OBJECTS)) do @%append $(OBJS)\gllib.lbc +%i
 	wlib -q -p4096 -n -b $^@ @$(OBJS)\gllib.lbc
 !endif
+!endif
+!endif
+
+!ifeq USE_GUI 1
+!ifeq USE_OPENGL 1
+wxgl : .SYMBOLIC $(____wxgl_namedll_DEP) $(____wxgl_namelib_DEP)
 !endif
 !endif
 

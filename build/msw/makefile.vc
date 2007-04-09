@@ -4216,6 +4216,12 @@ __RUNTIME_LIBS_518 = D
 !if "$(RUNTIME_LIBS)" == "static"
 __RUNTIME_LIBS_518 = $(__THREADSFLAG)
 !endif
+!if "$(SHARED)" == "1"
+____wxgl_namedll_DEP = $(__gldll___depname)
+!endif
+!if "$(SHARED)" == "0"
+____wxgl_namelib_DEP = $(__gllib___depname)
+!endif
 !if "$(MONOLITHIC)" == "0" && "$(SHARED)" == "1" && "$(USE_GUI)" == "1" && "$(USE_HTML)" == "1"
 __htmldll_library_link_DEP = $(__htmldll___depname)
 !endif
@@ -4497,7 +4503,7 @@ clean:
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl.lib
 	cd ..\..\samples
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
-	cd "$(MAKEDIR)"
+	cd $(MAKEDIR)
 
 setup_h: $(SETUPHDIR)\wx ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES)\setup.h $(SETUPHDIR)\wx\setup.h $(SETUPHDIR)\wx\msw\rcdefs.h
 
@@ -4843,10 +4849,14 @@ $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXD
 <<
 !endif
 
+!if "$(USE_GUI)" == "1" && "$(USE_OPENGL)" == "1"
+wxgl: $(____wxgl_namedll_DEP) $(____wxgl_namelib_DEP)
+!endif
+
 sub_samples: 
 	cd ..\..\samples
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
-	cd "$(MAKEDIR)"
+	cd $(MAKEDIR)
 
 $(LIBDIRNAME): 
 	if not exist $(LIBDIRNAME) mkdir $(LIBDIRNAME)

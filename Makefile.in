@@ -11325,6 +11325,8 @@ COND_SHARED_0_USE_GUI_1_USE_OPENGL_1___gllib___depname = \
 @COND_TOOLKIT_PM@__OPENGL_SRC_OBJECTS_1 = gllib_glcanvas.o
 @COND_TOOLKIT_WINCE@__OPENGL_SRC_OBJECTS_1 = gllib_glcanvas.o
 @COND_TOOLKIT_X11@__OPENGL_SRC_OBJECTS_1 = gllib_glcanvas.o
+@COND_SHARED_1@____wxgl_namedll_DEP = $(__gldll___depname)
+@COND_SHARED_0@____wxgl_namelib_DEP = $(__gllib___depname)
 COND_WITH_PLUGIN_SDL_1___sound_sdl___depname = \
 	$(DLLPREFIX_MODULE)sound_sdl$(PLUGINSUFFIX)$(PLUGVERDELIM)$(PLUGIN_VERSION0)$(WXCOMPILER).$(SO_SUFFIX_MODULE)
 @COND_WITH_PLUGIN_SDL_1@__sound_sdl___depname = $(COND_WITH_PLUGIN_SDL_1___sound_sdl___depname)
@@ -12461,6 +12463,8 @@ distclean: clean
 
 @COND_USE_PCH_1@.pch/wxprec_gllib/wx/wxprec.h.gch: 
 @COND_USE_PCH_1@	$(BK_MAKE_PCH) .pch/wxprec_gllib/wx/wxprec.h.gch wx/wxprec.h $(CXX) $(GLLIB_CXXFLAGS)
+
+@COND_USE_GUI_1_USE_OPENGL_1@wxgl: $(____wxgl_namedll_DEP) $(____wxgl_namelib_DEP)
 
 @COND_WITH_PLUGIN_SDL_1@$(DLLPREFIX_MODULE)sound_sdl$(PLUGINSUFFIX)$(PLUGVERDELIM)$(PLUGIN_VERSION0)$(WXCOMPILER).$(SO_SUFFIX_MODULE): $(SOUND_SDL_OBJECTS)
 @COND_WITH_PLUGIN_SDL_1@	$(SHARED_LD_MODULE_CXX) $@ $(SOUND_SDL_OBJECTS) $(LDFLAGS)  $(LIBS) $(EXTRALIBS_SDL)
@@ -30919,4 +30923,4 @@ rpm: bzip-dist
 # Include dependency info, if present:
 @IF_GNU_MAKE@-include .deps/*.d
 
-.PHONY: all install uninstall clean distclean install_wxregex uninstall_wxregex install_wxzlib uninstall_wxzlib install_wxpng uninstall_wxpng install_wxjpeg uninstall_wxjpeg install_wxtiff uninstall_wxtiff install_wxodbc uninstall_wxodbc install_wxexpat uninstall_wxexpat install_wxscintilla uninstall_wxscintilla install_monodll uninstall_monodll install_monolib uninstall_monolib install_basedll uninstall_basedll install_baselib uninstall_baselib wxbase install_netdll uninstall_netdll install_netlib uninstall_netlib wxnet install_coredll uninstall_coredll install_corelib uninstall_corelib wxcore install_advdll uninstall_advdll install_advlib uninstall_advlib wxadv install_mediadll uninstall_mediadll install_medialib uninstall_medialib wxmedia install_odbcdll uninstall_odbcdll install_odbclib uninstall_odbclib install_dbgriddll uninstall_dbgriddll install_dbgridlib uninstall_dbgridlib wxdbgrid install_htmldll uninstall_htmldll install_htmllib uninstall_htmllib wxhtml install_qadll uninstall_qadll install_qalib uninstall_qalib wxqa install_xmldll uninstall_xmldll install_xmllib uninstall_xmllib wxxml install_xrcdll uninstall_xrcdll install_xrclib uninstall_xrclib wxxrc install_auidll uninstall_auidll install_auilib uninstall_auilib wxaui install_richtextdll uninstall_richtextdll install_richtextlib uninstall_richtextlib wxrichtext install_stcdll uninstall_stcdll install_stclib uninstall_stclib wxstc install_gldll uninstall_gldll install_gllib uninstall_gllib install_sound_sdl uninstall_sound_sdl samples
+.PHONY: all install uninstall clean distclean install_wxregex uninstall_wxregex install_wxzlib uninstall_wxzlib install_wxpng uninstall_wxpng install_wxjpeg uninstall_wxjpeg install_wxtiff uninstall_wxtiff install_wxodbc uninstall_wxodbc install_wxexpat uninstall_wxexpat install_wxscintilla uninstall_wxscintilla install_monodll uninstall_monodll install_monolib uninstall_monolib install_basedll uninstall_basedll install_baselib uninstall_baselib wxbase install_netdll uninstall_netdll install_netlib uninstall_netlib wxnet install_coredll uninstall_coredll install_corelib uninstall_corelib wxcore install_advdll uninstall_advdll install_advlib uninstall_advlib wxadv install_mediadll uninstall_mediadll install_medialib uninstall_medialib wxmedia install_odbcdll uninstall_odbcdll install_odbclib uninstall_odbclib install_dbgriddll uninstall_dbgriddll install_dbgridlib uninstall_dbgridlib wxdbgrid install_htmldll uninstall_htmldll install_htmllib uninstall_htmllib wxhtml install_qadll uninstall_qadll install_qalib uninstall_qalib wxqa install_xmldll uninstall_xmldll install_xmllib uninstall_xmllib wxxml install_xrcdll uninstall_xrcdll install_xrclib uninstall_xrclib wxxrc install_auidll uninstall_auidll install_auilib uninstall_auilib wxaui install_richtextdll uninstall_richtextdll install_richtextlib uninstall_richtextlib wxrichtext install_stcdll uninstall_stcdll install_stclib uninstall_stclib wxstc install_gldll uninstall_gldll install_gllib uninstall_gllib wxgl install_sound_sdl uninstall_sound_sdl samples

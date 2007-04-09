@@ -4003,6 +4003,12 @@ __gllib___depname = \
 endif
 endif
 endif
+ifeq ($(SHARED),1)
+____wxgl_namedll_DEP = $(__gldll___depname)
+endif
+ifeq ($(SHARED),0)
+____wxgl_namelib_DEP = $(__gllib___depname)
+endif
 ifeq ($(MONOLITHIC),0)
 ifeq ($(SHARED),1)
 ifeq ($(USE_GUI),1)
@@ -4649,6 +4655,12 @@ $(LIBDIRNAME)\libwx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(
 	ar rcu $@ $(GLLIB_OBJECTS)
 	ranlib $@
 endif
+endif
+endif
+
+ifeq ($(USE_GUI),1)
+ifeq ($(USE_OPENGL),1)
+wxgl: $(____wxgl_namedll_DEP) $(____wxgl_namelib_DEP)
 endif
 endif
 
@@ -13983,7 +13995,7 @@ $(OBJS)\gllib_dummy.o: ../../src/common/dummy.cpp
 $(OBJS)\gllib_glcanvas.o: ../../src/msw/glcanvas.cpp
 	$(CXX) -c -o $@ $(GLLIB_CXXFLAGS) $(CPPDEPS) $<
 
-.PHONY: all clean setup_h wxbase wxnet wxcore wxadv wxmedia wxdbgrid wxhtml wxqa wxxml wxxrc wxaui wxrichtext wxstc samples build_cfg_file
+.PHONY: all clean setup_h wxbase wxnet wxcore wxadv wxmedia wxdbgrid wxhtml wxqa wxxml wxxrc wxaui wxrichtext wxstc wxgl samples build_cfg_file
 
 
 # Dependencies tracking:

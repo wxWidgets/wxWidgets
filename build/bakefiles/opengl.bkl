@@ -38,4 +38,6 @@
         <msvc-headers>$(OPENGL_HDR)</msvc-headers>
     </lib>
 
+    <wxshortcut id="wxgl" cond="USE_GUI=='1' and USE_OPENGL=='1'"/>
+
 </makefile>

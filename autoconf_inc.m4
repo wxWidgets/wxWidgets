@@ -830,6 +830,12 @@ dnl ### begin block 20_COND_USE_GUI_1[../../contrib/build/animate/animate.bkl,..
         COND_USE_GUI_1=""
     fi
     AC_SUBST(COND_USE_GUI_1)
+dnl ### begin block 20_COND_USE_GUI_1_USE_OPENGL_1[wx.bkl] ###
+    COND_USE_GUI_1_USE_OPENGL_1="#"
+    if test "x$USE_GUI" = "x1" -a "x$USE_OPENGL" = "x1" ; then
+        COND_USE_GUI_1_USE_OPENGL_1=""
+    fi
+    AC_SUBST(COND_USE_GUI_1_USE_OPENGL_1)
 dnl ### begin block 20_COND_USE_GUI_1_WXUNIV_0[wx.bkl] ###
     COND_USE_GUI_1_WXUNIV_0="#"
     if test "x$USE_GUI" = "x1" -a "x$WXUNIV" = "x0" ; then
