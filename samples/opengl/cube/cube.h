@@ -61,7 +61,10 @@ public:
     void OnKeyDown(wxKeyEvent& event);
 
 private:
-    // one-time OpenGL initialization
+    // OpenGL calls can't be done until we're initialized
+    bool IsInitialized() const { return m_gllist != 0; }
+
+    // one-time OpenGL initialization, only does something if !IsInitialized()
     void InitGL();
 
     // render to window

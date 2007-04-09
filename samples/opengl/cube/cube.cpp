@@ -92,7 +92,10 @@ static /* const */ int attribs[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, 0 };
 TestGLCanvas::TestGLCanvas(wxWindow *parent)
             : wxGLCanvas(parent, wxID_ANY, attribs)
 {
-    InitGL();
+    m_gllist = 0;
+
+    // notice that we can't call InitGL() from here: we must wait until the
+    // window is shown on screen to be able to perform OpenGL calls
 }
 
 // this function is called on each repaint so it should be fast
@@ -109,13 +112,22 @@ void TestGLCanvas::Render()
 
 void TestGLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
+    // initialize if not done yet
+    InitGL();
+
     wxPaintDC dc(this);
 
     Render();
 }
 
-void TestGLCanvas::OnSize(wxSizeEvent& WXUNUSED(event))
+void TestGLCanvas::OnSize(wxSizeEvent& event)
 {
+    // don't prevent default processing from taking place
+    event.Skip();
+
+    if ( !IsInitialized() )
+        return;
+
     // set GL viewport (not called by wxGLCanvas::OnSize on all platforms...)
     int w, h;
     GetClientSize(&w, &h);
@@ -126,6 +138,9 @@ void TestGLCanvas::OnSize(wxSizeEvent& WXUNUSED(event))
 
 void TestGLCanvas::InitGL()
 {
+    if ( IsInitialized() )
+        return;
+
     wxGetApp().SetCurrent(this);
 
     /* set viewing projection */
