@@ -638,7 +638,7 @@ public:
           iterator_name& operator-=(size_t n)                               \
             { m_cur = wxString::AddToIter(m_cur, -(int)n); return *this; }  \
                                                                             \
-          unsigned operator-(const iterator_name& i) const                  \
+          difference_type operator-(const iterator_name& i) const           \
             { return wxString::DiffIters(m_cur, i.m_cur); }                 \
                                                                             \
           bool operator==(const iterator_name& i) const                     \
@@ -664,14 +664,14 @@ public:
           friend class WXDLLIMPEXP_BASE wxCStrData;                         \
                                                                             \
       private:                                                              \
-          underlying_iterator m_cur;
+          underlying_iterator m_cur
 
   class const_iterator;
 
   class iterator
   {
       WX_STR_ITERATOR_IMPL(iterator, wxChar*, wxUniCharRef,
-                           wxUniCharRef::CreateForString(m_cur))
+                           wxUniCharRef::CreateForString(m_cur));
 
       friend class const_iterator;
   };
@@ -681,7 +681,7 @@ public:
       // NB: reference_type is intentionally value, not reference, the character
       //     may be encoded differently in wxString data:
       WX_STR_ITERATOR_IMPL(const_iterator, const wxChar*, wxUniChar,
-                           wxUniChar(*m_cur))
+                           wxUniChar(*m_cur));
 
   public:
       const_iterator(const iterator& i) : m_cur(i.m_cur) {}

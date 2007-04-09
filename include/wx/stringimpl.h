@@ -184,6 +184,7 @@ public:
         typedef wxStringCharType value_type;                                  \
         typedef ref_type reference;                                           \
         typedef ptr_type pointer;                                             \
+        typedef int difference_type;                                          \
                                                                               \
         iterator_name(pointer ptr) : m_ptr(ptr) { }                           \
                                                                               \
@@ -222,7 +223,7 @@ public:
         iterator_name& operator-=(size_t n)                                   \
             { m_ptr -= n; return *this; }                                     \
                                                                               \
-        size_t operator-(const iterator_name& i) const                        \
+        difference_type operator-(const iterator_name& i) const               \
             { return m_ptr - i.m_ptr; }                                       \
                                                                               \
         bool operator==(const iterator_name& i) const                         \
@@ -270,6 +271,8 @@ public:
                                     const wxStringCharType&,
                                     const wxStringCharType*);
   };
+
+  #undef WX_DEFINE_STRINGIMPL_ITERATOR
 
 
   // constructors and destructor
