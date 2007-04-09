@@ -618,9 +618,15 @@ public:
     virtual bool ScrollPages(int pages) { return ScrollRowPages(pages); }
 
 protected:
+    // unless the code has been updated to override OnGetRowHeight() instead,
     // this function must be overridden in the derived class and it should
     // return the height of the given row in pixels
-    virtual wxCoord OnGetLineHeight(size_t n) const = 0;
+    virtual wxCoord OnGetLineHeight(size_t n) const
+    {
+        wxFAIL_MSG( _T("must be overridden if OnGetRowHeight() isn't!") );
+
+        return -1;
+    }
 
     // forwards the calls from base class pure virtual function to pure virtual
     // OnGetLineHeight instead (backwards compatible name)
