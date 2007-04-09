@@ -13,6 +13,7 @@
 #define _WX_HASH_H__
 
 #include "wx/defs.h"
+#include "wx/string.h"
 
 #define wxUSE_OLD_HASH_TABLE 0
 
