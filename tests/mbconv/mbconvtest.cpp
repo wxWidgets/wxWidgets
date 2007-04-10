@@ -241,31 +241,6 @@ void MBConvTestCase::WC2CP1250()
     }
 }
 
-// print an unsigned character array as a C unsigned character array
-wxString CByteArrayFormat( const void* data, size_t len, const wxChar* name )
-{
-    const unsigned char* bytes = (unsigned char*)data;
-    wxString result;
-
-    result.Printf( _T("const static unsigned char %s[%i] = \n{"), name, (int)len );
-
-    for ( size_t i = 0; i < len; i++ )
-    {
-        if ( i != 0 )
-        {
-            result.append( _T(",") );
-        }
-        if ((i%16)==0)
-        {
-            result.append( _T("\n    ") );
-        }
-        wxString byte = wxString::Format( _T("0x%02x"), bytes[i] );
-        result.append(byte);
-    }
-    result.append( _T("\n};\n") );
-    return result;
-}
-
 // The following bytes represent the same string, containing Japanese and English 
 // characters, encoded in several different formats.
 
