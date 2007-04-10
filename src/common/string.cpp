@@ -45,7 +45,7 @@
     #include <clib.h>
 #endif
 
-#include <wx/hashmap.h>
+#include "wx/hashmap.h"
 
 // string handling functions used by wxString:
 #if wxUSE_UNICODE_UTF8
