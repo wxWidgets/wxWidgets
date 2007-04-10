@@ -95,11 +95,6 @@ static inline void UnselectItem(HWND hwndTV, HTREEITEM htItem)
     SelectItem(hwndTV, htItem, false);
 }
 
-static inline void ToggleItemSelection(HWND hwndTV, HTREEITEM htItem)
-{
-    SelectItem(hwndTV, htItem, !IsItemSelected(hwndTV, htItem));
-}
-
 // helper function which selects all items in a range and, optionally,
 // unselects all others
 static void SelectRange(HWND hwndTV,
@@ -168,57 +163,56 @@ static void SelectRange(HWND hwndTV,
 // helper function which tricks the standard control into changing the focused
 // item without changing anything else (if someone knows why Microsoft doesn't
 // allow to do it by just setting TVIS_FOCUSED flag, please tell me!)
-static void SetFocus(HWND hwndTV, HTREEITEM htItem)
+//
+// returns true if the focus was changed, false if the given item was already
+// the focused one
+static bool SetFocus(HWND hwndTV, HTREEITEM htItem)
 {
     // the current focus
     HTREEITEM htFocus = (HTREEITEM)TreeView_GetSelection(hwndTV);
 
+    if ( htItem == htFocus )
+        return false;
+
     if ( htItem )
     {
-        // set the focus
-        if ( htItem != htFocus )
+        // remember the selection state of the item
+        bool wasSelected = IsItemSelected(hwndTV, htItem);
+
+        if ( htFocus && IsItemSelected(hwndTV, htFocus) )
         {
-            // remember the selection state of the item
-            bool wasSelected = IsItemSelected(hwndTV, htItem);
-
-            if ( htFocus && IsItemSelected(hwndTV, htFocus) )
-            {
-                // prevent the tree from unselecting the old focus which it
-                // would do by default (TreeView_SelectItem unselects the
-                // focused item)
-                TreeView_SelectItem(hwndTV, 0);
-                SelectItem(hwndTV, htFocus);
-            }
-
-            TreeView_SelectItem(hwndTV, htItem);
-
-            if ( !wasSelected )
-            {
-                // need to clear the selection which TreeView_SelectItem() gave
-                // us
-                UnselectItem(hwndTV, htItem);
-            }
-            //else: was selected, still selected - ok
-        }
-        //else: nothing to do, focus already there
-    }
-    else
-    {
-        if ( htFocus )
-        {
-            bool wasFocusSelected = IsItemSelected(hwndTV, htFocus);
-
-            // just clear the focus
+            // prevent the tree from unselecting the old focus which it
+            // would do by default (TreeView_SelectItem unselects the
+            // focused item)
             TreeView_SelectItem(hwndTV, 0);
-
-            if ( wasFocusSelected )
-            {
-                // restore the selection state
-                SelectItem(hwndTV, htFocus);
-            }
+            SelectItem(hwndTV, htFocus);
         }
-        //else: nothing to do, no focus already
+
+        TreeView_SelectItem(hwndTV, htItem);
+
+        if ( !wasSelected )
+        {
+            // need to clear the selection which TreeView_SelectItem() gave
+            // us
+            UnselectItem(hwndTV, htItem);
+        }
+        //else: was selected, still selected - ok
     }
+    else // reset focus
+    {
+        bool wasFocusSelected = IsItemSelected(hwndTV, htFocus);
+
+        // just clear the focus
+        TreeView_SelectItem(hwndTV, 0);
+
+        if ( wasFocusSelected )
+        {
+            // restore the selection state
+            SelectItem(hwndTV, htFocus);
+        }
+    }
+
+    return true;
 }
 
 // ----------------------------------------------------------------------------
@@ -1669,34 +1663,23 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
 {
     wxCHECK_RET( !IsHiddenRoot(item), _T("can't select hidden root item") );
 
-    if ( m_windowStyle & wxTR_MULTIPLE )
-    {
-        ::SelectItem(GetHwnd(), HITEM(item), select);
-    }
-    else
-    {
-        wxASSERT_MSG( select,
-                      _T("SelectItem(false) works only for multiselect") );
+    wxASSERT_MSG( select || HasFlag(wxTR_MULTIPLE),
+                  _T("SelectItem(false) works only for multiselect") );
 
-        // inspite of the docs (MSDN Jan 99 edition), we don't seem to receive
-        // the notification from the control (i.e. TVN_SELCHANG{ED|ING}), so
-        // send them ourselves
-
-        wxTreeEvent event(wxEVT_COMMAND_TREE_SEL_CHANGING, this, item);
-        if ( !GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
+    wxTreeEvent event(wxEVT_COMMAND_TREE_SEL_CHANGING, this, item);
+    if ( !GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
+    {
+        if ( !::SelectItem(GetHwnd(), HITEM(item), select) )
         {
-            if ( !TreeView_SelectItem(GetHwnd(), HITEM(item)) )
-            {
-                wxLogLastError(wxT("TreeView_SelectItem"));
-            }
-            else // ok
-            {
-                event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGED);
-                (void)GetEventHandler()->ProcessEvent(event);
-            }
+            wxLogLastError(wxT("TreeView_SelectItem"));
         }
-        //else: program vetoed the change
+        else // ok
+        {
+            event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGED);
+            (void)GetEventHandler()->ProcessEvent(event);
+        }
     }
+    //else: program vetoed the change
 }
 
 void wxTreeCtrl::EnsureVisible(const wxTreeItemId& item)
@@ -2013,7 +1996,7 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                         SetFocus();
 
                         // toggle selected state
-                        ::ToggleItemSelection(GetHwnd(), htItem);
+                        ToggleItemSelection(htItem);
 
                         ::SetFocus(GetHwnd(), htItem);
 
@@ -2209,7 +2192,7 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
             case VK_SPACE:
                 if ( bCtrl )
                 {
-                    ::ToggleItemSelection(GetHwnd(), htSel);
+                    ToggleItemSelection(htSel);
                 }
                 else
                 {
