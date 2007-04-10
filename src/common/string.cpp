@@ -198,8 +198,24 @@ wxString::~wxString()
 const char* wxCStrData::AsChar() const
 {
     wxString *str = wxConstCast(m_str, wxString);
-    // convert the string and keep it:
-    str->m_convertedToChar = str->mb_str().release();
+
+    // convert the string:
+    wxCharBuffer buf(str->mb_str());
+
+    // FIXME-UTF8: do the conversion in-place in the existing buffer
+    if ( str->m_convertedToChar &&
+         strlen(buf) == strlen(str->m_convertedToChar) )
+    {
+        // keep the same buffer for as long as possible, so that several calls
+        // to c_str() in a row still work:
+        strcpy(str->m_convertedToChar, buf);
+    }
+    else
+    {
+        str->m_convertedToChar = buf.release();
+    }
+
+    // and keep it:
     return str->m_convertedToChar + m_offset;
 }
 #endif // wxUSE_UNICODE
@@ -208,8 +224,24 @@ const char* wxCStrData::AsChar() const
 const wchar_t* wxCStrData::AsWChar() const
 {
     wxString *str = wxConstCast(m_str, wxString);
-    // convert the string and keep it:
-    str->m_convertedToWChar = str->wc_str().release();
+
+    // convert the string:
+    wxWCharBuffer buf(str->wc_str());
+
+    // FIXME-UTF8: do the conversion in-place in the existing buffer
+    if ( str->m_convertedToWChar &&
+         wxWcslen(buf) == wxWcslen(str->m_convertedToWChar) )
+    {
+        // keep the same buffer for as long as possible, so that several calls
+        // to c_str() in a row still work:
+        memcpy(str->m_convertedToWChar, buf, sizeof(wchar_t) * wxWcslen(buf));
+    }
+    else
+    {
+        str->m_convertedToWChar = buf.release();
+    }
+
+    // and keep it:
     return str->m_convertedToWChar + m_offset;
 }
 #endif // !wxUSE_UNICODE_WCHAR

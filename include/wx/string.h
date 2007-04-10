@@ -2010,7 +2010,7 @@ private:
       ~ConvertedBuffer()
           { free(m_buf); }
 
-      operator const T*() const { return m_buf; }
+      operator T*() const { return m_buf; }
 
       ConvertedBuffer& operator=(T *str)
       {
