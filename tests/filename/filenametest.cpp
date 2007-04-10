@@ -50,9 +50,9 @@ static struct FileNameInfo
 } filenames[] =
 {
     // the empty string
-    { _T(""), _(""), _(""), _(""), _(""), false, wxPATH_UNIX }, 
-    { _T(""), _(""), _(""), _(""), _(""), false, wxPATH_DOS }, 
-    { _T(""), _(""), _(""), _(""), _(""), false, wxPATH_VMS }, 
+    { _T(""), _T(""), _T(""), _T(""), _T(""), false, wxPATH_UNIX },
+    { _T(""), _T(""), _T(""), _T(""), _T(""), false, wxPATH_DOS },
+    { _T(""), _T(""), _T(""), _T(""), _T(""), false, wxPATH_VMS },
 
     // Unix file names
     { _T("/usr/bin/ls"), _T(""), _T("/usr/bin"), _T("ls"), _T(""), true, wxPATH_UNIX },
