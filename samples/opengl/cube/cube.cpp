@@ -243,7 +243,8 @@ void TestGLCanvas::OnKeyDown( wxKeyEvent& event )
           i != wxTopLevelWindows.end();
           ++i )
     {
-        (*i)->Refresh(false);
+        MyFrame *frame = (MyFrame *)*i;
+        frame->RefreshCanvas();
     }
 }
 
@@ -287,3 +288,7 @@ void MyFrame::OnNewWindow( wxCommandEvent& WXUNUSED(event) )
     (void) new MyFrame();
 }
 
+void MyFrame::RefreshCanvas()
+{
+    m_canvas->Refresh(false);
+}

@@ -40,12 +40,16 @@ class MyFrame: public wxFrame
 public:
     MyFrame();
 
+    // update the image shown on the canvas (after the shared wxGLContext was
+    // updated, presumably)
+    void RefreshCanvas();
+
+private:
     void OnExit(wxCommandEvent& event);
     void OnNewWindow(wxCommandEvent& event);
     void OnDefRotateLeftKey(wxCommandEvent& event);
     void OnDefRotateRightKey(wxCommandEvent& event);
 
-private:
     TestGLCanvas *m_canvas;
 
     DECLARE_EVENT_TABLE()
@@ -56,11 +60,11 @@ class TestGLCanvas : public wxGLCanvas
 public:
     TestGLCanvas(wxWindow *parent);
 
+private:
     void OnPaint(wxPaintEvent& event);
     void OnSize(wxSizeEvent& event);
     void OnKeyDown(wxKeyEvent& event);
 
-private:
     // OpenGL calls can't be done until we're initialized
     bool IsInitialized() const { return m_gllist != 0; }
 
