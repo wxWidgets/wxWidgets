@@ -157,6 +157,7 @@ public:
     // menu callbacks
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
+    void OnClearLog(wxCommandEvent& event);
 
     void OnTogButtons(wxCommandEvent& event)
         { TogStyle(event.GetId(), wxTR_HAS_BUTTONS); }
@@ -253,6 +254,7 @@ enum
 {
     TreeTest_Quit = wxID_EXIT,
     TreeTest_About = wxID_ABOUT,
+    TreeTest_ClearLog = wxID_CLEAR,
     TreeTest_TogButtons = wxID_HIGHEST,
     TreeTest_TogTwist,
     TreeTest_TogLines,

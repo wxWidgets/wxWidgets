@@ -64,6 +64,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 
     MENU_LINK(Quit)
     MENU_LINK(About)
+    MENU_LINK(ClearLog)
 
     MENU_LINK(TogButtons)
     MENU_LINK(TogTwist)
@@ -193,6 +194,8 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
            *tree_menu = new wxMenu,
            *item_menu = new wxMenu;
 
+    file_menu->Append(TreeTest_ClearLog, wxT("&Clear log\tCtrl-L"));
+    file_menu->AppendSeparator();
     file_menu->Append(TreeTest_About, wxT("&About..."));
     file_menu->AppendSeparator();
     file_menu->Append(TreeTest_Quit, wxT("E&xit\tAlt-X"));
@@ -208,7 +211,7 @@ MyFrame::MyFrame(const wxString& title, int x, int y, int w, int h)
     style_menu->AppendCheckItem(TreeTest_TogFullHighlight, wxT("Toggle &full row highlight"));
     style_menu->AppendCheckItem(TreeTest_TogEdit, wxT("Toggle &edit mode"));
 #ifndef NO_MULTIPLE_SELECTION
-    style_menu->AppendCheckItem(TreeTest_ToggleSel, wxT("Toggle &selection mode"));
+    style_menu->AppendCheckItem(TreeTest_ToggleSel, wxT("Toggle &selection mode\tCtrl-S"));
 #endif // NO_MULTIPLE_SELECTION
     style_menu->AppendCheckItem(TreeTest_ToggleImages, wxT("Toggle show ima&ges"));
     style_menu->AppendCheckItem(TreeTest_ToggleAlternateImages, wxT("Toggle alternate images"));
@@ -400,12 +403,11 @@ void MyFrame::Resize()
 {
     wxSize size = GetClientSize();
     m_treeCtrl->SetSize(0, 0, size.x, size.y
-#if !wxUSE_LOG
-                                            );
-#else
+#if wxUSE_LOG
                                             *2/3);
-    m_textCtrl->SetSize(0, 2*size.y/3, size.x, size.y/3);
+    m_textCtrl->SetSize(0, 2*size.y/3, size.x, size.y/3
 #endif
+    );
 }
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
@@ -419,6 +421,11 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
                  wxT("(c) Julian Smart 1997, Vadim Zeitlin 1998"),
                  wxT("About tree test"),
                  wxOK | wxICON_INFORMATION, this);
+}
+
+void MyFrame::OnClearLog(wxCommandEvent& WXUNUSED(event))
+{
+    m_textCtrl->Clear();
 }
 
 void MyFrame::OnRename(wxCommandEvent& WXUNUSED(event))
