@@ -1202,12 +1202,6 @@ bool wxToolBar::Realize()
                                 tool2->SetIndex(-1);
                             }
                         }
-
-                        if (err != noErr)
-                        {
-                            wxString errMsg = wxString::Format( wxT("HIToolbarRemoveItemAtIndex failed [%ld]"), (long)err );
-                            wxFAIL_MSG( errMsg.c_str() );
-                        }
                     }
 
                     err = HIToolbarInsertItemAtIndex( (HIToolbarRef) m_macHIToolbarRef, hiItemRef, currentPosition );
