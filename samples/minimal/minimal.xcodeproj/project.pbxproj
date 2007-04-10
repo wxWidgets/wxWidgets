@@ -95,7 +95,6 @@
 		1864B4F208566CAB00E32E9B /* minimalDynamic.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = minimalDynamic.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1864B4F408566CAB00E32E9B /* minimal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = minimal.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		20286C33FDCF999611CA2CEA /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
-		4086D0EF063BBC5B00D4CD53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = Info.plist; sourceTree = "<group>"; };
 		409F03930977B96200D1030F /* wxWindows.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = wxWindows.xcodeproj; path = ../../src/wxWindows.xcodeproj; sourceTree = SOURCE_ROOT; };
 		40F017460A306CAD00AC9076 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		CA60173504D423C000000080 /* System.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = System.framework; path = /System/Library/Frameworks/System.framework; sourceTree = "<absolute>"; };
@@ -153,7 +152,6 @@
 				20286C2AFDCF999611CA2CEA /* Sources */,
 				20286C2CFDCF999611CA2CEA /* Resources */,
 				20286C32FDCF999611CA2CEA /* External Frameworks and Libraries */,
-				4086D0EF063BBC5B00D4CD53 /* Info.plist */,
 				1864B4F608566CB300E32E9B /* Products */,
 			);
 			name = "¬´PROJECTNAME¬ª";
@@ -405,6 +403,7 @@
 				);
 				GCC_VERSION_i386 = 4.0;
 				GCC_VERSION_ppc = 3.3;
+				INFOPLIST_FILE = ../Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../../src/build/Development";
 				MACOSX_DEPLOYMENT_TARGET_i386 = 10.4;
@@ -443,6 +442,7 @@
 				);
 				GCC_VERSION_i386 = 4.0;
 				GCC_VERSION_ppc = 3.3;
+				INFOPLIST_FILE = ../Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/../../src/build/Deployment";
 				MACOSX_DEPLOYMENT_TARGET_i386 = 10.4;
@@ -595,16 +595,12 @@
 		1842CAB508565A280032BCF7 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
 				COPY_PHASE_STRIP = NO;
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = __WXDEBUG__;
-				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_FILE = ../Info.plist;
 				LIBRARY_SEARCH_PATHS = ../../src/;
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				PRODUCT_NAME = minimal;
@@ -624,7 +620,7 @@
 				DynamicLibName = libwx_mac.dylib;
 				GCC_ENABLE_FIX_AND_CONTINUE = NO;
 				GCC_OPTIMIZATION_LEVEL = s;
-				INFOPLIST_FILE = Info.plist;
+				INFOPLIST_FILE = ../Info.plist;
 				LIBRARY_SEARCH_PATHS = ../../src/build/Deployment;
 				MACOSX_DEPLOYMENT_TARGET = 10.4;
 				PRODUCT_NAME = minimal;
