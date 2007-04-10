@@ -1416,10 +1416,10 @@ void wxWindow::OnChar(wxKeyEvent& event)
     if ( !event.HasModifiers() && event.GetKeyCode() == WXK_RETURN )
     {
         wxTopLevelWindow *
-            tlw = wxDynamicCast(wxTopLevelWindow *, wxGetTopLevelParent());
+            tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
         if ( tlw )
         {
-            wxButton *btn = wxDynamicCast(wxButton *, tlw->GetDefaultItem());
+            wxButton *btn = wxDynamicCast(tlw->GetDefaultItem(), wxButton);
             if ( btn )
             {
                 wxCommandEvent evt(wxEVT_COMMAND_BUTTON_CLICKED, btn->GetId());
