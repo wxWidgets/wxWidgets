@@ -1281,6 +1281,7 @@ GLDLL_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	-H=$(OBJS)\wxprec_gldll.csm $(CPPFLAGS) $(CXXFLAGS)
 GLDLL_OBJECTS =  \
 	$(OBJS)\gldll_dummy.obj \
+	$(OBJS)\gldll_glcmn.obj \
 	$(OBJS)\gldll_glcanvas.obj
 GLLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(__OPTIMIZEFLAG) $(__THREADSFLAG) -D__WXMSW__ $(__WXUNIV_DEFINE_p) \
@@ -1292,6 +1293,7 @@ GLLIB_CXXFLAGS = $(__RUNTIME_LIBS) -I$(BCCDIR)\include $(__DEBUGINFO) \
 	$(CXXFLAGS)
 GLLIB_OBJECTS =  \
 	$(OBJS)\gllib_dummy.obj \
+	$(OBJS)\gllib_glcmn.obj \
 	$(OBJS)\gllib_glcanvas.obj
 BUILD_CFG_FILE = $(SETUPHDIR)\build.cfg
 
@@ -13425,11 +13427,17 @@ $(OBJS)\gldll_dummy.obj: ..\..\src\common\dummy.cpp
 $(OBJS)\gldll_version.res: ..\..\src\msw\version.rc
 	brcc32 -32 -r -fo$@ -i$(BCCDIR)\include    -d__WXMSW__ $(__WXUNIV_DEFINE_p_62) $(__DEBUG_DEFINE_p_61) $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61) $(__UNICODE_DEFINE_p_62) $(__MSLU_DEFINE_p_61) $(__GFXCTX_DEFINE_p_61) -i$(SETUPHDIR) -i..\..\include -dWXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl_bcc$(VENDORTAG) -i..\..\src\tiff -i..\..\src\jpeg -i..\..\src\png -i..\..\src\zlib  -i..\..\src\regex -i..\..\src\expat\lib -dWXUSINGDLL -dWXMAKINGDLL_GL $**
 
+$(OBJS)\gldll_glcmn.obj: ..\..\src\common\glcmn.cpp
+	$(CXX) -q -c -P -o$@ $(GLDLL_CXXFLAGS) $**
+
 $(OBJS)\gldll_glcanvas.obj: ..\..\src\msw\glcanvas.cpp
 	$(CXX) -q -c -P -o$@ $(GLDLL_CXXFLAGS) $**
 
 $(OBJS)\gllib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) -q -c -P -o$@ $(GLLIB_CXXFLAGS) -H $**
+
+$(OBJS)\gllib_glcmn.obj: ..\..\src\common\glcmn.cpp
+	$(CXX) -q -c -P -o$@ $(GLLIB_CXXFLAGS) $**
 
 $(OBJS)\gllib_glcanvas.obj: ..\..\src\msw\glcanvas.cpp
 	$(CXX) -q -c -P -o$@ $(GLLIB_CXXFLAGS) $**

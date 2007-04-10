@@ -1,4 +1,4 @@
-/////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
 // Name:        src/mac/carbon/glcanvas.cpp
 // Purpose:     wxGLCanvas, for using OpenGL with wxWidgets under Macintosh
 // Author:      Stefan Csomor
@@ -7,7 +7,15 @@
 // RCS-ID:      $Id$
 // Copyright:   (c) Stefan Csomor
 // Licence:     wxWindows licence
-/////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+// ============================================================================
+// declarations
+// ============================================================================
+
+// ----------------------------------------------------------------------------
+// headers
+// ----------------------------------------------------------------------------
 
 #include "wx/wxprec.h"
 
@@ -27,86 +35,69 @@
 
 #include "wx/mac/uma.h"
 
-// DLL options compatibility check:
-#include "wx/build.h"
-WX_CHECK_BUILD_OPTIONS("wxGL")
-
 #include "wx/mac/private.h"
 
-/*
-* GLContext implementation
-*/
+// ----------------------------------------------------------------------------
+// helper functions
+// ----------------------------------------------------------------------------
 
-wxGLContext::wxGLContext(
-                         AGLPixelFormat fmt, wxGLCanvas *win,
-                         const wxPalette& palette,
-                         const wxGLContext *other        /* for sharing display lists */
-                         )
+static void wxLogAGLError(const char *func)
 {
-    m_window = win;
+    const int err = aglGetError();
 
-    m_drawable = (AGLDrawable) UMAGetWindowPort(MAC_WXHWND(win->MacGetTopLevelWindowRef()));
+    wxLogError(_("OpenGL function \"%s\" failed: %s (error %d)"),
+               func, aglErrorString(err), err);
+}
 
-    m_glContext = aglCreateContext(fmt, other ? other->m_glContext : NULL);
-    wxCHECK_RET( m_glContext, wxT("Couldn't create OpenGl context") );
+// ============================================================================
+// implementation
+// ============================================================================
 
-    GLboolean b;
-    b = aglSetDrawable(m_glContext, m_drawable);
-    wxCHECK_RET( b, wxT("Couldn't bind OpenGl context") );
-    aglEnable(m_glContext , AGL_BUFFER_RECT ) ;
-    b = aglSetCurrentContext(m_glContext);
-    wxCHECK_RET( b, wxT("Couldn't activate OpenGl context") );
+// ----------------------------------------------------------------------------
+// wxGLContext
+// ----------------------------------------------------------------------------
+
+wxGLContext::wxGLContext(wxGLCanvas *win, const wxGLContext *other)
+{
+    m_aglContext = aglCreateContext(win->GetAGLPixelFormat(),
+                                    other ? other->m_aglContext : NULL);
+    if ( !m_aglContext )
+        wxLogAGLError("aglCreateContext");
+
+    return;
+    if ( !aglEnable(m_aglContext, AGL_BUFFER_RECT) )
+        wxLogAGLError("aglEnable(AGL_BUFFER_RECT)");
 }
 
 wxGLContext::~wxGLContext()
 {
-    if (m_glContext)
+    if ( m_aglContext )
     {
-        aglSetCurrentContext(NULL);
-        aglDestroyContext(m_glContext);
+        // it's ok to pass the current context to this function
+        if ( !aglDestroyContext(m_aglContext) )
+            wxLogAGLError("aglDestroyContext");
     }
 }
 
-void wxGLContext::SwapBuffers()
+void wxGLContext::SetCurrent(const wxGLCanvas& win) const
 {
-    if (m_glContext)
-    {
-        aglSwapBuffers(m_glContext);
-    }
+    if ( !m_aglContext )
+        return;
+
+    AGLDrawable drawable = (AGLDrawable)UMAGetWindowPort(
+                                MAC_WXHWND(win.MacGetTopLevelWindowRef()));
+    if ( !aglSetDrawable(m_aglContext, drawable) )
+        wxLogAGLError("aglSetDrawable");
+
+    if ( !aglSetCurrentContext(m_aglContext) )
+        wxLogAGLError("aglSetCurrentContext");
+
+    wx_const_cast(wxGLCanvas&, win).SetViewport();
 }
 
-void wxGLContext::SetCurrent()
-{
-    if (m_glContext)
-    {
-        aglSetCurrentContext(m_glContext);
-    }
-}
-
-void wxGLContext::Update()
-{
-    if (m_glContext)
-    {
-        aglUpdateContext(m_glContext);
-    }
-}
-
-void wxGLContext::SetColour(const wxChar *colour)
-{
-    wxColour col = wxTheColourDatabase->Find(colour);
-    if (col.Ok())
-    {
-        float r = (float)(col.Red()/256.0);
-        float g = (float)(col.Green()/256.0);
-        float b = (float)(col.Blue()/256.0);
-        glColor3f( r, g, b);
-    }
-}
-
-
-/*
-* wxGLCanvas implementation
-*/
+// ----------------------------------------------------------------------------
+// wxGLCanvas
+// ----------------------------------------------------------------------------
 
 IMPLEMENT_CLASS(wxGLCanvas, wxWindow)
 
@@ -114,96 +105,173 @@ BEGIN_EVENT_TABLE(wxGLCanvas, wxWindow)
     EVT_SIZE(wxGLCanvas::OnSize)
 END_EVENT_TABLE()
 
-wxGLCanvas::wxGLCanvas(wxWindow *parent, wxWindowID id,
-                       const wxPoint& pos, const wxSize& size, long style, const wxString& name,
-                       int *attribList, const wxPalette& palette)
+wxGLCanvas::wxGLCanvas(wxWindow *parent,
+                       wxWindowID id,
+                       const int *attribList,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxString& name,
+                       const wxPalette& palette)
 {
-    Create(parent, NULL, id, pos, size, style, name, attribList, palette);
+    Create(parent, id, pos, size, style, name, attribList, palette);
 }
 
-wxGLCanvas::wxGLCanvas( wxWindow *parent,
-                       const wxGLContext *shared, wxWindowID id,
-                       const wxPoint& pos, const wxSize& size, long style, const wxString& name,
-                       int *attribList, const wxPalette& palette )
+#if WXWIN_COMPATIBILITY_2_8
+
+wxGLCanvas::wxGLCanvas(wxWindow *parent,
+                       wxWindowID id,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxString& name,
+                       const int *attribList,
+                       const wxPalette& palette)
 {
-    Create(parent, shared, id, pos, size, style, name, attribList, palette);
+    if ( Create(parent, id, pos, size, style, name, attribList, palette) )
+        m_glContext = new wxGLContext(this);
 }
 
-wxGLCanvas::wxGLCanvas( wxWindow *parent, const wxGLCanvas *shared, wxWindowID id,
-                       const wxPoint& pos, const wxSize& size, long style, const wxString& name,
-                       int *attribList, const wxPalette& palette )
+wxGLCanvas::wxGLCanvas(wxWindow *parent,
+                       const wxGLContext *shared,
+                       wxWindowID id,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxString& name,
+                       const int *attribList,
+                       const wxPalette& palette)
 {
-    Create(parent, shared ? shared->GetContext() : NULL, id, pos, size, style, name, attribList, palette);
+    if ( Create(parent, id, pos, size, style, name, attribList, palette) )
+        m_glContext = new wxGLContext(this, shared);
 }
 
-wxGLCanvas::~wxGLCanvas()
+wxGLCanvas::wxGLCanvas(wxWindow *parent,
+                       const wxGLCanvas *shared,
+                       wxWindowID id,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxString& name,
+                       const int *attribList,
+                       const wxPalette& palette)
 {
-    if (m_glContext != NULL) {
-        delete m_glContext;
-        m_glContext = NULL;
-    }
+    if ( Create(parent, id, pos, size, style, name, attribList, palette) )
+        m_glContext = new wxGLContext(this, shared ? shared->m_glContext : NULL);
 }
+
+#endif // WXWIN_COMPATIBILITY_2_8
 
 static AGLPixelFormat ChoosePixelFormat(const int *attribList)
 {
     GLint data[512];
-    GLint defaultAttribs[] = { AGL_RGBA,
+    const GLint defaultAttribs[] =
+    {
+        AGL_RGBA,
         AGL_DOUBLEBUFFER,
-        AGL_MINIMUM_POLICY,
+        AGL_MINIMUM_POLICY, // never choose less than requested
         AGL_DEPTH_SIZE, 1,  // use largest available depth buffer
         AGL_RED_SIZE, 1,
         AGL_GREEN_SIZE, 1,
         AGL_BLUE_SIZE, 1,
         AGL_ALPHA_SIZE, 0,
-        AGL_NONE };
-    GLint *attribs;
-    if (!attribList)
+        AGL_NONE
+    };
+
+    const GLint *attribs;
+    if ( !attribList )
     {
         attribs = defaultAttribs;
     }
     else
     {
-        int arg=0, p=0;
-
+        unsigned p = 0;
         data[p++] = AGL_MINIMUM_POLICY; // make _SIZE tags behave more like GLX
-        while( (attribList[arg]!=0) && (p<512) )
+
+        for ( unsigned arg = 0; attribList[arg] !=0 && p < WXSIZEOF(data); )
         {
-            switch( attribList[arg++] )
+            switch ( attribList[arg++] )
             {
-            case WX_GL_RGBA: data[p++] = AGL_RGBA; break;
-            case WX_GL_BUFFER_SIZE:
-                data[p++]=AGL_BUFFER_SIZE; data[p++]=attribList[arg++]; break;
-            case WX_GL_LEVEL:
-                data[p++]=AGL_LEVEL; data[p++]=attribList[arg++]; break;
-            case WX_GL_DOUBLEBUFFER: data[p++] = AGL_DOUBLEBUFFER; break;
-            case WX_GL_STEREO: data[p++] = AGL_STEREO; break;
-            case WX_GL_AUX_BUFFERS:
-                data[p++]=AGL_AUX_BUFFERS; data[p++]=attribList[arg++]; break;
-            case WX_GL_MIN_RED:
-                data[p++]=AGL_RED_SIZE; data[p++]=attribList[arg++]; break;
-            case WX_GL_MIN_GREEN:
-                data[p++]=AGL_GREEN_SIZE; data[p++]=attribList[arg++]; break;
-            case WX_GL_MIN_BLUE:
-                data[p++]=AGL_BLUE_SIZE; data[p++]=attribList[arg++]; break;
-            case WX_GL_MIN_ALPHA:
-                data[p++]=AGL_ALPHA_SIZE; data[p++]=attribList[arg++]; break;
-            case WX_GL_DEPTH_SIZE:
-                data[p++]=AGL_DEPTH_SIZE; data[p++]=attribList[arg++]; break;
-            case WX_GL_STENCIL_SIZE:
-                data[p++]=AGL_STENCIL_SIZE; data[p++]=attribList[arg++]; break;
-            case WX_GL_MIN_ACCUM_RED:
-                data[p++]=AGL_ACCUM_RED_SIZE; data[p++]=attribList[arg++]; break;
-            case WX_GL_MIN_ACCUM_GREEN:
-                data[p++]=AGL_ACCUM_GREEN_SIZE; data[p++]=attribList[arg++]; break;
-            case WX_GL_MIN_ACCUM_BLUE:
-                data[p++]=AGL_ACCUM_BLUE_SIZE; data[p++]=attribList[arg++]; break;
-            case WX_GL_MIN_ACCUM_ALPHA:
-                data[p++]=AGL_ACCUM_ALPHA_SIZE; data[p++]=attribList[arg++]; break;
-            default:
-                break;
+                case WX_GL_RGBA:
+                    data[p++] = AGL_RGBA;
+                    break;
+
+                case WX_GL_BUFFER_SIZE:
+                    data[p++] = AGL_BUFFER_SIZE;
+                    data[p++] = attribList[arg++];
+                    break;
+
+                case WX_GL_LEVEL:
+                    data[p++]=AGL_LEVEL;
+                    data[p++]=attribList[arg++];
+                    break;
+
+                case WX_GL_DOUBLEBUFFER:
+                    data[p++] = AGL_DOUBLEBUFFER;
+                    break;
+
+                case WX_GL_STEREO:
+                    data[p++] = AGL_STEREO;
+                    break;
+
+                case WX_GL_AUX_BUFFERS:
+                    data[p++] = AGL_AUX_BUFFERS;
+                    data[p++] = attribList[arg++];
+                    break;
+
+                case WX_GL_MIN_RED:
+                    data[p++] = AGL_RED_SIZE;
+                    data[p++] = attribList[arg++];
+                    break;
+
+                case WX_GL_MIN_GREEN:
+                    data[p++] = AGL_GREEN_SIZE;
+                    data[p++] = attribList[arg++];
+                    break;
+
+                case WX_GL_MIN_BLUE:
+                    data[p++] = AGL_BLUE_SIZE;
+                    data[p++] = attribList[arg++];
+                    break;
+
+                case WX_GL_MIN_ALPHA:
+                    data[p++] = AGL_ALPHA_SIZE;
+                    data[p++] = attribList[arg++];
+                    break;
+
+                case WX_GL_DEPTH_SIZE:
+                    data[p++] = AGL_DEPTH_SIZE;
+                    data[p++] = attribList[arg++];
+                    break;
+
+                case WX_GL_STENCIL_SIZE:
+                    data[p++] = AGL_STENCIL_SIZE;
+                    data[p++] = attribList[arg++];
+                    break;
+
+                case WX_GL_MIN_ACCUM_RED:
+                    data[p++] = AGL_ACCUM_RED_SIZE;
+                    data[p++] = attribList[arg++];
+                    break;
+
+                case WX_GL_MIN_ACCUM_GREEN:
+                    data[p++] = AGL_ACCUM_GREEN_SIZE;
+                    data[p++] = attribList[arg++];
+                    break;
+
+                case WX_GL_MIN_ACCUM_BLUE:
+                    data[p++] = AGL_ACCUM_BLUE_SIZE;
+                    data[p++] = attribList[arg++];
+                    break;
+
+                case WX_GL_MIN_ACCUM_ALPHA:
+                    data[p++] = AGL_ACCUM_ALPHA_SIZE;
+                    data[p++] = attribList[arg++];
+                    break;
             }
         }
-        data[p] = 0;
+
+        data[p] = AGL_NONE;
 
         attribs = data;
     }
@@ -211,186 +279,142 @@ static AGLPixelFormat ChoosePixelFormat(const int *attribList)
     return aglChoosePixelFormat(NULL, 0, attribs);
 }
 
-bool wxGLCanvas::Create(wxWindow *parent, const wxGLContext *shared, wxWindowID id,
-                        const wxPoint& pos, const wxSize& size, long style, const wxString& name,
-                        int *attribList, const wxPalette& palette)
+bool wxGLCanvas::Create(wxWindow *parent,
+                        wxWindowID id,
+                        const wxPoint& pos,
+                        const wxSize& size,
+                        long style,
+                        const wxString& name,
+                        const int *attribList,
+                        const wxPalette& WXUNUSED(palette))
 {
-    m_macCanvasIsShown = false ;
-    m_glContext = 0 ;
-    wxWindow::Create( parent, id, pos, size, style, name );
+    m_needsUpdate = false;
+    m_macCanvasIsShown = false;
 
-    AGLPixelFormat fmt = ChoosePixelFormat(attribList);
-    wxCHECK_MSG( fmt, false, wxT("Couldn't create OpenGl pixel format") );
+    m_aglFormat = ChoosePixelFormat(attribList);
+    if ( !m_aglFormat )
+        return false;
 
-    m_glContext = new wxGLContext(fmt, this, palette, shared);
-    m_macCanvasIsShown = true ;
-    aglDestroyPixelFormat(fmt);
+    if ( !wxWindow::Create(parent, id, pos, size, style, name) )
+        return false;
+
+    m_macCanvasIsShown = true;
 
     return true;
 }
 
-void wxGLCanvas::SwapBuffers()
+wxGLCanvas::~wxGLCanvas()
 {
-    if (m_glContext)
-        m_glContext->SwapBuffers();
+    if ( m_aglFormat )
+        aglDestroyPixelFormat(m_aglFormat);
 }
 
-void wxGLCanvas::UpdateContext()
+void wxGLCanvas::SwapBuffers()
 {
-    if (m_glContext)
-        m_glContext->Update();
+    AGLContext context = aglGetCurrentContext();
+    wxCHECK_RET( context, _T("should have current context") );
+
+    aglSwapBuffers(context);
 }
 
 void wxGLCanvas::SetViewport()
 {
-    // viewport is initially set to entire port
-    // adjust glViewport to just this window
-    int x = 0 ;
-    int y = 0 ;
+    if ( !m_needsUpdate )
+        return;
 
-    wxWindow* iter = this ;
-    while( iter->GetParent() )
-    {
-        iter = iter->GetParent() ;
-    }
+    m_needsUpdate = false;
 
-    if ( iter && iter->IsTopLevel() )
-    {
-        MacClientToRootWindow( &x , &y ) ;
-        int width, height;
-        GetClientSize(& width, & height);
-        Rect bounds ;
+    AGLContext context = aglGetCurrentContext();
+    if ( !context )
+        return;
+
+    // viewport is initially set to entire port, adjust it to just this window
+    int x = 0,
+        y = 0;
+    MacClientToRootWindow(&x , &y);
+
+    int width, height;
+    GetClientSize(&width, &height);
+
+    Rect bounds;
+    GetWindowPortBounds(MAC_WXHWND(MacGetTopLevelWindowRef()) , &bounds);
+
 #if 0
-		// TODO in case we adopt point vs pixel coordinates, this will make the conversion
-        GetWindowPortBounds( MAC_WXHWND(MacGetTopLevelWindowRef()) , &bounds ) ;
-        HIRect hiRect = CGRectMake( x, y, width, height ) ;
-        HIRectConvert( &hiRect, kHICoordSpace72DPIGlobal, NULL, kHICoordSpaceScreenPixel, NULL) ;
-        HIRect hiBounds = CGRectMake( 0, 0, bounds.right - bounds.left , bounds.bottom - bounds.top ) ;
-        HIRectConvert( &hiBounds, kHICoordSpace72DPIGlobal, NULL, kHICoordSpaceScreenPixel, NULL) ;
-        GLint parms[4] ;
-        parms[0] = hiRect.origin.x ;
-        parms[1] = hiBounds.size.height - (hiRect.origin.y + hiRect.size.height) ;
-        parms[2] = hiRect.size.width ;
-        parms[3] = hiRect.size.height ;
+    // TODO in case we adopt point vs pixel coordinates, this will make the conversion
+    HIRect hiRect = CGRectMake( x, y, width, height );
+    HIRectConvert( &hiRect, kHICoordSpace72DPIGlobal, NULL, kHICoordSpaceScreenPixel, NULL);
+    HIRect hiBounds = CGRectMake( 0, 0, bounds.right - bounds.left , bounds.bottom - bounds.top );
+    HIRectConvert( &hiBounds, kHICoordSpace72DPIGlobal, NULL, kHICoordSpaceScreenPixel, NULL);
+    GLint parms[4];
+    parms[0] = hiRect.origin.x;
+    parms[1] = hiBounds.size.height - (hiRect.origin.y + hiRect.size.height);
+    parms[2] = hiRect.size.width;
+    parms[3] = hiRect.size.height;
 #else
-        GetWindowPortBounds( MAC_WXHWND(MacGetTopLevelWindowRef()) , &bounds ) ;
-        GLint parms[4] ;
-        parms[0] = x ;
-        parms[1] = bounds.bottom - bounds.top - ( y + height ) ;
-        parms[2] = width ;
-        parms[3] = height ;
+    GLint parms[4];
+    parms[0] = x;
+    parms[1] = bounds.bottom - bounds.top - ( y + height );
+    parms[2] = width;
+    parms[3] = height;
 #endif
-        if ( !m_macCanvasIsShown )
-            parms[0] += 20000 ;
-        aglSetInteger( m_glContext->m_glContext , AGL_BUFFER_RECT , parms ) ;
-   }
+
+    // move the buffer rect out of sight if we're hidden
+    if ( !m_macCanvasIsShown )
+        parms[0] += 20000;
+
+    if ( !aglSetInteger(context, AGL_BUFFER_RECT, parms) )
+    {
+        wxLogAGLError("aglSetInteger(AGL_BUFFER_RECT)");
+    }
 }
 
 void wxGLCanvas::OnSize(wxSizeEvent& event)
 {
-    MacUpdateView() ;
+    MacUpdateView();
+    event.Skip();
 }
 
 void wxGLCanvas::MacUpdateView()
 {
-    if (m_glContext)
-    {
-        UpdateContext();
-        m_glContext->SetCurrent();
-        SetViewport();
-    }
+    m_needsUpdate = true;
+    Refresh(false);
 }
 
 void wxGLCanvas::MacSuperChangedPosition()
 {
-    MacUpdateView() ;
-    wxWindow::MacSuperChangedPosition() ;
+    MacUpdateView();
+    wxWindow::MacSuperChangedPosition();
 }
 
 void wxGLCanvas::MacTopLevelWindowChangedPosition()
 {
-    MacUpdateView() ;
-    wxWindow::MacTopLevelWindowChangedPosition() ;
-}
-
-void wxGLCanvas::SetCurrent()
-{
-    if (m_glContext)
-    {
-        m_glContext->SetCurrent();
-    }
-}
-
-void wxGLCanvas::SetColour(const wxChar *colour)
-{
-    if (m_glContext)
-        m_glContext->SetColour(colour);
-}
-
-bool wxGLCanvas::Show(bool show)
-{
-    if ( !wxWindow::Show( show ) )
-        return false ;
-/*
-    if ( !show )
-    {
-        if ( m_macCanvasIsShown )
-        {
-            m_macCanvasIsShown = false ;
-            SetViewport() ;
-        }
-    }
-    else
-    {
-        if ( m_peer->IsVisible()&& !m_macCanvasIsShown )
-        {
-            m_macCanvasIsShown = true ;
-            SetViewport() ;
-        }
-    }
-*/
-    return true ;
+    MacUpdateView();
+    wxWindow::MacTopLevelWindowChangedPosition();
 }
 
 void wxGLCanvas::MacVisibilityChanged()
 {
-    if ( !MacIsReallyShown() )
+    if ( MacIsReallyShown() != m_macCanvasIsShown )
     {
-        if ( m_macCanvasIsShown )
-        {
-            m_macCanvasIsShown = false ;
-            SetViewport() ;
-        }
+        m_macCanvasIsShown = !m_macCanvasIsShown;
+        MacUpdateView();
     }
-    else
-    {
-        if ( !m_macCanvasIsShown )
-        {
-            m_macCanvasIsShown = true ;
-            SetViewport() ;
-        }
-    }
-    wxWindowMac::MacVisibilityChanged() ;
+
+    wxWindowMac::MacVisibilityChanged();
 }
 
-//---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 // wxGLApp
-//---------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxGLApp, wxApp)
-
-bool wxGLApp::InitGLVisual(int *attribList)
+bool wxGLApp::InitGLVisual(const int *attribList)
 {
     AGLPixelFormat fmt = ChoosePixelFormat(attribList);
-    if (fmt != NULL) {
-        aglDestroyPixelFormat(fmt);
-        return true;
-    } else
+    if ( !fmt )
         return false;
-}
 
-wxGLApp::~wxGLApp(void)
-{
+    aglDestroyPixelFormat(fmt);
+    return true;
 }
 
 #endif // wxUSE_GLCANVAS

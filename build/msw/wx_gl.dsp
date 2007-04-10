@@ -456,6 +456,10 @@ SOURCE=..\..\src\common\dummy.cpp
 # ADD BASE CPP /Yc"wx/wxprec.h"
 # ADD CPP /Yc"wx/wxprec.h"
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\glcmn.cpp
+# End Source File
 # End Group
 # Begin Group "MSW Sources"
 
@@ -975,6 +979,14 @@ InputPath=..\..\include\wx\msw\genrcdefs.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\msw\glcanvas.h
+# End Source File
+# End Group
+# Begin Group "Common Headers"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\include\wx\glcanvas.h
 # End Source File
 # End Group
 # End Target

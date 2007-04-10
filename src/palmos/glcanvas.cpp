@@ -135,13 +135,6 @@ void wxGLCanvas::SetupPalette(const wxPalette& palette)
 {
 }
 
-wxPalette wxGLCanvas::CreateDefaultPalette()
-{
-    wxPalette palette;
-
-    return palette;
-}
-
 void wxGLCanvas::SwapBuffers()
 {
 }

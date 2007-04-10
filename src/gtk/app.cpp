@@ -339,6 +339,11 @@ wxApp::~wxApp()
 {
     if (m_idleTag)
         g_source_remove( m_idleTag );
+
+    if (m_glFBCInfo)
+        XFree(m_glFBCInfo);
+    if (m_glVisualInfo)
+        XFree(m_glVisualInfo);
 }
 
 bool wxApp::OnInitGui()

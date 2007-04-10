@@ -114,13 +114,7 @@ public:
 
     void SetupPalette(const wxPalette& palette);
 
-    wxPalette CreateDefaultPalette();
-
-    inline wxPalette* GetPalette() const { return (wxPalette *) &m_palette; }
-
 protected:
-    wxGLContext*   m_glContext;  // this is typedef-ed ptr, in fact
-    wxPalette      m_palette;
     WXHDC          m_hDC;
 
     DECLARE_EVENT_TABLE()

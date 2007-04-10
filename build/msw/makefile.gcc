@@ -1283,6 +1283,7 @@ GLDLL_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 GLDLL_OBJECTS =  \
 	$(OBJS)\gldll_dummy.o \
 	$(OBJS)\gldll_version_rc.o \
+	$(OBJS)\gldll_glcmn.o \
 	$(OBJS)\gldll_glcanvas.o
 GLLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	-DHAVE_W32API_H -D__WXMSW__ $(__WXUNIV_DEFINE_p) $(__DEBUG_DEFINE_p) \
@@ -1294,6 +1295,7 @@ GLLIB_CXXFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
 	$(CXXFLAGS)
 GLLIB_OBJECTS =  \
 	$(OBJS)\gllib_dummy.o \
+	$(OBJS)\gllib_glcmn.o \
 	$(OBJS)\gllib_glcanvas.o
 BUILD_CFG_FILE = $(SETUPHDIR)\build.cfg
 
@@ -13986,10 +13988,16 @@ $(OBJS)\gldll_dummy.o: ../../src/common/dummy.cpp
 $(OBJS)\gldll_version_rc.o: ../../src/msw/version.rc
 	windres --use-temp-file -i$< -o$@    --define __WXMSW__ $(__WXUNIV_DEFINE_p_62) $(__DEBUG_DEFINE_p_61) $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61) $(__UNICODE_DEFINE_p_62) $(__MSLU_DEFINE_p_61) $(__GFXCTX_DEFINE_p_61) --include-dir $(SETUPHDIR) --include-dir ..\../include --define WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl_gcc$(VENDORTAG) --include-dir ..\../src/tiff --include-dir ..\../src/jpeg --include-dir ..\../src/png --include-dir ..\../src/zlib  --include-dir ..\../src/regex --include-dir ..\../src/expat/lib --define WXUSINGDLL --define WXMAKINGDLL_GL
 
+$(OBJS)\gldll_glcmn.o: ../../src/common/glcmn.cpp
+	$(CXX) -c -o $@ $(GLDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\gldll_glcanvas.o: ../../src/msw/glcanvas.cpp
 	$(CXX) -c -o $@ $(GLDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\gllib_dummy.o: ../../src/common/dummy.cpp
+	$(CXX) -c -o $@ $(GLLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\gllib_glcmn.o: ../../src/common/glcmn.cpp
 	$(CXX) -c -o $@ $(GLLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\gllib_glcanvas.o: ../../src/msw/glcanvas.cpp

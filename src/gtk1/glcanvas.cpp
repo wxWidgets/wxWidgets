@@ -31,22 +31,14 @@ extern "C"
 }
 
 #include "wx/gtk1/win_gtk.h"
-
-// DLL options compatibility check:
-#include "wx/build.h"
-WX_CHECK_BUILD_OPTIONS("wxGL")
-
-
-//---------------------------------------------------------------------------
-// static variables
-//---------------------------------------------------------------------------
-int wxGLCanvas::m_glxVersion = 0;
+#include "wx/gtk1/private.h"
 
 //---------------------------------------------------------------------------
 // global data
 //---------------------------------------------------------------------------
 
 XVisualInfo *g_vi = (XVisualInfo*) NULL;
+
 //-----------------------------------------------------------------------------
 // idle system
 //-----------------------------------------------------------------------------
@@ -54,60 +46,40 @@ XVisualInfo *g_vi = (XVisualInfo*) NULL;
 extern void wxapp_install_idle_handler();
 extern bool g_isIdle;
 
+// ----------------------------------------------------------------------------
+// helper functions
+// ----------------------------------------------------------------------------
+
+// wrapper around glXMakeContextCurrent/glXMakeCurrent depending on GLX
+// version
+static void wxMakeContextCurrent(GLXDrawable drawable, GLXContext context)
+{
+    if (wxGLCanvas::GetGLXVersion() >= 13)
+        glXMakeContextCurrent( GDK_DISPLAY(), drawable, drawable, context);
+    else // GLX <= 1.2 doesn't have glXMakeContextCurrent()
+        glXMakeCurrent( GDK_DISPLAY(), drawable, context);
+}
+
 //---------------------------------------------------------------------------
 // wxGLContext
 //---------------------------------------------------------------------------
 
 IMPLEMENT_CLASS(wxGLContext,wxObject)
 
-wxGLContext::wxGLContext( bool WXUNUSED(isRGB), wxWindow *win, const wxPalette& WXUNUSED(palette) )
+wxGLContext::wxGLContext(wxWindow* win, const wxGLContext* other)
 {
-    m_window = win;
-    m_widget = win->m_wxwindow;
-
     wxGLCanvas *gc = (wxGLCanvas*) win;
 
     if (wxGLCanvas::GetGLXVersion() >= 13)
     {
-        // GLX >= 1.3
-        GLXFBConfig *fbc = gc->m_fbc;
-        wxCHECK_RET( fbc, _T("invalid GLXFBConfig for OpenGl") );
-        m_glContext = glXCreateNewContext( GDK_DISPLAY(), fbc[0], GLX_RGBA_TYPE, None, GL_TRUE );
-    }
-    else
-    {
-        // GLX <= 1.2
-        XVisualInfo *vi = (XVisualInfo *) gc->m_vi;
-        wxCHECK_RET( vi, _T("invalid visual for OpenGl") );
-        m_glContext = glXCreateContext( GDK_DISPLAY(), vi, None, GL_TRUE );
-    }
-
-    wxCHECK_RET( m_glContext, _T("Couldn't create OpenGl context") );
-}
-
-wxGLContext::wxGLContext(
-               bool WXUNUSED(isRGB), wxWindow *win,
-               const wxPalette& WXUNUSED(palette),
-               const wxGLContext *other        /* for sharing display lists */
-)
-{
-    m_window = win;
-    m_widget = win->m_wxwindow;
-
-    wxGLCanvas *gc = (wxGLCanvas*) win;
-
-    if (wxGLCanvas::GetGLXVersion() >= 13)
-    {
-        // GLX >= 1.3
         GLXFBConfig *fbc = gc->m_fbc;
         wxCHECK_RET( fbc, _T("invalid GLXFBConfig for OpenGl") );
         m_glContext = glXCreateNewContext( GDK_DISPLAY(), fbc[0], GLX_RGBA_TYPE,
                                            other ? other->m_glContext : None,
                                            GL_TRUE );
     }
-    else
+    else // GLX <= 1.2
     {
-        // GLX <= 1.2
         XVisualInfo *vi = (XVisualInfo *) gc->m_vi;
         wxCHECK_RET( vi, _T("invalid visual for OpenGl") );
         m_glContext = glXCreateContext( GDK_DISPLAY(), vi,
@@ -115,99 +87,49 @@ wxGLContext::wxGLContext(
                                         GL_TRUE );
     }
 
-    if ( !m_glContext )
-    {
-        wxFAIL_MSG( _T("Couldn't create OpenGl context") );
-    }
+    wxASSERT_MSG( m_glContext, _T("Couldn't create OpenGl context") );
 }
 
 wxGLContext::~wxGLContext()
 {
-    if (!m_glContext) return;
+    if ( !m_glContext )
+        return;
 
-    if (m_glContext == glXGetCurrentContext())
-    {
-        if (wxGLCanvas::GetGLXVersion() >= 13)
-            // GLX >= 1.3
-            glXMakeContextCurrent( GDK_DISPLAY(), None, None, NULL);
-        else
-            // GLX <= 1.2
-            glXMakeCurrent( GDK_DISPLAY(), None, NULL);
-    }
+    if ( m_glContext == glXGetCurrentContext() )
+        wxMakeContextCurrent(None, NULL);
 
     glXDestroyContext( GDK_DISPLAY(), m_glContext );
 }
 
-void wxGLContext::SwapBuffers()
+void wxGLContext::SetCurrent(const wxGLCanvas& win) const
 {
-    if (m_glContext)
-    {
-        GdkWindow *window = GTK_PIZZA(m_widget)->bin_window;
-        glXSwapBuffers( GDK_DISPLAY(), GDK_WINDOW_XWINDOW( window ) );
-    }
+    if ( !m_glContext )
+        return;
+
+    GdkWindow *window = GTK_PIZZA(win.m_wxwindow)->bin_window;
+    wxCHECK_RET( window, _T("window must be shown") );
+
+    wxMakeContextCurrent(GDK_WINDOW_XWINDOW(window), m_glContext);
 }
 
-void wxGLContext::SetCurrent()
-{
-    if (m_glContext)
-    {
-        GdkWindow *window = GTK_PIZZA(m_widget)->bin_window;
 
-        if (wxGLCanvas::GetGLXVersion() >= 13)
-            // GLX >= 1.3
-            glXMakeContextCurrent( GDK_DISPLAY(), GDK_WINDOW_XWINDOW(window),
-                                   GDK_WINDOW_XWINDOW(window), m_glContext );
-        else
-            // GLX <= 1.2
-            glXMakeCurrent( GDK_DISPLAY(), GDK_WINDOW_XWINDOW(window), m_glContext );
-    }
-}
-
-void wxGLContext::SetColour(const wxChar *colour)
-{
-    wxColour col = wxTheColourDatabase->Find(colour);
-    if (col.Ok())
-    {
-        float r = (float)(col.Red()/256.0);
-        float g = (float)(col.Green()/256.0);
-        float b = (float)(col.Blue()/256.0);
-        glColor3f( r, g, b);
-    }
-}
-
-void wxGLContext::SetupPixelFormat()
-{
-}
-
-void wxGLContext::SetupPalette( const wxPalette& WXUNUSED(palette) )
-{
-}
-
-wxPalette wxGLContext::CreateDefaultPalette()
-{
-    return wxNullPalette;
-}
+#if WXWIN_COMPATIBILITY_2_8
 
 //-----------------------------------------------------------------------------
-// "realize" from m_wxwindow
+// "realize" from m_wxwindow: used to create m_glContext implicitly
 //-----------------------------------------------------------------------------
 
 extern "C" {
 static gint
 gtk_glwindow_realized_callback( GtkWidget *WXUNUSED(widget), wxGLCanvas *win )
 {
-    if ( !win->m_glContext )
-    {
-        wxGLContext *share = win->m_sharedContext;
-        if ( !share && win->m_sharedContextOf )
-            share = win->m_sharedContextOf->GetContext();
-
-        win->m_glContext = new wxGLContext( TRUE, win, wxNullPalette, share );
-    }
+    win->GTKInitImplicitContext();
 
     return FALSE;
 }
 }
+
+#endif // WXWIN_COMPATIBILITY_2_8
 
 //-----------------------------------------------------------------------------
 // "map" from m_wxwindow
@@ -217,15 +139,11 @@ extern "C" {
 static gint
 gtk_glwindow_map_callback( GtkWidget * WXUNUSED(widget), wxGLCanvas *win )
 {
-    if (win->m_glContext/* && win->m_exposed*/)
-    {
-        wxPaintEvent event( win->GetId() );
-        event.SetEventObject( win );
-        win->GetEventHandler()->ProcessEvent( event );
+    wxPaintEvent event( win->GetId() );
+    event.SetEventObject( win );
+    win->GetEventHandler()->ProcessEvent( event );
 
-        win->m_exposed = false;
-        win->GetUpdateRegion().Clear();
-    }
+    win->GetUpdateRegion().Clear();
 
     return FALSE;
 }
@@ -241,8 +159,6 @@ gtk_glwindow_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gdk_e
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
-
-    win->m_exposed = true;
 
     win->GetUpdateRegion().Union( gdk_event->area.x,
                                   gdk_event->area.y,
@@ -261,8 +177,6 @@ gtk_glwindow_draw_callback( GtkWidget *WXUNUSED(widget), GdkRectangle *rect, wxG
 {
     if (g_isIdle)
         wxapp_install_idle_handler();
-
-    win->m_exposed = true;
 
     win->GetUpdateRegion().Union( rect->x, rect->y,
                                   rect->width, rect->height );
@@ -295,62 +209,81 @@ gtk_glcanvas_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, w
 
 IMPLEMENT_CLASS(wxGLCanvas, wxWindow)
 
-BEGIN_EVENT_TABLE(wxGLCanvas, wxWindow)
-    EVT_SIZE(wxGLCanvas::OnSize)
-END_EVENT_TABLE()
-
-wxGLCanvas::wxGLCanvas( wxWindow *parent, wxWindowID id,
-                        const wxPoint& pos, const wxSize& size,
-                        long style, const wxString& name,
-                        int *attribList,
-                        const wxPalette& palette )
+wxGLCanvas::wxGLCanvas(wxWindow *parent,
+                       wxWindowID id,
+                       const int *attribList,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxString& name,
+                       const wxPalette& palette)
+#if WXWIN_COMPATIBILITY_2_8
+    : m_createImplicitContext(false)
+#endif
 {
-    Create( parent, NULL, NULL, id, pos, size, style, name, attribList, palette );
+    Create(parent, id, pos, size, style, name, attribList, palette);
 }
 
-wxGLCanvas::wxGLCanvas( wxWindow *parent,
-                        const wxGLContext *shared,
+#if WXWIN_COMPATIBILITY_2_8
+
+wxGLCanvas::wxGLCanvas(wxWindow *parent,
+                       wxWindowID id,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxString& name,
+                       const int *attribList,
+                       const wxPalette& palette)
+    : m_createImplicitContext(true)
+{
+    Create(parent, id, pos, size, style, name, attribList, palette);
+}
+
+wxGLCanvas::wxGLCanvas(wxWindow *parent,
+                       const wxGLContext *shared,
+                       wxWindowID id,
+                       const wxPoint& pos,
+                       const wxSize& size,
+                       long style,
+                       const wxString& name,
+                       const int *attribList,
+                       const wxPalette& palette)
+    : m_createImplicitContext(true)
+{
+    m_sharedContext = wx_const_cast(wxGLContext *, shared);
+
+    Create(parent, id, pos, size, style, name, attribList, palette);
+}
+
+wxGLCanvas::wxGLCanvas(wxWindow *parent,
+                       const wxGLCanvas *shared,
+                       wxWindowID id,
+                       const wxPoint& pos, const wxSize& size,
+                       long style, const wxString& name,
+                       const int *attribList,
+                       const wxPalette& palette )
+    : m_createImplicitContext(true)
+{
+    m_sharedContextOf = wx_const_cast(wxGLCanvas *, shared);
+
+    Create(parent, id, pos, size, style, name, attribList, palette);
+}
+
+#endif // WXWIN_COMPATIBILITY_2_8
+
+bool wxGLCanvas::Create(wxWindow *parent,
                         wxWindowID id,
-                        const wxPoint& pos, const wxSize& size,
-                        long style, const wxString& name,
-                        int *attribList,
-                        const wxPalette& palette )
+                        const wxPoint& pos,
+                        const wxSize& size,
+                        long style,
+                        const wxString& name,
+                        const int *attribList,
+                        const wxPalette& palette)
 {
-    Create( parent, shared, NULL, id, pos, size, style, name, attribList, palette );
-}
-
-wxGLCanvas::wxGLCanvas( wxWindow *parent,
-                        const wxGLCanvas *shared,
-                        wxWindowID id,
-                        const wxPoint& pos, const wxSize& size,
-                        long style, const wxString& name,
-                        int *attribList,
-                        const wxPalette& palette )
-{
-    Create( parent, NULL, shared, id, pos, size, style, name, attribList, palette );
-}
-
-bool wxGLCanvas::Create( wxWindow *parent,
-                         const wxGLContext *shared,
-                         const wxGLCanvas *shared_context_of,
-                         wxWindowID id,
-                         const wxPoint& pos, const wxSize& size,
-                         long style, const wxString& name,
-                         int *attribList,
-                         const wxPalette& palette)
-{
-    m_sharedContext = (wxGLContext*)shared;  // const_cast
-    m_sharedContextOf = (wxGLCanvas*)shared_context_of;  // const_cast
-    m_glContext = (wxGLContext*) NULL;
-
-    m_exposed = false;
     m_noExpose = true;
     m_nativeSizeEvent = true;
     m_fbc = NULL;
     m_vi = NULL;
-
-    // to be sure the glx version is known
-    wxGLCanvas::QueryGLXVersion();
 
     if (wxGLCanvas::GetGLXVersion() >= 13)
     {
@@ -394,64 +327,45 @@ bool wxGLCanvas::Create( wxWindow *parent,
     GdkVisual *visual;
     GdkColormap *colormap;
 
-    // MR: This needs a fix for lower gtk+ versions too. Might need to rethink logic (FIXME)
-#if 0
-    if (!gtk_check_version(2,2,0))
-    {
-        wxWindow::Create( parent, id, pos, size, style, name );
+    visual = gdkx_visual_get( vi->visualid );
+    colormap = gdk_colormap_new( visual, TRUE );
 
-        m_glWidget = m_wxwindow;
+    gtk_widget_push_colormap( colormap );
+    gtk_widget_push_visual( visual );
 
-        GdkScreen *screen = gtk_widget_get_screen( m_glWidget );
-        colormap = gdk_screen_get_default_colormap(screen);
-        visual = gdk_colormap_get_visual(colormap);
-
-        if (GDK_VISUAL_XVISUAL(visual)->visualid != vi->visualid)
-        {
-            visual = gdk_x11_screen_lookup_visual( screen, vi->visualid );
-            colormap = gdk_colormap_new(visual, FALSE);
-        }
-
-        gtk_widget_set_colormap( m_glWidget, colormap );
-    }
-    else
-#endif
-    {
-        visual = gdkx_visual_get( vi->visualid );
-        colormap = gdk_colormap_new( visual, TRUE );
-
-        gtk_widget_push_colormap( colormap );
-        gtk_widget_push_visual( visual );
-
-        wxWindow::Create( parent, id, pos, size, style, name );
-        m_glWidget = m_wxwindow;
-    }
+    wxWindow::Create( parent, id, pos, size, style, name );
+    m_glWidget = m_wxwindow;
 
     gtk_pizza_set_clear( GTK_PIZZA(m_wxwindow), FALSE );
 
+#if WXWIN_COMPATIBILITY_2_8
     gtk_signal_connect( GTK_OBJECT(m_wxwindow), "realize",
-                            GTK_SIGNAL_FUNC(gtk_glwindow_realized_callback), (gpointer) this );
+                            GTK_SIGNAL_FUNC(gtk_glwindow_realized_callback), (gpointer) this);
+#endif // WXWIN_COMPATIBILITY_2_8
 
     gtk_signal_connect( GTK_OBJECT(m_wxwindow), "map",
-                            GTK_SIGNAL_FUNC(gtk_glwindow_map_callback), (gpointer) this );
+                            GTK_SIGNAL_FUNC(gtk_glwindow_map_callback), (gpointer) this);
 
     gtk_signal_connect( GTK_OBJECT(m_wxwindow), "expose_event",
-        GTK_SIGNAL_FUNC(gtk_glwindow_expose_callback), (gpointer)this );
+                            GTK_SIGNAL_FUNC(gtk_glwindow_expose_callback), (gpointer) this);
 
     gtk_signal_connect( GTK_OBJECT(m_wxwindow), "draw",
-        GTK_SIGNAL_FUNC(gtk_glwindow_draw_callback), (gpointer)this );
+                            GTK_SIGNAL_FUNC(gtk_glwindow_draw_callback), (gpointer) this);
 
     gtk_signal_connect( GTK_OBJECT(m_widget), "size_allocate",
-        GTK_SIGNAL_FUNC(gtk_glcanvas_size_callback), (gpointer)this );
+                            GTK_SIGNAL_FUNC(gtk_glcanvas_size_callback), (gpointer) this);
 
     gtk_widget_pop_visual();
+
     gtk_widget_pop_colormap();
 
+#if WXWIN_COMPATIBILITY_2_8
     // if our parent window is already visible, we had been realized before we
     // connected to the "realize" signal and hence our m_glContext hasn't been
     // initialized yet and we have to do it now
     if (GTK_WIDGET_REALIZED(m_wxwindow))
         gtk_glwindow_realized_callback( m_wxwindow, this );
+#endif // WXWIN_COMPATIBILITY_2_8
 
     if (GTK_WIDGET_MAPPED(m_wxwindow))
         gtk_glwindow_map_callback( m_wxwindow, this );
@@ -468,41 +382,40 @@ wxGLCanvas::~wxGLCanvas()
     XVisualInfo *vi = (XVisualInfo *) m_vi;
     if (vi && m_canFreeVi)
         XFree( vi );
-
-    delete m_glContext;
 }
 
-void* wxGLCanvas::ChooseGLVisual(int *attribList)
+void* wxGLCanvas::ChooseGLVisual(const int *attribList)
 {
     int data[512];
     GetGLAttribListFromWX( attribList, data );
-    attribList = (int*) data;
 
     Display *dpy = GDK_DISPLAY();
 
-    return glXChooseVisual( dpy, DefaultScreen(dpy), attribList );
+    return glXChooseVisual( dpy, DefaultScreen(dpy), data );
 }
 
-void* wxGLCanvas::ChooseGLFBC(int *attribList)
+void* wxGLCanvas::ChooseGLFBC(const int *attribList)
 {
     int data[512];
     GetGLAttribListFromWX( attribList, data );
-    attribList = (int*) data;
 
     int returned;
     return glXChooseFBConfig( GDK_DISPLAY(), DefaultScreen(GDK_DISPLAY()),
-                              attribList, &returned );
+                              data, &returned );
 }
 
 
-void wxGLCanvas::GetGLAttribListFromWX(int *wx_attribList, int *gl_attribList )
+void
+wxGLCanvas::GetGLAttribListFromWX(const int *wx_attribList, int *gl_attribList)
 {
-    if (!wx_attribList)
+    if ( !wx_attribList )
     {
         if (wxGLCanvas::GetGLXVersion() >= 13)
-        // leave GLX >= 1.3 choose the default attributes
+        {
+            // leave GLX >= 1.3 choose the default attributes
             gl_attribList[0] = 0;
-        else
+        }
+        else // GLX < 1.3
         {
             int i = 0;
             // default settings if attriblist = 0
@@ -516,7 +429,7 @@ void wxGLCanvas::GetGLAttribListFromWX(int *wx_attribList, int *gl_attribList )
             gl_attribList[i++] = None;
         }
     }
-    else
+    else // have non-default attributes
     {
         int arg=0, p=0;
         while( (wx_attribList[arg]!=0) && (p<510) )
@@ -525,8 +438,10 @@ void wxGLCanvas::GetGLAttribListFromWX(int *wx_attribList, int *gl_attribList )
             {
                 case WX_GL_RGBA:
                     if (wxGLCanvas::GetGLXVersion() <= 12)
+                    {
                         // for GLX >= 1.3, GLX_RGBA is useless (setting this flags will crash on most opengl implm)
                         gl_attribList[p++] = GLX_RGBA;
+                    }
                     break;
                 case WX_GL_BUFFER_SIZE:
                     gl_attribList[p++] = GLX_BUFFER_SIZE;
@@ -537,13 +452,7 @@ void wxGLCanvas::GetGLAttribListFromWX(int *wx_attribList, int *gl_attribList )
                     gl_attribList[p++] = wx_attribList[arg++];
                     break;
                 case WX_GL_DOUBLEBUFFER:
-                    if (wxGLCanvas::GetGLXVersion() <= 12)
-                        gl_attribList[p++] = GLX_DOUBLEBUFFER;
-                    else
-                        // for GLX >= 1.3, GLX_DOUBLEBUFFER format is different (1 <=> True)
-                        // it seems this flag is useless for some hardware opengl implementation.
-                        // but for Mesa 6.2.1, this flag is used so don't ignore it.
-                        gl_attribList[p++] = GLX_DOUBLEBUFFER;
+                    gl_attribList[p++] = GLX_DOUBLEBUFFER;
                     gl_attribList[p++] = 1;
                     break;
                 case WX_GL_STEREO:
@@ -602,109 +511,88 @@ void wxGLCanvas::GetGLAttribListFromWX(int *wx_attribList, int *gl_attribList )
     }
 }
 
-void wxGLCanvas::QueryGLXVersion()
+/* static */
+int wxGLCanvas::GetGLXVersion()
 {
-    if (m_glxVersion == 0)
+    static int s_glxVersion = 0;
+    if ( s_glxVersion == 0 )
     {
         // check the GLX version
         int glxMajorVer, glxMinorVer;
         bool ok = glXQueryVersion(GDK_DISPLAY(), &glxMajorVer, &glxMinorVer);
         wxASSERT_MSG( ok, _T("GLX version not found") );
         if (!ok)
-            m_glxVersion = 10; // 1.0 by default
+            s_glxVersion = 10; // 1.0 by default
         else
-            m_glxVersion = glxMajorVer*10 + glxMinorVer;
+            s_glxVersion = glxMajorVer*10 + glxMinorVer;
     }
-}
 
-int wxGLCanvas::GetGLXVersion()
-{
-    wxASSERT_MSG( m_glxVersion>0, _T("GLX version has not been initialized with wxGLCanvas::QueryGLXVersion()") );
-    return m_glxVersion;
+    return s_glxVersion;
 }
-
 
 void wxGLCanvas::SwapBuffers()
 {
-    if (m_glContext)
-        m_glContext->SwapBuffers();
-}
-
-void wxGLCanvas::OnSize(wxSizeEvent& WXUNUSED(event))
-{
-}
-
-void wxGLCanvas::SetCurrent()
-{
-    if (m_glContext)
-        m_glContext->SetCurrent();
-}
-
-void wxGLCanvas::SetColour( const wxChar *colour )
-{
-    if (m_glContext)
-        m_glContext->SetColour( colour );
+    GdkWindow *window = GTK_PIZZA(m_wxwindow)->bin_window;
+    glXSwapBuffers( GDK_DISPLAY(), GDK_WINDOW_XWINDOW( window ) );
 }
 
 void wxGLCanvas::OnInternalIdle()
 {
-    if (m_glContext && m_exposed)
+    if (!m_updateRegion.IsEmpty())
     {
         wxPaintEvent event( GetId() );
         event.SetEventObject( this );
         GetEventHandler()->ProcessEvent( event );
 
-        m_exposed = false;
         GetUpdateRegion().Clear();
     }
 
     wxWindow::OnInternalIdle();
 }
 
+#if WXWIN_COMPATIBILITY_2_8
 
+void wxGLCanvas::GTKInitImplicitContext()
+{
+    if ( !m_glContext && m_createImplicitContext )
+    {
+        wxGLContext *share = m_sharedContext;
+        if ( !share && m_sharedContextOf )
+            share = m_sharedContextOf->m_glContext;
+
+        m_glContext = new wxGLContext(this, share);
+    }
+}
+
+#endif // WXWIN_COMPATIBILITY_2_8
 
 //---------------------------------------------------------------------------
 // wxGLApp
 //---------------------------------------------------------------------------
 
-IMPLEMENT_CLASS(wxGLApp, wxApp)
-
-wxGLApp::~wxGLApp()
+bool wxGLApp::InitGLVisual(const int *attribList)
 {
-    if (m_glFBCInfo)
-        XFree(m_glFBCInfo);
-    if (m_glVisualInfo)
-        XFree(m_glVisualInfo);
-}
-
-bool wxGLApp::InitGLVisual(int *attribList)
-{
-    wxGLCanvas::QueryGLXVersion();
-
-    if (wxGLCanvas::GetGLXVersion() >= 13)
+    if ( wxGLCanvas::GetGLXVersion() >= 13 )
     {
-        // GLX >= 1.3
         if (m_glFBCInfo)
             XFree(m_glFBCInfo);
         m_glFBCInfo = wxGLCanvas::ChooseGLFBC(attribList);
 
-        if (m_glFBCInfo)
-        {
-            if (m_glVisualInfo)
-                XFree(m_glVisualInfo);
-            m_glVisualInfo = glXGetVisualFromFBConfig(GDK_DISPLAY(), ((GLXFBConfig *)m_glFBCInfo)[0]);
-        }
-        return (m_glFBCInfo != NULL) && (m_glVisualInfo != NULL);
+        if ( !m_glFBCInfo )
+            return false;
+
+        if (m_glVisualInfo)
+            XFree(m_glVisualInfo);
+        m_glVisualInfo = glXGetVisualFromFBConfig(GDK_DISPLAY(), ((GLXFBConfig *)m_glFBCInfo)[0]);
     }
-    else
+    else // GLX <= 1.2
     {
-        // GLX <= 1.2
         if (m_glVisualInfo)
             XFree(m_glVisualInfo);
         m_glVisualInfo = wxGLCanvas::ChooseGLVisual(attribList);
-        return m_glVisualInfo != NULL;
     }
+
+    return m_glVisualInfo != NULL;
 }
 
-#endif
-    // wxUSE_GLCANVAS
+#endif // wxUSE_GLCANVAS

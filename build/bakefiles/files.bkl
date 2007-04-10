@@ -832,7 +832,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gdiobj.h
     wx/geometry.h
     wx/gifdecod.h
-    wx/glcanvas.h
     wx/help.h
     wx/helpbase.h
     wx/helpwin.h
@@ -2223,7 +2222,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/fontdlg.h
     wx/mac/frame.h
     wx/mac/gauge.h
-    wx/mac/glcanvas.h
     wx/mac/gsockmac.h
     wx/mac/helpxxxx.h
     wx/mac/icon.h
@@ -3104,7 +3102,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!--                             OpenGL canvas                              -->
 <!-- ====================================================================== -->
 
-<set var="OPENGL_SRC" hints="files">
+<set var="OPENGL_SRC_PLATFORM" hints="files">
+    src/common/glcmn.cpp
     <if cond="TOOLKIT=='MAC'">src/mac/carbon/glcanvas.cpp</if>
     <if cond="TOOLKIT=='COCOA'">src/cocoa/glcanvas.mm</if>
     <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">src/gtk/glcanvas.cpp</if>
@@ -3116,8 +3115,13 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <if cond="TOOLKIT=='PM'">src/os2/glcanvas.cpp</if>
 </set>
 
-<set var="OPENGL_HDR" hints="files">
-    <if cond="TOOLKIT=='MAC'">wx/mac/carbon/glcanvas.h</if>
+<set var="OPENGL_SRC" hints="files">
+    src/common/glcmn.cpp
+    $(OPENGL_SRC_PLATFORM)
+</set>
+
+<set var="OPENGL_HDR_PLATFORM" hints="files">
+    <if cond="TOOLKIT=='MAC'">wx/mac/glcanvas.h wx/mac/carbon/glcanvas.h</if>
     <if cond="TOOLKIT=='COCOA'">wx/cocoa/glcanvas.h</if>
     <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">wx/gtk/glcanvas.h</if>
     <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">wx/gtk1/glcanvas.h</if>
@@ -3125,9 +3129,12 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <if cond="TOOLKIT=='WINCE'">wx/msw/glcanvas.h</if>
     <if cond="TOOLKIT=='MOTIF'">wx/x11/glcanvas.h</if>
     <if cond="TOOLKIT=='X11'">wx/x11/glcanvas.h</if>
-    <if cond="TOOLKIT=='PM'">wx/os2/glcanvas.h</if>
 </set>
 
+<set var="OPENGL_HDR" hints="files">
+    wx/glcanvas.h
+    $(OPENGL_HDR_PLATFORM)
+</set>
 
 
 <!-- ====================================================================== -->
@@ -3458,7 +3465,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
             $(GUI_CORE_HEADERS)
             $(ADVANCED_HDR) $(MEDIA_HDR) $(HTML_HDR)
             $(OPENGL_HDR) $(QA_HDR) $(DBGRID_HDR) $(XRC_HDR) $(AUI_HDR) $(RICHTEXT_HDR)
-	    $(STC_HDR)
+            $(STC_HDR)
         </if>
     </set>
 

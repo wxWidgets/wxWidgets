@@ -23,42 +23,31 @@
 #import <AppKit/NSOpenGL.h>
 #import <AppKit/NSOpenGLView.h>
 
-IMPLEMENT_DYNAMIC_CLASS(wxGLCanvas, wxWindow)
-BEGIN_EVENT_TABLE(wxGLCanvas, wxWindow)
-END_EVENT_TABLE()
+wxGLContext::wxGLContext(wxGLCanvas *win, const wxGLContext *other)
+{
+    // TODO
+}
+
+wxGLContext::~wxGLContext()
+{
+}
+
+void wxGLContext::SetCurrent(const wxGLCanvas& win) const
+{
+    [[win.GetNSOpenGLView() openGLContext] makeCurrentContext];
+}
+
+IMPLEMENT_CLASS(wxGLCanvas, wxWindow)
 // WX_IMPLEMENT_COCOA_OWNER(wxGLCanvas,NSOpenGLView,NSView,NSView)
 
-wxGLCanvas::wxGLCanvas(wxWindow *parent,
-            wxWindowID winid, const wxPoint& pos, const wxSize& size,
-            long style, const wxString& name,
-            int *attribList, const wxPalette& palette)
-{
-    Create(parent,winid,pos,size,style,name);
-}
-
-wxGLCanvas::wxGLCanvas(wxWindow *parent,
-            const wxGLContext *shared,
-            wxWindowID winid, const wxPoint& pos, const wxSize& size,
-            long style, const wxString& name,
-            int *attribList, const wxPalette& palette)
-{
-    Create(parent,winid,pos,size,style,name);
-}
-
-wxGLCanvas::wxGLCanvas(wxWindow *parent,
-            const wxGLCanvas *shared,
-            wxWindowID winid, const wxPoint& pos, const wxSize& size,
-            long style, const wxString& name,
-            int *attribList, const wxPalette& palette)
-{
-    Create(parent,winid,pos,size,style,name);
-}
-
-bool wxGLCanvas::Create(wxWindow *parent, wxWindowID winid,
-           const wxPoint& pos,
-           const wxSize& size,
-           long style,
-           const wxString& name)
+bool wxGLCanvas::Create(wxWindow *parent,
+                        wxWindowID winid,
+                        const wxPoint& pos,
+                        const wxSize& size,
+                        long style,
+                        const wxString& name,
+                        const int *attribList,
+                        const wxPalette& palette)
 {
     wxAutoNSAutoreleasePool pool;
     if(!CreateBase(parent,winid,pos,size,style,wxDefaultValidator,name))
@@ -77,14 +66,9 @@ wxGLCanvas::~wxGLCanvas()
 {
 }
 
-void wxGLCanvas::SetCurrent()
-{
-    [[(NSOpenGLView*)m_cocoaNSView openGLContext] makeCurrentContext];
-}
-
 void wxGLCanvas::SwapBuffers()
 {
-    [[(NSOpenGLView*)m_cocoaNSView openGLContext] flushBuffer];
+    [[GetNSOpenGLView() openGLContext] flushBuffer];
 }
 
 #endif // wxUSE_GLCANVAS

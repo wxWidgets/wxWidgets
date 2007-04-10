@@ -1641,14 +1641,16 @@ GLDLL_CXXFLAGS = $(__gldll_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	-DWXMAKINGDLL_GL $(PIC_FLAG) $(CPPFLAGS) $(CXXFLAGS)
 GLDLL_OBJECTS =  \
 	$(__gldll___win32rc) \
-	$(__OPENGL_SRC_OBJECTS)
+	gldll_glcmn.o \
+	$(__OPENGL_SRC_PLATFORM_OBJECTS)
 GLDLL_ODEP =  $(___pch_wxprec_gldll_wx_wxprec_h_gch___depname)
 GLLIB_CXXFLAGS = $(__gllib_PCH_INC) -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
 	$(__INC_TIFF_p) $(__INC_JPEG_p) $(__INC_PNG_p) $(__INC_ZLIB_p) \
 	$(__INC_ODBC_p) $(__INC_REGEX_p) $(__INC_EXPAT_p) $(CPPFLAGS) $(CXXFLAGS)
 GLLIB_OBJECTS =  \
-	$(__OPENGL_SRC_OBJECTS_1)
+	gllib_glcmn.o \
+	$(__OPENGL_SRC_PLATFORM_OBJECTS_1)
 GLLIB_ODEP =  $(___pch_wxprec_gllib_wx_wxprec_h_gch___depname)
 SOUND_SDL_CXXFLAGS = -DWXUSINGDLL -DwxUSE_GUI=0 $(PIC_FLAG) $(CPPFLAGS) \
 	$(CXXFLAGS)
@@ -1764,15 +1766,15 @@ COND_USE_STC_1___wxscintilla___depname = \
 @COND_TOOLKIT_WINCE@NET_WINCE_SRC = src/msw/wince/net.cpp
 @COND_TOOLKIT_WINCE@NET_WINCE_HDR = wx/msw/wince/net.h
 @COND_TOOLKIT_MSW@MSW_HTML_HDR = wx/msw/helpbest.h
-@COND_TOOLKIT_COCOA@OPENGL_HDR = wx/cocoa/glcanvas.h
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@OPENGL_HDR = wx/gtk1/glcanvas.h
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@OPENGL_HDR = wx/gtk/glcanvas.h
-@COND_TOOLKIT_MAC@OPENGL_HDR = wx/mac/carbon/glcanvas.h
-@COND_TOOLKIT_MOTIF@OPENGL_HDR = wx/x11/glcanvas.h
-@COND_TOOLKIT_MSW@OPENGL_HDR = wx/msw/glcanvas.h
-@COND_TOOLKIT_PM@OPENGL_HDR = wx/os2/glcanvas.h
-@COND_TOOLKIT_WINCE@OPENGL_HDR = wx/msw/glcanvas.h
-@COND_TOOLKIT_X11@OPENGL_HDR = wx/x11/glcanvas.h
+@COND_TOOLKIT_COCOA@OPENGL_HDR_PLATFORM = wx/cocoa/glcanvas.h
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@OPENGL_HDR_PLATFORM = wx/gtk1/glcanvas.h
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@OPENGL_HDR_PLATFORM = wx/gtk/glcanvas.h
+@COND_TOOLKIT_MAC@OPENGL_HDR_PLATFORM = wx/mac/glcanvas.h \
+@COND_TOOLKIT_MAC@	wx/mac/carbon/glcanvas.h
+@COND_TOOLKIT_MOTIF@OPENGL_HDR_PLATFORM = wx/x11/glcanvas.h
+@COND_TOOLKIT_MSW@OPENGL_HDR_PLATFORM = wx/msw/glcanvas.h
+@COND_TOOLKIT_WINCE@OPENGL_HDR_PLATFORM = wx/msw/glcanvas.h
+@COND_TOOLKIT_X11@OPENGL_HDR_PLATFORM = wx/x11/glcanvas.h
 COND_TOOLKIT__BASE_MACOSX_HDR =  \
 	wx/unix/apptbase.h \
 	wx/unix/apptrait.h \
@@ -2288,7 +2290,6 @@ COND_TOOLKIT_MAC_GUI_HDR =  \
 	wx/mac/fontdlg.h \
 	wx/mac/frame.h \
 	wx/mac/gauge.h \
-	wx/mac/glcanvas.h \
 	wx/mac/gsockmac.h \
 	wx/mac/helpxxxx.h \
 	wx/mac/icon.h \
@@ -3120,7 +3121,6 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/gdiobj.h \
 	wx/geometry.h \
 	wx/gifdecod.h \
-	wx/glcanvas.h \
 	wx/help.h \
 	wx/helpbase.h \
 	wx/helpwin.h \
@@ -3205,7 +3205,8 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/wxhtml.h \
 	wx/htmllbox.h \
 	$(MSW_HTML_HDR) \
-	$(OPENGL_HDR) \
+	wx/glcanvas.h \
+	$(OPENGL_HDR_PLATFORM) \
 	wx/debugrpt.h \
 	wx/dbgrid.h \
 	wx/xrc/xh_all.h \
@@ -11284,15 +11285,17 @@ COND_USE_SOSYMLINKS_1___gldll___so_symlinks_uninst_cmd = rm -f \
 	$(LIBPREFIX)wx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl-$(WX_RELEASE)$(HOST_SUFFIX).$(DLLIMP_SUFFIX)
 @COND_USE_SOSYMLINKS_1@__gldll___so_symlinks_uninst_cmd = $(COND_USE_SOSYMLINKS_1___gldll___so_symlinks_uninst_cmd)
 @COND_PLATFORM_WIN32_1@__gldll___win32rc = gldll_version_rc.o
-@COND_TOOLKIT_COCOA@__OPENGL_SRC_OBJECTS = gldll_glcanvas.o
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__OPENGL_SRC_OBJECTS = gldll_glcanvas.o
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__OPENGL_SRC_OBJECTS = gldll_glcanvas.o
-@COND_TOOLKIT_MAC@__OPENGL_SRC_OBJECTS = gldll_glcanvas.o
-@COND_TOOLKIT_MOTIF@__OPENGL_SRC_OBJECTS = gldll_glcanvas.o
-@COND_TOOLKIT_MSW@__OPENGL_SRC_OBJECTS = gldll_glcanvas.o
-@COND_TOOLKIT_PM@__OPENGL_SRC_OBJECTS = gldll_glcanvas.o
-@COND_TOOLKIT_WINCE@__OPENGL_SRC_OBJECTS = gldll_glcanvas.o
-@COND_TOOLKIT_X11@__OPENGL_SRC_OBJECTS = gldll_glcanvas.o
+@COND_TOOLKIT_COCOA@__OPENGL_SRC_PLATFORM_OBJECTS = gldll_glcanvas.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__OPENGL_SRC_PLATFORM_OBJECTS \
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@	= gldll_glcanvas.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__OPENGL_SRC_PLATFORM_OBJECTS \
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= gldll_glcanvas.o
+@COND_TOOLKIT_MAC@__OPENGL_SRC_PLATFORM_OBJECTS = gldll_glcanvas.o
+@COND_TOOLKIT_MOTIF@__OPENGL_SRC_PLATFORM_OBJECTS = gldll_glcanvas.o
+@COND_TOOLKIT_MSW@__OPENGL_SRC_PLATFORM_OBJECTS = gldll_glcanvas.o
+@COND_TOOLKIT_PM@__OPENGL_SRC_PLATFORM_OBJECTS = gldll_glcanvas.o
+@COND_TOOLKIT_WINCE@__OPENGL_SRC_PLATFORM_OBJECTS = gldll_glcanvas.o
+@COND_TOOLKIT_X11@__OPENGL_SRC_PLATFORM_OBJECTS = gldll_glcanvas.o
 COND_MONOLITHIC_0___WXLIBGLDEP_CORE_p = \
 	-lwx_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_core-$(WX_RELEASE)$(HOST_SUFFIX)
 @COND_MONOLITHIC_0@__WXLIBGLDEP_CORE_p = $(COND_MONOLITHIC_0___WXLIBGLDEP_CORE_p)
@@ -11314,17 +11317,17 @@ COND_SHARED_0_USE_GUI_1_USE_OPENGL_1___gllib___depname = \
 @COND_ICC_PCH_1@	.pch/wxprec_gllib/wx/wxprec.h.gch
 @COND_USE_PCH_1@___pch_wxprec_gllib_wx_wxprec_h_gch___depname \
 @COND_USE_PCH_1@	= .pch/wxprec_gllib/wx/wxprec.h.gch
-@COND_TOOLKIT_COCOA@__OPENGL_SRC_OBJECTS_1 = gllib_glcanvas.o
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__OPENGL_SRC_OBJECTS_1 \
+@COND_TOOLKIT_COCOA@__OPENGL_SRC_PLATFORM_OBJECTS_1 = gllib_glcanvas.o
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_@__OPENGL_SRC_PLATFORM_OBJECTS_1 \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_@	= gllib_glcanvas.o
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__OPENGL_SRC_OBJECTS_1 \
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@__OPENGL_SRC_PLATFORM_OBJECTS_1 \
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2@	= gllib_glcanvas.o
-@COND_TOOLKIT_MAC@__OPENGL_SRC_OBJECTS_1 = gllib_glcanvas.o
-@COND_TOOLKIT_MOTIF@__OPENGL_SRC_OBJECTS_1 = gllib_glcanvas.o
-@COND_TOOLKIT_MSW@__OPENGL_SRC_OBJECTS_1 = gllib_glcanvas.o
-@COND_TOOLKIT_PM@__OPENGL_SRC_OBJECTS_1 = gllib_glcanvas.o
-@COND_TOOLKIT_WINCE@__OPENGL_SRC_OBJECTS_1 = gllib_glcanvas.o
-@COND_TOOLKIT_X11@__OPENGL_SRC_OBJECTS_1 = gllib_glcanvas.o
+@COND_TOOLKIT_MAC@__OPENGL_SRC_PLATFORM_OBJECTS_1 = gllib_glcanvas.o
+@COND_TOOLKIT_MOTIF@__OPENGL_SRC_PLATFORM_OBJECTS_1 = gllib_glcanvas.o
+@COND_TOOLKIT_MSW@__OPENGL_SRC_PLATFORM_OBJECTS_1 = gllib_glcanvas.o
+@COND_TOOLKIT_PM@__OPENGL_SRC_PLATFORM_OBJECTS_1 = gllib_glcanvas.o
+@COND_TOOLKIT_WINCE@__OPENGL_SRC_PLATFORM_OBJECTS_1 = gllib_glcanvas.o
+@COND_TOOLKIT_X11@__OPENGL_SRC_PLATFORM_OBJECTS_1 = gllib_glcanvas.o
 @COND_SHARED_1@____wxgl_namedll_DEP = $(__gldll___depname)
 @COND_SHARED_0@____wxgl_namelib_DEP = $(__gllib___depname)
 COND_WITH_PLUGIN_SDL_1___sound_sdl___depname = \
@@ -30008,6 +30011,9 @@ stclib_ScintillaWX.o: $(srcdir)/src/stc/ScintillaWX.cpp $(STCLIB_ODEP)
 gldll_version_rc.o: $(srcdir)/src/msw/version.rc $(GLDLL_ODEP)
 	$(WINDRES) -i$< -o$@    --define __WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p_62)  $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61)   --define WXDLLNAME=$(WXDLLNAMEPREFIXGUI)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl$(WXCOMPILER)$(VENDORTAG)$(WXDLLVERSIONTAG) $(__RCDEFDIR_p) --include-dir $(top_srcdir)/include $(__INC_TIFF_p_61) $(__INC_JPEG_p_62) $(__INC_PNG_p_61) $(__INC_ZLIB_p_63) $(__INC_ODBC_p_61) $(__INC_REGEX_p_61) $(__INC_EXPAT_p_61) --define WXUSINGDLL --define WXMAKINGDLL_GL
 
+gldll_glcmn.o: $(srcdir)/src/common/glcmn.cpp $(GLDLL_ODEP)
+	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/common/glcmn.cpp
+
 @COND_TOOLKIT_MAC@gldll_glcanvas.o: $(srcdir)/src/mac/carbon/glcanvas.cpp $(GLDLL_ODEP)
 @COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/glcanvas.cpp
 
@@ -30034,6 +30040,9 @@ gldll_version_rc.o: $(srcdir)/src/msw/version.rc $(GLDLL_ODEP)
 
 @COND_TOOLKIT_PM@gldll_glcanvas.o: $(srcdir)/src/os2/glcanvas.cpp $(GLDLL_ODEP)
 @COND_TOOLKIT_PM@	$(CXXC) -c -o $@ $(GLDLL_CXXFLAGS) $(srcdir)/src/os2/glcanvas.cpp
+
+gllib_glcmn.o: $(srcdir)/src/common/glcmn.cpp $(GLLIB_ODEP)
+	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/common/glcmn.cpp
 
 @COND_TOOLKIT_MAC@gllib_glcanvas.o: $(srcdir)/src/mac/carbon/glcanvas.cpp $(GLLIB_ODEP)
 @COND_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(GLLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/glcanvas.cpp

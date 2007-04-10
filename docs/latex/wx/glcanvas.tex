@@ -1,29 +1,34 @@
 \section{\class{wxGLCanvas}}\label{wxglcanvas}
 
-wxGLCanvas is a class for displaying OpenGL graphics.
+wxGLCanvas is a class for displaying OpenGL graphics. It is always used in
+conjunction with \helpref{wxGLContext}{wxglcontext} as the context can only be
+be made current (i.e. active for the OpenGL commands) when it is associated to
+a wxGLCanvas.
 
-There are two ways to use this class:
+More precisely, you first need to create a wxGLCanvas window and then create an
+instance of a \helpref{wxGLContext}{wxglcontext} that is initialized with this
+wxGLCanvas and then later use either \helpref{wxGLCanvas::SetCurrent}{wxglcanvassetcurrentrc} 
+with the instance of the \helpref{wxGLContext}{wxglcontext} or 
+\helpref{wxGLContext::SetCurrent}{wxglcontextsetcurrent} with the instance of
+the \helpref{wxGLCanvas}{wxglcanvas} (which might be not the same as was used
+for the creation of the context) to bind the OpenGL state that is represented
+by the rendering context to the canvas, and then finally call 
+\helpref{wxGLCanvas::SwapBuffers}{wxglcanvasswapbuffers} to swap the buffers of
+the OpenGL canvas and thus show your current output.
 
-For the older (before wx 2.7.x) and simpler method, create a wxGLCanvas window using one of the three
-constructors that implicitly create a rendering context, call \helpref{wxGLCanvas::SetCurrent}{wxglcanvassetcurrent} 
-to direct normal OpenGL commands to the window, and then call \helpref{wxGLCanvas::SwapBuffers}{wxglcanvasswapbuffers} 
-to show the OpenGL buffer on the window.
-
-For the newer (wx 2.7.x+) method, create a wxGLCanvas window using the constructor that does \emph{not} create an implicit rendering context,
-create an explicit instance of a \helpref{wxGLContext}{wxglcontext} that is initialized with the wxGLCanvas yourself,
-then use either \helpref{wxGLCanvas::SetCurrent}{wxglcanvassetcurrentrc} with the instance of the \helpref{wxGLContext}{wxglcontext}
-or \helpref{wxGLContext::SetCurrent}{wxglcontextsetcurrent} with the instance of the \helpref{wxGLCanvas}{wxglcanvas}
-to bind the OpenGL state that is represented by the rendering context to the canvas, and then call
-\helpref{wxGLCanvas::SwapBuffers}{wxglcanvasswapbuffers} to swap the buffers of the OpenGL canvas and thus show your current output.
+Notice that previous versions of wxWidgets used to implicitly create a
+wxGLContext inside wxGLCanvas itself. This is still supported in the current
+version but is deprecated now and will be removed in the future, please update
+your code to create the rendering contexts explicitly.
 
 To set up the attributes for the canvas (number of bits for the depth buffer,
 number of bits for the stencil buffer and so on) you should set up the correct values of
 the {\it attribList} parameter. The values that should be set up and their meanings will be described below.
 
-To switch on wxGLCanvas support on under Windows, edit setup.h and set
-{\tt wxUSE\_GLCANVAS} to $1$. You may also need to have to add
-{\tt opengl32.lib} to the list of libraries your program is linked with. On
-Unix, pass \verb=--with-opengl= to configure to compile using OpenGL or Mesa.
+Notice that OpenGL is not enabled by default. To switch it on, you need to edit
+setup.h under Windows and set {\tt wxUSE\_GLCANVAS} to $1$ (you may also need
+to have to add {\tt opengl32.lib} and {\tt glu32.lib} to the list of libraries
+your program is linked with). On Unix, pass \verb=--with-opengl= to configure.
 
 \wxheading{Derived from}
 
@@ -75,45 +80,18 @@ alpha channel, and accum buffer. Other implementations may support them.
 
 \membersection{wxGLCanvas::wxGLCanvas}\label{wxglcanvasconstr}
 
-\func{void}{wxGLCanvas}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id = -1},
- \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},
- \param{long}{ style=0}, \param{const wxString\& }{name="GLCanvas"},
- \param{int*}{ attribList = 0}, \param{const wxPalette\&}{ palette = wxNullPalette}}
-
-\func{void}{wxGLCanvas}{\param{wxWindow* }{parent}, \param{wxGLContext* }{sharedContext}, \param{wxWindowID}{ id = -1},
- \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},
- \param{long}{ style=0}, \param{const wxString\& }{name="GLCanvas"},
- \param{int*}{ attribList = 0}, \param{const wxPalette\&}{ palette = wxNullPalette}}
-
-\func{void}{wxGLCanvas}{\param{wxWindow* }{parent}, \param{wxGLCanvas* }{sharedCanvas}, \param{wxWindowID}{ id = -1},
- \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},
- \param{long}{ style=0}, \param{const wxString\& }{name="GLCanvas"},
- \param{int*}{ attribList = 0}, \param{const wxPalette\&}{ palette = wxNullPalette}}
-
 \func{void}{wxGLCanvas}{\param{wxWindow* }{parent}, \param{wxWindowID}{ id = wxID\_ANY},
- \param{int*}{ attribList = 0},
+ \param{const int*}{ attribList = NULL},
  \param{const wxPoint\&}{ pos = wxDefaultPosition}, \param{const wxSize\&}{ size = wxDefaultSize},
  \param{long}{ style=0}, \param{const wxString\& }{name="GLCanvas"},
  \param{const wxPalette\&}{ palette = wxNullPalette}}
 
-Constructors.
-The first three constructors implicitly create an instance of \helpref{wxGLContext}{wxglcontext}.
-The fourth constructur is identical to the first, except for the fact that it does \emph{not}
-create such an implicit rendering context, which means that you have to create an explicit instance
-of \helpref{wxGLContext}{wxglcontext} yourself (highly recommended for future compatibility with wxWidgets
-and the flexibility of your own program!).
+Creates a window with the given parameters. Notice that you need to create and
+use a \helpref{wxGLContext}{wxglcontext} to output to this window.
 
-Note that if you used one of the first three constructors, \helpref{wxGLCanvas::GetContext}{wxglcanvasgetcontext}
-returns the pointer to the implicitly created instance, and the \helpref{wxGLCanvas::SetCurrent}{wxglcanvassetcurrent}
-method \emph{without} the parameter should be used.
-If however you used the fourth constructor, \helpref{wxGLCanvas::GetContext}{wxglcanvasgetcontext} always returns NULL
-and the \helpref{wxGLCanvas::SetCurrent}{wxglcanvassetcurrentrc} method \emph{with} the parameter must be used!
+If \arg{attribList} is not specified, double buffered RGBA mode is used.
 
 \docparam{parent}{Pointer to a parent window.}
-
-\docparam{sharedContext}{Context to share object resources with.}
-
-%TODO document sharedCanvas meaning
 
 \docparam{id}{Window identifier. If -1, will automatically create an identifier.}
 
@@ -127,64 +105,43 @@ generate a default size for the window. If no suitable size can be found, the wi
 
 \docparam{name}{Window name.}
 
-\docparam{attribList}{Array of int. With this parameter you can set the device context attributes associated to this window.
+\docparam{attribList}{Array of integers. With this parameter you can set the device context attributes associated to this window.
 This array is zero-terminated: it should be set up with constants described in the table above.
 If a constant should be followed by a value, put it in the next array position.
 For example, the WX\_GL\_DEPTH\_SIZE should be followed by the value that indicates the number of
 bits for the depth buffer, so:}
 
 \begin{verbatim}
-attribList[index]= WX_GL_DEPTH_SIZE;
-attribList[index+1]=32;
+attribList[index] = WX_GL_DEPTH_SIZE;
+attribList[index+1] = 32;
 and so on.
 \end{verbatim}
 
-\docparam{palette}{If the window has the palette, it should by pass this value.
-Note: palette and WX\_GL\_RGBA are mutually exclusive.}
-
-
-\membersection{wxGLCanvas::GetContext}\label{wxglcanvasgetcontext}
-
-\func{wxGLContext*}{GetContext}{\void}
-
-Obtains the context that is associated with this canvas if one was implicitly created (by use of one of the first three constructors).
-Always returns NULL if the canvas was constructed with the fourth constructor.
+\docparam{palette}{Palette for indexed colour (i.e. non WX\_GL\_RGBA) mode.
+Ignored under most platforms.}
 
 
 \membersection{wxGLCanvas::SetCurrent}\label{wxglcanvassetcurrent}
 
-\func{void}{SetCurrent}{\void}
+\func{void}{SetCurrent}{ \param{const wxGLContext&}{ context} }
 
-If this canvas was created with one of the first three constructors,
-a call to this method makes the implicit rendering context of this canvas current with this canvas,
-so that subsequent OpenGL calls modify the OpenGL state of the implicit rendering context.
+Makes the OpenGL state that is represented by the OpenGL rendering context
+\arg{context} current, i.e. it will be used by all subsequent OpenGL calls.
 
-If this canvas was created with the fourth constructor, this method should not be called
-(use the SetCurrent method below with the parameter instead)!
+This is equivalent to \helpref{wxGLContext::SetCurrent}{wxglcontextsetcurrent} 
+called with this window as parameter.
 
-Note that this function may only be called \emph{after} the window has been shown.
-
-
-\membersection{wxGLCanvas::SetCurrent}\label{wxglcanvassetcurrentrc}
-
-\func{void}{SetCurrent}{ \param{const wxGLContext&}{ RC} }
-
-If this canvas was created with one of the first three constructors,
-this method should not be called (use the SetCurrent above without the parameter instead)!
-
-If this canvas was created with the fourth constructor, a call to this method
-makes the OpenGL state that is represented by the OpenGL rendering context { \it RC } current with this canvas,
-and if { \it win } is an object of type wxGLCanvas, the statements { \it win.SetCurrent(RC); } and { \it RC.SetCurrent(win); } are equivalent,
-see \helpref{wxGLContext::SetCurrent}{wxglcontextsetcurrent}.
-
-Note that this function may only be called \emph{after} the window has been shown.
+Note that this function may only be called when the window is shown on screen,
+in particular it can't usually be called from the constructor as the window
+isn't yet shown at this moment.
 
 
 \membersection{wxGLCanvas::SetColour}\label{wxglcanvassetcolour}
 
 \func{void}{SetColour}{\param{const char*}{ colour}}
 
-Sets the current colour for this window, using the wxWidgets colour database to find a named colour.
+Sets the current colour for this window (using \texttt{glcolor3f()}), using the
+wxWidgets colour database to find a named colour.
 
 
 \membersection{wxGLCanvas::SwapBuffers}\label{wxglcanvasswapbuffers}

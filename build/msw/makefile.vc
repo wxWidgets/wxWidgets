@@ -1385,6 +1385,7 @@ GLDLL_CXXFLAGS = /M$(__RUNTIME_LIBS_505)$(__DEBUGRUNTIME) /DWIN32 \
 GLDLL_OBJECTS =  \
 	$(OBJS)\gldll_dummy.obj \
 	$(OBJS)\gldll_version.res \
+	$(OBJS)\gldll_glcmn.obj \
 	$(OBJS)\gldll_glcanvas.obj
 GLLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_518)$(__DEBUGRUNTIME) /DWIN32 \
 	$(__DEBUGINFO) \
@@ -1398,6 +1399,7 @@ GLLIB_CXXFLAGS = /M$(__RUNTIME_LIBS_518)$(__DEBUGRUNTIME) /DWIN32 \
 	/Yu"wx/wxprec.h" /Fp"$(OBJS)\wxprec_gllib.pch" $(CPPFLAGS) $(CXXFLAGS)
 GLLIB_OBJECTS =  \
 	$(OBJS)\gllib_dummy.obj \
+	$(OBJS)\gllib_glcmn.obj \
 	$(OBJS)\gllib_glcanvas.obj
 BUILD_CFG_FILE = $(SETUPHDIR)\build.cfg
 
@@ -4503,7 +4505,7 @@ clean:
 	-if exist $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl.lib del $(LIBDIRNAME)\wx$(PORTNAME)$(WXUNIVNAME)$(WX_RELEASE_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl.lib
 	cd ..\..\samples
 	$(MAKE) -f makefile.vc $(MAKEARGS) clean
-	cd $(MAKEDIR)
+	cd "$(MAKEDIR)"
 
 setup_h: $(SETUPHDIR)\wx ..\..\include\wx\$(__SETUP_H_SUBDIR_FILENAMES)\setup.h $(SETUPHDIR)\wx\setup.h $(SETUPHDIR)\wx\msw\rcdefs.h
 
@@ -4856,7 +4858,7 @@ wxgl: $(____wxgl_namedll_DEP) $(____wxgl_namelib_DEP)
 sub_samples: 
 	cd ..\..\samples
 	$(MAKE) -f makefile.vc $(MAKEARGS) all
-	cd $(MAKEDIR)
+	cd "$(MAKEDIR)"
 
 $(LIBDIRNAME): 
 	if not exist $(LIBDIRNAME) mkdir $(LIBDIRNAME)
@@ -13777,11 +13779,17 @@ $(OBJS)\gldll_dummy.obj: ..\..\src\common\dummy.cpp
 $(OBJS)\gldll_version.res: ..\..\src\msw\version.rc
 	rc /fo$@  /d WIN32 $(____DEBUGRUNTIME_4) $(__NO_VC_CRTDBG_p_68)  /d __WXMSW__ $(__WXUNIV_DEFINE_p_62) $(__DEBUG_DEFINE_p_61) $(__EXCEPTIONS_DEFINE_p_61) $(__RTTI_DEFINE_p_61) $(__THREAD_DEFINE_p_61) $(__UNICODE_DEFINE_p_62) $(__MSLU_DEFINE_p_61) $(__GFXCTX_DEFINE_p_61) /i $(SETUPHDIR) /i ..\..\include /d WXDLLNAME=wx$(PORTNAME)$(WXUNIVNAME)$(WX_VERSION_NODOT)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)_gl_vc$(VENDORTAG) /i ..\..\src\tiff /i ..\..\src\jpeg /i ..\..\src\png /i ..\..\src\zlib  /i ..\..\src\regex /i ..\..\src\expat\lib /d WXUSINGDLL /d WXMAKINGDLL_GL $**
 
+$(OBJS)\gldll_glcmn.obj: ..\..\src\common\glcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(GLDLL_CXXFLAGS) $**
+
 $(OBJS)\gldll_glcanvas.obj: ..\..\src\msw\glcanvas.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(GLDLL_CXXFLAGS) $**
 
 $(OBJS)\gllib_dummy.obj: ..\..\src\common\dummy.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(GLLIB_CXXFLAGS) /Ycwx/wxprec.h $**
+
+$(OBJS)\gllib_glcmn.obj: ..\..\src\common\glcmn.cpp
+	$(CXX) /c /nologo /TP /Fo$@ $(GLLIB_CXXFLAGS) $**
 
 $(OBJS)\gllib_glcanvas.obj: ..\..\src\msw\glcanvas.cpp
 	$(CXX) /c /nologo /TP /Fo$@ $(GLLIB_CXXFLAGS) $**
