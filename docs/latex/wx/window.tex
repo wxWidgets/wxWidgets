@@ -62,10 +62,10 @@ events. Windows only.}
 the window wants to get all char/key events for all keys - even for
 keys like TAB or ENTER which are usually used for dialog navigation
 and which wouldn't be generated without this style.  If you need to
-use this style in order to get the arrows or etc., but would still like to have
-normal keyboard navigation take place, you should create and send a
-wxNavigationKeyEvent in response to the key events for Tab and
-Shift-Tab.}
+use this style in order to get the arrows or etc., but would still like
+to have normal keyboard navigation take place, you should call
+\helpref{Navigate}{wxwindownavigate} in response to the key events for
+Tab and Shift-Tab.}
 \twocolitem{\windowstyle{wxNO\_FULL\_REPAINT\_ON\_RESIZE}}{On Windows, this style used to disable repainting
 the window completely when its size is changed. Since this behaviour is now the default, the style is now obsolete
 and no longer has an effect.}
