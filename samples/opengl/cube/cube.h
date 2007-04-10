@@ -45,7 +45,7 @@ public:
     void RefreshCanvas();
 
 private:
-    void OnExit(wxCommandEvent& event);
+    void OnClose(wxCommandEvent& event);
     void OnNewWindow(wxCommandEvent& event);
     void OnDefRotateLeftKey(wxCommandEvent& event);
     void OnDefRotateRightKey(wxCommandEvent& event);

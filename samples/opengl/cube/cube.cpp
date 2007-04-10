@@ -87,10 +87,10 @@ BEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
     EVT_KEY_DOWN(TestGLCanvas::OnKeyDown)
 END_EVENT_TABLE()
 
-static /* const */ int attribs[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, 0 };
+static const int attribs[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, 0 };
 
 TestGLCanvas::TestGLCanvas(wxWindow *parent)
-            : wxGLCanvas(parent, wxID_ANY, attribs)
+            : wxGLCanvas(parent, wxID_ANY, NULL /* attribs */)
 {
     m_gllist = 0;
 
@@ -101,8 +101,6 @@ TestGLCanvas::TestGLCanvas(wxWindow *parent)
 // this function is called on each repaint so it should be fast
 void TestGLCanvas::Render()
 {
-    wxGetApp().SetCurrent(this);
-
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glCallList(m_gllist);
 
@@ -112,6 +110,8 @@ void TestGLCanvas::Render()
 
 void TestGLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
 {
+    wxGetApp().SetCurrent(this);
+
     // initialize if not done yet
     InitGL();
 
@@ -140,8 +140,6 @@ void TestGLCanvas::InitGL()
 {
     if ( IsInitialized() )
         return;
-
-    wxGetApp().SetCurrent(this);
 
     /* set viewing projection */
     glMatrixMode(GL_PROJECTION);
@@ -253,8 +251,8 @@ void TestGLCanvas::OnKeyDown( wxKeyEvent& event )
 // ----------------------------------------------------------------------------
 
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
-    EVT_MENU(wxID_EXIT, MyFrame::OnExit)
     EVT_MENU(wxID_NEW, MyFrame::OnNewWindow)
+    EVT_MENU(wxID_CLOSE, MyFrame::OnClose)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame()
@@ -266,18 +264,21 @@ MyFrame::MyFrame()
     SetIcon(wxICON(sample));
 
     // Make a menubar
-    wxMenu *winMenu = new wxMenu;
-    winMenu->Append(wxID_EXIT, _T("&Close"));
-    winMenu->Append(wxID_NEW, _T("&New") );
+    wxMenu *menu = new wxMenu;
+    menu->Append(wxID_NEW);
+    menu->AppendSeparator();
+    menu->Append(wxID_CLOSE);
     wxMenuBar *menuBar = new wxMenuBar;
-    menuBar->Append(winMenu, _T("&Window"));
+    menuBar->Append(menu, _T("&Cube"));
 
     SetMenuBar(menuBar);
+
+    CreateStatusBar();
 
     Show();
 }
 
-void MyFrame::OnExit( wxCommandEvent& WXUNUSED(event) )
+void MyFrame::OnClose(wxCommandEvent& WXUNUSED(event))
 {
     // true is to force the frame to close
     Close(true);
