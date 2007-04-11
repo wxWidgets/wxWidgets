@@ -45,6 +45,8 @@ class WXDLLIMPEXP_BASE wxReader ;
 class WXDLLIMPEXP_BASE wxPersister
 {
 public :
+    virtual ~wxPersister() {}
+
     // will be called before an object is written, may veto by returning false
     virtual bool BeforeWriteObject( wxWriter *WXUNUSED(writer) , const wxObject *WXUNUSED(object) , const wxClassInfo *WXUNUSED(classInfo) , wxxVariantArray &WXUNUSED(metadata)) { return true ; }
 
@@ -186,6 +188,8 @@ private :
 class WXDLLIMPEXP_BASE wxDepersister
 {
 public :
+    virtual ~wxDepersister() {}
+
     // allocate the new object on the heap, that object will have the passed in ID
     virtual void AllocateObject(int objectID, wxClassInfo *classInfo, wxxVariantArray &metadata) = 0;
 

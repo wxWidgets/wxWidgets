@@ -399,6 +399,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/event.h
     wx/except.h
     wx/features.h
+    wx/flags.h
     wx/ffile.h
     wx/file.h
     wx/fileconf.h

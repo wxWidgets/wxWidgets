@@ -369,6 +369,7 @@ DEBUG_CONFIGURE=0
 if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_UNIVERSAL=no
   DEFAULT_wxUSE_STL=no
+  DEFAULT_wxUSE_EXTENDED_RTTI=no
 
   DEFAULT_wxUSE_NANOX=no
 
@@ -594,6 +595,7 @@ if test $DEBUG_CONFIGURE = 1; then
 else
   DEFAULT_wxUSE_UNIVERSAL=no
   DEFAULT_wxUSE_STL=no
+  DEFAULT_wxUSE_EXTENDED_RTTI=no
 
   DEFAULT_wxUSE_NANOX=no
 
@@ -909,6 +911,7 @@ WX_ARG_ENABLE(shared,      [  --enable-shared         create shared library code
 WX_ARG_ENABLE(optimise,    [  --enable-optimise       create optimised code], wxUSE_OPTIMISE)
 WX_ARG_ENABLE(debug,       [  --enable-debug          same as debug_flag and debug_info], wxUSE_DEBUG)
 WX_ARG_ENABLE(stl,         [  --enable-stl            use STL for containers], wxUSE_STL)
+WX_ARG_ENABLE(extended_rtti, [  --enable-extended_rtti  use extended RTTI (XTI)], wxUSE_EXTENDED_RTTI)
 if test "$USE_OS2" = "1"; then
     DEFAULT_wxUSE_OMF=no
     WX_ARG_ENABLE(omf,     [  --enable-omf            use OMF object format], wxUSE_OMF)
@@ -5701,6 +5704,10 @@ dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_STL" = "yes"; then
   AC_DEFINE(wxUSE_STL)
+fi
+
+if test "$wxUSE_EXTENDED_RTTI" = "yes"; then
+  AC_DEFINE(wxUSE_EXTENDED_RTTI)
 fi
 
 if test "$wxUSE_APPLE_IEEE" = "yes"; then

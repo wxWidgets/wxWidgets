@@ -389,7 +389,7 @@ bool wxReader::HasObjectClassInfo( int objectID )
     if ( objectID == wxNullObjectID || objectID == wxInvalidObjectID )
     {
         wxLogError( _("Invalid or Null Object ID passed to HasObjectClassInfo" ) ) ;
-        return NULL ;
+        return false ;
     }
     return m_data->m_classInfos.find(objectID) != m_data->m_classInfos.end() ;
 }

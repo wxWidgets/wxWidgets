@@ -797,7 +797,19 @@ BEGIN_EVENT_TABLE(wxOwnerDrawnComboBox, wxComboCtrl)
 END_EVENT_TABLE()
 
 
+#if wxUSE_EXTENDED_RTTI
+IMPLEMENT_DYNAMIC_CLASS2_XTI(wxOwnerDrawnComboBox, wxComboCtrl, wxControlWithItems, "wx/odcombo.h")
+
+wxBEGIN_PROPERTIES_TABLE(wxOwnerDrawnComboBox)
+wxEND_PROPERTIES_TABLE()
+
+wxBEGIN_HANDLERS_TABLE(wxOwnerDrawnComboBox)
+wxEND_HANDLERS_TABLE()
+
+wxCONSTRUCTOR_5( wxOwnerDrawnComboBox , wxWindow* , Parent , wxWindowID , Id , wxString , Value , wxPoint , Position , wxSize , Size )
+#else
 IMPLEMENT_DYNAMIC_CLASS2(wxOwnerDrawnComboBox, wxComboCtrl, wxControlWithItems)
+#endif
 
 void wxOwnerDrawnComboBox::Init()
 {

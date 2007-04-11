@@ -306,8 +306,8 @@ int wxXmlReader::ReadComponent(wxXmlNode *node, wxDepersister *callbacks)
     {
         wxString name ;
         children->GetPropVal( wxT("name") , &name ) ;
-        propertyNames.push_back( name.c_str() ) ;
-        propertyNodes[name.c_str()] = children->GetChildren() ;
+        propertyNames.push_back( (const wxChar*)name.c_str() ) ;
+        propertyNodes[(const wxChar*)name.c_str()] = children->GetChildren() ;
         children = children->GetNext() ;
     }
 

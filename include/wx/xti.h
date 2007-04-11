@@ -421,16 +421,24 @@ public :
     // convert a wxxVariant holding data of this type into a string
     void ConvertToString( const wxxVariant& data , wxString &result ) const
 
-    { if ( m_toString ) (*m_toString)( data , result ) ; else wxLogError( _("String conversions not supported") ) ; }
+    { if ( m_toString ) (*m_toString)( data , result ) ; else wxLogError( wxGetTranslation(_T("String conversions not supported")) ) ; }
 
     // convert a string into a wxxVariant holding the corresponding data in this type
     void ConvertFromString( const wxString& data , wxxVariant &result ) const
-    { if( m_fromString ) (*m_fromString)( data , result ) ; else wxLogError( _("String conversions not supported") ) ; }
+    { if( m_fromString ) (*m_fromString)( data , result ) ; else wxLogError( wxGetTranslation(_T("String conversions not supported")) ) ; }
 
 #if wxUSE_UNICODE
     static wxTypeInfo        *FindType(const char *typeName) { return FindType( wxString::FromAscii(typeName) ) ; }
 #endif
     static wxTypeInfo        *FindType(const wxChar *typeName);
+    static wxTypeInfo        *FindType(const wxString typeName)
+    {
+#if wxUSE_UNICODE
+        return FindType( typeName.wchar_str() );
+#else
+        return FindType( typeName.char_str() );
+#endif
+    }
 
 private :
 
@@ -494,11 +502,11 @@ public :
     // convert a wxxVariant holding data of this type into a long
     void ConvertToLong( const wxxVariant& data , long &result ) const
 
-    { if( m_toLong ) (*m_toLong)( data , result ) ; else wxLogError( _("Long Conversions not supported") ) ; }
+    { if( m_toLong ) (*m_toLong)( data , result ) ; else wxLogError( wxGetTranslation(_T("Long Conversions not supported")) ) ; }
 
     // convert a long into a wxxVariant holding the corresponding data in this type
     void ConvertFromLong( long data , wxxVariant &result ) const
-    { if( m_fromLong ) (*m_fromLong)( data , result ) ; else wxLogError( _("Long Conversions not supported") ) ;}
+    { if( m_fromLong ) (*m_fromLong)( data , result ) ; else wxLogError( wxGetTranslation(_T("Long Conversions not supported")) ) ;}
 
 private :
     converterToLong_t m_toLong ;
@@ -834,19 +842,19 @@ public :
 
     // Setting a simple property (non-collection)
     virtual void SetProperty(wxObject *object, const wxxVariant &value) const
-    { if ( m_setter ) m_setter->Set( object , value ) ; else wxLogError( _("SetProperty called w/o valid setter") ) ;}
+    { if ( m_setter ) m_setter->Set( object , value ) ; else wxLogError( wxGetTranslation(_T("SetProperty called w/o valid setter")) ) ;}
 
     // Getting a simple property (non-collection)
     virtual void GetProperty(const wxObject *object, wxxVariant &result) const
-    { if ( m_getter ) m_getter->Get( object , result ) ; else wxLogError( _("GetProperty called w/o valid getter") ) ;}
+    { if ( m_getter ) m_getter->Get( object , result ) ; else wxLogError( wxGetTranslation(_T("GetProperty called w/o valid getter")) ) ;}
 
     // Adding an element to a collection property
     virtual void AddToPropertyCollection(wxObject *object, const wxxVariant &value) const
-    { if ( m_adder ) m_adder->Add( object , value ) ; else wxLogError( _("AddToPropertyCollection called w/o valid adder") ) ;}
+    { if ( m_adder ) m_adder->Add( object , value ) ; else wxLogError( wxGetTranslation(_T("AddToPropertyCollection called w/o valid adder")) ) ;}
 
     // Getting a collection property
     virtual void GetPropertyCollection( const wxObject *obj, wxxVariantArray &result) const
-    { if ( m_collectionGetter ) m_collectionGetter->Get( obj , result) ; else wxLogError( _("GetPropertyCollection called w/o valid collection getter") ) ;}
+    { if ( m_collectionGetter ) m_collectionGetter->Get( obj , result) ; else wxLogError( wxGetTranslation(_T("GetPropertyCollection called w/o valid collection getter")) ) ;}
 
     virtual bool HasSetter() const { return m_setter != NULL ; }
     virtual bool HasCollectionGetter() const { return m_collectionGetter != NULL ; }
@@ -895,11 +903,11 @@ public :
 
     // Adding an element to a collection property
     virtual void AddToPropertyCollection(wxObject *WXUNUSED(object), const wxxVariant &WXUNUSED(value)) const
-    { wxLogError( _("AddToPropertyCollection called on a generic accessor") ) ;}
+    { wxLogError( wxGetTranslation(_T("AddToPropertyCollection called on a generic accessor")) ) ;}
 
     // Getting a collection property
     virtual void GetPropertyCollection( const wxObject *WXUNUSED(obj), wxxVariantArray &WXUNUSED(result)) const
-    { wxLogError ( _("GetPropertyCollection called on a generic accessor") ) ;}
+    { wxLogError ( wxGetTranslation(_T("GetPropertyCollection called on a generic accessor")) ) ;}
 private :
     struct wxGenericPropertyAccessorInternal ;
     wxGenericPropertyAccessorInternal* m_data ;
@@ -1267,6 +1275,7 @@ private :
 class WXDLLIMPEXP_BASE wxConstructorBridge
 {
 public :
+    virtual ~wxConstructorBridge() {};
     virtual void Create(wxObject * &o, wxxVariant *args) = 0;
 };
 
@@ -1665,7 +1674,7 @@ public:
     {
         if ( ParamCount != m_constructorPropertiesCount )
         {
-            wxLogError( _("Illegal Parameter Count for ConstructObject Method") ) ;
+            wxLogError( wxGetTranslation(_T("Illegal Parameter Count for ConstructObject Method")) ) ;
             return NULL ;
         }
         wxObject *object = NULL ;
@@ -1733,7 +1742,7 @@ public:
     {
         if ( ParamCount != m_constructorPropertiesCount )
         {
-            wxLogError( _("Illegal Parameter Count for Create Method") ) ;
+            wxLogError( wxGetTranslation(_T("Illegal Parameter Count for Create Method")) ) ;
             return ;
         }
         m_constructor->Create( object , Params ) ;
@@ -2016,7 +2025,7 @@ private :
     (int) sizeof(name),                              \
     (wxObjectConstructorFn) wxConstructorFor##name   ,   \
     name::GetPropertiesStatic(),name::GetHandlersStatic(),name::ms_constructor , name::ms_constructorProperties ,     \
-    name::ms_constructorPropertiesCount , wxVariantToObjectConverter##name , wxObjectToVariantConverter##name);    \
+    name::ms_constructorPropertiesCount , wxVariantToObjectConverter##name , NULL, wxObjectToVariantConverter##name);    \
 
 #define IMPLEMENT_DYNAMIC_CLASS2( name , basename , basename2) \
     _IMPLEMENT_DYNAMIC_CLASS2( name , basename , basename2 , "") \
