@@ -151,9 +151,9 @@ private:
 };
 
 #if WXWIN_COMPATIBILITY_2_8
-void wxMenuItem::SetName(const wxString &str)
+void wxMenuItemBase::SetName(const wxString &str)
     { SetText(str); }
-const wxString& wxMenuItem::GetName() const
+const wxString& wxMenuItemBase::GetName() const
     { return GetText(); }
 #endif // WXWIN_COMPATIBILITY_2_8
 

@@ -624,7 +624,7 @@ private:
 #if WXWIN_COMPATIBILITY_2_6
 inline size_t wxFileHistory::GetNoHistoryFiles() const
 {
-    return m_fileHistoryN;
+    return m_fileHistory.GetCount();
 }
 #endif // WXWIN_COMPATIBILITY_2_6
 
