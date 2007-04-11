@@ -112,6 +112,7 @@ public:
     bool CanBeUsedWithXRCCTRL(const wxString& name)
     {
         if (name == _T("tool") ||
+            name == _T("data") ||
             name == _T("unknown") ||
             name == _T("notebookpage") ||
             name == _T("separator") ||
@@ -455,7 +456,9 @@ static bool NodeContainsFilename(wxXmlNode *node)
    if ( name == _T("object") )
    {
        wxString klass = node->GetPropVal(_T("class"), wxEmptyString);
-       if (klass == _T("wxBitmap") || klass == _T("wxIcon"))
+       if (klass == _T("wxBitmap") ||
+               klass == _T("wxIcon") ||
+                klass == _T("data") )
            return true;
    }
 
