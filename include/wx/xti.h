@@ -2015,27 +2015,27 @@ private :
 
 // Multiple inheritance with two base classes
 
-#define _IMPLEMENT_DYNAMIC_CLASS2(name, basename, basename2, unit)                 \
+#define _IMPLEMENT_DYNAMIC_CLASS2(name, basename, basename2, unit, callback)                 \
     wxObject* wxConstructorFor##name()                             \
 { return new name; }                                          \
     const wxClassInfo* name::ms_classParents[] = { &basename::ms_classInfo ,&basename2::ms_classInfo , NULL } ; \
-    wxObject* wxVariantToObjectConverter##name ( wxxVariant &data ) { return data.wxTEMPLATED_MEMBER_CALL(Get , name*) ; } \
+    wxObject* wxVariantOfPtrToObjectConverter##name ( wxxVariant &data ) { return data.wxTEMPLATED_MEMBER_CALL(Get , name*) ; } \
     wxxVariant wxObjectToVariantConverter##name ( wxObject *data ) { return wxxVariant( dynamic_cast<name*> (data)  ) ; } \
     wxClassInfo name::ms_classInfo(name::ms_classParents , wxT(unit) , wxT(#name),   \
     (int) sizeof(name),                              \
     (wxObjectConstructorFn) wxConstructorFor##name   ,   \
     name::GetPropertiesStatic(),name::GetHandlersStatic(),name::ms_constructor , name::ms_constructorProperties ,     \
-    name::ms_constructorPropertiesCount , wxVariantToObjectConverter##name , NULL, wxObjectToVariantConverter##name);    \
+    name::ms_constructorPropertiesCount , wxVariantOfPtrToObjectConverter##name , NULL , wxObjectToVariantConverter##name , callback);    
 
 #define IMPLEMENT_DYNAMIC_CLASS2( name , basename , basename2) \
-    _IMPLEMENT_DYNAMIC_CLASS2( name , basename , basename2 , "") \
+    _IMPLEMENT_DYNAMIC_CLASS2( name , basename , basename2 , "", NULL) \
     _TYPEINFO_CLASSES(name, NULL , NULL) \
     wxPropertyInfo *name::GetPropertiesStatic() { return (wxPropertyInfo*) NULL ; } \
     wxHandlerInfo *name::GetHandlersStatic() { return (wxHandlerInfo*) NULL ; } \
     wxCONSTRUCTOR_DUMMY( name )
 
 #define IMPLEMENT_DYNAMIC_CLASS2_XTI( name , basename , basename2, unit) \
-    _IMPLEMENT_DYNAMIC_CLASS2( name , basename , basename2 , unit) \
+    _IMPLEMENT_DYNAMIC_CLASS2( name , basename , basename2 , unit, NULL) \
     _TYPEINFO_CLASSES(name, NULL , NULL)
 
 
