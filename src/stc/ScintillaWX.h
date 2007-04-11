@@ -66,6 +66,7 @@
     #define WXDLLIMPEXP_STC
 #endif
 
+class WXDLLIMPEXP_CORE wxDC;
 class WXDLLIMPEXP_STC wxStyledTextCtrl;           // forward
 class ScintillaWX;
 
