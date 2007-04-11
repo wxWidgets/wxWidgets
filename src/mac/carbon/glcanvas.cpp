@@ -363,9 +363,10 @@ void wxGLCanvas::SetViewport()
         parms[0] += 20000;
 
     if ( !aglSetInteger(context, AGL_BUFFER_RECT, parms) )
-    {
         wxLogAGLError("aglSetInteger(AGL_BUFFER_RECT)");
-    }
+
+    if ( !aglUpdateContext(context) )
+        wxLogAGLError("aglUpdateContext");
 }
 
 void wxGLCanvas::OnSize(wxSizeEvent& event)
