@@ -1517,7 +1517,7 @@ bool wxDbTable::CreateTable(bool attemptDrop)
                 //  DB2 is limited to 18 characters for index names
                 if (pDb->Dbms() == dbmsDB2)
                 {
-                    wxASSERT_MSG((tableName && wxStrlen(tableName) <= 13), wxT("DB2 table/index names must be no longer than 13 characters in length.\n\nTruncating table name to 13 characters."));
+                    wxASSERT_MSG(!tableName.empty() && tableName.length() <= 13, wxT("DB2 table/index names must be no longer than 13 characters in length.\n\nTruncating table name to 13 characters."));
                     sqlStmt += pDb->SQLTableName(tableName.substr(0, 13).c_str());
 //                    sqlStmt += tableName.substr(0, 13);
                 }
