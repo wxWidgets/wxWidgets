@@ -50,6 +50,17 @@
     #include <winnt.h>
 #endif
 
+#ifndef wxStrtoll
+    #ifdef __WXWINCE__
+        // there is no errno.h under CE apparently
+        #define wxSET_ERRNO(value)
+    #else
+        #include <errno.h>
+
+        #define wxSET_ERRNO(value) errno = value
+    #endif
+#endif
+
 #if defined(__MWERKS__) && __MSL__ >= 0x6000
 namespace std {}
 using namespace std ;
@@ -1131,6 +1142,140 @@ WXDLLEXPORT wxChar *wxCtime(const time_t *timep)
 #endif // wxCtime
 
 #endif // wxUSE_WCHAR_T
+
+#ifndef wxStrtoll
+static wxULongLong_t wxStrtoullBase(const wxChar* nptr, wxChar** endptr, int base, wxChar* sign)
+{
+    wxULongLong_t sum = 0;
+    wxString wxstr(nptr);
+    wxString::const_iterator i = wxstr.begin();
+    wxString::const_iterator end = wxstr.end();
+
+    // Skip spaces
+    while ( i != end && wxIsspace(*i) ) i++;
+
+    // Starts with sign?
+    *sign = wxT(' ');
+    if ( i != end )
+    {
+        wxChar c = *i;
+        if ( c == wxT('+') || c == wxT('-') )
+        {
+            *sign = c;
+            i++;
+        }
+    }
+
+    // Starts with 0x?
+    if ( i != end && *i == wxT('0') )
+    {
+        i++;
+        if ( i != end )
+        {
+            if ( *i == wxT('x') && (base == 16 || base == 0) )
+            {
+                base = 16;
+                i++;
+            }
+            else
+            {
+                if ( endptr )
+                    *endptr = (wxChar*) nptr;
+                wxSET_ERRNO(EINVAL);
+                return sum;
+            }
+        }
+        else
+            i--;
+    }
+
+    if ( base == 0 )
+        base = 10;
+
+    for ( ; i != end; i++ )
+    {
+        unsigned int n;
+
+        wxChar c = *i;
+        if ( c >= wxT('0') )
+        {
+            if ( c <= wxT('9') )
+                n = c - wxT('0');
+            else
+                n = wxTolower(c) - wxT('a') + 10;
+        }
+        else
+            break;
+
+        if ( n >= (unsigned int)base )
+            // Invalid character (for this base)
+            break;
+
+        wxULongLong_t prevsum = sum;
+        sum = (sum * base) + n;
+
+        if ( sum < prevsum )
+        {
+            wxSET_ERRNO(ERANGE);
+            break;
+        }
+    }
+
+    if ( endptr )
+    {
+        const wxChar& endref = *i;
+        *endptr = &(wxChar&)endref;
+    }
+
+    return sum;
+}
+
+wxULongLong_t wxStrtoull(const wxChar* nptr, wxChar** endptr, int base)
+{
+    wxChar sign;
+    wxULongLong_t uval = wxStrtoullBase(nptr, endptr, base, &sign);
+
+    if ( sign == wxT('-') )
+    {
+        wxSET_ERRNO(ERANGE);
+        uval = 0;
+    }
+
+    return uval;
+}
+
+wxLongLong_t wxStrtoll(const wxChar* nptr, wxChar** endptr, int base)
+{
+    wxChar sign;
+    wxULongLong_t uval = wxStrtoullBase(nptr, endptr, base, &sign);
+    wxLongLong_t val = 0;
+
+    if ( sign == wxT('-') )
+    {
+        if ( uval <= wxULL(wxINT64_MAX+1) )
+        {
+            if ( uval == wxULL(wxINT64_MAX+1))
+                val = -((wxLongLong_t)wxINT64_MAX) - 1;
+            else
+                val = -((wxLongLong_t)uval);
+        }
+        else
+        {
+            wxSET_ERRNO(ERANGE);
+        }
+    }
+    else if ( uval <= wxINT64_MAX )
+    {
+        val = uval;
+    }
+    else
+    {
+        wxSET_ERRNO(ERANGE);
+    }
+
+    return val;
+}
+#endif // wxStrtoll
 
 // ----------------------------------------------------------------------------
 // functions which we may need even if !wxUSE_WCHAR_T

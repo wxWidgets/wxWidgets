@@ -586,10 +586,6 @@
     #endif /* Unicode/ASCII */
 #endif /* TCHAR-aware compilers/the others */
 
-#ifdef wxStrtoll
-    #define wxHAS_STRTOLL
-#endif
-
 /*
     various special cases
  */
@@ -805,6 +801,14 @@ WXDLLIMPEXP_BASE bool wxOKlibc(); /* for internal use */
 #else
     #define wxUSE_WXVSNPRINTF 0
 #endif
+
+#ifndef wxStrtoll
+    /* supply strtoll and strtoull, if needed */
+    WXDLLIMPEXP_BASE wxLongLong_t wxStrtoll(const wxChar* nptr, wxChar** endptr, int base);
+    WXDLLIMPEXP_BASE wxULongLong_t wxStrtoull(const wxChar* nptr, wxChar** endptr, int base);
+#endif
+
+#define wxHAS_STRTOLL
 
 /*
    In Unicode mode we need to have all standard functions such as wprintf() and

@@ -1317,26 +1317,12 @@ bool wxString::ToULong(unsigned long *val, int base) const
 
 bool wxString::ToLongLong(wxLongLong_t *val, int base) const
 {
-#ifdef wxHAS_STRTOLL
     return wxStringToIntType((const wxChar*)c_str(), val, base, wxStrtoll);
-#else
-    // TODO: implement this ourselves
-    wxUnusedVar(val);
-    wxUnusedVar(base);
-    return false;
-#endif // wxHAS_STRTOLL
 }
 
 bool wxString::ToULongLong(wxULongLong_t *val, int base) const
 {
-#ifdef wxHAS_STRTOLL
     return wxStringToIntType((const wxChar*)c_str(), val, base, wxStrtoull);
-#else
-    // TODO: implement this ourselves
-    wxUnusedVar(val);
-    wxUnusedVar(base);
-    return false;
-#endif
 }
 
 bool wxString::ToDouble(double *val) const

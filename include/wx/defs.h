@@ -881,6 +881,14 @@ typedef wxUint16 wxWord;
 
 typedef wxUint32 wxDword;
 
+#ifdef LLONG_MAX
+    #define wxINT64_MAX LLONG_MAX
+    #define wxINT64_MIN LLONG_MIN
+#else
+    #define wxINT64_MAX wxLL(9223372036854775807)
+    #define wxINT64_MIN wxLL(-9223372036854775807-1)
+#endif
+
 /*
    Define an integral type big enough to contain all of long, size_t and void *.
  */
