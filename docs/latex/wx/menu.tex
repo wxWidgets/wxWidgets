@@ -73,10 +73,6 @@ With a popup menu, there is a variety of ways to handle a menu selection event
 \item Set a new event handler for wxMenu, using an object whose class has EVT\_MENU entries.
 \item Provide EVT\_MENU handlers in the window which pops up the menu, or in an ancestor of
 this window.
-\item Define a callback of type wxFunction, which you pass to the wxMenu constructor.
-The callback takes a reference to the menu, and a reference to a
-\helpref{wxCommandEvent}{wxcommandevent}. This method is deprecated and should
-not be used in the new code, it is provided for backwards compatibility only.
 \end{enumerate}
 
 \wxheading{See also}

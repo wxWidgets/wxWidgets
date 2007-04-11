@@ -258,7 +258,7 @@ void wxBookCtrlBase::DoSize()
 
     // resize all pages to fit the new control size
     const wxRect pageRect = GetPageRect();
-    const unsigned pagesCount = m_pages.Count();
+    const unsigned pagesCount = m_pages.GetCount();
     for ( unsigned int i = 0; i < pagesCount; ++i )
     {
         wxWindow * const page = m_pages[i];

@@ -287,7 +287,7 @@ public:                                                               \
   T& Item(size_t uiIndex) const                                       \
     { return (T&)/*const cast*/base::operator[](uiIndex); }           \
   T& Last() const                                                     \
-    { return Item(Count() - 1); }                                     \
+    { return Item(GetCount() - 1); }                                  \
                                                                       \
   int Index(T e, bool bFromEnd = false) const                         \
     { return base::Index(e, bFromEnd); }                              \
@@ -336,7 +336,7 @@ public:                                                               \
   T& Item(size_t uiIndex) const                                       \
     { return (T&)(base::operator[](uiIndex)); }                       \
   T& Last() const                                                     \
-    { return (T&)(base::operator[](Count() - 1)); }                   \
+    { return (T&)(base::operator[](GetCount() - 1)); }                \
                                                                       \
   int Index(T lItem, bool bFromEnd = false) const                     \
     { return base::Index((base_type)lItem, bFromEnd); }               \

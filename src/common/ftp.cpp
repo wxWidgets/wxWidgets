@@ -951,7 +951,7 @@ int wxFTP::GetFileSize(const wxString& fileName)
                     bool foundIt = false;
 
                     size_t i;
-                    for ( i = 0; !foundIt && i < fileList.Count(); i++ )
+                    for ( i = 0; !foundIt && i < fileList.GetCount(); i++ )
                     {
                         foundIt = fileList[i].Upper().Contains(fileName.Upper());
                     }

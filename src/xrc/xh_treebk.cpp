@@ -100,7 +100,7 @@ wxObject *wxTreebookXmlHandler::DoCreateResource()
 
     size_t depth = GetLong( wxT("depth") );
 
-    if( depth <= m_treeContext.Count() )
+    if( depth <= m_treeContext.GetCount() )
     {
         // first prepare the icon
         int imgIndex = wxNOT_FOUND;
@@ -117,8 +117,8 @@ wxObject *wxTreebookXmlHandler::DoCreateResource()
         }
 
         // then add the page to the corresponding parent
-        if( depth < m_treeContext.Count() )
-            m_treeContext.RemoveAt(depth, m_treeContext.Count() - depth );
+        if( depth < m_treeContext.GetCount() )
+            m_treeContext.RemoveAt(depth, m_treeContext.GetCount() - depth );
         if( depth == 0)
         {
             m_tbk->AddPage(wnd,

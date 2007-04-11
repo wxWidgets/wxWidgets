@@ -894,7 +894,6 @@ wxChar *wxStripMenuCodes(const wxChar *in, wxChar *out)
     }
     else
     {
-        // MYcopystring - for easier search...
         out = new wxChar[s.length() + 1];
         wxStrcpy(out, s.c_str());
     }

@@ -221,7 +221,7 @@ private:
 
     // Returns internal number of pages which can be different from
     // GetPageCount() while performing a page insertion or removal.
-    size_t DoInternalGetPageCount() const { return m_treeIds.Count(); }
+    size_t DoInternalGetPageCount() const { return m_treeIds.GetCount(); }
 
 
     DECLARE_EVENT_TABLE()

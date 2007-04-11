@@ -264,19 +264,19 @@ bool wxHtmlPrintout::OnPrintPage(int page)
 void wxHtmlPrintout::GetPageInfo(int *minPage, int *maxPage, int *selPageFrom, int *selPageTo)
 {
     *minPage = 1;
-    if ( m_NumPages >= (signed)m_PageBreaks.Count()-1)
+    if ( m_NumPages >= (signed)m_PageBreaks.GetCount()-1)
         *maxPage = m_NumPages;
     else
-        *maxPage = (signed)m_PageBreaks.Count()-1;
+        *maxPage = (signed)m_PageBreaks.GetCount()-1;
     *selPageFrom = 1;
-    *selPageTo = (signed)m_PageBreaks.Count()-1;
+    *selPageTo = (signed)m_PageBreaks.GetCount()-1;
 }
 
 
 
 bool wxHtmlPrintout::HasPage(int pageNum)
 {
-    return pageNum > 0 && (unsigned)pageNum < m_PageBreaks.Count();
+    return pageNum > 0 && (unsigned)pageNum < m_PageBreaks.GetCount();
 }
 
 
@@ -374,7 +374,7 @@ void wxHtmlPrintout::CountPages()
                                  m_PageBreaks,
                                  pos, true, INT_MAX);
         m_PageBreaks.Add( pos);
-        if( m_PageBreaks.Count() > wxHTML_PRINT_MAX_PAGES)
+        if( m_PageBreaks.GetCount() > wxHTML_PRINT_MAX_PAGES)
         {
             wxMessageBox( _("HTML pagination algorithm generated more than the allowed maximum number of pages and it can't continue any longer!"),
             _("Warning"), wxCANCEL | wxICON_ERROR );
@@ -440,7 +440,7 @@ wxString wxHtmlPrintout::TranslateHeader(const wxString& instr, int page)
     num.Printf(wxT("%i"), page);
     r.Replace(wxT("@PAGENUM@"), num);
 
-    num.Printf(wxT("%lu"), (unsigned long)(m_PageBreaks.Count() - 1));
+    num.Printf(wxT("%lu"), (unsigned long)(m_PageBreaks.GetCount() - 1));
     r.Replace(wxT("@PAGESCNT@"), num);
 
     const wxDateTime now = wxDateTime::Now();

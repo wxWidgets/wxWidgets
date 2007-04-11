@@ -290,7 +290,7 @@ void wxLogGui::Flush()
     wxString title;
     title.Printf(titleFormat, appName.c_str());
 
-    size_t nMsgCount = m_aMessages.Count();
+    size_t nMsgCount = m_aMessages.GetCount();
 
     // avoid showing other log dialogs until we're done with the dialog we're
     // showing right now: nested modal dialogs make for really bad UI!

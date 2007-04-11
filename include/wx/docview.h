@@ -589,8 +589,8 @@ public:
     virtual void AddFilesToMenu(wxMenu* menu); // Single menu
 
     // Accessors
-    virtual wxString GetHistoryFile(size_t i) const;
-    virtual size_t GetCount() const { return m_fileHistoryN; }
+    virtual wxString GetHistoryFile(size_t i) const { return m_fileHistory[i]; }
+    virtual size_t GetCount() const { return m_fileHistory.GetCount(); }
 
     const wxList& GetMenus() const { return m_fileMenus; }
 
@@ -605,11 +605,11 @@ public:
 
 protected:
     // Last n files
-    wxChar**          m_fileHistory;
-    // Number of files saved
-    size_t            m_fileHistoryN;
+    wxArrayString     m_fileHistory;
+
     // Menus to maintain (may need several for an MDI app)
     wxList            m_fileMenus;
+
     // Max files to maintain
     size_t            m_fileMaxFiles;
 

@@ -100,7 +100,7 @@ bool wxHtmlPageBreakCell::AdjustPagebreak(int* pagebreak, wxArrayInt& known_page
     // vertical position. Otherwise we'd be setting a pagebreak above
     // the current cell, which is incorrect, or duplicating a
     // pagebreak that has already been set.
-    if( known_pagebreaks.Count() == 0 || *pagebreak <= m_PosY)
+    if( known_pagebreaks.GetCount() == 0 || *pagebreak <= m_PosY)
     {
         return false;
     }

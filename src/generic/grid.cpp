@@ -2717,7 +2717,7 @@ int wxGridCellAttrData::FindIndex(int row, int col) const
 
 wxGridRowOrColAttrData::~wxGridRowOrColAttrData()
 {
-    size_t count = m_attrs.Count();
+    size_t count = m_attrs.GetCount();
     for ( size_t n = 0; n < count; n++ )
     {
         m_attrs[n]->DecRef();
@@ -2958,7 +2958,7 @@ void wxGridCellAttrProvider::UpdateAttrCols( size_t pos, int numCols )
 
 wxGridTypeRegistry::~wxGridTypeRegistry()
 {
-    size_t count = m_typeinfo.Count();
+    size_t count = m_typeinfo.GetCount();
     for ( size_t i = 0; i < count; i++ )
         delete m_typeinfo[i];
 }

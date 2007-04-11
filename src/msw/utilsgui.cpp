@@ -126,8 +126,6 @@ wxChar *wxLoadUserResource(const wxString& resourceName, const wxString& resourc
     wxStrncpy(s,theText,len);
     s[len]=0;
 
-    // wxChar *s = copystring(theText);
-
     // Obsolete in WIN32
 #ifndef __WIN32__
     UnlockResource(hData);

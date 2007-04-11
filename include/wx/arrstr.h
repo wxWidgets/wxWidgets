@@ -149,7 +149,7 @@ public:
   {
       wxASSERT_MSG( !IsEmpty(),
                     _T("wxArrayString: index out of bounds") );
-      return Item(Count() - 1);
+      return Item(GetCount() - 1);
   }
 
 

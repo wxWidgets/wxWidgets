@@ -883,7 +883,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
 
     // Add the sorted dirs
     size_t i;
-    for (i = 0; i < dirs.Count(); i++)
+    for (i = 0; i < dirs.GetCount(); i++)
     {
         eachFilename = dirs[i];
         path = dirName;
@@ -912,7 +912,7 @@ void wxGenericDirCtrl::ExpandDir(wxTreeItemId parentId)
     // Add the sorted filenames
     if ((GetWindowStyle() & wxDIRCTRL_DIR_ONLY) == 0)
     {
-        for (i = 0; i < filenames.Count(); i++)
+        for (i = 0; i < filenames.GetCount(); i++)
         {
             eachFilename = filenames[i];
             path = dirName;

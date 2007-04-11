@@ -132,7 +132,7 @@ public:
         file.Write(_T("class ") + m_className + _T(" : public ") + m_parentClassName
                    + _T(" {\nprotected:\n"));
         size_t i;
-        for(i=0;i<m_wdata.Count();++i)
+        for(i=0;i<m_wdata.GetCount();++i)
         {
             const XRCWidgetData& w = m_wdata.Item(i);
             if( !CanBeUsedWithXRCCTRL(w.GetClass()) ) continue;
@@ -147,7 +147,7 @@ public:
                    +  _T("\"), _T(\"")
                    +  m_parentClassName
                    +  _T("\"));\n"));
-        for(i=0;i<m_wdata.Count();++i)
+        for(i=0;i<m_wdata.GetCount();++i)
         {
             const XRCWidgetData& w = m_wdata.Item(i);
             if( !CanBeUsedWithXRCCTRL(w.GetClass()) ) continue;
@@ -383,7 +383,7 @@ wxArrayString XmlResApp::PrepareTempFiles()
 {
     wxArrayString flist;
 
-    for (size_t i = 0; i < parFiles.Count(); i++)
+    for (size_t i = 0; i < parFiles.GetCount(); i++)
     {
         if (flagVerbose)
             wxPrintf(_T("processing ") + parFiles[i] +  _T("...\n"));
@@ -513,7 +513,7 @@ void XmlResApp::FindFilesInXML(wxXmlNode *node, wxArrayString& flist, const wxSt
 
 void XmlResApp::DeleteTempFiles(const wxArrayString& flist)
 {
-    for (size_t i = 0; i < flist.Count(); i++)
+    for (size_t i = 0; i < flist.GetCount(); i++)
         wxRemoveFile(parOutputPath + wxFILE_SEP_PATH + flist[i]);
 }
 
@@ -523,7 +523,7 @@ void XmlResApp::MakePackageZIP(const wxArrayString& flist)
 {
     wxString files;
 
-    for (size_t i = 0; i < flist.Count(); i++)
+    for (size_t i = 0; i < flist.GetCount(); i++)
         files += flist[i] + _T(" ");
     files.RemoveLast();
 
@@ -614,7 +614,7 @@ _T("#include <wx/xrc/xmlres.h>\n")
 _T("#include <wx/xrc/xh_all.h>\n")
 _T("\n"));
 
-    for (i = 0; i < flist.Count(); i++)
+    for (i = 0; i < flist.GetCount(); i++)
         file.Write(
               FileToCppArray(parOutputPath + wxFILE_SEP_PATH + flist[i], i));
 
@@ -633,7 +633,7 @@ _T("        else wxFileSystem::AddHandler(new wxMemoryFSHandler);\n")
 _T("    }\n")
 _T("\n"));
 
-    for (i = 0; i < flist.Count(); i++)
+    for (i = 0; i < flist.GetCount(); i++)
     {
         wxString s;
         s.Printf(_T("    wxMemoryFSHandler::AddFile(wxT(\"XRC_resource/") + flist[i] +
@@ -641,7 +641,7 @@ _T("\n"));
         file.Write(s);
     }
 
-    for (i = 0; i < parFiles.Count(); i++)
+    for (i = 0; i < parFiles.GetCount(); i++)
     {
         file.Write(_T("    wxXmlResource::Get()->Load(wxT(\"memory:XRC_resource/") +
                    GetInternalFileName(parFiles[i], flist) + _T("\"));\n"));
@@ -665,7 +665,7 @@ _T("//\n\n")
 _T("#ifndef __")  + fileSpec + _T("_h__\n")
 _T("#define __")  + fileSpec + _T("_h__\n")
 );
-    for(size_t i=0;i<aXRCWndClassData.Count();++i){
+    for(size_t i=0;i<aXRCWndClassData.GetCount();++i){
                 aXRCWndClassData.Item(i).GenerateHeaderCode(file);
     }
     file.Write(
@@ -742,7 +742,7 @@ void XmlResApp::MakePackagePython(const wxArrayString& flist)
 
     file.Write(_T("def ") + parFuncname + _T("():\n"));
 
-    for (i = 0; i < flist.Count(); i++)
+    for (i = 0; i < flist.GetCount(); i++)
         file.Write(
           FileToPythonArray(parOutputPath + wxFILE_SEP_PATH + flist[i], i));
 
@@ -761,14 +761,14 @@ void XmlResApp::MakePackagePython(const wxArrayString& flist)
         );
 
 
-    for (i = 0; i < flist.Count(); i++)
+    for (i = 0; i < flist.GetCount(); i++)
     {
         wxString s;
         s.Printf(_T("    wx.MemoryFSHandler.AddFile('XRC_resource/") + flist[i] +
                  _T("', xml_res_file_%i)\n"), i);
         file.Write(s);
     }
-    for (i = 0; i < parFiles.Count(); i++)
+    for (i = 0; i < parFiles.GetCount(); i++)
     {
         file.Write(_T("    wx.xrc.XmlResource.Get().Load('memory:XRC_resource/") +
                    GetInternalFileName(parFiles[i], flist) + _T("')\n"));
@@ -801,7 +801,7 @@ wxArrayString XmlResApp::FindStrings()
 {
     wxArrayString arr, a2;
 
-    for (size_t i = 0; i < parFiles.Count(); i++)
+    for (size_t i = 0; i < parFiles.GetCount(); i++)
     {
         if (flagVerbose)
             wxPrintf(_T("processing ") + parFiles[i] +  _T("...\n"));
