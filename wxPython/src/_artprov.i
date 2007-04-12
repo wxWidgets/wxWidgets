@@ -31,6 +31,7 @@ MAKE_CONST_WXSTRING(ART_CMN_DIALOG);
 MAKE_CONST_WXSTRING(ART_HELP_BROWSER);
 MAKE_CONST_WXSTRING(ART_MESSAGE_BOX);
 MAKE_CONST_WXSTRING(ART_BUTTON);
+MAKE_CONST_WXSTRING(ART_LIST);
 MAKE_CONST_WXSTRING(ART_OTHER);
 
 // Art IDs
@@ -107,6 +108,30 @@ public:
             Py_DECREF(s2);
             if (ro) {
                 if (wxPyConvertSwigPtr(ro, (void**)&ptr, wxT("wxBitmap")))
+                    rval = *ptr;
+                Py_DECREF(ro);
+            }
+        }
+        wxPyEndBlockThreads(blocked);
+        return rval;
+    }
+
+    virtual wxIconBundle CreateIconBundle(const wxArtID& id,
+                                          const wxArtClient& client)
+    {
+        wxIconBundle rval = wxNullIconBundle;
+        wxPyBlock_t blocked = wxPyBeginBlockThreads();
+        if ((wxPyCBH_findCallback(m_myInst, "CreateIconBundle"))) {
+            PyObject* ro;
+            wxIconBundle* ptr;
+            PyObject* s1, *s2;
+            s1 = wx2PyString(id);
+            s2 = wx2PyString(client);
+            ro = wxPyCBH_callCallbackObj(m_myInst, Py_BuildValue("(OO)", s1, s2));
+            Py_DECREF(s1);
+            Py_DECREF(s2);
+            if (ro) {
+                if (wxPyConvertSwigPtr(ro, (void**)&ptr, wxT("wxIconBundle")))
                     rval = *ptr;
                 Py_DECREF(ro);
             }
@@ -237,6 +262,7 @@ identical bitmap for different client values!
 MustHaveApp(wxPyArtProvider);
 MustHaveApp(wxPyArtProvider::GetBitmap);
 MustHaveApp(wxPyArtProvider::GetIcon);
+MustHaveApp(wxPyArtProvider::GetBundle);
 
 %rename(ArtProvider) wxPyArtProvider;
 class wxPyArtProvider /*: public wxObject*/
@@ -287,11 +313,18 @@ wx.NullBitmap if no provider provides it.", "");
 
     DocDeclStr(
         static wxIcon , GetIcon(const wxString& id,
-                          const wxString& client = wxPyART_OTHER,
+                                const wxString& client = wxPyART_OTHER,
                                 const wxSize& size = wxDefaultSize),
         "Query the providers for icon with given ID and return it.  Return
 wx.NullIcon if no provider provides it.", "");
 
+    DocDeclStr(
+        static wxIconBundle , GetIconBundle(const wxArtID& id,
+                                            const wxArtClient& client = wxART_OTHER),
+        "Query the providers for iconbundle with given ID and return it. Return
+wx.NullIconBundle if no provider provides it.", "");
+    
+    
     DocDeclStr(
         static wxSize , GetSizeHint(const wxString& client, bool platform_dependent = false),
         "Get the size hint of an icon from a specific Art Client, queries the
