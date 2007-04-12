@@ -189,7 +189,15 @@ enum
     // by default synchronous execution disables all program windows to avoid
     // that the user interacts with the program while the child process is
     // running, you can use this flag to prevent this from happening
-    wxEXEC_NODISABLE = 8
+    wxEXEC_NODISABLE = 8,
+
+    // by default, the event loop is run while waiting for synchronous execution
+    // to complete and this flag can be used to simply block the main process
+    // until the child process finishes
+    wxEXEC_NOEVENTS = 16,
+
+    // convenient synonym for flags given system()-like behaviour
+    wxEXEC_BLOCK = wxEXEC_SYNC | wxEXEC_NOEVENTS
 };
 
 
