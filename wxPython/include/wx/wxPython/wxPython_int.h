@@ -253,6 +253,7 @@ bool wxRect_helper(PyObject* source, wxRect** obj);
 bool wxColour_helper(PyObject* source, wxColour** obj);
 bool wxPoint2D_helper(PyObject* source, wxPoint2D** obj);
 bool wxRect2D_helper(PyObject* source, wxRect2D** obj);
+bool wxPosition_helper(PyObject* source, wxPosition** obj);
 
 
 bool wxPySimple_typecheck(PyObject* source, const wxChar* classname, int seqLen);
@@ -434,6 +435,7 @@ struct wxPyCoreAPI {
     PyObject*           (*p_wxArrayDoublePyList_helper)(const wxArrayDouble& arr);
     wxPoint2D*          (*p_wxPoint2D_LIST_helper)(PyObject* source, size_t* npoints);
     bool                (*p_wxRect2D_helper)(PyObject* source, wxRect2D** obj);
+    bool                (*p_wxPosition_helper)(PyObject* source, wxPosition** obj);
 
 };
 
@@ -641,8 +643,9 @@ public:
     // virtual int FilterEvent(wxEvent& event); // This one too????
 
     // For catching Apple Events
-    virtual void MacOpenFile(const wxString &fileName);
-    virtual void MacPrintFile(const wxString &fileName);
+    virtual void MacOpenFile(const wxString& fileName);
+    virtual void MacOpenURL(const wxString& url);
+    virtual void MacPrintFile(const wxString& fileName);
     virtual void MacNewFile();
     virtual void MacReopenApp();
 

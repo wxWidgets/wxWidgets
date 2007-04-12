@@ -1108,6 +1108,59 @@ public:
 
 //---------------------------------------------------------------------------
 
+class wxPosition
+{
+public:
+    wxPosition(int row=0, int col=0);
+    ~wxPosition();
+
+    int GetRow() const;
+    int GetColumn() const;
+    int GetCol() const;
+    void SetRow(int row);
+    void SetColumn(int column);
+    void SetCol(int column);
+
+    %extend {
+        DocStr(__eq__, "Test for equality of wx.Position objects.", "");
+        bool __eq__(PyObject* other) {
+            wxPosition  temp, *obj = &temp;
+            if ( other == Py_None ) return false;
+            if ( ! wxPosition_helper(other, &obj) ) {
+                PyErr_Clear();
+                return false;
+            }
+            return self->operator==(*obj);
+        }
+
+        
+        DocStr(__ne__, "Test for inequality of wx.Position objects.", "");
+        bool __ne__(PyObject* other) {
+            wxPosition  temp, *obj = &temp;
+            if ( other == Py_None ) return true;
+            if ( ! wxPosition_helper(other, &obj)) {
+                PyErr_Clear();
+                return true;
+            }
+            return self->operator!=(*obj);
+        }
+    }
+
+    %nokwargs operator+;
+    %nokwargs operator-;
+    wxPosition operator+(const wxPosition& p) const;
+    wxPosition operator-(const wxPosition& p) const;
+    wxPosition operator+(const wxSize& s) const;
+    wxPosition operator-(const wxSize& s) const;
+
+    %property(row, GetRow, SetRow);
+    %property(col, GetCol, SetCol);
+};
+
+
+
+//---------------------------------------------------------------------------
+
 %immutable;
 const wxPoint     wxDefaultPosition;
 const wxSize      wxDefaultSize;
