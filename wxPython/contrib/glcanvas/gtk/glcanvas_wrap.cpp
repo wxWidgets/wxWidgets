@@ -2860,14 +2860,14 @@ SWIGINTERN PyObject *_wrap_new_GLCanvas(PyObject *SWIGUNUSEDPARM(self), PyObject
   PyObject *resultobj = 0;
   wxWindow *arg1 = (wxWindow *) 0 ;
   int arg2 = (int) -1 ;
-  wxPoint const &arg3_defvalue = wxDefaultPosition ;
-  wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
-  wxSize const &arg4_defvalue = wxDefaultSize ;
-  wxSize *arg4 = (wxSize *) &arg4_defvalue ;
-  long arg5 = (long) 0 ;
-  wxString const &arg6_defvalue = wxPyGLCanvasNameStr ;
-  wxString *arg6 = (wxString *) &arg6_defvalue ;
-  int *arg7 = (int *) NULL ;
+  int *arg3 = (int *) NULL ;
+  wxPoint const &arg4_defvalue = wxDefaultPosition ;
+  wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
+  wxSize const &arg5_defvalue = wxDefaultSize ;
+  wxSize *arg5 = (wxSize *) &arg5_defvalue ;
+  long arg6 = (long) 0 ;
+  wxString const &arg7_defvalue = wxPyGLCanvasNameStr ;
+  wxString *arg7 = (wxString *) &arg7_defvalue ;
   wxPalette const &arg8_defvalue = wxNullPalette ;
   wxPalette *arg8 = (wxPalette *) &arg8_defvalue ;
   wxGLCanvas *result = 0 ;
@@ -2875,12 +2875,12 @@ SWIGINTERN PyObject *_wrap_new_GLCanvas(PyObject *SWIGUNUSEDPARM(self), PyObject
   int res1 = 0 ;
   int val2 ;
   int ecode2 = 0 ;
-  wxPoint temp3 ;
-  wxSize temp4 ;
-  long val5 ;
-  int ecode5 = 0 ;
-  bool temp6 = false ;
-  int *temp7 ;
+  int *temp3 ;
+  wxPoint temp4 ;
+  wxSize temp5 ;
+  long val6 ;
+  int ecode6 = 0 ;
+  bool temp7 = false ;
   void *argp8 = 0 ;
   int res8 = 0 ;
   PyObject * obj0 = 0 ;
@@ -2892,7 +2892,7 @@ SWIGINTERN PyObject *_wrap_new_GLCanvas(PyObject *SWIGUNUSEDPARM(self), PyObject
   PyObject * obj6 = 0 ;
   PyObject * obj7 = 0 ;
   char *  kwnames[] = {
-    (char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style",(char *) "name",(char *) "attribList",(char *) "palette", NULL 
+    (char *) "parent",(char *) "id",(char *) "attribList",(char *) "pos",(char *) "size",(char *) "style",(char *) "name",(char *) "palette", NULL 
   };
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOOOO:new_GLCanvas",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7)) SWIG_fail;
@@ -2910,42 +2910,42 @@ SWIGINTERN PyObject *_wrap_new_GLCanvas(PyObject *SWIGUNUSEDPARM(self), PyObject
   }
   if (obj2) {
     {
-      arg3 = &temp3;
-      if ( ! wxPoint_helper(obj2, &arg3)) SWIG_fail;
+      int i;
+      if (PySequence_Check(obj2)) {
+        int size = PyObject_Length(obj2);
+        temp3 = new int[size+1]; // (int*)malloc((size + 1) * sizeof(int));
+        for (i = 0; i < size; i++) {
+          temp3[i] = PyInt_AsLong(PySequence_GetItem(obj2, i));
+        }
+        temp3[size] = 0;
+        arg3 = temp3;
+      }
     }
   }
   if (obj3) {
     {
       arg4 = &temp4;
-      if ( ! wxSize_helper(obj3, &arg4)) SWIG_fail;
+      if ( ! wxPoint_helper(obj3, &arg4)) SWIG_fail;
     }
   }
   if (obj4) {
-    ecode5 = SWIG_AsVal_long(obj4, &val5);
-    if (!SWIG_IsOK(ecode5)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new_GLCanvas" "', expected argument " "5"" of type '" "long""'");
-    } 
-    arg5 = static_cast< long >(val5);
+    {
+      arg5 = &temp5;
+      if ( ! wxSize_helper(obj4, &arg5)) SWIG_fail;
+    }
   }
   if (obj5) {
-    {
-      arg6 = wxString_in_helper(obj5);
-      if (arg6 == NULL) SWIG_fail;
-      temp6 = true;
-    }
+    ecode6 = SWIG_AsVal_long(obj5, &val6);
+    if (!SWIG_IsOK(ecode6)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "new_GLCanvas" "', expected argument " "6"" of type '" "long""'");
+    } 
+    arg6 = static_cast< long >(val6);
   }
   if (obj6) {
     {
-      int i;
-      if (PySequence_Check(obj6)) {
-        int size = PyObject_Length(obj6);
-        temp7 = new int[size+1]; // (int*)malloc((size + 1) * sizeof(int));
-        for (i = 0; i < size; i++) {
-          temp7[i] = PyInt_AsLong(PySequence_GetItem(obj6, i));
-        }
-        temp7[size] = 0;
-        arg7 = temp7;
-      }
+      arg7 = wxString_in_helper(obj6);
+      if (arg7 == NULL) SWIG_fail;
+      temp7 = true;
     }
   }
   if (obj7) {
@@ -2961,26 +2961,166 @@ SWIGINTERN PyObject *_wrap_new_GLCanvas(PyObject *SWIGUNUSEDPARM(self), PyObject
   {
     if (!wxPyCheckForApp()) SWIG_fail;
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxGLCanvas *)new wxGLCanvas(arg1,arg2,(wxPoint const &)*arg3,(wxSize const &)*arg4,arg5,(wxString const &)*arg6,arg7,(wxPalette const &)*arg8);
+    result = (wxGLCanvas *)new wxGLCanvas(arg1,arg2,(int const *)arg3,(wxPoint const &)*arg4,(wxSize const &)*arg5,arg6,(wxString const &)*arg7,(wxPalette const &)*arg8);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxGLCanvas, SWIG_POINTER_NEW |  0 );
   {
-    if (temp6)
-    delete arg6;
+    delete [] arg3;
   }
   {
-    delete [] arg7;
+    if (temp7)
+    delete arg7;
   }
   return resultobj;
 fail:
   {
-    if (temp6)
-    delete arg6;
+    delete [] arg3;
   }
   {
-    delete [] arg7;
+    if (temp7)
+    delete arg7;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GLCanvas_Create(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGLCanvas *arg1 = (wxGLCanvas *) 0 ;
+  wxWindow *arg2 = (wxWindow *) 0 ;
+  int arg3 = (int) wxID_ANY ;
+  wxPoint const &arg4_defvalue = wxDefaultPosition ;
+  wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
+  wxSize const &arg5_defvalue = wxDefaultSize ;
+  wxSize *arg5 = (wxSize *) &arg5_defvalue ;
+  long arg6 = (long) 0 ;
+  wxString const &arg7_defvalue = wxGLCanvasName ;
+  wxString *arg7 = (wxString *) &arg7_defvalue ;
+  int *arg8 = (int *) NULL ;
+  wxPalette const &arg9_defvalue = wxNullPalette ;
+  wxPalette *arg9 = (wxPalette *) &arg9_defvalue ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  wxPoint temp4 ;
+  wxSize temp5 ;
+  long val6 ;
+  int ecode6 = 0 ;
+  bool temp7 = false ;
+  int *temp8 ;
+  void *argp9 = 0 ;
+  int res9 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
+  PyObject * obj7 = 0 ;
+  PyObject * obj8 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style",(char *) "name",(char *) "attribList",(char *) "palette", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOOOO:GLCanvas_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6,&obj7,&obj8)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGLCanvas, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GLCanvas_Create" "', expected argument " "1"" of type '" "wxGLCanvas *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGLCanvas * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GLCanvas_Create" "', expected argument " "2"" of type '" "wxWindow *""'"); 
+  }
+  arg2 = reinterpret_cast< wxWindow * >(argp2);
+  if (obj2) {
+    ecode3 = SWIG_AsVal_int(obj2, &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "GLCanvas_Create" "', expected argument " "3"" of type '" "int""'");
+    } 
+    arg3 = static_cast< int >(val3);
+  }
+  if (obj3) {
+    {
+      arg4 = &temp4;
+      if ( ! wxPoint_helper(obj3, &arg4)) SWIG_fail;
+    }
+  }
+  if (obj4) {
+    {
+      arg5 = &temp5;
+      if ( ! wxSize_helper(obj4, &arg5)) SWIG_fail;
+    }
+  }
+  if (obj5) {
+    ecode6 = SWIG_AsVal_long(obj5, &val6);
+    if (!SWIG_IsOK(ecode6)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "GLCanvas_Create" "', expected argument " "6"" of type '" "long""'");
+    } 
+    arg6 = static_cast< long >(val6);
+  }
+  if (obj6) {
+    {
+      arg7 = wxString_in_helper(obj6);
+      if (arg7 == NULL) SWIG_fail;
+      temp7 = true;
+    }
+  }
+  if (obj7) {
+    {
+      int i;
+      if (PySequence_Check(obj7)) {
+        int size = PyObject_Length(obj7);
+        temp8 = new int[size+1]; // (int*)malloc((size + 1) * sizeof(int));
+        for (i = 0; i < size; i++) {
+          temp8[i] = PyInt_AsLong(PySequence_GetItem(obj7, i));
+        }
+        temp8[size] = 0;
+        arg8 = temp8;
+      }
+    }
+  }
+  if (obj8) {
+    res9 = SWIG_ConvertPtr(obj8, &argp9, SWIGTYPE_p_wxPalette,  0  | 0);
+    if (!SWIG_IsOK(res9)) {
+      SWIG_exception_fail(SWIG_ArgError(res9), "in method '" "GLCanvas_Create" "', expected argument " "9"" of type '" "wxPalette const &""'"); 
+    }
+    if (!argp9) {
+      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GLCanvas_Create" "', expected argument " "9"" of type '" "wxPalette const &""'"); 
+    }
+    arg9 = reinterpret_cast< wxPalette * >(argp9);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)(arg1)->Create(arg2,arg3,(wxPoint const &)*arg4,(wxSize const &)*arg5,arg6,(wxString const &)*arg7,(int const *)arg8,(wxPalette const &)*arg9);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  {
+    if (temp7)
+    delete arg7;
+  }
+  {
+    delete [] arg8;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp7)
+    delete arg7;
+  }
+  {
+    delete [] arg8;
   }
   return NULL;
 }
@@ -3102,7 +3242,7 @@ SWIGINTERN PyObject *_wrap_new_GLCanvasWithContext(PyObject *SWIGUNUSEDPARM(self
   {
     if (!wxPyCheckForApp()) SWIG_fail;
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxGLCanvas *)new wxGLCanvas(arg1,(wxGLContext const *)arg2,arg3,(wxPoint const &)*arg4,(wxSize const &)*arg5,arg6,(wxString const &)*arg7,arg8,(wxPalette const &)*arg9);
+    result = (wxGLCanvas *)new wxGLCanvas(arg1,(wxGLContext const *)arg2,arg3,(wxPoint const &)*arg4,(wxSize const &)*arg5,arg6,(wxString const &)*arg7,(int const *)arg8,(wxPalette const &)*arg9);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -3128,31 +3268,6 @@ fail:
 
 
 SWIGINTERN PyObject *_wrap_GLCanvas_SetCurrent__SWIG_0(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
-  PyObject *resultobj = 0;
-  wxGLCanvas *arg1 = (wxGLCanvas *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  
-  if ((nobjs < 1) || (nobjs > 1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGLCanvas, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GLCanvas_SetCurrent" "', expected argument " "1"" of type '" "wxGLCanvas *""'"); 
-  }
-  arg1 = reinterpret_cast< wxGLCanvas * >(argp1);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->SetCurrent();
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_GLCanvas_SetCurrent__SWIG_1(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
   PyObject *resultobj = 0;
   wxGLCanvas *arg1 = (wxGLCanvas *) 0 ;
   wxGLContext *arg2 = 0 ;
@@ -3184,25 +3299,6 @@ SWIGINTERN PyObject *_wrap_GLCanvas_SetCurrent__SWIG_1(PyObject *SWIGUNUSEDPARM(
   resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_GLCanvas_SetCurrent(PyObject *self, PyObject *args) {
-  int argc;
-  PyObject *argv[3];
-  
-  if (!(argc = SWIG_Python_UnpackTuple(args,"GLCanvas_SetCurrent",0,2,argv))) SWIG_fail;
-  --argc;
-  if (argc == 1) {
-    return _wrap_GLCanvas_SetCurrent__SWIG_0(self, argc, argv);
-  }
-  if (argc == 2) {
-    return _wrap_GLCanvas_SetCurrent__SWIG_1(self, argc, argv);
-  }
-  
-fail:
-  SWIG_SetErrorMsg(PyExc_NotImplementedError,"No matching function for overloaded 'GLCanvas_SetCurrent'");
   return NULL;
 }
 
@@ -3307,6 +3403,50 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_GLCanvas_SetCurrent__SWIG_1(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
+  PyObject *resultobj = 0;
+  wxGLCanvas *arg1 = (wxGLCanvas *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  
+  if ((nobjs < 1) || (nobjs > 1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxGLCanvas, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GLCanvas_SetCurrent" "', expected argument " "1"" of type '" "wxGLCanvas *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGLCanvas * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetCurrent();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_GLCanvas_SetCurrent(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  
+  if (!(argc = SWIG_Python_UnpackTuple(args,"GLCanvas_SetCurrent",0,2,argv))) SWIG_fail;
+  --argc;
+  if (argc == 1) {
+    return _wrap_GLCanvas_SetCurrent__SWIG_1(self, argc, argv);
+  }
+  if (argc == 2) {
+    return _wrap_GLCanvas_SetCurrent__SWIG_0(self, argc, argv);
+  }
+  
+fail:
+  SWIG_SetErrorMsg(PyExc_NotImplementedError,"No matching function for overloaded 'GLCanvas_SetCurrent'");
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *GLCanvas_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
@@ -3325,11 +3465,12 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GLContext_swigregister", GLContext_swigregister, METH_VARARGS, NULL},
 	 { (char *)"GLContext_swiginit", GLContext_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_GLCanvas", (PyCFunction) _wrap_new_GLCanvas, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"GLCanvas_Create", (PyCFunction) _wrap_GLCanvas_Create, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_GLCanvasWithContext", (PyCFunction) _wrap_new_GLCanvasWithContext, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"GLCanvas_SetCurrent", _wrap_GLCanvas_SetCurrent, METH_VARARGS, NULL},
 	 { (char *)"GLCanvas_SetColour", (PyCFunction) _wrap_GLCanvas_SetColour, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GLCanvas_SwapBuffers", (PyCFunction)_wrap_GLCanvas_SwapBuffers, METH_O, NULL},
 	 { (char *)"GLCanvas_GetContext", (PyCFunction)_wrap_GLCanvas_GetContext, METH_O, NULL},
+	 { (char *)"GLCanvas_SetCurrent", _wrap_GLCanvas_SetCurrent, METH_VARARGS, NULL},
 	 { (char *)"GLCanvas_swigregister", GLCanvas_swigregister, METH_VARARGS, NULL},
 	 { (char *)"GLCanvas_swiginit", GLCanvas_swiginit, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }

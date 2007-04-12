@@ -45,19 +45,7 @@ MustHaveApp(wxGLContext);
 
 class wxGLContext : public wxObject {
 public:
-#ifndef __WXMAC__  
     wxGLContext(wxGLCanvas *win, const wxGLContext* other = NULL);
-#else
-    %extend {
-        wxGLContext(bool isRGB, wxGLCanvas *win,
-                    const wxPalette& palette = wxNullPalette,
-                    const wxGLContext* other = NULL) {
-            AGLPixelFormat fmt;  // TODO: How should this be initialized?
-            return new wxGLContext(fmt, win, palette, other);
-        }
-    }
-
-#endif
     ~wxGLContext();
 
 #ifndef __WXMAC__  
@@ -87,7 +75,7 @@ enum {
 };
 
 
-%typemap(in) int *attribList (int *temp) {
+%typemap(in) const int *attribList (int *temp) {
     int i;
     if (PySequence_Check($input)) {
         int size = PyObject_Length($input);
@@ -112,13 +100,24 @@ MustHaveApp(wxGLCanvas);
 class wxGLCanvas : public wxWindow {
 public:
     %pythonAppend wxGLCanvas   "self._setOORInfo(self)"
-    wxGLCanvas(wxWindow *parent, wxWindowID id = -1,
+    wxGLCanvas(wxWindow *parent,
+               wxWindowID id = -1,
+               const int *attribList = NULL,
                const wxPoint& pos = wxDefaultPosition,
-               const wxSize& size = wxDefaultSize, long style = 0,
+               const wxSize& size = wxDefaultSize,
+               long style = 0,
                const wxString& name = wxPyGLCanvasNameStr,
-               int *attribList = NULL,
                const wxPalette& palette = wxNullPalette);
 
+    bool Create(wxWindow *parent,
+                wxWindowID id = wxID_ANY,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxGLCanvasName,
+                const int *attribList = NULL,
+                const wxPalette& palette = wxNullPalette);
+    
     %pythonAppend wxGLCanvas   "val._setOORInfo(val)"
     %RenameCtor(GLCanvasWithContext, 
         wxGLCanvas( wxWindow *parent,
@@ -128,21 +127,21 @@ public:
                     const wxSize& size = wxDefaultSize,
                     long style = 0,
                     const wxString& name = wxPyGLCanvasNameStr,
-                    int *attribList = NULL,
+                    const int *attribList = NULL,
                     const wxPalette& palette = wxNullPalette ));
 
     %nokwargs SetCurrent;
-    void SetCurrent();
-#ifndef __WXMAC__
-    void SetCurrent(const wxGLContext& RC);
-#endif
+    void SetCurrent(const wxGLContext& context);
     void SetColour(const wxString& colour);
     void SwapBuffers();
 
+    // deprecated...
     wxGLContext* GetContext();
+    void SetCurrent();
 
+    
 #ifdef __WXMSW__
-    void SetupPixelFormat(int *attribList = NULL);
+//     void SetupPixelFormat(int *attribList = NULL);
     void SetupPalette(const wxPalette& palette);
     wxPalette CreateDefaultPalette();
     wxPalette* GetPalette();
