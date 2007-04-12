@@ -108,12 +108,12 @@ if [ ! $? = 0 ]; then error 2; fi
 # cd -
 
 
-echo ------------------
-echo cd ../../contrib/build/stc
-cd ../../contrib/build/stc
-$WXWIN/build/msw/.mymake $BUILD_TYPE $@
-if [ ! $? = 0 ]; then error 2; fi
-cd -
+# echo ------------------
+# echo cd ../../contrib/build/stc
+# cd ../../contrib/build/stc
+# $WXWIN/build/msw/.mymake $BUILD_TYPE $@
+# if [ ! $? = 0 ]; then error 2; fi
+# cd -
 
 
 # echo ------------------

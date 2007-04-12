@@ -136,22 +136,11 @@ place, then do the same for wxPython.
                      --with-zlib=builtin \
 
 
-2. To build and install wxWidgets you could just use the "make"
-   command but there are a couple other libraries besides the main
-   wxWidgets libs that also need to be built so again I make a script
-   to do it all for me so I don't forget anything.  This time it is
-   called ".make" (I use the leading "."  so when I do ``rm -r *`` in
-   my build dir I don't lose my scripts too.)  This is what it looks
-   like::
+2. To build and install wxWidgets you just need to run "make" and
+   "make install" and the Makefile will take care of all the work for you::
 
-        make $* \
-            && make -C contrib/src/stc $* 
-   
-   So you just use .make as if it where make, but don't forget to set
-   the execute bit on .make first!::
-
-         .make
-         .make install
+         make
+         make install
 
    When it's done you should have an installed set of files under
    /opt/wx/2.8 containing just wxWidgets.  Now to use this version of
@@ -394,9 +383,9 @@ accordingly if you are using the bash shell.
    selection of command-line flags as described above.  
 
 
-7.  When that is all done it will have built the main wxWidgets DLLs
-    and also some of the contribs DLLs.  There should be a ton of DLLs
-    and lots of lib files and other stuff in %WXDIR%\\lib\\vc_dll.
+7.  When that is all done it will have built the main wxWidgets DLLs.
+    There should be a ton of DLLs and lots of lib files and other
+    stuff in %WXDIR%\\lib\\vc_dll.
 
 
 8. Building wxPython on Windows is very similar to doing it for the
