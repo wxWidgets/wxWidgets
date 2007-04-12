@@ -163,7 +163,7 @@ The stock IDs and coresponding labels are
 
 
     DocDeclStr(
-        void , SetDefault(),
+        wxWindow* , SetDefault(),
         "This sets the button to be the default item for the panel or dialog box.", "");
     
 
