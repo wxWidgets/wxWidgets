@@ -1860,7 +1860,7 @@ bool wxTreeListMainWindow::Create (wxTreeListCtrl *parent,
     if (major < 10) style |= wxTR_ROW_LINES;
 #endif
 
-    wxScrolledWindow::Create (parent, id, pos, size, style|wxHSCROLL|wxVSCROLL, name);
+    wxScrolledWindow::Create (parent, id, pos, size, style|wxHSCROLL|wxVSCROLL|wxWANTS_CHARS, name);
 
 #if wxUSE_VALIDATORS
     SetValidator(validator);
