@@ -656,6 +656,10 @@ if BUILD_STC:
                              opj(location, "_stc_gendocs.i"),
                              ] + swig_deps)
 
+    stcLibs = libs[:]
+    if not MONOLITHIC and findLib('stc', libdirs):
+        stcLibs += makeLibName('stc')
+
     ext = Extension('_stc',
                     swig_sources,
 
@@ -663,7 +667,7 @@ if BUILD_STC:
                     define_macros = defines,
 
                     library_dirs = libdirs,
-                    libraries = libs + makeLibName('stc'),
+                    libraries = stcLibs,
 
                     extra_compile_args = cflags,
                     extra_link_args = lflags,
