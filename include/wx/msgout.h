@@ -40,7 +40,8 @@ public:
     WX_DEFINE_VARARG_FUNC_VOID(Printf, DoPrintf)
 
 protected:
-    virtual void DoPrintf(const wxChar* format, ...)  ATTRIBUTE_PRINTF_2 = 0;
+    void DoPrintf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
+    virtual void Output(const wxString& str) = 0;
 };
 
 #ifdef __VISUALC__
@@ -81,7 +82,7 @@ public:
     wxMessageOutputBest() { }
 
 protected:
-    virtual void DoPrintf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
+    virtual void Output(const wxString& str);
 };
 
 // ----------------------------------------------------------------------------
@@ -94,7 +95,7 @@ public:
     wxMessageOutputStderr() { }
 
 protected:
-    virtual void DoPrintf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
+    virtual void Output(const wxString& str);
 };
 
 // ----------------------------------------------------------------------------
@@ -109,7 +110,7 @@ public:
     wxMessageOutputMessageBox() { }
 
 protected:
-    virtual void DoPrintf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
+    virtual void Output(const wxString& str);
 };
 
 #endif // wxUSE_GUI
@@ -124,7 +125,7 @@ public:
     wxMessageOutputDebug() { }
 
 protected:
-    virtual void DoPrintf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
+    virtual void Output(const wxString& str);
 };
 
 // ----------------------------------------------------------------------------
@@ -137,7 +138,7 @@ public:
     wxMessageOutputLog() { }
 
 protected:
-    virtual void DoPrintf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
+    virtual void Output(const wxString& str);
 };
 
 #endif

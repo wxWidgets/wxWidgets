@@ -76,6 +76,18 @@ wxMessageOutput* wxMessageOutput::Set(wxMessageOutput* msgout)
     return old;
 }
 
+void wxMessageOutputBase::DoPrintf(const wxChar* format, ...)
+{
+    va_list args;
+    va_start(args, format);
+    wxString out;
+
+    out.PrintfV(format, args);
+    va_end(args);
+
+    Output(out);
+}
+
 // ----------------------------------------------------------------------------
 // wxMessageOutputBest
 // ----------------------------------------------------------------------------
@@ -95,24 +107,22 @@ static inline bool IsInConsole()
 
 #endif // __WINDOWS__
 
-void wxMessageOutputBest::DoPrintf(const wxChar* format, ...)
+void wxMessageOutputBest::Output(const wxString& str)
 {
-    va_list args;
-    va_start(args, format);
-    wxString out;
-
-    out.PrintfV(format, args);
-    va_end(args);
-
 #ifdef __WINDOWS__
     if ( !IsInConsole() )
     {
-        ::MessageBox(NULL, out, _T("wxWidgets"), MB_ICONINFORMATION | MB_OK);
+        ::MessageBox(NULL, str, _T("wxWidgets"), MB_ICONINFORMATION | MB_OK);
     }
     else
 #endif // __WINDOWS__/!__WINDOWS__
     {
-        fprintf(stderr, "%s", (const char*) out.mb_str());
+        const wxWX2MBbuf buf(str.mb_str());
+
+        if ( buf )
+            fprintf(stderr, "%s", (const char*) buf);
+        else // print at least something
+            fprintf(stderr, "%s", (const char*) str.ToAscii());
     }
 }
 
@@ -120,31 +130,23 @@ void wxMessageOutputBest::DoPrintf(const wxChar* format, ...)
 // wxMessageOutputStderr
 // ----------------------------------------------------------------------------
 
-void wxMessageOutputStderr::DoPrintf(const wxChar* format, ...)
+void wxMessageOutputStderr::Output(const wxString& str)
 {
-    va_list args;
-    va_start(args, format);
-    wxString out;
+    const wxWX2MBbuf buf(str.mb_str());
 
-    out.PrintfV(format, args);
-    va_end(args);
-
-    fprintf(stderr, "%s", (const char*) out.mb_str());
+    if ( buf )
+        fprintf(stderr, "%s", (const char*) buf);
+    else // print at least something
+        fprintf(stderr, "%s", (const char*) str.ToAscii());
 }
 
 // ----------------------------------------------------------------------------
 // wxMessageOutputDebug
 // ----------------------------------------------------------------------------
 
-void wxMessageOutputDebug::DoPrintf(const wxChar* format, ...)
+void wxMessageOutputDebug::Output(const wxString& str)
 {
-    wxString out;
-
-    va_list args;
-    va_start(args, format);
-
-    out.PrintfV(format, args);
-    va_end(args);
+    wxString out(str);
 
 #if defined(__WXMSW__) && !defined(__WXMICROWIN__)
     out.Replace(wxT("\t"), wxT("        "));
@@ -175,15 +177,9 @@ void wxMessageOutputDebug::DoPrintf(const wxChar* format, ...)
 // wxMessageOutputLog
 // ----------------------------------------------------------------------------
 
-void wxMessageOutputLog::DoPrintf(const wxChar* format, ...)
+void wxMessageOutputLog::Output(const wxString& str)
 {
-    wxString out;
-
-    va_list args;
-    va_start(args, format);
-
-    out.PrintfV(format, args);
-    va_end(args);
+    wxString out(str);
 
     out.Replace(wxT("\t"), wxT("        "));
 
@@ -198,14 +194,9 @@ void wxMessageOutputLog::DoPrintf(const wxChar* format, ...)
 
 #if wxUSE_GUI
 
-void wxMessageOutputMessageBox::DoPrintf(const wxChar* format, ...)
+void wxMessageOutputMessageBox::Output(const wxString& str)
 {
-    va_list args;
-    va_start(args, format);
-    wxString out;
-
-    out.PrintfV(format, args);
-    va_end(args);
+    wxString out(str);
 
     // the native MSW msg box understands the TABs, others don't
 #ifndef __WXMSW__
