@@ -112,34 +112,6 @@ gtk_listbox_row_activated_callback(GtkTreeView        *treeview,
 }
 
 //-----------------------------------------------------------------------------
-// "key_press_event"
-//-----------------------------------------------------------------------------
-
-extern "C" {
-static gint
-gtk_listbox_key_press_callback( GtkWidget *widget,
-                                GdkEventKey *gdk_event,
-                                wxListBox *listbox )
-{
-    if (g_blockEventsOnDrag) return FALSE;
-
-    if ((gdk_event->keyval == GDK_Tab) || (gdk_event->keyval == GDK_ISO_Left_Tab))
-    {
-        wxNavigationKeyEvent new_event;
-        /* GDK reports GDK_ISO_Left_Tab for SHIFT-TAB */
-        new_event.SetDirection( (gdk_event->keyval == GDK_Tab) );
-        /* CTRL-TAB changes the (parent) window, i.e. switch notebook page */
-        new_event.SetWindowChange( (gdk_event->state & GDK_CONTROL_MASK) );
-        new_event.SetCurrentFocus( listbox );
-        if (listbox->GetEventHandler()->ProcessEvent( new_event ))
-            return TRUE;
-    }
-
-    return FALSE;
-}
-}
-
-//-----------------------------------------------------------------------------
 // "changed"
 //-----------------------------------------------------------------------------
 
@@ -455,11 +427,6 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
     // generate dclick events
     g_signal_connect_after(m_treeview, "row-activated",
                      G_CALLBACK(gtk_listbox_row_activated_callback), this);
-
-    // for panel navigation
-    g_signal_connect (m_treeview, "key_press_event",
-                      G_CALLBACK (gtk_listbox_key_press_callback),
-                           this);
 
     m_parent->DoAddChild( this );
 
