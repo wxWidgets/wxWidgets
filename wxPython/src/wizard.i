@@ -95,20 +95,11 @@ public:
 //     // that no other parameters are needed because the wizard will resize and
 //     // reposition the page anyhow
 //     wxWizardPage(wxWizard *parent,
-//                  const wxBitmap& bitmap = wxNullBitmap,
-//                  const char* resource = NULL);
+//                  const wxBitmap& bitmap = wxNullBitmap);
 //     %RenameCtor(PreWizardPage, wxWizardPage());
 
-    %extend {
-        bool Create(wxWizard *parent,
-                    const wxBitmap& bitmap = wxNullBitmap,
-                    const wxString& resource = wxPyEmptyString) {
-            const wxChar* res = NULL;
-            if (resource.length())
-                res = (const wxChar*)resource.c_str();
-            return self->Create(parent, bitmap, res);
-        }
-    }
+    bool Create(wxWizard *parent,
+                const wxBitmap& bitmap = wxNullBitmap);
 
 
     // these functions are used by the wizard to show another page when the
@@ -135,9 +126,8 @@ class wxPyWizardPage : public wxWizardPage {
 public:
     wxPyWizardPage() : wxWizardPage() {}
     wxPyWizardPage(wxWizard *parent,
-                   const wxBitmap& bitmap = wxNullBitmap,
-                   const wxChar* resource = NULL)
-        : wxWizardPage(parent, bitmap, resource) {}
+                   const wxBitmap& bitmap = wxNullBitmap)
+        : wxWizardPage(parent, bitmap) {}
 
     DEC_PYCALLBACK_WIZPG__pure(GetPrev);
     DEC_PYCALLBACK_WIZPG__pure(GetNext);
@@ -218,32 +208,16 @@ public:
     // of the default one for this wizard (should be of the same size). Notice
     // that no other parameters are needed because the wizard will resize and
     // reposition the page anyhow
-    %extend {
-        wxPyWizardPage(wxWizard *parent,
-                       const wxBitmap* bitmap = &wxNullBitmap,
-                       const wxString* resource = &wxPyEmptyString) {
-            const wxChar* res = NULL;
-            if (resource->length())
-                res = (const wxChar*)resource->c_str();
-            return new wxPyWizardPage(parent, *bitmap, res);
-        }
-    }
+    wxPyWizardPage(wxWizard *parent,
+                   const wxBitmap& bitmap = wxNullBitmap);
 
     %RenameCtor(PrePyWizardPage, wxPyWizardPage());
 
     // Turn it back on again
     %typemap(out) wxPyWizardPage* { $result = wxPyMake_wxObject($1, $owner); }
 
-    %extend {
-        bool Create(wxWizard *parent,
-                    const wxBitmap& bitmap = wxNullBitmap,
-                    const wxString& resource = wxPyEmptyString) {
-            const wxChar* res = NULL;
-            if (resource.length())
-                res = (const wxChar*)resource.c_str();
-            return self->Create(parent, bitmap, res);
-        }
-    }
+    bool Create(wxWizard *parent,
+                const wxBitmap& bitmap = wxNullBitmap);
 
     void _setCallbackInfo(PyObject* self, PyObject* _class);
 
@@ -328,15 +302,13 @@ public:
     wxWizardPageSimple(wxWizard *parent,
                        wxWizardPage *prev = NULL,
                        wxWizardPage *next = NULL,
-                       const wxBitmap& bitmap = wxNullBitmap,
-                       const wxChar* resource = NULL);
+                       const wxBitmap& bitmap = wxNullBitmap);
     %RenameCtor(PreWizardPageSimple, wxWizardPageSimple());
 
     bool Create(wxWizard *parent = NULL,
                 wxWizardPage *prev = NULL,
                 wxWizardPage *next = NULL,
-                const wxBitmap& bitmap = wxNullBitmap,
-                const wxChar* resource = NULL);
+                const wxBitmap& bitmap = wxNullBitmap);
 
     // the pointers may be also set later - but before starting the wizard
     void SetPrev(wxWizardPage *prev);
