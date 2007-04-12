@@ -297,6 +297,17 @@ void wxPyApp::MacOpenFile(const wxString &fileName)
     wxPyEndBlockThreads(blocked);
 }
 
+void wxPyApp::MacOpenURL(const wxString &url)
+{
+    wxPyBlock_t blocked = wxPyBeginBlockThreads();
+    if (wxPyCBH_findCallback(m_myInst, "MacOpenURL")) {
+        PyObject* s = wx2PyString(url);
+        wxPyCBH_callCallback(m_myInst, Py_BuildValue("(O)", s));
+        Py_DECREF(s);
+    }
+    wxPyEndBlockThreads(blocked);
+}
+
 void wxPyApp::MacPrintFile(const wxString &fileName)
 {
     wxPyBlock_t blocked = wxPyBeginBlockThreads();
@@ -2520,6 +2531,17 @@ bool wxPoint_helper(PyObject* source, wxPoint** obj)
         return true;
     }
     return wxPyTwoIntItem_helper(source, obj, wxT("wxPoint"));
+}
+
+
+
+bool wxPosition_helper(PyObject* source, wxPosition** obj)
+{
+    if (source == Py_None) {
+        **obj = wxPosition(-1,-1);
+        return true;
+    }
+    return wxPyTwoIntItem_helper(source, obj, wxT("wxPosition"));
 }
 
 
