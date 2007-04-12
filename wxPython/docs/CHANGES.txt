@@ -45,6 +45,36 @@ Generating wx.NavigationKeyEvent events doesn't work any more under
 wxGTK (and other platforms in the future), use wx.Window.Navigate() or
 NavigateIn() instead.
 
+wx.glcanvas.GLCanvas: The constructor has been changed slightly in
+order to make it consistent across all the platforms.  The C++ version
+now looks like this::
+
+    wxGLCanvas(wxWindow *parent,
+               wxWindowID id = -1,
+               const int *attribList = NULL,
+               const wxPoint& pos = wxDefaultPosition,
+               const wxSize& size = wxDefaultSize,
+               long style = 0,
+               const wxString& name = wxPyGLCanvasNameStr,
+               const wxPalette& palette = wxNullPalette);
+
+Also in GLCanvas, all the platforms now support the new pardigm of
+using a separate GLContext object, and associating it with the canvas
+using canvas.SetCurent(context).
+
+wxMac: The get-url apple event is now supported, simply override
+wx.App.MacOpenURL to receive it.  You'll also need to have appropriate
+meta-data in your app bundle to specify the protocol of the URLs that
+your app can respond to.
+
+wx.VScrolledWindow has been refactored, and new wx.HScrolledWindow and
+wx.HVScrolledWindow classes have been added.  Just like
+wx.VScrolledWindow they allow scrolling with non-uniform scroll
+increments, where the size of each item is determined by making
+callbacks into the derived class.  The H version handles horizontal
+scrolling and the HV version handles both horizontal and vertical
+scrolling. 
+
 
 
 

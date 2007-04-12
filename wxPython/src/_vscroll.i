@@ -18,20 +18,231 @@
 
 %{
 #include <wx/tipwin.h>
-%}
-
-//---------------------------------------------------------------------------
-%newgroup;
-
-
-// wxVScrolledWindow
-
-%{
 #include <wx/vscroll.h>
 %}
 
+%newgroup;
+//---------------------------------------------------------------------------
+// Base classes.  I don't expect that these will ever be used directly from
+// Python, (especially being derived from) so I own't worry about making their
+// virutals overridable.  They're just defined here for their public methods.
 
-// First, the C++ version
+
+
+// Provides all base common scroll calculations needed for either orientation,
+// automatic scrollbar functionality, saved scroll positions, functionality
+// for changing the target window to be scrolled, as well as defining all
+// required virtual functions that need to be implemented for any orientation
+// specific work.
+
+class wxVarScrollHelperBase
+{
+public:
+
+//     wxVarScrollHelperBase(wxWindow *winToScroll);    *** ABC, can't instantiate
+//     virtual ~wxVarScrollHelperBase();
+
+
+    // with physical scrolling on, the device origin is changed properly when
+    // a wxPaintDC is prepared, children are actually moved and laid out
+    // properly, and the contents of the window (pixels) are actually moved
+    void EnablePhysicalScrolling(bool scrolling = true);
+
+    // wxNOT_FOUND if none, i.e. if it is below the last item
+    virtual int HitTest(wxCoord coord) const;
+
+    // recalculate all our parameters and redisplay all units
+    virtual void RefreshAll();
+
+
+    // get the first currently visible unit
+    size_t GetVisibleBegin() const;
+
+    // get the last currently visible unit
+    size_t GetVisibleEnd() const;
+
+    // is this unit currently visible?
+    bool IsVisible(size_t unit) const;
+
+    // translate between scrolled and unscrolled coordinates
+    int CalcScrolledPosition(int coord) const;
+    int CalcUnscrolledPosition(int coord) const;
+
+    // update the thumb size shown by the scrollbar
+    virtual void UpdateScrollbar();
+    void RemoveScrollbar();
+
+    // Normally the wxScrolledWindow will scroll itself, but in some rare
+    // occasions you might want it to scroll [part of] another window (e.g. a
+    // child of it in order to scroll only a portion the area between the
+    // scrollbars (spreadsheet: only cell area will move).
+    virtual void SetTargetWindow(wxWindow *target);
+    virtual wxWindow *GetTargetWindow() const;
+
+
+    // these functions must be overidden in the derived class to return
+    // orientation specific data (e.g. the width for vertically scrolling
+    // derivatives in the case of GetOrientationTargetSize())
+    virtual int GetOrientationTargetSize() const; // = 0;
+    virtual int GetNonOrientationTargetSize() const; // = 0;
+    virtual wxOrientation GetOrientation() const; // = 0;
+};
+
+
+
+
+
+// Provides public API functions targeted for vertical-specific scrolling,
+// wrapping the functionality of wxVarScrollHelperBase.
+
+class wxVarVScrollHelper : public wxVarScrollHelperBase
+{
+public:
+
+//    wxVarVScrollHelper(wxWindow *winToScroll);    *** ABC, can't instantiate
+    
+    void SetRowCount(size_t rowCount);
+    bool ScrollToRow(size_t row);
+
+    virtual bool ScrollRows(int rows);
+    virtual bool ScrollRowPages(int pages);
+
+    virtual void RefreshRow(size_t row);
+    virtual void RefreshRows(size_t from, size_t to);
+
+    virtual int HitTest(wxCoord y) const;
+
+
+    size_t GetRowCount() const;
+    size_t GetVisibleRowsBegin() const;
+    size_t GetVisibleRowsEnd() const;
+    bool IsRowVisible(size_t row) const;
+
+    virtual int GetOrientationTargetSize() const;
+    virtual int GetNonOrientationTargetSize() const;
+    virtual wxOrientation GetOrientation() const;
+};
+
+
+
+
+
+// Provides public API functions targeted for horizontal-specific scrolling,
+// wrapping the functionality of wxVarScrollHelperBase.
+
+class wxVarHScrollHelper : public wxVarScrollHelperBase
+{
+public:
+
+//     wxVarHScrollHelper(wxWindow *winToScroll)     *** ABC, can't instantiate
+
+    void SetColumnCount(size_t columnCount);
+
+    bool ScrollToColumn(size_t column);
+    virtual bool ScrollColumns(int columns);
+    virtual bool ScrollColumnPages(int pages);
+
+    virtual void RefreshColumn(size_t column);
+    virtual void RefreshColumns(size_t from, size_t to);
+    virtual int HitTest(wxCoord x) const;
+
+
+    size_t GetColumnCount() const;
+    size_t GetVisibleColumnsBegin() const;
+    size_t GetVisibleColumnsEnd() const;
+    bool IsColumnVisible(size_t column) const;
+
+
+    virtual int GetOrientationTargetSize() const;
+    virtual int GetNonOrientationTargetSize() const;
+    virtual wxOrientation GetOrientation() const;
+    
+};
+
+
+
+
+
+
+// Provides public API functions targeted at functions with similar names in
+// both wxVScrollHelper and wxHScrollHelper so class scope doesn't need to be
+// specified (since we are using multiple inheritance). It also provides
+// functions to make changing values for both orientations at the same time
+// easier.
+
+class wxVarHVScrollHelper : public wxVarVScrollHelper,
+                            public wxVarHScrollHelper
+{
+public:
+
+//     wxVarHVScrollHelper(wxWindow *winToScroll);   *** ABC, can't instantiate
+
+
+    // set the number of units the window contains for each axis: the derived
+    // class must provide the widths and heights for all units with indices up
+    // to each of the one given here in its OnGetColumnWidth() and
+    // OnGetRowHeight()
+    void SetRowColumnCount(size_t rowCount, size_t columnCount);
+
+
+    // with physical scrolling on, the device origin is changed properly when
+    // a wxPaintDC is prepared, children are actually moved and laid out
+    // properly, and the contents of the window (pixels) are actually moved
+    void EnablePhysicalScrolling(bool vscrolling = true, bool hscrolling = true);
+    
+
+    // scroll to the specified row/column: it will become the first visible
+    // cell in the window
+    //
+    // return true if we scrolled the window, false if nothing was done
+//     bool ScrollToRowColumn(size_t row, size_t column);
+    bool ScrollToRowColumn(const wxPosition &pos);
+
+    // redraw the specified cell
+//     virtual void RefreshRowColumn(size_t row, size_t column);
+    virtual void RefreshRowColumn(const wxPosition &pos);
+
+    // redraw the specified regions (inclusive).  If the target window for
+    // both orientations is the same the rectangle of cells is refreshed; if
+    // the target windows differ the entire client size opposite the
+    // orientation direction is refreshed between the specified limits
+//     virtual void RefreshRowsColumns(size_t fromRow, size_t toRow,
+//                                     size_t fromColumn, size_t toColumn);
+    virtual void RefreshRowsColumns(const wxPosition& from,
+                                    const wxPosition& to);
+
+    // Override wxPanel::HitTest to use our version
+//     virtual wxPosition HitTest(wxCoord x, wxCoord y) const;
+    virtual wxPosition HitTest(const wxPoint &pos) const;
+
+    // replacement implementation of wxWindow::Layout virtual method.  To
+    // properly forward calls to wxWindow::Layout use
+    // WX_FORWARD_TO_SCROLL_HELPER() derived class. We use this version to
+    // call both base classes' ScrollLayout()
+    bool ScrollLayout();
+
+    // get the number of units this window contains (previously set by
+    // Set[Column/Row/RowColumn/Unit]Count())
+    wxSize GetRowColumnCount() const;
+
+    // get the first currently visible units
+    wxPosition GetVisibleBegin() const;
+    wxPosition GetVisibleEnd() const;
+
+    // is this cell currently visible?
+//     bool IsVisible(size_t row, size_t column) const;
+    bool IsVisible(const wxPosition &pos) const;
+};
+
+
+
+
+//---------------------------------------------------------------------------
+// wxVScrolledWindow
+
+
+
+// First, the C++ version that can redirect to overridden Python methods
 %{
 class wxPyVScrolledWindow  : public wxVScrolledWindow
 {
@@ -52,24 +263,24 @@ public:
 
     // this function must be overridden in the derived class and it should
     // return the height of the given line in pixels
-    DEC_PYCALLBACK_COORD_SIZET_constpure(OnGetLineHeight);
-
+    DEC_PYCALLBACK_COORD_SIZET_constpure(OnGetRowHeight);
+    DEC_PYCALLBACK_COORD_SIZET_constpure(OnGetLineHeight);  // old name
 
     // this function doesn't have to be overridden but it may be useful to do
     // it if calculating the lines heights is a relatively expensive operation
     // as it gives the user code a possibility to calculate several of them at
     // once
     //
-    // OnGetLinesHint() is normally called just before OnGetLineHeight() but you
+    // OnGetLinesHint() is normally called just before OnGetRowHeight() but you
     // shouldn't rely on the latter being called for all lines in the interval
-    // specified here. It is also possible that OnGetLineHeight() will be
+    // specified here. It is also possible that OnGetRowHeight() will be
     // called for the lines outside of this interval, so this is really just a
     // hint, not a promise.
     //
     // finally note that lineMin is inclusive, while lineMax is exclusive, as
     // usual
-    DEC_PYCALLBACK_VOID_SIZETSIZET_const(OnGetLinesHint);
-
+    DEC_PYCALLBACK_VOID_SIZETSIZET_const(OnGetRowsHeightHint);
+    DEC_PYCALLBACK_VOID_SIZETSIZET_const(OnGetLinesHint);      // old name
 
     // when the number of lines changes, we try to estimate the total height
     // of all lines which is a rather expensive operation in terms of lines
@@ -85,31 +296,26 @@ public:
     // Also expose some other interesting protected methods
 
 
-    // find the index of the line we need to show at the top of the window such
-    // that the last (fully or partially) visible line is the given one
-    size_t FindFirstFromBottom(size_t lineLast, bool fullyVisible = false)
-    { return wxVScrolledWindow::FindFirstFromBottom(lineLast, fullyVisible); }
-
     // get the total height of the lines between lineMin (inclusive) and
     // lineMax (exclusive)
-    wxCoord GetLinesHeight(size_t lineMin, size_t lineMax) const
-    { return wxVScrolledWindow::GetLinesHeight(lineMin, lineMax); }
+    wxCoord GetRowsHeight(size_t lineMin, size_t lineMax) const
+    { return wxVScrolledWindow::GetRowsHeight(lineMin, lineMax); }
 
-    // update the thumb size shown by the scrollbar
-    void UpdateScrollbar() { wxVScrolledWindow::UpdateScrollbar(); }
-
-    // remove the scrollbar completely because we don't need it
-    void RemoveScrollbar() { wxVScrolledWindow::RemoveScrollbar(); }
 
     PYPRIVATE;
 };
 
 IMPLEMENT_ABSTRACT_CLASS(wxPyVScrolledWindow, wxVScrolledWindow);
 
+IMP_PYCALLBACK_COORD_SIZET_constpure(wxPyVScrolledWindow, wxVScrolledWindow, OnGetRowHeight);
 IMP_PYCALLBACK_COORD_SIZET_constpure(wxPyVScrolledWindow, wxVScrolledWindow, OnGetLineHeight);
+IMP_PYCALLBACK_VOID_SIZETSIZET_const(wxPyVScrolledWindow, wxVScrolledWindow, OnGetRowsHeightHint);
 IMP_PYCALLBACK_VOID_SIZETSIZET_const(wxPyVScrolledWindow, wxVScrolledWindow, OnGetLinesHint);
+
 IMP_PYCALLBACK_COORD_const          (wxPyVScrolledWindow, wxVScrolledWindow, EstimateTotalHeight);
 %}
+
+
 
 
 
@@ -133,7 +339,9 @@ IMP_PYCALLBACK_COORD_const          (wxPyVScrolledWindow, wxVScrolledWindow, Est
 MustHaveApp(wxPyVScrolledWindow);
 
 %rename(VScrolledWindow) wxPyVScrolledWindow;
-class wxPyVScrolledWindow : public wxPanel
+
+class wxPyVScrolledWindow : public wxPanel,
+                            public wxVarVScrollHelper
 {
 public:
     %pythonAppend wxPyVScrolledWindow         "self._setOORInfo(self);" setCallbackInfo(VScrolledWindow)
@@ -159,77 +367,258 @@ public:
                 const wxString& name = wxPyPanelNameStr);
 
 
-    // set the number of lines the window contains: the derived class must
-    // provide the heights for all lines with indices up to the one given here
-    // in its OnGetLineHeight()
-    void SetLineCount(size_t count);
-
-    // scroll to the specified line: it will become the first visible line in
-    // the window
-    //
-    // return True if we scrolled the window, False if nothing was done
-    bool ScrollToLine(size_t line);
-
-    // scroll by the specified number of lines/pages
-    virtual bool ScrollLines(int lines);
-    virtual bool ScrollPages(int pages);
-
-    // redraw the specified line
-    void RefreshLine(size_t line);
-
-    // redraw all lines in the specified range (inclusive)
-    void RefreshLines(size_t from, size_t to);
-
-    // return the item at the specified (in physical coordinates) position or
-    // wxNOT_FOUND if none, i.e. if it is below the last item
-    %Rename(HitTestXY, int, HitTest(wxCoord x, wxCoord y) const);
-    int HitTest(const wxPoint& pt) const;
-
-    // recalculate all our parameters and redisplay all lines
-    virtual void RefreshAll();
-
-
-    // get the number of lines this window contains (previously set by
-    // SetLineCount())
-    size_t GetLineCount() const;
-
-    // get the first currently visible line
-    size_t GetVisibleBegin() const;
-
-    // get the last currently visible line
-    size_t GetVisibleEnd() const;
-
-    // is this line currently visible?
-    bool IsVisible(size_t line) const;
-
-    // this is the same as GetVisibleBegin(), exists to match
-    // GetLastVisibleLine() and for backwards compatibility only
-    size_t GetFirstVisibleLine() const;
-
-    // get the last currently visible line
-    //
-    // this function is unsafe as it returns (size_t)-1 (i.e. a huge positive
-    // number) if the control is empty, use GetVisibleEnd() instead, this one
-    // is kept for backwards compatibility
-    size_t GetLastVisibleLine() const;
-
-    // find the index of the line we need to show at the top of the window such
-    // that the last (fully or partially) visible line is the given one
-    size_t FindFirstFromBottom(size_t lineLast, bool fullyVisible = false);
-
     // get the total height of the lines between lineMin (inclusive) and
     // lineMax (exclusive)
-    wxCoord GetLinesHeight(size_t lineMin, size_t lineMax) const;
+    wxCoord GetRowsHeight(size_t lineMin, size_t lineMax) const;
+    %pythoncode { GetLinesHeight = wx._deprecated(GetRowsHeight,
+                                                  "Use GetRowsHeight instead.") }
+                                                  
+    virtual wxCoord EstimateTotalHeight() const;
 
-    %property(FirstVisibleLine, GetFirstVisibleLine, doc="See `GetFirstVisibleLine`");
-    %property(LastVisibleLine, GetLastVisibleLine, doc="See `GetLastVisibleLine`");
-    %property(LineCount, GetLineCount, SetLineCount, doc="See `GetLineCount` and `SetLineCount`");
-    %property(VisibleBegin, GetVisibleBegin, doc="See `GetVisibleBegin`");
-    %property(VisibleEnd, GetVisibleEnd, doc="See `GetVisibleEnd`");
+    int HitTest(const wxPoint& pt) const;
+
+    
+    // Deprecated wrappers for methods whose name changed when adding the H
+    // classes.  I just put them here instead of wrapping the
+    // wxVarVScrollLegacyAdaptor class.
+    %pythoncode {
+        def GetFirstVisibleLine(self):
+            return self.GetVisibleRowsBegin()
+        GetFirstVisibleLine = wx._deprecated(GetFirstVisibleLine, "Use GetVisibleRowsBegin instead" )
+
+        def GetLastVisibleLine(self):
+            return self.GetVisibleRowsEnd() - 1
+        GetLastVisibleLine = wx._deprecated(GetLastVisibleLine, "Use GetVisibleRowsEnd instead")
+
+        def GetLineCount(self):
+            return self.GetRowCount()
+        GetLineCount = wx._deprecated(GetLineCount, "Use GetRowCount instead")
+
+        def SetLineCount(self, count):
+            self.SetRowCount(count)
+        SetLineCount = wx._deprecated(SetLineCount, "Use SetRowCount instead")
+
+        def RefreshLine(self, line):
+            self.RefreshRow(line)
+        RefreshLine = wx._deprecated(RefreshLine, "Use RefreshRow instead")
+
+        def RefreshLines(self, frm, to):
+            self.RefreshRows(frm, to)
+        RefreshLines = wx._deprecated(RefreshLines, "Use RefreshRows instead")
+            
+        def ScrollToLine(self, line):
+            return self.ScrollToRow(line)
+        ScrollToLine = wx._deprecated(ScrollToLine, "Use RefreshRow instead")
+
+        def ScrollLines(self, lines):
+            return self.ScrollRows(lines)
+        ScrollLines = wx._deprecated(ScrollLines, "Use ScrollRows instead")
+
+        def ScrollPages(self, pages):
+            return self.ScrollRowPages(pages)
+        ScrollPages = wx._deprecated(ScrollPages, "Use ScrollRowPages instead")
+    }
+    
 };
 
 
 
+//---------------------------------------------------------------------------
+// wxHScrolledWindow
+
+
+// First, the C++ version that can redirect to overridden Python methods
+%{
+class wxPyHScrolledWindow  : public wxHScrolledWindow
+{
+    DECLARE_ABSTRACT_CLASS(wxPyHScrolledWindow)
+public:
+    wxPyHScrolledWindow() : wxHScrolledWindow() {}
+
+    wxPyHScrolledWindow(wxWindow *parent,
+                        wxWindowID id = wxID_ANY,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = 0,
+                        const wxString& name = wxPyPanelNameStr)
+        : wxHScrolledWindow(parent, id, pos, size, style, name)
+    {}
+
+    // Overridable virtuals
+    DEC_PYCALLBACK_COORD_SIZET_constpure(OnGetColumnWidth);
+    DEC_PYCALLBACK_VOID_SIZETSIZET_const(OnGetColumnsWidthHint);
+    DEC_PYCALLBACK_COORD_const(EstimateTotalWidth);
+
+    wxCoord GetColumnsWidth(size_t columnMin, size_t columnMax) const
+    { return wxHScrolledWindow::GetColumnsWidth(columnMin, columnMax); }
+
+    PYPRIVATE;
+};
+
+IMPLEMENT_ABSTRACT_CLASS(wxPyHScrolledWindow, wxHScrolledWindow);
+
+IMP_PYCALLBACK_COORD_SIZET_constpure(wxPyHScrolledWindow, wxHScrolledWindow, OnGetColumnWidth);
+IMP_PYCALLBACK_VOID_SIZETSIZET_const(wxPyHScrolledWindow, wxHScrolledWindow, OnGetColumnsWidthHint);
+IMP_PYCALLBACK_COORD_const          (wxPyHScrolledWindow, wxHScrolledWindow, EstimateTotalWidth);
+
+%}
+
+
+
+// Now define this class for SWIG
+
+// In the name of this class, "H" stands for "horizontal" because it can be
+// used for scrolling columns of variable widths. It is not necessary to know
+// the widths of all columns in advance -- only those which are shown on the
+// screen need to be measured.
+
+// This is a generalization of the wxScrolledWindow class which can be only
+// used when all columns have the same width. It lacks some other
+// wxScrolledWindow features however, notably it can't scroll only a rectangle
+// of the window and not its entire client area.
+
+MustHaveApp(wxPyHScrolledWindow);
+
+%rename(HScrolledWindow) wxPyHScrolledWindow;
+
+class wxPyHScrolledWindow : public wxPanel,
+                            public wxVarHScrollHelper
+{
+public:
+    %pythonAppend wxPyHScrolledWindow         "self._setOORInfo(self);" setCallbackInfo(HScrolledWindow)
+    %pythonAppend wxPyHScrolledWindow()       ""
+    
+
+    wxPyHScrolledWindow(wxWindow *parent,
+                        wxWindowID id = wxID_ANY,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = 0,
+                        const wxString& name = wxPyPanelNameStr);
+
+    %RenameCtor(PreHScrolledWindow, wxPyHScrolledWindow());
+
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+
+    bool Create(wxWindow *parent,
+                wxWindowID id = wxID_ANY,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxPyPanelNameStr);
+
+    
+    int HitTest(const wxPoint& pt) const;
+    wxCoord GetColumnsWidth(size_t columnMin, size_t columnMax) const;
+    wxCoord EstimateTotalWidth() const;
+};
+
+
+
+//---------------------------------------------------------------------------
+// wxHVScrolledWindow
+
+
+
+// First, the C++ version that can redirect to overridden Python methods
+%{
+class wxPyHVScrolledWindow  : public wxHVScrolledWindow
+{
+    DECLARE_ABSTRACT_CLASS(wxPyHScrolledWindow)
+public:
+    wxPyHVScrolledWindow() : wxHVScrolledWindow() {}
+
+    wxPyHVScrolledWindow(wxWindow *parent,
+                        wxWindowID id = wxID_ANY,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = 0,
+                        const wxString& name = wxPyPanelNameStr)
+        : wxHVScrolledWindow(parent, id, pos, size, style, name)
+    {}
+
+    // Overridable virtuals
+    DEC_PYCALLBACK_COORD_SIZET_constpure(OnGetRowHeight);
+    DEC_PYCALLBACK_VOID_SIZETSIZET_const(OnGetRowsHeightHint);
+    DEC_PYCALLBACK_COORD_const(EstimateTotalHeight);
+
+    DEC_PYCALLBACK_COORD_SIZET_constpure(OnGetColumnWidth);
+    DEC_PYCALLBACK_VOID_SIZETSIZET_const(OnGetColumnsWidthHint);
+    DEC_PYCALLBACK_COORD_const(EstimateTotalWidth);
+
+    wxCoord GetRowsHeight(size_t lineMin, size_t lineMax) const
+    { return wxHVScrolledWindow::GetRowsHeight(lineMin, lineMax); }
+
+    wxCoord GetColumnsWidth(size_t columnMin, size_t columnMax) const
+    { return wxHVScrolledWindow::GetColumnsWidth(columnMin, columnMax); }
+
+    PYPRIVATE;
+};
+
+IMPLEMENT_ABSTRACT_CLASS(wxPyHVScrolledWindow, wxHVScrolledWindow);
+
+IMP_PYCALLBACK_COORD_SIZET_constpure(wxPyHVScrolledWindow, wxHVScrolledWindow, OnGetRowHeight);
+IMP_PYCALLBACK_VOID_SIZETSIZET_const(wxPyHVScrolledWindow, wxHVScrolledWindow, OnGetRowsHeightHint);
+IMP_PYCALLBACK_COORD_const          (wxPyHVScrolledWindow, wxHVScrolledWindow, EstimateTotalHeight);
+
+IMP_PYCALLBACK_COORD_SIZET_constpure(wxPyHVScrolledWindow, wxHVScrolledWindow, OnGetColumnWidth);
+IMP_PYCALLBACK_VOID_SIZETSIZET_const(wxPyHVScrolledWindow, wxHVScrolledWindow, OnGetColumnsWidthHint);
+IMP_PYCALLBACK_COORD_const          (wxPyHVScrolledWindow, wxHVScrolledWindow, EstimateTotalWidth);
+
+%}
+
+
+
+
+// Now define this class for SWIG
+
+// This window inherits all functionality of both vertical and horizontal
+// scrolled windows automatically handling everything needed to scroll both
+// axis simultaneously.
+
+MustHaveApp(wxPyHVScrolledWindow);
+
+%rename(HVScrolledWindow) wxPyHVScrolledWindow;
+
+class wxPyHVScrolledWindow : public wxPanel,
+                             public wxVarHVScrollHelper
+{
+public:
+    %pythonAppend wxPyHVScrolledWindow         "self._setOORInfo(self);" setCallbackInfo(HVScrolledWindow)
+    %pythonAppend wxPyHVScrolledWindow()       ""
+    
+
+    wxPyHVScrolledWindow(wxWindow *parent,
+                         wxWindowID id = wxID_ANY,
+                         const wxPoint& pos = wxDefaultPosition,
+                         const wxSize& size = wxDefaultSize,
+                         long style = 0,
+                         const wxString& name = wxPyPanelNameStr);
+
+    %RenameCtor(PreHVScrolledWindow, wxPyHVScrolledWindow());
+
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
+
+    bool Create(wxWindow *parent,
+                wxWindowID id = wxID_ANY,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = 0,
+                const wxString& name = wxPyPanelNameStr);
+
+    
+    wxPosition HitTest(const wxPoint& pt) const;
+
+    wxCoord GetRowsHeight(size_t lineMin, size_t lineMax) const;
+    wxCoord EstimateTotalHeight() const;
+
+    wxCoord GetColumnsWidth(size_t columnMin, size_t columnMax) const;
+    wxCoord EstimateTotalWidth() const;
+};
+
+
+
+//---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
 // wxVListBox
 
