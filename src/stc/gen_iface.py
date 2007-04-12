@@ -21,7 +21,7 @@ H_TEMPLATE    = os.path.abspath('./stc.h.in')
 CPP_TEMPLATE  = os.path.abspath('./stc.cpp.in')
 H_DEST        = os.path.abspath('../../include/wx/stc/stc.h')
 CPP_DEST      = os.path.abspath('./stc.cpp')
-DOCSTR_DEST   = os.path.abspath('../../../wxPython/contrib/stc/_stc_gendocs.i')
+DOCSTR_DEST   = os.path.abspath('../../wxPython/contrib/stc/_stc_gendocs.i')
 
 
 # Value prefixes to convert
