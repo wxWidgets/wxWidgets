@@ -155,22 +155,53 @@ public:
 
     ~wxIconBundle();
 
-    // adds the icon to the collection, if the collection already
-    // contains an icon with the same width and height, it is
-    // replaced
-    void AddIcon( const wxIcon& icon );
+    virtual bool IsOk() const;
+    %pythoncode { def __nonzero__(self): return self.IsOk() }
+    
 
-    // adds all the icons contained in the file to the collection,
-    // if the collection already contains icons with the same
-    // width and height, they are replaced
-    %Rename(AddIconFromFile,void, AddIcon( const wxString& file, long type ));
+    DocDeclStr(
+        void , AddIcon( const wxIcon& icon ),
+        "Adds the icon to the collection, if the collection already contains an
+icon with the same width and height, it is replaced", "");
+    
 
-    // returns the icon with the given size; if no such icon exists,
-    // returns the icon with size wxSYS_ICON_[XY]; if no such icon exists,
-    // returns the first icon in the bundle
-    const wxIcon& GetIcon( const wxSize& size ) const;
+    DocDeclStrName(
+        void , AddIcon( const wxString& file, long type ),
+        "Adds all the icons contained in the file to the collection, if the
+collection already contains icons with the same width and height, they
+are replaced", "",
+        AddIconFromFile);
+    
 
-    %property(Icon, GetIcon, doc="See `GetIcon`");
+    DocDeclStr(
+        const wxIcon& , GetIcon( const wxSize& size ) const,
+        "Returns the icon with the given size; if no such icon exists, returns
+the icon with size wxSYS_ICON_[XY]; if no such icon exists, returns
+the first icon in the bundle", "");
+    
+
+
+    DocDeclStr(
+        wxIcon , GetIconOfExactSize(const wxSize& size) const,
+        "Returns the icon exactly of the specified size or wxNullIcon if no
+icon of exactly given size are available.", "");
+    
+
+
+    DocDeclStr(
+        size_t , GetIconCount() const,
+        "return the number of available icons", "");
+    
+
+    DocDeclStr(
+        wxIcon , GetIconByIndex(size_t n) const,
+        "Return the icon at index (must be < GetIconCount())", "");
+    
+
+    DocDeclStr(
+        bool , IsEmpty() const,
+        "Check if we have any icons at all", "");    
+
 };
 
 //---------------------------------------------------------------------------
