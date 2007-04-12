@@ -171,14 +171,15 @@ STANDARD_CURSOR   = Cursor.__new__(Cursor)
 %immutable;
 %threadWrapperOff;
 
-const wxBitmap wxNullBitmap;
-const wxIcon   wxNullIcon;
-const wxCursor wxNullCursor;
-const wxPen    wxNullPen;
-const wxBrush  wxNullBrush;
-const wxPalette wxNullPalette;
-const wxFont   wxNullFont;
-const wxColour wxNullColour;
+const wxBitmap     wxNullBitmap;
+const wxIcon       wxNullIcon;
+const wxCursor     wxNullCursor;
+const wxPen        wxNullPen;
+const wxBrush      wxNullBrush;
+const wxPalette    wxNullPalette;
+const wxFont       wxNullFont;
+const wxColour     wxNullColour;
+const wxIconBundle wxNullIconBundle;
 
 %threadWrapperOn;
 %mutable;
