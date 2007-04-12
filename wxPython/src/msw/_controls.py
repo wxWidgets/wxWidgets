@@ -99,7 +99,7 @@ class Button(_core.Control):
 
     def SetDefault(*args, **kwargs):
         """
-        SetDefault(self)
+        SetDefault(self) -> Window
 
         This sets the button to be the default item for the panel or dialog box.
         """

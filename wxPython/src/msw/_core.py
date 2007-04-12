@@ -1908,6 +1908,73 @@ class Rect2D(object):
 
 _core_.Rect2D_swigregister(Rect2D)
 
+class Position(object):
+    """Proxy of C++ Position class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """__init__(self, int row=0, int col=0) -> Position"""
+        _core_.Position_swiginit(self,_core_.new_Position(*args, **kwargs))
+    __swig_destroy__ = _core_.delete_Position
+    __del__ = lambda self : None;
+    def GetRow(*args, **kwargs):
+        """GetRow(self) -> int"""
+        return _core_.Position_GetRow(*args, **kwargs)
+
+    def GetColumn(*args, **kwargs):
+        """GetColumn(self) -> int"""
+        return _core_.Position_GetColumn(*args, **kwargs)
+
+    def GetCol(*args, **kwargs):
+        """GetCol(self) -> int"""
+        return _core_.Position_GetCol(*args, **kwargs)
+
+    def SetRow(*args, **kwargs):
+        """SetRow(self, int row)"""
+        return _core_.Position_SetRow(*args, **kwargs)
+
+    def SetColumn(*args, **kwargs):
+        """SetColumn(self, int column)"""
+        return _core_.Position_SetColumn(*args, **kwargs)
+
+    def SetCol(*args, **kwargs):
+        """SetCol(self, int column)"""
+        return _core_.Position_SetCol(*args, **kwargs)
+
+    def __eq__(*args, **kwargs):
+        """
+        __eq__(self, PyObject other) -> bool
+
+        Test for equality of wx.Position objects.
+        """
+        return _core_.Position___eq__(*args, **kwargs)
+
+    def __ne__(*args, **kwargs):
+        """
+        __ne__(self, PyObject other) -> bool
+
+        Test for inequality of wx.Position objects.
+        """
+        return _core_.Position___ne__(*args, **kwargs)
+
+    def __add__(*args):
+        """
+        __add__(self, Position p) -> Position
+        __add__(self, Size s) -> Position
+        """
+        return _core_.Position___add__(*args)
+
+    def __sub__(*args):
+        """
+        __sub__(self, Position p) -> Position
+        __sub__(self, Size s) -> Position
+        """
+        return _core_.Position___sub__(*args)
+
+    row = property(GetRow,SetRow) 
+    col = property(GetCol,SetCol) 
+_core_.Position_swigregister(Position)
+
 #---------------------------------------------------------------------------
 
 FromStart = _core_.FromStart
@@ -8140,9 +8207,21 @@ class VisualAttributes(object):
         _core_.VisualAttributes_swiginit(self,_core_.new_VisualAttributes(*args, **kwargs))
     __swig_destroy__ = _core_.delete_VisualAttributes
     __del__ = lambda self : None;
-    font = property(_core_.VisualAttributes_font_get, _core_.VisualAttributes_font_set)
-    colFg = property(_core_.VisualAttributes_colFg_get, _core_.VisualAttributes_colFg_set)
-    colBg = property(_core_.VisualAttributes_colBg_get, _core_.VisualAttributes_colBg_set)
+    def _get_font(*args, **kwargs):
+        """_get_font(self) -> Font"""
+        return _core_.VisualAttributes__get_font(*args, **kwargs)
+
+    def _get_colFg(*args, **kwargs):
+        """_get_colFg(self) -> Colour"""
+        return _core_.VisualAttributes__get_colFg(*args, **kwargs)
+
+    def _get_colBg(*args, **kwargs):
+        """_get_colBg(self) -> Colour"""
+        return _core_.VisualAttributes__get_colBg(*args, **kwargs)
+
+    font = property(_get_font) 
+    colFg = property(_get_colFg) 
+    colBg = property(_get_colBg) 
 _core_.VisualAttributes_swigregister(VisualAttributes)
 NullAcceleratorTable = cvar.NullAcceleratorTable
 PanelNameStr = cvar.PanelNameStr
@@ -9090,6 +9169,10 @@ class Window(EvtHandler):
         Can this window be assigned focus from keyboard right now?
         """
         return _core_.Window_CanAcceptFocusFromKeyboard(*args, **kwargs)
+
+    def SetCanFocus(*args, **kwargs):
+        """SetCanFocus(self, bool canFocus)"""
+        return _core_.Window_SetCanFocus(*args, **kwargs)
 
     def NavigateIn(*args, **kwargs):
         """

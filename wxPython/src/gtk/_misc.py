@@ -1986,6 +1986,8 @@ EXEC_SYNC = _misc_.EXEC_SYNC
 EXEC_NOHIDE = _misc_.EXEC_NOHIDE
 EXEC_MAKE_GROUP_LEADER = _misc_.EXEC_MAKE_GROUP_LEADER
 EXEC_NODISABLE = _misc_.EXEC_NODISABLE
+EXEC_NOEVENTS = _misc_.EXEC_NOEVENTS
+EXEC_BLOCK = _misc_.EXEC_BLOCK
 
 def Execute(*args, **kwargs):
   """Execute(String command, int flags=EXEC_ASYNC, Process process=None) -> long"""
@@ -2712,6 +2714,16 @@ class ArtProvider(object):
         return _misc_.ArtProvider_GetIcon(*args, **kwargs)
 
     GetIcon = staticmethod(GetIcon)
+    def GetIconBundle(*args, **kwargs):
+        """
+        GetIconBundle(wxArtID id, wxArtClient client=wxART_OTHER) -> wxIconBundle
+
+        Query the providers for iconbundle with given ID and return it. Return
+        wx.NullIconBundle if no provider provides it.
+        """
+        return _misc_.ArtProvider_GetIconBundle(*args, **kwargs)
+
+    GetIconBundle = staticmethod(GetIconBundle)
     def GetSizeHint(*args, **kwargs):
         """
         GetSizeHint(String client, bool platform_dependent=False) -> Size
@@ -2735,6 +2747,7 @@ ART_CMN_DIALOG = cvar.ART_CMN_DIALOG
 ART_HELP_BROWSER = cvar.ART_HELP_BROWSER
 ART_MESSAGE_BOX = cvar.ART_MESSAGE_BOX
 ART_BUTTON = cvar.ART_BUTTON
+ART_LIST = cvar.ART_LIST
 ART_OTHER = cvar.ART_OTHER
 ART_ADD_BOOKMARK = cvar.ART_ADD_BOOKMARK
 ART_DEL_BOOKMARK = cvar.ART_DEL_BOOKMARK
@@ -2837,6 +2850,15 @@ def ArtProvider_GetIcon(*args, **kwargs):
     wx.NullIcon if no provider provides it.
     """
   return _misc_.ArtProvider_GetIcon(*args, **kwargs)
+
+def ArtProvider_GetIconBundle(*args, **kwargs):
+  """
+    ArtProvider_GetIconBundle(wxArtID id, wxArtClient client=wxART_OTHER) -> wxIconBundle
+
+    Query the providers for iconbundle with given ID and return it. Return
+    wx.NullIconBundle if no provider provides it.
+    """
+  return _misc_.ArtProvider_GetIconBundle(*args, **kwargs)
 
 def ArtProvider_GetSizeHint(*args, **kwargs):
   """

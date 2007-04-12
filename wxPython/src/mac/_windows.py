@@ -1777,7 +1777,219 @@ _windows_.TipWindow_swigregister(TipWindow)
 
 #---------------------------------------------------------------------------
 
-class VScrolledWindow(Panel):
+class VarScrollHelperBase(object):
+    """Proxy of C++ VarScrollHelperBase class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    def EnablePhysicalScrolling(*args, **kwargs):
+        """EnablePhysicalScrolling(self, bool scrolling=True)"""
+        return _windows_.VarScrollHelperBase_EnablePhysicalScrolling(*args, **kwargs)
+
+    def HitTest(*args, **kwargs):
+        """HitTest(self, int coord) -> int"""
+        return _windows_.VarScrollHelperBase_HitTest(*args, **kwargs)
+
+    def RefreshAll(*args, **kwargs):
+        """RefreshAll(self)"""
+        return _windows_.VarScrollHelperBase_RefreshAll(*args, **kwargs)
+
+    def GetVisibleBegin(*args, **kwargs):
+        """GetVisibleBegin(self) -> size_t"""
+        return _windows_.VarScrollHelperBase_GetVisibleBegin(*args, **kwargs)
+
+    def GetVisibleEnd(*args, **kwargs):
+        """GetVisibleEnd(self) -> size_t"""
+        return _windows_.VarScrollHelperBase_GetVisibleEnd(*args, **kwargs)
+
+    def IsVisible(*args, **kwargs):
+        """IsVisible(self, size_t unit) -> bool"""
+        return _windows_.VarScrollHelperBase_IsVisible(*args, **kwargs)
+
+    def CalcScrolledPosition(*args, **kwargs):
+        """CalcScrolledPosition(self, int coord) -> int"""
+        return _windows_.VarScrollHelperBase_CalcScrolledPosition(*args, **kwargs)
+
+    def CalcUnscrolledPosition(*args, **kwargs):
+        """CalcUnscrolledPosition(self, int coord) -> int"""
+        return _windows_.VarScrollHelperBase_CalcUnscrolledPosition(*args, **kwargs)
+
+    def UpdateScrollbar(*args, **kwargs):
+        """UpdateScrollbar(self)"""
+        return _windows_.VarScrollHelperBase_UpdateScrollbar(*args, **kwargs)
+
+    def RemoveScrollbar(*args, **kwargs):
+        """RemoveScrollbar(self)"""
+        return _windows_.VarScrollHelperBase_RemoveScrollbar(*args, **kwargs)
+
+    def SetTargetWindow(*args, **kwargs):
+        """SetTargetWindow(self, Window target)"""
+        return _windows_.VarScrollHelperBase_SetTargetWindow(*args, **kwargs)
+
+    def GetTargetWindow(*args, **kwargs):
+        """GetTargetWindow(self) -> Window"""
+        return _windows_.VarScrollHelperBase_GetTargetWindow(*args, **kwargs)
+
+    def GetOrientationTargetSize(*args, **kwargs):
+        """GetOrientationTargetSize(self) -> int"""
+        return _windows_.VarScrollHelperBase_GetOrientationTargetSize(*args, **kwargs)
+
+    def GetNonOrientationTargetSize(*args, **kwargs):
+        """GetNonOrientationTargetSize(self) -> int"""
+        return _windows_.VarScrollHelperBase_GetNonOrientationTargetSize(*args, **kwargs)
+
+    def GetOrientation(*args, **kwargs):
+        """GetOrientation(self) -> int"""
+        return _windows_.VarScrollHelperBase_GetOrientation(*args, **kwargs)
+
+_windows_.VarScrollHelperBase_swigregister(VarScrollHelperBase)
+
+class VarVScrollHelper(VarScrollHelperBase):
+    """Proxy of C++ VarVScrollHelper class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    def SetRowCount(*args, **kwargs):
+        """SetRowCount(self, size_t rowCount)"""
+        return _windows_.VarVScrollHelper_SetRowCount(*args, **kwargs)
+
+    def ScrollToRow(*args, **kwargs):
+        """ScrollToRow(self, size_t row) -> bool"""
+        return _windows_.VarVScrollHelper_ScrollToRow(*args, **kwargs)
+
+    def ScrollRows(*args, **kwargs):
+        """ScrollRows(self, int rows) -> bool"""
+        return _windows_.VarVScrollHelper_ScrollRows(*args, **kwargs)
+
+    def ScrollRowPages(*args, **kwargs):
+        """ScrollRowPages(self, int pages) -> bool"""
+        return _windows_.VarVScrollHelper_ScrollRowPages(*args, **kwargs)
+
+    def RefreshRow(*args, **kwargs):
+        """RefreshRow(self, size_t row)"""
+        return _windows_.VarVScrollHelper_RefreshRow(*args, **kwargs)
+
+    def RefreshRows(*args, **kwargs):
+        """RefreshRows(self, size_t from, size_t to)"""
+        return _windows_.VarVScrollHelper_RefreshRows(*args, **kwargs)
+
+    def GetRowCount(*args, **kwargs):
+        """GetRowCount(self) -> size_t"""
+        return _windows_.VarVScrollHelper_GetRowCount(*args, **kwargs)
+
+    def GetVisibleRowsBegin(*args, **kwargs):
+        """GetVisibleRowsBegin(self) -> size_t"""
+        return _windows_.VarVScrollHelper_GetVisibleRowsBegin(*args, **kwargs)
+
+    def GetVisibleRowsEnd(*args, **kwargs):
+        """GetVisibleRowsEnd(self) -> size_t"""
+        return _windows_.VarVScrollHelper_GetVisibleRowsEnd(*args, **kwargs)
+
+    def IsRowVisible(*args, **kwargs):
+        """IsRowVisible(self, size_t row) -> bool"""
+        return _windows_.VarVScrollHelper_IsRowVisible(*args, **kwargs)
+
+_windows_.VarVScrollHelper_swigregister(VarVScrollHelper)
+
+class VarHScrollHelper(VarScrollHelperBase):
+    """Proxy of C++ VarHScrollHelper class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    def SetColumnCount(*args, **kwargs):
+        """SetColumnCount(self, size_t columnCount)"""
+        return _windows_.VarHScrollHelper_SetColumnCount(*args, **kwargs)
+
+    def ScrollToColumn(*args, **kwargs):
+        """ScrollToColumn(self, size_t column) -> bool"""
+        return _windows_.VarHScrollHelper_ScrollToColumn(*args, **kwargs)
+
+    def ScrollColumns(*args, **kwargs):
+        """ScrollColumns(self, int columns) -> bool"""
+        return _windows_.VarHScrollHelper_ScrollColumns(*args, **kwargs)
+
+    def ScrollColumnPages(*args, **kwargs):
+        """ScrollColumnPages(self, int pages) -> bool"""
+        return _windows_.VarHScrollHelper_ScrollColumnPages(*args, **kwargs)
+
+    def RefreshColumn(*args, **kwargs):
+        """RefreshColumn(self, size_t column)"""
+        return _windows_.VarHScrollHelper_RefreshColumn(*args, **kwargs)
+
+    def RefreshColumns(*args, **kwargs):
+        """RefreshColumns(self, size_t from, size_t to)"""
+        return _windows_.VarHScrollHelper_RefreshColumns(*args, **kwargs)
+
+    def GetColumnCount(*args, **kwargs):
+        """GetColumnCount(self) -> size_t"""
+        return _windows_.VarHScrollHelper_GetColumnCount(*args, **kwargs)
+
+    def GetVisibleColumnsBegin(*args, **kwargs):
+        """GetVisibleColumnsBegin(self) -> size_t"""
+        return _windows_.VarHScrollHelper_GetVisibleColumnsBegin(*args, **kwargs)
+
+    def GetVisibleColumnsEnd(*args, **kwargs):
+        """GetVisibleColumnsEnd(self) -> size_t"""
+        return _windows_.VarHScrollHelper_GetVisibleColumnsEnd(*args, **kwargs)
+
+    def IsColumnVisible(*args, **kwargs):
+        """IsColumnVisible(self, size_t column) -> bool"""
+        return _windows_.VarHScrollHelper_IsColumnVisible(*args, **kwargs)
+
+_windows_.VarHScrollHelper_swigregister(VarHScrollHelper)
+
+class VarHVScrollHelper(VarVScrollHelper,VarHScrollHelper):
+    """Proxy of C++ VarHVScrollHelper class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    def SetRowColumnCount(*args, **kwargs):
+        """SetRowColumnCount(self, size_t rowCount, size_t columnCount)"""
+        return _windows_.VarHVScrollHelper_SetRowColumnCount(*args, **kwargs)
+
+    def EnablePhysicalScrolling(*args, **kwargs):
+        """EnablePhysicalScrolling(self, bool vscrolling=True, bool hscrolling=True)"""
+        return _windows_.VarHVScrollHelper_EnablePhysicalScrolling(*args, **kwargs)
+
+    def ScrollToRowColumn(*args, **kwargs):
+        """ScrollToRowColumn(self, Position pos) -> bool"""
+        return _windows_.VarHVScrollHelper_ScrollToRowColumn(*args, **kwargs)
+
+    def RefreshRowColumn(*args, **kwargs):
+        """RefreshRowColumn(self, Position pos)"""
+        return _windows_.VarHVScrollHelper_RefreshRowColumn(*args, **kwargs)
+
+    def RefreshRowsColumns(*args, **kwargs):
+        """RefreshRowsColumns(self, Position from, Position to)"""
+        return _windows_.VarHVScrollHelper_RefreshRowsColumns(*args, **kwargs)
+
+    def HitTest(*args, **kwargs):
+        """HitTest(self, Point pos) -> Position"""
+        return _windows_.VarHVScrollHelper_HitTest(*args, **kwargs)
+
+    def ScrollLayout(*args, **kwargs):
+        """ScrollLayout(self) -> bool"""
+        return _windows_.VarHVScrollHelper_ScrollLayout(*args, **kwargs)
+
+    def GetRowColumnCount(*args, **kwargs):
+        """GetRowColumnCount(self) -> Size"""
+        return _windows_.VarHVScrollHelper_GetRowColumnCount(*args, **kwargs)
+
+    def GetVisibleBegin(*args, **kwargs):
+        """GetVisibleBegin(self) -> Position"""
+        return _windows_.VarHVScrollHelper_GetVisibleBegin(*args, **kwargs)
+
+    def GetVisibleEnd(*args, **kwargs):
+        """GetVisibleEnd(self) -> Position"""
+        return _windows_.VarHVScrollHelper_GetVisibleEnd(*args, **kwargs)
+
+    def IsVisible(*args, **kwargs):
+        """IsVisible(self, Position pos) -> bool"""
+        return _windows_.VarHVScrollHelper_IsVisible(*args, **kwargs)
+
+_windows_.VarHVScrollHelper_swigregister(VarHVScrollHelper)
+
+class VScrolledWindow(Panel,VarVScrollHelper):
     """Proxy of C++ VScrolledWindow class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
@@ -1800,29 +2012,15 @@ class VScrolledWindow(Panel):
         """
         return _windows_.VScrolledWindow_Create(*args, **kwargs)
 
-    def SetLineCount(*args, **kwargs):
-        """SetLineCount(self, size_t count)"""
-        return _windows_.VScrolledWindow_SetLineCount(*args, **kwargs)
+    def GetRowsHeight(*args, **kwargs):
+        """GetRowsHeight(self, size_t lineMin, size_t lineMax) -> int"""
+        return _windows_.VScrolledWindow_GetRowsHeight(*args, **kwargs)
 
-    def ScrollToLine(*args, **kwargs):
-        """ScrollToLine(self, size_t line) -> bool"""
-        return _windows_.VScrolledWindow_ScrollToLine(*args, **kwargs)
-
-    def RefreshLine(*args, **kwargs):
-        """RefreshLine(self, size_t line)"""
-        return _windows_.VScrolledWindow_RefreshLine(*args, **kwargs)
-
-    def RefreshLines(*args, **kwargs):
-        """RefreshLines(self, size_t from, size_t to)"""
-        return _windows_.VScrolledWindow_RefreshLines(*args, **kwargs)
-
-    def HitTestXY(*args, **kwargs):
-        """
-        HitTestXY(self, int x, int y) -> int
-
-        Test where the given (in client coords) point lies
-        """
-        return _windows_.VScrolledWindow_HitTestXY(*args, **kwargs)
+    GetLinesHeight = wx._deprecated(GetRowsHeight,
+                                                     "Use GetRowsHeight instead.") 
+    def EstimateTotalHeight(*args, **kwargs):
+        """EstimateTotalHeight(self) -> int"""
+        return _windows_.VScrolledWindow_EstimateTotalHeight(*args, **kwargs)
 
     def HitTest(*args, **kwargs):
         """
@@ -1832,52 +2030,139 @@ class VScrolledWindow(Panel):
         """
         return _windows_.VScrolledWindow_HitTest(*args, **kwargs)
 
-    def RefreshAll(*args, **kwargs):
-        """RefreshAll(self)"""
-        return _windows_.VScrolledWindow_RefreshAll(*args, **kwargs)
+    def GetFirstVisibleLine(self):
+        return self.GetVisibleRowsBegin()
+    GetFirstVisibleLine = wx._deprecated(GetFirstVisibleLine, "Use GetVisibleRowsBegin instead" )
 
-    def GetLineCount(*args, **kwargs):
-        """GetLineCount(self) -> size_t"""
-        return _windows_.VScrolledWindow_GetLineCount(*args, **kwargs)
+    def GetLastVisibleLine(self):
+        return self.GetVisibleRowsEnd() - 1
+    GetLastVisibleLine = wx._deprecated(GetLastVisibleLine, "Use GetVisibleRowsEnd instead")
 
-    def GetVisibleBegin(*args, **kwargs):
-        """GetVisibleBegin(self) -> size_t"""
-        return _windows_.VScrolledWindow_GetVisibleBegin(*args, **kwargs)
+    def GetLineCount(self):
+        return self.GetRowCount()
+    GetLineCount = wx._deprecated(GetLineCount, "Use GetRowCount instead")
 
-    def GetVisibleEnd(*args, **kwargs):
-        """GetVisibleEnd(self) -> size_t"""
-        return _windows_.VScrolledWindow_GetVisibleEnd(*args, **kwargs)
+    def SetLineCount(self, count):
+        self.SetRowCount(count)
+    SetLineCount = wx._deprecated(SetLineCount, "Use SetRowCount instead")
 
-    def IsVisible(*args, **kwargs):
-        """IsVisible(self, size_t line) -> bool"""
-        return _windows_.VScrolledWindow_IsVisible(*args, **kwargs)
+    def RefreshLine(self, line):
+        self.RefreshRow(line)
+    RefreshLine = wx._deprecated(RefreshLine, "Use RefreshRow instead")
 
-    def GetFirstVisibleLine(*args, **kwargs):
-        """GetFirstVisibleLine(self) -> size_t"""
-        return _windows_.VScrolledWindow_GetFirstVisibleLine(*args, **kwargs)
+    def RefreshLines(self, frm, to):
+        self.RefreshRows(frm, to)
+    RefreshLines = wx._deprecated(RefreshLines, "Use RefreshRows instead")
+        
+    def ScrollToLine(self, line):
+        return self.ScrollToRow(line)
+    ScrollToLine = wx._deprecated(ScrollToLine, "Use RefreshRow instead")
 
-    def GetLastVisibleLine(*args, **kwargs):
-        """GetLastVisibleLine(self) -> size_t"""
-        return _windows_.VScrolledWindow_GetLastVisibleLine(*args, **kwargs)
+    def ScrollLines(self, lines):
+        return self.ScrollRows(lines)
+    ScrollLines = wx._deprecated(ScrollLines, "Use ScrollRows instead")
 
-    def FindFirstFromBottom(*args, **kwargs):
-        """FindFirstFromBottom(self, size_t lineLast, bool fullyVisible=False) -> size_t"""
-        return _windows_.VScrolledWindow_FindFirstFromBottom(*args, **kwargs)
+    def ScrollPages(self, pages):
+        return self.ScrollRowPages(pages)
+    ScrollPages = wx._deprecated(ScrollPages, "Use ScrollRowPages instead")
 
-    def GetLinesHeight(*args, **kwargs):
-        """GetLinesHeight(self, size_t lineMin, size_t lineMax) -> int"""
-        return _windows_.VScrolledWindow_GetLinesHeight(*args, **kwargs)
-
-    FirstVisibleLine = property(GetFirstVisibleLine,doc="See `GetFirstVisibleLine`") 
-    LastVisibleLine = property(GetLastVisibleLine,doc="See `GetLastVisibleLine`") 
-    LineCount = property(GetLineCount,SetLineCount,doc="See `GetLineCount` and `SetLineCount`") 
-    VisibleBegin = property(GetVisibleBegin,doc="See `GetVisibleBegin`") 
-    VisibleEnd = property(GetVisibleEnd,doc="See `GetVisibleEnd`") 
 _windows_.VScrolledWindow_swigregister(VScrolledWindow)
 
 def PreVScrolledWindow(*args, **kwargs):
     """PreVScrolledWindow() -> VScrolledWindow"""
     val = _windows_.new_PreVScrolledWindow(*args, **kwargs)
+    return val
+
+class HScrolledWindow(Panel,VarHScrollHelper):
+    """Proxy of C++ HScrolledWindow class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, Window parent, int id=ID_ANY, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, String name=PanelNameStr) -> HScrolledWindow
+        """
+        _windows_.HScrolledWindow_swiginit(self,_windows_.new_HScrolledWindow(*args, **kwargs))
+        self._setOORInfo(self);HScrolledWindow._setCallbackInfo(self, self, HScrolledWindow)
+
+    def _setCallbackInfo(*args, **kwargs):
+        """_setCallbackInfo(self, PyObject self, PyObject _class)"""
+        return _windows_.HScrolledWindow__setCallbackInfo(*args, **kwargs)
+
+    def Create(*args, **kwargs):
+        """
+        Create(self, Window parent, int id=ID_ANY, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, String name=PanelNameStr) -> bool
+        """
+        return _windows_.HScrolledWindow_Create(*args, **kwargs)
+
+    def HitTest(*args, **kwargs):
+        """
+        HitTest(self, Point pt) -> int
+
+        Test where the given (in client coords) point lies
+        """
+        return _windows_.HScrolledWindow_HitTest(*args, **kwargs)
+
+    def GetColumnsWidth(*args, **kwargs):
+        """GetColumnsWidth(self, size_t columnMin, size_t columnMax) -> int"""
+        return _windows_.HScrolledWindow_GetColumnsWidth(*args, **kwargs)
+
+    def EstimateTotalWidth(*args, **kwargs):
+        """EstimateTotalWidth(self) -> int"""
+        return _windows_.HScrolledWindow_EstimateTotalWidth(*args, **kwargs)
+
+_windows_.HScrolledWindow_swigregister(HScrolledWindow)
+
+def PreHScrolledWindow(*args, **kwargs):
+    """PreHScrolledWindow() -> HScrolledWindow"""
+    val = _windows_.new_PreHScrolledWindow(*args, **kwargs)
+    return val
+
+class HVScrolledWindow(Panel,VarHVScrollHelper):
+    """Proxy of C++ HVScrolledWindow class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, Window parent, int id=ID_ANY, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, String name=PanelNameStr) -> HVScrolledWindow
+        """
+        _windows_.HVScrolledWindow_swiginit(self,_windows_.new_HVScrolledWindow(*args, **kwargs))
+        self._setOORInfo(self);HVScrolledWindow._setCallbackInfo(self, self, HVScrolledWindow)
+
+    def _setCallbackInfo(*args, **kwargs):
+        """_setCallbackInfo(self, PyObject self, PyObject _class)"""
+        return _windows_.HVScrolledWindow__setCallbackInfo(*args, **kwargs)
+
+    def Create(*args, **kwargs):
+        """
+        Create(self, Window parent, int id=ID_ANY, Point pos=DefaultPosition, 
+            Size size=DefaultSize, long style=0, String name=PanelNameStr) -> bool
+        """
+        return _windows_.HVScrolledWindow_Create(*args, **kwargs)
+
+    def GetRowsHeight(*args, **kwargs):
+        """GetRowsHeight(self, size_t lineMin, size_t lineMax) -> int"""
+        return _windows_.HVScrolledWindow_GetRowsHeight(*args, **kwargs)
+
+    def EstimateTotalHeight(*args, **kwargs):
+        """EstimateTotalHeight(self) -> int"""
+        return _windows_.HVScrolledWindow_EstimateTotalHeight(*args, **kwargs)
+
+    def GetColumnsWidth(*args, **kwargs):
+        """GetColumnsWidth(self, size_t columnMin, size_t columnMax) -> int"""
+        return _windows_.HVScrolledWindow_GetColumnsWidth(*args, **kwargs)
+
+    def EstimateTotalWidth(*args, **kwargs):
+        """EstimateTotalWidth(self) -> int"""
+        return _windows_.HVScrolledWindow_EstimateTotalWidth(*args, **kwargs)
+
+_windows_.HVScrolledWindow_swigregister(HVScrolledWindow)
+
+def PreHVScrolledWindow(*args, **kwargs):
+    """PreHVScrolledWindow() -> HVScrolledWindow"""
+    val = _windows_.new_PreHVScrolledWindow(*args, **kwargs)
     return val
 
 class VListBox(VScrolledWindow):

@@ -2564,77 +2564,84 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 #define SWIGTYPE_p_wxPasswordEntryDialog swig_types[98]
 #define SWIGTYPE_p_wxPoint swig_types[99]
 #define SWIGTYPE_p_wxPopupWindow swig_types[100]
-#define SWIGTYPE_p_wxPreviewCanvas swig_types[101]
-#define SWIGTYPE_p_wxPreviewControlBar swig_types[102]
-#define SWIGTYPE_p_wxPreviewFrame swig_types[103]
-#define SWIGTYPE_p_wxPrintData swig_types[104]
-#define SWIGTYPE_p_wxPrintDialog swig_types[105]
-#define SWIGTYPE_p_wxPrintDialogData swig_types[106]
-#define SWIGTYPE_p_wxPrintPreview swig_types[107]
-#define SWIGTYPE_p_wxPrinter swig_types[108]
-#define SWIGTYPE_p_wxProgressDialog swig_types[109]
-#define SWIGTYPE_p_wxPyApp swig_types[110]
-#define SWIGTYPE_p_wxPyCommandEvent swig_types[111]
-#define SWIGTYPE_p_wxPyEvent swig_types[112]
-#define SWIGTYPE_p_wxPyHtmlListBox swig_types[113]
-#define SWIGTYPE_p_wxPyImageHandler swig_types[114]
-#define SWIGTYPE_p_wxPyPanel swig_types[115]
-#define SWIGTYPE_p_wxPyPopupTransientWindow swig_types[116]
-#define SWIGTYPE_p_wxPyPreviewControlBar swig_types[117]
-#define SWIGTYPE_p_wxPyPreviewFrame swig_types[118]
-#define SWIGTYPE_p_wxPyPrintPreview swig_types[119]
-#define SWIGTYPE_p_wxPyPrintout swig_types[120]
-#define SWIGTYPE_p_wxPyScrolledWindow swig_types[121]
-#define SWIGTYPE_p_wxPySizer swig_types[122]
-#define SWIGTYPE_p_wxPyTaskBarIcon swig_types[123]
-#define SWIGTYPE_p_wxPyVListBox swig_types[124]
-#define SWIGTYPE_p_wxPyVScrolledWindow swig_types[125]
-#define SWIGTYPE_p_wxPyValidator swig_types[126]
-#define SWIGTYPE_p_wxPyWindow swig_types[127]
-#define SWIGTYPE_p_wxQueryLayoutInfoEvent swig_types[128]
-#define SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[129]
-#define SWIGTYPE_p_wxRect swig_types[130]
-#define SWIGTYPE_p_wxRegion swig_types[131]
-#define SWIGTYPE_p_wxSashEvent swig_types[132]
-#define SWIGTYPE_p_wxSashLayoutWindow swig_types[133]
-#define SWIGTYPE_p_wxSashWindow swig_types[134]
-#define SWIGTYPE_p_wxScrollEvent swig_types[135]
-#define SWIGTYPE_p_wxScrollWinEvent swig_types[136]
-#define SWIGTYPE_p_wxScrolledWindow swig_types[137]
-#define SWIGTYPE_p_wxSetCursorEvent swig_types[138]
-#define SWIGTYPE_p_wxShowEvent swig_types[139]
-#define SWIGTYPE_p_wxSimpleHtmlListBox swig_types[140]
-#define SWIGTYPE_p_wxSingleChoiceDialog swig_types[141]
-#define SWIGTYPE_p_wxSize swig_types[142]
-#define SWIGTYPE_p_wxSizeEvent swig_types[143]
-#define SWIGTYPE_p_wxSizer swig_types[144]
-#define SWIGTYPE_p_wxSizerItem swig_types[145]
-#define SWIGTYPE_p_wxSplashScreen swig_types[146]
-#define SWIGTYPE_p_wxSplashScreenWindow swig_types[147]
-#define SWIGTYPE_p_wxSplitterEvent swig_types[148]
-#define SWIGTYPE_p_wxSplitterWindow swig_types[149]
-#define SWIGTYPE_p_wxStaticBoxSizer swig_types[150]
-#define SWIGTYPE_p_wxStatusBar swig_types[151]
-#define SWIGTYPE_p_wxStdDialogButtonSizer swig_types[152]
-#define SWIGTYPE_p_wxString swig_types[153]
-#define SWIGTYPE_p_wxSysColourChangedEvent swig_types[154]
-#define SWIGTYPE_p_wxTGAHandler swig_types[155]
-#define SWIGTYPE_p_wxTIFFHandler swig_types[156]
-#define SWIGTYPE_p_wxTaskBarIcon swig_types[157]
-#define SWIGTYPE_p_wxTaskBarIconEvent swig_types[158]
-#define SWIGTYPE_p_wxTextEntryDialog swig_types[159]
-#define SWIGTYPE_p_wxTipWindow swig_types[160]
-#define SWIGTYPE_p_wxToolBar swig_types[161]
-#define SWIGTYPE_p_wxTopLevelWindow swig_types[162]
-#define SWIGTYPE_p_wxUpdateUIEvent swig_types[163]
-#define SWIGTYPE_p_wxValidator swig_types[164]
-#define SWIGTYPE_p_wxVisualAttributes swig_types[165]
-#define SWIGTYPE_p_wxWindow swig_types[166]
-#define SWIGTYPE_p_wxWindowCreateEvent swig_types[167]
-#define SWIGTYPE_p_wxWindowDestroyEvent swig_types[168]
-#define SWIGTYPE_p_wxXPMHandler swig_types[169]
-static swig_type_info *swig_types[171];
-static swig_module_info swig_module = {swig_types, 170, 0, 0, 0, 0};
+#define SWIGTYPE_p_wxPosition swig_types[101]
+#define SWIGTYPE_p_wxPreviewCanvas swig_types[102]
+#define SWIGTYPE_p_wxPreviewControlBar swig_types[103]
+#define SWIGTYPE_p_wxPreviewFrame swig_types[104]
+#define SWIGTYPE_p_wxPrintData swig_types[105]
+#define SWIGTYPE_p_wxPrintDialog swig_types[106]
+#define SWIGTYPE_p_wxPrintDialogData swig_types[107]
+#define SWIGTYPE_p_wxPrintPreview swig_types[108]
+#define SWIGTYPE_p_wxPrinter swig_types[109]
+#define SWIGTYPE_p_wxProgressDialog swig_types[110]
+#define SWIGTYPE_p_wxPyApp swig_types[111]
+#define SWIGTYPE_p_wxPyCommandEvent swig_types[112]
+#define SWIGTYPE_p_wxPyEvent swig_types[113]
+#define SWIGTYPE_p_wxPyHScrolledWindow swig_types[114]
+#define SWIGTYPE_p_wxPyHVScrolledWindow swig_types[115]
+#define SWIGTYPE_p_wxPyHtmlListBox swig_types[116]
+#define SWIGTYPE_p_wxPyImageHandler swig_types[117]
+#define SWIGTYPE_p_wxPyPanel swig_types[118]
+#define SWIGTYPE_p_wxPyPopupTransientWindow swig_types[119]
+#define SWIGTYPE_p_wxPyPreviewControlBar swig_types[120]
+#define SWIGTYPE_p_wxPyPreviewFrame swig_types[121]
+#define SWIGTYPE_p_wxPyPrintPreview swig_types[122]
+#define SWIGTYPE_p_wxPyPrintout swig_types[123]
+#define SWIGTYPE_p_wxPyScrolledWindow swig_types[124]
+#define SWIGTYPE_p_wxPySizer swig_types[125]
+#define SWIGTYPE_p_wxPyTaskBarIcon swig_types[126]
+#define SWIGTYPE_p_wxPyVListBox swig_types[127]
+#define SWIGTYPE_p_wxPyVScrolledWindow swig_types[128]
+#define SWIGTYPE_p_wxPyValidator swig_types[129]
+#define SWIGTYPE_p_wxPyWindow swig_types[130]
+#define SWIGTYPE_p_wxQueryLayoutInfoEvent swig_types[131]
+#define SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[132]
+#define SWIGTYPE_p_wxRect swig_types[133]
+#define SWIGTYPE_p_wxRegion swig_types[134]
+#define SWIGTYPE_p_wxSashEvent swig_types[135]
+#define SWIGTYPE_p_wxSashLayoutWindow swig_types[136]
+#define SWIGTYPE_p_wxSashWindow swig_types[137]
+#define SWIGTYPE_p_wxScrollEvent swig_types[138]
+#define SWIGTYPE_p_wxScrollWinEvent swig_types[139]
+#define SWIGTYPE_p_wxScrolledWindow swig_types[140]
+#define SWIGTYPE_p_wxSetCursorEvent swig_types[141]
+#define SWIGTYPE_p_wxShowEvent swig_types[142]
+#define SWIGTYPE_p_wxSimpleHtmlListBox swig_types[143]
+#define SWIGTYPE_p_wxSingleChoiceDialog swig_types[144]
+#define SWIGTYPE_p_wxSize swig_types[145]
+#define SWIGTYPE_p_wxSizeEvent swig_types[146]
+#define SWIGTYPE_p_wxSizer swig_types[147]
+#define SWIGTYPE_p_wxSizerItem swig_types[148]
+#define SWIGTYPE_p_wxSplashScreen swig_types[149]
+#define SWIGTYPE_p_wxSplashScreenWindow swig_types[150]
+#define SWIGTYPE_p_wxSplitterEvent swig_types[151]
+#define SWIGTYPE_p_wxSplitterWindow swig_types[152]
+#define SWIGTYPE_p_wxStaticBoxSizer swig_types[153]
+#define SWIGTYPE_p_wxStatusBar swig_types[154]
+#define SWIGTYPE_p_wxStdDialogButtonSizer swig_types[155]
+#define SWIGTYPE_p_wxString swig_types[156]
+#define SWIGTYPE_p_wxSysColourChangedEvent swig_types[157]
+#define SWIGTYPE_p_wxTGAHandler swig_types[158]
+#define SWIGTYPE_p_wxTIFFHandler swig_types[159]
+#define SWIGTYPE_p_wxTaskBarIcon swig_types[160]
+#define SWIGTYPE_p_wxTaskBarIconEvent swig_types[161]
+#define SWIGTYPE_p_wxTextEntryDialog swig_types[162]
+#define SWIGTYPE_p_wxTipWindow swig_types[163]
+#define SWIGTYPE_p_wxToolBar swig_types[164]
+#define SWIGTYPE_p_wxTopLevelWindow swig_types[165]
+#define SWIGTYPE_p_wxUpdateUIEvent swig_types[166]
+#define SWIGTYPE_p_wxValidator swig_types[167]
+#define SWIGTYPE_p_wxVarHScrollHelper swig_types[168]
+#define SWIGTYPE_p_wxVarHVScrollHelper swig_types[169]
+#define SWIGTYPE_p_wxVarScrollHelperBase swig_types[170]
+#define SWIGTYPE_p_wxVarVScrollHelper swig_types[171]
+#define SWIGTYPE_p_wxVisualAttributes swig_types[172]
+#define SWIGTYPE_p_wxWindow swig_types[173]
+#define SWIGTYPE_p_wxWindowCreateEvent swig_types[174]
+#define SWIGTYPE_p_wxWindowDestroyEvent swig_types[175]
+#define SWIGTYPE_p_wxXPMHandler swig_types[176]
+static swig_type_info *swig_types[178];
+static swig_module_info swig_module = {swig_types, 177, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2870,87 +2877,22 @@ SWIGINTERN wxTipWindow *new_wxTipWindow(wxWindow *parent,wxString const &text,in
         }
 
 #include <wx/tipwin.h>
-
-
 #include <wx/vscroll.h>
 
 
-class wxPyVScrolledWindow  : public wxVScrolledWindow
+SWIGINTERNINLINE PyObject* 
+SWIG_From_unsigned_SS_long  (unsigned long value)
 {
-    DECLARE_ABSTRACT_CLASS(wxPyVScrolledWindow)
-public:
-    wxPyVScrolledWindow() : wxVScrolledWindow() {}
-
-    wxPyVScrolledWindow(wxWindow *parent,
-                        wxWindowID id = wxID_ANY,
-                        const wxPoint& pos = wxDefaultPosition,
-                        const wxSize& size = wxDefaultSize,
-                        long style = 0,
-                        const wxString& name = wxPyPanelNameStr)
-        : wxVScrolledWindow(parent, id, pos, size, style, name)
-    {}
-
-    // Overridable virtuals
-
-    // this function must be overridden in the derived class and it should
-    // return the height of the given line in pixels
-    DEC_PYCALLBACK_COORD_SIZET_constpure(OnGetLineHeight);
+  return (value > LONG_MAX) ?
+    PyLong_FromUnsignedLong(value) : PyInt_FromLong(static_cast< long >(value)); 
+}
 
 
-    // this function doesn't have to be overridden but it may be useful to do
-    // it if calculating the lines heights is a relatively expensive operation
-    // as it gives the user code a possibility to calculate several of them at
-    // once
-    //
-    // OnGetLinesHint() is normally called just before OnGetLineHeight() but you
-    // shouldn't rely on the latter being called for all lines in the interval
-    // specified here. It is also possible that OnGetLineHeight() will be
-    // called for the lines outside of this interval, so this is really just a
-    // hint, not a promise.
-    //
-    // finally note that lineMin is inclusive, while lineMax is exclusive, as
-    // usual
-    DEC_PYCALLBACK_VOID_SIZETSIZET_const(OnGetLinesHint);
-
-
-    // when the number of lines changes, we try to estimate the total height
-    // of all lines which is a rather expensive operation in terms of lines
-    // access, so if the user code may estimate the average height
-    // better/faster than we do, it should override this function to implement
-    // its own logic
-    //
-    // this function should return the best guess for the total height it may
-    // make
-    DEC_PYCALLBACK_COORD_const(EstimateTotalHeight);
-
-
-    // Also expose some other interesting protected methods
-
-
-    // find the index of the line we need to show at the top of the window such
-    // that the last (fully or partially) visible line is the given one
-    size_t FindFirstFromBottom(size_t lineLast, bool fullyVisible = false)
-    { return wxVScrolledWindow::FindFirstFromBottom(lineLast, fullyVisible); }
-
-    // get the total height of the lines between lineMin (inclusive) and
-    // lineMax (exclusive)
-    wxCoord GetLinesHeight(size_t lineMin, size_t lineMax) const
-    { return wxVScrolledWindow::GetLinesHeight(lineMin, lineMax); }
-
-    // update the thumb size shown by the scrollbar
-    void UpdateScrollbar() { wxVScrolledWindow::UpdateScrollbar(); }
-
-    // remove the scrollbar completely because we don't need it
-    void RemoveScrollbar() { wxVScrolledWindow::RemoveScrollbar(); }
-
-    PYPRIVATE;
-};
-
-IMPLEMENT_ABSTRACT_CLASS(wxPyVScrolledWindow, wxVScrolledWindow);
-
-IMP_PYCALLBACK_COORD_SIZET_constpure(wxPyVScrolledWindow, wxVScrolledWindow, OnGetLineHeight);
-IMP_PYCALLBACK_VOID_SIZETSIZET_const(wxPyVScrolledWindow, wxVScrolledWindow, OnGetLinesHint);
-IMP_PYCALLBACK_COORD_const          (wxPyVScrolledWindow, wxVScrolledWindow, EstimateTotalHeight);
+SWIGINTERNINLINE PyObject *
+SWIG_From_size_t  (size_t value)
+{    
+  return SWIG_From_unsigned_SS_long  (static_cast< unsigned long >(value));
+}
 
 
 SWIGINTERN int 
@@ -2976,19 +2918,154 @@ SWIG_AsVal_size_t (PyObject * obj, size_t *val)
 }
 
 
-SWIGINTERNINLINE PyObject* 
-SWIG_From_unsigned_SS_long  (unsigned long value)
+class wxPyVScrolledWindow  : public wxVScrolledWindow
 {
-  return (value > LONG_MAX) ?
-    PyLong_FromUnsignedLong(value) : PyInt_FromLong(static_cast< long >(value)); 
-}
+    DECLARE_ABSTRACT_CLASS(wxPyVScrolledWindow)
+public:
+    wxPyVScrolledWindow() : wxVScrolledWindow() {}
+
+    wxPyVScrolledWindow(wxWindow *parent,
+                        wxWindowID id = wxID_ANY,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = 0,
+                        const wxString& name = wxPyPanelNameStr)
+        : wxVScrolledWindow(parent, id, pos, size, style, name)
+    {}
+
+    // Overridable virtuals
+
+    // this function must be overridden in the derived class and it should
+    // return the height of the given line in pixels
+    DEC_PYCALLBACK_COORD_SIZET_constpure(OnGetRowHeight);
+    DEC_PYCALLBACK_COORD_SIZET_constpure(OnGetLineHeight);  // old name
+
+    // this function doesn't have to be overridden but it may be useful to do
+    // it if calculating the lines heights is a relatively expensive operation
+    // as it gives the user code a possibility to calculate several of them at
+    // once
+    //
+    // OnGetLinesHint() is normally called just before OnGetRowHeight() but you
+    // shouldn't rely on the latter being called for all lines in the interval
+    // specified here. It is also possible that OnGetRowHeight() will be
+    // called for the lines outside of this interval, so this is really just a
+    // hint, not a promise.
+    //
+    // finally note that lineMin is inclusive, while lineMax is exclusive, as
+    // usual
+    DEC_PYCALLBACK_VOID_SIZETSIZET_const(OnGetRowsHeightHint);
+    DEC_PYCALLBACK_VOID_SIZETSIZET_const(OnGetLinesHint);      // old name
+
+    // when the number of lines changes, we try to estimate the total height
+    // of all lines which is a rather expensive operation in terms of lines
+    // access, so if the user code may estimate the average height
+    // better/faster than we do, it should override this function to implement
+    // its own logic
+    //
+    // this function should return the best guess for the total height it may
+    // make
+    DEC_PYCALLBACK_COORD_const(EstimateTotalHeight);
 
 
-SWIGINTERNINLINE PyObject *
-SWIG_From_size_t  (size_t value)
-{    
-  return SWIG_From_unsigned_SS_long  (static_cast< unsigned long >(value));
-}
+    // Also expose some other interesting protected methods
+
+
+    // get the total height of the lines between lineMin (inclusive) and
+    // lineMax (exclusive)
+    wxCoord GetRowsHeight(size_t lineMin, size_t lineMax) const
+    { return wxVScrolledWindow::GetRowsHeight(lineMin, lineMax); }
+
+
+    PYPRIVATE;
+};
+
+IMPLEMENT_ABSTRACT_CLASS(wxPyVScrolledWindow, wxVScrolledWindow);
+
+IMP_PYCALLBACK_COORD_SIZET_constpure(wxPyVScrolledWindow, wxVScrolledWindow, OnGetRowHeight);
+IMP_PYCALLBACK_COORD_SIZET_constpure(wxPyVScrolledWindow, wxVScrolledWindow, OnGetLineHeight);
+IMP_PYCALLBACK_VOID_SIZETSIZET_const(wxPyVScrolledWindow, wxVScrolledWindow, OnGetRowsHeightHint);
+IMP_PYCALLBACK_VOID_SIZETSIZET_const(wxPyVScrolledWindow, wxVScrolledWindow, OnGetLinesHint);
+
+IMP_PYCALLBACK_COORD_const          (wxPyVScrolledWindow, wxVScrolledWindow, EstimateTotalHeight);
+
+
+class wxPyHScrolledWindow  : public wxHScrolledWindow
+{
+    DECLARE_ABSTRACT_CLASS(wxPyHScrolledWindow)
+public:
+    wxPyHScrolledWindow() : wxHScrolledWindow() {}
+
+    wxPyHScrolledWindow(wxWindow *parent,
+                        wxWindowID id = wxID_ANY,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = 0,
+                        const wxString& name = wxPyPanelNameStr)
+        : wxHScrolledWindow(parent, id, pos, size, style, name)
+    {}
+
+    // Overridable virtuals
+    DEC_PYCALLBACK_COORD_SIZET_constpure(OnGetColumnWidth);
+    DEC_PYCALLBACK_VOID_SIZETSIZET_const(OnGetColumnsWidthHint);
+    DEC_PYCALLBACK_COORD_const(EstimateTotalWidth);
+
+    wxCoord GetColumnsWidth(size_t columnMin, size_t columnMax) const
+    { return wxHScrolledWindow::GetColumnsWidth(columnMin, columnMax); }
+
+    PYPRIVATE;
+};
+
+IMPLEMENT_ABSTRACT_CLASS(wxPyHScrolledWindow, wxHScrolledWindow);
+
+IMP_PYCALLBACK_COORD_SIZET_constpure(wxPyHScrolledWindow, wxHScrolledWindow, OnGetColumnWidth);
+IMP_PYCALLBACK_VOID_SIZETSIZET_const(wxPyHScrolledWindow, wxHScrolledWindow, OnGetColumnsWidthHint);
+IMP_PYCALLBACK_COORD_const          (wxPyHScrolledWindow, wxHScrolledWindow, EstimateTotalWidth);
+
+
+
+class wxPyHVScrolledWindow  : public wxHVScrolledWindow
+{
+    DECLARE_ABSTRACT_CLASS(wxPyHScrolledWindow)
+public:
+    wxPyHVScrolledWindow() : wxHVScrolledWindow() {}
+
+    wxPyHVScrolledWindow(wxWindow *parent,
+                        wxWindowID id = wxID_ANY,
+                        const wxPoint& pos = wxDefaultPosition,
+                        const wxSize& size = wxDefaultSize,
+                        long style = 0,
+                        const wxString& name = wxPyPanelNameStr)
+        : wxHVScrolledWindow(parent, id, pos, size, style, name)
+    {}
+
+    // Overridable virtuals
+    DEC_PYCALLBACK_COORD_SIZET_constpure(OnGetRowHeight);
+    DEC_PYCALLBACK_VOID_SIZETSIZET_const(OnGetRowsHeightHint);
+    DEC_PYCALLBACK_COORD_const(EstimateTotalHeight);
+
+    DEC_PYCALLBACK_COORD_SIZET_constpure(OnGetColumnWidth);
+    DEC_PYCALLBACK_VOID_SIZETSIZET_const(OnGetColumnsWidthHint);
+    DEC_PYCALLBACK_COORD_const(EstimateTotalWidth);
+
+    wxCoord GetRowsHeight(size_t lineMin, size_t lineMax) const
+    { return wxHVScrolledWindow::GetRowsHeight(lineMin, lineMax); }
+
+    wxCoord GetColumnsWidth(size_t columnMin, size_t columnMax) const
+    { return wxHVScrolledWindow::GetColumnsWidth(columnMin, columnMax); }
+
+    PYPRIVATE;
+};
+
+IMPLEMENT_ABSTRACT_CLASS(wxPyHVScrolledWindow, wxHVScrolledWindow);
+
+IMP_PYCALLBACK_COORD_SIZET_constpure(wxPyHVScrolledWindow, wxHVScrolledWindow, OnGetRowHeight);
+IMP_PYCALLBACK_VOID_SIZETSIZET_const(wxPyHVScrolledWindow, wxHVScrolledWindow, OnGetRowsHeightHint);
+IMP_PYCALLBACK_COORD_const          (wxPyHVScrolledWindow, wxHVScrolledWindow, EstimateTotalHeight);
+
+IMP_PYCALLBACK_COORD_SIZET_constpure(wxPyHVScrolledWindow, wxHVScrolledWindow, OnGetColumnWidth);
+IMP_PYCALLBACK_VOID_SIZETSIZET_const(wxPyHVScrolledWindow, wxHVScrolledWindow, OnGetColumnsWidthHint);
+IMP_PYCALLBACK_COORD_const          (wxPyHVScrolledWindow, wxHVScrolledWindow, EstimateTotalWidth);
+
 
 
 #include <wx/vlbox.h>
@@ -13583,6 +13660,1694 @@ SWIGINTERN PyObject *TipWindow_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject
   return SWIG_Python_InitShadowInstance(args);
 }
 
+SWIGINTERN PyObject *_wrap_VarScrollHelperBase_EnablePhysicalScrolling(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarScrollHelperBase *arg1 = (wxVarScrollHelperBase *) 0 ;
+  bool arg2 = (bool) true ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "scrolling", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:VarScrollHelperBase_EnablePhysicalScrolling",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarScrollHelperBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarScrollHelperBase_EnablePhysicalScrolling" "', expected argument " "1"" of type '" "wxVarScrollHelperBase *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarScrollHelperBase * >(argp1);
+  if (obj1) {
+    ecode2 = SWIG_AsVal_bool(obj1, &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VarScrollHelperBase_EnablePhysicalScrolling" "', expected argument " "2"" of type '" "bool""'");
+    } 
+    arg2 = static_cast< bool >(val2);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->EnablePhysicalScrolling(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarScrollHelperBase_HitTest(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarScrollHelperBase *arg1 = (wxVarScrollHelperBase *) 0 ;
+  int arg2 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "coord", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VarScrollHelperBase_HitTest",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarScrollHelperBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarScrollHelperBase_HitTest" "', expected argument " "1"" of type '" "wxVarScrollHelperBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarScrollHelperBase * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VarScrollHelperBase_HitTest" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (int)((wxVarScrollHelperBase const *)arg1)->HitTest(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarScrollHelperBase_RefreshAll(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxVarScrollHelperBase *arg1 = (wxVarScrollHelperBase *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVarScrollHelperBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarScrollHelperBase_RefreshAll" "', expected argument " "1"" of type '" "wxVarScrollHelperBase *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarScrollHelperBase * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->RefreshAll();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarScrollHelperBase_GetVisibleBegin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxVarScrollHelperBase *arg1 = (wxVarScrollHelperBase *) 0 ;
+  size_t result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVarScrollHelperBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarScrollHelperBase_GetVisibleBegin" "', expected argument " "1"" of type '" "wxVarScrollHelperBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarScrollHelperBase * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (size_t)((wxVarScrollHelperBase const *)arg1)->GetVisibleBegin();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarScrollHelperBase_GetVisibleEnd(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxVarScrollHelperBase *arg1 = (wxVarScrollHelperBase *) 0 ;
+  size_t result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVarScrollHelperBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarScrollHelperBase_GetVisibleEnd" "', expected argument " "1"" of type '" "wxVarScrollHelperBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarScrollHelperBase * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (size_t)((wxVarScrollHelperBase const *)arg1)->GetVisibleEnd();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarScrollHelperBase_IsVisible(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarScrollHelperBase *arg1 = (wxVarScrollHelperBase *) 0 ;
+  size_t arg2 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "unit", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VarScrollHelperBase_IsVisible",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarScrollHelperBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarScrollHelperBase_IsVisible" "', expected argument " "1"" of type '" "wxVarScrollHelperBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarScrollHelperBase * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VarScrollHelperBase_IsVisible" "', expected argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxVarScrollHelperBase const *)arg1)->IsVisible(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarScrollHelperBase_CalcScrolledPosition(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarScrollHelperBase *arg1 = (wxVarScrollHelperBase *) 0 ;
+  int arg2 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "coord", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VarScrollHelperBase_CalcScrolledPosition",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarScrollHelperBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarScrollHelperBase_CalcScrolledPosition" "', expected argument " "1"" of type '" "wxVarScrollHelperBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarScrollHelperBase * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VarScrollHelperBase_CalcScrolledPosition" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (int)((wxVarScrollHelperBase const *)arg1)->CalcScrolledPosition(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarScrollHelperBase_CalcUnscrolledPosition(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarScrollHelperBase *arg1 = (wxVarScrollHelperBase *) 0 ;
+  int arg2 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "coord", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VarScrollHelperBase_CalcUnscrolledPosition",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarScrollHelperBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarScrollHelperBase_CalcUnscrolledPosition" "', expected argument " "1"" of type '" "wxVarScrollHelperBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarScrollHelperBase * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VarScrollHelperBase_CalcUnscrolledPosition" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (int)((wxVarScrollHelperBase const *)arg1)->CalcUnscrolledPosition(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarScrollHelperBase_UpdateScrollbar(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxVarScrollHelperBase *arg1 = (wxVarScrollHelperBase *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVarScrollHelperBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarScrollHelperBase_UpdateScrollbar" "', expected argument " "1"" of type '" "wxVarScrollHelperBase *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarScrollHelperBase * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->UpdateScrollbar();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarScrollHelperBase_RemoveScrollbar(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxVarScrollHelperBase *arg1 = (wxVarScrollHelperBase *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVarScrollHelperBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarScrollHelperBase_RemoveScrollbar" "', expected argument " "1"" of type '" "wxVarScrollHelperBase *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarScrollHelperBase * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->RemoveScrollbar();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarScrollHelperBase_SetTargetWindow(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarScrollHelperBase *arg1 = (wxVarScrollHelperBase *) 0 ;
+  wxWindow *arg2 = (wxWindow *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "target", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VarScrollHelperBase_SetTargetWindow",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarScrollHelperBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarScrollHelperBase_SetTargetWindow" "', expected argument " "1"" of type '" "wxVarScrollHelperBase *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarScrollHelperBase * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VarScrollHelperBase_SetTargetWindow" "', expected argument " "2"" of type '" "wxWindow *""'"); 
+  }
+  arg2 = reinterpret_cast< wxWindow * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetTargetWindow(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarScrollHelperBase_GetTargetWindow(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxVarScrollHelperBase *arg1 = (wxVarScrollHelperBase *) 0 ;
+  wxWindow *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVarScrollHelperBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarScrollHelperBase_GetTargetWindow" "', expected argument " "1"" of type '" "wxVarScrollHelperBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarScrollHelperBase * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxWindow *)((wxVarScrollHelperBase const *)arg1)->GetTargetWindow();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = wxPyMake_wxObject(result, 0); 
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarScrollHelperBase_GetOrientationTargetSize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxVarScrollHelperBase *arg1 = (wxVarScrollHelperBase *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVarScrollHelperBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarScrollHelperBase_GetOrientationTargetSize" "', expected argument " "1"" of type '" "wxVarScrollHelperBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarScrollHelperBase * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (int)((wxVarScrollHelperBase const *)arg1)->GetOrientationTargetSize();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarScrollHelperBase_GetNonOrientationTargetSize(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxVarScrollHelperBase *arg1 = (wxVarScrollHelperBase *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVarScrollHelperBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarScrollHelperBase_GetNonOrientationTargetSize" "', expected argument " "1"" of type '" "wxVarScrollHelperBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarScrollHelperBase * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (int)((wxVarScrollHelperBase const *)arg1)->GetNonOrientationTargetSize();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarScrollHelperBase_GetOrientation(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxVarScrollHelperBase *arg1 = (wxVarScrollHelperBase *) 0 ;
+  wxOrientation result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVarScrollHelperBase, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarScrollHelperBase_GetOrientation" "', expected argument " "1"" of type '" "wxVarScrollHelperBase const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarScrollHelperBase * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxOrientation)((wxVarScrollHelperBase const *)arg1)->GetOrientation();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *VarScrollHelperBase_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_wxVarScrollHelperBase, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_VarVScrollHelper_SetRowCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarVScrollHelper *arg1 = (wxVarVScrollHelper *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "rowCount", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VarVScrollHelper_SetRowCount",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarVScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarVScrollHelper_SetRowCount" "', expected argument " "1"" of type '" "wxVarVScrollHelper *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarVScrollHelper * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VarVScrollHelper_SetRowCount" "', expected argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetRowCount(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarVScrollHelper_ScrollToRow(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarVScrollHelper *arg1 = (wxVarVScrollHelper *) 0 ;
+  size_t arg2 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "row", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VarVScrollHelper_ScrollToRow",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarVScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarVScrollHelper_ScrollToRow" "', expected argument " "1"" of type '" "wxVarVScrollHelper *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarVScrollHelper * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VarVScrollHelper_ScrollToRow" "', expected argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)(arg1)->ScrollToRow(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarVScrollHelper_ScrollRows(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarVScrollHelper *arg1 = (wxVarVScrollHelper *) 0 ;
+  int arg2 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "rows", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VarVScrollHelper_ScrollRows",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarVScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarVScrollHelper_ScrollRows" "', expected argument " "1"" of type '" "wxVarVScrollHelper *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarVScrollHelper * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VarVScrollHelper_ScrollRows" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)(arg1)->ScrollRows(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarVScrollHelper_ScrollRowPages(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarVScrollHelper *arg1 = (wxVarVScrollHelper *) 0 ;
+  int arg2 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "pages", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VarVScrollHelper_ScrollRowPages",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarVScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarVScrollHelper_ScrollRowPages" "', expected argument " "1"" of type '" "wxVarVScrollHelper *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarVScrollHelper * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VarVScrollHelper_ScrollRowPages" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)(arg1)->ScrollRowPages(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarVScrollHelper_RefreshRow(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarVScrollHelper *arg1 = (wxVarVScrollHelper *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "row", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VarVScrollHelper_RefreshRow",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarVScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarVScrollHelper_RefreshRow" "', expected argument " "1"" of type '" "wxVarVScrollHelper *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarVScrollHelper * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VarVScrollHelper_RefreshRow" "', expected argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->RefreshRow(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarVScrollHelper_RefreshRows(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarVScrollHelper *arg1 = (wxVarVScrollHelper *) 0 ;
+  size_t arg2 ;
+  size_t arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  size_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "from",(char *) "to", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:VarVScrollHelper_RefreshRows",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarVScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarVScrollHelper_RefreshRows" "', expected argument " "1"" of type '" "wxVarVScrollHelper *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarVScrollHelper * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VarVScrollHelper_RefreshRows" "', expected argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  ecode3 = SWIG_AsVal_size_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VarVScrollHelper_RefreshRows" "', expected argument " "3"" of type '" "size_t""'");
+  } 
+  arg3 = static_cast< size_t >(val3);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->RefreshRows(arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarVScrollHelper_GetRowCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxVarVScrollHelper *arg1 = (wxVarVScrollHelper *) 0 ;
+  size_t result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVarVScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarVScrollHelper_GetRowCount" "', expected argument " "1"" of type '" "wxVarVScrollHelper const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarVScrollHelper * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (size_t)((wxVarVScrollHelper const *)arg1)->GetRowCount();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarVScrollHelper_GetVisibleRowsBegin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxVarVScrollHelper *arg1 = (wxVarVScrollHelper *) 0 ;
+  size_t result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVarVScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarVScrollHelper_GetVisibleRowsBegin" "', expected argument " "1"" of type '" "wxVarVScrollHelper const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarVScrollHelper * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (size_t)((wxVarVScrollHelper const *)arg1)->GetVisibleRowsBegin();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarVScrollHelper_GetVisibleRowsEnd(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxVarVScrollHelper *arg1 = (wxVarVScrollHelper *) 0 ;
+  size_t result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVarVScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarVScrollHelper_GetVisibleRowsEnd" "', expected argument " "1"" of type '" "wxVarVScrollHelper const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarVScrollHelper * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (size_t)((wxVarVScrollHelper const *)arg1)->GetVisibleRowsEnd();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarVScrollHelper_IsRowVisible(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarVScrollHelper *arg1 = (wxVarVScrollHelper *) 0 ;
+  size_t arg2 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "row", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VarVScrollHelper_IsRowVisible",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarVScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarVScrollHelper_IsRowVisible" "', expected argument " "1"" of type '" "wxVarVScrollHelper const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarVScrollHelper * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VarVScrollHelper_IsRowVisible" "', expected argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxVarVScrollHelper const *)arg1)->IsRowVisible(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *VarVScrollHelper_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_wxVarVScrollHelper, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_VarHScrollHelper_SetColumnCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarHScrollHelper *arg1 = (wxVarHScrollHelper *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "columnCount", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VarHScrollHelper_SetColumnCount",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarHScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarHScrollHelper_SetColumnCount" "', expected argument " "1"" of type '" "wxVarHScrollHelper *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarHScrollHelper * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VarHScrollHelper_SetColumnCount" "', expected argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetColumnCount(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarHScrollHelper_ScrollToColumn(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarHScrollHelper *arg1 = (wxVarHScrollHelper *) 0 ;
+  size_t arg2 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "column", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VarHScrollHelper_ScrollToColumn",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarHScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarHScrollHelper_ScrollToColumn" "', expected argument " "1"" of type '" "wxVarHScrollHelper *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarHScrollHelper * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VarHScrollHelper_ScrollToColumn" "', expected argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)(arg1)->ScrollToColumn(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarHScrollHelper_ScrollColumns(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarHScrollHelper *arg1 = (wxVarHScrollHelper *) 0 ;
+  int arg2 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "columns", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VarHScrollHelper_ScrollColumns",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarHScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarHScrollHelper_ScrollColumns" "', expected argument " "1"" of type '" "wxVarHScrollHelper *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarHScrollHelper * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VarHScrollHelper_ScrollColumns" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)(arg1)->ScrollColumns(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarHScrollHelper_ScrollColumnPages(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarHScrollHelper *arg1 = (wxVarHScrollHelper *) 0 ;
+  int arg2 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "pages", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VarHScrollHelper_ScrollColumnPages",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarHScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarHScrollHelper_ScrollColumnPages" "', expected argument " "1"" of type '" "wxVarHScrollHelper *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarHScrollHelper * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VarHScrollHelper_ScrollColumnPages" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)(arg1)->ScrollColumnPages(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarHScrollHelper_RefreshColumn(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarHScrollHelper *arg1 = (wxVarHScrollHelper *) 0 ;
+  size_t arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "column", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VarHScrollHelper_RefreshColumn",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarHScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarHScrollHelper_RefreshColumn" "', expected argument " "1"" of type '" "wxVarHScrollHelper *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarHScrollHelper * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VarHScrollHelper_RefreshColumn" "', expected argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->RefreshColumn(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarHScrollHelper_RefreshColumns(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarHScrollHelper *arg1 = (wxVarHScrollHelper *) 0 ;
+  size_t arg2 ;
+  size_t arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  size_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "from",(char *) "to", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:VarHScrollHelper_RefreshColumns",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarHScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarHScrollHelper_RefreshColumns" "', expected argument " "1"" of type '" "wxVarHScrollHelper *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarHScrollHelper * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VarHScrollHelper_RefreshColumns" "', expected argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  ecode3 = SWIG_AsVal_size_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VarHScrollHelper_RefreshColumns" "', expected argument " "3"" of type '" "size_t""'");
+  } 
+  arg3 = static_cast< size_t >(val3);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->RefreshColumns(arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarHScrollHelper_GetColumnCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxVarHScrollHelper *arg1 = (wxVarHScrollHelper *) 0 ;
+  size_t result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVarHScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarHScrollHelper_GetColumnCount" "', expected argument " "1"" of type '" "wxVarHScrollHelper const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarHScrollHelper * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (size_t)((wxVarHScrollHelper const *)arg1)->GetColumnCount();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarHScrollHelper_GetVisibleColumnsBegin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxVarHScrollHelper *arg1 = (wxVarHScrollHelper *) 0 ;
+  size_t result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVarHScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarHScrollHelper_GetVisibleColumnsBegin" "', expected argument " "1"" of type '" "wxVarHScrollHelper const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarHScrollHelper * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (size_t)((wxVarHScrollHelper const *)arg1)->GetVisibleColumnsBegin();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarHScrollHelper_GetVisibleColumnsEnd(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxVarHScrollHelper *arg1 = (wxVarHScrollHelper *) 0 ;
+  size_t result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVarHScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarHScrollHelper_GetVisibleColumnsEnd" "', expected argument " "1"" of type '" "wxVarHScrollHelper const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarHScrollHelper * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (size_t)((wxVarHScrollHelper const *)arg1)->GetVisibleColumnsEnd();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarHScrollHelper_IsColumnVisible(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarHScrollHelper *arg1 = (wxVarHScrollHelper *) 0 ;
+  size_t arg2 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "column", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VarHScrollHelper_IsColumnVisible",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarHScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarHScrollHelper_IsColumnVisible" "', expected argument " "1"" of type '" "wxVarHScrollHelper const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarHScrollHelper * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VarHScrollHelper_IsColumnVisible" "', expected argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxVarHScrollHelper const *)arg1)->IsColumnVisible(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *VarHScrollHelper_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_wxVarHScrollHelper, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *_wrap_VarHVScrollHelper_SetRowColumnCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarHVScrollHelper *arg1 = (wxVarHVScrollHelper *) 0 ;
+  size_t arg2 ;
+  size_t arg3 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  size_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "rowCount",(char *) "columnCount", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:VarHVScrollHelper_SetRowColumnCount",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarHVScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarHVScrollHelper_SetRowColumnCount" "', expected argument " "1"" of type '" "wxVarHVScrollHelper *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarHVScrollHelper * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VarHVScrollHelper_SetRowColumnCount" "', expected argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  ecode3 = SWIG_AsVal_size_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VarHVScrollHelper_SetRowColumnCount" "', expected argument " "3"" of type '" "size_t""'");
+  } 
+  arg3 = static_cast< size_t >(val3);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetRowColumnCount(arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarHVScrollHelper_EnablePhysicalScrolling(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarHVScrollHelper *arg1 = (wxVarHVScrollHelper *) 0 ;
+  bool arg2 = (bool) true ;
+  bool arg3 = (bool) true ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  bool val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "vscrolling",(char *) "hscrolling", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OO:VarHVScrollHelper_EnablePhysicalScrolling",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarHVScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarHVScrollHelper_EnablePhysicalScrolling" "', expected argument " "1"" of type '" "wxVarHVScrollHelper *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarHVScrollHelper * >(argp1);
+  if (obj1) {
+    ecode2 = SWIG_AsVal_bool(obj1, &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VarHVScrollHelper_EnablePhysicalScrolling" "', expected argument " "2"" of type '" "bool""'");
+    } 
+    arg2 = static_cast< bool >(val2);
+  }
+  if (obj2) {
+    ecode3 = SWIG_AsVal_bool(obj2, &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VarHVScrollHelper_EnablePhysicalScrolling" "', expected argument " "3"" of type '" "bool""'");
+    } 
+    arg3 = static_cast< bool >(val3);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->EnablePhysicalScrolling(arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarHVScrollHelper_ScrollToRowColumn(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarHVScrollHelper *arg1 = (wxVarHVScrollHelper *) 0 ;
+  wxPosition *arg2 = 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "pos", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VarHVScrollHelper_ScrollToRowColumn",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarHVScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarHVScrollHelper_ScrollToRowColumn" "', expected argument " "1"" of type '" "wxVarHVScrollHelper *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarHVScrollHelper * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxPosition,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VarHVScrollHelper_ScrollToRowColumn" "', expected argument " "2"" of type '" "wxPosition const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VarHVScrollHelper_ScrollToRowColumn" "', expected argument " "2"" of type '" "wxPosition const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxPosition * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)(arg1)->ScrollToRowColumn((wxPosition const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarHVScrollHelper_RefreshRowColumn(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarHVScrollHelper *arg1 = (wxVarHVScrollHelper *) 0 ;
+  wxPosition *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "pos", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VarHVScrollHelper_RefreshRowColumn",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarHVScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarHVScrollHelper_RefreshRowColumn" "', expected argument " "1"" of type '" "wxVarHVScrollHelper *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarHVScrollHelper * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxPosition,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VarHVScrollHelper_RefreshRowColumn" "', expected argument " "2"" of type '" "wxPosition const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VarHVScrollHelper_RefreshRowColumn" "', expected argument " "2"" of type '" "wxPosition const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxPosition * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->RefreshRowColumn((wxPosition const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarHVScrollHelper_RefreshRowsColumns(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarHVScrollHelper *arg1 = (wxVarHVScrollHelper *) 0 ;
+  wxPosition *arg2 = 0 ;
+  wxPosition *arg3 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  void *argp3 = 0 ;
+  int res3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "from",(char *) "to", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:VarHVScrollHelper_RefreshRowsColumns",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarHVScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarHVScrollHelper_RefreshRowsColumns" "', expected argument " "1"" of type '" "wxVarHVScrollHelper *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarHVScrollHelper * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxPosition,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VarHVScrollHelper_RefreshRowsColumns" "', expected argument " "2"" of type '" "wxPosition const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VarHVScrollHelper_RefreshRowsColumns" "', expected argument " "2"" of type '" "wxPosition const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxPosition * >(argp2);
+  res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_wxPosition,  0  | 0);
+  if (!SWIG_IsOK(res3)) {
+    SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "VarHVScrollHelper_RefreshRowsColumns" "', expected argument " "3"" of type '" "wxPosition const &""'"); 
+  }
+  if (!argp3) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VarHVScrollHelper_RefreshRowsColumns" "', expected argument " "3"" of type '" "wxPosition const &""'"); 
+  }
+  arg3 = reinterpret_cast< wxPosition * >(argp3);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->RefreshRowsColumns((wxPosition const &)*arg2,(wxPosition const &)*arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarHVScrollHelper_HitTest(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarHVScrollHelper *arg1 = (wxVarHVScrollHelper *) 0 ;
+  wxPoint *arg2 = 0 ;
+  wxPosition result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  wxPoint temp2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "pos", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VarHVScrollHelper_HitTest",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarHVScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarHVScrollHelper_HitTest" "', expected argument " "1"" of type '" "wxVarHVScrollHelper const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarHVScrollHelper * >(argp1);
+  {
+    arg2 = &temp2;
+    if ( ! wxPoint_helper(obj1, &arg2)) SWIG_fail;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxVarHVScrollHelper const *)arg1)->HitTest((wxPoint const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxPosition(static_cast< const wxPosition& >(result))), SWIGTYPE_p_wxPosition, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarHVScrollHelper_ScrollLayout(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxVarHVScrollHelper *arg1 = (wxVarHVScrollHelper *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVarHVScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarHVScrollHelper_ScrollLayout" "', expected argument " "1"" of type '" "wxVarHVScrollHelper *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarHVScrollHelper * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)(arg1)->ScrollLayout();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarHVScrollHelper_GetRowColumnCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxVarHVScrollHelper *arg1 = (wxVarHVScrollHelper *) 0 ;
+  wxSize result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVarHVScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarHVScrollHelper_GetRowColumnCount" "', expected argument " "1"" of type '" "wxVarHVScrollHelper const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarHVScrollHelper * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxVarHVScrollHelper const *)arg1)->GetRowColumnCount();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxSize(static_cast< const wxSize& >(result))), SWIGTYPE_p_wxSize, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarHVScrollHelper_GetVisibleBegin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxVarHVScrollHelper *arg1 = (wxVarHVScrollHelper *) 0 ;
+  wxPosition result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVarHVScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarHVScrollHelper_GetVisibleBegin" "', expected argument " "1"" of type '" "wxVarHVScrollHelper const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarHVScrollHelper * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxVarHVScrollHelper const *)arg1)->GetVisibleBegin();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxPosition(static_cast< const wxPosition& >(result))), SWIGTYPE_p_wxPosition, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarHVScrollHelper_GetVisibleEnd(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxVarHVScrollHelper *arg1 = (wxVarHVScrollHelper *) 0 ;
+  wxPosition result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVarHVScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarHVScrollHelper_GetVisibleEnd" "', expected argument " "1"" of type '" "wxVarHVScrollHelper const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarHVScrollHelper * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxVarHVScrollHelper const *)arg1)->GetVisibleEnd();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxPosition(static_cast< const wxPosition& >(result))), SWIGTYPE_p_wxPosition, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_VarHVScrollHelper_IsVisible(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxVarHVScrollHelper *arg1 = (wxVarHVScrollHelper *) 0 ;
+  wxPosition *arg2 = 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "pos", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VarHVScrollHelper_IsVisible",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxVarHVScrollHelper, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VarHVScrollHelper_IsVisible" "', expected argument " "1"" of type '" "wxVarHVScrollHelper const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxVarHVScrollHelper * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxPosition,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VarHVScrollHelper_IsVisible" "', expected argument " "2"" of type '" "wxPosition const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "VarHVScrollHelper_IsVisible" "', expected argument " "2"" of type '" "wxPosition const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxPosition * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxVarHVScrollHelper const *)arg1)->IsVisible((wxPosition const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *VarHVScrollHelper_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_wxVarHVScrollHelper, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
 SWIGINTERN PyObject *_wrap_new_VScrolledWindow(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxWindow *arg1 = (wxWindow *) 0 ;
@@ -13831,128 +15596,12 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_VScrolledWindow_SetLineCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxPyVScrolledWindow *arg1 = (wxPyVScrolledWindow *) 0 ;
-  size_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  size_t val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "count", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VScrolledWindow_SetLineCount",kwnames,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyVScrolledWindow, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VScrolledWindow_SetLineCount" "', expected argument " "1"" of type '" "wxPyVScrolledWindow *""'"); 
-  }
-  arg1 = reinterpret_cast< wxPyVScrolledWindow * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VScrolledWindow_SetLineCount" "', expected argument " "2"" of type '" "size_t""'");
-  } 
-  arg2 = static_cast< size_t >(val2);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->SetLineCount(arg2);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_VScrolledWindow_ScrollToLine(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxPyVScrolledWindow *arg1 = (wxPyVScrolledWindow *) 0 ;
-  size_t arg2 ;
-  bool result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  size_t val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "line", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VScrolledWindow_ScrollToLine",kwnames,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyVScrolledWindow, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VScrolledWindow_ScrollToLine" "', expected argument " "1"" of type '" "wxPyVScrolledWindow *""'"); 
-  }
-  arg1 = reinterpret_cast< wxPyVScrolledWindow * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VScrolledWindow_ScrollToLine" "', expected argument " "2"" of type '" "size_t""'");
-  } 
-  arg2 = static_cast< size_t >(val2);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)(arg1)->ScrollToLine(arg2);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  {
-    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
-  }
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_VScrolledWindow_RefreshLine(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxPyVScrolledWindow *arg1 = (wxPyVScrolledWindow *) 0 ;
-  size_t arg2 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  size_t val2 ;
-  int ecode2 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "line", NULL 
-  };
-  
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VScrolledWindow_RefreshLine",kwnames,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyVScrolledWindow, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VScrolledWindow_RefreshLine" "', expected argument " "1"" of type '" "wxPyVScrolledWindow *""'"); 
-  }
-  arg1 = reinterpret_cast< wxPyVScrolledWindow * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VScrolledWindow_RefreshLine" "', expected argument " "2"" of type '" "size_t""'");
-  } 
-  arg2 = static_cast< size_t >(val2);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->RefreshLine(arg2);
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_VScrolledWindow_RefreshLines(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_VScrolledWindow_GetRowsHeight(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxPyVScrolledWindow *arg1 = (wxPyVScrolledWindow *) 0 ;
   size_t arg2 ;
   size_t arg3 ;
+  int result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   size_t val2 ;
@@ -13963,76 +15612,56 @@ SWIGINTERN PyObject *_wrap_VScrolledWindow_RefreshLines(PyObject *SWIGUNUSEDPARM
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "from",(char *) "to", NULL 
+    (char *) "self",(char *) "lineMin",(char *) "lineMax", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:VScrolledWindow_RefreshLines",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:VScrolledWindow_GetRowsHeight",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyVScrolledWindow, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VScrolledWindow_RefreshLines" "', expected argument " "1"" of type '" "wxPyVScrolledWindow *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VScrolledWindow_GetRowsHeight" "', expected argument " "1"" of type '" "wxPyVScrolledWindow const *""'"); 
   }
   arg1 = reinterpret_cast< wxPyVScrolledWindow * >(argp1);
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VScrolledWindow_RefreshLines" "', expected argument " "2"" of type '" "size_t""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VScrolledWindow_GetRowsHeight" "', expected argument " "2"" of type '" "size_t""'");
   } 
   arg2 = static_cast< size_t >(val2);
   ecode3 = SWIG_AsVal_size_t(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VScrolledWindow_RefreshLines" "', expected argument " "3"" of type '" "size_t""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VScrolledWindow_GetRowsHeight" "', expected argument " "3"" of type '" "size_t""'");
   } 
   arg3 = static_cast< size_t >(val3);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->RefreshLines(arg2,arg3);
+    result = (int)((wxPyVScrolledWindow const *)arg1)->GetRowsHeight(arg2,arg3);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_Py_Void();
+  resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_VScrolledWindow_HitTestXY(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_VScrolledWindow_EstimateTotalHeight(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxPyVScrolledWindow *arg1 = (wxPyVScrolledWindow *) 0 ;
-  int arg2 ;
-  int arg3 ;
   int result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  int val2 ;
-  int ecode2 = 0 ;
-  int val3 ;
-  int ecode3 = 0 ;
-  PyObject * obj0 = 0 ;
-  PyObject * obj1 = 0 ;
-  PyObject * obj2 = 0 ;
-  char *  kwnames[] = {
-    (char *) "self",(char *) "x",(char *) "y", NULL 
-  };
+  PyObject *swig_obj[1] ;
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:VScrolledWindow_HitTestXY",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyVScrolledWindow, 0 |  0 );
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyVScrolledWindow, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VScrolledWindow_HitTestXY" "', expected argument " "1"" of type '" "wxPyVScrolledWindow const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VScrolledWindow_EstimateTotalHeight" "', expected argument " "1"" of type '" "wxPyVScrolledWindow const *""'"); 
   }
   arg1 = reinterpret_cast< wxPyVScrolledWindow * >(argp1);
-  ecode2 = SWIG_AsVal_int(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VScrolledWindow_HitTestXY" "', expected argument " "2"" of type '" "int""'");
-  } 
-  arg2 = static_cast< int >(val2);
-  ecode3 = SWIG_AsVal_int(obj2, &val3);
-  if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VScrolledWindow_HitTestXY" "', expected argument " "3"" of type '" "int""'");
-  } 
-  arg3 = static_cast< int >(val3);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (int)((wxPyVScrolledWindow const *)arg1)->HitTest(arg2,arg3);
+    result = (int)((wxPyVScrolledWindow const *)arg1)->EstimateTotalHeight();
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -14080,23 +15709,153 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_VScrolledWindow_RefreshAll(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *VScrolledWindow_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_wxPyVScrolledWindow, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *VScrolledWindow_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  return SWIG_Python_InitShadowInstance(args);
+}
+
+SWIGINTERN PyObject *_wrap_new_HScrolledWindow(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
-  wxPyVScrolledWindow *arg1 = (wxPyVScrolledWindow *) 0 ;
+  wxWindow *arg1 = (wxWindow *) 0 ;
+  int arg2 = (int) wxID_ANY ;
+  wxPoint const &arg3_defvalue = wxDefaultPosition ;
+  wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
+  wxSize const &arg4_defvalue = wxDefaultSize ;
+  wxSize *arg4 = (wxSize *) &arg4_defvalue ;
+  long arg5 = (long) 0 ;
+  wxString const &arg6_defvalue = wxPyPanelNameStr ;
+  wxString *arg6 = (wxString *) &arg6_defvalue ;
+  wxPyHScrolledWindow *result = 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  PyObject *swig_obj[1] ;
+  int val2 ;
+  int ecode2 = 0 ;
+  wxPoint temp3 ;
+  wxSize temp4 ;
+  long val5 ;
+  int ecode5 = 0 ;
+  bool temp6 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  char *  kwnames[] = {
+    (char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
+  };
   
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyVScrolledWindow, 0 |  0 );
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOO:new_HScrolledWindow",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxWindow, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VScrolledWindow_RefreshAll" "', expected argument " "1"" of type '" "wxPyVScrolledWindow *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_HScrolledWindow" "', expected argument " "1"" of type '" "wxWindow *""'"); 
   }
-  arg1 = reinterpret_cast< wxPyVScrolledWindow * >(argp1);
+  arg1 = reinterpret_cast< wxWindow * >(argp1);
+  if (obj1) {
+    ecode2 = SWIG_AsVal_int(obj1, &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_HScrolledWindow" "', expected argument " "2"" of type '" "int""'");
+    } 
+    arg2 = static_cast< int >(val2);
+  }
+  if (obj2) {
+    {
+      arg3 = &temp3;
+      if ( ! wxPoint_helper(obj2, &arg3)) SWIG_fail;
+    }
+  }
+  if (obj3) {
+    {
+      arg4 = &temp4;
+      if ( ! wxSize_helper(obj3, &arg4)) SWIG_fail;
+    }
+  }
+  if (obj4) {
+    ecode5 = SWIG_AsVal_long(obj4, &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new_HScrolledWindow" "', expected argument " "5"" of type '" "long""'");
+    } 
+    arg5 = static_cast< long >(val5);
+  }
+  if (obj5) {
+    {
+      arg6 = wxString_in_helper(obj5);
+      if (arg6 == NULL) SWIG_fail;
+      temp6 = true;
+    }
+  }
+  {
+    if (!wxPyCheckForApp()) SWIG_fail;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxPyHScrolledWindow *)new wxPyHScrolledWindow(arg1,arg2,(wxPoint const &)*arg3,(wxSize const &)*arg4,arg5,(wxString const &)*arg6);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxPyHScrolledWindow, SWIG_POINTER_NEW |  0 );
+  {
+    if (temp6)
+    delete arg6;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp6)
+    delete arg6;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_PreHScrolledWindow(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPyHScrolledWindow *result = 0 ;
+  
+  if (!SWIG_Python_UnpackTuple(args,"new_PreHScrolledWindow",0,0,0)) SWIG_fail;
+  {
+    if (!wxPyCheckForApp()) SWIG_fail;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxPyHScrolledWindow *)new wxPyHScrolledWindow();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxPyHScrolledWindow, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_HScrolledWindow__setCallbackInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyHScrolledWindow *arg1 = (wxPyHScrolledWindow *) 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
+  PyObject *arg3 = (PyObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "self",(char *) "_class", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:HScrolledWindow__setCallbackInfo",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyHScrolledWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HScrolledWindow__setCallbackInfo" "', expected argument " "1"" of type '" "wxPyHScrolledWindow *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyHScrolledWindow * >(argp1);
+  arg2 = obj1;
+  arg3 = obj2;
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    (arg1)->RefreshAll();
+    (arg1)->_setCallbackInfo(arg2,arg3);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -14107,240 +15866,483 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_VScrolledWindow_GetLineCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_HScrolledWindow_Create(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
-  wxPyVScrolledWindow *arg1 = (wxPyVScrolledWindow *) 0 ;
-  size_t result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyVScrolledWindow, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VScrolledWindow_GetLineCount" "', expected argument " "1"" of type '" "wxPyVScrolledWindow const *""'"); 
-  }
-  arg1 = reinterpret_cast< wxPyVScrolledWindow * >(argp1);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (size_t)((wxPyVScrolledWindow const *)arg1)->GetLineCount();
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_VScrolledWindow_GetVisibleBegin(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxPyVScrolledWindow *arg1 = (wxPyVScrolledWindow *) 0 ;
-  size_t result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyVScrolledWindow, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VScrolledWindow_GetVisibleBegin" "', expected argument " "1"" of type '" "wxPyVScrolledWindow const *""'"); 
-  }
-  arg1 = reinterpret_cast< wxPyVScrolledWindow * >(argp1);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (size_t)((wxPyVScrolledWindow const *)arg1)->GetVisibleBegin();
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_VScrolledWindow_GetVisibleEnd(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxPyVScrolledWindow *arg1 = (wxPyVScrolledWindow *) 0 ;
-  size_t result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyVScrolledWindow, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VScrolledWindow_GetVisibleEnd" "', expected argument " "1"" of type '" "wxPyVScrolledWindow const *""'"); 
-  }
-  arg1 = reinterpret_cast< wxPyVScrolledWindow * >(argp1);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (size_t)((wxPyVScrolledWindow const *)arg1)->GetVisibleEnd();
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_VScrolledWindow_IsVisible(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxPyVScrolledWindow *arg1 = (wxPyVScrolledWindow *) 0 ;
-  size_t arg2 ;
+  wxPyHScrolledWindow *arg1 = (wxPyHScrolledWindow *) 0 ;
+  wxWindow *arg2 = (wxWindow *) 0 ;
+  int arg3 = (int) wxID_ANY ;
+  wxPoint const &arg4_defvalue = wxDefaultPosition ;
+  wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
+  wxSize const &arg5_defvalue = wxDefaultSize ;
+  wxSize *arg5 = (wxSize *) &arg5_defvalue ;
+  long arg6 = (long) 0 ;
+  wxString const &arg7_defvalue = wxPyPanelNameStr ;
+  wxString *arg7 = (wxString *) &arg7_defvalue ;
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  size_t val2 ;
-  int ecode2 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  wxPoint temp4 ;
+  wxSize temp5 ;
+  long val6 ;
+  int ecode6 = 0 ;
+  bool temp7 = false ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "line", NULL 
+    (char *) "self",(char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:VScrolledWindow_IsVisible",kwnames,&obj0,&obj1)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyVScrolledWindow, 0 |  0 );
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOO:HScrolledWindow_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyHScrolledWindow, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VScrolledWindow_IsVisible" "', expected argument " "1"" of type '" "wxPyVScrolledWindow const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HScrolledWindow_Create" "', expected argument " "1"" of type '" "wxPyHScrolledWindow *""'"); 
   }
-  arg1 = reinterpret_cast< wxPyVScrolledWindow * >(argp1);
-  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VScrolledWindow_IsVisible" "', expected argument " "2"" of type '" "size_t""'");
-  } 
-  arg2 = static_cast< size_t >(val2);
+  arg1 = reinterpret_cast< wxPyHScrolledWindow * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "HScrolledWindow_Create" "', expected argument " "2"" of type '" "wxWindow *""'"); 
+  }
+  arg2 = reinterpret_cast< wxWindow * >(argp2);
+  if (obj2) {
+    ecode3 = SWIG_AsVal_int(obj2, &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "HScrolledWindow_Create" "', expected argument " "3"" of type '" "int""'");
+    } 
+    arg3 = static_cast< int >(val3);
+  }
+  if (obj3) {
+    {
+      arg4 = &temp4;
+      if ( ! wxPoint_helper(obj3, &arg4)) SWIG_fail;
+    }
+  }
+  if (obj4) {
+    {
+      arg5 = &temp5;
+      if ( ! wxSize_helper(obj4, &arg5)) SWIG_fail;
+    }
+  }
+  if (obj5) {
+    ecode6 = SWIG_AsVal_long(obj5, &val6);
+    if (!SWIG_IsOK(ecode6)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "HScrolledWindow_Create" "', expected argument " "6"" of type '" "long""'");
+    } 
+    arg6 = static_cast< long >(val6);
+  }
+  if (obj6) {
+    {
+      arg7 = wxString_in_helper(obj6);
+      if (arg7 == NULL) SWIG_fail;
+      temp7 = true;
+    }
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (bool)((wxPyVScrolledWindow const *)arg1)->IsVisible(arg2);
+    result = (bool)(arg1)->Create(arg2,arg3,(wxPoint const &)*arg4,(wxSize const &)*arg5,arg6,(wxString const &)*arg7);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
   {
     resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
   }
+  {
+    if (temp7)
+    delete arg7;
+  }
   return resultobj;
 fail:
+  {
+    if (temp7)
+    delete arg7;
+  }
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_VScrolledWindow_GetFirstVisibleLine(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_HScrolledWindow_HitTest(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
-  wxPyVScrolledWindow *arg1 = (wxPyVScrolledWindow *) 0 ;
-  size_t result;
+  wxPyHScrolledWindow *arg1 = (wxPyHScrolledWindow *) 0 ;
+  wxPoint *arg2 = 0 ;
+  int result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  PyObject *swig_obj[1] ;
+  wxPoint temp2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "pt", NULL 
+  };
   
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyVScrolledWindow, 0 |  0 );
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:HScrolledWindow_HitTest",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyHScrolledWindow, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VScrolledWindow_GetFirstVisibleLine" "', expected argument " "1"" of type '" "wxPyVScrolledWindow const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HScrolledWindow_HitTest" "', expected argument " "1"" of type '" "wxPyHScrolledWindow const *""'"); 
   }
-  arg1 = reinterpret_cast< wxPyVScrolledWindow * >(argp1);
+  arg1 = reinterpret_cast< wxPyHScrolledWindow * >(argp1);
+  {
+    arg2 = &temp2;
+    if ( ! wxPoint_helper(obj1, &arg2)) SWIG_fail;
+  }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (size_t)((wxPyVScrolledWindow const *)arg1)->GetFirstVisibleLine();
+    result = (int)((wxPyHScrolledWindow const *)arg1)->HitTest((wxPoint const &)*arg2);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_VScrolledWindow_GetLastVisibleLine(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_HScrolledWindow_GetColumnsWidth(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
-  wxPyVScrolledWindow *arg1 = (wxPyVScrolledWindow *) 0 ;
-  size_t result;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyVScrolledWindow, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VScrolledWindow_GetLastVisibleLine" "', expected argument " "1"" of type '" "wxPyVScrolledWindow const *""'"); 
-  }
-  arg1 = reinterpret_cast< wxPyVScrolledWindow * >(argp1);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (size_t)((wxPyVScrolledWindow const *)arg1)->GetLastVisibleLine();
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_VScrolledWindow_FindFirstFromBottom(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
-  PyObject *resultobj = 0;
-  wxPyVScrolledWindow *arg1 = (wxPyVScrolledWindow *) 0 ;
+  wxPyHScrolledWindow *arg1 = (wxPyHScrolledWindow *) 0 ;
   size_t arg2 ;
-  bool arg3 = (bool) false ;
-  size_t result;
+  size_t arg3 ;
+  int result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   size_t val2 ;
   int ecode2 = 0 ;
-  bool val3 ;
+  size_t val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
   char *  kwnames[] = {
-    (char *) "self",(char *) "lineLast",(char *) "fullyVisible", NULL 
+    (char *) "self",(char *) "columnMin",(char *) "columnMax", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|O:VScrolledWindow_FindFirstFromBottom",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyVScrolledWindow, 0 |  0 );
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:HScrolledWindow_GetColumnsWidth",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyHScrolledWindow, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VScrolledWindow_FindFirstFromBottom" "', expected argument " "1"" of type '" "wxPyVScrolledWindow *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HScrolledWindow_GetColumnsWidth" "', expected argument " "1"" of type '" "wxPyHScrolledWindow const *""'"); 
   }
-  arg1 = reinterpret_cast< wxPyVScrolledWindow * >(argp1);
+  arg1 = reinterpret_cast< wxPyHScrolledWindow * >(argp1);
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VScrolledWindow_FindFirstFromBottom" "', expected argument " "2"" of type '" "size_t""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "HScrolledWindow_GetColumnsWidth" "', expected argument " "2"" of type '" "size_t""'");
   } 
   arg2 = static_cast< size_t >(val2);
-  if (obj2) {
-    ecode3 = SWIG_AsVal_bool(obj2, &val3);
-    if (!SWIG_IsOK(ecode3)) {
-      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VScrolledWindow_FindFirstFromBottom" "', expected argument " "3"" of type '" "bool""'");
-    } 
-    arg3 = static_cast< bool >(val3);
-  }
+  ecode3 = SWIG_AsVal_size_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "HScrolledWindow_GetColumnsWidth" "', expected argument " "3"" of type '" "size_t""'");
+  } 
+  arg3 = static_cast< size_t >(val3);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (size_t)(arg1)->FindFirstFromBottom(arg2,arg3);
+    result = (int)((wxPyHScrolledWindow const *)arg1)->GetColumnsWidth(arg2,arg3);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  resultobj = SWIG_From_int(static_cast< int >(result));
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_VScrolledWindow_GetLinesHeight(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+SWIGINTERN PyObject *_wrap_HScrolledWindow_EstimateTotalWidth(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
-  wxPyVScrolledWindow *arg1 = (wxPyVScrolledWindow *) 0 ;
+  wxPyHScrolledWindow *arg1 = (wxPyHScrolledWindow *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyHScrolledWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HScrolledWindow_EstimateTotalWidth" "', expected argument " "1"" of type '" "wxPyHScrolledWindow const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyHScrolledWindow * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (int)((wxPyHScrolledWindow const *)arg1)->EstimateTotalWidth();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *HScrolledWindow_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_wxPyHScrolledWindow, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *HScrolledWindow_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  return SWIG_Python_InitShadowInstance(args);
+}
+
+SWIGINTERN PyObject *_wrap_new_HVScrolledWindow(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxWindow *arg1 = (wxWindow *) 0 ;
+  int arg2 = (int) wxID_ANY ;
+  wxPoint const &arg3_defvalue = wxDefaultPosition ;
+  wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
+  wxSize const &arg4_defvalue = wxDefaultSize ;
+  wxSize *arg4 = (wxSize *) &arg4_defvalue ;
+  long arg5 = (long) 0 ;
+  wxString const &arg6_defvalue = wxPyPanelNameStr ;
+  wxString *arg6 = (wxString *) &arg6_defvalue ;
+  wxPyHVScrolledWindow *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  wxPoint temp3 ;
+  wxSize temp4 ;
+  long val5 ;
+  int ecode5 = 0 ;
+  bool temp6 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  char *  kwnames[] = {
+    (char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|OOOOO:new_HVScrolledWindow",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_HVScrolledWindow" "', expected argument " "1"" of type '" "wxWindow *""'"); 
+  }
+  arg1 = reinterpret_cast< wxWindow * >(argp1);
+  if (obj1) {
+    ecode2 = SWIG_AsVal_int(obj1, &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_HVScrolledWindow" "', expected argument " "2"" of type '" "int""'");
+    } 
+    arg2 = static_cast< int >(val2);
+  }
+  if (obj2) {
+    {
+      arg3 = &temp3;
+      if ( ! wxPoint_helper(obj2, &arg3)) SWIG_fail;
+    }
+  }
+  if (obj3) {
+    {
+      arg4 = &temp4;
+      if ( ! wxSize_helper(obj3, &arg4)) SWIG_fail;
+    }
+  }
+  if (obj4) {
+    ecode5 = SWIG_AsVal_long(obj4, &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "new_HVScrolledWindow" "', expected argument " "5"" of type '" "long""'");
+    } 
+    arg5 = static_cast< long >(val5);
+  }
+  if (obj5) {
+    {
+      arg6 = wxString_in_helper(obj5);
+      if (arg6 == NULL) SWIG_fail;
+      temp6 = true;
+    }
+  }
+  {
+    if (!wxPyCheckForApp()) SWIG_fail;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxPyHVScrolledWindow *)new wxPyHVScrolledWindow(arg1,arg2,(wxPoint const &)*arg3,(wxSize const &)*arg4,arg5,(wxString const &)*arg6);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxPyHVScrolledWindow, SWIG_POINTER_NEW |  0 );
+  {
+    if (temp6)
+    delete arg6;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp6)
+    delete arg6;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_new_PreHVScrolledWindow(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPyHVScrolledWindow *result = 0 ;
+  
+  if (!SWIG_Python_UnpackTuple(args,"new_PreHVScrolledWindow",0,0,0)) SWIG_fail;
+  {
+    if (!wxPyCheckForApp()) SWIG_fail;
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxPyHVScrolledWindow *)new wxPyHVScrolledWindow();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxPyHVScrolledWindow, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_HVScrolledWindow__setCallbackInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyHVScrolledWindow *arg1 = (wxPyHVScrolledWindow *) 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
+  PyObject *arg3 = (PyObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "self",(char *) "_class", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:HVScrolledWindow__setCallbackInfo",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyHVScrolledWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HVScrolledWindow__setCallbackInfo" "', expected argument " "1"" of type '" "wxPyHVScrolledWindow *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyHVScrolledWindow * >(argp1);
+  arg2 = obj1;
+  arg3 = obj2;
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->_setCallbackInfo(arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_HVScrolledWindow_Create(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyHVScrolledWindow *arg1 = (wxPyHVScrolledWindow *) 0 ;
+  wxWindow *arg2 = (wxWindow *) 0 ;
+  int arg3 = (int) wxID_ANY ;
+  wxPoint const &arg4_defvalue = wxDefaultPosition ;
+  wxPoint *arg4 = (wxPoint *) &arg4_defvalue ;
+  wxSize const &arg5_defvalue = wxDefaultSize ;
+  wxSize *arg5 = (wxSize *) &arg5_defvalue ;
+  long arg6 = (long) 0 ;
+  wxString const &arg7_defvalue = wxPyPanelNameStr ;
+  wxString *arg7 = (wxString *) &arg7_defvalue ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  wxPoint temp4 ;
+  wxSize temp5 ;
+  long val6 ;
+  int ecode6 = 0 ;
+  bool temp7 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  PyObject * obj3 = 0 ;
+  PyObject * obj4 = 0 ;
+  PyObject * obj5 = 0 ;
+  PyObject * obj6 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "parent",(char *) "id",(char *) "pos",(char *) "size",(char *) "style",(char *) "name", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO|OOOOO:HVScrolledWindow_Create",kwnames,&obj0,&obj1,&obj2,&obj3,&obj4,&obj5,&obj6)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyHVScrolledWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HVScrolledWindow_Create" "', expected argument " "1"" of type '" "wxPyHVScrolledWindow *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyHVScrolledWindow * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "HVScrolledWindow_Create" "', expected argument " "2"" of type '" "wxWindow *""'"); 
+  }
+  arg2 = reinterpret_cast< wxWindow * >(argp2);
+  if (obj2) {
+    ecode3 = SWIG_AsVal_int(obj2, &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "HVScrolledWindow_Create" "', expected argument " "3"" of type '" "int""'");
+    } 
+    arg3 = static_cast< int >(val3);
+  }
+  if (obj3) {
+    {
+      arg4 = &temp4;
+      if ( ! wxPoint_helper(obj3, &arg4)) SWIG_fail;
+    }
+  }
+  if (obj4) {
+    {
+      arg5 = &temp5;
+      if ( ! wxSize_helper(obj4, &arg5)) SWIG_fail;
+    }
+  }
+  if (obj5) {
+    ecode6 = SWIG_AsVal_long(obj5, &val6);
+    if (!SWIG_IsOK(ecode6)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "HVScrolledWindow_Create" "', expected argument " "6"" of type '" "long""'");
+    } 
+    arg6 = static_cast< long >(val6);
+  }
+  if (obj6) {
+    {
+      arg7 = wxString_in_helper(obj6);
+      if (arg7 == NULL) SWIG_fail;
+      temp7 = true;
+    }
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)(arg1)->Create(arg2,arg3,(wxPoint const &)*arg4,(wxSize const &)*arg5,arg6,(wxString const &)*arg7);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  {
+    if (temp7)
+    delete arg7;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp7)
+    delete arg7;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_HVScrolledWindow_GetRowsHeight(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyHVScrolledWindow *arg1 = (wxPyHVScrolledWindow *) 0 ;
   size_t arg2 ;
   size_t arg3 ;
   int result;
@@ -14357,25 +16359,25 @@ SWIGINTERN PyObject *_wrap_VScrolledWindow_GetLinesHeight(PyObject *SWIGUNUSEDPA
     (char *) "self",(char *) "lineMin",(char *) "lineMax", NULL 
   };
   
-  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:VScrolledWindow_GetLinesHeight",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyVScrolledWindow, 0 |  0 );
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:HVScrolledWindow_GetRowsHeight",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyHVScrolledWindow, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VScrolledWindow_GetLinesHeight" "', expected argument " "1"" of type '" "wxPyVScrolledWindow const *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HVScrolledWindow_GetRowsHeight" "', expected argument " "1"" of type '" "wxPyHVScrolledWindow const *""'"); 
   }
-  arg1 = reinterpret_cast< wxPyVScrolledWindow * >(argp1);
+  arg1 = reinterpret_cast< wxPyHVScrolledWindow * >(argp1);
   ecode2 = SWIG_AsVal_size_t(obj1, &val2);
   if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "VScrolledWindow_GetLinesHeight" "', expected argument " "2"" of type '" "size_t""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "HVScrolledWindow_GetRowsHeight" "', expected argument " "2"" of type '" "size_t""'");
   } 
   arg2 = static_cast< size_t >(val2);
   ecode3 = SWIG_AsVal_size_t(obj2, &val3);
   if (!SWIG_IsOK(ecode3)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "VScrolledWindow_GetLinesHeight" "', expected argument " "3"" of type '" "size_t""'");
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "HVScrolledWindow_GetRowsHeight" "', expected argument " "3"" of type '" "size_t""'");
   } 
   arg3 = static_cast< size_t >(val3);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (int)((wxPyVScrolledWindow const *)arg1)->GetLinesHeight(arg2,arg3);
+    result = (int)((wxPyHVScrolledWindow const *)arg1)->GetRowsHeight(arg2,arg3);
     wxPyEndAllowThreads(__tstate);
     if (PyErr_Occurred()) SWIG_fail;
   }
@@ -14386,14 +16388,118 @@ fail:
 }
 
 
-SWIGINTERN PyObject *VScrolledWindow_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_HVScrolledWindow_EstimateTotalHeight(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPyHVScrolledWindow *arg1 = (wxPyHVScrolledWindow *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyHVScrolledWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HVScrolledWindow_EstimateTotalHeight" "', expected argument " "1"" of type '" "wxPyHVScrolledWindow const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyHVScrolledWindow * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (int)((wxPyHVScrolledWindow const *)arg1)->EstimateTotalHeight();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_HVScrolledWindow_GetColumnsWidth(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyHVScrolledWindow *arg1 = (wxPyHVScrolledWindow *) 0 ;
+  size_t arg2 ;
+  size_t arg3 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  size_t val3 ;
+  int ecode3 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "columnMin",(char *) "columnMax", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:HVScrolledWindow_GetColumnsWidth",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyHVScrolledWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HVScrolledWindow_GetColumnsWidth" "', expected argument " "1"" of type '" "wxPyHVScrolledWindow const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyHVScrolledWindow * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "HVScrolledWindow_GetColumnsWidth" "', expected argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  ecode3 = SWIG_AsVal_size_t(obj2, &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "HVScrolledWindow_GetColumnsWidth" "', expected argument " "3"" of type '" "size_t""'");
+  } 
+  arg3 = static_cast< size_t >(val3);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (int)((wxPyHVScrolledWindow const *)arg1)->GetColumnsWidth(arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_HVScrolledWindow_EstimateTotalWidth(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPyHVScrolledWindow *arg1 = (wxPyHVScrolledWindow *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPyHVScrolledWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "HVScrolledWindow_EstimateTotalWidth" "', expected argument " "1"" of type '" "wxPyHVScrolledWindow const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyHVScrolledWindow * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (int)((wxPyHVScrolledWindow const *)arg1)->EstimateTotalWidth();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *HVScrolledWindow_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
-  SWIG_TypeNewClientData(SWIGTYPE_p_wxPyVScrolledWindow, SWIG_NewClientData(obj));
+  SWIG_TypeNewClientData(SWIGTYPE_p_wxPyHVScrolledWindow, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
 }
 
-SWIGINTERN PyObject *VScrolledWindow_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *HVScrolledWindow_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   return SWIG_Python_InitShadowInstance(args);
 }
 
@@ -32132,27 +34238,84 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"TipWindow_Close", (PyCFunction)_wrap_TipWindow_Close, METH_O, NULL},
 	 { (char *)"TipWindow_swigregister", TipWindow_swigregister, METH_VARARGS, NULL},
 	 { (char *)"TipWindow_swiginit", TipWindow_swiginit, METH_VARARGS, NULL},
+	 { (char *)"VarScrollHelperBase_EnablePhysicalScrolling", (PyCFunction) _wrap_VarScrollHelperBase_EnablePhysicalScrolling, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarScrollHelperBase_HitTest", (PyCFunction) _wrap_VarScrollHelperBase_HitTest, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarScrollHelperBase_RefreshAll", (PyCFunction)_wrap_VarScrollHelperBase_RefreshAll, METH_O, NULL},
+	 { (char *)"VarScrollHelperBase_GetVisibleBegin", (PyCFunction)_wrap_VarScrollHelperBase_GetVisibleBegin, METH_O, NULL},
+	 { (char *)"VarScrollHelperBase_GetVisibleEnd", (PyCFunction)_wrap_VarScrollHelperBase_GetVisibleEnd, METH_O, NULL},
+	 { (char *)"VarScrollHelperBase_IsVisible", (PyCFunction) _wrap_VarScrollHelperBase_IsVisible, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarScrollHelperBase_CalcScrolledPosition", (PyCFunction) _wrap_VarScrollHelperBase_CalcScrolledPosition, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarScrollHelperBase_CalcUnscrolledPosition", (PyCFunction) _wrap_VarScrollHelperBase_CalcUnscrolledPosition, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarScrollHelperBase_UpdateScrollbar", (PyCFunction)_wrap_VarScrollHelperBase_UpdateScrollbar, METH_O, NULL},
+	 { (char *)"VarScrollHelperBase_RemoveScrollbar", (PyCFunction)_wrap_VarScrollHelperBase_RemoveScrollbar, METH_O, NULL},
+	 { (char *)"VarScrollHelperBase_SetTargetWindow", (PyCFunction) _wrap_VarScrollHelperBase_SetTargetWindow, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarScrollHelperBase_GetTargetWindow", (PyCFunction)_wrap_VarScrollHelperBase_GetTargetWindow, METH_O, NULL},
+	 { (char *)"VarScrollHelperBase_GetOrientationTargetSize", (PyCFunction)_wrap_VarScrollHelperBase_GetOrientationTargetSize, METH_O, NULL},
+	 { (char *)"VarScrollHelperBase_GetNonOrientationTargetSize", (PyCFunction)_wrap_VarScrollHelperBase_GetNonOrientationTargetSize, METH_O, NULL},
+	 { (char *)"VarScrollHelperBase_GetOrientation", (PyCFunction)_wrap_VarScrollHelperBase_GetOrientation, METH_O, NULL},
+	 { (char *)"VarScrollHelperBase_swigregister", VarScrollHelperBase_swigregister, METH_VARARGS, NULL},
+	 { (char *)"VarVScrollHelper_SetRowCount", (PyCFunction) _wrap_VarVScrollHelper_SetRowCount, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarVScrollHelper_ScrollToRow", (PyCFunction) _wrap_VarVScrollHelper_ScrollToRow, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarVScrollHelper_ScrollRows", (PyCFunction) _wrap_VarVScrollHelper_ScrollRows, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarVScrollHelper_ScrollRowPages", (PyCFunction) _wrap_VarVScrollHelper_ScrollRowPages, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarVScrollHelper_RefreshRow", (PyCFunction) _wrap_VarVScrollHelper_RefreshRow, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarVScrollHelper_RefreshRows", (PyCFunction) _wrap_VarVScrollHelper_RefreshRows, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarVScrollHelper_GetRowCount", (PyCFunction)_wrap_VarVScrollHelper_GetRowCount, METH_O, NULL},
+	 { (char *)"VarVScrollHelper_GetVisibleRowsBegin", (PyCFunction)_wrap_VarVScrollHelper_GetVisibleRowsBegin, METH_O, NULL},
+	 { (char *)"VarVScrollHelper_GetVisibleRowsEnd", (PyCFunction)_wrap_VarVScrollHelper_GetVisibleRowsEnd, METH_O, NULL},
+	 { (char *)"VarVScrollHelper_IsRowVisible", (PyCFunction) _wrap_VarVScrollHelper_IsRowVisible, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarVScrollHelper_swigregister", VarVScrollHelper_swigregister, METH_VARARGS, NULL},
+	 { (char *)"VarHScrollHelper_SetColumnCount", (PyCFunction) _wrap_VarHScrollHelper_SetColumnCount, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarHScrollHelper_ScrollToColumn", (PyCFunction) _wrap_VarHScrollHelper_ScrollToColumn, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarHScrollHelper_ScrollColumns", (PyCFunction) _wrap_VarHScrollHelper_ScrollColumns, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarHScrollHelper_ScrollColumnPages", (PyCFunction) _wrap_VarHScrollHelper_ScrollColumnPages, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarHScrollHelper_RefreshColumn", (PyCFunction) _wrap_VarHScrollHelper_RefreshColumn, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarHScrollHelper_RefreshColumns", (PyCFunction) _wrap_VarHScrollHelper_RefreshColumns, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarHScrollHelper_GetColumnCount", (PyCFunction)_wrap_VarHScrollHelper_GetColumnCount, METH_O, NULL},
+	 { (char *)"VarHScrollHelper_GetVisibleColumnsBegin", (PyCFunction)_wrap_VarHScrollHelper_GetVisibleColumnsBegin, METH_O, NULL},
+	 { (char *)"VarHScrollHelper_GetVisibleColumnsEnd", (PyCFunction)_wrap_VarHScrollHelper_GetVisibleColumnsEnd, METH_O, NULL},
+	 { (char *)"VarHScrollHelper_IsColumnVisible", (PyCFunction) _wrap_VarHScrollHelper_IsColumnVisible, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarHScrollHelper_swigregister", VarHScrollHelper_swigregister, METH_VARARGS, NULL},
+	 { (char *)"VarHVScrollHelper_SetRowColumnCount", (PyCFunction) _wrap_VarHVScrollHelper_SetRowColumnCount, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarHVScrollHelper_EnablePhysicalScrolling", (PyCFunction) _wrap_VarHVScrollHelper_EnablePhysicalScrolling, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarHVScrollHelper_ScrollToRowColumn", (PyCFunction) _wrap_VarHVScrollHelper_ScrollToRowColumn, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarHVScrollHelper_RefreshRowColumn", (PyCFunction) _wrap_VarHVScrollHelper_RefreshRowColumn, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarHVScrollHelper_RefreshRowsColumns", (PyCFunction) _wrap_VarHVScrollHelper_RefreshRowsColumns, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarHVScrollHelper_HitTest", (PyCFunction) _wrap_VarHVScrollHelper_HitTest, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarHVScrollHelper_ScrollLayout", (PyCFunction)_wrap_VarHVScrollHelper_ScrollLayout, METH_O, NULL},
+	 { (char *)"VarHVScrollHelper_GetRowColumnCount", (PyCFunction)_wrap_VarHVScrollHelper_GetRowColumnCount, METH_O, NULL},
+	 { (char *)"VarHVScrollHelper_GetVisibleBegin", (PyCFunction)_wrap_VarHVScrollHelper_GetVisibleBegin, METH_O, NULL},
+	 { (char *)"VarHVScrollHelper_GetVisibleEnd", (PyCFunction)_wrap_VarHVScrollHelper_GetVisibleEnd, METH_O, NULL},
+	 { (char *)"VarHVScrollHelper_IsVisible", (PyCFunction) _wrap_VarHVScrollHelper_IsVisible, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VarHVScrollHelper_swigregister", VarHVScrollHelper_swigregister, METH_VARARGS, NULL},
 	 { (char *)"new_VScrolledWindow", (PyCFunction) _wrap_new_VScrolledWindow, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_PreVScrolledWindow", (PyCFunction)_wrap_new_PreVScrolledWindow, METH_NOARGS, NULL},
 	 { (char *)"VScrolledWindow__setCallbackInfo", (PyCFunction) _wrap_VScrolledWindow__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"VScrolledWindow_Create", (PyCFunction) _wrap_VScrolledWindow_Create, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"VScrolledWindow_SetLineCount", (PyCFunction) _wrap_VScrolledWindow_SetLineCount, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"VScrolledWindow_ScrollToLine", (PyCFunction) _wrap_VScrolledWindow_ScrollToLine, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"VScrolledWindow_RefreshLine", (PyCFunction) _wrap_VScrolledWindow_RefreshLine, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"VScrolledWindow_RefreshLines", (PyCFunction) _wrap_VScrolledWindow_RefreshLines, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"VScrolledWindow_HitTestXY", (PyCFunction) _wrap_VScrolledWindow_HitTestXY, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VScrolledWindow_GetRowsHeight", (PyCFunction) _wrap_VScrolledWindow_GetRowsHeight, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"VScrolledWindow_EstimateTotalHeight", (PyCFunction)_wrap_VScrolledWindow_EstimateTotalHeight, METH_O, NULL},
 	 { (char *)"VScrolledWindow_HitTest", (PyCFunction) _wrap_VScrolledWindow_HitTest, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"VScrolledWindow_RefreshAll", (PyCFunction)_wrap_VScrolledWindow_RefreshAll, METH_O, NULL},
-	 { (char *)"VScrolledWindow_GetLineCount", (PyCFunction)_wrap_VScrolledWindow_GetLineCount, METH_O, NULL},
-	 { (char *)"VScrolledWindow_GetVisibleBegin", (PyCFunction)_wrap_VScrolledWindow_GetVisibleBegin, METH_O, NULL},
-	 { (char *)"VScrolledWindow_GetVisibleEnd", (PyCFunction)_wrap_VScrolledWindow_GetVisibleEnd, METH_O, NULL},
-	 { (char *)"VScrolledWindow_IsVisible", (PyCFunction) _wrap_VScrolledWindow_IsVisible, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"VScrolledWindow_GetFirstVisibleLine", (PyCFunction)_wrap_VScrolledWindow_GetFirstVisibleLine, METH_O, NULL},
-	 { (char *)"VScrolledWindow_GetLastVisibleLine", (PyCFunction)_wrap_VScrolledWindow_GetLastVisibleLine, METH_O, NULL},
-	 { (char *)"VScrolledWindow_FindFirstFromBottom", (PyCFunction) _wrap_VScrolledWindow_FindFirstFromBottom, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"VScrolledWindow_GetLinesHeight", (PyCFunction) _wrap_VScrolledWindow_GetLinesHeight, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"VScrolledWindow_swigregister", VScrolledWindow_swigregister, METH_VARARGS, NULL},
 	 { (char *)"VScrolledWindow_swiginit", VScrolledWindow_swiginit, METH_VARARGS, NULL},
+	 { (char *)"new_HScrolledWindow", (PyCFunction) _wrap_new_HScrolledWindow, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"new_PreHScrolledWindow", (PyCFunction)_wrap_new_PreHScrolledWindow, METH_NOARGS, NULL},
+	 { (char *)"HScrolledWindow__setCallbackInfo", (PyCFunction) _wrap_HScrolledWindow__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"HScrolledWindow_Create", (PyCFunction) _wrap_HScrolledWindow_Create, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"HScrolledWindow_HitTest", (PyCFunction) _wrap_HScrolledWindow_HitTest, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"HScrolledWindow_GetColumnsWidth", (PyCFunction) _wrap_HScrolledWindow_GetColumnsWidth, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"HScrolledWindow_EstimateTotalWidth", (PyCFunction)_wrap_HScrolledWindow_EstimateTotalWidth, METH_O, NULL},
+	 { (char *)"HScrolledWindow_swigregister", HScrolledWindow_swigregister, METH_VARARGS, NULL},
+	 { (char *)"HScrolledWindow_swiginit", HScrolledWindow_swiginit, METH_VARARGS, NULL},
+	 { (char *)"new_HVScrolledWindow", (PyCFunction) _wrap_new_HVScrolledWindow, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"new_PreHVScrolledWindow", (PyCFunction)_wrap_new_PreHVScrolledWindow, METH_NOARGS, NULL},
+	 { (char *)"HVScrolledWindow__setCallbackInfo", (PyCFunction) _wrap_HVScrolledWindow__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"HVScrolledWindow_Create", (PyCFunction) _wrap_HVScrolledWindow_Create, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"HVScrolledWindow_GetRowsHeight", (PyCFunction) _wrap_HVScrolledWindow_GetRowsHeight, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"HVScrolledWindow_EstimateTotalHeight", (PyCFunction)_wrap_HVScrolledWindow_EstimateTotalHeight, METH_O, NULL},
+	 { (char *)"HVScrolledWindow_GetColumnsWidth", (PyCFunction) _wrap_HVScrolledWindow_GetColumnsWidth, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"HVScrolledWindow_EstimateTotalWidth", (PyCFunction)_wrap_HVScrolledWindow_EstimateTotalWidth, METH_O, NULL},
+	 { (char *)"HVScrolledWindow_swigregister", HVScrolledWindow_swigregister, METH_VARARGS, NULL},
+	 { (char *)"HVScrolledWindow_swiginit", HVScrolledWindow_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_VListBox", (PyCFunction) _wrap_new_VListBox, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_PreVListBox", (PyCFunction)_wrap_new_PreVListBox, METH_NOARGS, NULL},
 	 { (char *)"VListBox__setCallbackInfo", (PyCFunction) _wrap_VListBox__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -32796,6 +34959,36 @@ static void *_p_wxSplitterEventTo_p_wxNotifyEvent(void *x) {
 static void *_p_wxPasswordEntryDialogTo_p_wxTextEntryDialog(void *x) {
     return (void *)((wxTextEntryDialog *)  ((wxPasswordEntryDialog *) x));
 }
+static void *_p_wxPyVScrolledWindowTo_p_wxVarVScrollHelper(void *x) {
+    return (void *)((wxVarVScrollHelper *)  ((wxPyVScrolledWindow *) x));
+}
+static void *_p_wxPyHVScrolledWindowTo_p_wxVarVScrollHelper(void *x) {
+    return (void *)((wxVarVScrollHelper *) (wxVarHVScrollHelper *) ((wxPyHVScrolledWindow *) x));
+}
+static void *_p_wxVarHVScrollHelperTo_p_wxVarVScrollHelper(void *x) {
+    return (void *)((wxVarVScrollHelper *)  ((wxVarHVScrollHelper *) x));
+}
+static void *_p_wxPyVListBoxTo_p_wxVarVScrollHelper(void *x) {
+    return (void *)((wxVarVScrollHelper *) (wxPyVScrolledWindow *) ((wxPyVListBox *) x));
+}
+static void *_p_wxPyHtmlListBoxTo_p_wxVarVScrollHelper(void *x) {
+    return (void *)((wxVarVScrollHelper *) (wxPyVScrolledWindow *)(wxPyVListBox *) ((wxPyHtmlListBox *) x));
+}
+static void *_p_wxSimpleHtmlListBoxTo_p_wxVarVScrollHelper(void *x) {
+    return (void *)((wxVarVScrollHelper *) (wxPyVScrolledWindow *)(wxPyVListBox *)(wxPyHtmlListBox *) ((wxSimpleHtmlListBox *) x));
+}
+static void *_p_wxPyHScrolledWindowTo_p_wxVarHScrollHelper(void *x) {
+    return (void *)((wxVarHScrollHelper *)  ((wxPyHScrolledWindow *) x));
+}
+static void *_p_wxPyHVScrolledWindowTo_p_wxVarHScrollHelper(void *x) {
+    return (void *)((wxVarHScrollHelper *) (wxVarHVScrollHelper *) ((wxPyHVScrolledWindow *) x));
+}
+static void *_p_wxVarHVScrollHelperTo_p_wxVarHScrollHelper(void *x) {
+    return (void *)((wxVarHScrollHelper *)  ((wxVarHVScrollHelper *) x));
+}
+static void *_p_wxPyHVScrolledWindowTo_p_wxVarHVScrollHelper(void *x) {
+    return (void *)((wxVarHVScrollHelper *)  ((wxPyHVScrolledWindow *) x));
+}
 static void *_p_wxSplashScreenTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *) (wxWindow *)(wxTopLevelWindow *)(wxFrame *) ((wxSplashScreen *) x));
 }
@@ -32820,14 +35013,14 @@ static void *_p_wxPyValidatorTo_p_wxEvtHandler(void *x) {
 static void *_p_wxMenuTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *)  ((wxMenu *) x));
 }
-static void *_p_wxSingleChoiceDialogTo_p_wxEvtHandler(void *x) {
-    return (void *)((wxEvtHandler *) (wxWindow *)(wxTopLevelWindow *)(wxDialog *) ((wxSingleChoiceDialog *) x));
+static void *_p_wxFileDialogTo_p_wxEvtHandler(void *x) {
+    return (void *)((wxEvtHandler *) (wxWindow *)(wxTopLevelWindow *)(wxDialog *) ((wxFileDialog *) x));
 }
 static void *_p_wxMultiChoiceDialogTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *) (wxWindow *)(wxTopLevelWindow *)(wxDialog *) ((wxMultiChoiceDialog *) x));
 }
-static void *_p_wxFileDialogTo_p_wxEvtHandler(void *x) {
-    return (void *)((wxEvtHandler *) (wxWindow *)(wxTopLevelWindow *)(wxDialog *) ((wxFileDialog *) x));
+static void *_p_wxSingleChoiceDialogTo_p_wxEvtHandler(void *x) {
+    return (void *)((wxEvtHandler *) (wxWindow *)(wxTopLevelWindow *)(wxDialog *) ((wxSingleChoiceDialog *) x));
 }
 static void *_p_wxTextEntryDialogTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *) (wxWindow *)(wxTopLevelWindow *)(wxDialog *) ((wxTextEntryDialog *) x));
@@ -32852,6 +35045,12 @@ static void *_p_wxPanelTo_p_wxEvtHandler(void *x) {
 }
 static void *_p_wxStatusBarTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *) (wxWindow *) ((wxStatusBar *) x));
+}
+static void *_p_wxPyHVScrolledWindowTo_p_wxEvtHandler(void *x) {
+    return (void *)((wxEvtHandler *) (wxWindow *)(wxPanel *) ((wxPyHVScrolledWindow *) x));
+}
+static void *_p_wxPyHScrolledWindowTo_p_wxEvtHandler(void *x) {
+    return (void *)((wxEvtHandler *) (wxWindow *)(wxPanel *) ((wxPyHScrolledWindow *) x));
 }
 static void *_p_wxPyVScrolledWindowTo_p_wxEvtHandler(void *x) {
     return (void *)((wxEvtHandler *) (wxWindow *)(wxPanel *) ((wxPyVScrolledWindow *) x));
@@ -33315,6 +35514,12 @@ static void *_p_wxTipWindowTo_p_wxObject(void *x) {
 static void *_p_wxPyVScrolledWindowTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *)(wxPanel *) ((wxPyVScrolledWindow *) x));
 }
+static void *_p_wxPyHScrolledWindowTo_p_wxObject(void *x) {
+    return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *)(wxPanel *) ((wxPyHScrolledWindow *) x));
+}
+static void *_p_wxPyHVScrolledWindowTo_p_wxObject(void *x) {
+    return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *)(wxPanel *) ((wxPyHVScrolledWindow *) x));
+}
 static void *_p_wxMDIClientWindowTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvtHandler *)(wxWindow *) ((wxMDIClientWindow *) x));
 }
@@ -33408,15 +35613,6 @@ static void *_p_wxPyValidatorTo_p_wxObject(void *x) {
 static void *_p_wxValidatorTo_p_wxObject(void *x) {
     return (void *)((wxObject *) (wxEvtHandler *) ((wxValidator *) x));
 }
-static void *_p_wxPyVListBoxTo_p_wxPyVScrolledWindow(void *x) {
-    return (void *)((wxPyVScrolledWindow *)  ((wxPyVListBox *) x));
-}
-static void *_p_wxPyHtmlListBoxTo_p_wxPyVScrolledWindow(void *x) {
-    return (void *)((wxPyVScrolledWindow *) (wxPyVListBox *) ((wxPyHtmlListBox *) x));
-}
-static void *_p_wxSimpleHtmlListBoxTo_p_wxPyVScrolledWindow(void *x) {
-    return (void *)((wxPyVScrolledWindow *) (wxPyVListBox *)(wxPyHtmlListBox *) ((wxSimpleHtmlListBox *) x));
-}
 static void *_p_wxTipWindowTo_p_wxPyPopupTransientWindow(void *x) {
     return (void *)((wxPyPopupTransientWindow *)  ((wxTipWindow *) x));
 }
@@ -33501,12 +35697,6 @@ static void *_p_wxPyPanelTo_p_wxWindow(void *x) {
 static void *_p_wxMenuBarTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *)  ((wxMenuBar *) x));
 }
-static void *_p_wxFindReplaceDialogTo_p_wxWindow(void *x) {
-    return (void *)((wxWindow *) (wxTopLevelWindow *)(wxDialog *) ((wxFindReplaceDialog *) x));
-}
-static void *_p_wxProgressDialogTo_p_wxWindow(void *x) {
-    return (void *)((wxWindow *) (wxTopLevelWindow *)(wxFrame *) ((wxProgressDialog *) x));
-}
 static void *_p_wxMessageDialogTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *) (wxTopLevelWindow *)(wxDialog *) ((wxMessageDialog *) x));
 }
@@ -33528,11 +35718,23 @@ static void *_p_wxMultiChoiceDialogTo_p_wxWindow(void *x) {
 static void *_p_wxFileDialogTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *) (wxTopLevelWindow *)(wxDialog *) ((wxFileDialog *) x));
 }
+static void *_p_wxProgressDialogTo_p_wxWindow(void *x) {
+    return (void *)((wxWindow *) (wxTopLevelWindow *)(wxFrame *) ((wxProgressDialog *) x));
+}
+static void *_p_wxFindReplaceDialogTo_p_wxWindow(void *x) {
+    return (void *)((wxWindow *) (wxTopLevelWindow *)(wxDialog *) ((wxFindReplaceDialog *) x));
+}
 static void *_p_wxPanelTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *)  ((wxPanel *) x));
 }
 static void *_p_wxStatusBarTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *)  ((wxStatusBar *) x));
+}
+static void *_p_wxPyHVScrolledWindowTo_p_wxWindow(void *x) {
+    return (void *)((wxWindow *) (wxPanel *) ((wxPyHVScrolledWindow *) x));
+}
+static void *_p_wxPyHScrolledWindowTo_p_wxWindow(void *x) {
+    return (void *)((wxWindow *) (wxPanel *) ((wxPyHScrolledWindow *) x));
 }
 static void *_p_wxPyVScrolledWindowTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *) (wxPanel *) ((wxPyVScrolledWindow *) x));
@@ -33624,6 +35826,15 @@ static void *_p_wxDialogTo_p_wxWindow(void *x) {
 static void *_p_wxMDIParentFrameTo_p_wxWindow(void *x) {
     return (void *)((wxWindow *) (wxTopLevelWindow *)(wxFrame *) ((wxMDIParentFrame *) x));
 }
+static void *_p_wxPyVListBoxTo_p_wxPyVScrolledWindow(void *x) {
+    return (void *)((wxPyVScrolledWindow *)  ((wxPyVListBox *) x));
+}
+static void *_p_wxPyHtmlListBoxTo_p_wxPyVScrolledWindow(void *x) {
+    return (void *)((wxPyVScrolledWindow *) (wxPyVListBox *) ((wxPyHtmlListBox *) x));
+}
+static void *_p_wxSimpleHtmlListBoxTo_p_wxPyVScrolledWindow(void *x) {
+    return (void *)((wxPyVScrolledWindow *) (wxPyVListBox *)(wxPyHtmlListBox *) ((wxSimpleHtmlListBox *) x));
+}
 static void *_p_wxPyScrolledWindowTo_p_wxScrolledWindow(void *x) {
     return (void *)((wxScrolledWindow *)  ((wxPyScrolledWindow *) x));
 }
@@ -33672,6 +35883,12 @@ static void *_p_wxScrolledWindowTo_p_wxPanel(void *x) {
 static void *_p_wxPyVScrolledWindowTo_p_wxPanel(void *x) {
     return (void *)((wxPanel *)  ((wxPyVScrolledWindow *) x));
 }
+static void *_p_wxPyHScrolledWindowTo_p_wxPanel(void *x) {
+    return (void *)((wxPanel *)  ((wxPyHScrolledWindow *) x));
+}
+static void *_p_wxPyHVScrolledWindowTo_p_wxPanel(void *x) {
+    return (void *)((wxPanel *)  ((wxPyHVScrolledWindow *) x));
+}
 static void *_p_wxPyScrolledWindowTo_p_wxPanel(void *x) {
     return (void *)((wxPanel *) (wxScrolledWindow *) ((wxPyScrolledWindow *) x));
 }
@@ -33695,6 +35912,33 @@ static void *_p_wxPreviewControlBarTo_p_wxPanel(void *x) {
 }
 static void *_p_wxPyPreviewControlBarTo_p_wxPanel(void *x) {
     return (void *)((wxPanel *) (wxPreviewControlBar *) ((wxPyPreviewControlBar *) x));
+}
+static void *_p_wxPyVScrolledWindowTo_p_wxVarScrollHelperBase(void *x) {
+    return (void *)((wxVarScrollHelperBase *) (wxVarVScrollHelper *) ((wxPyVScrolledWindow *) x));
+}
+static void *_p_wxPyHScrolledWindowTo_p_wxVarScrollHelperBase(void *x) {
+    return (void *)((wxVarScrollHelperBase *) (wxVarHScrollHelper *) ((wxPyHScrolledWindow *) x));
+}
+static void *_p_wxPyHVScrolledWindowTo_p_wxVarScrollHelperBase(void *x) {
+    return (void *)((wxVarScrollHelperBase *) (wxVarVScrollHelper *)(wxVarHVScrollHelper *) ((wxPyHVScrolledWindow *) x));
+}
+static void *_p_wxVarVScrollHelperTo_p_wxVarScrollHelperBase(void *x) {
+    return (void *)((wxVarScrollHelperBase *)  ((wxVarVScrollHelper *) x));
+}
+static void *_p_wxVarHScrollHelperTo_p_wxVarScrollHelperBase(void *x) {
+    return (void *)((wxVarScrollHelperBase *)  ((wxVarHScrollHelper *) x));
+}
+static void *_p_wxVarHVScrollHelperTo_p_wxVarScrollHelperBase(void *x) {
+    return (void *)((wxVarScrollHelperBase *) (wxVarVScrollHelper *) ((wxVarHVScrollHelper *) x));
+}
+static void *_p_wxPyVListBoxTo_p_wxVarScrollHelperBase(void *x) {
+    return (void *)((wxVarScrollHelperBase *) (wxVarVScrollHelper *)(wxPyVScrolledWindow *) ((wxPyVListBox *) x));
+}
+static void *_p_wxPyHtmlListBoxTo_p_wxVarScrollHelperBase(void *x) {
+    return (void *)((wxVarScrollHelperBase *) (wxVarVScrollHelper *)(wxPyVScrolledWindow *)(wxPyVListBox *) ((wxPyHtmlListBox *) x));
+}
+static void *_p_wxSimpleHtmlListBoxTo_p_wxVarScrollHelperBase(void *x) {
+    return (void *)((wxVarScrollHelperBase *) (wxVarVScrollHelper *)(wxPyVScrolledWindow *)(wxPyVListBox *)(wxPyHtmlListBox *) ((wxSimpleHtmlListBox *) x));
 }
 static void *_p_wxChildFocusEventTo_p_wxCommandEvent(void *x) {
     return (void *)((wxCommandEvent *)  ((wxChildFocusEvent *) x));
@@ -33863,6 +36107,7 @@ static swig_type_info _swigt__p_wxPaperSize = {"_p_wxPaperSize", "enum wxPaperSi
 static swig_type_info _swigt__p_wxPasswordEntryDialog = {"_p_wxPasswordEntryDialog", "wxPasswordEntryDialog *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPoint = {"_p_wxPoint", "wxPoint *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPopupWindow = {"_p_wxPopupWindow", "wxPopupWindow *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxPosition = {"_p_wxPosition", "wxPosition *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPreviewCanvas = {"_p_wxPreviewCanvas", "wxPreviewCanvas *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPreviewControlBar = {"_p_wxPreviewControlBar", "wxPreviewControlBar *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPreviewFrame = {"_p_wxPreviewFrame", "wxPreviewFrame *", 0, 0, (void*)0, 0};
@@ -33872,6 +36117,8 @@ static swig_type_info _swigt__p_wxPrintDialogData = {"_p_wxPrintDialogData", "wx
 static swig_type_info _swigt__p_wxPrintPreview = {"_p_wxPrintPreview", "wxPrintPreview *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPrinter = {"_p_wxPrinter", "wxPrinter *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxProgressDialog = {"_p_wxProgressDialog", "wxProgressDialog *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxPyHScrolledWindow = {"_p_wxPyHScrolledWindow", "wxPyHScrolledWindow *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxPyHVScrolledWindow = {"_p_wxPyHVScrolledWindow", "wxPyHVScrolledWindow *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPyHtmlListBox = {"_p_wxPyHtmlListBox", "wxPyHtmlListBox *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPyPanel = {"_p_wxPyPanel", "wxPyPanel *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPyPopupTransientWindow = {"_p_wxPyPopupTransientWindow", "wxPyPopupTransientWindow *", 0, 0, (void*)0, 0};
@@ -33909,6 +36156,10 @@ static swig_type_info _swigt__p_wxTipWindow = {"_p_wxTipWindow", "wxTipWindow *"
 static swig_type_info _swigt__p_wxToolBar = {"_p_wxToolBar", "wxToolBar *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxTopLevelWindow = {"_p_wxTopLevelWindow", "wxTopLevelWindow *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxValidator = {"_p_wxValidator", "wxValidator *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxVarHScrollHelper = {"_p_wxVarHScrollHelper", "wxVarHScrollHelper *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxVarHVScrollHelper = {"_p_wxVarHVScrollHelper", "wxVarHVScrollHelper *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxVarScrollHelperBase = {"_p_wxVarScrollHelperBase", "wxVarScrollHelperBase *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxVarVScrollHelper = {"_p_wxVarVScrollHelper", "wxVarVScrollHelper *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxVisualAttributes = {"_p_wxVisualAttributes", "wxVisualAttributes *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxWindow = {"_p_wxWindow", "wxWindow *", 0, 0, (void*)0, 0};
 
@@ -34014,6 +36265,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxPasswordEntryDialog,
   &_swigt__p_wxPoint,
   &_swigt__p_wxPopupWindow,
+  &_swigt__p_wxPosition,
   &_swigt__p_wxPreviewCanvas,
   &_swigt__p_wxPreviewControlBar,
   &_swigt__p_wxPreviewFrame,
@@ -34026,6 +36278,8 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxPyApp,
   &_swigt__p_wxPyCommandEvent,
   &_swigt__p_wxPyEvent,
+  &_swigt__p_wxPyHScrolledWindow,
+  &_swigt__p_wxPyHVScrolledWindow,
   &_swigt__p_wxPyHtmlListBox,
   &_swigt__p_wxPyImageHandler,
   &_swigt__p_wxPyPanel,
@@ -34078,6 +36332,10 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxTopLevelWindow,
   &_swigt__p_wxUpdateUIEvent,
   &_swigt__p_wxValidator,
+  &_swigt__p_wxVarHScrollHelper,
+  &_swigt__p_wxVarHVScrollHelper,
+  &_swigt__p_wxVarScrollHelperBase,
+  &_swigt__p_wxVarVScrollHelper,
   &_swigt__p_wxVisualAttributes,
   &_swigt__p_wxWindow,
   &_swigt__p_wxWindowCreateEvent,
@@ -34145,7 +36403,7 @@ static swig_cast_info _swigc__p_wxPyValidator[] = {{&_swigt__p_wxPyValidator, 0,
 static swig_cast_info _swigc__p_wxControl[] = {{&_swigt__p_wxControl, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPyApp[] = {{&_swigt__p_wxPyApp, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxControlWithItems[] = {{&_swigt__p_wxControlWithItems, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_wxEvtHandler[] = {  {&_swigt__p_wxSplashScreen, _p_wxSplashScreenTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxMiniFrame, _p_wxMiniFrameTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyPanel, _p_wxPyPanelTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxEventBlocker, _p_wxEventBlockerTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxMenuBar, _p_wxMenuBarTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxValidator, _p_wxValidatorTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyValidator, _p_wxPyValidatorTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPasswordEntryDialog, _p_wxPasswordEntryDialogTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxTextEntryDialog, _p_wxTextEntryDialogTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxFileDialog, _p_wxFileDialogTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxFindReplaceDialog, _p_wxFindReplaceDialogTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxProgressDialog, _p_wxProgressDialogTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxMessageDialog, _p_wxMessageDialogTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxNumberEntryDialog, _p_wxNumberEntryDialogTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxSingleChoiceDialog, _p_wxSingleChoiceDialogTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxMultiChoiceDialog, _p_wxMultiChoiceDialogTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPanel, _p_wxPanelTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxStatusBar, _p_wxStatusBarTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxTopLevelWindow, _p_wxTopLevelWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxMDIClientWindow, _p_wxMDIClientWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyVScrolledWindow, _p_wxPyVScrolledWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyScrolledWindow, _p_wxPyScrolledWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxScrolledWindow, _p_wxScrolledWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxWindow, _p_wxWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxSashWindow, _p_wxSashWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxSashLayoutWindow, _p_wxSashLayoutWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxSplitterWindow, _p_wxSplitterWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxSplashScreenWindow, _p_wxSplashScreenWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPopupWindow, _p_wxPopupWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyPopupTransientWindow, _p_wxPyPopupTransientWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxTipWindow, _p_wxTipWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyPreviewFrame, _p_wxPyPreviewFrameTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPreviewFrame, _p_wxPreviewFrameTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxControl, _p_wxControlTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxMDIChildFrame, _p_wxMDIChildFrameTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyApp, _p_wxPyAppTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxControlWithItems, _p_wxControlWithItemsTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxEvtHandler, 0, 0, 0},  {&_swigt__p_wxPreviewCanvas, _p_wxPreviewCanvasTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyWindow, _p_wxPyWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxSimpleHtmlListBox, _p_wxSimpleHtmlListBoxTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyHtmlListBox, _p_wxPyHtmlListBoxTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyVListBox, _p_wxPyVListBoxTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyPreviewControlBar, _p_wxPyPreviewControlBarTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPreviewControlBar, _p_wxPreviewControlBarTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyTaskBarIcon, _p_wxPyTaskBarIconTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxFrame, _p_wxFrameTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxDialog, _p_wxDialogTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxColourDialog, _p_wxColourDialogTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxDirDialog, _p_wxDirDialogTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxFontDialog, _p_wxFontDialogTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxMenu, _p_wxMenuTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxMDIParentFrame, _p_wxMDIParentFrameTo_p_wxEvtHandler, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxEvtHandler[] = {  {&_swigt__p_wxSplashScreen, _p_wxSplashScreenTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxMiniFrame, _p_wxMiniFrameTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyPanel, _p_wxPyPanelTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxEventBlocker, _p_wxEventBlockerTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxMenuBar, _p_wxMenuBarTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxValidator, _p_wxValidatorTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyValidator, _p_wxPyValidatorTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPasswordEntryDialog, _p_wxPasswordEntryDialogTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxTextEntryDialog, _p_wxTextEntryDialogTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxSingleChoiceDialog, _p_wxSingleChoiceDialogTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxFindReplaceDialog, _p_wxFindReplaceDialogTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxProgressDialog, _p_wxProgressDialogTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxMessageDialog, _p_wxMessageDialogTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxNumberEntryDialog, _p_wxNumberEntryDialogTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxFileDialog, _p_wxFileDialogTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxMultiChoiceDialog, _p_wxMultiChoiceDialogTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPanel, _p_wxPanelTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxStatusBar, _p_wxStatusBarTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxTopLevelWindow, _p_wxTopLevelWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxMDIClientWindow, _p_wxMDIClientWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyHVScrolledWindow, _p_wxPyHVScrolledWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyHScrolledWindow, _p_wxPyHScrolledWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyVScrolledWindow, _p_wxPyVScrolledWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyScrolledWindow, _p_wxPyScrolledWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxScrolledWindow, _p_wxScrolledWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxWindow, _p_wxWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxSashWindow, _p_wxSashWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxSashLayoutWindow, _p_wxSashLayoutWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxSplitterWindow, _p_wxSplitterWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxSplashScreenWindow, _p_wxSplashScreenWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPopupWindow, _p_wxPopupWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyPopupTransientWindow, _p_wxPyPopupTransientWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxTipWindow, _p_wxTipWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPreviewFrame, _p_wxPreviewFrameTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyPreviewFrame, _p_wxPyPreviewFrameTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxControl, _p_wxControlTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxMDIChildFrame, _p_wxMDIChildFrameTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyApp, _p_wxPyAppTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxControlWithItems, _p_wxControlWithItemsTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxEvtHandler, 0, 0, 0},  {&_swigt__p_wxPreviewCanvas, _p_wxPreviewCanvasTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyWindow, _p_wxPyWindowTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxSimpleHtmlListBox, _p_wxSimpleHtmlListBoxTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyHtmlListBox, _p_wxPyHtmlListBoxTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyVListBox, _p_wxPyVListBoxTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyPreviewControlBar, _p_wxPyPreviewControlBarTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPreviewControlBar, _p_wxPreviewControlBarTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxPyTaskBarIcon, _p_wxPyTaskBarIconTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxFrame, _p_wxFrameTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxDialog, _p_wxDialogTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxColourDialog, _p_wxColourDialogTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxDirDialog, _p_wxDirDialogTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxFontDialog, _p_wxFontDialogTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxMenu, _p_wxMenuTo_p_wxEvtHandler, 0, 0},  {&_swigt__p_wxMDIParentFrame, _p_wxMDIParentFrameTo_p_wxEvtHandler, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxFileDialog[] = {  {&_swigt__p_wxFileDialog, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxFileSystem[] = {  {&_swigt__p_wxFileSystem, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxFindDialogEvent[] = {  {&_swigt__p_wxFindDialogEvent, 0, 0, 0},{0, 0, 0, 0}};
@@ -34199,14 +36457,15 @@ static swig_cast_info _swigc__p_wxTIFFHandler[] = {{&_swigt__p_wxTIFFHandler, 0,
 static swig_cast_info _swigc__p_wxTGAHandler[] = {{&_swigt__p_wxTGAHandler, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxAcceleratorTable[] = {{&_swigt__p_wxAcceleratorTable, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxImage[] = {{&_swigt__p_wxImage, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_wxObject[] = {  {&_swigt__p_wxQueryLayoutInfoEvent, _p_wxQueryLayoutInfoEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxLayoutConstraints, _p_wxLayoutConstraintsTo_p_wxObject, 0, 0},  {&_swigt__p_wxPreviewFrame, _p_wxPreviewFrameTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyPreviewFrame, _p_wxPyPreviewFrameTo_p_wxObject, 0, 0},  {&_swigt__p_wxEventBlocker, _p_wxEventBlockerTo_p_wxObject, 0, 0},  {&_swigt__p_wxSizerItem, _p_wxSizerItemTo_p_wxObject, 0, 0},  {&_swigt__p_wxGBSizerItem, _p_wxGBSizerItemTo_p_wxObject, 0, 0},  {&_swigt__p_wxScrollEvent, _p_wxScrollEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxIndividualLayoutConstraint, _p_wxIndividualLayoutConstraintTo_p_wxObject, 0, 0},  {&_swigt__p_wxStaticBoxSizer, _p_wxStaticBoxSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxBoxSizer, _p_wxBoxSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxSizer, _p_wxSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxGridBagSizer, _p_wxGridBagSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxUpdateUIEvent, _p_wxUpdateUIEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyPanel, _p_wxPyPanelTo_p_wxObject, 0, 0},  {&_swigt__p_wxMenu, _p_wxMenuTo_p_wxObject, 0, 0},  {&_swigt__p_wxFontData, _p_wxFontDataTo_p_wxObject, 0, 0},  {&_swigt__p_wxPrintData, _p_wxPrintDataTo_p_wxObject, 0, 0},  {&_swigt__p_wxEvent, _p_wxEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxFlexGridSizer, _p_wxFlexGridSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxGridSizer, _p_wxGridSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyTaskBarIcon, _p_wxPyTaskBarIconTo_p_wxObject, 0, 0},  {&_swigt__p_wxLayoutAlgorithm, _p_wxLayoutAlgorithmTo_p_wxObject, 0, 0},  {&_swigt__p_wxInitDialogEvent, _p_wxInitDialogEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxFindDialogEvent, _p_wxFindDialogEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPaintEvent, _p_wxPaintEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxNcPaintEvent, _p_wxNcPaintEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxClipboardTextEvent, _p_wxClipboardTextEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPaletteChangedEvent, _p_wxPaletteChangedEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxDisplayChangedEvent, _p_wxDisplayChangedEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMouseCaptureChangedEvent, _p_wxMouseCaptureChangedEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxSysColourChangedEvent, _p_wxSysColourChangedEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPreviewCanvas, _p_wxPreviewCanvasTo_p_wxObject, 0, 0},  {&_swigt__p_wxControl, _p_wxControlTo_p_wxObject, 0, 0},  {&_swigt__p_wxSetCursorEvent, _p_wxSetCursorEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxSplitterEvent, _p_wxSplitterEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxFSFile, _p_wxFSFileTo_p_wxObject, 0, 0},  {&_swigt__p_wxFindReplaceData, _p_wxFindReplaceDataTo_p_wxObject, 0, 0},  {&_swigt__p_wxPySizer, _p_wxPySizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxMDIChildFrame, _p_wxMDIChildFrameTo_p_wxObject, 0, 0},  {&_swigt__p_wxColourData, _p_wxColourDataTo_p_wxObject, 0, 0},  {&_swigt__p_wxNotifyEvent, _p_wxNotifyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyEvent, _p_wxPyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyWindow, _p_wxPyWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxSplashScreen, _p_wxSplashScreenTo_p_wxObject, 0, 0},  {&_swigt__p_wxFindReplaceDialog, _p_wxFindReplaceDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxProgressDialog, _p_wxProgressDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxMessageDialog, _p_wxMessageDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxNumberEntryDialog, _p_wxNumberEntryDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxPasswordEntryDialog, _p_wxPasswordEntryDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxTextEntryDialog, _p_wxTextEntryDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxSingleChoiceDialog, _p_wxSingleChoiceDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxMultiChoiceDialog, _p_wxMultiChoiceDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxFileDialog, _p_wxFileDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxShowEvent, _p_wxShowEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPrinter, _p_wxPrinterTo_p_wxObject, 0, 0},  {&_swigt__p_wxIdleEvent, _p_wxIdleEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxWindowCreateEvent, _p_wxWindowCreateEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxQueryNewPaletteEvent, _p_wxQueryNewPaletteEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMaximizeEvent, _p_wxMaximizeEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxIconizeEvent, _p_wxIconizeEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxActivateEvent, _p_wxActivateEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxSizeEvent, _p_wxSizeEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxDateEvent, _p_wxDateEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMoveEvent, _p_wxMoveEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMenuItem, _p_wxMenuItemTo_p_wxObject, 0, 0},  {&_swigt__p_wxCalculateLayoutEvent, _p_wxCalculateLayoutEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMouseCaptureLostEvent, _p_wxMouseCaptureLostEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxICOHandler, _p_wxICOHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxCURHandler, _p_wxCURHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxANIHandler, _p_wxANIHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPNGHandler, _p_wxPNGHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxGIFHandler, _p_wxGIFHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPCXHandler, _p_wxPCXHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxJPEGHandler, _p_wxJPEGHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPNMHandler, _p_wxPNMHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxBMPHandler, _p_wxBMPHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyImageHandler, _p_wxPyImageHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxImageHandler, _p_wxImageHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxXPMHandler, _p_wxXPMHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxTIFFHandler, _p_wxTIFFHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxTGAHandler, _p_wxTGAHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxEvtHandler, _p_wxEvtHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyVListBox, _p_wxPyVListBoxTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyHtmlListBox, _p_wxPyHtmlListBoxTo_p_wxObject, 0, 0},  {&_swigt__p_wxSimpleHtmlListBox, _p_wxSimpleHtmlListBoxTo_p_wxObject, 0, 0},  {&_swigt__p_wxAcceleratorTable, _p_wxAcceleratorTableTo_p_wxObject, 0, 0},  {&_swigt__p_wxStdDialogButtonSizer, _p_wxStdDialogButtonSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxMiniFrame, _p_wxMiniFrameTo_p_wxObject, 0, 0},  {&_swigt__p_wxImage, _p_wxImageTo_p_wxObject, 0, 0},  {&_swigt__p_wxFrame, _p_wxFrameTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyPrintout, _p_wxPyPrintoutTo_p_wxObject, 0, 0},  {&_swigt__p_wxTaskBarIconEvent, _p_wxTaskBarIconEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxScrollWinEvent, _p_wxScrollWinEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxStatusBar, _p_wxStatusBarTo_p_wxObject, 0, 0},  {&_swigt__p_wxMDIParentFrame, _p_wxMDIParentFrameTo_p_wxObject, 0, 0},  {&_swigt__p_wxObject, 0, 0, 0},  {&_swigt__p_wxKeyEvent, _p_wxKeyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxNavigationKeyEvent, _p_wxNavigationKeyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxWindowDestroyEvent, _p_wxWindowDestroyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMenuBar, _p_wxMenuBarTo_p_wxObject, 0, 0},  {&_swigt__p_wxScrolledWindow, _p_wxScrolledWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyScrolledWindow, _p_wxPyScrolledWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyVScrolledWindow, _p_wxPyVScrolledWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxMDIClientWindow, _p_wxMDIClientWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxTopLevelWindow, _p_wxTopLevelWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxWindow, _p_wxWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxSashWindow, _p_wxSashWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxSashLayoutWindow, _p_wxSashLayoutWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxSplitterWindow, _p_wxSplitterWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxSplashScreenWindow, _p_wxSplashScreenWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxPopupWindow, _p_wxPopupWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyPopupTransientWindow, _p_wxPyPopupTransientWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxTipWindow, _p_wxTipWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxSashEvent, _p_wxSashEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPrintPreview, _p_wxPrintPreviewTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyPrintPreview, _p_wxPyPrintPreviewTo_p_wxObject, 0, 0},  {&_swigt__p_wxPanel, _p_wxPanelTo_p_wxObject, 0, 0},  {&_swigt__p_wxDialog, _p_wxDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxColourDialog, _p_wxColourDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxDirDialog, _p_wxDirDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxFontDialog, _p_wxFontDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxPageSetupDialog, _p_wxPageSetupDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxPrintDialog, _p_wxPrintDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxFileSystem, _p_wxFileSystemTo_p_wxObject, 0, 0},  {&_swigt__p_wxContextMenuEvent, _p_wxContextMenuEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMenuEvent, _p_wxMenuEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxCloseEvent, _p_wxCloseEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMouseEvent, _p_wxMouseEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxEraseEvent, _p_wxEraseEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyApp, _p_wxPyAppTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyCommandEvent, _p_wxPyCommandEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxCommandEvent, _p_wxCommandEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPreviewControlBar, _p_wxPreviewControlBarTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyPreviewControlBar, _p_wxPyPreviewControlBarTo_p_wxObject, 0, 0},  {&_swigt__p_wxChildFocusEvent, _p_wxChildFocusEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxDropFilesEvent, _p_wxDropFilesEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxFocusEvent, _p_wxFocusEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxControlWithItems, _p_wxControlWithItemsTo_p_wxObject, 0, 0},  {&_swigt__p_wxPageSetupDialogData, _p_wxPageSetupDialogDataTo_p_wxObject, 0, 0},  {&_swigt__p_wxPrintDialogData, _p_wxPrintDialogDataTo_p_wxObject, 0, 0},  {&_swigt__p_wxValidator, _p_wxValidatorTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyValidator, _p_wxPyValidatorTo_p_wxObject, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxObject[] = {  {&_swigt__p_wxQueryLayoutInfoEvent, _p_wxQueryLayoutInfoEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxLayoutConstraints, _p_wxLayoutConstraintsTo_p_wxObject, 0, 0},  {&_swigt__p_wxPreviewFrame, _p_wxPreviewFrameTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyPreviewFrame, _p_wxPyPreviewFrameTo_p_wxObject, 0, 0},  {&_swigt__p_wxEventBlocker, _p_wxEventBlockerTo_p_wxObject, 0, 0},  {&_swigt__p_wxSizerItem, _p_wxSizerItemTo_p_wxObject, 0, 0},  {&_swigt__p_wxGBSizerItem, _p_wxGBSizerItemTo_p_wxObject, 0, 0},  {&_swigt__p_wxScrollEvent, _p_wxScrollEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxIndividualLayoutConstraint, _p_wxIndividualLayoutConstraintTo_p_wxObject, 0, 0},  {&_swigt__p_wxStaticBoxSizer, _p_wxStaticBoxSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxBoxSizer, _p_wxBoxSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxSizer, _p_wxSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxGridBagSizer, _p_wxGridBagSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxUpdateUIEvent, _p_wxUpdateUIEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyPanel, _p_wxPyPanelTo_p_wxObject, 0, 0},  {&_swigt__p_wxMenu, _p_wxMenuTo_p_wxObject, 0, 0},  {&_swigt__p_wxFontData, _p_wxFontDataTo_p_wxObject, 0, 0},  {&_swigt__p_wxPrintData, _p_wxPrintDataTo_p_wxObject, 0, 0},  {&_swigt__p_wxEvent, _p_wxEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxFlexGridSizer, _p_wxFlexGridSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxGridSizer, _p_wxGridSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyTaskBarIcon, _p_wxPyTaskBarIconTo_p_wxObject, 0, 0},  {&_swigt__p_wxLayoutAlgorithm, _p_wxLayoutAlgorithmTo_p_wxObject, 0, 0},  {&_swigt__p_wxInitDialogEvent, _p_wxInitDialogEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxFindDialogEvent, _p_wxFindDialogEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPaintEvent, _p_wxPaintEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxNcPaintEvent, _p_wxNcPaintEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxClipboardTextEvent, _p_wxClipboardTextEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPaletteChangedEvent, _p_wxPaletteChangedEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxDisplayChangedEvent, _p_wxDisplayChangedEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMouseCaptureChangedEvent, _p_wxMouseCaptureChangedEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxSysColourChangedEvent, _p_wxSysColourChangedEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPreviewCanvas, _p_wxPreviewCanvasTo_p_wxObject, 0, 0},  {&_swigt__p_wxControl, _p_wxControlTo_p_wxObject, 0, 0},  {&_swigt__p_wxSetCursorEvent, _p_wxSetCursorEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxSplitterEvent, _p_wxSplitterEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxFSFile, _p_wxFSFileTo_p_wxObject, 0, 0},  {&_swigt__p_wxFindReplaceData, _p_wxFindReplaceDataTo_p_wxObject, 0, 0},  {&_swigt__p_wxPySizer, _p_wxPySizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxMDIChildFrame, _p_wxMDIChildFrameTo_p_wxObject, 0, 0},  {&_swigt__p_wxColourData, _p_wxColourDataTo_p_wxObject, 0, 0},  {&_swigt__p_wxNotifyEvent, _p_wxNotifyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyEvent, _p_wxPyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyWindow, _p_wxPyWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxSplashScreen, _p_wxSplashScreenTo_p_wxObject, 0, 0},  {&_swigt__p_wxFindReplaceDialog, _p_wxFindReplaceDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxProgressDialog, _p_wxProgressDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxMessageDialog, _p_wxMessageDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxNumberEntryDialog, _p_wxNumberEntryDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxPasswordEntryDialog, _p_wxPasswordEntryDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxTextEntryDialog, _p_wxTextEntryDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxSingleChoiceDialog, _p_wxSingleChoiceDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxMultiChoiceDialog, _p_wxMultiChoiceDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxFileDialog, _p_wxFileDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxShowEvent, _p_wxShowEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPrinter, _p_wxPrinterTo_p_wxObject, 0, 0},  {&_swigt__p_wxIdleEvent, _p_wxIdleEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxWindowCreateEvent, _p_wxWindowCreateEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxQueryNewPaletteEvent, _p_wxQueryNewPaletteEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMaximizeEvent, _p_wxMaximizeEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxIconizeEvent, _p_wxIconizeEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxActivateEvent, _p_wxActivateEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxSizeEvent, _p_wxSizeEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxDateEvent, _p_wxDateEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMoveEvent, _p_wxMoveEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMenuItem, _p_wxMenuItemTo_p_wxObject, 0, 0},  {&_swigt__p_wxCalculateLayoutEvent, _p_wxCalculateLayoutEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMouseCaptureLostEvent, _p_wxMouseCaptureLostEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxICOHandler, _p_wxICOHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxCURHandler, _p_wxCURHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxANIHandler, _p_wxANIHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPNGHandler, _p_wxPNGHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxGIFHandler, _p_wxGIFHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPCXHandler, _p_wxPCXHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxJPEGHandler, _p_wxJPEGHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPNMHandler, _p_wxPNMHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxBMPHandler, _p_wxBMPHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyImageHandler, _p_wxPyImageHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxImageHandler, _p_wxImageHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxXPMHandler, _p_wxXPMHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxTIFFHandler, _p_wxTIFFHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxTGAHandler, _p_wxTGAHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxEvtHandler, _p_wxEvtHandlerTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyVListBox, _p_wxPyVListBoxTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyHtmlListBox, _p_wxPyHtmlListBoxTo_p_wxObject, 0, 0},  {&_swigt__p_wxSimpleHtmlListBox, _p_wxSimpleHtmlListBoxTo_p_wxObject, 0, 0},  {&_swigt__p_wxAcceleratorTable, _p_wxAcceleratorTableTo_p_wxObject, 0, 0},  {&_swigt__p_wxStdDialogButtonSizer, _p_wxStdDialogButtonSizerTo_p_wxObject, 0, 0},  {&_swigt__p_wxMiniFrame, _p_wxMiniFrameTo_p_wxObject, 0, 0},  {&_swigt__p_wxImage, _p_wxImageTo_p_wxObject, 0, 0},  {&_swigt__p_wxFrame, _p_wxFrameTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyPrintout, _p_wxPyPrintoutTo_p_wxObject, 0, 0},  {&_swigt__p_wxTaskBarIconEvent, _p_wxTaskBarIconEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxScrollWinEvent, _p_wxScrollWinEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxStatusBar, _p_wxStatusBarTo_p_wxObject, 0, 0},  {&_swigt__p_wxMDIParentFrame, _p_wxMDIParentFrameTo_p_wxObject, 0, 0},  {&_swigt__p_wxObject, 0, 0, 0},  {&_swigt__p_wxKeyEvent, _p_wxKeyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxNavigationKeyEvent, _p_wxNavigationKeyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxWindowDestroyEvent, _p_wxWindowDestroyEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMenuBar, _p_wxMenuBarTo_p_wxObject, 0, 0},  {&_swigt__p_wxScrolledWindow, _p_wxScrolledWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyScrolledWindow, _p_wxPyScrolledWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyVScrolledWindow, _p_wxPyVScrolledWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyHScrolledWindow, _p_wxPyHScrolledWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyHVScrolledWindow, _p_wxPyHVScrolledWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxMDIClientWindow, _p_wxMDIClientWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxTopLevelWindow, _p_wxTopLevelWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxWindow, _p_wxWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxSashWindow, _p_wxSashWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxSashLayoutWindow, _p_wxSashLayoutWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxSplitterWindow, _p_wxSplitterWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxSplashScreenWindow, _p_wxSplashScreenWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxPopupWindow, _p_wxPopupWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyPopupTransientWindow, _p_wxPyPopupTransientWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxTipWindow, _p_wxTipWindowTo_p_wxObject, 0, 0},  {&_swigt__p_wxSashEvent, _p_wxSashEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPrintPreview, _p_wxPrintPreviewTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyPrintPreview, _p_wxPyPrintPreviewTo_p_wxObject, 0, 0},  {&_swigt__p_wxPanel, _p_wxPanelTo_p_wxObject, 0, 0},  {&_swigt__p_wxDialog, _p_wxDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxColourDialog, _p_wxColourDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxDirDialog, _p_wxDirDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxFontDialog, _p_wxFontDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxPageSetupDialog, _p_wxPageSetupDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxPrintDialog, _p_wxPrintDialogTo_p_wxObject, 0, 0},  {&_swigt__p_wxFileSystem, _p_wxFileSystemTo_p_wxObject, 0, 0},  {&_swigt__p_wxContextMenuEvent, _p_wxContextMenuEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMenuEvent, _p_wxMenuEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxCloseEvent, _p_wxCloseEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxMouseEvent, _p_wxMouseEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxEraseEvent, _p_wxEraseEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyApp, _p_wxPyAppTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyCommandEvent, _p_wxPyCommandEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxCommandEvent, _p_wxCommandEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxPreviewControlBar, _p_wxPreviewControlBarTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyPreviewControlBar, _p_wxPyPreviewControlBarTo_p_wxObject, 0, 0},  {&_swigt__p_wxChildFocusEvent, _p_wxChildFocusEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxDropFilesEvent, _p_wxDropFilesEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxFocusEvent, _p_wxFocusEventTo_p_wxObject, 0, 0},  {&_swigt__p_wxControlWithItems, _p_wxControlWithItemsTo_p_wxObject, 0, 0},  {&_swigt__p_wxPageSetupDialogData, _p_wxPageSetupDialogDataTo_p_wxObject, 0, 0},  {&_swigt__p_wxPrintDialogData, _p_wxPrintDialogDataTo_p_wxObject, 0, 0},  {&_swigt__p_wxValidator, _p_wxValidatorTo_p_wxObject, 0, 0},  {&_swigt__p_wxPyValidator, _p_wxPyValidatorTo_p_wxObject, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPageSetupDialog[] = {  {&_swigt__p_wxPageSetupDialog, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPageSetupDialogData[] = {  {&_swigt__p_wxPageSetupDialogData, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_wxPanel[] = {  {&_swigt__p_wxPanel, 0, 0, 0},  {&_swigt__p_wxScrolledWindow, _p_wxScrolledWindowTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPyScrolledWindow, _p_wxPyScrolledWindowTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPyVScrolledWindow, _p_wxPyVScrolledWindowTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPyVListBox, _p_wxPyVListBoxTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPyHtmlListBox, _p_wxPyHtmlListBoxTo_p_wxPanel, 0, 0},  {&_swigt__p_wxSimpleHtmlListBox, _p_wxSimpleHtmlListBoxTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPyPanel, _p_wxPyPanelTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPreviewCanvas, _p_wxPreviewCanvasTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPreviewControlBar, _p_wxPreviewControlBarTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPyPreviewControlBar, _p_wxPyPreviewControlBarTo_p_wxPanel, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxPanel[] = {  {&_swigt__p_wxPanel, 0, 0, 0},  {&_swigt__p_wxScrolledWindow, _p_wxScrolledWindowTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPyScrolledWindow, _p_wxPyScrolledWindowTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPyVScrolledWindow, _p_wxPyVScrolledWindowTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPyHScrolledWindow, _p_wxPyHScrolledWindowTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPyHVScrolledWindow, _p_wxPyHVScrolledWindowTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPyVListBox, _p_wxPyVListBoxTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPyHtmlListBox, _p_wxPyHtmlListBoxTo_p_wxPanel, 0, 0},  {&_swigt__p_wxSimpleHtmlListBox, _p_wxSimpleHtmlListBoxTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPyPanel, _p_wxPyPanelTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPreviewCanvas, _p_wxPreviewCanvasTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPreviewControlBar, _p_wxPreviewControlBarTo_p_wxPanel, 0, 0},  {&_swigt__p_wxPyPreviewControlBar, _p_wxPyPreviewControlBarTo_p_wxPanel, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPaperSize[] = {  {&_swigt__p_wxPaperSize, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPasswordEntryDialog[] = {  {&_swigt__p_wxPasswordEntryDialog, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPoint[] = {  {&_swigt__p_wxPoint, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPopupWindow[] = {  {&_swigt__p_wxPopupWindow, 0, 0, 0},  {&_swigt__p_wxPyPopupTransientWindow, _p_wxPyPopupTransientWindowTo_p_wxPopupWindow, 0, 0},  {&_swigt__p_wxTipWindow, _p_wxTipWindowTo_p_wxPopupWindow, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxPosition[] = {  {&_swigt__p_wxPosition, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPreviewCanvas[] = {  {&_swigt__p_wxPreviewCanvas, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPreviewControlBar[] = {  {&_swigt__p_wxPreviewControlBar, 0, 0, 0},  {&_swigt__p_wxPyPreviewControlBar, _p_wxPyPreviewControlBarTo_p_wxPreviewControlBar, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPreviewFrame[] = {  {&_swigt__p_wxPreviewFrame, 0, 0, 0},  {&_swigt__p_wxPyPreviewFrame, _p_wxPyPreviewFrameTo_p_wxPreviewFrame, 0, 0},{0, 0, 0, 0}};
@@ -34216,6 +36475,8 @@ static swig_cast_info _swigc__p_wxPrintDialogData[] = {  {&_swigt__p_wxPrintDial
 static swig_cast_info _swigc__p_wxPrintPreview[] = {  {&_swigt__p_wxPrintPreview, 0, 0, 0},  {&_swigt__p_wxPyPrintPreview, _p_wxPyPrintPreviewTo_p_wxPrintPreview, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPrinter[] = {  {&_swigt__p_wxPrinter, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxProgressDialog[] = {  {&_swigt__p_wxProgressDialog, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxPyHScrolledWindow[] = {  {&_swigt__p_wxPyHScrolledWindow, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxPyHVScrolledWindow[] = {  {&_swigt__p_wxPyHVScrolledWindow, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPyHtmlListBox[] = {  {&_swigt__p_wxPyHtmlListBox, 0, 0, 0},  {&_swigt__p_wxSimpleHtmlListBox, _p_wxSimpleHtmlListBoxTo_p_wxPyHtmlListBox, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPyPanel[] = {  {&_swigt__p_wxPyPanel, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPyPopupTransientWindow[] = {  {&_swigt__p_wxPyPopupTransientWindow, 0, 0, 0},  {&_swigt__p_wxTipWindow, _p_wxTipWindowTo_p_wxPyPopupTransientWindow, 0, 0},{0, 0, 0, 0}};
@@ -34253,8 +36514,12 @@ static swig_cast_info _swigc__p_wxTipWindow[] = {  {&_swigt__p_wxTipWindow, 0, 0
 static swig_cast_info _swigc__p_wxToolBar[] = {  {&_swigt__p_wxToolBar, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxTopLevelWindow[] = {  {&_swigt__p_wxFrame, _p_wxFrameTo_p_wxTopLevelWindow, 0, 0},  {&_swigt__p_wxMiniFrame, _p_wxMiniFrameTo_p_wxTopLevelWindow, 0, 0},  {&_swigt__p_wxFontDialog, _p_wxFontDialogTo_p_wxTopLevelWindow, 0, 0},  {&_swigt__p_wxDirDialog, _p_wxDirDialogTo_p_wxTopLevelWindow, 0, 0},  {&_swigt__p_wxColourDialog, _p_wxColourDialogTo_p_wxTopLevelWindow, 0, 0},  {&_swigt__p_wxDialog, _p_wxDialogTo_p_wxTopLevelWindow, 0, 0},  {&_swigt__p_wxSplashScreen, _p_wxSplashScreenTo_p_wxTopLevelWindow, 0, 0},  {&_swigt__p_wxTopLevelWindow, 0, 0, 0},  {&_swigt__p_wxMDIParentFrame, _p_wxMDIParentFrameTo_p_wxTopLevelWindow, 0, 0},  {&_swigt__p_wxMDIChildFrame, _p_wxMDIChildFrameTo_p_wxTopLevelWindow, 0, 0},  {&_swigt__p_wxFileDialog, _p_wxFileDialogTo_p_wxTopLevelWindow, 0, 0},  {&_swigt__p_wxProgressDialog, _p_wxProgressDialogTo_p_wxTopLevelWindow, 0, 0},  {&_swigt__p_wxMultiChoiceDialog, _p_wxMultiChoiceDialogTo_p_wxTopLevelWindow, 0, 0},  {&_swigt__p_wxSingleChoiceDialog, _p_wxSingleChoiceDialogTo_p_wxTopLevelWindow, 0, 0},  {&_swigt__p_wxTextEntryDialog, _p_wxTextEntryDialogTo_p_wxTopLevelWindow, 0, 0},  {&_swigt__p_wxPasswordEntryDialog, _p_wxPasswordEntryDialogTo_p_wxTopLevelWindow, 0, 0},  {&_swigt__p_wxNumberEntryDialog, _p_wxNumberEntryDialogTo_p_wxTopLevelWindow, 0, 0},  {&_swigt__p_wxMessageDialog, _p_wxMessageDialogTo_p_wxTopLevelWindow, 0, 0},  {&_swigt__p_wxFindReplaceDialog, _p_wxFindReplaceDialogTo_p_wxTopLevelWindow, 0, 0},  {&_swigt__p_wxPyPreviewFrame, _p_wxPyPreviewFrameTo_p_wxTopLevelWindow, 0, 0},  {&_swigt__p_wxPreviewFrame, _p_wxPreviewFrameTo_p_wxTopLevelWindow, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxValidator[] = {  {&_swigt__p_wxValidator, 0, 0, 0},  {&_swigt__p_wxPyValidator, _p_wxPyValidatorTo_p_wxValidator, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxVarHScrollHelper[] = {  {&_swigt__p_wxPyHScrolledWindow, _p_wxPyHScrolledWindowTo_p_wxVarHScrollHelper, 0, 0},  {&_swigt__p_wxPyHVScrolledWindow, _p_wxPyHVScrolledWindowTo_p_wxVarHScrollHelper, 0, 0},  {&_swigt__p_wxVarHScrollHelper, 0, 0, 0},  {&_swigt__p_wxVarHVScrollHelper, _p_wxVarHVScrollHelperTo_p_wxVarHScrollHelper, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxVarHVScrollHelper[] = {  {&_swigt__p_wxPyHVScrolledWindow, _p_wxPyHVScrolledWindowTo_p_wxVarHVScrollHelper, 0, 0},  {&_swigt__p_wxVarHVScrollHelper, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxVarScrollHelperBase[] = {  {&_swigt__p_wxVarScrollHelperBase, 0, 0, 0},  {&_swigt__p_wxPyVScrolledWindow, _p_wxPyVScrolledWindowTo_p_wxVarScrollHelperBase, 0, 0},  {&_swigt__p_wxPyHScrolledWindow, _p_wxPyHScrolledWindowTo_p_wxVarScrollHelperBase, 0, 0},  {&_swigt__p_wxPyHVScrolledWindow, _p_wxPyHVScrolledWindowTo_p_wxVarScrollHelperBase, 0, 0},  {&_swigt__p_wxPyVListBox, _p_wxPyVListBoxTo_p_wxVarScrollHelperBase, 0, 0},  {&_swigt__p_wxPyHtmlListBox, _p_wxPyHtmlListBoxTo_p_wxVarScrollHelperBase, 0, 0},  {&_swigt__p_wxSimpleHtmlListBox, _p_wxSimpleHtmlListBoxTo_p_wxVarScrollHelperBase, 0, 0},  {&_swigt__p_wxVarVScrollHelper, _p_wxVarVScrollHelperTo_p_wxVarScrollHelperBase, 0, 0},  {&_swigt__p_wxVarHVScrollHelper, _p_wxVarHVScrollHelperTo_p_wxVarScrollHelperBase, 0, 0},  {&_swigt__p_wxVarHScrollHelper, _p_wxVarHScrollHelperTo_p_wxVarScrollHelperBase, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxVarVScrollHelper[] = {  {&_swigt__p_wxPyVScrolledWindow, _p_wxPyVScrolledWindowTo_p_wxVarVScrollHelper, 0, 0},  {&_swigt__p_wxPyHVScrolledWindow, _p_wxPyHVScrolledWindowTo_p_wxVarVScrollHelper, 0, 0},  {&_swigt__p_wxVarVScrollHelper, 0, 0, 0},  {&_swigt__p_wxPyVListBox, _p_wxPyVListBoxTo_p_wxVarVScrollHelper, 0, 0},  {&_swigt__p_wxPyHtmlListBox, _p_wxPyHtmlListBoxTo_p_wxVarVScrollHelper, 0, 0},  {&_swigt__p_wxSimpleHtmlListBox, _p_wxSimpleHtmlListBoxTo_p_wxVarVScrollHelper, 0, 0},  {&_swigt__p_wxVarHVScrollHelper, _p_wxVarHVScrollHelperTo_p_wxVarVScrollHelper, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxVisualAttributes[] = {  {&_swigt__p_wxVisualAttributes, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_wxWindow[] = {  {&_swigt__p_wxSplashScreen, _p_wxSplashScreenTo_p_wxWindow, 0, 0},  {&_swigt__p_wxMiniFrame, _p_wxMiniFrameTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyPanel, _p_wxPyPanelTo_p_wxWindow, 0, 0},  {&_swigt__p_wxMenuBar, _p_wxMenuBarTo_p_wxWindow, 0, 0},  {&_swigt__p_wxFindReplaceDialog, _p_wxFindReplaceDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxProgressDialog, _p_wxProgressDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxMessageDialog, _p_wxMessageDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxNumberEntryDialog, _p_wxNumberEntryDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPasswordEntryDialog, _p_wxPasswordEntryDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxTextEntryDialog, _p_wxTextEntryDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxSingleChoiceDialog, _p_wxSingleChoiceDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxMultiChoiceDialog, _p_wxMultiChoiceDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxFileDialog, _p_wxFileDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPanel, _p_wxPanelTo_p_wxWindow, 0, 0},  {&_swigt__p_wxStatusBar, _p_wxStatusBarTo_p_wxWindow, 0, 0},  {&_swigt__p_wxTopLevelWindow, _p_wxTopLevelWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxSplashScreenWindow, _p_wxSplashScreenWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxSplitterWindow, _p_wxSplitterWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxSashLayoutWindow, _p_wxSashLayoutWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxSashWindow, _p_wxSashWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxMDIClientWindow, _p_wxMDIClientWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyVScrolledWindow, _p_wxPyVScrolledWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyScrolledWindow, _p_wxPyScrolledWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxScrolledWindow, _p_wxScrolledWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxWindow, 0, 0, 0},  {&_swigt__p_wxPopupWindow, _p_wxPopupWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyPopupTransientWindow, _p_wxPyPopupTransientWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxTipWindow, _p_wxTipWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPreviewFrame, _p_wxPreviewFrameTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyPreviewFrame, _p_wxPyPreviewFrameTo_p_wxWindow, 0, 0},  {&_swigt__p_wxControl, _p_wxControlTo_p_wxWindow, 0, 0},  {&_swigt__p_wxMDIChildFrame, _p_wxMDIChildFrameTo_p_wxWindow, 0, 0},  {&_swigt__p_wxControlWithItems, _p_wxControlWithItemsTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPreviewCanvas, _p_wxPreviewCanvasTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyWindow, _p_wxPyWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxSimpleHtmlListBox, _p_wxSimpleHtmlListBoxTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyHtmlListBox, _p_wxPyHtmlListBoxTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyVListBox, _p_wxPyVListBoxTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyPreviewControlBar, _p_wxPyPreviewControlBarTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPreviewControlBar, _p_wxPreviewControlBarTo_p_wxWindow, 0, 0},  {&_swigt__p_wxFrame, _p_wxFrameTo_p_wxWindow, 0, 0},  {&_swigt__p_wxDialog, _p_wxDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxColourDialog, _p_wxColourDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxDirDialog, _p_wxDirDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxFontDialog, _p_wxFontDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxMDIParentFrame, _p_wxMDIParentFrameTo_p_wxWindow, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxWindow[] = {  {&_swigt__p_wxSplashScreen, _p_wxSplashScreenTo_p_wxWindow, 0, 0},  {&_swigt__p_wxMiniFrame, _p_wxMiniFrameTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyPanel, _p_wxPyPanelTo_p_wxWindow, 0, 0},  {&_swigt__p_wxMenuBar, _p_wxMenuBarTo_p_wxWindow, 0, 0},  {&_swigt__p_wxMessageDialog, _p_wxMessageDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxNumberEntryDialog, _p_wxNumberEntryDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPasswordEntryDialog, _p_wxPasswordEntryDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxTextEntryDialog, _p_wxTextEntryDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxSingleChoiceDialog, _p_wxSingleChoiceDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxMultiChoiceDialog, _p_wxMultiChoiceDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxFileDialog, _p_wxFileDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxProgressDialog, _p_wxProgressDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxFindReplaceDialog, _p_wxFindReplaceDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPanel, _p_wxPanelTo_p_wxWindow, 0, 0},  {&_swigt__p_wxStatusBar, _p_wxStatusBarTo_p_wxWindow, 0, 0},  {&_swigt__p_wxTopLevelWindow, _p_wxTopLevelWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxSplashScreenWindow, _p_wxSplashScreenWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxSplitterWindow, _p_wxSplitterWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxSashLayoutWindow, _p_wxSashLayoutWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxSashWindow, _p_wxSashWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxMDIClientWindow, _p_wxMDIClientWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyHVScrolledWindow, _p_wxPyHVScrolledWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyHScrolledWindow, _p_wxPyHScrolledWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyVScrolledWindow, _p_wxPyVScrolledWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyScrolledWindow, _p_wxPyScrolledWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxScrolledWindow, _p_wxScrolledWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxWindow, 0, 0, 0},  {&_swigt__p_wxPopupWindow, _p_wxPopupWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyPopupTransientWindow, _p_wxPyPopupTransientWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxTipWindow, _p_wxTipWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPreviewFrame, _p_wxPreviewFrameTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyPreviewFrame, _p_wxPyPreviewFrameTo_p_wxWindow, 0, 0},  {&_swigt__p_wxControl, _p_wxControlTo_p_wxWindow, 0, 0},  {&_swigt__p_wxMDIChildFrame, _p_wxMDIChildFrameTo_p_wxWindow, 0, 0},  {&_swigt__p_wxControlWithItems, _p_wxControlWithItemsTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPreviewCanvas, _p_wxPreviewCanvasTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyWindow, _p_wxPyWindowTo_p_wxWindow, 0, 0},  {&_swigt__p_wxSimpleHtmlListBox, _p_wxSimpleHtmlListBoxTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyHtmlListBox, _p_wxPyHtmlListBoxTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyVListBox, _p_wxPyVListBoxTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPyPreviewControlBar, _p_wxPyPreviewControlBarTo_p_wxWindow, 0, 0},  {&_swigt__p_wxPreviewControlBar, _p_wxPreviewControlBarTo_p_wxWindow, 0, 0},  {&_swigt__p_wxFrame, _p_wxFrameTo_p_wxWindow, 0, 0},  {&_swigt__p_wxDialog, _p_wxDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxColourDialog, _p_wxColourDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxDirDialog, _p_wxDirDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxFontDialog, _p_wxFontDialogTo_p_wxWindow, 0, 0},  {&_swigt__p_wxMDIParentFrame, _p_wxMDIParentFrameTo_p_wxWindow, 0, 0},{0, 0, 0, 0}};
 
 static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_bool,
@@ -34358,6 +36623,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_wxPasswordEntryDialog,
   _swigc__p_wxPoint,
   _swigc__p_wxPopupWindow,
+  _swigc__p_wxPosition,
   _swigc__p_wxPreviewCanvas,
   _swigc__p_wxPreviewControlBar,
   _swigc__p_wxPreviewFrame,
@@ -34370,6 +36636,8 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_wxPyApp,
   _swigc__p_wxPyCommandEvent,
   _swigc__p_wxPyEvent,
+  _swigc__p_wxPyHScrolledWindow,
+  _swigc__p_wxPyHVScrolledWindow,
   _swigc__p_wxPyHtmlListBox,
   _swigc__p_wxPyImageHandler,
   _swigc__p_wxPyPanel,
@@ -34422,6 +36690,10 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_wxTopLevelWindow,
   _swigc__p_wxUpdateUIEvent,
   _swigc__p_wxValidator,
+  _swigc__p_wxVarHScrollHelper,
+  _swigc__p_wxVarHVScrollHelper,
+  _swigc__p_wxVarScrollHelperBase,
+  _swigc__p_wxVarVScrollHelper,
   _swigc__p_wxVisualAttributes,
   _swigc__p_wxWindow,
   _swigc__p_wxWindowCreateEvent,

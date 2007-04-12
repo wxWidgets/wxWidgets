@@ -3243,6 +3243,23 @@ SWIGINTERN int wxIconLocation_GetIndex(wxIconLocation *self){
             return -1;
 
         }
+
+SWIGINTERNINLINE PyObject *
+SWIG_From_size_t  (size_t value)
+{    
+  return SWIG_From_unsigned_SS_long  (static_cast< unsigned long >(value));
+}
+
+
+SWIGINTERNINLINE int
+SWIG_AsVal_size_t (PyObject * obj, size_t *val)
+{
+  unsigned long v;
+  int res = SWIG_AsVal_unsigned_SS_long (obj, val ? &v : 0);
+  if (SWIG_IsOK(res) && val) *val = static_cast< size_t >(v);
+  return res;
+}
+
 SWIGINTERN wxCursor *new_wxCursor(wxString const &cursorName,long type,int hotSpotX=0,int hotSpotY=0){
 #ifdef __WXGTK__
             wxImage img(cursorName, type);
@@ -3277,23 +3294,6 @@ SWIGINTERN wxString wxNativeFontInfo___str__(wxNativeFontInfo *self){
         else
             return NULL;
     }
-
-
-SWIGINTERNINLINE PyObject *
-SWIG_From_size_t  (size_t value)
-{    
-  return SWIG_From_unsigned_SS_long  (static_cast< unsigned long >(value));
-}
-
-
-SWIGINTERNINLINE int
-SWIG_AsVal_size_t (PyObject * obj, size_t *val)
-{
-  unsigned long v;
-  int res = SWIG_AsVal_unsigned_SS_long (obj, val ? &v : 0);
-  if (SWIG_IsOK(res) && val) *val = static_cast< size_t >(v);
-  return res;
-}
 
 SWIGINTERN PyObject *wxFontMapper_GetAltForEncoding(wxFontMapper *self,wxFontEncoding encoding,wxString const &facename=wxPyEmptyString,bool interactive=true){
             wxFontEncoding alt_enc;
@@ -9980,6 +9980,36 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_IconBundle_IsOk(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxIconBundle *arg1 = (wxIconBundle *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxIconBundle, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "IconBundle_IsOk" "', expected argument " "1"" of type '" "wxIconBundle const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxIconBundle * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxIconBundle const *)arg1)->IsOk();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_IconBundle_AddIcon(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxIconBundle *arg1 = (wxIconBundle *) 0 ;
@@ -10111,6 +10141,140 @@ SWIGINTERN PyObject *_wrap_IconBundle_GetIcon(PyObject *SWIGUNUSEDPARM(self), Py
   {
     wxIcon* resultptr = new wxIcon(*result);
     resultobj = SWIG_NewPointerObj((void*)(resultptr), SWIGTYPE_p_wxIcon, 1);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_IconBundle_GetIconOfExactSize(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxIconBundle *arg1 = (wxIconBundle *) 0 ;
+  wxSize *arg2 = 0 ;
+  wxIcon result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  wxSize temp2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "size", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:IconBundle_GetIconOfExactSize",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxIconBundle, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "IconBundle_GetIconOfExactSize" "', expected argument " "1"" of type '" "wxIconBundle const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxIconBundle * >(argp1);
+  {
+    arg2 = &temp2;
+    if ( ! wxSize_helper(obj1, &arg2)) SWIG_fail;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxIconBundle const *)arg1)->GetIconOfExactSize((wxSize const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxIcon(static_cast< const wxIcon& >(result))), SWIGTYPE_p_wxIcon, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_IconBundle_GetIconCount(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxIconBundle *arg1 = (wxIconBundle *) 0 ;
+  size_t result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxIconBundle, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "IconBundle_GetIconCount" "', expected argument " "1"" of type '" "wxIconBundle const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxIconBundle * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (size_t)((wxIconBundle const *)arg1)->GetIconCount();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_size_t(static_cast< size_t >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_IconBundle_GetIconByIndex(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxIconBundle *arg1 = (wxIconBundle *) 0 ;
+  size_t arg2 ;
+  wxIcon result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  size_t val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "n", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:IconBundle_GetIconByIndex",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxIconBundle, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "IconBundle_GetIconByIndex" "', expected argument " "1"" of type '" "wxIconBundle const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxIconBundle * >(argp1);
+  ecode2 = SWIG_AsVal_size_t(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "IconBundle_GetIconByIndex" "', expected argument " "2"" of type '" "size_t""'");
+  } 
+  arg2 = static_cast< size_t >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = ((wxIconBundle const *)arg1)->GetIconByIndex(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxIcon(static_cast< const wxIcon& >(result))), SWIGTYPE_p_wxIcon, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_IconBundle_IsEmpty(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxIconBundle *arg1 = (wxIconBundle *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxIconBundle, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "IconBundle_IsEmpty" "', expected argument " "1"" of type '" "wxIconBundle const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxIconBundle * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxIconBundle const *)arg1)->IsEmpty();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
   }
   return resultobj;
 fail:
@@ -32276,6 +32440,20 @@ SWIGINTERN PyObject *NullColour_get(void) {
 }
 
 
+SWIGINTERN int NullIconBundle_set(PyObject *) {
+  SWIG_Error(SWIG_AttributeError,"Variable NullIconBundle is read-only.");
+  return 1;
+}
+
+
+SWIGINTERN PyObject *NullIconBundle_get(void) {
+  PyObject *pyobj = 0;
+  
+  pyobj = SWIG_NewPointerObj(SWIG_as_voidptr(&wxNullIconBundle), SWIGTYPE_p_wxIconBundle,  0 );
+  return pyobj;
+}
+
+
 SWIGINTERN PyObject *_wrap_new_GDIObjListBase(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxGDIObjListBase *result = 0 ;
@@ -38667,9 +38845,14 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_IconBundleFromFile", (PyCFunction) _wrap_new_IconBundleFromFile, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_IconBundleFromIcon", (PyCFunction) _wrap_new_IconBundleFromIcon, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"delete_IconBundle", (PyCFunction)_wrap_delete_IconBundle, METH_O, NULL},
+	 { (char *)"IconBundle_IsOk", (PyCFunction)_wrap_IconBundle_IsOk, METH_O, NULL},
 	 { (char *)"IconBundle_AddIcon", (PyCFunction) _wrap_IconBundle_AddIcon, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"IconBundle_AddIconFromFile", (PyCFunction) _wrap_IconBundle_AddIconFromFile, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"IconBundle_GetIcon", (PyCFunction) _wrap_IconBundle_GetIcon, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"IconBundle_GetIconOfExactSize", (PyCFunction) _wrap_IconBundle_GetIconOfExactSize, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"IconBundle_GetIconCount", (PyCFunction)_wrap_IconBundle_GetIconCount, METH_O, NULL},
+	 { (char *)"IconBundle_GetIconByIndex", (PyCFunction) _wrap_IconBundle_GetIconByIndex, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"IconBundle_IsEmpty", (PyCFunction)_wrap_IconBundle_IsEmpty, METH_O, NULL},
 	 { (char *)"IconBundle_swigregister", IconBundle_swigregister, METH_VARARGS, NULL},
 	 { (char *)"IconBundle_swiginit", IconBundle_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_Cursor", (PyCFunction) _wrap_new_Cursor, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -41522,6 +41705,7 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_addvarlink(SWIG_globals(),(char*)"NullPalette",NullPalette_get, NullPalette_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"NullFont",NullFont_get, NullFont_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"NullColour",NullColour_get, NullColour_set);
+  SWIG_addvarlink(SWIG_globals(),(char*)"NullIconBundle",NullIconBundle_get, NullIconBundle_set);
   SWIG_Python_SetConstant(d, "CONTROL_DISABLED",SWIG_From_int(static_cast< int >(wxCONTROL_DISABLED)));
   SWIG_Python_SetConstant(d, "CONTROL_FOCUSED",SWIG_From_int(static_cast< int >(wxCONTROL_FOCUSED)));
   SWIG_Python_SetConstant(d, "CONTROL_PRESSED",SWIG_From_int(static_cast< int >(wxCONTROL_PRESSED)));

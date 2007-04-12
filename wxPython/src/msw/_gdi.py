@@ -1267,19 +1267,73 @@ class IconBundle(object):
         _gdi_.IconBundle_swiginit(self,_gdi_.new_IconBundle(*args, **kwargs))
     __swig_destroy__ = _gdi_.delete_IconBundle
     __del__ = lambda self : None;
+    def IsOk(*args, **kwargs):
+        """IsOk(self) -> bool"""
+        return _gdi_.IconBundle_IsOk(*args, **kwargs)
+
+    def __nonzero__(self): return self.IsOk() 
     def AddIcon(*args, **kwargs):
-        """AddIcon(self, Icon icon)"""
+        """
+        AddIcon(self, Icon icon)
+
+        Adds the icon to the collection, if the collection already contains an
+        icon with the same width and height, it is replaced
+        """
         return _gdi_.IconBundle_AddIcon(*args, **kwargs)
 
     def AddIconFromFile(*args, **kwargs):
-        """AddIconFromFile(self, String file, long type)"""
+        """
+        AddIconFromFile(self, String file, long type)
+
+        Adds all the icons contained in the file to the collection, if the
+        collection already contains icons with the same width and height, they
+        are replaced
+        """
         return _gdi_.IconBundle_AddIconFromFile(*args, **kwargs)
 
     def GetIcon(*args, **kwargs):
-        """GetIcon(self, Size size) -> Icon"""
+        """
+        GetIcon(self, Size size) -> Icon
+
+        Returns the icon with the given size; if no such icon exists, returns
+        the icon with size wxSYS_ICON_[XY]; if no such icon exists, returns
+        the first icon in the bundle
+        """
         return _gdi_.IconBundle_GetIcon(*args, **kwargs)
 
-    Icon = property(GetIcon,doc="See `GetIcon`") 
+    def GetIconOfExactSize(*args, **kwargs):
+        """
+        GetIconOfExactSize(self, Size size) -> Icon
+
+        Returns the icon exactly of the specified size or wxNullIcon if no
+        icon of exactly given size are available.
+        """
+        return _gdi_.IconBundle_GetIconOfExactSize(*args, **kwargs)
+
+    def GetIconCount(*args, **kwargs):
+        """
+        GetIconCount(self) -> size_t
+
+        return the number of available icons
+        """
+        return _gdi_.IconBundle_GetIconCount(*args, **kwargs)
+
+    def GetIconByIndex(*args, **kwargs):
+        """
+        GetIconByIndex(self, size_t n) -> Icon
+
+        Return the icon at index (must be < GetIconCount())
+        """
+        return _gdi_.IconBundle_GetIconByIndex(*args, **kwargs)
+
+    def IsEmpty(*args, **kwargs):
+        """
+        IsEmpty(self) -> bool
+
+        Check if we have any icons at all
+        """
+        return _gdi_.IconBundle_IsEmpty(*args, **kwargs)
+
 _gdi_.IconBundle_swigregister(IconBundle)
 
 def IconBundleFromFile(*args, **kwargs):
@@ -6383,6 +6437,7 @@ NullBrush = cvar.NullBrush
 NullPalette = cvar.NullPalette
 NullFont = cvar.NullFont
 NullColour = cvar.NullColour
+NullIconBundle = cvar.NullIconBundle
 
 class PenList(GDIObjListBase):
     """Proxy of C++ PenList class"""

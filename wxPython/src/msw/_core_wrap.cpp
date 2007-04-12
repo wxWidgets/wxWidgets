@@ -2559,49 +2559,50 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 #define SWIGTYPE_p_wxPaperSize swig_types[93]
 #define SWIGTYPE_p_wxPoint swig_types[94]
 #define SWIGTYPE_p_wxPoint2D swig_types[95]
-#define SWIGTYPE_p_wxPropagateOnce swig_types[96]
-#define SWIGTYPE_p_wxPropagationDisabler swig_types[97]
-#define SWIGTYPE_p_wxPyApp swig_types[98]
-#define SWIGTYPE_p_wxPyCommandEvent swig_types[99]
-#define SWIGTYPE_p_wxPyDropTarget swig_types[100]
-#define SWIGTYPE_p_wxPyEvent swig_types[101]
-#define SWIGTYPE_p_wxPyFileSystemHandler swig_types[102]
-#define SWIGTYPE_p_wxPyImageHandler swig_types[103]
-#define SWIGTYPE_p_wxPyInputStream swig_types[104]
-#define SWIGTYPE_p_wxPySizer swig_types[105]
-#define SWIGTYPE_p_wxPyValidator swig_types[106]
-#define SWIGTYPE_p_wxQuantize swig_types[107]
-#define SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[108]
-#define SWIGTYPE_p_wxRealPoint swig_types[109]
-#define SWIGTYPE_p_wxRect swig_types[110]
-#define SWIGTYPE_p_wxRect2D swig_types[111]
-#define SWIGTYPE_p_wxRegion swig_types[112]
-#define SWIGTYPE_p_wxScrollEvent swig_types[113]
-#define SWIGTYPE_p_wxScrollWinEvent swig_types[114]
-#define SWIGTYPE_p_wxSetCursorEvent swig_types[115]
-#define SWIGTYPE_p_wxShowEvent swig_types[116]
-#define SWIGTYPE_p_wxSize swig_types[117]
-#define SWIGTYPE_p_wxSizeEvent swig_types[118]
-#define SWIGTYPE_p_wxSizer swig_types[119]
-#define SWIGTYPE_p_wxSizerFlags swig_types[120]
-#define SWIGTYPE_p_wxSizerItem swig_types[121]
-#define SWIGTYPE_p_wxStaticBox swig_types[122]
-#define SWIGTYPE_p_wxStaticBoxSizer swig_types[123]
-#define SWIGTYPE_p_wxStdDialogButtonSizer swig_types[124]
-#define SWIGTYPE_p_wxSysColourChangedEvent swig_types[125]
-#define SWIGTYPE_p_wxTGAHandler swig_types[126]
-#define SWIGTYPE_p_wxTIFFHandler swig_types[127]
-#define SWIGTYPE_p_wxToolTip swig_types[128]
-#define SWIGTYPE_p_wxUpdateUIEvent swig_types[129]
-#define SWIGTYPE_p_wxValidator swig_types[130]
-#define SWIGTYPE_p_wxVisualAttributes swig_types[131]
-#define SWIGTYPE_p_wxWindow swig_types[132]
-#define SWIGTYPE_p_wxWindowCreateEvent swig_types[133]
-#define SWIGTYPE_p_wxWindowDestroyEvent swig_types[134]
-#define SWIGTYPE_p_wxXPMHandler swig_types[135]
-#define SWIGTYPE_p_wxZipFSHandler swig_types[136]
-static swig_type_info *swig_types[138];
-static swig_module_info swig_module = {swig_types, 137, 0, 0, 0, 0};
+#define SWIGTYPE_p_wxPosition swig_types[96]
+#define SWIGTYPE_p_wxPropagateOnce swig_types[97]
+#define SWIGTYPE_p_wxPropagationDisabler swig_types[98]
+#define SWIGTYPE_p_wxPyApp swig_types[99]
+#define SWIGTYPE_p_wxPyCommandEvent swig_types[100]
+#define SWIGTYPE_p_wxPyDropTarget swig_types[101]
+#define SWIGTYPE_p_wxPyEvent swig_types[102]
+#define SWIGTYPE_p_wxPyFileSystemHandler swig_types[103]
+#define SWIGTYPE_p_wxPyImageHandler swig_types[104]
+#define SWIGTYPE_p_wxPyInputStream swig_types[105]
+#define SWIGTYPE_p_wxPySizer swig_types[106]
+#define SWIGTYPE_p_wxPyValidator swig_types[107]
+#define SWIGTYPE_p_wxQuantize swig_types[108]
+#define SWIGTYPE_p_wxQueryNewPaletteEvent swig_types[109]
+#define SWIGTYPE_p_wxRealPoint swig_types[110]
+#define SWIGTYPE_p_wxRect swig_types[111]
+#define SWIGTYPE_p_wxRect2D swig_types[112]
+#define SWIGTYPE_p_wxRegion swig_types[113]
+#define SWIGTYPE_p_wxScrollEvent swig_types[114]
+#define SWIGTYPE_p_wxScrollWinEvent swig_types[115]
+#define SWIGTYPE_p_wxSetCursorEvent swig_types[116]
+#define SWIGTYPE_p_wxShowEvent swig_types[117]
+#define SWIGTYPE_p_wxSize swig_types[118]
+#define SWIGTYPE_p_wxSizeEvent swig_types[119]
+#define SWIGTYPE_p_wxSizer swig_types[120]
+#define SWIGTYPE_p_wxSizerFlags swig_types[121]
+#define SWIGTYPE_p_wxSizerItem swig_types[122]
+#define SWIGTYPE_p_wxStaticBox swig_types[123]
+#define SWIGTYPE_p_wxStaticBoxSizer swig_types[124]
+#define SWIGTYPE_p_wxStdDialogButtonSizer swig_types[125]
+#define SWIGTYPE_p_wxSysColourChangedEvent swig_types[126]
+#define SWIGTYPE_p_wxTGAHandler swig_types[127]
+#define SWIGTYPE_p_wxTIFFHandler swig_types[128]
+#define SWIGTYPE_p_wxToolTip swig_types[129]
+#define SWIGTYPE_p_wxUpdateUIEvent swig_types[130]
+#define SWIGTYPE_p_wxValidator swig_types[131]
+#define SWIGTYPE_p_wxVisualAttributes swig_types[132]
+#define SWIGTYPE_p_wxWindow swig_types[133]
+#define SWIGTYPE_p_wxWindowCreateEvent swig_types[134]
+#define SWIGTYPE_p_wxWindowDestroyEvent swig_types[135]
+#define SWIGTYPE_p_wxXPMHandler swig_types[136]
+#define SWIGTYPE_p_wxZipFSHandler swig_types[137]
+static swig_type_info *swig_types[139];
+static swig_module_info swig_module = {swig_types, 138, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -2899,7 +2900,8 @@ static wxPyCoreAPI API = {
     wxArrayDouble2PyList_helper,
     wxPoint2D_LIST_helper,
     wxRect2D_helper,
-
+    wxPosition_helper,
+    
 };
 
 #endif
@@ -3207,6 +3209,24 @@ SWIGINTERN PyObject *wxRect2D_Get(wxRect2D *self){
             PyTuple_SET_ITEM(tup, 3, PyFloat_FromDouble(self->m_height));
             //wxPyEndBlockThreads(blocked);
             return tup;
+        }
+SWIGINTERN bool wxPosition___eq__(wxPosition *self,PyObject *other){
+            wxPosition  temp, *obj = &temp;
+            if ( other == Py_None ) return false;
+            if ( ! wxPosition_helper(other, &obj) ) {
+                PyErr_Clear();
+                return false;
+            }
+            return self->operator==(*obj);
+        }
+SWIGINTERN bool wxPosition___ne__(wxPosition *self,PyObject *other){
+            wxPosition  temp, *obj = &temp;
+            if ( other == Py_None ) return true;
+            if ( ! wxPosition_helper(other, &obj)) {
+                PyErr_Clear();
+                return true;
+            }
+            return self->operator!=(*obj);
         }
 
 #include "wx/wxPython/pyistream.h"
@@ -3881,6 +3901,9 @@ public:
  static const wxString wxPyPanelNameStr(wxPanelNameStr); 
 SWIGINTERN wxVisualAttributes *new_wxVisualAttributes(){ return new wxVisualAttributes; }
 SWIGINTERN void delete_wxVisualAttributes(wxVisualAttributes *self){ delete self; }
+SWIGINTERN wxFont wxVisualAttributes__get_font(wxVisualAttributes *self){ return self->font; }
+SWIGINTERN wxColour wxVisualAttributes__get_colFg(wxVisualAttributes *self){ return self->colFg; }
+SWIGINTERN wxColour wxVisualAttributes__get_colBg(wxVisualAttributes *self){ return self->colBg; }
 SWIGINTERN PyObject *wxWindow_GetChildren(wxWindow *self){
             wxWindowList& list = self->GetChildren();
             return wxPy_ConvertList(&list);
@@ -11451,6 +11474,520 @@ SWIGINTERN PyObject *Rect2D_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObjec
 }
 
 SWIGINTERN PyObject *Rect2D_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  return SWIG_Python_InitShadowInstance(args);
+}
+
+SWIGINTERN PyObject *_wrap_new_Position(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  int arg1 = (int) 0 ;
+  int arg2 = (int) 0 ;
+  wxPosition *result = 0 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "row",(char *) "col", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OO:new_Position",kwnames,&obj0,&obj1)) SWIG_fail;
+  if (obj0) {
+    ecode1 = SWIG_AsVal_int(obj0, &val1);
+    if (!SWIG_IsOK(ecode1)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_Position" "', expected argument " "1"" of type '" "int""'");
+    } 
+    arg1 = static_cast< int >(val1);
+  }
+  if (obj1) {
+    ecode2 = SWIG_AsVal_int(obj1, &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_Position" "', expected argument " "2"" of type '" "int""'");
+    } 
+    arg2 = static_cast< int >(val2);
+  }
+  {
+    result = (wxPosition *)new wxPosition(arg1,arg2);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxPosition, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_delete_Position(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPosition *arg1 = (wxPosition *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPosition, SWIG_POINTER_DISOWN |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "delete_Position" "', expected argument " "1"" of type '" "wxPosition *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPosition * >(argp1);
+  {
+    delete arg1;
+    
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Position_GetRow(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPosition *arg1 = (wxPosition *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPosition, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Position_GetRow" "', expected argument " "1"" of type '" "wxPosition const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPosition * >(argp1);
+  {
+    result = (int)((wxPosition const *)arg1)->GetRow();
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Position_GetColumn(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPosition *arg1 = (wxPosition *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPosition, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Position_GetColumn" "', expected argument " "1"" of type '" "wxPosition const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPosition * >(argp1);
+  {
+    result = (int)((wxPosition const *)arg1)->GetColumn();
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Position_GetCol(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPosition *arg1 = (wxPosition *) 0 ;
+  int result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPosition, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Position_GetCol" "', expected argument " "1"" of type '" "wxPosition const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPosition * >(argp1);
+  {
+    result = (int)((wxPosition const *)arg1)->GetCol();
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_From_int(static_cast< int >(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Position_SetRow(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPosition *arg1 = (wxPosition *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "row", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Position_SetRow",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPosition, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Position_SetRow" "', expected argument " "1"" of type '" "wxPosition *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPosition * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Position_SetRow" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    (arg1)->SetRow(arg2);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Position_SetColumn(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPosition *arg1 = (wxPosition *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "column", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Position_SetColumn",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPosition, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Position_SetColumn" "', expected argument " "1"" of type '" "wxPosition *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPosition * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Position_SetColumn" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    (arg1)->SetColumn(arg2);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Position_SetCol(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPosition *arg1 = (wxPosition *) 0 ;
+  int arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "column", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Position_SetCol",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPosition, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Position_SetCol" "', expected argument " "1"" of type '" "wxPosition *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPosition * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Position_SetCol" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    (arg1)->SetCol(arg2);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Position___eq__(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPosition *arg1 = (wxPosition *) 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "other", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Position___eq__",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPosition, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Position___eq__" "', expected argument " "1"" of type '" "wxPosition *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPosition * >(argp1);
+  arg2 = obj1;
+  {
+    result = (bool)wxPosition___eq__(arg1,arg2);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Position___ne__(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPosition *arg1 = (wxPosition *) 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "other", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Position___ne__",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPosition, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Position___ne__" "', expected argument " "1"" of type '" "wxPosition *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPosition * >(argp1);
+  arg2 = obj1;
+  {
+    result = (bool)wxPosition___ne__(arg1,arg2);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Position___add____SWIG_0(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
+  PyObject *resultobj = 0;
+  wxPosition *arg1 = (wxPosition *) 0 ;
+  wxPosition *arg2 = 0 ;
+  wxPosition result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  
+  if ((nobjs < 2) || (nobjs > 2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPosition, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Position___add__" "', expected argument " "1"" of type '" "wxPosition const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPosition * >(argp1);
+  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_wxPosition,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Position___add__" "', expected argument " "2"" of type '" "wxPosition const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Position___add__" "', expected argument " "2"" of type '" "wxPosition const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxPosition * >(argp2);
+  {
+    result = ((wxPosition const *)arg1)->operator +((wxPosition const &)*arg2);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxPosition(static_cast< const wxPosition& >(result))), SWIGTYPE_p_wxPosition, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Position___sub____SWIG_0(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
+  PyObject *resultobj = 0;
+  wxPosition *arg1 = (wxPosition *) 0 ;
+  wxPosition *arg2 = 0 ;
+  wxPosition result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  
+  if ((nobjs < 2) || (nobjs > 2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPosition, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Position___sub__" "', expected argument " "1"" of type '" "wxPosition const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPosition * >(argp1);
+  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_wxPosition,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Position___sub__" "', expected argument " "2"" of type '" "wxPosition const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Position___sub__" "', expected argument " "2"" of type '" "wxPosition const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxPosition * >(argp2);
+  {
+    result = ((wxPosition const *)arg1)->operator -((wxPosition const &)*arg2);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxPosition(static_cast< const wxPosition& >(result))), SWIGTYPE_p_wxPosition, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Position___add____SWIG_1(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
+  PyObject *resultobj = 0;
+  wxPosition *arg1 = (wxPosition *) 0 ;
+  wxSize *arg2 = 0 ;
+  wxPosition result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  wxSize temp2 ;
+  
+  if ((nobjs < 2) || (nobjs > 2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPosition, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Position___add__" "', expected argument " "1"" of type '" "wxPosition const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPosition * >(argp1);
+  {
+    arg2 = &temp2;
+    if ( ! wxSize_helper(swig_obj[1], &arg2)) SWIG_fail;
+  }
+  {
+    result = ((wxPosition const *)arg1)->operator +((wxSize const &)*arg2);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxPosition(static_cast< const wxPosition& >(result))), SWIGTYPE_p_wxPosition, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Position___add__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  
+  if (!(argc = SWIG_Python_UnpackTuple(args,"Position___add__",0,2,argv))) SWIG_fail;
+  --argc;
+  if (argc == 2) {
+    int _v = 0;
+    {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_wxPosition, 0);
+      _v = SWIG_CheckState(res);
+    }
+    if (!_v) goto check_1;
+    return _wrap_Position___add____SWIG_0(self, argc, argv);
+  }
+check_1:
+  
+  if (argc == 2) {
+    return _wrap_Position___add____SWIG_1(self, argc, argv);
+  }
+  
+fail:
+  Py_INCREF(Py_NotImplemented);
+  return Py_NotImplemented;
+}
+
+
+SWIGINTERN PyObject *_wrap_Position___sub____SWIG_1(PyObject *SWIGUNUSEDPARM(self), int nobjs, PyObject **swig_obj) {
+  PyObject *resultobj = 0;
+  wxPosition *arg1 = (wxPosition *) 0 ;
+  wxSize *arg2 = 0 ;
+  wxPosition result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  wxSize temp2 ;
+  
+  if ((nobjs < 2) || (nobjs > 2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxPosition, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Position___sub__" "', expected argument " "1"" of type '" "wxPosition const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPosition * >(argp1);
+  {
+    arg2 = &temp2;
+    if ( ! wxSize_helper(swig_obj[1], &arg2)) SWIG_fail;
+  }
+  {
+    result = ((wxPosition const *)arg1)->operator -((wxSize const &)*arg2);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxPosition(static_cast< const wxPosition& >(result))), SWIGTYPE_p_wxPosition, SWIG_POINTER_OWN |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Position___sub__(PyObject *self, PyObject *args) {
+  int argc;
+  PyObject *argv[3];
+  
+  if (!(argc = SWIG_Python_UnpackTuple(args,"Position___sub__",0,2,argv))) SWIG_fail;
+  --argc;
+  if (argc == 2) {
+    int _v = 0;
+    {
+      int res = SWIG_ConvertPtr(argv[1], 0, SWIGTYPE_p_wxPosition, 0);
+      _v = SWIG_CheckState(res);
+    }
+    if (!_v) goto check_1;
+    return _wrap_Position___sub____SWIG_0(self, argc, argv);
+  }
+check_1:
+  
+  if (argc == 2) {
+    return _wrap_Position___sub____SWIG_1(self, argc, argv);
+  }
+  
+fail:
+  Py_INCREF(Py_NotImplemented);
+  return Py_NotImplemented;
+}
+
+
+SWIGINTERN PyObject *Position_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *obj;
+  if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
+  SWIG_TypeNewClientData(SWIGTYPE_p_wxPosition, SWIG_NewClientData(obj));
+  return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *Position_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   return SWIG_Python_InitShadowInstance(args);
 }
 
@@ -32677,40 +33214,10 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_VisualAttributes_font_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_VisualAttributes__get_font(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxVisualAttributes *arg1 = (wxVisualAttributes *) 0 ;
-  wxFont *arg2 = (wxFont *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject *swig_obj[2] ;
-  
-  if (!SWIG_Python_UnpackTuple(args,"VisualAttributes_font_set",2,2,swig_obj)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVisualAttributes, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VisualAttributes_font_set" "', expected argument " "1"" of type '" "wxVisualAttributes *""'"); 
-  }
-  arg1 = reinterpret_cast< wxVisualAttributes * >(argp1);
-  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2,SWIGTYPE_p_wxFont, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VisualAttributes_font_set" "', expected argument " "2"" of type '" "wxFont *""'"); 
-  }
-  arg2 = reinterpret_cast< wxFont * >(argp2);
-  if (arg1) (arg1)->font = *arg2;
-  
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_VisualAttributes_font_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxVisualAttributes *arg1 = (wxVisualAttributes *) 0 ;
-  wxFont *result = 0 ;
+  wxFont result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
@@ -32719,51 +33226,26 @@ SWIGINTERN PyObject *_wrap_VisualAttributes_font_get(PyObject *SWIGUNUSEDPARM(se
   swig_obj[0] = args;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVisualAttributes, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VisualAttributes_font_get" "', expected argument " "1"" of type '" "wxVisualAttributes *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VisualAttributes__get_font" "', expected argument " "1"" of type '" "wxVisualAttributes *""'"); 
   }
   arg1 = reinterpret_cast< wxVisualAttributes * >(argp1);
-  result = (wxFont *)& ((arg1)->font);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxFont, 0 |  0 );
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = wxVisualAttributes__get_font(arg1);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxFont(static_cast< const wxFont& >(result))), SWIGTYPE_p_wxFont, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_VisualAttributes_colFg_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_VisualAttributes__get_colFg(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxVisualAttributes *arg1 = (wxVisualAttributes *) 0 ;
-  wxColour *arg2 = (wxColour *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject *swig_obj[2] ;
-  
-  if (!SWIG_Python_UnpackTuple(args,"VisualAttributes_colFg_set",2,2,swig_obj)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVisualAttributes, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VisualAttributes_colFg_set" "', expected argument " "1"" of type '" "wxVisualAttributes *""'"); 
-  }
-  arg1 = reinterpret_cast< wxVisualAttributes * >(argp1);
-  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2,SWIGTYPE_p_wxColour, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VisualAttributes_colFg_set" "', expected argument " "2"" of type '" "wxColour *""'"); 
-  }
-  arg2 = reinterpret_cast< wxColour * >(argp2);
-  if (arg1) (arg1)->colFg = *arg2;
-  
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_VisualAttributes_colFg_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxVisualAttributes *arg1 = (wxVisualAttributes *) 0 ;
-  wxColour *result = 0 ;
+  wxColour result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
@@ -32772,51 +33254,26 @@ SWIGINTERN PyObject *_wrap_VisualAttributes_colFg_get(PyObject *SWIGUNUSEDPARM(s
   swig_obj[0] = args;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVisualAttributes, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VisualAttributes_colFg_get" "', expected argument " "1"" of type '" "wxVisualAttributes *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VisualAttributes__get_colFg" "', expected argument " "1"" of type '" "wxVisualAttributes *""'"); 
   }
   arg1 = reinterpret_cast< wxVisualAttributes * >(argp1);
-  result = (wxColour *)& ((arg1)->colFg);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxColour, 0 |  0 );
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = wxVisualAttributes__get_colFg(arg1);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxColour(static_cast< const wxColour& >(result))), SWIGTYPE_p_wxColour, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_VisualAttributes_colBg_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_VisualAttributes__get_colBg(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxVisualAttributes *arg1 = (wxVisualAttributes *) 0 ;
-  wxColour *arg2 = (wxColour *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject *swig_obj[2] ;
-  
-  if (!SWIG_Python_UnpackTuple(args,"VisualAttributes_colBg_set",2,2,swig_obj)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVisualAttributes, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VisualAttributes_colBg_set" "', expected argument " "1"" of type '" "wxVisualAttributes *""'"); 
-  }
-  arg1 = reinterpret_cast< wxVisualAttributes * >(argp1);
-  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2,SWIGTYPE_p_wxColour, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VisualAttributes_colBg_set" "', expected argument " "2"" of type '" "wxColour *""'"); 
-  }
-  arg2 = reinterpret_cast< wxColour * >(argp2);
-  if (arg1) (arg1)->colBg = *arg2;
-  
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_VisualAttributes_colBg_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxVisualAttributes *arg1 = (wxVisualAttributes *) 0 ;
-  wxColour *result = 0 ;
+  wxColour result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
@@ -32825,11 +33282,16 @@ SWIGINTERN PyObject *_wrap_VisualAttributes_colBg_get(PyObject *SWIGUNUSEDPARM(s
   swig_obj[0] = args;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVisualAttributes, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VisualAttributes_colBg_get" "', expected argument " "1"" of type '" "wxVisualAttributes *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VisualAttributes__get_colBg" "', expected argument " "1"" of type '" "wxVisualAttributes *""'"); 
   }
   arg1 = reinterpret_cast< wxVisualAttributes * >(argp1);
-  result = (wxColour *)& ((arg1)->colBg);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxColour, 0 |  0 );
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = wxVisualAttributes__get_colBg(arg1);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxColour(static_cast< const wxColour& >(result))), SWIGTYPE_p_wxColour, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -36442,6 +36904,44 @@ SWIGINTERN PyObject *_wrap_Window_CanAcceptFocusFromKeyboard(PyObject *SWIGUNUSE
   {
     resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
   }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_Window_SetCanFocus(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxWindow *arg1 = (wxWindow *) 0 ;
+  bool arg2 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  bool val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "canFocus", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Window_SetCanFocus",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Window_SetCanFocus" "', expected argument " "1"" of type '" "wxWindow *""'"); 
+  }
+  arg1 = reinterpret_cast< wxWindow * >(argp1);
+  ecode2 = SWIG_AsVal_bool(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Window_SetCanFocus" "', expected argument " "2"" of type '" "bool""'");
+  } 
+  arg2 = static_cast< bool >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetCanFocus(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
   return resultobj;
 fail:
   return NULL;
@@ -58084,6 +58584,20 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Rect2D_Get", (PyCFunction)_wrap_Rect2D_Get, METH_O, NULL},
 	 { (char *)"Rect2D_swigregister", Rect2D_swigregister, METH_VARARGS, NULL},
 	 { (char *)"Rect2D_swiginit", Rect2D_swiginit, METH_VARARGS, NULL},
+	 { (char *)"new_Position", (PyCFunction) _wrap_new_Position, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"delete_Position", (PyCFunction)_wrap_delete_Position, METH_O, NULL},
+	 { (char *)"Position_GetRow", (PyCFunction)_wrap_Position_GetRow, METH_O, NULL},
+	 { (char *)"Position_GetColumn", (PyCFunction)_wrap_Position_GetColumn, METH_O, NULL},
+	 { (char *)"Position_GetCol", (PyCFunction)_wrap_Position_GetCol, METH_O, NULL},
+	 { (char *)"Position_SetRow", (PyCFunction) _wrap_Position_SetRow, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Position_SetColumn", (PyCFunction) _wrap_Position_SetColumn, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Position_SetCol", (PyCFunction) _wrap_Position_SetCol, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Position___eq__", (PyCFunction) _wrap_Position___eq__, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Position___ne__", (PyCFunction) _wrap_Position___ne__, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"Position___add__", _wrap_Position___add__, METH_VARARGS, NULL},
+	 { (char *)"Position___sub__", _wrap_Position___sub__, METH_VARARGS, NULL},
+	 { (char *)"Position_swigregister", Position_swigregister, METH_VARARGS, NULL},
+	 { (char *)"Position_swiginit", Position_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_InputStream", (PyCFunction) _wrap_new_InputStream, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"delete_InputStream", (PyCFunction)_wrap_delete_InputStream, METH_O, NULL},
 	 { (char *)"InputStream_close", (PyCFunction)_wrap_InputStream_close, METH_O, NULL},
@@ -58797,12 +59311,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"AcceleratorTable_swiginit", AcceleratorTable_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_VisualAttributes", (PyCFunction)_wrap_new_VisualAttributes, METH_NOARGS, NULL},
 	 { (char *)"delete_VisualAttributes", (PyCFunction)_wrap_delete_VisualAttributes, METH_O, NULL},
-	 { (char *)"VisualAttributes_font_set", _wrap_VisualAttributes_font_set, METH_VARARGS, NULL},
-	 { (char *)"VisualAttributes_font_get", (PyCFunction)_wrap_VisualAttributes_font_get, METH_O, NULL},
-	 { (char *)"VisualAttributes_colFg_set", _wrap_VisualAttributes_colFg_set, METH_VARARGS, NULL},
-	 { (char *)"VisualAttributes_colFg_get", (PyCFunction)_wrap_VisualAttributes_colFg_get, METH_O, NULL},
-	 { (char *)"VisualAttributes_colBg_set", _wrap_VisualAttributes_colBg_set, METH_VARARGS, NULL},
-	 { (char *)"VisualAttributes_colBg_get", (PyCFunction)_wrap_VisualAttributes_colBg_get, METH_O, NULL},
+	 { (char *)"VisualAttributes__get_font", (PyCFunction)_wrap_VisualAttributes__get_font, METH_O, NULL},
+	 { (char *)"VisualAttributes__get_colFg", (PyCFunction)_wrap_VisualAttributes__get_colFg, METH_O, NULL},
+	 { (char *)"VisualAttributes__get_colBg", (PyCFunction)_wrap_VisualAttributes__get_colBg, METH_O, NULL},
 	 { (char *)"VisualAttributes_swigregister", VisualAttributes_swigregister, METH_VARARGS, NULL},
 	 { (char *)"VisualAttributes_swiginit", VisualAttributes_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_Window", (PyCFunction) _wrap_new_Window, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -58902,6 +59413,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_CanAcceptFocus", (PyCFunction)_wrap_Window_CanAcceptFocus, METH_O, NULL},
 	 { (char *)"Window_AcceptsFocusFromKeyboard", (PyCFunction)_wrap_Window_AcceptsFocusFromKeyboard, METH_O, NULL},
 	 { (char *)"Window_CanAcceptFocusFromKeyboard", (PyCFunction)_wrap_Window_CanAcceptFocusFromKeyboard, METH_O, NULL},
+	 { (char *)"Window_SetCanFocus", (PyCFunction) _wrap_Window_SetCanFocus, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_NavigateIn", (PyCFunction) _wrap_Window_NavigateIn, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_Navigate", (PyCFunction) _wrap_Window_Navigate, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_MoveAfterInTabOrder", (PyCFunction) _wrap_Window_MoveAfterInTabOrder, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -60112,6 +60624,7 @@ static swig_type_info _swigt__p_wxPaletteChangedEvent = {"_p_wxPaletteChangedEve
 static swig_type_info _swigt__p_wxPaperSize = {"_p_wxPaperSize", "enum wxPaperSize *|wxPaperSize *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPoint = {"_p_wxPoint", "wxPoint *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPoint2D = {"_p_wxPoint2D", "wxPoint2D *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_wxPosition = {"_p_wxPosition", "wxPosition *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPropagateOnce = {"_p_wxPropagateOnce", "wxPropagateOnce *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPropagationDisabler = {"_p_wxPropagationDisabler", "wxPropagationDisabler *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxPyApp = {"_p_wxPyApp", "wxPyApp *", 0, 0, (void*)0, 0};
@@ -60251,6 +60764,7 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxPaperSize,
   &_swigt__p_wxPoint,
   &_swigt__p_wxPoint2D,
+  &_swigt__p_wxPosition,
   &_swigt__p_wxPropagateOnce,
   &_swigt__p_wxPropagationDisabler,
   &_swigt__p_wxPyApp,
@@ -60390,6 +60904,7 @@ static swig_cast_info _swigc__p_wxPaletteChangedEvent[] = {  {&_swigt__p_wxPalet
 static swig_cast_info _swigc__p_wxPaperSize[] = {  {&_swigt__p_wxPaperSize, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPoint[] = {  {&_swigt__p_wxPoint, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPoint2D[] = {  {&_swigt__p_wxPoint2D, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_wxPosition[] = {  {&_swigt__p_wxPosition, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPropagateOnce[] = {  {&_swigt__p_wxPropagateOnce, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPropagationDisabler[] = {  {&_swigt__p_wxPropagationDisabler, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxPyApp[] = {  {&_swigt__p_wxPyApp, 0, 0, 0},{0, 0, 0, 0}};
@@ -60529,6 +61044,7 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_wxPaperSize,
   _swigc__p_wxPoint,
   _swigc__p_wxPoint2D,
+  _swigc__p_wxPosition,
   _swigc__p_wxPropagateOnce,
   _swigc__p_wxPropagationDisabler,
   _swigc__p_wxPyApp,

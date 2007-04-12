@@ -100,7 +100,7 @@ class WizardPage(_windows.Panel):
     def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
     def Create(*args, **kwargs):
-        """Create(self, Wizard parent, Bitmap bitmap=wxNullBitmap, String resource=EmptyString) -> bool"""
+        """Create(self, Wizard parent, Bitmap bitmap=wxNullBitmap) -> bool"""
         return _wizard.WizardPage_Create(*args, **kwargs)
 
     def GetPrev(*args, **kwargs):
@@ -125,12 +125,12 @@ class PyWizardPage(WizardPage):
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
-        """__init__(self, Wizard parent, Bitmap bitmap=&wxNullBitmap, String resource=&wxPyEmptyString) -> PyWizardPage"""
+        """__init__(self, Wizard parent, Bitmap bitmap=wxNullBitmap) -> PyWizardPage"""
         _wizard.PyWizardPage_swiginit(self,_wizard.new_PyWizardPage(*args, **kwargs))
         self._setOORInfo(self);PyWizardPage._setCallbackInfo(self, self, PyWizardPage)
 
     def Create(*args, **kwargs):
-        """Create(self, Wizard parent, Bitmap bitmap=wxNullBitmap, String resource=EmptyString) -> bool"""
+        """Create(self, Wizard parent, Bitmap bitmap=wxNullBitmap) -> bool"""
         return _wizard.PyWizardPage_Create(*args, **kwargs)
 
     def _setCallbackInfo(*args, **kwargs):
@@ -300,7 +300,7 @@ class WizardPageSimple(WizardPage):
     def __init__(self, *args, **kwargs): 
         """
         __init__(self, Wizard parent, WizardPage prev=None, WizardPage next=None, 
-            Bitmap bitmap=wxNullBitmap, wxChar resource=None) -> WizardPageSimple
+            Bitmap bitmap=wxNullBitmap) -> WizardPageSimple
         """
         _wizard.WizardPageSimple_swiginit(self,_wizard.new_WizardPageSimple(*args, **kwargs))
         self._setOORInfo(self)
@@ -308,7 +308,7 @@ class WizardPageSimple(WizardPage):
     def Create(*args, **kwargs):
         """
         Create(self, Wizard parent=None, WizardPage prev=None, WizardPage next=None, 
-            Bitmap bitmap=wxNullBitmap, wxChar resource=None) -> bool
+            Bitmap bitmap=wxNullBitmap) -> bool
         """
         return _wizard.WizardPageSimple_Create(*args, **kwargs)
 
