@@ -709,7 +709,7 @@ void wxListBox::DoSetItemClientObject(unsigned int n, wxClientData* clientData)
 // string list access
 // ----------------------------------------------------------------------------
 
-void wxListBox::SetString(unsigned int n, const wxString &string)
+void wxListBox::SetString(unsigned int n, const wxString& label)
 {
     wxCHECK_RET( IsValid(n), wxT("invalid index in wxListBox::SetString") );
     wxCHECK_RET( m_treeview != NULL, wxT("invalid listbox") );
@@ -717,23 +717,28 @@ void wxListBox::SetString(unsigned int n, const wxString &string)
     GtkTreeEntry* entry = GtkGetEntry(n);
     wxCHECK_RET( entry, wxT("wrong listbox index") );
 
-    wxString label = string;
+    // update the item itself
+    gtk_tree_entry_set_label(entry, wxGTK_CONV(label));
 
-    // RN: This may look wierd but the problem is that the TreeView
-    // doesn't resort or update when changed above and there is no real
-    // notification function...
-    void* userdata = gtk_tree_entry_get_userdata(entry);
-    gtk_tree_entry_set_userdata(entry, NULL); //don't delete on destroy
-    g_object_unref (entry);
+    // and update the model which will refresh the tree too
+    GtkTreeIter iter;
+    if ( !gtk_tree_model_iter_nth_child(GTK_TREE_MODEL(m_liststore),
+                                        &iter, NULL, n) )
+    {
+        wxFAIL_MSG( wxT("failed to get iterator") );
+        return;
+    }
 
-    bool bWasSelected = wxListBox::IsSelected(n);
-    wxListBox::Delete(n);
-
-    wxArrayString aItems;
-    aItems.Add(label);
-    GtkInsertItems(aItems, &userdata, n);
-    if (bWasSelected)
-        wxListBox::GtkSetSelection(n, true, true);
+#if wxUSE_CHECKLISTBOX
+    if (m_hasCheckBoxes)
+    {
+        gtk_list_store_set(m_liststore, &iter,
+                             0, FALSE, //FALSE == not toggled
+                             1, entry, -1);
+    }
+    else
+#endif
+        gtk_list_store_set(m_liststore, &iter, 0, entry, -1);
 }
 
 wxString wxListBox::GetString(unsigned int n) const
