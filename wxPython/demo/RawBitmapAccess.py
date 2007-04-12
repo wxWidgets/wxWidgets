@@ -1,7 +1,7 @@
 import wx
 
 # use the numpy code instead of the raw access code for comparison
-USE_NUMPY = False  
+USE_NUMPY = False
 
 # time the execution of making a bitmap?
 TIMEIT = False
