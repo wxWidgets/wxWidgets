@@ -932,6 +932,11 @@ it.", "");
         "Can this window be assigned focus from keyboard right now?", "");
     
 
+    DocDeclStr(
+        virtual void , SetCanFocus(bool canFocus),
+        "", "");
+    
+
 
     DocDeclAStr(
         virtual bool , NavigateIn(int flags = wxNavigationKeyEvent::IsForward),
