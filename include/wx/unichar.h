@@ -69,6 +69,9 @@ public:
     // Returns Unicode code point value of the character
     value_type GetValue() const { return m_value; }
 
+    // Returns true if the character is an ASCII character:
+    bool IsAscii() const { return m_value < 0x80; }
+
     // Conversions to char and wchar_t types: all of those are needed to be
     // able to pass wxUniChars to verious standard narrow and wide character
     // functions
@@ -152,7 +155,11 @@ private:
     typedef wxStringImpl::iterator iterator;
 
     // create the reference
+#if wxUSE_UNICODE_UTF8
+    wxUniCharRef(wxStringImpl& str, iterator pos) : m_str(str), m_pos(pos) {}
+#else
     wxUniCharRef(iterator pos) : m_pos(pos) {}
+#endif
 
 public:
     // NB: we have to make this public, because we don't have wxString
@@ -160,23 +167,26 @@ public:
     //     as friend; so at least don't use a ctor but a static function
     //     that must be used explicitly (this is more than using 'explicit'
     //     keyword on ctor!):
+#if wxUSE_UNICODE_UTF8
+    static wxUniCharRef CreateForString(wxStringImpl& str, iterator pos)
+        { return wxUniCharRef(str, pos); }
+#else
     static wxUniCharRef CreateForString(iterator pos)
         { return wxUniCharRef(pos); }
+#endif
 
     wxUniChar::value_type GetValue() const { return UniChar().GetValue(); }
+    bool IsAscii() const { return UniChar().GetValue(); }
 
     // Assignment operators:
-    wxUniCharRef& operator=(const wxUniCharRef& c)
-    {
-        *m_pos = *c.m_pos;
-        return *this;
-    };
+#if wxUSE_UNICODE_UTF8
+    wxUniCharRef& operator=(const wxUniChar& c);
+#else
+    wxUniCharRef& operator=(const wxUniChar& c) { *m_pos = c; return *this; }
+#endif
 
-    wxUniCharRef& operator=(const wxUniChar& c)
-    {
-        *m_pos = c;
-        return *this;
-    };
+    wxUniCharRef& operator=(const wxUniCharRef& c)
+        { return *this = c.UniChar(); }
 
     wxUniCharRef& operator=(char c) { return *this = wxUniChar(c); }
     wxUniCharRef& operator=(wchar_t c) { return *this = wxUniChar(c); }
@@ -227,11 +237,28 @@ public:
 #endif
 
 private:
-    wxUniChar UniChar() const { return *m_pos; }
+    wxUniChar UniChar() const
+    {
+#if wxUSE_UNICODE_UTF8
+        return DecodeChar(m_pos);
+#else
+        return *m_pos;
+#endif
+    }
+
+#if wxUSE_UNICODE_UTF8
+    // FIXME-UTF8: move this to a separate 'string operations' class
+    static wxUniChar DecodeChar(wxStringImpl::const_iterator i);
+    friend class WXDLLIMPEXP_BASE wxString;
+#endif
+
     friend class WXDLLIMPEXP_BASE wxUniChar;
 
 private:
-    // pointer to the character in string
+    // reference to the string and pointer to the character in string
+#if wxUSE_UNICODE_UTF8
+    wxStringImpl& m_str;
+#endif
     iterator m_pos;
 };
 

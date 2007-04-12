@@ -557,6 +557,8 @@
 
 #define wxUSE_UNICODE_MSLU 0
 
+#define wxUSE_UNICODE_UTF8 0
+
 #define wxUSE_DC_CACHEING 0
 
 #define wxUSE_GADGETS 0

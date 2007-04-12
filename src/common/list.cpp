@@ -53,7 +53,7 @@ bool wxListKey::operator==(wxListKeyValue value) const
             // by not putting return here...
 
         case wxKEY_STRING:
-            return wxStrcmp(m_key.string, value.string) == 0;
+            return *m_key.string == *value.string;
 
         case wxKEY_INTEGER:
             return m_key.integer == value.integer;
@@ -84,7 +84,7 @@ wxNodeBase::wxNodeBase(wxListBase *list,
 
         case wxKEY_STRING:
             // to be free()d later
-            m_key.string = wxStrdup(key.GetString());
+            m_key.string = new wxString(key.GetString());
             break;
 
         default:
@@ -107,7 +107,7 @@ wxNodeBase::~wxNodeBase()
     {
         if ( m_list->m_keyType == wxKEY_STRING )
         {
-            free(m_key.string);
+            delete m_key.string;
         }
 
         m_list->DetachNode(this);
@@ -257,7 +257,7 @@ wxNodeBase *wxListBase::Append(long key, void *object)
     return AppendCommon(node);
 }
 
-wxNodeBase *wxListBase::Append (const wxChar *key, void *object)
+wxNodeBase *wxListBase::Append (const wxString& key, void *object)
 {
     wxCHECK_MSG( (m_keyType == wxKEY_STRING) ||
                  (m_keyType == wxKEY_NONE && m_count == 0),

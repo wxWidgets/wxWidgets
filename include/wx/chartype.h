@@ -190,9 +190,15 @@
 /* depending on the platform, Unicode build can either store wxStrings as
    wchar_t* or UTF-8 encoded char*: */
 #if wxUSE_UNICODE
-    /* for now, all Unicode builds are wchar_t* based: */
-    #define wxUSE_UNICODE_WCHAR 1
-    #define wxUSE_UNICODE_UTF8  0
+    #ifndef wxUSE_UNICODE_UTF8
+        #define wxUSE_UNICODE_UTF8 0
+    #endif
+
+    #if wxUSE_UNICODE_UTF8
+        #define wxUSE_UNICODE_WCHAR 0
+    #else
+        #define wxUSE_UNICODE_WCHAR 1
+    #endif
 #else
     #define wxUSE_UNICODE_WCHAR 0
     #define wxUSE_UNICODE_UTF8  0

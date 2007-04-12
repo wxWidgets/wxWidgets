@@ -576,6 +576,7 @@ if test $DEBUG_CONFIGURE = 1; then
 
   DEFAULT_wxUSE_UNICODE=no
   DEFAULT_wxUSE_UNICODE_MSLU=no
+  DEFAULT_wxUSE_UNICODE_UTF8=no
   DEFAULT_wxUSE_WCSRTOMBS=no
 
   DEFAULT_wxUSE_PALETTE=no
@@ -801,6 +802,7 @@ else
 
   DEFAULT_wxUSE_UNICODE=no
   DEFAULT_wxUSE_UNICODE_MSLU=yes
+  DEFAULT_wxUSE_UNICODE_UTF8=no
   DEFAULT_wxUSE_WCSRTOMBS=no
 
   DEFAULT_wxUSE_PALETTE=yes
@@ -987,6 +989,8 @@ WX_ARG_ENABLE(log,           [  --enable-log            use logging system], wxU
 WX_ARG_ENABLE(longlong,      [  --enable-longlong       use wxLongLong class], wxUSE_LONGLONG)
 WX_ARG_ENABLE(mimetype,      [  --enable-mimetype       use wxMimeTypesManager], wxUSE_MIMETYPE)
 WX_ARG_ENABLE(mslu,          [  --enable-mslu           use MS Layer for Unicode on Windows 9x (Win32 only)], wxUSE_UNICODE_MSLU)
+dnl FIXME-UTF8: make UTF8 automatic
+WX_ARG_ENABLE(utf8,          [  --enable-utf8           use UTF-8 representation for strings (Unix only)], wxUSE_UNICODE_UTF8)
 WX_ARG_ENABLE(snglinst,      [  --enable-snglinst       use wxSingleInstanceChecker class], wxUSE_SNGLINST_CHECKER)
 WX_ARG_ENABLE(std_iostreams, [  --enable-std_iostreams  use standard C++ stream classes], wxUSE_STD_IOSTREAM)
 WX_ARG_ENABLE(std_string,    [  --enable-std_string     use standard C++ string classes], wxUSE_STD_STRING)
@@ -6481,6 +6485,10 @@ if test "$wxUSE_UNICODE" = "yes" ; then
                 wxUSE_UNICODE_MSLU=no
             ])
     fi
+fi
+
+if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_UNICODE_UTF8" = "yes"; then
+    AC_DEFINE(wxUSE_UNICODE_UTF8)
 fi
 
 if test "$wxUSE_wxUSE_EXPERIMENTAL_PRINTF" = "yes"; then

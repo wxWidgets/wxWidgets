@@ -105,6 +105,427 @@ wxSTD ostream& operator<<(wxSTD ostream& os, const wxWCharBuffer& str)
 
 #endif // wxUSE_STD_IOSTREAM
 
+// ===========================================================================
+// wxString class core
+// ===========================================================================
+
+#if wxUSE_UNICODE_UTF8
+
+// ---------------------------------------------------------------------------
+// UTF-8 operations
+// ---------------------------------------------------------------------------
+
+//
+// Table 3.1B from Unicode spec: Legal UTF-8 Byte Sequences
+//
+//     Code Points    | 1st Byte | 2nd Byte | 3rd Byte | 4th Byte |
+// -------------------+----------+----------+----------+----------+
+//   U+0000..U+007F   |  00..7F  |          |          |          |
+//   U+0080..U+07FF   |  C2..DF  |  80..BF  |          |          |
+//   U+0800..U+0FFF   |  E0      |  A0..BF  |  80..BF  |          |
+//   U+1000..U+FFFF   |  E1..EF  |  80..BF  |  80..BF  |          |
+//  U+10000..U+3FFFF  |  F0      |  90..BF  |  80..BF  |  80..BF  |
+//  U+40000..U+FFFFF  |  F1..F3  |  80..BF  |  80..BF  |  80..BF  |
+// U+100000..U+10FFFF |  F4      |  80..8F  |  80..BF  |  80..BF  |
+// -------------------+----------+----------+----------+----------+
+
+bool wxString::IsValidUtf8String(const char *str)
+{
+    if ( !str )
+        return true; // empty string is UTF8 string
+
+    const unsigned char *c = (const unsigned char*)str;
+
+    for ( ; *c; ++c )
+    {
+        unsigned char b = *c;
+
+        if ( b <= 0x7F ) // 00..7F
+            continue;
+
+        else if ( b < 0xC2 ) // invalid lead bytes: 80..C1
+            return false;
+
+        // two-byte sequences:
+        else if ( b <= 0xDF ) // C2..DF
+        {
+            b = *(++c);
+            if ( !(b >= 0x80 && b <= 0xBF ) )
+                return false;
+        }
+
+        // three-byte sequences:
+        else if ( b == 0xE0 )
+        {
+            b = *(++c);
+            if ( !(b >= 0xA0 && b <= 0xBF ) )
+                return false;
+            b = *(++c);
+            if ( !(b >= 0x80 && b <= 0xBF ) )
+                return false;
+        }
+        else if ( b <= 0xEF ) // E1..EF
+        {
+            for ( int i = 0; i < 2; ++i )
+            {
+                b = *(++c);
+                if ( !(b >= 0x80 && b <= 0xBF ) )
+                    return false;
+            }
+        }
+
+        // four-byte sequences:
+        else if ( b == 0xF0 )
+        {
+            b = *(++c);
+            if ( !(b >= 0x90 && b <= 0xBF ) )
+                return false;
+            for ( int i = 0; i < 2; ++i )
+            {
+                b = *(++c);
+                if ( !(b >= 0x80 && b <= 0xBF ) )
+                    return false;
+            }
+        }
+        else if ( b <= 0xF3 ) // F1..F3
+        {
+            for ( int i = 0; i < 3; ++i )
+            {
+                b = *(++c);
+                if ( !(b >= 0x80 && b <= 0xBF ) )
+                    return false;
+            }
+        }
+        else if ( b == 0xF4 )
+        {
+            b = *(++c);
+            if ( !(b >= 0x80 && b <= 0x8F ) )
+                return false;
+            for ( int i = 0; i < 2; ++i )
+            {
+                b = *(++c);
+                if ( !(b >= 0x80 && b <= 0xBF ) )
+                    return false;
+            }
+        }
+        else // otherwise, it's invalid lead byte
+            return false;
+    }
+
+    return true;
+}
+
+#ifdef __WXDEBUG__
+/* static */
+bool wxString::IsValidUtf8LeadByte(unsigned char c)
+{
+    return (c <= 0x7F) || (c >= 0xC2 && c <= 0xF4);
+}
+#endif
+
+unsigned char wxString::ms_utf8IterTable[256] = {
+    // single-byte sequences (ASCII):
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // 00..0F
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // 10..1F
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // 20..2F
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // 30..3F
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // 40..4F
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // 50..5F
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // 60..6F
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // 70..7F
+
+    // these are invalid, we use step 1 to skip
+    // over them (should never happen):
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // 80..8F
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // 90..9F
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // A0..AF
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,  // B0..BF
+    1, 1,                                            // C0,C1
+
+    // two-byte sequences:
+          2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,  // C2..CF
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,  // D0..DF
+
+    // three-byte sequences:
+    3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,  // E0..EF
+
+    // four-byte sequences:
+    4, 4, 4, 4, 4,                                   // F0..F4
+
+    // these are invalid again (5- or 6-byte
+    // sequences and sequences for code points
+    // above U+10FFFF, as restricted by RFC 3629):
+                   1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1   // F5..FF
+};
+
+/* static */
+void wxString::DecIter(wxStringImpl::const_iterator& i)
+{
+    wxASSERT( IsValidUtf8LeadByte(*i) );
+
+    // Non-lead bytes are all in the 0x80..0xBF range (i.e. 10xxxxxx in
+    // binary), so we just have to go back until we hit a byte that is either
+    // < 0x80 (i.e. 0xxxxxxx in binary) or 0xC0..0xFF (11xxxxxx in binary; this
+    // includes some invalid values, but we can ignore it here, because we
+    // assume valid UTF-8 input for the purpose of efficient implementation).
+    --i;
+    while ( ((*i) & 0xC0) == 0x80 /* 2 highest bits are '10' */ )
+        --i;
+}
+
+/* static */
+void wxString::DecIter(wxStringImpl::iterator& i)
+{
+    // FIXME-UTF8: use template instead
+    wxASSERT( IsValidUtf8LeadByte(*i) );
+    --i;
+    while ( ((*i) & 0xC0) == 0x80 /* 2 highest bits are '10' */ )
+        --i;
+}
+
+/* static */
+wxStringImpl::const_iterator
+wxString::AddToIter(wxStringImpl::const_iterator i, int n)
+{
+    wxStringImpl::const_iterator out(i);
+
+    if ( n > 0 )
+    {
+        for ( int j = 0; j < n; ++j )
+            IncIter(out);
+    }
+    else if ( n < 0 )
+    {
+        for ( int j = 0; j > n; --j )
+            DecIter(out);
+    }
+
+    return out;
+}
+
+wxStringImpl::iterator
+wxString::AddToIter(wxStringImpl::iterator i, int n)
+{
+    // FIXME-UTF8: use template instead
+    wxStringImpl::iterator out(i);
+
+    if ( n > 0 )
+    {
+        for ( int j = 0; j < n; ++j )
+            IncIter(out);
+    }
+    else if ( n < 0 )
+    {
+        for ( int j = 0; j > n; --j )
+            DecIter(out);
+    }
+
+    return out;
+}
+
+
+/* static */
+int wxString::DiffIters(wxStringImpl::const_iterator i1,
+                        wxStringImpl::const_iterator i2)
+{
+    int dist = 0;
+
+    if ( i1 < i2 )
+    {
+        while ( i1 != i2 )
+        {
+            IncIter(i1);
+            dist--;
+        }
+    }
+    else if ( i2 < i1 )
+    {
+        while ( i2 != i1 )
+        {
+            IncIter(i2);
+            dist++;
+        }
+    }
+
+    return dist;
+}
+
+int wxString::DiffIters(wxStringImpl::iterator i1, wxStringImpl::iterator i2)
+{
+    // FIXME-UTF8: use template instead
+    int dist = 0;
+
+    if ( i1 < i2 )
+    {
+        while ( i1 != i2 )
+        {
+            IncIter(i1);
+            dist--;
+        }
+    }
+    else if ( i2 < i1 )
+    {
+        while ( i2 != i1 )
+        {
+            IncIter(i2);
+            dist++;
+        }
+    }
+
+    return dist;
+}
+
+/* static */
+wxString::Utf8CharBuffer wxString::EncodeChar(wxUniChar ch)
+{
+    Utf8CharBuffer buf;
+    char *out = buf.data;
+
+    wxUniChar::value_type code = ch.GetValue();
+
+    //    Char. number range   |        UTF-8 octet sequence
+    //       (hexadecimal)     |              (binary)
+    //   ----------------------+---------------------------------------------
+    //   0000 0000 - 0000 007F | 0xxxxxxx
+    //   0000 0080 - 0000 07FF | 110xxxxx 10xxxxxx
+    //   0000 0800 - 0000 FFFF | 1110xxxx 10xxxxxx 10xxxxxx
+    //   0001 0000 - 0010 FFFF | 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+    //
+    //   Code point value is stored in bits marked with 'x', lowest-order bit
+    //   of the value on the right side in the diagram above.
+    //                                                        (from RFC 3629)
+
+    if ( code <= 0x7F )
+    {
+        out[1] = 0;
+        out[0] = (char)code;
+    }
+    else if ( code <= 0x07FF )
+    {
+        out[2] = 0;
+        // NB: this line takes 6 least significant bits, encodes them as
+        // 10xxxxxx and discards them so that the next byte can be encoded:
+        out[1] = 0x80 | (code & 0x3F);  code >>= 6;
+        out[0] = 0xC0 | code;
+    }
+    else if ( code < 0xFFFF )
+    {
+        out[3] = 0;
+        out[2] = 0x80 | (code & 0x3F);  code >>= 6;
+        out[1] = 0x80 | (code & 0x3F);  code >>= 6;
+        out[0] = 0xE0 | code;
+    }
+    else if ( code <= 0x10FFFF )
+    {
+        out[4] = 0;
+        out[3] = 0x80 | (code & 0x3F);  code >>= 6;
+        out[2] = 0x80 | (code & 0x3F);  code >>= 6;
+        out[1] = 0x80 | (code & 0x3F);  code >>= 6;
+        out[0] = 0xF0 | code;
+    }
+    else
+    {
+        wxFAIL_MSG( _T("trying to encode undefined Unicode character") );
+        out[0] = 0;
+    }
+
+    return buf;
+}
+
+/* static */
+wxUniChar wxUniCharRef::DecodeChar(wxStringImpl::const_iterator i)
+{
+    wxASSERT( wxString::IsValidUtf8LeadByte(*i) ); // FIXME-UTF8: no "wxString::"
+
+    wxUniChar::value_type code = 0;
+    size_t len = wxString::GetUtf8CharLength(*i);
+    wxASSERT_MSG( len <= 4, _T("invalid UTF-8 sequence length") );
+
+    //    Char. number range   |        UTF-8 octet sequence
+    //       (hexadecimal)     |              (binary)
+    //   ----------------------+---------------------------------------------
+    //   0000 0000 - 0000 007F | 0xxxxxxx
+    //   0000 0080 - 0000 07FF | 110xxxxx 10xxxxxx
+    //   0000 0800 - 0000 FFFF | 1110xxxx 10xxxxxx 10xxxxxx
+    //   0001 0000 - 0010 FFFF | 11110xxx 10xxxxxx 10xxxxxx 10xxxxxx
+    //
+    //   Code point value is stored in bits marked with 'x', lowest-order bit
+    //   of the value on the right side in the diagram above.
+    //                                                        (from RFC 3629)
+
+    // mask to extract lead byte's value ('x' bits above), by sequence's length:
+    static const unsigned char s_leadValueMask[4] =  { 0x7F, 0x1F, 0x0F, 0x07 };
+#ifdef __WXDEBUG__
+    // mask and value of lead byte's most significant bits, by length:
+    static const unsigned char s_leadMarkerMask[4] = { 0x80, 0xE0, 0xF0, 0xF8 };
+    static const unsigned char s_leadMarkerVal[4] =  { 0x00, 0xC0, 0xE0, 0xF0 };
+#endif
+
+    // extract the lead byte's value bits:
+    wxASSERT_MSG( ((unsigned char)*i & s_leadMarkerMask[len-1]) ==
+                  s_leadMarkerVal[len-1],
+                  _T("invalid UTF-8 lead byte") );
+    code = (unsigned char)*i & s_leadValueMask[len-1];
+
+    // all remaining bytes, if any, are handled in the same way regardless of
+    // sequence's length:
+    for ( ++i ; len > 1; --len, ++i )
+    {
+        wxASSERT_MSG( ((unsigned char)*i & 0xC0) == 0x80,
+                      _T("invalid UTF-8 byte") );
+
+        code <<= 6;
+        code |= (unsigned char)*i & 0x3F;
+    }
+
+    return wxUniChar(code);
+}
+
+/* static */
+wxCharBuffer wxString::EncodeNChars(size_t n, wxUniChar ch)
+{
+    Utf8CharBuffer once(EncodeChar(ch));
+    // the IncIter() table can be used to determine the length of ch's encoding:
+    size_t len = ms_utf8IterTable[(unsigned char)once.data[0]];
+
+    wxCharBuffer buf(n * len);
+    char *ptr = buf.data();
+    for ( size_t i = 0; i < n; i++, ptr += len )
+    {
+        memcpy(ptr, once.data, len);
+    }
+
+    return buf;
+}
+
+
+void wxString::PosLenToImpl(size_t pos, size_t len,
+                            size_t *implPos, size_t *implLen) const
+{
+    if ( pos == npos )
+        *implPos = npos;
+    else
+    {
+        const_iterator i = begin() + pos;
+        *implPos = wxStringImpl::const_iterator(i) - m_impl.begin();
+        if ( len == npos )
+            *implLen = npos;
+        else
+        {
+            // too large length is interpreted as "to the end of the string"
+            // FIXME-UTF8: verify this is the case in std::string, assert
+            // otherwise
+            if ( pos + len > length() )
+                len = length() - pos;
+
+            *implLen = wxStringImpl::const_iterator(i + len) -
+                       wxStringImpl::const_iterator(i);
+        }
+    }
+}
+
+#endif // wxUSE_UNICODE_UTF8
+
 // ----------------------------------------------------------------------------
 // wxCStrData converted strings caching
 // ----------------------------------------------------------------------------
@@ -254,14 +675,14 @@ const wchar_t* wxCStrData::AsWChar() const
 // construction and conversion
 // ---------------------------------------------------------------------------
 
-#if wxUSE_UNICODE
+#if wxUSE_UNICODE_WCHAR
 /* static */
 wxString::SubstrBufFromMB wxString::ConvertStr(const char *psz, size_t nLength,
                                                const wxMBConv& conv)
 {
     // anything to do?
     if ( !psz || nLength == 0 )
-        return SubstrBufFromMB();
+        return SubstrBufFromMB(L"", 0);
 
     if ( nLength == npos )
         nLength = wxNO_LEN;
@@ -269,18 +690,51 @@ wxString::SubstrBufFromMB wxString::ConvertStr(const char *psz, size_t nLength,
     size_t wcLen;
     wxWCharBuffer wcBuf(conv.cMB2WC(psz, nLength, &wcLen));
     if ( !wcLen )
-        return SubstrBufFromMB();
+        return SubstrBufFromMB(_T(""), 0);
     else
         return SubstrBufFromMB(wcBuf, wcLen);
 }
-#else
+#endif // wxUSE_UNICODE_WCHAR
+
+#if wxUSE_UNICODE_UTF8
+/* static */
+wxString::SubstrBufFromMB wxString::ConvertStr(const char *psz, size_t nLength,
+                                               const wxMBConv& conv)
+{
+    // FIXME-UTF8: return as-is without copying under UTF8 locale, return
+    //             converted string under other locales - needs wxCharBuffer
+    //             changes
+
+    // anything to do?
+    if ( !psz || nLength == 0 )
+        return SubstrBufFromMB("", 0);
+
+    if ( nLength == npos )
+        nLength = wxNO_LEN;
+
+    // first convert to wide string:
+    size_t wcLen;
+    wxWCharBuffer wcBuf(conv.cMB2WC(psz, nLength, &wcLen));
+    if ( !wcLen )
+        return SubstrBufFromMB("", 0);
+
+    // and then to UTF-8:
+    SubstrBufFromMB buf(ConvertStr(wcBuf, wcLen, wxConvUTF8));
+    // widechar -> UTF-8 conversion isn't supposed to ever fail:
+    wxASSERT_MSG( buf.data, _T("conversion to UTF-8 failed") );
+
+    return buf;
+}
+#endif // wxUSE_UNICODE_UTF8
+
+#if wxUSE_UNICODE_UTF8 || !wxUSE_UNICODE
 /* static */
 wxString::SubstrBufFromWC wxString::ConvertStr(const wchar_t *pwz, size_t nLength,
                                                const wxMBConv& conv)
 {
     // anything to do?
     if ( !pwz || nLength == 0 )
-        return SubstrBufFromWC();
+        return SubstrBufFromWC("", 0);
 
     if ( nLength == npos )
         nLength = wxNO_LEN;
@@ -288,33 +742,55 @@ wxString::SubstrBufFromWC wxString::ConvertStr(const wchar_t *pwz, size_t nLengt
     size_t mbLen;
     wxCharBuffer mbBuf(conv.cWC2MB(pwz, nLength, &mbLen));
     if ( !mbLen )
-        return SubstrBufFromWC();
+        return SubstrBufFromWC("", 0);
     else
         return SubstrBufFromWC(mbBuf, mbLen);
 }
-#endif
+#endif // wxUSE_UNICODE_UTF8 || !wxUSE_UNICODE
 
 
-#if wxUSE_UNICODE
+#if wxUSE_UNICODE_WCHAR
 
 //Convert wxString in Unicode mode to a multi-byte string
 const wxCharBuffer wxString::mb_str(const wxMBConv& conv) const
 {
-    return conv.cWC2MB(c_str(), length() + 1 /* size, not length */, NULL);
+    return conv.cWC2MB(wx_str(), length() + 1 /* size, not length */, NULL);
+}
+
+#elif wxUSE_UNICODE_UTF8
+
+const wxWCharBuffer wxString::wc_str() const
+{
+    return wxConvUTF8.cMB2WC(m_impl.c_str(),
+                             m_impl.length() + 1 /* size, not length */,
+                             NULL);
+}
+
+const wxCharBuffer wxString::mb_str(const wxMBConv& conv) const
+{
+    // FIXME-UTF8: optimize the case when conv==wxConvUTF8 or wxConvLibc
+    //             under UTF8 locale
+    // FIXME-UTF8: use wc_str() here once we have buffers with length
+
+    size_t wcLen;
+    wxWCharBuffer wcBuf(
+            wxConvUTF8.cMB2WC(m_impl.c_str(),
+                              m_impl.length() + 1 /* size, not length */,
+                              &wcLen));
+    if ( !wcLen )
+        return wxCharBuffer("");
+
+    return conv.cWC2MB(wcBuf, wcLen, NULL);
 }
 
 #else // ANSI
-
-#if wxUSE_WCHAR_T
 
 //Converts this string to a wide character string if unicode
 //mode is not enabled and wxUSE_WCHAR_T is enabled
 const wxWCharBuffer wxString::wc_str(const wxMBConv& conv) const
 {
-    return conv.cMB2WC(c_str(), length() + 1 /* size, not length */, NULL);
+    return conv.cMB2WC(wx_str(), length() + 1 /* size, not length */, NULL);
 }
-
-#endif // wxUSE_WCHAR_T
 
 #endif // Unicode/ANSI
 
@@ -996,7 +1472,8 @@ bool wxString::EndsWith(const wxChar *suffix, wxString *rest) const
     wxASSERT_MSG( suffix, _T("invalid parameter in wxString::EndssWith") );
 
     int start = length() - wxStrlen(suffix);
-    if ( start < 0 || wxStrcmp(wx_str() + start, suffix) != 0 )
+
+    if ( start < 0 || compare(start, npos, suffix) != 0 )
         return false;
 
     if ( rest )
@@ -1420,7 +1897,7 @@ int wxString::PrintfV(const wxString& format, va_list argptr)
         // only a copy
         va_list argptrcopy;
         wxVaCopy(argptrcopy, argptr);
-        int len = wxVsnprintf(buf, size, format, argptrcopy);
+        int len = wxVsnprintf(buf, size, (const wxChar*)/*FIXME-UTF8*/format, argptrcopy);
         va_end(argptrcopy);
 
         // some implementations of vsnprintf() don't NUL terminate

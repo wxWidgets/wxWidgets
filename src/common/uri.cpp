@@ -641,7 +641,8 @@ const wxChar* wxURI::ParsePath(const wxChar* uri, bool bReference, bool bNormali
         if (bNormalize)
         {
             wxStringBufferLength theBuffer(m_path, m_path.length() + 1);
-#if wxUSE_STL
+#if wxUSE_STL || wxUSE_UNICODE_UTF8
+            // FIXME-UTF8: have some wxReadWriteStringBuffer instead?
             wxTmemcpy(theBuffer, m_path.c_str(), m_path.length()+1);
 #endif
             Normalize(theBuffer, true);
@@ -693,7 +694,8 @@ const wxChar* wxURI::ParsePath(const wxChar* uri, bool bReference, bool bNormali
             if (bNormalize)
             {
                 wxStringBufferLength theBuffer(m_path, m_path.length() + 1);
-#if wxUSE_STL
+#if wxUSE_STL || wxUSE_UNICODE_UTF8
+                // FIXME-UTF8: have some wxReadWriteStringBuffer instead?
                 wxTmemcpy(theBuffer, m_path.c_str(), m_path.length()+1);
 #endif
                 Normalize(theBuffer);

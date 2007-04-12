@@ -380,7 +380,7 @@ private:
 union wxListKeyValue
 {
     long integer;
-    wxChar *string;
+    wxString *string;
 };
 
 // a struct which may contain both types of keys
@@ -397,15 +397,13 @@ public:
         { }
     wxListKey(long i) : m_keyType(wxKEY_INTEGER)
         { m_key.integer = i; }
-    wxListKey(const wxChar *s) : m_keyType(wxKEY_STRING)
-        { m_key.string = wxStrdup(s); }
     wxListKey(const wxString& s) : m_keyType(wxKEY_STRING)
-        { m_key.string = wxStrdup(s.c_str()); }
+        { m_key.string = new wxString(s); }
 
     // accessors
     wxKeyType GetKeyType() const { return m_keyType; }
-    const wxChar *GetString() const
-        { wxASSERT( m_keyType == wxKEY_STRING ); return m_key.string; }
+    const wxString GetString() const
+        { wxASSERT( m_keyType == wxKEY_STRING ); return *m_key.string; }
     long GetNumber() const
         { wxASSERT( m_keyType == wxKEY_INTEGER ); return m_key.integer; }
 
@@ -418,7 +416,7 @@ public:
     ~wxListKey()
     {
         if ( m_keyType == wxKEY_STRING )
-            free(m_key.string);
+            delete m_key.string;
     }
 
 private:
@@ -448,11 +446,11 @@ public:
     virtual ~wxNodeBase();
 
     // FIXME no check is done that the list is really keyed on strings
-    const wxChar *GetKeyString() const { return m_key.string; }
+    wxString GetKeyString() const { return *m_key.string; }
     long GetKeyInteger() const { return m_key.integer; }
 
     // Necessary for some existing code
-    void SetKeyString(wxChar* s) { m_key.string = s; }
+    void SetKeyString(const wxString& s) { m_key.string = new wxString(s); }
     void SetKeyInteger(long i) { m_key.integer = i; }
 
 #ifdef wxLIST_COMPATIBILITY
@@ -602,7 +600,7 @@ protected:
 
         // keyed append
     wxNodeBase *Append(long key, void *object);
-    wxNodeBase *Append(const wxChar *key, void *object);
+    wxNodeBase *Append(const wxString& key, void *object);
 
         // removes node from the list but doesn't delete it (returns pointer
         // to the node or NULL if it wasn't found in the list)

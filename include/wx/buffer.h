@@ -168,8 +168,13 @@ typedef wxWritableCharTypeBuffer<wchar_t> wxWritableWCharBuffer;
 
     #define wxMB2WXbuf wxWCharBuffer
     #define wxWX2MBbuf wxCharBuffer
-    #define wxWC2WXbuf wxChar*
-    #define wxWX2WCbuf wxChar*
+    #if wxUSE_UNICODE_WCHAR
+        #define wxWC2WXbuf wxChar*
+        #define wxWX2WCbuf wxChar*
+    #elif wxUSE_UNICODE_UTF8
+        #define wxWC2WXbuf wxWCharBuffer
+        #define wxWX2WCbuf wxWCharBuffer
+    #endif
 #else // ANSI
     #define wxWxCharBuffer wxCharBuffer
 

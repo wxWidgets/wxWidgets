@@ -25,9 +25,16 @@
 
 #include "wx/unichar.h"
 
+// FIXME-UTF8: remove once UTF-8 functions moved outside
+#include "wx/string.h"
+
 // ===========================================================================
 // implementation
 // ===========================================================================
+
+// ---------------------------------------------------------------------------
+// wxUniChar
+// ---------------------------------------------------------------------------
 
 /* static */
 wxUniChar::value_type wxUniChar::From8bit(char c)
@@ -55,3 +62,35 @@ char wxUniChar::To8bit(wxUniChar::value_type c)
         return '?'; // FIXME-UTF8: what to use as failure character?
     return buf[0];
 }
+
+
+// ---------------------------------------------------------------------------
+// wxUniCharRef
+// ---------------------------------------------------------------------------
+
+#if wxUSE_UNICODE_UTF8
+wxUniCharRef& wxUniCharRef::operator=(const wxUniChar& c)
+{
+    wxString::Utf8CharBuffer utf(wxString::EncodeChar(c));
+    size_t lenOld = wxString::GetUtf8CharLength(*m_pos);
+    size_t lenNew = wxString::GetUtf8CharLength(utf[0]);
+
+    if ( lenNew == lenOld )
+    {
+        iterator pos(m_pos);
+        for ( size_t i = 0; i < lenNew; ++i, ++pos )
+            *pos = utf[i];
+    }
+    else
+    {
+        size_t idx = m_pos - m_str.begin();
+
+        m_str.replace(m_pos, m_pos + lenOld, utf, lenNew);
+
+        // this is needed to keep m_pos valid:
+        m_pos = m_str.begin() + idx;
+    }
+
+    return *this;
+}
+#endif // wxUSE_UNICODE_UTF8

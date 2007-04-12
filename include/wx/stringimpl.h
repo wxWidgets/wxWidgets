@@ -42,6 +42,10 @@
 
 // global pointer to empty string
 extern WXDLLIMPEXP_DATA_BASE(const wxChar*) wxEmptyString;
+#if wxUSE_UNICODE_UTF8
+// FIXME-UTF8: we should have only one wxEmptyString
+extern WXDLLIMPEXP_DATA_BASE(const wxStringCharType*) wxEmptyStringImpl;
+#endif
 
 
 // ----------------------------------------------------------------------------
@@ -61,7 +65,7 @@ extern WXDLLIMPEXP_DATA_BASE(const wxChar*) wxEmptyString;
     #ifdef HAVE_STD_WSTRING
         typedef std::wstring wxStdString;
     #else
-        typedef std::basic_string<wxChar> wxStdString;
+        typedef std::basic_string<wxStringCharType> wxStdString;
     #endif
 #else
     typedef std::string wxStdString;
@@ -97,8 +101,8 @@ struct WXDLLIMPEXP_BASE wxStringData
   size_t  nDataLength,  // actual string length
           nAllocLength; // allocated memory size
 
-  // mimics declaration 'wxChar data[nAllocLength]'
-  wxChar* data() const { return (wxChar*)(this + 1); }
+  // mimics declaration 'wxStringCharType data[nAllocLength]'
+  wxStringCharType* data() const { return (wxStringCharType*)(this + 1); }
 
   // empty string has a special ref count so it's never deleted
   bool  IsEmpty()   const { return (nRefs == -1); }
@@ -143,7 +147,11 @@ protected:
   // string (re)initialization functions
     // initializes the string to the empty value (must be called only from
     // ctors, use Reinit() otherwise)
+#if wxUSE_UNICODE_UTF8
+  void Init() { m_pchData = (wxStringCharType *)wxEmptyStringImpl; } // FIXME-UTF8
+#else
   void Init() { m_pchData = (wxStringCharType *)wxEmptyString; }
+#endif
     // initializes the string with (a part of) C-string
   void InitWith(const wxStringCharType *psz, size_t nPos = 0, size_t nLen = npos);
     // as Init, but also frees old data
@@ -378,7 +386,7 @@ public:
     { ConcatSelf(str.length(), str.c_str()); return *this; }
     // append first n (or all if n == npos) characters of sz
   wxStringImpl& append(const wxStringCharType *sz)
-    { ConcatSelf(wxStrlen(sz), sz); return *this; }
+    { ConcatSelf(Strsize(sz), sz); return *this; }
   wxStringImpl& append(const wxStringCharType *sz, size_t n)
     { ConcatSelf(n, sz); return *this; }
     // append n copies of ch
@@ -395,7 +403,7 @@ public:
     { clear(); return append(str, pos, n); }
     // same as `= first n (or all if n == npos) characters of sz'
   wxStringImpl& assign(const wxStringCharType *sz)
-    { clear(); return append(sz, wxStrlen(sz)); }
+    { clear(); return append(sz, Strsize(sz)); }
   wxStringImpl& assign(const wxStringCharType *sz, size_t n)
     { clear(); return append(sz, n); }
     // same as `= n copies of ch'
@@ -430,9 +438,9 @@ public:
     // insert first n (or all if n == npos) characters of sz
   wxStringImpl& insert(size_t nPos, const wxStringCharType *sz, size_t n = npos);
     // insert n copies of ch
-  wxStringImpl& insert(size_t nPos, size_t n, wxStringCharType ch)// FIXME-UTF8: tricky
+  wxStringImpl& insert(size_t nPos, size_t n, wxStringCharType ch)
     { return insert(nPos, wxStringImpl(n, ch)); }
-  iterator insert(iterator it, wxStringCharType ch) // FIXME-UTF8: tricky
+  iterator insert(iterator it, wxStringCharType ch)
     { size_t idx = it - begin(); insert(idx, 1, ch); return begin() + idx; }
   void insert(iterator it, const_iterator first, const_iterator last)
     { insert(it - begin(), first, last - first); }
@@ -523,6 +531,13 @@ public:
   wxStringCharType *DoGetWriteBuf(size_t nLen);
   void DoUngetWriteBuf();
   void DoUngetWriteBuf(size_t nLen);
+#endif
+
+private:
+#if wxUSE_UNICODE_UTF8
+  static size_t Strsize(const wxStringCharType *s) { return strlen(s); }
+#else
+  static size_t Strsize(const wxStringCharType *s) { return wxStrlen(s); }
 #endif
 
   friend class WXDLLIMPEXP_BASE wxString;

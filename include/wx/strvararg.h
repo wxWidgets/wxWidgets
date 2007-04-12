@@ -93,7 +93,7 @@ template<>
 struct WXDLLIMPEXP_BASE wxArgNormalizer<const wxCStrData&>
 {
     wxArgNormalizer(const wxCStrData& value) : m_value(value) {}
-    const wxStringCharType *get() const;
+    const wxChar *get() const; // FIXME-UTF8: should be wxStringCharType
 
     const wxCStrData& m_value;
 };
@@ -109,7 +109,7 @@ template<>
 struct WXDLLIMPEXP_BASE wxArgNormalizer<const wxString&>
 {
     wxArgNormalizer(const wxString& value) : m_value(value) {}
-    const wxStringCharType *get() const;
+    const wxChar *get() const; // FIXME-UTF8: should be wxStringCharType
 
     const wxString& m_value;
 };
@@ -121,8 +121,7 @@ struct wxArgNormalizer<wxString> : public wxArgNormalizer<const wxString&>
         : wxArgNormalizer<const wxString&>(value) {}
 };
 
-#if wxUSE_UNICODE_WCHAR
-
+#if wxUSE_UNICODE // FIXME-UTF8: should be wxUSE_UNICODE_WCHAR
 template<>
 struct WXDLLIMPEXP_BASE wxArgNormalizer<const char*>
 {
@@ -139,9 +138,30 @@ struct wxArgNormalizer<char*> : public wxArgNormalizer<const char*>
     wxArgNormalizer(char *value)
         : wxArgNormalizer<const char*>(value) {}
 };
+#endif // wxUSE_UNICODE_WCHAR
 
-#elif wxUSE_WCHAR_T // !wxUSE_UNICODE_WCHAR && wxUSE_WCHAR_T
+// FIXME-UTF8
+#if 0 // wxUSE_UNICODE_UTF8
+// for conversion from local charset to UTF-8
+template<>
+struct WXDLLIMPEXP_BASE wxArgNormalizer<const char*>
+{
+    wxArgNormalizer(const char *value);
+    ~wxArgNormalizer();
+    const char *get() const;
 
+    wxCharBuffer *m_value;
+};
+
+template<>
+struct wxArgNormalizer<char*> : public wxArgNormalizer<const char*>
+{
+    wxArgNormalizer(char *value)
+        : wxArgNormalizer<const char*>(value) {}
+};
+#endif // wxUSE_UNICODE_UTF8
+
+#if /*wxUSE_UNICODE_UTF8 || */ !wxUSE_UNICODE // FIXME-UTF8
 template<>
 struct WXDLLIMPEXP_BASE wxArgNormalizer<const wchar_t*>
 {
@@ -158,8 +178,7 @@ struct wxArgNormalizer<wchar_t*> : public wxArgNormalizer<const wchar_t*>
     wxArgNormalizer(wchar_t *value)
         : wxArgNormalizer<const wchar_t*>(value) {}
 };
-
-#endif // wxUSE_UNICODE_WCHAR / !wxUSE_UNICODE_WCHAR && wxUSE_WCHAR_T
+#endif // wxUSE_UNICODE_UTF8 || !wxUSE_UNICODE
 
 // versions for passing wx[W]CharBuffer:
 template<>

@@ -476,14 +476,14 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
     WX_DEFINE_VARARG_FUNC_VOID(wxLog##level, wxDoLog##level)
 
 #define DECLARE_LOG_FUNCTION_IMPL(level)                                    \
-    extern void WXDLLIMPEXP_BASE wxVLog##level(const wxChar *szFormat,      \
+    extern void WXDLLIMPEXP_BASE wxVLog##level(const wxString& format,      \
                                                va_list argptr);             \
-    extern void WXDLLIMPEXP_BASE wxDoLog##level(const wxChar *szFormat,     \
-                                                ...) ATTRIBUTE_PRINTF_1
+    extern void WXDLLIMPEXP_BASE                                            \
+    wxDoLog##level(const wxChar *szFormat, ...) ATTRIBUTE_PRINTF_1
 
 #define DECLARE_LOG_FUNCTION2_EXP_IMPL(level, argclass, arg, expdecl)       \
     extern void expdecl wxVLog##level(argclass arg,                         \
-                                      const wxChar *szFormat,               \
+                                      const wxString& format,               \
                                       va_list argptr);                      \
     extern void expdecl wxDoLog##level(argclass arg,                        \
                                        const wxChar *szFormat,              \
@@ -497,12 +497,12 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
     WX_DEFINE_VARARG_FUNC_NOP(wxLog##level)
 
 #define DECLARE_LOG_FUNCTION_IMPL(level)                                    \
-    inline void wxVLog##level(const wxChar *WXUNUSED(szFormat),             \
+    inline void wxVLog##level(const wxString& WXUNUSED(format),             \
                               va_list WXUNUSED(argptr)) { }                 \
 
 #define DECLARE_LOG_FUNCTION2_EXP_IMPL(level, argclass, arg, expdecl)       \
     inline void wxVLog##level(argclass WXUNUSED(arg),                       \
-                              const wxChar *WXUNUSED(szFormat),             \
+                              const wxString& WXUNUSED(format),             \
                               va_list WXUNUSED(argptr)) {}
 
 // Empty Class to fake wxLogNull
@@ -590,7 +590,7 @@ DECLARE_LOG_FUNCTION_PUBLIC(SysError)
 
     // this version only logs the message if the mask had been added to the
     // list of masks with AddTraceMask()
-    DECLARE_LOG_FUNCTION2_IMPL(Trace, const wxChar*, mask);
+    DECLARE_LOG_FUNCTION2_IMPL(Trace, const wxString&, mask);
     // and this one does nothing if all of level bits are not set in
     // wxLog::GetActive()->GetTraceMask() -- it's deprecated in favour of
     // string identifiers
