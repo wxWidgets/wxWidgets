@@ -4275,29 +4275,8 @@ this value.
 
 \section{Time functions}\label{timefunctions}
 
-The functions in this section deal with getting the current time and
-starting/stopping the global timers. Please note that the timer functions are
-deprecated because they work with one global timer only and
-\helpref{wxTimer}{wxtimer} and/or \helpref{wxStopWatch}{wxstopwatch} classes
-should be used instead. For retrieving the current time, you may also use
-\helpref{wxDateTime::Now}{wxdatetimenow} or
-\helpref{wxDateTime::UNow}{wxdatetimeunow} methods.
-
-
-\membersection{::wxGetElapsedTime}\label{wxgetelapsedtime}
-
-\func{long}{wxGetElapsedTime}{\param{bool}{ resetTimer = true}}
-
-Gets the time in milliseconds since the last \helpref{::wxStartTimer}{wxstarttimer}.
-
-If {\it resetTimer} is true (the default), the timer is reset to zero
-by this call.
-
-See also \helpref{wxTimer}{wxtimer}.
-
-\wxheading{Include files}
-
-<wx/timer.h>
+The functions in this section deal with getting the current time and sleeping
+for the specified time interval.
 
 
 \membersection{::wxGetLocalTime}\label{wxgetlocaltime}
@@ -4312,7 +4291,7 @@ Returns the number of seconds since local time 00:00:00 Jan 1st 1970.
 
 \wxheading{Include files}
 
-<wx/timer.h>
+<wx/stopwatch.h>
 
 
 \membersection{::wxGetLocalTimeMillis}\label{wxgetlocaltimemillis}
@@ -4328,7 +4307,7 @@ Returns the number of milliseconds since local time 00:00:00 Jan 1st 1970.
 
 \wxheading{Include files}
 
-<wx/timer.h>
+<wx/stopwatch.h>
 
 
 \membersection{::wxGetUTCTime}\label{wxgetutctime}
@@ -4343,7 +4322,7 @@ Returns the number of seconds since GMT 00:00:00 Jan 1st 1970.
 
 \wxheading{Include files}
 
-<wx/timer.h>
+<wx/stopwatch.h>
 
 
 \membersection{::wxMicroSleep}\label{wxmicrosleep}
@@ -4393,19 +4372,6 @@ Sleeps for the specified number of seconds.
 \wxheading{Include files}
 
 <wx/utils.h>
-
-
-\membersection{::wxStartTimer}\label{wxstarttimer}
-
-\func{void}{wxStartTimer}{\void}
-
-Starts a stopwatch; use \helpref{::wxGetElapsedTime}{wxgetelapsedtime} to get the elapsed time.
-
-See also \helpref{wxTimer}{wxtimer}.
-
-\wxheading{Include files}
-
-<wx/timer.h>
 
 
 \membersection{::wxUsleep}\label{wxusleep}
