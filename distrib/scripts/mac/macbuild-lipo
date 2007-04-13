@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# you need to change this if you run from outside this dir. 
+# you need to change this if you run from outside this dir.
 if [ "$WXROOT" = "" ]; then
   WXROOT=../../..
 fi
@@ -28,30 +28,30 @@ cd $DIR
 do_build
 cd ..
 
-# Copy over everything, then remove files we need to replace with lipo'd versions  
+# Copy over everything, then remove files we need to replace with lipo'd versions
 mkdir -p bld
 cp -R bld-i386/* bld
 cp -R bld-i386/.pch bld/.pch
 rm bld/lib/*.dylib
 
-# lipo the files, but make sure not to run it on symbolic links  
+# lipo the files, but make sure not to run it on symbolic links
 for item in `cd bld-i386/lib; ls *.dylib`
 do
   if [ -f bld-i386/lib/$item -a ! -L bld-i386/lib/$item ]; then
       lipo -create bld-i386/lib/$item bld-ppc/lib/$item -output bld/lib/$item
   else
       cp -R bld-i386/lib/$item bld/lib
-  fi    
+  fi
 done
-  
+
 # make install hacks - the copy operations mess up the timestamps and thus
 # cause make to erroneously think that the libraries need rebuilt
 touch bld/.pch/wxprec_monodll/wx/*.gch
 touch bld/.pch/wxprec_gldll/wx/*.gch
 touch bld/*.o
 touch bld/lib/*
-    
-# one more hack - inplace wx-config has a hardcoded path in it - we need to 
+
+# one more hack - inplace wx-config has a hardcoded path in it - we need to
 # change that path from bld-i386 to just bld in case someone wants to build things
 # in tree. (wxPython does this, for example)
 python -c "import os; fname = os.path.abspath('bld/wx-config'); data = open(fname).read(); data = data.replace('bld-i386', 'bld'); open(fname, 'w').write(data)"
@@ -59,8 +59,3 @@ python -c "import os; fname = os.path.abspath('bld/wx-config'); data = open(fnam
 cd bld
 make prefix=$INSTALLDIR install
 
-if [ "$WXPYTHON" == "1" ]; then
-  make -C contrib/src/animate prefix=$INSTALLDIR install
-  make -C contrib/src/gizmos prefix=$INSTALLDIR install
-  make -C contrib/src/stc prefix=$INSTALLDIR install
-fi

@@ -20,9 +20,3 @@ utils/tex2rtf/docs/*.bmp
 utils/tex2rtf/docs/*.shg
 utils/tex2rtf/docs/*.wmf
 utils/tex2rtf/docs/*.gif
-
-contrib/docs/latex/svg/*.gif
-contrib/docs/latex/svg/*.tex
-contrib/docs/latex/svg/*.ini
-contrib/docs/latex/svg/*.sty
-

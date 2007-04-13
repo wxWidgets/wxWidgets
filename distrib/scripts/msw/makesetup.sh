@@ -39,64 +39,63 @@ fi
 getfilelist(){
   port=$1
   outfile=$2
-  
+
   filelist="base.rsp"
-  contribfiles="stc.rsp contrib.rsp ogl.rsp"
   utilsfiles="tex2rtf.rsp utils.rsp utilmake.rsp"
-  commonfiles="generic.rsp generic_samples.rsp jpeg.rsp tiff.rsp xml.rsp deprecated.rsp makefile.rsp $utilsfiles $contribfiles"
-  
+  commonfiles="generic.rsp generic_samples.rsp jpeg.rsp tiff.rsp xml.rsp makefile.rsp $utilsfiles"
+
   if [ ! $port = "base" ]; then
-    filelist="$filelist $commonfiles" 
-  fi 
-  
+    filelist="$filelist $commonfiles"
+  fi
+
   if [ $port = "msw" ] || [ $port = "all" ]; then
     filelist="$filelist msw.rsp univ.rsp vc.rsp mmedia.rsp wince.rsp dmc.rsp"
   fi
-  
+
   if [ $port = "os2" ] || [ $port = "all" ]; then
     filelist="$filelist os2.rsp"
   fi
-  
+
   if [ $port = "x11" ] || [ $port = "all" ]; then
     filelist="$filelist x11.rsp"
   fi
-  
+
   if [ $port = "mgl" ] || [ $port = "all" ]; then
-    filelist="$filelist mgl.rsp" 
+    filelist="$filelist mgl.rsp"
   fi
-  
+
   if [ $port = "gtk" ] || [ $port = "all" ]; then
     filelist="$filelist gtk.rsp"
   fi
-  
+
   if [ $port = "cocoa" ] || [ $port = "all" ]; then
     filelist="$filelist cocoa.rsp"
   fi
-  
+
   if [ $port = "motif" ] || [ $port = "all" ]; then
     filelist="$filelist motif.rsp"
   fi
-  
+
   if [ $port = "mac" ] || [ $port = "all" ]; then
     filelist="$filelist mac.rsp"
   fi
-  
+
   if [ $port = "all" ]; then
     filelist="$filelist palmos.rsp"
   fi
-  
+
   tempfile="/tmp/wx$port.files.in"
-  rm -f $tempfile 
+  rm -f $tempfile
   rm -f $outfile
-  
+
   olddir=$PWD
   cd $MANIFESTDIR
-  
+
   cat $filelist > $tempfile
-  
+
   cd $APPDIR
   expandlines $tempfile $outfile
-  
+
   cd $olddir
 }
 
@@ -166,11 +165,11 @@ ziptotar()
     pushd $changeto
 
     unzip $ZIPFLAGS $archive
-    
+
     tar cfz $archive.tar.gz $dirname
 
     tar -cvf $dirname | bzip2 -9 > $archive.tar.bz2
-    
+
     rm -rf $dirname
 
     popd
@@ -218,7 +217,7 @@ dospinos2()
 
     cd $APPDIR
     getfilelist "os2" /tmp/os2files
-    
+
     # Zip up the complete wxOS2-xxx.zip file
     zip $ZIPFLAGS -@ $DESTDIR/wxOS2-$VERSION.zip < /tmp/os2files
 
@@ -243,7 +242,7 @@ dospinos2()
 dospinmsw()
 {
     echo Zipping wxMSW...
-    
+
     cd $APPDIR
 
     # now expand the wildcards to actual file names
@@ -263,12 +262,12 @@ dospinwxall()
     echo Zipping individual components
     rm -f $DESTDIR/wxWidgets-$VERSION-all.zip
 
-    # Save adding all the wxMSW files again    
+    # Save adding all the wxMSW files again
     if [ ! -f $DESTDIR/wxWidgets-$VERSION-win.zip ]; then
         dospinmsw
     fi
     cp $DESTDIR/wxWidgets-$VERSION-win.zip $DESTDIR/wxWidgets-$VERSION-all.zip
-    
+
     cat $MANIFESTDIR/cw_mac.rsp $MANIFESTDIR/vc.rsp $MANIFESTDIR/x11.rsp $MANIFESTDIR/gtk.rsp $MANIFESTDIR/cocoa.rsp $MANIFESTDIR/motif.rsp $MANIFESTDIR/mac.rsp $MANIFESTDIR/mgl.rsp $MANIFESTDIR/os2.rsp $MANIFESTDIR/palmos.rsp | sort | uniq > /tmp/all.txt
     zip $ZIPFLAGS -@ -u $DESTDIR/wxWidgets-$VERSION-all.zip < /tmp/all.txt
 
@@ -318,7 +317,7 @@ dospindocs()
 
     echo Creating $DESTDIR/wxWidgets-$VERSION-DocSource.zip
     expandlines $MANIFESTDIR/docsrc.rsp /tmp/docsources
-    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-DocSource.zip < /tmp/docsources 
+    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-DocSource.zip < /tmp/docsources
     rearchive wxWidgets-$VERSION-DocSource.zip wxWidgets-$VERSION $DESTDIR
 
     echo Creating $DESTDIR/wxWidgets-$VERSION-WinHelp.zip
@@ -347,16 +346,16 @@ dospindocs()
 
     echo Creating $DESTDIR/wxWidgets-$VERSION-HTMLHelp.zip
     expandlines $MANIFESTDIR/wx_chm.rsp /tmp/chmdocs
-    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-HTMLHelp.zip < /tmp/chmdocs 
+    zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-HTMLHelp.zip < /tmp/chmdocs
     rearchive wxWidgets-$VERSION-HTMLHelp.zip wxWidgets-$VERSION $DESTDIR
 
     # Add Linuxy docs to a separate archive to be transported to Linux for the
     # Linux-based releases
     echo Creating $DESTDIR/wxWidgets-$VERSION-LinuxDocs.zip
-    
+
     cat $MANIFESTDIR/wx_html.rsp $MANIFESTDIR/wx_pdf.rsp $MANIFESTDIR/wx_htb.rsp > /tmp/linuxdocs.in
     expandlines /tmp/linuxdocs.in /tmp/linuxdocs
-    
+
     zip $ZIPFLAGS -@ $DESTDIR/wxWidgets-$VERSION-LinuxDocs.zip < /tmp/linuxdocs
 
     # PDF/HTML docs that should go into the Windows setup because
@@ -370,30 +369,30 @@ dospindocs()
 
 dospinport(){
     port=$1
-    
+
     if [ $port != "all" ]; then
-        portname="`echo $port|tr '[a-z]' '[A-Z]'`"    
+        portname="`echo $port|tr '[a-z]' '[A-Z]'`"
     else
         portname="wxWidgets"
     fi
-    
+
     echo "Zipping wx$portname..."
 
     cd $APPDIR
     portfiles="/tmp/wx$port.files"
     getfilelist "$port" "$portfiles"
 
-    zip $ZIPFLAGS -@ $DESTDIR/wx$portname-$VERSION.zip < $portfiles 
+    zip $ZIPFLAGS -@ $DESTDIR/wx$portname-$VERSION.zip < $portfiles
     zip $ZIPFLAGS -g $DESTDIR/wx$portname-$VERSION.zip LICENSE.txt COPYING.LIB CHANGES.txt README.txt
-    
+
     if [ $port = "msw" ] || [ $port = "all" ]; then
-        zip $ZIPFLAGS -g $DESTDIR/wx$portname-$VERSION.zip README-MSW.txt INSTALL-MSW.txt        
+        zip $ZIPFLAGS -g $DESTDIR/wx$portname-$VERSION.zip README-MSW.txt INSTALL-MSW.txt
     fi
-    
+
     if [ $port = "os2" ] || [ $port = "all" ]; then
-        zip $ZIPFLAGS -g $DESTDIR/wx$portname-$VERSION.zip INSTALL-OS2.txt          
+        zip $ZIPFLAGS -g $DESTDIR/wx$portname-$VERSION.zip INSTALL-OS2.txt
     fi
-    
+
     # put all files in a wxWidgets-$VERSION subdir in the zip archive
     rearchive wx$portname-$VERSION.zip wxWidgets-$VERSION $DESTDIR
 }
@@ -421,7 +420,6 @@ dospininstaller()
     rm -f BuildCVS.txt descrip.mms
     rm -f setup.h_vms
     rm -f docs/html/wxbook.htm docs/html/roadmap.htm
-    rm -f -r contrib/docs/latex/ogl
     rm -f src/mingegcs.bat
     rm -f -r distrib
     rm -f *.spec
@@ -432,7 +430,7 @@ dospininstaller()
     if [ ! -d bin ]; then
         mkdir bin
     fi
-    
+
     #cp $APPDIR/bin/tex2rtf.exe bin
     #cp $APPDIR/bin/tex2rtf.chm bin
     #cp $APPDIR/bin/widgets.exe bin
@@ -453,74 +451,74 @@ dospininstaller()
     if [ "$INNO" != "0" ]; then
         echo Generating $SETUPSCRIPTNAME
         rm -f $SETUPSCRIPTNAME
-    
+
         sh $SCRIPTDIR/msw/makeinno.sh $SETUPIMAGEDIR $INNOTOP $INNOBOTTOM $SETUPSCRIPTNAME
-    
+
         if [ ! -f $SETUPSCRIPTNAME ]; then
             echo "*** Error - something went wrong with the script file generation."
             exit 1
         fi
-    
+
         # Now replace %VERSION% with the real application version, and other
         # variables
         echo Replacing variables in the setup script
         doreplace $SETUPSCRIPTNAME "s/%VERSION%/$VERSION/g"
         doreplace $SETUPSCRIPTNAME "s/%COPYRIGHTHOLDER%/$AUTHOR/g"
         doreplace $SETUPSCRIPTNAME "s/%VENDOR%/$VENDOR/g"
-    
+
         unix2dosname $READMEFILE
         doreplace $SETUPSCRIPTNAME "s;%READMEFILE%;$RETVALUE;g"
-    
+
         unix2dosname $READMEAFTERFILE
         doreplace $SETUPSCRIPTNAME "s;%READMEAFTERFILE%;$RETVALUE;g"
-    
+
         unix2dosname $LICENSEFILE
         doreplace $SETUPSCRIPTNAME "s;%LICENSEFILE%;$RETVALUE;g"
-    
+
         doreplace $SETUPSCRIPTNAME "s/%APPNAME%/$APPNAME/g"
         doreplace $SETUPSCRIPTNAME "s/%APPTITLE%/$APPTITLE/g"
-    
+
         unix2dosname $SETUPIMAGEDIR
         doreplace $SETUPSCRIPTNAME "s;%SOURCEDIR%;$RETVALUE;g"
-    
+
         unix2dosname $DESTDIR
         doreplace $SETUPSCRIPTNAME "s;%OUTPUTDIR%;$RETVALUE;g"
-    
+
         doreplace $SETUPSCRIPTNAME "s/%APPEXTENSION%/$APPEXTENSION/g"
-    
+
         # FIXME: how do we get the first name in the list?
         if [ "$MANUALFILES" != "" ]; then
             HELPFILE=`basename $MANUALFILES`
             unix2dosname $HELPFILE
             doreplace $SETUPSCRIPTNAME "s;%HELPFILE%;$RETVALUE;g"
         fi
-    
+
         rm -f $DESTDIR/setup*.* $DESTDIR/wxMSW-$VERSION-Setup.exe
-    
+
         # Inno Setup complains if this step is not done
         unix2dos --unix2dos $SETUPSCRIPTNAME
-        
+
         # Now invoke INNO compiler on the new ISS file
         # First, make a DOS filename or Inno Setup will get confused.
-    
+
         unix2dosname2 $SETUPSCRIPTNAME
         DOSFILENAME=$RETVALUE
-    
+
         # Note: the double slash is Mingw32/MSYS convention for
         # denoting a switch, that must not be converted into
         # a path (otherwise /c = c:/)
-    
+
         cd `dirname $SETUPSCRIPTNAME`
         BASESCRIPTNAME=`basename $SETUPSCRIPTNAME`
         echo Invoking Inno Setup compiler on $BASESCRIPTNAME
-    
+
         "$SETUPCOMPILER" //cc $BASESCRIPTNAME
-    
+
         if [ ! -f $DESTDIR/setup.exe ]; then
             echo "*** Error - the setup.exe was not generated."
             exit
         fi
-    
+
         cd $DESTDIR
         mv setup.exe wxMSW-$VERSION-Setup.exe
 
@@ -571,9 +569,7 @@ makesetup()
     rm -f $DESTDIR/wx*.zip
     rm -f $DESTDIR/*.htb
     rm -f $DESTDIR/ogl3*.zip
-    rm -f $DESTDIR/contrib*.zip
     rm -f $DESTDIR/tex2rtf2*.zip
-    rm -f $DESTDIR/mmedia*.zip
     rm -f $DESTDIR/jpeg*.zip
     rm -f $DESTDIR/tiff*.zip
     rm -f $DESTDIR/utils*.zip
@@ -605,7 +601,7 @@ makesetup()
     cp $WEBFILES/site/faq*.htm $APPDIR/docs/html
     cp $WEBFILES/site/platform.htm $APPDIR/docs/html
     cp $WEBFILES/site/i18n.htm $APPDIR/docs/html
-    
+
     echo Copying readme files...
     cp $APPDIR/docs/msw/readme.txt README-MSW.txt
     cp $APPDIR/docs/msw/install.txt INSTALL-MSW.txt
@@ -614,7 +610,7 @@ makesetup()
     cp $APPDIR/docs/lgpl.txt COPYING.LIB
     cp $APPDIR/docs/changes.txt CHANGES.txt
     cp $APPDIR/docs/readme.txt README.txt
-    
+
     # Copy setup0.h files to setup.h
     # OS/2 always built with configure now
     # cp $APPDIR/include/wx/os2/setup0.h $APPDIR/include/wx/os2/setup.h
@@ -658,7 +654,7 @@ makesetup()
     fi
 
     docopydocs $APPDIR $DESTDIR
-    
+
     # Time to regenerate the Inno Install script
     dospininstaller
 }

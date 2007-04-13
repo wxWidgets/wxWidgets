@@ -71,11 +71,7 @@ cat $SCRIPTDIR/manifests/mac.rsp  \
     $SCRIPTDIR/manifests/cw_mac.rsp  \
     $SCRIPTDIR/manifests/tex2rtf.rsp  \
     $SCRIPTDIR/manifests/utils.rsp  \
-    $SCRIPTDIR/manifests/ogl.rsp  \
-    $SCRIPTDIR/manifests/stc.rsp  \
     $SCRIPTDIR/manifests/xml.rsp  \
-    $SCRIPTDIR/manifests/contrib.rsp  \
-    $SCRIPTDIR/manifests/deprecated.rsp  \
     $SCRIPTDIR/manifests/makefile.rsp  \
     $SCRIPTDIR/manifests/tiff.rsp  \
     $SCRIPTDIR/manifests/jpeg.rsp \
@@ -91,7 +87,6 @@ mkdir wxMac-${WXVER}
 cd wxMac-${WXVER}
 
 $TAR xf ../wxMac-${WXVER}.tar
-rm -f -r contrib/src/mmedia contrib/samples/mmedia
 echo Copying readme files...
 cp $WXSRC/docs/mac/readme.txt README-MAC.txt
 cp $WXSRC/docs/mac/install.txt INSTALL-MAC.txt
@@ -144,15 +139,10 @@ cat $SCRIPTDIR/manifests/generic.rsp \
     $SCRIPTDIR/manifests/univ.rsp  \
     $SCRIPTDIR/manifests/mgl.rsp  \
     $SCRIPTDIR/manifests/dfb.rsp  \
-    $SCRIPTDIR/manifests/contrib.rsp  \
-    $SCRIPTDIR/manifests/deprecated.rsp  \
     $SCRIPTDIR/manifests/utilmake.rsp  \
     $SCRIPTDIR/manifests/utils.rsp  \
-    $SCRIPTDIR/manifests/mmedia.rsp  \
     $SCRIPTDIR/manifests/tex2rtf.rsp  \
-    $SCRIPTDIR/manifests/stc.rsp  \
     $SCRIPTDIR/manifests/xml.rsp  \
-    $SCRIPTDIR/manifests/ogl.rsp  \
     $SCRIPTDIR/manifests/makefile.rsp  \
     $SCRIPTDIR/manifests/tiff.rsp  \
     $SCRIPTDIR/manifests/jpeg.rsp  \

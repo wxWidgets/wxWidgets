@@ -39,16 +39,15 @@ getfilelist(){
   outfile=$2
 
   filelist="base.rsp"
-  contribfiles="stc.rsp contrib.rsp ogl.rsp"
   utilsfiles="tex2rtf.rsp utils.rsp utilmake.rsp"
-  commonfiles="generic.rsp generic_samples.rsp jpeg.rsp tiff.rsp xml.rsp deprecated.rsp makefile.rsp $utilsfiles $contribfiles"
+  commonfiles="generic.rsp generic_samples.rsp jpeg.rsp tiff.rsp xml.rsp makefile.rsp $utilsfiles"
 
   if [ ! $port = "base" ]; then
     filelist="$filelist $commonfiles"
   fi
 
   if [ $port = "msw" ] || [ $port = "all" ]; then
-    filelist="$filelist msw.rsp univ.rsp vc.rsp mmedia.rsp wince.rsp dmc.rsp"
+    filelist="$filelist msw.rsp univ.rsp vc.rsp wince.rsp dmc.rsp"
   fi
 
   if [ $port = "os2" ] || [ $port = "all" ]; then
@@ -62,11 +61,11 @@ getfilelist(){
   if [ $port = "mgl" ] || [ $port = "all" ]; then
     filelist="$filelist mgl.rsp"
   fi
-  
+
   if [ $port = "dfb" ] || [ $port = "all" ]; then
-    filelist="$filelist univ.rsp dfb.rsp" 
+    filelist="$filelist univ.rsp dfb.rsp"
   fi
-  
+
   if [ $port = "gtk" ] || [ $port = "all" ]; then
     filelist="$filelist gtk.rsp"
   fi
@@ -190,7 +189,7 @@ prepareforrelease()
 
     cp $APPDIR/docs/mgl/readme.txt $APPDIR/readme-mgl.txt
     cp $APPDIR/docs/mgl/install.txt $APPDIR/install-mgl.txt
-    
+
     cp $APPDIR/docs/dfb/install.txt $APPDIR/install-dfb.txt
 
     cp $APPDIR/docs/x11/readme.txt $APPDIR/readme-x11.txt
@@ -212,7 +211,6 @@ prepareforrelease()
     rm -f BuildCVS.txt descrip.mms
     rm -f setup.h_vms
     rm -f docs/html/wxbook.htm docs/html/roadmap.htm
-    rm -f -r contrib/docs/latex/ogl
     rm -f src/mingegcs.bat
 #    rm -f *.spec
     rm -f src/gtk/descrip.mms src/motif/descrip.mms

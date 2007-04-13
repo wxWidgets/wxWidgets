@@ -132,8 +132,6 @@ utils/hhp2cached/*.xbm
 utils/hhp2cached/*.xpm
 utils/hhp2cached/*.txt
 
-contrib/lib/dummy
-
 demos/demos.bkl
 demos/makefile*
 

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# you need to change this if you run from outside this dir. 
+# you need to change this if you run from outside this dir.
 if [ "$WXROOT" = "" ]; then
   WXROOT=../../..
 fi
@@ -19,10 +19,5 @@ fi
 do_build
 
 make prefix=$INSTALLDIR install
-
-if [ "$WXPYTHON" == "1" ]; then
-  make -C contrib/src/gizmos prefix=$INSTALLDIR install
-  make -C contrib/src/stc prefix=$INSTALLDIR install
-fi
 
 cd $OLDDIR

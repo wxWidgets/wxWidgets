@@ -82,25 +82,6 @@ samples/xrc/rc/*.ico
 samples/xrc/rc/*.xpm
 samples/xrc/rc/*.xrc
 
-contrib/utils/convertrc/*.cpp
-contrib/utils/convertrc/*.h
-contrib/utils/convertrc/*.rc
-contrib/utils/convertrc/*.def
-contrib/utils/convertrc/*.xbm
-contrib/utils/convertrc/makefile.vc
-contrib/utils/convertrc/makefile.bcc
-contrib/utils/convertrc/makefile.b32
-contrib/utils/convertrc/makefile.wat
-contrib/utils/convertrc/makefile.g95
-contrib/utils/convertrc/makefile.unx
-contrib/utils/convertrc/makefile.vms
-contrib/utils/convertrc/Makefile.in
-contrib/utils/convertrc/*.txt
-contrib/utils/convertrc/*.ico
-contrib/utils/convertrc/*.bmp
-contrib/utils/convertrc/*.xpm
-contrib/utils/convertrc/convertrc.dsp
-
 utils/wxrc/*.cpp
 utils/wxrc/*.h
 utils/wxrc/*.rc

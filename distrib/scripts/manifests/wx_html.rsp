@@ -11,8 +11,3 @@ docs/html/tex2rtf/*.gif
 docs/html/odbc/*.htm
 
 docs/html/gettext/*.html
-
-contrib/docs/html/ogl/*.htm
-contrib/docs/html/ogl/*.html
-contrib/docs/html/ogl/*.gif
-
