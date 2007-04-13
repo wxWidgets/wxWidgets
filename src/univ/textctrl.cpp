@@ -1444,8 +1444,12 @@ wxString wxTextCtrl::GetSelectionText() const
 void wxTextCtrl::SetSelection(wxTextPos from, wxTextPos to)
 {
     // selecting till -1 is the same as selecting to the end
-    if ( to == -1 && from != -1 )
+    if ( to == -1 )
     {
+        // and selecting (-1, -1) range is the same as selecting everything, by
+        // convention
+        if ( from == -1 )
+            from = 0;
         to = GetLastPosition();
     }
 
