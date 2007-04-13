@@ -12,10 +12,10 @@
 
 Represents a node in an XML document. See \helpref{wxXmlDocument}{wxxmldocument}.
 
-Node has a name and may have content
-and properties. Most common node types are {\tt wxXML\_TEXT\_NODE} (name and
-properties are irrelevant) and {\tt wxXML\_ELEMENT\_NODE} (e.g. in {\tt <title>hi</title>} there is
-an element with name="title", irrelevant content and one child ({\tt wxXML\_TEXT\_NODE}
+Node has a name and may have content and properties. Most common node types are 
+{\tt wxXML\_TEXT\_NODE} (name and properties are irrelevant) and 
+{\tt wxXML\_ELEMENT\_NODE} (e.g. in {\tt <title>hi</title>} there is an element
+with name="title", irrelevant content and one child ({\tt wxXML\_TEXT\_NODE}
 with content="hi").
 
 If \texttt{wxUSE\_UNICODE} is 0, all strings are encoded in the encoding given to
@@ -65,24 +65,31 @@ enum wxXmlNodeType
 
 \membersection{wxXmlNode::wxXmlNode}\label{wxxmlnodewxxmlnode}
 
-
 \func{}{wxXmlNode}{\param{wxXmlNode* }{parent}, \param{wxXmlNodeType }{type}, \param{const wxString\& }{name}, \param{const wxString\& }{content = wxEmptyString}, \param{wxXmlProperty* }{props = \NULL}, \param{wxXmlNode* }{next = \NULL}}
 
 \wxheading{Parameters}
 
-\docparam{parent}{The parent node. Can be \NULL.}
+\docparam{parent}{The parent node to which append this node instance.
+If this argument is \NULL this new node will be {\it floating} and it can be appended later to 
+another one using the \helpref{AddChild}{wxxmlnodeaddchild} or \helpref{InsertChild}{wxxmlnodeinsertchild}
+functions. Otherwise the child is already added to the XML tree by this
+constructor and it shouldn't be done again.}
 \docparam{type}{One of the wxXmlNodeType enumeration value.}
 \docparam{name}{The name of the node. This is the string which appears between angular brackets.}
-\docparam{content}{The content of the node. Only meaningful when {\it type} is {\tt wxXML\_TEXT\_NODE} or {\tt wxXML\_CDATA\_SECTION\_NODE}.}
-\docparam{props}{If not \NULL, this wxXmlProperty object and its eventual siblings are attached to
-the node.}
+\docparam{content}{The content of the node. Only meaningful when {\it type} is 
+{\tt wxXML\_TEXT\_NODE} or {\tt wxXML\_CDATA\_SECTION\_NODE}.}
+\docparam{props}{If not \NULL, this \helpref{wxXmlProperty}{wxxmlproperty} object 
+and its eventual siblings are attached to the node.}
 \docparam{next}{If not \NULL, this node and its eventual siblings are attached to
 the node.}
+
+Creates this XML node and eventually insert it into an existing XML tree.
 
 \func{}{wxXmlNode}{\param{const wxXmlNode\& }{node}}
 
 Copy constructor. Note that this does NOT copy syblings
-and parent pointer, i.e. \helpref{GetParent()}{wxxmlnodegetparent} and \helpref{GetNext()}{wxxmlnodegetnext} will return \NULL
+and parent pointer, i.e. \helpref{GetParent()}{wxxmlnodegetparent} and 
+\helpref{GetNext()}{wxxmlnodegetnext} will return \NULL
 after using copy ctor and are never unmodified by operator=.
 
 On the other hand, it DOES copy children and properties.
@@ -90,7 +97,7 @@ On the other hand, it DOES copy children and properties.
 
 \func{}{wxXmlNode}{\param{wxXmlNodeType }{type}, \param{const wxString\& }{name}, \param{const wxString\& }{content = wxEmptyString}}
 
-A simplified version of the first constructor form.
+A simplified version of the first constructor form, assuming a \NULL parent.
 
 
 \membersection{wxXmlNode::\destruct{wxXmlNode}}\label{wxxmlnodedtor}
