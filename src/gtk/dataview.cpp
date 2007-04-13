@@ -678,7 +678,17 @@ gtk_wx_cell_renderer_activate(
 
     unsigned int model_col = cell->GetOwner()->GetModelColumn();
 
-    if (event->type == GDK_BUTTON_PRESS)
+    if (!event)
+    {
+        bool ret = false;
+        
+        // activated by <ENTER>
+        if (cell->Activate( renderrect, model, model_col, model_row ))
+                    ret = true;
+        
+        return ret;
+    }
+    else if (event->type == GDK_BUTTON_PRESS)
     {
         GdkEventButton *button_event = (GdkEventButton*) event;
         wxPoint pt( ((int) button_event->x) - renderrect.x,
