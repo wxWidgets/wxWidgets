@@ -1583,6 +1583,10 @@ SOURCE=..\..\include\wx\filesys.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\flags.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\fontenc.h
 # End Source File
 # Begin Source File

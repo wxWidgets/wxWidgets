@@ -340,6 +340,7 @@ ALL_BASE_HEADERS =  \
 	wx/event.h \
 	wx/except.h \
 	wx/features.h \
+	wx/flags.h \
 	wx/ffile.h \
 	wx/file.h \
 	wx/fileconf.h \
@@ -479,6 +480,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/event.h \
 	wx/except.h \
 	wx/features.h \
+	wx/flags.h \
 	wx/ffile.h \
 	wx/file.h \
 	wx/fileconf.h \
@@ -2849,6 +2851,7 @@ COND_TOOLKIT_MAC_ADVANCED_PLATFORM_HDR =  \
 @COND_TOOLKIT_MSW@ADVANCED_PLATFORM_NATIVE_HDR = wx/msw/datectrl.h
 @COND_TOOLKIT_WINCE@ADVANCED_PLATFORM_NATIVE_HDR = wx/msw/datectrl.h
 COND_WXUNIV_0_ADVANCED_HDR =  \
+	wx/aboutdlg.h \
 	wx/animate.h \
 	wx/animdecod.h \
 	wx/bmpcbox.h \
@@ -2856,7 +2859,6 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/dataview.h \
 	wx/dateevt.h \
 	wx/dcbuffer.h \
-	wx/aboutdlg.h \
 	wx/generic/aboutdlgg.h \
 	wx/generic/animate.h \
 	wx/generic/bmpcbox.h \
@@ -2891,6 +2893,7 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	$(ADVANCED_PLATFORM_NATIVE_HDR)
 @COND_WXUNIV_0@ADVANCED_HDR = $(COND_WXUNIV_0_ADVANCED_HDR)
 COND_WXUNIV_1_ADVANCED_HDR =  \
+	wx/aboutdlg.h \
 	wx/animate.h \
 	wx/animdecod.h \
 	wx/bmpcbox.h \
@@ -2898,7 +2901,6 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/dataview.h \
 	wx/dateevt.h \
 	wx/dcbuffer.h \
-	wx/aboutdlg.h \
 	wx/generic/aboutdlgg.h \
 	wx/generic/animate.h \
 	wx/generic/bmpcbox.h \
