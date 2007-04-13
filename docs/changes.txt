@@ -148,6 +148,7 @@ wxMSW:
 - Corrected GetChecked() for events from checkable menu items (smanders)
 - Fixed popup menus under Windows NT 4
 - Fixed bug in wxThread::Wait() in console applications introduced in 2.8.3
+- Support right-aligned/centered owner drawn items in wxListCtrl (troelsk)
 - Compilation fixed with WXWIN_COMPATIBILITY_2_6==0
 
 wxGTK:

@@ -2417,22 +2417,22 @@ static RECT GetCustomDrawnItemRect(const NMCUSTOMDRAW& nmcd)
     return rc;
 }
 
-static void HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
+static bool HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
 {
     NMCUSTOMDRAW& nmcd = pLVCD->nmcd;
 
     HDC hdc = nmcd.hdc;
     HWND hwndList = nmcd.hdr.hwndFrom;
+    const int col = pLVCD->iSubItem;
     const DWORD item = nmcd.dwItemSpec;
-
 
     // the font must be valid, otherwise we wouldn't be painting the item at all
     SelectInHDC selFont(hdc, hfont);
 
     // get the rectangle to paint
     RECT rc;
-    ListView_GetSubItemRect(hwndList, item, pLVCD->iSubItem, LVIR_BOUNDS, &rc);
-    if ( !pLVCD->iSubItem )
+    ListView_GetSubItemRect(hwndList, item, col, LVIR_BOUNDS, &rc);
+    if ( !col )
     {
         // broken ListView_GetSubItemRect() returns the entire item rect for
         // 0th subitem while we really need just the part for this column
@@ -2453,7 +2453,7 @@ static void HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
     wxZeroMemory(it);
     it.mask = LVIF_TEXT | LVIF_IMAGE;
     it.iItem = item;
-    it.iSubItem = pLVCD->iSubItem;
+    it.iSubItem = col;
     it.pszText = text;
     it.cchTextMax = WXSIZEOF(text);
     ListView_GetItem(hwndList, &it);
@@ -2483,12 +2483,38 @@ static void HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
 
     ::SetBkMode(hdc, TRANSPARENT);
 
-    // TODO: support for centred/right aligned columns
-    ::DrawText(hdc, text, -1, &rc,
+    UINT fmt = DT_SINGLELINE |
 #ifndef __WXWINCE__
                DT_WORD_ELLIPSIS |
 #endif // __WXWINCE__
-               DT_NOPREFIX | DT_SINGLELINE | DT_VCENTER);
+               DT_NOPREFIX |
+               DT_VCENTER;
+
+    LV_COLUMN lvCol;
+    wxZeroMemory(lvCol);
+    lvCol.mask = LVCF_FMT;
+    if ( ListView_GetColumn(hwndList, col, &lvCol) )
+    {
+        switch ( lvCol.fmt & LVCFMT_JUSTIFYMASK )
+        {
+            case LVCFMT_LEFT:
+                fmt |= DT_LEFT;
+                break;
+
+            case LVCFMT_CENTER:
+                fmt |= DT_CENTER;
+                break;
+
+            case LVCFMT_RIGHT:
+                fmt |= DT_RIGHT;
+                break;
+        }
+    }
+    //else: failed to get alignment, assume it's DT_LEFT (default)
+
+    DrawText(hdc, text, -1, &rc, fmt);
+
+    return true;
 }
 
 static void HandleItemPostpaint(NMCUSTOMDRAW nmcd)
