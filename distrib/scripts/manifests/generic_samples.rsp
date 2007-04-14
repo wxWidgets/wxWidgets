@@ -1,4 +1,3 @@
-samples/.cvsignore
 samples/sample.ico
 samples/sample.r
 samples/sample.rc
@@ -25,7 +24,6 @@ samples/access/makefile.unx
 samples/access/makefile.wat
 samples/access/makefile.vc
 samples/access/accesstest.cpp
-samples/artprov/.cvsignore
 samples/artprov/artbrows.cpp
 samples/artprov/artbrows.h
 samples/artprov/artprov.bkl
@@ -47,12 +45,10 @@ samples/artprov/makefile.unx
 samples/artprov/makefile.wat
 samples/artprov/makefile.vc
 samples/artprov/arttest.cpp
-samples/calendar/.cvsignore
 samples/calendar/calendar.bkl
 samples/calendar/calendar.rc
 samples/calendar/calendarM5.xml
 samples/calendar/descrip.mms
-samples/calendar/makefile.sl
 samples/calendar/calendar.dsp
 samples/calendar/Makefile.in
 samples/calendar/makefile.bcc
@@ -61,7 +57,6 @@ samples/calendar/makefile.unx
 samples/calendar/makefile.wat
 samples/calendar/makefile.vc
 samples/calendar/calendar.cpp
-samples/caret/.cvsignore
 samples/caret/caret.bkl
 samples/caret/caret.rc
 samples/caret/caretM5.xml
@@ -75,13 +70,11 @@ samples/caret/makefile.unx
 samples/caret/makefile.wat
 samples/caret/makefile.vc
 samples/caret/caret.cpp
-samples/checklst/.cvsignore
 samples/checklst/checklst.bkl
 samples/checklst/checklst.rc
 samples/checklst/checklst.rcO
 samples/checklst/checklstM5.xml
 samples/checklst/descrip.mms
-samples/checklst/makefile.va
 samples/checklst/mondrian.xpm
 samples/checklst/mondros2.ico
 samples/checklst/checklst.dsp
@@ -91,7 +84,6 @@ samples/checklst/makefile.gcc
 samples/checklst/makefile.unx
 samples/checklst/makefile.wat
 samples/checklst/checklst.cpp
-samples/config/.cvsignore
 samples/config/config.bkl
 samples/config/configM5.xml
 samples/config/conftest.rc
@@ -114,7 +106,6 @@ samples/console/Makefile.in
 samples/console/makefile.bcc
 samples/console/makefile.vc
 samples/console/makefile.wat
-samples/controls/.cvsignore
 samples/controls/controls.rc
 samples/controls/controlsM5.xml
 samples/controls/controlsW7.xml
@@ -153,7 +144,6 @@ samples/dataview/makefile.gcc
 samples/dataview/makefile.wat
 samples/dataview/makefile.vc
 samples/dataview/dataview.cpp
-samples/db/.cvsignore
 samples/db/db.xpm
 samples/db/dbM5.xml
 samples/db/dbtest.h
@@ -179,7 +169,6 @@ samples/debugrpt/Makefile.in
 samples/debugrpt/makefile.bcc
 samples/debugrpt/makefile.gcc
 samples/debugrpt/makefile.wat
-samples/dialogs/.cvsignore
 samples/dialogs/descrip.mms
 samples/dialogs/dialogs.ico
 samples/dialogs/dialogs.rc
@@ -187,7 +176,6 @@ samples/dialogs/dialogs.rcO
 samples/dialogs/dialogsM5.xml
 samples/dialogs/dialogsW7.xml
 samples/dialogs/makefile.mgl
-samples/dialogs/makefile.va
 samples/dialogs/tips.txt
 samples/dialogs/dialogs.h
 samples/dialogs/dialogs.bkl
@@ -199,7 +187,6 @@ samples/dialogs/makefile.unx
 samples/dialogs/makefile.wat
 samples/dialogs/makefile.vc
 samples/dialogs/dialogs.cpp
-samples/dialup/.cvsignore
 samples/dialup/descrip.mms
 samples/dialup/nettest.rc
 samples/dialup/dialup.bkl
@@ -219,7 +206,6 @@ samples/display/makefile.bcc
 samples/display/makefile.gcc
 samples/display/makefile.wat
 samples/display/display.cpp
-samples/dnd/.cvsignore
 samples/dnd/d_and_d.txt
 samples/dnd/descrip.mms
 samples/dnd/dnd.bkl
@@ -242,7 +228,6 @@ samples/dnd/makefile.unx
 samples/dnd/makefile.wat
 samples/dnd/makefile.vc
 samples/dnd/dnd.cpp
-samples/docview/.cvsignore
 samples/docview/chart.ico
 samples/docview/chart.r
 samples/docview/descrip.mms
@@ -272,7 +257,6 @@ samples/docview/makefile.wat
 samples/docview/doc.cpp
 samples/docview/makefile.vc
 samples/docview/docview.cpp
-samples/docvwmdi/.cvsignore
 samples/docvwmdi/chart.ico
 samples/docvwmdi/doc.h
 samples/docvwmdi/doc.ico
@@ -292,15 +276,12 @@ samples/docvwmdi/makefile.gcc
 samples/docvwmdi/makefile.unx
 samples/docvwmdi/makefile.wat
 samples/docvwmdi/makefile.vc
-samples/dragimag/.cvsignore
 samples/dragimag/backgrnd.png
 samples/dragimag/dragicon.ico
 samples/dragimag/dragicon.xpm
 samples/dragimag/dragimag.bkl
 samples/dragimag/dragimag.rc
 samples/dragimag/dragimagM5.xml
-samples/dragimag/makefile.sl
-samples/dragimag/makefile.va
 samples/dragimag/mondrian.ico
 samples/dragimag/mondrian.xpm
 samples/dragimag/shape01.png
@@ -315,7 +296,6 @@ samples/dragimag/makefile.unx
 samples/dragimag/makefile.wat
 samples/dragimag/makefile.vc
 samples/dragimag/dragimag.cpp
-samples/drawing/.cvsignore
 samples/drawing/descrip.mms
 samples/drawing/drawing.bkl
 samples/drawing/drawing.rc
@@ -336,7 +316,6 @@ samples/drawing/makefile.unx
 samples/drawing/makefile.wat
 samples/drawing/makefile.vc
 samples/drawing/drawing.cpp
-samples/dynamic/.cvsignore
 samples/dynamic/dynamic.bkl
 samples/dynamic/dynamic.rc
 samples/dynamic/dynamicM5.xml
@@ -350,7 +329,6 @@ samples/dynamic/makefile.unx
 samples/dynamic/makefile.wat
 samples/dynamic/makefile.vc
 samples/dynamic/dynamic.cpp
-samples/erase/.cvsignore
 samples/erase/Erase.icc
 samples/erase/descrip.mms
 samples/erase/erase.bkl
@@ -358,8 +336,6 @@ samples/erase/erase.rc
 samples/erase/erase.rc0
 samples/erase/erase.rc4
 samples/erase/eraseM5.xml
-samples/erase/makefile.sl
-samples/erase/makefile.va
 samples/erase/makemac6.mcp
 samples/erase/mondrian.ico
 samples/erase/mondrian.xpm
@@ -372,11 +348,9 @@ samples/erase/makefile.unx
 samples/erase/makefile.wat
 samples/erase/makefile.vc
 samples/erase/erase.cpp
-samples/event/.cvsignore
 samples/event/event.bkl
 samples/event/event.rc
 samples/event/eventM5.xml
-samples/event/makefile.sl
 samples/event/event.dsp
 samples/event/Makefile.in
 samples/event/makefile.bcc
@@ -393,11 +367,9 @@ samples/except/makefile.bcc
 samples/except/makefile.gcc
 samples/except/makefile.wat
 samples/except/except.cpp
-samples/exec/.cvsignore
 samples/exec/exec.bkl
 samples/exec/exec.rc
 samples/exec/execM5.xml
-samples/exec/makefile.sl
 samples/exec/exec.dsp
 samples/exec/Makefile.in
 samples/exec/makefile.bcc
@@ -406,7 +378,6 @@ samples/exec/makefile.unx
 samples/exec/makefile.wat
 samples/exec/makefile.vc
 samples/exec/exec.cpp
-samples/font/.cvsignore
 samples/font/descrip.mms
 samples/font/font.bkl
 samples/font/font.rc
@@ -420,14 +391,12 @@ samples/font/makefile.unx
 samples/font/makefile.wat
 samples/font/makefile.vc
 samples/font/font.cpp
-samples/grid/.cvsignore
 samples/grid/bitmap1.bmp
 samples/grid/bitmap2.bmp
 samples/grid/grid.bkl
 samples/grid/griddemo.rc
 samples/grid/griddemoM5.xml
 samples/grid/griddemoM7.mcp
-samples/grid/makefile.sl
 samples/grid/griddemo.h
 samples/grid/grid.dsp
 samples/grid/Makefile.in
@@ -437,7 +406,6 @@ samples/grid/makefile.unx
 samples/grid/makefile.wat
 samples/grid/griddemo.cpp
 samples/grid/makefile.vc
-samples/help/.cvsignore
 samples/help/back.gif
 samples/help/bullet.bmp
 samples/help/contents.gif
@@ -501,14 +469,12 @@ samples/htlbox/makefile.gcc
 samples/htlbox/makefile.unx
 samples/htlbox/makefile.wat
 samples/htlbox/makefile.vc
-samples/html/.cvsignore
 samples/html/html_samples.bkl
 samples/html/Makefile.in
 samples/html/makefile.bcc
 samples/html/makefile.gcc
 samples/html/makefile.wat
 samples/html/makefile.vc
-samples/html/about/.cvsignore
 samples/html/about/about.bkl
 samples/html/about/about.rc
 samples/html/about/aboutM5.xml
@@ -525,7 +491,6 @@ samples/html/about/data/logo.png
 samples/html/help/help.rc
 samples/html/help/helpM5.xml
 samples/html/help/makemac6.mcp
-samples/html/help/.cvsignore
 samples/html/help/Makefile.in
 samples/html/help/help.bkl
 samples/html/help/help.dsp
@@ -544,7 +509,6 @@ samples/html/help/helpfiles/book1.htm
 samples/html/help/helpfiles/book2.htm
 samples/html/help/helpfiles/main.htm
 samples/html/help/helpfiles/page2-b.htm
-samples/html/helpview/.cvsignore
 samples/html/helpview/helpview.bkl
 samples/html/helpview/helpview.ico
 samples/html/helpview/helpview.rc
@@ -561,7 +525,6 @@ samples/html/helpview/helpview.cpp
 samples/html/htmlctrl/htmlctrl.bkl
 samples/html/htmlctrl/Makefile.in
 samples/html/htmlctrl/htmlctrl.cpp
-samples/html/printing/.cvsignore
 samples/html/printing/logo6.gif
 samples/html/printing/mondrian.ico
 samples/html/printing/printing.rc
@@ -575,7 +538,6 @@ samples/html/printing/printing.bkl
 samples/html/printing/printing.dsp
 samples/html/printing/makefile.vc
 samples/html/printing/printing.cpp
-samples/html/test/.cvsignore
 samples/html/test/8859_2.htm
 samples/html/test/cp1250.htm
 samples/html/test/fft.html
@@ -602,7 +564,6 @@ samples/html/test/makefile.gcc
 samples/html/test/makefile.wat
 samples/html/test/makefile.vc
 samples/html/test/test.cpp
-samples/html/virtual/.cvsignore
 samples/html/virtual/start.htm
 samples/html/virtual/virtual.bkl
 samples/html/virtual/virtual.rc
@@ -615,7 +576,6 @@ samples/html/virtual/makefile.gcc
 samples/html/virtual/makefile.wat
 samples/html/virtual/makefile.vc
 samples/html/virtual/virtual.cpp
-samples/html/widget/.cvsignore
 samples/html/widget/start.htm
 samples/html/widget/widget.bkl
 samples/html/widget/widget.rc
@@ -627,7 +587,6 @@ samples/html/widget/makefile.gcc
 samples/html/widget/makefile.wat
 samples/html/widget/makefile.vc
 samples/html/widget/widget.cpp
-samples/html/zip/.cvsignore
 samples/html/zip/pages.zip
 samples/html/zip/start.htm
 samples/html/zip/zip.bkl
@@ -640,7 +599,6 @@ samples/html/zip/makefile.gcc
 samples/html/zip/makefile.wat
 samples/html/zip/makefile.vc
 samples/html/zip/zip.cpp
-samples/image/.cvsignore
 samples/image/descrip.mms
 samples/image/horse.bmp
 samples/image/horse.cur
@@ -658,7 +616,6 @@ samples/image/horse_rg.pnm
 samples/image/image.rc
 samples/image/image.rco
 samples/image/imageM5.xml
-samples/image/makefile.va
 samples/image/makemac6.mcp
 samples/image/smile.xbm
 samples/image/smile.xpm
@@ -674,7 +631,6 @@ samples/image/makefile.unx
 samples/image/makefile.wat
 samples/image/makefile.vc
 samples/image/image.cpp
-samples/internat/.cvsignore
 samples/internat/internat.rc
 samples/internat/internatM5.xml
 samples/internat/makefile.vms
@@ -713,7 +669,6 @@ samples/internat/sv/internat.mo
 samples/internat/sv/internat.po
 samples/internat/ar/internat.mo
 samples/internat/ar/internat.po
-samples/ipc/.cvsignore
 samples/ipc/client.b32
 samples/ipc/client.g95
 samples/ipc/client.h
@@ -740,7 +695,6 @@ samples/ipc/makefile.vc
 samples/ipc/makefile.wat
 samples/ipc/client.cpp
 samples/ipc/server.cpp
-samples/joytest/.cvsignore
 samples/joytest/buttonpress.wav
 samples/joytest/chart.ico
 samples/joytest/joytest.bkl
@@ -748,7 +702,6 @@ samples/joytest/joytest.h
 samples/joytest/joytest.ico
 samples/joytest/joytest.rc
 samples/joytest/joytestM5.xml
-samples/joytest/makefile.sl
 samples/joytest/mondrian.ico
 samples/joytest/joytest.dsp
 samples/joytest/Makefile.in
@@ -758,7 +711,6 @@ samples/joytest/makefile.unx
 samples/joytest/makefile.wat
 samples/joytest/makefile.vc
 samples/joytest/joytest.cpp
-samples/keyboard/.cvsignore
 samples/keyboard/keyboard.bkl
 samples/keyboard/keyboard.rc
 samples/keyboard/keyboardM5.xml
@@ -769,7 +721,6 @@ samples/keyboard/makefile.gcc
 samples/keyboard/makefile.wat
 samples/keyboard/makefile.vc
 samples/keyboard/keyboard.cpp
-samples/layout/.cvsignore
 samples/layout/expt.cpp
 samples/layout/layout.bkl
 samples/layout/layout.rc
@@ -784,7 +735,6 @@ samples/layout/makefile.unx
 samples/layout/makefile.wat
 samples/layout/makefile.vc
 samples/layout/layout.cpp
-samples/listbox/.cvsignore
 samples/listbox/lboxtestM5.xml
 samples/listbox/listbox.bkl
 samples/listbox/listbox.dsp
@@ -794,7 +744,6 @@ samples/listbox/makefile.bcc
 samples/listbox/makefile.gcc
 samples/listbox/makefile.wat
 samples/listbox/lboxtest.cpp
-samples/listctrl/.cvsignore
 samples/listctrl/listctrl.bkl
 samples/listctrl/listctrlM5.xml
 samples/listctrl/listtest.rc
@@ -829,10 +778,8 @@ samples/listctrl/bitmaps/tooltodo.ico
 samples/listctrl/bitmaps/tooltodo.xpm
 samples/listctrl/bitmaps/toolword.ico
 samples/listctrl/bitmaps/toolword.xpm
-samples/mdi/.cvsignore
 samples/mdi/chart.ico
 samples/mdi/descrip.mms
-samples/mdi/makefile.sl
 samples/mdi/makefile.vms
 samples/mdi/mdi.bkl
 samples/mdi/mdiM5.xml
@@ -864,7 +811,6 @@ samples/mediaplayer/makefile.bcc
 samples/mediaplayer/makefile.gcc
 samples/mediaplayer/makefile.wat
 samples/mediaplayer/mediaplayer.cpp
-samples/memcheck/.cvsignore
 samples/memcheck/memcheck.bkl
 samples/memcheck/memcheck.rc
 samples/memcheck/mondrian.ico
@@ -877,11 +823,9 @@ samples/memcheck/makefile.unx
 samples/memcheck/makefile.wat
 samples/memcheck/makefile.vc
 samples/memcheck/memcheck.cpp
-samples/menu/.cvsignore
 samples/menu/MENU.RCO
 samples/menu/copy.xpm
 samples/menu/descrip.mms
-samples/menu/makefile.va
 samples/menu/menu.bkl
 samples/menu/menu.rc
 samples/menu/menuM5.xml
@@ -894,7 +838,6 @@ samples/menu/makefile.unx
 samples/menu/makefile.wat
 samples/menu/makefile.vc
 samples/menu/menu.cpp
-samples/mfc/.cvsignore
 samples/mfc/mfc.bkl
 samples/mfc/mfctest.h
 samples/mfc/mfctest.ico
@@ -908,8 +851,6 @@ samples/mfc/makefile.gcc
 samples/mfc/makefile.wat
 samples/mfc/makefile.vc
 samples/mfc/mfctest.cpp
-samples/minifram/.cvsignore
-samples/minifram/makefile.sl
 samples/minifram/minifram.bkl
 samples/minifram/minifram.rc
 samples/minifram/miniframM5.xml
@@ -937,8 +878,6 @@ samples/minimal/MinimalClassicM8.xml
 samples/minimal/MinimalM8.xml
 samples/minimal/descrip.mms
 samples/minimal/makefile.mic
-samples/minimal/makefile.sl
-samples/minimal/makefile.va
 samples/minimal/minimal.bkl
 samples/minimal/minimal.plc
 samples/minimal/minimal.rc
@@ -948,7 +887,6 @@ samples/minimal/minimalW7.xml
 samples/minimal/mondrian.icns
 samples/minimal/mondrian.r
 samples/minimal/mondros2.ico
-samples/minimal/.cvsignore
 samples/minimal/makefile.vc
 samples/minimal/minimal.dsp
 samples/minimal/Makefile.in
@@ -957,9 +895,7 @@ samples/minimal/makefile.gcc
 samples/minimal/makefile.unx
 samples/minimal/makefile.wat
 samples/minimal/minimal.cpp
-samples/minimal/minimal.xcode/.cvsignore
 samples/minimal/minimal.xcode/project.pbxproj
-samples/minimal/minimal.xcodeproj/.cvsignore
 samples/minimal/minimal.xcodeproj/project.pbxproj
 samples/mobile/mobile_samples.bkl
 samples/mobile/Makefile.in
@@ -995,7 +931,6 @@ samples/multimon/makefile.gcc
 samples/multimon/makefile.unx
 samples/multimon/makefile.wat
 samples/multimon/multimon_test.cpp
-samples/nativdlg/.cvsignore
 samples/nativdlg/dialog1.rc
 samples/nativdlg/makefile.vms
 samples/nativdlg/nativdlg.bkl
@@ -1009,9 +944,6 @@ samples/nativdlg/makefile.gcc
 samples/nativdlg/makefile.wat
 samples/nativdlg/makefile.vc
 samples/nativdlg/nativdlg.cpp
-samples/notebook/.cvsignore
-samples/notebook/makefile.sl
-samples/notebook/makefile.va
 samples/notebook/mondrian.ico
 samples/notebook/mondros2.ico
 samples/notebook/notebook.bkl
@@ -1026,7 +958,6 @@ samples/notebook/makefile.gcc
 samples/notebook/makefile.unx
 samples/notebook/makefile.wat
 samples/notebook/notebook.cpp
-samples/oleauto/.cvsignore
 samples/oleauto/mondrian.ico
 samples/oleauto/mondrian.xpm
 samples/oleauto/oleauto.bkl
@@ -1044,7 +975,6 @@ samples/opengl/makefile.bcc
 samples/opengl/makefile.gcc
 samples/opengl/makefile.wat
 samples/opengl/makefile.vc
-samples/opengl/cube/.cvsignore
 samples/opengl/cube/cube.cpp
 samples/opengl/cube/cube.h
 samples/opengl/cube/cube.rc
@@ -1057,7 +987,6 @@ samples/opengl/cube/makefile.gcc
 samples/opengl/cube/makefile.unx
 samples/opengl/cube/makefile.wat
 samples/opengl/cube/makefile.vc
-samples/opengl/isosurf/.cvsignore
 samples/opengl/isosurf/isosurf.dat.gz
 samples/opengl/isosurf/isosurf.h
 samples/opengl/isosurf/mondrian.ico
@@ -1070,7 +999,6 @@ samples/opengl/isosurf/makefile.gcc
 samples/opengl/isosurf/makefile.unx
 samples/opengl/isosurf/makefile.wat
 samples/opengl/isosurf/isosurf.cpp
-samples/opengl/penguin/.cvsignore
 samples/opengl/penguin/dxfrenderer.h
 samples/opengl/penguin/penguin.dxf.gz
 samples/opengl/penguin/penguin.h
@@ -1087,7 +1015,6 @@ samples/opengl/penguin/makefile.unx
 samples/opengl/penguin/makefile.wat
 samples/opengl/penguin/makefile.vc
 samples/opengl/penguin/penguin.cpp
-samples/ownerdrw/.cvsignore
 samples/ownerdrw/bell.bmp
 samples/ownerdrw/info.bmp
 samples/ownerdrw/info_mono.bmp
@@ -1105,7 +1032,6 @@ samples/ownerdrw/makefile.gcc
 samples/ownerdrw/makefile.wat
 samples/ownerdrw/makefile.vc
 samples/ownerdrw/ownerdrw.cpp
-samples/png/.cvsignore
 samples/png/julian.png
 samples/png/png.bkl
 samples/png/pngM5.xml
@@ -1128,7 +1054,6 @@ samples/popup/makefile.unx
 samples/popup/makefile.wat
 samples/popup/makefile.vc
 samples/popup/popup.cpp
-samples/printing/.cvsignore
 samples/printing/folder.xpm
 samples/printing/mondrian.ico
 samples/printing/mondrian.xpm
@@ -1144,8 +1069,6 @@ samples/printing/makefile.unx
 samples/printing/makefile.wat
 samples/printing/makefile.vc
 samples/printing/printing.cpp
-samples/propsize/.cvsignore
-samples/propsize/makefile.sl
 samples/propsize/mondrian.ico
 samples/propsize/propsize.bkl
 samples/propsize/propsize.rc
@@ -1159,7 +1082,6 @@ samples/propsize/makefile.unx
 samples/propsize/makefile.wat
 samples/propsize/makefile.vc
 samples/propsize/propsize.cpp
-samples/regtest/.cvsignore
 samples/regtest/key1.ico
 samples/regtest/key2.ico
 samples/regtest/key3.ico
@@ -1214,7 +1136,6 @@ samples/richtext/bitmaps/paste.xpm
 samples/richtext/bitmaps/redo.xpm
 samples/richtext/bitmaps/save.xpm
 samples/richtext/bitmaps/undo.xpm
-samples/rotate/.cvsignore
 samples/rotate/duck.png
 samples/rotate/mondrian.ico
 samples/rotate/rotate.bkl
@@ -1228,8 +1149,6 @@ samples/rotate/makefile.unx
 samples/rotate/makefile.wat
 samples/rotate/makefile.vc
 samples/rotate/rotate.cpp
-samples/sashtest/.cvsignore
-samples/sashtest/makefile.sl
 samples/sashtest/sashtest.bkl
 samples/sashtest/sashtest.h
 samples/sashtest/sashtest.ico
@@ -1243,8 +1162,6 @@ samples/sashtest/makefile.unx
 samples/sashtest/makefile.wat
 samples/sashtest/makefile.vc
 samples/sashtest/sashtest.cpp
-samples/scroll/.cvsignore
-samples/scroll/makefile.va
 samples/scroll/mondros2.ico
 samples/scroll/scroll.bkl
 samples/scroll/scroll.rc
@@ -1257,7 +1174,6 @@ samples/scroll/makefile.unx
 samples/scroll/makefile.wat
 samples/scroll/makefile.vc
 samples/scroll/scroll.cpp
-samples/scrollsub/.cvsignore
 samples/scrollsub/scrollsub.bkl
 samples/scrollsub/scrollsub.rc
 samples/scrollsub/scrollsubM5.xml
@@ -1269,9 +1185,7 @@ samples/scrollsub/makefile.unx
 samples/scrollsub/makefile.wat
 samples/scrollsub/makefile.vc
 samples/scrollsub/scrollsub.cpp
-samples/shaped/.cvsignore
 samples/shaped/descrip.mms
-samples/shaped/makefile.sl
 samples/shaped/shaped.bkl
 samples/shaped/shaped.rc
 samples/shaped/shapedM5.xml
@@ -1284,7 +1198,6 @@ samples/shaped/makefile.unx
 samples/shaped/makefile.wat
 samples/shaped/makefile.vc
 samples/shaped/shaped.cpp
-samples/sockets/.cvsignore
 samples/sockets/client.b32
 samples/sockets/client.g95
 samples/sockets/client.rc
@@ -1335,8 +1248,6 @@ samples/splash/makefile.gcc
 samples/splash/makefile.wat
 samples/splash/makefile.vc
 samples/splash/splash.cpp
-samples/splitter/.cvsignore
-samples/splitter/makefile.sl
 samples/splitter/mondrian.ico
 samples/splitter/splitter.bkl
 samples/splitter/splitter.rc
@@ -1349,9 +1260,7 @@ samples/splitter/makefile.unx
 samples/splitter/makefile.wat
 samples/splitter/makefile.vc
 samples/splitter/splitter.cpp
-samples/statbar/.cvsignore
 samples/statbar/green.xpm
-samples/statbar/makefile.sl
 samples/statbar/red.xpm
 samples/statbar/statbar.bkl
 samples/statbar/statbar.rc
@@ -1376,7 +1285,6 @@ samples/stc/makefile.wat
 samples/stc/makefile.vc
 samples/stc/*.cpp
 samples/stc/*.h
-samples/taskbar/.cvsignore
 samples/taskbar/smile.xpm
 samples/taskbar/taskbar.bkl
 samples/taskbar/taskbarM5.xml
@@ -1388,7 +1296,6 @@ samples/taskbar/makefile.bcc
 samples/taskbar/makefile.gcc
 samples/taskbar/makefile.wat
 samples/taskbar/tbtest.cpp
-samples/text/.cvsignore
 samples/text/mondrian.ico
 samples/text/mondrian.xpm
 samples/text/text.bkl
@@ -1402,8 +1309,6 @@ samples/text/makefile.unx
 samples/text/makefile.wat
 samples/text/makefile.vc
 samples/text/text.cpp
-samples/thread/.cvsignore
-samples/thread/makefile.sl
 samples/thread/thread.bkl
 samples/thread/thread.rc
 samples/thread/threadM5.xml
@@ -1415,9 +1320,6 @@ samples/thread/makefile.unx
 samples/thread/makefile.wat
 samples/thread/makefile.vc
 samples/thread/thread.cpp
-samples/toolbar/.cvsignore
-samples/toolbar/makefile.sl
-samples/toolbar/makefile.va
 samples/toolbar/mondrian.ico
 samples/toolbar/mondrian.xpm
 samples/toolbar/mondros2.ico
@@ -1451,7 +1353,6 @@ samples/toolbar/bitmaps/print.bmp
 samples/toolbar/bitmaps/print.xpm
 samples/toolbar/bitmaps/save.bmp
 samples/toolbar/bitmaps/save.xpm
-samples/treectrl/.cvsignore
 samples/treectrl/icon1.xpm
 samples/treectrl/icon2.xpm
 samples/treectrl/icon3.xpm
@@ -1468,8 +1369,6 @@ samples/treectrl/makefile.gcc
 samples/treectrl/makefile.wat
 samples/treectrl/makefile.vc
 samples/treectrl/treetest.cpp
-samples/typetest/.cvsignore
-samples/typetest/makefile.sl
 samples/typetest/mondrian.ico
 samples/typetest/mondrian.xpm
 samples/typetest/typetest.bkl
@@ -1484,7 +1383,6 @@ samples/typetest/makefile.unx
 samples/typetest/makefile.wat
 samples/typetest/makefile.vc
 samples/typetest/typetest.cpp
-samples/validate/.cvsignore
 samples/validate/validateM5.xml
 samples/validate/validate.bkl
 samples/validate/validate.h
@@ -1503,7 +1401,6 @@ samples/vscroll/makefile.bcc
 samples/vscroll/makefile.gcc
 samples/vscroll/makefile.wat
 samples/vscroll/vstest.cpp
-samples/widgets/.cvsignore
 samples/widgets/makefile.mic
 samples/widgets/widgetsM5.xml
 samples/widgets/widgets.h
@@ -1538,7 +1435,6 @@ samples/widgets/widgets.bkl
 samples/widgets/widgets.cpp
 samples/widgets/widgets.dsp
 samples/widgets/makefile.vc
-samples/widgets/icons/.cvsignore
 samples/widgets/icons/spinbtn.xpm
 samples/widgets/icons/bmpbtn.xpm
 samples/widgets/icons/button.xpm
@@ -1565,8 +1461,6 @@ samples/widgets/icons/combobox.xpm
 samples/widgets/icons/dirctrl.xpm
 samples/widgets/icons/listbox.xpm
 samples/widgets/icons/odcombobox.xpm
-samples/wizard/.cvsignore
-samples/wizard/makefile.sl
 samples/wizard/wizard.bkl
 samples/wizard/wizard.rc
 samples/wizard/wizardM5.xml
