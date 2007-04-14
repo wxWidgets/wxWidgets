@@ -607,6 +607,7 @@ static pascal OSStatus ControlToolbarItemHandler( EventHandlerCallRef inCallRef,
 
                         item = (ControlToolbarItem*) malloc(sizeof(ControlToolbarItem)) ;
                         item->toolbarItem = toolbarItem ;
+                        item->lastValidSize = wxSize(-1,-1);
                         item->viewRef = NULL ;
 
                         SetEventParameter( inEvent, kEventParamHIObjectInstance, typeVoidPtr, sizeof( void * ), &item );
@@ -681,16 +682,21 @@ static pascal OSStatus ControlToolbarItemHandler( EventHandlerCallRef inCallRef,
                     wxWindow* wxwindow = wxFindControlFromMacControl(object->viewRef ) ;
                     if ( wxwindow )
                     {
-                        wxSize sz = wxwindow->GetSize() ;
-                        sz.x -= wxwindow->MacGetLeftBorderSize() + wxwindow->MacGetRightBorderSize();
-                        sz.y -= wxwindow->MacGetTopBorderSize() + wxwindow->MacGetBottomBorderSize();
-                        // during toolbar layout the native window sometimes gets negative sizes
-                        // so we always keep the last valid size here, to make sure we survive the
-                        // shuffle ...
-                        if ( sz.x > 0 && sz.y > 0 )
-                            object->lastValidSize = sz ;
-                        else
-                            sz = object->lastValidSize ;
+                        // during toolbar layout the native window sometimes gets negative sizes,
+                        // sometimes it just gets shrunk behind our back, so in order to avoid
+                        // ever shrinking more, once a valid size is captured, we keep it
+
+                        wxSize sz = object->lastValidSize;
+                        if ( sz.x <= 0 || sz.y <= 0 )
+                        {
+                            sz = wxwindow->GetSize() ;
+                            sz.x -= wxwindow->MacGetLeftBorderSize() + wxwindow->MacGetRightBorderSize();
+                            sz.y -= wxwindow->MacGetTopBorderSize() + wxwindow->MacGetBottomBorderSize();
+                            if ( sz.x > 0 && sz.y > 0 )
+                                object->lastValidSize = sz ;
+                            else
+                                sz = wxSize(0,0) ;
+                        }
 
                         HISize min, max;
                         min.width = max.width = sz.x ;
