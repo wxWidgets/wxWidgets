@@ -76,6 +76,7 @@ samples/shaped/*W7.xml
 samples/sockets/*W7.xml
 samples/splitter/*W7.xml
 samples/statbar/*W7.xml
+samples/stc/*W7.xml
 samples/taskbar/*W7.xml
 samples/text/*W7.xml
 samples/thread/*W7.xml

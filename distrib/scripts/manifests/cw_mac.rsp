@@ -146,6 +146,8 @@ samples/splitter/*M?.xml
 samples/splitter/*.mcp
 samples/statbar/*M?.xml
 samples/statbar/*.mcp
+samples/stc/*M?.xml
+samples/stc/*.mcp
 samples/taskbar/*M?.xml
 samples/taskbar/*.mcp
 samples/text/*M?.xml

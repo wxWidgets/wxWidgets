@@ -200,6 +200,8 @@ samples/splitter/splitter.dsp
 samples/splitter/splitter.dsw
 samples/statbar/statbar.dsp
 samples/statbar/statbar.dsw
+samples/stc/stctest.dsp
+samples/stc/stctest.dsw
 samples/taskbar/taskbar.dsp
 samples/taskbar/taskbar.dsw
 samples/text/text.dsp
