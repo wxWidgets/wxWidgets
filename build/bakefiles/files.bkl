@@ -2698,6 +2698,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 
 <set var="ADVANCED_CMN_HDR" hints="files">
+    wx/aboutdlg.h
     wx/animate.h
     wx/animdecod.h
     wx/bmpcbox.h
@@ -2706,7 +2707,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/dateevt.h
     wx/dcbuffer.h
 <!--     wx/editlbox.h -->
-    wx/aboutdlg.h
     wx/generic/aboutdlgg.h
     wx/generic/animate.h
     wx/generic/bmpcbox.h
