@@ -205,7 +205,7 @@ public:
    {
        if (attr)
            delete attr;
-   };
+   }
 
     DECLARE_NO_COPY_CLASS(wxListItemInternalData)
 };

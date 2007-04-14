@@ -37,7 +37,7 @@ public:
 		const char *languageName_=0, LexerFunction fnFolder_=0) : LexerModule(language_, fnLexer_, 0, fnFolder_){
 		strncpy(name, languageName_, sizeof(name));
 		languageName = name;
-	};
+	}
 	virtual void Lex(unsigned int startPos, int lengthDoc, int initStyle,
 					WordList *keywordlists[], Accessor &styler) const;
 	virtual void Fold(unsigned int startPos, int lengthDoc, int initStyle,

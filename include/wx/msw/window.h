@@ -201,7 +201,7 @@ public:
     wxWindow *FindItemByHWND(WXHWND hWnd, bool controlOnly = false) const;
 
     // MSW only: true if this control is part of the main control
-    virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return false; };
+    virtual bool ContainsHWND(WXHWND WXUNUSED(hWnd)) const { return false; }
 
 #if wxUSE_TOOLTIPS
     // MSW only: true if this window or any of its children have a tooltip

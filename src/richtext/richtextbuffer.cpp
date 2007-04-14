@@ -5905,7 +5905,7 @@ public:
         wxRichTextBuffer::InitStandardHandlers();
         wxRichTextParagraph::InitDefaultTabs();
         return true;
-    };
+    }
     void OnExit()
     {
         wxRichTextBuffer::CleanUpHandlers();
@@ -5913,7 +5913,7 @@ public:
         wxRichTextParagraph::ClearDefaultTabs();
         wxRichTextCtrl::ClearAvailableFontNames();
         wxRichTextBuffer::SetRenderer(NULL);
-    };
+    }
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxRichTextModule, wxModule)

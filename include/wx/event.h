@@ -353,7 +353,7 @@ public:
     // to allow the event processing by the base classes (calling event.Skip()
     // is the analog of calling the base class version of a virtual function)
     void Skip(bool skip = true) { m_skipped = skip; }
-    bool GetSkipped() const { return m_skipped; };
+    bool GetSkipped() const { return m_skipped; }
 
     // this function is used to create a copy of the event polymorphically and
     // all derived classes must implement it because otherwise wxPostEvent()
@@ -1728,7 +1728,7 @@ public:
 
     virtual wxEvent *Clone() const { return new wxMouseCaptureChangedEvent(*this); }
 
-    wxWindow* GetCapturedWindow() const { return m_gainedCapture; };
+    wxWindow* GetCapturedWindow() const { return m_gainedCapture; }
 
 private:
     wxWindow* m_gainedCapture;

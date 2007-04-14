@@ -105,7 +105,7 @@ public:
     void AddGrabIfNeeded();
 
     // Override to add custom buttons to the toolbar
-    virtual void AddToolbarButtons(wxToolBar* WXUNUSED(toolBar), int WXUNUSED(style)) {};
+    virtual void AddToolbarButtons(wxToolBar* WXUNUSED(toolBar), int WXUNUSED(style)) {}
 
     // we don't want to prevent the app from closing just because a help window
     // remains opened

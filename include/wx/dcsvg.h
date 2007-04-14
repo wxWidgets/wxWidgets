@@ -46,13 +46,13 @@ class WXDLLIMPEXP_CORE wxSVGFileDC : public wxDC
 
 
         bool DoGetPixel(wxCoord, wxCoord, class wxColour *) const
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::DoGetPixel Call not implemented")); return true; };
+            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::DoGetPixel Call not implemented")); return true; }
 
         virtual bool DoBlit(wxCoord, wxCoord, wxCoord, wxCoord, class wxDC *,
             wxCoord, wxCoord, int = wxCOPY, bool = 0, int = -1, int = -1) ;
 
         void DoCrossHair(wxCoord, wxCoord)
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::CrossHair Call not implemented")); return  ; };
+            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::CrossHair Call not implemented")); return  ; }
 
         void DoDrawArc(wxCoord, wxCoord, wxCoord, wxCoord, wxCoord, wxCoord);
 
@@ -82,14 +82,14 @@ class WXDLLIMPEXP_CORE wxSVGFileDC : public wxDC
 
         bool DoFloodFill(wxCoord WXUNUSED(x), wxCoord WXUNUSED(y), const wxColour& WXUNUSED(col),
                              int WXUNUSED(style) = wxFLOOD_SURFACE)
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::DoFloodFill Call not implemented")); return false ; };
+            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::DoFloodFill Call not implemented")); return false ; }
 
-        void DoGetSize(int * x, int *y) const { *x = m_width; *y = m_height ; return ; } ;
+        void DoGetSize(int * x, int *y) const { *x = m_width; *y = m_height ; return ; }
 
         void DoGetTextExtent(const wxString& string, wxCoord *w, wxCoord *h, wxCoord *descent = NULL, wxCoord *externalLeading = NULL, wxFont *font = NULL) const ;
 
         void DoSetClippingRegionAsRegion(const class wxRegion &)
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::DoSetClippingRegionAsRegion Call not yet implemented")); return  ; };
+            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::DoSetClippingRegionAsRegion Call not yet implemented")); return  ; }
 
        void Init (wxString f, int Width, int Height, float dpi);
 
@@ -190,28 +190,28 @@ class WXDLLIMPEXP_CORE wxSVGFileDC : public wxDC
         ~wxSVGFileDC();
 
 
-        bool CanDrawBitmap() const { return true; };
+        bool CanDrawBitmap() const { return true; }
 
-        bool CanGetTextExtent() const { return true; };
+        bool CanGetTextExtent() const { return true; }
 
         int GetDepth() const
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::GetDepth Call not implemented")); return -1 ; };
+            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::GetDepth Call not implemented")); return -1 ; }
 
-        void BeginDrawing() { return;};
+        void BeginDrawing() { return;}
 
         bool Blit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height, wxDC* source, wxCoord xsrc, wxCoord ysrc, int logicalFunc = wxCOPY, bool useMask = false)
-            { return DoBlit(xdest, ydest, width, height, source, xsrc, ysrc, logicalFunc, useMask); };
+            { return DoBlit(xdest, ydest, width, height, source, xsrc, ysrc, logicalFunc, useMask); }
 
         void Clear()
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::Clear() Call not implemented \nNot sensible for an output file?")); return ; };
+            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::Clear() Call not implemented \nNot sensible for an output file?")); return ; }
 
         void CrossHair(wxCoord x, wxCoord y)
-            { DoCrossHair (x,y); return; };
+            { DoCrossHair (x,y); return; }
 
         virtual void ComputeScaleAndOrigin();
 
         void DestroyClippingRegion()
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::void Call not yet implemented")); return ; };
+            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::void Call not yet implemented")); return ; }
 
         wxCoord DeviceToLogicalX(wxCoord x) const ;
 
@@ -222,39 +222,39 @@ class WXDLLIMPEXP_CORE wxSVGFileDC : public wxDC
         wxCoord DeviceToLogicalYRel(wxCoord y)  const ;
 
         void DrawBitmap(const wxBitmap& bitmap, wxCoord x, wxCoord y, bool transparent)
-            {  DoDrawBitmap ( bitmap, x, y, transparent ) ; return ;};
+            {  DoDrawBitmap ( bitmap, x, y, transparent ) ; return ;}
 
         void DrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
-            {DoDrawIcon(icon, x, y) ; return ; };
+            {DoDrawIcon(icon, x, y) ; return ; }
 
         void DoDrawLines(int n, wxPoint points[], wxCoord xoffset = 0, wxCoord yoffset = 0) ;
 
         void EndDoc()
-            { return ; };
+            { return ; }
 
         void EndDrawing()
-            { return ; };
+            { return ; }
 
         void EndPage()
-            {  return ; };
+            {  return ; }
 
         void FloodFill(wxCoord x, wxCoord y, wxColour *colour, int style=wxFLOOD_SURFACE)
-            { DoFloodFill (x, y, *colour, style); return ;} ;
+            { DoFloodFill (x, y, *colour, style); return ;}
 
         wxCoord GetCharHeight() const;
 
         wxCoord GetCharWidth() const;
 
         void GetClippingBox(wxCoord *WXUNUSED(x), wxCoord *WXUNUSED(y), wxCoord * WXUNUSED(width), wxCoord * WXUNUSED(height))
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::GetClippingBox Call not yet implemented")); return ; };
+            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::GetClippingBox Call not yet implemented")); return ; }
 
         int GetLogicalFunction()
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::GetLogicalFunction()  Call not implemented")); return wxCOPY ; };
+            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::GetLogicalFunction()  Call not implemented")); return wxCOPY ; }
 
         int GetMapMode() ;
 
         bool GetPixel(wxCoord x, wxCoord y, wxColour *colour)
-            { return DoGetPixel (x, y, colour) ; } ;
+            { return DoGetPixel (x, y, colour) ; }
 
         void GetUserScale(double *x, double *y) const ;
 
@@ -266,15 +266,15 @@ class WXDLLIMPEXP_CORE wxSVGFileDC : public wxDC
 
         wxCoord LogicalToDeviceYRel(wxCoord y)  const ;
 
-        bool Ok() const {return m_OK;};
+        bool Ok() const {return m_OK;}
 
         void SetAxisOrientation( bool xLeftRight, bool yBottomUp ) ;
 
         void SetClippingRegion(wxCoord  WXUNUSED(x), wxCoord  WXUNUSED(y), wxCoord  WXUNUSED(width), wxCoord  WXUNUSED(height))
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::SetClippingRegion Call not yet implemented")); return ; };
+            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::SetClippingRegion Call not yet implemented")); return ; }
 
         void SetPalette(const wxPalette&  WXUNUSED(palette))
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::SetPalette Call not yet implemented")); return ; };
+            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::SetPalette Call not yet implemented")); return ; }
 
         void SetBackground( const wxBrush &brush ) ;
 
@@ -285,7 +285,7 @@ class WXDLLIMPEXP_CORE wxSVGFileDC : public wxDC
         void SetFont(const wxFont& font) ;
 
         void SetLogicalFunction(int  WXUNUSED(function))
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::SetLogicalFunction Call implemented")); return ; };
+            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::SetLogicalFunction Call implemented")); return ; }
 
         void SetLogicalScale( double x, double y ) ;
 
@@ -300,10 +300,10 @@ class WXDLLIMPEXP_CORE wxSVGFileDC : public wxDC
         void SetUserScale(double xScale, double yScale) ;
 
         bool StartDoc(const wxString&  WXUNUSED(message))
-            {  return false; };
+            {  return false; }
 
         void StartPage()
-            {  return ; };
+            {  return ; }
 };
 
 #endif      // __DCSVG_H

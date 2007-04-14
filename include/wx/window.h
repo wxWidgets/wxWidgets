@@ -1125,7 +1125,7 @@ public:
     void SetAccessible(wxAccessible* accessible) ;
 
     // Returns the accessible object.
-    wxAccessible* GetAccessible() { return m_accessible; };
+    wxAccessible* GetAccessible() { return m_accessible; }
 
     // Returns the accessible object, creating if necessary.
     wxAccessible* GetOrCreateAccessible() ;

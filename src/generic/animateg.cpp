@@ -255,8 +255,8 @@ class wxAnimationModule: public wxModule
 DECLARE_DYNAMIC_CLASS(wxAnimationModule)
 public:
     wxAnimationModule() {}
-    bool OnInit() { wxAnimation::InitStandardHandlers(); return true; };
-    void OnExit() { wxAnimation::CleanUpHandlers(); };
+    bool OnInit() { wxAnimation::InitStandardHandlers(); return true; }
+    void OnExit() { wxAnimation::CleanUpHandlers(); }
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxAnimationModule, wxModule)

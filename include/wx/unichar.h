@@ -279,7 +279,7 @@ wxDEFINE_COMPARISONS(wchar_t, const wxUniChar&, wxCMP_REVERSE)
 wxDEFINE_COMPARISONS(wchar_t, const wxUniCharRef&, wxCMP_REVERSE)
 
 #ifdef wxWINT_T_IS_SEPARATE_TYPE
-wxDEFINE_COMPARISONS(wint_t, const wxUniChar&, wxCMP_REVERSE)
+//wxDEFINE_COMPARISONS(wint_t, const wxUniChar&, wxCMP_REVERSE)
 wxDEFINE_COMPARISONS(wint_t, const wxUniCharRef&, wxCMP_REVERSE)
 #endif
 

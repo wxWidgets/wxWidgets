@@ -49,7 +49,7 @@ public:
         m_extension = _T("bmp");
         m_type = wxBITMAP_TYPE_BMP;
         m_mime = _T("image/x-bmp");
-    };
+    }
 
 #if wxUSE_STREAMS
     virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=true );
@@ -83,7 +83,7 @@ public:
         m_extension = _T("ico");
         m_type = wxBITMAP_TYPE_ICO;
         m_mime = _T("image/x-ico");
-    };
+    }
 
 #if wxUSE_STREAMS
     virtual bool SaveFile( wxImage *image, wxOutputStream& stream, bool verbose=true );
@@ -112,7 +112,7 @@ public:
         m_extension = _T("cur");
         m_type = wxBITMAP_TYPE_CUR;
         m_mime = _T("image/x-cur");
-    };
+    }
 
     // VS: This handler's meat is implemented inside wxICOHandler (the two
     //     formats are almost identical), but we hide this fact at
@@ -139,11 +139,11 @@ public:
         m_extension = _T("ani");
         m_type = wxBITMAP_TYPE_ANI;
         m_mime = _T("image/x-ani");
-    };
+    }
 
 
 #if wxUSE_STREAMS
-    virtual bool SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSED(stream), bool WXUNUSED(verbose=true) ){return false ;};
+    virtual bool SaveFile( wxImage *WXUNUSED(image), wxOutputStream& WXUNUSED(stream), bool WXUNUSED(verbose=true) ){return false ;}
     virtual bool LoadFile( wxImage *image, wxInputStream& stream, bool verbose=true, int index=-1 );
     virtual int GetImageCount( wxInputStream& stream );
 protected:

@@ -214,7 +214,7 @@ public:
     wxOnceOnlyDLLLoader(const wxChar *dllName)
         : m_dllName(dllName)
     {
-    };
+    }
 
 
     // return the symbol with the given name or NULL if the DLL not loaded

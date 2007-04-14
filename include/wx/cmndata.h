@@ -269,35 +269,35 @@ public:
     wxPrintDialogData(const wxPrintData& printData);
     virtual ~wxPrintDialogData();
 
-    int GetFromPage() const { return m_printFromPage; };
-    int GetToPage() const { return m_printToPage; };
-    int GetMinPage() const { return m_printMinPage; };
-    int GetMaxPage() const { return m_printMaxPage; };
-    int GetNoCopies() const { return m_printNoCopies; };
-    bool GetAllPages() const { return m_printAllPages; };
-    bool GetSelection() const { return m_printSelection; };
-    bool GetCollate() const { return m_printCollate; };
-    bool GetPrintToFile() const { return m_printToFile; };
+    int GetFromPage() const { return m_printFromPage; }
+    int GetToPage() const { return m_printToPage; }
+    int GetMinPage() const { return m_printMinPage; }
+    int GetMaxPage() const { return m_printMaxPage; }
+    int GetNoCopies() const { return m_printNoCopies; }
+    bool GetAllPages() const { return m_printAllPages; }
+    bool GetSelection() const { return m_printSelection; }
+    bool GetCollate() const { return m_printCollate; }
+    bool GetPrintToFile() const { return m_printToFile; }
 
-    void SetFromPage(int v) { m_printFromPage = v; };
-    void SetToPage(int v) { m_printToPage = v; };
-    void SetMinPage(int v) { m_printMinPage = v; };
-    void SetMaxPage(int v) { m_printMaxPage = v; };
-    void SetNoCopies(int v) { m_printNoCopies = v; };
-    void SetAllPages(bool flag) { m_printAllPages = flag; };
-    void SetSelection(bool flag) { m_printSelection = flag; };
-    void SetCollate(bool flag) { m_printCollate = flag; };
-    void SetPrintToFile(bool flag) { m_printToFile = flag; };
+    void SetFromPage(int v) { m_printFromPage = v; }
+    void SetToPage(int v) { m_printToPage = v; }
+    void SetMinPage(int v) { m_printMinPage = v; }
+    void SetMaxPage(int v) { m_printMaxPage = v; }
+    void SetNoCopies(int v) { m_printNoCopies = v; }
+    void SetAllPages(bool flag) { m_printAllPages = flag; }
+    void SetSelection(bool flag) { m_printSelection = flag; }
+    void SetCollate(bool flag) { m_printCollate = flag; }
+    void SetPrintToFile(bool flag) { m_printToFile = flag; }
 
-    void EnablePrintToFile(bool flag) { m_printEnablePrintToFile = flag; };
-    void EnableSelection(bool flag) { m_printEnableSelection = flag; };
-    void EnablePageNumbers(bool flag) { m_printEnablePageNumbers = flag; };
-    void EnableHelp(bool flag) { m_printEnableHelp = flag; };
+    void EnablePrintToFile(bool flag) { m_printEnablePrintToFile = flag; }
+    void EnableSelection(bool flag) { m_printEnableSelection = flag; }
+    void EnablePageNumbers(bool flag) { m_printEnablePageNumbers = flag; }
+    void EnableHelp(bool flag) { m_printEnableHelp = flag; }
 
-    bool GetEnablePrintToFile() const { return m_printEnablePrintToFile; };
-    bool GetEnableSelection() const { return m_printEnableSelection; };
-    bool GetEnablePageNumbers() const { return m_printEnablePageNumbers; };
-    bool GetEnableHelp() const { return m_printEnableHelp; };
+    bool GetEnablePrintToFile() const { return m_printEnablePrintToFile; }
+    bool GetEnableSelection() const { return m_printEnableSelection; }
+    bool GetEnablePageNumbers() const { return m_printEnablePageNumbers; }
+    bool GetEnableHelp() const { return m_printEnableHelp; }
 
     // Is this data OK for showing the print dialog?
     bool Ok() const { return IsOk(); }
@@ -344,20 +344,20 @@ public:
     wxPageSetupDialogData(const wxPrintData& printData);
     virtual ~wxPageSetupDialogData();
 
-    wxSize GetPaperSize() const { return m_paperSize; };
-    wxPaperSize GetPaperId() const { return m_printData.GetPaperId(); };
-    wxPoint GetMinMarginTopLeft() const { return m_minMarginTopLeft; };
-    wxPoint GetMinMarginBottomRight() const { return m_minMarginBottomRight; };
-    wxPoint GetMarginTopLeft() const { return m_marginTopLeft; };
-    wxPoint GetMarginBottomRight() const { return m_marginBottomRight; };
+    wxSize GetPaperSize() const { return m_paperSize; }
+    wxPaperSize GetPaperId() const { return m_printData.GetPaperId(); }
+    wxPoint GetMinMarginTopLeft() const { return m_minMarginTopLeft; }
+    wxPoint GetMinMarginBottomRight() const { return m_minMarginBottomRight; }
+    wxPoint GetMarginTopLeft() const { return m_marginTopLeft; }
+    wxPoint GetMarginBottomRight() const { return m_marginBottomRight; }
 
-    bool GetDefaultMinMargins() const { return m_defaultMinMargins; };
-    bool GetEnableMargins() const { return m_enableMargins; };
-    bool GetEnableOrientation() const { return m_enableOrientation; };
-    bool GetEnablePaper() const { return m_enablePaper; };
-    bool GetEnablePrinter() const { return m_enablePrinter; };
-    bool GetDefaultInfo() const { return m_getDefaultInfo; };
-    bool GetEnableHelp() const { return m_enableHelp; };
+    bool GetDefaultMinMargins() const { return m_defaultMinMargins; }
+    bool GetEnableMargins() const { return m_enableMargins; }
+    bool GetEnableOrientation() const { return m_enableOrientation; }
+    bool GetEnablePaper() const { return m_enablePaper; }
+    bool GetEnablePrinter() const { return m_enablePrinter; }
+    bool GetDefaultInfo() const { return m_getDefaultInfo; }
+    bool GetEnableHelp() const { return m_enableHelp; }
 
     // Is this data OK for showing the page setup dialog?
     bool Ok() const { return IsOk(); }
@@ -367,23 +367,23 @@ public:
     // paper size id member as well.
     void SetPaperSize(const wxSize& sz);
 
-    void SetPaperId(wxPaperSize id) { m_printData.SetPaperId(id); };
+    void SetPaperId(wxPaperSize id) { m_printData.SetPaperId(id); }
 
     // Sets the wxPrintData id, plus the paper width/height if found in the paper database.
     void SetPaperSize(wxPaperSize id);
 
-    void SetMinMarginTopLeft(const wxPoint& pt) { m_minMarginTopLeft = pt; };
-    void SetMinMarginBottomRight(const wxPoint& pt) { m_minMarginBottomRight = pt; };
-    void SetMarginTopLeft(const wxPoint& pt) { m_marginTopLeft = pt; };
-    void SetMarginBottomRight(const wxPoint& pt) { m_marginBottomRight = pt; };
-    void SetDefaultMinMargins(bool flag) { m_defaultMinMargins = flag; };
-    void SetDefaultInfo(bool flag) { m_getDefaultInfo = flag; };
+    void SetMinMarginTopLeft(const wxPoint& pt) { m_minMarginTopLeft = pt; }
+    void SetMinMarginBottomRight(const wxPoint& pt) { m_minMarginBottomRight = pt; }
+    void SetMarginTopLeft(const wxPoint& pt) { m_marginTopLeft = pt; }
+    void SetMarginBottomRight(const wxPoint& pt) { m_marginBottomRight = pt; }
+    void SetDefaultMinMargins(bool flag) { m_defaultMinMargins = flag; }
+    void SetDefaultInfo(bool flag) { m_getDefaultInfo = flag; }
 
-    void EnableMargins(bool flag) { m_enableMargins = flag; };
-    void EnableOrientation(bool flag) { m_enableOrientation = flag; };
-    void EnablePaper(bool flag) { m_enablePaper = flag; };
-    void EnablePrinter(bool flag) { m_enablePrinter = flag; };
-    void EnableHelp(bool flag) { m_enableHelp = flag; };
+    void EnableMargins(bool flag) { m_enableMargins = flag; }
+    void EnableOrientation(bool flag) { m_enableOrientation = flag; }
+    void EnablePaper(bool flag) { m_enablePaper = flag; }
+    void EnablePrinter(bool flag) { m_enablePrinter = flag; }
+    void EnableHelp(bool flag) { m_enableHelp = flag; }
 
     // Use paper size defined in this object to set the wxPrintData
     // paper id

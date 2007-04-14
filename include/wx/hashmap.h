@@ -271,9 +271,9 @@ public: \
     const_iterator end() const { return const_iterator( 0, this ); } \
     iterator end() { return iterator( 0, this ); } \
     const_iterator begin() const \
-        { return const_iterator( (Node*)GetFirstNode( m_tableBuckets, (_wxHashTable_NodeBase**)m_table ), this ); }; \
+        { return const_iterator( (Node*)GetFirstNode( m_tableBuckets, (_wxHashTable_NodeBase**)m_table ), this ); }  \
     iterator begin() \
-        { return iterator( (Node*)GetFirstNode( m_tableBuckets, (_wxHashTable_NodeBase**)m_table ), this ); }; \
+        { return iterator( (Node*)GetFirstNode( m_tableBuckets, (_wxHashTable_NodeBase**)m_table ), this ); }  \
  \
     size_type erase( const const_key_type& key ) \
     { \

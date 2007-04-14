@@ -153,7 +153,7 @@ public:
     typedef wxHashTableBase_Node Node;
 
     wxHashTableBase();
-    virtual ~wxHashTableBase() { };
+    virtual ~wxHashTableBase() { }
 
     void Create( wxKeyType keyType = wxKEY_INTEGER,
                  size_t size = wxHASH_SIZE_DEFAULT );

@@ -332,7 +332,7 @@ public:
     bool HasCurrentRow() { return m_currentRow != (unsigned int)-1; }
     void ChangeCurrentRow( unsigned int row );
 
-    bool IsSingleSel() const { return !GetParent()->HasFlag(wxDV_MULTIPLE); };
+    bool IsSingleSel() const { return !GetParent()->HasFlag(wxDV_MULTIPLE); }
     bool IsEmpty() { return GetRowCount() == 0; }
 
     int GetCountPerPage() const;

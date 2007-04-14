@@ -205,94 +205,94 @@ protected:
     bool m_ok;
 
 public:
-    wxDL_VOIDMETHOD_DEFINE( StartMovie, (Movie m), (m) );
-    wxDL_VOIDMETHOD_DEFINE( StopMovie, (Movie m), (m) );
-    wxDL_METHOD_DEFINE( bool, IsMovieDone, (Movie m), (m), false);
-    wxDL_VOIDMETHOD_DEFINE( GoToBeginningOfMovie, (Movie m), (m) );
-    wxDL_METHOD_DEFINE( OSErr, GetMoviesError, (), (), -1);
-    wxDL_METHOD_DEFINE( OSErr, EnterMovies, (), (), -1);
-    wxDL_VOIDMETHOD_DEFINE( ExitMovies, (), () );
-    wxDL_METHOD_DEFINE( OSErr, InitializeQTML, (long flags), (flags), -1);
-    wxDL_VOIDMETHOD_DEFINE( TerminateQTML, (), () );
+    wxDL_VOIDMETHOD_DEFINE( StartMovie, (Movie m), (m) )
+    wxDL_VOIDMETHOD_DEFINE( StopMovie, (Movie m), (m) )
+    wxDL_METHOD_DEFINE( bool, IsMovieDone, (Movie m), (m), false)
+    wxDL_VOIDMETHOD_DEFINE( GoToBeginningOfMovie, (Movie m), (m) )
+    wxDL_METHOD_DEFINE( OSErr, GetMoviesError, (), (), -1)
+    wxDL_METHOD_DEFINE( OSErr, EnterMovies, (), (), -1)
+    wxDL_VOIDMETHOD_DEFINE( ExitMovies, (), () )
+    wxDL_METHOD_DEFINE( OSErr, InitializeQTML, (long flags), (flags), -1)
+    wxDL_VOIDMETHOD_DEFINE( TerminateQTML, (), () )
 
     wxDL_METHOD_DEFINE( OSErr, NativePathNameToFSSpec,
                         (char* inName, FSSpec* outFile, long flags),
-                        (inName, outFile, flags), -1);
+                        (inName, outFile, flags), -1)
 
     wxDL_METHOD_DEFINE( OSErr, OpenMovieFile,
                         (const FSSpec * fileSpec, short * resRefNum, wxInt8 permission),
-                        (fileSpec, resRefNum, permission), -1 );
+                        (fileSpec, resRefNum, permission), -1 )
 
     wxDL_METHOD_DEFINE( OSErr, CloseMovieFile,
-                        (short resRefNum), (resRefNum), -1);
+                        (short resRefNum), (resRefNum), -1)
 
     wxDL_METHOD_DEFINE( OSErr, NewMovieFromFile,
                             (Movie * theMovie, short resRefNum, short *  resId,
                              StringPtr resName, short newMovieFlags,
                              bool * dataRefWasChanged),
                              (theMovie, resRefNum, resId, resName, newMovieFlags,
-                              dataRefWasChanged), -1);
+                              dataRefWasChanged), -1)
 
-    wxDL_VOIDMETHOD_DEFINE( SetMovieRate, (Movie m, Fixed rate), (m, rate) );
-    wxDL_METHOD_DEFINE( Fixed, GetMovieRate, (Movie m), (m), 0);
-    wxDL_VOIDMETHOD_DEFINE( MoviesTask, (Movie m, long maxms), (m, maxms) );
+    wxDL_VOIDMETHOD_DEFINE( SetMovieRate, (Movie m, Fixed rate), (m, rate) )
+    wxDL_METHOD_DEFINE( Fixed, GetMovieRate, (Movie m), (m), 0)
+    wxDL_VOIDMETHOD_DEFINE( MoviesTask, (Movie m, long maxms), (m, maxms) )
     wxDL_VOIDMETHOD_DEFINE( BlockMove,
-        (const char* p1, const char* p2, long s), (p1,p2,s) );
-    wxDL_METHOD_DEFINE( Handle, NewHandleClear, (long s), (s), NULL );
+        (const char* p1, const char* p2, long s), (p1,p2,s) )
+    wxDL_METHOD_DEFINE( Handle, NewHandleClear, (long s), (s), NULL )
 
     wxDL_METHOD_DEFINE( OSErr, NewMovieFromDataRef,
                            (Movie * m, short flags, short * id,
                             Handle  dataRef, OSType  dataRefType),
-                            (m,flags,id,dataRef,dataRefType), -1 );
+                            (m,flags,id,dataRef,dataRefType), -1 )
 
-    wxDL_VOIDMETHOD_DEFINE( DisposeHandle, (Handle h), (h) );
-    wxDL_VOIDMETHOD_DEFINE( GetMovieNaturalBoundsRect, (Movie m, Rect* r), (m,r) );
+    wxDL_VOIDMETHOD_DEFINE( DisposeHandle, (Handle h), (h) )
+    wxDL_VOIDMETHOD_DEFINE( GetMovieNaturalBoundsRect, (Movie m, Rect* r), (m,r) )
     wxDL_METHOD_DEFINE( void*, GetMovieIndTrackType,
                         (Movie m, long index, OSType type, long flags),
-                        (m,index,type,flags), NULL );
+                        (m,index,type,flags), NULL )
     wxDL_VOIDMETHOD_DEFINE( CreatePortAssociation,
-            (void* hWnd, void* junk, long morejunk), (hWnd, junk, morejunk) );
-    wxDL_METHOD_DEFINE(void*, GetNativeWindowPort, (void* hWnd), (hWnd), NULL);
+            (void* hWnd, void* junk, long morejunk), (hWnd, junk, morejunk) )
+    wxDL_METHOD_DEFINE(void*, GetNativeWindowPort, (void* hWnd), (hWnd), NULL)
     wxDL_VOIDMETHOD_DEFINE(SetMovieGWorld, (Movie m, CGrafPtr port, void* whatever),
-                            (m, port, whatever) );
-    wxDL_VOIDMETHOD_DEFINE(DisposeMovie, (Movie m), (m) );
-    wxDL_VOIDMETHOD_DEFINE(SetMovieBox, (Movie m, Rect* r), (m,r));
-    wxDL_VOIDMETHOD_DEFINE(SetMovieTimeScale, (Movie m, long s), (m,s));
-    wxDL_METHOD_DEFINE(long, GetMovieDuration, (Movie m), (m), 0);
-    wxDL_METHOD_DEFINE(TimeBase, GetMovieTimeBase, (Movie m), (m), 0);
-    wxDL_METHOD_DEFINE(TimeScale, GetMovieTimeScale, (Movie m), (m), 0);
-    wxDL_METHOD_DEFINE(long, GetMovieTime, (Movie m, void* cruft), (m,cruft), 0);
-    wxDL_VOIDMETHOD_DEFINE(SetMovieTime, (Movie m, TimeRecord* tr), (m,tr) );
-    wxDL_METHOD_DEFINE(short, GetMovieVolume, (Movie m), (m), 0);
-    wxDL_VOIDMETHOD_DEFINE(SetMovieVolume, (Movie m, short sVolume), (m,sVolume) );
-    wxDL_VOIDMETHOD_DEFINE(SetMovieTimeValue, (Movie m, long s), (m,s));
-    wxDL_METHOD_DEFINE(ComponentInstance, NewMovieController, (Movie m, const Rect* mr, long fl), (m,mr,fl), 0);
-    wxDL_VOIDMETHOD_DEFINE(DisposeMovieController, (ComponentInstance ci), (ci));
-    wxDL_METHOD_DEFINE(int, MCSetVisible, (ComponentInstance m, int b), (m, b), 0);
+                            (m, port, whatever) )
+    wxDL_VOIDMETHOD_DEFINE(DisposeMovie, (Movie m), (m) )
+    wxDL_VOIDMETHOD_DEFINE(SetMovieBox, (Movie m, Rect* r), (m,r))
+    wxDL_VOIDMETHOD_DEFINE(SetMovieTimeScale, (Movie m, long s), (m,s))
+    wxDL_METHOD_DEFINE(long, GetMovieDuration, (Movie m), (m), 0)
+    wxDL_METHOD_DEFINE(TimeBase, GetMovieTimeBase, (Movie m), (m), 0)
+    wxDL_METHOD_DEFINE(TimeScale, GetMovieTimeScale, (Movie m), (m), 0)
+    wxDL_METHOD_DEFINE(long, GetMovieTime, (Movie m, void* cruft), (m,cruft), 0)
+    wxDL_VOIDMETHOD_DEFINE(SetMovieTime, (Movie m, TimeRecord* tr), (m,tr) )
+    wxDL_METHOD_DEFINE(short, GetMovieVolume, (Movie m), (m), 0)
+    wxDL_VOIDMETHOD_DEFINE(SetMovieVolume, (Movie m, short sVolume), (m,sVolume) )
+    wxDL_VOIDMETHOD_DEFINE(SetMovieTimeValue, (Movie m, long s), (m,s))
+    wxDL_METHOD_DEFINE(ComponentInstance, NewMovieController, (Movie m, const Rect* mr, long fl), (m,mr,fl), 0)
+    wxDL_VOIDMETHOD_DEFINE(DisposeMovieController, (ComponentInstance ci), (ci))
+    wxDL_METHOD_DEFINE(int, MCSetVisible, (ComponentInstance m, int b), (m, b), 0)
 
-    wxDL_VOIDMETHOD_DEFINE(PrePrerollMovie, (Movie m, long t, Fixed r, WXFARPROC p1, void* p2), (m,t,r,p1,p2) );
-    wxDL_VOIDMETHOD_DEFINE(PrerollMovie, (Movie m, long t, Fixed r), (m,t,r) );
-    wxDL_METHOD_DEFINE(Fixed, GetMoviePreferredRate, (Movie m), (m), 0);
-    wxDL_METHOD_DEFINE(long, GetMovieLoadState, (Movie m), (m), 0);
-    wxDL_METHOD_DEFINE(void*, NewRoutineDescriptor, (WXFARPROC f, int l, void* junk), (f, l, junk), 0);
-    wxDL_VOIDMETHOD_DEFINE(DisposeRoutineDescriptor, (void* f), (f));
-    wxDL_METHOD_DEFINE(void*, GetCurrentArchitecture, (), (), 0);
-    wxDL_METHOD_DEFINE(int, MCDoAction, (ComponentInstance ci, long f, void* p), (ci,f,p), 0);
-    wxDL_VOIDMETHOD_DEFINE(MCSetControllerBoundsRect, (ComponentInstance ci, Rect* r), (ci,r));
-    wxDL_VOIDMETHOD_DEFINE(DestroyPortAssociation, (CGrafPtr g), (g));
-    wxDL_VOIDMETHOD_DEFINE(NativeEventToMacEvent, (MSG* p1, EventRecord* p2), (p1,p2));
-    wxDL_VOIDMETHOD_DEFINE(MCIsPlayerEvent, (ComponentInstance ci, EventRecord* p2), (ci, p2));
+    wxDL_VOIDMETHOD_DEFINE(PrePrerollMovie, (Movie m, long t, Fixed r, WXFARPROC p1, void* p2), (m,t,r,p1,p2) )
+    wxDL_VOIDMETHOD_DEFINE(PrerollMovie, (Movie m, long t, Fixed r), (m,t,r) )
+    wxDL_METHOD_DEFINE(Fixed, GetMoviePreferredRate, (Movie m), (m), 0)
+    wxDL_METHOD_DEFINE(long, GetMovieLoadState, (Movie m), (m), 0)
+    wxDL_METHOD_DEFINE(void*, NewRoutineDescriptor, (WXFARPROC f, int l, void* junk), (f, l, junk), 0)
+    wxDL_VOIDMETHOD_DEFINE(DisposeRoutineDescriptor, (void* f), (f))
+    wxDL_METHOD_DEFINE(void*, GetCurrentArchitecture, (), (), 0)
+    wxDL_METHOD_DEFINE(int, MCDoAction, (ComponentInstance ci, long f, void* p), (ci,f,p), 0)
+    wxDL_VOIDMETHOD_DEFINE(MCSetControllerBoundsRect, (ComponentInstance ci, Rect* r), (ci,r))
+    wxDL_VOIDMETHOD_DEFINE(DestroyPortAssociation, (CGrafPtr g), (g))
+    wxDL_VOIDMETHOD_DEFINE(NativeEventToMacEvent, (MSG* p1, EventRecord* p2), (p1,p2))
+    wxDL_VOIDMETHOD_DEFINE(MCIsPlayerEvent, (ComponentInstance ci, EventRecord* p2), (ci, p2))
     wxDL_METHOD_DEFINE(int, MCSetMovie, (ComponentInstance ci, Movie m, void* p1, Point w),
-                          (ci,m,p1,w),0);
+                          (ci,m,p1,w),0)
     wxDL_VOIDMETHOD_DEFINE(MCPositionController,
-        (ComponentInstance ci, Rect* r, void* junk, void* morejunk), (ci,r,junk,morejunk));
+        (ComponentInstance ci, Rect* r, void* junk, void* morejunk), (ci,r,junk,morejunk))
     wxDL_VOIDMETHOD_DEFINE(MCSetActionFilterWithRefCon,
-        (ComponentInstance ci, WXFARPROC cb, void* ref), (ci,cb,ref));
-    wxDL_VOIDMETHOD_DEFINE(MCGetControllerInfo, (MovieController mc, long* flags), (mc,flags));
-    wxDL_VOIDMETHOD_DEFINE(BeginUpdate, (CGrafPtr port), (port));
-    wxDL_VOIDMETHOD_DEFINE(UpdateMovie, (Movie m), (m));
-    wxDL_VOIDMETHOD_DEFINE(EndUpdate, (CGrafPtr port), (port));
-    wxDL_METHOD_DEFINE( OSErr, GetMoviesStickyError, (), (), -1);
+        (ComponentInstance ci, WXFARPROC cb, void* ref), (ci,cb,ref))
+    wxDL_VOIDMETHOD_DEFINE(MCGetControllerInfo, (MovieController mc, long* flags), (mc,flags))
+    wxDL_VOIDMETHOD_DEFINE(BeginUpdate, (CGrafPtr port), (port))
+    wxDL_VOIDMETHOD_DEFINE(UpdateMovie, (Movie m), (m))
+    wxDL_VOIDMETHOD_DEFINE(EndUpdate, (CGrafPtr port), (port))
+    wxDL_METHOD_DEFINE( OSErr, GetMoviesStickyError, (), (), -1)
 };
 
 bool wxQuickTimeLibrary::Initialize()

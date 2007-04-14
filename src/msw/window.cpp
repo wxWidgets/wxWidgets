@@ -6641,7 +6641,7 @@ public:
         }
 
         return CallNextHookEx(ms_hMsgHookProc, nCode, wParam, lParam);
-    };
+    }
 
 private:
     static HHOOK ms_hMsgHookProc;

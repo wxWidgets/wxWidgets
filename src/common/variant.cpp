@@ -226,7 +226,7 @@ public:
     virtual bool Write(wxOutputStream &str) const;
 #endif // wxUSE_STREAMS
 
-    virtual wxString GetType() const { return wxT("long"); };
+    virtual wxString GetType() const { return wxT("long"); }
 
 protected:
     long m_value;
@@ -377,7 +377,7 @@ public:
     virtual bool Read(wxInputStream& str);
     virtual bool Write(wxOutputStream &str) const;
 #endif // wxUSE_STREAMS
-    virtual wxString GetType() const { return wxT("double"); };
+    virtual wxString GetType() const { return wxT("double"); }
 
 protected:
     double m_value;
@@ -517,7 +517,7 @@ public:
     virtual bool Read(wxInputStream& str);
     virtual bool Write(wxOutputStream& str) const;
 #endif // wxUSE_STREAMS
-    virtual wxString GetType() const { return wxT("bool"); };
+    virtual wxString GetType() const { return wxT("bool"); }
 
 protected:
     bool m_value;
@@ -658,7 +658,7 @@ public:
     virtual bool Read(wxInputStream& str);
     virtual bool Write(wxOutputStream& str) const;
 #endif // wxUSE_STREAMS
-    virtual wxString GetType() const { return wxT("char"); };
+    virtual wxString GetType() const { return wxT("char"); }
 
 protected:
     wxChar m_value;
@@ -793,13 +793,13 @@ public:
     virtual bool Read(wxString& str);
     virtual bool Write(wxString& str) const;
 #if wxUSE_STD_IOSTREAM
-    virtual bool Read(wxSTD istream& WXUNUSED(str)) { return false; };
+    virtual bool Read(wxSTD istream& WXUNUSED(str)) { return false; }
 #endif
 #if wxUSE_STREAMS
     virtual bool Read(wxInputStream& str);
     virtual bool Write(wxOutputStream& str) const;
 #endif // wxUSE_STREAMS
-    virtual wxString GetType() const { return wxT("string"); };
+    virtual wxString GetType() const { return wxT("string"); }
 
 protected:
     wxString m_value;
@@ -1066,7 +1066,7 @@ public:
     virtual bool Read(wxSTD istream& str);
 #endif
     virtual bool Read(wxString& str);
-    virtual wxString GetType() const { return wxT("void*"); };
+    virtual wxString GetType() const { return wxT("void*"); }
     virtual wxVariantData* Clone() { return new wxVariantDataVoidPtr; }
 
 protected:
@@ -1190,7 +1190,7 @@ public:
     virtual bool Read(wxSTD istream& str);
 #endif
     virtual bool Read(wxString& str);
-    virtual wxString GetType() const { return wxT("datetime"); };
+    virtual wxString GetType() const { return wxT("datetime"); }
     virtual wxVariantData* Clone() { return new wxVariantDataDateTime; }
 
 protected:
@@ -1356,7 +1356,7 @@ public:
     virtual bool Read(wxSTD istream& str);
 #endif
     virtual bool Read(wxString& str);
-    virtual wxString GetType() const { return wxT("arrstring"); };
+    virtual wxString GetType() const { return wxT("arrstring"); }
     virtual wxVariantData* Clone() { return new wxVariantDataArrayString; }
 
 protected:
@@ -1485,7 +1485,7 @@ public:
     virtual bool Read(wxSTD istream& str);
 #endif
     virtual bool Read(wxString& str);
-    virtual wxString GetType() const { return wxT("list"); };
+    virtual wxString GetType() const { return wxT("list"); }
 
     void Clear();
 

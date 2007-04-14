@@ -415,14 +415,14 @@ public:
     // get/set the size of the bitmaps used by the toolbar: should be called
     // before adding any tools to the toolbar
     virtual void SetToolBitmapSize(const wxSize& size)
-        { m_defaultWidth = size.x; m_defaultHeight = size.y; };
+        { m_defaultWidth = size.x; m_defaultHeight = size.y; }
     virtual wxSize GetToolBitmapSize() const
         { return wxSize(m_defaultWidth, m_defaultHeight); }
 
     // the button size in some implementations is bigger than the bitmap size:
     // get the total button size (by default the same as bitmap size)
     virtual wxSize GetToolSize() const
-        { return GetToolBitmapSize(); } ;
+        { return GetToolBitmapSize(); }
 
     // returns a (non separator) tool containing the point (x, y) or NULL if
     // there is no tool at this point (corrdinates are client)
