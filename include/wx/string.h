@@ -60,6 +60,12 @@
 
 class WXDLLIMPEXP_BASE wxString;
 
+// unless this symbol is predefined to disable the compatibility functions, do
+// use them
+#ifndef WXWIN_COMPATIBILITY_STRING_PTR_AS_ITER
+    #define WXWIN_COMPATIBILITY_STRING_PTR_AS_ITER 1
+#endif
+
 // ---------------------------------------------------------------------------
 // macros
 // ---------------------------------------------------------------------------
@@ -559,102 +565,6 @@ private:
     { return ConvertStr(str, n, wxConvUTF8); }
 #endif // !wxUSE_UNICODE_UTF8/wxUSE_UNICODE_UTF8
 
-
-public:
-  // constructors and destructor
-    // ctor for an empty string
-  wxString() {}
-
-    // copy ctor
-  // FIXME-UTF8: this one needs to do UTF-8 conversion in UTF-8 build!
-  wxString(const wxStringImpl& stringSrc) : m_impl(stringSrc) { }
-
-  wxString(const wxString& stringSrc) : m_impl(stringSrc.m_impl) { }
-
-    // string containing nRepeat copies of ch
-  wxString(wxUniChar ch, size_t nRepeat = 1)
-    { assign(nRepeat, ch); }
-  wxString(size_t nRepeat, wxUniChar ch)
-    { assign(nRepeat, ch); }
-  wxString(wxUniCharRef ch, size_t nRepeat = 1)
-    { assign(nRepeat, ch); }
-  wxString(size_t nRepeat, wxUniCharRef ch)
-    { assign(nRepeat, ch); }
-  wxString(char ch, size_t nRepeat = 1)
-    { assign(nRepeat, ch); }
-  wxString(size_t nRepeat, char ch)
-    { assign(nRepeat, ch); }
-  wxString(wchar_t ch, size_t nRepeat = 1)
-    { assign(nRepeat, ch); }
-  wxString(size_t nRepeat, wchar_t ch)
-    { assign(nRepeat, ch); }
-
-    // ctors from char* strings:
-  wxString(const char *psz)
-    : m_impl(ImplStr(psz)) {}
-  wxString(const char *psz, const wxMBConv& conv)
-    : m_impl(ImplStr(psz, conv)) {}
-  wxString(const char *psz, size_t nLength)
-    { assign(psz, nLength); }
-  wxString(const char *psz, const wxMBConv& conv, size_t nLength)
-  {
-    SubstrBufFromMB str(ImplStr(psz, nLength, conv));
-    m_impl.assign(str.data, str.len);
-  }
-
-    // and unsigned char*:
-  wxString(const unsigned char *psz)
-    : m_impl(ImplStr((const char*)psz)) {}
-  wxString(const unsigned char *psz, const wxMBConv& conv)
-    : m_impl(ImplStr((const char*)psz, conv)) {}
-  wxString(const unsigned char *psz, size_t nLength)
-    { assign((const char*)psz, nLength); }
-  wxString(const unsigned char *psz, const wxMBConv& conv, size_t nLength)
-  {
-    SubstrBufFromMB str(ImplStr((const char*)psz, nLength, conv));
-    m_impl.assign(str.data, str.len);
-  }
-
-    // ctors from wchar_t* strings:
-  wxString(const wchar_t *pwz)
-    : m_impl(ImplStr(pwz)) {}
-  wxString(const wchar_t *pwz, const wxMBConv& WXUNUSED(conv))
-    : m_impl(ImplStr(pwz)) {}
-  wxString(const wchar_t *pwz, size_t nLength)
-    { assign(pwz, nLength); }
-  wxString(const wchar_t *pwz, const wxMBConv& WXUNUSED(conv), size_t nLength)
-    { assign(pwz, nLength); }
-
-  wxString(const wxCharBuffer& buf)
-    { assign(buf.data()); } // FIXME-UTF8: fix for embedded NUL and buffer length
-  wxString(const wxWCharBuffer& buf)
-    { assign(buf.data()); } // FIXME-UTF8: fix for embedded NUL and buffer length
-
-  wxString(const wxCStrData& cstr)
-      : m_impl(cstr.AsString().m_impl) { }
-
-    // as we provide both ctors with this signature for both char and unsigned
-    // char string, we need to provide one for wxCStrData to resolve ambiguity
-  wxString(const wxCStrData& cstr, size_t nLength)
-      : m_impl(cstr.AsString().Mid(0, nLength).m_impl) {}
-
-    // and because wxString is convertible to wxCStrData and const wxChar *
-    // we also need to provide this one
-  wxString(const wxString& str, size_t nLength)
-      : m_impl(str.Mid(0, nLength).m_impl) {}
-
-  // even if we're not built with wxUSE_STL == 1 it is very convenient to allow
-  // implicit conversions from std::string to wxString as this allows to use
-  // the same strings in non-GUI and GUI code, however we don't want to
-  // unconditionally add this ctor as it would make wx lib dependent on
-  // libstdc++ on some Linux versions which is bad, so instead we ask the
-  // client code to define this wxUSE_STD_STRING symbol if they need it
-#if wxUSE_STD_STRING && !wxUSE_STL_BASED_WXSTRING
-  wxString(const wxStdString& s)
-      // FIXME-UTF8: this one needs to do UTF-8 conversion in UTF-8 build!
-      : m_impl(s.c_str()) { } // FIXME-UTF8: this is broken for embedded 0s
-#endif // wxUSE_STD_STRING && !wxUSE_STL_BASED_WXSTRING
-
 public:
   // standard types
   typedef wxUniChar value_type;
@@ -909,6 +819,110 @@ public:
 
   typedef reverse_iterator_impl<iterator> reverse_iterator;
   typedef reverse_iterator_impl<const_iterator> const_reverse_iterator;
+
+private:
+  // used to transform an expression built using c_str() (and hence of type
+  // wxCStrData) to an iterator into the string
+  static const_iterator CreateConstIterator(const wxCStrData& data)
+  {
+      return const_iterator(data.m_str->begin() + data.m_offset);
+  }
+
+public:
+  // constructors and destructor
+    // ctor for an empty string
+  wxString() {}
+
+    // copy ctor
+  // FIXME-UTF8: this one needs to do UTF-8 conversion in UTF-8 build!
+  wxString(const wxStringImpl& stringSrc) : m_impl(stringSrc) { }
+
+  wxString(const wxString& stringSrc) : m_impl(stringSrc.m_impl) { }
+
+    // string containing nRepeat copies of ch
+  wxString(wxUniChar ch, size_t nRepeat = 1)
+    { assign(nRepeat, ch); }
+  wxString(size_t nRepeat, wxUniChar ch)
+    { assign(nRepeat, ch); }
+  wxString(wxUniCharRef ch, size_t nRepeat = 1)
+    { assign(nRepeat, ch); }
+  wxString(size_t nRepeat, wxUniCharRef ch)
+    { assign(nRepeat, ch); }
+  wxString(char ch, size_t nRepeat = 1)
+    { assign(nRepeat, ch); }
+  wxString(size_t nRepeat, char ch)
+    { assign(nRepeat, ch); }
+  wxString(wchar_t ch, size_t nRepeat = 1)
+    { assign(nRepeat, ch); }
+  wxString(size_t nRepeat, wchar_t ch)
+    { assign(nRepeat, ch); }
+
+    // ctors from char* strings:
+  wxString(const char *psz)
+    : m_impl(ImplStr(psz)) {}
+  wxString(const char *psz, const wxMBConv& conv)
+    : m_impl(ImplStr(psz, conv)) {}
+  wxString(const char *psz, size_t nLength)
+    { assign(psz, nLength); }
+  wxString(const char *psz, const wxMBConv& conv, size_t nLength)
+  {
+    SubstrBufFromMB str(ImplStr(psz, nLength, conv));
+    m_impl.assign(str.data, str.len);
+  }
+
+    // and unsigned char*:
+  wxString(const unsigned char *psz)
+    : m_impl(ImplStr((const char*)psz)) {}
+  wxString(const unsigned char *psz, const wxMBConv& conv)
+    : m_impl(ImplStr((const char*)psz, conv)) {}
+  wxString(const unsigned char *psz, size_t nLength)
+    { assign((const char*)psz, nLength); }
+  wxString(const unsigned char *psz, const wxMBConv& conv, size_t nLength)
+  {
+    SubstrBufFromMB str(ImplStr((const char*)psz, nLength, conv));
+    m_impl.assign(str.data, str.len);
+  }
+
+    // ctors from wchar_t* strings:
+  wxString(const wchar_t *pwz)
+    : m_impl(ImplStr(pwz)) {}
+  wxString(const wchar_t *pwz, const wxMBConv& WXUNUSED(conv))
+    : m_impl(ImplStr(pwz)) {}
+  wxString(const wchar_t *pwz, size_t nLength)
+    { assign(pwz, nLength); }
+  wxString(const wchar_t *pwz, const wxMBConv& WXUNUSED(conv), size_t nLength)
+    { assign(pwz, nLength); }
+
+  wxString(const wxCharBuffer& buf)
+    { assign(buf.data()); } // FIXME-UTF8: fix for embedded NUL and buffer length
+  wxString(const wxWCharBuffer& buf)
+    { assign(buf.data()); } // FIXME-UTF8: fix for embedded NUL and buffer length
+
+  wxString(const wxCStrData& cstr)
+      : m_impl(cstr.AsString().m_impl) { }
+
+    // as we provide both ctors with this signature for both char and unsigned
+    // char string, we need to provide one for wxCStrData to resolve ambiguity
+  wxString(const wxCStrData& cstr, size_t nLength)
+      : m_impl(cstr.AsString().Mid(0, nLength).m_impl) {}
+
+    // and because wxString is convertible to wxCStrData and const wxChar *
+    // we also need to provide this one
+  wxString(const wxString& str, size_t nLength)
+      : m_impl(str.Mid(0, nLength).m_impl) {}
+
+  // even if we're not built with wxUSE_STL == 1 it is very convenient to allow
+  // implicit conversions from std::string to wxString as this allows to use
+  // the same strings in non-GUI and GUI code, however we don't want to
+  // unconditionally add this ctor as it would make wx lib dependent on
+  // libstdc++ on some Linux versions which is bad, so instead we ask the
+  // client code to define this wxUSE_STD_STRING symbol if they need it
+#if wxUSE_STD_STRING && !wxUSE_STL_BASED_WXSTRING
+  wxString(const wxStdString& s)
+      // FIXME-UTF8: this one needs to do UTF-8 conversion in UTF-8 build!
+      : m_impl(s.c_str()) { } // FIXME-UTF8: this is broken for embedded 0s
+#endif // wxUSE_STD_STRING && !wxUSE_STL_BASED_WXSTRING
+
 
   // first valid index position
   const_iterator begin() const { return const_iterator(m_impl.begin()); }
@@ -1566,6 +1580,9 @@ public:
     // take all characters from first to last
   wxString(const_iterator first, const_iterator last)
       : m_impl(first, last) { }
+#if WXWIN_COMPATIBILITY_STRING_PTR_AS_ITER
+    // the 2 overloads below are for compatibility with the existing code using
+    // pointers instead of iterators
   wxString(const char *first, const char *last)
   {
       SubstrBufFromMB str(ImplStr(first, last - first));
@@ -1576,6 +1593,14 @@ public:
       SubstrBufFromWC str(ImplStr(first, last - first));
       m_impl.assign(str.data, str.len);
   }
+    // and this one is needed to compile code adding offsets to c_str() result
+  wxString(const wxCStrData& first, const wxCStrData& last)
+      : m_impl(CreateConstIterator(first), CreateConstIterator(last))
+  {
+      wxASSERT_MSG( first.m_str == last.m_str,
+                    _T("pointers must be into the same string") );
+  }
+#endif // WXWIN_COMPATIBILITY_STRING_PTR_AS_ITER
 
   // lib.string.modifiers
     // append elements str[pos], ..., str[pos+n]
@@ -1622,10 +1647,14 @@ public:
     // append from first to last
   wxString& append(const_iterator first, const_iterator last)
     { m_impl.append(first, last); return *this; }
+#if WXWIN_COMPATIBILITY_STRING_PTR_AS_ITER
   wxString& append(const char *first, const char *last)
     { return append(first, last - first); }
   wxString& append(const wchar_t *first, const wchar_t *last)
     { return append(first, last - first); }
+  wxString& append(const wxCStrData& first, const wxCStrData& last)
+    { return append(CreateConstIterator(first), CreateConstIterator(last)); }
+#endif // WXWIN_COMPATIBILITY_STRING_PTR_AS_ITER
 
     // same as `this_string = str'
   wxString& assign(const wxString& str)
@@ -1684,10 +1713,14 @@ public:
     // assign from first to last
   wxString& assign(const_iterator first, const_iterator last)
     { m_impl.assign(first, last); return *this; }
+#if WXWIN_COMPATIBILITY_STRING_PTR_AS_ITER
   wxString& assign(const char *first, const char *last)
     { return assign(first, last - first); }
   wxString& assign(const wchar_t *first, const wchar_t *last)
     { return assign(first, last - first); }
+  wxString& assign(const wxCStrData& first, const wxCStrData& last)
+    { return assign(CreateConstIterator(first), CreateConstIterator(last)); }
+#endif // WXWIN_COMPATIBILITY_STRING_PTR_AS_ITER
 
     // string comparison
   int compare(const wxString& str) const;
@@ -1759,10 +1792,15 @@ public:
   }
   void insert(iterator it, const_iterator first, const_iterator last)
     { m_impl.insert(it, first, last); }
+#if WXWIN_COMPATIBILITY_STRING_PTR_AS_ITER
   void insert(iterator it, const char *first, const char *last)
     { insert(it - begin(), first, last - first); }
-  void append(iterator it, const wchar_t *first, const wchar_t *last)
+  void insert(iterator it, const wchar_t *first, const wchar_t *last)
     { insert(it - begin(), first, last - first); }
+  void insert(iterator it, const wxCStrData& first, const wxCStrData& last)
+    { insert(it, CreateConstIterator(first), CreateConstIterator(last)); }
+#endif // WXWIN_COMPATIBILITY_STRING_PTR_AS_ITER
+
   void insert(iterator it, size_type n, wxUniChar ch)
   {
 #if wxUSE_UNICODE_UTF8
