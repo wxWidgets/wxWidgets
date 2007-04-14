@@ -657,6 +657,8 @@ wxFileOffset wxStreamBuffer::Tell() const
 // wxStreamBase
 // ----------------------------------------------------------------------------
 
+IMPLEMENT_ABSTRACT_CLASS(wxStreamBase, wxObject)
+
 wxStreamBase::wxStreamBase()
 {
     m_lasterror = wxSTREAM_NO_ERROR;
@@ -692,6 +694,8 @@ wxFileOffset wxStreamBase::OnSysTell() const
 // ----------------------------------------------------------------------------
 // wxInputStream
 // ----------------------------------------------------------------------------
+
+IMPLEMENT_ABSTRACT_CLASS(wxInputStream, wxStreamBase)
 
 wxInputStream::wxInputStream()
 {
@@ -938,6 +942,8 @@ wxFileOffset wxInputStream::TellI() const
 // wxOutputStream
 // ----------------------------------------------------------------------------
 
+IMPLEMENT_ABSTRACT_CLASS(wxOutputStream, wxStreamBase)
+
 wxOutputStream::wxOutputStream()
 {
 }
@@ -987,6 +993,8 @@ void wxOutputStream::Sync()
 // ----------------------------------------------------------------------------
 // wxCountingOutputStream
 // ----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxCountingOutputStream, wxOutputStream)
 
 wxCountingOutputStream::wxCountingOutputStream ()
 {
@@ -1050,6 +1058,8 @@ wxFileOffset wxCountingOutputStream::OnSysTell() const
 // wxFilterInputStream
 // ----------------------------------------------------------------------------
 
+IMPLEMENT_ABSTRACT_CLASS(wxFilterInputStream, wxInputStream)
+
 wxFilterInputStream::wxFilterInputStream()
  :  m_parent_i_stream(NULL),
     m_owns(false)
@@ -1077,6 +1087,8 @@ wxFilterInputStream::~wxFilterInputStream()
 // ----------------------------------------------------------------------------
 // wxFilterOutputStream
 // ----------------------------------------------------------------------------
+
+IMPLEMENT_ABSTRACT_CLASS(wxFilterOutputStream, wxOutputStream)
 
 wxFilterOutputStream::wxFilterOutputStream()
  :  m_parent_o_stream(NULL),

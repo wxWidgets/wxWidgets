@@ -52,7 +52,7 @@ const int wxEOF = -1;
 // wxStreamBase: common (but non virtual!) base for all stream classes
 // ---------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxStreamBase
+class WXDLLIMPEXP_BASE wxStreamBase : public wxObject
 {
 public:
     wxStreamBase();
@@ -82,6 +82,7 @@ protected:
 
     friend class wxStreamBuffer;
 
+    DECLARE_ABSTRACT_CLASS(wxStreamBase)
     DECLARE_NO_COPY_CLASS(wxStreamBase)
 };
 
@@ -216,6 +217,7 @@ protected:
 
     friend class wxStreamBuffer;
 
+    DECLARE_ABSTRACT_CLASS(wxInputStream)
     DECLARE_NO_COPY_CLASS(wxInputStream)
 };
 
@@ -251,6 +253,7 @@ protected:
 
     friend class wxStreamBuffer;
 
+    DECLARE_ABSTRACT_CLASS(wxOutputStream)
     DECLARE_NO_COPY_CLASS(wxOutputStream)
 };
 
@@ -278,6 +281,7 @@ protected:
 
     size_t m_currentPos;
 
+    DECLARE_DYNAMIC_CLASS(wxCountingOutputStream)
     DECLARE_NO_COPY_CLASS(wxCountingOutputStream)
 };
 
@@ -303,6 +307,7 @@ protected:
     wxInputStream *m_parent_i_stream;
     bool m_owns;
 
+    DECLARE_ABSTRACT_CLASS(wxFilterInputStream)
     DECLARE_NO_COPY_CLASS(wxFilterInputStream)
 };
 
@@ -324,6 +329,7 @@ protected:
     wxOutputStream *m_parent_o_stream;
     bool m_owns;
 
+    DECLARE_ABSTRACT_CLASS(wxFilterOutputStream)
     DECLARE_NO_COPY_CLASS(wxFilterOutputStream)
 };
 

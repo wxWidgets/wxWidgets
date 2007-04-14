@@ -80,6 +80,7 @@ All:
 - Added wxMemoryInputStream(wxInputStream&) ctor (Stas Sergeev)
 - Implemented wxMemoryInputStream::CanRead()
 - Added wxEXEC_BLOCK flag (Hank Schultz)
+- Add support for wxStream-derived classes to wxRTTI (Stas Sergeev)
 
 All (GUI):
 

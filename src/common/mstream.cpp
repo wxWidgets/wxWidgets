@@ -42,6 +42,8 @@
 // wxMemoryInputStream
 // ----------------------------------------------------------------------------
 
+IMPLEMENT_ABSTRACT_CLASS(wxMemoryInputStream, wxInputStream)
+
 wxMemoryInputStream::wxMemoryInputStream(const void *data, size_t len)
 {
     m_i_streambuf = new wxStreamBuffer(wxStreamBuffer::read);
@@ -150,6 +152,8 @@ wxFileOffset wxMemoryInputStream::OnSysTell() const
 // ----------------------------------------------------------------------------
 // wxMemoryOutputStream
 // ----------------------------------------------------------------------------
+
+IMPLEMENT_DYNAMIC_CLASS(wxMemoryOutputStream, wxOutputStream)
 
 wxMemoryOutputStream::wxMemoryOutputStream(void *data, size_t len)
 {
