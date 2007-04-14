@@ -142,6 +142,33 @@ public:
 };
 
 // -------------------------------------
+// MyTextRenderer
+// -------------------------------------
+
+class MyTextRenderer: public wxDataViewTextRenderer
+{
+public:
+    MyTextRenderer( const wxString varianttype = wxT("string"), 
+                    wxDataViewCellMode mode = wxDATAVIEW_CELL_INERT )
+      : wxDataViewTextRenderer( varianttype, mode ) { }
+    
+    virtual bool Validate( wxVariant &value )
+    {
+        wxString str = value;
+        if (str.Length() > 10)
+        {
+            wxMessageDialog dlg( NULL, wxT("string too long") , wxT("Error") );
+            dlg.ShowModal();
+            // Activate();
+            return false;
+        }
+        
+        return true;
+    }
+};
+
+
+// -------------------------------------
 // MyCustomRenderer
 // -------------------------------------
 
@@ -899,7 +926,7 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
     dataview_left->AssociateModel( m_unsorted_model.get() );
 
     wxDataViewTextRenderer *text_renderer = 
-        new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
+        new MyTextRenderer( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
     wxDataViewColumn *column = new wxDataViewColumn( wxT("editable"), text_renderer, 0 );
     dataview_left->AppendColumn( column );
     dataview_left->AppendTextColumn( wxT("second"), 1 );
