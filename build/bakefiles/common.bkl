@@ -489,7 +489,9 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
             <lib-path>$(MGLLIBPATH)</lib-path>
             <lib-path>$(MGLLIBPATH)/$(MGLPMLIBPATH)</lib-path>
         </if>
+
         <warnings>max</warnings>
+        <cxxflags cond="FORMAT=='autoconf'">$(CXXWARNINGS)</cxxflags>
         <cppflags-watcom>
             -wcd=549 <!-- 'sizeof' operand contains compiler generated information -->
             -wcd=656 <!-- define this function inside its class definition (may improve code quality) -->
