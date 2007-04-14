@@ -227,6 +227,18 @@ wxStdDialogButtonSizer *wxDialogBase::CreateStdDialogButtonSizer( long flags )
         sizer->AddButton(no);
     }
 
+    if (flags & wxAPPLY)
+    {
+        wxButton *apply = new wxButton(this, wxID_APPLY);
+        sizer->AddButton(apply);
+    }
+
+    if (flags & wxCLOSE)
+    {
+        wxButton *close = new wxButton(this, wxID_CLOSE);
+        sizer->AddButton(close);
+    }
+
     if (flags & wxHELP)
     {
         wxButton *help = new wxButton(this, wxID_HELP);

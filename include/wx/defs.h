@@ -1653,6 +1653,8 @@ enum wxBorder
 #define wxNO                    0x00000008
 #define wxYES_NO                (wxYES | wxNO)
 #define wxCANCEL                0x00000010
+#define wxAPPLY                 0x00000020
+#define wxCLOSE                 0x00000040
 
 #define wxYES_DEFAULT           0x00000000  /*  has no effect (default) */
 #define wxNO_DEFAULT            0x00000080

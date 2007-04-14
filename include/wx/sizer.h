@@ -862,10 +862,10 @@ public:
 
 protected:
     wxButton *m_buttonAffirmative;  // wxID_OK, wxID_YES, wxID_SAVE go here
-    wxButton *m_buttonApply;
+    wxButton *m_buttonApply;        // wxID_APPLY
     wxButton *m_buttonNegative;     // wxID_NO
-    wxButton *m_buttonCancel;
-    wxButton *m_buttonHelp;
+    wxButton *m_buttonCancel;       // wxID_CANCEL, wxID_CLOSE
+    wxButton *m_buttonHelp;         // wxID_HELP, wxID_CONTEXT_HELP
 
 private:
     DECLARE_CLASS(wxStdDialogButtonSizer)

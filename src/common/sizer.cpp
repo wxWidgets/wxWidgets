@@ -1962,6 +1962,7 @@ void wxStdDialogButtonSizer::AddButton(wxButton *mybutton)
             m_buttonNegative = mybutton;
             break;
         case wxID_CANCEL:
+        case wxID_CLOSE:
             m_buttonCancel = mybutton;
             break;
         case wxID_HELP:
@@ -2040,14 +2041,16 @@ void wxStdDialogButtonSizer::Realize()
             Add((wxWindow*)m_buttonNegative, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
         }
 
+        // according to HIG, in explicit apply windows the order is: 
+        // [ Help                     Apply   Cancel   OK ]
+        if (m_buttonApply)
+            Add((wxWindow*)m_buttonApply, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
+
         if (m_buttonCancel){
             Add((wxWindow*)m_buttonCancel, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
             // Cancel or help should be default
             // m_buttonCancel->SetDefaultButton();
         }
-
-        if (m_buttonApply)
-            Add((wxWindow*)m_buttonApply, 0, wxALIGN_CENTRE | wxLEFT | wxRIGHT, 3);
 
         if (m_buttonAffirmative)
             Add((wxWindow*)m_buttonAffirmative, 0, wxALIGN_CENTRE | wxLEFT, 6);
