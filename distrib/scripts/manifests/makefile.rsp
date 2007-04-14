@@ -95,6 +95,7 @@ samples/splash/Makefile.in
 samples/splitter/Makefile.in
 samples/statbar/Makefile.in
 samples/stc/Makefile.in
+samples/svg/Makefile.in
 samples/taskbar/Makefile.in
 samples/text/Makefile.in
 samples/thread/Makefile.in

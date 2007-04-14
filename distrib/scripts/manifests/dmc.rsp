@@ -190,6 +190,10 @@ samples/splitter/makefile.dmc
 samples/splitter/makefile.dms
 samples/statbar/makefile.dmc
 samples/statbar/makefile.dms
+samples/stc/makefile.dmc
+samples/stc/makefile.dms
+samples/svg/makefile.dmc
+samples/svg/makefile.dms
 samples/taskbar/makefile.dmc
 samples/taskbar/makefile.dms
 samples/text/makefile.dmc

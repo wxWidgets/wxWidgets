@@ -148,6 +148,8 @@ samples/statbar/*M?.xml
 samples/statbar/*.mcp
 samples/stc/*M?.xml
 samples/stc/*.mcp
+samples/svg/*M?.xml
+samples/svg/*.mcp
 samples/taskbar/*M?.xml
 samples/taskbar/*.mcp
 samples/text/*M?.xml

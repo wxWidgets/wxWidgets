@@ -186,6 +186,8 @@ samples/statbar/statbar.vcp
 samples/statbar/statbar.vcw
 samples/stc/stctest.vcp
 samples/stc/stctest.vcw
+samples/svg/svgtest.vcp
+samples/svg/svgtest.vcw
 samples/taskbar/taskbar.vcp
 samples/taskbar/taskbar.vcw
 samples/text/text.vcp
