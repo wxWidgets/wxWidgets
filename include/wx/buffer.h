@@ -33,18 +33,32 @@ public:
     typedef T CharType;
 
     wxCharTypeBuffer(const CharType *str = NULL)
-        : m_str(str ? wxStrDup(str) : NULL)
+        : m_str(str ? wxStrDup(str) : NULL),
+          m_owned(true)
     {
     }
 
     wxCharTypeBuffer(size_t len)
-        : m_str((CharType *)malloc((len + 1)*sizeof(CharType)))
+        : m_str((CharType *)malloc((len + 1)*sizeof(CharType))),
+          m_owned(true)
     {
         m_str[len] = (CharType)0;
     }
 
+    static wxCharTypeBuffer CreateNonOwned(const CharType *str)
+    {
+        wxCharTypeBuffer buf;
+        buf.m_str = str;
+        buf.m_owned = false;
+        return buf;
+    }
+
     /* no need to check for NULL, free() does it */
-    ~wxCharTypeBuffer() { free(m_str); }
+    ~wxCharTypeBuffer()
+    {
+        if ( m_owned)
+            free(m_str);
+    }
 
     /*
         WARNING:
@@ -55,7 +69,7 @@ public:
         a) it shouldn't be really const
         b) you shouldn't use it afterwards (or know that it was reset)
 
-        This is very ugly but is unfortunately needed to make the normal use\
+        This is very ugly but is unfortunately needed to make the normal use
         of wxCharTypeBuffer buffer objects possible and is very similar to what
         std::auto_ptr<> does (as if it were an excuse...)
     */
@@ -66,39 +80,43 @@ public:
      */
     CharType *release() const
     {
-        CharType *p = m_str;
-        ((wxCharTypeBuffer *)this)->m_str = NULL;
-        return p;
+        wxASSERT_MSG( m_owned, _T("can't release non-owned buffer") );
+        return DoRelease();
     }
 
     void reset()
     {
-        free(m_str);
+        if ( m_owned )
+            free(m_str);
         m_str = NULL;
     }
 
     wxCharTypeBuffer(const wxCharTypeBuffer& src)
-        : m_str(src.release())
     {
+        CopyFrom(src);
     }
 
     wxCharTypeBuffer& operator=(const CharType *str)
     {
-        free(m_str);
+        if ( m_owned )
+            free(m_str);
         m_str = str ? wxStrDup(str) : NULL;
+        m_owned = true;
         return *this;
     }
 
     wxCharTypeBuffer& operator=(const wxCharTypeBuffer& src)
     {
-        free(m_str);
-        m_str = src.release();
-
+        if ( m_owned )
+            free(m_str);
+        CopyFrom(src);
         return *this;
     }
 
     bool extend(size_t len)
     {
+        wxASSERT_MSG( m_owned, _T("cannot extend non-owned buffer") );
+
         CharType *
             str = (CharType *)realloc(m_str, (len + 1)*sizeof(CharType));
         if ( !str )
@@ -114,8 +132,24 @@ public:
     operator const CharType *() const { return m_str; }
     CharType operator[](size_t n) const { return m_str[n]; }
 
+
+private:
+    CharType *DoRelease() const
+    {
+        CharType *p = m_str;
+        ((wxCharTypeBuffer *)this)->m_str = NULL;
+        return p;
+    }
+
+    void CopyFrom(const wxCharTypeBuffer& src)
+    {
+        m_owned = src.m_owned;
+        m_str = src.DoRelease();
+    }
+
 private:
     CharType *m_str;
+    bool m_owned;
 };
 
 class WXDLLIMPEXP_BASE wxCharBuffer : public wxCharTypeBuffer<char>
