@@ -22,15 +22,11 @@
 
 class WXDLLIMPEXP_BASE wxString;
 
-void wxMacConvertNewlines13To10( char * data ) ;
-void wxMacConvertNewlines10To13( char * data ) ;
 void wxMacConvertNewlines13To10( wxString *data ) ;
 void wxMacConvertNewlines10To13( wxString *data ) ;
 
-#if wxUSE_UNICODE
-void wxMacConvertNewlines13To10( wxChar * data ) ;
-void wxMacConvertNewlines10To13( wxChar * data ) ;
-#endif
+void wxMacConvertNewlines13To10( char * data ) ;
+void wxMacConvertNewlines10To13( char * data ) ;
 
 wxUint32 wxMacGetSystemEncFromFontEnc(wxFontEncoding encoding) ;
 wxFontEncoding wxMacGetFontEncFromSystemEnc(wxUint32 encoding) ;
