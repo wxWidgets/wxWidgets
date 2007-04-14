@@ -215,7 +215,7 @@ wxMetaFileDC::wxMetaFileDC(
     int width, int height,
     const wxString& WXUNUSED(description) )
 {
-    wxASSERT_MSG( width <= 0 || height <= 0, wxT("no arbitration of metafile size supported") );
+    wxASSERT_MSG( width != 0 || height != 0, wxT("no arbitration of metafile size supported") );
     wxASSERT_MSG( filename.empty(), wxT("no file based metafile support yet"));
 
     m_metaFile = new wxMetaFile( filename );
