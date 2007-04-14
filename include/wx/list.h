@@ -93,7 +93,7 @@ enum wxKeyType
 #define WX_DECLARE_LIST_WITH_DECL(elT, liT, decl) \
     WX_DECLARE_LIST_XO(elT*, liT, decl)
 
-#if !defined( __VISUALC__ )
+#if !defined(__VISUALC__) || __VISUALC__ >= 1300 // == !VC6
 
 template<class T>
 class WXDLLIMPEXP_BASE wxList_SortFunction
@@ -109,7 +109,7 @@ private:
 #define WX_LIST_SORTFUNCTION( elT, f ) wxList_SortFunction<elT>(f)
 #define VC6_WORKAROUND(elT, liT, decl)
 
-#else // if defined( __VISUALC__ )
+#else // if defined( __VISUALC__ ) && __VISUALC__ < 1300 // == VC6
 
 #define WX_LIST_SORTFUNCTION( elT, f ) std::greater<elT>( f )
 #define VC6_WORKAROUND(elT, liT, decl)                                        \
@@ -133,7 +133,7 @@ private:
                 }                                                             \
     };
 
-#endif // defined( __VISUALC__ )
+#endif // VC6/!VC6
 
 /*
     Note 1: the outer helper class _WX_LIST_HELPER_##liT below is a workaround
