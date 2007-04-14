@@ -99,6 +99,7 @@ All (GUI):
 - Support wxGRID_AUTOSIZE in wxGrid::SetRow/ColLabelSize() (Evgeniy Tarassov)
 - Added wxWindow::NavigateIn() in addition to existing Navigate()
 - Add support for <data> tags to wxrc
+- Support wxAPPLY and wxCLOSE in CreateStdDialogButtonSizer() (Marcin Wojdyr)
 
 wxGTK:
 
