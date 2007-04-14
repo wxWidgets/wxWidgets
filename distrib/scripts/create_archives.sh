@@ -40,7 +40,7 @@ getfilelist(){
 
   filelist="base.rsp"
   utilsfiles="tex2rtf.rsp utils.rsp utilmake.rsp"
-  commonfiles="generic.rsp generic_samples.rsp jpeg.rsp tiff.rsp xml.rsp makefile.rsp $utilsfiles"
+  commonfiles="generic.rsp generic_samples.rsp stc.rsp jpeg.rsp tiff.rsp xml.rsp makefile.rsp $utilsfiles"
 
   if [ ! $port = "base" ]; then
     filelist="$filelist $commonfiles"
