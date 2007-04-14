@@ -117,7 +117,7 @@ void wxMessageOutputBest::Output(const wxString& str)
     else
 #endif // __WINDOWS__/!__WINDOWS__
     {
-        const wxWX2MBbuf buf(str.mb_str());
+        const wxWX2MBbuf buf = str.mb_str();
 
         if ( buf )
             fprintf(stderr, "%s", (const char*) buf);
@@ -132,7 +132,7 @@ void wxMessageOutputBest::Output(const wxString& str)
 
 void wxMessageOutputStderr::Output(const wxString& str)
 {
-    const wxWX2MBbuf buf(str.mb_str());
+    const wxWX2MBbuf buf = str.mb_str();
 
     if ( buf )
         fprintf(stderr, "%s", (const char*) buf);
