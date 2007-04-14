@@ -1190,8 +1190,8 @@ bool wxDC::DoStretchBlit(wxCoord xdest, wxCoord ydest,
                          wxDC *source,
                          wxCoord xsrc, wxCoord ysrc,
                          wxCoord srcWidth, wxCoord srcHeight,
-                         int logical_func = wxCOPY, bool useMask = false,
-                         wxCoord xsrcMask = wxDefaultCoord, wxCoord ysrcMask = wxDefaultCoord);
+                         int logical_func, bool useMask,
+                         wxCoord xsrcMask, wxCoord ysrcMask)
 {
     wxCHECK_MSG(Ok(), false, wxT("wxDC::DoStretchBlit - invalid DC"));
     wxCHECK_MSG(source->Ok(), false, wxT("wxDC::DoStretchBlit - invalid source DC"));
