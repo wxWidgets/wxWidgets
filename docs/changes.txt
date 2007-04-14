@@ -160,6 +160,7 @@ wxGTK:
 wxUniv:
 
 - Fix wxTextCtrl::SetSelection(-1, -1) to behave as documented (Anders Larsen)
+- Fix setting background colour for controls with transparent background
 
 
 2.8.3

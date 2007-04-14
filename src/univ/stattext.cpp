@@ -83,14 +83,6 @@ wxSize wxStaticText::DoGetBestClientSize() const
 
 void wxStaticText::DoDraw(wxControlRenderer *renderer)
 {
-    if ( UseBgCol() )
-    {
-        wxDC& dc = renderer->GetDC();
-        dc.SetBrush(GetBackgroundColour());
-        dc.SetPen(*wxTRANSPARENT_PEN);
-        dc.DrawRectangle(renderer->GetRect());
-    }
-
     renderer->DrawLabel();
 }
 
