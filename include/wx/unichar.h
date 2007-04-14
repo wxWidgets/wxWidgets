@@ -176,7 +176,7 @@ public:
 #endif
 
     wxUniChar::value_type GetValue() const { return UniChar().GetValue(); }
-    bool IsAscii() const { return UniChar().GetValue(); }
+    bool IsAscii() const { return UniChar().IsAscii(); }
 
     // Assignment operators:
 #if wxUSE_UNICODE_UTF8
