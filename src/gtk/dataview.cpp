@@ -1100,8 +1100,10 @@ void wxDataViewTextRenderer::SetAlignment( int align )
 {
     wxDataViewRenderer::SetAlignment(align);
 
-    // horizontal alignment:
+    if (gtk_check_version(2,10,0))
+        return;
 
+    // horizontal alignment:
     PangoAlignment pangoAlign = PANGO_ALIGN_LEFT;
     if (align & wxALIGN_RIGHT)
         pangoAlign = PANGO_ALIGN_RIGHT;
