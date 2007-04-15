@@ -146,6 +146,8 @@ TestGLContext& MyApp::GetContext(wxGLCanvas *canvas)
 {
     if ( !m_glContext )
         m_glContext = new TestGLContext(canvas);
+    else
+        m_glContext->SetCurrent(*canvas);
 
     return *m_glContext;
 }
