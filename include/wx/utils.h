@@ -669,18 +669,11 @@ void WXDLLEXPORT wxGetMousePosition( int* x, int* y );
     WXDLLIMPEXP_CORE wxString wxGetDisplayName();
 #endif // X or GTK+
 
-#ifdef __X__
-
-#ifdef __VMS__ // Xlib.h for VMS is not (yet) compatible with C++
-               // The resulting warnings are switched off here
-#pragma message disable nosimpint
-#endif
-// #include <X11/Xlib.h>
-#ifdef __VMS__
-#pragma message enable nosimpint
-#endif
-
-#endif //__X__
+// use this function instead of the functions above in implementation code
+inline struct _XDisplay *wxGetX11Display()
+{
+    return (_XDisplay *)wxGetDisplay();
+}
 
 #endif // wxUSE_GUI
 
