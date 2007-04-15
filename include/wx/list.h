@@ -128,10 +128,17 @@ private:
             bool operator()(const elT X, const elT Y) const                   \
                 {                                                             \
                     return m_CompFunc ?                                       \
-                        ( m_CompFunc( X, Y ) < 0 ) :                          \
+                        ( m_CompFunc( wxListCastElementToVoidPtr(X),          \
+                                      wxListCastElementToVoidPtr(Y) ) < 0 ) : \
                         ( X > Y );                                            \
                 }                                                             \
     };
+
+// helper for std::greater<elT> above:
+template<typename T>
+inline const void *wxListCastElementToVoidPtr(const T* ptr) { return ptr; }
+inline const void *wxListCastElementToVoidPtr(const wxString& str)
+    { return (const char*)str; }
 
 #endif // VC6/!VC6
 
@@ -1217,10 +1224,10 @@ public:
         // default
 #ifdef wxWARN_COMPAT_LIST_USE
     wxStringList();
-    wxDEPRECATED( wxStringList(const wxChar *first ...) );
+    wxDEPRECATED( wxStringList(const wxChar *first ...) ); // FIXME-UTF8
 #else
     wxStringList();
-    wxStringList(const wxChar *first ...);
+    wxStringList(const wxChar *first ...); // FIXME-UTF8
 #endif
 
         // copying the string list: the strings are copied, too (extremely
