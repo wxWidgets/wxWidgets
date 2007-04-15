@@ -288,6 +288,37 @@ wxObject *wxCreateDynamicObject(const wxChar *name)
     }
 }
 
+// iterator interface
+wxClassInfo::const_iterator::value_type
+wxClassInfo::const_iterator::operator*() const
+{
+    return (wxClassInfo*)m_node->GetData();
+}
+
+wxClassInfo::const_iterator& wxClassInfo::const_iterator::operator++()
+{
+    m_node = m_table->Next();
+    return *this;
+}
+
+const wxClassInfo::const_iterator wxClassInfo::const_iterator::operator++(int)
+{
+    wxClassInfo::const_iterator tmp = *this;
+    m_node = m_table->Next();
+    return tmp;
+}
+
+wxClassInfo::const_iterator wxClassInfo::begin_classinfo()
+{
+    sm_classTable->BeginFind();
+
+    return const_iterator(sm_classTable->Next(), sm_classTable);
+}
+
+wxClassInfo::const_iterator wxClassInfo::end_classinfo()
+{
+    return const_iterator(NULL, NULL);
+}
 
 // ----------------------------------------------------------------------------
 // wxObjectRefData

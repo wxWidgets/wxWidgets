@@ -120,12 +120,13 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
     }
     else
     {
-        wxClassInfo::sm_classTable->BeginFind();
+        wxClassInfo::const_iterator it = wxClassInfo::begin_classinfo();
 
-        wxClassInfo* classInfo;
+        const wxClassInfo* classInfo;
 
-        while((classInfo = NextBackend()) != NULL)
+        while((classInfo = NextBackend(&it)) != NULL)
         {
+            wxLogMessage( classInfo->GetClassName() );
             if(!DoCreate(classInfo, parent, id,
                          pos, size, style, validator, name))
                 continue;
@@ -183,11 +184,11 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
     }
     else
     {
-        wxClassInfo::sm_classTable->BeginFind();
+        wxClassInfo::const_iterator it  = wxClassInfo::begin_classinfo();
 
-        wxClassInfo* classInfo;
+        const wxClassInfo* classInfo;
 
-        while((classInfo = NextBackend()) != NULL)
+        while((classInfo = NextBackend(&it)) != NULL)
         {
             if(!DoCreate(classInfo, parent, id,
                          pos, size, style, validator, name))
@@ -212,7 +213,7 @@ bool wxMediaCtrl::Create(wxWindow* parent, wxWindowID id,
 //
 // Attempts to create the control from a backend
 //---------------------------------------------------------------------------
-bool wxMediaCtrl::DoCreate(wxClassInfo* classInfo,
+bool wxMediaCtrl::DoCreate(const wxClassInfo* classInfo,
                             wxWindow* parent, wxWindowID id,
                             const wxPoint& pos,
                             const wxSize& size,
@@ -246,19 +247,17 @@ bool wxMediaCtrl::DoCreate(wxClassInfo* classInfo,
 // incompatible with the old 2.4 stable version - but since
 // we're in 2.5+ only we don't need to worry about the new version
 //---------------------------------------------------------------------------
-wxClassInfo* wxMediaCtrl::NextBackend()
+const wxClassInfo* wxMediaCtrl::NextBackend(wxClassInfo::const_iterator* it)
 {
-    wxHashTable::compatibility_iterator
-            node = wxClassInfo::sm_classTable->Next();
-    while (node)
+    for ( wxClassInfo::const_iterator end = wxClassInfo::end_classinfo();
+          *it != end; ++(*it) )
     {
-        wxClassInfo* classInfo = (wxClassInfo *)node->GetData();
+        const wxClassInfo* classInfo = **it;
         if ( classInfo->IsKindOf(CLASSINFO(wxMediaBackend)) &&
              classInfo != CLASSINFO(wxMediaBackend) )
         {
             return classInfo;
         }
-        node = wxClassInfo::sm_classTable->Next();
     }
 
     //

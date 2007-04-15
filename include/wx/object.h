@@ -25,6 +25,37 @@ class WXDLLIMPEXP_BASE wxObject;
 #define wxUSE_EXTENDED_RTTI 0
 #endif
 
+#define DECLARE_CLASS_INFO_ITERATORS()                                       \
+    class WXDLLIMPEXP_BASE const_iterator                                    \
+    {                                                                        \
+        typedef wxHashTable_Node Node;                                       \
+    public:                                                                  \
+        typedef const wxClassInfo* value_type;                               \
+        typedef const value_type& const_reference;                           \
+        typedef const_iterator itor;                                         \
+        typedef value_type* ptr_type;                                        \
+                                                                             \
+        Node* m_node;                                                        \
+        wxHashTable* m_table;                                                \
+    public:                                                                  \
+        typedef const_reference reference_type;                              \
+        typedef ptr_type pointer_type;                                       \
+                                                                             \
+        const_iterator(Node* node, wxHashTable* table)                       \
+            : m_node(node), m_table(table) { }                               \
+        const_iterator() : m_node(NULL), m_table(NULL) { }                   \
+        value_type operator*() const;                                        \
+        itor& operator++();                                                  \
+        const itor operator++(int);                                          \
+        bool operator!=(const itor& it) const                                \
+            { return it.m_node != m_node; }                                  \
+        bool operator==(const itor& it) const                                \
+            { return it.m_node == m_node; }                                  \
+    };                                                                       \
+                                                                             \
+    static const_iterator begin_classinfo();                                 \
+    static const_iterator end_classinfo();
+
 #if wxUSE_EXTENDED_RTTI
 #include "wx/xti.h"
 #else
@@ -35,7 +66,10 @@ class WXDLLIMPEXP_BASE wxObject;
 
 class WXDLLIMPEXP_BASE wxClassInfo;
 class WXDLLIMPEXP_BASE wxHashTable;
+class WXDLLIMPEXP_BASE wxObject;
+class WXDLLIMPEXP_BASE wxPluginLibrary;
 class WXDLLIMPEXP_BASE wxObjectRefData;
+class WXDLLIMPEXP_BASE wxHashTable_Node;
 
 // ----------------------------------------------------------------------------
 // wxClassInfo
@@ -45,6 +79,8 @@ typedef wxObject *(*wxObjectConstructorFn)(void);
 
 class WXDLLIMPEXP_BASE wxClassInfo
 {
+    friend class WXDLLIMPEXP_BASE wxObject;
+    friend wxObject *wxCreateDynamicObject(const wxChar *name);
 public:
     wxClassInfo( const wxChar *className,
                  const wxClassInfo *baseInfo1,
@@ -94,7 +130,8 @@ public:
                  ( m_baseInfo2 && m_baseInfo2->IsKindOf(info) ) );
     }
 
-public:
+    DECLARE_CLASS_INFO_ITERATORS()
+private:
     const wxChar            *m_className;
     int                      m_objectSize;
     wxObjectConstructorFn    m_objectConstructor;
@@ -110,8 +147,6 @@ public:
     static wxClassInfo      *sm_first;
     wxClassInfo             *m_next;
 
-    // FIXME: this should be private (currently used directly by way too
-    //        many clients)
     static wxHashTable      *sm_classTable;
 
 protected:

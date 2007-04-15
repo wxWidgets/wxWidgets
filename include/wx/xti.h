@@ -84,6 +84,7 @@ class WXDLLIMPEXP_BASE wxObject;
 class WXDLLIMPEXP_BASE wxClassInfo;
 class WXDLLIMPEXP_BASE wxDynamicClassInfo;
 class WXDLLIMPEXP_BASE wxHashTable;
+class WXDLLIMPEXP_BASE wxHashTable_Node;
 class WXDLLIMPEXP_BASE wxObjectRefData;
 class WXDLLIMPEXP_BASE wxEvent;
 class WXDLLIMPEXP_BASE wxEvtHandler;
@@ -1601,6 +1602,7 @@ class WXDLLIMPEXP_BASE wxClassInfo
 {
     friend class WXDLLIMPEXP_BASE wxPropertyInfo ;
     friend class WXDLLIMPEXP_BASE wxHandlerInfo ;
+    friend wxObject *wxCreateDynamicObject(const wxChar *name);
 public:
     wxClassInfo(const wxClassInfo **_Parents,
         const wxChar *_UnitName,
@@ -1718,6 +1720,8 @@ public:
         return false ;
     }
 
+    DECLARE_CLASS_INFO_ITERATORS()
+
     // if there is a callback registered with that class it will be called
     // before this object will be written to disk, it can veto streaming out
     // this object by returning false, if this class has not registered a
@@ -1788,7 +1792,7 @@ public:
     // puts all the properties of this class and its superclasses in the map, as long as there is not yet
     // an entry with the same name (overriding mechanism)
     void GetProperties( wxPropertyInfoMap &map ) const ;
-public:
+private:
     const wxChar            *m_className;
     int                      m_objectSize;
     wxObjectConstructorFn    m_objectConstructor;
@@ -1799,8 +1803,6 @@ public:
     static wxClassInfo      *sm_first;
     wxClassInfo             *m_next;
 
-    // FIXME: this should be private (currently used directly by way too
-    //        many clients)
     static wxHashTable      *sm_classTable;
 
 protected :

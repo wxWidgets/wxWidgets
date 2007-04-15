@@ -171,7 +171,7 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxT("mediaCtrl"));
 
-    bool DoCreate(wxClassInfo* instance,
+    bool DoCreate(const wxClassInfo* instance,
                 wxWindow* parent, wxWindowID winid,
                 const wxPoint& pos = wxDefaultPosition,
                 const wxSize& size = wxDefaultSize,
@@ -213,7 +213,7 @@ public:
     {   return Load(wxURI(fileName), wxURI(proxy));       }
 
 protected:
-    static wxClassInfo* NextBackend();
+    static const wxClassInfo* NextBackend(wxClassInfo::const_iterator* it);
 
     void OnMediaFinished(wxMediaEvent& evt);
     virtual void DoMoveWindow(int x, int y, int w, int h);

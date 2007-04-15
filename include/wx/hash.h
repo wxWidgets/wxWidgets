@@ -335,6 +335,8 @@ private:
 
 #else // if wxUSE_OLD_HASH_TABLE
 
+typedef wxNode wxHashTable_Node;
+
 class WXDLLIMPEXP_BASE wxHashTable : public wxObject
 {
 public:

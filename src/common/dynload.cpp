@@ -77,9 +77,9 @@ wxPluginLibrary::wxPluginLibrary(const wxString &libname, int flags)
         : m_linkcount(1)
         , m_objcount(0)
 {
-    m_before = wxClassInfo::sm_first;
+    m_before = wxClassInfo::GetFirst();
     Load( libname, flags );
-    m_after = wxClassInfo::sm_first;
+    m_after = wxClassInfo::GetFirst();
 
     if( m_handle != 0 )
     {
@@ -131,7 +131,7 @@ bool wxPluginLibrary::UnrefLib()
 
 void wxPluginLibrary::UpdateClasses()
 {
-    for (wxClassInfo *info = m_after; info != m_before; info = info->m_next)
+    for (const wxClassInfo *info = m_after; info != m_before; info = info->GetNext())
     {
         if( info->GetClassName() )
         {
@@ -148,7 +148,7 @@ void wxPluginLibrary::RestoreClasses()
     if (!ms_classes)
         return;
 
-    for(wxClassInfo *info = m_after; info != m_before; info = info->m_next)
+    for(const wxClassInfo *info = m_after; info != m_before; info = info->GetNext())
     {
         ms_classes->erase(ms_classes->find(info->GetClassName()));
     }
@@ -167,7 +167,7 @@ void wxPluginLibrary::RegisterModules()
     wxASSERT_MSG( m_linkcount == 1,
                   _T("RegisterModules should only be called for the first load") );
 
-    for ( wxClassInfo *info = m_after; info != m_before; info = info->m_next)
+    for ( const wxClassInfo *info = m_after; info != m_before; info = info->GetNext())
     {
         if( info->IsKindOf(CLASSINFO(wxModule)) )
         {
