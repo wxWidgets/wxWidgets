@@ -58,7 +58,7 @@ public:
 
 private:
     // common part of all ctors
-    void Init(const wxString& text);
+    void Init();
 
     // DoSetText() transforms the accel mnemonics in our label from MSW/wxWin
     // style to GTK+ and is called from ctor and SetText()

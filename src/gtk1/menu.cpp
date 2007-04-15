@@ -704,7 +704,7 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu,
                        wxMenu *subMenu)
           : wxMenuItemBase(parentMenu, id, text, help, kind, subMenu)
 {
-    Init(text);
+    Init();
 }
 
 wxMenuItem::wxMenuItem(wxMenu *parentMenu,
@@ -716,15 +716,15 @@ wxMenuItem::wxMenuItem(wxMenu *parentMenu,
           : wxMenuItemBase(parentMenu, id, text, help,
                            isCheckable ? wxITEM_CHECK : wxITEM_NORMAL, subMenu)
 {
-    Init(text);
+    Init();
 }
 
-void wxMenuItem::Init(const wxString& text)
+void wxMenuItem::Init()
 {
     m_labelWidget = (GtkWidget *) NULL;
     m_menuItem = (GtkWidget *) NULL;
 
-    DoSetText(text);
+    DoSetText(m_text);
 }
 
 wxMenuItem::~wxMenuItem()
@@ -834,7 +834,9 @@ void wxMenuItem::SetText( const wxString& string )
 void wxMenuItem::DoSetText( const wxString& str )
 {
     // '\t' is the deliminator indicating a hot key
-    m_text.Empty();
+    wxString text;
+    text.reserve(str.length());
+
     const wxChar *pc = str;
     while ( (*pc != wxT('\0')) && (*pc != wxT('\t')) )
     {
@@ -842,30 +844,32 @@ void wxMenuItem::DoSetText( const wxString& str )
         {
             // "&" is doubled to indicate "&" instead of accelerator
             ++pc;
-            m_text << wxT('&');
+            text << wxT('&');
         }
         else if (*pc == wxT('&'))
         {
-            m_text << wxT('_');
+            text << wxT('_');
         }
         else if ( *pc == wxT('_') )    // escape underscores
         {
-            m_text << wxT("__");
+            text << wxT("__");
         }
         else
         {
-            m_text << *pc;
+            text << *pc;
         }
         ++pc;
     }
 
     m_hotKey = wxEmptyString;
 
-    if(*pc == wxT('\t'))
+    if ( *pc == wxT('\t') )
     {
        pc++;
        m_hotKey = pc;
     }
+
+    m_text = text;
 }
 
 #if wxUSE_ACCEL
