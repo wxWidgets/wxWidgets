@@ -52,18 +52,27 @@ public:
     bool IsInAssert() const { return m_isInAssert; }
 #endif // __WXDEBUG__
 
+    // GTK-specific methods
+    // -------------------
+
+    // this can be overridden to return a specific visual to be used for GTK+
+    // instead of the default one (it's used by wxGLApp)
+    //
+    // must return XVisualInfo pointer (it is not freed by caller)
+    virtual void *GetXVisualInfo() { return NULL; }
+
+
+    // implementation only from now on
+    // -------------------------------
+
     guint m_idleTag;
     // temporarily disable idle events
     void SuspendIdleCallback();
 
-    // Used by the the wxGLApp and wxGLCanvas class for GL-based X visual
-    // selection.
-    void           *m_glVisualInfo; // this is actually an XVisualInfo*
-    void           *m_glFBCInfo; // this is actually an GLXFBConfig*
     // This returns the current visual: either that used by wxRootWindow
     // or the XVisualInfo* for SGI.
     GdkVisual      *GetGdkVisual();
-    
+
 private:
     // true if we're inside an assert modal dialog
 #ifdef __WXDEBUG__

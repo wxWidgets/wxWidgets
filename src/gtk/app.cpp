@@ -329,21 +329,12 @@ wxApp::wxApp()
     m_idleTag = 0;
     g_isIdle = true;
     wxapp_install_idle_handler();
-
-    // this is NULL for a "regular" wxApp, but is set (and freed) by a wxGLApp
-    m_glVisualInfo = (void *) NULL;
-    m_glFBCInfo = (void *) NULL;
 }
 
 wxApp::~wxApp()
 {
     if (m_idleTag)
         g_source_remove( m_idleTag );
-
-    if (m_glFBCInfo)
-        XFree(m_glFBCInfo);
-    if (m_glVisualInfo)
-        XFree(m_glVisualInfo);
 }
 
 bool wxApp::OnInitGui()
@@ -353,7 +344,7 @@ bool wxApp::OnInitGui()
 
     // if this is a wxGLApp (derived from wxApp), and we've already
     // chosen a specific visual, then derive the GdkVisual from that
-    if (m_glVisualInfo != NULL)
+    if ( GetXVisualInfo() )
     {
         GdkVisual* vis = gtk_widget_get_default_visual();
 
@@ -396,8 +387,9 @@ GdkVisual *wxApp::GetGdkVisual()
 {
     GdkVisual *visual = NULL;
 
-    if (m_glVisualInfo)
-        visual = gdkx_visual_get( ((XVisualInfo *) m_glVisualInfo)->visualid );
+    XVisualInfo *xvi = (XVisualInfo *)GetXVisualInfo();
+    if ( xvi )
+        visual = gdkx_visual_get( xvi->visualid );
     else
         visual = gdk_drawable_get_visual( wxGetRootWindow()->window );
 

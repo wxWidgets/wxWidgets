@@ -13,30 +13,9 @@
 #ifndef _WX_GLCANVAS_H_
 #define _WX_GLCANVAS_H_
 
-#include "wx/gdicmn.h"
+#include "wx/unix/glx11.h"
 
-#include <GL/glx.h>
-
-//---------------------------------------------------------------------------
-// classes
-//---------------------------------------------------------------------------
-
-class WXDLLEXPORT wxGLContext : public wxGLContextBase
-{
-public:
-    wxGLContext(wxGLCanvas *win, const wxGLContext *other = NULL);
-    virtual ~wxGLContext();
-
-    virtual void SetCurrent(const wxGLCanvas& win) const;
-
-private:
-    GLXContext       m_glContext;
-
-    DECLARE_CLASS(wxGLContext)
-};
-
-
-class WXDLLEXPORT wxGLCanvas : public wxGLCanvasBase
+class WXDLLEXPORT wxGLCanvas : public wxGLCanvasX11
 {
 public:
     wxGLCanvas(wxWindow *parent,
@@ -57,13 +36,10 @@ public:
                 const int *attribList = NULL,
                 const wxPalette& palette = wxNullPalette);
 
-    virtual ~wxGLCanvas();
+    // implement wxGLCanvasX11 methods
+    // --------------------------------
 
-    virtual void SwapBuffers();
-
-
-    // implementation
-    void *m_vi;
+    virtual Window GetXWindow() const;
 
 protected:
     virtual int GetColourIndex(const wxColour& col);

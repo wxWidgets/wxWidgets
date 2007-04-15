@@ -155,6 +155,22 @@ protected:
 #endif // WXWIN_COMPATIBILITY_2_8
 };
 
+// ----------------------------------------------------------------------------
+// wxGLApp: a special wxApp subclass for OpenGL applications which must be used
+//          to select a visual compatible with the given attributes
+// ----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_GL wxGLAppBase : public wxApp
+{
+public:
+    wxGLAppBase() : wxApp() { }
+
+    // use this in the constructor of the user-derived wxGLApp class to
+    // determine if an OpenGL rendering context with these attributes
+    // is available - returns true if so, false if not.
+    virtual bool InitGLVisual(const int *attribList) = 0;
+};
+
 #if defined(__WXMSW__)
     #include "wx/msw/glcanvas.h"
 #elif defined(__WXMOTIF__) || defined(__WXX11__)
@@ -171,19 +187,21 @@ protected:
     #error "wxGLCanvas not supported in this wxWidgets port"
 #endif
 
-class WXDLLIMPEXP_GL wxGLApp : public wxApp
+// wxMac and wxMSW don't need anything extra in wxGLAppBase, so declare it here
+#ifndef wxGL_APP_DEFINED
+
+class WXDLLIMPEXP_GL wxGLApp : public wxGLAppBase
 {
 public:
-    wxGLApp() : wxApp() { }
+    wxGLApp() : wxGLAppBase() { }
 
-    // use this in the constructor of the user-derived wxGLApp class to
-    // determine if an OpenGL rendering context with these attributes
-    // is available - returns true if so, false if not.
-    bool InitGLVisual(const int *attribList);
+    virtual bool InitGLVisual(const int *attribList);
 
 private:
     DECLARE_DYNAMIC_CLASS(wxGLApp)
 };
+
+#endif // !wxGL_APP_DEFINED
 
 #endif // wxUSE_GLCANVAS
 

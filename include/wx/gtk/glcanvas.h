@@ -12,37 +12,13 @@
 #ifndef _WX_GLCANVAS_H_
 #define _WX_GLCANVAS_H_
 
-extern "C"
-{
-    #include <GL/gl.h>
-    #include <GL/glx.h>
-    #include <GL/glu.h>
-}
-
-//---------------------------------------------------------------------------
-// wxGLContext
-//---------------------------------------------------------------------------
-
-
-class WXDLLEXPORT wxGLContext : public wxGLContextBase
-{
-public:
-    wxGLContext(wxWindow* win, const wxGLContext* other = NULL);
-    virtual ~wxGLContext();
-
-    virtual void SetCurrent(const wxGLCanvas& win) const;
-
-private:
-    GLXContext m_glContext;
-
-    DECLARE_CLASS(wxGLContext)
-};
+#include "wx/unix/glx11.h"
 
 //---------------------------------------------------------------------------
 // wxGLCanvas
 //---------------------------------------------------------------------------
 
-class WXDLLEXPORT wxGLCanvas : public wxGLCanvasBase
+class WXDLLEXPORT wxGLCanvas : public wxGLCanvasX11
 {
 public:
     wxGLCanvas(wxWindow *parent,
@@ -63,20 +39,11 @@ public:
                 const int *attribList = NULL,
                 const wxPalette& palette = wxNullPalette);
 
-    virtual ~wxGLCanvas();
 
-
-    // implement wxGLCanvasBase methods
+    // implement wxGLCanvasX11 methods
     // --------------------------------
 
-    virtual void SwapBuffers();
-
-
-    // GTK-specific helpers
-    // --------------------
-
-    // return GLX version: 13 means 1.3
-    static int GetGLXVersion();
+    virtual Window GetXWindow() const;
 
 
     // deprecated methods
@@ -125,10 +92,6 @@ public:
     // implementation from now on
     void OnInternalIdle();
 
-    void             *m_vi; // actually an XVisualInfo*
-    GLXFBConfig      *m_fbc;
-    bool              m_canFreeVi;
-    bool              m_canFreeFBC;
     GtkWidget        *m_glWidget;
     bool              m_exposed;
 
@@ -137,14 +100,6 @@ public:
     wxGLCanvas       *m_sharedContextOf;
     const bool        m_createImplicitContext;
 #endif // WXWIN_COMPATIBILITY_2_8
-
-    // returns an XVisualInfo* based on desired GL attributes;
-    // returns NULL if an appropriate visual is not found. The
-    // caller is reponsible for using XFree() to deallocate
-    // the returned structure.
-    static void* ChooseGLVisual(const int *attribList);
-    static void* ChooseGLFBC(const int *attribList);
-    static void GetGLAttribListFromWX(const int *wx_attribList, int *gl_attribList );
 
 private:
     DECLARE_CLASS(wxGLCanvas)

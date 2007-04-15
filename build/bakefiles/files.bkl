@@ -2682,7 +2682,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/calctrl.cpp
     src/generic/datavgen.cpp
     src/generic/datectlg.cpp
-<!--     src/generic/editlbox.cpp -->
+    <!-- src/generic/editlbox.cpp -->
     src/generic/grid.cpp
     src/generic/gridctrl.cpp
     src/generic/gridsel.cpp
@@ -2706,7 +2706,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/dataview.h
     wx/dateevt.h
     wx/dcbuffer.h
-<!--     wx/editlbox.h -->
+    <!-- wx/editlbox.h -->
     wx/generic/aboutdlgg.h
     wx/generic/animate.h
     wx/generic/bmpcbox.h
@@ -3107,12 +3107,18 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/glcmn.cpp
     <if cond="TOOLKIT=='MAC'">src/mac/carbon/glcanvas.cpp</if>
     <if cond="TOOLKIT=='COCOA'">src/cocoa/glcanvas.mm</if>
-    <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">src/gtk/glcanvas.cpp</if>
-    <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">src/gtk1/glcanvas.cpp</if>
+    <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
+        src/gtk/glcanvas.cpp
+        src/unix/glx11.cpp
+    </if>
+    <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">
+        src/gtk1/glcanvas.cpp
+        src/unix/glx11.cpp
+    </if>
     <if cond="TOOLKIT=='MSW'">src/msw/glcanvas.cpp</if>
     <if cond="TOOLKIT=='WINCE'">src/msw/glcanvas.cpp</if>
-    <if cond="TOOLKIT=='MOTIF'">src/x11/glcanvas.cpp</if>
-    <if cond="TOOLKIT=='X11'">src/x11/glcanvas.cpp</if>
+    <if cond="TOOLKIT=='MOTIF'">src/x11/glcanvas.cpp src/unix/glx11.cpp</if>
+    <if cond="TOOLKIT=='X11'">src/x11/glcanvas.cpp src/unix/glx11.cpp</if>
     <if cond="TOOLKIT=='PM'">src/os2/glcanvas.cpp</if>
 </set>
 
@@ -3124,12 +3130,18 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="OPENGL_HDR_PLATFORM" hints="files">
     <if cond="TOOLKIT=='MAC'">wx/mac/glcanvas.h wx/mac/carbon/glcanvas.h</if>
     <if cond="TOOLKIT=='COCOA'">wx/cocoa/glcanvas.h</if>
-    <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">wx/gtk/glcanvas.h</if>
-    <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">wx/gtk1/glcanvas.h</if>
+    <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION=='2'">
+        wx/gtk/glcanvas.h
+        wx/unix/glx11.h
+    </if>
+    <if cond="TOOLKIT=='GTK' and TOOLKIT_VERSION==''">
+        wx/gtk1/glcanvas.h
+        wx/unix/glx11.h
+    </if>
     <if cond="TOOLKIT=='MSW'">wx/msw/glcanvas.h</if>
     <if cond="TOOLKIT=='WINCE'">wx/msw/glcanvas.h</if>
-    <if cond="TOOLKIT=='MOTIF'">wx/x11/glcanvas.h</if>
-    <if cond="TOOLKIT=='X11'">wx/x11/glcanvas.h</if>
+    <if cond="TOOLKIT=='MOTIF'">wx/x11/glcanvas.h wx/unix/glx11.h</if>
+    <if cond="TOOLKIT=='X11'">wx/x11/glcanvas.h wx/unix/glx11.h</if>
 </set>
 
 <set var="OPENGL_HDR" hints="files">
