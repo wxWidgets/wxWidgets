@@ -526,7 +526,7 @@ private:
       if ( pos == 0 || pos == npos )
           return pos;
       else
-          return wxStringImpl::const_iterator(begin() + pos) - m_impl.begin();
+          return (begin() + pos).impl() - m_impl.begin();
   }
 
   void PosLenToImpl(size_t pos, size_t len, size_t *implPos, size_t *implLen) const;
@@ -545,9 +545,6 @@ private:
       else
           return const_iterator(m_impl.begin() + pos) - begin();
   }
-
-  size_t IterToImplPos(wxStringImpl::iterator i) const
-    { return wxStringImpl::const_iterator(i) - m_impl.begin(); }
 
   // FIXME-UTF8: return as-is without copying under UTF8 locale, return
   //             converted string under other locales - needs wxCharBuffer
@@ -646,7 +643,7 @@ public:
                                                                             \
       private:                                                              \
           /* for internal wxString use only: */                             \
-          operator underlying_iterator() const { return m_cur; }            \
+          underlying_iterator impl() const { return m_cur; }                \
                                                                             \
           friend class WXDLLIMPEXP_BASE wxString;                           \
           friend class WXDLLIMPEXP_BASE wxCStrData;                         \
@@ -690,7 +687,12 @@ public:
 
       friend class const_iterator;
   };
+
+  size_t IterToImplPos(wxString::iterator i) const
+    { return wxStringImpl::const_iterator(i.impl()) - m_impl.begin(); }
+
 #else // !wxUSE_UNICODE_UTF8
+
   class iterator
   {
       WX_STR_ITERATOR_IMPL(iterator, wxChar*, wxUniCharRef,
@@ -1579,7 +1581,7 @@ public:
       : m_impl(str.m_impl, nPos, nLen) { }
     // take all characters from first to last
   wxString(const_iterator first, const_iterator last)
-      : m_impl(first, last) { }
+      : m_impl(first.impl(), last.impl()) { }
 #if WXWIN_COMPATIBILITY_STRING_PTR_AS_ITER
     // the 2 overloads below are for compatibility with the existing code using
     // pointers instead of iterators
@@ -1595,7 +1597,8 @@ public:
   }
     // and this one is needed to compile code adding offsets to c_str() result
   wxString(const wxCStrData& first, const wxCStrData& last)
-      : m_impl(CreateConstIterator(first), CreateConstIterator(last))
+      : m_impl(CreateConstIterator(first).impl(),
+               CreateConstIterator(last).impl())
   {
       wxASSERT_MSG( first.m_str == last.m_str,
                     _T("pointers must be into the same string") );
@@ -1646,7 +1649,7 @@ public:
   }
     // append from first to last
   wxString& append(const_iterator first, const_iterator last)
-    { m_impl.append(first, last); return *this; }
+    { m_impl.append(first.impl(), last.impl()); return *this; }
 #if WXWIN_COMPATIBILITY_STRING_PTR_AS_ITER
   wxString& append(const char *first, const char *last)
     { return append(first, last - first); }
@@ -1712,7 +1715,7 @@ public:
 
     // assign from first to last
   wxString& assign(const_iterator first, const_iterator last)
-    { m_impl.assign(first, last); return *this; }
+    { m_impl.assign(first.impl(), last.impl()); return *this; }
 #if WXWIN_COMPATIBILITY_STRING_PTR_AS_ITER
   wxString& assign(const char *first, const char *last)
     { return assign(first, last - first); }
@@ -1788,10 +1791,10 @@ public:
     }
     else
 #endif
-        return iterator(this, m_impl.insert(it, (wxStringCharType)ch));
+        return iterator(this, m_impl.insert(it.impl(), (wxStringCharType)ch));
   }
   void insert(iterator it, const_iterator first, const_iterator last)
-    { m_impl.insert(it, first, last); }
+    { m_impl.insert(it.impl(), first.impl(), last.impl()); }
 #if WXWIN_COMPATIBILITY_STRING_PTR_AS_ITER
   void insert(iterator it, const char *first, const char *last)
     { insert(it - begin(), first, last - first); }
@@ -1808,7 +1811,7 @@ public:
         m_impl.insert(IterToImplPos(it), EncodeNChars(n, ch));
     else
 #endif
-        m_impl.insert(it, n, (wxStringCharType)ch);
+        m_impl.insert(it.impl(), n, (wxStringCharType)ch);
   }
 
     // delete characters from nStart to nStart + nLen
@@ -1821,9 +1824,9 @@ public:
   }
     // delete characters from first up to last
   iterator erase(iterator first, iterator last)
-    { return iterator(this, m_impl.erase(first, last)); }
+    { return iterator(this, m_impl.erase(first.impl(), last.impl())); }
   iterator erase(iterator first)
-    { return iterator(this, m_impl.erase(first)); }
+    { return iterator(this, m_impl.erase(first.impl())); }
 
 #ifdef wxSTRING_BASE_HASNT_CLEAR
   void clear() { erase(); }
@@ -1913,36 +1916,39 @@ public:
   }
 
   wxString& replace(iterator first, iterator last, const char* s)
-    { m_impl.replace(first, last, ImplStr(s)); return *this; }
+    { m_impl.replace(first.impl(), last.impl(), ImplStr(s)); return *this; }
   wxString& replace(iterator first, iterator last, const wchar_t* s)
-    { m_impl.replace(first, last, ImplStr(s)); return *this; }
+    { m_impl.replace(first.impl(), last.impl(), ImplStr(s)); return *this; }
   wxString& replace(iterator first, iterator last, const char* s, size_type n)
   {
     SubstrBufFromMB str(ImplStr(s, n));
-    m_impl.replace(first, last, str.data, str.len);
+    m_impl.replace(first.impl(), last.impl(), str.data, str.len);
     return *this;
   }
   wxString& replace(iterator first, iterator last, const wchar_t* s, size_type n)
   {
     SubstrBufFromWC str(ImplStr(s, n));
-    m_impl.replace(first, last, str.data, str.len);
+    m_impl.replace(first.impl(), last.impl(), str.data, str.len);
     return *this;
   }
   wxString& replace(iterator first, iterator last, const wxString& s)
-    { m_impl.replace(first, last, s.m_impl); return *this; }
+    { m_impl.replace(first.impl(), last.impl(), s.m_impl); return *this; }
   wxString& replace(iterator first, iterator last, size_type n, wxUniChar ch)
   {
 #if wxUSE_UNICODE_UTF8
     if ( !ch.IsAscii() )
-        m_impl.replace(first, last, EncodeNChars(n, ch));
+        m_impl.replace(first.impl(), last.impl(), EncodeNChars(n, ch));
     else
 #endif
-        m_impl.replace(first, last, n, (wxStringCharType)ch);
+        m_impl.replace(first.impl(), last.impl(), n, (wxStringCharType)ch);
     return *this;
   }
   wxString& replace(iterator first, iterator last,
                     const_iterator first1, const_iterator last1)
-    { m_impl.replace(first, last, first1, last1); return *this; }
+  {
+    m_impl.replace(first.impl(), last.impl(), first1.impl(), last1.impl());
+    return *this;
+  }
   wxString& replace(iterator first, iterator last,
                     const char *first1, const char *last1)
     { replace(first, last, first1, last1 - first1); return *this; }

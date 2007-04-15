@@ -507,7 +507,7 @@ void wxString::PosLenToImpl(size_t pos, size_t len,
     else
     {
         const_iterator i = begin() + pos;
-        *implPos = wxStringImpl::const_iterator(i) - m_impl.begin();
+        *implPos = wxStringImpl::const_iterator(i.impl()) - m_impl.begin();
         if ( len == npos )
             *implLen = npos;
         else
@@ -518,8 +518,7 @@ void wxString::PosLenToImpl(size_t pos, size_t len,
             if ( pos + len > length() )
                 len = length() - pos;
 
-            *implLen = wxStringImpl::const_iterator(i + len) -
-                       wxStringImpl::const_iterator(i);
+            *implLen = (i + len).impl() - i.impl();
         }
     }
 }
