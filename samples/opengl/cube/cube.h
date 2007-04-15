@@ -14,14 +14,32 @@
 
 #include "wx/glcanvas.h"
 
+// the rendering context used by all GL canvases
+class TestGLContext : public wxGLContext
+{
+public:
+    TestGLContext(wxGLCanvas *canvas);
+
+    // render the cube showing it at given angles
+    void DrawRotatedCube(float xangle, float yangle);
+
+private:
+    // one-time OpenGL initialization, safe to call many times
+    void Init();
+
+
+    // the list of commands to draw the cube
+    GLuint m_gllist;
+};
+
 // Define a new application type
 class MyApp: public wxApp
 {
 public:
     MyApp() { m_glContext = NULL; }
 
-    // set the specified canvas for current output
-    void SetCurrent(wxGLCanvas *canvas);
+    // get the context we use creating it on demand (and set it as current)
+    TestGLContext& GetContext(wxGLCanvas *canvas);
 
     // virtual wxApp methods
     virtual bool OnInit();
@@ -29,28 +47,20 @@ public:
 
 private:
     // the GL context we use for all our windows
-    wxGLContext *m_glContext;
+    TestGLContext *m_glContext;
 };
 
 // Define a new frame type
-class TestGLCanvas;
-
 class MyFrame: public wxFrame
 {
 public:
     MyFrame();
-
-    // update the image shown on the canvas (after the shared wxGLContext was
-    // updated, presumably)
-    void RefreshCanvas();
 
 private:
     void OnClose(wxCommandEvent& event);
     void OnNewWindow(wxCommandEvent& event);
     void OnDefRotateLeftKey(wxCommandEvent& event);
     void OnDefRotateRightKey(wxCommandEvent& event);
-
-    TestGLCanvas *m_canvas;
 
     DECLARE_EVENT_TABLE()
 };
@@ -65,18 +75,9 @@ private:
     void OnSize(wxSizeEvent& event);
     void OnKeyDown(wxKeyEvent& event);
 
-    // OpenGL calls can't be done until we're initialized
-    bool IsInitialized() const { return m_gllist != 0; }
-
-    // one-time OpenGL initialization, only does something if !IsInitialized()
-    void InitGL();
-
-    // render to window
-    void Render();
-
-
-    // the list of commands to draw the cube
-    GLuint m_gllist;
+    // angles of rotation around x- and y- axis
+    float m_xangle,
+          m_yangle;
 
     DECLARE_EVENT_TABLE()
 };

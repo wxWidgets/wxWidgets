@@ -66,79 +66,29 @@ int MyApp::OnExit()
     return wxApp::OnExit();
 }
 
-void MyApp::SetCurrent(wxGLCanvas *canvas)
+TestGLContext& MyApp::GetContext(wxGLCanvas *canvas)
 {
-    wxCHECK_RET( canvas, _T("canvas can't be NULL") );
-
     if ( !m_glContext )
-        m_glContext = new wxGLContext(canvas);
+        m_glContext = new TestGLContext(canvas);
 
     m_glContext->SetCurrent(*canvas);
+
+    return *m_glContext;
 }
 
 // ----------------------------------------------------------------------------
-// TestGLCanvas
+// TestGLContext
 // ----------------------------------------------------------------------------
 
-BEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
-    EVT_SIZE(TestGLCanvas::OnSize)
-    EVT_PAINT(TestGLCanvas::OnPaint)
-
-    EVT_KEY_DOWN(TestGLCanvas::OnKeyDown)
-END_EVENT_TABLE()
-
-static const int attribs[] = { WX_GL_RGBA, WX_GL_DOUBLEBUFFER, 0 };
-
-TestGLCanvas::TestGLCanvas(wxWindow *parent)
-            : wxGLCanvas(parent, wxID_ANY, NULL /* attribs */)
+TestGLContext::TestGLContext(wxGLCanvas *canvas)
+             : wxGLContext(canvas)
 {
     m_gllist = 0;
-
-    // notice that we can't call InitGL() from here: we must wait until the
-    // window is shown on screen to be able to perform OpenGL calls
 }
 
-// this function is called on each repaint so it should be fast
-void TestGLCanvas::Render()
+void TestGLContext::Init()
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glCallList(m_gllist);
-
-    glFlush();
-    SwapBuffers();
-}
-
-void TestGLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
-{
-    wxGetApp().SetCurrent(this);
-
-    // initialize if not done yet
-    InitGL();
-
-    wxPaintDC dc(this);
-
-    Render();
-}
-
-void TestGLCanvas::OnSize(wxSizeEvent& event)
-{
-    // don't prevent default processing from taking place
-    event.Skip();
-
-    if ( !IsInitialized() )
-        return;
-
-    // set GL viewport (not called by wxGLCanvas::OnSize on all platforms...)
-    int w, h;
-    GetClientSize(&w, &h);
-
-    wxGetApp().SetCurrent(this);
-    glViewport(0, 0, w, h);
-}
-
-void TestGLCanvas::InitGL()
-{
-    if ( IsInitialized() )
+    if ( m_gllist )
         return;
 
     /* set viewing projection */
@@ -146,21 +96,12 @@ void TestGLCanvas::InitGL()
     glLoadIdentity();
     glFrustum(-0.5f, 0.5f, -0.5f, 0.5f, 1.0f, 3.0f);
 
-    /* position viewer */
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glTranslatef(0.0f, 0.0f, -2.0f);
-
-    /* position object */
-    glRotatef(30.0f, 1.0f, 0.0f, 0.0f);
-    glRotatef(30.0f, 0.0f, 1.0f, 0.0f);
-
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
     // create the list of commands to draw the cube: then we can just (quickly)
-    // execute it in Render() later
+    // execute it in DrawRotatedCube() later
     m_gllist = glGenLists(1);
     glNewList(m_gllist, GL_COMPILE);
 
@@ -194,11 +135,69 @@ void TestGLCanvas::InitGL()
     glEndList();
 }
 
+void TestGLContext::DrawRotatedCube(float xangle, float yangle)
+{
+    Init();
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glTranslatef(0.0f, 0.0f, -2.0f);
+    glRotatef(xangle, 1.0f, 0.0f, 0.0f);
+    glRotatef(yangle, 0.0f, 1.0f, 0.0f);
+
+    glCallList(m_gllist);
+
+    glFlush();
+}
+
+// ----------------------------------------------------------------------------
+// TestGLCanvas
+// ----------------------------------------------------------------------------
+
+BEGIN_EVENT_TABLE(TestGLCanvas, wxGLCanvas)
+    EVT_SIZE(TestGLCanvas::OnSize)
+    EVT_PAINT(TestGLCanvas::OnPaint)
+
+    EVT_KEY_DOWN(TestGLCanvas::OnKeyDown)
+END_EVENT_TABLE()
+
+TestGLCanvas::TestGLCanvas(wxWindow *parent)
+            : wxGLCanvas(parent, wxID_ANY, NULL /* attribs */)
+{
+    m_xangle =
+    m_yangle = 30;
+}
+
+void TestGLCanvas::OnPaint(wxPaintEvent& WXUNUSED(event))
+{
+    wxPaintDC dc(this);
+
+    wxGetApp().GetContext(this).DrawRotatedCube(m_xangle, m_yangle);
+
+    SwapBuffers();
+}
+
+void TestGLCanvas::OnSize(wxSizeEvent& event)
+{
+    // don't prevent default processing from taking place
+    event.Skip();
+
+    if ( !IsShown() )
+        return;
+
+    // set GL viewport (not called by wxGLCanvas::OnSize on all platforms...)
+    int w, h;
+    GetClientSize(&w, &h);
+
+    wxGetApp().GetContext(this);
+    glViewport(0, 0, w, h);
+}
+
 void TestGLCanvas::OnKeyDown( wxKeyEvent& event )
 {
-    GLfloat x = 0,
-            y = 0,
-            z = 0;
+    float *p = NULL;
 
     bool inverse = false;
 
@@ -209,8 +208,8 @@ void TestGLCanvas::OnKeyDown( wxKeyEvent& event )
             // fall through
 
         case WXK_LEFT:
-            // rotate around Z axis
-            z = 1;
+            // rotate around Y axis
+            p = &m_yangle;
             break;
 
         case WXK_DOWN:
@@ -218,8 +217,8 @@ void TestGLCanvas::OnKeyDown( wxKeyEvent& event )
             // fall through
 
         case WXK_UP:
-            // rotate around Y axis
-            y = 1;
+            // rotate around X axis
+            p = &m_xangle;
             break;
 
         default:
@@ -231,19 +230,9 @@ void TestGLCanvas::OnKeyDown( wxKeyEvent& event )
     if ( inverse )
         angle = -angle;
 
-    wxGetApp().SetCurrent(this);
+    *p += angle;
 
-    glMatrixMode(GL_MODELVIEW);
-    glRotatef(angle, x, y, z);
-
-    // refresh all cubes
-    for ( wxWindowList::const_iterator i = wxTopLevelWindows.begin();
-          i != wxTopLevelWindows.end();
-          ++i )
-    {
-        MyFrame *frame = (MyFrame *)*i;
-        frame->RefreshCanvas();
-    }
+    Refresh(false);
 }
 
 // ----------------------------------------------------------------------------
@@ -256,10 +245,9 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
 END_EVENT_TABLE()
 
 MyFrame::MyFrame()
-       : wxFrame(NULL, wxID_ANY, _T("wxWidgets OpenGL Cube Sample"),
-                 wxDefaultPosition, wxSize(400, 300))
+       : wxFrame(NULL, wxID_ANY, _T("wxWidgets OpenGL Cube Sample"))
 {
-    m_canvas = new TestGLCanvas(this);
+    new TestGLCanvas(this);
 
     SetIcon(wxICON(sample));
 
@@ -275,6 +263,7 @@ MyFrame::MyFrame()
 
     CreateStatusBar();
 
+    SetClientSize(400, 400);
     Show();
 }
 
@@ -289,7 +278,3 @@ void MyFrame::OnNewWindow( wxCommandEvent& WXUNUSED(event) )
     (void) new MyFrame();
 }
 
-void MyFrame::RefreshCanvas()
-{
-    m_canvas->Refresh(false);
-}
