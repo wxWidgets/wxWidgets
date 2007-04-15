@@ -41,6 +41,17 @@ IMPLEMENT_CLASS(wxGLApp, wxApp)
 // implementation
 // ============================================================================
 
+wxGLCanvasBase::wxGLCanvasBase()
+{
+#if WXWIN_COMPATIBILITY_2_8
+    m_glContext = NULL;
+#endif
+
+    // we always paint background entirely ourselves so prevent wx from erasing
+    // it to avoid flicker
+    SetBackgroundStyle(wxBG_STYLE_CUSTOM);
+}
+
 void wxGLCanvasBase::SetCurrent(const wxGLContext& context) const
 {
     // although on MSW it works even if the window is still hidden, it doesn't

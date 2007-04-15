@@ -77,12 +77,7 @@ class WXDLLIMPEXP_GL wxGLCanvasBase : public wxWindow
 {
 public:
     // default ctor doesn't initialize the window, use Create() later
-    wxGLCanvasBase()
-    {
-#if WXWIN_COMPATIBILITY_2_8
-        m_glContext = NULL;
-#endif
-    }
+    wxGLCanvasBase();
 
     virtual ~wxGLCanvasBase();
 
