@@ -656,8 +656,10 @@ void WXDLLEXPORT wxGetMousePosition( int* x, int* y );
 #endif // MSW
 
 // ----------------------------------------------------------------------------
-// Display and colorss (X only)
+// X11 Display access
 // ----------------------------------------------------------------------------
+
+#if defined(__X__) || defined(__WXGTK__)
 
 #ifdef __WXGTK__
     void *wxGetDisplay();
@@ -674,6 +676,8 @@ inline struct _XDisplay *wxGetX11Display()
 {
     return (_XDisplay *)wxGetDisplay();
 }
+
+#endif // X11 || wxGTK
 
 #endif // wxUSE_GUI
 
