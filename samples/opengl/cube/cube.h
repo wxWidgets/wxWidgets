@@ -24,12 +24,8 @@ public:
     void DrawRotatedCube(float xangle, float yangle);
 
 private:
-    // one-time OpenGL initialization, safe to call many times
-    void Init();
-
-
-    // the list of commands to draw the cube
-    GLuint m_gllist;
+    // textures for the cube faces
+    GLuint m_textures[6];
 };
 
 // Define a new application type
