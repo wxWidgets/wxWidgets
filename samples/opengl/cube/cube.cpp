@@ -304,7 +304,7 @@ void TestGLCanvas::OnSize(wxSizeEvent& event)
     // don't prevent default processing from taking place
     event.Skip();
 
-    if ( !IsShown() )
+    if ( !IsShownOnScreen() )
         return;
 
     // set GL viewport (not called by wxGLCanvas::OnSize on all platforms...)
