@@ -1604,34 +1604,43 @@ size_t wxString::Replace(const wxString& strOld,
 
 bool wxString::IsAscii() const
 {
-  const wxChar *s = (const wxChar*) *this;
-  while(*s){
-    if(!isascii(*s)) return(false);
-    s++;
-  }
-  return(true);
+    for ( const_iterator i = begin(); i != end(); ++i )
+    {
+        if ( !(*i).IsAscii() )
+            return false;
+    }
+
+    return true;
 }
 
 bool wxString::IsWord() const
 {
-  const wxChar *s = (const wxChar*) *this;
-  while(*s){
-    if(!wxIsalpha(*s)) return(false);
-    s++;
-  }
-  return(true);
+    for ( const_iterator i = begin(); i != end(); ++i )
+    {
+        if ( !wxIsalpha(*i) )
+            return false;
+    }
+
+    return true;
 }
 
 bool wxString::IsNumber() const
 {
-  const wxChar *s = (const wxChar*) *this;
-  if (wxStrlen(s))
-     if ((s[0] == wxT('-')) || (s[0] == wxT('+'))) s++;
-  while(*s){
-    if(!wxIsdigit(*s)) return(false);
-    s++;
-  }
-  return(true);
+    if ( empty() )
+        return true;
+
+    const_iterator i = begin();
+
+    if ( *i == _T('-') || *i == _T('+') )
+        ++i;
+
+    for ( ; i != end(); ++i )
+    {
+        if ( !wxIsdigit(*i) )
+            return false;
+    }
+
+    return true;
 }
 
 wxString wxString::Strip(stripType w) const
