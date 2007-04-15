@@ -351,7 +351,7 @@ protected:
 
     // forward calls to OnGetRowsHeightHint()
     virtual void OnGetUnitsSizeHint(size_t unitMin, size_t unitMax) const
-        { return OnGetRowsHeightHint(unitMin, unitMax); }
+        { OnGetRowsHeightHint(unitMin, unitMax); }
 
     // again, if not overridden, it will fall back on default method
     virtual wxCoord EstimateTotalHeight() const
