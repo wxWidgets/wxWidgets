@@ -552,6 +552,9 @@ enum {
     wxNO,
     wxNO_DEFAULT,
     wxYES_DEFAULT,
+    wxAPPLY,
+    wxCLOSE,
+     
     wxICON_EXCLAMATION,
     wxICON_HAND,
     wxICON_QUESTION,
