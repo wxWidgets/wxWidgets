@@ -80,9 +80,9 @@ wxSTD ostream& operator<<(wxSTD ostream& os, const wxCStrData& str)
 {
 // FIXME-UTF8: always, not only if wxUSE_UNICODE
 #if wxUSE_UNICODE && !defined(__BORLANDC__)
-    return os << str.AsWChar();
+    return os << (const wchar_t*)str.AsWCharBuf();
 #else
-    return os << str.AsChar();
+    return os << (const char*)str.AsCharBuf();
 #endif
 }
 

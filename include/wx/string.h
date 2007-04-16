@@ -212,6 +212,9 @@ public:
 
     operator const void*() const { return AsChar(); }
 
+    inline const wxCharBuffer AsCharBuf() const;
+    inline const wxWCharBuffer AsWCharBuf() const;
+
     inline wxString AsString() const;
 
     // allow expressions like "c_str()[0]":
@@ -2574,6 +2577,24 @@ inline const char* wxCStrData::AsChar() const
 }
 #endif // !wxUSE_UNICODE
 
+inline const wxCharBuffer wxCStrData::AsCharBuf() const
+{
+#if !wxUSE_UNICODE
+    return wxCharBuffer::CreateNonOwned(AsChar());
+#else
+    return AsString().mb_str();
+#endif
+}
+
+inline const wxWCharBuffer wxCStrData::AsWCharBuf() const
+{
+#if wxUSE_UNICODE_WCHAR
+    return wxWCharBuffer::CreateNonOwned(AsWChar());
+#else
+    return AsString().wc_str();
+#endif
+}
+
 inline wxString wxCStrData::AsString() const
 {
     if ( m_offset == 0 )
@@ -2617,12 +2638,12 @@ inline size_t operator-(const wchar_t *p, const wxCStrData& cs)
 
 // FIXME-UTF8: move this to buffer.h
 inline wxCharBuffer::wxCharBuffer(const wxCStrData& cstr)
-                    : wxCharTypeBufferBase(cstr.AsChar())
+                    : wxCharTypeBufferBase(cstr.AsCharBuf())
 {
 }
 
 inline wxWCharBuffer::wxWCharBuffer(const wxCStrData& cstr)
-                    : wxCharTypeBufferBase(cstr.AsWChar())
+                    : wxCharTypeBufferBase(cstr.AsWCharBuf())
 {
 }
 

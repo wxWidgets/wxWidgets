@@ -45,10 +45,10 @@ public:
         m_str[len] = (CharType)0;
     }
 
-    static wxCharTypeBuffer CreateNonOwned(const CharType *str)
+    static const wxCharTypeBuffer CreateNonOwned(const CharType *str)
     {
         wxCharTypeBuffer buf;
-        buf.m_str = str;
+        buf.m_str = wx_const_cast(CharType*, str);
         buf.m_owned = false;
         return buf;
     }
@@ -157,6 +157,9 @@ class WXDLLIMPEXP_BASE wxCharBuffer : public wxCharTypeBuffer<char>
 public:
     typedef wxCharTypeBuffer<char> wxCharTypeBufferBase;
 
+    wxCharBuffer(const wxCharTypeBufferBase& buf)
+        : wxCharTypeBufferBase(buf) {}
+
     wxCharBuffer(const CharType *str = NULL) : wxCharTypeBufferBase(str) {}
     wxCharBuffer(size_t len) : wxCharTypeBufferBase(len) {}
 
@@ -168,6 +171,9 @@ class WXDLLIMPEXP_BASE wxWCharBuffer : public wxCharTypeBuffer<wchar_t>
 {
 public:
     typedef wxCharTypeBuffer<wchar_t> wxCharTypeBufferBase;
+
+    wxWCharBuffer(const wxCharTypeBufferBase& buf)
+        : wxCharTypeBufferBase(buf) {}
 
     wxWCharBuffer(const CharType *str = NULL) : wxCharTypeBufferBase(str) {}
     wxWCharBuffer(size_t len) : wxCharTypeBufferBase(len) {}
