@@ -2199,7 +2199,8 @@ void wxComboCtrlBase::SetValueWithEvent(const wxString& value, bool withEvent)
 
         EnsurePopupControl();
 
-        m_popupInterface->SetStringValue(value);
+        if (m_popupInterface)
+            m_popupInterface->SetStringValue(value);
     }
 
     Refresh();
