@@ -1891,4 +1891,22 @@ public:
 #endif
 
 //---------------------------------------------------------------------------
+
+%{
+#include <wx/dcsvg.h>
+%}
+
+class wxSVGFileDC : public wxDC
+{
+    %nokwargs wxSVGFileDC;
+    
+    wxSVGFileDC(wxString f);
+    wxSVGFileDC(wxString f, int Width, int Height);
+    wxSVGFileDC(wxString f, int Width, int Height, float dpi);
+    
+    ~wxSVGFileDC();
+
+};
+
+//---------------------------------------------------------------------------
 //---------------------------------------------------------------------------
