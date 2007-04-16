@@ -280,7 +280,7 @@ public:
     //       to combine alignment flags (e.g. wxALIGN_LEFT|wxALIGN_BOTTOM)
     virtual void SetAlignment( int align ) = 0;
     virtual int GetAlignment() const = 0;
-
+    
 protected:
     wxString                m_variantType;
     wxDataViewColumn       *m_owner;

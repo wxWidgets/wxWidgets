@@ -25,6 +25,30 @@ class WXDLLIMPEXP_ADV wxDataViewCtrl;
 class WXDLLIMPEXP_ADV wxDataViewMainWindow;
 class WXDLLIMPEXP_ADV wxDataViewHeaderWindow;
 
+//-----------------------------------------------------------------------------
+// wxDataViewEditorCtrlEvtHandler
+//-----------------------------------------------------------------------------
+
+class wxDataViewEditorCtrlEvtHandler: public wxEvtHandler
+{
+public:
+    wxDataViewEditorCtrlEvtHandler( wxControl *editor, wxDataViewRenderer *owner );
+                         
+    void AcceptChangesAndFinish();
+
+protected:
+    void OnChar( wxKeyEvent &event );
+    void OnKillFocus( wxFocusEvent &event );
+
+private:
+    wxDataViewRenderer     *m_owner;
+    wxControl              *m_editorCtrl;
+    bool                    m_finished;
+
+private:
+    DECLARE_EVENT_TABLE()
+};
+
 // ---------------------------------------------------------
 // wxDataViewRenderer
 // ---------------------------------------------------------
@@ -78,10 +102,24 @@ public:
     // Create DC on request
     virtual wxDC *GetDC();
 
+    // in-place editing
+    virtual bool HasEditorCtrl()
+        { return false; }
+    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
+        { return NULL; }
+    virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value )
+        { return false; }
+        
+    virtual bool StartEditing( unsigned int row, wxRect labelRect );
+    virtual void CancelEditing();
+    virtual bool FinishEditing();
+    
 private:
-    wxDC                *m_dc;
-    int                  m_align;
-    wxDataViewCellMode   m_mode;
+    wxDC                        *m_dc;
+    int                          m_align;
+    wxDataViewCellMode           m_mode;
+    wxControl                   *m_editorCtrl;
+    unsigned int                 m_row; // for m_editorCtrl
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewRenderer)
@@ -102,6 +140,7 @@ protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCustomRenderer)
 };
 
+
 // ---------------------------------------------------------
 // wxDataViewTextRenderer
 // ---------------------------------------------------------
@@ -119,8 +158,13 @@ public:
     bool Render( wxRect cell, wxDC *dc, int state );
     wxSize GetSize() const;
 
+    // in-place editing
+    virtual bool HasEditorCtrl();
+    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value );
+    virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value );
+        
 private:
-    wxString m_text;
+    wxString   m_text;
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewTextRenderer)
@@ -361,6 +405,8 @@ public:     // utility functions not part of the API
 
     // updates the header window after a change in a column setting
     void OnColumnChange();
+
+    wxDataViewMainWindow* GetMainWindow() { return m_clientArea; }
 
 private:
     wxDataViewListModelNotifier *m_notifier;
