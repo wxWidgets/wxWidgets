@@ -1058,12 +1058,12 @@ public:
          return self.Format().encode(wx.GetDefaultPyEncoding())
      }
 
-    %property(Days, GetDays, doc="See `GetDays`");
-    %property(Hours, GetHours, doc="See `GetHours`");
-    %property(Milliseconds, GetMilliseconds, doc="See `GetMilliseconds`");
-    %property(Minutes, GetMinutes, doc="See `GetMinutes`");
-    %property(Seconds, GetSeconds, doc="See `GetSeconds`");
-    %property(Weeks, GetWeeks, doc="See `GetWeeks`");
+    %property(days, GetDays, doc="See `GetDays`");
+    %property(hours, GetHours, doc="See `GetHours`");
+    %property(milliseconds, GetMilliseconds, doc="See `GetMilliseconds`");
+    %property(minutes, GetMinutes, doc="See `GetMinutes`");
+    %property(seconds, GetSeconds, doc="See `GetSeconds`");
+    %property(weeks, GetWeeks, doc="See `GetWeeks`");
 };
 
 
@@ -1190,11 +1190,11 @@ public:
         bool __ne__(const wxDateSpan* other) { return other ? (*self != *other) : true;  }
     }
 
-    %property(Days, GetDays, SetDays, doc="See `GetDays` and `SetDays`");
-    %property(Months, GetMonths, SetMonths, doc="See `GetMonths` and `SetMonths`");
-    %property(TotalDays, GetTotalDays, doc="See `GetTotalDays`");
-    %property(Weeks, GetWeeks, SetWeeks, doc="See `GetWeeks` and `SetWeeks`");
-    %property(Years, GetYears, SetYears, doc="See `GetYears` and `SetYears`");
+    %property(days, GetDays, SetDays, doc="See `GetDays` and `SetDays`");
+    %property(months, GetMonths, SetMonths, doc="See `GetMonths` and `SetMonths`");
+    %property(totalDays, GetTotalDays, doc="See `GetTotalDays`");
+    %property(weeks, GetWeeks, SetWeeks, doc="See `GetWeeks` and `SetWeeks`");
+    %property(years, GetYears, SetYears, doc="See `GetYears` and `SetYears`");
 };
 
 
