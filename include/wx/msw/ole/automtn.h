@@ -38,7 +38,7 @@ public:
     virtual ~wxAutomationObject();
 
     // Set/get dispatch pointer
-    inline void SetDispatchPtr(WXIDISPATCH* dispatchPtr) { m_dispatchPtr = dispatchPtr; };
+    inline void SetDispatchPtr(WXIDISPATCH* dispatchPtr) { m_dispatchPtr = dispatchPtr; }
     inline WXIDISPATCH* GetDispatchPtr() const { return m_dispatchPtr; }
 
     // Get a dispatch pointer from the current object associated

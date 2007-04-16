@@ -39,11 +39,11 @@ public:
     void SetBitmapLabel(const wxBitmap& bitmap)
         { m_bmpNormal = bitmap; OnSetBitmap(); }
     void SetBitmapSelected(const wxBitmap& sel)
-        { m_bmpSelected = sel; OnSetBitmap(); };
+        { m_bmpSelected = sel; OnSetBitmap(); }
     void SetBitmapFocus(const wxBitmap& focus)
-        { m_bmpFocus = focus; OnSetBitmap(); };
+        { m_bmpFocus = focus; OnSetBitmap(); }
     void SetBitmapDisabled(const wxBitmap& disabled)
-        { m_bmpDisabled = disabled; OnSetBitmap(); };
+        { m_bmpDisabled = disabled; OnSetBitmap(); }
     void SetBitmapHover(const wxBitmap& hover)
         { m_bmpHover = hover; OnSetBitmap(); }
 

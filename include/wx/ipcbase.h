@@ -73,28 +73,28 @@ public:
                                wxChar *WXUNUSED(data),
                                int WXUNUSED(size),
                                wxIPCFormat WXUNUSED(format) )
-                             { return false; };
+                             { return false; }
 
   virtual wxChar *OnRequest    ( const wxString& WXUNUSED(topic),
                                const wxString& WXUNUSED(item),
                                int *WXUNUSED(size),
                                wxIPCFormat WXUNUSED(format) )
-                             { return (wxChar *) NULL; };
+                             { return (wxChar *) NULL; }
 
   virtual bool OnPoke        ( const wxString& WXUNUSED(topic),
                                const wxString& WXUNUSED(item),
                                wxChar *WXUNUSED(data),
                                int WXUNUSED(size),
                                wxIPCFormat WXUNUSED(format) )
-                             { return false; };
+                             { return false; }
 
   virtual bool OnStartAdvise ( const wxString& WXUNUSED(topic),
                                const wxString& WXUNUSED(item) )
-                             { return false; };
+                             { return false; }
 
   virtual bool OnStopAdvise  ( const wxString& WXUNUSED(topic),
                                const wxString& WXUNUSED(item) )
-                             { return false; };
+                             { return false; }
 
   // Callbacks to CLIENT - override at will
   virtual bool OnAdvise      ( const wxString& WXUNUSED(topic),
@@ -102,7 +102,7 @@ public:
                                wxChar *WXUNUSED(data),
                                int WXUNUSED(size),
                                wxIPCFormat WXUNUSED(format) )
-                             { return false; };
+                             { return false; }
 
   // Callbacks to BOTH - override at will
   // Default behaviour is to delete connection and return true
