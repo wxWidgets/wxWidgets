@@ -1472,16 +1472,11 @@ void wxWindowDC::DoDrawText( const wxString &text, wxCoord x, wxCoord y )
         return;
     size_t datalen = strlen(data);
 
-#ifdef PANGO_VERSION_MAJOR
-    // in Pango >= 1.16 the "underline of leading/trailing spaces" bug has been fixed...
-    static bool pangoOk = (pango_version_check(1, 16, 1) == NULL);
-#else
-    // the version of Pango used for compiling wxWidgets does not have version macros/functions...
-    // we are forced to assume that the run-time version of Pango is older than 1.16
-    const bool pangoOk = false;
-#endif
-
-    bool needshack = underlined && !pangoOk;
+    // TODO: as soon as Pango provides a function to check at runtime its
+    //       version, we can use it to disable the underline hack for
+    //       Pango >= 1.16 as the "underline of leading/trailing spaces"
+    //       has been fixed there
+    bool needshack = underlined;
     char *hackstring = NULL;
 
     if (needshack)
