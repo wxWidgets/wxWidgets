@@ -128,6 +128,7 @@ wxMSW:
 
 - Fixed infinite loop in wxThread::Wait() in console applications.
 - Return the restored window size from GetSize() when window is minimized.
+- wxCheckListBox now looks more natively, especially under XP (Marcin Malich)
 
 wxX11:
 

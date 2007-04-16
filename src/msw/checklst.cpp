@@ -45,6 +45,7 @@
 
 #include <windowsx.h>
 
+#include "wx/renderer.h"
 #include "wx/msw/private.h"
 
 // ----------------------------------------------------------------------------
@@ -142,7 +143,7 @@ public:
 private:
     bool            m_bChecked;
     wxCheckListBox *m_pParent;
-    size_t    m_nIndex;
+    size_t          m_nIndex;
 
     DECLARE_NO_COPY_CLASS(wxCheckListBoxItem)
 };
@@ -158,10 +159,8 @@ wxCheckListBoxItem::wxCheckListBoxItem(wxCheckListBox *pParent, size_t nIndex)
     // done in OnMeasure while they are used only in OnDraw and we
     // know that there will always be OnMeasure before OnDraw
 
-    // fix appearance for check list boxes: they don't look quite the same as
-    // menu icons
-    SetMarginWidth(::GetSystemMetrics(SM_CXMENUCHECK) -
-                      2*wxSystemSettings::GetMetric(wxSYS_EDGE_X) + 1);
+    SetMarginWidth(::GetSystemMetrics(SM_CXMENUCHECK) - 2);
+
     SetBackgroundColour(pParent->GetBackgroundColour());
 }
 
@@ -175,62 +174,44 @@ bool wxCheckListBoxItem::OnDrawItem(wxDC& dc, const wxRect& rc,
     if ( !wxOwnerDrawn::OnDrawItem(dc, rc, act, stat) )
         return false;
 
-
     // now draw the check mark part
-    size_t nCheckWidth  = GetDefaultMarginWidth(),
-           nCheckHeight = m_pParent->GetItemHeight();
+    HDC hdc = GetHdcOf(dc);
 
-    int x = rc.GetX(),
-        y = rc.GetY();
+    int nBmpWidth  = ::GetSystemMetrics(SM_CXMENUCHECK),
+        nBmpHeight = ::GetSystemMetrics(SM_CYMENUCHECK);
 
-    HDC hdc = (HDC)dc.GetHDC();
 
-    // create pens, brushes &c
-    COLORREF colBg = ::GetSysColor(COLOR_WINDOW);
-    AutoHPEN hpenBack(colBg),
-             hpenGray(RGB(0xc0, 0xc0, 0xc0));
+    // first create bitmap in a memory DC
+    MemoryHDC hdcMem(hdc);
+    CompatibleBitmap hBmpCheck(hdc, nBmpWidth, nBmpHeight);
 
-    SelectInHDC selPen(hdc, (HGDIOBJ)hpenBack);
-    AutoHBRUSH hbrBack(colBg);
-    SelectInHDC selBrush(hdc, hbrBack);
-
-    // erase the background: it could have been filled with the selected colour
-    Rectangle(hdc, x, y, x + nCheckWidth + 1, rc.GetBottom() + 1);
-
-    // shift check mark 1 pixel to the right, looks better like this
-    x++;
-
-    if ( IsChecked() )
+    // then draw a check mark into it
     {
-        // first create a monochrome bitmap in a memory DC
-        MemoryHDC hdcMem(hdc);
-        MonoBitmap hbmpCheck(nCheckWidth, nCheckHeight);
-        SelectInHDC selBmp(hdcMem, hbmpCheck);
+        SelectInHDC selBmp(hdcMem, hBmpCheck);
 
-        // then draw a check mark into it
-        RECT rect = { 0, 0, nCheckWidth, nCheckHeight };
-        ::DrawFrameControl(hdcMem, &rect,
-#ifdef __WXWINCE__
-                           DFC_BUTTON, DFCS_BUTTONCHECK
-#else
-                           DFC_MENU, DFCS_MENUCHECK
-#endif
-                           );
+        int flags = wxCONTROL_FLAT;
+        if ( IsChecked() )
+            flags |= wxCONTROL_CHECKED;
 
-        // finally copy it to screen DC
-        ::BitBlt(hdc, x, y, nCheckWidth, nCheckHeight, hdcMem, 0, 0, SRCCOPY);
-    }
+        wxDCTemp dcMem(hdcMem);
+        wxRendererNative::Get().DrawCheckBox(
+                m_pParent, dcMem, wxRect(0, 0, nBmpWidth, nBmpHeight), flags);
+    } // select hBmpCheck out of hdcMem
 
-    // now we draw the smaller rectangle
-    y++;
-    nCheckWidth  -= 2;
-    nCheckHeight -= 2;
+    // shift check mark 2 pixel to the right and bottom, looks better like this
+    int x = rc.GetX() + 2,
+        y = rc.GetY() + 2;
 
-    // draw hollow gray rectangle
-    (void)::SelectObject(hdc, (HGDIOBJ)hpenGray);
+    // finally draw bitmap to screen: uses image list functions to blend
+    // the bitmap with the background colour (better for the selected items)
+    HIMAGELIST himl = ImageList_Create(nBmpWidth, nBmpHeight,
+                                       ILC_COLOR32 | ILC_MASK, 1, 1);
+    ImageList_Add(himl, hBmpCheck, NULL);
 
-    SelectInHDC selBrush2(hdc, ::GetStockObject(NULL_BRUSH));
-    Rectangle(hdc, x, y, x + nCheckWidth, y + nCheckHeight);
+    UINT fStyle = stat & wxOwnerDrawn::wxODSelected ? ILD_SELECTED : ILD_NORMAL;
+    ImageList_Draw(himl, 0, hdc, x, y, fStyle);
+
+    ImageList_Destroy(himl);
 
     return true;
 }
@@ -375,11 +356,12 @@ bool wxCheckListBox::MSWOnMeasure(WXMEASUREITEMSTRUCT *item)
   if ( wxListBox::MSWOnMeasure(item) ) {
     MEASUREITEMSTRUCT *pStruct = (MEASUREITEMSTRUCT *)item;
 
+    // add place for the check mark
+    pStruct->itemWidth  += wxOwnerDrawn::GetDefaultMarginWidth();
+    pStruct->itemHeight += 1;
+
     // save item height
     m_nItemHeight = pStruct->itemHeight;
-
-    // add place for the check mark
-    pStruct->itemWidth += wxOwnerDrawn::GetDefaultMarginWidth();
 
     return true;
   }
