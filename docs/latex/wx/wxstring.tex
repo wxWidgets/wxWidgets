@@ -586,7 +586,7 @@ to a function expecting non-const pointer.
 
 \membersection{wxString::char\_str}\label{wxstringcharstr}
 
-\constfunc{wxWritableCharBuffer}{char\_str}{\void}
+\constfunc{wxWritableCharBuffer}{char\_str}{\param{wxMBConv\&}{ conv = wxConvLibc}}
 
 Returns an object with string data that is implicitly convertible to
 {\tt char*} pointer. Note that any change to the returned buffer is lost and so
