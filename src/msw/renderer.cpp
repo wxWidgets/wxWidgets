@@ -80,6 +80,10 @@
     #define DFCS_FLAT 0
 #endif
 
+#ifndef DFCS_HOT
+    #define DFCS_HOT 0x1000
+#endif
+
 // ----------------------------------------------------------------------------
 // wxRendererMSW: wxRendererNative implementation for "old" Win32 systems
 // ----------------------------------------------------------------------------
@@ -95,6 +99,11 @@ public:
                                         wxDC& dc,
                                         const wxRect& rect,
                                         int flags = 0);
+
+    virtual void DrawCheckBox(wxWindow *win,
+                              wxDC& dc,
+                              const wxRect& rect,
+                              int flags = 0);
 
     virtual void DrawPushButton(wxWindow *win,
                                 wxDC& dc,
@@ -210,6 +219,28 @@ wxRendererMSW::DrawComboBoxDropButton(wxWindow * WXUNUSED(win),
         style |= DFCS_PUSHED | DFCS_FLAT;
 
     ::DrawFrameControl(GetHdcOf(dc), &r, DFC_SCROLL, style);
+}
+
+void
+wxRendererMSW::DrawCheckBox(wxWindow * WXUNUSED(win),
+                            wxDC& dc,
+                            const wxRect& rect,
+                            int flags)
+{
+    RECT r;
+    wxCopyRectToRECT(rect, r);
+
+    int style = DFCS_BUTTONCHECK;
+    if ( flags & wxCONTROL_CHECKED )
+        style |= DFCS_CHECKED;
+    if ( flags & wxCONTROL_DISABLED )
+        style |= DFCS_INACTIVE;
+    if ( flags & wxCONTROL_PRESSED )
+        style |= DFCS_PUSHED;
+    if ( flags & wxCONTROL_CURRENT )
+        style |= DFCS_HOT;
+
+    ::DrawFrameControl(GetHdcOf(dc), &r, DFC_BUTTON, style);
 }
 
 void
@@ -416,13 +447,20 @@ wxRendererXP::DrawCheckBox(wxWindow *win,
     else
         state = CBS_UNCHECKEDNORMAL;
 
-    // CBS_XXX is followed by CBX_XXXGOT, then CBS_XXXPRESSED and DISABLED
-    if ( flags & wxCONTROL_CURRENT )
-        state += 1;
+    // CBS_XXX is followed by CBX_XXXHOT, then CBS_XXXPRESSED and DISABLED
+    enum
+    {
+        CBS_HOT_OFFSET = 1,
+        CBS_PRESSED_OFFSET = 2,
+        CBS_DISABLED_OFFSET = 3
+    };
+
+    if ( flags & wxCONTROL_DISABLED )
+        state += CBS_DISABLED_OFFSET;
     else if ( flags & wxCONTROL_PRESSED )
-        state += 2;
-    else if ( flags & wxCONTROL_DISABLED )
-        state += 3;
+        state += CBS_PRESSED_OFFSET;
+    else if ( flags & wxCONTROL_CURRENT )
+        state += CBS_HOT_OFFSET;
 
     wxUxThemeEngine::Get()->DrawThemeBackground
                             (
