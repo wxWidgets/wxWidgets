@@ -80,7 +80,7 @@ typedef wxObject *(*wxObjectConstructorFn)(void);
 class WXDLLIMPEXP_BASE wxClassInfo
 {
     friend class WXDLLIMPEXP_BASE wxObject;
-    friend wxObject *wxCreateDynamicObject(const wxChar *name);
+    friend WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
 public:
     wxClassInfo( const wxChar *className,
                  const wxClassInfo *baseInfo1,
