@@ -1731,6 +1731,10 @@ class PyAuiDockArt(AuiDefaultDockArt):
         _aui.PyAuiDockArt_swiginit(self,_aui.new_PyAuiDockArt(*args, **kwargs))
         PyAuiDockArt._setCallbackInfo(self, self, PyAuiDockArt)
 
+    def _setCallbackInfo(*args, **kwargs):
+        """_setCallbackInfo(self, PyObject self, PyObject _class)"""
+        return _aui.PyAuiDockArt__setCallbackInfo(*args, **kwargs)
+
 _aui.PyAuiDockArt_swigregister(PyAuiDockArt)
 
 class PyAuiTabArt(AuiDefaultTabArt):
@@ -1751,6 +1755,10 @@ class PyAuiTabArt(AuiDefaultTabArt):
         """
         _aui.PyAuiTabArt_swiginit(self,_aui.new_PyAuiTabArt(*args, **kwargs))
         PyAuiTabArt._setCallbackInfo(self, self, PyAuiTabArt)
+
+    def _setCallbackInfo(*args, **kwargs):
+        """_setCallbackInfo(self, PyObject self, PyObject _class)"""
+        return _aui.PyAuiTabArt__setCallbackInfo(*args, **kwargs)
 
 _aui.PyAuiTabArt_swigregister(PyAuiTabArt)
 
