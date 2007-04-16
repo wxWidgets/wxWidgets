@@ -235,6 +235,8 @@ wxRendererMSW::DrawCheckBox(wxWindow * WXUNUSED(win),
         style |= DFCS_CHECKED;
     if ( flags & wxCONTROL_DISABLED )
         style |= DFCS_INACTIVE;
+    if ( flags & wxCONTROL_FLAT )
+        style |= DFCS_MONO;
     if ( flags & wxCONTROL_PRESSED )
         style |= DFCS_PUSHED;
     if ( flags & wxCONTROL_CURRENT )
