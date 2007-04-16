@@ -25,8 +25,8 @@ The VirtualTree and DragAndDrop mixins force the wx.TR_HIDE_ROOT style.
 
 Author: Frank Niessink <frank@niessink.com>
 License: wxWidgets license
-Version: 0.9.1
-Date: 26 March 2007
+Version: 1.0
+Date: 15 April 2007
 
 ExpansionState is based on code and ideas from Karsten Hilbert.
 Andrea Gavana provided help with the CustomTreeCtrl integration.
@@ -39,14 +39,6 @@ import wx, wx.lib.customtreectrl
 class TreeAPIHarmonizer(object):
     ''' This class attempts to hide the differences in API between the
     different tree controls that are part of wxPython. '''
-
-    def __init__(self, *args, **kwargs):
-        # CustomTreeCtrl uses a different keyword for the window style 
-        # argument ('ctstyle'). To hide this, we replace the 'style' keyword
-        # by 'ctstyle' if we're mixed in with CustomTreeCtrl.
-        if isinstance(self, wx.lib.customtreectrl.CustomTreeCtrl):
-            kwargs['ctstyle'] = kwargs.pop('style', wx.TR_DEFAULT_STYLE)
-        super(TreeAPIHarmonizer, self).__init__(*args, **kwargs)
 
     def __callSuper(self, methodName, default, *args, **kwargs):
         # If our super class has a method called methodName, call it,
@@ -148,12 +140,20 @@ class TreeAPIHarmonizer(object):
             else:
                 selections = []
         # If the root item is hidden, it should never be selected, 
-        # unfortunately, CustomTreeCtrl and TreeCtrl allow it to be selected.
+        # unfortunately, CustomTreeCtrl allows it to be selected.
         if self.HasFlag(wx.TR_HIDE_ROOT):
             rootItem = self.GetRootItem()
             if rootItem and rootItem in selections:
                 selections.remove(rootItem)
         return selections
+
+    def GetFirstVisibleItem(self):
+        # TreeListCtrl raises an exception or even crashes when invoking 
+        # GetFirstVisibleItem on an empty tree.
+        if self.GetRootItem():
+            return super(TreeAPIHarmonizer, self).GetFirstVisibleItem()
+        else:
+            return wx.TreeItemId()
 
     def SelectItem(self, item, *args, **kwargs):
         # Prevent the hidden root from being selected, otherwise TreeCtrl
@@ -197,7 +197,7 @@ class TreeAPIHarmonizer(object):
                 super(TreeAPIHarmonizer, self).ExpandAll(item)
 
     def ExpandAllChildren(self, item):
-        # TreeListCtrl doesn't have ExpandallChildren
+        # TreeListCtrl and CustomTreeCtrl don't have ExpandallChildren
         try:
             super(TreeAPIHarmonizer, self).ExpandAllChildren(item)
         except AttributeError:
@@ -352,7 +352,12 @@ class VirtualTree(TreeAPIHarmonizer, TreeHelper):
 
     def RefreshItem(self, index):
         ''' Redraws the item with the specified index. '''
-        item = self.GetItemByIndex(index)
+        try:
+            item = self.GetItemByIndex(index)
+        except IndexError:
+            # There's no corresponding item for index, because its parent
+            # has not been expanded yet.
+            return
         hasChildren = bool(self.OnGetChildrenCount(index))
         self.DoRefreshItem(item, index, hasChildren)
 

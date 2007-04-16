@@ -1,10 +1,6 @@
 import wx, wx.lib.customtreectrl, wx.gizmos
-try:
-    import treemixin 
-except ImportError:
-    from wx.lib.mixins import treemixin
+import treemixin
 
-overview = treemixin.__doc__
 
 class TreeModel(object):
     ''' TreeModel holds the domain objects that are shown in the different
@@ -153,8 +149,8 @@ class VirtualCustomTreeCtrl(DemoTreeMixin,
                             wx.lib.customtreectrl.CustomTreeCtrl):
     def __init__(self, *args, **kwargs):
         self.checked = {}
-        kwargs['ctstyle'] = wx.TR_DEFAULT_STYLE | wx.TR_HIDE_ROOT | \
-                            wx.TR_HAS_BUTTONS | wx.TR_FULL_ROW_HIGHLIGHT
+        kwargs['style'] = wx.TR_HIDE_ROOT | \
+            wx.TR_HAS_BUTTONS | wx.TR_FULL_ROW_HIGHLIGHT
         super(VirtualCustomTreeCtrl, self).__init__(*args, **kwargs)
         self.Bind(wx.lib.customtreectrl.EVT_TREE_ITEM_CHECKED,
                   self.OnItemChecked)
