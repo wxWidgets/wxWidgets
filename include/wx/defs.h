@@ -561,12 +561,20 @@ typedef int wxWindowID;
 #define wxFOR_ALL_COMPARISONS_3(m, x, y, z) \
     m(==,x,y,z) m(!=,x,y,z) m(>=,x,y,z) m(<=,x,y,z) m(>,x,y,z) m(<,x,y,z)
 
+/*
+    This is only used with wxDEFINE_COMPARISON_REV: it passes both the normal
+    and the reversed comparison operators to the macro.
+ */
+#define wxFOR_ALL_COMPARISONS_3_REV(m, x, y, z) \
+    m(==,x,y,z,==) m(!=,x,y,z,!=) m(>=,x,y,z,<=) \
+    m(<=,x,y,z,>=) m(>,x,y,z,<) m(<,x,y,z,>)
+
 
 #define wxDEFINE_COMPARISON(op, T1, T2, cmp) \
     inline bool operator op(T1 x, T2 y) { return cmp(x, y, op); }
 
-#define wxDEFINE_COMPARISON_REV(op, T1, T2, cmp) \
-    inline bool operator op(T2 y, T1 x) { return cmp(x, y, op); }
+#define wxDEFINE_COMPARISON_REV(op, T1, T2, cmp, oprev) \
+    inline bool operator op(T2 y, T1 x) { return cmp(x, y, oprev); }
 
 /*
     Define all 6 comparison operators (==, !=, <, <=, >, >=) for the given
@@ -586,7 +594,7 @@ typedef int wxWindowID;
  */
 #define wxDEFINE_ALL_COMPARISONS(T1, T2, cmp) \
     wxFOR_ALL_COMPARISONS_3(wxDEFINE_COMPARISON, T1, T2, cmp) \
-    wxFOR_ALL_COMPARISONS_3(wxDEFINE_COMPARISON_REV, T1, T2, cmp)
+    wxFOR_ALL_COMPARISONS_3_REV(wxDEFINE_COMPARISON_REV, T1, T2, cmp)
 
 /*  ---------------------------------------------------------------------------- */
 /*  macros to avoid compiler warnings */

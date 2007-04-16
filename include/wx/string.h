@@ -2427,7 +2427,7 @@ private:
 // wxString comparison functions: operator versions are always case sensitive
 // ---------------------------------------------------------------------------
 
-#define wxCMP_WXCHAR_STRING(p, s, op) s.Cmp(p) op 0
+#define wxCMP_WXCHAR_STRING(p, s, op) 0 op s.Cmp(p)
 
 wxDEFINE_ALL_COMPARISONS(const wxChar *, const wxString&, wxCMP_WXCHAR_STRING)
 
