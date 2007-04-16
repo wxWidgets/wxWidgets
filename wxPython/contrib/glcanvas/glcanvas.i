@@ -48,9 +48,7 @@ public:
     wxGLContext(wxGLCanvas *win, const wxGLContext* other = NULL);
     ~wxGLContext();
 
-#ifndef __WXMAC__  
     void SetCurrent(const wxGLCanvas& win);
-#endif
 };
 
 //---------------------------------------------------------------------------
@@ -139,6 +137,17 @@ public:
     wxGLContext* GetContext();
     void SetCurrent();
 
+#ifdef __WXGTK__
+    bool InitVisual(const int *attribList);
+
+// What about these?    
+//     // return GLX version: 13 means 1.3 &c
+//     static int GetGLXVersion();
+
+//     // get the X11 handle of this window
+//     virtual Window GetXWindow() const = 0;
+    
+#endif
     
 #ifdef __WXMSW__
 //     void SetupPixelFormat(int *attribList = NULL);
