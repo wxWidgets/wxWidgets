@@ -4381,12 +4381,12 @@ class TimeSpan(object):
     def __str__(self):
         return self.Format().encode(wx.GetDefaultPyEncoding())
 
-    Days = property(GetDays,doc="See `GetDays`") 
-    Hours = property(GetHours,doc="See `GetHours`") 
-    Milliseconds = property(GetMilliseconds,doc="See `GetMilliseconds`") 
-    Minutes = property(GetMinutes,doc="See `GetMinutes`") 
-    Seconds = property(GetSeconds,doc="See `GetSeconds`") 
-    Weeks = property(GetWeeks,doc="See `GetWeeks`") 
+    days = property(GetDays,doc="See `GetDays`") 
+    hours = property(GetHours,doc="See `GetHours`") 
+    milliseconds = property(GetMilliseconds,doc="See `GetMilliseconds`") 
+    minutes = property(GetMinutes,doc="See `GetMinutes`") 
+    seconds = property(GetSeconds,doc="See `GetSeconds`") 
+    weeks = property(GetWeeks,doc="See `GetWeeks`") 
 _misc_.TimeSpan_swigregister(TimeSpan)
 
 def TimeSpan_Milliseconds(*args, **kwargs):
@@ -4578,11 +4578,11 @@ class DateSpan(object):
         """__ne__(self, DateSpan other) -> bool"""
         return _misc_.DateSpan___ne__(*args, **kwargs)
 
-    Days = property(GetDays,SetDays,doc="See `GetDays` and `SetDays`") 
-    Months = property(GetMonths,SetMonths,doc="See `GetMonths` and `SetMonths`") 
-    TotalDays = property(GetTotalDays,doc="See `GetTotalDays`") 
-    Weeks = property(GetWeeks,SetWeeks,doc="See `GetWeeks` and `SetWeeks`") 
-    Years = property(GetYears,SetYears,doc="See `GetYears` and `SetYears`") 
+    days = property(GetDays,SetDays,doc="See `GetDays` and `SetDays`") 
+    months = property(GetMonths,SetMonths,doc="See `GetMonths` and `SetMonths`") 
+    totalDays = property(GetTotalDays,doc="See `GetTotalDays`") 
+    weeks = property(GetWeeks,SetWeeks,doc="See `GetWeeks` and `SetWeeks`") 
+    years = property(GetYears,SetYears,doc="See `GetYears` and `SetYears`") 
 _misc_.DateSpan_swigregister(DateSpan)
 
 def DateSpan_Days(*args, **kwargs):

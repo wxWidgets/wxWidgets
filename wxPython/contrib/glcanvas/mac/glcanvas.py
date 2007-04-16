@@ -67,6 +67,10 @@ class GLContext(_core.Object):
         _glcanvas.GLContext_swiginit(self,_glcanvas.new_GLContext(*args, **kwargs))
     __swig_destroy__ = _glcanvas.delete_GLContext
     __del__ = lambda self : None;
+    def SetCurrent(*args, **kwargs):
+        """SetCurrent(self, GLCanvas win)"""
+        return _glcanvas.GLContext_SetCurrent(*args, **kwargs)
+
 _glcanvas.GLContext_swigregister(GLContext)
 cvar = _glcanvas.cvar
 GLCanvasNameStr = cvar.GLCanvasNameStr

@@ -2804,6 +2804,47 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_GLContext_SetCurrent(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGLContext *arg1 = (wxGLContext *) 0 ;
+  wxGLCanvas *arg2 = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "win", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GLContext_SetCurrent",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGLContext, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GLContext_SetCurrent" "', expected argument " "1"" of type '" "wxGLContext *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGLContext * >(argp1);
+  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxGLCanvas,  0  | 0);
+  if (!SWIG_IsOK(res2)) {
+    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "GLContext_SetCurrent" "', expected argument " "2"" of type '" "wxGLCanvas const &""'"); 
+  }
+  if (!argp2) {
+    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "GLContext_SetCurrent" "', expected argument " "2"" of type '" "wxGLCanvas const &""'"); 
+  }
+  arg2 = reinterpret_cast< wxGLCanvas * >(argp2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->SetCurrent((wxGLCanvas const &)*arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *GLContext_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
@@ -3420,6 +3461,7 @@ SWIGINTERN PyObject *GLCanvas_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject 
 static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_GLContext", (PyCFunction) _wrap_new_GLContext, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"delete_GLContext", (PyCFunction)_wrap_delete_GLContext, METH_O, NULL},
+	 { (char *)"GLContext_SetCurrent", (PyCFunction) _wrap_GLContext_SetCurrent, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GLContext_swigregister", GLContext_swigregister, METH_VARARGS, NULL},
 	 { (char *)"GLContext_swiginit", GLContext_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_GLCanvas", (PyCFunction) _wrap_new_GLCanvas, METH_VARARGS | METH_KEYWORDS, NULL},

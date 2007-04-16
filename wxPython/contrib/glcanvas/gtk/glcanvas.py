@@ -132,6 +132,10 @@ class GLCanvas(_core.Window):
         """
         return _glcanvas.GLCanvas_SetCurrent(*args)
 
+    def InitVisual(*args, **kwargs):
+        """InitVisual(self, int attribList) -> bool"""
+        return _glcanvas.GLCanvas_InitVisual(*args, **kwargs)
+
     Context = property(GetContext,doc="See `GetContext`") 
 _glcanvas.GLCanvas_swigregister(GLCanvas)
 

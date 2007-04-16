@@ -61638,6 +61638,8 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_Python_SetConstant(d, "NO",SWIG_From_int(static_cast< int >(wxNO)));
   SWIG_Python_SetConstant(d, "NO_DEFAULT",SWIG_From_int(static_cast< int >(wxNO_DEFAULT)));
   SWIG_Python_SetConstant(d, "YES_DEFAULT",SWIG_From_int(static_cast< int >(wxYES_DEFAULT)));
+  SWIG_Python_SetConstant(d, "APPLY",SWIG_From_int(static_cast< int >(wxAPPLY)));
+  SWIG_Python_SetConstant(d, "CLOSE",SWIG_From_int(static_cast< int >(wxCLOSE)));
   SWIG_Python_SetConstant(d, "ICON_EXCLAMATION",SWIG_From_int(static_cast< int >(wxICON_EXCLAMATION)));
   SWIG_Python_SetConstant(d, "ICON_HAND",SWIG_From_int(static_cast< int >(wxICON_HAND)));
   SWIG_Python_SetConstant(d, "ICON_QUESTION",SWIG_From_int(static_cast< int >(wxICON_QUESTION)));

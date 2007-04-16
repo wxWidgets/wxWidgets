@@ -5029,6 +5029,13 @@ class PrinterDC(DC):
         _gdi_.PrinterDC_swiginit(self,_gdi_.new_PrinterDC(*args, **kwargs))
 _gdi_.PrinterDC_swigregister(PrinterDC)
 
+class SVGFileDC(DC):
+    """Proxy of C++ SVGFileDC class"""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+_gdi_.SVGFileDC_swigregister(SVGFileDC)
+
 #---------------------------------------------------------------------------
 
 class GraphicsObject(_core.Object):
@@ -6486,6 +6493,7 @@ CONTROL_ISDEFAULT = _gdi_.CONTROL_ISDEFAULT
 CONTROL_ISSUBMENU = _gdi_.CONTROL_ISSUBMENU
 CONTROL_EXPANDED = _gdi_.CONTROL_EXPANDED
 CONTROL_SIZEGRIP = _gdi_.CONTROL_SIZEGRIP
+CONTROL_FLAT = _gdi_.CONTROL_FLAT
 CONTROL_CURRENT = _gdi_.CONTROL_CURRENT
 CONTROL_SELECTED = _gdi_.CONTROL_SELECTED
 CONTROL_CHECKED = _gdi_.CONTROL_CHECKED

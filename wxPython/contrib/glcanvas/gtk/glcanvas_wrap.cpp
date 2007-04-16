@@ -3447,6 +3447,59 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_GLCanvas_InitVisual(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxGLCanvas *arg1 = (wxGLCanvas *) 0 ;
+  int *arg2 = (int *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int *temp2 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "attribList", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:GLCanvas_InitVisual",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxGLCanvas, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "GLCanvas_InitVisual" "', expected argument " "1"" of type '" "wxGLCanvas *""'"); 
+  }
+  arg1 = reinterpret_cast< wxGLCanvas * >(argp1);
+  {
+    int i;
+    if (PySequence_Check(obj1)) {
+      int size = PyObject_Length(obj1);
+      temp2 = new int[size+1]; // (int*)malloc((size + 1) * sizeof(int));
+      for (i = 0; i < size; i++) {
+        temp2[i] = PyInt_AsLong(PySequence_GetItem(obj1, i));
+      }
+      temp2[size] = 0;
+      arg2 = temp2;
+    }
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)(arg1)->InitVisual((int const *)arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  {
+    delete [] arg2;
+  }
+  return resultobj;
+fail:
+  {
+    delete [] arg2;
+  }
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *GLCanvas_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
@@ -3471,6 +3524,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GLCanvas_SwapBuffers", (PyCFunction)_wrap_GLCanvas_SwapBuffers, METH_O, NULL},
 	 { (char *)"GLCanvas_GetContext", (PyCFunction)_wrap_GLCanvas_GetContext, METH_O, NULL},
 	 { (char *)"GLCanvas_SetCurrent", _wrap_GLCanvas_SetCurrent, METH_VARARGS, NULL},
+	 { (char *)"GLCanvas_InitVisual", (PyCFunction) _wrap_GLCanvas_InitVisual, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"GLCanvas_swigregister", GLCanvas_swigregister, METH_VARARGS, NULL},
 	 { (char *)"GLCanvas_swiginit", GLCanvas_swiginit, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
