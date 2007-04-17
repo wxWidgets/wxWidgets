@@ -2,11 +2,13 @@
 \section{\class{wxDataViewCtrl}}\label{wxdataviewctrl}
 
 This class and its documentation are work in progress and
-certainly subject to change.
+therefore subject to change.
 
 wxDataViewCtrl is planned to be a control to display data either
-in a tree like fashion or in a tabular form or both. Currently,
-only the tabular form is implemented. wxDataViewCtrl doesn't
+in a tree like fashion or in a tabular form or both. So far,
+only the tabular form is implemented. 
+
+Unlike \helpref{wxListCtrl}{wxlistctrl} wxDataViewCtrl doesn't 
 get its data from the user through virtual functions or events,
 instead you need to write your own 
 \helpref{wxDataViewListModel}{wxdataviewlistmodel} and associate
@@ -27,10 +29,11 @@ be extended to support more data formats as necessary.
 Accordingly, all type information uses the strings returned
 from \helpref{wxVariant::GetType}{wxvariantgettype}.
 
-So far, this control has only be implemented for GTK+ and
-there are only barely working stubs for a generic implementation.
-It is planned to implement the control natively under OS X
-and use generic code under Windows (and elsewhere).
+So far, this control has been implemented for GTK+ and there
+is an almost complete generic implementation including several
+additions for a native Windows look and feel (in particular
+concerning the header). It is planned to implement the control
+natively under OS X.
 
 \wxheading{Window styles}
 

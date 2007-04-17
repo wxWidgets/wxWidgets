@@ -12,13 +12,20 @@ a number of ready-to-use renderers provided:
 \helpref{wxDataViewBitmapRenderer}{wxdataviewbitmaprenderer},
 \helpref{wxDataViewDateRenderer}{wxdataviewdaterenderer}.
 
-
 Additionally, the user can write own renderers by deriving from
 \helpref{wxDataViewCustomRenderer}{wxdataviewcustomrenderer}.
 
-These flags control the behaviour of the renderer and they
-are used for controlling in what mode the renderer shall
-render its contents:
+The {\it wxDataViewCellMode} flag controls, what actions
+the cell data allows. {\it wxDATAVIEW_CELL_ACTIVATABLE}
+indicates that the user can double click the cell and
+something will happen (e.g. a window for editing a date
+will pop up). {\it wxDATAVIEW_CELL_EDITABLE} indicates
+that the user can edit the data in-place, i.e. an control
+will show up after a slow click on the cell. This behaviour
+is best known from changing the filename in most file 
+managers etc.
+
+
 
 {\small
 \begin{verbatim}
@@ -28,7 +35,14 @@ enum wxDataViewCellMode
     wxDATAVIEW_CELL_ACTIVATABLE,
     wxDATAVIEW_CELL_EDITABLE
 };
+\end{verbatim}
+}
 
+The {\it wxDataViewCellRenderState} flag controls how the
+the renderer should display its contents in a cell:
+
+{\small
+\begin{verbatim}
 enum wxDataViewCellRenderState
 {
     wxDATAVIEW_CELL_SELECTED    = 1,
@@ -101,12 +115,22 @@ The internal code will then render this cell with this data.
 
 \func{virtual bool}{Validate}{\param{wxVariant\& }{value}}
 
-To be implemented.
+Before data is committed to the data model, it is passed to this
+method where it can be checked for validity. This can also be
+used for checking a valid range or limiting the user input in
+a certain aspect (e.g. max number of characters or only alphanumeric
+input, ASCII only etc.). Return {\it false} if the value is
+not valid.
+
+Please note that due to implementation limitations, this validation
+is done after the editing control already is destroyed and the
+editing process finished.
 
 
 \section{\class{wxDataViewTextRenderer}}\label{wxdataviewtextrenderer}
 
-wxDataViewTextRenderer
+wxDataViewTextRenderer is used for rendering text. It supports
+in-place editing if desired.
 
 
 \wxheading{Derived from}
@@ -200,7 +224,21 @@ wxDataViewDateRenderer
 
 \section{\class{wxDataViewCustomRenderer}}\label{wxdataviewcustomrenderer}
 
-wxDataViewCustomRenderer
+wxDataViewCustomRenderer has to be derived from if the
+user wants to have a completely new renderer. You
+need to overrode at least \helpref{SetValue}{wxdataviewrenderersetvalue},
+\helpref{GetValue}{wxdataviewrenderergetvalue}, 
+\helpref{GetSize}{wxdataviewcustomrenderergetsize}
+and \helpref{Render}{wxdataviewcustomrendererrender}.
+
+If you want your renderer to additionally support in-place
+editing then you also need to override 
+\helpref{HasEditorCtrl}{wxdataviewcustomrendererhaseditorctrl},
+\helpref{CreateEditorCtrl}{wxdataviewcustomrenderercreateeditorctrl}
+and \helpref{GetValueFromEditorCtrl}{wxdataviewcustomrenderergetvaluefromeditorctrl}.
+Note that a special event handler will be pushed onto that
+editor control which handles <ENTER> and focus out events
+in order to end the editing.
 
 \wxheading{Derived from}
 
@@ -221,6 +259,51 @@ Constructor.
 \func{}{\destruct{wxDataViewCustomRenderer}}{\void}
 
 Destructor.
+
+
+\membersection{wxDataViewCustomRenderer::HasEditorCtrl}\label{wxdataviewcustomrendererhaseditorctrl}
+
+\func{virtual bool}{HasEditorCtrl}{\void}
+
+Override this and make it return {\it true} in order to
+indicate that this renderer supports in-place editing.
+
+\membersection{wxDataViewCustomRenderer::CreateEditorCtrl}\label{wxdataviewcustomrenderercreateeditorctrl}
+
+\func{virtual wxControl*}{CreateEditorCtrl} {\param{wxWindow *}{parent}, \param{wxRect }{labelRect}, \param{const wxVariant & }{value}}
+
+Override this to create the actual editor control once editing
+is about to start. {\it parent} is the parent of the editor
+control, {\it labelRect} indicates the position and
+size of the editor control and {\it value} is its initial value:
+
+{\small
+\begin{verbatim}
+{ 
+    long l = value;
+    return new wxSpinCtrl( parent, wxID_ANY, wxEmptyString, 
+                 labelRect.GetTopLeft(), labelRect.GetSize(), 0, 0, 100, l );
+}
+\end{verbatim}
+}
+
+\membersection{wxDataViewCustomRenderer::GetValueFromEditorCtrl}\label{wxdataviewcustomrenderergetvaluefromeditorctrl}
+
+\func{virtual bool}{GetValueFromEditorCtrl}{\param{wxControl* }{editor}, \param{wxVariant & }{value}}
+
+Overrride this so that the renderer can get the value 
+from the editor control (pointed to by {\it editor}):
+
+{\small
+\begin{verbatim}
+{ 
+    wxSpinCtrl *sc = (wxSpinCtrl*) editor;
+    long l = sc->GetValue();
+    value = l;
+    return true;
+}
+\end{verbatim}
+}
 
 \membersection{wxDataViewCustomRenderer::Activate}\label{wxdataviewcustomrendereractivate}
 
