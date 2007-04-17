@@ -61,17 +61,20 @@ extern WXDLLIMPEXP_DATA_BASE(const wxStringCharType*) wxEmptyStringImpl;
 #include <string>
 #include "wx/afterstd.h"
 
+#ifdef HAVE_STD_WSTRING
+    typedef std::wstring wxStdWideString;
+#else
+    typedef std::basic_string<wchar_t> wxStdWideString;
+#endif
+
 #if wxUSE_UNICODE_WCHAR
-    #ifdef HAVE_STD_WSTRING
-        typedef std::wstring wxStdString;
-    #else
-        typedef std::basic_string<wxStringCharType> wxStdString;
-    #endif
+    typedef wxStdWideString wxStdString;
 #else
     typedef std::string wxStdString;
 #endif
 
-#endif // need <string>
+#endif // wxUSE_STL_BASED_WXSTRING || wxUSE_STD_STRING
+
 
 #if wxUSE_STL_BASED_WXSTRING
 
@@ -320,6 +323,17 @@ public:
   }
     // take everything between start and end
   wxStringImpl(const_iterator start, const_iterator end);
+
+
+    // ctor from and conversion to std::string
+#if wxUSE_STD_STRING
+  wxStringImpl(const wxStdString& impl)
+      { InitWith(impl.c_str(), 0, impl.length()); }
+
+  operator wxStdString() const
+      { return wxStdString(c_str(), length()); }
+#endif
+
 
     // dtor is not virtual, this class must not be inherited from!
   ~wxStringImpl()

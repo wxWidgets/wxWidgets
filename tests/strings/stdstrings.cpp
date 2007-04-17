@@ -46,6 +46,9 @@ private:
         CPPUNIT_TEST( StdResize );
         CPPUNIT_TEST( StdRiter );
         CPPUNIT_TEST( StdSubstr );
+#if wxUSE_STD_STRING
+        CPPUNIT_TEST( StdConversion );
+#endif
     CPPUNIT_TEST_SUITE_END();
 
     void StdConstructors();
@@ -62,6 +65,9 @@ private:
     void StdResize();
     void StdRiter();
     void StdSubstr();
+#if wxUSE_STD_STRING
+    void StdConversion();
+#endif
 
     DECLARE_NO_COPY_CLASS(StdStringTestCase)
 };
@@ -514,3 +520,29 @@ void StdStringTestCase::StdSubstr()
     CPPUNIT_ASSERT( s1.substr( 17, 30 ) == _T("") );
 }
 
+#if wxUSE_STD_STRING
+void StdStringTestCase::StdConversion()
+{
+    std::string strStd("std::string value");
+    wxStdWideString strStdWide(L"std::wstring value");
+
+    wxString s1(strStd);
+    CPPUNIT_ASSERT( s1 == "std::string value" );
+
+    wxString s2(strStdWide);
+    CPPUNIT_ASSERT( s2 == "std::wstring value" );
+
+    wxString s3;
+    s3 = strStd;
+    CPPUNIT_ASSERT( s3 == "std::string value" );
+    s3 = strStdWide;
+    CPPUNIT_ASSERT( s3 == "std::wstring value" );
+
+    wxString s4("hello");
+    std::string s5 = s4;
+    CPPUNIT_ASSERT( s5 == "hello" );
+
+    wxStdWideString s6 = s4;
+    CPPUNIT_ASSERT( s6 == "hello" );
+}
+#endif // wxUSE_STD_STRING

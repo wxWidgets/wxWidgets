@@ -833,15 +833,30 @@ private:
       return const_iterator(data.m_str->begin() + data.m_offset);
   }
 
+  // in UTF-8 STL build, creation from std::string requires conversion under
+  // non-UTF8 locales, so we can't have and use wxString(wxStringImpl) ctor;
+  // instead we define dummy type that lets us have wxString ctor for creation
+  // from wxStringImpl that couldn't be used by user code (in all other builds,
+  // "standard" ctors can be used):
+#if wxUSE_UNICODE_UTF8 && wxUSE_STL_BASED_WXSTRING
+  struct CtorFromStringImplTag {};
+
+  wxString(CtorFromStringImplTag* WXUNUSED(dummy), const wxStringImpl& src)
+      : m_impl(src) {}
+
+  static wxString FromImpl(const wxStringImpl& src)
+      { return wxString((CtorFromStringImplTag*)NULL, src); }
+#else
+  wxString(const wxStringImpl& src) : m_impl(src) { }
+  static wxString FromImpl(const wxStringImpl& src) { return wxString(src); }
+#endif
+
 public:
   // constructors and destructor
     // ctor for an empty string
   wxString() {}
 
     // copy ctor
-  // FIXME-UTF8: this one needs to do UTF-8 conversion in UTF-8 build!
-  wxString(const wxStringImpl& stringSrc) : m_impl(stringSrc) { }
-
   wxString(const wxString& stringSrc) : m_impl(stringSrc.m_impl) { }
 
     // string containing nRepeat copies of ch
@@ -917,17 +932,50 @@ public:
       : m_impl(str.Mid(0, nLength).m_impl) {}
 
   // even if we're not built with wxUSE_STL == 1 it is very convenient to allow
-  // implicit conversions from std::string to wxString as this allows to use
-  // the same strings in non-GUI and GUI code, however we don't want to
-  // unconditionally add this ctor as it would make wx lib dependent on
+  // implicit conversions from std::string to wxString and vice verse as this
+  // allows to use the same strings in non-GUI and GUI code, however we don't
+  // want to unconditionally add this ctor as it would make wx lib dependent on
   // libstdc++ on some Linux versions which is bad, so instead we ask the
   // client code to define this wxUSE_STD_STRING symbol if they need it
-#if wxUSE_STD_STRING && !wxUSE_STL_BASED_WXSTRING
-  wxString(const wxStdString& s)
-      // FIXME-UTF8: this one needs to do UTF-8 conversion in UTF-8 build!
-      : m_impl(s.c_str()) { } // FIXME-UTF8: this is broken for embedded 0s
-#endif // wxUSE_STD_STRING && !wxUSE_STL_BASED_WXSTRING
+#if wxUSE_STD_STRING
 
+  #if wxUSE_UNICODE_WCHAR
+    wxString(const wxStdWideString& str) : m_impl(str) {}
+  #else // UTF-8 or ANSI
+    wxString(const wxStdWideString& str)
+        { assign(str.c_str(), str.length()); }
+  #endif
+
+  #if !wxUSE_UNICODE // ANSI build
+    // FIXME-UTF8: do this in UTF8 build #if wxUSE_UTF8_LOCALE_ONLY, too
+    wxString(const std::string& str) : m_impl(str) {}
+  #else // Unicode
+    wxString(const std::string& str)
+        { assign(str.c_str(), str.length()); }
+  #endif
+
+  #if wxUSE_UNICODE_WCHAR && wxUSE_STL_BASED_WXSTRING
+    // wxStringImpl is std::string in the encoding we want
+    operator const wxStdWideString&() const { return m_impl; }
+  #else
+    // wxStringImpl is either not std::string or needs conversion
+    operator wxStdWideString() const
+        // FIXME-UTF8: broken for embedded NULs
+        { return wxStdWideString(wc_str()); }
+  #endif
+
+  #if !wxUSE_UNICODE && wxUSE_STL_BASED_WXSTRING
+    // FIXME-UTF8: do this in UTF8 build #if wxUSE_UTF8_LOCALE_ONLY, too
+    // wxStringImpl is std::string in the encoding we want
+    operator const std::string&() const { return m_impl; }
+  #else
+    // wxStringImpl is either not std::string or needs conversion
+    operator std::string() const
+        // FIXME-UTF8: broken for embedded NULs
+        { return std::string(mb_str()); }
+  #endif
+
+#endif // wxUSE_STD_STRING
 
   // first valid index position
   const_iterator begin() const { return const_iterator(m_impl.begin()); }
@@ -984,7 +1032,7 @@ public:
   {
     size_t pos, len;
     PosLenToImpl(nStart, nLen, &pos, &len);
-    return m_impl.substr(pos, len);
+    return FromImpl(m_impl.substr(pos, len));
   }
 
   // generic attributes & operations
