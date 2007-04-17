@@ -21,8 +21,11 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_STC
 
 #ifndef WX_PRECOMP
+    #include "wx/scrolbar.h"
+    #include "wx/menu.h"
 #endif // WX_PRECOMP
 
 #include "wx/textbuf.h"
@@ -1143,3 +1146,5 @@ bool ScintillaWX::GetUseAntiAliasing() {
 
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
+
+#endif // wxUSE_STC

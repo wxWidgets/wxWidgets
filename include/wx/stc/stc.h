@@ -20,10 +20,15 @@
 #ifndef __stc_h__
 #define __stc_h__
 
+#include "wx/defs.h"
 
-#include "wx/wx.h"
+#if wxUSE_STC
+
+#include "wx/control.h"
 #include "wx/dnd.h"
+#include "wx/stopwatch.h"
 
+class WXDLLIMPEXP_CORE wxScrollBar;
 
 #ifdef WXMAKINGDLL_STC
     #define WXDLLIMPEXP_STC WXEXPORT
@@ -3618,4 +3623,4 @@ inline const wxWX2MBbuf wx2stc(const wxString& str) {
 //----------------------------------------------------------------------
 #endif
 
-
+#endif // wxUSE_STC

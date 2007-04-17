@@ -11,8 +11,12 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_STC
 
 #ifndef WX_PRECOMP
+    #include "wx/menu.h"
+    #include "wx/dcmemory.h"
+    #include "wx/settings.h"
 #endif // WX_PRECOMP
 
 #include <ctype.h>
@@ -1568,3 +1572,5 @@ const wxWX2MBbuf wx2stc(const wxString& str)
 }
 
 #endif
+
+#endif // wxUSE_STC

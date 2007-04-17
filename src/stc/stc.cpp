@@ -22,19 +22,21 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_STC
+
+#include "wx/stc/stc.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/wx.h"
 #endif // WX_PRECOMP
 
 #include <ctype.h>
 
-#include "wx/wx.h"
 #include "wx/tokenzr.h"
 #include "wx/mstream.h"
 #include "wx/image.h"
 #include "wx/file.h"
 
-#include "wx/stc/stc.h"
 #include "ScintillaWX.h"
 
 //----------------------------------------------------------------------
@@ -3433,11 +3435,4 @@ wxStyledTextEvent::wxStyledTextEvent(const wxStyledTextEvent& event):
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------
 
-
-
-
-
-
-
-
-
+#endif // wxUSE_STC

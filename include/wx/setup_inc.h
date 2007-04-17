@@ -562,6 +562,13 @@
 // Recommended setting: 1
 #define wxUSE_AUI       1
 
+// Use wxStyledTextCtrl, a wxWidgets implementation of Scintilla.
+//
+// Default is 1
+//
+// Recommended setting: 1
+#define wxUSE_STC 1
+
 
 // Enable the new wxGraphicsPath and wxGraphicsContext classes for an advanced
 // 2D drawing API.  (Still somewhat experimental)

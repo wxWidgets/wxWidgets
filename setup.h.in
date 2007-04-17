@@ -298,6 +298,8 @@
 
 #define wxUSE_AUI       0
 
+#define wxUSE_STC 0
+
 
 #ifndef wxUSE_GRAPHICS_CONTEXT
 #define wxUSE_GRAPHICS_CONTEXT 0
@@ -908,9 +910,6 @@
 
 /* define if you have vsscanf function */
 #undef HAVE_VSSCANF
-
-/* The number of bytes in a char.  */
-#undef SIZEOF_CHAR
 
 /* The number of bytes in a wchar_t.  */
 #undef SIZEOF_WCHAR_T
