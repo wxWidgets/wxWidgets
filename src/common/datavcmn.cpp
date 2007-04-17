@@ -706,11 +706,111 @@ wxDataViewRendererBase::wxDataViewRendererBase( const wxString &varianttype,
                                                 int WXUNUSED(align) )
 {
     m_variantType = varianttype;
+    m_editorCtrl = NULL;
+    m_row = (unsigned int) -1;
 }
 
 const wxDataViewCtrl* wxDataViewRendererBase::GetView() const
 {
     return wx_const_cast(wxDataViewRendererBase*, this)->GetOwner()->GetOwner();
+}
+
+bool wxDataViewRendererBase::StartEditing( unsigned int row, wxRect labelRect )
+{
+    m_row = row; // remember for later
+                                     
+    unsigned int col = GetOwner()->GetModelColumn();
+    wxVariant value;
+    GetOwner()->GetOwner()->GetModel()->GetValue( value, col, row );
+    
+    m_editorCtrl = CreateEditorCtrl( GetOwner()->GetOwner()->GetMainWindow(), labelRect, value );
+    
+    m_editorCtrl->PushEventHandler( 
+        new wxDataViewEditorCtrlEvtHandler( m_editorCtrl, (wxDataViewRenderer*) this ) );
+    
+    m_editorCtrl->SetFocus();
+    
+    return true;
+}
+
+void wxDataViewRendererBase::CancelEditing()
+{
+    // m_editorCtrl->PopEventHandler( true );
+
+    delete m_editorCtrl;
+    
+    GetOwner()->GetOwner()->GetMainWindow()->SetFocus();
+}
+
+bool wxDataViewRendererBase::FinishEditing()
+{
+    // m_editorCtrl->PopEventHandler( true );
+
+    wxVariant value;
+    GetValueFromEditorCtrl( m_editorCtrl, value );
+
+    delete m_editorCtrl;
+    
+    GetOwner()->GetOwner()->GetMainWindow()->SetFocus();
+    
+    if (!Validate(value))
+        return false;
+        
+    unsigned int col = GetOwner()->GetModelColumn();
+    GetOwner()->GetOwner()->GetModel()->SetValue( value, col, m_row );
+    GetOwner()->GetOwner()->GetModel()->ValueChanged( col, m_row );
+    
+    return true;
+}
+
+//-----------------------------------------------------------------------------
+// wxDataViewEditorCtrlEvtHandler
+//-----------------------------------------------------------------------------
+
+BEGIN_EVENT_TABLE(wxDataViewEditorCtrlEvtHandler, wxEvtHandler)
+    EVT_CHAR           (wxDataViewEditorCtrlEvtHandler::OnChar)
+    EVT_KILL_FOCUS     (wxDataViewEditorCtrlEvtHandler::OnKillFocus)
+END_EVENT_TABLE()
+
+wxDataViewEditorCtrlEvtHandler::wxDataViewEditorCtrlEvtHandler(
+                                wxControl *editorCtrl,
+                                wxDataViewRenderer *owner )
+{
+    m_owner = owner;
+    m_editorCtrl = editorCtrl;
+
+    m_finished = false;
+}
+
+void wxDataViewEditorCtrlEvtHandler::OnChar( wxKeyEvent &event )
+{
+    switch ( event.m_keyCode )
+    {
+        case WXK_RETURN:
+            m_finished = true;
+            m_owner->FinishEditing();
+            break;
+
+        case WXK_ESCAPE:
+            m_finished = true;
+            m_owner->CancelEditing();
+            break;
+
+        default:
+            event.Skip();
+    }
+}
+
+void wxDataViewEditorCtrlEvtHandler::OnKillFocus( wxFocusEvent &event )
+{
+    if (!m_finished)
+    {
+        m_finished = true;
+        m_owner->FinishEditing();
+    }
+
+    // We must let the native text control handle focus
+    event.Skip();
 }
 
 // ---------------------------------------------------------

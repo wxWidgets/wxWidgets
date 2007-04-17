@@ -317,6 +317,9 @@ public:
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
     
+    GtkWidget *GtkGetTreeView() { return m_treeview; }
+    wxWindow *GetMainWindow() { return (wxWindow*) this; }
+    
 private:
     friend class wxDataViewCtrlDC;
     friend class wxDataViewColumn;

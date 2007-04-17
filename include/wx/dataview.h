@@ -233,6 +233,30 @@ private:
     void InitStatics(); // BAD
 };
 
+//-----------------------------------------------------------------------------
+// wxDataViewEditorCtrlEvtHandler
+//-----------------------------------------------------------------------------
+
+class wxDataViewEditorCtrlEvtHandler: public wxEvtHandler
+{
+public:
+    wxDataViewEditorCtrlEvtHandler( wxControl *editor, wxDataViewRenderer *owner );
+                         
+    void AcceptChangesAndFinish();
+
+protected:
+    void OnChar( wxKeyEvent &event );
+    void OnKillFocus( wxFocusEvent &event );
+
+private:
+    wxDataViewRenderer     *m_owner;
+    wxControl              *m_editorCtrl;
+    bool                    m_finished;
+
+private:
+    DECLARE_EVENT_TABLE()
+};
+
 // ---------------------------------------------------------
 // wxDataViewRendererBase
 // ---------------------------------------------------------
@@ -281,9 +305,25 @@ public:
     virtual void SetAlignment( int align ) = 0;
     virtual int GetAlignment() const = 0;
     
+    // in-place editing
+    virtual bool HasEditorCtrl()
+        { return false; }
+    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
+        { return NULL; }
+    virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value )
+        { return false; }
+
+    virtual bool StartEditing( unsigned int row, wxRect labelRect );
+    virtual void CancelEditing();
+    virtual bool FinishEditing();
+    
+    wxControl *GetEditorCtrl() { return m_editorCtrl; }
+    
 protected:
     wxString                m_variantType;
     wxDataViewColumn       *m_owner;
+    wxControl              *m_editorCtrl;
+    unsigned int            m_row; // for m_editorCtrl
 
     // internal utility:
     const wxDataViewCtrl* GetView() const;

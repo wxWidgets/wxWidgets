@@ -480,6 +480,15 @@ static gboolean gtk_wx_cell_renderer_activate(
                         GdkRectangle            *background_area,
                         GdkRectangle            *cell_area,
                         GtkCellRendererState     flags );
+static GtkCellEditable *gtk_wx_cell_renderer_start_editing(
+                        GtkCellRenderer         *cell,
+                        GdkEvent                *event,
+                        GtkWidget               *widget,
+                        const gchar             *path,
+                        GdkRectangle            *background_area,
+                        GdkRectangle            *cell_area,
+                        GtkCellRendererState     flags );
+                        
 
 static GObjectClass *cell_parent_class = NULL;
 
@@ -532,6 +541,7 @@ gtk_wx_cell_renderer_class_init (GtkWxCellRendererClass *klass)
     cell_class->get_size = gtk_wx_cell_renderer_get_size;
     cell_class->render = gtk_wx_cell_renderer_render;
     cell_class->activate = gtk_wx_cell_renderer_activate;
+    cell_class->start_editing = gtk_wx_cell_renderer_start_editing;
 }
 
 static void
@@ -545,6 +555,48 @@ GtkCellRenderer*
 gtk_wx_cell_renderer_new (void)
 {
     return (GtkCellRenderer*) g_object_new (GTK_TYPE_WX_CELL_RENDERER, NULL);
+}
+
+
+
+static GtkCellEditable *gtk_wx_cell_renderer_start_editing(
+                        GtkCellRenderer         *renderer,
+                        GdkEvent                *event,
+                        GtkWidget               *widget,
+                        const gchar             *path,
+                        GdkRectangle            *background_area,
+                        GdkRectangle            *cell_area,
+                        GtkCellRendererState     flags )
+{
+    GtkWxCellRenderer *wxrenderer = (GtkWxCellRenderer *) renderer;
+    wxDataViewCustomRenderer *cell = wxrenderer->cell;
+    if (!cell->HasEditorCtrl())
+        return NULL;
+        
+    GdkRectangle rect;
+    gtk_wx_cell_renderer_get_size (renderer, widget, cell_area,
+                                   &rect.x,
+                                   &rect.y,
+                                   &rect.width,
+                                   &rect.height);
+
+    rect.x += cell_area->x;
+    rect.y += cell_area->y;
+//    rect.width  -= renderer->xpad * 2;
+//    rect.height -= renderer->ypad * 2;
+
+//    wxRect renderrect( rect.x, rect.y, rect.width, rect.height );
+    wxRect renderrect( cell_area->x, cell_area->y, cell_area->width, cell_area->height );
+
+    wxDataViewListModel *model = cell->GetOwner()->GetOwner()->GetModel();
+
+    GtkTreePath *treepath = gtk_tree_path_new_from_string( path );
+    unsigned int model_row = (unsigned int)gtk_tree_path_get_indices (treepath)[0];
+    gtk_tree_path_free( treepath );
+
+    cell->StartEditing( model_row, renderrect );
+    
+    return NULL;
 }
 
 static void
@@ -1870,6 +1922,49 @@ wxdataview_row_activated_callback( GtkTreeView* treeview, GtkTreePath *path,
 // wxDataViewCtrl
 //-----------------------------------------------------------------------------
 
+//-----------------------------------------------------------------------------
+// InsertChild for wxDataViewCtrl
+//-----------------------------------------------------------------------------
+
+static void wxInsertChildInDataViewCtrl( wxWindowGTK* parent, wxWindowGTK* child )
+{
+    wxDataViewCtrl * dvc = (wxDataViewCtrl*) parent;
+    GtkWidget *treeview = dvc->GtkGetTreeView();
+
+    // Insert widget in GtkTreeView
+    if (GTK_WIDGET_REALIZED(treeview))
+        gtk_widget_set_parent_window( child->m_widget, 
+          gtk_tree_view_get_bin_window( GTK_TREE_VIEW(treeview) ) );
+    gtk_widget_set_parent( child->m_widget, treeview );
+}
+
+static
+void gtk_dataviewctrl_size_callback( GtkWidget *WXUNUSED(widget),
+                                     GtkAllocation *alloc,
+                                     wxDataViewCtrl *win )
+{
+    
+    wxWindowList::Node *node = win->GetChildren().GetFirst();
+    while (node)
+    {
+        wxWindow *child = node->GetData();
+        
+        GtkRequisition req;
+        gtk_widget_size_request( child->m_widget, &req );
+        
+        GtkAllocation alloc;
+        alloc.x = child->m_x;
+        alloc.y = child->m_y;
+        alloc.width = child->m_width;
+        alloc.height = child->m_height;
+        gtk_widget_size_allocate( child->m_widget, &alloc );
+        
+        node = node->GetNext();
+    }
+}
+
+
+
 IMPLEMENT_DYNAMIC_CLASS(wxDataViewCtrl, wxDataViewCtrlBase)
 
 wxDataViewCtrl::~wxDataViewCtrl()
@@ -1902,12 +1997,17 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
         return false;
     }
 
+    m_insertCallback = wxInsertChildInDataViewCtrl;
+
     m_widget = gtk_scrolled_window_new (NULL, NULL);
 
     GtkScrolledWindowSetBorder(m_widget, style);
 
     m_treeview = gtk_tree_view_new();
     gtk_container_add (GTK_CONTAINER (m_widget), m_treeview);
+    
+    g_signal_connect (m_treeview, "size_allocate",
+                     G_CALLBACK (gtk_dataviewctrl_size_callback), this);
 
 #ifdef __WXGTK26__
     if (!gtk_check_version(2,6,0))

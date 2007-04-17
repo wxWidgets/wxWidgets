@@ -418,106 +418,6 @@ wxDC *wxDataViewRenderer::GetDC()
     return m_dc;
 }
 
-bool wxDataViewRenderer::StartEditing( unsigned int row, wxRect labelRect )
-{
-    GetView()->CalcScrolledPosition( labelRect.x, labelRect.y,
-                                     &labelRect.x, &labelRect.y);
-
-    m_row = row; // remember for later
-                                     
-    unsigned int col = GetOwner()->GetModelColumn();
-    wxVariant value;
-    GetOwner()->GetOwner()->GetModel()->GetValue( value, col, row );
-    
-    m_editorCtrl = CreateEditorCtrl( GetOwner()->GetOwner()->GetMainWindow(), labelRect, value );
-    
-    m_editorCtrl->PushEventHandler( new wxDataViewEditorCtrlEvtHandler( m_editorCtrl, this ) );
-    
-    m_editorCtrl->SetFocus();
-    
-    return true;
-}
-
-void wxDataViewRenderer::CancelEditing()
-{
-    // m_editorCtrl->PopEventHandler( true );
-
-    delete m_editorCtrl;
-    
-    GetOwner()->GetOwner()->GetMainWindow()->SetFocus();
-}
-
-bool wxDataViewRenderer::FinishEditing()
-{
-    // m_editorCtrl->PopEventHandler( true );
-
-    wxVariant value;
-    GetValueFromEditorCtrl( m_editorCtrl, value );
-
-    delete m_editorCtrl;
-    
-    GetOwner()->GetOwner()->GetMainWindow()->SetFocus();
-    
-    if (!Validate(value))
-        return false;
-        
-    unsigned int col = GetOwner()->GetModelColumn();
-    GetOwner()->GetOwner()->GetModel()->SetValue( value, col, m_row );
-    GetOwner()->GetOwner()->GetModel()->ValueChanged( col, m_row );
-    
-    return true;
-}
-
-//-----------------------------------------------------------------------------
-// wxDataViewEditorCtrlEvtHandler
-//-----------------------------------------------------------------------------
-
-BEGIN_EVENT_TABLE(wxDataViewEditorCtrlEvtHandler, wxEvtHandler)
-    EVT_CHAR           (wxDataViewEditorCtrlEvtHandler::OnChar)
-    EVT_KILL_FOCUS     (wxDataViewEditorCtrlEvtHandler::OnKillFocus)
-END_EVENT_TABLE()
-
-wxDataViewEditorCtrlEvtHandler::wxDataViewEditorCtrlEvtHandler(
-                                wxControl *editorCtrl,
-                                wxDataViewRenderer *owner )
-{
-    m_owner = owner;
-    m_editorCtrl = editorCtrl;
-
-    m_finished = false;
-}
-
-void wxDataViewEditorCtrlEvtHandler::OnChar( wxKeyEvent &event )
-{
-    switch ( event.m_keyCode )
-    {
-        case WXK_RETURN:
-            m_finished = true;
-            m_owner->FinishEditing();
-            break;
-
-        case WXK_ESCAPE:
-            m_finished = true;
-            m_owner->CancelEditing();
-            break;
-
-        default:
-            event.Skip();
-    }
-}
-
-void wxDataViewEditorCtrlEvtHandler::OnKillFocus( wxFocusEvent &event )
-{
-    if (!m_finished)
-    {
-        m_finished = true;
-        m_owner->FinishEditing();
-    }
-
-    // We must let the native text control handle focus
-    event.Skip();
-}
-
 // ---------------------------------------------------------
 // wxDataViewCustomRenderer
 // ---------------------------------------------------------
@@ -1665,7 +1565,6 @@ void wxDataViewMainWindow::OnRenameTimer()
     if ( m_dirty )
         wxSafeYield();
 
-
     int xpos = 0;
     unsigned int cols = GetOwner()->GetColumnCount();
     unsigned int i;
@@ -1681,6 +1580,9 @@ void wxDataViewMainWindow::OnRenameTimer()
     }
     wxRect labelRect( xpos, m_currentRow * m_lineHeight,
                       m_currentCol->GetWidth(), m_lineHeight );
+
+    GetOwner()->CalcScrolledPosition( labelRect.x, labelRect.y,
+                                     &labelRect.x, &labelRect.y);
 
     m_currentCol->GetRenderer()->StartEditing( m_currentRow, labelRect );
 }

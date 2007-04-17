@@ -26,6 +26,7 @@
 #include "wx/choicdlg.h"
 #include "wx/numdlg.h"
 #include "wx/dataview.h"
+#include "wx/spinctrl.h"
 
 #ifndef __WXMSW__
     #include "../sample.xpm"
@@ -159,7 +160,6 @@ public:
         {
             wxMessageDialog dlg( NULL, wxT("string too long") , wxT("Error") );
             dlg.ShowModal();
-            // Activate();
             return false;
         }
         
@@ -221,6 +221,63 @@ private:
 };
 
 // -------------------------------------
+// MySpinCtrlInPlaceRenderer
+// -------------------------------------
+
+class MySpinCtrlInPlaceRenderer: public wxDataViewCustomRenderer
+{
+public:
+    MySpinCtrlInPlaceRenderer() :
+        wxDataViewCustomRenderer( wxT("long"), wxDATAVIEW_CELL_EDITABLE ) { }
+    
+    
+    virtual bool HasEditorCtrl()
+        { 
+            return true; 
+        }
+    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
+        { 
+            long l = value;
+            return new wxSpinCtrl( parent, wxID_ANY, wxEmptyString, 
+                    labelRect.GetTopLeft(), labelRect.GetSize(), 0, 0, 100, l );
+        }
+    virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value )
+        { 
+            wxSpinCtrl *sc = (wxSpinCtrl*) editor;
+            long l = sc->GetValue();
+            value = l;
+            return true;
+        }
+        
+    bool Render( wxRect rect, wxDC *dc, int WXUNUSED(state) )
+    {
+        wxString str;
+        str.Printf( wxT("%d"), (int) m_data );
+        dc->SetTextForeground( *wxBLACK );
+        dc->DrawText( str, rect.x, rect.y );
+        return true;
+    }
+    wxSize GetSize() const
+    {
+        return wxSize(80,16);
+    }
+    bool SetValue( const wxVariant &value )
+    {
+        m_data = value.GetLong();
+        return true;
+    }
+    bool GetValue( wxVariant &value ) const
+    {
+        value = m_data;
+        return true;
+    }
+    
+    
+private:
+    long    m_data;
+};
+
+// -------------------------------------
 // MyUnsortedTextModel
 // -------------------------------------
 
@@ -237,6 +294,14 @@ public:
         m_list.Add( wxT("of") );
         m_list.Add( wxT("words.") );
         
+        m_ilist.Add( 0 );
+        m_ilist.Add( 1);
+        m_ilist.Add( 2 );
+        m_ilist.Add( 3 );
+        m_ilist.Add( 4 );
+        m_ilist.Add( 5 );
+        m_ilist.Add( 6 );
+        
         m_bitmap = wxBitmap( null_xpm );
     }
 
@@ -247,7 +312,7 @@ public:
 
     virtual unsigned int GetColumnCount() const 
     { 
-        return 2; 
+        return 4; 
     }
 
     virtual wxString GetColumnType( unsigned int WXUNUSED(col) ) const 
@@ -261,12 +326,18 @@ public:
         {
             variant = m_list[row];
             return;
-        }
+        } else
         if ((col == 2) || (col == 3))
         {
             variant << m_bitmap;
             return;
+        } else
+        if (col == 4)
+        {
+            variant = (long) m_ilist[row];
+            return;
         }
+        
         wxString tmp;
         tmp.Printf( wxT("item(%d;%d)"), (int)row, (int)col );
         variant = tmp;
@@ -278,6 +349,11 @@ public:
         {
             m_list[row] = variant.GetString();
             return true;
+        } else
+        if (col == 4)
+        {
+            m_ilist[row] = variant.GetLong();
+            return true;
         }
         return false;
 
@@ -286,28 +362,33 @@ public:
     void AppendRow( const wxString &text )
     {
         m_list.Add( text );
+        m_ilist.Add( 0 );
         RowAppended();
     }
 
     void PrependRow( const wxString &text )
     {
         m_list.Insert( text, 0 );
+        m_ilist.Insert( 0, 0 );
         RowPrepended();
     }
 
     void InsertRowAt1( const wxString &text )
     {
         m_list.Insert( text, 1 );
+        m_ilist.Insert( 0, 1 );
         RowInserted( 1 );
     }
 
     void DeleteRow( unsigned int index )
     {
         m_list.RemoveAt( index );
+        m_ilist.RemoveAt( index );
         RowDeleted( index );
     }
 
     wxArrayString m_list;
+    wxArrayInt m_ilist;
     wxBitmap m_bitmap;
 };
 
@@ -948,6 +1029,10 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
     dataview_right->AppendColumn( column );
     
     dataview_right->AppendTextColumn( wxT("second"), 1 );
+    
+    MySpinCtrlInPlaceRenderer *sr = new MySpinCtrlInPlaceRenderer;
+    column = new wxDataViewColumn( wxT("spin"), sr, 4, -1, wxALIGN_CENTER );
+    dataview_right->AppendColumn( column );
 
     // layout dataview controls.
 
