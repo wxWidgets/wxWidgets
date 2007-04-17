@@ -11,7 +11,7 @@
 # Python Code By:
 #
 # Andrea Gavana, @ 02 Oct 2006
-# Latest Revision: 12 Oct 2006, 20.00 GMT
+# Latest Revision: 16 Apr 2007, 11.00 GMT
 #
 #
 # For All Kind Of Problems, Requests Of Enhancements And Bug Reports, Please
@@ -37,7 +37,7 @@ Some features:
   - The scrolling is done for bulks of tabs (so, the scrolling is faster and better)
   - The buttons area is never overdrawn by tabs (unlike many other implementations I saw)
   - It is a generic control
-  - Currently there are 4 differnt styles - VC8, VC 71, Standard and Fancy
+  - Currently there are 5 differnt styles - VC8, VC 71, Standard, Fancy and Firefox 2;
   - Mouse middle click can be used to close tabs
   - A function to add right click menu for tabs (simple as SetRightClickMenu)
   - All styles has bottom style as well (they can be drawn in the bottom of screen)
@@ -58,7 +58,7 @@ License And Version:
 
 FlatNotebook Is Freeware And Distributed Under The wxPython License. 
 
-Latest Revision: Andrea Gavana @ 12 Oct 2006, 20.00 GMT
+Latest Revision: Andrea Gavana @ 16 Apr 2007, 11.00 GMT
 
 Version 2.0.
 
@@ -122,6 +122,10 @@ FNB_NODRAG = 128
 # Use Visual Studio 2005 (VC8) style for tabs
 FNB_VC8 = 256
 """Use Visual Studio 2005 (VC8) style for tabs"""
+
+# Firefox 2 tabs style
+FNB_FF2 = 131072
+"""Use Firefox 2 style for tabs"""
 
 # Place 'X' on a tab
 FNB_X_ON_TAB = 512
@@ -716,6 +720,61 @@ def PaintStraightGradientBox(dc, rect, startColor, endColor, vertical=True):
     dc.SetBrush(savedBrush)
 
 
+
+# -----------------------------------------------------------------------------
+# Util functions
+# -----------------------------------------------------------------------------
+
+def DrawButton(dc, rect, focus, upperTabs):
+
+    # Define the rounded rectangle base on the given rect
+    # we need an array of 9 points for it
+    regPts = [wx.Point() for indx in xrange(9)]
+
+    if focus:
+        if upperTabs:
+            leftPt = wx.Point(rect.x, rect.y + (rect.height / 10)*8)
+            rightPt = wx.Point(rect.x + rect.width - 2, rect.y + (rect.height / 10)*8)
+        else:
+            leftPt = wx.Point(rect.x, rect.y + (rect.height / 10)*5)
+            rightPt = wx.Point(rect.x + rect.width - 2, rect.y + (rect.height / 10)*5)
+    else:
+        leftPt = wx.Point(rect.x, rect.y + (rect.height / 2))
+        rightPt = wx.Point(rect.x + rect.width - 2, rect.y + (rect.height / 2))
+
+    # Define the top region
+    top = wx.RectPP(rect.GetTopLeft(), rightPt)
+    bottom = wx.RectPP(leftPt, rect.GetBottomRight())
+
+    topStartColor = wx.WHITE
+
+    if not focus:
+        topStartColor = LightColour(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE), 50)
+
+    topEndColor = wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE)
+    bottomStartColor = topEndColor
+    bottomEndColor = topEndColor
+
+    # Incase we use bottom tabs, switch the colors
+    if upperTabs:
+        if focus:
+            PaintStraightGradientBox(dc, top, topStartColor, topEndColor)
+            PaintStraightGradientBox(dc, bottom, bottomStartColor, bottomEndColor)
+        else:
+            PaintStraightGradientBox(dc, top, topEndColor , topStartColor)
+            PaintStraightGradientBox(dc, bottom, bottomStartColor, bottomEndColor)
+
+    else:
+        if focus:
+            PaintStraightGradientBox(dc, bottom, topEndColor, bottomEndColor)
+            PaintStraightGradientBox(dc, top,topStartColor,  topStartColor)
+        else:
+            PaintStraightGradientBox(dc, bottom, bottomStartColor, bottomEndColor)
+            PaintStraightGradientBox(dc, top, topEndColor, topStartColor)
+    
+    dc.SetBrush(wx.TRANSPARENT_BRUSH)
+
+
 # ---------------------------------------------------------------------------- #
 # Class FNBDropSource
 # Gives Some Custom UI Feedback during the DnD Operations
@@ -1148,7 +1207,7 @@ class TabNavigatorWindow(wx.Dialog):
     def OnItemSelected(self, event):
         """Handles the wx.EVT_LISTBOX_DCLICK event for the wx.ListBox inside L{TabNavigatorWindow}. """
 
-    	self.CloseDialog()
+        self.CloseDialog()
 
 
     def CloseDialog(self):
@@ -1481,7 +1540,7 @@ class FNBRenderer:
         return bmp
 
 
-    def DrawTabsLine(self, pageContainer, dc):
+    def DrawTabsLine(self, pageContainer, dc, selTabX1=-1, selTabX2=-1):
         """ Draws a line over the tabs. """
 
         pc = pageContainer
@@ -1489,38 +1548,70 @@ class FNBRenderer:
         clntRect = pc.GetClientRect()
         clientRect3 = wx.Rect(0, 0, clntRect.width, clntRect.height)
 
-        if pc.HasFlag(FNB_BOTTOM):
-        
-            clientRect = wx.Rect(0, 2, clntRect.width, clntRect.height - 2)
-            clientRect2 = wx.Rect(0, 1, clntRect.width, clntRect.height - 1)
-        
+        if pc.HasFlag(FNB_FF2):
+            if not pc.HasFlag(FNB_BOTTOM):
+                fillColor = wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE)
+            else:
+                fillColor = wx.WHITE
+
+            dc.SetPen(wx.Pen(fillColor))
+
+            if pc.HasFlag(FNB_BOTTOM):
+
+                dc.DrawLine(1, 0, clntRect.width-1, 0)
+                dc.DrawLine(1, 1, clntRect.width-1, 1)
+
+                dc.SetPen(wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNSHADOW)))
+                dc.DrawLine(1, 2, clntRect.width-1, 2)
+
+                dc.SetPen(wx.Pen(fillColor))
+                dc.DrawLine(selTabX1 + 2, 2, selTabX2 - 1, 2)
+                
+            else:
+                
+                dc.DrawLine(1, clntRect.height, clntRect.width-1, clntRect.height)
+                dc.DrawLine(1, clntRect.height-1, clntRect.width-1, clntRect.height-1)
+
+                dc.SetPen(wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNSHADOW)))
+                dc.DrawLine(1, clntRect.height-2, clntRect.width-1, clntRect.height-2)
+
+                dc.SetPen(wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_3DFACE)))
+                dc.DrawLine(selTabX1 + 2, clntRect.height-2, selTabX2-1, clntRect.height-2)
+
         else:
-        
-            clientRect = wx.Rect(0, 0, clntRect.width, clntRect.height - 2)
-            clientRect2 = wx.Rect(0, 0, clntRect.width, clntRect.height - 1)
-        
-        dc.SetBrush(wx.TRANSPARENT_BRUSH)
-        dc.SetPen(wx.Pen(pc.GetSingleLineBorderColour()))
-        dc.DrawRectangleRect(clientRect2)
-        dc.DrawRectangleRect(clientRect3)
-
-        dc.SetPen(wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNSHADOW)))
-        dc.DrawRectangleRect(clientRect)
-
-        if not pc.HasFlag(FNB_TABS_BORDER_SIMPLE):
-        
-            dc.SetPen(wx.Pen((pc.HasFlag(FNB_VC71) and [wx.Colour(247, 243, 233)] or [pc._tabAreaColor])[0]))
-            dc.DrawLine(0, 0, 0, clientRect.height+1)
             
             if pc.HasFlag(FNB_BOTTOM):
             
-                dc.DrawLine(0, clientRect.height+1, clientRect.width, clientRect.height+1)
+                clientRect = wx.Rect(0, 2, clntRect.width, clntRect.height - 2)
+                clientRect2 = wx.Rect(0, 1, clntRect.width, clntRect.height - 1)
             
             else:
+            
+                clientRect = wx.Rect(0, 0, clntRect.width, clntRect.height - 2)
+                clientRect2 = wx.Rect(0, 0, clntRect.width, clntRect.height - 1)
+            
+            dc.SetBrush(wx.TRANSPARENT_BRUSH)
+            dc.SetPen(wx.Pen(pc.GetSingleLineBorderColour()))
+            dc.DrawRectangleRect(clientRect2)
+            dc.DrawRectangleRect(clientRect3)
+
+            dc.SetPen(wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNSHADOW)))
+            dc.DrawRectangleRect(clientRect)
+
+            if not pc.HasFlag(FNB_TABS_BORDER_SIMPLE):
+            
+                dc.SetPen(wx.Pen((pc.HasFlag(FNB_VC71) and [wx.Colour(247, 243, 233)] or [pc._tabAreaColor])[0]))
+                dc.DrawLine(0, 0, 0, clientRect.height+1)
                 
-                dc.DrawLine(0, 0, clientRect.width, 0)
+                if pc.HasFlag(FNB_BOTTOM):
                 
-            dc.DrawLine(clientRect.width - 1, 0, clientRect.width - 1, clientRect.height+1)
+                    dc.DrawLine(0, clientRect.height+1, clientRect.width, clientRect.height+1)
+                
+                else:
+                    
+                    dc.DrawLine(0, 0, clientRect.width, 0)
+                    
+                dc.DrawLine(clientRect.width - 1, 0, clientRect.width - 1, clientRect.height+1)
 
 
     def CalcTabWidth(self, pageContainer, tabIdx, tabHeight):
@@ -1650,7 +1741,12 @@ class FNBRenderer:
         else:
             colr = (pc.HasFlag(FNB_VC71) and [wx.Colour(247, 243, 233)] or [pc.GetBackgroundColour()])[0]
             dc.SetPen(wx.Pen(colr))
-        
+
+        if pc.HasFlag(FNB_FF2):
+            lightFactor = (pc.HasFlag(FNB_BACKGROUND_GRADIENT) and [70] or [0])[0]
+            PaintStraightGradientBox(dc, pc.GetClientRect(), pc._tabAreaColor, LightColour(pc._tabAreaColor, lightFactor))
+            dc.SetBrush(wx.TRANSPARENT_BRUSH)
+
         dc.DrawRectangle(0, 0, size.x, size.y)
 
         # Take 3 bitmaps for the background for the buttons
@@ -1683,7 +1779,9 @@ class FNBRenderer:
         # We always draw the bottom/upper line of the tabs
         # regradless the style
         dc.SetPen(borderPen)
-        self.DrawTabsLine(pc, dc)
+
+        if not pc.HasFlag(FNB_FF2):
+            self.DrawTabsLine(pc, dc)
 
         # Restore the pen
         dc.SetPen(borderPen)
@@ -1727,10 +1825,13 @@ class FNBRenderer:
         #----------------------------------------------------------
         # Go over and draw the visible tabs
         #----------------------------------------------------------
+        x1 = x2 = -1
         for i in xrange(pc._nFrom, len(pc._pagesInfoVec)):
         
             dc.SetPen(borderPen)
-            dc.SetBrush((i==pc.GetSelection() and [selBrush] or [noselBrush])[0])
+
+            if not pc.HasFlag(FNB_FF2):
+                dc.SetBrush((i==pc.GetSelection() and [selBrush] or [noselBrush])[0])
 
             # Now set the font to the correct font
             dc.SetFont((i==pc.GetSelection() and [boldFont] or [normalFont])[0])
@@ -1759,6 +1860,10 @@ class FNBRenderer:
             # Draw the tab (border, text, image & 'x' on tab)
             self.DrawTab(pc, dc, posx, i, tabWidth, tabHeight, pc._nTabXButtonStatus)
 
+            if pc.GetSelection() == i:
+                x1 = posx
+                x2 = posx + tabWidth + 2
+
             # Restore the text forground
             dc.SetTextForeground(pc._activeTextColor)
 
@@ -1780,6 +1885,9 @@ class FNBRenderer:
         self.DrawRightArrow(pc, dc)
         self.DrawX(pc, dc)
         self.DrawDropDownArrow(pc, dc)
+
+        if pc.HasFlag(FNB_FF2):
+            self.DrawTabsLine(pc, dc, x1, x2)
 
 
     def DrawDragHint(self, pc, tabIdx):
@@ -1846,15 +1954,11 @@ class FNBRendererMgr:
         self._renderers.update({FNB_VC71: FNBRendererVC71()})
         self._renderers.update({FNB_FANCY_TABS: FNBRendererFancy()})
         self._renderers.update({FNB_VC8: FNBRendererVC8()})
+        self._renderers.update({FNB_FF2: FNBRendererFirefox2()})
 
 
     def GetRenderer(self, style):
         """ Returns the current renderer based on the style selected. """
-
-        # since we dont have a style for default tabs, we 
-        # test for all others - FIXME: add style for default tabs
-        if not style & FNB_VC71 and not style & FNB_VC8 and not style & FNB_FANCY_TABS:
-            return self._renderers[-1]
 
         if style & FNB_VC71:
             return self._renderers[FNB_VC71]
@@ -1864,6 +1968,9 @@ class FNBRendererMgr:
 
         if style & FNB_VC8:
             return self._renderers[FNB_VC8]
+
+        if style & FNB_FF2:
+            return self._renderers[FNB_FF2]
 
         # the default is to return the default renderer
         return self._renderers[-1]
@@ -1990,6 +2097,106 @@ class FNBRendererDefault(FNBRenderer):
 
             # Draw the tab
             self.DrawTabX(pc, dc, x_rect, tabIdx, btnStatus)            
+        
+
+#------------------------------------------
+# Firefox2 renderer 
+#------------------------------------------
+class FNBRendererFirefox2(FNBRenderer):
+    """
+    This class handles the drawing of tabs using the I{Firefox 2} renderer.
+    """
+    
+    def __init__(self):
+        """ Default class constructor. """
+
+        FNBRenderer.__init__(self)
+
+        
+    def DrawTab(self, pageContainer, dc, posx, tabIdx, tabWidth, tabHeight, btnStatus):
+        """ Draws a tab using the I{Firefox 2} style. """
+
+        borderPen = wx.Pen(wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNSHADOW))
+        pc = pageContainer
+
+        tabPoints = [wx.Point() for indx in xrange(7)]
+        tabPoints[0].x = posx + 2
+        tabPoints[0].y = (pc.HasFlag(FNB_BOTTOM) and [2] or [tabHeight - 2])[0]
+
+        tabPoints[1].x = tabPoints[0].x
+        tabPoints[1].y = (pc.HasFlag(FNB_BOTTOM) and [tabHeight - (VERTICAL_BORDER_PADDING+2)] or [(VERTICAL_BORDER_PADDING+2)])[0]
+
+        tabPoints[2].x = tabPoints[1].x+2
+        tabPoints[2].y = (pc.HasFlag(FNB_BOTTOM) and [tabHeight - VERTICAL_BORDER_PADDING] or [VERTICAL_BORDER_PADDING])[0]
+
+        tabPoints[3].x = posx + tabWidth - 2
+        tabPoints[3].y = (pc.HasFlag(FNB_BOTTOM) and [tabHeight - VERTICAL_BORDER_PADDING] or [VERTICAL_BORDER_PADDING])[0]
+
+        tabPoints[4].x = tabPoints[3].x + 2
+        tabPoints[4].y = (pc.HasFlag(FNB_BOTTOM) and [tabHeight - (VERTICAL_BORDER_PADDING+2)] or [(VERTICAL_BORDER_PADDING+2)])[0]
+
+        tabPoints[5].x = tabPoints[4].x
+        tabPoints[5].y = (pc.HasFlag(FNB_BOTTOM) and [2] or [tabHeight - 2])[0]
+
+        tabPoints[6].x = tabPoints[0].x
+        tabPoints[6].y = tabPoints[0].y
+
+        #------------------------------------
+        # Paint the tab with gradient
+        #------------------------------------
+        rr = wx.RectPP(tabPoints[2], tabPoints[5])
+        DrawButton(dc, rr, pc.GetSelection() == tabIdx , not pc.HasFlag(FNB_BOTTOM))
+
+        dc.SetBrush(wx.TRANSPARENT_BRUSH)
+        dc.SetPen(borderPen)
+
+        # Draw the tab as rounded rectangle
+        dc.DrawPolygon(tabPoints)
+
+        # -----------------------------------
+        # Text and image drawing
+        # -----------------------------------
+
+        # The width of the images are 16 pixels
+        padding = pc.GetParent().GetPadding()
+        shapePoints = int(tabHeight*math.tan(float(pc._pagesInfoVec[tabIdx].GetTabAngle())/180.0*math.pi))
+        hasImage = pc._pagesInfoVec[tabIdx].GetImageIndex() != -1
+        imageYCoord = (pc.HasFlag(FNB_BOTTOM) and [6] or [8])[0]
+
+        if hasImage:
+            textOffset = 2*padding + 16 + shapePoints/2 
+        else:
+            textOffset = padding + shapePoints/2
+            
+        textOffset += 2
+
+        if tabIdx != pc.GetSelection():
+        
+            # Set the text background to be like the vertical lines
+            dc.SetTextForeground(pc._pParent.GetNonActiveTabTextColour())
+
+        if hasImage:
+            imageXOffset = textOffset - 16 - padding
+            pc._ImageList.Draw(pc._pagesInfoVec[tabIdx].GetImageIndex(), dc,
+                               posx + imageXOffset, imageYCoord,
+                               wx.IMAGELIST_DRAW_TRANSPARENT, True)
+        
+        dc.DrawText(pc.GetPageText(tabIdx), posx + textOffset, imageYCoord)
+
+        # draw 'x' on tab (if enabled)
+        if pc.HasFlag(FNB_X_ON_TAB) and tabIdx == pc.GetSelection():
+        
+            textWidth, textHeight = dc.GetTextExtent(pc.GetPageText(tabIdx))
+            tabCloseButtonXCoord = posx + textOffset + textWidth + 1
+
+            # take a bitmap from the position of the 'x' button (the x on tab button)
+            # this bitmap will be used later to delete old buttons
+            tabCloseButtonYCoord = imageYCoord
+            x_rect = wx.Rect(tabCloseButtonXCoord, tabCloseButtonYCoord, 16, 16)
+            self._tabXBgBmp = self._GetBitmap(dc, x_rect, self._tabXBgBmp)
+
+            # Draw the tab
+            self.DrawTabX(pc, dc, x_rect, tabIdx, btnStatus)
         
 
 #------------------------------------------------------------------
@@ -3545,7 +3752,7 @@ class PageContainer(wx.Panel):
         self._colorFrom = wx.WHITE
         self._activeTabColor = wx.WHITE
         self._activeTextColor = wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNTEXT)
-        self._nonActiveTextColor = wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNSHADOW)
+        self._nonActiveTextColor = wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNTEXT)
         self._tabAreaColor = wx.SystemSettings_GetColour(wx.SYS_COLOUR_BTNFACE)
 
         self._nFrom = 0
@@ -3758,6 +3965,47 @@ class PageContainer(wx.Panel):
                     self.FireEvent(tabIdx)
 
 
+    def RotateLeft(self):
+
+        if self._nFrom == 0:
+            return
+
+        # Make sure that the button was pressed before
+        if self._nLeftButtonStatus != FNB_BTN_PRESSED:
+            return
+
+        self._nLeftButtonStatus = FNB_BTN_HOVER
+
+        # We scroll left with bulks of 5
+        scrollLeft = self.GetNumTabsCanScrollLeft()
+
+        self._nFrom -= scrollLeft
+        if self._nFrom < 0:
+            self._nFrom = 0
+
+        self.Refresh()
+
+
+    def RotateRight(self):
+
+        if self._nFrom >= len(self._pagesInfoVec) - 1:
+            return
+
+        # Make sure that the button was pressed before
+        if self._nRightButtonStatus != FNB_BTN_PRESSED:
+            return
+
+        self._nRightButtonStatus = FNB_BTN_HOVER
+
+        # Check if the right most tab is visible, if it is
+        # don't rotate right anymore
+        if self._pagesInfoVec[len(self._pagesInfoVec)-1].GetPosition() != wx.Point(-1, -1):
+            return
+
+        self._nFrom += 1
+        self.Refresh()
+
+
     def OnLeftUp(self, event):
         """ Handles the wx.EVT_LEFT_UP events for L{PageContainer}. """
 
@@ -3767,49 +4015,10 @@ class PageContainer(wx.Panel):
         where, tabIdx = self.HitTest(event.GetPosition())
         
         if where == FNB_LEFT_ARROW:
-            
-            if self._nFrom == 0:
-                return
-
-            # Make sure that the button was pressed before
-            if self._nLeftButtonStatus != FNB_BTN_PRESSED:
-                return
-
-            self._nLeftButtonStatus = FNB_BTN_HOVER
-
-            # We scroll left with bulks of 5
-            scrollLeft = self.GetNumTabsCanScrollLeft()
-
-            self._nFrom -= scrollLeft
-            if self._nFrom < 0:
-                self._nFrom = 0
-
-            self.Refresh()
+            self.RotateLeft()
             
         elif where == FNB_RIGHT_ARROW:
-            
-            if self._nFrom >= len(self._pagesInfoVec) - 1:
-                return
-
-            # Make sure that the button was pressed before
-            if self._nRightButtonStatus != FNB_BTN_PRESSED:
-                return
-
-            self._nRightButtonStatus = FNB_BTN_HOVER
-
-            # Check if the right most tab is visible, if it is
-            # don't rotate right anymore
-            if self._pagesInfoVec[-1].GetPosition() != wx.Point(-1, -1):
-                return
-
-            lastVisibleTab = self.GetLastVisibleTab()
-            if lastVisibleTab < 0:
-                # Probably the screen is too small for displaying even a single
-                # tab, in this case we do nothing
-                return
-
-            self._nFrom += self.GetNumOfVisibleTabs()
-            self.Refresh()
+            self.RotateRight()
             
         elif where == FNB_X:
             
@@ -3846,6 +4055,8 @@ class PageContainer(wx.Panel):
 
             self.PopupTabsMenu()
 
+        event.Skip()
+        
 
     def HitTest(self, pt):
         """
@@ -4185,66 +4396,10 @@ class PageContainer(wx.Panel):
     def GetNumTabsCanScrollLeft(self):
         """ Returns the number of tabs than can be scrolled left. """
 
-        # Reserved area for the buttons (<>x)
-        rect = self.GetClientRect()
-        clientWidth = rect.width
-        posx = self._pParent._nPadding
-        numTabs = 0
-        pom = 0
-        
-        # In case we have error prevent crash
-        if self._nFrom < 0:
-            return 0
+        if self._nFrom - 1 >= 0:
+            return 1
 
-        dc = wx.ClientDC(self)
-
-        style = self.GetParent().GetWindowStyleFlag()
-        render = self._mgr.GetRenderer(style)
-        
-        for ii in xrange(self._nFrom, -1, -1):
-
-            boldFont = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)        
-            boldFont.SetWeight(wx.FONTWEIGHT_BOLD)
-            dc.SetFont(boldFont)
-
-            height = dc.GetCharHeight()
-
-            tabHeight = height + FNB_HEIGHT_SPACER # We use 6 pixels as padding
-            if style & FNB_VC71:
-                tabHeight = (style & FNB_BOTTOM and [tabHeight - 4] or [tabHeight])[0]
-            elif style & FNB_FANCY_TABS:
-                tabHeight = (style & FNB_BOTTOM and [tabHeight - 3] or [tabHeight])[0]
-
-            width, pom = dc.GetTextExtent(self.GetPageText(ii))
-            if style != FNB_VC71:
-                shapePoints = int(tabHeight*math.tan(float(self._pagesInfoVec[ii].GetTabAngle())/180.0*math.pi))
-            else:
-                shapePoints = 0
-
-            tabWidth = 2*self._pParent._nPadding + width
-            
-            if not (style & FNB_VC71):
-                # Default style
-                tabWidth += 2*shapePoints
-
-            hasImage = self._ImageList != None and self._pagesInfoVec[ii].GetImageIndex() != -1
-
-            # For VC71 style, we only add the icon size (16 pixels)
-            if hasImage:
-            
-                if not self.IsDefaultTabs():
-                    tabWidth += 16 + self._pParent._nPadding
-                else:
-                    # Default style
-                    tabWidth += 16 + self._pParent._nPadding + shapePoints/2
-            
-            if posx + tabWidth + render.GetButtonsAreaLength(self) >= clientWidth:
-                break
-
-            numTabs = numTabs + 1
-            posx += tabWidth
-        
-        return numTabs
+        return 0
 
 
     def IsDefaultTabs(self):
@@ -4553,10 +4708,16 @@ class PageContainer(wx.Panel):
     def OnLeftDClick(self, event):
         """ Handles the wx.EVT_LEFT_DCLICK event for L{PageContainer}. """
 
-        if self.HasFlag(FNB_DCLICK_CLOSES_TABS):
+        where, tabIdx = self.HitTest(event.GetPosition())
         
-            where, tabIdx = self.HitTest(event.GetPosition())
-            
+        if where == FNB_RIGHT_ARROW:
+            self.RotateRight()
+
+        elif where == FNB_LEFT_ARROW:
+            self.RotateLeft()
+
+        elif self.HasFlag(FNB_DCLICK_CLOSES_TABS):
+        
             if where == FNB_TAB:
                 self.DeletePage(tabIdx)
         
@@ -4671,4 +4832,5 @@ class PageContainer(wx.Panel):
         client_pt = self.ScreenToClient(pt)
         where, tabIdx = self.HitTest(client_pt)
         self._mgr.GetRenderer(self.GetParent().GetWindowStyleFlag()).DrawDragHint(self, tabIdx)
+
 
