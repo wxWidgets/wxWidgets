@@ -783,7 +783,7 @@ END_EVENT_TABLE()
 
 
 #if wxUSE_POPUPWIN //-----------------------------------
-#include <wx/popupwin.h>
+#include "wx/popupwin.h"
 
 
 //
@@ -913,6 +913,7 @@ END_EVENT_TABLE()
 
 
 #else // !wxUSE_POPUPWIN -----------------------------------
+#include "wx/frame.h"
 
 // A normal window to place the wxSTCListBox upon, but make it behave as much
 // like a wxPopupWindow as possible

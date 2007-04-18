@@ -96,15 +96,16 @@ void  wxSTCDropTarget::OnLeave() {
 
 
 #if wxUSE_POPUPWIN && wxSTC_USE_POPUP
-#include <wx/popupwin.h>
+#include "wx/popupwin.h"
 #define wxSTCCallTipBase wxPopupWindow
 #define param2  wxBORDER_NONE  // popup's 2nd param is flags
 #else
+#include "wx/frame.h"
 #define wxSTCCallTipBase wxFrame
 #define param2 -1 // wxWindow's 2nd param is ID
 #endif
 
-#include <wx/dcbuffer.h>
+#include "wx/dcbuffer.h"
 
 class wxSTCCallTip : public wxSTCCallTipBase {
 public:
