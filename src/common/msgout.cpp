@@ -76,7 +76,7 @@ wxMessageOutput* wxMessageOutput::Set(wxMessageOutput* msgout)
     return old;
 }
 
-void wxMessageOutputBase::DoPrintf(const wxChar* format, ...)
+void wxMessageOutput::DoPrintf(const wxChar* format, ...)
 {
     va_list args;
     va_start(args, format);

@@ -40,7 +40,11 @@ public:
     WX_DEFINE_VARARG_FUNC_VOID(Printf, DoPrintf)
 
 protected:
-    void DoPrintf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
+    // NB: this is pure virtual so that it can be implemented in dllexported
+    //     wxMessagOutput class
+    virtual void DoPrintf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2 = 0;
+
+    // called by DoPrintf() to output formatted string
     virtual void Output(const wxString& str) = 0;
 };
 
@@ -61,6 +65,10 @@ public:
 
     // sets the global wxMessageOutput instance; returns the previous one
     static wxMessageOutput* Set(wxMessageOutput* msgout);
+
+protected:
+    virtual void DoPrintf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
+    virtual void Output(const wxString& str) = 0;
 
 private:
     static wxMessageOutput* ms_msgOut;
