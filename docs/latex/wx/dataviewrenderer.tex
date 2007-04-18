@@ -270,7 +270,7 @@ indicate that this renderer supports in-place editing.
 
 \membersection{wxDataViewCustomRenderer::CreateEditorCtrl}\label{wxdataviewcustomrenderercreateeditorctrl}
 
-\func{virtual wxControl*}{CreateEditorCtrl} {\param{wxWindow *}{parent}, \param{wxRect }{labelRect}, \param{const wxVariant & }{value}}
+\func{virtual wxControl*}{CreateEditorCtrl} {\param{wxWindow *}{parent}, \param{wxRect }{labelRect}, \param{const wxVariant \& }{value}}
 
 Override this to create the actual editor control once editing
 is about to start. {\it parent} is the parent of the editor
@@ -289,7 +289,7 @@ size of the editor control and {\it value} is its initial value:
 
 \membersection{wxDataViewCustomRenderer::GetValueFromEditorCtrl}\label{wxdataviewcustomrenderergetvaluefromeditorctrl}
 
-\func{virtual bool}{GetValueFromEditorCtrl}{\param{wxControl* }{editor}, \param{wxVariant & }{value}}
+\func{virtual bool}{GetValueFromEditorCtrl}{\param{wxControl* }{editor}, \param{wxVariant \& }{value}}
 
 Overrride this so that the renderer can get the value 
 from the editor control (pointed to by {\it editor}):
