@@ -224,15 +224,15 @@ wxDataViewDateRenderer
 
 \section{\class{wxDataViewCustomRenderer}}\label{wxdataviewcustomrenderer}
 
-wxDataViewCustomRenderer has to be derived from if the
-user wants to have a completely new renderer. You
-need to overrode at least \helpref{SetValue}{wxdataviewrenderersetvalue},
+You need to derive a new class from wxDataViewCustomRenderer in
+order to write a new renderer. You need to override at least 
+\helpref{SetValue}{wxdataviewrenderersetvalue},
 \helpref{GetValue}{wxdataviewrenderergetvalue}, 
 \helpref{GetSize}{wxdataviewcustomrenderergetsize}
 and \helpref{Render}{wxdataviewcustomrendererrender}.
 
-If you want your renderer to additionally support in-place
-editing then you also need to override 
+If you want your renderer to support in-place editing then you
+also need to override 
 \helpref{HasEditorCtrl}{wxdataviewcustomrendererhaseditorctrl},
 \helpref{CreateEditorCtrl}{wxdataviewcustomrenderercreateeditorctrl}
 and \helpref{GetValueFromEditorCtrl}{wxdataviewcustomrenderergetvaluefromeditorctrl}.
