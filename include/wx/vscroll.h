@@ -434,7 +434,7 @@ protected:
 
     // forward calls to OnGetColumnsWidthHint()
     virtual void OnGetUnitsSizeHint(size_t unitMin, size_t unitMax) const
-        { return OnGetColumnsWidthHint(unitMin, unitMax); }
+        { OnGetColumnsWidthHint(unitMin, unitMax); }
 
     // again, if not overridden, it will fall back on default method
     virtual wxCoord EstimateTotalWidth() const { return DoEstimateTotalSize(); }
@@ -654,7 +654,7 @@ protected:
     // forwards the calls from base class pure virtual function to pure virtual
     // OnGetLinesHint instead (backwards compatible name)
     void OnGetRowsHeightHint(size_t rowMin, size_t rowMax) const
-        { return OnGetLinesHint(rowMin, rowMax); }
+        { OnGetLinesHint(rowMin, rowMax); }
 
 
     // get the total height of the lines between lineMin (inclusive) and
