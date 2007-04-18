@@ -348,6 +348,9 @@ void wxDataViewSortedListModel::Resort()
     unsigned int i;
     for (i = 0; i < n; i++)
         m_array.Add( i );
+       
+    // do we need the neworder?
+    wxDataViewListModel::RowsReordered( NULL );
 }
 
 #if 0

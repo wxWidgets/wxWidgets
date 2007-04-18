@@ -176,6 +176,8 @@ public:
         delete m_resizeCursor;
     }
 
+    virtual void UpdateDisplay() { Refresh(); }
+    
     // event handlers:
 
     void OnPaint( wxPaintEvent &event );
@@ -819,6 +821,7 @@ void wxDataViewColumn::Init( int width )
 {
     m_width = width;
     m_minWidth = wxDVC_DEFAULT_MINWIDTH;
+    m_ascending = true;
 }
 
 void wxDataViewColumn::SetResizeable( bool resizeable )
@@ -847,17 +850,24 @@ void wxDataViewColumn::SetSortable( bool sortable )
         m_flags |= wxDATAVIEW_COL_SORTABLE;
     else
         m_flags &= ~wxDATAVIEW_COL_SORTABLE;
+        
+    // Update header button
+    if (GetOwner())
+        GetOwner()->OnColumnChange();
 }
 
-void wxDataViewColumn::SetSortOrder( bool WXUNUSED(ascending) )
+void wxDataViewColumn::SetSortOrder( bool ascending )
 {
-    // TODO
+    m_ascending = ascending;
+    
+    // Update header button
+    if (GetOwner())
+        GetOwner()->OnColumnChange();
 }
 
 bool wxDataViewColumn::IsSortOrderAscending() const
 {
-    // TODO
-    return true;
+    return m_ascending;
 }
 
 void wxDataViewColumn::SetInternalWidth( int width )
@@ -1279,13 +1289,23 @@ void wxGenericDataViewHeaderWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
         int cw = col->GetWidth();
         int ch = h;
 
+        wxHeaderSortIconType sortArrow = wxHDR_SORT_ICON_NONE;
+        if (col->IsSortable())
+        {
+            if (col->IsSortOrderAscending())
+                sortArrow = wxHDR_SORT_ICON_UP;
+            else
+                sortArrow = wxHDR_SORT_ICON_DOWN;
+        }
+
         wxRendererNative::Get().DrawHeaderButton
                                 (
                                     this,
                                     dc,
                                     wxRect(xpos, 0, cw, ch-1),
                                     m_parent->IsEnabled() ? 0
-                                                          : (int)wxCONTROL_DISABLED
+                                                          : (int)wxCONTROL_DISABLED,
+                                    sortArrow
                                 );
 
         // align as required the column title:

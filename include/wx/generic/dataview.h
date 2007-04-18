@@ -297,6 +297,7 @@ private:
     int                      m_flags;
     wxAlignment              m_align;
     wxString                 m_title;
+    bool                     m_ascending;
 
     void Init(int width);
 
