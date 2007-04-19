@@ -728,11 +728,17 @@ bool wxDataViewRendererBase::StartEditing( unsigned int row, wxRect labelRect )
     
     m_editorCtrl = CreateEditorCtrl( GetOwner()->GetOwner()->GetMainWindow(), labelRect, value );
     
-    m_editorCtrl->PushEventHandler( 
-        new wxDataViewEditorCtrlEvtHandler( m_editorCtrl, (wxDataViewRenderer*) this ) );
+    wxDataViewEditorCtrlEvtHandler *handler = 
+        new wxDataViewEditorCtrlEvtHandler( m_editorCtrl, (wxDataViewRenderer*) this );
+        
+    m_editorCtrl->PushEventHandler( handler );
     
+#if defined(__WXGTK20__) && !defined(wxUSE_GENERICDATAVIEWCTRL)
+    handler->SetFocusOnIdle();
+#else
     m_editorCtrl->SetFocus();
-    
+#endif
+
     return true;
 }
 
@@ -773,6 +779,7 @@ bool wxDataViewRendererBase::FinishEditing()
 BEGIN_EVENT_TABLE(wxDataViewEditorCtrlEvtHandler, wxEvtHandler)
     EVT_CHAR           (wxDataViewEditorCtrlEvtHandler::OnChar)
     EVT_KILL_FOCUS     (wxDataViewEditorCtrlEvtHandler::OnKillFocus)
+    EVT_IDLE           (wxDataViewEditorCtrlEvtHandler::OnIdle)
 END_EVENT_TABLE()
 
 wxDataViewEditorCtrlEvtHandler::wxDataViewEditorCtrlEvtHandler(
@@ -783,6 +790,18 @@ wxDataViewEditorCtrlEvtHandler::wxDataViewEditorCtrlEvtHandler(
     m_editorCtrl = editorCtrl;
 
     m_finished = false;
+}
+
+void wxDataViewEditorCtrlEvtHandler::OnIdle( wxIdleEvent &event )
+{
+    if (m_focusOnIdle)
+    {
+        m_focusOnIdle = false;
+        if (wxWindow::FindFocus() != m_editorCtrl)
+            m_editorCtrl->SetFocus();
+    }
+    
+    event.Skip();
 }
 
 void wxDataViewEditorCtrlEvtHandler::OnChar( wxKeyEvent &event )

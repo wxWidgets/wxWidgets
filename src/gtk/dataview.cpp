@@ -595,7 +595,7 @@ static GtkCellEditable *gtk_wx_cell_renderer_start_editing(
     gtk_tree_path_free( treepath );
 
     cell->StartEditing( model_row, renderrect );
-    
+
     return NULL;
 }
 

@@ -24,7 +24,7 @@
 
 #if defined(__WXGTK20__)
     // for testing
-    #define wxUSE_GENERICDATAVIEWCTRL 1
+    // #define wxUSE_GENERICDATAVIEWCTRL 1
 #elif defined(__WXMAC__)
     #define wxUSE_GENERICDATAVIEWCTRL 1
 #else
@@ -243,15 +243,18 @@ public:
     wxDataViewEditorCtrlEvtHandler( wxControl *editor, wxDataViewRenderer *owner );
                          
     void AcceptChangesAndFinish();
+    void SetFocusOnIdle( bool focus = true ) { m_focusOnIdle = focus; }
 
 protected:
     void OnChar( wxKeyEvent &event );
     void OnKillFocus( wxFocusEvent &event );
+    void OnIdle( wxIdleEvent &event );
 
 private:
     wxDataViewRenderer     *m_owner;
     wxControl              *m_editorCtrl;
     bool                    m_finished;
+    bool                    m_focusOnIdle;
 
 private:
     DECLARE_EVENT_TABLE()
@@ -487,7 +490,7 @@ public:
 private:
     wxDataViewListModel    *m_model;
     wxList                  m_cols;
-
+    
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCtrlBase)
 };
