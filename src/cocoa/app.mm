@@ -25,10 +25,6 @@
 #include "wx/cocoa/mbarman.h"
 #include "wx/cocoa/NSApplication.h"
 
-#if wxUSE_WX_RESOURCES
-#  include "wx/resource.h"
-#endif
-
 #import <AppKit/NSApplication.h>
 #import <Foundation/NSRunLoop.h>
 #import <Foundation/NSThread.h>
