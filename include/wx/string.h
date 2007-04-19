@@ -2612,7 +2612,9 @@ inline wxUniChar wxCStrData::operator*() const
 
 inline wxUniChar wxCStrData::operator[](size_t n) const
 {
-    return m_str->at(m_offset + n);
+    // NB: we intentionally use operator[] and not at() here because the former
+    //     works for the terminating NUL while the latter does not
+    return (*m_str)[m_offset + n];
 }
 
 // ----------------------------------------------------------------------------
