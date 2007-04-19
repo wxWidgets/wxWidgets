@@ -19,7 +19,6 @@
 #include "wx/stockitem.h"
 
 #include "wx/gtk/private.h"
-#include "wx/gtk/win_gtk.h"
 
 //-----------------------------------------------------------------------------
 // classes
@@ -40,9 +39,6 @@ extern bool   g_blockEventsOnDrag;
 extern "C" {
 static void gtk_button_clicked_callback( GtkWidget *WXUNUSED(widget), wxButton *button )
 {
-    if (g_isIdle)
-       wxapp_install_idle_handler();
-
     if (!button->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
 
@@ -59,9 +55,6 @@ static void gtk_button_clicked_callback( GtkWidget *WXUNUSED(widget), wxButton *
 static gint
 gtk_button_style_set_callback( GtkWidget *m_widget, GtkStyle *WXUNUSED(style), wxButton *win )
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
     int left_border = 0;
     int right_border = 0;
     int top_border = 0;

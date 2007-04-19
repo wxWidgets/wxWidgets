@@ -14,7 +14,7 @@
 
 #include "wx/checkbox.h"
 
-#include "wx/gtk/private.h"
+#include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------
 // data
@@ -29,8 +29,6 @@ extern bool           g_blockEventsOnDrag;
 extern "C" {
 static void gtk_checkbox_toggled_callback(GtkWidget *widget, wxCheckBox *cb)
 {
-    if (g_isIdle) wxapp_install_idle_handler();
-
     if (!cb->m_hasVMT) return;
 
     if (g_blockEventsOnDrag) return;

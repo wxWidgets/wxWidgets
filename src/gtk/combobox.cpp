@@ -45,8 +45,6 @@ extern "C" {
 static void
 gtkcombo_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
-
     if (combo->m_ignoreNextUpdate)
     {
         combo->m_ignoreNextUpdate = false;
@@ -118,8 +116,6 @@ extern "C" {
 static void
 gtkcombo_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
-
     if (!combo->m_hasVMT) return;
 
     if (g_blockEventsOnDrag) return;
@@ -171,8 +167,6 @@ extern "C" {
 static void
 gtkcombobox_text_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
-
     if (!combo->m_hasVMT) return;
 
     wxCommandEvent event( wxEVT_COMMAND_TEXT_UPDATED, combo->GetId() );
@@ -186,8 +180,6 @@ extern "C" {
 static void
 gtkcombobox_changed_callback( GtkWidget *WXUNUSED(widget), wxComboBox *combo )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
-
     if (!combo->m_hasVMT) return;
 
     if (combo->GetSelection() == -1)

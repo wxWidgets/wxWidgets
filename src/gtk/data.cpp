@@ -26,7 +26,3 @@ bool g_blockEventsOnScroll = false;
 
 /* Don't allow window closing if there are open dialogs */
 int g_openDialogs = 0;
-
-/* true when the message queue is empty. this gets set to
-   false by all event callbacks before anything else is done */
-bool g_isIdle = false;

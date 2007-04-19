@@ -32,7 +32,6 @@
     #include "wx/tooltip.h"
 #endif
 
-#include <gdk/gdk.h>
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
 
@@ -68,8 +67,6 @@ gtk_listbox_row_activated_callback(GtkTreeView        *treeview,
                                    GtkTreeViewColumn  *col,
                                    wxListBox          *listbox)
 {
-    if (g_isIdle) wxapp_install_idle_handler();
-
     if (g_blockEventsOnDrag) return;
     if (g_blockEventsOnScroll) return;
 

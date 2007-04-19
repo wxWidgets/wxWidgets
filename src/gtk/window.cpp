@@ -469,8 +469,6 @@ gtk_window_expose_callback( GtkWidget *widget,
 {
     DEBUG_MAIN_THREAD
 
-    // don't need to install idle handler, its done from "event" signal
-
     // This callback gets called in drawing-idle time under
     // GTK 2.0, so we don't need to defer anything to idle
     // time anymore.
@@ -982,8 +980,6 @@ gtk_window_key_press_callback( GtkWidget *widget,
 {
     DEBUG_MAIN_THREAD
 
-    // don't need to install idle handler, its done from "event" signal
-
     if (!win->m_hasVMT)
         return FALSE;
     if (g_blockEventsOnDrag)
@@ -1200,8 +1196,6 @@ gtk_window_key_release_callback( GtkWidget *widget,
 {
     DEBUG_MAIN_THREAD
 
-    // don't need to install idle handler, its done from "event" signal
-
     if (!win->m_hasVMT)
         return FALSE;
 
@@ -1377,8 +1371,6 @@ bool wxWindowGTK::GTKProcessEvent(wxEvent& event) const
 int wxWindowGTK::GTKCallbackCommonPrologue(GdkEventAny *event) const
 {
     DEBUG_MAIN_THREAD
-
-    // don't need to install idle handler, its done from "event" signal
 
     if (!m_hasVMT)
         return FALSE;
@@ -1746,8 +1738,6 @@ window_scroll_event(GtkWidget*, GdkEventScroll* gdk_event, wxWindow* win)
 {
     DEBUG_MAIN_THREAD
 
-    // don't need to install idle handler, its done from "event" signal
-
     if (gdk_event->direction != GDK_SCROLL_UP &&
         gdk_event->direction != GDK_SCROLL_DOWN)
     {
@@ -1804,8 +1794,6 @@ gtk_window_focus_in_callback( GtkWidget *widget,
 {
     DEBUG_MAIN_THREAD
 
-    // don't need to install idle handler, its done from "event" signal
-
     if (win->m_imData)
         gtk_im_context_focus_in(win->m_imData->context);
 
@@ -1855,8 +1843,6 @@ gtk_window_focus_out_callback( GtkWidget *widget,
                                wxWindowGTK *win )
 {
     DEBUG_MAIN_THREAD
-
-    // don't need to install idle handler, its done from "event" signal
 
     if (win->m_imData)
         gtk_im_context_focus_out(win->m_imData->context);
@@ -2037,8 +2023,6 @@ gtk_scrollbar_button_press_event(GtkRange*, GdkEventButton*, wxWindow* win)
 {
     DEBUG_MAIN_THREAD
 
-    // don't need to install idle handler, its done from "event" signal
-
     g_blockEventsOnScroll = true;
     win->m_mouseButtonDown = true;
 
@@ -2100,9 +2084,6 @@ gtk_window_realized_callback( GtkWidget *m_widget, wxWindow *win )
 {
     DEBUG_MAIN_THREAD
 
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
     if (win->m_imData)
     {
         GtkPizza *pizza = GTK_PIZZA( m_widget );
@@ -2124,9 +2105,6 @@ void gtk_window_size_callback( GtkWidget *WXUNUSED(widget),
                                GtkAllocation *alloc,
                                wxWindow *win )
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
     int client_width = 0;
     int client_height = 0;
     win->GetClientSize( &client_width, &client_height );
@@ -3330,16 +3308,14 @@ void wxWindowGTK::AddChild(wxWindowBase *child)
 {
     wxWindowBase::AddChild(child);
     m_dirtyTabOrder = true;
-    if (g_isIdle)
-        wxapp_install_idle_handler();
+    wxTheApp->WakeUpIdle();
 }
 
 void wxWindowGTK::RemoveChild(wxWindowBase *child)
 {
     wxWindowBase::RemoveChild(child);
     m_dirtyTabOrder = true;
-    if (g_isIdle)
-        wxapp_install_idle_handler();
+    wxTheApp->WakeUpIdle();
 }
 
 /* static */
@@ -3403,8 +3379,7 @@ void wxWindowGTK::DoMoveInTabOrder(wxWindow *win, MoveKind move)
 {
     wxWindowBase::DoMoveInTabOrder(win, move);
     m_dirtyTabOrder = true;
-    if (g_isIdle)
-        wxapp_install_idle_handler();
+    wxTheApp->WakeUpIdle();
 }
 
 bool wxWindowGTK::DoNavigateIn(int flags)
@@ -4246,9 +4221,6 @@ static inline bool IsScrollIncrement(double increment, double x)
 wxEventType wxWindowGTK::GetScrollEventType(GtkRange* range)
 {
     DEBUG_MAIN_THREAD
-
-    if (g_isIdle)
-        wxapp_install_idle_handler();
 
     wxASSERT(range == m_scrollBar[0] || range == m_scrollBar[1]);
 

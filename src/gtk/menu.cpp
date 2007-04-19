@@ -97,9 +97,6 @@ static wxString wxReplaceUnderscore( const wxString& title )
 
 static void DoCommonMenuCallbackCode(wxMenu *menu, wxMenuEvent& event)
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
     event.SetEventObject( menu );
 
     wxEvtHandler* handler = menu->GetEventHandler();
@@ -560,9 +557,6 @@ void wxMenuBar::SetLabelTop( size_t pos, const wxString& label )
 extern "C" {
 static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
     int id = menu->FindMenuIdByMenuItem(widget);
 
     /* should find it for normal (not popup) menu */
@@ -637,8 +631,6 @@ static void gtk_menu_clicked_callback( GtkWidget *widget, wxMenu *menu )
 extern "C" {
 static void gtk_menu_hilight_callback( GtkWidget *widget, wxMenu *menu )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
-
     int id = menu->FindMenuIdByMenuItem(widget);
 
     wxASSERT( id != -1 ); // should find it!
@@ -665,8 +657,6 @@ static void gtk_menu_hilight_callback( GtkWidget *widget, wxMenu *menu )
 extern "C" {
 static void gtk_menu_nolight_callback( GtkWidget *widget, wxMenu *menu )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
-
     int id = menu->FindMenuIdByMenuItem(widget);
 
     wxASSERT( id != -1 ); // should find it!

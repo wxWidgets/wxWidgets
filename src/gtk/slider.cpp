@@ -19,7 +19,7 @@
     #include "wx/math.h"
 #endif
 
-#include "wx/gtk/private.h"
+#include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------
 // data
@@ -124,8 +124,6 @@ extern "C" {
 static void
 gtk_value_changed(GtkRange* range, wxSlider* win)
 {
-    if (g_isIdle) wxapp_install_idle_handler();
-
     GtkAdjustment* adj = gtk_range_get_adjustment (range);
     const int pos = wxRound(adj->value);
     const double oldPos = win->m_pos;

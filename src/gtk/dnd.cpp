@@ -23,12 +23,7 @@
     #include "wx/gdicmn.h"
 #endif
 
-#include "wx/gtk/private.h"
-
-#include <gdk/gdkprivate.h>
-
-#include <gtk/gtkdnd.h>
-#include <gtk/gtkselection.h>
+#include <gtk/gtk.h>
 
 //----------------------------------------------------------------------------
 // global data
@@ -167,8 +162,6 @@ static void target_drag_leave( GtkWidget *WXUNUSED(widget),
                                guint WXUNUSED(time),
                                wxDropTarget *drop_target )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
-
     /* inform the wxDropTarget about the current GdkDragContext.
        this is only valid for the duration of this call */
     drop_target->SetDragContext( context );
@@ -197,8 +190,6 @@ static gboolean target_drag_motion( GtkWidget *WXUNUSED(widget),
                                     guint time,
                                     wxDropTarget *drop_target )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
-
     /* Owen Taylor: "if the coordinates not in a drop zone,
        return FALSE, otherwise call gtk_drag_status() and
        return TRUE" */
@@ -295,8 +286,6 @@ static gboolean target_drag_drop( GtkWidget *widget,
                                   guint time,
                                   wxDropTarget *drop_target )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
-
     /* Owen Taylor: "if the drop is not in a drop zone,
        return FALSE, otherwise, if you aren't accepting
        the drop, call gtk_drag_finish() with success == FALSE
@@ -402,8 +391,6 @@ static void target_drag_data_received( GtkWidget *WXUNUSED(widget),
                                        guint time,
                                        wxDropTarget *drop_target )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
-
     /* Owen Taylor: "call gtk_drag_finish() with
        success == TRUE" */
 
@@ -607,8 +594,6 @@ source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
                        guint               WXUNUSED(time),
                        wxDropSource       *drop_source )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
-
     wxDataFormat format( selection_data->target );
 
 #ifdef __WXDEBUG__
@@ -675,38 +660,6 @@ source_drag_data_get  (GtkWidget          *WXUNUSED(widget),
 }
 
 //----------------------------------------------------------------------------
-// "drag_data_delete"
-//----------------------------------------------------------------------------
-
-extern "C" {
-static void source_drag_data_delete( GtkWidget *WXUNUSED(widget),
-                                     GdkDragContext *WXUNUSED(context),
-                                     wxDropSource *WXUNUSED(drop_source) )
-{
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
-    // printf( "Drag source: drag_data_delete\n" );
-}
-}
-
-//----------------------------------------------------------------------------
-// "drag_begin"
-//----------------------------------------------------------------------------
-
-extern "C" {
-static void source_drag_begin( GtkWidget          *WXUNUSED(widget),
-                               GdkDragContext     *WXUNUSED(context),
-                               wxDropSource       *WXUNUSED(drop_source) )
-{
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
-    // printf( "Drag source: drag_begin.\n" );
-}
-}
-
-//----------------------------------------------------------------------------
 // "drag_end"
 //----------------------------------------------------------------------------
 
@@ -715,8 +668,6 @@ static void source_drag_end( GtkWidget          *WXUNUSED(widget),
                              GdkDragContext     *WXUNUSED(context),
                              wxDropSource       *drop_source )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
-
     // printf( "Drag source: drag_end.\n" );
 
     drop_source->m_waiting = false;
@@ -731,8 +682,6 @@ extern "C" {
 static gint
 gtk_dnd_window_configure_callback( GtkWidget *WXUNUSED(widget), GdkEventConfigure *WXUNUSED(event), wxDropSource *source )
 {
-    // don't need to install idle handler, its done from "event" signal
-
     source->GiveFeedback( ConvertFromGTK(source->m_dragContext->action) );
 
     return 0;
@@ -925,10 +874,6 @@ void wxDropSource::RegisterWindow()
 
     g_signal_connect (m_widget, "drag_data_get",
                       G_CALLBACK (source_drag_data_get), this);
-    g_signal_connect (m_widget, "drag_data_delete",
-                      G_CALLBACK (source_drag_data_delete), this);
-    g_signal_connect (m_widget, "drag_begin",
-                      G_CALLBACK (source_drag_begin), this);
     g_signal_connect (m_widget, "drag_end",
                       G_CALLBACK (source_drag_end), this);
 
@@ -941,12 +886,6 @@ void wxDropSource::UnregisterWindow()
 
     g_signal_handlers_disconnect_by_func (m_widget,
                                           (gpointer) source_drag_data_get,
-                                          this);
-    g_signal_handlers_disconnect_by_func (m_widget,
-                                          (gpointer) source_drag_data_delete,
-                                          this);
-    g_signal_handlers_disconnect_by_func (m_widget,
-                                          (gpointer) source_drag_begin,
                                           this);
     g_signal_handlers_disconnect_by_func (m_widget,
                                           (gpointer) source_drag_end,

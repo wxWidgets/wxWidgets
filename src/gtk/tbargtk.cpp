@@ -157,9 +157,6 @@ extern "C" {
 static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget),
                                   wxToolBarTool *tool )
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
     wxToolBar *tbar = (wxToolBar *)tool->GetToolBar();
 
     if (tbar->m_blockEvent) return;
@@ -199,8 +196,6 @@ static gint gtk_toolbar_tool_callback( GtkWidget *WXUNUSED(widget),
                                        GdkEventCrossing *gdk_event,
                                        wxToolBarTool *tool )
 {
-    // don't need to install idle handler, its done from "event" signal
-
     if (g_blockEventsOnDrag) return TRUE;
 
     wxToolBar *tb = (wxToolBar *)tool->GetToolBar();

@@ -60,8 +60,6 @@ static wxColor LightContrastColour(const wxColour& c)
 extern "C" {
 static gboolean gtk_window_own_expose_callback(GtkWidget* widget, GdkEventExpose* gdk_event, wxMiniFrame* win)
 {
-    // don't need to install idle handler, its done from "event" signal
-
     if (!win->m_hasVMT || gdk_event->count > 0)
         return false;
 
@@ -118,8 +116,6 @@ static gboolean gtk_window_own_expose_callback(GtkWidget* widget, GdkEventExpose
 extern "C" {
 static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton *gdk_event, wxMiniFrame *win )
 {
-    // don't need to install idle handler, its done from "event" signal
-
     if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return TRUE;
     if (g_blockEventsOnScroll) return TRUE;
@@ -204,8 +200,6 @@ static gint gtk_window_button_press_callback( GtkWidget *widget, GdkEventButton 
 extern "C" {
 static gint gtk_window_button_release_callback( GtkWidget *widget, GdkEventButton *gdk_event, wxMiniFrame *win )
 {
-    // don't need to install idle handler, its done from "event" signal
-
     if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return TRUE;
     if (g_blockEventsOnScroll) return TRUE;
@@ -239,8 +233,6 @@ extern "C" {
 static gboolean
 gtk_window_leave_callback( GtkWidget *widget, GdkEventCrossing *gdk_event, wxMiniFrame *win )
 {
-    // don't need to install idle handler, its done from "event" signal
-
     if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
 
@@ -258,8 +250,6 @@ extern "C" {
 static gint
 gtk_window_motion_notify_callback( GtkWidget *widget, GdkEventMotion *gdk_event, wxMiniFrame *win )
 {
-    // don't need to install idle handler, its done from "event" signal
-
     if (!win->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return TRUE;
     if (g_blockEventsOnScroll) return TRUE;

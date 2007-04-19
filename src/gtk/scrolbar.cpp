@@ -57,8 +57,6 @@ extern "C" {
 static gboolean
 gtk_button_press_event(GtkRange*, GdkEventButton*, wxScrollBar* win)
 {
-    // don't need to install idle handler, its done from "event" signal
-
     win->m_mouseButtonDown = true;
     return false;
 }
@@ -98,8 +96,6 @@ extern "C" {
 static gboolean
 gtk_button_release_event(GtkRange* range, GdkEventButton*, wxScrollBar* win)
 {
-    // don't need to install idle handler, its done from "event" signal
-
     win->m_mouseButtonDown = false;
     // If thumb tracking
     if (win->m_isScrolling)

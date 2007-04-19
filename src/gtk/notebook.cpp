@@ -26,7 +26,6 @@
 #include "wx/fontutil.h"
 
 #include "wx/gtk/private.h"
-#include "wx/gtk/win_gtk.h"
 
 #include <gdk/gdkkeysyms.h>
 
@@ -119,9 +118,6 @@ static void gtk_notebook_page_changed_callback( GtkNotebook *widget,
 extern "C" {
 static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxWindow *win )
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
     if ((win->m_x == alloc->x) &&
         (win->m_y == alloc->y) &&
         (win->m_width == alloc->width) &&
@@ -153,9 +149,6 @@ extern "C" {
 static void
 gtk_notebook_realized_callback( GtkWidget * WXUNUSED(widget), wxWindow *win )
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
     /* GTK 1.2 up to version 1.2.5 is broken so that we have to call a queue_resize
        here in order to make repositioning before showing to take effect. */
     gtk_widget_queue_resize( win->m_widget );

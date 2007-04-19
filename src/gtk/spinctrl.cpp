@@ -36,8 +36,6 @@ extern "C" {
 static void
 gtk_value_changed(GtkSpinButton* spinbutton, wxSpinCtrl* win)
 {
-    if (g_isIdle) wxapp_install_idle_handler();
-
     win->m_pos = int(gtk_spin_button_get_value(spinbutton));
     if (!win->m_hasVMT || g_blockEventsOnDrag || win->m_blockScrollEvent)
         return;
@@ -64,9 +62,6 @@ extern "C" {
 static void
 gtk_changed(GtkSpinButton* spinbutton, wxSpinCtrl* win)
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
     if (!win->m_hasVMT || win->m_blockScrollEvent)
         return;
 

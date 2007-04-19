@@ -30,8 +30,6 @@ extern "C" {
 static
 void gtk_radiobutton_clicked_callback( GtkToggleButton *button, wxRadioButton *rb )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
-
     if (!rb->m_hasVMT) return;
 
     if (g_blockEventsOnDrag) return;

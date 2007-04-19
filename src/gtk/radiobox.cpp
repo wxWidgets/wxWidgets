@@ -27,8 +27,6 @@
 #include "wx/gtk/private.h"
 #include <gdk/gdkkeysyms.h>
 
-#include "wx/gtk/win_gtk.h"
-
 //-----------------------------------------------------------------------------
 // wxGTKRadioButtonInfo
 //-----------------------------------------------------------------------------
@@ -60,8 +58,6 @@ extern bool          g_blockEventsOnDrag;
 extern "C" {
 static void gtk_radiobutton_clicked_callback( GtkToggleButton *button, wxRadioBox *rb )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
-
     if (!rb->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
 
@@ -82,8 +78,6 @@ static void gtk_radiobutton_clicked_callback( GtkToggleButton *button, wxRadioBo
 extern "C" {
 static gint gtk_radiobox_keypress_callback( GtkWidget *widget, GdkEventKey *gdk_event, wxRadioBox *rb )
 {
-    // don't need to install idle handler, its done from "event" signal
-
     if (!rb->m_hasVMT) return FALSE;
     if (g_blockEventsOnDrag) return FALSE;
 

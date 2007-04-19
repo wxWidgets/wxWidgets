@@ -20,11 +20,8 @@
     #include "wx/cursor.h"
 #endif // WX_PRECOMP
 
-#include <gdk/gdk.h>
 #include <gtk/gtk.h>
-#include <gdk/gdkkeysyms.h>
 
-#include "wx/gtk/private.h" //for idle stuff
 #include "wx/gtk/win_gtk.h"
 
 //-----------------------------------------------------------------------------
@@ -72,9 +69,6 @@ static gint gtk_popup_button_press (GtkWidget *widget, GdkEvent *gdk_event, wxPo
 extern "C" {
 bool gtk_dialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxPopupWindow *win )
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
     if (win->IsEnabled())
         win->Close();
 
@@ -93,9 +87,6 @@ extern "C" {
 static gint
 gtk_dialog_realized_callback( GtkWidget * WXUNUSED(widget), wxPopupWindow *win )
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
     /* all this is for Motif Window Manager "hints" and is supposed to be
        recognized by other WM as well. not tested. */
     long decor = (long) GDK_DECOR_BORDER;

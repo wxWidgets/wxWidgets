@@ -19,7 +19,7 @@
     #include "wx/colour.h"
 #endif // WX_PRECOMP
 
-#include "wx/gtk/private.h" //for idle stuff
+#include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------
 // wxCursor
@@ -431,8 +431,6 @@ bool wxIsBusy()
 
 void wxSetCursor( const wxCursor& cursor )
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
     g_globalCursor = cursor;
+    wxTheApp->WakeUpIdle();
 }

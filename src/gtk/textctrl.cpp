@@ -298,9 +298,6 @@ gtk_insert_text_callback(GtkEditable *editable,
                          gint *position,
                          wxTextCtrl *win)
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
     // we should only be called if we have a max len limit at all
     GtkEntry *entry = GTK_ENTRY (editable);
 
@@ -546,9 +543,6 @@ gtk_text_changed_callback( GtkWidget *widget, wxTextCtrl *win )
         return;
 
     if (!win->m_hasVMT) return;
-
-    if (g_isIdle)
-        wxapp_install_idle_handler();
 
     if ( win->MarkDirtyOnChange() )
         win->MarkDirty();

@@ -23,8 +23,6 @@
 #include "wx/notebook.h"
 #include "wx/gtk/private.h"
 
-#include <glib.h>
-#include <gdk/gdk.h>
 #include <gtk/gtk.h>
 #include "wx/gtk/win_gtk.h"
 
@@ -49,9 +47,6 @@ gtk_mdi_page_change_callback( GtkNotebook *WXUNUSED(widget),
                               gint WXUNUSED(page_num),
                               wxMDIParentFrame *parent )
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
     // send deactivate event to old child
 
     wxMDIChildFrame *child = parent->GetActiveChild();
@@ -441,8 +436,6 @@ void wxMDIChildFrame::SetTitle( const wxString &title )
 extern "C" {
 static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxWindow *win )
 {
-    if (g_isIdle) wxapp_install_idle_handler();
-
     if ((win->m_x == alloc->x) &&
         (win->m_y == alloc->y) &&
         (win->m_width == alloc->width) &&

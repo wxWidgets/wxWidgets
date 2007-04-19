@@ -55,16 +55,6 @@ bool   g_mainThreadLocked = false;
 static GtkWidget *gs_RootWindow = (GtkWidget*) NULL;
 
 //-----------------------------------------------------------------------------
-// idle system
-//-----------------------------------------------------------------------------
-
-void wxapp_install_idle_handler();
-
-#if wxUSE_THREADS
-static wxMutex gs_idleTagsMutex;
-#endif
-
-//-----------------------------------------------------------------------------
 // wxYield
 //-----------------------------------------------------------------------------
 
@@ -95,17 +85,13 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
     wxIsInsideYield = true;
 
-    // We need to remove idle callbacks or the loop will
-    // never finish.
-    SuspendIdleCallback();
-
 #if wxUSE_LOG
     // disable log flushing from here because a call to wxYield() shouldn't
     // normally result in message boxes popping up &c
     wxLog::Suspend();
 #endif
 
-    while (gtk_events_pending())
+    while (EventsPending())
         gtk_main_iteration();
 
     // It's necessary to call ProcessIdle() to update the frames sizes which
@@ -127,118 +113,112 @@ bool wxApp::Yield(bool onlyIfNeeded)
 }
 
 //-----------------------------------------------------------------------------
-// wxWakeUpIdle
-//-----------------------------------------------------------------------------
-
-// RR/KH: No wxMutexGui calls are needed here according to the GTK faq,
-// http://www.gtk.org/faq/#AEN500 - this caused problems for wxPostEvent.
-
-void wxApp::WakeUpIdle()
-{
-    wxapp_install_idle_handler();
-}
-
-//-----------------------------------------------------------------------------
 // local functions
 //-----------------------------------------------------------------------------
 
-// the callback functions must be extern "C" to comply with GTK+ declarations
-extern "C"
-{
-
-// One-shot emission hook for "event" signal, to install idle handler.
-// This will be called when the "event" signal is issued on any GtkWidget object.
+// One-shot signal emission hook, to install idle handler.
+extern "C" {
 static gboolean
-event_emission_hook(GSignalInvocationHint*, guint, const GValue*, gpointer)
+wx_emission_hook(GSignalInvocationHint*, guint, const GValue*, gpointer data)
 {
-    wxapp_install_idle_handler();
+    wxApp* app = wxTheApp;
+    if (app != NULL)
+        app->WakeUpIdle();
+    gulong* hook_id = (gulong*)data;
+    // record that hook is not installed
+    *hook_id = 0;
     // remove hook
     return false;
 }
+}
 
-// add emission hook for "event" signal, to re-install idle handler when needed
-static inline void wxAddEmissionHook()
+// Add signal emission hooks, to re-install idle handler when needed.
+static void wx_add_idle_hooks()
 {
-    GType widgetType = GTK_TYPE_WIDGET;
-    // if GtkWidget type is loaded
-    if (g_type_class_peek(widgetType) != NULL)
+    // "event" hook
     {
-        guint sig_id = g_signal_lookup("event", widgetType);
-        g_signal_add_emission_hook(sig_id, 0, event_emission_hook, NULL, NULL);
+        static gulong hook_id = 0;
+        if (hook_id == 0)
+        {
+            static guint sig_id = 0;
+            if (sig_id == 0)
+                sig_id = g_signal_lookup("event", GTK_TYPE_WIDGET);
+            hook_id = g_signal_add_emission_hook(
+                sig_id, 0, wx_emission_hook, &hook_id, NULL);
+        }
+    }
+    // "size_allocate" hook
+    // Needed to match the behavior of the old idle system,
+    // but probably not necessary.
+    {
+        static gulong hook_id = 0;
+        if (hook_id == 0)
+        {
+            static guint sig_id = 0;
+            if (sig_id == 0)
+                sig_id = g_signal_lookup("size_allocate", GTK_TYPE_WIDGET);
+            hook_id = g_signal_add_emission_hook(
+                sig_id, 0, wx_emission_hook, &hook_id, NULL);
+        }
     }
 }
 
-static gint wxapp_idle_callback( gpointer WXUNUSED(data) )
+extern "C" {
+static gboolean wxapp_idle_callback(gpointer)
 {
-    // this does not look possible, but just in case...
-    if (!wxTheApp)
-        return false;
+    return wxTheApp->DoIdle();
+}
+}
 
-    bool moreIdles = false;
-
+bool wxApp::DoIdle()
+{
+    guint id_save;
+    {
+        // Allow another idle source to be added while this one is busy.
+        // Needed if an idle event handler runs a new event loop,
+        // for example by showing a dialog.
+#if wxUSE_THREADS
+        wxMutexLocker lock(*m_idleMutex);
+#endif
+        id_save = m_idleSourceId;
+        m_idleSourceId = 0;
+        wx_add_idle_hooks();
 #ifdef __WXDEBUG__
-    // don't generate the idle events while the assert modal dialog is shown,
-    // this matches the behavior of wxMSW
-    if (!wxTheApp->IsInAssert())
-#endif // __WXDEBUG__
-    {
-        guint idleID_save;
-        {
-            // Allow another idle source to be added while this one is busy.
-            // Needed if an idle event handler runs a new event loop,
-            // for example by showing a dialog.
-#if wxUSE_THREADS
-            wxMutexLocker lock(gs_idleTagsMutex);
+        // don't generate the idle events while the assert modal dialog is shown,
+        // this matches the behavior of wxMSW
+        if (m_isInAssert)
+            return false;
 #endif
-            idleID_save = wxTheApp->m_idleTag;
-            wxTheApp->m_idleTag = 0;
-            g_isIdle = true;
-            wxAddEmissionHook();
-        }
-
-        // When getting called from GDK's time-out handler
-        // we are no longer within GDK's grab on the GUI
-        // thread so we must lock it here ourselves.
-        gdk_threads_enter();
-
-        // Send idle event to all who request them as long as
-        // no events have popped up in the event queue.
-        do {
-            moreIdles = wxTheApp->ProcessIdle();
-        } while (moreIdles && gtk_events_pending() == 0);
-
-        // Release lock again
-        gdk_threads_leave();
-
-        {
-            // If another idle source was added, remove it
-#if wxUSE_THREADS
-            wxMutexLocker lock(gs_idleTagsMutex);
-#endif
-            if (wxTheApp->m_idleTag != 0)
-                g_source_remove(wxTheApp->m_idleTag);
-            wxTheApp->m_idleTag = idleID_save;
-            g_isIdle = false;
-        }
     }
 
-    if (!moreIdles)
-    {
+    gdk_threads_enter();
+    bool needMore;
+    do {
+        needMore = ProcessIdle();
+    } while (needMore && gtk_events_pending() == 0);
+    gdk_threads_leave();
+
 #if wxUSE_THREADS
-        wxMutexLocker lock(gs_idleTagsMutex);
+    wxMutexLocker lock(*m_idleMutex);
 #endif
-        // Indicate that we are now in idle mode and event handlers
-        // will have to reinstall the idle handler again.
-        g_isIdle = true;
-        wxTheApp->m_idleTag = 0;
-
-        wxAddEmissionHook();
+    // if a new idle source was added during ProcessIdle
+    if (m_idleSourceId != 0)
+    {
+        // remove it
+        g_source_remove(m_idleSourceId);
+        m_idleSourceId = 0;
     }
-
-    // Return FALSE if no more idle events are to be sent
-    return moreIdles;
+    // if more idle processing requested
+    if (needMore)
+    {
+        // keep this source installed
+        m_idleSourceId = id_save;
+        return true;
+    }
+    // add hooks and remove this source
+    wx_add_idle_hooks();
+    return false;
 }
-} // extern "C"
 
 #if wxUSE_THREADS
 
@@ -264,37 +244,6 @@ static gint wxapp_poll_func( GPollFD *ufds, guint nfds, gint timeout )
 }
 
 #endif // wxUSE_THREADS
-
-void wxapp_install_idle_handler()
-{
-    if (wxTheApp == NULL)
-        return;
-
-#if wxUSE_THREADS
-    wxMutexLocker lock(gs_idleTagsMutex);
-#endif
-
-    // Don't install the handler if it's already installed. This test *MUST*
-    // be done when gs_idleTagsMutex is locked!
-    if (!g_isIdle)
-        return;
-
-    // GD: this assert is raised when using the thread sample (which works)
-    //     so the test is probably not so easy. Can widget callbacks be
-    //     triggered from child threads and, if so, for which widgets?
-    // wxASSERT_MSG( wxThread::IsMain() || gs_WakeUpIdle, wxT("attempt to install idle handler from widget callback in child thread (should be exclusively from wxWakeUpIdle)") );
-
-    wxASSERT_MSG( wxTheApp->m_idleTag == 0, wxT("attempt to install idle handler twice") );
-
-    g_isIdle = false;
-
-    // This routine gets called by all event handlers
-    // indicating that the idle is over. It may also
-    // get called from other thread for sending events
-    // to the main thread (and processing these in
-    // idle time). Very low priority.
-    wxTheApp->m_idleTag = g_idle_add_full(G_PRIORITY_LOW, wxapp_idle_callback, NULL, NULL);
-}
 
 //-----------------------------------------------------------------------------
 // Access to the root window global
@@ -325,16 +274,14 @@ wxApp::wxApp()
 #ifdef __WXDEBUG__
     m_isInAssert = false;
 #endif // __WXDEBUG__
-
-    m_idleTag = 0;
-    g_isIdle = true;
-    wxapp_install_idle_handler();
+#if wxUSE_THREADS
+    m_idleMutex = NULL;
+#endif
+    m_idleSourceId = 0;
 }
 
 wxApp::~wxApp()
 {
-    if (m_idleTag)
-        g_source_remove( m_idleTag );
 }
 
 bool wxApp::OnInitGui()
@@ -518,14 +465,55 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     wxFont::SetDefaultEncoding(wxLocale::GetSystemEncoding());
 #endif
 
+#if wxUSE_THREADS
+    m_idleMutex = new wxMutex;
+#endif
+    // make sure GtkWidget type is loaded, idle hooks need it
+    g_type_class_ref(GTK_TYPE_WIDGET);
+    WakeUpIdle();
+
     return true;
 }
 
 void wxApp::CleanUp()
 {
+    if (m_idleSourceId != 0)
+        g_source_remove(m_idleSourceId);
+#if wxUSE_THREADS
+    delete m_idleMutex;
+    m_idleMutex = NULL;
+#endif
+    // release reference acquired by Initialize()
+    g_type_class_unref(g_type_class_peek(GTK_TYPE_WIDGET));
+
     gdk_threads_leave();
 
     wxAppBase::CleanUp();
+}
+
+void wxApp::WakeUpIdle()
+{
+#if wxUSE_THREADS
+    wxMutexLocker lock(*m_idleMutex);
+#endif
+    if (m_idleSourceId == 0)
+        m_idleSourceId = g_idle_add_full(G_PRIORITY_LOW, wxapp_idle_callback, NULL, NULL);
+}
+
+// Checking for pending events requires first removing our idle source,
+// otherwise it will cause the check to always return true.
+bool wxApp::EventsPending()
+{
+#if wxUSE_THREADS
+    wxMutexLocker lock(*m_idleMutex);
+#endif
+    if (m_idleSourceId != 0)
+    {
+        g_source_remove(m_idleSourceId);
+        m_idleSourceId = 0;
+        wx_add_idle_hooks();
+    }
+    return gtk_events_pending() != 0;
 }
 
 #ifdef __WXDEBUG__
@@ -546,17 +534,3 @@ void wxApp::OnAssertFailure(const wxChar *file,
 }
 
 #endif // __WXDEBUG__
-
-void wxApp::SuspendIdleCallback()
-{
-#if wxUSE_THREADS
-    wxMutexLocker lock(gs_idleTagsMutex);
-#endif
-    if (m_idleTag != 0)
-    {
-        g_source_remove(m_idleTag);
-        m_idleTag = 0;
-        g_isIdle = true;
-        wxAddEmissionHook();
-    }
-}

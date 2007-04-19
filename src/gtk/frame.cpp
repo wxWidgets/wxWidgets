@@ -18,7 +18,7 @@
     #include "wx/statusbr.h"
 #endif // WX_PRECOMP
 
-#include "wx/gtk/private.h"
+#include <gtk/gtk.h>
 #include "wx/gtk/win_gtk.h"
 
 // ----------------------------------------------------------------------------
@@ -65,9 +65,6 @@ static void gtk_menu_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *
 extern "C" {
 static void gtk_menu_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrame *win )
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
     if (!win->m_hasVMT) return;
 
     // Raise the client area area
@@ -102,9 +99,6 @@ static void gtk_toolbar_attached_callback( GtkWidget *WXUNUSED(widget), GtkWidge
 extern "C" {
 static void gtk_toolbar_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidget *WXUNUSED(child), wxFrame *win )
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
     if (!win->m_hasVMT) return;
 
     // Raise the client area area

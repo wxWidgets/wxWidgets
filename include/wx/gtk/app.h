@@ -14,8 +14,9 @@
 // classes
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxApp;
-class WXDLLIMPEXP_BASE wxLog;
+#if wxUSE_THREADS
+class WXDLLIMPEXP_BASE wxMutex;
+#endif
 
 //-----------------------------------------------------------------------------
 // wxApp
@@ -40,16 +41,12 @@ public:
     virtual bool Initialize(int& argc, wxChar **argv);
     virtual void CleanUp();
 
-    static bool InitialzeVisual();
-
 #ifdef __WXDEBUG__
     virtual void OnAssertFailure(const wxChar *file,
                                  int line,
                                  const wxChar *func,
                                  const wxChar *cond,
                                  const wxChar *msg);
-
-    bool IsInAssert() const { return m_isInAssert; }
 #endif // __WXDEBUG__
 
     // GTK-specific methods
@@ -65,19 +62,23 @@ public:
     // implementation only from now on
     // -------------------------------
 
-    guint m_idleTag;
-    // temporarily disable idle events
-    void SuspendIdleCallback();
-
     // This returns the current visual: either that used by wxRootWindow
     // or the XVisualInfo* for SGI.
     GdkVisual      *GetGdkVisual();
+
+    // check for pending events, without interference from our idle source
+    bool EventsPending();
+    bool DoIdle();
 
 private:
     // true if we're inside an assert modal dialog
 #ifdef __WXDEBUG__
     bool m_isInAssert;
 #endif // __WXDEBUG__
+#if wxUSE_THREADS
+    wxMutex* m_idleMutex;
+#endif
+    guint m_idleSourceId;
 
     DECLARE_DYNAMIC_CLASS(wxApp)
     DECLARE_EVENT_TABLE()

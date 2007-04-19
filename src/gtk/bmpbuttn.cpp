@@ -14,7 +14,7 @@
 
 #include "wx/bmpbuttn.h"
 
-#include "wx/gtk/private.h"
+#include <gtk/gtk.h>
 
 //-----------------------------------------------------------------------------
 // classes
@@ -35,9 +35,6 @@ extern bool   g_blockEventsOnDrag;
 extern "C" {
 static void gtk_bmpbutton_clicked_callback( GtkWidget *WXUNUSED(widget), wxBitmapButton *button )
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
     if (!button->m_hasVMT) return;
     if (g_blockEventsOnDrag) return;
 

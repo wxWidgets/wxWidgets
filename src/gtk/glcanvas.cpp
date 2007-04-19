@@ -23,15 +23,10 @@
     #include "wx/module.h"
 #endif // WX_PRECOMP
 
-extern "C"
-{
-#include "gtk/gtk.h"
-#include "gdk/gdk.h"
-#include "gdk/gdkx.h"
-}
+#include <gtk/gtk.h>
+#include <gdk/gdkx.h>
 
 #include "wx/gtk/win_gtk.h"
-#include "wx/gtk/private.h"
 
 #if WXWIN_COMPATIBILITY_2_8
 
@@ -78,8 +73,6 @@ extern "C" {
 static gboolean
 gtk_glwindow_expose_callback( GtkWidget *WXUNUSED(widget), GdkEventExpose *gdk_event, wxGLCanvas *win )
 {
-    // don't need to install idle handler, its done from "event" signal
-
     win->m_exposed = true;
 
     win->GetUpdateRegion().Union( gdk_event->area.x,
@@ -98,9 +91,6 @@ extern "C" {
 static void
 gtk_glcanvas_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxGLCanvas *win )
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
     if (!win->m_hasVMT)
         return;
 

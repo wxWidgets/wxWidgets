@@ -112,8 +112,6 @@ static gboolean gtk_frame_focus_in_callback( GtkWidget *widget,
                                          GdkEvent *WXUNUSED(event),
                                          wxTopLevelWindowGTK *win )
 {
-    // don't need to install idle handler, its done from "event" signal
-
     switch ( g_sendActivateEvent )
     {
         case -1:
@@ -173,8 +171,6 @@ static gboolean gtk_frame_focus_out_callback( GtkWidget *widget,
                                           GdkEventFocus *WXUNUSED(gdk_event),
                                           wxTopLevelWindowGTK *win )
 {
-    // don't need to install idle handler, its done from "event" signal
-
     // if the focus goes out of our app alltogether, OnIdle() will send
     // wxActivateEvent, otherwise gtk_window_focus_in_callback() will reset
     // g_sendActivateEvent to -1
@@ -205,9 +201,6 @@ static gboolean gtk_frame_focus_out_callback( GtkWidget *widget,
 extern "C" {
 static void gtk_frame_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxTopLevelWindowGTK *win )
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
     if (!win->m_hasVMT)
         return;
 
@@ -260,8 +253,6 @@ gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget),
                            GdkEvent *WXUNUSED(event),
                            wxTopLevelWindowGTK *win )
 {
-    // don't need to install idle handler, its done from "event" signal
-
     if (win->IsEnabled() &&
         (g_openDialogs == 0 || (win->GetExtraStyle() & wxTOPLEVEL_EX_DIALOG) ||
          win->IsGrabbed()))
@@ -282,8 +273,6 @@ gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget),
                               GdkEventConfigure *WXUNUSED(event),
                               wxTopLevelWindowGTK *win )
 {
-    // don't need to install idle handler, its done from "event" signal
-
     if (!win->m_hasVMT || !win->IsShown())
         return FALSE;
 
@@ -314,9 +303,6 @@ static void
 gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget),
                              wxTopLevelWindowGTK *win )
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
     // All this is for Motif Window Manager "hints" and is supposed to be
     // recognized by other WM as well. Not tested.
     gdk_window_set_decorations(win->m_widget->window,
@@ -1119,8 +1105,6 @@ void wxTopLevelWindowGTK::OnInternalIdle()
         GtkOnSize();
 
         // we'll come back later
-        if (g_isIdle)
-            wxapp_install_idle_handler();
         return;
     }
 

@@ -32,8 +32,6 @@ extern "C" {
 static
 bool gtk_fontdialog_delete_callback( GtkWidget *WXUNUSED(widget), GdkEvent *WXUNUSED(event), wxDialog *win )
 {
-    // don't need to install idle handler, its done from "event" signal
-
 /*
     printf( "OnDelete from " );
     if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
@@ -55,9 +53,6 @@ extern "C" {
 static
 void gtk_fontdialog_ok_callback( GtkWidget *WXUNUSED(widget), wxFontDialog *dialog )
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
     GtkFontSelectionDialog *fontdlg = GTK_FONT_SELECTION_DIALOG(dialog->m_widget);
 
     wxGtkString fontname(gtk_font_selection_dialog_get_font_name(fontdlg));
@@ -77,9 +72,6 @@ extern "C" {
 static
 void gtk_fontdialog_cancel_callback( GtkWidget *WXUNUSED(w), wxFontDialog *dialog )
 {
-    if (g_isIdle)
-        wxapp_install_idle_handler();
-
     wxCommandEvent event(wxEVT_COMMAND_BUTTON_CLICKED, wxID_CANCEL);
     event.SetEventObject( dialog );
     dialog->GetEventHandler()->ProcessEvent( event );

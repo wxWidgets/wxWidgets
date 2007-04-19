@@ -40,9 +40,6 @@ extern bool   g_blockEventsOnDrag;
 extern "C" {
 static void gtk_choice_clicked_callback( GtkWidget *WXUNUSED(widget), wxChoice *choice )
 {
-    if (g_isIdle)
-      wxapp_install_idle_handler();
-
     if (!choice->m_hasVMT) return;
 
     if (g_blockEventsOnDrag) return;

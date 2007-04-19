@@ -98,14 +98,14 @@ void wxEventLoop::Exit(int rc)
 
 bool wxEventLoop::Pending() const
 {
-    if (wxTheApp)
-    {
-        // We need to remove idle callbacks or gtk_events_pending will
-        // never return false.
-        wxTheApp->SuspendIdleCallback();
-    }
-
-    return gtk_events_pending();
+    bool pending;
+    wxApp* app = wxTheApp;
+    if (app != NULL)
+        // app->EventsPending() avoids false positives from our idle source
+        pending = app->EventsPending();
+    else
+        pending = gtk_events_pending() != 0;
+    return pending;
 }
 
 bool wxEventLoop::Dispatch()
