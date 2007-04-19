@@ -787,7 +787,10 @@ private:
   static wxString FromImpl(const wxStringImpl& src)
       { return wxString((CtorFromStringImplTag*)NULL, src); }
 #else
+  #if !wxUSE_STL_BASED_WXSTRING
   wxString(const wxStringImpl& src) : m_impl(src) { }
+  // else: already defined as wxString(wxStdString) below
+  #endif
   static wxString FromImpl(const wxStringImpl& src) { return wxString(src); }
 #endif
 
