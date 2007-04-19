@@ -17,6 +17,8 @@
 
 #include <stdlib.h>             // malloc() and free()
 
+class WXDLLIMPEXP_BASE wxCStrData;
+
 inline char *wxStrDup(const char *s) { return wxStrdupA(s); }
 #if wxUSE_WCHAR_T
     inline wchar_t *wxStrDup(const wchar_t *ws) { return wxStrdupW(ws); }
