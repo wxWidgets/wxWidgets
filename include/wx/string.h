@@ -56,6 +56,7 @@
 #include "wx/buffer.h"      // for wxCharBuffer
 #include "wx/strconv.h"     // for wxConvertXXX() macros and wxMBConv classes
 #include "wx/stringimpl.h"
+#include "wx/stringops.h"
 #include "wx/unichar.h"
 
 class WXDLLIMPEXP_BASE wxString;
@@ -373,7 +374,6 @@ private:
 
   // buffer for holding temporary substring when using any of the methods
   // that take (char*,size_t) or (wchar_t*,size_t) arguments:
-  // FIXME-UTF8: This will need changes when UTF8 build is introduced
   template<typename T>
   struct SubstrBufFromType
   {
@@ -441,28 +441,6 @@ private:
     { return ConvertStr(str, n, wxConvLibc); }
   #endif
 
-  // moves the iterator to the next Unicode character
-  static void IncIter(wxStringImpl::iterator& i) { ++i; }
-  static void IncIter(wxStringImpl::const_iterator& i) { ++i; }
-  // moves the iterator to the previous Unicode character
-  static void DecIter(wxStringImpl::iterator& i) { --i; }
-  static void DecIter(wxStringImpl::const_iterator& i) { --i; }
-  // moves the iterator by n Unicode characters
-  static wxStringImpl::iterator AddToIter(wxStringImpl::iterator i, int n)
-    { return i + n; }
-  static wxStringImpl::const_iterator AddToIter(wxStringImpl::const_iterator i, int n)
-    { return i + n; }
-  // returns distance of the two iterators in Unicode characters
-  static int DiffIters(wxStringImpl::iterator i1, wxStringImpl::iterator i2)
-    { return i1 - i2; }
-  static int DiffIters(wxStringImpl::const_iterator i1, wxStringImpl::const_iterator i2)
-    { return i1 - i2; }
-
-  // encodes the character to a form used to represent it in internal
-  // representation (returns a string in UTF8 version)
-  static wxChar EncodeChar(wxUniChar ch) { return (wxChar)ch; }
-  static wxUniChar DecodeChar(wxStringImpl::const_iterator i) { return *i; }
-
   // translates position index in wxString to/from index in underlying
   // wxStringImpl:
   static size_t PosToImpl(size_t pos) { return pos; }
@@ -474,55 +452,20 @@ private:
 
 #else // wxUSE_UNICODE_UTF8
 
-  // checks correctness of UTF-8 sequence
-  static bool IsValidUtf8String(const char *c);
-#ifdef __WXDEBUG__
-  static bool IsValidUtf8LeadByte(unsigned char c);
-#endif
+  // FIXME-UTF8: return as-is without copying under UTF8 locale, return
+  //             converted string under other locales - needs wxCharBuffer
+  //             changes
+  static wxCharBuffer ImplStr(const char* str,
+                              const wxMBConv& conv = wxConvLibc)
+    { return ConvertStr(str, npos, conv).data; }
+  static SubstrBufFromMB ImplStr(const char* str, size_t n,
+                                 const wxMBConv& conv = wxConvLibc)
+    { return ConvertStr(str, n, conv); }
 
-  // table of offsets to skip forward when iterating
-  static unsigned char ms_utf8IterTable[256];
-
-  static void IncIter(wxStringImpl::iterator& i)
-  {
-      wxASSERT( IsValidUtf8LeadByte(*i) );
-      i += ms_utf8IterTable[(unsigned char)*i];
-  }
-  static void IncIter(wxStringImpl::const_iterator& i)
-  {
-      wxASSERT( IsValidUtf8LeadByte(*i) );
-      i += ms_utf8IterTable[(unsigned char)*i];
-  }
-
-  static void DecIter(wxStringImpl::iterator& i);
-  static void DecIter(wxStringImpl::const_iterator& i);
-  static wxStringImpl::iterator AddToIter(wxStringImpl::iterator i, int n);
-  static wxStringImpl::const_iterator AddToIter(wxStringImpl::const_iterator i, int n);
-  static int DiffIters(wxStringImpl::const_iterator i1, wxStringImpl::const_iterator i2);
-  static int DiffIters(wxStringImpl::iterator i1, wxStringImpl::iterator i2);
-
-  struct Utf8CharBuffer
-  {
-      char data[5];
-      operator const char*() const { return data; }
-  };
-  static Utf8CharBuffer EncodeChar(wxUniChar ch);
-  // returns n copies of ch encoded in UTF-8 string
-  static wxCharBuffer EncodeNChars(size_t n, wxUniChar ch);
-
-  // returns the length of UTF-8 encoding of the character with lead byte 'c'
-  static size_t GetUtf8CharLength(char c)
-  {
-      wxASSERT( IsValidUtf8LeadByte(c) );
-      return ms_utf8IterTable[(unsigned char)c];
-  }
-
-  // decodes single UTF-8 character from UTF-8 string
-  // FIXME-UTF8: move EncodeChar/DecodeChar and other operations to separate
-  //             class
-  static wxUniChar DecodeChar(wxStringImpl::const_iterator i)
-    { return wxUniCharRef::DecodeChar(i); }
-  friend class WXDLLIMPEXP_BASE wxUniCharRef;
+  static wxCharBuffer ImplStr(const wchar_t* str)
+    { return ConvertStr(str, npos, wxConvUTF8).data; }
+  static SubstrBufFromWC ImplStr(const wchar_t* str, size_t n)
+    { return ConvertStr(str, n, wxConvUTF8); }
 
   size_t PosToImpl(size_t pos) const
   {
@@ -548,21 +491,6 @@ private:
       else
           return const_iterator(m_impl.begin() + pos) - begin();
   }
-
-  // FIXME-UTF8: return as-is without copying under UTF8 locale, return
-  //             converted string under other locales - needs wxCharBuffer
-  //             changes
-  static wxCharBuffer ImplStr(const char* str,
-                              const wxMBConv& conv = wxConvLibc)
-    { return ConvertStr(str, npos, conv).data; }
-  static SubstrBufFromMB ImplStr(const char* str, size_t n,
-                                 const wxMBConv& conv = wxConvLibc)
-    { return ConvertStr(str, n, conv); }
-
-  static wxCharBuffer ImplStr(const wchar_t* str)
-    { return ConvertStr(str, npos, wxConvUTF8).data; }
-  static SubstrBufFromWC ImplStr(const wchar_t* str, size_t n)
-    { return ConvertStr(str, n, wxConvUTF8); }
 #endif // !wxUSE_UNICODE_UTF8/wxUSE_UNICODE_UTF8
 
 public:
@@ -602,33 +530,45 @@ public:
           reference operator[](size_t n) const { return *(*this + n); }     \
                                                                             \
           iterator_name& operator++()                                       \
-            { wxString::IncIter(m_cur); return *this; }                     \
+            { wxStringOperations::IncIter(m_cur); return *this; }           \
           iterator_name& operator--()                                       \
-            { wxString::DecIter(m_cur); return *this; }                     \
+            { wxStringOperations::DecIter(m_cur); return *this; }           \
           iterator_name operator++(int)                                     \
           {                                                                 \
               iterator_name tmp = *this;                                    \
-              wxString::IncIter(m_cur);                                     \
+              wxStringOperations::IncIter(m_cur);                           \
               return tmp;                                                   \
           }                                                                 \
           iterator_name operator--(int)                                     \
           {                                                                 \
               iterator_name tmp = *this;                                    \
-              wxString::DecIter(m_cur);                                     \
+              wxStringOperations::DecIter(m_cur);                           \
               return tmp;                                                   \
           }                                                                 \
                                                                             \
           iterator_name& operator+=(int n)                                  \
-            { m_cur = wxString::AddToIter(m_cur, n); return *this; }        \
+          {                                                                 \
+              m_cur = wxStringOperations::AddToIter(m_cur, n);              \
+              return *this;                                                 \
+          }                                                                 \
           iterator_name& operator+=(size_t n)                               \
-            { m_cur = wxString::AddToIter(m_cur, (int)n); return *this; }   \
+          {                                                                 \
+              m_cur = wxStringOperations::AddToIter(m_cur, (int)n);         \
+              return *this;                                                 \
+          }                                                                 \
           iterator_name& operator-=(int n)                                  \
-            { m_cur = wxString::AddToIter(m_cur, -n); return *this; }       \
+          {                                                                 \
+              m_cur = wxStringOperations::AddToIter(m_cur, -n);             \
+              return *this;                                                 \
+          }                                                                 \
           iterator_name& operator-=(size_t n)                               \
-            { m_cur = wxString::AddToIter(m_cur, -(int)n); return *this; }  \
+          {                                                                 \
+              m_cur = wxStringOperations::AddToIter(m_cur, -(int)n);        \
+              return *this;                                                 \
+          }                                                                 \
                                                                             \
           difference_type operator-(const iterator_name& i) const           \
-            { return wxString::DiffIters(m_cur, i.m_cur); }                 \
+            { return wxStringOperations::DiffIters(m_cur, i.m_cur); }       \
                                                                             \
           bool operator==(const iterator_name& i) const                     \
             { return m_cur == i.m_cur; }                                    \
@@ -672,13 +612,13 @@ public:
       iterator(const iterator& i) : m_cur(i.m_cur), m_str(i.m_str) {}
 
       iterator operator+(int n) const
-        { return iterator(m_str, wxString::AddToIter(m_cur, n)); }
+        { return iterator(m_str, wxStringOperations::AddToIter(m_cur, n)); }
       iterator operator+(size_t n) const
-        { return iterator(m_str, wxString::AddToIter(m_cur, (int)n)); }
+        { return iterator(m_str, wxStringOperations::AddToIter(m_cur, (int)n)); }
       iterator operator-(int n) const
-        { return iterator(m_str, wxString::AddToIter(m_cur, -n)); }
+        { return iterator(m_str, wxStringOperations::AddToIter(m_cur, -n)); }
       iterator operator-(size_t n) const
-        { return iterator(m_str, wxString::AddToIter(m_cur, -(int)n)); }
+        { return iterator(m_str, wxStringOperations::AddToIter(m_cur, -(int)n)); }
 
   private:
       iterator(wxString *str, underlying_iterator ptr)
@@ -705,13 +645,13 @@ public:
       iterator(const iterator& i) : m_cur(i.m_cur) {}
 
       iterator operator+(int n) const
-        { return iterator(wxString::AddToIter(m_cur, n)); }
+        { return iterator(wxStringOperations::AddToIter(m_cur, n)); }
       iterator operator+(size_t n) const
-        { return iterator(wxString::AddToIter(m_cur, (int)n)); }
+        { return iterator(wxStringOperations::AddToIter(m_cur, (int)n)); }
       iterator operator-(int n) const
-        { return iterator(wxString::AddToIter(m_cur, -n)); }
+        { return iterator(wxStringOperations::AddToIter(m_cur, -n)); }
       iterator operator-(size_t n) const
-        { return iterator(wxString::AddToIter(m_cur, -(int)n)); }
+        { return iterator(wxStringOperations::AddToIter(m_cur, -(int)n)); }
 
   private:
       // for internal wxString use only:
@@ -727,20 +667,20 @@ public:
       // NB: reference_type is intentionally value, not reference, the character
       //     may be encoded differently in wxString data:
       WX_STR_ITERATOR_IMPL(const_iterator, const wxChar*, wxUniChar,
-                           wxString::DecodeChar(m_cur));
+                           wxStringOperations::DecodeChar(m_cur));
 
   public:
       const_iterator(const const_iterator& i) : m_cur(i.m_cur) {}
       const_iterator(const iterator& i) : m_cur(i.m_cur) {}
 
       const_iterator operator+(int n) const
-        { return const_iterator(wxString::AddToIter(m_cur, n)); }
+        { return const_iterator(wxStringOperations::AddToIter(m_cur, n)); }
       const_iterator operator+(size_t n) const
-        { return const_iterator(wxString::AddToIter(m_cur, (int)n)); }
+        { return const_iterator(wxStringOperations::AddToIter(m_cur, (int)n)); }
       const_iterator operator-(int n) const
-        { return const_iterator(wxString::AddToIter(m_cur, -n)); }
+        { return const_iterator(wxStringOperations::AddToIter(m_cur, -n)); }
       const_iterator operator-(size_t n) const
-        { return const_iterator(wxString::AddToIter(m_cur, -(int)n)); }
+        { return const_iterator(wxStringOperations::AddToIter(m_cur, -(int)n)); }
 
   private:
       // for internal wxString use only:
@@ -1217,7 +1157,7 @@ public:
     { return *this = cstr.AsString(); }
     // from a character
   wxString& operator=(wxUniChar ch)
-    { m_impl = EncodeChar(ch); return *this; }
+    { m_impl = wxStringOperations::EncodeChar(ch); return *this; }
   wxString& operator=(wxUniCharRef ch)
     { return operator=((wxUniChar)ch); }
   wxString& operator=(char ch)
@@ -1693,7 +1633,7 @@ public:
   {
 #if wxUSE_UNICODE_UTF8
     if ( !ch.IsAscii() )
-        m_impl.append(EncodeNChars(n, ch));
+        m_impl.append(wxStringOperations::EncodeNChars(n, ch));
     else
 #endif
         m_impl.append(n, (wxStringCharType)ch);
@@ -1749,7 +1689,7 @@ public:
   {
 #if wxUSE_UNICODE_UTF8
     if ( !ch.IsAscii() )
-        m_impl.assign(EncodeNChars(n, ch));
+        m_impl.assign(wxStringOperations::EncodeNChars(n, ch));
     else
 #endif
         m_impl.assign(n, (wxStringCharType)ch);
@@ -1826,7 +1766,7 @@ public:
   {
 #if wxUSE_UNICODE_UTF8
     if ( !ch.IsAscii() )
-        m_impl.insert(PosToImpl(nPos), EncodeNChars(n, ch));
+        m_impl.insert(PosToImpl(nPos), wxStringOperations::EncodeNChars(n, ch));
     else
 #endif
         m_impl.insert(PosToImpl(nPos), n, (wxStringCharType)ch);
@@ -1838,7 +1778,7 @@ public:
     if ( !ch.IsAscii() )
     {
         size_t pos = IterToImplPos(it);
-        m_impl.insert(pos, EncodeChar(ch));
+        m_impl.insert(pos, wxStringOperations::EncodeChar(ch));
         return iterator(this, m_impl.begin() + pos);
     }
     else
@@ -1860,7 +1800,7 @@ public:
   {
 #if wxUSE_UNICODE_UTF8
     if ( !ch.IsAscii() )
-        m_impl.insert(IterToImplPos(it), EncodeNChars(n, ch));
+        m_impl.insert(IterToImplPos(it), wxStringOperations::EncodeNChars(n, ch));
     else
 #endif
         m_impl.insert(it.impl(), n, (wxStringCharType)ch);
@@ -1916,7 +1856,7 @@ public:
     PosLenToImpl(nStart, nLen, &from, &len);
 #if wxUSE_UNICODE_UTF8
     if ( !ch.IsAscii() )
-        m_impl.replace(from, len, EncodeNChars(nCount, ch));
+        m_impl.replace(from, len, wxStringOperations::EncodeNChars(nCount, ch));
     else
 #endif
         m_impl.replace(from, len, nCount, (wxStringCharType)ch);
@@ -1989,7 +1929,8 @@ public:
   {
 #if wxUSE_UNICODE_UTF8
     if ( !ch.IsAscii() )
-        m_impl.replace(first.impl(), last.impl(), EncodeNChars(n, ch));
+        m_impl.replace(first.impl(), last.impl(),
+                       wxStringOperations::EncodeNChars(n, ch));
     else
 #endif
         m_impl.replace(first.impl(), last.impl(), n, (wxStringCharType)ch);
@@ -2030,7 +1971,10 @@ public:
 
     // find the first occurence of character ch after nStart
   size_t find(wxUniChar ch, size_t nStart = 0) const
-    { return PosFromImpl(m_impl.find(EncodeChar(ch), PosToImpl(nStart))); }
+  {
+    return PosFromImpl(m_impl.find(wxStringOperations::EncodeChar(ch),
+                                   PosToImpl(nStart)));
+  }
   size_t find(wxUniCharRef ch, size_t nStart = 0) const
     {  return find(wxUniChar(ch), nStart); }
   size_t find(char ch, size_t nStart = 0) const
@@ -2059,7 +2003,10 @@ public:
   }
     // as find, but from the end
   size_t rfind(wxUniChar ch, size_t nStart = npos) const
-    { return PosFromImpl(m_impl.rfind(EncodeChar(ch), PosToImpl(nStart))); }
+  {
+    return PosFromImpl(m_impl.rfind(wxStringOperations::EncodeChar(ch),
+                                    PosToImpl(nStart)));
+  }
   size_t rfind(wxUniCharRef ch, size_t nStart = npos) const
     {  return rfind(wxUniChar(ch), nStart); }
   size_t rfind(char ch, size_t nStart = npos) const
@@ -2239,7 +2186,7 @@ public:
     { m_impl += s.AsString().m_impl; return *this; }
       // string += char
   wxString& operator+=(wxUniChar ch)
-    { m_impl += EncodeChar(ch); return *this; }
+    { m_impl += wxStringOperations::EncodeChar(ch); return *this; }
   wxString& operator+=(wxUniCharRef ch) { return *this += wxUniChar(ch); }
   wxString& operator+=(int ch) { return *this += wxUniChar(ch); }
   wxString& operator+=(char ch) { return *this += wxUniChar(ch); }

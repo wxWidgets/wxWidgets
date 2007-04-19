@@ -346,6 +346,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_stream.obj \
 	$(OBJS)\monodll_string.obj \
 	$(OBJS)\monodll_stringimpl.obj \
+	$(OBJS)\monodll_stringops.obj \
 	$(OBJS)\monodll_strvararg.obj \
 	$(OBJS)\monodll_sysopt.obj \
 	$(OBJS)\monodll_tarstrm.obj \
@@ -474,6 +475,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_stream.obj \
 	$(OBJS)\monolib_string.obj \
 	$(OBJS)\monolib_stringimpl.obj \
+	$(OBJS)\monolib_stringops.obj \
 	$(OBJS)\monolib_strvararg.obj \
 	$(OBJS)\monolib_sysopt.obj \
 	$(OBJS)\monolib_tarstrm.obj \
@@ -600,6 +602,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_stream.obj \
 	$(OBJS)\basedll_string.obj \
 	$(OBJS)\basedll_stringimpl.obj \
+	$(OBJS)\basedll_stringops.obj \
 	$(OBJS)\basedll_strvararg.obj \
 	$(OBJS)\basedll_sysopt.obj \
 	$(OBJS)\basedll_tarstrm.obj \
@@ -710,6 +713,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_stream.obj \
 	$(OBJS)\baselib_string.obj \
 	$(OBJS)\baselib_stringimpl.obj \
+	$(OBJS)\baselib_stringops.obj \
 	$(OBJS)\baselib_strvararg.obj \
 	$(OBJS)\baselib_sysopt.obj \
 	$(OBJS)\baselib_tarstrm.obj \
@@ -5318,6 +5322,9 @@ $(OBJS)\monodll_string.obj: ..\..\src\common\string.cpp
 $(OBJS)\monodll_stringimpl.obj: ..\..\src\common\stringimpl.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 
+$(OBJS)\monodll_stringops.obj: ..\..\src\common\stringops.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+
 $(OBJS)\monodll_strvararg.obj: ..\..\src\common\strvararg.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 
@@ -7370,6 +7377,9 @@ $(OBJS)\monolib_string.obj: ..\..\src\common\string.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 
 $(OBJS)\monolib_stringimpl.obj: ..\..\src\common\stringimpl.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+
+$(OBJS)\monolib_stringops.obj: ..\..\src\common\stringops.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 
 $(OBJS)\monolib_strvararg.obj: ..\..\src\common\strvararg.cpp
@@ -9426,6 +9436,9 @@ $(OBJS)\basedll_string.obj: ..\..\src\common\string.cpp
 $(OBJS)\basedll_stringimpl.obj: ..\..\src\common\stringimpl.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
 
+$(OBJS)\basedll_stringops.obj: ..\..\src\common\stringops.cpp
+	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
+
 $(OBJS)\basedll_strvararg.obj: ..\..\src\common\strvararg.cpp
 	$(CXX) -q -c -P -o$@ $(BASEDLL_CXXFLAGS) $**
 
@@ -9706,6 +9719,9 @@ $(OBJS)\baselib_string.obj: ..\..\src\common\string.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
 
 $(OBJS)\baselib_stringimpl.obj: ..\..\src\common\stringimpl.cpp
+	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
+
+$(OBJS)\baselib_stringops.obj: ..\..\src\common\stringops.cpp
 	$(CXX) -q -c -P -o$@ $(BASELIB_CXXFLAGS) $**
 
 $(OBJS)\baselib_strvararg.obj: ..\..\src\common\strvararg.cpp

@@ -201,6 +201,7 @@ wx/strconv.h
 wx/stream.h
 wx/string.h
 wx/stringimpl.h
+wx/stringops.h
 wx/strvararg.h
 wx/sysopt.h
 wx/tarstrm.h

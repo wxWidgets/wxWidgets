@@ -683,6 +683,10 @@ SOURCE=..\..\src\common\stringimpl.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\stringops.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\strvararg.cpp
 # End Source File
 # Begin Source File
@@ -1784,6 +1788,10 @@ SOURCE=..\..\include\wx\string.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\stringimpl.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\stringops.h
 # End Source File
 # Begin Source File
 

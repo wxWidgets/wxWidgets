@@ -24,9 +24,7 @@
 #endif
 
 #include "wx/unichar.h"
-
-// FIXME-UTF8: remove once UTF-8 functions moved outside
-#include "wx/string.h"
+#include "wx/stringops.h"
 
 // ===========================================================================
 // implementation
@@ -69,11 +67,16 @@ char wxUniChar::To8bit(wxUniChar::value_type c)
 // ---------------------------------------------------------------------------
 
 #if wxUSE_UNICODE_UTF8
+wxUniChar wxUniCharRef::UniChar() const
+{
+    return wxStringOperations::DecodeChar(m_pos);
+}
+
 wxUniCharRef& wxUniCharRef::operator=(const wxUniChar& c)
 {
-    wxString::Utf8CharBuffer utf(wxString::EncodeChar(c));
-    size_t lenOld = wxString::GetUtf8CharLength(*m_pos);
-    size_t lenNew = wxString::GetUtf8CharLength(utf[0]);
+    wxStringOperations::Utf8CharBuffer utf(wxStringOperations::EncodeChar(c));
+    size_t lenOld = wxStringOperations::GetUtf8CharLength(*m_pos);
+    size_t lenNew = wxStringOperations::GetUtf8CharLength(utf[0]);
 
     if ( lenNew == lenOld )
     {

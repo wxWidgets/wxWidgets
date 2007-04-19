@@ -3286,6 +3286,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_stream.obj &
 	$(OBJS)\monodll_string.obj &
 	$(OBJS)\monodll_stringimpl.obj &
+	$(OBJS)\monodll_stringops.obj &
 	$(OBJS)\monodll_strvararg.obj &
 	$(OBJS)\monodll_sysopt.obj &
 	$(OBJS)\monodll_tarstrm.obj &
@@ -3415,6 +3416,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_stream.obj &
 	$(OBJS)\monolib_string.obj &
 	$(OBJS)\monolib_stringimpl.obj &
+	$(OBJS)\monolib_stringops.obj &
 	$(OBJS)\monolib_strvararg.obj &
 	$(OBJS)\monolib_sysopt.obj &
 	$(OBJS)\monolib_tarstrm.obj &
@@ -3542,6 +3544,7 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_stream.obj &
 	$(OBJS)\basedll_string.obj &
 	$(OBJS)\basedll_stringimpl.obj &
+	$(OBJS)\basedll_stringops.obj &
 	$(OBJS)\basedll_strvararg.obj &
 	$(OBJS)\basedll_sysopt.obj &
 	$(OBJS)\basedll_tarstrm.obj &
@@ -3653,6 +3656,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_stream.obj &
 	$(OBJS)\baselib_string.obj &
 	$(OBJS)\baselib_stringimpl.obj &
+	$(OBJS)\baselib_stringops.obj &
 	$(OBJS)\baselib_strvararg.obj &
 	$(OBJS)\baselib_sysopt.obj &
 	$(OBJS)\baselib_tarstrm.obj &
@@ -5748,6 +5752,9 @@ $(OBJS)\monodll_string.obj :  .AUTODEPEND ..\..\src\common\string.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_stringimpl.obj :  .AUTODEPEND ..\..\src\common\stringimpl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_stringops.obj :  .AUTODEPEND ..\..\src\common\stringops.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_strvararg.obj :  .AUTODEPEND ..\..\src\common\strvararg.cpp
@@ -7904,6 +7911,9 @@ $(OBJS)\monolib_string.obj :  .AUTODEPEND ..\..\src\common\string.cpp
 $(OBJS)\monolib_stringimpl.obj :  .AUTODEPEND ..\..\src\common\stringimpl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_stringops.obj :  .AUTODEPEND ..\..\src\common\stringops.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_strvararg.obj :  .AUTODEPEND ..\..\src\common\strvararg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
@@ -10058,6 +10068,9 @@ $(OBJS)\basedll_string.obj :  .AUTODEPEND ..\..\src\common\string.cpp
 $(OBJS)\basedll_stringimpl.obj :  .AUTODEPEND ..\..\src\common\stringimpl.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_stringops.obj :  .AUTODEPEND ..\..\src\common\stringops.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_strvararg.obj :  .AUTODEPEND ..\..\src\common\strvararg.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
@@ -10338,6 +10351,9 @@ $(OBJS)\baselib_string.obj :  .AUTODEPEND ..\..\src\common\string.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_stringimpl.obj :  .AUTODEPEND ..\..\src\common\stringimpl.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_stringops.obj :  .AUTODEPEND ..\..\src\common\stringops.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_strvararg.obj :  .AUTODEPEND ..\..\src\common\strvararg.cpp

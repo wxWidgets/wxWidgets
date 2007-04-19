@@ -237,19 +237,10 @@ public:
 #endif
 
 private:
-    wxUniChar UniChar() const
-    {
 #if wxUSE_UNICODE_UTF8
-        return DecodeChar(m_pos);
+    wxUniChar UniChar() const;
 #else
-        return *m_pos;
-#endif
-    }
-
-#if wxUSE_UNICODE_UTF8
-    // FIXME-UTF8: move this to a separate 'string operations' class
-    static wxUniChar DecodeChar(wxStringImpl::const_iterator i);
-    friend class WXDLLIMPEXP_BASE wxString;
+    wxUniChar UniChar() const { return *m_pos; }
 #endif
 
     friend class WXDLLIMPEXP_BASE wxUniChar;
