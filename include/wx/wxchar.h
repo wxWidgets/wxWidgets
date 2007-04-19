@@ -19,5 +19,6 @@
 
 /* and wrappers for CRT functions: */
 #include "wx/wxcrt.h"
+#include "wx/wxcrtvararg.h"
 
 #endif /* _WX_WXCHAR_H_ */
