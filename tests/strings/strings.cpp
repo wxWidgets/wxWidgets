@@ -54,6 +54,7 @@ private:
         CPPUNIT_TEST( ToDouble );
         CPPUNIT_TEST( WriteBuf );
         CPPUNIT_TEST( CStrDataTernaryOperator );
+        CPPUNIT_TEST( CStrDataOperators );
         CPPUNIT_TEST( CStrDataImplicitConversion );
         CPPUNIT_TEST( ExplicitConversion );
     CPPUNIT_TEST_SUITE_END();
@@ -81,6 +82,7 @@ private:
     void WriteBuf();
     void CStrDataTernaryOperator();
     void DoCStrDataTernaryOperator(bool cond);
+    void CStrDataOperators();
     void CStrDataImplicitConversion();
     void ExplicitConversion();
 
@@ -694,6 +696,19 @@ void StringTestCase::DoCStrDataTernaryOperator(bool cond)
     wxString empty("");
     CPPUNIT_ASSERT( CheckStr(empty, (cond ? empty.c_str() : wxEmptyString)) );
     CPPUNIT_ASSERT( CheckStr(empty, (cond ? wxEmptyString : empty.c_str())) );
+}
+
+void StringTestCase::CStrDataOperators()
+{
+    wxString s("hello");
+
+    CPPUNIT_ASSERT( s.c_str()[0] == 'h' );
+    CPPUNIT_ASSERT( s.c_str()[1] == 'e' );
+    CPPUNIT_ASSERT( s.c_str()[5] == '\0' );
+
+    CPPUNIT_ASSERT( *s.c_str() == 'h' );
+    CPPUNIT_ASSERT( *(s.c_str() + 2) == 'l' );
+    CPPUNIT_ASSERT( *(s.c_str() + 5) == '\0' );
 }
 
 bool CheckStrChar(const wxString& expected, char *s)
