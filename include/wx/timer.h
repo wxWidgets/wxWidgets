@@ -149,7 +149,7 @@ private:
 // wxTimerEvent
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxTimerEvent : public wxEvent
+class WXDLLIMPEXP_BASE wxTimerEvent : public wxEvent
 {
 public:
     wxTimerEvent(int timerid = 0, int interval = 0) : wxEvent(timerid)
