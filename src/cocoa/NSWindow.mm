@@ -26,9 +26,9 @@
 #include "wx/cocoa/ObjcPose.h"
 #include "wx/cocoa/NSWindow.h"
 
-#import <AppKit/NSWindow.h>
 #import <Foundation/NSNotification.h>
 #import <Foundation/NSString.h>
+#include "wx/cocoa/objc/NSWindow.h"
 
 // ============================================================================
 // @class wxNSWindowDelegate
@@ -189,14 +189,6 @@ wxMenuBar* wxCocoaNSWindow::GetAppMenuBar(wxCocoaNSWindow *win)
 // ============================================================================
 // @class wxPoserNSWindow
 // ============================================================================
-@interface wxPoserNSWindow : NSWindow
-{
-}
-
-- (BOOL)canBecomeKeyWindow;
-- (BOOL)canBecomeMainWindow;
-@end // wxPoserNSwindow
-
 WX_IMPLEMENT_POSER(wxPoserNSWindow);
 @implementation wxPoserNSWindow : NSWindow
 
