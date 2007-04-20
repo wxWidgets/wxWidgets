@@ -607,7 +607,7 @@ void wxSVGFileDC::ComputeScaleAndOrigin()
 }
 
 
-int wxSVGFileDC::GetMapMode()
+int wxSVGFileDC::GetMapMode() const
 {
     return m_mappingMode ;
 }
