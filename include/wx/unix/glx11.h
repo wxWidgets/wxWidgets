@@ -155,7 +155,7 @@ public:
     }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxGLApp);
+    DECLARE_DYNAMIC_CLASS(wxGLApp)
 };
 
 #endif // _WX_UNIX_GLX11_H_

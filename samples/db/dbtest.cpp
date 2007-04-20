@@ -1374,8 +1374,8 @@ void CeditorDlg::OnCommand(wxWindow& win, wxCommandEvent& WXUNUSED(event))
         // Display the query dialog box
         wxChar qryWhere[DB_MAX_WHERE_CLAUSE_LEN+1];
         wxStrcpy(qryWhere, (const wxChar*) wxGetApp().Contact->qryWhereStr);
-        wxChar *tblName[] = {(wxChar *)CONTACT_TABLE_NAME.c_str(), 0};
-        new CqueryDlg(GetParent(), wxGetApp().Contact->GetDb(), tblName, qryWhere);
+        const wxChar *tblName[] = {(const wxChar *)CONTACT_TABLE_NAME.c_str(), 0};
+        new CqueryDlg(GetParent(), wxGetApp().Contact->GetDb(), (wxChar**) tblName, qryWhere);
 
         // Query the first record in the new record set and
         // display it, if the query string has changed.

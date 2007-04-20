@@ -362,7 +362,7 @@ ClookUpDlg::ClookUpDlg(wxWindow *parent, const wxString &windowTitle, const wxSt
     }
 
     // Query the actual record set
-    if (selectStmt && wxStrlen(selectStmt))    // Query by sql stmt passed in
+    if ( (const char*) selectStmt && wxStrlen(selectStmt))    // Query by sql stmt passed in
     {
         if (!lookup2->QueryBySqlStmt(selectStmt))
         {

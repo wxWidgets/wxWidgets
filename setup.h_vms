@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 19 December 2006                                                   *
+ * Date : 17 April 2007                                                      *
  *                                                                           *
  *****************************************************************************/
 
@@ -328,6 +328,8 @@ typedef pid_t GPid;
 
 #define wxUSE_TIPWINDOW    1
 
+#define wxUSE_STC 1
+
 #define wxUSE_ANIMATIONCTRL 1
 #define wxUSE_BUTTON       1
 #define wxUSE_BMPBUTTON    1
@@ -586,6 +588,8 @@ typedef pid_t GPid;
 #define wxUSE_INKEDIT 1
 
 #define wxUSE_UNICODE_MSLU 0
+
+#define wxUSE_UNICODE_UTF8 0
 
 #define wxUSE_DC_CACHEING 1
 
@@ -989,9 +993,6 @@ typedef pid_t GPid;
 
 /* define if you have vsscanf function */
 #undef HAVE_VSSCANF
-
-/* The number of bytes in a char.  */
-#define SIZEOF_CHAR 1
 
 /* The number of bytes in a wchar_t.  */
 #define SIZEOF_WCHAR_T 4
