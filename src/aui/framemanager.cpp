@@ -1866,7 +1866,19 @@ wxSizer* wxAuiManager::LayoutAll(wxAuiPaneInfoArray& panes,
 
     // empty all docks out
     for (i = 0, dock_count = docks.GetCount(); i < dock_count; ++i)
-        docks.Item(i).panes.Empty();
+    {
+        wxAuiDockInfo& dock = docks.Item(i);
+        
+        // empty out all panes, as they will be readded below
+        dock.panes.Empty();
+        
+        if (dock.fixed)
+        {
+            // always reset fixed docks' sizes, because
+            // the contained windows may have been resized
+            dock.size = 0;
+        }
+    }
 
 
     // iterate through all known panes, filing each
