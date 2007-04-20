@@ -707,6 +707,14 @@ SOURCE=..\..\src\common\textfile.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\timercmn.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\common\timerimpl.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\tokenzr.cpp
 # End Source File
 # Begin Source File
@@ -824,6 +832,10 @@ SOURCE=..\..\src\msw\stdpaths.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\thread.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\msw\timer.cpp
 # End Source File
 # Begin Source File
 

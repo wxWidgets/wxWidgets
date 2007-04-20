@@ -32,6 +32,7 @@
 
 #include "wx/apptrait.h"
 #include "wx/unix/execute.h"
+#include "wx/unix/private/timer.h"
 
 // for waitpid()
 #include <sys/types.h>
@@ -81,3 +82,10 @@ wxConsoleAppTraits::WaitForChild(wxExecuteData& execData)
     return exitcode;
 }
 
+wxTimerImpl*
+wxConsoleAppTraits::CreateTimerImpl(wxTimer *timer)
+{
+    // this doesn't work yet as there is no main loop in console applications
+    // (but it will be added later)
+    return new wxUnixTimerImpl(timer);
+}

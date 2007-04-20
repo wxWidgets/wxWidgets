@@ -1,39 +1,34 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        wx/gtk1/timer.h
-// Purpose:
+// Name:        wx/gtk1/private/timer.h
+// Purpose:     wxTimerImpl for wxGTK
 // Author:      Robert Roebling
 // Id:          $Id$
 // Copyright:   (c) 1998 Robert Roebling
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GTKTIMERH__
-#define __GTKTIMERH__
+#ifndef _WX_GTK1_PRIVATE_TIMER_H_
+#define _WX_GTK1_PRIVATE_TIMER_H_
+
+#include "wx/private/timer.h"
 
 //-----------------------------------------------------------------------------
 // wxTimer
 //-----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_CORE wxTimer : public wxTimerBase
+class WXDLLIMPEXP_CORE wxGTKTimerImpl : public wxTimerImpl
 {
 public:
-    wxTimer() { Init(); }
-    wxTimer(wxEvtHandler *owner, int id = -1) : wxTimerBase(owner, id)
-        { Init(); }
-    virtual ~wxTimer();
+    wxGTKTimerImpl(wxTimer *timer) : wxTimerImpl(timer) { m_tag = -1; }
 
-    virtual bool Start( int millisecs = -1, bool oneShot = FALSE );
+    virtual bool Start(int millisecs = -1, bool oneShot = FALSE);
     virtual void Stop();
 
     virtual bool IsRunning() const { return m_tag != -1; }
 
-protected:
-    void Init();
-
-    int  m_tag;
-
 private:
-    DECLARE_ABSTRACT_CLASS(wxTimer)
+    // registered timeout id, -1 if the timer isn't running
+    int m_tag;
 };
 
-#endif // __GTKTIMERH__
+#endif // _WX_GTK1_PRIVATE_TIMER_H_

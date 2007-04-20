@@ -18,11 +18,10 @@
 
 #if wxUSE_TIMER
 
-#include "wx/timer.h"
+#include "wx/msw/private/timer.h"
 
 #ifndef WX_PRECOMP
     #include "wx/list.h"
-    #include "wx/window.h"
     #include "wx/event.h"
     #include "wx/app.h"
     #include "wx/intl.h"
@@ -38,7 +37,7 @@
 
 // define a hash containing all the timers: it is indexed by timer id and
 // contains the corresponding timer
-WX_DECLARE_HASH_MAP(unsigned long, wxTimer *, wxIntegerHash, wxIntegerEqual,
+WX_DECLARE_HASH_MAP(unsigned long, wxMSWTimerImpl *, wxIntegerHash, wxIntegerEqual,
                     wxTimerMap);
 
 // instead of using a global here, wrap it in a static function as otherwise it
@@ -58,35 +57,18 @@ static wxTimerMap& TimerMap()
 // timer callback used for all timers
 void WINAPI wxTimerProc(HWND hwnd, UINT msg, UINT_PTR idTimer, DWORD dwTime);
 
-// ----------------------------------------------------------------------------
-// macros
-// ----------------------------------------------------------------------------
-
-IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxEvtHandler)
-
 // ============================================================================
 // implementation
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// wxTimer class
+// wxMSWTimerImpl class
 // ----------------------------------------------------------------------------
 
-void wxTimer::Init()
+bool wxMSWTimerImpl::Start(int milliseconds, bool oneShot)
 {
-    m_id = 0;
-}
-
-wxTimer::~wxTimer()
-{
-    wxTimer::Stop();
-}
-
-bool wxTimer::Start(int milliseconds, bool oneShot)
-{
-    (void)wxTimerBase::Start(milliseconds, oneShot);
-
-    wxCHECK_MSG( m_milli > 0, false, wxT("invalid value for timer timeout") );
+    if ( !wxTimerImpl::Start(milliseconds, oneShot) )
+        return false;
 
     m_id = ::SetTimer
              (
@@ -121,14 +103,13 @@ bool wxTimer::Start(int milliseconds, bool oneShot)
     return true;
 }
 
-void wxTimer::Stop()
+void wxMSWTimerImpl::Stop()
 {
-    if ( m_id )
-    {
-        ::KillTimer(NULL, m_id);
+    wxASSERT_MSG( m_id, _T("should be running") );
 
-        TimerMap().erase(m_id);
-    }
+    ::KillTimer(NULL, m_id);
+
+    TimerMap().erase(m_id);
 
     m_id = 0;
 }
@@ -137,9 +118,9 @@ void wxTimer::Stop()
 // private functions
 // ----------------------------------------------------------------------------
 
-void wxProcessTimer(wxTimer& timer)
+void wxProcessTimer(wxMSWTimerImpl& timer)
 {
-    wxASSERT_MSG( timer.m_id != 0, _T("bogus timer id") );
+    wxASSERT_MSG( timer.IsRunning(), _T("bogus timer id") );
 
     if ( timer.IsOneShot() )
         timer.Stop();

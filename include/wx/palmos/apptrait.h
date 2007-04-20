@@ -22,7 +22,9 @@ public:
     virtual void *BeforeChildWaitLoop();
     virtual void AlwaysYield();
     virtual void AfterChildWaitLoop(void *data);
-
+#if wxUSE_TIMER
+    virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer) { return NULL; };
+#endif
     virtual bool DoMessageFromThreadWait();
 };
 
@@ -34,7 +36,10 @@ public:
     virtual void *BeforeChildWaitLoop();
     virtual void AlwaysYield();
     virtual void AfterChildWaitLoop(void *data);
-
+#if wxUSE_TIMER
+    // there is no wxTimer support yet
+    virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer);
+#endif
     virtual bool DoMessageFromThreadWait();
     virtual wxPortId GetToolkitVersion(int *majVer, int *minVer) const;
 };

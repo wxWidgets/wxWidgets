@@ -22,7 +22,6 @@
     #include "wx/frame.h"
     #include "wx/icon.h"
     #include "wx/dialog.h"
-    #include "wx/timer.h"
     #include "wx/memory.h"
     #include "wx/gdicmn.h"
     #include "wx/module.h"
@@ -33,6 +32,7 @@
 
 #include "wx/univ/theme.h"
 #include "wx/univ/renderer.h"
+#include "wx/generic/private/timer.h"
 
 #if wxUSE_THREADS
     #include "wx/thread.h"
@@ -812,7 +812,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
             wxTheApp->Dispatch();
 
 #if wxUSE_TIMER
-        wxTimer::NotifyTimers();
+        wxGenericTimerImpl::NotifyTimers();
 #endif
         ProcessIdle();
 

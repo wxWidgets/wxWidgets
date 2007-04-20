@@ -1,11 +1,10 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        src/cocoa/utils.cpp
 // Purpose:     Various utilities
-// Author:      AUTHOR
-// Modified by:
+// Author:      David Elliott
 // Created:     2003/??/??
 // RCS-ID:      $Id$
-// Copyright:   (c) AUTHOR
+// Copyright:   (c) wxWidgets dev team
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -19,6 +18,7 @@
 
 #include "wx/apptrait.h"
 #include "wx/display.h"
+#include "wx/cocoa/private/timer.h"
 
 #include <ctype.h>
 
@@ -60,6 +60,11 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
     wxGetOsVersion(verMaj, verMin);
 
     return wxPORT_COCOA;
+}
+
+wxTimerImpl* wxGUIAppTraits::CreateTimerImpl(wxTimer* timer)
+{
+    return new wxCocoaTimerImpl(timer);
 }
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)

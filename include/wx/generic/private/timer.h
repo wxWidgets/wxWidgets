@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        timer.h
+// Name:        wx/generic/private/timer.h
 // Purpose:     Generic implementation of wxTimer class
 // Author:      Vaclav Slavik
 // Id:          $Id$
@@ -8,8 +8,10 @@
 /////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef __WX_TIMER_H__
-#define __WX_TIMER_H__
+#ifndef _WX_GENERIC_PRIVATE_TIMER_H_
+#define _WX_GENERIC_PRIVATE_TIMER_H_
+
+#include "wx/private/timer.h"
 
 //-----------------------------------------------------------------------------
 // wxTimer
@@ -17,13 +19,11 @@
 
 class wxTimerDesc;
 
-class WXDLLEXPORT wxTimer : public wxTimerBase
+class WXDLLEXPORT wxGenericTimerImpl : public wxTimerImpl
 {
 public:
-    wxTimer() { Init(); }
-    wxTimer(wxEvtHandler *owner, int timerid = -1) : wxTimerBase(owner, timerid)
-        { Init(); }
-    virtual ~wxTimer();
+    wxGenericTimerImpl(wxTimer* timer) : wxTimerImpl(timer) { Init(); }
+    virtual ~wxGenericTimerImpl();
 
     virtual bool Start(int millisecs = -1, bool oneShot = false);
     virtual void Stop();
@@ -38,8 +38,6 @@ protected:
 
 private:
     wxTimerDesc *m_desc;
-
-    DECLARE_ABSTRACT_CLASS(wxTimer)
 };
 
-#endif // __WX_TIMER_H__
+#endif // _WX_GENERIC_PRIVATE_TIMER_H_

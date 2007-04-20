@@ -336,6 +336,8 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_tarstrm.o \
 	$(OBJS)\monodll_textbuf.o \
 	$(OBJS)\monodll_textfile.o \
+	$(OBJS)\monodll_timercmn.o \
+	$(OBJS)\monodll_timerimpl.o \
 	$(OBJS)\monodll_tokenzr.o \
 	$(OBJS)\monodll_txtstrm.o \
 	$(OBJS)\monodll_unichar.o \
@@ -362,6 +364,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_stackwalk.o \
 	$(OBJS)\monodll_stdpaths.o \
 	$(OBJS)\monodll_thread.o \
+	$(OBJS)\monodll_timer.o \
 	$(OBJS)\monodll_utils.o \
 	$(OBJS)\monodll_utilsexc.o \
 	$(OBJS)\monodll_event.o \
@@ -467,6 +470,8 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_tarstrm.o \
 	$(OBJS)\monolib_textbuf.o \
 	$(OBJS)\monolib_textfile.o \
+	$(OBJS)\monolib_timercmn.o \
+	$(OBJS)\monolib_timerimpl.o \
 	$(OBJS)\monolib_tokenzr.o \
 	$(OBJS)\monolib_txtstrm.o \
 	$(OBJS)\monolib_unichar.o \
@@ -493,6 +498,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_stackwalk.o \
 	$(OBJS)\monolib_stdpaths.o \
 	$(OBJS)\monolib_thread.o \
+	$(OBJS)\monolib_timer.o \
 	$(OBJS)\monolib_utils.o \
 	$(OBJS)\monolib_utilsexc.o \
 	$(OBJS)\monolib_event.o \
@@ -595,6 +601,8 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_tarstrm.o \
 	$(OBJS)\basedll_textbuf.o \
 	$(OBJS)\basedll_textfile.o \
+	$(OBJS)\basedll_timercmn.o \
+	$(OBJS)\basedll_timerimpl.o \
 	$(OBJS)\basedll_tokenzr.o \
 	$(OBJS)\basedll_txtstrm.o \
 	$(OBJS)\basedll_unichar.o \
@@ -621,6 +629,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_stackwalk.o \
 	$(OBJS)\basedll_stdpaths.o \
 	$(OBJS)\basedll_thread.o \
+	$(OBJS)\basedll_timer.o \
 	$(OBJS)\basedll_utils.o \
 	$(OBJS)\basedll_utilsexc.o \
 	$(OBJS)\basedll_event.o \
@@ -706,6 +715,8 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_tarstrm.o \
 	$(OBJS)\baselib_textbuf.o \
 	$(OBJS)\baselib_textfile.o \
+	$(OBJS)\baselib_timercmn.o \
+	$(OBJS)\baselib_timerimpl.o \
 	$(OBJS)\baselib_tokenzr.o \
 	$(OBJS)\baselib_txtstrm.o \
 	$(OBJS)\baselib_unichar.o \
@@ -732,6 +743,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_stackwalk.o \
 	$(OBJS)\baselib_stdpaths.o \
 	$(OBJS)\baselib_thread.o \
+	$(OBJS)\baselib_timer.o \
 	$(OBJS)\baselib_utils.o \
 	$(OBJS)\baselib_utilsexc.o \
 	$(OBJS)\baselib_event.o \
@@ -1522,7 +1534,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_region.o \
 	$(OBJS)\monodll_renderer.o \
 	$(OBJS)\monodll_settings.o \
-	$(OBJS)\monodll_timer.o \
 	$(OBJS)\monodll_tooltip.o \
 	$(OBJS)\monodll_toplevel.o \
 	$(OBJS)\monodll_utilsgui.o \
@@ -1666,7 +1677,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_stockitem.o \
 	$(OBJS)\monodll_tbarbase.o \
 	$(OBJS)\monodll_textcmn.o \
-	$(OBJS)\monodll_timercmn.o \
 	$(OBJS)\monodll_toplvcmn.o \
 	$(OBJS)\monodll_treebase.o \
 	$(OBJS)\monodll_valgen.o \
@@ -1751,7 +1761,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_region.o \
 	$(OBJS)\monodll_renderer.o \
 	$(OBJS)\monodll_settings.o \
-	$(OBJS)\monodll_timer.o \
 	$(OBJS)\monodll_tooltip.o \
 	$(OBJS)\monodll_toplevel.o \
 	$(OBJS)\monodll_utilsgui.o \
@@ -1898,7 +1907,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_stockitem.o \
 	$(OBJS)\monodll_tbarbase.o \
 	$(OBJS)\monodll_textcmn.o \
-	$(OBJS)\monodll_timercmn.o \
 	$(OBJS)\monodll_toplvcmn.o \
 	$(OBJS)\monodll_treebase.o \
 	$(OBJS)\monodll_valgen.o \
@@ -2159,7 +2167,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_region.o \
 	$(OBJS)\monolib_renderer.o \
 	$(OBJS)\monolib_settings.o \
-	$(OBJS)\monolib_timer.o \
 	$(OBJS)\monolib_tooltip.o \
 	$(OBJS)\monolib_toplevel.o \
 	$(OBJS)\monolib_utilsgui.o \
@@ -2303,7 +2310,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_stockitem.o \
 	$(OBJS)\monolib_tbarbase.o \
 	$(OBJS)\monolib_textcmn.o \
-	$(OBJS)\monolib_timercmn.o \
 	$(OBJS)\monolib_toplvcmn.o \
 	$(OBJS)\monolib_treebase.o \
 	$(OBJS)\monolib_valgen.o \
@@ -2388,7 +2394,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_region.o \
 	$(OBJS)\monolib_renderer.o \
 	$(OBJS)\monolib_settings.o \
-	$(OBJS)\monolib_timer.o \
 	$(OBJS)\monolib_tooltip.o \
 	$(OBJS)\monolib_toplevel.o \
 	$(OBJS)\monolib_utilsgui.o \
@@ -2535,7 +2540,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_stockitem.o \
 	$(OBJS)\monolib_tbarbase.o \
 	$(OBJS)\monolib_textcmn.o \
-	$(OBJS)\monolib_timercmn.o \
 	$(OBJS)\monolib_toplvcmn.o \
 	$(OBJS)\monolib_treebase.o \
 	$(OBJS)\monolib_valgen.o \
@@ -2723,7 +2727,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_region.o \
 	$(OBJS)\coredll_renderer.o \
 	$(OBJS)\coredll_settings.o \
-	$(OBJS)\coredll_timer.o \
 	$(OBJS)\coredll_tooltip.o \
 	$(OBJS)\coredll_toplevel.o \
 	$(OBJS)\coredll_utilsgui.o \
@@ -2867,7 +2870,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_stockitem.o \
 	$(OBJS)\coredll_tbarbase.o \
 	$(OBJS)\coredll_textcmn.o \
-	$(OBJS)\coredll_timercmn.o \
 	$(OBJS)\coredll_toplvcmn.o \
 	$(OBJS)\coredll_treebase.o \
 	$(OBJS)\coredll_valgen.o \
@@ -2952,7 +2954,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_region.o \
 	$(OBJS)\coredll_renderer.o \
 	$(OBJS)\coredll_settings.o \
-	$(OBJS)\coredll_timer.o \
 	$(OBJS)\coredll_tooltip.o \
 	$(OBJS)\coredll_toplevel.o \
 	$(OBJS)\coredll_utilsgui.o \
@@ -3099,7 +3100,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_stockitem.o \
 	$(OBJS)\coredll_tbarbase.o \
 	$(OBJS)\coredll_textcmn.o \
-	$(OBJS)\coredll_timercmn.o \
 	$(OBJS)\coredll_toplvcmn.o \
 	$(OBJS)\coredll_treebase.o \
 	$(OBJS)\coredll_valgen.o \
@@ -3192,7 +3192,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_region.o \
 	$(OBJS)\corelib_renderer.o \
 	$(OBJS)\corelib_settings.o \
-	$(OBJS)\corelib_timer.o \
 	$(OBJS)\corelib_tooltip.o \
 	$(OBJS)\corelib_toplevel.o \
 	$(OBJS)\corelib_utilsgui.o \
@@ -3336,7 +3335,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_stockitem.o \
 	$(OBJS)\corelib_tbarbase.o \
 	$(OBJS)\corelib_textcmn.o \
-	$(OBJS)\corelib_timercmn.o \
 	$(OBJS)\corelib_toplvcmn.o \
 	$(OBJS)\corelib_treebase.o \
 	$(OBJS)\corelib_valgen.o \
@@ -3421,7 +3419,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_region.o \
 	$(OBJS)\corelib_renderer.o \
 	$(OBJS)\corelib_settings.o \
-	$(OBJS)\corelib_timer.o \
 	$(OBJS)\corelib_tooltip.o \
 	$(OBJS)\corelib_toplevel.o \
 	$(OBJS)\corelib_utilsgui.o \
@@ -3568,7 +3565,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_stockitem.o \
 	$(OBJS)\corelib_tbarbase.o \
 	$(OBJS)\corelib_textcmn.o \
-	$(OBJS)\corelib_timercmn.o \
 	$(OBJS)\corelib_toplvcmn.o \
 	$(OBJS)\corelib_treebase.o \
 	$(OBJS)\corelib_valgen.o \
@@ -5501,6 +5497,12 @@ $(OBJS)\monodll_textbuf.o: ../../src/common/textbuf.cpp
 $(OBJS)\monodll_textfile.o: ../../src/common/textfile.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monodll_timercmn.o: ../../src/common/timercmn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monodll_timerimpl.o: ../../src/common/timerimpl.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monodll_tokenzr.o: ../../src/common/tokenzr.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -5577,6 +5579,9 @@ $(OBJS)\monodll_stdpaths.o: ../../src/msw/stdpaths.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_thread.o: ../../src/msw/thread.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monodll_timer.o: ../../src/msw/timer.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_utils.o: ../../src/msw/utils.cpp
@@ -6312,11 +6317,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_settings.o: ../../src/msw/settings.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monodll_timer.o: ../../src/msw/timer.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -7151,11 +7151,6 @@ $(OBJS)\monodll_textcmn.o: ../../src/common/textcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\monodll_timercmn.o: ../../src/common/timercmn.cpp
-	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_toplvcmn.o: ../../src/common/toplvcmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -7658,6 +7653,12 @@ $(OBJS)\monolib_textbuf.o: ../../src/common/textbuf.cpp
 $(OBJS)\monolib_textfile.o: ../../src/common/textfile.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\monolib_timercmn.o: ../../src/common/timercmn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_timerimpl.o: ../../src/common/timerimpl.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\monolib_tokenzr.o: ../../src/common/tokenzr.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -7734,6 +7735,9 @@ $(OBJS)\monolib_stdpaths.o: ../../src/msw/stdpaths.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_thread.o: ../../src/msw/thread.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\monolib_timer.o: ../../src/msw/timer.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_utils.o: ../../src/msw/utils.cpp
@@ -8469,11 +8473,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_settings.o: ../../src/msw/settings.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\monolib_timer.o: ../../src/msw/timer.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -9308,11 +9307,6 @@ $(OBJS)\monolib_textcmn.o: ../../src/common/textcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\monolib_timercmn.o: ../../src/common/timercmn.cpp
-	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\monolib_toplvcmn.o: ../../src/common/toplvcmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -9815,6 +9809,12 @@ $(OBJS)\basedll_textbuf.o: ../../src/common/textbuf.cpp
 $(OBJS)\basedll_textfile.o: ../../src/common/textfile.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\basedll_timercmn.o: ../../src/common/timercmn.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\basedll_timerimpl.o: ../../src/common/timerimpl.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\basedll_tokenzr.o: ../../src/common/tokenzr.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
@@ -9891,6 +9891,9 @@ $(OBJS)\basedll_stdpaths.o: ../../src/msw/stdpaths.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\basedll_thread.o: ../../src/msw/thread.cpp
+	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\basedll_timer.o: ../../src/msw/timer.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\basedll_utils.o: ../../src/msw/utils.cpp
@@ -10100,6 +10103,12 @@ $(OBJS)\baselib_textbuf.o: ../../src/common/textbuf.cpp
 $(OBJS)\baselib_textfile.o: ../../src/common/textfile.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
+$(OBJS)\baselib_timercmn.o: ../../src/common/timercmn.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\baselib_timerimpl.o: ../../src/common/timerimpl.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
+
 $(OBJS)\baselib_tokenzr.o: ../../src/common/tokenzr.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
@@ -10176,6 +10185,9 @@ $(OBJS)\baselib_stdpaths.o: ../../src/msw/stdpaths.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_thread.o: ../../src/msw/thread.cpp
+	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
+
+$(OBJS)\baselib_timer.o: ../../src/msw/timer.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_utils.o: ../../src/msw/utils.cpp
@@ -10656,11 +10668,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_settings.o: ../../src/msw/settings.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_timer.o: ../../src/msw/timer.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -11495,11 +11502,6 @@ $(OBJS)\coredll_textcmn.o: ../../src/common/textcmn.cpp
 endif
 
 ifeq ($(USE_GUI),1)
-$(OBJS)\coredll_timercmn.o: ../../src/common/timercmn.cpp
-	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_toplvcmn.o: ../../src/common/toplvcmn.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -12056,11 +12058,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_settings.o: ../../src/msw/settings.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_timer.o: ../../src/msw/timer.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
@@ -12891,11 +12888,6 @@ endif
 
 ifeq ($(USE_GUI),1)
 $(OBJS)\corelib_textcmn.o: ../../src/common/textcmn.cpp
-	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
-endif
-
-ifeq ($(USE_GUI),1)
-$(OBJS)\corelib_timercmn.o: ../../src/common/timercmn.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 

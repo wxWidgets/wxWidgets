@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        timer.h
+// Name:        wx/os2/private/timer.h
 // Purpose:     wxTimer class
 // Author:      David Webster
 // Modified by:
@@ -12,22 +12,15 @@
 #ifndef _WX_TIMER_H_
 #define _WX_TIMER_H_
 
-#include "wx/object.h"
+#include "wx/private/timerimpl.h"
 
-class WXDLLEXPORT wxTimer: public wxTimerBase
+class WXDLLEXPORT wxOS2TimerImpl: public wxTimerImpl
 {
-friend void wxProcessTimer(wxTimer& timer);
+friend void wxProcessTimer(wxOS2TimerImpl& timer);
 
 public:
-    wxTimer() { Init(); }
-    wxTimer( wxEvtHandler* pOwner
-            ,int           nId = -1
-           )
-           : wxTimerBase( pOwner
-                         ,nId
-                        )
-        { Init(); }
-    virtual ~wxTimer();
+    wxOS2TimerImpl(wxTimer *timer) : wxTimerImpl(timer) { Init(); }
+    virtual ~wxOS2TimerImpl();
 
     virtual void Notify(void);
     virtual bool Start( int  nMilliseconds = -1
@@ -43,9 +36,6 @@ protected:
 
     ULONG                            m_ulId;
     HAB                              m_Hab;
-
-private:
-    DECLARE_ABSTRACT_CLASS(wxTimer)
 };
 
 extern ULONG wxTimerProc( HWND  WXUNUSED(hwnd)

@@ -266,21 +266,20 @@ private:
 // Returns the current state of the mouse position, buttons and modifers
 WXDLLEXPORT wxMouseState wxGetMouseState();
 
+#endif // wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // Window ID management
 // ----------------------------------------------------------------------------
 
-// Generate a unique ID
-WXDLLEXPORT long wxNewId();
-
 // Ensure subsequent IDs don't clash with this one
-WXDLLEXPORT void wxRegisterId(long id);
+WXDLLIMPEXP_BASE void wxRegisterId(long id);
 
 // Return the current ID
-WXDLLEXPORT long wxGetCurrentId();
+WXDLLIMPEXP_BASE long wxGetCurrentId();
 
-#endif // wxUSE_GUI
+// Generate a unique ID
+WXDLLIMPEXP_BASE long wxNewId();
 
 // ----------------------------------------------------------------------------
 // Various conversions

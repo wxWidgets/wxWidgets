@@ -24,6 +24,8 @@
 
 #include "wx/unix/execute.h"
 
+#include "wx/gtk/private/timer.h"
+
 #ifdef __WXDEBUG__
     #include "wx/gtk/assertdlg_gtk.h"
     #if wxUSE_STACKWALKER
@@ -284,6 +286,11 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
         *verMin = gtk_minor_version;
 
     return wxPORT_GTK;
+}
+
+wxTimerImpl *wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
+{
+    return new wxGTKTimerImpl(timer);
 }
 
 #if wxUSE_DETECT_SM

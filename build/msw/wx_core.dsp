@@ -814,10 +814,6 @@ SOURCE=..\..\src\common\textcmn.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\timercmn.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\common\toplvcmn.cpp
 # End Source File
 # Begin Source File
@@ -3870,10 +3866,6 @@ SOURCE=..\..\src\msw\tglbtn.cpp
 
 !ENDIF
 
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\msw\timer.cpp
 # End Source File
 # Begin Source File
 
@@ -8185,10 +8177,6 @@ SOURCE=..\..\include\wx\msw\tglbtn.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\include\wx\msw\timer.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\include\wx\msw\tooltip.h
 # End Source File
 # Begin Source File
@@ -8414,10 +8402,6 @@ SOURCE=..\..\include\wx\generic\tabg.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\generic\textdlgg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\include\wx\generic\timer.h
 # End Source File
 # Begin Source File
 

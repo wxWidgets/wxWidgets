@@ -22,12 +22,13 @@
 
 #if wxUSE_TIMER
 
-#include "wx/timer.h"
-
 #ifndef WX_PRECOMP
     #include "wx/log.h"
     #include "wx/module.h"
 #endif
+
+#include "wx/apptrait.h"
+#include "wx/generic/private/timer.h"
 
 // ----------------------------------------------------------------------------
 // Time input function
@@ -93,15 +94,15 @@
 class wxTimerDesc
 {
 public:
-    wxTimerDesc(wxTimer *t) :
+    wxTimerDesc(wxGenericTimerImpl *t) :
         timer(t), running(false), next(NULL), prev(NULL),
         shotTime(0), deleteFlag(NULL) {}
 
-    wxTimer         *timer;
-    bool             running;
-    wxTimerDesc     *next, *prev;
-    wxTimerTick_t    shotTime;
-    volatile bool   *deleteFlag; // see comment in ~wxTimer
+    wxGenericTimerImpl  *timer;
+    bool                running;
+    wxTimerDesc         *next, *prev;
+    wxTimerTick_t        shotTime;
+    volatile bool       *deleteFlag; // see comment in ~wxTimer
 };
 
 class wxTimerScheduler
@@ -207,18 +208,16 @@ void wxTimerScheduler::NotifyTimers()
 // wxTimer
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxEvtHandler)
-
 wxTimerScheduler *gs_scheduler = NULL;
 
-void wxTimer::Init()
+void wxGenericTimerImpl::Init()
 {
     if ( !gs_scheduler )
         gs_scheduler = new wxTimerScheduler;
     m_desc = new wxTimerDesc(this);
 }
 
-wxTimer::~wxTimer()
+wxGenericTimerImpl::~wxGenericTimerImpl()
 {
     wxLogTrace( wxT("timer"), wxT("destroying timer %p..."), this);
     if ( IsRunning() )
@@ -235,31 +234,31 @@ wxTimer::~wxTimer()
     wxLogTrace( wxT("timer"), wxT("    ...done destroying timer %p..."), this);
 }
 
-bool wxTimer::IsRunning() const
+bool wxGenericTimerImpl::IsRunning() const
 {
     return m_desc->running;
 }
 
-bool wxTimer::Start(int millisecs, bool oneShot)
+bool wxGenericTimerImpl::Start(int millisecs, bool oneShot)
 {
     wxLogTrace( wxT("timer"), wxT("started timer %p: %i ms, oneshot=%i"),
                this, millisecs, oneShot);
 
-    if ( !wxTimerBase::Start(millisecs, oneShot) )
-        return false;
+     if ( !wxTimerImpl::Start(millisecs, oneShot) )
+         return false;
 
     gs_scheduler->QueueTimer(m_desc);
     return true;
 }
 
-void wxTimer::Stop()
+void wxGenericTimerImpl::Stop()
 {
     if ( !m_desc->running ) return;
 
     gs_scheduler->RemoveTimer(m_desc);
 }
 
-/*static*/ void wxTimer::NotifyTimers()
+/*static*/ void wxGenericTimerImpl::NotifyTimers()
 {
     if ( gs_scheduler )
         gs_scheduler->NotifyTimers();
@@ -278,6 +277,15 @@ public:
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxTimerModule, wxModule)
+
+// ----------------------------------------------------------------------------
+// wxGUIAppTraits
+// ----------------------------------------------------------------------------
+
+wxTimerImpl *wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
+{
+    return new wxGenericTimerImpl(timer);
+}
 
 
 #endif //wxUSE_TIMER

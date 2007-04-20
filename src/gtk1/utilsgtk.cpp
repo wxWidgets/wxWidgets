@@ -19,7 +19,7 @@
 #endif
 
 #include "wx/apptrait.h"
-
+#include "wx/gtk1/private/timer.h"
 #include "wx/process.h"
 
 #include "wx/unix/execute.h"
@@ -181,6 +181,11 @@ int wxAddProcessCallback(wxEndProcessData *proc_data, int fd)
                             (gpointer)proc_data);
 
     return tag;
+}
+
+wxTimerImpl* wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
+{
+    return new wxGTKTimerImpl(timer);
 }
 
 // ----------------------------------------------------------------------------

@@ -57,6 +57,8 @@
     #include <TextCommon.h>
     #include <TextEncodingConverter.h>
 #endif
+
+#include "wx/mac/private/timer.h"
 #endif // wxUSE_GUI
 
 #include "wx/mac/private.h"
@@ -376,6 +378,11 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
     wxGetOsVersion(verMaj, verMin);
 
     return wxPORT_MAC;
+}
+
+wxTimerImpl* wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
+{
+    return new wxCarbonTimerImpl(timer);
 }
 
 int gs_wxBusyCursorCount = 0;

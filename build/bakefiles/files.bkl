@@ -62,6 +62,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/stackwalk.cpp
     src/unix/stdpaths.cpp
     src/unix/threadpsx.cpp
+    src/unix/timerunx.cpp
 </set>
 <set var="BASE_AND_GUI_UNIX_SRC" hints="files">
     src/unix/utilsunx.cpp
@@ -95,6 +96,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/stackwalk.cpp
     src/msw/stdpaths.cpp
     src/msw/thread.cpp
+    src/msw/timer.cpp
     src/msw/utils.cpp
     src/msw/utilsexc.cpp
 </set>
@@ -201,6 +203,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/dlunix.cpp
     src/unix/snglinst.cpp
     src/unix/stdpaths.cpp
+    src/unix/timerunx.cpp
 </set>
 <set var="BASE_MACOSX_WXMAC_HDR" hints="files">
     $(BASE_MAC_HDR)
@@ -348,6 +351,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/tarstrm.cpp
     src/common/textbuf.cpp
     src/common/textfile.cpp
+    src/common/timercmn.cpp
+    src/common/timerimpl.cpp
     src/common/tokenzr.cpp
     src/common/txtstrm.cpp
     src/common/unichar.cpp
@@ -661,7 +666,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/stockitem.cpp
     src/common/tbarbase.cpp
     src/common/textcmn.cpp
-    src/common/timercmn.cpp
     src/common/toplvcmn.cpp
     src/common/treebase.cpp
     src/common/valgen.cpp
@@ -759,7 +763,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/splitter.h
     wx/generic/srchctlg.h
     wx/generic/textdlgg.h
-    wx/generic/timer.h
     wx/generic/treectlg.h
     wx/graphics.h
     wx/helphtml.h
@@ -983,7 +986,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk/pen.h
     wx/gtk/popupwin.h
     wx/gtk/region.h
-    wx/gtk/timer.h
     wx/gtk/tooltip.h
     wx/gtk/toplevel.h
     wx/gtk/win_gtk.h
@@ -1162,7 +1164,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/gtk1/pen.h
     wx/gtk1/popupwin.h
     wx/gtk1/region.h
-    wx/gtk1/timer.h
     wx/gtk1/tooltip.h
     wx/gtk1/toplevel.h
     wx/gtk1/win_gtk.h
@@ -1404,7 +1405,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/motif/stattext.h
     wx/motif/textctrl.h
     wx/motif/tglbtn.h
-    wx/motif/timer.h
     wx/motif/toolbar.h
     wx/motif/toplevel.h
     wx/motif/window.h
@@ -1531,7 +1531,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/region.cpp
     src/msw/renderer.cpp
     src/msw/settings.cpp
-    src/msw/timer.cpp
     src/msw/tooltip.cpp
     src/msw/toplevel.cpp
     src/msw/utilsgui.cpp
@@ -1683,7 +1682,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/msw/tbar95.h
     wx/msw/textctrl.h
     wx/msw/tglbtn.h
-    wx/msw/timer.h
     wx/msw/tooltip.h
     wx/msw/toplevel.h
     wx/msw/treectrl.h
@@ -1811,7 +1809,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/icon.h
     wx/generic/imaglist.h
     wx/generic/mask.h
-    wx/generic/timer.h
     wx/mgl/app.h
     wx/mgl/bitmap.h
     wx/mgl/brush.h
@@ -1876,7 +1873,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/generic/icon.h
     wx/generic/imaglist.h
     wx/generic/mask.h
-    wx/generic/timer.h
     wx/dfb/app.h
     wx/dfb/bitmap.h
     wx/dfb/brush.h
@@ -2061,7 +2057,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/os2/tabctrl.h
     wx/os2/textctrl.h
     wx/os2/tglbtn.h
-    wx/os2/timer.h
     wx/os2/toolbar.h
     wx/os2/tooltip.h
     wx/os2/toplevel.h
@@ -2267,7 +2262,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/tabctrl.h
     wx/mac/taskbarosx.h
     wx/mac/textctrl.h
-    wx/mac/timer.h
     wx/mac/tglbtn.h
     wx/mac/toolbar.h
     wx/mac/tooltip.h
@@ -2353,7 +2347,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/mac/carbon/statusbr.h
     wx/mac/carbon/tabctrl.h
     wx/mac/carbon/textctrl.h
-    wx/mac/carbon/timer.h
     wx/mac/carbon/tglbtn.h
     wx/mac/carbon/toolbar.h
     wx/mac/carbon/tooltip.h
@@ -2541,7 +2534,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/cocoa/statline.h
     wx/cocoa/stattext.h
     wx/cocoa/textctrl.h
-    wx/cocoa/timer.h
     wx/cocoa/toolbar.h
     wx/cocoa/tooltip.h
     wx/cocoa/toplevel.h

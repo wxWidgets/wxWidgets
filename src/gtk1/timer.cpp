@@ -7,12 +7,11 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-// For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
 #if wxUSE_TIMER
 
-#include "wx/timer.h"
+#include "wx/gtk1/private/timer.h"
 
 #include "gtk/gtk.h"
 
@@ -20,20 +19,14 @@
 // wxTimer
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxEvtHandler)
-
 extern "C" {
-static gint timeout_callback( gpointer data )
+static gint timeout_callback(void *data)
 {
-    wxTimer *timer = (wxTimer*)data;
+    wxTimerImpl * const timer = (wxTimerImpl *)data;
 
-    // Don't change the order of anything in this callback!
-
-    if (timer->IsOneShot())
-    {
-        // This sets m_tag to -1
+    const bool keepGoing = !timer->IsOneShot();
+    if ( !keepGoing )
         timer->Stop();
-    }
 
     // When getting called from GDK's timer handler we
     // are no longer within GDK's grab on the GUI
@@ -45,43 +38,28 @@ static gint timeout_callback( gpointer data )
     // Release lock again.
     gdk_threads_leave();
 
-    if (timer->IsOneShot())
-        return FALSE;
-
-    return TRUE;
+    return keepGoing;
 }
 }
 
-void wxTimer::Init()
+bool wxGTKTimerImpl::Start(int millisecs, bool oneShot)
 {
-    m_tag = -1;
-    m_milli = 1000;
-}
+    if ( !wxTimerImpl::Start(millisecs, oneShot) )
+        return false;
 
-wxTimer::~wxTimer()
-{
-    wxTimer::Stop();
-}
-
-bool wxTimer::Start( int millisecs, bool oneShot )
-{
-    (void)wxTimerBase::Start(millisecs, oneShot);
-
-    if (m_tag != -1)
-        gtk_timeout_remove( m_tag );
+    wxASSERT_MSG( m_tag == -1, _T("shouldn't be still running") );
 
     m_tag = gtk_timeout_add( m_milli, timeout_callback, this );
 
-    return TRUE;
+    return true;
 }
 
-void wxTimer::Stop()
+void wxGTKTimerImpl::Stop()
 {
-    if (m_tag != -1)
-    {
-        gtk_timeout_remove( m_tag );
-        m_tag = -1;
-    }
+    wxASSERT_MSG( m_tag != -1, _T("should be running") );
+
+    gtk_timeout_remove( m_tag );
+    m_tag = -1;
 }
 
 #endif // wxUSE_TIMER

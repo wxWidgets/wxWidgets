@@ -17,7 +17,7 @@
     #include "wx/dynarray.h"
 #endif
 
-#include "wx/timer.h"
+#include "wx/mac/private/timer.h"
 
 #ifdef __WXMAC__
     #include "wx/mac/private.h"
@@ -27,26 +27,23 @@
     #include <Timer.h>
 #endif
 
-IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxEvtHandler)
-
 #define wxMAC_USE_CARBON_TIMER 1
 
 #if wxMAC_USE_CARBON_TIMER
 
 struct MacTimerInfo
 {
-    wxTimer* m_timer;
+    wxCarbonTimerImpl* m_timer;
     EventLoopTimerUPP m_proc;
     EventLoopTimerRef   m_timerRef;
 };
 
-static pascal void wxProcessTimer( EventLoopTimerRef theTimer, void *data );
 static pascal void wxProcessTimer( EventLoopTimerRef theTimer, void *data )
 {
     if ( data == NULL )
         return;
 
-    wxTimer* timer = (wxTimer*)data;
+    wxCarbonTimerImpl* timer = (wxCarbonTimerImpl*)data;
 
     if ( timer->IsOneShot() )
         timer->Stop();
@@ -54,7 +51,8 @@ static pascal void wxProcessTimer( EventLoopTimerRef theTimer, void *data )
     timer->Notify();
 }
 
-void wxTimer::Init()
+wxCarbonTimerImpl::wxCarbonTimerImpl(wxTimer *timer)
+                 : wxTimerImpl(timer)
 {
     m_info = new MacTimerInfo();
     m_info->m_timer = this;
@@ -62,24 +60,19 @@ void wxTimer::Init()
     m_info->m_timerRef = kInvalidID;
 }
 
-bool wxTimer::IsRunning() const
+bool wxCarbonTimerImpl::IsRunning() const
 {
     return ( m_info->m_timerRef != kInvalidID );
 }
 
-wxTimer::~wxTimer()
+wxCarbonTimerImpl::~wxCarbonTimerImpl()
 {
-    Stop();
-    if (m_info != NULL)
-    {
-        delete m_info;
-        m_info = NULL;
-    }
+    delete m_info;
 }
 
-bool wxTimer::Start( int milliseconds, bool mode )
+bool wxCarbonTimerImpl::Start( int milliseconds, bool mode )
 {
-    (void)wxTimerBase::Start(milliseconds, mode);
+    (void)wxTimerImpl::Start(milliseconds, mode);
 
     wxCHECK_MSG( m_milli > 0, false, wxT("invalid value for timer timeout") );
     wxCHECK_MSG( m_info->m_timerRef == NULL, false, wxT("attempting to restart a timer") );
@@ -99,7 +92,7 @@ bool wxTimer::Start( int milliseconds, bool mode )
     return true;
 }
 
-void wxTimer::Stop()
+void wxCarbonTimerImpl::Stop()
 {
     if (m_info->m_timerRef)
         RemoveEventLoopTimer( m_info->m_timerRef );
@@ -110,13 +103,13 @@ void wxTimer::Stop()
     m_info->m_timerRef = kInvalidID;
 }
 
-#else
+#else // !wxMAC_USE_CARBON_TIMER
 
 typedef struct MacTimerInfo
 {
     TMTask m_task;
     wxMacNotifierTableRef m_table;
-    wxTimer* m_timer;
+    wxCarbonTimerImpl* m_timer;
 };
 
 static void wxProcessTimer( unsigned long event, void *data );
@@ -138,8 +131,8 @@ static void wxProcessTimer( unsigned long event, void *data )
     if ( data == NULL )
         return;
 
-    wxTimer* timer = (wxTimer*) data;
-    if ( timer->IsOneShot() )
+    wxCarbonTimerImpl* timer = (wxCarbonTimerImpl*) data;
+    if ( timer->m_oneShot )
         timer->Stop();
 
     gTimersInProcess.Add( timer );
@@ -155,7 +148,7 @@ static void wxProcessTimer( unsigned long event, void *data )
     }
 }
 
-void wxTimer::Init()
+void wxCarbonTimerImpl::Init()
 {
     m_info = new MacTimerInfo();
     m_info->m_task.tmAddr = NULL;
@@ -166,14 +159,14 @@ void wxTimer::Init()
     m_info->m_timer = this;
 }
 
-bool wxTimer::IsRunning() const
+bool wxCarbonTimerImpl::IsRunning() const
 {
     // as the qType may already indicate it is elapsed, but it
     // was not handled internally yet
     return ( m_info->m_task.tmAddr != NULL );
 }
 
-wxTimer::~wxTimer()
+wxCarbonTimerImpl::~wxCarbonTimerImpl()
 {
     Stop();
     if (m_info != NULL)
@@ -187,7 +180,7 @@ wxTimer::~wxTimer()
         gTimersInProcess.RemoveAt( index );
 }
 
-bool wxTimer::Start( int milliseconds, bool mode )
+bool wxCarbonTimerImpl::Start( int milliseconds, bool mode )
 {
     (void)wxTimerBase::Start( milliseconds, mode );
 
@@ -205,7 +198,7 @@ bool wxTimer::Start( int milliseconds, bool mode )
     return true;
 }
 
-void wxTimer::Stop()
+void wxCarbonTimerImpl::Stop()
 {
     if ( m_info->m_task.tmAddr )
     {
@@ -217,7 +210,7 @@ void wxTimer::Stop()
     wxMacRemoveAllNotifiersForData( wxMacGetNotifierTable(), this );
 }
 
-#endif // wxMAC_USE_CARBON_TIMER
+#endif // wxMAC_USE_CARBON_TIMER/!wxMAC_USE_CARBON_TIMER
 
 #endif // wxUSE_TIMER
 

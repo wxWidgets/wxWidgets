@@ -18,7 +18,7 @@
 
 #if wxUSE_TIMER
 
-#include "wx/timer.h"
+#include "wx/palmos/private/timer.h"
 
 #ifndef WX_PRECOMP
     #include "wx/list.h"
@@ -42,7 +42,7 @@ wxCreateHiddenWindow(LPCTSTR *pclassname, LPCTSTR classname, WNDPROC wndproc);
 
 // define a hash containing all the timers: it is indexed by timer id and
 // contains the corresponding timer
-WX_DECLARE_HASH_MAP(unsigned long, wxTimer *, wxIntegerHash, wxIntegerEqual,
+WX_DECLARE_HASH_MAP(unsigned long, wxPalmOSTimerImpl*, wxIntegerHash, wxIntegerEqual,
                     wxTimerMap);
 
 static wxTimerMap g_timerMap;
@@ -53,12 +53,6 @@ static wxTimerMap g_timerMap;
 
 void WINAPI wxTimerProc(HWND hwnd, WORD, int idTimer, DWORD);
 
-// ----------------------------------------------------------------------------
-// macros
-// ----------------------------------------------------------------------------
-
-IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxEvtHandler)
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -67,20 +61,20 @@ IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxEvtHandler)
 // wxTimer class
 // ----------------------------------------------------------------------------
 
-void wxTimer::Init()
+void wxPalmOSTimerImpl::Init()
 {
 }
 
-wxTimer::~wxTimer()
+wxPalmOSTimerImpl::~wxPalmOSTimerImpl()
 {
 }
 
-bool wxTimer::Start(int milliseconds, bool oneShot)
+bool wxPalmOSTimerImpl::Start(int milliseconds, bool oneShot)
 {
     return false;
 }
 
-void wxTimer::Stop()
+void wxPalmOSTimerImpl::Stop()
 {
 }
 
@@ -88,7 +82,7 @@ void wxTimer::Stop()
 // private functions
 // ----------------------------------------------------------------------------
 
-void wxProcessTimer(wxTimer& timer)
+void wxProcessTimer(wxPalmOSTimerImpl& timer)
 {
 }
 

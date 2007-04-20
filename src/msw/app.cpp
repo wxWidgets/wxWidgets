@@ -52,6 +52,7 @@
 
 #include "wx/msw/private.h"
 #include "wx/msw/ole/oleutils.h"
+#include "wx/msw/private/timer.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
@@ -264,6 +265,12 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *majVer, int *minVer) const
     return wxPORT_MSW;
 #endif
 }
+
+wxTimerImpl *
+wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
+{
+  return new wxMSWTimerImpl(timer);
+};
 
 // ===========================================================================
 // wxApp implementation

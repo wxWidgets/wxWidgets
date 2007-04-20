@@ -26,7 +26,6 @@
     #include "wx/hash.h"
     #include "wx/app.h"
     #include "wx/window.h"
-    #include "wx/timer.h"
     #include "wx/module.h"
 #endif
 
@@ -34,6 +33,7 @@
 #include "wx/unix/private.h"
 #include "wx/x11/private.h"
 #include "X11/Xlib.h"
+#include "wx/generic/private/timer.h"
 
 #if wxUSE_THREADS
     #include "wx/thread.h"
@@ -165,7 +165,7 @@ int wxEventLoop::Run()
         while ( ! Pending() )
         {
 #if wxUSE_TIMER
-            wxTimer::NotifyTimers(); // TODO: is this the correct place for it?
+            wxGenericTimerImpl::NotifyTimers(); // TODO: is this the correct place for it?
 #endif
             if (!m_impl->SendIdleEvent())
             {

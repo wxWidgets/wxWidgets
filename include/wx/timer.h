@@ -15,13 +15,13 @@
 
 #include "wx/defs.h"
 
-#if wxUSE_GUI && wxUSE_TIMER
+#if wxUSE_TIMER
 
 #include "wx/object.h"
 #include "wx/longlong.h"
 #include "wx/event.h"
 #include "wx/stopwatch.h" // for backwards compatibility
-#include "wx/window.h"    // only for NewControlId()
+#include "wx/utils.h"
 
 
 // more readable flags for Start():
@@ -32,8 +32,10 @@
 // only send the notification once and then stop the timer
 #define wxTIMER_ONE_SHOT true
 
+class WXDLLIMPEXP_BASE wxTimerImpl;
+
 // the interface of wxTimer class
-class WXDLLEXPORT wxTimerBase : public wxEvtHandler
+class WXDLLIMPEXP_BASE wxTimer : public wxEvtHandler
 {
 public:
     // ctors and initializers
@@ -41,28 +43,32 @@ public:
 
     // default: if you don't call SetOwner(), your only chance to get timer
     // notifications is to override Notify() in the derived class
-    wxTimerBase()
-        { Init(); SetOwner(this); }
+    wxTimer()
+    {
+        Init();
+        SetOwner(this);
+    }
 
     // ctor which allows to avoid having to override Notify() in the derived
     // class: the owner will get timer notifications which can be handled with
     // EVT_TIMER
-    wxTimerBase(wxEvtHandler *owner, int timerid = wxID_ANY)
-        { Init(); SetOwner(owner, timerid); }
-
-    // same as ctor above
-    void SetOwner(wxEvtHandler *owner, int timerid = wxID_ANY)
+    wxTimer(wxEvtHandler *owner, int timerid = wxID_ANY)
     {
-        m_owner = owner;
-        m_idTimer = timerid == wxID_ANY ? wxWindow::NewControlId() : timerid;
+        Init();
+        SetOwner(owner, timerid);
     }
 
-    wxEvtHandler *GetOwner() const { return m_owner; }
+    // same as ctor above
+    void SetOwner(wxEvtHandler *owner, int timerid = wxID_ANY);
 
-    virtual ~wxTimerBase();
+    virtual ~wxTimer();
+
 
     // working with the timer
     // ----------------------
+
+    // NB: Start() and Stop() are not supposed to be overridden, they are only
+    //     virtual for historical reasons, only Notify() can be overridden
 
     // start the timer: if milliseconds == -1, use the same value as for the
     // last Start()
@@ -71,62 +77,40 @@ public:
     // timer if it is already running
     virtual bool Start(int milliseconds = -1, bool oneShot = false);
 
-    // stop the timer
-    virtual void Stop() = 0;
+    // stop the timer, does nothing if the timer is not running
+    virtual void Stop();
 
     // override this in your wxTimer-derived class if you want to process timer
     // messages in it, use non default ctor or SetOwner() otherwise
     virtual void Notify();
 
-    // getting info
-    // ------------
+
+    // accessors
+    // ---------
+
+    // get the object notified about the timer events
+    wxEvtHandler *GetOwner() const;
 
     // return true if the timer is running
-    virtual bool IsRunning() const = 0;
+    bool IsRunning() const;
 
     // return the timer ID
-    int GetId() const { return m_idTimer; }
+    int GetId() const;
 
     // get the (last) timer interval in milliseconds
-    int GetInterval() const { return m_milli; }
+    int GetInterval() const;
 
     // return true if the timer is one shot
-    bool IsOneShot() const { return m_oneShot; }
+    bool IsOneShot() const;
 
 protected:
     // common part of all ctors
-    void Init()
-        { m_owner = NULL; m_idTimer = wxID_ANY; m_milli = 0; m_oneShot = false; }
+    void Init();
 
-    wxEvtHandler *m_owner;
-    int     m_idTimer;
-    int     m_milli;        // the timer interval
-    bool    m_oneShot;      // true if one shot
+    wxTimerImpl *m_impl;
 
-    DECLARE_NO_COPY_CLASS(wxTimerBase)
+    DECLARE_NO_COPY_CLASS(wxTimer)
 };
-
-// ----------------------------------------------------------------------------
-// wxTimer itself
-// ----------------------------------------------------------------------------
-
-#if defined(__WXMSW__)
-    #include "wx/msw/timer.h"
-#elif defined(__WXMOTIF__)
-    #include "wx/motif/timer.h"
-#elif defined(__WXGTK20__)
-    #include "wx/gtk/timer.h"
-#elif defined(__WXGTK__)
-    #include "wx/gtk1/timer.h"
-#elif defined(__WXX11__) || defined(__WXMGL__) || defined(__WXDFB__)
-    #include "wx/generic/timer.h"
-#elif defined (__WXCOCOA__)
-    #include "wx/cocoa/timer.h"
-#elif defined(__WXMAC__)
-    #include "wx/mac/timer.h"
-#elif defined(__WXPM__)
-    #include "wx/os2/timer.h"
-#endif
 
 // ----------------------------------------------------------------------------
 // wxTimerRunner: starts the timer in its ctor, stops in the dtor
@@ -195,7 +179,6 @@ typedef void (wxEvtHandler::*wxTimerEventFunction)(wxTimerEvent&);
 #define EVT_TIMER(timerid, func) \
     wx__DECLARE_EVT1(wxEVT_TIMER, timerid, wxTimerEventHandler(func))
 
-#endif // wxUSE_GUI && wxUSE_TIMER
+#endif // wxUSE_TIMER
 
-#endif
-    // _WX_TIMER_H_BASE_
+#endif // _WX_TIMER_H_BASE_

@@ -845,14 +845,6 @@ bool wxYieldIfNeeded()
     return wxTheApp && wxTheApp->Yield(true);
 }
 
-#endif // wxUSE_BASE
-
-// ============================================================================
-// GUI-only functions from now on
-// ============================================================================
-
-#if wxUSE_GUI
-
 // Id generation
 static long wxCurrentId = 100;
 
@@ -874,6 +866,14 @@ wxRegisterId (long id)
   if (id >= wxCurrentId)
     wxCurrentId = id + 1;
 }
+
+#endif // wxUSE_BASE
+
+// ============================================================================
+// GUI-only functions from now on
+// ============================================================================
+
+#if wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // Menu accelerators related functions

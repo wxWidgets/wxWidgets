@@ -33,6 +33,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/apptrait.h"
+#include "wx/os2/private/timer.h"
 
 #include "wx/os2/private.h"     // includes <windows.h>
 
@@ -259,6 +260,11 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
     // How to get version of PM ? I guess, just reusing the OS version is OK.
     (void) wxGetOsVersion(verMaj, verMin);
     return wxPORT_OS2;
+}
+
+wxTimerImpl* wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
+{
+    return new wxOS2TimerImpl(timer);
 }
 
 

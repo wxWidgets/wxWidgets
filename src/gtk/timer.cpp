@@ -12,28 +12,23 @@
 
 #if wxUSE_TIMER
 
-#include "wx/timer.h"
+#include "wx/gtk/private/timer.h"
 
 #include <gtk/gtk.h>
 
 // ----------------------------------------------------------------------------
-// wxTimer
+// wxTimerImpl
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxEvtHandler)
-
 extern "C" {
+
 static gboolean timeout_callback(gpointer data)
 {
-    wxTimer *timer = (wxTimer*)data;
+    wxGTKTimerImpl *timer = (wxGTKTimerImpl*)data;
 
-    // Don't change the order of anything in this callback!
-
-    if (timer->IsOneShot())
-    {
-        // This sets m_tag to -1
+    const bool keepGoing = !timer->IsOneShot();
+    if ( !keepGoing )
         timer->Stop();
-    }
 
     // When getting called from GDK's timer handler we
     // are no longer within GDK's grab on the GUI
@@ -45,40 +40,29 @@ static gboolean timeout_callback(gpointer data)
     // Release lock again.
     gdk_threads_leave();
 
-    return !timer->IsOneShot();
-}
+    return keepGoing;
 }
 
-void wxTimer::Init()
+} // extern "C"
+
+bool wxGTKTimerImpl::Start(int millisecs, bool oneShot)
 {
-    m_sourceId = 0;
-    m_milli = 1000;
-}
+    if ( !wxTimerImpl::Start(millisecs, oneShot) )
+        return false;
 
-wxTimer::~wxTimer()
-{
-    Stop();
-}
-
-bool wxTimer::Start( int millisecs, bool oneShot )
-{
-    (void)wxTimerBase::Start(millisecs, oneShot);
-
-    if (m_sourceId != 0)
-        g_source_remove(m_sourceId);
+    wxASSERT_MSG( !m_sourceId, _T("shouldn't be still running") );
 
     m_sourceId = g_timeout_add(m_milli, timeout_callback, this);
 
     return true;
 }
 
-void wxTimer::Stop()
+void wxGTKTimerImpl::Stop()
 {
-    if (m_sourceId != 0)
-    {
-        g_source_remove(m_sourceId);
-        m_sourceId = 0;
-    }
+    wxASSERT_MSG( m_sourceId, _T("should be running") );
+
+    g_source_remove(m_sourceId);
+    m_sourceId = 0;
 }
 
 #endif // wxUSE_TIMER

@@ -34,6 +34,7 @@
 
 #include "wx/apptrait.h"
 #include "wx/evtloop.h"
+#include "wx/motif/private/timer.h"
 
 #include <string.h>
 
@@ -133,6 +134,11 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
         *verMin = XmREVISION;
 
     return wxPORT_MOTIF;
+}
+
+wxTimerImpl* wxGUIAppTraits::CreateTimerImpl(wxTimer* timer)
+{
+    return new wxMotifTimerImpl(timer);
 }
 
 // ----------------------------------------------------------------------------

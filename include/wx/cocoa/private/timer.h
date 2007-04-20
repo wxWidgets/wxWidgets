@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        timer.h
+// Name:        wx/cocoa/private/timer.h
 // Purpose:     Cocoa wxTimer class
 // Author:      Ryan Norton
 // Id:          $Id$
@@ -7,9 +7,10 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+#ifndef _WX_COCOA_PRIVATE_TIMER_H_
+#define _WX_COCOA_PRIVATE_TIMER_H_
 
-#ifndef __WX_TIMER_H__
-#define __WX_TIMER_H__
+#include "wx/private/timer.h"
 
 #include "wx/cocoa/ObjcRef.h"
 
@@ -19,29 +20,24 @@
 
 DECLARE_WXCOCOA_OBJC_CLASS(NSTimer);
 
-class WXDLLEXPORT wxTimer : public wxTimerBase
+class WXDLLEXPORT wxCocoaTimerImpl : public wxTimerImpl
 {
 public:
-    wxTimer() { Init(); }
-    wxTimer(wxEvtHandler *owner, int timerid = -1) : wxTimerBase(owner, timerid)
-        { Init(); }
-    virtual ~wxTimer();
+    wxCocoaTimerImpl(wxTimer* timer) : wxTimerImpl(timer) { Init(); }
+    virtual ~wxCocoaTimerImpl();
 
     virtual bool Start(int millisecs = -1, bool oneShot = false);
     virtual void Stop();
 
     virtual bool IsRunning() const;
 
-    inline WX_NSTimer GetNSTimer()
-    {   return m_cocoaNSTimer; }
+    WX_NSTimer GetNSTimer() { return m_cocoaNSTimer; }
 
 protected:
     void Init();
 
 private:
     WX_NSTimer m_cocoaNSTimer;
-
-    DECLARE_ABSTRACT_CLASS(wxTimer)
 };
 
-#endif // __WX_TIMER_H__
+#endif // _WX_COCOA_PRIVATE_TIMER_H_

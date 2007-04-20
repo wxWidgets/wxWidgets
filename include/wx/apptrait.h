@@ -24,6 +24,8 @@ class WXDLLIMPEXP_BASE wxLog;
 class WXDLLIMPEXP_BASE wxMessageOutput;
 class WXDLLEXPORT wxRendererNative;
 class WXDLLIMPEXP_BASE wxString;
+class WXDLLIMPEXP_BASE wxTimer;
+class WXDLLIMPEXP_BASE wxTimerImpl;
 
 class GSocketGUIFunctionsTable;
 
@@ -117,6 +119,10 @@ public:
     virtual GSocketGUIFunctionsTable* GetSocketGUIFunctionsTable() = 0;
 #endif
 
+#if wxUSE_TIMER
+    // return platform and toolkit dependent wxTimer implementation
+    virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer) = 0;
+#endif
 
     // functions returning port-specific information
     // ------------------------------------------------------------------------

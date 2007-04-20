@@ -26,7 +26,7 @@
 #endif
 
 #include "wx/thread.h"
-#include "wx/timer.h"
+#include "wx/generic/private/timer.h"
 #include "wx/private/selectdispatcher.h"
 #include "wx/dfb/private.h"
 #include "wx/nonownedwnd.h"
@@ -136,7 +136,7 @@ void wxEventLoop::WakeUp()
 void wxEventLoop::OnNextIteration()
 {
 #if wxUSE_TIMER
-    wxTimer::NotifyTimers();
+    wxGenericTimerImpl::NotifyTimers();
 #endif
 
 #if wxUSE_SOCKETS

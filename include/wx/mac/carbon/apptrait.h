@@ -19,6 +19,10 @@
 class WXDLLEXPORT wxConsoleAppTraits : public wxConsoleAppTraitsBase
 {
 public:
+    // no timer support in wxBase yet
+#if wxUSE_TIMER
+    virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer) { return NULL; };
+#endif
     // other miscellaneous helpers
     // ---------------------------
 
@@ -30,6 +34,9 @@ public:
 class WXDLLEXPORT wxGUIAppTraits : public wxGUIAppTraitsBase
 {
 public:
+#if wxUSE_TIMER
+    virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer);
+#endif
     // other miscellaneous helpers
     // ---------------------------
 

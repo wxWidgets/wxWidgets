@@ -39,6 +39,8 @@
 #include "wx/x11/private.h"
 #include "X11/Xatom.h"
 
+#include "wx/generic/private/timer.h"
+
 /*
  * wxAdoptedWindow
  */
@@ -173,7 +175,7 @@ bool wxReparenter::WaitAndReparent(wxWindow* newParent, wxAdoptedWindow* toRepar
         else
         {
 #if wxUSE_TIMER
-            wxTimer::NotifyTimers();
+            wxGenericTimerImpl::NotifyTimers();
             wxTheApp->ProcessIdle();
 #endif
         }

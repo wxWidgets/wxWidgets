@@ -689,6 +689,8 @@ ALL_BASE_SOURCES =  \
 	src/common/tarstrm.cpp \
 	src/common/textbuf.cpp \
 	src/common/textfile.cpp \
+	src/common/timercmn.cpp \
+	src/common/timerimpl.cpp \
 	src/common/tokenzr.cpp \
 	src/common/txtstrm.cpp \
 	src/common/unichar.cpp \
@@ -709,6 +711,7 @@ ALL_BASE_SOURCES =  \
 	src/unix/stackwalk.cpp \
 	src/unix/stdpaths.cpp \
 	src/unix/threadpsx.cpp \
+	src/unix/timerunx.cpp \
 	src/msw/basemsw.cpp \
 	src/msw/crashrpt.cpp \
 	src/msw/debughlp.cpp \
@@ -723,6 +726,7 @@ ALL_BASE_SOURCES =  \
 	src/msw/stackwalk.cpp \
 	src/msw/stdpaths.cpp \
 	src/msw/thread.cpp \
+	src/msw/timer.cpp \
 	src/msw/utils.cpp \
 	src/msw/utilsexc.cpp \
 	$(BASE_WINCE_SRC) \
@@ -853,6 +857,8 @@ MONODLL_OBJECTS =  \
 	monodll_tarstrm.o \
 	monodll_textbuf.o \
 	monodll_textfile.o \
+	monodll_timercmn.o \
+	monodll_timerimpl.o \
 	monodll_tokenzr.o \
 	monodll_txtstrm.o \
 	monodll_unichar.o \
@@ -963,6 +969,8 @@ MONOLIB_OBJECTS =  \
 	monolib_tarstrm.o \
 	monolib_textbuf.o \
 	monolib_textfile.o \
+	monolib_timercmn.o \
+	monolib_timerimpl.o \
 	monolib_tokenzr.o \
 	monolib_txtstrm.o \
 	monolib_unichar.o \
@@ -1070,6 +1078,8 @@ BASEDLL_OBJECTS =  \
 	basedll_tarstrm.o \
 	basedll_textbuf.o \
 	basedll_textfile.o \
+	basedll_timercmn.o \
+	basedll_timerimpl.o \
 	basedll_tokenzr.o \
 	basedll_txtstrm.o \
 	basedll_unichar.o \
@@ -1160,6 +1170,8 @@ BASELIB_OBJECTS =  \
 	baselib_tarstrm.o \
 	baselib_textbuf.o \
 	baselib_textfile.o \
+	baselib_timercmn.o \
+	baselib_timerimpl.o \
 	baselib_tokenzr.o \
 	baselib_txtstrm.o \
 	baselib_unichar.o \
@@ -1929,7 +1941,6 @@ COND_TOOLKIT_DFB_LOWLEVEL_HDR =  \
 	wx/generic/icon.h \
 	wx/generic/imaglist.h \
 	wx/generic/mask.h \
-	wx/generic/timer.h \
 	wx/dfb/app.h \
 	wx/dfb/bitmap.h \
 	wx/dfb/brush.h \
@@ -1977,7 +1988,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION__LOWLEVEL_HDR =  \
 	wx/gtk1/pen.h \
 	wx/gtk1/popupwin.h \
 	wx/gtk1/region.h \
-	wx/gtk1/timer.h \
 	wx/gtk1/tooltip.h \
 	wx/gtk1/toplevel.h \
 	wx/gtk1/win_gtk.h \
@@ -2010,7 +2020,6 @@ COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_LOWLEVEL_HDR =  \
 	wx/gtk/pen.h \
 	wx/gtk/popupwin.h \
 	wx/gtk/region.h \
-	wx/gtk/timer.h \
 	wx/gtk/tooltip.h \
 	wx/gtk/toplevel.h \
 	wx/gtk/win_gtk.h \
@@ -2023,7 +2032,6 @@ COND_TOOLKIT_MGL_LOWLEVEL_HDR =  \
 	wx/generic/icon.h \
 	wx/generic/imaglist.h \
 	wx/generic/mask.h \
-	wx/generic/timer.h \
 	wx/mgl/app.h \
 	wx/mgl/bitmap.h \
 	wx/mgl/brush.h \
@@ -2171,7 +2179,6 @@ COND_TOOLKIT_COCOA_GUI_HDR =  \
 	wx/cocoa/statline.h \
 	wx/cocoa/stattext.h \
 	wx/cocoa/textctrl.h \
-	wx/cocoa/timer.h \
 	wx/cocoa/toolbar.h \
 	wx/cocoa/tooltip.h \
 	wx/cocoa/toplevel.h \
@@ -2355,7 +2362,6 @@ COND_TOOLKIT_MAC_GUI_HDR =  \
 	wx/mac/tabctrl.h \
 	wx/mac/taskbarosx.h \
 	wx/mac/textctrl.h \
-	wx/mac/timer.h \
 	wx/mac/tglbtn.h \
 	wx/mac/toolbar.h \
 	wx/mac/tooltip.h \
@@ -2438,7 +2444,6 @@ COND_TOOLKIT_MAC_GUI_HDR =  \
 	wx/mac/carbon/statusbr.h \
 	wx/mac/carbon/tabctrl.h \
 	wx/mac/carbon/textctrl.h \
-	wx/mac/carbon/timer.h \
 	wx/mac/carbon/tglbtn.h \
 	wx/mac/carbon/toolbar.h \
 	wx/mac/carbon/tooltip.h \
@@ -2514,7 +2519,6 @@ COND_TOOLKIT_MOTIF_GUI_HDR =  \
 	wx/motif/stattext.h \
 	wx/motif/textctrl.h \
 	wx/motif/tglbtn.h \
-	wx/motif/timer.h \
 	wx/motif/toolbar.h \
 	wx/motif/toplevel.h \
 	wx/motif/window.h
@@ -2598,7 +2602,6 @@ COND_TOOLKIT_MSW_GUI_HDR =  \
 	wx/msw/tbar95.h \
 	wx/msw/textctrl.h \
 	wx/msw/tglbtn.h \
-	wx/msw/timer.h \
 	wx/msw/tooltip.h \
 	wx/msw/toplevel.h \
 	wx/msw/treectrl.h \
@@ -2707,7 +2710,6 @@ COND_TOOLKIT_PM_GUI_HDR =  \
 	wx/os2/tabctrl.h \
 	wx/os2/textctrl.h \
 	wx/os2/tglbtn.h \
-	wx/os2/timer.h \
 	wx/os2/toolbar.h \
 	wx/os2/tooltip.h \
 	wx/os2/toplevel.h \
@@ -2792,7 +2794,6 @@ COND_TOOLKIT_WINCE_GUI_HDR =  \
 	wx/msw/tbar95.h \
 	wx/msw/textctrl.h \
 	wx/msw/tglbtn.h \
-	wx/msw/timer.h \
 	wx/msw/tooltip.h \
 	wx/msw/toplevel.h \
 	wx/msw/treectrl.h \
@@ -3069,7 +3070,6 @@ COND_USE_GUI_1_ALL_GUI_HEADERS =  \
 	wx/generic/splitter.h \
 	wx/generic/srchctlg.h \
 	wx/generic/textdlgg.h \
-	wx/generic/timer.h \
 	wx/generic/treectlg.h \
 	wx/graphics.h \
 	wx/helphtml.h \
@@ -3395,7 +3395,8 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_snglinst.o \
 	monodll_stackwalk.o \
 	monodll_stdpaths.o \
-	monodll_threadpsx.o
+	monodll_threadpsx.o \
+	monodll_timerunx.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_basemsw.o \
@@ -3412,6 +3413,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS =  \
 	monodll_stackwalk.o \
 	monodll_stdpaths.o \
 	monodll_thread.o \
+	monodll_timer.o \
 	monodll_utils.o \
 	monodll_utilsexc.o \
 	$(__BASE_WINCE_SRC_OBJECTS)
@@ -3426,6 +3428,7 @@ COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_stackwalk.o \
 	monodll_stdpaths.o \
 	monodll_threadpsx.o \
+	monodll_timerunx.o \
 	monodll_cfstring.o \
 	monodll_stdpaths_cf.o \
 	monodll_utilsexc_base.o
@@ -3439,6 +3442,7 @@ COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_stackwalk.o \
 	monodll_stdpaths.o \
 	monodll_threadpsx.o \
+	monodll_timerunx.o \
 	monodll_cfstring.o \
 	monodll_stdpaths_cf.o \
 	monodll_utilsexc_base.o
@@ -3452,6 +3456,7 @@ COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_stackwalk.o \
 	monodll_stdpaths.o \
 	monodll_threadpsx.o \
+	monodll_timerunx.o \
 	monodll_cfstring.o \
 	monodll_stdpaths_cf.o \
 	monodll_utilsexc_base.o
@@ -3469,7 +3474,8 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_baseunix.o \
 	monodll_dlunix.o \
 	monodll_snglinst.o \
-	monodll_stdpaths.o
+	monodll_stdpaths.o \
+	monodll_timerunx.o
 @COND_TOOLKIT_MAC@__BASE_MACOSX_SRC_OBJECTS = $(COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS)
 COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_baseunix.o \
@@ -3480,6 +3486,7 @@ COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_stackwalk.o \
 	monodll_stdpaths.o \
 	monodll_threadpsx.o \
+	monodll_timerunx.o \
 	monodll_cfstring.o \
 	monodll_stdpaths_cf.o \
 	monodll_utilsexc_base.o
@@ -3493,6 +3500,7 @@ COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS =  \
 	monodll_stackwalk.o \
 	monodll_stdpaths.o \
 	monodll_threadpsx.o \
+	monodll_timerunx.o \
 	monodll_cfstring.o \
 	monodll_stdpaths_cf.o \
 	monodll_utilsexc_base.o
@@ -3710,7 +3718,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	monodll_stockitem.o \
 	monodll_tbarbase.o \
 	monodll_textcmn.o \
-	monodll_timercmn.o \
 	monodll_toplvcmn.o \
 	monodll_treebase.o \
 	monodll_valgen.o \
@@ -3889,7 +3896,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_stockitem.o \
 	monodll_tbarbase.o \
 	monodll_textcmn.o \
-	monodll_timercmn.o \
 	monodll_toplvcmn.o \
 	monodll_treebase.o \
 	monodll_valgen.o \
@@ -4132,7 +4138,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_region.o \
 	monodll_renderer.o \
 	monodll_settings.o \
-	monodll_timer.o \
 	monodll_tooltip.o \
 	monodll_toplevel.o \
 	monodll_utilsgui.o \
@@ -4186,7 +4191,6 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS =  \
 	monodll_region.o \
 	monodll_renderer.o \
 	monodll_settings.o \
-	monodll_timer.o \
 	monodll_tooltip.o \
 	monodll_toplevel.o \
 	monodll_utilsgui.o \
@@ -4970,7 +4974,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_region.o \
 	monodll_renderer.o \
 	monodll_settings.o \
-	monodll_timer.o \
 	monodll_tooltip.o \
 	monodll_toplevel.o \
 	monodll_utilsgui.o \
@@ -5024,7 +5027,6 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_1 =  \
 	monodll_region.o \
 	monodll_renderer.o \
 	monodll_settings.o \
-	monodll_timer.o \
 	monodll_tooltip.o \
 	monodll_toplevel.o \
 	monodll_utilsgui.o \
@@ -5199,7 +5201,8 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_snglinst.o \
 	monolib_stackwalk.o \
 	monolib_stdpaths.o \
-	monolib_threadpsx.o
+	monolib_threadpsx.o \
+	monolib_timerunx.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_1 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_1)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_basemsw.o \
@@ -5216,6 +5219,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_1 =  \
 	monolib_stackwalk.o \
 	monolib_stdpaths.o \
 	monolib_thread.o \
+	monolib_timer.o \
 	monolib_utils.o \
 	monolib_utilsexc.o \
 	$(__BASE_WINCE_SRC_OBJECTS_1)
@@ -5230,6 +5234,7 @@ COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_stackwalk.o \
 	monolib_stdpaths.o \
 	monolib_threadpsx.o \
+	monolib_timerunx.o \
 	monolib_cfstring.o \
 	monolib_stdpaths_cf.o \
 	monolib_utilsexc_base.o
@@ -5243,6 +5248,7 @@ COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_stackwalk.o \
 	monolib_stdpaths.o \
 	monolib_threadpsx.o \
+	monolib_timerunx.o \
 	monolib_cfstring.o \
 	monolib_stdpaths_cf.o \
 	monolib_utilsexc_base.o
@@ -5256,6 +5262,7 @@ COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_stackwalk.o \
 	monolib_stdpaths.o \
 	monolib_threadpsx.o \
+	monolib_timerunx.o \
 	monolib_cfstring.o \
 	monolib_stdpaths_cf.o \
 	monolib_utilsexc_base.o
@@ -5273,7 +5280,8 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_baseunix.o \
 	monolib_dlunix.o \
 	monolib_snglinst.o \
-	monolib_stdpaths.o
+	monolib_stdpaths.o \
+	monolib_timerunx.o
 @COND_TOOLKIT_MAC@__BASE_MACOSX_SRC_OBJECTS_1 = $(COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_1)
 COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_baseunix.o \
@@ -5284,6 +5292,7 @@ COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_stackwalk.o \
 	monolib_stdpaths.o \
 	monolib_threadpsx.o \
+	monolib_timerunx.o \
 	monolib_cfstring.o \
 	monolib_stdpaths_cf.o \
 	monolib_utilsexc_base.o
@@ -5297,6 +5306,7 @@ COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_1 =  \
 	monolib_stackwalk.o \
 	monolib_stdpaths.o \
 	monolib_threadpsx.o \
+	monolib_timerunx.o \
 	monolib_cfstring.o \
 	monolib_stdpaths_cf.o \
 	monolib_utilsexc_base.o
@@ -5514,7 +5524,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	monolib_stockitem.o \
 	monolib_tbarbase.o \
 	monolib_textcmn.o \
-	monolib_timercmn.o \
 	monolib_toplvcmn.o \
 	monolib_treebase.o \
 	monolib_valgen.o \
@@ -5693,7 +5702,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_stockitem.o \
 	monolib_tbarbase.o \
 	monolib_textcmn.o \
-	monolib_timercmn.o \
 	monolib_toplvcmn.o \
 	monolib_treebase.o \
 	monolib_valgen.o \
@@ -5937,7 +5945,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_region.o \
 	monolib_renderer.o \
 	monolib_settings.o \
-	monolib_timer.o \
 	monolib_tooltip.o \
 	monolib_toplevel.o \
 	monolib_utilsgui.o \
@@ -5991,7 +5998,6 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_2 =  \
 	monolib_region.o \
 	monolib_renderer.o \
 	monolib_settings.o \
-	monolib_timer.o \
 	monolib_tooltip.o \
 	monolib_toplevel.o \
 	monolib_utilsgui.o \
@@ -6776,7 +6782,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_region.o \
 	monolib_renderer.o \
 	monolib_settings.o \
-	monolib_timer.o \
 	monolib_tooltip.o \
 	monolib_toplevel.o \
 	monolib_utilsgui.o \
@@ -6830,7 +6835,6 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_3 =  \
 	monolib_region.o \
 	monolib_renderer.o \
 	monolib_settings.o \
-	monolib_timer.o \
 	monolib_tooltip.o \
 	monolib_toplevel.o \
 	monolib_utilsgui.o \
@@ -7044,7 +7048,8 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_snglinst.o \
 	basedll_stackwalk.o \
 	basedll_stdpaths.o \
-	basedll_threadpsx.o
+	basedll_threadpsx.o \
+	basedll_timerunx.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_2 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_2)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_basemsw.o \
@@ -7061,6 +7066,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_2 =  \
 	basedll_stackwalk.o \
 	basedll_stdpaths.o \
 	basedll_thread.o \
+	basedll_timer.o \
 	basedll_utils.o \
 	basedll_utilsexc.o \
 	$(__BASE_WINCE_SRC_OBJECTS_2)
@@ -7075,6 +7081,7 @@ COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_stackwalk.o \
 	basedll_stdpaths.o \
 	basedll_threadpsx.o \
+	basedll_timerunx.o \
 	basedll_cfstring.o \
 	basedll_stdpaths_cf.o \
 	basedll_utilsexc_base.o
@@ -7088,6 +7095,7 @@ COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_stackwalk.o \
 	basedll_stdpaths.o \
 	basedll_threadpsx.o \
+	basedll_timerunx.o \
 	basedll_cfstring.o \
 	basedll_stdpaths_cf.o \
 	basedll_utilsexc_base.o
@@ -7101,6 +7109,7 @@ COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_stackwalk.o \
 	basedll_stdpaths.o \
 	basedll_threadpsx.o \
+	basedll_timerunx.o \
 	basedll_cfstring.o \
 	basedll_stdpaths_cf.o \
 	basedll_utilsexc_base.o
@@ -7118,7 +7127,8 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_baseunix.o \
 	basedll_dlunix.o \
 	basedll_snglinst.o \
-	basedll_stdpaths.o
+	basedll_stdpaths.o \
+	basedll_timerunx.o
 @COND_TOOLKIT_MAC@__BASE_MACOSX_SRC_OBJECTS_2 = $(COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_2)
 COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_baseunix.o \
@@ -7129,6 +7139,7 @@ COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_stackwalk.o \
 	basedll_stdpaths.o \
 	basedll_threadpsx.o \
+	basedll_timerunx.o \
 	basedll_cfstring.o \
 	basedll_stdpaths_cf.o \
 	basedll_utilsexc_base.o
@@ -7142,6 +7153,7 @@ COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_2 =  \
 	basedll_stackwalk.o \
 	basedll_stdpaths.o \
 	basedll_threadpsx.o \
+	basedll_timerunx.o \
 	basedll_cfstring.o \
 	basedll_stdpaths_cf.o \
 	basedll_utilsexc_base.o
@@ -7207,7 +7219,8 @@ COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_snglinst.o \
 	baselib_stackwalk.o \
 	baselib_stdpaths.o \
-	baselib_threadpsx.o
+	baselib_threadpsx.o \
+	baselib_timerunx.o
 @COND_PLATFORM_UNIX_1@__BASE_PLATFORM_SRC_OBJECTS_3 = $(COND_PLATFORM_UNIX_1___BASE_PLATFORM_SRC_OBJECTS_3)
 COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_basemsw.o \
@@ -7224,6 +7237,7 @@ COND_PLATFORM_WIN32_1___BASE_PLATFORM_SRC_OBJECTS_3 =  \
 	baselib_stackwalk.o \
 	baselib_stdpaths.o \
 	baselib_thread.o \
+	baselib_timer.o \
 	baselib_utils.o \
 	baselib_utilsexc.o \
 	$(__BASE_WINCE_SRC_OBJECTS_3)
@@ -7238,6 +7252,7 @@ COND_TOOLKIT____BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_stackwalk.o \
 	baselib_stdpaths.o \
 	baselib_threadpsx.o \
+	baselib_timerunx.o \
 	baselib_cfstring.o \
 	baselib_stdpaths_cf.o \
 	baselib_utilsexc_base.o
@@ -7251,6 +7266,7 @@ COND_TOOLKIT_COCOA___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_stackwalk.o \
 	baselib_stdpaths.o \
 	baselib_threadpsx.o \
+	baselib_timerunx.o \
 	baselib_cfstring.o \
 	baselib_stdpaths_cf.o \
 	baselib_utilsexc_base.o
@@ -7264,6 +7280,7 @@ COND_TOOLKIT_GTK___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_stackwalk.o \
 	baselib_stdpaths.o \
 	baselib_threadpsx.o \
+	baselib_timerunx.o \
 	baselib_cfstring.o \
 	baselib_stdpaths_cf.o \
 	baselib_utilsexc_base.o
@@ -7281,7 +7298,8 @@ COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_baseunix.o \
 	baselib_dlunix.o \
 	baselib_snglinst.o \
-	baselib_stdpaths.o
+	baselib_stdpaths.o \
+	baselib_timerunx.o
 @COND_TOOLKIT_MAC@__BASE_MACOSX_SRC_OBJECTS_3 = $(COND_TOOLKIT_MAC___BASE_MACOSX_SRC_OBJECTS_3)
 COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_baseunix.o \
@@ -7292,6 +7310,7 @@ COND_TOOLKIT_MOTIF___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_stackwalk.o \
 	baselib_stdpaths.o \
 	baselib_threadpsx.o \
+	baselib_timerunx.o \
 	baselib_cfstring.o \
 	baselib_stdpaths_cf.o \
 	baselib_utilsexc_base.o
@@ -7305,6 +7324,7 @@ COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_3 =  \
 	baselib_stackwalk.o \
 	baselib_stdpaths.o \
 	baselib_threadpsx.o \
+	baselib_timerunx.o \
 	baselib_cfstring.o \
 	baselib_stdpaths_cf.o \
 	baselib_utilsexc_base.o
@@ -7548,7 +7568,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	coredll_stockitem.o \
 	coredll_tbarbase.o \
 	coredll_textcmn.o \
-	coredll_timercmn.o \
 	coredll_toplvcmn.o \
 	coredll_treebase.o \
 	coredll_valgen.o \
@@ -7727,7 +7746,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_stockitem.o \
 	coredll_tbarbase.o \
 	coredll_textcmn.o \
-	coredll_timercmn.o \
 	coredll_toplvcmn.o \
 	coredll_treebase.o \
 	coredll_valgen.o \
@@ -7971,7 +7989,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_region.o \
 	coredll_renderer.o \
 	coredll_settings.o \
-	coredll_timer.o \
 	coredll_tooltip.o \
 	coredll_toplevel.o \
 	coredll_utilsgui.o \
@@ -8025,7 +8042,6 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_4 =  \
 	coredll_region.o \
 	coredll_renderer.o \
 	coredll_settings.o \
-	coredll_timer.o \
 	coredll_tooltip.o \
 	coredll_toplevel.o \
 	coredll_utilsgui.o \
@@ -8810,7 +8826,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_region.o \
 	coredll_renderer.o \
 	coredll_settings.o \
-	coredll_timer.o \
 	coredll_tooltip.o \
 	coredll_toplevel.o \
 	coredll_utilsgui.o \
@@ -8864,7 +8879,6 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_5 =  \
 	coredll_region.o \
 	coredll_renderer.o \
 	coredll_settings.o \
-	coredll_timer.o \
 	coredll_tooltip.o \
 	coredll_toplevel.o \
 	coredll_utilsgui.o \
@@ -9020,7 +9034,6 @@ COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	corelib_stockitem.o \
 	corelib_tbarbase.o \
 	corelib_textcmn.o \
-	corelib_timercmn.o \
 	corelib_toplvcmn.o \
 	corelib_treebase.o \
 	corelib_valgen.o \
@@ -9199,7 +9212,6 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_stockitem.o \
 	corelib_tbarbase.o \
 	corelib_textcmn.o \
-	corelib_timercmn.o \
 	corelib_toplvcmn.o \
 	corelib_treebase.o \
 	corelib_valgen.o \
@@ -9443,7 +9455,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_region.o \
 	corelib_renderer.o \
 	corelib_settings.o \
-	corelib_timer.o \
 	corelib_tooltip.o \
 	corelib_toplevel.o \
 	corelib_utilsgui.o \
@@ -9497,7 +9508,6 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_6 =  \
 	corelib_region.o \
 	corelib_renderer.o \
 	corelib_settings.o \
-	corelib_timer.o \
 	corelib_tooltip.o \
 	corelib_toplevel.o \
 	corelib_utilsgui.o \
@@ -10282,7 +10292,6 @@ COND_TOOLKIT_MSW___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_region.o \
 	corelib_renderer.o \
 	corelib_settings.o \
-	corelib_timer.o \
 	corelib_tooltip.o \
 	corelib_toplevel.o \
 	corelib_utilsgui.o \
@@ -10336,7 +10345,6 @@ COND_TOOLKIT_WINCE___LOWLEVEL_SRC_OBJECTS_7 =  \
 	corelib_region.o \
 	corelib_renderer.o \
 	corelib_settings.o \
-	corelib_timer.o \
 	corelib_tooltip.o \
 	corelib_toplevel.o \
 	corelib_utilsgui.o \
@@ -13398,6 +13406,12 @@ monodll_textbuf.o: $(srcdir)/src/common/textbuf.cpp $(MONODLL_ODEP)
 monodll_textfile.o: $(srcdir)/src/common/textfile.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/textfile.cpp
 
+monodll_timercmn.o: $(srcdir)/src/common/timercmn.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/timercmn.cpp
+
+monodll_timerimpl.o: $(srcdir)/src/common/timerimpl.cpp $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/timerimpl.cpp
+
 monodll_tokenzr.o: $(srcdir)/src/common/tokenzr.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/tokenzr.cpp
 
@@ -14244,6 +14258,27 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@monodll_threadpsx.o: $(srcdir)/src/unix/threadpsx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/threadpsx.cpp
 
+@COND_PLATFORM_UNIX_1@monodll_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@monodll_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@monodll_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@monodll_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@monodll_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@monodll_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_@monodll_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
 @COND_PLATFORM_WIN32_1@monodll_thread.o: $(srcdir)/src/msw/thread.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/thread.cpp
 
@@ -14255,6 +14290,36 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_PLATFORM_OS2_1@monodll_thread.o: $(srcdir)/src/os2/thread.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/thread.cpp
+
+@COND_PLATFORM_WIN32_1@monodll_timer.o: $(srcdir)/src/msw/timer.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/timer.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_timer.o: $(srcdir)/src/gtk/timer.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/timer.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monodll_timer.o: $(srcdir)/src/gtk1/timer.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/timer.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@monodll_timer.o: $(srcdir)/src/generic/timer.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
+
+@COND_TOOLKIT_MGL_USE_GUI_1@monodll_timer.o: $(srcdir)/src/generic/timer.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_timer.o: $(srcdir)/src/generic/timer.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
+
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_timer.o: $(srcdir)/src/motif/timer.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/timer.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_timer.o: $(srcdir)/src/mac/carbon/timer.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/timer.cpp
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_timer.o: $(srcdir)/src/cocoa/timer.mm $(MONODLL_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/cocoa/timer.mm
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_timer.o: $(srcdir)/src/os2/timer.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/timer.cpp
 
 @COND_PLATFORM_WIN32_1@monodll_utils.o: $(srcdir)/src/msw/utils.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/utils.cpp
@@ -15257,39 +15322,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_settings.o: $(srcdir)/src/os2/settings.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/settings.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_timer.o: $(srcdir)/src/gtk/timer.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/timer.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monodll_timer.o: $(srcdir)/src/gtk1/timer.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/timer.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1@monodll_timer.o: $(srcdir)/src/msw/timer.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/timer.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1@monodll_timer.o: $(srcdir)/src/msw/timer.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/timer.cpp
-
-@COND_TOOLKIT_X11_USE_GUI_1@monodll_timer.o: $(srcdir)/src/generic/timer.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_timer.o: $(srcdir)/src/generic/timer.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
-
-@COND_TOOLKIT_DFB_USE_GUI_1@monodll_timer.o: $(srcdir)/src/generic/timer.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_timer.o: $(srcdir)/src/motif/timer.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/timer.cpp
-
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_timer.o: $(srcdir)/src/mac/carbon/timer.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/timer.cpp
-
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_timer.o: $(srcdir)/src/cocoa/timer.mm $(MONODLL_ODEP)
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/cocoa/timer.mm
-
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_timer.o: $(srcdir)/src/os2/timer.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/timer.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_tooltip.o: $(srcdir)/src/gtk/tooltip.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/tooltip.cpp
@@ -17055,9 +17087,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_textcmn.o: $(srcdir)/src/common/textcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/textcmn.cpp
 
-@COND_USE_GUI_1@monodll_timercmn.o: $(srcdir)/src/common/timercmn.cpp $(MONODLL_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/timercmn.cpp
-
 @COND_USE_GUI_1@monodll_toplvcmn.o: $(srcdir)/src/common/toplvcmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/toplvcmn.cpp
 
@@ -17579,6 +17608,12 @@ monolib_textbuf.o: $(srcdir)/src/common/textbuf.cpp $(MONOLIB_ODEP)
 
 monolib_textfile.o: $(srcdir)/src/common/textfile.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/textfile.cpp
+
+monolib_timercmn.o: $(srcdir)/src/common/timercmn.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/timercmn.cpp
+
+monolib_timerimpl.o: $(srcdir)/src/common/timerimpl.cpp $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/timerimpl.cpp
 
 monolib_tokenzr.o: $(srcdir)/src/common/tokenzr.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/tokenzr.cpp
@@ -18426,6 +18461,27 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@monolib_threadpsx.o: $(srcdir)/src/unix/threadpsx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/threadpsx.cpp
 
+@COND_PLATFORM_UNIX_1@monolib_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@monolib_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@monolib_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@monolib_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@monolib_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@monolib_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_@monolib_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
 @COND_PLATFORM_WIN32_1@monolib_thread.o: $(srcdir)/src/msw/thread.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/thread.cpp
 
@@ -18437,6 +18493,36 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_PLATFORM_OS2_1@monolib_thread.o: $(srcdir)/src/os2/thread.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_OS2_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/thread.cpp
+
+@COND_PLATFORM_WIN32_1@monolib_timer.o: $(srcdir)/src/msw/timer.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/timer.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_timer.o: $(srcdir)/src/gtk/timer.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/timer.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monolib_timer.o: $(srcdir)/src/gtk1/timer.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk1/timer.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@monolib_timer.o: $(srcdir)/src/generic/timer.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
+
+@COND_TOOLKIT_MGL_USE_GUI_1@monolib_timer.o: $(srcdir)/src/generic/timer.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_timer.o: $(srcdir)/src/generic/timer.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
+
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_timer.o: $(srcdir)/src/motif/timer.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/timer.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_timer.o: $(srcdir)/src/mac/carbon/timer.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/timer.cpp
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_timer.o: $(srcdir)/src/cocoa/timer.mm $(MONOLIB_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/cocoa/timer.mm
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_timer.o: $(srcdir)/src/os2/timer.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/timer.cpp
 
 @COND_PLATFORM_WIN32_1@monolib_utils.o: $(srcdir)/src/msw/utils.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/utils.cpp
@@ -19439,39 +19525,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_settings.o: $(srcdir)/src/os2/settings.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/settings.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_timer.o: $(srcdir)/src/gtk/timer.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/timer.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monolib_timer.o: $(srcdir)/src/gtk1/timer.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk1/timer.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1@monolib_timer.o: $(srcdir)/src/msw/timer.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/timer.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1@monolib_timer.o: $(srcdir)/src/msw/timer.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/timer.cpp
-
-@COND_TOOLKIT_X11_USE_GUI_1@monolib_timer.o: $(srcdir)/src/generic/timer.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_timer.o: $(srcdir)/src/generic/timer.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
-
-@COND_TOOLKIT_DFB_USE_GUI_1@monolib_timer.o: $(srcdir)/src/generic/timer.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_timer.o: $(srcdir)/src/motif/timer.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/timer.cpp
-
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_timer.o: $(srcdir)/src/mac/carbon/timer.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/timer.cpp
-
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_timer.o: $(srcdir)/src/cocoa/timer.mm $(MONOLIB_ODEP)
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/cocoa/timer.mm
-
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_timer.o: $(srcdir)/src/os2/timer.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/timer.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_tooltip.o: $(srcdir)/src/gtk/tooltip.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/tooltip.cpp
@@ -21237,9 +21290,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@monolib_textcmn.o: $(srcdir)/src/common/textcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/textcmn.cpp
 
-@COND_USE_GUI_1@monolib_timercmn.o: $(srcdir)/src/common/timercmn.cpp $(MONOLIB_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/timercmn.cpp
-
 @COND_USE_GUI_1@monolib_toplvcmn.o: $(srcdir)/src/common/toplvcmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/toplvcmn.cpp
 
@@ -21762,6 +21812,12 @@ basedll_textbuf.o: $(srcdir)/src/common/textbuf.cpp $(BASEDLL_ODEP)
 basedll_textfile.o: $(srcdir)/src/common/textfile.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/textfile.cpp
 
+basedll_timercmn.o: $(srcdir)/src/common/timercmn.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/timercmn.cpp
+
+basedll_timerimpl.o: $(srcdir)/src/common/timerimpl.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/timerimpl.cpp
+
 basedll_tokenzr.o: $(srcdir)/src/common/tokenzr.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/tokenzr.cpp
 
@@ -21821,6 +21877,9 @@ basedll_regconf.o: $(srcdir)/src/msw/regconf.cpp $(BASEDLL_ODEP)
 
 basedll_registry.o: $(srcdir)/src/msw/registry.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/registry.cpp
+
+basedll_timer.o: $(srcdir)/src/msw/timer.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/timer.cpp
 
 basedll_time.o: $(srcdir)/src/msw/wince/time.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/wince/time.cpp
@@ -22064,6 +22123,27 @@ basedll_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASEDLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@basedll_threadpsx.o: $(srcdir)/src/unix/threadpsx.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/threadpsx.cpp
+
+@COND_PLATFORM_UNIX_1@basedll_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@basedll_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@basedll_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@basedll_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@basedll_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@basedll_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_@basedll_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(BASEDLL_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
 
 @COND_PLATFORM_WIN32_1@basedll_thread.o: $(srcdir)/src/msw/thread.cpp $(BASEDLL_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/thread.cpp
@@ -22368,6 +22448,12 @@ baselib_textbuf.o: $(srcdir)/src/common/textbuf.cpp $(BASELIB_ODEP)
 baselib_textfile.o: $(srcdir)/src/common/textfile.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/textfile.cpp
 
+baselib_timercmn.o: $(srcdir)/src/common/timercmn.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/timercmn.cpp
+
+baselib_timerimpl.o: $(srcdir)/src/common/timerimpl.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/timerimpl.cpp
+
 baselib_tokenzr.o: $(srcdir)/src/common/tokenzr.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/tokenzr.cpp
 
@@ -22427,6 +22513,9 @@ baselib_regconf.o: $(srcdir)/src/msw/regconf.cpp $(BASELIB_ODEP)
 
 baselib_registry.o: $(srcdir)/src/msw/registry.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/registry.cpp
+
+baselib_timer.o: $(srcdir)/src/msw/timer.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/timer.cpp
 
 baselib_time.o: $(srcdir)/src/msw/wince/time.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/wince/time.cpp
@@ -22670,6 +22759,27 @@ baselib_uma.o: $(srcdir)/src/mac/carbon/uma.cpp $(BASELIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@baselib_threadpsx.o: $(srcdir)/src/unix/threadpsx.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/threadpsx.cpp
+
+@COND_PLATFORM_UNIX_1@baselib_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_UNIX_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@baselib_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MAC@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@baselib_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_COCOA@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@baselib_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_GTK@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@baselib_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_X11@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@baselib_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_MOTIF@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
+
+@COND_PLATFORM_MACOSX_1_TOOLKIT_@baselib_timerunx.o: $(srcdir)/src/unix/timerunx.cpp $(BASELIB_ODEP)
+@COND_PLATFORM_MACOSX_1_TOOLKIT_@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/unix/timerunx.cpp
 
 @COND_PLATFORM_WIN32_1@baselib_thread.o: $(srcdir)/src/msw/thread.cpp $(BASELIB_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/thread.cpp
@@ -24014,12 +24124,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@coredll_timer.o: $(srcdir)/src/gtk1/timer.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk1/timer.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1@coredll_timer.o: $(srcdir)/src/msw/timer.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/timer.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1@coredll_timer.o: $(srcdir)/src/msw/timer.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/timer.cpp
 
 @COND_TOOLKIT_X11_USE_GUI_1@coredll_timer.o: $(srcdir)/src/generic/timer.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
@@ -25770,9 +25874,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@coredll_textcmn.o: $(srcdir)/src/common/textcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/textcmn.cpp
 
-@COND_USE_GUI_1@coredll_timercmn.o: $(srcdir)/src/common/timercmn.cpp $(COREDLL_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/timercmn.cpp
-
 @COND_USE_GUI_1@coredll_toplvcmn.o: $(srcdir)/src/common/toplvcmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/toplvcmn.cpp
 
@@ -26996,12 +27097,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@corelib_timer.o: $(srcdir)/src/gtk1/timer.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk1/timer.cpp
-
-@COND_TOOLKIT_MSW_USE_GUI_1@corelib_timer.o: $(srcdir)/src/msw/timer.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MSW_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/timer.cpp
-
-@COND_TOOLKIT_WINCE_USE_GUI_1@corelib_timer.o: $(srcdir)/src/msw/timer.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_WINCE_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/timer.cpp
 
 @COND_TOOLKIT_X11_USE_GUI_1@corelib_timer.o: $(srcdir)/src/generic/timer.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/timer.cpp
@@ -28751,9 +28846,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1@corelib_textcmn.o: $(srcdir)/src/common/textcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/textcmn.cpp
-
-@COND_USE_GUI_1@corelib_timercmn.o: $(srcdir)/src/common/timercmn.cpp $(CORELIB_ODEP)
-@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/timercmn.cpp
 
 @COND_USE_GUI_1@corelib_toplvcmn.o: $(srcdir)/src/common/toplvcmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/toplvcmn.cpp

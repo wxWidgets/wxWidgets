@@ -12,7 +12,7 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
-#include "wx/timer.h"
+#include "wx/os2/private/timer.h"
 
 #ifndef WX_PRECOMP
     #include "wx/list.h"
@@ -36,7 +36,7 @@
 
 // define a hash containing all the timers: it is indexed by timer id and
 // contains the corresponding timer
-WX_DECLARE_HASH_MAP(unsigned long, wxTimer *, wxIntegerHash, wxIntegerEqual,
+WX_DECLARE_HASH_MAP(unsigned long, wxOS2TimerImpl *, wxIntegerHash, wxIntegerEqual,
                     wxTimerMap);
 
 // instead of using a global here, wrap it in a static function as otherwise it
@@ -56,12 +56,6 @@ static wxTimerMap& TimerMap()
 // timer callback used for all timers
 ULONG wxTimerProc(HWND hwnd, ULONG, int nIdTimer, ULONG);
 
-// ----------------------------------------------------------------------------
-// macros
-// ----------------------------------------------------------------------------
-
-IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxEvtHandler)
-
 // ============================================================================
 // implementation
 // ============================================================================
@@ -70,17 +64,17 @@ IMPLEMENT_ABSTRACT_CLASS(wxTimer, wxEvtHandler)
 // wxTimer class
 // ----------------------------------------------------------------------------
 
-void wxTimer::Init()
+void wxOS2TimerImpl::Init()
 {
     m_ulId = 0;
 }
 
-wxTimer::~wxTimer()
+wxOS2TimerImpl::~wxOS2TimerImpl()
 {
-    wxTimer::Stop();
+    wxOS2TimerImpl::Stop();
 }
 
-void wxTimer::Notify()
+void wxOS2TimerImpl::Notify()
 {
     //
     // The base class version generates an event if it has owner - which it
@@ -96,9 +90,9 @@ void wxTimer::Notify()
     (void)m_owner->ProcessEvent(vEvent);
 } // end of wxTimer::Notify
 
-bool wxTimer::Start( int nMilliseconds, bool bOneShot )
+bool wxOS2TimerImpl::Start( int nMilliseconds, bool bOneShot )
 {
-    (void)wxTimerBase::Start( nMilliseconds, bOneShot );
+    (void)wxTimerImpl::Start( nMilliseconds, bOneShot );
 
     wxCHECK_MSG( m_milli > 0L, false, wxT("invalid value for timer") );
 
@@ -147,7 +141,7 @@ bool wxTimer::Start( int nMilliseconds, bool bOneShot )
     }
 }
 
-void wxTimer::Stop()
+void wxOS2TimerImpl::Stop()
 {
     if ( m_ulId )
     {
@@ -170,7 +164,7 @@ void wxTimer::Stop()
 // ----------------------------------------------------------------------------
 
 void wxProcessTimer(
-  wxTimer&                          rTimer
+  wxOS2TimerImpl&                          rTimer
 )
 {
     //
