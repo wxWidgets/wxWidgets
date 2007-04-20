@@ -187,10 +187,9 @@ wxMenuBar* wxCocoaNSWindow::GetAppMenuBar(wxCocoaNSWindow *win)
 }
 
 // ============================================================================
-// @class wxPoserNSWindow
+// @class WXNSWindow
 // ============================================================================
-WX_IMPLEMENT_POSER(wxPoserNSWindow);
-@implementation wxPoserNSWindow : NSWindow
+@implementation WXNSWindow : NSWindow
 
 - (BOOL)canBecomeKeyWindow
 {
@@ -210,4 +209,29 @@ WX_IMPLEMENT_POSER(wxPoserNSWindow);
     return canBecome;
 }
 
-@end // implementation wxPoserNSWindow
+@end // implementation WXNSWindow
+
+// ============================================================================
+// @class WXNSPanel
+// ============================================================================
+@implementation WXNSPanel : NSPanel
+
+- (BOOL)canBecomeKeyWindow
+{
+    bool canBecome = false;
+    wxCocoaNSWindow *tlw = wxCocoaNSWindow::GetFromCocoa(self);
+    if(!tlw || !tlw->Cocoa_canBecomeKeyWindow(canBecome))
+        canBecome = [super canBecomeKeyWindow];
+    return canBecome;
+}
+
+- (BOOL)canBecomeMainWindow
+{
+    bool canBecome = false;
+    wxCocoaNSWindow *tlw = wxCocoaNSWindow::GetFromCocoa(self);
+    if(!tlw || !tlw->Cocoa_canBecomeMainWindow(canBecome))
+        canBecome = [super canBecomeMainWindow];
+    return canBecome;
+}
+
+@end // implementation WXNSPanel

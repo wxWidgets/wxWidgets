@@ -73,7 +73,7 @@ private:
 // ========================================================================
 // wxMenuBar
 // ========================================================================
-class WXDLLEXPORT wxMenuBar : public wxMenuBarBase, public wxCocoaNSMenu
+class WXDLLEXPORT wxMenuBar : public wxMenuBarBase
 {
 public:
     // ctors and dtor

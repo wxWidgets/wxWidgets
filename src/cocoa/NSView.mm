@@ -54,10 +54,10 @@ void wxCocoaNSView::DisassociateNSView(WX_NSView cocoaNSView)
 }
 
 // ============================================================================
-// @class wxPoserNSView
+// @class WXNSView
 // ============================================================================
-WX_IMPLEMENT_POSER(wxPoserNSView);
-@implementation wxPoserNSView : NSView
+
+@implementation WXNSView : NSView
 
 - (BOOL)acceptsFirstMouse:(NSEvent *)theEvent
 {
@@ -166,7 +166,7 @@ WX_IMPLEMENT_POSER(wxPoserNSView);
         [super resetCursorRects];
 }
 
-@end // implementation wxPoserNSView
+@end // implementation WXNSView
 
 @interface wxNSViewNotificationObserver : NSObject
 {

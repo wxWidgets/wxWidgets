@@ -22,11 +22,10 @@
 #include "wx/cocoa/objc/NSMenu.h"
 
 // ============================================================================
-// @class wxPoserNSMenu
+// @class WXNSMenu
 // ============================================================================
 
-WX_IMPLEMENT_POSER(wxPoserNSMenu);
-@implementation wxPoserNSMenu : NSMenu
+@implementation WXNSMenu : NSMenu
 
 - (void)dealloc
 {
@@ -36,7 +35,7 @@ WX_IMPLEMENT_POSER(wxPoserNSMenu);
     [super dealloc];
 }
 
-@end // wxPoserNSMenu
+@end // WXNSMenu
 
 // ============================================================================
 // @class wxNSMenuNotificationObserver

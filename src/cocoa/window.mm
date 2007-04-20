@@ -23,7 +23,7 @@
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"
 
-#import <AppKit/NSView.h>
+#include "wx/cocoa/objc/NSView.h"
 #import <AppKit/NSEvent.h>
 #import <AppKit/NSScrollView.h>
 #import <AppKit/NSColor.h>
@@ -327,7 +327,7 @@ bool wxWindow::Create(wxWindow *parent, wxWindowID winid,
 
     // TODO: create the window
     m_cocoaNSView = NULL;
-    SetNSView([[NSView alloc] initWithFrame: MakeDefaultNSRect(size)]);
+    SetNSView([[WXNSView alloc] initWithFrame: MakeDefaultNSRect(size)]);
     [m_cocoaNSView release];
 
     if (m_parent)

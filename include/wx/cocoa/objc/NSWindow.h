@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/cocoa/objc/NSWindow.h
-// Purpose:     wxPoserNSWindow class
+// Purpose:     WXNSWindow class
 // Author:      David Elliott
 // Modified by:
 // Created:     2007/04/20 (move from NSWindow.mm)
@@ -10,15 +10,27 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 #import <AppKit/NSWindow.h>
+#import <AppKit/NSPanel.h>
 
 // ============================================================================
-// @class wxPoserNSWindow
+// @class WXNSWindow
 // ============================================================================
-@interface wxPoserNSWindow : NSWindow
+@interface WXNSWindow : NSWindow
 {
 }
 
 - (BOOL)canBecomeKeyWindow;
 - (BOOL)canBecomeMainWindow;
-@end // wxPoserNSwindow
+@end // WXNSWindow
+
+// ============================================================================
+// @class WXNSPanel
+// ============================================================================
+@interface WXNSPanel : NSPanel
+{
+}
+
+- (BOOL)canBecomeKeyWindow;
+- (BOOL)canBecomeMainWindow;
+@end // WXNSPanel
 

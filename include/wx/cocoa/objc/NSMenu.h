@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/cocoa/objc/NSMenu.h
-// Purpose:     wxPoserNSMenu class
+// Purpose:     WXNSMenu class
 // Author:      David Elliott
 // Modified by:
 // Created:     2007/04/20 (move from NSMenu.mm)
@@ -15,14 +15,14 @@
 #import <AppKit/NSMenu.h>
 
 // ============================================================================
-// @class wxPoserNSMenu
+// @class WXNSMenu
 // ============================================================================
-@interface wxPoserNSMenu : NSMenu
+@interface WXNSMenu : NSMenu
 {
 }
 
 - (void)dealloc;
 
-@end // wxPoserNSMenu
+@end // WXNSMenu
 
 #endif //ndef __WX_COCOA_OBJC_NSMENU_H__
