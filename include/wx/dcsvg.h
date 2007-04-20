@@ -248,10 +248,10 @@ class WXDLLIMPEXP_CORE wxSVGFileDC : public wxDC
         void GetClippingBox(wxCoord *WXUNUSED(x), wxCoord *WXUNUSED(y), wxCoord * WXUNUSED(width), wxCoord * WXUNUSED(height))
             { wxASSERT_MSG (false, wxT("wxSVGFILEDC::GetClippingBox Call not yet implemented")); return ; }
 
-        int GetLogicalFunction()
+        int GetLogicalFunction() const
             { wxASSERT_MSG (false, wxT("wxSVGFILEDC::GetLogicalFunction()  Call not implemented")); return wxCOPY ; }
 
-        int GetMapMode() ;
+        int GetMapMode() const ;
 
         bool GetPixel(wxCoord x, wxCoord y, wxColour *colour)
             { return DoGetPixel (x, y, colour) ; }
