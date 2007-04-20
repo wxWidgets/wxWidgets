@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 13 March 2007                                                       *
+# Date : 19 April 2007                                                       *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -54,9 +54,11 @@ OBJECTS = \
 		animatecmn.obj,\
 		appbase.obj,\
 		appcmn.obj,\
+		arrstr.obj,\
 		artprov.obj,\
 		artstd.obj,\
 		bmpbase.obj,\
+		btncmn.obj,\
 		bookctrl.obj,\
 		choiccmn.obj,\
 		clipcmn.obj,\
@@ -164,12 +166,15 @@ OBJECTS1=fs_inet.obj,\
 		socket.obj,\
 		settcmn.obj,\
 		statbar.obj,\
+		stattextcmn.obj,\
 		stdpbase.obj,\
 		stockitem.obj,\
 		stopwatch.obj,\
 		strconv.obj,\
 		stream.obj,\
 		string.obj,\
+		stringimpl.obj,\
+		strvararg.obj,\
 		sysopt.obj
 
 OBJECTS2=tbarbase.obj,\
@@ -184,14 +189,15 @@ OBJECTS2=tbarbase.obj,\
 		url.obj,\
 		utilscmn.obj,\
 		rgncmn.obj,\
+		unichar.obj,\
 		uri.obj,\
 		valgen.obj,\
 		validate.obj,\
 		valtext.obj,\
 		variant.obj,\
 		wfstream.obj,\
-		wxchar.obj,\
 		wincmn.obj,\
+		wxcrt.obj,\
 		xpmdecod.obj,\
 		zipstrm.obj,\
 		zstream.obj,\
@@ -218,9 +224,11 @@ SOURCES = \
 		animatecmn.cpp,\
 		appbase.cpp,\
 		appcmn.cpp,\
+		arrstr.cpp,\
 		artprov.cpp,\
 		artstd.cpp,\
 		bmpbase.cpp,\
+		btncmn.cpp,\
 		bookctrl.cpp,\
 		choiccmn.cpp,\
 		clipcmn.cpp,\
@@ -331,13 +339,16 @@ SOURCES = \
 		socketevtdispatch.cpp,\
 		settcmn.cpp,\
 		statbar.cpp,\
+		stattextcmn.cpp,\
 		stdpbase.cpp,\
 		stockitem.cpp,\
 		stopwatch.cpp,\
 		strconv.cpp,\
 		stream.cpp,\
+		strvararg.cpp,\
 		sysopt.cpp,\
 		string.cpp,\
+		stringimpl.cpp,\
 		tbarbase.cpp,\
 		textbuf.cpp,\
 		textcmn.cpp,\
@@ -347,6 +358,7 @@ SOURCES = \
 		toplvcmn.cpp,\
 		treebase.cpp,\
 		txtstrm.cpp,\
+		unichar.cpp,\
 		url.cpp,\
 		utilscmn.cpp,\
 		valgen.cpp,\
@@ -355,7 +367,7 @@ SOURCES = \
 		variant.cpp,\
 		wfstream.cpp,\
 		wincmn.cpp,\
-		wxchar.cpp,\
+		wxcrt.cpp,\
 		xpmdecod.cpp,\
 		zipstrm.cpp,\
 		zstream.cpp,\
@@ -426,9 +438,11 @@ anidecod.obj : anidecod.cpp
 animatecmn.obj : animatecmn.cpp
 appbase.obj : appbase.cpp
 appcmn.obj : appcmn.cpp
+arrstr.obj : arrstr.cpp
 artprov.obj : artprov.cpp
 artstd.obj : artstd.cpp
 bmpbase.obj : bmpbase.cpp
+btncmn.obj : btncmn.cpp
 bookctrl.obj : bookctrl.cpp
 choiccmn.obj : choiccmn.cpp
 clipcmn.obj : clipcmn.cpp
@@ -537,13 +551,16 @@ socket.obj : socket.cpp
 socketevtdispatch.obj : socketevtdispatch.cpp
 settcmn.obj : settcmn.cpp
 statbar.obj : statbar.cpp
+stattextcmn.obj : stattextcmn.cpp
 stdpbase.obj : stdpbase.cpp
 stockitem.obj : stockitem.cpp
 stopwatch.obj : stopwatch.cpp
 strconv.obj : strconv.cpp
 stream.obj : stream.cpp
+strvararg.obj : strvararg.cpp
 sysopt.obj : sysopt.cpp
 string.obj : string.cpp
+stringimpl.obj : stringimpl.cpp
 tbarbase.obj : tbarbase.cpp
 textbuf.obj : textbuf.cpp
 textcmn.obj : textcmn.cpp
@@ -553,6 +570,7 @@ tokenzr.obj : tokenzr.cpp
 toplvcmn.obj : toplvcmn.cpp
 treebase.obj : treebase.cpp
 txtstrm.obj : txtstrm.cpp
+unichar.obj : unichar.cpp
 url.obj : url.cpp
 utilscmn.obj : utilscmn.cpp
 valgen.obj : valgen.cpp
@@ -561,7 +579,7 @@ valtext.obj : valtext.cpp
 variant.obj : variant.cpp
 wfstream.obj : wfstream.cpp
 wincmn.obj : wincmn.cpp
-wxchar.obj : wxchar.cpp
+wxcrt.obj : wxcrt.cpp
 xpmdecod.obj : xpmdecod.cpp
 zipstrm.obj : zipstrm.cpp
 zstream.obj : zstream.cpp
