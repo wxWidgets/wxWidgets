@@ -311,9 +311,12 @@ public:
     // in-place editing
     virtual bool HasEditorCtrl()
         { return false; }
-    virtual wxControl* CreateEditorCtrl( wxWindow *parent, wxRect labelRect, const wxVariant &value )
+    virtual wxControl* CreateEditorCtrl(wxWindow * WXUNUSED(parent),
+                                        wxRect WXUNUSED(labelRect),
+                                        const wxVariant& WXUNUSED(value))
         { return NULL; }
-    virtual bool GetValueFromEditorCtrl( wxControl* editor, wxVariant &value )
+    virtual bool GetValueFromEditorCtrl(wxControl * WXUNUSED(editor),
+                                        wxVariant& WXUNUSED(value))
         { return false; }
 
     virtual bool StartEditing( unsigned int row, wxRect labelRect );
