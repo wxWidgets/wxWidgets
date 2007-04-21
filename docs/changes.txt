@@ -140,10 +140,17 @@ wxX11:
 2.8.4
 -----
 
+All:
+
+- Fix bug in wxFileConfig when recreating a group (Steven Van Ingelgem)
+
 All (Unix):
 
 - Handle socket shutdown by the peer correctly in wxSocket (Tim Kosse)
-- Fix bug in wxFileConfig when recreating a group (Steven Van Ingelgem)
+
+All (GUI):
+
+- Allow status bar children in XRC (Edmunt Pienkowski)
 
 wxMSW:
 
