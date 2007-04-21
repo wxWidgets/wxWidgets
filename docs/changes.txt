@@ -142,6 +142,7 @@ wxX11:
 All (Unix):
 
 - Handle socket shutdown by the peer correctly in wxSocket (Tim Kosse)
+- Fix bug in wxFileConfig when recreating a group (Steven Van Ingelgem)
 
 wxMSW:
 

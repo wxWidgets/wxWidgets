@@ -1730,7 +1730,7 @@ bool wxFileConfigGroup::DeleteSubgroup(wxFileConfigGroup *pGroup)
 
             m_pLastGroup = NULL;
             for ( wxFileConfigLineList *pl = pLine->Prev();
-                  pl && pl != m_pLine && !m_pLastGroup;
+                  pl && !m_pLastGroup;
                   pl = pl->Prev() )
             {
                 // does this line belong to our subgroup?
@@ -1744,6 +1744,9 @@ bool wxFileConfigGroup::DeleteSubgroup(wxFileConfigGroup *pGroup)
                         break;
                     }
                 }
+
+                if ( pl == m_pLine )
+                    break;
             }
         }
 
