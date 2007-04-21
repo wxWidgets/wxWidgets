@@ -2882,6 +2882,7 @@ COND_WXUNIV_0_ADVANCED_HDR =  \
 	wx/dataview.h \
 	wx/dateevt.h \
 	wx/dcbuffer.h \
+	wx/editlbox.h \
 	wx/generic/aboutdlgg.h \
 	wx/generic/animate.h \
 	wx/generic/bmpcbox.h \
@@ -2924,6 +2925,7 @@ COND_WXUNIV_1_ADVANCED_HDR =  \
 	wx/dataview.h \
 	wx/dateevt.h \
 	wx/dcbuffer.h \
+	wx/editlbox.h \
 	wx/generic/aboutdlgg.h \
 	wx/generic/animate.h \
 	wx/generic/bmpcbox.h \
@@ -5082,6 +5084,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS =  \
 	monodll_calctrl.o \
 	monodll_datavgen.o \
 	monodll_datectlg.o \
+	monodll_editlbox.o \
 	monodll_grid.o \
 	monodll_gridctrl.o \
 	monodll_gridsel.o \
@@ -5107,6 +5110,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS =  \
 	monodll_calctrl.o \
 	monodll_datavgen.o \
 	monodll_datectlg.o \
+	monodll_editlbox.o \
 	monodll_grid.o \
 	monodll_gridctrl.o \
 	monodll_gridsel.o \
@@ -6890,6 +6894,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_calctrl.o \
 	monolib_datavgen.o \
 	monolib_datectlg.o \
+	monolib_editlbox.o \
 	monolib_grid.o \
 	monolib_gridctrl.o \
 	monolib_gridsel.o \
@@ -6915,6 +6920,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_1 =  \
 	monolib_calctrl.o \
 	monolib_datavgen.o \
 	monolib_datectlg.o \
+	monolib_editlbox.o \
 	monolib_grid.o \
 	monolib_gridctrl.o \
 	monolib_gridsel.o \
@@ -10454,6 +10460,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_calctrl.o \
 	advdll_datavgen.o \
 	advdll_datectlg.o \
+	advdll_editlbox.o \
 	advdll_grid.o \
 	advdll_gridctrl.o \
 	advdll_gridsel.o \
@@ -10479,6 +10486,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_2 =  \
 	advdll_calctrl.o \
 	advdll_datavgen.o \
 	advdll_datectlg.o \
+	advdll_editlbox.o \
 	advdll_grid.o \
 	advdll_gridctrl.o \
 	advdll_gridsel.o \
@@ -10521,6 +10529,7 @@ COND_WXUNIV_0___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_calctrl.o \
 	advlib_datavgen.o \
 	advlib_datectlg.o \
+	advlib_editlbox.o \
 	advlib_grid.o \
 	advlib_gridctrl.o \
 	advlib_gridsel.o \
@@ -10546,6 +10555,7 @@ COND_WXUNIV_1___ADVANCED_SRC_OBJECTS_3 =  \
 	advlib_calctrl.o \
 	advlib_datavgen.o \
 	advlib_datectlg.o \
+	advlib_editlbox.o \
 	advlib_grid.o \
 	advlib_gridctrl.o \
 	advlib_gridsel.o \
@@ -17228,6 +17238,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@monodll_datectlg.o: $(srcdir)/src/generic/datectlg.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/datectlg.cpp
 
+@COND_USE_GUI_1@monodll_editlbox.o: $(srcdir)/src/generic/editlbox.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/editlbox.cpp
+
 @COND_USE_GUI_1@monodll_grid.o: $(srcdir)/src/generic/grid.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/grid.cpp
 
@@ -21430,6 +21443,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1@monolib_datectlg.o: $(srcdir)/src/generic/datectlg.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/datectlg.cpp
+
+@COND_USE_GUI_1@monolib_editlbox.o: $(srcdir)/src/generic/editlbox.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/editlbox.cpp
 
 @COND_USE_GUI_1@monolib_grid.o: $(srcdir)/src/generic/grid.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/grid.cpp
@@ -28994,6 +29010,9 @@ advdll_datavgen.o: $(srcdir)/src/generic/datavgen.cpp $(ADVDLL_ODEP)
 advdll_datectlg.o: $(srcdir)/src/generic/datectlg.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/datectlg.cpp
 
+advdll_editlbox.o: $(srcdir)/src/generic/editlbox.cpp $(ADVDLL_ODEP)
+	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/editlbox.cpp
+
 advdll_grid.o: $(srcdir)/src/generic/grid.cpp $(ADVDLL_ODEP)
 	$(CXXC) -c -o $@ $(ADVDLL_CXXFLAGS) $(srcdir)/src/generic/grid.cpp
 
@@ -29209,6 +29228,9 @@ advlib_datavgen.o: $(srcdir)/src/generic/datavgen.cpp $(ADVLIB_ODEP)
 
 advlib_datectlg.o: $(srcdir)/src/generic/datectlg.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/datectlg.cpp
+
+advlib_editlbox.o: $(srcdir)/src/generic/editlbox.cpp $(ADVLIB_ODEP)
+	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/editlbox.cpp
 
 advlib_grid.o: $(srcdir)/src/generic/grid.cpp $(ADVLIB_ODEP)
 	$(CXXC) -c -o $@ $(ADVLIB_CXXFLAGS) $(srcdir)/src/generic/grid.cpp

@@ -2677,7 +2677,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/generic/calctrl.cpp
     src/generic/datavgen.cpp
     src/generic/datectlg.cpp
-    <!-- src/generic/editlbox.cpp -->
+    src/generic/editlbox.cpp
     src/generic/grid.cpp
     src/generic/gridctrl.cpp
     src/generic/gridsel.cpp
@@ -2701,7 +2701,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/dataview.h
     wx/dateevt.h
     wx/dcbuffer.h
-    <!-- wx/editlbox.h -->
+    wx/editlbox.h
     wx/generic/aboutdlgg.h
     wx/generic/animate.h
     wx/generic/bmpcbox.h

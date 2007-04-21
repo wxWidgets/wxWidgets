@@ -648,6 +648,10 @@ SOURCE=..\..\src\generic\datectlg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\generic\editlbox.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\generic\grid.cpp
 # End Source File
 # Begin Source File
@@ -1262,6 +1266,10 @@ SOURCE=..\..\include\wx\dateevt.h
 # Begin Source File
 
 SOURCE=..\..\include\wx\dcbuffer.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\include\wx\editlbox.h
 # End Source File
 # Begin Source File
 

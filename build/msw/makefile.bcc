@@ -1945,6 +1945,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_calctrl.obj \
 	$(OBJS)\monodll_datavgen.obj \
 	$(OBJS)\monodll_datectlg.obj \
+	$(OBJS)\monodll_editlbox.obj \
 	$(OBJS)\monodll_grid.obj \
 	$(OBJS)\monodll_gridctrl.obj \
 	$(OBJS)\monodll_gridsel.obj \
@@ -1975,6 +1976,7 @@ ____ADVANCED_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_calctrl.obj \
 	$(OBJS)\monodll_datavgen.obj \
 	$(OBJS)\monodll_datectlg.obj \
+	$(OBJS)\monodll_editlbox.obj \
 	$(OBJS)\monodll_grid.obj \
 	$(OBJS)\monodll_gridctrl.obj \
 	$(OBJS)\monodll_gridsel.obj \
@@ -2572,6 +2574,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_calctrl.obj \
 	$(OBJS)\monolib_datavgen.obj \
 	$(OBJS)\monolib_datectlg.obj \
+	$(OBJS)\monolib_editlbox.obj \
 	$(OBJS)\monolib_grid.obj \
 	$(OBJS)\monolib_gridctrl.obj \
 	$(OBJS)\monolib_gridsel.obj \
@@ -2602,6 +2605,7 @@ ____ADVANCED_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_calctrl.obj \
 	$(OBJS)\monolib_datavgen.obj \
 	$(OBJS)\monolib_datectlg.obj \
+	$(OBJS)\monolib_editlbox.obj \
 	$(OBJS)\monolib_grid.obj \
 	$(OBJS)\monolib_gridctrl.obj \
 	$(OBJS)\monolib_gridsel.obj \
@@ -3583,6 +3587,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_calctrl.obj \
 	$(OBJS)\advdll_datavgen.obj \
 	$(OBJS)\advdll_datectlg.obj \
+	$(OBJS)\advdll_editlbox.obj \
 	$(OBJS)\advdll_grid.obj \
 	$(OBJS)\advdll_gridctrl.obj \
 	$(OBJS)\advdll_gridsel.obj \
@@ -3613,6 +3618,7 @@ ____ADVANCED_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\advdll_calctrl.obj \
 	$(OBJS)\advdll_datavgen.obj \
 	$(OBJS)\advdll_datectlg.obj \
+	$(OBJS)\advdll_editlbox.obj \
 	$(OBJS)\advdll_grid.obj \
 	$(OBJS)\advdll_gridctrl.obj \
 	$(OBJS)\advdll_gridsel.obj \
@@ -3646,6 +3652,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_calctrl.obj \
 	$(OBJS)\advlib_datavgen.obj \
 	$(OBJS)\advlib_datectlg.obj \
+	$(OBJS)\advlib_editlbox.obj \
 	$(OBJS)\advlib_grid.obj \
 	$(OBJS)\advlib_gridctrl.obj \
 	$(OBJS)\advlib_gridsel.obj \
@@ -3676,6 +3683,7 @@ ____ADVANCED_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\advlib_calctrl.obj \
 	$(OBJS)\advlib_datavgen.obj \
 	$(OBJS)\advlib_datectlg.obj \
+	$(OBJS)\advlib_editlbox.obj \
 	$(OBJS)\advlib_grid.obj \
 	$(OBJS)\advlib_gridctrl.obj \
 	$(OBJS)\advlib_gridsel.obj \
@@ -7125,6 +7133,11 @@ $(OBJS)\monodll_datectlg.obj: ..\..\src\generic\datectlg.cpp
 !endif
 
 !if "$(USE_GUI)" == "1"
+$(OBJS)\monodll_editlbox.obj: ..\..\src\generic\editlbox.cpp
+	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
 $(OBJS)\monodll_grid.obj: ..\..\src\generic\grid.cpp
 	$(CXX) -q -c -P -o$@ $(MONODLL_CXXFLAGS) $**
 !endif
@@ -9177,6 +9190,11 @@ $(OBJS)\monolib_datavgen.obj: ..\..\src\generic\datavgen.cpp
 
 !if "$(USE_GUI)" == "1"
 $(OBJS)\monolib_datectlg.obj: ..\..\src\generic\datectlg.cpp
+	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
+!endif
+
+!if "$(USE_GUI)" == "1"
+$(OBJS)\monolib_editlbox.obj: ..\..\src\generic\editlbox.cpp
 	$(CXX) -q -c -P -o$@ $(MONOLIB_CXXFLAGS) $**
 !endif
 
@@ -12556,6 +12574,9 @@ $(OBJS)\advdll_datavgen.obj: ..\..\src\generic\datavgen.cpp
 $(OBJS)\advdll_datectlg.obj: ..\..\src\generic\datectlg.cpp
 	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) $**
 
+$(OBJS)\advdll_editlbox.obj: ..\..\src\generic\editlbox.cpp
+	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) $**
+
 $(OBJS)\advdll_grid.obj: ..\..\src\generic\grid.cpp
 	$(CXX) -q -c -P -o$@ $(ADVDLL_CXXFLAGS) $**
 
@@ -12638,6 +12659,9 @@ $(OBJS)\advlib_datavgen.obj: ..\..\src\generic\datavgen.cpp
 	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) $**
 
 $(OBJS)\advlib_datectlg.obj: ..\..\src\generic\datectlg.cpp
+	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) $**
+
+$(OBJS)\advlib_editlbox.obj: ..\..\src\generic\editlbox.cpp
 	$(CXX) -q -c -P -o$@ $(ADVLIB_CXXFLAGS) $**
 
 $(OBJS)\advlib_grid.obj: ..\..\src\generic\grid.cpp

@@ -8893,6 +8893,10 @@ SOURCE=..\..\include\wx\dragimag.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\editlbox.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\effects.h
 # End Source File
 # Begin Source File
