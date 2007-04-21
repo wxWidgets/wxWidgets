@@ -2061,6 +2061,14 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                             ::SetFocus(GetHwnd(), htItem);
                             processed = true;
                         }
+                        else // click on a single selected item
+                        {
+                            // don't interfere with the default processing in
+                            // WM_MOUSEMOVE handler below as the default window
+                            // proc will start the drag itself if we let have
+                            // WM_LBUTTONDOWN
+                            m_htClickedItem.Unset();
+                        }
 
                         // reset on any click without Shift
                         m_htSelStart.Unset();
@@ -2075,35 +2083,44 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                     int cx = abs(m_ptClick.x - x);
                     int cy = abs(m_ptClick.y - y);
 
-                    if ( cx > GetSystemMetrics( SM_CXDRAG ) || cy > GetSystemMetrics( SM_CYDRAG ) )
+                    if ( cx > ::GetSystemMetrics(SM_CXDRAG) ||
+                            cy > ::GetSystemMetrics(SM_CYDRAG) )
                     {
-                        HWND pWnd = ::GetParent( GetHwnd() );
-                        if ( pWnd )
-                        {
-                            NM_TREEVIEW tv;
+                        NM_TREEVIEW tv;
+                        wxZeroMemory(tv);
 
-                            tv.hdr.hwndFrom = GetHwnd();
-                            tv.hdr.idFrom = ::GetWindowLong( GetHwnd(), GWL_ID );
-                            tv.hdr.code = TVN_BEGINDRAG;
+                        tv.hdr.hwndFrom = GetHwnd();
+                        tv.hdr.idFrom = ::GetWindowLong(GetHwnd(), GWL_ID);
+                        tv.hdr.code = TVN_BEGINDRAG;
 
-                            tv.itemNew.hItem = HITEM(m_htClickedItem);
+                        tv.itemNew.hItem = HITEM(m_htClickedItem);
 
-                            TVITEM tviAux;
-                            ZeroMemory(&tviAux, sizeof(tviAux));
-                            tviAux.hItem = HITEM(m_htClickedItem);
-                            tviAux.mask = TVIF_STATE | TVIF_PARAM;
-                            tviAux.stateMask = 0xffffffff;
-                            TreeView_GetItem( GetHwnd(), &tviAux );
 
-                            tv.itemNew.state = tviAux.state;
-                            tv.itemNew.lParam = tviAux.lParam;
+                        TVITEM tviAux;
+                        wxZeroMemory(tviAux);
 
-                            tv.ptDrag.x = x;
-                            tv.ptDrag.y = y;
+                        tviAux.hItem = HITEM(m_htClickedItem);
+                        tviAux.mask = TVIF_STATE | TVIF_PARAM;
+                        tviAux.stateMask = 0xffffffff;
+                        TreeView_GetItem(GetHwnd(), &tviAux);
 
-                            ::SendMessage( pWnd, WM_NOTIFY, tv.hdr.idFrom, (LPARAM)&tv );
-                        }
+                        tv.itemNew.state = tviAux.state;
+                        tv.itemNew.lParam = tviAux.lParam;
+
+                        tv.ptDrag.x = x;
+                        tv.ptDrag.y = y;
+
+                        // do it before SendMessage() call below to avoid
+                        // reentrancies here if there is another WM_MOUSEMOVE
+                        // in the queue already
                         m_htClickedItem.Unset();
+
+                        ::SendMessage(GetHwndOf(GetParent()), WM_NOTIFY,
+                                      tv.hdr.idFrom, (LPARAM)&tv );
+
+                        // don't pass it to the default window proc, it would
+                        // start dragging again
+                        processed = true;
                     }
                 }
 #endif // __WXWINCE__
