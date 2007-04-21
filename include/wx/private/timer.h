@@ -67,7 +67,7 @@ protected:
     bool    m_oneShot;      // true if one shot
 
 
-    DECLARE_NO_COPY_CLASS(wxTimerImpl);
-}
+    DECLARE_NO_COPY_CLASS(wxTimerImpl)
+};
 
 #endif // _WX_TIMERIMPL_H_BASE_
