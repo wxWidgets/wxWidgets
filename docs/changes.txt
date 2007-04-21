@@ -91,12 +91,19 @@ Major new features in 2.8 release
 2.8.4
 -----
 
-All (Unix):
+All:
 
-- Handle socket shutdown by the peer correctly in wxSocket (Tim Kosse)
 - Fix bug in wxFileConfig when recreating a group (Steven Van Ingelgem)
 - Added wxString::char_str() and wchar_str() methods for forward
   compatiblity with wxWidgets 3
+
+All (Unix):
+
+- Handle socket shutdown by the peer correctly in wxSocket (Tim Kosse)
+
+All (GUI):
+
+- Allow status bar children in XRC (Edmunt Pienkowski)
 
 wxMSW:
 
