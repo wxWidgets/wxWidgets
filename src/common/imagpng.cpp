@@ -63,6 +63,8 @@ enum Transparency
     Transparency_Alpha
 };
 
+static const double INCHES_IN_METER = 39.3700787;
+
 // ----------------------------------------------------------------------------
 // local functions
 // ----------------------------------------------------------------------------
@@ -747,6 +749,30 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
 
     if ( iBitDepth == 16 )
         iElements *= 2;
+
+    // save the image resolution if we have it
+    int resX, resY;
+    switch ( GetResolutionFromOptions(*image, &resX, &resY) )
+    {
+        case wxIMAGE_RESOLUTION_INCHES:
+            resX *= INCHES_IN_METER;
+            resY *= INCHES_IN_METER;
+            break;
+
+        case wxIMAGE_RESOLUTION_CM:
+            resX *= 100;
+            resY *= 100;
+            break;
+
+        case wxIMAGE_RESOLUTION_NONE:
+            break;
+
+        default:
+            wxFAIL_MSG( _T("unsupported image resolution units") );
+    }
+
+    if ( resX && resY )
+        png_set_pHYs( png_ptr, info_ptr, resX, resY, PNG_RESOLUTION_METER );
 
     png_set_sBIT( png_ptr, info_ptr, &sig_bit );
     png_write_info( png_ptr, info_ptr );

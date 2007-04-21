@@ -2645,6 +2645,42 @@ bool wxImageHandler::CallDoCanRead(wxInputStream& stream)
 
 #endif // wxUSE_STREAMS
 
+/* static */
+wxImageResolution
+wxImageHandler::GetResolutionFromOptions(const wxImage& image, int *x, int *y)
+{
+    wxCHECK_MSG( x && y, wxIMAGE_RESOLUTION_NONE, _T("NULL pointer") );
+
+    if ( image.HasOption(wxIMAGE_OPTION_RESOLUTIONX) &&
+         image.HasOption(wxIMAGE_OPTION_RESOLUTIONY) )
+    {
+        *x = image.GetOptionInt(wxIMAGE_OPTION_RESOLUTIONX);
+        *y = image.GetOptionInt(wxIMAGE_OPTION_RESOLUTIONY);
+    }
+    else if ( image.HasOption(wxIMAGE_OPTION_RESOLUTION) )
+    {
+        *x =
+        *y = image.GetOptionInt(wxIMAGE_OPTION_RESOLUTION);
+    }
+    else // no resolution options specified
+    {
+        *x =
+        *y = 0;
+
+        return wxIMAGE_RESOLUTION_NONE;
+    }
+
+    // get the resolution unit too
+    int resUnit = image.GetOptionInt(wxIMAGE_OPTION_RESOLUTIONUNIT);
+    if ( !resUnit )
+    {
+        // this is the default
+        resUnit = wxIMAGE_RESOLUTION_INCHES;
+    }
+
+    return (wxImageResolution)resUnit;
+}
+
 // ----------------------------------------------------------------------------
 // image histogram stuff
 // ----------------------------------------------------------------------------
