@@ -184,6 +184,17 @@ the beginning of the stream. Otherwise, it returns wxInvalidOffset.
 
 Resets to the initial state variables concerning the buffer.
 
+
+\membersection{wxStreamBuffer::Truncate}\label{wxstreambuffertruncate}
+
+\func{void}{Truncate}{\void}
+
+Truncates the buffer to the current position.
+
+Note: Truncate() cannot be used to enlarge the buffer. This is
+usually not needed since the buffer expands automatically.
+
+
 \membersection{wxStreamBuffer::SetBufferIO}\label{wxstreambuffersetbufferio}
 
 \func{void}{SetBufferIO}{\param{char*}{ buffer\_start}, \param{char*}{ buffer\_end}}

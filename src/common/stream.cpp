@@ -192,6 +192,28 @@ void wxStreamBuffer::ResetBuffer()
                         : m_buffer_start;
 }
 
+void wxStreamBuffer::Truncate()
+{
+    size_t new_size = m_buffer_pos - m_buffer_start;
+    if ( new_size == m_buffer_size )
+        return;
+
+    if ( !new_size )
+    {
+        FreeBuffer();
+        InitBuffer();
+        return;
+    }
+
+    char *new_start = (char *)realloc(m_buffer_start, new_size);
+    wxCHECK_RET( new_size, _T("shrinking buffer shouldn't fail") );
+
+    m_buffer_start = new_start;
+    m_buffer_size = new_size;
+    m_buffer_end = m_buffer_start + m_buffer_size;
+    m_buffer_pos = m_buffer_end;
+}
+
 // fill the buffer with as much data as possible (only for read buffers)
 bool wxStreamBuffer::FillBuffer()
 {

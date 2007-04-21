@@ -81,6 +81,7 @@ All:
 - Implemented wxMemoryInputStream::CanRead()
 - Added wxEXEC_BLOCK flag (Hank Schultz)
 - Add support for wxStream-derived classes to wxRTTI (Stas Sergeev)
+- Added wxStreamBuffer::Truncate() (Stas Sergeev)
 
 All (GUI):
 

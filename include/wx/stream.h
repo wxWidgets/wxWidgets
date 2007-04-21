@@ -434,6 +434,7 @@ public:
 
     // Buffer control
     void ResetBuffer();
+    void Truncate();
 
     // NB: the buffer must always be allocated with malloc() if takeOwn is
     //     true as it will be deallocated by free()
