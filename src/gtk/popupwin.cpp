@@ -113,7 +113,7 @@ gtk_dialog_realized_callback( GtkWidget * WXUNUSED(widget), wxPopupWindow *win )
 static void wxInsertChildInDialog( wxPopupWindow* parent, wxWindow* child )
 {
     gtk_pizza_put( GTK_PIZZA(parent->m_wxwindow),
-                   GTK_WIDGET(child->m_widget),
+                   child->m_widget,
                    child->m_x,
                    child->m_y,
                    child->m_width,

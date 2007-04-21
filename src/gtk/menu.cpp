@@ -157,12 +157,12 @@ void wxMenuBar::Init(size_t n, wxMenu *menus[], const wxString titles[], long st
     if (style & wxMB_DOCKABLE)
     {
         m_widget = gtk_handle_box_new();
-        gtk_container_add( GTK_CONTAINER(m_widget), GTK_WIDGET(m_menubar) );
-        gtk_widget_show( GTK_WIDGET(m_menubar) );
+        gtk_container_add(GTK_CONTAINER(m_widget), m_menubar);
+        gtk_widget_show(m_menubar);
     }
     else
     {
-        m_widget = GTK_WIDGET(m_menubar);
+        m_widget = m_menubar;
     }
 
     PostCreation();
@@ -823,7 +823,7 @@ void wxMenuItem::SetText( const wxString& str )
         gtk_accelerator_parse( (const char*) oldbuf, &accel_key, &accel_mods);
         if (accel_key != 0)
         {
-            gtk_widget_remove_accelerator( GTK_WIDGET(m_menuItem),
+            gtk_widget_remove_accelerator(m_menuItem,
                                         m_parentMenu->m_accel,
                                         accel_key,
                                         accel_mods );
@@ -833,7 +833,7 @@ void wxMenuItem::SetText( const wxString& str )
     {
         // if the accelerator was taken from a stock ID, just get it back from GTK+ stock
         if (wxGetStockGtkAccelerator(stockid, &accel_mods, &accel_key))
-            gtk_widget_remove_accelerator( GTK_WIDGET(m_menuItem),
+            gtk_widget_remove_accelerator( m_menuItem,
                                            m_parentMenu->m_accel,
                                            accel_key,
                                            accel_mods );
@@ -846,7 +846,7 @@ void wxMenuItem::SetText( const wxString& str )
         gtk_accelerator_parse( (const char*) buf, &accel_key, &accel_mods);
         if (accel_key != 0)
         {
-            gtk_widget_add_accelerator( GTK_WIDGET(m_menuItem),
+            gtk_widget_add_accelerator( m_menuItem,
                                         "activate",
                                         m_parentMenu->m_accel,
                                         accel_key,
@@ -858,7 +858,7 @@ void wxMenuItem::SetText( const wxString& str )
     {
         // if the accelerator was taken from a stock ID, just get it back from GTK+ stock
         if (wxGetStockGtkAccelerator(stockid, &accel_mods, &accel_key))
-            gtk_widget_remove_accelerator( GTK_WIDGET(m_menuItem),
+            gtk_widget_remove_accelerator( m_menuItem,
                                            m_parentMenu->m_accel,
                                            accel_key,
                                            accel_mods );
@@ -1164,7 +1164,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
         gtk_accelerator_parse( (const char*) buf, &accel_key, &accel_mods);
         if (accel_key != 0)
         {
-            gtk_widget_add_accelerator (GTK_WIDGET(menuItem),
+            gtk_widget_add_accelerator (menuItem,
                                         "activate",
                                         m_accel,
                                         accel_key,
@@ -1176,7 +1176,7 @@ bool wxMenu::GtkAppend(wxMenuItem *mitem, int pos)
     {
         // if the accelerator was taken from a stock ID, just get it back from GTK+ stock
         if (wxGetStockGtkAccelerator(stockid, &accel_mods, &accel_key))
-            gtk_widget_add_accelerator( GTK_WIDGET(menuItem),
+            gtk_widget_add_accelerator( menuItem,
                                         "activate",
                                         m_accel,
                                         accel_key,

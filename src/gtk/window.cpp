@@ -2161,7 +2161,7 @@ static void wxInsertChildInWindow( wxWindowGTK* parent, wxWindowGTK* child )
     child->m_y += gtk_pizza_get_yoffset( pizza );
 
     gtk_pizza_put( GTK_PIZZA(parent->m_wxwindow),
-                     GTK_WIDGET(child->m_widget),
+                     child->m_widget,
                      child->m_x,
                      child->m_y,
                      child->m_width,
@@ -2669,7 +2669,7 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
     if (wxDynamicCast(GetParent(), wxToolBar))
     {
        // don't take the x,y values, they're wrong because toolbar sets them
-       GtkWidget  *widget = GTK_WIDGET(m_widget);
+       GtkWidget  *widget = m_widget;
        gtk_widget_set_size_request (widget, m_width, m_height);
     }
     else
@@ -3321,7 +3321,7 @@ void wxWindowGTK::RemoveChild(wxWindowBase *child)
 /* static */
 wxLayoutDirection wxWindowGTK::GTKGetLayout(GtkWidget *widget)
 {
-    return gtk_widget_get_direction(GTK_WIDGET(widget)) == GTK_TEXT_DIR_RTL
+    return gtk_widget_get_direction(widget) == GTK_TEXT_DIR_RTL
                 ? wxLayout_RightToLeft
                 : wxLayout_LeftToRight;
 }
@@ -3331,7 +3331,7 @@ void wxWindowGTK::GTKSetLayout(GtkWidget *widget, wxLayoutDirection dir)
 {
     wxASSERT_MSG( dir != wxLayout_Default, _T("invalid layout direction") );
 
-    gtk_widget_set_direction(GTK_WIDGET(widget),
+    gtk_widget_set_direction(widget,
                              dir == wxLayout_RightToLeft ? GTK_TEXT_DIR_RTL
                                                          : GTK_TEXT_DIR_LTR);
 }

@@ -244,7 +244,7 @@ void wxScrollBar::SetRange(int range)
 
 GdkWindow *wxScrollBar::GTKGetWindow(wxArrayGdkWindows& WXUNUSED(windows)) const
 {
-    return GTK_WIDGET(GTK_RANGE(m_widget))->window;
+    return m_widget->window;
 }
 
 // static

@@ -426,9 +426,9 @@ int wxComboBox::DoAppend( const wxString &item )
         GtkRcStyle *style = CreateWidgetStyle();
         if (style)
         {
-            gtk_widget_modify_style( GTK_WIDGET( list_item ), style );
+            gtk_widget_modify_style(list_item, style);
             GtkBin *bin = GTK_BIN( list_item );
-            GtkWidget *label = GTK_WIDGET( bin->child );
+            GtkWidget *label = bin->child;
             gtk_widget_modify_style( label, style );
             gtk_rc_style_unref( style );
         }

@@ -439,7 +439,7 @@ void wxClipboard::AddSupportedTarget(GdkAtom atom)
 {
     gtk_selection_add_target
     (
-        GTK_WIDGET(m_clipboardWidget),
+        m_clipboardWidget,
         GTKGetClipboardAtom(),
         atom,
         0 // info (same as client data) unused

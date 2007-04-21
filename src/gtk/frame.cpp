@@ -133,7 +133,7 @@ static void wxInsertChildInFrame( wxFrame* parent, wxWindow* child )
         // These are outside the client area
         wxFrame* frame = (wxFrame*) parent;
         gtk_pizza_put( GTK_PIZZA(frame->m_mainWidget),
-                         GTK_WIDGET(child->m_widget),
+                         child->m_widget,
                          child->m_x,
                          child->m_y,
                          child->m_width,
@@ -161,7 +161,7 @@ static void wxInsertChildInFrame( wxFrame* parent, wxWindow* child )
     {
         // These are inside the client area
         gtk_pizza_put( GTK_PIZZA(parent->m_wxwindow),
-                         GTK_WIDGET(child->m_widget),
+                         child->m_widget,
                          child->m_x,
                          child->m_y,
                          child->m_width,

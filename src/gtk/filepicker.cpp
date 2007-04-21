@@ -81,7 +81,7 @@ bool wxFileButton::Create( wxWindow *parent, wxWindowID id,
         // NOTE: we deliberately ignore the given label as GtkFileChooserButton
         //       use as label the currently selected file
         m_widget = gtk_file_chooser_button_new_with_dialog( m_dialog->m_widget );
-        gtk_widget_show( GTK_WIDGET(m_widget) );
+        gtk_widget_show(m_widget);
 
         // we need to know when the dialog has been dismissed clicking OK...
         // NOTE: the "clicked" signal is not available for a GtkFileChooserButton
@@ -230,7 +230,7 @@ bool wxDirButton::Create( wxWindow *parent, wxWindowID id,
         //       use as label the currently selected file
         m_widget = gtk_file_chooser_button_new_with_dialog( m_dialog->m_widget );
 
-        gtk_widget_show( GTK_WIDGET(m_widget) );
+        gtk_widget_show(m_widget);
 
         // GtkFileChooserButton signals
         g_signal_connect(m_widget, "current-folder-changed",
