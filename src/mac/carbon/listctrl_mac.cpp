@@ -654,12 +654,43 @@ void wxListCtrl::FireMouseEvent(wxEventType eventType, wxPoint position)
 
 void wxListCtrl::OnChar(wxKeyEvent& event)
 {
+
+    
     if (m_dbImpl)
     {
         wxListEvent le( wxEVT_COMMAND_LIST_KEY_DOWN, GetId() );
         le.SetEventObject(this);
         le.m_code = event.GetKeyCode();
         le.m_itemIndex = -1;
+        
+        if (m_current == -1)
+        {
+            // if m_current isn't set, check if there's been a selection
+            // made before continuing
+            m_current = GetNextItem(-1, wxLIST_NEXT_BELOW, wxLIST_STATE_SELECTED);
+        }
+        
+        // We need to determine m_current ourselves when navigation keys
+        // are used. Note that PAGEUP and PAGEDOWN do not alter the current
+        // item on native Mac ListCtrl, so we only handle up and down keys.
+        switch ( event.GetKeyCode() )
+        {
+            case WXK_UP:
+                if ( m_current > 0 )
+                    m_current -= 1;
+                else
+                    m_current = 0;
+                    
+                break;
+
+            case WXK_DOWN:
+                if ( m_current < GetItemCount() - 1 )
+                    m_current += 1;
+                else
+                    m_current = GetItemCount() - 1;
+                    
+                break;
+        }
 
         if (m_current != -1)
         {
@@ -1174,7 +1205,7 @@ bool wxListCtrl::SetItemState(long item, long state, long stateMask)
     if (m_dbImpl)
     {
         DataBrowserSetOption option = kDataBrowserItemsAdd;
-        if ( stateMask == wxLIST_STATE_SELECTED && state == 0 )
+        if ( (stateMask & wxLIST_STATE_SELECTED) && state == 0 )
             option = kDataBrowserItemsRemove;
 
         if (item == -1)
@@ -1202,7 +1233,14 @@ bool wxListCtrl::SetItemState(long item, long state, long stateMask)
             if ( HasFlag(wxLC_VIRTUAL) )
             {
                 long itemID = item+1;
+                bool isSelected = IsDataBrowserItemSelected(m_dbImpl->GetControlRef(), (DataBrowserItemID)itemID );
+                bool isSelectedState = (state == wxLIST_STATE_SELECTED);
+
+                // toggle the selection state if wxListInfo state and actual state don't match.
+                if ( (stateMask & wxLIST_STATE_SELECTED) && isSelected != isSelectedState )
+                {
                 SetDataBrowserSelectedItems(m_dbImpl->GetControlRef(), 1, (DataBrowserItemID*)&itemID, option);
+            }
             }
             else
             {
@@ -1579,7 +1617,7 @@ long wxListCtrl::GetNextItem(long item, int geom, int state) const
             }
         }
 
-        if ( geom == wxLIST_NEXT_ALL || geom == wxLIST_NEXT_ABOVE )
+        if ( geom == wxLIST_NEXT_ABOVE )
         {
             int item2 = item;
             if ( item2 == -1 )
