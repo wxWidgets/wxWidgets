@@ -30,15 +30,6 @@
 
 class WXDLLIMPEXP_CORE wxScrollBar;
 
-#ifdef WXMAKINGDLL_STC
-    #define WXDLLIMPEXP_STC WXEXPORT
-#elif defined(WXUSINGDLL)
-    #define WXDLLIMPEXP_STC WXIMPORT
-#else // not making nor using DLL
-    #define WXDLLIMPEXP_STC
-#endif
-
-
 // SWIG can't handle "#if" type of conditionals, only "#ifdef"
 #ifdef SWIG
 #define STC_USE_DND 1
