@@ -18,6 +18,7 @@
 #include "wx/stream.h"
 #include "wx/image.h"
 #include "wx/animdecod.h"
+#include "wx/dynarray.h"
 
 // internal utility used to store a frame in 8bit-per-pixel format
 class GIFImage;
