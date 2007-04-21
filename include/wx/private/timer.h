@@ -68,6 +68,6 @@ protected:
 
 
     DECLARE_NO_COPY_CLASS(wxTimerImpl);
-};
+}
 
 #endif // _WX_TIMERIMPL_H_BASE_

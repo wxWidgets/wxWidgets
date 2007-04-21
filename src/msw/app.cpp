@@ -270,7 +270,7 @@ wxTimerImpl *
 wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
 {
   return new wxMSWTimerImpl(timer);
-};
+}
 
 // ===========================================================================
 // wxApp implementation
