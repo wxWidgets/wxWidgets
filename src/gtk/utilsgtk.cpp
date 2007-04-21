@@ -224,6 +224,28 @@ wxCharBuffer wxConvertFromGTK(const wxString& s, wxFontEncoding enc)
 
 #endif // !wxUSE_UNICODE
 
+// Returns false if version is certainly greater or equal than major.minor.micro
+// Returns true if version is lower than major.minor.micro OR it cannot be
+// determined and one should not rely on the availability of pango version
+// major.minor.micro, nor the non-availability
+const gchar *wx_pango_version_check (int major, int minor, int micro)
+{
+#ifdef PANGO_VERSION_MAJOR
+    if (!gtk_check_version (2,11,0))
+    {
+        // GTK+ 2.11 requires Pango >= 1.15.3 and pango_version_check
+        // was added in Pango 1.15.2 thus we know for sure the pango lib we're
+        // using has the pango_version_check function:
+        return pango_version_check (major, minor, micro);
+    }
+
+    return "can't check";
+#else // !PANGO_VERSION_MAJOR
+    return "too old headers";
+#endif
+}
+
+
 // ----------------------------------------------------------------------------
 // subprocess routines
 // ----------------------------------------------------------------------------

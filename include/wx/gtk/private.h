@@ -23,6 +23,16 @@
     #define GTK_CHECK_VERSION(a, b, c) 0
 #endif
 
+// pango_version_check symbol is quite recent ATM (4/2007)... so we
+// use our own wrapper which implements a smart trick.
+// Use this function as you'd use pango_version_check:
+//
+//  if (!wx_pango_version_check(1,18,0))
+//     ... call to a function available only in pango >= 1.18 ...
+//
+// and use it only to test for pango versions >= 1.16.0
+extern const gchar *wx_pango_version_check(int major, int minor, int micro);
+
 #if wxUSE_UNICODE
     #define wxGTK_CONV(s) wxConvUTF8.cWX2MB((s))
     #define wxGTK_CONV_ENC(s, enc) wxGTK_CONV((s))
