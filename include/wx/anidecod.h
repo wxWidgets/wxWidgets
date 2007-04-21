@@ -17,6 +17,7 @@
 #include "wx/stream.h"
 #include "wx/image.h"
 #include "wx/animdecod.h"
+#include "wx/dynarray.h"
 
 
 class /*WXDLLEXPORT*/ wxANIFrameInfo;
