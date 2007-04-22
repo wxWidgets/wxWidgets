@@ -34,6 +34,7 @@
 
 #include "wx/gtk/win_gtk.h"
 #include "wx/gtk/private.h"
+#include "wx/apptrait.h"
 
 #include <gdk/gdkx.h>
 
@@ -451,8 +452,13 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     init_result = gtk_init_check( &argc, &argv );
 #endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
-    if (!init_result) {
-        wxLogError(wxT("Unable to initialize gtk, is DISPLAY set properly?"));
+    // update internal arg[cv] as GTK+ may have removed processed options:
+    this->argc = argc;
+    this->argv = argv;
+
+    if ( !init_result )
+    {
+        wxLogError(_("Unable to initialize GTK+, is DISPLAY set properly?"));
         return false;
     }
 
