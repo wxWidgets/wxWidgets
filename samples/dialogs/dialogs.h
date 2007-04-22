@@ -141,6 +141,34 @@ private:
 
 #endif // USE_MODAL_PRESENTATION
 
+class StdButtonSizerDialog : public wxDialog
+{
+public:
+    StdButtonSizerDialog(wxWindow *parent);
+
+    void OnEvent(wxCommandEvent& event);
+
+private:
+    void EnableDisableControls();
+
+    wxCheckBox *m_chkboxAffirmativeButton;
+    wxRadioButton *m_radiobtnOk,
+                  *m_radiobtnYes;
+
+    wxCheckBox *m_chkboxDismissButton;
+    wxRadioButton *m_radiobtnClose,
+                  *m_radiobtnCancel;
+
+    wxCheckBox *m_chkboxApply,
+               *m_chkboxNo,
+               *m_chkboxHelp,
+               *m_chkboxNoDefault;
+
+    wxSizer *m_buttonsSizer;
+
+    DECLARE_EVENT_TABLE()
+};
+
 #if USE_SETTINGS_DIALOG
 // Property sheet dialog
 class SettingsDialog: public wxPropertySheetDialog
@@ -271,6 +299,7 @@ public:
 
     void OnPropertySheet(wxCommandEvent& event);
     void OnRequestUserAttention(wxCommandEvent& event);
+    void OnStandardButtonsSizerDialog(wxCommandEvent& event);
     void OnExit(wxCommandEvent& event);
 
 private:
@@ -347,7 +376,8 @@ enum
     DIALOGS_REQUEST,
     DIALOGS_PROPERTY_SHEET,
     DIALOGS_PROPERTY_SHEET_TOOLBOOK,
-    DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK
+    DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK,
+    DIALOGS_STANDARD_BUTTON_SIZER_DIALOG
 };
 
 #endif

@@ -215,6 +215,7 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_MENU(DIALOGS_PROPERTY_SHEET_BUTTONTOOLBOOK, MyFrame::OnPropertySheet)
 #endif
 
+    EVT_MENU(DIALOGS_STANDARD_BUTTON_SIZER_DIALOG,  MyFrame::OnStandardButtonsSizerDialog)
     EVT_MENU(DIALOGS_REQUEST,                       MyFrame::OnRequestUserAttention)
 
     EVT_MENU(wxID_EXIT,                             MyFrame::OnExit)
@@ -232,6 +233,11 @@ END_EVENT_TABLE()
     END_EVENT_TABLE()
 
 #endif // USE_MODAL_PRESENTATION
+
+BEGIN_EVENT_TABLE(StdButtonSizerDialog, wxDialog)
+    EVT_CHECKBOX(wxID_ANY, StdButtonSizerDialog::OnEvent)
+    EVT_RADIOBUTTON(wxID_ANY, StdButtonSizerDialog::OnEvent)
+END_EVENT_TABLE()
 
 MyCanvas *myCanvas = (MyCanvas *) NULL;
 
@@ -397,6 +403,8 @@ bool MyApp::OnInit()
 */
     menuDlg->Append(wxID_ANY, _T("&Property sheets"), sheet_menu);
 #endif // USE_SETTINGS_DIALOG
+
+    menuDlg->Append(DIALOGS_STANDARD_BUTTON_SIZER_DIALOG, _T("&Standard Buttons Sizer Dialog"));
 
     menuDlg->Append(DIALOGS_REQUEST, _T("&Request user attention\tCtrl-R"));
 
@@ -1064,6 +1072,12 @@ void MyFrame::OnRequestUserAttention(wxCommandEvent& WXUNUSED(event))
     RequestUserAttention(wxUSER_ATTENTION_ERROR);
 }
 
+void MyFrame::OnStandardButtonsSizerDialog(wxCommandEvent& WXUNUSED(event))
+{
+    StdButtonSizerDialog  dialog(this);
+    dialog.ShowModal();
+}
+
 void MyFrame::OnExit(wxCommandEvent& WXUNUSED(event) )
 {
     Close(true);
@@ -1513,6 +1527,165 @@ void MyModalDialog::OnButton(wxCommandEvent& event)
 }
 
 #endif // USE_MODAL_PRESENTATION
+
+// ----------------------------------------------------------------------------
+// StdButtonSizerDialog
+// ----------------------------------------------------------------------------
+
+StdButtonSizerDialog::StdButtonSizerDialog(wxWindow *parent)
+    : wxDialog(parent, wxID_ANY, wxString(_T("StdButtonSizer dialog")),
+      wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE|wxRESIZE_BORDER),
+      m_buttonsSizer(NULL)
+{
+    wxBoxSizer *const sizerTop = new wxBoxSizer(wxVERTICAL);
+
+    wxBoxSizer *const sizer = new wxBoxSizer(wxHORIZONTAL);
+    wxBoxSizer *const sizerInside1 = new wxBoxSizer(wxVERTICAL);
+
+    m_chkboxAffirmativeButton = new wxCheckBox(this, wxID_ANY, _("Enable Affirmative Button"));
+
+    wxStaticBoxSizer *const sizer1 = new wxStaticBoxSizer(wxVERTICAL, this, wxT("Affirmative Button"));
+
+    m_radiobtnOk = new wxRadioButton(this, wxID_ANY, _("Ok"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
+    m_radiobtnYes = new wxRadioButton(this, wxID_ANY, _("Yes"));
+
+    wxBoxSizer *const sizerInside2 = new wxBoxSizer(wxVERTICAL);
+
+    m_chkboxDismissButton = new wxCheckBox(this, wxID_ANY, _("Enable Dismiss Button"));
+
+    wxStaticBoxSizer *const sizer2 = new wxStaticBoxSizer(wxVERTICAL, this, wxT("Dismiss Button"));
+
+    m_radiobtnCancel = new wxRadioButton(this, wxID_ANY, _("Cancel"), wxDefaultPosition, wxDefaultSize, wxRB_GROUP);
+    m_radiobtnClose = new wxRadioButton(this, wxID_ANY, _("Close"));
+
+    wxBoxSizer *const sizer3 = new wxBoxSizer(wxHORIZONTAL);
+
+    m_chkboxNo = new wxCheckBox(this, wxID_ANY, _("No"));
+    m_chkboxHelp = new wxCheckBox(this, wxID_ANY, _("Help"));
+    m_chkboxApply = new wxCheckBox(this, wxID_ANY, _("Apply"));
+
+    m_chkboxNoDefault = new wxCheckBox(this, wxID_ANY, wxT("No Default"));
+
+    sizer1->Add(m_radiobtnOk, 0, wxALL, 5);
+    sizer1->Add(m_radiobtnYes, 0, wxALL, 5);
+
+    sizer->Add(sizerInside1, 0, 0, 0);
+    sizerInside1->Add(m_chkboxAffirmativeButton, 0, wxALL, 5);
+    sizerInside1->Add(sizer1, 0, wxALL, 5);
+    sizerInside1->SetItemMinSize(sizer1, sizer1->GetStaticBox()->GetBestSize());    // to prevent wrapping of static box label
+
+    sizer2->Add(m_radiobtnCancel, 0, wxALL, 5);
+    sizer2->Add(m_radiobtnClose, 0, wxALL, 5);
+
+    sizer->Add(sizerInside2, 0, 0, 0);
+    sizerInside2->Add(m_chkboxDismissButton, 0, wxALL, 5);
+    sizerInside2->Add(sizer2, 0, wxALL, 5);
+    sizerInside2->SetItemMinSize(sizer2, sizer2->GetStaticBox()->GetBestSize());    // to prevent wrapping of static box label
+
+    sizerTop->Add(sizer, 0, wxALL, 5);
+
+    sizer3->Add(m_chkboxNo, 0, wxALL, 5);
+    sizer3->Add(m_chkboxHelp, 0, wxALL, 5);
+    sizer3->Add(m_chkboxApply, 0, wxALL, 5);
+
+    sizerTop->Add(sizer3, 0, wxALL, 5);
+
+    sizerTop->Add(m_chkboxNoDefault, 0, wxLEFT|wxRIGHT, 10);
+
+    EnableDisableControls();
+
+    SetSizer(sizerTop);
+
+    sizerTop->SetSizeHints(this);
+    wxCommandEvent ev;
+    OnEvent(ev);
+}
+
+void StdButtonSizerDialog::OnEvent(wxCommandEvent& WXUNUSED(event))
+{
+    if (m_buttonsSizer)
+    {
+        m_buttonsSizer->DeleteWindows();
+        GetSizer()->Remove(m_buttonsSizer);
+    }
+
+    EnableDisableControls();
+
+    long flags = 0;
+    unsigned long numButtons = 0;
+
+    if (m_chkboxAffirmativeButton->IsChecked())
+    {
+        if (m_radiobtnOk->GetValue())
+        {
+            flags |= wxOK;
+            numButtons ++;
+        }
+        else if (m_radiobtnYes->GetValue())
+        {
+            flags |= wxYES;
+            numButtons ++;
+        }
+    }
+
+    if (m_chkboxDismissButton->IsChecked())
+    {
+        if (m_radiobtnCancel->GetValue())
+        {
+            flags |= wxCANCEL;
+            numButtons ++;
+        }
+
+        else if (m_radiobtnClose->GetValue())
+        {
+            flags |= wxCLOSE;
+            numButtons ++;
+        }
+
+    }
+
+    if (m_chkboxApply->IsChecked())
+    {
+        flags |= wxAPPLY;
+        numButtons ++;
+    }
+
+    if (m_chkboxNo->IsChecked())
+    {
+        flags |= wxNO;
+        numButtons ++;
+    }
+
+    if (m_chkboxHelp->IsChecked())
+    {
+        flags |= wxHELP;
+        numButtons ++;
+    }
+
+    if (m_chkboxNoDefault->IsChecked())
+    {
+        flags |= wxNO_DEFAULT;
+    }
+
+    m_buttonsSizer = CreateStdDialogButtonSizer(flags);
+    GetSizer()->Add(m_buttonsSizer, 0, wxGROW|wxALL, 5);
+
+    Layout();
+    GetSizer()->SetSizeHints(this);
+}
+
+void StdButtonSizerDialog::EnableDisableControls()
+{
+    const bool affButtonEnabled = m_chkboxAffirmativeButton->IsChecked();
+
+    m_radiobtnOk->Enable(affButtonEnabled);
+    m_radiobtnYes->Enable(affButtonEnabled);
+
+    const bool dismissButtonEnabled = m_chkboxDismissButton->IsChecked();
+
+    m_radiobtnCancel->Enable(dismissButtonEnabled);
+    m_radiobtnClose->Enable(dismissButtonEnabled);
+}
 
 #if USE_SETTINGS_DIALOG
 // ----------------------------------------------------------------------------
