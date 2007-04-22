@@ -15,6 +15,7 @@
 #include "wx/string.h"
 #include "wx/platinfo.h"
 
+class WXDLLIMPEXP_BASE wxArrayString;
 class WXDLLIMPEXP_BASE wxObject;
 class WXDLLEXPORT wxAppTraits;
 #if wxUSE_FONTMAP

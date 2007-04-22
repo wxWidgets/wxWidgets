@@ -27,6 +27,7 @@
 #include "wx/dialog.h"
 
 #ifndef WX_PRECOMP
+    #include "wx/app.h"
     #include "wx/button.h"
     #include "wx/dcclient.h"
     #include "wx/intl.h"
