@@ -504,6 +504,10 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         return false;
     }
 
+    // update internal arg[cv] as GTK+ may have removed processed options:
+    this->argc = argc;
+    this->argv = argv;
+
     // we can not enter threads before gtk_init is done
     gdk_threads_enter();
 
