@@ -546,6 +546,8 @@ public:
     virtual void SetExtraStyle(long exStyle) { m_exStyle = exStyle; }
     long GetExtraStyle() const { return m_exStyle; }
 
+    bool HasExtraStyle(int exFlag) const { return (m_exStyle & exFlag) != 0; }
+
         // make the window modal (all other windows unresponsive)
     virtual void MakeModal(bool modal = true);
 
