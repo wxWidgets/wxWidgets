@@ -63,8 +63,6 @@ enum Transparency
     Transparency_Alpha
 };
 
-static const double INCHES_IN_METER = 39.3700787;
-
 // ----------------------------------------------------------------------------
 // local functions
 // ----------------------------------------------------------------------------
@@ -755,8 +753,11 @@ bool wxPNGHandler::SaveFile( wxImage *image, wxOutputStream& stream, bool verbos
     switch ( GetResolutionFromOptions(*image, &resX, &resY) )
     {
         case wxIMAGE_RESOLUTION_INCHES:
-            resX *= INCHES_IN_METER;
-            resY *= INCHES_IN_METER;
+            {
+                const double INCHES_IN_METER = 10000.0 / 254;
+                resX = int(resX * INCHES_IN_METER);
+                resY = int(resY * INCHES_IN_METER);
+            }
             break;
 
         case wxIMAGE_RESOLUTION_CM:
