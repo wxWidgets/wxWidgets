@@ -734,8 +734,7 @@ public:
 
 protected:
     void AdjustForFlexDirection();
-    void AdjustForGrowables(const wxSize& sz, const wxSize& minsz,
-                            int nrows, int ncols);
+    void AdjustForGrowables(const wxSize& sz);
 
     // the heights/widths of all rows/columns
     wxArrayInt  m_rowHeights,

@@ -1346,101 +1346,125 @@ void wxFlexGridSizer::RecalcSizes()
     if ( (nitems = CalcRowsCols(nrows, ncols)) == 0 )
         return;
 
-    wxPoint pt( GetPosition() );
-    wxSize sz( GetSize() );
+    const wxPoint pt(GetPosition());
+    const wxSize sz(GetSize());
 
-    AdjustForGrowables(sz, m_calculatedMinSize, nrows, ncols);
+    AdjustForGrowables(sz);
 
-    sz = wxSize( pt.x + sz.x, pt.y + sz.y );
-
-    int x = pt.x;
-    for (int c = 0; c < ncols; c++)
+    wxSizerItemList::const_iterator i = m_children.begin();
+    int y = 0;
+    for ( int r = 0; r < nrows; r++ )
     {
-        int y = pt.y;
-        for (int r = 0; r < nrows; r++)
+        if ( m_rowHeights[r] == -1 )
         {
-            int i = r * ncols + c;
-            if (i < nitems)
-            {
-                wxSizerItemList::compatibility_iterator node = m_children.Item( i );
+            // this row is entirely hidden, skip it
+            for ( int c = 0; c < ncols; c++ )
+                ++i;
 
-                wxASSERT_MSG( node, _T("Failed to find node") );
-
-                int w = wxMax( 0, wxMin( m_colWidths[c], sz.x - x ) );
-                int h = wxMax( 0, wxMin( m_rowHeights[r], sz.y - y ) );
-
-                SetItemBounds( node->GetData(), x, y, w, h);
-            }
-            if (m_rowHeights[r] != -1)
-                y = y + m_rowHeights[r] + m_vgap;
+            continue;
         }
-        if (m_colWidths[c] != -1)
-            x = x + m_colWidths[c] + m_hgap;
+
+        const int hrow = m_rowHeights[r];
+        int h = sz.y - y; // max remaining height, don't overflow it
+        if ( hrow < h )
+            h = hrow;
+
+        int x = 0;
+        for ( int c = 0; c < ncols; c++, ++i )
+        {
+            const int wcol = m_colWidths[c];
+
+            if ( wcol == -1 )
+                continue;
+
+            // check if there are any remaining children: it may happen that
+            // the last row is incomplete
+            if ( i == m_children.end() )
+            {
+                wxASSERT_MSG( r == nrows - 1, _T("too few items") );
+
+                return;
+            }
+
+            int w = sz.x - x; // max possible value, ensure we don't overflow
+            if ( wcol < w )
+                w = wcol;
+
+            SetItemBounds(*i, pt.x + x, pt.y + y, w, h);
+
+            x += wcol + m_hgap;
+        }
+
+        y += hrow + m_vgap;
     }
+}
+
+// helper function used in CalcMin() to sum up the sizes of non-hidden items
+static int SumArraySizes(const wxArrayInt& sizes, int gap)
+{
+    // Sum total minimum size, including gaps between rows/columns.
+    // -1 is used as a magic number meaning empty row/column.
+    int total = 0;
+
+    const size_t count = sizes.size();
+    for ( size_t n = 0; n < count; n++ )
+    {
+        if ( sizes[n] != -1 )
+        {
+            if ( total )
+                total += gap; // separate from the previous column
+
+            total += sizes[n];
+        }
+    }
+
+    return total;
 }
 
 wxSize wxFlexGridSizer::CalcMin()
 {
-    int     nrows,
-            ncols;
-    size_t  i, s;
+    int nrows,
+        ncols;
 
     // Number of rows/columns can change as items are added or removed.
     if ( !CalcRowsCols(nrows, ncols) )
         return wxSize();
 
-    m_rowHeights.SetCount(nrows);
-    m_colWidths.SetCount(ncols);
 
-    // We have to recalcuate the sizes in case the item minimum size has
+    // We have to recalculate the sizes in case the item minimum size has
     // changed since the previous layout, or the item has been hidden using
     // wxSizer::Show(). If all the items in a row/column are hidden, the final
     // dimension of the row/column will be -1, indicating that the column
     // itself is hidden.
-    for( s = m_rowHeights.GetCount(), i = 0; i < s; ++i )
-        m_rowHeights[ i ] = -1;
-    for( s = m_colWidths.GetCount(), i = 0; i < s; ++i )
-        m_colWidths[ i ] = -1;
+    m_rowHeights.assign(nrows, -1);
+    m_colWidths.assign(ncols, -1);
 
-    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
-
-    i = 0;
-    while (node)
+    // n is the index of the item in left-to-right top-to-bottom order
+    size_t n = 0;
+    for ( wxSizerItemList::iterator i = m_children.begin();
+          i != m_children.end();
+          ++i, ++n )
     {
-        wxSizerItem    *item = node->GetData();
+        wxSizerItem * const item = *i;
         if ( item->IsShown() )
         {
-            wxSize sz( item->CalcMin() );
-            int row = i / ncols;
-            int col = i % ncols;
+            const wxSize sz(item->CalcMin());
 
-            m_rowHeights[ row ] = wxMax( wxMax( 0, sz.y ), m_rowHeights[ row ] );
-            m_colWidths[ col ] = wxMax( wxMax( 0, sz.x ), m_colWidths[ col ] );
+            const int row = n / ncols;
+            const int col = n % ncols;
+
+            if ( sz.y > m_rowHeights[row] )
+                m_rowHeights[row] = sz.y;
+            if ( sz.x > m_colWidths[col] )
+                m_colWidths[col] = sz.x;
         }
-
-        node = node->GetNext();
-        i++;
     }
 
     AdjustForFlexDirection();
 
-    // Sum total minimum size, including gaps between rows/columns.
-    // -1 is used as a magic number meaning empty column.
-    int width = 0;
-    for (int col = 0; col < ncols; col++)
-        if ( m_colWidths[ col ] != -1 )
-            width += m_colWidths[ col ] + m_hgap;
-    if (width > 0)
-        width -= m_hgap;
+    m_calculatedMinSize = wxSize(SumArraySizes(m_colWidths, m_hgap),
+                                 SumArraySizes(m_rowHeights, m_vgap));
 
-    int height = 0;
-    for (int row = 0; row < nrows; row++)
-        if ( m_rowHeights[ row ] != -1 )
-            height += m_rowHeights[ row ] + m_vgap;
-    if (height > 0)
-        height -= m_vgap;
-
-    m_calculatedMinSize = wxSize( width, height );
     return m_calculatedMinSize;
 }
 
@@ -1477,107 +1501,110 @@ void wxFlexGridSizer::AdjustForFlexDirection()
     }
 }
 
-
-void wxFlexGridSizer::AdjustForGrowables(const wxSize& sz, const wxSize& minsz,
-                                         int nrows, int ncols)
+// helper of AdjustForGrowables() which is called for rows/columns separately
+//
+// parameters:
+//      delta: the extra space, we do nothing unless it's positive
+//      growable: indices or growable rows/cols in sizes array
+//      sizes: the height/widths of rows/cols to adjust
+//      proportions: proportions of the growable rows/cols or NULL if they all
+//                   should be assumed to have proportion of 1
+static void
+DoAdjustForGrowables(int delta,
+                     const wxArrayInt& growable,
+                     wxArrayInt& sizes,
+                     const wxArrayInt *proportions)
 {
-    // what to do with the rows? by default, resize them proportionally
-    if ( sz.y > minsz.y && ( (m_flexDirection & wxVERTICAL) || (m_growMode == wxFLEX_GROWMODE_SPECIFIED) ) )
-    {
-        int sum_proportions = 0;
-        int growable_space = 0;
-        int num = 0;
-        size_t idx;
-        for (idx = 0; idx < m_growableRows.GetCount(); idx++)
-        {
-            // Since the number of rows/columns can change as items are
-            // inserted/deleted, we need to verify at runtime that the
-            // requested growable rows/columns are still valid.
-            if (m_growableRows[idx] >= nrows)
-                continue;
+    if ( delta <= 0 )
+        return;
 
-            // If all items in a row/column are hidden, that row/column will
-            // have a dimension of -1.  This causes the row/column to be
-            // hidden completely.
-            if (m_rowHeights[ m_growableRows[idx] ] == -1)
-                continue;
-            sum_proportions += m_growableRowsProportions[idx];
-            growable_space += m_rowHeights[ m_growableRows[idx] ];
-            num++;
-        }
+    // total sum of proportions of all non-hidden rows
+    int sum_proportions = 0;
 
-        if (num > 0)
-        {
-            for (idx = 0; idx < m_growableRows.GetCount(); idx++)
-            {
-                if (m_growableRows[idx] >= nrows )
-                    continue;
-                if (m_rowHeights[ m_growableRows[idx] ] != -1)
-                {
-                    int delta = (sz.y - minsz.y);
-                    if (sum_proportions == 0)
-                        delta = (delta/num) + m_rowHeights[ m_growableRows[idx] ];
-                    else
-                        delta = ((delta+growable_space)*m_growableRowsProportions[idx]) / sum_proportions;
-                    m_rowHeights[ m_growableRows[idx] ] = delta;
-                }
-            }
-        }
-    }
-    else if ( (m_growMode == wxFLEX_GROWMODE_ALL) && (sz.y > minsz.y) )
+    // number of currently shown growable rows
+    int num = 0;
+
+    const int max_idx = sizes.size();
+
+    const size_t count = growable.size();
+    size_t idx;
+    for ( idx = 0; idx < count; idx++ )
     {
-        // rounding problem?
-        for ( int row = 0; row < nrows; ++row )
-            m_rowHeights[ row ] = sz.y / nrows;
+        // Since the number of rows/columns can change as items are
+        // inserted/deleted, we need to verify at runtime that the
+        // requested growable rows/columns are still valid.
+        if ( growable[idx] >= max_idx )
+            continue;
+
+        // If all items in a row/column are hidden, that row/column will
+        // have a dimension of -1.  This causes the row/column to be
+        // hidden completely.
+        if ( sizes[growable[idx]] == -1 )
+            continue;
+
+        if ( proportions )
+            sum_proportions += (*proportions)[idx];
+
+        num++;
     }
 
-    // the same logic as above but for the columns
-    if ( sz.x > minsz.x && ( (m_flexDirection & wxHORIZONTAL) || (m_growMode == wxFLEX_GROWMODE_SPECIFIED) ) )
+    if ( !num )
+        return;
+
+    // the remaining extra free space, adjusted during each iteration
+    for ( idx = 0; idx < count; idx++ )
     {
-        int sum_proportions = 0;
-        int growable_space = 0;
-        int num = 0;
-        size_t idx;
-        for (idx = 0; idx < m_growableCols.GetCount(); idx++)
-        {
-            // Since the number of rows/columns can change as items are
-            // inserted/deleted, we need to verify at runtime that the
-            // requested growable rows/columns are still valid.
-            if (m_growableCols[idx] >= ncols)
-                continue;
+        if ( growable[idx] >= max_idx )
+            continue;
 
-            // If all items in a row/column are hidden, that row/column will
-            // have a dimension of -1.  This causes the column to be hidden
-            // completely.
-            if (m_colWidths[ m_growableCols[idx] ] == -1)
-                continue;
-            sum_proportions += m_growableColsProportions[idx];
-            growable_space += m_colWidths[ m_growableCols[idx] ];
-            num++;
+        if ( sizes[ growable[idx] ] == -1 )
+            continue;
+
+        int cur_delta;
+        if ( sum_proportions == 0 )
+        {
+            // no growable rows -- divide extra space evenly among all
+            cur_delta = delta/num;
+            num--;
+        }
+        else // allocate extra space proportionally
+        {
+            const int cur_prop = (*proportions)[idx];
+            cur_delta = (delta*cur_prop)/sum_proportions;
+            sum_proportions -= cur_prop;
         }
 
-        if (num > 0)
-        {
-            for (idx = 0; idx < m_growableCols.GetCount(); idx++)
-            {
-                if (m_growableCols[idx] >= ncols )
-                    continue;
-                if (m_colWidths[ m_growableCols[idx] ] != -1)
-                {
-                    int delta = (sz.x - minsz.x);
-                    if (sum_proportions == 0)
-                        delta = (delta/num) + m_colWidths[ m_growableCols[idx] ];
-                    else
-                        delta = ((delta+growable_space)*m_growableColsProportions[idx])/sum_proportions;
-                    m_colWidths[ m_growableCols[idx] ] = delta;
-                }
-            }
-        }
+        sizes[growable[idx]] += cur_delta;
+        delta -= cur_delta;
     }
-    else if ( (m_growMode == wxFLEX_GROWMODE_ALL) && (sz.x > minsz.x) )
+}
+
+void wxFlexGridSizer::AdjustForGrowables(const wxSize& sz)
+{
+    if ( (m_flexDirection & wxVERTICAL) || (m_growMode != wxFLEX_GROWMODE_NONE) )
     {
-        for ( int col=0; col < ncols; ++col )
-            m_colWidths[ col ] = sz.x / ncols;
+        // pass NULL instead of proportions if the grow mode is ALL as we
+        // should treat all rows as having proportion of 1 then
+        DoAdjustForGrowables
+        (
+            sz.y - m_calculatedMinSize.y,
+            m_growableRows,
+            m_rowHeights,
+            m_growMode == wxFLEX_GROWMODE_SPECIFIED ? &m_growableRowsProportions
+                                                    : NULL
+        );
+    }
+
+    if ( (m_flexDirection & wxHORIZONTAL) || (m_growMode != wxFLEX_GROWMODE_NONE) )
+    {
+        DoAdjustForGrowables
+        (
+            sz.x - m_calculatedMinSize.x,
+            m_growableCols,
+            m_colWidths,
+            m_growMode == wxFLEX_GROWMODE_SPECIFIED ? &m_growableColsProportions
+                                                    : NULL
+        );
     }
 }
 
