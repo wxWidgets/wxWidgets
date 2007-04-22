@@ -138,7 +138,21 @@ public:
 
     // return the name of the Desktop Environment such as
     // "KDE" or "GNOME". May return an empty string.
-    virtual wxString GetDesktopEnvironment() const { return wxEmptyString; }
+    virtual wxString GetDesktopEnvironment() const = 0;
+
+    // returns a short string to identify the block of the standard command
+    // line options parsed automatically by current port: if this string is
+    // empty, there are no such options, otherwise the function also fills
+    // passed arrays with the names and the descriptions of those options.
+    virtual wxString GetStandardCmdLineOptions(wxArrayString& names,
+                                               wxArrayString& desc) const
+    {
+        wxUnusedVar(names);
+        wxUnusedVar(desc);
+
+        return wxEmptyString;
+    }
+
 
 protected:
 #if wxUSE_STACKWALKER && defined( __WXDEBUG__ )
@@ -214,6 +228,7 @@ public:
     }
 
     virtual bool IsUsingUniversalWidgets() const { return false; }
+    virtual wxString GetDesktopEnvironment() const { return wxEmptyString; }
 };
 
 // ----------------------------------------------------------------------------
@@ -253,6 +268,8 @@ public:
         return false;
     #endif
     }
+
+    virtual wxString GetDesktopEnvironment() const { return wxEmptyString; }
 };
 
 #endif // wxUSE_GUI

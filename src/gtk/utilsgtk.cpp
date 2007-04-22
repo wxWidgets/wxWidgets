@@ -482,5 +482,96 @@ wxString wxGUIAppTraits::GetDesktopEnvironment() const
     return wxEmptyString;
 }
 
+#ifdef __WXGTK26__
 
+// see the hack below in wxCmdLineParser::GetUsageString().
+// TODO: replace this hack with a g_option_group_get_entries()
+//       call as soon as such function exists
+struct _GOptionGroup
+{
+  gchar           *name;
+  gchar           *description;
+  gchar           *help_description;
+
+  GDestroyNotify   destroy_notify;
+  gpointer         user_data;
+
+  GTranslateFunc   translate_func;
+  GDestroyNotify   translate_notify;
+  gpointer     translate_data;
+
+  GOptionEntry    *entries;
+  gint             n_entries;
+
+  GOptionParseFunc pre_parse_func;
+  GOptionParseFunc post_parse_func;
+  GOptionErrorFunc error_func;
+};
+
+wxString wxGetNameFromGtkOptionEntry(const GOptionEntry *opt)
+{
+    wxString ret;
+
+    if (opt->short_name)
+        ret << _T("-") << opt->short_name;
+    if (opt->long_name)
+    {
+        if (!ret.empty())
+            ret << _T(", ");
+        ret << _T("--") << opt->long_name;
+
+        if (opt->arg_description)
+            ret << _T("=") << opt->arg_description;
+    }
+
+    return _T("  ") + ret;
+}
+
+#endif // __WXGTK26__
+
+wxString
+wxGUIAppTraits::GetStandardCmdLineOptions(wxArrayString& names,
+                                          wxArrayString& desc) const
+{
+    wxString usage;
+
+#ifdef __WXGTK26__
+    // check whether GTK version is greater than 2.6 but also lower than 2.12
+    // because, as we use the undocumented _GOptionGroup struct, we don't want
+    // to run this code with future versions which might change it (2.11 is the
+    // latest one at the time of this writing)
+    if (!gtk_check_version(2,6,0) &&
+        gtk_check_version(2,12,0))
+    {
+        usage << _("The following standard GTK+ options are also supported:\n");
+
+        // passing true here means that the function can open the default
+        // display while parsing (not really used here anyhow)
+        GOptionGroup *gtkOpts = gtk_get_option_group(true);
+
+        // WARNING: here we access the internals of GOptionGroup:
+        GOptionEntry *entries = ((_GOptionGroup*)gtkOpts)->entries;
+        unsigned int n_entries = ((_GOptionGroup*)gtkOpts)->n_entries;
+        wxArrayString namesOptions, descOptions;
+
+        for ( size_t n = 0; n < n_entries; n++ )
+        {
+            if ( entries[n].flags & G_OPTION_FLAG_HIDDEN )
+                continue;       // skip
+
+            names.push_back(wxGetNameFromGtkOptionEntry(&entries[n]));
+
+            const gchar * const entryDesc = entries[n].description;
+            desc.push_back(entryDesc ? wxString(entryDesc) : _T(""));
+        }
+
+        g_option_group_free (gtkOpts);
+    }
+#else
+    wxUnusedVar(names);
+    wxUnusedVar(desc);
+#endif // __WXGTK26__
+
+    return usage;
+}
 

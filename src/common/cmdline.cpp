@@ -41,6 +41,7 @@
 #include "wx/datetime.h"
 #include "wx/msgout.h"
 #include "wx/filename.h"
+#include "wx/apptrait.h"
 
 // ----------------------------------------------------------------------------
 // private functions
@@ -179,7 +180,7 @@ struct wxCmdLineParserData
 
     // cmd line data
     wxArrayString m_arguments;  // == argv, argc == m_arguments.GetCount()
-    wxArrayOptions m_options;   // all possible options and switchrs
+    wxArrayOptions m_options;   // all possible options and switches
     wxArrayParams m_paramDesc;  // description of all possible params
     wxArrayString m_parameters; // all params found
 
@@ -1068,18 +1069,29 @@ wxString wxCmdLineParser::GetUsageString()
 
     usage << _T('\n');
 
+    // set to number of our own options, not counting the standard ones
+    count = namesOptions.size();
+
+    // get option names & descriptions for standard options, if any:
+    wxAppTraits *traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+    wxString stdDesc;
+    if ( traits )
+        stdDesc = traits->GetStandardCmdLineOptions(namesOptions, descOptions);
+
     // now construct the detailed help message
     size_t len, lenMax = 0;
-    count = namesOptions.size();
-    for ( n = 0; n < count; n++ )
+    for ( n = 0; n < namesOptions.size(); n++ )
     {
         len = namesOptions[n].length();
         if ( len > lenMax )
             lenMax = len;
     }
 
-    for ( n = 0; n < count; n++ )
+    for ( n = 0; n < namesOptions.size(); n++ )
     {
+        if ( n == count )
+            usage << _T('\n') << stdDesc;
+
         len = namesOptions[n].length();
         usage << namesOptions[n]
               << wxString(_T(' '), lenMax - len) << _T('\t')

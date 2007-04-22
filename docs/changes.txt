@@ -109,6 +109,7 @@ All (GUI):
 - Added wxWindow::NavigateIn() in addition to existing Navigate()
 - Add support for <data> tags to wxrc
 - Support wxAPPLY and wxCLOSE in CreateStdDialogButtonSizer() (Marcin Wojdyr)
+- Show standard options in wxCmdLineParser usage message (Francesco Montorsi)
 
 wxGTK:
 

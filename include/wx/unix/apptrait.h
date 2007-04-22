@@ -49,6 +49,8 @@ public:
 #ifdef __WXGTK__
     virtual void SetLocale();
     virtual wxString GetDesktopEnvironment() const;
+    virtual wxString GetStandardCmdLineOptions(wxArrayString& names,
+                                               wxArrayString& desc) const;
 #endif
 
 #if defined(__WXDEBUG__) && defined(__WXGTK20__)
