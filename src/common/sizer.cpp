@@ -1474,7 +1474,9 @@ void wxFlexGridSizer::AdjustForFlexDirection()
         // and now fill it with the largest value
         for ( n = 0; n < count; ++n )
         {
-            array[n] = largest;
+            // don't touch hidden rows
+            if ( array[n] != -1 )
+                array[n] = largest;
         }
     }
 }
@@ -1514,9 +1516,7 @@ void wxFlexGridSizer::AdjustForGrowables(const wxSize& sz, const wxSize& minsz,
             {
                 if (m_growableRows[idx] >= nrows )
                     continue;
-                if (m_rowHeights[ m_growableRows[idx] ] == -1)
-                    m_rowHeights[ m_growableRows[idx] ] = 0;
-                else
+                if (m_rowHeights[ m_growableRows[idx] ] != -1)
                 {
                     int delta = (sz.y - minsz.y);
                     if (sum_proportions == 0)
@@ -1566,9 +1566,7 @@ void wxFlexGridSizer::AdjustForGrowables(const wxSize& sz, const wxSize& minsz,
             {
                 if (m_growableCols[idx] >= ncols )
                     continue;
-                if (m_colWidths[ m_growableCols[idx] ] == -1)
-                    m_colWidths[ m_growableCols[idx] ] = 0;
-                else
+                if (m_colWidths[ m_growableCols[idx] ] != -1)
                 {
                     int delta = (sz.x - minsz.x);
                     if (sum_proportions == 0)
