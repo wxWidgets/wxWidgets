@@ -205,8 +205,10 @@ void wxTopLevelWindowBase::DoCentre(int dir)
     if(IsAlwaysMaximized())
         return;
 
-    // we need the display rect anyhow so store it first
-    int nDisplay = wxDisplay::GetFromWindow(this);
+    // we need the display rect anyhow so store it first: notice that we should
+    // be centered on the same display as our parent window, the display of
+    // this window itself is not really defined yet
+    int nDisplay = wxDisplay::GetFromWindow(GetParent() ? GetParent() : this);
     wxDisplay dpy(nDisplay == wxNOT_FOUND ? 0 : nDisplay);
     const wxRect rectDisplay(dpy.GetClientArea());
 
@@ -247,29 +249,26 @@ void wxTopLevelWindowBase::DoCentre(int dir)
     // we don't want to place the window off screen if Centre() is called as
     // this is (almost?) never wanted and it would be very difficult to prevent
     // it from happening from the user code if we didn't check for it here
-    if ( rectDisplay.Contains(rect.GetTopLeft()) )
+    if ( !rectDisplay.Contains(rect.GetTopLeft()) )
     {
-        if ( !rectDisplay.Contains(rect.GetBottomRight()) )
-        {
-            // move the window just enough for the bottom right corner to
-            // become visible
-            int dx = rectDisplay.GetRight() - rect.GetRight();
-            int dy = rectDisplay.GetBottom() - rect.GetBottom();
-            rect.Offset(dx < 0 ? dx : 0, dy < 0 ? dy : 0);
-        }
-        //else: the window top left and bottom right corner are both visible,
-        //      although the window might still be not entirely on screen (with
-        //      2 staggered displays for example) we wouldn't be able to
-        //      improve the layout much in such case, so just leave it as is
+        // move the window just enough to make the corner visible
+        int dx = rectDisplay.GetLeft() - rect.GetLeft();
+        int dy = rectDisplay.GetTop() - rect.GetTop();
+        rect.Offset(dx > 0 ? dx : 0, dy > 0 ? dy : 0);
     }
-    else // make top left corner visible
-    {
-        if ( rect.x < rectDisplay.x )
-            rect.x = rectDisplay.x;
 
-        if ( rect.y < rectDisplay.y )
-            rect.y = rectDisplay.y;
+    if ( !rectDisplay.Contains(rect.GetBottomRight()) )
+    {
+        // do the same for this corner too
+        int dx = rectDisplay.GetRight() - rect.GetRight();
+        int dy = rectDisplay.GetBottom() - rect.GetBottom();
+        rect.Offset(dx < 0 ? dx : 0, dy < 0 ? dy : 0);
     }
+
+    // the window top left and bottom right corner are both visible now and
+    // although the window might still be not entirely on screen (with 2
+    // staggered displays for example) we wouldn't be able to improve the
+    // layout much in such case, so we stop here
 
     // -1 could be valid coordinate here if there are several displays
     SetSize(rect, wxSIZE_ALLOW_MINUS_ONE);
