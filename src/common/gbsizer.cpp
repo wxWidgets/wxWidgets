@@ -507,7 +507,7 @@ void wxGridBagSizer::RecalcSizes()
     m_cols = m_colWidths.GetCount();
     int idx, width, height;
 
-    AdjustForGrowables(sz, m_calculatedMinSize, m_rows, m_cols);
+    AdjustForGrowables(sz);
 
     // Find the start positions on the window of the rows and columns
     wxArrayInt rowpos;
