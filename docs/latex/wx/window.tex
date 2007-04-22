@@ -2980,7 +2980,7 @@ can be overridden to do something in addition to this in the derived classes.
 
 \membersection{wxWindow::SetFont}\label{wxwindowsetfont}
 
-\func{void}{SetFont}{\param{const wxFont\& }{font}}
+\func{bool}{SetFont}{\param{const wxFont\& }{font}}
 
 Sets the font for this window. This function should not be called for the
 parent window if you don't want its font to be inherited by its children,
@@ -2998,6 +2998,11 @@ any standard controls for drawing their text as well as by
 
 \docparam{font}{Font to associate with this window, pass
 {\tt wxNullFont} to reset to the default font.}
+
+\wxheading{Return value}
+
+\true if the want was really changed, \false if it was already set to this 
+\arg{font} and so nothing was done.
 
 \wxheading{See also}
 
