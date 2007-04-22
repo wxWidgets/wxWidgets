@@ -73,7 +73,7 @@ public:
     }
 
     // some shortcuts for Align()
-    wxSizerFlags& Centre() { return Align(wxCENTRE); }
+    wxSizerFlags& Centre() { return Align(wxALIGN_CENTRE); }
     wxSizerFlags& Center() { return Centre(); }
     wxSizerFlags& Top() { return Align(wxALIGN_TOP); }
     wxSizerFlags& Left() { return Align(wxALIGN_LEFT); }
@@ -569,8 +569,12 @@ public:
     // Calculate the minimal size or return m_minSize if bigger.
     wxSize GetMinSize();
 
-    virtual void RecalcSizes() = 0;
+    // These virtual functions are used by the layout algorithm: first
+    // CalcMin() is called to calculate the minimal size of the sizer and
+    // prepare for laying it out and then RecalcSizes() is called to really
+    // update all the sizer items
     virtual wxSize CalcMin() = 0;
+    virtual void RecalcSizes() = 0;
 
     virtual void Layout();
 
@@ -765,24 +769,80 @@ private:
 class WXDLLEXPORT wxBoxSizer: public wxSizer
 {
 public:
-    wxBoxSizer( int orient );
+    wxBoxSizer(int orient)
+    {
+        m_orient = orient;
 
-    void RecalcSizes();
-    wxSize CalcMin();
+        wxASSERT_MSG( m_orient == wxHORIZONTAL || m_orient == wxVERTICAL,
+                      _T("invalid value for wxBoxSizer orientation") );
+    }
 
-    int GetOrientation() const
-        { return m_orient; }
+    int GetOrientation() const { return m_orient; }
 
-    void SetOrientation(int orient)
-        { m_orient = orient; }
+    bool IsVertical() const { return m_orient == wxVERTICAL; }
+
+    void SetOrientation(int orient) { m_orient = orient; }
+
+    // implementation of our resizing logic
+    virtual wxSize CalcMin();
+    virtual void RecalcSizes();
 
 protected:
+    // helpers for our code: this returns the component of the given wxSize in
+    // the direction of the sizer and in the other direction, respectively
+    int SizeInMajorDir(const wxSize& sz) const
+    {
+        return m_orient == wxHORIZONTAL ? sz.x : sz.y;
+    }
+
+    int& SizeInMajorDir(wxSize& sz)
+    {
+        return m_orient == wxHORIZONTAL ? sz.x : sz.y;
+    }
+
+    int& PosInMajorDir(wxPoint& pt)
+    {
+        return m_orient == wxHORIZONTAL ? pt.x : pt.y;
+    }
+
+    int SizeInMinorDir(const wxSize& sz) const
+    {
+        return m_orient == wxHORIZONTAL ? sz.y : sz.x;
+    }
+
+    int& SizeInMinorDir(wxSize& sz)
+    {
+        return m_orient == wxHORIZONTAL ? sz.y : sz.x;
+    }
+
+    int& PosInMinorDir(wxPoint& pt)
+    {
+        return m_orient == wxHORIZONTAL ? pt.y : pt.x;
+    }
+
+    // another helper: creates wxSize from major and minor components
+    wxSize SizeFromMajorMinor(int major, int minor) const
+    {
+        if ( m_orient == wxHORIZONTAL )
+        {
+            return wxSize(major, minor);
+        }
+        else // wxVERTICAL
+        {
+            return wxSize(minor, major);
+        }
+    }
+
+
+    // either wxHORIZONTAL or wxVERTICAL
     int m_orient;
-    int m_stretchable;
-    int m_minWidth;
-    int m_minHeight;
-    int m_fixedWidth;
-    int m_fixedHeight;
+
+    // the sum of proportion of all of our elements
+    int m_totalProportion;
+
+    // the minimal size needed for this sizer as calculated by the last call to
+    // our CalcMin()
+    wxSize m_minSize;
 
 private:
     DECLARE_CLASS(wxBoxSizer)

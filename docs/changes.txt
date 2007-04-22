@@ -19,6 +19,13 @@ Changes in behaviour not resulting in compilation errors, please read this!
   other platforms in the future), use wxWindow::Navigate() or NavigateIn()
   instead.
 
+- Sizers distribute only the extra space between the stretchable items
+  according to their proportions and not all available space. We believe the
+  new behaviour corresponds better to user expectations but if you did rely
+  on the old behaviour you will have to update your code to set the minimal
+  sizes of the sizer items to be in the same proportion as the items
+  proportions to return to the old behaviour.
+
 Changes in behaviour which may result in compilation errors
 -----------------------------------------------------------
 

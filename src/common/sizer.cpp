@@ -1628,204 +1628,106 @@ void wxFlexGridSizer::RemoveGrowableRow( size_t idx )
 // wxBoxSizer
 //---------------------------------------------------------------------------
 
-wxBoxSizer::wxBoxSizer( int orient )
-    : m_orient( orient )
-{
-}
-
 void wxBoxSizer::RecalcSizes()
 {
-    if (m_children.GetCount() == 0)
+    if ( m_children.empty() )
         return;
 
-    int delta = 0;
-    if (m_stretchable)
+    // the amount of free space which we should redistribute among the
+    // stretchable items (i.e. those with non zero proportion)
+    const int delta = SizeInMajorDir(m_size) - SizeInMajorDir(m_minSize);
+
+    // the position at which we put the next child
+    wxPoint pt(m_position);
+
+    const wxCoord totalMinorSize = SizeInMinorDir(m_size);
+
+    for ( wxSizerItemList::const_iterator i = m_children.begin();
+          i != m_children.end();
+          ++i )
     {
-        if (m_orient == wxHORIZONTAL)
-            delta = m_size.x - m_fixedWidth;
-        else
-            delta = m_size.y - m_fixedHeight;
-    }
+        wxSizerItem * const item = *i;
 
-    wxPoint pt( m_position );
+        if ( !item->IsShown() )
+            continue;
 
-    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
-    while (node)
-    {
-        wxSizerItem     *item = node->GetData();
+        const wxSize sizeThis(item->GetMinSizeWithBorder());
 
-        if (item->IsShown())
+
+        // adjust the size in the major direction using the proportion
+        wxCoord majorSize = SizeInMajorDir(sizeThis);
+        if ( item->GetProportion() )
         {
-            wxSize size( item->GetMinSizeWithBorder() );
-
-            if (m_orient == wxVERTICAL)
-            {
-                wxCoord height = size.y;
-                if (item->GetProportion())
-                {
-                    // Because of at least one visible item has non-zero
-                    // proportion then m_stretchable is not zero
-                    height = (delta * item->GetProportion()) / m_stretchable;
-                }
-
-                wxPoint child_pos( pt );
-                wxSize  child_size( size.x, height );
-
-                if (item->GetFlag() & (wxEXPAND | wxSHAPED))
-                    child_size.x = m_size.x;
-                else if (item->GetFlag() & wxALIGN_RIGHT)
-                    child_pos.x += m_size.x - size.x;
-                else if (item->GetFlag() & (wxCENTER | wxALIGN_CENTER_HORIZONTAL))
-                // XXX wxCENTER is added for backward compatibility;
-                //     wxALIGN_CENTER should be used in new code
-                    child_pos.x += (m_size.x - size.x) / 2;
-
-                item->SetDimension( child_pos, child_size );
-
-                pt.y += height;
-            }
-            else
-            {
-                wxCoord width = size.x;
-                if (item->GetProportion())
-                {
-                    // Because of at least one visible item has non-zero
-                    // proportion then m_stretchable is not zero
-                    width = (delta * item->GetProportion()) / m_stretchable;
-                }
-
-                wxPoint child_pos( pt );
-                wxSize  child_size( width, size.y );
-
-                if (item->GetFlag() & (wxEXPAND | wxSHAPED))
-                    child_size.y = m_size.y;
-                else if (item->GetFlag() & wxALIGN_BOTTOM)
-                    child_pos.y += m_size.y - size.y;
-                else if (item->GetFlag() & (wxCENTER | wxALIGN_CENTER_VERTICAL))
-                // XXX wxCENTER is added for backward compatibility;
-                //     wxALIGN_CENTER should be used in new code
-                    child_pos.y += (m_size.y - size.y) / 2;
-
-                if ( m_containingWindow )
-                {
-                    child_pos.x = m_containingWindow->AdjustForLayoutDirection
-                                                      (
-                                                        child_pos.x,
-                                                        width,
-                                                        m_size.x
-                                                      );
-                }
-
-                item->SetDimension( child_pos, child_size );
-
-                pt.x += width;
-            }
+            // as at least one visible item has non-zero proportion the total
+            // proportion must be non zero
+            majorSize += (delta * item->GetProportion()) / m_totalProportion;
         }
 
-        node = node->GetNext();
+
+        // apply the alignment in the minor direction
+        wxPoint posChild(pt);
+
+        wxCoord minorSize = SizeInMinorDir(sizeThis);
+        const int flag = item->GetFlag();
+        if ( flag & (wxEXPAND | wxSHAPED) )
+        {
+            minorSize = totalMinorSize;
+        }
+        else if ( flag & (IsVertical() ? wxALIGN_RIGHT : wxALIGN_BOTTOM) )
+        {
+            PosInMinorDir(posChild) += totalMinorSize - minorSize;
+        }
+        // NB: wxCENTRE is used here only for backwards compatibility,
+        //     wxALIGN_CENTRE should be used in new code
+        else if ( flag & (wxCENTER | wxALIGN_CENTRE) )
+        {
+            PosInMinorDir(posChild) += (totalMinorSize - minorSize) / 2;
+        }
+
+
+        // apply RTL adjustment for horizontal sizers:
+        if ( !IsVertical() && m_containingWindow )
+        {
+            posChild.x = m_containingWindow->AdjustForLayoutDirection
+                                             (
+                                                posChild.x,
+                                                majorSize,
+                                                m_size.x
+                                             );
+        }
+
+        // finally set size of this child and advance to the next one
+        item->SetDimension(posChild, SizeFromMajorMinor(majorSize, minorSize));
+
+        PosInMajorDir(pt) += majorSize;
     }
 }
 
 wxSize wxBoxSizer::CalcMin()
 {
-    if (m_children.GetCount() == 0)
-        return wxSize();
+    m_totalProportion = 0;
+    m_minSize = wxSize(0, 0);
 
-    m_stretchable = 0;
-    m_minWidth = 0;
-    m_minHeight = 0;
-    m_fixedWidth = 0;
-    m_fixedHeight = 0;
-
-    // precalc item minsizes and count proportions
-    wxSizerItemList::compatibility_iterator node = m_children.GetFirst();
-    while (node)
+    // calculate the minimal sizes for all items and count sum of proportions
+    for ( wxSizerItemList::const_iterator i = m_children.begin();
+          i != m_children.end();
+          ++i )
     {
-        wxSizerItem *item = node->GetData();
+        wxSizerItem * const item = *i;
 
-        if ( item->IsShown() )
-        {
-            item->CalcMin();  // result is stored in the item
+        if ( !item->IsShown() )
+            continue;
 
-            m_stretchable += item->GetProportion();
-        }
+        const wxSize sizeMinThis = item->CalcMin();
 
-        node = node->GetNext();
+        SizeInMajorDir(m_minSize) += SizeInMajorDir(sizeMinThis);
+        if ( SizeInMinorDir(sizeMinThis) > SizeInMinorDir(m_minSize) )
+            SizeInMinorDir(m_minSize) = SizeInMinorDir(sizeMinThis);
+
+        m_totalProportion += item->GetProportion();
     }
 
-    // Total minimum size (width or height) of sizer
-    int maxMinSize = 0;
-
-    node = m_children.GetFirst();
-    while (node)
-    {
-        wxSizerItem *item = node->GetData();
-
-        if (item->IsShown() && item->GetProportion() != 0)
-        {
-            int stretch = item->GetProportion();
-            wxSize size( item->GetMinSizeWithBorder() );
-            int minSize;
-
-            // Integer division rounded up is (a + b - 1) / b
-            // Round up needed in order to guarantee that all
-            // all items will have size not less then their min size
-            if (m_orient == wxHORIZONTAL)
-                minSize = ( size.x*m_stretchable + stretch - 1)/stretch;
-            else
-                minSize = ( size.y*m_stretchable + stretch - 1)/stretch;
-
-            if (minSize > maxMinSize)
-                maxMinSize = minSize;
-        }
-        node = node->GetNext();
-    }
-
-    // Calculate overall minimum size
-    node = m_children.GetFirst();
-    while (node)
-    {
-        wxSizerItem *item = node->GetData();
-
-        if (item->IsShown())
-        {
-            wxSize size( item->GetMinSizeWithBorder() );
-            if (item->GetProportion() != 0)
-            {
-                if (m_orient == wxHORIZONTAL)
-                    size.x = (maxMinSize*item->GetProportion())/m_stretchable;
-                else
-                    size.y = (maxMinSize*item->GetProportion())/m_stretchable;
-            }
-            else
-            {
-                if (m_orient == wxVERTICAL)
-                {
-                    m_fixedHeight += size.y;
-                    m_fixedWidth = wxMax( m_fixedWidth, size.x );
-                }
-                else
-                {
-                    m_fixedWidth += size.x;
-                    m_fixedHeight = wxMax( m_fixedHeight, size.y );
-                }
-            }
-
-            if (m_orient == wxHORIZONTAL)
-            {
-                m_minWidth += size.x;
-                m_minHeight = wxMax( m_minHeight, size.y );
-            }
-            else
-            {
-                m_minHeight += size.y;
-                m_minWidth = wxMax( m_minWidth, size.x );
-            }
-        }
-        node = node->GetNext();
-    }
-
-    return wxSize( m_minWidth, m_minHeight );
+    return m_minSize;
 }
 
 //---------------------------------------------------------------------------
