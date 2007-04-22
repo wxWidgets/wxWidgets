@@ -1660,13 +1660,14 @@ void wxBoxSizer::RecalcSizes()
 
     // the amount of free space which we should redistribute among the
     // stretchable items (i.e. those with non zero proportion)
-    const int delta = SizeInMajorDir(m_size) - SizeInMajorDir(m_minSize);
+    int delta = SizeInMajorDir(m_size) - SizeInMajorDir(m_minSize);
 
     // the position at which we put the next child
     wxPoint pt(m_position);
 
     const wxCoord totalMinorSize = SizeInMinorDir(m_size);
 
+    int totalProportion = m_totalProportion;
     for ( wxSizerItemList::const_iterator i = m_children.begin();
           i != m_children.end();
           ++i )
@@ -1681,11 +1682,15 @@ void wxBoxSizer::RecalcSizes()
 
         // adjust the size in the major direction using the proportion
         wxCoord majorSize = SizeInMajorDir(sizeThis);
-        if ( item->GetProportion() )
+        const int propItem = item->GetProportion();
+        if ( propItem )
         {
-            // as at least one visible item has non-zero proportion the total
-            // proportion must be non zero
-            majorSize += (delta * item->GetProportion()) / m_totalProportion;
+            const int deltaItem = (delta * propItem) / totalProportion;
+
+            majorSize += deltaItem;
+
+            delta -= deltaItem;
+            totalProportion -= propItem;
         }
 
 
