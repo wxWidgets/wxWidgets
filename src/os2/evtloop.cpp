@@ -36,6 +36,7 @@
 #include "wx/ptr_scpd.h"
 
 #include "wx/os2/private.h"
+#include "wx/os2/private/timer.h"       // for wxTimerProc
 
 #if wxUSE_THREADS
     // define the array of QMSG strutures

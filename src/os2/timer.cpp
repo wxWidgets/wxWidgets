@@ -64,37 +64,10 @@ ULONG wxTimerProc(HWND hwnd, ULONG, int nIdTimer, ULONG);
 // wxTimer class
 // ----------------------------------------------------------------------------
 
-void wxOS2TimerImpl::Init()
-{
-    m_ulId = 0;
-}
-
-wxOS2TimerImpl::~wxOS2TimerImpl()
-{
-    wxOS2TimerImpl::Stop();
-}
-
-void wxOS2TimerImpl::Notify()
-{
-    //
-    // The base class version generates an event if it has owner - which it
-    // should because otherwise nobody can process timer events, but it does
-    // not use the OS's ID, which OS/2 must have to figure out which timer fired
-    //
-    wxCHECK_RET( m_owner, _T("wxTimer::Notify() should be overridden.") );
-
-    wxTimerEvent                    vEvent( m_idTimer
-                                           ,m_milli
-                                          );
-
-    (void)m_owner->ProcessEvent(vEvent);
-} // end of wxTimer::Notify
-
 bool wxOS2TimerImpl::Start( int nMilliseconds, bool bOneShot )
 {
-    (void)wxTimerImpl::Start( nMilliseconds, bOneShot );
-
-    wxCHECK_MSG( m_milli > 0L, false, wxT("invalid value for timer") );
+    if ( !wxTimerImpl::Start( nMilliseconds, bOneShot ) )
+        return false;
 
     wxWindow* pWin = NULL;
 
@@ -108,11 +81,14 @@ bool wxOS2TimerImpl::Start( int nMilliseconds, bool bOneShot )
                                 );
     }
     else
+    {
         m_ulId = ::WinStartTimer( m_Hab
                                  ,NULLHANDLE
                                  ,0
                                  ,(ULONG)nMilliseconds
                                 );
+    }
+
     if (m_ulId > 0L)
     {
         // check that SetTimer() didn't reuse an existing id: according to

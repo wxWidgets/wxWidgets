@@ -9,31 +9,24 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef _WX_TIMER_H_
-#define _WX_TIMER_H_
+#ifndef _WX_OS2_PRIVATE_TIMER_H_
+#define _WX_OS2_PRIVATE_TIMER_H_
 
-#include "wx/private/timerimpl.h"
+#include "wx/private/timer.h"
 
 class WXDLLEXPORT wxOS2TimerImpl: public wxTimerImpl
 {
 friend void wxProcessTimer(wxOS2TimerImpl& timer);
 
 public:
-    wxOS2TimerImpl(wxTimer *timer) : wxTimerImpl(timer) { Init(); }
-    virtual ~wxOS2TimerImpl();
+    wxOS2TimerImpl(wxTimer *timer) : wxTimerImpl(timer) { m_ulId = 0; }
 
-    virtual void Notify(void);
-    virtual bool Start( int  nMilliseconds = -1
-                       ,bool bOneShot = FALSE
-                      );
+    virtual bool Start(int  nMilliseconds = -1, bool bOneShot = FALSE);
     virtual void Stop(void);
 
-    inline virtual bool IsRunning(void) const { return m_ulId != 0L; }
-    inline          int GetTimerId(void) const { return m_idTimer; }
+    virtual bool IsRunning(void) const { return m_ulId != 0L; }
 
 protected:
-    void Init(void);
-
     ULONG                            m_ulId;
     HAB                              m_Hab;
 };
@@ -43,5 +36,4 @@ extern ULONG wxTimerProc( HWND  WXUNUSED(hwnd)
                          ,int   nIdTimer
                          ,ULONG
                         );
-#endif
-    // _WX_TIMER_H_
+#endif // _WX_OS2_PRIVATE_TIMER_H_
