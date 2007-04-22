@@ -99,6 +99,8 @@ wxDirDialog::wxDirDialog(wxWindow* parent, const wxString& title,
         m_message = title;
         m_needParent = false;
 
+        parent = GetParentForModalDialog(parent);
+
         if (!PreCreation(parent, pos, wxDefaultSize) ||
             !CreateBase(parent, wxID_ANY, pos, wxDefaultSize, style,
                     wxDefaultValidator, wxT("dirdialog")))

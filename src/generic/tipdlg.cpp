@@ -215,7 +215,7 @@ END_EVENT_TABLE()
 wxTipDialog::wxTipDialog(wxWindow *parent,
                          wxTipProvider *tipProvider,
                          bool showAtStartup)
-           : wxDialog(parent, wxID_ANY, _("Tip of the Day"),
+           : wxDialog(GetParentForModalDialog(parent), wxID_ANY, _("Tip of the Day"),
                       wxDefaultPosition, wxDefaultSize,
                       wxDEFAULT_DIALOG_STYLE | wxRESIZE_BORDER
                       )

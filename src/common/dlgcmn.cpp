@@ -71,6 +71,25 @@ void wxDialogBase::Init()
     WX_INIT_CONTROL_CONTAINER();
 }
 
+wxWindow *wxDialogBase::GetParentForModalDialog(wxWindow *parent) const
+{
+    // creating a parent-less modal dialog will result (under e.g. wxGTK2)
+    // in an unfocused dialog, so try to find a valid parent for it:
+    if ( parent )
+        parent = wxGetTopLevelParent(parent);
+
+    if ( !parent || parent->HasExtraStyle(wxWS_EX_TRANSIENT) )
+        parent = wxTheApp->GetTopWindow();
+
+    if ( parent && parent->HasExtraStyle(wxWS_EX_TRANSIENT) )
+    {
+        // can't use this one, it's going to disappear
+        parent = NULL;
+    }
+
+    return parent;
+}
+
 #if wxUSE_STATTEXT
 
 class wxTextSizerWrapper : public wxTextWrapper

@@ -41,9 +41,10 @@ bool wxColourDialog::Create(wxWindow *parent, wxColourData *data)
     wxString title(_("Choose colour"));
     m_widget = gtk_color_selection_dialog_new(wxGTK_CONV(title));
 
-    if (parent)
+    m_parent = GetParentForModalDialog(parent);
+    if ( m_parent )
     {
-        GtkWindow* gtk_parent = GTK_WINDOW( gtk_widget_get_toplevel(parent->m_widget) );
+        GtkWindow* gtk_parent = GTK_WINDOW( gtk_widget_get_toplevel(m_parent->m_widget) );
         gtk_window_set_transient_for(GTK_WINDOW(m_widget),
                                      gtk_parent);
     }

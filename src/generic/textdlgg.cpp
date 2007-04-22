@@ -71,7 +71,8 @@ wxTextEntryDialog::wxTextEntryDialog(wxWindow *parent,
                                      const wxString& value,
                                      long style,
                                      const wxPoint& pos)
-                 : wxDialog(parent, wxID_ANY, caption, pos, wxDefaultSize,
+                 : wxDialog(GetParentForModalDialog(parent),
+                            wxID_ANY, caption, pos, wxDefaultSize,
                             wxDEFAULT_DIALOG_STYLE),
                    m_value(value)
 {

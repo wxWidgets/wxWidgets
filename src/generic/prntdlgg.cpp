@@ -136,7 +136,8 @@ END_EVENT_TABLE()
 
 wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent,
                                            wxPrintDialogData* data)
-                    : wxPrintDialogBase(parent, wxID_ANY, _("Print"),
+                    : wxPrintDialogBase(GetParentForModalDialog(parent), 
+                               wxID_ANY, _("Print"),
                                wxPoint(0,0), wxSize(600, 600),
                                wxDEFAULT_DIALOG_STYLE |
                                wxTAB_TRAVERSAL)
@@ -149,7 +150,8 @@ wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent,
 
 wxGenericPrintDialog::wxGenericPrintDialog(wxWindow *parent,
                                            wxPrintData* data)
-                    : wxPrintDialogBase(parent, wxID_ANY, _("Print"),
+                    : wxPrintDialogBase(GetParentForModalDialog(parent), 
+                                wxID_ANY, _("Print"),
                                wxPoint(0,0), wxSize(600, 600),
                                wxDEFAULT_DIALOG_STYLE |
                                wxTAB_TRAVERSAL)

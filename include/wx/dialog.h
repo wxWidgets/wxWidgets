@@ -64,6 +64,10 @@ public:
     void SetEscapeId(int escapeId);
     int GetEscapeId() const { return m_escapeId; }
 
+    // Returns the parent to use for modal dialogs if the user did not specify it
+    // explicitly
+    wxWindow *GetParentForModalDialog(wxWindow *parent = NULL) const;
+
 #if wxUSE_STATTEXT // && wxUSE_TEXTCTRL
     // splits text up at newlines and places the
     // lines into a vertical wxBoxSizer

@@ -154,6 +154,8 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
 
     m_needParent = false;
 
+    parent = GetParentForModalDialog(parent);
+
     if (!PreCreation(parent, pos, wxDefaultSize) ||
         !CreateBase(parent, wxID_ANY, pos, wxDefaultSize, style,
                 wxDefaultValidator, wxT("filedialog")))

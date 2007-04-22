@@ -64,6 +64,8 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
 {
     SetMessageDialogStyle(style);
 
+    parent = GetParentForModalDialog(parent);
+
     bool is_pda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
 
     wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );

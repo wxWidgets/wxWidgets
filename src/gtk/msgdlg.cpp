@@ -38,7 +38,8 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
     m_caption = caption;
     m_message = message;
     SetMessageDialogStyle(style);
-    m_parent = wxGetTopLevelParent(parent);
+
+    m_parent = GetParentForModalDialog(parent);
 
     GtkMessageType type = GTK_MESSAGE_ERROR;
     GtkButtonsType buttons = GTK_BUTTONS_OK;

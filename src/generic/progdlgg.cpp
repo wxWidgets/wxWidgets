@@ -97,7 +97,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
                                    int maximum,
                                    wxWindow *parent,
                                    int style)
-                : wxDialog(parent, wxID_ANY, title),
+                : wxDialog(GetParentForModalDialog(parent), wxID_ANY, title),
                   m_skip(false),
                   m_delay(3),
                   m_hasAbortButton(false),

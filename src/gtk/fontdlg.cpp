@@ -88,6 +88,8 @@ bool wxFontDialog::DoCreate(wxWindow *parent)
 {
     m_needParent = false;
 
+    parent = GetParentForModalDialog(parent);
+
     if (!PreCreation( parent, wxDefaultPosition, wxDefaultSize ) ||
         !CreateBase( parent, -1, wxDefaultPosition, wxDefaultSize, wxDEFAULT_DIALOG_STYLE,
                      wxDefaultValidator, wxT("fontdialog") ))

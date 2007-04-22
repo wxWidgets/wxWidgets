@@ -102,8 +102,8 @@ wxIcon wxAboutDialogInfo::GetIcon() const
 
 bool wxGenericAboutDialog::Create(const wxAboutDialogInfo& info)
 {
-    // TODO: should we use main frame as parent by default here?
-    if ( !wxDialog::Create(NULL, wxID_ANY, _("About ") + info.GetName(),
+    // this is a modal dialog thus we'll use GetParentForModalDialog:
+    if ( !wxDialog::Create(GetParentForModalDialog(), wxID_ANY, _("About ") + info.GetName(),
                            wxDefaultPosition, wxDefaultSize, wxRESIZE_BORDER|wxDEFAULT_DIALOG_STYLE) )
         return false;
 
