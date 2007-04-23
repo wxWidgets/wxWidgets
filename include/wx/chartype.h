@@ -190,6 +190,14 @@
 /* depending on the platform, Unicode build can either store wxStrings as
    wchar_t* or UTF-8 encoded char*: */
 #if wxUSE_UNICODE
+    // FIXME-UTF8: what would be better place for this?
+    #if defined(wxUSE_UTF8_LOCALE_ONLY) && !defined(wxUSE_UNICODE_UTF8)
+        #error "wxUSE_UTF8_LOCALE_ONLY only makes sense with wxUSE_UNICODE_UTF8"
+    #endif
+    #ifndef wxUSE_UTF8_LOCALE_ONLY
+        #define wxUSE_UTF8_LOCALE_ONLY 0
+    #endif
+
     #ifndef wxUSE_UNICODE_UTF8
         #define wxUSE_UNICODE_UTF8 0
     #endif

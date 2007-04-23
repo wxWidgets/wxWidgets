@@ -1600,10 +1600,14 @@ bool wxLocale::Init(const wxString& name,
 
 
 #if defined(__UNIX__) && wxUSE_UNICODE && !defined(__WXMAC__)
-static wxWCharBuffer wxSetlocaleTryUTF(int c, const wxChar *lc)
+static wxWCharBuffer wxSetlocaleTryUTF8(int c, const wxChar *lc)
 {
-    wxMB2WXbuf l = wxSetlocale(c, lc);
-    if ( !l && lc && lc[0] != 0 )
+    wxMB2WXbuf l;
+
+    // NB: We prefer to set UTF-8 locale if it's possible and only fall back to
+    //     non-UTF-8 locale if it fails
+
+    if ( lc && lc[0] != 0 )
     {
         wxString buf(lc);
         wxString buf2;
@@ -1625,10 +1629,15 @@ static wxWCharBuffer wxSetlocaleTryUTF(int c, const wxChar *lc)
             l = wxSetlocale(c, buf2.c_str());
         }
     }
+
+    // if we can't set UTF-8 locale, try non-UTF-8 one:
+    if ( !l )
+        l = wxSetlocale(c, lc);
+
     return l;
 }
 #else
-#define wxSetlocaleTryUTF(c, lc)  wxSetlocale(c, lc)
+#define wxSetlocaleTryUTF8(c, lc)  wxSetlocale(c, lc)
 #endif
 
 bool wxLocale::Init(int language, int flags)
@@ -1666,13 +1675,13 @@ bool wxLocale::Init(int language, int flags)
     if (language != wxLANGUAGE_DEFAULT)
         locale = info->CanonicalName;
 
-    wxMB2WXbuf retloc = wxSetlocaleTryUTF(LC_ALL, locale);
+    wxMB2WXbuf retloc = wxSetlocaleTryUTF8(LC_ALL, locale);
 
     const wxString langOnly = locale.Left(2);
     if ( !retloc )
     {
         // Some C libraries don't like xx_YY form and require xx only
-        retloc = wxSetlocaleTryUTF(LC_ALL, langOnly);
+        retloc = wxSetlocaleTryUTF8(LC_ALL, langOnly);
     }
 
 #if wxUSE_FONTMAP
@@ -1713,9 +1722,9 @@ bool wxLocale::Init(int language, int flags)
 
         if ( !localeAlt.empty() )
         {
-            retloc = wxSetlocaleTryUTF(LC_ALL, localeAlt);
+            retloc = wxSetlocaleTryUTF8(LC_ALL, localeAlt);
             if ( !retloc )
-                retloc = wxSetlocaleTryUTF(LC_ALL, localeAlt.Left(2));
+                retloc = wxSetlocaleTryUTF8(LC_ALL, localeAlt.Left(2));
         }
     }
 
@@ -2741,11 +2750,11 @@ bool wxLocale::IsAvailable(int lang)
     
     // Test if setting the locale works, then set it back. 
     wxMB2WXbuf oldLocale = wxSetlocale(LC_ALL, wxEmptyString);
-    wxMB2WXbuf tmp = wxSetlocaleTryUTF(LC_ALL, info->CanonicalName);
+    wxMB2WXbuf tmp = wxSetlocaleTryUTF8(LC_ALL, info->CanonicalName);
     if ( !tmp )
     {
         // Some C libraries don't like xx_YY form and require xx only
-        tmp = wxSetlocaleTryUTF(LC_ALL, info->CanonicalName.Left(2));
+        tmp = wxSetlocaleTryUTF8(LC_ALL, info->CanonicalName.Left(2));
         if ( !tmp )
             return false;
     }

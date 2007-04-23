@@ -804,14 +804,30 @@ int WXDLLEXPORT wxStrnicmp(const wxChar *s1, const wxChar *s2, size_t n)
 }
 #endif
 
-#ifndef wxSetlocale
-WXDLLEXPORT wxWCharBuffer wxSetlocale(int category, const wxChar *locale)
+#ifndef wxSetlocale_
+wxWCharBuffer wxSetlocale_(int category, const wxChar *locale)
 {
     char *localeOld = setlocale(category, wxConvLibc.cWX2MB(locale));
 
     return wxWCharBuffer(wxConvLibc.cMB2WC(localeOld));
 }
-#endif
+
+wxWCharBuffer wxSetlocale(int category, const wxChar *locale)
+{
+    wxWCharBuffer rv = wxSetlocale_(category, locale);
+    if ( rv )
+        wxUpdateLocaleIsUtf8();
+    return rv;
+}
+#else // defined(wxSetlocale_)
+const wxChar *wxSetlocale(int category, const wxChar *locale)
+{
+    const wxChar *rv = wxSetlocale_(category, locale);
+    if ( rv )
+        wxUpdateLocaleIsUtf8();
+    return rv;
+}
+#endif // wxSetlocale_ defined or not
 
 #if wxUSE_WCHAR_T && !defined(HAVE_WCSLEN)
 WXDLLEXPORT size_t wxWcslen(const wchar_t *s)
@@ -1350,3 +1366,56 @@ int wxRemove(const wxChar *path)
 }
 
 #endif
+
+
+// ----------------------------------------------------------------------------
+// wxLocaleIsUtf8
+// ----------------------------------------------------------------------------
+
+#if wxUSE_UNICODE_UTF8
+
+#if !wxUSE_UTF8_LOCALE_ONLY
+bool wxLocaleIsUtf8 = false; // the safer setting if not known
+#endif
+
+static bool wxIsLocaleUtf8()
+{
+    // NB: we intentionally don't use wxLocale::GetSystemEncodingName(),
+    //     because a) it may be unavailable in some builds and b) has slightly
+    //     different semantics (default locale instead of current)
+
+#if defined(HAVE_LANGINFO_H) && defined(CODESET)
+    // GNU libc provides current character set this way (this conforms to
+    // Unix98)
+    const char *charset = nl_langinfo(CODESET);
+    if ( charset )
+    {
+        // "UTF-8" is used by modern glibc versions, but test other variants
+        // as well, just in case:
+        return strcmp(charset, "UTF-8") == 0 ||
+               strcmp(charset, "utf-8") == 0 ||
+               strcmp(charset, "UTF8") == 0 ||
+               strcmp(charset, "utf8") == 0;
+    }
+    else // nl_langinfo() failed
+#endif
+    {
+        // we don't know what charset libc is using, so assume the worst
+        // to be safe:
+        return false;
+    }
+}
+
+void wxUpdateLocaleIsUtf8()
+{
+#if wxUSE_UTF8_LOCALE_ONLY
+    if ( !wxIsLocaleUtf8() )
+    {
+        wxLogFatalError(_T("This program requires UTF-8 locale to run."));
+    }
+#else // !wxUSE_UTF8_LOCALE_ONLY
+    wxLocaleIsUtf8 = wxIsLocaleUtf8();
+#endif
+}
+
+#endif // wxUSE_UTF8_LOCALE_ONLY

@@ -362,6 +362,7 @@ static wxString GetSM()
 void wxGUIAppTraits::SetLocale()
 {
     gtk_set_locale();
+    wxUpdateLocaleIsUtf8();
 }
 #endif
 

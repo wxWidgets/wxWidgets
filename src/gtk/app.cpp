@@ -423,6 +423,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
 #else
     init_result = gtk_init_check( &argcGTK, &argvGTK );
 #endif
+    wxUpdateLocaleIsUtf8();
 
     if ( argcGTK != argc )
     {

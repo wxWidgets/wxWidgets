@@ -19,6 +19,20 @@
 
 #include <stdio.h>  /* we use FILE below */
 
+#ifdef __cplusplus
+    #if wxUSE_UNICODE_UTF8
+    // flag indicating whether the current locale uses UTF-8 or not; must be
+    // updated every time the locale is changed!
+    #if !wxUSE_UTF8_LOCALE_ONLY
+    extern WXDLLIMPEXP_BASE bool wxLocaleIsUtf8;
+    #endif
+    // function used to update the flag:
+    extern WXDLLIMPEXP_BASE void wxUpdateLocaleIsUtf8();
+    #else // !wxUSE_UNICODE_UTF8
+    inline WXDLLIMPEXP_BASE void wxUpdateLocaleIsUtf8() {}
+    #endif // wxUSE_UNICODE_UTF8/!wxUSE_UNICODE_UTF8
+#endif // __cplusplus
+
 #if defined(HAVE_STRTOK_R) && defined(__DARWIN__) && defined(_MSL_USING_MW_C_HEADERS) && _MSL_USING_MW_C_HEADERS
     char *strtok_r(char *, const char *, char **);
 #endif
@@ -99,7 +113,7 @@
     #define  wxToupper(c) _totupper((wxUChar)(wxChar)(c))
 
     /* locale.h functons */
-    #define  wxSetlocale _tsetlocale
+    #define  wxSetlocale_ _tsetlocale
 
     /* string.h functions */
     #define  wxStrcat    _tcscat
@@ -476,7 +490,7 @@
         #define  wxToupper   toupper
 
          /* locale.h functons */
-        #define  wxSetlocale setlocale
+        #define  wxSetlocale_ setlocale
 
          /* string.h functions */
         #define  wxStrcat    strcat
@@ -772,11 +786,14 @@ WXDLLIMPEXP_BASE wxChar * wxStrtok(wxChar *psz, const wxChar *delim, wxChar **sa
 #endif
 
 #ifdef __cplusplus
-#ifndef wxSetlocale
-class WXDLLIMPEXP_BASE wxWCharBuffer;
-WXDLLIMPEXP_BASE wxWCharBuffer wxSetlocale(int category, const wxChar *locale);
-#endif
-#endif
+    #ifndef wxSetlocale_
+    class WXDLLIMPEXP_BASE wxWCharBuffer;
+    WXDLLIMPEXP_BASE wxWCharBuffer wxSetlocale_(int category, const wxChar *locale);
+    WXDLLIMPEXP_BASE wxWCharBuffer wxSetlocale(int category, const wxChar *locale);
+    #else
+    WXDLLIMPEXP_BASE const wxChar *wxSetlocale(int category, const wxChar *locale);
+    #endif // defined(wxSetlocale_)
+#endif // __cplusplus
 
 /* stdio.h functions */
 #ifdef wxNEED_WX_STDIO_H
