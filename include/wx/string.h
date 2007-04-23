@@ -1075,6 +1075,11 @@ public:
     operator const char*() const { return c_str(); }
     operator const wchar_t*() const { return c_str(); }
 
+    // implicit conversion to untyped pointer for compatibility with previous
+    // wxWidgets versions: this is the same as conversion to const char * so it
+    // may fail!
+    operator const void*() const { return c_str(); }
+
     // identical to c_str(), for MFC compatibility
     const wxCStrData GetData() const { return c_str(); }
 
