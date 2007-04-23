@@ -210,6 +210,7 @@
 #else
     #define wxUSE_UNICODE_WCHAR 0
     #define wxUSE_UNICODE_UTF8  0
+    #define wxUSE_UTF8_LOCALE_ONLY 0
 #endif
 
 /* define char type used by wxString internal representation: */
