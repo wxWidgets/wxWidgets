@@ -115,14 +115,11 @@ int wxDialog::ShowModal()
     // forbidden
     if ( !GetParent() && !(GetWindowStyleFlag() & wxDIALOG_NO_PARENT) )
     {
-        wxWindow *parent = wxTheApp->GetTopWindow();
-        if ( parent &&
-                parent != this &&
-                    !parent->IsBeingDeleted() &&
-                        !(parent->GetExtraStyle() & wxWS_EX_TRANSIENT) )
+        wxWindow * const parent = GetParentForModalDialog();
+        if ( parent && parent != this )
         {
-            m_parent = parent;
-            gtk_window_set_transient_for( GTK_WINDOW(m_widget), GTK_WINDOW(parent->m_widget) );
+            gtk_window_set_transient_for( GTK_WINDOW(m_widget),
+                                          GTK_WINDOW(parent->m_widget) );
         }
     }
 
