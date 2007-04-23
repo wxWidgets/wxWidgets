@@ -61,6 +61,7 @@ import _core
 import _misc
 wx = _core 
 __docfilter__ = wx.__DocFilter(globals()) 
+USE_STC = _stc.USE_STC
 STC_USE_DND = _stc.STC_USE_DND
 STC_USE_POPUP = _stc.STC_USE_POPUP
 STC_INVALID_POSITION = _stc.STC_INVALID_POSITION
@@ -4997,7 +4998,7 @@ class StyledTextCtrl(_core.Control):
 
     def SetVScrollBar(*args, **kwargs):
         """
-        SetVScrollBar(self, wxScrollBar bar)
+        SetVScrollBar(self, ScrollBar bar)
 
         Set the vertical scrollbar to use instead of the one that's built-in.
         """
@@ -5005,7 +5006,7 @@ class StyledTextCtrl(_core.Control):
 
     def SetHScrollBar(*args, **kwargs):
         """
-        SetHScrollBar(self, wxScrollBar bar)
+        SetHScrollBar(self, ScrollBar bar)
 
         Set the horizontal scrollbar to use instead of the ont that's built-in.
         """

@@ -671,6 +671,10 @@ class Dialog(TopLevelWindow):
         """GetEscapeId(self) -> int"""
         return _windows_.Dialog_GetEscapeId(*args, **kwargs)
 
+    def GetParentForModalDialog(*args, **kwargs):
+        """GetParentForModalDialog(self, Window parent=None) -> Window"""
+        return _windows_.Dialog_GetParentForModalDialog(*args, **kwargs)
+
     def CreateTextSizer(*args, **kwargs):
         """CreateTextSizer(self, String message) -> Sizer"""
         return _windows_.Dialog_CreateTextSizer(*args, **kwargs)

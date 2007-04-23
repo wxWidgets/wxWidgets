@@ -36607,6 +36607,47 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Window_HasExtraStyle(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxWindow *arg1 = (wxWindow *) 0 ;
+  int arg2 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "exFlag", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OO:Window_HasExtraStyle",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxWindow, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Window_HasExtraStyle" "', expected argument " "1"" of type '" "wxWindow const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxWindow * >(argp1);
+  ecode2 = SWIG_AsVal_int(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Window_HasExtraStyle" "', expected argument " "2"" of type '" "int""'");
+  } 
+  arg2 = static_cast< int >(val2);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxWindow const *)arg1)->HasExtraStyle(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Window_MakeModal(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxWindow *arg1 = (wxWindow *) 0 ;
@@ -53268,6 +53309,36 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_BoxSizer_IsVertical(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxBoxSizer *arg1 = (wxBoxSizer *) 0 ;
+  bool result;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxBoxSizer, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "BoxSizer_IsVertical" "', expected argument " "1"" of type '" "wxBoxSizer const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxBoxSizer * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (bool)((wxBoxSizer const *)arg1)->IsVertical();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *BoxSizer_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
@@ -59403,6 +59474,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Window_ToggleWindowStyle", (PyCFunction) _wrap_Window_ToggleWindowStyle, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_SetExtraStyle", (PyCFunction) _wrap_Window_SetExtraStyle, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_GetExtraStyle", (PyCFunction)_wrap_Window_GetExtraStyle, METH_O, NULL},
+	 { (char *)"Window_HasExtraStyle", (PyCFunction) _wrap_Window_HasExtraStyle, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_MakeModal", (PyCFunction) _wrap_Window_MakeModal, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_SetThemeEnabled", (PyCFunction) _wrap_Window_SetThemeEnabled, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Window_GetThemeEnabled", (PyCFunction)_wrap_Window_GetThemeEnabled, METH_O, NULL},
@@ -59844,6 +59916,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"new_BoxSizer", (PyCFunction) _wrap_new_BoxSizer, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"BoxSizer_GetOrientation", (PyCFunction)_wrap_BoxSizer_GetOrientation, METH_O, NULL},
 	 { (char *)"BoxSizer_SetOrientation", (PyCFunction) _wrap_BoxSizer_SetOrientation, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"BoxSizer_IsVertical", (PyCFunction)_wrap_BoxSizer_IsVertical, METH_O, NULL},
 	 { (char *)"BoxSizer_swigregister", BoxSizer_swigregister, METH_VARARGS, NULL},
 	 { (char *)"BoxSizer_swiginit", BoxSizer_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_StaticBoxSizer", (PyCFunction) _wrap_new_StaticBoxSizer, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -62276,6 +62349,7 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_addvarlink(SWIG_globals(),(char*)"IMAGE_OPTION_RESOLUTIONY",IMAGE_OPTION_RESOLUTIONY_get, IMAGE_OPTION_RESOLUTIONY_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"IMAGE_OPTION_RESOLUTIONUNIT",IMAGE_OPTION_RESOLUTIONUNIT_get, IMAGE_OPTION_RESOLUTIONUNIT_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"IMAGE_OPTION_QUALITY",IMAGE_OPTION_QUALITY_get, IMAGE_OPTION_QUALITY_set);
+  SWIG_Python_SetConstant(d, "IMAGE_RESOLUTION_NONE",SWIG_From_int(static_cast< int >(wxIMAGE_RESOLUTION_NONE)));
   SWIG_Python_SetConstant(d, "IMAGE_RESOLUTION_INCHES",SWIG_From_int(static_cast< int >(wxIMAGE_RESOLUTION_INCHES)));
   SWIG_Python_SetConstant(d, "IMAGE_RESOLUTION_CM",SWIG_From_int(static_cast< int >(wxIMAGE_RESOLUTION_CM)));
   SWIG_addvarlink(SWIG_globals(),(char*)"IMAGE_OPTION_BITSPERSAMPLE",IMAGE_OPTION_BITSPERSAMPLE_get, IMAGE_OPTION_BITSPERSAMPLE_set);

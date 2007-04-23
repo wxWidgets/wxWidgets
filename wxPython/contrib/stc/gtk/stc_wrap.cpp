@@ -2677,7 +2677,6 @@ namespace swig {
 #include "wx/wxPython/pyclasses.h"
 #include <wx/stc/stc.h>
 
-
  static const wxString wxPySTCNameStr(wxSTCNameStr); 
 
   #define SWIG_From_long   PyInt_FromLong 
@@ -23181,6 +23180,7 @@ SWIGEXPORT void SWIG_init(void) {
   
   PyDict_SetItemString(d,(char*)"cvar", SWIG_globals());
   SWIG_addvarlink(SWIG_globals(),(char*)"STCNameStr",STCNameStr_get, STCNameStr_set);
+  SWIG_Python_SetConstant(d, "USE_STC",SWIG_From_int(static_cast< int >(1)));
   SWIG_Python_SetConstant(d, "STC_USE_DND",SWIG_From_int(static_cast< int >(1)));
   SWIG_Python_SetConstant(d, "STC_USE_POPUP",SWIG_From_int(static_cast< int >(1)));
   SWIG_Python_SetConstant(d, "STC_INVALID_POSITION",SWIG_From_int(static_cast< int >(-1)));

@@ -7848,6 +7848,49 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_Dialog_GetParentForModalDialog(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxDialog *arg1 = (wxDialog *) 0 ;
+  wxWindow *arg2 = (wxWindow *) NULL ;
+  wxWindow *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  void *argp2 = 0 ;
+  int res2 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "parent", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"O|O:Dialog_GetParentForModalDialog",kwnames,&obj0,&obj1)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxDialog, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Dialog_GetParentForModalDialog" "', expected argument " "1"" of type '" "wxDialog const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxDialog * >(argp1);
+  if (obj1) {
+    res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxWindow, 0 |  0 );
+    if (!SWIG_IsOK(res2)) {
+      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Dialog_GetParentForModalDialog" "', expected argument " "2"" of type '" "wxWindow *""'"); 
+    }
+    arg2 = reinterpret_cast< wxWindow * >(argp2);
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxWindow *)((wxDialog const *)arg1)->GetParentForModalDialog(arg2);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = wxPyMake_wxObject(result, 0); 
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_Dialog_CreateTextSizer(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxDialog *arg1 = (wxDialog *) 0 ;
@@ -33801,6 +33844,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"Dialog_GetAffirmativeId", (PyCFunction)_wrap_Dialog_GetAffirmativeId, METH_O, NULL},
 	 { (char *)"Dialog_SetEscapeId", (PyCFunction) _wrap_Dialog_SetEscapeId, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Dialog_GetEscapeId", (PyCFunction)_wrap_Dialog_GetEscapeId, METH_O, NULL},
+	 { (char *)"Dialog_GetParentForModalDialog", (PyCFunction) _wrap_Dialog_GetParentForModalDialog, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Dialog_CreateTextSizer", (PyCFunction) _wrap_Dialog_CreateTextSizer, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Dialog__CreateButtonSizer", (PyCFunction) _wrap_Dialog__CreateButtonSizer, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"Dialog_CreateSeparatedButtonSizer", (PyCFunction) _wrap_Dialog_CreateSeparatedButtonSizer, METH_VARARGS | METH_KEYWORDS, NULL},

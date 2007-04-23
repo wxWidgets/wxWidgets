@@ -707,7 +707,7 @@ class DemoCodePanel(wx.Panel):
                 os.makedirs(GetModifiedDirectory())
                 if not os.path.exists(GetModifiedDirectory()):
                     wx.LogMessage("BUG: Created demo directory but it still doesn't exist")
-                    raise AssetionError
+                    raise AssertionError
             except:
                 wx.LogMessage("Error creating demo directory: %s" % GetModifiedDirectory())
                 return

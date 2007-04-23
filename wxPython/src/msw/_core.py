@@ -3560,6 +3560,7 @@ def InitAllImageHandlers():
     """
     pass
 
+IMAGE_RESOLUTION_NONE = _core_.IMAGE_RESOLUTION_NONE
 IMAGE_RESOLUTION_INCHES = _core_.IMAGE_RESOLUTION_INCHES
 IMAGE_RESOLUTION_CM = _core_.IMAGE_RESOLUTION_CM
 PNG_TYPE_COLOUR = _core_.PNG_TYPE_COLOUR
@@ -7775,7 +7776,7 @@ class App(wx.PyApp):
 
         :param redirect: Should ``sys.stdout`` and ``sys.stderr`` be
             redirected?  Defaults to True on Windows and Mac, False
-            otherwise.  If `filename` is None then output will be
+            otherwise.  If ``filename`` is None then output will be
             redirected to a window that pops up as needed.  (You can
             control what kind of window is created for the output by
             resetting the class variable ``outputWindowClass`` to a
@@ -9076,6 +9077,14 @@ class Window(EvtHandler):
         Returns the extra style bits for the window.
         """
         return _core_.Window_GetExtraStyle(*args, **kwargs)
+
+    def HasExtraStyle(*args, **kwargs):
+        """
+        HasExtraStyle(self, int exFlag) -> bool
+
+        Returns ``True`` if the given extra flag is set.
+        """
+        return _core_.Window_HasExtraStyle(*args, **kwargs)
 
     def MakeModal(*args, **kwargs):
         """
@@ -12961,6 +12970,10 @@ class BoxSizer(Sizer):
         Resets the orientation of the sizer.
         """
         return _core_.BoxSizer_SetOrientation(*args, **kwargs)
+
+    def IsVertical(*args, **kwargs):
+        """IsVertical(self) -> bool"""
+        return _core_.BoxSizer_IsVertical(*args, **kwargs)
 
     Orientation = property(GetOrientation,SetOrientation,doc="See `GetOrientation` and `SetOrientation`") 
 _core_.BoxSizer_swigregister(BoxSizer)
