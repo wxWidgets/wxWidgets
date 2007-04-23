@@ -279,14 +279,11 @@ gtk_frame_configure_callback( GtkWidget* widget,
     wxPoint point;
     gtk_window_get_position((GtkWindow*)widget, &point.x, &point.y);
 
-    if (win->m_x != point.x || win->m_y != point.y)
-    {
-        win->m_x = point.x;
-        win->m_y = point.y;
-        wxMoveEvent mevent(point, win->GetId());
-        mevent.SetEventObject( win );
-        win->GetEventHandler()->ProcessEvent( mevent );
-    }
+    win->m_x = point.x;
+    win->m_y = point.y;
+    wxMoveEvent mevent(point, win->GetId());
+    mevent.SetEventObject( win );
+    win->GetEventHandler()->ProcessEvent( mevent );
 
     return FALSE;
 }
