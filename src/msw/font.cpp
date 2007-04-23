@@ -318,7 +318,12 @@ public:
         { return m_nativeFontInfo; }
 
     void SetNativeFontInfo(const wxNativeFontInfo& nativeFontInfo)
-        { Free(); m_nativeFontInfo = nativeFontInfo; }
+    {
+        Free();
+
+        m_nativeFontInfo = nativeFontInfo;
+        m_nativeFontInfoOk = true;
+    }
 
 protected:
     // common part of all ctors
