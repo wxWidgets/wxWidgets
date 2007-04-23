@@ -72,6 +72,17 @@ void wxDialogBase::Init()
     WX_INIT_CONTROL_CONTAINER();
 }
 
+// helper of GetParentForModalDialog()
+static bool CanBeUsedAsParent(wxWindow *parent)
+{
+    extern WXDLLIMPEXP_DATA_CORE(wxList) wxPendingDelete;
+
+    return !parent->HasExtraStyle(wxWS_EX_TRANSIENT) &&
+                parent->IsShownOnScreen() &&
+                    !wxPendingDelete.Member(parent) &&
+                        parent->IsBeingDeleted();
+}
+
 wxWindow *wxDialogBase::GetParentForModalDialog(wxWindow *parent) const
 {
     // creating a parent-less modal dialog will result (under e.g. wxGTK2)
@@ -79,10 +90,10 @@ wxWindow *wxDialogBase::GetParentForModalDialog(wxWindow *parent) const
     if ( parent )
         parent = wxGetTopLevelParent(parent);
 
-    if ( !parent || parent->HasExtraStyle(wxWS_EX_TRANSIENT) )
+    if ( !parent || !CanBeUsedAsParent(parent) )
         parent = wxTheApp->GetTopWindow();
 
-    if ( parent && parent->HasExtraStyle(wxWS_EX_TRANSIENT) )
+    if ( parent && !CanBeUsedAsParent(parent) )
     {
         // can't use this one, it's going to disappear
         parent = NULL;
