@@ -544,7 +544,9 @@ bool wxRichTextXMLHandler::DoSaveFile(wxRichTextBuffer *buffer, wxOutputStream& 
     {
         if (m_encoding == wxT("<System>"))
         {
+#if wxUSE_INTL
             fileEncoding = wxLocale::GetSystemEncodingName();
+#endif // wxUSE_INTL
         }
         else
         {
