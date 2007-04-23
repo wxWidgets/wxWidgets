@@ -853,7 +853,7 @@ public:
     void PaintBackground(const wxRect& rectCell, wxGridCellAttr *attr) {
         bool found;
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
-        if ((found = wxPyCBH_findCallback(m_myInst, "PaintBackground)"))) {
+        if ((found = wxPyCBH_findCallback(m_myInst, "PaintBackground"))) {
             PyObject* ao = wxPyMake_wxGridCellAttr(attr,false);
             PyObject* ro = wxPyConstructObject((void*)&rectCell, wxT("wxRect"), 0);
 

@@ -75,7 +75,16 @@ callbacks into the derived class.  The H version handles horizontal
 scrolling and the HV version handles both horizontal and vertical
 scrolling. 
 
+Support wx.APPLY and wx.CLOSE in CreateStdDialogButtonSizer()
 
+wx.CheckListBox now looks more native, especially under XP.
+
+Sizers distribute only the extra space between the stretchable items
+according to their proportions and not all available space. We believe
+the new behaviour corresponds better to user expectations but if you
+did rely on the old behaviour you will have to update your code to set
+the minimal sizes of the sizer items to be in the same proportion as
+the items proportions to return to the old behaviour.
 
 
 

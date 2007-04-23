@@ -23,7 +23,6 @@ languages are built-in."
 #include "wx/wxPython/wxPython.h"
 #include "wx/wxPython/pyclasses.h"
 #include <wx/stc/stc.h>
-
 %}
 
 //---------------------------------------------------------------------------
@@ -47,7 +46,11 @@ MustHaveApp(wxStyledTextCtrl);
 //---------------------------------------------------------------------------
 // Get all our defs from the REAL header file.
 
+#define wxUSE_STC 1
+#define WXDLLIMPEXP_STC
+#define WXDLLIMPEXP_CORE
 %include stc.h
+
 
 %extend wxStyledTextCtrl {
     %pythoncode {

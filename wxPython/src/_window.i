@@ -850,6 +850,9 @@ SetWindowStyleFlag()", "");
         long , GetExtraStyle() const,
         "Returns the extra style bits for the window.", "");
     
+    DocDeclStr(
+        bool , HasExtraStyle(int exFlag) const,
+        "Returns ``True`` if the given extra flag is set.", "");
 
     
     DocDeclStr(

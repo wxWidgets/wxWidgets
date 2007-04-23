@@ -627,7 +627,7 @@ if BUILD_STC:
     msg('Preparing STC...')
     location = 'contrib/stc'
     #if os.name == 'nt':
-    STC_H = opj(WXDIR, 'contrib', 'include/wx/stc')
+    STC_H = opj(WXDIR, 'include/wx/stc')
     #else:
     #    STC_H = opj(WXPREFIX, 'include/wx-%d.%d/wx/stc' % (VER_MAJOR, VER_MINOR))
 
@@ -724,7 +724,7 @@ if BUILD_GIZMOS:
     ext = Extension('_gizmos',
                     [ '%s/treelistctrl.cpp'        % opj(location, 'wxCode/src'),
                       '%s/gizmos/dynamicsash.cpp'  % opj(location, 'wxCode/src'),
-                      '%s/gizmos/editlbox.cpp'     % opj(location, 'wxCode/src'),
+                      #'%s/gizmos/editlbox.cpp'     % opj(location, 'wxCode/src'),
                       '%s/gizmos/ledctrl.cpp'      % opj(location, 'wxCode/src'),
                       '%s/gizmos/splittree.cpp'    % opj(location, 'wxCode/src'),
                       '%s/gizmos/statpict.cpp'     % opj(location, 'wxCode/src'),

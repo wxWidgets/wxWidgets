@@ -382,6 +382,10 @@ public:
     void SetEscapeId(int escapeId);
     int GetEscapeId() const;
 
+    // Returns the parent to use for modal dialogs if the user did not specify it
+    // explicitly
+    wxWindow *GetParentForModalDialog(wxWindow *parent = NULL) const;
+
     // splits text up at newlines and places the
     // lines into a vertical wxBoxSizer
     wxSizer* CreateTextSizer( const wxString &message );

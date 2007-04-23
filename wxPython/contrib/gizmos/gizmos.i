@@ -23,7 +23,7 @@
 #include "wx/wxPython/pyclasses.h"
 
 #include <wx/gizmos/dynamicsash.h>
-#include <wx/gizmos/editlbox.h>
+//#include <wx/gizmos/editlbox.h>
 #include <wx/gizmos/splittree.h>
 #include <wx/gizmos/ledctrl.h>
 #include <wx/gizmos/statpict.h>
@@ -31,7 +31,7 @@
 #include <wx/listctrl.h>
 #include <wx/treectrl.h>
 #include <wx/imaglist.h>
-
+#include <wx/editlbox.h>
 %}
 
 //---------------------------------------------------------------------------

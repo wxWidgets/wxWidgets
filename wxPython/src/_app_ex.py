@@ -103,7 +103,7 @@ class App(wx.PyApp):
 
         :param redirect: Should ``sys.stdout`` and ``sys.stderr`` be
             redirected?  Defaults to True on Windows and Mac, False
-            otherwise.  If `filename` is None then output will be
+            otherwise.  If ``filename`` is None then output will be
             redirected to a window that pops up as needed.  (You can
             control what kind of window is created for the output by
             resetting the class variable ``outputWindowClass`` to a

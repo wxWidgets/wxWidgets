@@ -27,7 +27,6 @@ enum {
     wxIMAGE_ALPHA_OPAQUE
 };
 
-
 // Constants for wxImage::Scale() for determining the level of quality
 enum
 {
@@ -1141,11 +1140,19 @@ MAKE_CONST_WXSTRING(IMAGE_OPTION_RESOLUTIONY);
 MAKE_CONST_WXSTRING(IMAGE_OPTION_RESOLUTIONUNIT);
 MAKE_CONST_WXSTRING(IMAGE_OPTION_QUALITY);
 
-enum
+// constants used with wxIMAGE_OPTION_RESOLUTIONUNIT
+enum wxImageResolution
 {
+    // Resolution not specified
+    wxIMAGE_RESOLUTION_NONE = 0,
+
+    // Resolution specified in inches
     wxIMAGE_RESOLUTION_INCHES = 1,
+
+    // Resolution specified in centimeters
     wxIMAGE_RESOLUTION_CM = 2
 };
+
 
 
 MAKE_CONST_WXSTRING(IMAGE_OPTION_BITSPERSAMPLE);

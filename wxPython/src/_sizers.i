@@ -1436,6 +1436,8 @@ sizer.", "");
         void , SetOrientation(int orient),
         "Resets the orientation of the sizer.", "");
 
+    bool IsVertical() const;
+    
     %property(Orientation, GetOrientation, SetOrientation, doc="See `GetOrientation` and `SetOrientation`");
 };
 
