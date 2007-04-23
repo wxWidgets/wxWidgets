@@ -269,23 +269,24 @@ gtk_frame_delete_callback( GtkWidget *WXUNUSED(widget),
 
 extern "C" {
 static gboolean
-gtk_frame_configure_callback( GtkWidget *WXUNUSED(widget),
+gtk_frame_configure_callback( GtkWidget* widget,
                               GdkEventConfigure *WXUNUSED(event),
                               wxTopLevelWindowGTK *win )
 {
     if (!win->m_hasVMT || !win->IsShown())
         return FALSE;
 
+    wxPoint point;
+    gtk_window_get_position((GtkWindow*)widget, &point.x, &point.y);
 
-    int x = 0;
-    int y = 0;
-    gdk_window_get_root_origin( win->m_widget->window, &x, &y );
-    win->m_x = x;
-    win->m_y = y;
-
-    wxMoveEvent mevent( wxPoint(win->m_x,win->m_y), win->GetId() );
-    mevent.SetEventObject( win );
-    win->GetEventHandler()->ProcessEvent( mevent );
+    if (win->m_x != point.x || win->m_y != point.y)
+    {
+        win->m_x = point.x;
+        win->m_y = point.y;
+        wxMoveEvent mevent(point, win->GetId());
+        mevent.SetEventObject( win );
+        win->GetEventHandler()->ProcessEvent( mevent );
+    }
 
     return FALSE;
 }
@@ -596,7 +597,7 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     g_signal_connect (m_widget, "unmap_event",
                       G_CALLBACK (gtk_frame_unmap_callback), this);
 
-    // the only way to get the window size is to connect to this event
+    // for wxMoveEvent
     g_signal_connect (m_widget, "configure_event",
                       G_CALLBACK (gtk_frame_configure_callback), this);
 
