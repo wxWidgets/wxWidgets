@@ -468,7 +468,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         for ( int i = 0; i < argc; i++ )
         {
             // leave just the names of the options with values
-            const wxString str(wxString(argv[i]).BeforeFirst('='));
+            const wxString str = wxString(argv[i]).BeforeFirst('=');
 
             for ( size_t j = 0; j < opt.size(); j++ )
             {
