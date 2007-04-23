@@ -791,7 +791,7 @@ WXDLLIMPEXP_BASE wxChar * wxStrtok(wxChar *psz, const wxChar *delim, wxChar **sa
     WXDLLIMPEXP_BASE wxWCharBuffer wxSetlocale_(int category, const wxChar *locale);
     WXDLLIMPEXP_BASE wxWCharBuffer wxSetlocale(int category, const wxChar *locale);
     #else
-    WXDLLIMPEXP_BASE const wxChar *wxSetlocale(int category, const wxChar *locale);
+    WXDLLIMPEXP_BASE wxChar *wxSetlocale(int category, const wxChar *locale);
     #endif // defined(wxSetlocale_)
 #endif // __cplusplus
 

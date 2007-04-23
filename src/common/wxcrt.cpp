@@ -820,9 +820,9 @@ wxWCharBuffer wxSetlocale(int category, const wxChar *locale)
     return rv;
 }
 #else // defined(wxSetlocale_)
-const wxChar *wxSetlocale(int category, const wxChar *locale)
+wxChar *wxSetlocale(int category, const wxChar *locale)
 {
-    const wxChar *rv = wxSetlocale_(category, locale);
+    wxChar *rv = wxSetlocale_(category, locale);
     if ( rv )
         wxUpdateLocaleIsUtf8();
     return rv;
