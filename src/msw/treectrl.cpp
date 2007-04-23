@@ -1671,15 +1671,26 @@ void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
     wxTreeEvent event(wxEVT_COMMAND_TREE_SEL_CHANGING, this, item);
     if ( !GetEventHandler()->ProcessEvent(event) || event.IsAllowed() )
     {
-        if ( !::SelectItem(GetHwnd(), HITEM(item), select) )
+        if ( HasFlag(wxTR_MULTIPLE) )
         {
-            wxLogLastError(wxT("TreeView_SelectItem"));
+            if ( !::SelectItem(GetHwnd(), HITEM(item), select) )
+            {
+                wxLogLastError(wxT("TreeView_SelectItem"));
+                return;
+            }
         }
-        else // ok
+        else // single selection
         {
-            event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGED);
-            (void)GetEventHandler()->ProcessEvent(event);
+            // use TreeView_SelectItem() to deselect the previous selection
+            if ( !TreeView_SelectItem(GetHwnd(), HITEM(item)) )
+            {
+                wxLogLastError(wxT("TreeView_SelectItem"));
+                return;
+            }
         }
+
+        event.SetEventType(wxEVT_COMMAND_TREE_SEL_CHANGED);
+        (void)GetEventHandler()->ProcessEvent(event);
     }
     //else: program vetoed the change
 }
