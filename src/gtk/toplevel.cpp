@@ -331,12 +331,13 @@ gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget),
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static void
+static gboolean
 gtk_frame_map_callback( GtkWidget * WXUNUSED(widget),
                         GdkEvent * WXUNUSED(event),
                         wxTopLevelWindow *win )
 {
     win->SetIconizeState(false);
+    return false;
 }
 }
 
@@ -345,12 +346,13 @@ gtk_frame_map_callback( GtkWidget * WXUNUSED(widget),
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static void
+static gboolean
 gtk_frame_unmap_callback( GtkWidget * WXUNUSED(widget),
                           GdkEvent * WXUNUSED(event),
                           wxTopLevelWindow *win )
 {
     win->SetIconizeState(true);
+    return false;
 }
 }
 
