@@ -458,8 +458,6 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
 
     wxTopLevelWindows.Append( this );
 
-    m_needParent = false;
-
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {

@@ -303,7 +303,6 @@ bool wxListBox::Create( wxWindow *parent, wxWindowID id,
                         long style, const wxValidator& validator,
                         const wxString &name )
 {
-    m_needParent = true;
     m_blockEvent = false;
 
     if (!PreCreation( parent, pos, size ) ||

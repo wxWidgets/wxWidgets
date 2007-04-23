@@ -488,7 +488,7 @@ static GtkCellEditable *gtk_wx_cell_renderer_start_editing(
                         GdkRectangle            *background_area,
                         GdkRectangle            *cell_area,
                         GtkCellRendererState     flags );
-                        
+
 
 static GObjectClass *cell_parent_class = NULL;
 
@@ -572,7 +572,7 @@ static GtkCellEditable *gtk_wx_cell_renderer_start_editing(
     wxDataViewCustomRenderer *cell = wxrenderer->cell;
     if (!cell->HasEditorCtrl())
         return NULL;
-        
+
     GdkRectangle rect;
     gtk_wx_cell_renderer_get_size (renderer, widget, cell_area,
                                    &rect.x,
@@ -733,11 +733,11 @@ gtk_wx_cell_renderer_activate(
     if (!event)
     {
         bool ret = false;
-        
+
         // activated by <ENTER>
         if (cell->Activate( renderrect, model, model_col, model_row ))
                     ret = true;
-        
+
         return ret;
     }
     else if (event->type == GDK_BUTTON_PRESS)
@@ -1933,7 +1933,7 @@ static void wxInsertChildInDataViewCtrl( wxWindowGTK* parent, wxWindowGTK* child
 
     // Insert widget in GtkTreeView
     if (GTK_WIDGET_REALIZED(treeview))
-        gtk_widget_set_parent_window( child->m_widget, 
+        gtk_widget_set_parent_window( child->m_widget,
           gtk_tree_view_get_bin_window( GTK_TREE_VIEW(treeview) ) );
     gtk_widget_set_parent( child->m_widget, treeview );
 }
@@ -1943,22 +1943,22 @@ void gtk_dataviewctrl_size_callback( GtkWidget *WXUNUSED(widget),
                                      GtkAllocation *alloc,
                                      wxDataViewCtrl *win )
 {
-    
+
     wxWindowList::Node *node = win->GetChildren().GetFirst();
     while (node)
     {
         wxWindow *child = node->GetData();
-        
+
         GtkRequisition req;
         gtk_widget_size_request( child->m_widget, &req );
-        
+
         GtkAllocation alloc;
         alloc.x = child->m_x;
         alloc.y = child->m_y;
         alloc.width = child->m_width;
         alloc.height = child->m_height;
         gtk_widget_size_allocate( child->m_widget, &alloc );
-        
+
         node = node->GetNext();
     }
 }
@@ -1988,8 +1988,6 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
 {
     Init();
 
-    m_needParent = true;
-
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator ))
     {
@@ -2005,7 +2003,7 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
 
     m_treeview = gtk_tree_view_new();
     gtk_container_add (GTK_CONTAINER (m_widget), m_treeview);
-    
+
     g_signal_connect (m_treeview, "size_allocate",
                      G_CALLBACK (gtk_dataviewctrl_size_callback), this);
 

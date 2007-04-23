@@ -90,13 +90,11 @@ bool wxStaticBox::Create( wxWindow *parent,
                           long style,
                           const wxString& name )
 {
-    m_needParent = TRUE;
-
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
         wxFAIL_MSG( wxT("wxStaticBox creation failed") );
-        return FALSE;
+        return false;
     }
 
     m_widget = GTKCreateFrame(label);

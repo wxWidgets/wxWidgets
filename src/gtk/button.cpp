@@ -97,12 +97,15 @@ wxButton::~wxButton()
 {
 }
 
-bool wxButton::Create(  wxWindow *parent, wxWindowID id, const wxString &label,
-      const wxPoint &pos, const wxSize &size,
-      long style, const wxValidator& validator, const wxString &name )
+bool wxButton::Create(wxWindow *parent,
+                      wxWindowID id,
+                      const wxString &label,
+                      const wxPoint& pos,
+                      const wxSize& size,
+                      long style,
+                      const wxValidator& validator,
+                      const wxString& name)
 {
-    m_needParent = true;
-
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {

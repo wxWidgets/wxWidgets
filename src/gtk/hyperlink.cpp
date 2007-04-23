@@ -76,8 +76,6 @@ bool wxHyperlinkCtrl::Create(wxWindow *parent, wxWindowID id,
         // do validation checks:
         CheckParams(label, url, style);
 
-        m_needParent = true;
-
         if (!PreCreation( parent, pos, size ) ||
             !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
         {

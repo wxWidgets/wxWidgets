@@ -55,8 +55,6 @@ bool wxToggleBitmapButton::Create(wxWindow *parent, wxWindowID id,
                             const wxValidator& validator,
                             const wxString &name)
 {
-    m_needParent = true;
-
     m_blockEvent = false;
 
     if (!PreCreation(parent, pos, size) ||
@@ -197,8 +195,6 @@ bool wxToggleButton::Create(wxWindow *parent, wxWindowID id,
                             const wxValidator& validator,
                             const wxString &name)
 {
-    m_needParent = true;
-
     m_blockEvent = false;
 
     if (!PreCreation(parent, pos, size) ||

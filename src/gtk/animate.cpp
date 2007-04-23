@@ -199,8 +199,6 @@ bool wxAnimationCtrl::Create( wxWindow *parent, wxWindowID id,
                               long style,
                               const wxString& name)
 {
-    m_needParent = true;
-
     if (!PreCreation( parent, pos, size ) ||
         !base_type::CreateBase(parent, id, pos, size, style & wxWINDOW_STYLE_MASK,
                                wxDefaultValidator, name))

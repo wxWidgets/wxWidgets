@@ -60,8 +60,6 @@ bool wxFontButton::Create( wxWindow *parent, wxWindowID id,
 {
     if (!gtk_check_version(2,4,0))
     {
-        m_needParent = true;
-
         if (!PreCreation( parent, pos, size ) ||
             !wxControl::CreateBase(parent, id, pos, size, style, validator, name))
         {

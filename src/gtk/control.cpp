@@ -37,7 +37,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxControl, wxWindow)
 
 wxControl::wxControl()
 {
-    m_needParent = true;
 }
 
 bool wxControl::Create( wxWindow *parent,

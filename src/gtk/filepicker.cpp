@@ -46,8 +46,6 @@ bool wxFileButton::Create( wxWindow *parent, wxWindowID id,
         // VERY IMPORTANT: this code is identic to relative code in wxDirButton;
         //                 if you find a problem here, fix it also in wxDirButton !
 
-        m_needParent = true;
-
         if (!PreCreation( parent, pos, size ) ||
             !wxControl::CreateBase(parent, id, pos, size, style & wxWINDOW_STYLE_MASK,
                                     validator, name))
@@ -194,8 +192,6 @@ bool wxDirButton::Create( wxWindow *parent, wxWindowID id,
     {
         // VERY IMPORTANT: this code is identic to relative code in wxFileButton;
         //                 if you find a problem here, fix it also in wxFileButton !
-
-        m_needParent = true;
 
         if (!PreCreation( parent, pos, size ) ||
             !wxControl::CreateBase(parent, id, pos, size, style & wxWINDOW_STYLE_MASK,

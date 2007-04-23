@@ -91,8 +91,6 @@ bool wxSpinButton::Create(wxWindow *parent,
                           long style,
                           const wxString& name)
 {
-    m_needParent = true;
-
     wxSize new_size = size,
            sizeBest = DoGetBestSize();
     new_size.x = sizeBest.x;            // override width always

@@ -152,8 +152,6 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
         return;
     }
 
-    m_needParent = false;
-
     parent = GetParentForModalDialog(parent);
 
     if (!PreCreation(parent, pos, wxDefaultSize) ||

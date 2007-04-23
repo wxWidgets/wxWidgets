@@ -496,8 +496,6 @@ wxMDIClientWindow::~wxMDIClientWindow()
 
 bool wxMDIClientWindow::CreateClient( wxMDIParentFrame *parent, long style )
 {
-    m_needParent = true;
-
     m_insertCallback = (wxInsertChildFunction)wxInsertChildInMDI;
 
     if (!PreCreation( parent, wxDefaultPosition, wxDefaultSize ) ||
@@ -523,4 +521,4 @@ bool wxMDIClientWindow::CreateClient( wxMDIParentFrame *parent, long style )
     return true;
 }
 
-#endif
+#endif // wxUSE_MDI

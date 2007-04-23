@@ -212,8 +212,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxRadioBox,wxControl)
 
 void wxRadioBox::Init()
 {
-    m_needParent = true;
-
     m_hasFocus =
     m_lostFocus = false;
 }

@@ -217,7 +217,6 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
                         const wxPoint& pos, const wxSize& size,
                         long style, const wxString& name )
 {
-    m_needParent = true;
     m_insertCallback = (wxInsertChildFunction)wxInsertChildInNotebook;
 
     if ( (style & wxBK_ALIGN_MASK) == wxBK_DEFAULT )

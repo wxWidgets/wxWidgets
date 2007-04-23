@@ -94,8 +94,6 @@ bool wxChoice::Create( wxWindow *parent, wxWindowID id,
                        int n, const wxString choices[],
                        long style, const wxValidator& validator, const wxString &name )
 {
-    m_needParent = true;
-
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {

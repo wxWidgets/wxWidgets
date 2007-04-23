@@ -140,13 +140,11 @@ IMPLEMENT_DYNAMIC_CLASS(wxMenuBar,wxWindow)
 
 void wxMenuBar::Init(size_t n, wxMenu *menus[], const wxString titles[], long style)
 {
-    // the parent window is known after wxFrame::SetMenu()
-    m_needParent = false;
     m_style = style;
-    m_invokingWindow = (wxWindow*) NULL;
+    m_invokingWindow = NULL;
 
-    if (!PreCreation( (wxWindow*) NULL, wxDefaultPosition, wxDefaultSize ) ||
-        !CreateBase( (wxWindow*) NULL, -1, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, wxT("menubar") ))
+    if (!PreCreation( NULL, wxDefaultPosition, wxDefaultSize ) ||
+        !CreateBase( NULL, -1, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, wxT("menubar") ))
     {
         wxFAIL_MSG( wxT("wxMenuBar creation failed") );
         return;

@@ -181,6 +181,11 @@ public:
     static wxLayoutDirection GTKGetLayout(GtkWidget *widget);
     static void GTKSetLayout(GtkWidget *widget, wxLayoutDirection dir);
 
+    // return true if this window must have a non-NULL parent, false if it can
+    // be created without parent (normally only top level windows but in wxGTK
+    // there is also the exception of wxMenuBar)
+    virtual bool GTKNeedsParent() const { return !IsTopLevel(); }
+
 protected:
     // Override GTKWidgetNeedsMnemonic and return true if your
     // needs to set its mnemonic widget, such as for a
@@ -292,7 +297,6 @@ public:
 
 
     // extra (wxGTK-specific) flags
-    bool                 m_needParent:1;        // ! wxFrame, wxDialog, wxNotebookPage ?
     bool                 m_noExpose:1;          // wxGLCanvas has its own redrawing
     bool                 m_nativeSizeEvent:1;   // wxGLCanvas sends wxSizeEvent upon "alloc_size"
     bool                 m_hasScrolling:1;

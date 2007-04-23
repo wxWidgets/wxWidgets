@@ -143,8 +143,6 @@ wxPopupWindow::~wxPopupWindow()
 
 bool wxPopupWindow::Create( wxWindow *parent, int style )
 {
-    m_needParent = false;
-
     if (!PreCreation( parent, wxDefaultPosition, wxDefaultSize ) ||
         !CreateBase( parent, -1, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, wxT("popup") ))
     {

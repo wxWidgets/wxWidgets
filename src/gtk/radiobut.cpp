@@ -60,15 +60,13 @@ bool wxRadioButton::Create( wxWindow *parent,
                             const wxValidator& validator,
                             const wxString& name )
 {
-    m_needParent = TRUE;
-
-    m_blockEvent = FALSE;
+    m_blockEvent = false;
 
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {
         wxFAIL_MSG( wxT("wxRadioButton creation failed") );
-        return FALSE;
+        return false;
     }
 
     GSList* radioButtonGroup = NULL;

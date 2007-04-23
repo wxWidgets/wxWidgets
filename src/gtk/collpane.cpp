@@ -198,7 +198,6 @@ bool wxCollapsiblePane::Create(wxWindow *parent,
         return wxGenericCollapsiblePane::Create(parent, id, label,
                                                 pos, size, style, val, name);
 
-    m_needParent = true;
     m_bIgnoreNextChange = false;
 
     if ( !PreCreation( parent, pos, size ) ||

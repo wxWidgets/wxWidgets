@@ -293,7 +293,6 @@ bool wxToolBar::Create( wxWindow *parent,
                         long style,
                         const wxString& name )
 {
-    m_needParent = true;
     m_insertCallback = (wxInsertChildFunction)wxInsertChildInToolBar;
 
     if ( !PreCreation( parent, pos, size ) ||

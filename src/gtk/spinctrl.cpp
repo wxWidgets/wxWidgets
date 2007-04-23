@@ -97,8 +97,6 @@ bool wxSpinCtrl::Create(wxWindow *parent, wxWindowID id,
                         int min, int max, int initial,
                         const wxString& name)
 {
-    m_needParent = true;
-
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {

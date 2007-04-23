@@ -281,13 +281,17 @@ wxSlider::wxSlider()
     m_needThumbRelease = false;
 }
 
-bool wxSlider::Create(wxWindow *parent, wxWindowID id,
-        int value, int minValue, int maxValue,
-        const wxPoint& pos, const wxSize& size,
-        long style, const wxValidator& validator, const wxString& name )
+bool wxSlider::Create(wxWindow *parent,
+                      wxWindowID id,
+                      int value,
+                      int minValue,
+                      int maxValue,
+                      const wxPoint& pos,
+                      const wxSize& size,
+                      long style,
+                      const wxValidator& validator,
+                      const wxString& name)
 {
-    m_needParent = true;
-
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {

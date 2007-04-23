@@ -52,13 +52,11 @@ bool wxStaticText::Create(wxWindow *parent,
                           long style,
                           const wxString &name )
 {
-    m_needParent = TRUE;
-
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))
     {
         wxFAIL_MSG( wxT("wxStaticText creation failed") );
-        return FALSE;
+        return false;
     }
 
     m_widget = gtk_label_new(NULL);

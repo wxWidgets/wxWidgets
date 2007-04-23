@@ -40,6 +40,10 @@ public:
     void SetLayoutDirection(wxLayoutDirection dir);
     wxLayoutDirection GetLayoutDirection() const;
 
+    // wxMenuBar is not a top level window but it still doesn't need a parent
+    // window
+    virtual bool GTKNeedsParent() const { return false; }
+
     void Attach(wxFrame *frame);
 
     // implementation only from now on

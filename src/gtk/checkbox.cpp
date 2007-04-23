@@ -107,7 +107,6 @@ bool wxCheckBox::Create(wxWindow *parent,
                         const wxValidator& validator,
                         const wxString &name )
 {
-    m_needParent = true;
     m_blockEvent = false;
 
     if (!PreCreation( parent, pos, size ) ||

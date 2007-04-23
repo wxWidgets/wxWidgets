@@ -121,8 +121,6 @@ bool wxBitmapButton::Create( wxWindow *parent,
                              const wxValidator& validator,
                              const wxString &name )
 {
-    m_needParent = true;
-
     if (!PreCreation( parent, pos, size ) ||
         !CreateBase( parent, id, pos, size, style, validator, name ))
     {

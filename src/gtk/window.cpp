@@ -2229,7 +2229,6 @@ void wxWindowGTK::Init()
 
     m_sizeSet = false;
     m_hasVMT = false;
-    m_needParent = true;
     m_isBeingDeleted = false;
 
     m_showOnIdle= false;
@@ -2452,7 +2451,10 @@ wxWindowGTK::~wxWindowGTK()
 
 bool wxWindowGTK::PreCreation( wxWindowGTK *parent, const wxPoint &pos,  const wxSize &size )
 {
-    wxCHECK_MSG( !m_needParent || parent, false, wxT("Need complete parent.") );
+    if ( GTKNeedsParent() )
+    {
+        wxCHECK_MSG( parent, false, wxT("Must have non-NULL parent") );
+    }
 
     // Use either the given size, or the default if -1 is given.
     // See wxWindowBase for these functions.

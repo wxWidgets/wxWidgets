@@ -97,7 +97,6 @@ wxDirDialog::wxDirDialog(wxWindow* parent, const wxString& title,
     if (!gtk_check_version(2,4,0))
     {
         m_message = title;
-        m_needParent = false;
 
         parent = GetParentForModalDialog(parent);
 

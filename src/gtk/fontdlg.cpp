@@ -86,8 +86,6 @@ IMPLEMENT_DYNAMIC_CLASS(wxFontDialog, wxDialog)
 
 bool wxFontDialog::DoCreate(wxWindow *parent)
 {
-    m_needParent = false;
-
     parent = GetParentForModalDialog(parent);
 
     if (!PreCreation( parent, wxDefaultPosition, wxDefaultSize ) ||

@@ -242,7 +242,6 @@ bool wxComboBox::Create( wxWindow *parent, wxWindowID id, const wxString& value,
                          const wxString& name )
 {
     m_ignoreNextUpdate = false;
-    m_needParent = true;
     m_prevSelection = 0;
 
     if (!PreCreation( parent, pos, size ) ||
