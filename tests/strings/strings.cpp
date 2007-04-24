@@ -683,9 +683,9 @@ void StringTestCase::DoCStrDataTernaryOperator(bool cond)
 
     const wchar_t *wcStr = L"foo";
     CPPUNIT_ASSERT( CheckStr(s, (cond ? s.c_str() : wcStr)) );
-    CPPUNIT_ASSERT( CheckStr(s, (cond ? s.c_str() : L"bar")) );
+    CPPUNIT_ASSERT( CheckStr(s, (cond ? s.c_str() : L"foo")) );
     CPPUNIT_ASSERT( CheckStr(s, (cond ? wcStr : s.c_str())) );
-    CPPUNIT_ASSERT( CheckStr(s, (cond ? L"bar" : s.c_str())) );
+    CPPUNIT_ASSERT( CheckStr(s, (cond ? L"foo" : s.c_str())) );
 
     const char *mbStr = "foo";
     CPPUNIT_ASSERT( CheckStr(s, (cond ? s.c_str() : mbStr)) );
