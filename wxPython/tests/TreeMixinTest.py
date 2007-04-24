@@ -1,8 +1,4 @@
-import wx, wx.gizmos, wx.lib.customtreectrl, unittest
-try:
-    import treemixin
-except ImportError:
-    from wx.lib.mixins import treemixin
+import wx, wx.gizmos, wx.lib.customtreectrl, unittest, treemixin
 
 
 # VirtualTree tests
@@ -171,6 +167,14 @@ class VirtualTreeCtrlTest_OneRoot(unittest.TestCase):
         item, cookie = self.tree.GetFirstChild(self.tree.GetRootItem())
         self.assertEqual(wx.RED, self.tree.GetItemTextColour(item))
 
+    def testRefreshItemThatHasNoCorrespondingNodeInTheTree(self):
+        # The item to refresh might be in a collapsed branch of the tree
+        # and not present yet.
+        self.tree.PrepareChildrenCount((0,), 1)
+        self.tree.RefreshItem((0,0))
+        item, cookie = self.tree.GetFirstChild(self.tree.GetRootItem())
+        self.failIf(self.tree.ItemHasChildren(item))
+        
 
 # TreeAPIHarmonizer tests
 
@@ -239,6 +243,10 @@ class TreeAPIHarmonizerCommonTests(object):
         self.tree.AppendItem(self.item, 'child')
         self.tree.ExpandAllChildren(self.item)
         self.failUnless(self.tree.IsExpanded(self.item))
+
+    def testGetFirstVisibleItem(self):
+        self.tree.DeleteAllItems()
+        self.failIf(self.tree.GetFirstVisibleItem())
 
 
 class TreeAPIHarmonizerNoTreeListCtrlCommonTests(object):
@@ -707,6 +715,7 @@ class VanillaTreeCommonTests(object):
         self.assertEqual(1, len(self.eventsReceived))
 
 
+
 class VanillaTreeCtrlTestCase(VanillaTreeCommonTests, VanillaTreeTestCase):
     TreeClass = wx.TreeCtrl
 
@@ -724,31 +733,9 @@ class VanillaCustomTreeCtrlTestCase(VanillaTreeCommonTests,
     TreeClass = wx.lib.customtreectrl.CustomTreeCtrl
 
 
-# Tests of the tree controls without any mixin, to document behaviour
-# that is either different between tree control widgets or undesired
-# behaviour. 
-
-class TreeCtrlTestCase(unittest.TestCase):
-    def setUp(self):
-        self.frame = wx.Frame(None)
-        self.tree = wx.TreeCtrl(self.frame, style=wx.TR_HIDE_ROOT)
-
-    def testSelectHiddenRootItem(self):
-        root = self.tree.AddRoot('Hidden root')
-        self.tree.SelectItem(root)
-        self.assertEqual(root, self.tree.GetSelection())
-
-
-class CustomTreeCtrlTestCase(unittest.TestCase):
-    def setUp(self):
-        self.frame = wx.Frame(None)
-        self.tree = wx.lib.customtreectrl.CustomTreeCtrl(self.frame, 
-            style=wx.TR_HIDE_ROOT)
-
-    def testSelectHiddenRootItem(self):
-        root = self.tree.AddRoot('Hidden root')
-        self.tree.SelectItem(root)
-        self.assertEqual(root, self.tree.GetSelection())
+class VanillaTreeItemIdTestCase(unittest.TestCase):
+    def testTreeItemIdIsFalseDefault(self):
+        self.failIf(wx.TreeItemId())
 
 
 if __name__ == '__main__':
