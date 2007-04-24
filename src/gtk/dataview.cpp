@@ -896,10 +896,14 @@ bool wxGtkDataViewListModelNotifier::ValueChanged( unsigned int model_col, unsig
             gtk_tree_view_get_cell_area( widget, path, column, &cell_area );
             gtk_tree_path_free( path );
 
+            GtkAdjustment* hadjust = gtk_tree_view_get_hadjustment( widget );
+            double d = gtk_adjustment_get_value( hadjust );
+            int xdiff = (int) d;
+
             int ydiff = column->button->allocation.height;
             // Redraw
             gtk_widget_queue_draw_area( GTK_WIDGET(widget),
-                cell_area.x, ydiff + cell_area.y, cell_area.width, cell_area.height );
+                cell_area.x - xdiff, ydiff + cell_area.y, cell_area.width, cell_area.height );
         }
 
         node = node->GetNext();
