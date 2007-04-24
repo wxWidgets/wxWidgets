@@ -200,8 +200,6 @@ public:
     const wchar_t* AsWChar() const;
     operator const wchar_t*() const { return AsWChar(); }
 
-    inline operator bool() const;
-
 #if !wxUSE_UNICODE
     inline
 #endif
@@ -2558,11 +2556,6 @@ inline wxCStrData::~wxCStrData()
 {
     if ( m_owned )
         delete m_str;
-}
-
-inline wxCStrData::operator bool() const
-{
-    return !m_str->empty();
 }
 
 // simple cases for AsChar() and AsWChar(), the complicated ones are
