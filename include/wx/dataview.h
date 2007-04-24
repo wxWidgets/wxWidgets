@@ -140,7 +140,7 @@ public:
     virtual void GetValue( wxVariant &variant, unsigned int col, unsigned int row ) const = 0;
 
     // set value, call ValueChanged() afterwards!
-    virtual bool SetValue( wxVariant &variant, unsigned int col, unsigned int row ) = 0;
+    virtual bool SetValue( const wxVariant &variant, unsigned int col, unsigned int row ) = 0;
 
     // delegated notifiers
     virtual bool RowAppended();
@@ -200,7 +200,7 @@ public:
     virtual void GetValue( wxVariant &variant, unsigned int col, unsigned int row ) const;
 
     // set value, call ValueChanged() afterwards!
-    virtual bool SetValue( wxVariant &variant, unsigned int col, unsigned int row );
+    virtual bool SetValue( const wxVariant &variant, unsigned int col, unsigned int row );
 
     // called from user
     virtual bool RowAppended();

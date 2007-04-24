@@ -2037,7 +2037,9 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
     }
     else
 #endif
+    {
         gtk_tree_view_set_rules_hint( GTK_TREE_VIEW(m_treeview), (style & wxDV_HORIZ_RULES) != 0 );
+    }
 
     gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (m_widget),
         GTK_POLICY_AUTOMATIC, GTK_POLICY_ALWAYS);

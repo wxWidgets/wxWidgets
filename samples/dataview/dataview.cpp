@@ -118,7 +118,7 @@ public:
                 variant = tmp;
             }
         }
-    virtual bool SetValue( wxVariant &value, unsigned int col, unsigned int row )
+    virtual bool SetValue( const wxVariant &value, unsigned int col, unsigned int row )
         {
             if (col == 6)
             {
@@ -343,7 +343,7 @@ public:
         variant = tmp;
     }
 
-    virtual bool SetValue( wxVariant &variant, unsigned int col, unsigned int row )
+    virtual bool SetValue( const wxVariant &variant, unsigned int col, unsigned int row )
     {
         if (col == 0)
         {
@@ -682,10 +682,12 @@ void MyFrame::CreateDataViewControls()
         style |= wxDV_MULTIPLE;
     if (GetMenuBar()->FindItem(ID_NO_HEADER_MODE)->IsChecked())
         style |= wxDV_NO_HEADER;
+#if 0
     if (GetMenuBar()->FindItem(ID_HORIZ_RULES_MODE)->IsChecked())
         style |= wxDV_HORIZ_RULES;
     if (GetMenuBar()->FindItem(ID_VERT_RULES_MODE)->IsChecked())
         style |= wxDV_VERT_RULES;
+#endif
 
 
     // Left wxDataViewCtrl
@@ -693,6 +695,9 @@ void MyFrame::CreateDataViewControls()
                                         wxDefaultSize, style );
 
 
+    wxDataViewTextRenderer *text_renderer;
+    wxDataViewColumn *column;
+    
     wxObjectDataPtr<MyTextModel> model(new MyTextModel);
     dataview_left->AssociateModel( model.get() );
 
@@ -701,10 +706,8 @@ void MyFrame::CreateDataViewControls()
     dataview_left->AppendTextColumn( wxT("Second"), 1, wxDATAVIEW_CELL_INERT, -1,
                                      DEFAULT_ALIGN );
 
-    wxDataViewTextRenderer *text_renderer = 
-        new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
-    wxDataViewColumn *column = new wxDataViewColumn( wxT("editable"), text_renderer, 2,
-                                                     -1, DEFAULT_ALIGN );
+    text_renderer = new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_EDITABLE );
+    column = new wxDataViewColumn( wxT("editable"), text_renderer, 2, -1, DEFAULT_ALIGN );
     dataview_left->AppendColumn( column );
 
     dataview_left->AppendToggleColumn( wxT("fourth"), 3, wxDATAVIEW_CELL_INERT, -1, 
@@ -718,7 +721,6 @@ void MyFrame::CreateDataViewControls()
                                          DEFAULT_ALIGN );
 
     dataview_left->AppendDateColumn( wxT("date"), 6, wxDATAVIEW_CELL_INERT, -1, DEFAULT_ALIGN );
-
 
     // Right wxDataViewCtrl using the same model
     dataview_right = new wxDataViewCtrl( m_panelRight, wxID_ANY );

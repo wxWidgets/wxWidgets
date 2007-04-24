@@ -603,7 +603,7 @@ void wxDataViewSortedListModel::GetValue( wxVariant &variant, unsigned int col, 
     m_child->GetValue( variant, col, child_row );
 }
 
-bool wxDataViewSortedListModel::SetValue( wxVariant &variant, unsigned int col, unsigned int row )
+bool wxDataViewSortedListModel::SetValue( const wxVariant &variant, unsigned int col, unsigned int row )
 {
     unsigned int child_row = m_array[row];
     bool ret = m_child->SetValue( variant, col, child_row );
@@ -744,21 +744,19 @@ bool wxDataViewRendererBase::StartEditing( unsigned int row, wxRect labelRect )
 
 void wxDataViewRendererBase::CancelEditing()
 {
-    // m_editorCtrl->PopEventHandler( true );
-
-    delete m_editorCtrl;
+    wxPendingDelete.Append( m_editorCtrl );
     
     GetOwner()->GetOwner()->GetMainWindow()->SetFocus();
+    
+    // m_editorCtrl->PopEventHandler( true );
 }
 
 bool wxDataViewRendererBase::FinishEditing()
 {
-    // m_editorCtrl->PopEventHandler( true );
-
     wxVariant value;
     GetValueFromEditorCtrl( m_editorCtrl, value );
 
-    delete m_editorCtrl;
+    wxPendingDelete.Append( m_editorCtrl );
     
     GetOwner()->GetOwner()->GetMainWindow()->SetFocus();
     
@@ -768,6 +766,8 @@ bool wxDataViewRendererBase::FinishEditing()
     unsigned int col = GetOwner()->GetModelColumn();
     GetOwner()->GetOwner()->GetModel()->SetValue( value, col, m_row );
     GetOwner()->GetOwner()->GetModel()->ValueChanged( col, m_row );
+    
+    // m_editorCtrl->PopEventHandler( true );
     
     return true;
 }
@@ -831,7 +831,6 @@ void wxDataViewEditorCtrlEvtHandler::OnKillFocus( wxFocusEvent &event )
         m_owner->FinishEditing();
     }
 
-    // We must let the native text control handle focus
     event.Skip();
 }
 
