@@ -75,7 +75,12 @@ class TestPanel(wx.Panel):
         self.tree.Expand(self.root)
 
         self.tree.GetMainWindow().Bind(wx.EVT_RIGHT_UP, self.OnRightUp)
+        self.tree.Bind(wx.EVT_TREE_ITEM_ACTIVATED, self.OnActivate)
 
+
+    def OnActivate(self, evt):
+        self.log.write('OnActivate: %s' % self.tree.GetItemText(evt.GetItem()))
+        
 
     def OnRightUp(self, evt):
         pos = evt.GetPosition()
