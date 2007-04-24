@@ -120,9 +120,13 @@ class Frame(wx.Frame):
         menu.Append(wx.ID_NEW, '&New\tCtrl-N', 'New file')
         menu.AppendSeparator()
         menu.Append(wx.ID_OPEN, '&Open...\tCtrl-O', 'Open XRC file')
+        
         self.recentMenu = wx.Menu()
-        self.AppendRecent(self.recentMenu)
-        menu.AppendMenu(-1, 'Open Recent', self.recentMenu, 'Open a recent file')
+        g.fileHistory.UseMenu(self.recentMenu)
+        g.fileHistory.AddFilesToMenu()
+        self.Bind(wx.EVT_MENU, self.OnRecentFile, id=wx.ID_FILE1, id2=wx.ID_FILE9)
+        menu.AppendMenu(-1, 'Open &Recent', self.recentMenu, 'Open a recent file')
+        
         menu.AppendSeparator()
         menu.Append(wx.ID_SAVE, '&Save\tCtrl-S', 'Save XRC file')
         menu.Append(wx.ID_SAVEAS, 'Save &As...', 'Save XRC file under different name')
@@ -350,25 +354,22 @@ class Frame(wx.Frame):
         wx.EVT_KEY_UP(self, tools.OnKeyUp)
         wx.EVT_ICONIZE(self, self.OnIconize)
     
-    def AppendRecent(self, menu):
-        # add recently used files to the menu
-        for id,name in conf.recentfiles.iteritems():
-            menu.Append(id,name)
-            wx.EVT_MENU(self,id,self.OnRecentFile)
-        return 
-        
     def OnRecentFile(self,evt):
         # open recently used file
         if not self.AskSave(): return
         wx.BeginBusyCursor()
-        try:
-            path=conf.recentfiles[evt.GetId()]
-            if self.Open(path):
-                self.SetStatusText('Data loaded')
-            else:
-                self.SetStatusText('Failed')
-        except KeyError:
-            self.SetStatusText('No such file')
+
+        # get the pathname based on the menu ID
+        fileNum = evt.GetId() - wx.ID_FILE1
+        path = g.fileHistory.GetHistoryFile(fileNum)
+            
+        if self.Open(path):
+            self.SetStatusText('Data loaded')
+            # add it back to the history so it will be moved up the list
+            self.SaveRecent(path)
+        else:
+            self.SetStatusText('Failed')
+
         wx.EndBusyCursor()
 
     def OnNew(self, evt):
@@ -386,9 +387,9 @@ class Frame(wx.Frame):
             try:
                 if self.Open(path):
                     self.SetStatusText('Data loaded')
+                    self.SaveRecent(path)
                 else:
                     self.SetStatusText('Failed')
-                self.SaveRecent(path)
             finally:
                 wx.EndBusyCursor()
         dlg.Destroy()
@@ -433,6 +434,7 @@ class Frame(wx.Frame):
                 self.Save(tmpName) # save temporary file first
                 shutil.move(tmpName, path)
                 self.dataFile = path
+                self.SetModified(False)
                 if conf.localconf.ReadBool("autogenerate", False):
                     pypath = conf.localconf.Read("filename")
                     embed = conf.localconf.ReadBool("embedResource", False)
@@ -448,11 +450,7 @@ class Frame(wx.Frame):
 
     def SaveRecent(self,path):
         # append to recently used files
-        if path not in conf.recentfiles.values():
-            newid = wx.NewId()
-            self.recentMenu.Append(newid, path)
-            wx.EVT_MENU(self, newid, self.OnRecentFile)
-            conf.recentfiles[newid] = path
+        g.fileHistory.AddFileToHistory(path)
 
     def GeneratePython(self, dataFile, pypath, embed, genGettext):
         try:
@@ -1700,12 +1698,11 @@ Please upgrade wxWidgets to %d.%d.%d or higher.''' % MinWxVersion)
         conf.embedPanel = conf.ReadInt('embedPanel', True)
         conf.showTools = conf.ReadInt('showTools', True)
         conf.sashPos = conf.ReadInt('sashPos', 200)
+
         # read recently used files
-        recentfiles=conf.Read('recentFiles','')
-        conf.recentfiles={}
-        if recentfiles:
-            for fil in recentfiles.split('|'):
-                conf.recentfiles[wx.NewId()]=fil
+        g.fileHistory = wx.FileHistory()
+        g.fileHistory.Load(conf)
+
         if not conf.embedPanel:
             conf.panelX = conf.ReadInt('panelX', -1)
             conf.panelY = conf.ReadInt('panelY', -1)
@@ -1783,7 +1780,7 @@ Please upgrade wxWidgets to %d.%d.%d or higher.''' % MinWxVersion)
         wc.WriteInt('panelWidth', conf.panelWidth)
         wc.WriteInt('panelHeight', conf.panelHeight)
         wc.WriteInt('nopanic', 1)
-        wc.Write('recentFiles', '|'.join(conf.recentfiles.values()[-5:]))
+        g.fileHistory.Save(wc)
         # Preferences
         wc.DeleteGroup('Prefs')
         wc.Write('Prefs/allowExec', conf.allowExec)
