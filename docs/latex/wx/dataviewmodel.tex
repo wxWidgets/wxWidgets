@@ -13,7 +13,7 @@ of the abstract wxDataViewModel.
 
 \wxheading{Derived from}
 
-\helpref{wxObject}{wxobject}
+\helpref{wxObjectRefData}{wxobjectrefdata}
 
 \wxheading{Include files}
 
@@ -39,9 +39,9 @@ to define a table like data model to be displayed by a
 \helpref{wxDataViewCtrl}{wxdataviewctrl}. You need to derive
 from this class to define your own data model.
 
-You need to override \helpref{GetNumberOfRows}{wxdataviewlistmodelgetnumberofrows},
-\helpref{GetNumberOfCols}{wxdataviewlistmodelgetnumberofcols},
-\helpref{GetColType}{wxdataviewlistmodelgetcoltype} and
+You need to override \helpref{GetRowCount}{wxdataviewlistmodelgetrowcount},
+\helpref{GetColumnCount}{wxdataviewlistmodelgetcolumncount},
+\helpref{GetColumnType}{wxdataviewlistmodelgetcolumntype} and
 \helpref{GetValue}{wxdataviewlistmodelgetvalue} in order to
 define the data model (which acts as an interface between 
 your actual data and the wxDataViewCtrl). Since you will
@@ -141,16 +141,16 @@ Override this to indicate what type of data is stored in the
 column specified by {\it col}. This should return a string
 indicating the type of data as reported by \helpref{wxVariant}{wxvariant}.
 
-\membersection{wxDataViewListModel::GetNumberOfCols}\label{wxdataviewlistmodelgetnumberofcols}
+\membersection{wxDataViewListModel::GetColumnCount}\label{wxdataviewlistmodelgetcolumncount}
 
-\func{virtual unsigned int}{GetNumberOfCols}{\void}
+\func{virtual unsigned int}{GetColumnCount}{\void}
 
 Override this to indicate, how many columns the list
 model has.
 
-\membersection{wxDataViewListModel::GetNumberOfRows}\label{wxdataviewlistmodelgetnumberofrows}
+\membersection{wxDataViewListModel::GetRowCount}\label{wxdataviewlistmodelgetrowcount}
 
-\func{virtual unsigned int}{GetNumberOfRows}{\void}
+\func{virtual unsigned int}{GetRowCount}{\void}
 
 Override this to indicate, how many rows the list
 model has.
@@ -217,7 +217,7 @@ Call this if the rows have been reorderd.
 
 \membersection{wxDataViewListModel::SetValue}\label{wxdataviewlistmodelsetvalue}
 
-\func{virtual bool}{SetValue}{\param{wxVariant\& }{variant}, \param{unsigned int }{col}, \param{unsigned int }{row}}
+\func{virtual bool}{SetValue}{\param{const wxVariant\& }{variant}, \param{unsigned int }{col}, \param{unsigned int }{row}}
 
 This method gets called by e.g. the wxDataViewCtrl class if a 
 value has been changed through its graphical interface. You
