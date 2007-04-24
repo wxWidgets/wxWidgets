@@ -656,14 +656,6 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p, size_t
                     buf[lenCur++] = ch; \
                 }
 
-#define APPEND_STR(s) \
-                { \
-                    for ( const wxChar *p = s; *p; p++ ) \
-                    { \
-                        APPEND_CH(*p); \
-                    } \
-                }
-
     switch ( m_type )
     {
         case wxPAT_INT:
@@ -1096,7 +1088,6 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
 }
 
 #undef APPEND_CH
-#undef APPEND_STR
 #undef CHECK_PREC
 
 #else    // wxVsnprintf_ is defined
