@@ -778,6 +778,7 @@ class wxGtkDataViewListModelNotifier: public wxDataViewListModelNotifier
 {
 public:
     wxGtkDataViewListModelNotifier( GtkWxListStore* gtk_store, wxDataViewListModel *wx_model );
+    ~wxGtkDataViewListModelNotifier();
 
     virtual bool RowAppended();
     virtual bool RowPrepended();
@@ -787,13 +788,6 @@ public:
     virtual bool ValueChanged( unsigned int col, unsigned int row );
     virtual bool RowsReordered( unsigned int *new_order );
     virtual bool Cleared();
-
-    virtual bool Freed()
-    {
-        m_wx_model = NULL;
-        m_gtk_store = NULL;
-        return wxDataViewListModelNotifier::Freed();
-    }
 
     GtkWxListStore      *m_gtk_store;
     wxDataViewListModel *m_wx_model;
@@ -808,6 +802,12 @@ wxGtkDataViewListModelNotifier::wxGtkDataViewListModelNotifier(
 {
     m_gtk_store = gtk_store;
     m_wx_model = wx_model;
+}
+
+wxGtkDataViewListModelNotifier::~wxGtkDataViewListModelNotifier()
+{
+    m_wx_model = NULL;
+    m_gtk_store = NULL;
 }
 
 bool wxGtkDataViewListModelNotifier::RowAppended()

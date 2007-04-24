@@ -38,13 +38,6 @@ wxDataViewListModel::wxDataViewListModel()
 
 wxDataViewListModel::~wxDataViewListModel()
 {
-    wxList::compatibility_iterator node = m_notifiers.GetFirst();
-    while (node)
-    {
-        wxDataViewListModelNotifier* notifier = (wxDataViewListModelNotifier*) node->GetData();
-        notifier->Freed();
-        node = node->GetNext();
-    }
 }
 
 bool wxDataViewListModel::RowAppended()
@@ -217,6 +210,9 @@ class wxDataViewSortedListModelNotifier: public wxDataViewListModelNotifier
 public:
     wxDataViewSortedListModelNotifier( wxDataViewSortedListModel *model )
         { m_model = model; }
+        
+    ~wxDataViewSortedListModelNotifier()
+        { m_model->DetachChild(); }
 
     virtual bool RowAppended()
         { return m_model->ChildRowAppended(); }
@@ -241,9 +237,6 @@ public:
 
     virtual bool Cleared()
         { return m_model->ChildCleared(); }
-
-    virtual bool Freed()
-        { m_model->m_child = NULL; return wxDataViewListModelNotifier::Freed(); }
 
     wxDataViewSortedListModel *m_model;
 };
@@ -325,7 +318,12 @@ wxDataViewSortedListModel::wxDataViewSortedListModel( wxDataViewListModel *child
 wxDataViewSortedListModel::~wxDataViewSortedListModel()
 {
     if (m_child)
-    m_child->RemoveNotifier( m_notifierOnChild );
+        m_child->RemoveNotifier( m_notifierOnChild );
+}
+
+void wxDataViewSortedListModel::DetachChild()
+{
+    m_child = NULL;
 }
 
 // FIXME

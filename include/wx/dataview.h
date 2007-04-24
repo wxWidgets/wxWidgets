@@ -82,7 +82,7 @@ class WXDLLIMPEXP_ADV wxDataViewListModelNotifier: public wxObject
 {
 public:
     wxDataViewListModelNotifier() { }
-    virtual ~wxDataViewListModelNotifier() { }
+    virtual ~wxDataViewListModelNotifier() { m_owner = NULL; }
 
     virtual bool RowAppended() = 0;
     virtual bool RowPrepended() = 0;
@@ -92,8 +92,6 @@ public:
     virtual bool ValueChanged( unsigned int col, unsigned int row ) = 0;
     virtual bool RowsReordered( unsigned int *new_order ) = 0;
     virtual bool Cleared() = 0;
-    virtual bool Freed()
-        { m_owner = NULL; return true; }
 
     void SetOwner( wxDataViewListModel *owner ) { m_owner = owner; }
     wxDataViewListModel *GetOwner()             { return m_owner; }
@@ -223,6 +221,8 @@ public:
     bool ChildCleared();
 
     virtual void Resort();
+    
+    void DetachChild();
 
 private:
     bool                             m_ascending;
