@@ -798,9 +798,15 @@ bool wxTopLevelWindowGTK::Show( bool show )
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
     if (show == IsShown())
-        return true;
+        return false;
 
-    if (show && !m_sizeSet)
+    if (!show)
+    {
+        // make sure window has a non-default position, so when it is shown
+        // again, it won't be repositioned by WM as if it were a new window
+        gtk_window_move((GtkWindow*)m_widget, m_x, m_y);
+    }
+    else if (!m_sizeSet)
     {
         /* by calling GtkOnSize here, we don't have to call
            either after showing the frame, which would entail
@@ -810,13 +816,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
         GtkOnSize();
     }
 
-    // This seems no longer to be needed and the call
-    // itself is deprecated.
-    //
-    //if (show)
-    //    gtk_widget_set_uposition( m_widget, m_x, m_y );
-
-    return wxWindow::Show( show );
+    return wxTopLevelWindowBase::Show(show);
 }
 
 void wxTopLevelWindowGTK::Raise()
