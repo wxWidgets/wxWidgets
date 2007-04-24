@@ -408,7 +408,7 @@ bool wxString::Shrink()
 
 // deprecated compatibility code:
 #if WXWIN_COMPATIBILITY_2_8 && !wxUSE_STL_BASED_WXSTRING && !wxUSE_UNICODE_UTF8
-wxChar *wxString::GetWriteBuf(size_t nLen)
+wxStringCharType *wxString::GetWriteBuf(size_t nLen)
 {
     return DoGetWriteBuf(nLen);
 }

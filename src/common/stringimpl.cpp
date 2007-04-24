@@ -754,7 +754,7 @@ bool wxStringImpl::ConcatSelf(size_t nSrcLen,
 
 #if !wxUSE_UNICODE_UTF8
 // get the pointer to writable buffer of (at least) nLen bytes
-wxChar *wxStringImpl::DoGetWriteBuf(size_t nLen)
+wxStringCharType *wxStringImpl::DoGetWriteBuf(size_t nLen)
 {
   if ( !AllocBeforeWrite(nLen) ) {
     // allocation failure handled by caller

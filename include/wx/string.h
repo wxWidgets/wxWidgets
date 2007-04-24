@@ -1512,7 +1512,7 @@ public:
     //
     // get writable buffer of at least nLen bytes. Unget() *must* be called
     // a.s.a.p. to put string back in a reasonable state!
-  wxDEPRECATED( wxChar *GetWriteBuf(size_t nLen) );
+  wxDEPRECATED( wxStringCharType *GetWriteBuf(size_t nLen) );
     // call this immediately after GetWriteBuf() has been used
   wxDEPRECATED( void UngetWriteBuf() );
   wxDEPRECATED( void UngetWriteBuf(size_t nLen) );
