@@ -521,6 +521,7 @@ public:
     %pythonAppend wxPyAuiDockArt     setCallbackInfo(PyAuiDockArt)
     wxPyAuiDockArt();
 
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
 };
 
 
@@ -754,7 +755,6 @@ public:
     DEC_PYCALLBACK__FONT(SetNormalFont);
     DEC_PYCALLBACK__FONT(SetSelectedFont);
     DEC_PYCALLBACK__FONT(SetMeasuringFont);
-//    DEC_PYCALLBACK_INT_WIN(GetBestTabCtrlSize);
 
     PYPRIVATE;
 };
@@ -763,7 +763,6 @@ public:
 IMP_PYCALLBACK__FONT(wxPyAuiTabArt, wxAuiDefaultTabArt, SetNormalFont);
 IMP_PYCALLBACK__FONT(wxPyAuiTabArt, wxAuiDefaultTabArt, SetSelectedFont);
 IMP_PYCALLBACK__FONT(wxPyAuiTabArt, wxAuiDefaultTabArt, SetMeasuringFont);
-//IMP_PYCALLBACK_INT_WIN(wxPyAuiTabArt, wxAuiDefaultTabArt, GetBestTabCtrlSize);
 %}
 
 
@@ -778,6 +777,7 @@ public:
     %pythonAppend wxPyAuiTabArt     setCallbackInfo(PyAuiTabArt)
     wxPyAuiTabArt();
 
+    void _setCallbackInfo(PyObject* self, PyObject* _class);   
 };
 
 
