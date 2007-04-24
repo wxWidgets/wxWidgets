@@ -75,4 +75,9 @@ void VarArgTestCase::StringPrintf()
     CPPUNIT_ASSERT( s2 == "(FooBar)" );
     s2.Printf(_T("value=%s;"), s.wc_str());
     CPPUNIT_ASSERT( s2 == "value=FooBar;" );
+
+    // this tests correct passing of wxCStrData constructed from string
+    // literal:
+    bool cond = true;
+    s2.Printf(_T("foo %s"), !cond ? s.c_str() : _T("bar"));
 }
