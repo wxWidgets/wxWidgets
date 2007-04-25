@@ -29,7 +29,7 @@
     // function used to update the flag:
     extern WXDLLIMPEXP_BASE void wxUpdateLocaleIsUtf8();
     #else // !wxUSE_UNICODE_UTF8
-    inline WXDLLIMPEXP_BASE void wxUpdateLocaleIsUtf8() {}
+    inline void wxUpdateLocaleIsUtf8() {}
     #endif // wxUSE_UNICODE_UTF8/!wxUSE_UNICODE_UTF8
 #endif // __cplusplus
 
