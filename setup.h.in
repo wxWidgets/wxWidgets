@@ -325,6 +325,7 @@
 #define wxUSE_DATAVIEWCTRL  0
 #define wxUSE_DATEPICKCTRL  0
 #define wxUSE_DIRPICKERCTRL 0
+#define wxUSE_EDITABLELISTBOX   0
 #define wxUSE_FILEPICKERCTRL 0
 #define wxUSE_FONTPICKERCTRL 0
 #define wxUSE_GAUGE         0

@@ -11,6 +11,10 @@
 #ifndef __WX_EDITLBOX_H__
 #define __WX_EDITLBOX_H__
 
+#include "wx/defs.h"
+
+#if wxUSE_EDITABLELISTBOX
+
 #include "wx/panel.h"
 
 class WXDLLEXPORT wxBitmapButton;
@@ -62,5 +66,7 @@ protected:
     DECLARE_CLASS(wxEditableListBox)
     DECLARE_EVENT_TABLE()
 };
+
+#endif  // wxUSE_EDITABLELISTBOX
 
 #endif // __WX_EDITLBOX_H__

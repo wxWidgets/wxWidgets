@@ -536,6 +536,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_DISPLAY=no
   DEFAULT_wxUSE_DETECT_SM=no
   DEFAULT_wxUSE_DIRPICKERCTRL=no
+  DEFAULT_wxUSE_EDITABLELISTBOX=no
   DEFAULT_wxUSE_FILEPICKERCTRL=no
   DEFAULT_wxUSE_FONTPICKERCTRL=no
   DEFAULT_wxUSE_GAUGE=no
@@ -762,6 +763,7 @@ else
   DEFAULT_wxUSE_DISPLAY=yes
   DEFAULT_wxUSE_DETECT_SM=yes
   DEFAULT_wxUSE_DIRPICKERCTRL=yes
+  DEFAULT_wxUSE_EDITABLELISTBOX=yes
   DEFAULT_wxUSE_FILEPICKERCTRL=yes
   DEFAULT_wxUSE_FONTPICKERCTRL=yes
   DEFAULT_wxUSE_GAUGE=yes
@@ -1203,6 +1205,7 @@ WX_ARG_ENABLE(datepick,    [  --enable-datepick       use wxDatePickerCtrl class
 WX_ARG_ENABLE(dirpicker,   [  --enable-dirpicker      use wxDirPickerCtrl class], wxUSE_DIRPICKERCTRL)
 WX_ARG_ENABLE(display,     [  --enable-display        use wxDisplay class], wxUSE_DISPLAY)
 WX_ARG_ENABLE(detect_sm,   [  --enable-detect_sm      use code to detect X11 session manager], wxUSE_DETECT_SM)
+WX_ARG_ENABLE(editablebox, [  --enable-editablebox    use wxEditableListBox class], wxUSE_EDITABLELISTBOX)
 WX_ARG_ENABLE(filepicker,  [  --enable-filepicker     use wxFilePickerCtrl class], wxUSE_FILEPICKERCTRL)
 WX_ARG_ENABLE(fontpicker,  [  --enable-fontpicker     use wxFontPickerCtrl class], wxUSE_FONTPICKERCTRL)
 WX_ARG_ENABLE(gauge,       [  --enable-gauge          use wxGauge class], wxUSE_GAUGE)
@@ -6861,6 +6864,12 @@ if test "$wxUSE_LISTCTRL" = "yes"; then
     else
         AC_MSG_WARN([wxListCtrl requires wxImageList and won't be compiled without it])
     fi
+fi
+
+if test "$wxUSE_EDITABLELISTBOX" = "yes"; then
+    AC_DEFINE(wxUSE_EDITABLELISTBOX)
+    USES_CONTROLS=1
+    SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS editlbox"
 fi
 
 if test "$wxUSE_NOTEBOOK" = "yes"; then

@@ -14,6 +14,8 @@
     #pragma hdrstop
 #endif
 
+#if wxUSE_EDITABLELISTBOX
+
 // for all others, include the necessary headers (this file is usually all you
 // need because it includes almost all "standard" wxWidgets headers)
 #ifndef WX_PRECOMP
@@ -376,3 +378,5 @@ void wxEditableListBox::OnDownItem(wxCommandEvent& WXUNUSED(event))
     m_listCtrl->SetItemState(m_selection + 1,
                              wxLIST_STATE_SELECTED, wxLIST_STATE_SELECTED);
 }
+
+#endif // wxUSE_EDITABLELISTBOX
