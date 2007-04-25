@@ -133,20 +133,20 @@ display a certain column of this model.
 
 Call this if all data in your model has been cleared.
 
-\membersection{wxDataViewListModel::GetColType}\label{wxdataviewlistmodelgetcoltype}
-
-\func{virtual wxString}{GetColType}{\param{unsigned int }{col}}
-
-Override this to indicate what type of data is stored in the
-column specified by {\it col}. This should return a string
-indicating the type of data as reported by \helpref{wxVariant}{wxvariant}.
-
 \membersection{wxDataViewListModel::GetColumnCount}\label{wxdataviewlistmodelgetcolumncount}
 
 \func{virtual unsigned int}{GetColumnCount}{\void}
 
 Override this to indicate, how many columns the list
 model has.
+
+\membersection{wxDataViewListModel::GetColumnType}\label{wxdataviewlistmodelgetcolumntype}
+
+\func{virtual wxString}{GetColType}{\param{unsigned int }{col}}
+
+Override this to indicate what type of data is stored in the
+column specified by {\it col}. This should return a string
+indicating the type of data as reported by \helpref{wxVariant}{wxvariant}.
 
 \membersection{wxDataViewListModel::GetRowCount}\label{wxdataviewlistmodelgetrowcount}
 
