@@ -138,11 +138,12 @@ wxString wxComboBox::GetValue() const
 
 void wxComboBox::SetValue(const wxString& value)
 {
-    m_inSetValue = true;
     if( !value.empty() )
-        XmComboBoxSetString( (Widget)m_mainWidget,
-                             wxConstCast(value.c_str(), char) );
-    m_inSetValue = false;
+    {
+        m_inSetValue = true;
+        XmComboBoxSetString((Widget)m_mainWidget, value.char_str());
+        m_inSetValue = false;
+    }
 }
 
 void wxComboBox::SetString(unsigned int WXUNUSED(n), const wxString& WXUNUSED(s))
@@ -289,7 +290,7 @@ void wxComboBox::Replace(long from, long to, const wxString& value)
 {
     XmComboBoxReplace ((Widget) m_mainWidget, (XmTextPosition) from,
                        (XmTextPosition) to,
-                       wxConstCast(value.c_str(), char));
+                       value.char_str());
 }
 
 void wxComboBox::Remove(long from, long to)
