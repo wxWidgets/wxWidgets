@@ -51,7 +51,27 @@ it is top).}
 
 \end{twocollist}
 
+\input choicebevt.inc
+
 \wxheading{See also}
 
 \helpref{wxBookCtrl}{wxbookctrloverview}, \helpref{wxNotebook}{wxnotebook}, \helpref{notebook sample}{samplenotebook}
 
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxChoicebook::wxChoicebook}\label{wxchoicebookctor}
+
+\func{}{wxChoicebook}{\void}
+
+Default constructor.
+
+\func{}{wxChoicebook}{\param{wxWindow*}{ parent}, \param{wxWindowID }{id}, \param{const wxPoint\&}{ pos = wxDefaultPosition},
+ \param{const wxSize\&}{ size = wxDefaultSize}, \param{long}{ style = 0}, \param{const wxString\& }{name = wxEmptyStr}}
+
+Constructs a choicebook control.
+
+\membersection{wxChoicebook::GetChoiceCtrl}\label{wxchoicebookgetchoicectrl}
+
+\constfunc{wxChoice *}{GetChoiceCtrl}{\void}
+
+Returns the \helpref{wxChoice}{wxchoice} associated with the control.
