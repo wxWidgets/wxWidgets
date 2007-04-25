@@ -230,7 +230,7 @@ void wxDC::DoDrawLine(wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2)
     [bezpath stroke];
 }
 
-void wxDC::DoGetTextExtent(const wxString& text, wxCoord *x, wxCoord *y, wxCoord *descent, wxCoord *externalLeading, wxFont *theFont) const
+void wxDC::DoGetTextExtent(const wxString& text, wxCoord *x, wxCoord *y, wxCoord *descent, wxCoord *externalLeading, const wxFont *theFont) const
 {
     wxAutoNSAutoreleasePool pool;
 // FIXME: Cache this so it can be used for DoDrawText

@@ -480,7 +480,7 @@ wxCoord wxDC::GetCharWidth() const
 
 void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
                            wxCoord *descent, wxCoord *externalLeading,
-                           wxFont *theFont) const
+                           const wxFont *theFont) const
 {
     wxCHECK_RET( Ok(), wxT("invalid dc") );
     wxCHECK_RET( m_font.Ok(), wxT("no font selected") );

@@ -330,7 +330,7 @@ wxCoord wxDC::GetCharWidth() const
 
 void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
                            wxCoord *descent, wxCoord *externalLeading,
-                           wxFont *font) const
+                           const wxFont *font) const
 {
 }
 

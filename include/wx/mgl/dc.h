@@ -79,7 +79,7 @@ public:
                                  wxCoord *x, wxCoord *y,
                                  wxCoord *descent = NULL,
                                  wxCoord *externalLeading = NULL,
-                                 wxFont *theFont = NULL) const;
+                                 const wxFont *theFont = NULL) const;
 
     virtual bool CanDrawBitmap() const;
     virtual bool CanGetTextExtent() const;

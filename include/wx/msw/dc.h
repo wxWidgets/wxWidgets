@@ -166,7 +166,7 @@ protected:
                                  wxCoord *x, wxCoord *y,
                                  wxCoord *descent = NULL,
                                  wxCoord *externalLeading = NULL,
-                                 wxFont *theFont = NULL) const;
+                                 const wxFont *theFont = NULL) const;
     virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const;
 
     virtual bool DoFloodFill(wxCoord x, wxCoord y, const wxColour& col,

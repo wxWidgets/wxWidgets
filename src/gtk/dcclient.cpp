@@ -1719,7 +1719,7 @@ void wxWindowDC::DoDrawRotatedText( const wxString &text, wxCoord x, wxCoord y, 
 void wxWindowDC::DoGetTextExtent(const wxString &string,
                                  wxCoord *width, wxCoord *height,
                                  wxCoord *descent, wxCoord *externalLeading,
-                                 wxFont *theFont) const
+                                 const wxFont *theFont) const
 {
     if ( width )
         *width = 0;

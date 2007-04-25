@@ -458,7 +458,7 @@ void wxSVGFileDC::DoDrawEllipticArc(wxCoord x,wxCoord y,wxCoord w,wxCoord h,doub
 }
 
 
-void wxSVGFileDC::DoGetTextExtent(const wxString& string, wxCoord *w, wxCoord *h, wxCoord *descent , wxCoord *externalLeading , wxFont *font) const
+void wxSVGFileDC::DoGetTextExtent(const wxString& string, wxCoord *w, wxCoord *h, wxCoord *descent , wxCoord *externalLeading , const wxFont *font) const
 
 {
     wxScreenDC sDC ;

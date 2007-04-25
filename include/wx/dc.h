@@ -457,7 +457,7 @@ public:
                        wxCoord *x, wxCoord *y,
                        wxCoord *descent = NULL,
                        wxCoord *externalLeading = NULL,
-                       wxFont *theFont = NULL) const
+                       const wxFont *theFont = NULL) const
         { DoGetTextExtent(string, x, y, descent, externalLeading, theFont); }
 
     wxSize GetTextExtent(const wxString& string) const
@@ -472,7 +472,7 @@ public:
                                         wxCoord *width,
                                         wxCoord *height,
                                         wxCoord *heightLine = NULL,
-                                        wxFont *font = NULL) const;
+                                        const wxFont *font = NULL) const;
 
     wxSize GetMultiLineTextExtent(const wxString& string) const
     {
@@ -640,7 +640,7 @@ public:
                        long *x, long *y,
                        long *descent = NULL,
                        long *externalLeading = NULL,
-                       wxFont *theFont = NULL) const
+                       const wxFont *theFont = NULL) const
     {
         wxCoord x2, y2, descent2, externalLeading2;
         DoGetTextExtent(string, &x2, &y2,
@@ -807,7 +807,7 @@ protected:
                                  wxCoord *x, wxCoord *y,
                                  wxCoord *descent = NULL,
                                  wxCoord *externalLeading = NULL,
-                                 wxFont *theFont = NULL) const = 0;
+                                 const wxFont *theFont = NULL) const = 0;
 
     virtual bool DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) const;
 

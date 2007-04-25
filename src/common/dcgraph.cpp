@@ -830,7 +830,7 @@ bool wxGCDC::CanGetTextExtent() const
 
 void wxGCDC::DoGetTextExtent( const wxString &str, wxCoord *width, wxCoord *height,
                               wxCoord *descent, wxCoord *externalLeading ,
-                              wxFont *theFont ) const
+                              const wxFont *theFont ) const
 {
     wxCHECK_RET( Ok(), wxT("wxGCDC(cg)::DoGetTextExtent - invalid DC") );
 

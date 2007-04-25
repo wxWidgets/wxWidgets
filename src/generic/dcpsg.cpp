@@ -1835,11 +1835,11 @@ wxCoord wxPostScriptDC::GetCharHeight() const
 void wxPostScriptDC::DoGetTextExtent(const wxString& string,
                                      wxCoord *x, wxCoord *y,
                                      wxCoord *descent, wxCoord *externalLeading,
-                                     wxFont *theFont ) const
+                                     const wxFont *theFont ) const
 {
-    wxFont *fontToUse = theFont;
+    const wxFont *fontToUse = theFont;
 
-    if (!fontToUse) fontToUse = (wxFont*) &m_font;
+    if (!fontToUse) fontToUse = &m_font;
 
     wxCHECK_RET( fontToUse, wxT("GetTextExtent: no font defined") );
 

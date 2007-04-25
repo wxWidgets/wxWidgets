@@ -269,7 +269,7 @@ protected:
                                  wxCoord *x, wxCoord *y,
                                  wxCoord *descent = NULL,
                                  wxCoord *externalLeading = NULL,
-                                 wxFont *theFont = NULL) const
+                                 const wxFont *theFont = NULL) const
     {
         // never mirrored
         m_dc.DoGetTextExtent(string, x, y, descent, externalLeading, theFont);

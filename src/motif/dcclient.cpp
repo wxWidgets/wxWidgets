@@ -1297,7 +1297,7 @@ bool wxWindowDC::CanGetTextExtent() const
 
 void wxWindowDC::DoGetTextExtent( const wxString &string, wxCoord *width, wxCoord *height,
                                 wxCoord *descent, wxCoord *externalLeading,
-                                wxFont *font ) const
+                                const wxFont *font ) const
 {
     wxCHECK_RET( Ok(), "invalid dc" );
 

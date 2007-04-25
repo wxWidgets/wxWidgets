@@ -124,7 +124,7 @@ protected:
     void DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
                          wxCoord *descent = NULL,
                          wxCoord *externalLeading = NULL,
-                         wxFont *theFont = NULL) const;
+                         const wxFont *theFont = NULL) const;
     void DoGetSize(int* width, int* height) const;
     void DoGetSizeMM(int *width, int *height) const;
 

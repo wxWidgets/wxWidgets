@@ -74,7 +74,7 @@ protected:
                                 wxCoord *width, wxCoord *height,
                                 wxCoord *descent = (wxCoord *) NULL,
                                 wxCoord *externalLeading = (wxCoord *) NULL,
-                                wxFont *theFont = (wxFont *) NULL) const;
+                                const wxFont *theFont = (wxFont *) NULL) const;
 
 public:
     virtual wxCoord GetCharWidth() const;

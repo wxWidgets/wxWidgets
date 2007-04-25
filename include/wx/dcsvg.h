@@ -86,7 +86,7 @@ class WXDLLIMPEXP_CORE wxSVGFileDC : public wxDC
 
         void DoGetSize(int * x, int *y) const { *x = m_width; *y = m_height ; return ; }
 
-        void DoGetTextExtent(const wxString& string, wxCoord *w, wxCoord *h, wxCoord *descent = NULL, wxCoord *externalLeading = NULL, wxFont *font = NULL) const ;
+        void DoGetTextExtent(const wxString& string, wxCoord *w, wxCoord *h, wxCoord *descent = NULL, wxCoord *externalLeading = NULL, const wxFont *font = NULL) const ;
 
         void DoSetClippingRegionAsRegion(const class wxRegion &)
             { wxASSERT_MSG (false, wxT("wxSVGFILEDC::DoSetClippingRegionAsRegion Call not yet implemented")); return  ; }

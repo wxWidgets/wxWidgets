@@ -2139,7 +2139,7 @@ bool wxDC::CanGetTextExtent() const
 
 void wxDC::DoGetTextExtent( const wxString &str, wxCoord *width, wxCoord *height,
                             wxCoord *descent, wxCoord *externalLeading ,
-                            wxFont *theFont ) const
+                            const wxFont *theFont ) const
 {
     wxCHECK_RET( Ok(), wxT("wxDC(cg)::DoGetTextExtent - invalid DC") );
 
