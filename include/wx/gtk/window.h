@@ -260,6 +260,9 @@ public:
     GtkWidget           *m_widget;          // mostly the widget seen by the rest of GTK
     GtkWidget           *m_wxwindow;        // mostly the client area as per wxWidgets
 
+    // return true if the window is of a standard (i.e. not wxWidgets') class
+    bool IsOfStandardClass() const { return m_wxwindow == NULL; }
+    
     // this widget will be queried for GTK's focus events
     GtkWidget           *m_focusWidget;
 
