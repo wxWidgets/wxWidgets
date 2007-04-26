@@ -955,19 +955,24 @@ wxString wxString::FromAscii(const char *ascii)
     if (!ascii)
        return wxEmptyString;
 
-    size_t len = strlen( ascii );
+    size_t len = strlen(ascii);
     wxString res;
 
     if ( len )
     {
-        wxStringBuffer buf(res, len);
-
-        wchar_t *dest = buf;
+        wxImplStringBuffer buf(res, len);
+        wxStringCharType *dest = buf;
 
         for ( ;; )
         {
-           if ( (*dest++ = (wchar_t)(unsigned char)*ascii++) == L'\0' )
-               break;
+            unsigned char c = (unsigned char)*ascii++;
+            wxASSERT_MSG( c < 0x80,
+                          _T("Non-ASCII value passed to FromAscii().") );
+
+            *dest++ = (wchar_t)c;
+
+            if ( c == '\0' )
+                break;
         }
     }
 
@@ -978,35 +983,36 @@ wxString wxString::FromAscii(const char ascii)
 {
     // What do we do with '\0' ?
 
-    wxString res;
-    res += (wchar_t)(unsigned char) ascii;
+    unsigned char c = (unsigned char)ascii;
 
-    return res;
+    wxASSERT_MSG( c < 0x80, _T("Non-ASCII value passed to FromAscii().") );
+
+    // NB: the cast to wchar_t causes interpretation of 'ascii' as Latin1 value
+    return wxString(wxUniChar((wchar_t)c));
 }
 
 const wxCharBuffer wxString::ToAscii() const
 {
     // this will allocate enough space for the terminating NUL too
     wxCharBuffer buffer(length());
-
-
     char *dest = buffer.data();
 
-    const wchar_t *pwc = c_str();
-    for ( ;; )
+    for ( const_iterator i = begin(); i != end(); ++i )
     {
-        *dest++ = (char)(*pwc > SCHAR_MAX ? wxT('_') : *pwc);
+        wxUniChar c(*i);
+        // FIXME-UTF8: unify substituted char ('_') with wxUniChar ('?')
+        *dest++ = c.IsAscii() ? (char)c : '_';
 
         // the output string can't have embedded NULs anyhow, so we can safely
         // stop at first of them even if we do have any
-        if ( !*pwc++ )
+        if ( !c )
             break;
     }
 
     return buffer;
 }
 
-#endif // Unicode
+#endif // wxUSE_UNICODE
 
 // extract string of length nCount starting at nFirst
 wxString wxString::Mid(size_t nFirst, size_t nCount) const
