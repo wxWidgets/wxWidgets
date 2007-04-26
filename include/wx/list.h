@@ -60,22 +60,6 @@ typedef wxObjectListNode wxNode;
 //
 typedef int (* LINKAGEMODE wxListIterateFunction)(void *current);
 
-// ----------------------------------------------------------------------------
-// constants
-// ----------------------------------------------------------------------------
-
-#if !defined(wxENUM_KEY_TYPE_DEFINED)
-#define wxENUM_KEY_TYPE_DEFINED
-
-enum wxKeyType
-{
-    wxKEY_NONE,
-    wxKEY_INTEGER,
-    wxKEY_STRING
-};
-
-#endif
-
 #if wxUSE_STL
 
 #define wxLIST_COMPATIBILITY

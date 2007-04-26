@@ -1695,6 +1695,16 @@ enum wxBackgroundStyle
   wxBG_STYLE_CUSTOM
 };
 
+/*
+ * Key types used by (old style) lists and hashes.
+ */
+enum wxKeyType
+{
+    wxKEY_NONE,
+    wxKEY_INTEGER,
+    wxKEY_STRING
+};
+
 /*  ---------------------------------------------------------------------------- */
 /*  standard IDs */
 /*  ---------------------------------------------------------------------------- */
