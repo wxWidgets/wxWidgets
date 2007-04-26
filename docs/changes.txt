@@ -120,6 +120,7 @@ wxGTK:
 
 - Fix infinite loop when adding a wxStaticText control to a toolbar
 - Fix wxNO_BORDER style for wxRadioBox (David Hart)
+- wxComboBox::SetValue() doesn't emit EVT_TEXT anymore
 - Fix wxTextCtrl::GetLineText() for empty lines (Marcin Wojdyr)
 
 wxMac:
@@ -132,6 +133,7 @@ wxUniv:
 - Fix wxComboBox::SetSelection(wxNOT_FOUND)
 - Fix setting background colour for controls with transparent background
 
+>>>>>>> 1.1006.2.35
 
 2.8.3
 -----
