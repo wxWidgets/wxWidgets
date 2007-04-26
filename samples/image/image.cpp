@@ -135,15 +135,36 @@ private:
     DECLARE_EVENT_TABLE()
 };
 
+// ----------------------------------------------------------------------------
+// Frame used for showing a standalone image
+// ----------------------------------------------------------------------------
+
+enum
+{
+    ID_ROTATE_LEFT = 100,
+    ID_ROTATE_RIGHT
+};
+
 class MyImageFrame : public wxFrame
 {
 public:
-    MyImageFrame(wxFrame *parent, const wxBitmap& bitmap)
-        : wxFrame(parent, wxID_ANY, _T("Double click to save"),
+    MyImageFrame(wxFrame *parent, const wxString& desc, const wxBitmap& bitmap)
+        : wxFrame(parent, wxID_ANY,
+                  wxString::Format(_T("Image from %s"), desc.c_str()),
                   wxDefaultPosition, wxDefaultSize,
                   wxCAPTION | wxSYSTEM_MENU | wxCLOSE_BOX),
                   m_bitmap(bitmap)
     {
+        wxMenu *menu = new wxMenu;
+        menu->Append(wxID_SAVE);
+        menu->AppendSeparator();
+        menu->Append(ID_ROTATE_LEFT, _T("Rotate &left\tCtrl-L"));
+        menu->Append(ID_ROTATE_RIGHT, _T("Rotate &right\tCtrl-R"));
+
+        wxMenuBar *mbar = new wxMenuBar;
+        mbar->Append(menu, _T("&Image"));
+        SetMenuBar(mbar);
+
         SetClientSize(bitmap.GetWidth(), bitmap.GetHeight());
     }
 
@@ -158,7 +179,7 @@ public:
         dc.DrawBitmap( m_bitmap, 0, 0, true /* use mask */ );
     }
 
-    void OnSave(wxMouseEvent& WXUNUSED(event))
+    void OnSave(wxCommandEvent& WXUNUSED(event))
     {
 #if wxUSE_FILEDLG
         wxImage image = m_bitmap.ConvertToImage();
@@ -282,6 +303,24 @@ public:
             image.SaveFile(savefilename);
         }
 #endif // wxUSE_FILEDLG
+    }
+
+    void OnRotate(wxCommandEvent& event)
+    {
+        double angle = 5;
+        if ( event.GetId() == ID_ROTATE_LEFT )
+            angle = -angle;
+
+        wxImage img(m_bitmap.ConvertToImage());
+        img = img.Rotate(angle, wxPoint(0, 0));//wxPoint(img.GetWidth() / 2, img.GetHeight() / 2));
+        if ( !img.Ok() )
+        {
+            wxLogWarning(_T("Rotation failed"));
+            return;
+        }
+
+        m_bitmap = wxBitmap(img);
+        Refresh();
     }
 
 private:
@@ -448,7 +487,9 @@ IMPLEMENT_APP(MyApp)
 BEGIN_EVENT_TABLE(MyImageFrame, wxFrame)
     EVT_ERASE_BACKGROUND(MyImageFrame::OnEraseBackground)
     EVT_PAINT(MyImageFrame::OnPaint)
-    EVT_LEFT_DCLICK(MyImageFrame::OnSave)
+
+    EVT_MENU(wxID_SAVE, MyImageFrame::OnSave)
+    EVT_MENU_RANGE(ID_ROTATE_LEFT, ID_ROTATE_RIGHT, MyImageFrame::OnRotate)
 END_EVENT_TABLE()
 
 #ifdef wxHAVE_RAW_BITMAP
@@ -1114,7 +1155,7 @@ void MyFrame::OnNewFrame( wxCommandEvent &WXUNUSED(event) )
         return;
     }
 
-    (new MyImageFrame(this, wxBitmap(image)))->Show();
+    (new MyImageFrame(this, filename, wxBitmap(image)))->Show();
 #endif // wxUSE_FILEDLG
 }
 
@@ -1155,7 +1196,7 @@ void MyFrame::OnPaste(wxCommandEvent& WXUNUSED(event))
     }
     else
     {
-        (new MyImageFrame(this, dobjBmp.GetBitmap()))->Show();
+        (new MyImageFrame(this, _T("Clipboard"), dobjBmp.GetBitmap()))->Show();
     }
     wxTheClipboard->Close();
 }
