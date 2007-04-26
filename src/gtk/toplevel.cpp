@@ -857,23 +857,7 @@ void wxTopLevelWindowGTK::GTKDoSetSize(int width, int height)
     if ( height != -1 )
         m_height = height;
 
-    // GPE's window manager doesn't like size hints at all, esp. when the user
-    // has to use the virtual keyboard, so don't constrain size there
-#ifndef __WXGPE__
-    int minWidth = GetMinWidth(),
-        minHeight = GetMinHeight(),
-        maxWidth = GetMaxWidth(),
-        maxHeight = GetMaxHeight();
-
-    if ( minWidth != -1 && m_width < minWidth )
-        m_width = minWidth;
-    if ( minHeight != -1 && m_height < minHeight )
-        m_height = minHeight;
-    if ( maxWidth != -1 && m_width > maxWidth )
-        m_width = maxWidth;
-    if ( maxHeight != -1 && m_height > maxHeight )
-        m_height = maxHeight;
-#endif // __WXGPE__
+    ConstrainSize();
 
     if ( m_width != old_width || m_height != old_height )
     {
@@ -1046,25 +1030,7 @@ void wxTopLevelWindowGTK::GtkOnSize()
        skip the part which handles m_frameMenuBar, m_frameToolBar and (most
        importantly) m_mainWidget */
 
-    int minWidth = GetMinWidth(),
-        minHeight = GetMinHeight(),
-        maxWidth = GetMaxWidth(),
-        maxHeight = GetMaxHeight();
-
-#ifdef __WXGPE__
-    // GPE's window manager doesn't like size hints
-    // at all, esp. when the user has to use the
-    // virtual keyboard.
-    minWidth = -1;
-    minHeight = -1;
-    maxWidth = -1;
-    maxHeight = -1;
-#endif
-
-    if ((minWidth != -1) && (m_width < minWidth)) m_width = minWidth;
-    if ((minHeight != -1) && (m_height < minHeight)) m_height = minHeight;
-    if ((maxWidth != -1) && (m_width > maxWidth)) m_width = maxWidth;
-    if ((maxHeight != -1) && (m_height > maxHeight)) m_height = maxHeight;
+    ConstrainSize();
 
     if (m_mainWidget)
     {

@@ -378,6 +378,8 @@ protected:
     // should be called from OnInternalIdle() if it's overridden
     void GTKUpdateCursor();
 
+    void ConstrainSize();
+
 private:
     enum ScrollUnit { ScrollUnit_Line, ScrollUnit_Page, ScrollUnit_Max };
 

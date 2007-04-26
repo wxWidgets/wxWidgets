@@ -2625,6 +2625,23 @@ void wxWindowGTK::DoMoveWindow(int x, int y, int width, int height)
 
 }
 
+void wxWindowGTK::ConstrainSize()
+{
+#ifdef __WXGPE__
+    // GPE's window manager doesn't like size hints at all, esp. when the user
+    // has to use the virtual keyboard, so don't constrain size there
+    if (!IsTopLevel())
+#endif
+    {
+        const wxSize minSize = GetMinSize();
+        const wxSize maxSize = GetMaxSize();
+        if (minSize.x > 0 && m_width  < minSize.x) m_width  = minSize.x;
+        if (minSize.y > 0 && m_height < minSize.y) m_height = minSize.y;
+        if (maxSize.x > 0 && m_width  > maxSize.x) m_width  = maxSize.x;
+        if (maxSize.y > 0 && m_height > maxSize.y) m_height = maxSize.y;
+    }
+}
+
 void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags )
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid window") );
@@ -2657,15 +2674,7 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
     if (height != -1)
         m_height = height;
 
-    int minWidth  = GetMinWidth(),
-        minHeight = GetMinHeight(),
-        maxWidth  = GetMaxWidth(),
-        maxHeight = GetMaxHeight();
-
-    if ((minWidth  != -1) && (m_width  < minWidth )) m_width  = minWidth;
-    if ((minHeight != -1) && (m_height < minHeight)) m_height = minHeight;
-    if ((maxWidth  != -1) && (m_width  > maxWidth )) m_width  = maxWidth;
-    if ((maxHeight != -1) && (m_height > maxHeight)) m_height = maxHeight;
+    ConstrainSize();
 
 #if wxUSE_TOOLBAR_NATIVE
     if (wxDynamicCast(GetParent(), wxToolBar))

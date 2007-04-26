@@ -334,15 +334,7 @@ void wxFrame::GtkOnSize()
        skip the part which handles m_frameMenuBar, m_frameToolBar and (most
        importantly) m_mainWidget */
 
-    int minWidth = GetMinWidth(),
-        minHeight = GetMinHeight(),
-        maxWidth = GetMaxWidth(),
-        maxHeight = GetMaxHeight();
-
-    if ((minWidth != -1) && (m_width < minWidth)) m_width = minWidth;
-    if ((minHeight != -1) && (m_height < minHeight)) m_height = minHeight;
-    if ((maxWidth != -1) && (m_width > maxWidth)) m_width = maxWidth;
-    if ((maxHeight != -1) && (m_height > maxHeight)) m_height = maxHeight;
+    ConstrainSize();
 
     if (m_mainWidget)
     {
