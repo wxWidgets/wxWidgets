@@ -9662,7 +9662,7 @@ void wxGrid::SetCellHighlightPenWidth(int width)
         // make any visible change if the the thickness is getting smaller.
         int row = m_currentCellCoords.GetRow();
         int col = m_currentCellCoords.GetCol();
-        if ( GetColWidth(col) <= 0 || GetRowHeight(row) <= 0 )
+        if ( row == -1 || col == -1 || GetColWidth(col) <= 0 || GetRowHeight(row) <= 0 )
             return;
 
         wxRect rect = CellToRect(row, col);
