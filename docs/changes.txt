@@ -184,6 +184,7 @@ wxMac:
 wxUniv:
 
 - Fix wxTextCtrl::SetSelection(-1, -1) to behave as documented (Anders Larsen)
+- Fix wxComboBox::SetSelection(wxNOT_FOUND)
 - Fix setting background colour for controls with transparent background
 
 
