@@ -11,6 +11,12 @@ import traceback
 # Constant to define standart window name
 STD_NAME = '_XRCED_T_W'
 
+COLOUR_COMMENT  = 'Blue'
+COLOUR_REF      = 'DarkGreen'
+COLOUR_HIDDEN   = 'Grey'
+COLOUR_HL       = 'Red'
+COLOUR_DT       = 'Green'
+
 # Icons
 import images
 
@@ -412,20 +418,24 @@ def SetMenu(m, list, shift=False):
 ################################################################################
 
 class HighLightBox:
+    colour = None
     def __init__(self, pos, size):
+        if not self.colour: colour = self.colour = wx.NamedColour(COLOUR_HL)
+        else: colour = self.colour
         if size.width == -1: size.width = 0
         if size.height == -1: size.height = 0
         w = g.testWin.panel
         l1 = wx.Window(w, -1, pos, wx.Size(size.width, 2))
-        l1.SetBackgroundColour(wx.RED)
+        l1.SetBackgroundColour(self.colour)
         l2 = wx.Window(w, -1, pos, wx.Size(2, size.height))
-        l2.SetBackgroundColour(wx.RED)
+        l2.SetBackgroundColour(self.colour)
         l3 = wx.Window(w, -1, wx.Point(pos.x + size.width - 2, pos.y), wx.Size(2, size.height))
-        l3.SetBackgroundColour(wx.RED)
+        l3.SetBackgroundColour(self.colour)
         l4 = wx.Window(w, -1, wx.Point(pos.x, pos.y + size.height - 2), wx.Size(size.width, 2))
-        l4.SetBackgroundColour(wx.RED)
+        l4.SetBackgroundColour(self.colour)
         self.lines = [l1, l2, l3, l4]
         self.size = size
+        g.testWin.highLight = self
     # Move highlight to a new position
     def Replace(self, pos, size):
         if size.width == -1: size.width = 0
@@ -441,6 +451,42 @@ class HighLightBox:
         g.testWin.highLight = None
     def Refresh(self):
         map(wx.Window.Refresh, self.lines)
+
+# Same for drop target
+class HighLightDTBox(HighLightBox):
+    colour = None
+    def __init__(self, pos, size):
+        if not self.colour: colour = self.colour = wx.NamedColour(COLOUR_DT)
+        else: colour = self.colour
+        if size.width == -1: size.width = 0
+        if size.height == -1: size.height = 0
+        w = g.testWin.panel
+        l1 = wx.Window(w, -1, pos, wx.Size(size.width, 2))
+        l1.SetBackgroundColour(colour)
+        l2 = wx.Window(w, -1, pos, wx.Size(2, size.height))
+        l2.SetBackgroundColour(colour)
+        l3 = wx.Window(w, -1, wx.Point(pos.x + size.width - 2, pos.y), wx.Size(2, size.height))
+        l3.SetBackgroundColour(colour)
+        l4 = wx.Window(w, -1, wx.Point(pos.x, pos.y + size.height - 2), wx.Size(size.width, 2))
+        l4.SetBackgroundColour(colour)
+        self.lines = [l1, l2, l3, l4]
+        self.size = size
+        self.item = None
+    # Remove it
+    def Remove(self):
+        map(wx.Window.Destroy, self.lines)
+        g.testWin.highLightDT = None
+
+def updateHL(hl, hlClass, pos, size):
+    if hl and hl.size == size:
+        hl.Remove()
+        hl = None
+    if hl:
+        hl.Replace(pos, size)
+        hl.Refresh()
+    else:
+        hl = hlClass(pos, size)
+    return hl
 
 ################################################################################
 
@@ -555,6 +601,7 @@ class XML_Tree(wx.TreeCtrl):
         self.rootObj = xxxMainNode(self.dom)
         self.root = self.AddRoot('XML tree', self.rootImage,
                                  data=wx.TreeItemData(self.rootObj))
+        self.itemColour = self.GetItemTextColour(self.root)
         self.SetItemHasChildren(self.root)
         nodes = self.mainNode.childNodes[:]
         for node in nodes:
@@ -587,12 +634,12 @@ class XML_Tree(wx.TreeCtrl):
                                data=wx.TreeItemData(xxx))
         # Different color for comments and references
         if xxx.className == 'comment':
-            self.SetItemTextColour(item, 'Blue')
+            self.SetItemTextColour(item, COLOUR_COMMENT)
             self.SetItemFont(item, self.fontComment)
         elif treeObj.ref:
-            self.SetItemTextColour(item, 'DarkGreen')
+            self.SetItemTextColour(item, COLOUR_REF)
         elif treeObj.hasStyle and treeObj.params.get('hidden', False):
-            self.SetItemTextColour(item, 'Grey')
+            self.SetItemTextColour(item, COLOUR_HIDDEN)
         # Try to find children objects
         if treeObj.hasChildren:
             nodes = treeObj.node.childNodes[:]
@@ -623,12 +670,12 @@ class XML_Tree(wx.TreeCtrl):
         treeObj = xxx.treeObject()
         # Different color for references and comments
         if xxx.className == 'comment':
-            self.SetItemTextColour(newItem, 'Blue')
+            self.SetItemTextColour(newItem, COLOUR_COMMENT)
             self.SetItemFont(newItem, self.fontComment)
         elif treeObj.ref:
-            self.SetItemTextColour(newItem, 'DarkGreen')
+            self.SetItemTextColour(newItem, COLOUR_REF)
         elif treeObj.hasStyle and treeObj.params.get('hidden', False):
-            self.SetItemTextColour(newItem, 'Grey')
+            self.SetItemTextColour(newItem, COLOUR_HIDDEN)
         # Add children items
         if xxx.hasChildren:
             treeObj = xxx.treeObject()
@@ -724,6 +771,7 @@ class XML_Tree(wx.TreeCtrl):
         self.UnselectAll()
         self.SelectItem(evt.GetItem())
         self.selectionChanging = False
+        g.frame.SetStatusText('')
 
     def ChangeSelection(self, item):
         # Apply changes
@@ -742,7 +790,7 @@ class XML_Tree(wx.TreeCtrl):
                         g.testWin.highLight.Remove()
                     self.needUpdate = True
                 status = 'Changes were applied'
-        g.frame.SetStatusText(status)
+        if status: g.frame.SetStatusText(status)
         # Generate view
         self.selection = item
         if not self.selection.IsOk():
@@ -787,18 +835,10 @@ class XML_Tree(wx.TreeCtrl):
         size = obj.GetSize()
         # Highlight
         # Negative positions are not working quite well
-        hl = g.testWin.highLight
         # If highlight object has the same size SetDimension does not repaint it
         # so we must remove the old HL window
-        if hl and hl.size == size:
-            hl.Remove()
-            hl = None
-        if hl:
-            hl.Replace(pos, size)
-        else:
-            g.testWin.highLight = hl = HighLightBox(pos, size)
-        hl.Refresh()
-        hl.item = item
+        g.testWin.highLight = updateHL(g.testWin.highLight, HighLightBox, pos, size)
+        g.testWin.highLight.item = item
 
     def ShowTestWindow(self, item):
         xxx = self.GetPyData(item)
@@ -906,6 +946,7 @@ class XML_Tree(wx.TreeCtrl):
         if not g.currentEncoding:
             xmlFlags != xrc.XRC_USE_LOCALE
         res = xrc.XmlResource('', xmlFlags)
+        res.InitAllHandlers()
         xrc.XmlResource.Set(res)        # set as global
         # Register handlers
         addHandlers()
@@ -997,7 +1038,10 @@ class XML_Tree(wx.TreeCtrl):
                 testWin.item = item
                 wx.EVT_CLOSE(testWin, self.OnCloseTestWin)
                 wx.EVT_SIZE(testWin, self.OnSizeTestWin)
-                testWin.highLight = None
+                # Add drop target
+                testWin.SetDropTarget(DropTarget())
+                # Reset highlights
+                testWin.highLight = testWin.highLightDT = None
                 if highLight and not self.pendingHighLight:
                     self.HighLight(highLight)
         except:
@@ -1236,3 +1280,88 @@ class XML_Tree(wx.TreeCtrl):
             node.data = evt.GetLabel()
             g.panel.SetData(xxx)
         evt.Skip()
+
+################################################################################
+
+# DragAndDrop
+
+class DropTarget(wx.PyDropTarget):
+    def __init__(self):
+        self.do = MyDataObject()
+        wx.DropTarget.__init__(self, self.do)
+
+    # Find best object for dropping
+    def WhereToDrop(self, x, y, d):
+        # Find object by position
+        obj = wx.FindWindowAtPoint(g.testWin.ClientToScreen((x,y)))
+        if not obj:
+            return wx.DragNone, ()
+        item = g.frame.FindObject(g.testWin.item, obj)
+        if not item:
+            return wx.DragNone, ()
+        xxx = g.tree.GetPyData(item).treeObject()
+        parentItem = None
+        # Check if window has a XRC sizer, then use it as parent
+        if obj.GetSizer():
+            sizer = obj.GetSizer()
+            sizerItem = g.frame.FindObject(g.testWin.item, sizer)
+            if sizerItem:
+                parentItem = sizerItem
+                obj = sizer
+                item = wx.TreeItemId()
+        # if not sizer but can have children, it is parent with free placement
+        elif xxx.hasChildren:
+            parentItem = item
+            item = wx.TreeItemId()
+        # Otherwise, try to add to item's parent
+        if not parentItem:
+            parentItem = g.tree.GetItemParent(item)
+            obj = g.tree.FindNodeObject(parentItem)
+        parent = g.tree.GetPyData(parentItem).treeObject()
+        return d,(obj,parent,parentItem,item)
+        
+    # Drop
+    def OnData(self, x, y, d):
+        self.GetData()
+        id = int(self.do.GetDataHere())
+        d,other = self.WhereToDrop(x, y, d)
+        if d != wx.DragNone:
+            obj,parent,parentItem,item = other
+            g.tree.selection = parentItem
+            xxx = g.frame.CreateXXX(parent, parentItem, item,  id)
+            # Set coordinates if parent is not sizer
+            if not parent.isSizer:
+                xxx.set('pos', '%d,%d' % (x, y))
+                g.panel.SetData(xxx)
+            g.frame.SetStatusText('Object created')
+        self.RemoveHL()
+        return d
+
+    def OnDragOver(self, x, y, d):
+        d,other = self.WhereToDrop(x, y, d)
+        if d != wx.DragNone:
+            obj,parent,parentItem,item = other
+            pos, size = g.tree.FindNodePos(parentItem, obj), obj.GetSize()
+            # Change tree item colour
+            hl = g.testWin.highLightDT
+            if hl and hl.item and hl.item != parentItem:
+                g.tree.SetItemTextColour(hl.item, g.tree.itemColour)
+            g.testWin.highLightDT = updateHL(hl, HighLightDTBox, pos, size)
+            g.testWin.highLightDT.item = parentItem
+            g.tree.SetItemTextColour(parentItem, COLOUR_DT)
+            g.tree.EnsureVisible(parentItem)
+            g.frame.SetStatusText('Drop target: %s' % parent.treeName())
+        else:
+            g.frame.SetStatusText('Inappropriate drop target')
+            self.RemoveHL()
+        return d
+
+    def OnLeave(self):
+        self.RemoveHL()
+
+    def RemoveHL(self):
+        hl = g.testWin.highLightDT
+        if hl:
+            if hl.item: g.tree.SetItemTextColour(hl.item, g.tree.itemColour)
+            hl.Remove()
+        
