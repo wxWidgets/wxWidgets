@@ -1579,6 +1579,12 @@ gtk_window_button_press_callback( GtkWidget *widget,
     if ( ret )
         return TRUE;
 
+    if ((event_type == wxEVT_LEFT_DOWN) && !win->IsOfStandardClass() && 
+        (g_focusWindow != win) && win->CanAcceptFocus())
+    {
+        gtk_widget_grab_focus( win->m_wxwindow );
+    }
+
     if (event_type == wxEVT_RIGHT_DOWN)
     {
         // generate a "context menu" event: this is similar to right mouse
@@ -2076,9 +2082,6 @@ gtk_scrollbar_button_release_event(GtkRange* range, GdkEventButton*, wxWindow* w
 // "realize" from m_widget
 //-----------------------------------------------------------------------------
 
-/* We cannot set colours and fonts before the widget has
-   been realized, so we do this directly after realization. */
-
 static void
 gtk_window_realized_callback( GtkWidget *m_widget, wxWindow *win )
 {
@@ -2089,6 +2092,16 @@ gtk_window_realized_callback( GtkWidget *m_widget, wxWindow *win )
         GtkPizza *pizza = GTK_PIZZA( m_widget );
         gtk_im_context_set_client_window( win->m_imData->context,
                                           pizza->bin_window );
+    }
+
+    // We cannot set colours and fonts before the widget
+    // been realized, so we do this directly after realization
+    // or otherwise in idle time
+
+    if (win->m_needsStyleChange)
+    {
+        win->SetBackgroundStyle(win->GetBackgroundStyle());
+        win->m_needsStyleChange = false;
     }
 
     wxWindowCreateEvent event( win );
