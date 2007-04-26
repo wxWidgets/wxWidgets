@@ -622,7 +622,7 @@
               </object>
               <object class="sizeritem">
                 <object class="wxSpinCtrl" name="spin_proportion_panel">
-                  <size>50,-1</size>
+                  <size>30,-1d</size>
                 </object>
               </object>
               <object class="sizeritem">
@@ -657,7 +657,7 @@
               </object>
               <object class="sizeritem">
                 <object class="wxSpinCtrl" name="spin_proportion_control">
-                  <size>50,-1</size>
+                  <size>30,-1d</size>
                 </object>
               </object>
               <object class="sizeritem">
@@ -685,6 +685,7 @@
             <item>always</item>
             <item>never</item>
           </content>
+          <style>wxRA_SPECIFY_ROWS</style>
         </object>
         <flag>wxALL|wxALIGN_CENTRE_HORIZONTAL</flag>
         <border>5</border>
