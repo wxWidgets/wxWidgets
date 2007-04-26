@@ -301,7 +301,7 @@ class Frame(wx.Frame):
 
         # Build interface
         sizer = wx.BoxSizer(wx.VERTICAL)
-        sizer.Add(wx.StaticLine(self, -1), 0, wx.EXPAND)
+        #sizer.Add(wx.StaticLine(self, -1), 0, wx.EXPAND)
         # Horizontal sizer for toolbar and splitter
         self.toolsSizer = sizer1 = wx.BoxSizer()
         splitter = wx.SplitterWindow(self, -1, style=wx.SP_3DSASH)
@@ -988,8 +988,9 @@ class Frame(wx.Frame):
                 child = tree.GetNextSibling(child)
         return None
 
+    # Click event after locate activated
     def OnTestWinLeftDown(self, evt):
-        pos = evt.GetPosition()
+        # Restore normal event processing
         self.SetHandler(g.testWin)
         g.testWin.Disconnect(wx.ID_ANY, wx.ID_ANY, wx.wxEVT_LEFT_DOWN)
         item = self.FindObject(g.testWin.item, evt.GetEventObject())
@@ -1101,19 +1102,24 @@ Homepage: http://xrced.sourceforge.net\
         parent = tree.GetPyData(parentLeaf)
         if parent.hasChild: parent = parent.child
 
+        self.CreateXXX(parent, parentLeaf, nextItem, evt.GetId())
+
+    # Actual method to create object and add to XML and wx trees
+    def CreateXXX(self, parent, parentLeaf, nextItem, id):
+        selected = tree.selection
         # Create object_ref?
-        if evt.GetId() == ID_NEW.REF:
+        if id == ID_NEW.REF:
             ref = wx.GetTextFromUser('Create reference to:', 'Create reference')
             if not ref: return
             xxx = MakeEmptyRefXXX(parent, ref)
-        elif evt.GetId() == ID_NEW.COMMENT:
+        elif id == ID_NEW.COMMENT:
             xxx = MakeEmptyCommentXXX(parent)
         else:
             # Create empty element
-            if evt.GetId() >= ID_NEW.CUSTOM:
-                className = pullDownMenu.customMap[evt.GetId()]
+            if id >= ID_NEW.CUSTOM:
+                className = pullDownMenu.customMap[id]
             else:
-                className = pullDownMenu.createMap[evt.GetId()]
+                className = pullDownMenu.createMap[id]
             xxx = MakeEmptyXXX(parent, className)
 
         # Insert new node, register undo
@@ -1125,17 +1131,21 @@ Homepage: http://xrced.sourceforge.net\
                 xxx.setTreeName('%s%d' % (defaultIDs[cl], frame.maxIDs[cl]))
             # And for some other standard controls
             elif parent.__class__ == xxxStdDialogButtonSizer:
-                xxx.setTreeName(pullDownMenu.stdButtonIDs[evt.GetId()][0])
-                # We can even set label
+                # ... we can even set automatically tree name
+                xxx.setTreeName(pullDownMenu.stdButtonIDs[id][0])
                 obj = xxx.treeObject()
+                # ... and label
                 elem = g.tree.dom.createElement('label')
-                elem.appendChild(g.tree.dom.createTextNode(pullDownMenu.stdButtonIDs[evt.GetId()][1]))
+                elem.appendChild(g.tree.dom.createTextNode(pullDownMenu.stdButtonIDs[id][1]))
                 obj.params['label'] = xxxParam(elem)
                 xxx.treeObject().node.appendChild(elem)
-
-            newItem = tree.InsertNode(parentLeaf, parent, xxx.node, nextItem)
-        else:                           # comment node
-            newItem = tree.InsertNode(parentLeaf, parent, xxx.node, nextItem)
+            # Else, set label if exists to class name
+            elif 'label' in xxx.treeObject().allParams:
+                label = className
+                if label[:2] == 'wx': label = label[2:]
+                xxx.treeObject().set('label', label.upper())
+        # For comment nodes, simply add node
+        newItem = tree.InsertNode(parentLeaf, parent, xxx.node, nextItem)
         undoMan.RegisterUndo(UndoPasteCreate(parentLeaf, parent, newItem, selected))
         tree.EnsureVisible(newItem)
         tree.SelectItem(newItem)
@@ -1153,6 +1163,7 @@ Homepage: http://xrced.sourceforge.net\
         if not xxx.isElement:
             tree.EditLabel(newItem)
         self.SetModified()
+        return xxx
 
     # Replace one object with another
     def OnReplace(self, evt):
@@ -1313,10 +1324,10 @@ Homepage: http://xrced.sourceforge.net\
             if tree.needUpdate:
                 if conf.autoRefresh:
                     if g.testWin:
-                        self.SetStatusText('Refreshing test window...')
+                        #self.SetStatusText('Refreshing test window...')
                         # (re)create
                         tree.CreateTestWin(g.testWin.item)
-                        self.SetStatusText('')
+                        #self.SetStatusText('')
                     tree.needUpdate = False
             elif tree.pendingHighLight:
                 try:
@@ -1750,7 +1761,7 @@ Please upgrade wxWidgets to %d.%d.%d or higher.''' % MinWxVersion)
         # Store important data
         frame.handlers = getHandlers()[:]
         frame.custom = g.pullDownMenu.custom[:]
-        frame.modules = set(sys.modules.keys())
+        frame.modules = sys.modules.copy()
 
         # Initialize
         frame.Clear()
