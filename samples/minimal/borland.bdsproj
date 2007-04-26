@@ -20,7 +20,7 @@
         <property category="build.config.0" name="type" value="Toolset"/>
         <property category="build.config.0" name="win32.win32b.builddir" value="Debug_Build"/>
         <property category="build.node" name="libraries" value="vcldbx.lib bdertl.lib vcldb.lib dbrtl.lib vclx.lib vcl.lib rtl.lib"/>
-        <property category="build.node" name="name" value="minimal.exe "/>
+        <property category="build.node" name="name" value="borland.exe"/>
         <property category="build.node" name="sparelibs" value="rtl.lib vcl.lib vclx.lib dbrtl.lib vcldb.lib bdertl.lib vcldbx.lib"/>
         <property category="build.node" name="use_packages" value="0"/>
         <property category="build.platform" name="active" value="win32"/>
@@ -90,7 +90,7 @@
           <property category="win32.*.win32b.bcc32" name="option.I.arg.1" value="$(BDS)\include"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.2" value="$(BDS)\include\vcl"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.3" value="..\..\include"/>
-          <property category="win32.*.win32b.bcc32" name="option.I.arg.4" value="..\..\lib\bcc_lib\mswd"/>
+          <property category="win32.*.win32b.bcc32" name="option.I.arg.4" value="..\..\lib\bcc_dll\mswd"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.5" value="$(BDS)\include\dinkumware"/>
           <property category="win32.*.win32b.bcc32" name="option.I.arg.merge" value="1"/>
           <property category="win32.*.win32b.bcc32" name="option.I.enabled" value="1"/>
@@ -207,7 +207,7 @@
         </optionset>
       </project>
       <FILELIST>
-        <FILE FILENAME="borland_ide.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="minimal" FORMNAME="" DESIGNCLASS=""/>
+        <FILE FILENAME="borland_ide.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="borland_ide" FORMNAME="" DESIGNCLASS=""/>
         <FILE FILENAME="minimal.cpp" CONTAINERID="CCompiler" LOCALCOMMAND="" UNITNAME="minimal" FORMNAME="" DESIGNCLASS=""/>
       </FILELIST>
       <IDEOPTIONS>
@@ -258,6 +258,7 @@
           <Parameters Name="LoadAllSymbols">True</Parameters>
           <Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
         </Parameters>
+
         <Linker>
           <Linker Name="LibPrefix"></Linker>
           <Linker Name="LibSuffix"></Linker>
@@ -266,7 +267,7 @@
       </IDEOPTIONS>
     </BCBPROJECT>
 		<Source>
-			<Source Name="MainSource">minimal.cpp</Source>
+			<Source Name="MainSource">borland_ide.cpp</Source>
 		</Source>
 		<buildevents/>
 	</CPlusPlusBuilder.Personality>
