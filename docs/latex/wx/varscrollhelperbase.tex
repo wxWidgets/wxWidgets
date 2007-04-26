@@ -172,12 +172,13 @@ Returns the index of the last visible unit based on the scroll position. This
 includes the last unit even if it is only partially visible.
 
 
-\membersection{wxVarScrollHelperBase::HitTest}\label{wxvarscrollhelperbasehittest}
+\membersection{wxVarScrollHelperBase::VirtualHitTest}\label{wxvarscrollhelperbasevirtualhittest}
 
-\constfunc{virtual int}{HitTest}{\param{wxCoord }{coord}}
+\constfunc{int}{VirtualHitTest}{\param{wxCoord }{coord}}
 
-Returns the scroll unit under the device unit given accounting for scroll
-position or {\tt wxNOT\_FOUND} if none (i.e. if it is below the last item).
+Returns the virtual scroll unit under the device unit given accounting for
+scroll position or {\tt wxNOT\_FOUND} if none (i.e. if it is below the last
+item).
 
 
 \membersection{wxVarScrollHelperBase::IsVisible}\label{wxvarscrollhelperbaseisvisible}

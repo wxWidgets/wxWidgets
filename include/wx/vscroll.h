@@ -78,7 +78,7 @@ public:
         { m_physicalScrolling = scrolling; }
 
     // wxNOT_FOUND if none, i.e. if it is below the last item
-    virtual int HitTest(wxCoord coord) const;
+    int VirtualHitTest(wxCoord coord) const;
 
     // recalculate all our parameters and redisplay all units
     virtual void RefreshAll();
@@ -324,9 +324,6 @@ public:
     virtual void RefreshRows(size_t from, size_t to)
         { RefreshUnits(from, to); }
 
-    virtual int HitTest(wxCoord y) const
-        { return wxVarScrollHelperBase::HitTest(y); }
-
     // accessors
 
     size_t GetRowCount() const                  { return GetUnitCount(); }
@@ -401,8 +398,6 @@ public:
         { RefreshUnit(column); }
     virtual void RefreshColumns(size_t from, size_t to)
         { RefreshUnits(from, to); }
-    virtual int HitTest(wxCoord x) const
-        { return wxVarScrollHelperBase::HitTest(x); }
 
     // accessors
 
@@ -514,10 +509,10 @@ public:
                           from.GetColumn(), to.GetColumn());
     }
 
-    // Override wxPanel::HitTest to use our version
-    virtual wxPosition HitTest(wxCoord x, wxCoord y) const;
-    virtual wxPosition HitTest(const wxPoint &pos) const
-        { return HitTest(pos.x, pos.y); }
+    // locate the virtual position from the given device coordinates
+    wxPosition VirtualHitTest(wxCoord x, wxCoord y) const;
+    wxPosition VirtualHitTest(const wxPoint &pos) const
+        { return VirtualHitTest(pos.x, pos.y); }
 
     // change the DC origin according to the scroll position. To properly
     // forward calls to wxWindow::Layout use WX_FORWARD_TO_SCROLL_HELPER()
@@ -736,11 +731,14 @@ public:
         return wxPanel::Create(parent, id, pos, size, style | wxVSCROLL, name);
     }
 
+#if WXWIN_COMPATIBILITY_2_8
     // Make sure we prefer our version of HitTest rather than wxWindow's
+    // These functions should no longer be masked in favor of VirtualHitTest()
     int HitTest(wxCoord WXUNUSED(x), wxCoord y) const
-        { return wxVarVScrollHelper::HitTest(y); }
+        { return wxVarVScrollHelper::VirtualHitTest(y); }
     int HitTest(const wxPoint& pt) const
         { return HitTest(pt.x, pt.y); }
+#endif // WXWIN_COMPATIBILITY_2_8
 
     WX_FORWARD_TO_VAR_SCROLL_HELPER()
 
@@ -809,12 +807,6 @@ public:
         return wxPanel::Create(parent, id, pos, size, style | wxHSCROLL, name);
     }
 
-    // Make sure we prefer our version of HitTest rather than wxWindow's
-    int HitTest(wxCoord x, wxCoord WXUNUSED(y)) const
-        { return wxVarHScrollHelper::HitTest(x); }
-    int HitTest(const wxPoint& pt) const
-        { return HitTest(pt.x, pt.y); }
-
     WX_FORWARD_TO_VAR_SCROLL_HELPER()
 
 #ifdef __WXMAC__
@@ -879,12 +871,6 @@ public:
         return wxPanel::Create(parent, id, pos, size,
                                style | wxVSCROLL | wxHSCROLL, name);
     }
-
-    // Make sure we prefer our version of HitTest rather than wxWindow's
-    wxPosition HitTest(wxCoord x, wxCoord y) const
-        { return wxVarHVScrollHelper::HitTest(x, y); }
-    wxPosition HitTest(const wxPoint &pt) const
-        { return HitTest(pt.x, pt.y); }
 
     WX_FORWARD_TO_VAR_SCROLL_HELPER()
 

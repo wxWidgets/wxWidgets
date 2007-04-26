@@ -102,15 +102,15 @@ Returns the index of the last visible column and row based on the scroll
 position. This includes any partially visible columns or rows.
 
 
-\membersection{wxVarHVScrollHelper::HitTest}\label{wxvarhvscrollhelperhittest}
+\membersection{wxVarHVScrollHelper::VirtualHitTest}\label{wxvarhvscrollhelpervirtualhittest}
 
-\constfunc{virtual wxPosition}{HitTest}{\param{wxCoord }{x}, \param{wxCoord }{y}}
+\constfunc{wxPosition}{VirtualHitTest}{\param{wxCoord }{x}, \param{wxCoord }{y}}
 
-\constfunc{virtual wxPosition}{HitTest}{\param{const wxPoint\& }{pos}}
+\constfunc{wxPosition}{VirtualHitTest}{\param{const wxPoint\& }{pos}}
 
-Returns the scroll unit under the device unit given accounting for scroll
-position or {\tt wxNOT\_FOUND} (for the row, column, or possibly both values)
-if none.
+Returns the virtual scroll unit under the device unit given accounting for
+scroll position or {\tt wxNOT\_FOUND} (for the row, column, or possibly both
+values) if none.
 
 
 \membersection{wxVarHVScrollHelper::IsVisible}\label{wxvarhvscrollhelperisvisible}

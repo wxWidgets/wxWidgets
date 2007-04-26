@@ -382,7 +382,7 @@ wxString wxExpandEnvVars(const wxString& str)
 
           while ( m < str.length() && (wxIsalnum(str[m]) || str[m] == wxT('_')) )
             m++;
-
+ 
           wxString strVarName(str.c_str() + n + 1, m - n - 1);
 
 #ifdef __WXWINCE__

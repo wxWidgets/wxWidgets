@@ -539,7 +539,7 @@ bool wxVarScrollHelperBase::ScrollLayout()
     return m_targetWindow->wxWindow::Layout();
 }
 
-int wxVarScrollHelperBase::HitTest(wxCoord coord) const
+int wxVarScrollHelperBase::VirtualHitTest(wxCoord coord) const
 {
     const size_t unitMax = GetVisibleEnd();
     for ( size_t unit = GetVisibleBegin(); unit < unitMax; ++unit )
@@ -874,10 +874,10 @@ void wxVarHVScrollHelper::RefreshRowsColumns(size_t fromRow, size_t toRow,
     }
 }
 
-wxPosition wxVarHVScrollHelper::HitTest(wxCoord x, wxCoord y) const
+wxPosition wxVarHVScrollHelper::VirtualHitTest(wxCoord x, wxCoord y) const
 {
-    return wxPosition(wxVarVScrollHelper::HitTest(y),
-                        wxVarHScrollHelper::HitTest(x));
+    return wxPosition(wxVarVScrollHelper::VirtualHitTest(y),
+                      wxVarHScrollHelper::VirtualHitTest(x));
 }
 
 void wxVarHVScrollHelper::DoPrepareDC(wxDC& dc)
