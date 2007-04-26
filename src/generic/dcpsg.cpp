@@ -2201,7 +2201,7 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
 }
 
 // print postscript datas via required method (file, stream)
-void wxPostScriptDC::DoPsPrintfFormat(const wxChar *fmt, ... )
+void wxPostScriptDC::DoPsPrintfFormat(const wxString& fmt, ...)
 {
     va_list argptr;
     va_start(argptr, fmt);
