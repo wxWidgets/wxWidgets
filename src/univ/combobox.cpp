@@ -390,7 +390,11 @@ void wxComboBox::SetSelection(int n)
 
     GetLBox()->SetSelection(n);
 
-    SetText(GetLBox()->GetString(n));
+    wxString str;
+    if ( n != wxNOT_FOUND )
+        str = GetLBox()->GetString(n);
+
+    SetText(str);
 }
 
 int wxComboBox::GetSelection() const
