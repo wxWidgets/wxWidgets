@@ -19,12 +19,18 @@ class Panel(wx.Notebook):
         g.panel = panel = self
         self.modified = False
 
-        # Set common button size for parameter buttons
-        bTmp = wx.Button(self, -1, '')
+        # Set common sizes
         import params
-        params.buttonSize = (self.DLG_SZE(buttonSizeD)[0], bTmp.GetSize()[1])
-        bTmp.Destroy()
-        del bTmp
+        cTmp = wx.Button(self, -1, '')
+        params.buttonSize = (self.DLG_SZE(buttonSizeD)[0], cTmp.GetSize()[1])        
+        cTmp.Destroy()
+        cTmp = wx.TextCtrl(self, -1, '')
+        params.textSize = cTmp.GetSize()
+        cTmp.Destroy()
+        cTmp = wx.CheckBox(self, -1, 'growablerows ') # this is the longest
+        ParamPage.labelSize = cTmp.GetSize()
+        cTmp.Destroy()
+        del cTmp
 
         # List of child windows
         self.pages = []
@@ -170,6 +176,7 @@ class Panel(wx.Notebook):
 
 # General class for notebook pages
 class ParamPage(wx.Panel):
+    labelSize = None
     def __init__(self, parent, xxx):
         wx.Panel.__init__(self, parent, -1)
         self.xxx = xxx
@@ -266,38 +273,36 @@ class ParamPage(wx.Panel):
 
 ################################################################################
 
-LABEL_WIDTH = 125
-
 # Panel for displaying properties
 class PropPage(ParamPage):
+    renameDict = {'orient':'orientation', 'option':'proportion',
+                  'usenotebooksizer':'usesizer', 'dontattachtoframe':'dontattach',
+                  }
     def __init__(self, parent, label, xxx):
         ParamPage.__init__(self, parent, xxx)
         self.box = wx.StaticBox(self, -1, label)
         self.box.SetFont(g.labelFont())
         topSizer = wx.StaticBoxSizer(self.box, wx.VERTICAL)
-        sizer = wx.FlexGridSizer(len(xxx.allParams), 2, 0, 1)
+        sizer = wx.FlexGridSizer(len(xxx.allParams), 2, 1, 5)
         sizer.AddGrowableCol(1)
         if xxx.hasName:
-            label = wx.StaticText(self, -1, 'XML ID:', size=(LABEL_WIDTH,-1))
+            label = wx.StaticText(self, -1, 'XML ID:', size=self.labelSize)
             control = ParamText(self, 'XML_name', 200)
             sizer.AddMany([ (label, 0, wx.ALIGN_CENTER_VERTICAL),
                             (control, 0, wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM | wx.GROW, 10) ])
             self.controlName = control
         for param in xxx.allParams:
             present = xxx.params.has_key(param)
+            sParam = self.renameDict.get(param, param)
             if param in xxx.required:
                 if isinstance(xxx, xxxComment):
                     label = None
                 else:
-                    label = wx.StaticText(self, paramIDs[param], param + ':',
-                                          size = (LABEL_WIDTH,-1), name = param)
+                    label = wx.StaticText(self, paramIDs[param], sParam,
+                                          size = self.labelSize, name = param)
             else:
-                # Rename some parameters
-                if param == 'usenotebooksizer': sParam = 'usesizer:'
-                elif param == 'option': sParam = 'proportion'
-                else: sParam = param + ':'
                 label = wx.CheckBox(self, paramIDs[param], sParam,
-                                   size = (LABEL_WIDTH,-1), name = param)
+                                   size = self.labelSize, name = param)
                 self.checks[param] = label
             try:
                 typeClass = xxx.paramDict[param]
@@ -360,17 +365,19 @@ class PropPage(ParamPage):
 
 # Style notebook page
 class StylePage(ParamPage):
+    renameDict = {'fg':'foreground', 'bg':'background'}
     def __init__(self, parent, label, xxx):
         ParamPage.__init__(self, parent, xxx)
         box = wx.StaticBox(self, -1, label)
         box.SetFont(g.labelFont())
         topSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        sizer = wx.FlexGridSizer(len(xxx.styles), 2, 0, 1)
+        sizer = wx.FlexGridSizer(len(xxx.styles), 2, 1, 5)
         sizer.AddGrowableCol(1)
         for param in xxx.styles:
             present = xxx.params.has_key(param)
+            sParam = self.renameDict.get(param, param)
             check = wx.CheckBox(self, paramIDs[param],
-                               param + ':', size = (LABEL_WIDTH,-1), name = param)
+                                sParam, size = self.labelSize, name = param)
             check.SetValue(present)
             control = paramDict[param](self, name = param)
             control.Enable(present)
