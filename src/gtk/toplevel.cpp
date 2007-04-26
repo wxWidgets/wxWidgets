@@ -800,13 +800,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
     if (show == IsShown())
         return false;
 
-    if (!show)
-    {
-        // make sure window has a non-default position, so when it is shown
-        // again, it won't be repositioned by WM as if it were a new window
-        gtk_window_move((GtkWindow*)m_widget, m_x, m_y);
-    }
-    else if (!m_sizeSet)
+    if (show && !m_sizeSet)
     {
         /* by calling GtkOnSize here, we don't have to call
            either after showing the frame, which would entail
@@ -816,7 +810,17 @@ bool wxTopLevelWindowGTK::Show( bool show )
         GtkOnSize();
     }
 
-    return wxTopLevelWindowBase::Show(show);
+    wxTopLevelWindowBase::Show(show);
+
+    if (!show)
+    {
+        // make sure window has a non-default position, so when it is shown
+        // again, it won't be repositioned by WM as if it were a new window
+        // Note that this must be done _after_ the window is hidden.
+        gtk_window_move((GtkWindow*)m_widget, m_x, m_y);
+    }
+
+    return true;
 }
 
 void wxTopLevelWindowGTK::Raise()
