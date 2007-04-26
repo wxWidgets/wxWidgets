@@ -1,4 +1,4 @@
-0.1.8-5 (under construction)
+0.1.8-5
 -------
 
 Preferences for default "sizeritem" parameters for new panels and
