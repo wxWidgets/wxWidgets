@@ -17,6 +17,11 @@
 
 #define wxSVGVersion wxT("v0100")
 
+#ifdef __BORLANDC__
+#pragma warn -8008
+#pragma warn -8066
+#endif
+
 class WXDLLIMPEXP_CORE wxSVGFileDC : public wxDC
 {
 
@@ -285,7 +290,7 @@ class WXDLLIMPEXP_CORE wxSVGFileDC : public wxDC
         void SetFont(const wxFont& font) ;
 
         void SetLogicalFunction(int  WXUNUSED(function))
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::SetLogicalFunction Call implemented")); return ; }
+            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::SetLogicalFunction Call not implemented")); return ; }
 
         void SetLogicalScale( double x, double y ) ;
 
