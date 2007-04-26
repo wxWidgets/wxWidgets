@@ -1,7 +1,7 @@
 %define pref /usr
 %define ver  2.8.4
 %define ver2 2.8
-%define rel  3
+%define rel  4
 
 # Configurable settings (use --with(out) unicode on rpmbuild cmd line):
 %define unicode 0
