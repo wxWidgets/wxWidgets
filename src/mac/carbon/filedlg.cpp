@@ -102,7 +102,6 @@ static pascal void NavEventProc(
             {
                 int i = menu->menuType ;
                 wxString extension =  data->extensions[i].AfterLast('.') ;
-                extension.MakeLower() ;
                 wxString sfilename ;
 
                 wxMacCFStringHolder cfString( NavDialogGetSaveFileName( ioParams->context ) , false  );
@@ -143,7 +142,7 @@ void MakeUserDataRec(OpenUserDataRec *myData , const wxString& filter )
                 }
                 else
                 {
-                    myData->extensions.Add( current.MakeUpper() ) ;
+                    myData->extensions.Add( current ) ;
                     ++filterIndex ;
                 }
 
@@ -162,9 +161,9 @@ void MakeUserDataRec(OpenUserDataRec *myData , const wxString& filter )
         if ( current.empty() )
             myData->extensions.Add( myData->name[filterIndex] ) ;
         else
-            myData->extensions.Add( current.MakeUpper() ) ;
+            myData->extensions.Add( current ) ;
         if ( filterIndex == 0 || isName )
-            myData->name.Add( current.MakeUpper() ) ;
+            myData->name.Add( current ) ;
 
         ++filterIndex ;
 
@@ -212,6 +211,7 @@ static Boolean CheckFile( const wxString &filename , OSType type , OpenUserDataR
                 wxString extension = tokenizer.GetNextToken() ;
                 if ( extension.GetChar(0) == '*' )
                     extension = extension.Mid(1) ;
+                extension.MakeUpper();
 
                 if ( file.length() >= extension.length() && extension == file.Right(extension.length() ) )
                     return true ;
