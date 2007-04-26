@@ -12,6 +12,7 @@
        {wx}/include/wx/version.h
        {wx}/include/msvc/wx/setup.h
        {wx}/src/wxvc_dll.dsp
+       {wx}/samples/minimal/borland_ide.cpp
        {wx}/docs/latex/wx/manual.tex
        {wx}/docs/changes.txt
        {wx}/docs/gtk/changes.txt
@@ -34,6 +35,9 @@
 Version: $Id$
 
 $Log$
+Revision 1.11  2007/04/26 14:03:29  CE
+add Borland Developer Studio and Turbo Explorer info
+
 Revision 1.10  2007/01/07 22:28:07  VZ
 also update manual.tex
 
