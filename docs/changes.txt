@@ -177,6 +177,10 @@ wxGTK:
 - Fix wxNO_BORDER style for wxRadioBox (David Hart)
 - Fix wxTextCtrl::GetLineText() for empty lines (Marcin Wojdyr)
 
+wxMac:
+
+- Fix wxComboBox::SetSelection(wxNOT_FOUND) (Adrian Secord)
+
 wxUniv:
 
 - Fix wxTextCtrl::SetSelection(-1, -1) to behave as documented (Anders Larsen)
