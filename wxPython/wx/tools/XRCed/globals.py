@@ -71,3 +71,16 @@ class Globals:
     
 
 g = Globals()
+
+
+class MyDataObject(wx.PyDataObjectSimple):
+    def __init__(self):
+        wx.PyDataObjectSimple.__init__(self, wx.CustomDataFormat('XRCed_DND'))
+        self.data = ''
+    def GetDataSize(self):
+        return len(self.data)
+    def GetDataHere(self):
+        return self.data  # returns a string  
+    def SetData(self, data):
+        self.data = data
+        return True

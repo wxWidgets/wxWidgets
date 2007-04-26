@@ -16,7 +16,6 @@ GROUP_WINDOWS, GROUP_MENUS, GROUP_SIZERS, GROUP_CONTROLS = range(GROUPNUM)
 
 # States depending on current selection and Control/Shift keys
 STATE_ROOT, STATE_MENUBAR, STATE_TOOLBAR, STATE_MENU, STATE_STDDLGBTN, STATE_ELSE = range(6)
-
 # Left toolbar for GUI elements
 class Tools(wx.Panel):
     TOOL_SIZE = (30, 30)
@@ -97,17 +96,18 @@ class Tools(wx.Panel):
         self.SetSizeHints(self.GetSize()[0], -1)
         # Events
         wx.EVT_COMMAND_RANGE(self, ID_NEW.PANEL, ID_NEW.LAST,
-                          wx.wxEVT_COMMAND_BUTTON_CLICKED, g.frame.OnCreate)
+                             wx.wxEVT_COMMAND_BUTTON_CLICKED, g.frame.OnCreate)
         wx.EVT_KEY_DOWN(self, self.OnKeyDown)
         wx.EVT_KEY_UP(self, self.OnKeyUp)
 
     def AddButton(self, id, image, text):
         from wx.lib import buttons
         button = buttons.GenBitmapButton(self, id, image, size=self.TOOL_SIZE,
-                                           style=wx.NO_BORDER|wx.WANTS_CHARS)
+                                         style=wx.NO_BORDER|wx.WANTS_CHARS)
         button.SetBezelWidth(0)
         wx.EVT_KEY_DOWN(button, self.OnKeyDown)
         wx.EVT_KEY_UP(button, self.OnKeyUp)
+        wx.EVT_RIGHT_DOWN(button, self.OnRightClick)
         button.SetToolTipString(text)
         self.curSizer.Add(button)
         self.groups[-1][1][id] = button
@@ -159,6 +159,22 @@ class Tools(wx.Panel):
         if box.show: box.SetLabel('[+] ' + box.name)
         else: box.SetLabel('[-] ' + box.name)
         self.Layout()
+
+    # Drag
+    def OnRightClick(self, evt):
+        do = MyDataObject()
+        do.SetData(str(evt.GetId()))
+        bm = evt.GetEventObject().GetBitmapLabel()
+        if wx.Platform != '__WXMAC__':
+            icon = wx.EmptyIcon()
+            icon.CopyFromBitmap(bm)
+            dragSource = wx.DropSource(self, icon)
+        else: # on Mac DragSource requires cursor (but does not work anyway)
+            curs = wx.CursorFromImage(wx.ImageFromBitmap(bm))
+            dragSource = wx.DropSource(self, curs)
+        dragSource.SetData(do)
+        g.frame.SetStatusText('Release the mouse button over the test window')
+        dragSource.DoDragDrop()
 
     # Process key events
     def OnKeyDown(self, evt):
