@@ -39,6 +39,8 @@ struct WXDLLIMPEXP_BASE wxStringOperationsWchar
         { return i + n; }
     static wxStringImpl::const_iterator AddToIter(const wxStringImpl::const_iterator& i, int n)
         { return i + n; }
+    static const wxChar* AddToIter(const wxChar *i, int n)
+        { return i + n; }
 
     // returns distance of the two iterators in Unicode characters
     static int DiffIters(const wxStringImpl::iterator& i1,

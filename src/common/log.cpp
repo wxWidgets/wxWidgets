@@ -91,11 +91,11 @@ void wxVLogGeneric(wxLogLevel level, const wxString& format, va_list argptr)
     }
 }
 
-void wxDoLogGeneric(wxLogLevel level, const wxChar *szFormat, ...)
+void wxDoLogGeneric(wxLogLevel level, const wxString& format, ...)
 {
     va_list argptr;
-    va_start(argptr, szFormat);
-    wxVLogGeneric(level, szFormat, argptr);
+    va_start(argptr, format);
+    wxVLogGeneric(level, format, argptr);
     va_end(argptr);
 }
 
@@ -108,11 +108,11 @@ void wxDoLogGeneric(wxLogLevel level, const wxChar *szFormat, ...)
     }                                                               \
   }                                                                 \
                                                                     \
-  void wxDoLog##level(const wxChar *szFormat, ...)                  \
+  void wxDoLog##level(const wxString& format, ...)                  \
   {                                                                 \
     va_list argptr;                                                 \
-    va_start(argptr, szFormat);                                     \
-    wxVLog##level(szFormat, argptr);                                \
+    va_start(argptr, format);                                       \
+    wxVLog##level(format, argptr);                                  \
     va_end(argptr);                                                 \
   }
 
@@ -145,11 +145,11 @@ void wxVLogFatalError(const wxString& format, va_list argptr)
 #endif
 }
 
-void wxDoLogFatalError(const wxChar *szFormat, ...)
+void wxDoLogFatalError(const wxString& format, ...)
 {
     va_list argptr;
-    va_start(argptr, szFormat);
-    wxVLogFatalError(szFormat, argptr);
+    va_start(argptr, format);
+    wxVLogFatalError(format, argptr);
 
     // some compilers warn about unreachable code and it shouldn't matter
     // for the others anyhow...
@@ -167,30 +167,30 @@ void wxVLogVerbose(const wxString& format, va_list argptr)
     }
 }
 
-void wxDoLogVerbose(const wxChar *szFormat, ...)
+void wxDoLogVerbose(const wxString& format, ...)
 {
     va_list argptr;
-    va_start(argptr, szFormat);
-    wxVLogVerbose(szFormat, argptr);
+    va_start(argptr, format);
+    wxVLogVerbose(format, argptr);
     va_end(argptr);
 }
 
 // debug functions
 #ifdef __WXDEBUG__
 #define IMPLEMENT_LOG_DEBUG_FUNCTION(level)                         \
-  void wxVLog##level(const wxChar *szFormat, va_list argptr)        \
+  void wxVLog##level(const wxString& format, va_list argptr)        \
   {                                                                 \
     if ( wxLog::IsEnabled() ) {                                     \
       wxLog::OnLog(wxLOG_##level,                                   \
-                   wxString::FormatV(szFormat, argptr), time(NULL));\
+                   wxString::FormatV(format, argptr), time(NULL));  \
     }                                                               \
   }                                                                 \
                                                                     \
-  void wxDoLog##level(const wxChar *szFormat, ...)                  \
+  void wxDoLog##level(const wxString& format, ...)                  \
   {                                                                 \
     va_list argptr;                                                 \
-    va_start(argptr, szFormat);                                     \
-    wxVLog##level(szFormat, argptr);                                \
+    va_start(argptr, format);                                       \
+    wxVLog##level(format, argptr);                                  \
     va_end(argptr);                                                 \
   }
 
@@ -204,11 +204,11 @@ void wxDoLogVerbose(const wxChar *szFormat, ...)
     }
   }
 
-  void wxDoLogTrace(const wxString& mask, const wxChar *szFormat, ...)
+  void wxDoLogTrace(const wxString& mask, const wxString& format, ...)
   {
     va_list argptr;
-    va_start(argptr, szFormat);
-    wxVLogTrace(mask, szFormat, argptr);
+    va_start(argptr, format);
+    wxVLogTrace(mask, format, argptr);
     va_end(argptr);
   }
 
@@ -222,13 +222,47 @@ void wxDoLogVerbose(const wxChar *szFormat, ...)
     }
   }
 
-  void wxDoLogTrace(wxTraceMask mask, const wxChar *szFormat, ...)
+  void wxDoLogTrace(wxTraceMask mask, const wxString& format, ...)
   {
     va_list argptr;
-    va_start(argptr, szFormat);
-    wxVLogTrace(mask, szFormat, argptr);
+    va_start(argptr, format);
+    wxVLogTrace(mask, format, argptr);
     va_end(argptr);
   }
+
+#ifdef __WATCOMC__
+  // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
+  void wxDoLogTrace(int mask, const wxString& format, ...)
+  {
+    va_list argptr;
+    va_start(argptr, format);
+    wxVLogTrace(mask, format, argptr);
+    va_end(argptr);
+  }
+
+  void wxDoLogTrace(const char *mask, const wxString& format, ...)
+  {
+    va_list argptr;
+    va_start(argptr, format);
+    wxVLogTrace(mask, format, argptr);
+    va_end(argptr);
+  }
+
+  void wxDoLogTrace(const wchar_t *mask, const wxString& format, ...)
+  {
+    va_list argptr;
+    va_start(argptr, format);
+    wxVLogTrace(mask, format, argptr);
+    va_end(argptr);
+  }
+
+  void wxVLogTrace(int mask, const wxString& format, va_list argptr)
+    { wxVLogTrace((wxTraceMask)mask, format, argptr); }
+  void wxVLogTrace(const char *mask, const wxString& format, va_list argptr)
+    { wxVLogTrace(wxString(mask), format, argptr); }
+  void wxVLogTrace(const wchar_t *mask, const wxString& format, va_list argptr)
+    { wxVLogTrace(wxString(mask), format, argptr); }
+#endif // __WATCOMC__
 
 #else // release
   #define IMPLEMENT_LOG_DEBUG_FUNCTION(level)
@@ -251,11 +285,11 @@ void WXDLLEXPORT wxVLogSysError(const wxString& format, va_list argptr)
     wxVLogSysError(wxSysErrorCode(), format, argptr);
 }
 
-void WXDLLEXPORT wxDoLogSysError(const wxChar *szFormat, ...)
+void WXDLLEXPORT wxDoLogSysError(const wxString& format, ...)
 {
     va_list argptr;
-    va_start(argptr, szFormat);
-    wxVLogSysError(szFormat, argptr);
+    va_start(argptr, format);
+    wxVLogSysError(format, argptr);
     va_end(argptr);
 }
 
@@ -268,13 +302,27 @@ void WXDLLEXPORT wxVLogSysError(long err, const wxString& format, va_list argptr
     }
 }
 
-void WXDLLEXPORT wxDoLogSysError(long lErrCode, const wxChar *szFormat, ...)
+void WXDLLEXPORT wxDoLogSysError(long lErrCode, const wxString& format, ...)
 {
     va_list argptr;
-    va_start(argptr, szFormat);
-    wxVLogSysError(lErrCode, szFormat, argptr);
+    va_start(argptr, format);
+    wxVLogSysError(lErrCode, format, argptr);
     va_end(argptr);
 }
+
+#ifdef __WATCOMC__
+// workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
+void WXDLLEXPORT wxDoLogSysError(unsigned long lErrCode, const wxString& format, ...)
+{
+    va_list argptr;
+    va_start(argptr, format);
+    wxVLogSysError(lErrCode, format, argptr);
+    va_end(argptr);
+}
+
+void WXDLLEXPORT wxVLogSysError(unsigned long err, const wxString& format, va_list argptr)
+    { wxVLogSysError((long)err, format, argptr); }
+#endif // __WATCOMC__
 
 // ----------------------------------------------------------------------------
 // wxLog class implementation

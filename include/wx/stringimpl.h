@@ -23,7 +23,8 @@
 // ----------------------------------------------------------------------------
 
 #include "wx/defs.h"        // everybody should include this
-#include "wx/wxchar.h"      // for wxChar, wxStrlen() etc.
+#include "wx/chartype.h"    // for wxChar
+#include "wx/wxcrt.h"       // for wxStrlen() etc.
 
 #include <stdlib.h>
 
@@ -540,12 +541,10 @@ public:
       // string += char
   wxStringImpl& operator+=(wxStringCharType ch) { return append(1, ch); }
 
-#if !wxUSE_UNICODE_UTF8
   // helpers for wxStringBuffer and wxStringBufferLength
   wxStringCharType *DoGetWriteBuf(size_t nLen);
   void DoUngetWriteBuf();
   void DoUngetWriteBuf(size_t nLen);
-#endif
 
 private:
 #if wxUSE_UNICODE_UTF8

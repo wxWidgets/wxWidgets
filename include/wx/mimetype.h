@@ -116,16 +116,44 @@ private:
 
 class WXDLLIMPEXP_BASE wxFileTypeInfo
 {
+private:
+    void VarArgInit(const wxString& mimeType,
+                    const wxString& openCmd,
+                    const wxString& printCmd,
+                    const wxString& desc,
+                    // the other parameters form a NULL terminated list of
+                    // extensions
+                    ...);
 public:
     // ctors
         // a normal item
-    wxFileTypeInfo(const wxChar *mimeType,
-                   const wxChar *openCmd,
-                   const wxChar *printCmd,
-                   const wxChar *desc,
-                   // the other parameters form a NULL terminated list of
-                   // extensions
-                   ...);
+
+    // wxFileTypeInfo(const wxString& mimeType,
+    //               const wxString& openCmd,
+    //               const wxString& printCmd,
+    //               const wxString& desc,
+    //               // the other parameters form a NULL terminated list of
+    //               // extensions
+    //               ...);
+    WX_DEFINE_VARARG_FUNC_CTOR(wxFileTypeInfo,
+                               4, (const wxString&, const wxString&,
+                                   const wxString&, const wxString&),
+                               VarArgInit)
+#ifdef __WATCOMC__
+    // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
+    WX_DEFINE_VARARG_FUNC_CTOR(wxFileTypeInfo,
+                               4, (const char*, const char*,
+                                   const char*, const char*),
+                               VarArgInit)
+    WX_DEFINE_VARARG_FUNC_CTOR(wxFileTypeInfo,
+                               4, (const wchar_t*, const wchar_t*,
+                                   const wchar_t*, const wchar_t*),
+                               VarArgInit)
+    WX_DEFINE_VARARG_FUNC_CTOR(wxFileTypeInfo,
+                               4, (const wxCStrData&, const wxCStrData&,
+                                   const wxCStrData&, const wxCStrData&),
+                               VarArgInit)
+#endif
 
         // the array elements correspond to the parameters of the ctor above in
         // the same order

@@ -31,6 +31,7 @@
 #include "wx/stopwatch.h"
 #include "wx/module.h"
 #include "wx/wxcrt.h"
+#include "wx/wxcrtvararg.h"
 
 #if wxUSE_GUI
 

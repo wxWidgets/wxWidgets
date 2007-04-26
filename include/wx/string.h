@@ -51,7 +51,7 @@
     #include <StringMgr.h>
 #endif
 
-#include "wx/wxchar.h"      // for wxChar, wxStrlen() etc.
+#include "wx/wxcrt.h"       // for wxChar, wxStrlen() etc.
 #include "wx/strvararg.h"
 #include "wx/buffer.h"      // for wxCharBuffer
 #include "wx/strconv.h"     // for wxConvertXXX() macros and wxMBConv classes
@@ -216,6 +216,10 @@ public:
 
     inline wxString AsString() const;
 
+    // returns the value as C string in internal representation (equivalent
+    // to AsString().wx_str(), but more efficient)
+    const wxStringCharType *AsInternal() const;
+
     // allow expressions like "c_str()[0]":
     inline wxUniChar operator[](size_t n) const;
     wxUniChar operator[](int n) const { return operator[](size_t(n)); }
@@ -292,8 +296,8 @@ class WXDLLIMPEXP_BASE wxStringPrintfMixinBase
 protected:
     wxStringPrintfMixinBase() {}
 
-    int DoPrintf(const wxChar *format, ...) ATTRIBUTE_PRINTF_2;
-    static wxString DoFormat(const wxChar *format, ...) ATTRIBUTE_PRINTF_1;
+    int DoPrintf(const wxString& format, ...);
+    static wxString DoFormat(const wxString& format, ...);
 };
 
 // this class contains template wrappers for wxString's vararg methods, it's
@@ -316,13 +320,27 @@ public:
     // these are duplicated wxString methods, they're also declared below
     // if !wxNEEDS_WXSTRING_PRINTF_MIXIN:
 
-    // int Printf(const wxChar *pszFormat, ...);
-    WX_DEFINE_VARARG_FUNC(int, Printf, DoPrintf)
-    // static wxString Format(const wxChar *pszFormat, ...) ATTRIBUTE_PRINTF_1;
-    WX_DEFINE_VARARG_FUNC(static typename StringReturnType<T1>::type,
-                          Format, DoFormat)
-    // int sprintf(const wxChar *pszFormat, ...) ATTRIBUTE_PRINTF_2;
-    WX_DEFINE_VARARG_FUNC(int, sprintf, DoPrintf)
+    // static wxString Format(const wString& format, ...) ATTRIBUTE_PRINTF_1;
+    WX_DEFINE_VARARG_FUNC2_SANS_N0(static typename StringReturnType<T1>::type,
+                                   Format, 1, (const wxString&),
+                                   DoFormat, DoFormat)
+    // We have to implement the version without template arguments manually
+    // because of the StringReturnType<> hack, although WX_DEFINE_VARARG_FUNC
+    // normally does it itself. It has to be a template so that we can use
+    // the hack, even though there's no real template parameter:
+    struct FormatDummyArg {} ;
+
+    template<typename T>
+    inline static typename StringReturnType<T>::type
+    Format(const wxString& fmt, FormatDummyArg dummy = FormatDummyArg())
+    {
+        return DoFormat(fmt);
+    }
+
+    // int Printf(const wxString& format, ...);
+    WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wxString&), DoPrintf)
+    // int sprintf(const wxString& format, ...) ATTRIBUTE_PRINTF_2;
+    WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const wxString&), DoPrintf)
 
 protected:
     wxStringPrintfMixin() : wxStringPrintfMixinBase() {}
@@ -879,7 +897,6 @@ public:
   // libstdc++ on some Linux versions which is bad, so instead we ask the
   // client code to define this wxUSE_STD_STRING symbol if they need it
 #if wxUSE_STD_STRING
-
   #if wxUSE_UNICODE_WCHAR
     wxString(const wxStdWideString& str) : m_impl(str) {}
   #else // UTF-8 or ANSI
@@ -1484,16 +1501,27 @@ public:
   // formatted input/output
     // as sprintf(), returns the number of characters written or < 0 on error
     // (take 'this' into account in attribute parameter count)
-  // int Printf(const wxChar *pszFormat, ...);
-  WX_DEFINE_VARARG_FUNC(int, Printf, DoPrintf)
+  // int Printf(const wxString& format, ...);
+  WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wxString&), DoPrintf)
+#ifdef __WATCOMC__
+  WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const char*), DoPrintf)
+  WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wchar_t*), DoPrintf)
+  WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wxCStrData&), DoPrintf)
+#endif
 #endif // !wxNEEDS_WXSTRING_PRINTF_MIXIN
     // as vprintf(), returns the number of characters written or < 0 on error
   int PrintfV(const wxString& format, va_list argptr);
 
 #ifndef wxNEEDS_WXSTRING_PRINTF_MIXIN
     // returns the string containing the result of Printf() to it
-  // static wxString Format(const wxChar *pszFormat, ...) ATTRIBUTE_PRINTF_1;
-  WX_DEFINE_VARARG_FUNC(static wxString, Format, DoFormat)
+  // static wxString Format(const wxString& format, ...) ATTRIBUTE_PRINTF_1;
+  WX_DEFINE_VARARG_FUNC(static wxString, Format, 1, (const wxString&), DoFormat)
+#ifdef __WATCOMC__
+  // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
+  WX_DEFINE_VARARG_FUNC(static wxString, Format, 1, (const char*), DoFormat)
+  WX_DEFINE_VARARG_FUNC(static wxString, Format, 1, (const wchar_t*), DoFormat)
+  WX_DEFINE_VARARG_FUNC(static wxString, Format, 1, (const wxCStrData&), DoFormat)
+#endif
 #endif
     // the same as above, but takes a va_list
   static wxString FormatV(const wxString& format, va_list argptr);
@@ -1529,8 +1557,14 @@ public:
 #ifndef wxNEEDS_WXSTRING_PRINTF_MIXIN
   // use Printf()
   // (take 'this' into account in attribute parameter count)
-  // int sprintf(const wxChar *pszFormat, ...) ATTRIBUTE_PRINTF_2;
-  WX_DEFINE_VARARG_FUNC(int, sprintf, DoPrintf)
+  // int sprintf(const wxString& format, ...) ATTRIBUTE_PRINTF_2;
+  WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const wxString&), DoPrintf)
+#ifdef __WATCOMC__
+  // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
+  WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const char*), DoPrintf)
+  WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const wchar_t*), DoPrintf)
+  WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const wxCStrData&), DoPrintf)
+#endif
 #endif // wxNEEDS_WXSTRING_PRINTF_MIXIN
 
     // use Cmp()
@@ -2200,7 +2234,7 @@ public:
   wxString& operator+=(wchar_t ch) { return *this += wxUniChar(ch); }
 
 private:
-#if !wxUSE_STL_BASED_WXSTRING && !wxUSE_UNICODE_UTF8
+#if !wxUSE_STL_BASED_WXSTRING
   // helpers for wxStringBuffer and wxStringBufferLength
   wxStringCharType *DoGetWriteBuf(size_t nLen)
     { return m_impl.DoGetWriteBuf(nLen); }
@@ -2208,14 +2242,11 @@ private:
     { m_impl.DoUngetWriteBuf(); }
   void DoUngetWriteBuf(size_t nLen)
     { m_impl.DoUngetWriteBuf(nLen); }
-
-  friend class WXDLLIMPEXP_BASE wxStringBuffer;
-  friend class WXDLLIMPEXP_BASE wxStringBufferLength;
-#endif // !wxUSE_STL_BASED_WXSTRING && !wxUSE_UNICODE_UTF8
+#endif // !wxUSE_STL_BASED_WXSTRING
 
 #ifndef wxNEEDS_WXSTRING_PRINTF_MIXIN
-  int DoPrintf(const wxChar *format, ...) ATTRIBUTE_PRINTF_2;
-  static wxString DoFormat(const wxChar *format, ...) ATTRIBUTE_PRINTF_1;
+  int DoPrintf(const wxString& format, ...);
+  static wxString DoFormat(const wxString& format, ...);
 #endif
 
 #if !wxUSE_STL_BASED_WXSTRING
@@ -2253,7 +2284,10 @@ private:
 #if !wxUSE_UNICODE_WCHAR
   ConvertedBuffer<wchar_t> m_convertedToWChar;
 #endif
+
   friend class WXDLLIMPEXP_BASE wxCStrData;
+  friend class wxImplStringBuffer;
+  friend class wxImplStringBufferLength;
 };
 
 #ifdef wxNEEDS_WXSTRING_PRINTF_MIXIN
@@ -2321,107 +2355,170 @@ inline wxString operator+(wchar_t ch, const wxString& string)
 // wxStringBuffer: a tiny class allowing to get a writable pointer into string
 // ----------------------------------------------------------------------------
 
-#if wxUSE_STL_BASED_WXSTRING || wxUSE_UNICODE_UTF8
-
-class WXDLLIMPEXP_BASE wxStringBuffer
+#if !wxUSE_STL_BASED_WXSTRING
+// string buffer for direct access to string data in their native
+// representation:
+class wxImplStringBuffer
 {
 public:
-    wxStringBuffer(wxString& str, size_t lenWanted = 1024)
-        : m_str(str), m_buf(lenWanted)
-        { }
+    typedef wxStringCharType CharType;
 
-    ~wxStringBuffer() { m_str.assign(m_buf.data(), wxStrlen(m_buf.data())); }
-
-    operator wxChar*() { return m_buf.data(); }
-
-private:
-    wxString& m_str;
-#if wxUSE_UNICODE
-    wxWCharBuffer m_buf;
-#else
-    wxCharBuffer m_buf;
-#endif
-
-    DECLARE_NO_COPY_CLASS(wxStringBuffer)
-};
-
-class WXDLLIMPEXP_BASE wxStringBufferLength
-{
-public:
-    wxStringBufferLength(wxString& str, size_t lenWanted = 1024)
-        : m_str(str), m_buf(lenWanted), m_len(0), m_lenSet(false)
-        { }
-
-    ~wxStringBufferLength()
-    {
-        wxASSERT(m_lenSet);
-        m_str.assign(m_buf.data(), m_len);
-    }
-
-    operator wxChar*() { return m_buf.data(); }
-    void SetLength(size_t length) { m_len = length; m_lenSet = true; }
-
-private:
-    wxString& m_str;
-#if wxUSE_UNICODE
-    wxWCharBuffer m_buf;
-#else
-    wxCharBuffer  m_buf;
-#endif
-    size_t        m_len;
-    bool          m_lenSet;
-
-    DECLARE_NO_COPY_CLASS(wxStringBufferLength)
-};
-
-#else // if !wxUSE_STL_BASED_WXSTRING && !wxUSE_UNICODE_UTF8
-
-class WXDLLIMPEXP_BASE wxStringBuffer
-{
-public:
-    wxStringBuffer(wxString& str, size_t lenWanted = 1024)
+    wxImplStringBuffer(wxString& str, size_t lenWanted = 1024)
         : m_str(str), m_buf(NULL)
         { m_buf = m_str.DoGetWriteBuf(lenWanted); }
 
-    ~wxStringBuffer() { m_str.DoUngetWriteBuf(); }
+    ~wxImplStringBuffer() { m_str.DoUngetWriteBuf(); }
 
-    operator wxChar*() const { return m_buf; }
+    operator wxStringCharType*() const { return m_buf; }
 
 private:
-    wxString& m_str;
-    wxChar   *m_buf;
+    wxString&         m_str;
+    wxStringCharType *m_buf;
 
-    DECLARE_NO_COPY_CLASS(wxStringBuffer)
+    DECLARE_NO_COPY_CLASS(wxImplStringBuffer)
 };
 
-class WXDLLIMPEXP_BASE wxStringBufferLength
+class wxImplStringBufferLength
 {
 public:
-    wxStringBufferLength(wxString& str, size_t lenWanted = 1024)
+    typedef wxStringCharType CharType;
+
+    wxImplStringBufferLength(wxString& str, size_t lenWanted = 1024)
         : m_str(str), m_buf(NULL), m_len(0), m_lenSet(false)
     {
         m_buf = m_str.DoGetWriteBuf(lenWanted);
         wxASSERT(m_buf != NULL);
     }
 
-    ~wxStringBufferLength()
+    ~wxImplStringBufferLength()
     {
         wxASSERT(m_lenSet);
         m_str.DoUngetWriteBuf(m_len);
     }
 
-    operator wxChar*() const { return m_buf; }
+    operator wxStringCharType*() const { return m_buf; }
     void SetLength(size_t length) { m_len = length; m_lenSet = true; }
 
 private:
-    wxString& m_str;
-    wxChar   *m_buf;
-    size_t    m_len;
-    bool      m_lenSet;
+    wxString&         m_str;
+    wxStringCharType *m_buf;
+    size_t            m_len;
+    bool              m_lenSet;
 
-    DECLARE_NO_COPY_CLASS(wxStringBufferLength)
+    DECLARE_NO_COPY_CLASS(wxImplStringBufferLength)
 };
 
+#endif // !wxUSE_STL_BASED_WXSTRING
+
+template<typename T>
+class wxStringTypeBufferBase
+{
+public:
+    typedef T CharType;
+
+    wxStringTypeBufferBase(wxString& str, size_t lenWanted = 1024)
+        : m_str(str), m_buf(lenWanted)
+        { }
+
+
+    operator CharType*() { return m_buf.data(); }
+
+protected:
+    wxString& m_str;
+    wxCharTypeBuffer<CharType> m_buf;
+};
+
+template<typename T>
+class wxStringTypeBufferLengthBase
+{
+public:
+    typedef T CharType;
+
+    wxStringTypeBufferLengthBase(wxString& str, size_t lenWanted = 1024)
+        : m_str(str), m_buf(lenWanted), m_len(0), m_lenSet(false)
+        { }
+
+    ~wxStringTypeBufferLengthBase()
+    {
+        wxASSERT(m_lenSet);
+        m_str.assign(m_buf.data(), m_len);
+    }
+
+    operator CharType*() { return m_buf.data(); }
+    void SetLength(size_t length) { m_len = length; m_lenSet = true; }
+
+protected:
+    wxString& m_str;
+    wxCharTypeBuffer<CharType> m_buf;
+    size_t        m_len;
+    bool          m_lenSet;
+};
+
+template<typename T>
+class wxStringTypeBuffer : public wxStringTypeBufferBase<T>
+{
+public:
+    wxStringTypeBuffer(wxString& str, size_t lenWanted = 1024)
+        : wxStringTypeBufferBase<T>(str, lenWanted) {}
+    ~wxStringTypeBuffer()
+    {
+        this->m_str.assign(this->m_buf.data());
+    }
+
+    DECLARE_NO_COPY_CLASS(wxStringTypeBuffer)
+};
+
+template<typename T>
+class wxStringTypeBufferLength : public wxStringTypeBufferLengthBase<T>
+{
+public:
+    wxStringTypeBufferLength(wxString& str, size_t lenWanted = 1024)
+        : wxStringTypeBufferLengthBase<T>(str, lenWanted) {}
+
+    ~wxStringTypeBufferLength()
+    {
+        wxASSERT(this->m_lenSet);
+        this->m_str.assign(this->m_buf.data(), this->m_len);
+    }
+
+    DECLARE_NO_COPY_CLASS(wxStringTypeBufferLength)
+};
+
+#if wxUSE_STL_BASED_WXSTRING
+class wxImplStringBuffer : public wxStringTypeBufferBase<wxStringCharType>
+{
+public:
+    wxImplStringBuffer(wxString& str, size_t lenWanted = 1024)
+        : wxStringTypeBufferBase<wxStringCharType>(str, lenWanted) {}
+    ~wxImplStringBuffer()
+        { m_str.m_impl.assign(m_buf.data()); }
+
+    DECLARE_NO_COPY_CLASS(wxImplStringBuffer)
+};
+
+class wxImplStringBufferLength : public wxStringTypeBufferLengthBase<wxStringCharType>
+{
+public:
+    wxImplStringBufferLength(wxString& str, size_t lenWanted = 1024)
+        : wxStringTypeBufferLengthBase<wxStringCharType>(str, lenWanted) {}
+
+    ~wxImplStringBufferLength()
+    {
+        wxASSERT(m_lenSet);
+        m_str.m_impl.assign(m_buf.data(), m_len);
+    }
+
+    DECLARE_NO_COPY_CLASS(wxImplStringBufferLength)
+};
+#endif // wxUSE_STL_BASED_WXSTRING
+
+
+#if wxUSE_STL_BASED_WXSTRING || wxUSE_UNICODE_UTF8
+typedef wxStringTypeBuffer<wxChar>        wxStringBuffer;
+typedef wxStringTypeBufferLength<wxChar>  wxStringBufferLength;
+#else // if !wxUSE_STL_BASED_WXSTRING && !wxUSE_UNICODE_UTF8
+typedef wxImplStringBuffer                wxStringBuffer;
+typedef wxImplStringBufferLength          wxStringBufferLength;
 #endif // !wxUSE_STL_BASED_WXSTRING && !wxUSE_UNICODE_UTF8
 
 // ---------------------------------------------------------------------------
@@ -2598,6 +2695,11 @@ inline wxString wxCStrData::AsString() const
         return *m_str;
     else
         return m_str->Mid(m_offset);
+}
+
+inline const wxStringCharType *wxCStrData::AsInternal() const
+{
+    return wxStringOperations::AddToIter(m_str->wx_str(), m_offset);
 }
 
 inline wxUniChar wxCStrData::operator*() const

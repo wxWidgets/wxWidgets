@@ -111,18 +111,19 @@ wxString wxMimeTypeCommands::GetVerbCmd(size_t n) const
 // wxFileTypeInfo
 // ----------------------------------------------------------------------------
 
-wxFileTypeInfo::wxFileTypeInfo(const wxChar *mimeType,
-                               const wxChar *openCmd,
-                               const wxChar *printCmd,
-                               const wxChar *desc,
-                               ...)
-              : m_mimeType(mimeType),
-                m_openCmd(openCmd),
-                m_printCmd(printCmd),
-                m_desc(desc)
+void wxFileTypeInfo::VarArgInit(const wxString& mimeType,
+                                const wxString& openCmd,
+                                const wxString& printCmd,
+                                const wxString& desc,
+                                ...)
 {
     va_list argptr;
     va_start(argptr, desc);
+
+    m_mimeType = mimeType;
+    m_openCmd = openCmd;
+    m_printCmd = printCmd;
+    m_desc = desc;
 
     for ( ;; )
     {
@@ -132,7 +133,7 @@ wxFileTypeInfo::wxFileTypeInfo(const wxChar *mimeType,
     #pragma warning(disable: 1684)
 #endif
 
-        const wxChar *ext = va_arg(argptr, const wxChar *);
+        wxArgNormalizedString ext(WX_VA_ARG_STRING(argptr));
 
 #ifdef __INTELC__
     #pragma warning(pop)
@@ -143,7 +144,7 @@ wxFileTypeInfo::wxFileTypeInfo(const wxChar *mimeType,
             break;
         }
 
-        m_exts.Add(ext);
+        m_exts.Add(ext.GetString());
     }
 
     va_end(argptr);

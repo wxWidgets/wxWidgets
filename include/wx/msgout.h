@@ -36,13 +36,19 @@ public:
     virtual ~wxMessageOutputBase() { }
 
     // show a message to the user
-    // void Printf(const wxChar* format, ...)  ATTRIBUTE_PRINTF_2 = 0;
-    WX_DEFINE_VARARG_FUNC_VOID(Printf, DoPrintf)
+    // void Printf(const wxString& format, ...) = 0;
+    WX_DEFINE_VARARG_FUNC_VOID(Printf, 1, (const wxString&), DoPrintf)
+#ifdef __WATCOMC__
+    // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
+    WX_DEFINE_VARARG_FUNC_VOID(Printf, 1, (const char*), DoPrintf)
+    WX_DEFINE_VARARG_FUNC_VOID(Printf, 1, (const wchar_t*), DoPrintf)
+    WX_DEFINE_VARARG_FUNC_VOID(Printf, 1, (const wxCStrData&), DoPrintf)
+#endif
 
 protected:
     // NB: this is pure virtual so that it can be implemented in dllexported
     //     wxMessagOutput class
-    virtual void DoPrintf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2 = 0;
+    virtual void DoPrintf(const wxString& format, ...) = 0;
 
     // called by DoPrintf() to output formatted string
     virtual void Output(const wxString& str) = 0;
@@ -67,7 +73,7 @@ public:
     static wxMessageOutput* Set(wxMessageOutput* msgout);
 
 protected:
-    virtual void DoPrintf(const wxChar* format, ...) ATTRIBUTE_PRINTF_2;
+    virtual void DoPrintf(const wxString& format, ...);
     virtual void Output(const wxString& str) = 0;
 
 private:

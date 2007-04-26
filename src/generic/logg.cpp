@@ -205,13 +205,13 @@ static wxFrame *gs_pFrame = NULL; // FIXME MT-unsafe
 
 // accepts an additional argument which tells to which frame the output should
 // be directed
-void wxVLogStatus(wxFrame *pFrame, const wxChar *szFormat, va_list argptr)
+void wxVLogStatus(wxFrame *pFrame, const wxString& format, va_list argptr)
 {
   wxString msg;
 
   wxLog *pLog = wxLog::GetActiveTarget();
   if ( pLog != NULL ) {
-    msg.PrintfV(szFormat, argptr);
+    msg.PrintfV(format, argptr);
 
     wxASSERT( gs_pFrame == NULL ); // should be reset!
     gs_pFrame = pFrame;
@@ -224,11 +224,11 @@ void wxVLogStatus(wxFrame *pFrame, const wxChar *szFormat, va_list argptr)
   }
 }
 
-void wxDoLogStatus(wxFrame *pFrame, const wxChar *szFormat, ...)
+void wxDoLogStatus(wxFrame *pFrame, const wxString& format, ...)
 {
     va_list argptr;
-    va_start(argptr, szFormat);
-    wxVLogStatus(pFrame, szFormat, argptr);
+    va_start(argptr, format);
+    wxVLogStatus(pFrame, format, argptr);
     va_end(argptr);
 }
 
@@ -588,7 +588,7 @@ void wxLogFrame::OnSave(wxCommandEvent& WXUNUSED(event))
         wxLogError(_("Can't save log contents to file."));
     }
     else {
-        wxLogStatus(this, _("Log saved to the file '%s'."), filename.c_str());
+        wxLogStatus((wxFrame*)this, _("Log saved to the file '%s'."), filename.c_str());
     }
 #endif
 }

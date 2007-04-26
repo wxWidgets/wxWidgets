@@ -163,31 +163,16 @@ bool WXDLLEXPORT wxOKlibc()
     #undef wxVsprintf
     #undef wxVprintf
     #undef wxVsnprintf_
-    #undef wxSnprintf_
 
     #define wxNEED_WPRINTF
 
     int wxVfprintf( FILE *stream, const wxChar *format, va_list argptr );
 #endif
 
-#if !defined(wxSnprintf_)
-int WXDLLEXPORT wxDoSnprintf_(wxChar *buf, size_t len, const wxChar *format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-
-    int iLen = wxVsnprintf_(buf, len, format, argptr);
-
-    va_end(argptr);
-
-    return iLen;
-}
-#endif // wxSnprintf_
-
 #if defined(__DMC__)
     /* Digital Mars adds count to _stprintf (C99) so convert */
     #if wxUSE_UNICODE
-        int wxDoSprintf (wchar_t * __RESTRICT s, const wchar_t * __RESTRICT format, ... )
+        int wxSprintf (wchar_t * __RESTRICT s, const wchar_t * __RESTRICT format, ... )
         {
             va_list arglist;
 
@@ -527,7 +512,7 @@ wxString wxConvertFormat(const wxChar *format)
 
 #if defined(wxNEED_PRINTF_CONVERSION) || defined(wxNEED_WPRINTF)
 
-int wxDoScanf( const wxChar *format, ... )
+int wxCRT_Scanf( const wxChar *format, ... )
 {
     va_list argptr;
     va_start(argptr, format);
@@ -539,7 +524,7 @@ int wxDoScanf( const wxChar *format, ... )
     return ret;
 }
 
-int wxDoSscanf( const wxChar *str, const wxChar *format, ... )
+int wxCRT_Sscanf( const wxChar *str, const wxChar *format, ... )
 {
     va_list argptr;
     va_start(argptr, format);
@@ -551,7 +536,7 @@ int wxDoSscanf( const wxChar *str, const wxChar *format, ... )
     return ret;
 }
 
-int wxDoFscanf( FILE *stream, const wxChar *format, ... )
+int wxCRT_Fscanf( FILE *stream, const wxChar *format, ... )
 {
     va_list argptr;
     va_start(argptr, format);
@@ -562,7 +547,7 @@ int wxDoFscanf( FILE *stream, const wxChar *format, ... )
     return ret;
 }
 
-int wxDoPrintf( const wxChar *format, ... )
+int wxCRT_Printf( const wxChar *format, ... )
 {
     va_list argptr;
     va_start(argptr, format);
@@ -574,40 +559,7 @@ int wxDoPrintf( const wxChar *format, ... )
     return ret;
 }
 
-#ifndef wxSnprintf
-int wxDoSnprintf( wxChar *str, size_t size, const wxChar *format, ... )
-{
-    va_list argptr;
-    va_start(argptr, format);
-
-    int ret = vswprintf( str, size, wxFormatConverter(format), argptr );
-
-    // VsnprintfTestCase reveals that glibc's implementation of vswprintf
-    // doesn't nul terminate on truncation.
-    str[size - 1] = 0;
-
-    va_end(argptr);
-
-    return ret;
-}
-#endif // wxSnprintf
-
-int wxDoSprintf( wxChar *str, const wxChar *format, ... )
-{
-    va_list argptr;
-    va_start(argptr, format);
-
-    // note that wxString::FormatV() uses wxVsnprintf(), not wxSprintf(), so
-    // it's safe to implement this one in terms of it
-    wxString s(wxString::FormatV(format, argptr));
-    wxStrcpy(str, s);
-
-    va_end(argptr);
-
-    return s.length();
-}
-
-int wxDoFprintf( FILE *stream, const wxChar *format, ... )
+int wxCRT_Fprintf( FILE *stream, const wxChar *format, ... )
 {
     va_list argptr;
     va_start( argptr, format );
@@ -619,35 +571,235 @@ int wxDoFprintf( FILE *stream, const wxChar *format, ... )
     return ret;
 }
 
-int wxVsscanf( const wxChar *str, const wxChar *format, va_list argptr )
+int wxCRT_Vsscanf( const wxChar *str, const wxChar *format, va_list argptr )
 {
     return vswscanf( str, wxFormatConverter(format), argptr );
 }
 
-int wxVfprintf( FILE *stream, const wxChar *format, va_list argptr )
+int wxCRT_Vfprintf( FILE *stream, const wxChar *format, va_list argptr )
 {
     return vfwprintf( stream, wxFormatConverter(format), argptr );
 }
 
-int wxVprintf( const wxChar *format, va_list argptr )
+int wxCRT_Vprintf( const wxChar *format, va_list argptr )
 {
     return vwprintf( wxFormatConverter(format), argptr );
 }
 
-#ifndef wxVsnprintf
-int wxVsnprintf( wxChar *str, size_t size, const wxChar *format, va_list argptr )
+#ifndef wxCRT_Vsnprintf
+int wxCRT_Vsnprintf( wxChar *str, size_t size, const wxChar *format, va_list argptr )
 {
     return vswprintf( str, size, wxFormatConverter(format), argptr );
 }
-#endif // wxVsnprintf
+#endif // wxCRT_Vsnprintf
 
-int wxVsprintf( wxChar *str, const wxChar *format, va_list argptr )
+int wxCRT_Vsprintf( wxChar *str, const wxChar *format, va_list argptr )
 {
     // same as for wxSprintf()
     return vswprintf(str, INT_MAX / 4, wxFormatConverter(format), argptr);
 }
 
 #endif // wxNEED_PRINTF_CONVERSION
+
+
+// ----------------------------------------------------------------------------
+// wrappers to printf and scanf function families
+// ----------------------------------------------------------------------------
+
+int wxDoSprintf(char *str, const wxString& format, ...)
+{
+    va_list argptr;
+    va_start(argptr, format);
+
+    int rv = wxVsprintf(str, format, argptr);
+
+    va_end(argptr);
+    return rv;
+}
+
+#if wxUSE_UNICODE
+int wxDoSprintf(wchar_t *str, const wxString& format, ...)
+{
+    va_list argptr;
+    va_start(argptr, format);
+
+    int rv = wxVsprintf(str, format, argptr);
+
+    va_end(argptr);
+    return rv;
+}
+#endif
+
+int wxDoSnprintf(char *str, size_t size, const wxString& format, ...)
+{
+    va_list argptr;
+    va_start(argptr, format);
+
+    int rv = wxVsnprintf(str, size, format, argptr);
+
+    va_end(argptr);
+    return rv;
+}
+
+#if wxUSE_UNICODE
+int wxDoSnprintf(wchar_t *str, size_t size, const wxString& format, ...)
+{
+    va_list argptr;
+    va_start(argptr, format);
+
+    int rv = wxVsnprintf(str, size, format, argptr);
+
+    va_end(argptr);
+    return rv;
+}
+#endif
+
+
+#ifdef HAVE_BROKEN_VSNPRINTF_DECL
+    #define vsnprintf wx_fixed_vsnprintf
+#endif
+
+#if wxUSE_UNICODE
+static int ConvertStringToBuf(const wxString& s, char *out, size_t outsize)
+{
+    const wxWX2WCbuf buf = s.wc_str();
+
+    size_t len = wxConvLibc.FromWChar(out, outsize, buf);
+    if ( len != wxCONV_FAILED )
+        return len-1;
+    else
+        return wxConvLibc.FromWChar(NULL, 0, buf);
+}
+
+#if wxUSE_UNICODE_UTF8
+static int ConvertStringToBuf(const wxString& s, wchar_t *out, size_t outsize)
+{
+    const wxWX2WCbuf buf(s.wc_str());
+    size_t len = wxWcslen(buf);
+    if ( outsize > len )
+        memcpy(out, buf, (len+1) * sizeof(wchar_t));
+    // else: not enough space
+    return len;
+}
+#endif
+
+template<typename T>
+static size_t PrintfViaString(T *out, size_t outsize,
+                              const wxString& format, va_list argptr)
+{
+    va_list argcopy;
+    wxVaCopy(argcopy, argptr);
+
+    wxString s;
+    s.PrintfV(format, argcopy);
+
+    return ConvertStringToBuf(s, out, outsize);
+}
+#endif // wxUSE_UNICODE
+
+int wxVsprintf(char *str, const wxString& format, va_list argptr)
+{
+    va_list argcopy;
+    wxVaCopy(argcopy, argptr);
+
+#if wxUSE_UTF8_LOCALE_ONLY
+    return vsprintf(str, format.wx_str(), argcopy);
+#else
+    #if wxUSE_UNICODE_UTF8
+    if ( wxLocaleIsUtf8 )
+        return vsprintf(str, format.wx_str(), argcopy);
+    else
+    #endif
+    #if wxUSE_UNICODE
+    return PrintfViaString(str, wxNO_LEN, format, argcopy);
+    #else
+    return wxCRT_Vsprintf(str, format, argcopy);
+    #endif
+#endif
+}
+
+#if wxUSE_UNICODE
+int wxVsprintf(wchar_t *str, const wxString& format, va_list argptr)
+{
+    va_list argcopy;
+    wxVaCopy(argcopy, argptr);
+
+#if wxUSE_UNICODE_WCHAR
+    return wxCRT_Vsprintf(str, format, argcopy);
+#else // wxUSE_UNICODE_UTF8
+    #if !wxUSE_UTF8_LOCALE_ONLY
+    if ( !wxLocaleIsUtf8 )
+        return wxCRT_Vsprintf(str, format, argcopy);
+    else
+    #endif
+        return PrintfViaString(str, wxNO_LEN, format, argcopy);
+#endif // wxUSE_UNICODE_UTF8
+}
+#endif // wxUSE_UNICODE
+
+int wxVsnprintf(char *str, size_t size, const wxString& format, va_list argptr)
+{
+    int rv;
+    va_list argcopy;
+    wxVaCopy(argcopy, argptr);
+
+#if wxUSE_UTF8_LOCALE_ONLY
+    rv = vsnprintf(str, size, format.wx_str(), argcopy);
+#else
+    #if wxUSE_UNICODE_UTF8
+    if ( wxLocaleIsUtf8 )
+        rv = vsnprintf(str, size, format.wx_str(), argcopy);
+    else
+    #endif
+    #if wxUSE_UNICODE
+    {
+        // NB: if this code is called, then wxString::PrintV() would use the
+        //     wchar_t* version of wxVsnprintf(), so it's safe to use PrintV()
+        //     from here
+        rv = PrintfViaString(str, size, format, argcopy);
+    }
+    #else
+    rv = wxCRT_Vsnprintf(str, size, format, argcopy);
+    #endif
+#endif
+
+    // VsnprintfTestCase reveals that glibc's implementation of vswprintf
+    // doesn't nul terminate on truncation.
+    str[size - 1] = 0;
+
+    return rv;
+}
+
+#if wxUSE_UNICODE
+int wxVsnprintf(wchar_t *str, size_t size, const wxString& format, va_list argptr)
+{
+    int rv;
+    va_list argcopy;
+    wxVaCopy(argcopy, argptr);
+
+#if wxUSE_UNICODE_WCHAR
+    rv = wxCRT_Vsnprintf(str, size, format, argcopy);
+#else // wxUSE_UNICODE_UTF8
+    #if !wxUSE_UTF8_LOCALE_ONLY
+    if ( !wxLocaleIsUtf8 )
+        rv = wxCRT_Vsnprintf(str, size, format, argcopy);
+    else
+    #endif
+    {
+        // NB: if this code is called, then wxString::PrintV() would use the
+        //     char* version of wxVsnprintf(), so it's safe to use PrintV()
+        //     from here
+        rv = PrintfViaString(str, size, format, argcopy);
+    }
+#endif // wxUSE_UNICODE_UTF8
+
+    // VsnprintfTestCase reveals that glibc's implementation of vswprintf
+    // doesn't nul terminate on truncation.
+    str[size - 1] = 0;
+
+    return rv;
+}
+#endif // wxUSE_UNICODE
 
 #if wxUSE_WCHAR_T
 

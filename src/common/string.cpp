@@ -23,6 +23,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
+    #include "wx/wxcrtvararg.h"
 #endif
 
 #include <ctype.h>
@@ -1442,9 +1443,9 @@ bool wxString::ToDouble(double *val) const
 
 /* static */
 #ifdef wxNEEDS_WXSTRING_PRINTF_MIXIN
-wxString wxStringPrintfMixinBase::DoFormat(const wxChar *format, ...)
+wxString wxStringPrintfMixinBase::DoFormat(const wxString& format, ...)
 #else
-wxString wxString::DoFormat(const wxChar *format, ...)
+wxString wxString::DoFormat(const wxString& format, ...)
 #endif
 {
     va_list argptr;
@@ -1467,9 +1468,9 @@ wxString wxString::FormatV(const wxString& format, va_list argptr)
 }
 
 #ifdef wxNEEDS_WXSTRING_PRINTF_MIXIN
-int wxStringPrintfMixinBase::DoPrintf(const wxChar *format, ...)
+int wxStringPrintfMixinBase::DoPrintf(const wxString& format, ...)
 #else
-int wxString::DoPrintf(const wxChar *format, ...)
+int wxString::DoPrintf(const wxString& format, ...)
 #endif
 {
     va_list argptr;
@@ -1491,14 +1492,27 @@ int wxString::DoPrintf(const wxChar *format, ...)
     return iLen;
 }
 
-int wxString::PrintfV(const wxString& format, va_list argptr)
+#if wxUSE_UNICODE_UTF8
+template<typename BufferType>
+#else
+// we only need one version in non-UTF8 builds and at least two Windows
+// compilers have problems with this function template, so use just one
+// normal function here
+#endif
+static int DoStringPrintfV(wxString& str,
+                           const wxString& format, va_list argptr)
 {
     int size = 1024;
 
     for ( ;; )
     {
-        wxStringBuffer tmp(*this, size + 1);
+#if wxUSE_UNICODE_UTF8
+        BufferType tmp(str, size + 1);
+        typename BufferType::CharType *buf = tmp;
+#else
+        wxStringBuffer tmp(str, size + 1);
         wxChar *buf = tmp;
+#endif
 
         if ( !buf )
         {
@@ -1510,7 +1524,7 @@ int wxString::PrintfV(const wxString& format, va_list argptr)
         // only a copy
         va_list argptrcopy;
         wxVaCopy(argptrcopy, argptr);
-        int len = wxVsnprintf(buf, size, (const wxChar*)/*FIXME-UTF8*/format, argptrcopy);
+        int len = wxVsnprintf(buf, size, format, argptrcopy);
         va_end(argptrcopy);
 
         // some implementations of vsnprintf() don't NUL terminate
@@ -1554,9 +1568,37 @@ int wxString::PrintfV(const wxString& format, va_list argptr)
     }
 
     // we could have overshot
-    Shrink();
+    str.Shrink();
 
-    return length();
+    return str.length();
+}
+
+int wxString::PrintfV(const wxString& format, va_list argptr)
+{
+    va_list argcopy;
+    wxVaCopy(argcopy, argptr);
+
+#if wxUSE_UNICODE_UTF8
+    #if wxUSE_STL_BASED_WXSTRING
+        typedef wxStringTypeBuffer<char> Utf8Buffer;
+    #else
+        typedef wxImplStringBuffer Utf8Buffer;
+    #endif
+#endif
+
+#if wxUSE_UTF8_LOCALE_ONLY
+    return DoStringPrintfV<Utf8Buffer>(*this, format, argcopy);
+#else
+    #if wxUSE_UNICODE_UTF8
+    if ( wxLocaleIsUtf8 )
+        return DoStringPrintfV<Utf8Buffer>(*this, format, argcopy);
+    else
+        // wxChar* version
+        return DoStringPrintfV<wxStringBuffer>(*this, format, argcopy);
+    #else
+        return DoStringPrintfV(*this, format, argcopy);
+    #endif // UTF8/WCHAR
+#endif
 }
 
 // ----------------------------------------------------------------------------

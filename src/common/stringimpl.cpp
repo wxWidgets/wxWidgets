@@ -752,7 +752,6 @@ bool wxStringImpl::ConcatSelf(size_t nSrcLen,
   return true;
 }
 
-#if !wxUSE_UNICODE_UTF8
 // get the pointer to writable buffer of (at least) nLen bytes
 wxStringCharType *wxStringImpl::DoGetWriteBuf(size_t nLen)
 {
@@ -784,6 +783,5 @@ void wxStringImpl::DoUngetWriteBuf(size_t nLen)
   pData->nDataLength = nLen;
   pData->Validate(true);
 }
-#endif // !wxUSE_UNICODE_UTF8
 
 #endif // !wxUSE_STL_BASED_WXSTRING

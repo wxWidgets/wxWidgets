@@ -31,6 +31,7 @@
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/module.h"
+    #include "wx/wxcrtvararg.h"
 #endif //WX_PRECOMP
 
 #if defined(__WXMSW__)

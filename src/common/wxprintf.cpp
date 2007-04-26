@@ -143,8 +143,7 @@ typedef union {
     char pad_char;                      // %hc  (in ANSI mode: %c, too)
     wchar_t pad_wchar;                  // %lc  (in Unicode mode: %c, too)
 
-    char *pad_pchar;                    // %s   (related to a char *)
-    wchar_t *pad_pwchar;                // %s   (related to a wchar_t *)
+    void *pad_str;                      // %s
 
     int *pad_nint;                      // %n
     short int *pad_nshortint;           // %hn
@@ -616,10 +615,8 @@ bool wxPrintfConvSpec::LoadArg(wxPrintfArg *p, va_list &argptr)
             break;
 
         case wxPAT_PCHAR:
-            p->pad_pchar = va_arg(argptr, char *);
-            break;
         case wxPAT_PWCHAR:
-            p->pad_pwchar = va_arg(argptr, wchar_t *);
+            p->pad_str = va_arg(argptr, void *);
             break;
 
         case wxPAT_NINT:
@@ -735,54 +732,15 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p, size_t
         case wxPAT_PCHAR:
         case wxPAT_PWCHAR:
             {
-                wxString s;
-                const wxChar *val =
-#if wxUSE_UNICODE
-                    p->pad_pwchar;
+                wxArgNormalizedString arg(p->pad_str);
+                wxString s = arg;
 
-                if (m_type == wxPAT_PCHAR)
-                {
-                    // user passed a string explicitely indicated as ANSI...
-                    val = s = wxString(p->pad_pchar, wxConvLibc);
+                if ( !arg.IsValid() && m_nMaxWidth >= 6 )
+                    s = wxT("(null)");
 
-                    //wprintf(L"converting ANSI=>Unicode");   // for debug
-                }
-#else
-                    p->pad_pchar;
-
-#if wxUSE_WCHAR_T
-                if (m_type == wxPAT_PWCHAR)
-                {
-                    // user passed a string explicitely indicated as Unicode...
-                    val = s = wxString(p->pad_pwchar, wxConvLibc);
-
-                    //printf("converting Unicode=>ANSI");   // for debug
-                }
-#endif
-#endif
-                int len;
-
-                if (val)
-                {
-#if wxUSE_STRUTILS
-                    // at this point we are sure that m_nMaxWidth is positive or null
-                    // (see top of wxPrintfConvSpec::LoadArg)
-                    len = wxMin((unsigned int)m_nMaxWidth, wxStrlen(val));
-#else
-                    for ( len = 0; val[len] && (len < m_nMaxWidth); len++ )
-                        ;
-#endif
-                }
-                else if (m_nMaxWidth >= 6)
-                {
-                    val = wxT("(null)");
-                    len = 6;
-                }
-                else
-                {
-                    val = wxEmptyString;
-                    len = 0;
-                }
+                // at this point we are sure that m_nMaxWidth is positive or
+                // null (see top of wxPrintfConvSpec::LoadArg)
+                int len = wxMin((unsigned int)m_nMaxWidth, s.length());
 
                 int i;
 
@@ -794,11 +752,16 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p, size_t
 
 #if wxUSE_STRUTILS
                 len = wxMin((unsigned int)len, lenMax-lenCur);
-                wxStrncpy(buf+lenCur, val, len);
+    #if wxUSE_UNICODE // FIXME-UTF8
+                wxStrncpy(buf+lenCur, s.wc_str(), len);
+    #else
+                wxStrncpy(buf+lenCur, s.mb_str(), len);
+    #endif
                 lenCur += len;
 #else
-                for (i = 0; i < len; i++)
-                    APPEND_CH(val[i]);
+                wxString::const_iterator end = s.begin() + len;
+                for (wxString::const_iterator j = s.begin(); j != end; ++j)
+                    APPEND_CH(*j);
 #endif
 
                 if (m_bAlignLeft)
