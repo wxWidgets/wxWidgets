@@ -142,7 +142,8 @@ private:
 enum
 {
     ID_ROTATE_LEFT = 100,
-    ID_ROTATE_RIGHT
+    ID_ROTATE_RIGHT,
+    ID_RESIZE
 };
 
 class MyImageFrame : public wxFrame
@@ -152,11 +153,13 @@ public:
         : wxFrame(parent, wxID_ANY,
                   wxString::Format(_T("Image from %s"), desc.c_str()),
                   wxDefaultPosition, wxDefaultSize,
-                  wxCAPTION | wxSYSTEM_MENU | wxCLOSE_BOX),
+                  wxDEFAULT_FRAME_STYLE | wxFULL_REPAINT_ON_RESIZE),
                   m_bitmap(bitmap)
     {
         wxMenu *menu = new wxMenu;
         menu->Append(wxID_SAVE);
+        menu->AppendSeparator();
+        menu->Append(ID_RESIZE, _T("&Fit to window\tCtrl-F"));
         menu->AppendSeparator();
         menu->Append(ID_ROTATE_LEFT, _T("Rotate &left\tCtrl-L"));
         menu->Append(ID_ROTATE_RIGHT, _T("Rotate &right\tCtrl-R"));
@@ -165,7 +168,11 @@ public:
         mbar->Append(menu, _T("&Image"));
         SetMenuBar(mbar);
 
+        CreateStatusBar();
+
         SetClientSize(bitmap.GetWidth(), bitmap.GetHeight());
+
+        UpdateStatusBar();
     }
 
     void OnEraseBackground(wxEraseEvent& WXUNUSED(event))
@@ -175,8 +182,12 @@ public:
 
     void OnPaint(wxPaintEvent& WXUNUSED(event))
     {
-        wxPaintDC dc( this );
-        dc.DrawBitmap( m_bitmap, 0, 0, true /* use mask */ );
+        wxPaintDC dc(this);
+        const wxSize size = GetClientSize();
+        dc.DrawBitmap(m_bitmap,
+                      (size.x - m_bitmap.GetWidth())/2,
+                      (size.y - m_bitmap.GetHeight())/2,
+                      true /* use mask */);
     }
 
     void OnSave(wxCommandEvent& WXUNUSED(event))
@@ -305,6 +316,18 @@ public:
 #endif // wxUSE_FILEDLG
     }
 
+    void OnResize(wxCommandEvent& WXUNUSED(event))
+    {
+        wxImage img(m_bitmap.ConvertToImage());
+
+        const wxSize size = GetClientSize();
+        img.Rescale(size.x, size.y, wxIMAGE_QUALITY_HIGH);
+        m_bitmap = wxBitmap(img);
+
+        UpdateStatusBar();
+        Refresh();
+    }
+
     void OnRotate(wxCommandEvent& event)
     {
         double angle = 5;
@@ -312,7 +335,7 @@ public:
             angle = -angle;
 
         wxImage img(m_bitmap.ConvertToImage());
-        img = img.Rotate(angle, wxPoint(0, 0));//wxPoint(img.GetWidth() / 2, img.GetHeight() / 2));
+        img = img.Rotate(angle, wxPoint(img.GetWidth() / 2, img.GetHeight() / 2));
         if ( !img.Ok() )
         {
             wxLogWarning(_T("Rotation failed"));
@@ -320,10 +343,19 @@ public:
         }
 
         m_bitmap = wxBitmap(img);
+
+        UpdateStatusBar();
         Refresh();
     }
 
 private:
+    void UpdateStatusBar()
+    {
+        wxLogStatus(this, _T("Image size: (%d, %d)"),
+                    m_bitmap.GetWidth(),
+                    m_bitmap.GetHeight());
+    }
+
     wxBitmap m_bitmap;
 
     DECLARE_EVENT_TABLE()
@@ -490,6 +522,7 @@ BEGIN_EVENT_TABLE(MyImageFrame, wxFrame)
 
     EVT_MENU(wxID_SAVE, MyImageFrame::OnSave)
     EVT_MENU_RANGE(ID_ROTATE_LEFT, ID_ROTATE_RIGHT, MyImageFrame::OnRotate)
+    EVT_MENU(ID_RESIZE, MyImageFrame::OnResize)
 END_EVENT_TABLE()
 
 #ifdef wxHAVE_RAW_BITMAP
