@@ -68,6 +68,8 @@ enum
     ComboPage_Delete,
     ComboPage_DeleteText,
     ComboPage_DeleteSel,
+    ComboPage_SetValue,
+    ComboPage_SetValueText,
     ComboPage_Combo
 };
 
@@ -105,6 +107,7 @@ protected:
     void OnButtonAdd(wxCommandEvent& event);
     void OnButtonAddSeveral(wxCommandEvent& event);
     void OnButtonAddMany(wxCommandEvent& event);
+    void OnButtonSetValue(wxCommandEvent& event);
     void OnButtonSetCurrent(wxCommandEvent& event);
 
     void OnComboBox(wxCommandEvent& event);
@@ -147,6 +150,7 @@ protected:
     wxTextCtrl *m_textInsert,
                *m_textAdd,
                *m_textChange,
+               *m_textSetValue,
                *m_textDelete,
                *m_textCur;
 
@@ -169,6 +173,7 @@ BEGIN_EVENT_TABLE(ComboboxWidgetsPage, WidgetsPage)
     EVT_BUTTON(ComboPage_Add, ComboboxWidgetsPage::OnButtonAdd)
     EVT_BUTTON(ComboPage_AddSeveral, ComboboxWidgetsPage::OnButtonAddSeveral)
     EVT_BUTTON(ComboPage_AddMany, ComboboxWidgetsPage::OnButtonAddMany)
+    EVT_BUTTON(ComboPage_SetValue, ComboboxWidgetsPage::OnButtonSetValue)
     EVT_BUTTON(ComboPage_SetCurrent, ComboboxWidgetsPage::OnButtonSetCurrent)
 
     EVT_TEXT_ENTER(ComboPage_InsertText, ComboboxWidgetsPage::OnButtonInsert)
@@ -320,6 +325,14 @@ void ComboboxWidgetsPage::CreateContent()
     btn = new wxButton(this, ComboPage_Clear, _T("&Clear"));
     sizerMiddle->Add(btn, 0, wxALL | wxGROW, 5);
 
+    sizerRow = CreateSizerWithTextAndButton(ComboPage_SetValue,
+                                            _T("SetValue"),
+                                            ComboPage_SetValueText,
+                                            &m_textSetValue);
+    sizerMiddle->Add(sizerRow, 0, wxALL | wxGROW, 5);
+
+
+
     // right pane
     wxSizer *sizerRight = new wxBoxSizer(wxVERTICAL);
     m_combobox = new wxComboBox(this, ComboPage_Combo, wxEmptyString,
@@ -455,6 +468,12 @@ void ComboboxWidgetsPage::OnButtonDeleteSel(wxCommandEvent& WXUNUSED(event))
     {
         m_combobox->Delete(sel);
     }
+}
+
+void ComboboxWidgetsPage::OnButtonSetValue(wxCommandEvent& WXUNUSED(event))
+{
+    wxString value = m_textSetValue->GetValue();
+    m_combobox->SetValue( value );
 }
 
 void ComboboxWidgetsPage::OnButtonClear(wxCommandEvent& WXUNUSED(event))
