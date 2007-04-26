@@ -7,8 +7,15 @@
 // Copyright:   (c) wxWidgets team
 // Licence:     wxWindows licence
 //
-// Purpose:     Minimal wxWidgets sample file for Borland
-// To use this with other samples, copy the borland_ide.cpp
+// Purpose:     Minimal wxWidgets start source file for
+// Borland's Turbo explorer or Developer Studio 2006.
+// Doubleclick / open borland.bdsproj. The current version is
+// to be used with a dynamic build of wxWidgets-made by running
+// make -f Makefile.bcc -DBUILD=debug -DSHARED=1
+// in wxWidgets\build\msw. You also need the wxWidgets\lib\bcc_dll
+// directory in your PATH.
+
+// To use this to debug other samples, copy the borland_ide.cpp
 // and borland.bdsproj files, then replace all occurences of
 // "minimal" with the name of the new project files
 **************************************************/
