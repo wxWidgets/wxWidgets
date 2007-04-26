@@ -207,10 +207,7 @@ wxRendererMSW::DrawComboBoxDropButton(wxWindow * WXUNUSED(win),
                                       int flags)
 {
     RECT r;
-    r.left = rect.GetLeft();
-    r.top = rect.GetTop();
-    r.bottom = rect.y + rect.height;
-    r.right = rect.x + rect.width;
+    wxCopyRectToRECT(rect, r);
 
     int style = DFCS_SCROLLCOMBOBOX;
     if ( flags & wxCONTROL_DISABLED )
