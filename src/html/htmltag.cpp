@@ -19,12 +19,12 @@
 
 #ifndef WXPRECOMP
     #include "wx/colour.h"
+    #include "wx/wxcrtvararg.h"
 #endif
 
 #include "wx/html/htmlpars.h"
 #include <stdio.h> // for vsscanf
 #include <stdarg.h>
-
 
 //-----------------------------------------------------------------------------
 // wxHtmlTagsCache

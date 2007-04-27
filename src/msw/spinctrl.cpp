@@ -32,6 +32,7 @@
     #include "wx/msw/wrapcctl.h" // include <commctrl.h> "properly"
     #include "wx/event.h"
     #include "wx/textctrl.h"
+    #include "wx/wxcrtvararg.h"
 #endif
 
 #include "wx/msw/private.h"

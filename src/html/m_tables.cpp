@@ -16,6 +16,7 @@
 #if wxUSE_HTML && wxUSE_STREAMS
 
 #ifndef WXPRECOMP
+    #include "wx/wxcrtvararg.h"
 #endif
 
 #include "wx/html/forcelnk.h"

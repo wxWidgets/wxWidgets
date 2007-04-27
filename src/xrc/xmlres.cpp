@@ -29,6 +29,7 @@
     #include "wx/bitmap.h"
     #include "wx/image.h"
     #include "wx/module.h"
+    #include "wx/wxcrtvararg.h"
 #endif
 
 #ifndef __WXWINCE__

@@ -22,6 +22,7 @@
     #include "wx/dc.h"
     #include "wx/settings.h"
     #include "wx/module.h"
+    #include "wx/wxcrtvararg.h"
 #endif
 
 #include "wx/html/htmlcell.h"

@@ -20,6 +20,7 @@
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/app.h"
+    #include "wx/wxcrtvararg.h"
 #endif
 
 #include "wx/tokenzr.h"

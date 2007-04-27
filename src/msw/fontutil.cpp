@@ -29,6 +29,7 @@
     #include "wx/log.h"
     #include "wx/intl.h"
     #include "wx/encinfo.h"
+    #include "wx/wxcrtvararg.h"
 #endif //WX_PRECOMP
 
 #include "wx/msw/private.h"

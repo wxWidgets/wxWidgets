@@ -37,6 +37,7 @@
     #include "wx/menu.h"
     #include "wx/math.h"
     #include "wx/module.h"
+    #include "wx/wxcrtvararg.h"
 #endif
 
 #include "wx/sysopt.h"
