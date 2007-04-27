@@ -15,7 +15,7 @@
 
 #if wxUSE_HTML && wxUSE_STREAMS
 
-#ifndef WXPRECOMP
+#ifndef WX_PRECOMP
     #include "wx/image.h"
 #endif
 

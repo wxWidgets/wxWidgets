@@ -15,7 +15,7 @@
 
 #include "wx/printdlg.h"
 
-#ifndef WXPRECOMP
+#ifndef WX_PRECOMP
     #include "wx/object.h"
     #include "wx/dcprint.h"
     #include "wx/msgdlg.h"

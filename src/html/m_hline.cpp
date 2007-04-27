@@ -15,7 +15,7 @@
 
 #if wxUSE_HTML && wxUSE_STREAMS
 
-#ifndef WXPRECOMP
+#ifndef WX_PRECOMP
     #include "wx/brush.h"
     #include "wx/pen.h"
     #include "wx/dc.h"

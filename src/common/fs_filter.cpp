@@ -17,7 +17,7 @@
 
 #include "wx/fs_filter.h"
 
-#ifndef WXPRECOMP
+#ifndef WX_PRECOMP
 #endif
 
 #include "wx/ptr_scpd.h"

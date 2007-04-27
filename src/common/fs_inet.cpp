@@ -20,7 +20,7 @@
 
 #if wxUSE_FILESYSTEM && wxUSE_FS_INET
 
-#ifndef WXPRECOMP
+#ifndef WX_PRECOMP
     #include "wx/module.h"
 #endif
 

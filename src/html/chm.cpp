@@ -17,7 +17,7 @@
 
 #include <mspack.h>
 
-#ifndef WXPRECOMP
+#ifndef WX_PRECOMP
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/module.h"

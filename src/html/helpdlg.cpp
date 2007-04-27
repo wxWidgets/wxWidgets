@@ -18,7 +18,7 @@
 
 #if wxUSE_WXHTML_HELP
 
-#ifndef WXPRECOMP
+#ifndef WX_PRECOMP
     #include "wx/object.h"
     #include "wx/intl.h"
     #include "wx/log.h"
@@ -30,7 +30,7 @@
     #include "wx/radiobox.h"
     #include "wx/menu.h"
     #include "wx/msgdlg.h"
-#endif // WXPRECOMP
+#endif // WX_PRECOMP
 
 #include "wx/html/htmlwin.h"
 #include "wx/html/helpdlg.h"

@@ -17,7 +17,7 @@
 
 #include "wx/html/htmltag.h"
 
-#ifndef WXPRECOMP
+#ifndef WX_PRECOMP
     #include "wx/colour.h"
     #include "wx/wxcrtvararg.h"
 #endif
