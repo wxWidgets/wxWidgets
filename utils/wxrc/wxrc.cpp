@@ -19,6 +19,7 @@
 #ifndef WX_PRECOMP
     #include "wx/app.h"
     #include "wx/log.h"
+    #include "wx/wxcrtvararg.h"
 #endif
 
 #include "wx/cmdline.h"
