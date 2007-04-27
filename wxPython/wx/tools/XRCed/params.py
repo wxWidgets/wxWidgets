@@ -25,10 +25,11 @@ genericExStyles = [
     'wxWS_EX_PROCESS_UI_UPDATES'
     ]
 
-# Global var initialized in Panel.__init__ for button size in screen pixels
-buttonSize = None
-# Button size in dialog units
+# Global vars initialized in Panel.__init__ for button and textbox size in screen pixels
+buttonSize = textSise = None
+# Default Button size in dialog units
 buttonSizeD = (35,-1)
+
 
 # Class that can properly disable children
 class PPanel(wx.Panel):
@@ -58,9 +59,10 @@ class ParamBinaryOr(PPanel):
         sizer = wx.BoxSizer()
         self.text = wx.TextCtrl(self, self.ID_TEXT_CTRL, size=wx.Size(200,-1))
         sizer.Add(self.text, 0, wx.RIGHT | wx.ALIGN_CENTER_VERTICAL, 5)
-        self.button = wx.Button(self, self.ID_BUTTON_CHOICES, 'Edit...', size=buttonSize)
-        sizer.Add(self.button, 0, wx.ALIGN_CENTER_VERTICAL)
-        self.SetSizer(sizer)
+        self.button = wx.Button(self, self.ID_BUTTON_CHOICES, 'Edit...', 
+                                size=(buttonSize[0], textSize[1]))
+        sizer.Add(self.button, 0, wx.EXPAND)
+        self.SetSizerAndFit(sizer)
         wx.EVT_BUTTON(self, self.ID_BUTTON_CHOICES, self.OnButtonChoices)
         wx.EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
     def GetValue(self):
@@ -390,6 +392,8 @@ class ParamUnit(PPanel):
         self.SetSizer(sizer)
         self.spin.Bind(wx.EVT_SPIN_UP, self.OnSpinUp)
         self.spin.Bind(wx.EVT_SPIN_DOWN, self.OnSpinDown)
+        self.text.Bind(wx.EVT_TEXT, self.OnChange)
+        
     def GetValue(self):
         return self.text.GetValue()
     def SetValue(self, value):

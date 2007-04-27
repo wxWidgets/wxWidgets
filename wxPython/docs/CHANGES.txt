@@ -50,6 +50,12 @@ existed.
 wx.aui.PyAuiDocArt and wx.aui.PyAuiTabArt can now be derived from in
 wxPython and plugged in to wx.AUI.
 
+XRCed has a new experimental feature to add controls by draging icons
+on the test window using the right button. Mouse position is tracked
+to highlight the future parent.
+
+
+
 
 
 
