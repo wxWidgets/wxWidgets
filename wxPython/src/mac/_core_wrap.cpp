@@ -3881,6 +3881,9 @@ public:
  static const wxString wxPyPanelNameStr(wxPanelNameStr); 
 SWIGINTERN wxVisualAttributes *new_wxVisualAttributes(){ return new wxVisualAttributes; }
 SWIGINTERN void delete_wxVisualAttributes(wxVisualAttributes *self){ delete self; }
+SWIGINTERN wxFont wxVisualAttributes__get_font(wxVisualAttributes *self){ return self->font; }
+SWIGINTERN wxColour wxVisualAttributes__get_colFg(wxVisualAttributes *self){ return self->colFg; }
+SWIGINTERN wxColour wxVisualAttributes__get_colBg(wxVisualAttributes *self){ return self->colBg; }
 SWIGINTERN PyObject *wxWindow_GetChildren(wxWindow *self){
             wxWindowList& list = self->GetChildren();
             return wxPy_ConvertList(&list);
@@ -32582,40 +32585,10 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_VisualAttributes_font_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_VisualAttributes__get_font(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxVisualAttributes *arg1 = (wxVisualAttributes *) 0 ;
-  wxFont *arg2 = (wxFont *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject *swig_obj[2] ;
-  
-  if (!SWIG_Python_UnpackTuple(args,"VisualAttributes_font_set",2,2,swig_obj)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVisualAttributes, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VisualAttributes_font_set" "', expected argument " "1"" of type '" "wxVisualAttributes *""'"); 
-  }
-  arg1 = reinterpret_cast< wxVisualAttributes * >(argp1);
-  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2,SWIGTYPE_p_wxFont, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VisualAttributes_font_set" "', expected argument " "2"" of type '" "wxFont *""'"); 
-  }
-  arg2 = reinterpret_cast< wxFont * >(argp2);
-  if (arg1) (arg1)->font = *arg2;
-  
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_VisualAttributes_font_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxVisualAttributes *arg1 = (wxVisualAttributes *) 0 ;
-  wxFont *result = 0 ;
+  wxFont result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
@@ -32624,51 +32597,26 @@ SWIGINTERN PyObject *_wrap_VisualAttributes_font_get(PyObject *SWIGUNUSEDPARM(se
   swig_obj[0] = args;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVisualAttributes, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VisualAttributes_font_get" "', expected argument " "1"" of type '" "wxVisualAttributes *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VisualAttributes__get_font" "', expected argument " "1"" of type '" "wxVisualAttributes *""'"); 
   }
   arg1 = reinterpret_cast< wxVisualAttributes * >(argp1);
-  result = (wxFont *)& ((arg1)->font);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxFont, 0 |  0 );
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = wxVisualAttributes__get_font(arg1);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxFont(static_cast< const wxFont& >(result))), SWIGTYPE_p_wxFont, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_VisualAttributes_colFg_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_VisualAttributes__get_colFg(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxVisualAttributes *arg1 = (wxVisualAttributes *) 0 ;
-  wxColour *arg2 = (wxColour *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject *swig_obj[2] ;
-  
-  if (!SWIG_Python_UnpackTuple(args,"VisualAttributes_colFg_set",2,2,swig_obj)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVisualAttributes, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VisualAttributes_colFg_set" "', expected argument " "1"" of type '" "wxVisualAttributes *""'"); 
-  }
-  arg1 = reinterpret_cast< wxVisualAttributes * >(argp1);
-  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2,SWIGTYPE_p_wxColour, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VisualAttributes_colFg_set" "', expected argument " "2"" of type '" "wxColour *""'"); 
-  }
-  arg2 = reinterpret_cast< wxColour * >(argp2);
-  if (arg1) (arg1)->colFg = *arg2;
-  
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_VisualAttributes_colFg_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxVisualAttributes *arg1 = (wxVisualAttributes *) 0 ;
-  wxColour *result = 0 ;
+  wxColour result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
@@ -32677,51 +32625,26 @@ SWIGINTERN PyObject *_wrap_VisualAttributes_colFg_get(PyObject *SWIGUNUSEDPARM(s
   swig_obj[0] = args;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVisualAttributes, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VisualAttributes_colFg_get" "', expected argument " "1"" of type '" "wxVisualAttributes *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VisualAttributes__get_colFg" "', expected argument " "1"" of type '" "wxVisualAttributes *""'"); 
   }
   arg1 = reinterpret_cast< wxVisualAttributes * >(argp1);
-  result = (wxColour *)& ((arg1)->colFg);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxColour, 0 |  0 );
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = wxVisualAttributes__get_colFg(arg1);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxColour(static_cast< const wxColour& >(result))), SWIGTYPE_p_wxColour, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
 }
 
 
-SWIGINTERN PyObject *_wrap_VisualAttributes_colBg_set(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+SWIGINTERN PyObject *_wrap_VisualAttributes__get_colBg(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxVisualAttributes *arg1 = (wxVisualAttributes *) 0 ;
-  wxColour *arg2 = (wxColour *) 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
-  PyObject *swig_obj[2] ;
-  
-  if (!SWIG_Python_UnpackTuple(args,"VisualAttributes_colBg_set",2,2,swig_obj)) SWIG_fail;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVisualAttributes, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VisualAttributes_colBg_set" "', expected argument " "1"" of type '" "wxVisualAttributes *""'"); 
-  }
-  arg1 = reinterpret_cast< wxVisualAttributes * >(argp1);
-  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2,SWIGTYPE_p_wxColour, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "VisualAttributes_colBg_set" "', expected argument " "2"" of type '" "wxColour *""'"); 
-  }
-  arg2 = reinterpret_cast< wxColour * >(argp2);
-  if (arg1) (arg1)->colBg = *arg2;
-  
-  resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_VisualAttributes_colBg_get(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxVisualAttributes *arg1 = (wxVisualAttributes *) 0 ;
-  wxColour *result = 0 ;
+  wxColour result;
   void *argp1 = 0 ;
   int res1 = 0 ;
   PyObject *swig_obj[1] ;
@@ -32730,11 +32653,16 @@ SWIGINTERN PyObject *_wrap_VisualAttributes_colBg_get(PyObject *SWIGUNUSEDPARM(s
   swig_obj[0] = args;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxVisualAttributes, 0 |  0 );
   if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VisualAttributes_colBg_get" "', expected argument " "1"" of type '" "wxVisualAttributes *""'"); 
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "VisualAttributes__get_colBg" "', expected argument " "1"" of type '" "wxVisualAttributes *""'"); 
   }
   arg1 = reinterpret_cast< wxVisualAttributes * >(argp1);
-  result = (wxColour *)& ((arg1)->colBg);
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxColour, 0 |  0 );
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = wxVisualAttributes__get_colBg(arg1);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj((new wxColour(static_cast< const wxColour& >(result))), SWIGTYPE_p_wxColour, SWIG_POINTER_OWN |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -58368,12 +58296,9 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"GetAccelFromString", (PyCFunction) _wrap_GetAccelFromString, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_VisualAttributes", (PyCFunction)_wrap_new_VisualAttributes, METH_NOARGS, NULL},
 	 { (char *)"delete_VisualAttributes", (PyCFunction)_wrap_delete_VisualAttributes, METH_O, NULL},
-	 { (char *)"VisualAttributes_font_set", _wrap_VisualAttributes_font_set, METH_VARARGS, NULL},
-	 { (char *)"VisualAttributes_font_get", (PyCFunction)_wrap_VisualAttributes_font_get, METH_O, NULL},
-	 { (char *)"VisualAttributes_colFg_set", _wrap_VisualAttributes_colFg_set, METH_VARARGS, NULL},
-	 { (char *)"VisualAttributes_colFg_get", (PyCFunction)_wrap_VisualAttributes_colFg_get, METH_O, NULL},
-	 { (char *)"VisualAttributes_colBg_set", _wrap_VisualAttributes_colBg_set, METH_VARARGS, NULL},
-	 { (char *)"VisualAttributes_colBg_get", (PyCFunction)_wrap_VisualAttributes_colBg_get, METH_O, NULL},
+	 { (char *)"VisualAttributes__get_font", (PyCFunction)_wrap_VisualAttributes__get_font, METH_O, NULL},
+	 { (char *)"VisualAttributes__get_colFg", (PyCFunction)_wrap_VisualAttributes__get_colFg, METH_O, NULL},
+	 { (char *)"VisualAttributes__get_colBg", (PyCFunction)_wrap_VisualAttributes__get_colBg, METH_O, NULL},
 	 { (char *)"VisualAttributes_swigregister", VisualAttributes_swigregister, METH_VARARGS, NULL},
 	 { (char *)"VisualAttributes_swiginit", VisualAttributes_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_Window", (PyCFunction) _wrap_new_Window, METH_VARARGS | METH_KEYWORDS, NULL},

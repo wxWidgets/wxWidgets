@@ -8113,9 +8113,21 @@ class VisualAttributes(object):
         _core_.VisualAttributes_swiginit(self,_core_.new_VisualAttributes(*args, **kwargs))
     __swig_destroy__ = _core_.delete_VisualAttributes
     __del__ = lambda self : None;
-    font = property(_core_.VisualAttributes_font_get, _core_.VisualAttributes_font_set)
-    colFg = property(_core_.VisualAttributes_colFg_get, _core_.VisualAttributes_colFg_set)
-    colBg = property(_core_.VisualAttributes_colBg_get, _core_.VisualAttributes_colBg_set)
+    def _get_font(*args, **kwargs):
+        """_get_font(self) -> Font"""
+        return _core_.VisualAttributes__get_font(*args, **kwargs)
+
+    def _get_colFg(*args, **kwargs):
+        """_get_colFg(self) -> Colour"""
+        return _core_.VisualAttributes__get_colFg(*args, **kwargs)
+
+    def _get_colBg(*args, **kwargs):
+        """_get_colBg(self) -> Colour"""
+        return _core_.VisualAttributes__get_colBg(*args, **kwargs)
+
+    font = property(_get_font) 
+    colFg = property(_get_colFg) 
+    colBg = property(_get_colBg) 
 _core_.VisualAttributes_swigregister(VisualAttributes)
 NullAcceleratorTable = cvar.NullAcceleratorTable
 PanelNameStr = cvar.PanelNameStr
