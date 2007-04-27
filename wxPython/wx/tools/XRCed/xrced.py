@@ -686,12 +686,18 @@ class Frame(wx.Frame):
         index = tree.ItemIndex(selected)
         if index == 0: return # No previous sibling found
 
+        # Remove highlight, update testWin
+        if g.testWin.highLight:
+            g.testWin.highLight.Remove()
+            tree.needUpdate = True
+
         # Undo info
         self.lastOp = 'MOVEUP'
         status = 'Moved before previous sibling'
 
         # Prepare undo data
         panel.Apply()
+        tree.UnselectAll()
 
         parent = tree.GetItemParent(selected)
         elem = tree.RemoveLeaf(selected)
@@ -716,12 +722,18 @@ class Frame(wx.Frame):
         next = tree.GetNextSibling(selected)
         if not next: return
 
+        # Remove highlight, update testWin
+        if g.testWin.highLight:
+            g.testWin.highLight.Remove()
+            tree.needUpdate = True
+
         # Undo info
         self.lastOp = 'MOVEDOWN'
         status = 'Moved after next sibling'
 
         # Prepare undo data
         panel.Apply()
+        tree.UnselectAll()
 
         parent = tree.GetItemParent(selected)
         elem = tree.RemoveLeaf(selected)
@@ -749,6 +761,11 @@ class Frame(wx.Frame):
 
         # Check compatibility
         if not self.ItemsAreCompatible(tree.GetPyData(pparent).treeObject(), tree.GetPyData(selected).treeObject()): return
+
+        # Remove highlight, update testWin
+        if g.testWin.highLight:
+            g.testWin.highLight.Remove()
+            tree.needUpdate = True
 
         # Undo info
         self.lastOp = 'MOVELEFT'
@@ -789,6 +806,7 @@ class Frame(wx.Frame):
 
         selected = tree.InsertNode(pparent, tree.GetPyData(pparent).treeObject(), elem, nextItem)
         newIndex = tree.ItemIndex(selected)
+        tree.oldItem = None
         tree.SelectItem(selected)
 
         undoMan.RegisterUndo(UndoMove(oldParent, oldIndex, pparent, newIndex))
@@ -810,6 +828,11 @@ class Frame(wx.Frame):
 
         # Check compatibility
         if not self.ItemsAreCompatible(parent, tree.GetPyData(selected).treeObject()): return
+
+        # Remove highlight, update testWin
+        if g.testWin.highLight:
+            g.testWin.highLight.Remove()
+            tree.needUpdate = True
 
         # Undo info
         self.lastOp = 'MOVERIGHT'
@@ -847,10 +870,11 @@ class Frame(wx.Frame):
         selected = tree.InsertNode(newParent, tree.GetPyData(newParent).treeObject(), elem, wx.TreeItemId())
 
         newIndex = tree.ItemIndex(selected)
+        tree.oldItem = None
         tree.SelectItem(selected)
 
         undoMan.RegisterUndo(UndoMove(oldParent, oldIndex, newParent, newIndex))
-        
+
         self.modified = True
         self.SetStatusText(status)
 
