@@ -15,7 +15,7 @@ COLOUR_COMMENT  = 'Blue'
 COLOUR_REF      = 'DarkGreen'
 COLOUR_HIDDEN   = 'Grey'
 COLOUR_HL       = 'Red'
-COLOUR_DT       = 'Green'
+COLOUR_DT       = 'DarkGreen'
 
 # Icons
 import images
@@ -1121,6 +1121,7 @@ class XML_Tree(wx.TreeCtrl):
     # Override to use like single-selection tree
     def GetSelection(self):
         return self.selection
+    
     def SelectItem(self, item):
         self.UnselectAll()
         self.ChangeSelection(item)
@@ -1341,10 +1342,13 @@ class DropTarget(wx.PyDropTarget):
         if d != wx.DragNone:
             obj,parent,parentItem,item = other
             pos, size = g.tree.FindNodePos(parentItem, obj), obj.GetSize()
-            # Change tree item colour
             hl = g.testWin.highLightDT
-            if hl and hl.item and hl.item != parentItem:
-                g.tree.SetItemTextColour(hl.item, g.tree.itemColour)
+            # Set color of highlighted item back to normal
+            if hl and hl.item:
+                if hl.item != parentItem:
+                    g.tree.SetItemTextColour(hl.item, g.tree.itemColour)
+                    # Highlight future parent
+                    g.tree.itemColour = g.tree.GetItemTextColour(parentItem) # save current
             g.testWin.highLightDT = updateHL(hl, HighLightDTBox, pos, size)
             g.testWin.highLightDT.item = parentItem
             g.tree.SetItemTextColour(parentItem, COLOUR_DT)
@@ -1361,6 +1365,7 @@ class DropTarget(wx.PyDropTarget):
     def RemoveHL(self):
         hl = g.testWin.highLightDT
         if hl:
-            if hl.item: g.tree.SetItemTextColour(hl.item, g.tree.itemColour)
+            if hl.item:
+                g.tree.SetItemTextColour(hl.item, g.tree.itemColour)
             hl.Remove()
         
