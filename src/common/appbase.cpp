@@ -33,6 +33,7 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/utils.h"
+    #include "wx/wxcrtvararg.h"
 #endif //WX_PRECOMP
 
 #include "wx/apptrait.h"

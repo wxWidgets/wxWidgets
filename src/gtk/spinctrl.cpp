@@ -18,6 +18,7 @@
 #ifndef WX_PRECOMP
     #include "wx/textctrl.h"    // for wxEVT_COMMAND_TEXT_UPDATED
     #include "wx/utils.h"
+    #include "wx/wxcrtvararg.h"
 #endif
 
 #include "wx/gtk/private.h"

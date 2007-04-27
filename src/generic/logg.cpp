@@ -38,6 +38,7 @@
     #include "wx/sizer.h"
     #include "wx/statbmp.h"
     #include "wx/settings.h"
+    #include "wx/wxcrtvararg.h"
 #endif // WX_PRECOMP
 
 #if wxUSE_LOGGUI || wxUSE_LOGWINDOW

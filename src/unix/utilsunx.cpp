@@ -25,6 +25,7 @@
     #include "wx/intl.h"
     #include "wx/log.h"
     #include "wx/app.h"
+    #include "wx/wxcrtvararg.h"
 #endif
 
 #include "wx/apptrait.h"
