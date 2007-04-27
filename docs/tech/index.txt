@@ -20,9 +20,9 @@ tn0016.txt   How to add new files and libraries to wxWidgets build system (Bakef
 tn0017.txt   How to write unit tests for wxWidgets classes
 tn0018.txt   How to add a new font encoding/charset to wxWidgets
 tn0019.txt   Special notes about writing wxMSW code
-tn0020.txt   Binary Compatability and wxWidgets
+tn0020.txt   Binary compatibility and wxWidgets
 tn0021.txt   How to add a new wxUSE_XXX preprocessor constant
-tn0022.txt   Working with the the wxWidgets release system
+tn0022.txt   Working with the wxWidgets release system
 tn0023.txt   Adding a new app/screenshot to the wxWidgets.org front page
 
 
