@@ -343,12 +343,13 @@ gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget),
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static void
+static gboolean
 gtk_frame_map_callback( GtkWidget * WXUNUSED(widget),
                         GdkEvent * WXUNUSED(event),
                         wxTopLevelWindow *win )
 {
     win->SetIconizeState(false);
+    return false;
 }
 }
 
@@ -357,12 +358,13 @@ gtk_frame_map_callback( GtkWidget * WXUNUSED(widget),
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static void
+static gboolean
 gtk_frame_unmap_callback( GtkWidget * WXUNUSED(widget),
                           GdkEvent * WXUNUSED(event),
                           wxTopLevelWindow *win )
 {
     win->SetIconizeState(true);
+    return false;
 }
 }
 
@@ -814,7 +816,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
     if (show == IsShown())
-        return true;
+        return false;
 
     if (show && !m_sizeSet)
     {
