@@ -186,8 +186,9 @@ private:
 public:
     // Ctor constructs the object from char literal; they are needed to make
     // operator?: compile and they intentionally take char*, not const char*
-    wxCStrData(char *buf);
-    wxCStrData(wchar_t *buf);
+    inline wxCStrData(char *buf);
+    inline wxCStrData(wchar_t *buf);
+    inline wxCStrData(const wxCStrData& data);
 
     inline ~wxCStrData();
 
@@ -2648,6 +2649,13 @@ inline wxCStrData::wxCStrData(char *buf)
     : m_str(new wxString(buf)), m_offset(0), m_owned(true) {}
 inline wxCStrData::wxCStrData(wchar_t *buf)
     : m_str(new wxString(buf)), m_offset(0), m_owned(true) {}
+
+inline wxCStrData::wxCStrData(const wxCStrData& data)
+    : m_str(data.m_owned ? new wxString(*data.m_str) : data.m_str),
+      m_offset(data.m_offset),
+      m_owned(data.m_owned)
+{
+}
 
 inline wxCStrData::~wxCStrData()
 {
