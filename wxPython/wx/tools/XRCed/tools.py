@@ -165,11 +165,12 @@ class Tools(wx.Panel):
         do = MyDataObject()
         do.SetData(str(evt.GetId()))
         bm = evt.GetEventObject().GetBitmapLabel()
-        if wx.Platform != '__WXMAC__':
+        # wxGTK requires wxIcon cursor, wxWIN and wxMAC require wxCursor
+        if wx.Platform == '__WXGTK__':
             icon = wx.EmptyIcon()
             icon.CopyFromBitmap(bm)
             dragSource = wx.DropSource(self, icon)
-        else: # on Mac DragSource requires cursor (but does not work anyway)
+        else:
             curs = wx.CursorFromImage(wx.ImageFromBitmap(bm))
             dragSource = wx.DropSource(self, curs)
         dragSource.SetData(do)
