@@ -687,7 +687,7 @@ class Frame(wx.Frame):
         if index == 0: return # No previous sibling found
 
         # Remove highlight, update testWin
-        if g.testWin.highLight:
+        if g.testWin and g.testWin.highLight:
             g.testWin.highLight.Remove()
             tree.needUpdate = True
 
@@ -723,7 +723,7 @@ class Frame(wx.Frame):
         if not next: return
 
         # Remove highlight, update testWin
-        if g.testWin.highLight:
+        if g.testWin and g.testWin.highLight:
             g.testWin.highLight.Remove()
             tree.needUpdate = True
 
@@ -763,7 +763,7 @@ class Frame(wx.Frame):
         if not self.ItemsAreCompatible(tree.GetPyData(pparent).treeObject(), tree.GetPyData(selected).treeObject()): return
 
         # Remove highlight, update testWin
-        if g.testWin.highLight:
+        if g.testWin and g.testWin.highLight:
             g.testWin.highLight.Remove()
             tree.needUpdate = True
 
@@ -830,7 +830,7 @@ class Frame(wx.Frame):
         if not self.ItemsAreCompatible(parent, tree.GetPyData(selected).treeObject()): return
 
         # Remove highlight, update testWin
-        if g.testWin.highLight:
+        if g.testWin and g.testWin.highLight:
             g.testWin.highLight.Remove()
             tree.needUpdate = True
 
@@ -1358,7 +1358,7 @@ Homepage: http://xrced.sourceforge.net\
                     tree.HighLight(tree.pendingHighLight)
                 except:
                     # Remove highlight if any problem
-                    if g.testWin.highLight:
+                    if g.testWin and g.testWin.highLight:
                         g.testWin.highLight.Remove()
                     tree.pendingHighLight = None
                     raise
