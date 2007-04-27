@@ -46,8 +46,6 @@ sys_path = sys.path
 # 1 adds CMD command to Help menu
 debug = 0
 
-import xxx
-
 g.helpText = """\
 <HTML><H2>Welcome to XRC<font color="blue">ed</font></H2><H3><font color="green">DON'T PANIC :)</font></H3>
 Read this note before clicking on anything!<P>
@@ -688,12 +686,18 @@ class Frame(wx.Frame):
         index = tree.ItemIndex(selected)
         if index == 0: return # No previous sibling found
 
+        # Remove highlight, update testWin
+        if g.testWin and g.testWin.highLight:
+            g.testWin.highLight.Remove()
+            tree.needUpdate = True
+
         # Undo info
         self.lastOp = 'MOVEUP'
         status = 'Moved before previous sibling'
 
         # Prepare undo data
         panel.Apply()
+        tree.UnselectAll()
 
         parent = tree.GetItemParent(selected)
         elem = tree.RemoveLeaf(selected)
@@ -718,12 +722,18 @@ class Frame(wx.Frame):
         next = tree.GetNextSibling(selected)
         if not next: return
 
+        # Remove highlight, update testWin
+        if g.testWin and g.testWin.highLight:
+            g.testWin.highLight.Remove()
+            tree.needUpdate = True
+
         # Undo info
         self.lastOp = 'MOVEDOWN'
         status = 'Moved after next sibling'
 
         # Prepare undo data
         panel.Apply()
+        tree.UnselectAll()
 
         parent = tree.GetItemParent(selected)
         elem = tree.RemoveLeaf(selected)
@@ -751,6 +761,11 @@ class Frame(wx.Frame):
 
         # Check compatibility
         if not self.ItemsAreCompatible(tree.GetPyData(pparent).treeObject(), tree.GetPyData(selected).treeObject()): return
+
+        # Remove highlight, update testWin
+        if g.testWin and g.testWin.highLight:
+            g.testWin.highLight.Remove()
+            tree.needUpdate = True
 
         # Undo info
         self.lastOp = 'MOVELEFT'
@@ -791,6 +806,7 @@ class Frame(wx.Frame):
 
         selected = tree.InsertNode(pparent, tree.GetPyData(pparent).treeObject(), elem, nextItem)
         newIndex = tree.ItemIndex(selected)
+        tree.oldItem = None
         tree.SelectItem(selected)
 
         undoMan.RegisterUndo(UndoMove(oldParent, oldIndex, pparent, newIndex))
@@ -812,6 +828,11 @@ class Frame(wx.Frame):
 
         # Check compatibility
         if not self.ItemsAreCompatible(parent, tree.GetPyData(selected).treeObject()): return
+
+        # Remove highlight, update testWin
+        if g.testWin and g.testWin.highLight:
+            g.testWin.highLight.Remove()
+            tree.needUpdate = True
 
         # Undo info
         self.lastOp = 'MOVERIGHT'
@@ -849,10 +870,11 @@ class Frame(wx.Frame):
         selected = tree.InsertNode(newParent, tree.GetPyData(newParent).treeObject(), elem, wx.TreeItemId())
 
         newIndex = tree.ItemIndex(selected)
+        tree.oldItem = None
         tree.SelectItem(selected)
 
         undoMan.RegisterUndo(UndoMove(oldParent, oldIndex, newParent, newIndex))
-        
+
         self.modified = True
         self.SetStatusText(status)
 
@@ -1336,7 +1358,7 @@ Homepage: http://xrced.sourceforge.net\
                     tree.HighLight(tree.pendingHighLight)
                 except:
                     # Remove highlight if any problem
-                    if g.testWin.highLight:
+                    if g.testWin and g.testWin.highLight:
                         g.testWin.highLight.Remove()
                     tree.pendingHighLight = None
                     raise
