@@ -2756,4 +2756,12 @@ inline wxWCharBuffer::wxWCharBuffer(const wxCStrData& cstr)
 {
 }
 
+#if WXWIN_COMPATIBILITY_2_8
+    // lot of code out there doesn't explicitly include wx/wxchar.h, but uses
+    // CRT wrappers that are now declared in wx/wxcrt.h and wx/wxcrtvararg.h,
+    // so let's include this header now that wxString is defined and it's safe
+    // to do it:
+    #include "wx/wxchar.h"
+#endif
+
 #endif  // _WX_WXSTRING_H_
