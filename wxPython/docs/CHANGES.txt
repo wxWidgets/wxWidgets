@@ -1,13 +1,54 @@
 Recent Changes for wxPython
 =====================================================================
 
-2.8.3.1
+2.8.4.0
 -------
 * 
 
 wxGTK: Make wx.NO_BORDER style work with wx.RadioBox (patch 1525406)
 
 Update to 0.9.1 of TreeMixin.
+
+wx.lib.customtreectrl: Patch from Andrea that fixes the following
+problems/issues:
+
+ * ZeroDivisionError when using the Vista selection style and calling
+   SelectItem; for some strange reason, sometimes the item rect is
+   not initialized and that generates the ZeroDivisionError when
+   painting the selection rectangle;
+
+ * Added a DeleteWindow method to GenericTreeItem class, for items
+   that hold a widget next to them;
+
+ * Renamed CustomTreeCtrl method IsEnabled to IsItemEnabled, otherwise
+   it conflicts with wx.Window.IsEnabled;
+
+ * Now CustomTreeCtrl behaves correctly when the widget attached to an
+   item is narrower (in height) than the item text;
+
+
+wx.lib.flatnotebook: Patch from Andrea that implements the following:
+
+ * A new style FNB_FF2: my intentions were to make it like Firefox 2,
+   however it turned out to be an hybrid between wxAUI notebook glose
+   style & FF2 ...I still think it looks OK. The main purpose for
+   making it more like wxAUI is to allow applications that uses both
+   to have same look and feel (or as close as it can get...);
+
+ * Changed the behavior of the left/right rotation arrows to rotate
+   single tab at a time and not bulk of tabs;
+
+ * Updated the demo module.
+
+XRCed now uses a wx.FileHistory object for managing the recent files
+menu. 
+
+wx.DateSpan and wx.TimeSpan now use lower case property names in order
+to not conflict with the same named static methods that already
+existed.
+
+wx.aui.PyAuiDocArt and wx.aui.PyAuiTabArt can now be derived from in
+wxPython and plugged in to wx.AUI.
 
 
 
