@@ -2151,7 +2151,7 @@ void wxDC::DoGetTextExtent(
 , wxCoord*                          pvY
 , wxCoord*                          pvDescent
 , wxCoord*                          pvExternalLeading
-, wxFont*                           pTheFont
+, const wxFont*                     pTheFont
 ) const
 {
     POINTL                          avPoint[TXTBOX_COUNT];
