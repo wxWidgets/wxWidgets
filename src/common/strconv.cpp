@@ -480,7 +480,7 @@ wxConvBrokenFileNames::wxConvBrokenFileNames(const wxChar *charset)
 {
     if ( !charset || wxStricmp(charset, _T("UTF-8")) == 0
                   || wxStricmp(charset, _T("UTF8")) == 0  )
-        m_conv = new wxMBConvUTF8(wxMBConvUTF8::MAP_INVALID_UTF8_TO_OCTAL);
+        m_conv = new wxMBConvUTF8(wxMBConvUTF8::MAP_INVALID_UTF8_TO_PUA);
     else
         m_conv = new wxCSConv(charset);
 }
