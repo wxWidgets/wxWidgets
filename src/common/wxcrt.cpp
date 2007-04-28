@@ -1544,18 +1544,28 @@ static bool wxIsLocaleUtf8()
     {
         // "UTF-8" is used by modern glibc versions, but test other variants
         // as well, just in case:
-        return strcmp(charset, "UTF-8") == 0 ||
-               strcmp(charset, "utf-8") == 0 ||
-               strcmp(charset, "UTF8") == 0 ||
-               strcmp(charset, "utf8") == 0;
+        if ( strcmp(charset, "UTF-8") == 0 ||
+             strcmp(charset, "utf-8") == 0 ||
+             strcmp(charset, "UTF8") == 0 ||
+             strcmp(charset, "utf8") == 0 )
+        {
+            return true;
+        }
     }
-    else // nl_langinfo() failed
 #endif
+
+    // check if we're running under the "C" locale: it is 7bit subset
+    // of UTF-8, so it can be safely used with the UTF-8 build:
+    const char *lc_ctype = setlocale(LC_CTYPE, NULL);
+    if ( lc_ctype &&
+         (strcmp(lc_ctype, "C") == 0 || strcmp(lc_ctype, "POSIX") == 0) )
     {
-        // we don't know what charset libc is using, so assume the worst
-        // to be safe:
-        return false;
+        return true;
     }
+
+    // we don't know what charset libc is using, so assume the worst
+    // to be safe:
+    return false;
 }
 
 void wxUpdateLocaleIsUtf8()
