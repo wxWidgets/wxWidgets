@@ -1346,7 +1346,8 @@ class DropTarget(wx.PyDropTarget):
             # Set color of highlighted item back to normal
             if hl and hl.item:
                 if hl.item != parentItem:
-                    g.tree.SetItemTextColour(hl.item, g.tree.itemColour)
+                    if hasattr(g.tree, 'itemColour'):
+                        g.tree.SetItemTextColour(hl.item, g.tree.itemColour)
                     # Highlight future parent
                     g.tree.itemColour = g.tree.GetItemTextColour(parentItem) # save current
             g.testWin.highLightDT = updateHL(hl, HighLightDTBox, pos, size)
