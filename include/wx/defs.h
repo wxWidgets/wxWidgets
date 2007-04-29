@@ -434,6 +434,12 @@ typedef int wxWindowID;
     #endif /* va_copy/!va_copy */
 #endif /* wxVaCopy */
 
+#ifndef HAVE_VARIADIC_MACROS
+    #if wxCHECK_WATCOM_VERSION(1,2)
+        #define HAVE_VARIADIC_MACROS
+    #endif
+#endif /* HAVE_VARIADIC_MACROS */
+
 
 /*  ---------------------------------------------------------------------------- */
 /*  portable calling conventions macros */
