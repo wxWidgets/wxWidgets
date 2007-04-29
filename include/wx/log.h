@@ -471,13 +471,6 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
 // define wxLog<level>
 // ----------------------------------------------------------------------------
 
-#ifdef __WATCOMC__
-    // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-    #define WX_WATCOM_ONLY_CODE( x )  x
-#else
-    #define WX_WATCOM_ONLY_CODE( x )
-#endif
-
 #define DECLARE_LOG_FUNCTION(level)                                         \
     extern void WXDLLIMPEXP_BASE                                            \
     wxDoLog##level(const wxString& format, ...);                            \
@@ -535,6 +528,13 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
 
 #else // !wxUSE_LOG
 
+#ifdef __WATCOMC__
+    // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
+    #define WX_WATCOM_ONLY_CODE( x )  x
+#else
+    #define WX_WATCOM_ONLY_CODE( x )
+#endif
+
 // log functions do nothing at all
 #define DECLARE_LOG_FUNCTION(level)                                         \
     WX_DEFINE_VARARG_FUNC_NOP(wxLog##level, 1, (const wxString&))           \
@@ -556,8 +556,6 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
     inline void wxVLog##level(argclass WXUNUSED(arg),                       \
                                const wxString& WXUNUSED(format),            \
                                va_list WXUNUSED(argptr)) {}
-
-#undef WX_WATCOM_ONLY_CODE
 
 // Empty Class to fake wxLogNull
 class WXDLLIMPEXP_BASE wxLogNull
@@ -713,6 +711,10 @@ wxSafeShowMessage(const wxString& title, const wxString& text);
 // wxCocoa has additiional trace masks
 #if defined(__WXCOCOA__)
 #include "wx/cocoa/log.h"
+#endif
+
+#ifdef WX_WATCOM_ONLY_CODE
+    #undef WX_WATCOM_ONLY_CODE
 #endif
 
 #endif  // _WX_LOG_H_

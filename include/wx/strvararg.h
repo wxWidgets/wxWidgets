@@ -105,7 +105,7 @@ class WXDLLIMPEXP_BASE wxString;
         _WX_VARARG_DEFINE_FUNC_NOP_N0(name, numfixed, fixed)                  \
         _WX_VARARG_ITER(_WX_VARARG_MAX_ARGS,                                  \
                         _WX_VARARG_DEFINE_FUNC_NOP,                           \
-                        void, name, dummy, numfixed, fixed)
+                        void, name, dummy, dummy, numfixed, fixed)
 
 // Like WX_DEFINE_VARARG_FUNC_CTOR, but for defining template constructors
 #define WX_DEFINE_VARARG_FUNC_CTOR(name, numfixed, fixed, impl)               \
