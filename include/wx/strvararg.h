@@ -320,6 +320,53 @@ WX_ARG_NORMALIZER_FORWARD(const wxCharBuffer&, const char*);
 WX_ARG_NORMALIZER_FORWARD(wxWCharBuffer, const wchar_t*);
 WX_ARG_NORMALIZER_FORWARD(const wxWCharBuffer&, const wchar_t*);
 
+// versions for std::[w]string:
+#if wxUSE_STD_STRING
+
+#include "wx/stringimpl.h"
+
+#if !wxUSE_UTF8_LOCALE_ONLY
+template<>
+struct wxArgNormalizerWchar<const std::string&>
+    : public wxArgNormalizerWchar<const char*>
+{
+    wxArgNormalizerWchar(const std::string& s)
+        : wxArgNormalizerWchar<const char*>(s.c_str()) {}
+};
+
+template<>
+struct wxArgNormalizerWchar<const wxStdWideString&>
+    : public wxArgNormalizerWchar<const wchar_t*>
+{
+    wxArgNormalizerWchar(const wxStdWideString& s)
+        : wxArgNormalizerWchar<const wchar_t*>(s.c_str()) {}
+};
+#endif // !wxUSE_UTF8_LOCALE_ONLY
+
+#if wxUSE_UNICODE_UTF8
+template<>
+struct wxArgNormalizerUtf8<const std::string&>
+    : public wxArgNormalizerUtf8<const char*>
+{
+    wxArgNormalizerUtf8(const std::string& s)
+        : wxArgNormalizerUtf8<const char*>(s.c_str()) {}
+};
+
+template<>
+struct wxArgNormalizerUtf8<const wxStdWideString&>
+    : public wxArgNormalizerUtf8<const wchar_t*>
+{
+    wxArgNormalizerUtf8(const wxStdWideString& s)
+        : wxArgNormalizerUtf8<const wchar_t*>(s.c_str()) {}
+};
+#endif // wxUSE_UNICODE_UTF8
+
+WX_ARG_NORMALIZER_FORWARD(std::string, const std::string&);
+WX_ARG_NORMALIZER_FORWARD(wxStdWideString, const wxStdWideString&);
+
+#endif // wxUSE_STD_STRING
+
+
 #undef WX_ARG_NORMALIZER_FORWARD
 #undef _WX_ARG_NORMALIZER_FORWARD_IMPL
 
