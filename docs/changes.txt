@@ -94,6 +94,7 @@ Major new features in 2.8 release
 All:
 
 - Fix bug in wxFileConfig when recreating a group (Steven Van Ingelgem)
+- Account for lines without newline at the end in wxExecute()
 - Added wxString::char_str() and wchar_str() methods for forward
   compatiblity with wxWidgets 3
 
