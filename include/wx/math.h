@@ -22,9 +22,9 @@
     #define M_PI 3.1415926535897932384626433832795
 #endif
 
-/* Scaling factors for various unit conversions */
+/* Scaling factors for various unit conversions: 1 inch = 2.54 cm */
 #ifndef METRIC_CONVERSION_CONSTANT
-    #define METRIC_CONVERSION_CONSTANT 0.0393700787
+    #define METRIC_CONVERSION_CONSTANT (1./254)
 #endif
 
 #ifndef mm2inches
