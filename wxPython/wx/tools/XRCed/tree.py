@@ -501,7 +501,7 @@ class XML_Tree(wx.TreeCtrl):
         # Register events
         wx.EVT_TREE_SEL_CHANGED(self, self.GetId(), self.OnSelChanged)
         # One works on Linux, another on Windows
-        if wx.Platform == '__WXGTK__':
+        if wx.Platform == '__WXGTK__': # !!! MAC too?
             wx.EVT_TREE_ITEM_ACTIVATED(self, self.GetId(), self.OnItemActivated)
         else:
             wx.EVT_LEFT_DCLICK(self, self.OnDClick)

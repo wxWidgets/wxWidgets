@@ -348,6 +348,7 @@ class PropPage(ParamPage):
                     self.origChecks.append((param, True))
                 self.origControls.append((param, value, True))
             except KeyError:
+                # Optional param not present in xxx - set empty value
                 self.checks[param].SetValue(False)
                 w.SetValue('')
                 w.Enable(False)

@@ -397,9 +397,11 @@ class ParamUnit(PPanel):
     def GetValue(self):
         return self.text.GetValue()
     def SetValue(self, value):
+        self.freeze = True
         if not value: value = '0'        
         self.text.SetValue(value)
         self.Change(0)
+        self.freeze = False
     def Change(self, x):
         self.freeze = True
         # Check if we are working with dialog units

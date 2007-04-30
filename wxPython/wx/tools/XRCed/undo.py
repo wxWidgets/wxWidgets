@@ -274,7 +274,8 @@ class UndoEdit:
         # Save current state for redo
         map(ParamPage.SaveState, g.panel.pages)
         pages = map(ParamPage.GetState, g.panel.pages)
-        map(ParamPage.SetState, g.panel.pages, self.pages)
+        if self.pages:
+            map(ParamPage.SetState, g.panel.pages, self.pages)
         self.pages = pages
         self.update(selected)
     def redo(self):
