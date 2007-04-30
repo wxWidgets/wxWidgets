@@ -1756,7 +1756,7 @@ void wxDC::DrawAnyText( const wxString& rsText,
     ::GpiMove(m_hPS, &vPtlStart);
     lHits = ::GpiCharString( m_hPS
                             ,rsText.length()
-                            ,rsText.wx_str()
+                            ,rsText.char_str()
                            );
     if (lHits != GPI_OK)
     {
@@ -2176,7 +2176,7 @@ void wxDC::DoGetTextExtent(
     //
     bRc = ::GpiQueryTextBox( m_hPS
                             ,l
-                            ,(char *)rsString.wx_str()
+                            ,rsString.char_str()
                             ,TXTBOX_COUNT // return maximum information
                             ,avPoint      // array of coordinates points
                            );
