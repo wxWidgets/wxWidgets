@@ -665,10 +665,16 @@ DECLARE_LOG_FUNCTION2(SysError, unsigned long, lErrCode);
         #define wxLogTrace(mask, fmt, ...) wxLogNop()
     #else // !HAVE_VARIADIC_MACROS
         //inline void wxLogDebug(const wxString& fmt, ...) {}
-        WX_DEFINE_VARARG_FUNC_NOP(wxLogDebug)
+        WX_DEFINE_VARARG_FUNC_NOP(wxLogDebug, 1, (const wxString&))
         //inline void wxLogTrace(wxTraceMask, const wxString& fmt, ...) {}
         //inline void wxLogTrace(const wxString&, const wxString& fmt, ...) {}
-        WX_DEFINE_VARARG_FUNC_NOP(wxLogTrace)
+        WX_DEFINE_VARARG_FUNC_NOP(wxLogTrace, 2, (wxTraceMask, const wxString&))
+        WX_DEFINE_VARARG_FUNC_NOP(wxLogTrace, 2, (const wxString&, const wxString&))
+        #ifdef __WATCOMC__
+        // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
+        WX_DEFINE_VARARG_FUNC_NOP(wxLogTrace, 2, (const char*, const char*))
+        WX_DEFINE_VARARG_FUNC_NOP(wxLogTrace, 2, (const wchar_t*, const wchar_t*))
+        #endif
     #endif // HAVE_VARIADIC_MACROS/!HAVE_VARIADIC_MACROS
 #endif // debug/!debug
 
