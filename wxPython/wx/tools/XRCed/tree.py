@@ -1038,7 +1038,10 @@ class XML_Tree(wx.TreeCtrl):
                 wx.EVT_CLOSE(testWin, self.OnCloseTestWin)
                 wx.EVT_SIZE(testWin, self.OnSizeTestWin)
                 # Add drop target
-                testWin.SetDropTarget(DropTarget())
+                if testWin.panel:
+                    testWin.panel.SetDropTarget(DropTarget())
+                else:
+                    testWin.SetDropTarget(DropTarget())
                 # Reset highlights
                 testWin.highLight = testWin.highLightDT = None
                 if highLight and not self.pendingHighLight:
