@@ -312,6 +312,15 @@ bool wxWizard::Create(wxWindow *parent,
     return result;
 }
 
+wxWizard::~wxWizard()
+{
+    // normally we don't have to delete this sizer as it's deleted by the
+    // associated window but if we never used it or didn't set it as the window
+    // sizer yet, do delete it manually
+    if ( !m_usingSizer || !m_started )
+        delete m_sizerPage;
+}
+
 void wxWizard::AddBitmapRow(wxBoxSizer *mainColumn)
 {
     m_sizerBmpAndPage = new wxBoxSizer(wxHORIZONTAL);
