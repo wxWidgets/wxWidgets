@@ -556,24 +556,27 @@ static bool ReadAll(wxInputStream *is, wxArrayString& output)
 
     wxTextInputStream tis(*is);
 
-    bool cont = true;
-    while ( cont )
+    for ( ;; )
     {
         wxString line = tis.ReadLine();
-        if ( is->Eof() )
-            break;
 
+        // check for EOF before other errors as it's not really an error
+        if ( is->Eof() )
+        {
+            // add the last, possibly incomplete, line
+            if ( !line.empty() )
+                output.Add(line);
+            break;
+        }
+
+        // any other error is fatal
         if ( !*is )
-        {
-            cont = false;
-        }
-        else
-        {
-            output.Add(line);
-        }
+            return false;
+
+        output.Add(line);
     }
 
-    return cont;
+    return true;
 }
 #endif // wxUSE_STREAMS
 
