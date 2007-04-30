@@ -23,7 +23,9 @@
     #if wxUSE_UNICODE_UTF8
     // flag indicating whether the current locale uses UTF-8 or not; must be
     // updated every time the locale is changed!
-    #if !wxUSE_UTF8_LOCALE_ONLY
+    #if wxUSE_UTF8_LOCALE_ONLY
+    #define wxLocaleIsUtf8 true
+    #else
     extern WXDLLIMPEXP_BASE bool wxLocaleIsUtf8;
     #endif
     // function used to update the flag:
