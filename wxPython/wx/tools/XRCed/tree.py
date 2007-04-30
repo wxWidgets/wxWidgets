@@ -582,6 +582,7 @@ class XML_Tree(wx.TreeCtrl):
         self.rootObj = xxxMainNode(self.dom)
         self.root = self.AddRoot('XML tree', self.rootImage,
                                  data=wx.TreeItemData(self.rootObj))
+        self.itemColour = self.GetItemTextColour(self.root)
         self.SetItemHasChildren(self.root)
         self.testElem = self.dom.createElement('dummy')
         self.mainNode.appendChild(self.testElem)
@@ -601,7 +602,6 @@ class XML_Tree(wx.TreeCtrl):
         self.rootObj = xxxMainNode(self.dom)
         self.root = self.AddRoot('XML tree', self.rootImage,
                                  data=wx.TreeItemData(self.rootObj))
-        self.itemColour = self.GetItemTextColour(self.root)
         self.SetItemHasChildren(self.root)
         nodes = self.mainNode.childNodes[:]
         for node in nodes:
@@ -1346,8 +1346,7 @@ class DropTarget(wx.PyDropTarget):
             # Set color of highlighted item back to normal
             if hl and hl.item:
                 if hl.item != parentItem:
-                    if hasattr(g.tree, 'itemColour'):
-                        g.tree.SetItemTextColour(hl.item, g.tree.itemColour)
+                    g.tree.SetItemTextColour(hl.item, g.tree.itemColour)
                     # Highlight future parent
                     g.tree.itemColour = g.tree.GetItemTextColour(parentItem) # save current
             g.testWin.highLightDT = updateHL(hl, HighLightDTBox, pos, size)
