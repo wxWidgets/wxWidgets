@@ -592,7 +592,7 @@ wxGetTranslation(const wxChar *sz1, const wxChar *sz2,
     #if !defined(_)
         #define _(s)                 (_T(s))
     #endif
-    #define wxPLURAL(sing, plur, n)  ((n) == 1 ? (sing) : (plur))
+    #define wxPLURAL(sing, plur, n)  ((n) == 1 ? _T(sing) : _T(plur))
 #endif
 
 #define wxTRANSLATE(str) _T(str)
