@@ -796,7 +796,10 @@ void wxMacControl::Dispose()
     wxASSERT_MSG( IsValidControlHandle(m_controlRef) , wxT("Invalid Control Handle (maybe already released) in Dispose") );
 
     // we cannot check the ref count here anymore, as autorelease objects might delete their refs later
-    CFRelease(m_controlRef);
+    // we can have situations when being embedded, where the control gets deleted behind our back, so only
+    // CFRelease if we are safe
+    if ( IsValidControlHandle(m_controlRef) )
+        CFRelease(m_controlRef);
     m_controlRef = NULL;
 }
 
