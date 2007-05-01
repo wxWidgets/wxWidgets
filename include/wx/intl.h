@@ -591,6 +591,7 @@ inline const wxString& wxGetTranslation(const wxString& str1,
     #if !defined(_)
         #define _(s)                 (_T(s))
     #endif
+    #define wxPLURAL(sing, plur, n)  ((n) == 1 ? _T(sing) : _T(plur))
 #endif
 
 #define wxTRANSLATE(str) _T(str)
