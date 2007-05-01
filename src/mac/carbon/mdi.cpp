@@ -123,6 +123,9 @@ void wxMDIParentFrame::GetRectForTopLevelChildren(int *x, int *y, int *w, int *h
 
 void wxMDIParentFrame::AddChild(wxWindowBase *child)
 {
+    // moved this to front, so that we don't run into unset m_parent problems later
+    wxFrame::AddChild(child);
+
     if ( !m_currentChild )
     {
         m_currentChild = wxDynamicCast(child, wxMDIChildFrame);
@@ -134,8 +137,6 @@ void wxMDIParentFrame::AddChild(wxWindowBase *child)
             m_shouldBeShown = true;
         }
     }
-
-    wxFrame::AddChild(child);
 }
 
 void wxMDIParentFrame::RemoveChild(wxWindowBase *child)
