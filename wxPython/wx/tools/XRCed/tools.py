@@ -100,6 +100,8 @@ class Tools(wx.Panel):
         wx.EVT_KEY_DOWN(self, self.OnKeyDown)
         wx.EVT_KEY_UP(self, self.OnKeyUp)
 
+        self.drag = None
+
     def AddButton(self, id, image, text):
         from wx.lib import buttons
         button = buttons.GenBitmapButton(self, id, image, size=self.TOOL_SIZE,
@@ -107,7 +109,8 @@ class Tools(wx.Panel):
         button.SetBezelWidth(0)
         wx.EVT_KEY_DOWN(button, self.OnKeyDown)
         wx.EVT_KEY_UP(button, self.OnKeyUp)
-        wx.EVT_RIGHT_DOWN(button, self.OnRightClick)
+        wx.EVT_LEFT_DOWN(button, self.OnLeftDownOnButton)
+        wx.EVT_MOTION(button, self.OnMotionOnButton)
         button.SetToolTipString(text)
         self.curSizer.Add(button)
         self.groups[-1][1][id] = button
@@ -160,11 +163,32 @@ class Tools(wx.Panel):
         else: box.SetLabel('[-] ' + box.name)
         self.Layout()
 
-    # Drag
-    def OnRightClick(self, evt):
+    # DaD
+    def OnLeftDownOnButton(self, evt):
+        self.posDown = evt.GetPosition()
+        self.idDown = evt.GetId()
+        self.btnDown = evt.GetEventObject()
+        evt.Skip()
+
+    def OnMotionOnButton(self, evt):
+        # Detect dragging
+        if evt.Dragging() and evt.LeftIsDown():
+            d = evt.GetPosition() - self.posDown
+            if max(abs(d[0]), abs(d[1])) >= 5:
+                if self.btnDown.HasCapture(): 
+                    # Generate up event to release mouse
+                    evt = wx.MouseEvent(wx.EVT_LEFT_UP.typeId)
+                    evt.SetId(self.idDown)
+                    # Set flag to prevent normal button operation this time
+                    self.drag = True
+                    self.btnDown.ProcessEvent(evt)
+                self.StartDrag()
+        evt.Skip()
+
+    def StartDrag(self):
         do = MyDataObject()
-        do.SetData(str(evt.GetId()))
-        bm = evt.GetEventObject().GetBitmapLabel()
+        do.SetData(str(self.idDown))
+        bm = self.btnDown.GetBitmapLabel()
         # wxGTK requires wxIcon cursor, wxWIN and wxMAC require wxCursor
         if wx.Platform == '__WXGTK__':
             icon = wx.EmptyIcon()

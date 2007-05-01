@@ -501,7 +501,7 @@ class XML_Tree(wx.TreeCtrl):
         # Register events
         wx.EVT_TREE_SEL_CHANGED(self, self.GetId(), self.OnSelChanged)
         # One works on Linux, another on Windows
-        if wx.Platform == '__WXGTK__':
+        if wx.Platform == '__WXGTK__': # !!! MAC too?
             wx.EVT_TREE_ITEM_ACTIVATED(self, self.GetId(), self.OnItemActivated)
         else:
             wx.EVT_LEFT_DCLICK(self, self.OnDClick)
@@ -582,6 +582,7 @@ class XML_Tree(wx.TreeCtrl):
         self.rootObj = xxxMainNode(self.dom)
         self.root = self.AddRoot('XML tree', self.rootImage,
                                  data=wx.TreeItemData(self.rootObj))
+        self.itemColour = self.GetItemTextColour(self.root)
         self.SetItemHasChildren(self.root)
         self.testElem = self.dom.createElement('dummy')
         self.mainNode.appendChild(self.testElem)
@@ -601,7 +602,6 @@ class XML_Tree(wx.TreeCtrl):
         self.rootObj = xxxMainNode(self.dom)
         self.root = self.AddRoot('XML tree', self.rootImage,
                                  data=wx.TreeItemData(self.rootObj))
-        self.itemColour = self.GetItemTextColour(self.root)
         self.SetItemHasChildren(self.root)
         nodes = self.mainNode.childNodes[:]
         for node in nodes:
@@ -1038,7 +1038,10 @@ class XML_Tree(wx.TreeCtrl):
                 wx.EVT_CLOSE(testWin, self.OnCloseTestWin)
                 wx.EVT_SIZE(testWin, self.OnSizeTestWin)
                 # Add drop target
-                testWin.SetDropTarget(DropTarget())
+                if testWin.panel:
+                    testWin.panel.SetDropTarget(DropTarget())
+                else:
+                    testWin.SetDropTarget(DropTarget())
                 # Reset highlights
                 testWin.highLight = testWin.highLightDT = None
                 if highLight and not self.pendingHighLight:
@@ -1346,8 +1349,7 @@ class DropTarget(wx.PyDropTarget):
             # Set color of highlighted item back to normal
             if hl and hl.item:
                 if hl.item != parentItem:
-                    if hasattr(g.tree, 'itemColour'):
-                        g.tree.SetItemTextColour(hl.item, g.tree.itemColour)
+                    g.tree.SetItemTextColour(hl.item, g.tree.itemColour)
                     # Highlight future parent
                     g.tree.itemColour = g.tree.GetItemTextColour(parentItem) # save current
             g.testWin.highLightDT = updateHL(hl, HighLightDTBox, pos, size)

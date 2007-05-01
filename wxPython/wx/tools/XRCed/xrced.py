@@ -1101,6 +1101,10 @@ Homepage: http://xrced.sourceforge.net\
                 print msg
 
     def OnCreate(self, evt):
+        # Ignore fake events generated while dragging
+        if g.tools.drag: 
+            g.tools.drag = False
+            return
         selected = tree.selection
         if tree.ctrl: appendChild = False
         else: appendChild = not tree.NeedInsert(selected)
