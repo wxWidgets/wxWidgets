@@ -6905,15 +6905,11 @@ void wxGrid::Refresh(bool eraseb, const wxRect* rect)
 
 void wxGrid::OnSize( wxSizeEvent& event )
 {
-    // position the child windows
-    CalcWindowSizes();
-
-    // don't call CalcDimensions() from here, the base class handles the size
-    // changes itself
-    event.Skip();
+    // update our children window positions and scrollbars
+    CalcDimensions();
 }
 
-void wxGrid::OnKeyDown( wxKeyEvent& event )
+void wxGrid::OnKeyDown( wxKeyEvent& WXUNUSED(event) )
 {
     if ( m_inOnKeyDown )
     {
