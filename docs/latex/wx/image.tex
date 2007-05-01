@@ -36,10 +36,12 @@ means that the pixel is 100\% opaque.
 
 Unlike RGB data, not all images have an alpha channel and before using
 \helpref{GetAlpha}{wximagegetalpha} you should check if this image contains
-an alpha channel with \helpref{HasAlpha}{wximagehasalpha}. Note that currently only
-images loaded from PNG files with transparency information will have an alpha
-channel but alpha support will be added to the other formats as well (as well
-as support for saving images with alpha channel which also isn't implemented).
+an alpha channel with \helpref{HasAlpha}{wximagehasalpha}. Note that currently
+only the PNG format has full alpha channel support so only the images loaded
+from PNG files can have alpha and, if you initialize the image alpha channel
+yourself using \helpref{SetAlpha}{wximagesetalpha}, you should save it in PNG
+format to avoid losing it.
+
 
 \wxheading{Available image handlers}
 
