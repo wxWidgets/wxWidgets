@@ -151,6 +151,8 @@ wxX11:
 All:
 
 - Fix bug in wxFileConfig when recreating a group (Steven Van Ingelgem)
+- Fix wxStringOutputStream::Write() in Unicode build when the argument
+  overlaps UTF-8 characters boundary
 - Account for lines without newline at the end in wxExecute()
 
 All (Unix):

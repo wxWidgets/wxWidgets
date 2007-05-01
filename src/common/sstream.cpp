@@ -153,9 +153,52 @@ size_t wxStringOutputStream::OnSysWrite(const void *buffer, size_t size)
 {
     const char *p = wx_static_cast(const char *, buffer);
 
-    // append the input buffer (may not be null terminated - thus 
-    // the literal length
-    m_str->Append(wxString(p, m_conv, size));
+#if wxUSE_UNICODE_WCHAR
+    // the part of the string we have here may be incomplete, i.e. it can stop
+    // in the middle of an UTF-8 character and so converting it would fail; if
+    // this is the case, accumulate the part which we failed to convert until
+    // we get the rest (and also take into account the part which we might have
+    // left unconverted before)
+    const char *src;
+    size_t srcLen;
+    if ( m_unconv.GetDataLen() )
+    {
+        // append the new data to the data remaining since the last time
+        m_unconv.AppendData(p, size);
+        src = m_unconv;
+        srcLen = m_unconv.GetDataLen();
+    }
+    else // no unconverted data left, avoid extra copy
+    {
+        src = p;
+        srcLen = size;
+    }
+
+    wxWCharBuffer wbuf(m_conv.cMB2WC(src, srcLen, NULL /* out len */));
+    if ( wbuf )
+    {
+        // conversion succeeded, clear the unconverted buffer
+        m_unconv = wxMemoryBuffer(0);
+
+        *m_str += wbuf;
+    }
+    else // conversion failed
+    {
+        // remember unconverted data if there had been none before (otherwise
+        // we've already got it in the buffer)
+        if ( src == p )
+            m_unconv.AppendData(src, srcLen);
+
+        // pretend that we wrote the data anyhow, otherwise the caller would
+        // believe there was an error and this might not be the case, but do
+        // not update m_pos as m_str hasn't changed
+        return size;
+    }
+#else // !wxUSE_UNICODE_WCHAR
+    // no recoding necessary, the data is supposed to already be in UTF-8 (if
+    // supported) or ASCII otherwise
+    m_str->append(p, size);
+#endif // wxUSE_UNICODE_WCHAR/!wxUSE_UNICODE_WCHAR
 
     // update position
     m_pos += size;
