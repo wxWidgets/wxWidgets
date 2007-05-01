@@ -249,6 +249,7 @@ static pascal OSStatus KeyboardEventHandler( EventHandlerCallRef handler , Event
 wxWindow* g_MacLastWindow = NULL ;
 
 EventMouseButton g_lastButton = 0 ;
+bool g_lastButtonWasFakeRight = false ;
 
 void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
 {
@@ -269,10 +270,13 @@ void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
     wxevent.m_metaDown = modifiers & cmdKey;
     wxevent.SetTimestamp( cEvent.GetTicks() ) ;
 
-   // a control click is interpreted as a right click
+    // a control click is interpreted as a right click
+    bool thisButtonIsFakeRight = false ;
     if ( button == kEventMouseButtonPrimary && (modifiers & controlKey) )
+    {
         button = kEventMouseButtonSecondary ;
-
+        thisButtonIsFakeRight = true ;
+    }
     // otherwise we report double clicks by connecting a left click with a ctrl-left click
     if ( clickCount > 1 && button != g_lastButton )
         clickCount = 1 ;
@@ -281,11 +285,17 @@ void SetupMouseEvent( wxMouseEvent &wxevent , wxMacCarbonEvent &cEvent )
     // mouse down, moved and mouse up, and does not deliver a right down and left up
 
     if ( cEvent.GetKind() == kEventMouseDown )
+    {
         g_lastButton = button ;
+        g_lastButtonWasFakeRight = thisButtonIsFakeRight ;
+    }
 
     if ( button == 0 )
+    {
         g_lastButton = 0 ;
-    else if ( g_lastButton )
+        g_lastButtonWasFakeRight = false ;
+    }
+    else if ( g_lastButton == kEventMouseButtonSecondary && g_lastButtonWasFakeRight )
         button = g_lastButton ;
 
     // determine the correct down state, wx does not want a 'down' for a mouseUp event,
