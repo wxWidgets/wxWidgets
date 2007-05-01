@@ -94,6 +94,8 @@ Major new features in 2.8 release
 All:
 
 - Fix bug in wxFileConfig when recreating a group (Steven Van Ingelgem)
+- Fix wxStringOutputStream::Write() in Unicode build when the argument
+  overlaps UTF-8 characters boundary
 - Account for lines without newline at the end in wxExecute()
 - Added wxString::char_str() and wchar_str() methods for forward
   compatiblity with wxWidgets 3
@@ -134,8 +136,6 @@ wxUniv:
 - Fix wxTextCtrl::SetSelection(-1, -1) to behave as documented (Anders Larsen)
 - Fix wxComboBox::SetSelection(wxNOT_FOUND)
 - Fix setting background colour for controls with transparent background
-
->>>>>>> 1.1006.2.35
 
 2.8.3
 -----
