@@ -602,6 +602,17 @@ inline const wxString& wxGetTranslation(const wxString& str,
     return str;
 }
 
+inline const wxString& wxGetTranslation(const wxString& str1,
+                                        const wxString& str2,
+                                        size_t n,
+                                        const wxString& WXUNUSED(domain) = wxEmptyString)
+{
+    if ( n == 1 )
+        return str1;
+    else
+        return str2;
+}
+
 #endif // wxUSE_INTL/!wxUSE_INTL
 
 // define this one just in case it occurs somewhere (instead of preferred
