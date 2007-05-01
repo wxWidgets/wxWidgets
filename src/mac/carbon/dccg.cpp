@@ -2298,42 +2298,42 @@ void wxDC::Clear(void)
             return (wxCoord)((double)new_y * m_scaleY - 0.5) * m_signY + m_deviceOriginY + m_macLocalOrigin.y;
     }
 */ // TODO
-wxCoord wxDCBase::DeviceToLogicalX(wxCoord x) const
+wxCoord wxDC::DeviceToLogicalX(wxCoord x) const
 {
     return wxRound((double)(x - m_deviceOriginX) / m_scaleX) * m_signX + m_logicalOriginX;
 }
 
-wxCoord wxDCBase::DeviceToLogicalY(wxCoord y) const
+wxCoord wxDC::DeviceToLogicalY(wxCoord y) const
 {
     return wxRound((double)(y - m_deviceOriginY) / m_scaleY) * m_signY + m_logicalOriginY;
 }
 
-wxCoord wxDCBase::DeviceToLogicalXRel(wxCoord x) const
+wxCoord wxDC::DeviceToLogicalXRel(wxCoord x) const
 {
     return wxRound((double)(x) / m_scaleX);
 }
 
-wxCoord wxDCBase::DeviceToLogicalYRel(wxCoord y) const
+wxCoord wxDC::DeviceToLogicalYRel(wxCoord y) const
 {
     return wxRound((double)(y) / m_scaleY);
 }
 
-wxCoord wxDCBase::LogicalToDeviceX(wxCoord x) const
+wxCoord wxDC::LogicalToDeviceX(wxCoord x) const
 {
     return wxRound((double)(x - m_logicalOriginX) * m_scaleX) * m_signX + m_deviceOriginX;
 }
 
-wxCoord wxDCBase::LogicalToDeviceY(wxCoord y) const
+wxCoord wxDC::LogicalToDeviceY(wxCoord y) const
 {
     return wxRound((double)(y - m_logicalOriginY) * m_scaleY) * m_signY + m_deviceOriginY;
 }
 
-wxCoord wxDCBase::LogicalToDeviceXRel(wxCoord x) const
+wxCoord wxDC::LogicalToDeviceXRel(wxCoord x) const
 {
     return wxRound((double)(x) * m_scaleX);
 }
 
-wxCoord wxDCBase::LogicalToDeviceYRel(wxCoord y) const
+wxCoord wxDC::LogicalToDeviceYRel(wxCoord y) const
 {
     return wxRound((double)(y) * m_scaleY);
 }
