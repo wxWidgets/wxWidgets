@@ -66,7 +66,8 @@ END_EVENT_TABLE()
 // when this view is removed from the native toolbar its count gets decremented again
 // and when the HITooolbarItem wrapper object gets destroyed it is decremented as well
 // so in the end the control lives with a refcount of one and can be disposed of by the
-// wxControl code
+// wxControl code. For embedded controls on a non-native toolbar this ref count is less
+// so we can only test against a range, not a specific value of the refcount.
 
 class wxToolBarTool : public wxToolBarToolBase
 {
@@ -642,7 +643,6 @@ static pascal OSStatus ControlToolbarItemHandler( EventHandlerCallRef inCallRef,
                 case kEventHIObjectDestruct:
                     {
                         HIViewRef viewRef = object->viewRef ;
-                        wxASSERT( IsValidControlHandle(viewRef) ) ;
                         if( viewRef && IsValidControlHandle( viewRef)  )
                         {
                             // depending whether the wxControl corresponding to this HIView has already been destroyed or
@@ -1192,7 +1192,7 @@ bool wxToolBar::Realize()
                                 if ( tool2->IsControl() )
                                 {
                                     CFIndex count = CFGetRetainCount( tool2->GetControl()->GetPeer()->GetControlRef() ) ;
-                                    wxASSERT_MSG( count == 3 , wxT("Reference Count of native tool was not 3 before removal") );
+                                    wxASSERT_MSG( count == 3 || count == 2 , wxT("Reference Count of native tool was illegal before removal") );
                                     wxASSERT( IsValidControlHandle(tool2->GetControl()->GetPeer()->GetControlRef() )) ;
                                 }
                                 err = HIToolbarRemoveItemAtIndex(refTB, idx);
@@ -1223,7 +1223,7 @@ bool wxToolBar::Realize()
                     if ( tool->IsControl() )
                     {
                         CFIndex count = CFGetRetainCount( tool->GetControl()->GetPeer()->GetControlRef() ) ;
-                        wxASSERT_MSG( count == 3 , wxT("Reference Count of native tool was not 3 after insertion") );
+                        wxASSERT_MSG( count == 3 || count == 2, wxT("Reference Count of native tool was illegal after insertion") );
                         wxASSERT( IsValidControlHandle(tool->GetControl()->GetPeer()->GetControlRef() )) ;
                     }
                 }
