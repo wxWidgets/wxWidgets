@@ -968,6 +968,10 @@ wxTopLevelWindowMac::~wxTopLevelWindowMac()
     FullScreenData *data = (FullScreenData *) m_macFullScreenData ;
     delete data ;
     m_macFullScreenData = NULL ;
+
+    // avoid dangling refs
+    if ( s_macDeactivateWindow == this )
+        s_macDeactivateWindow = NULL;
 }
 
 
