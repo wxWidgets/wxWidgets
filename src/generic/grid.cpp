@@ -6903,13 +6903,13 @@ void wxGrid::Refresh(bool eraseb, const wxRect* rect)
     }
 }
 
-void wxGrid::OnSize( wxSizeEvent& event )
+void wxGrid::OnSize( wxSizeEvent& WXUNUSED(event) )
 {
     // update our children window positions and scrollbars
     CalcDimensions();
 }
 
-void wxGrid::OnKeyDown( wxKeyEvent& WXUNUSED(event) )
+void wxGrid::OnKeyDown( wxKeyEvent& event )
 {
     if ( m_inOnKeyDown )
     {
