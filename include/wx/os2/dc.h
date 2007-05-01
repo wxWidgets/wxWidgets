@@ -157,6 +157,15 @@ public:
                                       );
     virtual void    SetLogicalFunction(int nFunction);
 
+    virtual wxCoord DeviceToLogicalX(wxCoord x) const;
+    virtual wxCoord DeviceToLogicalY(wxCoord y) const;
+    virtual wxCoord DeviceToLogicalXRel(wxCoord x) const;
+    virtual wxCoord DeviceToLogicalYRel(wxCoord y) const;
+    virtual wxCoord LogicalToDeviceX(wxCoord x) const;
+    virtual wxCoord LogicalToDeviceY(wxCoord y) const;
+    virtual wxCoord LogicalToDeviceXRel(wxCoord x) const;
+    virtual wxCoord LogicalToDeviceYRel(wxCoord y) const ;
+    
     // implementation from now on
     // --------------------------
 

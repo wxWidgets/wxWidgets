@@ -78,6 +78,15 @@ public:
     virtual int GetDepth() const;
     virtual wxSize GetPPI() const;
 
+    virtual wxCoord DeviceToLogicalX(wxCoord x) const;
+    virtual wxCoord DeviceToLogicalY(wxCoord y) const;
+    virtual wxCoord DeviceToLogicalXRel(wxCoord x) const;
+    virtual wxCoord DeviceToLogicalYRel(wxCoord y) const;
+    virtual wxCoord LogicalToDeviceX(wxCoord x) const;
+    virtual wxCoord LogicalToDeviceY(wxCoord y) const;
+    virtual wxCoord LogicalToDeviceXRel(wxCoord x) const;
+    virtual wxCoord LogicalToDeviceYRel(wxCoord y) const ;
+
     virtual void SetMapMode(int mode);
     virtual void SetUserScale(double x, double y);
     virtual void SetSystemScale(double x, double y);

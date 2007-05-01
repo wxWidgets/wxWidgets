@@ -371,42 +371,42 @@ void wxDC::SetDeviceOrigin(wxCoord x, wxCoord y)
 // coordinates transformations
 // ---------------------------------------------------------------------------
 
-wxCoord wxDCBase::DeviceToLogicalX(wxCoord x) const
+wxCoord wxDC::DeviceToLogicalX(wxCoord x) const
 {
     return 0;
 }
 
-wxCoord wxDCBase::DeviceToLogicalXRel(wxCoord x) const
+wxCoord wxDC::DeviceToLogicalXRel(wxCoord x) const
 {
     return 0;
 }
 
-wxCoord wxDCBase::DeviceToLogicalY(wxCoord y) const
+wxCoord wxDC::DeviceToLogicalY(wxCoord y) const
 {
     return 0;
 }
 
-wxCoord wxDCBase::DeviceToLogicalYRel(wxCoord y) const
+wxCoord wxDC::DeviceToLogicalYRel(wxCoord y) const
 {
     return 0;
 }
 
-wxCoord wxDCBase::LogicalToDeviceX(wxCoord x) const
+wxCoord wxDC::LogicalToDeviceX(wxCoord x) const
 {
     return 0;
 }
 
-wxCoord wxDCBase::LogicalToDeviceXRel(wxCoord x) const
+wxCoord wxDC::LogicalToDeviceXRel(wxCoord x) const
 {
     return 0;
 }
 
-wxCoord wxDCBase::LogicalToDeviceY(wxCoord y) const
+wxCoord wxDC::LogicalToDeviceY(wxCoord y) const
 {
     return 0;
 }
 
-wxCoord wxDCBase::LogicalToDeviceYRel(wxCoord y) const
+wxCoord wxDC::LogicalToDeviceYRel(wxCoord y) const
 {
     return 0;
 }

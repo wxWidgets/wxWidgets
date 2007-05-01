@@ -24,32 +24,71 @@
 
 class WXDLLIMPEXP_CORE wxSVGFileDC : public wxDC
 {
+public:
+    wxSVGFileDC (wxString f);
+    wxSVGFileDC (wxString f, int Width, int Height);
+    wxSVGFileDC (wxString f, int Width, int Height, float dpi);
+    
+    ~wxSVGFileDC();
 
-    private:
-        wxFileOutputStream * m_outfile ;
-        wxString m_filename ;
-        //holds number of png format images we have
-        int m_sub_images ;
-        bool m_OK, m_graphics_changed ;
-        int m_width, m_height ;
+    bool CanDrawBitmap() const { return true; }
+    bool CanGetTextExtent() const { return true; }
 
-        double
-            m_logicalScaleX,
-            m_logicalScaleY,
-            m_userScaleX,
-            m_userScaleY,
-            m_scaleX,
-            m_scaleY,
-            m_OriginX,
-            m_OriginY,
-            m_mm_to_pix_x,
-            m_mm_to_pix_y;
+    int GetDepth() const
+            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::GetDepth Call not implemented")); return -1 ; }
 
-        bool
-            m_needComputeScaleX,
-            m_needComputeScaleY; // not yet used
+    void Clear()
+            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::Clear() Call not implemented \nNot sensible for an output file?")); return ; }
 
+    void DestroyClippingRegion()
+            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::void Call not yet implemented")); return ; }
 
+    wxCoord GetCharHeight() const;
+    wxCoord GetCharWidth() const;
+
+        void SetClippingRegion(wxCoord  WXUNUSED(x), wxCoord  WXUNUSED(y), wxCoord  WXUNUSED(width), wxCoord  WXUNUSED(height))
+            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::SetClippingRegion not implemented")); return ; }
+
+        void SetPalette(const wxPalette&  WXUNUSED(palette))
+            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::SetPalette not implemented")); return ; }
+
+        void GetClippingBox(wxCoord *WXUNUSED(x), wxCoord *WXUNUSED(y), wxCoord * WXUNUSED(width), wxCoord * WXUNUSED(height))
+            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::GetClippingBox not implemented")); return ; }
+
+        void SetLogicalFunction(int  WXUNUSED(function))
+            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::SetLogicalFunction Call not implemented")); return ; }
+
+        int GetLogicalFunction() const
+            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::GetLogicalFunction() not implemented")); return wxCOPY ; }
+
+        void SetBackground( const wxBrush &brush ) ;
+        void SetBackgroundMode( int mode ) ;
+        void SetBrush(const wxBrush& brush) ;
+        void SetFont(const wxFont& font) ;
+        void SetPen(const wxPen& pen)  ;
+          
+        bool IsOk() const {return m_OK;}
+
+    virtual wxCoord DeviceToLogicalX(wxCoord x) const;
+    virtual wxCoord DeviceToLogicalY(wxCoord y) const;
+    virtual wxCoord DeviceToLogicalXRel(wxCoord x) const;
+    virtual wxCoord DeviceToLogicalYRel(wxCoord y) const;
+    virtual wxCoord LogicalToDeviceX(wxCoord x) const;
+    virtual wxCoord LogicalToDeviceY(wxCoord y) const;
+    virtual wxCoord LogicalToDeviceXRel(wxCoord x) const;
+    virtual wxCoord LogicalToDeviceYRel(wxCoord y) const ;
+
+    virtual void SetMapMode( int mode );
+    virtual void SetUserScale( double x, double y );
+    virtual void SetLogicalScale( double x, double y );
+    virtual void SetLogicalOrigin( wxCoord x, wxCoord y );
+    virtual void SetDeviceOrigin( wxCoord x, wxCoord y );
+
+    virtual void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
+
+    virtual void ComputeScaleAndOrigin();
+
+private:
         bool DoGetPixel(wxCoord, wxCoord, class wxColour *) const
             { wxASSERT_MSG (false, wxT("wxSVGFILEDC::DoGetPixel Call not implemented")); return true; }
 
@@ -72,6 +111,8 @@ class WXDLLIMPEXP_CORE wxSVGFileDC : public wxDC
         void DoDrawIcon(const class wxIcon &, wxCoord, wxCoord) ;
 
         void DoDrawLine (wxCoord x1, wxCoord y1, wxCoord x2, wxCoord y2) ;
+
+        void DoDrawLines(int n, wxPoint points[], wxCoord xoffset = 0, wxCoord yoffset = 0) ;
 
         void DoDrawPoint(wxCoord, wxCoord) ;
 
@@ -98,217 +139,21 @@ class WXDLLIMPEXP_CORE wxSVGFileDC : public wxDC
 
        void Init (wxString f, int Width, int Height, float dpi);
 
-       void NewGraphics () ;
+       void NewGraphics();
+       
+       void write( const wxString &s );
 
-#ifdef XDEV2LOG
-#undef XDEV2LOG
-#endif
-        wxCoord XDEV2LOG(wxCoord x) const
-        {
-            wxCoord new_x = x - m_deviceOriginX;
-            if (new_x > 0)
-                return (wxCoord)((double)(new_x) / m_scaleX + 0.5) * m_signX + m_logicalOriginX;
-            else
-                return (wxCoord)((double)(new_x) / m_scaleX - 0.5) * m_signX + m_logicalOriginX;
-        }
-#ifdef XDEV2LOGREL
-#undef XDEV2LOGREL
-#endif
-        wxCoord XDEV2LOGREL(wxCoord x) const
-        {
-            if (x > 0)
-                return (wxCoord)((double)(x) / m_scaleX + 0.5);
-            else
-                return (wxCoord)((double)(x) / m_scaleX - 0.5);
-        }
-#ifdef YDEV2LOG
-#undef YDEV2LOG
-#endif
-        wxCoord YDEV2LOG(wxCoord y) const
-        {
-            wxCoord new_y = y - m_deviceOriginY;
-            if (new_y > 0)
-                return (wxCoord)((double)(new_y) / m_scaleY + 0.5) * m_signY + m_logicalOriginY;
-            else
-                return (wxCoord)((double)(new_y) / m_scaleY - 0.5) * m_signY + m_logicalOriginY;
-        }
-#ifdef YDEV2LOGREL
-#undef YDEV2LOGREL
-#endif
-        wxCoord YDEV2LOGREL(wxCoord y) const
-        {
-            if (y > 0)
-                return (wxCoord)((double)(y) / m_scaleY + 0.5);
-            else
-                return (wxCoord)((double)(y) / m_scaleY - 0.5);
-        }
-#ifdef XLOG2DEV
-#undef XLOG2DEV
-#endif
-        wxCoord XLOG2DEV(wxCoord x) const
-        {
-            wxCoord new_x = x - m_logicalOriginX;
-            if (new_x > 0)
-                return (wxCoord)((double)(new_x) * m_scaleX + 0.5) * m_signX + m_deviceOriginX;
-            else
-                return (wxCoord)((double)(new_x) * m_scaleX - 0.5) * m_signX + m_deviceOriginX;
-        }
-#ifdef XLOG2DEVREL
-#undef XLOG2DEVREL
-#endif
-        wxCoord XLOG2DEVREL(wxCoord x) const
-        {
-            if (x > 0)
-                return (wxCoord)((double)(x) * m_scaleX + 0.5);
-            else
-                return (wxCoord)((double)(x) * m_scaleX - 0.5);
-        }
-#ifdef YLOG2DEV
-#undef YLOG2DEV
-#endif
-        wxCoord YLOG2DEV(wxCoord y) const
-        {
-            wxCoord new_y = y - m_logicalOriginY;
-            if (new_y > 0)
-                return (wxCoord)((double)(new_y) * m_scaleY + 0.5) * m_signY + m_deviceOriginY;
-            else
-                return (wxCoord)((double)(new_y) * m_scaleY - 0.5) * m_signY + m_deviceOriginY;
-        }
-#ifdef YLOG2DEVREL
-#undef YLOG2DEVREL
-#endif
-        wxCoord YLOG2DEVREL(wxCoord y) const
-        {
-            if (y > 0)
-                return (wxCoord)((double)(y) * m_scaleY + 0.5);
-            else
-                return (wxCoord)((double)(y) * m_scaleY - 0.5);
-        }
-
-        void write(const wxString &s);
-
-    public:
-
-        wxSVGFileDC (wxString f);
-        wxSVGFileDC (wxString f, int Width, int Height);
-        wxSVGFileDC (wxString f, int Width, int Height, float dpi);
-        ~wxSVGFileDC();
-
-
-        bool CanDrawBitmap() const { return true; }
-
-        bool CanGetTextExtent() const { return true; }
-
-        int GetDepth() const
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::GetDepth Call not implemented")); return -1 ; }
-
-        void BeginDrawing() { return;}
-
-        bool Blit(wxCoord xdest, wxCoord ydest, wxCoord width, wxCoord height, wxDC* source, wxCoord xsrc, wxCoord ysrc, int logicalFunc = wxCOPY, bool useMask = false)
-            { return DoBlit(xdest, ydest, width, height, source, xsrc, ysrc, logicalFunc, useMask); }
-
-        void Clear()
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::Clear() Call not implemented \nNot sensible for an output file?")); return ; }
-
-        void CrossHair(wxCoord x, wxCoord y)
-            { DoCrossHair (x,y); return; }
-
-        virtual void ComputeScaleAndOrigin();
-
-        void DestroyClippingRegion()
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::void Call not yet implemented")); return ; }
-
-        wxCoord DeviceToLogicalX(wxCoord x) const ;
-
-        wxCoord DeviceToLogicalXRel(wxCoord x)  const ;
-
-        wxCoord DeviceToLogicalY(wxCoord y)  const ;
-
-        wxCoord DeviceToLogicalYRel(wxCoord y)  const ;
-
-        void DrawBitmap(const wxBitmap& bitmap, wxCoord x, wxCoord y, bool transparent)
-            {  DoDrawBitmap ( bitmap, x, y, transparent ) ; return ;}
-
-        void DrawIcon(const wxIcon& icon, wxCoord x, wxCoord y)
-            {DoDrawIcon(icon, x, y) ; return ; }
-
-        void DoDrawLines(int n, wxPoint points[], wxCoord xoffset = 0, wxCoord yoffset = 0) ;
-
-        void EndDoc()
-            { return ; }
-
-        void EndDrawing()
-            { return ; }
-
-        void EndPage()
-            {  return ; }
-
-        void FloodFill(wxCoord x, wxCoord y, wxColour *colour, int style=wxFLOOD_SURFACE)
-            { DoFloodFill (x, y, *colour, style); return ;}
-
-        wxCoord GetCharHeight() const;
-
-        wxCoord GetCharWidth() const;
-
-        void GetClippingBox(wxCoord *WXUNUSED(x), wxCoord *WXUNUSED(y), wxCoord * WXUNUSED(width), wxCoord * WXUNUSED(height))
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::GetClippingBox Call not yet implemented")); return ; }
-
-        int GetLogicalFunction() const
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::GetLogicalFunction()  Call not implemented")); return wxCOPY ; }
-
-        int GetMapMode() const ;
-
-        bool GetPixel(wxCoord x, wxCoord y, wxColour *colour)
-            { return DoGetPixel (x, y, colour) ; }
-
-        void GetUserScale(double *x, double *y) const ;
-
-        wxCoord LogicalToDeviceX(wxCoord x)  const ;
-
-        wxCoord LogicalToDeviceXRel(wxCoord x)  const ;
-
-        wxCoord LogicalToDeviceY(wxCoord y)  const ;
-
-        wxCoord LogicalToDeviceYRel(wxCoord y)  const ;
-
-        bool Ok() const {return m_OK;}
-
-        void SetAxisOrientation( bool xLeftRight, bool yBottomUp ) ;
-
-        void SetClippingRegion(wxCoord  WXUNUSED(x), wxCoord  WXUNUSED(y), wxCoord  WXUNUSED(width), wxCoord  WXUNUSED(height))
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::SetClippingRegion Call not yet implemented")); return ; }
-
-        void SetPalette(const wxPalette&  WXUNUSED(palette))
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::SetPalette Call not yet implemented")); return ; }
-
-        void SetBackground( const wxBrush &brush ) ;
-
-        void SetBackgroundMode( int mode ) ;
-
-        void SetBrush(const wxBrush& brush) ;
-
-        void SetFont(const wxFont& font) ;
-
-        void SetLogicalFunction(int  WXUNUSED(function))
-            { wxASSERT_MSG (false, wxT("wxSVGFILEDC::SetLogicalFunction Call not implemented")); return ; }
-
-        void SetLogicalScale( double x, double y ) ;
-
-        void SetLogicalOrigin( wxCoord x, wxCoord y ) ;
-
-        void SetDeviceOrigin( wxCoord x, wxCoord y ) ;
-
-        void SetMapMode(int anint) ;
-
-        void SetPen(const wxPen& pen)  ;
-
-        void SetUserScale(double xScale, double yScale) ;
-
-        bool StartDoc(const wxString&  WXUNUSED(message))
-            {  return false; }
-
-        void StartPage()
-            {  return ; }
+private:
+    wxFileOutputStream *m_outfile;
+    wxString            m_filename;
+    int                 m_sub_images; // number of png format images we have
+    bool                m_OK;
+    bool                m_graphics_changed;
+    int                 m_width, m_height;
+    double              m_mm_to_pix_x, m_mm_to_pix_y;
+    
+private:
+    DECLARE_ABSTRACT_CLASS(wxSVGFileDC)
 };
 
 #endif      // __DCSVG_H

@@ -2380,34 +2380,34 @@ wxCoord wxDCBase::DeviceToLogicalXRel(wxCoord x) const
     return (wxCoord) ((x)/(m_logicalScaleX*m_userScaleX*m_scaleX));
 }
 
-wxCoord wxDCBase::DeviceToLogicalY(wxCoord y) const
+wxCoord wxDC::DeviceToLogicalY(wxCoord y) const
 {
     return (wxCoord) (((y) - m_deviceOriginY)/(m_logicalScaleY*m_userScaleY*m_signY*m_scaleY) - m_logicalOriginY);
 }
 
-wxCoord wxDCBase::DeviceToLogicalYRel(wxCoord y) const
+wxCoord wxDC::DeviceToLogicalYRel(wxCoord y) const
 {
     // axis orientation is not taken into account for conversion of a distance
     return (wxCoord) ((y)/(m_logicalScaleY*m_userScaleY*m_scaleY));
 }
 
-wxCoord wxDCBase::LogicalToDeviceX(wxCoord x) const
+wxCoord wxDC::LogicalToDeviceX(wxCoord x) const
 {
     return (wxCoord) ((x - m_logicalOriginX)*m_logicalScaleX*m_userScaleX*m_signX*m_scaleX + m_deviceOriginX);
 }
 
-wxCoord wxDCBase::LogicalToDeviceXRel(wxCoord x) const
+wxCoord wxDC::LogicalToDeviceXRel(wxCoord x) const
 {
     // axis orientation is not taken into account for conversion of a distance
     return (wxCoord) (x*m_logicalScaleX*m_userScaleX*m_scaleX);
 }
 
-wxCoord wxDCBase::LogicalToDeviceY(wxCoord y) const
+wxCoord wxDC::LogicalToDeviceY(wxCoord y) const
 {
     return (wxCoord) ((y - m_logicalOriginY)*m_logicalScaleY*m_userScaleY*m_signY*m_scaleY + m_deviceOriginY);
 }
 
-wxCoord wxDCBase::LogicalToDeviceYRel(wxCoord y) const
+wxCoord wxDC::LogicalToDeviceYRel(wxCoord y) const
 {
     // axis orientation is not taken into account for conversion of a distance
     return (wxCoord) (y*m_logicalScaleY*m_userScaleY*m_scaleY);

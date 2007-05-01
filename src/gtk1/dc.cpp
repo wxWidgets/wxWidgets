@@ -73,6 +73,46 @@ wxSize wxDC::GetPPI() const
 // set various DC parameters
 // ---------------------------------------------------------------------------
 
+wxCoord wxDC::DeviceToLogicalX(wxCoord x) const
+{
+    return wxRound((x - m_deviceOriginX) / m_scaleX) * m_signX + m_logicalOriginX;
+}
+
+wxCoord wxDC::DeviceToLogicalY(wxCoord y) const
+{
+    return wxRound((y - m_deviceOriginY) / m_scaleY) * m_signY + m_logicalOriginY;
+}
+
+wxCoord wxDC::DeviceToLogicalXRel(wxCoord x) const
+{
+    return wxRound(x / m_scaleX);
+}
+
+wxCoord wxDC::DeviceToLogicalYRel(wxCoord y) const
+{
+    return wxRound(y / m_scaleY);
+}
+
+wxCoord wxDC::LogicalToDeviceX(wxCoord x) const
+{
+    return wxRound((x - m_logicalOriginX) * m_scaleX) * m_signX + m_deviceOriginX;
+}
+
+wxCoord wxDC::LogicalToDeviceY(wxCoord y) const
+{
+    return wxRound((y - m_logicalOriginY) * m_scaleY) * m_signY + m_deviceOriginY;
+}
+
+wxCoord wxDC::LogicalToDeviceXRel(wxCoord x) const
+{
+    return wxRound(x * m_scaleX);
+}
+
+wxCoord wxDC::LogicalToDeviceYRel(wxCoord y) const
+{
+    return wxRound(y * m_scaleY);
+}
+
 void wxDC::ComputeScaleAndOrigin()
 {
     m_scaleX = m_logicalScaleX * m_userScaleX;

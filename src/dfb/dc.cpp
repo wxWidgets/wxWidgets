@@ -613,44 +613,44 @@ void wxDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
 // coordinates transformations
 // ---------------------------------------------------------------------------
 
-wxCoord wxDCBase::DeviceToLogicalX(wxCoord x) const
+wxCoord wxDC::DeviceToLogicalX(wxCoord x) const
 {
-    return ((wxDC *)this)->XDEV2LOG(x);
+    return XDEV2LOG(x);
 }
 
-wxCoord wxDCBase::DeviceToLogicalY(wxCoord y) const
+wxCoord wxDC::DeviceToLogicalY(wxCoord y) const
 {
-    return ((wxDC *)this)->YDEV2LOG(y);
+    return YDEV2LOG(y);
 }
 
-wxCoord wxDCBase::DeviceToLogicalXRel(wxCoord x) const
+wxCoord wxDC::DeviceToLogicalXRel(wxCoord x) const
 {
-    return ((wxDC *)this)->XDEV2LOGREL(x);
+    return XDEV2LOGREL(x);
 }
 
-wxCoord wxDCBase::DeviceToLogicalYRel(wxCoord y) const
+wxCoord wxDC::DeviceToLogicalYRel(wxCoord y) const
 {
-    return ((wxDC *)this)->YDEV2LOGREL(y);
+    return YDEV2LOGREL(y);
 }
 
-wxCoord wxDCBase::LogicalToDeviceX(wxCoord x) const
+wxCoord wxDC::LogicalToDeviceX(wxCoord x) const
 {
-    return ((wxDC *)this)->XLOG2DEV(x);
+    return XLOG2DEV(x);
 }
 
-wxCoord wxDCBase::LogicalToDeviceY(wxCoord y) const
+wxCoord wxDC::LogicalToDeviceY(wxCoord y) const
 {
-    return ((wxDC *)this)->YLOG2DEV(y);
+    return YLOG2DEV(y);
 }
 
-wxCoord wxDCBase::LogicalToDeviceXRel(wxCoord x) const
+wxCoord wxDC::LogicalToDeviceXRel(wxCoord x) const
 {
-    return ((wxDC *)this)->XLOG2DEVREL(x);
+    return XLOG2DEVREL(x);
 }
 
-wxCoord wxDCBase::LogicalToDeviceYRel(wxCoord y) const
+wxCoord wxDC::LogicalToDeviceYRel(wxCoord y) const
 {
-    return ((wxDC *)this)->YLOG2DEVREL(y);
+    return YLOG2DEVREL(y);
 }
 
 

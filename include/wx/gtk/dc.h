@@ -26,43 +26,6 @@
 #endif
 
 //-----------------------------------------------------------------------------
-// coordinates transformations
-//-----------------------------------------------------------------------------
-
-inline wxCoord wxDCBase::DeviceToLogicalX(wxCoord x) const
-{
-    return wxRound((x - m_deviceOriginX) / m_scaleX) * m_signX + m_logicalOriginX;
-}
-inline wxCoord wxDCBase::DeviceToLogicalY(wxCoord y) const
-{
-    return wxRound((y - m_deviceOriginY) / m_scaleY) * m_signY + m_logicalOriginY;
-}
-inline wxCoord wxDCBase::DeviceToLogicalXRel(wxCoord x) const
-{
-    return wxRound(x / m_scaleX);
-}
-inline wxCoord wxDCBase::DeviceToLogicalYRel(wxCoord y) const
-{
-    return wxRound(y / m_scaleY);
-}
-inline wxCoord wxDCBase::LogicalToDeviceX(wxCoord x) const
-{
-    return wxRound((x - m_logicalOriginX) * m_scaleX) * m_signX + m_deviceOriginX;
-}
-inline wxCoord wxDCBase::LogicalToDeviceY(wxCoord y) const
-{
-    return wxRound((y - m_logicalOriginY) * m_scaleY) * m_signY + m_deviceOriginY;
-}
-inline wxCoord wxDCBase::LogicalToDeviceXRel(wxCoord x) const
-{
-    return wxRound(x * m_scaleX);
-}
-inline wxCoord wxDCBase::LogicalToDeviceYRel(wxCoord y) const
-{
-    return wxRound(y * m_scaleY);
-}
-
-//-----------------------------------------------------------------------------
 // wxDC
 //-----------------------------------------------------------------------------
 
@@ -83,6 +46,15 @@ public:
     virtual void EndDoc() { }
     virtual void StartPage() { }
     virtual void EndPage() { }
+
+    virtual wxCoord DeviceToLogicalX(wxCoord x) const;
+    virtual wxCoord DeviceToLogicalY(wxCoord y) const;
+    virtual wxCoord DeviceToLogicalXRel(wxCoord x) const;
+    virtual wxCoord DeviceToLogicalYRel(wxCoord y) const;
+    virtual wxCoord LogicalToDeviceX(wxCoord x) const;
+    virtual wxCoord LogicalToDeviceY(wxCoord y) const;
+    virtual wxCoord LogicalToDeviceXRel(wxCoord x) const;
+    virtual wxCoord LogicalToDeviceYRel(wxCoord y) const ;
 
     virtual void SetMapMode( int mode );
     virtual void SetUserScale( double x, double y );

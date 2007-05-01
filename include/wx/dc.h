@@ -516,14 +516,14 @@ public:
 
     // This group of functions does actual conversion of the input, as you'd
     // expect.
-    wxCoord DeviceToLogicalX(wxCoord x) const;
-    wxCoord DeviceToLogicalY(wxCoord y) const;
-    wxCoord DeviceToLogicalXRel(wxCoord x) const;
-    wxCoord DeviceToLogicalYRel(wxCoord y) const;
-    wxCoord LogicalToDeviceX(wxCoord x) const;
-    wxCoord LogicalToDeviceY(wxCoord y) const;
-    wxCoord LogicalToDeviceXRel(wxCoord x) const;
-    wxCoord LogicalToDeviceYRel(wxCoord y) const;
+    virtual wxCoord DeviceToLogicalX(wxCoord x) const = 0;
+    virtual wxCoord DeviceToLogicalY(wxCoord y) const = 0;
+    virtual wxCoord DeviceToLogicalXRel(wxCoord x) const = 0;
+    virtual wxCoord DeviceToLogicalYRel(wxCoord y) const = 0;
+    virtual wxCoord LogicalToDeviceX(wxCoord x) const = 0;
+    virtual wxCoord LogicalToDeviceY(wxCoord y) const = 0;
+    virtual wxCoord LogicalToDeviceXRel(wxCoord x) const = 0;
+    virtual wxCoord LogicalToDeviceYRel(wxCoord y) const = 0;
 
     // query DC capabilities
     // ---------------------

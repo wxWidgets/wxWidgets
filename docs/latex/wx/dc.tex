@@ -199,7 +199,7 @@ See also \helpref{wxDC::SetClippingRegion}{wxdcsetclippingregion}.
 
 \membersection{wxDC::DeviceToLogicalX}\label{wxdcdevicetologicalx}
 
-\func{wxCoord}{DeviceToLogicalX}{\param{wxCoord}{ x}}
+\func{virtual wxCoord}{DeviceToLogicalX}{\param{wxCoord}{ x}}
 
 Convert device X coordinate to logical coordinate, using the current
 mapping mode.
@@ -207,7 +207,7 @@ mapping mode.
 
 \membersection{wxDC::DeviceToLogicalXRel}\label{wxdcdevicetologicalxrel}
 
-\func{wxCoord}{DeviceToLogicalXRel}{\param{wxCoord}{ x}}
+\func{virtual wxCoord}{DeviceToLogicalXRel}{\param{wxCoord}{ x}}
 
 Convert device X coordinate to relative logical coordinate, using the current
 mapping mode but ignoring the x axis orientation.
@@ -216,7 +216,7 @@ Use this function for converting a width, for example.
 
 \membersection{wxDC::DeviceToLogicalY}\label{wxdcdevicetologicaly}
 
-\func{wxCoord}{DeviceToLogicalY}{\param{wxCoord}{ y}}
+\func{virtual wxCoord}{DeviceToLogicalY}{\param{wxCoord}{ y}}
 
 Converts device Y coordinate to logical coordinate, using the current
 mapping mode.
@@ -224,7 +224,7 @@ mapping mode.
 
 \membersection{wxDC::DeviceToLogicalYRel}\label{wxdcdevicetologicalyrel}
 
-\func{wxCoord}{DeviceToLogicalYRel}{\param{wxCoord}{ y}}
+\func{virtual wxCoord}{DeviceToLogicalYRel}{\param{wxCoord}{ y}}
 
 Convert device Y coordinate to relative logical coordinate, using the current
 mapping mode but ignoring the y axis orientation.
@@ -880,7 +880,7 @@ use \arg{initialColour} on the left part of the rectangle and
 
 \membersection{wxDC::LogicalToDeviceX}\label{wxdclogicaltodevicex}
 
-\func{wxCoord}{LogicalToDeviceX}{\param{wxCoord}{ x}}
+\func{virtual wxCoord}{LogicalToDeviceX}{\param{wxCoord}{ x}}
 
 Converts logical X coordinate to device coordinate, using the current
 mapping mode.
@@ -888,7 +888,7 @@ mapping mode.
 
 \membersection{wxDC::LogicalToDeviceXRel}\label{wxdclogicaltodevicexrel}
 
-\func{wxCoord}{LogicalToDeviceXRel}{\param{wxCoord}{ x}}
+\func{virtual wxCoord}{LogicalToDeviceXRel}{\param{wxCoord}{ x}}
 
 Converts logical X coordinate to relative device coordinate, using the current
 mapping mode but ignoring the x axis orientation.
@@ -897,7 +897,7 @@ Use this for converting a width, for example.
 
 \membersection{wxDC::LogicalToDeviceY}\label{wxdclogicaltodevicey}
 
-\func{wxCoord}{LogicalToDeviceY}{\param{wxCoord}{ y}}
+\func{virtual wxCoord}{LogicalToDeviceY}{\param{wxCoord}{ y}}
 
 Converts logical Y coordinate to device coordinate, using the current
 mapping mode.
@@ -905,7 +905,7 @@ mapping mode.
 
 \membersection{wxDC::LogicalToDeviceYRel}\label{wxdclogicaltodeviceyrel}
 
-\func{wxCoord}{LogicalToDeviceYRel}{\param{wxCoord}{ y}}
+\func{virtual wxCoord}{LogicalToDeviceYRel}{\param{wxCoord}{ y}}
 
 Converts logical Y coordinate to relative device coordinate, using the current
 mapping mode but ignoring the y axis orientation.
