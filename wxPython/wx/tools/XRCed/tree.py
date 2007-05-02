@@ -492,8 +492,8 @@ def updateHL(hl, hlClass, pos, size):
 
 class XML_Tree(wx.TreeCtrl):
     def __init__(self, parent, id):
-        wx.TreeCtrl.__init__(self, parent, id)
-#                             style = wx.TR_HAS_BUTTONS | wx.TR_MULTIPLE | wx.TR_EDIT_LABELS)
+        wx.TreeCtrl.__init__(self, parent, id,
+                             style = wx.TR_HAS_BUTTONS | wx.TR_MULTIPLE | wx.TR_EDIT_LABELS)
         self.SetBackgroundColour(wx.Colour(224, 248, 224))
         self.fontComment = wx.FFont(self.GetFont().GetPointSize(),
                                     self.GetFont().GetFamily(),
