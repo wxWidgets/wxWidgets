@@ -500,11 +500,6 @@ void wxScrollHelper::HandleOnScroll(wxScrollWinEvent& event)
     }
 
     bool needsRefresh = false;
-#ifdef __WXMAC__
-    // OS X blocks on immediate redraws, so make this a refresh
-    if (!wxScrolledWindowHasChildren(m_targetWindow))
-      needsRefresh = true;
-#endif
     int dx = 0,
         dy = 0;
     int orient = event.GetOrientation();
@@ -536,7 +531,12 @@ void wxScrollHelper::HandleOnScroll(wxScrollWinEvent& event)
         // flush all pending repaints before we change m_{x,y}ScrollPosition, as
         // otherwise invalidated area could be updated incorrectly later when
         // ScrollWindow() makes sure they're repainted before scrolling them
+#ifdef __WXMAC__
+        // wxWindowMac is taking care of making sure the update area is correctly
+        // set up, while not forcing an immediate redraw
+#else
         m_targetWindow->Update();
+#endif
     }
 
     if (orient == wxHORIZONTAL)
