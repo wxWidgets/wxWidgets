@@ -34,15 +34,27 @@ struct wxVisualAttributes
         ~wxVisualAttributes() { delete self; }
     } 
     
-    // the font used for control label/text inside it
-    wxFont font;
+//     // the font used for control label/text inside it
+//     wxFont font;
+//     // the foreground colour
+//     wxColour colFg;
+//     // the background colour, may be wxNullColour if the controls background
+//     // colour is not solid
+//     wxColour colBg;
 
-    // the foreground colour
-    wxColour colFg;
+    // Use our own getters and properties instead of the ones that SWIG will
+    // generate, so copies of the attributes will be made when they are
+    // accessed, instead of using a pointer to the one in the object which may
+    // be temporary.
+    %extend {
+        wxFont   _get_font()      { return self->font; }
+        wxColour _get_colFg()     { return self->colFg; }
+        wxColour _get_colBg()     { return self->colBg; }
+    }
 
-    // the background colour, may be wxNullColour if the controls background
-    // colour is not solid
-    wxColour colBg;
+    %property(font,  _get_font)
+    %property(colFg, _get_colFg)
+    %property(colBg, _get_colBg)
 };
 
 
@@ -973,8 +985,16 @@ do not change.", "");
         wxWindow *, GetGrandParent() const,
         "Returns the parent of the parent of this window, or None if there
 isn't one.", "");
-    
 
+    
+    %extend {
+        DocDeclStr(wxWindow *, GetTopLevelParent(),
+                   "Returns the first frame or dialog in this window's parental hierarchy.", "")
+        {
+            return wxGetTopLevelParent(self);
+        }
+    }
+    
 
     DocDeclStr(
         virtual bool , IsTopLevel() const,
@@ -2072,9 +2092,15 @@ opaque.", "");
         self.thisown = pre.thisown
         pre.thisown = 0
         if hasattr(self, '_setOORInfo'):
-            self._setOORInfo(self)
+            try:
+                self._setOORInfo(self)
+            except TypeError:
+                pass
         if hasattr(self, '_setCallbackInfo'):
-            self._setCallbackInfo(self, pre.__class__)
+            try:
+                self._setCallbackInfo(self, pre.__class__)
+            except TypeError:
+                pass
     }
 
     %pythoncode {
@@ -2108,6 +2134,7 @@ opaque.", "");
     %property(Font, GetFont, SetFont, doc="See `GetFont` and `SetFont`");
     %property(ForegroundColour, GetForegroundColour, SetForegroundColour, doc="See `GetForegroundColour` and `SetForegroundColour`");
     %property(GrandParent, GetGrandParent, doc="See `GetGrandParent`");
+    %property(TopLevelParent, GetTopLevelParent, doc="See `GetTopLevelParent`");
     %property(Handle, GetHandle, doc="See `GetHandle`");
     %property(HelpText, GetHelpText, SetHelpText, doc="See `GetHelpText` and `SetHelpText`");
     %property(Id, GetId, SetId, doc="See `GetId` and `SetId`");

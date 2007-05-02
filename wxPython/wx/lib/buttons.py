@@ -589,6 +589,8 @@ class ThemedGenButton(GenButton):
             state = 0
         else:
             state = wx.CONTROL_PRESSED
+        if not self.IsEnabled():
+            state = wx.CONTROL_DISABLED
         wx.RendererNative.Get().DrawPushButton(self, dc, rect, state)
  
 class ThemedGenBitmapButton(ThemedGenButton, GenBitmapButton):

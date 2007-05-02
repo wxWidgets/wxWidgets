@@ -2313,9 +2313,10 @@ def GetColourFromUser(*args, **kwargs):
         String caption=EmptyString) -> Colour
     """
   return _windows_.GetColourFromUser(*args, **kwargs)
+DD_CHANGE_DIR = _windows_.DD_CHANGE_DIR
+DD_DIR_MUST_EXIST = _windows_.DD_DIR_MUST_EXIST
 DD_NEW_DIR_BUTTON = _windows_.DD_NEW_DIR_BUTTON
 DD_DEFAULT_STYLE = _windows_.DD_DEFAULT_STYLE
-DD_CHANGE_DIR = _windows_.DD_CHANGE_DIR
 class DirDialog(Dialog):
     """
     wx.DirDialog allows the user to select a directory by browising the

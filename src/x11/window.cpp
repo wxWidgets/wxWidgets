@@ -160,6 +160,8 @@ bool wxWindowX11::Create(wxWindow *parent, wxWindowID id,
     if (pos2.y == wxDefaultCoord)
         pos2.y = 0;
 
+    AdjustForParentClientOrigin(pos2.x, pos2.y);
+
 #if wxUSE_TWO_WINDOWS
     bool need_two_windows =
         ((( wxSUNKEN_BORDER | wxRAISED_BORDER | wxSIMPLE_BORDER | wxHSCROLL | wxVSCROLL ) & m_windowStyle) != 0);

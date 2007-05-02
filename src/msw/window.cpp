@@ -2104,10 +2104,22 @@ bool wxWindowMSW::DoPopupMenu(wxMenu *menu, int x, int y)
     ::ClientToScreen(hWnd, &point);
     wxCurrentPopupMenu = menu;
 #if defined(__WXWINCE__)
-    UINT flags = 0;
-#else
-    UINT flags = TPM_RIGHTBUTTON | TPM_RECURSE;
-#endif
+    static const UINT flags = 0;
+#else // !__WXWINCE__
+    UINT flags = TPM_RIGHTBUTTON;
+    // NT4 doesn't support TPM_RECURSE and simply doesn't show the menu at all
+    // when it's use, I'm not sure about Win95/98 but prefer to err on the safe
+    // side and not to use it there neither -- modify the test if it does work
+    // on these systems
+    if ( wxGetWinVersion() >= wxWinVersion_5 )
+    {
+        // using TPM_RECURSE allows us to show a popup menu while another menu
+        // is opened which can be useful and is supported by the other
+        // platforms, so allow it under Windows too
+        flags |= TPM_RECURSE;
+    }
+#endif // __WXWINCE__/!__WXWINCE__
+
     ::TrackPopupMenu(hMenu, flags, point.x, point.y, 0, hWnd, NULL);
 
     // we need to do it right now as otherwise the events are never going to be
@@ -2864,12 +2876,12 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
 #endif // defined(WM_DRAWITEM)
 
         case WM_GETDLGCODE:
-            if ( !IsOfStandardClass() )
+            if ( !IsOfStandardClass() || HasFlag(wxWANTS_CHARS) )
             {
                 // we always want to get the char events
                 rc.result = DLGC_WANTCHARS;
 
-                if ( GetWindowStyleFlag() & wxWANTS_CHARS )
+                if ( HasFlag(wxWANTS_CHARS) )
                 {
                     // in fact, we want everything
                     rc.result |= DLGC_WANTARROWS |
@@ -5769,13 +5781,26 @@ WXWORD wxCharCodeWXToMSW(int wxk, bool *isVirtual)
     return vk;
 }
 
+#ifndef SM_SWAPBUTTON
+    #define SM_SWAPBUTTON 23
+#endif
+
 // small helper for wxGetKeyState() and wxGetMouseState()
 static inline bool wxIsKeyDown(WXWORD vk)
 {
+    switch (vk)
+    {
+        case VK_LBUTTON:
+            if (GetSystemMetrics(SM_SWAPBUTTON)) vk = VK_RBUTTON; 
+            break;
+        case VK_RBUTTON:
+            if (GetSystemMetrics(SM_SWAPBUTTON)) vk = VK_LBUTTON;
+            break;
+    }
     // the low order bit indicates whether the key was pressed since the last
     // call and the high order one indicates whether it is down right now and
     // we only want that one
-    return (::GetAsyncKeyState(vk) & (1<<15)) != 0;
+    return (GetAsyncKeyState(vk) & (1<<15)) != 0;
 }
 
 bool wxGetKeyState(wxKeyCode key)
@@ -5795,7 +5820,7 @@ bool wxGetKeyState(wxKeyCode key)
         // low order bit means LED is highlighted and high order one means the
         // key is down; for compatibility with the other ports return true if
         // either one is set
-        return ::GetKeyState(vk) != 0;
+        return GetKeyState(vk) != 0;
 
     }
     else // normal key
@@ -6580,7 +6605,7 @@ public:
         }
 
         return CallNextHookEx(ms_hMsgHookProc, nCode, wParam, lParam);
-    };
+    }
 
 private:
     static HHOOK ms_hMsgHookProc;

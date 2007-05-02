@@ -37,6 +37,8 @@ typedef struct
     wxWindow *m_currentTargetWindow;
     wxDropTarget *m_currentTarget;
     wxDropSource *m_currentSource;
+    wxDragResult m_result;
+    int m_flags;
 } MacTrackingGlobals;
 
 MacTrackingGlobals gTrackingGlobals;
@@ -455,18 +457,15 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     // only when drag was successfully completed
 
     gTrackingGlobals.m_currentSource = this;
+    gTrackingGlobals.m_result = wxDragNone;
+    gTrackingGlobals.m_flags = flags;
+
     TrackDrag( theDrag, ev, dragRegion );
     DisposeRgn( dragRegion );
     DisposeDrag( theDrag );
     gTrackingGlobals.m_currentSource = NULL;
 
-    bool optionDown = GetCurrentKeyModifiers() & optionKey;
-    wxDragResult dndresult = wxDragCopy;
-    if ( flags != wxDrag_CopyOnly )
-        // on mac the option key is always the indication for copy
-        dndresult = optionDown ? wxDragCopy : wxDragMove;
-
-    return dndresult;
+    return gTrackingGlobals.m_result;
 }
 
 bool wxDropSource::MacInstallDefaultCursor(wxDragResult effect)
@@ -704,13 +703,20 @@ pascal OSErr wxMacWindowDragReceiveHandler(
             trackingGlobals->m_currentTargetWindow->MacRootWindowToWindow( &localx, &localy );
         if ( trackingGlobals->m_currentTarget->OnDrop( localx, localy ) )
         {
-            bool optionDown = GetCurrentKeyModifiers() & optionKey;
-            wxDragResult result = optionDown ? wxDragCopy : wxDragMove;
-            trackingGlobals->m_currentTarget->OnData( localx, localy, result );
+            // the option key indicates copy in Mac UI, if it's not pressed do
+            // move by default if it's allowed at all
+            wxDragResult
+                result = !(trackingGlobals->m_flags & wxDrag_AllowMove) ||
+                            (GetCurrentKeyModifiers() & optionKey)
+                            ? wxDragCopy
+                            : wxDragMove;
+            trackingGlobals->m_result =
+                trackingGlobals->m_currentTarget->OnData( localx, localy, result );
         }
     }
 
     return noErr;
 }
 
-#endif
+#endif // wxUSE_DRAG_AND_DROP
+

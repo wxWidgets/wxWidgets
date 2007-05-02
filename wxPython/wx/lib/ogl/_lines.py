@@ -218,16 +218,6 @@ class LineShape(Shape):
         self._lineControlPoints = []
         self._arcArrows = []
 
-    def __del__(self):
-        if self._lineControlPoints:
-            self._lineControlPoints = []
-        for i in range(3):
-            if self._labelObjects[i]:
-                self._labelObjects[i].Select(False)
-                self._labelObjects[i].RemoveFromCanvas(self._canvas)
-        self._labelObjects = []
-        self.ClearArrowsAtPosition(-1)
-
     def GetFrom(self):
         """Return the 'from' object."""
         return self._from
@@ -492,6 +482,11 @@ class LineShape(Shape):
             self._from.GetLines().remove(self)
         self._to = None
         self._from = None
+        for i in range(3):
+            if self._labelObjects[i]:
+                self._labelObjects[i].Select(False)
+                self._labelObjects[i].RemoveFromCanvas(self._canvas)
+        self.ClearArrowsAtPosition(-1)
 
     def SetEnds(self, x1, y1, x2, y2):
         """Set the end positions of the line."""

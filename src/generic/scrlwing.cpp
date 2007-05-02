@@ -41,6 +41,10 @@
     #include "wx/sizer.h"
 #endif
 
+#ifdef __WXMAC__
+#include "wx/scrolbar.h"
+#endif
+
 #include "wx/recguard.h"
 
 #ifdef __WXMSW__
@@ -447,6 +451,22 @@ wxWindow *wxScrollHelper::GetTargetWindow() const
     return m_targetWindow;
 }
 
+#ifdef __WXMAC__
+static bool wxScrolledWindowHasChildren(wxWindow* win)
+{
+    wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
+    while ( node )
+    {
+        wxWindow* child = node->GetData();
+        if ( !child->IsKindOf(CLASSINFO(wxScrollBar)) )
+            return true;
+
+        node = node->GetNext();
+    }
+    return false;
+}
+#endif
+
 // ----------------------------------------------------------------------------
 // scrolling implementation itself
 // ----------------------------------------------------------------------------
@@ -463,6 +483,7 @@ void wxScrollHelper::HandleOnScroll(wxScrollWinEvent& event)
     }
 
     bool needsRefresh = false;
+
     int dx = 0,
         dy = 0;
     int orient = event.GetOrientation();
@@ -494,7 +515,12 @@ void wxScrollHelper::HandleOnScroll(wxScrollWinEvent& event)
         // flush all pending repaints before we change m_{x,y}ScrollPosition, as
         // otherwise invalidated area could be updated incorrectly later when
         // ScrollWindow() makes sure they're repainted before scrolling them
+#ifdef __WXMAC__
+        // wxWindowMac is taking care of making sure the update area is correctly
+        // set up, while not forcing an immediate redraw
+#else
         m_targetWindow->Update();
+#endif
     }
 
     if (orient == wxHORIZONTAL)

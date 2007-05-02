@@ -836,6 +836,15 @@ public:
     // identical to c_str(), for MFC compatibility
     const wxChar* GetData() const { return c_str(); }
 
+    // conversion to *non-const* multibyte or widestring buffer; modifying
+    // returned buffer won't affect the string, these methods are only useful
+    // for passing values to const-incorrect functions
+    wxWritableCharBuffer char_str(const wxMBConv& conv = wxConvLibc) const
+      { return mb_str(conv); }
+#if wxUSE_WCHAR_T
+    wxWritableWCharBuffer wchar_str() const { return wc_str(wxConvLibc); }
+#endif
+
     // conversion to/from plain (i.e. 7 bit) ASCII: this is useful for
     // converting numbers or strings which are certain not to contain special
     // chars (typically system functions, X atoms, environment variables etc.)

@@ -497,7 +497,18 @@ wxSize wxWindowBase::DoGetBestSize() const
 
     if ( m_windowSizer )
     {
-        best = GetWindowSizeForVirtualSize(m_windowSizer->GetMinSize());
+        // Adjust to window size, since the return value of GetWindowSizeForVirtualSize is
+        // expressed in window and not client size
+        wxSize minSize = m_windowSizer->GetMinSize();
+        wxSize size(GetSize());
+        wxSize clientSize(GetClientSize());
+
+        wxSize minWindowSize(minSize.x + size.x - clientSize.x,
+                             minSize.y + size.y - clientSize.y);
+
+        best = GetWindowSizeForVirtualSize(minWindowSize);
+
+        return best;
     }
 #if wxUSE_CONSTRAINTS
     else if ( m_constraints )

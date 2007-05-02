@@ -698,7 +698,7 @@ class Bitmap(GDIObject):
         CopyFromBuffer(self, buffer data)
 
         Copy data from a RGB buffer object to replace the bitmap pixel data.
-        See `wxBitmapFromBuffer` for more .
+        See `wx.BitmapFromBuffer` for more .
         """
         return _gdi_.Bitmap_CopyFromBuffer(*args, **kwargs)
 
@@ -707,7 +707,7 @@ class Bitmap(GDIObject):
         CopyFromBufferRGBA(self, buffer data)
 
         Copy data from a RGBA buffer object to replace the bitmap pixel data.
-        See `wxBitmapFromBufferRGBA` for more .
+        See `wx.BitmapFromBufferRGBA` for more .
         """
         return _gdi_.Bitmap_CopyFromBufferRGBA(*args, **kwargs)
 
@@ -5190,22 +5190,13 @@ _gdi_.GraphicsFont_swigregister(GraphicsFont)
 class GraphicsMatrix(GraphicsObject):
     """
     A wx.GraphicsMatrix is a native representation of an affine
-    matrix. The contents are specific an private to the respective
+    matrix. The contents are specific and private to the respective
     renderer. The only way to get a valid instance is via a CreateMatrix
     call on the graphics context or the renderer instance.
     """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
-    def __init__(self, *args, **kwargs): 
-        """
-        __init__(self) -> GraphicsMatrix
-
-        A wx.GraphicsMatrix is a native representation of an affine
-        matrix. The contents are specific an private to the respective
-        renderer. The only way to get a valid instance is via a CreateMatrix
-        call on the graphics context or the renderer instance.
-        """
-        _gdi_.GraphicsMatrix_swiginit(self,_gdi_.new_GraphicsMatrix(*args, **kwargs))
     __swig_destroy__ = _gdi_.delete_GraphicsMatrix
     __del__ = lambda self : None;
     def Concat(*args, **kwargs):
@@ -5316,10 +5307,8 @@ _gdi_.GraphicsMatrix_swigregister(GraphicsMatrix)
 class GraphicsPath(GraphicsObject):
     """Proxy of C++ GraphicsPath class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
-    def __init__(self, *args, **kwargs): 
-        """__init__(self) -> GraphicsPath"""
-        _gdi_.GraphicsPath_swiginit(self,_gdi_.new_GraphicsPath(*args, **kwargs))
     __swig_destroy__ = _gdi_.delete_GraphicsPath
     __del__ = lambda self : None;
     def MoveToPoint(*args):
@@ -5527,7 +5516,8 @@ class GraphicsContext(GraphicsObject):
 
         Creates a wx.GraphicsContext from a native context. This native
         context must be eg a CGContextRef for Core Graphics, a Graphics
-        pointer for GDIPlus or a cairo_t pointer for Cairo.
+        pointer for GDIPlus or a cairo_t pointer for Cairo.  NOTE: For
+        wxPython we still need a way to make this value usable.
         """
         return _gdi_.GraphicsContext_CreateFromNative(*args, **kwargs)
 
@@ -5536,7 +5526,8 @@ class GraphicsContext(GraphicsObject):
         """
         CreateFromNativeWindow(void window) -> GraphicsContext
 
-        Creates a wx.GraphicsContext from a native window.
+        Creates a wx.GraphicsContext from a native window.  NOTE: For wxPython
+        we still need a way to make this value usable.
         """
         return _gdi_.GraphicsContext_CreateFromNativeWindow(*args, **kwargs)
 
@@ -5855,7 +5846,7 @@ class GraphicsContext(GraphicsObject):
 
     def StrokeLineSegements(*args, **kwargs):
         """
-        StrokeLineSegements(self, PyObject beginPoints, PyObject endPoints)
+        StrokeLineSegments(self, List beginPoints, List endPoints)
 
         Stroke disconnected lines from begin to end points
         """
@@ -5936,7 +5927,8 @@ def GraphicsContext_CreateFromNative(*args, **kwargs):
 
     Creates a wx.GraphicsContext from a native context. This native
     context must be eg a CGContextRef for Core Graphics, a Graphics
-    pointer for GDIPlus or a cairo_t pointer for Cairo.
+    pointer for GDIPlus or a cairo_t pointer for Cairo.  NOTE: For
+    wxPython we still need a way to make this value usable.
     """
   return _gdi_.GraphicsContext_CreateFromNative(*args, **kwargs)
 
@@ -5944,7 +5936,8 @@ def GraphicsContext_CreateFromNativeWindow(*args, **kwargs):
   """
     GraphicsContext_CreateFromNativeWindow(void window) -> GraphicsContext
 
-    Creates a wx.GraphicsContext from a native window.
+    Creates a wx.GraphicsContext from a native window.  NOTE: For wxPython
+    we still need a way to make this value usable.
     """
   return _gdi_.GraphicsContext_CreateFromNativeWindow(*args, **kwargs)
 

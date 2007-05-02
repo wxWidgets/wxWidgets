@@ -340,8 +340,12 @@ gtk_pizza_set_size (GtkPizza   *pizza,
 
         if (child->widget == widget)
         {
-            child->x = x;
-            child->y = y;
+            if (child->x != x || child->y != y)
+            {
+                child->x = x;
+                child->y = y;
+                gtk_widget_queue_resize(widget);
+            }
 
             gtk_widget_set_size_request (widget, width, height);
 

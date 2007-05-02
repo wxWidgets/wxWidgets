@@ -66,6 +66,10 @@ public:
         m_pos = m_str->length() / sizeof(wxChar);
     }
 
+#if wxABI_VERSION >= 20804 && wxUSE_UNICODE
+    virtual ~wxStringOutputStream();
+#endif // wx 2.8.4+
+
     // get the string containing current output
     const wxString& GetString() const { return *m_str; }
 

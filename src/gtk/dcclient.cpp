@@ -1830,7 +1830,12 @@ wxCoord wxWindowDC::GetCharWidth() const
 wxCoord wxWindowDC::GetCharHeight() const
 {
     PangoFontMetrics *metrics = pango_context_get_metrics (m_context, m_fontdesc, pango_context_get_language(m_context));
-    return PANGO_PIXELS (pango_font_metrics_get_descent (metrics) + pango_font_metrics_get_ascent (metrics));
+    wxCHECK_MSG( metrics, -1, _T("failed to get pango font metrics") );
+
+    wxCoord h = PANGO_PIXELS (pango_font_metrics_get_descent (metrics) +
+                pango_font_metrics_get_ascent (metrics));
+    pango_font_metrics_unref (metrics);
+    return h;
 }
 
 void wxWindowDC::Clear()

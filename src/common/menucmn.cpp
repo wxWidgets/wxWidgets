@@ -319,9 +319,7 @@ wxString wxAcceleratorEntry::ToString() const
 
     const int code = GetKeyCode();
 
-    if ( wxIsalnum(code) )
-        text << (wxChar)code;
-    else if ( code >= WXK_F1 && code <= WXK_F12 )
+    if ( code >= WXK_F1 && code <= WXK_F12 )
         text << _("F") << code - WXK_F1 + 1;
     else if ( code >= WXK_NUMPAD0 && code <= WXK_NUMPAD9 )
         text << _("KP_") << code - WXK_NUMPAD0;
@@ -340,8 +338,22 @@ wxString wxAcceleratorEntry::ToString() const
             }
         }
 
-        wxASSERT_MSG( n != WXSIZEOF(wxKeyNames),
-                      wxT("unknown keyboard accelerator code") );
+        if ( n == WXSIZEOF(wxKeyNames) )
+        {
+            // must be a simple key
+            if (
+#if !wxUSE_UNICODE
+                 isascii(code) &&
+#endif // ANSI
+                    wxIsalnum(code) )
+            {
+                text << (wxChar)code;
+            }
+            else
+            {
+                wxFAIL_MSG( wxT("unknown keyboard accelerator code") );
+            }
+        }
     }
 
     return text;

@@ -58,6 +58,7 @@ MENU_DISABLE_TAB = wx.NewId()
 MENU_ENABLE_DRAG_N_DROP = wx.NewId()
 MENU_DCLICK_CLOSES_TAB = wx.NewId()
 MENU_USE_VC8_STYLE = wx.NewId()
+MENU_USE_FF2_STYLE = wx.NewId()
 MENU_HIDE_ON_SINGLE_TAB = wx.NewId()
 
 MENU_SET_ACTIVE_TEXT_COLOR = wx.NewId()
@@ -179,6 +180,10 @@ class FlatNotebookDemo(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnFancyStyle, item)
         styleMenu.AppendItem(item)
 
+        item = wx.MenuItem(styleMenu, MENU_USE_FF2_STYLE, "Use Firefox 2 Style", "Use Firefox 2 Style", wx.ITEM_RADIO)
+        self.Bind(wx.EVT_MENU, self.OnFF2Style, item)
+        styleMenu.AppendItem(item)
+        
         self._visualMenu.AppendMenu(wx.ID_ANY, "Tabs Style", styleMenu)
 
         item = wx.MenuItem(self._visualMenu, MENU_SELECT_GRADIENT_COLOR_FROM, "Select fancy tab style 'from' color",
@@ -443,12 +448,25 @@ class FlatNotebookDemo(wx.Frame):
         self._bShowImages = event.IsChecked()
 
 
+    def OnFF2Style(self, event):
+
+        style = self.book.GetWindowStyleFlag()
+
+        # remove old tabs style
+        mirror = ~(fnb.FNB_VC71 | fnb.FNB_VC8 | fnb.FNB_FANCY_TABS | fnb.FNB_FF2)
+        style &= mirror
+
+        style |= fnb.FNB_FF2
+
+        self.book.SetWindowStyleFlag(style)
+
+
     def OnVC71Style(self, event):
 
         style = self.book.GetWindowStyleFlag()
 
         # remove old tabs style
-        mirror = ~(fnb.FNB_VC71 | fnb.FNB_VC8 | fnb.FNB_FANCY_TABS)
+        mirror = ~(fnb.FNB_VC71 | fnb.FNB_VC8 | fnb.FNB_FANCY_TABS | fnb.FNB_FF2)
         style &= mirror
 
         style |= fnb.FNB_VC71
@@ -461,7 +479,7 @@ class FlatNotebookDemo(wx.Frame):
         style = self.book.GetWindowStyleFlag()
 
         # remove old tabs style
-        mirror = ~(fnb.FNB_VC71 | fnb.FNB_VC8 | fnb.FNB_FANCY_TABS)
+        mirror = ~(fnb.FNB_VC71 | fnb.FNB_VC8 | fnb.FNB_FANCY_TABS | fnb.FNB_FF2)
         style &= mirror
 
         # set new style
@@ -475,7 +493,7 @@ class FlatNotebookDemo(wx.Frame):
         style = self.book.GetWindowStyleFlag()
 
         # remove old tabs style
-        mirror = ~(fnb.FNB_VC71 | fnb.FNB_VC8 | fnb.FNB_FANCY_TABS)
+        mirror = ~(fnb.FNB_VC71 | fnb.FNB_VC8 | fnb.FNB_FANCY_TABS | fnb.FNB_FF2)
         style &= mirror
 
         self.book.SetWindowStyleFlag(style)
@@ -486,7 +504,7 @@ class FlatNotebookDemo(wx.Frame):
         style = self.book.GetWindowStyleFlag()
 
         # remove old tabs style
-        mirror = ~(fnb.FNB_VC71 | fnb.FNB_VC8 | fnb.FNB_FANCY_TABS)
+        mirror = ~(fnb.FNB_VC71 | fnb.FNB_VC8 | fnb.FNB_FANCY_TABS | fnb.FNB_FF2)
         style &= mirror
 
         style |= fnb.FNB_FANCY_TABS

@@ -234,17 +234,14 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
         fn.AssignDir(defaultDir);
 
     // set the initial file name and/or directory
-    wxString fname = fn.GetFullName();
-    if ( fname.empty() )
+    const wxString dir = fn.GetPath();
+    if ( !dir.empty() )
     {
-        wxString dir = fn.GetPath();
-        if ( !dir.empty() )
-        {
-            gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget),
-                                                dir.fn_str());
-        }
+        gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget),
+                                            dir.fn_str());
     }
 
+    const wxString fname = fn.GetFullName();
     if ( style & wxFD_SAVE )
     {
         if ( !fname.empty() )

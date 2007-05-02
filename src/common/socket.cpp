@@ -1344,14 +1344,18 @@ wxDatagramSocket::wxDatagramSocket( const wxSockAddress& addr,
     // Create the socket
     m_socket = GSocket_new();
 
-    if(!m_socket)
+    if (!m_socket)
     {
         wxFAIL_MSG( _T("datagram socket not new'd") );
         return;
     }
     // Setup the socket as non connection oriented
     m_socket->SetLocal(addr.GetAddress());
-    if( m_socket->SetNonOriented() != GSOCK_NOERROR )
+    if (flags & wxSOCKET_REUSEADDR)
+    {
+        m_socket->SetReusable();
+    }
+    if ( m_socket->SetNonOriented() != GSOCK_NOERROR )
     {
         delete m_socket;
         m_socket = NULL;

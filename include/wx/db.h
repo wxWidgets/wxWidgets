@@ -326,38 +326,38 @@ class WXDLLIMPEXP_ODBC wxDbConnectInf
         void             FreeHenv();
 
         // Accessors
-        const HENV       &GetHenv()          { return Henv; };
+        const HENV       &GetHenv()          { return Henv; }
 
-        const wxChar    *GetDsn()           { return Dsn; };
+        const wxChar    *GetDsn()           { return Dsn; }
 
-        const wxChar    *GetUid()           { return Uid; };
-        const wxChar    *GetUserID()        { return Uid; };
+        const wxChar    *GetUid()           { return Uid; }
+        const wxChar    *GetUserID()        { return Uid; }
 
-        const wxChar    *GetAuthStr()       { return AuthStr; };
-        const wxChar    *GetPassword()      { return AuthStr; };
+        const wxChar    *GetAuthStr()       { return AuthStr; }
+        const wxChar    *GetPassword()      { return AuthStr; }
 
-        const wxChar    *GetConnectionStr() { return ConnectionStr; };
-        bool             UseConnectionStr() { return useConnectionStr; };
+        const wxChar    *GetConnectionStr() { return ConnectionStr; }
+        bool             UseConnectionStr() { return useConnectionStr; }
 
-        const wxChar    *GetDescription()   { return Description; };
-        const wxChar    *GetFileType()      { return FileType; };
-        const wxChar    *GetDefaultDir()    { return DefaultDir; };
+        const wxChar    *GetDescription()   { return Description; }
+        const wxChar    *GetFileType()      { return FileType; }
+        const wxChar    *GetDefaultDir()    { return DefaultDir; }
 
-        void             SetHenv(const HENV henv)               { Henv = henv; };
+        void             SetHenv(const HENV henv)               { Henv = henv; }
 
         void             SetDsn(const wxString &dsn);
 
         void             SetUserID(const wxString &userID);
-        void             SetUid(const wxString &uid)            { SetUserID(uid); };
+        void             SetUid(const wxString &uid)            { SetUserID(uid); }
 
         void             SetPassword(const wxString &password);
-        void             SetAuthStr(const wxString &authstr)    { SetPassword(authstr); };
+        void             SetAuthStr(const wxString &authstr)    { SetPassword(authstr); }
 
         void             SetConnectionStr(const wxString &connectStr);
 
-        void             SetDescription(const wxString &desc)   { Description   = desc;     };
-        void             SetFileType(const wxString &fileType)  { FileType      = fileType; };
-        void             SetDefaultDir(const wxString &defDir)  { DefaultDir    = defDir;   };
+        void             SetDescription(const wxString &desc)   { Description   = desc;     }
+        void             SetFileType(const wxString &fileType)  { FileType      = fileType; }
+        void             SetDefaultDir(const wxString &defDir)  { DefaultDir    = defDir;   }
 };  // class wxDbConnectInf
 
 
@@ -558,8 +558,8 @@ private:
 
 public:
 
-    void             setCached(bool cached)  { dbIsCached = cached; };  // This function must only be called by wxDbGetConnection() and wxDbCloseConnections!!!
-    bool             IsCached() { return dbIsCached; };
+    void             setCached(bool cached)  { dbIsCached = cached; }  // This function must only be called by wxDbGetConnection() and wxDbCloseConnections!!!
+    bool             IsCached() { return dbIsCached; }
 
     bool             GetDataTypeInfo(SWORD fSqlType, wxDbSqlTypeInfo &structSQLTypeInfo)
                             { return getDataTypeInfo(fSqlType, structSQLTypeInfo); }

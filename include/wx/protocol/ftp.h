@@ -47,7 +47,7 @@ public:
     // Parameters set up
 
     // set transfer mode now
-    void SetPassive(bool pasv) { m_bPassive = pasv; };
+    void SetPassive(bool pasv) { m_bPassive = pasv; }
     void SetDefaultTimeout(wxUint32 Value);
     bool SetBinary() { return SetTransferMode(BINARY); }
     bool SetAscii() { return SetTransferMode(ASCII); }

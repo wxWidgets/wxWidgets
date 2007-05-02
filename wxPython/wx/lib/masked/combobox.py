@@ -162,6 +162,8 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
             self.Bind(wx.EVT_KEY_DOWN, self._OnKeyDownInComboBox ) ## for special processing of up/down keys
             self.Bind(wx.EVT_KEY_DOWN, self._OnKeyDown )        ## for processing the rest of the control keys
                                                                 ## (next in evt chain)
+            self.Bind(wx.EVT_COMBOBOX, self._OnDropdownSelect)  ## to bring otherwise completely independent base
+                                                                ## ctrl selection into maskededit framework
             self.Bind(wx.EVT_TEXT, self._OnTextChange )         ## color control appropriately & keep
                                                                 ## track of previous value for undo
 
@@ -531,6 +533,18 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
             event.Skip()    # let mixin default KeyDown behavior occur
 
 
+    def _OnDropdownSelect(self, event):
+        """
+        This function appears to be necessary because dropdown selection seems to
+        manipulate the contents of the control in an inconsistent way, properly
+        changing the selection index, but *not* the value. (!)  Calling SetSelection()
+        on a selection event for the same selection would seem like a nop, but it seems to
+        fix the problem.
+        """
+        self.SetSelection(event.GetSelection())
+        event.Skip()
+
+
     def _OnSelectChoice(self, event):
         """
         This function appears to be necessary, because the processing done
@@ -659,6 +673,10 @@ class PreMaskedComboBox( BaseMaskedComboBox, MaskedEditAccessorsMixin ):
 __i = 0
 ## CHANGELOG:
 ## ====================
+##  Version 1.4
+##  1. Added handler for EVT_COMBOBOX to address apparently inconsistent behavior
+##     of control when the dropdown control is used to do a selection.
+##
 ##  Version 1.3
 ##  1. Made definition of "hack" GetMark conditional on base class not
 ##     implementing it properly, to allow for migration in wx code base

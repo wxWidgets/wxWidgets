@@ -58,6 +58,17 @@ END_EVENT_TABLE()
 
 // We have a dual implementation for each tool, ControlRef and HIToolbarItemRef
 
+// when embedding native controls in the native toolbar we must make sure the
+// control does not get deleted behind our backs, so the retain count gets increased
+// (after creation it is 1), first be the creation of the custom HIToolbarItem wrapper 
+// object, and second by the code 'creating' the custom HIView (which is the same as the
+// already existing native control, therefore we just increase the ref count)
+// when this view is removed from the native toolbar its count gets decremented again
+// and when the HITooolbarItem wrapper object gets destroyed it is decremented as well
+// so in the end the control lives with a refcount of one and can be disposed of by the
+// wxControl code. For embedded controls on a non-native toolbar this ref count is less
+// so we can only test against a range, not a specific value of the refcount.
+
 class wxToolBarTool : public wxToolBarToolBase
 {
 public:
@@ -99,18 +110,20 @@ public:
 
     void ClearControl()
     {
-        m_control = NULL;
         if ( m_controlHandle )
         {
             if ( !IsControl() )
                 DisposeControl( m_controlHandle );
             else
             {
-                // the embedded control is not under the responsibility of the tool
+                // the embedded control is not under the responsibility of the tool, it will be disposed of in the
+                // proper wxControl destructor
+                wxASSERT( IsValidControlHandle(GetControl()->GetPeer()->GetControlRef() )) ;
             }
             m_controlHandle = NULL ;
         }
-
+        m_control = NULL;
+        
 #if wxMAC_USE_NATIVE_TOOLBAR
         if ( m_toolbarItemRef )
         {
@@ -168,10 +181,19 @@ public:
         m_toolbarItemRef = ref;
         if ( m_toolbarItemRef )
         {
+            wxFont f;
+            wxFontEncoding enc;
+            if ( GetToolBar() )
+                f = GetToolBar()->GetFont();
+            if ( f.IsOk() )
+                enc = f.GetEncoding();
+            else
+                enc = wxFont::GetDefaultEncoding();
+            
             HIToolbarItemSetHelpText(
                 m_toolbarItemRef,
-                wxMacCFStringHolder( GetShortHelp(), GetToolBar()->GetFont().GetEncoding() ),
-                wxMacCFStringHolder( GetLongHelp(), GetToolBar()->GetFont().GetEncoding() ) );
+                wxMacCFStringHolder( GetShortHelp(), enc ),
+                wxMacCFStringHolder( GetLongHelp(), enc ) );
         }
     }
 
@@ -585,6 +607,7 @@ static pascal OSStatus ControlToolbarItemHandler( EventHandlerCallRef inCallRef,
                         
                         item = (ControlToolbarItem*) malloc(sizeof(ControlToolbarItem)) ;
                         item->toolbarItem = toolbarItem ;
+                        item->lastValidSize = wxSize(-1,-1);
                         item->viewRef = NULL ;
                         
                         SetEventParameter( inEvent, kEventParamHIObjectInstance, typeVoidPtr, sizeof( void * ), &item );
@@ -607,19 +630,24 @@ static pascal OSStatus ControlToolbarItemHandler( EventHandlerCallRef inCallRef,
                         memcpy( &viewRef , CFDataGetBytePtr( data ) , sizeof( viewRef ) ) ;
                     
                         object->viewRef = (HIViewRef) viewRef ;
+                        // make sure we keep that control during our lifetime
+                        CFRetain( object->viewRef ) ;
 
+                        verify_noerr(InstallEventHandler( GetControlEventTarget( viewRef ), ControlToolbarItemHandler,
+                                            GetEventTypeCount( kViewEvents ), kViewEvents, object, NULL ));
                         result = noErr ;
                     }
                     break;
 
                 case kEventHIObjectDestruct:
                     {
-                        // we've increased the ref count when creating this, so we decrease manually again in case
-                        // it was never really installed and deinstalled
                         HIViewRef viewRef = object->viewRef ;
                         if( viewRef && IsValidControlHandle( viewRef)  )
                         {
+                            // depending whether the wxControl corresponding to this HIView has already been destroyed or
+                            // not, ref counts differ, so we cannot assert a special value
                             CFIndex count =  CFGetRetainCount( viewRef ) ; 
+                            wxASSERT_MSG( count >=1 , wxT("Reference Count of native tool was illegal before removal") );
                             if ( count >= 1 )
                                 CFRelease( viewRef ) ;
                         }
@@ -636,12 +664,9 @@ static pascal OSStatus ControlToolbarItemHandler( EventHandlerCallRef inCallRef,
                 case kEventToolbarItemCreateCustomView:
                 {
                     HIViewRef viewRef = object->viewRef ;
-
-                    HIViewRemoveFromSuperview( viewRef ) ;
+               		HIViewRemoveFromSuperview( viewRef ) ;
                     HIViewSetVisible(viewRef, true) ;
-                    InstallEventHandler( GetControlEventTarget( viewRef ), ControlToolbarItemHandler,
-                                            GetEventTypeCount( kViewEvents ), kViewEvents, object, NULL );
-                    
+                    CFRetain( viewRef ) ;
                     result = SetEventParameter( inEvent, kEventParamControlRef, typeControlRef, sizeof( HIViewRef ), &viewRef );
                 }
                 break;
@@ -656,16 +681,21 @@ static pascal OSStatus ControlToolbarItemHandler( EventHandlerCallRef inCallRef,
                     wxWindow* wxwindow = wxFindControlFromMacControl(object->viewRef ) ;
                     if ( wxwindow )
                     {
-                        wxSize sz = wxwindow->GetSize() ;
-                        sz.x -= wxwindow->MacGetLeftBorderSize() + wxwindow->MacGetRightBorderSize();
-                        sz.y -= wxwindow->MacGetTopBorderSize() + wxwindow->MacGetBottomBorderSize();
-                        // during toolbar layout the native window sometimes gets negative sizes
-                        // so we always keep the last valid size here, to make sure we survive the
-                        // shuffle ...
-                        if ( sz.x > 0 && sz.y > 0 )
-                            object->lastValidSize = sz ;
-                        else
-                            sz = object->lastValidSize ;
+                        // during toolbar layout the native window sometimes gets negative sizes,
+                        // sometimes it just gets shrunk behind our back, so in order to avoid
+                        // ever shrinking more, once a valid size is captured, we keep it
+
+                        wxSize sz = object->lastValidSize;
+                        if ( sz.x <= 0 || sz.y <= 0 )
+                        {
+                            sz = wxwindow->GetSize() ;
+                            sz.x -= wxwindow->MacGetLeftBorderSize() + wxwindow->MacGetRightBorderSize();
+                            sz.y -= wxwindow->MacGetTopBorderSize() + wxwindow->MacGetBottomBorderSize();
+                            if ( sz.x > 0 && sz.y > 0 )
+                                object->lastValidSize = sz ;
+                            else
+                                sz = wxSize(0,0) ;
+                        }
                             
                         HISize min, max;
                         min.width = max.width = sz.x ;
@@ -1146,17 +1176,37 @@ bool wxToolBar::Realize()
 
                         // if this is the first tool that gets newly inserted or repositioned
                         // first remove all 'old' tools from here to the right, because of this
-                        // all following tools will have to be reinserted (insertAll). i = 100 because there's
-                        // no way to determine how many there are in a toolbar, so just a high number :-(
-                        for ( CFIndex i = 100; i >= currentPosition; --i )
+                        // all following tools will have to be reinserted (insertAll).
+                       for ( wxToolBarToolsList::compatibility_iterator node2 = m_tools.GetLast();
+                              node2 != node;
+                              node2 = node2->GetPrevious() )
                         {
-                            err = HIToolbarRemoveItemAtIndex( (HIToolbarRef) m_macHIToolbarRef, i );
-                        }
+                            wxToolBarTool *tool2 = (wxToolBarTool*) node2->GetData();
 
-                        if (err != noErr)
-                        {
-                            wxString errMsg = wxString::Format( wxT("HIToolbarRemoveItemAtIndex failed [%ld]"), (long)err );
-                            wxFAIL_MSG( errMsg.c_str() );
+                            const long idx = tool2->GetIndex();
+                            if ( idx != -1 )
+                            {
+                                if ( tool2->IsControl() )
+                                {
+                                    CFIndex count = CFGetRetainCount( tool2->GetControl()->GetPeer()->GetControlRef() ) ;
+                                    wxASSERT_MSG( count == 3 || count == 2 , wxT("Reference Count of native tool was illegal before removal") );
+                                    wxASSERT( IsValidControlHandle(tool2->GetControl()->GetPeer()->GetControlRef() )) ;
+                                }
+                                err = HIToolbarRemoveItemAtIndex((HIToolbarRef) m_macHIToolbarRef, idx);
+                                if ( err != noErr )
+                                {
+                                    wxLogDebug(wxT("HIToolbarRemoveItemAtIndex(%ld) failed [%ld]"),
+                                               idx, (long)err);
+                                }
+                                if ( tool2->IsControl() )
+                                {
+                                    CFIndex count = CFGetRetainCount( tool2->GetControl()->GetPeer()->GetControlRef() ) ;
+                                    wxASSERT_MSG( count == 2 , wxT("Reference Count of native tool was not 2 after removal") );
+                                    wxASSERT( IsValidControlHandle(tool2->GetControl()->GetPeer()->GetControlRef() )) ;
+                                }
+
+                                tool2->SetIndex(-1);
+                            }
                         }
                     }
 
@@ -1168,6 +1218,12 @@ bool wxToolBar::Realize()
                     }
 
                     tool->SetIndex( currentPosition );
+                    if ( tool->IsControl() )
+                    {
+                        CFIndex count = CFGetRetainCount( tool->GetControl()->GetPeer()->GetControlRef() ) ;
+                        wxASSERT_MSG( count == 3 || count == 2, wxT("Reference Count of native tool was illegal after insertion") );
+                        wxASSERT( IsValidControlHandle(tool->GetControl()->GetPeer()->GetControlRef() )) ;
+                    }
                 }
 
                 currentPosition++;
@@ -1312,6 +1368,33 @@ void wxToolBar::MacSuperChangedPosition()
 #endif
 }
 
+void wxToolBar::SetToolNormalBitmap( int id, const wxBitmap& bitmap )
+{
+    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, FindById(id));
+    if ( tool )
+    {
+        wxCHECK_RET( tool->IsButton(), wxT("Can only set bitmap on button tools."));
+
+        tool->SetNormalBitmap(bitmap);
+
+        // a side-effect of the UpdateToggleImage function is that it always changes the bitmap used on the button.
+        tool->UpdateToggleImage( tool->CanBeToggled() && tool->IsToggled() );
+    }    
+}
+
+void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmap& bitmap )
+{
+    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, FindById(id));
+    if ( tool )
+    {
+        wxCHECK_RET( tool->IsButton(), wxT("Can only set bitmap on button tools."));
+
+        tool->SetDisabledBitmap(bitmap);
+        
+        // TODO:  what to do for this one?
+    }    
+}
+
 wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
 {
     wxToolBarTool *tool;
@@ -1365,6 +1448,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
     Rect toolrect = { 0, 0, toolSize.y, toolSize.x };
     ControlRef controlHandle = NULL;
     OSStatus err = 0;
+    tool->Attach( this );
 
     switch (tool->GetStyle())
     {
@@ -1456,9 +1540,6 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
                 wxASSERT( tool->GetControl() != NULL );
                 HIToolbarItemRef    item;
                 HIViewRef viewRef = (HIViewRef) tool->GetControl()->GetHandle() ;
-                // as this control now is part of both the wxToolBar children and the native toolbar, we have to increase the
-                // reference count to make sure we are not dealing with zombie controls after the native toolbar has released its views
-                CFRetain( viewRef ) ;
                 CFDataRef data = CFDataCreate( kCFAllocatorDefault , (UInt8*) &viewRef , sizeof(viewRef) ) ;
                  err = HIToolbarCreateItemWithIdentifier((HIToolbarRef) m_macHIToolbarRef,kControlToolbarItemClassID,
                    data , &item ) ;
@@ -1494,7 +1575,6 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
             tool->UpdateToggleImage( true );
 
         // nothing special to do here - we relayout in Realize() later
-        tool->Attach( this );
         InvalidateBestSize();
     }
     else

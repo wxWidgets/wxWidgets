@@ -110,8 +110,8 @@ class TestPanel(wx.Panel):
             useMetal = self.cb.IsChecked()
             
         dlg = TestDialog(self, -1, "Sample Dialog", size=(350, 200),
-                         #style=wxCAPTION | wxSYSTEM_MENU | wxTHICK_FRAME,
-                         style=wx.DEFAULT_DIALOG_STYLE,
+                         #style=wx.CAPTION | wx.SYSTEM_MENU | wx.THICK_FRAME,
+                         style=wx.DEFAULT_DIALOG_STYLE, # & ~wx.CLOSE_BOX,
                          useMetal=useMetal,
                          )
         dlg.CenterOnScreen()

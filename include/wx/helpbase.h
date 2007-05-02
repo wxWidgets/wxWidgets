@@ -57,7 +57,7 @@ public:
     virtual bool DisplaySection(int sectionNo) = 0;
 
     // Display the section using a context id
-    virtual bool DisplayContextPopup(int WXUNUSED(contextId)) { return false; };
+    virtual bool DisplayContextPopup(int WXUNUSED(contextId)) { return false; }
 
     // Display the text in a popup, if possible
     virtual bool DisplayTextPopup(const wxString& WXUNUSED(text), const wxPoint& WXUNUSED(pos)) { return false; }

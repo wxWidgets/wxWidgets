@@ -29,8 +29,7 @@ It is double buffered, so re-draws after the window is uncovered by
 something else are very quick.
 
 It relies on NumPy, which is needed for speed (maybe, I haven't profiled
-it). It will also use numarray, if you don't have Numeric, but it is
-slower.
+properly) and convenience. 
 
 Bugs and Limitations: Lots: patches, fixes welcome
 
@@ -93,6 +92,6 @@ Chris.Barker@noaa.gov
 
 """
 
-__version__ = "0.9.10"
+__version__ = "0.9.18a"
 
 

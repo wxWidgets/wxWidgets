@@ -343,12 +343,13 @@ gtk_frame_realized_callback( GtkWidget * WXUNUSED(widget),
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static void
+static gboolean
 gtk_frame_map_callback( GtkWidget * WXUNUSED(widget),
                         GdkEvent * WXUNUSED(event),
                         wxTopLevelWindow *win )
 {
     win->SetIconizeState(false);
+    return false;
 }
 }
 
@@ -357,12 +358,13 @@ gtk_frame_map_callback( GtkWidget * WXUNUSED(widget),
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static void
+static gboolean
 gtk_frame_unmap_callback( GtkWidget * WXUNUSED(widget),
                           GdkEvent * WXUNUSED(event),
                           wxTopLevelWindow *win )
 {
     win->SetIconizeState(true);
+    return false;
 }
 }
 
@@ -814,7 +816,7 @@ bool wxTopLevelWindowGTK::Show( bool show )
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
     if (show == IsShown())
-        return true;
+        return false;
 
     if (show && !m_sizeSet)
     {
@@ -826,13 +828,17 @@ bool wxTopLevelWindowGTK::Show( bool show )
         GtkOnSize();
     }
 
-    // This seems no longer to be needed and the call
-    // itself is deprecated.
-    //
-    //if (show)
-    //    gtk_widget_set_uposition( m_widget, m_x, m_y );
+    wxTopLevelWindowBase::Show(show);
 
-    return wxWindow::Show( show );
+    if (!show)
+    {
+        // make sure window has a non-default position, so when it is shown
+        // again, it won't be repositioned by WM as if it were a new window
+        // Note that this must be done _after_ the window is hidden.
+        gtk_window_move((GtkWindow*)m_widget, m_x, m_y);
+    }
+
+    return true;
 }
 
 void wxTopLevelWindowGTK::Raise()

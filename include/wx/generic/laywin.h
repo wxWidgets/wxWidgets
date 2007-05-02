@@ -165,11 +165,11 @@ public:
         const wxSize& size = wxDefaultSize, long style = wxSW_3D|wxCLIP_CHILDREN, const wxString& name = wxT("layoutWindow"));
 
 // Accessors
-    inline wxLayoutAlignment GetAlignment() const { return m_alignment; };
-    inline wxLayoutOrientation GetOrientation() const { return m_orientation; };
+    inline wxLayoutAlignment GetAlignment() const { return m_alignment; }
+    inline wxLayoutOrientation GetOrientation() const { return m_orientation; }
 
-    inline void SetAlignment(wxLayoutAlignment align) { m_alignment = align; };
-    inline void SetOrientation(wxLayoutOrientation orient) { m_orientation = orient; };
+    inline void SetAlignment(wxLayoutAlignment align) { m_alignment = align; }
+    inline void SetOrientation(wxLayoutOrientation orient) { m_orientation = orient; }
 
     // Give the window default dimensions
     inline void SetDefaultSize(const wxSize& size) { m_defaultSize = size; }

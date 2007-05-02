@@ -461,10 +461,11 @@ See also \helpref{Sleep()}{wxthreadsleep}.
 
 \constfunc{ExitCode}{Wait}{\void}
 
-Gracefully terminates a joinable thread, either when the thread calls 
-\helpref{TestDestroy}{wxthreadtestdestroy} or finished processing, and 
-returns the value the thread returned from 
-\helpref{wxThread::Entry}{wxthreadentry} or {\tt (ExitCode)-1} on error. 
+Waits for a joinable thread to terminate and returns the value the thread
+returned from \helpref{wxThread::Entry}{wxthreadentry} or {\tt (ExitCode)-1} on
+error. Notice that, unlike \helpref{Delete}{wxthreaddelete} doesn't cancel the
+thread in any way so the caller waits for as long as it takes to the thread to
+exit.
 
 You can only Wait() for joinable (not detached) threads.
 

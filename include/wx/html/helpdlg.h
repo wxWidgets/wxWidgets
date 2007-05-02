@@ -66,7 +66,7 @@ public:
     void SetTitleFormat(const wxString& format);
 
     // Override to add custom buttons to the toolbar
-    virtual void AddToolbarButtons(wxToolBar* WXUNUSED(toolBar), int WXUNUSED(style)) {};
+    virtual void AddToolbarButtons(wxToolBar* WXUNUSED(toolBar), int WXUNUSED(style)) {}
 
 protected:
     void Init(wxHtmlHelpData* data = NULL);

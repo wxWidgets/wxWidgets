@@ -19,12 +19,18 @@ class Panel(wx.Notebook):
         g.panel = panel = self
         self.modified = False
 
-        # Set common button size for parameter buttons
-        bTmp = wx.Button(self, -1, '')
+        # Set common sizes
         import params
-        params.buttonSize = (self.DLG_SZE(buttonSize)[0], bTmp.GetSize()[1])
-        bTmp.Destroy()
-        del bTmp
+        cTmp = wx.Button(self, -1, '')
+        params.buttonSize = (self.DLG_SZE(buttonSizeD)[0], cTmp.GetSize()[1])        
+        cTmp.Destroy()
+        cTmp = wx.TextCtrl(self, -1, '')
+        params.textSize = cTmp.GetSize()
+        cTmp.Destroy()
+        cTmp = wx.CheckBox(self, -1, 'growablerows ') # this is the longest
+        ParamPage.labelSize = cTmp.GetSize()
+        cTmp.Destroy()
+        del cTmp
 
         # List of child windows
         self.pages = []
@@ -89,7 +95,7 @@ class Panel(wx.Notebook):
             g.currentXXX = xxx.treeObject()
             # Normal or SizerItem page
             isGBSizerItem = isinstance(xxx.parent, xxxGridBagSizer)
-            cacheID = (xxx.__class__, isGBSizerItem)            
+            cacheID = (xxx.panelName(), isGBSizerItem)
             try:
                 page = self.pageCache[cacheID]
                 page.box.SetLabel(xxx.panelName())
@@ -102,7 +108,7 @@ class Panel(wx.Notebook):
             sizer.Add(page, 1, wx.EXPAND)
             if xxx.hasChild:
                 # Special label for child objects - they may have different GUI
-                cacheID = (xxx.child.__class__, xxx.__class__)
+                cacheID = (xxx.child.panelName(), xxx.__class__)
                 try:
                     page = self.pageCache[cacheID]
                     page.box.SetLabel(xxx.child.panelName())
@@ -160,6 +166,7 @@ class Panel(wx.Notebook):
         # Register undo object when modifying first time
         if not self.modified and value:
            g.undoMan.RegisterUndo(UndoEdit())
+           g.frame.SetModified()
         self.modified = value
         
     def Apply(self):
@@ -169,6 +176,7 @@ class Panel(wx.Notebook):
 
 # General class for notebook pages
 class ParamPage(wx.Panel):
+    labelSize = None
     def __init__(self, parent, xxx):
         wx.Panel.__init__(self, parent, -1)
         self.xxx = xxx
@@ -184,7 +192,7 @@ class ParamPage(wx.Panel):
         param = evt.GetEventObject().GetName()
         w = self.controls[param]
         w.Enable(True)
-        objElem = xxx.element
+        objElem = xxx.node
         if evt.IsChecked():
             # Ad  new text node in order of allParams
             w.SetValue('')              # set empty (default) value
@@ -192,7 +200,7 @@ class ParamPage(wx.Panel):
             elem = g.tree.dom.createElement(param)
             # Some classes are special
             if param == 'font':
-                xxx.params[param] = xxxParamFont(xxx.element, elem)
+                xxx.params[param] = xxxParamFont(xxx.node, elem)
             elif param in xxxObject.bitmapTags:
                 xxx.params[param] = xxxParamBitmap(elem)
             else:
@@ -218,7 +226,7 @@ class ParamPage(wx.Panel):
             xxx.params[param].remove()
             del xxx.params[param]
             w.SetValue('')
-            w.modified = False          # mark as not changed
+            w.SetModified(False)        # mark as not changed
             w.Enable(False)
         # Set modified flag (provokes undo storing is necessary)
         panel.SetModified(True)
@@ -228,7 +236,7 @@ class ParamPage(wx.Panel):
             name = self.controlName.GetValue()
             if xxx.name != name:
                 xxx.name = name
-                xxx.element.setAttribute('name', name)
+                xxx.node.setAttribute('name', name)
         for param, w in self.controls.items():
             if w.modified:
                 paramObj = xxx.params[param]
@@ -237,10 +245,11 @@ class ParamPage(wx.Panel):
                     xxx.setSpecial(param, value)
                 else:
                     paramObj.update(value)
+                
     # Save current state
     def SaveState(self):
         self.origChecks = map(lambda i: (i[0], i[1].GetValue()), self.checks.items())
-        self.origControls = map(lambda i: (i[0], i[1].GetValue(), i[1].IsEnabled()),
+        self.origControls = map(lambda i: (i[0], i[1].GetValue(), i[1].enabled),
                             self.controls.items())
         if self.controlName:
             self.origName = self.controlName.GetValue()
@@ -257,40 +266,43 @@ class ParamPage(wx.Panel):
         for k,v,e in state[1]:
             self.controls[k].SetValue(v)
             self.controls[k].Enable(e)
-            if e: self.controls[k].modified = True
+            # Set all states to modified
+            if e and k in self.xxx.params: self.controls[k].modified = True            
         if self.controlName:
             self.controlName.SetValue(state[2])
 
 ################################################################################
 
-LABEL_WIDTH = 125
-
 # Panel for displaying properties
 class PropPage(ParamPage):
+    renameDict = {'orient':'orientation', 'option':'proportion',
+                  'usenotebooksizer':'usesizer', 'dontattachtoframe':'dontattach',
+                  }
     def __init__(self, parent, label, xxx):
         ParamPage.__init__(self, parent, xxx)
         self.box = wx.StaticBox(self, -1, label)
         self.box.SetFont(g.labelFont())
         topSizer = wx.StaticBoxSizer(self.box, wx.VERTICAL)
-        sizer = wx.FlexGridSizer(len(xxx.allParams), 2, 0, 1)
+        sizer = wx.FlexGridSizer(len(xxx.allParams), 2, 1, 5)
         sizer.AddGrowableCol(1)
         if xxx.hasName:
-            label = wx.StaticText(self, -1, 'XML ID:', size=(LABEL_WIDTH,-1))
+            label = wx.StaticText(self, -1, 'XML ID:', size=self.labelSize)
             control = ParamText(self, 'XML_name', 200)
             sizer.AddMany([ (label, 0, wx.ALIGN_CENTER_VERTICAL),
                             (control, 0, wx.ALIGN_CENTER_VERTICAL | wx.BOTTOM | wx.GROW, 10) ])
             self.controlName = control
         for param in xxx.allParams:
             present = xxx.params.has_key(param)
+            sParam = self.renameDict.get(param, param)
             if param in xxx.required:
-                label = wx.StaticText(self, paramIDs[param], param + ':',
-                                     size = (LABEL_WIDTH,-1), name = param)
+                if isinstance(xxx, xxxComment):
+                    label = None
+                else:
+                    label = wx.StaticText(self, paramIDs[param], sParam,
+                                          size = self.labelSize, name = param)
             else:
-                # Notebook has one very loooooong parameter
-                if param == 'usenotebooksizer': sParam = 'usesizer:'
-                else: sParam = param + ':'
                 label = wx.CheckBox(self, paramIDs[param], sParam,
-                                   size = (LABEL_WIDTH,-1), name = param)
+                                   size = self.labelSize, name = param)
                 self.checks[param] = label
             try:
                 typeClass = xxx.paramDict[param]
@@ -303,13 +315,19 @@ class PropPage(ParamPage):
                     typeClass = ParamText
             control = typeClass(self, param)
             control.Enable(present)
-            sizer.AddMany([ (label, 0, wx.ALIGN_CENTER_VERTICAL),
-                            (control, 0, wx.ALIGN_CENTER_VERTICAL | wx.GROW) ])
+            # Comment has only one parameter
+            if isinstance(xxx, xxxComment):
+                # Bind char event to check Enter key
+                control.text.Bind(wx.EVT_CHAR, self.OnEnter)
+                sizer.Add(control, 0, wx.ALIGN_CENTER_VERTICAL | wx.GROW)
+            else:
+                sizer.AddMany([ (label, 0, wx.ALIGN_CENTER_VERTICAL),
+                                (control, 0, wx.ALIGN_CENTER_VERTICAL | wx.GROW) ])
             self.controls[param] = control
         topSizer.Add(sizer, 1, wx.ALL | wx.EXPAND, 3)
-        self.SetAutoLayout(True)
         self.SetSizer(topSizer)
         topSizer.Fit(self)
+        
     def SetValues(self, xxx):
         self.xxx = xxx
         self.origChecks = []
@@ -330,27 +348,37 @@ class PropPage(ParamPage):
                     self.origChecks.append((param, True))
                 self.origControls.append((param, value, True))
             except KeyError:
+                # Optional param not present in xxx - set empty value
                 self.checks[param].SetValue(False)
                 w.SetValue('')
                 w.Enable(False)
                 self.origChecks.append((param, False))
                 self.origControls.append((param, '', False))
 
+    # This is called only for comment now
+    def OnEnter(self, evt):
+        if evt.GetKeyCode() == 13:
+            g.tree.Apply(self.xxx, g.tree.selection)
+        else:
+            evt.Skip()
+
 ################################################################################
 
 # Style notebook page
 class StylePage(ParamPage):
+    renameDict = {'fg':'foreground', 'bg':'background'}
     def __init__(self, parent, label, xxx):
         ParamPage.__init__(self, parent, xxx)
         box = wx.StaticBox(self, -1, label)
         box.SetFont(g.labelFont())
         topSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        sizer = wx.FlexGridSizer(len(xxx.styles), 2, 0, 1)
+        sizer = wx.FlexGridSizer(len(xxx.styles), 2, 1, 5)
         sizer.AddGrowableCol(1)
         for param in xxx.styles:
             present = xxx.params.has_key(param)
+            sParam = self.renameDict.get(param, param)
             check = wx.CheckBox(self, paramIDs[param],
-                               param + ':', size = (LABEL_WIDTH,-1), name = param)
+                                sParam, size = self.labelSize, name = param)
             check.SetValue(present)
             control = paramDict[param](self, name = param)
             control.Enable(present)
@@ -362,6 +390,7 @@ class StylePage(ParamPage):
         self.SetAutoLayout(True)
         self.SetSizer(topSizer)
         topSizer.Fit(self)
+        
     # Set data for a cahced page
     def SetValues(self, xxx):
         self.xxx = xxx

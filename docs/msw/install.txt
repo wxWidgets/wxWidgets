@@ -766,9 +766,9 @@ VENDOR=<your company name>
   distribute wxWidgets DLLs with your application. Default value is 'custom'.
   This string is included as part of DLL name. wxWidgets DLLs contain compiler
   name, version information and vendor name in them. For example
-  wxmsw280_core_bcc_custom.dll is one of DLLs build using Borland C++ with
+  wxmsw283_core_bcc_custom.dll is one of DLLs build using Borland C++ with
   default settings. If you set VENDOR=mycorp, the name will change to
-  wxmsw280_core_bcc_mycorp.dll.
+  wxmsw283_core_bcc_mycorp.dll.
 
 CFG=<configuration name>
   Sets configuration name so that you can have multiple wxWidgets builds with

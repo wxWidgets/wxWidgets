@@ -87,7 +87,7 @@ wxEND_FLAGS( wxSpinCtrlStyle )
 IMPLEMENT_DYNAMIC_CLASS_XTI(wxSpinCtrl, wxControl,"wx/spinbut.h")
 
 wxBEGIN_PROPERTIES_TABLE(wxSpinCtrl)
-    wxEVENT_RANGE_PROPERTY( Spin , wxEVT_SCROLL_TOP , wxEVT_SCROLL_ENDSCROLL , wxSpinEvent )
+    wxEVENT_RANGE_PROPERTY( Spin , wxEVT_SCROLL_TOP , wxEVT_SCROLL_CHANGED , wxSpinEvent )
     wxEVENT_PROPERTY( Updated , wxEVT_COMMAND_SPINCTRL_UPDATED , wxCommandEvent )
     wxEVENT_PROPERTY( TextUpdated , wxEVT_COMMAND_TEXT_UPDATED , wxCommandEvent )
     wxEVENT_PROPERTY( TextEnter , wxEVT_COMMAND_TEXT_ENTER , wxCommandEvent )
@@ -372,10 +372,7 @@ bool wxSpinCtrl::Create(wxWindow *parent,
         return false;
     }
 
-    SetRange(min, max);
-    SetValue(initial);
-
-    m_oldValue = initial;
+    wxSpinButtonBase::SetRange(min, max);
 
     // subclass the text ctrl to be able to intercept some events
     wxSetWindowUserData(GetBuddyHwnd(), this);
@@ -404,9 +401,20 @@ bool wxSpinCtrl::Create(wxWindow *parent,
     // associate the text window with the spin button
     (void)::SendMessage(GetHwnd(), UDM_SETBUDDY, (WPARAM)m_hwndBuddy, 0);
 
+    SetValue(initial);
+
+    // Set the range in the native control
+    SetRange(min, max);
+
     if ( !value.empty() )
     {
         SetValue(value);
+        m_oldValue = (int) wxAtol(value);
+    }
+    else
+    {
+        SetValue(wxString::Format(wxT("%d"), initial));
+        m_oldValue = initial;
     }
 
     // do it after finishing with m_hwndBuddy creation to avoid generating

@@ -253,6 +253,12 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
 
     m_widget = GTKCreateFrame(title);
     wxControl::SetLabel(title);
+    if ( HasFlag(wxNO_BORDER) )
+    {
+        // If we don't do this here, the wxNO_BORDER style is ignored in Show()
+        gtk_frame_set_shadow_type(GTK_FRAME(m_widget), GTK_SHADOW_NONE);
+    }
+
 
     // majorDim may be 0 if all trailing parameters were omitted, so don't
     // assert here but just use the correct value for it

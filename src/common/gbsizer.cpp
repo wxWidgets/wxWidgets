@@ -537,20 +537,24 @@ void wxGridBagSizer::RecalcSizes()
     {
         int row, col, endrow, endcol;
         wxGBSizerItem* item = (wxGBSizerItem*)node->GetData();
-        item->GetPos(row, col);
-        item->GetEndPos(endrow, endcol);
 
-        height = 0;
-        for(idx=row; idx <= endrow; idx++)
-            height += m_rowHeights[idx];
-        height += (endrow - row) * m_vgap; // add a vgap for every row spanned
+        if ( item->IsShown() )
+        {
+            item->GetPos(row, col);
+            item->GetEndPos(endrow, endcol);
 
-        width = 0;
-        for (idx=col; idx <= endcol; idx++)
-            width += m_colWidths[idx];
-        width += (endcol - col) * m_hgap; // add a hgap for every col spanned
+            height = 0;
+            for(idx=row; idx <= endrow; idx++)
+                height += m_rowHeights[idx];
+            height += (endrow - row) * m_vgap; // add a vgap for every row spanned
 
-        SetItemBounds(item, colpos[col], rowpos[row], width, height);
+            width = 0;
+            for (idx=col; idx <= endcol; idx++)
+                width += m_colWidths[idx];
+            width += (endcol - col) * m_hgap; // add a hgap for every col spanned
+
+            SetItemBounds(item, colpos[col], rowpos[row], width, height);
+        }
 
         node = node->GetNext();
     }
