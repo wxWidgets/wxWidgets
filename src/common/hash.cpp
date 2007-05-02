@@ -26,6 +26,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/hash.h"
+    #include "wx/object.h"
 #endif
 
 wxHashTableBase_Node::wxHashTableBase_Node( long key, void* value,
