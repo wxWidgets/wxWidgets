@@ -1023,37 +1023,13 @@ void wxTopLevelWindowGTK::GtkOnSize()
 
     if ( m_wxwindow == NULL ) return;
 
-    /* wxMDIChildFrame derives from wxFrame but it _is_ a wxWindow as it uses
-       wxWindow::Create to create it's GTK equivalent. m_mainWidget is only
-       set in wxFrame::Create so it is used to check what kind of frame we
-       have here. if m_mainWidget is NULL it is a wxMDIChildFrame and so we
-       skip the part which handles m_frameMenuBar, m_frameToolBar and (most
-       importantly) m_mainWidget */
-
     ConstrainSize();
 
     if (m_mainWidget)
     {
-        // m_mainWidget holds the menubar, the toolbar and the client area,
-        // which is represented by m_wxwindow.
-        int client_x = m_miniEdge;
-        int client_y = m_miniEdge + m_miniTitle;
-        int client_w = m_width - 2*m_miniEdge;
-        int client_h = m_height - 2*m_miniEdge - m_miniTitle;
-        if (client_w < 0)
-            client_w = 0;
-        if (client_h < 0)
-            client_h = 0;
-
-        // Let the parent perform the resize
         gtk_pizza_set_size( GTK_PIZZA(m_mainWidget),
                               m_wxwindow,
-                              client_x, client_y, client_w, client_h );
-    }
-    else
-    {
-        // If there is no m_mainWidget between m_widget and m_wxwindow there
-        // is no need to set the size or position of m_wxwindow.
+                              0, 0, m_width, m_height);
     }
 
     m_sizeSet = true;
