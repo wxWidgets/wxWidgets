@@ -54,6 +54,32 @@ XRCed has a new experimental feature to add controls by draging icons
 on the test window using the right button. Mouse position is tracked
 to highlight the future parent.
 
+Updates to MaskedEdit controls from Will Sadkin:
+
+  maskededit.py:
+    Added parameter option stopFieldChangeIfInvalid, which can be used to 
+    relax the validation rules for a control, but make best efforts to stop 
+    navigation out of that field should its current value be invalid.  Note: 
+    this does not prevent the value from remaining invalid if focus for the 
+    control is lost, via mousing etc.
+
+  numctrl.py, demo / MaskedNumCtrl.py:
+    In response to user request, added limitOnFieldChange feature, so that
+    out-of-bounds values can be temporarily added to the control, but should
+    navigation be attempted out of an invalid field, it will not navigate,
+    and if focus is lost on a control so limited with an invalid value, it
+    will change the value to the nearest bound.
+
+  combobox.py:
+    Added handler for EVT_COMBOBOX to address apparently inconsistent behavior
+    of control when the dropdown control is used to do a selection.
+
+  textctrl.py
+    Added support for ChangeValue() function, similar to that of the base
+    control, added in wxPython 2.7.1.1.
+
+Update to latest FloatCanvas from Chris Barker.
+
 
 
 
