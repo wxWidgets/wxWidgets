@@ -2634,7 +2634,8 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
 
         if ( m_peer->GetNeedsDisplay() )
         {
-            // because HIViewScrollRect does not scroll the already invalidated area we have two options:
+            // because HIViewScrollRect does not scroll the already invalidated area we have two options
+            // in case there is already a pending redraw on that area
             // either immediate redraw or full invalidate
 #if 1
             // is the better overall solution, as it does not slow down scrolling
@@ -2655,14 +2656,8 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
         scrollrect.Offset( -MacGetLeftBorderSize() , -MacGetTopBorderSize() ) ;
         m_peer->ScrollRect( &scrollrect , dx , dy ) ;
 
-        // becuase HIViewScrollRect does not scroll the already invalidated area we have two options
-        // either immediate redraw or full invalidate
 #if 0
-        // is the better overall solution, as it does not slow down scrolling
-        m_peer->SetNeedsDisplay() ;
-#else
         // this would be the preferred version for fast drawing controls
-
         HIViewRender(m_peer->GetControlRef()) ;
 #endif
     }
