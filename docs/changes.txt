@@ -97,8 +97,8 @@ All:
 - Fix wxStringOutputStream::Write() in Unicode build when the argument
   overlaps UTF-8 characters boundary
 - Account for lines without newline at the end in wxExecute()
-- Added wxString::char_str() and wchar_str() methods for forward
-  compatiblity with wxWidgets 3
+- Added wxString::char_str(), wchar_str(), From8BitData() and To8BitData()
+  methods for forward compatiblity with wxWidgets 3
 
 All (Unix):
 

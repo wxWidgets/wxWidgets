@@ -27,6 +27,9 @@
 # public symbols added in 2.8.4 (please keep in alphabetical order):
 @WX_VERSION_TAG@.4 {
     global:
+        # wxString::To/From8BitData()
+        *wxString*To8BitData*;
+        *wxString*From8BitData*;
         # wxString::[w]char_str()
         *wxString*char_str*;
         # wxWritable[W]CharBuffer
