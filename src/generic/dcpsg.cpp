@@ -270,6 +270,7 @@ wxPostScriptDC::wxPostScriptDC ()
 
     m_signX =  1;  // default x-axis left to right
     m_signY = -1;  // default y-axis bottom up -> top down
+    
 }
 
 wxPostScriptDC::wxPostScriptDC (const wxPrintData& printData)
@@ -292,6 +293,10 @@ wxPostScriptDC::wxPostScriptDC (const wxPrintData& printData)
 
     m_printData = printData;
 
+    int h = 0;
+    GetSize( NULL, &h );
+    SetDeviceLocalOrigin( 0, h );
+    
     m_ok = true;
 }
 
@@ -1480,6 +1485,14 @@ wxCoord wxPostScriptDC::GetCharWidth() const
     return (wxCoord) (GetCharHeight() * 72.0 / 120.0);
 }
 
+void wxPostScriptDC::SetPrintData(const wxPrintData& data)
+{ 
+    m_printData = data;
+    
+    int h = 0;
+    GetSize( NULL, &h );
+    SetDeviceLocalOrigin( 0, h );
+}
 
 void wxPostScriptDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
 {
@@ -1491,15 +1504,29 @@ void wxPostScriptDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
     ComputeScaleAndOrigin();
 }
 
-void wxPostScriptDC::SetDeviceOrigin( wxCoord x, wxCoord y )
+void wxPostScriptDC::SetMapMode(int mode)
 {
-    wxCHECK_RET( m_ok, wxT("invalid postscript dc") );
+    wxDCBase::SetMapMode(mode);
+}
 
-    int h = 0;
-    int w = 0;
-    GetSize( &w, &h );
+void wxPostScriptDC::SetUserScale(double x, double y)
+{
+    wxDCBase::SetUserScale(x,y);
+}
 
-    wxDC::SetDeviceOrigin( x, h-y );
+void wxPostScriptDC::SetLogicalScale(double x, double y)
+{
+    wxDCBase::SetLogicalScale(x,y);
+}
+
+void wxPostScriptDC::SetLogicalOrigin(wxCoord x, wxCoord y)
+{
+    wxDCBase::SetLogicalOrigin(x,y);
+}
+
+void wxPostScriptDC::SetDeviceOrigin(wxCoord x, wxCoord y)
+{
+    wxDCBase::SetDeviceOrigin(x,y);
 }
 
 void wxPostScriptDC::DoGetSize(int* width, int* height) const

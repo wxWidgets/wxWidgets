@@ -2294,6 +2294,9 @@ void wxDC::SetMapMode(
     m_nWindowExtX = (int)MS_XDEV2LOG(VIEWPORT_EXTENT);
     m_nWindowExtY = (int)MS_YDEV2LOG(VIEWPORT_EXTENT);
     // ????
+    
+    ComputeScaleAndOrigin();
+    
 }; // end of wxDC::SetMapMode
 
 void wxDC::SetUserScale( double dX,
@@ -2313,17 +2316,6 @@ void wxDC::SetAxisOrientation( bool bXLeftRight,
 
     SetMapMode(m_mappingMode);
 } // end of wxDC::SetAxisOrientation
-
-void wxDC::SetSystemScale(
-  double                            dX
-, double                            dY
-)
-{
-    m_scaleX = dX;
-    m_scaleY = dY;
-
-    SetMapMode(m_mappingMode);
-} // end of wxDC::SetSystemScale
 
 void wxDC::SetLogicalOrigin(
   wxCoord                           vX
@@ -2364,54 +2356,6 @@ void wxDC::SetDeviceOrigin(
                          ,&vRect
                         );
 }; // end of wxDC::SetDeviceOrigin
-
-// ---------------------------------------------------------------------------
-// coordinates transformations
-// ---------------------------------------------------------------------------
-
-wxCoord wxDCBase::DeviceToLogicalX(wxCoord x) const
-{
-    return (wxCoord) (((x) - m_deviceOriginX)/(m_logicalScaleX*m_userScaleX*m_signX*m_scaleX) - m_logicalOriginX);
-}
-
-wxCoord wxDCBase::DeviceToLogicalXRel(wxCoord x) const
-{
-    // axis orientation is not taken into account for conversion of a distance
-    return (wxCoord) ((x)/(m_logicalScaleX*m_userScaleX*m_scaleX));
-}
-
-wxCoord wxDC::DeviceToLogicalY(wxCoord y) const
-{
-    return (wxCoord) (((y) - m_deviceOriginY)/(m_logicalScaleY*m_userScaleY*m_signY*m_scaleY) - m_logicalOriginY);
-}
-
-wxCoord wxDC::DeviceToLogicalYRel(wxCoord y) const
-{
-    // axis orientation is not taken into account for conversion of a distance
-    return (wxCoord) ((y)/(m_logicalScaleY*m_userScaleY*m_scaleY));
-}
-
-wxCoord wxDC::LogicalToDeviceX(wxCoord x) const
-{
-    return (wxCoord) ((x - m_logicalOriginX)*m_logicalScaleX*m_userScaleX*m_signX*m_scaleX + m_deviceOriginX);
-}
-
-wxCoord wxDC::LogicalToDeviceXRel(wxCoord x) const
-{
-    // axis orientation is not taken into account for conversion of a distance
-    return (wxCoord) (x*m_logicalScaleX*m_userScaleX*m_scaleX);
-}
-
-wxCoord wxDC::LogicalToDeviceY(wxCoord y) const
-{
-    return (wxCoord) ((y - m_logicalOriginY)*m_logicalScaleY*m_userScaleY*m_signY*m_scaleY + m_deviceOriginY);
-}
-
-wxCoord wxDC::LogicalToDeviceYRel(wxCoord y) const
-{
-    // axis orientation is not taken into account for conversion of a distance
-    return (wxCoord) (y*m_logicalScaleY*m_userScaleY*m_scaleY);
-}
 
 // ---------------------------------------------------------------------------
 // bit blit

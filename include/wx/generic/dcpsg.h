@@ -42,59 +42,67 @@ public:
 
     // Recommended constructor
     wxPostScriptDC(const wxPrintData& printData);
-
-    // Recommended destructor :-)
+    
     virtual ~wxPostScriptDC();
 
-  virtual bool Ok() const { return IsOk(); }
-  virtual bool IsOk() const;
+    virtual bool Ok() const { return IsOk(); }
+    virtual bool IsOk() const;
 
-  bool CanDrawBitmap() const { return true; }
+    bool CanDrawBitmap() const { return true; }
 
-  void Clear();
-  void SetFont( const wxFont& font );
-  void SetPen( const wxPen& pen );
-  void SetBrush( const wxBrush& brush );
-  void SetLogicalFunction( int function );
-  void SetBackground( const wxBrush& brush );
+    void Clear();
+    void SetFont( const wxFont& font );
+    void SetPen( const wxPen& pen );
+    void SetBrush( const wxBrush& brush );
+    void SetLogicalFunction( int function );
+    void SetBackground( const wxBrush& brush );
 
-  void DestroyClippingRegion();
+    void DestroyClippingRegion();
 
-  bool StartDoc(const wxString& message);
-  void EndDoc();
-  void StartPage();
-  void EndPage();
+    bool StartDoc(const wxString& message);
+    void EndDoc();
+    void StartPage();
+    void EndPage();
 
-  wxCoord GetCharHeight() const;
-  wxCoord GetCharWidth() const;
-  bool CanGetTextExtent() const { return true; }
+    wxCoord GetCharHeight() const;
+    wxCoord GetCharWidth() const;
+    bool CanGetTextExtent() const { return true; }
 
-  // Resolution in pixels per logical inch
-  wxSize GetPPI() const;
+    // Resolution in pixels per logical inch
+    wxSize GetPPI() const;
 
-  void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
-  void SetDeviceOrigin( wxCoord x, wxCoord y );
+    // overridden because origin is bottom left and
+    // axes are inverted
+    void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
+    
+    // these need to be overridden as wxPostscriptDC inherits
+    // from the platform dependent wxDC and this we'd call
+    // e.g. wxMSW specific code here.
+    virtual void SetMapMode(int mode);
+    virtual void SetUserScale(double x, double y);
+    virtual void SetLogicalScale(double x, double y);
+    virtual void SetLogicalOrigin(wxCoord x, wxCoord y);
+    virtual void SetDeviceOrigin(wxCoord x, wxCoord y);
 
-  void SetBackgroundMode(int WXUNUSED(mode)) { }
-  void SetPalette(const wxPalette& WXUNUSED(palette)) { }
+    void SetBackgroundMode(int WXUNUSED(mode)) { }
+    void SetPalette(const wxPalette& WXUNUSED(palette)) { }
 
-  wxPrintData& GetPrintData() { return m_printData; }
-  void SetPrintData(const wxPrintData& data) { m_printData = data; }
+    void SetPrintData(const wxPrintData& data);
+    wxPrintData& GetPrintData() { return m_printData; }
 
-  virtual int GetDepth() const { return 24; }
+    virtual int GetDepth() const { return 24; }
 
-  static void SetResolution(int ppi);
-  static int GetResolution();
+    static void SetResolution(int ppi);
+    static int GetResolution();
 
-  WX_DEFINE_VARARG_FUNC_VOID(PsPrintf, 1, (const wxString&), DoPsPrintfFormat)
+    WX_DEFINE_VARARG_FUNC_VOID(PsPrintf, 1, (const wxString&), DoPsPrintfFormat)
 #ifdef __WATCOMC__
     // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-  WX_DEFINE_VARARG_FUNC_VOID(PsPrintf, 1, (const char*), DoPsPrintfFormat)
-  WX_DEFINE_VARARG_FUNC_VOID(PsPrintf, 1, (const wchar_t*), DoPsPrintfFormat)
+    WX_DEFINE_VARARG_FUNC_VOID(PsPrintf, 1, (const char*), DoPsPrintfFormat)
+    WX_DEFINE_VARARG_FUNC_VOID(PsPrintf, 1, (const wchar_t*), DoPsPrintfFormat)
 #endif
-
-  void PsPrint( const wxString& psdata );
-  void PsPrint( int ch );
+    void PsPrint( const wxString& psdata );
+    void PsPrint( int ch );
 
 private:
     void DoPsPrintfFormat(const wxString& fmt, ... );

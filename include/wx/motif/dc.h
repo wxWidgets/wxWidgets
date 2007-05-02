@@ -45,17 +45,7 @@ public:
     wxDC();
     virtual ~wxDC() { }
 
-    // implement base class pure virtuals
-    // ----------------------------------
-
     virtual wxSize GetPPI() const;
-
-    virtual void SetMapMode(int mode);
-    virtual void SetUserScale(double x, double y);
-    virtual void SetLogicalScale(double x, double y);
-    virtual void SetLogicalOrigin(wxCoord x, wxCoord y);
-    virtual void SetDeviceOrigin(wxCoord x, wxCoord y);
-    virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
 
 protected:
     virtual void DoDrawIcon(const wxIcon& icon, wxCoord x, wxCoord y);
@@ -68,93 +58,25 @@ protected:
     virtual void DoGetSizeMM(int* width, int* height) const;
 
 public:
-    virtual void ComputeScaleAndOrigin();
-
-    wxCoord XDEV2LOG(wxCoord x) const
-    {
-        wxCoord new_x = x - m_deviceOriginX;
-        if (new_x > 0)
-            return (wxCoord)((double)(new_x) / m_scaleX + 0.5) * m_signX + m_logicalOriginX;
-        else
-            return (wxCoord)((double)(new_x) / m_scaleX - 0.5) * m_signX + m_logicalOriginX;
-    }
-    wxCoord XDEV2LOGREL(wxCoord x) const
-    {
-        if (x > 0)
-            return (wxCoord)((double)(x) / m_scaleX + 0.5);
-        else
-            return (wxCoord)((double)(x) / m_scaleX - 0.5);
-    }
-    wxCoord YDEV2LOG(wxCoord y) const
-    {
-        wxCoord new_y = y - m_deviceOriginY;
-        if (new_y > 0)
-            return (wxCoord)((double)(new_y) / m_scaleY + 0.5) * m_signY + m_logicalOriginY;
-        else
-            return (wxCoord)((double)(new_y) / m_scaleY - 0.5) * m_signY + m_logicalOriginY;
-    }
-    wxCoord YDEV2LOGREL(wxCoord y) const
-    {
-        if (y > 0)
-            return (wxCoord)((double)(y) / m_scaleY + 0.5);
-        else
-            return (wxCoord)((double)(y) / m_scaleY - 0.5);
-    }
-    wxCoord XLOG2DEV(wxCoord x) const
-    {
-        wxCoord new_x = x - m_logicalOriginX;
-        if (new_x > 0)
-            return (wxCoord)((double)(new_x) * m_scaleX + 0.5) * m_signX + m_deviceOriginX;
-        else
-            return (wxCoord)((double)(new_x) * m_scaleX - 0.5) * m_signX + m_deviceOriginX;
-    }
+    // implementation
+    wxCoord XDEV2LOG(wxCoord x) const       { return DeviceToLogicalX(x); }
+    wxCoord XDEV2LOGREL(wxCoord x) const    { return DeviceToLogicalXRel(x); }
+    wxCoord YDEV2LOG(wxCoord y) const       { return DeviceToLogicalY(y); }
+    wxCoord YDEV2LOGREL(wxCoord y) const    { return DeviceToLogicalYRel(y); }
+    wxCoord XLOG2DEV(wxCoord x) const       { return LogicalToDeviceX(x); }
+    wxCoord XLOG2DEVREL(wxCoord x) const    { return LogicalToDeviceXRel(x); }
+    wxCoord YLOG2DEV(wxCoord y) const       { return LogicalToDeviceY(y); }
+    wxCoord YLOG2DEVREL(wxCoord y) const    { return LogicalToDeviceYRel(y); }
+    
     // Without device translation, for backing pixmap purposes
     wxCoord XLOG2DEV_2(wxCoord x) const
     {
-        wxCoord new_x = x - m_logicalOriginX;
-        if (new_x > 0)
-            return (wxCoord)((double)(new_x) * m_scaleX + 0.5) * m_signX;
-        else
-            return (wxCoord)((double)(new_x) * m_scaleX - 0.5) * m_signX;
+        return wxRound((double)(x - m_logicalOriginX) * m_scaleX) * m_signX;
     }
-    wxCoord XLOG2DEVREL(wxCoord x) const
-    {
-        if (x > 0)
-            return (wxCoord)((double)(x) * m_scaleX + 0.5);
-        else
-            return (wxCoord)((double)(x) * m_scaleX - 0.5);
-    }
-    wxCoord YLOG2DEV(wxCoord y) const
-    {
-        wxCoord new_y = y - m_logicalOriginY;
-        if (new_y > 0)
-            return (wxCoord)((double)(new_y) * m_scaleY + 0.5) * m_signY + m_deviceOriginY;
-        else
-            return (wxCoord)((double)(new_y) * m_scaleY - 0.5) * m_signY + m_deviceOriginY;
-    }
-    // Without device translation, for backing pixmap purposes
     wxCoord YLOG2DEV_2(wxCoord y) const
     {
-        wxCoord new_y = y - m_logicalOriginY;
-        if (new_y > 0)
-            return (wxCoord)((double)(new_y) * m_scaleY + 0.5) * m_signY;
-        else
-            return (wxCoord)((double)(new_y) * m_scaleY - 0.5) * m_signY;
+        return wxRound((double)(y - m_logicalOriginY) * m_scaleY) * m_signY;
     }
-    wxCoord YLOG2DEVREL(wxCoord y) const
-    {
-        if (y > 0)
-            return (wxCoord)((double)(y) * m_scaleY + 0.5);
-        else
-            return (wxCoord)((double)(y) * m_scaleY - 0.5);
-    }
-
-public:
-    // not sure what for, but what is a mm on a screen you don't know the size of?
-    double       m_mm_to_pix_x,m_mm_to_pix_y;
-
-    // recompute scale?
-    bool         m_needComputeScaleX, m_needComputeScaleY;
 
 };
 

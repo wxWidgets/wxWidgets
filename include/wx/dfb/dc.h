@@ -65,65 +65,20 @@ public:
     virtual int GetDepth() const;
     virtual wxSize GetPPI() const;
 
-    virtual void SetMapMode(int mode);
-    virtual void SetUserScale(double x, double y);
-    virtual void SetLogicalScale(double x, double y);
-    virtual void SetLogicalOrigin(wxCoord x, wxCoord y);
-    virtual void SetDeviceOrigin(wxCoord x, wxCoord y);
-    virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
-    virtual void SetLogicalFunction(int function);
-
-    virtual wxCoord DeviceToLogicalX(wxCoord x) const;
-    virtual wxCoord DeviceToLogicalY(wxCoord y) const;
-    virtual wxCoord DeviceToLogicalXRel(wxCoord x) const;
-    virtual wxCoord DeviceToLogicalYRel(wxCoord y) const;
-    virtual wxCoord LogicalToDeviceX(wxCoord x) const;
-    virtual wxCoord LogicalToDeviceY(wxCoord y) const;
-    virtual wxCoord LogicalToDeviceXRel(wxCoord x) const;
-    virtual wxCoord LogicalToDeviceYRel(wxCoord y) const ;
-    
-    // implementation from now on
-    // --------------------------
-
-    virtual void ComputeScaleAndOrigin();
-
-    wxCoord XDEV2LOG(wxCoord x) const
-    {
-        return wxRound((double)(x - m_deviceOriginX) / m_scaleX) * m_signX + m_logicalOriginX;
-    }
-    wxCoord XDEV2LOGREL(wxCoord x) const
-    {
-        return wxRound((double)(x) / m_scaleX);
-    }
-    wxCoord YDEV2LOG(wxCoord y) const
-    {
-        return wxRound((double)(y - m_deviceOriginY) / m_scaleY) * m_signY + m_logicalOriginY;
-    }
-    wxCoord YDEV2LOGREL(wxCoord y) const
-    {
-        return wxRound((double)(y) / m_scaleY);
-    }
-    wxCoord XLOG2DEV(wxCoord x) const
-    {
-        return wxRound((double)(x - m_logicalOriginX) * m_scaleX) * m_signX + m_deviceOriginX;
-    }
-    wxCoord XLOG2DEVREL(wxCoord x) const
-    {
-        return wxRound((double)(x) * m_scaleX);
-    }
-    wxCoord YLOG2DEV(wxCoord y) const
-    {
-        return wxRound((double)(y - m_logicalOriginY) * m_scaleY) * m_signY + m_deviceOriginY;
-    }
-    wxCoord YLOG2DEVREL(wxCoord y) const
-    {
-        return wxRound((double)(y) * m_scaleY);
-    }
-
     // Returns the surface (and increases its ref count)
     wxIDirectFBSurfacePtr GetDirectFBSurface() const { return m_surface; }
 
 protected:
+    // implementation
+    wxCoord XDEV2LOG(wxCoord x) const       { return DeviceToLogicalX(x); }
+    wxCoord XDEV2LOGREL(wxCoord x) const    { return DeviceToLogicalXRel(x); }
+    wxCoord YDEV2LOG(wxCoord y) const       { return DeviceToLogicalY(y); }
+    wxCoord YDEV2LOGREL(wxCoord y) const    { return DeviceToLogicalYRel(y); }
+    wxCoord XLOG2DEV(wxCoord x) const       { return LogicalToDeviceX(x); }
+    wxCoord XLOG2DEVREL(wxCoord x) const    { return LogicalToDeviceXRel(x); }
+    wxCoord YLOG2DEV(wxCoord y) const       { return LogicalToDeviceY(y); }
+    wxCoord YLOG2DEVREL(wxCoord y) const    { return LogicalToDeviceYRel(y); }
+    
     // initializes the DC from a surface, must be called if default ctor
     // was used
     void DFBInit(const wxIDirectFBSurfacePtr& surface);

@@ -585,17 +585,7 @@ void wxDC::Clear()
     ::FillRect(GetHdc(), &rect, brush);
     ::DeleteObject(brush);
 
-#ifndef __WXWINCE__
-    int width = DeviceToLogicalXRel(VIEWPORT_EXTENT)*m_signX,
-        height = DeviceToLogicalYRel(VIEWPORT_EXTENT)*m_signY;
-
-    ::SetMapMode(GetHdc(), MM_ANISOTROPIC);
-
-    ::SetViewportExtEx(GetHdc(), VIEWPORT_EXTENT, VIEWPORT_EXTENT, NULL);
-    ::SetWindowExtEx(GetHdc(), width, height, NULL);
-    ::SetViewportOrgEx(GetHdc(), (int)m_deviceOriginX, (int)m_deviceOriginY, NULL);
-    ::SetWindowOrgEx(GetHdc(), (int)m_logicalOriginX, (int)m_logicalOriginY, NULL);
-#endif
+    RealizeScaleAndOrigin();
 }
 
 bool wxDC::DoFloodFill(wxCoord WXUNUSED_IN_WINCE(x),
@@ -1851,8 +1841,25 @@ bool wxDC::DoGetPartialTextExtents(const wxString& text, wxArrayInt& widths) con
     return true;
 }
 
+void wxDC::RealizeScaleAndOrigin()
+{
+    // VZ: it seems very wasteful to always use MM_ANISOTROPIC when in 99% of
+    //     cases we could do with MM_TEXT and in the remaining 0.9% with
+    //     MM_ISOTROPIC (TODO!)
+#ifndef __WXWINCE__
+    ::SetMapMode(GetHdc(), MM_ANISOTROPIC);
 
+    int width = DeviceToLogicalXRel(VIEWPORT_EXTENT)*m_signX,
+        height = DeviceToLogicalYRel(VIEWPORT_EXTENT)*m_signY;
 
+    ::SetViewportExtEx(GetHdc(), VIEWPORT_EXTENT, VIEWPORT_EXTENT, NULL);
+    ::SetWindowExtEx(GetHdc(), width, height, NULL);
+
+    ::SetViewportOrgEx(GetHdc(), m_deviceOriginX, m_deviceOriginY, NULL);
+    ::SetWindowOrgEx(GetHdc(), m_logicalOriginX, m_logicalOriginY, NULL);
+#endif
+    
+}
 
 void wxDC::SetMapMode(int mode)
 {
@@ -1907,22 +1914,10 @@ void wxDC::SetMapMode(int mode)
                 wxFAIL_MSG( _T("unknown mapping mode in SetMapMode") );
         }
     }
-
-    // VZ: it seems very wasteful to always use MM_ANISOTROPIC when in 99% of
-    //     cases we could do with MM_TEXT and in the remaining 0.9% with
-    //     MM_ISOTROPIC (TODO!)
-#ifndef __WXWINCE__
-    ::SetMapMode(GetHdc(), MM_ANISOTROPIC);
-
-    int width = DeviceToLogicalXRel(VIEWPORT_EXTENT)*m_signX,
-        height = DeviceToLogicalYRel(VIEWPORT_EXTENT)*m_signY;
-
-    ::SetViewportExtEx(GetHdc(), VIEWPORT_EXTENT, VIEWPORT_EXTENT, NULL);
-    ::SetWindowExtEx(GetHdc(), width, height, NULL);
-
-    ::SetViewportOrgEx(GetHdc(), m_deviceOriginX, m_deviceOriginY, NULL);
-    ::SetWindowOrgEx(GetHdc(), m_logicalOriginX, m_logicalOriginY, NULL);
-#endif
+    
+    ComputeScaleAndOrigin();
+    
+    RealizeScaleAndOrigin();
 }
 
 void wxDC::SetUserScale(double x, double y)
@@ -1932,44 +1927,25 @@ void wxDC::SetUserScale(double x, double y)
     if ( x == m_userScaleX && y == m_userScaleY )
         return;
 
-    m_userScaleX = x;
-    m_userScaleY = y;
-
-    this->SetMapMode(m_mappingMode);
+    wxDCBase::SetUserScale(x,y);
+    
+    RealizeScaleAndOrigin();
 }
 
-void wxDC::SetAxisOrientation(bool WXUNUSED_IN_WINCE(xLeftRight),
-                              bool WXUNUSED_IN_WINCE(yBottomUp))
+void wxDC::SetAxisOrientation(bool xLeftRight,
+                              bool yBottomUp)
 {
     WXMICROWIN_CHECK_HDC
 
-#ifndef __WXWINCE__
     int signX = xLeftRight ? 1 : -1,
         signY = yBottomUp ? -1 : 1;
-
-    if ( signX != m_signX || signY != m_signY )
-    {
-        m_signX = signX;
-        m_signY = signY;
-
-        SetMapMode(m_mappingMode);
-    }
-#endif
-}
-
-void wxDC::SetSystemScale(double x, double y)
-{
-    WXMICROWIN_CHECK_HDC
-
-    if ( x == m_scaleX && y == m_scaleY )
+        
+    if (signX == m_signX && signY == m_signY)
         return;
+    
+    wxDCBase::SetAxisOrientation( xLeftRight, yBottomUp );
 
-    m_scaleX = x;
-    m_scaleY = y;
-
-#ifndef __WXWINCE__
-    SetMapMode(m_mappingMode);
-#endif
+    RealizeScaleAndOrigin();
 }
 
 void wxDC::SetLogicalOrigin(wxCoord x, wxCoord y)
@@ -1979,8 +1955,7 @@ void wxDC::SetLogicalOrigin(wxCoord x, wxCoord y)
     if ( x == m_logicalOriginX && y == m_logicalOriginY )
         return;
 
-    m_logicalOriginX = x;
-    m_logicalOriginY = y;
+    wxDCBase::SetLogicalOrigin( x, y );
 
 #ifndef __WXWINCE__
     ::SetWindowOrgEx(GetHdc(), (int)m_logicalOriginX, (int)m_logicalOriginY, NULL);
@@ -1993,64 +1968,16 @@ void wxDC::SetDeviceOrigin(wxCoord x, wxCoord y)
 
     if ( x == m_deviceOriginX && y == m_deviceOriginY )
         return;
-
-    m_deviceOriginX = x;
-    m_deviceOriginY = y;
+        
+    wxDCBase::SetDeviceOrigin( x, y );
 
     ::SetViewportOrgEx(GetHdc(), (int)m_deviceOriginX, (int)m_deviceOriginY, NULL);
 }
 
 // ---------------------------------------------------------------------------
-// coordinates transformations
-// ---------------------------------------------------------------------------
-
-wxCoord wxDC::DeviceToLogicalX(wxCoord x) const
-{
-    return DeviceToLogicalXRel(x - m_deviceOriginX)*m_signX + m_logicalOriginX;
-}
-
-wxCoord wxDC::DeviceToLogicalXRel(wxCoord x) const
-{
-    // axis orientation is not taken into account for conversion of a distance
-    return (wxCoord)(x / (m_logicalScaleX*m_userScaleX*m_scaleX));
-}
-
-wxCoord wxDC::DeviceToLogicalY(wxCoord y) const
-{
-    return DeviceToLogicalYRel(y - m_deviceOriginY)*m_signY + m_logicalOriginY;
-}
-
-wxCoord wxDC::DeviceToLogicalYRel(wxCoord y) const
-{
-    // axis orientation is not taken into account for conversion of a distance
-    return (wxCoord)( y / (m_logicalScaleY*m_userScaleY*m_scaleY));
-}
-
-wxCoord wxDC::LogicalToDeviceX(wxCoord x) const
-{
-    return LogicalToDeviceXRel(x - m_logicalOriginX)*m_signX + m_deviceOriginX;
-}
-
-wxCoord wxDC::LogicalToDeviceXRel(wxCoord x) const
-{
-    // axis orientation is not taken into account for conversion of a distance
-    return (wxCoord) (x*m_logicalScaleX*m_userScaleX*m_scaleX);
-}
-
-wxCoord wxDC::LogicalToDeviceY(wxCoord y) const
-{
-    return LogicalToDeviceYRel(y - m_logicalOriginY)*m_signY + m_deviceOriginY;
-}
-
-wxCoord wxDC::LogicalToDeviceYRel(wxCoord y) const
-{
-    // axis orientation is not taken into account for conversion of a distance
-    return (wxCoord) (y*m_logicalScaleY*m_userScaleY*m_scaleY);
-}
-
-// ---------------------------------------------------------------------------
 // bit blit
 // ---------------------------------------------------------------------------
+
 bool wxDC::DoBlit(wxCoord dstX, wxCoord dstY,
                   wxCoord dstWidth, wxCoord dstHeight,
                   wxDC *source,
@@ -2417,8 +2344,7 @@ void wxDC::SetLogicalScale(double x, double y)
 {
     WXMICROWIN_CHECK_HDC
 
-    m_logicalScaleX = x;
-    m_logicalScaleY = y;
+    wxDCBase::SetLogicalScale(x,y);
 }
 
 // ----------------------------------------------------------------------------

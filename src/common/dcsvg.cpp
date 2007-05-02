@@ -675,114 +675,36 @@ void wxSVGFileDC::write(const wxString &s)
 // coordinates transformations
 // ---------------------------------------------------------------------------
 
-wxCoord wxSVGFileDC::DeviceToLogicalX(wxCoord x) const
-{
-    return wxRound((x - m_deviceOriginX) / m_scaleX) * m_signX + m_logicalOriginX;
-}
-
-wxCoord wxSVGFileDC::DeviceToLogicalY(wxCoord y) const
-{
-    return wxRound((y - m_deviceOriginY) / m_scaleY) * m_signY + m_logicalOriginY;
-}
-
-wxCoord wxSVGFileDC::DeviceToLogicalXRel(wxCoord x) const
-{
-    return wxRound(x / m_scaleX);
-}
-
-wxCoord wxSVGFileDC::DeviceToLogicalYRel(wxCoord y) const
-{
-    return wxRound(y / m_scaleY);
-}
-
-wxCoord wxSVGFileDC::LogicalToDeviceX(wxCoord x) const
-{
-    return wxRound((x - m_logicalOriginX) * m_scaleX) * m_signX + m_deviceOriginX;
-}
-
-wxCoord wxSVGFileDC::LogicalToDeviceY(wxCoord y) const
-{
-    return wxRound((y - m_logicalOriginY) * m_scaleY) * m_signY + m_deviceOriginY;
-}
-
-wxCoord wxSVGFileDC::LogicalToDeviceXRel(wxCoord x) const
-{
-    return wxRound(x * m_scaleX);
-}
-
-wxCoord wxSVGFileDC::LogicalToDeviceYRel(wxCoord y) const
-{
-    return wxRound(y * m_scaleY);
-}
-
-void wxSVGFileDC::ComputeScaleAndOrigin()
-{
-    m_scaleX = m_logicalScaleX * m_userScaleX;
-    m_scaleY = m_logicalScaleY * m_userScaleY;
-}
-
-void wxSVGFileDC::SetMapMode( int mode )
-{
-    switch (mode)
-    {
-        case wxMM_TWIPS:
-            SetLogicalScale( twips2mm*m_mm_to_pix_x, twips2mm*m_mm_to_pix_y );
-            break;
-        case wxMM_POINTS:
-            SetLogicalScale( pt2mm*m_mm_to_pix_x, pt2mm*m_mm_to_pix_y );
-            break;
-        case wxMM_METRIC:
-            SetLogicalScale( m_mm_to_pix_x, m_mm_to_pix_y );
-            break;
-        case wxMM_LOMETRIC:
-            SetLogicalScale( m_mm_to_pix_x/10.0, m_mm_to_pix_y/10.0 );
-            break;
-        default:
-        case wxMM_TEXT:
-            SetLogicalScale( 1.0, 1.0 );
-            break;
-    }
-    m_mappingMode = mode;
-}
-
-void wxSVGFileDC::SetUserScale( double x, double y )
-{
-    // allow negative ? -> no
-    m_userScaleX = x;
-    m_userScaleY = y;
-    ComputeScaleAndOrigin();
-}
-
-void wxSVGFileDC::SetLogicalScale( double x, double y )
-{
-    // allow negative ?
-    m_logicalScaleX = x;
-    m_logicalScaleY = y;
-    ComputeScaleAndOrigin();
-}
-
-void wxSVGFileDC::SetLogicalOrigin( wxCoord x, wxCoord y )
-{
-    m_logicalOriginX = x * m_signX;   // is this still correct ?
-    m_logicalOriginY = y * m_signY;
-    ComputeScaleAndOrigin();
-}
-
-void wxSVGFileDC::SetDeviceOrigin( wxCoord x, wxCoord y )
-{
-    // only wxPostScripDC has m_signX = -1, we override SetDeviceOrigin there
-    m_deviceOriginX = x;
-    m_deviceOriginY = y;
-    ComputeScaleAndOrigin();
-}
-
 void wxSVGFileDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
 {
-    // only wxPostScripDC has m_signX = -1, we override SetAxisOrientation there
-    m_signX = (xLeftRight ?  1 : -1);
-    m_signY = (yBottomUp  ? -1 :  1);
-    ComputeScaleAndOrigin();
+    wxDCBase::SetAxisOrientation( xLeftRight, yBottomUp );
 }
+
+void wxSVGFileDC::SetMapMode(int mode)
+{
+    wxDCBase::SetMapMode(mode);
+}
+
+void wxSVGFileDC::SetUserScale(double x, double y)
+{
+    wxDCBase::SetUserScale(x,y);
+}
+
+void wxSVGFileDC::SetLogicalScale(double x, double y)
+{
+    wxDCBase::SetLogicalScale(x,y);
+}
+
+void wxSVGFileDC::SetLogicalOrigin(wxCoord x, wxCoord y)
+{
+    wxDCBase::SetLogicalOrigin(x,y);
+}
+
+void wxSVGFileDC::SetDeviceOrigin(wxCoord x, wxCoord y)
+{
+    wxDCBase::SetDeviceOrigin(x,y);
+}
+
 
 
 #ifdef __BORLANDC__

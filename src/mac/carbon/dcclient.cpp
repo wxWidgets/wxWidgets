@@ -150,12 +150,12 @@ wxWindowDC::wxWindowDC(wxWindow *window)
     int x , y ;
     x = y = 0 ;
     window->MacWindowToRootWindow( &x , &y ) ;
-    m_macLocalOrigin.x = x ;
-    m_macLocalOrigin.y = y ;
+    m_deviceLocalOriginX = x;
+    m_deviceLocalOriginY = y;
     m_macPort = UMAGetWindowPort( (WindowRef) rootwindow->MacGetWindowRef() ) ;
 
     CopyRgn( (RgnHandle) window->MacGetVisibleRegion(true).GetWXHRGN() , (RgnHandle) m_macBoundaryClipRgn ) ;
-    OffsetRgn( (RgnHandle) m_macBoundaryClipRgn , m_macLocalOrigin.x , m_macLocalOrigin.y ) ;
+    OffsetRgn( (RgnHandle) m_macBoundaryClipRgn , m_deviceLocalOriginX , m_deviceLocalOriginY ) ;
     CopyRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
 #endif
     SetBackground(MacGetBackgroundBrush(window));
@@ -281,12 +281,12 @@ wxClientDC::wxClientDC(wxWindow *window)
     m_macPort = UMAGetWindowPort( windowref ) ;
     m_ok = true ;
 
-    m_macLocalOrigin.x = x ;
-    m_macLocalOrigin.y = y ;
+    m_deviceLocalOriginX = x ;
+    m_deviceLocalOriginY = y ;
     SetRectRgn( (RgnHandle) m_macBoundaryClipRgn , origin.x , origin.y , origin.x + size.x , origin.y + size.y ) ;
     SectRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) window->MacGetVisibleRegion().GetWXHRGN() , (RgnHandle) m_macBoundaryClipRgn ) ;
     OffsetRgn( (RgnHandle) m_macBoundaryClipRgn , -origin.x , -origin.y ) ;
-    OffsetRgn( (RgnHandle) m_macBoundaryClipRgn , m_macLocalOrigin.x , m_macLocalOrigin.y ) ;
+    OffsetRgn( (RgnHandle) m_macBoundaryClipRgn , m_deviceLocalOriginX , m_deviceLocalOriginY ) ;
     CopyRgn( (RgnHandle) m_macBoundaryClipRgn ,(RgnHandle)  m_macCurrentClipRgn ) ;
 
     SetBackground(MacGetBackgroundBrush(window));
@@ -356,13 +356,13 @@ wxPaintDC::wxPaintDC(wxWindow *window)
     }
     // there is no out-of-order drawing on OSX
 #else
-    m_macLocalOrigin.x = x ;
-    m_macLocalOrigin.y = y ;
+    m_deviceLocalOriginX = x ;
+    m_deviceLocalOriginY = y ;
     SetRectRgn( (RgnHandle) m_macBoundaryClipRgn , origin.x , origin.y , origin.x + size.x , origin.y + size.y ) ;
     SectRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) window->MacGetVisibleRegion().GetWXHRGN() , (RgnHandle) m_macBoundaryClipRgn ) ;
     OffsetRgn( (RgnHandle) m_macBoundaryClipRgn , -origin.x , -origin.y ) ;
     SectRgn( (RgnHandle) m_macBoundaryClipRgn  , (RgnHandle) window->GetUpdateRegion().GetWXHRGN() , (RgnHandle) m_macBoundaryClipRgn ) ;
-    OffsetRgn( (RgnHandle) m_macBoundaryClipRgn , m_macLocalOrigin.x , m_macLocalOrigin.y ) ;
+    OffsetRgn( (RgnHandle) m_macBoundaryClipRgn , m_deviceLocalOriginX , m_deviceLocalOriginY ) ;
     CopyRgn( (RgnHandle) m_macBoundaryClipRgn , (RgnHandle) m_macCurrentClipRgn ) ;
     SetBackground(MacGetBackgroundBrush(window));
 #endif

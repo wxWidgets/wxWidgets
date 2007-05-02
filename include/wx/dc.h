@@ -101,40 +101,9 @@ protected:
 class WXDLLEXPORT wxDCBase : public wxObject
 {
 public:
-    wxDCBase()
-        : m_colour(wxColourDisplay())
-        , m_ok(true)
-        , m_clipping(false)
-        , m_isInteractive(0)
-        , m_isBBoxValid(false)
-        , m_logicalOriginX(0), m_logicalOriginY(0)
-        , m_deviceOriginX(0), m_deviceOriginY(0)
-        , m_logicalScaleX(1.0), m_logicalScaleY(1.0)
-        , m_userScaleX(1.0), m_userScaleY(1.0)
-        , m_scaleX(1.0), m_scaleY(1.0)
-        , m_signX(1), m_signY(1)
-        , m_minX(0), m_minY(0), m_maxX(0), m_maxY(0)
-        , m_clipX1(0), m_clipY1(0), m_clipX2(0), m_clipY2(0)
-        , m_logicalFunction(wxCOPY)
-        , m_backgroundMode(wxTRANSPARENT)
-        , m_mappingMode(wxMM_TEXT)
-        , m_pen()
-        , m_brush()
-        , m_backgroundBrush(*wxTRANSPARENT_BRUSH)
-        , m_textForegroundColour(*wxBLACK)
-        , m_textBackgroundColour(*wxWHITE)
-        , m_font()
-#if wxUSE_PALETTE
-        , m_palette()
-        , m_hasCustomPalette(false)
-#endif // wxUSE_PALETTE
-    {
-        ResetBoundingBox();
-        ResetClipping();
-    }
-
-    virtual ~wxDCBase() { }
-
+    wxDCBase();
+    virtual ~wxDCBase();
+    
     // graphic primitives
     // ------------------
 
@@ -511,20 +480,6 @@ public:
         return wxSize(w, h);
     }
 
-    // coordinates conversions
-    // -----------------------
-
-    // This group of functions does actual conversion of the input, as you'd
-    // expect.
-    virtual wxCoord DeviceToLogicalX(wxCoord x) const = 0;
-    virtual wxCoord DeviceToLogicalY(wxCoord y) const = 0;
-    virtual wxCoord DeviceToLogicalXRel(wxCoord x) const = 0;
-    virtual wxCoord DeviceToLogicalYRel(wxCoord y) const = 0;
-    virtual wxCoord LogicalToDeviceX(wxCoord x) const = 0;
-    virtual wxCoord LogicalToDeviceY(wxCoord y) const = 0;
-    virtual wxCoord LogicalToDeviceXRel(wxCoord x) const = 0;
-    virtual wxCoord LogicalToDeviceYRel(wxCoord y) const = 0;
-
     // query DC capabilities
     // ---------------------
 
@@ -556,43 +511,60 @@ public:
     virtual void SetTextBackground(const wxColour& colour)
         { m_textBackgroundColour = colour; }
 
-    virtual int GetMapMode() const { return m_mappingMode; }
-    virtual void SetMapMode(int mode) = 0;
 
+    // coordinates conversions and transforms
+    // --------------------------------------
+
+    virtual wxCoord DeviceToLogicalX(wxCoord x) const;
+    virtual wxCoord DeviceToLogicalY(wxCoord y) const;
+    virtual wxCoord DeviceToLogicalXRel(wxCoord x) const;
+    virtual wxCoord DeviceToLogicalYRel(wxCoord y) const;
+    virtual wxCoord LogicalToDeviceX(wxCoord x) const;
+    virtual wxCoord LogicalToDeviceY(wxCoord y) const;
+    virtual wxCoord LogicalToDeviceXRel(wxCoord x) const;
+    virtual wxCoord LogicalToDeviceYRel(wxCoord y) const;
+
+    virtual void SetMapMode(int mode);
+    virtual int GetMapMode() const { return m_mappingMode; }
+
+    virtual void SetUserScale(double x, double y);
     virtual void GetUserScale(double *x, double *y) const
     {
         if ( x ) *x = m_userScaleX;
         if ( y ) *y = m_userScaleY;
     }
-    virtual void SetUserScale(double x, double y) = 0;
 
+    virtual void SetLogicalScale(double x, double y);
     virtual void GetLogicalScale(double *x, double *y)
     {
         if ( x ) *x = m_logicalScaleX;
         if ( y ) *y = m_logicalScaleY;
     }
-    virtual void SetLogicalScale(double x, double y)
-    {
-        m_logicalScaleX = x;
-        m_logicalScaleY = y;
-    }
 
+    virtual void SetLogicalOrigin(wxCoord x, wxCoord y);
     void GetLogicalOrigin(wxCoord *x, wxCoord *y) const
         { DoGetLogicalOrigin(x, y); }
     wxPoint GetLogicalOrigin() const
         { wxCoord x, y; DoGetLogicalOrigin(&x, &y); return wxPoint(x, y); }
-    virtual void SetLogicalOrigin(wxCoord x, wxCoord y) = 0;
 
+    virtual void SetDeviceOrigin(wxCoord x, wxCoord y);
     void GetDeviceOrigin(wxCoord *x, wxCoord *y) const
         { DoGetDeviceOrigin(x, y); }
     wxPoint GetDeviceOrigin() const
         { wxCoord x, y; DoGetDeviceOrigin(&x, &y); return wxPoint(x, y); }
-    virtual void SetDeviceOrigin(wxCoord x, wxCoord y) = 0;
+        
+    virtual void SetDeviceLocalOrigin( wxCoord x, wxCoord y );
 
-    virtual void ComputeScaleAndOrigin() {}
+    virtual void ComputeScaleAndOrigin();
 
-    virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp) = 0;
+    // this needs to overidden if the axis is inverted (such
+    // as when using Postscript, where 0,0 is the lower left
+    // corner, not the upper left).
+    virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
 
+    // logical functions
+    // ---------------------------
+    
     virtual int GetLogicalFunction() const { return m_logicalFunction; }
     virtual void SetLogicalFunction(int function) = 0;
 
@@ -836,15 +808,25 @@ protected:
     // TODO short descriptions of what exactly they are would be nice...
 
     wxCoord m_logicalOriginX, m_logicalOriginY;
-    wxCoord m_deviceOriginX, m_deviceOriginY;
-
+    wxCoord m_deviceOriginX, m_deviceOriginY;           // Usually 0,0, can be change by user
+    
+    wxCoord m_deviceLocalOriginX, m_deviceLocalOriginY; // non-zero if native top-left corner
+                                                        // is not at 0,0. This was the case under
+                                                        // Mac's GrafPorts (coordinate system
+                                                        // used toplevel window's origin) and
+                                                        // e.g. for Postscript, where the native
+                                                        // origin in the bottom left corner.
     double m_logicalScaleX, m_logicalScaleY;
     double m_userScaleX, m_userScaleY;
-    double m_scaleX, m_scaleY;
+    double m_scaleX, m_scaleY;  // calculated from logical scale and user scale
 
     // Used by SetAxisOrientation() to invert the axes
     int m_signX, m_signY;
 
+    // what is a mm on a screen you don't know the size of?
+    double       m_mm_to_pix_x,
+                 m_mm_to_pix_y;
+                 
     // bounding and clipping boxes
     wxCoord m_minX, m_minY, m_maxX, m_maxY;
     wxCoord m_clipX1, m_clipY1, m_clipX2, m_clipY2;

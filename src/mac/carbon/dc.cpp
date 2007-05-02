@@ -262,26 +262,11 @@ wxDC::wxDC()
 {
     m_ok = false;
     m_colour = true;
-    m_mm_to_pix_x = mm2pt;
-    m_mm_to_pix_y = mm2pt;
-    m_internalDeviceOriginX = 0;
-    m_internalDeviceOriginY = 0;
-    m_externalDeviceOriginX = 0;
-    m_externalDeviceOriginY = 0;
-    m_logicalScaleX = 1.0;
-    m_logicalScaleY = 1.0;
-    m_userScaleX = 1.0;
-    m_userScaleY = 1.0;
-    m_scaleX = 1.0;
-    m_scaleY = 1.0;
-    m_needComputeScaleX = false;
-    m_needComputeScaleY = false;
     m_macPort = NULL ;
     m_macMask = NULL ;
     m_macFontInstalled = false ;
     m_macBrushInstalled = false ;
     m_macPenInstalled = false ;
-    m_macLocalOrigin.x = m_macLocalOrigin.y = 0 ;
     m_macBoundaryClipRgn = NewRgn() ;
     m_macCurrentClipRgn = NewRgn() ;
     SetRectRgn( (RgnHandle) m_macBoundaryClipRgn , -32000 , -32000 , 32000 , 32000 ) ;
@@ -567,77 +552,6 @@ void wxDC::SetTextBackground( const wxColour &col )
     m_macFontInstalled = false ;
 }
 
-void wxDC::SetMapMode( int mode )
-{
-    switch (mode)
-    {
-    case wxMM_TWIPS:
-        SetLogicalScale( twips2mm * m_mm_to_pix_x, twips2mm * m_mm_to_pix_y );
-        break;
-
-    case wxMM_POINTS:
-        SetLogicalScale( pt2mm * m_mm_to_pix_x, pt2mm * m_mm_to_pix_y );
-        break;
-
-    case wxMM_METRIC:
-        SetLogicalScale( m_mm_to_pix_x, m_mm_to_pix_y );
-        break;
-
-    case wxMM_LOMETRIC:
-        SetLogicalScale( m_mm_to_pix_x / 10.0, m_mm_to_pix_y / 10.0 );
-        break;
-
-    default:
-    case wxMM_TEXT:
-        SetLogicalScale( 1.0, 1.0 );
-        break;
-    }
-
-    if (mode != wxMM_TEXT)
-    {
-        m_needComputeScaleX = true;
-        m_needComputeScaleY = true;
-    }
-}
-
-void wxDC::SetUserScale( double x, double y )
-{
-    // allow negative ? -> no
-    m_userScaleX = x;
-    m_userScaleY = y;
-    ComputeScaleAndOrigin();
-}
-
-void wxDC::SetLogicalScale( double x, double y )
-{
-    // allow negative ?
-    m_logicalScaleX = x;
-    m_logicalScaleY = y;
-    ComputeScaleAndOrigin();
-}
-
-void wxDC::SetLogicalOrigin( wxCoord x, wxCoord y )
-{
-    // is this still correct ?
-    m_logicalOriginX = x * m_signX;
-    m_logicalOriginY = y * m_signY;
-    ComputeScaleAndOrigin();
-}
-
-void wxDC::SetDeviceOrigin( wxCoord x, wxCoord y )
-{
-    m_externalDeviceOriginX = x;
-    m_externalDeviceOriginY = y;
-    ComputeScaleAndOrigin();
-}
-
-void wxDC::SetAxisOrientation( bool xLeftRight, bool yBottomUp )
-{
-    m_signX = (xLeftRight ?  1 : -1);
-    m_signY = (yBottomUp  ? -1 :  1);
-    ComputeScaleAndOrigin();
-}
-
 wxSize wxDC::GetPPI() const
 {
     return wxSize(72, 72);
@@ -649,27 +563,6 @@ int wxDC::GetDepth() const
         return ( (**GetPortPixMap( (CGrafPtr) m_macPort)).pixelSize ) ;
 
     return 1 ;
-}
-
-void wxDC::ComputeScaleAndOrigin()
-{
-    // CMB: copy scale to see if it changes
-    double origScaleX = m_scaleX;
-    double origScaleY = m_scaleY;
-    m_scaleX = m_logicalScaleX * m_userScaleX;
-    m_scaleY = m_logicalScaleY * m_userScaleY;
-    m_deviceOriginX = m_internalDeviceOriginX + m_externalDeviceOriginX;
-    m_deviceOriginY = m_internalDeviceOriginY + m_externalDeviceOriginY;
-
-    // CMB: if scale has changed call SetPen to recalulate the line width
-    if (m_scaleX != origScaleX || m_scaleY != origScaleY)
-    {
-        // this is a bit artificial, but we need to force wxDC to think
-        // the pen has changed
-        wxPen pen(GetPen());
-        m_pen = wxNullPen;
-        SetPen(pen);
-    }
 }
 
 void wxDC::SetPalette( const wxPalette& palette )
@@ -1580,7 +1473,7 @@ void wxDC::DoDrawRotatedText(const wxString& str, wxCoord x, wxCoord y,
         IntToFixed(drawX) , IntToFixed(drawY) , &rect );
     wxASSERT_MSG( status == noErr , wxT("couldn't measure the rotated text") );
 
-    OffsetRect( &rect , -m_macLocalOrigin.x , -m_macLocalOrigin.y ) ;
+    OffsetRect( &rect , -m_deviceLocalOriginX , -m_deviceLocalOriginY ) ;
     CalcBoundingBox(XDEV2LOG(rect.left), YDEV2LOG(rect.top) );
     CalcBoundingBox(XDEV2LOG(rect.right), YDEV2LOG(rect.bottom) );
     ::ATSUDisposeTextLayout(atsuLayout);

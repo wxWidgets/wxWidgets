@@ -78,22 +78,14 @@ public:
     virtual int GetDepth() const;
     virtual wxSize GetPPI() const;
 
-    virtual wxCoord DeviceToLogicalX(wxCoord x) const;
-    virtual wxCoord DeviceToLogicalY(wxCoord y) const;
-    virtual wxCoord DeviceToLogicalXRel(wxCoord x) const;
-    virtual wxCoord DeviceToLogicalYRel(wxCoord y) const;
-    virtual wxCoord LogicalToDeviceX(wxCoord x) const;
-    virtual wxCoord LogicalToDeviceY(wxCoord y) const;
-    virtual wxCoord LogicalToDeviceXRel(wxCoord x) const;
-    virtual wxCoord LogicalToDeviceYRel(wxCoord y) const ;
 
     virtual void SetMapMode(int mode);
     virtual void SetUserScale(double x, double y);
-    virtual void SetSystemScale(double x, double y);
     virtual void SetLogicalScale(double x, double y);
     virtual void SetLogicalOrigin(wxCoord x, wxCoord y);
     virtual void SetDeviceOrigin(wxCoord x, wxCoord y);
     virtual void SetAxisOrientation(bool xLeftRight, bool yBottomUp);
+    
     virtual void SetLogicalFunction(int function);
 
     // implementation from now on
@@ -170,6 +162,8 @@ protected:
     // create an uninitialized DC: this should be only used by the derived
     // classes
     wxDC() { Init(); }
+
+    void RealizeScaleAndOrigin();
 
     virtual void DoGetTextExtent(const wxString& string,
                                  wxCoord *x, wxCoord *y,

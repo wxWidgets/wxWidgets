@@ -46,47 +46,38 @@ public:
     wxCoord GetCharHeight() const;
     wxCoord GetCharWidth() const;
 
-        void SetClippingRegion(wxCoord  WXUNUSED(x), wxCoord  WXUNUSED(y), wxCoord  WXUNUSED(width), wxCoord  WXUNUSED(height))
+    void SetClippingRegion(wxCoord  WXUNUSED(x), wxCoord  WXUNUSED(y), wxCoord  WXUNUSED(width), wxCoord  WXUNUSED(height))
             { wxASSERT_MSG (false, wxT("wxSVGFILEDC::SetClippingRegion not implemented")); return ; }
 
-        void SetPalette(const wxPalette&  WXUNUSED(palette))
+    void SetPalette(const wxPalette&  WXUNUSED(palette))
             { wxASSERT_MSG (false, wxT("wxSVGFILEDC::SetPalette not implemented")); return ; }
 
-        void GetClippingBox(wxCoord *WXUNUSED(x), wxCoord *WXUNUSED(y), wxCoord * WXUNUSED(width), wxCoord * WXUNUSED(height))
+    void GetClippingBox(wxCoord *WXUNUSED(x), wxCoord *WXUNUSED(y), wxCoord * WXUNUSED(width), wxCoord * WXUNUSED(height))
             { wxASSERT_MSG (false, wxT("wxSVGFILEDC::GetClippingBox not implemented")); return ; }
 
-        void SetLogicalFunction(int  WXUNUSED(function))
+    void SetLogicalFunction(int  WXUNUSED(function))
             { wxASSERT_MSG (false, wxT("wxSVGFILEDC::SetLogicalFunction Call not implemented")); return ; }
 
-        int GetLogicalFunction() const
+    int GetLogicalFunction() const
             { wxASSERT_MSG (false, wxT("wxSVGFILEDC::GetLogicalFunction() not implemented")); return wxCOPY ; }
 
-        void SetBackground( const wxBrush &brush ) ;
-        void SetBackgroundMode( int mode ) ;
-        void SetBrush(const wxBrush& brush) ;
-        void SetFont(const wxFont& font) ;
-        void SetPen(const wxPen& pen)  ;
+    void SetBackground( const wxBrush &brush ) ;
+    void SetBackgroundMode( int mode ) ;
+    void SetBrush(const wxBrush& brush) ;
+    void SetFont(const wxFont& font) ;
+    void SetPen(const wxPen& pen)  ;
           
-        bool IsOk() const {return m_OK;}
+    bool IsOk() const {return m_OK;}
 
-    virtual wxCoord DeviceToLogicalX(wxCoord x) const;
-    virtual wxCoord DeviceToLogicalY(wxCoord y) const;
-    virtual wxCoord DeviceToLogicalXRel(wxCoord x) const;
-    virtual wxCoord DeviceToLogicalYRel(wxCoord y) const;
-    virtual wxCoord LogicalToDeviceX(wxCoord x) const;
-    virtual wxCoord LogicalToDeviceY(wxCoord y) const;
-    virtual wxCoord LogicalToDeviceXRel(wxCoord x) const;
-    virtual wxCoord LogicalToDeviceYRel(wxCoord y) const ;
-
+    // these need to be overridden as wxPostscriptDC inherits
+    // from the platform dependent wxDC and this we'd call
+    // e.g. wxMSW specific code here.
     virtual void SetMapMode( int mode );
     virtual void SetUserScale( double x, double y );
     virtual void SetLogicalScale( double x, double y );
     virtual void SetLogicalOrigin( wxCoord x, wxCoord y );
     virtual void SetDeviceOrigin( wxCoord x, wxCoord y );
-
-    virtual void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
-
-    virtual void ComputeScaleAndOrigin();
+    void SetAxisOrientation( bool xLeftRight, bool yBottomUp );
 
 private:
         bool DoGetPixel(wxCoord, wxCoord, class wxColour *) const
@@ -150,7 +141,6 @@ private:
     bool                m_OK;
     bool                m_graphics_changed;
     int                 m_width, m_height;
-    double              m_mm_to_pix_x, m_mm_to_pix_y;
     
 private:
     DECLARE_ABSTRACT_CLASS(wxSVGFileDC)
