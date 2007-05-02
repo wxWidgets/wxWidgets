@@ -89,9 +89,16 @@ class xrc%(windowName)s(wx.%(windowClass)s):
         pre.thisown = 0
         if hasattr(self, '_setOORInfo'):
             self._setOORInfo(self)
-        if hasattr(self, '_setCallbackInfo'):
-            self._setCallbackInfo(self, self.__class__)
 
+        # Define variables for the menu items
+"""
+
+    MENUBAR_CLASS_HEADER = """\
+class xrc%(windowName)s(wx.%(windowClass)s):
+    def __init__(self):
+        pre = get_resources().LoadMenuBar("%(windowName)s")
+        self.PostCreate(pre)
+        
         # Define variables for the menu items
 """
 
@@ -227,7 +234,9 @@ class XmlResourceCompiler:
             windowClass = re.sub("^wx", "", windowClass)
             windowName = topWindow.getAttribute("name")
             
-            if windowClass in ["Menu", "MenuItem"]:
+            if windowClass in ["MenuBar"]:
+                outputList.append(self.templates.MENUBAR_CLASS_HEADER % locals())
+            elif windowClass in ["Menu"]:
                 outputList.append(self.templates.MENU_CLASS_HEADER % locals())
             else:
                 outputList.append(self.templates.CLASS_HEADER % locals())
