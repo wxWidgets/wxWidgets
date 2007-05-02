@@ -836,6 +836,7 @@ public:
     // identical to c_str(), for MFC compatibility
     const wxChar* GetData() const { return c_str(); }
 
+#if wxABI_VERSION >= 20804
     // conversion to *non-const* multibyte or widestring buffer; modifying
     // returned buffer won't affect the string, these methods are only useful
     // for passing values to const-incorrect functions
@@ -844,6 +845,7 @@ public:
 #if wxUSE_WCHAR_T
     wxWritableWCharBuffer wchar_str() const { return wc_str(wxConvLibc); }
 #endif
+#endif // wxABI_VERSION >= 20804
 
     // conversion to/from plain (i.e. 7 bit) ASCII: this is useful for
     // converting numbers or strings which are certain not to contain special
