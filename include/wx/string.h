@@ -1126,6 +1126,23 @@ public:
     const char *ToAscii() const { return c_str(); }
 #endif // Unicode/!Unicode
 
+    // functions for storing binary data in wxString:
+#if wxUSE_UNICODE
+    static wxString From8BitData(const char *data, size_t len)
+      { return wxString(data, wxConvISO8859_1, len); }
+    // version for NUL-terminated data:
+    static wxString From8BitData(const char *data)
+      { return wxString(data, wxConvISO8859_1); }
+    const wxCharBuffer To8BitData() const { return mb_str(wxConvISO8859_1); }
+#else // ANSI
+    static wxString From8BitData(const char *data, size_t len)
+      { return wxString(data, len); }
+    // version for NUL-terminated data:
+    static wxString From8BitData(const char *data)
+      { return wxString(data); }
+    const char *To8BitData() const { return c_str(); }
+#endif // Unicode/ANSI
+
     // conversions with (possible) format conversions: have to return a
     // buffer with temporary data
     //

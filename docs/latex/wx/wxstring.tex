@@ -747,6 +747,24 @@ Returns the number of occurrences of {\it ch} in the string.
 
 This is a wxWidgets 1.xx compatibility function; you should not use it in new code.
 
+\membersection{wxString::From8BitData}\label{wxstringfrom8bitdata}
+
+\func{static wxString }{From8BitData}{\param{const char*}{ buf}, \param{size\_t}{len}}
+
+\func{static wxString }{From8BitData}{\param{const char*}{ buf}}
+
+Converts given buffer of binary data from 8-bit string to wxString. In Unicode
+build, the string is interpreted as being in ISO-8859-1 encoding. The version
+without \arg{len} parameter takes NUL-terminated data.
+
+This is a convenience method useful when storing binary data in wxString.
+
+\newsince{2.8.4}
+
+\wxheading{See also}
+
+\helpref{To8BitData}{wxstringto8bitdata}
+
 
 \membersection{wxString::FromAscii}\label{wxstringfromascii}
 
@@ -1122,6 +1140,26 @@ inclusive.
 
 This is a wxWidgets 1.xx compatibility function, use \helpref{Mid}{wxstringmid}
 instead (but note that parameters have different meaning).
+
+
+\membersection{wxString::To8BitData}\label{wxstringto8bitdata}
+
+\constfunc{const char*}{To8BitData}{\void}
+
+Converts the string to an 8-bit string (ANSI builds only).
+
+\constfunc{const wxCharBuffer}{To8BitData}{\void}
+
+Converts the string to an 8-bit string in ISO-8859-1 encoding in the form of
+a wxCharBuffer (Unicode builds only).
+
+This is a convenience method useful when storing binary data in wxString.
+
+\newsince{2.8.4}
+
+\wxheading{See also}
+
+\helpref{From8BitData}{wxstringfrom8bitdata}
 
 
 \membersection{wxString::ToAscii}\label{wxstringtoascii}
