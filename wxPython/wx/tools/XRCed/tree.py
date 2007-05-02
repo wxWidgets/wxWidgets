@@ -422,8 +422,8 @@ class HighLightBox:
     def __init__(self, pos, size):
         if not self.colour: colour = self.colour = wx.NamedColour(COLOUR_HL)
         else: colour = self.colour
-        if size.width == -1: size.width = 0
-        if size.height == -1: size.height = 0
+        if size.width == -1: size.width = 1
+        if size.height == -1: size.height = 1
         w = g.testWin.panel
         l1 = wx.Window(w, -1, pos, wx.Size(size.width, 2))
         l1.SetBackgroundColour(self.colour)
@@ -438,8 +438,8 @@ class HighLightBox:
         g.testWin.highLight = self
     # Move highlight to a new position
     def Replace(self, pos, size):
-        if size.width == -1: size.width = 0
-        if size.height == -1: size.height = 0
+        if size.width == -1: size.width = 1
+        if size.height == -1: size.height = 1
         self.lines[0].SetDimensions(pos.x, pos.y, size.width, 2)
         self.lines[1].SetDimensions(pos.x, pos.y, 2, size.height)
         self.lines[2].SetDimensions(pos.x + size.width - 2, pos.y, 2, size.height)
@@ -492,8 +492,8 @@ def updateHL(hl, hlClass, pos, size):
 
 class XML_Tree(wx.TreeCtrl):
     def __init__(self, parent, id):
-        wx.TreeCtrl.__init__(self, parent, id,
-                             style = wx.TR_HAS_BUTTONS | wx.TR_MULTIPLE | wx.TR_EDIT_LABELS)
+        wx.TreeCtrl.__init__(self, parent, id)
+#                             style = wx.TR_HAS_BUTTONS | wx.TR_MULTIPLE | wx.TR_EDIT_LABELS)
         self.SetBackgroundColour(wx.Colour(224, 248, 224))
         self.fontComment = wx.FFont(self.GetFont().GetPointSize(),
                                     self.GetFont().GetFamily(),
@@ -838,6 +838,7 @@ class XML_Tree(wx.TreeCtrl):
         # so we must remove the old HL window
         g.testWin.highLight = updateHL(g.testWin.highLight, HighLightBox, pos, size)
         g.testWin.highLight.item = item
+        g.testWin.highLight.obj = obj
 
     def ShowTestWindow(self, item):
         xxx = self.GetPyData(item)
@@ -975,9 +976,10 @@ class XML_Tree(wx.TreeCtrl):
                 # Create new frame
                 if not testWin:
                     testWin = g.testWin = wx.Frame(g.frame, -1, 'Panel: ' + name,
-                                                  pos=pos, name=STD_NAME)
+                                                   pos=pos, name=STD_NAME)
                 testWin.panel = res.LoadPanel(testWin, STD_NAME)
-                testWin.SetClientSize(testWin.GetBestSize())
+                testWin.panel.SetSize(testWin.GetClientSize())
+                #testWin.SetClientSize(testWin.GetSize())
                 testWin.Show(True)
             elif xxx.__class__ == xxxDialog:
                 testWin = g.testWin = res.LoadDialog(g.frame, STD_NAME)
@@ -1072,8 +1074,10 @@ class XML_Tree(wx.TreeCtrl):
         self.CloseTestWindow()
 
     def OnSizeTestWin(self, evt):
-        if g.testWin.highLight:
-            self.HighLight(g.testWin.highLight.item)
+        # Update highlight after size change
+        hl = g.testWin.highLight
+        if hl:  hl.Replace(self.FindNodePos(hl.item), hl.obj.GetSize())
+            #self.HighLight(g.testWin.highLight.item)
         evt.Skip()
 
     # Return index in parent, for real window children
@@ -1352,8 +1356,9 @@ class DropTarget(wx.PyDropTarget):
                     g.tree.SetItemTextColour(hl.item, g.tree.itemColour)
                     # Highlight future parent
                     g.tree.itemColour = g.tree.GetItemTextColour(parentItem) # save current
-            g.testWin.highLightDT = updateHL(hl, HighLightDTBox, pos, size)
-            g.testWin.highLightDT.item = parentItem
+            if not hl or hl.item != parentItem:
+                g.testWin.highLightDT = updateHL(hl, HighLightDTBox, pos, size)
+                g.testWin.highLightDT.item = parentItem
             g.tree.SetItemTextColour(parentItem, COLOUR_DT)
             g.tree.EnsureVisible(parentItem)
             g.frame.SetStatusText('Drop target: %s' % parent.treeName())
