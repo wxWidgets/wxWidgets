@@ -26,7 +26,7 @@ public:
     MyMiniFrame(wxFrame *parent, wxWindowID id = wxID_ANY, const wxString& title = _T("wxToolBar Sample"),
         const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize );
 
-    void OnCloseWindow(wxCloseEvent& event);
+    virtual bool Destroy();
     void OnReparent(wxCommandEvent& event);
     
 DECLARE_EVENT_TABLE()
@@ -39,7 +39,7 @@ public:
     MyMainFrame(wxFrame *parent, wxWindowID id = wxID_ANY, const wxString& title = _T("wxToolBar Sample"),
         const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxDefaultSize );
 
-    void OnCloseWindow(wxCloseEvent& event);
+    void OnExit(wxCommandEvent&);
     void OnReparent(wxCommandEvent& event);
     void OnSetSize_150_150(wxCommandEvent &event);
     void OnSetSize_200_200(wxCommandEvent &event);

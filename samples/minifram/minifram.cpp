@@ -164,7 +164,6 @@ bool MyApp::InitToolbar(wxToolBar* toolBar)
 // MyMiniFrame
 
 BEGIN_EVENT_TABLE(MyMiniFrame, wxMiniFrame)
-    EVT_CLOSE  (              MyMiniFrame::OnCloseWindow)
     EVT_BUTTON (ID_REPARENT,  MyMiniFrame::OnReparent)
     EVT_MENU   (wxID_PRINT,   MyMiniFrame::OnReparent)
 END_EVENT_TABLE()
@@ -175,11 +174,11 @@ MyMiniFrame::MyMiniFrame(wxFrame* parent, wxWindowID id, const wxString& title, 
 {
 }
 
-void MyMiniFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
+bool MyMiniFrame::Destroy()
 {
   // make it known that the miniframe is no more
   mini_frame_exists = false;
-  Destroy();
+  return wxMiniFrame::Destroy();
 }
 
 void MyMiniFrame::OnReparent(wxCommandEvent& WXUNUSED(event))
@@ -193,7 +192,7 @@ void MyMiniFrame::OnReparent(wxCommandEvent& WXUNUSED(event))
 // MyMainFrame
 
 BEGIN_EVENT_TABLE(MyMainFrame, wxFrame)
-    EVT_CLOSE  (              MyMainFrame::OnCloseWindow)
+    EVT_MENU   (wxID_EXIT,    MyMainFrame::OnExit)
     EVT_BUTTON (ID_REPARENT,  MyMainFrame::OnReparent)
     EVT_MENU   (wxID_PRINT,   MyMainFrame::OnReparent)
 END_EVENT_TABLE()
@@ -204,9 +203,9 @@ MyMainFrame::MyMainFrame(wxFrame* parent, wxWindowID id, const wxString& title, 
 {
 }
 
-void MyMainFrame::OnCloseWindow(wxCloseEvent& WXUNUSED(event))
+void MyMainFrame::OnExit(wxCommandEvent&)
 {
-  Destroy();
+    Close();
 }
 
 void MyMainFrame::OnReparent(wxCommandEvent& WXUNUSED(event))
