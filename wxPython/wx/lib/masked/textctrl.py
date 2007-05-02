@@ -152,7 +152,7 @@ class BaseMaskedTextCtrl( wx.TextCtrl, MaskedEditMixin ):
         return self.GetValue()
 
 
-    def _SetValue(self, value, use_change_value=False):
+    def _SetValue(self, value):
         """
         Allow mixin to set the raw value of the control with this function.
         REQUIRED by any class derived from MaskedEditMixin.
@@ -161,11 +161,21 @@ class BaseMaskedTextCtrl( wx.TextCtrl, MaskedEditMixin ):
         # Record current selection and insertion point, for undo
         self._prevSelection = self._GetSelection()
         self._prevInsertionPoint = self._GetInsertionPoint()
-        if use_change_value:
-            wx.TextCtrl.ChangeValue(self, value)
-        else:
-            wx.TextCtrl.SetValue(self, value)
+        wx.TextCtrl.SetValue(self, value)
 ##        dbg(indent=0)
+
+    def _ChangeValue(self, value):
+        """
+        Allow mixin to set the raw value of the control with this function without
+        generating an event as a result. (New for masked.TextCtrl as of 2.8.4)
+        """
+##        dbg('MaskedTextCtrl::_ChangeValue("%(value)s", use_change_value=%(use_change_value)d)' % locals(), indent=1)
+        # Record current selection and insertion point, for undo
+        self._prevSelection = self._GetSelection()
+        self._prevInsertionPoint = self._GetInsertionPoint()
+        wx.TextCtrl.ChangeValue(self, value)
+##        dbg(indent=0)
+
 
     def SetValue(self, value, use_change_value=False):
         """
@@ -226,10 +236,12 @@ class BaseMaskedTextCtrl( wx.TextCtrl, MaskedEditMixin ):
             else:
 ##                dbg('exception thrown', indent=0)
                 raise
-
-        self._SetValue(value, use_change_value)   # note: to preserve similar capability, .SetValue()
-                                                  # does not change IsModified()
-####        dbg('queuing insertion after .SetValue', replace_to)
+        if use_change_value:
+            self._ChangeValue(value)
+        else:
+            self._SetValue(value)       # note: to preserve similar capability, .SetValue()
+                                        # does not change IsModified()
+####        dbg('queuing insertion after ._Set/ChangeValue', replace_to)
         # set selection to last char replaced by paste
         wx.CallAfter(self._SetInsertionPoint, replace_to)
         wx.CallAfter(self._SetSelection, replace_to, replace_to)
