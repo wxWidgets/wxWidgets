@@ -833,12 +833,13 @@ void wxWindow::CocoaSetWxWindowSize(int width, int height)
 
 void wxWindow::SetLabel(const wxString& WXUNUSED(label))
 {
-    // TODO
+    // Intentional no-op.
 }
 
 wxString wxWindow::GetLabel() const
 {
-    // TODO
+    // General Get/Set of labels is implemented in wxControlBase
+    wxLogDebug(wxT("wxWindow::GetLabel: Should be overridden if needed."));
     return wxEmptyString;
 }
 
