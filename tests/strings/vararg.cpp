@@ -36,9 +36,15 @@ public:
 private:
     CPPUNIT_TEST_SUITE( VarArgTestCase );
         CPPUNIT_TEST( StringPrintf );
+#if wxUSE_STD_STRING
+        CPPUNIT_TEST( StdString );
+#endif
     CPPUNIT_TEST_SUITE_END();
 
     void StringPrintf();
+#if wxUSE_STD_STRING
+    void StdString();
+#endif
 
     DECLARE_NO_COPY_CLASS(VarArgTestCase)
 };
@@ -80,4 +86,22 @@ void VarArgTestCase::StringPrintf()
     // literal:
     bool cond = true;
     s2.Printf(_T("foo %s"), !cond ? s.c_str() : _T("bar"));
+
 }
+
+#if wxUSE_STD_STRING
+void VarArgTestCase::StdString()
+{
+    // test passing std::[w]string
+    wxString s;
+
+    std::string mb("multi-byte");
+    std::string wc("widechar");
+
+    s.Printf("string %s(%i).", mb, 1);
+    CPPUNIT_ASSERT( s == "string multi-byte(1)." );
+
+    s.Printf("string %s(%i).", wc, 2);
+    CPPUNIT_ASSERT( s == "string widechar(2)." );
+}
+#endif // wxUSE_STD_STRING
