@@ -47,11 +47,14 @@ public:
     virtual wxPortId GetToolkitVersion(int *majVer, int *minVer) const;
 
 #ifdef __WXGTK__
+
+#if wxUSE_INTL
     virtual void SetLocale();
+#endif
     virtual wxString GetDesktopEnvironment() const;
     virtual wxString GetStandardCmdLineOptions(wxArrayString& names,
                                                wxArrayString& desc) const;
-#endif
+#endif // __WXGTK__
 
 #if defined(__WXDEBUG__) && defined(__WXGTK20__)
     virtual bool ShowAssertDialog(const wxString& msg);
