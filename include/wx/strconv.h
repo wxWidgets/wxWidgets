@@ -418,14 +418,35 @@ private:
 // declare predefined conversion objects
 // ----------------------------------------------------------------------------
 
+// Note: this macro is an implementation detail (see the comment in
+// strconv.cpp). The wxGet_XXX() and wxGet_XXXPtr() functions shouldn't be
+// used by user code and neither should XXXPtr, use the wxConvXXX macro
+// instead.
+#define WX_DECLARE_GLOBAL_CONV(klass, name)                             \
+    extern WXDLLIMPEXP_DATA_BASE(klass*) name##Ptr;                     \
+    extern klass* WXDLLIMPEXP_BASE wxGet_##name##Ptr();                 \
+    inline klass& wxGet_##name()                                        \
+    {                                                                   \
+        if ( !name##Ptr )                                               \
+            name##Ptr = wxGet_##name##Ptr();                            \
+        return *name##Ptr;                                              \
+    }
+
+
 // conversion to be used with all standard functions affected by locale, e.g.
 // strtol(), strftime(), ...
-extern WXDLLIMPEXP_DATA_BASE(wxMBConv&) wxConvLibc;
+WX_DECLARE_GLOBAL_CONV(wxMBConv, wxConvLibc)
+#define wxConvLibc wxGet_wxConvLibc()
 
 // conversion ISO-8859-1/UTF-7/UTF-8 <-> wchar_t
-extern WXDLLIMPEXP_DATA_BASE(wxCSConv&) wxConvISO8859_1;
-extern WXDLLIMPEXP_DATA_BASE(wxMBConvUTF7&) wxConvUTF7;
-extern WXDLLIMPEXP_DATA_BASE(wxMBConvUTF8&) wxConvUTF8;
+WX_DECLARE_GLOBAL_CONV(wxCSConv, wxConvISO8859_1)
+#define wxConvISO8859_1 wxGet_wxConvISO8859_1()
+
+WX_DECLARE_GLOBAL_CONV(wxMBConvUTF8, wxConvUTF8)
+#define wxConvUTF8 wxGet_wxConvUTF8()
+
+WX_DECLARE_GLOBAL_CONV(wxMBConvUTF7, wxConvUTF7)
+#define wxConvUTF7 wxGet_wxConvUTF7()
 
 // conversion used for the file names on the systems where they're not Unicode
 // (basically anything except Windows)
@@ -444,13 +465,16 @@ extern WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvFileName;
 extern WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvCurrent;
 
 // the conversion corresponding to the current locale
-extern WXDLLIMPEXP_DATA_BASE(wxCSConv&) wxConvLocal;
+WX_DECLARE_GLOBAL_CONV(wxCSConv, wxConvLocal)
+#define wxConvLocal wxGet_wxConvLocal()
 
 // the conversion corresponding to the encoding of the standard UI elements
 //
 // by default this is the same as wxConvLocal but may be changed if the program
 // needs to use a fixed encoding
 extern WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvUI;
+
+#undef WX_DECLARE_GLOBAL_CONV
 
 // ----------------------------------------------------------------------------
 // endianness-dependent conversions

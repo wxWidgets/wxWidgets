@@ -3616,42 +3616,6 @@ size_t wxCSConv::GetMBNulLen() const
     return 1;
 }
 
-// ----------------------------------------------------------------------------
-// globals
-// ----------------------------------------------------------------------------
-
-#ifdef __WINDOWS__
-    static wxMBConv_win32 wxConvLibcObj;
-#elif defined(__WXMAC__) && !defined(__MACH__)
-    static wxMBConv_mac wxConvLibcObj ;
-#else
-    static wxMBConvLibc wxConvLibcObj;
-#endif
-
-static wxCSConv wxConvLocalObj(wxFONTENCODING_SYSTEM);
-static wxCSConv wxConvISO8859_1Obj(wxFONTENCODING_ISO8859_1);
-static wxMBConvUTF7 wxConvUTF7Obj;
-static wxMBConvUTF8 wxConvUTF8Obj;
-#if defined(__WXMAC__) && defined(TARGET_CARBON)
-static wxMBConv_macUTF8D wxConvMacUTF8DObj;
-#endif
-WXDLLIMPEXP_DATA_BASE(wxMBConv&) wxConvLibc = wxConvLibcObj;
-WXDLLIMPEXP_DATA_BASE(wxCSConv&) wxConvLocal = wxConvLocalObj;
-WXDLLIMPEXP_DATA_BASE(wxCSConv&) wxConvISO8859_1 = wxConvISO8859_1Obj;
-WXDLLIMPEXP_DATA_BASE(wxMBConvUTF7&) wxConvUTF7 = wxConvUTF7Obj;
-WXDLLIMPEXP_DATA_BASE(wxMBConvUTF8&) wxConvUTF8 = wxConvUTF8Obj;
-WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvCurrent = &wxConvLibcObj;
-WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvUI = &wxConvLocal;
-WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvFileName = &
-#ifdef __WXOSX__
-#if defined(__WXMAC__) && defined(TARGET_CARBON)
-                                    wxConvMacUTF8DObj;
-#else
-                                    wxConvUTF8Obj;
-#endif
-#else // !__WXOSX__
-                                    wxConvLibcObj;
-#endif // __WXOSX__/!__WXOSX__
 
 #if wxUSE_UNICODE
 
@@ -3683,8 +3647,72 @@ wxCharBuffer wxSafeConvertWX2MB(const wchar_t *ws)
 
 #endif // wxUSE_UNICODE
 
+// ----------------------------------------------------------------------------
+// globals
+// ----------------------------------------------------------------------------
+
+// NB: The reason why we create converted objects in this convoluted way,
+//     using a factory function instead of global variable, is that they
+//     may be used at static initialization time (some of them are used by
+//     wxString ctors and there may be a global wxString object). In other
+//     words, possibly _before_ the converter global object would be
+//     initialized.
+
+#undef wxConvLibc
+#undef wxConvUTF8
+#undef wxConvUTF7
+#undef wxConvLocal
+#undef wxConvISO8859_1
+
+#define WX_DEFINE_GLOBAL_CONV2(klass, impl_klass, name, ctor_args)      \
+    WXDLLIMPEXP_DATA_BASE(klass*) name##Ptr = NULL;                     \
+    klass* WXDLLIMPEXP_BASE wxGet_##name##Ptr()                         \
+    {                                                                   \
+        static impl_klass name##Obj ctor_args;                          \
+        return &name##Obj;                                              \
+    }                                                                   \
+    /* this ensures that all global converter objects are created */    \
+    /* by the time static initialization is done, i.e. before any */    \
+    /* thread is launched: */                                           \
+    static klass* gs_##name##instance = wxGet_##name##Ptr()
+
+#define WX_DEFINE_GLOBAL_CONV(klass, name, ctor_args) \
+    WX_DEFINE_GLOBAL_CONV2(klass, klass, name, ctor_args)
+
+#ifdef __WINDOWS__
+    WX_DEFINE_GLOBAL_CONV2(wxMBConv, wxMBConv_win32, wxConvLibc, wxEMPTY_PARAMETER_VALUE);
+#elif defined(__WXMAC__) && !defined(__MACH__)
+    WX_DEFINE_GLOBAL_CONV2(wxMBConv, wxMBConv_mac, wxConvLibc, wxEMPTY_PARAMETER_VALUE);
+#else
+    WX_DEFINE_GLOBAL_CONV2(wxMBConv, wxMBConvLibc, wxConvLibc, wxEMPTY_PARAMETER_VALUE);
+#endif
+
+WX_DEFINE_GLOBAL_CONV(wxMBConvUTF8, wxConvUTF8, wxEMPTY_PARAMETER_VALUE);
+WX_DEFINE_GLOBAL_CONV(wxMBConvUTF7, wxConvUTF7, wxEMPTY_PARAMETER_VALUE);
+
+WX_DEFINE_GLOBAL_CONV(wxCSConv, wxConvLocal, (wxFONTENCODING_SYSTEM));
+WX_DEFINE_GLOBAL_CONV(wxCSConv, wxConvISO8859_1, (wxFONTENCODING_ISO8859_1));
+
+WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvCurrent = wxGet_wxConvLibcPtr();
+WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvUI = wxGet_wxConvLocalPtr();
+
+#if defined(__WXMAC__) && defined(TARGET_CARBON)
+static wxMBConv_macUTF8D wxConvMacUTF8DObj;
+#endif
+WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvFileName =
+#ifdef __WXOSX__
+#if defined(__WXMAC__) && defined(TARGET_CARBON)
+                                    &wxConvMacUTF8DObj;
+#else
+                                    wxGet_wxConvUTF8Ptr();
+#endif
+#else // !__WXOSX__
+                                    wxGet_wxConvLibcPtr();
+#endif // __WXOSX__/!__WXOSX__
+
 #else // !wxUSE_WCHAR_T
 
+// FIXME-UTF8: remove this, wxUSE_WCHAR_T is required now
 // stand-ins in absence of wchar_t
 WXDLLIMPEXP_DATA_BASE(wxMBConv) wxConvLibc,
                                 wxConvISO8859_1,
