@@ -1265,12 +1265,7 @@ public:
       // string += buffer (i.e. from wxGetString)
   wxString& operator<<(const wxWCharBuffer& s)
     { return operator<<((const wchar_t *)s); }
-  wxString& operator+=(const wxWCharBuffer& s)
-    { return operator<<((const wchar_t *)s); }
-
   wxString& operator<<(const wxCharBuffer& s)
-    { return operator<<((const char *)s); }
-  wxString& operator+=(const wxCharBuffer& s)
     { return operator<<((const char *)s); }
 
     // string += C string
@@ -1283,12 +1278,16 @@ public:
             append(s);
         return *this;
     }
-  wxString& Append(const wxCStrData& psz)
-    { append(psz); return *this; }
   wxString& Append(const char* psz)
     { append(psz); return *this; }
   wxString& Append(const wchar_t* pwz)
     { append(pwz); return *this; }
+  wxString& Append(const wxCStrData& psz)
+    { append(psz); return *this; }
+  wxString& Append(const wxCharBuffer& psz)
+    { append(psz); return *this; }
+  wxString& Append(const wxWCharBuffer& psz)
+    { append(psz); return *this; }
     // append count copies of given character
   wxString& Append(wxUniChar ch, size_t count = 1u)
     { append(count, ch); return *this; }
@@ -1370,12 +1369,14 @@ public:
     { return compare(pwz); }
   int Cmp(const wxString& s) const
     { return compare(s); }
+  int Cmp(const wxCStrData& s) const
+    { return compare(s); }
+  int Cmp(const wxCharBuffer& s) const
+    { return compare(s); }
+  int Cmp(const wxWCharBuffer& s) const
+    { return compare(s); }
     // same as Cmp() but not case-sensitive
   int CmpNoCase(const wxString& s) const;
-  int CmpNoCase(const char *psz) const
-    { return CmpNoCase(wxString(psz)); }
-  int CmpNoCase(const wchar_t *pwz) const
-    { return CmpNoCase(wxString(pwz)); }
     // test for the string equality, either considering case or not
     // (if compareWithCase then the case matters)
   bool IsSameAs(const wxString& str, bool compareWithCase = true) const
@@ -1384,6 +1385,12 @@ public:
     { return (compareWithCase ? Cmp(str) : CmpNoCase(str)) == 0; }
   bool IsSameAs(const wchar_t *str, bool compareWithCase = true) const
     { return (compareWithCase ? Cmp(str) : CmpNoCase(str)) == 0; }
+  bool IsSameAs(const wxCStrData& str, bool compareWithCase = true) const
+    { return IsSameAs(str.AsString(), compareWithCase); }
+  bool IsSameAs(const wxCharBuffer& str, bool compareWithCase = true) const
+    { return IsSameAs(str.data(), compareWithCase); }
+  bool IsSameAs(const wxWCharBuffer& str, bool compareWithCase = true) const
+    { return IsSameAs(str.data(), compareWithCase); }
     // comparison with a single character: returns true if equal
   bool IsSameAs(wxUniChar c, bool compareWithCase = true) const
     {
@@ -1470,7 +1477,6 @@ public:
   int Find(wchar_t ch, bool bFromEnd = false) const
     { return Find(wxUniChar(ch), bFromEnd); }
       // searching (return starting index, or -1 if not found)
-  // FIXME-UTF8: keep wxString overload only
   int Find(const wxString& sub) const               // like strstr
   {
     size_type idx = find(sub);
@@ -1486,6 +1492,13 @@ public:
     size_type idx = find(sub);
     return (idx == npos) ? wxNOT_FOUND : (int)idx;
   }
+
+  int Find(const wxCStrData& sub) const
+    { return Find(sub.AsString()); }
+  int Find(const wxCharBuffer& sub) const
+    { return Find(sub.data()); }
+  int Find(const wxWCharBuffer& sub) const
+    { return Find(sub.data()); }
 
       // replace first (or all of bReplaceAll) occurences of substring with
       // another string, returns the number of replacements made
@@ -1616,7 +1629,6 @@ public:
   int First( char ch ) const { return Find(ch); }
   int First( unsigned char ch ) const { return Find(ch); }
   int First( wchar_t ch ) const { return Find(ch); }
-  int First( const wxChar* psz ) const { return Find(psz); }
   int First( const wxString& str ) const { return Find(str); }
   int Last( wxUniChar ch ) const { return Find(ch, true); }
   bool Contains(const wxString& str) const { return Find(str) != wxNOT_FOUND; }
@@ -1667,8 +1679,6 @@ public:
     // append a string
   wxString& append(const wxString& str)
     { m_impl.append(str.m_impl); return *this; }
-  wxString& append(const wxCStrData& str)
-    { m_impl.append(str.AsString().m_impl); return *this; }
     // append first n (or all if n == npos) characters of sz
   wxString& append(const char *sz)
     { m_impl.append(ImplStr(sz)); return *this; }
@@ -1686,6 +1696,14 @@ public:
     m_impl.append(str.data, str.len);
     return *this;
   }
+
+  wxString& append(const wxCStrData& str)
+    { return append(str.AsString()); }
+  wxString& append(const wxCharBuffer& str)
+    { return append(str.data()); }
+  wxString& append(const wxWCharBuffer& str)
+    { return append(str.data()); }
+
     // append n copies of ch
   wxString& append(size_t n, wxUniChar ch)
   {
@@ -1742,6 +1760,20 @@ public:
     m_impl.assign(str.data, str.len);
     return *this;
   }
+
+  wxString& assign(const wxCStrData& str)
+    { return assign(str.AsString()); }
+  wxString& assign(const wxCharBuffer& str)
+    { return assign(str.data()); }
+  wxString& assign(const wxWCharBuffer& str)
+    { return assign(str.data()); }
+  wxString& assign(const wxCStrData& str, size_t len)
+    { return assign(str.AsString(), len); }
+  wxString& assign(const wxCharBuffer& str, size_t len)
+    { return assign(str.data(), len); }
+  wxString& assign(const wxWCharBuffer& str, size_t len)
+    { return assign(str.data(), len); }
+
     // same as `= n copies of ch'
   wxString& assign(size_t n, wxUniChar ch)
   {
@@ -1777,14 +1809,19 @@ public:
 
     // string comparison
   int compare(const wxString& str) const;
+  int compare(const char* sz) const;
+  int compare(const wchar_t* sz) const;
+  int compare(const wxCStrData& str) const
+    { return compare(str.AsString()); }
+  int compare(const wxCharBuffer& str) const
+    { return compare(str.data()); }
+  int compare(const wxWCharBuffer& str) const
+    { return compare(str.data()); }
     // comparison with a substring
   int compare(size_t nStart, size_t nLen, const wxString& str) const;
     // comparison of 2 substrings
   int compare(size_t nStart, size_t nLen,
               const wxString& str, size_t nStart2, size_t nLen2) const;
-    // just like strcmp()
-  int compare(const char* sz) const;
-  int compare(const wchar_t* sz) const;
     // substring comparison with first nCount characters of sz
   int compare(size_t nStart, size_t nLen,
               const char* sz, size_t nCount = npos) const;
@@ -2026,6 +2063,12 @@ public:
       SubstrBufFromWC str(ImplStr(sz, n));
       return PosFromImpl(m_impl.find(str.data, PosToImpl(nStart), str.len));
   }
+  size_t find(const wxCharBuffer& s, size_t nStart = 0, size_t n = npos) const
+    { return find(s.data(), nStart, n); }
+  size_t find(const wxWCharBuffer& s, size_t nStart = 0, size_t n = npos) const
+    { return find(s.data(), nStart, n); }
+  size_t find(const wxCStrData& s, size_t nStart = 0, size_t n = npos) const
+    { return find(s.AsWChar(), nStart, n); }
 
     // find the first occurence of character ch after nStart
   size_t find(wxUniChar ch, size_t nStart = 0) const
@@ -2059,6 +2102,12 @@ public:
       SubstrBufFromWC str(ImplStr(sz, n));
       return PosFromImpl(m_impl.rfind(str.data, PosToImpl(nStart), str.len));
   }
+  size_t rfind(const wxCharBuffer& s, size_t nStart = npos, size_t n = npos) const
+    { return rfind(s.data(), nStart, n); }
+  size_t rfind(const wxWCharBuffer& s, size_t nStart = npos, size_t n = npos) const
+    { return rfind(s.data(), nStart, n); }
+  size_t rfind(const wxCStrData& s, size_t nStart = npos, size_t n = npos) const
+    { return rfind(s.AsWChar(), nStart, n); }
     // as find, but from the end
   size_t rfind(wxUniChar ch, size_t nStart = npos) const
   {
@@ -2137,9 +2186,9 @@ public:
     // as strpbrk() but starts at nStart, returns npos if not found
   size_t find_first_of(const wxString& str, size_t nStart = 0) const
 #if wxUSE_UNICODE // FIXME-UTF8: temporary
-    { return find_first_of(str.mb_str().data(), nStart); }
+    { return find_first_of(str.wc_str(), nStart); }
 #else
-    { return find_first_of((const wxChar*)str.c_str(), nStart); }
+    { return find_first_of(str.mb_str(), nStart); }
 #endif
     // same as above
   size_t find_first_of(const char* sz, size_t nStart = 0) const;
@@ -2152,9 +2201,9 @@ public:
     // find the last (starting from nStart) char from str in this string
   size_t find_last_of (const wxString& str, size_t nStart = npos) const
 #if wxUSE_UNICODE // FIXME-UTF8: temporary
-    { return find_last_of(str.mb_str().data(), nStart); }
+    { return find_last_of(str.wc_str(), nStart); }
 #else
-    { return find_last_of((const wxChar*)str.c_str(), nStart); }
+    { return find_last_of(str.mb_str(), nStart); }
 #endif
     // same as above
   size_t find_last_of (const char* sz, size_t nStart = npos) const;
@@ -2170,9 +2219,9 @@ public:
     // as strspn() (starting from nStart), returns npos on failure
   size_t find_first_not_of(const wxString& str, size_t nStart = 0) const
 #if wxUSE_UNICODE // FIXME-UTF8: temporary
-    { return find_first_not_of(str.mb_str().data(), nStart); }
+    { return find_first_not_of(str.wc_str(), nStart); }
 #else
-    { return find_first_not_of((const wxChar*)str.c_str(), nStart); }
+    { return find_first_not_of(str.mb_str(), nStart); }
 #endif
     // same as above
   size_t find_first_not_of(const char* sz, size_t nStart = 0) const;
@@ -2184,9 +2233,9 @@ public:
     //  as strcspn()
   size_t find_last_not_of(const wxString& str, size_t nStart = npos) const
 #if wxUSE_UNICODE // FIXME-UTF8: temporary
-    { return find_last_not_of(str.mb_str().data(), nStart); }
+    { return find_last_not_of(str.wc_str(), nStart); }
 #else
-    { return find_last_not_of((const wxChar*)str.c_str(), nStart); }
+    { return find_last_not_of(str.mb_str(), nStart); }
 #endif
     // same as above
   size_t find_last_not_of(const char* sz, size_t nStart = npos) const;
@@ -2232,6 +2281,59 @@ public:
   size_t find_last_not_of(wchar_t ch, size_t nStart = npos) const
     {  return find_last_not_of(wxUniChar(ch), nStart); }
 
+  // and additional overloads for the versions taking strings:
+  size_t find_first_of(const wxCStrData& sz, size_t nStart = 0) const
+    { return find_first_of(sz.AsString(), nStart); }
+  size_t find_first_of(const wxCharBuffer& sz, size_t nStart = 0) const
+    { return find_first_of(sz.data(), nStart); }
+  size_t find_first_of(const wxWCharBuffer& sz, size_t nStart = 0) const
+    { return find_first_of(sz.data(), nStart); }
+  size_t find_first_of(const wxCStrData& sz, size_t nStart, size_t n) const
+    { return find_first_of(sz.AsWChar(), nStart, n); }
+  size_t find_first_of(const wxCharBuffer& sz, size_t nStart, size_t n) const
+    { return find_first_of(sz.data(), nStart, n); }
+  size_t find_first_of(const wxWCharBuffer& sz, size_t nStart, size_t n) const
+    { return find_first_of(sz.data(), nStart, n); }
+
+  size_t find_last_of(const wxCStrData& sz, size_t nStart = 0) const
+    { return find_last_of(sz.AsString(), nStart); }
+  size_t find_last_of(const wxCharBuffer& sz, size_t nStart = 0) const
+    { return find_last_of(sz.data(), nStart); }
+  size_t find_last_of(const wxWCharBuffer& sz, size_t nStart = 0) const
+    { return find_last_of(sz.data(), nStart); }
+  size_t find_last_of(const wxCStrData& sz, size_t nStart, size_t n) const
+    { return find_last_of(sz.AsWChar(), nStart, n); }
+  size_t find_last_of(const wxCharBuffer& sz, size_t nStart, size_t n) const
+    { return find_last_of(sz.data(), nStart, n); }
+  size_t find_last_of(const wxWCharBuffer& sz, size_t nStart, size_t n) const
+    { return find_last_of(sz.data(), nStart, n); }
+
+  size_t find_first_not_of(const wxCStrData& sz, size_t nStart = 0) const
+    { return find_first_not_of(sz.AsString(), nStart); }
+  size_t find_first_not_of(const wxCharBuffer& sz, size_t nStart = 0) const
+    { return find_first_not_of(sz.data(), nStart); }
+  size_t find_first_not_of(const wxWCharBuffer& sz, size_t nStart = 0) const
+    { return find_first_not_of(sz.data(), nStart); }
+  size_t find_first_not_of(const wxCStrData& sz, size_t nStart, size_t n) const
+    { return find_first_not_of(sz.AsWChar(), nStart, n); }
+  size_t find_first_not_of(const wxCharBuffer& sz, size_t nStart, size_t n) const
+    { return find_first_not_of(sz.data(), nStart, n); }
+  size_t find_first_not_of(const wxWCharBuffer& sz, size_t nStart, size_t n) const
+    { return find_first_not_of(sz.data(), nStart, n); }
+
+  size_t find_last_not_of(const wxCStrData& sz, size_t nStart = 0) const
+    { return find_last_not_of(sz.AsString(), nStart); }
+  size_t find_last_not_of(const wxCharBuffer& sz, size_t nStart = 0) const
+    { return find_last_not_of(sz.data(), nStart); }
+  size_t find_last_not_of(const wxWCharBuffer& sz, size_t nStart = 0) const
+    { return find_last_not_of(sz.data(), nStart); }
+  size_t find_last_not_of(const wxCStrData& sz, size_t nStart, size_t n) const
+    { return find_last_not_of(sz.AsWChar(), nStart, n); }
+  size_t find_last_not_of(const wxCharBuffer& sz, size_t nStart, size_t n) const
+    { return find_last_not_of(sz.data(), nStart, n); }
+  size_t find_last_not_of(const wxWCharBuffer& sz, size_t nStart, size_t n) const
+    { return find_last_not_of(sz.data(), nStart, n); }
+
       // string += string
   wxString& operator+=(const wxString& s)
     { m_impl += s.m_impl; return *this; }
@@ -2242,6 +2344,10 @@ public:
     { m_impl += ImplStr(pwz); return *this; }
   wxString& operator+=(const wxCStrData& s)
     { m_impl += s.AsString().m_impl; return *this; }
+  wxString& operator+=(const wxCharBuffer& s)
+    { return operator+=(s.data()); }
+  wxString& operator+=(const wxWCharBuffer& s)
+    { return operator+=(s.data()); }
       // string += char
   wxString& operator+=(wxUniChar ch)
     { m_impl += wxStringOperations::EncodeChar(ch); return *this; }
