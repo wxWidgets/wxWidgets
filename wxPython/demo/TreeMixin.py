@@ -1,6 +1,10 @@
 import wx, wx.lib.customtreectrl, wx.gizmos
-import treemixin
+try:
+    import treemixin 
+except ImportError:
+    from wx.lib.mixins import treemixin
 
+overview = treemixin.__doc__
 
 class TreeModel(object):
     ''' TreeModel holds the domain objects that are shown in the different

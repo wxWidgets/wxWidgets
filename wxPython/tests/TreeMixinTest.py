@@ -1,4 +1,9 @@
-import wx, wx.gizmos, wx.lib.customtreectrl, unittest, treemixin
+import wx, wx.gizmos, wx.lib.customtreectrl, unittest
+try:
+    import treemixin 
+except ImportError:
+    from wx.lib.mixins import treemixin
+
 
 
 # VirtualTree tests
