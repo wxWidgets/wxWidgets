@@ -1545,11 +1545,11 @@ public:
   WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wxString&),
                         DoPrintfWchar, DoPrintfUtf8)
 #ifdef __WATCOMC__
-  WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const char*)
+  WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const char*),
                         DoPrintfWchar, DoPrintfUtf8)
-  WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wchar_t*)
+  WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wchar_t*),
                         DoPrintfWchar, DoPrintfUtf8)
-  WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wxCStrData&)
+  WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wxCStrData&),
                         DoPrintfWchar, DoPrintfUtf8)
 #endif
 #endif // !wxNEEDS_WXSTRING_PRINTF_MIXIN
