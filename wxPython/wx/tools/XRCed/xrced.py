@@ -878,7 +878,6 @@ class Frame(wx.Frame):
         self.modified = True
         self.SetStatusText(status)
 
-        
     def OnCutDelete(self, evt):
         selected = tree.selection
         if not selected: return         # key pressed event
@@ -905,6 +904,7 @@ class Frame(wx.Frame):
         index = tree.ItemFullIndex(selected)
         xxx = tree.GetPyData(selected)
         parent = tree.GetPyData(tree.GetItemParent(selected)).treeObject()
+        tree.UnselectAll()
         elem = tree.RemoveLeaf(selected)
         undoMan.RegisterUndo(UndoCutDelete(index, parent, elem))
         if evt.GetId() == wx.ID_CUT:
@@ -922,10 +922,7 @@ class Frame(wx.Frame):
             else:
                 wx.MessageBox("Unable to open the clipboard", "Error")
         tree.pendingHighLight = None
-        tree.UnselectAll()
-        tree.selection = None
         # Update tools
-        g.tools.UpdateUI()
         panel.Clear()
         self.SetModified()
         self.SetStatusText(status)
@@ -1400,7 +1397,7 @@ Homepage: http://xrced.sourceforge.net\
             panel.RemovePage(1)
         if not self.IsIconized():
             conf.x, conf.y = self.GetPosition()
-            conf.width, conf.height = self.GetSize()
+            conf.width, conf.height = self.GetClientSize()
             if conf.embedPanel:
                 conf.sashPos = self.splitter.GetSashPosition()
             else:
@@ -1766,6 +1763,7 @@ Please upgrade wxWidgets to %d.%d.%d or higher.''' % MinWxVersion)
         wx.FileSystem.AddHandler(wx.MemoryFSHandler())
         # Create main frame
         frame = Frame(pos, size)
+        frame.SetClientSize(size)
         frame.Show(True)
         
         # Load plugins

@@ -1,3 +1,9 @@
+0.1.8-6
+-------
+
+Various fixes and improvements to get look-and-feel similar across
+different platforms.
+
 0.1.8-5
 -------
 
