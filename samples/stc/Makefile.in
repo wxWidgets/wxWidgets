@@ -31,6 +31,7 @@ TOOLKIT_VERSION = @TOOLKIT_VERSION@
 TOOLCHAIN_FULLNAME = @TOOLCHAIN_FULLNAME@
 EXTRALIBS = @EXTRALIBS@
 EXTRALIBS_GUI = @EXTRALIBS_GUI@
+CXXWARNINGS = @CXXWARNINGS@
 HOST_SUFFIX = @HOST_SUFFIX@
 SAMPLES_RPATH_FLAG = @SAMPLES_RPATH_FLAG@
 SAMPLES_RPATH_POSTLINK = @SAMPLES_RPATH_POSTLINK@
@@ -44,7 +45,8 @@ WX_VERSION = $(WX_RELEASE).0
 LIBDIRNAME = $(wx_top_builddir)/lib
 STCTEST_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 	$(__EXCEPTIONS_DEFINE_p) $(__RTTI_DEFINE_p) $(__THREAD_DEFINE_p) \
-	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples $(CPPFLAGS) $(CXXFLAGS)
+	-I$(srcdir) $(__DLLFLAG_p) -I$(srcdir)/../../samples $(CXXWARNINGS) \
+	$(CPPFLAGS) $(CXXFLAGS)
 STCTEST_OBJECTS =  \
 	$(__stctest_os2_lib_res) \
 	stctest_stctest.o \
@@ -157,7 +159,7 @@ distclean: clean
 	rm -f config.cache config.log config.status bk-deps bk-make-pch shared-ld-sh Makefile
 
 stctest$(EXEEXT): $(STCTEST_OBJECTS) $(__stctest___win32rc)
-	$(CXX) -o $@ $(STCTEST_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(LIBS) $(__WXLIB_STC_p)  -lwxscintilla $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
+	$(CXX) -o $@ $(STCTEST_OBJECTS) $(LDFLAGS)   -L$(LIBDIRNAME) $(LDFLAGS_GUI) $(SAMPLES_RPATH_FLAG)  $(LIBS) $(__WXLIB_STC_p)  -lwxscintilla$(WXDEBUGFLAG)$(WX_LIB_FLAVOUR)-$(WX_RELEASE)$(HOST_SUFFIX) $(__WXLIB_CORE_p)  $(__WXLIB_BASE_p)  $(__WXLIB_MONO_p) $(__LIB_TIFF_p) $(__LIB_JPEG_p) $(__LIB_PNG_p) $(EXTRALIBS_FOR_GUI) $(__LIB_ZLIB_p) $(__LIB_ODBC_p) $(__LIB_REGEX_p) $(__LIB_EXPAT_p) $(EXTRALIBS_FOR_BASE)
 	$(__stctest___mac_rezcmd)
 	$(__stctest___mac_setfilecmd)
 	$(__stctest___os2_emxbindcmd)

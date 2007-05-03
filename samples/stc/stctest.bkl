@@ -10,9 +10,13 @@
 	    prefs.cpp
         </sources>
         <wx-lib>stc</wx-lib>
-        <sys-lib>wxscintilla</sys-lib>
         <wx-lib>core</wx-lib>
         <wx-lib>base</wx-lib>
+        
+        <if cond="OUT_OF_TREE_MAKEFILES=='0'">
+            <sys-lib>$(LIB_SCINTILLA)</sys-lib>
+        </if>
+        
         <win32-res>../sample.rc</win32-res>
     </exe>
 
