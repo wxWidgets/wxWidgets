@@ -59,7 +59,7 @@ mkdir %WXWIN%\docs\pdf
 mkdir %WXWIN%\docs\htmlhelp
 mkdir %WXWIN%\docs\htb
 echo starting word >>  c:\temp.log
-start /WAIT winword /mwx_ps
+start /WAIT winword /mwx28_ps
 
 
 echo cvs doc up part 2 >>  c:\temp.log
