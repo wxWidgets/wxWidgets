@@ -121,9 +121,9 @@ struct wxArgNormalizer
     // Returns the value in a form that can be safely passed to real vararg
     // functions. In case of strings, this is char* in ANSI build and wchar_t*
     // in Unicode build.
-    const T& get() const { return m_value; }
+    T get() const { return m_value; }
 
-    const T& m_value;
+    T m_value;
 };
 
 // normalizer for passing arguments to functions working with wchar_t* (and
