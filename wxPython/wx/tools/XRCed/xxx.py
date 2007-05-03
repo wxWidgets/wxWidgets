@@ -191,7 +191,7 @@ class xxxObject:
     hasName = True                      # has name attribute?
     isSizer = hasChild = False
     isElement = True
-    allParams = None                    # Some nodes have no parameters
+    allParams = []                     # Some nodes have no parameters
     # Style parameters (all optional)
     styles = ['fg', 'bg', 'font', 'enabled', 'focused', 'hidden', 'tooltip']
     # Special parameters
