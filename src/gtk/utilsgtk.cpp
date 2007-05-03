@@ -332,15 +332,19 @@ static wxString GetSM()
     if ( !dpy )
         return wxEmptyString;
 
+    char smerr[256];
     char *client_id;
     SmcConn smc_conn = SmcOpenConnection(NULL, NULL,
                                          999, 999,
                                          0 /* mask */, NULL /* callbacks */,
                                          NULL, &client_id,
-                                         0, NULL);
+                                         WXSIZEOF(smerr), smerr);
 
     if ( !smc_conn )
+    {
+        wxLogWarning(_("Failed to connect to session manager: %s"), smerr);
         return wxEmptyString;
+    }
 
     char *vendor = SmcVendor(smc_conn);
     wxString ret = wxString::FromAscii( vendor );
@@ -471,7 +475,7 @@ bool wxGUIAppTraits::ShowAssertDialog(const wxString& msg)
 wxString wxGUIAppTraits::GetDesktopEnvironment() const
 {
 #if wxUSE_DETECT_SM
-    const wxString SM = GetSM();
+    static const wxString SM = GetSM();
 
     if (SM == wxT("GnomeSM"))
         return wxT("GNOME");
