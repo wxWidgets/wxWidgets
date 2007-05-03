@@ -252,11 +252,6 @@ public:
     virtual void SetMinSize(const wxSize& minSize);
     virtual void SetMaxSize(const wxSize& maxSize);
 
-    // set size hints for "window manager"
-    virtual void DoSetSizeHints( int minW, int minH,
-                                 int maxW = wxDefaultCoord, int maxH = wxDefaultCoord,
-                                 int incW = wxDefaultCoord, int incH = wxDefaultCoord );
-
 protected:
     // the frame client to screen translation should take account of the
     // toolbar which may shift the origin of the client area
