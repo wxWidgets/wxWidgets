@@ -442,7 +442,7 @@ private:
 // instead.
 #define WX_DECLARE_GLOBAL_CONV(klass, name)                             \
     extern WXDLLIMPEXP_DATA_BASE(klass*) name##Ptr;                     \
-    extern klass* WXDLLIMPEXP_BASE wxGet_##name##Ptr();                 \
+    extern WXDLLIMPEXP_BASE klass* wxGet_##name##Ptr();                 \
     inline klass& wxGet_##name()                                        \
     {                                                                   \
         if ( !name##Ptr )                                               \

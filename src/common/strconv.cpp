@@ -3666,7 +3666,7 @@ wxCharBuffer wxSafeConvertWX2MB(const wchar_t *ws)
 
 #define WX_DEFINE_GLOBAL_CONV2(klass, impl_klass, name, ctor_args)      \
     WXDLLIMPEXP_DATA_BASE(klass*) name##Ptr = NULL;                     \
-    klass* WXDLLIMPEXP_BASE wxGet_##name##Ptr()                         \
+    WXDLLIMPEXP_BASE klass* wxGet_##name##Ptr()                         \
     {                                                                   \
         static impl_klass name##Obj ctor_args;                          \
         return &name##Obj;                                              \
