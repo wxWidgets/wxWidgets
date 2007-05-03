@@ -315,7 +315,7 @@ void wxDoLogVerboseUtf8(const char *format, ...)
     }
   }
 
-#if wxUSE_UTF8_LOCALE_ONLY
+#if !wxUSE_UTF8_LOCALE_ONLY
   void wxDoLogTraceWchar(wxTraceMask mask, const wxChar *format, ...)
   {
     va_list argptr;
@@ -323,7 +323,7 @@ void wxDoLogVerboseUtf8(const char *format, ...)
     wxVLogTrace(mask, format, argptr);
     va_end(argptr);
   }
-#endif // wxUSE_UTF8_LOCALE_ONLY
+#endif // !wxUSE_UTF8_LOCALE_ONLY
 
 #if wxUSE_UNICODE_UTF8
   void wxDoLogTraceUtf8(wxTraceMask mask, const char *format, ...)
