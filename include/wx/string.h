@@ -201,7 +201,7 @@ public:
     const wchar_t* AsWChar() const;
     operator const wchar_t*() const { return AsWChar(); }
 
-#if !wxUSE_UNICODE
+#if !wxUSE_UNICODE || wxUSE_UTF8_LOCALE_ONLY
     inline
 #endif
     const char* AsChar() const;
@@ -477,9 +477,6 @@ private:
 
 #else // wxUSE_UNICODE_UTF8
 
-  // FIXME-UTF8: return as-is without copying under UTF8 locale, return
-  //             converted string under other locales - needs wxCharBuffer
-  //             changes
   static wxCharBuffer ImplStr(const char* str,
                               const wxMBConv& conv = wxConvLibc)
     { return ConvertStr(str, npos, conv).data; }
@@ -931,8 +928,7 @@ public:
         { return wxStdWideString(wc_str()); }
   #endif
 
-  #if !wxUSE_UNICODE && wxUSE_STL_BASED_WXSTRING
-    // FIXME-UTF8: do this in UTF8 build #if wxUSE_UTF8_LOCALE_ONLY, too
+  #if (!wxUSE_UNICODE || wxUSE_UTF8_LOCALE_ONLY) && wxUSE_STL_BASED_WXSTRING
     // wxStringImpl is std::string in the encoding we want
     operator const std::string&() const { return m_impl; }
   #else
@@ -941,8 +937,7 @@ public:
         // FIXME-UTF8: broken for embedded NULs
         { return std::string(mb_str()); }
   #endif
-
-#endif // wxUSE_STD_STRING
+#endif // wxUSE_STL
 
   // first valid index position
   const_iterator begin() const { return const_iterator(m_impl.begin()); }
@@ -1161,7 +1156,13 @@ public:
     // type differs because a function may either return pointer to the buffer
     // directly or have to use intermediate buffer for translation.
 #if wxUSE_UNICODE
+
+#if wxUSE_UTF8_LOCALE_ONLY
+    const char* mb_str() const { return wx_str(); }
+    const wxCharBuffer mb_str(const wxMBConv& conv) const;
+#else
     const wxCharBuffer mb_str(const wxMBConv& conv = wxConvLibc) const;
+#endif
 
     const wxWX2MBbuf mbc_str() const { return mb_str(*wxConvCurrent); }
 
@@ -2428,7 +2429,7 @@ private:
 
       T *m_buf;
   };
-#if wxUSE_UNICODE
+#if wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
   ConvertedBuffer<char> m_convertedToChar;
 #endif
 #if !wxUSE_UNICODE_WCHAR
@@ -2821,10 +2822,10 @@ inline const wchar_t* wxCStrData::AsWChar() const
 }
 #endif // wxUSE_UNICODE_WCHAR
 
-#if !wxUSE_UNICODE
+#if !wxUSE_UNICODE || wxUSE_UTF8_LOCALE_ONLY
 inline const char* wxCStrData::AsChar() const
 {
-    return m_str->wx_str() + m_offset;
+    return wxStringOperations::AddToIter(m_str->wx_str(), m_offset);
 }
 #endif // !wxUSE_UNICODE
 

@@ -41,10 +41,15 @@ wxUniChar::value_type wxUniChar::From8bit(char c)
     if ( (unsigned char)c < 0x80 )
         return c;
 
+#if wxUSE_UTF8_LOCALE_ONLY
+    wxFAIL_MSG( _T("invalid UTF-8 character") );
+    return wxT('?'); // FIXME-UTF8: what to use as failure character?
+#else
     wchar_t buf[2];
     if ( wxConvLibc.ToWChar(buf, 2, &c, 1) != 2 )
         return wxT('?'); // FIXME-UTF8: what to use as failure character?
     return buf[0];
+#endif
 }
 
 /* static */
@@ -54,11 +59,16 @@ char wxUniChar::To8bit(wxUniChar::value_type c)
     if ( c < 0x80 )
         return c;
 
+#if wxUSE_UTF8_LOCALE_ONLY
+    wxFAIL_MSG( _T("character cannot be converted to single UTF-8 byte") );
+    return '?'; // FIXME-UTF8: what to use as failure character?
+#else
     wchar_t in = c;
     char buf[2];
     if ( wxConvLibc.FromWChar(buf, 2, &in, 1) != 2 )
         return '?'; // FIXME-UTF8: what to use as failure character?
     return buf[0];
+#endif
 }
 
 

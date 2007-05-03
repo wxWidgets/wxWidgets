@@ -135,6 +135,12 @@ public:
     // encoding
     static size_t GetMaxMBNulLen() { return 4 /* for UTF-32 */; }
 
+#if wxUSE_UNICODE_UTF8
+    // return true if the converter's charset is UTF-8, i.e. char* strings
+    // decoded using this object can be directly copied to wxString's internal
+    // storage without converting to WC and than back to UTF-8 MB string
+    virtual bool IsUTF8() const { return false; }
+#endif
 
     // The old conversion functions. The existing classes currently mostly
     // implement these ones but we're in transition to using To/FromWChar()
@@ -175,6 +181,10 @@ public:
     virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
 
     virtual wxMBConv *Clone() const { return new wxMBConvLibc; }
+
+#if wxUSE_UNICODE_UTF8
+    virtual bool IsUTF8() const { return wxLocaleIsUtf8; }
+#endif
 };
 
 #ifdef __UNIX__
@@ -244,6 +254,8 @@ public:
 class WXDLLIMPEXP_BASE wxMBConvUTF8 : public wxMBConv
 {
 public:
+    // FIXME-UTF8: split this class into multiple classes, one strict and
+    //             other lossy (PUA, OCTAL mappings)
     enum
     {
         MAP_INVALID_UTF8_NOT = 0,
@@ -256,6 +268,12 @@ public:
     virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
 
     virtual wxMBConv *Clone() const { return new wxMBConvUTF8(m_options); }
+
+#if wxUSE_UNICODE_UTF8
+    // NB: other mapping modes are not, strictly speaking, UTF-8, so we can't
+    //     take the shortcut in that case
+    virtual bool IsUTF8() const { return m_options == MAP_INVALID_UTF8_NOT; }
+#endif
 
 private:
     int m_options;

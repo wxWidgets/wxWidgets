@@ -220,9 +220,16 @@ wxString::~wxString()
 }
 #endif
 
-#if wxUSE_UNICODE
+#if wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
 const char* wxCStrData::AsChar() const
 {
+#if wxUSE_UNICODE_UTF8
+    if ( wxLocaleIsUtf8 )
+        return AsInternal();
+#endif
+    // under non-UTF8 locales, we have to convert the internal UTF-8
+    // representation using wxConvLibc and cache the result
+
     wxString *str = wxConstCast(m_str, wxString);
 
     // convert the string:
@@ -244,7 +251,7 @@ const char* wxCStrData::AsChar() const
     // and keep it:
     return str->m_convertedToChar + m_offset;
 }
-#endif // wxUSE_UNICODE
+#endif // wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
 
 #if !wxUSE_UNICODE_WCHAR
 const wchar_t* wxCStrData::AsWChar() const
@@ -306,13 +313,22 @@ wxString::SubstrBufFromMB wxString::ConvertStr(const char *psz, size_t nLength,
 wxString::SubstrBufFromMB wxString::ConvertStr(const char *psz, size_t nLength,
                                                const wxMBConv& conv)
 {
-    // FIXME-UTF8: return as-is without copying under UTF8 locale, return
-    //             converted string under other locales - needs wxCharBuffer
-    //             changes
-
     // anything to do?
     if ( !psz || nLength == 0 )
         return SubstrBufFromMB("", 0);
+
+    // if psz is already in UTF-8, we don't have to do the roundtrip to
+    // wchar_t* and back:
+    if ( conv.IsUTF8() )
+    {
+        // we need to validate the input because UTF8 iterators assume valid
+        // UTF-8 sequence and psz may be invalid:
+        if ( wxStringOperations::IsValidUtf8String(psz, nLength) )
+        {
+            return SubstrBufFromMB(wxCharBuffer::CreateNonOwned(psz), nLength);
+        }
+        // else: do the roundtrip through wchar_t*
+    }
 
     if ( nLength == npos )
         nLength = wxNO_LEN;
@@ -373,8 +389,9 @@ const wxWCharBuffer wxString::wc_str() const
 
 const wxCharBuffer wxString::mb_str(const wxMBConv& conv) const
 {
-    // FIXME-UTF8: optimize the case when conv==wxConvUTF8 or wxConvLibc
-    //             under UTF8 locale
+    if ( conv.IsUTF8() )
+        return wxCharBuffer::CreateNonOwned(m_impl.c_str());
+
     // FIXME-UTF8: use wc_str() here once we have buffers with length
 
     size_t wcLen;

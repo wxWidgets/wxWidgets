@@ -65,7 +65,8 @@ struct WXDLLIMPEXP_BASE wxStringOperationsWchar
 struct WXDLLIMPEXP_BASE wxStringOperationsUtf8
 {
     // checks correctness of UTF-8 sequence
-    static bool IsValidUtf8String(const char *c);
+    static bool IsValidUtf8String(const char *c,
+                                  size_t len = wxStringImpl::npos);
 #ifdef __WXDEBUG__
     static bool IsValidUtf8LeadByte(unsigned char c);
 #endif

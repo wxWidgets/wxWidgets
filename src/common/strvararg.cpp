@@ -41,7 +41,7 @@ const wxStringCharType *wxArgNormalizerNative<const wxCStrData&>::get() const
     return m_value.AsInternal();
 }
 
-#if wxUSE_UNICODE_UTF8
+#if wxUSE_UNICODE_UTF8 && !wxUSE_UTF8_LOCALE_ONLY
 wxArgNormalizerWchar<const wxString&>::wxArgNormalizerWchar(const wxString& s)
     : wxArgNormalizerWithBuffer<wchar_t>(s.wc_str())
 {
@@ -51,7 +51,7 @@ wxArgNormalizerWchar<const wxCStrData&>::wxArgNormalizerWchar(const wxCStrData& 
     : wxArgNormalizerWithBuffer<wchar_t>(s.AsWCharBuf())
 {
 }
-#endif // wxUSE_UNICODE_UTF8
+#endif // wxUSE_UNICODE_UTF8 && !wxUSE_UTF8_LOCALE_ONLY
 
 wxString wxArgNormalizedString::GetString() const
 {

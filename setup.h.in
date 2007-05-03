@@ -562,6 +562,8 @@
 
 #define wxUSE_UNICODE_UTF8 0
 
+#define wxUSE_UTF8_LOCALE_ONLY 0
+
 #define wxUSE_DC_CACHEING 0
 
 #define wxUSE_GADGETS 0
