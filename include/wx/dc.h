@@ -607,6 +607,7 @@ public:
     // misc old functions
     // ------------------
 
+#if WXWIN_COMPATIBILITY_2_8
     // for compatibility with the old code when wxCoord was long everywhere
     void GetTextExtent(const wxString& string,
                        long *x, long *y,
@@ -656,6 +657,7 @@ public:
         if (w) *w = ww;
         if (h) *h = hh;
     }
+#endif  // WXWIN_COMPATIBILITY_2_8
 
     // RTL related functions
     // ---------------------
