@@ -22,6 +22,7 @@
 #if wxUSE_GLCANVAS
 
 #ifndef WX_PRECOMP
+    #include "wx/log.h"
 #endif //WX_PRECOMP
 
 #include "wx/glcanvas.h"
