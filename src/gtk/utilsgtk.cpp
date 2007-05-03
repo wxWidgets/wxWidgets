@@ -21,6 +21,7 @@
 #include "wx/apptrait.h"
 
 #include "wx/process.h"
+#include "wx/sysopt.h"
 
 #include "wx/unix/execute.h"
 
@@ -474,17 +475,20 @@ bool wxGUIAppTraits::ShowAssertDialog(const wxString& msg)
 
 wxString wxGUIAppTraits::GetDesktopEnvironment() const
 {
+    wxString de = wxSystemOptions::GetOption(_T("gtk.desktop"));
+    if ( de.empty() )
+    {
 #if wxUSE_DETECT_SM
-    static const wxString SM = GetSM();
+        static const wxString s_SM = GetSM();
 
-    if (SM == wxT("GnomeSM"))
-        return wxT("GNOME");
-
-    if (SM == wxT("KDE"))
-        return wxT("KDE");
+        if (s_SM == wxT("GnomeSM"))
+            de = wxT("GNOME");
+        else if (s_SM == wxT("KDE"))
+            de = wxT("KDE");
+    }
 #endif // wxUSE_DETECT_SM
 
-    return wxEmptyString;
+    return de;
 }
 
 #ifdef __WXGTK26__
