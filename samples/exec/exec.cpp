@@ -869,7 +869,7 @@ void MyFrame::OnFileExec(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnOpenURL(wxCommandEvent& WXUNUSED(event))
 {
-    static wxString s_filename;
+    static wxString s_filename(_T("http://www.wxwidgets.org/"));
 
     wxString filename = wxGetTextFromUser
                         (
