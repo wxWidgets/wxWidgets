@@ -28,6 +28,10 @@
 
 #include "wx/sstream.h"
 
+#if wxUSE_UNICODE
+    #include "wx/hashmap.h"
+#endif
+
 // ============================================================================
 // wxStringInputStream implementation
 // ============================================================================
