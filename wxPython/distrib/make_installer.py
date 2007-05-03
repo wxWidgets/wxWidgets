@@ -121,6 +121,7 @@ Source: "wx\lib\mixins\*.py";                  DestDir: "{app}\%(PKGDIR)s\wx\lib
 Source: "wx\lib\masked\*.py";                  DestDir: "{app}\%(PKGDIR)s\wx\lib\masked"; Components: core
 Source: "wx\lib\ogl\*.py";                     DestDir: "{app}\%(PKGDIR)s\wx\lib\ogl"; Components: core
 Source: "wx\lib\floatcanvas\*.py";             DestDir: "{app}\%(PKGDIR)s\wx\lib\floatcanvas"; Components: core
+Source: "wx\lib\floatcanvas\Utilities\*.py";   DestDir: "{app}\%(PKGDIR)s\wx\lib\floatcanvas\Utilities"; Components: core
 Source: "wx\py\*.py";                          DestDir: "{app}\%(PKGDIR)s\wx\py"; Components: core
 Source: "wx\py\*.txt";                         DestDir: "{app}\%(PKGDIR)s\wx\py"; Components: core
 Source: "wx\py\*.ico";                         DestDir: "{app}\%(PKGDIR)s\wx\py"; Components: core
@@ -216,6 +217,8 @@ Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\ogl\*.pyc";
 Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\ogl\*.pyo";
 Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\floatcanvas\*.pyc";
 Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\floatcanvas\*.pyo";
+Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\floatcanvas\Utilities\*.pyc";
+Type: files; Name: "{app}\%(PKGDIR)s\wx\lib\floatcanvas\Utilities\*.pyo";
 
 Type: files; Name: "{app}\%(PKGDIR)s\wx\py\*.pyc";
 Type: files; Name: "{app}\%(PKGDIR)s\wx\py\*.pyo";
