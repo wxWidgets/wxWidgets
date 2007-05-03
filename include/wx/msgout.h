@@ -37,18 +37,27 @@ public:
 
     // show a message to the user
     // void Printf(const wxString& format, ...) = 0;
-    WX_DEFINE_VARARG_FUNC_VOID(Printf, 1, (const wxString&), DoPrintf)
+    WX_DEFINE_VARARG_FUNC_VOID(Printf, 1, (const wxString&),
+                               DoPrintfWchar, DoPrintfUtf8)
 #ifdef __WATCOMC__
     // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-    WX_DEFINE_VARARG_FUNC_VOID(Printf, 1, (const char*), DoPrintf)
-    WX_DEFINE_VARARG_FUNC_VOID(Printf, 1, (const wchar_t*), DoPrintf)
-    WX_DEFINE_VARARG_FUNC_VOID(Printf, 1, (const wxCStrData&), DoPrintf)
+    WX_DEFINE_VARARG_FUNC_VOID(Printf, 1, (const char*),
+                               DoPrintfWchar, DoPrintfUtf8)
+    WX_DEFINE_VARARG_FUNC_VOID(Printf, 1, (const wchar_t*),
+                               DoPrintfWchar, DoPrintfUtf8)
+    WX_DEFINE_VARARG_FUNC_VOID(Printf, 1, (const wxCStrData&),
+                               DoPrintfWchar, DoPrintfUtf8)
 #endif
 
 protected:
     // NB: this is pure virtual so that it can be implemented in dllexported
     //     wxMessagOutput class
-    virtual void DoPrintf(const wxString& format, ...) = 0;
+#if !wxUSE_UTF8_LOCALE_ONLY
+    virtual void DoPrintfWchar(const wxChar *format, ...) = 0;
+#endif
+#if wxUSE_UNICODE_UTF8
+    virtual void DoPrintfUtf8(const char *format, ...) = 0;
+#endif
 
     // called by DoPrintf() to output formatted string
     virtual void Output(const wxString& str) = 0;
@@ -73,7 +82,12 @@ public:
     static wxMessageOutput* Set(wxMessageOutput* msgout);
 
 protected:
-    virtual void DoPrintf(const wxString& format, ...);
+#if !wxUSE_UTF8_LOCALE_ONLY
+    virtual void DoPrintfWchar(const wxChar *format, ...);
+#endif
+#if wxUSE_UNICODE_UTF8
+    virtual void DoPrintfUtf8(const char *format, ...);
+#endif
     virtual void Output(const wxString& str) = 0;
 
 private:

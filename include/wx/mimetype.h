@@ -26,6 +26,8 @@
 #include "wx/dynarray.h"
 #include "wx/arrstr.h"
 
+#include <stdarg.h>
+
 // fwd decls
 class WXDLLIMPEXP_BASE wxIconLocation;
 class WXDLLIMPEXP_BASE wxFileTypeImpl;
@@ -117,13 +119,30 @@ private:
 class WXDLLIMPEXP_BASE wxFileTypeInfo
 {
 private:
-    void VarArgInit(const wxString& mimeType,
-                    const wxString& openCmd,
-                    const wxString& printCmd,
-                    const wxString& desc,
-                    // the other parameters form a NULL terminated list of
-                    // extensions
-                    ...);
+    void DoVarArgInit(const wxString& mimeType,
+                      const wxString& openCmd,
+                      const wxString& printCmd,
+                      const wxString& desc,
+                      va_list argptr);
+
+#if !wxUSE_UTF8_LOCALE_ONLY
+    void VarArgInitWchar(const wxChar *mimeType,
+                         const wxChar *openCmd,
+                         const wxChar *printCmd,
+                         const wxChar *desc,
+                         // the other parameters form a NULL terminated list of
+                         // extensions
+                         ...);
+#endif
+#if wxUSE_UNICODE_UTF8
+    void VarArgInitUtf8(const char *mimeType,
+                        const char *openCmd,
+                        const char *printCmd,
+                        const char *desc,
+                        // the other parameters form a NULL terminated list of
+                        // extensions
+                        ...);
+#endif
 public:
     // ctors
         // a normal item
@@ -138,21 +157,21 @@ public:
     WX_DEFINE_VARARG_FUNC_CTOR(wxFileTypeInfo,
                                4, (const wxString&, const wxString&,
                                    const wxString&, const wxString&),
-                               VarArgInit)
+                               VarArgInitWchar, VarArgInitUtf8)
 #ifdef __WATCOMC__
     // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
     WX_DEFINE_VARARG_FUNC_CTOR(wxFileTypeInfo,
                                4, (const char*, const char*,
                                    const char*, const char*),
-                               VarArgInit)
+                               VarArgInitWchar, VarArgInitUtf8)
     WX_DEFINE_VARARG_FUNC_CTOR(wxFileTypeInfo,
                                4, (const wchar_t*, const wchar_t*,
                                    const wchar_t*, const wchar_t*),
-                               VarArgInit)
+                               VarArgInitWchar, VarArgInitUtf8)
     WX_DEFINE_VARARG_FUNC_CTOR(wxFileTypeInfo,
                                4, (const wxCStrData&, const wxCStrData&,
                                    const wxCStrData&, const wxCStrData&),
-                               VarArgInit)
+                               VarArgInitWchar, VarArgInitUtf8)
 #endif
 
         // the array elements correspond to the parameters of the ctor above in

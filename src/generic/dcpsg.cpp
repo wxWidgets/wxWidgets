@@ -2228,13 +2228,25 @@ void wxPostScriptDC::DoGetTextExtent(const wxString& string,
 }
 
 // print postscript datas via required method (file, stream)
-void wxPostScriptDC::DoPsPrintfFormat(const wxString& fmt, ...)
+#if !wxUSE_UTF8_LOCALE_ONLY
+void wxPostScriptDC::DoPsPrintfFormatWchar(const wxChar *fmt, ...)
 {
     va_list argptr;
     va_start(argptr, fmt);
 
     PsPrint( wxString::FormatV( fmt, argptr ) );
 }
+#endif // !wxUSE_UTF8_LOCALE_ONLY
+
+#if wxUSE_UNICODE_UTF8
+void wxPostScriptDC::DoPsPrintfFormatUtf8(const char *fmt, ...)
+{
+    va_list argptr;
+    va_start(argptr, fmt);
+
+    PsPrint( wxString::FormatV( fmt, argptr ) );
+}
+#endif // wxUSE_UNICODE_UTF8
 
 void wxPostScriptDC::PsPrint( const wxString& str )
 {

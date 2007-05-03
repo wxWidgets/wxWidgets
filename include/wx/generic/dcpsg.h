@@ -95,17 +95,26 @@ public:
     static void SetResolution(int ppi);
     static int GetResolution();
 
-    WX_DEFINE_VARARG_FUNC_VOID(PsPrintf, 1, (const wxString&), DoPsPrintfFormat)
+    WX_DEFINE_VARARG_FUNC_VOID(PsPrintf, 1, (const wxString&),
+                               DoPsPrintfFormatWchar, DoPsPrintfFormatUtf8)
 #ifdef __WATCOMC__
     // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-    WX_DEFINE_VARARG_FUNC_VOID(PsPrintf, 1, (const char*), DoPsPrintfFormat)
-    WX_DEFINE_VARARG_FUNC_VOID(PsPrintf, 1, (const wchar_t*), DoPsPrintfFormat)
+    WX_DEFINE_VARARG_FUNC_VOID(PsPrintf, 1, (const char*),
+                               DoPsPrintfFormatWchar, DoPsPrintfFormatUtf8)
+    WX_DEFINE_VARARG_FUNC_VOID(PsPrintf, 1, (const wchar_t*),
+                               DoPsPrintfFormatWchar, DoPsPrintfFormatUtf8)
 #endif
+
     void PsPrint( const wxString& psdata );
     void PsPrint( int ch );
 
 private:
-    void DoPsPrintfFormat(const wxString& fmt, ... );
+#if !wxUSE_UTF8_LOCALE_ONLY
+    void DoPsPrintfFormatWchar(const wxChar *fmt, ... );
+#endif
+#if wxUSE_UNICODE_UTF8
+    void DoPsPrintfFormatUtf8(const char *fmt, ... );
+#endif
 
     static float ms_PSScaleFactor;
 

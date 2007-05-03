@@ -473,9 +473,12 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
 
 #define DECLARE_LOG_FUNCTION(level)                                         \
     extern void WXDLLIMPEXP_BASE                                            \
-    wxDoLog##level(const wxString& format, ...);                            \
+    wxDoLog##level##Wchar(const wxChar *format, ...);                       \
+    extern void WXDLLIMPEXP_BASE                                            \
+    wxDoLog##level##Utf8(const char *format, ...);                          \
     WX_DEFINE_VARARG_FUNC_VOID(wxLog##level,                                \
-                               1, (const wxString&), wxDoLog##level)        \
+                               1, (const wxString&),                        \
+                               wxDoLog##level##Wchar, wxDoLog##level##Utf8) \
     DECLARE_LOG_FUNCTION_WATCOM(level)                                      \
     extern void WXDLLIMPEXP_BASE wxVLog##level(const wxString& format,      \
                                                va_list argptr)
@@ -486,22 +489,30 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
     // something too big for Borland C++ to handle
     #define DECLARE_LOG_FUNCTION_WATCOM(level)                              \
         WX_DEFINE_VARARG_FUNC_VOID(wxLog##level,                            \
-                                   1, (const char*), wxDoLog##level)        \
+                                   1, (const char*),                        \
+                                   wxDoLog##level##Wchar,                   \
+                                   wxDoLog##level##Utf8)                    \
         WX_DEFINE_VARARG_FUNC_VOID(wxLog##level,                            \
-                                   1, (const wchar_t*), wxDoLog##level)     \
+                                   1, (const wchar_t*),                     \
+                                   wxDoLog##level##Wchar,                   \
+                                   wxDoLog##level##Utf8)                    \
         WX_DEFINE_VARARG_FUNC_VOID(wxLog##level,                            \
-                                   1, (const wxCStrData&), wxDoLog##level)
+                                   1, (const wxCStrData&),                  \
+                                   wxDoLog##level##Wchar,                   \
+                                   wxDoLog##level##Utf8)
 #else
     #define DECLARE_LOG_FUNCTION_WATCOM(level)
 #endif
 
 
 #define DECLARE_LOG_FUNCTION2_EXP(level, argclass, arg, expdecl)            \
-    extern void expdecl wxDoLog##level(argclass arg,                        \
-                                       const wxString& format, ...);        \
+    extern void expdecl wxDoLog##level##Wchar(argclass arg,                 \
+                                              const wxChar *format, ...);   \
+    extern void expdecl wxDoLog##level##Utf8(argclass arg,                  \
+                                             const char *format, ...);      \
     WX_DEFINE_VARARG_FUNC_VOID(wxLog##level,                                \
                                2, (argclass, const wxString&),              \
-                               wxDoLog##level)                              \
+                               wxDoLog##level##Wchar, wxDoLog##level##Utf8) \
     DECLARE_LOG_FUNCTION2_EXP_WATCOM(level, argclass, arg, expdecl)         \
     extern void expdecl wxVLog##level(argclass arg,                         \
                                       const wxString& format,               \
@@ -514,13 +525,16 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
     #define DECLARE_LOG_FUNCTION2_EXP_WATCOM(level, argclass, arg, expdecl) \
         WX_DEFINE_VARARG_FUNC_VOID(wxLog##level,                            \
                                    2, (argclass, const char*),              \
-                                   wxDoLog##level)                          \
+                                   wxDoLog##level##Wchar,                   \
+                                   wxDoLog##level##Utf8)                    \
         WX_DEFINE_VARARG_FUNC_VOID(wxLog##level,                            \
                                    2, (argclass, const wchar_t*),           \
-                                   wxDoLog##level)                          \
+                                   wxDoLog##level##Wchar,                   \
+                                   wxDoLog##level##Utf8)                    \
         WX_DEFINE_VARARG_FUNC_VOID(wxLog##level,                            \
                                    2, (argclass, const wxCStrData&),        \
-                                   wxDoLog##level)
+                                   wxDoLog##level##Wchar,                   \
+                                   wxDoLog##level##Utf8)
 #else
     #define DECLARE_LOG_FUNCTION2_EXP_WATCOM(level, argclass, arg, expdecl)
 #endif

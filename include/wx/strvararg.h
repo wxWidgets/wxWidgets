@@ -70,32 +70,24 @@ class WXDLLIMPEXP_BASE wxString;
 //                  if wxUSE_UNICODE_UTF8 and running under UTF-8 locale
 //                  (ignored otherwise)  [fprintf]
 //
-#define WX_DEFINE_VARARG_FUNC2(rettype, name, numfixed, fixed, impl, implUtf8)\
+#define WX_DEFINE_VARARG_FUNC(rettype, name, numfixed, fixed, impl, implUtf8) \
     _WX_VARARG_DEFINE_FUNC_N0(rettype, name, impl, implUtf8, numfixed, fixed) \
-    WX_DEFINE_VARARG_FUNC2_SANS_N0(rettype, name, numfixed, fixed, impl, implUtf8)
+    WX_DEFINE_VARARG_FUNC_SANS_N0(rettype, name, numfixed, fixed, impl, implUtf8)
 
 // ditto, but without the version with 0 template/vararg arguments
-#define WX_DEFINE_VARARG_FUNC2_SANS_N0(rettype, name,                         \
+#define WX_DEFINE_VARARG_FUNC_SANS_N0(rettype, name,                          \
                                        numfixed, fixed, impl, implUtf8)       \
     _WX_VARARG_ITER(_WX_VARARG_MAX_ARGS,                                      \
                     _WX_VARARG_DEFINE_FUNC,                                   \
                     rettype, name, impl, implUtf8, numfixed, fixed)
 
-// like WX_DEFINE_VARARG_FUNC2, but for impl=implUtf8:
-#define WX_DEFINE_VARARG_FUNC(rettype, name, numfixed, fixed, impl)           \
-    WX_DEFINE_VARARG_FUNC2(rettype, name, numfixed, fixed, impl, impl)
-
-// Like WX_DEFINE_VARARG_FUNC2, but for variadic functions that don't return
+// Like WX_DEFINE_VARARG_FUNC, but for variadic functions that don't return
 // a value.
-#define WX_DEFINE_VARARG_FUNC_VOID2(name, numfixed, fixed, impl, implUtf8)    \
+#define WX_DEFINE_VARARG_FUNC_VOID(name, numfixed, fixed, impl, implUtf8)     \
     _WX_VARARG_DEFINE_FUNC_VOID_N0(name, impl, implUtf8, numfixed, fixed)     \
     _WX_VARARG_ITER(_WX_VARARG_MAX_ARGS,                                      \
                     _WX_VARARG_DEFINE_FUNC_VOID,                              \
                     void, name, impl, implUtf8, numfixed, fixed)
-
-// like WX_DEFINE_VARARG_FUNC_VOID2, but for impl=implUtf8:
-#define WX_DEFINE_VARARG_FUNC_VOID(name, numfixed, fixed, impl)               \
-    WX_DEFINE_VARARG_FUNC_VOID2(name, numfixed, fixed, impl, impl)
 
 // Like WX_DEFINE_VARARG_FUNC_VOID, but instead of wrapping an implementation
 // function, does nothing in defined functions' bodies.
@@ -108,11 +100,11 @@ class WXDLLIMPEXP_BASE wxString;
                         void, name, dummy, dummy, numfixed, fixed)
 
 // Like WX_DEFINE_VARARG_FUNC_CTOR, but for defining template constructors
-#define WX_DEFINE_VARARG_FUNC_CTOR(name, numfixed, fixed, impl)               \
-    _WX_VARARG_DEFINE_FUNC_CTOR_N0(name, impl, impl, numfixed, fixed)         \
+#define WX_DEFINE_VARARG_FUNC_CTOR(name, numfixed, fixed, impl, implUtf8)     \
+    _WX_VARARG_DEFINE_FUNC_CTOR_N0(name, impl, implUtf8, numfixed, fixed)     \
     _WX_VARARG_ITER(_WX_VARARG_MAX_ARGS,                                      \
                     _WX_VARARG_DEFINE_FUNC_CTOR,                              \
-                    void, name, impl, impl, numfixed, fixed)
+                    void, name, impl, implUtf8, numfixed, fixed)
 
 // ----------------------------------------------------------------------------
 // wxArgNormalizer*<T> converters
@@ -548,7 +540,7 @@ private:
 #define _WX_VARARG_ARG(i)               T##i a##i
 
 // Like _WX_VARARG_ARG_UNUSED, but outputs argument's type with WXUNUSED:
-#define _WX_VARARG_ARG_UNUSED(i)             T##i WXUNUSED(a##i)
+#define _WX_VARARG_ARG_UNUSED(i)        T##i WXUNUSED(a##i)
 
 // Generates code snippet for i-th type in vararg function's template<...>:
 #define _WX_VARARG_TEMPL(i)             typename T##i

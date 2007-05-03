@@ -91,13 +91,51 @@ void wxVLogGeneric(wxLogLevel level, const wxString& format, va_list argptr)
     }
 }
 
-void wxDoLogGeneric(wxLogLevel level, const wxString& format, ...)
+#if !wxUSE_UTF8_LOCALE_ONLY
+void wxDoLogGenericWchar(wxLogLevel level, const wxChar *format, ...)
 {
     va_list argptr;
     va_start(argptr, format);
     wxVLogGeneric(level, format, argptr);
     va_end(argptr);
 }
+#endif // wxUSE_UTF8_LOCALE_ONLY
+
+#if wxUSE_UNICODE_UTF8
+void wxDoLogGenericUtf8(wxLogLevel level, const char *format, ...)
+{
+    va_list argptr;
+    va_start(argptr, format);
+    wxVLogGeneric(level, format, argptr);
+    va_end(argptr);
+}
+#endif // wxUSE_UNICODE_UTF8
+
+#if !wxUSE_UTF8_LOCALE_ONLY
+    #define IMPLEMENT_LOG_FUNCTION_WCHAR(level)                         \
+      void wxDoLog##level##Wchar(const wxChar *format, ...)             \
+      {                                                                 \
+        va_list argptr;                                                 \
+        va_start(argptr, format);                                       \
+        wxVLog##level(format, argptr);                                  \
+        va_end(argptr);                                                 \
+      }
+#else
+    #define IMPLEMENT_LOG_FUNCTION_WCHAR(level)
+#endif
+
+#if wxUSE_UNICODE_UTF8
+    #define IMPLEMENT_LOG_FUNCTION_UTF8(level)                          \
+      void wxDoLog##level##Utf8(const char *format, ...)                \
+      {                                                                 \
+        va_list argptr;                                                 \
+        va_start(argptr, format);                                       \
+        wxVLog##level(format, argptr);                                  \
+        va_end(argptr);                                                 \
+      }
+#else
+    #define IMPLEMENT_LOG_FUNCTION_UTF8(level)
+#endif
 
 #define IMPLEMENT_LOG_FUNCTION(level)                               \
   void wxVLog##level(const wxString& format, va_list argptr)        \
@@ -107,14 +145,8 @@ void wxDoLogGeneric(wxLogLevel level, const wxString& format, ...)
                    wxString::FormatV(format, argptr), time(NULL));  \
     }                                                               \
   }                                                                 \
-                                                                    \
-  void wxDoLog##level(const wxString& format, ...)                  \
-  {                                                                 \
-    va_list argptr;                                                 \
-    va_start(argptr, format);                                       \
-    wxVLog##level(format, argptr);                                  \
-    va_end(argptr);                                                 \
-  }
+  IMPLEMENT_LOG_FUNCTION_WCHAR(level)                               \
+  IMPLEMENT_LOG_FUNCTION_UTF8(level)
 
 IMPLEMENT_LOG_FUNCTION(Error)
 IMPLEMENT_LOG_FUNCTION(Warning)
@@ -145,7 +177,8 @@ void wxVLogFatalError(const wxString& format, va_list argptr)
 #endif
 }
 
-void wxDoLogFatalError(const wxString& format, ...)
+#if !wxUSE_UTF8_LOCALE_ONLY
+void wxDoLogFatalErrorWchar(const wxChar *format, ...)
 {
     va_list argptr;
     va_start(argptr, format);
@@ -155,6 +188,20 @@ void wxDoLogFatalError(const wxString& format, ...)
     // for the others anyhow...
     //va_end(argptr);
 }
+#endif // wxUSE_UTF8_LOCALE_ONLY
+
+#if wxUSE_UNICODE_UTF8
+void wxDoLogFatalErrorUtf8(const char *format, ...)
+{
+    va_list argptr;
+    va_start(argptr, format);
+    wxVLogFatalError(format, argptr);
+
+    // some compilers warn about unreachable code and it shouldn't matter
+    // for the others anyhow...
+    //va_end(argptr);
+}
+#endif // wxUSE_UNICODE_UTF8
 
 // same as info, but only if 'verbose' mode is on
 void wxVLogVerbose(const wxString& format, va_list argptr)
@@ -167,16 +214,55 @@ void wxVLogVerbose(const wxString& format, va_list argptr)
     }
 }
 
-void wxDoLogVerbose(const wxString& format, ...)
+#if !wxUSE_UTF8_LOCALE_ONLY
+void wxDoLogVerboseWchar(const wxChar *format, ...)
 {
     va_list argptr;
     va_start(argptr, format);
     wxVLogVerbose(format, argptr);
     va_end(argptr);
 }
+#endif // !wxUSE_UTF8_LOCALE_ONLY
+
+#if wxUSE_UNICODE_UTF8
+void wxDoLogVerboseUtf8(const char *format, ...)
+{
+    va_list argptr;
+    va_start(argptr, format);
+    wxVLogVerbose(format, argptr);
+    va_end(argptr);
+}
+#endif // wxUSE_UNICODE_UTF8
 
 // debug functions
 #ifdef __WXDEBUG__
+
+#if !wxUSE_UTF8_LOCALE_ONLY
+    #define IMPLEMENT_LOG_DEBUG_FUNCTION_WCHAR(level)                   \
+      void wxDoLog##level##Wchar(const wxChar *format, ...)             \
+      {                                                                 \
+        va_list argptr;                                                 \
+        va_start(argptr, format);                                       \
+        wxVLog##level(format, argptr);                                  \
+        va_end(argptr);                                                 \
+      }
+#else
+    #define IMPLEMENT_LOG_DEBUG_FUNCTION_WCHAR(level)
+#endif
+
+#if wxUSE_UNICODE_UTF8
+    #define IMPLEMENT_LOG_DEBUG_FUNCTION_UTF8(level)                    \
+      void wxDoLog##level##Utf8(const char *format, ...)                \
+      {                                                                 \
+        va_list argptr;                                                 \
+        va_start(argptr, format);                                       \
+        wxVLog##level(format, argptr);                                  \
+        va_end(argptr);                                                 \
+      }
+#else
+    #define IMPLEMENT_LOG_DEBUG_FUNCTION_UTF8(level)
+#endif
+
 #define IMPLEMENT_LOG_DEBUG_FUNCTION(level)                         \
   void wxVLog##level(const wxString& format, va_list argptr)        \
   {                                                                 \
@@ -185,14 +271,9 @@ void wxDoLogVerbose(const wxString& format, ...)
                    wxString::FormatV(format, argptr), time(NULL));  \
     }                                                               \
   }                                                                 \
-                                                                    \
-  void wxDoLog##level(const wxString& format, ...)                  \
-  {                                                                 \
-    va_list argptr;                                                 \
-    va_start(argptr, format);                                       \
-    wxVLog##level(format, argptr);                                  \
-    va_end(argptr);                                                 \
-  }
+  IMPLEMENT_LOG_DEBUG_FUNCTION_WCHAR(level)                         \
+  IMPLEMENT_LOG_DEBUG_FUNCTION_UTF8(level)
+
 
   void wxVLogTrace(const wxString& mask, const wxString& format, va_list argptr)
   {
@@ -204,13 +285,25 @@ void wxDoLogVerbose(const wxString& format, ...)
     }
   }
 
-  void wxDoLogTrace(const wxString& mask, const wxString& format, ...)
+#if !wxUSE_UTF8_LOCALE_ONLY
+  void wxDoLogTraceWchar(const wxString& mask, const wxChar *format, ...)
   {
     va_list argptr;
     va_start(argptr, format);
     wxVLogTrace(mask, format, argptr);
     va_end(argptr);
   }
+#endif // !wxUSE_UTF8_LOCALE_ONLY
+
+#if wxUSE_UNICODE_UTF8
+  void wxDoLogTraceUtf8(const wxString& mask, const char *format, ...)
+  {
+    va_list argptr;
+    va_start(argptr, format);
+    wxVLogTrace(mask, format, argptr);
+    va_end(argptr);
+  }
+#endif // wxUSE_UNICODE_UTF8
 
   void wxVLogTrace(wxTraceMask mask, const wxString& format, va_list argptr)
   {
@@ -222,17 +315,29 @@ void wxDoLogVerbose(const wxString& format, ...)
     }
   }
 
-  void wxDoLogTrace(wxTraceMask mask, const wxString& format, ...)
+#if wxUSE_UTF8_LOCALE_ONLY
+  void wxDoLogTraceWchar(wxTraceMask mask, const wxChar *format, ...)
   {
     va_list argptr;
     va_start(argptr, format);
     wxVLogTrace(mask, format, argptr);
     va_end(argptr);
   }
+#endif // wxUSE_UTF8_LOCALE_ONLY
+
+#if wxUSE_UNICODE_UTF8
+  void wxDoLogTraceUtf8(wxTraceMask mask, const char *format, ...)
+  {
+    va_list argptr;
+    va_start(argptr, format);
+    wxVLogTrace(mask, format, argptr);
+    va_end(argptr);
+  }
+#endif // wxUSE_UNICODE_UTF8
 
 #ifdef __WATCOMC__
   // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-  void wxDoLogTrace(int mask, const wxString& format, ...)
+  void wxDoLogTrace(int mask, const wxChar *format, ...)
   {
     va_list argptr;
     va_start(argptr, format);
@@ -240,7 +345,7 @@ void wxDoLogVerbose(const wxString& format, ...)
     va_end(argptr);
   }
 
-  void wxDoLogTrace(const char *mask, const wxString& format, ...)
+  void wxDoLogTrace(const char *mask, const wxChar *format, ...)
   {
     va_list argptr;
     va_start(argptr, format);
@@ -248,7 +353,7 @@ void wxDoLogVerbose(const wxString& format, ...)
     va_end(argptr);
   }
 
-  void wxDoLogTrace(const wchar_t *mask, const wxString& format, ...)
+  void wxDoLogTrace(const wchar_t *mask, const wxChar *format, ...)
   {
     va_list argptr;
     va_start(argptr, format);
@@ -285,13 +390,25 @@ void WXDLLEXPORT wxVLogSysError(const wxString& format, va_list argptr)
     wxVLogSysError(wxSysErrorCode(), format, argptr);
 }
 
-void WXDLLEXPORT wxDoLogSysError(const wxString& format, ...)
+#if !wxUSE_UTF8_LOCALE_ONLY
+void WXDLLEXPORT wxDoLogSysErrorWchar(const wxChar *format, ...)
 {
     va_list argptr;
     va_start(argptr, format);
     wxVLogSysError(format, argptr);
     va_end(argptr);
 }
+#endif // !wxUSE_UTF8_LOCALE_ONLY
+
+#if wxUSE_UNICODE_UTF8
+void WXDLLEXPORT wxDoLogSysErrorUtf8(const char *format, ...)
+{
+    va_list argptr;
+    va_start(argptr, format);
+    wxVLogSysError(format, argptr);
+    va_end(argptr);
+}
+#endif // wxUSE_UNICODE_UTF8
 
 void WXDLLEXPORT wxVLogSysError(long err, const wxString& format, va_list argptr)
 {
@@ -302,17 +419,29 @@ void WXDLLEXPORT wxVLogSysError(long err, const wxString& format, va_list argptr
     }
 }
 
-void WXDLLEXPORT wxDoLogSysError(long lErrCode, const wxString& format, ...)
+#if !wxUSE_UTF8_LOCALE_ONLY
+void WXDLLEXPORT wxDoLogSysErrorWchar(long lErrCode, const wxChar *format, ...)
 {
     va_list argptr;
     va_start(argptr, format);
     wxVLogSysError(lErrCode, format, argptr);
     va_end(argptr);
 }
+#endif // !wxUSE_UTF8_LOCALE_ONLY
+
+#if wxUSE_UNICODE_UTF8
+void WXDLLEXPORT wxDoLogSysErrorUtf8(long lErrCode, const char *format, ...)
+{
+    va_list argptr;
+    va_start(argptr, format);
+    wxVLogSysError(lErrCode, format, argptr);
+    va_end(argptr);
+}
+#endif // wxUSE_UNICODE_UTF8
 
 #ifdef __WATCOMC__
 // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-void WXDLLEXPORT wxDoLogSysError(unsigned long lErrCode, const wxString& format, ...)
+void WXDLLEXPORT wxDoLogSysError(unsigned long lErrCode, const wxChar *format, ...)
 {
     va_list argptr;
     va_start(argptr, format);
@@ -320,7 +449,7 @@ void WXDLLEXPORT wxDoLogSysError(unsigned long lErrCode, const wxString& format,
     va_end(argptr);
 }
 
-void WXDLLEXPORT wxVLogSysError(unsigned long err, const wxString& format, va_list argptr)
+void WXDLLEXPORT wxVLogSysError(unsigned long err, const wxChar *format, va_list argptr)
     { wxVLogSysError((long)err, format, argptr); }
 #endif // __WATCOMC__
 

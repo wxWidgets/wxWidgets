@@ -606,7 +606,8 @@ int wxCRT_Vsprintf( wxChar *str, const wxChar *format, va_list argptr )
 // wrappers to printf and scanf function families
 // ----------------------------------------------------------------------------
 
-int wxDoSprintf(char *str, const wxString& format, ...)
+#if !wxUSE_UTF8_LOCALE_ONLY
+int wxDoSprintfWchar(char *str, const wxChar *format, ...)
 {
     va_list argptr;
     va_start(argptr, format);
@@ -616,9 +617,10 @@ int wxDoSprintf(char *str, const wxString& format, ...)
     va_end(argptr);
     return rv;
 }
+#endif // !wxUSE_UTF8_LOCALE_ONLY
 
-#if wxUSE_UNICODE
-int wxDoSprintf(wchar_t *str, const wxString& format, ...)
+#if wxUSE_UNICODE_UTF8
+int wxDoSprintfUtf8(char *str, const char *format, ...)
 {
     va_list argptr;
     va_start(argptr, format);
@@ -628,21 +630,40 @@ int wxDoSprintf(wchar_t *str, const wxString& format, ...)
     va_end(argptr);
     return rv;
 }
-#endif
-
-int wxDoSnprintf(char *str, size_t size, const wxString& format, ...)
-{
-    va_list argptr;
-    va_start(argptr, format);
-
-    int rv = wxVsnprintf(str, size, format, argptr);
-
-    va_end(argptr);
-    return rv;
-}
+#endif // wxUSE_UNICODE_UTF8
 
 #if wxUSE_UNICODE
-int wxDoSnprintf(wchar_t *str, size_t size, const wxString& format, ...)
+
+#if !wxUSE_UTF8_LOCALE_ONLY
+int wxDoSprintfWchar(wchar_t *str, const wxChar *format, ...)
+{
+    va_list argptr;
+    va_start(argptr, format);
+
+    int rv = wxVsprintf(str, format, argptr);
+
+    va_end(argptr);
+    return rv;
+}
+#endif // !wxUSE_UTF8_LOCALE_ONLY
+
+#if wxUSE_UNICODE_UTF8
+int wxDoSprintfUtf8(wchar_t *str, const char *format, ...)
+{
+    va_list argptr;
+    va_start(argptr, format);
+
+    int rv = wxVsprintf(str, format, argptr);
+
+    va_end(argptr);
+    return rv;
+}
+#endif // wxUSE_UNICODE_UTF8
+
+#endif // wxUSE_UNICODE
+
+#if !wxUSE_UTF8_LOCALE_ONLY
+int wxDoSnprintfWchar(char *str, size_t size, const wxChar *format, ...)
 {
     va_list argptr;
     va_start(argptr, format);
@@ -652,7 +673,50 @@ int wxDoSnprintf(wchar_t *str, size_t size, const wxString& format, ...)
     va_end(argptr);
     return rv;
 }
-#endif
+#endif // !wxUSE_UTF8_LOCALE_ONLY
+
+#if wxUSE_UNICODE_UTF8
+int wxDoSnprintfUtf8(char *str, size_t size, const char *format, ...)
+{
+    va_list argptr;
+    va_start(argptr, format);
+
+    int rv = wxVsnprintf(str, size, format, argptr);
+
+    va_end(argptr);
+    return rv;
+}
+#endif // wxUSE_UNICODE_UTF8
+
+#if wxUSE_UNICODE
+
+#if !wxUSE_UTF8_LOCALE_ONLY
+int wxDoSnprintfWchar(wchar_t *str, size_t size, const wxChar *format, ...)
+{
+    va_list argptr;
+    va_start(argptr, format);
+
+    int rv = wxVsnprintf(str, size, format, argptr);
+
+    va_end(argptr);
+    return rv;
+}
+#endif // !wxUSE_UTF8_LOCALE_ONLY
+
+#if wxUSE_UNICODE_UTF8
+int wxDoSnprintfUtf8(wchar_t *str, size_t size, const char *format, ...)
+{
+    va_list argptr;
+    va_start(argptr, format);
+
+    int rv = wxVsnprintf(str, size, format, argptr);
+
+    va_end(argptr);
+    return rv;
+}
+#endif // wxUSE_UNICODE_UTF8
+
+#endif // wxUSE_UNICODE
 
 
 #ifdef HAVE_BROKEN_VSNPRINTF_DECL
@@ -660,6 +724,8 @@ int wxDoSnprintf(wchar_t *str, size_t size, const wxString& format, ...)
 #endif
 
 #if wxUSE_UNICODE
+
+#if !wxUSE_UTF8_LOCALE_ONLY
 static int ConvertStringToBuf(const wxString& s, char *out, size_t outsize)
 {
     const wxWX2WCbuf buf = s.wc_str();
@@ -670,6 +736,7 @@ static int ConvertStringToBuf(const wxString& s, char *out, size_t outsize)
     else
         return wxConvLibc.FromWChar(NULL, 0, buf);
 }
+#endif // !wxUSE_UTF8_LOCALE_ONLY
 
 #if wxUSE_UNICODE_UTF8
 static int ConvertStringToBuf(const wxString& s, wchar_t *out, size_t outsize)
@@ -681,7 +748,7 @@ static int ConvertStringToBuf(const wxString& s, wchar_t *out, size_t outsize)
     // else: not enough space
     return len;
 }
-#endif
+#endif // wxUSE_UNICODE_UTF8
 
 template<typename T>
 static size_t PrintfViaString(T *out, size_t outsize,

@@ -259,10 +259,10 @@
 //             we'll also need wxArgNormalizer<T> specializations for char,
 //             wchar_t, wxUniChar and wxUniCharRef to handle this correctly
 
-WX_DEFINE_VARARG_FUNC2(int, wxPrintf, 1, (const wxString&),
-                       wxCRT_Printf, printf)
-WX_DEFINE_VARARG_FUNC2(int, wxFprintf, 2, (FILE*, const wxString&),
-                       wxCRT_Fprintf, fprintf)
+WX_DEFINE_VARARG_FUNC(int, wxPrintf, 1, (const wxString&),
+                      wxCRT_Printf, printf)
+WX_DEFINE_VARARG_FUNC(int, wxFprintf, 2, (FILE*, const wxString&),
+                      wxCRT_Fprintf, fprintf)
 
 // va_list versions of printf functions simply forward to the respective
 // CRT function; note that they assume that va_list was created using
@@ -299,34 +299,56 @@ wxVfprintf(FILE *f, const wxString& format, va_list ap)
 // wxSprintf() and friends have to be implemented in two forms, one for
 // writing to char* buffer and one for writing to wchar_t*:
 
-int WXDLLIMPEXP_BASE wxDoSprintf(char *str, const wxString& format, ...);
+#if !wxUSE_UTF8_LOCALE_ONLY
+int WXDLLIMPEXP_BASE wxDoSprintfWchar(char *str, const wxChar *format, ...);
+#endif
+#if wxUSE_UNICODE_UTF8
+int WXDLLIMPEXP_BASE wxDoSprintfUtf8(char *str, const char *format, ...);
+#endif
 WX_DEFINE_VARARG_FUNC(int, wxSprintf, 2, (char*, const wxString&),
-                      wxDoSprintf)
+                      wxDoSprintfWchar, wxDoSprintfUtf8)
 
 int WXDLLIMPEXP_BASE
 wxVsprintf(char *str, const wxString& format, va_list argptr);
 
-int WXDLLIMPEXP_BASE wxDoSnprintf(char *str, size_t size, const wxString& format, ...);
+#if !wxUSE_UTF8_LOCALE_ONLY
+int WXDLLIMPEXP_BASE wxDoSnprintfWchar(char *str, size_t size, const wxChar *format, ...);
+#endif
+#if wxUSE_UNICODE_UTF8
+int WXDLLIMPEXP_BASE wxDoSnprintfUtf8(char *str, size_t size, const char *format, ...);
+#endif
 WX_DEFINE_VARARG_FUNC(int, wxSnprintf, 3, (char*, size_t, const wxString&),
-                      wxDoSnprintf)
+                      wxDoSnprintfWchar, wxDoSnprintfUtf8)
 
 int WXDLLIMPEXP_BASE
 wxVsnprintf(char *str, size_t size, const wxString& format, va_list argptr);
 
 #if wxUSE_UNICODE
-int WXDLLIMPEXP_BASE wxDoSprintf(wchar_t *str, const wxString& format, ...);
+
+#if !wxUSE_UTF8_LOCALE_ONLY
+int WXDLLIMPEXP_BASE wxDoSprintfWchar(wchar_t *str, const wxChar *format, ...);
+#endif
+#if wxUSE_UNICODE_UTF8
+int WXDLLIMPEXP_BASE wxDoSprintfUtf8(wchar_t *str, const char *format, ...);
+#endif
 WX_DEFINE_VARARG_FUNC(int, wxSprintf, 2, (wchar_t*, const wxString&),
-                      wxDoSprintf)
+                      wxDoSprintfWchar, wxDoSprintfUtf8)
 
 int WXDLLIMPEXP_BASE
 wxVsprintf(wchar_t *str, const wxString& format, va_list argptr);
 
-int WXDLLIMPEXP_BASE wxDoSnprintf(wchar_t *str, size_t size, const wxString& format, ...);
+#if !wxUSE_UTF8_LOCALE_ONLY
+int WXDLLIMPEXP_BASE wxDoSnprintfWchar(wchar_t *str, size_t size, const wxChar *format, ...);
+#endif
+#if wxUSE_UNICODE_UTF8
+int WXDLLIMPEXP_BASE wxDoSnprintfUtf8(wchar_t *str, size_t size, const char *format, ...);
+#endif
 WX_DEFINE_VARARG_FUNC(int, wxSnprintf, 3, (wchar_t*, size_t, const wxString&),
-                      wxDoSnprintf)
+                      wxDoSnprintfWchar, wxDoSnprintfUtf8)
 
 int WXDLLIMPEXP_BASE
 wxVsnprintf(wchar_t *str, size_t size, const wxString& format, va_list argptr);
+
 #endif // wxUSE_UNICODE
 
 #ifdef __WATCOMC__

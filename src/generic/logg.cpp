@@ -225,13 +225,25 @@ void wxVLogStatus(wxFrame *pFrame, const wxString& format, va_list argptr)
   }
 }
 
-void wxDoLogStatus(wxFrame *pFrame, const wxString& format, ...)
+#if !wxUSE_UTF8_LOCALE_ONLY
+void wxDoLogStatusWchar(wxFrame *pFrame, const wxChar *format, ...)
 {
     va_list argptr;
     va_start(argptr, format);
     wxVLogStatus(pFrame, format, argptr);
     va_end(argptr);
 }
+#endif // !wxUSE_UTF8_LOCALE_ONLY
+
+#if wxUSE_UNICODE_UTF8
+void wxDoLogStatusUtf8(wxFrame *pFrame, const char *format, ...)
+{
+    va_list argptr;
+    va_start(argptr, format);
+    wxVLogStatus(pFrame, format, argptr);
+    va_end(argptr);
+}
+#endif // wxUSE_UNICODE_UTF8
 
 // ----------------------------------------------------------------------------
 // wxLogGui implementation (FIXME MT-unsafe)

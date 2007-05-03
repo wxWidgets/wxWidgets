@@ -76,7 +76,8 @@ wxMessageOutput* wxMessageOutput::Set(wxMessageOutput* msgout)
     return old;
 }
 
-void wxMessageOutput::DoPrintf(const wxString& format, ...)
+#if !wxUSE_UTF8_LOCALE_ONLY
+void wxMessageOutput::DoPrintfWchar(const wxChar *format, ...)
 {
     va_list args;
     va_start(args, format);
@@ -87,6 +88,21 @@ void wxMessageOutput::DoPrintf(const wxString& format, ...)
 
     Output(out);
 }
+#endif // !wxUSE_UTF8_LOCALE_ONLY
+
+#if wxUSE_UNICODE_UTF8
+void wxMessageOutput::DoPrintfUtf8(const char *format, ...)
+{
+    va_list args;
+    va_start(args, format);
+    wxString out;
+
+    out.PrintfV(format, args);
+    va_end(args);
+
+    Output(out);
+}
+#endif // wxUSE_UNICODE_UTF8
 
 // ----------------------------------------------------------------------------
 // wxMessageOutputBest

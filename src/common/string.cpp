@@ -1447,11 +1447,12 @@ bool wxString::ToDouble(double *val) const
 // formatted output
 // ---------------------------------------------------------------------------
 
+#if !wxUSE_UTF8_LOCALE_ONLY
 /* static */
 #ifdef wxNEEDS_WXSTRING_PRINTF_MIXIN
-wxString wxStringPrintfMixinBase::DoFormat(const wxString& format, ...)
+wxString wxStringPrintfMixinBase::DoFormat(const wxChar *format, ...)
 #else
-wxString wxString::DoFormat(const wxString& format, ...)
+wxString wxString::DoFormatWchar(const wxChar *format, ...)
 #endif
 {
     va_list argptr;
@@ -1464,6 +1465,23 @@ wxString wxString::DoFormat(const wxString& format, ...)
 
     return s;
 }
+#endif // !wxUSE_UTF8_LOCALE_ONLY
+
+#if wxUSE_UNICODE_UTF8
+/* static */
+wxString wxString::DoFormatUtf8(const char *format, ...)
+{
+    va_list argptr;
+    va_start(argptr, format);
+
+    wxString s;
+    s.PrintfV(format, argptr);
+
+    va_end(argptr);
+
+    return s;
+}
+#endif // wxUSE_UNICODE_UTF8
 
 /* static */
 wxString wxString::FormatV(const wxString& format, va_list argptr)
@@ -1473,10 +1491,11 @@ wxString wxString::FormatV(const wxString& format, va_list argptr)
     return s;
 }
 
+#if !wxUSE_UTF8_LOCALE_ONLY
 #ifdef wxNEEDS_WXSTRING_PRINTF_MIXIN
-int wxStringPrintfMixinBase::DoPrintf(const wxString& format, ...)
+int wxStringPrintfMixinBase::DoPrintfWchar(const wxChar *format, ...)
 #else
-int wxString::DoPrintf(const wxString& format, ...)
+int wxString::DoPrintfWchar(const wxChar *format, ...)
 #endif
 {
     va_list argptr;
@@ -1497,6 +1516,21 @@ int wxString::DoPrintf(const wxString& format, ...)
 
     return iLen;
 }
+#endif // !wxUSE_UTF8_LOCALE_ONLY
+
+#if wxUSE_UNICODE_UTF8
+int wxString::DoPrintfUtf8(const char *format, ...)
+{
+    va_list argptr;
+    va_start(argptr, format);
+
+    int iLen = PrintfV(format, argptr);
+
+    va_end(argptr);
+
+    return iLen;
+}
+#endif // wxUSE_UNICODE_UTF8
 
 #if wxUSE_UNICODE_UTF8
 template<typename BufferType>

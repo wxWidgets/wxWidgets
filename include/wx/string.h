@@ -297,8 +297,14 @@ class WXDLLIMPEXP_BASE wxStringPrintfMixinBase
 protected:
     wxStringPrintfMixinBase() {}
 
-    int DoPrintf(const wxString& format, ...);
-    static wxString DoFormat(const wxString& format, ...);
+#if !wxUSE_UTF8_LOCALE_ONLY
+    int DoPrintfWchar(const wxChar *format, ...);
+    static wxString DoFormatWchar(const wxChar *format, ...);
+#endif
+#if wxUSE_UNICODE_UTF8
+    int DoPrintfUtf8(const char *format, ...);
+    static wxString DoFormatUtf8(const char *format, ...);
+#endif
 };
 
 // this class contains template wrappers for wxString's vararg methods, it's
@@ -322,9 +328,9 @@ public:
     // if !wxNEEDS_WXSTRING_PRINTF_MIXIN:
 
     // static wxString Format(const wString& format, ...) ATTRIBUTE_PRINTF_1;
-    WX_DEFINE_VARARG_FUNC2_SANS_N0(static typename StringReturnType<T1>::type,
-                                   Format, 1, (const wxString&),
-                                   DoFormat, DoFormat)
+    WX_DEFINE_VARARG_FUNC_SANS_N0(static typename StringReturnType<T1>::type,
+                                  Format, 1, (const wxString&),
+                                  DoFormatWchar, DoFormatUtf8)
     // We have to implement the version without template arguments manually
     // because of the StringReturnType<> hack, although WX_DEFINE_VARARG_FUNC
     // normally does it itself. It has to be a template so that we can use
@@ -339,9 +345,11 @@ public:
     }
 
     // int Printf(const wxString& format, ...);
-    WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wxString&), DoPrintf)
+    WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wxString&),
+                          DoPrintfWchar, DoPrintfUtf8)
     // int sprintf(const wxString& format, ...) ATTRIBUTE_PRINTF_2;
-    WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const wxString&), DoPrintf)
+    WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const wxString&),
+                          DoPrintfWchar, DoPrintfUtf8)
 
 protected:
     wxStringPrintfMixin() : wxStringPrintfMixinBase() {}
@@ -1533,11 +1541,15 @@ public:
     // as sprintf(), returns the number of characters written or < 0 on error
     // (take 'this' into account in attribute parameter count)
   // int Printf(const wxString& format, ...);
-  WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wxString&), DoPrintf)
+  WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wxString&),
+                        DoPrintfWchar, DoPrintfUtf8)
 #ifdef __WATCOMC__
-  WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const char*), DoPrintf)
-  WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wchar_t*), DoPrintf)
-  WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wxCStrData&), DoPrintf)
+  WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const char*)
+                        DoPrintfWchar, DoPrintfUtf8)
+  WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wchar_t*)
+                        DoPrintfWchar, DoPrintfUtf8)
+  WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wxCStrData&)
+                        DoPrintfWchar, DoPrintfUtf8)
 #endif
 #endif // !wxNEEDS_WXSTRING_PRINTF_MIXIN
     // as vprintf(), returns the number of characters written or < 0 on error
@@ -1546,12 +1558,16 @@ public:
 #ifndef wxNEEDS_WXSTRING_PRINTF_MIXIN
     // returns the string containing the result of Printf() to it
   // static wxString Format(const wxString& format, ...) ATTRIBUTE_PRINTF_1;
-  WX_DEFINE_VARARG_FUNC(static wxString, Format, 1, (const wxString&), DoFormat)
+  WX_DEFINE_VARARG_FUNC(static wxString, Format, 1, (const wxString&),
+                        DoFormatWchar, DoFormatUtf8)
 #ifdef __WATCOMC__
   // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-  WX_DEFINE_VARARG_FUNC(static wxString, Format, 1, (const char*), DoFormat)
-  WX_DEFINE_VARARG_FUNC(static wxString, Format, 1, (const wchar_t*), DoFormat)
-  WX_DEFINE_VARARG_FUNC(static wxString, Format, 1, (const wxCStrData&), DoFormat)
+  WX_DEFINE_VARARG_FUNC(static wxString, Format, 1, (const char*),
+                        DoFormatWchar, DoFormatUtf8)
+  WX_DEFINE_VARARG_FUNC(static wxString, Format, 1, (const wchar_t*),
+                        DoFormatWchar, DoFormatUtf8)
+  WX_DEFINE_VARARG_FUNC(static wxString, Format, 1, (const wxCStrData&),
+                        DoFormatWchar, DoFormatUtf8)
 #endif
 #endif
     // the same as above, but takes a va_list
@@ -1589,12 +1605,16 @@ public:
   // use Printf()
   // (take 'this' into account in attribute parameter count)
   // int sprintf(const wxString& format, ...) ATTRIBUTE_PRINTF_2;
-  WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const wxString&), DoPrintf)
+  WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const wxString&),
+                        DoPrintfWchar, DoPrintfUtf8)
 #ifdef __WATCOMC__
   // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-  WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const char*), DoPrintf)
-  WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const wchar_t*), DoPrintf)
-  WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const wxCStrData&), DoPrintf)
+  WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const char*),
+                        DoPrintfWchar, DoPrintfUtf8)
+  WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const wchar_t*),
+                        DoPrintfWchar, DoPrintfUtf8)
+  WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const wxCStrData&),
+                        DoPrintfWchar, DoPrintfUtf8)
 #endif
 #endif // wxNEEDS_WXSTRING_PRINTF_MIXIN
 
@@ -2369,8 +2389,14 @@ private:
 #endif // !wxUSE_STL_BASED_WXSTRING
 
 #ifndef wxNEEDS_WXSTRING_PRINTF_MIXIN
-  int DoPrintf(const wxString& format, ...);
-  static wxString DoFormat(const wxString& format, ...);
+  #if !wxUSE_UTF8_LOCALE_ONLY
+  int DoPrintfWchar(const wxChar *format, ...);
+  static wxString DoFormatWchar(const wxChar *format, ...);
+  #endif
+  #if wxUSE_UNICODE_UTF8
+  int DoPrintfUtf8(const char *format, ...);
+  static wxString DoFormatUtf8(const char *format, ...);
+  #endif
 #endif
 
 #if !wxUSE_STL_BASED_WXSTRING
