@@ -31,6 +31,7 @@
 #include <wx/utils.h>
 #include <wx/cmdline.h>
 #include <wx/app.h>
+#include <wx/wxchar.h>
 
 
 // ----------------------------------------------------------------------------
