@@ -238,14 +238,19 @@ struct wxArgNormalizerUtf8<const char*>
 {
     wxArgNormalizerUtf8(const char* s)
     {
-        // FIXME-UTF8: optimize this if current locale is UTF-8 one
+        if ( wxLocaleIsUtf8 )
+        {
+            m_value = wxCharBuffer::CreateNonOwned(s);
+        }
+        else
+        {
+            // convert to widechar string first:
+            wxWCharBuffer buf(wxConvLibc.cMB2WC(s));
 
-        // convert to widechar string first:
-        wxWCharBuffer buf(wxConvLibc.cMB2WC(s));
-
-        // then to UTF-8:
-        if ( buf )
-            m_value = wxConvUTF8.cWC2MB(buf);
+            // then to UTF-8:
+            if ( buf )
+                m_value = wxConvUTF8.cWC2MB(buf);
+        }
     }
 };
 
