@@ -269,6 +269,8 @@ typedef int wxWindowID;
         #define HAVE_EXPLICIT
     #elif defined(__DIGITALMARS__)
         #define HAVE_EXPLICIT
+    #elif defined(__WATCOMC__)
+        #define HAVE_EXPLICIT
     #endif
 #endif /*  !HAVE_EXPLICIT */
 
