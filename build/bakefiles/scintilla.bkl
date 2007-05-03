@@ -107,5 +107,10 @@
 	    src/stc/scintilla/src/XPM.cxx
         </sources>
     </lib>
+    
+    <!-- use this to conditonally link against wxscintilla with <library>: -->
+    <set var="wxscintilla_library_link">
+        <if cond="USE_STC=='1' and BUILDING_LIB=='1'">wxscintilla</if>
+    </set>
 
 </makefile>

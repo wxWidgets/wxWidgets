@@ -654,6 +654,7 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
         <depends>wxtiff</depends>
         <depends>wxjpeg</depends>
         <depends>wxpng</depends>
+        <depends>wxscintilla</depends>
     </template>
 
     <template id="wx_3rdparty_dependencies"
@@ -662,7 +663,6 @@ $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\r
         <depends>wxzlib</depends>
         <depends cond="FORMAT=='autoconf'">wxodbc</depends>
         <depends>wxregex</depends>
-        <depends>wxscintilla</depends>
     </template>
 
     <template id="wx_3rdparty_includes_gui" cond="USE_GUI=='1'">

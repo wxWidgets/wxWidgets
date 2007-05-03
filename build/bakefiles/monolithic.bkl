@@ -28,7 +28,7 @@
         <define>__WX__</define>
         <define>SCI_LEXER</define>
         <define>LINK_LEXERS</define>
-	<library>wxscintilla</library>
+        <library>$(wxscintilla_library_link)</library>
     </dll>
 
     <lib id="monolib" template="wx_lib"
