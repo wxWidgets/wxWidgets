@@ -1467,7 +1467,7 @@ bool wxString::ToDouble(double *val) const
 #if !wxUSE_UTF8_LOCALE_ONLY
 /* static */
 #ifdef wxNEEDS_WXSTRING_PRINTF_MIXIN
-wxString wxStringPrintfMixinBase::DoFormat(const wxChar *format, ...)
+wxString wxStringPrintfMixinBase::DoFormatWchar(const wxChar *format, ...)
 #else
 wxString wxString::DoFormatWchar(const wxChar *format, ...)
 #endif

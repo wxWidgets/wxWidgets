@@ -477,7 +477,7 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
     extern void WXDLLIMPEXP_BASE                                            \
     wxDoLog##level##Utf8(const char *format, ...);                          \
     WX_DEFINE_VARARG_FUNC_VOID(wxLog##level,                                \
-                               1, (const wxString&),                        \
+                               1, (const wxFormatString&),                  \
                                wxDoLog##level##Wchar, wxDoLog##level##Utf8) \
     DECLARE_LOG_FUNCTION_WATCOM(level)                                      \
     extern void WXDLLIMPEXP_BASE wxVLog##level(const wxString& format,      \
@@ -511,7 +511,7 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
     extern void expdecl wxDoLog##level##Utf8(argclass arg,                  \
                                              const char *format, ...);      \
     WX_DEFINE_VARARG_FUNC_VOID(wxLog##level,                                \
-                               2, (argclass, const wxString&),              \
+                               2, (argclass, const wxFormatString&),        \
                                wxDoLog##level##Wchar, wxDoLog##level##Utf8) \
     DECLARE_LOG_FUNCTION2_EXP_WATCOM(level, argclass, arg, expdecl)         \
     extern void expdecl wxVLog##level(argclass arg,                         \

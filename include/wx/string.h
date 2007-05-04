@@ -329,7 +329,7 @@ public:
 
     // static wxString Format(const wString& format, ...) ATTRIBUTE_PRINTF_1;
     WX_DEFINE_VARARG_FUNC_SANS_N0(static typename StringReturnType<T1>::type,
-                                  Format, 1, (const wxString&),
+                                  Format, 1, (const wxFormatString&),
                                   DoFormatWchar, DoFormatUtf8)
     // We have to implement the version without template arguments manually
     // because of the StringReturnType<> hack, although WX_DEFINE_VARARG_FUNC
@@ -339,16 +339,16 @@ public:
 
     template<typename T>
     inline static typename StringReturnType<T>::type
-    Format(const wxString& fmt, FormatDummyArg dummy = FormatDummyArg())
+    Format(const wxFormatString& fmt, FormatDummyArg dummy = FormatDummyArg())
     {
-        return DoFormat(fmt);
+        return DoFormatWchar(fmt);
     }
 
     // int Printf(const wxString& format, ...);
-    WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wxString&),
+    WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wxFormatString&),
                           DoPrintfWchar, DoPrintfUtf8)
     // int sprintf(const wxString& format, ...) ATTRIBUTE_PRINTF_2;
-    WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const wxString&),
+    WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const wxFormatString&),
                           DoPrintfWchar, DoPrintfUtf8)
 
 protected:
@@ -1542,7 +1542,7 @@ public:
     // as sprintf(), returns the number of characters written or < 0 on error
     // (take 'this' into account in attribute parameter count)
   // int Printf(const wxString& format, ...);
-  WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wxString&),
+  WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wxFormatString&),
                         DoPrintfWchar, DoPrintfUtf8)
 #ifdef __WATCOMC__
   WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const char*),
@@ -1559,7 +1559,7 @@ public:
 #ifndef wxNEEDS_WXSTRING_PRINTF_MIXIN
     // returns the string containing the result of Printf() to it
   // static wxString Format(const wxString& format, ...) ATTRIBUTE_PRINTF_1;
-  WX_DEFINE_VARARG_FUNC(static wxString, Format, 1, (const wxString&),
+  WX_DEFINE_VARARG_FUNC(static wxString, Format, 1, (const wxFormatString&),
                         DoFormatWchar, DoFormatUtf8)
 #ifdef __WATCOMC__
   // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
@@ -1606,7 +1606,7 @@ public:
   // use Printf()
   // (take 'this' into account in attribute parameter count)
   // int sprintf(const wxString& format, ...) ATTRIBUTE_PRINTF_2;
-  WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const wxString&),
+  WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const wxFormatString&),
                         DoPrintfWchar, DoPrintfUtf8)
 #ifdef __WATCOMC__
   // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351

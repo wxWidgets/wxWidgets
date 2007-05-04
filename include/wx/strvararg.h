@@ -106,6 +106,60 @@ class WXDLLIMPEXP_BASE wxString;
                     _WX_VARARG_DEFINE_FUNC_CTOR,                              \
                     void, name, impl, implUtf8, numfixed, fixed)
 
+
+// ----------------------------------------------------------------------------
+// wxFormatString
+// ----------------------------------------------------------------------------
+
+// This class should be used for format string argument of the functions
+// defined using WX_DEFINE_VARARG_FUNC_* macros. It converts the string to
+// char* or wchar_t* for passing to implementation function efficiently (i.e.
+// without keeping the converted string in memory for longer than necessary,
+// like c_str())
+//
+// Note that this class can _only_ be used for function arguments!
+class WXDLLIMPEXP_BASE wxFormatString
+{
+public:
+    wxFormatString(const char *str)
+        : m_char(wxCharBuffer::CreateNonOwned(str)), m_str(NULL), m_cstr(NULL) {}
+    wxFormatString(const wchar_t *str)
+        : m_wchar(wxWCharBuffer::CreateNonOwned(str)), m_str(NULL), m_cstr(NULL) {}
+    wxFormatString(const wxString& str)
+        : m_str(&str), m_cstr(NULL) {}
+    wxFormatString(const wxCStrData& str)
+        : m_str(NULL), m_cstr(&str) {}
+    wxFormatString(const wxCharBuffer& str)
+        : m_char(str), m_str(NULL), m_cstr(NULL)  {}
+    wxFormatString(const wxWCharBuffer& str)
+        : m_wchar(str), m_str(NULL), m_cstr(NULL) {}
+
+#if !wxUSE_UNICODE_WCHAR
+    operator const char*() const
+        { return wx_const_cast(wxFormatString*, this)->AsChar(); }
+private:
+    const char* AsChar();
+#endif // !wxUSE_UNICODE_WCHAR
+
+#if wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
+    operator const wchar_t*() const
+        { return wx_const_cast(wxFormatString*, this)->AsWChar(); }
+private:
+    const wchar_t* AsWChar();
+#endif // wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
+
+private:
+    wxCharBuffer  m_char;
+    wxWCharBuffer m_wchar;
+    // NB: we can use a pointer here, because wxFormatString is only used
+    //     as function argument, so it has shorter life than the string
+    //     passed to the ctor
+    const wxString * const m_str;
+    const wxCStrData * const m_cstr;
+
+    DECLARE_NO_COPY_CLASS(wxFormatString)
+};
+
 // ----------------------------------------------------------------------------
 // wxArgNormalizer*<T> converters
 // ----------------------------------------------------------------------------

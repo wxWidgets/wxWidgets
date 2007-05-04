@@ -95,7 +95,7 @@ public:
     static void SetResolution(int ppi);
     static int GetResolution();
 
-    WX_DEFINE_VARARG_FUNC_VOID(PsPrintf, 1, (const wxString&),
+    WX_DEFINE_VARARG_FUNC_VOID(PsPrintf, 1, (const wxFormatString&),
                                DoPsPrintfFormatWchar, DoPsPrintfFormatUtf8)
 #ifdef __WATCOMC__
     // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351

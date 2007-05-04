@@ -259,9 +259,9 @@
 //             we'll also need wxArgNormalizer<T> specializations for char,
 //             wchar_t, wxUniChar and wxUniCharRef to handle this correctly
 
-WX_DEFINE_VARARG_FUNC(int, wxPrintf, 1, (const wxString&),
+WX_DEFINE_VARARG_FUNC(int, wxPrintf, 1, (const wxFormatString&),
                       wxCRT_Printf, printf)
-WX_DEFINE_VARARG_FUNC(int, wxFprintf, 2, (FILE*, const wxString&),
+WX_DEFINE_VARARG_FUNC(int, wxFprintf, 2, (FILE*, const wxFormatString&),
                       wxCRT_Fprintf, fprintf)
 
 // va_list versions of printf functions simply forward to the respective
@@ -305,7 +305,7 @@ int WXDLLIMPEXP_BASE wxDoSprintfWchar(char *str, const wxChar *format, ...);
 #if wxUSE_UNICODE_UTF8
 int WXDLLIMPEXP_BASE wxDoSprintfUtf8(char *str, const char *format, ...);
 #endif
-WX_DEFINE_VARARG_FUNC(int, wxSprintf, 2, (char*, const wxString&),
+WX_DEFINE_VARARG_FUNC(int, wxSprintf, 2, (char*, const wxFormatString&),
                       wxDoSprintfWchar, wxDoSprintfUtf8)
 
 int WXDLLIMPEXP_BASE
@@ -317,7 +317,7 @@ int WXDLLIMPEXP_BASE wxDoSnprintfWchar(char *str, size_t size, const wxChar *for
 #if wxUSE_UNICODE_UTF8
 int WXDLLIMPEXP_BASE wxDoSnprintfUtf8(char *str, size_t size, const char *format, ...);
 #endif
-WX_DEFINE_VARARG_FUNC(int, wxSnprintf, 3, (char*, size_t, const wxString&),
+WX_DEFINE_VARARG_FUNC(int, wxSnprintf, 3, (char*, size_t, const wxFormatString&),
                       wxDoSnprintfWchar, wxDoSnprintfUtf8)
 
 int WXDLLIMPEXP_BASE
@@ -331,7 +331,7 @@ int WXDLLIMPEXP_BASE wxDoSprintfWchar(wchar_t *str, const wxChar *format, ...);
 #if wxUSE_UNICODE_UTF8
 int WXDLLIMPEXP_BASE wxDoSprintfUtf8(wchar_t *str, const char *format, ...);
 #endif
-WX_DEFINE_VARARG_FUNC(int, wxSprintf, 2, (wchar_t*, const wxString&),
+WX_DEFINE_VARARG_FUNC(int, wxSprintf, 2, (wchar_t*, const wxFormatString&),
                       wxDoSprintfWchar, wxDoSprintfUtf8)
 
 int WXDLLIMPEXP_BASE
@@ -343,7 +343,7 @@ int WXDLLIMPEXP_BASE wxDoSnprintfWchar(wchar_t *str, size_t size, const wxChar *
 #if wxUSE_UNICODE_UTF8
 int WXDLLIMPEXP_BASE wxDoSnprintfUtf8(wchar_t *str, size_t size, const char *format, ...);
 #endif
-WX_DEFINE_VARARG_FUNC(int, wxSnprintf, 3, (wchar_t*, size_t, const wxString&),
+WX_DEFINE_VARARG_FUNC(int, wxSnprintf, 3, (wchar_t*, size_t, const wxFormatString&),
                       wxDoSnprintfWchar, wxDoSnprintfUtf8)
 
 int WXDLLIMPEXP_BASE

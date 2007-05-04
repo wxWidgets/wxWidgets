@@ -30,6 +30,9 @@
 // implementation
 // ============================================================================
 
+// ----------------------------------------------------------------------------
+// wxArgNormalizer<>
+// ----------------------------------------------------------------------------
 
 const wxStringCharType *wxArgNormalizerNative<const wxString&>::get() const
 {
@@ -53,6 +56,10 @@ wxArgNormalizerWchar<const wxCStrData&>::wxArgNormalizerWchar(const wxCStrData& 
 }
 #endif // wxUSE_UNICODE_UTF8 && !wxUSE_UTF8_LOCALE_ONLY
 
+// ----------------------------------------------------------------------------
+// wxArgNormalizedString
+// ----------------------------------------------------------------------------
+
 wxString wxArgNormalizedString::GetString() const
 {
     if ( !IsValid() )
@@ -74,3 +81,67 @@ wxArgNormalizedString::operator wxString() const
 {
     return GetString();
 }
+
+// ----------------------------------------------------------------------------
+// wxFormatString
+// ----------------------------------------------------------------------------
+
+#if !wxUSE_UNICODE_WCHAR
+const char* wxFormatString::AsChar()
+{
+    if ( m_char )
+        return m_char.data();
+
+    // in ANSI build, wx_str() returns char*, in UTF-8 build, this function
+    // is only called under UTF-8 locales, so we should return UTF-8 string,
+    // which is, again, what wx_str() returns:
+    if ( m_str )
+        return m_str->wx_str();
+
+    // ditto wxCStrData:
+    if ( m_cstr )
+        return m_cstr->AsInternal();
+
+    // the last case is that wide string was passed in: in that case, we need
+    // to convert it:
+    wxASSERT( m_wchar );
+
+    m_char = wxConvLibc.cWC2MB(m_wchar.data());
+
+    return m_char.data();
+}
+#endif // !wxUSE_UNICODE_WCHAR
+
+#if wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
+const wchar_t* wxFormatString::AsWChar()
+{
+    if ( m_wchar )
+        return m_wchar.data();
+
+#if wxUSE_UNICODE_WCHAR
+    if ( m_str )
+        return m_str->wc_str();
+    if ( m_cstr )
+        return m_cstr->AsInternal();
+#else // wxUSE_UNICODE_UTF8
+    if ( m_str )
+    {
+        m_wchar = m_str->wc_str();
+        return m_wchar.data();
+    }
+    if ( m_cstr )
+    {
+        m_wchar = m_cstr->AsWCharBuf();
+        return m_wchar.data();
+    }
+#endif // wxUSE_UNICODE_WCHAR/UTF8
+
+    // the last case is that narrow string was passed in: in that case, we need
+    // to convert it:
+    wxASSERT( m_char );
+
+    m_wchar = wxConvLibc.cMB2WC(m_char.data());
+
+    return m_wchar.data();
+}
+#endif // wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
