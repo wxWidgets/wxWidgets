@@ -59,12 +59,6 @@ If you are zoomed in, it checks the Bounding box of an object before
 drawing it. This makes it a great deal faster when there are a lot of
 objects and you are zoomed in so that only a few are shown.
 
-One solution is to be able to pass some sort of object set to the DC
-directly. I've used DC.DrawPointList(Points), and it helped a lot with
-drawing lots of points. However, when zoomed in, the Bounding boxes need
-to be checked, so I may some day write C++ code that does the loop and
-checks the BBs.
-
 Mouse Events:
 
 There are a full set of custom mouse events. They are just like the
@@ -79,19 +73,25 @@ clicked, mouse-over'd, etc.
 See the Demo for what it can do, and how to use it.
 
 Copyright: Christopher Barker
-
 License: Same as the version of wxPython you are using it with.
 
+TRAC site for some docs and updates:
+http://morticia.cs.dal.ca/FloatCanvas/
+
+SVN for latest code:
+svn://morticia.cs.dal.ca/FloatCanvas
+
+Mailing List:
+http://mail.mithis.com/cgi-bin/mailman/listinfo/floatcanvas
+
 Check for updates or answers to questions, send me an email.
-
 Please let me know if you're using this!!!
-
 Contact me at:
 
 Chris.Barker@noaa.gov
 
 """
 
-__version__ = "0.9.18a"
+__version__ = "0.9.18"
 
 
