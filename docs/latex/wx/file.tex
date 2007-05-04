@@ -93,7 +93,7 @@ mode constants used with \helpref{Seek()}{wxfileseek}:
 
 Default constructor.
 
-\func{}{wxFile}{\param{const char*}{ filename}, \param{wxFile::OpenMode}{ mode = wxFile::read}}
+\func{}{wxFile}{\param{const wxString\&}{ filename}, \param{wxFile::OpenMode}{ mode = wxFile::read}}
 
 Opens a file with the given mode. As there is no way to return whether the
 operation was successful or not from the constructor you should test the
@@ -124,7 +124,7 @@ Destructor will close the file.
 
 \membersection{wxFile::Access}\label{wxfileaccess}
 
-\func{static bool}{Access}{\param{const char *}{ name}, \param{OpenMode}{ mode}}
+\func{static bool}{Access}{\param{const wxString\&}{ name}, \param{OpenMode}{ mode}}
 
 This function verifies if we may access the given file in specified mode. Only
 values of wxFile::read or wxFile::write really make sense here.
@@ -151,7 +151,7 @@ Closes the file.
 
 \membersection{wxFile::Create}\label{wxfilecreate}
 
-\func{bool}{Create}{\param{const char*}{ filename}, \param{bool}{ overwrite = false}, \param{int }{access = wxS\_DEFAULT}}
+\func{bool}{Create}{\param{const wxString\&}{ filename}, \param{bool}{ overwrite = false}, \param{int }{access = wxS\_DEFAULT}}
 
 Creates a file for writing. If the file already exists, setting {\bf overwrite} to true
 will ensure it is overwritten.
@@ -195,7 +195,7 @@ of using Eof() as this will not work for special files under Unix.
 
 \membersection{wxFile::Exists}\label{wxfileexists}
 
-\func{static bool}{Exists}{\param{const char*}{ filename}}
+\func{static bool}{Exists}{\param{const wxString\&}{ filename}}
 
 Returns true if the given name specifies an existing regular file (not a
 directory or a link)
@@ -246,7 +246,7 @@ Returns the length of the file.
 
 \membersection{wxFile::Open}\label{wxfileopen}
 
-\func{bool}{Open}{\param{const char*}{ filename}, \param{wxFile::OpenMode}{ mode = wxFile::read}}
+\func{bool}{Open}{\param{const wxString\&}{ filename}, \param{wxFile::OpenMode}{ mode = wxFile::read}}
 
 Opens the file, returning true if successful.
 

@@ -148,12 +148,12 @@
 // static functions
 // ----------------------------------------------------------------------------
 
-bool wxFile::Exists(const wxChar *name)
+bool wxFile::Exists(const wxString& name)
 {
     return wxFileExists(name);
 }
 
-bool wxFile::Access(const wxChar *name, OpenMode mode)
+bool wxFile::Access(const wxString& name, OpenMode mode)
 {
     int how;
 
@@ -193,23 +193,23 @@ wxFile::wxFile(const wxString& fileName, OpenMode mode)
 }
 
 // create the file, fail if it already exists and bOverwrite
-bool wxFile::Create(const wxChar *szFileName, bool bOverwrite, int accessMode)
+bool wxFile::Create(const wxString& fileName, bool bOverwrite, int accessMode)
 {
     // if bOverwrite we create a new file or truncate the existing one,
     // otherwise we only create the new file and fail if it already exists
 #if defined(__WXMAC__) && !defined(__UNIX__) && !wxUSE_UNICODE
     // Dominic Mazzoni [dmazzoni+@cs.cmu.edu] reports that open is still broken on the mac, so we replace
-    // int fd = open( szFileName , O_CREAT | (bOverwrite ? O_TRUNC : O_EXCL), access);
-    int fd = creat( szFileName , accessMode);
+    // int fd = open( fileName , O_CREAT | (bOverwrite ? O_TRUNC : O_EXCL), access);
+    int fd = creat( fileName , accessMode);
 #else
-    int fd = wxOpen( szFileName,
+    int fd = wxOpen( fileName,
                      O_BINARY | O_WRONLY | O_CREAT |
                      (bOverwrite ? O_TRUNC : O_EXCL)
                      ACCESS(accessMode) );
 #endif
     if ( fd == -1 )
     {
-        wxLogSysError(_("can't create file '%s'"), szFileName);
+        wxLogSysError(_("can't create file '%s'"), fileName);
         return false;
     }
 
@@ -218,7 +218,7 @@ bool wxFile::Create(const wxChar *szFileName, bool bOverwrite, int accessMode)
 }
 
 // open the file
-bool wxFile::Open(const wxChar *szFileName, OpenMode mode, int accessMode)
+bool wxFile::Open(const wxString& fileName, OpenMode mode, int accessMode)
 {
     int flags = O_BINARY;
 
@@ -229,7 +229,7 @@ bool wxFile::Open(const wxChar *szFileName, OpenMode mode, int accessMode)
             break;
 
         case write_append:
-            if ( wxFile::Exists(szFileName) )
+            if ( wxFile::Exists(fileName) )
             {
                 flags |= O_WRONLY | O_APPEND;
                 break;
@@ -257,11 +257,11 @@ bool wxFile::Open(const wxChar *szFileName, OpenMode mode, int accessMode)
     accessMode &= wxS_IRUSR | wxS_IWUSR;
 #endif // __WINDOWS__
 
-    int fd = wxOpen( szFileName, flags ACCESS(accessMode));
+    int fd = wxOpen( fileName, flags ACCESS(accessMode));
 
     if ( fd == -1 )
     {
-        wxLogSysError(_("can't open file '%s'"), szFileName);
+        wxLogSysError(_("can't open file '%s'"), fileName);
         return false;
     }
 

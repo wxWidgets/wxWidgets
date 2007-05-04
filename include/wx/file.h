@@ -63,10 +63,10 @@ public:
   // static functions
   // ----------------
     // check whether a regular file by this name exists
-  static bool Exists(const wxChar *name);
+  static bool Exists(const wxString& name);
     // check whether we can access the given file in given mode
     // (only read and write make sense here)
-  static bool Access(const wxChar *name, OpenMode mode);
+  static bool Access(const wxString& name, OpenMode mode);
 
   // ctors
   // -----
@@ -80,9 +80,9 @@ public:
   // open/close
     // create a new file (with the default value of bOverwrite, it will fail if
     // the file already exists, otherwise it will overwrite it and succeed)
-  bool Create(const wxChar *szFileName, bool bOverwrite = false,
+  bool Create(const wxString& fileName, bool bOverwrite = false,
               int access = wxS_DEFAULT);
-  bool Open(const wxChar *szFileName, OpenMode mode = read,
+  bool Open(const wxString& fileName, OpenMode mode = read,
             int access = wxS_DEFAULT);
   bool Close();  // Close is a NOP if not opened
 
