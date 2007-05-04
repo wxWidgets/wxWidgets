@@ -142,6 +142,7 @@ private:
 #endif // !wxUSE_UNICODE_WCHAR
 
 #if wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
+public:
     operator const wchar_t*() const
         { return wx_const_cast(wxFormatString*, this)->AsWChar(); }
 private:
