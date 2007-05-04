@@ -284,13 +284,15 @@ WX_DEFINE_VARARG_FUNC(int, wxFprintf, 2, (FILE*, const wxFormatString&),
 inline int
 wxVprintf(const wxString& format, va_list ap)
 {
-    WX_VARARG_VFOO_IMPL((format, ap), wxCRT_Vprintf, vprintf);
+    WX_VARARG_VFOO_IMPL((wxFormatString(format), ap),
+                        wxCRT_Vprintf, vprintf);
 }
 
 inline int
 wxVfprintf(FILE *f, const wxString& format, va_list ap)
 {
-    WX_VARARG_VFOO_IMPL((f, format, ap), wxCRT_Vfprintf, vfprintf);
+    WX_VARARG_VFOO_IMPL((f, wxFormatString(format), ap),
+                        wxCRT_Vfprintf, vfprintf);
 }
 
 #undef WX_VARARG_VFOO_IMPL
