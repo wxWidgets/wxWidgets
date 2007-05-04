@@ -99,7 +99,9 @@ class Tools(wx.Panel):
                              wx.wxEVT_COMMAND_BUTTON_CLICKED, g.frame.OnCreate)
         wx.EVT_KEY_DOWN(self, self.OnKeyDown)
         wx.EVT_KEY_UP(self, self.OnKeyUp)
-        self.Bind(wx.EVT_LEFT_DOWN, self.OnClickBox)
+        # wxMSW does not generate click events for StaticBox
+        if wx.Platform == '__WXMSW__':
+            self.Bind(wx.EVT_LEFT_DOWN, self.OnClickBox)
 
         self.drag = None
 
@@ -161,11 +163,13 @@ class Tools(wx.Panel):
         if wx.Platform == '__WXMSW__':
             box = None
             for id,b in self.boxes.items():
-                # Detect click on label
+                # How to detect a click on a label?
                 if b.GetRect().Inside(evt.GetPosition()):
                     box = b
                     break
-            if not box: return
+            if not box: 
+                evt.Skip()
+                return
         else:
             box = self.boxes[evt.GetId()]
         # Collapse/restore static box, change label
