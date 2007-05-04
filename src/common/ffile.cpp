@@ -57,14 +57,14 @@
 // opening the file
 // ----------------------------------------------------------------------------
 
-wxFFile::wxFFile(const wxChar *filename, const wxChar *mode)
+wxFFile::wxFFile(const wxString& filename, const wxString& mode)
 {
     Detach();
 
     (void)Open(filename, mode);
 }
 
-bool wxFFile::Open(const wxChar *filename, const wxChar *mode)
+bool wxFFile::Open(const wxString& filename, const wxString& mode)
 {
     wxASSERT_MSG( !m_fp, wxT("should close or detach the old file first") );
 

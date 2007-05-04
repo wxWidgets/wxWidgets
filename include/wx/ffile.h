@@ -37,13 +37,13 @@ public:
     // def ctor
   wxFFile() { m_fp = NULL; }
     // open specified file (may fail, use IsOpened())
-  wxFFile(const wxChar *filename, const wxChar *mode = _T("r"));
+  wxFFile(const wxString& filename, const wxString& mode = _T("r"));
     // attach to (already opened) file
   wxFFile(FILE *lfp) { m_fp = lfp; }
 
   // open/close
     // open a file (existing or not - the mode controls what happens)
-  bool Open(const wxChar *filename, const wxChar *mode = _T("r"));
+  bool Open(const wxString& filename, const wxString& mode = _T("r"));
     // closes the opened file (this is a NOP if not opened)
   bool Close();
 

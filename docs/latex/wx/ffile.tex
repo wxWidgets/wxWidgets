@@ -41,7 +41,7 @@ None.
 
 Default constructor.
 
-\func{}{wxFFile}{\param{const char*}{ filename}, \param{const char*}{ mode = "r"}}
+\func{}{wxFFile}{\param{const wxString\&}{ filename}, \param{const wxString\&}{ mode = "r"}}
 
 Opens a file with the given mode. As there is no way to return whether the
 operation was successful or not from the constructor you should test the
@@ -180,7 +180,7 @@ Returns the length of the file.
 
 \membersection{wxFFile::Open}\label{wxffileopen}
 
-\func{bool}{Open}{\param{const char*}{ filename}, \param{const char*}{ mode = "r"}}
+\func{bool}{Open}{\param{const wxString\&}{ filename}, \param{const wxString\&}{ mode = "r"}}
 
 Opens the file, returning \true if successful.
 
