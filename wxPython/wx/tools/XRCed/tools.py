@@ -99,6 +99,7 @@ class Tools(wx.Panel):
                              wx.wxEVT_COMMAND_BUTTON_CLICKED, g.frame.OnCreate)
         wx.EVT_KEY_DOWN(self, self.OnKeyDown)
         wx.EVT_KEY_UP(self, self.OnKeyUp)
+        self.Bind(wx.EVT_LEFT_DOWN, self.OnClickBox)
 
         self.drag = None
 
@@ -119,10 +120,11 @@ class Tools(wx.Panel):
         # Each group is inside box
         id = wx.NewId()
         box = wx.StaticBox(self, id, '[+] '+name, style=wx.WANTS_CHARS)
+        box.SetForegroundColour(wx.Colour(64, 64, 64))
+#        box.SetFont(g.smallerFont())
         box.show = True
         box.name = name
         box.gnum = len(self.groups)
-        box.SetFont(g.smallerFont())
         box.Bind(wx.EVT_LEFT_DOWN, self.OnClickBox)
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         boxSizer.Add((0, 4))
@@ -135,7 +137,7 @@ class Tools(wx.Panel):
     # Enable/disable group
     def EnableGroup(self, gnum, enable = True):
         grp = self.groups[gnum]
-        grp[0].Enable(enable)
+        #grp[0].Enable(enable)
         for b in grp[1].values(): b.Enable(enable)
 
     # Show/hide group
@@ -156,12 +158,23 @@ class Tools(wx.Panel):
             grp[1][id].Enable(enable)
 
     def OnClickBox(self, evt):
-        box = self.boxes[evt.GetId()]
+        if wx.Platform == '__WXMSW__':
+            box = None
+            for id,b in self.boxes.items():
+                # Detect click on label
+                if b.GetRect().Inside(evt.GetPosition()):
+                    box = b
+                    break
+            if not box: return
+        else:
+            box = self.boxes[evt.GetId()]
         # Collapse/restore static box, change label
         self.ShowGroup(box.gnum, not box.show)
         if box.show: box.SetLabel('[+] ' + box.name)
         else: box.SetLabel('[-] ' + box.name)
         self.Layout()
+        self.Refresh()
+        #for b in self.boxes.items():
 
     # DaD
     def OnLeftDownOnButton(self, evt):
