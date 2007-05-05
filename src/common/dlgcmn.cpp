@@ -80,7 +80,7 @@ static bool CanBeUsedAsParent(wxWindow *parent)
     return !parent->HasExtraStyle(wxWS_EX_TRANSIENT) &&
                 parent->IsShownOnScreen() &&
                     !wxPendingDelete.Member(parent) &&
-                        parent->IsBeingDeleted();
+                        !parent->IsBeingDeleted();
 }
 
 wxWindow *wxDialogBase::GetParentForModalDialog(wxWindow *parent) const
