@@ -1016,6 +1016,7 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
 
     ignoreChanges = true;
 
+#if wxUSE_CONFIG
     if (wxConfig::Get(false))
     {
         wxConfig::Get()->Read(wxT("/wxWindows/wxFileDialog/ViewStyle"),
@@ -1023,6 +1024,7 @@ bool wxGenericFileDialog::Create( wxWindow *parent,
         wxConfig::Get()->Read(wxT("/wxWindows/wxFileDialog/ShowHidden"),
                               &ms_lastShowHidden);
     }
+#endif
 
     if ((m_dir.empty()) || (m_dir == wxT(".")))
     {
@@ -1190,6 +1192,7 @@ wxGenericFileDialog::~wxGenericFileDialog()
 
     if (!m_bypassGenericImpl)
     {
+#if wxUSE_CONFIG
         if (wxConfig::Get(false))
         {
             wxConfig::Get()->Write(wxT("/wxWindows/wxFileDialog/ViewStyle"),
@@ -1197,6 +1200,7 @@ wxGenericFileDialog::~wxGenericFileDialog()
             wxConfig::Get()->Write(wxT("/wxWindows/wxFileDialog/ShowHidden"),
                                    ms_lastShowHidden);
         }
+#endif
 
         const int count = m_choice->GetCount();
         for ( int i = 0; i < count; i++ )
