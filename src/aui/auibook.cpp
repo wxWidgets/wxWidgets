@@ -2232,6 +2232,11 @@ public:
         m_tab_ctrl_height = 20;
     }
 
+	~wxTabFrame()
+	{
+		wxDELETE(m_tabs);
+	}
+
     void SetTabCtrlHeight(int h)
     {
         m_tab_ctrl_height = h;
