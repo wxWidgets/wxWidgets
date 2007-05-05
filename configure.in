@@ -8175,9 +8175,15 @@ echo "  Should wxWidgets be compiled into single library?       ${wxUSE_MONOLITH
 
 echo "  Should wxWidgets be compiled in debug mode?             ${wxUSE_DEBUG:-no}"
 echo "  Should wxWidgets be linked as a shared library?         ${wxUSE_SHARED:-no}"
-echo "  Should wxWidgets be compiled in Unicode mode?           ${wxUSE_UNICODE:-no}"
+echo -n "  Should wxWidgets support Unicode?                       ${wxUSE_UNICODE:-no}"
 if test "$wxUSE_UNICODE" = "yes"; then
-echo "  Should wxWidgets use UTF-8 internally?                  ${wxUSE_UNICODE_UTF8:-no}"
+    if test "$wxUSE_UNICODE_UTF8" = "yes"; then
+        echo " (using UTF-8)"
+    else
+        echo " (using wchar_t)"
+    fi
+else
+    echo
 fi
 
 echo "  What level of wxWidgets compatibility should be enabled?"
