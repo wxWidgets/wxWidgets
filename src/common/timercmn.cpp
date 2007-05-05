@@ -39,7 +39,7 @@
 // wxWin macros
 // ----------------------------------------------------------------------------
 
-IMPLEMENT_DYNAMIC_CLASS(wxTimerEvent, wxEvent)
+IMPLEMENT_ABSTRACT_CLASS(wxTimerEvent, wxEvent)
 
 // ============================================================================
 // wxTimerBase implementation

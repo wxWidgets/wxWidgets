@@ -152,23 +152,25 @@ private:
 class WXDLLIMPEXP_BASE wxTimerEvent : public wxEvent
 {
 public:
-    wxTimerEvent(int timerid = 0, int interval = 0) : wxEvent(timerid)
+    wxTimerEvent(wxTimer& timer)
+        : wxEvent(timer.GetId(), wxEVT_TIMER),
+          m_timer(timer)
     {
-        m_eventType = wxEVT_TIMER;
-
-        m_interval = interval;
+        SetEventObject(timer.GetOwner());
     }
 
     // accessors
-    int GetInterval() const { return m_interval; }
+    int GetInterval() const { return m_timer.GetInterval(); }
+    wxTimer& GetTimer() const { return m_timer; }
 
     // implement the base class pure virtual
     virtual wxEvent *Clone() const { return new wxTimerEvent(*this); }
 
 private:
-    int m_interval;
+    wxTimer& m_timer;
 
-    DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxTimerEvent)
+    DECLARE_ABSTRACT_CLASS(wxTimerEvent)
+    DECLARE_NO_ASSIGN_CLASS(wxTimerEvent)
 };
 
 typedef void (wxEvtHandler::*wxTimerEventFunction)(wxTimerEvent&);

@@ -47,8 +47,7 @@ void wxTimerImpl::SetOwner(wxEvtHandler *owner, int timerid)
 
 void wxTimerImpl::SendEvent()
 {
-    wxTimerEvent event(m_idTimer, m_milli);
-    event.SetEventObject(m_owner);
+    wxTimerEvent event(*m_timer);
     (void)m_owner->ProcessEvent(event);
 }
 
