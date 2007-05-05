@@ -404,7 +404,7 @@ void wxRichTextFontPreviewCtrl::OnPaint(wxPaintEvent& WXUNUSED(event))
     {
         dc.SetFont(font);
         // Calculate vertical and horizontal centre
-        long w = 0, h = 0;
+        wxCoord w = 0, h = 0;
 
         wxString text(_("ABCDEFGabcdefg12345"));
         if (GetTextEffects() & wxTEXT_ATTR_EFFECT_CAPITALS)
