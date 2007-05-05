@@ -59,6 +59,17 @@ static void gtk_filedialog_ok_callback(GtkWidget *widget, wxFileDialog *dialog)
         }
     }
 
+    if (style & wxFD_FILE_MUST_EXIST)
+    {
+        if ( !g_file_test(filename, G_FILE_TEST_EXISTS) )
+        {
+            wxMessageDialog dlg( dialog, _("Please choose an existing file."), 
+                                 _("Error"), wxOK| wxICON_ERROR);
+            dlg.ShowModal();
+            return;
+        }
+    }
+    
     // change to the directory where the user went if asked
     if (style & wxFD_CHANGE_DIR)
     {

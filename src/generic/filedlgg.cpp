@@ -1473,6 +1473,8 @@ void wxGenericFileDialog::HandleAction( const wxString &fn )
     {
         wxMessageBox(_("Please choose an existing file."), _("Error"),
                      wxOK | wxICON_ERROR );
+                     
+        return;
     }
 
     SetPath( filename );
