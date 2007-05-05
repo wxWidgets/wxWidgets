@@ -511,6 +511,14 @@ wxAuiManager::wxAuiManager(wxWindow* managed_wnd, unsigned int flags)
 
 wxAuiManager::~wxAuiManager()
 {
+    int i;
+	for (i = 0; i < m_panes.Count(); i++ )
+	{
+		wxAuiPaneInfo& pinfo = m_panes.Item(i);
+		if (pinfo.window && pinfo.window->GetParent() == 0)
+			delete pinfo.window;
+	}
+    
     delete m_art;
 }
 
