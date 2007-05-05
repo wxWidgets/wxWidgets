@@ -1129,6 +1129,36 @@ public:
     const char *ToAscii() const { return c_str(); }
 #endif // Unicode/!Unicode
 
+    // conversion to/from UTF-8:
+#if wxUSE_UNICODE_UTF8
+    static wxString FromUTF8(const char *utf8)
+    {
+      wxASSERT( wxStringOperations::IsValidUtf8String(utf8) );
+      return FromImpl(wxStringImpl(utf8));
+    }
+    static wxString FromUTF8(const char *utf8, size_t len)
+    {
+      wxASSERT( wxStringOperations::IsValidUtf8String(utf8, len) );
+      return FromImpl(wxStringImpl(utf8, len));
+    }
+    const char* utf8_str() const { return wx_str(); }
+    const char* ToUTF8() const { return wx_str(); }
+#elif wxUSE_UNICODE_WCHAR
+    static wxString FromUTF8(const char *utf8)
+      { return wxString(utf8, wxConvUTF8); }
+    static wxString FromUTF8(const char *utf8, size_t len)
+      { return wxString(utf8, wxConvUTF8, len); }
+    const wxCharBuffer utf8_str() const { return mb_str(wxConvUTF8); }
+    const wxCharBuffer ToUTF8() const { return utf8_str(); }
+#else // ANSI
+    static wxString FromUTF8(const char *utf8)
+      { return wxString(wxConvUTF8.cMB2WC(utf8)); }
+    static wxString FromUTF8(const char *utf8, size_t len)
+      { return wxString(wxConvUTF8.cMB2WC(utf8, len == npos ? wxNO_LEN : len)); }
+    const wxCharBuffer utf8_str() const { return wxConvUTF8.cWC2MB(wc_str()); }
+    const wxCharBuffer ToUTF8() const { return utf8_str(); }
+#endif
+
     // functions for storing binary data in wxString:
 #if wxUSE_UNICODE
     static wxString From8BitData(const char *data, size_t len)

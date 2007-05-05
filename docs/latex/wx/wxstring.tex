@@ -779,6 +779,19 @@ Use \helpref{wxString constructors}{wxstringconstruct} if you
 need to convert from another charset.
 
 
+\membersection{wxString::FromUTF8}\label{wxstringfromutf8}
+
+\func{static wxString }{FromUTF8}{\param{const char*}{ s}}
+
+\func{static wxString }{FromUTF8}{\param{const char*}{ s}, \param{size\_t}{ len}}
+
+Converts C string encoded in UTF-8 to wxString.
+
+Note that this method assumes that \arg{s} is a valid UTF-8 sequence and
+doesn't do any validation in release builds, it's validity is only checked in
+debug builds.
+
+
 \membersection{wxString::GetChar}\label{wxstringgetchar}
 
 \constfunc{wxChar}{GetChar}{\param{size\_t}{ n}}
@@ -1166,12 +1179,10 @@ This is a convenience method useful when storing binary data in wxString.
 
 \constfunc{const char*}{ToAscii}{\void}
 
-Converts the string to an ASCII, 7-bit string (ANSI builds only).
-
 \constfunc{const wxCharBuffer}{ToAscii}{\void}
 
 Converts the string to an ASCII, 7-bit string in the form of
-a wxCharBuffer (Unicode builds only).
+a wxCharBuffer (Unicode builds only) or a C string (ANSI builds).
 
 Note that this conversion only works if the string contains only ASCII
 characters. The \helpref{mb\_str}{wxstringmbstr} method provides more
@@ -1263,6 +1274,15 @@ bit integer numbers.
 Please see \helpref{ToLongLong}{wxstringtolonglong} for additional remarks.
 
 
+\membersection{wxString::ToUTF8}\label{wxstringtoutf8}
+
+\constfunc{const char*}{ToUTF8}{\void}
+
+\constfunc{const wxCharBuffer}{ToUF8}{\void}
+
+Same as \helpref{utf8\_str}{wxstringutf8str}.
+
+
 \membersection{wxString::Trim}\label{wxstringtrim}
 
 \func{wxString\&}{Trim}{\param{bool}{ fromRight = true}}
@@ -1314,6 +1334,18 @@ Returns this string converted to upper case.
 The same as MakeUpper.
 
 This is a wxWidgets 1.xx compatibility function; you should not use it in new code.
+
+
+\membersection{wxString::utf8\_str}\label{wxstringutf8str}
+
+\constfunc{const char*}{utf8\_str}{\void}
+
+\constfunc{const wxCharBuffer}{utf8\_str}{\void}
+
+Converts the strings contents to UTF-8 and returns it either as a temporary
+wxCharBuffer object or as a pointer to the internal string contents in
+UTF-8 build.
+% FIXME-UTF8: link to a topic explaining UTF-8 build here
 
 
 \membersection{wxString::wc\_str}\label{wxstringwcstr}
