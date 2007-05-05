@@ -356,7 +356,11 @@ IMPLEMENT_ABSTRACT_CLASS(wxHtmlWordCell, wxHtmlCell)
 wxHtmlWordCell::wxHtmlWordCell(const wxString& word, const wxDC& dc) : wxHtmlCell()
 {
     m_Word = word;
-    dc.GetTextExtent(m_Word, &m_Width, &m_Height, &m_Descent);
+    wxCoord w, h, d;
+    dc.GetTextExtent(m_Word, &w, &h, &d);
+    m_Width = w;
+    m_Height = h;
+    m_Descent = d;
     SetCanLiveOnPagebreak(false);
     m_allowLinebreak = true;
 }
