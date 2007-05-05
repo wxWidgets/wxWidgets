@@ -18,17 +18,6 @@
 #include <directfb_version.h>
 
 //-----------------------------------------------------------------------------
-// strings conversion
-//-----------------------------------------------------------------------------
-
-// convert string from wxString to UTF-8 encoded const char*
-#if wxUSE_UNICODE
-    #define wxSTR_TO_DFB(s)    (s).mb_str(wxConvUTF8)
-#else
-    #define wxSTR_TO_DFB(s)    wxConvUTF8.cWC2MB((s).wc_str(*wxConvUI))
-#endif
-
-//-----------------------------------------------------------------------------
 // misc helpers
 //-----------------------------------------------------------------------------
 

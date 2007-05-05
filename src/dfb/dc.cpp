@@ -338,7 +338,7 @@ void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     wxCHECK_RET( m_textForegroundColour.Ok(),
                  wxT("invalid foreground color") );
     SelectColour(m_textForegroundColour);
-    m_surface->DrawString(wxSTR_TO_DFB(text), -1, xx, yy, DSTF_LEFT | DSTF_TOP);
+    m_surface->DrawString(text.utf8_str(), -1, xx, yy, DSTF_LEFT | DSTF_TOP);
 
     // restore pen's colour, because other drawing functions expect the colour
     // to be set to the pen:
@@ -497,7 +497,7 @@ void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
     DFBRectangle rect;
     wxIDirectFBFontPtr f = GetCurrentFont();
 
-    if ( f->GetStringExtents(wxSTR_TO_DFB(string), -1, &rect, NULL) )
+    if ( f->GetStringExtents(string.utf8_str(), -1, &rect, NULL) )
     {
         // VS: YDEV is corrent, it should *not* be XDEV, because font's are
         //     only scaled according to m_scaleY
