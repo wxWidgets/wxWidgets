@@ -577,7 +577,7 @@ if test $DEBUG_CONFIGURE = 1; then
 
   DEFAULT_wxUSE_UNICODE=no
   DEFAULT_wxUSE_UNICODE_MSLU=no
-  DEFAULT_wxUSE_UNICODE_UTF8=no
+  DEFAULT_wxUSE_UNICODE_UTF8=auto
   DEFAULT_wxUSE_UNICODE_UTF8_LOCALE=no
   DEFAULT_wxUSE_WCSRTOMBS=no
 
@@ -805,7 +805,7 @@ else
 
   DEFAULT_wxUSE_UNICODE=no
   DEFAULT_wxUSE_UNICODE_MSLU=yes
-  DEFAULT_wxUSE_UNICODE_UTF8=no
+  DEFAULT_wxUSE_UNICODE_UTF8=auto
   DEFAULT_wxUSE_UNICODE_UTF8_LOCALE=no
   DEFAULT_wxUSE_WCSRTOMBS=no
 
@@ -993,8 +993,7 @@ WX_ARG_ENABLE(log,           [  --enable-log            use logging system], wxU
 WX_ARG_ENABLE(longlong,      [  --enable-longlong       use wxLongLong class], wxUSE_LONGLONG)
 WX_ARG_ENABLE(mimetype,      [  --enable-mimetype       use wxMimeTypesManager], wxUSE_MIMETYPE)
 WX_ARG_ENABLE(mslu,          [  --enable-mslu           use MS Layer for Unicode on Windows 9x (Win32 only)], wxUSE_UNICODE_MSLU)
-dnl FIXME-UTF8: make UTF8 automatic
-WX_ARG_ENABLE(utf8,          [  --enable-utf8           use UTF-8 representation for strings (Unix only)], wxUSE_UNICODE_UTF8)
+WX_ARG_ENABLE_PARAM(utf8,          [  --enable-utf8           use UTF-8 representation for strings (Unix only)], wxUSE_UNICODE_UTF8)
 WX_ARG_ENABLE(utf8only,      [  --enable-utf8only      only support UTF-8 locales in UTF-8 build (Unix only)], wxUSE_UNICODE_UTF8_LOCALE)
 WX_ARG_ENABLE(snglinst,      [  --enable-snglinst       use wxSingleInstanceChecker class], wxUSE_SNGLINST_CHECKER)
 WX_ARG_ENABLE(std_iostreams, [  --enable-std_iostreams  use standard C++ stream classes], wxUSE_STD_IOSTREAM)
@@ -3830,6 +3829,23 @@ else
     dnl distribute only wxBase sources/headers
     GUIDIST="BASE_DIST"
     DISTDIR="wxBase"
+fi
+
+
+dnl ---------------------------------------------------------------------------
+dnl UTF-8 support
+dnl ---------------------------------------------------------------------------
+
+dnl If UTF-8 support wasn't explicitly enabled or disabled, enable it only
+dnl for ports where it makes sense by default (GTK+, DirectFB):
+if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_UNICODE_UTF8" = "auto" ; then
+    if test "$TOOLKIT" = "DFB" ; then
+        wxUSE_UNICODE_UTF8=yes
+    elif test "$TOOLKIT" = "GTK" -a "$WXGTK20" = "1" ; then
+        wxUSE_UNICODE_UTF8=yes
+    else
+        wxUSE_UNICODE_UTF8=no
+    fi
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -8160,6 +8176,9 @@ echo "  Should wxWidgets be compiled into single library?       ${wxUSE_MONOLITH
 echo "  Should wxWidgets be compiled in debug mode?             ${wxUSE_DEBUG:-no}"
 echo "  Should wxWidgets be linked as a shared library?         ${wxUSE_SHARED:-no}"
 echo "  Should wxWidgets be compiled in Unicode mode?           ${wxUSE_UNICODE:-no}"
+if test "$wxUSE_UNICODE" = "yes"; then
+echo "  Should wxWidgets use UTF-8 internally?                  ${wxUSE_UNICODE_UTF8:-no}"
+fi
 
 echo "  What level of wxWidgets compatibility should be enabled?"
 echo "                                       wxWidgets 2.6      ${WXWIN_COMPATIBILITY_2_6:-no}"
