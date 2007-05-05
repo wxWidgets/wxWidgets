@@ -50,7 +50,7 @@ public:
     virtual void SetPalette(const wxPalette& palette);
 #endif
 
-    virtual void SetLogicalFunction(int function) { }
+    virtual void SetLogicalFunction(int function);
 
     virtual void DestroyClippingRegion();
 
