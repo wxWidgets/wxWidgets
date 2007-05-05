@@ -2148,7 +2148,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
     else if (item->IsBold())
         dc.SetFont(m_boldFont);
 
-    long text_w = 0, text_h = 0;
+    wxCoord text_w = 0, text_h = 0;
     dc.GetTextExtent( item->GetText(), &text_w, &text_h );
 
     int image_h = 0, image_w = 0;
