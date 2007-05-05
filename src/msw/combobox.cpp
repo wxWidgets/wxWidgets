@@ -367,6 +367,30 @@ bool wxComboBox::MSWCommand(WXUINT param, WXWORD id)
     return true;
 }
 
+bool wxComboBox::MSWShouldPreProcessMessage(WXMSG *pMsg)
+{
+    // prevent command accelerators from stealing editing
+    // hotkeys when we have the focus
+    if (wxIsCtrlDown())
+    {
+        WPARAM vkey = pMsg->wParam;
+        
+        switch (vkey)
+        {
+            case 'C':
+            case 'V':
+            case 'X':
+            case VK_INSERT:
+            case VK_DELETE:
+            case VK_HOME:
+            case VK_END:
+                return false;
+        }
+    }
+    
+    return wxChoice::MSWShouldPreProcessMessage(pMsg);
+}
+
 WXHWND wxComboBox::GetEditHWND() const
 {
     // this function should not be called for wxCB_READONLY controls, it is
