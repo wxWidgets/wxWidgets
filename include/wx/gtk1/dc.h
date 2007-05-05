@@ -38,7 +38,7 @@ public:
     virtual void StartPage() { }
     virtual void EndPage() { }
 
-protected:
+public:
     // implementation
     wxCoord XDEV2LOG(wxCoord x) const       { return DeviceToLogicalX(x); }
     wxCoord XDEV2LOGREL(wxCoord x) const    { return DeviceToLogicalXRel(x); }

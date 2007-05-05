@@ -25,14 +25,6 @@ wxDC::wxDC()
 {
     m_ok = FALSE;
 
-    m_mm_to_pix_x = (double)wxGetDisplaySize().GetWidth() /
-                    (double)wxGetDisplaySizeMM().GetWidth();
-    m_mm_to_pix_y = (double)wxGetDisplaySize().GetHeight() /
-                    (double)wxGetDisplaySizeMM().GetHeight();
-
-    m_needComputeScaleX = FALSE; /* not used yet */
-    m_needComputeScaleY = FALSE; /* not used yet */
-
     m_logicalFunction = wxCOPY;
 
     m_pen = *wxBLACK_PEN;
