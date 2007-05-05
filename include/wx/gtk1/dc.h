@@ -38,6 +38,8 @@ public:
     virtual void StartPage() { }
     virtual void EndPage() { }
 
+    virtual GdkWindow* GetGDKWindow() const { return NULL; }
+
 public:
     // implementation
     wxCoord XDEV2LOG(wxCoord x) const       { return DeviceToLogicalX(x); }
@@ -48,7 +50,7 @@ public:
     wxCoord XLOG2DEVREL(wxCoord x) const    { return LogicalToDeviceXRel(x); }
     wxCoord YLOG2DEV(wxCoord y) const       { return LogicalToDeviceY(y); }
     wxCoord YLOG2DEVREL(wxCoord y) const    { return LogicalToDeviceYRel(y); }
-    
+
     // base class pure virtuals implemented here
     virtual void DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height);
     virtual void DoGetSizeMM(int* width, int* height) const;
