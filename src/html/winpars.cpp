@@ -199,10 +199,13 @@ void wxHtmlWinParser::InitParser(const wxString& source)
     m_FontBold = m_FontItalic = m_FontUnderlined = m_FontFixed = FALSE;
     m_FontSize = 3; //default one
     CreateCurrentFont();           // we're selecting default font into
-    m_DC->GetTextExtent( wxT("H"), &m_CharWidth, &m_CharHeight);
-                /* NOTE : we're not using GetCharWidth/Height() because
-                   of differences under X and win
-                 */
+    
+    // we're not using GetCharWidth/Height() because of
+    // differences under X and win
+    wxCoord w,h;
+    m_DC->GetTextExtent( wxT("H"), &w, &h);
+    m_CharWidth = w;
+    m_CharHeight = h;
 
     m_UseLink = false;
     m_Link = wxHtmlLinkInfo( wxEmptyString );
