@@ -228,11 +228,13 @@ protected:
 
         m_search->SetFocus();
 
+#if wxUSE_MENUS
         if ( m_eventType == wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN )
         {
             // this happens automatically, just like on Mac OS X
             m_search->PopupSearchMenu();
         }
+#endif // wxUSE_MENUS
     }
 
     void OnPaint(wxPaintEvent&)
@@ -294,17 +296,21 @@ wxSearchCtrl::wxSearchCtrl(wxWindow *parent, wxWindowID id,
 
 void wxSearchCtrl::Init()
 {
-    m_text = 0;
-    m_searchButton = 0;
-    m_cancelButton = 0;
-    m_menu = 0;
+    m_text = NULL;
+    m_searchButton = NULL;
+    m_cancelButton = NULL;
+#if wxUSE_MENUS
+    m_menu = NULL;
+#endif // wxUSE_MENUS
 
     m_searchButtonVisible = true;
     m_cancelButtonVisible = false;
 
-    m_searchMenuBitmapUser = false;
     m_searchBitmapUser = false;
     m_cancelBitmapUser = false;
+#if wxUSE_MENUS
+    m_searchMenuBitmapUser = false;
+#endif // wxUSE_MENUS
 }
 
 bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
@@ -359,11 +365,15 @@ wxSearchCtrl::~wxSearchCtrl()
     delete m_text;
     delete m_searchButton;
     delete m_cancelButton;
+#if wxUSE_MENUS
     delete m_menu;
+#endif // wxUSE_MENUS
 }
 
 
 // search control specific interfaces
+#if wxUSE_MENUS
+
 void wxSearchCtrl::SetMenu( wxMenu* menu )
 {
     if ( menu == m_menu )
@@ -396,6 +406,8 @@ wxMenu* wxSearchCtrl::GetMenu()
 {
     return m_menu;
 }
+
+#endif // wxUSE_MENUS
 
 void wxSearchCtrl::ShowSearchButton( bool show )
 {
@@ -459,7 +471,7 @@ wxSize wxSearchCtrl::DoGetBestSize() const
     wxSize sizeCancel(0,0);
     int searchMargin = 0;
     int cancelMargin = 0;
-    if ( m_searchButtonVisible || m_menu )
+    if ( m_searchButtonVisible || HasMenu() )
     {
         sizeSearch = m_searchButton->GetBestSize();
         searchMargin = MARGIN;
@@ -502,7 +514,7 @@ void wxSearchCtrl::LayoutControls(int x, int y, int width, int height)
     wxSize sizeCancel(0,0);
     int searchMargin = 0;
     int cancelMargin = 0;
-    if ( m_searchButtonVisible || m_menu )
+    if ( m_searchButtonVisible || HasMenu() )
     {
         sizeSearch = m_searchButton->GetBestSize();
         searchMargin = MARGIN;
@@ -512,7 +524,7 @@ void wxSearchCtrl::LayoutControls(int x, int y, int width, int height)
         sizeCancel = m_cancelButton->GetBestSize();
         cancelMargin = MARGIN;
     }
-    m_searchButton->Show( m_searchButtonVisible || m_menu );
+    m_searchButton->Show( m_searchButtonVisible || HasMenu() );
     m_cancelButton->Show( m_cancelButtonVisible );
 
     if ( sizeSearch.x + sizeCancel.x > width )
@@ -810,7 +822,7 @@ void wxSearchCtrl::SetSearchBitmap( const wxBitmap& bitmap )
     m_searchBitmapUser = bitmap.Ok();
     if ( m_searchBitmapUser )
     {
-        if ( m_searchButton && !m_menu )
+        if ( m_searchButton && !HasMenu() )
         {
             m_searchButton->SetBitmapLabel( m_searchBitmap );
         }
@@ -821,6 +833,8 @@ void wxSearchCtrl::SetSearchBitmap( const wxBitmap& bitmap )
         RecalcBitmaps();
     }
 }
+
+#if wxUSE_MENUS
 
 void wxSearchCtrl::SetSearchMenuBitmap( const wxBitmap& bitmap )
 {
@@ -839,6 +853,8 @@ void wxSearchCtrl::SetSearchMenuBitmap( const wxBitmap& bitmap )
         RecalcBitmaps();
     }
 }
+
+#endif // wxUSE_MENUS
 
 void wxSearchCtrl::SetCancelBitmap( const wxBitmap& bitmap )
 {
@@ -1121,7 +1137,7 @@ void wxSearchCtrl::RecalcBitmaps()
             )
         {
             m_searchBitmap = RenderSearchBitmap(bitmapWidth,bitmapHeight,false);
-            if ( !m_menu )
+            if ( !HasMenu() )
             {
                 m_searchButton->SetBitmapLabel(m_searchBitmap);
             }
@@ -1129,6 +1145,7 @@ void wxSearchCtrl::RecalcBitmaps()
         // else this bitmap was set by user, don't alter
     }
 
+#if wxUSE_MENUS
     if ( !m_searchMenuBitmapUser )
     {
         if (
@@ -1145,6 +1162,7 @@ void wxSearchCtrl::RecalcBitmaps()
         }
         // else this bitmap was set by user, don't alter
     }
+#endif // wxUSE_MENUS
 
     if ( !m_cancelBitmapUser )
     {
@@ -1181,6 +1199,8 @@ void wxSearchCtrl::OnSize( wxSizeEvent& WXUNUSED(event) )
     LayoutControls(0, 0, width, height);
 }
 
+#if wxUSE_MENUS
+
 void wxSearchCtrl::PopupSearchMenu()
 {
     if ( m_menu )
@@ -1189,6 +1209,8 @@ void wxSearchCtrl::PopupSearchMenu()
         PopupMenu( m_menu, 0, size.y );
     }
 }
+
+#endif // wxUSE_MENUS
 
 #endif // !wxUSE_NATIVE_SEARCH_CONTROL
 

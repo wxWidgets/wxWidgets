@@ -47,10 +47,12 @@ public:
                 const wxValidator& validator = wxDefaultValidator,
                 const wxString& name = wxSearchCtrlNameStr);
 
+#if wxUSE_MENUS
     // get/set search button menu
     // --------------------------
     virtual void SetMenu( wxMenu* menu );
     virtual wxMenu* GetMenu();
+#endif // wxUSE_MENUS
 
     // get/set search options
     // ----------------------
@@ -195,8 +197,10 @@ public:
 
     // search control generic only
     void SetSearchBitmap( const wxBitmap& bitmap );
-    void SetSearchMenuBitmap( const wxBitmap& bitmap );
     void SetCancelBitmap( const wxBitmap& bitmap );
+#if wxUSE_MENUS
+    void SetSearchMenuBitmap( const wxBitmap& bitmap );
+#endif // wxUSE_MENUS
 
 protected:
     virtual void DoSetValue(const wxString& value, int flags = 0);
@@ -217,27 +221,46 @@ protected:
 
     void OnSetFocus( wxFocusEvent& event );
     void OnSize( wxSizeEvent& event );
-    
+
+    bool HasMenu() const
+    {
+#if wxUSE_MENUS
+        return m_menu != NULL;
+#else // !wxUSE_MENUS
+        return false;
+#endif // wxUSE_MENUS/!wxUSE_MENUS
+    }
+
 private:
     friend class wxSearchButton;
 
+#if wxUSE_MENUS
     void PopupSearchMenu();
+#endif // wxUSE_MENUS
 
     // the subcontrols
     wxSearchTextCtrl *m_text;
     wxSearchButton *m_searchButton;
     wxSearchButton *m_cancelButton;
+#if wxUSE_MENUS
     wxMenu *m_menu;
+#endif // wxUSE_MENUS
 
     bool m_searchButtonVisible;
     bool m_cancelButtonVisible;
 
     bool m_searchBitmapUser;
-    bool m_searchMenuBitmapUser;
     bool m_cancelBitmapUser;
+#if wxUSE_MENUS
+    bool m_searchMenuBitmapUser;
+#endif // wxUSE_MENUS
+
     wxBitmap m_searchBitmap;
-    wxBitmap m_searchMenuBitmap;
     wxBitmap m_cancelBitmap;
+#if wxUSE_MENUS
+    wxBitmap m_searchMenuBitmap;
+#endif // wxUSE_MENUS
+
 private:
     DECLARE_DYNAMIC_CLASS(wxSearchCtrl)
 
