@@ -618,7 +618,9 @@ void wxTreeCtrl::Init()
 {
     m_textCtrl = NULL;
     m_hasAnyAttr = false;
+#if wxUSE_DRAGIMAGE
     m_dragImage = NULL;
+#endif
     m_pVirtualRoot = NULL;
 
     // initialize the global array of events now as it can't be done statically
@@ -2136,6 +2138,7 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                 }
 #endif // __WXWINCE__
 
+#if wxUSE_DRAGIMAGE
                 if ( m_dragImage )
                 {
                     m_dragImage->Move(wxPoint(x, y));
@@ -2148,6 +2151,7 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                         m_dragImage->Show();
                     }
                 }
+#endif // wxUSE_DRAGIMAGE
                 break;
 
             case WM_LBUTTONUP:
@@ -2173,6 +2177,7 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                 // fall through
 
             case WM_RBUTTONUP:
+#if wxUSE_DRAGIMAGE
                 if ( m_dragImage )
                 {
                     m_dragImage->EndDrag();
@@ -2189,6 +2194,7 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                     // are selected simultaneously which is quite weird
                     TreeView_SelectDropTarget(GetHwnd(), 0);
                 }
+#endif // wxUSE_DRAGIMAGE
                 break;
         }
     }
@@ -2717,6 +2723,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
         case TVN_BEGINDRAG:
         case TVN_BEGINRDRAG:
+#if wxUSE_DRAGIMAGE
             if ( event.IsAllowed() )
             {
                 // normally this is impossible because the m_dragImage is
@@ -2727,6 +2734,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 m_dragImage->BeginDrag(wxPoint(0,0), this);
                 m_dragImage->Show();
             }
+#endif // wxUSE_DRAGIMAGE
             break;
 
         case TVN_DELETEITEM:

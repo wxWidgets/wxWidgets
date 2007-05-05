@@ -263,8 +263,10 @@ private:
     // true if the hash above is not empty
     bool m_hasAnyAttr;
 
+#if wxUSE_DRAGIMAGE
     // used for dragging
     wxDragImage *m_dragImage;
+#endif
 
     // Virtual root item, if wxTR_HIDE_ROOT is set.
     void* m_pVirtualRoot;
