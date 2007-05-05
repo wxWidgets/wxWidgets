@@ -511,11 +511,10 @@ wxAuiManager::wxAuiManager(wxWindow* managed_wnd, unsigned int flags)
 
 wxAuiManager::~wxAuiManager()
 {
-    int i;
-    for (i = 0; i < m_panes.Count(); i++ )
+    for ( size_t i = 0; i < m_panes.size(); i++ )
     {
-        wxAuiPaneInfo& pinfo = m_panes.Item(i);
-        if (pinfo.window && pinfo.window->GetParent() == 0)
+        wxAuiPaneInfo& pinfo = m_panes[i];
+        if (pinfo.window && !pinfo.window->GetParent())
             delete pinfo.window;
     }
 
