@@ -1048,7 +1048,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk/textctrl.cpp
     src/gtk/tglbtn.cpp
     src/gtk/treeentry_gtk.c
-    src/gtk/utilsres.cpp
 </set>
 <set var="GTK_HDR" hints="files">
     wx/generic/colrdlgg.h
@@ -1214,7 +1213,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/gtk1/tbargtk.cpp
     src/gtk1/textctrl.cpp
     src/gtk1/tglbtn.cpp
-    src/gtk1/utilsres.cpp
 </set>
 <set var="GTK1_HDR" hints="files">
     wx/generic/colrdlgg.h
