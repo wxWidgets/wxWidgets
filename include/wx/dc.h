@@ -609,11 +609,11 @@ public:
 
 #if WXWIN_COMPATIBILITY_2_8
     // for compatibility with the old code when wxCoord was long everywhere
-    void GetTextExtent(const wxString& string,
+    wxDEPRECATED( void GetTextExtent(const wxString& string,
                        long *x, long *y,
                        long *descent = NULL,
                        long *externalLeading = NULL,
-                       const wxFont *theFont = NULL) const
+                       const wxFont *theFont = NULL) const )
     {
         wxCoord x2, y2, descent2, externalLeading2;
         DoGetTextExtent(string, &x2, &y2,
@@ -629,7 +629,7 @@ public:
             *externalLeading = externalLeading2;
     }
 
-    void GetLogicalOrigin(long *x, long *y) const
+    wxDEPRECATED( void GetLogicalOrigin(long *x, long *y) const )
     {
         wxCoord x2, y2;
         DoGetLogicalOrigin(&x2, &y2);
@@ -639,7 +639,7 @@ public:
             *y = y2;
     }
 
-    void GetDeviceOrigin(long *x, long *y) const
+    wxDEPRECATED( void GetDeviceOrigin(long *x, long *y) const )
     {
         wxCoord x2, y2;
         DoGetDeviceOrigin(&x2, &y2);
@@ -648,7 +648,7 @@ public:
         if ( y )
             *y = y2;
     }
-    void GetClippingBox(long *x, long *y, long *w, long *h) const
+    wxDEPRECATED( void GetClippingBox(long *x, long *y, long *w, long *h) const )
     {
         wxCoord xx,yy,ww,hh;
         DoGetClippingBox(&xx, &yy, &ww, &hh);
