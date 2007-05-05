@@ -8120,7 +8120,7 @@ void wxGrid::DrawTextRectangle(wxDC& dc,
             continue;
         }
 
-        long lineWidth = 0,
+        wxCoord lineWidth = 0,
              lineHeight = 0;
         dc.GetTextExtent(line, &lineWidth, &lineHeight);
 
@@ -8201,9 +8201,9 @@ void wxGrid::GetTextBoxSize( const wxDC& dc,
                              const wxArrayString& lines,
                              long *width, long *height ) const
 {
-    long w = 0;
-    long h = 0;
-    long lineW = 0, lineH = 0;
+    wxCoord w = 0;
+    wxCoord h = 0;
+    wxCoord lineW = 0, lineH = 0;
 
     size_t i;
     for ( i = 0; i < lines.GetCount(); i++ )
