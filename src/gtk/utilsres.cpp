@@ -10,6 +10,8 @@
 // For compilers that support precompilation, includes "wx.h".
 #include "wx/wxprec.h"
 
+#if wxUSE_CONFIG
+
 #include "wx/utils.h"
 
 #ifndef WX_PRECOMP
@@ -123,3 +125,5 @@ bool wxGetResource(const wxString& section, const wxString& entry, int *value, c
     }
     else return false;
 }
+
+#endif // wxUSE_CONFIG
