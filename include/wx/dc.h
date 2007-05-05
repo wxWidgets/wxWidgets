@@ -613,50 +613,10 @@ public:
                        long *x, long *y,
                        long *descent = NULL,
                        long *externalLeading = NULL,
-                       const wxFont *theFont = NULL) const )
-    {
-        wxCoord x2, y2, descent2, externalLeading2;
-        DoGetTextExtent(string, &x2, &y2,
-                        &descent2, &externalLeading2,
-                        theFont);
-        if ( x )
-            *x = x2;
-        if ( y )
-            *y = y2;
-        if ( descent )
-            *descent = descent2;
-        if ( externalLeading )
-            *externalLeading = externalLeading2;
-    }
-
-    wxDEPRECATED( void GetLogicalOrigin(long *x, long *y) const )
-    {
-        wxCoord x2, y2;
-        DoGetLogicalOrigin(&x2, &y2);
-        if ( x )
-            *x = x2;
-        if ( y )
-            *y = y2;
-    }
-
-    wxDEPRECATED( void GetDeviceOrigin(long *x, long *y) const )
-    {
-        wxCoord x2, y2;
-        DoGetDeviceOrigin(&x2, &y2);
-        if ( x )
-            *x = x2;
-        if ( y )
-            *y = y2;
-    }
-    wxDEPRECATED( void GetClippingBox(long *x, long *y, long *w, long *h) const )
-    {
-        wxCoord xx,yy,ww,hh;
-        DoGetClippingBox(&xx, &yy, &ww, &hh);
-        if (x) *x = xx;
-        if (y) *y = yy;
-        if (w) *w = ww;
-        if (h) *h = hh;
-    }
+                       const wxFont *theFont = NULL) const );
+    wxDEPRECATED( void GetLogicalOrigin(long *x, long *y) const );
+    wxDEPRECATED( void GetDeviceOrigin(long *x, long *y) const );
+    wxDEPRECATED( void GetClippingBox(long *x, long *y, long *w, long *h) const );
 #endif  // WXWIN_COMPATIBILITY_2_8
 
     // RTL related functions
