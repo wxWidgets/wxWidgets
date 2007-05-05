@@ -98,9 +98,9 @@ void wxDCBase::EndDrawing()
     // for compatibility with the old code when wxCoord was long everywhere
 void wxDCBase::GetTextExtent(const wxString& string,
                        long *x, long *y,
-                       long *descent = NULL,
-                       long *externalLeading = NULL,
-                       const wxFont *theFont = NULL) const
+                       long *descent,
+                       long *externalLeading,
+                       const wxFont *theFont) const
     {
         wxCoord x2, y2, descent2, externalLeading2;
         DoGetTextExtent(string, &x2, &y2,
