@@ -30,7 +30,8 @@
 // global data
 //-----------------------------------------------------------------------------
 
-extern int g_openDialogs;
+// Don't allow window closing if there are open dialogs
+int g_openDialogs;
 
 //-----------------------------------------------------------------------------
 // wxDialog

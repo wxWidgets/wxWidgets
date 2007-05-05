@@ -190,8 +190,10 @@
 // data
 //-----------------------------------------------------------------------------
 
-extern bool       g_blockEventsOnDrag;
-extern bool       g_blockEventsOnScroll;
+// Don't allow event propagation during drag
+bool g_blockEventsOnDrag;
+// Don't allow mouse event propagation during scroll
+bool g_blockEventsOnScroll;
 extern wxCursor   g_globalCursor;
 
 // mouse capture state: the window which has it and if the mouse is currently

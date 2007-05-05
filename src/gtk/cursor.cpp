@@ -379,7 +379,9 @@ GdkCursor *wxCursor::GetCursor() const
 // busy cursor routines
 //-----------------------------------------------------------------------------
 
-extern wxCursor g_globalCursor;
+/* Current cursor, in order to hang on to
+ * cursor handle when setting the cursor globally */
+wxCursor g_globalCursor;
 
 static wxCursor  gs_savedCursor;
 static int       gs_busyCount = 0;
