@@ -198,7 +198,10 @@ bool wxOwnerDrawn::OnMeasureItem(size_t *pwidth, size_t *pheight)
 
         dc.SetFont(GetFontToUse());
 
-        dc.GetTextExtent(str, (long *)pwidth, (long *)pheight);
+        wxCoord w, h;
+        dc.GetTextExtent(str, &w, &h);
+        *pwidth = w;
+        *pheight = h;
 
         // add space at the end of the menu for the submenu expansion arrow
         // this will also allow offsetting the accel string from the right edge
