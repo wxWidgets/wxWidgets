@@ -79,13 +79,10 @@ void wxFontPreviewer::OnPaint(wxPaintEvent& WXUNUSED(event))
     if ( font.Ok() )
     {
         dc.SetFont(font);
-        // Calculate vertical centre
-        long w = 0, h = 0;
-        dc.GetTextExtent( wxT("X"), &w, &h);
         dc.SetTextForeground(GetForegroundColour());
         dc.SetClippingRegion(2, 2, size.x-4, size.y-4);
         dc.DrawText(_("ABCDEFGabcdefg12345"),
-                     10, size.y/2 - h/2);
+                     10, (size.y - dc.GetTextExtent(wxT("X")).y)/2);
         dc.DestroyClippingRegion();
     }
 }
