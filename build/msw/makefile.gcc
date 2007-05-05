@@ -1588,6 +1588,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_checklst.o \
 	$(OBJS)\monodll_fdrepdlg.o \
 	$(OBJS)\monodll_fontdlg.o \
+	$(OBJS)\monodll_accelcmn.o \
 	$(OBJS)\monodll_accesscmn.o \
 	$(OBJS)\monodll_anidecod.o \
 	$(OBJS)\monodll_appcmn.o \
@@ -1818,6 +1819,7 @@ ____CORE_SRC_FILENAMES_OBJECTS =  \
 	$(OBJS)\monodll_metal.o \
 	$(OBJS)\monodll_mono.o \
 	$(OBJS)\monodll_win32.o \
+	$(OBJS)\monodll_accelcmn.o \
 	$(OBJS)\monodll_accesscmn.o \
 	$(OBJS)\monodll_anidecod.o \
 	$(OBJS)\monodll_appcmn.o \
@@ -2226,6 +2228,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_checklst.o \
 	$(OBJS)\monolib_fdrepdlg.o \
 	$(OBJS)\monolib_fontdlg.o \
+	$(OBJS)\monolib_accelcmn.o \
 	$(OBJS)\monolib_accesscmn.o \
 	$(OBJS)\monolib_anidecod.o \
 	$(OBJS)\monolib_appcmn.o \
@@ -2456,6 +2459,7 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  \
 	$(OBJS)\monolib_metal.o \
 	$(OBJS)\monolib_mono.o \
 	$(OBJS)\monolib_win32.o \
+	$(OBJS)\monolib_accelcmn.o \
 	$(OBJS)\monolib_accesscmn.o \
 	$(OBJS)\monolib_anidecod.o \
 	$(OBJS)\monolib_appcmn.o \
@@ -2788,6 +2792,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_checklst.o \
 	$(OBJS)\coredll_fdrepdlg.o \
 	$(OBJS)\coredll_fontdlg.o \
+	$(OBJS)\coredll_accelcmn.o \
 	$(OBJS)\coredll_accesscmn.o \
 	$(OBJS)\coredll_anidecod.o \
 	$(OBJS)\coredll_appcmn.o \
@@ -3018,6 +3023,7 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  \
 	$(OBJS)\coredll_metal.o \
 	$(OBJS)\coredll_mono.o \
 	$(OBJS)\coredll_win32.o \
+	$(OBJS)\coredll_accelcmn.o \
 	$(OBJS)\coredll_accesscmn.o \
 	$(OBJS)\coredll_anidecod.o \
 	$(OBJS)\coredll_appcmn.o \
@@ -3253,6 +3259,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_checklst.o \
 	$(OBJS)\corelib_fdrepdlg.o \
 	$(OBJS)\corelib_fontdlg.o \
+	$(OBJS)\corelib_accelcmn.o \
 	$(OBJS)\corelib_accesscmn.o \
 	$(OBJS)\corelib_anidecod.o \
 	$(OBJS)\corelib_appcmn.o \
@@ -3483,6 +3490,7 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  \
 	$(OBJS)\corelib_metal.o \
 	$(OBJS)\corelib_mono.o \
 	$(OBJS)\corelib_win32.o \
+	$(OBJS)\corelib_accelcmn.o \
 	$(OBJS)\corelib_accesscmn.o \
 	$(OBJS)\corelib_anidecod.o \
 	$(OBJS)\corelib_appcmn.o \
@@ -6732,6 +6740,11 @@ endif
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\monodll_accelcmn.o: ../../src/common/accelcmn.cpp
+	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\monodll_accesscmn.o: ../../src/common/accesscmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -8890,6 +8903,11 @@ ifeq ($(WXUNIV),1)
 $(OBJS)\monolib_fdrepdlg.o: ../../src/generic/fdrepdlg.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\monolib_accelcmn.o: ../../src/common/accelcmn.cpp
+	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
 ifeq ($(USE_GUI),1)
@@ -11093,6 +11111,11 @@ endif
 endif
 
 ifeq ($(USE_GUI),1)
+$(OBJS)\coredll_accelcmn.o: ../../src/common/accelcmn.cpp
+	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
+endif
+
+ifeq ($(USE_GUI),1)
 $(OBJS)\coredll_accesscmn.o: ../../src/common/accesscmn.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 endif
@@ -12480,6 +12503,11 @@ ifeq ($(WXUNIV),1)
 $(OBJS)\corelib_fdrepdlg.o: ../../src/generic/fdrepdlg.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
+endif
+
+ifeq ($(USE_GUI),1)
+$(OBJS)\corelib_accelcmn.o: ../../src/common/accelcmn.cpp
+	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 endif
 
 ifeq ($(USE_GUI),1)

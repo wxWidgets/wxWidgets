@@ -3634,6 +3634,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS =  \
 COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS =  \
 	$(__LOWLEVEL_SRC_OBJECTS) \
 	$(__GUI_SRC_OBJECTS) \
+	monodll_accelcmn.o \
 	monodll_accesscmn.o \
 	monodll_anidecod.o \
 	monodll_appcmn.o \
@@ -3812,6 +3813,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS =  \
 	monodll_metal.o \
 	monodll_mono.o \
 	monodll_win32.o \
+	monodll_accelcmn.o \
 	monodll_accesscmn.o \
 	monodll_anidecod.o \
 	monodll_appcmn.o \
@@ -5442,6 +5444,7 @@ COND_USE_GUI_1___MONOLIB_GUI_SRC_OBJECTS_1 =  \
 COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_1 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_2) \
 	$(__GUI_SRC_OBJECTS_1) \
+	monolib_accelcmn.o \
 	monolib_accesscmn.o \
 	monolib_anidecod.o \
 	monolib_appcmn.o \
@@ -5620,6 +5623,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_1 =  \
 	monolib_metal.o \
 	monolib_mono.o \
 	monolib_win32.o \
+	monolib_accelcmn.o \
 	monolib_accesscmn.o \
 	monolib_anidecod.o \
 	monolib_appcmn.o \
@@ -7484,6 +7488,7 @@ COND_USE_SOSYMLINKS_1___coredll___so_symlinks_uninst_cmd = rm -f \
 COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_2 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_4) \
 	$(__GUI_SRC_OBJECTS_2) \
+	coredll_accelcmn.o \
 	coredll_accesscmn.o \
 	coredll_anidecod.o \
 	coredll_appcmn.o \
@@ -7662,6 +7667,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_2 =  \
 	coredll_metal.o \
 	coredll_mono.o \
 	coredll_win32.o \
+	coredll_accelcmn.o \
 	coredll_accesscmn.o \
 	coredll_anidecod.o \
 	coredll_appcmn.o \
@@ -8946,6 +8952,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___corelib___depname = \
 COND_USE_GUI_1_WXUNIV_0___CORE_SRC_OBJECTS_3 =  \
 	$(__LOWLEVEL_SRC_OBJECTS_6) \
 	$(__GUI_SRC_OBJECTS_3) \
+	corelib_accelcmn.o \
 	corelib_accesscmn.o \
 	corelib_anidecod.o \
 	corelib_appcmn.o \
@@ -9124,6 +9131,7 @@ COND_USE_GUI_1_WXUNIV_1___CORE_SRC_OBJECTS_3 =  \
 	corelib_metal.o \
 	corelib_mono.o \
 	corelib_win32.o \
+	corelib_accelcmn.o \
 	corelib_accesscmn.o \
 	corelib_anidecod.o \
 	corelib_appcmn.o \
@@ -16818,6 +16826,9 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@monodll_mdig.o: $(srcdir)/src/generic/mdig.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/generic/mdig.cpp
 
+@COND_USE_GUI_1@monodll_accelcmn.o: $(srcdir)/src/common/accelcmn.cpp $(MONODLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/accelcmn.cpp
+
 @COND_USE_GUI_1@monodll_accesscmn.o: $(srcdir)/src/common/accesscmn.cpp $(MONODLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/accesscmn.cpp
 
@@ -21014,6 +21025,9 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_USE_GUI_1_WXUNIV_1@monolib_mdig.o: $(srcdir)/src/generic/mdig.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/generic/mdig.cpp
+
+@COND_USE_GUI_1@monolib_accelcmn.o: $(srcdir)/src/common/accelcmn.cpp $(MONOLIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/accelcmn.cpp
 
 @COND_USE_GUI_1@monolib_accesscmn.o: $(srcdir)/src/common/accesscmn.cpp $(MONOLIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/accesscmn.cpp
@@ -25593,6 +25607,9 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@coredll_mdig.o: $(srcdir)/src/generic/mdig.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/generic/mdig.cpp
 
+@COND_USE_GUI_1@coredll_accelcmn.o: $(srcdir)/src/common/accelcmn.cpp $(COREDLL_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/accelcmn.cpp
+
 @COND_USE_GUI_1@coredll_accesscmn.o: $(srcdir)/src/common/accesscmn.cpp $(COREDLL_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/accesscmn.cpp
 
@@ -28556,6 +28573,9 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_USE_GUI_1_WXUNIV_1@corelib_mdig.o: $(srcdir)/src/generic/mdig.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1_WXUNIV_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/generic/mdig.cpp
+
+@COND_USE_GUI_1@corelib_accelcmn.o: $(srcdir)/src/common/accelcmn.cpp $(CORELIB_ODEP)
+@COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/accelcmn.cpp
 
 @COND_USE_GUI_1@corelib_accesscmn.o: $(srcdir)/src/common/accesscmn.cpp $(CORELIB_ODEP)
 @COND_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/accesscmn.cpp

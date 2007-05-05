@@ -580,6 +580,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- ====================================================================== -->
 
 <set var="GUI_CMN_SRC" hints="files">
+    src/common/accelcmn.cpp
     src/common/accesscmn.cpp
     src/common/anidecod.cpp
     src/common/appcmn.cpp
