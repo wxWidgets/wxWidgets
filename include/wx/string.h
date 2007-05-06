@@ -1579,12 +1579,15 @@ public:
   WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wxFormatString&),
                         DoPrintfWchar, DoPrintfUtf8)
 #ifdef __WATCOMC__
-  WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const char*),
-                        DoPrintfWchar, DoPrintfUtf8)
-  WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wchar_t*),
-                        DoPrintfWchar, DoPrintfUtf8)
-  WX_DEFINE_VARARG_FUNC(int, Printf, 1, (const wxCStrData&),
-                        DoPrintfWchar, DoPrintfUtf8)
+  // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
+  WX_VARARG_WATCOM_WORKAROUND(int, Printf, 1, (const wxString&),
+                              (wxFormatString(f1)));
+  WX_VARARG_WATCOM_WORKAROUND(int, Printf, 1, (const wxCStrData&),
+                              (wxFormatString(f1)));
+  WX_VARARG_WATCOM_WORKAROUND(int, Printf, 1, (const char*),
+                              (wxFormatString(f1)));
+  WX_VARARG_WATCOM_WORKAROUND(int, Printf, 1, (const wchar_t*),
+                              (wxFormatString(f1)));
 #endif
 #endif // !wxNEEDS_WXSTRING_PRINTF_MIXIN
     // as vprintf(), returns the number of characters written or < 0 on error
@@ -1597,12 +1600,14 @@ public:
                         DoFormatWchar, DoFormatUtf8)
 #ifdef __WATCOMC__
   // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-  WX_DEFINE_VARARG_FUNC(static wxString, Format, 1, (const char*),
-                        DoFormatWchar, DoFormatUtf8)
-  WX_DEFINE_VARARG_FUNC(static wxString, Format, 1, (const wchar_t*),
-                        DoFormatWchar, DoFormatUtf8)
-  WX_DEFINE_VARARG_FUNC(static wxString, Format, 1, (const wxCStrData&),
-                        DoFormatWchar, DoFormatUtf8)
+  WX_VARARG_WATCOM_WORKAROUND(static wxString, Format, 1, (const wxString&),
+                              (wxFormatString(f1)));
+  WX_VARARG_WATCOM_WORKAROUND(static wxString, Format, 1, (const wxCStrData&),
+                              (wxFormatString(f1)));
+  WX_VARARG_WATCOM_WORKAROUND(static wxString, Format, 1, (const char*),
+                              (wxFormatString(f1)));
+  WX_VARARG_WATCOM_WORKAROUND(static wxString, Format, 1, (const wchar_t*),
+                              (wxFormatString(f1)));
 #endif
 #endif
     // the same as above, but takes a va_list
@@ -1644,12 +1649,14 @@ public:
                         DoPrintfWchar, DoPrintfUtf8)
 #ifdef __WATCOMC__
   // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-  WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const char*),
-                        DoPrintfWchar, DoPrintfUtf8)
-  WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const wchar_t*),
-                        DoPrintfWchar, DoPrintfUtf8)
-  WX_DEFINE_VARARG_FUNC(int, sprintf, 1, (const wxCStrData&),
-                        DoPrintfWchar, DoPrintfUtf8)
+  WX_VARARG_WATCOM_WORKAROUND(int, sprintf, 1, (const wxString&),
+                              (wxFormatString(f1)));
+  WX_VARARG_WATCOM_WORKAROUND(int, sprintf, 1, (const wxCStrData&),
+                              (wxFormatString(f1)));
+  WX_VARARG_WATCOM_WORKAROUND(int, sprintf, 1, (const char*),
+                              (wxFormatString(f1)));
+  WX_VARARG_WATCOM_WORKAROUND(int, sprintf, 1, (const wchar_t*),
+                              (wxFormatString(f1)));
 #endif
 #endif // wxNEEDS_WXSTRING_PRINTF_MIXIN
 

@@ -41,12 +41,14 @@ public:
                                DoPrintfWchar, DoPrintfUtf8)
 #ifdef __WATCOMC__
     // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-    WX_DEFINE_VARARG_FUNC_VOID(Printf, 1, (const char*),
-                               DoPrintfWchar, DoPrintfUtf8)
-    WX_DEFINE_VARARG_FUNC_VOID(Printf, 1, (const wchar_t*),
-                               DoPrintfWchar, DoPrintfUtf8)
-    WX_DEFINE_VARARG_FUNC_VOID(Printf, 1, (const wxCStrData&),
-                               DoPrintfWchar, DoPrintfUtf8)
+    WX_VARARG_WATCOM_WORKAROUND(void, Printf, 1, (const wxString&),
+                                (wxFormatString(f1)));
+    WX_VARARG_WATCOM_WORKAROUND(void, Printf, 1, (const wxCStrData&),
+                                (wxFormatString(f1)));
+    WX_VARARG_WATCOM_WORKAROUND(void, Printf, 1, (const char*),
+                                (wxFormatString(f1)));
+    WX_VARARG_WATCOM_WORKAROUND(void, Printf, 1, (const wchar_t*),
+                                (wxFormatString(f1)));
 #endif
 
 protected:

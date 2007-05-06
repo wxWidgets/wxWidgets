@@ -99,10 +99,14 @@ public:
                                DoPsPrintfFormatWchar, DoPsPrintfFormatUtf8)
 #ifdef __WATCOMC__
     // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-    WX_DEFINE_VARARG_FUNC_VOID(PsPrintf, 1, (const char*),
-                               DoPsPrintfFormatWchar, DoPsPrintfFormatUtf8)
-    WX_DEFINE_VARARG_FUNC_VOID(PsPrintf, 1, (const wchar_t*),
-                               DoPsPrintfFormatWchar, DoPsPrintfFormatUtf8)
+    WX_VARARG_WATCOM_WORKAROUND(void, PsPrintf, 1, (const wxString&),
+                                (wxFormatString(f1)));
+    WX_VARARG_WATCOM_WORKAROUND(void, PsPrintf, 1, (const wxCStrData&),
+                                (wxFormatString(f1)));
+    WX_VARARG_WATCOM_WORKAROUND(void, PsPrintf, 1, (const char*),
+                                (wxFormatString(f1)));
+    WX_VARARG_WATCOM_WORKAROUND(void, PsPrintf, 1, (const wchar_t*),
+                                (wxFormatString(f1)));
 #endif
 
     void PsPrint( const wxString& psdata );

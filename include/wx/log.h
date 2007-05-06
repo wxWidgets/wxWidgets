@@ -488,18 +488,18 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
     // can't use WX_WATCOM_ONLY_CODE here because the macro would expand to
     // something too big for Borland C++ to handle
     #define DECLARE_LOG_FUNCTION_WATCOM(level)                              \
-        WX_DEFINE_VARARG_FUNC_VOID(wxLog##level,                            \
-                                   1, (const char*),                        \
-                                   wxDoLog##level##Wchar,                   \
-                                   wxDoLog##level##Utf8)                    \
-        WX_DEFINE_VARARG_FUNC_VOID(wxLog##level,                            \
-                                   1, (const wchar_t*),                     \
-                                   wxDoLog##level##Wchar,                   \
-                                   wxDoLog##level##Utf8)                    \
-        WX_DEFINE_VARARG_FUNC_VOID(wxLog##level,                            \
+        WX_VARARG_WATCOM_WORKAROUND(void, wxLog##level,                     \
+                                   1, (const wxString&),                    \
+                                   (wxFormatString(f1)))                    \
+        WX_VARARG_WATCOM_WORKAROUND(void, wxLog##level,                     \
                                    1, (const wxCStrData&),                  \
-                                   wxDoLog##level##Wchar,                   \
-                                   wxDoLog##level##Utf8)
+                                   (wxFormatString(f1)))                    \
+        WX_VARARG_WATCOM_WORKAROUND(void, wxLog##level,                     \
+                                   1, (const char*),                        \
+                                   (wxFormatString(f1)))                    \
+        WX_VARARG_WATCOM_WORKAROUND(void, wxLog##level,                     \
+                                   1, (const wchar_t*),                     \
+                                   (wxFormatString(f1)))
 #else
     #define DECLARE_LOG_FUNCTION_WATCOM(level)
 #endif
@@ -523,18 +523,18 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
     // can't use WX_WATCOM_ONLY_CODE here because the macro would expand to
     // something too big for Borland C++ to handle
     #define DECLARE_LOG_FUNCTION2_EXP_WATCOM(level, argclass, arg, expdecl) \
-        WX_DEFINE_VARARG_FUNC_VOID(wxLog##level,                            \
-                                   2, (argclass, const char*),              \
-                                   wxDoLog##level##Wchar,                   \
-                                   wxDoLog##level##Utf8)                    \
-        WX_DEFINE_VARARG_FUNC_VOID(wxLog##level,                            \
-                                   2, (argclass, const wchar_t*),           \
-                                   wxDoLog##level##Wchar,                   \
-                                   wxDoLog##level##Utf8)                    \
-        WX_DEFINE_VARARG_FUNC_VOID(wxLog##level,                            \
+        WX_VARARG_WATCOM_WORKAROUND(void, wxLog##level,                     \
+                                   2, (argclass, const wxString&),          \
+                                   (f1, wxFormatString(f2)))                \
+        WX_VARARG_WATCOM_WORKAROUND(void, wxLog##level,                     \
                                    2, (argclass, const wxCStrData&),        \
-                                   wxDoLog##level##Wchar,                   \
-                                   wxDoLog##level##Utf8)
+                                   (f1, wxFormatString(f2)))                \
+        WX_VARARG_WATCOM_WORKAROUND(void, wxLog##level,                     \
+                                   2, (argclass, const char*),              \
+                                   (f1, wxFormatString(f2)))                \
+        WX_VARARG_WATCOM_WORKAROUND(void, wxLog##level,                     \
+                                   2, (argclass, const wchar_t*),           \
+                                   (f1, wxFormatString(f2)))
 #else
     #define DECLARE_LOG_FUNCTION2_EXP_WATCOM(level, argclass, arg, expdecl)
 #endif
@@ -558,7 +558,7 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
         WX_DEFINE_VARARG_FUNC_NOP(wxLog##level, 1, (const wxCStrData&))     \
     )                                                                       \
     inline void wxVLog##level(const wxString& WXUNUSED(format),             \
-                               va_list WXUNUSED(argptr)) { }                \
+                              va_list WXUNUSED(argptr)) { }                 \
 
 #define DECLARE_LOG_FUNCTION2_EXP(level, argclass, arg, expdecl)            \
     WX_DEFINE_VARARG_FUNC_NOP(wxLog##level, 2, (argclass, const wxString&)) \
@@ -568,8 +568,8 @@ WXDLLIMPEXP_BASE const wxChar* wxSysErrorMsg(unsigned long nErrCode = 0);
         WX_DEFINE_VARARG_FUNC_NOP(wxLog##level, 2, (argclass, const wxCStrData&)) \
     )                                                                       \
     inline void wxVLog##level(argclass WXUNUSED(arg),                       \
-                               const wxString& WXUNUSED(format),            \
-                               va_list WXUNUSED(argptr)) {}
+                              const wxString& WXUNUSED(format),             \
+                              va_list WXUNUSED(argptr)) {}
 
 // Empty Class to fake wxLogNull
 class WXDLLIMPEXP_BASE wxLogNull

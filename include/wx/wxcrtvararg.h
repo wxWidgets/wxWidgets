@@ -364,13 +364,13 @@ wxVsnprintf(wchar_t *str, size_t size, const wxString& format, va_list argptr);
     #undef wxSnprintf
 
     #define wxPrintf(fmt, ...) \
-            wxPrintf_Impl(wxString(fmt), __VA_ARGS__)
+            wxPrintf_Impl(wxFormatString(fmt), __VA_ARGS__)
     #define wxFprintf(f, fmt, ...) \
-            wxFprintf_Impl(f, wxString(fmt), __VA_ARGS__)
+            wxFprintf_Impl(f, wxFormatString(fmt), __VA_ARGS__)
     #define wxSprintf(s, fmt, ...) \
-            wxSprintf_Impl(s, wxString(fmt), __VA_ARGS__)
+            wxSprintf_Impl(s, wxFormatString(fmt), __VA_ARGS__)
     #define wxSnprintf(s, n, fmt, ...) \
-            wxSnprintf_Impl(s, n, wxString(fmt), __VA_ARGS__)
+            wxSnprintf_Impl(s, n, wxFormatString(fmt), __VA_ARGS__)
 #endif // __WATCOMC__
 
 

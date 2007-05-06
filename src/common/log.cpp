@@ -337,7 +337,7 @@ void wxDoLogVerboseUtf8(const char *format, ...)
 
 #ifdef __WATCOMC__
   // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-  void wxDoLogTrace(int mask, const wxChar *format, ...)
+  void wxDoLogTraceWchar(int mask, const wxChar *format, ...)
   {
     va_list argptr;
     va_start(argptr, format);
@@ -345,7 +345,7 @@ void wxDoLogVerboseUtf8(const char *format, ...)
     va_end(argptr);
   }
 
-  void wxDoLogTrace(const char *mask, const wxChar *format, ...)
+  void wxDoLogTraceWchar(const char *mask, const wxChar *format, ...)
   {
     va_list argptr;
     va_start(argptr, format);
@@ -353,7 +353,7 @@ void wxDoLogVerboseUtf8(const char *format, ...)
     va_end(argptr);
   }
 
-  void wxDoLogTrace(const wchar_t *mask, const wxChar *format, ...)
+  void wxDoLogTraceWchar(const wchar_t *mask, const wxChar *format, ...)
   {
     va_list argptr;
     va_start(argptr, format);
@@ -441,7 +441,7 @@ void WXDLLEXPORT wxDoLogSysErrorUtf8(long lErrCode, const char *format, ...)
 
 #ifdef __WATCOMC__
 // workaround for http://bugzilla.openwatcom.org/show_bug.cgi?id=351
-void WXDLLEXPORT wxDoLogSysError(unsigned long lErrCode, const wxChar *format, ...)
+void WXDLLEXPORT wxDoLogSysErrorWchar(unsigned long lErrCode, const wxChar *format, ...)
 {
     va_list argptr;
     va_start(argptr, format);
@@ -449,7 +449,7 @@ void WXDLLEXPORT wxDoLogSysError(unsigned long lErrCode, const wxChar *format, .
     va_end(argptr);
 }
 
-void WXDLLEXPORT wxVLogSysError(unsigned long err, const wxChar *format, va_list argptr)
+void WXDLLEXPORT wxVLogSysError(unsigned long err, const wxString& format, va_list argptr)
     { wxVLogSysError((long)err, format, argptr); }
 #endif // __WATCOMC__
 
