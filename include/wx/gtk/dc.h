@@ -10,7 +10,51 @@
 #ifndef __GTKDCH__
 #define __GTKDCH__
 
-#if 0
+#define wxUSE_NEW_DC 0
+
+#if wxUSE_NEW_DC
+
+//-----------------------------------------------------------------------------
+// wxDCFactory
+//-----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxImplDC;
+
+class WXDLLIMPEXP_CORE wxDCFactory
+{
+public:
+    wxDCFactory() {}
+    virtual ~wxDCFactory() {}
+    
+    virtual wxImplDC* CreateWindowDC( wxWindow *window ) = 0;
+    virtual wxImplDC* CreateClientDC( wxWindow *window ) = 0;
+    virtual wxImplDC* CreatePaintDC( wxWindow *window ) = 0;
+    virtual wxImplDC* CreateMemoryDC() = 0;
+    virtual wxImplDC* CreateMemoryDC( wxBitmap &bitmap ) = 0;
+    virtual wxImplDC* CreateMemoryDC( wxDC *dc ) = 0;
+    
+    static void SetDCFactory( wxDCFactory *factory );
+    static wxDCFactory *GetFactory();
+private:
+    static wxDCFactory *m_factory;
+};
+
+//-----------------------------------------------------------------------------
+// wxNativeDCFactory
+//-----------------------------------------------------------------------------
+
+class WXDLLIMPEXP_CORE wxDCFactory
+{
+public:
+    wxNativeDCFactory() {}
+    
+    virtual wxImplDC* CreateWindowDC( wxWindow *window );
+    virtual wxImplDC* CreateClientDC( wxWindow *window );
+    virtual wxImplDC* CreatePaintDC( wxWindow *window );
+    virtual wxImplDC* CreateMemoryDC();
+    virtual wxImplDC* CreateMemoryDC( wxBitmap &bitmap );
+    virtual wxImplDC* CreateMemoryDC( wxDC *dc );
+};
 
 //-----------------------------------------------------------------------------
 // wxImplDC
@@ -590,9 +634,9 @@ public:
     void SetDeviceOrigin(wxCoord x, wxCoord y)
         { m_pimpl->SetDeviceOrigin( x, y); }
     void GetDeviceOrigin(wxCoord *x, wxCoord *y) const
-        { DoGetDeviceOrigin(x, y); }
+        { m_pimpl->DoGetDeviceOrigin(x, y); }
     wxPoint GetDeviceOrigin() const
-        { wxCoord x, y; DoGetDeviceOrigin(&x, &y); return wxPoint(x, y); }
+        { wxCoord x, y; m_pimpl->DoGetDeviceOrigin(&x, &y); return wxPoint(x, y); }
 
     void SetAxisOrientation(bool xLeftRight, bool yBottomUp)
         { m_pimpl->SetAxisOrientation(xLeftRight, yBottomUp); }
@@ -822,6 +866,19 @@ public:
     void DrawSpline(wxList *points) 
         { m_pimpl->DoDrawSpline(points); }
 #endif // wxUSE_SPLINES
+
+
+#if WXWIN_COMPATIBILITY_2_8
+    // for compatibility with the old code when wxCoord was long everywhere
+    wxDEPRECATED( void GetTextExtent(const wxString& string,
+                       long *x, long *y,
+                       long *descent = NULL,
+                       long *externalLeading = NULL,
+                       const wxFont *theFont = NULL) const );
+    wxDEPRECATED( void GetLogicalOrigin(long *x, long *y) const );
+    wxDEPRECATED( void GetDeviceOrigin(long *x, long *y) const );
+    wxDEPRECATED( void GetClippingBox(long *x, long *y, long *w, long *h) const );
+#endif  // WXWIN_COMPATIBILITY_2_8
 
 
 protected:
