@@ -864,6 +864,30 @@ public:
 #endif // Unicode/!Unicode
 
 #if wxABI_VERSION >= 20804
+    // conversion to/from UTF-8:
+#if wxUSE_UNICODE
+    static wxString FromUTF8(const char *utf8)
+      { return wxString(utf8, wxConvUTF8); }
+    static wxString FromUTF8(const char *utf8, size_t len)
+      { return wxString(utf8, wxConvUTF8, len); }
+    const wxCharBuffer utf8_str() const { return mb_str(wxConvUTF8); }
+    const wxCharBuffer ToUTF8() const { return utf8_str(); }
+#elif wxUSE_WCHAR_T // ANSI
+    static wxString FromUTF8(const char *utf8)
+      { return wxString(wxConvUTF8.cMB2WC(utf8)); }
+    static wxString FromUTF8(const char *utf8, size_t len)
+    {
+      size_t wlen;
+      wxWCharBuffer buf(wxConvUTF8.cMB2WC(utf8, len == npos ? wxNO_LEN : len, &wlen));
+      return wxString(buf.data(), wxConvLibc, wlen);
+    }
+    const wxCharBuffer utf8_str() const
+      { return wxConvUTF8.cWC2MB(wc_str(wxConvLibc)); }
+    const wxCharBuffer ToUTF8() const { return utf8_str(); }
+#endif // Unicode/ANSI
+#endif // wxABI_VERSION >= 20804
+
+#if wxABI_VERSION >= 20804
     // functions for storing binary data in wxString:
 #if wxUSE_UNICODE
     static wxString From8BitData(const char *data, size_t len)
