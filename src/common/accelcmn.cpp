@@ -27,6 +27,8 @@
 
 #ifndef WX_PRECOMP
     #include "wx/string.h"
+    #include "wx/intl.h"
+    #include "wx/log.h"
     #include "wx/accel.h"
 #endif //WX_PRECOMP
 
