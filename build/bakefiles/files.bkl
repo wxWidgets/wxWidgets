@@ -2448,7 +2448,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/cocoa/toolbar.mm
     src/cocoa/tooltip.mm
     src/cocoa/toplevel.mm
-    src/cocoa/utils.cpp
+    src/cocoa/utils.mm
     src/cocoa/utilsexc.mm
     src/cocoa/window.mm
     <!-- Generic implementations used by wxCocoa: -->
