@@ -25,6 +25,9 @@ class WXDLLEXPORT wxListEvent;
 #define wxEL_ALLOW_EDIT         0x0200
 #define wxEL_ALLOW_DELETE       0x0400
 #define wxEL_NO_REORDER         0x0800
+#define wxEL_DEFAULT_STYLE      (wxEL_ALLOW_NEW | wxEL_ALLOW_EDIT | wxEL_ALLOW_DELETE)
+
+extern WXDLLEXPORT_DATA(const wxChar) wxEditableListBoxNameStr[];
 
 // This class provides a composite control that lets the
 // user easily enter list of strings
@@ -32,12 +35,25 @@ class WXDLLEXPORT wxListEvent;
 class WXDLLIMPEXP_ADV wxEditableListBox : public wxPanel
 {
 public:
+    wxEditableListBox() { Init(); }
+
     wxEditableListBox(wxWindow *parent, wxWindowID id,
                       const wxString& label,
                       const wxPoint& pos = wxDefaultPosition,
                       const wxSize& size = wxDefaultSize,
-                      long style = wxEL_ALLOW_NEW | wxEL_ALLOW_EDIT | wxEL_ALLOW_DELETE,
-                      const wxString& name = wxT("editableListBox"));
+                      long style = wxEL_DEFAULT_STYLE,
+                      const wxString& name = wxEditableListBoxNameStr)
+    {
+        Init();
+        Create(parent, id, label, pos, size, style, name);
+    }
+
+    bool Create(wxWindow *parent, wxWindowID id,
+                const wxString& label,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxEL_DEFAULT_STYLE,
+                const wxString& name = wxEditableListBoxNameStr);
 
     void SetStrings(const wxArrayString& strings);
     void GetStrings(wxArrayString& strings) const;
@@ -54,6 +70,14 @@ protected:
     wxListCtrl *m_listCtrl;
     int m_selection;
     long m_style;
+
+    void Init()
+    {
+        m_style = 0;
+        m_selection = 0;
+        m_bEdit = m_bNew = m_bDel = m_bUp = m_bDown = NULL;
+        m_listCtrl = NULL;
+    }
 
     void OnItemSelected(wxListEvent& event);
     void OnEndLabelEdit(wxListEvent& event);

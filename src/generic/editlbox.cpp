@@ -26,6 +26,12 @@
 #include "wx/sizer.h"
 #include "wx/listctrl.h"
 
+// ============================================================================
+// implementation
+// ============================================================================
+
+const wxChar wxEditableListBoxNameStr[] = wxT("editableListBox");
+
 static char * eledit_xpm[] = {
 "16 16 3 1",
 "   c None",
@@ -182,6 +188,11 @@ BEGIN_EVENT_TABLE(CleverListCtrl, wxListCtrl)
    EVT_SIZE(CleverListCtrl::OnSize)
 END_EVENT_TABLE()
 
+
+// ----------------------------------------------------------------------------
+// wxEditableListBox
+// ----------------------------------------------------------------------------
+
 IMPLEMENT_CLASS(wxEditableListBox, wxPanel)
 
 // NB: generate the IDs at runtime to avoid conflict with XRCID values,
@@ -203,15 +214,16 @@ BEGIN_EVENT_TABLE(wxEditableListBox, wxPanel)
     EVT_BUTTON(wxID_ELB_DELETE, wxEditableListBox::OnDelItem)
 END_EVENT_TABLE()
 
-wxEditableListBox::wxEditableListBox(wxWindow *parent, wxWindowID id,
+bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
                           const wxString& label,
                           const wxPoint& pos, const wxSize& size,
                           long style,
                           const wxString& name)
-   : wxPanel(parent, id, pos, size, wxTAB_TRAVERSAL, name)
 {
+    if (!wxPanel::Create(parent, id, pos, size, wxTAB_TRAVERSAL, name))
+        return false;
+
     m_style = style;
-    m_bEdit = m_bNew = m_bDel = m_bUp = m_bDown = NULL;
 
     wxSizer *sizer = new wxBoxSizer(wxVERTICAL);
 

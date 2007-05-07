@@ -1,0 +1,97 @@
+\section{\class{wxEditableListBox}}\label{wxeditablelistbox}
+
+An editable listbox is composite control that lets the
+user easily enter, delete and reorder a list of strings.
+
+\wxheading{Derived from}
+
+\helpref{wxPanel}{wxpanel}\\
+\helpref{wxWindow}{wxwindow}\\
+\helpref{wxEvtHandler}{wxevthandler}\\
+\helpref{wxObject}{wxobject}
+
+\wxheading{Include files}
+
+<wx/editlbox.h>
+
+\wxheading{Window styles}
+
+\twocolwidtha{5cm}%
+\begin{twocollist}\itemsep=0pt
+\twocolitem{\windowstyle{wxEL\_ALLOW\_NEW}}{Allows the user to enter new strings.}
+\twocolitem{\windowstyle{wxEL\_ALLOW\_EDIT}}{Allows the user to edit existing strings.}
+\twocolitem{\windowstyle{wxEL\_ALLOW\_DELETE}}{Allows the user to delete existing strings.}
+\twocolitem{\windowstyle{wxEL\_NO\_REORDER}}{Does not allow the user to reorder the strings.}
+\twocolitem{\windowstyle{wxEL\_DEFAULT\_STYLE}}{wxEL\_ALLOW\_NEW|wxEL\_ALLOW\_EDIT|wxEL\_ALLOW\_DELETE}
+\end{twocollist}
+
+See also \helpref{window styles overview}{windowstyles}.
+
+\wxheading{See also}
+
+\helpref{wxListBox}{wxlistbox}
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxEditableListBox::wxEditableListBox}\label{wxeditablelistboxctor}
+
+\func{}{wxEditableListBox}{\void}
+
+Default constructor.
+
+\func{}{wxEditableListBox}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxString\&}{ label},\param{const wxPoint\&}{ pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxEL\_DEFAULT\_STYLE}, \param{const wxString\& }{name = ``editableListBox"}}
+
+Constructor, creating and showing a list box.
+
+\wxheading{Parameters}
+
+\docparam{parent}{Parent window. Must not be NULL.}
+
+\docparam{id}{Window identifier. A value of -1 indicates a default value.}
+
+\docparam{label}{The text shown just before the list control.}
+
+\docparam{pos}{Window position.}
+
+\docparam{size}{Window size. If the default size (-1, -1) is specified then the window is sized
+appropriately.}
+
+\docparam{style}{Window style. See \helpref{wxEditableListBox}{wxeditablelistbox}.}
+
+\docparam{name}{Window name.}
+
+\wxheading{See also}
+
+\helpref{wxEditableListBox::Create}{wxeditablelistboxcreate}
+
+\membersection{wxEditableListBox::\destruct{wxEditableListBox}}\label{wxeditablelistboxdtor}
+
+\func{void}{\destruct{wxEditableListBox}}{\void}
+
+Destructor, destroying the list box.
+
+\membersection{wxEditableListBox::Create}\label{wxeditablelistboxcreate}
+
+\func{bool}{Create}{\param{wxWindow*}{ parent}, \param{wxWindowID}{ id},\rtfsp
+\param{const wxString\&}{ label},\param{const wxPoint\&}{ pos = wxDefaultPosition},\rtfsp
+\param{const wxSize\&}{ size = wxDefaultSize},\rtfsp
+\param{long}{ style = wxEL\_DEFAULT\_STYLE}, \param{const wxString\& }{name = ``editableListBox"}}
+
+Creates the editable listbox for two-step construction. See \helpref{wxEditableListBox::wxEditableListBox}{wxeditablelistboxctor}\rtfsp
+for further details.
+
+\membersection{wxEditableListBox::SetStrings}\label{wxeditablelistboxsetstrings}
+
+\func{void}{SetStrings}{\param{const wxArrayString\&}{ strings}}
+
+Replaces current contents with given strings.
+
+\membersection{wxEditableListBox::GetStrings}\label{wxeditablelistboxgetstrings}
+
+\constfunc{void}{GetSelections}{\param{wxArrayString\& }{strings}}
+
+Returns in the given array the current contents of the control
+(the array will be erased before control's contents are appended).
