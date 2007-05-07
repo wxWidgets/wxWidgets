@@ -263,7 +263,7 @@ class ParamFont(PPanel):
         PPanel.OnChange(self, evt)
         self.textModified = True
     def _defaultValue(self):
-        return [`g._sysFont.GetPointSize()`, 'default', 'normal', 'normal', '0', '', '']
+        return [`g.sysFont().GetPointSize()`, 'default', 'normal', 'normal', '0', '', '']
     def GetValue(self):
         if self.textModified:           # text has newer value
             try:
@@ -287,7 +287,7 @@ class ParamFont(PPanel):
                 self.value = self._defaultValue()
         # Make initial font
         # Default values
-        size = g._sysFont.GetPointSize()
+        size = g.sysFont().GetPointSize()
         family = wx.DEFAULT
         style = weight = wx.NORMAL
         underlined = 0

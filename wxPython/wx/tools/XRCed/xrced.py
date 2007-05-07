@@ -92,14 +92,29 @@ class Locator(wx.EvtHandler):
     def ProcessEvent(self, evt):
         print evt
 
+class TaskBarIcon(wx.TaskBarIcon):
+    def __init__(self, frame):
+        wx.TaskBarIcon.__init__(self)
+        self.frame = frame
+        # Set the image
+        self.SetIcon(images.getIconIcon(), "XRCed")
+
 class Frame(wx.Frame):
     def __init__(self, pos, size):
-        wx.Frame.__init__(self, None, -1, '', pos, size)
+        pre = wx.PreFrame()
+#        pre.SetExtraStyle(wx.FRAME_EX_METAL)
+        pre.Create(None, -1, '', pos, size)
+        self.PostCreate(pre)
+        #wx.Frame.__init__(self, None, -1, '', pos, size)
         global frame
         frame = g.frame = self
         bar = self.CreateStatusBar(2)
         bar.SetStatusWidths([-1, 40])
         self.SetIcon(images.getIconIcon())
+        try:
+            self.tbicon = TaskBarIcon(self)
+        except:
+            self.tbicon = None
 
         # Idle flag
         self.inIdle = False
@@ -156,7 +171,6 @@ class Frame(wx.Frame):
         self.ID_TOOL_PASTE = wx.NewId()
         menu.Append(self.ID_LOCATE, '&Locate\tCtrl-L', 'Locate control in test window and select it')
         menuBar.Append(menu, '&Edit')
-
         menu = wx.Menu()
         self.ID_EMBED_PANEL = wx.NewId()
         menu.Append(self.ID_EMBED_PANEL, '&Embed Panel',
@@ -204,11 +218,12 @@ class Frame(wx.Frame):
 
         # Create toolbar
         tb = self.CreateToolBar(wx.TB_HORIZONTAL | wx.NO_BORDER | wx.TB_FLAT)
-        tb.SetToolBitmapSize((24,24))
+        
         # Hide some icons on Mac to reduce the toolbar size,
         # and comply more with the Apple LnF, besides
         # wxMac icons are ugly
         if wx.Platform != '__WXMAC__':
+            tb.SetToolBitmapSize((24,24))
             new_bmp  = wx.ArtProvider.GetBitmap(wx.ART_NORMAL_FILE, wx.ART_TOOLBAR)
             open_bmp = wx.ArtProvider.GetBitmap(wx.ART_FILE_OPEN, wx.ART_TOOLBAR)
             save_bmp = wx.ArtProvider.GetBitmap(wx.ART_FILE_SAVE, wx.ART_TOOLBAR)
@@ -231,7 +246,7 @@ class Frame(wx.Frame):
         tb.AddSimpleTool(self.ID_TOOL_LOCATE,
                         images.getLocateBitmap(), #images.getLocateArmedBitmap(),
                         'Locate', 'Locate control in test window and select it', True)
-        tb.AddControl(wx.StaticLine(tb, -1, size=(-1,23), style=wx.LI_VERTICAL))
+#        tb.AddControl(wx.StaticLine(tb, -1, size=(-1,23), style=wx.LI_VERTICAL))
         tb.AddSimpleTool(self.ID_TEST, images.getTestBitmap(), 'Test', 'Test window')
         tb.AddSimpleTool(self.ID_REFRESH, images.getRefreshBitmap(),
                          'Refresh', 'Refresh view')
@@ -343,7 +358,10 @@ class Frame(wx.Frame):
             sizer2.Add(panel, 1, wx.EXPAND)
             miniFrame.Show(True)
             splitter.Initialize(tree)
-        sizer1.Add(splitter, 1, wx.EXPAND)
+        if wx.Platform == '__WXMAC__':
+            sizer1.Add(splitter, 1, wx.EXPAND|wx.RIGHT, 5)
+        else:
+            sizer1.Add(splitter, 1, wx.EXPAND)
         sizer.Add(sizer1, 1, wx.EXPAND)
         self.SetAutoLayout(True)
         self.SetSizer(sizer)
@@ -763,10 +781,9 @@ class Frame(wx.Frame):
         # Check compatibility
         if not self.ItemsAreCompatible(tree.GetPyData(pparent).treeObject(), tree.GetPyData(selected).treeObject()): return
 
-        # Remove highlight, update testWin
         if g.testWin and g.testWin.highLight:
             g.testWin.highLight.Remove()
-            tree.needUpdate = True
+        tree.needUpdate = True
 
         # Undo info
         self.lastOp = 'MOVELEFT'
@@ -807,7 +824,6 @@ class Frame(wx.Frame):
 
         selected = tree.InsertNode(pparent, tree.GetPyData(pparent).treeObject(), elem, nextItem)
         newIndex = tree.ItemIndex(selected)
-        tree.oldItem = None
         tree.SelectItem(selected)
 
         undoMan.RegisterUndo(UndoMove(oldParent, oldIndex, pparent, newIndex))
@@ -833,7 +849,7 @@ class Frame(wx.Frame):
         # Remove highlight, update testWin
         if g.testWin and g.testWin.highLight:
             g.testWin.highLight.Remove()
-            tree.needUpdate = True
+        tree.needUpdate = True
 
         # Undo info
         self.lastOp = 'MOVERIGHT'
@@ -871,7 +887,6 @@ class Frame(wx.Frame):
         selected = tree.InsertNode(newParent, tree.GetPyData(newParent).treeObject(), elem, wx.TreeItemId())
 
         newIndex = tree.ItemIndex(selected)
-        tree.oldItem = None
         tree.SelectItem(selected)
 
         undoMan.RegisterUndo(UndoMove(oldParent, oldIndex, newParent, newIndex))
@@ -1324,8 +1339,11 @@ Homepage: http://xrced.sourceforge.net\
         menuId = evt.GetMenuId()
         if menuId != -1:
             menu = evt.GetEventObject()
-            help = menu.GetHelpString(menuId)
-            self.SetStatusText(help)
+            try:
+                help = menu.GetHelpString(menuId)
+                self.SetStatusText(help)
+            except:
+                self.SetStatusText('')
         else:
             self.SetStatusText('')
 
@@ -1346,6 +1364,7 @@ Homepage: http://xrced.sourceforge.net\
     def OnIdle(self, evt):
         if self.inIdle: return          # Recursive call protection
         self.inIdle = True
+        #print 'onidle',tree.needUpdate,tree.pendingHighLight
         try:
             if tree.needUpdate:
                 if conf.autoRefresh:

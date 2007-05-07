@@ -70,7 +70,7 @@ class Panel(wx.Notebook):
         if g.conf.panic:
             topSizer.Add(sizer, 1, wx.EXPAND)
         else:
-            topSizer.Add(sizer, 0, wx.ALL, 5)
+            topSizer.Add(sizer, 1, wx.ALL, 5)
         return sizer
 
     def SetData(self, xxx):
@@ -281,7 +281,7 @@ class PropPage(ParamPage):
     def __init__(self, parent, label, xxx):
         ParamPage.__init__(self, parent, xxx)
         self.box = wx.StaticBox(self, -1, label)
-        self.box.SetFont(g.labelFont())
+        #self.box.SetFont(g.labelFont())
         topSizer = wx.StaticBoxSizer(self.box, wx.VERTICAL)
         sizer = wx.FlexGridSizer(len(xxx.allParams), 2, 1, 5)
         sizer.AddGrowableCol(1)
@@ -370,7 +370,7 @@ class StylePage(ParamPage):
     def __init__(self, parent, label, xxx):
         ParamPage.__init__(self, parent, xxx)
         box = wx.StaticBox(self, -1, label)
-        box.SetFont(g.labelFont())
+        #box.SetFont(g.labelFont())
         topSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
         sizer = wx.FlexGridSizer(len(xxx.styles), 2, 1, 5)
         sizer.AddGrowableCol(1)

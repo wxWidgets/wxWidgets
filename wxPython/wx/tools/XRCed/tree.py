@@ -1109,8 +1109,9 @@ class XML_Tree(wx.TreeCtrl):
         n = 0                           # index of sibling
         prev = self.GetPrevSibling(item)
         while prev.IsOk():
-            # MenuBar is not a child
-            if not isinstance(self.GetPyData(prev), xxxMenuBar):
+            # MenuBar and sizers are not real children (who else?)
+            if not isinstance(self.GetPyData(prev), xxxMenuBar) and not \
+                    isinstance(self.GetPyData(prev), xxxSizer):
                 n += 1
             prev = self.GetPrevSibling(prev)
         return n

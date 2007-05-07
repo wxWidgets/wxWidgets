@@ -56,7 +56,6 @@ class Tools(wx.Panel):
              (ID_NEW.STATIC_TEXT, images.getToolStaticTextBitmap()),
              (ID_NEW.STATIC_BITMAP, images.getToolStaticBitmapBitmap()),
              (ID_NEW.STATIC_LINE, images.getToolStaticLineBitmap()),
-             
              (ID_NEW.BUTTON, images.getToolButtonBitmap()),
              (ID_NEW.BITMAP_BUTTON, images.getToolBitmapButtonBitmap()),
              (ID_NEW.STATIC_BOX, images.getToolStaticBoxBitmap()),
@@ -102,7 +101,6 @@ class Tools(wx.Panel):
         # wxMSW does not generate click events for StaticBox
         if wx.Platform == '__WXMSW__':
             self.Bind(wx.EVT_LEFT_DOWN, self.OnClickBox)
-
         self.drag = None
 
     def AddButton(self, id, image, text):
@@ -129,9 +127,9 @@ class Tools(wx.Panel):
         box.gnum = len(self.groups)
         box.Bind(wx.EVT_LEFT_DOWN, self.OnClickBox)
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        boxSizer.Add((0, 4))
+        boxSizer.Add((0, 0))
         self.boxes[id] = box
-        self.curSizer = wx.GridSizer(0, 3)
+        self.curSizer = wx.GridSizer(0, 3, 3, 3)
         boxSizer.Add(self.curSizer)
         self.sizer.Add(boxSizer, 0, wx.TOP | wx.LEFT | wx.RIGHT | wx.EXPAND, 4)
         self.groups.append((box,{}))
@@ -139,7 +137,6 @@ class Tools(wx.Panel):
     # Enable/disable group
     def EnableGroup(self, gnum, enable = True):
         grp = self.groups[gnum]
-        #grp[0].Enable(enable)
         for b in grp[1].values(): b.Enable(enable)
 
     # Show/hide group
@@ -367,3 +364,4 @@ class Tools(wx.Panel):
                 self.EnableGroupItem(GROUP_MENUS, ID_NEW.MENU_BAR)
         # Save state
         self.state = state
+        self.Refresh()
