@@ -792,7 +792,7 @@ class XML_Tree(wx.TreeCtrl):
         self.selection = None
         g.tools.UpdateUI()
         wx.TreeCtrl.UnselectAll(self)
-        wx.Yield()
+        #wx.Yield()
 
     def ChangeSelection(self, item):
         # Apply changes
