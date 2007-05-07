@@ -205,26 +205,29 @@ class Frame(wx.Frame):
         # Create toolbar
         tb = self.CreateToolBar(wx.TB_HORIZONTAL | wx.NO_BORDER | wx.TB_FLAT)
         tb.SetToolBitmapSize((24,24))
-        new_bmp  = wx.ArtProvider.GetBitmap(wx.ART_NORMAL_FILE, wx.ART_TOOLBAR)
-        open_bmp = wx.ArtProvider.GetBitmap(wx.ART_FILE_OPEN, wx.ART_TOOLBAR)
-        save_bmp = wx.ArtProvider.GetBitmap(wx.ART_FILE_SAVE, wx.ART_TOOLBAR)
-        undo_bmp = wx.ArtProvider.GetBitmap(wx.ART_UNDO, wx.ART_TOOLBAR)
-        redo_bmp = wx.ArtProvider.GetBitmap(wx.ART_REDO, wx.ART_TOOLBAR)
-        cut_bmp  = wx.ArtProvider.GetBitmap(wx.ART_CUT, wx.ART_TOOLBAR)
-        copy_bmp = wx.ArtProvider.GetBitmap(wx.ART_COPY, wx.ART_TOOLBAR)
-        paste_bmp= wx.ArtProvider.GetBitmap(wx.ART_PASTE, wx.ART_TOOLBAR)
-        
-        tb.AddSimpleTool(wx.ID_NEW, new_bmp, 'New', 'New file')
-        tb.AddSimpleTool(wx.ID_OPEN, open_bmp, 'Open', 'Open file')
-        tb.AddSimpleTool(wx.ID_SAVE, save_bmp, 'Save', 'Save file')
-        tb.AddControl(wx.StaticLine(tb, -1, size=(-1,23), style=wx.LI_VERTICAL))
-        tb.AddSimpleTool(wx.ID_UNDO, undo_bmp, 'Undo', 'Undo')
-        tb.AddSimpleTool(wx.ID_REDO, redo_bmp, 'Redo', 'Redo')
-        tb.AddControl(wx.StaticLine(tb, -1, size=(-1,23), style=wx.LI_VERTICAL))
-        tb.AddSimpleTool(wx.ID_CUT, cut_bmp, 'Cut', 'Cut')
-        tb.AddSimpleTool(wx.ID_COPY, copy_bmp, 'Copy', 'Copy')
-        tb.AddSimpleTool(self.ID_TOOL_PASTE, paste_bmp, 'Paste', 'Paste')
-        tb.AddControl(wx.StaticLine(tb, -1, size=(-1,23), style=wx.LI_VERTICAL))
+        # Hide some icons on Mac to reduce the toolbar size,
+        # and comply more with the Apple LnF, besides
+        # wxMac icons are ugly
+        if wx.Platform != '__WXMAC__':
+            new_bmp  = wx.ArtProvider.GetBitmap(wx.ART_NORMAL_FILE, wx.ART_TOOLBAR)
+            open_bmp = wx.ArtProvider.GetBitmap(wx.ART_FILE_OPEN, wx.ART_TOOLBAR)
+            save_bmp = wx.ArtProvider.GetBitmap(wx.ART_FILE_SAVE, wx.ART_TOOLBAR)
+            undo_bmp = wx.ArtProvider.GetBitmap(wx.ART_UNDO, wx.ART_TOOLBAR)
+            redo_bmp = wx.ArtProvider.GetBitmap(wx.ART_REDO, wx.ART_TOOLBAR)
+            cut_bmp  = wx.ArtProvider.GetBitmap(wx.ART_CUT, wx.ART_TOOLBAR)
+            copy_bmp = wx.ArtProvider.GetBitmap(wx.ART_COPY, wx.ART_TOOLBAR)
+            paste_bmp= wx.ArtProvider.GetBitmap(wx.ART_PASTE, wx.ART_TOOLBAR)
+            tb.AddSimpleTool(wx.ID_NEW, new_bmp, 'New', 'New file')
+            tb.AddSimpleTool(wx.ID_OPEN, open_bmp, 'Open', 'Open file')
+            tb.AddSimpleTool(wx.ID_SAVE, save_bmp, 'Save', 'Save file')
+            tb.AddControl(wx.StaticLine(tb, -1, size=(-1,23), style=wx.LI_VERTICAL))
+            tb.AddSimpleTool(wx.ID_UNDO, undo_bmp, 'Undo', 'Undo')
+            tb.AddSimpleTool(wx.ID_REDO, redo_bmp, 'Redo', 'Redo')
+            tb.AddControl(wx.StaticLine(tb, -1, size=(-1,23), style=wx.LI_VERTICAL))
+            tb.AddSimpleTool(wx.ID_CUT, cut_bmp, 'Cut', 'Cut')
+            tb.AddSimpleTool(wx.ID_COPY, copy_bmp, 'Copy', 'Copy')
+            tb.AddSimpleTool(self.ID_TOOL_PASTE, paste_bmp, 'Paste', 'Paste')
+            tb.AddControl(wx.StaticLine(tb, -1, size=(-1,23), style=wx.LI_VERTICAL))
         tb.AddSimpleTool(self.ID_TOOL_LOCATE,
                         images.getLocateBitmap(), #images.getLocateArmedBitmap(),
                         'Locate', 'Locate control in test window and select it', True)
@@ -328,9 +331,7 @@ class Frame(wx.Frame):
                                  (conf.panelWidth, conf.panelHeight))
         self.miniFrame = miniFrame
         sizer2 = wx.BoxSizer()
-        miniFrame.SetAutoLayout(True)
         miniFrame.SetSizer(sizer2)
-        wx.EVT_CLOSE(self.miniFrame, self.OnCloseMiniFrame)
         # Create panel for parameters
         global panel
         if conf.embedPanel:
@@ -1368,10 +1369,6 @@ Homepage: http://xrced.sourceforge.net\
         finally:
             self.inIdle = False
 
-    # We don't let close panel window
-    def OnCloseMiniFrame(self, evt):
-        return
-
     def OnIconize(self, evt):
         if evt.Iconized():
             conf.x, conf.y = self.GetPosition()
@@ -1381,10 +1378,10 @@ Homepage: http://xrced.sourceforge.net\
             else:
                 conf.panelX, conf.panelY = self.miniFrame.GetPosition()
                 conf.panelWidth, conf.panelHeight = self.miniFrame.GetSize()
-                self.miniFrame.Iconize()
+                self.miniFrame.Show(False)
         else:
             if not conf.embedPanel:
-                self.miniFrame.Iconize(False)
+                self.miniFrame.Show(True)
         evt.Skip()
 
     def OnCloseWindow(self, evt):
@@ -1397,7 +1394,10 @@ Homepage: http://xrced.sourceforge.net\
             panel.RemovePage(1)
         if not self.IsIconized():
             conf.x, conf.y = self.GetPosition()
-            conf.width, conf.height = self.GetClientSize()
+            if wx.Platform == '__WXMAC__':
+                conf.width, conf.height = self.GetClientSize()
+            else:
+                conf.width, conf.height = self.GetSize()
             if conf.embedPanel:
                 conf.sashPos = self.splitter.GetSashPosition()
             else:
@@ -1763,7 +1763,9 @@ Please upgrade wxWidgets to %d.%d.%d or higher.''' % MinWxVersion)
         wx.FileSystem.AddHandler(wx.MemoryFSHandler())
         # Create main frame
         frame = Frame(pos, size)
-        frame.SetClientSize(size)
+        # Mac does not set the correct size
+        if wx.Platform == '__WXMAC__':
+            frame.SetClientSize(size)
         frame.Show(True)
         
         # Load plugins
