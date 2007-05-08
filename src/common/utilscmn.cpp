@@ -631,6 +631,50 @@ long wxExecute(const wxString& command,
 }
 
 // ----------------------------------------------------------------------------
+// wxApp::Yield() wrappers for backwards compatibility
+// ----------------------------------------------------------------------------
+
+bool wxYield()
+{
+    return wxTheApp && wxTheApp->Yield();
+}
+
+bool wxYieldIfNeeded()
+{
+    return wxTheApp && wxTheApp->Yield(true);
+}
+
+// Id generation
+static long wxCurrentId = 100;
+
+long wxNewId()
+{
+    // skip the part of IDs space that contains hard-coded values:
+    if (wxCurrentId == wxID_LOWEST)
+        wxCurrentId = wxID_HIGHEST + 1;
+
+    return wxCurrentId++;
+}
+
+long
+wxGetCurrentId(void) { return wxCurrentId; }
+
+void
+wxRegisterId (long id)
+{
+  if (id >= wxCurrentId)
+    wxCurrentId = id + 1;
+}
+
+#endif // wxUSE_BASE
+
+// ============================================================================
+// GUI-only functions from now on
+// ============================================================================
+
+#if wxUSE_GUI
+
+// ----------------------------------------------------------------------------
 // Launch default browser
 // ----------------------------------------------------------------------------
 
@@ -833,50 +877,6 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
 
     return false;
 }
-
-// ----------------------------------------------------------------------------
-// wxApp::Yield() wrappers for backwards compatibility
-// ----------------------------------------------------------------------------
-
-bool wxYield()
-{
-    return wxTheApp && wxTheApp->Yield();
-}
-
-bool wxYieldIfNeeded()
-{
-    return wxTheApp && wxTheApp->Yield(true);
-}
-
-// Id generation
-static long wxCurrentId = 100;
-
-long wxNewId()
-{
-    // skip the part of IDs space that contains hard-coded values:
-    if (wxCurrentId == wxID_LOWEST)
-        wxCurrentId = wxID_HIGHEST + 1;
-
-    return wxCurrentId++;
-}
-
-long
-wxGetCurrentId(void) { return wxCurrentId; }
-
-void
-wxRegisterId (long id)
-{
-  if (id >= wxCurrentId)
-    wxCurrentId = id + 1;
-}
-
-#endif // wxUSE_BASE
-
-// ============================================================================
-// GUI-only functions from now on
-// ============================================================================
-
-#if wxUSE_GUI
 
 // ----------------------------------------------------------------------------
 // Menu accelerators related functions

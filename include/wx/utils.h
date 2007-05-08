@@ -447,15 +447,6 @@ WXDLLIMPEXP_BASE bool wxHandleFatalExceptions(bool doit = true);
 
 #endif // wxUSE_ON_FATAL_EXCEPTION
 
-// flags for wxLaunchDefaultBrowser
-enum
-{
-    wxBROWSER_NEW_WINDOW = 1
-};
-
-// Launch url in the user's default internet browser
-WXDLLIMPEXP_BASE bool wxLaunchDefaultBrowser(const wxString& url, int flags = 0);
-
 // ----------------------------------------------------------------------------
 // Environment variables
 // ----------------------------------------------------------------------------
@@ -520,6 +511,19 @@ WXDLLIMPEXP_BASE bool wxGetDiskSpace(const wxString& path,
                                      wxDiskspaceSize_t *pFree = NULL);
 
 #if wxUSE_GUI // GUI only things from now on
+
+// ----------------------------------------------------------------------------
+// Launch default browser
+// ----------------------------------------------------------------------------
+
+// flags for wxLaunchDefaultBrowser
+enum
+{
+    wxBROWSER_NEW_WINDOW = 1
+};
+
+// Launch url in the user's default internet browser
+WXDLLIMPEXP_CORE bool wxLaunchDefaultBrowser(const wxString& url, int flags = 0);
 
 // ----------------------------------------------------------------------------
 // Menu accelerators related things
