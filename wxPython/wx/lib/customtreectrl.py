@@ -3562,7 +3562,8 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         for child in self._itemWithWindow:
             if not self.IsVisible(child):
                 wnd = child.GetWindow()
-                wnd.Hide()
+                if wnd:
+                    wnd.Hide()
             
 
     def Unselect(self):
