@@ -80,7 +80,7 @@ void* wxProcessTerminationThread::Entry()
     {
         usleep(100);
         int status = 0;
-        int rc = waitpid(abs(m_data->pid), & status, WNOHANG);
+        int rc = waitpid(abs(m_data->pid), & status, 0);
         if (rc != 0)
         {
             if ((rc != -1) && WIFEXITED(status))
