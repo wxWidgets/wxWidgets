@@ -533,6 +533,9 @@ class InspectionInfoPanel(wx.stc.StyledTextCtrl):
 
 
     def FmtSizerItem(self, obj):
+        if obj is None:
+            return ['SizerItem: None']
+        
         st = ['SizerItem:']
         st.append(self.Fmt('proportion', obj.GetProportion()))
         st.append(self.Fmt('flag',
