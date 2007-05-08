@@ -1198,6 +1198,18 @@
 #endif /* wxUSE_ZIPSTREAM */
 
 #if wxUSE_TARSTREAM
+    /* wxTar doesn't currently compile without wchar_t */
+#   if !wxUSE_WCHAR_T
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxTar requires wchar_t"
+#       else
+#           undef wxUSE_TARSTREAM
+#           define wxUSE_TARSTREAM 0
+#       endif
+#   endif
+#endif /* wxUSE_TARSTREAM */
+
+#if wxUSE_TARSTREAM
 #   if !wxUSE_ARCHIVE_STREAMS
 #       ifdef wxABORT_ON_CONFIG_ERROR
 #           error "wxTar requires wxArchive"

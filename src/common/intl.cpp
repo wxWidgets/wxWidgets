@@ -1304,7 +1304,7 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
                             : new wxCSConv(msgIdCharset);
 
 #elif wxUSE_FONTMAP
-    wxASSERT_MSG( msgIdCharset == NULL,
+    wxASSERT_MSG( msgIdCharset.empty(),
                   _T("non-ASCII msgid languages only supported if wxUSE_WCHAR_T=1") );
 
     wxEncodingConverter converter;
@@ -1430,6 +1430,7 @@ bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName,
 
     file.FillHash(m_messages, msgIdCharset, bConvertEncoding);
 
+#if wxUSE_WCHAR_T
     // we should use a conversion compatible with the message catalog encoding
     // in the GUI if we don't convert the strings to the current conversion but
     // as the encoding is global, only change it once, otherwise we could get
@@ -1445,6 +1446,7 @@ bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName,
         wxConvUI =
         m_conv = new wxCSConv(file.GetCharset());
     }
+#endif // wxUSE_WCHAR_T
 
     return true;
 }

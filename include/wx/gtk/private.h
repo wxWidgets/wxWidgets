@@ -29,7 +29,7 @@
     #define wxGTK_CONV_FONT(s, font) wxGTK_CONV((s))
     #define wxGTK_CONV_SYS(s) wxGTK_CONV((s))
     #define wxGTK_CONV_BACK(s) wxConvUTF8.cMB2WX((s))
-#else
+#elif wxUSE_WCHAR_T
     #include "wx/font.h"
 
     // convert the text in given encoding to UTF-8 used by wxGTK
@@ -49,6 +49,12 @@
     #define wxGTK_CONV(s) wxGTK_CONV_FONT((s), m_font)
     #define wxGTK_CONV_SYS(s) wxConvertToGTK((s))
     #define wxGTK_CONV_BACK(s)  wxConvLocal.cWC2WX(wxConvUTF8.cMB2WC((s)))
+#else // we're limited to ASCII
+    #define wxGTK_CONV_ENC(s, enc) (s)
+    #define wxGTK_CONV_FONT(s, font) (s)
+    #define wxGTK_CONV(s) (s)
+    #define wxGTK_CONV_SYS(s) (s)
+    #define wxGTK_CONV_BACK(s) (wxString(s))
 #endif
 
 // Some deprecated GTK+ prototypes we still use often

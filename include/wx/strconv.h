@@ -500,9 +500,13 @@ class WXDLLIMPEXP_BASE wxMBConv
 public:
     const char* cMB2WX(const char *psz) const { return psz; }
     const char* cWX2MB(const char *psz) const { return psz; }
+    wxMBConv *Clone() const { return NULL; }
 };
 
 #define wxConvFile wxConvLocal
+#define wxConvUI wxConvCurrent
+
+typedef wxMBConv wxCSConv;
 
 extern WXDLLIMPEXP_DATA_BASE(wxMBConv) wxConvLibc,
                                        wxConvLocal,
@@ -513,8 +517,7 @@ extern WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvCurrent;
 #define wxFNCONV(name) name
 #define wxFNSTRINGCAST WXSTRINGCAST
 
-#endif
-  // wxUSE_WCHAR_T
+#endif // wxUSE_WCHAR_T/!wxUSE_WCHAR_T
 
 // ----------------------------------------------------------------------------
 // macros for the most common conversions

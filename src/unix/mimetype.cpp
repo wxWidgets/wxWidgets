@@ -152,7 +152,12 @@ protected:
     virtual bool OnRead(const wxMBConv& WXUNUSED(conv))
     {
         return wxTextFile::OnRead(
-                    wxMBConvUTF8(wxMBConvUTF8::MAP_INVALID_UTF8_TO_PUA));
+#if wxUSE_WCHAR_T
+                    wxMBConvUTF8(wxMBConvUTF8::MAP_INVALID_UTF8_TO_PUA)
+#else
+                    wxMBConv()
+#endif // wxUSE_WCHAR_T/!wxUSE_WCHAR_T
+                                 );
     }
 };
 

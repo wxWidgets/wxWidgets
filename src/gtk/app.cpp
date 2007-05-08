@@ -448,8 +448,11 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     if (encName.empty())
         encName = _T("UTF-8");
 #endif // wxUSE_INTL
+
+#if wxUSE_WCHAR_T
     static wxConvBrokenFileNames fileconv(encName);
     wxConvFileName = &fileconv;
+#endif // wxUSE_WCHAR_T
 
 #if wxUSE_UNICODE
     // gtk_init() wants UTF-8, not wchar_t, so convert
