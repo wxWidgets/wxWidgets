@@ -598,7 +598,8 @@ protected:
     wxTreeListItem       *m_shiftItem; // item, where the shift key was pressed
     wxTreeListItem       *m_editItem; // item, which is currently edited
     wxTreeListItem       *m_selectItem; // current selected item, not with wxTR_MULTIPLE
-
+    wxTreeListItem       *m_select_me;
+    
     int                  m_curColumn;
 
     int                  m_btnWidth, m_btnWidth2;
@@ -921,6 +922,29 @@ private:
 // ===========================================================================
 // implementation
 // ===========================================================================
+
+
+// ---------------------------------------------------------------------------
+// internal helpers
+// ---------------------------------------------------------------------------
+
+// check if the given item is under another one
+static bool IsDescendantOf(const wxTreeListItem *parent, const wxTreeListItem *item)
+{
+    while ( item )
+    {
+        if ( item == parent )
+        {
+            // item is a descendant of parent
+            return true;
+        }
+
+        item = item->GetItemParent();
+    }
+
+    return false;
+}
+
 
 // ---------------------------------------------------------------------------
 // wxTreeListRenameTimer (internal)
@@ -1789,7 +1813,8 @@ void wxTreeListMainWindow::Init() {
     m_shiftItem = (wxTreeListItem*)NULL;
     m_editItem = (wxTreeListItem*)NULL;
     m_selectItem = (wxTreeListItem*)NULL;
-
+    m_select_me = (wxTreeListItem*)NULL;
+    
     m_curColumn = -1; // no current column
 
     m_hasFocus = false;
@@ -2418,6 +2443,27 @@ void wxTreeListMainWindow::Delete (const wxTreeItemId& itemId) {
     }
 
     wxTreeListItem *parent = item->GetItemParent();
+
+
+    // m_select_me records whether we need to select
+    // a different item, in idle time.
+    if ( m_select_me && IsDescendantOf(item, m_select_me) )
+    {
+        m_select_me = parent;
+    }
+
+    if ( IsDescendantOf(item, m_curItem) )
+    {
+        // Don't silently change the selection:
+        // do it properly in idle time, so event
+        // handlers get called.
+
+        // m_current = parent;
+        m_curItem = NULL;
+        m_select_me = parent;
+    }
+    
+    // remove the item from the tree
     if (parent) {
         parent->GetChildren().Remove (item);  // remove by value
     }
@@ -2426,6 +2472,10 @@ void wxTreeListMainWindow::Delete (const wxTreeItemId& itemId) {
     SendDeleteEvent (item);
     if (m_selectItem == item) m_selectItem = (wxTreeListItem*)NULL;
     item->DeleteChildren (this);
+
+    if (item == m_select_me)
+        m_select_me = NULL;
+    
     delete item;
 }
 
@@ -2660,7 +2710,6 @@ void wxTreeListMainWindow::SelectItem (const wxTreeItemId& itemId,
         if (unselect_others) {
             m_selectItem = (item->IsSelected())? item: (wxTreeListItem*)NULL;
         }
-
     }
 
     // send event to user code
@@ -3627,7 +3676,6 @@ void wxTreeListMainWindow::OnChar (wxKeyEvent &event) {
         m_curItem = (wxTreeListItem*)newItem.m_pItem; // make the new item the current item
         RefreshLine (oldItem);
     }
-
 }
 
 wxTreeItemId wxTreeListMainWindow::HitTest (const wxPoint& point, int& flags, int& column) {
@@ -3969,9 +4017,23 @@ void wxTreeListMainWindow::OnIdle (wxIdleEvent &WXUNUSED(event)) {
      * we actually redraw the tree when everything is over */
 
     if (!m_dirty) return;
-
     m_dirty = false;
 
+    // Check if we need to select the root item
+    // because nothing else has been selected.
+    // Delaying it means that we can invoke event handlers
+    // as required, when a first item is selected.
+    if (!m_owner->HasFlag(wxTR_MULTIPLE) && !m_owner->GetSelection().IsOk())
+    {
+        if (m_select_me)
+            m_owner->SelectItem(m_select_me);
+        else if (m_owner->GetRootItem().IsOk())
+            m_owner->SelectItem(m_owner->GetRootItem());
+        m_select_me = NULL;
+        m_curItem = (wxTreeListItem*)m_owner->GetSelection().m_pItem;
+
+    }
+    
     CalculatePositions();
     Refresh();
     AdjustMyScrollbars();
