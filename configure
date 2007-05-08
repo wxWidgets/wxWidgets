@@ -13763,17 +13763,17 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 { echo "$as_me:$LINENO: result: $bakefile_cv_c_compiler___INTEL_COMPILER" >&5
 echo "${ECHO_T}$bakefile_cv_c_compiler___INTEL_COMPILER" >&6; }
-    if test "x$bakefile_cv_c_compiler___INTEL_COMPILER" = "xyes"; then
-        :; INTELCC=yes
-    else
-        :;
-    fi
     ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+    if test "x$bakefile_cv_c_compiler___INTEL_COMPILER" = "xyes"; then
+        :; INTELCC=yes
+    else
+        :;
+    fi
 
 
         if test "x$GCC" != "xyes"; then
@@ -14274,17 +14274,17 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 { echo "$as_me:$LINENO: result: $bakefile_cv_c_compiler__SGI_COMPILER_VERSION" >&5
 echo "${ECHO_T}$bakefile_cv_c_compiler__SGI_COMPILER_VERSION" >&6; }
-    if test "x$bakefile_cv_c_compiler__SGI_COMPILER_VERSION" = "xyes"; then
-        :; SGICC=yes
-    else
-        :;
-    fi
     ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+    if test "x$bakefile_cv_c_compiler__SGI_COMPILER_VERSION" = "xyes"; then
+        :; SGICC=yes
+    else
+        :;
+    fi
 
 
                 ;;
@@ -14354,17 +14354,17 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 { echo "$as_me:$LINENO: result: $bakefile_cv_c_compiler___HP_cc" >&5
 echo "${ECHO_T}$bakefile_cv_c_compiler___HP_cc" >&6; }
-    if test "x$bakefile_cv_c_compiler___HP_cc" = "xyes"; then
-        :; HPCC=yes
-    else
-        :;
-    fi
     ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+    if test "x$bakefile_cv_c_compiler___HP_cc" = "xyes"; then
+        :; HPCC=yes
+    else
+        :;
+    fi
 
 
                 ;;
@@ -14434,17 +14434,17 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 { echo "$as_me:$LINENO: result: $bakefile_cv_c_compiler___DECC" >&5
 echo "${ECHO_T}$bakefile_cv_c_compiler___DECC" >&6; }
-    if test "x$bakefile_cv_c_compiler___DECC" = "xyes"; then
-        :; COMPAQCC=yes
-    else
-        :;
-    fi
     ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+    if test "x$bakefile_cv_c_compiler___DECC" = "xyes"; then
+        :; COMPAQCC=yes
+    else
+        :;
+    fi
 
 
                 ;;
@@ -14514,17 +14514,17 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 { echo "$as_me:$LINENO: result: $bakefile_cv_c_compiler___SUNPRO_C" >&5
 echo "${ECHO_T}$bakefile_cv_c_compiler___SUNPRO_C" >&6; }
-    if test "x$bakefile_cv_c_compiler___SUNPRO_C" = "xyes"; then
-        :; SUNCC=yes
-    else
-        :;
-    fi
     ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+    if test "x$bakefile_cv_c_compiler___SUNPRO_C" = "xyes"; then
+        :; SUNCC=yes
+    else
+        :;
+    fi
 
 
                 ;;
@@ -15409,17 +15409,17 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 { echo "$as_me:$LINENO: result: $bakefile_cv_cxx_compiler___INTEL_COMPILER" >&5
 echo "${ECHO_T}$bakefile_cv_cxx_compiler___INTEL_COMPILER" >&6; }
-    if test "x$bakefile_cv_cxx_compiler___INTEL_COMPILER" = "xyes"; then
-        :; INTELCXX=yes
-    else
-        :;
-    fi
     ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+    if test "x$bakefile_cv_c_compiler___INTEL_COMPILER" = "xyes"; then
+        :; INTELCXX=yes
+    else
+        :;
+    fi
 
 
         if test "x$GCXX" != "xyes"; then
@@ -15920,17 +15920,17 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 { echo "$as_me:$LINENO: result: $bakefile_cv_cxx_compiler__SGI_COMPILER_VERSION" >&5
 echo "${ECHO_T}$bakefile_cv_cxx_compiler__SGI_COMPILER_VERSION" >&6; }
-    if test "x$bakefile_cv_cxx_compiler__SGI_COMPILER_VERSION" = "xyes"; then
-        :; SGICXX=yes
-    else
-        :;
-    fi
     ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+    if test "x$bakefile_cv_c_compiler__SGI_COMPILER_VERSION" = "xyes"; then
+        :; SGICXX=yes
+    else
+        :;
+    fi
 
 
                 ;;
@@ -16000,17 +16000,17 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 { echo "$as_me:$LINENO: result: $bakefile_cv_cxx_compiler___HP_aCC" >&5
 echo "${ECHO_T}$bakefile_cv_cxx_compiler___HP_aCC" >&6; }
-    if test "x$bakefile_cv_cxx_compiler___HP_aCC" = "xyes"; then
-        :; HPCXX=yes
-    else
-        :;
-    fi
     ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+    if test "x$bakefile_cv_c_compiler___HP_aCC" = "xyes"; then
+        :; HPCXX=yes
+    else
+        :;
+    fi
 
 
                 ;;
@@ -16080,17 +16080,17 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 { echo "$as_me:$LINENO: result: $bakefile_cv_cxx_compiler___DECCXX" >&5
 echo "${ECHO_T}$bakefile_cv_cxx_compiler___DECCXX" >&6; }
-    if test "x$bakefile_cv_cxx_compiler___DECCXX" = "xyes"; then
-        :; COMPAQCXX=yes
-    else
-        :;
-    fi
     ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+    if test "x$bakefile_cv_c_compiler___DECCXX" = "xyes"; then
+        :; COMPAQCXX=yes
+    else
+        :;
+    fi
 
 
                 ;;
@@ -16160,17 +16160,17 @@ rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
 fi
 { echo "$as_me:$LINENO: result: $bakefile_cv_cxx_compiler___SUNPRO_CC" >&5
 echo "${ECHO_T}$bakefile_cv_cxx_compiler___SUNPRO_CC" >&6; }
-    if test "x$bakefile_cv_cxx_compiler___SUNPRO_CC" = "xyes"; then
-        :; SUNCXX=yes
-    else
-        :;
-    fi
     ac_ext=c
 ac_cpp='$CPP $CPPFLAGS'
 ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
 ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
+    if test "x$bakefile_cv_c_compiler___SUNPRO_CC" = "xyes"; then
+        :; SUNCXX=yes
+    else
+        :;
+    fi
 
 
                 ;;
@@ -23621,10 +23621,142 @@ if test "x$SUNCC" = xyes; then
 fi
 
 if test "x$SGICC" = "xyes"; then
-    CFLAGS="-woff 3970 $CFLAGS"
+    { echo "$as_me:$LINENO: checking if cc version is 7.4.4 or greater" >&5
+echo $ECHO_N "checking if cc version is 7.4.4 or greater... $ECHO_C" >&6; }
+if test "${wx_cv_prog_sgicc744+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+            cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+                    #if _SGI_COMPILER_VERSION >= 744
+                    chock me: mipsPro is 7.4.4 or later
+                    #endif
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  wx_cv_prog_sgicc744=no
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	wx_cv_prog_sgicc744=yes
+
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+
+
+fi
+{ echo "$as_me:$LINENO: result: $wx_cv_prog_sgicc744" >&5
+echo "${ECHO_T}$wx_cv_prog_sgicc744" >&6; }
+
+    if test "x$wx_cv_prog_sgicc744" = "xyes"; then
+        CFLAGS="-woff 3970 $CFLAGS"
+    fi
 fi
 if test "x$SGICXX" = "xyes"; then
-    CXXFLAGS="-woff 3970 $CXXFLAGS"
+    { echo "$as_me:$LINENO: checking if CC version is 7.4.4 or greater" >&5
+echo $ECHO_N "checking if CC version is 7.4.4 or greater... $ECHO_C" >&6; }
+if test "${wx_cv_prog_sgicxx744+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+
+            ac_ext=cpp
+ac_cpp='$CXXCPP $CPPFLAGS'
+ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
+
+            cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+
+int
+main ()
+{
+
+                    #if _SGI_COMPILER_VERSION >= 744
+                    chock me: mipsPro is 7.4.4 or later
+                    #endif
+
+  ;
+  return 0;
+}
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_cxx_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  wx_cv_prog_sgicxx744=no
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	wx_cv_prog_sgicxx744=yes
+
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+            ac_ext=c
+ac_cpp='$CPP $CPPFLAGS'
+ac_compile='$CC -c $CFLAGS $CPPFLAGS conftest.$ac_ext >&5'
+ac_link='$CC -o conftest$ac_exeext $CFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
+ac_compiler_gnu=$ac_cv_c_compiler_gnu
+
+
+
+fi
+{ echo "$as_me:$LINENO: result: $wx_cv_prog_sgicxx744" >&5
+echo "${ECHO_T}$wx_cv_prog_sgicxx744" >&6; }
+
+    if test "x$wx_cv_prog_sgicxx744" = "xyes"; then
+        CXXFLAGS="-woff 3970 $CXXFLAGS"
+    fi
 fi
 
 if test "x$HPCC" = "xyes"; then
@@ -44779,22 +44911,18 @@ echo "$as_me: WARNING: wxTreeCtrl requires wxImageList and won't be compiled wit
 fi
 
 if test "$wxUSE_POPUPWIN" = "yes"; then
-    if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1 ; then
-        { echo "$as_me:$LINENO: WARNING: Popup window not yet supported under Mac OS X... disabled" >&5
-echo "$as_me: WARNING: Popup window not yet supported under Mac OS X... disabled" >&2;}
+    if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1 -o "$wxUSE_PM" = 1 \
+            -o "$wxUSE_DFB" = 1; then
+        { echo "$as_me:$LINENO: WARNING: Popup window not yet supported on this platform... disabled" >&5
+echo "$as_me: WARNING: Popup window not yet supported on this platform... disabled" >&2;}
     else
-        if test "$wxUSE_PM" = 1; then
-            { echo "$as_me:$LINENO: WARNING: wxPopupWindow not yet supported under PM... disabled" >&5
-echo "$as_me: WARNING: wxPopupWindow not yet supported under PM... disabled" >&2;}
-        else
-            cat >>confdefs.h <<\_ACEOF
+        cat >>confdefs.h <<\_ACEOF
 #define wxUSE_POPUPWIN 1
 _ACEOF
 
-            SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS popup"
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS popup"
 
-            USES_CONTROLS=1
-        fi
+        USES_CONTROLS=1
     fi
 fi
 
@@ -46153,9 +46281,13 @@ fi
 
 
     if test "x$SUNCXX" = "xyes"; then
-                                AR=${AR:-"$CXX"}
+                                AR=$CXX
+        AROPTIONS="-xar -o"
 
-        AROPTIONS=${AROPTIONS:-"-xar -o"}
+    elif test "x$SGICC" = "xyes"; then
+                AR=$CXX
+        AROPTIONS="-ar -o"
+
     else
         if test -n "$ac_tool_prefix"; then
   # Extract the first word of "${ac_tool_prefix}ar", so it can be a program name with args.
@@ -46551,10 +46683,7 @@ echo "${ECHO_T}$bakefile_cv_prog_makeisgnu" >&6; }
                 PLATFORM_BEOS=1
             ;;
             * )
-                { { echo "$as_me:$LINENO: error: Unknown platform: $BAKEFILE_FORCE_PLATFORM" >&5
-echo "$as_me: error: Unknown platform: $BAKEFILE_FORCE_PLATFORM" >&2;}
-   { (exit 1); exit 1; }; }
-            ;;
+                                            ;;
         esac
     fi
 
@@ -47517,7 +47646,10 @@ EOF
               ;;
 
       *)
-                    esac
+        { { echo "$as_me:$LINENO: error: unknown system type $BAKEFILE_HOST." >&5
+echo "$as_me: error: unknown system type $BAKEFILE_HOST." >&2;}
+   { (exit 1); exit 1; }; }
+    esac
 
     if test "x$PIC_FLAG" != "x" ; then
         PIC_FLAG="$PIC_FLAG -DPIC"
