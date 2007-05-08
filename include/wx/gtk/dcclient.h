@@ -19,13 +19,18 @@ class WXDLLIMPEXP_CORE wxWindow;
 // wxWindowDC
 //-----------------------------------------------------------------------------
 
+#if wxUSE_NEW_DC
+class WXDLLIMPEXP_CORE wxGTKWindowImplDC : public wxGTKImplDC
+#else
+#define wxGTKWindowImplDC wxWindowDC
 class WXDLLIMPEXP_CORE wxWindowDC : public wxDC
+#endif
 {
 public:
-    wxWindowDC();
-    wxWindowDC( wxWindow *win );
+    wxGTKWindowImplDC();
+    wxGTKWindowImplDC( wxWindow *win );
 
-    virtual ~wxWindowDC();
+    virtual ~wxGTKWindowImplDC();
 
     virtual bool CanDrawBitmap() const { return true; }
     virtual bool CanGetTextExtent() const { return true; }
@@ -129,38 +134,48 @@ public:
     virtual GdkWindow *GetGDKWindow() const { return m_window; }
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxWindowDC)
+    DECLARE_DYNAMIC_CLASS(wxGTKWindowImplDC)
 };
 
 //-----------------------------------------------------------------------------
 // wxClientDC
 //-----------------------------------------------------------------------------
 
+#if wxUSE_NEW_DC
+class WXDLLIMPEXP_CORE wxGTKClientImplDC : public wxGTKWindowImplDC
+#else
+#define wxGTKClientImplDC wxClientDC
 class WXDLLIMPEXP_CORE wxClientDC : public wxWindowDC
+#endif
 {
 public:
-    wxClientDC() { }
-    wxClientDC( wxWindow *win );
+    wxGTKClientImplDC() { }
+    wxGTKClientImplDC( wxWindow *win );
 
 protected:
     virtual void DoGetSize(int *width, int *height) const;
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxClientDC)
+    DECLARE_DYNAMIC_CLASS(wxGTKClientImplDC)
 };
 
 //-----------------------------------------------------------------------------
 // wxPaintDC
 //-----------------------------------------------------------------------------
 
+#if wxUSE_NEW_DC
+class WXDLLIMPEXP_CORE wxGTKPaintImplDC : public wxGTKClientImplDC
+#else
+#define wxGTKPaintImplDC wxPaintDC
 class WXDLLIMPEXP_CORE wxPaintDC : public wxClientDC
+#endif
 {
 public:
-    wxPaintDC() { }
-    wxPaintDC( wxWindow *win );
+    wxGTKPaintImplDC() { }
+    wxGTKPaintImplDC( wxWindow *win );
 
 private:
-    DECLARE_DYNAMIC_CLASS(wxPaintDC)
+    DECLARE_DYNAMIC_CLASS(wxGTKPaintImplDC)
 };
 
 #endif // __GTKDCCLIENTH__
