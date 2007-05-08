@@ -56,7 +56,6 @@ class Tools(wx.Panel):
              (ID_NEW.STATIC_TEXT, images.getToolStaticTextBitmap()),
              (ID_NEW.STATIC_BITMAP, images.getToolStaticBitmapBitmap()),
              (ID_NEW.STATIC_LINE, images.getToolStaticLineBitmap()),
-             
              (ID_NEW.BUTTON, images.getToolButtonBitmap()),
              (ID_NEW.BITMAP_BUTTON, images.getToolBitmapButtonBitmap()),
              (ID_NEW.STATIC_BOX, images.getToolStaticBoxBitmap()),
@@ -99,8 +98,9 @@ class Tools(wx.Panel):
                              wx.wxEVT_COMMAND_BUTTON_CLICKED, g.frame.OnCreate)
         wx.EVT_KEY_DOWN(self, self.OnKeyDown)
         wx.EVT_KEY_UP(self, self.OnKeyUp)
-        self.Bind(wx.EVT_LEFT_DOWN, self.OnClickBox)
-
+        # wxMSW does not generate click events for StaticBox
+        if wx.Platform == '__WXMSW__':
+            self.Bind(wx.EVT_LEFT_DOWN, self.OnClickBox)
         self.drag = None
 
     def AddButton(self, id, image, text):
@@ -127,9 +127,9 @@ class Tools(wx.Panel):
         box.gnum = len(self.groups)
         box.Bind(wx.EVT_LEFT_DOWN, self.OnClickBox)
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        boxSizer.Add((0, 4))
+        boxSizer.Add((0, 0))
         self.boxes[id] = box
-        self.curSizer = wx.GridSizer(0, 3)
+        self.curSizer = wx.GridSizer(0, 3, 3, 3)
         boxSizer.Add(self.curSizer)
         self.sizer.Add(boxSizer, 0, wx.TOP | wx.LEFT | wx.RIGHT | wx.EXPAND, 4)
         self.groups.append((box,{}))
@@ -137,7 +137,6 @@ class Tools(wx.Panel):
     # Enable/disable group
     def EnableGroup(self, gnum, enable = True):
         grp = self.groups[gnum]
-        #grp[0].Enable(enable)
         for b in grp[1].values(): b.Enable(enable)
 
     # Show/hide group
@@ -161,11 +160,13 @@ class Tools(wx.Panel):
         if wx.Platform == '__WXMSW__':
             box = None
             for id,b in self.boxes.items():
-                # Detect click on label
+                # How to detect a click on a label?
                 if b.GetRect().Inside(evt.GetPosition()):
                     box = b
                     break
-            if not box: return
+            if not box: 
+                evt.Skip()
+                return
         else:
             box = self.boxes[evt.GetId()]
         # Collapse/restore static box, change label
@@ -363,3 +364,4 @@ class Tools(wx.Panel):
                 self.EnableGroupItem(GROUP_MENUS, ID_NEW.MENU_BAR)
         # Save state
         self.state = state
+        self.Refresh()

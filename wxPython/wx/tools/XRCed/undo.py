@@ -210,6 +210,10 @@ class UndoMove:
 
         selected = g.tree.InsertNode(self.oldParent, parent, elem, nextItem)
         g.tree.EnsureVisible(selected)
+        # Highlight is outdated
+        if g.testWin and g.testWin.highLight:
+            g.testWin.highLight.Remove()
+            g.tree.needUpdate = True
         g.tree.SelectItem(selected)
     def redo(self):
         item = g.tree.GetFirstChild(self.oldParent)[0]
@@ -248,6 +252,10 @@ class UndoMove:
         for i in range(self.newIndex): nextItem = g.tree.GetNextSibling(nextItem) 
         selected = g.tree.InsertNode(self.newParent, parent, elem, nextItem)
         g.tree.EnsureVisible(selected)
+        # Highlight is outdated
+        if g.testWin and g.testWin.highLight:
+            g.testWin.highLight.Remove()
+            g.tree.needUpdate = True
         g.tree.SelectItem(selected)
 
 class UndoEdit:
