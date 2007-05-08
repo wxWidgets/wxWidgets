@@ -323,47 +323,6 @@ void wxDC::DoDrawText(const wxString& text, wxCoord x, wxCoord y)
     [context restoreGraphicsState];
 }
 
-// wxDCBase functions
-int wxDCBase::DeviceToLogicalX(int x) const
-{
-    return x;
-}
-
-int wxDCBase::DeviceToLogicalY(int y) const
-{
-    return y;
-}
-
-int wxDCBase::DeviceToLogicalXRel(int x) const
-{
-    return x;
-}
-
-int wxDCBase::DeviceToLogicalYRel(int y) const
-{
-    return y;
-}
-
-int wxDCBase::LogicalToDeviceX(int x) const
-{
-    return x;
-}
-
-int wxDCBase::LogicalToDeviceY(int y) const
-{
-    return y;
-}
-
-int wxDCBase::LogicalToDeviceXRel(int x) const
-{
-    return x;
-}
-
-int wxDCBase::LogicalToDeviceYRel(int y) const
-{
-    return y;
-}
-
 ///////////////////////////////////////////////////////////////////////////
 // cut here, the rest is stubs
 ///////////////////////////////////////////////////////////////////////////
