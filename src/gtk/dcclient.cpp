@@ -271,7 +271,7 @@ wxWindowDC::wxWindowDC()
 
 wxWindowDC::wxWindowDC( wxWindow *window )
 {
-    wxASSERT_MSG( window, wxT("DC needs a window") );
+    wxCHECK_RET( window, wxT("DC needs a window") );
 
     m_penGC = (GdkGC *) NULL;
     m_brushGC = (GdkGC *) NULL;
@@ -2446,6 +2446,9 @@ wxPaintDC::wxPaintDC( wxWindow *win )
          : wxClientDC( win )
 {
 #if USE_PAINT_REGION
+    if (!win)        // the base class already asserted...
+        return;
+    
     if (!win->m_clipPaintRegion)
         return;
 
@@ -2479,7 +2482,8 @@ IMPLEMENT_DYNAMIC_CLASS(wxClientDC, wxWindowDC)
 wxClientDC::wxClientDC( wxWindow *win )
           : wxWindowDC( win )
 {
-    wxCHECK_RET( win, _T("NULL window in wxClientDC::wxClientDC") );
+    if (!win)        // the base class already asserted...
+        return;
 
 #ifdef __WXUNIVERSAL__
     wxPoint ptOrigin = win->GetClientAreaOrigin();
