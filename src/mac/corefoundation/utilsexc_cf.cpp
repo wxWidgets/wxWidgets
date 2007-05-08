@@ -26,6 +26,8 @@
 // Use polling instead of Mach ports, which doesn't work on Intel
 // due to task_for_pid security issues.
 
+// http://developer.apple.com/technotes/tn/tn2050.html
+
 // What's a better test for Intel vs PPC?
 #ifdef WORDS_BIGENDIAN
 #define USE_POLLING 0
