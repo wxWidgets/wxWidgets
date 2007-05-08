@@ -433,6 +433,7 @@ class PyAUIFrame(wx.Frame):
     def OnClose(self, event):
         
         self._mgr.UnInit()
+        del self._mgr
         self.Destroy()
 
         event.Skip()        
