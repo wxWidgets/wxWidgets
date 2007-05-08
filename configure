@@ -23635,7 +23635,7 @@ if test "x$HPCXX" = "xyes"; then
 fi
 
 if test "x$COMPAQCXX" = "xyes"; then
-                                CXXFLAGS="-w0 -msg_disable basclsnondto,unrimpret,intconlosbit"
+                                CXXFLAGS="-w0 -msg_disable basclsnondto,unrimpret,intconlosbit $CXXFLAGS"
 fi
 
 ac_ext=cpp

@@ -2139,7 +2139,7 @@ if test "x$COMPAQCXX" = "xyes"; then
     dnl intconlosbit: "conversion to integral type of smaller size could lose
     dnl               data" this is a useful warning but there are too many of
     dnl               them for now
-    CXXFLAGS="-w0 -msg_disable basclsnondto,unrimpret,intconlosbit"
+    CXXFLAGS="-w0 -msg_disable basclsnondto,unrimpret,intconlosbit $CXXFLAGS"
 fi
 
 dnl the next few tests are all for C++ features and so need to be done using
