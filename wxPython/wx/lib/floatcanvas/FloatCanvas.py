@@ -1555,8 +1555,8 @@ class ScaledTextBox(TextObjectMixin, DrawObject):
         DrawingSize = self.LayoutFontSize # pts This effectively determines the resolution that the BB is computed to.
         ScaleFactor = float(self.Size) / DrawingSize
         Width = (self.Width - 2*self.PadSize) / ScaleFactor #Width to wrap to
-        dc.SetFont(self.SetFont(DrawingSize, self.Family, self.Style, self.Weight, self.Underlined, self.FaceName) )
-
+        self.SetFont(DrawingSize, self.Family, self.Style, self.Weight, self.Underlined, self.FaceName)
+        dc.SetFont(self.Font)
         NewStrings = []
         for s in self.Strings:
             #beginning = True
@@ -1605,8 +1605,8 @@ class ScaledTextBox(TextObjectMixin, DrawObject):
         DrawingSize = self.LayoutFontSize # pts This effectively determines the resolution that the BB is computed to.
         ScaleFactor = float(self.Size) / DrawingSize
 
-        dc.SetFont(self.SetFont(DrawingSize, self.Family, self.Style, self.Weight, self.Underlined, self.FaceName) )
-
+        self.SetFont(DrawingSize, self.Family, self.Style, self.Weight, self.Underlined, self.FaceName)
+        dc.SetFont(self.Font)
         TextHeight = dc.GetTextExtent("X")[1]
         SpaceWidth = dc.GetTextExtent(" ")[0]
         LineHeight = TextHeight * self.LineSpacing
@@ -1690,8 +1690,8 @@ class ScaledTextBox(TextObjectMixin, DrawObject):
         ## note that this limit is dependent on how much memory you have, etc.
         Size = min(Size, self.MaxFontSize)
 
-        font = self.SetFont(Size, self.Family, self.Style, self.Weight, self.Underlined, self.FaceName)
-        dc.SetFont(font)
+        self.SetFont(Size, self.Family, self.Style, self.Weight, self.Underlined, self.FaceName)
+        dc.SetFont(self.Font)
         dc.SetTextForeground(self.Color)
         dc.SetBackgroundMode(wx.TRANSPARENT)
 
@@ -2468,7 +2468,9 @@ class FloatCanvas(wx.Panel):
         
         """
         self._HTBitmap = wx.EmptyBitmap(self.PanelSize[0],
+
                                         self.PanelSize[1],
+
                                         depth=self.HitTestBitmapDepth)
 
     def MakeNewForegroundHTBitmap(self):
@@ -2480,7 +2482,9 @@ class FloatCanvas(wx.Panel):
         
         """
         self._ForegroundHTBitmap = wx.EmptyBitmap(self.PanelSize[0],
+
                                                   self.PanelSize[1],
+
                                                   depth=self.HitTestBitmapDepth)
 
     def OnSize(self, event=None):
