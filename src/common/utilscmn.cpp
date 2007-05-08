@@ -678,6 +678,11 @@ wxRegisterId (long id)
 // Launch default browser
 // ----------------------------------------------------------------------------
 
+#ifdef __WXCOCOA__
+// Private method in Objective-C++ source file.
+bool wxCocoaLaunchDefaultBrowser(const wxString& url, int flags);
+#endif
+
 bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
 {
     wxUnusedVar(flags);
@@ -778,6 +783,10 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
 #endif // __WXDEBUG__
         return true;
     }
+#elif defined(__WXCOCOA__)
+    // NOTE: We need to call the real implementation from src/cocoa/utils.mm
+    // because the code must use Objective-C features.
+    return wxCocoaLaunchDefaultBrowser(url, flags);
 #elif defined(__WXMAC__)
     OSStatus err;
     ICInstance inst;
