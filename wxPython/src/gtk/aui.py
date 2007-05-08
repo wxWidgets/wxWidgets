@@ -49,7 +49,7 @@ interface:
 **Usage**
 
 The following example shows a simple implementation that utilizes
-`wx.aui.FrameManager` to manage three text controls in a frame window::
+`wx.aui.AuiManager` to manage three text controls in a frame window::
 
     import wx
     import wx.aui
@@ -713,7 +713,7 @@ class AuiManager(_core.EvtHandler):
         widget reference or by pane name, which acts as a unique id
         for a window pane. The returned `PaneInfo` object may then be
         modified to change a pane's look, state or position. After one
-        or more modifications to the `PaneInfo`, `FrameManager.Update`
+        or more modifications to the `PaneInfo`, `AuiManager.Update`
         should be called to realize the changes to the user interface.
 
         If the lookup failed (meaning the pane could not be found in
