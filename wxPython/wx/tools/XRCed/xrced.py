@@ -218,11 +218,25 @@ class Frame(wx.Frame):
 
         # Create toolbar
         tb = self.CreateToolBar(wx.TB_HORIZONTAL | wx.NO_BORDER | wx.TB_FLAT)
-        
-        # Hide some icons on Mac to reduce the toolbar size,
-        # and comply more with the Apple LnF, besides
-        # wxMac icons are ugly
         if wx.Platform != '__WXMAC__':
+            # Redefine AddSeparator on wxGTK and wxMSW to add vertical line
+            def _AddSeparator():
+                tb.AddControl(wx.StaticLine(tb, -1, size=(-1,23), 
+                                            style=wx.LI_VERTICAL))
+            tb.AddSeparator = _AddSeparator
+        
+        # Use tango icons and slightly wider bitmap size on Mac
+        if wx.Platform == '__WXMAC__':
+            tb.SetToolBitmapSize((26,26))
+            new_bmp = images.getNewBitmap()            
+            open_bmp = images.getOpenBitmap()            
+            save_bmp = images.getSaveBitmap()            
+            undo_bmp = images.getUndoBitmap()            
+            redo_bmp = images.getRedoBitmap()            
+            cut_bmp = images.getCutBitmap()            
+            copy_bmp = images.getCopyBitmap()            
+            paste_bmp = images.getPasteBitmap()            
+        else:
             tb.SetToolBitmapSize((24,24))
             new_bmp  = wx.ArtProvider.GetBitmap(wx.ART_NORMAL_FILE, wx.ART_TOOLBAR)
             open_bmp = wx.ArtProvider.GetBitmap(wx.ART_FILE_OPEN, wx.ART_TOOLBAR)
@@ -232,27 +246,26 @@ class Frame(wx.Frame):
             cut_bmp  = wx.ArtProvider.GetBitmap(wx.ART_CUT, wx.ART_TOOLBAR)
             copy_bmp = wx.ArtProvider.GetBitmap(wx.ART_COPY, wx.ART_TOOLBAR)
             paste_bmp= wx.ArtProvider.GetBitmap(wx.ART_PASTE, wx.ART_TOOLBAR)
-            tb.AddSimpleTool(wx.ID_NEW, new_bmp, 'New', 'New file')
-            tb.AddSimpleTool(wx.ID_OPEN, open_bmp, 'Open', 'Open file')
-            tb.AddSimpleTool(wx.ID_SAVE, save_bmp, 'Save', 'Save file')
-            tb.AddControl(wx.StaticLine(tb, -1, size=(-1,23), style=wx.LI_VERTICAL))
-            tb.AddSimpleTool(wx.ID_UNDO, undo_bmp, 'Undo', 'Undo')
-            tb.AddSimpleTool(wx.ID_REDO, redo_bmp, 'Redo', 'Redo')
-            tb.AddControl(wx.StaticLine(tb, -1, size=(-1,23), style=wx.LI_VERTICAL))
-            tb.AddSimpleTool(wx.ID_CUT, cut_bmp, 'Cut', 'Cut')
-            tb.AddSimpleTool(wx.ID_COPY, copy_bmp, 'Copy', 'Copy')
-            tb.AddSimpleTool(self.ID_TOOL_PASTE, paste_bmp, 'Paste', 'Paste')
-            tb.AddControl(wx.StaticLine(tb, -1, size=(-1,23), style=wx.LI_VERTICAL))
+        tb.AddSimpleTool(wx.ID_NEW, new_bmp, 'New', 'New file')
+        tb.AddSimpleTool(wx.ID_OPEN, open_bmp, 'Open', 'Open file')
+        tb.AddSimpleTool(wx.ID_SAVE, save_bmp, 'Save', 'Save file')
+        tb.AddSeparator()
+        tb.AddSimpleTool(wx.ID_UNDO, undo_bmp, 'Undo', 'Undo')
+        tb.AddSimpleTool(wx.ID_REDO, redo_bmp, 'Redo', 'Redo')
+        tb.AddSeparator()
+        tb.AddSimpleTool(wx.ID_CUT, cut_bmp, 'Cut', 'Cut')
+        tb.AddSimpleTool(wx.ID_COPY, copy_bmp, 'Copy', 'Copy')
+        tb.AddSimpleTool(self.ID_TOOL_PASTE, paste_bmp, 'Paste', 'Paste')
+        tb.AddSeparator()
         tb.AddSimpleTool(self.ID_TOOL_LOCATE,
-                        images.getLocateBitmap(), #images.getLocateArmedBitmap(),
-                        'Locate', 'Locate control in test window and select it', True)
-#        tb.AddControl(wx.StaticLine(tb, -1, size=(-1,23), style=wx.LI_VERTICAL))
+                         images.getLocateBitmap(), #images.getLocateArmedBitmap(),
+                         'Locate', 'Locate control in test window and select it', True)
         tb.AddSimpleTool(self.ID_TEST, images.getTestBitmap(), 'Test', 'Test window')
         tb.AddSimpleTool(self.ID_REFRESH, images.getRefreshBitmap(),
                          'Refresh', 'Refresh view')
         tb.AddSimpleTool(self.ID_AUTO_REFRESH, images.getAutoRefreshBitmap(),
                          'Auto-refresh', 'Toggle auto-refresh mode', True)
-        tb.AddControl(wx.StaticLine(tb, -1, size=(-1,23), style=wx.LI_VERTICAL))
+        tb.AddSeparator()
         tb.AddSimpleTool(self.ID_MOVEUP, images.getToolMoveUpBitmap(),
                          'Up', 'Move before previous sibling')
         tb.AddSimpleTool(self.ID_MOVEDOWN, images.getToolMoveDownBitmap(),
@@ -261,8 +274,6 @@ class Frame(wx.Frame):
                          'Make Sibling', 'Make sibling of parent')
         tb.AddSimpleTool(self.ID_MOVERIGHT, images.getToolMoveRightBitmap(),
                          'Make Child', 'Make child of previous sibling')
-#        if wx.Platform == '__WXGTK__':
-#            tb.AddSeparator()   # otherwise auto-refresh sticks in status line
         tb.ToggleTool(self.ID_AUTO_REFRESH, conf.autoRefresh)
         tb.Realize()
  
