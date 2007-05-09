@@ -4713,7 +4713,11 @@ if test "$wxUSE_FILE" = "yes"; then
     WX_CHECK_FUNCS(fsync)
 fi
 
+dnl at least under IRIX with mipsPro the C99 round() function is available when
+dnl building using the C compiler but not when using C++ one
+AC_LANG_PUSH(C++)
 WX_CHECK_FUNCS(round,,,[#include <math.h>])
+AC_LANG_POP()
 
 dnl the following tests are for Unix(like) systems only
 if test "$TOOLKIT" != "MSW"; then
