@@ -99,13 +99,44 @@ class TaskBarIcon(wx.TaskBarIcon):
         # Set the image
         self.SetIcon(images.getIconIcon(), "XRCed")
 
+# ArtProvider for toolbar icons
+class ToolArtProvider(wx.ArtProvider):
+    def __init__(self):
+        wx.ArtProvider.__init__(self)
+        self.images = {
+            'ART_LOCATE': images.getLocateImage(),
+            'ART_TEST': images.getTestImage(),
+            'ART_REFRESH': images.getRefreshImage(),
+            'ART_AUTO_REFRESH': images.getAutoRefreshImage(),
+            'ART_MOVEUP': images.getMoveUpImage(),
+            'ART_MOVEDOWN': images.getMoveDownImage(),
+            'ART_MOVELEFT': images.getMoveLeftImage(),
+            'ART_MOVERIGHT': images.getMoveRightImage()
+            }
+        if wx.Platform in ['__WXMAC__', '__WXMSW__']:
+            self.images.update({
+                    wx.ART_NORMAL_FILE: images.getNewImage(),
+                    wx.ART_FILE_OPEN: images.getOpenImage(),
+                    wx.ART_FILE_SAVE: images.getSaveImage(),
+                    wx.ART_UNDO: images.getUndoImage(),
+                    wx.ART_REDO: images.getRedoImage(),
+                    wx.ART_CUT: images.getCutImage(),
+                    wx.ART_COPY: images.getCopyImage(),
+                    wx.ART_PASTE: images.getPasteImage()
+                    })
+    def CreateBitmap(self, id, client, size):
+        bmp = wx.NullBitmap
+        if id in self.images:
+            img = self.images[id]
+            # Alpha not implemented completely there
+            if wx.Platform in ['__WXMAC__', '__WXMSW__']:
+                img.ConvertAlphaToMask()
+            bmp = wx.BitmapFromImage(img)
+        return bmp
+
 class Frame(wx.Frame):
     def __init__(self, pos, size):
-        pre = wx.PreFrame()
-#        pre.SetExtraStyle(wx.FRAME_EX_METAL)
-        pre.Create(None, -1, '', pos, size)
-        self.PostCreate(pre)
-        #wx.Frame.__init__(self, None, -1, '', pos, size)
+        wx.Frame.__init__(self, None, -1, '', pos, size)
         global frame
         frame = g.frame = self
         bar = self.CreateStatusBar(2)
@@ -168,6 +199,7 @@ class Frame(wx.Frame):
         menu.AppendSeparator()
         self.ID_LOCATE = wx.NewId()
         self.ID_TOOL_LOCATE = wx.NewId()
+        self.ART_LOCATE = 'ART_LOCATE'
         self.ID_TOOL_PASTE = wx.NewId()
         menu.Append(self.ID_LOCATE, '&Locate\tCtrl-L', 'Locate control in test window and select it')
         menuBar.Append(menu, '&Edit')
@@ -181,10 +213,13 @@ class Frame(wx.Frame):
         menu.Check(self.ID_SHOW_TOOLS, conf.showTools)
         menu.AppendSeparator()
         self.ID_TEST = wx.NewId()
+        self.ART_TEST = 'ART_TEST'
         menu.Append(self.ID_TEST, '&Test\tF5', 'Show test window')
         self.ID_REFRESH = wx.NewId()
+        self.ART_REFRESH = 'ART_REFRESH'
         menu.Append(self.ID_REFRESH, '&Refresh\tCtrl-R', 'Refresh test window')
         self.ID_AUTO_REFRESH = wx.NewId()
+        self.ART_AUTO_REFRESH = 'ART_AUTO_REFRESH'
         menu.Append(self.ID_AUTO_REFRESH, '&Auto-refresh\tAlt-A',
                     'Toggle auto-refresh mode', True)
         menu.Check(self.ID_AUTO_REFRESH, conf.autoRefresh)
@@ -194,12 +229,16 @@ class Frame(wx.Frame):
 
         menu = wx.Menu()
         self.ID_MOVEUP = wx.NewId()
+        self.ART_MOVEUP = 'ART_MOVEUP'
         menu.Append(self.ID_MOVEUP, '&Up', 'Move before previous sibling')
         self.ID_MOVEDOWN = wx.NewId()
+        self.ART_MOVEDOWN = 'ART_MOVEDOWN'
         menu.Append(self.ID_MOVEDOWN, '&Down', 'Move after next sibling')
         self.ID_MOVELEFT = wx.NewId()
+        self.ART_MOVELEFT = 'ART_MOVELEFT'
         menu.Append(self.ID_MOVELEFT, '&Make sibling', 'Make sibling of parent')
         self.ID_MOVERIGHT = wx.NewId()
+        self.ART_MOVERIGHT = 'ART_MOVERIGHT'
         menu.Append(self.ID_MOVERIGHT, '&Make child', 'Make child of previous sibling')
         menuBar.Append(menu, '&Move')
 
@@ -228,24 +267,16 @@ class Frame(wx.Frame):
         # Use tango icons and slightly wider bitmap size on Mac
         if wx.Platform in ['__WXMAC__', '__WXMSW__']:
             tb.SetToolBitmapSize((26,26))
-            new_bmp = images.getNewBitmap()            
-            open_bmp = images.getOpenBitmap()            
-            save_bmp = images.getSaveBitmap()            
-            undo_bmp = images.getUndoBitmap()            
-            redo_bmp = images.getRedoBitmap()            
-            cut_bmp = images.getCutBitmap()            
-            copy_bmp = images.getCopyBitmap()            
-            paste_bmp = images.getPasteBitmap()            
         else:
             tb.SetToolBitmapSize((24,24))
-            new_bmp  = wx.ArtProvider.GetBitmap(wx.ART_NORMAL_FILE, wx.ART_TOOLBAR)
-            open_bmp = wx.ArtProvider.GetBitmap(wx.ART_FILE_OPEN, wx.ART_TOOLBAR)
-            save_bmp = wx.ArtProvider.GetBitmap(wx.ART_FILE_SAVE, wx.ART_TOOLBAR)
-            undo_bmp = wx.ArtProvider.GetBitmap(wx.ART_UNDO, wx.ART_TOOLBAR)
-            redo_bmp = wx.ArtProvider.GetBitmap(wx.ART_REDO, wx.ART_TOOLBAR)
-            cut_bmp  = wx.ArtProvider.GetBitmap(wx.ART_CUT, wx.ART_TOOLBAR)
-            copy_bmp = wx.ArtProvider.GetBitmap(wx.ART_COPY, wx.ART_TOOLBAR)
-            paste_bmp= wx.ArtProvider.GetBitmap(wx.ART_PASTE, wx.ART_TOOLBAR)
+        new_bmp  = wx.ArtProvider.GetBitmap(wx.ART_NORMAL_FILE, wx.ART_TOOLBAR)
+        open_bmp = wx.ArtProvider.GetBitmap(wx.ART_FILE_OPEN, wx.ART_TOOLBAR)
+        save_bmp = wx.ArtProvider.GetBitmap(wx.ART_FILE_SAVE, wx.ART_TOOLBAR)
+        undo_bmp = wx.ArtProvider.GetBitmap(wx.ART_UNDO, wx.ART_TOOLBAR)
+        redo_bmp = wx.ArtProvider.GetBitmap(wx.ART_REDO, wx.ART_TOOLBAR)
+        cut_bmp  = wx.ArtProvider.GetBitmap(wx.ART_CUT, wx.ART_TOOLBAR)
+        copy_bmp = wx.ArtProvider.GetBitmap(wx.ART_COPY, wx.ART_TOOLBAR)
+        paste_bmp= wx.ArtProvider.GetBitmap(wx.ART_PASTE, wx.ART_TOOLBAR)
         tb.AddSimpleTool(wx.ID_NEW, new_bmp, 'New', 'New file')
         tb.AddSimpleTool(wx.ID_OPEN, open_bmp, 'Open', 'Open file')
         tb.AddSimpleTool(wx.ID_SAVE, save_bmp, 'Save', 'Save file')
@@ -257,22 +288,28 @@ class Frame(wx.Frame):
         tb.AddSimpleTool(wx.ID_COPY, copy_bmp, 'Copy', 'Copy')
         tb.AddSimpleTool(self.ID_TOOL_PASTE, paste_bmp, 'Paste', 'Paste')
         tb.AddSeparator()
-        tb.AddSimpleTool(self.ID_TOOL_LOCATE,
-                         images.getLocateBitmap(), #images.getLocateArmedBitmap(),
+        bmp = wx.ArtProvider.GetBitmap(self.ART_LOCATE, wx.ART_TOOLBAR)
+        tb.AddSimpleTool(self.ID_TOOL_LOCATE, bmp,
                          'Locate', 'Locate control in test window and select it', True)
-        tb.AddSimpleTool(self.ID_TEST, images.getTestBitmap(), 'Test', 'Test window')
-        tb.AddSimpleTool(self.ID_REFRESH, images.getRefreshBitmap(),
-                         'Refresh', 'Refresh view')
-        tb.AddSimpleTool(self.ID_AUTO_REFRESH, images.getAutoRefreshBitmap(),
+        bmp = wx.ArtProvider.GetBitmap(self.ART_TEST, wx.ART_TOOLBAR)
+        tb.AddSimpleTool(self.ID_TEST, bmp, 'Test', 'Test window')
+        bmp = wx.ArtProvider.GetBitmap(self.ART_REFRESH, wx.ART_TOOLBAR)
+        tb.AddSimpleTool(self.ID_REFRESH, bmp, 'Refresh', 'Refresh view')
+        bmp = wx.ArtProvider.GetBitmap(self.ART_AUTO_REFRESH, wx.ART_TOOLBAR)
+        tb.AddSimpleTool(self.ID_AUTO_REFRESH, bmp,
                          'Auto-refresh', 'Toggle auto-refresh mode', True)
         tb.AddSeparator()
-        tb.AddSimpleTool(self.ID_MOVEUP, images.getMoveUpBitmap(),
+        bmp = wx.ArtProvider.GetBitmap(self.ART_MOVEUP, wx.ART_TOOLBAR)
+        tb.AddSimpleTool(self.ID_MOVEUP, bmp,
                          'Up', 'Move before previous sibling')
-        tb.AddSimpleTool(self.ID_MOVEDOWN, images.getMoveDownBitmap(),
+        bmp = wx.ArtProvider.GetBitmap(self.ART_MOVEDOWN, wx.ART_TOOLBAR)
+        tb.AddSimpleTool(self.ID_MOVEDOWN, bmp,
                          'Down', 'Move after next sibling')
-        tb.AddSimpleTool(self.ID_MOVELEFT, images.getMoveLeftBitmap(),
+        bmp = wx.ArtProvider.GetBitmap(self.ART_MOVELEFT, wx.ART_TOOLBAR)
+        tb.AddSimpleTool(self.ID_MOVELEFT, bmp,
                          'Make Sibling', 'Make sibling of parent')
-        tb.AddSimpleTool(self.ID_MOVERIGHT, images.getMoveRightBitmap(),
+        bmp = wx.ArtProvider.GetBitmap(self.ART_MOVERIGHT, wx.ART_TOOLBAR)
+        tb.AddSimpleTool(self.ID_MOVERIGHT, bmp,
                          'Make Child', 'Make child of previous sibling')
         tb.ToggleTool(self.ID_AUTO_REFRESH, conf.autoRefresh)
         tb.Realize()
@@ -1798,6 +1835,8 @@ Please upgrade wxWidgets to %d.%d.%d or higher.''' % MinWxVersion)
             
         # Add handlers
         wx.FileSystem.AddHandler(wx.MemoryFSHandler())
+        self.toolArtProvider = ToolArtProvider()
+        wx.ArtProvider.Push(self.toolArtProvider)
         # Create main frame
         frame = Frame(pos, size)
         # Mac does not set the correct size
