@@ -221,6 +221,8 @@ class InspectionFrame(wx.Frame):
 
     def OnClose(self, evt):
         self.SaveSettings(self.config)
+        self.mgr.UnInit()
+        del self.mgr
         evt.Skip()
         
 
