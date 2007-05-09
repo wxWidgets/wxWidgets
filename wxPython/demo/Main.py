@@ -1568,7 +1568,8 @@ class wxPythonDemo(wx.Frame):
 
 
     def SetTreeModified(self, modifiedFilename, setIcon):
-
+        if not USE_CUSTOMTREECTRL:
+            return
         self.tree.Freeze()        
         treeItemText = os.path.split(os.path.splitext(modifiedFilename)[0])[1]
         self.LoopTreeCtrl(self.root, treeItemText, setIcon)
@@ -2190,7 +2191,7 @@ is loaded in another tab for you to browse and learn from.
 #----------------------------------------------------------------------------
 
 if __name__ == '__main__':
-    __name__ = 'MainWithoutFNB'
+    __name__ = 'Main'
     main()
 
 #----------------------------------------------------------------------------
