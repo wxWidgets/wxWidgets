@@ -372,7 +372,7 @@ AC_DEFUN([WX_ARG_SYS_WITH],
                         fi
                       ],
                       [
-                        LINE=`grep "$3" ${wx_arg_cache_file}`
+                        LINE=`grep "^$3=" ${wx_arg_cache_file}`
                         if test "x$LINE" != x ; then
                           eval "DEFAULT_$LINE"
                         else
@@ -416,7 +416,7 @@ AC_DEFUN([WX_ARG_WITH],
                         fi
                       ],
                       [
-                        LINE=`grep "$3" ${wx_arg_cache_file}`
+                        LINE=`grep "^$3=" ${wx_arg_cache_file}`
                         if test "x$LINE" != x ; then
                           eval "DEFAULT_$LINE"
                         else
@@ -458,7 +458,7 @@ AC_DEFUN([WX_ARG_ENABLE],
                           fi
                         ],
                         [
-                          LINE=`grep "$3" ${wx_arg_cache_file}`
+                          LINE=`grep "^$3=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -505,7 +505,7 @@ AC_DEFUN([WX_ARG_ENABLE_PARAM],
                           wx_cv_use_$1="$3='$enableval'"
                         ],
                         [
-                          LINE=`grep "$3" ${wx_arg_cache_file}`
+                          LINE=`grep "^$3=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
