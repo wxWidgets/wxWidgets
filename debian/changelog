@@ -1,3 +1,22 @@
+wxwidgets2.8 (2.8.4.0-0) unstable; urgency=low
+
+  * Fix bug in wxFileConfig when recreating a group (Steven Van Ingelgem)
+  * Fix wxStringOutputStream::Write() in Unicode build when the argument
+    overlaps UTF-8 characters boundary
+  * Account for lines without newline at the end in wxExecute()
+  * Handle socket shutdown by the peer correctly in wxSocket (Tim Kosse)
+  * Allow status bar children in XRC (Edmunt Pienkowski)
+  * Fix memory leak in wxWizard when not using sizers for the page layout
+  * Fix infinite loop when adding a wxStaticText control to a toolbar
+  * Fix wxNO_BORDER style for wxRadioBox (David Hart)
+  * wxComboBox::SetValue() doesn't emit EVT_TEXT anymore
+  * Fix wxTextCtrl::GetLineText() for empty lines (Marcin Wojdyr)
+  * Added wxString::char_str(), wchar_str(), From8BitData(), To8BitData(),
+    FromUTF8(), ToUTF8() and utf8_str() methods for forward compatiblity
+    with wxWidgets 3
+
+ -- Vadim Zeitlin <vadim@wxwindows.org>  May, 09 Wed 2007 23:10:01 +0200
+
 wxwidgets2.8 (2.8.3.0-0) unstable; urgency=low
 
   * Added wxSizerFlags::Shaped(), FixedMinSize(), Top() and Bottom() methods.
