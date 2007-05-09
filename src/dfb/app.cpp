@@ -45,8 +45,55 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     if ( !wxAppBase::Initialize(argc, argv) )
         return false;
 
+    // FIXME-UTF8: This code is taken from wxGTK and duplicated here. This
+    //             is just a temporary fix to make wxDFB compile in Unicode
+    //             build, the real fix is to change Initialize()'s signature
+    //             to use char* on Unix.
+#if wxUSE_UNICODE
+    // DirectFBInit() wants UTF-8, not wchar_t, so convert
+    int i;
+    char **argvDFB = new char *[argc + 1];
+    for ( i = 0; i < argc; i++ )
+    {
+        argvDFB[i] = strdup(wxConvUTF8.cWX2MB(argv[i]));
+    }
+
+    argvDFB[argc] = NULL;
+
+    int argcDFB = argc;
+
+    if ( !wxDfbCheckReturn(DirectFBInit(&argcDFB, &argvDFB)) )
+        return false;
+
+    if ( argcDFB != argc )
+    {
+        // we have to drop the parameters which were consumed by DFB+
+        for ( i = 0; i < argcDFB; i++ )
+        {
+            while ( strcmp(wxConvUTF8.cWX2MB(argv[i]), argvDFB[i]) != 0 )
+            {
+                memmove(argv + i, argv + i + 1, (argc - i)*sizeof(*argv));
+            }
+        }
+
+        argc = argcDFB;
+    }
+    //else: DirectFBInit() didn't modify our parameters
+
+    // free our copy
+    for ( i = 0; i < argcDFB; i++ )
+    {
+        free(argvDFB[i]);
+    }
+
+    delete [] argvDFB;
+
+#else // ANSI
+
     if ( !wxDfbCheckReturn(DirectFBInit(&argc, &argv)) )
         return false;
+
+#endif // Unicode/ANSI
 
     // update internal arg[cv] as DFB may have removed processed options:
     this->argc = argc;
