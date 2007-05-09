@@ -1470,6 +1470,13 @@ dnl see CFLAGS line above
 CXXFLAGS=${CXXFLAGS:=}
 AC_BAKEFILE_PROG_CXX
 
+dnl configure always sets CXX to something as it falls back to g++ even if no
+dnl C++ compiler was found, but we prefer to abort now with a clear error
+dnl message rather than give errors about all tests failures below
+if test -n "$ac_cv_prog_ac_ct_CXX"; then
+    AC_MSG_ERROR([C++ compiler is needed to build wxWidgets])
+fi
+
 dnl ranlib command
 dnl   defines RANLIB with the appropriate command
 AC_PROG_RANLIB
