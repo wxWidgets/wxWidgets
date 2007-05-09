@@ -57,7 +57,7 @@ def getTasks(config_env):
                               [config.OSX_HOST_panther, "2.3", "both"], env=config_env),
                           Job("bigmac.24",
                               "distrib/all/build-osx",
-                              [config.OSX_HOST_panther, "2.4", "both"], env=config_env)
+                              [config.OSX_HOST_panther, "2.4", "both"], env=config_env),
                           Job("bigmac.25",
                               "distrib/all/build-osx",
                               [config.OSX_HOST_panther, "2.5", "both"], env=config_env)
