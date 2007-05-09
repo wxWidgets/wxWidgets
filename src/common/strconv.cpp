@@ -3692,4 +3692,6 @@ WXDLLIMPEXP_DATA_BASE(wxMBConv) wxConvLibc,
                                 wxConvLocal,
                                 wxConvUTF8;
 
+WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvCurrent = NULL;
+
 #endif // wxUSE_WCHAR_T/!wxUSE_WCHAR_T
