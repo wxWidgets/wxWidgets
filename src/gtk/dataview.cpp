@@ -1108,7 +1108,7 @@ wxDataViewTextRenderer::wxDataViewTextRenderer( const wxString &varianttype, wxD
                                                 int align ) :
     wxDataViewRenderer( varianttype, mode, align )
 {
-    m_renderer = (GtkWidget*) gtk_cell_renderer_text_new();
+    m_renderer = (GtkCellRenderer*) gtk_cell_renderer_text_new();
 
     if (mode & wxDATAVIEW_CELL_EDITABLE)
     {
@@ -1183,7 +1183,7 @@ wxDataViewBitmapRenderer::wxDataViewBitmapRenderer( const wxString &varianttype,
                                                     int align ) :
     wxDataViewRenderer( varianttype, mode, align )
 {
-    m_renderer = (GtkWidget*) gtk_cell_renderer_pixbuf_new();
+    m_renderer = (GtkCellRenderer*) gtk_cell_renderer_pixbuf_new();
 
     SetMode(mode);
     SetAlignment(align);
@@ -1280,7 +1280,7 @@ wxDataViewToggleRenderer::wxDataViewToggleRenderer( const wxString &varianttype,
                                                     wxDataViewCellMode mode, int align ) :
     wxDataViewRenderer( varianttype, mode, align )
 {
-    m_renderer = (GtkWidget*) gtk_cell_renderer_toggle_new();
+    m_renderer = (GtkCellRenderer*) gtk_cell_renderer_toggle_new();
 
     if (mode & wxDATAVIEW_CELL_ACTIVATABLE)
     {
@@ -1375,7 +1375,7 @@ bool wxDataViewCustomRenderer::Init(wxDataViewCellMode mode, int align)
     GtkWxCellRenderer *renderer = (GtkWxCellRenderer *) gtk_wx_cell_renderer_new();
     renderer->cell = this;
 
-    m_renderer = (GtkWidget*) renderer;
+    m_renderer = (GtkCellRenderer*) renderer;
 
     SetMode(mode);
     SetAlignment(align);
@@ -1419,7 +1419,7 @@ wxDataViewProgressRenderer::wxDataViewProgressRenderer( const wxString &label,
 #ifdef __WXGTK26__
     if (!gtk_check_version(2,6,0))
     {
-        m_renderer = (GtkWidget*) gtk_cell_renderer_progress_new();
+        m_renderer = (GtkCellRenderer*) gtk_cell_renderer_progress_new();
 
         GValue gvalue = { 0, };
         g_value_init( &gvalue, G_TYPE_STRING );
@@ -1655,6 +1655,19 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
                     cell->GetVariantType().c_str() );
 
     cell->SetValue( value );
+    
+/*
+    To set the background to this
+ 
+    wxColour colour(30,100,255);
+    GdkColor *gcol = colour.GetColor();
+    
+    GValue gvalue = { 0, };
+    g_value_init( &gvalue, GDK_TYPE_COLOR );
+    g_value_set_boxed( &gvalue, gcol );
+    g_object_set_property( G_OBJECT(renderer), "cell-background_gdk", &gvalue );
+    g_value_unset( &gvalue );
+*/ 
 }
 
 IMPLEMENT_CLASS(wxDataViewColumn, wxDataViewColumnBase)

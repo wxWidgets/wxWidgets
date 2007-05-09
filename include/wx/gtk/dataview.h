@@ -34,7 +34,7 @@ public:
                         int align = wxDVR_DEFAULT_ALIGNMENT );
 
     // implementation
-    GtkWidget* GetGtkHandle() { return m_renderer; }
+    GtkCellRenderer* GetGtkHandle() { return m_renderer; }
 
     virtual void SetMode( wxDataViewCellMode mode );
     virtual wxDataViewCellMode GetMode() const;
@@ -43,7 +43,7 @@ public:
     virtual int GetAlignment() const;
 
 protected:
-    GtkWidget   *m_renderer;
+    GtkCellRenderer   *m_renderer;
 
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewRenderer)
