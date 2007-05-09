@@ -226,7 +226,7 @@ class Frame(wx.Frame):
             tb.AddSeparator = _AddSeparator
         
         # Use tango icons and slightly wider bitmap size on Mac
-        if wx.Platform == '__WXMAC__':
+        if wx.Platform in ['__WXMAC__', '__WXMSW__']:
             tb.SetToolBitmapSize((26,26))
             new_bmp = images.getNewBitmap()            
             open_bmp = images.getOpenBitmap()            
@@ -266,13 +266,13 @@ class Frame(wx.Frame):
         tb.AddSimpleTool(self.ID_AUTO_REFRESH, images.getAutoRefreshBitmap(),
                          'Auto-refresh', 'Toggle auto-refresh mode', True)
         tb.AddSeparator()
-        tb.AddSimpleTool(self.ID_MOVEUP, images.getToolMoveUpBitmap(),
+        tb.AddSimpleTool(self.ID_MOVEUP, images.getMoveUpBitmap(),
                          'Up', 'Move before previous sibling')
-        tb.AddSimpleTool(self.ID_MOVEDOWN, images.getToolMoveDownBitmap(),
+        tb.AddSimpleTool(self.ID_MOVEDOWN, images.getMoveDownBitmap(),
                          'Down', 'Move after next sibling')
-        tb.AddSimpleTool(self.ID_MOVELEFT, images.getToolMoveLeftBitmap(),
+        tb.AddSimpleTool(self.ID_MOVELEFT, images.getMoveLeftBitmap(),
                          'Make Sibling', 'Make sibling of parent')
-        tb.AddSimpleTool(self.ID_MOVERIGHT, images.getToolMoveRightBitmap(),
+        tb.AddSimpleTool(self.ID_MOVERIGHT, images.getMoveRightBitmap(),
                          'Make Child', 'Make child of previous sibling')
         tb.ToggleTool(self.ID_AUTO_REFRESH, conf.autoRefresh)
         tb.Realize()
@@ -326,6 +326,10 @@ class Frame(wx.Frame):
         wx.EVT_UPDATE_UI(self, wx.ID_REDO, self.OnUpdateUI)
         wx.EVT_UPDATE_UI(self, self.ID_DELETE, self.OnUpdateUI)
         wx.EVT_UPDATE_UI(self, self.ID_TEST, self.OnUpdateUI)
+        wx.EVT_UPDATE_UI(self, self.ID_MOVEUP, self.OnUpdateUI)
+        wx.EVT_UPDATE_UI(self, self.ID_MOVEDOWN, self.OnUpdateUI)
+        wx.EVT_UPDATE_UI(self, self.ID_MOVELEFT, self.OnUpdateUI)
+        wx.EVT_UPDATE_UI(self, self.ID_MOVERIGHT, self.OnUpdateUI)
         wx.EVT_UPDATE_UI(self, self.ID_REFRESH, self.OnUpdateUI)
 
         # Build interface
@@ -1365,9 +1369,12 @@ Homepage: http://xrced.sourceforge.net\
             evt.Enable(self.modified)
         elif evt.GetId() in [wx.ID_PASTE, self.ID_TOOL_PASTE]:
             evt.Enable(tree.selection is not None)
-        elif evt.GetId() == self.ID_TEST:
+        elif evt.GetId() in [self.ID_TEST,
+                             self.ID_MOVEUP, self.ID_MOVEDOWN,
+                             self.ID_MOVELEFT, self.ID_MOVERIGHT]:
             evt.Enable(tree.selection is not None and tree.selection != tree.root)
-        elif evt.GetId() in [self.ID_LOCATE, self.ID_TOOL_LOCATE]:
+        elif evt.GetId() in [self.ID_LOCATE, self.ID_TOOL_LOCATE,
+                             self.ID_REFRESH]:
             evt.Enable(g.testWin is not None)
         elif evt.GetId() == wx.ID_UNDO:  evt.Enable(undoMan.CanUndo())
         elif evt.GetId() == wx.ID_REDO:  evt.Enable(undoMan.CanRedo())
