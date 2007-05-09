@@ -775,11 +775,19 @@ class DemoCodePanel(wx.Panel):
 
 def opj(path):
     """Convert paths to the platform-specific separator"""
-    str = apply(os.path.join, tuple(path.split('/')))
+    st = apply(os.path.join, tuple(path.split('/')))
     # HACK: on Linux, a leading / gets lost...
     if path.startswith('/'):
-        str = '/' + str
-    return str
+        st = '/' + st
+    return st
+
+
+def GetDataDir():
+    """
+    Return the standard location on this platform for application data
+    """
+    sp = wx.StandardPaths.Get()
+    return sp.GetUserDataDir()
 
 
 def GetModifiedDirectory():
@@ -787,7 +795,7 @@ def GetModifiedDirectory():
     Returns the directory where modified versions of the demo files
     are stored
     """
-    return opj(wx.GetHomeDir() + "/.wxPyDemo/modified/")
+    return os.path.join(GetDataDir(), "modified")
 
 
 def GetModifiedFilename(name):
@@ -796,7 +804,7 @@ def GetModifiedFilename(name):
     """
     if not name.endswith(".py"):
         name = name + ".py"
-    return GetModifiedDirectory() + name
+    return os.path.join(GetModifiedDirectory(), name)
 
 
 def GetOriginalFilename(name):
@@ -814,6 +822,15 @@ def DoesModifiedExist(name):
         return True
     else:
         return False
+
+
+def GetConfig():
+    if not os.path.exists(GetDataDir()):
+        os.makedirs(GetDataDir())
+
+    config = wx.FileConfig(
+        localFilename=os.path.join(GetDataDir(), "options"))
+    return config
 
 
 def SearchDemo(name, keyword):
@@ -1203,8 +1220,6 @@ class wxPythonDemo(wx.Frame):
         except:
             self.tbicon = None
             
-        wx.CallAfter(self.ShowTip)
-
         self.otherWin = None
         self.Bind(wx.EVT_IDLE, self.OnIdle)
         self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
@@ -1349,18 +1364,17 @@ class wxPythonDemo(wx.Frame):
     def ReadConfigurationFile(self):
 
         self.auiConfigurations = {}
-        optionsFile = opj(wx.GetHomeDir() + "/.wxPyDemo/wxPythonOptions.txt")
-        if not os.path.isfile(optionsFile):
-            self.expansionState = [0, 1]
-            return
+        self.expansionState = [0, 1]
 
-        fid = open(optionsFile, "rt")
-        self.expansionState = eval(fid.readline().strip().split(":")[1])
-        auiConfigurations = fid.readline().strip().split(":")[1:]
-        auiConfigurations = ":".join(auiConfigurations)
-        self.auiConfigurations.update(eval(auiConfigurations))
-        fid.close()
+        config = GetConfig()
+        val = config.Read('ExpansionState')
+        if val:
+            self.expansionState = eval(val)
 
+        val = config.Read('AUIPerspectives')
+        if val:
+            self.auiConfigurations = eval(val)
+        
 
     def BuildMenuBar(self):
 
@@ -1976,11 +1990,10 @@ class wxPythonDemo(wx.Frame):
         if self.tbicon is not None:
             self.tbicon.Destroy()
 
-        optionsFile = opj(wx.GetHomeDir() + "/.wxPyDemo/wxPythonOptions.txt")
-        fid = open(optionsFile, "wt")
-        fid.write("ExpansionState: %s\n"%self.tree.GetExpansionState())
-        fid.write("AUIPerspectives: %s\n"%self.auiConfigurations)
-        fid.close()
+        config = GetConfig()
+        config.Write('ExpansionState', str(self.expansionState))
+        config.Write('AUIPerspectives', str(self.auiConfigurations))
+        config.Flush()
 
         self.mgr.UnInit()
         del self.mgr
@@ -1997,18 +2010,20 @@ class wxPythonDemo(wx.Frame):
 
     #---------------------------------------------
     def ShowTip(self):
-        try:
-            showTipText = open(opj("data/showTips")).read()
+        config = GetConfig()
+        showTipText = config.Read("tips")
+        if showTipText:
             showTip, index = eval(showTipText)
-        except IOError:
+        else:
             showTip, index = (1, 0)
+            
         if showTip:
             tp = wx.CreateFileTipProvider(opj("data/tips.txt"), index)
             ##tp = MyTP(0)
             showTip = wx.ShowTip(self, tp)
             index = tp.GetCurrentTip()
-            open(opj("data/showTips"), "w").write(str( (showTip, index) ))
-
+            config.Write("tips", str( (showTip, index) ))
+            config.Flush()
 
     #---------------------------------------------
     def OnDemoMenu(self, event):
@@ -2073,6 +2088,8 @@ class MySplashScreen(wx.SplashScreen):
         frame.Show()
         if self.fc.IsRunning():
             self.Raise()
+        wx.CallAfter(frame.ShowTip)
+
 
 
 
@@ -2124,7 +2141,8 @@ class MyApp(wx.App):
         """
 
         wx.SystemOptions.SetOptionInt("mac.window-plain-transition", 1)
-
+        self.SetAppName("wxPyDemo")
+        
         # For debugging
         #self.SetAssertMode(wx.PYAPP_ASSERT_DIALOG)
 
