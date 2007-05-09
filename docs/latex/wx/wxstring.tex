@@ -1110,7 +1110,7 @@ Minimizes the string's memory. This can be useful after a call to
 
 \membersection{wxString::StartsWith}\label{wxstringstartswith}
 
-\constfunc{bool}{StartsWith}{\param{const wxChar }{*prefix}, \param{wxString }{*rest = NULL}}
+\constfunc{bool}{StartsWith}{\param{const wxString\& }{prefix}, \param{wxString }{*rest = NULL}}
 
 This function can be used to test if the string starts with the specified 
 {\it prefix}. If it does, the function will return \true and put the rest
@@ -1121,7 +1121,7 @@ of the string (i.e. after the prefix) into {\it rest} string if it is not
 
 \membersection{wxString::EndsWith}\label{wxstringendswith}
 
-\constfunc{bool}{EndsWith}{\param{const wxChar }{*suffix}, \param{wxString }{*rest = NULL}}
+\constfunc{bool}{EndsWith}{\param{const wxString\& }{suffix}, \param{wxString }{*rest = NULL}}
 
 This function can be used to test if the string ends with the specified 
 {\it suffix}. If it does, the function will return \true and put the

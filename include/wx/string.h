@@ -1464,11 +1464,11 @@ public:
       // check if the string starts with the given prefix and return the rest
       // of the string in the provided pointer if it is not NULL; otherwise
       // return false
-  bool StartsWith(const wxChar *prefix, wxString *rest = NULL) const;
+  bool StartsWith(const wxString& prefix, wxString *rest = NULL) const;
       // check if the string ends with the given suffix and return the
       // beginning of the string before the suffix in the provided pointer if
       // it is not NULL; otherwise return false
-  bool EndsWith(const wxChar *suffix, wxString *rest = NULL) const;
+  bool EndsWith(const wxString& suffix, wxString *rest = NULL) const;
 
       // get first nCount characters
   wxString Left(size_t nCount) const;

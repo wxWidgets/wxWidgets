@@ -1065,28 +1065,15 @@ wxString wxString::Mid(size_t nFirst, size_t nCount) const
 
 // check that the string starts with prefix and return the rest of the string
 // in the provided pointer if it is not NULL, otherwise return false
-bool wxString::StartsWith(const wxChar *prefix, wxString *rest) const
+bool wxString::StartsWith(const wxString& prefix, wxString *rest) const
 {
-    wxASSERT_MSG( prefix, _T("invalid parameter in wxString::StartsWith") );
-
-    // first check if the beginning of the string matches the prefix: note
-    // that we don't have to check that we don't run out of this string as
-    // when we reach the terminating NUL, either prefix string ends too (and
-    // then it's ok) or we break out of the loop because there is no match
-    const wxChar *p = c_str();
-    while ( *prefix )
-    {
-        if ( *prefix++ != *p++ )
-        {
-            // no match
-            return false;
-        }
-    }
+    if ( compare(0, prefix.length(), prefix) != 0 )
+        return false;
 
     if ( rest )
     {
         // put the rest of the string into provided pointer
-        *rest = p;
+        rest->assign(*this, prefix.length(), npos);
     }
 
     return true;
@@ -1095,11 +1082,9 @@ bool wxString::StartsWith(const wxChar *prefix, wxString *rest) const
 
 // check that the string ends with suffix and return the rest of it in the
 // provided pointer if it is not NULL, otherwise return false
-bool wxString::EndsWith(const wxChar *suffix, wxString *rest) const
+bool wxString::EndsWith(const wxString& suffix, wxString *rest) const
 {
-    wxASSERT_MSG( suffix, _T("invalid parameter in wxString::EndssWith") );
-
-    int start = length() - wxStrlen(suffix);
+    int start = length() - suffix.length();
 
     if ( start < 0 || compare(start, npos, suffix) != 0 )
         return false;
