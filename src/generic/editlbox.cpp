@@ -293,6 +293,8 @@ bool wxEditableListBox::Create(wxWindow *parent, wxWindowID id,
 
     SetSizer(sizer);
     Layout();
+
+    return true;
 }
 
 void wxEditableListBox::SetStrings(const wxArrayString& strings)
