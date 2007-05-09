@@ -48,6 +48,10 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     if ( !wxDfbCheckReturn(DirectFBInit(&argc, &argv)) )
         return false;
 
+    // update internal arg[cv] as DFB may have removed processed options:
+    this->argc = argc;
+    this->argv = argv;
+
     if ( !wxIDirectFB::Get() )
         return false;
 
