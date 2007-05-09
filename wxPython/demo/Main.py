@@ -34,10 +34,10 @@ import sys, os, time, traceback, types
 import wx                  # This module uses the new wx namespace
 import wx.aui
 import wx.html
-import wx.lib.customtreectrl as CT
-from wx.lib.mixins.treemixin import ExpansionState
 
 import images
+
+USE_CUSTOMTREECTRL = False
 
 # For debugging
 ##wx.Trap();
@@ -1505,7 +1505,8 @@ class wxPythonDemo(wx.Frame):
         firstChild = None
         filter = self.filter.GetValue()
         count = 0
-        bmp = images.catalog['modifiedexists'].getBitmap()
+        if USE_CUSTOMTREECTRL:
+            bmp = images.catalog['modifiedexists'].getBitmap()
         for category, items in _treeList:
             count += 1
             if filter:
@@ -1519,10 +1520,9 @@ class wxPythonDemo(wx.Frame):
                 self.tree.SetPyData(child, count)
                 if not firstChild: firstChild = child
                 for childItem in items:
-                    if DoesModifiedExist(childItem):
+                    wnd = None
+                    if USE_CUSTOMTREECTRL and DoesModifiedExist(childItem):
                         wnd = wx.StaticBitmap(self.tree, -1, bmp)
-                    else:
-                        wnd = None
                     theDemo = self.tree.AppendItem(child, childItem, image=count, wnd=wnd)
                     self.tree.SetPyData(theDemo, count)
                     self.treeMap[childItem] = theDemo
@@ -2074,29 +2074,47 @@ class MySplashScreen(wx.SplashScreen):
             self.Raise()
 
 
-class wxPythonTreeCtrl(ExpansionState, CT.CustomTreeCtrl):
+
+#---------------------------------------------------------------------------
+
+from wx.lib.mixins.treemixin import ExpansionState
+if USE_CUSTOMTREECTRL:
+    import wx.lib.customtreectrl as CT
+    TreeBaseClass = CT.CustomTreeCtrl
+else:
+    TreeBaseClass = wx.TreeCtrl
+    
+
+class wxPythonTreeCtrl(ExpansionState, TreeBaseClass):
     def __init__(self, parent):
-        CT.CustomTreeCtrl.__init__(self, parent, style=wx.TR_DEFAULT_STYLE|
-                                   wx.TR_HAS_VARIABLE_ROW_HEIGHT)
-        self.SetSpacing(10)
-        self.SetWindowStyle(self.GetWindowStyle() & ~wx.TR_LINES_AT_ROOT)
-
+        TreeBaseClass.__init__(self, parent, style=wx.TR_DEFAULT_STYLE|
+                               wx.TR_HAS_VARIABLE_ROW_HEIGHT)
         self.BuildTreeImageList()
+        if USE_CUSTOMTREECTRL:
+            self.SetSpacing(10)
+            self.SetWindowStyle(self.GetWindowStyle() & ~wx.TR_LINES_AT_ROOT)
 
-
+    def AppendItem(self, parent, text, image=-1, wnd=None):
+        if USE_CUSTOMTREECTRL:
+            item = TreeBaseClass.AppendItem(self, parent, text, image=image, wnd=wnd)
+        else:
+            item = TreeBaseClass.AppendItem(self, parent, text, image=image)
+        return item
+            
     def BuildTreeImageList(self):
         imgList = wx.ImageList(16, 16)
         for png in _demoPngs:
             imgList.Add(images.catalog[png].getBitmap())
 
-        self.SetImageList(imgList)
+        self.AssignImageList(imgList)
         
 
     def GetItemIdentity(self, item):
         return self.GetPyData(item)
 
 
-    
+#---------------------------------------------------------------------------
+
 class MyApp(wx.App):
     def OnInit(self):
         """
