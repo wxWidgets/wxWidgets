@@ -926,10 +926,7 @@ void wxWindowMSW::ScrollWindow(int dx, int dy, const wxRect *prect)
     RECT *pr;
     if ( prect )
     {
-        rect.left = prect->x;
-        rect.top = prect->y;
-        rect.right = prect->x + prect->width;
-        rect.bottom = prect->y + prect->height;
+        wxCopyRectToRECT(*prect, rect);
         pr = &rect;
     }
     else
@@ -1467,11 +1464,7 @@ void wxWindowMSW::Refresh(bool eraseBack, const wxRect *rect)
         const RECT *pRect;
         if ( rect )
         {
-            mswRect.left = rect->x;
-            mswRect.top = rect->y;
-            mswRect.right = rect->x + rect->width;
-            mswRect.bottom = rect->y + rect->height;
-
+            wxCopyRectToRECT(*rect, mswRect);
             pRect = &mswRect;
         }
         else
