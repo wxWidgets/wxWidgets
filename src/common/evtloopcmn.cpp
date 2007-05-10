@@ -41,11 +41,7 @@ struct wxRunningEventLoopCounter
     ~wxRunningEventLoopCounter() { wxRunningEventLoopCount--; }
 };
 
-#else // !__WXMSW__
-
-struct wxRunningEventLoopCounter { };
-
-#endif // __WXMSW__/!__WXMSW__
+#endif // __WXMSW__
 
 // ----------------------------------------------------------------------------
 // globals
@@ -76,7 +72,9 @@ int wxEventLoopManual::Run()
     // should undo
     wxEventLoopActivator activate(wx_static_cast(wxEventLoop *, this));
 
+#if defined(__WXMSW__) && wxUSE_THREADS
     wxRunningEventLoopCounter evtLoopCounter;
+#endif // __WXMSW__
 
     // we must ensure that OnExit() is called even if an exception is thrown
     // from inside Dispatch() but we must call it from Exit() in normal
