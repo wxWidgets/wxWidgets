@@ -2297,7 +2297,7 @@ void wxDC::Clear(void)
         else
             return (wxCoord)((double)new_y * m_scaleY - 0.5) * m_signY + m_deviceOriginY + m_macLocalOrigin.y;
     }
-*/ // TODO
+
 wxCoord wxDC::DeviceToLogicalX(wxCoord x) const
 {
     return wxRound((double)(x - m_deviceOriginX) / m_scaleX) * m_signX + m_logicalOriginX;
@@ -2337,5 +2337,5 @@ wxCoord wxDC::LogicalToDeviceYRel(wxCoord y) const
 {
     return wxRound((double)(y) * m_scaleY);
 }
-
+*/ // TODO
 #endif // wxMAC_USE_CORE_GRAPHICS
