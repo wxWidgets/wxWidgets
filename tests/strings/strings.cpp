@@ -186,6 +186,14 @@ void StringTestCase::Extraction()
     CPPUNIT_ASSERT( wxStrcmp( s.substr(3, 5).c_str() , _T("lo, w") ) == 0 );
     CPPUNIT_ASSERT( wxStrcmp( s.substr(3).c_str() , _T("lo, world!") ) == 0 );
 
+#if wxUSE_UNICODE
+    static const char *germanUTF8 = "Oberfl\303\244che";
+    wxString strUnicode(wxString::FromUTF8(germanUTF8));
+
+    CPPUNIT_ASSERT( strUnicode.Mid(0, 10) == strUnicode );
+    CPPUNIT_ASSERT( strUnicode.Mid(7, 2) == "ch" );
+#endif // wxUSE_UNICODE
+
     wxString rest;
 
     #define TEST_STARTS_WITH(prefix, correct_rest, result)                    \
