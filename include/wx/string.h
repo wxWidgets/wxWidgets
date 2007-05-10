@@ -1045,18 +1045,17 @@ public:
 
     // get last character
     wxUniChar Last() const
-      {
-          wxASSERT_MSG( !empty(), _T("wxString: index out of bounds") );
-
-          return at(length() - 1);
-      }
+    {
+      wxASSERT_MSG( !empty(), _T("wxString: index out of bounds") );
+      return *rbegin();
+    }
 
     // get writable last character
     wxUniCharRef Last()
-      {
-          wxASSERT_MSG( !empty(), _T("wxString: index out of bounds") );
-          return at(length() - 1);
-      }
+    {
+      wxASSERT_MSG( !empty(), _T("wxString: index out of bounds") );
+      return *rbegin();
+    }
 
     /*
        Note that we we must define all of the overloads below to avoid
