@@ -283,7 +283,7 @@ long wxListCtrl::GetItemData(long item) const
 }
 
 // Sets the item data
-bool wxListCtrl::SetItemData(long item, long data)
+bool wxListCtrl::SetItemPtrData(long item, wxUIntPtr data)
 {
     return false;
 }

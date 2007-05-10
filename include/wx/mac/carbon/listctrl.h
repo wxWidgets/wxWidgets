@@ -122,7 +122,8 @@ class WXDLLEXPORT wxListCtrl: public wxControl
   long GetItemData(long item) const ;
 
   // Sets the item data
-  bool SetItemData(long item, long data) ;
+  bool SetItemPtrData(long item, wxUIntPtr data);
+  bool SetItemData(long item, long data) { return SetItemPtrData(item, data); }
 
   // Gets the item rectangle
   bool GetItemRect(long item, wxRect& rect, int code = wxLIST_RECT_BOUNDS) const ;

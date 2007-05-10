@@ -5177,7 +5177,7 @@ wxUIntPtr wxGenericListCtrl::GetItemData( long item ) const
     return info.m_data;
 }
 
-bool wxGenericListCtrl::SetItemData( long item, long data )
+bool wxGenericListCtrl::SetItemPtrData( long item, wxUIntPtr data )
 {
     wxListItem info;
     info.m_mask = wxLIST_MASK_DATA;

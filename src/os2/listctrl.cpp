@@ -1519,9 +1519,9 @@ long wxListCtrl::GetItemData (
 } // end of wxListCtrl::GetItemData
 
 // Sets the item data
-bool wxListCtrl::SetItemData (
+bool wxListCtrl::SetItemPtrData (
   long                              lItem
-, long                              lData
+, wxUIntPtr                         lData
 )
 {
     wxListItem                      vInfo;
@@ -1530,7 +1530,7 @@ bool wxListCtrl::SetItemData (
     vInfo.m_itemId = lItem;
     vInfo.m_data   = lData;
     return SetItem(vInfo);
-} // end of wxListCtrl::SetItemData
+} // end of wxListCtrl::SetItemPtrData
 
 // Gets the item rectangle
 bool wxListCtrl::GetItemRect ( long lItem,

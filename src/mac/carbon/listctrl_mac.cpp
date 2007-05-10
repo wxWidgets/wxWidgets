@@ -1326,7 +1326,7 @@ long wxListCtrl::GetItemData(long item) const
 }
 
 // Sets the item data
-bool wxListCtrl::SetItemData(long item, long data)
+bool wxListCtrl::SetItemPtrData(long item, wxUIntPtr data)
 {
     if (m_genericImpl)
         return m_genericImpl->SetItemData(item, data);
