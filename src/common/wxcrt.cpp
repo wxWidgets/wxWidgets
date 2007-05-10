@@ -1458,8 +1458,7 @@ static wxULongLong_t wxStrtoullBase(const wxChar* nptr, wxChar** endptr, int bas
 
     if ( endptr )
     {
-        const wxChar& endref = *i;
-        *endptr = &(wxChar&)endref;
+        *endptr = (wxChar*)(nptr + (i - wxstr.begin()));
     }
 
     return sum;
