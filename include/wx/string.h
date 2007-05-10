@@ -894,7 +894,7 @@ public:
     // and because wxString is convertible to wxCStrData and const wxChar *
     // we also need to provide this one
   wxString(const wxString& str, size_t nLength)
-      : m_impl(str.Mid(0, nLength).m_impl) {}
+    { assign(str, nLength); }
 
   // even if we're not built with wxUSE_STL == 1 it is very convenient to allow
   // implicit conversions from std::string to wxString and vice verse as this
@@ -1702,7 +1702,7 @@ public:
 
     // take nLen chars starting at nPos
   wxString(const wxString& str, size_t nPos, size_t nLen)
-      : m_impl(str.m_impl, nPos, nLen) { }
+      { assign(str, nPos, nLen); }
     // take all characters from first to last
   wxString(const_iterator first, const_iterator last)
       : m_impl(first.impl(), last.impl()) { }
