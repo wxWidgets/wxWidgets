@@ -5177,7 +5177,7 @@ wxUIntPtr wxGenericListCtrl::GetItemData( long item ) const
     return info.m_data;
 }
 
-bool wxGenericListCtrl::SetItemData( long item, long data )
+bool wxGenericListCtrl::SetItemPtrData( long item, wxUIntPtr data )
 {
     wxListItem info;
     info.m_mask = wxLIST_MASK_DATA;
@@ -5185,6 +5185,11 @@ bool wxGenericListCtrl::SetItemData( long item, long data )
     info.m_data = data;
     m_mainWin->SetItem( info );
     return true;
+}
+
+bool wxGenericListCtrl::SetItemData(long item, long data)
+{
+    return SetItemPtrData(item, data);
 }
 
 wxRect wxGenericListCtrl::GetViewRect() const

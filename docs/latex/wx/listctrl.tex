@@ -943,6 +943,9 @@ from $0$ to {\it count}.
 
 Associates application-defined data with this item.
 
+Notice that this function cannot be used to associate pointers with the control
+items, use \helpref{SetItemPtrData}{wxlistctrlsetitemptrdata} instead.
+
 
 \membersection{wxListCtrl::SetItemFont}\label{wxlistctrlsetitemfont}
 
@@ -979,6 +982,18 @@ The image is an index into the image list associated with the list control.
 \func{bool}{SetItemPosition}{\param{long }{item}, \param{const wxPoint\& }{pos}}
 
 Sets the position of the item, in icon or small icon view. Windows only.
+
+
+\membersection{wxListCtrl::SetItemPtrData}\label{wxlistctrlsetitemptrdata}
+
+\func{bool}{SetItemPtrData}{\param{long }{item}, \param{wxUIntPtr }{data}}
+
+Associates application-defined data with this item. The \arg{data} parameter may
+be either an integer or a pointer cast to the \texttt{wxUIntPtr} type which is
+guaranteed to be large enough to be able to contain all integer types and
+pointers.
+
+\newsince{2.8.4}
 
 
 \membersection{wxListCtrl::SetItemState}\label{wxlistctrlsetitemstate}

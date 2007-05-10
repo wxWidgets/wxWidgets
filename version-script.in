@@ -27,6 +27,7 @@
 # public symbols added in 2.8.4 (please keep in alphabetical order):
 @WX_VERSION_TAG@.4 {
     global:
+        *wxListCtrl*SetItemPtrData*;
         # wxString::To/From8BitData()
         *wxString*To8BitData*;
         *wxString*From8BitData*;

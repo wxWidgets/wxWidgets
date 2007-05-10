@@ -948,7 +948,7 @@ wxUIntPtr wxListCtrl::GetItemData(long item) const
 }
 
 // Sets the item data
-bool wxListCtrl::SetItemData(long item, long data)
+bool wxListCtrl::SetItemPtrData(long item, wxUIntPtr data)
 {
     wxListItem info;
 
@@ -957,6 +957,11 @@ bool wxListCtrl::SetItemData(long item, long data)
     info.m_data = data;
 
     return SetItem(info);
+}
+
+bool wxListCtrl::SetItemData(long item, long data)
+{
+    return SetItemPtrData(item, data);
 }
 
 wxRect wxListCtrl::GetViewRect() const

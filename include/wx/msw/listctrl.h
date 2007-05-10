@@ -163,7 +163,10 @@ public:
     wxUIntPtr GetItemData(long item) const ;
 
     // Sets the item data
-    bool SetItemData(long item, long data) ;
+#if wxABI_VERSION >= 20804
+    bool SetItemPtrData(long item, wxUIntPtr data);
+#endif // wxABI 2.8.4+
+    bool SetItemData(long item, long data);
 
     // Gets the item rectangle
     bool GetItemRect(long item, wxRect& rect, int code = wxLIST_RECT_BOUNDS) const ;
