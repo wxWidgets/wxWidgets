@@ -267,7 +267,7 @@ void wxFontRefData::MacFindFont()
                 m_macFontFamily = FMGetFontFamilyFromName( qdFontName );
                 if ( m_macFontFamily == kInvalidFontFamily )
                 {
-                    wxLogDebug( wxT("ATSFontFamilyFindFromName failed for %s"), m_faceName );
+                    wxLogDebug( wxT("ATSFontFamilyFindFromName failed for %s"), m_faceName.c_str() );
                     m_macFontFamily = GetAppFont();
                 }
 #endif
@@ -292,7 +292,7 @@ void wxFontRefData::MacFindFont()
                 ATSFontFamilyRef atsfamily = ATSFontFamilyFindFromName( cf , kATSOptionFlagsDefault );
                 if ( atsfamily == (ATSFontFamilyRef) -1 )
                 {
-                    wxLogDebug( wxT("ATSFontFamilyFindFromName failed for %s"), m_faceName );
+                    wxLogDebug( wxT("ATSFontFamilyFindFromName failed for %s"), m_faceName.c_str() );
                     m_macFontFamily = GetAppFont();
                 }
                 else
