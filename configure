@@ -16316,7 +16316,7 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-if test -n "$ac_cv_prog_ac_ct_CXX"; then
+if test "$CXX" = "g++" -a "$GXX" != "yes"; then
     { { echo "$as_me:$LINENO: error: C++ compiler is needed to build wxWidgets" >&5
 echo "$as_me: error: C++ compiler is needed to build wxWidgets" >&2;}
    { (exit 1); exit 1; }; }
