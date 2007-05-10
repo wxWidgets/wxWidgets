@@ -240,7 +240,7 @@ public:
     wxPyPanel(wxWindow* parent, const wxWindowID id,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               long style = 0,
+               long style = wxTAB_TRAVERSAL | wxNO_BORDER,
                const wxString& name = wxPyPanelNameStr)
         : wxPanel(parent, id, pos, size, style, name) {}
 
@@ -334,7 +334,7 @@ public:
     wxPyPanel(wxWindow* parent, const wxWindowID id=-1,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               long style = 0,
+               long style = wxTAB_TRAVERSAL | wxNO_BORDER,
                const wxString& name = wxPyPanelNameStr);
 
     %RenameCtor(PrePyPanel,  wxPyPanel());
@@ -415,7 +415,7 @@ public:
     wxPyScrolledWindow(wxWindow* parent, const wxWindowID id,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               long style = 0,
+               long style = wxHSCROLL | wxVSCROLL,
                const wxString& name = wxPyPanelNameStr)
         : wxScrolledWindow(parent, id, pos, size, style, name) {}
 
@@ -508,7 +508,7 @@ public:
     wxPyScrolledWindow(wxWindow* parent, const wxWindowID id=-1,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               long style = 0,
+               long style = wxHSCROLL | wxVSCROLL,
                const wxString& name = wxPyPanelNameStr);
 
     %RenameCtor(PrePyScrolledWindow,  wxPyScrolledWindow());
