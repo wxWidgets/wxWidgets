@@ -32,7 +32,7 @@
 void BombsCanvas::DrawField(wxDC *dc, int xc1, int yc1, int xc2, int yc2)
 {
     wxString buf;
-    long chw, chh;
+    wxCoord chw, chh;
 
     wxColour wxYellow  = wxTheColourDatabase->Find(wxT("YELLOW"));
     wxColour wxFocused = wxTheColourDatabase->Find(wxT("GREY"));

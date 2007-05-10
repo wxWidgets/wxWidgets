@@ -179,8 +179,8 @@ void MainWindow::ScanBuffer(wxDC *dc, bool DrawIt, int *max_x, int *max_y)
     // See what ACTUAL char height is
     if(m_normalFont)
         dc->SetFont(*m_normalFont);
-    long xx;
-    long yy;
+    wxCoord xx;
+    wxCoord yy;
     dc->GetTextExtent(_T("X"), &xx, &yy);
     char_height = (int)yy;
 
