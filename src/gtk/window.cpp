@@ -1157,6 +1157,10 @@ gtk_wxwindow_commit_cb (GtkIMContext *context,
         wxFillOtherKeyEventFields(event,
                                   window, window->m_imData->lastKeyEvent);
     }
+    else
+    {
+        event.SetEventObject( window );
+    }
 
     const wxWxCharBuffer data(wxGTK_CONV_BACK(str));
     if( !data )
