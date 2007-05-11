@@ -191,9 +191,12 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
     def __repr__(self):
         return "<MaskedComboBox: %s>" % self.GetValue()
 
+
     def OnWindowDestroy(self, event):
         # clean up associated event handler object:
-        self.PopEventHandler(deleteHandler=True)
+        if self.RemoveEventHandler(self.evt_handler):
+            self.evt_handler.Destroy()
+        event.Skip()
 
 
     def _CalcSize(self, size=None):
