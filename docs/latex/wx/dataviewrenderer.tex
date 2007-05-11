@@ -16,10 +16,10 @@ Additionally, the user can write own renderers by deriving from
 \helpref{wxDataViewCustomRenderer}{wxdataviewcustomrenderer}.
 
 The {\it wxDataViewCellMode} flag controls, what actions
-the cell data allows. {\it wxDATAVIEW_CELL_ACTIVATABLE}
+the cell data allows. {\it wxDATAVIEW\_CELL\_ACTIVATABLE}
 indicates that the user can double click the cell and
 something will happen (e.g. a window for editing a date
-will pop up). {\it wxDATAVIEW_CELL_EDITABLE} indicates
+will pop up). {\it wxDATAVIEW\_CELL\_EDITABLE} indicates
 that the user can edit the data in-place, i.e. an control
 will show up after a slow click on the cell. This behaviour
 is best known from changing the filename in most file 
@@ -270,7 +270,7 @@ indicate that this renderer supports in-place editing.
 
 \membersection{wxDataViewCustomRenderer::CreateEditorCtrl}\label{wxdataviewcustomrenderercreateeditorctrl}
 
-\func{virtual wxControl*}{CreateEditorCtrl} {\param{wxWindow *}{parent}, \param{wxRect }{labelRect}, \param{const wxVariant \& }{value}}
+\func{virtual wxControl*}{CreateEditorCtrl}{\param{wxWindow *}{parent}, \param{wxRect }{labelRect}, \param{const wxVariant \& }{value}}
 
 Override this to create the actual editor control once editing
 is about to start. {\it parent} is the parent of the editor
