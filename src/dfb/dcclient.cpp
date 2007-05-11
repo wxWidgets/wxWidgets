@@ -80,6 +80,11 @@ wxIDirectFBSurfacePtr CreateDummySurface(wxWindow *win, const wxRect *rect)
     wxLogTrace(TRACE_PAINT, _T("%p ('%s'): creating dummy DC surface"),
                win, win->GetName().c_str());
     wxSize size(rect ? rect->GetSize() : win->GetSize());
+
+    // we can't create a surface of 0 size but the size of the window may be 0,
+    // so ensure that we have at least a single pixel to draw on
+    size.IncTo(wxSize(1, 1));
+
     return win->GetDfbSurface()->CreateCompatible
            (
              size,
