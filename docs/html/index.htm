@@ -25,7 +25,6 @@ downloaded from the <a href="http://www.wxwidgets.org">wxWidgets Web site</a>.<b
 [<a href="#manuals">Manuals</a>]
 [<a href="#technotes">Technical Notes</a>]
 [<a href="#thirdparty">3rd party tools</a>] 
-[<a href="#contribs">Optional Libraries</a>]
 [<a href="#samples">Samples</a>]
 [<a href="#demos">Demos</a>]
 </FONT>
@@ -85,7 +84,6 @@ for how to do this.
   <li><a href="faqgtk.htm">wxWidgets for GTK+</a>
   <li><a href="faqmot.htm">wxWidgets for Motif</a>
   <li><a href="faqx11.htm">wxWidgets for X11</a>
-  <li><a href="faqunx.htm">wxWidgets for Unix</a>
   <li><a href="faqmac.htm">wxWidgets for Mac</a>
   </ul>
 <li>ToDo: <a href="../todo.txt"><b>General ToDo</b></a>,
@@ -182,52 +180,6 @@ or downloading a binary, for example from <a href="http://www.storylinescentral.
 </td>
 </tr>
 
-<tr>
-<td align=center>
-<a href="fl/fl.htm">FL Library</a>
-</td>
-
-<td align=center>
-<a href="../winhelp/fl.hlp">FL Library</a>
-
-</td>
-
-<td align=center>
-<a href="../htmlhelp/fl.chm">FL Library</a>
-</td>
-
-<td align=center>
-<a href="../htb/fl.htb">FL Library</a>
-</td>
-
-<td align=center>
-<a href="../pdf/fl.pdf">FL Library</a>
-</td>
-</tr>
-
-<tr>
-<td align=center>
-<a href="ogl/ogl.htm">OGL Library</a>
-</td>
-
-<td align=center>
-<a href="../winhelp/ogl.hlp">OGL Library</a>
-
-</td>
-
-<td align=center>
-<a href="../htmlhelp/ogl.chm">OGL Library</a>
-</td>
-
-<td align=center>
-<a href="../htb/ogl.htb">OGL Library</a>
-</td>
-
-<td align=center>
-<a href="../pdf/ogl.pdf">OGL Library</a>
-</td>
-</tr>
-
 </table>
 
 <P>
@@ -271,35 +223,6 @@ or downloading a binary, for example from <a href="http://www.storylinescentral.
 
 <P>
 
-<table width=100% border=0 cellpadding=3 cellspacing=0>
-<tr>
-<td bgcolor="#004080" align=left height=24 background="images/bluetitlegradient.gif">
-<font size=+1 face="Arial, Lucida Sans, Helvetica" color="#FFFFFF">
-<b><a name="contribs">Optional Libraries</a></b>
-</font>
-</td>
-</tr>
-</table>
-
-<P>
-
-These are the optional libraries in the <a href="../../contrib">contrib</a> hierarchy.<P>
-
-<ul>
-<li><a href="../../contrib/src/animate">animate</a>: a flip-book animation class, with animated GIF player.
-<li><a href="../../contrib/src/deprecated">deprecated</a>: deprecated classes including the old WXR resource system and property sheet classes.
-<li><a href="../../contrib/src/fl">fl</a>: a frame layout/docking library.
-<li><a href="../../contrib/src/foldbar">foldbar</a>: wxFoldPanel class for economical layout of controls.
-<li><a href="../../contrib/src/gizmos">gizmos</a>: a variety of GUI classes including wxDynamicSashWindow, wxLEDNumberCtrl, wxEditableListBox, wxStaticPicture
-and a split tree/content view.
-<li><a href="../../contrib/src/mmedia">mmedia</a>: deprecated library for playing audio and video.
-<li><a href="../../contrib/src/net">net</a>: wxEmail class.
-<li><a href="../../contrib/src/ogl">ogl</a>: Object Graphics Library (for drawing connected shapes).
-<li><a href="../../contrib/src/plot">plot</a>: simple plotting class.
-<li><a href="../../contrib/src/stc">stc</a>: wxStyledTextControl, a wrapper for the Scintilla code editor control.
-<li><a href="../../contrib/src/svg">svg</a>: wxSVGFileDC class for drawing vector graphics into a SVG file.
-</ul>
-
 <P>
 
 <table width=100% border=0 cellpadding=3 cellspacing=0>
@@ -318,6 +241,7 @@ Each of the following samples demonstrates one or more aspect of wxWidgets.<P>
 
 <ul>
 <li><a href="../../samples/access">access</a>: Active Accessiblity sample (Windows only).
+<li><a href="../../samples/animate">animate</a>: shows the wxAnimationCtrl class.
 <li><a href="../../samples/artprov">artprov</a>: shows how you can customize the look of standard
 wxWidgets dialogs by replacing default bitmaps/icons with your own versions.
 <li><a href="../../samples/aui">aui</a>: wxAui (docking subsystem) sample.
@@ -325,6 +249,7 @@ wxWidgets dialogs by replacing default bitmaps/icons with your own versions.
 <li><a href="../../samples/caret">caret</a>: a sample to test the wxCaret class.
 <li><a href="../../samples/checklst">checklst</a>: demonstrates wxCheckListBox on
 supported platforms (currently Windows and GTK only).
+<li><a href="../../samples/collpane">collpane</a>: shows the wxCollapsiblePane class.
 <li><a href="../../samples/config">config</a>: demonstrates use of wxConfig, which
 defaults to wxRegConfig on WIN32 (optionally wxIniConfig), and wxFileConfig on other platforms.
 <li><a href="../../samples/console">console</a>: demonstrates a console application using
@@ -347,6 +272,7 @@ using wxMDIParentFrame, wxMDIChildFrame.
 <li><a href="../../samples/drawing">drawing</a>: tests device context drawing.
 <li><a href="../../samples/dynamic">dynamic</a>: shows how to connect events to member functions
 dynamically.
+<li><a href="../../samples/editlbox">erase</a>: shows the wxEditableListBox class.
 <li><a href="../../samples/erase">erase</a>: Window erasing sample.
 <li><a href="../../samples/event">event</a>: demonstrates event handling.
 <li><a href="../../samples/except">exept</a>: demonstrates exception handling.
@@ -430,16 +356,9 @@ programming.
 wxTime, wxDate and wxVariant.
 <li><a href="../../samples/validate">validate</a>: shows simple use of validation.
 <li><a href="../../samples/vscroll">vscroll</a>: shows use of wxVScrolledWindow.
+<li><a href="../../samples/widgets">widgets</a>: shows a lot of control classes.
 <li><a href="../../samples/wizard">wizard</a>: demonstrates the wxWizard class.
 <li><a href="../../samples/xrc">xrc</a>: demonstrates the XRC resource system.
-</ul>
-
-The following are deprecated samples.
-
-<ul>
-<li><a href="../../contrib/deprecated/samples/resource">resource</a>: shows how to use old-style wxWidgets resources (.wxr files).
-<li><a href="../../contrib/deprecated/samples/proplist">proplist</a>: demonstrates the property list classes (a VB-style property editor).
-<li><a href="../../contrib/deprecated/samples/treelay">treelay</a>: an algorithm for displaying tree hierarchies.
 </ul>
 
 
