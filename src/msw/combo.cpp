@@ -219,13 +219,20 @@ void wxComboCtrl::OnThemeChange()
     wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
     if ( theme )
     {
-        wxUxThemeHandle hTheme(this, L"COMBOBOX");
+        wxUxThemeHandle hTheme(this, L"EDIT");
 
         COLORREF col;
-        theme->GetThemeColor(hTheme,EP_EDITTEXT,ETS_NORMAL,TMT_FILLCOLOR,&col);
-        SetBackgroundColour(wxRGBToColour(col));
-        theme->GetThemeColor(hTheme,EP_EDITTEXT,ETS_NORMAL,TMT_TEXTCOLOR,&col);
-        SetForegroundColour(wxRGBToColour(col));
+        HRESULT hr = theme->GetThemeColor(hTheme,EP_EDITTEXT,ETS_NORMAL,TMT_FILLCOLOR,&col);
+        if ( FAILED(hr) )
+            wxLogApiError(_T("GetThemeColor(EDIT, EP_EDITTEXT, ETS_NORMAL, TMT_FILLCOLOR)"), hr);
+        else
+            SetBackgroundColour(wxRGBToColour(col));
+
+        hr = theme->GetThemeColor(hTheme,EP_EDITTEXT,ETS_NORMAL,TMT_TEXTCOLOR,&col);
+        if ( FAILED(hr) )
+            wxLogApiError(_T("GetThemeColor(EDIT, EP_EDITTEXT, ETS_NORMAL, TMT_TEXTCOLOR)"), hr);
+        else
+            SetForegroundColour(wxRGBToColour(col));
     }
     else
     {

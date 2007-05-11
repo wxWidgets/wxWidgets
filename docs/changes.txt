@@ -175,6 +175,7 @@ wxMSW:
 - Fixed bug in wxThread::Wait() in console applications introduced in 2.8.3
 - Support right-aligned/centered owner drawn items in wxListCtrl (troelsk)
 - Compilation fixed with WXWIN_COMPATIBILITY_2_6==0
+- Fix wxComboCtrl colours under Windows Vista (Kolya Kosenko)
 
 wxGTK:
 
