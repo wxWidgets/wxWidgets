@@ -3372,7 +3372,7 @@ public:
     wxPyPanel(wxWindow* parent, const wxWindowID id,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               long style = 0,
+               long style = wxTAB_TRAVERSAL | wxNO_BORDER,
                const wxString& name = wxPyPanelNameStr)
         : wxPanel(parent, id, pos, size, style, name) {}
 
@@ -3463,7 +3463,7 @@ public:
     wxPyScrolledWindow(wxWindow* parent, const wxWindowID id,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               long style = 0,
+               long style = wxHSCROLL | wxVSCROLL,
                const wxString& name = wxPyPanelNameStr)
         : wxScrolledWindow(parent, id, pos, size, style, name) {}
 
@@ -22325,7 +22325,7 @@ SWIGINTERN PyObject *_wrap_new_PyPanel(PyObject *SWIGUNUSEDPARM(self), PyObject 
   wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
   wxSize const &arg4_defvalue = wxDefaultSize ;
   wxSize *arg4 = (wxSize *) &arg4_defvalue ;
-  long arg5 = (long) 0 ;
+  long arg5 = (long) wxTAB_TRAVERSAL|wxNO_BORDER ;
   wxString const &arg6_defvalue = wxPyPanelNameStr ;
   wxString *arg6 = (wxString *) &arg6_defvalue ;
   wxPyPanel *result = 0 ;
@@ -23010,7 +23010,7 @@ SWIGINTERN PyObject *_wrap_new_PyScrolledWindow(PyObject *SWIGUNUSEDPARM(self), 
   wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
   wxSize const &arg4_defvalue = wxDefaultSize ;
   wxSize *arg4 = (wxSize *) &arg4_defvalue ;
-  long arg5 = (long) 0 ;
+  long arg5 = (long) wxHSCROLL|wxVSCROLL ;
   wxString const &arg6_defvalue = wxPyPanelNameStr ;
   wxString *arg6 = (wxString *) &arg6_defvalue ;
   wxPyScrolledWindow *result = 0 ;
