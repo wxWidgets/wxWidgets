@@ -70,11 +70,48 @@ class xrc%(windowName)s(wx.%(windowClass)s):
         get_resources().LoadOn%(windowClass)s(pre, parent, "%(windowName)s")
         self.PostCreate(pre)
 
-        # Define variables for the controls
+        # create attributes for the named items in this container
 """
 
     CREATE_WIDGET_VAR = """\
         self.%(widgetName)s = xrc.XRCCTRL(self, \"%(widgetName)s\")
+"""
+
+    FRAME_MENUBAR_VAR = """\
+        self.%(widgetName)s = self.GetMenuBar()
+"""
+
+    FRAME_MENUBAR_MENUITEM_VAR = """\
+        self.%(widgetName)s = self.GetMenuBar().FindItemById(xrc.XRCID(\"%(widgetName)s\"))
+"""
+
+    FRAME_MENUBAR_MENU_VAR = """\
+        idx = self.GetMenuBar().FindMenu(\"%(label)s\")
+        if idx != wx.NOT_FOUND:
+            self.%(widgetName)s = self.GetMenuBar().GetMenu(idx)
+        else:
+            self.%(widgetName)s = self.GetMenuBar().FindItemById(xrc.XRCID(\"%(widgetName)s\")).GetSubMenu()
+"""
+
+
+    MENUBAR_MENUITEM_VAR = """\
+        self.%(widgetName)s = self.FindItemById(xrc.XRCID(\"%(widgetName)s\"))
+"""
+
+    MENUBAR_MENU_VAR = """\
+        idx = self.FindMenu(\"%(label)s\")
+        if idx != wx.NOT_FOUND:
+            self.%(widgetName)s = self.GetMenu(idx)
+        else:
+            self.%(widgetName)s = self.FindItemById(xrc.XRCID(\"%(widgetName)s\")).GetSubMenu()
+"""
+
+    MENU_MENUITEM_VAR = """\
+        self.%(widgetName)s = self.FindItemById(xrc.XRCID(\"%(widgetName)s\"))
+"""
+
+    MENU_MENU_VAR = """\
+        self.%(widgetName)s = self.FindItemById(xrc.XRCID(\"%(widgetName)s\")).GetSubMenu()
 """
 
     MENU_CLASS_HEADER = """\
@@ -82,15 +119,14 @@ class xrc%(windowName)s(wx.%(windowClass)s):
     def __init__(self):
         pre = get_resources().LoadMenu("%(windowName)s")
 
-        # This is a copy of Robin's PostCreate voodoo magic in wx.Window that
-        # relinks the self object with the menu object.
+        # wx.Menu doesn't have a PostCreate method so duplicate
+        # the important bits of it here.
         self.this = pre.this
         self.thisown = pre.thisown
         pre.thisown = 0
-        if hasattr(self, '_setOORInfo'):
-            self._setOORInfo(self)
+        self._setOORInfo(self)
 
-        # Define variables for the menu items
+        # create attributes for the named menu items
 """
 
     MENUBAR_CLASS_HEADER = """\
@@ -99,7 +135,7 @@ class xrc%(windowName)s(wx.%(windowClass)s):
         pre = get_resources().LoadMenuBar("%(windowName)s")
         self.PostCreate(pre)
         
-        # Define variables for the menu items
+        # create attributes for the named menu items
 """
 
     CREATE_MENUITEM_VAR = """\
@@ -235,27 +271,90 @@ class XmlResourceCompiler:
             windowName = topWindow.getAttribute("name")
             
             if windowClass in ["MenuBar"]:
-                outputList.append(self.templates.MENUBAR_CLASS_HEADER % locals())
+                genfunc = self.GenerateMenuBarClass
             elif windowClass in ["Menu"]:
-                outputList.append(self.templates.MENU_CLASS_HEADER % locals())
+                genfunc = self.GenerateMenuClass
             else:
-                outputList.append(self.templates.CLASS_HEADER % locals())
-            
-            # Generate a variable for each control, and standard event handlers
-            # for standard controls.
-            for widget in topWindow.getElementsByTagName("object"):
-                widgetClass = widget.getAttribute("class")
-                widgetClass = re.sub("^wx", "", widgetClass)
-                widgetName = widget.getAttribute("name")
-                if (widgetName != "" and widgetClass != ""):
-                    if widgetClass == "MenuItem":
-                        outputList.append(self.templates.CREATE_MENUITEM_VAR % locals())
-                    elif widgetClass not in \
-                        ['tool', 'unknown', 'notebookpage', 'separator', 'sizeritem']:
-                        outputList.append(self.templates.CREATE_WIDGET_VAR % locals())
+                genfunc = self.GenerateWidgetClass
+
+            outputList += genfunc(windowClass, windowName, topWindow)
             outputList.append('\n\n')
                     
         return "".join(outputList)
+
+
+    def GenerateMenuBarClass(self, windowClass, windowName, topWindow):
+        outputList = []
+
+        # output the header
+        outputList.append(self.templates.MENUBAR_CLASS_HEADER % locals())
+
+        # create an attribute for menus and menu items that have names
+        for widget in topWindow.getElementsByTagName("object"):
+            widgetClass = widget.getAttribute("class")
+            widgetClass = re.sub("^wx", "", widgetClass)
+            widgetName = widget.getAttribute("name")
+            if widgetName != "" and widgetClass != "":
+                if widgetClass == "MenuItem":
+                    outputList.append(self.templates.MENUBAR_MENUITEM_VAR % locals())
+                elif widgetClass == "Menu":
+                    label = widget.getElementsByTagName("label")[0]
+                    label = label.childNodes[0].data
+                    outputList.append(self.templates.MENUBAR_MENU_VAR % locals())
+                else:
+                    raise RuntimeError("Unexpected widgetClass for MenuBar: %s" % widgetClass)
+
+        return outputList
+
+
+    def GenerateMenuClass(self, windowClass, windowName, topWindow):
+        outputList = []
+
+        # output the header
+        outputList.append(self.templates.MENU_CLASS_HEADER % locals())
+        for widget in topWindow.getElementsByTagName("object"):
+            widgetClass = widget.getAttribute("class")
+            widgetClass = re.sub("^wx", "", widgetClass)
+            widgetName = widget.getAttribute("name")
+            if widgetName != "" and widgetClass != "":
+                if widgetClass == "MenuItem":
+                    outputList.append(self.templates.MENU_MENUITEM_VAR % locals())
+                elif widgetClass == "Menu":
+                    label = widget.getElementsByTagName("label")[0]
+                    label = label.childNodes[0].data
+                    outputList.append(self.templates.MENU_MENU_VAR % locals())
+                else:
+                    raise RuntimeError("Unexpected widgetClass for Menu: %s" % widgetClass)
+
+        return outputList
+
+
+    def GenerateWidgetClass(self, windowClass, windowName, topWindow):
+        outputList = []
+
+        # output the header
+        outputList.append(self.templates.CLASS_HEADER % locals())
+
+        # Generate an attribute for each named item in the container
+        for widget in topWindow.getElementsByTagName("object"):
+            widgetClass = widget.getAttribute("class")
+            widgetClass = re.sub("^wx", "", widgetClass)
+            widgetName = widget.getAttribute("name")
+            if widgetName != "" and widgetClass != "":
+                if widgetClass not in \
+                       ['tool', 'unknown', 'notebookpage', 'separator',
+                        'sizeritem', 'Menu', 'MenuBar', 'MenuItem']:
+                    outputList.append(self.templates.CREATE_WIDGET_VAR % locals())
+                elif widgetClass == "MenuBar":
+                    outputList.append(self.templates.FRAME_MENUBAR_VAR % locals())
+                elif widgetClass == "MenuItem":
+                    outputList.append(self.templates.FRAME_MENUBAR_MENUITEM_VAR % locals())
+                elif widgetClass == "Menu":
+                    label = widget.getElementsByTagName("label")[0]
+                    label = label.childNodes[0].data
+                    outputList.append(self.templates.FRAME_MENUBAR_MENU_VAR % locals())
+
+        return outputList
 
     #-------------------------------------------------------------------
 

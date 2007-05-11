@@ -3,7 +3,7 @@ Recent Changes for wxPython
 
 2.8.4.0
 -------
-* 
+* 14-May-2007
 
 wxGTK: Make wx.NO_BORDER style work with wx.RadioBox (patch 1525406)
 
@@ -80,6 +80,9 @@ Updates to MaskedEdit controls from Will Sadkin:
 
 Update to latest FloatCanvas from Chris Barker.
 
+The pywxrc tool now properly supports generating classes for menus and
+menubars, and also creating attributes for menus, menubars and menu
+items. 
 
 
 
