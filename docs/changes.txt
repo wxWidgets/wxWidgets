@@ -128,6 +128,9 @@ wxGTK:
 - Fix wxNO_BORDER style for wxRadioBox (David Hart)
 - wxComboBox::SetValue() doesn't emit EVT_TEXT anymore
 - Fix wxTextCtrl::GetLineText() for empty lines (Marcin Wojdyr)
+- Fix support for wxFD_FILE_MUST_EXIST in wxFileDialog
+- Fix support for setting orientation, paper size and collate
+  in GNOME print backend
 - Support wxTEXT_ALIGNMENT_JUSTIFIED in wxTextCtrl if GTK+ version is at
   least 2.11 (Mart Raudsepp).
 
