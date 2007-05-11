@@ -262,9 +262,9 @@ Insert a line before the line number {\it n}.
 
 \membersection{wxTextFile::Open}\label{wxtextfileopen}
 
-\constfunc{bool}{Open}{\param{wxMBConv\&}{ conv = wxConvUTF8}}
+\constfunc{bool}{Open}{\param{const wxMBConv\&}{ conv = wxConvAuto()}}
 
-\constfunc{bool}{Open}{\param{const wxString\& }{strFile}, \param{wxMBConv\&}{ conv = wxConvUTF8}}
+\constfunc{bool}{Open}{\param{const wxString\& }{strFile}, \param{const wxMBConv\&}{ conv = wxConvAuto()}}
 
 Open() opens the file with the given name or the name which was given in the
 \helpref{constructor}{wxtextfilector} and also loads file in memory on
@@ -288,7 +288,7 @@ Delete all lines from the file, set current line number to 0.
 
 \membersection{wxTextFile::Write}\label{wxtextfilewrite}
 
-\constfunc{bool}{Write}{\param{wxTextFileType }{typeNew = wxTextFileType\_None}, \param{wxMBConv\&}{ conv = wxConvUTF8}}
+\constfunc{bool}{Write}{\param{wxTextFileType }{typeNew = wxTextFileType\_None}, \param{const wxMBConv\&}{ conv = wxConvAuto()}}
 
 Change the file on disk. The {\it typeNew} parameter allows you to change the
 file format (default argument means "don't change type") and may be used to

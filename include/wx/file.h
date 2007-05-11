@@ -97,7 +97,7 @@ public:
     // returns the number of bytes written
   size_t Write(const void *pBuf, size_t nCount);
     // returns true on success
-  bool Write(const wxString& s, const wxMBConv& conv = wxConvUTF8);
+  bool Write(const wxString& s, const wxMBConv& conv = wxMBConvUTF8());
     // flush data not yet written
   bool Flush();
 
@@ -167,7 +167,7 @@ public:
 
   // I/O (both functions return true on success, false on failure)
   bool Write(const void *p, size_t n) { return m_file.Write(p, n) == n; }
-  bool Write(const wxString& str, const wxMBConv& conv = wxConvUTF8)
+  bool Write(const wxString& str, const wxMBConv& conv = wxMBConvUTF8())
     { return m_file.Write(str, conv); }
 
   // different ways to close the file

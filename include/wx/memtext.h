@@ -41,7 +41,7 @@ protected:
         { return true; }
 
     virtual bool OnWrite(wxTextFileType WXUNUSED(typeNew),
-                         const wxMBConv& WXUNUSED(conv) = wxConvUTF8)
+                         const wxMBConv& WXUNUSED(conv) = wxMBConvUTF8())
         { return true; }
 
 private:

@@ -43,7 +43,7 @@ None
 
 \func{}{wxDataInputStream}{\param{wxInputStream\&}{ stream}}
 
-\func{}{wxDataInputStream}{\param{wxInputStream\&}{ stream}, \param{wxMBConv\&}{ conv = wxMBConvUTF8}}
+\func{}{wxDataInputStream}{\param{wxInputStream\&}{ stream}, \param{const wxMBConv\&}{ conv = wxConvAuto()}}
 
 Constructs a datastream object from an input stream. Only read methods will
 be available. The second form is only available in Unicode build of wxWidgets.

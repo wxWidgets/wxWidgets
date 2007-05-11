@@ -34,7 +34,7 @@ Windows.
 
 \membersection{wxFileConfig::wxFileConfig}\label{wxfileconfigctor}
 
-\func{}{wxFileConfig}{\param{wxInputStream\& }{is}, \param{wxMBConv\& }{conv = wxConvUTF8}}
+\func{}{wxFileConfig}{\param{wxInputStream\& }{is}, \param{const wxMBConv\& }{conv = wxConvAuto()}}
 
 Read the config data from the specified stream instead of the associated file,
 as usual.
@@ -72,7 +72,7 @@ path name.
 
 \membersection{wxFileConfig::Save}\label{wxfileconfigsave}
 
-\func{bool}{Save}{\param{wxOutputStream\& }{os}, \param{wxMBConv\& }{conv = wxConvUTF8}}
+\func{bool}{Save}{\param{wxOutputStream\& }{os}, \param{const wxMBConv\& }{conv = wxConvAuto()}}
 
 Saves all config data to the given stream, returns \true if data was saved
 successfully or \false on error.

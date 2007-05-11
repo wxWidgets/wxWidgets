@@ -210,7 +210,7 @@ The number of bytes read.
 
 \membersection{wxFFile::ReadAll}\label{wxffilereadall}
 
-\func{bool}{ReadAll}{\param{wxString *}{ str}, \param{wxMBConv\&}{ conv = wxConvUTF8}}
+\func{bool}{ReadAll}{\param{wxString *}{ str}, \param{const wxMBConv\&}{ conv = wxConvAuto()}}
 
 Reads the entire contents of the file into a string.
 
@@ -277,7 +277,7 @@ Number of bytes written.
 
 \membersection{wxFFile::Write}\label{wxffilewrites}
 
-\func{bool}{Write}{\param{const wxString\& }{s}, \param{wxMBConv\&}{ conv = wxConvUTF8}}
+\func{bool}{Write}{\param{const wxString\& }{s}, \param{const wxMBConv\&}{ conv = wxConvAuto()}}
 
 Writes the contents of the string to the file, returns \true on success.
 

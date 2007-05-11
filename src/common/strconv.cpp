@@ -2035,12 +2035,12 @@ public:
         //     http://msdn.microsoft.com/library/en-us/intl/unicode_17si.asp
         if ( m_CodePage == CP_UTF8 )
         {
-            return wxConvUTF8.MB2WC(buf, psz, n);
+            return wxMBConvUTF8().MB2WC(buf, psz, n);
         }
 
         if ( m_CodePage == CP_UTF7 )
         {
-            return wxConvUTF7.MB2WC(buf, psz, n);
+            return wxMBConvUTF7().MB2WC(buf, psz, n);
         }
 
         int flags = 0;
@@ -3626,7 +3626,7 @@ wxWCharBuffer wxSafeConvertMB2WX(const char *s)
 
     wxWCharBuffer wbuf(wxConvLibc.cMB2WX(s));
     if ( !wbuf )
-        wbuf = wxConvUTF8.cMB2WX(s);
+        wbuf = wxMBConvUTF8().cMB2WX(s);
     if ( !wbuf )
         wbuf = wxConvISO8859_1.cMB2WX(s);
 

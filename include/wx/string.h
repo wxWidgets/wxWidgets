@@ -485,9 +485,9 @@ private:
     { return ConvertStr(str, n, conv); }
 
   static wxCharBuffer ImplStr(const wchar_t* str)
-    { return ConvertStr(str, npos, wxConvUTF8).data; }
+    { return ConvertStr(str, npos, wxMBConvUTF8()).data; }
   static SubstrBufFromWC ImplStr(const wchar_t* str, size_t n)
-    { return ConvertStr(str, n, wxConvUTF8); }
+    { return ConvertStr(str, n, wxMBConvUTF8()); }
 
   size_t PosToImpl(size_t pos) const
   {
@@ -1144,21 +1144,22 @@ public:
     const char* ToUTF8() const { return wx_str(); }
 #elif wxUSE_UNICODE_WCHAR
     static wxString FromUTF8(const char *utf8)
-      { return wxString(utf8, wxConvUTF8); }
+      { return wxString(utf8, wxMBConvUTF8()); }
     static wxString FromUTF8(const char *utf8, size_t len)
-      { return wxString(utf8, wxConvUTF8, len); }
-    const wxCharBuffer utf8_str() const { return mb_str(wxConvUTF8); }
+      { return wxString(utf8, wxMBConvUTF8(), len); }
+    const wxCharBuffer utf8_str() const { return mb_str(wxMBConvUTF8()); }
     const wxCharBuffer ToUTF8() const { return utf8_str(); }
 #else // ANSI
     static wxString FromUTF8(const char *utf8)
-      { return wxString(wxConvUTF8.cMB2WC(utf8)); }
+      { return wxString(wxMBConvUTF8().cMB2WC(utf8)); }
     static wxString FromUTF8(const char *utf8, size_t len)
     {
       size_t wlen;
-      wxWCharBuffer buf(wxConvUTF8.cMB2WC(utf8, len == npos ? wxNO_LEN : len, &wlen));
+      wxWCharBuffer buf(wxMBConvUTF8().cMB2WC(utf8, len == npos ? wxNO_LEN : len, &wlen));
       return wxString(buf.data(), wlen);
     }
-    const wxCharBuffer utf8_str() const { return wxConvUTF8.cWC2MB(wc_str()); }
+    const wxCharBuffer utf8_str() const
+      { return wxMBConvUTF8().cWC2MB(wc_str()); }
     const wxCharBuffer ToUTF8() const { return utf8_str(); }
 #endif
 

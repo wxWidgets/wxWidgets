@@ -454,7 +454,7 @@ For ANSI builds only (note the use of {\tt char} instead of {\tt wxChar}).
 The following constructors allow you to construct wxString from a wide string
 in ANSI build or from a C string in Unicode build.
 
-\func{}{wxString}{\param{const wchar\_t*}{ psz}, \param{wxMBConv\&}{ conv}, \param{size\_t}{ nLength = wxSTRING\_MAXLEN}}
+\func{}{wxString}{\param{const wchar\_t*}{ psz}, \param{const wxMBConv\&}{ conv}, \param{size\_t}{ nLength = wxSTRING\_MAXLEN}}
 
 Initializes the string from first \arg{nLength} characters of wide string. 
 The default value of {\tt wxSTRING\_MAXLEN} means take all the string.
@@ -462,7 +462,7 @@ In ANSI build, \arg{conv}'s
 \helpref{WC2MB}{wxmbconvwc2mb} method is called to
 convert \arg{psz} to wide string. It is ignored in Unicode build.
 
-\func{}{wxString}{\param{const char*}{ psz}, \param{wxMBConv\&}{ conv = wxConvLibc}, \param{size\_t}{ nLength = wxSTRING\_MAXLEN}}
+\func{}{wxString}{\param{const char*}{ psz}, \param{const wxMBConv\&}{ conv = wxConvLibc}, \param{size\_t}{ nLength = wxSTRING\_MAXLEN}}
 
 Initializes the string from first \arg{nLength} characters of C string.
 The default value of {\tt wxSTRING\_MAXLEN} means take all the string.
@@ -586,7 +586,7 @@ to a function expecting non-const pointer.
 
 \membersection{wxString::char\_str}\label{wxstringcharstr}
 
-\constfunc{wxWritableCharBuffer}{char\_str}{\param{wxMBConv\&}{ conv = wxConvLibc}}
+\constfunc{wxWritableCharBuffer}{char\_str}{\param{const wxMBConv\&}{ conv = wxConvLibc}}
 
 Returns an object with string data that is implicitly convertible to
 {\tt char*} pointer. Note that any change to the returned buffer is lost and so
@@ -980,9 +980,9 @@ Returns \true if the string contents matches a mask containing '*' and '?'.
 
 \membersection{wxString::mb\_str}\label{wxstringmbstr}
 
-\constfunc{const char*}{mb\_str}{\param{wxMBConv\&}{ conv = wxConvLibc}}
+\constfunc{const char*}{mb\_str}{\param{const wxMBConv\&}{ conv = wxConvLibc}}
 
-\constfunc{const wxCharBuffer}{mb\_str}{\param{wxMBConv\&}{ conv = wxConvLibc}}
+\constfunc{const wxCharBuffer}{mb\_str}{\param{const wxMBConv\&}{ conv = wxConvLibc}}
 
 Returns multibyte (C string) representation of the string.
 In Unicode build, converts using \arg{conv}'s \helpref{cWC2MB}{wxmbconvcwc2mb}
@@ -1350,9 +1350,9 @@ UTF-8 build.
 
 \membersection{wxString::wc\_str}\label{wxstringwcstr}
 
-\constfunc{const wchar\_t*}{wc\_str}{\param{wxMBConv\&}{ conv}}
+\constfunc{const wchar\_t*}{wc\_str}{\param{const wxMBConv\&}{ conv}}
 
-\constfunc{const wxWCharBuffer}{wc\_str}{\param{wxMBConv\&}{ conv}}
+\constfunc{const wxWCharBuffer}{wc\_str}{\param{const wxMBConv\&}{ conv}}
 
 Returns wide character representation of the string.
 In ANSI build, converts using \arg{conv}'s \helpref{cMB2WC}{wxmbconvcmb2wc}

@@ -45,7 +45,7 @@ For example:
 \membersection{wxTextInputStream::wxTextInputStream}\label{wxtextinputstreamctor}
 
 \func{}{wxTextInputStream}{\param{wxInputStream\&}{ stream}, \param{const wxString\&}{ sep=" $\backslash$t"}, 
-  \param{wxMBConv\&}{ conv = wxConvUTF8} }
+  \param{const wxMBConv\&}{ conv = wxConvAuto()} }
 
 Constructs a text stream associated to the given input stream.
 
@@ -216,7 +216,7 @@ and Unix in their native formats (concerning the line ending).
 
 \membersection{wxTextOutputStream::wxTextOutputStream}\label{wxtextoutputstreamctor}
 
-\func{}{wxTextOutputStream}{\param{wxOutputStream\&}{ stream}, \param{wxEOL}{ mode = wxEOL\_NATIVE}, \param{wxMBConv\&}{ conv = wxConvUTF8}}
+\func{}{wxTextOutputStream}{\param{wxOutputStream\&}{ stream}, \param{wxEOL}{ mode = wxEOL\_NATIVE}, \param{const wxMBConv\&}{ conv = wxConvAuto()}}
 
 Constructs a text stream object associated to the given output stream.
 
