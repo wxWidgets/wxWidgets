@@ -55,7 +55,7 @@ def main(args=sys.argv):
     wx.Log.SetLogLevel(wx.LOG_Error)
 
     # Set up the default config so the htmlhelp frame can save its preferences
-    app.SetVendorName('wxWindows')
+    app.SetVendorName('wxWidgets')
     app.SetAppName('helpviewer')
     cfg = wx.ConfigBase.Get()
 
