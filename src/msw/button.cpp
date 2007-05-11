@@ -355,12 +355,33 @@ wxWindow *wxButton::SetDefault()
     return winOldDefault;
 }
 
+// special version of wxGetTopLevelParent() which is safe to call when the
+// parent is being destroyed: wxGetTopLevelParent() would just return NULL in
+// this case because wxWindow version of IsTopLevel() is used when it's called
+// during window destruction instead of wxTLW one, but we want to distinguish
+// between these cases
+static wxTopLevelWindow *GetTLWParentIfNotBeingDeleted(wxWindow *win)
+{
+    for ( ; win; win = win->GetParent() )
+    {
+        if ( win->IsBeingDeleted() )
+            return NULL;
+
+        if ( win->IsTopLevel() )
+            break;
+    }
+
+    wxASSERT_MSG( win, _T("button without top level parent?") );
+
+    return wxDynamicCast(win, wxTopLevelWindow);
+}
+
 // set this button as being currently default
 void wxButton::SetTmpDefault()
 {
-    wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
-
-    wxCHECK_RET( tlw, _T("button without top level window?") );
+    wxTopLevelWindow * const tlw = GetTLWParentIfNotBeingDeleted(GetParent());
+    if ( !tlw )
+        return;
 
     wxWindow *winOldDefault = tlw->GetDefaultItem();
     tlw->SetTmpDefaultItem(this);
@@ -372,9 +393,9 @@ void wxButton::SetTmpDefault()
 // unset this button as currently default, it may still stay permanent default
 void wxButton::UnsetTmpDefault()
 {
-    wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
-
-    wxCHECK_RET( tlw, _T("button without top level window?") );
+    wxTopLevelWindow * const tlw = GetTLWParentIfNotBeingDeleted(GetParent());
+    if ( !tlw )
+        return;
 
     tlw->SetTmpDefaultItem(NULL);
 
