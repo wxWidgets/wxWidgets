@@ -666,7 +666,7 @@ void wxSVGFileDC::DoDrawBitmap(const class wxBitmap & bmp, wxCoord x, wxCoord y 
 
 void wxSVGFileDC::write(const wxString &s)
 {
-    const wxWX2MBbuf buf = s.mb_str(wxConvUTF8);
+    const wxCharBuffer buf = s.utf8_str();
     m_outfile->Write(buf, strlen((const char *)buf));
     m_OK = m_outfile->Ok();
 }
