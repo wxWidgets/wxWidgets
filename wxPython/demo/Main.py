@@ -37,8 +37,6 @@ import wx.html
 
 import images
 
-USE_CUSTOMTREECTRL = False
-
 # For debugging
 ##wx.Trap();
 ##print "wx.VERSION_STRING = %s (%s)" % (wx.VERSION_STRING, wx.USE_UNICODE and 'unicode' or 'ansi')
@@ -48,8 +46,14 @@ USE_CUSTOMTREECTRL = False
 
 #---------------------------------------------------------------------------
 
+USE_CUSTOMTREECTRL = False
+ALLOW_AUI_FLOATING = False
+DEFAULT_PERSPECTIVE = "Default Perspective"
+
+#---------------------------------------------------------------------------
+
 _demoPngs = ["overview", "recent", "frame", "dialog", "moredialog", "core",
-             "book", "custom", "morecontrols", "layout", "process", "clipboard",
+             "book", "customcontrol", "morecontrols", "layout", "process", "clipboard",
              "images", "miscellaneous"]
 
 _treeList = [
@@ -663,7 +667,9 @@ class DemoCodePanel(wx.Panel):
     def ActiveModuleChanged(self):
         self.LoadDemoSource(self.demoModules.GetSource())
         self.UpdateControlState()
+        self.mainFrame.Freeze()        
         self.ReloadDemo()
+        self.mainFrame.Thaw()
 
         
     def LoadDemoSource(self, source):
@@ -758,7 +764,7 @@ class DemoCodePanel(wx.Panel):
         self.demoModules.LoadFromFile(modModified, modifiedFilename)
         self.ActiveModuleChanged()
 
-        self.mainFrame.SetTreeModified(modifiedFilename, setIcon=True)
+        self.mainFrame.SetTreeModified(True)
 
 
     def OnRestore(self, event): # Handles the "Delete Modified" button
@@ -766,9 +772,10 @@ class DemoCodePanel(wx.Panel):
         self.demoModules.Delete(modModified)
         os.unlink(modifiedFilename) # Delete the modified copy
         busy = wx.BusyInfo("Reloading demo module...")
+        
         self.ActiveModuleChanged()
 
-        self.mainFrame.SetTreeModified(modifiedFilename, setIcon=False)
+        self.mainFrame.SetTreeModified(False)
 
 
 #---------------------------------------------------------------------------
@@ -1230,7 +1237,8 @@ class wxPythonDemo(wx.Frame):
         self.CreateStatusBar(1, wx.ST_SIZEGRIP)
 
         self.dying = False
-
+        self.skipLoad = False
+        
         def EmptyHandler(evt): pass
 
         self.ReadConfigurationFile()
@@ -1249,11 +1257,11 @@ class wxPythonDemo(wx.Frame):
         self.finddata.SetFlags(wx.FR_DOWN)
 
         # Create a TreeCtrl
-        leftPanel = wx.Panel(self)
+        leftPanel = wx.Panel(self, style=wx.TAB_TRAVERSAL|wx.CLIP_CHILDREN)
         self.treeMap = {}
         self.searchItems = {}
         
-        self.tree = wxPythonTreeCtrl(leftPanel)
+        self.tree = wxPythonDemoTree(leftPanel)
         
         self.filter = wx.SearchCtrl(leftPanel, style=wx.TE_PROCESS_ENTER)
         self.filter.ShowCancelButton(True)
@@ -1346,14 +1354,24 @@ class wxPythonDemo(wx.Frame):
 
         # Use the aui manager to set up everything
         self.mgr.AddPane(self.nb, wx.aui.AuiPaneInfo().CenterPane().Name("Notebook"))
-        self.mgr.AddPane(leftPanel, wx.aui.AuiPaneInfo().Left().Layer(2).BestSize((240, -1)).
-                         MinSize((160, -1)).FloatingSize((240, 700)).Caption("wxPython Demos").
-                         MaximizeButton().Name("TreeDemo"))
-        self.mgr.AddPane(self.log, wx.aui.AuiPaneInfo().Bottom().BestSize((-1, 150)).
-                         MinSize((-1, 60)).FloatingSize((500, 160)).Caption("Event Handlers Messages").
-                         MaximizeButton().Name("LogWindow"))
+        self.mgr.AddPane(leftPanel,
+                         wx.aui.AuiPaneInfo().
+                         Left().Layer(2).BestSize((240, -1)).
+                         MinSize((160, -1)).
+                         Floatable(ALLOW_AUI_FLOATING).FloatingSize((240, 700)).
+                         Caption("wxPython Demos").
+                         CloseButton(False).
+                         Name("DemoTree"))
+        self.mgr.AddPane(self.log,
+                         wx.aui.AuiPaneInfo().
+                         Bottom().BestSize((-1, 150)).
+                         MinSize((-1, 60)).
+                         Floatable(ALLOW_AUI_FLOATING).FloatingSize((500, 160)).
+                         Caption("Demo Log Messages").
+                         CloseButton(False).
+                         Name("LogWindow"))
 
-        self.auiConfigurations["Default Perspective"] = self.mgr.SavePerspective()
+        self.auiConfigurations[DEFAULT_PERSPECTIVE] = self.mgr.SavePerspective()
         self.mgr.Update()
 
         self.mgr.SetFlags(self.mgr.GetFlags() ^ wx.aui.AUI_MGR_ALLOW_ACTIVE_PANE)
@@ -1407,41 +1425,43 @@ class wxPythonDemo(wx.Frame):
         self.mainmenu.Append(menu, '&Demo')
 
         # Make an Option menu
-        menu = wx.Menu()
-        auiPerspectives = self.auiConfigurations.keys()
-        auiPerspectives.sort()
-        perspectivesMenu = wx.Menu()
-        item = wx.MenuItem(perspectivesMenu, -1, "Default Perspective", "Load startup default perspective", wx.ITEM_RADIO)
-        self.Bind(wx.EVT_MENU, self.OnAUIPerspectives, item)
-        perspectivesMenu.AppendItem(item)
-        for indx, key in enumerate(auiPerspectives):
-            if key == "Default Perspective":
-                continue
-            item = wx.MenuItem(perspectivesMenu, -1, key, "Load user perspective %d"%indx, wx.ITEM_RADIO)
-            perspectivesMenu.AppendItem(item)
+        # If we've turned off floatable panels then this menu is not needed
+        if ALLOW_AUI_FLOATING:
+            menu = wx.Menu()
+            auiPerspectives = self.auiConfigurations.keys()
+            auiPerspectives.sort()
+            perspectivesMenu = wx.Menu()
+            item = wx.MenuItem(perspectivesMenu, -1, DEFAULT_PERSPECTIVE, "Load startup default perspective", wx.ITEM_RADIO)
             self.Bind(wx.EVT_MENU, self.OnAUIPerspectives, item)
+            perspectivesMenu.AppendItem(item)
+            for indx, key in enumerate(auiPerspectives):
+                if key == DEFAULT_PERSPECTIVE:
+                    continue
+                item = wx.MenuItem(perspectivesMenu, -1, key, "Load user perspective %d"%indx, wx.ITEM_RADIO)
+                perspectivesMenu.AppendItem(item)
+                self.Bind(wx.EVT_MENU, self.OnAUIPerspectives, item)
 
-        menu.AppendMenu(wx.ID_ANY, "&AUI Perspectives", perspectivesMenu)
-        self.perspectives_menu = perspectivesMenu
-        
-        item = wx.MenuItem(menu, -1, 'Save Perspective', 'Save AUI perspective')
-        item.SetBitmap(images.catalog['saveperspective'].getBitmap())
-        menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, self.OnSavePerspective, item)
+            menu.AppendMenu(wx.ID_ANY, "&AUI Perspectives", perspectivesMenu)
+            self.perspectives_menu = perspectivesMenu
 
-        item = wx.MenuItem(menu, -1, 'Delete Perspective', 'Delete AUI perspective')
-        item.SetBitmap(images.catalog['deleteperspective'].getBitmap())
-        menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, self.OnDeletePerspective, item)
+            item = wx.MenuItem(menu, -1, 'Save Perspective', 'Save AUI perspective')
+            item.SetBitmap(images.catalog['saveperspective'].getBitmap())
+            menu.AppendItem(item)
+            self.Bind(wx.EVT_MENU, self.OnSavePerspective, item)
 
-        menu.AppendSeparator()
-        
-        item = wx.MenuItem(menu, -1, 'Restore Tree Expansion', 'Restore the initial tree expansion state')
-        item.SetBitmap(images.catalog['expansion'].getBitmap())
-        menu.AppendItem(item)
-        self.Bind(wx.EVT_MENU, self.OnTreeExpansion, item)
+            item = wx.MenuItem(menu, -1, 'Delete Perspective', 'Delete AUI perspective')
+            item.SetBitmap(images.catalog['deleteperspective'].getBitmap())
+            menu.AppendItem(item)
+            self.Bind(wx.EVT_MENU, self.OnDeletePerspective, item)
 
-        self.mainmenu.Append(menu, '&Options')
+            menu.AppendSeparator()
+
+            item = wx.MenuItem(menu, -1, 'Restore Tree Expansion', 'Restore the initial tree expansion state')
+            item.SetBitmap(images.catalog['expansion'].getBitmap())
+            menu.AppendItem(item)
+            self.Bind(wx.EVT_MENU, self.OnTreeExpansion, item)
+
+            self.mainmenu.Append(menu, '&Options')
         
         # Make a Help menu
         menu = wx.Menu()
@@ -1492,7 +1512,6 @@ class wxPythonDemo(wx.Frame):
 
     #---------------------------------------------    
     def RecreateTree(self, evt=None):
-
         # Catch the search type (name or content)
         searchMenu = self.filter.GetMenu().GetMenuItems()
         fullSearch = searchMenu[1].IsChecked()
@@ -1502,12 +1521,22 @@ class wxPythonDemo(wx.Frame):
                 # Do not`scan all the demo files for every char
                 # the user input, use wx.EVT_TEXT_ENTER instead
                 return
-        
+
+        expansionState = self.tree.GetExpansionState()
+
+        current = None
+        item = self.tree.GetSelection()
+        if item:
+            prnt = self.tree.GetItemParent(item)
+            if prnt:
+                current = (self.tree.GetItemText(item),
+                           self.tree.GetItemText(prnt))
+                    
         self.tree.Freeze()
         self.tree.DeleteAllItems()
         self.root = self.tree.AddRoot("wxPython Overview")
         self.tree.SetItemImage(self.root, 0)
-        self.tree.SetPyData(self.root, 0)
+        self.tree.SetItemPyData(self.root, 0)
 
         treeFont = self.tree.GetFont()
         catFont = self.tree.GetFont()
@@ -1517,10 +1546,10 @@ class wxPythonDemo(wx.Frame):
         catFont.SetWeight(wx.BOLD)
         
         firstChild = None
+        selectItem = None
         filter = self.filter.GetValue()
         count = 0
-        if USE_CUSTOMTREECTRL:
-            bmp = images.catalog['modifiedexists'].getBitmap()
+        
         for category, items in _treeList:
             count += 1
             if filter:
@@ -1531,21 +1560,31 @@ class wxPythonDemo(wx.Frame):
             if items:
                 child = self.tree.AppendItem(self.root, category, image=count)
                 self.tree.SetItemFont(child, catFont)
-                self.tree.SetPyData(child, count)
+                self.tree.SetItemPyData(child, count)
                 if not firstChild: firstChild = child
                 for childItem in items:
-                    wnd = None
-                    if USE_CUSTOMTREECTRL and DoesModifiedExist(childItem):
-                        wnd = wx.StaticBitmap(self.tree, -1, bmp)
-                    theDemo = self.tree.AppendItem(child, childItem, image=count, wnd=wnd)
-                    self.tree.SetPyData(theDemo, count)
+                    image = count
+                    if DoesModifiedExist(childItem):
+                        image = len(_demoPngs)
+                    theDemo = self.tree.AppendItem(child, childItem, image=image)
+                    self.tree.SetItemPyData(theDemo, count)
                     self.treeMap[childItem] = theDemo
+                    if current and (childItem, category) == current:
+                        selectItem = theDemo
+                        
                     
         self.tree.Expand(self.root)
         if firstChild:
             self.tree.Expand(firstChild)
         if filter:
             self.tree.ExpandAll()
+        elif expansionState:
+            self.tree.SetExpansionState(expansionState)
+        if selectItem:
+            self.skipLoad = True
+            self.tree.SelectItem(selectItem)
+            self.skipLoad = False
+        
         self.tree.Thaw()
         self.searchItems = {}
 
@@ -1581,30 +1620,14 @@ class wxPythonDemo(wx.Frame):
         self.RecreateTree()            
 
 
-    def SetTreeModified(self, modifiedFilename, setIcon):
-        if not USE_CUSTOMTREECTRL:
-            return
-        self.tree.Freeze()        
-        treeItemText = os.path.split(os.path.splitext(modifiedFilename)[0])[1]
-        self.LoopTreeCtrl(self.root, treeItemText, setIcon)
-        self.tree.CalculatePositions()
-        self.tree.Thaw()
-
-
-    def LoopTreeCtrl(self, parentItem, itemText, setIcon):
-
-        child, cookie = self.tree.GetFirstChild(parentItem)
-        while child:
-            text = self.tree.GetItemText(child)
-            if text == itemText:
-                child.DeleteWindow()
-                if setIcon:
-                    bmp = images.catalog['modifiedexists'].getBitmap()
-                    child.SetWindow(wx.StaticBitmap(self.tree, -1, bmp))
-                    
-            self.LoopTreeCtrl(child, itemText, setIcon)
-            child, cookie = self.tree.GetNextChild(parentItem, cookie)
-                
+    def SetTreeModified(self, modified):
+        item = self.tree.GetSelection()
+        if modified:
+            image = len(_demoPngs)
+        else:
+            image = self.tree.GetItemPyData(item)
+        self.tree.SetItemImage(item, image)
+        
         
     def WriteText(self, text):
         if text[-1:] == '\n':
@@ -1637,7 +1660,7 @@ class wxPythonDemo(wx.Frame):
 
     #---------------------------------------------
     def OnSelChanged(self, event):
-        if self.dying or  not self.loaded:
+        if self.dying or not self.loaded or self.skipLoad:
             return
 
         item = event.GetItem()
@@ -1666,7 +1689,6 @@ class wxPythonDemo(wx.Frame):
                     wx.LogMessage("Loading demo %s.py..." % demoName)
                     self.demoModules = DemoModules(demoName)
                     self.LoadDemoSource()
-                    self.tree.Refresh()
                 else:
                     self.SetOverview("wxPython", mainOverview)
                     self.codePage = None
@@ -1718,7 +1740,7 @@ class wxPythonDemo(wx.Frame):
         self.SetOverview(self.demoModules.name + " Overview", overviewText)
 
         if self.firstTime:
-            # cahnge to the demo page the first time a module is run
+            # change to the demo page the first time a module is run
             self.UpdateNotebook(2)
             self.firstTime = False
         else:
@@ -1862,7 +1884,7 @@ class wxPythonDemo(wx.Frame):
                 lst.remove(sel)
 
         if loadDefault:
-            self.mgr.LoadPerspective(self.auiConfigurations["Default Perspective"])
+            self.mgr.LoadPerspective(self.auiConfigurations[DEFAULT_PERSPECTIVE])
             self.mgr.Update()
 
 
@@ -1991,12 +2013,10 @@ class wxPythonDemo(wx.Frame):
             self.tbicon.Destroy()
 
         config = GetConfig()
-        config.Write('ExpansionState', str(self.expansionState))
+        config.Write('ExpansionState', str(self.tree.GetExpansionState()))
         config.Write('AUIPerspectives', str(self.auiConfigurations))
         config.Flush()
 
-        self.mgr.UnInit()
-        del self.mgr
         self.Destroy()
 
 
@@ -2103,7 +2123,7 @@ else:
     TreeBaseClass = wx.TreeCtrl
     
 
-class wxPythonTreeCtrl(ExpansionState, TreeBaseClass):
+class wxPythonDemoTree(ExpansionState, TreeBaseClass):
     def __init__(self, parent):
         TreeBaseClass.__init__(self, parent, style=wx.TR_DEFAULT_STYLE|
                                wx.TR_HAS_VARIABLE_ROW_HEIGHT)
@@ -2123,6 +2143,9 @@ class wxPythonTreeCtrl(ExpansionState, TreeBaseClass):
         imgList = wx.ImageList(16, 16)
         for png in _demoPngs:
             imgList.Add(images.catalog[png].getBitmap())
+            
+        # add the image for modified demos.
+        imgList.Add(images.catalog["custom"].getBitmap())
 
         self.AssignImageList(imgList)
         
