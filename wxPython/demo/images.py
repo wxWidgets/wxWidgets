@@ -14408,7 +14408,9 @@ catalog['saveperspective'].getData = getsaveperspectiveData
 catalog['saveperspective'].getImage = getsaveperspectiveImage
 catalog['saveperspective'].getBitmap = getsaveperspectiveBitmap
 
-def getCustomControlData():
+
+#----------------------------------------------------------------------
+def getcustomcontrolData():
     return \
 '\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x10\x00\x00\x00\x10\x08\x06\
 \x00\x00\x00\x1f\xf3\xffa\x00\x00\x00\x04sBIT\x08\x08\x08\x08|\x08d\x88\x00\
@@ -14439,16 +14441,17 @@ def getCustomControlData():
 \xe4\xaf\xc1/_\xff\xb7\xdf\xfd\x17\xfd\r*\xb1L*W\n\xe5H\x00\x00\x00\x00IEND\
 \xaeB`\x82' 
 
-def getCustomControlBitmap():
-    return BitmapFromImage(getCustomControlImage())
+def getcustomcontrolBitmap():
+    return BitmapFromImage(getcustomcontrolImage())
 
-def getCustomControlImage():
-    stream = cStringIO.StringIO(getCustomControlData())
+def getcustomcontrolImage():
+    stream = cStringIO.StringIO(getcustomcontrolData())
     return ImageFromStream(stream)
 
 index.append('customcontrol')
 catalog['customcontrol'] = ImageClass()
-catalog['customcontrol'].getData = getCustomControlData
-catalog['customcontrol'].getImage = getCustomControlImage
-catalog['customcontrol'].getBitmap = getCustomControlBitmap
+catalog['customcontrol'].getData = getcustomcontrolData
+catalog['customcontrol'].getImage = getcustomcontrolImage
+catalog['customcontrol'].getBitmap = getcustomcontrolBitmap
+
 

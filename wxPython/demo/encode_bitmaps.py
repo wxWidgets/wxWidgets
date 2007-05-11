@@ -125,6 +125,7 @@ command_lines = [
     "-a -u -c bmp_source/pyshell.png           images.py",
     "-a -u -c bmp_source/recent.png            images.py",
     "-a -u -c bmp_source/saveperspective.png   images.py",
+    "-a -u -c bmp_source/customcontrol.png     images.py",
 
 
     "   -u -c bmp_source/001.png throbImages.py",
