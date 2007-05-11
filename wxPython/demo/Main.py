@@ -1374,7 +1374,6 @@ class wxPythonDemo(wx.Frame):
         self.auiConfigurations[DEFAULT_PERSPECTIVE] = self.mgr.SavePerspective()
         self.mgr.Update()
 
-        self.mgr.SetFlags(self.mgr.GetFlags() ^ wx.aui.AUI_MGR_ALLOW_ACTIVE_PANE)
         self.mgr.SetFlags(self.mgr.GetFlags() ^ wx.aui.AUI_MGR_TRANSPARENT_DRAG)
         
 
