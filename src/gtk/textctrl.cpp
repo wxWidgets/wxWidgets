@@ -162,12 +162,12 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
 // gtk+ doesn't support justify before gtk+-2.11.0 with pango-1.17 being available
 // (but if new enough pango isn't available it's a mere gtk warning)
 #if GTK_CHECK_VERSION(2,11,0)
-			case wxTEXT_ALIGNMENT_JUSTIFIED:
+            case wxTEXT_ALIGNMENT_JUSTIFIED:
                 if (!gtk_check_version(2,11,0))
-				    align = GTK_JUSTIFY_FILL;
+                    align = GTK_JUSTIFY_FILL;
                 else
                     align = GTK_JUSTIFY_LEFT;
-				break;
+                break;
 #endif
         }
 
