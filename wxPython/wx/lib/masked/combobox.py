@@ -71,7 +71,6 @@ class MaskedComboBoxEventHandler(wx.EvtHandler):
                                                                         ## track of previous value for undo
 
 
-
 class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
     """
     Base class for generic masked edit comboboxes; allows auto-complete of values.
@@ -196,7 +195,6 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
         # clean up associated event handler object:
         if self.RemoveEventHandler(self.evt_handler):
             self.evt_handler.Destroy()
-        event.Skip()
 
 
     def _CalcSize(self, size=None):
