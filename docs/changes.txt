@@ -164,6 +164,7 @@ All (GUI):
 - Allow status bar children in XRC (Edmunt Pienkowski)
 - Fix memory leak in wxWizard when not using sizers for the page layout
 - Added wxListCtrl::SetItemPtrData()
+- wxHTML: Apply table background colour between the cells too (Michael Hieke)
 
 wxMSW:
 

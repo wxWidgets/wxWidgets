@@ -137,7 +137,11 @@ wxHtmlTableCell::wxHtmlTableCell(wxHtmlContainerCell *parent, const wxHtmlTag& t
 
     /* scan params: */
     if (tag.HasParam(wxT("BGCOLOR")))
+    {
         tag.GetParamAsColour(wxT("BGCOLOR"), &m_tBkg);
+        if (m_tBkg.Ok())
+            SetBackgroundColour(m_tBkg);
+    }
     if (tag.HasParam(wxT("VALIGN")))
         m_tValign = tag.GetParam(wxT("VALIGN"));
     else
