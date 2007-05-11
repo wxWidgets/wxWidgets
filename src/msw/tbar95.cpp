@@ -303,6 +303,9 @@ bool wxToolBar::MSWCreateToolbar(const wxPoint& pos, const wxSize& size)
     // toolbar-specific post initialisation
     ::SendMessage(GetHwnd(), TB_BUTTONSTRUCTSIZE, sizeof(TBBUTTON), 0);
 
+    if ( wxApp::GetComCtl32Version() >= 471 )
+        ::SendMessage(GetHwnd(), TB_SETEXTENDEDSTYLE, 0, TBSTYLE_EX_DRAWDDARROWS);
+
     return true;
 }
 
@@ -958,6 +961,10 @@ bool wxToolBar::Realize()
                         button.fsStyle = TBSTYLE_BUTTON;
                         break;
 
+                   case wxITEM_DROPDOWN:
+                        button.fsStyle = TBSTYLE_DROPDOWN;
+                        break;
+
                     default:
                         wxFAIL_MSG( _T("unexpected toolbar button kind") );
                         button.fsStyle = TBSTYLE_BUTTON;
@@ -1200,11 +1207,38 @@ bool wxToolBar::MSWOnNotify(int WXUNUSED(idCtrl),
                             WXLPARAM lParam,
                             WXLPARAM *WXUNUSED(result))
 {
+    LPNMHDR hdr = (LPNMHDR)lParam;
+    if ( hdr->code == TBN_DROPDOWN )
+    {
+        LPNMTOOLBAR tbhdr = (LPNMTOOLBAR)lParam;
+
+        wxCommandEvent evt(wxEVT_COMMAND_TOOL_DROPDOWN_CLICKED, tbhdr->iItem);
+        if ( GetEventHandler()->ProcessEvent(evt) )
+        {
+            // Event got handled, don't display default popup menu
+            return false;
+        }
+
+        const wxToolBarToolBase * const tool = FindById(tbhdr->iItem);
+        wxCHECK_MSG( tool, false, _T("drop down message for unknown tool") );
+
+        wxMenu * const menu = tool->GetDropdownMenu();
+        if ( !menu )
+            return false;
+
+        // Display popup menu below button
+        RECT r;
+        if (::SendMessage(GetHwnd(), TB_GETITEMRECT, GetToolPos(tbhdr->iItem), (LPARAM)&r))
+            PopupMenu(menu, r.left, r.bottom);
+
+        return true;
+    }
+
+
     if( !HasFlag(wxTB_NO_TOOLTIPS) )
     {
 #if wxUSE_TOOLTIPS
         // First check if this applies to us
-        NMHDR *hdr = (NMHDR *)lParam;
 
         // the tooltips control created by the toolbar is sometimes Unicode, even
         // in an ANSI application - this seems to be a bug in comctl32.dll v5

@@ -71,7 +71,8 @@ public:
                       const wxString& longHelpString = wxEmptyString)
         : m_label(label),
           m_shortHelpString(shortHelpString),
-          m_longHelpString(longHelpString)
+          m_longHelpString(longHelpString),
+          m_dropdownMenu(NULL)
     {
         m_tbar = tbar;
         m_id = toolid;
@@ -106,9 +107,11 @@ public:
         m_toggled = false;
 
         m_toolStyle = wxTOOL_STYLE_CONTROL;
+
+        m_dropdownMenu = 0;
     }
 
-    virtual ~wxToolBarToolBase(){}
+    virtual ~wxToolBarToolBase();
 
     // accessors
     // ---------
@@ -197,6 +200,11 @@ public:
     virtual void Detach() { m_tbar = (wxToolBarBase *)NULL; }
     virtual void Attach(wxToolBarBase *tbar) { m_tbar = tbar; }
 
+    // these methods are only for tools of wxITEM_DROPDOWN kind (but even such
+    // tools can have a NULL associated menu)
+    void SetDropdownMenu(wxMenu *menu);
+    wxMenu *GetDropdownMenu() const { return m_dropdownMenu; }
+
 protected:
     wxToolBarBase *m_tbar;  // the toolbar to which we belong (may be NULL)
 
@@ -226,6 +234,8 @@ protected:
     // short and long help strings
     wxString m_shortHelpString;
     wxString m_longHelpString;
+
+    wxMenu *m_dropdownMenu;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxToolBarToolBase)
 };
@@ -524,6 +534,9 @@ public:
 
     // don't want toolbars to accept the focus
     virtual bool AcceptsFocus() const { return false; }
+
+    // Set dropdown menu
+    bool SetDropdownMenu(int toolid, wxMenu *menu);
 
 protected:
     // to implement in derived classes

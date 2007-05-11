@@ -104,6 +104,24 @@ Pass the id of the tool.}
 for a range of ids. Pass the ids of the tools.}
 \twocolitem{{\bf EVT\_TOOL\_ENTER(id, func)}}{Process a wxEVT\_COMMAND\_TOOL\_ENTER event.
 Pass the id of the toolbar itself. The value of wxCommandEvent::GetSelection is the tool id, or -1 if the mouse cursor has moved off a tool.}
+\twocolitem{{\bf EVT\_TOOL\_DROPDOWN(id, func)}}{Process a wxEVT\_COMMAND\_TOOL\_DROPDOWN\_CLICKED event. If unhandled, displays the default dropdown menu set using \helpref{wxToolBar::SetDropdownMenu}{wxtoolbarsetdropdownmenu}.}
+\end{twocollist}
+
+\wxheading{wxItemKind}
+
+There are several different types of tools you can add to a toolbar. These
+types are controlled by the wxItemKind enumeration which has the following
+values:
+\twocolwidtha{5cm}
+\begin{twocollist}\itemsep=0pt
+\twocolitem{{\bf wxITEM\_NORMAL}}{Normal tool button}
+\twocolitem{{\bf wxITEM\_CHECK}}{Check (or toggle) tool button.}
+\twocolitem{{\bf wxITEM\_NORMAL}}{Radio tool button. See \helpref{wxToolBar::AddRadioTool}{wxtoolbaraddradiotool} for details}
+\twocolitem{{\bf wxITEM\_DROPDOWN}}{Normal tool button with a dropdown arrow
+next to it. Clicking the dropdown arrow sends a wxEVT\_COMMAND\_TOOL\_DROPDOWN\_CLICKED
+event and may also display the menu previously associated with the item with 
+\helpref{wxToolBar::SetDropdownMenu}{wxtoolbarsetdropdownmenu}. Currently this
+type of tools is only supported under MSW.}
 \end{twocollist}
 
 \wxheading{See also}
@@ -736,6 +754,17 @@ default (zero-size) margins are to be overridden.
 \wxheading{See also}
 
 \helpref{wxToolBar::GetMargins}{wxtoolbargetmargins}, \helpref{wxSize}{wxsize}
+
+
+\membersection{wxToolBar::SetDropdownMenu}\label{wxtoolbarsetdropdownmenu}
+
+\func{bool}{SetDropdownMenu}{\param{int }{id}, \param{wxMenu* }{menu}}
+
+Sets the dropdown menu for the tool given by its \arg{id}. The tool itself will
+delete the menu when it's no longer needed.
+
+If you define a EVT\_TOOL\_DROPDOWN handler in your program, you must call 
+\helpref{wxEvent::Skip()}{wxeventskip} from it or the menu won't be displayed.
 
 
 \membersection{wxToolBar::SetToolBitmapSize}\label{wxtoolbarsettoolbitmapsize}

@@ -35,6 +35,7 @@
     #if WXWIN_COMPATIBILITY_2_8
         #include "wx/image.h"
     #endif // WXWIN_COMPATIBILITY_2_8
+    #include "wx/menu.h"
 #endif
 
 // ----------------------------------------------------------------------------
@@ -57,6 +58,12 @@ WX_DEFINE_LIST(wxToolBarToolsList)
 // ----------------------------------------------------------------------------
 
 IMPLEMENT_DYNAMIC_CLASS(wxToolBarToolBase, wxObject)
+
+wxToolBarToolBase::~wxToolBarToolBase()
+{
+    delete m_dropdownMenu;
+}
+
 
 bool wxToolBarToolBase::Enable(bool enable)
 {
@@ -109,6 +116,13 @@ bool wxToolBarToolBase::SetLongHelp(const wxString& help)
     m_longHelpString = help;
 
     return true;
+}
+
+
+void wxToolBarToolBase::SetDropdownMenu(wxMenu* menu)
+{
+    delete m_dropdownMenu;
+    m_dropdownMenu = menu;
 }
 
 // ----------------------------------------------------------------------------
@@ -690,6 +704,19 @@ void wxToolBarBase::UpdateWindowUI(long flags)
     }
 }
 
+bool wxToolBarBase::SetDropdownMenu(int toolid, wxMenu* menu)
+{
+    wxToolBarToolBase * const tool = FindById(toolid);
+    wxCHECK_MSG( tool, false, _T("invalid tool id") );
+
+    wxCHECK_MSG( tool->GetKind() == wxITEM_DROPDOWN, false,
+                    _T("menu can be only associated with drop down tools") );
+
+    tool->SetDropdownMenu(menu);
+
+    return true;
+}
+
 #if WXWIN_COMPATIBILITY_2_8
 
 bool wxCreateGreyedImage(const wxImage& in, wxImage& out)
@@ -699,7 +726,6 @@ bool wxCreateGreyedImage(const wxImage& in, wxImage& out)
     if ( out.Ok() )
         return true;
 #endif // wxUSE_IMAGE
-
     return false;
 }
 

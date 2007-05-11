@@ -125,6 +125,7 @@ public:
 
     void OnToolLeftClick(wxCommandEvent& event);
     void OnToolRightClick(wxCommandEvent& event);
+    void OnToolDropdown(wxCommandEvent& event);
 
     void OnCombo(wxCommandEvent& event);
 
@@ -244,6 +245,8 @@ BEGIN_EVENT_TABLE(MyFrame, wxFrame)
     EVT_COMBOBOX(ID_COMBO, MyFrame::OnCombo)
 
     EVT_TOOL_RCLICKED(wxID_ANY, MyFrame::OnToolRightClick)
+
+    EVT_TOOL_DROPDOWN(wxID_ANY, MyFrame::OnToolDropdown)
 
     EVT_UPDATE_UI(wxID_COPY, MyFrame::OnUpdateCopyAndCut)
     EVT_UPDATE_UI(wxID_CUT, MyFrame::OnUpdateCopyAndCut)
@@ -385,8 +388,16 @@ void MyFrame::RecreateToolbar()
     toolBar->SetToolBitmapSize(wxSize(w, h));
 
     toolBar->AddTool(wxID_NEW, _T("New"),
-                     toolBarBitmaps[Tool_new], wxNullBitmap, wxITEM_NORMAL,
+                     toolBarBitmaps[Tool_new], wxNullBitmap, wxITEM_DROPDOWN,
                      _T("New file"), _T("This is help for new file tool"));
+
+    wxMenu* menu = new wxMenu;
+    menu->Append(wxID_ANY, _T("&First dummy item"));
+    menu->Append(wxID_ANY, _T("&Second dummy item"));
+    menu->AppendSeparator();
+    menu->Append(wxID_EXIT, _T("Exit"));
+    toolBar->SetDropdownMenu(wxID_NEW, menu);
+
     toolBar->AddTool(wxID_OPEN, _T("Open"),
                      toolBarBitmaps[Tool_open], wxNullBitmap, wxITEM_NORMAL,
                      _T("Open file"), _T("This is help for open file tool"));
@@ -867,4 +878,13 @@ void MyFrame::OnToggleRadioBtn(wxCommandEvent& event)
         m_tbar->ToggleTool(IDM_TOOLBAR_OTHER_1 +
                             event.GetId() - IDM_TOOLBAR_TOGGLERADIOBTN1, true);
     }
+}
+
+void MyFrame::OnToolDropdown(wxCommandEvent& event)
+{
+    wxString str;
+    str.Printf( _T("Dropdown on tool %d\n"), event.GetId());
+    m_textWindow->WriteText( str );
+
+    event.Skip();
 }
