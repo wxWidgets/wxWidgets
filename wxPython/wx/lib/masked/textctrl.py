@@ -176,15 +176,28 @@ class BaseMaskedTextCtrl( wx.TextCtrl, MaskedEditMixin ):
         wx.TextCtrl.ChangeValue(self, value)
 ##        dbg(indent=0)
 
-
-    def SetValue(self, value, use_change_value=False):
+    def SetValue(self, value):
         """
         This function redefines the externally accessible .SetValue() to be
         a smart "paste" of the text in question, so as not to corrupt the
         masked control.  NOTE: this must be done in the class derived
         from the base wx control.
         """
-##        dbg('MaskedTextCtrl::SetValue("%(value)s", use_change_value=%(use_change_value)d)' % locals(), indent=1)
+        self.ModifyValue(value, use_change_value=False)
+
+    def ChangeValue(self, value):
+        """
+        Provided to accomodate similar functionality added to base control in wxPython 2.7.1.1.
+        """
+        self.ModifyValue(value, use_change_value=True)
+
+
+    def ModifyValue(self, value, use_change_value=False):
+        """
+        This factored function of common code does the bulk of the work for SetValue 
+        and ChangeValue.
+        """
+##        dbg('MaskedTextCtrl::ModifyValue("%(value)s", use_change_value=%(use_change_value)d)' % locals(), indent=1)
 
         if not self._mask:
             if use_change_value:
@@ -214,7 +227,7 @@ class BaseMaskedTextCtrl( wx.TextCtrl, MaskedEditMixin ):
                 value = value[1:]
 ##            dbg('padded value = "%s"' % value)
 
-        # make SetValue behave the same as if you had typed the value in:
+        # make Set/ChangeValue behave the same as if you had typed the value in:
         try:
             value, replace_to = self._Paste(value, raise_on_invalid=True, just_return_value=True)
             if self._isFloat:
@@ -246,12 +259,6 @@ class BaseMaskedTextCtrl( wx.TextCtrl, MaskedEditMixin ):
         wx.CallAfter(self._SetInsertionPoint, replace_to)
         wx.CallAfter(self._SetSelection, replace_to, replace_to)
 ##        dbg(indent=0)
-
-    def ChangeValue(self, value):
-        """
-        Provided to accomodate similar functionality added to base control in wxPython 2.7.1.1.
-        """
-        self.SetValue(value, use_change_value=True)
 
 
     def SetFont(self, *args, **kwargs):
