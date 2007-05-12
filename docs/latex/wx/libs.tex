@@ -2,7 +2,7 @@
 \setheader{{\it CHAPTER \thechapter}}{}{}{}{}{{\it CHAPTER \thechapter}}%
 \setfooter{\thepage}{}{}{}{}{\thepage}%
 
-Starting from version 2.5.0 wxWidgets can be built either as a single large
+wxWidgets can be built either as a single large
 library (this is called the {\it monolithic build}) or as several smaller
 libraries ({\it multilib build}). Multilib build is the default.
 
@@ -13,10 +13,6 @@ diagram show dependencies between them:
 \image{}{libs.gif}
 \end{center}
 
-{\large {\bf wxAui}}
-
-This contains the Advanced User Interface docking library.
-
 {\large {\bf wxBase}}
 
 Every wxWidgets application must link against this library. It contains
@@ -25,6 +21,18 @@ mandatory classes that any wxWidgets code depends on (e.g.
 differences between platforms. wxBase can be used to develop console mode
 applications, it does not require any GUI libraries or running X Window System
 on Unix.
+
+{\large {\bf wxCore}}
+
+Basic GUI classes such as GDI classes or controls are in this library. All
+wxWidgets GUI applications must link against this library, only console mode
+applications don't.
+
+{\large {\bf wxAui}}
+
+This contains the Advanced User Interface docking library.
+
+Requires wxHTML, wxAdvanced, wxCore, wxBase, wxXML.
 
 {\large {\bf wxNet}}
 
@@ -40,34 +48,28 @@ Classes for network access:
  \helpref{wxTCPConnection}{wxddeconnection}) }
 \item{ \helpref{wxURL}{wxurl} }
 \item{ wxInternetFSHandler (a \helpref{wxFileSystem handler}{fs}) }
-Requires wxBase.
 \end{itemize}
+
+Requires wxBase.
 
 {\large {\bf wxRichText}}
 
 This contains generic rich text control functionality.
 
+Requires wxAdvanced, wxHTML, wxCore, wxXML, wxBase.
+
 {\large {\bf wxXML}}
 
-This library contains simple classes for parsing XML documents. Note that
-their API {\em will} change in the future and backward
-compatibility will not be preserved. Use of this library in your applications
-is not recommended, it is only meant for use by XML resources system. Future
-versions of wxWidgets will contain new XML handling classes with DOM-like API.
+This library contains simple classes for parsing XML documents.
+
 Requires wxBase.
-
-{\large {\bf wxCore}}
-
-Basic GUI classes such as GDI classes or controls are in this library. All
-wxWidgets GUI applications must link against this library, only console mode
-applications don't.
 
 {\large {\bf wxAdvanced}}
 
 Advanced or rarely used GUI classes:
 
 \begin{itemize}\itemsep=0pt
-\item{ wxBufferedDC }
+\item{ \helpref{wxBufferedDC}{wxbuffereddc} }
 \item{ \helpref{wxCalendarCtrl}{wxcalendarctrl} }
 \item{ \helpref{wxGrid classes}{gridoverview} }
 \item{ \helpref{wxJoystick}{wxjoystick} }
@@ -78,6 +80,7 @@ Advanced or rarely used GUI classes:
 \item{ \helpref{wxWizard}{wxwizard} }
 \item{ \helpref{wxSashLayoutWindow}{wxsashlayoutwindow} }
 \item{ \helpref{wxSashWindow}{wxsashwindow} }
+\item{ ...others }
 \end{itemize}
 
 Requires wxCore and wxBase.
@@ -95,6 +98,7 @@ Requires wxCore and wxBase.
 This library contains \helpref{wxGLCanvas}{wxglcanvas} class for integrating
 OpenGL library with wxWidgets. Unlike all others, this library is {\em not}
  part of the monolithic library, it is always built as separate library.
+
 Requires wxCore and wxBase.
 
 {\large {\bf wxHTML}}
@@ -103,7 +107,9 @@ Simple HTML renderer and other \helpref{HTML rendering classes}{wxhtml} are
 contained in this library, as well as
  \helpref{wxHtmlHelpController}{wxhtmlhelpcontroller},
  \helpref{wxBestHelpController}{wxhelpcontroller} and
- \helpref{wxHtmlListBox}{wxhtmllistbox}. Requires wxCore and wxBase.
+ \helpref{wxHtmlListBox}{wxhtmllistbox}.
+
+Requires wxCore and wxBase.
 
 {\large {\bf wxODBC}}
 
@@ -121,11 +127,18 @@ Requires wxCore, wxBase and wxXML.
 
 \helpref{wxDbGridTableBase}{wxdbgridtablebase} class which combines 
  \helpref{wxGrid}{wxgrid} and \helpref{wxDbTable}{wxdbtable}. 
+
 Requires wxODBC and wxAdvanced.
 
 {\large {\bf wxXRC}}
 
 This library contains \helpref{wxXmlResource}{wxxmlresource} class that
-provides access to XML resource files in XRC format.
+provides access to XML resource files in XRC format
+
 Requires wxXML, wxCore, wxAdvanced and wxHTML.
 
+{\large {\bf wxSTC}}
+
+STC (Styled Text Control) is a wrapper around Scintilla, a syntax-highlighting text editor.
+
+Requires wxCore, wxBase.
