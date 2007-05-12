@@ -1026,9 +1026,10 @@ wxEvtHandler::~wxEvtHandler()
 
     if (m_dynamicEvents)
     {
-        wxList::iterator it = m_dynamicEvents->begin(),
-                         en = m_dynamicEvents->end();
-        for (;it != en; ++it)
+        for ( wxList::iterator it = m_dynamicEvents->begin(),
+                               end = m_dynamicEvents->end();
+              it != end;
+              ++it )
         {
 #if WXWIN_COMPATIBILITY_EVENT_TYPES
             wxEventTableEntry *entry = (wxEventTableEntry*)*it;
