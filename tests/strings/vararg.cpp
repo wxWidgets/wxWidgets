@@ -71,6 +71,9 @@ void VarArgTestCase::StringPrintf()
     s2.Printf(_T("[%s](%s)"), s.c_str(), "str");
     CPPUNIT_ASSERT( s2 == "[bar = 11](str)" );
 
+    s2.Printf("%s mailbox", wxString("Opening").c_str());
+    CPPUNIT_ASSERT( s2 == "Opening mailbox" );
+
     // test passing wxString directly:
     s2.Printf(_T("[%s](%s)"), s, "str");
     CPPUNIT_ASSERT( s2 == "[bar = 11](str)" );
