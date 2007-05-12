@@ -94,6 +94,7 @@ All (GUI):
 
 - Added wxH[V]ScrolledWindow (Brad Anderson, Bryan Petty)
 - Added wxDC::StretchBlit() for wxMac and wxMSW (Vince Harron)
+- Added support for drop down toolbar buttons (Tim Kosse)
 - Added support for labels for toolbar controls (Vince Harron)
 - Added wxEventBlocker class (Francesco Montorsi).
 - Added wxFile/DirPickerCtrl::Get/SetFile/DirName() (Francesco Montorsi).
