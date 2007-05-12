@@ -2,10 +2,10 @@
 // Name:        wx/mac/corefoundation/cfref.h
 // Purpose:     wxCFRef template class
 // Author:      David Elliott <dfe@cox.net>
-// Modified by: 
+// Modified by: Stefan Csomor
 // Created:     2007/05/10
 // RCS-ID:      $Id$
-// Copyright:   (c) 2007 David Elliott <dfe@cox.net>
+// Copyright:   (c) 2007 David Elliott <dfe@cox.net>, Stefan Csomor
 // Licence:     wxWindows licence
 // Notes:       See http://developer.apple.com/documentation/CoreFoundation/Conceptual/CFMemoryMgmt/index.html
 /////////////////////////////////////////////////////////////////////////////
@@ -19,6 +19,29 @@
 
 #include <CoreFoundation/CFBase.h>
 
+/*! @function   wxCFRelease
+    @abstract   A CFRelease variant that checks for NULL before releasing.
+*/
+inline void wxCFRelease(CFTypeRef r)
+{
+    if ( r != NULL )
+        ::CFRelease(r);
+}
+
+/*! @function   wxCFRetain
+    @abstract   A typesafe CFRetain variant that checks for NULL.
+*/
+template <class Type>
+inline Type* wxCFRetain(Type *r)
+{
+    // NOTE(DE): Setting r to the result of CFRetain improves efficiency on both x86 and PPC
+    // Casting r to CFTypeRef ensures we are calling the real C version defined in CFBase.h
+    // and not any possibly templated/overloaded CFRetain.
+    if ( r != NULL )
+        r = (Type*)::CFRetain((CFTypeRef)r);
+    return r;
+}
+
 /*! @class wxCFRef
     @templatefield  refType     The CF reference type (e.g. CFStringRef, CFRunLoopRef, etc.)
                                 It should already be a pointer.  This is different from
@@ -28,11 +51,6 @@
 template <class refType>
 class wxCFRef
 {
-    // Declare wxCFRef<otherRefType> as a friend so that the conversion constructor can access m_ptr directly
-    template <class otherRefType>
-    friend class wxCFRef;
-
-
 public:
     /*! @method     wxCFRef
         @abstract   Creates a NULL reference
@@ -65,11 +83,8 @@ public:
                     the object will be explicitly retained by this new ref.
     */
     wxCFRef(const wxCFRef& otherRef)
-    :   m_ptr(otherRef.m_ptr)
-    {
-        if(m_ptr != NULL)
-            CFRetain(m_ptr);
-    }
+    :   m_ptr(wxCFRetain(otherRef.m_ptr))
+    {}
 
     /*! @method     wxCFRef
         @abstract   Copies a ref holder where its type can be converted to ours
@@ -80,11 +95,8 @@ public:
     */
     template <class otherRefType>
     wxCFRef(const wxCFRef<otherRefType>& otherRef)
-    :   m_ptr(otherRef.m_ptr) // Implicit conversion from otherRefType to refType should occur
-    {
-        if(m_ptr != NULL)
-            CFRetain(m_ptr);
-    }
+    :   m_ptr(wxCFRetain(otherRef.get())) // Implicit conversion from otherRefType to refType should occur
+    {}
 
     /*! @method     ~wxCFRef
         @abstract   Releases (potentially shared) ownership of the ref.
@@ -102,10 +114,8 @@ public:
     */
     wxCFRef& operator=(const wxCFRef& otherRef)
     {
-        if(otherRef.m_ptr != NULL)
-            CFRetain(otherRef.m_ptr);
-        if(m_ptr != NULL)
-            CFRelease(m_ptr);
+        wxCFRetain(otherRef.m_ptr);
+        wxCFRelease(m_ptr);
         m_ptr = otherRef.m_ptr;
         return *this;
     }
@@ -120,11 +130,9 @@ public:
     template <class otherRefType>
     wxCFRef& operator=(const wxCFRef<otherRefType>& otherRef)
     {
-        if(otherRef.m_ptr != NULL)
-            CFRetain(otherRef.m_ptr);
-        if(m_ptr != NULL)
-            CFRelease(m_ptr);
-        m_ptr = otherRef.m_ptr; // Implicit conversion from otherRefType to refType should occur
+        wxCFRetain(otherRef.get());
+        wxCFRelease(m_ptr);
+        m_ptr = otherRef.get(); // Implicit conversion from otherRefType to refType should occur
         return *this;
     }
 
@@ -160,8 +168,7 @@ public:
     */
     void reset()
     {
-        if(m_ptr != NULL)
-            CFRelease(m_ptr);
+        wxCFRelease(m_ptr);
         m_ptr = NULL;
     }
 
@@ -178,8 +185,7 @@ public:
     template <class otherType>
     void reset(otherType* p)
     {
-        if(m_ptr != NULL)
-            CFRelease(m_ptr);
+        wxCFRelease(m_ptr);
         m_ptr = p; // Automatic conversion should occur
     }
 protected:
@@ -199,7 +205,7 @@ protected:
 template <typename Type>
 inline wxCFRef<Type*> wxCFRefFromGet(Type *p)
 {
-    return wxCFRef<Type*>( (p!=NULL) ? (Type*)CFRetain(p) : p );
+    return wxCFRef<Type*>(wxCFRetain(p));
 }
 
 /*! @function   static_cfref_cast
@@ -217,7 +223,7 @@ inline wxCFRef<refType> static_cfref_cast(const wxCFRef<otherRefType> &otherRef)
 template <class refType, class otherRefType>
 inline wxCFRef<refType> static_cfref_cast(const wxCFRef<otherRefType> &otherRef)
 {
-    return wxCFRef<refType>(static_cast<refType>(CFRetain(otherRef.get())));
+    return wxCFRef<refType>(static_cast<refType>(wxCFRetain(otherRef.get())));
 }
 
 /*! @function   CFRelease
