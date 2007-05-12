@@ -21,11 +21,14 @@
 
 /*! @function   wxCFRelease
     @abstract   A CFRelease variant that checks for NULL before releasing.
+    @discussion The parameter is template not for type safety but to ensure the argument
+                is a raw pointer and not a ref holder of any type.
 */
-inline void wxCFRelease(CFTypeRef r)
+template <class Type>
+inline void wxCFRelease(Type *r)
 {
     if ( r != NULL )
-        ::CFRelease(r);
+        ::CFRelease((CFTypeRef)r);
 }
 
 /*! @function   wxCFRetain
