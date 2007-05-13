@@ -2863,12 +2863,19 @@ inline const wchar_t* wxCStrData::AsWChar() const
 }
 #endif // wxUSE_UNICODE_WCHAR
 
-#if !wxUSE_UNICODE || wxUSE_UTF8_LOCALE_ONLY
+#if !wxUSE_UNICODE
+inline const char* wxCStrData::AsChar() const
+{
+    return m_str->wx_str() + m_offset;
+}
+#endif // !wxUSE_UNICODE
+
+#if wxUSE_UTF8_LOCALE_ONLY
 inline const char* wxCStrData::AsChar() const
 {
     return wxStringOperations::AddToIter(m_str->wx_str(), m_offset);
 }
-#endif // !wxUSE_UNICODE
+#endif // wxUSE_UTF8_LOCALE_ONLY
 
 inline const wxCharBuffer wxCStrData::AsCharBuf() const
 {
@@ -2898,7 +2905,11 @@ inline wxString wxCStrData::AsString() const
 
 inline const wxStringCharType *wxCStrData::AsInternal() const
 {
+#if wxUSE_UNICODE_UTF8
     return wxStringOperations::AddToIter(m_str->wx_str(), m_offset);
+#else
+    return m_str->wx_str() + m_offset;
+#endif
 }
 
 inline wxUniChar wxCStrData::operator*() const
