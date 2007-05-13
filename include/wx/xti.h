@@ -1621,7 +1621,8 @@ struct wxConstructorBridge_4 : public wxConstructorBridge
 #define wxCONSTRUCTOR_4(klass,t0,v0,t1,v1,t2,v2,t3,v3) \
     wxConstructorBridge_4<klass,t0,t1,t2,t3> constructor##klass; \
     wxConstructorBridge* klass::ms_constructor = &constructor##klass; \
-    const wxChar *klass::ms_constructorProperties[] = { wxT(#v0)  , wxT(#v1)  , wxT(#v2)  , wxT(#v3)  }; \
+    const wxChar *klass::ms_constructorProperties[] = { wxT(#v0)  , wxT(#v1)  , \
+        wxT(#v2)  , wxT(#v3)  }; \
     const int klass::ms_constructorPropertiesCount = 4;
 
 // 5 params
@@ -1646,7 +1647,8 @@ struct wxConstructorBridge_5 : public wxConstructorBridge
 #define wxCONSTRUCTOR_5(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4) \
     wxConstructorBridge_5<klass,t0,t1,t2,t3,t4> constructor##klass; \
     wxConstructorBridge* klass::ms_constructor = &constructor##klass; \
-    const wxChar *klass::ms_constructorProperties[] = { wxT(#v0)  , wxT(#v1)  , wxT(#v2)  , wxT(#v3)  , wxT(#v4)  }; \
+    const wxChar *klass::ms_constructorProperties[] = { wxT(#v0)  , wxT(#v1)  , \
+        wxT(#v2)  , wxT(#v3)  , wxT(#v4)  }; \
     const int klass::ms_constructorPropertiesCount = 5;
 
 // 6 params
@@ -1672,7 +1674,8 @@ struct wxConstructorBridge_6 : public wxConstructorBridge
 #define wxCONSTRUCTOR_6(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5) \
     wxConstructorBridge_6<klass,t0,t1,t2,t3,t4,t5> constructor##klass; \
     wxConstructorBridge* klass::ms_constructor = &constructor##klass; \
-    const wxChar *klass::ms_constructorProperties[] = { wxT(#v0)  , wxT(#v1)  , wxT(#v2)  , wxT(#v3)  , wxT(#v4)  , wxT(#v5)  }; \
+    const wxChar *klass::ms_constructorProperties[] = { wxT(#v0)  , wxT(#v1)  , \
+        wxT(#v2)  , wxT(#v3)  , wxT(#v4)  , wxT(#v5)  }; \
     const int klass::ms_constructorPropertiesCount = 6;
 
 // direct constructor version
@@ -1697,7 +1700,8 @@ struct wxDirectConstructorBridge_6 : public wxDirectConstructorBrigde
 #define wxDIRECT_CONSTRUCTOR_6(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5) \
     wxDirectConstructorBridge_6<klass,t0,t1,t2,t3,t4,t5> constructor##klass; \
     wxConstructorBridge* klass::ms_constructor = &constructor##klass; \
-    const wxChar *klass::ms_constructorProperties[] = { wxT(#v0)  , wxT(#v1)  , wxT(#v2)  , wxT(#v3)  , wxT(#v4)  , wxT(#v5)  }; \
+    const wxChar *klass::ms_constructorProperties[] = { wxT(#v0)  , wxT(#v1)  , \
+        wxT(#v2)  , wxT(#v3)  , wxT(#v4)  , wxT(#v5)  }; \
     const int klass::ms_constructorPropertiesCount = 6;
 
 // 7 params
@@ -1724,7 +1728,8 @@ struct wxConstructorBridge_7 : public wxConstructorBridge
 #define wxCONSTRUCTOR_7(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5,t6,v6) \
     wxConstructorBridge_7<klass,t0,t1,t2,t3,t4,t5,t6> constructor##klass; \
     wxConstructorBridge* klass::ms_constructor = &constructor##klass; \
-    const wxChar *klass::ms_constructorProperties[] = { wxT(#v0)  , wxT(#v1)  , wxT(#v2)  , wxT(#v3)  , wxT(#v4)  , wxT(#v5)  , wxT(#v6) }; \
+    const wxChar *klass::ms_constructorProperties[] = { wxT(#v0)  , wxT(#v1)  , \
+        wxT(#v2)  , wxT(#v3)  , wxT(#v4)  , wxT(#v5)  , wxT(#v6) }; \
     const int klass::ms_constructorPropertiesCount = 7;
 
 // 8 params
@@ -1753,7 +1758,8 @@ struct wxConstructorBridge_8 : public wxConstructorBridge
 #define wxCONSTRUCTOR_8(klass,t0,v0,t1,v1,t2,v2,t3,v3,t4,v4,t5,v5,t6,v6,t7,v7) \
     wxConstructorBridge_8<klass,t0,t1,t2,t3,t4,t5,t6,t7> constructor##klass; \
     wxConstructorBridge* klass::ms_constructor = &constructor##klass; \
-    const wxChar *klass::ms_constructorProperties[] = { wxT(#v0)  , wxT(#v1)  , wxT(#v2)  , wxT(#v3)  , wxT(#v4)  , wxT(#v5)  , wxT(#v6) , wxT(#v7) }; \
+    const wxChar *klass::ms_constructorProperties[] = { wxT(#v0)  , wxT(#v1)  , \
+        wxT(#v2)  , wxT(#v3)  , wxT(#v4)  , wxT(#v5)  , wxT(#v6) , wxT(#v7) }; \
     const int klass::ms_constructorPropertiesCount = 8;
 
 
