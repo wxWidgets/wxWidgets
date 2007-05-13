@@ -38,10 +38,13 @@
 #include "wx/event.h"
 
 #include "wx/xtistrm.h"
+#include "wx/xtixml.h"
 #include "wx/txtstrm.h"
 #include "wx/wfstream.h"
 
-
+#if !wxUSE_EXTENDED_RTTI
+    #error This sample requires XTI (eXtended RTTI) enabled
+#endif
 
 
 // ----------------------------------------------------------------------------
@@ -138,12 +141,43 @@ bool MyApp::OnInit()
     if ( !wxApp::OnInit() )
         return false;
 
+#if 1
     // create the main application window
     MyFrame *frame = new MyFrame(_T("Minimal wxWidgets App"));
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
     frame->Show(true);
+
+#else
+
+	wxObject* frame ;
+
+	wxxVariant v(wxPoint(100, 100));
+	wxPoint pt = v.Get<wxPoint>();
+
+#if 1
+	 frame = CreateFrameRTTI() ;
+     delete frame ;
+#endif
+
+	frame = TryLoad() ;
+	TryCode() ;
+
+    wxFrame *trueFrame = dynamic_cast< wxFrame * >( frame ) ;
+    if ( !trueFrame )
+    {
+        wxDynamicObject* dyno = dynamic_cast< wxDynamicObject* >( frame ) ;
+        if ( dyno )
+            trueFrame = dynamic_cast< wxFrame *>( dyno->GetSuperClassInstance() ) ;
+    }
+    if ( trueFrame )
+        trueFrame->Show() ;
+    else
+        wxMessageBox(wxT("We were not getting a real window") , wxT("Error") , wxOK ) ;
+	return true ;
+
+#endif
 
     // success: wxApp::OnRun() will be called which will enter the main message
     // loop and the application will run. If we returned false here, the
@@ -308,7 +342,8 @@ wxObject* CreateFrameRTTI()
             wxT("MyXTIFrame") , CLASSINFO( wxFrame ) ) ;
 
     dyninfo->AddProperty("Button",wxGetTypeInfo((wxButton**) NULL)) ;
-    dyninfo->AddHandler("ButtonClickHandler", NULL /* no instance of the handler method */ , CLASSINFO( wxEvent ) ) ;
+    dyninfo->AddHandler("ButtonClickHandler", 
+        NULL /* no instance of the handler method */ , CLASSINFO( wxEvent ) ) ;
 
     wxClassInfo *info;
 	info = wxClassInfo::FindClass(wxT("MyXTIFrame"));
@@ -476,7 +511,7 @@ wxObject* CreateFrameRTTI()
     xml.SetRoot(root);
     wxXmlWriter writer(root) ;
     MyDesignerPersister persister(frame) ;
-    writer.WriteObject( frame , frame->GetClassInfo() , &persister , wxString("myTestFrame") ) ;
+//    writer.WriteObject( frame , frame->GetClassInfo() , &persister , wxString("myTestFrame") ) ;
     xml.Save("testxti.xml");
 	return frame ;
 
@@ -522,39 +557,10 @@ static void TryCode()
 	wxXmlReader Reader(root);
 	Reader.ReadObject( wxString("myTestFrame") , &Callbacks ) ;
 }
-
-bool MyApp::OnInit()
-{
-	wxObject* frame ;
-
-	wxxVariant v(wxPoint(100, 100));
-	wxPoint pt = v.Get<wxPoint>();
-
-#if 1
-	 frame = CreateFrameRTTI() ;
-     delete frame ;
-#endif
-
-	frame = TryLoad() ;
-	TryCode() ;
-
-    wxFrame *trueFrame = dynamic_cast< wxFrame * >( frame ) ;
-    if ( !trueFrame )
-    {
-        wxDynamicObject* dyno = dynamic_cast< wxDynamicObject* >( frame ) ;
-        if ( dyno )
-            trueFrame = dynamic_cast< wxFrame *>( dyno->GetSuperClassInstance() ) ;
-    }
-    if ( trueFrame )
-        trueFrame->Show() ;
-    else
-        wxMessageBox(wxT("We were not getting a real window") , wxT("Error") , wxOK ) ;
-	return true ;
-}
-
+/*
 void test()
 {
-}
+}*/
 
 
 
