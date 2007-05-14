@@ -310,7 +310,7 @@ long wxExecute(const wxString& command, int flags, wxProcess *process)
 
     argv[n] = NULL;
     while (n-- > 0)
-        argv[n] = wx_const_cast(wxChar*, args[n].c_str());
+        argv[n] = wx_const_cast(wxChar*, (const char *)args[n].c_str());
 
     long result = wxExecute(argv, flags, process);
 
