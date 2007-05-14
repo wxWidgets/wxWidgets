@@ -609,7 +609,7 @@
       <orient>wxVERTICAL</orient>
       <object class="sizeritem">
         <object class="wxStaticBoxSizer">
-          <label>Defaults for new containes</label>
+          <label>Defaults for new containers</label>
           <orient>wxVERTICAL</orient>
           <object class="sizeritem">
             <object class="wxFlexGridSizer">
