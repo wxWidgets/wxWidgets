@@ -92,12 +92,12 @@ def getTasks(config_env):
           ])
 
     cyclopsTask1 = Task([
-        Job("cyclops.d", "distrib/all/build-deb", ["cyclops", "/work/chroot/dapper32", "dapper"], env=config_env),
+        Job("cyclops.d", "distrib/all/build-deb", ["cyclops", "/work/chroot/dapper", "dapper"], env=config_env),
         Job("cyclops.d64", "distrib/all/build-deb", ["cyclops", "/work/chroot/dapper64", "dapper64"], env=config_env),
         ])
 
     cyclopsTask2 = Task([
-        Job("cyclops.f", "distrib/all/build-deb", ["cyclops", "/work/chroot/feisty32", "feisty"], env=config_env),
+        Job("cyclops.f", "distrib/all/build-deb", ["cyclops", "/work/chroot/feisty", "feisty"], env=config_env),
         Job("cyclops.f64", "distrib/all/build-deb", ["cyclops", "/work/chroot/feisty64", "feisty64"], env=config_env),
         ])
 
