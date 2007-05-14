@@ -30,7 +30,6 @@
     #include "wx/log.h"
 #endif
 
-#include "wx/cocoa/ObjcPose.h"
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/string.h"
 

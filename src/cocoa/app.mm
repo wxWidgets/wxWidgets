@@ -22,7 +22,6 @@
 #endif
 
 #include "wx/cocoa/ObjcRef.h"
-#include "wx/cocoa/ObjcPose.h"
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/mbarman.h"
 #include "wx/cocoa/NSApplication.h"
@@ -37,11 +36,6 @@
 
 // wxNSApplicationObserver singleton.
 static wxObjcAutoRefFromAlloc<wxNSApplicationObserver*> sg_cocoaAppObserver = [[wxNSApplicationObserver alloc] init];
-
-// ========================================================================
-// wxPoseAsInitializer
-// ========================================================================
-wxPoseAsInitializer *wxPoseAsInitializer::sm_first = NULL;
 
 // ========================================================================
 // wxNSApplicationDelegate
@@ -130,10 +124,6 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
             memmove(argv + 1, argv + 2, argc * sizeof(wxChar *));
         }
     }
-
-    // Posing must be completed before any instances of the Objective-C
-    // classes being posed as are created.
-    wxPoseAsInitializer::InitializePosers();
 
     return wxAppBase::Initialize(argc, argv);
 }
