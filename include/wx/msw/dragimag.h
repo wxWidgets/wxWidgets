@@ -13,6 +13,8 @@
 #ifndef _WX_DRAGIMAG_H_
 #define _WX_DRAGIMAG_H_
 
+#if wxUSE_DRAGIMAGE
+
 #include "wx/bitmap.h"
 #include "wx/icon.h"
 #include "wx/cursor.h"
@@ -267,5 +269,6 @@ private:
     DECLARE_NO_COPY_CLASS(wxDragImage)
 };
 
+#endif // wxUSE_DRAGIMAGE
 #endif
     // _WX_DRAGIMAG_H_

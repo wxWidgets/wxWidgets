@@ -362,6 +362,9 @@ wxSize wxToolBar::DoGetBestSize() const
         sizeBest.y = size.cy;
     }
 
+    if (!IsVertical() && !(GetWindowStyle() & wxTB_NODIVIDER))
+        sizeBest.y += 1;
+
     CacheBestSize(sizeBest);
 
     return sizeBest;
@@ -1073,7 +1076,7 @@ bool wxToolBar::Realize()
     {
         // if not set yet, have one column
         m_maxRows = 1;
-        SetRows(m_nButtons);        
+        SetRows(m_nButtons);
     }
 
     InvalidateBestSize();
@@ -1329,6 +1332,30 @@ void wxToolBar::DoSetToggle(wxToolBarToolBase *WXUNUSED(tool), bool WXUNUSED(tog
     // VZ: AFAIK, the button has to be created either with TBSTYLE_CHECK or
     //     without, so we really need to delete the button and recreate it here
     wxFAIL_MSG( _T("not implemented") );
+}
+
+void wxToolBar::SetToolNormalBitmap( int id, const wxBitmap& bitmap )
+{
+    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, FindById(id));
+    if ( tool )
+    {
+        wxCHECK_RET( tool->IsButton(), wxT("Can only set bitmap on button tools."));
+
+        tool->SetNormalBitmap(bitmap);
+        Realize();
+    }
+}
+
+void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmap& bitmap )
+{
+    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, FindById(id));
+    if ( tool )
+    {
+        wxCHECK_RET( tool->IsButton(), wxT("Can only set bitmap on button tools."));
+
+        tool->SetDisabledBitmap(bitmap);
+        Realize();
+    }
 }
 
 // ----------------------------------------------------------------------------

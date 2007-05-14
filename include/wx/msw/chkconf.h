@@ -375,4 +375,13 @@
 #   endif
 #endif /* !wxUSE_ACTIVEX */
 
+#if defined(_MSC_VER) && _MSC_VER <= 1200 && wxUSE_GRAPHICS_CONTEXT
+#       ifdef wxABORT_ON_CONFIG_ERROR
+#           error "wxGraphicsContext needs MSVC 7 or newer"
+#       else
+#           undef wxUSE_GRAPHICS_CONTEXT
+#           define wxUSE_GRAPHICS_CONTEXT 0
+#       endif
+#endif
+
 #endif /* _WX_MSW_CHKCONF_H_ */

@@ -764,7 +764,8 @@ class CustomTreeCtrlDemo(wx.Panel):
         splitter = wx.SplitterWindow(self, -1, style=wx.CLIP_CHILDREN | wx.SP_LIVE_UPDATE | wx.SP_3D)
 
         # Create the CustomTreeCtrl, using a derived class defined below
-        self.tree = CustomTreeCtrl(splitter, -1, log=self.log, style=wx.SUNKEN_BORDER)           
+        self.tree = CustomTreeCtrl(splitter, -1, log=self.log, 
+                                   style= wx.SUNKEN_BORDER| CT.TR_HAS_BUTTONS | CT.TR_HAS_VARIABLE_ROW_HEIGHT)           
 
         self.leftpanel = wx.ScrolledWindow(splitter, -1, style=wx.SUNKEN_BORDER)
         self.leftpanel.SetScrollRate(20,20)
@@ -1239,11 +1240,10 @@ class CustomTreeCtrl(CT.CustomTreeCtrl):
 
     def __init__(self, parent, id=wx.ID_ANY, pos=wx.DefaultPosition,
                  size=wx.DefaultSize,
-                 style=wx.SUNKEN_BORDER,
-                 ctstyle=CT.TR_HAS_BUTTONS | CT.TR_HAS_VARIABLE_ROW_HEIGHT,
+                 style=wx.SUNKEN_BORDER | CT.TR_HAS_BUTTONS | CT.TR_HAS_VARIABLE_ROW_HEIGHT,
                  log=None):
 
-        CT.CustomTreeCtrl.__init__(self, parent, id, pos, size, style, ctstyle)
+        CT.CustomTreeCtrl.__init__(self, parent, id, pos, size, style)
 
         alldata = dir(CT)
 

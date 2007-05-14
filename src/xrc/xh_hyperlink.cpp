@@ -51,6 +51,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxHyperlinkCtrlXmlHandler, wxXmlResourceHandler)
 
 wxHyperlinkCtrlXmlHandler::wxHyperlinkCtrlXmlHandler()
 {
+    XRC_ADD_STYLE(wxHL_CONTEXTMENU);
+    XRC_ADD_STYLE(wxHL_ALIGN_LEFT);
+    XRC_ADD_STYLE(wxHL_ALIGN_RIGHT);
+    XRC_ADD_STYLE(wxHL_ALIGN_CENTRE);
+    XRC_ADD_STYLE(wxHL_DEFAULT_STYLE);
+    
     AddWindowStyles();
 }
 
@@ -61,7 +67,8 @@ wxObject *wxHyperlinkCtrlXmlHandler::DoCreateResource()
     SetupWindow(control);
     control->Create(m_parentAsWindow, GetID(),
         GetParamValue(wxT("label")), GetParamValue(wxT("url")),
-        GetPosition(), GetSize(), GetStyle());
+        GetPosition(), GetSize(),
+        GetStyle(wxT("style"), wxHL_DEFAULT_STYLE));
 
     return control;
 }

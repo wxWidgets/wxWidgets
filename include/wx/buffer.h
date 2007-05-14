@@ -111,15 +111,35 @@ private:                                                                    \
     chartype *m_str;                                                        \
 }
 
+#if wxABI_VERSION >= 20804
+// needed for wxString::char_str() and wchar_str()
+#define DEFINE_WRITABLE_BUFFER(classname, baseclass, chartype)              \
+class WXDLLIMPEXP_BASE classname : public baseclass                         \
+{                                                                           \
+public:                                                                     \
+    classname(const baseclass& src) : baseclass(src) {}                     \
+    classname(const chartype *str = NULL) : baseclass(str) {}               \
+                                                                            \
+    operator chartype*() { return this->data(); }                           \
+}
+#endif // wxABI_VERSION >= 20804
+
 DEFINE_BUFFER(wxCharBuffer, char, wxStrdupA);
+#if wxABI_VERSION >= 20804
+DEFINE_WRITABLE_BUFFER(wxWritableCharBuffer, wxCharBuffer, char);
+#endif
 
 #if wxUSE_WCHAR_T
 
 DEFINE_BUFFER(wxWCharBuffer, wchar_t, wxStrdupW);
+#if wxABI_VERSION >= 20804
+DEFINE_WRITABLE_BUFFER(wxWritableWCharBuffer, wxWCharBuffer, wchar_t);
+#endif
 
 #endif // wxUSE_WCHAR_T
 
 #undef DEFINE_BUFFER
+#undef DEFINE_WRITABLE_BUFFER
 
 #if wxUSE_UNICODE
     typedef wxWCharBuffer wxWxCharBuffer;

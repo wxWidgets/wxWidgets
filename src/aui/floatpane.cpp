@@ -159,8 +159,10 @@ void wxAuiFloatingFrame::OnSize(wxSizeEvent& event)
 void wxAuiFloatingFrame::OnClose(wxCloseEvent& evt)
 {
     m_owner_mgr->OnFloatingPaneClosed(m_pane_window, evt);
-    if (!evt.GetVeto())
+    if (!evt.GetVeto()) {
+	m_mgr.DetachPane(m_pane_window);
         Destroy();
+    }
 }
 
 void wxAuiFloatingFrame::OnMoveEvent(wxMoveEvent& event)

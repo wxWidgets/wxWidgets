@@ -562,7 +562,8 @@ private:
 extern WXDLLIMPEXP_BASE wxLocale* wxGetLocale();
 
 // get the translation of the string in the current locale
-inline const wxChar *wxGetTranslation(const wxChar *sz, const wxChar* domain=NULL)
+inline const wxChar *
+wxGetTranslation(const wxChar *sz, const wxChar* domain = NULL)
 {
     wxLocale *pLoc = wxGetLocale();
     if (pLoc)
@@ -570,8 +571,11 @@ inline const wxChar *wxGetTranslation(const wxChar *sz, const wxChar* domain=NUL
     else
         return sz;
 }
-inline const wxChar *wxGetTranslation(const wxChar *sz1, const wxChar *sz2,
-                                      size_t n, const wxChar* domain=NULL)
+
+inline const wxChar *
+wxGetTranslation(const wxChar *sz1, const wxChar *sz2,
+                 size_t n,
+                 const wxChar *domain = NULL)
 {
     wxLocale *pLoc = wxGetLocale();
     if (pLoc)
@@ -588,13 +592,16 @@ inline const wxChar *wxGetTranslation(const wxChar *sz1, const wxChar *sz2,
     #if !defined(_)
         #define _(s)                 (_T(s))
     #endif
+    #define wxPLURAL(sing, plur, n)  ((n) == 1 ? _T(sing) : _T(plur))
 #endif
 
 #define wxTRANSLATE(str) _T(str)
 
-// Note: use of 'inline' here can cause this symbol not to be found when compiled with gcc
-//const wxChar *wxGetTranslation(const wxChar *sz);
-#define wxGetTranslation(sz) (sz)
+inline const wxChar *
+wxGetTranslation(const wxChar *sz, const wxChar * WXUNUSED(domain) = NULL)
+{
+    return sz;
+}
 
 #endif // wxUSE_INTL/!wxUSE_INTL
 

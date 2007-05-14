@@ -212,6 +212,7 @@ private:
 CPPUNIT_TEST_SUITE_REGISTRATION( MBConvTestCase );
 
 // also include in it's own registry so that these tests can be run alone
+CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( MBConvTestCase, "MBConvTestCase" );
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION( MBConvTestCase, "MBConv" );
 
 void MBConvTestCase::WC2CP1250()

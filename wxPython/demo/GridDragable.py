@@ -103,17 +103,17 @@ class CustomDataTable(gridlib.PyGridTableBase):
 
             # Notify the grid
             grid.BeginBatch()
-            msg = gridlib.GridTableMessage(
-                    self, gridlib.GRIDTABLE_NOTIFY_COLS_DELETED, frm, 1
-                    )
-                    
-            grid.ProcessTableMessage(msg)
-            
+           
             msg = gridlib.GridTableMessage(
                     self, gridlib.GRIDTABLE_NOTIFY_COLS_INSERTED, to, 1
                     )
-
             grid.ProcessTableMessage(msg)
+
+            msg = gridlib.GridTableMessage(
+                    self, gridlib.GRIDTABLE_NOTIFY_COLS_DELETED, frm, 1
+                    )
+            grid.ProcessTableMessage(msg)
+            
             grid.EndBatch()
 
     # Move the row
@@ -138,16 +138,15 @@ class CustomDataTable(gridlib.PyGridTableBase):
             grid.BeginBatch()
 
             msg = gridlib.GridTableMessage(
-                    self, gridlib.GRIDTABLE_NOTIFY_ROWS_DELETED, frm, 1
+                    self, gridlib.GRIDTABLE_NOTIFY_ROWS_INSERTED, to, 1
                     )
-
             grid.ProcessTableMessage(msg)
 
             msg = gridlib.GridTableMessage(
-                    self, gridlib.GRIDTABLE_NOTIFY_ROWS_INSERTED, to, 1
+                    self, gridlib.GRIDTABLE_NOTIFY_ROWS_DELETED, frm, 1
                     )
-
             grid.ProcessTableMessage(msg)
+    
             grid.EndBatch()
 
 

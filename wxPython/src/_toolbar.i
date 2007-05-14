@@ -442,6 +442,10 @@ public:
               long style = wxNO_BORDER | wxTB_HORIZONTAL,
               const wxString& name = wxPyToolBarNameStr);
 
+    // TODO: In 2.9 move these to the base class...
+    void SetToolNormalBitmap(int id, const wxBitmap& bitmap);
+    void SetToolDisabledBitmap(int id, const wxBitmap& bitmap);
+    
     static wxVisualAttributes
     GetClassDefaultAttributes(wxWindowVariant variant = wxWINDOW_VARIANT_NORMAL);
 };

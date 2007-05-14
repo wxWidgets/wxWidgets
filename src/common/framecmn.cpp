@@ -447,6 +447,9 @@ void wxFrameBase::DoGiveHelp(const wxString& text, bool show)
     {
         // i.e. restore the old one
         help = m_oldStatusText;
+
+        // make sure we get the up to date text when showing it the next time
+        m_oldStatusText.clear();
     }
 
     statbar->SetStatusText(help, m_statusBarPane);

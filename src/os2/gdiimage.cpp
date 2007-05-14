@@ -300,7 +300,7 @@ wxGDIImageHandler* wxGDIImage::FindHandler(
     {
         wxGDIImageHandler*          pHandler = pNode->GetData();
 
-        if ( (pHandler->GetExtension() = rExtension) &&
+        if ( (pHandler->GetExtension() == rExtension) &&
              (lType == -1 || pHandler->GetType() == lType) )
         {
             return pHandler;

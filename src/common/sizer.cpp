@@ -460,6 +460,11 @@ bool wxSizerItem::IsShown() const
             // shown, so are we (this arbitrariness is the reason for
             // deprecating this function)
             {
+                // Some apps (such as dialog editors) depend on an empty sizer still
+                // being laid out correctly and reporting the correct size and position.
+                if (m_sizer->GetChildren().GetCount() == 0)
+                    return true;
+
                 for ( wxSizerItemList::compatibility_iterator
                         node = m_sizer->GetChildren().GetFirst();
                       node;
@@ -1469,7 +1474,9 @@ void wxFlexGridSizer::AdjustForFlexDirection()
         // and now fill it with the largest value
         for ( n = 0; n < count; ++n )
         {
-            array[n] = largest;
+            // don't touch hidden rows
+            if ( array[n] != -1 )
+                array[n] = largest;
         }
     }
 }
@@ -1509,9 +1516,7 @@ void wxFlexGridSizer::AdjustForGrowables(const wxSize& sz, const wxSize& minsz,
             {
                 if (m_growableRows[idx] >= nrows )
                     continue;
-                if (m_rowHeights[ m_growableRows[idx] ] == -1)
-                    m_rowHeights[ m_growableRows[idx] ] = 0;
-                else
+                if (m_rowHeights[ m_growableRows[idx] ] != -1)
                 {
                     int delta = (sz.y - minsz.y);
                     if (sum_proportions == 0)
@@ -1561,9 +1566,7 @@ void wxFlexGridSizer::AdjustForGrowables(const wxSize& sz, const wxSize& minsz,
             {
                 if (m_growableCols[idx] >= ncols )
                     continue;
-                if (m_colWidths[ m_growableCols[idx] ] == -1)
-                    m_colWidths[ m_growableCols[idx] ] = 0;
-                else
+                if (m_colWidths[ m_growableCols[idx] ] != -1)
                 {
                     int delta = (sz.x - minsz.x);
                     if (sum_proportions == 0)
@@ -2020,7 +2023,8 @@ void wxStdDialogButtonSizer::Realize()
             if (m_buttonAffirmative->GetId() == wxID_SAVE){
                 // these buttons have set labels under Mac so we should use them
                 m_buttonAffirmative->SetLabel(_("Save"));
-                m_buttonNegative->SetLabel(_("Don't Save"));
+                if (m_buttonNegative)
+                    m_buttonNegative->SetLabel(_("Don't Save"));
             }
         }
 

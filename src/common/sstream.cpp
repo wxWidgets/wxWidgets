@@ -28,6 +28,10 @@
 
 #include "wx/sstream.h"
 
+#if wxUSE_UNICODE
+    #include "wx/hashmap.h"
+#endif
+
 // ============================================================================
 // wxStringInputStream implementation
 // ============================================================================
@@ -37,8 +41,8 @@
 // ----------------------------------------------------------------------------
 
 // TODO:  Do we want to include the null char in the stream?  If so then
-// just add +1 to m_len in the ctor 
-wxStringInputStream::wxStringInputStream(const wxString& s) 
+// just add +1 to m_len in the ctor
+wxStringInputStream::wxStringInputStream(const wxString& s)
 #if wxUSE_UNICODE
     : m_str(s), m_buf(wxMBConvUTF8().cWX2MB(s).release()), m_len(strlen(m_buf))
 #else
@@ -63,9 +67,9 @@ wxStringInputStream::~wxStringInputStream()
 // getlength
 // ----------------------------------------------------------------------------
 
-wxFileOffset wxStringInputStream::GetLength() const 
-{ 
-    return m_len; 
+wxFileOffset wxStringInputStream::GetLength() const
+{
+    return m_len;
 }
 
 // ----------------------------------------------------------------------------
@@ -149,13 +153,76 @@ wxFileOffset wxStringOutputStream::OnSysTell() const
 // actual IO
 // ----------------------------------------------------------------------------
 
+#if wxUSE_UNICODE
+
+// we can't add a member to wxStringOutputStream in 2.8 branch without breaking
+// backwards binary compatibility, so we emulate it by using a hash indexed by
+// wxStringOutputStream pointers
+
+// can't use wxCharBuffer as it has incorrect copying semantics and doesn't
+// store the length which we need here
+WX_DECLARE_VOIDPTR_HASH_MAP(wxMemoryBuffer, wxStringStreamUnconvBuffers);
+
+static wxStringStreamUnconvBuffers gs_unconverted;
+
+wxStringOutputStream::~wxStringOutputStream()
+{
+    // TODO: check that nothing remains (i.e. the unconverted buffer is empty)?
+    gs_unconverted.erase(this);
+}
+
+#endif // wxUSE_UNICODE
+
 size_t wxStringOutputStream::OnSysWrite(const void *buffer, size_t size)
 {
     const char *p = wx_static_cast(const char *, buffer);
 
-    // append the input buffer (may not be null terminated - thus 
-    // the literal length
-    m_str->Append(wxString(p, m_conv, size));
+#if wxUSE_UNICODE
+    // the part of the string we have here may be incomplete, i.e. it can stop
+    // in the middle of an UTF-8 character and so converting it would fail; if
+    // this is the case, accumulate the part which we failed to convert until
+    // we get the rest (and also take into account the part which we might have
+    // left unconverted before)
+    const char *src;
+    size_t srcLen;
+    wxMemoryBuffer& unconv = gs_unconverted[this];
+    if ( unconv.GetDataLen() )
+    {
+        // append the new data to the data remaining since the last time
+        unconv.AppendData(p, size);
+        src = unconv;
+        srcLen = unconv.GetDataLen();
+    }
+    else // no unconverted data left, avoid extra copy
+    {
+        src = p;
+        srcLen = size;
+    }
+
+    wxWCharBuffer wbuf(m_conv.cMB2WC(src, srcLen, NULL /* out len */));
+    if ( wbuf )
+    {
+        // conversion succeeded, clear the unconverted buffer
+        unconv = wxMemoryBuffer(0);
+
+        *m_str += wbuf;
+    }
+    else // conversion failed
+    {
+        // remember unconverted data if there had been none before (otherwise
+        // we've already got it in the buffer)
+        if ( src == p )
+            unconv.AppendData(src, srcLen);
+
+        // pretend that we wrote the data anyhow, otherwise the caller would
+        // believe there was an error and this might not be the case, but do
+        // not update m_pos as m_str hasn't changed
+        return size;
+    }
+#else // !wxUSE_UNICODE
+    // append directly, no conversion necessary
+    m_str->Append(wxString(p, size));
+#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
     // update position
     m_pos += size;

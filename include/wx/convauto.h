@@ -95,7 +95,14 @@ private:
     DECLARE_NO_ASSIGN_CLASS(wxConvAuto)
 };
 
-#endif // wxUSE_WCHAR_T
+#else // !wxUSE_WCHAR_T
+
+// it doesn't matter how we define it in this case as it's unused anyhow, but
+// do define it to allow the code using wxConvAuto() as default argument (this
+// is done in many places) to compile
+typedef wxMBConv wxConvAuto;
+
+#endif // wxUSE_WCHAR_T/!wxUSE_WCHAR_T
 
 #endif // _WX_CONVAUTO_H_
 

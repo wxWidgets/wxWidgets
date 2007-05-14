@@ -109,11 +109,11 @@ public:
 
   // state
   inline bool Ok() const { return IsOk(); }
-  inline bool IsOk() const { return (m_socket != NULL); };
-  inline bool Error() const { return m_error; };
-  inline bool IsConnected() const { return m_connected; };
-  inline bool IsData() { return WaitForRead(0, 0); };
-  inline bool IsDisconnected() const { return !IsConnected(); };
+  inline bool IsOk() const { return (m_socket != NULL); }
+  inline bool Error() const { return m_error; }
+  inline bool IsConnected() const { return m_connected; }
+  inline bool IsData() { return WaitForRead(0, 0); }
+  inline bool IsDisconnected() const { return !IsConnected(); }
   inline wxUint32 LastCount() const { return m_lcount; }
   inline wxSocketError LastError() const { return (wxSocketError)m_socket->GetError(); }
   void SaveState();
@@ -134,7 +134,7 @@ public:
   wxSocketBase& Write(const void *buffer, wxUint32 nbytes);
   wxSocketBase& WriteMsg(const void *buffer, wxUint32 nbytes);
 
-  void InterruptWait() { m_interrupt = true; };
+  void InterruptWait() { m_interrupt = true; }
   bool Wait(long seconds = -1, long milliseconds = 0);
   bool WaitForRead(long seconds = -1, long milliseconds = 0);
   bool WaitForWrite(long seconds = -1, long milliseconds = 0);
@@ -146,7 +146,7 @@ public:
 
   bool GetOption(int level, int optname, void *optval, int *optlen);
   bool SetOption(int level, int optname, const void *optval, int optlen);
-  inline wxUint32 GetLastIOSize() const { return m_lcount; };
+  inline wxUint32 GetLastIOSize() const { return m_lcount; }
 
   // event handling
   void *GetClientData() const { return m_clientData; }

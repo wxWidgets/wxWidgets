@@ -1779,8 +1779,6 @@ void wxWindowDC::SetFont( const wxFont &font )
 
     m_font = font;
 
-    return;
-
 #if wxUSE_UNICODE
     m_fontdesc = font.GetNativeFontInfo()->description;
 #endif

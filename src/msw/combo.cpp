@@ -161,22 +161,36 @@ wxComboCtrl::~wxComboCtrl()
 
 void wxComboCtrl::OnThemeChange()
 {
-    wxUxThemeEngine* theme = wxUxThemeEngine::GetIfActive();
+    // there doesn't seem to be any way to get the text colour using themes
+    // API: TMT_TEXTCOLOR doesn't work neither for EDIT nor COMBOBOX
+    SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
+
+    wxUxThemeEngine * const theme = wxUxThemeEngine::GetIfActive();
     if ( theme )
     {
-        wxUxThemeHandle hTheme(this, L"COMBOBOX");
-
+        // NB: use EDIT, not COMBOBOX (the latter works in XP but not Vista)
+        wxUxThemeHandle hTheme(this, L"EDIT");
         COLORREF col;
-        theme->GetThemeColor(hTheme,EP_EDITTEXT,ETS_NORMAL,TMT_FILLCOLOR,&col);
-        SetBackgroundColour(wxRGBToColour(col));
-        theme->GetThemeColor(hTheme,EP_EDITTEXT,ETS_NORMAL,TMT_TEXTCOLOR,&col);
-        SetForegroundColour(wxRGBToColour(col));
+        HRESULT hr = theme->GetThemeColor
+                            (
+                                hTheme,
+                                EP_EDITTEXT,
+                                ETS_NORMAL,
+                                TMT_FILLCOLOR,
+                                &col
+                            );
+        if ( SUCCEEDED(hr) )
+        {
+            SetBackgroundColour(wxRGBToColour(col));
+
+            // skip the call below
+            return;
+        }
+
+        wxLogApiError(_T("GetThemeColor(EDIT, ETS_NORMAL, TMT_FILLCOLOR)"), hr);
     }
-    else
-    {
-        SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
-        SetForegroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT));
-    }
+
+    SetBackgroundColour(wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOW));
 }
 
 void wxComboCtrl::OnResize()

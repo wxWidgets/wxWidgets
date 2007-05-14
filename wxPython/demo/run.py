@@ -18,7 +18,7 @@ on the command line.
 """
 
 import wx
-import wx.lib.mixins.inspect
+import wx.lib.mixins.inspection
 import sys, os
 
 # stuff for debugging
@@ -40,7 +40,7 @@ class Log:
     write = WriteText
 
 
-class RunDemoApp(wx.App, wx.lib.mixins.inspect.InspectionMixin):
+class RunDemoApp(wx.App, wx.lib.mixins.inspection.InspectionMixin):
     def __init__(self, name, module, useShell):
         self.name = name
         self.demoModule = module

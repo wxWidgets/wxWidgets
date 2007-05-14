@@ -88,6 +88,8 @@ wxObject *wxStatusBarXmlHandler::DoCreateResource()
         delete [] style;
     }
 
+    CreateChildren(statbar);
+
     if (m_parentAsWindow)
     {
         wxFrame *parentFrame = wxDynamicCast(m_parent, wxFrame);

@@ -15,7 +15,7 @@ import sys
 # Global constants
 
 progname = 'XRCed'
-version = '0.1.7-5'
+version = '0.1.8-5'
 # Minimal wxWidgets version
 MinWxVersion = (2,6,0)
 if wx.VERSION[:3] < MinWxVersion:
@@ -48,6 +48,7 @@ class Globals:
     testWinPos = wx.DefaultPosition
     currentXXX = None
     currentEncoding = defaultEncoding
+    conf = None
 
     def _makeFonts(self):
         self._sysFont = wx.SystemSettings.GetFont(wx.SYS_SYSTEM_FONT)
@@ -70,3 +71,16 @@ class Globals:
     
 
 g = Globals()
+
+
+class MyDataObject(wx.PyDataObjectSimple):
+    def __init__(self):
+        wx.PyDataObjectSimple.__init__(self, wx.CustomDataFormat('XRCed_DND'))
+        self.data = ''
+    def GetDataSize(self):
+        return len(self.data)
+    def GetDataHere(self):
+        return self.data  # returns a string  
+    def SetData(self, data):
+        self.data = data
+        return True

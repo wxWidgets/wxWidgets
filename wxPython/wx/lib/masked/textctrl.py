@@ -157,11 +157,23 @@ class BaseMaskedTextCtrl( wx.TextCtrl, MaskedEditMixin ):
         Allow mixin to set the raw value of the control with this function.
         REQUIRED by any class derived from MaskedEditMixin.
         """
-##        dbg('MaskedTextCtrl::_SetValue("%(value)s")' % locals(), indent=1)
+##        dbg('MaskedTextCtrl::_SetValue("%(value)s", use_change_value=%(use_change_value)d)' % locals(), indent=1)
         # Record current selection and insertion point, for undo
         self._prevSelection = self._GetSelection()
         self._prevInsertionPoint = self._GetInsertionPoint()
         wx.TextCtrl.SetValue(self, value)
+##        dbg(indent=0)
+
+    def _ChangeValue(self, value):
+        """
+        Allow mixin to set the raw value of the control with this function without
+        generating an event as a result. (New for masked.TextCtrl as of 2.8.4)
+        """
+##        dbg('MaskedTextCtrl::_ChangeValue("%(value)s", use_change_value=%(use_change_value)d)' % locals(), indent=1)
+        # Record current selection and insertion point, for undo
+        self._prevSelection = self._GetSelection()
+        self._prevInsertionPoint = self._GetInsertionPoint()
+        wx.TextCtrl.ChangeValue(self, value)
 ##        dbg(indent=0)
 
     def SetValue(self, value):
@@ -171,10 +183,27 @@ class BaseMaskedTextCtrl( wx.TextCtrl, MaskedEditMixin ):
         masked control.  NOTE: this must be done in the class derived
         from the base wx control.
         """
-##        dbg('MaskedTextCtrl::SetValue = "%s"' % value, indent=1)
+        self.ModifyValue(value, use_change_value=False)
+
+    def ChangeValue(self, value):
+        """
+        Provided to accomodate similar functionality added to base control in wxPython 2.7.1.1.
+        """
+        self.ModifyValue(value, use_change_value=True)
+
+
+    def ModifyValue(self, value, use_change_value=False):
+        """
+        This factored function of common code does the bulk of the work for SetValue 
+        and ChangeValue.
+        """
+##        dbg('MaskedTextCtrl::ModifyValue("%(value)s", use_change_value=%(use_change_value)d)' % locals(), indent=1)
 
         if not self._mask:
-            wx.TextCtrl.SetValue(self, value)    # revert to base control behavior
+            if use_change_value:
+                wx.TextCtrl.ChangeValue(self, value)    # revert to base control behavior
+            else:
+                wx.TextCtrl.SetValue(self, value)    # revert to base control behavior
             return
 
         # empty previous contents, replacing entire value:
@@ -198,7 +227,7 @@ class BaseMaskedTextCtrl( wx.TextCtrl, MaskedEditMixin ):
                 value = value[1:]
 ##            dbg('padded value = "%s"' % value)
 
-        # make SetValue behave the same as if you had typed the value in:
+        # make Set/ChangeValue behave the same as if you had typed the value in:
         try:
             value, replace_to = self._Paste(value, raise_on_invalid=True, just_return_value=True)
             if self._isFloat:
@@ -220,10 +249,12 @@ class BaseMaskedTextCtrl( wx.TextCtrl, MaskedEditMixin ):
             else:
 ##                dbg('exception thrown', indent=0)
                 raise
-
-        self._SetValue(value)   # note: to preserve similar capability, .SetValue()
-                                # does not change IsModified()
-####        dbg('queuing insertion after .SetValue', replace_to)
+        if use_change_value:
+            self._ChangeValue(value)
+        else:
+            self._SetValue(value)       # note: to preserve similar capability, .SetValue()
+                                        # does not change IsModified()
+####        dbg('queuing insertion after ._Set/ChangeValue', replace_to)
         # set selection to last char replaced by paste
         wx.CallAfter(self._SetInsertionPoint, replace_to)
         wx.CallAfter(self._SetSelection, replace_to, replace_to)
@@ -372,6 +403,10 @@ class PreMaskedTextCtrl( BaseMaskedTextCtrl, MaskedEditAccessorsMixin ):
 __i=0
 ## CHANGELOG:
 ## ====================
+##  Version 1.3
+##  - Added support for ChangeValue() function, similar to that of the base
+##    control, added in wxPython 2.7.1.1.
+##
 ##  Version 1.2
 ##  - Converted docstrings to reST format, added doc for ePyDoc.
 ##    removed debugging override functions.

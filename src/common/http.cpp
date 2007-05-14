@@ -139,7 +139,7 @@ wxString wxHTTP::GenerateAuthString(const wxString& user, const wxString& pass) 
         if (len == 1) {
             buf << wxString::Format(wxT("%c="), base64[(from[0] << 4) & 0x30]);
         } else {
-            buf << wxString::Format(wxT("%c%c"), base64[(from[0] << 4) & 0x30] + ((from[1] >> 4) & 0xf), base64[(from[1] << 2) & 0x3c]);
+            buf << wxString::Format(wxT("%c%c"), base64[((from[0] << 4) & 0x30) | ((from[1] >> 4) & 0xf)], base64[(from[1] << 2) & 0x3c]);
         }
         buf << wxString::Format(wxT("="));
     }

@@ -884,12 +884,12 @@ void wxHtmlContainerCell::Layout(int w)
                 if ( step > 0 )
                 {
                     // first count the cells which will get extra space
-                    int total = 0;
+                    int total = -1;
 
                     const wxHtmlCell *c;
                     if ( line != cell )
                     {
-                        for ( c = line->GetNext(); c != cell; c = c->GetNext() )
+                        for ( c = line; c != cell; c = c->GetNext() )
                         {
                             if ( c->IsLinebreakAllowed() )
                             {
@@ -901,11 +901,22 @@ void wxHtmlContainerCell::Layout(int w)
                     // and now extra space to those cells which merit it
                     if ( total )
                     {
-                        // first cell on line is not moved:
-                        line->SetPos(line->GetPosX() + s_indent,
-                                     line->GetPosY() + ypos);
+                        // first visible cell on line is not moved:
+                        while (line !=cell && !line->IsLinebreakAllowed())
+                        {
+                            line->SetPos(line->GetPosX() + s_indent,
+                                         line->GetPosY() + ypos);
+                            line = line->GetNext();
+                        }
 
-                        line = line->GetNext();
+                        if (line != cell)
+                        {
+                            line->SetPos(line->GetPosX() + s_indent,
+                                         line->GetPosY() + ypos);
+
+                            line = line->GetNext();
+                        }
+
                         for ( int n = 0; line != cell; line = line->GetNext() )
                         {
                             if ( line->IsLinebreakAllowed() )

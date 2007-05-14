@@ -4,18 +4,9 @@ A Panel that includes the FloatCanvas and Navigation controls
 """
 
 import wx
-
 import FloatCanvas, Resources
 
-ID_ZOOM_IN_BUTTON = wx.NewId()
-ID_ZOOM_OUT_BUTTON = wx.NewId()
-ID_ZOOM_TO_FIT_BUTTON = wx.NewId()
-ID_MOVE_MODE_BUTTON = wx.NewId()
-ID_POINTER_BUTTON = wx.NewId()
 
-
-#---------------------------------------------------------------------------
-    
 class NavCanvas(wx.Panel):
     """
     NavCanvas.py
@@ -23,96 +14,80 @@ class NavCanvas(wx.Panel):
     This is a high level window that encloses the FloatCanvas in a panel
     and adds a Navigation toolbar.
 
-    Copyright: Christopher Barker)
+    """
 
-    License: Same as the version of wxPython you are using it with
+    def __init__(self,
+                   parent,
+                   id = wx.ID_ANY,
+                   size = wx.DefaultSize,
+                   **kwargs): # The rest just get passed into FloatCanvas
+        wx.Panel.__init__(self, parent, id, size=size)
 
-    Please let me know if you're using this!!!
-
-    Contact me at:
-
-    Chris.Barker@noaa.gov
-
-    """ 
-    
-    def __init__(self, parent, id = -1,
-                 size = wx.DefaultSize,
-                 **kwargs): # The rest just get passed into FloatCanvas
-
-        wx.Panel.__init__( self, parent, id, wx.DefaultPosition, size)
-
+        self.BuildToolbar()
         ## Create the vertical sizer for the toolbar and Panel
         box = wx.BoxSizer(wx.VERTICAL)
-        box.Add(self.BuildToolbar(), 0, wx.ALL | wx.ALIGN_LEFT | wx.GROW, 4)
-        
-        self.Canvas = FloatCanvas.FloatCanvas( self, wx.NewId(),
-                                   size = wx.DefaultSize,
-                                   **kwargs)
-        box.Add(self.Canvas,1,wx.GROW)
+        box.Add(self.ToolBar, 0, wx.ALL | wx.ALIGN_LEFT | wx.GROW, 4)
 
-        box.Fit(self)
-        self.SetSizer(box)
+        self.Canvas = FloatCanvas.FloatCanvas(self, **kwargs)
+        box.Add(self.Canvas, 1, wx.GROW)
+
+        self.SetSizerAndFit(box)
+
+
+        import GUIMode # here so that it doesn't get imported before wx.App()
+        self.GUIZoomIn  =  GUIMode.GUIZoomIn(self.Canvas)
+        self.GUIZoomOut =  GUIMode.GUIZoomOut(self.Canvas)
+        self.GUIMove    =  GUIMode.GUIMove(self.Canvas)
+        self.GUIMouse   =  GUIMode.GUIMouse(self.Canvas)
 
         # default to Mouse mode
-        self.ToolBar.ToggleTool(ID_POINTER_BUTTON,1)
-        self.Canvas.SetMode("Mouse")
-        
+        self.ToolBar.ToggleTool(self.PointerTool.GetId(), True)
+        self.Canvas.SetMode(self.GUIMouse)
+
         return None
 
-    def __getattr__(self, name):
-        """
-        Delegate all extra methods to the Canvas
-        """
-        attrib = getattr(self.Canvas, name)
-        ## add the attribute to this module's dict for future calls
-        self.__dict__[name] = attrib
-        return attrib
-
     def BuildToolbar(self):
-        tb = wx.ToolBar(self,-1)
+        tb = wx.ToolBar(self)
         self.ToolBar = tb
-        
         tb.SetToolBitmapSize((24,24))
-        
-        tb.AddTool(ID_POINTER_BUTTON, Resources.getPointerBitmap(), isToggle=True, shortHelpString = "Pointer")
-        wx.EVT_TOOL(self, ID_POINTER_BUTTON, self.SetToolMode)
 
-        tb.AddTool(ID_ZOOM_IN_BUTTON, Resources.getMagPlusBitmap(), isToggle=True, shortHelpString = "Zoom In")
-        wx.EVT_TOOL(self, ID_ZOOM_IN_BUTTON, self.SetToolMode)
-        
-        tb.AddTool(ID_ZOOM_OUT_BUTTON, Resources.getMagMinusBitmap(), isToggle=True, shortHelpString = "Zoom Out")
-        wx.EVT_TOOL(self, ID_ZOOM_OUT_BUTTON, self.SetToolMode)
-        
-        tb.AddTool(ID_MOVE_MODE_BUTTON, Resources.getHandBitmap(), isToggle=True, shortHelpString = "Move")
-        wx.EVT_TOOL(self, ID_MOVE_MODE_BUTTON, self.SetToolMode)
-        
+        self.PointerTool = tb.AddRadioTool(wx.ID_ANY, bitmap=Resources.getPointerBitmap(), shortHelp = "Pointer")
+        self.Bind(wx.EVT_TOOL, lambda evt : self.SetMode(Mode=self.GUIMouse), self.PointerTool)
+
+        self.ZoomInTool = tb.AddRadioTool(wx.ID_ANY, bitmap=Resources.getMagPlusBitmap(), shortHelp = "Zoom In")
+        self.Bind(wx.EVT_TOOL, lambda evt : self.SetMode(Mode=self.GUIZoomIn), self.ZoomInTool)
+    
+        self.ZoomOutTool = tb.AddRadioTool(wx.ID_ANY, bitmap=Resources.getMagMinusBitmap(), shortHelp = "Zoom Out")
+        self.Bind(wx.EVT_TOOL, lambda evt : self.SetMode(Mode=self.GUIZoomOut), self.ZoomOutTool)
+
+        self.MoveTool = tb.AddRadioTool(wx.ID_ANY, bitmap=Resources.getHandBitmap(), shortHelp = "Move")
+        self.Bind(wx.EVT_TOOL, lambda evt : self.SetMode(Mode=self.GUIMove), self.MoveTool)
+
         tb.AddSeparator()
-        
-        tb.AddControl(wx.Button(tb, ID_ZOOM_TO_FIT_BUTTON, "Zoom To Fit",wx.DefaultPosition, wx.DefaultSize))
-        wx.EVT_BUTTON(self, ID_ZOOM_TO_FIT_BUTTON, self.ZoomToFit)
+
+        self.ZoomButton = wx.Button(tb, label="Zoom To Fit")
+        tb.AddControl(self.ZoomButton)
+        self.ZoomButton.Bind(wx.EVT_BUTTON, self.ZoomToFit)
 
         tb.Realize()
-        S = tb.GetSize()
-        tb.SetSizeHints(S[0],S[1])
+        ## fixme: remove this when the bug is fixed!
+        wx.CallAfter(self.HideShowHack) # this required on wxPython 2.8.3 on OS-X
+
         return tb
 
-    def SetToolMode(self,event):
-        for id in [ID_ZOOM_IN_BUTTON,
-                   ID_ZOOM_OUT_BUTTON,
-                   ID_MOVE_MODE_BUTTON,
-                   ID_POINTER_BUTTON]:
-            self.ToolBar.ToggleTool(id,0)
-        self.ToolBar.ToggleTool(event.GetId(),1)
-        if event.GetId() == ID_ZOOM_IN_BUTTON:
-            self.Canvas.SetMode("ZoomIn")
-        elif event.GetId() == ID_ZOOM_OUT_BUTTON:
-            self.Canvas.SetMode("ZoomOut")
-        elif event.GetId() == ID_MOVE_MODE_BUTTON:
-            self.Canvas.SetMode("Move")
-        elif event.GetId() == ID_POINTER_BUTTON:
-            self.Canvas.SetMode("Mouse")
+    def HideShowHack(self):
+        ##fixme: remove this when the bug is fixed!
+        """
+        Hack to hide and show button on toolbar to get around OS-X bug on
+        wxPython2.8 on OS-X
+        """
+        self.ZoomButton.Hide()
+        self.ZoomButton.Show()
 
+    def SetMode(self, Mode):
+        self.Canvas.SetMode(Mode)
 
     def ZoomToFit(self,Event):
         self.Canvas.ZoomToBB()
+        self.Canvas.SetFocus() # Otherwise the focus stays on the Button, and wheel events are lost.
 

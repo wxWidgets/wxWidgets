@@ -3,6 +3,7 @@
 # Build an RPM containing both wxGTK and wxPython
 
 ##set -o xtrace
+##set -o errexit
 
 spectemplate=distrib/wxPythonFull.spec.in
 
@@ -236,7 +237,7 @@ fi
 #----------------------------------------------------------------------
 # build the RPM
 
-if [ -z "${skiprpm}" ]; then
+if [ "${skiprpm}" != "1" ]; then
     echo "*** Building RPMs..."
     cp ${distdir}/${tarver}.tar.bz2 ${rpmtop}/SOURCES
 

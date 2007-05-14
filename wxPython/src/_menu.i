@@ -367,7 +367,6 @@ public:
     }
     
     %property(Frame, GetFrame, doc="See `GetFrame`");
-    %property(Menu, GetMenu, doc="See `GetMenu`");
     %property(MenuCount, GetMenuCount, doc="See `GetMenuCount`");
     %property(Menus, GetMenus, SetMenus, doc="See `GetMenus` and `SetMenus`");
 };

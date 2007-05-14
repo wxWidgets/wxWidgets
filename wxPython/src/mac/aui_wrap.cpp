@@ -2925,10 +2925,20 @@ SWIG_From_size_t  (size_t value)
   return SWIG_From_unsigned_SS_long  (static_cast< unsigned long >(value));
 }
 
+SWIGINTERN wxAuiNotebook *wxAuiMDIParentFrame__GetNotebook(wxAuiMDIParentFrame const *self){
+        return self->GetNotebook();
+    }
+SWIGINTERN wxAuiMDIChildFrame *wxAuiMDIParentFrame__GetActiveChild(wxAuiMDIParentFrame const *self){
+        return self->GetActiveChild();
+    }
+SWIGINTERN wxAuiMDIClientWindow *wxAuiMDIParentFrame__GetClientWindow(wxAuiMDIParentFrame const *self){
+        return self->GetClientWindow();
+    }
 
 // A wxDocArt class that knows how to forward virtuals to Python methods
 class wxPyAuiDockArt :  public wxAuiDefaultDockArt
 {
+public:
     wxPyAuiDockArt() : wxAuiDefaultDockArt() {}
 
     DEC_PYCALLBACK_INT_INT(GetMetric);
@@ -3097,6 +3107,7 @@ IMP_PYCALLBACK__INTCOLOUR(wxPyAuiDockArt, wxAuiDefaultDockArt, SetColour);
 // A wxTabArt class that knows how to forward virtuals to Python methods
 class wxPyAuiTabArt :  public wxAuiDefaultTabArt
 {
+public:
     wxPyAuiTabArt() : wxAuiDefaultTabArt() {}
 
     
@@ -3284,7 +3295,6 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
     DEC_PYCALLBACK__FONT(SetNormalFont);
     DEC_PYCALLBACK__FONT(SetSelectedFont);
     DEC_PYCALLBACK__FONT(SetMeasuringFont);
-//    DEC_PYCALLBACK_INT_WIN(GetBestTabCtrlSize);
 
     PYPRIVATE;
 };
@@ -3293,7 +3303,6 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
 IMP_PYCALLBACK__FONT(wxPyAuiTabArt, wxAuiDefaultTabArt, SetNormalFont);
 IMP_PYCALLBACK__FONT(wxPyAuiTabArt, wxAuiDefaultTabArt, SetSelectedFont);
 IMP_PYCALLBACK__FONT(wxPyAuiTabArt, wxAuiDefaultTabArt, SetMeasuringFont);
-//IMP_PYCALLBACK_INT_WIN(wxPyAuiTabArt, wxAuiDefaultTabArt, GetBestTabCtrlSize);
 
 #ifdef __cplusplus
 extern "C" {
@@ -16360,34 +16369,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_AuiMDIParentFrame_GetNotebook(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxAuiMDIParentFrame *arg1 = (wxAuiMDIParentFrame *) 0 ;
-  wxAuiNotebook *result = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAuiMDIParentFrame, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AuiMDIParentFrame_GetNotebook" "', expected argument " "1"" of type '" "wxAuiMDIParentFrame const *""'"); 
-  }
-  arg1 = reinterpret_cast< wxAuiMDIParentFrame * >(argp1);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxAuiNotebook *)((wxAuiMDIParentFrame const *)arg1)->GetNotebook();
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxAuiNotebook, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_AuiMDIParentFrame_GetWindowMenu(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *resultobj = 0;
   wxAuiMDIParentFrame *arg1 = (wxAuiMDIParentFrame *) 0 ;
@@ -16538,34 +16519,6 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_AuiMDIParentFrame_GetActiveChild(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxAuiMDIParentFrame *arg1 = (wxAuiMDIParentFrame *) 0 ;
-  wxAuiMDIChildFrame *result = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAuiMDIParentFrame, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AuiMDIParentFrame_GetActiveChild" "', expected argument " "1"" of type '" "wxAuiMDIParentFrame const *""'"); 
-  }
-  arg1 = reinterpret_cast< wxAuiMDIParentFrame * >(argp1);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxAuiMDIChildFrame *)((wxAuiMDIParentFrame const *)arg1)->GetActiveChild();
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxAuiMDIChildFrame, 0 |  0 );
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
 SWIGINTERN PyObject *_wrap_AuiMDIParentFrame_SetActiveChild(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
   PyObject *resultobj = 0;
   wxAuiMDIParentFrame *arg1 = (wxAuiMDIParentFrame *) 0 ;
@@ -16598,34 +16551,6 @@ SWIGINTERN PyObject *_wrap_AuiMDIParentFrame_SetActiveChild(PyObject *SWIGUNUSED
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_Py_Void();
-  return resultobj;
-fail:
-  return NULL;
-}
-
-
-SWIGINTERN PyObject *_wrap_AuiMDIParentFrame_GetClientWindow(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
-  PyObject *resultobj = 0;
-  wxAuiMDIParentFrame *arg1 = (wxAuiMDIParentFrame *) 0 ;
-  wxAuiMDIClientWindow *result = 0 ;
-  void *argp1 = 0 ;
-  int res1 = 0 ;
-  PyObject *swig_obj[1] ;
-  
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAuiMDIParentFrame, 0 |  0 );
-  if (!SWIG_IsOK(res1)) {
-    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AuiMDIParentFrame_GetClientWindow" "', expected argument " "1"" of type '" "wxAuiMDIParentFrame const *""'"); 
-  }
-  arg1 = reinterpret_cast< wxAuiMDIParentFrame * >(argp1);
-  {
-    PyThreadState* __tstate = wxPyBeginAllowThreads();
-    result = (wxAuiMDIClientWindow *)((wxAuiMDIParentFrame const *)arg1)->GetClientWindow();
-    wxPyEndAllowThreads(__tstate);
-    if (PyErr_Occurred()) SWIG_fail;
-  }
-  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxAuiMDIClientWindow, 0 |  0 );
   return resultobj;
 fail:
   return NULL;
@@ -16802,6 +16727,96 @@ SWIGINTERN PyObject *_wrap_AuiMDIParentFrame_ActivatePrevious(PyObject *SWIGUNUS
     if (PyErr_Occurred()) SWIG_fail;
   }
   resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AuiMDIParentFrame_GetNotebook(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAuiMDIParentFrame *arg1 = (wxAuiMDIParentFrame *) 0 ;
+  wxAuiNotebook *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAuiMDIParentFrame, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AuiMDIParentFrame_GetNotebook" "', expected argument " "1"" of type '" "wxAuiMDIParentFrame const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAuiMDIParentFrame * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxAuiNotebook *)wxAuiMDIParentFrame__GetNotebook((wxAuiMDIParentFrame const *)arg1);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = wxPyMake_wxObject(result, 0); 
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AuiMDIParentFrame_GetActiveChild(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAuiMDIParentFrame *arg1 = (wxAuiMDIParentFrame *) 0 ;
+  wxAuiMDIChildFrame *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAuiMDIParentFrame, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AuiMDIParentFrame_GetActiveChild" "', expected argument " "1"" of type '" "wxAuiMDIParentFrame const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAuiMDIParentFrame * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxAuiMDIChildFrame *)wxAuiMDIParentFrame__GetActiveChild((wxAuiMDIParentFrame const *)arg1);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = wxPyMake_wxObject(result, 0); 
+  }
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_AuiMDIParentFrame_GetClientWindow(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxAuiMDIParentFrame *arg1 = (wxAuiMDIParentFrame *) 0 ;
+  wxAuiMDIClientWindow *result = 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject *swig_obj[1] ;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxAuiMDIParentFrame, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AuiMDIParentFrame_GetClientWindow" "', expected argument " "1"" of type '" "wxAuiMDIParentFrame const *""'"); 
+  }
+  arg1 = reinterpret_cast< wxAuiMDIParentFrame * >(argp1);
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxAuiMDIClientWindow *)wxAuiMDIParentFrame__GetClientWindow((wxAuiMDIParentFrame const *)arg1);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  {
+    resultobj = wxPyMake_wxObject(result, 0); 
+  }
   return resultobj;
 fail:
   return NULL;
@@ -18143,6 +18158,59 @@ SWIGINTERN PyObject *AuiMDIClientWindow_swiginit(PyObject *SWIGUNUSEDPARM(self),
   return SWIG_Python_InitShadowInstance(args);
 }
 
+SWIGINTERN PyObject *_wrap_new_PyAuiDockArt(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPyAuiDockArt *result = 0 ;
+  
+  if (!SWIG_Python_UnpackTuple(args,"new_PyAuiDockArt",0,0,0)) SWIG_fail;
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxPyAuiDockArt *)new wxPyAuiDockArt();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxPyAuiDockArt, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PyAuiDockArt__setCallbackInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyAuiDockArt *arg1 = (wxPyAuiDockArt *) 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
+  PyObject *arg3 = (PyObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "self",(char *) "_class", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PyAuiDockArt__setCallbackInfo",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyAuiDockArt, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PyAuiDockArt__setCallbackInfo" "', expected argument " "1"" of type '" "wxPyAuiDockArt *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyAuiDockArt * >(argp1);
+  arg2 = obj1;
+  arg3 = obj2;
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->_setCallbackInfo(arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *PyAuiDockArt_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
@@ -18150,11 +18218,72 @@ SWIGINTERN PyObject *PyAuiDockArt_swigregister(PyObject *SWIGUNUSEDPARM(self), P
   return SWIG_Py_Void();
 }
 
+SWIGINTERN PyObject *PyAuiDockArt_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  return SWIG_Python_InitShadowInstance(args);
+}
+
+SWIGINTERN PyObject *_wrap_new_PyAuiTabArt(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  PyObject *resultobj = 0;
+  wxPyAuiTabArt *result = 0 ;
+  
+  if (!SWIG_Python_UnpackTuple(args,"new_PyAuiTabArt",0,0,0)) SWIG_fail;
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    result = (wxPyAuiTabArt *)new wxPyAuiTabArt();
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_NewPointerObj(SWIG_as_voidptr(result), SWIGTYPE_p_wxPyAuiTabArt, SWIG_POINTER_NEW |  0 );
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_PyAuiTabArt__setCallbackInfo(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxPyAuiTabArt *arg1 = (wxPyAuiTabArt *) 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
+  PyObject *arg3 = (PyObject *) 0 ;
+  void *argp1 = 0 ;
+  int res1 = 0 ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "self",(char *) "self",(char *) "_class", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:PyAuiTabArt__setCallbackInfo",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  res1 = SWIG_ConvertPtr(obj0, &argp1,SWIGTYPE_p_wxPyAuiTabArt, 0 |  0 );
+  if (!SWIG_IsOK(res1)) {
+    SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "PyAuiTabArt__setCallbackInfo" "', expected argument " "1"" of type '" "wxPyAuiTabArt *""'"); 
+  }
+  arg1 = reinterpret_cast< wxPyAuiTabArt * >(argp1);
+  arg2 = obj1;
+  arg3 = obj2;
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    (arg1)->_setCallbackInfo(arg2,arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *PyAuiTabArt_swigregister(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
   PyObject *obj;
   if (!SWIG_Python_UnpackTuple(args,(char*)"swigregister", 1, 1,&obj)) return NULL;
   SWIG_TypeNewClientData(SWIGTYPE_p_wxPyAuiTabArt, SWIG_NewClientData(obj));
   return SWIG_Py_Void();
+}
+
+SWIGINTERN PyObject *PyAuiTabArt_swiginit(PyObject *SWIGUNUSEDPARM(self), PyObject *args) {
+  return SWIG_Python_InitShadowInstance(args);
 }
 
 static PyMethodDef SwigMethods[] = {
@@ -18538,20 +18667,20 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"AuiMDIParentFrame_Create", (PyCFunction) _wrap_AuiMDIParentFrame_Create, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"AuiMDIParentFrame_SetArtProvider", (PyCFunction) _wrap_AuiMDIParentFrame_SetArtProvider, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"AuiMDIParentFrame_GetArtProvider", (PyCFunction)_wrap_AuiMDIParentFrame_GetArtProvider, METH_O, NULL},
-	 { (char *)"AuiMDIParentFrame_GetNotebook", (PyCFunction)_wrap_AuiMDIParentFrame_GetNotebook, METH_O, NULL},
 	 { (char *)"AuiMDIParentFrame_GetWindowMenu", (PyCFunction)_wrap_AuiMDIParentFrame_GetWindowMenu, METH_O, NULL},
 	 { (char *)"AuiMDIParentFrame_SetWindowMenu", (PyCFunction) _wrap_AuiMDIParentFrame_SetWindowMenu, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"AuiMDIParentFrame_SetChildMenuBar", (PyCFunction) _wrap_AuiMDIParentFrame_SetChildMenuBar, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"AuiMDIParentFrame_ProcessEvent", (PyCFunction) _wrap_AuiMDIParentFrame_ProcessEvent, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"AuiMDIParentFrame_GetActiveChild", (PyCFunction)_wrap_AuiMDIParentFrame_GetActiveChild, METH_O, NULL},
 	 { (char *)"AuiMDIParentFrame_SetActiveChild", (PyCFunction) _wrap_AuiMDIParentFrame_SetActiveChild, METH_VARARGS | METH_KEYWORDS, NULL},
-	 { (char *)"AuiMDIParentFrame_GetClientWindow", (PyCFunction)_wrap_AuiMDIParentFrame_GetClientWindow, METH_O, NULL},
 	 { (char *)"AuiMDIParentFrame_OnCreateClient", (PyCFunction)_wrap_AuiMDIParentFrame_OnCreateClient, METH_O, NULL},
 	 { (char *)"AuiMDIParentFrame_Cascade", (PyCFunction)_wrap_AuiMDIParentFrame_Cascade, METH_O, NULL},
 	 { (char *)"AuiMDIParentFrame_Tile", (PyCFunction) _wrap_AuiMDIParentFrame_Tile, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"AuiMDIParentFrame_ArrangeIcons", (PyCFunction)_wrap_AuiMDIParentFrame_ArrangeIcons, METH_O, NULL},
 	 { (char *)"AuiMDIParentFrame_ActivateNext", (PyCFunction)_wrap_AuiMDIParentFrame_ActivateNext, METH_O, NULL},
 	 { (char *)"AuiMDIParentFrame_ActivatePrevious", (PyCFunction)_wrap_AuiMDIParentFrame_ActivatePrevious, METH_O, NULL},
+	 { (char *)"AuiMDIParentFrame_GetNotebook", (PyCFunction)_wrap_AuiMDIParentFrame_GetNotebook, METH_O, NULL},
+	 { (char *)"AuiMDIParentFrame_GetActiveChild", (PyCFunction)_wrap_AuiMDIParentFrame_GetActiveChild, METH_O, NULL},
+	 { (char *)"AuiMDIParentFrame_GetClientWindow", (PyCFunction)_wrap_AuiMDIParentFrame_GetClientWindow, METH_O, NULL},
 	 { (char *)"AuiMDIParentFrame_swigregister", AuiMDIParentFrame_swigregister, METH_VARARGS, NULL},
 	 { (char *)"AuiMDIParentFrame_swiginit", AuiMDIParentFrame_swiginit, METH_VARARGS, NULL},
 	 { (char *)"new_PreAuiMDIChildFrame", (PyCFunction)_wrap_new_PreAuiMDIChildFrame, METH_NOARGS, NULL},
@@ -18589,8 +18718,14 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"AuiMDIClientWindow_SetSelection", (PyCFunction) _wrap_AuiMDIClientWindow_SetSelection, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"AuiMDIClientWindow_swigregister", AuiMDIClientWindow_swigregister, METH_VARARGS, NULL},
 	 { (char *)"AuiMDIClientWindow_swiginit", AuiMDIClientWindow_swiginit, METH_VARARGS, NULL},
+	 { (char *)"new_PyAuiDockArt", (PyCFunction)_wrap_new_PyAuiDockArt, METH_NOARGS, NULL},
+	 { (char *)"PyAuiDockArt__setCallbackInfo", (PyCFunction) _wrap_PyAuiDockArt__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyAuiDockArt_swigregister", PyAuiDockArt_swigregister, METH_VARARGS, NULL},
+	 { (char *)"PyAuiDockArt_swiginit", PyAuiDockArt_swiginit, METH_VARARGS, NULL},
+	 { (char *)"new_PyAuiTabArt", (PyCFunction)_wrap_new_PyAuiTabArt, METH_NOARGS, NULL},
+	 { (char *)"PyAuiTabArt__setCallbackInfo", (PyCFunction) _wrap_PyAuiTabArt__setCallbackInfo, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"PyAuiTabArt_swigregister", PyAuiTabArt_swigregister, METH_VARARGS, NULL},
+	 { (char *)"PyAuiTabArt_swiginit", PyAuiTabArt_swiginit, METH_VARARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
 

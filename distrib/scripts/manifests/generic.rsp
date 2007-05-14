@@ -879,6 +879,7 @@ samples/minimal/*.rc
 samples/minimal/*.pro
 samples/minimal/*.bkl
 samples/minimal/*.r
+samples/minimal/Info.plist
 
 samples/minifram/*.h
 samples/minifram/*.cpp

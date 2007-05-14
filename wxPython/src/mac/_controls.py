@@ -579,7 +579,7 @@ class ComboBox(_core.Control,_core.ItemContainer):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(Window parent, int id, String value=EmptyString,
+        __init__(Window parent, int id=-1, String value=EmptyString,
             Point pos=DefaultPosition, Size size=DefaultSize,
             List choices=EmptyList, long style=0, Validator validator=DefaultValidator,
             String name=ComboBoxNameStr) -> ComboBox
@@ -591,7 +591,7 @@ class ComboBox(_core.Control,_core.ItemContainer):
 
     def Create(*args, **kwargs):
         """
-        Create(Window parent, int id, String value=EmptyString,
+        Create(Window parent, int id=-1, String value=EmptyString,
             Point pos=DefaultPosition, Size size=DefaultSize,
             List choices=EmptyList, long style=0, Validator validator=DefaultValidator,
             String name=ChoiceNameStr) -> bool
@@ -3966,6 +3966,14 @@ class ToolBar(ToolBarBase):
         """
         return _controls_.ToolBar_Create(*args, **kwargs)
 
+    def SetToolNormalBitmap(*args, **kwargs):
+        """SetToolNormalBitmap(self, int id, Bitmap bitmap)"""
+        return _controls_.ToolBar_SetToolNormalBitmap(*args, **kwargs)
+
+    def SetToolDisabledBitmap(*args, **kwargs):
+        """SetToolDisabledBitmap(self, int id, Bitmap bitmap)"""
+        return _controls_.ToolBar_SetToolDisabledBitmap(*args, **kwargs)
+
     def GetClassDefaultAttributes(*args, **kwargs):
         """
         GetClassDefaultAttributes(int variant=WINDOW_VARIANT_NORMAL) -> VisualAttributes
@@ -7274,7 +7282,7 @@ class SearchCtrl(TextCtrl):
         """
         GetDescriptiveText(self) -> String
 
-        Set the text to be displayed when the user has not yet typed anything
+        Get the text to be displayed when the user has not yet typed anything
         in the control.
         """
         return _controls_.SearchCtrl_GetDescriptiveText(*args, **kwargs)

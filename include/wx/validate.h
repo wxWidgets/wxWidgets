@@ -50,13 +50,13 @@ public:
 
     // Called when the value in the window must be validated.
     // This function can pop up an error message.
-    virtual bool Validate(wxWindow *WXUNUSED(parent)) { return false; };
+    virtual bool Validate(wxWindow *WXUNUSED(parent)) { return false; }
 
     // Called to transfer data to the window
     virtual bool TransferToWindow() { return false; }
 
     // Called to transfer data from the window
-    virtual bool TransferFromWindow() { return false; };
+    virtual bool TransferFromWindow() { return false; }
 
     // accessors
     wxWindow *GetWindow() const { return (wxWindow *)m_validatorWindow; }

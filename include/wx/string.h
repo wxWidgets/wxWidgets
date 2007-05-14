@@ -836,6 +836,17 @@ public:
     // identical to c_str(), for MFC compatibility
     const wxChar* GetData() const { return c_str(); }
 
+#if wxABI_VERSION >= 20804
+    // conversion to *non-const* multibyte or widestring buffer; modifying
+    // returned buffer won't affect the string, these methods are only useful
+    // for passing values to const-incorrect functions
+    wxWritableCharBuffer char_str(const wxMBConv& conv = wxConvLibc) const
+      { return mb_str(conv); }
+#if wxUSE_WCHAR_T
+    wxWritableWCharBuffer wchar_str() const { return wc_str(wxConvLibc); }
+#endif
+#endif // wxABI_VERSION >= 20804
+
     // conversion to/from plain (i.e. 7 bit) ASCII: this is useful for
     // converting numbers or strings which are certain not to contain special
     // chars (typically system functions, X atoms, environment variables etc.)
@@ -851,6 +862,49 @@ public:
     static wxString FromAscii(const char ascii) { return wxString( ascii ); }
     const char *ToAscii() const { return c_str(); }
 #endif // Unicode/!Unicode
+
+#if wxABI_VERSION >= 20804
+    // conversion to/from UTF-8:
+#if wxUSE_UNICODE
+    static wxString FromUTF8(const char *utf8)
+      { return wxString(utf8, wxConvUTF8); }
+    static wxString FromUTF8(const char *utf8, size_t len)
+      { return wxString(utf8, wxConvUTF8, len); }
+    const wxCharBuffer utf8_str() const { return mb_str(wxConvUTF8); }
+    const wxCharBuffer ToUTF8() const { return utf8_str(); }
+#elif wxUSE_WCHAR_T // ANSI
+    static wxString FromUTF8(const char *utf8)
+      { return wxString(wxConvUTF8.cMB2WC(utf8)); }
+    static wxString FromUTF8(const char *utf8, size_t len)
+    {
+      size_t wlen;
+      wxWCharBuffer buf(wxConvUTF8.cMB2WC(utf8, len == npos ? wxNO_LEN : len, &wlen));
+      return wxString(buf.data(), wxConvLibc, wlen);
+    }
+    const wxCharBuffer utf8_str() const
+      { return wxConvUTF8.cWC2MB(wc_str(wxConvLibc)); }
+    const wxCharBuffer ToUTF8() const { return utf8_str(); }
+#endif // Unicode/ANSI
+#endif // wxABI_VERSION >= 20804
+
+#if wxABI_VERSION >= 20804
+    // functions for storing binary data in wxString:
+#if wxUSE_UNICODE
+    static wxString From8BitData(const char *data, size_t len)
+      { return wxString(data, wxConvISO8859_1, len); }
+    // version for NUL-terminated data:
+    static wxString From8BitData(const char *data)
+      { return wxString(data, wxConvISO8859_1); }
+    const wxCharBuffer To8BitData() const { return mb_str(wxConvISO8859_1); }
+#else // ANSI
+    static wxString From8BitData(const char *data, size_t len)
+      { return wxString(data, len); }
+    // version for NUL-terminated data:
+    static wxString From8BitData(const char *data)
+      { return wxString(data); }
+    const char *To8BitData() const { return c_str(); }
+#endif // Unicode/ANSI
+#endif // wxABI_VERSION >= 20804
 
     // conversions with (possible) format conversions: have to return a
     // buffer with temporary data

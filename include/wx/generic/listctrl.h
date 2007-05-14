@@ -77,7 +77,10 @@ public:
     wxString GetItemText( long item ) const;
     void SetItemText( long item, const wxString& str );
     wxUIntPtr GetItemData( long item ) const;
-    bool SetItemData( long item, long data );
+#if wxABI_VERSION >= 20804
+    bool SetItemPtrData(long item, wxUIntPtr data);
+#endif // wxABI 2.8.4+
+    bool SetItemData(long item, long data);
     bool GetItemRect( long item, wxRect& rect, int code = wxLIST_RECT_BOUNDS ) const;
     bool GetItemPosition( long item, wxPoint& pos ) const;
     bool SetItemPosition( long item, const wxPoint& pos ); // not supported in wxGLC
