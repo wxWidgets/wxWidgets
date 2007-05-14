@@ -110,7 +110,8 @@ wxFontFace *wxFontBundleBase::GetFace(FaceType type) const
 wxFontFace *
 wxFontBundleBase::GetFaceForFont(const wxFontMgrFontRefData& font) const
 {
-    wxASSERT_MSG( font.GetFaceName().empty() || font.GetFaceName() == GetName(),
+    wxASSERT_MSG( font.GetFaceName().empty() ||
+                  GetName().CmpNoCase(font.GetFaceName()) == 0,
                   _T("calling GetFaceForFont for incompatible font") );
 
     int type = FaceType_Regular;
