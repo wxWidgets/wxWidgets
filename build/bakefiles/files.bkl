@@ -54,9 +54,14 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!--                               UNIX                                     -->
 <!-- =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=- -->
 <set var="BASE_UNIX_SRC" hints="files">
+    src/common/fdiodispatcher.cpp
+    src/common/selectdispatcher.cpp
+    src/unix/appunix.cpp
     src/unix/baseunix.cpp
     src/unix/dir.cpp
     src/unix/dlunix.cpp
+    src/unix/epolldispatcher.cpp
+    src/unix/evtloopunix.cpp
     src/unix/mimetype.cpp
     src/unix/snglinst.cpp
     src/unix/stackwalk.cpp
@@ -68,9 +73,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/unix/utilsunx.cpp
 </set>
 <set var="BASE_UNIX_HDR" hints="files">
+    wx/unix/app.h
     wx/unix/apptbase.h
     wx/unix/apptrait.h
     wx/unix/execute.h
+    wx/unix/evtloop.h
     wx/unix/mimetype.h
     wx/unix/pipe.h
     wx/unix/private.h
@@ -101,6 +108,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/utilsexc.cpp
 </set>
 <set var="BASE_AND_GUI_WIN32_SRC" hints="files">
+    src/msw/evtloopmsw.cpp
     src/msw/main.cpp
     src/msw/mslu.cpp
     src/msw/volume.cpp
@@ -199,7 +207,11 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <!-- Base files used only by OS X builds (not CarbonLib or Classic)  -->
 <set var="BASE_MACOSX_WXMAC_SRC" hints="files">
     $(BASE_MAC_SRC)
+    src/common/fdiodispatcher.cpp
+    src/common/selectdispatcher.cpp
+    src/unix/appunix.cpp
     src/unix/baseunix.cpp
+    src/unix/evtloopunix.cpp
     src/unix/dlunix.cpp
     src/unix/snglinst.cpp
     src/unix/stdpaths.cpp
@@ -207,8 +219,10 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 </set>
 <set var="BASE_MACOSX_WXMAC_HDR" hints="files">
     $(BASE_MAC_HDR)
+    wx/unix/app.h
     wx/unix/apptbase.h
     wx/unix/apptrait.h
+    wx/unix/evtloop.h
     wx/unix/stdpaths.h
 </set>
 
@@ -308,6 +322,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/dynlib.cpp
     src/common/dynload.cpp
     src/common/encconv.cpp
+    src/common/evtloopcmn.cpp
     src/common/extended.c
     src/common/ffile.cpp
     src/common/file.cpp
@@ -613,7 +628,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/common/dpycmn.cpp
     src/common/dseldlg.cpp
     src/common/effects.cpp
-    src/common/evtloopcmn.cpp
     src/common/fddlgcmn.cpp
     src/common/filepickercmn.cpp
     src/common/fontpickercmn.cpp
@@ -1417,7 +1431,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="X11_LOWLEVEL_SRC" hints="files">
     $(XWIN_LOWLEVEL_SRC)
     src/common/gsocketiohandler.cpp
-    src/common/selectdispatcher.cpp
     src/generic/icon.cpp
     src/generic/timer.cpp
     src/x11/app.cpp
@@ -1505,7 +1518,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/dib.cpp
     src/msw/display.cpp
     src/msw/enhmeta.cpp
-    src/msw/evtloop.cpp
     src/msw/font.cpp
     src/msw/fontenum.cpp
     src/msw/fontutil.cpp
@@ -1835,7 +1847,6 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
 <set var="DFB_LOWLEVEL_SRC" hints="files">
     src/common/fontmgrcmn.cpp
     src/common/gsocketiohandler.cpp
-    src/common/selectdispatcher.cpp
     src/generic/caret.cpp
     src/generic/colour.cpp
     src/generic/icon.cpp

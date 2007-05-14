@@ -47,6 +47,7 @@
 #include "wx/apptrait.h"
 #include "wx/filename.h"
 #include "wx/dynlib.h"
+#include "wx/evtloop.h"
 
 #if wxUSE_TOOLTIPS
     #include "wx/tooltip.h"
@@ -123,6 +124,11 @@ wxTimerImpl* wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
 {
     return new wxPalmOSTimerImpl(timer);
 };
+
+wxEventLoop* wxGUIAppTraits::CreateEventLoop()
+{
+    return new wxEventLoop;
+}
 // ===========================================================================
 // wxApp implementation
 // ===========================================================================

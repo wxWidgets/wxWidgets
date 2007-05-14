@@ -18,6 +18,7 @@
 class WXDLLIMPEXP_BASE wxArrayString;
 class WXDLLIMPEXP_BASE wxObject;
 class WXDLLEXPORT wxAppTraits;
+class WXDLLIMPEXP_BASE wxEventLoop;
 #if wxUSE_FONTMAP
     class WXDLLEXPORT wxFontMapper;
 #endif // wxUSE_FONTMAP
@@ -119,6 +120,9 @@ public:
     // table can be passed around
     virtual GSocketGUIFunctionsTable* GetSocketGUIFunctionsTable() = 0;
 #endif
+
+    // create a new, port specific, instance of the event loop used by wxApp
+    virtual wxEventLoop *CreateEventLoop() = 0;
 
 #if wxUSE_TIMER
     // return platform and toolkit dependent wxTimer implementation

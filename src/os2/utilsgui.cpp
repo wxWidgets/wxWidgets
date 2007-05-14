@@ -34,6 +34,7 @@
 
 #include "wx/apptrait.h"
 #include "wx/os2/private/timer.h"
+#include "wx/evtloop.h"
 
 #include "wx/os2/private.h"     // includes <windows.h>
 
@@ -267,6 +268,10 @@ wxTimerImpl* wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
     return new wxOS2TimerImpl(timer);
 }
 
+wxEventLoop* wxGUIAppTraits::CreateEventLoop()
+{
+    return new wxEventLoop;
+}
 
 // ---------------------------------------------------------------------------
 // window information functions

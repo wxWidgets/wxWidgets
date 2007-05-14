@@ -1,7 +1,7 @@
 ///////////////////////////////////////////////////////////////////////////////
-// Name:        src/common/socketevtdispatch.cpp
+// Name:        src/common/selectdispatcher.cpp
 // Purpose:     implements dispatcher for select() call
-// Author:      Lukasz Michalski
+// Author:      Lukasz Michalski and Vadim Zeitlin
 // Created:     December 2006
 // RCS-ID:      $Id$
 // Copyright:   (c) 2006 Lukasz Michalski
@@ -29,12 +29,11 @@
     #include "wx/hash.h"
 #endif
 
-#include <sys/time.h>
-#include <unistd.h>
-
 #ifdef HAVE_SYS_SELECT_H
-#   include <sys/select.h>
+    #include <sys/select.h>
 #endif
+
+#include <errno.h>
 
 #define wxSelectDispatcher_Trace wxT("selectdispatcher")
 
@@ -43,200 +42,248 @@
 // ============================================================================
 
 // ----------------------------------------------------------------------------
+// wxSelectSets
+// ----------------------------------------------------------------------------
+
+int wxSelectSets::ms_flags[wxSelectSets::Max] =
+{
+    wxFDIO_INPUT,
+    wxFDIO_OUTPUT,
+    wxFDIO_EXCEPTION,
+};
+
+const char *wxSelectSets::ms_names[wxSelectSets::Max] =
+{
+    "input",
+    "output",
+    "exceptional",
+};
+
+wxSelectSets::Callback wxSelectSets::ms_handlers[wxSelectSets::Max] =
+{
+    &wxFDIOHandler::OnReadWaiting,
+    &wxFDIOHandler::OnWriteWaiting,
+    &wxFDIOHandler::OnExceptionWaiting,
+};
+
+wxSelectSets::wxSelectSets()
+{
+    for ( int n = 0; n < Max; n++ )
+    {
+        wxFD_ZERO(&m_fds[n]);
+    }
+}
+
+bool wxSelectSets::HasFD(int fd) const
+{
+    for ( int n = 0; n < Max; n++ )
+    {
+        if ( wxFD_ISSET(fd, &m_fds[n]) )
+            return true;
+    }
+
+    return false;
+}
+
+bool wxSelectSets::SetFD(int fd, int flags)
+{
+    wxCHECK_MSG( fd >= 0, false, _T("invalid descriptor") );
+
+    for ( int n = 0; n < Max; n++ )
+    {
+        if ( flags & ms_flags[n] )
+        {
+            wxFD_SET(fd, &m_fds[n]);
+            wxLogTrace(wxSelectDispatcher_Trace,
+                       _T("Registered fd %d for %s events"), fd, ms_names[n]);
+        }
+        else if ( wxFD_ISSET(fd, &m_fds[n]) )
+        {
+            wxFD_CLR(fd, &m_fds[n]);
+            wxLogTrace(wxSelectDispatcher_Trace,
+                       _T("Unregistered fd %d from %s events"), fd, ms_names[n]);
+        }
+    }
+
+    return true;
+}
+
+int wxSelectSets::Select(int nfds, struct timeval *tv)
+{
+    return select(nfds, &m_fds[Read], &m_fds[Write], &m_fds[Except], tv);
+}
+
+void wxSelectSets::Handle(int fd, wxFDIOHandler& handler) const
+{
+    for ( int n = 0; n < Max; n++ )
+    {
+        if ( wxFD_ISSET(fd, &m_fds[n]) )
+        {
+            wxLogTrace(wxSelectDispatcher_Trace,
+                       _T("Got %s event on fd %d"), ms_names[n], fd);
+            (handler.*ms_handlers[n])();
+        }
+    }
+}
+
+// ----------------------------------------------------------------------------
 // wxSelectDispatcher
 // ----------------------------------------------------------------------------
 
-wxSelectDispatcher* wxSelectDispatcher::ms_instance = NULL;
+static wxSelectDispatcher *gs_selectDispatcher = NULL;
 
 /* static */
-wxSelectDispatcher& wxSelectDispatcher::Get()
+wxSelectDispatcher *wxSelectDispatcher::Get()
 {
-    if ( !ms_instance )
-        ms_instance = new wxSelectDispatcher;
-    return *ms_instance;
-}
-
-void
-wxSelectDispatcher::RegisterFD(int fd, wxFDIOHandler* handler, int flags)
-{
-    if ((flags & wxSelectInput) == wxSelectInput) 
+    if ( !gs_selectDispatcher )
     {
-        wxFD_SET(fd, &m_readset);
-        wxLogTrace(wxSelectDispatcher_Trace,wxT("Registered fd %d for input events"),fd);
-    };
-
-    if ((flags & wxSelectOutput) == wxSelectOutput)
-    {
-        wxFD_SET(fd, &m_writeset);
-        wxLogTrace(wxSelectDispatcher_Trace,wxT("Registered fd %d for output events"),fd);
+        // the dispatcher should be only created from one thread so it should
+        // be ok to use a global without any protection here
+        gs_selectDispatcher = new wxSelectDispatcher;
     }
 
-    if ((flags & wxSelectException) == wxSelectException)
-    {
-        wxFD_SET(fd, &m_exeptset);
-        wxLogTrace(wxSelectDispatcher_Trace,wxT("Registered fd %d for exception events"),fd);
-    };
+    return gs_selectDispatcher;
+}
 
-    m_handlers[fd] = handler;
-    if (fd > m_maxFD)
+/* static */
+void wxSelectDispatcher::DispatchPending()
+{
+    if ( gs_selectDispatcher )
+        gs_selectDispatcher->RunLoop(0);
+}
+
+wxSelectDispatcher::wxSelectDispatcher()
+{
+    m_maxFD = -1;
+}
+
+bool wxSelectDispatcher::RegisterFD(int fd, wxFDIOHandler *handler, int flags)
+{
+    if ( !wxFDIODispatcher::RegisterFD(fd, handler, flags) )
+        return false;
+
+    if ( !m_sets.SetFD(fd, flags) )
+       return false;
+
+    if ( fd > m_maxFD )
       m_maxFD = fd;
+
+    return true;
 }
 
-wxFDIOHandler*
-wxSelectDispatcher::UnregisterFD(int fd, int flags)
+bool wxSelectDispatcher::ModifyFD(int fd, wxFDIOHandler *handler, int flags)
 {
-    // GSocket likes to unregister -1 descriptor
-    if (fd == -1)
-      return NULL;
+    if ( !wxFDIODispatcher::ModifyFD(fd, handler, flags) )
+        return false;
 
-    if ((flags & wxSelectInput) == wxSelectInput)
+    wxASSERT_MSG( fd <= m_maxFD, _T("logic error: registered fd > m_maxFD?") );
+
+    return m_sets.SetFD(fd, flags);
+}
+
+wxFDIOHandler *wxSelectDispatcher::UnregisterFD(int fd, int flags)
+{
+    wxFDIOHandler * const handler = wxFDIODispatcher::UnregisterFD(fd, flags);
+
+    m_sets.ClearFD(fd, flags);
+
+    // remove the handler if we don't need it any more
+    if ( !m_sets.HasFD(fd) )
     {
-        wxLogTrace(wxSelectDispatcher_Trace,wxT("Unregistered fd %d from input events"),fd);
-        wxFD_CLR(fd, &m_readset);
+        if ( fd == m_maxFD )
+        {
+            // need to find new max fd
+            m_maxFD = -1;
+            for ( wxFDIOHandlerMap::const_iterator it = m_handlers.begin();
+                  it != m_handlers.end();
+                  ++it )
+            {
+                if ( it->first > m_maxFD )
+                    m_maxFD = it->first;
+            }
+        }
     }
 
-    if ((flags & wxSelectOutput) == wxSelectOutput)
+    return handler;
+}
+
+void wxSelectDispatcher::ProcessSets(const wxSelectSets& sets)
+{
+    for ( int fd = 0; fd <= m_maxFD; fd++ )
     {
-        wxLogTrace(wxSelectDispatcher_Trace,wxT("Unregistered fd %d from output events"),fd);
-        wxFD_CLR(fd, &m_writeset);
+        if ( !sets.HasFD(fd) )
+            continue;
+
+        wxFDIOHandler * const handler = FindHandler(fd);
+        if ( !handler )
+        {
+            wxFAIL_MSG( _T("NULL handler in wxSelectDispatcher?") );
+            continue;
+        }
+
+        sets.Handle(fd, *handler);
     }
-
-    if ((flags & wxSelectException) == wxSelectException)
-    {
-        wxLogTrace(wxSelectDispatcher_Trace,wxT("Unregistered fd %d from exeption events"),fd);
-        wxFD_CLR(fd, &m_exeptset);
-    };
-
-    wxFDIOHandler* ret = NULL;
-    wxFDIOHandlerMap::const_iterator it = m_handlers.find(fd);
-    if (it != m_handlers.end())
-    {
-        ret = it->second;
-        if (!wxFD_ISSET(fd,&m_readset) && !wxFD_ISSET(fd,&m_writeset) && !wxFD_ISSET(fd,&m_exeptset)) 
-        {
-            m_handlers.erase(it);
-            if ( m_handlers.empty() )
-                m_maxFD = 0;
-        };
-    };
-    return ret;
 }
-
-void wxSelectDispatcher::ProcessSets(fd_set* readset, fd_set* writeset, fd_set* exeptset, int max_fd)
-{
-    // it is safe to remove handler from onXXX methods,
-    // if you unregister descriptor first.
-    wxFDIOHandlerMap::const_iterator it = m_handlers.begin();
-    for ( int i = 0; i < max_fd; i++ )
-    {
-        wxFDIOHandler* handler = NULL;
-        if (wxFD_ISSET(i, readset)) 
-        {
-            wxLogTrace(wxSelectDispatcher_Trace,wxT("Got read event on fd %d"),i);
-            handler = FindHandler(i);
-            if (handler != NULL && wxFD_ISSET(i,&m_readset))
-                handler->OnReadWaiting(i);
-            else
-            {
-              wxLogError(wxT("Lost fd in read fdset: %d, removing"),i);
-              wxFD_CLR(i,&m_readset);
-            };
-        };
-
-        if (wxFD_ISSET(i, writeset)) 
-        {
-            wxLogTrace(wxSelectDispatcher_Trace,wxT("Got write event on fd %d"),i);
-            if (handler == NULL)
-                handler = FindHandler(i);
-            if (handler != NULL && wxFD_ISSET(i,&m_writeset))
-                handler->OnWriteWaiting(i);
-            else
-            {
-              wxLogError(wxT("Lost fd in write fdset: %d, removing"),i);
-              wxFD_CLR(i,&m_writeset);
-            };
-        };
-
-        if (wxFD_ISSET(i, exeptset))
-        {
-            wxLogTrace(wxSelectDispatcher_Trace,wxT("Got exception event on fd %d"),i);
-            if (handler == NULL)
-                handler = FindHandler(i);
-            if (handler != NULL && wxFD_ISSET(i,&m_writeset))
-                handler->OnExceptionWaiting(i);
-            else
-            {
-              wxLogError(wxT("Lost fd in exept fdset: %d, removing"),i);
-              wxFD_CLR(i,&m_exeptset);
-            };
-        };
-    };
-}
-
-wxFDIOHandler* wxSelectDispatcher::FindHandler(int fd)
-{
-    wxFDIOHandlerMap::const_iterator it = m_handlers.find(fd);
-    if (it != m_handlers.end())
-        return it->second;
-    return NULL;
-};
 
 void wxSelectDispatcher::RunLoop(int timeout)
 {
-    struct timeval tv, *ptv = NULL;
-    if ( timeout != wxSELECT_TIMEOUT_INFINITE )
+    struct timeval tv,
+                  *ptv = NULL;
+    if ( timeout != TIMEOUT_INFINITE )
     {
         ptv = &tv;
         tv.tv_sec = 0;
-        tv.tv_usec = timeout*10;
-    };
+        tv.tv_usec = timeout*1000;
+    }
 
-    int ret;
-    do
+    for ( ;; )
     {
-        fd_set readset = m_readset;
-        fd_set writeset = m_writeset;
-        fd_set exeptset = m_exeptset;
+        wxSelectSets sets = m_sets;
+
         wxStopWatch sw;
         if ( ptv && timeout )
           sw.Start(ptv->tv_usec/10);
-        ret = select(m_maxFD+1, &readset, &writeset, &exeptset, ptv);
+
+        const int ret = sets.Select(m_maxFD + 1, ptv);
         switch ( ret )
         {
-            // TODO: handle unix signals here
             case -1:
-                if ( !timeout )
+                // continue if we were interrupted by a signal, else bail out
+                if ( errno != EINTR )
                 {
-                    // it doesn't make sense to remain here
+                    wxLogSysError(_("Failed to monitor IO channels"));
                     return;
                 }
-
-                if ( ptv )
-                {
-                    ptv->tv_sec = 0;
-                    ptv->tv_usec = timeout - sw.Time()*10;
-                }
                 break;
 
-            // timeout
             case 0:
-                break;
+                // timeout expired without anything happening
+                return;
 
             default:
-                ProcessSets(&readset, &writeset, &exeptset, m_maxFD+1);
-        };
-    } while (ret != 0);
+                ProcessSets(sets);
+        }
+
+        if ( ptv )
+        {
+            timeout -= sw.Time();
+            if ( timeout <= 0 )
+                break;
+
+            ptv->tv_usec = timeout*1000;
+        }
+    }
 }
 
 // ----------------------------------------------------------------------------
 // wxSelectDispatcherModule
 // ----------------------------------------------------------------------------
 
-class wxSelectDispatcherModule: public wxModule
+class wxSelectDispatcherModule : public wxModule
 {
 public:
-    bool OnInit() { wxLog::AddTraceMask(wxSelectDispatcher_Trace); return true; }
-    void OnExit() { wxDELETE(wxSelectDispatcher::ms_instance); }
+    virtual bool OnInit() { return true; }
+    virtual void OnExit() { wxDELETE(gs_selectDispatcher); }
 
 private:
     DECLARE_DYNAMIC_CLASS(wxSelectDispatcherModule)

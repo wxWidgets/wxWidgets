@@ -25,14 +25,14 @@ class WXDLLIMPEXP_CORE wxGSocketIOHandler : public wxFDIOHandler
 public:
     wxGSocketIOHandler(GSocket* socket);
     int GetFlags() const;
-    void RemoveFlag(wxSelectDispatcherEntryFlags flag);
-    void AddFlag(wxSelectDispatcherEntryFlags flag);
+    void RemoveFlag(wxFDIODispatcherEntryFlags flag);
+    void AddFlag(wxFDIODispatcherEntryFlags flag);
+
+    virtual void OnReadWaiting();
+    virtual void OnWriteWaiting();
+    virtual void OnExceptionWaiting();
 
 private:
-    virtual void OnReadWaiting(int fd);
-    virtual void OnWriteWaiting(int fd);
-    virtual void OnExceptionWaiting(int fd);
-
     GSocket* m_socket;
     int m_flags;
 };

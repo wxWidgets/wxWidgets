@@ -61,6 +61,7 @@
 #include "wx/mac/private/timer.h"
 #endif // wxUSE_GUI
 
+#include "wx/evtloop.h"
 #include "wx/mac/private.h"
 
 #if defined(__MWERKS__) && wxUSE_UNICODE
@@ -378,6 +379,11 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
     wxGetOsVersion(verMaj, verMin);
 
     return wxPORT_MAC;
+}
+
+wxEventLoop* wxGUIAppTraits::CreateEventLoop()
+{
+    return new wxEventLoop;
 }
 
 wxTimerImpl* wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)

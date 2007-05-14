@@ -26,6 +26,8 @@
 #endif //WX_PRECOMP
 
 #include "wx/evtloop.h"
+
+#include "wx/generic/private/timer.h"
 #include "wx/mgl/private.h"
 
 // ----------------------------------------------------------------------------
@@ -79,9 +81,10 @@ void wxEventLoopImpl::Dispatch()
     for (;;)
     {
 #if wxUSE_TIMER
-        wxTimer::NotifyTimers();
-        MGL_wmUpdateDC(g_winMng);
+        wxGenericTimerImpl::NotifyTimers();
 #endif
+        MGL_wmUpdateDC(g_winMng);
+
         EVT_pollJoystick();
         if ( EVT_getNext(&evt, EVT_EVERYEVT) ) break;
         PM_sleep(10);
@@ -97,19 +100,19 @@ bool wxEventLoopImpl::SendIdleEvent()
 }
 
 // ============================================================================
-// wxEventLoop implementation
+// wxGUIEventLoop implementation
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// wxEventLoop running and exiting
+// wxGUIEventLoop running and exiting
 // ----------------------------------------------------------------------------
 
-wxEventLoop::~wxEventLoop()
+wxGUIEventLoop::~wxGUIEventLoop()
 {
     wxASSERT_MSG( !m_impl, _T("should have been deleted in Run()") );
 }
 
-int wxEventLoop::Run()
+int wxGUIEventLoop::Run()
 {
     // event loops are not recursive, you need to create another loop!
     wxCHECK_MSG( !IsRunning(), -1, _T("can't reenter a message loop") );
@@ -146,7 +149,7 @@ int wxEventLoop::Run()
     return exitcode;
 }
 
-void wxEventLoop::Exit(int rc)
+void wxGUIEventLoop::Exit(int rc)
 {
     wxCHECK_RET( IsRunning(), _T("can't call Exit() if not running") );
 
@@ -162,7 +165,7 @@ void wxEventLoop::Exit(int rc)
 // wxEventLoop message processing dispatching
 // ----------------------------------------------------------------------------
 
-bool wxEventLoop::Pending() const
+bool wxGUIEventLoop::Pending() const
 {
     // update the display here, so that wxYield refreshes display and
     // changes take effect immediately, not after emptying events queue:
@@ -173,10 +176,11 @@ bool wxEventLoop::Pending() const
     return (bool)(EVT_peekNext(&evt, EVT_EVERYEVT));
 }
 
-bool wxEventLoop::Dispatch()
+bool wxGUIEventLoop::Dispatch()
 {
     wxCHECK_MSG( IsRunning(), false, _T("can't call Dispatch() if not running") );
 
     m_impl->Dispatch();
     return m_impl->GetKeepLooping();
 }
+

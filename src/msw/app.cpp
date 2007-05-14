@@ -266,10 +266,14 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *majVer, int *minVer) const
 #endif
 }
 
-wxTimerImpl *
-wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
+wxTimerImpl *wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
 {
-  return new wxMSWTimerImpl(timer);
+    return new wxMSWTimerImpl(timer);
+}
+
+wxEventLoop* wxGUIAppTraits::CreateEventLoop()
+{
+    return new wxEventLoop;
 }
 
 // ===========================================================================

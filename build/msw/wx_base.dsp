@@ -526,6 +526,10 @@ SOURCE=..\..\src\common\event.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\common\evtloopcmn.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\common\extended.c
 # SUBTRACT CPP /YX /Yc /Yu
 # End Source File
@@ -792,6 +796,10 @@ SOURCE=..\..\src\msw\dir.cpp
 # Begin Source File
 
 SOURCE=..\..\src\msw\dlmsw.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\msw\evtloopmsw.cpp
 # End Source File
 # Begin Source File
 

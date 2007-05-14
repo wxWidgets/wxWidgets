@@ -1,8 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // Name:        wx/private/selectdispatcher.h
 // Purpose:     wxSelectDispatcher class
-// Authors:     Lukasz Michalski
-// Modified by:
+// Authors:     Lukasz Michalski and Vadim Zeitlin
 // Created:     December 2006
 // Copyright:   (c) Lukasz Michalski
 // RCS-ID:      $Id$
@@ -14,82 +13,100 @@
 
 #include "wx/defs.h"
 
-#include "wx/hashmap.h"
+#include "wx/private/fdiodispatcher.h"
 
-static const int wxSELECT_TIMEOUT_INFINITE = -1;
-
-// handler used to process events on descriptors
-class wxFDIOHandler
+// helper class storing all the select() fd sets
+class WXDLLIMPEXP_BASE wxSelectSets
 {
 public:
-    // called when descriptor is available for non-blocking read
-    virtual void OnReadWaiting(int fd) = 0;
+    // ctor zeroes out all fd_sets
+    wxSelectSets();
 
-    // called when descriptor is available  for non-blocking write
-    virtual void OnWriteWaiting(int fd) = 0;
+    // default copy ctor, assignment operator and dtor are ok
 
-    // called when there is exception on descriptor
-    virtual void OnExceptionWaiting(int fd) = 0;
 
-    // virtual dtor for the base class
-    virtual ~wxFDIOHandler() { }
-};
+    // return true if fd appears in any of the sets
+    bool HasFD(int fd) const;
 
-// those flags describes sets where descriptor should be added
-enum wxSelectDispatcherEntryFlags
-{
-    wxSelectInput = 1,
-    wxSelectOutput = 2,
-    wxSelectException = 4,
-    wxSelectAll = wxSelectInput | wxSelectOutput | wxSelectException
-};
+    // add or remove FD to our sets depending on whether flags contains
+    // wxFDIO_INPUT/OUTPUT/EXCEPTION bits
+    bool SetFD(int fd, int flags);
 
-WX_DECLARE_HASH_MAP(
-  int,
-  wxFDIOHandler*,
-  wxIntegerHash,
-  wxIntegerEqual,
-  wxFDIOHandlerMap
-);
-
-class WXDLLIMPEXP_CORE wxSelectDispatcher
-{
-public:
-    // returns instance of the table
-    static wxSelectDispatcher& Get();
-
-    virtual ~wxSelectDispatcher()
+    // same as SetFD() except it unsets the bits set in the flags for the given
+    // fd
+    bool ClearFD(int fd, int flags)
     {
+        return SetFD(fd, wxFDIO_ALL & ~flags);
     }
 
-    // register descriptor in sets.
-    void RegisterFD(int fd, wxFDIOHandler* handler, int flags = wxSelectAll);
 
-    // unregister descriptor from sets and return handler for cleanup
-    wxFDIOHandler* UnregisterFD(int fd, int flags = wxSelectAll);
+    // call select() with our sets: the other parameters are the same as for
+    // select() itself
+    int Select(int nfds, struct timeval *tv);
 
-    // return handler for descriptor or null if fd is not registered
-    wxFDIOHandler* FindHandler(int fd);
-
-    // calls select on registered descriptors and
-    void RunLoop(int timeout = wxSELECT_TIMEOUT_INFINITE);
-
-protected:
-    wxSelectDispatcher() { m_maxFD = -1; }
+    // call the handler methods corresponding to the sets having this fd
+    void Handle(int fd, wxFDIOHandler& handler) const;
 
 private:
-    void ProcessSets(fd_set* readset, fd_set* writeset, fd_set* exeptset, int max_fd);
+    typedef void (wxFDIOHandler::*Callback)();
 
-    fd_set m_readset;
-    fd_set m_writeset;
-    fd_set m_exeptset;
+    // the FD sets indices
+    enum
+    {
+        Read,
+        Write,
+        Except,
+        Max
+    };
 
+    // the sets used with select()
+    fd_set m_fds[Max];
+
+    // the wxFDIO_XXX flags, functions and names (used for debug messages only)
+    // corresponding to the FD sets above
+    static int ms_flags[Max];
+    static const char *ms_names[Max];
+    static Callback ms_handlers[Max];
+};
+
+class WXDLLIMPEXP_BASE wxSelectDispatcher : public wxFDIODispatcher
+{
+public:
+    // returns the unique instance of this class, the pointer shouldn't be
+    // deleted and is normally never NULL
+    static wxSelectDispatcher *Get();
+
+    // if we have any registered handlers, check for any pending events to them
+    // and dispatch them -- this is used from wxX11 and wxDFB event loops
+    // implementation
+    static void DispatchPending();
+
+    // implement pure virtual methods of the base class
+    virtual bool RegisterFD(int fd, wxFDIOHandler *handler, int flags = wxFDIO_ALL);
+    virtual bool ModifyFD(int fd, wxFDIOHandler *handler, int flags = wxFDIO_ALL);
+    virtual wxFDIOHandler *UnregisterFD(int fd, int flags = wxFDIO_ALL);
+    virtual void RunLoop(int timeout = TIMEOUT_INFINITE);
+
+protected:
+    wxSelectDispatcher();
+
+private:
+    // common part of RegisterFD() and ModifyFD()
+    bool DoUpdateFDAndHandler(int fd, wxFDIOHandler *handler, int flags);
+
+    // call the handlers for the fds present in the given sets
+    void ProcessSets(const wxSelectSets& sets);
+
+    // helper of ProcessSets(): call the handler if its fd is in the set
+    void DoProcessFD(int fd, const fd_set& fds, wxFDIOHandler *handler,
+                     const char *name);
+
+
+    // the select sets containing all the registered fds
+    wxSelectSets m_sets;
+
+    // the highest registered fd value or -1 if none
     int m_maxFD;
-    wxFDIOHandlerMap m_handlers;
-
-    static wxSelectDispatcher *ms_instance;
-
-    friend class wxSelectDispatcherModule;
 };
 
 

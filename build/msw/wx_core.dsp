@@ -594,10 +594,6 @@ SOURCE=..\..\src\common\event.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\common\evtloopcmn.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\common\fddlgcmn.cpp
 # End Source File
 # Begin Source File
@@ -1820,7 +1816,7 @@ SOURCE=..\..\src\msw\enhmeta.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\msw\evtloop.cpp
+SOURCE=..\..\src\msw\evtloopmsw.cpp
 # End Source File
 # Begin Source File
 

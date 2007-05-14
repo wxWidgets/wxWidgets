@@ -26,6 +26,7 @@
 #include "wx/unix/execute.h"
 
 #include "wx/gtk/private/timer.h"
+#include "wx/evtloop.h"
 
 #ifdef __WXDEBUG__
     #include "wx/gtk/assertdlg_gtk.h"
@@ -362,6 +363,12 @@ static wxString GetSM()
 //-----------------------------------------------------------------------------
 // wxGUIAppTraits
 //-----------------------------------------------------------------------------
+
+wxEventLoop *wxGUIAppTraits::CreateEventLoop()
+{
+    return new wxEventLoop();
+}
+
 
 #if wxUSE_INTL
 void wxGUIAppTraits::SetLocale()

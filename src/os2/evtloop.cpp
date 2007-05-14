@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        src/os2/evtloop.cpp
-// Purpose:     implements wxEventLoop for PM
+// Purpose:     implements wxGUIEventLoop for PM
 // Author:      Vadim Zeitlin
 // Modified by:
 // Created:     01.06.01
@@ -197,14 +197,14 @@ bool wxEventLoopImpl::SendIdleMessage()
 }
 
 // ============================================================================
-// wxEventLoop implementation
+// wxGUIEventLoop implementation
 // ============================================================================
 
 // ----------------------------------------------------------------------------
-// wxEventLoop running and exiting
+// wxGUIEventLoop running and exiting
 // ----------------------------------------------------------------------------
 
-wxEventLoop::~wxEventLoop()
+wxGUIEventLoop::~wxGUIEventLoop()
 {
     wxASSERT_MSG( !m_impl, _T("should have been deleted in Run()") );
 }
@@ -227,18 +227,18 @@ wxEventLoop::~wxEventLoop()
 class CallEventLoopMethod
 {
 public:
-    typedef void (wxEventLoop::*FuncType)();
+    typedef void (wxGUIEventLoop::*FuncType)();
 
-    CallEventLoopMethod(wxEventLoop *evtLoop, FuncType fn)
+    CallEventLoopMethod(wxGUIEventLoop *evtLoop, FuncType fn)
         : m_evtLoop(evtLoop), m_fn(fn) { }
     ~CallEventLoopMethod() { (m_evtLoop->*m_fn)(); }
 
 private:
-    wxEventLoop *m_evtLoop;
+    wxGUIEventLoop *m_evtLoop;
     FuncType m_fn;
 };
 
-int wxEventLoop::Run()
+int wxGUIEventLoop::Run()
 {
     // event loops are not recursive, you need to create another loop!
     wxCHECK_MSG( !IsRunning(), -1, _T("can't reenter a message loop") );
@@ -249,7 +249,7 @@ int wxEventLoop::Run()
     wxEventLoopActivator activate(this);
     wxEventLoopImplTiedPtr impl(&m_impl, new wxEventLoopImpl);
 
-    CallEventLoopMethod  callOnExit(this, &wxEventLoop::OnExit);
+    CallEventLoopMethod  callOnExit(this, &wxGUIEventLoop::OnExit);
 
     for ( ;; )
     {
@@ -283,7 +283,7 @@ int wxEventLoop::Run()
     return m_impl->GetExitCode();
 }
 
-void wxEventLoop::Exit(int rc)
+void wxGUIEventLoop::Exit(int rc)
 {
     wxCHECK_RET( IsRunning(), _T("can't call Exit() if not running") );
 
@@ -293,16 +293,16 @@ void wxEventLoop::Exit(int rc)
 }
 
 // ----------------------------------------------------------------------------
-// wxEventLoop message processing dispatching
+// wxGUIEventLoop message processing dispatching
 // ----------------------------------------------------------------------------
 
-bool wxEventLoop::Pending() const
+bool wxGUIEventLoop::Pending() const
 {
     QMSG msg;
     return ::WinPeekMsg(vHabmain, &msg, 0, 0, 0, PM_NOREMOVE) != 0;
 }
 
-bool wxEventLoop::Dispatch()
+bool wxGUIEventLoop::Dispatch()
 {
     wxCHECK_MSG( IsRunning(), false, _T("can't call Dispatch() if not running") );
 

@@ -19,6 +19,7 @@
 class WXDLLEXPORT wxConsoleAppTraits : public wxConsoleAppTraitsBase
 {
 public:
+    virtual wxEventLoop *CreateEventLoop();
     virtual bool CreateEndProcessPipe(wxExecuteData& execData);
     virtual bool IsWriteFDOfEndProcessPipe(wxExecuteData& execData, int fd);
     virtual void DetachWriteFDOfEndProcessPipe(wxExecuteData& execData);
@@ -33,6 +34,7 @@ public:
 class WXDLLEXPORT wxGUIAppTraits : public wxGUIAppTraitsBase
 {
 public:
+    virtual wxEventLoop *CreateEventLoop();
     virtual bool CreateEndProcessPipe(wxExecuteData& execData);
     virtual bool IsWriteFDOfEndProcessPipe(wxExecuteData& execData, int fd);
     virtual void DetachWriteFDOfEndProcessPipe(wxExecuteData& execData);
@@ -46,15 +48,15 @@ public:
 #endif
     virtual wxPortId GetToolkitVersion(int *majVer, int *minVer) const;
 
-#ifdef __WXGTK__
-
-#if wxUSE_INTL
+#if defined(__WXGTK__) && wxUSE_INTL
     virtual void SetLocale();
-#endif
+#endif // __WXGTK__
+
+#ifdef __WXGTK20__
     virtual wxString GetDesktopEnvironment() const;
     virtual wxString GetStandardCmdLineOptions(wxArrayString& names,
                                                wxArrayString& desc) const;
-#endif // __WXGTK__
+#endif // __WXGTK20____
 
 #if defined(__WXDEBUG__) && defined(__WXGTK20__)
     virtual bool ShowAssertDialog(const wxString& msg);

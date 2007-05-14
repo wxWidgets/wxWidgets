@@ -28,6 +28,7 @@
 #endif //WX_PRECOMP
 
 #include "wx/apptrait.h"
+#include "wx/evtloop.h"
 #include "wx/msw/private/timer.h"
 // MBN: this is a workaround for MSVC 5: if it is not #included in
 // some wxBase file, wxRecursionGuard methods won't be exported from
@@ -81,12 +82,15 @@ bool wxConsoleAppTraits::DoMessageFromThreadWait()
     return true;
 }
 
-wxTimerImpl *
-wxConsoleAppTraits::CreateTimerImpl(wxTimer *timer)
+wxTimerImpl *wxConsoleAppTraits::CreateTimerImpl(wxTimer *timer)
 {
     return new wxMSWTimerImpl(timer);
 }
 
+wxEventLoop *wxConsoleAppTraits::CreateEventLoop()
+{
+    return new wxEventLoop();
+}
 
 WXDWORD wxConsoleAppTraits::WaitForThread(WXHANDLE hThread)
 {

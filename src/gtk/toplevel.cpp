@@ -1173,7 +1173,7 @@ void wxTopLevelWindowGTK::AddGrab()
     {
         m_grabbed = true;
         gtk_grab_add( m_widget );
-        wxEventLoop().Run();
+        wxGUIEventLoop().Run();
         gtk_grab_remove( m_widget );
     }
 }

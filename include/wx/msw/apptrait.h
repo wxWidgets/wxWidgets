@@ -19,6 +19,7 @@
 class WXDLLIMPEXP_BASE wxConsoleAppTraits : public wxConsoleAppTraitsBase
 {
 public:
+    virtual wxEventLoop *CreateEventLoop();
     virtual void *BeforeChildWaitLoop();
     virtual void AlwaysYield();
     virtual void AfterChildWaitLoop(void *data);
@@ -34,6 +35,7 @@ public:
 class WXDLLIMPEXP_CORE wxGUIAppTraits : public wxGUIAppTraitsBase
 {
 public:
+    virtual wxEventLoop *CreateEventLoop();
     virtual void *BeforeChildWaitLoop();
     virtual void AlwaysYield();
     virtual void AfterChildWaitLoop(void *data);

@@ -228,7 +228,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_dib.obj &
 	$(OBJS)\monodll_display.obj &
 	$(OBJS)\monodll_enhmeta.obj &
-	$(OBJS)\monodll_evtloop.obj &
 	$(OBJS)\monodll_font.obj &
 	$(OBJS)\monodll_fontenum.obj &
 	$(OBJS)\monodll_fontutil.obj &
@@ -342,7 +341,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_dpycmn.obj &
 	$(OBJS)\monodll_dseldlg.obj &
 	$(OBJS)\monodll_effects.obj &
-	$(OBJS)\monodll_evtloopcmn.obj &
 	$(OBJS)\monodll_fddlgcmn.obj &
 	$(OBJS)\monodll_filepickercmn.obj &
 	$(OBJS)\monodll_fontpickercmn.obj &
@@ -456,7 +454,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_dib.obj &
 	$(OBJS)\monodll_display.obj &
 	$(OBJS)\monodll_enhmeta.obj &
-	$(OBJS)\monodll_evtloop.obj &
 	$(OBJS)\monodll_font.obj &
 	$(OBJS)\monodll_fontenum.obj &
 	$(OBJS)\monodll_fontutil.obj &
@@ -573,7 +570,6 @@ ____CORE_SRC_FILENAMES_OBJECTS =  &
 	$(OBJS)\monodll_dpycmn.obj &
 	$(OBJS)\monodll_dseldlg.obj &
 	$(OBJS)\monodll_effects.obj &
-	$(OBJS)\monodll_evtloopcmn.obj &
 	$(OBJS)\monodll_fddlgcmn.obj &
 	$(OBJS)\monodll_filepickercmn.obj &
 	$(OBJS)\monodll_fontpickercmn.obj &
@@ -873,7 +869,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_dib.obj &
 	$(OBJS)\monolib_display.obj &
 	$(OBJS)\monolib_enhmeta.obj &
-	$(OBJS)\monolib_evtloop.obj &
 	$(OBJS)\monolib_font.obj &
 	$(OBJS)\monolib_fontenum.obj &
 	$(OBJS)\monolib_fontutil.obj &
@@ -987,7 +982,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_dpycmn.obj &
 	$(OBJS)\monolib_dseldlg.obj &
 	$(OBJS)\monolib_effects.obj &
-	$(OBJS)\monolib_evtloopcmn.obj &
 	$(OBJS)\monolib_fddlgcmn.obj &
 	$(OBJS)\monolib_filepickercmn.obj &
 	$(OBJS)\monolib_fontpickercmn.obj &
@@ -1101,7 +1095,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_dib.obj &
 	$(OBJS)\monolib_display.obj &
 	$(OBJS)\monolib_enhmeta.obj &
-	$(OBJS)\monolib_evtloop.obj &
 	$(OBJS)\monolib_font.obj &
 	$(OBJS)\monolib_fontenum.obj &
 	$(OBJS)\monolib_fontutil.obj &
@@ -1218,7 +1211,6 @@ ____CORE_SRC_FILENAMES_1_OBJECTS =  &
 	$(OBJS)\monolib_dpycmn.obj &
 	$(OBJS)\monolib_dseldlg.obj &
 	$(OBJS)\monolib_effects.obj &
-	$(OBJS)\monolib_evtloopcmn.obj &
 	$(OBJS)\monolib_fddlgcmn.obj &
 	$(OBJS)\monolib_filepickercmn.obj &
 	$(OBJS)\monolib_fontpickercmn.obj &
@@ -1448,7 +1440,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_dib.obj &
 	$(OBJS)\coredll_display.obj &
 	$(OBJS)\coredll_enhmeta.obj &
-	$(OBJS)\coredll_evtloop.obj &
 	$(OBJS)\coredll_font.obj &
 	$(OBJS)\coredll_fontenum.obj &
 	$(OBJS)\coredll_fontutil.obj &
@@ -1562,7 +1553,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_dpycmn.obj &
 	$(OBJS)\coredll_dseldlg.obj &
 	$(OBJS)\coredll_effects.obj &
-	$(OBJS)\coredll_evtloopcmn.obj &
 	$(OBJS)\coredll_fddlgcmn.obj &
 	$(OBJS)\coredll_filepickercmn.obj &
 	$(OBJS)\coredll_fontpickercmn.obj &
@@ -1676,7 +1666,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_dib.obj &
 	$(OBJS)\coredll_display.obj &
 	$(OBJS)\coredll_enhmeta.obj &
-	$(OBJS)\coredll_evtloop.obj &
 	$(OBJS)\coredll_font.obj &
 	$(OBJS)\coredll_fontenum.obj &
 	$(OBJS)\coredll_fontutil.obj &
@@ -1793,7 +1782,6 @@ ____CORE_SRC_FILENAMES_2_OBJECTS =  &
 	$(OBJS)\coredll_dpycmn.obj &
 	$(OBJS)\coredll_dseldlg.obj &
 	$(OBJS)\coredll_effects.obj &
-	$(OBJS)\coredll_evtloopcmn.obj &
 	$(OBJS)\coredll_fddlgcmn.obj &
 	$(OBJS)\coredll_filepickercmn.obj &
 	$(OBJS)\coredll_fontpickercmn.obj &
@@ -1917,7 +1905,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_dib.obj &
 	$(OBJS)\corelib_display.obj &
 	$(OBJS)\corelib_enhmeta.obj &
-	$(OBJS)\corelib_evtloop.obj &
 	$(OBJS)\corelib_font.obj &
 	$(OBJS)\corelib_fontenum.obj &
 	$(OBJS)\corelib_fontutil.obj &
@@ -2031,7 +2018,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_dpycmn.obj &
 	$(OBJS)\corelib_dseldlg.obj &
 	$(OBJS)\corelib_effects.obj &
-	$(OBJS)\corelib_evtloopcmn.obj &
 	$(OBJS)\corelib_fddlgcmn.obj &
 	$(OBJS)\corelib_filepickercmn.obj &
 	$(OBJS)\corelib_fontpickercmn.obj &
@@ -2145,7 +2131,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_dib.obj &
 	$(OBJS)\corelib_display.obj &
 	$(OBJS)\corelib_enhmeta.obj &
-	$(OBJS)\corelib_evtloop.obj &
 	$(OBJS)\corelib_font.obj &
 	$(OBJS)\corelib_fontenum.obj &
 	$(OBJS)\corelib_fontutil.obj &
@@ -2262,7 +2247,6 @@ ____CORE_SRC_FILENAMES_3_OBJECTS =  &
 	$(OBJS)\corelib_dpycmn.obj &
 	$(OBJS)\corelib_dseldlg.obj &
 	$(OBJS)\corelib_effects.obj &
-	$(OBJS)\corelib_evtloopcmn.obj &
 	$(OBJS)\corelib_fddlgcmn.obj &
 	$(OBJS)\corelib_filepickercmn.obj &
 	$(OBJS)\corelib_fontpickercmn.obj &
@@ -3253,6 +3237,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_dynlib.obj &
 	$(OBJS)\monodll_dynload.obj &
 	$(OBJS)\monodll_encconv.obj &
+	$(OBJS)\monodll_evtloopcmn.obj &
 	$(OBJS)\monodll_extended.obj &
 	$(OBJS)\monodll_ffile.obj &
 	$(OBJS)\monodll_file.obj &
@@ -3331,6 +3316,7 @@ MONODLL_OBJECTS =  &
 	$(OBJS)\monodll_fs_mem.obj &
 	$(OBJS)\monodll_msgout.obj &
 	$(OBJS)\monodll_utilscmn.obj &
+	$(OBJS)\monodll_evtloopmsw.obj &
 	$(OBJS)\monodll_main.obj &
 	$(OBJS)\monodll_mslu.obj &
 	$(OBJS)\monodll_volume.obj &
@@ -3386,6 +3372,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_dynlib.obj &
 	$(OBJS)\monolib_dynload.obj &
 	$(OBJS)\monolib_encconv.obj &
+	$(OBJS)\monolib_evtloopcmn.obj &
 	$(OBJS)\monolib_extended.obj &
 	$(OBJS)\monolib_ffile.obj &
 	$(OBJS)\monolib_file.obj &
@@ -3464,6 +3451,7 @@ MONOLIB_OBJECTS =  &
 	$(OBJS)\monolib_fs_mem.obj &
 	$(OBJS)\monolib_msgout.obj &
 	$(OBJS)\monolib_utilscmn.obj &
+	$(OBJS)\monolib_evtloopmsw.obj &
 	$(OBJS)\monolib_main.obj &
 	$(OBJS)\monolib_mslu.obj &
 	$(OBJS)\monolib_volume.obj &
@@ -3517,6 +3505,7 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_dynlib.obj &
 	$(OBJS)\basedll_dynload.obj &
 	$(OBJS)\basedll_encconv.obj &
+	$(OBJS)\basedll_evtloopcmn.obj &
 	$(OBJS)\basedll_extended.obj &
 	$(OBJS)\basedll_ffile.obj &
 	$(OBJS)\basedll_file.obj &
@@ -3595,6 +3584,7 @@ BASEDLL_OBJECTS =  &
 	$(OBJS)\basedll_fs_mem.obj &
 	$(OBJS)\basedll_msgout.obj &
 	$(OBJS)\basedll_utilscmn.obj &
+	$(OBJS)\basedll_evtloopmsw.obj &
 	$(OBJS)\basedll_main.obj &
 	$(OBJS)\basedll_mslu.obj &
 	$(OBJS)\basedll_volume.obj
@@ -3632,6 +3622,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_dynlib.obj &
 	$(OBJS)\baselib_dynload.obj &
 	$(OBJS)\baselib_encconv.obj &
+	$(OBJS)\baselib_evtloopcmn.obj &
 	$(OBJS)\baselib_extended.obj &
 	$(OBJS)\baselib_ffile.obj &
 	$(OBJS)\baselib_file.obj &
@@ -3710,6 +3701,7 @@ BASELIB_OBJECTS =  &
 	$(OBJS)\baselib_fs_mem.obj &
 	$(OBJS)\baselib_msgout.obj &
 	$(OBJS)\baselib_utilscmn.obj &
+	$(OBJS)\baselib_evtloopmsw.obj &
 	$(OBJS)\baselib_main.obj &
 	$(OBJS)\baselib_mslu.obj &
 	$(OBJS)\baselib_volume.obj
@@ -3773,6 +3765,7 @@ COREDLL_OBJECTS =  &
 	$(OBJS)\coredll_fs_mem.obj &
 	$(OBJS)\coredll_msgout.obj &
 	$(OBJS)\coredll_utilscmn.obj &
+	$(OBJS)\coredll_evtloopmsw.obj &
 	$(OBJS)\coredll_main.obj &
 	$(OBJS)\coredll_mslu.obj &
 	$(OBJS)\coredll_volume.obj &
@@ -3791,6 +3784,7 @@ CORELIB_OBJECTS =  &
 	$(OBJS)\corelib_fs_mem.obj &
 	$(OBJS)\corelib_msgout.obj &
 	$(OBJS)\corelib_utilscmn.obj &
+	$(OBJS)\corelib_evtloopmsw.obj &
 	$(OBJS)\corelib_main.obj &
 	$(OBJS)\corelib_mslu.obj &
 	$(OBJS)\corelib_volume.obj &
@@ -5659,6 +5653,9 @@ $(OBJS)\monodll_dynload.obj :  .AUTODEPEND ..\..\src\common\dynload.cpp
 $(OBJS)\monodll_encconv.obj :  .AUTODEPEND ..\..\src\common\encconv.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
+$(OBJS)\monodll_evtloopcmn.obj :  .AUTODEPEND ..\..\src\common\evtloopcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
 $(OBJS)\monodll_extended.obj :  .AUTODEPEND ..\..\src\common\extended.c
 	$(CC) -bt=nt -zq -fo=$^@ $(MONODLL_CFLAGS) $<
 
@@ -5891,6 +5888,9 @@ $(OBJS)\monodll_msgout.obj :  .AUTODEPEND ..\..\src\common\msgout.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_utilscmn.obj :  .AUTODEPEND ..\..\src\common\utilscmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
+
+$(OBJS)\monodll_evtloopmsw.obj :  .AUTODEPEND ..\..\src\msw\evtloopmsw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 
 $(OBJS)\monodll_main.obj :  .AUTODEPEND ..\..\src\msw\main.cpp
@@ -6488,11 +6488,6 @@ $(OBJS)\monodll_display.obj :  .AUTODEPEND ..\..\src\msw\display.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monodll_enhmeta.obj :  .AUTODEPEND ..\..\src\msw\enhmeta.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\monodll_evtloop.obj :  .AUTODEPEND ..\..\src\msw\evtloop.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
 
@@ -7177,11 +7172,6 @@ $(OBJS)\monodll_effects.obj :  .AUTODEPEND ..\..\src\common\effects.cpp
 !endif
 
 !ifeq USE_GUI 1
-$(OBJS)\monodll_evtloopcmn.obj :  .AUTODEPEND ..\..\src\common\evtloopcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
 $(OBJS)\monodll_fddlgcmn.obj :  .AUTODEPEND ..\..\src\common\fddlgcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONODLL_CXXFLAGS) $<
 !endif
@@ -7825,6 +7815,9 @@ $(OBJS)\monolib_dynload.obj :  .AUTODEPEND ..\..\src\common\dynload.cpp
 $(OBJS)\monolib_encconv.obj :  .AUTODEPEND ..\..\src\common\encconv.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
+$(OBJS)\monolib_evtloopcmn.obj :  .AUTODEPEND ..\..\src\common\evtloopcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
 $(OBJS)\monolib_extended.obj :  .AUTODEPEND ..\..\src\common\extended.c
 	$(CC) -bt=nt -zq -fo=$^@ $(MONOLIB_CFLAGS) $<
 
@@ -8057,6 +8050,9 @@ $(OBJS)\monolib_msgout.obj :  .AUTODEPEND ..\..\src\common\msgout.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_utilscmn.obj :  .AUTODEPEND ..\..\src\common\utilscmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
+
+$(OBJS)\monolib_evtloopmsw.obj :  .AUTODEPEND ..\..\src\msw\evtloopmsw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 
 $(OBJS)\monolib_main.obj :  .AUTODEPEND ..\..\src\msw\main.cpp
@@ -8654,11 +8650,6 @@ $(OBJS)\monolib_display.obj :  .AUTODEPEND ..\..\src\msw\display.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\monolib_enhmeta.obj :  .AUTODEPEND ..\..\src\msw\enhmeta.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\monolib_evtloop.obj :  .AUTODEPEND ..\..\src\msw\evtloop.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
 
@@ -9343,11 +9334,6 @@ $(OBJS)\monolib_effects.obj :  .AUTODEPEND ..\..\src\common\effects.cpp
 !endif
 
 !ifeq USE_GUI 1
-$(OBJS)\monolib_evtloopcmn.obj :  .AUTODEPEND ..\..\src\common\evtloopcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
 $(OBJS)\monolib_fddlgcmn.obj :  .AUTODEPEND ..\..\src\common\fddlgcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(MONOLIB_CXXFLAGS) $<
 !endif
@@ -9991,6 +9977,9 @@ $(OBJS)\basedll_dynload.obj :  .AUTODEPEND ..\..\src\common\dynload.cpp
 $(OBJS)\basedll_encconv.obj :  .AUTODEPEND ..\..\src\common\encconv.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_evtloopcmn.obj :  .AUTODEPEND ..\..\src\common\evtloopcmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_extended.obj :  .AUTODEPEND ..\..\src\common\extended.c
 	$(CC) -bt=nt -zq -fo=$^@ $(BASEDLL_CFLAGS) $<
 
@@ -10225,6 +10214,9 @@ $(OBJS)\basedll_msgout.obj :  .AUTODEPEND ..\..\src\common\msgout.cpp
 $(OBJS)\basedll_utilscmn.obj :  .AUTODEPEND ..\..\src\common\utilscmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
+$(OBJS)\basedll_evtloopmsw.obj :  .AUTODEPEND ..\..\src\msw\evtloopmsw.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
+
 $(OBJS)\basedll_main.obj :  .AUTODEPEND ..\..\src\msw\main.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASEDLL_CXXFLAGS) $<
 
@@ -10283,6 +10275,9 @@ $(OBJS)\baselib_dynload.obj :  .AUTODEPEND ..\..\src\common\dynload.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_encconv.obj :  .AUTODEPEND ..\..\src\common\encconv.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
+$(OBJS)\baselib_evtloopcmn.obj :  .AUTODEPEND ..\..\src\common\evtloopcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
 $(OBJS)\baselib_extended.obj :  .AUTODEPEND ..\..\src\common\extended.c
@@ -10519,6 +10514,9 @@ $(OBJS)\baselib_msgout.obj :  .AUTODEPEND ..\..\src\common\msgout.cpp
 $(OBJS)\baselib_utilscmn.obj :  .AUTODEPEND ..\..\src\common\utilscmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
+$(OBJS)\baselib_evtloopmsw.obj :  .AUTODEPEND ..\..\src\msw\evtloopmsw.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
+
 $(OBJS)\baselib_main.obj :  .AUTODEPEND ..\..\src\msw\main.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(BASELIB_CXXFLAGS) $<
 
@@ -10625,6 +10623,9 @@ $(OBJS)\coredll_msgout.obj :  .AUTODEPEND ..\..\src\common\msgout.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_utilscmn.obj :  .AUTODEPEND ..\..\src\common\utilscmn.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
+
+$(OBJS)\coredll_evtloopmsw.obj :  .AUTODEPEND ..\..\src\msw\evtloopmsw.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 
 $(OBJS)\coredll_main.obj :  .AUTODEPEND ..\..\src\msw\main.cpp
@@ -10859,11 +10860,6 @@ $(OBJS)\coredll_display.obj :  .AUTODEPEND ..\..\src\msw\display.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\coredll_enhmeta.obj :  .AUTODEPEND ..\..\src\msw\enhmeta.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\coredll_evtloop.obj :  .AUTODEPEND ..\..\src\msw\evtloop.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
 
@@ -11548,11 +11544,6 @@ $(OBJS)\coredll_effects.obj :  .AUTODEPEND ..\..\src\common\effects.cpp
 !endif
 
 !ifeq USE_GUI 1
-$(OBJS)\coredll_evtloopcmn.obj :  .AUTODEPEND ..\..\src\common\evtloopcmn.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
 $(OBJS)\coredll_fddlgcmn.obj :  .AUTODEPEND ..\..\src\common\fddlgcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(COREDLL_CXXFLAGS) $<
 !endif
@@ -12022,6 +12013,9 @@ $(OBJS)\corelib_msgout.obj :  .AUTODEPEND ..\..\src\common\msgout.cpp
 $(OBJS)\corelib_utilscmn.obj :  .AUTODEPEND ..\..\src\common\utilscmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
+$(OBJS)\corelib_evtloopmsw.obj :  .AUTODEPEND ..\..\src\msw\evtloopmsw.cpp
+	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
+
 $(OBJS)\corelib_main.obj :  .AUTODEPEND ..\..\src\msw\main.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 
@@ -12254,11 +12248,6 @@ $(OBJS)\corelib_display.obj :  .AUTODEPEND ..\..\src\msw\display.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_enhmeta.obj :  .AUTODEPEND ..\..\src\msw\enhmeta.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\corelib_evtloop.obj :  .AUTODEPEND ..\..\src\msw\evtloop.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 
@@ -12939,11 +12928,6 @@ $(OBJS)\corelib_dseldlg.obj :  .AUTODEPEND ..\..\src\common\dseldlg.cpp
 
 !ifeq USE_GUI 1
 $(OBJS)\corelib_effects.obj :  .AUTODEPEND ..\..\src\common\effects.cpp
-	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
-!endif
-
-!ifeq USE_GUI 1
-$(OBJS)\corelib_evtloopcmn.obj :  .AUTODEPEND ..\..\src\common\evtloopcmn.cpp
 	$(CXX) -bt=nt -zq -fo=$^@ $(CORELIB_CXXFLAGS) $<
 !endif
 

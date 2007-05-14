@@ -20,6 +20,7 @@
 
 #include "wx/apptrait.h"
 #include "wx/gtk1/private/timer.h"
+#include "wx/evtloop.h"
 #include "wx/process.h"
 
 #include "wx/unix/execute.h"
@@ -202,9 +203,9 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
     return wxPORT_GTK;
 }
 
-wxString wxGUIAppTraits::GetDesktopEnvironment() const
+wxEventLoop* wxGUIAppTraits::CreateEventLoop()
 {
-    return wxEmptyString;
+    return new wxEventLoop;
 }
 
 #if wxUSE_INTL

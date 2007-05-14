@@ -14,6 +14,7 @@
 
 #include "wx/defs.h"
 #include "X11/Xlib.h"
+#include "wx/evtloop.h"
 
 class WXDLLEXPORT wxFont;
 class WXDLLEXPORT wxWindow;
@@ -185,11 +186,9 @@ wxSize wxDoGetSingleTextCtrlBestSize( Widget textWidget,
 // event-related functions
 // ----------------------------------------------------------------------------
 
-class wxEventLoop;
-
 // executes one main loop iteration (implemented in src/motif/evtloop.cpp)
 // returns true if the loop should be exited
-bool wxDoEventLoopIteration( wxEventLoop& evtLoop );
+bool wxDoEventLoopIteration( wxGUIEventLoop& evtLoop );
 
 // Consume all events until no more left
 void wxFlushEvents(WXDisplay* display);

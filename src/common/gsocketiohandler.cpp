@@ -2,7 +2,6 @@
 // Name:        src/common/gsocketiohandler.cpp
 // Purpose:     implementation of wxFDIOHandler for GSocket
 // Author:      Angel Vidal, Lukasz Michalski
-// Modified by:
 // Created:     08.24.06
 // RCS-ID:      $Id$
 // Copyright:   (c) 2006 Angel vidal
@@ -35,43 +34,43 @@
 // wxGSocketIOHandler
 // ----------------------------------------------------------------------------
 
-wxGSocketIOHandler::wxGSocketIOHandler(GSocket* socket) 
+wxGSocketIOHandler::wxGSocketIOHandler(GSocket* socket)
                   : m_socket(socket),
                     m_flags(0)
 {
 
-};
+}
 
-void wxGSocketIOHandler::OnReadWaiting(int fd)
+void wxGSocketIOHandler::OnReadWaiting()
 {
     m_socket->Detected_Read();
-};
+}
 
-void wxGSocketIOHandler::OnWriteWaiting(int fd) 
+void wxGSocketIOHandler::OnWriteWaiting()
 {
     m_socket->Detected_Write();
-};
+}
 
-void wxGSocketIOHandler::OnExceptionWaiting(int fd) 
+void wxGSocketIOHandler::OnExceptionWaiting()
 {
     m_socket->Detected_Read();
-};
+}
 
-int wxGSocketIOHandler::GetFlags() const 
+int wxGSocketIOHandler::GetFlags() const
 {
     return m_flags;
-};
+}
 
 
-void wxGSocketIOHandler::RemoveFlag(wxSelectDispatcherEntryFlags flag)
+void wxGSocketIOHandler::RemoveFlag(wxFDIODispatcherEntryFlags flag)
 {
     m_flags &= ~flag;
-};
+}
 
-void wxGSocketIOHandler::AddFlag(wxSelectDispatcherEntryFlags flag)
+void wxGSocketIOHandler::AddFlag(wxFDIODispatcherEntryFlags flag)
 {
     m_flags |= flag;
-};
+}
 
 // ----------------------------------------------------------------------------
 // GSocket interface
@@ -113,11 +112,12 @@ void GSocketGUIFunctionsTableConcrete::Install_Callback(GSocket *socket,
                                                         GSocketEvent event)
 {
   int *m_id = (int *)(socket->m_gui_dependent);
-  int c;
+  const int fd = socket->m_fd;
 
-  if (socket->m_fd == -1)
+  if ( fd == -1 )
     return;
 
+  int c;
   switch (event)
   {
     case GSOCK_LOST:       /* fall-through */
@@ -127,24 +127,29 @@ void GSocketGUIFunctionsTableConcrete::Install_Callback(GSocket *socket,
     default: return;
   }
 
-  wxGSocketIOHandler* handler = (wxGSocketIOHandler*)(wxSelectDispatcher::Get().FindHandler(socket->m_fd));
-  if (handler == NULL)
+  wxSelectDispatcher * const dispatcher = wxSelectDispatcher::Get();
+  if ( !dispatcher )
+      return;
+
+  wxGSocketIOHandler *
+      handler = (wxGSocketIOHandler*)dispatcher->FindHandler(fd);
+  if ( !handler )
   {
       handler = new wxGSocketIOHandler(socket);
-  };
+  }
 
   if (c == 0)
   {
-      m_id[0] = socket->m_fd;
-      handler->AddFlag(wxSelectInput);
+      m_id[0] = fd;
+      handler->AddFlag(wxFDIO_INPUT);
   }
   else
   {
-      m_id[1] = socket->m_fd;
-      handler->AddFlag(wxSelectOutput);
+      m_id[1] = fd;
+      handler->AddFlag(wxFDIO_OUTPUT);
   }
 
-  wxSelectDispatcher::Get().RegisterFD(socket->m_fd,handler,handler->GetFlags());
+  dispatcher->RegisterFD(fd, handler, handler->GetFlags());
 }
 
 void GSocketGUIFunctionsTableConcrete::Uninstall_Callback(GSocket *socket,
@@ -162,26 +167,27 @@ void GSocketGUIFunctionsTableConcrete::Uninstall_Callback(GSocket *socket,
     default: return;
   }
 
-  wxGSocketIOHandler* handler = NULL;
-  if ( m_id[c] != -1 )
+  if ( m_id[c] == -1 )
+      return;
+
+  int fd = m_id[c];
+  m_id[c] = -1;
+
+  const wxFDIODispatcherEntryFlags flag = c == 0 ? wxFDIO_INPUT : wxFDIO_OUTPUT;
+
+  wxSelectDispatcher * const dispatcher = wxSelectDispatcher::Get();
+  if ( !dispatcher )
+      return;
+
+  wxGSocketIOHandler * const
+      handler = (wxGSocketIOHandler*)dispatcher->UnregisterFD(fd, flag);
+  if ( handler )
   {
-      if ( c == 0 )
-      {
-          handler = (wxGSocketIOHandler*)wxSelectDispatcher::Get().UnregisterFD(m_id[c], wxSelectInput);
-          if (handler != NULL)
-              handler->RemoveFlag(wxSelectInput);
-      }
-      else
-      {
-          handler = (wxGSocketIOHandler*)wxSelectDispatcher::Get().UnregisterFD(m_id[c], wxSelectOutput);
-          if (handler != NULL)
-              handler->RemoveFlag(wxSelectOutput);
-      }
-      if (handler && handler->GetFlags() == 0)
+      handler->RemoveFlag(flag);
+
+      if ( !handler->GetFlags() )
           delete handler;
   }
-
-  m_id[c] = -1;
 }
 
 void GSocketGUIFunctionsTableConcrete::Enable_Events(GSocket *socket)

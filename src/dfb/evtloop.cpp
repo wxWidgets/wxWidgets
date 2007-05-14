@@ -41,28 +41,28 @@
 // wxEventLoop initialization
 //-----------------------------------------------------------------------------
 
-wxIDirectFBEventBufferPtr wxEventLoop::ms_buffer;
+wxIDirectFBEventBufferPtr wxGUIEventLoop::ms_buffer;
 
-wxEventLoop::wxEventLoop()
+wxGUIEventLoop::wxGUIEventLoop()
 {
     if ( !ms_buffer )
         InitBuffer();
 }
 
 /* static */
-void wxEventLoop::InitBuffer()
+void wxGUIEventLoop::InitBuffer()
 {
     ms_buffer = wxIDirectFB::Get()->CreateEventBuffer();
 }
 
 /* static */
-void wxEventLoop::CleanUp()
+void wxGUIEventLoop::CleanUp()
 {
     ms_buffer.Reset();
 }
 
 /* static */
-wxIDirectFBEventBufferPtr wxEventLoop::GetDirectFBEventBuffer()
+wxIDirectFBEventBufferPtr wxGUIEventLoop::GetDirectFBEventBuffer()
 {
     if ( !ms_buffer )
         InitBuffer();
@@ -74,14 +74,14 @@ wxIDirectFBEventBufferPtr wxEventLoop::GetDirectFBEventBuffer()
 // events dispatch and loop handling
 //-----------------------------------------------------------------------------
 
-bool wxEventLoop::Pending() const
+bool wxGUIEventLoop::Pending() const
 {
     wxCHECK_MSG( ms_buffer, false, _T("invalid event buffer") );
 
     return ms_buffer->HasEvent();
 }
 
-bool wxEventLoop::Dispatch()
+bool wxGUIEventLoop::Dispatch()
 {
     wxCHECK_MSG( ms_buffer, false, _T("invalid event buffer") );
 
@@ -126,14 +126,14 @@ bool wxEventLoop::Dispatch()
     return true;
 }
 
-void wxEventLoop::WakeUp()
+void wxGUIEventLoop::WakeUp()
 {
     wxCHECK_RET( ms_buffer, _T("invalid event buffer") );
 
     ms_buffer->WakeUp();
 }
 
-void wxEventLoop::OnNextIteration()
+void wxGUIEventLoop::OnNextIteration()
 {
 #if wxUSE_TIMER
     wxGenericTimerImpl::NotifyTimers();
@@ -141,11 +141,11 @@ void wxEventLoop::OnNextIteration()
 
 #if wxUSE_SOCKETS
     // handle any pending socket events:
-    wxSelectDispatcher::Get().RunLoop(0);
+    wxSelectDispatcher::DispatchPending();
 #endif
 }
 
-void wxEventLoop::Yield()
+void wxGUIEventLoop::Yield()
 {
     // process all pending events:
     while ( Pending() )
@@ -160,7 +160,7 @@ void wxEventLoop::Yield()
 // DirectFB -> wxWidgets events translation
 //-----------------------------------------------------------------------------
 
-void wxEventLoop::HandleDFBEvent(const wxDFBEvent& event)
+void wxGUIEventLoop::HandleDFBEvent(const wxDFBEvent& event)
 {
     switch ( event.GetClass() )
     {

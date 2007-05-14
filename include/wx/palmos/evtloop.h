@@ -16,10 +16,10 @@
 // wxEventLoop
 // ----------------------------------------------------------------------------
 
-class WXDLLEXPORT wxEventLoop : public wxEventLoopBase
+class WXDLLEXPORT wxGUIEventLoop : public wxEventLoopBase
 {
 public:
-    wxEventLoop();
+    wxGUIEventLoop();
 
     // implement base class pure virtuals
     virtual int Run();

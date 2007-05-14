@@ -89,6 +89,7 @@ All:
 - Added wxEXEC_BLOCK flag (Hank Schultz)
 - Add support for wxStream-derived classes to wxRTTI (Stas Sergeev)
 - Added wxStreamBuffer::Truncate() (Stas Sergeev)
+- Allow using  wxEventLoop in console applications (Lukasz Michalski)
 
 All (GUI):
 

@@ -62,12 +62,12 @@ wxDEFINE_TIED_SCOPED_PTR_TYPE(wxEventLoopImpl)
 // wxEventLoop running and exiting
 // ----------------------------------------------------------------------------
 
-wxEventLoop::~wxEventLoop()
+wxGUIEventLoop::~wxGUIEventLoop()
 {
     wxASSERT_MSG( !m_impl, _T("should have been deleted in Run()") );
 }
 
-int wxEventLoop::Run()
+int wxGUIEventLoop::Run()
 {
     // event loops are not recursive, you need to create another loop!
     wxCHECK_MSG( !IsRunning(), -1, _T("can't reenter a message loop") );
@@ -83,7 +83,7 @@ int wxEventLoop::Run()
     return m_impl->GetExitCode();
 }
 
-void wxEventLoop::Exit(int rc)
+void wxGUIEventLoop::Exit(int rc)
 {
     wxCHECK_RET( IsRunning(), _T("can't call Exit() if not running") );
 
@@ -96,7 +96,7 @@ void wxEventLoop::Exit(int rc)
 // wxEventLoop message processing dispatching
 // ----------------------------------------------------------------------------
 
-bool wxEventLoop::Pending() const
+bool wxGUIEventLoop::Pending() const
 {
     bool pending;
     wxApp* app = wxTheApp;
@@ -108,7 +108,7 @@ bool wxEventLoop::Pending() const
     return pending;
 }
 
-bool wxEventLoop::Dispatch()
+bool wxGUIEventLoop::Dispatch()
 {
     wxCHECK_MSG( IsRunning(), false, _T("can't call Dispatch() if not running") );
 

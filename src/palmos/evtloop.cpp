@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        src/palmos/evtloop.cpp
-// Purpose:     implements wxEventLoop for Palm OS
+// Purpose:     implements wxGUIEventLoop for Palm OS
 // Author:      William Osborne - minimal working wxPalmOS port
 // Modified by:
 // Created:     10.14.04
@@ -52,42 +52,42 @@
 #include <Form.h>
 
 // ============================================================================
-// wxEventLoop implementation
+// wxGUIEventLoop implementation
 // ============================================================================
 
 // ----------------------------------------------------------------------------
 // ctor/dtor
 // ----------------------------------------------------------------------------
 
-wxEventLoop::wxEventLoop()
+wxGUIEventLoop::wxGUIEventLoop()
 {
     m_shouldExit = false;
     m_exitcode = 0;
 }
 
 // ----------------------------------------------------------------------------
-// wxEventLoop message processing
+// wxGUIEventLoop message processing
 // ----------------------------------------------------------------------------
 
-void wxEventLoop::ProcessMessage(WXMSG *msg)
+void wxGUIEventLoop::ProcessMessage(WXMSG *msg)
 {
 }
 
-bool wxEventLoop::PreProcessMessage(WXMSG *msg)
+bool wxGUIEventLoop::PreProcessMessage(WXMSG *msg)
 {
     return false;
 }
 
 // ----------------------------------------------------------------------------
-// wxEventLoop running and exiting
+// wxGUIEventLoop running and exiting
 // ----------------------------------------------------------------------------
 
-bool wxEventLoop::IsRunning() const
+bool wxGUIEventLoop::IsRunning() const
 {
     return true;
 }
 
-int wxEventLoop::Run()
+int wxGUIEventLoop::Run()
 {
     status_t    error;
     EventType    event;
@@ -112,7 +112,7 @@ int wxEventLoop::Run()
     return 0;
 }
 
-void wxEventLoop::Exit(int rc)
+void wxGUIEventLoop::Exit(int rc)
 {
     FrmCloseAllForms();
 
@@ -122,15 +122,15 @@ void wxEventLoop::Exit(int rc)
 }
 
 // ----------------------------------------------------------------------------
-// wxEventLoop message processing dispatching
+// wxGUIEventLoop message processing dispatching
 // ----------------------------------------------------------------------------
 
-bool wxEventLoop::Pending() const
+bool wxGUIEventLoop::Pending() const
 {
     return false;
 }
 
-bool wxEventLoop::Dispatch()
+bool wxGUIEventLoop::Dispatch()
 {
     return false;
 }

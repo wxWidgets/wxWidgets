@@ -111,8 +111,8 @@ private:
     // are we currently painting some area of this TLW?
     bool m_isPainting;
 
-    friend class wxEventLoop; // for HandleDFBWindowEvent
-    friend class wxWindowDFB; // for SetDfbFocus
+    friend class wxGUIEventLoop; // for HandleDFBWindowEvent
+    friend class wxWindowDFB;    // for SetDfbFocus
 };
 
 #endif // _WX_DFB_NONOWNEDWND_H_

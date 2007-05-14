@@ -1871,6 +1871,9 @@ if test "$USE_UNIX" = 1 ; then
     AC_CHECK_HEADER([sys/select.h],,, [AC_INCLUDES_DEFAULT()])
 fi
 
+dnl defines HAVE_SYS_EPOLL_H - for epoll mainloop implementation in wxbase
+AC_CHECK_HEADERS(sys/epoll.h)
+
 dnl ---------------------------------------------------------------------------
 dnl Checks for compiler characteristics
 dnl ---------------------------------------------------------------------------

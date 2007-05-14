@@ -39,8 +39,10 @@
 #include "wx/apptrait.h"
 #include "wx/cmdline.h"
 #include "wx/confbase.h"
+#include "wx/evtloop.h"
 #include "wx/filename.h"
 #include "wx/msgout.h"
+#include "wx/ptr_scpd.h"
 #include "wx/tokenzr.h"
 
 #if !defined(__WXMSW__) || defined(__WXMICROWIN__)
@@ -112,6 +114,13 @@ wxAppConsole *wxAppConsole::ms_appInstance = NULL;
 
 wxAppInitializerFunction wxAppConsole::ms_appInitFn = NULL;
 
+// ----------------------------------------------------------------------------
+// wxEventLoopPtr
+// ----------------------------------------------------------------------------
+
+// this defines wxEventLoopPtr
+wxDEFINE_TIED_SCOPED_PTR_TYPE(wxEventLoop)
+
 // ============================================================================
 // wxAppConsole implementation
 // ============================================================================
@@ -123,6 +132,7 @@ wxAppInitializerFunction wxAppConsole::ms_appInitFn = NULL;
 wxAppConsole::wxAppConsole()
 {
     m_traits = NULL;
+    m_mainLoop = NULL;
 
     ms_appInstance = this;
 
@@ -157,6 +167,13 @@ bool wxAppConsole::Initialize(int& argcOrig, wxChar **argvOrig)
     argc = argcOrig;
     argv = argvOrig;
 
+#if wxUSE_THREADS
+    wxPendingEventsLocker = new wxCriticalSection;
+#endif
+
+    //create port specific main loop
+    m_mainLoop = CreateMainLoop();
+
 #ifndef __WXPALMOS__
     if ( m_appName.empty() && argv )
     {
@@ -168,8 +185,20 @@ bool wxAppConsole::Initialize(int& argcOrig, wxChar **argvOrig)
     return true;
 }
 
+wxEventLoop *wxAppConsole::CreateMainLoop()
+{
+    return GetTraits()->CreateEventLoop();
+}
+
 void wxAppConsole::CleanUp()
 {
+    delete wxPendingEvents;
+    wxPendingEvents = NULL;
+
+#if wxUSE_THREADS
+    delete wxPendingEventsLocker;
+    wxPendingEventsLocker = NULL;
+#endif // wxUSE_THREADS
 }
 
 // ----------------------------------------------------------------------------
@@ -206,6 +235,11 @@ bool wxAppConsole::OnInit()
     return true;
 }
 
+int wxAppConsole::OnRun()
+{
+    return MainLoop();
+};
+
 int wxAppConsole::OnExit()
 {
 #if wxUSE_CONFIG
@@ -219,7 +253,10 @@ int wxAppConsole::OnExit()
 
 void wxAppConsole::Exit()
 {
-    exit(-1);
+    if (m_mainLoop != NULL)
+        ExitMainLoop();
+    else
+        exit(-1);
 }
 
 // ----------------------------------------------------------------------------
@@ -248,6 +285,55 @@ wxAppTraits *wxAppConsole::GetTraits()
 // event processing
 // ----------------------------------------------------------------------------
 
+int wxAppConsole::MainLoop()
+{
+    wxEventLoopTiedPtr mainLoop(&m_mainLoop, CreateMainLoop());
+
+    return m_mainLoop ? m_mainLoop->Run() : -1;
+}
+
+void wxAppConsole::ExitMainLoop()
+{
+    // we should exit from the main event loop, not just any currently active
+    // (e.g. modal dialog) event loop
+    if ( m_mainLoop && m_mainLoop->IsRunning() )
+    {
+        m_mainLoop->Exit(0);
+    }
+}
+
+bool wxAppConsole::Pending()
+{
+    // use the currently active message loop here, not m_mainLoop, because if
+    // we're showing a modal dialog (with its own event loop) currently the
+    // main event loop is not running anyhow
+    wxEventLoop * const loop = wxEventLoopBase::GetActive();
+
+    return loop && loop->Pending();
+}
+
+bool wxAppConsole::Dispatch()
+{
+    // see comment in Pending()
+    wxEventLoop * const loop = wxEventLoopBase::GetActive();
+
+    return loop && loop->Dispatch();
+}
+
+bool wxAppConsole::HasPendingEvents() const
+{
+    // ensure that we're the only thread to modify the pending events list
+    wxENTER_CRIT_SECT( *wxPendingEventsLocker );
+
+    if ( !wxPendingEvents )
+    {
+        wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
+        return false;
+    }
+    wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
+    return true;
+};
+
 void wxAppConsole::ProcessPendingEvents()
 {
 #if wxUSE_THREADS
@@ -255,14 +341,8 @@ void wxAppConsole::ProcessPendingEvents()
         return;
 #endif
 
-    // ensure that we're the only thread to modify the pending events list
-    wxENTER_CRIT_SECT( *wxPendingEventsLocker );
-
-    if ( !wxPendingEvents )
-    {
-        wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
+    if ( !HasPendingEvents() )
         return;
-    }
 
     // iterate until the list becomes empty
     wxList::compatibility_iterator node = wxPendingEvents->GetFirst();
@@ -285,6 +365,21 @@ void wxAppConsole::ProcessPendingEvents()
     wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
 }
 
+void wxAppConsole::WakeUpIdle()
+{
+    if ( m_mainLoop )
+        m_mainLoop->WakeUp();
+}
+
+bool wxAppConsole::ProcessIdle()
+{
+    wxIdleEvent event;
+
+    event.SetEventObject(this);
+    ProcessEvent(event);
+    return event.MoreRequested();
+}
+
 int wxAppConsole::FilterEvent(wxEvent& WXUNUSED(event))
 {
     // process the events normally by default
@@ -305,6 +400,25 @@ wxAppConsole::HandleEvent(wxEvtHandler *handler,
     // by default, simply call the handler
     (handler->*func)(event);
 }
+
+// ----------------------------------------------------------------------------
+// exceptions support
+// ----------------------------------------------------------------------------
+
+#if wxUSE_EXCEPTIONS
+
+bool wxAppConsole::OnExceptionInMainLoop()
+{
+    throw;
+
+    // some compilers are too stupid to know that we never return after throw
+#if defined(__DMC__) || (defined(_MSC_VER) && _MSC_VER < 1200)
+    return false;
+#endif
+}
+
+#endif // wxUSE_EXCEPTIONS
+
 
 #endif // wxUSE_EXCEPTIONS
 

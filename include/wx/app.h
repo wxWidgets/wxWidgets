@@ -25,6 +25,7 @@
 class WXDLLIMPEXP_BASE wxAppConsole;
 class WXDLLIMPEXP_BASE wxAppTraits;
 class WXDLLIMPEXP_BASE wxCmdLineParser;
+class WXDLLIMPEXP_BASE wxEventLoop;
 class WXDLLIMPEXP_BASE wxLog;
 class WXDLLIMPEXP_BASE wxMessageOutput;
 
@@ -86,7 +87,7 @@ public:
 
     // This is the replacement for the normal main(): all program work should
     // be done here. When OnRun() returns, the programs starts shutting down.
-    virtual int OnRun() = 0;
+    virtual int OnRun();
 
     // This is only called if OnInit() returned true so it's a good place to do
     // any cleanup matching the initializations done there.
@@ -170,7 +171,7 @@ public:
     // either should be configurable by the user (then he can change the
     // default behaviour simply by overriding CreateTraits() and returning his
     // own traits object) or which is GUI/console dependent as then wxAppTraits
-    // allows us to abstract the differences behind the common façade
+    // allows us to abstract the differences behind the common faï¿½de
     wxAppTraits *GetTraits();
 
 
@@ -203,22 +204,62 @@ public:
     virtual void OnUnhandledException() { }
 #endif // wxUSE_EXCEPTIONS
 
+    // event processing functions
+    // --------------------------
+
+    // return true if we're running event loop, i.e. if the events can
+    // (already) be dispatched
+    static bool IsMainLoopRunning()
+    {
+        const wxAppConsole * const app = GetInstance();
+        return app && app->m_mainLoop != NULL;
+    }
+
     // process all events in the wxPendingEvents list -- it is necessary to
     // call this function to process posted events. This happens during each
     // event loop iteration in GUI mode but if there is no main loop, it may be
     // also called directly.
     virtual void ProcessPendingEvents();
 
+    // check if there are pending events on global pending event list
+    bool HasPendingEvents() const;
+
     // doesn't do anything in this class, just a hook for GUI wxApp
     virtual bool Yield(bool WXUNUSED(onlyIfNeeded) = false) { return true; }
 
     // make sure that idle events are sent again
-    virtual void WakeUpIdle() { }
+    virtual void WakeUpIdle();
 
-    // this is just a convenience: by providing its implementation here we
-    // avoid #ifdefs in the code using it
-    static bool IsMainLoopRunning() { return false; }
+        // execute the main GUI loop, the function returns when the loop ends
+    virtual int MainLoop();
 
+        // exit the main GUI loop during the next iteration (i.e. it does not
+        // stop the program immediately!)
+    virtual void ExitMainLoop();
+
+        // returns true if there are unprocessed events in the event queue
+    virtual bool Pending();
+
+        // process the first event in the event queue (blocks until an event
+        // appears if there are none currently, use Pending() if this is not
+        // wanted), returns false if the event loop should stop and true
+        // otherwise
+    virtual bool Dispatch();
+
+        // this virtual function is called  when the application
+        // becomes idle and normally just sends wxIdleEvent to all interested
+        // parties
+        //
+        // it should return true if more idle events are needed, false if not
+    virtual bool ProcessIdle();
+
+#if wxUSE_EXCEPTIONS
+    // Function called if an uncaught exception is caught inside the main
+    // event loop: it may return true to continue running the event loop or
+    // false to stop it (in the latter case it may rethrow the exception as
+    // well)
+    virtual bool OnExceptionInMainLoop();
+#endif // wxUSE_EXCEPTIONS
 
     // debugging support
     // -----------------
@@ -284,6 +325,9 @@ protected:
     // the one and only global application object
     static wxAppConsole *ms_appInstance;
 
+    // create main loop from AppTraits or return NULL if
+    // there is no main loop implementation
+    wxEventLoop *CreateMainLoop();
 
     // application info (must be set from the user code)
     wxString m_vendorName,      // vendor name (ACME Inc)
@@ -294,6 +338,9 @@ protected:
     // by GetTraits() when first needed
     wxAppTraits *m_traits;
 
+    // the main event loop of the application (may be NULL if the loop hasn't
+    // been started yet or has already terminated)
+    wxEventLoop *m_mainLoop;
 
     // the application object is a singleton anyhow, there is no sense in
     // copying it
@@ -347,32 +394,7 @@ public:
     // the worker functions - usually not used directly by the user code
     // -----------------------------------------------------------------
 
-        // return true if we're running main loop, i.e. if the events can
-        // (already) be dispatched
-    static bool IsMainLoopRunning()
-    {
-        wxAppBase *app = wx_static_cast(wxAppBase *, GetInstance());
-        return app && app->m_mainLoop != NULL;
-    }
 
-        // execute the main GUI loop, the function returns when the loop ends
-    virtual int MainLoop();
-
-        // exit the main loop thus terminating the application
-    virtual void Exit();
-
-        // exit the main GUI loop during the next iteration (i.e. it does not
-        // stop the program immediately!)
-    virtual void ExitMainLoop();
-
-        // returns true if there are unprocessed events in the event queue
-    virtual bool Pending();
-
-        // process the first event in the event queue (blocks until an event
-        // appears if there are none currently, use Pending() if this is not
-        // wanted), returns false if the event loop should stop and true
-        // otherwise
-    virtual bool Dispatch();
 
         // process all currently pending events right now
         //
@@ -395,15 +417,6 @@ public:
         // Send idle event to window and all subwindows
         // Returns true if more idle time is requested.
     virtual bool SendIdleEvents(wxWindow* win, wxIdleEvent& event);
-
-
-#if wxUSE_EXCEPTIONS
-    // Function called if an uncaught exception is caught inside the main
-    // event loop: it may return true to continue running the event loop or
-    // false to stop it (in the latter case it may rethrow the exception as
-    // well)
-    virtual bool OnExceptionInMainLoop();
-#endif // wxUSE_EXCEPTIONS
 
 
     // top level window functions
@@ -494,10 +507,6 @@ protected:
     virtual wxAppTraits *CreateTraits();
 
 
-    // the main event loop of the application (may be NULL if the loop hasn't
-    // been started yet or has already terminated)
-    wxEventLoop *m_mainLoop;
-
     // the main top level window (may be NULL)
     wxWindow *m_topWindow;
 
@@ -560,8 +569,15 @@ protected:
         #include "wx/os2/app.h"
     #endif
 #else // !GUI
-    // allow using just wxApp (instead of wxAppConsole) in console programs
-    typedef wxAppConsole wxApp;
+    // wxApp is defined in core and we cannot define another one in wxBase,
+    // so we create a different class and typedef it to wxApp instead
+    #if defined(__UNIX__)
+        #include "wx/unix/app.h"
+        class wxApp : public wxAppConsoleUnix { };
+    #else
+        // allow using just wxApp (instead of wxAppConsole) in console programs
+        class wxApp : public wxAppConsole { };
+    #endif
 #endif // GUI/!GUI
 
 // ----------------------------------------------------------------------------

@@ -45,7 +45,7 @@
 
 #if wxMAC_USE_RUN_APP_EVENT_LOOP
 
-int wxEventLoop::Run()
+int wxGUIEventLoop::Run()
 {
     wxEventLoopActivator activate(this);
 
@@ -54,7 +54,7 @@ int wxEventLoop::Run()
     return m_exitcode;
 }
 
-void wxEventLoop::Exit(int rc)
+void wxGUIEventLoop::Exit(int rc)
 {
     m_exitcode = rc;
 
@@ -69,7 +69,7 @@ void wxEventLoop::Exit(int rc)
 // functions only used by wxEventLoopManual-based implementation
 // ----------------------------------------------------------------------------
 
-void wxEventLoop::WakeUp()
+void wxGUIEventLoop::WakeUp()
 {
     extern void wxMacWakeUp();
 
@@ -82,7 +82,7 @@ void wxEventLoop::WakeUp()
 // low level functions used in both cases
 // ----------------------------------------------------------------------------
 
-bool wxEventLoop::Pending() const
+bool wxGUIEventLoop::Pending() const
 {
     EventRef theEvent;
 
@@ -96,7 +96,7 @@ bool wxEventLoop::Pending() const
            ) == noErr;
 }
 
-bool wxEventLoop::Dispatch()
+bool wxGUIEventLoop::Dispatch()
 {
     // TODO: we probably should do the dispatching directly from here but for
     //       now it's easier to forward to wxApp which has all the code to do

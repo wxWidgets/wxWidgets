@@ -41,19 +41,19 @@ private:
 };
 
 // ========================================================================
-// wxEventLoop
+// wxGUIEventLoop
 // ========================================================================
 
 // ----------------------------------------------------------------------------
-// wxEventLoop running and exiting
+// wxGUIEventLoop running and exiting
 // ----------------------------------------------------------------------------
 
-wxEventLoop::~wxEventLoop()
+wxGUIEventLoop::~wxGUIEventLoop()
 {
     wxASSERT_MSG( !m_impl, _T("should have been deleted in Run()") );
 }
 
-int wxEventLoop::Run()
+int wxGUIEventLoop::Run()
 {
     // event loops are not recursive, you need to create another loop!
     wxCHECK_MSG( !IsRunning(), -1, _T("can't reenter a message loop") );
@@ -73,7 +73,7 @@ int wxEventLoop::Run()
     return exitcode;
 }
 
-void wxEventLoop::Exit(int rc)
+void wxGUIEventLoop::Exit(int rc)
 {
     wxCHECK_RET( IsRunning(), _T("can't call Exit() if not running") );
 
@@ -101,7 +101,7 @@ void wxEventLoop::Exit(int rc)
 // wxEventLoop message processing dispatching
 // ----------------------------------------------------------------------------
 
-bool wxEventLoop::Pending() const
+bool wxGUIEventLoop::Pending() const
 {
     // a pointer to the event is returned if there is one, or nil if not
     return [[NSApplication sharedApplication]
@@ -111,7 +111,7 @@ bool wxEventLoop::Pending() const
             dequeue: NO];
 }
 
-bool wxEventLoop::Dispatch()
+bool wxGUIEventLoop::Dispatch()
 {
     // This check is required by wxGTK but probably not really for wxCocoa
     // Keep it here to encourage developers to write cross-platform code

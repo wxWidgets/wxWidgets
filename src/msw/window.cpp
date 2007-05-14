@@ -2464,7 +2464,7 @@ LRESULT WXDLLEXPORT APIENTRY _EXPORT wxWndProc(HWND hWnd, UINT message, WPARAM w
 
     LRESULT rc;
 
-    if ( wnd && wxEventLoop::AllowProcessing(wnd) )
+    if ( wnd && wxGUIEventLoop::AllowProcessing(wnd) )
         rc = wnd->MSWWindowProc(message, wParam, lParam);
     else
         rc = ::DefWindowProc(hWnd, message, wParam, lParam);

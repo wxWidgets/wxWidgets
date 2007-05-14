@@ -3396,7 +3396,7 @@ if test "${enable_gui+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_GUI" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_GUI=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -3437,7 +3437,7 @@ if test "${enable_monolithic+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_MONOLITHIC" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_MONOLITHIC=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -3478,7 +3478,7 @@ if test "${enable_plugins+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_PLUGINS" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_PLUGINS=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -3520,7 +3520,7 @@ if test "${with_subdirs+set}" = set; then
 
 else
 
-                        LINE=`grep "wxWITH_SUBDIRS" ${wx_arg_cache_file}`
+                        LINE=`grep "^wxWITH_SUBDIRS=" ${wx_arg_cache_file}`
                         if test "x$LINE" != x ; then
                           eval "DEFAULT_$LINE"
                         else
@@ -3564,7 +3564,7 @@ if test "${enable_universal+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_UNIVERSAL" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_UNIVERSAL=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -3671,7 +3671,7 @@ if test "${enable_nanox+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_NANOX" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_NANOX=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -3718,7 +3718,7 @@ if test "${enable_gpe+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_GPE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_GPE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -3768,7 +3768,7 @@ echo "$as_me: error: Invalid value for --with-libpng: should be yes, no, sys, or
 
 else
 
-                        LINE=`grep "wxUSE_LIBPNG" ${wx_arg_cache_file}`
+                        LINE=`grep "^wxUSE_LIBPNG=" ${wx_arg_cache_file}`
                         if test "x$LINE" != x ; then
                           eval "DEFAULT_$LINE"
                         else
@@ -3827,7 +3827,7 @@ echo "$as_me: error: Invalid value for --with-libjpeg: should be yes, no, sys, o
 
 else
 
-                        LINE=`grep "wxUSE_LIBJPEG" ${wx_arg_cache_file}`
+                        LINE=`grep "^wxUSE_LIBJPEG=" ${wx_arg_cache_file}`
                         if test "x$LINE" != x ; then
                           eval "DEFAULT_$LINE"
                         else
@@ -3886,7 +3886,7 @@ echo "$as_me: error: Invalid value for --with-libtiff: should be yes, no, sys, o
 
 else
 
-                        LINE=`grep "wxUSE_LIBTIFF" ${wx_arg_cache_file}`
+                        LINE=`grep "^wxUSE_LIBTIFF=" ${wx_arg_cache_file}`
                         if test "x$LINE" != x ; then
                           eval "DEFAULT_$LINE"
                         else
@@ -3945,7 +3945,7 @@ echo "$as_me: error: Invalid value for --with-libxpm: should be yes, no, sys, or
 
 else
 
-                        LINE=`grep "wxUSE_LIBXPM" ${wx_arg_cache_file}`
+                        LINE=`grep "^wxUSE_LIBXPM=" ${wx_arg_cache_file}`
                         if test "x$LINE" != x ; then
                           eval "DEFAULT_$LINE"
                         else
@@ -3997,7 +3997,7 @@ if test "${with_libmspack+set}" = set; then
 
 else
 
-                        LINE=`grep "wxUSE_LIBMSPACK" ${wx_arg_cache_file}`
+                        LINE=`grep "^wxUSE_LIBMSPACK=" ${wx_arg_cache_file}`
                         if test "x$LINE" != x ; then
                           eval "DEFAULT_$LINE"
                         else
@@ -4039,7 +4039,7 @@ if test "${with_sdl+set}" = set; then
 
 else
 
-                        LINE=`grep "wxUSE_LIBSDL" ${wx_arg_cache_file}`
+                        LINE=`grep "^wxUSE_LIBSDL=" ${wx_arg_cache_file}`
                         if test "x$LINE" != x ; then
                           eval "DEFAULT_$LINE"
                         else
@@ -4081,7 +4081,7 @@ if test "${with_gnomeprint+set}" = set; then
 
 else
 
-                        LINE=`grep "wxUSE_LIBGNOMEPRINT" ${wx_arg_cache_file}`
+                        LINE=`grep "^wxUSE_LIBGNOMEPRINT=" ${wx_arg_cache_file}`
                         if test "x$LINE" != x ; then
                           eval "DEFAULT_$LINE"
                         else
@@ -4123,7 +4123,7 @@ if test "${with_gnomevfs+set}" = set; then
 
 else
 
-                        LINE=`grep "wxUSE_LIBGNOMEVFS" ${wx_arg_cache_file}`
+                        LINE=`grep "^wxUSE_LIBGNOMEVFS=" ${wx_arg_cache_file}`
                         if test "x$LINE" != x ; then
                           eval "DEFAULT_$LINE"
                         else
@@ -4165,7 +4165,7 @@ if test "${with_hildon+set}" = set; then
 
 else
 
-                        LINE=`grep "wxUSE_LIBHILDON" ${wx_arg_cache_file}`
+                        LINE=`grep "^wxUSE_LIBHILDON=" ${wx_arg_cache_file}`
                         if test "x$LINE" != x ; then
                           eval "DEFAULT_$LINE"
                         else
@@ -4207,7 +4207,7 @@ if test "${with_opengl+set}" = set; then
 
 else
 
-                        LINE=`grep "wxUSE_OPENGL" ${wx_arg_cache_file}`
+                        LINE=`grep "^wxUSE_OPENGL=" ${wx_arg_cache_file}`
                         if test "x$LINE" != x ; then
                           eval "DEFAULT_$LINE"
                         else
@@ -4261,7 +4261,7 @@ if test "${with_dmalloc+set}" = set; then
 
 else
 
-                        LINE=`grep "wxUSE_DMALLOC" ${wx_arg_cache_file}`
+                        LINE=`grep "^wxUSE_DMALLOC=" ${wx_arg_cache_file}`
                         if test "x$LINE" != x ; then
                           eval "DEFAULT_$LINE"
                         else
@@ -4310,7 +4310,7 @@ echo "$as_me: error: Invalid value for --with-regex: should be yes, no, sys, or 
 
 else
 
-                        LINE=`grep "wxUSE_REGEX" ${wx_arg_cache_file}`
+                        LINE=`grep "^wxUSE_REGEX=" ${wx_arg_cache_file}`
                         if test "x$LINE" != x ; then
                           eval "DEFAULT_$LINE"
                         else
@@ -4369,7 +4369,7 @@ echo "$as_me: error: Invalid value for --with-zlib: should be yes, no, sys, or b
 
 else
 
-                        LINE=`grep "wxUSE_ZLIB" ${wx_arg_cache_file}`
+                        LINE=`grep "^wxUSE_ZLIB=" ${wx_arg_cache_file}`
                         if test "x$LINE" != x ; then
                           eval "DEFAULT_$LINE"
                         else
@@ -4428,7 +4428,7 @@ echo "$as_me: error: Invalid value for --with-odbc: should be yes, no, sys, or b
 
 else
 
-                        LINE=`grep "wxUSE_ODBC" ${wx_arg_cache_file}`
+                        LINE=`grep "^wxUSE_ODBC=" ${wx_arg_cache_file}`
                         if test "x$LINE" != x ; then
                           eval "DEFAULT_$LINE"
                         else
@@ -4487,7 +4487,7 @@ echo "$as_me: error: Invalid value for --with-expat: should be yes, no, sys, or 
 
 else
 
-                        LINE=`grep "wxUSE_EXPAT" ${wx_arg_cache_file}`
+                        LINE=`grep "^wxUSE_EXPAT=" ${wx_arg_cache_file}`
                         if test "x$LINE" != x ; then
                           eval "DEFAULT_$LINE"
                         else
@@ -4540,7 +4540,7 @@ if test "${enable_shared+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_SHARED" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_SHARED=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -4581,7 +4581,7 @@ if test "${enable_optimise+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_OPTIMISE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_OPTIMISE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -4622,7 +4622,7 @@ if test "${enable_debug+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_DEBUG" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_DEBUG=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -4663,7 +4663,7 @@ if test "${enable_stl+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_STL" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_STL=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -4704,7 +4704,7 @@ if test "${enable_extended_rtti+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_EXTENDED_RTTI" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_EXTENDED_RTTI=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -4747,7 +4747,7 @@ if test "${enable_omf+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_OMF" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_OMF=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -4800,7 +4800,7 @@ if test "${enable_debug_flag+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_DEBUG_FLAG" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_DEBUG_FLAG=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -4841,7 +4841,7 @@ if test "${enable_debug_info+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_DEBUG_INFO" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_DEBUG_INFO=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -4882,7 +4882,7 @@ if test "${enable_debug_gdb+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_DEBUG_GDB" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_DEBUG_GDB=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -4923,7 +4923,7 @@ if test "${enable_debug_cntxt+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_DEBUG_CONTEXT" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_DEBUG_CONTEXT=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -4964,7 +4964,7 @@ if test "${enable_mem_tracing+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_MEM_TRACING" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_MEM_TRACING=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -5005,7 +5005,7 @@ if test "${enable_profile+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_PROFILE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_PROFILE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -5046,7 +5046,7 @@ if test "${enable_no_rtti+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_NO_RTTI" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_NO_RTTI=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -5087,7 +5087,7 @@ if test "${enable_no_exceptions+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_NO_EXCEPTIONS" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_NO_EXCEPTIONS=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -5128,7 +5128,7 @@ if test "${enable_permissive+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_PERMISSIVE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_PERMISSIVE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -5169,7 +5169,7 @@ if test "${enable_no_deps+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_NO_DEPS" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_NO_DEPS=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -5210,7 +5210,7 @@ if test "${enable_vararg_macros+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_VARARG_MACROS" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_VARARG_MACROS=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -5247,7 +5247,7 @@ if test "${enable_universal_binary+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_UNIVERSAL_BINARY" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_UNIVERSAL_BINARY=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -5284,7 +5284,7 @@ if test "${enable_compat26+set}" = set; then
 
 else
 
-                          LINE=`grep "WXWIN_COMPATIBILITY_2_6" ${wx_arg_cache_file}`
+                          LINE=`grep "^WXWIN_COMPATIBILITY_2_6=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -5325,7 +5325,7 @@ if test "${enable_compat28+set}" = set; then
 
 else
 
-                          LINE=`grep "WXWIN_COMPATIBILITY_2_8" ${wx_arg_cache_file}`
+                          LINE=`grep "^WXWIN_COMPATIBILITY_2_8=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -5367,7 +5367,7 @@ if test "${enable_rpath+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_RPATH" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_RPATH=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -5411,7 +5411,7 @@ if test "${enable_intl+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_INTL" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_INTL=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -5452,7 +5452,7 @@ if test "${enable_config+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_CONFIG" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_CONFIG=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -5494,7 +5494,7 @@ if test "${enable_protocols+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_PROTOCOL" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_PROTOCOL=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -5535,7 +5535,7 @@ if test "${enable_ftp+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_PROTOCOL_FTP" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_PROTOCOL_FTP=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -5576,7 +5576,7 @@ if test "${enable_http+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_PROTOCOL_HTTP" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_PROTOCOL_HTTP=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -5617,7 +5617,7 @@ if test "${enable_fileproto+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_PROTOCOL_FILE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_PROTOCOL_FILE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -5658,7 +5658,7 @@ if test "${enable_sockets+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_SOCKETS" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_SOCKETS=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -5699,7 +5699,7 @@ if test "${enable_ole+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_OLE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_OLE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -5740,7 +5740,7 @@ if test "${enable_dataobj+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_DATAOBJ" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_DATAOBJ=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -5782,7 +5782,7 @@ if test "${enable_ipc+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_IPC" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_IPC=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -5824,7 +5824,7 @@ if test "${enable_apple_ieee+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_APPLE_IEEE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_APPLE_IEEE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -5865,7 +5865,7 @@ if test "${enable_arcstream+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_ARCHIVE_STREAMS" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_ARCHIVE_STREAMS=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -5906,7 +5906,7 @@ if test "${enable_backtrace+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_STACKWALKER" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_STACKWALKER=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -5947,7 +5947,7 @@ if test "${enable_catch_segvs+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_ON_FATAL_EXCEPTION" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_ON_FATAL_EXCEPTION=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -5988,7 +5988,7 @@ if test "${enable_cmdline+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_CMDLINE_PARSER" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_CMDLINE_PARSER=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -6029,7 +6029,7 @@ if test "${enable_datetime+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_DATETIME" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_DATETIME=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -6070,7 +6070,7 @@ if test "${enable_debugreport+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_DEBUGREPORT" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_DEBUGREPORT=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -6111,7 +6111,7 @@ if test "${enable_dialupman+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_DIALUP_MANAGER" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_DIALUP_MANAGER=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -6152,7 +6152,7 @@ if test "${enable_dynlib+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_DYNLIB_CLASS" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_DYNLIB_CLASS=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -6193,7 +6193,7 @@ if test "${enable_dynamicloader+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_DYNAMIC_LOADER" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_DYNAMIC_LOADER=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -6234,7 +6234,7 @@ if test "${enable_exceptions+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_EXCEPTIONS" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_EXCEPTIONS=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -6275,7 +6275,7 @@ if test "${enable_ffile+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_FFILE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_FFILE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -6316,7 +6316,7 @@ if test "${enable_file+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_FILE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_FILE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -6357,7 +6357,7 @@ if test "${enable_filesystem+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_FILESYSTEM" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_FILESYSTEM=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -6398,7 +6398,7 @@ if test "${enable_fontmap+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_FONTMAP" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_FONTMAP=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -6439,7 +6439,7 @@ if test "${enable_fs_archive+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_FS_ARCHIVE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_FS_ARCHIVE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -6480,7 +6480,7 @@ if test "${enable_fs_inet+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_FS_INET" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_FS_INET=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -6521,7 +6521,7 @@ if test "${enable_fs_zip+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_FS_ZIP" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_FS_ZIP=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -6562,7 +6562,7 @@ if test "${enable_geometry+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_GEOMETRY" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_GEOMETRY=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -6603,7 +6603,7 @@ if test "${enable_log+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_LOG" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_LOG=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -6644,7 +6644,7 @@ if test "${enable_longlong+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_LONGLONG" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_LONGLONG=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -6685,7 +6685,7 @@ if test "${enable_mimetype+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_MIMETYPE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_MIMETYPE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -6726,7 +6726,7 @@ if test "${enable_mslu+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_UNICODE_MSLU" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_UNICODE_MSLU=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -6763,7 +6763,7 @@ if test "${enable_utf8+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_UNICODE_UTF8" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_UNICODE_UTF8=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -6799,7 +6799,7 @@ if test "${enable_utf8only+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_UNICODE_UTF8_LOCALE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_UNICODE_UTF8_LOCALE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -6840,7 +6840,7 @@ if test "${enable_snglinst+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_SNGLINST_CHECKER" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_SNGLINST_CHECKER=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -6881,7 +6881,7 @@ if test "${enable_std_iostreams+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_STD_IOSTREAM" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_STD_IOSTREAM=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -6922,7 +6922,7 @@ if test "${enable_std_string+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_STD_STRING" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_STD_STRING=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -6963,7 +6963,7 @@ if test "${enable_stdpaths+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_STDPATHS" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_STDPATHS=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -7004,7 +7004,7 @@ if test "${enable_stopwatch+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_STOPWATCH" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_STOPWATCH=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -7045,7 +7045,7 @@ if test "${enable_streams+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_STREAMS" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_STREAMS=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -7086,7 +7086,7 @@ if test "${enable_system_options+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_SYSTEM_OPTIONS" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_SYSTEM_OPTIONS=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -7127,7 +7127,7 @@ if test "${enable_tarstream+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_TARSTREAM" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_TARSTREAM=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -7168,7 +7168,7 @@ if test "${enable_textbuf+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_TEXTBUFFER" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_TEXTBUFFER=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -7209,7 +7209,7 @@ if test "${enable_textfile+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_TEXTFILE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_TEXTFILE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -7250,7 +7250,7 @@ if test "${enable_timer+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_TIMER" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_TIMER=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -7291,7 +7291,7 @@ if test "${enable_unicode+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_UNICODE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_UNICODE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -7332,7 +7332,7 @@ if test "${enable_sound+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_SOUND" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_SOUND=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -7373,7 +7373,7 @@ if test "${enable_mediactrl+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_MEDIACTRL" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_MEDIACTRL=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -7414,7 +7414,7 @@ if test "${enable_gstreamer8+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_GSTREAMER8" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_GSTREAMER8=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -7455,7 +7455,7 @@ if test "${enable_printfposparam+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_PRINTF_POS_PARAMS" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_PRINTF_POS_PARAMS=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -7496,7 +7496,7 @@ if test "${enable_zipstream+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_ZIPSTREAM" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_ZIPSTREAM=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -7538,7 +7538,7 @@ if test "${enable_url+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_URL" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_URL=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -7579,7 +7579,7 @@ if test "${enable_variant+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_VARIANT" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_VARIANT=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -7620,7 +7620,7 @@ if test "${enable_protocol+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_PROTOCOL" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_PROTOCOL=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -7661,7 +7661,7 @@ if test "${enable_protocol_http+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_PROTOCOL_HTTP" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_PROTOCOL_HTTP=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -7702,7 +7702,7 @@ if test "${enable_protocol_ftp+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_PROTOCOL_FTP" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_PROTOCOL_FTP=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -7743,7 +7743,7 @@ if test "${enable_protocol_file+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_PROTOCOL_FILE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_PROTOCOL_FILE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -7787,7 +7787,7 @@ if test "${enable_threads+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_THREADS" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_THREADS=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -7832,7 +7832,7 @@ if test "${enable_docview+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_DOC_VIEW_ARCHITECTURE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_DOC_VIEW_ARCHITECTURE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -7873,7 +7873,7 @@ if test "${enable_help+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_HELP" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_HELP=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -7914,7 +7914,7 @@ if test "${enable_mshtmlhelp+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_MS_HTML_HELP" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_MS_HTML_HELP=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -7955,7 +7955,7 @@ if test "${enable_html+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_HTML" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_HTML=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -7996,7 +7996,7 @@ if test "${enable_htmlhelp+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_WXHTML_HELP" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_WXHTML_HELP=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -8037,7 +8037,7 @@ if test "${enable_xrc+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_XRC" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_XRC=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -8078,7 +8078,7 @@ if test "${enable_aui+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_AUI" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_AUI=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -8119,7 +8119,7 @@ if test "${enable_stc+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_STC" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_STC=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -8160,7 +8160,7 @@ if test "${enable_constraints+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_CONSTRAINTS" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_CONSTRAINTS=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -8201,7 +8201,7 @@ if test "${enable_printarch+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_PRINTING_ARCHITECTURE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_PRINTING_ARCHITECTURE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -8242,7 +8242,7 @@ if test "${enable_mdi+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_MDI" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_MDI=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -8283,7 +8283,7 @@ if test "${enable_mdidoc+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_MDI_ARCHITECTURE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_MDI_ARCHITECTURE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -8324,7 +8324,7 @@ if test "${enable_loggui+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_LOGGUI" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_LOGGUI=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -8365,7 +8365,7 @@ if test "${enable_logwin+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_LOGWINDOW" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_LOGWINDOW=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -8406,7 +8406,7 @@ if test "${enable_logdialog+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_LOGDIALOG" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_LOGDIALOG=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -8447,7 +8447,7 @@ if test "${enable_webkit+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_WEBKIT" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_WEBKIT=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -8488,7 +8488,7 @@ if test "${enable_richtext+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_RICHTEXT" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_RICHTEXT=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -8529,7 +8529,7 @@ if test "${enable_graphics_ctx+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_GRAPHICS_CONTEXT" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_GRAPHICS_CONTEXT=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -8571,7 +8571,7 @@ if test "${enable_postscript+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_POSTSCRIPT" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_POSTSCRIPT=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -8615,7 +8615,7 @@ if test "${enable_clipboard+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_CLIPBOARD" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_CLIPBOARD=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -8656,7 +8656,7 @@ if test "${enable_dnd+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_DRAG_AND_DROP" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_DRAG_AND_DROP=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -8697,7 +8697,7 @@ if test "${enable_metafile+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_METAFILE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_METAFILE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -8741,7 +8741,7 @@ if test "${enable_controls+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_CONTROLS" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_CONTROLS=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -8891,7 +8891,7 @@ if test "${enable_accel+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_ACCEL" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_ACCEL=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -8932,7 +8932,7 @@ if test "${enable_animatectrl+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_ANIMATIONCTRL" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_ANIMATIONCTRL=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -8973,7 +8973,7 @@ if test "${enable_button+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_BUTTON" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_BUTTON=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -9014,7 +9014,7 @@ if test "${enable_bmpbutton+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_BMPBUTTON" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_BMPBUTTON=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -9055,7 +9055,7 @@ if test "${enable_bmpcombobox+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_BITMAPCOMBOBOX" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_BITMAPCOMBOBOX=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -9096,7 +9096,7 @@ if test "${enable_calendar+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_CALCTRL" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_CALCTRL=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -9137,7 +9137,7 @@ if test "${enable_caret+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_CARET" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_CARET=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -9178,7 +9178,7 @@ if test "${enable_checkbox+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_CHECKBOX" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_CHECKBOX=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -9219,7 +9219,7 @@ if test "${enable_checklst+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_CHECKLST" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_CHECKLST=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -9260,7 +9260,7 @@ if test "${enable_choice+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_CHOICE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_CHOICE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -9301,7 +9301,7 @@ if test "${enable_choicebook+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_CHOICEBOOK" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_CHOICEBOOK=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -9342,7 +9342,7 @@ if test "${enable_collpane+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_COLLPANE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_COLLPANE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -9383,7 +9383,7 @@ if test "${enable_colourpicker+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_COLOURPICKERCTRL" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_COLOURPICKERCTRL=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -9424,7 +9424,7 @@ if test "${enable_combobox+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_COMBOBOX" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_COMBOBOX=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -9465,7 +9465,7 @@ if test "${enable_comboctrl+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_COMBOCTRL" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_COMBOCTRL=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -9506,7 +9506,7 @@ if test "${enable_datepick+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_DATEPICKCTRL" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_DATEPICKCTRL=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -9547,7 +9547,7 @@ if test "${enable_dirpicker+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_DIRPICKERCTRL" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_DIRPICKERCTRL=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -9588,7 +9588,7 @@ if test "${enable_display+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_DISPLAY" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_DISPLAY=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -9629,7 +9629,7 @@ if test "${enable_detect_sm+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_DETECT_SM" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_DETECT_SM=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -9670,7 +9670,7 @@ if test "${enable_editablebox+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_EDITABLELISTBOX" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_EDITABLELISTBOX=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -9711,7 +9711,7 @@ if test "${enable_filepicker+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_FILEPICKERCTRL" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_FILEPICKERCTRL=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -9752,7 +9752,7 @@ if test "${enable_fontpicker+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_FONTPICKERCTRL" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_FONTPICKERCTRL=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -9793,7 +9793,7 @@ if test "${enable_gauge+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_GAUGE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_GAUGE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -9834,7 +9834,7 @@ if test "${enable_grid+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_GRID" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_GRID=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -9875,7 +9875,7 @@ if test "${enable_dataviewctrl+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_DATAVIEWCTRL" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_DATAVIEWCTRL=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -9916,7 +9916,7 @@ if test "${enable_hyperlink+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_HYPERLINKCTRL" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_HYPERLINKCTRL=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -9957,7 +9957,7 @@ if test "${enable_imaglist+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_IMAGLIST" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_IMAGLIST=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -9998,7 +9998,7 @@ if test "${enable_listbook+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_LISTBOOK" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_LISTBOOK=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -10039,7 +10039,7 @@ if test "${enable_listbox+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_LISTBOX" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_LISTBOX=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -10080,7 +10080,7 @@ if test "${enable_listctrl+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_LISTCTRL" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_LISTCTRL=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -10121,7 +10121,7 @@ if test "${enable_notebook+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_NOTEBOOK" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_NOTEBOOK=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -10162,7 +10162,7 @@ if test "${enable_odcombobox+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_ODCOMBOBOX" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_ODCOMBOBOX=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -10203,7 +10203,7 @@ if test "${enable_radiobox+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_RADIOBOX" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_RADIOBOX=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -10244,7 +10244,7 @@ if test "${enable_radiobtn+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_RADIOBTN" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_RADIOBTN=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -10285,7 +10285,7 @@ if test "${enable_sash+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_SASH" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_SASH=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -10326,7 +10326,7 @@ if test "${enable_scrollbar+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_SCROLLBAR" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_SCROLLBAR=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -10367,7 +10367,7 @@ if test "${enable_searchctrl+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_SEARCHCTRL" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_SEARCHCTRL=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -10408,7 +10408,7 @@ if test "${enable_slider+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_SLIDER" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_SLIDER=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -10449,7 +10449,7 @@ if test "${enable_spinbtn+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_SPINBTN" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_SPINBTN=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -10490,7 +10490,7 @@ if test "${enable_spinctrl+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_SPINCTRL" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_SPINCTRL=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -10531,7 +10531,7 @@ if test "${enable_splitter+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_SPLITTER" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_SPLITTER=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -10572,7 +10572,7 @@ if test "${enable_statbmp+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_STATBMP" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_STATBMP=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -10613,7 +10613,7 @@ if test "${enable_statbox+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_STATBOX" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_STATBOX=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -10654,7 +10654,7 @@ if test "${enable_statline+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_STATLINE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_STATLINE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -10695,7 +10695,7 @@ if test "${enable_stattext+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_STATTEXT" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_STATTEXT=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -10736,7 +10736,7 @@ if test "${enable_statusbar+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_STATUSBAR" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_STATUSBAR=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -10777,7 +10777,7 @@ if test "${enable_tabdialog+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_TAB_DIALOG" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_TAB_DIALOG=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -10818,7 +10818,7 @@ if test "${enable_textctrl+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_TEXTCTRL" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_TEXTCTRL=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -10859,7 +10859,7 @@ if test "${enable_togglebtn+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_TOGGLEBTN" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_TOGGLEBTN=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -10900,7 +10900,7 @@ if test "${enable_toolbar+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_TOOLBAR" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_TOOLBAR=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -10941,7 +10941,7 @@ if test "${enable_tbarnative+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_TOOLBAR_NATIVE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_TOOLBAR_NATIVE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -10982,7 +10982,7 @@ if test "${enable_treebook+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_TREEBOOK" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_TREEBOOK=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -11023,7 +11023,7 @@ if test "${enable_toolbook+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_TOOLBOOK" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_TOOLBOOK=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -11064,7 +11064,7 @@ if test "${enable_treectrl+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_TREECTRL" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_TREECTRL=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -11105,7 +11105,7 @@ if test "${enable_tipwindow+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_TIPWINDOW" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_TIPWINDOW=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -11146,7 +11146,7 @@ if test "${enable_popupwin+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_POPUPWIN" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_POPUPWIN=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -11189,7 +11189,7 @@ if test "${enable_commondlg+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_COMMONDLGS" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_COMMONDLGS=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -11230,7 +11230,7 @@ if test "${enable_aboutdlg+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_ABOUTDLG" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_ABOUTDLG=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -11271,7 +11271,7 @@ if test "${enable_choicedlg+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_CHOICEDLG" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_CHOICEDLG=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -11312,7 +11312,7 @@ if test "${enable_coldlg+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_COLOURDLG" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_COLOURDLG=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -11353,7 +11353,7 @@ if test "${enable_filedlg+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_FILEDLG" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_FILEDLG=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -11394,7 +11394,7 @@ if test "${enable_finddlg+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_FINDREPLDLG" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_FINDREPLDLG=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -11435,7 +11435,7 @@ if test "${enable_fontdlg+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_FONTDLG" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_FONTDLG=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -11476,7 +11476,7 @@ if test "${enable_dirdlg+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_DIRDLG" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_DIRDLG=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -11517,7 +11517,7 @@ if test "${enable_msgdlg+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_MSGDLG" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_MSGDLG=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -11558,7 +11558,7 @@ if test "${enable_numberdlg+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_NUMBERDLG" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_NUMBERDLG=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -11599,7 +11599,7 @@ if test "${enable_splash+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_SPLASH" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_SPLASH=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -11640,7 +11640,7 @@ if test "${enable_textdlg+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_TEXTDLG" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_TEXTDLG=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -11681,7 +11681,7 @@ if test "${enable_tipdlg+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_STARTUP_TIPS" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_STARTUP_TIPS=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -11722,7 +11722,7 @@ if test "${enable_progressdlg+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_PROGRESSDLG" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_PROGRESSDLG=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -11763,7 +11763,7 @@ if test "${enable_wizarddlg+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_WIZARDDLG" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_WIZARDDLG=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -11806,7 +11806,7 @@ if test "${enable_menus+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_MENUS" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_MENUS=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -11847,7 +11847,7 @@ if test "${enable_miniframe+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_MINIFRAME" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_MINIFRAME=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -11888,7 +11888,7 @@ if test "${enable_tooltips+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_TOOLTIPS" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_TOOLTIPS=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -11929,7 +11929,7 @@ if test "${enable_splines+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_SPLINES" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_SPLINES=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -11970,7 +11970,7 @@ if test "${enable_mousewheel+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_MOUSEWHEEL" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_MOUSEWHEEL=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -12011,7 +12011,7 @@ if test "${enable_validators+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_VALIDATORS" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_VALIDATORS=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -12052,7 +12052,7 @@ if test "${enable_busyinfo+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_BUSYINFO" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_BUSYINFO=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -12093,7 +12093,7 @@ if test "${enable_joystick+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_JOYSTICK" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_JOYSTICK=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -12134,7 +12134,7 @@ if test "${enable_metafile+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_METAFILE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_METAFILE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -12175,7 +12175,7 @@ if test "${enable_dragimage+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_DRAGIMAGE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_DRAGIMAGE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -12216,7 +12216,7 @@ if test "${enable_accessibility+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_ACCESSIBILITY" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_ACCESSIBILITY=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -12259,7 +12259,7 @@ if test "${enable_dccache+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_DC_CACHEING" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_DC_CACHEING=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -12303,7 +12303,7 @@ if test "${enable_palette+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_PALETTE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_PALETTE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -12344,7 +12344,7 @@ if test "${enable_image+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_IMAGE" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_IMAGE=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -12385,7 +12385,7 @@ if test "${enable_gif+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_GIF" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_GIF=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -12426,7 +12426,7 @@ if test "${enable_pcx+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_PCX" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_PCX=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -12467,7 +12467,7 @@ if test "${enable_tga+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_TGA" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_TGA=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -12508,7 +12508,7 @@ if test "${enable_iff+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_IFF" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_IFF=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -12549,7 +12549,7 @@ if test "${enable_pnm+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_PNM" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_PNM=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -12590,7 +12590,7 @@ if test "${enable_xpm+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_XPM" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_XPM=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -12631,7 +12631,7 @@ if test "${enable_ico_cur+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_ICO_CUR" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_ICO_CUR=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -12684,7 +12684,7 @@ if test "${enable_official_build+set}" = set; then
 
 else
 
-                          LINE=`grep "wxUSE_OFFICIAL_BUILD" ${wx_arg_cache_file}`
+                          LINE=`grep "^wxUSE_OFFICIAL_BUILD=" ${wx_arg_cache_file}`
                           if test "x$LINE" != x ; then
                             eval "DEFAULT_$LINE"
                           else
@@ -18124,6 +18124,152 @@ echo "${ECHO_T}$ac_cv_header_sys_select_h" >&6; }
 
 
 fi
+
+
+for ac_header in sys/epoll.h
+do
+as_ac_Header=`echo "ac_cv_header_$ac_header" | $as_tr_sh`
+if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
+  { echo "$as_me:$LINENO: checking for $ac_header" >&5
+echo $ECHO_N "checking for $ac_header... $ECHO_C" >&6; }
+if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+fi
+ac_res=`eval echo '${'$as_ac_Header'}'`
+	       { echo "$as_me:$LINENO: result: $ac_res" >&5
+echo "${ECHO_T}$ac_res" >&6; }
+else
+  # Is the header compilable?
+{ echo "$as_me:$LINENO: checking $ac_header usability" >&5
+echo $ECHO_N "checking $ac_header usability... $ECHO_C" >&6; }
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+$ac_includes_default
+#include <$ac_header>
+_ACEOF
+rm -f conftest.$ac_objext
+if { (ac_try="$ac_compile"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_compile") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && {
+	 test -z "$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       } && test -s conftest.$ac_objext; then
+  ac_header_compiler=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+	ac_header_compiler=no
+fi
+
+rm -f core conftest.err conftest.$ac_objext conftest.$ac_ext
+{ echo "$as_me:$LINENO: result: $ac_header_compiler" >&5
+echo "${ECHO_T}$ac_header_compiler" >&6; }
+
+# Is the header present?
+{ echo "$as_me:$LINENO: checking $ac_header presence" >&5
+echo $ECHO_N "checking $ac_header presence... $ECHO_C" >&6; }
+cat >conftest.$ac_ext <<_ACEOF
+/* confdefs.h.  */
+_ACEOF
+cat confdefs.h >>conftest.$ac_ext
+cat >>conftest.$ac_ext <<_ACEOF
+/* end confdefs.h.  */
+#include <$ac_header>
+_ACEOF
+if { (ac_try="$ac_cpp conftest.$ac_ext"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_cpp conftest.$ac_ext") 2>conftest.er1
+  ac_status=$?
+  grep -v '^ *+' conftest.er1 >conftest.err
+  rm -f conftest.er1
+  cat conftest.err >&5
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } >/dev/null && {
+	 test -z "$ac_c_preproc_warn_flag$ac_c_werror_flag" ||
+	 test ! -s conftest.err
+       }; then
+  ac_header_preproc=yes
+else
+  echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+  ac_header_preproc=no
+fi
+
+rm -f conftest.err conftest.$ac_ext
+{ echo "$as_me:$LINENO: result: $ac_header_preproc" >&5
+echo "${ECHO_T}$ac_header_preproc" >&6; }
+
+# So?  What about this header?
+case $ac_header_compiler:$ac_header_preproc:$ac_c_preproc_warn_flag in
+  yes:no: )
+    { echo "$as_me:$LINENO: WARNING: $ac_header: accepted by the compiler, rejected by the preprocessor!" >&5
+echo "$as_me: WARNING: $ac_header: accepted by the compiler, rejected by the preprocessor!" >&2;}
+    { echo "$as_me:$LINENO: WARNING: $ac_header: proceeding with the compiler's result" >&5
+echo "$as_me: WARNING: $ac_header: proceeding with the compiler's result" >&2;}
+    ac_header_preproc=yes
+    ;;
+  no:yes:* )
+    { echo "$as_me:$LINENO: WARNING: $ac_header: present but cannot be compiled" >&5
+echo "$as_me: WARNING: $ac_header: present but cannot be compiled" >&2;}
+    { echo "$as_me:$LINENO: WARNING: $ac_header:     check for missing prerequisite headers?" >&5
+echo "$as_me: WARNING: $ac_header:     check for missing prerequisite headers?" >&2;}
+    { echo "$as_me:$LINENO: WARNING: $ac_header: see the Autoconf documentation" >&5
+echo "$as_me: WARNING: $ac_header: see the Autoconf documentation" >&2;}
+    { echo "$as_me:$LINENO: WARNING: $ac_header:     section \"Present But Cannot Be Compiled\"" >&5
+echo "$as_me: WARNING: $ac_header:     section \"Present But Cannot Be Compiled\"" >&2;}
+    { echo "$as_me:$LINENO: WARNING: $ac_header: proceeding with the preprocessor's result" >&5
+echo "$as_me: WARNING: $ac_header: proceeding with the preprocessor's result" >&2;}
+    { echo "$as_me:$LINENO: WARNING: $ac_header: in the future, the compiler will take precedence" >&5
+echo "$as_me: WARNING: $ac_header: in the future, the compiler will take precedence" >&2;}
+    ( cat <<\_ASBOX
+## ----------------------------------------- ##
+## Report this to wx-dev@lists.wxwidgets.org ##
+## ----------------------------------------- ##
+_ASBOX
+     ) | sed "s/^/$as_me: WARNING:     /" >&2
+    ;;
+esac
+{ echo "$as_me:$LINENO: checking for $ac_header" >&5
+echo $ECHO_N "checking for $ac_header... $ECHO_C" >&6; }
+if { as_var=$as_ac_Header; eval "test \"\${$as_var+set}\" = set"; }; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  eval "$as_ac_Header=\$ac_header_preproc"
+fi
+ac_res=`eval echo '${'$as_ac_Header'}'`
+	       { echo "$as_me:$LINENO: result: $ac_res" >&5
+echo "${ECHO_T}$ac_res" >&6; }
+
+fi
+if test `eval echo '${'$as_ac_Header'}'` = yes; then
+  cat >>confdefs.h <<_ACEOF
+#define `echo "HAVE_$ac_header" | $as_tr_cpp` 1
+_ACEOF
+
+fi
+
+done
+
 
 
 { echo "$as_me:$LINENO: checking for an ANSI C-conforming const" >&5

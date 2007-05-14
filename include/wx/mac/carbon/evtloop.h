@@ -29,10 +29,10 @@
 
 #if wxMAC_USE_RUN_APP_EVENT_LOOP
 
-class WXDLLEXPORT wxEventLoop : public wxEventLoopBase
+class WXDLLEXPORT wxGUIEventLoop : public wxEventLoopBase
 {
 public:
-    wxEventLoop() { m_exitcode = 0; }
+    wxGUIEventLoop() { m_exitcode = 0; }
 
     // implement base class pure virtuals
     virtual int Run();
@@ -46,10 +46,10 @@ private:
 
 #else // manual event loop
 
-class WXDLLEXPORT wxEventLoop : public wxEventLoopManual
+class WXDLLEXPORT wxGUIEventLoop : public wxEventLoopManual
 {
 public:
-    wxEventLoop() { }
+    wxGUIEventLoop() { }
 
     virtual bool Pending() const;
     virtual bool Dispatch();

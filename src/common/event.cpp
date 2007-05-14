@@ -48,10 +48,10 @@
 #if wxUSE_BASE
     IMPLEMENT_DYNAMIC_CLASS(wxEvtHandler, wxObject)
     IMPLEMENT_ABSTRACT_CLASS(wxEvent, wxObject)
+    IMPLEMENT_DYNAMIC_CLASS(wxIdleEvent, wxEvent)
 #endif // wxUSE_BASE
 
 #if wxUSE_GUI
-    IMPLEMENT_DYNAMIC_CLASS(wxIdleEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxCommandEvent, wxEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxNotifyEvent, wxCommandEvent)
     IMPLEMENT_DYNAMIC_CLASS(wxScrollEvent, wxCommandEvent)
@@ -309,6 +309,8 @@ DEFINE_EVENT_TYPE(wxEVT_DETAILED_HELP)
 
 #if wxUSE_BASE
 
+wxIdleMode wxIdleEvent::sm_idleMode = wxIDLE_PROCESS_ALL;
+
 // ============================================================================
 // implementation
 // ============================================================================
@@ -467,25 +469,6 @@ void wxUpdateUIEvent::ResetUpdateTime()
         }
     }
 #endif
-}
-
-/*
- * Idle events
- */
-
-wxIdleMode wxIdleEvent::sm_idleMode = wxIDLE_PROCESS_ALL;
-
-// Can we send an idle event?
-bool wxIdleEvent::CanSend(wxWindow* win)
-{
-    // Don't update if we've switched global updating off
-    // and this window doesn't support updates.
-    if (win &&
-       (GetMode() == wxIDLE_PROCESS_SPECIFIED &&
-       ((win->GetExtraStyle() & wxWS_EX_PROCESS_IDLE) == 0)))
-        return false;
-
-    return true;
 }
 
 /*

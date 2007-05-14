@@ -37,7 +37,7 @@
 wxEventLoop *wxEventLoopBase::ms_activeLoop = NULL;
 
 // wxEventLoopManual is unused in the other ports
-#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXDFB__)
+#if defined(__WXMSW__) || defined(__WXMAC__) || defined(__WXDFB__) || (defined(__UNIX__) && !wxUSE_GUI)
 
 // ============================================================================
 // wxEventLoopManual implementation
@@ -57,7 +57,7 @@ int wxEventLoopManual::Run()
     // ProcessIdle() and Dispatch() below may throw so the code here should
     // be exception-safe, hence we must use local objects for all actions we
     // should undo
-    wxEventLoopActivator activate(wx_static_cast(wxEventLoop *, this));
+    wxEventLoopActivator activate(this);
 
     // we must ensure that OnExit() is called even if an exception is thrown
     // from inside Dispatch() but we must call it from Exit() in normal

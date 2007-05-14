@@ -1237,7 +1237,7 @@ void wxDC::DoGetTextExtent(const wxString& string, wxCoord *x, wxCoord *y,
     if ( x )
         // VS: YDEV is corrent, it should *not* be XDEV, because font's are
         //     only scaled according to m_scaleY
-        *x = YDEV2LOGREL(m_MGLDC->textWidth(string.c_str()));
+        *x = YDEV2LOGREL(m_MGLDC->textWidth(string.wc_str()));
     if ( y )
         *y = YDEV2LOGREL(m_MGLDC->textHeight());
     if ( descent )

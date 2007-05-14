@@ -2068,6 +2068,8 @@ private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxContextMenuEvent)
 };
 
+#endif // wxUSE_GUI
+
 // Idle event
 /*
  wxEVT_IDLE
@@ -2087,7 +2089,7 @@ enum wxIdleMode
     wxIDLE_PROCESS_SPECIFIED
 };
 
-class WXDLLIMPEXP_CORE wxIdleEvent : public wxEvent
+class WXDLLIMPEXP_BASE wxIdleEvent : public wxEvent
 {
 public:
     wxIdleEvent()
@@ -2112,9 +2114,6 @@ public:
     // Returns the idle event mode
     static wxIdleMode GetMode() { return sm_idleMode; }
 
-    // Can we send an idle event?
-    static bool CanSend(wxWindow* win);
-
 protected:
     bool m_requestMore;
     static wxIdleMode sm_idleMode;
@@ -2122,8 +2121,6 @@ protected:
 private:
     DECLARE_DYNAMIC_CLASS_NO_ASSIGN(wxIdleEvent)
 };
-
-#endif // wxUSE_GUI
 
 /* TODO
  wxEVT_MOUSE_CAPTURE_CHANGED,
