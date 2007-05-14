@@ -688,7 +688,7 @@ WXDLLEXPORT bool wxConvertOleToVariant(const VARIANTARG& oleVariant, wxVariant& 
             unsigned short dosTime = 0;
             VariantTimeToDosDateTime(oleVariant.date, & dosDate, & dosTime);
 
-            long dosDateTime = (dosDate << 16) || dosTime;
+            long dosDateTime = (dosDate << 16) | dosTime;
             wxDateTime date;
             date.SetFromDOS(dosDateTime);
             variant = date;

@@ -210,7 +210,18 @@ struct tm *wxLocaltime_r(const time_t* ticks, struct tm* temp)
   // thread local storage for localtime anyway.
   wxMutexLocker locker(timeLock);
 #endif
-  memcpy(temp, localtime(ticks), sizeof(struct tm));
+
+  // Borland CRT crashes when passed 0 ticks for some reason, see SF bug 1704438
+#ifdef __BORLANDC__
+  if ( !*ticks )
+      return NULL;
+#endif
+
+  const tm * const t = localtime(ticks);
+  if ( !t )
+      return NULL;
+
+  memcpy(temp, t, sizeof(struct tm));
   return temp;
 }
 #endif // !HAVE_LOCALTIME_R
@@ -223,6 +234,16 @@ struct tm *wxGmtime_r(const time_t* ticks, struct tm* temp)
   // using thread local storage for gmtime anyway.
   wxMutexLocker locker(timeLock);
 #endif
+
+#ifdef __BORLANDC__
+  if ( !*ticks )
+      return NULL;
+#endif
+
+  const tm * const t = gmtime(ticks);
+  if ( !t )
+      return NULL;
+
   memcpy(temp, gmtime(ticks), sizeof(struct tm));
   return temp;
 }
@@ -660,7 +681,7 @@ void wxDateTime::Tm::ComputeWeekDay()
     // compute the week day from day/month/year: we use the dumbest algorithm
     // possible: just compute our JDN and then use the (simple to derive)
     // formula: weekday = (JDN + 1.5) % 7
-    wday = (wxDateTime::wxDateTime_t)((wxDateTime::WeekDay)(GetTruncatedJDN(mday, mon, year) + 2) % 7);
+    wday = (wxDateTime::wxDateTime_t)((GetTruncatedJDN(mday, mon, year) + 2) % 7);
 }
 
 void wxDateTime::Tm::AddMonths(int monDiff)

@@ -211,7 +211,8 @@ class MyEvtHandler(ogl.ShapeEvtHandler):
 
         if shape.Selected():
             shape.Select(False, dc)
-            canvas.Redraw(dc)
+            #canvas.Redraw(dc)
+            canvas.Refresh(False)
         else:
             redraw = False
             shapeList = canvas.GetDiagram().GetShapeList()
@@ -230,7 +231,8 @@ class MyEvtHandler(ogl.ShapeEvtHandler):
                 for s in toUnselect:
                     s.Select(False, dc)
 
-                canvas.Redraw(dc)
+                ##canvas.Redraw(dc)
+                canvas.Refresh(False)
 
         self.UpdateStatusBar(shape)
 
@@ -251,9 +253,11 @@ class MyEvtHandler(ogl.ShapeEvtHandler):
 
 
     def OnMovePost(self, dc, x, y, oldX, oldY, display):
+        shape = self.GetShape()
         ogl.ShapeEvtHandler.OnMovePost(self, dc, x, y, oldX, oldY, display)
-        self.UpdateStatusBar(self.GetShape())
-
+        self.UpdateStatusBar(shape)
+        if "wxMac" in wx.PlatformInfo:
+            shape.GetCanvas().Refresh(False)
 
     def OnRightClick(self, *dontcare):
         self.log.WriteText("%s\n" % self.GetShape())
@@ -334,8 +338,8 @@ class TestWindow(ogl.ShapeCanvas):
         s.SetBitmap(bmp)
         self.MyAddShape(s, 225, 130, None, None, "Bitmap")
 
-        dc = wx.ClientDC(self)
-        self.PrepareDC(dc)
+        #dc = wx.ClientDC(self)
+        #self.PrepareDC(dc)
 
         for x in range(len(self.shapes)):
             fromShape = self.shapes[x]

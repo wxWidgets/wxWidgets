@@ -53,6 +53,7 @@ private:
 #endif // wxLongLong_t
         CPPUNIT_TEST( ToDouble );
         CPPUNIT_TEST( WriteBuf );
+        CPPUNIT_TEST( CharStr );
     CPPUNIT_TEST_SUITE_END();
 
     void String();
@@ -76,6 +77,7 @@ private:
 #endif // wxLongLong_t
     void ToDouble();
     void WriteBuf();
+    void CharStr();
 
     DECLARE_NO_COPY_CLASS(StringTestCase)
 };
@@ -630,3 +632,15 @@ void StringTestCase::WriteBuf()
     }
 }
 
+
+static bool IsFoo(/* non-const */ char *s)
+{
+    return strcmp(s, "foo") == 0;
+}
+
+void StringTestCase::CharStr()
+{
+    wxString s(_T("foo"));
+
+    CPPUNIT_ASSERT( IsFoo(s.char_str()) );
+}

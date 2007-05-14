@@ -362,7 +362,7 @@
     <set var="msvc_copy_setup_h_script">
         <if cond="IS_MSVC_PRJ">
 Creating $(SETUPHDIR)\wx\setup.h
-InputPath=..\include\wx\%s
+InputPath=..\..\include\wx\%s
 
 "$(SETUPHDIR)\wx\setup.h" : $(DOLLAR)(SOURCE) "$(DOLLAR)(INTDIR)" "$(DOLLAR)(OUTDIR)"
 $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
@@ -421,6 +421,7 @@ $(TAB)copy "$(DOLLAR)(InputPath)" $(SETUPHDIR)\wx\setup.h
             </set>
             <set var="_custom_build_include_wx_msw_genrcdefs_h">
 Creating $(SETUPHDIR)\wx\msw\rcdefs.h
+InputPath=..\..\include\wx\msw\genrcdefs.h
 
 "$(SETUPHDIR)\wx\msw\rcdefs.h" : "$(DOLLAR)(SOURCE)" "$(SETUPHDIR)\wx\msw"
 $(TAB)$(VC_COMPILER) /EP /nologo "$(DOLLAR)(InputPath)" > "$(SETUPHDIR)\wx\msw\rcdefs.h"

@@ -94,7 +94,7 @@ public:
     // Is the matrix the identity matrix?
     // Only returns a flag, which is set whenever an operation
     // is done.
-    inline bool IsIdentity(void) const { return m_isIdentity; };
+    inline bool IsIdentity(void) const { return m_isIdentity; }
 
     // This does an actual check.
     inline bool IsIdentity1(void) const ;

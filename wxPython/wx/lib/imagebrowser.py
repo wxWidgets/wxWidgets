@@ -95,7 +95,10 @@ class ImageView(wx.Window):
         if image is None:
             return
 
-        bmp = image.ConvertToBitmap()
+        try:
+            bmp = image.ConvertToBitmap()
+        except:
+            return
 
         iwidth = bmp.GetWidth()   # dimensions of image file
         iheight = bmp.GetHeight()

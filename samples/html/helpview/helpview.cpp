@@ -43,19 +43,33 @@ class MyApp : public wxApp
         virtual bool OnInit();
         virtual int OnExit();
 
-    private:
-        wxHtmlHelpController *help;
+        /// Respond to idle event
+        void OnIdle(wxIdleEvent& event);
+
+private:
+        bool                    m_exitIfNoMainWindow;
+        wxHtmlHelpController *  help;
+DECLARE_EVENT_TABLE()
 };
 
 
 IMPLEMENT_APP(MyApp)
 
+BEGIN_EVENT_TABLE(MyApp, wxApp)
+    EVT_IDLE(MyApp::OnIdle)
+END_EVENT_TABLE()
 
 bool MyApp::OnInit()
 {
+    m_exitIfNoMainWindow = false;
 #ifdef __WXMOTIF__
     delete wxLog::SetActiveTarget(new wxLogStderr); // So dialog boxes aren't used
 #endif
+
+    // Don't exit on frame deletion, since the help window is programmed
+    // to cause the app to exit even if it is still open. We need to have the app
+    // close by other means.
+    SetExitOnFrameDelete(false);
 
     wxInitAllImageHandlers();
     wxFileSystem::AddHandler(new wxZipFSHandler);
@@ -64,7 +78,7 @@ bool MyApp::OnInit()
     SetAppName(wxT("wxHTMLHelp")); 
     wxConfig::Get(); // create an instance
 
-    help = new wxHtmlHelpController;
+    help = new wxHtmlHelpController(wxHF_DEFAULT_STYLE|wxHF_OPEN_FILES);
 
     if (argc < 2) {
         wxLogError(wxT("Usage : helpview <helpfile> [<more helpfiles>]"));
@@ -80,10 +94,20 @@ bool MyApp::OnInit()
 #endif
 
     help -> DisplayContents();
+    SetTopWindow(help->GetFrame());
+    m_exitIfNoMainWindow = true;
 
     return true;
 }
 
+void MyApp::OnIdle(wxIdleEvent& event)
+{
+    if (m_exitIfNoMainWindow && !GetTopWindow())
+        ExitMainLoop();
+
+    event.Skip();
+    event.RequestMore();
+}
 
 int MyApp::OnExit()
 {

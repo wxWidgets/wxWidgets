@@ -58,7 +58,7 @@ void wxAboutBox(const wxAboutDialogInfo& info)
         // add everything remaining
         msg << info.GetDescriptionAndCredits();
 
-        wxMessageBox(msg, _T("About ") + name);
+        wxMessageBox(msg, _("About ") + name);
     }
     else // simple "native" version is not enough
     {

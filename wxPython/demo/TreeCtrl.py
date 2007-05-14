@@ -30,8 +30,9 @@ class TestTreeCtrlPanel(wx.Panel):
         tID = wx.NewId()
 
         self.tree = MyTreeCtrl(self, tID, wx.DefaultPosition, wx.DefaultSize,
-                               wx.TR_HAS_BUTTONS
-                               | wx.TR_EDIT_LABELS
+                               wx.TR_DEFAULT_STYLE
+                               #wx.TR_HAS_BUTTONS
+                               #| wx.TR_EDIT_LABELS
                                #| wx.TR_MULTIPLE
                                #| wx.TR_HIDE_ROOT
                                , self.log)

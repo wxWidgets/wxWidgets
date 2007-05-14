@@ -19,7 +19,8 @@ class TestPanel(wx.Panel):
         title.SetFont(wx.Font(18, wx.SWISS, wx.NORMAL, wx.BOLD))
         title.SetForegroundColour("blue")
 
-        self.cp = cp = wx.CollapsiblePane(self, label=label1)
+        self.cp = cp = wx.CollapsiblePane(self, label=label1,
+                                          style=wx.CP_DEFAULT_STYLE|wx.CP_NO_TLW_RESIZE)
         self.Bind(wx.EVT_COLLAPSIBLEPANE_CHANGED, self.OnPaneChanged, cp)
         self.MakePaneContent(cp.GetPane())
 

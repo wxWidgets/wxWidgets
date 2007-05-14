@@ -472,7 +472,7 @@ public:                                                               \
   const_reverse_iterator rbegin() const;                              \
   reverse_iterator rend() { return reverse_iterator(begin() - 1); }   \
   const_reverse_iterator rend() const;                                \
-  void reserve(size_type n) { base::reserve(n); };                    \
+  void reserve(size_type n) { base::reserve(n); }                     \
   void resize(size_type n, value_type v = value_type())               \
     { base::resize(n, v); }                                           \
 }

@@ -460,7 +460,8 @@ wxMenu* wxFindMenuFromMacCommand( const HICommand &command , wxMenuItem* &item )
 
         // is it part of the application or the Help menu, then look for the id directly
         if ( ( GetMenuHandle( kwxMacAppleMenuId ) != NULL && command.menu.menuRef == GetMenuHandle( kwxMacAppleMenuId ) ) ||
-             ( mh != NULL && command.menu.menuRef == mh ) )
+             ( mh != NULL && command.menu.menuRef == mh ) || 
+             wxMenuBar::MacGetWindowMenuHMenu() != NULL && command.menu.menuRef == wxMenuBar::MacGetWindowMenuHMenu() )
         {
             wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar() ;
             if ( mbar )
@@ -1586,7 +1587,7 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
         wxWindow* focus = wxFindWinFromMacWindow( FrontWindow() ) ;
         if ( focus )
         {
-            if ( keyval == WXK_RETURN )
+            if ( keyval == WXK_RETURN || keyval == WXK_NUMPAD_ENTER )
             {
                 wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(focus), wxTopLevelWindow);
                 if ( tlw && tlw->GetDefaultItem() )

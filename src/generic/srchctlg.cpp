@@ -68,17 +68,17 @@ static wxColor wxStepColour(const wxColor& c, int ialpha)
 {
     if (ialpha == 100)
         return c;
-        
+
     double r = c.Red(), g = c.Green(), b = c.Blue();
     double bg;
-    
+
     // ialpha is 0..200 where 0 is completely black
     // and 200 is completely white and 100 is the same
     // convert that to normal alpha 0.0 - 1.0
     ialpha = wxMin(ialpha, 200);
     ialpha = wxMax(ialpha, 0);
     double alpha = ((double)(ialpha - 100.0))/100.0;
-    
+
     if (ialpha > 100)
     {
         // blend with white
@@ -91,11 +91,11 @@ static wxColor wxStepColour(const wxColor& c, int ialpha)
         bg = 0.0;
         alpha = 1.0 + alpha;  // 0 = transparent fg; 1 = opaque fg
     }
-    
+
     r = wxBlendColour(r, bg, alpha);
     g = wxBlendColour(g, bg, alpha);
     b = wxBlendColour(b, bg, alpha);
-    
+
     return wxColour((unsigned char)r, (unsigned char)g, (unsigned char)b);
 }
 
@@ -114,7 +114,7 @@ public:
     {
         m_search = search;
         m_defaultFG = GetForegroundColour();
-        
+
         // remove the default minsize, the searchctrl will have one instead
         SetSizeHints(wxDefaultCoord,wxDefaultCoord);
     }
@@ -123,17 +123,17 @@ public:
     {
         if ( GetValue() == m_descriptiveText )
         {
-            SetValue(wxEmptyString);
+            ChangeValue(wxEmptyString);
         }
-        
+
         m_descriptiveText = text;
     }
-    
+
     wxString GetDescriptiveText() const
     {
         return m_descriptiveText;
     }
-    
+
 protected:
     void OnText(wxCommandEvent& eventText)
     {
@@ -163,7 +163,7 @@ protected:
     {
         if ( IsEmpty() && !(wxWindow::FindFocus() == this) )
         {
-            SetValue(m_descriptiveText);
+            ChangeValue(m_descriptiveText);
             SetInsertionPoint(0);
             SetForegroundColour(wxStepColour(m_defaultFG, LIGHT_STEP));
         }
@@ -174,16 +174,16 @@ protected:
         event.Skip();
         if ( GetValue() == m_descriptiveText )
         {
-            SetValue(wxEmptyString);
+            ChangeValue(wxEmptyString);
             SetForegroundColour(m_defaultFG);
         }
     }
-    
+
 private:
     wxSearchCtrl* m_search;
     wxString      m_descriptiveText;
     wxColour      m_defaultFG;
-    
+
     DECLARE_EVENT_TABLE()
 };
 
@@ -228,11 +228,13 @@ protected:
 
         m_search->SetFocus();
 
+#if wxUSE_MENUS
         if ( m_eventType == wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN )
         {
             // this happens automatically, just like on Mac OS X
             m_search->PopupSearchMenu();
         }
+#endif // wxUSE_MENUS
     }
 
     void OnPaint(wxPaintEvent&)
@@ -294,17 +296,21 @@ wxSearchCtrl::wxSearchCtrl(wxWindow *parent, wxWindowID id,
 
 void wxSearchCtrl::Init()
 {
-    m_text = 0;
-    m_searchButton = 0;
-    m_cancelButton = 0;
-    m_menu = 0;
+    m_text = NULL;
+    m_searchButton = NULL;
+    m_cancelButton = NULL;
+#if wxUSE_MENUS
+    m_menu = NULL;
+#endif // wxUSE_MENUS
 
     m_searchButtonVisible = true;
     m_cancelButtonVisible = false;
 
-    m_searchMenuBitmapUser = false;
     m_searchBitmapUser = false;
     m_cancelBitmapUser = false;
+#if wxUSE_MENUS
+    m_searchMenuBitmapUser = false;
+#endif // wxUSE_MENUS
 }
 
 bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
@@ -326,7 +332,7 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
 
     m_text = new wxSearchTextCtrl(this, value, style & ~wxBORDER_MASK);
     m_text->SetDescriptiveText(_("Search"));
-    
+
     wxSize sizeText = m_text->GetBestSize();
 
     m_searchButton = new wxSearchButton(this,wxEVT_COMMAND_SEARCHCTRL_SEARCH_BTN,m_searchBitmap);
@@ -352,11 +358,15 @@ wxSearchCtrl::~wxSearchCtrl()
     delete m_text;
     delete m_searchButton;
     delete m_cancelButton;
+#if wxUSE_MENUS
     delete m_menu;
+#endif // wxUSE_MENUS
 }
 
 
 // search control specific interfaces
+#if wxUSE_MENUS
+
 void wxSearchCtrl::SetMenu( wxMenu* menu )
 {
     if ( menu == m_menu )
@@ -382,13 +392,15 @@ void wxSearchCtrl::SetMenu( wxMenu* menu )
         }
     }
     wxRect rect = GetRect();
-    LayoutControls(0, 0, rect.GetWidth(), rect.GetHeight());    
+    LayoutControls(0, 0, rect.GetWidth(), rect.GetHeight());
 }
 
 wxMenu* wxSearchCtrl::GetMenu()
 {
     return m_menu;
 }
+
+#endif // wxUSE_MENUS
 
 void wxSearchCtrl::ShowSearchButton( bool show )
 {
@@ -452,7 +464,7 @@ wxSize wxSearchCtrl::DoGetBestSize() const
     wxSize sizeCancel(0,0);
     int searchMargin = 0;
     int cancelMargin = 0;
-    if ( m_searchButtonVisible || m_menu )
+    if ( m_searchButtonVisible || HasMenu() )
     {
         sizeSearch = m_searchButton->GetBestSize();
         searchMargin = MARGIN;
@@ -482,7 +494,7 @@ void wxSearchCtrl::LayoutControls(int x, int y, int width, int height)
 {
     if ( !m_text )
         return;
-    
+
     wxSize sizeText = m_text->GetBestSize();
     // make room for the search menu & clear button
     int horizontalBorder = ( sizeText.y - sizeText.y * 14 / 21 ) / 2;
@@ -495,7 +507,7 @@ void wxSearchCtrl::LayoutControls(int x, int y, int width, int height)
     wxSize sizeCancel(0,0);
     int searchMargin = 0;
     int cancelMargin = 0;
-    if ( m_searchButtonVisible || m_menu )
+    if ( m_searchButtonVisible || HasMenu() )
     {
         sizeSearch = m_searchButton->GetBestSize();
         searchMargin = MARGIN;
@@ -505,7 +517,7 @@ void wxSearchCtrl::LayoutControls(int x, int y, int width, int height)
         sizeCancel = m_cancelButton->GetBestSize();
         cancelMargin = MARGIN;
     }
-    m_searchButton->Show( m_searchButtonVisible || m_menu );
+    m_searchButton->Show( m_searchButtonVisible || HasMenu() );
     m_cancelButton->Show( m_cancelButtonVisible );
 
     if ( sizeSearch.x + sizeCancel.x > width )
@@ -520,9 +532,9 @@ void wxSearchCtrl::LayoutControls(int x, int y, int width, int height)
     // position the subcontrols inside the client area
 
     m_searchButton->SetSize(x, y + ICON_OFFSET - 1, sizeSearch.x, height);
-    m_text->SetSize( x + sizeSearch.x + searchMargin, 
+    m_text->SetSize( x + sizeSearch.x + searchMargin,
                      y + ICON_OFFSET - BORDER,
-                     textWidth, 
+                     textWidth,
                      height);
     m_cancelButton->SetSize(x + sizeSearch.x + searchMargin + textWidth + cancelMargin,
                             y + ICON_OFFSET - 1, sizeCancel.x, height);
@@ -803,7 +815,7 @@ void wxSearchCtrl::SetSearchBitmap( const wxBitmap& bitmap )
     m_searchBitmapUser = bitmap.Ok();
     if ( m_searchBitmapUser )
     {
-        if ( m_searchButton && !m_menu )
+        if ( m_searchButton && !HasMenu() )
         {
             m_searchButton->SetBitmapLabel( m_searchBitmap );
         }
@@ -814,6 +826,8 @@ void wxSearchCtrl::SetSearchBitmap( const wxBitmap& bitmap )
         RecalcBitmaps();
     }
 }
+
+#if wxUSE_MENUS
 
 void wxSearchCtrl::SetSearchMenuBitmap( const wxBitmap& bitmap )
 {
@@ -832,6 +846,8 @@ void wxSearchCtrl::SetSearchMenuBitmap( const wxBitmap& bitmap )
         RecalcBitmaps();
     }
 }
+
+#endif // wxUSE_MENUS
 
 void wxSearchCtrl::SetCancelBitmap( const wxBitmap& bitmap )
 {
@@ -989,7 +1005,7 @@ wxBitmap wxSearchCtrl::RenderSearchBitmap( int x, int y, bool renderDrop )
         mem.DrawPolygon(WXSIZEOF(dropPolygon),dropPolygon,multiplier*triangleX,multiplier*triangleY);
     }
     mem.SelectObject(wxNullBitmap);
-    
+
     //===============================================================================
     // end drawing code
     //===============================================================================
@@ -1114,7 +1130,7 @@ void wxSearchCtrl::RecalcBitmaps()
             )
         {
             m_searchBitmap = RenderSearchBitmap(bitmapWidth,bitmapHeight,false);
-            if ( !m_menu )
+            if ( !HasMenu() )
             {
                 m_searchButton->SetBitmapLabel(m_searchBitmap);
             }
@@ -1122,6 +1138,7 @@ void wxSearchCtrl::RecalcBitmaps()
         // else this bitmap was set by user, don't alter
     }
 
+#if wxUSE_MENUS
     if ( !m_searchMenuBitmapUser )
     {
         if (
@@ -1138,6 +1155,7 @@ void wxSearchCtrl::RecalcBitmaps()
         }
         // else this bitmap was set by user, don't alter
     }
+#endif // wxUSE_MENUS
 
     if ( !m_cancelBitmapUser )
     {
@@ -1174,6 +1192,8 @@ void wxSearchCtrl::OnSize( wxSizeEvent& WXUNUSED(event) )
     LayoutControls(0, 0, width, height);
 }
 
+#if wxUSE_MENUS
+
 void wxSearchCtrl::PopupSearchMenu()
 {
     if ( m_menu )
@@ -1182,6 +1202,8 @@ void wxSearchCtrl::PopupSearchMenu()
         PopupMenu( m_menu, 0, size.y );
     }
 }
+
+#endif // wxUSE_MENUS
 
 #endif // !wxUSE_NATIVE_SEARCH_CONTROL
 

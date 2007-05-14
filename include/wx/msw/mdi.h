@@ -62,7 +62,7 @@ public:
     virtual wxMDIClientWindow *OnCreateClient(void);
 
     // MDI windows menu
-    wxMenu* GetWindowMenu() const { return m_windowMenu; };
+    wxMenu* GetWindowMenu() const { return m_windowMenu; }
     void SetWindowMenu(wxMenu* menu) ;
     virtual void DoMenuUpdates(wxMenu* menu = NULL);
 

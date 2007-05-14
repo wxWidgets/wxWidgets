@@ -666,7 +666,14 @@ int wxAuiDefaultTabArt::ShowDropDown(wxWindow* wnd,
     for (i = 0; i < count; ++i)
     {
         const wxAuiNotebookPage& page = pages.Item(i);
-        menuPopup.AppendCheckItem(1000+i, page.caption);
+        wxString caption = page.caption;
+        
+        // if there is no caption, make it a space.  This will prevent
+        // an assert in the menu code.
+        if (caption.IsEmpty())
+            caption = wxT(" ");
+            
+        menuPopup.AppendCheckItem(1000+i, caption);
     }
 
     if (active_idx != -1)
@@ -1935,7 +1942,8 @@ void wxAuiTabContainer::DoShowHide()
     for (i = 0; i < page_count; ++i)
     {
         wxAuiNotebookPage& page = pages.Item(i);
-        ShowWnd(page.window, page.active);
+        if (!page.active)
+            ShowWnd(page.window, false);
     }
 }
 
@@ -2223,6 +2231,11 @@ public:
         m_rect = wxRect(0,0,200,200);
         m_tab_ctrl_height = 20;
     }
+
+	~wxTabFrame()
+	{
+		wxDELETE(m_tabs);
+	}
 
     void SetTabCtrlHeight(int h)
     {
@@ -2598,7 +2611,8 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
     // select is false, it must become the "current page"
     // (though no select events will be fired)
     if (!select && m_tabs.GetPageCount() == 1)
-        m_curpage = GetPageIndex(page);
+        select = true;
+        //m_curpage = GetPageIndex(page);
 
     wxAuiTabCtrl* active_tabctrl = GetActiveTabCtrl();
     if (page_idx >= active_tabctrl->GetPageCount())

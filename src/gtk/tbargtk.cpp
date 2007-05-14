@@ -597,6 +597,30 @@ void wxToolBar::SetToolShortHelp( int id, const wxString& helpString )
     }
 }
 
+void wxToolBar::SetToolNormalBitmap( int id, const wxBitmap& bitmap )
+{
+    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, FindById(id));
+    if ( tool )
+    {
+        wxCHECK_RET( tool->IsButton(), wxT("Can only set bitmap on button tools."));
+
+        tool->SetNormalBitmap(bitmap);
+        tool->SetImage(tool->GetBitmap());
+    }    
+}
+
+void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmap& bitmap )
+{
+    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, FindById(id));
+    if ( tool )
+    {
+        wxCHECK_RET( tool->IsButton(), wxT("Can only set bitmap on button tools."));
+
+        tool->SetDisabledBitmap(bitmap);
+        tool->SetImage(tool->GetBitmap());
+    }    
+}
+
 // ----------------------------------------------------------------------------
 // wxToolBar idle handling
 // ----------------------------------------------------------------------------

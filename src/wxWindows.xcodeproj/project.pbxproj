@@ -3301,6 +3301,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 18B5B98A08564B5D002803C9 /* Build configuration list for PBXNativeTarget "static" */;
 			buildPhases = (
+				4059FD3C0BA95691001F6B1C /* ShellScript */,
 				4086C744063AB2FF00D4CD53 /* Headers */,
 				4086C746063AB2FF00D4CD53 /* Sources */,
 				4086C8C8063AB2FF00D4CD53 /* Frameworks */,
@@ -3371,6 +3372,19 @@
 /* End PBXRezBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		4059FD3C0BA95691001F6B1C /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "$SRCROOT/../distrib/mac/pbsetup-sh \"${SRCROOT}\" \"${SYMROOT}\"";
+		};
 		4086CA56063AB30000D4CD53 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -4489,8 +4503,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				DYLIB_COMPATIBILITY_VERSION = 2.6;
-				DYLIB_CURRENT_VERSION = 2.6.0;
+				DYLIB_COMPATIBILITY_VERSION = 2.8;
+				DYLIB_CURRENT_VERSION = 2.8.3;
 				GCC_INPUT_FILETYPE = automatic;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PFE_FILE_C_DIALECTS = "c++";
@@ -4532,8 +4546,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				DYLIB_COMPATIBILITY_VERSION = 2.6;
-				DYLIB_CURRENT_VERSION = 2.6.0;
+				DYLIB_COMPATIBILITY_VERSION = 2.8;
+				DYLIB_CURRENT_VERSION = 2.8.3;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_INPUT_FILETYPE = automatic;
 				GCC_PFE_FILE_C_DIALECTS = "c++";
@@ -4574,10 +4588,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(NATIVE_ARCH)";
 				DEBUG_INFORMATION_FORMAT = stabs;
-				DYLIB_COMPATIBILITY_VERSION = 2.6;
-				DYLIB_CURRENT_VERSION = 2.6.0;
+				DYLIB_COMPATIBILITY_VERSION = 2.8;
+				DYLIB_CURRENT_VERSION = 2.8.3;
 				EXECUTABLE_PREFIX = lib;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -4629,8 +4642,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				DYLIB_COMPATIBILITY_VERSION = 2.6;
-				DYLIB_CURRENT_VERSION = 2.6.0;
+				DYLIB_COMPATIBILITY_VERSION = 2.8;
+				DYLIB_CURRENT_VERSION = 2.8.3;
 				EXECUTABLE_PREFIX = lib;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
@@ -4716,10 +4729,6 @@
 		18B5B99F08564B5D002803C9 /* Development */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = (
-					ppc,
-					i386,
-				);
 				GCC_ENABLE_FIX_AND_CONTINUE = YES;
 				GCC_OPTIMIZATION_LEVEL = 1;
 				GCC_PREPROCESSOR_DEFINITIONS = "__WXDEBUG__\n";

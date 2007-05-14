@@ -182,7 +182,6 @@ gtk_value_changed(GtkRange* range, wxSlider* win)
     // If integral position has changed
     if (wxRound(oldPos) != pos)
     {
-        wxCHECK_RET(eventType != wxEVT_NULL, _T("Unknown slider scroll event type"));
         ProcessScrollEvent(win, eventType);
         win->m_needThumbRelease = eventType == wxEVT_SCROLL_THUMBTRACK;
     }

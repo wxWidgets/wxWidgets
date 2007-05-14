@@ -259,7 +259,8 @@ void wxDatePickerCtrl::SetValue(const wxDateTime& dt)
     // we need to keep only the date part, times don't make sense for this
     // control (in particular, comparisons with other dates would fail)
     m_date = dt;
-    m_date.ResetTime();
+    if ( m_date.IsValid() )
+        m_date.ResetTime();
 }
 
 wxDateTime wxDatePickerCtrl::GetValue() const

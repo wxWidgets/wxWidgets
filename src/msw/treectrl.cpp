@@ -622,7 +622,9 @@ void wxTreeCtrl::Init()
 {
     m_textCtrl = NULL;
     m_hasAnyAttr = false;
+#if wxUSE_DRAGIMAGE
     m_dragImage = NULL;
+#endif
     m_pVirtualRoot = NULL;
 
     // initialize the global array of events now as it can't be done statically
@@ -1165,7 +1167,7 @@ void wxTreeCtrl::SetItemFont(const wxTreeItemId& item, const wxFont& font)
     // Reset the item's text to ensure that the bounding rect will be adjusted
     // for the new font.
     SetItemText(item, GetItemText(item));
-    
+
     RefreshItem(item);
 }
 
@@ -1725,6 +1727,8 @@ void wxTreeCtrl::UnselectAll()
 
 void wxTreeCtrl::SelectItem(const wxTreeItemId& item, bool select)
 {
+    wxCHECK_RET( !IsHiddenRoot(item), _T("can't select hidden root item") );
+
     if ( m_windowStyle & wxTR_MULTIPLE )
     {
         ::SelectItem(GetHwnd(), HITEM(item), select);
@@ -2132,6 +2136,14 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                             ::SetFocus(GetHwnd(), htItem);
                             processed = true;
                         }
+                        else // click on a single selected item
+                        {
+                            // don't interfere with the default processing in
+                            // WM_MOUSEMOVE handler below as the default window
+                            // proc will start the drag itself if we let have
+                            // WM_LBUTTONDOWN
+                            m_htClickedItem.Unset();
+                        }
 
                         // reset on any click without Shift
                         m_htSelStart.Unset();
@@ -2146,39 +2158,49 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                     int cx = abs(m_ptClick.x - x);
                     int cy = abs(m_ptClick.y - y);
 
-                    if ( cx > GetSystemMetrics( SM_CXDRAG ) || cy > GetSystemMetrics( SM_CYDRAG ) )
+                    if ( cx > ::GetSystemMetrics(SM_CXDRAG) ||
+                            cy > ::GetSystemMetrics(SM_CYDRAG) )
                     {
-                        HWND pWnd = ::GetParent( GetHwnd() );
-                        if ( pWnd )
-                        {
-                            NM_TREEVIEW tv;
+                        NM_TREEVIEW tv;
+                        wxZeroMemory(tv);
 
-                            tv.hdr.hwndFrom = GetHwnd();
-                            tv.hdr.idFrom = ::GetWindowLong( GetHwnd(), GWL_ID );
-                            tv.hdr.code = TVN_BEGINDRAG;
+                        tv.hdr.hwndFrom = GetHwnd();
+                        tv.hdr.idFrom = ::GetWindowLong(GetHwnd(), GWL_ID);
+                        tv.hdr.code = TVN_BEGINDRAG;
 
-                            tv.itemNew.hItem = HITEM(m_htClickedItem);
+                        tv.itemNew.hItem = HITEM(m_htClickedItem);
 
-                            TVITEM tviAux;
-                            ZeroMemory(&tviAux, sizeof(tviAux));
-                            tviAux.hItem = HITEM(m_htClickedItem);
-                            tviAux.mask = TVIF_STATE | TVIF_PARAM;
-                            tviAux.stateMask = 0xffffffff;
-                            TreeView_GetItem( GetHwnd(), &tviAux );
 
-                            tv.itemNew.state = tviAux.state;
-                            tv.itemNew.lParam = tviAux.lParam;
+                        TVITEM tviAux;
+                        wxZeroMemory(tviAux);
 
-                            tv.ptDrag.x = x;
-                            tv.ptDrag.y = y;
+                        tviAux.hItem = HITEM(m_htClickedItem);
+                        tviAux.mask = TVIF_STATE | TVIF_PARAM;
+                        tviAux.stateMask = 0xffffffff;
+                        TreeView_GetItem(GetHwnd(), &tviAux);
 
-                            ::SendMessage( pWnd, WM_NOTIFY, tv.hdr.idFrom, (LPARAM)&tv );
-                        }
+                        tv.itemNew.state = tviAux.state;
+                        tv.itemNew.lParam = tviAux.lParam;
+
+                        tv.ptDrag.x = x;
+                        tv.ptDrag.y = y;
+
+                        // do it before SendMessage() call below to avoid
+                        // reentrancies here if there is another WM_MOUSEMOVE
+                        // in the queue already
                         m_htClickedItem.Unset();
+
+                        ::SendMessage(GetHwndOf(GetParent()), WM_NOTIFY,
+                                      tv.hdr.idFrom, (LPARAM)&tv );
+
+                        // don't pass it to the default window proc, it would
+                        // start dragging again
+                        processed = true;
                     }
                 }
 #endif // __WXWINCE__
 
+#if wxUSE_DRAGIMAGE
                 if ( m_dragImage )
                 {
                     m_dragImage->Move(wxPoint(x, y));
@@ -2191,6 +2213,7 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                         m_dragImage->Show();
                     }
                 }
+#endif // wxUSE_DRAGIMAGE
                 break;
 
             case WM_LBUTTONUP:
@@ -2216,6 +2239,7 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
                 // fall through
 
             case WM_RBUTTONUP:
+#if wxUSE_DRAGIMAGE
                 if ( m_dragImage )
                 {
                     m_dragImage->EndDrag();
@@ -2224,12 +2248,14 @@ WXLRESULT wxTreeCtrl::MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lPara
 
                     // generate the drag end event
                     wxTreeEvent event(wxEVT_COMMAND_TREE_END_DRAG, this, htItem);
+                    event.m_pointDrag = wxPoint(x, y);
                     (void)GetEventHandler()->ProcessEvent(event);
 
                     // if we don't do it, the tree seems to think that 2 items
                     // are selected simultaneously which is quite weird
                     TreeView_SelectDropTarget(GetHwnd(), 0);
                 }
+#endif // wxUSE_DRAGIMAGE
                 break;
         }
     }
@@ -2758,6 +2784,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
 
         case TVN_BEGINDRAG:
         case TVN_BEGINRDRAG:
+#if wxUSE_DRAGIMAGE
             if ( event.IsAllowed() )
             {
                 // normally this is impossible because the m_dragImage is
@@ -2768,6 +2795,7 @@ bool wxTreeCtrl::MSWOnNotify(int idCtrl, WXLPARAM lParam, WXLPARAM *result)
                 m_dragImage->BeginDrag(wxPoint(0,0), this);
                 m_dragImage->Show();
             }
+#endif // wxUSE_DRAGIMAGE
             break;
 
         case TVN_DELETEITEM:

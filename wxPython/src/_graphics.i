@@ -422,26 +422,18 @@ public :
 
 DocStr(wxGraphicsMatrix,
 "A wx.GraphicsMatrix is a native representation of an affine
-matrix. The contents are specific an private to the respective
+matrix. The contents are specific and private to the respective
 renderer. The only way to get a valid instance is via a CreateMatrix
 call on the graphics context or the renderer instance.", "");
 class wxGraphicsMatrix : public wxGraphicsObject
 {
 public :
-    wxGraphicsMatrix(); 
+//    wxGraphicsMatrix(); 
     virtual ~wxGraphicsMatrix();
 
     DocDeclStr(
         virtual void , Concat( const wxGraphicsMatrix& t ),
         "Concatenates the passed in matrix to the current matrix.", "");
-
-//     %extend  {
-//         DocStr(Copy,
-//                "Copy the passed in matrix to this one.", "");
-//         void Copy( const wxGraphicsMatrix& t ) {
-//             *self = t;
-//         }
-//     }
 
 
     DocDeclStr(
@@ -515,7 +507,7 @@ way to make this value usable.", "");
 class wxGraphicsPath : public wxGraphicsObject
 {
 public :
-    wxGraphicsPath();
+//    wxGraphicsPath();
     virtual ~wxGraphicsPath();
 
 
@@ -678,13 +670,15 @@ public:
         static wxGraphicsContext* , CreateFromNative( void * context ) ,
         "Creates a wx.GraphicsContext from a native context. This native
 context must be eg a CGContextRef for Core Graphics, a Graphics
-pointer for GDIPlus or a cairo_t pointer for Cairo.", "");
+pointer for GDIPlus or a cairo_t pointer for Cairo.  NOTE: For
+wxPython we still need a way to make this value usable.", "");
     
 
     %newobject CreateFromNative;
     DocDeclStr(
         static wxGraphicsContext* , CreateFromNativeWindow( void * window ) ,
-        "Creates a wx.GraphicsContext from a native window.", "");
+        "Creates a wx.GraphicsContext from a native window.  NOTE: For wxPython
+we still need a way to make this value usable.", "");
     
 
 
@@ -807,8 +801,7 @@ this context.", "");
     DocDeclStr(
         virtual wxGraphicsMatrix , GetTransform() const,
         "Gets the current transformation matrix of this context.", "");
-    
-    
+        
 
 
     DocStr(SetPen, "Sets the stroke pen", "");
@@ -945,8 +938,9 @@ and the current brush is used for filling.", "");
 
 
     %extend {
-        DocStr(StrokeLineSegements,
-               "Stroke disconnected lines from begin to end points", "");
+        DocAStr(StrokeLineSegements,
+                "StrokeLineSegments(self, List beginPoints, List endPoints)",
+                "Stroke disconnected lines from begin to end points", "");
         void StrokeLineSegements(PyObject* beginPoints, PyObject* endPoints)
         {
             size_t c1, c2, count;

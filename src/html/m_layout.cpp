@@ -352,6 +352,8 @@ TAG_HANDLER_BEGIN(BODY, "BODY")
                         winIface->SetHTMLBackgroundImage(image);
 #endif
                 }
+
+                delete fileBgImage;
             }
         }
 

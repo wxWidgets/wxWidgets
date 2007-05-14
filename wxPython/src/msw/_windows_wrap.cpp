@@ -3371,7 +3371,7 @@ public:
     wxPyPanel(wxWindow* parent, const wxWindowID id,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               long style = 0,
+               long style = wxTAB_TRAVERSAL | wxNO_BORDER,
                const wxString& name = wxPyPanelNameStr)
         : wxPanel(parent, id, pos, size, style, name) {}
 
@@ -3462,7 +3462,7 @@ public:
     wxPyScrolledWindow(wxWindow* parent, const wxWindowID id,
                const wxPoint& pos = wxDefaultPosition,
                const wxSize& size = wxDefaultSize,
-               long style = 0,
+               long style = wxHSCROLL | wxVSCROLL,
                const wxString& name = wxPyPanelNameStr)
         : wxScrolledWindow(parent, id, pos, size, style, name) {}
 
@@ -22593,7 +22593,7 @@ SWIGINTERN PyObject *_wrap_new_PyPanel(PyObject *SWIGUNUSEDPARM(self), PyObject 
   wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
   wxSize const &arg4_defvalue = wxDefaultSize ;
   wxSize *arg4 = (wxSize *) &arg4_defvalue ;
-  long arg5 = (long) 0 ;
+  long arg5 = (long) wxTAB_TRAVERSAL|wxNO_BORDER ;
   wxString const &arg6_defvalue = wxPyPanelNameStr ;
   wxString *arg6 = (wxString *) &arg6_defvalue ;
   wxPyPanel *result = 0 ;
@@ -23278,7 +23278,7 @@ SWIGINTERN PyObject *_wrap_new_PyScrolledWindow(PyObject *SWIGUNUSEDPARM(self), 
   wxPoint *arg3 = (wxPoint *) &arg3_defvalue ;
   wxSize const &arg4_defvalue = wxDefaultSize ;
   wxSize *arg4 = (wxSize *) &arg4_defvalue ;
-  long arg5 = (long) 0 ;
+  long arg5 = (long) wxHSCROLL|wxVSCROLL ;
   wxString const &arg6_defvalue = wxPyPanelNameStr ;
   wxString *arg6 = (wxString *) &arg6_defvalue ;
   wxPyScrolledWindow *result = 0 ;
@@ -35110,9 +35110,10 @@ SWIGEXPORT void SWIG_init(void) {
   SWIG_addvarlink(SWIG_globals(),(char*)"FileSelectorDefaultWildcardStr",FileSelectorDefaultWildcardStr_get, FileSelectorDefaultWildcardStr_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"GetTextFromUserPromptStr",GetTextFromUserPromptStr_get, GetTextFromUserPromptStr_set);
   SWIG_addvarlink(SWIG_globals(),(char*)"MessageBoxCaptionStr",MessageBoxCaptionStr_get, MessageBoxCaptionStr_set);
+  SWIG_Python_SetConstant(d, "DD_CHANGE_DIR",SWIG_From_int(static_cast< int >(wxDD_CHANGE_DIR)));
+  SWIG_Python_SetConstant(d, "DD_DIR_MUST_EXIST",SWIG_From_int(static_cast< int >(wxDD_DIR_MUST_EXIST)));
   SWIG_Python_SetConstant(d, "DD_NEW_DIR_BUTTON",SWIG_From_int(static_cast< int >(wxDD_NEW_DIR_BUTTON)));
   SWIG_Python_SetConstant(d, "DD_DEFAULT_STYLE",SWIG_From_int(static_cast< int >(wxDD_DEFAULT_STYLE)));
-  SWIG_Python_SetConstant(d, "DD_CHANGE_DIR",SWIG_From_int(static_cast< int >(wxDD_CHANGE_DIR)));
   SWIG_Python_SetConstant(d, "OPEN",SWIG_From_int(static_cast< int >(wxOPEN)));
   SWIG_Python_SetConstant(d, "SAVE",SWIG_From_int(static_cast< int >(wxSAVE)));
   SWIG_Python_SetConstant(d, "OVERWRITE_PROMPT",SWIG_From_int(static_cast< int >(wxOVERWRITE_PROMPT)));

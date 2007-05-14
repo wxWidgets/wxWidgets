@@ -671,8 +671,8 @@ class wxGenericRendererModule: public wxModule
 DECLARE_DYNAMIC_CLASS(wxGenericRendererModule)
 public:
     wxGenericRendererModule() {}
-    bool OnInit() { return true; };
-    void OnExit() { wxRendererGeneric::Cleanup(); };
+    bool OnInit() { return true; }
+    void OnExit() { wxRendererGeneric::Cleanup(); }
 };
 
 IMPLEMENT_DYNAMIC_CLASS(wxGenericRendererModule, wxModule)

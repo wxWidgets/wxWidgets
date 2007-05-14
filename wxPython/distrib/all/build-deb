@@ -25,8 +25,8 @@ function TestOnline {
 if [ $skipdeb != yes ]; then
     # We use a chroot environment on the build machine for the debian
     # builds, so this build is pretty simple.  Just copy the tarball
-    # and a build script to /tmp, and then run do-build-deb in the
-    # chroot.
+    # and a build script to the build machine, and then run
+    # do-build-deb in the chroot.
 
     if TestOnline $host; then
     
@@ -37,7 +37,7 @@ if [ $skipdeb != yes ]; then
 	scp $STAGING_DIR/wxPython-src* distrib/all/do-build-deb \
             root@$host:$chRootRoot/$LINUX_BUILD
     
-	ssh root@$host "dchroot --chroot $chRootName --directory $LINUX_BUILD \"do-build-deb $VERSION $VER2\""
+	ssh root@$host "dchroot --chroot $chRootName --directory $LINUX_BUILD \"./do-build-deb $VERSION $VER2\""
 
 	echo "Fetching the results..."
 	mkdir -p $STAGING_DIR/$chRootName

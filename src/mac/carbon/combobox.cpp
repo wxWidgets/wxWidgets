@@ -576,7 +576,7 @@ void wxComboBox::SetSelection(int n)
     m_choice->SetSelection( n );
 
     if ( m_text != NULL )
-        m_text->SetValue(GetString(n));
+        m_text->SetValue(n != wxNOT_FOUND ? GetString(n) : wxString(wxEmptyString));
 }
 
 int wxComboBox::FindString(const wxString& s, bool bCase) const

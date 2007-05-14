@@ -839,7 +839,7 @@ public:
     void PaintBackground(const wxRect& rectCell, wxGridCellAttr *attr) {
         bool found;
         wxPyBlock_t blocked = wxPyBeginBlockThreads();
-        if ((found = wxPyCBH_findCallback(m_myInst, "PaintBackground)"))) {
+        if ((found = wxPyCBH_findCallback(m_myInst, "PaintBackground"))) {
             PyObject* ao = wxPyMake_wxGridCellAttr(attr,false);
             PyObject* ro = wxPyConstructObject((void*)&rectCell, wxT("wxRect"), 0);
 
@@ -1606,7 +1606,7 @@ public:
     def __str__(self):                   return str(self.Get())
     def __repr__(self):                  return 'wxGridCellCoords'+str(self.Get())
     def __len__(self):                   return len(self.Get())
-    def __getitem__(self, index):        return self.asTuple()[index]
+    def __getitem__(self, index):        return self.Get()[index]
     def __setitem__(self, index, val):
         if index == 0: self.SetRow(val)
         elif index == 1: self.SetCol(val)

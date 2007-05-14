@@ -29,14 +29,17 @@ wxTreeCtrl::wxTreeCtrl()
 
 bool wxTreeCtrl::Create(wxWindow *parent,
     wxWindowID id, const wxPoint& pos, const wxSize& size,
-    long style, const wxValidator& validator, const wxString& name)
+    long style, const wxValidator& wxVALIDATOR_PARAM(validator),
+    const wxString& name)
 {
     m_imageListNormal = NULL;
     m_imageListState = NULL;
     m_textCtrl = NULL;
 
     SetName(name);
+#if wxUSE_VALIDATORS
     SetValidator(validator);
+#endif
     SetParent(parent);
 
     m_windowStyle = style;

@@ -148,6 +148,14 @@ public:
         (void), (), NULL )
     wxDL_METHOD_DEFINE( gboolean, gnome_print_config_set,
         (GnomePrintConfig *config, const guchar *key, const guchar *value), (config, key, value), false )
+    wxDL_METHOD_DEFINE( gboolean, gnome_print_config_set_double,
+        (GnomePrintConfig *config, const guchar *key, gdouble value), (config, key, value), false )
+    wxDL_METHOD_DEFINE( gboolean, gnome_print_config_set_int,
+        (GnomePrintConfig *config, const guchar *key, gint value), (config, key, value), false )
+    wxDL_METHOD_DEFINE( gboolean, gnome_print_config_set_boolean,
+        (GnomePrintConfig *config, const guchar *key, gboolean value), (config, key, value), false )
+    wxDL_METHOD_DEFINE( gboolean, gnome_print_config_set_length,
+        (GnomePrintConfig *config, const guchar *key, gdouble value, const GnomePrintUnit *unit), (config, key, value, unit), false )
     wxDL_METHOD_DEFINE( gboolean, gnome_print_config_get_length,
         (GnomePrintConfig *config, const guchar *key, gdouble *val, const GnomePrintUnit **unit), (config, key, val, unit), false )
 
@@ -252,6 +260,10 @@ void wxGnomePrintLibrary::InitializeMethods()
 
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_config_default, success )
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_config_set, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_config_set_boolean, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_config_set_double, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_config_set_int, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_config_set_length, success )
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_config_get_length, success )
 
     wxDL_METHOD_LOAD( m_gnome_printui_lib, gnome_print_dialog_new, success )
@@ -290,12 +302,93 @@ wxGnomePrintNativeData::~wxGnomePrintNativeData()
 bool wxGnomePrintNativeData::TransferTo( wxPrintData &data )
 {
     // TODO
+    
     return true;
 }
 
 bool wxGnomePrintNativeData::TransferFrom( const wxPrintData &data )
 {
-    // TODO
+    if (data.GetOrientation() == wxLANDSCAPE)
+    {
+        gs_lgp->gnome_print_config_set( m_config,
+            (guchar*)(char*)GNOME_PRINT_KEY_PAGE_ORIENTATION,
+            (guchar*)(char*)"R90" );
+    }
+    else
+    {
+        gs_lgp->gnome_print_config_set( m_config,
+            (guchar*)(char*)GNOME_PRINT_KEY_PAGE_ORIENTATION,
+            (guchar*)(char*)"R0" );
+    }
+
+    if (data.GetCollate())
+    {
+        gs_lgp->gnome_print_config_set_boolean( m_config,
+            (guchar*)(char*)GNOME_PRINT_KEY_COLLATE,
+            TRUE );
+    }
+    else
+    {
+        gs_lgp->gnome_print_config_set_boolean( m_config,
+            (guchar*)(char*)GNOME_PRINT_KEY_COLLATE,
+            FALSE );
+    }
+
+    switch (data.GetPaperId())
+    {
+        case wxPAPER_A3:        gs_lgp->gnome_print_config_set( m_config,
+                                    (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
+                                    (guchar*)(char*)"A3" );
+                                break;
+        case wxPAPER_A5:        gs_lgp->gnome_print_config_set( m_config,
+                                    (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
+                                    (guchar*)(char*)"A5" );
+                                break;
+        case wxPAPER_B5:        gs_lgp->gnome_print_config_set( m_config,
+                                    (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
+                                    (guchar*)(char*)"B5 (JIS)" );
+                                break;
+        case wxPAPER_LETTER:        gs_lgp->gnome_print_config_set( m_config,
+                                    (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
+                                    (guchar*)(char*)"Letter" );
+                                break;
+        case wxPAPER_LEGAL:     gs_lgp->gnome_print_config_set( m_config,
+                                    (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
+                                    (guchar*)(char*)"Legal" );
+                                break;
+        case wxPAPER_EXECUTIVE: gs_lgp->gnome_print_config_set( m_config,
+                                    (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
+                                    (guchar*)(char*)"Executive" );
+                                break;
+        case wxPAPER_ENV_10:    gs_lgp->gnome_print_config_set( m_config,
+                                    (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
+                                    (guchar*)(char*)"Envelope #10" );
+                                break;
+        case wxPAPER_ENV_C5:    gs_lgp->gnome_print_config_set( m_config,
+                                    (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
+                                    (guchar*)(char*)"Envelope C5" );
+                                break;
+        case wxPAPER_ENV_C6:    gs_lgp->gnome_print_config_set( m_config,
+                                    (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
+                                    (guchar*)(char*)"Envelope C6" );
+                                break;
+        case wxPAPER_ENV_B5:    gs_lgp->gnome_print_config_set( m_config,
+                                    (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
+                                    (guchar*)(char*)"Envelope B5" );
+                                break;
+        case wxPAPER_ENV_MONARCH:    gs_lgp->gnome_print_config_set( m_config,
+                                    (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
+                                    (guchar*)(char*)"Envelope Monarch" );
+                                break;
+        case wxPAPER_NONE:      break;
+        
+        default:
+        case wxPAPER_A4:        gs_lgp->gnome_print_config_set( m_config,
+                                    (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
+                                    (guchar*)(char*)"A4" );
+                                break;
+    }
+
     return true;
 }
 
@@ -428,6 +521,8 @@ wxGnomePrintDialog::wxGnomePrintDialog( wxWindow *parent, wxPrintData *data )
 void wxGnomePrintDialog::Init()
 {
     wxPrintData data = m_printDialogData.GetPrintData();
+    
+    data.ConvertToNative();
 
     wxGnomePrintNativeData *native =
       (wxGnomePrintNativeData*) data.GetNativeData();
@@ -457,8 +552,6 @@ wxGnomePrintDialog::~wxGnomePrintDialog()
 
 int wxGnomePrintDialog::ShowModal()
 {
-    // Transfer data from m_printDalogData to dialog here
-
     int response = gtk_dialog_run (GTK_DIALOG (m_widget));
 
     if (response == GNOME_PRINT_DIALOG_RESPONSE_CANCEL)
@@ -535,6 +628,8 @@ wxGnomePageSetupDialog::wxGnomePageSetupDialog( wxWindow *parent,
 {
     if (data)
         m_pageDialogData = *data;
+
+    m_pageDialogData.GetPrintData().ConvertToNative();
 
     wxGnomePrintNativeData *native =
       (wxGnomePrintNativeData*) m_pageDialogData.GetPrintData().GetNativeData();
