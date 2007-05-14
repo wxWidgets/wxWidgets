@@ -18,7 +18,8 @@
 // wint_t is just a typedef for wchar_t for many old compilers but for modern
 // ones it's a separate type and we must provide a conversion to it to allow
 // passing wxUniChar[Ref] to functions taking wint_t such as iswalnum() &c
-#if (defined(__GNUC__) && !defined(__DARWIN__) && !defined(__OS2__)) || \
+#if (defined(__GNUC__) && \
+        !defined(__DARWIN__) && !defined(__OS2__) && !defined(__DOS__)) || \
     (defined(__VISUALC__) && defined(_NATIVE_WCHAR_T_DEFINED))
     #define wxWINT_T_IS_SEPARATE_TYPE
 #endif
