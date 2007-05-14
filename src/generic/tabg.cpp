@@ -207,7 +207,7 @@ void wxTabControl::OnDraw(wxDC& dc, bool lastInRow)
   wxColour col(m_view->GetTextColour());
   dc.SetTextForeground(col);
   dc.SetBackgroundMode(wxTRANSPARENT);
-  long textWidth, textHeight;
+  wxCoord textWidth, textHeight;
   dc.GetTextExtent(GetLabel(), &textWidth, &textHeight);
 
   int textX = (int)(tabX + (GetWidth() - textWidth)/2.0);
