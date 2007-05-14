@@ -6,6 +6,7 @@
 // Created:     2002/11/27
 // RCS-ID:      $Id$
 // Copyright:   (c) David Elliott
+//              Software 2000 Ltd.
 // Licence:     wxWidgets licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -20,6 +21,7 @@
     #include "wx/module.h"
 #endif
 
+#include "wx/cocoa/ObjcRef.h"
 #include "wx/cocoa/ObjcPose.h"
 #include "wx/cocoa/autorelease.h"
 #include "wx/cocoa/mbarman.h"
@@ -33,94 +35,13 @@
 #import <Foundation/NSNotification.h>
 #import <AppKit/NSCell.h>
 
+// wxNSApplicationObserver singleton.
+static wxObjcAutoRefFromAlloc<wxNSApplicationObserver*> sg_cocoaAppObserver = [[wxNSApplicationObserver alloc] init];
+
 // ========================================================================
 // wxPoseAsInitializer
 // ========================================================================
 wxPoseAsInitializer *wxPoseAsInitializer::sm_first = NULL;
-
-static bool sg_needIdle = true;
-
-// ========================================================================
-// wxPoserNSApplication
-// ========================================================================
-@interface wxPoserNSApplication : NSApplication
-{
-}
-
-- (NSEvent *)nextEventMatchingMask:(unsigned int)mask untilDate:(NSDate *)expiration inMode:(NSString *)mode dequeue:(BOOL)flag;
-- (void)sendEvent: (NSEvent*)anEvent;
-@end // wxPoserNSApplication
-
-WX_IMPLEMENT_POSER(wxPoserNSApplication);
-
-@implementation wxPoserNSApplication : NSApplication
-
-/* NOTE: The old method of idle event handling added the handler using the
-    [NSRunLoop -performSelector:target:argument:order:modes] which caused
-    the invocation to occur at the begining of [NSApplication
-    -nextEventMatchingMask:untilDate:expiration:inMode:dequeue:].  However,
-    the code would be scheduled for invocation with every iteration of
-    the event loop.  This new method simply overrides the method.  The
-    same caveats apply.  In particular, by the time the event loop has
-    called this method, it usually expects to receive an event.  If you
-    plan on stopping the event loop, it is wise to send an event through
-    the queue to ensure this method will return.
-    See wxEventLoop::Exit() for more information.
-
-    This overridden method calls the superclass method with an untilDate
-    parameter that indicates nil should be returned if there are no pending
-    events.  That is, nextEventMatchingMask: should not wait for an event.
-    If nil is returned then idle event processing occurs until the user
-    does not request anymore idle events or until a real event comes through.
-
-    RN: Even though Apple documentation states that nil can be passed in place
-    of [NSDate distantPast] in the untilDate parameter, this causes Jaguar (10.2)
-    to get stuck in some kind of loop deep within nextEventMatchingMask:, thus we
-    need to explicitly pass [NSDate distantPast] instead.
-*/
-
-- (NSEvent *)nextEventMatchingMask:(unsigned int)mask untilDate:(NSDate *)expiration inMode:(NSString *)mode dequeue:(BOOL)flag
-{
-    // Get the same events except don't block
-    NSEvent *event = [super nextEventMatchingMask:mask untilDate:[NSDate distantPast] inMode:mode dequeue:flag];
-    // If we got one, simply return it
-    if(event)
-        return event;
-    // No events, try doing some idle stuff
-    if(sg_needIdle
-#ifdef __WXDEBUG__
-        && !wxTheApp->IsInAssert()
-#endif
-        && ([NSDefaultRunLoopMode isEqualToString:mode] || [NSModalPanelRunLoopMode isEqualToString:mode]))
-    {
-        sg_needIdle = false;
-        wxLogTrace(wxTRACE_COCOA,wxT("Processing idle events"));
-        while(wxTheApp->ProcessIdle())
-        {
-            // Get the same events except don't block
-            NSEvent *event = [super nextEventMatchingMask:mask untilDate:[NSDate distantPast] inMode:mode dequeue:flag];
-            // If we got one, simply return it
-            if(event)
-                return event;
-            // we didn't get one, do some idle work
-            wxLogTrace(wxTRACE_COCOA,wxT("Looping idle events"));
-        }
-        // No more idle work requested, block
-        wxLogTrace(wxTRACE_COCOA,wxT("Finished idle processing"));
-    }
-    else
-        wxLogTrace(wxTRACE_COCOA,wxT("Avoiding idle processing sg_needIdle=%d"),sg_needIdle);
-    return [super nextEventMatchingMask:mask untilDate:expiration inMode:mode dequeue:flag];
-}
-
-- (void)sendEvent: (NSEvent*)anEvent
-{
-    wxLogTrace(wxTRACE_COCOA,wxT("SendEvent"));
-    sg_needIdle = true;
-    [super sendEvent: anEvent];
-}
-
-@end // wxPoserNSApplication
 
 // ========================================================================
 // wxNSApplicationDelegate
@@ -134,6 +55,13 @@ WX_IMPLEMENT_POSER(wxPoserNSApplication);
 {
     return NO;
 }
+
+@end // implementation wxNSApplicationDelegate : NSObject
+
+// ========================================================================
+// wxNSApplicationObserver
+// ========================================================================
+@implementation wxNSApplicationObserver : NSObject
 
 - (void)applicationWillBecomeActive:(NSNotification *)notification
 {
@@ -155,12 +83,17 @@ WX_IMPLEMENT_POSER(wxPoserNSApplication);
     wxTheApp->CocoaDelegate_applicationDidResignActive();
 }
 
+- (void)applicationWillUpdate:(NSNotification *)notification;
+{
+    wxTheApp->CocoaDelegate_applicationWillUpdate();
+}
+
 - (void)controlTintChanged:(NSNotification *)notification
 {
     wxLogDebug(wxT("TODO: send EVT_SYS_COLOUR_CHANGED as appropriate"));
 }
 
-@end // implementation wxNSApplicationDelegate : NSObject
+@end // implementation wxNSApplicationObserver : NSObject
 
 // ========================================================================
 // wxApp
@@ -213,8 +146,7 @@ void wxApp::CleanUp()
     wxMenuBarManager::DestroyInstance();
 
     [m_cocoaApp setDelegate:nil];
-    [[NSNotificationCenter defaultCenter] removeObserver:m_cocoaAppDelegate
-        name:NSControlTintDidChangeNotification object:nil];
+    [[NSNotificationCenter defaultCenter] removeObserver:m_cocoaAppDelegate];
     [m_cocoaAppDelegate release];
     m_cocoaAppDelegate = NULL;
 
@@ -263,9 +195,34 @@ bool wxApp::OnInitGui()
 
     // Create the app using the sharedApplication method
     m_cocoaApp = [NSApplication sharedApplication];
+
+    // Enable response to application delegate messages
     m_cocoaAppDelegate = [[wxNSApplicationDelegate alloc] init];
     [m_cocoaApp setDelegate:m_cocoaAppDelegate];
-    [[NSNotificationCenter defaultCenter] addObserver:m_cocoaAppDelegate
+
+    // Enable response to "delegate" messages on the notification observer
+    [[NSNotificationCenter defaultCenter] addObserver:sg_cocoaAppObserver
+        selector:@selector(applicationWillBecomeActive:)
+        name:NSApplicationWillBecomeActiveNotification object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:sg_cocoaAppObserver
+        selector:@selector(applicationDidBecomeActive:)
+        name:NSApplicationDidBecomeActiveNotification object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:sg_cocoaAppObserver
+        selector:@selector(applicationWillResignActive:)
+        name:NSApplicationWillResignActiveNotification object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:sg_cocoaAppObserver
+        selector:@selector(applicationDidResignActive:)
+        name:NSApplicationDidResignActiveNotification object:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:sg_cocoaAppObserver
+        selector:@selector(applicationWillUpdate:)
+        name:NSApplicationWillUpdateNotification object:nil];
+
+    // Enable response to system notifications
+    [[NSNotificationCenter defaultCenter] addObserver:sg_cocoaAppObserver
         selector:@selector(controlTintChanged:)
         name:NSControlTintDidChangeNotification object:nil];
 
@@ -273,6 +230,17 @@ bool wxApp::OnInitGui()
 
     wxDC::CocoaInitializeTextSystem();
     return true;
+}
+
+wxApp::~wxApp()
+{
+    if(m_cfRunLoopIdleObserver != NULL)
+    {
+        // Invalidate the observer which also removes it from the run loop.
+        CFRunLoopObserverInvalidate(m_cfRunLoopIdleObserver);
+        // Release the ref as we don't need it anymore.
+        m_cfRunLoopIdleObserver.reset();
+    }
 }
 
 bool wxApp::CallOnInit()
@@ -350,6 +318,80 @@ void wxApp::WakeUpIdle()
             location:NSZeroPoint modifierFlags:NSAnyEventMask
             timestamp:0 windowNumber:0 context:nil
             subtype:0 data1:0 data2:0] atStart:NO];
+}
+
+extern "C" static void ObserveMainRunLoopBeforeWaiting(CFRunLoopObserverRef observer, CFRunLoopActivity activity, void *info);
+extern "C" static void ObserveMainRunLoopBeforeWaiting(CFRunLoopObserverRef observer, CFRunLoopActivity activity, void *info)
+{
+    static_cast<wxApp*>(info)->CF_ObserveMainRunLoopBeforeWaiting(observer, activity);
+}
+
+#if 0
+static int sg_cApplicationWillUpdate = 0;
+#endif
+
+void wxApp::CocoaDelegate_applicationWillUpdate()
+{
+    wxLogTrace(wxTRACE_COCOA,wxT("applicationWillUpdate"));
+
+//    CFRunLoopRef cfRunLoop = [[NSRunLoop currentRunLoop] getCFRunLoop];
+    CFRunLoopRef cfRunLoop = CFRunLoopGetCurrent();
+    wxCFRef<CFStringRef> cfRunLoopMode(CFRunLoopCopyCurrentMode(cfRunLoop));
+
+    if(m_cfRunLoopIdleObserver != NULL && m_cfObservedRunLoopMode != cfRunLoopMode)
+    {
+        CFRunLoopObserverInvalidate(m_cfRunLoopIdleObserver);
+        m_cfRunLoopIdleObserver.reset();
+    }
+#if 0
+    ++sg_cApplicationWillUpdate;
+#endif
+    if(m_cfRunLoopIdleObserver == NULL)
+    {
+        // Enable idle event handling
+        CFRunLoopObserverContext observerContext =
+        {   0
+        ,   this
+        ,   NULL
+        ,   NULL
+        ,   NULL
+        };
+        m_cfRunLoopIdleObserver.reset(CFRunLoopObserverCreate(kCFAllocatorDefault, kCFRunLoopBeforeWaiting, /*repeats*/FALSE, /*priority*/0, ObserveMainRunLoopBeforeWaiting, &observerContext));
+        m_cfObservedRunLoopMode = cfRunLoopMode;
+        CFRunLoopAddObserver(cfRunLoop, m_cfRunLoopIdleObserver, m_cfObservedRunLoopMode);
+    }
+}
+
+static inline bool FakeNeedMoreIdle()
+{
+#if 0
+// Return true on every 10th call.
+    static int idleCount = 0;
+    return ++idleCount % 10;
+#else
+    return false;
+#endif
+}
+
+void wxApp::CF_ObserveMainRunLoopBeforeWaiting(CFRunLoopObserverRef observer, int activity)
+{
+    // Ensure that the app knows we've been invalidated
+    m_cfRunLoopIdleObserver.reset();
+#if 0
+    wxLogTrace(wxTRACE_COCOA,wxT("Idle BEGIN (%d)"), sg_cApplicationWillUpdate);
+    sg_cApplicationWillUpdate = 0;
+#else
+    wxLogTrace(wxTRACE_COCOA,wxT("Idle BEGIN"));
+#endif
+    if( ProcessIdle() || FakeNeedMoreIdle() )
+    {
+        wxLogTrace(wxTRACE_COCOA, wxT("Idle REQUEST MORE"));
+        [NSApp setWindowsNeedUpdate:YES];
+    }
+    else
+    {
+        wxLogTrace(wxTRACE_COCOA, wxT("Idle END"));
+    }
 }
 
 #ifdef __WXDEBUG__

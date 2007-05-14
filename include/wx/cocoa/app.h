@@ -12,6 +12,11 @@
 #ifndef _WX_COCOA_APP_H_
 #define _WX_COCOA_APP_H_
 
+typedef struct __CFRunLoopObserver * CFRunLoopObserverRef;
+typedef const struct __CFString * CFStringRef;
+
+#include "wx/mac/corefoundation/cfref.h"
+
 // ========================================================================
 // wxApp
 // ========================================================================
@@ -26,7 +31,7 @@ class WXDLLEXPORT wxApp: public wxAppBase
 // ------------------------------------------------------------------------
 public:
     wxApp();
-    virtual ~wxApp() {}
+    virtual ~wxApp();
 
 // ------------------------------------------------------------------------
 // Cocoa specifics
@@ -37,10 +42,14 @@ public:
     virtual void CocoaDelegate_applicationDidBecomeActive();
     virtual void CocoaDelegate_applicationWillResignActive();
     virtual void CocoaDelegate_applicationDidResignActive();
+    virtual void CocoaDelegate_applicationWillUpdate();
+    virtual void CF_ObserveMainRunLoopBeforeWaiting(CFRunLoopObserverRef observer, int activity);
 protected:
     WX_NSApplication m_cocoaApp;
     struct objc_object *m_cocoaAppDelegate;
     WX_NSThread m_cocoaMainThread;
+    wxCFRef<CFRunLoopObserverRef> m_cfRunLoopIdleObserver;
+    wxCFRef<CFStringRef> m_cfObservedRunLoopMode;
 
 // ------------------------------------------------------------------------
 // Implementation
