@@ -725,6 +725,8 @@ class Frame(wx.Frame):
             # Toolbar can be top-level of child of panel or frame
             if parent.__class__ not in [xxxMainNode, xxxPanel, xxxFrame] and \
                not parent.isSizer: error = True
+        elif not parent.hasChildren:
+            error = True
         elif child.__class__ == xxxPanel and parent.__class__ == xxxMainNode:
             pass
         elif child.__class__ == xxxSpacer:
@@ -835,11 +837,15 @@ class Frame(wx.Frame):
 
         if g.testWin and g.testWin.highLight:
             g.testWin.highLight.Remove()
-        tree.needUpdate = True
+            tree.needUpdate = True
 
         # Undo info
         self.lastOp = 'MOVELEFT'
         status = 'Made next sibling of parent'
+
+        # Prepare undo data
+        panel.Apply()
+        tree.UnselectAll()
 
         oldIndex = tree.ItemIndex(selected)
         elem = tree.RemoveLeaf(selected)
@@ -901,7 +907,11 @@ class Frame(wx.Frame):
         # Remove highlight, update testWin
         if g.testWin and g.testWin.highLight:
             g.testWin.highLight.Remove()
-        tree.needUpdate = True
+            tree.needUpdate = True
+
+        # Prepare undo data
+        panel.Apply()
+        tree.UnselectAll()
 
         # Undo info
         self.lastOp = 'MOVERIGHT'
@@ -939,6 +949,7 @@ class Frame(wx.Frame):
         selected = tree.InsertNode(newParent, tree.GetPyData(newParent).treeObject(), elem, wx.TreeItemId())
 
         newIndex = tree.ItemIndex(selected)
+        tree.Expand(selected)
         tree.SelectItem(selected)
 
         undoMan.RegisterUndo(UndoMove(oldParent, oldIndex, newParent, newIndex))

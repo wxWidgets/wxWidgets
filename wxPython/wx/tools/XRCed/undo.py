@@ -167,20 +167,23 @@ class UndoReplace:
 
 class UndoMove:
     def __init__(self, oldParent, oldIndex, newParent, newIndex):
-        self.oldParent = oldParent
+        # Store indexes because items can be invalid already
+        self.oldParentIndex = g.tree.ItemFullIndex(oldParent)
         self.oldIndex = oldIndex
-        self.newParent = newParent
+        self.newParentIndex = g.tree.ItemFullIndex(newParent)
         self.newIndex = newIndex
     def destroy(self):
         pass
     def undo(self):
-        item = g.tree.GetFirstChild(self.newParent)[0]
+        oldParent = g.tree.ItemAtFullIndex(self.oldParentIndex)
+        newParent = g.tree.ItemAtFullIndex(self.newParentIndex)
+        item = g.tree.GetFirstChild(newParent)[0]
         for i in range(self.newIndex): item = g.tree.GetNextSibling(item)
         elem = g.tree.RemoveLeaf(item)
-        nextItem = g.tree.GetFirstChild(self.oldParent)[0]
+        nextItem = g.tree.GetFirstChild(oldParent)[0]
         for i in range(self.oldIndex): nextItem = g.tree.GetNextSibling(nextItem) 
 
-        parent = g.tree.GetPyData(self.oldParent).treeObject()
+        parent = g.tree.GetPyData(oldParent).treeObject()
 
         # Check parent and child relationships.
         # If parent is sizer or notebook, child is of wrong class or
@@ -208,7 +211,7 @@ class UndoMove:
             pageElem.appendChild(elem)
             elem = pageElem
 
-        selected = g.tree.InsertNode(self.oldParent, parent, elem, nextItem)
+        selected = g.tree.InsertNode(oldParent, parent, elem, nextItem)
         g.tree.EnsureVisible(selected)
         # Highlight is outdated
         if g.testWin and g.testWin.highLight:
@@ -216,11 +219,13 @@ class UndoMove:
             g.tree.needUpdate = True
         g.tree.SelectItem(selected)
     def redo(self):
-        item = g.tree.GetFirstChild(self.oldParent)[0]
+        oldParent = g.tree.ItemAtFullIndex(self.oldParentIndex)
+        newParent = g.tree.ItemAtFullIndex(self.newParentIndex)
+        item = g.tree.GetFirstChild(oldParent)[0]
         for i in range(self.oldIndex): item = g.tree.GetNextSibling(item)
         elem = g.tree.RemoveLeaf(item)
 
-        parent = g.tree.GetPyData(self.newParent).treeObject()
+        parent = g.tree.GetPyData(newParent).treeObject()
 
         # Check parent and child relationships.
         # If parent is sizer or notebook, child is of wrong class or
@@ -248,9 +253,9 @@ class UndoMove:
             pageElem.appendChild(elem)
             elem = pageElem
 
-        nextItem = g.tree.GetFirstChild(self.newParent)[0]
+        nextItem = g.tree.GetFirstChild(newParent)[0]
         for i in range(self.newIndex): nextItem = g.tree.GetNextSibling(nextItem) 
-        selected = g.tree.InsertNode(self.newParent, parent, elem, nextItem)
+        selected = g.tree.InsertNode(newParent, parent, elem, nextItem)
         g.tree.EnsureVisible(selected)
         # Highlight is outdated
         if g.testWin and g.testWin.highLight:
