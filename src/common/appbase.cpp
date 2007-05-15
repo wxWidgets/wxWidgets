@@ -238,7 +238,7 @@ bool wxAppConsole::OnInit()
 int wxAppConsole::OnRun()
 {
     return MainLoop();
-};
+}
 
 int wxAppConsole::OnExit()
 {
@@ -332,7 +332,7 @@ bool wxAppConsole::HasPendingEvents() const
     }
     wxLEAVE_CRIT_SECT( *wxPendingEventsLocker );
     return true;
-};
+}
 
 void wxAppConsole::ProcessPendingEvents()
 {
