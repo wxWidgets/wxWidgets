@@ -789,6 +789,15 @@ const void * wxFont::MacGetCTFont() const
 
     return M_FONTDATA->m_macFontRef;
 }
+
+// to be removed
+void * wxFont::MacGetATSUStyle() const
+{
+    wxCHECK_MSG( M_FONTDATA != NULL , NULL, wxT("invalid font") );
+
+    return M_FONTDATA->m_macATSUStyle;
+}
+
 #endif
 
 const wxNativeFontInfo * wxFont::GetNativeFontInfo() const
