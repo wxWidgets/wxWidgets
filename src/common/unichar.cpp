@@ -24,7 +24,7 @@
 #endif
 
 #include "wx/unichar.h"
-#include "wx/stringops.h"
+#include "wx/string.h"
 
 // ===========================================================================
 // implementation
