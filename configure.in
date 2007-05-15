@@ -1937,6 +1937,7 @@ dnl checks needed to define wxVaCopy
 AC_CACHE_CHECK([for va_copy],
     wx_cv_func_va_copy,
     [
+        AC_LANG_PUSH(C++)
         AC_LINK_IFELSE([
             #include <stdarg.h>
             void foo(char *f, ...)
@@ -1955,6 +1956,7 @@ AC_CACHE_CHECK([for va_copy],
             wx_cv_func_va_copy=yes,
             wx_cv_func_va_copy=no
         )
+        AC_LANG_POP()
     ]
 )
 
