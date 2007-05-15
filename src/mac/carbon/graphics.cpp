@@ -297,7 +297,7 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
 {
     Init();
 
-    float components[4] = { pen.GetColour().Red() / 255.0 , pen.GetColour().Green() / 255.0 ,
+    CGFloat components[4] = { pen.GetColour().Red() / 255.0 , pen.GetColour().Green() / 255.0 ,
             pen.GetColour().Blue() / 255.0 , pen.GetColour().Alpha() / 255.0 } ;
     m_color.Set( CGColorCreate( wxMacGetGenericRGBColorSpace() , components ) ) ;
 
@@ -553,14 +553,14 @@ wxMacCoreGraphicsBrushData::wxMacCoreGraphicsBrushData(wxGraphicsRenderer* rende
                 // as close as we can get, unfortunately < 10.4 things get difficult
                 RGBColor color;
                 GetThemeBrushAsColor( brush.MacGetTheme(), 32, true, &color );
-                float components[4] = {  (CGFloat) color.red / 65536,
+                CGFloat components[4] = {  (CGFloat) color.red / 65536,
                     (CGFloat) color.green / 65536, (CGFloat) color.blue / 65536, 1 } ;
                 m_color.Set( CGColorCreate( wxMacGetGenericRGBColorSpace() , components ) ) ;
             }
         }
         else
         {
-            float components[4] = { brush.GetColour().Red() / 255.0 , brush.GetColour().Green() / 255.0 ,
+            CGFloat components[4] = { brush.GetColour().Red() / 255.0 , brush.GetColour().Green() / 255.0 ,
                 brush.GetColour().Blue() / 255.0 , brush.GetColour().Alpha() / 255.0 } ;
             m_color.Set( CGColorCreate( wxMacGetGenericRGBColorSpace() , components ) ) ;
         }
@@ -697,7 +697,7 @@ wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* rendere
 
     // we need the scale here ...
 
-    Fixed atsuSize = IntToFixed( int( 1 * font.MacGetFontSize()) );
+    Fixed atsuSize = IntToFixed( int( 1 * font.GetPointSize()) );
     RGBColor atsuColor = MAC_WXCOLORREF( col.GetPixel() );
     ATSUAttributeTag atsuTags[] =
     {
@@ -1320,7 +1320,12 @@ void wxMacCoreGraphicsContext::EnsureIsValid()
 {
     if ( !m_cgContext )
     {
-        OSStatus status = QDBeginCGContext( GetWindowPort( m_windowRef ) , &m_cgContext );
+        OSStatus status = 
+#ifndef __LP64__
+            QDBeginCGContext( GetWindowPort( m_windowRef ) , &m_cgContext );
+#else
+            paramErr;
+#endif
         wxASSERT_MSG( status == noErr , wxT("Cannot nest wxDCs on the same window") );
 
         CGContextConcatCTM( m_cgContext, m_windowTransform );
@@ -1551,7 +1556,11 @@ void wxMacCoreGraphicsContext::SetNativeContext( CGContextRef cg )
         CGContextRestoreGState( m_cgContext );
         CGContextRestoreGState( m_cgContext );
         if ( m_releaseContext )
+        {
+#ifndef __LP64__
             QDEndCGContext( GetWindowPort( m_windowRef ) , &m_cgContext);
+#endif
+        }
         else
             CGContextRelease(m_cgContext);
     }

@@ -1002,6 +1002,7 @@ void wxMacControl::SuperChangedPosition()
 void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , long windowStyle )
 {
     m_font = font;
+#ifndef __LP64__
     ControlFontStyleRec fontStyle;
     if ( font.MacGetThemeFontID() != kThemeCurrentPortFont )
     {
@@ -1052,6 +1053,7 @@ void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , l
     }
 
     ::SetControlFontStyle( m_controlRef , &fontStyle );
+#endif
 }
 
 void wxMacControl::SetBackground( const wxBrush &WXUNUSED(brush) )

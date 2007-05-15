@@ -2667,7 +2667,9 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     Rect enclosingRect;
     CGRect enclosingCGRect, iconCGRect, textCGRect;
     Boolean active;
+#ifndef __LP64__
     ThemeDrawingState savedState = NULL;
+#endif
     CGContextRef context = (CGContextRef)list->MacGetDrawingContext();
     RGBColor labelColor;
     labelColor.red = 0;
@@ -2698,9 +2700,10 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     }
     if (itemState == kDataBrowserItemIsSelected)
     {
-
+#ifndef __LP64__
         GetThemeDrawingState(&savedState);
-        
+#endif
+
         if (active && hasFocus)
         {
             GetThemeBrushAsColor(kThemeBrushAlternatePrimaryHighlightColor, 32, true, &backgroundColor);
@@ -2763,19 +2766,29 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     }
 
     HIThemeTextHorizontalFlush hFlush = kHIThemeTextHorizontalFlushLeft;
-    UInt16 fontID = kThemeViewsFont;
+    HIThemeTextInfo info;
+
+#ifdef __LP64__
+    info.version = kHIThemeTextInfoVersionOne;
+    info.fontID = kThemeViewsFont;
+    if (font.Ok())
+    {
+        info.fontID = kThemeSpecifiedFont;
+        info.font = (CTFontRef) font.MacGetCTFont();
+    }
+#else
+    info.version = kHIThemeTextInfoVersionZero;
+    info.fontID = kThemeViewsFont;
 
     if (font.Ok())
     {
         if (font.GetFamily() != wxFONTFAMILY_DEFAULT)
-            fontID = font.MacGetThemeFontID();
+            info.fontID = font.MacGetThemeFontID();
 
-// FIXME: replace these with CG or ATSUI calls so we can remove this #ifndef.
-#ifndef __LP64__
         ::TextSize( (short)(font.MacGetFontSize()) ) ;
         ::TextFace( font.MacGetFontStyle() ) ;
-#endif
     }
+#endif
 
     wxListItem item;
     list->GetColumn(listColumn, item);
@@ -2792,10 +2805,7 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
         }
     }
 
-    HIThemeTextInfo info;
-    info.version = kHIThemeTextInfoVersionZero;
     info.state = active ? kThemeStateActive : kThemeStateInactive;
-    info.fontID = fontID;
     info.horizontalFlushness = hFlush;
     info.verticalFlushness = kHIThemeTextVerticalFlushCenter;
     info.options = kHIThemeTextBoxOptionNone;
@@ -2811,8 +2821,10 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
 
     CGContextRestoreGState(context);
 
+#ifndef __LP64__
     if (savedState != NULL)
         SetThemeDrawingState(savedState, true);
+#endif
 }
 
 OSStatus wxMacDataBrowserListCtrlControl::GetSetItemData(DataBrowserItemID itemID,

@@ -1227,7 +1227,11 @@ public:
 
     // returns a Pict from the bitmap content
     PicHandle     GetPictHandle();
+#ifdef __LP64__
+    CGContextRef  GetHBITMAP(CGContextRef * mask = NULL ) const;
+#else
     GWorldPtr     GetHBITMAP(GWorldPtr * mask = NULL ) const;
+#endif
     void          UpdateAlphaMask() const;
 
 private :
@@ -1247,10 +1251,15 @@ private :
 #endif
     IconRef       m_iconRef;
     PicHandle     m_pictHandle;
-    GWorldPtr     m_hBitmap;
-    GWorldPtr     m_hMaskBitmap;
     wxMemoryBuffer m_maskMemBuf;
     int            m_maskBytesPerRow;
+#ifdef __LP64__
+    CGContextRef  m_hBitmap;
+    CGContextRef  m_hMaskBitmap;
+#else
+    GWorldPtr     m_hBitmap;
+    GWorldPtr     m_hMaskBitmap;
+#endif
 };
 
 class WXDLLEXPORT wxIconRefData : public wxGDIRefData

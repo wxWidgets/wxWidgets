@@ -57,6 +57,14 @@
 #include <QuickTime/QuickTimeComponents.h>
 #endif
 
+#if !defined(__DARWIN__) || !defined(__LP64__)
+#define USE_QUICKTIME 1
+#else
+#define USE_QUICKTIME 0
+#endif
+
+#if USE_QUICKTIME
+
 //---------------------------------------------------------------------------
 // Height and Width of movie controller in the movie control (apple samples)
 //---------------------------------------------------------------------------
@@ -1225,6 +1233,8 @@ pascal OSStatus wxQTMediaBackend::WindowEventHandler(
     else
         return eventNotHandledErr;
 }
+
+#endif
 
 // in source file that contains stuff you don't directly use
 #include "wx/html/forcelnk.h"

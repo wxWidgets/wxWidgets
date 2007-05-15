@@ -204,6 +204,9 @@ bool wxBitmapRefData::Create( int w , int h , int d )
     verify_noerr( NewGWorldFromPtr( (GWorldPtr*) &m_hBitmap , k32ARGBPixelFormat , &rect , NULL , NULL , 0 ,
         (char*) data , m_bytesPerRow ) ) ;
     wxASSERT_MSG( m_hBitmap , wxT("Unable to create GWorld context") ) ;
+#else
+    m_hBitmap = CGBitmapContextCreate((char*) data, m_width, m_height, 8, m_bytesPerRow, wxMacGetGenericRGBColorSpace(), kCGImageAlphaNoneSkipFirst );
+    wxASSERT_MSG( m_hBitmap , wxT("Unable to create CGBitmapContext context") ) ;
 #endif
     m_ok = ( m_hBitmap != NULL ) ;
 
@@ -307,14 +310,16 @@ IconRef wxBitmapRefData::GetIconRef()
 
         IconFamilyHandle iconFamily = NULL ;
 
-#ifdef WORDS_BIGENDIAN
-        iconFamily = (IconFamilyHandle) NewHandle( 8 ) ;
-        (**iconFamily).resourceType = kIconFamilyType ;
-        (**iconFamily).resourceSize = sizeof(OSType) + sizeof(Size);
-#else
-        // test this solution on big endian as well
-        iconFamily = (IconFamilyHandle) NewHandle( 0 ) ;
-#endif
+        if ( UMAGetSystemVersion() < 0x1040 )
+        {
+            iconFamily = (IconFamilyHandle) NewHandle( 8 ) ;
+            (**iconFamily).resourceType = kIconFamilyType ;
+            (**iconFamily).resourceSize = sizeof(OSType) + sizeof(Size);
+        }
+        else
+        {
+            iconFamily = (IconFamilyHandle) NewHandle( 0 ) ;
+        }
 
         int w = GetWidth() ;
         int h = GetHeight() ;
@@ -326,23 +331,39 @@ IconRef wxBitmapRefData::GetIconRef()
         switch (sz)
         {
             case 128:
+#if 0 // for later
+                dataType = kIconServices128PixelDataARGB ;
+#else
                 dataType = kThumbnail32BitData ;
                 maskType = kThumbnail8BitMask ;
+#endif
                 break;
 
             case 48:
+#if 0 // for later
+                dataType = kIconServices48PixelDataARGB ;
+#else
                 dataType = kHuge32BitData ;
                 maskType = kHuge8BitMask ;
+#endif
                 break;
 
             case 32:
+#if 0 // for later
+                dataType = kIconServices32PixelDataARGB ;
+#else
                 dataType = kLarge32BitData ;
                 maskType = kLarge8BitMask ;
+#endif
                 break;
 
             case 16:
+#if 0 // for later
+                dataType = kIconServices16PixelDataARGB ;
+#else
                 dataType = kSmall32BitData ;
                 maskType = kSmall8BitMask ;
+#endif
                 break;
 
             default:
@@ -351,6 +372,13 @@ IconRef wxBitmapRefData::GetIconRef()
 
         if ( dataType != 0 )
         {
+#if 0 // for later
+            Handle data = NULL ;  
+            PtrToHand(GetRawAccess(), &data, sz * sz * 4);
+            OSStatus err = SetIconFamilyData( iconFamily, dataType , data );
+            wxASSERT_MSG( err == noErr , wxT("Error when adding bitmap") );
+            DisposeHandle( data );
+#else
             // setup the header properly
 
             Handle data = NULL ;
@@ -418,6 +446,7 @@ IconRef wxBitmapRefData::GetIconRef()
             HUnlock( maskdata ) ;
             DisposeHandle( data ) ;
             DisposeHandle( maskdata ) ;
+#endif
         }
         else
         {
@@ -633,7 +662,11 @@ CGImageRef wxBitmapRefData::CGImageCreate() const
 }
 #endif
 
+#ifndef __LP64__
 GWorldPtr wxBitmapRefData::GetHBITMAP(GWorldPtr* mask) const
+#else
+CGContextRef wxBitmapRefData::GetHBITMAP(CGContextRef* mask) const
+#endif
 {
     wxCHECK_MSG( Ok(), NULL, wxT("invalid bitmap") );
     if ( mask )
@@ -641,7 +674,13 @@ GWorldPtr wxBitmapRefData::GetHBITMAP(GWorldPtr* mask) const
         *mask = NULL ;
         if ( m_bitmapMask )
         {
-            *mask = (GWorldPtr) m_bitmapMask->GetHBITMAP() ;
+            *mask = 
+#ifndef __LP64__
+                (GWorldPtr) 
+#else
+                (CGContextRef) 
+#endif
+                m_bitmapMask->GetHBITMAP() ;
         }
         else if ( m_hasAlpha )
         {
@@ -711,19 +750,27 @@ void wxBitmapRefData::Free()
         KillPicture( m_pictHandle ) ;
         m_pictHandle = NULL ;
     }
+#endif
 
     if ( m_hBitmap )
     {
+#ifndef __LP64__
         DisposeGWorld( MAC_WXHBITMAP(m_hBitmap) ) ;
+#else
+        CGContextRelease(m_hBitmap);
+#endif
         m_hBitmap = NULL ;
     }
 
     if ( m_hMaskBitmap )
     {
+#ifndef __LP64__
         DisposeGWorld( MAC_WXHBITMAP(m_hMaskBitmap) ) ;
+#else
+        CGContextRelease(m_hMaskBitmap);
+#endif
         m_hMaskBitmap = NULL ;
     }
-#endif
     if (m_bitmapMask)
     {
         delete m_bitmapMask;
@@ -1098,38 +1145,41 @@ wxBitmap::wxBitmap(const wxImage& image, int depth)
 
     unsigned char* destination = (unsigned char*) BeginRawAccess() ;
     register unsigned char* data = image.GetData();
-    const unsigned char *alpha = hasAlpha ? image.GetAlpha() : NULL ;
-
-    for (int y = 0; y < height; y++)
+    if ( destination != NULL && data != NULL )
     {
-        for (int x = 0; x < width; x++)
+        const unsigned char *alpha = hasAlpha ? image.GetAlpha() : NULL ;
+
+        for (int y = 0; y < height; y++)
         {
-            if ( hasAlpha )
+            for (int x = 0; x < width; x++)
             {
-                const unsigned char a = *alpha++;
-                *destination++ = a ;
+                if ( hasAlpha )
+                {
+                    const unsigned char a = *alpha++;
+                    *destination++ = a ;
 
 #if wxMAC_USE_PREMULTIPLIED_ALPHA
-                *destination++ = ((*data++) * a + 127) / 255 ;
-                *destination++ = ((*data++) * a + 127) / 255 ;
-                *destination++ = ((*data++) * a + 127) / 255 ;
+                    *destination++ = ((*data++) * a + 127) / 255 ;
+                    *destination++ = ((*data++) * a + 127) / 255 ;
+                    *destination++ = ((*data++) * a + 127) / 255 ;
 #else
-                *destination++ = *data++ ;
-                *destination++ = *data++ ;
-                *destination++ = *data++ ;
+                    *destination++ = *data++ ;
+                    *destination++ = *data++ ;
+                    *destination++ = *data++ ;
 #endif
-            }
-            else
-            {
-                *destination++ = 0xFF ;
-                *destination++ = *data++ ;
-                *destination++ = *data++ ;
-                *destination++ = *data++ ;
+                }
+                else
+                {
+                    *destination++ = 0xFF ;
+                    *destination++ = *data++ ;
+                    *destination++ = *data++ ;
+                    *destination++ = *data++ ;
+                }
             }
         }
-    }
 
-    EndRawAccess() ;
+        EndRawAccess() ;
+    }
     if ( image.HasMask() )
         SetMask( new wxMask( *this , wxColour( image.GetMaskRed() , image.GetMaskGreen() , image.GetMaskBlue() ) ) ) ;
 }
@@ -1361,7 +1411,11 @@ void wxBitmap::SetMask(wxMask *mask)
 
 WXHBITMAP wxBitmap::GetHBITMAP(WXHBITMAP* mask) const
 {
+#ifdef __LP64__
+    return WXHBITMAP(M_BITMAPDATA->GetHBITMAP((CGContextRef*)mask));
+#else
     return WXHBITMAP(M_BITMAPDATA->GetHBITMAP((GWorldPtr*)mask));
+#endif
 }
 
 // ----------------------------------------------------------------------------
