@@ -244,7 +244,7 @@ void spInterFileContext::ParseContents( SourceParserPlugin* pPlugin )
 
     for( size_t i = 0; i != m_Files.size(); ++i )
     {
-        wxChar* s = (char*)(m_Contents[i].c_str());
+        wxWritableCharBuffer s(m_Contents[i].char_str());
 
         spFile* pFCtx = mParser.Parse( s, s + m_Contents[i].length() );
 
