@@ -2843,7 +2843,6 @@ inline bool operator!=(const wxString& s1, const wxCStrData& s2)
 inline bool operator!=(const wxCStrData& s1, const wxString& s2)
     { return s1.AsString() != s2; }
 
-#if wxUSE_UNICODE
 inline bool operator==(const wxString& s1, const wxWCharBuffer& s2)
     { return (s1.Cmp((const wchar_t *)s2) == 0); }
 inline bool operator==(const wxWCharBuffer& s1, const wxString& s2)
@@ -2852,7 +2851,7 @@ inline bool operator!=(const wxString& s1, const wxWCharBuffer& s2)
     { return (s1.Cmp((const wchar_t *)s2) != 0); }
 inline bool operator!=(const wxWCharBuffer& s1, const wxString& s2)
     { return (s2.Cmp((const wchar_t *)s1) != 0); }
-#else // !wxUSE_UNICODE
+
 inline bool operator==(const wxString& s1, const wxCharBuffer& s2)
     { return (s1.Cmp((const char *)s2) == 0); }
 inline bool operator==(const wxCharBuffer& s1, const wxString& s2)
@@ -2861,19 +2860,16 @@ inline bool operator!=(const wxString& s1, const wxCharBuffer& s2)
     { return (s1.Cmp((const char *)s2) != 0); }
 inline bool operator!=(const wxCharBuffer& s1, const wxString& s2)
     { return (s2.Cmp((const char *)s1) != 0); }
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
-#if wxUSE_UNICODE
 inline wxString operator+(const wxString& string, const wxWCharBuffer& buf)
     { return string + (const wchar_t *)buf; }
 inline wxString operator+(const wxWCharBuffer& buf, const wxString& string)
     { return (const wchar_t *)buf + string; }
-#else // !wxUSE_UNICODE
+
 inline wxString operator+(const wxString& string, const wxCharBuffer& buf)
     { return string + (const char *)buf; }
 inline wxString operator+(const wxCharBuffer& buf, const wxString& string)
     { return (const char *)buf + string; }
-#endif // wxUSE_UNICODE/!wxUSE_UNICODE
 
 // comparison with char
 inline bool operator==(const wxUniChar& c, const wxString& s) { return s.IsSameAs(c); }
