@@ -146,7 +146,7 @@ void wxFontsManager::AddAllFonts()
 
         if ( !wxDir::Exists(dir) )
         {
-            wxLogTrace(_T("font"), _T("font directory %s doesn't exist"), dir);
+            wxLogDebug(_T("font directory %s doesn't exist"), dir);
             continue;
         }
 
