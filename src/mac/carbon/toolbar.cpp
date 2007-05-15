@@ -841,7 +841,7 @@ bool wxToolBar::Create(
     OSStatus err = noErr;
 
 #if wxMAC_USE_NATIVE_TOOLBAR
-    wxString labelStr = wxString::Format( wxT("%xd"), (int)this );
+    wxString labelStr = wxString::Format( wxT("%p"), this );
     err = HIToolbarCreate(
         wxMacCFStringHolder( labelStr, wxFont::GetDefaultEncoding() ), 0,
         (HIToolbarRef*) &m_macHIToolbarRef );
@@ -1502,7 +1502,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 
 #if wxMAC_USE_NATIVE_TOOLBAR
                 HIToolbarItemRef item;
-                wxString labelStr = wxString::Format(wxT("%xd"), (int)tool);
+                wxString labelStr = wxString::Format(wxT("%p"), tool);
                 err = HIToolbarItemCreate(
                     wxMacCFStringHolder(labelStr, wxFont::GetDefaultEncoding()),
                     kHIToolbarItemCantBeRemoved | kHIToolbarItemAnchoredLeft | kHIToolbarItemAllowDuplicates, &item );
