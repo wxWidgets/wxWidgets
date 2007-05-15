@@ -111,6 +111,7 @@ public:
     // Assignment operators:
     wxUniChar& operator=(const wxUniChar& c) { m_value = c.m_value; return *this; }
     wxUniChar& operator=(char c) { m_value = From8bit(c); return *this; }
+    wxUniChar& operator=(unsigned char c) { m_value = From8bit((char)c); return *this; }
     wxUniChar& operator=(wchar_t c) { m_value = c; return *this; }
     wxUniChar& operator=(int c) { m_value = c; return *this; }
 #ifdef wxWINT_T_IS_SEPARATE_TYPE
@@ -123,7 +124,9 @@ public:
 #define wxDEFINE_UNICHAR_OPERATOR(op)                                         \
     bool operator op(const wxUniChar& c) const { return m_value op c.m_value; }\
     bool operator op(char c) const { return m_value op From8bit(c); }         \
+    bool operator op(unsigned char c) const { return m_value op From8bit((char)c); } \
     bool operator op(wchar_t c) const { return m_value op (value_type)c; }    \
+    bool operator op(int c) const { return m_value op (value_type)c; }        \
     wxIF_WINT_T_TYPE( bool operator op(wint_t c) const { return m_value op (value_type)c; } )
 
     wxFOR_ALL_COMPARISONS(wxDEFINE_UNICHAR_OPERATOR)
@@ -133,6 +136,7 @@ public:
     // this is needed for expressions like 'Z'-c
     int operator-(const wxUniChar& c) const { return m_value - c.m_value; }
     int operator-(char c) const { return m_value - From8bit(c); }
+    int operator-(unsigned char c) const { return m_value - From8bit((char)c); }
     int operator-(wchar_t c) const { return m_value - (value_type)c; }
 #ifdef wxWINT_T_IS_SEPARATE_TYPE
     int operator-(wint_t c) const { return m_value - (value_type)c; }
@@ -191,6 +195,7 @@ public:
         { return *this = c.UniChar(); }
 
     wxUniCharRef& operator=(char c) { return *this = wxUniChar(c); }
+    wxUniCharRef& operator=(unsigned char c) { return *this = wxUniChar(c); }
     wxUniCharRef& operator=(wchar_t c) { return *this = wxUniChar(c); }
     wxUniCharRef& operator=(int c) { return *this = wxUniChar(c); }
 #ifdef wxWINT_T_IS_SEPARATE_TYPE
@@ -222,7 +227,9 @@ public:
     bool operator op(const wxUniCharRef& c) const { return UniChar() op c.UniChar(); }\
     bool operator op(const wxUniChar& c) const { return UniChar() op c; }     \
     bool operator op(char c) const { return UniChar() op c; }                 \
+    bool operator op(unsigned char c) const { return UniChar() op c; }        \
     bool operator op(wchar_t c) const { return UniChar() op c; }              \
+    bool operator op(int c) const { return UniChar() op c; }                  \
     wxIF_WINT_T_TYPE( bool operator op(wint_t c) const { return UniChar() op c; } )
 
     wxFOR_ALL_COMPARISONS(wxDEFINE_UNICHARREF_OPERATOR)
@@ -233,6 +240,7 @@ public:
     int operator-(const wxUniCharRef& c) const { return UniChar() - c.UniChar(); }
     int operator-(const wxUniChar& c) const { return UniChar() - c; }
     int operator-(char c) const { return UniChar() - c; }
+    int operator-(unsigned char c) const { return UniChar() - c; }
     int operator-(wchar_t c) const { return UniChar() - c; }
 #ifdef wxWINT_T_IS_SEPARATE_TYPE
     int operator-(wint_t c) const { return UniChar() - c; }
