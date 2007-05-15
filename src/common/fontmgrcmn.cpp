@@ -130,6 +130,8 @@ wxFontBundleBase::GetFaceForFont(const wxFontMgrFontRefData& font) const
 
     if ( !HasFace((FaceType)type) )
     {
+        // if we can't get the exact font requested, substitute it with
+        // some other variant:
         for (int i = 0; i < FaceType_Max; i++)
         {
             if ( HasFace((FaceType)i) )
