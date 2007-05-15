@@ -51,6 +51,9 @@ public:
     bool Create(const wxNativeFontInfo& info);
 
     bool MacCreateThemeFont( wxUint16 themeFontID ) ;
+#ifdef __LP64__
+	bool MacCreateUIFont( wxUint32 coreTextFontType );
+#endif
 
     virtual ~wxFont();
 

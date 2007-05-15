@@ -303,7 +303,8 @@ void wxFontRefData::MacFindFont()
     Boolean kTrue = true ;
     Boolean kFalse = false ;
 
-    Fixed atsuSize = IntToFixed( m_macFontSize );
+    Fixed atsuSize = IntToFixed( m_pointSize );
+	short m_macATSUAdditionalQDStyles = 0;
     ATSUVerticalCharacterType kHorizontal = kATSUStronglyHorizontal;
     ATSUAttributeValuePtr    atsuValues[sizeof(atsuTags) / sizeof(ATSUAttributeTag)] =
     {
@@ -323,7 +324,6 @@ void wxFontRefData::MacFindFont()
         atsuTags, atsuSizes, atsuValues);
 
     wxASSERT_MSG( status == noErr , wxT("couldn't modify ATSU style") );
-#endif
 #else
     if ( m_macThemeFontID != kThemeCurrentPortFont )
     {
