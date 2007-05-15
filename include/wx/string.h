@@ -2834,6 +2834,15 @@ inline bool operator<=(const wxString& s1, const wxString& s2)
 inline bool operator>=(const wxString& s1, const wxString& s2)
     { return s1.Cmp(s2) >= 0; }
 
+inline bool operator==(const wxString& s1, const wxCStrData& s2)
+    { return s1 == s2.AsString(); }
+inline bool operator==(const wxCStrData& s1, const wxString& s2)
+    { return s1.AsString() == s2; }
+inline bool operator!=(const wxString& s1, const wxCStrData& s2)
+    { return s1 != s2.AsString(); }
+inline bool operator!=(const wxCStrData& s1, const wxString& s2)
+    { return s1.AsString() != s2; }
+
 #if wxUSE_UNICODE
 inline bool operator==(const wxString& s1, const wxWCharBuffer& s2)
     { return (s1.Cmp((const wchar_t *)s2) == 0); }
