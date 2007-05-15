@@ -894,7 +894,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
     dc.SetTextForeground(m_colour);
 
     // the size of one cell (Normally biggest char + small margin)
-    long maxCharWidth, maxCharHeight;
+    wxCoord maxCharWidth, maxCharHeight;
     dc.GetTextExtent(wxT("W"), &maxCharWidth, &maxCharHeight);
     int w = maxCharWidth + 5,
         h = maxCharHeight + 4;
@@ -907,7 +907,7 @@ void MyCanvas::OnPaint( wxPaintEvent &WXUNUSED(event) )
         {
             wxChar c = (wxChar)(32 * (i + 1) + j);
 
-            long charWidth, charHeight;
+            wxCoord charWidth, charHeight;
             dc.GetTextExtent(c, &charWidth, &charHeight);
             dc.DrawText
             (

@@ -2784,6 +2784,7 @@ static void TestStackWalk(const char *argv0)
 #ifdef TEST_STDPATHS
 
 #include "wx/stdpaths.h"
+#include "wx/wxchar.h"      // wxPrintf
 
 static void TestStandardPaths()
 {

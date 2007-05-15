@@ -790,9 +790,9 @@ void MyCanvas::DrawText(wxDC& dc)
 
     dc.DrawText( _T("This is Swiss 18pt text."), 110, 40 );
 
-    long length;
-    long height;
-    long descent;
+    wxCoord length;
+    wxCoord height;
+    wxCoord descent;
     dc.GetTextExtent( _T("This is Swiss 18pt text."), &length, &height, &descent );
     text.Printf( wxT("Dimensions are length %ld, height %ld, descent %ld"), length, height, descent );
     dc.DrawText( text, 110, 80 );

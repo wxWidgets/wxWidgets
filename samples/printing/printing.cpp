@@ -609,7 +609,7 @@ void MyPrintout::DrawPageTwo()
 
     { // GetTextExtent demo:
         wxString words[7] = {_T("This "), _T("is "), _T("GetTextExtent "), _T("testing "), _T("string. "), _T("Enjoy "), _T("it!")};
-        long w, h;
+        wxCoord w, h;
         long x = 200, y= 250;
         wxFont fnt(15, wxSWISS, wxNORMAL, wxNORMAL);
 
@@ -681,7 +681,7 @@ dc->SetFont(headerFont);
     float topMarginLogical = (float)(mmToLogical*topMargin);
     float rightMarginLogical = (float)(mmToLogical*(pageWidthMM - rightMargin));
 
-    long xExtent, yExtent;
+    wxCoord xExtent, yExtent;
     dc->GetTextExtent(text, &xExtent, &yExtent);
     float xPos = (float)(((((pageWidthMM - leftMargin - rightMargin)/2.0)+leftMargin)*mmToLogical) - (xExtent/2.0));
     dc->DrawText(text, (long)xPos, (long)topMarginLogical);
