@@ -88,7 +88,7 @@
     #define TEST_WCHAR
     #define TEST_ZIP
 #else // #if TEST_ALL
-    #define TEST_STDPATHS
+    #define TEST_TIMER
 #endif
 
 // some tests are interactive, define this to run them
@@ -2943,6 +2943,46 @@ static void TestStopWatch()
     wxPuts(_T(", ok."));
 }
 
+#include "wx/timer.h"
+#include "wx/evtloop.h"
+
+void TestTimer()
+{
+    wxPuts(_T("*** Testing wxTimer ***\n"));
+
+    class MyTimer : public wxTimer
+    {
+    public:
+        MyTimer() : wxTimer() { m_num = 0; }
+
+        virtual void Notify()
+        {
+            wxPrintf(_T("%d"), m_num++);
+
+            if ( m_num == 10 )
+            {
+                wxPrintf(_T("... exiting the event loop"));
+                Stop();
+
+                wxEventLoop::GetActive()->Exit(0);
+                wxPuts(_T(", ok."));
+            }
+
+            fflush(stdout);
+        }
+
+    private:
+        int m_num;
+    };
+
+    wxEventLoop loop;
+
+    MyTimer timer;
+    timer.Start(500);
+
+    loop.Run();
+}
+
 #endif // TEST_TIMER
 
 // ----------------------------------------------------------------------------
@@ -4450,6 +4490,7 @@ int main(int argc, char **argv)
 
 #ifdef TEST_TIMER
     TestStopWatch();
+    TestTimer();
 #endif // TEST_TIMER
 
 #ifdef TEST_DATETIME
