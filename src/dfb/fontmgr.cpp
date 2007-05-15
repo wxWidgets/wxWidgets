@@ -37,6 +37,11 @@
 // wxFontInstance
 // ----------------------------------------------------------------------------
 
+// This is a fake "filename" for DirectFB's builtin font (which isn't loaded
+// from a file); we can't use empty string, because that's already used for
+// "this face is not available" by wxFontsManagerBase
+#define BUILTIN_DFB_FONT_FILENAME   "/dev/null"
+
 wxFontInstance::wxFontInstance(float ptSize, bool aa,
                                const wxString& filename)
     : wxFontInstanceBase(ptSize, aa)
@@ -55,7 +60,11 @@ wxFontInstance::wxFontInstance(float ptSize, bool aa,
                     DFDESC_ATTRIBUTES | DFDESC_FRACT_HEIGHT);
     desc.attributes = aa ? DFFA_NONE : DFFA_MONOCHROME;
     desc.fract_height = pixSize;
-    m_font = wxIDirectFB::Get()->CreateFont(filename.fn_str(), &desc);
+
+    if ( filename == BUILTIN_DFB_FONT_FILENAME )
+        m_font = wxIDirectFB::Get()->CreateFont(NULL, &desc);
+    else
+        m_font = wxIDirectFB::Get()->CreateFont(filename.fn_str(), &desc);
 
     wxASSERT_MSG( m_font, _T("cannot create font instance") );
 }
@@ -163,8 +172,23 @@ void wxFontsManager::AddAllFonts()
 
     if ( GetBundles().empty() )
     {
-        // wxDFB is unusable without fonts, so terminate the app
-        wxLogFatalError(_("No fonts found in %s."), path.c_str());
+        // We can fall back to the builtin default font if no other fonts are
+        // defined:
+        wxLogTrace(_T("font"),
+                   _("no fonts found in %s, using builtin font"), path);
+
+        AddBundle
+        (
+          new wxFontBundle
+              (
+                _("Default font"),
+                BUILTIN_DFB_FONT_FILENAME,
+                wxEmptyString,
+                wxEmptyString,
+                wxEmptyString,
+                false // IsFixed
+              )
+        );
     }
 }
 
