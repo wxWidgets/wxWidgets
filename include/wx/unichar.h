@@ -39,6 +39,7 @@
 #endif
 
 class WXDLLIMPEXP_BASE wxUniCharRef;
+class WXDLLIMPEXP_BASE wxStringIteratorNode;
 
 // This class represents single Unicode character. It can be converted to
 // and from char or wchar_t and implements commonly used character operations.
@@ -157,7 +158,7 @@ private:
 
     // create the reference
 #if wxUSE_UNICODE_UTF8
-    wxUniCharRef(wxStringImpl& str, iterator pos) : m_str(str), m_pos(pos) {}
+    wxUniCharRef(wxStringIteratorNode& node, iterator pos) : m_node(node), m_pos(pos) {}
 #else
     wxUniCharRef(iterator pos) : m_pos(pos) {}
 #endif
@@ -169,8 +170,8 @@ public:
     //     that must be used explicitly (this is more than using 'explicit'
     //     keyword on ctor!):
 #if wxUSE_UNICODE_UTF8
-    static wxUniCharRef CreateForString(wxStringImpl& str, iterator pos)
-        { return wxUniCharRef(str, pos); }
+    static wxUniCharRef CreateForString(wxStringIteratorNode& node, iterator pos)
+        { return wxUniCharRef(node, pos); }
 #else
     static wxUniCharRef CreateForString(iterator pos)
         { return wxUniCharRef(pos); }
@@ -249,7 +250,7 @@ private:
 private:
     // reference to the string and pointer to the character in string
 #if wxUSE_UNICODE_UTF8
-    wxStringImpl& m_str;
+    wxStringIteratorNode& m_node;
 #endif
     iterator m_pos;
 };

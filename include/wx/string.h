@@ -376,6 +376,23 @@ protected:
     #pragma warning (disable:4275)
 #endif
 
+#if wxUSE_UNICODE_UTF8
+// see the comment near wxString::iterator for why we need this
+struct WXDLLIMPEXP_BASE wxStringIteratorNode
+{
+    inline wxStringIteratorNode(const wxString *str,
+                                wxStringImpl::const_iterator *citer);
+    inline wxStringIteratorNode(const wxString *str,
+                                wxStringImpl::iterator *iter);
+    inline ~wxStringIteratorNode();
+
+    const wxString *m_str;
+    wxStringImpl::const_iterator *m_citer;
+    wxStringImpl::iterator *m_iter;
+    wxStringIteratorNode *m_prev, *m_next;
+};
+#endif // wxUSE_UNICODE_UTF8
+
 class WXDLLIMPEXP_BASE wxString
 #ifdef wxNEEDS_WXSTRING_PRINTF_MIXIN
                                 : public wxStringPrintfMixin
@@ -519,7 +536,7 @@ private:
       if ( pos == 0 || pos == npos )
           return pos;
       else
-          return const_iterator(m_impl.begin() + pos) - begin();
+          return const_iterator(this, m_impl.begin() + pos) - begin();
   }
 #endif // !wxUSE_UNICODE_UTF8/wxUSE_UNICODE_UTF8
 
@@ -545,8 +562,7 @@ public:
   #define WX_STR_ITERATOR_TAG void /* dummy type */
 #endif
 
-  #define WX_STR_ITERATOR_IMPL(iterator_name, pointer_type,                 \
-                               reference_type, reference_ctor)              \
+  #define WX_STR_ITERATOR_IMPL(iterator_name, pointer_type, reference_type) \
       private:                                                              \
           typedef wxStringImpl::iterator_name underlying_iterator;          \
       public:                                                               \
@@ -556,7 +572,6 @@ public:
           typedef reference_type reference;                                 \
           typedef pointer_type pointer;                                     \
                                                                             \
-          reference operator*() const { return reference_ctor; }            \
           reference operator[](size_t n) const { return *(*this + n); }     \
                                                                             \
           iterator_name& operator++()                                       \
@@ -627,38 +642,87 @@ public:
   class const_iterator;
 
 #if wxUSE_UNICODE_UTF8
+  // NB: In UTF-8 build, (non-const) iterator needs to keep reference
+  //     to the underlying wxStringImpl, because UTF-8 is variable-length
+  //     encoding and changing the value pointer to by an iterator (using
+  //     its operator*) requires calling wxStringImpl::replace() if the old
+  //     and new values differ in their encoding's length.
+  //
+  //     Furthermore, the replace() call may invalid all iterators for the
+  //     string, so we have to keep track of outstanding iterators and update
+  //     them if replace() happens.
+  //
+  //     This is implemented by maintaining linked list of iterators for every
+  //     string and traversing it in wxUniCharRef::operator=(). Head of the
+  //     list is stored in wxString. (FIXME-UTF8)
+
   class iterator
   {
-      // NB: In UTF-8 build, (non-const) iterator needs to keep reference
-      //     to the underlying wxStringImpl, because UTF-8 is variable-length
-      //     encoding and changing the value pointer to by an iterator using
-      //     its operator* requires calling wxStringImpl::replace() if the old
-      //     and new values differ in their encoding's length.
-
-      WX_STR_ITERATOR_IMPL(iterator, wxChar*, wxUniCharRef,
-                           wxUniCharRef::CreateForString(m_str, m_cur));
+      WX_STR_ITERATOR_IMPL(iterator, wxChar*, wxUniCharRef);
 
   public:
-      iterator(const iterator& i) : m_cur(i.m_cur), m_str(i.m_str) {}
+      iterator(const iterator& i)
+          : m_cur(i.m_cur), m_node(i.str(), &m_cur) {}
+
+      reference operator*()
+        { return wxUniCharRef::CreateForString(m_node, m_cur); }
 
       iterator operator+(int n) const
-        { return iterator(m_str, wxStringOperations::AddToIter(m_cur, n)); }
+        { return iterator(str(), wxStringOperations::AddToIter(m_cur, n)); }
       iterator operator+(size_t n) const
-        { return iterator(m_str, wxStringOperations::AddToIter(m_cur, (int)n)); }
+        { return iterator(str(), wxStringOperations::AddToIter(m_cur, (int)n)); }
       iterator operator-(int n) const
-        { return iterator(m_str, wxStringOperations::AddToIter(m_cur, -n)); }
+        { return iterator(str(), wxStringOperations::AddToIter(m_cur, -n)); }
       iterator operator-(size_t n) const
-        { return iterator(m_str, wxStringOperations::AddToIter(m_cur, -(int)n)); }
+        { return iterator(str(), wxStringOperations::AddToIter(m_cur, -(int)n)); }
 
   private:
       iterator(wxString *str, underlying_iterator ptr)
-          : m_cur(ptr), m_str(str->m_impl) {}
-      iterator(wxStringImpl& str, underlying_iterator ptr)
-          : m_cur(ptr), m_str(str) {}
+          : m_cur(ptr), m_node(str, &m_cur) {}
+      iterator(wxString& str, underlying_iterator ptr)
+          : m_cur(ptr), m_node(&str, &m_cur) {}
 
-      wxStringImpl& m_str;
+      wxString* str() const { return wx_const_cast(wxString*, m_node.m_str); }
+
+      wxStringIteratorNode m_node;
 
       friend class const_iterator;
+  };
+
+  class const_iterator
+  {
+      // NB: reference_type is intentionally value, not reference, the character
+      //     may be encoded differently in wxString data:
+      WX_STR_ITERATOR_IMPL(const_iterator, const wxChar*, wxUniChar);
+
+  public:
+      const_iterator(const const_iterator& i)
+          : m_cur(i.m_cur), m_node(i.str(), &m_cur) {}
+      const_iterator(const iterator& i)
+          : m_cur(i.m_cur), m_node(i.str(), &m_cur) {}
+
+      reference operator*() const
+        { return wxStringOperations::DecodeChar(m_cur); }
+
+      const_iterator operator+(int n) const
+        { return const_iterator(str(), wxStringOperations::AddToIter(m_cur, n)); }
+      const_iterator operator+(size_t n) const
+        { return const_iterator(str(), wxStringOperations::AddToIter(m_cur, (int)n)); }
+      const_iterator operator-(int n) const
+        { return const_iterator(str(), wxStringOperations::AddToIter(m_cur, -n)); }
+      const_iterator operator-(size_t n) const
+        { return const_iterator(str(), wxStringOperations::AddToIter(m_cur, -(int)n)); }
+
+  private:
+      // for internal wxString use only:
+      const_iterator(const wxString *str, underlying_iterator ptr)
+          : m_cur(ptr), m_node(str, &m_cur) {}
+      const_iterator(const wxString& str, underlying_iterator ptr)
+          : m_cur(ptr), m_node(&str, &m_cur) {}
+
+      const wxString* str() const { return m_node.m_str; }
+
+      wxStringIteratorNode m_node;
   };
 
   size_t IterToImplPos(wxString::iterator i) const
@@ -668,11 +732,13 @@ public:
 
   class iterator
   {
-      WX_STR_ITERATOR_IMPL(iterator, wxChar*, wxUniCharRef,
-                           wxUniCharRef::CreateForString(m_cur));
+      WX_STR_ITERATOR_IMPL(iterator, wxChar*, wxUniCharRef);
 
   public:
       iterator(const iterator& i) : m_cur(i.m_cur) {}
+
+      reference operator*()
+        { return wxUniCharRef::CreateForString(m_cur); }
 
       iterator operator+(int n) const
         { return iterator(wxStringOperations::AddToIter(m_cur, n)); }
@@ -690,18 +756,19 @@ public:
 
       friend class const_iterator;
   };
-#endif // wxUSE_UNICODE_UTF8/!wxUSE_UNICODE_UTF8
 
   class const_iterator
   {
       // NB: reference_type is intentionally value, not reference, the character
       //     may be encoded differently in wxString data:
-      WX_STR_ITERATOR_IMPL(const_iterator, const wxChar*, wxUniChar,
-                           wxStringOperations::DecodeChar(m_cur));
+      WX_STR_ITERATOR_IMPL(const_iterator, const wxChar*, wxUniChar);
 
   public:
       const_iterator(const const_iterator& i) : m_cur(i.m_cur) {}
       const_iterator(const iterator& i) : m_cur(i.m_cur) {}
+
+      reference operator*() const
+        { return wxStringOperations::DecodeChar(m_cur); }
 
       const_iterator operator+(int n) const
         { return const_iterator(wxStringOperations::AddToIter(m_cur, n)); }
@@ -715,7 +782,10 @@ public:
   private:
       // for internal wxString use only:
       const_iterator(underlying_iterator ptr) : m_cur(ptr) {}
+      const_iterator(const wxString *WXUNUSED(str), underlying_iterator ptr)
+          : m_cur(ptr) {}
   };
+#endif // wxUSE_UNICODE_UTF8/!wxUSE_UNICODE_UTF8
 
   #undef WX_STR_ITERATOR_TAG
   #undef WX_STR_ITERATOR_IMPL
@@ -800,7 +870,8 @@ private:
   // wxCStrData) to an iterator into the string
   static const_iterator CreateConstIterator(const wxCStrData& data)
   {
-      return const_iterator(data.m_str->begin() + data.m_offset);
+      return const_iterator(data.m_str,
+                            (data.m_str->begin() + data.m_offset).impl());
   }
 
   // in UTF-8 STL build, creation from std::string requires conversion under
@@ -948,10 +1019,10 @@ public:
 #endif // wxUSE_STL
 
   // first valid index position
-  const_iterator begin() const { return const_iterator(m_impl.begin()); }
+  const_iterator begin() const { return const_iterator(this, m_impl.begin()); }
   iterator begin() { return iterator(this, m_impl.begin()); }
   // position one after the last valid one
-  const_iterator end() const { return const_iterator(m_impl.end()); }
+  const_iterator end() const { return const_iterator(this, m_impl.end()); }
   iterator end() { return iterator(this, m_impl.end()); }
 
   // first element of the reversed string
@@ -2485,6 +2556,23 @@ private:
   ConvertedBuffer<wchar_t> m_convertedToWChar;
 #endif
 
+#if wxUSE_UNICODE_UTF8
+  // FIXME-UTF8: (try to) move this elsewhere (TLS) or solve differently
+  //             assigning to character pointer to by wxString::interator may
+  //             change the underlying wxStringImpl iterator, so we have to
+  //             keep track of all iterators and update them as necessary:
+  struct wxStringIteratorNodeHead
+  {
+      wxStringIteratorNodeHead() : ptr(NULL) {}
+      wxStringIteratorNode *ptr;
+  };
+
+  wxStringIteratorNodeHead m_iterators;
+
+  friend class WXDLLIMPEXP_BASE wxStringIteratorNode;
+  friend class WXDLLIMPEXP_BASE wxUniCharRef;
+#endif // wxUSE_UNICODE_UTF8
+
   friend class WXDLLIMPEXP_BASE wxCStrData;
   friend class wxImplStringBuffer;
   friend class wxImplStringBufferLength;
@@ -2965,6 +3053,48 @@ inline wxWCharBuffer::wxWCharBuffer(const wxCStrData& cstr)
                     : wxCharTypeBufferBase(cstr.AsWCharBuf())
 {
 }
+
+#if wxUSE_UNICODE_UTF8
+// ----------------------------------------------------------------------------
+// implementation of wxStringIteratorNode inline methods
+// ----------------------------------------------------------------------------
+
+wxStringIteratorNode::wxStringIteratorNode(const wxString *str,
+                                           wxStringImpl::const_iterator *citer)
+    : m_str(str),
+      m_citer(citer),
+      m_iter(NULL),
+      m_prev(NULL),
+      m_next(str->m_iterators.ptr)
+{
+    wx_const_cast(wxString*, m_str)->m_iterators.ptr = this;
+    if ( m_next )
+        m_next->m_prev = this;
+}
+
+wxStringIteratorNode::wxStringIteratorNode(const wxString *str,
+                                           wxStringImpl::iterator *iter)
+    : m_str(str),
+      m_citer(NULL),
+      m_iter(iter),
+      m_prev(NULL),
+      m_next(str->m_iterators.ptr)
+{
+    wx_const_cast(wxString*, m_str)->m_iterators.ptr = this;
+    if ( m_next)
+        m_next->m_prev = this;
+}
+
+wxStringIteratorNode::~wxStringIteratorNode()
+{
+    if ( m_next )
+        m_next->m_prev = m_prev;
+    if ( m_prev )
+        m_prev->m_next = m_next;
+    else // first in the list
+        wx_const_cast(wxString*, m_str)->m_iterators.ptr = m_next;
+}
+#endif // wxUSE_UNICODE_UTF8
 
 #if WXWIN_COMPATIBILITY_2_8
     // lot of code out there doesn't explicitly include wx/wxchar.h, but uses

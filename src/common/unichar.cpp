@@ -90,18 +90,78 @@ wxUniCharRef& wxUniCharRef::operator=(const wxUniChar& c)
 
     if ( lenNew == lenOld )
     {
+        // this is the simpler case: if the new value's UTF-8 code has the
+        // same length, we can just replace it:
+
         iterator pos(m_pos);
         for ( size_t i = 0; i < lenNew; ++i, ++pos )
             *pos = utf[i];
     }
     else
     {
-        size_t idx = m_pos - m_str.begin();
+        // the worse case is when the new value has either longer or shorter
+        // code -- in that case, we have to use wxStringImpl::replace() and
+        // this invalidates all iterators, so we have to update them too:
 
-        m_str.replace(m_pos, m_pos + lenOld, utf, lenNew);
+        wxString& str = *wx_const_cast(wxString*, m_node.m_str);
+        wxStringImpl& strimpl = str.m_impl;
 
-        // this is needed to keep m_pos valid:
-        m_pos = m_str.begin() + idx;
+        int iterDiff = lenNew - lenOld;
+        size_t posIdx = m_pos - strimpl.begin();
+
+        // compute positions of outstanding iterators for this string after the
+        // replacement is done (there is only a small number of iterators at
+        // any time, so we use an array on the stack to avoid unneeded
+        // allocation):
+        static const size_t STATIC_SIZE = 32;
+        size_t indexes_a[STATIC_SIZE];
+        size_t *indexes = indexes_a;
+        size_t iterNum = 0;
+        wxStringIteratorNode *it;
+        for ( it = str.m_iterators.ptr; it; it = it->m_next, ++iterNum )
+        {
+            wxASSERT( it->m_iter || it->m_citer );
+
+            if ( iterNum == STATIC_SIZE )
+            {
+                wxLogTrace( _T("utf8"), _T("unexpectedly many iterators") );
+
+                size_t total = iterNum + 1;
+                for ( wxStringIteratorNode *it2 = it; it2; it2 = it2->m_next )
+                    total++;
+                indexes = new size_t[total];
+                memcpy(indexes, indexes_a, sizeof(size_t) * STATIC_SIZE);
+            }
+
+            size_t idx = it->m_iter
+                         ? (*it->m_iter - strimpl.begin())
+                         : (*it->m_citer - strimpl.begin());
+
+            if ( idx > posIdx )
+                idx += iterDiff;
+
+            indexes[iterNum] = idx;
+        }
+
+        // update the string:
+        strimpl.replace(m_pos, m_pos + lenOld, utf, lenNew);
+
+        // finally, set the iterators to valid values again (note that this
+        // updates m_pos as well):
+        size_t i;
+        for ( i = 0, it = str.m_iterators.ptr; it; it = it->m_next, ++i )
+        {
+            wxASSERT( i < iterNum );
+            wxASSERT( it->m_iter || it->m_citer );
+
+            if ( it->m_iter )
+                *it->m_iter = strimpl.begin() + indexes[i];
+            else // it->m_citer
+                *it->m_citer = strimpl.begin() + indexes[i];
+        }
+
+        if ( indexes != indexes_a )
+            delete[] indexes;
     }
 
     return *this;

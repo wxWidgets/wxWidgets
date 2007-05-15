@@ -61,6 +61,9 @@ private:
         CPPUNIT_TEST( ConversionUTF32 );
         CPPUNIT_TEST( IsConvOk );
 #endif // wxUSE_WCHAR_T
+#if wxUSE_UNICODE
+        CPPUNIT_TEST( Iteration );
+#endif
     CPPUNIT_TEST_SUITE_END();
 
     void ToFromAscii();
@@ -73,6 +76,9 @@ private:
     void ConversionUTF16();
     void ConversionUTF32();
     void IsConvOk();
+#if wxUSE_UNICODE
+    void Iteration();
+#endif
 
     // test if converting s using the given encoding gives ws and vice versa
     //
@@ -355,3 +361,56 @@ void UnicodeTestCase::IsConvOk()
 
 #endif // wxUSE_WCHAR_T
 
+#if wxUSE_UNICODE
+void UnicodeTestCase::Iteration()
+{
+    // "czech" in Czech ("cestina"):
+    static const char *textUTF8 = "\304\215e\305\241tina";
+    static const wchar_t textUTF16[] = {0x10D, 0x65, 0x161, 0x74, 0x69, 0x6E, 0x61, 0};
+
+    wxString text(wxString::FromUTF8(textUTF8));
+    CPPUNIT_ASSERT( wxStrcmp(text.wc_str(), textUTF16) == 0 );
+
+    // verify the string was decoded correctly:
+    {
+        size_t idx = 0;
+        for ( wxString::const_iterator i = text.begin(); i != text.end(); ++i, ++idx )
+        {
+            CPPUNIT_ASSERT( *i == textUTF16[idx] );
+        }
+    }
+
+    // overwrite the string with something that is shorter in UTF-8:
+    {
+        for ( wxString::iterator i = text.begin(); i != text.end(); ++i )
+            *i = 'x';
+    }
+
+    // restore the original text now:
+    {
+        wxString::iterator end1 = text.end();
+        wxString::const_iterator end2 = text.end();
+
+        size_t idx = 0;
+        for ( wxString::iterator i = text.begin(); i != text.end(); ++i, ++idx )
+        {
+            *i = textUTF16[idx];
+
+            CPPUNIT_ASSERT( end1 == text.end() );
+            CPPUNIT_ASSERT( end2 == text.end() );
+        }
+
+        CPPUNIT_ASSERT( end1 == text.end() );
+        CPPUNIT_ASSERT( end2 == text.end() );
+    }
+
+    // and verify it again:
+    {
+        size_t idx = 0;
+        for ( wxString::const_iterator i = text.begin(); i != text.end(); ++i, ++idx )
+        {
+            CPPUNIT_ASSERT( *i == textUTF16[idx] );
+        }
+    }
+}
+#endif // wxUSE_UNICODE
