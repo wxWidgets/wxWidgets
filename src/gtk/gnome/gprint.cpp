@@ -338,47 +338,39 @@ bool wxGnomePrintNativeData::TransferFrom( const wxPrintData &data )
     {
         case wxPAPER_A3:        gs_lgp->gnome_print_config_set( m_config,
                                     (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
-                                    (guchar*)(char*)"A3" );
+                                    (guchar*)(char*)"A2" );
                                 break;
         case wxPAPER_A5:        gs_lgp->gnome_print_config_set( m_config,
                                     (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
                                     (guchar*)(char*)"A5" );
                                 break;
+        case wxPAPER_B4:        gs_lgp->gnome_print_config_set( m_config,
+                                    (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
+                                    (guchar*)(char*)"B4" );
+                                break;
         case wxPAPER_B5:        gs_lgp->gnome_print_config_set( m_config,
                                     (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
-                                    (guchar*)(char*)"B5 (JIS)" );
+                                    (guchar*)(char*)"B5" );
                                 break;
         case wxPAPER_LETTER:        gs_lgp->gnome_print_config_set( m_config,
                                     (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
-                                    (guchar*)(char*)"Letter" );
+                                    (guchar*)(char*)"USLetter" );
                                 break;
         case wxPAPER_LEGAL:     gs_lgp->gnome_print_config_set( m_config,
                                     (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
-                                    (guchar*)(char*)"Legal" );
+                                    (guchar*)(char*)"USLegal" );
                                 break;
         case wxPAPER_EXECUTIVE: gs_lgp->gnome_print_config_set( m_config,
                                     (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
-                                    (guchar*)(char*)"Executive" );
-                                break;
-        case wxPAPER_ENV_10:    gs_lgp->gnome_print_config_set( m_config,
-                                    (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
-                                    (guchar*)(char*)"Envelope #10" );
+                                    (guchar*)(char*)"USExecutive" );
                                 break;
         case wxPAPER_ENV_C5:    gs_lgp->gnome_print_config_set( m_config,
                                     (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
-                                    (guchar*)(char*)"Envelope C5" );
+                                    (guchar*)(char*)"C5" );
                                 break;
         case wxPAPER_ENV_C6:    gs_lgp->gnome_print_config_set( m_config,
                                     (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
-                                    (guchar*)(char*)"Envelope C6" );
-                                break;
-        case wxPAPER_ENV_B5:    gs_lgp->gnome_print_config_set( m_config,
-                                    (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
-                                    (guchar*)(char*)"Envelope B5" );
-                                break;
-        case wxPAPER_ENV_MONARCH:    gs_lgp->gnome_print_config_set( m_config,
-                                    (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
-                                    (guchar*)(char*)"Envelope Monarch" );
+                                    (guchar*)(char*)"C6" );
                                 break;
         case wxPAPER_NONE:      break;
         
@@ -634,11 +626,31 @@ wxGnomePageSetupDialog::wxGnomePageSetupDialog( wxWindow *parent,
     wxGnomePrintNativeData *native =
       (wxGnomePrintNativeData*) m_pageDialogData.GetPrintData().GetNativeData();
 
-    // This is required as the page setup dialog
+    // This *was* required as the page setup dialog
     // calculates wrong values otherwise.
+#if 0
     gs_lgp->gnome_print_config_set( native->GetPrintConfig(),
                             (const guchar*) GNOME_PRINT_KEY_PREFERED_UNIT,
                             (const guchar*) "Pts" );
+#endif
+
+    GnomePrintConfig *config = native->GetPrintConfig();
+
+    const GnomePrintUnit *mm_unit = gs_lgp->gnome_print_unit_get_by_abbreviation( (const guchar*) "mm" );
+
+    double ml = (double) m_pageDialogData.GetMarginTopLeft().x;
+    double mt = (double) m_pageDialogData.GetMarginTopLeft().y;
+    double mr = (double) m_pageDialogData.GetMarginBottomRight().x;
+    double mb = (double) m_pageDialogData.GetMarginBottomRight().y;
+    
+    gs_lgp->gnome_print_config_set_length (config,
+            (const guchar*) GNOME_PRINT_KEY_PAGE_MARGIN_LEFT, ml, mm_unit );
+    gs_lgp->gnome_print_config_set_length (config,
+            (const guchar*) GNOME_PRINT_KEY_PAGE_MARGIN_RIGHT, mr, mm_unit );
+    gs_lgp->gnome_print_config_set_length (config,
+            (const guchar*) GNOME_PRINT_KEY_PAGE_MARGIN_TOP, mt, mm_unit );
+    gs_lgp->gnome_print_config_set_length (config,
+            (const guchar*) GNOME_PRINT_KEY_PAGE_MARGIN_BOTTOM, mb, mm_unit );
 
     m_widget = gtk_dialog_new();
 
@@ -675,9 +687,9 @@ int wxGnomePageSetupDialog::ShowModal()
 {
     wxGnomePrintNativeData *native =
       (wxGnomePrintNativeData*) m_pageDialogData.GetPrintData().GetNativeData();
+      
     GnomePrintConfig *config = native->GetPrintConfig();
 
-    // Transfer data from m_pageDialogData to native dialog
 
     int ret = gtk_dialog_run( GTK_DIALOG(m_widget) );
 
@@ -686,8 +698,6 @@ int wxGnomePageSetupDialog::ShowModal()
         // Transfer data back to m_pageDialogData
 
         // I don't know how querying the last parameter works
-        // I cannot test it as the dialog is currently broken
-        // anyways (it only works for points).
         double ml,mr,mt,mb,pw,ph;
         gs_lgp->gnome_print_config_get_length (config,
             (const guchar*) GNOME_PRINT_KEY_PAGE_MARGIN_LEFT, &ml, NULL);
@@ -702,9 +712,8 @@ int wxGnomePageSetupDialog::ShowModal()
         gs_lgp->gnome_print_config_get_length (config,
             (const guchar*) GNOME_PRINT_KEY_PAPER_HEIGHT, &ph, NULL);
 
-        // This probably assumes that the user entered the
-        // values in Pts. Since that is the only the dialog
-        // works right now, we need to fix this later.
+        // This code converts correctly from what the user chose
+        // as the unit although I query Pts here
         const GnomePrintUnit *mm_unit = gs_lgp->gnome_print_unit_get_by_abbreviation( (const guchar*) "mm" );
         const GnomePrintUnit *pts_unit = gs_lgp->gnome_print_unit_get_by_abbreviation( (const guchar*) "Pts" );
         gs_lgp->gnome_print_convert_distance( &ml, pts_unit, mm_unit );
@@ -719,11 +728,12 @@ int wxGnomePageSetupDialog::ShowModal()
 
         m_pageDialogData.SetPaperSize( wxSize( (int)(pw+0.5), (int)(ph+0.5) ) );
 
-#if 0
-        wxPrintf( wxT("paper %d %d, top margin %d\n"),
+#if 1
+        wxPrintf( wxT("paper %d %d, top,left margin %d,%d\n"),
             m_pageDialogData.GetPaperSize().x,
             m_pageDialogData.GetPaperSize().y,
-            m_pageDialogData.GetMarginTopLeft().x );
+            m_pageDialogData.GetMarginTopLeft().x,
+            m_pageDialogData.GetMarginTopLeft().y );
 #endif
 
         ret = wxID_OK;
