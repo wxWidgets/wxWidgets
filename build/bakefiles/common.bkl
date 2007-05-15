@@ -183,8 +183,13 @@
         <set var="CFG_NAME_PART">
             $(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
         </set>
+
+        <!-- NB: this is make_var so that it can be overriden on command line
+                 like this: nmake -f makefile.vc COMPILER_PREFIX=vc6 -->
+        <set var="COMPILER_PREFIX" make_var="1">$(COMPILER)</set>
+
         <set var="OBJS" make_var="1">
-            $(COMPILER)_$(CFG_NAME_PART)$(DIR_SUFFIX_CPU)
+            $(COMPILER_PREFIX)_$(CFG_NAME_PART)$(DIR_SUFFIX_CPU)
         </set>
 
         <set var="BUILDDIR">$(OBJS)</set>
@@ -200,7 +205,7 @@
     <set var="LIBDIRNAME" make_var="1">
         <if cond="FORMAT=='autoconf'">$(wx_top_builddir)/lib</if>
         <if cond="FORMAT!='autoconf'">
-            $(nativePaths(TOP_SRCDIR))lib$(DIRSEP)$(COMPILER)$(DIR_SUFFIX_CPU)_$(LIBTYPE_SUFFIX)$(CFG)
+            $(nativePaths(TOP_SRCDIR))lib$(DIRSEP)$(COMPILER_PREFIX)$(DIR_SUFFIX_CPU)_$(LIBTYPE_SUFFIX)$(CFG)
         </if>
     </set>
 

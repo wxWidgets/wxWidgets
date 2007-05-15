@@ -778,6 +778,10 @@ DEBUG_INFO=1
   Same as DEBUG_FLAG in behaviour, this option affects whether debugging
   information is included in the executable or not.
 
+TARGET_CPU=AMD64|IA64
+  (VC++ only.) Set this variable to build for x86_64 systems. If unset, x86
+  build is performed.
+
 VENDOR=<your company name>
   Set this to a short string identifying your company if you are planning to
   distribute wxWidgets DLLs with your application. Default value is 'custom'.
@@ -791,6 +795,14 @@ CFG=<configuration name>
   Sets configuration name so that you can have multiple wxWidgets builds with
   different setup.h settings coexisting in same tree. See "Object and library
   directories" below for more information.
+
+COMPILER_PREFIX=<string>
+  If you build with multiple versions of the same compiler, you can put
+  their outputs into directories like "vc6_lib", "vc8_lib" etc. instead of
+  "vc_lib" by setting this variable to e.g. "vc6". This is merely a
+  convenience variable, you can achieve the same effect (but different dir
+  names) with the CFG option.
+
 
 Compiler specific options
 ----------------------------------------------------------------
