@@ -1,7 +1,0 @@
-# this file contains classes and functions HelpGen should ignore
-# in 'diff' mode
-wxCursorRefData
-wxCursor::SetHCURSOR
-wxCursor::GetHCURSOR
-wxCursor::FreeResource
-wxStringData
