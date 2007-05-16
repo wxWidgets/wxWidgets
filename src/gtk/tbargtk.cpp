@@ -188,6 +188,30 @@ static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget),
 }
 
 //-----------------------------------------------------------------------------
+// "right-click"
+//-----------------------------------------------------------------------------
+extern "C" {
+static gboolean gtk_toolbar_tool_rclick_callback(GtkWidget *WXUNUSED(widget),
+                                                 GdkEventButton *event,
+                                                 wxToolBarToolBase *tool)
+{
+    if (event->button != 3)
+        return FALSE;
+
+    wxToolBar *tbar = (wxToolBar *)tool->GetToolBar();
+
+    if (tbar->m_blockEvent) return TRUE;
+
+    if (g_blockEventsOnDrag) return TRUE;
+    if (!tool->IsEnabled()) return TRUE;
+
+    tbar->OnRightClick( tool->GetId(), (int)event->x, (int)event->y );
+
+    return TRUE;
+}
+}
+
+//-----------------------------------------------------------------------------
 // "enter_notify_event" / "leave_notify_event"
 //-----------------------------------------------------------------------------
 
@@ -451,6 +475,9 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                                   tool);
                 g_signal_connect (tool->m_item, "leave_notify_event",
                                   G_CALLBACK (gtk_toolbar_tool_callback),
+                                  tool);
+                g_signal_connect(tool->m_item, "button-press-event",
+                                  G_CALLBACK (gtk_toolbar_tool_rclick_callback),
                                   tool);
             }
             break;
