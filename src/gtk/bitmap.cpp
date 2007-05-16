@@ -304,9 +304,6 @@ wxBitmap wxBitmap::Rescale(int clipx, int clipy, int clipwidth, int clipheight, 
 
     wxCHECK_MSG(Ok(), bmp, wxT("invalid bitmap"));
 
-    if (newx==M_BMPDATA->m_width && newy==M_BMPDATA->m_height)
-        return *this;
-
     int width = wxMax(newx, 1);
     int height = wxMax(newy, 1);
     width = wxMin(width, clipwidth);
@@ -336,7 +333,7 @@ wxBitmap wxBitmap::Rescale(int clipx, int clipy, int clipwidth, int clipheight, 
     // images, but the only one which preserves sharp edges
     gdk_pixbuf_scale(
         pixbuf, pixbuf_scaled,
-        0, 0, width, height, clipx, clipy, scale_x, scale_y,
+        0, 0, width, height, -clipx, -clipy, scale_x, scale_y,
         GDK_INTERP_NEAREST);
 
     g_object_unref(pixbuf);
@@ -353,7 +350,7 @@ wxBitmap wxBitmap::Rescale(int clipx, int clipy, int clipwidth, int clipheight, 
 
         gdk_pixbuf_scale(
             pixbuf, pixbuf_scaled,
-            0, 0, width, height, clipx, clipy, scale_x, scale_y,
+            0, 0, width, height, -clipx, -clipy, scale_x, scale_y,
             GDK_INTERP_NEAREST);
 
         g_object_unref(pixbuf);
