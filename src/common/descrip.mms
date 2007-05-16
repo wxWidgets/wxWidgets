@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 19 April 2007                                                       *
+# Date : 24 April 2007                                                       *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -182,6 +182,7 @@ OBJECTS2=tbarbase.obj,\
 		textcmn.obj,\
 		textfile.obj,\
 		timercmn.obj,\
+		timerimpl.obj,\
 		tokenzr.obj,\
 		toplvcmn.obj,\
 		treebase.obj,\
@@ -354,6 +355,7 @@ SOURCES = \
 		textcmn.cpp,\
 		textfile.cpp,\
 		timercmn.cpp,\
+		timerimpl.cpp,\
 		tokenzr.cpp,\
 		toplvcmn.cpp,\
 		treebase.cpp,\
@@ -566,6 +568,7 @@ textbuf.obj : textbuf.cpp
 textcmn.obj : textcmn.cpp
 textfile.obj : textfile.cpp
 timercmn.obj : timercmn.cpp
+timerimpl.obj : timerimpl.cpp
 tokenzr.obj : tokenzr.cpp
 toplvcmn.obj : toplvcmn.cpp
 treebase.obj : treebase.cpp

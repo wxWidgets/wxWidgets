@@ -215,3 +215,14 @@ void wxGUIAppTraits::SetLocale()
 }
 #endif
 
+wxString
+wxGUIAppTraits::GetStandardCmdLineOptions(wxArrayString& names,
+                                          wxArrayString& desc) const
+{
+    wxString usage;
+
+    wxUnusedVar(names);
+    wxUnusedVar(desc);
+
+    return usage;
+}

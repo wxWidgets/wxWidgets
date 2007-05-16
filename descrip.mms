@@ -236,7 +236,6 @@ motif : [.include.wx]setup.h
 	library [--.lib]libwx_motif.olb [.CXX_REPOSITORY]*.obj
 	set default [-.aui]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
-	library [--.lib]libwx_motif.olb [.CXX_REPOSITORY]*.obj
 	set default [-.motif]
 	$(MMS)$(MMSQUALIFIERS)/macro=(__WXMOTIF__=1)
 	library [--.lib]libwx_motif.olb [.CXX_REPOSITORY]*.obj

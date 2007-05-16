@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 17 April 2007                                                      *
+ * Date : 16 May 2007                                                        *
  *                                                                           *
  *****************************************************************************/
 
@@ -343,6 +343,7 @@ typedef pid_t GPid;
 #define wxUSE_DATAVIEWCTRL   1
 #define wxUSE_DATEPICKCTRL 1
 #define wxUSE_DIRPICKERCTRL 1
+#define wxUSE_EDITABLELISTBOX 1
 #define wxUSE_FILEPICKERCTRL 1
 #define wxUSE_FONTPICKERCTRL 1
 #define wxUSE_GAUGE        1
@@ -590,6 +591,8 @@ typedef pid_t GPid;
 #define wxUSE_UNICODE_MSLU 0
 
 #define wxUSE_UNICODE_UTF8 0
+
+#define wxUSE_UTF8_LOCALE_ONLY 0
 
 #define wxUSE_DC_CACHEING 1
 
@@ -1235,6 +1238,9 @@ typedef pid_t GPid;
 
 /* Define if you have Pango xft support */
 #undef HAVE_PANGO_XFT
+
+/* Define if you have the <sys/epoll.h> header file.  */
+#undef HAVE_SYS_EPOLL_H
 
 /* Define if fdopen is available.  */
 #define HAVE_FDOPEN 1

@@ -1359,7 +1359,7 @@ bool wxXPMFileHandler::LoadFile(wxBitmap *bitmap, const wxString& name,
     Pixmap mask = 0;
 
     int ErrorStatus = XpmReadFileToPixmap( xdisplay, xroot,
-                                           (char*) name.c_str(),
+                                           (char*) ((const char*) name.c_str()),
                                            &pixmap, &mask, &xpmAttr);
 
     if (ErrorStatus == XpmSuccess)
