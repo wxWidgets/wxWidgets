@@ -23,10 +23,11 @@
 #include "wx/module.h"
 #include "wx/timer.h"
 #include "wx/unix/private.h"
-#include "wx/log.h"
 
 #ifndef WX_PRECOMP
     #include "wx/hash.h"
+    #include "wx/log.h"
+    #include "wx/intl.h"
 #endif
 
 #ifdef HAVE_SYS_SELECT_H
@@ -251,7 +252,7 @@ void wxSelectDispatcher::RunLoop(int timeout)
                 // continue if we were interrupted by a signal, else bail out
                 if ( errno != EINTR )
                 {
-                    wxLogSysError(_("Failed to monitor IO channels"));
+                    wxLogSysError(_("Failed to monitor I/O channels"));
                     return;
                 }
                 break;

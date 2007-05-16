@@ -23,8 +23,12 @@
 
 #include "wx/unix/private/epolldispatcher.h"
 #include "wx/unix/private.h"
-#include "wx/log.h"
 #include "wx/module.h"
+
+#ifndef WX_PRECOMP
+    #include "wx/log.h"
+    #include "wx/intl.h"
+#endif
 
 #include <sys/epoll.h>
 #include <errno.h>
