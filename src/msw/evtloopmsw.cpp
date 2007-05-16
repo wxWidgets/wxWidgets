@@ -315,7 +315,9 @@ void wxConsoleEventLoop::OnNextIteration()
 
 void wxConsoleEventLoop::WakeUp()
 {
+#if wxUSE_THREADS
     wxWakeUpMainThread();
+#endif
 }
 
 bool wxConsoleEventLoop::Dispatch()
