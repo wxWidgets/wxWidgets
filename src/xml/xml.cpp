@@ -477,9 +477,7 @@ static void StartElementHnd(void *userData, const char *name, const char **atts)
     ctx->node = node;
     ctx->lastAsText = NULL;
 }
-}
 
-extern "C" {
 static void EndElementHnd(void *userData, const char* WXUNUSED(name))
 {
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
@@ -487,9 +485,7 @@ static void EndElementHnd(void *userData, const char* WXUNUSED(name))
     ctx->node = ctx->node->GetParent();
     ctx->lastAsText = NULL;
 }
-}
 
-extern "C" {
 static void TextHnd(void *userData, const char *s, int len)
 {
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
@@ -520,9 +516,7 @@ static void TextHnd(void *userData, const char *s, int len)
         }
     }
 }
-}
 
-extern "C" {
 static void StartCdataHnd(void *userData)
 {
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
@@ -532,18 +526,14 @@ static void StartCdataHnd(void *userData)
     ctx->lastAsText = new wxXmlNode(wxXML_CDATA_SECTION_NODE, wxT("cdata"),wxT(""));
     ctx->node->AddChild(ctx->lastAsText);
 }
-}
 
-extern "C" {
 static void EndCdataHnd(void *userData)
 {
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
 
     ctx->bLastCdata = false;
 }
-}
 
-extern "C" {
 static void CommentHnd(void *userData, const char *data)
 {
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
@@ -558,9 +548,7 @@ static void CommentHnd(void *userData, const char *data)
     }
     ctx->lastAsText = NULL;
 }
-}
 
-extern "C" {
 static void DefaultHnd(void *userData, const char *s, int len)
 {
     // XML header:
@@ -578,9 +566,7 @@ static void DefaultHnd(void *userData, const char *s, int len)
             ctx->version = buf.Mid(pos + 9).BeforeFirst(buf[(size_t)pos+8]);
     }
 }
-}
 
-extern "C" {
 static int UnknownEncodingHnd(void * WXUNUSED(encodingHandlerData),
                               const XML_Char *name, XML_Encoding *info)
 {
@@ -612,7 +598,8 @@ static int UnknownEncodingHnd(void * WXUNUSED(encodingHandlerData),
 
     return 1;
 }
-}
+
+} // extern "C"
 
 bool wxXmlDocument::Load(wxInputStream& stream, const wxString& encoding, int flags)
 {
