@@ -1,5 +1,0 @@
-
-  Files in this directory are used to generate parts
-  of include/wx/intl.h (wxLanguage enum) and
-  src/common/intl.cpp (conversion tables)
-

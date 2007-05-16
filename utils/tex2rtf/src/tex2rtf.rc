@@ -1,4 +1,0 @@
-aaa ICON "tex2rtf.ico"
-tex2rtf ICON "tex2rtf.ico"
-#include "wx/msw/wx.rc"
-
