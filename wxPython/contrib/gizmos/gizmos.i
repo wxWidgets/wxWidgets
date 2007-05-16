@@ -170,6 +170,8 @@ enum {
     wxEL_ALLOW_NEW,
     wxEL_ALLOW_EDIT,
     wxEL_ALLOW_DELETE,
+    wxEL_NO_REORDER,
+    wxEL_DEFAULT_STYLE
 };
 
 
@@ -190,9 +192,16 @@ public:
                       const wxString& label = wxPyEmptyString,
                       const wxPoint& pos = wxDefaultPosition,
                       const wxSize& size = wxDefaultSize,
-                      long style = wxEL_ALLOW_NEW | wxEL_ALLOW_EDIT | wxEL_ALLOW_DELETE,
+                      long style = wxEL_DEFAULT_STYLE,
                       const wxString& name = wxPyEditableListBoxNameStr);
+    %RenameCtor(PreEditableListBox, wxEditableListBox());
 
+    bool Create(wxWindow *parent, wxWindowID id,
+                const wxString& label,
+                const wxPoint& pos = wxDefaultPosition,
+                const wxSize& size = wxDefaultSize,
+                long style = wxEL_DEFAULT_STYLE,
+                const wxString& name = wxEditableListBoxNameStr);
 
     void SetStrings(const wxArrayString& strings);
 

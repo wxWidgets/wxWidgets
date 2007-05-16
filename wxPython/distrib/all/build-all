@@ -57,7 +57,10 @@ def getTasks(config_env):
                               [config.OSX_HOST_panther, "2.3", "both"], env=config_env),
                           Job("bigmac.24",
                               "distrib/all/build-osx",
-                              [config.OSX_HOST_panther, "2.4", "both"], env=config_env)
+                              [config.OSX_HOST_panther, "2.4", "both"], env=config_env),
+                          Job("bigmac.25",
+                              "distrib/all/build-osx",
+                              [config.OSX_HOST_panther, "2.5", "both"], env=config_env)
                           ])
 
     tigerTask =  Task([ #Job("smallfry.23",
@@ -88,9 +91,16 @@ def getTasks(config_env):
 #          Job("co-mdk2006.24","distrib/all/build-rpm", ["beast", "co-mdk2006", "mdk2006", "2.4"], env=config_env),
           ])
 
-    xavierTask = Task([
-        Job("xavier.d", "distrib/all/build-deb", ["xavier", "/work/chroot/dapper", "dapper"], env=config_env),
-        Job("xavier.f", "distrib/all/build-deb", ["xavier", "/work/chroot/feisty", "feisty"], env=config_env),
+    cyclopsTask1 = Task([
+        Job("cyclops.d", "distrib/all/build-deb", ["cyclops", "/work/chroot/dapper", "dapper"], env=config_env),
+        Job("cyclops.d64", "distrib/all/build-deb", ["cyclops", "/work/chroot/dapper64", "dapper64"], env=config_env),
+        Job("cyclops.fc6", "distrib/all/build-chrpm",
+            ["cyclops", "/work/chroot/fc6", "fc6", "fc6", "2.4"], env=config_env),
+        ])
+
+    cyclopsTask2 = Task([
+        Job("cyclops.f", "distrib/all/build-deb", ["cyclops", "/work/chroot/feisty", "feisty"], env=config_env),
+        Job("cyclops.f64", "distrib/all/build-deb", ["cyclops", "/work/chroot/feisty64", "feisty64"], env=config_env),
         ])
 
     buildTasks = [ #jaguarTask,
@@ -98,7 +108,8 @@ def getTasks(config_env):
                    tigerTask,
                    beastTask1,
                    beastTask2,
-                   xavierTask,
+                   cyclopsTask1,
+                   cyclopsTask2,
                    ]
     
     # Finalization.  This is for things that must wait until all the

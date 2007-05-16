@@ -86,6 +86,10 @@ did rely on the old behaviour you will have to update your code to set
 the minimal sizes of the sizer items to be in the same proportion as
 the items proportions to return to the old behaviour.
 
+Added support for toolbar buttons with dropdown menus.
+
+
+
 
 
 

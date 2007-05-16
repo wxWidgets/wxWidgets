@@ -113,6 +113,11 @@ during each event loop iteration.", "");
 
 
     DocDeclStr(
+        bool , HasPendingEvents() const,
+        "Check if there are pending events on global pending event list", "");
+    
+
+    DocDeclStr(
         virtual bool, Yield(bool onlyIfNeeded = false),
         "Process all currently pending events right now, instead of waiting
 until return to the event loop.  It is an error to call ``Yield``

@@ -23,15 +23,17 @@
 #if 0   // #ifdef __WXMAC__
 
 // A dummy class that raises an exception if used...    
-class wxEventLoop
+class wxEventLoopBase
 {
 public:
-    wxEventLoop() { wxPyRaiseNotImplemented(); }
+    wxEventLoopBase() { wxPyRaiseNotImplemented(); }
+    bool IsOk() const { return false; }
     int Run() { return 0; }
     void Exit(int rc = 0) {}
     bool Pending() const { return false; }
     bool Dispatch() { return false; }
     bool IsRunning() const { return false; }
+    void WakeUp() {}
     static wxEventLoop *GetActive() { wxPyRaiseNotImplemented(); return NULL; }
     static void SetActive(wxEventLoop* loop) { wxPyRaiseNotImplemented(); }
 };
@@ -43,11 +45,15 @@ public:
 #endif
 %}
 
-class wxEventLoop
+class wxEventLoopBase
 {
 public:
-    wxEventLoop();
+    wxEventLoopBase();
     virtual ~wxEventLoop();
+
+    // use this to check whether the event loop was successfully created before
+    // using it
+    virtual bool IsOk() const;
 
     // start the event loop, return the exit code when it is finished
     virtual int Run();
@@ -64,11 +70,41 @@ public:
     // is the event loop running now?
     virtual bool IsRunning() const;
 
+    virtual void WakeUp();
+    
     // return currently active (running) event loop, may be NULL
     static wxEventLoop *GetActive();
 
     // set currently active (running) event loop
     static void SetActive(wxEventLoop* loop);
+};
+
+
+class wxEventLoopManual : public wxEventLoopBase
+{
+public:
+    wxEventLoopManual();
+};
+
+
+class wxGUIEventLoop : public wxEventLoopBase
+{
+public:
+    wxGUIEventLoop();
+};
+
+
+%pythoncode {
+    class EventLoop(GUIEventLoop):
+        """Class using the old name for compatibility."""
+        pass
+}
+
+
+class wxModalEventLoop : public wxGUIEventLoop
+{
+public:
+    wxModalEventLoop(wxWindow *winModal)
 };
 
 

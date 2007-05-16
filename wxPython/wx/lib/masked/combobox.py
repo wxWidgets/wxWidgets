@@ -47,6 +47,30 @@ class MaskedComboBoxSelectEvent(wx.PyCommandEvent):
         this event was generated."""
         return self.__selection
 
+class MaskedComboBoxEventHandler(wx.EvtHandler):
+    """
+    This handler ensures that the derived control can react to events
+    from the base control before any external handlers run, to ensure 
+    proper behavior.
+    """
+    def __init__(self, combobox):
+        wx.EvtHandler.__init__(self)
+        self.combobox = combobox
+        combobox.PushEventHandler(self)
+        self.Bind(wx.EVT_SET_FOCUS, self.combobox._OnFocus )            ## defeat automatic full selection
+        self.Bind(wx.EVT_KILL_FOCUS, self.combobox._OnKillFocus )       ## run internal validator
+        self.Bind(wx.EVT_LEFT_DCLICK, self.combobox._OnDoubleClick)     ## select field under cursor on dclick
+        self.Bind(wx.EVT_RIGHT_UP, self.combobox._OnContextMenu )       ## bring up an appropriate context menu
+        self.Bind(wx.EVT_CHAR, self.combobox._OnChar )                  ## handle each keypress
+        self.Bind(wx.EVT_KEY_DOWN, self.combobox._OnKeyDownInComboBox ) ## for special processing of up/down keys
+        self.Bind(wx.EVT_KEY_DOWN, self.combobox._OnKeyDown )           ## for processing the rest of the control keys
+                                                                        ## (next in evt chain)
+        self.Bind(wx.EVT_COMBOBOX, self.combobox._OnDropdownSelect )    ## to bring otherwise completely independent base
+                                                                        ## ctrl selection into maskededit framework
+        self.Bind(wx.EVT_TEXT, self.combobox._OnTextChange )            ## color control appropriately & keep
+                                                                        ## track of previous value for undo
+
+
 
 class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
     """
@@ -152,23 +176,27 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
         self._SetKeycodeHandler(wx.WXK_UP, self._OnSelectChoice)
         self._SetKeycodeHandler(wx.WXK_DOWN, self._OnSelectChoice)
 
+        self.replace_next_combobox_event = False
+        self.correct_selection = -1
+
         if setupEventHandling:
-            ## Setup event handlers
-            self.Bind(wx.EVT_SET_FOCUS, self._OnFocus )         ## defeat automatic full selection
-            self.Bind(wx.EVT_KILL_FOCUS, self._OnKillFocus )    ## run internal validator
-            self.Bind(wx.EVT_LEFT_DCLICK, self._OnDoubleClick)  ## select field under cursor on dclick
-            self.Bind(wx.EVT_RIGHT_UP, self._OnContextMenu )    ## bring up an appropriate context menu
-            self.Bind(wx.EVT_CHAR, self._OnChar )               ## handle each keypress
-            self.Bind(wx.EVT_KEY_DOWN, self._OnKeyDownInComboBox ) ## for special processing of up/down keys
-            self.Bind(wx.EVT_KEY_DOWN, self._OnKeyDown )        ## for processing the rest of the control keys
-                                                                ## (next in evt chain)
-            self.Bind(wx.EVT_TEXT, self._OnTextChange )         ## color control appropriately & keep
-                                                                ## track of previous value for undo
+            ## Setup event handling functions through event handler object,
+            ## to guarantee processing prior to giving event callbacks from
+            ## outside the class:
+            self.evt_handler = MaskedComboBoxEventHandler(self)
+            self.Bind(wx.EVT_WINDOW_DESTROY, self.OnWindowDestroy )
 
 
 
     def __repr__(self):
         return "<MaskedComboBox: %s>" % self.GetValue()
+
+
+    def OnWindowDestroy(self, event):
+        # clean up associated event handler object:
+        if self.RemoveEventHandler(self.evt_handler):
+            self.evt_handler.Destroy()
+        event.Skip()
 
 
     def _CalcSize(self, size=None):
@@ -252,7 +280,9 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
         # Record current selection and insertion point, for undo
         self._prevSelection = self._GetSelection()
         self._prevInsertionPoint = self._GetInsertionPoint()
+##        dbg('MaskedComboBox::_SetValue(%s), selection beforehand: %d' % (value, self.GetSelection()))
         wx.ComboBox.SetValue(self, value)
+##        dbg('MaskedComboBox::_SetValue(%s), selection now: %d' % (value, self.GetSelection()))
         # text change events don't always fire, so we check validity here
         # to make certain formatting is applied:
         self._CheckValid()
@@ -264,11 +294,14 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
         masked control.  NOTE: this must be done in the class derived
         from the base wx control.
         """
+##        dbg('MaskedComboBox::SetValue(%s)' % value, indent=1)
         if not self._mask:
             wx.ComboBox.SetValue(value)   # revert to base control behavior
+##            dbg('no mask; deferring to base class', indent=0)
             return
         # else...
         # empty previous contents, replacing entire value:
+##        dbg('MaskedComboBox::SetValue: selection beforehand: %d' % (self.GetSelection()))
         self._SetInsertionPoint(0)
         self._SetSelection(0, self._masklength)
 
@@ -306,15 +339,26 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
                 dateparts = value.split(' ')
                 dateparts[0] = self._adjustDate(dateparts[0], fixcentury=True)
                 value = string.join(dateparts, ' ')
-##                dbg('adjusted value: "%s"' % value)
                 value = self._Paste(value, raise_on_invalid=True, just_return_value=True)
             else:
                 raise
+##        dbg('adjusted value: "%s"' % value)
 
-        self._SetValue(value)
-####        dbg('queuing insertion after .SetValue', replace_to)
-        wx.CallAfter(self._SetInsertionPoint, replace_to)
-        wx.CallAfter(self._SetSelection, replace_to, replace_to)
+        # Attempt to compensate for fact that calling .SetInsertionPoint() makes the
+        # selection index -1, even if the resulting set value is in the list.  
+        # So, if we are setting a value that's in the list, use index selection instead.
+        if value in self._choices:
+            index = self._choices.index(value)
+            self._prevValue = self._curValue
+            self._curValue = self._choices[index]
+            self._ctrl_constraints._autoCompleteIndex = index
+            self.SetSelection(index)
+        else:
+            self._SetValue(value)
+####            dbg('queuing insertion after .SetValue', replace_to)
+            wx.CallAfter(self._SetInsertionPoint, replace_to)
+            wx.CallAfter(self._SetSelection, replace_to, replace_to)
+##        dbg(indent=0)
 
 
     def _Refresh(self):
@@ -509,26 +553,60 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
         Necessary override for bookkeeping on choice selection, to keep current value
         current.
         """
-##        dbg('MaskedComboBox::SetSelection(%d)' % index)
+##        dbg('MaskedComboBox::SetSelection(%d)' % index, indent=1)
         if self._mask:
             self._prevValue = self._curValue
-            self._curValue = self._choices[index]
             self._ctrl_constraints._autoCompleteIndex = index
+            if index != -1:
+                self._curValue = self._choices[index]
+            else:
+                self._curValue = None
         wx.ComboBox.SetSelection(self, index)
+##        dbg('selection now: %d' % self.GetCurrentSelection(), indent=0)
 
 
     def _OnKeyDownInComboBox(self, event):
         """
-        This function is necessary because navigation and control key
-        events do not seem to normally be seen by the wxComboBox's
-        EVT_CHAR routine.  (Tabs don't seem to be visible no matter
-        what... {:-( )
+        This function is necessary because navigation and control key events
+        do not seem to normally be seen by the wxComboBox's EVT_CHAR routine.
+        (Tabs don't seem to be visible no matter what, except for CB_READONLY
+        controls, for some bizarre reason... {:-( )
         """
+        key = event.GetKeyCode()
+##        dbg('MaskedComboBox::OnKeyDownInComboBox(%d)' % key)
         if event.GetKeyCode() in self._nav + self._control:
-            self._OnChar(event)
-            return
+            if not self._IsEditable():
+                # WANTS_CHARS with CB_READONLY apparently prevents navigation on WXK_TAB;
+                # ensure we can still navigate properly, as maskededit mixin::OnChar assumes
+                # that event.Skip() will just work, but it doesn't:
+                if self._keyhandlers.has_key(key):
+                    self._keyhandlers[key](event)
+                # else pass
+            else:
+##                dbg('calling OnChar()')
+                self._OnChar(event)
         else:
             event.Skip()    # let mixin default KeyDown behavior occur
+##        dbg(indent=0)
+
+
+    def _OnDropdownSelect(self, event):
+        """
+        This function appears to be necessary because dropdown selection seems to
+        manipulate the contents of the control in an inconsistent way, properly
+        changing the selection index, but *not* the value. (!)  Calling SetSelection()
+        on a selection event for the same selection would seem like a nop, but it seems to
+        fix the problem.
+        """
+##        dbg('MaskedComboBox::OnDropdownSelect(%d)' % event.GetSelection(), indent=1)
+        if self.replace_next_combobox_event:
+##            dbg('replacing EVT_COMBOBOX')
+            self.replace_next_combobox_event = False
+            self._OnAutoSelect(self._ctrl_constraints, self.correct_selection)
+        else:
+##            dbg('skipping EVT_COMBOBOX')
+            event.Skip()
+##        dbg(indent=0)
 
 
     def _OnSelectChoice(self, event):
@@ -585,7 +663,7 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
         Override mixin (empty) autocomplete handler, so that autocompletion causes
         combobox to update appropriately.
         """
-##        dbg('MaskedComboBox::OnAutoSelect', field._index, indent=1)
+##        dbg('MaskedComboBox::OnAutoSelect(%d, %d)' % (field._index, match_index), indent=1)
 ##        field._autoCompleteIndex = match_index
         if field == self._ctrl_constraints:
             self.SetSelection(match_index)
@@ -594,7 +672,7 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
                 MaskedComboBoxSelectEvent( self.GetId(), match_index, self ) )
         self._CheckValid()
 ##        dbg('field._autoCompleteIndex:', match_index)
-##        dbg('self.GetSelection():', self.GetSelection())
+##        dbg('self.GetCurrentSelection():', self.GetCurrentSelection())
         end = self._goEnd(getPosOnly=True)
 ##        dbg('scheduling set of end position to:', end)
         # work around bug in wx 2.5
@@ -614,13 +692,22 @@ class BaseMaskedComboBox( wx.ComboBox, MaskedEditMixin ):
         item in the list. (and then does the usual OnReturn bit.)
         """
 ##        dbg('MaskedComboBox::OnReturn', indent=1)
-##        dbg('current value: "%s"' % self.GetValue(), 'current index:', self.GetSelection())
-        if self.GetSelection() == -1 and self.GetValue().lower().strip() in self._ctrl_constraints._compareChoices:
-            wx.CallAfter(self.SetSelection, self._ctrl_constraints._autoCompleteIndex)
-
+##        dbg('current value: "%s"' % self.GetValue(), 'current selection:', self.GetCurrentSelection())
+        if self.GetCurrentSelection() == -1 and self.GetValue().lower().strip() in self._ctrl_constraints._compareChoices:
+##            dbg('attempting to correct the selection to make it %d' % self._ctrl_constraints._autoCompleteIndex)
+##            wx.CallAfter(self.SetSelection, self._ctrl_constraints._autoCompleteIndex)
+            self.replace_next_combobox_event = True
+            self.correct_selection = self._ctrl_constraints._autoCompleteIndex
         event.m_keyCode = wx.WXK_TAB
         event.Skip()
 ##        dbg(indent=0)
+
+
+    def _LostFocus(self):
+##        dbg('MaskedComboBox::LostFocus; Selection=%d, value="%s"' % (self.GetSelection(), self.GetValue()))
+        if self.GetCurrentSelection() == -1 and self.GetValue().lower().strip() in self._ctrl_constraints._compareChoices:
+##            dbg('attempting to correct the selection to make it %d' % self._ctrl_constraints._autoCompleteIndex)
+            wx.CallAfter(self.SetSelection, self._ctrl_constraints._autoCompleteIndex)
 
 
 class ComboBox( BaseMaskedComboBox, MaskedEditAccessorsMixin ):
@@ -659,6 +746,19 @@ class PreMaskedComboBox( BaseMaskedComboBox, MaskedEditAccessorsMixin ):
 __i = 0
 ## CHANGELOG:
 ## ====================
+##  Version 1.4
+##  1. Added handler for EVT_COMBOBOX to address apparently inconsistent behavior
+##     of control when the dropdown control is used to do a selection.
+##     NOTE: due to misbehavior of wx.ComboBox re: losing all concept of the 
+##      current selection index if SetInsertionPoint() is called, which is required
+##      to support masked .SetValue(), this control is flaky about retaining selection
+##      information.  I can't truly fix this without major changes to the base control,
+##      but I've tried to compensate as best I can.
+##     TODO: investigate replacing base control with ComboCtrl instead...
+##  2. Fixed navigation in readonly masked combobox, which was not working because
+##      the base control doesn't do navigation if style=CB_READONLY|WANTS_CHARS.
+##
+##
 ##  Version 1.3
 ##  1. Made definition of "hack" GetMark conditional on base class not
 ##     implementing it properly, to allow for migration in wx code base

@@ -395,7 +395,7 @@ class PyAUIFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnChangeContentPane, id=ID_TextContent)
         self.Bind(wx.EVT_MENU, self.OnChangeContentPane, id=ID_SizeReportContent)
         self.Bind(wx.EVT_MENU, self.OnChangeContentPane, id=ID_HTMLContent)
-        self.Bind(wx.EVT_MENU, self.OnClose, id=wx.ID_EXIT)
+        self.Bind(wx.EVT_MENU, self.OnExit, id=wx.ID_EXIT)
         self.Bind(wx.EVT_MENU, self.OnAbout, id=ID_About)
 
         self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI, id=ID_TransparentHint)
@@ -431,12 +431,13 @@ class PyAUIFrame(wx.Frame):
         
 
     def OnClose(self, event):
-        
         self._mgr.UnInit()
+        del self._mgr
         self.Destroy()
 
-        event.Skip()        
 
+    def OnExit(self, event):
+        self.Close()
 
     def OnAbout(self, event):
 

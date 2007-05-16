@@ -14,6 +14,9 @@ print "wx.VERSION_STRING = ", wx.VERSION_STRING
 print "pid:", os.getpid()
 ##raw_input("Press Enter...")
 
+testImage = os.path.join(os.path.dirname(sys.argv[0]), 'image.png')
+
+
 class LayoutTestFrame(wx.Frame):
     def __init__(self):
         wx.Frame.__init__(self, None, -1, "Widget Layout Tester")
@@ -148,8 +151,7 @@ class LayoutTestFrame(wx.Frame):
         Load and eval a list of lists from a file, load the contents
         into self.testHistory
         """
-        fname = os.path.join(os.path.dirname(sys.argv[0]),
-                             'widgetLayoutTest.cfg')
+        fname = os.path.join(os.path.dirname(sys.argv[0]), 'widgets.cfg')
         try:
             self.history = eval(open(fname).read())
         except:
@@ -171,8 +173,7 @@ class LayoutTestFrame(wx.Frame):
 
     def OnSaveHistory(self, evt):
         if self.needSaved:
-            fname = os.path.join(os.path.dirname(sys.argv[0]),
-                                 'widgetLayoutTest.cfg')
+            fname = os.path.join(os.path.dirname(sys.argv[0]), 'widgets.cfg')
             f = open(fname, 'wb')
             f.write('[\n')
             for item in self.history:
@@ -233,7 +234,7 @@ class LayoutTestFrame(wx.Frame):
 
 
     def OnHistoryActivate(self, evt):
-        btn = self.testHistory.GetParent().GetDefaultItem()
+        btn = self.testHistory.GetTopLevelParent().GetDefaultItem()
         if btn is not None:
             e = wx.CommandEvent(wx.wxEVT_COMMAND_BUTTON_CLICKED, btn.GetId())
             btn.Command(e)
@@ -408,8 +409,7 @@ class SizeInfoPane(wx.Panel):
         self._size        = wx.TextCtrl(self, -1, "", style=wx.TE_READONLY)
         self._minsize     = wx.TextCtrl(self, -1, "", style=wx.TE_READONLY)
         self._bestsize    = wx.TextCtrl(self, -1, "", style=wx.TE_READONLY)
-        self._adjbstsize  = wx.TextCtrl(self, -1, "", style=wx.TE_READONLY)
-        self._bestfit     = wx.TextCtrl(self, -1, "", style=wx.TE_READONLY)
+        self._effmin     = wx.TextCtrl(self, -1, "", style=wx.TE_READONLY)
 
         # setup the layout
         fgs = wx.FlexGridSizer(2, 2, 5, 5)
@@ -427,13 +427,9 @@ class SizeInfoPane(wx.Panel):
                 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
         fgs.Add(self._bestsize, 0, wx.EXPAND)
 
-        fgs.Add(wx.StaticText(self, -1, "AdjustedBestSize:"),
+        fgs.Add(wx.StaticText(self, -1, "EffectiveMinSize:"),
                 0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
-        fgs.Add(self._adjbstsize, 0, wx.EXPAND)
-
-        fgs.Add(wx.StaticText(self, -1, "BestFittingSize:"),
-                0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
-        fgs.Add(self._bestfit, 0, wx.EXPAND)
+        fgs.Add(self._effmin, 0, wx.EXPAND)
 
         sbs = wx.StaticBoxSizer(sb, wx.VERTICAL)
         sbs.Add(fgs, 0, wx.EXPAND|wx.ALL, 4)
@@ -445,15 +441,13 @@ class SizeInfoPane(wx.Panel):
         self._size.SetValue(       str(win.GetSize()) )
         self._minsize.SetValue(    str(win.GetMinSize()) )
         self._bestsize.SetValue(   str(win.GetBestSize()) )
-        self._adjbstsize.SetValue( str(win.GetAdjustedBestSize()) )
-        self._bestfit.SetValue(    str(win.GetEffectiveMinSize()) )
+        self._effmin.SetValue(    str(win.GetEffectiveMinSize()) )
 
     def Clear(self):
         self._size.SetValue("")
         self._minsize.SetValue("")
         self._bestsize.SetValue("")
-        self._adjbstsize.SetValue("")
-        self._bestfit.SetValue("")
+        self._effmin.SetValue("")
 
 
 

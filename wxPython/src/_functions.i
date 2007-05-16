@@ -337,8 +337,14 @@ MustHaveApp(wxGetTopLevelParent);
 wxWindow* wxGetTopLevelParent(wxWindow *win);
 
 
+// flags for wxLaunchDefaultBrowser
+enum
+{
+    wxBROWSER_NEW_WINDOW = 1
+};
+
 DocDeclStr(
-    bool , wxLaunchDefaultBrowser(const wxString& url),
+    bool , wxLaunchDefaultBrowser(const wxString& url, int flags = 0),
     "Launches the user's default browser and tells it to open the location
 at ``url``.  Returns ``True`` if the application was successfully
 launched.", "");

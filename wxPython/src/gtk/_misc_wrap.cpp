@@ -3289,6 +3289,14 @@ public:
 
 #if !wxUSE_SOUND
 // A C++ stub class for wxWave for platforms that don't have it.
+
+enum wxSoundFlags
+{
+    wxSOUND_SYNC,
+    wxSOUND_ASYNC,
+    wxSOUND_LOOP
+};
+    
 class wxSound : public wxObject
 {
 public:

@@ -221,6 +221,8 @@ class InspectionFrame(wx.Frame):
 
     def OnClose(self, evt):
         self.SaveSettings(self.config)
+        self.mgr.UnInit()
+        del self.mgr
         evt.Skip()
         
 
@@ -533,6 +535,9 @@ class InspectionInfoPanel(wx.stc.StyledTextCtrl):
 
 
     def FmtSizerItem(self, obj):
+        if obj is None:
+            return ['SizerItem: None']
+        
         st = ['SizerItem:']
         st.append(self.Fmt('proportion', obj.GetProportion()))
         st.append(self.Fmt('flag',

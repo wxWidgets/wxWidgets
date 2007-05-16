@@ -1,12 +1,12 @@
 #----------------------------------------------------------------------------
 # Name:         maskededit.py
-# Authors:      Jeff Childers, Will Sadkin
-# Email:        jchilders_98@yahoo.com, wsadkin@parlancecorp.com
+# Authors:      Will Sadkin, Jeff Childers
+# Email:        wsadkin@parlancecorp.com, jchilders_98@yahoo.com
 # Created:      02/11/2003
 # Copyright:    (c) 2003 by Jeff Childers, Will Sadkin, 2003
-# Portions:     (c) 2002 by Will Sadkin, 2002-2006
+# Portions:     (c) 2002 by Will Sadkin, 2002-2007
 # RCS-ID:       $Id$
-# License:      wxWindows license
+# License:      wxWidgets license
 #----------------------------------------------------------------------------
 # NOTE:
 #   MaskedEdit controls are based on a suggestion made on [wxPython-Users] by
@@ -27,7 +27,7 @@
 #
 #----------------------------------------------------------------------------
 #
-# 03/30/2004 - Will Sadkin (wsadkin@nameconnector.com)
+# 03/30/2004 - Will Sadkin (wsadkin@parlancecorp.com)
 #
 # o Split out TextCtrl, ComboBox and IpAddrCtrl into their own files,
 # o Reorganized code into masked package
@@ -337,7 +337,18 @@ to individual fields:
         raiseOnInvalidPaste    False by default; normally a bad paste simply is ignored with a bell;
                                if True, this will cause a ValueError exception to be thrown,
                                with the .value attribute of the exception containing the bad value.
-        =====================  ==================================================================
+
+        stopFieldChangeIfInvalid
+                               False by default; tries to prevent navigation out of a field if its
+                               current value is invalid.  Can be used to create a hybrid of validation
+                               settings, allowing intermediate invalid values in a field without
+                               sacrificing ability to limit values as with validRequired.
+                               NOTE: It is possible to end up with an invalid value when using
+                                 this option if focus is switched to some other control via mousing.
+                                 To avoid this, consider deriving a class that defines _LostFocus()
+                                 function that returns the control to a valid value when the focus
+                                 shifts.  (AFAICT, The change in focus is unpreventable.)
+        =====================  =================================================================
 
 
 Coloring Behavior
@@ -1327,12 +1338,14 @@ class Field:
               'emptyInvalid':  False,           ## Set to True to make EMPTY = INVALID
               'description': "",                ## primarily for autoformats, but could be useful elsewhere
               'raiseOnInvalidPaste': False,     ## if True, paste into field will cause ValueError
+              'stopFieldChangeIfInvalid': False,## if True, disallow field navigation out of invalid field
               }
 
     # This list contains all parameters that when set at the control level should
     # propagate down to each field:
     propagating_params = ('fillChar', 'groupChar', 'decimalChar','useParensForNegatives',
-                          'compareNoCase', 'emptyInvalid', 'validRequired', 'raiseOnInvalidPaste')
+                          'compareNoCase', 'emptyInvalid', 'validRequired', 'raiseOnInvalidPaste',
+                          'stopFieldChangeIfInvalid')
 
     def __init__(self, **kwargs):
         """
@@ -3021,7 +3034,7 @@ class MaskedEditMixin:
                     char = char.decode(self._defaultEncoding)
                 else:
                     char = unichr(event.GetUnicodeKey())
-                    dbg('unicode char:', char)
+##                    dbg('unicode char:', char)
                 excludes = u''
                 if type(field._excludeChars) != types.UnicodeType:
                     excludes += field._excludeChars.decode(self._defaultEncoding)
@@ -3767,6 +3780,21 @@ class MaskedEditMixin:
 ##            dbg(indent=0)
             return False
 
+        field = self._FindField(sel_to)
+        index = field._index
+        field_start, field_end = field._extent
+        slice = self._GetValue()[field_start:field_end]
+
+##        dbg('field._stopFieldChangeIfInvalid?', field._stopFieldChangeIfInvalid)
+##        dbg('field.IsValid(slice)?', field.IsValid(slice))
+        
+        if field._stopFieldChangeIfInvalid and not field.IsValid(slice):
+##            dbg('field invalid; field change disallowed')
+            if not wx.Validator_IsSilent():
+                wx.Bell()
+##            dbg(indent=0)
+            return False
+
 
         if event.ShiftDown():
 
@@ -3775,13 +3803,12 @@ class MaskedEditMixin:
             # NOTE: doesn't yet work with SHIFT-tab under wx; the control
             # never sees this event! (But I've coded for it should it ever work,
             # and it *does* work for '.' in IpAddrCtrl.)
-            field = self._FindField(pos)
-            index = field._index
-            field_start = field._extent[0]
+
             if pos < field_start:
 ##                dbg('cursor before 1st field; cannot change to a previous field')
                 if not wx.Validator_IsSilent():
                     wx.Bell()
+##                dbg(indent=0)
                 return False
 
             if event.ControlDown():
@@ -3821,8 +3848,6 @@ class MaskedEditMixin:
 
         else:
             # "Go forward"
-            field = self._FindField(sel_to)
-            field_start, field_end = field._extent
             if event.ControlDown():
 ##                dbg('queuing select to end of field:', pos, field_end)
                 wx.CallAfter(self._SetInsertionPoint, pos)
@@ -3888,10 +3913,19 @@ class MaskedEditMixin:
                             wx.CallAfter(self._SetInsertionPoint, next_pos)
 ##                        dbg(indent=0)
                         return False
+##                dbg(indent=0)
 
 
     def _OnDecimalPoint(self, event):
 ##        dbg('MaskedEditMixin::_OnDecimalPoint', indent=1)
+        field = self._FindField(self._GetInsertionPoint())
+        start, end = field._extent
+        slice = self._GetValue()[start:end]
+        
+        if field._stopFieldChangeIfInvalid and not field.IsValid(slice):
+            if not wx.Validator_IsSilent():
+                wx.Bell()
+            return False
 
         pos = self._adjustPos(self._GetInsertionPoint(), event.GetKeyCode())
 
@@ -4021,7 +4055,7 @@ class MaskedEditMixin:
 
     def _findNextEntry(self,pos, adjustInsert=True):
         """ Find the insertion point for the next valid entry character position."""
-##        dbg('MaskedEditMixin::_findNextEntry', indent=1)        
+##        dbg('MaskedEditMixin::_findNextEntry', indent=1)
         if self._isTemplateChar(pos) or pos in self._explicit_field_boundaries:   # if changing fields, pay attn to flag
             adjustInsert = adjustInsert
         else:                           # else within a field; flag not relevant
@@ -4280,7 +4314,9 @@ class MaskedEditMixin:
 ####                    dbg('field_len?', field_len)
 ####                    dbg('pos==end; len (slice) < field_len?', len(slice) < field_len)
 ####                    dbg('not field._moveOnFieldFull?', not field._moveOnFieldFull)
-                    if len(slice) == field_len and field._moveOnFieldFull:
+                    if( len(slice) == field_len and field._moveOnFieldFull
+                        and (not field._stopFieldChangeIfInvalid or
+                             field._stopFieldChangeIfInvalid and field.IsValid(slice))):
                         # move cursor to next field:
                         pos = self._findNextEntry(pos)
                         self._SetInsertionPoint(pos)
@@ -4317,11 +4353,14 @@ class MaskedEditMixin:
             # else make sure the user is not trying to type over a template character
             # If they are, move them to the next valid entry position
             elif self._isTemplateChar(pos):
-                if( not field._moveOnFieldFull
-                      and (not self._signOk
-                           or (self._signOk
-                               and field._index == 0
-                               and pos > 0) ) ):      # don't move to next field without explicit cursor movement
+                if( (not field._moveOnFieldFull
+                     and (not self._signOk
+                          or (self._signOk and field._index == 0 and pos > 0) ) )
+                    
+                    or (field._stopFieldChangeIfInvalid
+                        and not field.IsValid(self._GetValue()[start:end]) ) ):
+                    
+                    # don't move to next field without explicit cursor movement
                     pass
                 else:
                     # find next valid position
@@ -5092,7 +5131,11 @@ class MaskedEditMixin:
 ####            dbg('field._moveOnFieldFull?', field._moveOnFieldFull)
 ####            dbg('len(fstr.lstrip()) == end-start?', len(fstr.lstrip()) == end-start)
             if( field._moveOnFieldFull and pos == end
-                and len(fstr.lstrip()) == end-start):   # if field now full
+                and len(fstr.lstrip()) == end-start     # if field now full
+                and (not field._stopFieldChangeIfInvalid     # and we either don't care about valid
+                     or (field._stopFieldChangeIfInvalid     # or we do and the current field value is valid
+                         and field.IsValid(fstr)))):
+
                 newpos = self._findNextEntry(end)       #   go to next field
             else:
                 newpos = pos                            # else keep cursor at current position
@@ -5165,7 +5208,11 @@ class MaskedEditMixin:
 
             if( field._insertRight                                  # if insert-right field (but we didn't start at right edge)
                 and field._moveOnFieldFull                          # and should move cursor when full
-                and len(newtext[start:end].strip()) == end-start):  # and field now full
+                and len(newtext[start:end].strip()) == end-start    # and field now full
+                and (not field._stopFieldChangeIfInvalid            # and we either don't care about valid
+                     or (field._stopFieldChangeIfInvalid            # or we do and the current field value is valid
+                         and field.IsValid(newtext[start:end].strip())))):
+
                 newpos = self._findNextEntry(end)                   #   go to next field
 ##                dbg('newpos = nextentry =', newpos)
             else:
@@ -6723,6 +6770,12 @@ __i=0
 
 ## CHANGELOG:
 ## ====================
+##  Version 1.13
+##  1. Added parameter option stopFieldChangeIfInvalid, which can be used to relax the 
+##     validation rules for a control, but make best efforts to stop navigation out of 
+##     that field should its current value be invalid.  Note: this does not prevent the 
+##     value from remaining invalid if focus for the control is lost, via mousing etc.
+##
 ##  Version 1.12
 ##  1. Added proper support for NUMPAD keypad keycodes for navigation and control.
 ##

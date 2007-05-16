@@ -136,19 +136,11 @@ class DragCanvas(wx.ScrolledWindow):
                 return shape
         return None
 
-    # Remove a shape from the display
-    def EraseShape(self, shape, dc):
-        r = shape.GetRect()
-        dc.SetClippingRect(r)
-        self.TileBackground(dc)
-        self.DrawShapes(dc)
-        dc.DestroyClippingRegion()
 
     # Clears the background, then redraws it. If the DC is passed, then
     # we only do so in the area so designated. Otherwise, it's the whole thing.
     def OnEraseBackground(self, evt):
         dc = evt.GetDC()
-
         if not dc:
             dc = wx.ClientDC(self)
             rect = self.GetUpdateRegion().GetBox()
@@ -231,11 +223,11 @@ class DragCanvas(wx.ScrolledWindow):
             if dx <= tolerance and dy <= tolerance:
                 return
 
-            # erase the shape since it will be drawn independently now
-            dc = wx.ClientDC(self)
+            # refresh the area of the window where the shape was so it
+            # will get erased.
             self.dragShape.shown = False
-            self.EraseShape(self.dragShape, dc)
-
+            self.RefreshRect(self.dragShape.GetRect(), True)
+            self.Update()
 
             if self.dragShape.text:
                 self.dragImage = wx.DragString(self.dragShape.text,

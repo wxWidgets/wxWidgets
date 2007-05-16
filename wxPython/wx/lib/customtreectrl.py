@@ -1766,7 +1766,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
             TR_NO_LINES                             # don't draw lines at all
             TR_LINES_AT_ROOT                        # connect top-level nodes
             TR_TWIST_BUTTONS                        # draw mac-like twist buttons
-            TR_SINGLE                               # single selection mode                           
+            TR_SINGLE                               # single selection mode     
             TR_MULTIPLE                             # can select multiple items
             TR_EXTENDED                             # todo: allow extended selection
             TR_HAS_VARIABLE_ROW_HEIGHT              # allows rows to have variable height
@@ -1870,12 +1870,13 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         self._vistaselection = False        
 
         # Connection lines style
+        grey = (160,160,160)
         if wx.Platform != "__WXMAC__":
-            self._dottedPen = wx.Pen("grey", 1, wx.USER_DASH)
+            self._dottedPen = wx.Pen(grey, 1, wx.USER_DASH)
             self._dottedPen.SetDashes([1,1])
             self._dottedPen.SetCap(wx.CAP_BUTT)
         else:
-            self._dottedPen = wx.Pen("grey", 1)
+            self._dottedPen = wx.Pen(grey, 1)
 
         # Pen Used To Draw The Border Around Selected Items
         self._borderPen = wx.BLACK_PEN
@@ -1892,8 +1893,6 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
             platform, major, minor = wx.GetOsVersion()
             if major < 10:
                 style |= TR_ROW_LINES
-
-        self._windowStyle = style
 
         # Create the default check image list        
         self.SetImageListCheck(13, 13)
@@ -2169,13 +2168,13 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         dc = wx.ClientDC(self)
         self.RefreshLine(item)
 
-        if self._windowStyle & TR_AUTO_CHECK_CHILD:
+        if self.HasFlag(TR_AUTO_CHECK_CHILD):
             ischeck = self.IsItemChecked(item)
             self.AutoCheckChild(item, ischeck)
-        if self._windowStyle & TR_AUTO_CHECK_PARENT:
+        if self.HasFlag(TR_AUTO_CHECK_PARENT):
             ischeck = self.IsItemChecked(item)
             self.AutoCheckParent(item, ischeck)
-        elif self._windowStyle & TR_AUTO_TOGGLE_CHILD:
+        elif self.HasFlag(TR_AUTO_TOGGLE_CHILD):
             self.AutoToggleChild(item)
 
         e = TreeEvent(wxEVT_TREE_ITEM_CHECKED, self.GetId())
@@ -2310,12 +2309,6 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         self._dirty = True
 
 
-    def HasFlag(self, flag):
-        """Returns whether CustomTreeCtrl has a flag."""
-
-        return self._windowStyle & flag
-    
-
     def HasChildren(self, item):
         """Returns whether an item has children or not."""
 
@@ -2349,19 +2342,19 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         # want to update the inherited styles, but right now
         # none of the parents has updatable styles
 
-        if self._windowStyle & TR_MULTIPLE and not (styles & TR_MULTIPLE):
+        if self.HasFlag(TR_MULTIPLE) and not (styles & TR_MULTIPLE):
             selections = self.GetSelections()
             for select in selections[0:-1]:
                 self.SelectItem(select, False)
 
-        self._windowStyle = styles
+        self.SetWindowStyle(styles)
         self._dirty = True
 
 
     def GetTreeStyle(self):
         """Returns the CustomTreeCtrl style."""
 
-        return self._windowStyle
+        return self.GetWindowStyle()
     
 
     def HasButtons(self):
@@ -3155,10 +3148,10 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
     def DoInsertItem(self, parentId, previous, text, ct_type=0, wnd=None, image=-1, selImage=-1, data=None):
         """Actually inserts an item in the tree."""
 
-        if wnd is not None and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
+        if wnd is not None and not self.HasFlag(TR_HAS_VARIABLE_ROW_HEIGHT):
             raise Exception("\nERROR: In Order To Append/Insert Controls You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
 
-        if text.find("\n") >= 0 and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
+        if text.find("\n") >= 0 and not self.HasFlag(TR_HAS_VARIABLE_ROW_HEIGHT):
             raise Exception("\nERROR: In Order To Append/Insert A MultiLine Text You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
 
         if ct_type < 0 or ct_type > 2:
@@ -3190,10 +3183,10 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         if self._anchor:
             raise Exception("\nERROR: Tree Can Have Only One Root")
 
-        if wnd is not None and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
+        if wnd is not None and not self.HasFlag(TR_HAS_VARIABLE_ROW_HEIGHT):
             raise Exception("\nERROR: In Order To Append/Insert Controls You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
 
-        if text.find("\n") >= 0 and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
+        if text.find("\n") >= 0 and not self.HasFlag(TR_HAS_VARIABLE_ROW_HEIGHT):
             raise Exception("\nERROR: In Order To Append/Insert A MultiLine Text You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
 
         if ct_type < 0 or ct_type > 2:
@@ -3226,10 +3219,10 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
     def PrependItem(self, parent, text, ct_type=0, wnd=None, image=-1, selImage=-1, data=None):
         """Appends an item as a first child of parent."""
 
-        if wnd is not None and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
+        if wnd is not None and not self.HasFlag(TR_HAS_VARIABLE_ROW_HEIGHT):
             raise Exception("\nERROR: In Order To Append/Insert Controls You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
 
-        if text.find("\n") >= 0 and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
+        if text.find("\n") >= 0 and not self.HasFlag(TR_HAS_VARIABLE_ROW_HEIGHT):
             raise Exception("\nERROR: In Order To Append/Insert A MultiLine Text You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
         
         return self.DoInsertItem(parent, 0, text, ct_type, wnd, image, selImage, data)
@@ -3238,10 +3231,10 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
     def InsertItemByItem(self, parentId, idPrevious, text, ct_type=0, wnd=None, image=-1, selImage=-1, data=None):
         """Auxiliary function to cope with the C++ hideous multifunction."""
         
-        if wnd is not None and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
+        if wnd is not None and not self.HasFlag(TR_HAS_VARIABLE_ROW_HEIGHT):
             raise Exception("\nERROR: In Order To Append/Insert Controls You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
 
-        if text.find("\n") >= 0 and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
+        if text.find("\n") >= 0 and not self.HasFlag(TR_HAS_VARIABLE_ROW_HEIGHT):
             raise Exception("\nERROR: In Order To Append/Insert A MultiLine Text You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
         
         parent = parentId
@@ -3264,10 +3257,10 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
     def InsertItemByIndex(self, parentId, before, text, ct_type=0, wnd=None, image=-1, selImage=-1, data=None):
         """Auxiliary function to cope with the C++ hideous multifunction."""
 
-        if wnd is not None and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
+        if wnd is not None and not self.HasFlag(TR_HAS_VARIABLE_ROW_HEIGHT):
             raise Exception("\nERROR: In Order To Append/Insert Controls You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
 
-        if text.find("\n") >= 0 and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
+        if text.find("\n") >= 0 and not self.HasFlag(TR_HAS_VARIABLE_ROW_HEIGHT):
             raise Exception("\nERROR: In Order To Append/Insert A MultiLine Text You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
         
         parent = parentId
@@ -3282,10 +3275,10 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
     def InsertItem(self, parentId, input, text, ct_type=0, wnd=None, image=-1, selImage=-1, data=None):
         """Inserts an item after the given previous."""
 
-        if wnd is not None and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
+        if wnd is not None and not self.HasFlag(TR_HAS_VARIABLE_ROW_HEIGHT):
             raise Exception("\nERROR: In Order To Append/Insert Controls You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
 
-        if text.find("\n") >= 0 and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
+        if text.find("\n") >= 0 and not self.HasFlag(TR_HAS_VARIABLE_ROW_HEIGHT):
             raise Exception("\nERROR: In Order To Append/Insert A MultiLine Text You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
         
         if type(input) == type(1):
@@ -3297,10 +3290,10 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
     def AppendItem(self, parentId, text, ct_type=0, wnd=None, image=-1, selImage=-1, data=None):
         """Appends an item as a last child of its parent."""
 
-        if wnd is not None and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
+        if wnd is not None and not self.HasFlag(TR_HAS_VARIABLE_ROW_HEIGHT):
             raise Exception("\nERROR: In Order To Append/Insert Controls You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
 
-        if text.find("\n") >= 0 and not (self._windowStyle & TR_HAS_VARIABLE_ROW_HEIGHT):
+        if text.find("\n") >= 0 and not self.HasFlag(TR_HAS_VARIABLE_ROW_HEIGHT):
             raise Exception("\nERROR: In Order To Append/Insert A MultiLine Text You Have To Use The Style TR_HAS_VARIABLE_ROW_HEIGHT")
         
         parent = parentId
@@ -3562,7 +3555,8 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
         for child in self._itemWithWindow:
             if not self.IsVisible(child):
                 wnd = child.GetWindow()
-                wnd.Hide()
+                if wnd:
+                    wnd.Hide()
             
 
     def Unselect(self):
@@ -4565,7 +4559,7 @@ class CustomTreeCtrl(wx.PyScrolledWindow):
                     
                 else: # no custom buttons
 
-                    if self._windowStyle & TR_TWIST_BUTTONS:
+                    if self.HasFlag(TR_TWIST_BUTTONS):
                         # We draw something like the Mac twist buttons
                         
                         dc.SetPen(wx.BLACK_PEN)

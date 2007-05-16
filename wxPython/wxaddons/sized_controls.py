@@ -457,10 +457,21 @@ class SizedPanel(wx.PyPanel):
         self.sizerType = "vertical"
         
     def AddChild(self, child):
-        wx.PyPanel.base_AddChild(self, child)
-        
+        if wx.VERSION < (2,8):
+            wx.PyPanel.base_AddChild(self, child)
+        else:
+            wx.PyPanel.AddChild(self, child)
+
+        # Note: The wx.LogNull is used here to suppress a log message
+        # on wxMSW that happens because when AddChild is called the
+        # widget's hwnd hasn't been set yet, so the GetWindowRect that
+        # happens as a result of sizer.Add (in wxSizerItem::SetWindow)
+        # fails.  A better fix would be to defer this code somehow
+        # until after the child widget is fully constructed.
         sizer = self.GetSizer()
+        nolog = wx.LogNull()
         item = sizer.Add(child)
+        del nolog
         item.SetUserData({"HGrow":0, "VGrow":0})
         
         # Note: One problem is that the child class given to AddChild

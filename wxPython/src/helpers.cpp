@@ -842,6 +842,7 @@ void wxPyOORClientData_dtor(wxPyOORClientData* self) {
             //Py_INCREF(deadObjectClass);
             Py_DECREF(klass);
             Py_DECREF(name);
+            Py_DECREF(dict);
         }
     }
 

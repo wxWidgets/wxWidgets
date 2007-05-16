@@ -630,7 +630,7 @@ works for single line strings.", "");
     DocDeclAStrName(
         void, GetTextExtent(const wxString& string,
                             wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord* OUTPUT,
-                            wxFont* font = NULL),
+                            const wxFont* font = NULL),
         "GetFullTextExtent(wxString string, Font font=None) ->\n   (width, height, descent, externalLeading)",
         "Get the width, height, decent and leading of the text using the
 current or specified font. Only works for single line strings.", "",
@@ -641,7 +641,7 @@ current or specified font. Only works for single line strings.", "",
     DocDeclAStr(
         void, GetMultiLineTextExtent(const wxString& text,
                                      wxCoord *OUTPUT, wxCoord *OUTPUT, wxCoord *OUTPUT,
-                                     wxFont *font = NULL),
+                                     const wxFont *font = NULL),
         "GetMultiLineTextExtent(wxString string, Font font=None) ->\n   (width, height, lineHeight)",
         "Get the width, height, and line height of the text using the
 current or specified font. Works for single as well as multi-line

@@ -140,8 +140,10 @@ class wxTimerEvent : public wxEvent
 public:
     wxTimerEvent(int timerid = 0, int interval = 0);
     int GetInterval() const;
-
+    wxTimer& GetTimer() const;
+    
     %property(Interval, GetInterval, doc="See `GetInterval`");
+    %property(Timer, GetTimer);
 };
 
 

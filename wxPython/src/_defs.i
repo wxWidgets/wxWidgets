@@ -1162,6 +1162,7 @@ enum wxItemKind
     wxITEM_NORMAL,
     wxITEM_CHECK,
     wxITEM_RADIO,
+    wxITEM_DROPDOWN,
     wxITEM_MAX
 };
 

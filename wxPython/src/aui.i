@@ -58,7 +58,7 @@ interface:
 **Usage**
 
 The following example shows a simple implementation that utilizes
-`wx.aui.FrameManager` to manage three text controls in a frame window::
+`wx.aui.AuiManager` to manage three text controls in a frame window::
 
     import wx
     import wx.aui
@@ -170,7 +170,7 @@ The following example shows a simple implementation that utilizes
                                             const wxPaneInfo& pane_info,
                                             const wxPoint& drop_pos);
 
-// A typemap for the return value of wxFrameManager::GetAllPanes
+// A typemap for the return value of wxAuiManager::GetAllPanes
 %typemap(out) wxAuiPaneInfoArray& {
     $result = PyList_New(0);
     for (size_t i=0; i < $1->GetCount(); i++) {
@@ -179,6 +179,7 @@ The following example shows a simple implementation that utilizes
     }
 }
 
+//%ignore wxAuiManager::~wxAuiManager;
 
 %nokwargs wxAuiTabContainer::SetActivePage;
 
@@ -234,7 +235,7 @@ The following example shows a simple implementation that utilizes
 #undef wxColor
 
 //---------------------------------------------------------------------------
-// Methods to inject into the FrameManager class that will sort out calls to
+// Methods to inject into the AuiManager class that will sort out calls to
 // the overloaded versions of GetPane and AddPane
 
 %extend wxAuiManager {
@@ -247,7 +248,7 @@ The following example shows a simple implementation that utilizes
         widget reference or by pane name, which acts as a unique id
         for a window pane. The returned `PaneInfo` object may then be
         modified to change a pane's look, state or position. After one
-        or more modifications to the `PaneInfo`, `FrameManager.Update`
+        or more modifications to the `PaneInfo`, `AuiManager.Update`
         should be called to realize the changes to the user interface.
 
         If the lookup failed (meaning the pane could not be found in

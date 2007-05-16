@@ -110,9 +110,6 @@ public:
     virtual void RefreshRow(size_t row);
     virtual void RefreshRows(size_t from, size_t to);
 
-    virtual int HitTest(wxCoord y) const;
-
-
     size_t GetRowCount() const;
     size_t GetVisibleRowsBegin() const;
     size_t GetVisibleRowsEnd() const;
@@ -144,8 +141,6 @@ public:
 
     virtual void RefreshColumn(size_t column);
     virtual void RefreshColumns(size_t from, size_t to);
-    virtual int HitTest(wxCoord x) const;
-
 
     size_t GetColumnCount() const;
     size_t GetVisibleColumnsBegin() const;
@@ -212,8 +207,8 @@ public:
                                     const wxPosition& to);
 
     // Override wxPanel::HitTest to use our version
-//     virtual wxPosition HitTest(wxCoord x, wxCoord y) const;
-    virtual wxPosition HitTest(const wxPoint &pos) const;
+//     wxPosition VirtualHitTest(wxCoord x, wxCoord y) const;
+    wxPosition VirtualHitTest(const wxPoint &pos) const;
 
     // replacement implementation of wxWindow::Layout virtual method.  To
     // properly forward calls to wxWindow::Layout use
@@ -508,7 +503,6 @@ public:
                 const wxString& name = wxPyPanelNameStr);
 
     
-    int HitTest(const wxPoint& pt) const;
     wxCoord GetColumnsWidth(size_t columnMin, size_t columnMax) const;
     wxCoord EstimateTotalWidth() const;
 };
@@ -607,8 +601,6 @@ public:
                 const wxString& name = wxPyPanelNameStr);
 
     
-    wxPosition HitTest(const wxPoint& pt) const;
-
     wxCoord GetRowsHeight(size_t lineMin, size_t lineMax) const;
     wxCoord EstimateTotalHeight() const;
 

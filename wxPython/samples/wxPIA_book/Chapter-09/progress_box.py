@@ -19,7 +19,10 @@ class Frame(wx.Frame):
                                             | wx.PD_REMAINING_TIME)
 
         self.count += 1
-        keepGoing = self.dialog.Update(self.count)
+        if wx.VERSION < (2,7,1,1):
+            keepGoing = self.dialog.Update(self.count)
+        else:
+            (keepGoing, skip) = self.dialog.Update(self.count)            
         if not keepGoing or self.count == self.progressMax:
             self.dialog.Destroy()
             self.timer.Stop()

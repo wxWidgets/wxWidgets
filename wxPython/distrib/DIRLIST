@@ -123,6 +123,7 @@ wxPython/wx/lib/art
 wxPython/wx/lib/colourchooser
 wxPython/wx/lib/editor
 wxPython/wx/lib/floatcanvas
+wxPython/wx/lib/floatcanvas/Utilities
 wxPython/wx/lib/masked
 wxPython/wx/lib/mixins
 wxPython/wx/lib/ogl

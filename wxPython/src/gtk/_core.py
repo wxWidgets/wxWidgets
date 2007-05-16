@@ -9360,7 +9360,7 @@ class Window(EvtHandler):
 
         Pushes this event handler onto the event handler stack for the window.
         An event handler is an object that is capable of processing the events
-        sent to a window.  (In other words, is able to dispatch the events to
+        sent to a window.  (In other words, is able to dispatch the events to a
         handler function.)  By default, the window is its own event handler,
         but an application may wish to substitute another, for example to
         allow central implementation of event-handling for a variety of

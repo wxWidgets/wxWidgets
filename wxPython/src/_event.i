@@ -61,6 +61,7 @@ wxEventType wxNewEventType();
 %constant wxEventType wxEVT_COMMAND_COMBOBOX_SELECTED;
 %constant wxEventType wxEVT_COMMAND_TOOL_RCLICKED;
 %constant wxEventType wxEVT_COMMAND_TOOL_ENTER;
+%constant wxEventType wxEVT_COMMAND_TOOL_DROPDOWN_CLICKED;
 
 // Mouse event types
 %constant wxEventType wxEVT_LEFT_DOWN;
@@ -354,6 +355,7 @@ EVT_TOOL_RANGE = wx.PyEventBinder( wxEVT_COMMAND_TOOL_CLICKED, 2)
 EVT_TOOL_RCLICKED = wx.PyEventBinder( wxEVT_COMMAND_TOOL_RCLICKED, 1)
 EVT_TOOL_RCLICKED_RANGE = wx.PyEventBinder( wxEVT_COMMAND_TOOL_RCLICKED, 2)
 EVT_TOOL_ENTER = wx.PyEventBinder( wxEVT_COMMAND_TOOL_ENTER, 1)
+EVT_TOOL_DROPDOWN = wx.PyEventBinder( wxEVT_COMMAND_TOOL_DROPDOWN_CLICKED, 1)
 EVT_CHECKLISTBOX = wx.PyEventBinder( wxEVT_COMMAND_CHECKLISTBOX_TOGGLED, 1)
 
 
