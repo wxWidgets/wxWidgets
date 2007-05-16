@@ -40,7 +40,7 @@ IMPLEMENT_CLASS(wxXmlDocument, wxObject)
 
 
 // a private utility used by wxXML
-static bool wxIsWhiteOnly(const wxChar *buf);
+static bool wxIsWhiteOnly(const wxString& buf);
 
 
 //-----------------------------------------------------------------------------
@@ -438,11 +438,14 @@ static wxString CharToString(wxMBConv *conv,
 }
 
 // returns true if the given string contains only whitespaces
-bool wxIsWhiteOnly(const wxChar *buf)
+bool wxIsWhiteOnly(const wxString& buf)
 {
-    for (const wxChar *c = buf; *c != wxT('\0'); c++)
-        if (*c != wxT(' ') && *c != wxT('\t') && *c != wxT('\n') && *c != wxT('\r'))
+    for ( wxString::const_iterator i = buf.begin(); i != buf.end(); ++i )
+    {
+        wxChar c = *i;
+        if ( c != wxT(' ') && c != wxT('\t') && c != wxT('\n') && c != wxT('\r'))
             return false;
+    }
     return true;
 }
 
@@ -573,8 +576,7 @@ static int UnknownEncodingHnd(void * WXUNUSED(encodingHandlerData),
     // We must build conversion table for expat. The easiest way to do so
     // is to let wxCSConv convert as string containing all characters to
     // wide character representation:
-    wxString str(name, wxConvLibc);
-    wxCSConv conv(str);
+    wxCSConv conv(name);
     char mbBuf[2];
     wchar_t wcBuf[10];
     size_t i;
