@@ -27,7 +27,7 @@
 #include "wx/metafile.h"
 #include "wx/tokenzr.h"
 
-#include "wx/mac/private.h"
+#include "wx/mac/uma.h"
 
 #ifndef __DARWIN__
 #include <Scrap.h>
@@ -314,25 +314,46 @@ void wxBitmapDataObject::SetBitmap( const wxBitmap& rBitmap )
     if (m_bitmap.Ok())
     {
 #if wxMAC_USE_CORE_GRAPHICS
-#ifdef __LP64__
-#else
-        // export as TIFF
-        GraphicsExportComponent exporter = 0;
-        OSStatus err = OpenADefaultComponent(GraphicsExporterComponentType, kQTFileTypeTIFF, &exporter);
-        if (noErr == err)
+        CGImageRef cgImageRef = (CGImageRef) m_bitmap.CGImageCreate();
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+        if ( UMAGetSystemVersion() >= 0x1040 )
         {
-            m_pictHandle = NewHandle(0);
+            CFMutableDataRef data = CFDataCreateMutable(kCFAllocatorDefault, 0);
+            CGImageDestinationRef destination = CGImageDestinationCreateWithData( data , kUTTypeTIFF , 1 , NULL );
+            if ( destination )
+            {
+                CGImageDestinationAddImage( destination, cgImageRef, NULL );
+                CGImageDestinationFinalize( destination );
+                CFRelease( destination );
+            }
+            m_pictHandle = NewHandle(CFDataGetLength(data));
             if ( m_pictHandle )
             {
-                CGImageRef cgImageRef = (CGImageRef) m_bitmap.CGImageCreate();
-                err = GraphicsExportSetInputCGImage( exporter, cgImageRef);
-                err = GraphicsExportSetOutputHandle(exporter, (Handle)m_pictHandle);
-                err = GraphicsExportDoExport(exporter, NULL);
-                CGImageRelease(cgImageRef);
+                memcpy( *(Handle)m_pictHandle, (const char *)CFDataGetBytePtr(data), CFDataGetLength(data) );
             }
-            CloseComponent( exporter );
+            CFRelease( data );
+        }
+        else
+#endif
+#ifndef __LP64__
+        {
+            // export as TIFF
+            GraphicsExportComponent exporter = 0;
+            OSStatus err = OpenADefaultComponent(GraphicsExporterComponentType, kQTFileTypeTIFF, &exporter);
+            if (noErr == err)
+            {
+                m_pictHandle = NewHandle(0);
+                if ( m_pictHandle )
+                {
+                    err = GraphicsExportSetInputCGImage( exporter, cgImageRef);
+                    err = GraphicsExportSetOutputHandle(exporter, (Handle)m_pictHandle);
+                    err = GraphicsExportDoExport(exporter, NULL);
+                }
+                CloseComponent( exporter );
+            }
         }
 #endif
+        CGImageRelease(cgImageRef);
 #else
         m_pictHandle = m_bitmap.GetBitmapData()->GetPictHandle();
         m_pictCreated = false;
@@ -407,32 +428,50 @@ bool wxBitmapDataObject::SetData( size_t nSize, const void *pBuf )
     Handle picHandle = NewHandle( nSize );
     memcpy( *picHandle, pBuf, nSize );
     m_pictHandle = picHandle;
-#ifdef __LP64__
-#else
-
-    // import from TIFF
-    GraphicsImportComponent importer = 0;
-    OSStatus err = OpenADefaultComponent(GraphicsImporterComponentType, kQTFileTypeTIFF, &importer);
-    if (noErr == err)
+    CGImageRef cgImageRef = 0;
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+    if ( UMAGetSystemVersion() >= 0x1040 )
     {
-        if ( picHandle )
+        CFDataRef data = CFDataCreateWithBytesNoCopy( kCFAllocatorDefault, (const UInt8*) pBuf, nSize, kCFAllocatorNull);
+        CGImageSourceRef source = CGImageSourceCreateWithData( data, NULL );
+        if ( source )
         {
-            ComponentResult result = GraphicsImportSetDataHandle(importer, picHandle);
-            if ( result == noErr )
-            {
-                Rect frame;
-                GraphicsImportGetNaturalBounds( importer, &frame );
-                CGImageRef cgImageRef = 0;
-                GraphicsImportCreateCGImage( importer, &cgImageRef, kGraphicsImportCreateCGImageUsingCurrentSettings );
-                m_bitmap.Create( frame.right - frame.left, frame.bottom - frame.top );
-                CGRect r = CGRectMake( 0 , 0 , frame.right - frame.left , frame.bottom - frame.top );
-                CGContextDrawImage( (CGContextRef) m_bitmap.GetHBITMAP() , r, cgImageRef ) ;
-                CGImageRelease(cgImageRef);
-            }
+            cgImageRef = CGImageSourceCreateImageAtIndex(source, 0, NULL);
         }
-        CloseComponent( importer );
+        CFRelease( source );
+        CFRelease( data );
+    }
+    else
+#endif
+#ifndef __LP64__
+    {
+        // import from TIFF
+        GraphicsImportComponent importer = 0;
+        OSStatus err = OpenADefaultComponent(GraphicsImporterComponentType, kQTFileTypeTIFF, &importer);
+        if (noErr == err)
+        {
+            if ( picHandle )
+            {
+                ComponentResult result = GraphicsImportSetDataHandle(importer, picHandle);
+                if ( result == noErr )
+                {
+                    Rect frame;
+                    GraphicsImportGetNaturalBounds( importer, &frame );
+                    GraphicsImportCreateCGImage( importer, &cgImageRef, kGraphicsImportCreateCGImageUsingCurrentSettings );
+                }
+            }
+            CloseComponent( importer );
+        }
     }
 #endif
+    if ( cgImageRef )
+    {
+        m_bitmap.Create( CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );
+        CGRect r = CGRectMake( 0 , 0 , CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );
+        CGContextDrawImage( (CGContextRef) m_bitmap.GetHBITMAP() , r, cgImageRef ) ;
+        CGImageRelease(cgImageRef);
+        cgImageRef = NULL;
+    }
 #else
     PicHandle picHandle = (PicHandle)NewHandle( nSize );
     memcpy( *picHandle, pBuf, nSize );

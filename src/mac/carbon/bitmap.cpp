@@ -1449,7 +1449,7 @@ void wxBitmap::SetMask(wxMask *mask)
 
 WXHBITMAP wxBitmap::GetHBITMAP(WXHBITMAP* mask) const
 {
-#ifndef __LP64__
+#if !wxMAC_USE_CORE_GRAPHICS
     return WXHBITMAP(M_BITMAPDATA->GetHBITMAP((CGContextRef*)mask));
 #else
     return WXHBITMAP(M_BITMAPDATA->GetBitmapContext());
