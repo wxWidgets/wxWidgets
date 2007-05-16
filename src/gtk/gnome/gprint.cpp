@@ -338,7 +338,7 @@ bool wxGnomePrintNativeData::TransferFrom( const wxPrintData &data )
     {
         case wxPAPER_A3:        gs_lgp->gnome_print_config_set( m_config,
                                     (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
-                                    (guchar*)(char*)"A2" );
+                                    (guchar*)(char*)"A3" );
                                 break;
         case wxPAPER_A5:        gs_lgp->gnome_print_config_set( m_config,
                                     (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
@@ -362,7 +362,7 @@ bool wxGnomePrintNativeData::TransferFrom( const wxPrintData &data )
                                 break;
         case wxPAPER_EXECUTIVE: gs_lgp->gnome_print_config_set( m_config,
                                     (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
-                                    (guchar*)(char*)"USExecutive" );
+                                    (guchar*)(char*)"Executive" );
                                 break;
         case wxPAPER_ENV_C5:    gs_lgp->gnome_print_config_set( m_config,
                                     (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
