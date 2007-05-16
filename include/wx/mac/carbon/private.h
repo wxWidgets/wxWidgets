@@ -1227,13 +1227,13 @@ public:
 
     // returns a Pict from the bitmap content
     PicHandle     GetPictHandle();
-#ifdef __LP64__
-    CGContextRef  GetHBITMAP(CGContextRef * mask = NULL ) const;
+#if wxMAC_USE_CORE_GRAPHICS
+    CGContextRef  GetBitmapContext() const;
 #else
     GWorldPtr     GetHBITMAP(GWorldPtr * mask = NULL ) const;
-#endif
     void          UpdateAlphaMask() const;
-
+#endif
+    int           GetBytesPerRow() const { return m_bytesPerRow; }
 private :
     bool Create(int width , int height , int depth);
     void Init();
@@ -1251,14 +1251,13 @@ private :
 #endif
     IconRef       m_iconRef;
     PicHandle     m_pictHandle;
-    wxMemoryBuffer m_maskMemBuf;
-    int            m_maskBytesPerRow;
-#ifdef __LP64__
+#if wxMAC_USE_CORE_GRAPHICS
     CGContextRef  m_hBitmap;
-    CGContextRef  m_hMaskBitmap;
 #else
     GWorldPtr     m_hBitmap;
     GWorldPtr     m_hMaskBitmap;
+    wxMemoryBuffer m_maskMemBuf;
+    int            m_maskBytesPerRow;
 #endif
 };
 
