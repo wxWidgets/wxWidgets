@@ -459,7 +459,6 @@ struct wxXmlParsingContext
     wxXmlNode *lastAsText;
     wxString   encoding;
     wxString   version;
-    bool       bLastCdata;
     bool       removeWhiteOnlyNodes;
 };
 
@@ -501,15 +500,7 @@ static void TextHnd(void *userData, const char *s, int len)
 
     if (ctx->lastAsText)
     {
-        if ( ctx->bLastCdata )
-        {
-            ctx->lastAsText->SetContent(ctx->lastAsText->GetContent() +
-                                        CharToString(NULL, s, len));
-        }
-        else
-        {
-            ctx->lastAsText->SetContent(ctx->lastAsText->GetContent() + str);
-        }
+        ctx->lastAsText->SetContent(ctx->lastAsText->GetContent() + str);
     }
     else
     {
@@ -531,19 +522,8 @@ static void StartCdataHnd(void *userData)
 {
     wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
 
-    ctx->bLastCdata = true;
-
     ctx->lastAsText = new wxXmlNode(wxXML_CDATA_SECTION_NODE, wxT("cdata"),wxT(""));
     ctx->node->AddChild(ctx->lastAsText);
-}
-}
-
-extern "C" {
-static void EndCdataHnd(void *userData)
-{
-    wxXmlParsingContext *ctx = (wxXmlParsingContext*)userData;
-
-    ctx->bLastCdata = false;
 }
 }
 
@@ -640,12 +620,11 @@ bool wxXmlDocument::Load(wxInputStream& stream, const wxString& encoding, int fl
         ctx.conv = new wxCSConv(encoding);
 #endif
     ctx.removeWhiteOnlyNodes = (flags & wxXMLDOC_KEEP_WHITESPACE_NODES) == 0;
-    ctx.bLastCdata = false;
 
     XML_SetUserData(parser, (void*)&ctx);
     XML_SetElementHandler(parser, StartElementHnd, EndElementHnd);
     XML_SetCharacterDataHandler(parser, TextHnd);
-    XML_SetCdataSectionHandler(parser, StartCdataHnd, EndCdataHnd );
+    XML_SetStartCdataSectionHandler(parser, StartCdataHnd);
     XML_SetCommentHandler(parser, CommentHnd);
     XML_SetDefaultHandler(parser, DefaultHnd);
     XML_SetUnknownEncodingHandler(parser, UnknownEncodingHnd, NULL);
