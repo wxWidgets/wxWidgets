@@ -35,6 +35,10 @@
 
 #define TRACE_EVENTS _T("events")
 
+//this code should not be compiled when GUI is defined
+//(monolithic build issue)
+#if !wxUSE_GUI
+
 // ===========================================================================
 // wxEventLoop::PipeIOHandler implementation
 // ===========================================================================
@@ -190,3 +194,4 @@ void wxConsoleEventLoop::OnNextIteration()
     wxTheApp->CheckSignal();
 }
 
+#endif // !wxUSE_GUI

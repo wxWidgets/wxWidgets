@@ -12,6 +12,10 @@
 #include "wx/log.h"
 #include "wx/evtloop.h"
 
+//this code should not be compiled when GUI is defined
+//(monolithic build issue)
+#if !wxUSE_GUI
+
 #include <signal.h>
 #include <unistd.h>
 
@@ -75,3 +79,5 @@ bool wxAppConsoleUnix::SetSignalHandler(int signal, SignalHandler handler)
 
     return true;
 }
+
+#endif // !wxUSE_GUI

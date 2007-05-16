@@ -54,7 +54,6 @@ public:
     virtual bool Pending() const;
     virtual bool Dispatch();
 
-protected:
     // implement base class pure virtual
     virtual void WakeUp();
 };
