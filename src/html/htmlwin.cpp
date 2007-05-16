@@ -1149,9 +1149,13 @@ void wxHtmlWindow::OnMouseUp(wxMouseEvent& event)
         ReleaseMouse();
         m_makingSelection = false;
 
-        // did the user move the mouse far enough from starting point?
-        if ( CopySelection(Primary) )
+        // if m_selection=NULL, the user didn't move the mouse far enough from
+        // starting point and the mouse up event is part of a click, the user
+        // is not selecting text:
+        if ( m_selection )
         {
+            CopySelection(Primary);
+
             // we don't want mouse up event that ended selecting to be
             // handled as mouse click and e.g. follow hyperlink:
             return;
