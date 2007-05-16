@@ -21,6 +21,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/strconv.h"  // wxConvLibc
+    #include "wx/log.h"
 #endif
 
 #include "wx/unichar.h"
