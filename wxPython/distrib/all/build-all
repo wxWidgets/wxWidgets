@@ -94,6 +94,8 @@ def getTasks(config_env):
     cyclopsTask1 = Task([
         Job("cyclops.d", "distrib/all/build-deb", ["cyclops", "/work/chroot/dapper", "dapper"], env=config_env),
         Job("cyclops.d64", "distrib/all/build-deb", ["cyclops", "/work/chroot/dapper64", "dapper64"], env=config_env),
+        Job("cyclops.fc6", "distrib/all/build-chrpm",
+            ["cyclops", "/work/chroot/fc6", "fc6", "fc6", "2.4"], env=config_env),
         ])
 
     cyclopsTask2 = Task([
