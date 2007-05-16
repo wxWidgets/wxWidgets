@@ -304,7 +304,7 @@ wxBitmap wxBitmap::Rescale(int clipx, int clipy, int clipwidth, int clipheight, 
 
     wxCHECK_MSG(Ok(), bmp, wxT("invalid bitmap"));
 
-    if (newy==M_BMPDATA->m_width && newy==M_BMPDATA->m_height)
+    if (newx==M_BMPDATA->m_width && newy==M_BMPDATA->m_height)
         return *this;
 
     int width = wxMax(newx, 1);
@@ -330,24 +330,8 @@ wxBitmap wxBitmap::Rescale(int clipx, int clipy, int clipwidth, int clipheight, 
         GdkImage* img = gdk_drawable_get_image(
             M_BMPDATA->m_pixmap, 0, 0, M_BMPDATA->m_width, M_BMPDATA->m_height);
 
-        wxCHECK_MSG(img, bmp, wxT("couldn't create image"));
-
-        GdkGC *gc = NULL;
-        GdkPixmap *dstpix = NULL;
-        char *dst = NULL;
-        long dstbyteperline = 0;
-
-        if (GetDepth() != 1)
-        {
-            bmp.Create(width, height, gdk_drawable_get_depth(M_BMPDATA->m_pixmap));
-            dstpix = bmp.GetPixmap();
-            gc = gdk_gc_new( dstpix );
-        }
-        else
-        {
-            dstbyteperline = (width + 7) / 8;
-            dst = (char*) malloc(dstbyteperline*height);
-        }
+        bmp.Create(width, height, gdk_drawable_get_depth(M_BMPDATA->m_pixmap));
+        GdkImage* img_scaled = gdk_drawable_get_image(bmp.GetPixmap(), 0, 0, width, height);
 
         // be careful to use the right scaling factor
         float scx = (float)M_BMPDATA->m_width/(float)newx;
@@ -365,7 +349,6 @@ wxBitmap wxBitmap::Rescale(int clipx, int clipy, int clipwidth, int clipheight, 
         // Main rescaling routine starts here
         for (int h = 0; h < height; h++)
         {
-            char outbyte = 0;
             int old_x = -1;
             guint32 old_pixval = 0;
 
@@ -382,48 +365,21 @@ wxBitmap wxBitmap::Rescale(int clipx, int clipy, int clipwidth, int clipheight, 
                     old_x = x;
                 }
 
-                if ( dst )
-                {
-                    if (pixval)
-                    {
-                        char bit=1;
-                        char shift = bit << (w % 8);
-                        outbyte |= shift;
-                    }
-
-                    if ((w+1)%8==0)
-                    {
-                        dst[h*dstbyteperline+w/8] = outbyte;
-                        outbyte = 0;
-                    }
-                }
-                else
-                {
-                    GdkColor col;
-                    col.pixel = pixval;
-                    gdk_gc_set_foreground( gc, &col );
-                    gdk_draw_point( dstpix, gc, w, h);
-                }
+                gdk_image_put_pixel(img_scaled, w, h, pixval);
             }
-
-            // do not forget the last byte
-            if ( dst && (width % 8 != 0) )
-                dst[h*dstbyteperline+width/8] = outbyte;
         }
 
         g_object_unref (img);
-        if (gc) g_object_unref (gc);
 
-        if ( dst )
-        {
-            bmp = wxBitmap(dst, width, height, 1);
-            free( dst );
-        }
+        GdkGC* gc = gdk_gc_new(bmp.GetPixmap());
+        gdk_draw_image(bmp.GetPixmap(), gc, img_scaled, 0, 0, 0, 0, -1, -1);
+        g_object_unref(gc);
+        g_object_unref(img_scaled);
 
         if (GetMask())
         {
-            dstbyteperline = (width + 7) / 8;
-            dst = (char*) malloc(dstbyteperline*height);
+            size_t dstbyteperline = (width + 7) / 8;
+            char* dst = (char*) malloc(dstbyteperline*height);
             img = gdk_drawable_get_image(GetMask()->GetBitmap(), 0, 0, GetWidth(), GetHeight());
 
             for (int h = 0; h < height; h++)
