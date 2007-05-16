@@ -284,7 +284,11 @@ bool wxClipboard::AddData( wxDataObject *data )
 
             case wxDF_BITMAP:
             case wxDF_DIB:
+#if wxMAC_USE_CORE_GRAPHICS
+                mactype = 'TIFF';
+#else
                 mactype = kScrapFlavorTypePicture;
+#endif
                 break;
 
             default:

@@ -31,6 +31,8 @@
 
 #ifndef __DARWIN__
 #include <Scrap.h>
+#else
+    #include <QuickTime/QuickTime.h>
 #endif
 
 
@@ -79,6 +81,12 @@ void wxDataFormat::SetType( wxDataFormatId dataType )
         break;
 
     case wxDF_BITMAP:
+#if wxMAC_USE_CORE_GRAPHICS
+        m_format = 'TIFF';
+#else
+        m_format = kScrapFlavorTypePicture;
+#endif
+        break;
     case wxDF_METAFILE:
         m_format = kScrapFlavorTypePicture;
         break;
@@ -118,9 +126,14 @@ void wxDataFormat::SetId( NativeFormat format )
     case kScrapFlavorTypeUnicode:
         m_type = wxDF_UNICODETEXT;
         break;
-
-    case kScrapFlavorTypePicture:
+        
+#if wxMAC_USE_CORE_GRAPHCIS
+    case 'TIFF':
         m_type = wxDF_BITMAP;
+        break;
+#endif
+    case kScrapFlavorTypePicture:
+        m_type = wxDF_METAFILE;
         break;
 
     case kDragFlavorTypeHFS:
@@ -280,8 +293,12 @@ wxBitmapDataObject::wxBitmapDataObject( const wxBitmap& rBitmap )
 
     if (m_bitmap.Ok())
     {
+#if wxMAC_USE_CORE_GRAPHICS
+		SetBitmap( rBitmap );
+#else
         m_pictHandle = m_bitmap.GetBitmapData()->GetPictHandle();
         m_pictCreated = false;
+#endif
     }
 }
 
@@ -296,8 +313,30 @@ void wxBitmapDataObject::SetBitmap( const wxBitmap& rBitmap )
     wxBitmapDataObjectBase::SetBitmap( rBitmap );
     if (m_bitmap.Ok())
     {
+#if wxMAC_USE_CORE_GRAPHICS
+#ifdef __LP64__
+#else
+        // export as TIFF
+        GraphicsExportComponent exporter = 0;
+        OSStatus err = OpenADefaultComponent(GraphicsExporterComponentType, kQTFileTypeTIFF, &exporter);
+        if (noErr == err)
+        {
+            m_pictHandle = NewHandle(0);
+            if ( m_pictHandle )
+            {
+                CGImageRef cgImageRef = (CGImageRef) m_bitmap.CGImageCreate();
+                err = GraphicsExportSetInputCGImage( exporter, cgImageRef);
+                err = GraphicsExportSetOutputHandle(exporter, (Handle)m_pictHandle);
+                err = GraphicsExportDoExport(exporter, NULL);
+                CGImageRelease(cgImageRef);
+            }
+            CloseComponent( exporter );
+        }
+#endif
+#else
         m_pictHandle = m_bitmap.GetBitmapData()->GetPictHandle();
         m_pictCreated = false;
+#endif
     }
 }
 
@@ -311,13 +350,14 @@ void wxBitmapDataObject::Clear()
 {
     if (m_pictHandle != NULL)
     {
-#ifndef __LP64__
+#if wxMAC_USE_CORE_GRAPHICS
+        DisposeHandle( (Handle) m_pictHandle );
+#else
         if (m_pictCreated)
             KillPicture( (PicHandle)m_pictHandle );
 #endif
         m_pictHandle = NULL;
     }
-
     m_pictCreated = false;
 }
 
@@ -345,6 +385,17 @@ size_t wxBitmapDataObject::GetDataSize() const
         return 0;
 }
 
+Handle MacCreateDataReferenceHandle(Handle theDataHandle)
+{
+    Handle  dataRef = NULL;
+    OSErr   err     = noErr;
+
+    // Create a data reference handle for our data.
+    err = PtrToHand( &theDataHandle, &dataRef, sizeof(Handle));
+
+    return dataRef;
+}
+
 bool wxBitmapDataObject::SetData( size_t nSize, const void *pBuf )
 {
     Clear();
@@ -352,10 +403,40 @@ bool wxBitmapDataObject::SetData( size_t nSize, const void *pBuf )
     if ((pBuf == NULL) || (nSize == 0))
         return false;
 
+#if wxMAC_USE_CORE_GRAPHICS
+    Handle picHandle = NewHandle( nSize );
+    memcpy( *picHandle, pBuf, nSize );
+    m_pictHandle = picHandle;
+#ifdef __LP64__
+#else
+
+    // import from TIFF
+    GraphicsImportComponent importer = 0;
+    OSStatus err = OpenADefaultComponent(GraphicsImporterComponentType, kQTFileTypeTIFF, &importer);
+    if (noErr == err)
+    {
+        if ( picHandle )
+        {
+            ComponentResult result = GraphicsImportSetDataHandle(importer, picHandle);
+            if ( result == noErr )
+            {
+                Rect frame;
+                GraphicsImportGetNaturalBounds( importer, &frame );
+                CGImageRef cgImageRef = 0;
+                GraphicsImportCreateCGImage( importer, &cgImageRef, kGraphicsImportCreateCGImageUsingCurrentSettings );
+                m_bitmap.Create( frame.right - frame.left, frame.bottom - frame.top );
+                CGRect r = CGRectMake( 0 , 0 , frame.right - frame.left , frame.bottom - frame.top );
+                CGContextDrawImage( (CGContextRef) m_bitmap.GetHBITMAP() , r, cgImageRef ) ;
+                CGImageRelease(cgImageRef);
+            }
+        }
+        CloseComponent( importer );
+    }
+#endif
+#else
     PicHandle picHandle = (PicHandle)NewHandle( nSize );
     memcpy( *picHandle, pBuf, nSize );
     m_pictHandle = picHandle;
-
     // ownership is transferred to the bitmap
     m_pictCreated = false;
 #ifndef __LP64__
@@ -372,6 +453,7 @@ bool wxBitmapDataObject::SetData( size_t nSize, const void *pBuf )
     mf.Play( &mdc );
 #endif
     mdc.SelectObject( wxNullBitmap );
+#endif
 #endif
 
     return m_bitmap.Ok();
