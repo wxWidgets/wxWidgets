@@ -321,7 +321,7 @@ wxBitmap wxBitmap::Rescale(int clipx, int clipy, int clipwidth, int clipheight, 
                                      8, width, height), M_BMPDATA->m_bpp);
         gdk_pixbuf_scale(M_BMPDATA->m_pixbuf, bmp.GetPixbuf(),
                          0, 0, width, height,
-                         clipx, clipy,
+                         -clipx, -clipy,
                          (double)newx/GetWidth(), (double)newy/GetHeight(),
                          GDK_INTERP_BILINEAR);
     }
