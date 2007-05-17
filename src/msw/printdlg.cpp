@@ -1037,7 +1037,7 @@ bool wxWindowsPageSetupDialog::ConvertFromNative( wxPageSetupDialogData &data )
     data.EnableHelp( ((pd->Flags & PSD_SHOWHELP) == PSD_SHOWHELP) );
 
     //   PAGESETUPDLG is in hundreds of a mm
-    if (data.GetOrientation() == wxLANDSCAPE)
+    if (data.GetPrintData().GetOrientation() == wxLANDSCAPE)
         data.SetPaperSize( wxSize(pd->ptPaperSize.y / 100, pd->ptPaperSize.x / 100) );
     else
         data.SetPaperSize( wxSize(pd->ptPaperSize.x / 100, pd->ptPaperSize.y / 100) );
