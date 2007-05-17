@@ -679,8 +679,6 @@ public:
   private:
       iterator(wxString *str, underlying_iterator ptr)
           : m_cur(ptr), m_node(str, &m_cur) {}
-      iterator(wxString& str, underlying_iterator ptr)
-          : m_cur(ptr), m_node(&str, &m_cur) {}
 
       wxString* str() const { return wx_const_cast(wxString*, m_node.m_str); }
 
@@ -717,8 +715,6 @@ public:
       // for internal wxString use only:
       const_iterator(const wxString *str, underlying_iterator ptr)
           : m_cur(ptr), m_node(str, &m_cur) {}
-      const_iterator(const wxString& str, underlying_iterator ptr)
-          : m_cur(ptr), m_node(&str, &m_cur) {}
 
       const wxString* str() const { return m_node.m_str; }
 
