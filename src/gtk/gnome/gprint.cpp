@@ -728,14 +728,6 @@ int wxGnomePageSetupDialog::ShowModal()
 
         m_pageDialogData.SetPaperSize( wxSize( (int)(pw+0.5), (int)(ph+0.5) ) );
 
-#if 1
-        wxPrintf( wxT("paper %d %d, top,left margin %d,%d\n"),
-            m_pageDialogData.GetPaperSize().x,
-            m_pageDialogData.GetPaperSize().y,
-            m_pageDialogData.GetMarginTopLeft().x,
-            m_pageDialogData.GetMarginTopLeft().y );
-#endif
-
         ret = wxID_OK;
     }
     else
@@ -773,7 +765,6 @@ IMPLEMENT_CLASS(wxGnomePrinter, wxPrinterBase)
 wxGnomePrinter::wxGnomePrinter( wxPrintDialogData *data ) :
     wxPrinterBase( data )
 {
-    m_gpc = NULL;
     m_native_preview = false;
 }
 
@@ -790,11 +781,11 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     }
 
     wxPrintData printdata = GetPrintDialogData().GetPrintData();
+    
     wxGnomePrintNativeData *native =
         (wxGnomePrintNativeData*) printdata.GetNativeData();
 
     GnomePrintJob *job = gs_lgp->gnome_print_job_new( native->GetPrintConfig() );
-    m_gpc = gs_lgp->gnome_print_job_get_context (job);
 
     // The GnomePrintJob is temporarily stored in the
     // native print data as the native print dialog
@@ -813,7 +804,7 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     if (prompt)
         dc = PrintDialog( parent );
     else
-        dc = new wxGnomePrintDC( this );
+        dc = new wxGnomePrintDC( printdata );
 
     if (m_native_preview)
         printout->SetIsPreview(true);
@@ -931,7 +922,7 @@ wxDC* wxGnomePrinter::PrintDialog( wxWindow *parent )
     m_native_preview = ret == wxID_PREVIEW;
 
     m_printDialogData = dialog.GetPrintDialogData();
-    return new wxGnomePrintDC( this );
+    return new wxGnomePrintDC( m_printDialogData.GetPrintData() );
 }
 
 bool wxGnomePrinter::Setup( wxWindow *parent )
@@ -945,38 +936,15 @@ bool wxGnomePrinter::Setup( wxWindow *parent )
 
 IMPLEMENT_CLASS(wxGnomePrintDC, wxDC)
 
-wxGnomePrintDC::wxGnomePrintDC( wxGnomePrinter *printer )
-{
-    m_printer = printer;
-
-    m_gpc = printer->GetPrintContext();
-    m_job = NULL; // only used and destroyed when created with wxPrintData
-
-    m_layout = gs_lgp->gnome_print_pango_create_layout( m_gpc );
-    m_fontdesc = pango_font_description_from_string( "Sans 12" );
-    m_context = NULL;
-
-    m_currentRed = 0;
-    m_currentBlue = 0;
-    m_currentGreen = 0;
-
-    m_signX =  1;  // default x-axis left to right
-    m_signY = -1;  // default y-axis bottom up -> top down
-    
-    GetSize( NULL, &m_deviceOffsetY );
-}
-
 wxGnomePrintDC::wxGnomePrintDC( const wxPrintData& data )
 {
-    m_printer = NULL;
     m_printData = data;
 
     wxGnomePrintNativeData *native =
         (wxGnomePrintNativeData*) m_printData.GetNativeData();
 
-    GnomePrintJob *job = gs_lgp->gnome_print_job_new( native->GetPrintConfig() );
-    m_gpc = gs_lgp->gnome_print_job_get_context (job);
-    m_job = job; // only used and destroyed when created with wxPrintData
+    m_job = native->GetPrintJob();
+    m_gpc = gs_lgp->gnome_print_job_get_context (m_job);
 
     m_layout = gs_lgp->gnome_print_pango_create_layout( m_gpc );
     m_fontdesc = pango_font_description_from_string( "Sans 12" );
@@ -994,8 +962,6 @@ wxGnomePrintDC::wxGnomePrintDC( const wxPrintData& data )
 
 wxGnomePrintDC::~wxGnomePrintDC()
 {
-    if (m_job)
-        g_object_unref (m_job);
 }
 
 bool wxGnomePrintDC::IsOk() const
@@ -1946,6 +1912,16 @@ void wxGnomePrintDC::SetLogicalOrigin( wxCoord x, wxCoord y )
 void wxGnomePrintDC::SetDeviceOrigin( wxCoord x, wxCoord y )
 {
     wxDC::SetDeviceOrigin( x, y );
+}
+
+void wxGnomePrintDC::SetPrintData(const wxPrintData& data)
+{ 
+    m_printData = data;
+    
+    if (m_printData.GetOrientation() == wxPORTRAIT)
+        GetSize( NULL, &m_deviceOffsetY );
+    else
+        GetSize( &m_deviceOffsetY, NULL );
 }
 
 void wxGnomePrintDC::SetResolution(int ppi)
