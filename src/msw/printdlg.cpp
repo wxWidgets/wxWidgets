@@ -38,6 +38,7 @@
 #include "wx/printdlg.h"
 #include "wx/msw/printdlg.h"
 #include "wx/paper.h"
+#include "wx/msgdlg.h"
 
 #include <stdlib.h>
 
@@ -220,7 +221,6 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
             data.SetColour( true );
 
         //// Paper size
-
         // We don't know size of user defined paper and some buggy drivers
         // set both DM_PAPERSIZE and DM_PAPERWIDTH & DM_PAPERLENGTH. Since
         // dmPaperSize >= DMPAPER_USER wouldn't be in wxWin's database, this
@@ -253,7 +253,8 @@ bool wxWindowsPrintNativeData::TransferTo( wxPrintData &data )
             }
         }
 
-        if (!foundPaperSize) {
+        if (!foundPaperSize)
+        {
             if ((devMode->dmFields & DM_PAPERWIDTH) && (devMode->dmFields & DM_PAPERLENGTH))
             {
                 // DEVMODE is in tenths of a millimeter
@@ -815,6 +816,7 @@ bool wxWindowsPrintDialog::ConvertFromNative( wxPrintDialogData &data )
 #if WXWIN_COMPATIBILITY_2_4
     data.SetSetupDialog( ((pd->Flags & PD_PRINTSETUP) == PD_PRINTSETUP) );
 #endif
+
     return true;
 }
 
@@ -868,15 +870,18 @@ int wxWindowsPageSetupDialog::ShowModal()
         pd->hwndOwner = (HWND) wxTheApp->GetTopWindow()->GetHWND();
     else
         pd->hwndOwner = 0;
+        
     BOOL retVal = PageSetupDlg( pd ) ;
     pd->hwndOwner = 0;
+    
     if (retVal)
     {
         ConvertFromNative( m_pageSetupData );
+        
         return wxID_OK;
     }
-    else
-        return wxID_CANCEL;
+    
+    return wxID_CANCEL;
 }
 
 bool wxWindowsPageSetupDialog::ConvertToNative( wxPageSetupDialogData &data )
@@ -884,7 +889,7 @@ bool wxWindowsPageSetupDialog::ConvertToNative( wxPageSetupDialogData &data )
     wxWindowsPrintNativeData *native_data =
         (wxWindowsPrintNativeData *) data.GetPrintData().GetNativeData();
     data.GetPrintData().ConvertToNative();
-
+    
     PAGESETUPDLG *pd = (PAGESETUPDLG*) m_pageDlg;
 
     // Shouldn't have been defined anywhere
@@ -1032,7 +1037,10 @@ bool wxWindowsPageSetupDialog::ConvertFromNative( wxPageSetupDialogData &data )
     data.EnableHelp( ((pd->Flags & PSD_SHOWHELP) == PSD_SHOWHELP) );
 
     //   PAGESETUPDLG is in hundreds of a mm
-    data.SetPaperSize( wxSize(pd->ptPaperSize.x / 100, pd->ptPaperSize.y / 100) );
+    if (data.GetOrientation() == wxLANDSCAPE)
+        data.SetPaperSize( wxSize(pd->ptPaperSize.y / 100, pd->ptPaperSize.x / 100) );
+    else
+        data.SetPaperSize( wxSize(pd->ptPaperSize.x / 100, pd->ptPaperSize.y / 100) );
 
     data.SetMinMarginTopLeft( wxPoint(pd->rtMinMargin.left / 100, pd->rtMinMargin.top / 100) );
     data.SetMinMarginBottomRight( wxPoint(pd->rtMinMargin.right / 100, pd->rtMinMargin.bottom / 100) );
