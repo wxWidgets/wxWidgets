@@ -778,6 +778,10 @@ bool wxMDIChildFrame::Create(wxMDIParentFrame *parent,
 
 wxMDIChildFrame::~wxMDIChildFrame()
 {
+    // if we hadn't been created, there is nothing to destroy
+    if ( !m_hWnd )
+        return;
+
     // will be destroyed by DestroyChildren() but reset them before calling it
     // to avoid using dangling pointers if a callback comes in the meanwhile
 #if wxUSE_TOOLBAR
