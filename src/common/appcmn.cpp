@@ -138,15 +138,14 @@ void wxAppBase::CleanUp()
     delete wxTheColourDatabase;
     wxTheColourDatabase = NULL;
 
-    delete wxPendingEvents;
-    wxPendingEvents = NULL;
-
 #if wxUSE_THREADS
     #if wxUSE_VALIDATORS
         // If we don't do the following, we get an apparent memory leak.
         ((wxEvtHandler&) wxDefaultValidator).ClearEventLocker();
     #endif // wxUSE_VALIDATORS
 #endif // wxUSE_THREADS
+
+    wxAppConsole::CleanUp();
 }
 
 // ----------------------------------------------------------------------------
