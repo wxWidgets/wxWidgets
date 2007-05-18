@@ -18,6 +18,7 @@
 
 #include "wx/apptrait.h"
 #include "wx/display.h"
+#include "wx/evtloop.h"
 #include "wx/cocoa/private/timer.h"
 
 #include <ctype.h>
@@ -70,6 +71,11 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
 wxTimerImpl* wxGUIAppTraits::CreateTimerImpl(wxTimer* timer)
 {
     return new wxCocoaTimerImpl(timer);
+}
+
+wxEventLoop* wxGUIAppTraits::CreateEventLoop()
+{
+	return new wxEventLoop;
 }
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
