@@ -75,7 +75,10 @@ wxTimerImpl* wxGUIAppTraits::CreateTimerImpl(wxTimer* timer)
 
 wxEventLoop* wxGUIAppTraits::CreateEventLoop()
 {
-	return new wxEventLoop;
+    // MAJOR HACK: wxEventLoop is implemented in both core and base libraries.
+    // Fortunately, it has an empty implementation so an instance of the
+    // wxGUIEventLoop parent class will be fine until this issue is fixed.
+    return static_cast<wxEventLoop*>(new wxGUIEventLoop);
 }
 
 wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
