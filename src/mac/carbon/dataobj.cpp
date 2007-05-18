@@ -88,7 +88,11 @@ void wxDataFormat::SetType( wxDataFormatId dataType )
 #endif
         break;
     case wxDF_METAFILE:
+#if wxMAC_USE_CORE_GRAPHICS
+        m_format = 'PDF ';
+#else
         m_format = kScrapFlavorTypePicture;
+#endif
         break;
 
     case wxDF_FILENAME:
