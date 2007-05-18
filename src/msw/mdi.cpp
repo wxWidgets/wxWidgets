@@ -1395,7 +1395,11 @@ static void MDISetMenu(wxWindow *win, HMENU hmenuFrame, HMENU hmenuWindow)
                             (WPARAM)hmenuFrame,
                             (LPARAM)hmenuWindow) )
         {
-            wxLogLastError(_T("SendMessage(WM_MDISETMENU)"));
+#ifdef __WXDEBUG__
+            DWORD err = ::GetLastError();
+            if ( err )
+                wxLogApiError(_T("SendMessage(WM_MDISETMENU)"), err);
+#endif // __WXDEBUG__
         }
     }
 
