@@ -13,6 +13,8 @@
 
 #include "wx/defs.h"
 
+#include <sys/types.h>
+
 #include "wx/private/fdiodispatcher.h"
 
 // helper class storing all the select() fd sets
