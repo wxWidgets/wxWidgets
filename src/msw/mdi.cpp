@@ -315,6 +315,17 @@ void wxMDIParentFrame::DoMenuUpdates(wxMenu* menu)
     }
 }
 
+const wxMenuItem *wxMDIParentFrame::FindItemInMenuBar(int menuId) const
+{
+    const wxMenuItem *item = wxFrame::FindItemInMenuBar(menuId);
+    if ( !item && m_currentChild )
+    {
+        item = m_currentChild->FindItemInMenuBar(menuId);
+    }
+
+    return item;
+}
+
 void wxMDIParentFrame::UpdateClientSize()
 {
     if ( GetClientWindow() )
@@ -473,24 +484,6 @@ WXLRESULT wxMDIParentFrame::MSWWindowProc(WXUINT message,
 
             // we erase background ourselves
             rc = true;
-            break;
-
-        case WM_MENUSELECT:
-            {
-                WXWORD item, flags;
-                WXHMENU hmenu;
-                UnpackMenuSelect(wParam, lParam, &item, &flags, &hmenu);
-
-                if ( m_parentFrameActive )
-                {
-                    processed = HandleMenuSelect(item, flags, hmenu);
-                }
-                else if (m_currentChild)
-                {
-                    processed = m_currentChild->
-                        HandleMenuSelect(item, flags, hmenu);
-                }
-            }
             break;
 
         case WM_SIZE:

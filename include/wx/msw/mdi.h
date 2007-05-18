@@ -92,6 +92,9 @@ public:
     virtual WXLRESULT MSWDefWindowProc(WXUINT, WXWPARAM, WXLPARAM);
     virtual bool MSWTranslateMessage(WXMSG* msg);
 
+    // override wxFrameBase function to also look in the active child menu bar
+    virtual const wxMenuItem *FindItemInMenuBar(int menuId) const;
+
 protected:
 #if wxUSE_MENUS_NATIVE
     virtual void InternalSetMenuBar();

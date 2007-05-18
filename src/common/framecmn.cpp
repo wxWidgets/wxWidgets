@@ -356,15 +356,12 @@ bool wxFrameBase::ShowMenuHelp(int menuId)
     wxString helpString;
     if ( menuId != wxID_SEPARATOR && menuId != -3 /* wxID_TITLE */ )
     {
-        wxMenuBar *menuBar = GetMenuBar();
-        if ( menuBar )
-        {
-            // it's ok if we don't find the item because it might belong
-            // to the popup menu
-            wxMenuItem *item = menuBar->FindItem(menuId);
-            if ( item )
-                helpString = item->GetHelp();
-        }
+        const wxMenuItem * const item = FindItemInMenuBar(menuId);
+        if ( item )
+            helpString = item->GetHelp();
+
+        // notice that it's ok if we don't find the item because it might
+        // belong to the popup menu, so don't assert here
     }
 
     DoGiveHelp(helpString, true);
@@ -558,6 +555,13 @@ void wxFrameBase::SetMenuBar(wxMenuBar *menubar)
     DetachMenuBar();
 
     this->AttachMenuBar(menubar);
+}
+
+const wxMenuItem *wxFrameBase::FindItemInMenuBar(int menuId) const
+{
+    const wxMenuBar * const menuBar = GetMenuBar();
+
+    return menuBar ? menuBar->FindItem(menuId) : NULL;
 }
 
 #endif // wxUSE_MENUS

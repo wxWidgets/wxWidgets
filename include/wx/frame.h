@@ -81,6 +81,11 @@ public:
 #if wxUSE_MENUS
     virtual void SetMenuBar(wxMenuBar *menubar);
     virtual wxMenuBar *GetMenuBar() const { return m_frameMenuBar; }
+
+    // find the item by id in the frame menu bar: this is an internal function
+    // and exists mainly in order to be overridden in the MDI parent frame
+    // which also looks at its active child menu bar
+    virtual const wxMenuItem *FindItemInMenuBar(int menuId) const;
 #endif // wxUSE_MENUS
 
     // process menu command: returns true if processed
@@ -212,8 +217,8 @@ protected:
     virtual void PositionStatusBar() { }
 
     // show the help string for the given menu item using DoGiveHelp() if the
-    // given item does have a help string, return false if there is no help for
-    // such item
+    // given item does have a help string (as determined by FindInMenuBar()),
+    // return false if there is no help for such item
     bool ShowMenuHelp(int helpid);
 
     wxStatusBar *m_frameStatusBar;
