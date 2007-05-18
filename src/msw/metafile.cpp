@@ -218,14 +218,13 @@ void wxMetafileDC::DoGetTextExtent(const wxString& string,
     if (!fontToUse)
         fontToUse = &m_font;
 
-    HDC dc = GetDC(NULL);
+    ScreenHDC dc;
+    SelectInHDC selFont(dc, GetHfontOf(*fontToUse));
 
     SIZE sizeRect;
     TEXTMETRIC tm;
     ::GetTextExtentPoint32(dc, WXSTRINGCAST string, wxStrlen(WXSTRINGCAST string), &sizeRect);
-    GetTextMetrics(dc, &tm);
-
-    ReleaseDC(NULL, dc);
+    ::GetTextMetrics(dc, &tm);
 
     if ( x )
         *x = sizeRect.cx;
