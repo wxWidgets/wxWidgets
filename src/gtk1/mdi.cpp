@@ -409,7 +409,7 @@ void wxMDIChildFrame::OnMenuHighlight( wxMenuEvent& event )
 {
 #if wxUSE_STATUSBAR
     wxMDIParentFrame *mdi_frame = (wxMDIParentFrame*)m_parent->GetParent();
-    if ( !ShowMenuHelp(mdi_frame->GetStatusBar(), event.GetMenuId()) )
+    if ( !ShowMenuHelp(event.GetMenuId()) )
     {
         // we don't have any help text for this item, but may be the MDI frame
         // does?

@@ -211,9 +211,10 @@ protected:
     // something changes
     virtual void PositionStatusBar() { }
 
-    // show the help string for this menu item in the given status bar: the
-    // status bar pointer can be NULL; return true if help was shown
-    bool ShowMenuHelp(wxStatusBar *statbar, int helpid);
+    // show the help string for the given menu item using DoGiveHelp() if the
+    // given item does have a help string, return false if there is no help for
+    // such item
+    bool ShowMenuHelp(int helpid);
 
     wxStatusBar *m_frameStatusBar;
 #endif // wxUSE_STATUSBAR

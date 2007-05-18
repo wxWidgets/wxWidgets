@@ -253,7 +253,7 @@ void wxFrameBase::UpdateWindowUI(long flags)
 void wxFrameBase::OnMenuHighlight(wxMenuEvent& event)
 {
 #if wxUSE_STATUSBAR
-    (void)ShowMenuHelp(GetStatusBar(), event.GetMenuId());
+    (void)ShowMenuHelp(event.GetMenuId());
 #endif // wxUSE_STATUSBAR
 }
 
@@ -349,7 +349,7 @@ void wxFrameBase::PopStatusText(int number)
     m_frameStatusBar->PopStatusText(number);
 }
 
-bool wxFrameBase::ShowMenuHelp(wxStatusBar *WXUNUSED(statbar), int menuId)
+bool wxFrameBase::ShowMenuHelp(int menuId)
 {
 #if wxUSE_MENUS
     // if no help string found, we will clear the status bar text
