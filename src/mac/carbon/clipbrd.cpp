@@ -278,7 +278,11 @@ bool wxClipboard::AddData( wxDataObject *data )
 
 #if wxUSE_DRAG_AND_DROP
             case wxDF_METAFILE:
+#if wxMAC_USE_CORE_GRAPHICS
+                mactype = 'PDF ';
+#else
                 mactype = kScrapFlavorTypePicture;
+#endif
                 break;
 #endif
 
