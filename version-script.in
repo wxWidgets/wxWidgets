@@ -24,6 +24,12 @@
 # and once released its version cannot be changed.
 
 
+# public symbols added in 2.8.5 (please keep in alphabetical order):
+@WX_VERSION_TAG@.5 {
+    global:
+        *wxMetafileDC*DoGetTextExtent*;
+};
+
 # public symbols added in 2.8.4 (please keep in alphabetical order):
 @WX_VERSION_TAG@.4 {
     global:

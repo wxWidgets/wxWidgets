@@ -88,6 +88,18 @@ public:
     // Should be called at end of drawing
     virtual wxMetafile *Close();
     virtual void SetMapMode(int mode);
+
+#if wxABI_VERSION >= 20805
+    virtual void DoGetTextExtent(const wxString& string,
+                                 wxCoord *x, wxCoord *y,
+                                 wxCoord *descent = NULL,
+                                 wxCoord *externalLeading = NULL,
+                                 const wxFont *theFont = NULL) const;
+#endif // wx ABI 2.8.5+
+
+    // this method shouldn't have been defined here (DoGetTextExtent() is the
+    // correct one) but keep it to avoid breaking binary backwards
+    // compatibility
     virtual void GetTextExtent(const wxString& string, long *x, long *y,
             long *descent = NULL, long *externalLeading = NULL,
             wxFont *theFont = NULL, bool use16bit = false) const;
