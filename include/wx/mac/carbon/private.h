@@ -49,6 +49,7 @@
 
 #ifdef __WXMAC_CARBON__
 #include "wx/mac/corefoundation/cfstring.h"
+#include "wx/mac/corefoundation/cfdataref.h"
 #endif
 
 #ifndef FixedToInt
@@ -429,6 +430,11 @@ public :
 
     operator refType () const { return m_ref; }
 
+    wxMacCFRefHolder& operator=(refType r)
+    {
+        Set( r );
+        return *this;
+    }
 private :
     refType m_ref;
     bool m_release;
