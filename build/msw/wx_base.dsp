@@ -799,7 +799,7 @@ SOURCE=..\..\src\msw\dlmsw.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\msw\evtloopmsw.cpp
+SOURCE=..\..\src\msw\evtloop.cpp
 # End Source File
 # Begin Source File
 

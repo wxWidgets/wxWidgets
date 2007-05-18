@@ -29,9 +29,10 @@ MAKEARGS = CC="$(CC)" CXX="$(CXX)" CFLAGS="$(CFLAGS)" CXXFLAGS="$(CXXFLAGS)" \
 CPPDEPS = -MT$@ -MF$@.d -MD
 WX_RELEASE_NODOT = 29
 WX_VERSION_NODOT = $(WX_RELEASE_NODOT)0
+COMPILER_PREFIX = gcc
 OBJS = \
-	gcc_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
-LIBDIRNAME = ..\..\lib\gcc_$(LIBTYPE_SUFFIX)$(CFG)
+	$(COMPILER_PREFIX)_$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)$(WXDLLFLAG)$(CFG)
+LIBDIRNAME = ..\..\lib\$(COMPILER_PREFIX)_$(LIBTYPE_SUFFIX)$(CFG)
 SETUPHDIR = \
 	$(LIBDIRNAME)\$(PORTNAME)$(WXUNIVNAME)$(WXUNICODEFLAG)$(WXDEBUGFLAG)
 WXREGEX_CFLAGS = $(__DEBUGINFO) $(__OPTIMIZEFLAG) $(__THREADSFLAG) $(GCCFLAGS) \
@@ -372,7 +373,7 @@ MONODLL_OBJECTS =  \
 	$(OBJS)\monodll_fs_mem.o \
 	$(OBJS)\monodll_msgout.o \
 	$(OBJS)\monodll_utilscmn.o \
-	$(OBJS)\monodll_evtloopmsw.o \
+	$(OBJS)\monodll_evtloop.o \
 	$(OBJS)\monodll_main.o \
 	$(OBJS)\monodll_mslu.o \
 	$(OBJS)\monodll_volume.o \
@@ -508,7 +509,7 @@ MONOLIB_OBJECTS =  \
 	$(OBJS)\monolib_fs_mem.o \
 	$(OBJS)\monolib_msgout.o \
 	$(OBJS)\monolib_utilscmn.o \
-	$(OBJS)\monolib_evtloopmsw.o \
+	$(OBJS)\monolib_evtloop.o \
 	$(OBJS)\monolib_main.o \
 	$(OBJS)\monolib_mslu.o \
 	$(OBJS)\monolib_volume.o \
@@ -641,7 +642,7 @@ BASEDLL_OBJECTS =  \
 	$(OBJS)\basedll_fs_mem.o \
 	$(OBJS)\basedll_msgout.o \
 	$(OBJS)\basedll_utilscmn.o \
-	$(OBJS)\basedll_evtloopmsw.o \
+	$(OBJS)\basedll_evtloop.o \
 	$(OBJS)\basedll_main.o \
 	$(OBJS)\basedll_mslu.o \
 	$(OBJS)\basedll_volume.o
@@ -757,7 +758,7 @@ BASELIB_OBJECTS =  \
 	$(OBJS)\baselib_fs_mem.o \
 	$(OBJS)\baselib_msgout.o \
 	$(OBJS)\baselib_utilscmn.o \
-	$(OBJS)\baselib_evtloopmsw.o \
+	$(OBJS)\baselib_evtloop.o \
 	$(OBJS)\baselib_main.o \
 	$(OBJS)\baselib_mslu.o \
 	$(OBJS)\baselib_volume.o
@@ -822,7 +823,7 @@ COREDLL_OBJECTS =  \
 	$(OBJS)\coredll_fs_mem.o \
 	$(OBJS)\coredll_msgout.o \
 	$(OBJS)\coredll_utilscmn.o \
-	$(OBJS)\coredll_evtloopmsw.o \
+	$(OBJS)\coredll_evtloop.o \
 	$(OBJS)\coredll_main.o \
 	$(OBJS)\coredll_mslu.o \
 	$(OBJS)\coredll_volume.o \
@@ -841,7 +842,7 @@ CORELIB_OBJECTS =  \
 	$(OBJS)\corelib_fs_mem.o \
 	$(OBJS)\corelib_msgout.o \
 	$(OBJS)\corelib_utilscmn.o \
-	$(OBJS)\corelib_evtloopmsw.o \
+	$(OBJS)\corelib_evtloop.o \
 	$(OBJS)\corelib_main.o \
 	$(OBJS)\corelib_mslu.o \
 	$(OBJS)\corelib_volume.o \
@@ -5618,7 +5619,7 @@ $(OBJS)\monodll_msgout.o: ../../src/common/msgout.cpp
 $(OBJS)\monodll_utilscmn.o: ../../src/common/utilscmn.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monodll_evtloopmsw.o: ../../src/msw/evtloopmsw.cpp
+$(OBJS)\monodll_evtloop.o: ../../src/msw/evtloop.cpp
 	$(CXX) -c -o $@ $(MONODLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monodll_main.o: ../../src/msw/main.cpp
@@ -7780,7 +7781,7 @@ $(OBJS)\monolib_msgout.o: ../../src/common/msgout.cpp
 $(OBJS)\monolib_utilscmn.o: ../../src/common/utilscmn.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\monolib_evtloopmsw.o: ../../src/msw/evtloopmsw.cpp
+$(OBJS)\monolib_evtloop.o: ../../src/msw/evtloop.cpp
 	$(CXX) -c -o $@ $(MONOLIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\monolib_main.o: ../../src/msw/main.cpp
@@ -9942,7 +9943,7 @@ $(OBJS)\basedll_msgout.o: ../../src/common/msgout.cpp
 $(OBJS)\basedll_utilscmn.o: ../../src/common/utilscmn.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\basedll_evtloopmsw.o: ../../src/msw/evtloopmsw.cpp
+$(OBJS)\basedll_evtloop.o: ../../src/msw/evtloop.cpp
 	$(CXX) -c -o $@ $(BASEDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\basedll_main.o: ../../src/msw/main.cpp
@@ -10242,7 +10243,7 @@ $(OBJS)\baselib_msgout.o: ../../src/common/msgout.cpp
 $(OBJS)\baselib_utilscmn.o: ../../src/common/utilscmn.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\baselib_evtloopmsw.o: ../../src/msw/evtloopmsw.cpp
+$(OBJS)\baselib_evtloop.o: ../../src/msw/evtloop.cpp
 	$(CXX) -c -o $@ $(BASELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\baselib_main.o: ../../src/msw/main.cpp
@@ -10353,7 +10354,7 @@ $(OBJS)\coredll_msgout.o: ../../src/common/msgout.cpp
 $(OBJS)\coredll_utilscmn.o: ../../src/common/utilscmn.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\coredll_evtloopmsw.o: ../../src/msw/evtloopmsw.cpp
+$(OBJS)\coredll_evtloop.o: ../../src/msw/evtloop.cpp
 	$(CXX) -c -o $@ $(COREDLL_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\coredll_main.o: ../../src/msw/main.cpp
@@ -11741,7 +11742,7 @@ $(OBJS)\corelib_msgout.o: ../../src/common/msgout.cpp
 $(OBJS)\corelib_utilscmn.o: ../../src/common/utilscmn.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
-$(OBJS)\corelib_evtloopmsw.o: ../../src/msw/evtloopmsw.cpp
+$(OBJS)\corelib_evtloop.o: ../../src/msw/evtloop.cpp
 	$(CXX) -c -o $@ $(CORELIB_CXXFLAGS) $(CPPDEPS) $<
 
 $(OBJS)\corelib_main.o: ../../src/msw/main.cpp

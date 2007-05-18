@@ -1816,7 +1816,7 @@ SOURCE=..\..\src\msw\enhmeta.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\msw\evtloopmsw.cpp
+SOURCE=..\..\src\msw\evtloop.cpp
 # End Source File
 # Begin Source File
 

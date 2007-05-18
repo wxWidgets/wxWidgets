@@ -25,61 +25,95 @@
 #endif
 
 #ifndef WX_PRECOMP
-    #include "wx/window.h"
+    #if wxUSE_GUI
+        #include "wx/window.h"
+    #endif
     #include "wx/app.h"
 #endif //WX_PRECOMP
 
 #include "wx/evtloop.h"
 
-#include "wx/tooltip.h"
+
 #include "wx/except.h"
 #include "wx/ptr_scpd.h"
 
 #include "wx/msw/private.h"
 
-#if wxUSE_THREADS
-    #include "wx/thread.h"
+#if wxUSE_GUI
+    #include "wx/tooltip.h"
+    #if wxUSE_THREADS
+        #include "wx/thread.h"
 
-    // define the list of MSG strutures
-    WX_DECLARE_LIST(MSG, wxMsgList);
+        // define the list of MSG strutures
+        WX_DECLARE_LIST(MSG, wxMsgList);
 
-    #include "wx/listimpl.cpp"
+        #include "wx/listimpl.cpp"
 
-    WX_DEFINE_LIST(wxMsgList)
-#endif // wxUSE_THREADS
+        WX_DEFINE_LIST(wxMsgList)
+    #endif // wxUSE_THREADS
+#endif //wxUSE_GUI
+
+#if wxUSE_BASE
 
 // ============================================================================
-// wxEventLoop implementation
+// wxMSWEventLoopBase implementation
 // ============================================================================
-
-wxWindowMSW *wxEventLoop::ms_winCritical = NULL;
 
 // ----------------------------------------------------------------------------
 // ctor/dtor
 // ----------------------------------------------------------------------------
 
-wxEventLoop::wxEventLoop()
+wxMSWEventLoopBase::wxMSWEventLoopBase()
 {
     m_shouldExit = false;
     m_exitcode = 0;
 }
 
 // ----------------------------------------------------------------------------
-// wxEventLoop message processing
+// wxEventLoop message processing dispatching
 // ----------------------------------------------------------------------------
 
-void wxEventLoop::ProcessMessage(WXMSG *msg)
+bool wxMSWEventLoopBase::Pending() const
 {
-    // give us the chance to preprocess the message first
-    if ( !PreProcessMessage(msg) )
-    {
-        // if it wasn't done, dispatch it to the corresponding window
-        ::TranslateMessage(msg);
-        ::DispatchMessage(msg);
-    }
+    MSG msg;
+    return ::PeekMessage(&msg, 0, 0, 0, PM_NOREMOVE) != 0;
 }
 
-bool wxEventLoop::IsChildOfCriticalWindow(wxWindowMSW *win)
+bool wxMSWEventLoopBase::GetNextMessage(WXMSG* msg)
+{
+    wxCHECK_MSG( IsRunning(), false, _T("can't get messages if not running") );
+
+    const BOOL rc = ::GetMessage(msg, NULL, 0, 0);
+
+    if ( rc == 0 )
+    {
+        // got WM_QUIT
+        return false;
+    }
+
+    if ( rc == -1 )
+    {
+        // should never happen, but let's test for it nevertheless
+        wxLogLastError(wxT("GetMessage"));
+
+        // still break from the loop
+        return false;
+    }
+
+    return true;
+}
+
+#endif // wxUSE_BASE
+
+#if wxUSE_GUI
+
+// ============================================================================
+// GUI wxEventLoop implementation
+// ============================================================================
+
+wxWindowMSW *wxGUIEventLoop::ms_winCritical = NULL;
+
+bool wxGUIEventLoop::IsChildOfCriticalWindow(wxWindowMSW *win)
 {
     while ( win )
     {
@@ -92,7 +126,7 @@ bool wxEventLoop::IsChildOfCriticalWindow(wxWindowMSW *win)
     return false;
 }
 
-bool wxEventLoop::PreProcessMessage(WXMSG *msg)
+bool wxGUIEventLoop::PreProcessMessage(WXMSG *msg)
 {
     HWND hwnd = msg->hwnd;
     wxWindow *wndThis = wxGetWindowFromHWND((WXHWND)hwnd);
@@ -187,57 +221,22 @@ bool wxEventLoop::PreProcessMessage(WXMSG *msg)
     return false;
 }
 
-// ----------------------------------------------------------------------------
-// wxEventLoop running and exiting
-// ----------------------------------------------------------------------------
-
-// ----------------------------------------------------------------------------
-// wxEventLoopManual customization
-// ----------------------------------------------------------------------------
-
-void wxEventLoop::OnNextIteration()
+void wxGUIEventLoop::ProcessMessage(WXMSG *msg)
 {
-#if wxUSE_THREADS
-    wxMutexGuiLeaveOrEnter();
-#endif // wxUSE_THREADS
+    // give us the chance to preprocess the message first
+    if ( !PreProcessMessage(msg) )
+    {
+        // if it wasn't done, dispatch it to the corresponding window
+        ::TranslateMessage(msg);
+        ::DispatchMessage(msg);
+    }
 }
 
-void wxEventLoop::WakeUp()
-{
-    ::PostMessage(NULL, WM_NULL, 0, 0);
-}
-
-// ----------------------------------------------------------------------------
-// wxEventLoop message processing dispatching
-// ----------------------------------------------------------------------------
-
-bool wxEventLoop::Pending() const
+bool wxGUIEventLoop::Dispatch()
 {
     MSG msg;
-    return ::PeekMessage(&msg, 0, 0, 0, PM_NOREMOVE) != 0;
-}
-
-bool wxEventLoop::Dispatch()
-{
-    wxCHECK_MSG( IsRunning(), false, _T("can't call Dispatch() if not running") );
-
-    MSG msg;
-    BOOL rc = ::GetMessage(&msg, (HWND) NULL, 0, 0);
-
-    if ( rc == 0 )
-    {
-        // got WM_QUIT
+    if ( !GetNextMessage(&msg) )
         return false;
-    }
-
-    if ( rc == -1 )
-    {
-        // should never happen, but let's test for it nevertheless
-        wxLogLastError(wxT("GetMessage"));
-
-        // still break from the loop
-        return false;
-    }
 
 #if wxUSE_THREADS
     wxASSERT_MSG( wxThread::IsMain(),
@@ -294,3 +293,51 @@ bool wxEventLoop::Dispatch()
     return true;
 }
 
+void wxGUIEventLoop::OnNextIteration()
+{
+#if wxUSE_THREADS
+    wxMutexGuiLeaveOrEnter();
+#endif // wxUSE_THREADS
+}
+
+void wxGUIEventLoop::WakeUp()
+{
+    ::PostMessage(NULL, WM_NULL, 0, 0);
+}
+
+#else // !wxUSE_GUI
+
+void wxConsoleEventLoop::OnNextIteration()
+{
+    if ( wxTheApp )
+        wxTheApp->ProcessPendingEvents();
+}
+
+void wxConsoleEventLoop::WakeUp()
+{
+#if wxUSE_THREADS
+    wxWakeUpMainThread();
+#endif
+}
+
+bool wxConsoleEventLoop::Dispatch()
+{
+    MSG msg;
+    if ( !GetNextMessage(&msg) )
+        return false;
+
+    if ( msg.message == WM_TIMER )
+    {
+        TIMERPROC proc = (TIMERPROC)msg.lParam;
+        if ( proc )
+            (*proc)(NULL, 0, msg.wParam, 0);
+    }
+    else
+    {
+        wxLogDebug(_T("Ignoring unexpected message %d"), msg.message);
+    }
+
+    return !m_shouldExit;
+}
+
+#endif //wxUSE_GUI

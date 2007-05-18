@@ -108,7 +108,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/msw/utilsexc.cpp
 </set>
 <set var="BASE_AND_GUI_WIN32_SRC" hints="files">
-    src/msw/evtloopmsw.cpp
+    src/msw/evtloop.cpp
     src/msw/main.cpp
     src/msw/mslu.cpp
     src/msw/volume.cpp
