@@ -171,7 +171,7 @@ bool wxAppConsole::Initialize(int& argcOrig, wxChar **argvOrig)
     wxPendingEventsLocker = new wxCriticalSection;
 #endif
 
-    //create port specific main loop
+    // create port-specific main loop
     m_mainLoop = CreateMainLoop();
 
 #ifndef __WXPALMOS__
@@ -192,6 +192,9 @@ wxEventLoop *wxAppConsole::CreateMainLoop()
 
 void wxAppConsole::CleanUp()
 {
+    delete m_mainLoop;
+    m_mainLoop = NULL;
+
     delete wxPendingEvents;
     wxPendingEvents = NULL;
 
