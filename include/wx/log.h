@@ -181,6 +181,9 @@ public:
     // current is NULL?
     static void DontCreateOnDemand();
 
+    // Make GetActiveTarget() create a new log object again.
+    static void DoCreateOnDemand();
+
     // log the count of repeating messages instead of logging the messages
     // multiple times
     static void SetRepetitionCounting(bool bRepetCounting = true)

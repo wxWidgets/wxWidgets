@@ -575,6 +575,11 @@ void wxLog::DontCreateOnDemand()
     ClearTraceMasks();
 }
 
+void wxLog::DoCreateOnDemand()
+{
+    ms_bAutoCreate = true;
+}
+
 void wxLog::RemoveTraceMask(const wxString& str)
 {
     int index = ms_aTraceMasks.Index(str);
