@@ -7,7 +7,7 @@ a wxGLCanvas.
 
 More precisely, you first need to create a wxGLCanvas window and then create an
 instance of a \helpref{wxGLContext}{wxglcontext} that is initialized with this
-wxGLCanvas and then later use either \helpref{wxGLCanvas::SetCurrent}{wxglcanvassetcurrentrc} 
+wxGLCanvas and then later use either \helpref{wxGLCanvas::SetCurrent}{wxglcanvassetcurrent} 
 with the instance of the \helpref{wxGLContext}{wxglcontext} or 
 \helpref{wxGLContext::SetCurrent}{wxglcontextsetcurrent} with the instance of
 the \helpref{wxGLCanvas}{wxglcanvas} (which might be not the same as was used
@@ -28,7 +28,7 @@ the {\it attribList} parameter. The values that should be set up and their meani
 Notice that OpenGL is not enabled by default. To switch it on, you need to edit
 setup.h under Windows and set {\tt wxUSE\_GLCANVAS} to $1$ (you may also need
 to have to add {\tt opengl32.lib} and {\tt glu32.lib} to the list of libraries
-your program is linked with). On Unix, pass \verb=--with-opengl= to configure.
+your program is linked with). On Unix, pass {\tt --with-opengl} to configure.
 
 \wxheading{Derived from}
 
