@@ -692,7 +692,12 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
     wxString url(urlOrig);
     wxURI uri(url);
     if ( !uri.HasScheme() )
-        url.Prepend(wxT("http://"));
+    {
+        if (wxFileExists(urlOrig))
+            url.Prepend( wxT("file://") );
+        else
+            url.Prepend(wxT("http://"));
+    }
 
 
 #if defined(__WXMSW__)
