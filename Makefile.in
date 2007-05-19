@@ -770,7 +770,7 @@ ALL_BASE_SOURCES =  \
 	src/unix/utilsunx.cpp \
 	src/mac/carbon/utils.cpp \
 	src/mac/carbon/uma.cpp \
-	src/msw/evtloopmsw.cpp \
+	src/msw/evtloop.cpp \
 	src/msw/main.cpp \
 	src/msw/mslu.cpp \
 	src/msw/volume.cpp \
@@ -3574,7 +3574,7 @@ COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS =  \
 @COND_PLATFORM_UNIX_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS \
 @COND_PLATFORM_UNIX_1@	= monodll_utilsunx.o
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS \
-@COND_PLATFORM_WIN32_1@	= monodll_evtloopmsw.o monodll_main.o monodll_mslu.o \
+@COND_PLATFORM_WIN32_1@	= monodll_evtloop.o monodll_main.o monodll_mslu.o \
 @COND_PLATFORM_WIN32_1@	monodll_volume.o
 @COND_TOOLKIT_MAC@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS = \
 @COND_TOOLKIT_MAC@	monodll_utils.o monodll_uma.o
@@ -5409,7 +5409,7 @@ COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_1 =  \
 @COND_PLATFORM_UNIX_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_1 \
 @COND_PLATFORM_UNIX_1@	= monolib_utilsunx.o
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_1 \
-@COND_PLATFORM_WIN32_1@	= monolib_evtloopmsw.o monolib_main.o monolib_mslu.o \
+@COND_PLATFORM_WIN32_1@	= monolib_evtloop.o monolib_main.o monolib_mslu.o \
 @COND_PLATFORM_WIN32_1@	monolib_volume.o
 @COND_TOOLKIT_MAC@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_MAC@	monolib_utils.o monolib_uma.o
@@ -7281,7 +7281,7 @@ COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_2 =  \
 @COND_PLATFORM_UNIX_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_2 \
 @COND_PLATFORM_UNIX_1@	= basedll_utilsunx.o
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_2 \
-@COND_PLATFORM_WIN32_1@	= basedll_evtloopmsw.o basedll_main.o basedll_mslu.o \
+@COND_PLATFORM_WIN32_1@	= basedll_evtloop.o basedll_main.o basedll_mslu.o \
 @COND_PLATFORM_WIN32_1@	basedll_volume.o
 @COND_TOOLKIT_MAC@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_2 = \
 @COND_TOOLKIT_MAC@	basedll_utils.o basedll_uma.o
@@ -7487,7 +7487,7 @@ COND_TOOLKIT_X11___BASE_MACOSX_SRC_OBJECTS_3 =  \
 @COND_PLATFORM_UNIX_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_3 \
 @COND_PLATFORM_UNIX_1@	= baselib_utilsunx.o
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_3 \
-@COND_PLATFORM_WIN32_1@	= baselib_evtloopmsw.o baselib_main.o baselib_mslu.o \
+@COND_PLATFORM_WIN32_1@	= baselib_evtloop.o baselib_main.o baselib_mslu.o \
 @COND_PLATFORM_WIN32_1@	baselib_volume.o
 @COND_TOOLKIT_MAC@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_3 = \
 @COND_TOOLKIT_MAC@	baselib_utils.o baselib_uma.o
@@ -7629,7 +7629,7 @@ COND_USE_SOSYMLINKS_1___coredll___so_symlinks_uninst_cmd = rm -f \
 @COND_PLATFORM_UNIX_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_4 \
 @COND_PLATFORM_UNIX_1@	= coredll_utilsunx.o
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_4 \
-@COND_PLATFORM_WIN32_1@	= coredll_evtloopmsw.o coredll_main.o coredll_mslu.o \
+@COND_PLATFORM_WIN32_1@	= coredll_evtloop.o coredll_main.o coredll_mslu.o \
 @COND_PLATFORM_WIN32_1@	coredll_volume.o
 @COND_TOOLKIT_MAC@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_4 = \
 @COND_TOOLKIT_MAC@	coredll_utils.o coredll_uma.o
@@ -9084,7 +9084,7 @@ COND_MONOLITHIC_0_SHARED_0_USE_GUI_1___corelib___depname = \
 @COND_PLATFORM_UNIX_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_5 \
 @COND_PLATFORM_UNIX_1@	= corelib_utilsunx.o
 @COND_PLATFORM_WIN32_1@__BASE_AND_GUI_PLATFORM_SRC_OBJECTS_5 \
-@COND_PLATFORM_WIN32_1@	= corelib_evtloopmsw.o corelib_main.o corelib_mslu.o \
+@COND_PLATFORM_WIN32_1@	= corelib_evtloop.o corelib_main.o corelib_mslu.o \
 @COND_PLATFORM_WIN32_1@	corelib_volume.o
 @COND_TOOLKIT_MAC@__BASE_AND_GUI_TOOLKIT_SRC_OBJECTS_5 = \
 @COND_TOOLKIT_MAC@	corelib_utils.o corelib_uma.o
@@ -13655,9 +13655,6 @@ monodll_msgout.o: $(srcdir)/src/common/msgout.cpp $(MONODLL_ODEP)
 monodll_utilscmn.o: $(srcdir)/src/common/utilscmn.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/common/utilscmn.cpp
 
-monodll_evtloopmsw.o: $(srcdir)/src/msw/evtloopmsw.cpp $(MONODLL_ODEP)
-	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/evtloopmsw.cpp
-
 monodll_mslu.o: $(srcdir)/src/msw/mslu.cpp $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/mslu.cpp
 
@@ -14696,6 +14693,36 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1@monodll_utilsunx.o: $(srcdir)/src/unix/utilsunx.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/unix/utilsunx.cpp
 
+@COND_PLATFORM_WIN32_1@monodll_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(MONODLL_ODEP)
+@COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_evtloop.o: $(srcdir)/src/gtk/evtloop.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/evtloop.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monodll_evtloop.o: $(srcdir)/src/gtk1/evtloop.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/evtloop.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@monodll_evtloop.o: $(srcdir)/src/x11/evtloop.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/x11/evtloop.cpp
+
+@COND_TOOLKIT_MGL_USE_GUI_1@monodll_evtloop.o: $(srcdir)/src/mgl/evtloop.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/evtloop.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monodll_evtloop.o: $(srcdir)/src/dfb/evtloop.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/evtloop.cpp
+
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_evtloop.o: $(srcdir)/src/motif/evtloop.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/evtloop.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_evtloop.o: $(srcdir)/src/mac/carbon/evtloop.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/evtloop.cpp
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_evtloop.o: $(srcdir)/src/cocoa/evtloop.mm $(MONODLL_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/cocoa/evtloop.mm
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_evtloop.o: $(srcdir)/src/os2/evtloop.cpp $(MONODLL_ODEP)
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/evtloop.cpp
+
 @COND_PLATFORM_WIN32_1@monodll_main.o: $(srcdir)/src/msw/main.cpp $(MONODLL_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/msw/main.cpp
 
@@ -15307,33 +15334,6 @@ monodll_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONODLL_ODEP)
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_dnd.o: $(srcdir)/src/os2/dnd.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/dnd.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_evtloop.o: $(srcdir)/src/gtk/evtloop.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/evtloop.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monodll_evtloop.o: $(srcdir)/src/gtk1/evtloop.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk1/evtloop.cpp
-
-@COND_TOOLKIT_X11_USE_GUI_1@monodll_evtloop.o: $(srcdir)/src/x11/evtloop.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/x11/evtloop.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monodll_evtloop.o: $(srcdir)/src/mgl/evtloop.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mgl/evtloop.cpp
-
-@COND_TOOLKIT_DFB_USE_GUI_1@monodll_evtloop.o: $(srcdir)/src/dfb/evtloop.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/dfb/evtloop.cpp
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monodll_evtloop.o: $(srcdir)/src/motif/evtloop.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/motif/evtloop.cpp
-
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monodll_evtloop.o: $(srcdir)/src/mac/carbon/evtloop.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/evtloop.cpp
-
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monodll_evtloop.o: $(srcdir)/src/cocoa/evtloop.mm $(MONODLL_ODEP)
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/cocoa/evtloop.mm
-
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monodll_evtloop.o: $(srcdir)/src/os2/evtloop.cpp $(MONODLL_ODEP)
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/os2/evtloop.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monodll_font.o: $(srcdir)/src/gtk/font.cpp $(MONODLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/gtk/font.cpp
@@ -17948,9 +17948,6 @@ monolib_msgout.o: $(srcdir)/src/common/msgout.cpp $(MONOLIB_ODEP)
 monolib_utilscmn.o: $(srcdir)/src/common/utilscmn.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/common/utilscmn.cpp
 
-monolib_evtloopmsw.o: $(srcdir)/src/msw/evtloopmsw.cpp $(MONOLIB_ODEP)
-	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/evtloopmsw.cpp
-
 monolib_mslu.o: $(srcdir)/src/msw/mslu.cpp $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/mslu.cpp
 
@@ -18989,6 +18986,36 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1@monolib_utilsunx.o: $(srcdir)/src/unix/utilsunx.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/unix/utilsunx.cpp
 
+@COND_PLATFORM_WIN32_1@monolib_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(MONOLIB_ODEP)
+@COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_evtloop.o: $(srcdir)/src/gtk/evtloop.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/evtloop.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monolib_evtloop.o: $(srcdir)/src/gtk1/evtloop.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk1/evtloop.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@monolib_evtloop.o: $(srcdir)/src/x11/evtloop.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/x11/evtloop.cpp
+
+@COND_TOOLKIT_MGL_USE_GUI_1@monolib_evtloop.o: $(srcdir)/src/mgl/evtloop.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/evtloop.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@monolib_evtloop.o: $(srcdir)/src/dfb/evtloop.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/evtloop.cpp
+
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_evtloop.o: $(srcdir)/src/motif/evtloop.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/evtloop.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_evtloop.o: $(srcdir)/src/mac/carbon/evtloop.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/evtloop.cpp
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_evtloop.o: $(srcdir)/src/cocoa/evtloop.mm $(MONOLIB_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/cocoa/evtloop.mm
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_evtloop.o: $(srcdir)/src/os2/evtloop.cpp $(MONOLIB_ODEP)
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/evtloop.cpp
+
 @COND_PLATFORM_WIN32_1@monolib_main.o: $(srcdir)/src/msw/main.cpp $(MONOLIB_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/msw/main.cpp
 
@@ -19600,33 +19627,6 @@ monolib_sound_sdl.o: $(srcdir)/src/unix/sound_sdl.cpp $(MONOLIB_ODEP)
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_dnd.o: $(srcdir)/src/os2/dnd.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/dnd.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_evtloop.o: $(srcdir)/src/gtk/evtloop.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/evtloop.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@monolib_evtloop.o: $(srcdir)/src/gtk1/evtloop.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk1/evtloop.cpp
-
-@COND_TOOLKIT_X11_USE_GUI_1@monolib_evtloop.o: $(srcdir)/src/x11/evtloop.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/x11/evtloop.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@monolib_evtloop.o: $(srcdir)/src/mgl/evtloop.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mgl/evtloop.cpp
-
-@COND_TOOLKIT_DFB_USE_GUI_1@monolib_evtloop.o: $(srcdir)/src/dfb/evtloop.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/dfb/evtloop.cpp
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@monolib_evtloop.o: $(srcdir)/src/motif/evtloop.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/motif/evtloop.cpp
-
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@monolib_evtloop.o: $(srcdir)/src/mac/carbon/evtloop.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/evtloop.cpp
-
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@monolib_evtloop.o: $(srcdir)/src/cocoa/evtloop.mm $(MONOLIB_ODEP)
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/cocoa/evtloop.mm
-
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@monolib_evtloop.o: $(srcdir)/src/os2/evtloop.cpp $(MONOLIB_ODEP)
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/os2/evtloop.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@monolib_font.o: $(srcdir)/src/gtk/font.cpp $(MONOLIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/gtk/font.cpp
@@ -22244,8 +22244,8 @@ basedll_msgout.o: $(srcdir)/src/common/msgout.cpp $(BASEDLL_ODEP)
 basedll_utilscmn.o: $(srcdir)/src/common/utilscmn.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/common/utilscmn.cpp
 
-basedll_evtloopmsw.o: $(srcdir)/src/msw/evtloopmsw.cpp $(BASEDLL_ODEP)
-	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/evtloopmsw.cpp
+basedll_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(BASEDLL_ODEP)
+	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
 
 basedll_main.o: $(srcdir)/src/msw/main.cpp $(BASEDLL_ODEP)
 	$(CXXC) -c -o $@ $(BASEDLL_CXXFLAGS) $(srcdir)/src/msw/main.cpp
@@ -22988,8 +22988,8 @@ baselib_msgout.o: $(srcdir)/src/common/msgout.cpp $(BASELIB_ODEP)
 baselib_utilscmn.o: $(srcdir)/src/common/utilscmn.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/common/utilscmn.cpp
 
-baselib_evtloopmsw.o: $(srcdir)/src/msw/evtloopmsw.cpp $(BASELIB_ODEP)
-	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/evtloopmsw.cpp
+baselib_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(BASELIB_ODEP)
+	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
 
 baselib_main.o: $(srcdir)/src/msw/main.cpp $(BASELIB_ODEP)
 	$(CXXC) -c -o $@ $(BASELIB_CXXFLAGS) $(srcdir)/src/msw/main.cpp
@@ -23558,9 +23558,6 @@ coredll_msgout.o: $(srcdir)/src/common/msgout.cpp $(COREDLL_ODEP)
 coredll_utilscmn.o: $(srcdir)/src/common/utilscmn.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/common/utilscmn.cpp
 
-coredll_evtloopmsw.o: $(srcdir)/src/msw/evtloopmsw.cpp $(COREDLL_ODEP)
-	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/evtloopmsw.cpp
-
 coredll_mslu.o: $(srcdir)/src/msw/mslu.cpp $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/mslu.cpp
 
@@ -23779,6 +23776,36 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_PLATFORM_MACOSX_1@coredll_utilsunx.o: $(srcdir)/src/unix/utilsunx.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/unix/utilsunx.cpp
+
+@COND_PLATFORM_WIN32_1@coredll_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(COREDLL_ODEP)
+@COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_evtloop.o: $(srcdir)/src/gtk/evtloop.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/evtloop.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@coredll_evtloop.o: $(srcdir)/src/gtk1/evtloop.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk1/evtloop.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@coredll_evtloop.o: $(srcdir)/src/x11/evtloop.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/x11/evtloop.cpp
+
+@COND_TOOLKIT_MGL_USE_GUI_1@coredll_evtloop.o: $(srcdir)/src/mgl/evtloop.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/evtloop.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@coredll_evtloop.o: $(srcdir)/src/dfb/evtloop.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/evtloop.cpp
+
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_evtloop.o: $(srcdir)/src/motif/evtloop.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/evtloop.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_evtloop.o: $(srcdir)/src/mac/carbon/evtloop.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/evtloop.cpp
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_evtloop.o: $(srcdir)/src/cocoa/evtloop.mm $(COREDLL_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/cocoa/evtloop.mm
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_evtloop.o: $(srcdir)/src/os2/evtloop.cpp $(COREDLL_ODEP)
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/os2/evtloop.cpp
 
 @COND_PLATFORM_WIN32_1@coredll_main.o: $(srcdir)/src/msw/main.cpp $(COREDLL_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/msw/main.cpp
@@ -24394,33 +24421,6 @@ coredll_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(COREDLL_ODEP)
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_dnd.o: $(srcdir)/src/os2/dnd.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/os2/dnd.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_evtloop.o: $(srcdir)/src/gtk/evtloop.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/evtloop.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@coredll_evtloop.o: $(srcdir)/src/gtk1/evtloop.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk1/evtloop.cpp
-
-@COND_TOOLKIT_X11_USE_GUI_1@coredll_evtloop.o: $(srcdir)/src/x11/evtloop.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/x11/evtloop.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@coredll_evtloop.o: $(srcdir)/src/mgl/evtloop.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mgl/evtloop.cpp
-
-@COND_TOOLKIT_DFB_USE_GUI_1@coredll_evtloop.o: $(srcdir)/src/dfb/evtloop.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/dfb/evtloop.cpp
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@coredll_evtloop.o: $(srcdir)/src/motif/evtloop.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/motif/evtloop.cpp
-
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@coredll_evtloop.o: $(srcdir)/src/mac/carbon/evtloop.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/evtloop.cpp
-
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@coredll_evtloop.o: $(srcdir)/src/cocoa/evtloop.mm $(COREDLL_ODEP)
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/cocoa/evtloop.mm
-
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@coredll_evtloop.o: $(srcdir)/src/os2/evtloop.cpp $(COREDLL_ODEP)
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/os2/evtloop.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@coredll_font.o: $(srcdir)/src/gtk/font.cpp $(COREDLL_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/gtk/font.cpp
@@ -26513,9 +26513,6 @@ corelib_msgout.o: $(srcdir)/src/common/msgout.cpp $(CORELIB_ODEP)
 corelib_utilscmn.o: $(srcdir)/src/common/utilscmn.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/common/utilscmn.cpp
 
-corelib_evtloopmsw.o: $(srcdir)/src/msw/evtloopmsw.cpp $(CORELIB_ODEP)
-	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/evtloopmsw.cpp
-
 corelib_mslu.o: $(srcdir)/src/msw/mslu.cpp $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/mslu.cpp
 
@@ -26734,6 +26731,36 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_PLATFORM_MACOSX_1@corelib_utilsunx.o: $(srcdir)/src/unix/utilsunx.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_MACOSX_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/unix/utilsunx.cpp
+
+@COND_PLATFORM_WIN32_1@corelib_evtloop.o: $(srcdir)/src/msw/evtloop.cpp $(CORELIB_ODEP)
+@COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/evtloop.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_evtloop.o: $(srcdir)/src/gtk/evtloop.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/evtloop.cpp
+
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@corelib_evtloop.o: $(srcdir)/src/gtk1/evtloop.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk1/evtloop.cpp
+
+@COND_TOOLKIT_X11_USE_GUI_1@corelib_evtloop.o: $(srcdir)/src/x11/evtloop.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/x11/evtloop.cpp
+
+@COND_TOOLKIT_MGL_USE_GUI_1@corelib_evtloop.o: $(srcdir)/src/mgl/evtloop.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/evtloop.cpp
+
+@COND_TOOLKIT_DFB_USE_GUI_1@corelib_evtloop.o: $(srcdir)/src/dfb/evtloop.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/evtloop.cpp
+
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_evtloop.o: $(srcdir)/src/motif/evtloop.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/evtloop.cpp
+
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_evtloop.o: $(srcdir)/src/mac/carbon/evtloop.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/evtloop.cpp
+
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_evtloop.o: $(srcdir)/src/cocoa/evtloop.mm $(CORELIB_ODEP)
+@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/cocoa/evtloop.mm
+
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_evtloop.o: $(srcdir)/src/os2/evtloop.cpp $(CORELIB_ODEP)
+@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/os2/evtloop.cpp
 
 @COND_PLATFORM_WIN32_1@corelib_main.o: $(srcdir)/src/msw/main.cpp $(CORELIB_ODEP)
 @COND_PLATFORM_WIN32_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/msw/main.cpp
@@ -27349,33 +27376,6 @@ corelib_win32.o: $(srcdir)/src/univ/themes/win32.cpp $(CORELIB_ODEP)
 
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_dnd.o: $(srcdir)/src/os2/dnd.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/os2/dnd.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_evtloop.o: $(srcdir)/src/gtk/evtloop.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/evtloop.cpp
-
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@corelib_evtloop.o: $(srcdir)/src/gtk1/evtloop.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_GTK_TOOLKIT_VERSION__USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk1/evtloop.cpp
-
-@COND_TOOLKIT_X11_USE_GUI_1@corelib_evtloop.o: $(srcdir)/src/x11/evtloop.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_X11_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/x11/evtloop.cpp
-
-@COND_TOOLKIT_MGL_USE_GUI_1@corelib_evtloop.o: $(srcdir)/src/mgl/evtloop.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MGL_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mgl/evtloop.cpp
-
-@COND_TOOLKIT_DFB_USE_GUI_1@corelib_evtloop.o: $(srcdir)/src/dfb/evtloop.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_DFB_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/dfb/evtloop.cpp
-
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@corelib_evtloop.o: $(srcdir)/src/motif/evtloop.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MOTIF_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/motif/evtloop.cpp
-
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@corelib_evtloop.o: $(srcdir)/src/mac/carbon/evtloop.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_MAC_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/evtloop.cpp
-
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@corelib_evtloop.o: $(srcdir)/src/cocoa/evtloop.mm $(CORELIB_ODEP)
-@COND_TOOLKIT_COCOA_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/cocoa/evtloop.mm
-
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@corelib_evtloop.o: $(srcdir)/src/os2/evtloop.cpp $(CORELIB_ODEP)
-@COND_TOOLKIT_PM_USE_GUI_1_WXUNIV_0@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/os2/evtloop.cpp
 
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@corelib_font.o: $(srcdir)/src/gtk/font.cpp $(CORELIB_ODEP)
 @COND_TOOLKIT_GTK_TOOLKIT_VERSION_2_USE_GUI_1@	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/gtk/font.cpp
