@@ -220,12 +220,6 @@ public:
     virtual void ApplyToolTip( GtkTooltips *tips, const wxChar *tip );
 #endif // wxUSE_TOOLTIPS
 
-    // Called from GTK signal handlers. it indicates that
-    // the layouting functions have to be called later on
-    // (i.e. in idle time, implemented in OnInternalIdle() ).
-    void GtkUpdateSize() { m_sizeSet = false; }
-
-
     // Called when a window should delay showing itself
     // until idle time. This partly mimmicks defered
     // sizing under MSW.
@@ -304,7 +298,6 @@ public:
     bool                 m_nativeSizeEvent:1;   // wxGLCanvas sends wxSizeEvent upon "alloc_size"
     bool                 m_hasScrolling:1;
     bool                 m_hasVMT:1;
-    bool                 m_sizeSet:1;
     bool                 m_resizing:1;
     bool                 m_hasFocus:1;          // true if == FindFocus()
     bool                 m_isScrolling:1;       // dragging scrollbar thumb?

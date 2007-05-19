@@ -2246,7 +2246,6 @@ void wxWindowGTK::Init()
     m_width = 0;
     m_height = 0;
 
-    m_sizeSet = false;
     m_hasVMT = false;
     m_isBeingDeleted = false;
 

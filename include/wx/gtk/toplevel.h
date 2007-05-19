@@ -103,6 +103,8 @@ public:
     long          m_gdkFunc,
                   m_gdkDecor;
 
+    bool m_sizeSet;
+
     // private gtk_timeout_add result for mimicing wxUSER_ATTENTION_INFO and
     // wxUSER_ATTENTION_ERROR difference, -2 for no hint, -1 for ERROR hint, rest for GtkTimeout handle.
     int m_urgency_hint;
@@ -115,6 +117,8 @@ public:
 
     // return the full size of the window without WM decorations
     void GTKDoGetSize(int *width, int *height) const;
+
+    void GtkUpdateSize() { m_sizeSet = false; }
 
 protected:
     // common part of all ctors

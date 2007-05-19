@@ -424,7 +424,7 @@ void wxMDIChildFrame::SetTitle( const wxString &title )
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxWindow *win )
+static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* alloc, wxMDIChildFrame *win )
 {
     if ((win->m_x == alloc->x) &&
         (win->m_y == alloc->y) &&
