@@ -44,6 +44,7 @@ rm debian/control
 ./debian/rules debian/control
 dpkg-buildpackage -rfakeroot > /dev/null
 
+sed -i '/^WX_UNICODE := /s/0/1/' debian/rules
 fakeroot ./debian/rules clean
 
 ) 2>&1 | tee $wx_dir/debian/build.log
