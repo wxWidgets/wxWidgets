@@ -353,16 +353,6 @@ void wxMDIChildFrame::DoSetSize( int x, int y, int width, int height, int sizeFl
     wxWindow::DoSetSize( x, y, width, height, sizeFlags );
 }
 
-void wxMDIChildFrame::DoSetClientSize(int width, int height)
-{
-    wxWindow::DoSetClientSize( width, height );
-}
-
-void wxMDIChildFrame::DoGetClientSize( int *width, int *height ) const
-{
-    wxWindow::DoGetClientSize( width, height );
-}
-
 void wxMDIChildFrame::AddChild( wxWindowBase *child )
 {
     wxWindow::AddChild(child);

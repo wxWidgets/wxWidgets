@@ -91,7 +91,6 @@ protected:
 #endif // wxUSE_STATUSBAR
 
     // override wxWindow methods to take into account tool/menu/statusbars
-    virtual void DoSetClientSize(int width, int height);
     virtual void DoGetClientSize( int *width, int *height ) const;
 
 #if wxUSE_MENUS_NATIVE

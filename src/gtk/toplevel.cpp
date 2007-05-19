@@ -977,11 +977,6 @@ void wxTopLevelWindowGTK::DoGetClientSize( int *width, int *height ) const
     }
 }
 
-void wxTopLevelWindowGTK::DoSetClientSize( int width, int height )
-{
-    GTKDoSetSize(width + m_miniEdge*2, height  + m_miniEdge*2 + m_miniTitle);
-}
-
 void wxTopLevelWindowGTK::DoSetSizeHints( int minW, int minH,
                                           int maxW, int maxH,
                                           int incW, int incH )

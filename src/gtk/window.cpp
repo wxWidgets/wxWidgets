@@ -2868,25 +2868,9 @@ void wxWindowGTK::DoSetClientSize( int width, int height )
 {
     wxCHECK_RET( (m_widget != NULL), wxT("invalid window") );
 
-    if (m_wxwindow)
-    {
-        int dw = 0;
-        int dh = 0;
-
-        if (m_hasScrolling)
-        {
-            GetScrollbarWidth(m_widget, dw, dh);
-        }
-
-        const int border = GTK_CONTAINER(m_wxwindow)->border_width;
-        dw += 2 * border;
-        dh += 2 * border;
-
-        width += dw;
-        height += dh;
-    }
-
-    SetSize(width, height);
+    const wxSize size = GetSize();
+    const wxSize clientSize = GetClientSize();
+    SetSize(width + (size.x - clientSize.x), height + (size.y - clientSize.y));
 }
 
 void wxWindowGTK::DoGetClientSize( int *width, int *height ) const

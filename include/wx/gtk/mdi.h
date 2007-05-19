@@ -164,8 +164,6 @@ protected:
     virtual void DoSetSize(int x, int y,
                            int width, int height,
                            int sizeFlags = wxSIZE_AUTO);
-    virtual void DoSetClientSize(int width, int height);
-    virtual void DoGetClientSize( int *width, int *height ) const;
 
 private:
     DECLARE_EVENT_TABLE()

@@ -265,55 +265,6 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
         *height = 0;
 }
 
-void wxFrame::DoSetClientSize( int width, int height )
-{
-    wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
-
-#if wxUSE_MENUS_NATIVE
-        // menu bar
-        if (m_frameMenuBar && !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOMENUBAR) != 0))
-        {
-            if (!m_menuBarDetached)
-                height += m_menuBarHeight;
-            else
-                height += wxPLACE_HOLDER;
-        }
-#endif // wxUSE_MENUS_NATIVE
-
-#if wxUSE_STATUSBAR
-        // status bar
-        if (m_frameStatusBar && m_frameStatusBar->IsShown() &&
-            !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOSTATUSBAR) != 0))
-            height += wxSTATUS_HEIGHT;
-#endif
-
-#if wxUSE_TOOLBAR
-        // tool bar
-        if (m_frameToolBar && m_frameToolBar->IsShown())
-        {
-            if (m_toolBarDetached)
-            {
-                height += wxPLACE_HOLDER;
-            }
-            else
-            {
-                int x, y;
-                m_frameToolBar->GetSize( &x, &y );
-                if ( m_frameToolBar->IsVertical() )
-                {
-                    width += x;
-                }
-                else
-                {
-                    height += y;
-                }
-            }
-        }
-#endif
-
-    wxTopLevelWindow::DoSetClientSize( width, height );
-}
-
 void wxFrame::GtkOnSize()
 {
     // avoid recursions

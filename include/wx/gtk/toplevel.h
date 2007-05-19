@@ -120,8 +120,7 @@ protected:
     // common part of all ctors
     void Init();
 
-    // move the window to the specified location and resize it: this is called
-    // from both DoSetSize() and DoSetClientSize()
+    // move the window to the specified location and resize it
     virtual void DoMoveWindow(int x, int y, int width, int height);
 
     // take into account WM decorations here
@@ -131,11 +130,10 @@ protected:
                            int sizeFlags = wxSIZE_AUTO);
 
     // override these methods to take into account tool/menu/statusbars
-    virtual void DoSetClientSize(int width, int height);
     virtual void DoGetClientSize(int *width, int *height) const;
 
     // this method takes the size of the window not taking account of
-    // decorations and is used by both DoSetSize() and DoSetClientSize()
+    // decorations
     void GTKDoSetSize(int width, int height);
 
 
