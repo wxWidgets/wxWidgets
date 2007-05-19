@@ -3250,7 +3250,10 @@ frame or dialog containing it, or {\tt NULL}.
 
 Open the \arg{url} in user's default browser. If \arg{flags} parameter contains
 \texttt{wxBROWSER\_NEW\_WINDOW} flag, a new window is opened for the URL
-(currently this is only supported under Windows).
+(currently this is only supported under Windows). The \arg{url} may also be a
+local file path (with or without \texttt{file://} prefix), if it doesn't
+correspond to an existing file and the URL has no scheme \texttt{http://} is
+prepended to it by default.
 
 Returns \true if the application was successfully launched.
 
