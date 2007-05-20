@@ -209,52 +209,40 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
-    wxTopLevelWindow::DoGetClientSize( width, height );
+    wxFrameBase::DoGetClientSize(width, height);
 
     if (height)
     {
 #if wxUSE_MENUS_NATIVE
         // menu bar
-        if (m_frameMenuBar && !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOMENUBAR) != 0))
+        if (m_frameMenuBar &&
+            GTK_WIDGET_VISIBLE(m_frameMenuBar->m_widget) && !m_menuBarDetached)
         {
-            if (!m_menuBarDetached)
-                (*height) -= m_menuBarHeight;
-            else
-                (*height) -= wxPLACE_HOLDER;
+            *height -= m_menuBarHeight;
         }
 #endif // wxUSE_MENUS_NATIVE
 
 #if wxUSE_STATUSBAR
         // status bar
-        if (m_frameStatusBar && m_frameStatusBar->IsShown() &&
-            !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOSTATUSBAR) != 0))
-            (*height) -= wxSTATUS_HEIGHT;
+        if (m_frameStatusBar && GTK_WIDGET_VISIBLE(m_frameStatusBar->m_widget))
+            *height -= wxSTATUS_HEIGHT;
 #endif // wxUSE_STATUSBAR
     }
 
 #if wxUSE_TOOLBAR
     // tool bar
-    if (m_frameToolBar && m_frameToolBar->IsShown())
+    if (m_frameToolBar &&
+        GTK_WIDGET_VISIBLE(m_frameToolBar->m_widget) && !m_toolBarDetached)
     {
-        if (m_toolBarDetached)
+        if (m_frameToolBar->IsVertical())
         {
-            if (height != NULL)
-                *height -= wxPLACE_HOLDER;
+            if (width)
+                *width -= m_frameToolBar->GetSize().x;
         }
         else
         {
-            int x, y;
-            m_frameToolBar->GetSize( &x, &y );
-            if ( m_frameToolBar->IsVertical() )
-            {
-                if (width != NULL)
-                    *width -= x;
-            }
-            else
-            {
-                if (height != NULL)
-                    *height -= y;
-            }
+            if (height)
+                *height -= m_frameToolBar->GetSize().y;
         }
     }
 #endif // wxUSE_TOOLBAR
