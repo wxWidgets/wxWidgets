@@ -156,6 +156,9 @@ public:
         (GnomePrintConfig *config, const guchar *key, gboolean value), (config, key, value), false )
     wxDL_METHOD_DEFINE( gboolean, gnome_print_config_set_length,
         (GnomePrintConfig *config, const guchar *key, gdouble value, const GnomePrintUnit *unit), (config, key, value, unit), false )
+        
+    wxDL_METHOD_DEFINE( guchar*, gnome_print_config_get,
+        (GnomePrintConfig *config, const guchar *key), (config, key), NULL )
     wxDL_METHOD_DEFINE( gboolean, gnome_print_config_get_length,
         (GnomePrintConfig *config, const guchar *key, gdouble *val, const GnomePrintUnit **unit), (config, key, val, unit), false )
 
@@ -264,6 +267,8 @@ void wxGnomePrintLibrary::InitializeMethods()
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_config_set_double, success )
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_config_set_int, success )
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_config_set_length, success )
+    
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_config_get, success )
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_config_get_length, success )
 
     wxDL_METHOD_LOAD( m_gnome_printui_lib, gnome_print_dialog_new, success )
@@ -301,7 +306,13 @@ wxGnomePrintNativeData::~wxGnomePrintNativeData()
 
 bool wxGnomePrintNativeData::TransferTo( wxPrintData &data )
 {
-    // TODO
+    guchar *res = gs_lgp->gnome_print_config_get( m_config,
+            (guchar*)(char*)GNOME_PRINT_KEY_PAGE_ORIENTATION );
+    if (g_ascii_strcasecmp((const gchar *)res,"R90") == 0)
+        data.SetOrientation( wxLANDSCAPE );
+    else
+        data.SetOrientation( wxPORTRAIT );
+    g_free( res );
     
     return true;
 }
@@ -554,6 +565,8 @@ int wxGnomePrintDialog::ShowModal()
         return wxID_CANCEL;
     }
 
+    m_printDialogData.GetPrintData().ConvertFromNative();
+
     gint copies = 1;
     gboolean collate = false;
     gs_lgp->gnome_print_dialog_get_copies( (GnomePrintDialog*) m_widget, &copies, &collate );
@@ -696,6 +709,7 @@ int wxGnomePageSetupDialog::ShowModal()
     if (ret == GTK_RESPONSE_OK)
     {
         // Transfer data back to m_pageDialogData
+        m_pageDialogData.GetPrintData().ConvertFromNative();
 
         // I don't know how querying the last parameter works
         double ml,mr,mt,mb,pw,ph;
