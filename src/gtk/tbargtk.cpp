@@ -35,7 +35,7 @@
 #endif
 
 #include "wx/gtk/private.h"
-#include "wx/crt.h"
+#include "wx/wxcrt.h"
 #include "wx/menu.h"
 
 
