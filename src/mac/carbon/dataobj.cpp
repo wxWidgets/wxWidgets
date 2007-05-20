@@ -48,63 +48,85 @@ wxDataFormat::wxDataFormat()
 
 wxDataFormat::wxDataFormat( wxDataFormatId vType )
 {
+    m_format = 0;
+    m_type = wxDF_INVALID;
     SetType( vType );
 }
 
 wxDataFormat::wxDataFormat( const wxChar *zId )
 {
+    m_format = 0;
+    m_type = wxDF_INVALID;
     SetId( zId );
 }
 
 wxDataFormat::wxDataFormat( const wxString& rId )
 {
+    m_format = 0;
+    m_type = wxDF_INVALID;
     SetId( rId );
 }
 
 wxDataFormat::wxDataFormat( NativeFormat vFormat )
 {
+    m_format = 0;
+    m_type = wxDF_INVALID;
     SetId( vFormat );
 }
+
+wxDataFormat::~wxDataFormat()
+{
+    if ( m_format != 0 )
+    {
+        CFRelease( (CFStringRef) m_format );
+        m_format = 0;
+    }
+}
+
+// in order to be correct for 10.3 we restrict to the available types there
+// http://developer.apple.com/qa/qa2005/qa1406.html
+// TODO : Use UTCoreTypes.h constants once we support 10.4+ only
 
 void wxDataFormat::SetType( wxDataFormatId dataType )
 {
     m_type = dataType;
+    if ( m_format != 0 )
+    {
+        CFRelease( (CFStringRef) m_format );
+        m_format = 0;
+    }
 
     switch (m_type)
     {
     case wxDF_TEXT:
-        m_format = kScrapFlavorTypeText;
+        m_format = (long) CFStringCreateCopy( NULL, CFSTR("public.plain-text") );
         break;
 
     case wxDF_UNICODETEXT:
-        m_format = kScrapFlavorTypeUnicode;
+        m_format = (long) CFStringCreateCopy( NULL, CFSTR("public.utf16-plain-text") );
         break;
 
     case wxDF_BITMAP:
 #if wxMAC_USE_CORE_GRAPHICS
-        m_format = 'TIFF';
+        m_format = (long) CFStringCreateCopy( NULL, CFSTR("public.tiff") );
 #else
-        m_format = kScrapFlavorTypePicture;
+        m_format = (long) CFStringCreateCopy( NULL, CFSTR("com.apple.pict") );
 #endif
         break;
     case wxDF_METAFILE:
 #if wxMAC_USE_CORE_GRAPHICS
-        m_format = 'PDF ';
+        m_format = (long) CFStringCreateCopy( NULL, CFSTR("com.adobe.pdf") );
 #else
-        m_format = kScrapFlavorTypePicture;
+        m_format = (long) CFStringCreateCopy( NULL, CFSTR("com.apple.pict") );
 #endif
         break;
 
     case wxDF_FILENAME:
-        m_format = kDragFlavorTypeHFS;
+        m_format = (long) CFStringCreateCopy( NULL, CFSTR("public.url") );
         break;
 
     default:
        wxFAIL_MSG( wxT("invalid data format") );
-
-       // NB: this translates to '????' ASCII but it can't be used in the code
-       // because '??' will get parsed as a trigraph!
-       m_format = 0x3f3f3f3f;
        break;
     }
 }
@@ -119,38 +141,43 @@ wxString wxDataFormat::GetId() const
 
 void wxDataFormat::SetId( NativeFormat format )
 {
-    m_format = format;
-
-    switch (m_format)
+    if ( m_format != 0 )
     {
-    case kScrapFlavorTypeText:
+        CFRelease( (CFStringRef) m_format );
+        m_format = 0;
+    }
+    m_format = (NativeFormat) CFStringCreateCopy(NULL, (CFStringRef)format);
+    if ( UTTypeConformsTo( (CFStringRef)format, CFSTR("public.plain-text") ) )
+    {
         m_type = wxDF_TEXT;
-        break;
-
-    case kScrapFlavorTypeUnicode:
+    }
+    else if (  UTTypeConformsTo( (CFStringRef)format, CFSTR("public.utf16-plain-text") )  ) 
+    {
         m_type = wxDF_UNICODETEXT;
-        break;
-        
-#if wxMAC_USE_CORE_GRAPHCIS
-    case 'TIFF':
+    }        
+#if wxMAC_USE_CORE_GRAPHICS
+    else if (  UTTypeConformsTo( (CFStringRef)format, CFSTR("public.tiff") )  ) 
+    {
         m_type = wxDF_BITMAP;
-        break;
-#endif
-    case kScrapFlavorTypePicture:
+    }
+    else if (  UTTypeConformsTo( (CFStringRef)format, CFSTR("com.adobe.pdf") )  ) 
+    {
         m_type = wxDF_METAFILE;
-        break;
-
-    case kDragFlavorTypeHFS:
+    }
+#else
+    else if (  UTTypeConformsTo( (CFStringRef)format, CFSTR("com.apple.pict") )  ) 
+    {
+        m_type = wxDF_METAFILE;
+    }
+#endif
+    else if (  UTTypeConformsTo( (CFStringRef)format, CFSTR("public.file-url") )  ) 
+    {
         m_type = wxDF_FILENAME;
-        break;
-
-    default:
+    }
+    else 
+    {
         m_type = wxDF_PRIVATE;
-        char text[5];
-        memcpy( text, (const char*)&format, 4 );
-        text[4] = 0;
-        m_id = wxString::FromAscii( text );
-        break;
+        m_id = wxMacCFStringHolder( (CFStringRef) CFRetain((CFStringRef) format )).AsString();
     }
 }
 
@@ -158,15 +185,21 @@ void wxDataFormat::SetId( const wxChar* zId )
 {
     m_type = wxDF_PRIVATE;
     m_id = zId;
-    m_format = 'WXPR';
+    if ( m_format != 0 )
+    {
+        CFRelease( (CFStringRef) m_format );
+        m_format = 0;
+    }
+    // since it is private, no need to conform to anything ...
+    m_format = (long) wxMacCFStringHolder(m_id).Detach();
 }
 
 bool wxDataFormat::operator==(const wxDataFormat& format) const
 {
     if (IsStandard() || format.IsStandard())
-        return (format.m_type == m_type);
+        return ( format.m_type == m_type );
     else
-        return (m_id == format.m_id);
+        return ( UTTypeConformsTo( (CFStringRef) m_format , (CFStringRef) format.m_format ) );
 }
 
 //-------------------------------------------------------------------------
@@ -204,6 +237,300 @@ bool wxDataObject::IsSupportedFormat( const wxDataFormat& rFormat, Direction vDi
     }
 
     return found;
+}
+
+void wxDataObject::AddToPasteboard( void * pb, int itemID )
+{
+    PasteboardRef pasteboard = (PasteboardRef) pb;
+   // get formats from wxDataObjects
+    wxDataFormat *array = new wxDataFormat[ GetFormatCount() ];
+    GetAllFormats( array );
+
+    for (size_t i = 0; i < GetFormatCount(); i++)
+    {
+        wxDataFormat thisFormat = array[ i ];
+    
+        // add four bytes at the end for data objs like text that 
+        // have a datasize = strlen but still need a buffer for the
+        // string including trailing zero
+        
+        size_t datasize = GetDataSize( thisFormat );
+        size_t sz = datasize + 4;
+        void* buf = malloc( sz );
+        if ( buf != NULL )
+        {
+            // empty the buffer because in some case GetDataHere does not fill buf
+            memset( buf, 0, sz );
+            GetDataHere( array[ i ], buf );
+            int counter = 1 ;
+            if ( thisFormat.GetType() == wxDF_FILENAME )
+            {
+                // the data is D-normalized UTF8 strings of filenames delimited with \n
+                char *fname = strtok((char*) buf,"\n");
+                while (fname != NULL)
+                {
+                    // translate the filepath into a fileurl and put that into the pasteobard
+                    CFStringRef path = CFStringCreateWithBytes(NULL,(UInt8*)fname,strlen(fname),kCFStringEncodingUTF8,false);
+                    CFURLRef url = CFURLCreateWithFileSystemPath(NULL, path , kCFURLPOSIXPathStyle, false);
+                    CFRelease(path);
+                    CFDataRef data = CFURLCreateData(NULL,url,kCFStringEncodingUTF8,true);
+                    CFRelease(url);
+                    PasteboardPutItemFlavor( pasteboard, (PasteboardItemID) counter,
+                        (CFStringRef) thisFormat.GetFormatId() , data, kPasteboardFlavorNoFlags);
+//                    CFRelease(data);
+                    counter++;
+                    fname = strtok (NULL,"\n");
+                }
+                
+            }
+            else
+            {
+                CFDataRef data = CFDataCreate( kCFAllocatorDefault, (UInt8*)buf, datasize );
+                if ( thisFormat.GetType() == wxDF_TEXT )
+                     PasteboardPutItemFlavor( pasteboard, (PasteboardItemID) itemID,
+                        CFSTR("com.apple.traditional-mac-plain-text") , data, kPasteboardFlavorNoFlags);
+                else
+                    PasteboardPutItemFlavor( pasteboard, (PasteboardItemID) itemID,
+                        (CFStringRef) thisFormat.GetFormatId() , data, kPasteboardFlavorNoFlags);
+//                CFRelease(data);
+            }
+            free( buf );
+        }
+    }
+
+    delete [] array;
+}
+
+bool wxDataObject::IsFormatInPasteboard( void * pb, const wxDataFormat &dataFormat )
+{
+    PasteboardRef pasteboard = (PasteboardRef) pb;
+    bool hasData = false;
+    OSStatus err = noErr;
+    ItemCount itemCount;
+
+    // we synchronize here once again, so we don't mind which flags get returned
+    PasteboardSynchronize( pasteboard );
+
+    err = PasteboardGetItemCount( pasteboard, &itemCount );
+    if ( err == noErr )
+    {
+        for( UInt32 itemIndex = 1; itemIndex <= itemCount && hasData == false ; itemIndex++ )
+        {
+            PasteboardItemID    itemID;
+            CFArrayRef          flavorTypeArray;
+            CFIndex             flavorCount;
+     
+            err = PasteboardGetItemIdentifier( pasteboard, itemIndex, &itemID );
+            if ( err != noErr )
+                continue;
+     
+            err = PasteboardCopyItemFlavors( pasteboard, itemID, &flavorTypeArray );
+            if ( err != noErr )
+                continue;
+     
+            flavorCount = CFArrayGetCount( flavorTypeArray );
+     
+            for( CFIndex flavorIndex = 0; flavorIndex < flavorCount && hasData == false ; flavorIndex++ )
+            {
+                CFStringRef             flavorType;
+     
+                flavorType = (CFStringRef)CFArrayGetValueAtIndex( flavorTypeArray,
+                                                                     flavorIndex );
+                     
+                wxDataFormat flavorFormat( (wxDataFormat::NativeFormat) flavorType );
+                if ( dataFormat == flavorFormat )
+                    hasData = true;
+                else if (  dataFormat.GetType() == wxDF_UNICODETEXT && flavorFormat.GetType() == wxDF_TEXT )
+                    hasData = true;
+            }
+            CFRelease (flavorTypeArray);
+        }
+    }
+
+    return hasData;
+}
+
+bool wxDataObject::GetFromPasteboard( void * pb )
+{
+    PasteboardRef pasteboard = (PasteboardRef) pb;
+    size_t formatcount = GetFormatCount() + 1;
+    wxDataFormat *array = new wxDataFormat[ formatcount ];
+    array[0] = GetPreferredFormat();
+    GetAllFormats( &array[1] );
+    ItemCount itemCount = 0;
+    wxString filenamesPassed;
+    bool transferred = false;
+
+    // we synchronize here once again, so we don't mind which flags get returned
+    PasteboardSynchronize( pasteboard );
+
+    OSStatus err = PasteboardGetItemCount( pasteboard, &itemCount );
+    if ( err == noErr )
+    {
+        for (size_t i = 0; !transferred && i < formatcount; i++)
+        {
+            // go through the data in our order of preference
+            wxDataFormat dataFormat = array[ i ];
+
+            for( UInt32 itemIndex = 1; itemIndex <= itemCount && transferred == false ; itemIndex++ )
+            {
+                PasteboardItemID    itemID = 0;
+                CFArrayRef          flavorTypeArray = NULL;
+                CFIndex             flavorCount = 0;
+
+                err = PasteboardGetItemIdentifier( pasteboard, itemIndex, &itemID );
+                if ( err != noErr )
+                    continue;
+
+                err = PasteboardCopyItemFlavors( pasteboard, itemID, &flavorTypeArray );
+                if ( err != noErr )
+                    continue;
+                    
+                flavorCount = CFArrayGetCount( flavorTypeArray );
+
+                for( CFIndex flavorIndex = 0; !transferred && flavorIndex < flavorCount ; flavorIndex++ )
+                {
+                    CFStringRef             flavorType;
+                    CFDataRef               flavorData;
+                    CFIndex                 flavorDataSize;
+         
+                    flavorType = (CFStringRef)CFArrayGetValueAtIndex( flavorTypeArray,
+                                                                         flavorIndex );
+
+                    wxDataFormat flavorFormat( (wxDataFormat::NativeFormat) flavorType );
+ 
+                    if ( dataFormat == flavorFormat )
+                    {
+                        err = PasteboardCopyItemFlavorData( pasteboard, itemID, flavorType , &flavorData );
+                        if ( err == noErr )
+                        {
+                            flavorDataSize = CFDataGetLength( flavorData );
+                            if (dataFormat.GetType() == wxDF_FILENAME )
+                            {
+                                // revert the translation and decomposition to arrive at a proper utf8 string again
+                                CFURLRef url = CFURLCreateWithBytes( kCFAllocatorDefault, CFDataGetBytePtr( flavorData ), flavorDataSize, kCFStringEncodingUTF8, NULL );
+                                CFStringRef cfString = CFURLCopyFileSystemPath( url, kCFURLPOSIXPathStyle );
+                                CFRelease( url );
+                                CFMutableStringRef cfMutableString = CFStringCreateMutableCopy(NULL, 0, cfString);
+                                CFRelease( cfString );
+                                CFStringNormalize(cfMutableString,kCFStringNormalizationFormC);
+                                wxString path = wxMacCFStringHolder(cfMutableString).AsString();
+                                if (!path.empty())
+                                    filenamesPassed += path + wxT("\n");
+                            }
+                            else
+                            {
+                                // because some data implementation expect trailing a trailing NUL, we add some headroom
+                                void *buf = malloc( flavorDataSize + 4 );
+                                if ( buf )
+                                {
+                                    memset( buf, 0, flavorDataSize + 4 );
+                                    memcpy( buf, CFDataGetBytePtr( flavorData ), flavorDataSize );
+ 
+                                    if (dataFormat.GetType() == wxDF_TEXT)
+                                        wxMacConvertNewlines10To13( (char*) buf );
+                                    SetData( flavorFormat, flavorDataSize, buf );
+                                    transferred = true;
+                                    free( buf );
+                                }
+                            }
+                            CFRelease (flavorData);
+                        }
+                    }
+                    else if ( dataFormat.GetType() == wxDF_UNICODETEXT && flavorFormat.GetType() == wxDF_TEXT )
+                    {
+                        err = PasteboardCopyItemFlavorData( pasteboard, itemID, flavorType, &flavorData );
+                        if ( err == noErr )
+                        {
+                            flavorDataSize = CFDataGetLength( flavorData );
+                            void *asciibuf = malloc( flavorDataSize + 1 );
+                            if ( asciibuf )
+                            {
+                                memset( asciibuf, 0, flavorDataSize + 1 );
+                                memcpy( asciibuf, CFDataGetBytePtr( flavorData ), flavorDataSize );
+                                CFRelease (flavorData);
+
+                                SetData( wxDF_TEXT, flavorDataSize, asciibuf );
+                                transferred = true;
+                                free( asciibuf );
+                            }
+                            else
+                                CFRelease (flavorData);
+                        }
+                    }
+                }
+                CFRelease( flavorTypeArray );
+            }
+            if (filenamesPassed.length() > 0)
+            {
+                wxCharBuffer buf = filenamesPassed.fn_str();
+                SetData( wxDF_FILENAME, strlen( buf ), (const char*)buf );
+                transferred = true;
+            }
+        }
+    }
+    return transferred;
+}
+
+bool wxDataObject::HasDataInPasteboard( void * pb )
+{
+    PasteboardRef pasteboard = (PasteboardRef) pb;
+    size_t formatcount = GetFormatCount() + 1;
+    wxDataFormat *array = new wxDataFormat[ formatcount ];
+    array[0] = GetPreferredFormat();
+    GetAllFormats( &array[1] );
+    ItemCount itemCount = 0;
+    bool hasData = false;
+
+    // we synchronize here once again, so we don't mind which flags get returned
+    PasteboardSynchronize( pasteboard );
+
+    OSStatus err = PasteboardGetItemCount( pasteboard, &itemCount );
+    if ( err == noErr )
+    {
+        for (size_t i = 0; !hasData && i < formatcount; i++)
+        {
+            // go through the data in our order of preference
+            wxDataFormat dataFormat = array[ i ];
+
+            for( UInt32 itemIndex = 1; itemIndex <= itemCount && hasData == false ; itemIndex++ )
+            {
+                PasteboardItemID    itemID = 0;
+                CFArrayRef          flavorTypeArray = NULL;
+                CFIndex             flavorCount = 0;
+
+                err = PasteboardGetItemIdentifier( pasteboard, itemIndex, &itemID );
+                if ( err != noErr )
+                    continue;
+
+                err = PasteboardCopyItemFlavors( pasteboard, itemID, &flavorTypeArray );
+                if ( err != noErr )
+                    continue;
+                    
+                flavorCount = CFArrayGetCount( flavorTypeArray );
+
+                for( CFIndex flavorIndex = 0; !hasData && flavorIndex < flavorCount ; flavorIndex++ )
+                {
+                    CFStringRef             flavorType;
+          
+                    flavorType = (CFStringRef)CFArrayGetValueAtIndex( flavorTypeArray,
+                                                                         flavorIndex );
+
+                    CFShow( flavorType );
+
+                    wxDataFormat flavorFormat( (wxDataFormat::NativeFormat) flavorType );
+ 
+                    if ( dataFormat == flavorFormat || 
+                        dataFormat.GetType() == wxDF_UNICODETEXT && flavorFormat.GetType() == wxDF_TEXT )
+                    {
+                        hasData = true;
+                    }
+                }
+                CFRelease( flavorTypeArray );
+            }
+        }
+    }
+    return hasData;
 }
 
 // ----------------------------------------------------------------------------
@@ -257,7 +584,7 @@ size_t wxFileDataObject::GetDataSize() const
 
     GetFileNames( buf );
     buffLength = strlen( buf );
-
+    // terminating 0
     return buffLength + 1;
 }
 

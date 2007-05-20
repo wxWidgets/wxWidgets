@@ -22,6 +22,7 @@ public:
     wxDataFormat(const wxString& rId);
     wxDataFormat(const wxChar* pId);
     wxDataFormat(NativeFormat vFormat);
+    ~wxDataFormat();
 
     wxDataFormat& operator=(NativeFormat vFormat)
         { SetId(vFormat); return *this; }
