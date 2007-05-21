@@ -118,6 +118,7 @@ protected:
     virtual void DoGetSize( int *width, int *height ) const;
     virtual void DoMoveWindow(int x, int y, int width, int height);
     virtual void DoGetClientSize(int *width, int *height) const;
+    virtual void DoCentre(int dir);
 
     // is the frame currently iconized?
     bool m_iconized;
