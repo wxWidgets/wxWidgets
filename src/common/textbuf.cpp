@@ -226,7 +226,7 @@ wxTextFileType wxTextBuffer::GuessType() const
             case wxTextFileType_Unix: nUnix++; break;   \
             case wxTextFileType_Dos:  nDos++;  break;   \
             case wxTextFileType_Mac:  nMac++;  break;   \
-            default: wxFAIL_MSG(_("unknown line terminator")); \
+            default: wxFAIL_MSG(_T("unknown line terminator")); \
         }
 
     size_t n;

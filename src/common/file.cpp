@@ -367,7 +367,7 @@ wxFileOffset wxFile::Seek(wxFileOffset ofs, wxSeekMode mode)
     int origin;
     switch ( mode ) {
         default:
-            wxFAIL_MSG(_("unknown seek origin"));
+            wxFAIL_MSG(_T("unknown seek origin"));
 
         case wxFromStart:
             origin = SEEK_SET;
@@ -459,7 +459,7 @@ bool wxFile::Eof() const
     else if ( iRc == wxInvalidOffset )
         wxLogSysError(_("can't determine if the end of file is reached on descriptor %d"), m_fd);
     else
-        wxFAIL_MSG(_("invalid eof() return value."));
+        wxFAIL_MSG(_T("invalid eof() return value."));
 
     return true;
 }
