@@ -380,7 +380,10 @@ int wxFileDialog::ShowModal()
         ::DisposeNavObjectFilterUPP(navFilterUPP);
 
     if (err != noErr)
+    {
+        ::NavDialogDispose(dialog);
         return wxID_CANCEL;
+    }
 
     NavReplyRecord navReply;
     err = ::NavDialogGetReply(dialog, &navReply);
@@ -411,6 +414,7 @@ int wxFileDialog::ShowModal()
             if (!thePath)
             {
                 ::NavDisposeReply(&navReply);
+                ::NavDialogDispose(dialog);
                 return wxID_CANCEL;
             }
 
@@ -427,6 +431,7 @@ int wxFileDialog::ShowModal()
     }
 
     ::NavDisposeReply(&navReply);
+    ::NavDialogDispose(dialog);
 
     return (err == noErr) ? wxID_OK : wxID_CANCEL;
 }
