@@ -516,8 +516,6 @@ bool wxDataObject::HasDataInPasteboard( void * pb )
                     flavorType = (CFStringRef)CFArrayGetValueAtIndex( flavorTypeArray,
                                                                          flavorIndex );
 
-                    CFShow( flavorType );
-
                     wxDataFormat flavorFormat( (wxDataFormat::NativeFormat) flavorType );
  
                     if ( dataFormat == flavorFormat || 
