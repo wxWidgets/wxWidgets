@@ -512,6 +512,11 @@ public:
                                       size_t n,
                                       const wxString& domain = wxEmptyString) const;
 
+    // this is hack to work around a problem with wxGetTranslation() which
+    // returns const wxString& and not wxString, so when it returns untranslated
+    // string, it needs to have a copy of it somewhere
+    static const wxString& GetUntranslatedString(const wxString& str);
+
     // Returns the current short name for the locale
     const wxString& GetName() const { return m_strShort; }
 
@@ -569,7 +574,9 @@ inline const wxString& wxGetTranslation(const wxString& str,
     if (pLoc)
         return pLoc->GetString(str, domain);
     else
-        return str;
+        // NB: this function returns reference to a string, so we have to keep
+        //     a copy of it somewhere
+        return wxLocale::GetUntranslatedString(str);
 }
 inline const wxString& wxGetTranslation(const wxString& str1,
                                         const wxString& str2,
@@ -580,7 +587,11 @@ inline const wxString& wxGetTranslation(const wxString& str1,
     if (pLoc)
         return pLoc->GetString(str1, str2, n, domain);
     else
-        return n == 1 ? str1 : str2;
+        // NB: this function returns reference to a string, so we have to keep
+        //     a copy of it somewhere
+        return n == 1
+               ? wxLocale::GetUntranslatedString(str1)
+               : wxLocale::GetUntranslatedString(str2);
 }
 
 #else // !wxUSE_INTL
@@ -596,22 +607,27 @@ inline const wxString& wxGetTranslation(const wxString& str1,
 
 #define wxTRANSLATE(str) _T(str)
 
-inline const wxString& wxGetTranslation(const wxString& str,
-                                        const wxString& WXUNUSED(domain) = wxEmptyString)
-{
-    return str;
-}
+// NB: we use a template here in order to avoid using
+//     wxLocale::GetUntranslatedString() above, which would be required if
+//     we returned const wxString&; this way, the compiler should be able to
+//     optimize wxGetTranslation() away
 
-inline const wxString& wxGetTranslation(const wxString& str1,
-                                        const wxString& str2,
-                                        size_t n,
-                                        const wxString& WXUNUSED(domain) = wxEmptyString)
-{
-    if ( n == 1 )
-        return str1;
-    else
-        return str2;
-}
+template<typename TString>
+inline TString wxGetTranslation(TString str)
+    { return str; }
+
+template<typename TString, typename TDomain>
+inline TString wxGetTranslation(TString str, TDomain WXUNUSED(domain))
+    { return str; }
+
+template<typename TString, typename TDomain>
+inline TString wxGetTranslation(TString str1, TString str2, size_t n)
+    { return n == 1 ? str1 : str2; }
+
+template<typename TString, typename TDomain>
+inline TString wxGetTranslation(TString str1, TString str2, size_t n,
+                                TDomain WXUNUSED(domain))
+    { return n == 1 ? str1 : str2; }
 
 #endif // wxUSE_INTL/!wxUSE_INTL
 

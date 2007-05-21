@@ -69,6 +69,7 @@
 #include "wx/ptr_scpd.h"
 #include "wx/apptrait.h"
 #include "wx/stdpaths.h"
+#include "wx/hashset.h"
 
 #if defined(__WXMAC__)
     #include  "wx/mac/private.h"  // includes mac headers
@@ -2614,7 +2615,7 @@ const wxString& wxLocale::GetString(const wxString& origString,
                                     const wxString& domain) const
 {
     if ( origString.empty() )
-        return origString;
+        return GetUntranslatedString(origString);
 
     const wxString *trans = NULL;
     wxMsgCatalog *pMsgCat;
@@ -2656,12 +2657,29 @@ const wxString& wxLocale::GetString(const wxString& origString,
 #endif // __WXDEBUG__
 
         if (n == size_t(-1))
-            return origString;
+            return GetUntranslatedString(origString);
         else
-            return n == 1 ? origString : origString2;
+            return GetUntranslatedString(n == 1 ? origString : origString2);
     }
 
     return *trans;
+}
+
+WX_DECLARE_HASH_SET(wxString, wxStringHash, wxStringEqual,
+                    wxLocaleUntranslatedStrings);
+
+/* static */
+const wxString& wxLocale::GetUntranslatedString(const wxString& str)
+{
+    static wxLocaleUntranslatedStrings s_strings;
+
+    wxLocaleUntranslatedStrings::iterator i = s_strings.find(str);
+    if ( i != s_strings.end() )
+        return *i;
+    else
+        return *s_strings.insert(str).first;
+
+    return *i;
 }
 
 wxString wxLocale::GetHeaderValue(const wxString& header,
