@@ -102,10 +102,6 @@ protected :
 
     // contains the tag for the content (is different for password and non-password controls)
     OSType m_valueTag ;
-
-    // as the selection tag only works correctly when the control has the focus we have to mirror the
-    // intended value
-    EventHandlerRef m_focusHandlerRef ;
 public :
     ControlEditTextSelectionRec m_selection ;
 };

@@ -261,7 +261,6 @@ public :
 protected :
     HIViewRef m_scrollView ;
     HIViewRef m_textView ;
-    EventHandlerRef m_textEventHandlerRef ;
 };
 
 #endif
@@ -1383,14 +1382,13 @@ bool wxMacUnicodeTextControl::Create( wxTextCtrl *wxPeer,
 
     InstallControlEventHandler( m_controlRef , GetwxMacUnicodeTextControlEventHandlerUPP(),
                                 GetEventTypeCount(unicodeTextControlEventList), unicodeTextControlEventList, this,
-                                &m_focusHandlerRef);
+                                NULL);
                                 
     return true;
 }
 
 wxMacUnicodeTextControl::~wxMacUnicodeTextControl()
 {
-    ::RemoveEventHandler( m_focusHandlerRef );
 }
 
 void wxMacUnicodeTextControl::VisibilityChanged(bool shown)
@@ -3073,12 +3071,11 @@ wxMacMLTEHIViewControl::wxMacMLTEHIViewControl( wxTextCtrl *wxPeer,
 
     InstallControlEventHandler( m_textView , GetwxMacTextControlEventHandlerUPP(),
                                 GetEventTypeCount(eventList), eventList, this,
-                                &m_textEventHandlerRef);
+                                NULL);
 }
 
 wxMacMLTEHIViewControl::~wxMacMLTEHIViewControl()
 {
-    ::RemoveEventHandler( m_textEventHandlerRef ) ;
 }
 
 OSStatus wxMacMLTEHIViewControl::SetFocus( ControlFocusPart focusPart )
@@ -3089,6 +3086,9 @@ OSStatus wxMacMLTEHIViewControl::SetFocus( ControlFocusPart focusPart )
 bool wxMacMLTEHIViewControl::HasFocus() const
 {
     ControlRef control ;
+    if ( GetUserFocusWindow() == NULL )
+        return false;
+        
     GetKeyboardFocus( GetUserFocusWindow() , &control ) ;
     return control == m_textView ;
 }
