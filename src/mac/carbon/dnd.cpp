@@ -284,9 +284,9 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
 
     err = TrackDrag( theDrag, &rec, dragRegion );
     
-    CFRelease( pasteboard );
     DisposeRgn( dragRegion );
     DisposeDrag( theDrag );
+    CFRelease( pasteboard );
     gTrackingGlobals.m_currentSource = NULL;
 
     return gTrackingGlobals.m_result;
