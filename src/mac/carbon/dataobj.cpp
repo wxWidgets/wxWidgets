@@ -277,6 +277,8 @@ void wxDataObject::AddToPasteboard( void * pb, int itemID )
                     CFRelease(url);
                     PasteboardPutItemFlavor( pasteboard, (PasteboardItemID) counter,
                         (CFStringRef) thisFormat.GetFormatId() , data, kPasteboardFlavorNoFlags);
+                    // don't release do CFRelease( data ), it's not documented but the samples don't release the data for non promised entries
+                    // also when running with the _debug version of carbon drag and drop is showing errors otherwise
                     counter++;
                     fname = strtok (NULL,"\n");
                 }
@@ -291,6 +293,8 @@ void wxDataObject::AddToPasteboard( void * pb, int itemID )
                 else
                     PasteboardPutItemFlavor( pasteboard, (PasteboardItemID) itemID,
                         (CFStringRef) thisFormat.GetFormatId() , data, kPasteboardFlavorNoFlags);
+                // don't release do CFRelease( data ), it's not documented but the samples don't release the data for non promised entries
+                // also when running with the _debug version of carbon drag and drop is showing errors otherwise
             }
             free( buf );
         }
