@@ -67,6 +67,16 @@ wxDataFormat::wxDataFormat( const wxString& rId )
     SetId( rId );
 }
 
+wxDataFormat::wxDataFormat(const wxDataFormat& rFormat)
+{
+    if ( rFormat.m_format )
+        m_format = (NativeFormat) CFStringCreateCopy(NULL, (CFStringRef)rFormat.m_format);
+    else
+        m_format = 0;
+    m_type = rFormat.m_type;
+    m_id = rFormat.m_id;
+}
+
 wxDataFormat::wxDataFormat( NativeFormat vFormat )
 {
     m_format = 0;
@@ -86,6 +96,20 @@ wxDataFormat::~wxDataFormat()
 // in order to be correct for 10.3 we restrict to the available types there
 // http://developer.apple.com/qa/qa2005/qa1406.html
 // TODO : Use UTCoreTypes.h constants once we support 10.4+ only
+
+wxDataFormat& wxDataFormat::operator=(const wxDataFormat& rFormat)
+{
+    if ( m_format != 0 )
+    {
+        CFRelease( (CFStringRef) m_format );
+        m_format = 0;
+    }
+    if ( rFormat.m_format )
+        m_format = (NativeFormat) CFStringCreateCopy(NULL, (CFStringRef)rFormat.m_format);
+    m_type = rFormat.m_type;
+    m_id = rFormat.m_id;
+    return *this;
+}
 
 void wxDataFormat::SetType( wxDataFormatId dataType )
 {

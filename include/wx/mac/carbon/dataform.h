@@ -19,6 +19,7 @@ public:
 
     wxDataFormat();
     wxDataFormat(wxDataFormatId vType);
+    wxDataFormat(const wxDataFormat& rFormat);
     wxDataFormat(const wxString& rId);
     wxDataFormat(const wxChar* pId);
     wxDataFormat(NativeFormat vFormat);
@@ -35,6 +36,8 @@ public:
         { return m_type == (wxDataFormatId)format; }
     bool operator!=(wxDataFormatId format) const
         { return m_type != (wxDataFormatId)format; }
+
+    wxDataFormat& operator=(const wxDataFormat& format);
 
     // explicit and implicit conversions to NativeFormat which is one of
     // standard data types (implicit conversion is useful for preserving the
