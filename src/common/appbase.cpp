@@ -95,11 +95,11 @@
     // prepare for showing the assert dialog, use the given traits or
     // DoShowAssertDialog() as last fallback to really show it
     static
-    void ShowAssertDialog(const wxChar *szFile,
+    void ShowAssertDialog(const wxString& szFile,
                           int nLine,
-                          const wxChar *szFunc,
-                          const wxChar *szCond,
-                          const wxChar *szMsg,
+                          const wxString& szFunc,
+                          const wxString& szCond,
+                          const wxString& szMsg,
                           wxAppTraits *traits = NULL);
 
     // turn on the trace masks specified in the env variable WXTRACE
@@ -780,11 +780,11 @@ void wxTrap()
 }
 
 // this function is called when an assert fails
-void wxOnAssert(const wxChar *szFile,
-                int nLine,
-                const char *szFunc,
-                const wxChar *szCond,
-                const wxChar *szMsg)
+static void wxDoOnAssert(const wxString& szFile,
+                         int nLine,
+                         const wxString& szFunc,
+                         const wxString& szCond,
+                         const wxString& szMsg = wxEmptyString)
 {
     // FIXME MT-unsafe
     static bool s_bInAssert = false;
@@ -801,23 +801,76 @@ void wxOnAssert(const wxChar *szFile,
 
     s_bInAssert = true;
 
-    // __FUNCTION__ is always in ASCII, convert it to wide char if needed
-    const wxString strFunc = wxString::FromAscii(szFunc);
-
     if ( !wxTheApp )
     {
         // by default, show the assert dialog box -- we can't customize this
         // behaviour
-        ShowAssertDialog(szFile, nLine, strFunc, szCond, szMsg);
+        ShowAssertDialog(szFile, nLine, szFunc, szCond, szMsg);
     }
     else
     {
         // let the app process it as it wants
-        wxTheApp->OnAssertFailure(szFile, nLine, strFunc, szCond, szMsg);
+        // FIXME-UTF8: use wc_str(), not c_str(), when ANSI build is removed
+        wxTheApp->OnAssertFailure(szFile.c_str(), nLine, szFunc.c_str(),
+                                  szCond.c_str(), szMsg.c_str());
     }
 
     s_bInAssert = false;
 }
+
+void wxOnAssert(const wxString& szFile,
+                int nLine,
+                const wxString& szFunc,
+                const wxString& szCond,
+                const wxString& szMsg)
+{
+    wxDoOnAssert(szFile, nLine, szFunc, szCond, szMsg);
+}
+
+void wxOnAssert(const wxString& szFile,
+                int nLine,
+                const wxString& szFunc,
+                const wxString& szCond)
+{
+    wxDoOnAssert(szFile, nLine, szFunc, szCond);
+}
+
+void wxOnAssert(const wxChar *szFile,
+                int nLine,
+                const char *szFunc,
+                const wxChar *szCond,
+                const wxChar *szMsg)
+{
+    wxDoOnAssert(szFile, nLine, szFunc, szCond, szMsg);
+}
+
+#if wxUSE_UNICODE
+void wxOnAssert(const char *szFile,
+                int nLine,
+                const char *szFunc,
+                const char *szCond)
+{
+    wxDoOnAssert(szFile, nLine, szFunc, szCond);
+}
+
+void wxOnAssert(const char *szFile,
+                int nLine,
+                const char *szFunc,
+                const char *szCond,
+                const char *szMsg)
+{
+    wxDoOnAssert(szFile, nLine, szFunc, szCond, szMsg);
+}
+
+void wxOnAssert(const char *szFile,
+                int nLine,
+                const char *szFunc,
+                const char *szCond,
+                const wxChar *szMsg)
+{
+    wxDoOnAssert(szFile, nLine, szFunc, szCond, szMsg);
+}
+#endif // wxUSE_UNICODE
 
 #endif // __WXDEBUG__
 
@@ -879,11 +932,11 @@ bool DoShowAssertDialog(const wxString& msg)
 
 // show the assert modal dialog
 static
-void ShowAssertDialog(const wxChar *szFile,
+void ShowAssertDialog(const wxString& szFile,
                       int nLine,
-                      const wxChar *szFunc,
-                      const wxChar *szCond,
-                      const wxChar *szMsg,
+                      const wxString& szFunc,
+                      const wxString& szCond,
+                      const wxString& szMsg,
                       wxAppTraits *traits)
 {
     // this variable can be set to true to suppress "assert failure" messages
@@ -898,11 +951,11 @@ void ShowAssertDialog(const wxChar *szFile,
     msg.Printf(wxT("%s(%d): assert \"%s\" failed"), szFile, nLine, szCond);
 
     // add the function name, if any
-    if ( szFunc && *szFunc )
+    if ( !szFunc.empty() )
         msg << _T(" in ") << szFunc << _T("()");
 
     // and the message itself
-    if ( szMsg )
+    if ( !szMsg.empty() )
     {
         msg << _T(": ") << szMsg;
     }

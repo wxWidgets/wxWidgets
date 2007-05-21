@@ -100,18 +100,56 @@
        szCond           - text form of the condition which failed
        szMsg            - optional message explaining the reason
   */
+
+  /* this version is for compatibility with wx 2.8: */
   extern void WXDLLIMPEXP_BASE wxOnAssert(const wxChar *szFile,
                                           int nLine,
                                           const char *szFunc,
                                           const wxChar *szCond,
                                           const wxChar *szMsg = NULL);
 
+#if wxUSE_UNICODE
+  /* char versions are used by debugging macros; we have to provide
+     wxChar* szMsg version because it's common to use _T() in the macros
+     and finally, we can't use const wx(char)* szMsg = NULL, because that
+     would be ambiguous: */
+  extern void WXDLLIMPEXP_BASE wxOnAssert(const char *szFile,
+                                          int nLine,
+                                          const char *szFunc,
+                                          const char *szCond);
+
+  extern void WXDLLIMPEXP_BASE wxOnAssert(const char *szFile,
+                                          int nLine,
+                                          const char *szFunc,
+                                          const char *szCond,
+                                          const char *szMsg);
+
+  extern void WXDLLIMPEXP_BASE wxOnAssert(const char *szFile,
+                                          int nLine,
+                                          const char *szFunc,
+                                          const char *szCond,
+                                          const wxChar *szMsg);
+#endif // wxUSE_UNICODE
+
+  class WXDLLIMPEXP_BASE wxString;
+  /* these two work when szMsg passed to debug macro is a string: */
+  extern void WXDLLIMPEXP_BASE wxOnAssert(const wxString& szFile,
+                                          int nLine,
+                                          const wxString& szFunc,
+                                          const wxString& szCond,
+                                          const wxString& szMsg);
+
+  extern void WXDLLIMPEXP_BASE wxOnAssert(const wxString& szFile,
+                                          int nLine,
+                                          const wxString& szFunc,
+                                          const wxString& szCond);
+
   /*  call this function to break into the debugger unconditionally (assuming */
   /*  the program is running under debugger, of course) */
   extern void WXDLLIMPEXP_BASE wxTrap();
 
   /*  generic assert macro */
-  #define wxASSERT(cond) wxASSERT_MSG(cond, NULL)
+  #define wxASSERT(cond) wxASSERT_MSG(cond, (const char*)NULL)
 
 
   /*  assert with additional message explaining its cause */
@@ -123,24 +161,24 @@
       if ( cond )                                                             \
       {}                                                                      \
       else                                                                    \
-          wxOnAssert(__TFILE__, __LINE__, __WXFUNCTION__, _T(#cond), msg)
+          wxOnAssert(__FILE__, __LINE__, __WXFUNCTION__, #cond, msg)
   #else
     #define wxASSERT_MSG(cond, msg)                                           \
       if ( cond )                                                             \
           ;                                                                   \
       else                                                                    \
-          wxOnAssert(__TFILE__, __LINE__, __WXFUNCTION__, _T(#cond), msg)
+          wxOnAssert(__FILE__, __LINE__, __WXFUNCTION__, #cond, msg)
   #endif
 
   /*  special form of assert: always triggers it (in debug mode) */
-  #define wxFAIL wxFAIL_MSG(NULL)
+  #define wxFAIL wxFAIL_MSG((const char*)NULL)
 
   /*  FAIL with some message */
   #define wxFAIL_MSG(msg) wxFAIL_COND_MSG("wxAssertFailure", msg)
 
   /*  FAIL with some message and a condition */
   #define wxFAIL_COND_MSG(cond, msg)                                          \
-      wxOnAssert(__TFILE__, __LINE__,  __WXFUNCTION__, _T(cond), msg)
+      wxOnAssert(__FILE__, __LINE__,  __WXFUNCTION__, cond, msg)
 
   /*  An assert helper used to avoid warning when testing constant expressions, */
   /*  i.e. wxASSERT( sizeof(int) == 4 ) can generate a compiler warning about */
@@ -180,13 +218,13 @@
 */
 
 /*  check that expression is true, "return" if not (also FAILs in debug mode) */
-#define wxCHECK(cond, rc)            wxCHECK_MSG(cond, rc, NULL)
+#define wxCHECK(cond, rc)            wxCHECK_MSG(cond, rc, (const char*)NULL)
 
 /*  as wxCHECK but with a message explaining why we fail */
 #define wxCHECK_MSG(cond, rc, msg)   wxCHECK2_MSG(cond, return rc, msg)
 
 /*  check that expression is true, perform op if not */
-#define wxCHECK2(cond, op)           wxCHECK2_MSG(cond, op, NULL)
+#define wxCHECK2(cond, op)           wxCHECK2_MSG(cond, op, (const char*)NULL)
 
 /*  as wxCHECK2 but with a message explaining why we fail */
 
