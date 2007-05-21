@@ -86,7 +86,9 @@ wxDragResult wxDropTarget::OnData(
 bool wxDropTarget::CurrentDragHasSupportedFormat()
 {
     bool supported = false;
-
+    if (m_dataObject == NULL)
+        return false;
+        
     if ( gTrackingGlobals.m_currentSource != NULL )
     {
         wxDataObject* data = gTrackingGlobals.m_currentSource->GetDataObject();
