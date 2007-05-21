@@ -144,6 +144,12 @@
                                           const wxString& szFunc,
                                           const wxString& szCond);
 
+  extern void WXDLLIMPEXP_BASE wxOnAssert(const char *szFile,
+                                          int nLine,
+                                          const char *szFunc,
+                                          const char *szCond,
+                                          const wxString& szMsg);
+
   /*  call this function to break into the debugger unconditionally (assuming */
   /*  the program is running under debugger, of course) */
   extern void WXDLLIMPEXP_BASE wxTrap();
