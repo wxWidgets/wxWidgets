@@ -1531,6 +1531,12 @@ void wxTopLevelWindowMac::DoGetClientSize( int *width, int *height ) const
        *height = bounds.bottom - bounds.top ;
 }
 
+void wxTopLevelWindowMac::DoCentre(int dir)
+{
+    if ( m_macWindow != 0 )
+        wxTopLevelWindowBase::DoCentre(dir);
+}
+
 void wxTopLevelWindowMac::MacSetMetalAppearance( bool set )
 {
 #if TARGET_API_MAC_OSX
