@@ -277,7 +277,6 @@ void wxDataObject::AddToPasteboard( void * pb, int itemID )
                     CFRelease(url);
                     PasteboardPutItemFlavor( pasteboard, (PasteboardItemID) counter,
                         (CFStringRef) thisFormat.GetFormatId() , data, kPasteboardFlavorNoFlags);
-                    CFRelease(data);
                     counter++;
                     fname = strtok (NULL,"\n");
                 }
@@ -292,7 +291,6 @@ void wxDataObject::AddToPasteboard( void * pb, int itemID )
                 else
                     PasteboardPutItemFlavor( pasteboard, (PasteboardItemID) itemID,
                         (CFStringRef) thisFormat.GetFormatId() , data, kPasteboardFlavorNoFlags);
-                CFRelease(data);
             }
             free( buf );
         }
