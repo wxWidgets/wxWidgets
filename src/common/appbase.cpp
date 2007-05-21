@@ -347,6 +347,8 @@ void wxAppConsole::ProcessPendingEvents()
     if ( !HasPendingEvents() )
         return;
 
+    wxENTER_CRIT_SECT( *wxPendingEventsLocker );
+
     // iterate until the list becomes empty
     wxList::compatibility_iterator node = wxPendingEvents->GetFirst();
     while (node)
