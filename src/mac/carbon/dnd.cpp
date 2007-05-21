@@ -217,6 +217,16 @@ wxDropSource::~wxDropSource()
 {
 }
 
+OSStatus wxMacPromiseKeeper( PasteboardRef inPasteboard, PasteboardItemID inItem, CFStringRef inFlavorType,
+              void *inContext )
+{
+    OSStatus  err = noErr;
+    
+    // we might add promises here later, inContext is the wxDropSource*
+
+    return err;
+}
+
 wxDragResult wxDropSource::DoDragDrop(int flags)
 {
     wxASSERT_MSG( m_data, wxT("Drop source: no data") );
@@ -235,6 +245,14 @@ wxDragResult wxDropSource::DoDragDrop(int flags)
     if ( err != noErr )
         return wxDragNone;
         
+   // we add a dummy promise keeper because of strange messages when linking against carbon debug
+	err = PasteboardSetPromiseKeeper( pasteboard, wxMacPromiseKeeper, this );
+    if ( err != noErr )
+    {
+        CFRelease( pasteboard );
+        return wxDragNone;
+    }
+
 	err = PasteboardClear( pasteboard );
     if ( err != noErr )
     {
