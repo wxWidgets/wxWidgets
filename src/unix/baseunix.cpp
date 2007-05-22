@@ -90,7 +90,7 @@ wxTimerImpl *wxConsoleAppTraits::CreateTimerImpl(wxTimer *timer)
     return new wxUnixTimerImpl(timer);
 }
 
-wxEventLoop *wxConsoleAppTraits::CreateEventLoop()
+wxEventLoopBase *wxConsoleAppTraits::CreateEventLoop()
 {
     return new wxEventLoop();
 }

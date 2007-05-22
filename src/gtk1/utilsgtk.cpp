@@ -203,7 +203,7 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
     return wxPORT_GTK;
 }
 
-wxEventLoop* wxGUIAppTraits::CreateEventLoop()
+wxEventLoopBase* wxGUIAppTraits::CreateEventLoop()
 {
     return new wxEventLoop;
 }

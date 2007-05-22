@@ -156,7 +156,7 @@ void wxApp::WakeUpIdle()
         wxMutexGuiEnter();
 #endif
 
-    wxEventLoop * const loop = wxEventLoop::GetActive();
+    wxEventLoopBase * const loop = wxEventLoop::GetActive();
     if ( loop )
         loop->WakeUp();
 
@@ -190,7 +190,8 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
     wxLog::Suspend();
 
-    wxEventLoop * const loop = wxEventLoop::GetActive();
+    wxEventLoop * const
+        loop = wx_static_cast(wxEventLoop *, wxEventLoop::GetActive());
     if ( loop )
         loop->Yield();
 

@@ -796,7 +796,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
         // Make sure we have an event loop object,
         // or Pending/Dispatch will fail
-        wxEventLoop* eventLoop = wxEventLoop::GetActive();
+        wxEventLoopBase * const eventLoop = wxEventLoop::GetActive();
         wxEventLoop* newEventLoop = NULL;
         if (!eventLoop)
         {

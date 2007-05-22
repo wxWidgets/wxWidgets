@@ -18,7 +18,7 @@
 class WXDLLIMPEXP_BASE wxArrayString;
 class WXDLLIMPEXP_BASE wxObject;
 class WXDLLEXPORT wxAppTraits;
-class WXDLLIMPEXP_BASE wxEventLoop;
+class WXDLLIMPEXP_BASE wxEventLoopBase;
 #if wxUSE_FONTMAP
     class WXDLLEXPORT wxFontMapper;
 #endif // wxUSE_FONTMAP
@@ -122,7 +122,7 @@ public:
 #endif
 
     // create a new, port specific, instance of the event loop used by wxApp
-    virtual wxEventLoop *CreateEventLoop() = 0;
+    virtual wxEventLoopBase *CreateEventLoop() = 0;
 
 #if wxUSE_TIMER
     // return platform and toolkit dependent wxTimer implementation

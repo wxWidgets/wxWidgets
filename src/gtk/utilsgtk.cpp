@@ -364,7 +364,7 @@ static wxString GetSM()
 // wxGUIAppTraits
 //-----------------------------------------------------------------------------
 
-wxEventLoop *wxGUIAppTraits::CreateEventLoop()
+wxEventLoopBase *wxGUIAppTraits::CreateEventLoop()
 {
     return new wxEventLoop();
 }

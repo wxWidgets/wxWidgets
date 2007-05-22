@@ -381,7 +381,7 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
     return wxPORT_MAC;
 }
 
-wxEventLoop* wxGUIAppTraits::CreateEventLoop()
+wxEventLoopBase* wxGUIAppTraits::CreateEventLoop()
 {
     return new wxEventLoop;
 }

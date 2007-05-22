@@ -87,7 +87,7 @@ wxTimerImpl *wxConsoleAppTraits::CreateTimerImpl(wxTimer *timer)
     return new wxMSWTimerImpl(timer);
 }
 
-wxEventLoop *wxConsoleAppTraits::CreateEventLoop()
+wxEventLoopBase *wxConsoleAppTraits::CreateEventLoop()
 {
     return new wxEventLoop();
 }

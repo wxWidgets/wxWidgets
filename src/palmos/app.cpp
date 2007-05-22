@@ -125,7 +125,7 @@ wxTimerImpl* wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
     return new wxPalmOSTimerImpl(timer);
 };
 
-wxEventLoop* wxGUIAppTraits::CreateEventLoop()
+wxEventLoopBase* wxGUIAppTraits::CreateEventLoop()
 {
     return new wxEventLoop;
 }

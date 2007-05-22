@@ -40,10 +40,11 @@ wxPortId wxGUIAppTraits::GetToolkitVersion(int *verMaj, int *verMin) const
 }
 
 
-wxEventLoop* wxGUIAppTraits::CreateEventLoop()
+wxEventLoopBase* wxGUIAppTraits::CreateEventLoop()
 {
     return new wxEventLoop;
-};
+}
+
 // ----------------------------------------------------------------------------
 // display characteristics
 // ----------------------------------------------------------------------------

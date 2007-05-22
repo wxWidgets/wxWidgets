@@ -14,8 +14,6 @@
 
 #include "wx/utils.h"
 
-class WXDLLEXPORT wxEventLoop;
-
 // ----------------------------------------------------------------------------
 // wxEventLoopBase: interface for wxEventLoop
 // ----------------------------------------------------------------------------
@@ -46,10 +44,10 @@ public:
     virtual bool Dispatch() = 0;
 
     // return currently active (running) event loop, may be NULL
-    static wxEventLoop *GetActive() { return ms_activeLoop; }
+    static wxEventLoopBase *GetActive() { return ms_activeLoop; }
 
     // set currently active (running) event loop
-    static void SetActive(wxEventLoop* loop) { ms_activeLoop = loop; }
+    static void SetActive(wxEventLoopBase* loop) { ms_activeLoop = loop; }
 
     // is this event loop running now?
     //
@@ -69,7 +67,7 @@ protected:
 
 
     // the pointer to currently active loop
-    static wxEventLoop *ms_activeLoop;
+    static wxEventLoopBase *ms_activeLoop;
 
     DECLARE_NO_COPY_CLASS(wxEventLoopBase)
 };
@@ -151,13 +149,18 @@ protected:
     #include "wx/unix/evtloop.h"
 #endif
 
-// cannot use typedef because wxEventLoop is forward-declared in many places
+// we use a class rather than a typedef because wxEventLoop is forward-declared
+// in many places
 #if wxUSE_GUI
-class wxEventLoop : public wxGUIEventLoop { };
-#elif defined(__WXMSW__) || defined(__UNIX__)
-class wxEventLoop : public wxConsoleEventLoop { };
-#else // we still must define it somehow for the code below...
-class wxEventLoop : public wxEventLoopBase { };
+    class wxEventLoop : public wxGUIEventLoop { };
+#else // !GUI
+    // we can't define wxEventLoop differently in GUI and base libraries so use
+    // a #define to still allow writing wxEventLoop in the user code
+    #if defined(__WXMSW__) || defined(__UNIX__)
+        #define wxEventLoop wxConsoleEventLoop
+    #else // we still must define it somehow for the code below...
+        #define wxEventLoop wxEventLoopBase
+    #endif
 #endif
 
 inline bool wxEventLoopBase::IsRunning() const { return GetActive() == this; }
@@ -207,7 +210,7 @@ public:
     wxEventLoopActivator(wxEventLoopBase *evtLoop)
     {
         m_evtLoopOld = wxEventLoopBase::GetActive();
-        wxEventLoopBase::SetActive(wx_static_cast(wxEventLoop *, evtLoop));
+        wxEventLoopBase::SetActive(evtLoop);
     }
 
     ~wxEventLoopActivator()
@@ -217,7 +220,7 @@ public:
     }
 
 private:
-    wxEventLoop *m_evtLoopOld;
+    wxEventLoopBase *m_evtLoopOld;
 };
 
 #endif // _WX_EVTLOOP_H_

@@ -74,10 +74,11 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
     wxLog::Suspend();
 
-    if ( wxEventLoop::GetActive() )
+    wxEventLoopBase * const eventLoop = wxEventLoop::GetActive();
+    if ( eventLoop )
     {
-        while (wxEventLoop::GetActive()->Pending())
-            wxEventLoop::GetActive()->Dispatch();
+        while (eventLoop->Pending())
+            eventLoop->Dispatch();
     }
 
     /* it's necessary to call ProcessIdle() to update the frames sizes which

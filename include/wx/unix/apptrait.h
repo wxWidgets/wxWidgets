@@ -19,7 +19,7 @@
 class WXDLLEXPORT wxConsoleAppTraits : public wxConsoleAppTraitsBase
 {
 public:
-    virtual wxEventLoop *CreateEventLoop();
+    virtual wxEventLoopBase *CreateEventLoop();
     virtual bool CreateEndProcessPipe(wxExecuteData& execData);
     virtual bool IsWriteFDOfEndProcessPipe(wxExecuteData& execData, int fd);
     virtual void DetachWriteFDOfEndProcessPipe(wxExecuteData& execData);
@@ -34,7 +34,7 @@ public:
 class WXDLLEXPORT wxGUIAppTraits : public wxGUIAppTraitsBase
 {
 public:
-    virtual wxEventLoop *CreateEventLoop();
+    virtual wxEventLoopBase *CreateEventLoop();
     virtual bool CreateEndProcessPipe(wxExecuteData& execData);
     virtual bool IsWriteFDOfEndProcessPipe(wxExecuteData& execData, int fd);
     virtual void DetachWriteFDOfEndProcessPipe(wxExecuteData& execData);

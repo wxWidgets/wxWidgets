@@ -119,7 +119,7 @@ wxAppInitializerFunction wxAppConsole::ms_appInitFn = NULL;
 // ----------------------------------------------------------------------------
 
 // this defines wxEventLoopPtr
-wxDEFINE_TIED_SCOPED_PTR_TYPE(wxEventLoop)
+wxDEFINE_TIED_SCOPED_PTR_TYPE(wxEventLoopBase)
 
 // ============================================================================
 // wxAppConsole implementation
@@ -185,7 +185,7 @@ bool wxAppConsole::Initialize(int& argcOrig, wxChar **argvOrig)
     return true;
 }
 
-wxEventLoop *wxAppConsole::CreateMainLoop()
+wxEventLoopBase *wxAppConsole::CreateMainLoop()
 {
     return GetTraits()->CreateEventLoop();
 }
@@ -290,7 +290,7 @@ wxAppTraits *wxAppConsole::GetTraits()
 
 int wxAppConsole::MainLoop()
 {
-    wxEventLoopTiedPtr mainLoop(&m_mainLoop, CreateMainLoop());
+    wxEventLoopBaseTiedPtr mainLoop(&m_mainLoop, CreateMainLoop());
 
     return m_mainLoop ? m_mainLoop->Run() : -1;
 }
@@ -310,7 +310,7 @@ bool wxAppConsole::Pending()
     // use the currently active message loop here, not m_mainLoop, because if
     // we're showing a modal dialog (with its own event loop) currently the
     // main event loop is not running anyhow
-    wxEventLoop * const loop = wxEventLoopBase::GetActive();
+    wxEventLoopBase * const loop = wxEventLoopBase::GetActive();
 
     return loop && loop->Pending();
 }
@@ -318,7 +318,7 @@ bool wxAppConsole::Pending()
 bool wxAppConsole::Dispatch()
 {
     // see comment in Pending()
-    wxEventLoop * const loop = wxEventLoopBase::GetActive();
+    wxEventLoopBase * const loop = wxEventLoopBase::GetActive();
 
     return loop && loop->Dispatch();
 }

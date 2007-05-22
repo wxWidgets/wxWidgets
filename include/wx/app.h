@@ -25,12 +25,11 @@
 class WXDLLIMPEXP_BASE wxAppConsole;
 class WXDLLIMPEXP_BASE wxAppTraits;
 class WXDLLIMPEXP_BASE wxCmdLineParser;
-class WXDLLIMPEXP_BASE wxEventLoop;
+class WXDLLIMPEXP_BASE wxEventLoopBase;
 class WXDLLIMPEXP_BASE wxLog;
 class WXDLLIMPEXP_BASE wxMessageOutput;
 
 #if wxUSE_GUI
-    class WXDLLEXPORT wxEventLoop;
     struct WXDLLIMPEXP_CORE wxVideoMode;
 #endif
 
@@ -327,7 +326,7 @@ protected:
 
     // create main loop from AppTraits or return NULL if
     // there is no main loop implementation
-    wxEventLoop *CreateMainLoop();
+    wxEventLoopBase *CreateMainLoop();
 
     // application info (must be set from the user code)
     wxString m_vendorName,      // vendor name (ACME Inc)
@@ -340,7 +339,7 @@ protected:
 
     // the main event loop of the application (may be NULL if the loop hasn't
     // been started yet or has already terminated)
-    wxEventLoop *m_mainLoop;
+    wxEventLoopBase *m_mainLoop;
 
     // the application object is a singleton anyhow, there is no sense in
     // copying it

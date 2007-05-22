@@ -213,7 +213,7 @@ bool wxGUIAppTraits::DoMessageFromThreadWait()
 {
     // we should return false only if the app should exit, i.e. only if
     // Dispatch() determines that the main event loop should terminate
-    wxEventLoop *evtLoop = wxEventLoop::GetActive();
+    wxEventLoopBase * const evtLoop = wxEventLoop::GetActive();
     if ( !evtLoop || !evtLoop->Pending() )
     {
         // no events means no quit event
@@ -271,7 +271,7 @@ wxTimerImpl *wxGUIAppTraits::CreateTimerImpl(wxTimer *timer)
     return new wxMSWTimerImpl(timer);
 }
 
-wxEventLoop* wxGUIAppTraits::CreateEventLoop()
+wxEventLoopBase* wxGUIAppTraits::CreateEventLoop()
 {
     return new wxEventLoop;
 }
