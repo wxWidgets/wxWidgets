@@ -2275,7 +2275,7 @@ void wxWindowMac::GetTextExtent(const wxString& string, int *x, int *y,
         fontToUse = &m_font;
 
     wxClientDC dc( (wxWindowMac*) this ) ;
-    long lx,ly,ld,le ;
+    wxCoord lx,ly,ld,le ;
     dc.GetTextExtent( string , &lx , &ly , &ld, &le, (wxFont *)fontToUse ) ;
     if ( externalLeading )
         *externalLeading = le ;
