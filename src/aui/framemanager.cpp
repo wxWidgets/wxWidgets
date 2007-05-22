@@ -3540,6 +3540,10 @@ void wxAuiManager::OnFloatingPaneActivated(wxWindow* wnd)
 
 void wxAuiManager::OnRender(wxAuiManagerEvent& evt)
 {
+    // if the frame is about to be deleted, don't bother
+    if (!m_frame || wxPendingDelete.Member(m_frame))
+	    return;
+        
     wxDC* dc = evt.GetDC();
 
 #ifdef __WXMAC__
