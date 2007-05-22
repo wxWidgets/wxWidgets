@@ -76,6 +76,9 @@ void wxMenuItem::UpdateItemBitmap()
             if ( info.contentType == kControlContentIconRef )
                 SetMenuItemIconHandle( mhandle , index ,
                     kMenuIconRefType , (Handle) info.u.iconRef ) ;
+			else if ( info.contentType == kControlContentCGImageRef )
+               SetMenuItemIconHandle( mhandle , index ,
+                    kMenuCGImageRefType , (Handle) info.u.imageRef ) ;
         }
         wxMacReleaseBitmapButton( &info ) ;
 #endif
