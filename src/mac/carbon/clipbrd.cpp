@@ -27,10 +27,6 @@
 
 #include "wx/metafile.h"
 
-#ifndef __DARWIN__
-#include <Scrap.h>
-#endif
-
 #include "wx/mac/uma.h"
 
 #define wxUSE_DATAOBJ 1

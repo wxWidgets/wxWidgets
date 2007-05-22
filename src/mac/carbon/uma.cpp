@@ -726,22 +726,6 @@ wxMacPortStateHelper::~wxMacPortStateHelper()
 
 #endif
 
-OSStatus UMAPutScrap( Size size , OSType type , void *data )
-{
-    OSStatus err = noErr ;
-
-#if !TARGET_CARBON
-    err = PutScrap( size , type , data ) ;
-#else
-    ScrapRef    scrap;
-    err = GetCurrentScrap( &scrap );
-    if ( err == noErr )
-        err = PutScrapFlavor( scrap, type , 0, size, data );
-#endif
-
-    return err ;
-}
-
 Rect * UMAGetControlBoundsInWindowCoords( ControlRef theControl, Rect *bounds )
 {
     GetControlBounds( theControl , bounds ) ;

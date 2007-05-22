@@ -29,9 +29,7 @@
 
 #include "wx/mac/uma.h"
 
-#ifndef __DARWIN__
-#include <Scrap.h>
-#else
+#ifdef __DARWIN__
     #include <QuickTime/QuickTime.h>
 #endif
 
