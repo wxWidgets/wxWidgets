@@ -52,10 +52,6 @@
 #endif
 
 #ifndef __DARWIN__
-#include <Scrap.h>
-#endif
-
-#ifndef __DARWIN__
 #include <MacTextEditor.h>
 #include <ATSUnicode.h>
 #include <TextCommon.h>
@@ -1896,21 +1892,16 @@ void wxMacMLTEControl::SetStyle( long start, long end, const wxTextAttr& style )
 
 void wxMacMLTEControl::Copy()
 {
-    ClearCurrentScrap();
     TXNCopy( m_txn );
-    TXNConvertToPublicScrap();
 }
 
 void wxMacMLTEControl::Cut()
 {
-    ClearCurrentScrap();
     TXNCut( m_txn );
-    TXNConvertToPublicScrap();
 }
 
 void wxMacMLTEControl::Paste()
 {
-    TXNConvertFromPublicScrap();
     TXNPaste( m_txn );
 }
 
@@ -1974,7 +1965,10 @@ void wxMacMLTEControl::Remove( long from , long to )
 
 void wxMacMLTEControl::GetSelection( long* from, long* to) const
 {
-    TXNGetSelection( m_txn , (TXNOffset*) from , (TXNOffset*) to ) ;
+    TXNOffset f,t ;
+    TXNGetSelection( m_txn , &f , &t ) ;
+    *from = f;
+    *to = t;
 }
 
 void wxMacMLTEControl::SetSelection( long from , long to )
