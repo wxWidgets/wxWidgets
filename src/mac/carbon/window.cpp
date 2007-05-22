@@ -448,9 +448,12 @@ static pascal OSStatus wxMacWindowServiceEventHandler( EventHandlerCallRef handl
                 textCtrl->GetSelection( &from , &to ) ;
                 wxString val = textCtrl->GetValue() ;
                 val = val.Mid( from , to - from ) ;
-                ScrapRef scrapRef = cEvent.GetParameter< ScrapRef > ( kEventParamScrapRef , typeScrapRef ) ;
-                verify_noerr( ClearScrap( &scrapRef ) ) ;
-                verify_noerr( PutScrapFlavor( scrapRef , kTXNTextData , 0 , val.length() , val.c_str() ) ) ;
+				PasteboardRef pasteboard = cEvent.GetParameter<PasteboardRef>( kEventParamPasteboardRef, typePasteboardRef );
+                verify_noerr( PasteboardClear( pasteboard ) ) ;
+				PasteboardSynchronize( pasteboard );
+				CFDataRef data = CFDataCreate( kCFAllocatorDefault, (UInt8*)val.c_str(), val.length() );
+				PasteboardPutItemFlavor( pasteboard, (PasteboardItemID) 1, CFSTR("com.apple.traditional-mac-plain-text"), data, 0);
+				CFRelease( data );
                 result = noErr ;
             }
             break ;
@@ -458,23 +461,35 @@ static pascal OSStatus wxMacWindowServiceEventHandler( EventHandlerCallRef handl
         case kEventServicePaste :
             if ( textCtrl )
             {
-                ScrapRef scrapRef = cEvent.GetParameter< ScrapRef > ( kEventParamScrapRef , typeScrapRef ) ;
-                Size textSize, pastedSize ;
-                verify_noerr( GetScrapFlavorSize(scrapRef, kTXNTextData, &textSize) ) ;
-                textSize++ ;
-                char *content = new char[textSize] ;
-                GetScrapFlavorData(scrapRef, kTXNTextData, &pastedSize, content );
-                content[textSize - 1] = 0 ;
-
+				PasteboardRef pasteboard = cEvent.GetParameter<PasteboardRef>( kEventParamPasteboardRef, typePasteboardRef );
+				PasteboardSynchronize( pasteboard );
+				ItemCount itemCount;
+				verify_noerr( PasteboardGetItemCount( pasteboard, &itemCount ) );
+				for( UInt32 itemIndex = 1; itemIndex <= itemCount; itemIndex++ )
+				{
+					PasteboardItemID itemID; 
+					if ( PasteboardGetItemIdentifier( pasteboard, itemIndex, &itemID ) == noErr )
+					{
+						CFDataRef flavorData = NULL;
+						if ( PasteboardCopyItemFlavorData( pasteboard, itemID, CFSTR("com.apple.traditional-mac-plain-text"), &flavorData ) == noErr )
+						{
+							CFIndex flavorDataSize = CFDataGetLength( flavorData );
+							char *content = new char[flavorDataSize+1] ;
+							memcpy( content, CFDataGetBytePtr( flavorData ), flavorDataSize );
+							content[flavorDataSize]=0;
+							CFRelease( flavorData );
 #if wxUSE_UNICODE
-                textCtrl->WriteText( wxString( content , wxConvLocal ) );
+							textCtrl->WriteText( wxString( content , wxConvLocal ) );
 #else
-                textCtrl->WriteText( wxString( content ) ) ;
+							textCtrl->WriteText( wxString( content ) ) ;
 #endif
 
-                delete[] content ;
-                result = noErr ;
-            }
+							delete[] content ;
+							result = noErr ;
+ 						}
+					}
+				}
+           }
             break ;
 
         default:
