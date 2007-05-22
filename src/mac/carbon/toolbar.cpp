@@ -1594,8 +1594,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
     }
     else
     {
-        wxString errMsg = wxString::Format( wxT("wxToolBar::DoInsertTool - failure [%ld]"), (long)err );
-        wxFAIL_MSG( errMsg.c_str() );
+        wxFAIL_MSG( wxString::Format( wxT("wxToolBar::DoInsertTool - failure [%ld]"), (long)err ) );
     }
 
     return (err == noErr);

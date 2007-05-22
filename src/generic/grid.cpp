@@ -10268,10 +10268,7 @@ wxGridCellEditor * wxGrid::GetDefaultEditorForType(const wxString& typeName) con
     int index = m_typeRegistry->FindOrCloneDataType(typeName);
     if ( index == wxNOT_FOUND )
     {
-        wxString errStr;
-
-        errStr.Printf(wxT("Unknown data type name [%s]"), typeName.c_str());
-        wxFAIL_MSG(errStr.c_str());
+        wxFAIL_MSG(wxString::Format(wxT("Unknown data type name [%s]"), typeName.c_str()));
 
         return NULL;
     }
@@ -10284,10 +10281,7 @@ wxGridCellRenderer * wxGrid::GetDefaultRendererForType(const wxString& typeName)
     int index = m_typeRegistry->FindOrCloneDataType(typeName);
     if ( index == wxNOT_FOUND )
     {
-        wxString errStr;
-
-        errStr.Printf(wxT("Unknown data type name [%s]"), typeName.c_str());
-        wxFAIL_MSG(errStr.c_str());
+        wxFAIL_MSG(wxString::Format(wxT("Unknown data type name [%s]"), typeName.c_str()));
 
         return NULL;
     }
