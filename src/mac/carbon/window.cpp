@@ -65,7 +65,6 @@
 #ifndef __DARWIN__
 #include <Windows.h>
 #include <ToolUtils.h>
-#include <Scrap.h>
 #include <MacTextEditor.h>
 #endif
 

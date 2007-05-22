@@ -29,10 +29,6 @@
 #  endif
 #endif
 
-#ifndef __DARWIN__
-#  include <Scrap.h>
-#endif
-
 #include "wx/mac/uma.h"
 
 // since we have decided that we only support 8.6 upwards we are
