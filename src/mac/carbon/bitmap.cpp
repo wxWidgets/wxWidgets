@@ -46,13 +46,12 @@ IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
 // under Quartz then content is transformed into a CGImageRef representing the same data
 // which can be transferred to the GPU by the OS for fast rendering
 
-// we don't dare use premultiplied alpha yet
-#define wxMAC_USE_PREMULTIPLIED_ALPHA 0
-
 #if wxMAC_USE_CORE_GRAPHICS
+    #define wxMAC_USE_PREMULTIPLIED_ALPHA 1
     static const int kBestByteAlignement = 16;
     static const int kMaskBytesPerPixel = 1;
 #else
+    #define wxMAC_USE_PREMULTIPLIED_ALPHA 0
     static const int kBestByteAlignement = 4;
     static const int kMaskBytesPerPixel = 4;
 #endif
@@ -75,7 +74,7 @@ void wxMacCreateBitmapButton( ControlButtonContentInfo*info , const wxBitmap& bi
             
         if ( forceType == 0  )
         {
-            if ( UMAGetSystemVersion() > 0x1040 )
+            if ( UMAGetSystemVersion() >= 0x1040 )
             {
                 // as soon as it is supported, it's a better default
                 forceType = kControlContentCGImageRef;
@@ -160,6 +159,7 @@ void wxBitmapRefData::Init()
     m_width = 0 ;
     m_height = 0 ;
     m_depth = 0 ;
+    m_bytesPerRow = 0;
     m_ok = false ;
     m_bitmapMask = NULL ;
 
@@ -186,17 +186,13 @@ wxBitmapRefData::wxBitmapRefData(const wxBitmapRefData &tocopy)
     
     if (tocopy.m_bitmapMask)
         m_bitmapMask = new wxMask(*tocopy.m_bitmapMask);
+    else if (tocopy.m_hasAlpha)
+        UseAlpha(true);
 
     unsigned char* dest = (unsigned char*)GetRawAccess();
     unsigned char* source = (unsigned char*)tocopy.GetRawAccess();
-    size_t numbytes = tocopy.m_width * tocopy.m_height * 4;
-    
-    for (size_t i=0; i<numbytes; i++)
-    {
-        *dest++ = *source++;
-    }
-    
-    UseAlpha(tocopy.m_hasAlpha);
+    size_t numbytes = m_bytesPerRow * m_height;
+    memcpy( dest, source, numbytes );
 }
 
 wxBitmapRefData::wxBitmapRefData()
@@ -420,10 +416,58 @@ IconRef wxBitmapRefData::GetIconRef()
         if ( dataType != 0 )
         {
 #if wxMAC_USE_CORE_GRAPHICS && MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_5
-            if ( UMAGetSystemVersion() >= 0x1050 )
+            if (  maskType == 0 && UMAGetSystemVersion() >= 0x1050 )
             {
-                Handle data = NULL ;  
-                PtrToHand(GetRawAccess(), &data, sz * sz * 4);
+                size_t datasize = sz * sz * 4 ;
+                Handle data = NewHandle( datasize ) ;
+                HLock( data ) ;
+                unsigned char* ptr = (unsigned char*) *data ;
+                memset( ptr, 0, datasize );
+                bool hasAlpha = HasAlpha() ;
+                wxMask *mask = m_bitmapMask ;
+                unsigned char * sourcePtr = (unsigned char*) GetRawAccess() ;
+                unsigned char * masksourcePtr = mask ? (unsigned char*) mask->GetRawAccess() : NULL ;
+
+                for ( int y = 0 ; y < h ; ++y, sourcePtr += m_bytesPerRow , masksourcePtr += mask ? mask->GetBytesPerRow() : 0 )
+                {
+                    unsigned char * source = sourcePtr;
+                    unsigned char * masksource = masksourcePtr;
+                    unsigned char * dest = ptr + y * sz * 4 ;
+                    unsigned char a, r, g, b;
+
+                    for ( int x = 0 ; x < w ; ++x )
+                    {
+                        a = *source ++ ;
+                        r = *source ++ ;
+                        g = *source ++ ;
+                        b = *source ++ ;
+
+                        if ( mask )
+                        {
+                            a = 0xFF - *masksource++ ;
+                        }
+                        else if ( !hasAlpha )
+                            a = 0xFF ;
+                        else
+                        {
+#if wxMAC_USE_PREMULTIPLIED_ALPHA
+                            // this must be non-premultiplied data
+                            if ( a != 0xFF && a!= 0 )
+                            {
+                                r = r * 255 / a;
+                                g = g * 255 / a;
+                                b = b * 255 / a;
+                            }
+#endif
+                        }
+                        *dest++ = a ;
+                        *dest++ = r ;
+                        *dest++ = g ;
+                        *dest++ = b ;
+
+                     }
+                }
+                HUnlock( data );
                 OSStatus err = SetIconFamilyData( iconFamily, dataType , data );
                 wxASSERT_MSG( err == noErr , wxT("Error when adding bitmap") );
                 DisposeHandle( data );
@@ -456,7 +500,7 @@ IconRef wxBitmapRefData::GetIconRef()
                 unsigned char * sourcePtr = (unsigned char*) GetRawAccess() ;
                 unsigned char * masksourcePtr = mask ? (unsigned char*) mask->GetRawAccess() : NULL ;
 
-                for ( int y = 0 ; y < h ; ++y, sourcePtr += m_bytesPerRow , masksourcePtr += mask->GetBytesPerRow() )
+                for ( int y = 0 ; y < h ; ++y, sourcePtr += m_bytesPerRow , masksourcePtr += mask ? mask->GetBytesPerRow() : 0 )
                 {
                     unsigned char * source = sourcePtr;
                     unsigned char * masksource = masksourcePtr;
@@ -889,11 +933,18 @@ bool wxBitmap::CopyFromIcon(const wxIcon& icon)
             {
                 for ( int x = 0 ; x < w ; ++x )
                 {
-                    *destination++ = *sourcemask++ ;
+                    unsigned char a = *sourcemask++;
+                    *destination++ = a;
                     source++ ;
+#if wxMAC_USE_PREMULTIPLIED_ALPHA
+                    *destination++ = ( (*source++) * a + 127 ) / 255;
+                    *destination++ = ( (*source++) * a + 127 ) / 255;
+                    *destination++ = ( (*source++) * a + 127 ) / 255;
+#else                    
                     *destination++ = *source++ ;
                     *destination++ = *source++ ;
                     *destination++ = *source++ ;
+#endif
                 }
             }
 
@@ -1040,7 +1091,6 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
     wxBitmap ret( rect.width, rect.height, GetDepth() );
     wxASSERT_MSG( ret.Ok(), wxT("GetSubBitmap error") );
 
-    int sourcewidth = GetWidth() ;
     int destwidth = rect.width ;
     int destheight = rect.height ;
 
@@ -1049,8 +1099,8 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
         unsigned char *destdata = (unsigned char*) ret.BeginRawAccess() ;
         wxASSERT( (sourcedata != NULL) && (destdata != NULL) ) ;
 
-        int sourcelinesize = sourcewidth * 4 ;
-        int destlinesize = destwidth * 4 ;
+        int sourcelinesize = GetBitmapData()->GetBytesPerRow() ;
+        int destlinesize = ret.GetBitmapData()->GetBytesPerRow() ;
         unsigned char *source = sourcedata + rect.x * 4 + rect.y * sourcelinesize ;
         unsigned char *dest = destdata ;
 
@@ -1065,7 +1115,7 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
     if ( M_BITMAPDATA->m_bitmapMask )
     {
         wxMemoryBuffer maskbuf ;
-        int rowBytes = ( destwidth * 4 + 3 ) & 0xFFFFFFC ;
+        int rowBytes = GetBestBytesPerRow( destwidth * kMaskBytesPerPixel );
         size_t maskbufsize = rowBytes * destheight ;
 
         int sourcelinesize = M_BITMAPDATA->m_bitmapMask->GetBytesPerRow() ;
@@ -1075,7 +1125,7 @@ wxBitmap wxBitmap::GetSubBitmap(const wxRect &rect) const
         unsigned char *destdata = (unsigned char * ) maskbuf.GetWriteBuf( maskbufsize ) ;
         wxASSERT( (source != NULL) && (destdata != NULL) ) ;
 
-        source += rect.x * 4 + rect.y * sourcelinesize ;
+        source += rect.x * kMaskBytesPerPixel + rect.y * sourcelinesize ;
         unsigned char *dest = destdata ;
 
         for (int yy = 0; yy < destheight; ++yy, source += sourcelinesize , dest += destlinesize)
@@ -1300,13 +1350,25 @@ wxImage wxBitmap::ConvertToImage() const
                 }
                 else if ( r == MASK_RED && g == MASK_GREEN && b == MASK_BLUE )
                     b = MASK_BLUE_REPLACEMENT ;
-
+#if !wxMAC_USE_CORE_GRAPHICS
                 maskp++ ;
                 maskp++ ;
                 maskp++ ;
+#endif
             }
             else if ( hasAlpha )
+            {
                 *alpha++ = a ;
+#if wxMAC_USE_PREMULTIPLIED_ALPHA
+                // this must be non-premultiplied data
+                if ( a != 0xFF && a!= 0 )
+                {
+                    r = r * 255 / a;
+                    g = g * 255 / a;
+                    b = b * 255 / a;
+                }
+#endif
+            }
 
             data[index    ] = r ;
             data[index + 1] = g ;
@@ -1476,11 +1538,7 @@ wxMask::wxMask(const wxMask &tocopy)
     size_t size = m_bytesPerRow * m_height;
     unsigned char* dest = (unsigned char*)m_memBuf.GetWriteBuf( size );
     unsigned char* source = (unsigned char*)tocopy.m_memBuf.GetData();
-    for (size_t i=0; i<size; i++)
-    {
-        *dest++ = *source++;
-    }
-
+    memcpy( dest, source, size );
     m_memBuf.UngetWriteBuf( size ) ;
     RealizeNative() ;
 }
@@ -1636,17 +1694,19 @@ bool wxMask::Create(const wxBitmap& bitmap, const wxColour& colour)
 {
     m_width = bitmap.GetWidth() ;
     m_height = bitmap.GetHeight() ;
-    m_bytesPerRow = GetBestBytesPerRow( m_width * 4 ) ;
-
+    m_bytesPerRow = GetBestBytesPerRow( m_width * kMaskBytesPerPixel ) ;
+    
     size_t size = m_bytesPerRow * m_height ;
     unsigned char * destdatabase = (unsigned char*) m_memBuf.GetWriteBuf( size ) ;
     wxASSERT( destdatabase != NULL ) ;
 
     memset( destdatabase , 0 , size ) ;
-    unsigned char * srcdata = (unsigned char*) bitmap.GetRawAccess() ;
+    unsigned char * srcdatabase = (unsigned char*) bitmap.GetRawAccess() ;
+    size_t sourceBytesRow = bitmap.GetBitmapData()->GetBytesPerRow();
 
-    for ( int y = 0 ; y < m_height ; ++y , destdatabase += m_bytesPerRow)
+    for ( int y = 0 ; y < m_height ; ++y , srcdatabase+= sourceBytesRow, destdatabase += m_bytesPerRow)
     {
+        unsigned char *srcdata = srcdatabase ;
         unsigned char *destdata = destdatabase ;
         unsigned char r, g, b;
 
@@ -1762,7 +1822,7 @@ void *wxBitmap::GetRawData(wxPixelDataBase& data, int bpp)
 
     data.m_width = GetWidth() ;
     data.m_height = GetHeight() ;
-    data.m_stride = GetWidth() * 4 ;
+    data.m_stride = GetBitmapData()->GetBytesPerRow() ;
 
     return BeginRawAccess() ;
 }
