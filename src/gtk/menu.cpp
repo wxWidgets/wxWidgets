@@ -1018,6 +1018,8 @@ wxMenu::~wxMenu()
    {
        // see wxMenu::Init
        gtk_widget_unref( m_menu );
+       g_object_unref( m_accel );
+       
        // if the menu is inserted in another menu at this time, there was
        // one more reference to it:
        if ( m_owner )
