@@ -853,6 +853,15 @@ void wxOnAssert(const char *szFile,
     wxDoOnAssert(szFile, nLine, szFunc, szCond, szMsg);
 }
 
+void wxOnAssert(const char *szFile,
+                int nLine,
+                const char *szFunc,
+                const char *szCond,
+                const wxCStrData& msg)
+{
+    wxDoOnAssert(szFile, nLine, szFunc, szCond, msg);
+}
+
 #if wxUSE_UNICODE
 void wxOnAssert(const char *szFile,
                 int nLine,

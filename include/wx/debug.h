@@ -92,7 +92,7 @@
   /*
     This function is called whenever one of debugging macros fails (i.e.
     condition is false in an assertion). To customize its behaviour, override
-    wxApp::OnAssert().
+    wxApp::OnAssertFailure().
 
     Parameters:
        szFile and nLine - file name and line number of the ASSERT
@@ -101,7 +101,7 @@
        szMsg            - optional message explaining the reason
   */
 
-  /* this version is for compatibility with wx 2.8: */
+  /* this version is for compatibility with wx 2.8 Unicode build only: */
   extern void WXDLLIMPEXP_BASE wxOnAssert(const wxChar *szFile,
                                           int nLine,
                                           const char *szFunc,
@@ -132,7 +132,11 @@
 #endif // wxUSE_UNICODE
 
   class WXDLLIMPEXP_BASE wxString;
-  /* these two work when szMsg passed to debug macro is a string: */
+  class WXDLLIMPEXP_BASE wxCStrData;
+
+  /* these two work when szMsg passed to debug macro is a string,
+     we also have to provide wxCStrData overload to resolve ambiguity
+     which would otherwise arise from wxASSERT( s.c_str() ): */
   extern void WXDLLIMPEXP_BASE wxOnAssert(const wxString& szFile,
                                           int nLine,
                                           const wxString& szFunc,
@@ -143,6 +147,12 @@
                                           int nLine,
                                           const wxString& szFunc,
                                           const wxString& szCond);
+
+  extern void WXDLLIMPEXP_BASE wxOnAssert(const char *szFile,
+                                          int nLine,
+                                          const char *szFunc,
+                                          const char *szCond,
+                                          const wxCStrData& msg);
 
   extern void WXDLLIMPEXP_BASE wxOnAssert(const char *szFile,
                                           int nLine,
