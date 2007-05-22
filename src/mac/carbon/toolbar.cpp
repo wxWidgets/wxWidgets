@@ -475,12 +475,15 @@ void wxToolBarTool::UpdateToggleImage( bool toggle )
         dc.DrawBitmap( m_bmpNormal, 0, 0, true );
         dc.SelectObject( wxNullBitmap );
         ControlButtonContentInfo info;
-        wxMacCreateBitmapButton( &info, bmp, kControlContentIconRef );
+        wxMacCreateBitmapButton( &info, bmp );
         SetControlData( m_controlHandle, 0, kControlIconContentTag, sizeof(info), (Ptr)&info );
 #if wxMAC_USE_NATIVE_TOOLBAR
         if (m_toolbarItemRef != NULL)
         {
-            HIToolbarItemSetIconRef( m_toolbarItemRef, info.u.iconRef );
+            if ( info.contentType == kControlContentIconRef )
+                HIToolbarItemSetIconRef( m_toolbarItemRef, info.u.iconRef );
+            else
+                HIToolbarItemSetImage( m_toolbarItemRef, info.u.imageRef );
         }
 #endif
         wxMacReleaseBitmapButton( &info );
@@ -488,12 +491,15 @@ void wxToolBarTool::UpdateToggleImage( bool toggle )
     else
     {
         ControlButtonContentInfo info;
-        wxMacCreateBitmapButton( &info, m_bmpNormal, kControlContentIconRef );
+        wxMacCreateBitmapButton( &info, m_bmpNormal );
         SetControlData( m_controlHandle, 0, kControlIconContentTag, sizeof(info), (Ptr)&info );
 #if wxMAC_USE_NATIVE_TOOLBAR
         if (m_toolbarItemRef != NULL)
         {
-            HIToolbarItemSetIconRef( m_toolbarItemRef, info.u.iconRef );
+           if ( info.contentType == kControlContentIconRef )
+                HIToolbarItemSetIconRef( m_toolbarItemRef, info.u.iconRef );
+            else
+                HIToolbarItemSetImage( m_toolbarItemRef, info.u.imageRef );
         }
 #endif
         wxMacReleaseBitmapButton( &info );
@@ -1484,11 +1490,15 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
             {
                 wxASSERT( tool->GetControlHandle() == NULL );
                 ControlButtonContentInfo info;
-                wxMacCreateBitmapButton( &info, tool->GetNormalBitmap(), kControlContentIconRef );
+                wxMacCreateBitmapButton( &info, tool->GetNormalBitmap() );
 
-                if ( UMAGetSystemVersion() >= 0x1000)
+                if ( UMAGetSystemVersion() >= 0x1000 )
                 {
+                    // contrary to the docs this control only works with iconrefs
+                    ControlButtonContentInfo info;
+                    wxMacCreateBitmapButton( &info, tool->GetNormalBitmap(), kControlContentIconRef );
                     CreateIconControl( window, &toolrect, &info, false, &controlHandle );
+                    wxMacReleaseBitmapButton( &info );
                 }
                 else
                 {
@@ -1512,7 +1522,10 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
                         HIObjectGetEventTarget(item), GetwxMacToolBarEventHandlerUPP(),
                         GetEventTypeCount(toolBarEventList), toolBarEventList, tool, NULL );
                     HIToolbarItemSetLabel( item, wxMacCFStringHolder(tool->GetLabel(), m_font.GetEncoding()) );
-                    HIToolbarItemSetIconRef( item, info.u.iconRef );
+                    if ( info.contentType == kControlContentIconRef )
+                        HIToolbarItemSetIconRef( item, info.u.iconRef );
+                    else
+                        HIToolbarItemSetImage( item, info.u.imageRef );
                     HIToolbarItemSetCommandID( item, kHIToolbarCommandPressAction );
                     tool->SetToolbarItemRef( item );
                 }
