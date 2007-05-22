@@ -458,7 +458,7 @@ pascal OSErr wxMacWindowDragTrackingHandler(
                     if ( trackingGlobals->m_currentTarget )
                     {
                         trackingGlobals->m_currentTarget->SetCurrentDrag( theDrag );
-                        trackingGlobals->m_currentTarget->OnDragOver( localx, localy, result );
+                        result = trackingGlobals->m_currentTarget->OnDragOver( localx, localy, result );
                     }
                 }
 
