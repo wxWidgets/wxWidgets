@@ -900,6 +900,9 @@ bool wxApp::OnInitGui()
                                sQuitHandler , 0 , FALSE ) ;
     }
 
+    if ( !wxMacInitCocoa() )
+        return false;
+
     return true ;
 }
 
@@ -1194,6 +1197,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
 void wxApp::MacDoOneEvent()
 {
+    wxMacAutoreleasePool autoreleasepool;
     EventRef theEvent;
 
     s_inReceiveEvent = true ;

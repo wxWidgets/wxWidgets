@@ -29,5 +29,5 @@ wxMacAutoreleasePool::wxMacAutoreleasePool()
 
 wxMacAutoreleasePool::~wxMacAutoreleasePool()
 {
-    [m_pool release];
+    [(NSAutoreleasePool*)m_pool release];
 }
