@@ -110,7 +110,7 @@ bool wxBitmapButton::Create( wxWindow *parent,
 #ifdef __WXMAC_OSX__
     if ( HasFlag( wxBORDER_NONE ) )
     {
-        wxMacCreateBitmapButton( &info, m_bmpNormal, kControlContentIconRef );
+        wxMacCreateBitmapButton( &info, m_bmpNormal );
         err = CreateIconControl(
                 MAC_WXHWND(parent->MacGetTopLevelWindowRef()),
                 &bounds, &info, false, m_peer->GetControlRefAddr() );
@@ -145,7 +145,7 @@ void wxBitmapButton::SetBitmapLabel( const wxBitmap& bitmap )
 #ifdef __WXMAC_OSX__
     if ( HasFlag( wxBORDER_NONE ) )
     {
-        wxMacCreateBitmapButton( &info, m_bmpNormal, kControlContentIconRef );
+        wxMacCreateBitmapButton( &info, m_bmpNormal );
         if ( info.contentType != kControlNoContent )
             m_peer->SetData( kControlIconPart, kControlIconContentTag, info );
     }
