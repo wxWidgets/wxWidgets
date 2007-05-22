@@ -1347,5 +1347,20 @@ void wxMacGlobalToLocal( WindowRef window , Point*pt );
 
 #endif
 
+//---------------------------------------------------------------------------
+// cocoa bridging utilities
+//---------------------------------------------------------------------------
+
+bool wxMacInitCocoa();
+
+class wxMacAutoreleasePool
+{
+public :
+    wxMacAutoreleasePool();
+    ~wxMacAutoreleasePool();
+private :
+    void* m_pool;
+};
+
 #endif
     // _WX_PRIVATE_H_
