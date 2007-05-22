@@ -468,22 +468,6 @@ wxWindow *wxScrollHelper::GetTargetWindow() const
     return m_targetWindow;
 }
 
-#ifdef __WXMAC__
-static bool wxScrolledWindowHasChildren(wxWindow* win)
-{
-    wxWindowList::compatibility_iterator node = win->GetChildren().GetFirst();
-    while ( node )
-    {
-        wxWindow* child = node->GetData();
-        if ( !child->IsKindOf(CLASSINFO(wxScrollBar)) )
-            return true;
-
-        node = node->GetNext();
-    }
-    return false;
-}
-#endif
-
 // ----------------------------------------------------------------------------
 // scrolling implementation itself
 // ----------------------------------------------------------------------------
