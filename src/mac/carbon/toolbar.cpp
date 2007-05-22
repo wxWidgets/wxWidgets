@@ -1101,7 +1101,7 @@ bool wxToolBar::Realize()
     // find the maximum tool width and height
     wxToolBarTool *tool;
     wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
-    while ( node != NULL )
+    while ( node )
     {
         tool = (wxToolBarTool *) node->GetData();
         if ( tool != NULL )
@@ -1126,7 +1126,7 @@ bool wxToolBar::Realize()
 #endif
 
     node = m_tools.GetFirst();
-    while ( node != NULL )
+    while ( node )
     {
         tool = (wxToolBarTool*) node->GetData();
         if ( tool == NULL )
@@ -1255,7 +1255,7 @@ bool wxToolBar::Realize()
                     DoToggleTool( tool, true );
 
                 wxToolBarToolsList::compatibility_iterator  nodePrev = node->GetPrevious();
-                while ( nodePrev != NULL )
+                while ( nodePrev )
                 {
                     wxToolBarToolBase   *toggleTool = nodePrev->GetData();
                     if ( (toggleTool == NULL) || !toggleTool->IsButton() || (toggleTool->GetKind() != wxITEM_RADIO) )
@@ -1399,7 +1399,7 @@ wxToolBarToolBase *wxToolBar::FindToolForPosition(wxCoord x, wxCoord y) const
 {
     wxToolBarTool *tool;
     wxToolBarToolsList::compatibility_iterator node = m_tools.GetFirst();
-    while ( node != NULL )
+    while ( node )
     {
         tool = (wxToolBarTool *)node->GetData();
         if (tool != NULL)
