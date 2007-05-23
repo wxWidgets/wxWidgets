@@ -754,8 +754,10 @@ void wxMenuBar::MacInstallMenuBar()
                             if ( mh )
                             {
                                 UMAAppendMenuItem(mh, wxStripMenuCodes(item->GetText()) , wxFont::GetDefaultEncoding(), entry);
-                                SetMenuItemCommandID( mh , CountMenuItems(mh) , wxIdToMacCommand ( item->GetId() ) ) ;
-                                SetMenuItemRefCon( mh , CountMenuItems(mh) , (URefCon) item ) ;
+                                MenuItemIndex position = CountMenuItems(mh);
+                                SetMenuItemCommandID( mh , position, wxIdToMacCommand ( item->GetId() ) );
+                                SetMenuItemRefCon( mh , position, (URefCon) item );
+                                item->DoUpdateItemBitmap( mh, position );
                             }
                         }
 

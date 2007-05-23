@@ -47,6 +47,8 @@ public:
     void UpdateItemBitmap() ;
     void UpdateItemText() ;
     void UpdateItemStatus() ;
+    
+    void DoUpdateItemBitmap( WXHMENU menu, wxUint16 index) ;
 
     // mark item as belonging to the given radio group
     void SetAsRadioGroupStart();
