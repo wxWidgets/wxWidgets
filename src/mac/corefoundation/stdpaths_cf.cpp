@@ -201,7 +201,7 @@ wxString wxStandardPathsCF::GetResourcesDir() const
 }
 
 wxString
-wxStandardPathsCF::GetLocalizedResourcesDir(const wxChar *lang,
+wxStandardPathsCF::GetLocalizedResourcesDir(const wxString& lang,
                                             ResourceCat category) const
 {
     return wxStandardPathsBase::
