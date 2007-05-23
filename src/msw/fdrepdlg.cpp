@@ -349,20 +349,23 @@ wxFindReplaceDialog::wxFindReplaceDialog(wxWindow *parent,
 
 wxFindReplaceDialog::~wxFindReplaceDialog()
 {
-    // the dialog might have been already deleted if the user closed it
-    // manually but in this case we should have got a notification about it and
-    // the flagmust have been set
-    if ( !m_impl->WasClosedByUser() )
+    if ( m_impl )
     {
-        // if it wasn't, delete the dialog ourselves
-        if ( !::DestroyWindow(GetHwnd()) )
+        // the dialog might have been already deleted if the user closed it
+        // manually but in this case we should have got a notification about it
+        // and the flag must have been set
+        if ( !m_impl->WasClosedByUser() )
         {
-            wxLogLastError(_T("DestroyWindow(find dialog)"));
+            // if it wasn't, delete the dialog ourselves
+            if ( !::DestroyWindow(GetHwnd()) )
+            {
+                wxLogLastError(_T("DestroyWindow(find dialog)"));
+            }
         }
-    }
 
-    // unsubclass the parent
-    delete m_impl;
+        // unsubclass the parent
+        delete m_impl;
+    }
 
     // prevent the base class dtor from trying to hide us!
     m_isShown = false;
