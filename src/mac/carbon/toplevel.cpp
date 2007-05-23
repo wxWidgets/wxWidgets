@@ -566,6 +566,7 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
         if ( cEvent.GetKind() == kEventMouseDown )
         {
             ::MenuSelect( screenMouseLocation ) ;
+            ::HiliteMenu(0);
             result = noErr ;
         }
     }
