@@ -102,10 +102,6 @@ OSStatus UMAGetHelpMenu(
 
 OSStatus UMADrawThemePlacard( const Rect *inRect , ThemeDrawState inState ) ;
 
-// Clipboard support
-
-OSStatus UMAPutScrap( Size size , OSType type , void *data ) ;
-
 #define GetWindowUpdateRgn( inWindow , updateRgn ) GetWindowRegion( inWindow , kWindowUpdateRgn, updateRgn )
 
 #endif // wxUSE_GUI
