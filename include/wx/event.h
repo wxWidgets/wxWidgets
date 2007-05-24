@@ -2285,8 +2285,10 @@ public:
     // Clear table
     void Clear();
 
+#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING 
     // Clear all tables
     static void ClearAll();
+#endif // __WXDEBUG__ && wxUSE_MEMORY_TRACING
 
 protected:
     // Init the hash table with the entries of the static event table.

@@ -107,22 +107,26 @@ const wxEventTableEntry wxEvtHandler::sm_eventTableEntries[] =
     { DECLARE_EVENT_TABLE_ENTRY(wxEVT_NULL, 0, 0, (wxObjectEventFunction)NULL, NULL) };
 
 
-#ifdef __WXDEBUG__
-// Clear up event hash table contents or we can get problems
-// when C++ is cleaning up the static object
+// wxUSE_MEMORY_TRACING considers memory freed from the static objects dtors
+// leaked, so we need to manually clean up all event tables before checking for
+// the memory leaks when using it, however this breaks re-initializing the
+// library (i.e. repeated calls to wxInitialize/wxUninitialize) because the
+// event tables won't be rebuilt the next time, so disable this by default
+#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING 
+
 class wxEventTableEntryModule: public wxModule
 {
-DECLARE_DYNAMIC_CLASS(wxEventTableEntryModule)
 public:
-    wxEventTableEntryModule() {}
-    bool OnInit() { return true; }
-    void OnExit()
-    {
-        wxEventHashTable::ClearAll();
-    }
+    wxEventTableEntryModule() { }
+    virtual bool OnInit() { return true; }
+    virtual void OnExit() { wxEventHashTable::ClearAll(); }
+
+    DECLARE_DYNAMIC_CLASS(wxEventTableEntryModule)
 };
+
 IMPLEMENT_DYNAMIC_CLASS(wxEventTableEntryModule, wxModule)
-#endif
+
+#endif // __WXDEBUG__ && wxUSE_MEMORY_TRACING
 
 // ----------------------------------------------------------------------------
 // global variables
@@ -801,24 +805,19 @@ wxEventHashTable::~wxEventHashTable()
 
 void wxEventHashTable::Clear()
 {
-    size_t i;
-    for(i = 0; i < m_size; i++)
+    for ( size_t i = 0; i < m_size; i++ )
     {
         EventTypeTablePointer  eTTnode = m_eventTypeTable[i];
-        if (eTTnode)
-        {
-            delete eTTnode;
-        }
+        delete eTTnode;
     }
 
-    // Necessary in order to not invoke the
-    // overloaded delete operator when statics are cleaned up
-    if (m_eventTypeTable)
-        delete[] m_eventTypeTable;
-
+    delete[] m_eventTypeTable;
     m_eventTypeTable = NULL;
+
     m_size = 0;
 }
+
+#if defined(__WXDEBUG__) && wxUSE_MEMORY_TRACING 
 
 // Clear all tables
 void wxEventHashTable::ClearAll()
@@ -830,6 +829,8 @@ void wxEventHashTable::ClearAll()
         table = table->m_next;
     }
 }
+
+#endif // __WXDEBUG__ && wxUSE_MEMORY_TRACING
 
 bool wxEventHashTable::HandleEvent(wxEvent &event, wxEvtHandler *self)
 {
