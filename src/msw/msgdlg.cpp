@@ -33,18 +33,6 @@
 
 IMPLEMENT_CLASS(wxMessageDialog, wxDialog)
 
-wxMessageDialog::wxMessageDialog(wxWindow *parent,
-                                 const wxString& message,
-                                 const wxString& caption,
-                                 long style,
-                                 const wxPoint& WXUNUSED(pos))
-{
-    m_caption = caption;
-    m_message = message;
-    m_parent = parent;
-    SetMessageDialogStyle(style);
-}
-
 int wxMessageDialog::ShowModal()
 {
     if ( !wxTheApp->GetTopWindow() )
@@ -110,7 +98,7 @@ int wxMessageDialog::ShowModal()
     // per MSDN documentation for MessageBox() we can prefix the message with 2
     // right-to-left mark characters to tell the function to use RTL layout
     // (unfortunately this only works in Unicode builds)
-    wxString message = m_message;
+    wxString message = GetFullMessage();
 #if wxUSE_UNICODE
     if ( wxTheApp->GetLayoutDirection() == wxLayout_RightToLeft )
     {

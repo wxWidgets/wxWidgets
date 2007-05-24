@@ -99,18 +99,6 @@ static void msgboxCallBackClose(Widget w,
 // wxMessageDialog
 // ----------------------------------------------------------------------------
 
-wxMessageDialog::wxMessageDialog(wxWindow *parent,
-                                 const wxString& message,
-                                 const wxString& caption,
-                                 long style,
-                                 const wxPoint& WXUNUSED(pos))
-{
-    m_caption = caption;
-    m_message = message;
-    m_parent = parent;
-    SetMessageDialogStyle(style);
-}
-
 extern "C"
 {
     typedef Widget (*DialogCreateFunction)(Widget, String, ArgList, Cardinal);
@@ -160,7 +148,7 @@ int wxMessageDialog::ShowModal()
     Arg args[10];
     int ac = 0;
 
-    wxXmString text(m_message);
+    wxXmString text(GetFullMessage());
     wxXmString title(m_caption);
     XtSetArg(args[ac], XmNmessageString, text()); ac++;
     XtSetArg(args[ac], XmNdialogTitle, title()); ac++;

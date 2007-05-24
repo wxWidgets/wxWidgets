@@ -60,11 +60,18 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
                                                 const wxString& caption,
                                                 long style,
                                                 const wxPoint& pos)
-                      : wxDialog( parent, wxID_ANY, caption, pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE )
+                      : wxMessageDialogBase(GetParentForModalDialog(parent),
+                                            message,
+                                            caption,
+                                            style),
+                        m_pos(pos)
 {
-    SetMessageDialogStyle(style);
+    m_created = false;
+}
 
-    parent = GetParentForModalDialog(parent);
+void wxGenericMessageDialog::DoCreateMsgdialog()
+{
+    wxDialog::Create(m_parent, wxID_ANY, m_caption, m_pos, wxDefaultSize, wxDEFAULT_DIALOG_STYLE);
 
     bool is_pda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
 
@@ -74,10 +81,10 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
 
 #if wxUSE_STATBMP
     // 1) icon
-    if (style & wxICON_MASK)
+    if (m_dialogStyle & wxICON_MASK)
     {
         wxBitmap bitmap;
-        switch ( style & wxICON_MASK )
+        switch ( m_dialogStyle & wxICON_MASK )
         {
             default:
                 wxFAIL_MSG(_T("incorrect log style"));
@@ -109,16 +116,16 @@ wxGenericMessageDialog::wxGenericMessageDialog( wxWindow *parent,
 
 #if wxUSE_STATTEXT
     // 2) text
-    icon_text->Add( CreateTextSizer( message ), 0, wxALIGN_CENTER | wxLEFT, 10 );
+    icon_text->Add( CreateTextSizer( GetFullMessage() ), 0, wxALIGN_CENTER | wxLEFT, 10 );
 
     topsizer->Add( icon_text, 1, wxCENTER | wxLEFT|wxRIGHT|wxTOP, 10 );
 #endif // wxUSE_STATTEXT
 
     // 3) buttons
     int center_flag = wxEXPAND;
-    if (style & wxYES_NO)
+    if (m_dialogStyle & wxYES_NO)
         center_flag = wxALIGN_CENTRE;
-    wxSizer *sizerBtn = CreateSeparatedButtonSizer(style & ButtonSizerFlags);
+    wxSizer *sizerBtn = CreateSeparatedButtonSizer(m_dialogStyle & ButtonSizerFlags);
     if ( sizerBtn )
         topsizer->Add(sizerBtn, 0, center_flag | wxALL, 10 );
 
@@ -156,6 +163,17 @@ void wxGenericMessageDialog::OnCancel(wxCommandEvent& WXUNUSED(event))
     {
         EndModal( wxID_CANCEL );
     }
+}
+
+int wxGenericMessageDialog::ShowModal()
+{
+    if ( !m_created )
+    {
+        m_created = true;
+        DoCreateMsgdialog();
+    }
+
+    return wxMessageDialogBase::ShowModal();
 }
 
 #endif // wxUSE_MSGDLG && !defined(__WXGTK20__)

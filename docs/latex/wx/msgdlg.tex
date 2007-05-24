@@ -20,6 +20,7 @@ with a choice of OK, Yes, No and Cancel buttons.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
+
 \membersection{wxMessageDialog::wxMessageDialog}\label{wxmessagedialogctor}
 
 \func{}{wxMessageDialog}{\param{wxWindow* }{parent}, \param{const wxString\& }{message},\rtfsp
@@ -56,15 +57,86 @@ Constructor. Use \helpref{wxMessageDialog::ShowModal}{wxmessagedialogshowmodal} 
 
 \docparam{pos}{Dialog position. Not Windows.}
 
+
 \membersection{wxMessageDialog::\destruct{wxMessageDialog}}\label{wxmessagedialogdtor}
 
 \func{}{\destruct{wxMessageDialog}}{\void}
 
 Destructor.
 
+
 \membersection{wxMessageDialog::ShowModal}\label{wxmessagedialogshowmodal}
 
 \func{int}{ShowModal}{\void}
 
 Shows the dialog, returning one of wxID\_OK, wxID\_CANCEL, wxID\_YES, wxID\_NO.
+
+
+\membersection{wxMessageDialog::SetYesNoLabels}\label{wxmessagedialogsetyesnolabels}
+
+\func{bool}{SetYesNoLabels}{\param{const wxString&}{yes},\param{const wxString&}{no}}
+
+Overrides the default labels of the Yes and No buttons.
+
+Notice that this function is not currently available on all platforms, so it
+may return \false to indicate that the labels couldn't be changed. If it
+returns \true (currently only under wxMac), the labels were set successfully.
+Typically, if the function was used successfully, the main dialog message may
+need to be changed, e.g.:
+\begin{verbatim}
+    wxMessageDialog dlg(...);
+    if ( dlg.SetYesNoLabels(_("&Quit"), _("&Don't quit")) )
+        dlg.SetMessage(_("What do you want to do?"));
+    else // buttons have standard "Yes"/"No" values, so rephrase the question
+        dlg.SetMessage(_("Do you really want to quit?"));
+\end{verbatim}
+
+
+\membersection{wxMessageDialog::SetYesNoCancelLabels}\label{wxmessagedialogsetyesnocancellabels}
+
+\func{bool}{SetYesNoCancelLabels}{\param{const wxString&}{yes},\param{const wxString&}{no},\param{const wxString&}{cancel}}
+
+Overrides the default labels of the Yes, No and Cancel buttons.
+
+Please see the remarks in 
+\helpref{SetYesNoLabels}{wxmessagedialogsetyesnolabels} documentation.
+
+
+\membersection{wxMessageDialog::SetOKLabel}\label{wxmessagedialogsetyesoklabel}
+
+\func{bool}{SetOKLabel}{\param{const wxString&}{ok}}
+
+Overrides the default label of the OK button.
+
+Please see the remarks in 
+\helpref{SetYesNoLabels}{wxmessagedialogsetyesnolabels} documentation.
+
+
+\membersection{wxMessageDialog::SetOKCancelLabels}\label{wxmessagedialogsetokcancellabels}
+
+\func{bool}{SetOKCancelLabels}{\param{const wxString&}{ok},\param{const wxString&}{cancel}}
+
+Overrides the default labels of the OK and Cancel buttons.
+
+Please see the remarks in 
+\helpref{SetYesNoLabels}{wxmessagedialogsetyesnolabels} documentation.
+
+
+\membersection{wxMessageDialog::SetMessage}\label{wxmessagedialogsetmessage}
+
+\func{void}{SetMessage}{\param{const wxString&}{msg}}
+
+Sets the message shown by the dialog.
+
+
+\membersection{wxMessageDialog::SetExtendedMessage}\label{wxmessagedialogsetextendedmessage}
+
+\func{void}{SetExtendedMessage}{\param{const wxString&}{exMsg}
+
+Sets the extended message for the dialog: this message is usually an extension
+of the short message specified in the constructor or set with 
+\helpref{SetMessage}{wxmessagedialogsetmessage}. If it is set, the main message
+appears highlighted -- if supported -- and this message appears beneath it in
+normal font. On the platforms which don't support extended messages, it is
+simply appended to the normal message with a new line separating them.
 

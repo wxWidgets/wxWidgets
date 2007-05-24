@@ -9,27 +9,18 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
-#ifndef __MSGDLG_H__
-#define __MSGDLG_H__
+#ifndef _WX_GTK_MSGDLG_H_
+#define _WX_GTK_MSGDLG_H_
 
-#include "wx/defs.h"
-#include "wx/dialog.h"
-
-// type is an 'or' (|) of wxOK, wxCANCEL, wxYES_NO
-// Returns wxYES/NO/OK/CANCEL
-
-WXDLLEXPORT_DATA(extern const wxChar) wxMessageBoxCaptionStr[];
-
-class WXDLLEXPORT wxMessageDialog: public wxDialog, public wxMessageDialogBase
+class WXDLLEXPORT wxMessageDialog : public wxMessageDialogBase
 {
 public:
     wxMessageDialog(wxWindow *parent, const wxString& message,
                     const wxString& caption = wxMessageBoxCaptionStr,
                     long style = wxOK|wxCENTRE,
                     const wxPoint& pos = wxDefaultPosition);
-    virtual ~wxMessageDialog();
 
-    int ShowModal();
+    virtual int ShowModal();
     virtual bool Show( bool WXUNUSED(show) = true ) { return false; };
 
 protected:
@@ -42,10 +33,11 @@ protected:
                               int WXUNUSED(width), int WXUNUSED(height)) {}
 
 private:
-    wxString m_caption;
-    wxString m_message;
+    // create the real GTK+ dialog: this is done from ShowModal() to allow
+    // changing the message between constructing the dialog and showing it
+    void GTKCreateMsgDialog();
 
     DECLARE_DYNAMIC_CLASS(wxMessageDialog)
 };
 
-#endif
+#endif // _WX_GTK_MSGDLG_H_

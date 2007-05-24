@@ -34,57 +34,88 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
                                  const wxString& caption,
                                  long style,
                                  const wxPoint& WXUNUSED(pos))
+               : wxMessageDialogBase(GetParentForModalDialog(parent),
+                                     message,
+                                     caption,
+                                     style)
 {
-    m_caption = caption;
-    m_message = message;
-    SetMessageDialogStyle(style);
+}
 
-    m_parent = GetParentForModalDialog(parent);
-
+void wxMessageDialog::GTKCreateMsgDialog()
+{
     GtkMessageType type = GTK_MESSAGE_ERROR;
     GtkButtonsType buttons = GTK_BUTTONS_OK;
 
-    if (style & wxYES_NO)
+    if (m_dialogStyle & wxYES_NO)
     {
-        if (style & wxCANCEL)
+        if (m_dialogStyle & wxCANCEL)
             buttons = GTK_BUTTONS_NONE;
         else
             buttons = GTK_BUTTONS_YES_NO;
     }
 
-    if (style & wxOK)
+    if (m_dialogStyle & wxOK)
     {
-        if (style & wxCANCEL)
+        if (m_dialogStyle & wxCANCEL)
             buttons = GTK_BUTTONS_OK_CANCEL;
         else
             buttons = GTK_BUTTONS_OK;
     }
 
-    if (style & wxICON_EXCLAMATION)
+    if (m_dialogStyle & wxICON_EXCLAMATION)
         type = GTK_MESSAGE_WARNING;
-    else if (style & wxICON_ERROR)
+    else if (m_dialogStyle & wxICON_ERROR)
         type = GTK_MESSAGE_ERROR;
-    else if (style & wxICON_INFORMATION)
+    else if (m_dialogStyle & wxICON_INFORMATION)
         type = GTK_MESSAGE_INFO;
-    else if (style & wxICON_QUESTION)
+    else if (m_dialogStyle & wxICON_QUESTION)
         type = GTK_MESSAGE_QUESTION;
     else
     {
         // GTK+ doesn't have a "typeless" msg box, so try to auto detect...
-        type = style & wxYES ? GTK_MESSAGE_QUESTION : GTK_MESSAGE_INFO;
+        type = m_dialogStyle & wxYES ? GTK_MESSAGE_QUESTION : GTK_MESSAGE_INFO;
     }
 
-    m_widget = gtk_message_dialog_new(m_parent ?
-                                          GTK_WINDOW(m_parent->m_widget) : NULL,
+    wxString message;
+#if GTK_CHECK_VERSION(2, 4, 0)
+    bool needsExtMessage = false;
+    if ( gtk_check_version(2, 4, 0) == NULL && !m_extendedMessage.empty() )
+    {
+        message = m_message;
+        needsExtMessage = true;
+    }
+    else // extended message not needed or not supported
+#endif // GTK+ 2.4+
+    {
+        message = GetFullMessage();
+    }
+
+    m_widget = gtk_message_dialog_new(m_parent ? GTK_WINDOW(m_parent->m_widget)
+                                              : NULL,
                                       GTK_DIALOG_MODAL,
-                                      type, buttons,
-                                      "%s", (const char*)wxGTK_CONV(m_message));
+                                      type,
+                                      buttons,
+                                      "%s",
+                                      (const char*)wxGTK_CONV(message));
+
+#if GTK_CHECK_VERSION(2, 4, 0)
+    if ( needsExtMessage )
+    {
+        gtk_message_dialog_format_secondary_text
+        (
+            (GtkMessageDialog *)m_widget,
+            "%s",
+            (const char *)wxGTK_CONV(m_extendedMessage)
+        );
+    }
+#endif // GTK+ 2.4+
+
     if (m_caption != wxMessageBoxCaptionStr)
         gtk_window_set_title(GTK_WINDOW(m_widget), wxGTK_CONV(m_caption));
 
-    if (style & wxYES_NO)
+    if (m_dialogStyle & wxYES_NO)
     {
-        if (style & wxCANCEL)
+        if (m_dialogStyle & wxCANCEL)
         {
             gtk_dialog_add_button(GTK_DIALOG(m_widget), GTK_STOCK_NO,
                                   GTK_RESPONSE_NO);
@@ -93,7 +124,7 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
             gtk_dialog_add_button(GTK_DIALOG(m_widget), GTK_STOCK_YES,
                                   GTK_RESPONSE_YES);
         }
-        if (style & wxNO_DEFAULT)
+        if (m_dialogStyle & wxNO_DEFAULT)
             gtk_dialog_set_default_response(GTK_DIALOG(m_widget), GTK_RESPONSE_NO);
         else
             gtk_dialog_set_default_response(GTK_DIALOG(m_widget), GTK_RESPONSE_YES);
@@ -104,12 +135,15 @@ wxMessageDialog::wxMessageDialog(wxWindow *parent,
                                      GTK_WINDOW(m_parent->m_widget));
 }
 
-wxMessageDialog::~wxMessageDialog()
-{
-}
-
 int wxMessageDialog::ShowModal()
 {
+    if ( !m_widget )
+    {
+        GTKCreateMsgDialog();
+        wxCHECK_MSG( m_widget, wxID_CANCEL,
+                     _T("failed to create GtkMessageDialog") );
+    }
+
     // This should be necessary, but otherwise the
     // parent TLW will disappear..
     if (m_parent)
