@@ -354,14 +354,32 @@ Assignment operator.
 
 \membersection{wxRect::operator $==$}\label{wxrectequal}
 
-\func{bool}{operator $==$}{\param{const wxRect\& }{rect}}
+\func{bool}{operator $==$}{\param{const wxRect\& }{r1}, \param{const wxRect\& }{r2}}
 
 Equality operator.
 
 
 \membersection{wxRect::operator $!=$}\label{wxrectnotequal}
 
-\func{bool}{operator $!=$}{\param{const wxRect\& }{rect}}
+\func{bool}{operator $!=$}{\param{const wxRect\& }{r1}, \param{const wxRect\& }{r2}}
 
 Inequality operator.
+
+
+\func{wxRect}{operator $+$}{\param{const wxRect\& }{r1}, \param{const wxRect\& }{r2}}
+
+\func{wxRect\&}{operator $+=$}{\param{const wxRect\& }{r}}
+
+Like \helpref{Union}{wxrectunion} but don't treat empty rectangles specially.
+
+\wxheading{See also}
+
+\helpref{wxRect::Union}{wxrectunion}
+
+
+\func{wxRect}{operator $*$}{\param{const wxRect\& }{r1}, \param{const wxRect\& }{r2}}
+
+\func{wxRect\&}{operator $*=$}{\param{const wxRect\& }{r}}
+
+Returns the intersection of two rectangles (which may be empty).
 

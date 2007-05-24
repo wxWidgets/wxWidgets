@@ -58,6 +58,8 @@ void SizeTestCase::Operators()
     CPPUNIT_ASSERT( s3.GetWidth()==2 && s3.GetHeight()==2 );
     s3 = s1 * 2;
     CPPUNIT_ASSERT( s3.GetWidth()==2 && s3.GetHeight()==4 );
+    s3 = 2 * s1;
+    CPPUNIT_ASSERT( s3.GetWidth()==2 && s3.GetHeight()==4 );
     s3 = s3 / 2;
     CPPUNIT_ASSERT( s3.GetWidth()==1 && s3.GetHeight()==2 );
 

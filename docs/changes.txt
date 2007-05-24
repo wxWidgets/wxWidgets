@@ -115,6 +115,7 @@ All (GUI):
 - Add support for <data> tags to wxrc
 - Support wxAPPLY and wxCLOSE in CreateStdDialogButtonSizer() (Marcin Wojdyr)
 - Show standard options in wxCmdLineParser usage message (Francesco Montorsi)
+- Added wxRect::operator+ (union) and * (intersection) (bdonner)
 
 wxGTK:
 
