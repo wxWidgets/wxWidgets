@@ -87,6 +87,7 @@ bool wxDbColDef::Initialize()
     DerivedCol      = false;
     CbValue         = 0;
     Null            = false;
+    CbValueCol      = 0;
 
     return true;
 }  // wxDbColDef::Initialize()
@@ -552,7 +553,7 @@ bool wxDbTable::bindCols(HSTMT cursor)
     for (i = 0; i < m_numCols; i++)
     {
         if (SQLBindCol(cursor, (UWORD)(i+1), colDefs[i].SqlCtype, (UCHAR*) colDefs[i].PtrDataObj,
-                       colDefs[i].SzDataObj, &colDefs[i].CbValue ) != SQL_SUCCESS)
+                       colDefs[i].SzDataObj, &colDefs[i].CbValueCol ) != SQL_SUCCESS)
           return (pDb->DispAllErrors(henv, hdbc, cursor));
     }
 
@@ -586,7 +587,7 @@ bool wxDbTable::getRec(UWORD fetchType)
             // of each column just read in.
             int i;
             for (i = 0; i < m_numCols; i++)
-                colDefs[i].Null = (colDefs[i].CbValue == SQL_NULL_DATA);
+                colDefs[i].Null = (colDefs[i].CbValueCol == SQL_NULL_DATA);
         }
     }
     else
@@ -606,7 +607,7 @@ bool wxDbTable::getRec(UWORD fetchType)
             // of each column just read in.
             int i;
             for (i = 0; i < m_numCols; i++)
-                colDefs[i].Null = (colDefs[i].CbValue == SQL_NULL_DATA);
+                colDefs[i].Null = (colDefs[i].CbValueCol == SQL_NULL_DATA);
         }
     }
 

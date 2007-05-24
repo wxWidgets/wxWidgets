@@ -55,8 +55,9 @@ public:
     bool    Updateable;                         // Specifies whether this column is updateable
     bool    InsertAllowed;                      // Specifies whether this column should be included in an INSERT statement
     bool    DerivedCol;                         // Specifies whether this column is a derived value
-    SQLLEN  CbValue;                            // Internal use only!!!
+    SQLLEN  CbValue;                            // Internal use only!!! For parameter bindings
     bool    Null;                               // NOT FULLY IMPLEMENTED - Allows NULL values in Inserts and Updates
+    SQLLEN  CbValueCol;                         // Internal use only!!! For column bindings
 
     wxDbColDef();
 
