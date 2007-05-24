@@ -132,8 +132,9 @@ protected:
     wxCheckBox *m_chkDirOnly,
                *m_chk3D,
                *m_chkFirst,
-               *m_chkFilters,
                *m_chkLabels;
+    // filters
+    wxCheckBox *m_fltr[3];
 
 private:
     DECLARE_EVENT_TABLE()
@@ -182,9 +183,16 @@ void DirCtrlWidgetsPage::CreateContent()
     m_chkDirOnly = CreateCheckBoxAndAddToSizer(sizerUseFlags, _T("wxDIRCTRL_DIR_ONLY"));
     m_chk3D      = CreateCheckBoxAndAddToSizer(sizerUseFlags, _T("wxDIRCTRL_3D_INTERNAL"));
     m_chkFirst   = CreateCheckBoxAndAddToSizer(sizerUseFlags, _T("wxDIRCTRL_SELECT_FIRST"));
-    m_chkFilters = CreateCheckBoxAndAddToSizer(sizerUseFlags, _T("wxDIRCTRL_SHOW_FILTERS"));
     m_chkLabels  = CreateCheckBoxAndAddToSizer(sizerUseFlags, _T("wxDIRCTRL_EDIT_LABELS"));
     sizerLeft->Add(sizerUseFlags, wxSizerFlags().Expand().Border());
+
+    wxSizer *sizerFilters =
+        new wxStaticBoxSizer(wxVERTICAL, this, _T("&Filters"));
+    m_fltr[0] = CreateCheckBoxAndAddToSizer(sizerFilters, wxString::Format(wxT("all files (%s)|%s"),
+                            wxFileSelectorDefaultWildcardStr, wxFileSelectorDefaultWildcardStr));
+    m_fltr[1] = CreateCheckBoxAndAddToSizer(sizerFilters, wxT("C++ files (*.cpp; *.h)|*.cpp;*.h"));
+    m_fltr[2] = CreateCheckBoxAndAddToSizer(sizerFilters, wxT("PNG images (*.png)|*.png"));
+    sizerLeft->Add(sizerFilters, wxSizerFlags().Expand().Border());
 
     wxButton *btn = new wxButton(this, DirCtrlPage_Reset, _T("&Reset"));
     sizerLeft->Add(btn, 0, wxALIGN_CENTRE_HORIZONTAL | wxALL, 15);
@@ -236,9 +244,20 @@ void DirCtrlWidgetsPage::CreateDirCtrl()
         ( m_chkDirOnly->IsChecked() ? wxDIRCTRL_DIR_ONLY : 0 ) |
         ( m_chk3D->IsChecked() ? wxDIRCTRL_3D_INTERNAL : 0 ) |
         ( m_chkFirst->IsChecked() ? wxDIRCTRL_SELECT_FIRST : 0 ) |
-        ( m_chkFilters->IsChecked() ? wxDIRCTRL_SHOW_FILTERS : 0 ) |
         ( m_chkLabels->IsChecked() ? wxDIRCTRL_EDIT_LABELS : 0 )
     );
+
+    wxString filter;
+    for (int i = 0; i < 3; ++i) 
+    {
+        if (m_fltr[i]->IsChecked()) 
+        {
+            if (!filter.IsEmpty())
+                filter += wxT("|");
+            filter += m_fltr[i]->GetLabel();
+        }
+    }
+    dirCtrl->SetFilter(filter);
 
     // update sizer's child window
     GetSizer()->Replace(m_dirCtrl, dirCtrl, true);
