@@ -37,6 +37,7 @@
 
 #if wxUSE_CONFIG && ((wxUSE_FILE && wxUSE_TEXTFILE) || wxUSE_CONFIG_NATIVE)
 
+#include "wx/apptrait.h"
 #include "wx/file.h"
 
 #include <stdlib.h>
@@ -53,6 +54,22 @@ bool          wxConfigBase::ms_bAutoCreate = true;
 // ============================================================================
 // implementation
 // ============================================================================
+
+// ----------------------------------------------------------------------------
+// wxAppTraitsBase
+// ----------------------------------------------------------------------------
+
+wxConfigBase *wxAppTraitsBase::CreateConfig()
+{
+    return new
+    #if defined(__WXMSW__) && wxUSE_CONFIG_NATIVE
+        wxRegConfig(wxTheApp->GetAppName(), wxTheApp->GetVendorName());
+    #elif defined(__WXPALMOS__) && wxUSE_CONFIG_NATIVE
+        wxPrefConfig(wxTheApp->GetAppName());
+    #else // either we're under Unix or wish to use files even under Windows
+        wxFileConfig(wxTheApp->GetAppName());
+    #endif
+}
 
 // ----------------------------------------------------------------------------
 // wxConfigBase
@@ -87,14 +104,10 @@ wxConfigBase *wxConfigBase::Set(wxConfigBase *pConfig)
 wxConfigBase *wxConfigBase::Create()
 {
   if ( ms_bAutoCreate && ms_pConfig == NULL ) {
-    ms_pConfig =
-    #if defined(__WXMSW__) && wxUSE_CONFIG_NATIVE
-        new wxRegConfig(wxTheApp->GetAppName(), wxTheApp->GetVendorName());
-    #elif defined(__WXPALMOS__) && wxUSE_CONFIG_NATIVE
-        new wxPrefConfig(wxTheApp->GetAppName());
-    #else // either we're under Unix or wish to use files even under Windows
-      new wxFileConfig(wxTheApp->GetAppName());
-    #endif
+    wxAppTraits * const traits = wxTheApp ? wxTheApp->GetTraits() : NULL;
+    wxCHECK_MSG( traits, NULL, _T("create wxApp before calling this") );
+
+    ms_pConfig = traits->CreateConfig();
   }
 
   return ms_pConfig;

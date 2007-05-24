@@ -16,15 +16,16 @@
 #include "wx/platinfo.h"
 
 class WXDLLIMPEXP_BASE wxArrayString;
-class WXDLLIMPEXP_BASE wxObject;
-class WXDLLEXPORT wxAppTraits;
+class WXDLLIMPEXP_BASE wxConfigBase;
 class WXDLLIMPEXP_BASE wxEventLoopBase;
 #if wxUSE_FONTMAP
     class WXDLLEXPORT wxFontMapper;
 #endif // wxUSE_FONTMAP
 class WXDLLIMPEXP_BASE wxLog;
 class WXDLLIMPEXP_BASE wxMessageOutput;
+class WXDLLIMPEXP_BASE wxObject;
 class WXDLLEXPORT wxRendererNative;
+class WXDLLIMPEXP_BASE wxStandardPathsBase;
 class WXDLLIMPEXP_BASE wxString;
 class WXDLLIMPEXP_BASE wxTimer;
 class WXDLLIMPEXP_BASE wxTimerImpl;
@@ -36,8 +37,6 @@ class GSocketGUIFunctionsTable;
 // wxAppTraits: this class defines various configurable aspects of wxApp
 // ----------------------------------------------------------------------------
 
-class WXDLLIMPEXP_BASE wxStandardPathsBase;
-
 class WXDLLIMPEXP_BASE wxAppTraitsBase
 {
 public:
@@ -46,6 +45,13 @@ public:
 
     // hooks for working with the global objects, may be overridden by the user
     // ------------------------------------------------------------------------
+
+#if wxUSE_CONFIG
+    // create the default configuration object (base class version is
+    // implemented in config.cpp and creates wxRegConfig for wxMSW and
+    // wxFileConfig for all the other platforms)
+    virtual wxConfigBase *CreateConfig();
+#endif // wxUSE_CONFIG
 
 #if wxUSE_LOG
     // create the default log target
