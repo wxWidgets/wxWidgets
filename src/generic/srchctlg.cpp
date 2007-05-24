@@ -322,9 +322,9 @@ bool wxSearchCtrl::Create(wxWindow *parent, wxWindowID id,
             const wxString& name)
 {
 #ifdef __WXGTK__
-    if ( !wxTextCtrlBase::Create(parent, id, pos, size, wxSUNKEN_BORDER | style, validator, name) )
+    if ( !wxTextCtrlBase::Create(parent, id, pos, size, wxSUNKEN_BORDER | (style & ~wxBORDER_MASK), validator, name) )
 #else
-    if ( !wxTextCtrlBase::Create(parent, id, pos, size, wxSIMPLE_BORDER | style, validator, name) )
+    if ( !wxTextCtrlBase::Create(parent, id, pos, size, wxSIMPLE_BORDER | (style & ~wxBORDER_MASK), validator, name) )
 #endif
     {
         return false;
