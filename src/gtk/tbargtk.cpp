@@ -154,7 +154,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget),
+static void gtk_toolbar_callback( GtkWidget *widget,
                                   wxToolBarTool *tool )
 {
     if (g_isIdle)
@@ -169,6 +169,14 @@ static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget),
 
     if (tool->CanBeToggled())
     {
+        if (tool->IsRadio() &&
+            gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget)) &&
+            tool->IsToggled())
+        {
+            // pressed an already pressed radio button
+            return;
+        }
+    
         tool->Toggle();
 
         tool->SetImage(tool->GetBitmap());
@@ -474,7 +482,7 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                                );
 
                 wxCHECK_MSG(tool->m_item != NULL, false, _T("gtk_toolbar_insert_element() failed"));
-
+                
                 g_signal_connect (tool->m_item, "enter_notify_event",
                                   G_CALLBACK (gtk_toolbar_tool_callback),
                                   tool);
