@@ -243,20 +243,7 @@ bool wxNonOwnedWindow::Show(bool show)
     m_dfbwin->SetOpacity(show ? m_opacity : 0);
 
     if ( show )
-    {
-        wxWindow *focused = wxWindow::FindFocus();
-        if ( focused && focused->GetTLW() == this )
-        {
-            SetDfbFocus();
-        }
-        else if ( CanAcceptFocus() )
-        {
-            // FIXME: we should probably always call SetDfbFocus instead
-            // and call SetFocus() from wxActivateEvent/DWET_GOTFOCUS
-            // handler
-            SetFocus();
-        }
-    }
+        SetDfbFocus();
 
     return true;
 }
@@ -403,42 +390,41 @@ void wxNonOwnedWindow::HandleDFBWindowEvent(const wxDFBWindowEvent& event_)
     }
 
     wxNonOwnedWindow *tlw = gs_dfbWindowsMap[event.window_id];
-    wxWindow *recipient = NULL;
-    void (wxWindow::*handlerFunc)(const wxDFBWindowEvent&) = NULL;
 
     switch ( event.type )
     {
         case DWET_KEYDOWN:
         case DWET_KEYUP:
         {
-            recipient = wxWindow::FindFocus();
-            handlerFunc = &wxWindowDFB::HandleKeyEvent;
+            wxWindow *recipient = wxWindow::FindFocus();
+            if ( !recipient )
+            {
+                wxLogTrace(TRACE_EVENTS,
+                           _T("ignoring event: no recipient window"));
+                return;
+            }
+
+            wxCHECK_RET( recipient && recipient->GetTLW() == tlw,
+                         _T("event recipient not in TLW which received the event") );
+
+            recipient->HandleKeyEvent(event_);
             break;
         }
 
+        case DWET_GOTFOCUS:
+        case DWET_LOSTFOCUS:
+            tlw->HandleFocusEvent(event_);
+            break;
+
         case DWET_NONE:
         case DWET_ALL:
-        {
             wxFAIL_MSG( _T("invalid event type") );
             break;
-        }
 
         default:
             // we're not interested in them here
             break;
     }
-
-    if ( !recipient )
-    {
-        wxLogTrace(TRACE_EVENTS, _T("ignoring event: no recipient window"));
-        return;
-    }
-
-    wxCHECK_RET( recipient && recipient->GetTLW() == tlw,
-                 _T("event recipient not in TLW which received the event") );
-
-    // process the event:
-    (recipient->*handlerFunc)(event_);
 }
 
 // ---------------------------------------------------------------------------

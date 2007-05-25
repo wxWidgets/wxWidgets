@@ -19,6 +19,8 @@
 
 #include "wx/dfb/private.h"
 
+#define TRACE_EVENTS _T("events")
+
 // ============================================================================
 // wxTopLevelWindowDFB
 // ============================================================================
@@ -165,4 +167,39 @@ void wxTopLevelWindowDFB::Iconize(bool WXUNUSED(iconize))
 bool wxTopLevelWindowDFB::IsIconized() const
 {
     return false;
+}
+
+// ----------------------------------------------------------------------------
+// focus handling
+// ----------------------------------------------------------------------------
+
+void wxTopLevelWindowDFB::HandleFocusEvent(const wxDFBWindowEvent& event_)
+{
+    const DFBWindowEvent& dfbevent = event_;
+    const bool activate = (dfbevent.type == DWET_GOTFOCUS);
+
+    wxLogTrace(TRACE_EVENTS,
+               _T("toplevel window %p ('%s') %s focus"),
+               this, GetName(),
+               activate ? _T("got") : _T("lost"));
+
+    wxActivateEvent event(wxEVT_ACTIVATE, activate, GetId());
+    event.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(event);
+
+    // if a frame that doesn't have wx focus inside it just got focus, we
+    // need to set focus to it (or its child):
+    if ( activate )
+    {
+        wxWindow *focused = wxWindow::FindFocus();
+        if ( !focused || focused->GetTLW() != this )
+        {
+            wxLogTrace(TRACE_EVENTS,
+                       _T("setting wx focus to toplevel window %p ('%s')"),
+                       this, GetName());
+
+            if ( CanAcceptFocus() )
+                SetFocus();
+        }
+    }
 }
