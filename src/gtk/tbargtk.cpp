@@ -355,7 +355,7 @@ void gtktoolwidget_size_callback( GtkWidget *widget,
 // InsertChild callback for wxToolBar
 //-----------------------------------------------------------------------------
 
-static void wxInsertChildInToolBar( wxToolBar* WXUNUSED(parent),
+static void wxInsertChildInToolBar( wxWindow* WXUNUSED(parent),
                                     wxWindow* WXUNUSED(child) )
 {
     // we don't do anything here
@@ -413,7 +413,7 @@ bool wxToolBar::Create( wxWindow *parent,
                         long style,
                         const wxString& name )
 {
-    m_insertCallback = (wxInsertChildFunction)wxInsertChildInToolBar;
+    m_insertCallback = wxInsertChildInToolBar;
 
     if ( !PreCreation( parent, pos, size ) ||
          !CreateBase( parent, id, pos, size, style, wxDefaultValidator, name ))

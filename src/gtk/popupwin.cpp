@@ -110,7 +110,7 @@ gtk_dialog_realized_callback( GtkWidget * WXUNUSED(widget), wxPopupWindow *win )
  * virtual function here as wxWidgets requires different ways to insert
  * a child in container classes. */
 
-static void wxInsertChildInDialog( wxPopupWindow* parent, wxWindow* child )
+static void wxInsertChildInPopupWin(wxWindow* parent, wxWindow* child)
 {
     gtk_pizza_put( GTK_PIZZA(parent->m_wxwindow),
                    child->m_widget,
@@ -158,7 +158,7 @@ bool wxPopupWindow::Create( wxWindow *parent, int style )
     // All dialogs should really have this style
     m_windowStyle |= wxTAB_TRAVERSAL;
 
-    m_insertCallback = (wxInsertChildFunction) wxInsertChildInDialog;
+    m_insertCallback = wxInsertChildInPopupWin;
 
     m_widget = gtk_window_new( GTK_WINDOW_POPUP );
 

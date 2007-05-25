@@ -443,9 +443,10 @@ static void gtk_page_size_callback( GtkWidget *WXUNUSED(widget), GtkAllocation* 
 // InsertChild callback for wxMDIClientWindow
 //-----------------------------------------------------------------------------
 
-static void wxInsertChildInMDI( wxMDIClientWindow* parent, wxMDIChildFrame* child )
+static void wxInsertChildInMDI(wxWindow* parent, wxWindow* child)
 {
-    wxString s = child->GetTitle();
+    wxMDIChildFrame* child_frame = wx_static_cast(wxMDIChildFrame*, child);
+    wxString s = child_frame->GetTitle();
     if (s.IsNull()) s = _("MDI child");
 
     GtkWidget *label_widget = gtk_label_new( s.mbc_str() );
@@ -458,9 +459,9 @@ static void wxInsertChildInMDI( wxMDIClientWindow* parent, wxMDIChildFrame* chil
 
     gtk_notebook_append_page( notebook, child->m_widget, label_widget );
 
-    child->m_page = (GtkNotebookPage*) (g_list_last(notebook->children)->data);
+    child_frame->m_page = (GtkNotebookPage*) (g_list_last(notebook->children)->data);
 
-    wxMDIParentFrame *parent_frame = (wxMDIParentFrame*) parent->GetParent();
+    wxMDIParentFrame *parent_frame = wx_static_cast(wxMDIParentFrame*, parent->GetParent());
     parent_frame->m_justInserted = true;
 }
 
@@ -486,7 +487,7 @@ wxMDIClientWindow::~wxMDIClientWindow()
 
 bool wxMDIClientWindow::CreateClient( wxMDIParentFrame *parent, long style )
 {
-    m_insertCallback = (wxInsertChildFunction)wxInsertChildInMDI;
+    m_insertCallback = wxInsertChildInMDI;
 
     if (!PreCreation( parent, wxDefaultPosition, wxDefaultSize ) ||
         !CreateBase( parent, wxID_ANY, wxDefaultPosition, wxDefaultSize, style, wxDefaultValidator, wxT("wxMDIClientWindow") ))

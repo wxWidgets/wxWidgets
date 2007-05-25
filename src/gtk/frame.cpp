@@ -124,49 +124,35 @@ static void gtk_toolbar_detached_callback( GtkWidget *WXUNUSED(widget), GtkWidge
  * virtual function here as wxWidgets requires different ways to insert
  * a child in container classes. */
 
-static void wxInsertChildInFrame( wxFrame* parent, wxWindow* child )
+static void wxInsertChildInFrame(wxWindow* parent, wxWindow* child)
 {
     wxASSERT( GTK_IS_WIDGET(child->m_widget) );
 
-    if (!parent->m_insertInClientArea)
-    {
-        // These are outside the client area
-        wxFrame* frame = (wxFrame*) parent;
-        gtk_pizza_put( GTK_PIZZA(frame->m_mainWidget),
-                         child->m_widget,
-                         child->m_x,
-                         child->m_y,
-                         child->m_width,
-                         child->m_height );
+    // These are outside the client area
+    wxFrame* frame = wx_static_cast(wxFrame*, parent);
+    gtk_pizza_put( GTK_PIZZA(frame->m_mainWidget),
+                     child->m_widget,
+                     child->m_x,
+                     child->m_y,
+                     child->m_width,
+                     child->m_height );
 
 #if wxUSE_TOOLBAR_NATIVE
-        // We connect to these events for recalculating the client area
-        // space when the toolbar is floating
-        if (wxIS_KIND_OF(child,wxToolBar))
-        {
-            wxToolBar *toolBar = (wxToolBar*) child;
-            if (toolBar->GetWindowStyle() & wxTB_DOCKABLE)
-            {
-                g_signal_connect (toolBar->m_widget, "child_attached",
-                                  G_CALLBACK (gtk_toolbar_attached_callback),
-                                  parent);
-                g_signal_connect (toolBar->m_widget, "child_detached",
-                                  G_CALLBACK (gtk_toolbar_detached_callback),
-                                  parent);
-            }
-        }
-#endif // wxUSE_TOOLBAR
-    }
-    else
+    // We connect to these events for recalculating the client area
+    // space when the toolbar is floating
+    if (wxIS_KIND_OF(child,wxToolBar))
     {
-        // These are inside the client area
-        gtk_pizza_put( GTK_PIZZA(parent->m_wxwindow),
-                         child->m_widget,
-                         child->m_x,
-                         child->m_y,
-                         child->m_width,
-                         child->m_height );
+        if (child->HasFlag(wxTB_DOCKABLE))
+        {
+            g_signal_connect (child->m_widget, "child_attached",
+                              G_CALLBACK (gtk_toolbar_attached_callback),
+                              parent);
+            g_signal_connect (child->m_widget, "child_detached",
+                              G_CALLBACK (gtk_toolbar_detached_callback),
+                              parent);
+        }
     }
+#endif // wxUSE_TOOLBAR
 }
 
 // ----------------------------------------------------------------------------
@@ -188,11 +174,7 @@ bool wxFrame::Create( wxWindow *parent,
                       long style,
                       const wxString &name )
 {
-    bool rt = wxTopLevelWindow::Create(parent, id, title, pos, sizeOrig,
-                                       style, name);
-    m_insertCallback = (wxInsertChildFunction) wxInsertChildInFrame;
-
-    return rt;
+    return wxFrameBase::Create(parent, id, title, pos, sizeOrig, style, name);
 }
 
 wxFrame::~wxFrame()
@@ -583,11 +565,10 @@ wxToolBar* wxFrame::CreateToolBar( long style, wxWindowID id, const wxString& na
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid frame") );
 
-    m_insertInClientArea = false;
-
+    InsertChildFunction save = m_insertCallback;
+    m_insertCallback = wxInsertChildInFrame;
     m_frameToolBar = wxFrameBase::CreateToolBar( style, id, name );
-
-    m_insertInClientArea = true;
+    m_insertCallback = save;
 
     GtkUpdateSize();
 

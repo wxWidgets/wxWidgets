@@ -92,7 +92,6 @@ public:
     int           m_miniEdge,
                   m_miniTitle;
     GtkWidget    *m_mainWidget;
-    bool          m_insertInClientArea;  /* not from within OnCreateXXX */
 
     bool          m_fsIsShowing;         /* full screen */
     long          m_fsSaveGdkFunc, m_fsSaveGdkDecor;

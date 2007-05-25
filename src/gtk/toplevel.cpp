@@ -379,46 +379,6 @@ gtk_window_expose_callback( GtkWidget *widget,
 }
 
 // ----------------------------------------------------------------------------
-// wxTopLevelWindowGTK itself
-// ----------------------------------------------------------------------------
-
-//-----------------------------------------------------------------------------
-// InsertChild for wxTopLevelWindowGTK
-//-----------------------------------------------------------------------------
-
-/* Callback for wxTopLevelWindowGTK. This very strange beast has to be used because
- * C++ has no virtual methods in a constructor. We have to emulate a
- * virtual function here as wxWidgets requires different ways to insert
- * a child in container classes. */
-
-static void wxInsertChildInTopLevelWindow( wxTopLevelWindowGTK* parent, wxWindow* child )
-{
-    wxASSERT( GTK_IS_WIDGET(child->m_widget) );
-
-    if (!parent->m_insertInClientArea)
-    {
-        // these are outside the client area
-        wxTopLevelWindowGTK* frame = (wxTopLevelWindowGTK*) parent;
-        gtk_pizza_put( GTK_PIZZA(frame->m_mainWidget),
-                         child->m_widget,
-                         child->m_x,
-                         child->m_y,
-                         child->m_width,
-                         child->m_height );
-    }
-    else
-    {
-        // these are inside the client area
-        gtk_pizza_put( GTK_PIZZA(parent->m_wxwindow),
-                         child->m_widget,
-                         child->m_x,
-                         child->m_y,
-                         child->m_width,
-                         child->m_height );
-    }
-}
-
-// ----------------------------------------------------------------------------
 // wxTopLevelWindowGTK creation
 // ----------------------------------------------------------------------------
 
@@ -428,7 +388,6 @@ void wxTopLevelWindowGTK::Init()
     m_miniEdge = 0;
     m_miniTitle = 0;
     m_mainWidget = (GtkWidget*) NULL;
-    m_insertInClientArea = true;
     m_isIconized = false;
     m_fsIsShowing = false;
     m_fsSaveFlag = 0;
@@ -463,8 +422,6 @@ bool wxTopLevelWindowGTK::Create( wxWindow *parent,
     }
 
     m_title = title;
-
-    m_insertCallback = (wxInsertChildFunction) wxInsertChildInTopLevelWindow;
 
     // NB: m_widget may be !=NULL if it was created by derived class' Create,
     //     e.g. in wxTaskBarIconAreaGTK

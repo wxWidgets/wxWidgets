@@ -159,7 +159,7 @@ gtk_notebook_realized_callback( GtkWidget * WXUNUSED(widget), wxWindow *win )
 // InsertChild callback for wxNotebook
 //-----------------------------------------------------------------------------
 
-static void wxInsertChildInNotebook( wxNotebook* parent, wxWindow* child )
+static void wxInsertChildInNotebook(wxWindow* parent, wxWindow* child)
 {
     // Hack Alert! (Part I): This sets the notebook as the parent of the child
     // widget, and takes care of some details such as updating the state and
@@ -217,7 +217,7 @@ bool wxNotebook::Create(wxWindow *parent, wxWindowID id,
                         const wxPoint& pos, const wxSize& size,
                         long style, const wxString& name )
 {
-    m_insertCallback = (wxInsertChildFunction)wxInsertChildInNotebook;
+    m_insertCallback = wxInsertChildInNotebook;
 
     if ( (style & wxBK_ALIGN_MASK) == wxBK_DEFAULT )
         style |= wxBK_TOP;

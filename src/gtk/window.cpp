@@ -2272,7 +2272,7 @@ void wxWindowGTK::Init()
 
     m_resizing = false;
 
-    m_insertCallback = (wxInsertChildFunction) NULL;
+    m_insertCallback = wxInsertChildInWindow;
 
     m_hasFocus = false;
 
@@ -2316,9 +2316,6 @@ bool wxWindowGTK::Create( wxWindow *parent,
         wxFAIL_MSG( wxT("wxWindowGTK creation failed") );
         return false;
     }
-
-    m_insertCallback = wxInsertChildInWindow;
-
 
     if (!HasFlag(wxHSCROLL) && !HasFlag(wxVSCROLL))
     {
@@ -3305,10 +3302,7 @@ bool wxWindowGTK::Reparent( wxWindowBase *newParentBase )
 void wxWindowGTK::DoAddChild(wxWindowGTK *child)
 {
     wxASSERT_MSG( (m_widget != NULL), wxT("invalid window") );
-
     wxASSERT_MSG( (child != NULL), wxT("invalid child window") );
-
-    wxASSERT_MSG( (m_insertCallback != NULL), wxT("invalid child insertion function") );
 
     /* add to list */
     AddChild( child );
