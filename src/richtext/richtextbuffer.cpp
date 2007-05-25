@@ -7902,7 +7902,7 @@ wxTextAttrEx wxTextAttrEx::CombineEx(const wxTextAttrEx& attr,
 
 IMPLEMENT_CLASS(wxRichTextFileHandler, wxObject)
 
-#if wxUSE_STREAMS
+#if wxUSE_FFILE && wxUSE_STREAMS
 bool wxRichTextFileHandler::LoadFile(wxRichTextBuffer *buffer, const wxString& filename)
 {
     wxFFileInputStream stream(filename);
@@ -7920,7 +7920,7 @@ bool wxRichTextFileHandler::SaveFile(wxRichTextBuffer *buffer, const wxString& f
 
     return false;
 }
-#endif // wxUSE_STREAMS
+#endif // wxUSE_FFILE && wxUSE_STREAMS
 
 /// Can we handle this filename (if using files)? By default, checks the extension.
 bool wxRichTextFileHandler::CanHandle(const wxString& filename) const
