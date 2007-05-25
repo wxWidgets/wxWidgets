@@ -1548,7 +1548,7 @@ void wxToolBar::OnEraseBackground(wxEraseEvent& event)
     }
 
     // Only draw a rebar theme on Vista, since it doesn't jive so well with XP
-    if ( !UseBgCol() && majorVersion >= 6)
+    if ( !UseBgCol() && majorVersion >= 6 )
     {
         wxUxThemeEngine *theme = wxUxThemeEngine::GetIfActive();
         if ( theme )
@@ -1727,16 +1727,7 @@ bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
                 // does it intersect the control?
                 wxRect rectItem;
                 wxCopyRECTToRect(r, rectItem);
-                if ( rectCtrl.Intersects(rectItem) )
-                {
-                    // yes, do erase it!
-                    dc.DrawRectangle(rectItem);
-
-                    // Necessary in case we use a no-paint-on-size
-                    // style in the parent: the controls can disappear
-                    control->Refresh(false);
-                }
-                if ( staticText && rectStaticText.Intersects(rectItem) )
+                if ( rectCtrl.Intersects(rectItem) || (staticText && rectStaticText.Intersects(rectItem)))
                 {
                     // yes, do erase it!
 
@@ -1747,7 +1738,7 @@ bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
                     {
                         // Don't use DrawThemeBackground
                     }
-                    else if (!UseBgCol() && majorVersion >= 6)
+                    else if ( !UseBgCol() && majorVersion >= 6 )
                     {
                         wxUxThemeEngine *theme = wxUxThemeEngine::GetIfActive();
                         if ( theme )
@@ -1772,7 +1763,17 @@ bool wxToolBar::HandlePaint(WXWPARAM wParam, WXLPARAM lParam)
 
                     if (!haveRefreshed)
                         dc.DrawRectangle(rectItem);
+                }
 
+                if ( rectCtrl.Intersects(rectItem) )
+                {
+                    // Necessary in case we use a no-paint-on-size
+                    // style in the parent: the controls can disappear
+                    control->Refresh(false);
+				}
+
+                if ( staticText && rectStaticText.Intersects(rectItem) )
+                {
                     // Necessary in case we use a no-paint-on-size
                     // style in the parent: the controls can disappear
                     staticText->Refresh(false);
