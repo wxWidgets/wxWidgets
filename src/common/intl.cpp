@@ -2674,9 +2674,7 @@ const wxString& wxLocale::GetUntranslatedString(const wxString& str)
     static wxLocaleUntranslatedStrings s_strings;
 
     wxLocaleUntranslatedStrings::iterator i = s_strings.find(str);
-    if ( i != s_strings.end() )
-        return *i;
-    else
+    if ( i == s_strings.end() )
         return *s_strings.insert(str).first;
 
     return *i;
