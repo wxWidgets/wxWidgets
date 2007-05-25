@@ -35,7 +35,6 @@
 #endif
 
 #include "wx/gtk/private.h"
-#include "wx/wxcrt.h"
 #include "wx/menu.h"
 
 
@@ -186,6 +185,14 @@ static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget),
 
     if (tool->CanBeToggled())
     {
+        if (tool->IsRadio() &&
+            gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget)) &&
+            tool->IsToggled())
+        {
+            // pressed an already pressed radio button
+            return;
+        }
+    
         tool->Toggle();
 
         tool->SetImage(tool->GetBitmap());
