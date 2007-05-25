@@ -435,6 +435,15 @@ least the GUI part of) the library can't be used at all.
 Notice that parameters \arg{argc} and \arg{argv} may be modified by this
 function.
 
+An additional overload of wxEntryStart() is provided under MSW only: it is
+meant to be called with the parameters passed to \texttt{WinMain()}.
+
+\func{bool}{wxEntryStart}{\param{HINSTANCE }{hInstance}, \param{HINSTANCE }{hPrevInstance = \NULL}, \param{char *}{pCmdLine = \NULL}, \param{int }{nCmdShow = \texttt{SW\_SHOWNORMAL}}}
+
+(notice that under Windows CE platform, and only there, the type of 
+\arg{pCmdLine} is \texttt{wchar\_t *}, otherwise it is \texttt{char *}, even in
+Unicode build).
+
 \wxheading{Include files}
 
 <wx/init.h>

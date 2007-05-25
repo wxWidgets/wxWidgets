@@ -61,6 +61,7 @@
 
 // defined in common/init.cpp
 extern int wxEntryReal(int& argc, wxChar **argv);
+extern int wxEntryCleanupReal(int& argc, wxChar **argv);
 
 // ============================================================================
 // implementation: various entry points
@@ -319,31 +320,56 @@ static bool wxIsUnicodeAvailable()
 // Windows-specific wxEntry
 // ----------------------------------------------------------------------------
 
-// helper function used to clean up in wxEntry() just below
-//
-// notice that argv elements are supposed to be allocated using malloc() while
-// argv array itself is allocated with new
-static void wxFreeArgs(int argc, wxChar **argv)
+struct wxMSWCommandLineArguments
 {
-    for ( int i = 0; i < argc; i++ )
+    wxMSWCommandLineArguments() { argc = 0; argv = NULL; }
+
+    void Init(const wxArrayString& args)
     {
-        free(argv[i]);
+        argc = args.size();
+
+        // +1 here for the terminating NULL
+        argv = new wxChar *[argc + 1];
+        for ( int i = 0; i < argc; i++ )
+        {
+            argv[i] = wxStrdup(args[i]);
+        }
+
+        // argv[] must be NULL-terminated
+        argv[argc] = NULL;
     }
 
-    delete [] argv;
-}
+    void Free()
+    {
+        if ( !argc )
+            return;
 
-WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
-                        HINSTANCE WXUNUSED(hPrevInstance),
-                        wxCmdLineArgType WXUNUSED(pCmdLine),
-                        int nCmdShow)
+        for ( int i = 0; i < argc; i++ )
+        {
+            free(argv[i]);
+        }
+
+        delete [] argv;
+        argv = NULL;
+        argc = 0;
+    }
+
+    int argc;
+    wxChar **argv;
+};
+
+static wxMSWCommandLineArguments wxArgs;
+
+// common part of wxMSW-specific wxEntryStart() and wxEntry() overloads
+static bool
+wxMSWEntryCommon(HINSTANCE hInstance, int nCmdShow)
 {
     // the first thing to do is to check if we're trying to run an Unicode
     // program under Win9x w/o MSLU emulation layer - if so, abort right now
     // as it has no chance to work and has all chances to crash
 #ifdef NEED_UNICODE_CHECK
     if ( !wxIsUnicodeAvailable() )
-        return -1;
+        return false;
 #endif // NEED_UNICODE_CHECK
 
 
@@ -369,21 +395,33 @@ WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
     args.Insert(wxGetFullModuleName(), 0);
 #endif
 
-    int argc = args.GetCount();
+    wxArgs.Init(args);
 
-    // +1 here for the terminating NULL
-    wxChar **argv = new wxChar *[argc + 1];
-    for ( int i = 0; i < argc; i++ )
-    {
-        argv[i] = wxStrdup(args[i]);
-    }
+    return true;
+}
 
-    // argv[] must be NULL-terminated
-    argv[argc] = NULL;
+WXDLLEXPORT bool wxEntryStart(HINSTANCE hInstance,
+                              HINSTANCE WXUNUSED(hPrevInstance),
+                              wxCmdLineArgType WXUNUSED(pCmdLine),
+                              int nCmdShow)
+{
+    if ( !wxMSWEntryCommon(hInstance, nCmdShow) )
+       return false;
 
-    wxON_BLOCK_EXIT2(wxFreeArgs, argc, argv);
+    return wxEntryStart(wxArgs.argc, wxArgs.argv);
+}
 
-    return wxEntry(argc, argv);
+WXDLLEXPORT int wxEntry(HINSTANCE hInstance,
+                        HINSTANCE WXUNUSED(hPrevInstance),
+                        wxCmdLineArgType WXUNUSED(pCmdLine),
+                        int nCmdShow)
+{
+    if ( !wxMSWEntryCommon(hInstance, nCmdShow) )
+        return -1;
+
+    wxON_BLOCK_EXIT_OBJ0(wxArgs, wxMSWCommandLineArguments::Free);
+
+    return wxEntry(wxArgs.argc, wxArgs.argv);
 }
 
 #endif // wxUSE_GUI && __WXMSW__
