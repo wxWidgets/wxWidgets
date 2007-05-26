@@ -116,6 +116,11 @@ public:
     wxDL_METHOD_DEFINE( gint, gnome_print_grestore,
         (GnomePrintContext *pc), (pc), 0 )
 
+    wxDL_METHOD_DEFINE( gint, gnome_print_clip,
+        (GnomePrintContext *pc), (pc), 0 )
+    wxDL_METHOD_DEFINE( gint, gnome_print_eoclip,
+        (GnomePrintContext *pc), (pc), 0 )
+
     wxDL_METHOD_DEFINE( gint, gnome_print_beginpage,
         (GnomePrintContext *pc, const guchar* name), (pc, name), 0 )
     wxDL_METHOD_DEFINE( gint, gnome_print_showpage,
@@ -244,6 +249,9 @@ void wxGnomePrintLibrary::InitializeMethods()
 
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_gsave, success )
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_grestore, success )
+
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_clip, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_eoclip, success )
 
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_beginpage, success )
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_showpage, success )
@@ -1754,10 +1762,28 @@ void wxGnomePrintDC::SetBackground( const wxBrush& brush )
 
 void wxGnomePrintDC::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
+    gs_lgp->gnome_print_gsave( m_gpc );
+    
+    gs_lgp->gnome_print_newpath( m_gpc );
+    gs_lgp->gnome_print_moveto( m_gpc, XLOG2DEV(x), YLOG2DEV(y) );
+    gs_lgp->gnome_print_lineto( m_gpc, XLOG2DEV(x + width), YLOG2DEV(y) );
+    gs_lgp->gnome_print_lineto( m_gpc, XLOG2DEV(x + width), YLOG2DEV(y + height) );
+    gs_lgp->gnome_print_lineto( m_gpc, XLOG2DEV(x), YLOG2DEV(y + height) );
+    gs_lgp->gnome_print_closepath( m_gpc );
+    gs_lgp->gnome_print_clip( m_gpc );
 }
 
 void wxGnomePrintDC::DestroyClippingRegion()
 {
+    gs_lgp->gnome_print_grestore( m_gpc );
+    
+#if 0
+    // not needed, we set the values in each
+    // drawing method anyways
+    SetPen( m_pen );
+    SetBrush( m_brush );
+    SetFont( m_font );
+#endif
 }
 
 bool wxGnomePrintDC::StartDoc(const wxString& message)
