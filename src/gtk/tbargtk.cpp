@@ -173,7 +173,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget),
+static void gtk_toolbar_callback( GtkWidget *widget,
                                   wxToolBarTool *tool )
 {
     wxToolBar *tbar = (wxToolBar *)tool->GetToolBar();
