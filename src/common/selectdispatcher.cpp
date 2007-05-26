@@ -79,7 +79,7 @@ bool wxSelectSets::HasFD(int fd) const
 {
     for ( int n = 0; n < Max; n++ )
     {
-        if ( wxFD_ISSET(fd, &m_fds[n]) )
+        if ( wxFD_ISSET(fd, (fd_set*) &m_fds[n]) )
             return true;
     }
 
@@ -98,7 +98,7 @@ bool wxSelectSets::SetFD(int fd, int flags)
             wxLogTrace(wxSelectDispatcher_Trace,
                        _T("Registered fd %d for %s events"), fd, ms_names[n]);
         }
-        else if ( wxFD_ISSET(fd, &m_fds[n]) )
+        else if ( wxFD_ISSET(fd,  (fd_set*) &m_fds[n]) )
         {
             wxFD_CLR(fd, &m_fds[n]);
             wxLogTrace(wxSelectDispatcher_Trace,
@@ -118,7 +118,7 @@ void wxSelectSets::Handle(int fd, wxFDIOHandler& handler) const
 {
     for ( int n = 0; n < Max; n++ )
     {
-        if ( wxFD_ISSET(fd, &m_fds[n]) )
+        if ( wxFD_ISSET(fd, (fd_set*) &m_fds[n]) )
         {
             wxLogTrace(wxSelectDispatcher_Trace,
                        _T("Got %s event on fd %d"), ms_names[n], fd);
