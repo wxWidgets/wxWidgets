@@ -164,6 +164,7 @@ void wxFrame::Init()
     m_menuBarDetached = false;
     m_toolBarDetached = false;
     m_menuBarHeight = 2;
+    m_fsSaveFlag = 0;
 }
 
 bool wxFrame::Create( wxWindow *parent,
@@ -235,6 +236,41 @@ void wxFrame::DoGetClientSize( int *width, int *height ) const
         *height = 0;
 }
 
+bool wxFrame::ShowFullScreen(bool show, long style)
+{
+    if (!wxFrameBase::ShowFullScreen(show, style))
+        return false;
+
+    wxWindow* const bar[] = {
+        m_frameMenuBar, m_frameToolBar, m_frameStatusBar
+    };
+    const long fsNoBar[] = {
+        wxFULLSCREEN_NOMENUBAR, wxFULLSCREEN_NOTOOLBAR, wxFULLSCREEN_NOSTATUSBAR
+    };
+    for (int i = 0; i < 3; i++)
+    {
+        if (show)
+        {
+            if (bar[i] && (style & fsNoBar[i]))
+            {
+                if (bar[i]->IsShown())
+                    bar[i]->Show(false);
+                else
+                    style &= ~fsNoBar[i];
+            }
+        }
+        else
+        {
+            if (bar[i] && (m_fsSaveFlag & fsNoBar[i]))
+                bar[i]->Show(true);
+        }
+    }
+    if (show)
+        m_fsSaveFlag = style;
+
+    return true;
+}
+
 void wxFrame::GtkOnSize()
 {
     // avoid recursions
@@ -266,10 +302,8 @@ void wxFrame::GtkOnSize()
         // area, which is represented by m_wxwindow.
 
 #if wxUSE_MENUS_NATIVE
-        if (m_frameMenuBar && !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOMENUBAR) != 0))
+        if (m_frameMenuBar && m_frameMenuBar->IsShown())
         {
-            if (!GTK_WIDGET_VISIBLE(m_frameMenuBar->m_widget))
-                gtk_widget_show( m_frameMenuBar->m_widget );
             int xx = m_miniEdge;
             int yy = m_miniEdge + m_miniTitle;
             int ww = m_width  - 2*m_miniEdge;
@@ -285,14 +319,6 @@ void wxFrame::GtkOnSize()
                                   m_frameMenuBar->m_widget,
                                   xx, yy, ww, hh );
             client_area_y_offset += hh;
-        }
-        else
-        {
-            if (m_frameMenuBar)
-            {
-                if (GTK_WIDGET_VISIBLE(m_frameMenuBar->m_widget))
-                    gtk_widget_hide( m_frameMenuBar->m_widget );
-            }
         }
 #endif // wxUSE_MENUS_NATIVE
 
@@ -387,12 +413,8 @@ void wxFrame::GtkOnSize()
     }
 
 #if wxUSE_STATUSBAR
-    if (m_frameStatusBar && m_frameStatusBar->IsShown() &&
-        !(m_fsIsShowing && (m_fsSaveFlag & wxFULLSCREEN_NOSTATUSBAR) != 0))
+    if (m_frameStatusBar && m_frameStatusBar->IsShown())
     {
-        if (!GTK_WIDGET_VISIBLE(m_frameStatusBar->m_widget))
-            gtk_widget_show( m_frameStatusBar->m_widget );
-
         int xx = 0 + m_miniEdge;
         int yy = m_height - wxSTATUS_HEIGHT - m_miniEdge - client_area_y_offset;
         int ww = m_width - 2*m_miniEdge;
@@ -406,14 +428,6 @@ void wxFrame::GtkOnSize()
         gtk_pizza_set_size( GTK_PIZZA(m_wxwindow),
                             m_frameStatusBar->m_widget,
                             xx, yy, ww, hh );
-    }
-    else
-    {
-        if (m_frameStatusBar)
-        {
-            if (GTK_WIDGET_VISIBLE(m_frameStatusBar->m_widget))
-                gtk_widget_hide( m_frameStatusBar->m_widget );
-        }
     }
 #endif // wxUSE_STATUSBAR
 

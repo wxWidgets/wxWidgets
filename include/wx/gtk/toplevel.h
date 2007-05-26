@@ -95,7 +95,6 @@ public:
 
     bool          m_fsIsShowing;         /* full screen */
     long          m_fsSaveGdkFunc, m_fsSaveGdkDecor;
-    long          m_fsSaveFlag;
     wxRect        m_fsSaveFrame;
 
     // m_windowStyle translated to GDK's terms
