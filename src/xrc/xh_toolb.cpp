@@ -75,7 +75,7 @@ wxObject *wxToolBarXmlHandler::DoCreateResource()
             if (GetBool(wxT("toggle")))
             {
                 wxASSERT_MSG( kind == wxITEM_NORMAL,
-                              _T("can't have both toggleable and radion button at once") );
+                              _T("can't have both toggle and radio button at once") );
                 kind = wxITEM_CHECK;
             }
             m_toolbar->AddTool(GetID(),
