@@ -8,6 +8,9 @@
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
+//Ensure that sigset_t is being defined
+#include <signal.h>
+
 // wxApp subclass implementing event processing for console applications
 class WXDLLIMPEXP_BASE wxAppConsoleUnix : public wxAppConsole
 {
