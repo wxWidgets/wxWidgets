@@ -116,6 +116,11 @@ public:
     wxDL_METHOD_DEFINE( gint, gnome_print_grestore,
         (GnomePrintContext *pc), (pc), 0 )
 
+    wxDL_METHOD_DEFINE( gint, gnome_print_clip,
+        (GnomePrintContext *pc), (pc), 0 )
+    wxDL_METHOD_DEFINE( gint, gnome_print_eoclip,
+        (GnomePrintContext *pc), (pc), 0 )
+
     wxDL_METHOD_DEFINE( gint, gnome_print_beginpage,
         (GnomePrintContext *pc, const guchar* name), (pc, name), 0 )
     wxDL_METHOD_DEFINE( gint, gnome_print_showpage,
@@ -148,6 +153,17 @@ public:
         (void), (), NULL )
     wxDL_METHOD_DEFINE( gboolean, gnome_print_config_set,
         (GnomePrintConfig *config, const guchar *key, const guchar *value), (config, key, value), false )
+    wxDL_METHOD_DEFINE( gboolean, gnome_print_config_set_double,
+        (GnomePrintConfig *config, const guchar *key, gdouble value), (config, key, value), false )
+    wxDL_METHOD_DEFINE( gboolean, gnome_print_config_set_int,
+        (GnomePrintConfig *config, const guchar *key, gint value), (config, key, value), false )
+    wxDL_METHOD_DEFINE( gboolean, gnome_print_config_set_boolean,
+        (GnomePrintConfig *config, const guchar *key, gboolean value), (config, key, value), false )
+    wxDL_METHOD_DEFINE( gboolean, gnome_print_config_set_length,
+        (GnomePrintConfig *config, const guchar *key, gdouble value, const GnomePrintUnit *unit), (config, key, value, unit), false )
+        
+    wxDL_METHOD_DEFINE( guchar*, gnome_print_config_get,
+        (GnomePrintConfig *config, const guchar *key), (config, key), NULL )
     wxDL_METHOD_DEFINE( gboolean, gnome_print_config_get_length,
         (GnomePrintConfig *config, const guchar *key, gdouble *val, const GnomePrintUnit **unit), (config, key, val, unit), false )
 
@@ -234,6 +250,9 @@ void wxGnomePrintLibrary::InitializeMethods()
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_gsave, success )
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_grestore, success )
 
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_clip, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_eoclip, success )
+
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_beginpage, success )
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_showpage, success )
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_end_doc, success )
@@ -252,6 +271,12 @@ void wxGnomePrintLibrary::InitializeMethods()
 
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_config_default, success )
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_config_set, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_config_set_boolean, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_config_set_double, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_config_set_int, success )
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_config_set_length, success )
+    
+    wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_config_get, success )
     wxDL_METHOD_LOAD( m_gnome_print_lib, gnome_print_config_get_length, success )
 
     wxDL_METHOD_LOAD( m_gnome_printui_lib, gnome_print_dialog_new, success )
@@ -289,13 +314,92 @@ wxGnomePrintNativeData::~wxGnomePrintNativeData()
 
 bool wxGnomePrintNativeData::TransferTo( wxPrintData &data )
 {
-    // TODO
+    guchar *res = gs_lgp->gnome_print_config_get( m_config,
+            (guchar*)(char*)GNOME_PRINT_KEY_PAGE_ORIENTATION );
+    if (g_ascii_strcasecmp((const gchar *)res,"R90") == 0)
+        data.SetOrientation( wxLANDSCAPE );
+    else
+        data.SetOrientation( wxPORTRAIT );
+    g_free( res );
+    
     return true;
 }
 
 bool wxGnomePrintNativeData::TransferFrom( const wxPrintData &data )
 {
-    // TODO
+    if (data.GetOrientation() == wxLANDSCAPE)
+    {
+        gs_lgp->gnome_print_config_set( m_config,
+            (guchar*)(char*)GNOME_PRINT_KEY_PAGE_ORIENTATION,
+            (guchar*)(char*)"R90" );
+    }
+    else
+    {
+        gs_lgp->gnome_print_config_set( m_config,
+            (guchar*)(char*)GNOME_PRINT_KEY_PAGE_ORIENTATION,
+            (guchar*)(char*)"R0" );
+    }
+
+    if (data.GetCollate())
+    {
+        gs_lgp->gnome_print_config_set_boolean( m_config,
+            (guchar*)(char*)GNOME_PRINT_KEY_COLLATE,
+            TRUE );
+    }
+    else
+    {
+        gs_lgp->gnome_print_config_set_boolean( m_config,
+            (guchar*)(char*)GNOME_PRINT_KEY_COLLATE,
+            FALSE );
+    }
+
+    switch (data.GetPaperId())
+    {
+        case wxPAPER_A3:        gs_lgp->gnome_print_config_set( m_config,
+                                    (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
+                                    (guchar*)(char*)"A3" );
+                                break;
+        case wxPAPER_A5:        gs_lgp->gnome_print_config_set( m_config,
+                                    (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
+                                    (guchar*)(char*)"A5" );
+                                break;
+        case wxPAPER_B4:        gs_lgp->gnome_print_config_set( m_config,
+                                    (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
+                                    (guchar*)(char*)"B4" );
+                                break;
+        case wxPAPER_B5:        gs_lgp->gnome_print_config_set( m_config,
+                                    (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
+                                    (guchar*)(char*)"B5" );
+                                break;
+        case wxPAPER_LETTER:        gs_lgp->gnome_print_config_set( m_config,
+                                    (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
+                                    (guchar*)(char*)"USLetter" );
+                                break;
+        case wxPAPER_LEGAL:     gs_lgp->gnome_print_config_set( m_config,
+                                    (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
+                                    (guchar*)(char*)"USLegal" );
+                                break;
+        case wxPAPER_EXECUTIVE: gs_lgp->gnome_print_config_set( m_config,
+                                    (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
+                                    (guchar*)(char*)"Executive" );
+                                break;
+        case wxPAPER_ENV_C5:    gs_lgp->gnome_print_config_set( m_config,
+                                    (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
+                                    (guchar*)(char*)"C5" );
+                                break;
+        case wxPAPER_ENV_C6:    gs_lgp->gnome_print_config_set( m_config,
+                                    (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
+                                    (guchar*)(char*)"C6" );
+                                break;
+        case wxPAPER_NONE:      break;
+        
+        default:
+        case wxPAPER_A4:        gs_lgp->gnome_print_config_set( m_config,
+                                    (guchar*)(char*)GNOME_PRINT_KEY_PAPER_SIZE,
+                                    (guchar*)(char*)"A4" );
+                                break;
+    }
+
     return true;
 }
 
@@ -428,6 +532,8 @@ wxGnomePrintDialog::wxGnomePrintDialog( wxWindow *parent, wxPrintData *data )
 void wxGnomePrintDialog::Init()
 {
     wxPrintData data = m_printDialogData.GetPrintData();
+    
+    data.ConvertToNative();
 
     wxGnomePrintNativeData *native =
       (wxGnomePrintNativeData*) data.GetNativeData();
@@ -457,8 +563,6 @@ wxGnomePrintDialog::~wxGnomePrintDialog()
 
 int wxGnomePrintDialog::ShowModal()
 {
-    // Transfer data from m_printDalogData to dialog here
-
     int response = gtk_dialog_run (GTK_DIALOG (m_widget));
 
     if (response == GNOME_PRINT_DIALOG_RESPONSE_CANCEL)
@@ -468,6 +572,8 @@ int wxGnomePrintDialog::ShowModal()
 
         return wxID_CANCEL;
     }
+
+    m_printDialogData.GetPrintData().ConvertFromNative();
 
     gint copies = 1;
     gboolean collate = false;
@@ -536,14 +642,36 @@ wxGnomePageSetupDialog::wxGnomePageSetupDialog( wxWindow *parent,
     if (data)
         m_pageDialogData = *data;
 
+    m_pageDialogData.GetPrintData().ConvertToNative();
+
     wxGnomePrintNativeData *native =
       (wxGnomePrintNativeData*) m_pageDialogData.GetPrintData().GetNativeData();
 
-    // This is required as the page setup dialog
+    // This *was* required as the page setup dialog
     // calculates wrong values otherwise.
+#if 0
     gs_lgp->gnome_print_config_set( native->GetPrintConfig(),
                             (const guchar*) GNOME_PRINT_KEY_PREFERED_UNIT,
                             (const guchar*) "Pts" );
+#endif
+
+    GnomePrintConfig *config = native->GetPrintConfig();
+
+    const GnomePrintUnit *mm_unit = gs_lgp->gnome_print_unit_get_by_abbreviation( (const guchar*) "mm" );
+
+    double ml = (double) m_pageDialogData.GetMarginTopLeft().x;
+    double mt = (double) m_pageDialogData.GetMarginTopLeft().y;
+    double mr = (double) m_pageDialogData.GetMarginBottomRight().x;
+    double mb = (double) m_pageDialogData.GetMarginBottomRight().y;
+    
+    gs_lgp->gnome_print_config_set_length (config,
+            (const guchar*) GNOME_PRINT_KEY_PAGE_MARGIN_LEFT, ml, mm_unit );
+    gs_lgp->gnome_print_config_set_length (config,
+            (const guchar*) GNOME_PRINT_KEY_PAGE_MARGIN_RIGHT, mr, mm_unit );
+    gs_lgp->gnome_print_config_set_length (config,
+            (const guchar*) GNOME_PRINT_KEY_PAGE_MARGIN_TOP, mt, mm_unit );
+    gs_lgp->gnome_print_config_set_length (config,
+            (const guchar*) GNOME_PRINT_KEY_PAGE_MARGIN_BOTTOM, mb, mm_unit );
 
     m_widget = gtk_dialog_new();
 
@@ -580,19 +708,18 @@ int wxGnomePageSetupDialog::ShowModal()
 {
     wxGnomePrintNativeData *native =
       (wxGnomePrintNativeData*) m_pageDialogData.GetPrintData().GetNativeData();
+      
     GnomePrintConfig *config = native->GetPrintConfig();
 
-    // Transfer data from m_pageDialogData to native dialog
 
     int ret = gtk_dialog_run( GTK_DIALOG(m_widget) );
 
     if (ret == GTK_RESPONSE_OK)
     {
         // Transfer data back to m_pageDialogData
+        m_pageDialogData.GetPrintData().ConvertFromNative();
 
         // I don't know how querying the last parameter works
-        // I cannot test it as the dialog is currently broken
-        // anyways (it only works for points).
         double ml,mr,mt,mb,pw,ph;
         gs_lgp->gnome_print_config_get_length (config,
             (const guchar*) GNOME_PRINT_KEY_PAGE_MARGIN_LEFT, &ml, NULL);
@@ -607,9 +734,8 @@ int wxGnomePageSetupDialog::ShowModal()
         gs_lgp->gnome_print_config_get_length (config,
             (const guchar*) GNOME_PRINT_KEY_PAPER_HEIGHT, &ph, NULL);
 
-        // This probably assumes that the user entered the
-        // values in Pts. Since that is the only the dialog
-        // works right now, we need to fix this later.
+        // This code converts correctly from what the user chose
+        // as the unit although I query Pts here
         const GnomePrintUnit *mm_unit = gs_lgp->gnome_print_unit_get_by_abbreviation( (const guchar*) "mm" );
         const GnomePrintUnit *pts_unit = gs_lgp->gnome_print_unit_get_by_abbreviation( (const guchar*) "Pts" );
         gs_lgp->gnome_print_convert_distance( &ml, pts_unit, mm_unit );
@@ -623,13 +749,6 @@ int wxGnomePageSetupDialog::ShowModal()
         m_pageDialogData.SetMarginBottomRight( wxPoint( (int)(mr+0.5), (int)(mb+0.5)) );
 
         m_pageDialogData.SetPaperSize( wxSize( (int)(pw+0.5), (int)(ph+0.5) ) );
-
-#if 0
-        wxPrintf( wxT("paper %d %d, top margin %d\n"),
-            m_pageDialogData.GetPaperSize().x,
-            m_pageDialogData.GetPaperSize().y,
-            m_pageDialogData.GetMarginTopLeft().x );
-#endif
 
         ret = wxID_OK;
     }
@@ -668,7 +787,6 @@ IMPLEMENT_CLASS(wxGnomePrinter, wxPrinterBase)
 wxGnomePrinter::wxGnomePrinter( wxPrintDialogData *data ) :
     wxPrinterBase( data )
 {
-    m_gpc = NULL;
     m_native_preview = false;
 }
 
@@ -685,11 +803,11 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     }
 
     wxPrintData printdata = GetPrintDialogData().GetPrintData();
+    
     wxGnomePrintNativeData *native =
         (wxGnomePrintNativeData*) printdata.GetNativeData();
 
     GnomePrintJob *job = gs_lgp->gnome_print_job_new( native->GetPrintConfig() );
-    m_gpc = gs_lgp->gnome_print_job_get_context (job);
 
     // The GnomePrintJob is temporarily stored in the
     // native print data as the native print dialog
@@ -708,7 +826,7 @@ bool wxGnomePrinter::Print(wxWindow *parent, wxPrintout *printout, bool prompt )
     if (prompt)
         dc = PrintDialog( parent );
     else
-        dc = new wxGnomePrintDC( this );
+        dc = new wxGnomePrintDC( printdata );
 
     if (m_native_preview)
         printout->SetIsPreview(true);
@@ -826,7 +944,7 @@ wxDC* wxGnomePrinter::PrintDialog( wxWindow *parent )
     m_native_preview = ret == wxID_PREVIEW;
 
     m_printDialogData = dialog.GetPrintDialogData();
-    return new wxGnomePrintDC( this );
+    return new wxGnomePrintDC( m_printDialogData.GetPrintData() );
 }
 
 bool wxGnomePrinter::Setup( wxWindow *parent )
@@ -840,38 +958,15 @@ bool wxGnomePrinter::Setup( wxWindow *parent )
 
 IMPLEMENT_CLASS(wxGnomePrintDC, wxDC)
 
-wxGnomePrintDC::wxGnomePrintDC( wxGnomePrinter *printer )
-{
-    m_printer = printer;
-
-    m_gpc = printer->GetPrintContext();
-    m_job = NULL; // only used and destroyed when created with wxPrintData
-
-    m_layout = gs_lgp->gnome_print_pango_create_layout( m_gpc );
-    m_fontdesc = pango_font_description_from_string( "Sans 12" );
-    m_context = NULL;
-
-    m_currentRed = 0;
-    m_currentBlue = 0;
-    m_currentGreen = 0;
-
-    m_signX =  1;  // default x-axis left to right
-    m_signY = -1;  // default y-axis bottom up -> top down
-
-    GetSize( NULL, &m_deviceOffsetY );
-}
-
 wxGnomePrintDC::wxGnomePrintDC( const wxPrintData& data )
 {
-    m_printer = NULL;
     m_printData = data;
 
     wxGnomePrintNativeData *native =
         (wxGnomePrintNativeData*) m_printData.GetNativeData();
 
-    GnomePrintJob *job = gs_lgp->gnome_print_job_new( native->GetPrintConfig() );
-    m_gpc = gs_lgp->gnome_print_job_get_context (job);
-    m_job = job; // only used and destroyed when created with wxPrintData
+    m_job = native->GetPrintJob();
+    m_gpc = gs_lgp->gnome_print_job_get_context (m_job);
 
     m_layout = gs_lgp->gnome_print_pango_create_layout( m_gpc );
     m_fontdesc = pango_font_description_from_string( "Sans 12" );
@@ -889,8 +984,6 @@ wxGnomePrintDC::wxGnomePrintDC( const wxPrintData& data )
 
 wxGnomePrintDC::~wxGnomePrintDC()
 {
-    if (m_job)
-        g_object_unref (m_job);
 }
 
 bool wxGnomePrintDC::IsOk() const
@@ -1669,10 +1762,28 @@ void wxGnomePrintDC::SetBackground( const wxBrush& brush )
 
 void wxGnomePrintDC::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
+    gs_lgp->gnome_print_gsave( m_gpc );
+    
+    gs_lgp->gnome_print_newpath( m_gpc );
+    gs_lgp->gnome_print_moveto( m_gpc, XLOG2DEV(x), YLOG2DEV(y) );
+    gs_lgp->gnome_print_lineto( m_gpc, XLOG2DEV(x + width), YLOG2DEV(y) );
+    gs_lgp->gnome_print_lineto( m_gpc, XLOG2DEV(x + width), YLOG2DEV(y + height) );
+    gs_lgp->gnome_print_lineto( m_gpc, XLOG2DEV(x), YLOG2DEV(y + height) );
+    gs_lgp->gnome_print_closepath( m_gpc );
+    gs_lgp->gnome_print_clip( m_gpc );
 }
 
 void wxGnomePrintDC::DestroyClippingRegion()
 {
+    gs_lgp->gnome_print_grestore( m_gpc );
+    
+#if 0
+    // not needed, we set the values in each
+    // drawing method anyways
+    SetPen( m_pen );
+    SetBrush( m_brush );
+    SetFont( m_font );
+#endif
 }
 
 bool wxGnomePrintDC::StartDoc(const wxString& message)
@@ -1841,6 +1952,16 @@ void wxGnomePrintDC::SetLogicalOrigin( wxCoord x, wxCoord y )
 void wxGnomePrintDC::SetDeviceOrigin( wxCoord x, wxCoord y )
 {
     wxDC::SetDeviceOrigin( x, y );
+}
+
+void wxGnomePrintDC::SetPrintData(const wxPrintData& data)
+{ 
+    m_printData = data;
+    
+    if (m_printData.GetOrientation() == wxPORTRAIT)
+        GetSize( NULL, &m_deviceOffsetY );
+    else
+        GetSize( &m_deviceOffsetY, NULL );
 }
 
 void wxGnomePrintDC::SetResolution(int ppi)
