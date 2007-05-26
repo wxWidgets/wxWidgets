@@ -19,6 +19,7 @@
 class WXDLLIMPEXP_BASE wxConsoleAppTraits : public wxConsoleAppTraitsBase
 {
 public:
+    virtual wxEventLoopBase *CreateEventLoop();
 #if wxUSE_TIMER
     virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer) { return NULL; };
 #endif
