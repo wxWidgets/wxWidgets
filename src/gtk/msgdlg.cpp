@@ -77,7 +77,7 @@ void wxMessageDialog::GTKCreateMsgDialog()
     }
 
     wxString message;
-#if GTK_CHECK_VERSION(2, 4, 0)
+#if GTK_CHECK_VERSION(2, 6, 0)
     bool needsExtMessage = false;
     if ( gtk_check_version(2, 4, 0) == NULL && !m_extendedMessage.empty() )
     {
@@ -98,7 +98,7 @@ void wxMessageDialog::GTKCreateMsgDialog()
                                       "%s",
                                       (const char*)wxGTK_CONV(message));
 
-#if GTK_CHECK_VERSION(2, 4, 0)
+#if GTK_CHECK_VERSION(2, 6, 0)
     if ( needsExtMessage )
     {
         gtk_message_dialog_format_secondary_text
