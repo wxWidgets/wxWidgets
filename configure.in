@@ -828,6 +828,9 @@ else
   DEFAULT_wxUSE_GTK2=yes
 fi
 
+dnl Always default to no. Only special cases require this.
+DEFAULT_wxUSE_OBJC_UNIQUIFYING=no
+
 
 dnl WX_ARG_WITH should be used to select whether an external package will be
 dnl used or not, to configure compile-time features of this package itself,
@@ -951,6 +954,7 @@ WX_ARG_ENABLE(compat28,      [  --disable-compat28      disable wxWidgets 2.8 co
 
 WX_ARG_ENABLE(rpath,         [  --disable-rpath         disable use of rpath for uninstalled builds], wxUSE_RPATH)
 
+WX_ARG_ENABLE(objc_uniquifying,[  --enable-objc_uniquifying enable Objective-C class name uniquifying], wxUSE_OBJC_UNIQUIFYING)
 
 dnl ---------------------------------------------------------------------------
 dnl (small) optional non GUI classes
@@ -6073,6 +6077,9 @@ if test "$wxUSE_PRINTF_POS_PARAMS" = "yes"; then
   AC_DEFINE(wxUSE_PRINTF_POS_PARAMS)
 fi
 
+if test "$wxUSE_OBJC_UNIQUIFYING" = "yes"; then
+  AC_DEFINE(wxUSE_OBJC_UNIQUIFYING)
+fi
 
 dnl ---------------------------------------------------------------------------
 dnl time/date functions

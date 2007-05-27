@@ -1657,6 +1657,7 @@ Optional Features:
   --enable-compat26       enable wxWidgets 2.6 compatibility
   --disable-compat28      disable wxWidgets 2.8 compatibility
   --disable-rpath         disable use of rpath for uninstalled builds
+  --enable-objc_uniquifying enable Objective-C class name uniquifying
   --enable-intl           use internationalization system
   --enable-config         use wxConfig (and derived) classes
   --enable-protocols      use wxProtocol and derived classes
@@ -3361,6 +3362,8 @@ else
 
     DEFAULT_wxUSE_GTK2=yes
 fi
+
+DEFAULT_wxUSE_OBJC_UNIQUIFYING=no
 
 
 
@@ -5392,6 +5395,47 @@ echo "${ECHO_T}yes" >&6; }
 echo "${ECHO_T}no" >&6; }
           fi
 
+
+
+          enablestring=
+          { echo "$as_me:$LINENO: checking for --${enablestring:-enable}-objc_uniquifying" >&5
+echo $ECHO_N "checking for --${enablestring:-enable}-objc_uniquifying... $ECHO_C" >&6; }
+          no_cache=0
+          # Check whether --enable-objc_uniquifying was given.
+if test "${enable_objc_uniquifying+set}" = set; then
+  enableval=$enable_objc_uniquifying;
+                          if test "$enableval" = yes; then
+                            ac_cv_use_objc_uniquifying='wxUSE_OBJC_UNIQUIFYING=yes'
+                          else
+                            ac_cv_use_objc_uniquifying='wxUSE_OBJC_UNIQUIFYING=no'
+                          fi
+
+else
+
+                          LINE=`grep "^wxUSE_OBJC_UNIQUIFYING=" ${wx_arg_cache_file}`
+                          if test "x$LINE" != x ; then
+                            eval "DEFAULT_$LINE"
+                          else
+                            no_cache=1
+                          fi
+
+                          ac_cv_use_objc_uniquifying='wxUSE_OBJC_UNIQUIFYING='$DEFAULT_wxUSE_OBJC_UNIQUIFYING
+
+fi
+
+
+          eval "$ac_cv_use_objc_uniquifying"
+          if test "$no_cache" != 1; then
+            echo $ac_cv_use_objc_uniquifying >> ${wx_arg_cache_file}.tmp
+          fi
+
+          if test "$wxUSE_OBJC_UNIQUIFYING" = yes; then
+            { echo "$as_me:$LINENO: result: yes" >&5
+echo "${ECHO_T}yes" >&6; }
+          else
+            { echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6; }
+          fi
 
 
 
@@ -22712,13 +22756,11 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <sys/types.h> /* for off_t */
-     #include <stdio.h>
+#include <stdio.h>
 int
 main ()
 {
-int (*fp) (FILE *, off_t, int) = fseeko;
-     return fseeko (stdin, 0, 0) && fp (stdin, 0, 0);
+return fseeko (stdin, 0, 0) && (fseeko) (stdin, 0, 0);
   ;
   return 0;
 }
@@ -22758,13 +22800,11 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #define _LARGEFILE_SOURCE 1
-#include <sys/types.h> /* for off_t */
-     #include <stdio.h>
+#include <stdio.h>
 int
 main ()
 {
-int (*fp) (FILE *, off_t, int) = fseeko;
-     return fseeko (stdin, 0, 0) && fp (stdin, 0, 0);
+return fseeko (stdin, 0, 0) && (fseeko) (stdin, 0, 0);
   ;
   return 0;
 }
@@ -42245,6 +42285,12 @@ _ACEOF
 
 fi
 
+if test "$wxUSE_OBJC_UNIQUIFYING" = "yes"; then
+  cat >>confdefs.h <<\_ACEOF
+#define wxUSE_OBJC_UNIQUIFYING 1
+_ACEOF
+
+fi
 
 
 if test "$wxUSE_DATETIME" = "yes"; then
