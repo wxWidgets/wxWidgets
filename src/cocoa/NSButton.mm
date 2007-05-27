@@ -22,6 +22,7 @@
     #include "wx/log.h"
 #endif // WX_PRECOMP
 
+#include "wx/cocoa/objc/objc_uniquifying.h"
 #include "wx/cocoa/NSButton.h"
 #import <AppKit/NSButton.h>
 
@@ -39,6 +40,7 @@ WX_IMPLEMENT_OBJC_INTERFACE_HASHMAP(NSButton)
 
 - (void)wxNSButtonAction: (id)sender;
 @end // wxNSButtonTarget
+WX_DECLARE_GET_OBJC_CLASS(wxNSButtonTarget,NSObject)
 
 @implementation wxNSButtonTarget :  NSObject
 - (void)wxNSButtonAction: (id)sender
@@ -49,11 +51,12 @@ WX_IMPLEMENT_OBJC_INTERFACE_HASHMAP(NSButton)
 }
 
 @end // implementation wxNSButtonTarget
+WX_IMPLEMENT_GET_OBJC_CLASS(wxNSButtonTarget,NSObject)
 
 // ============================================================================
 // class wxCocoaNSButton
 // ============================================================================
-const wxObjcAutoRefFromAlloc<struct objc_object*> wxCocoaNSButton::sm_cocoaTarget = [[wxNSButtonTarget alloc] init];
+const wxObjcAutoRefFromAlloc<struct objc_object*> wxCocoaNSButton::sm_cocoaTarget = [[WX_GET_OBJC_CLASS(wxNSButtonTarget) alloc] init];
 
 void wxCocoaNSButton::AssociateNSButton(WX_NSButton cocoaNSButton)
 {
