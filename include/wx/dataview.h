@@ -44,6 +44,7 @@ class WXDLLIMPEXP_ADV wxDataViewListModel;
 class WXDLLIMPEXP_ADV wxDataViewCtrl;
 class WXDLLIMPEXP_ADV wxDataViewColumn;
 class WXDLLIMPEXP_ADV wxDataViewRenderer;
+class                 wxDataViewEventListModelNotifier;
 
 extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxDataViewCtrlNameStr[];
 
@@ -104,19 +105,6 @@ private:
 // wxDataViewListModel
 // ---------------------------------------------------------
 
-class WXDLLIMPEXP_ADV wxDataViewViewingColumn: public wxObject
-{
-public:
-    wxDataViewViewingColumn( wxDataViewColumn *view_column, unsigned int model_column )
-    {
-        m_viewColumn = view_column;
-        m_modelColumn = model_column;
-    }
-
-    wxDataViewColumn   *m_viewColumn;
-    unsigned int        m_modelColumn;
-};
-
 class WXDLLIMPEXP_ADV wxDataViewListModel: public wxDataViewModel
 {
 public:
@@ -151,9 +139,8 @@ protected:
     // the user should not delete this class directly: he should use DecRef() instead!
     virtual ~wxDataViewListModel();
 
-    wxList                      m_notifiers;
+    wxList  m_notifiers;
 };
-
 
 // ---------------------------------------------------------
 // wxDataViewSortedListModel
@@ -481,6 +468,7 @@ public:
 private:
     wxDataViewListModel    *m_model;
     wxList                  m_cols;
+    wxDataViewEventListModelNotifier *m_eventNotifier;
     
 protected:
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxDataViewCtrlBase)
@@ -553,6 +541,15 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_ROW_ACTIVATED, -1)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK, -1)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK, -1)
+    // notifications from the model to the control
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_MODEL_ROW_APPENDED, -1)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_MODEL_ROW_PREPENDED, -1)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_MODEL_ROW_INSERTED, -1)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_MODEL_ROW_DELETED, -1)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_MODEL_ROW_CHANGED, -1)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_MODEL_VALUE_CHANGED, -1)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_MODEL_ROWS_REORDERED, -1)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_ADV, wxEVT_COMMAND_DATAVIEW_MODEL_CLEARED, -1)
 END_DECLARE_EVENT_TYPES()
 
 typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
@@ -567,6 +564,15 @@ typedef void (wxEvtHandler::*wxDataViewEventFunction)(wxDataViewEvent&);
 #define EVT_DATAVIEW_ROW_ACTIVATED(id, fn) wx__DECLARE_DATAVIEWEVT(ROW_ACTIVATED, id, fn)
 #define EVT_DATAVIEW_COLUMN_HEADER_CLICK(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_HEADER_CLICK, id, fn)
 #define EVT_DATAVIEW_COLUMN_HEADER_RIGHT_CLICKED(id, fn) wx__DECLARE_DATAVIEWEVT(COLUMN_HEADER_RIGHT_CLICK, id, fn)
+
+#define EVT_DATAVIEW_MODEL_ROW_APPENDED(id, fn) wx__DECLARE_DATAVIEWEVT(MODEL_ROW_APPENDED, id, fn)
+#define EVT_DATAVIEW_MODEL_ROW_PREPENDED(id, fn) wx__DECLARE_DATAVIEWEVT(MODEL_ROW_PREPENDED, id, fn)
+#define EVT_DATAVIEW_MODEL_ROW_INSERTED(id, fn) wx__DECLARE_DATAVIEWEVT(MODEL_ROW_INSERTED, id, fn)
+#define EVT_DATAVIEW_MODEL_ROW_DELETED(id, fn) wx__DECLARE_DATAVIEWEVT(MODEL_ROW_DELETED, id, fn)
+#define EVT_DATAVIEW_MODEL_ROW_CHANGED(id, fn) wx__DECLARE_DATAVIEWEVT(MODEL_ROW_CHANGED, id, fn)
+#define EVT_DATAVIEW_MODEL_VALUE_CHANGED(id, fn) wx__DECLARE_DATAVIEWEVT(MODEL_VALUE_CHANGED, id, fn)
+#define EVT_DATAVIEW_MODEL_ROWS_REORDERED(id, fn) wx__DECLARE_DATAVIEWEVT(MODEL_ROWS_REORDERED, id, fn)
+#define EVT_DATAVIEW_MODEL_CLEARED(id, fn) wx__DECLARE_DATAVIEWEVT(MODEL_CLEARED, id, fn)
 
 
 #if defined(wxUSE_GENERICDATAVIEWCTRL)

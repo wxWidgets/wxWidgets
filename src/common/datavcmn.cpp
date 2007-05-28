@@ -872,6 +872,44 @@ void wxDataViewColumnBase::SetFlags(int flags)
     SetHidden((flags & wxDATAVIEW_COL_HIDDEN) != 0);
 }
 
+// ---------------------------------------------------------
+// wxDataViewEventListModelNotifier
+// ---------------------------------------------------------
+
+class WXDLLIMPEXP_ADV wxDataViewEventListModelNotifier: public wxDataViewListModelNotifier
+{
+public:
+    wxDataViewEventListModelNotifier( wxDataViewCtrl *ctrl ) { m_ctrl = ctrl; }
+    
+    bool SendEvent( wxEventType event_type, unsigned int row = 0, unsigned int col = 0 )
+    {
+        wxDataViewEvent event( event_type, m_ctrl->GetId() );
+        event.SetEventObject( m_ctrl );
+        event.SetModel( m_ctrl->GetModel() );
+        event.SetRow( row );
+        event.SetColumn( col );
+        m_ctrl->GetEventHandler()->ProcessEvent( event );
+        return true;
+    }
+
+    virtual bool RowAppended()  { return SendEvent( wxEVT_COMMAND_DATAVIEW_MODEL_ROW_APPENDED ); }
+    virtual bool RowPrepended() { return SendEvent( wxEVT_COMMAND_DATAVIEW_MODEL_ROW_PREPENDED ); }
+    virtual bool RowInserted( unsigned int before )
+                                { return SendEvent( wxEVT_COMMAND_DATAVIEW_MODEL_ROW_INSERTED, before ); }
+    virtual bool RowDeleted( unsigned int row )
+                                { return SendEvent( wxEVT_COMMAND_DATAVIEW_MODEL_ROW_DELETED, row ); }
+    virtual bool RowChanged( unsigned int row )
+                                { return SendEvent( wxEVT_COMMAND_DATAVIEW_MODEL_ROW_CHANGED, row ); }
+    virtual bool ValueChanged( unsigned int col, unsigned int row )
+                                { return SendEvent( wxEVT_COMMAND_DATAVIEW_MODEL_VALUE_CHANGED, row, col ); }
+    virtual bool RowsReordered( unsigned int *new_order )
+                                { return SendEvent( wxEVT_COMMAND_DATAVIEW_MODEL_ROWS_REORDERED ); }
+    virtual bool Cleared()      { return SendEvent( wxEVT_COMMAND_DATAVIEW_MODEL_CLEARED ); }
+
+private:
+    wxDataViewCtrl *m_ctrl;
+};
+
 
 // ---------------------------------------------------------
 // wxDataViewCtrlBase
@@ -883,6 +921,7 @@ wxDataViewCtrlBase::wxDataViewCtrlBase()
 {
     m_model = NULL;
     m_cols.DeleteContents( true );
+    m_eventNotifier = NULL;
 }
 
 wxDataViewCtrlBase::~wxDataViewCtrlBase()
@@ -894,6 +933,10 @@ wxDataViewCtrlBase::~wxDataViewCtrlBase()
 
     if (m_model)
     {
+        if (m_eventNotifier)
+            m_model->RemoveNotifier( m_eventNotifier );
+        m_eventNotifier = NULL;
+    
         m_model->DecRef();
         m_model = NULL;
     }
@@ -901,13 +944,23 @@ wxDataViewCtrlBase::~wxDataViewCtrlBase()
 
 bool wxDataViewCtrlBase::AssociateModel( wxDataViewListModel *model )
 {
-    if ( m_model )
+    if (m_model)
+    {
+        if (m_eventNotifier)
+            m_model->RemoveNotifier( m_eventNotifier );
+        m_eventNotifier = NULL;
+        
         m_model->DecRef();   // discard old model, if any
+    }
 
     // add our own reference to the new model:
     m_model = model;
-    if ( m_model )
+    if (m_model)
+    {
         m_model->IncRef(); 
+        m_eventNotifier = new wxDataViewEventListModelNotifier( (wxDataViewCtrl*) this );
+        m_model->AddNotifier( m_eventNotifier );
+    }
 
     return true;
 }
@@ -1035,5 +1088,13 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_ROW_ACTIVATED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK)
 
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_MODEL_ROW_APPENDED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_MODEL_ROW_PREPENDED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_MODEL_ROW_INSERTED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_MODEL_ROW_DELETED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_MODEL_ROW_CHANGED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_MODEL_VALUE_CHANGED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_MODEL_ROWS_REORDERED)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_MODEL_CLEARED)
 
 #endif

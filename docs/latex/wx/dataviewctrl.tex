@@ -60,6 +60,24 @@ macros to direct input to member functions that take a
 
 \end{twocollist}
 
+Additionally, you can get informed about changes to the
+\helpref{model}{wxDataViewListModel}, to which a wxDataViewCtrl
+has been associated. These events correspond to the interface
+offered by \helpref{wxDataViewListModelNotifier}{wxdataviewlistmodelnotifier}.
+
+\twocolwidtha{7cm}
+\begin{twocollist}\itemsep=0pt
+
+\twocolitem{{\bf EVT\_DATAVIEW\_MODEL\_ROW\_PREPENDED(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_MODEL\_ROW\_PREPENDED event.}
+\twocolitem{{\bf EVT\_DATAVIEW\_MODEL\_ROW\_APPENDED(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_MODEL\_ROW\_APPENDED event.}
+\twocolitem{{\bf EVT\_DATAVIEW\_MODEL\_ROW\_INSERTED(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_MODEL\_ROW\_INSERTED event.}
+\twocolitem{{\bf EVT\_DATAVIEW\_MODEL\_ROW\_DELETED(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_MODEL\_ROW\_DELETED event.}
+\twocolitem{{\bf EVT\_DATAVIEW\_MODEL\_ROW\_CHANGED(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_MODEL\_ROW\_CHANGED event.}
+\twocolitem{{\bf EVT\_DATAVIEW\_MODEL\_VALUE\_CHANGED(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_MODEL\_VALUE\_CHANGED event.}
+\twocolitem{{\bf EVT\_DATAVIEW\_MODEL\_ROWS\_REORDERED(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_MODEL\_ROWS\_REORDERED event.}
+\twocolitem{{\bf EVT\_DATAVIEW\_MODEL\_CLEARED(id, func)}}{Processes a wxEVT\_COMMAND\_DATAVIEW\_MODEL\_CLEARED event.}
+
+\end{twocollist}
 
 
 \wxheading{Derived from}
