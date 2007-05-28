@@ -22,6 +22,7 @@ DECLARE_WXCOCOA_OBJC_CLASS(NSAffineTransform);
 
 class wxWindowCocoaHider;
 class wxWindowCocoaScrollView;
+class wxCocoaTrackingRectManager;
 
 // ========================================================================
 // wxWindowCocoa
@@ -33,6 +34,7 @@ class WXDLLEXPORT wxWindowCocoa: public wxWindowBase, protected wxCocoaNSView
     DECLARE_EVENT_TABLE()
     friend wxWindow *wxWindowBase::GetCapture();
     friend class wxWindowCocoaScrollView;
+    friend class wxCocoaTrackingRectManager;
 // ------------------------------------------------------------------------
 // initialization
 // ------------------------------------------------------------------------
@@ -88,6 +90,7 @@ protected:
     void InitMouseEvent(wxMouseEvent &event, WX_NSEvent cocoaEvent);
     virtual wxWindow* GetWxWindow() const;
     virtual void Cocoa_FrameChanged(void);
+    virtual void Cocoa_synthesizeMouseMoved(void);
     virtual bool Cocoa_drawRect(const NSRect &rect);
     virtual bool Cocoa_mouseDown(WX_NSEvent theEvent);
     virtual bool Cocoa_mouseDragged(WX_NSEvent theEvent);
@@ -102,11 +105,14 @@ protected:
     virtual bool Cocoa_otherMouseDragged(WX_NSEvent theEvent);
     virtual bool Cocoa_otherMouseUp(WX_NSEvent theEvent);
     virtual bool Cocoa_resetCursorRects();
+    virtual bool Cocoa_viewDidMoveToWindow();
+    virtual bool Cocoa_viewWillMoveToWindow(WX_NSWindow newWindow);
     void SetNSView(WX_NSView cocoaNSView);
     WX_NSView m_cocoaNSView;
     wxWindowCocoaHider *m_cocoaHider;
     wxWindowCocoaScrollView *m_wxCocoaScrollView;
     bool m_isInPaint;
+    wxCocoaTrackingRectManager *m_visibleTrackingRectManager;
     static wxWindow *sm_capturedWindow;
     virtual void CocoaReplaceView(WX_NSView oldView, WX_NSView newView);
     void SetInitialFrameRect(const wxPoint& pos, const wxSize& size);

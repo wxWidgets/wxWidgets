@@ -37,6 +37,8 @@
 - (void)otherMouseDragged:(NSEvent *)theEvent;
 - (void)otherMouseUp:(NSEvent *)theEvent;
 - (void)resetCursorRects;
+- (void)viewDidMoveToWindow;
+- (void)viewWillMoveToWindow:(NSWindow *)newWindow;
 @end // WXNSView
 WX_DECLARE_GET_OBJC_CLASS(WXNSView,NSView)
 

@@ -32,6 +32,7 @@ public:
     virtual wxWindow* GetWxWindow() const
     {   return NULL; }
     virtual void Cocoa_FrameChanged(void) = 0;
+    virtual void Cocoa_synthesizeMouseMoved(void) = 0;
     virtual bool Cocoa_acceptsFirstMouse(bool &acceptsFirstMouse, WX_NSEvent theEvent)
     {   return false; }
     virtual bool Cocoa_drawRect(const NSRect &rect)
@@ -61,6 +62,10 @@ public:
     virtual bool Cocoa_otherMouseUp(WX_NSEvent theEvent)
     {   return false; }
     virtual bool Cocoa_resetCursorRects()
+    {   return false; }
+    virtual bool Cocoa_viewDidMoveToWindow()
+    {   return false; }
+    virtual bool Cocoa_viewWillMoveToWindow(WX_NSWindow newWindow)
     {   return false; }
     virtual ~wxCocoaNSView() { }
 };
