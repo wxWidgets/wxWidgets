@@ -588,7 +588,7 @@ static GtkCellEditable *gtk_wx_cell_renderer_start_editing(
 //    wxRect renderrect( rect.x, rect.y, rect.width, rect.height );
     wxRect renderrect( cell_area->x, cell_area->y, cell_area->width, cell_area->height );
 
-    wxDataViewListModel *model = cell->GetOwner()->GetOwner()->GetModel();
+    // wxDataViewListModel *model = cell->GetOwner()->GetOwner()->GetModel();
 
     GtkTreePath *treepath = gtk_tree_path_new_from_string( path );
     unsigned int model_row = (unsigned int)gtk_tree_path_get_indices (treepath)[0];
@@ -777,7 +777,9 @@ gtk_wx_cell_renderer_activate(
 class wxGtkDataViewListModelNotifier: public wxDataViewListModelNotifier
 {
 public:
-    wxGtkDataViewListModelNotifier( GtkWxListStore* gtk_store, wxDataViewListModel *wx_model );
+    wxGtkDataViewListModelNotifier( GtkWxListStore* gtk_store, 
+                                    wxDataViewListModel *wx_model,
+                                    wxDataViewCtrl* ctrl );
     ~wxGtkDataViewListModelNotifier();
 
     virtual bool RowAppended();
@@ -791,6 +793,7 @@ public:
 
     GtkWxListStore      *m_gtk_store;
     wxDataViewListModel *m_wx_model;
+    wxDataViewCtrl      *m_owner;
 };
 
 // ---------------------------------------------------------
@@ -798,10 +801,12 @@ public:
 // ---------------------------------------------------------
 
 wxGtkDataViewListModelNotifier::wxGtkDataViewListModelNotifier(
-    GtkWxListStore* gtk_store, wxDataViewListModel *wx_model )
+    GtkWxListStore* gtk_store, wxDataViewListModel *wx_model,
+    wxDataViewCtrl *ctrl )
 {
     m_gtk_store = gtk_store;
     m_wx_model = wx_model;
+    m_owner = ctrl;
 }
 
 wxGtkDataViewListModelNotifier::~wxGtkDataViewListModelNotifier()
@@ -879,34 +884,31 @@ bool wxGtkDataViewListModelNotifier::RowChanged( unsigned int row )
 bool wxGtkDataViewListModelNotifier::ValueChanged( unsigned int model_col, unsigned int model_row )
 {
     // This adds GTK+'s missing MVC logic for ValueChanged
-    wxObjectList::compatibility_iterator
-        node = GetOwner()->m_viewingColumns.GetFirst();
-    while (node)
+    unsigned int index;
+    for (index = 0; index < m_owner->GetColumnCount(); index++)
     {
-        wxDataViewViewingColumn* viewing_column = (wxDataViewViewingColumn*) node->GetData();
-        if (viewing_column->m_modelColumn == model_col)
+        wxDataViewColumn *column = m_owner->GetColumn( index );
+        if (column->GetModelColumn() == model_col)
         {
-            GtkTreeView *widget = GTK_TREE_VIEW(viewing_column->m_viewColumn->GetOwner()->m_treeview);
-            GtkTreeViewColumn *column = GTK_TREE_VIEW_COLUMN(viewing_column->m_viewColumn->GetGtkHandle());
+            GtkTreeView *widget = GTK_TREE_VIEW(m_owner->m_treeview);
+            GtkTreeViewColumn *gcolumn = GTK_TREE_VIEW_COLUMN(column->GetGtkHandle());
 
             // Get cell area
             GtkTreePath *path = gtk_tree_path_new();
             gtk_tree_path_append_index( path, model_row );
             GdkRectangle cell_area;
-            gtk_tree_view_get_cell_area( widget, path, column, &cell_area );
+            gtk_tree_view_get_cell_area( widget, path, gcolumn, &cell_area );
             gtk_tree_path_free( path );
 
             GtkAdjustment* hadjust = gtk_tree_view_get_hadjustment( widget );
             double d = gtk_adjustment_get_value( hadjust );
             int xdiff = (int) d;
 
-            int ydiff = column->button->allocation.height;
+            int ydiff = gcolumn->button->allocation.height;
             // Redraw
             gtk_widget_queue_draw_area( GTK_WIDGET(widget),
                 cell_area.x - xdiff, ydiff + cell_area.y, cell_area.width, cell_area.height );
         }
-
-        node = node->GetNext();
     }
 
     return true;
@@ -921,17 +923,9 @@ bool wxGtkDataViewListModelNotifier::RowsReordered( unsigned int *new_order )
     gtk_tree_path_free (path);
 
     // This adds GTK+'s missing MVC logic for RowsReordered
-    wxObjectList::compatibility_iterator
-        node = GetOwner()->m_viewingColumns.GetFirst();
-    while (node)
-    {
-        wxDataViewViewingColumn* viewing_column = (wxDataViewViewingColumn*) node->GetData();
-        GtkTreeView *widget = GTK_TREE_VIEW(viewing_column->m_viewColumn->GetOwner()->m_treeview);
-        // Doesn't work yet...
-        gtk_widget_queue_draw( GTK_WIDGET(widget) );
-
-        node = node->GetNext();
-    }
+    GtkTreeView *widget = GTK_TREE_VIEW(m_owner->m_treeview);
+    // Doesn't work yet...
+    gtk_widget_queue_draw( GTK_WIDGET(widget) );
 
     return true;
 }
@@ -2096,7 +2090,7 @@ bool wxDataViewCtrl::AssociateModel( wxDataViewListModel *model )
     GtkWxListStore *gtk_store = wxgtk_list_store_new();
     gtk_store->model = model;
 
-    m_notifier = new wxGtkDataViewListModelNotifier( gtk_store, model );
+    m_notifier = new wxGtkDataViewListModelNotifier( gtk_store, model, this );
 
     model->AddNotifier( m_notifier );
 

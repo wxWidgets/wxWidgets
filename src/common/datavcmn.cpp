@@ -32,7 +32,6 @@ const wxChar wxDataViewCtrlNameStr[] = wxT("dataviewCtrl");
 
 wxDataViewListModel::wxDataViewListModel()
 {
-    m_viewingColumns.DeleteContents( true );
     m_notifiers.DeleteContents( true );
 }
 
@@ -166,28 +165,6 @@ bool wxDataViewListModel::Cleared()
     }
 
     return ret;
-}
-
-void wxDataViewListModel::AddViewingColumn( wxDataViewColumn *view_column, unsigned int model_column )
-{
-    m_viewingColumns.Append( new wxDataViewViewingColumn( view_column, model_column ) );
-}
-
-void wxDataViewListModel::RemoveViewingColumn( wxDataViewColumn *column )
-{
-    wxList::compatibility_iterator node = m_viewingColumns.GetFirst();
-    while (node)
-    {
-        wxDataViewViewingColumn* tmp = (wxDataViewViewingColumn*) node->GetData();
-
-        if (tmp->m_viewColumn == column)
-        {
-            m_viewingColumns.DeleteObject( tmp );
-            return;
-        }
-
-        node = node->GetNext();
-    }
 }
 
 void wxDataViewListModel::AddNotifier( wxDataViewListModelNotifier *notifier )
@@ -872,11 +849,6 @@ wxDataViewColumnBase::~wxDataViewColumnBase()
 {
     if (m_renderer)
         delete m_renderer;
-
-    if (GetOwner())
-    {
-        GetOwner()->GetModel()->RemoveViewingColumn( (wxDataViewColumn*) this );
-    }
 }
 
 int wxDataViewColumnBase::GetFlags() const
@@ -1029,7 +1001,6 @@ bool wxDataViewCtrlBase::AppendColumn( wxDataViewColumn *col )
 {
     m_cols.Append( (wxObject*) col );
     col->SetOwner( (wxDataViewCtrl*) this );
-    m_model->AddViewingColumn( col, col->GetModelColumn() );
     return true;
 }
 

@@ -119,12 +119,6 @@ public:
 
 class WXDLLIMPEXP_ADV wxDataViewListModel: public wxDataViewModel
 {
-    friend class WXDLLIMPEXP_ADV wxDataViewCtrl;
-    friend class WXDLLIMPEXP_ADV wxDataViewCtrlBase;
-    friend class WXDLLIMPEXP_ADV wxDataViewSortedListModel;
-    friend class WXDLLIMPEXP_ADV wxDataViewColumnBase;
-    friend class WXDLLIMPEXP_ADV wxGtkDataViewListModelNotifier;
-
 public:
     wxDataViewListModel();
 
@@ -150,21 +144,15 @@ public:
     virtual bool RowsReordered( unsigned int *new_order );
     virtual bool Cleared();
 
+    void AddNotifier( wxDataViewListModelNotifier *notifier );
+    void RemoveNotifier( wxDataViewListModelNotifier *notifier );
+    
 protected:
     // the user should not delete this class directly: he should use DecRef() instead!
     virtual ~wxDataViewListModel();
 
-    // Used internally
-    void AddViewingColumn( wxDataViewColumn *view_column, unsigned int model_column );
-    void RemoveViewingColumn( wxDataViewColumn *column );
-
-    void AddNotifier( wxDataViewListModelNotifier *notifier );
-    void RemoveNotifier( wxDataViewListModelNotifier *notifier );
-
     wxList                      m_notifiers;
-    wxList                      m_viewingColumns;
 };
-
 
 
 // ---------------------------------------------------------
