@@ -1303,14 +1303,17 @@ wxColour wxNotebook::GetThemeBackgroundColour() const
         if (hTheme)
         {
             // This is total guesswork.
-            // See PlatformSDK\Include\Tmschema.h for values
+            // See PlatformSDK\Include\Tmschema.h for values.
+            // JACS: can also use 9 (TABP_PANE)
             COLORREF themeColor;
-            wxUxThemeEngine::Get()->GetThemeColor(
+            bool success = (S_OK == wxUxThemeEngine::Get()->GetThemeColor(
                                         hTheme,
                                         10 /* TABP_BODY */,
                                         1 /* NORMAL */,
                                         3821 /* FILLCOLORHINT */,
-                                        &themeColor);
+                                        &themeColor));
+            if (!success)
+                return GetBackgroundColour();
 
             /*
             [DS] Workaround for WindowBlinds:
@@ -1331,7 +1334,33 @@ wxColour wxNotebook::GetThemeBackgroundColour() const
                                             &themeColor);
             }
 
-            return wxRGBToColour(themeColor);
+            wxColour colour = wxRGBToColour(themeColor);
+
+            // Under Vista, the tab background colour is reported incorrectly.
+            // So for the default theme at least, hard-code the colour to something
+            // that will blend in.
+
+            static int s_AeroStatus = -1;
+            if (s_AeroStatus == -1)
+            {
+                WCHAR szwThemeFile[1024];
+                WCHAR szwThemeColor[256];
+                if (S_OK == wxUxThemeEngine::Get()->GetCurrentThemeName(szwThemeFile, 1024, szwThemeColor, 256, NULL, 0))
+                {
+                    wxString themeFile(szwThemeFile), themeColor(szwThemeColor);
+                    if (themeFile.Find(wxT("Aero")) != -1 && themeColor == wxT("NormalColor"))
+                        s_AeroStatus = 1;
+                    else
+                        s_AeroStatus = 0;
+                }
+                else
+                    s_AeroStatus = 0;
+            }
+
+            if (s_AeroStatus == 1)
+                colour = wxColour(255, 255, 255);
+
+            return colour;
         }
     }
 #endif // wxUSE_UXTHEME
