@@ -13,6 +13,7 @@
 #define _WX_HASHMAP_H_
 
 #include "wx/string.h"
+#include "wx/wxcrt.h"
 
 #if (defined(HAVE_EXT_HASH_MAP) || defined(HAVE_HASH_MAP)) \
     && (defined(HAVE_GNU_CXX_HASH_MAP) || defined(HAVE_STD_HASH_MAP))
