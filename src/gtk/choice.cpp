@@ -382,6 +382,8 @@ void wxChoice::SetString(unsigned int n, const wxString& str)
 
             gtk_label_set_text( label, wxGTK_CONV( str ) );
 
+            InvalidateBestSize();
+
             return;
         }
         child = child->next;
