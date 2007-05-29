@@ -2,7 +2,7 @@
 #                                                                            *
 # Make file for VMS                                                          *
 # Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                             *
-# Date : 24 April 2007                                                       *
+# Date : 23 May 2007                                                         *
 #                                                                            *
 #*****************************************************************************
 .first
@@ -50,6 +50,7 @@ LEX=flex
 	cc $(CFLAGS)$(CC_DEFINE) $(MMS$TARGET_NAME).c
 
 OBJECTS = \
+		accelcmn.obj,\
 		anidecod.obj,\
 		animatecmn.obj,\
 		appbase.obj,\
@@ -216,11 +217,13 @@ OBJECTS_X11=accesscmn.obj,dndcmn.obj,dpycmn.obj,dseldlg.obj,\
 	regex.obj,taskbarcmn.obj,xti.obj,xtistrm.obj,xtixml.obj,\
 	combocmn.obj
 
-OBJECTS_X11_2=socketevtdispatch.obj
+OBJECTS_X11_2=gsocketiohandler.obj,fdiodispatcher.obj,selectdispatcher.obj
+
 
 OBJECTS_GTK2=fontutilcmn.obj
 
 SOURCES = \
+		accelcmn.cpp,\
 		anidecod.cpp,\
 		animatecmn.cpp,\
 		appbase.cpp,\
@@ -266,6 +269,7 @@ SOURCES = \
 		extended.c,\
 		ffile.cpp,\
 		fddlgcmn.cpp,\
+		fdiodispatcher.cpp,\
 		file.cpp,\
 		fileback.cpp,\
 		fileconf.cpp,\
@@ -285,6 +289,7 @@ SOURCES = \
 		gbsizer.cpp,\
 		gdicmn.cpp,\
 		gifdecod.cpp,\
+		gsocketiohandler.cpp,\
 		hash.cpp,\
 		hashmap.cpp,\
 		helpbase.cpp,\
@@ -337,7 +342,7 @@ SOURCES = \
 		sckstrm.cpp,\
 		sizer.cpp,\
 		socket.cpp,\
-		socketevtdispatch.cpp,\
+		selectdispatcher.cpp,\
 		settcmn.cpp,\
 		statbar.cpp,\
 		stattextcmn.cpp,\
@@ -436,6 +441,7 @@ all : $(SOURCES)
 .endif
 .endif
 
+accelcmn.obj : accelcmn.cpp
 anidecod.obj : anidecod.cpp
 animatecmn.obj : animatecmn.cpp
 appbase.obj : appbase.cpp
@@ -480,6 +486,7 @@ evtloopcmn.obj : evtloopcmn.cpp
 extended.obj : extended.c
 ffile.obj : ffile.cpp
 fddlgcmn.obj : fddlgcmn.cpp
+fdiodispatcher.obj : fdiodispatcher.cpp
 file.obj : file.cpp
 fileback.obj : fileback.cpp
 fileconf.obj : fileconf.cpp
@@ -499,6 +506,7 @@ gaugecmn.obj : gaugecmn.cpp
 gbsizer.obj : gbsizer.cpp
 gdicmn.obj : gdicmn.cpp
 gifdecod.obj : gifdecod.cpp
+gsocketiohandler.obj : gsocketiohandler.cpp
 hash.obj : hash.cpp
 hashmap.obj : hashmap.cpp
 helpbase.obj : helpbase.cpp
@@ -548,9 +556,9 @@ sckaddr.obj : sckaddr.cpp
 sckfile.obj : sckfile.cpp
 sckipc.obj : sckipc.cpp
 sckstrm.obj : sckstrm.cpp
+selectdispatcher.obj : selectdispatcher.cpp
 sizer.obj : sizer.cpp
 socket.obj : socket.cpp
-socketevtdispatch.obj : socketevtdispatch.cpp
 settcmn.obj : settcmn.cpp
 statbar.obj : statbar.cpp
 stattextcmn.obj : stattextcmn.cpp
