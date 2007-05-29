@@ -373,6 +373,8 @@ void wxChoice::SetString(unsigned int n, const wxString& str)
             wxASSERT_MSG( label != NULL , wxT("wxChoice: invalid label") );
 
             gtk_label_set_text( label, wxGTK_CONV( str ) );
+            
+            InvalidateBestSize();
 
             return;
         }
