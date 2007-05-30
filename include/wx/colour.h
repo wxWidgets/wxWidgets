@@ -27,7 +27,9 @@ class WXDLLEXPORT wxColour;
               ChannelType alpha = wxALPHA_OPAQUE )                            \
         { Set(red, green, blue, alpha); }                                     \
     wxColour( unsigned long colRGB ) { Set(colRGB); }                         \
-    wxColour(const wxString& colourName) { Set(colourName); }
+    wxColour(const wxString& colourName) { Set(colourName); }                 \
+    wxColour(const char *colourName) { Set(colourName); }                     \
+    wxColour(const wchar_t *colourName) { Set(colourName); }
 
 
 // flags for wxColour -> wxString conversion (see wxColour::GetAsString)
