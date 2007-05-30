@@ -104,15 +104,15 @@ void wxAboutBox(const wxAboutDialogInfo& info)
     if ( !gtk_check_version(2,6,0) )
     {
         GtkAboutDialog * const dlg = GTK_ABOUT_DIALOG(gtk_about_dialog_new());
-        gtk_about_dialog_set_name(dlg, wxGTK_CONV(info.GetName()));
+        gtk_about_dialog_set_name(dlg, wxGTK_CONV_SYS(info.GetName()));
         if ( info.HasVersion() )
-            gtk_about_dialog_set_version(dlg, wxGTK_CONV(info.GetVersion()));
+            gtk_about_dialog_set_version(dlg, wxGTK_CONV_SYS(info.GetVersion()));
         if ( info.HasCopyright() )
-            gtk_about_dialog_set_copyright(dlg, wxGTK_CONV(info.GetCopyright()));
+            gtk_about_dialog_set_copyright(dlg, wxGTK_CONV_SYS(info.GetCopyright()));
         if ( info.HasDescription() )
-            gtk_about_dialog_set_comments(dlg, wxGTK_CONV(info.GetDescription()));
+            gtk_about_dialog_set_comments(dlg, wxGTK_CONV_SYS(info.GetDescription()));
         if ( info.HasLicence() )
-            gtk_about_dialog_set_license(dlg, wxGTK_CONV(info.GetLicence()));
+            gtk_about_dialog_set_license(dlg, wxGTK_CONV_SYS(info.GetLicence()));
 
         wxIcon icon = info.GetIcon();
         if ( icon.Ok() )
@@ -125,11 +125,11 @@ void wxAboutBox(const wxAboutDialogInfo& info)
             //     this...)
             gtk_about_dialog_set_url_hook(wxGtkAboutDialogOnLink, NULL, NULL);
 
-            gtk_about_dialog_set_website(dlg, wxGTK_CONV(info.GetWebSiteURL()));
+            gtk_about_dialog_set_website(dlg, wxGTK_CONV_SYS(info.GetWebSiteURL()));
             gtk_about_dialog_set_website_label
             (
                 dlg,
-                wxGTK_CONV(info.GetWebSiteDescription())
+                wxGTK_CONV_SYS(info.GetWebSiteDescription())
             );
         }
 
@@ -166,7 +166,7 @@ void wxAboutBox(const wxAboutDialogInfo& info)
         }
 
         if ( !transCredits.empty() )
-            gtk_about_dialog_set_translator_credits(dlg, wxGTK_CONV(transCredits));
+            gtk_about_dialog_set_translator_credits(dlg, wxGTK_CONV_SYS(transCredits));
 
         g_signal_connect(dlg, "response",
                             G_CALLBACK(wxGtkAboutDialogOnClose), NULL);
