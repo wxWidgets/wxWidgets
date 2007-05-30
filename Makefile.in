@@ -327,6 +327,7 @@ ALL_BASE_HEADERS =  \
 	wx/convauto.h \
 	wx/containr.h \
 	wx/cpp.h \
+	wx/crt.h \
 	wx/datetime.h \
 	wx/datstrm.h \
 	wx/dde.h \
@@ -469,6 +470,7 @@ ALL_PORTS_BASE_HEADERS =  \
 	wx/convauto.h \
 	wx/containr.h \
 	wx/cpp.h \
+	wx/crt.h \
 	wx/datetime.h \
 	wx/datstrm.h \
 	wx/dde.h \
