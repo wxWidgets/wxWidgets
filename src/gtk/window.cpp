@@ -1136,8 +1136,8 @@ gtk_wxwindow_commit_cb (GtkIMContext *context,
         event.SetEventObject( window );
     }
 
-    const wxWxCharBuffer data(wxGTK_CONV_BACK_SYS(str));
-    if( !data )
+    const wxString data(wxGTK_CONV_BACK_SYS(str));
+    if( data.empty() )
         return;
 
     bool ret = false;
@@ -1147,7 +1147,7 @@ gtk_wxwindow_commit_cb (GtkIMContext *context,
     while (parent && !parent->IsTopLevel())
         parent = parent->GetParent();
 
-    for( const wxChar* pstr = data; *pstr; pstr++ )
+    for( wxString::const_iterator pstr = data.begin(); pstr != data.end(); ++pstr )
     {
 #if wxUSE_UNICODE
         event.m_uniChar = *pstr;
@@ -1155,7 +1155,7 @@ gtk_wxwindow_commit_cb (GtkIMContext *context,
         event.m_keyCode = *pstr < 256 ? event.m_uniChar : 0;
         wxLogTrace(TRACE_KEYS, _T("IM sent character '%c'"), event.m_uniChar);
 #else
-        event.m_keyCode = *pstr;
+        event.m_keyCode = (char)*pstr;
 #endif  // wxUSE_UNICODE
 
         // To conform to the docs we need to translate Ctrl-alpha

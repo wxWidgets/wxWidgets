@@ -955,16 +955,12 @@ wxString wxTextCtrl::GetValue() const
         gtk_text_buffer_get_end_iter( m_buffer, &end );
         wxGtkString text(gtk_text_buffer_get_text(m_buffer, &start, &end, true));
 
-        const wxWxCharBuffer buf = wxGTK_CONV_BACK(text);
-        if ( buf )
-            tmp = buf;
+        return wxGTK_CONV_BACK(text);
     }
     else
     {
         const gchar *text = gtk_entry_get_text( GTK_ENTRY(m_text) );
-        const wxWxCharBuffer buf = wxGTK_CONV_BACK( text );
-        if ( buf )
-            tmp = buf;
+        return wxGTK_CONV_BACK(text);
     }
 
     return tmp;
