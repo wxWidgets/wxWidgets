@@ -137,7 +137,7 @@ private:
 // wxDataFormat
 // ----------------------------------------------------------------------------
 
-void wxDataFormat::SetId(const wxChar *format)
+void wxDataFormat::SetId(const wxString& format)
 {
     m_format = (wxDataFormat::NativeFormat)::RegisterClipboardFormat(format);
     if ( !m_format )

@@ -58,12 +58,6 @@ wxDataFormat::wxDataFormat( wxDataFormatId type )
     SetType( type );
 }
 
-wxDataFormat::wxDataFormat( const wxChar *id )
-{
-    PrepareFormats();
-    SetId( id );
-}
-
 wxDataFormat::wxDataFormat( const wxString &id )
 {
     PrepareFormats();
@@ -140,12 +134,11 @@ void wxDataFormat::SetId( NativeFormat format )
         m_type = wxDF_PRIVATE;
 }
 
-void wxDataFormat::SetId( const wxChar *id )
+void wxDataFormat::SetId( const wxString& id )
 {
     PrepareFormats();
     m_type = wxDF_PRIVATE;
-    wxString tmp( id );
-    m_format = gdk_atom_intern( (const char*) tmp.ToAscii(), FALSE );
+    m_format = gdk_atom_intern( id.ToAscii(), FALSE );
 }
 
 void wxDataFormat::PrepareFormats()

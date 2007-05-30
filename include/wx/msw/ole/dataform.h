@@ -23,7 +23,7 @@ public:
     typedef unsigned short NativeFormat;
 
     wxDataFormat(NativeFormat format = wxDF_INVALID) { m_format = format; }
-    wxDataFormat(const wxChar *format) { SetId(format); }
+    wxDataFormat(const wxString& format) { SetId(format); }
 
     wxDataFormat& operator=(NativeFormat format)
         { m_format = format; return *this; }
@@ -55,7 +55,7 @@ public:
     // string ids are used for custom types - this SetId() must be used for
     // application-specific formats
     wxString GetId() const;
-    void SetId(const wxChar *format);
+    void SetId(const wxString& format);
 
     // returns true if the format is one of those defined in wxDataFormatId
     bool IsStandard() const { return m_format > 0 && m_format < wxDF_PRIVATE; }
