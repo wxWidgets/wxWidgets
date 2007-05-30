@@ -20,7 +20,7 @@
 #include "wx/textctrl.h"
 #include "wx/bitmap.h"
 #include "wx/variant.h"
-
+#include "wx/listctrl.h"
 
 #if defined(__WXGTK20__)
     // for testing
@@ -121,6 +121,9 @@ public:
 
     // set value, call ValueChanged() afterwards!
     virtual bool SetValue( const wxVariant &variant, unsigned int col, unsigned int row ) = 0;
+
+    // override to set cell attributes
+    virtual void GetAttr( wxListItemAttr &attr, unsigned int col, unsigned int row ) { }
 
     // delegated notifiers
     virtual bool RowAppended();
