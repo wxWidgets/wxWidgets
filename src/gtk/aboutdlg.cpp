@@ -34,6 +34,9 @@
 // GtkArray: temporary array of GTK strings
 // ----------------------------------------------------------------------------
 
+namespace
+{
+
 class GtkArray
 {
 public:
@@ -75,6 +78,8 @@ private:
 
     DECLARE_NO_COPY_CLASS(GtkArray)
 };
+
+} // anonymous namespace
 
 // ============================================================================
 // implementation
