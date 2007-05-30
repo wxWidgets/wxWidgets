@@ -39,23 +39,23 @@ public:
     // version of the program, in free format (but without "version" word)
     void SetVersion(const wxString& version) { m_version = version; }
     bool HasVersion() const { return !m_version.empty(); }
-    wxString GetVersion() const { return m_version; }
+    const wxString& GetVersion() const { return m_version; }
 
     // brief, but possibly multiline, description of the program
     void SetDescription(const wxString& desc) { m_description = desc; }
     bool HasDescription() const { return !m_description.empty(); }
-    wxString GetDescription() const { return m_description; }
+    const wxString& GetDescription() const { return m_description; }
 
     // short string containing the program copyright information
     void SetCopyright(const wxString& copyright) { m_copyright = copyright; }
     bool HasCopyright() const { return !m_copyright.empty(); }
-    wxString GetCopyright() const { return m_copyright; }
+    const wxString& GetCopyright() const { return m_copyright; }
 
     // long, multiline string containing the text of the program licence
     void SetLicence(const wxString& licence) { m_licence = licence; }
     void SetLicense(const wxString& licence) { m_licence = licence; }
     bool HasLicence() const { return !m_licence.empty(); }
-    wxString GetLicence() const { return m_licence; }
+    const wxString& GetLicence() const { return m_licence; }
 
     // icon to be shown in the dialog, defaults to the main frame icon
     void SetIcon(const wxIcon& icon) { m_icon = icon; }
@@ -72,8 +72,8 @@ public:
 
     bool HasWebSite() const { return !m_url.empty(); }
 
-    wxString GetWebSiteURL() const { return m_url; }
-    wxString GetWebSiteDescription() const { return m_urlDesc; }
+    const wxString& GetWebSiteURL() const { return m_url; }
+    const wxString& GetWebSiteDescription() const { return m_urlDesc; }
 
     // accessors for the arrays
     // ------------------------
