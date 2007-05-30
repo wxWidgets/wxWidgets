@@ -601,7 +601,7 @@ void wxRadioBox::GTKWidgetDoSetMnemonic(GtkWidget* w)
 }
 
 #if wxUSE_TOOLTIPS
-void wxRadioBox::ApplyToolTip(GtkTooltips * WXUNUSED(tips), const wxChar *tip)
+void wxRadioBox::ApplyToolTip(GtkTooltips * WXUNUSED(tips), const gchar *tip)
 {
     // set this tooltip for all radiobuttons which don't have their own tips
     unsigned n = 0;
@@ -611,8 +611,7 @@ void wxRadioBox::ApplyToolTip(GtkTooltips * WXUNUSED(tips), const wxChar *tip)
     {
         if ( !GetItemToolTip(n) )
         {
-            wxToolTip::Apply(GTK_WIDGET(node->GetData()->button),
-                             wxConvCurrent->cWX2MB(tip));
+            wxToolTip::Apply(GTK_WIDGET(node->GetData()->button), tip);
         }
     }
 }
