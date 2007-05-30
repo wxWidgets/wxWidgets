@@ -134,6 +134,12 @@ public:
             }
             return true;
         }
+        
+    virtual void GetAttr( wxListItemAttr &attr, unsigned int col, unsigned int row )
+        {
+            if (row == 4)
+                attr.SetBackgroundColour( *wxGREEN );
+        }
 
     wxArrayString m_list;
     wxArrayInt    m_bools;
@@ -1005,7 +1011,7 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
     dataview_left = new wxDataViewCtrl( main, ID_UNSORTED, wxDefaultPosition, 
                                         wxDefaultSize, wxDV_MULTIPLE );
 
-    m_unsorted_model.reset(new MyUnsortedTextModel);
+    m_unsorted_model = new MyUnsortedTextModel;
     dataview_left->AssociateModel( m_unsorted_model.get() );
 
     wxDataViewTextRenderer *text_renderer = 
@@ -1021,7 +1027,7 @@ MySortingFrame::MySortingFrame(wxFrame *frame, wxChar *title, int x, int y, int 
     // Right wxDataViewCtrl using the sorting model
     dataview_right = new wxDataViewCtrl( main, ID_SORTED );
     
-    m_sorted_model.reset(new wxDataViewSortedListModel( m_unsorted_model.get() ));
+    m_sorted_model = new wxDataViewSortedListModel( m_unsorted_model.get() );
     dataview_right->AssociateModel( m_sorted_model.get() );
 
     text_renderer = new wxDataViewTextRenderer( wxT("string"), wxDATAVIEW_CELL_EDITABLE );

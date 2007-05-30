@@ -1650,18 +1650,28 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
 
     cell->SetValue( value );
     
-/*
-    To set the background to this
- 
-    wxColour colour(30,100,255);
-    GdkColor *gcol = colour.GetColor();
+    wxListItemAttr attr;
+    list_store->model->GetAttr( attr, cell->GetOwner()->GetModelColumn(), model_row );
+
+    if (attr.HasBackgroundColour())
+    {
+        wxColour colour = attr.GetBackgroundColour();
+        GdkColor *gcol = colour.GetColor();
     
-    GValue gvalue = { 0, };
-    g_value_init( &gvalue, GDK_TYPE_COLOR );
-    g_value_set_boxed( &gvalue, gcol );
-    g_object_set_property( G_OBJECT(renderer), "cell-background_gdk", &gvalue );
-    g_value_unset( &gvalue );
-*/ 
+        GValue gvalue = { 0, };
+        g_value_init( &gvalue, GDK_TYPE_COLOR );
+        g_value_set_boxed( &gvalue, gcol );
+        g_object_set_property( G_OBJECT(renderer), "cell-background_gdk", &gvalue );
+        g_value_unset( &gvalue );
+    }
+    else
+    {
+        GValue gvalue = { 0, };
+        g_value_init( &gvalue, G_TYPE_BOOLEAN );
+        g_value_set_boolean( &gvalue, FALSE );
+        g_object_set_property( G_OBJECT(renderer), "cell-background-set", &gvalue );
+        g_value_unset( &gvalue );
+    }
 }
 
 IMPLEMENT_CLASS(wxDataViewColumn, wxDataViewColumnBase)
