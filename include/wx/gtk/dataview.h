@@ -329,6 +329,9 @@ private:
     
     virtual void OnInternalIdle();
     
+    void GtkEnableSelectionEvents();
+    void GtkDisableSelectionEvents();
+    
 private:
     DECLARE_DYNAMIC_CLASS(wxDataViewCtrl)
     DECLARE_NO_COPY_CLASS(wxDataViewCtrl)

@@ -2060,9 +2060,8 @@ bool wxDataViewCtrl::Create(wxWindow *parent, wxWindowID id,
 
     PostCreation(size);
 
-    GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
-    g_signal_connect_after (selection, "changed",
-                            G_CALLBACK (wxdataview_selection_changed_callback), this);
+    GtkEnableSelectionEvents();
+
     g_signal_connect_after (m_treeview, "row_activated",
                             G_CALLBACK (wxdataview_row_activated_callback), this);
 
@@ -2112,8 +2111,24 @@ bool wxDataViewCtrl::AppendColumn( wxDataViewColumn *col )
     return true;
 }
 
+void wxDataViewCtrl::GtkDisableSelectionEvents()
+{
+    GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
+    g_signal_connect_after (selection, "changed",
+                            G_CALLBACK (wxdataview_selection_changed_callback), this);
+}
+
+void wxDataViewCtrl::GtkEnableSelectionEvents()
+{
+    GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
+    g_signal_handlers_disconnect_by_func( selection, 
+                            (gpointer) (wxdataview_selection_changed_callback), this);
+}
+
 void wxDataViewCtrl::SetSelection( int row )
 {
+    GtkDisableSelectionEvents();
+
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
 
     if (row < 0)
@@ -2129,10 +2144,14 @@ void wxDataViewCtrl::SetSelection( int row )
 
         gtk_tree_path_free( path );
     }
+    
+    GtkEnableSelectionEvents();
 }
 
 void wxDataViewCtrl::Unselect( unsigned int row )
 {
+    GtkDisableSelectionEvents();
+    
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
 
     GtkTreePath *path = gtk_tree_path_new ();
@@ -2141,14 +2160,54 @@ void wxDataViewCtrl::Unselect( unsigned int row )
     gtk_tree_selection_unselect_path( selection, path );
 
     gtk_tree_path_free( path );
+    
+    GtkEnableSelectionEvents();
 }
 
 void wxDataViewCtrl::SetSelectionRange( unsigned int from, unsigned int to )
 {
+    GtkDisableSelectionEvents();
+    
+    if (from > to)
+    {
+        unsigned int tmp = from;
+        from = to;
+        to = tmp;
+    }
+    
+    GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
+    
+    GtkTreePath *path_from = gtk_tree_path_new ();
+    gtk_tree_path_append_index( path_from, from );
+    GtkTreePath *path_to = gtk_tree_path_new ();
+    gtk_tree_path_append_index( path_to, to );
+    
+    gtk_tree_selection_select_range( selection, path_from, path_to );
+    
+    gtk_tree_path_free( path_to );
+    gtk_tree_path_free( path_from );
+    
+    GtkEnableSelectionEvents();
 }
 
 void wxDataViewCtrl::SetSelections( const wxArrayInt& aSelections)
 {
+    GtkDisableSelectionEvents();
+    
+    GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
+    
+    unsigned int i;
+    for (i = 0; i < aSelections.GetCount(); i++)
+    {
+        GtkTreePath *path = gtk_tree_path_new ();
+        gtk_tree_path_append_index( path, aSelections[i] );
+
+        gtk_tree_selection_select_path( selection, path );
+
+        gtk_tree_path_free( path );
+    }
+    
+    GtkEnableSelectionEvents();
 }
 
 bool wxDataViewCtrl::IsSelected( unsigned int row ) const
