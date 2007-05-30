@@ -188,9 +188,6 @@ public:
     wxDataViewSortedListModelNotifier( wxDataViewSortedListModel *model )
         { m_model = model; }
         
-    ~wxDataViewSortedListModelNotifier()
-        { m_model->DetachChild(); }
-
     virtual bool RowAppended()
         { return m_model->ChildRowAppended(); }
 
@@ -288,18 +285,25 @@ wxDataViewSortedListModel::wxDataViewSortedListModel( wxDataViewListModel *child
 
     m_notifierOnChild = new wxDataViewSortedListModelNotifier( this );
     m_child->AddNotifier( m_notifierOnChild );
+    
+    m_child->IncRef();
 
     Resort();
 }
 
 wxDataViewSortedListModel::~wxDataViewSortedListModel()
 {
-    if (m_child)
-        m_child->RemoveNotifier( m_notifierOnChild );
+    DetachChild();
 }
 
 void wxDataViewSortedListModel::DetachChild()
 {
+    if (m_child)
+    {
+        m_child->RemoveNotifier( m_notifierOnChild );
+        m_child->DecRef();
+    }
+    
     m_child = NULL;
 }
 
@@ -318,14 +322,48 @@ void wxDataViewSortedListModel::Resort()
 {
     InitStatics();
     
-    m_array.Clear();
+    if (!m_child) return;
+    
     unsigned int n = m_child->GetRowCount();
+    
     unsigned int i;
+    if (n != m_array.GetCount())
+    {
+        // probably sorted for the first time -> no reordered
+        // -- just create index and leave
+        m_array.Clear();
+        for (i = 0; i < n; i++)
+            m_array.Add( i );
+        return;
+    }
+    
+    unsigned int *old_array = new unsigned int[ n ];
+
+    for (i = 0; i < n; i++)
+        old_array[i] = m_array[ i ];
+    
+    m_array.Clear();
     for (i = 0; i < n; i++)
         m_array.Add( i );
+
+    unsigned int *order = new unsigned int[ n ];
        
-    // do we need the neworder?
-    wxDataViewListModel::RowsReordered( NULL );
+    for (i = 0; i < n; i++)
+    {
+        unsigned int new_value = m_array[i];
+        
+        unsigned int old_pos;
+        for (old_pos = 0; old_pos < n; old_pos++)
+            if (old_array[old_pos] == new_value)
+                break;
+        order[i] = old_pos;
+    }
+    
+    delete [] old_array;
+    
+    wxDataViewListModel::RowsReordered( order );
+
+    delete [] order;
 }
 
 #if 0
@@ -559,11 +597,15 @@ bool wxDataViewSortedListModel::ChildCleared()
 
 unsigned int wxDataViewSortedListModel::GetRowCount() const
 {
-    return m_array.GetCount();
+    if (!m_child) return 0;
+    
+    return m_child->GetRowCount();
 }
 
 unsigned int wxDataViewSortedListModel::GetColumnCount() const
 {
+    if (!m_child) return 0;
+    
     return m_child->GetColumnCount();
 }
 
@@ -571,6 +613,8 @@ wxString wxDataViewSortedListModel::GetColumnType( unsigned int col ) const
 {
     return m_child->GetColumnType( col );
 }
+
+#include "wx/crt.h"
 
 void wxDataViewSortedListModel::GetValue( wxVariant &variant, unsigned int col, unsigned int row ) const
 {
