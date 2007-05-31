@@ -29,7 +29,7 @@ class XMLTree(wx.TreeCtrl):
         # 0 index is the default image
         il.Add(images.getTreeDefaultImage().Scale(16,16).ConvertToBitmap())
         self.rootImage = il.Add(images.getTreeRootImage().Scale(16,16).ConvertToBitmap())
-        for component in manager.components.values():
+        for component in manager.components:
             if component.image:
                 component.imageId = il.Add(component.image.Scale(16,16).ConvertToBitmap())
         self.il = il
