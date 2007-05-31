@@ -171,6 +171,9 @@ void StringTestCase::Constructors()
     const wxChar *start = wxStrchr(s, _T('r'));
     const wxChar *end = wxStrchr(s, _T('!'));
     TEST_CTOR((start, end), _T("really"));
+
+    // test if creating string from NULL C pointer works:
+    TEST_CTOR(((char*)NULL), "");
 }
 
 
