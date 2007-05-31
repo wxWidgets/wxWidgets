@@ -20,6 +20,7 @@
 #include "wx/memory.h"
 
 class WXDLLIMPEXP_BASE wxObject;
+class WXDLLIMPEXP_BASE wxString;
 
 #ifndef wxUSE_EXTENDED_RTTI
 #define wxUSE_EXTENDED_RTTI 0
@@ -80,7 +81,7 @@ typedef wxObject *(*wxObjectConstructorFn)(void);
 class WXDLLIMPEXP_BASE wxClassInfo
 {
     friend class WXDLLIMPEXP_BASE wxObject;
-    friend WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
+    friend WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxString& name);
 public:
     wxClassInfo( const wxChar *className,
                  const wxClassInfo *baseInfo1,
@@ -117,7 +118,7 @@ public:
         { return m_objectConstructor; }
     static const wxClassInfo  *GetFirst() { return sm_first; }
     const wxClassInfo         *GetNext() const { return m_next; }
-    static wxClassInfo        *FindClass(const wxChar *className);
+    static wxClassInfo        *FindClass(const wxString& className);
 
         // Climb upwards through inheritance hierarchy.
         // Dual inheritance is catered for.
@@ -157,7 +158,7 @@ protected:
     DECLARE_NO_COPY_CLASS(wxClassInfo)
 };
 
-WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
+WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxString& name);
 
 // ----------------------------------------------------------------------------
 // Dynamic class macros

@@ -187,7 +187,7 @@ wxClassInfo::~wxClassInfo()
     Unregister();
 }
 
-wxClassInfo *wxClassInfo::FindClass(const wxChar *className)
+wxClassInfo *wxClassInfo::FindClass(const wxString& className)
 {
     if ( sm_classTable )
     {
@@ -197,7 +197,7 @@ wxClassInfo *wxClassInfo::FindClass(const wxChar *className)
     {
         for ( wxClassInfo *info = sm_first; info ; info = info->m_next )
         {
-            if ( wxStrcmp(info->GetClassName(), className) == 0 )
+            if ( className == info->GetClassName() )
                 return info;
         }
 
@@ -263,7 +263,7 @@ void wxClassInfo::Unregister()
     }
 }
 
-wxObject *wxCreateDynamicObject(const wxChar *name)
+wxObject *wxCreateDynamicObject(const wxString& name)
 {
 #if defined(__WXDEBUG__) || wxUSE_DEBUG_CONTEXT
     DEBUG_PRINTF(wxObject *wxCreateDynamicObject)

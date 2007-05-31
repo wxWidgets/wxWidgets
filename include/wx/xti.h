@@ -1602,7 +1602,7 @@ class WXDLLIMPEXP_BASE wxClassInfo
 {
     friend class WXDLLIMPEXP_BASE wxPropertyInfo ;
     friend class WXDLLIMPEXP_BASE wxHandlerInfo ;
-    friend wxObject *wxCreateDynamicObject(const wxChar *name);
+    friend wxObject *wxCreateDynamicObject(const wxString& name);
 public:
     wxClassInfo(const wxClassInfo **_Parents,
         const wxChar *_UnitName,
@@ -1699,7 +1699,7 @@ public:
     wxObjectConstructorFn      GetConstructor() const { return m_objectConstructor; }
     static const wxClassInfo  *GetFirst() { return sm_first; }
     const wxClassInfo         *GetNext() const { return m_next; }
-    static wxClassInfo        *FindClass(const wxChar *className);
+    static wxClassInfo        *FindClass(const wxString& className);
 
     // Climb upwards through inheritance hierarchy.
     // Dual inheritance is catered for.
@@ -1830,7 +1830,7 @@ protected:
 };
 
 
-WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxChar *name);
+WXDLLIMPEXP_BASE wxObject *wxCreateDynamicObject(const wxString& name);
 
 // ----------------------------------------------------------------------------
 // wxDynamicObject
