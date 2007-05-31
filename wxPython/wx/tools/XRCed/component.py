@@ -51,7 +51,7 @@ class ContainerComponent(Component):
 class ComponentManager:
     '''manager instance collects information from component plugins.'''
     def __init__(self):
-        self.components = []
+        self.components = {}
         self.ids = {}
         self.menus = {}
         self.panels = {}
@@ -62,7 +62,7 @@ class ComponentManager:
                            'Controls', 'Custom']
 
     def register(self, component):
-        bisect.insort_left(self.components, component)
+        self.components[component.name] = component
         component.id = wx.NewId()
         self.ids[component.id] = component
 
