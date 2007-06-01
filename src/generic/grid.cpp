@@ -642,21 +642,29 @@ void wxGridCellTextEditor::Create(wxWindow* parent,
                                   wxWindowID id,
                                   wxEvtHandler* evtHandler)
 {
-    m_control = new wxTextCtrl(parent, id, wxEmptyString,
-                               wxDefaultPosition, wxDefaultSize
+    DoCreate(parent, id, evtHandler);
+}
+
+void wxGridCellTextEditor::DoCreate(wxWindow* parent,
+                                    wxWindowID id,
+                                    wxEvtHandler* evtHandler,
+                                    long style)
+{
 #if defined(__WXMSW__)
-                               ,
-                               wxTE_PROCESS_ENTER |
-                               wxTE_PROCESS_TAB |
-                               wxTE_AUTO_SCROLL |
-                               wxNO_BORDER
+    style |= wxTE_PROCESS_ENTER |
+             wxTE_PROCESS_TAB |
+             wxTE_AUTO_SCROLL |
+             wxNO_BORDER;
 #endif
-                              );
+
+    m_control = new wxTextCtrl(parent, id, wxEmptyString,
+                               wxDefaultPosition, wxDefaultSize,
+                               style);
 
     // set max length allowed in the textctrl, if the parameter was set
-    if (m_maxChars != 0)
+    if ( m_maxChars != 0 )
     {
-        ((wxTextCtrl*)m_control)->SetMaxLength(m_maxChars);
+        Text()->SetMaxLength(m_maxChars);
     }
 
     wxGridCellEditor::Create(parent, id, evtHandler);

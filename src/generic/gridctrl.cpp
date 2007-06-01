@@ -292,12 +292,8 @@ wxGridCellAutoWrapStringEditor::Create(wxWindow* parent,
                                        wxWindowID id,
                                        wxEvtHandler* evtHandler)
 {
-  m_control = new wxTextCtrl(parent, id, wxEmptyString,
-                             wxDefaultPosition, wxDefaultSize,
-                             wxTE_MULTILINE | wxTE_RICH);
-
-
-  wxGridCellEditor::Create(parent, id, evtHandler);
+  wxGridCellTextEditor::DoCreate(parent, id, evtHandler,
+                                 wxTE_MULTILINE | wxTE_RICH);
 }
 
 void

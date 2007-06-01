@@ -423,6 +423,8 @@ protected:
     wxTextCtrl *Text() const { return (wxTextCtrl *)m_control; }
 
     // parts of our virtual functions reused by the derived classes
+    void DoCreate(wxWindow* parent, wxWindowID id, wxEvtHandler* evtHandler,
+                  long style = 0);
     void DoBeginEdit(const wxString& startValue);
     void DoReset(const wxString& startValue);
 
