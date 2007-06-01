@@ -1656,7 +1656,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
     if (attr.HasBackgroundColour())
     {
         wxColour colour = attr.GetBackgroundColour();
-        GdkColor *gcol = colour.GetColor();
+        const GdkColor * const gcol = colour.GetColor();
 
         GValue gvalue = { 0, };
         g_value_init( &gvalue, GDK_TYPE_COLOR );
