@@ -79,7 +79,7 @@ void wxMessageDialog::GTKCreateMsgDialog()
     wxString message;
 #if GTK_CHECK_VERSION(2, 6, 0)
     bool needsExtMessage = false;
-    if ( gtk_check_version(2, 4, 0) == NULL && !m_extendedMessage.empty() )
+    if ( gtk_check_version(2, 6, 0) == NULL && !m_extendedMessage.empty() )
     {
         message = m_message;
         needsExtMessage = true;
