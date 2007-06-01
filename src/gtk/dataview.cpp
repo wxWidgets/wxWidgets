@@ -311,7 +311,7 @@ wxgtk_list_store_get_value (GtkTreeModel *tree_model,
         g_value_init( value, G_TYPE_STRING );
         model->GetValue( variant,
                          (unsigned int) column,
-                         (unsigned int) iter->user_data );
+                         wxPtrToUInt(iter->user_data) );
 
         // FIXME: we should support different encodings here
         g_value_set_string( value, wxGTK_CONV_SYS(variant.GetString()) );
@@ -777,7 +777,7 @@ gtk_wx_cell_renderer_activate(
 class wxGtkDataViewListModelNotifier: public wxDataViewListModelNotifier
 {
 public:
-    wxGtkDataViewListModelNotifier( GtkWxListStore* gtk_store, 
+    wxGtkDataViewListModelNotifier( GtkWxListStore* gtk_store,
                                     wxDataViewListModel *wx_model,
                                     wxDataViewCtrl* ctrl );
     ~wxGtkDataViewListModelNotifier();
@@ -1638,7 +1638,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
 
     wxDataViewRenderer *cell = (wxDataViewRenderer*) data;
 
-    unsigned int model_row = (unsigned int) iter->user_data;
+    unsigned int model_row = wxPtrToUInt(iter->user_data);
 
     wxVariant value;
     list_store->model->GetValue( value, cell->GetOwner()->GetModelColumn(), model_row );
@@ -1649,7 +1649,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
                     cell->GetVariantType().c_str() );
 
     cell->SetValue( value );
-    
+
     wxListItemAttr attr;
     list_store->model->GetAttr( attr, cell->GetOwner()->GetModelColumn(), model_row );
 
@@ -1657,7 +1657,7 @@ static void wxGtkTreeCellDataFunc( GtkTreeViewColumn *column,
     {
         wxColour colour = attr.GetBackgroundColour();
         GdkColor *gcol = colour.GetColor();
-    
+
         GValue gvalue = { 0, };
         g_value_init( &gvalue, GDK_TYPE_COLOR );
         g_value_set_boxed( &gvalue, gcol );
@@ -2131,7 +2131,7 @@ void wxDataViewCtrl::GtkDisableSelectionEvents()
 void wxDataViewCtrl::GtkEnableSelectionEvents()
 {
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
-    g_signal_handlers_disconnect_by_func( selection, 
+    g_signal_handlers_disconnect_by_func( selection,
                             (gpointer) (wxdataview_selection_changed_callback), this);
 }
 
@@ -2154,14 +2154,14 @@ void wxDataViewCtrl::SetSelection( int row )
 
         gtk_tree_path_free( path );
     }
-    
+
     GtkEnableSelectionEvents();
 }
 
 void wxDataViewCtrl::Unselect( unsigned int row )
 {
     GtkDisableSelectionEvents();
-    
+
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
 
     GtkTreePath *path = gtk_tree_path_new ();
@@ -2170,42 +2170,42 @@ void wxDataViewCtrl::Unselect( unsigned int row )
     gtk_tree_selection_unselect_path( selection, path );
 
     gtk_tree_path_free( path );
-    
+
     GtkEnableSelectionEvents();
 }
 
 void wxDataViewCtrl::SetSelectionRange( unsigned int from, unsigned int to )
 {
     GtkDisableSelectionEvents();
-    
+
     if (from > to)
     {
         unsigned int tmp = from;
         from = to;
         to = tmp;
     }
-    
+
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
-    
+
     GtkTreePath *path_from = gtk_tree_path_new ();
     gtk_tree_path_append_index( path_from, from );
     GtkTreePath *path_to = gtk_tree_path_new ();
     gtk_tree_path_append_index( path_to, to );
-    
+
     gtk_tree_selection_select_range( selection, path_from, path_to );
-    
+
     gtk_tree_path_free( path_to );
     gtk_tree_path_free( path_from );
-    
+
     GtkEnableSelectionEvents();
 }
 
 void wxDataViewCtrl::SetSelections( const wxArrayInt& aSelections)
 {
     GtkDisableSelectionEvents();
-    
+
     GtkTreeSelection *selection = gtk_tree_view_get_selection( GTK_TREE_VIEW(m_treeview) );
-    
+
     unsigned int i;
     for (i = 0; i < aSelections.GetCount(); i++)
     {
@@ -2216,7 +2216,7 @@ void wxDataViewCtrl::SetSelections( const wxArrayInt& aSelections)
 
         gtk_tree_path_free( path );
     }
-    
+
     GtkEnableSelectionEvents();
 }
 
