@@ -1,6 +1,28 @@
 Recent Changes for wxPython
 =====================================================================
 
+2.8.4.1
+-------
+* 
+
+Added some SWIG magic that allows wx C++ lists to be exposed to
+wxPython as sqequence-like wrappers around the real list, instead of
+making a Python list that is a copy of the real list as was done
+before.  These sequence-like objects support indexing, iteration and
+containment tests ("obj in seq") but not anything that would modify the
+sequence.  If you need to have a real list object like before you can
+pass the sequence to Python's list() function to convert it.  Current
+functions that are affected by this are wx.Window.GetChildren,
+wx.GetTopLevelWindows, wx.Sizer.GetChildren, and
+wx.Menu.GetMenuItems.  Care should be taken to be sure that you don't
+try to use the sequence after the C++ object the list belongs to has
+been destroyed.
+
+
+
+
+
+
 2.8.4.0
 -------
 * 14-May-2007
