@@ -268,7 +268,8 @@ defining the appropriate event table, and then call
 \rtfsp\helpref{wxWindow::SetEventHandler}{wxwindowseteventhandler} (or, preferably,
 \rtfsp\helpref{wxWindow::PushEventHandler}{wxwindowpusheventhandler}) to make this
 event handler the object that responds to events. This way, you can avoid
-a lot of class derivation, and use the same event handler object to
+a lot of class derivation, and use the same event handler class (but different
+objects as the same event handler object shouldn't be used more than once) to
 handle events from instances of different classes. If you ever have to call a window's event handler
 manually, use the GetEventHandler function to retrieve the window's event handler and use that
 to call the member function. By default, GetEventHandler returns a pointer to the window itself
