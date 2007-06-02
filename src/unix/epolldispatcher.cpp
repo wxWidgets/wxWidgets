@@ -86,9 +86,6 @@ wxEpollDispatcher::wxEpollDispatcher()
 
 bool wxEpollDispatcher::RegisterFD(int fd, wxFDIOHandler* handler, int flags)
 {
-    if ( !wxFDIODispatcher::RegisterFD(fd, handler, flags) )
-        return false;
-
     epoll_event ev;
     ev.events = GetEpollMask(flags, fd);
     ev.data.ptr = handler;
@@ -107,9 +104,6 @@ bool wxEpollDispatcher::RegisterFD(int fd, wxFDIOHandler* handler, int flags)
 
 bool wxEpollDispatcher::ModifyFD(int fd, wxFDIOHandler* handler, int flags)
 {
-    if ( !wxFDIODispatcher::ModifyFD(fd, handler, flags) )
-        return false;
-
     epoll_event ev;
     ev.events = GetEpollMask(flags, fd);
     ev.data.ptr = handler;
@@ -126,12 +120,8 @@ bool wxEpollDispatcher::ModifyFD(int fd, wxFDIOHandler* handler, int flags)
     return true;
 }
 
-wxFDIOHandler *wxEpollDispatcher::UnregisterFD(int fd, int flags)
+bool wxEpollDispatcher::UnregisterFD(int fd, int flags)
 {
-    wxFDIOHandler * const handler = wxFDIODispatcher::UnregisterFD(fd, flags);
-    if ( !handler )
-        return NULL;
-
     epoll_event ev;
     ev.events = 0;
     ev.data.ptr = NULL;
@@ -142,7 +132,7 @@ wxFDIOHandler *wxEpollDispatcher::UnregisterFD(int fd, int flags)
                       fd, m_epollDescriptor);
     }
 
-    return handler;
+    return true;
 }
 
 void wxEpollDispatcher::RunLoop(int timeout)

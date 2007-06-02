@@ -39,6 +39,31 @@ enum wxFDIODispatcherEntryFlags
     wxFDIO_ALL = wxFDIO_INPUT | wxFDIO_OUTPUT | wxFDIO_EXCEPTION
 };
 
+// base class for wxSelectDispatcher and wxEpollDispatcher
+class WXDLLIMPEXP_BASE wxFDIODispatcher
+{
+public:
+    enum { TIMEOUT_INFINITE = -1 };
+
+    // register handler for the given descriptor with the dispatcher, return
+    // true on success or false on error
+    virtual bool RegisterFD(int fd, wxFDIOHandler *handler, int flags) = 0;
+
+    // modify descriptor flags or handler, return true on success
+    virtual bool ModifyFD(int fd, wxFDIOHandler *handler, int flags) = 0;
+
+    // unregister descriptor previously registered with RegisterFD(), the
+    // caller is responsible for deleting the returned handler pointer if
+    // necessary
+    virtual bool UnregisterFD(int fd, int flags) = 0;
+
+    // loops waiting for an event to happen on any of the descriptors
+    virtual void RunLoop(int timeout) = 0;
+
+    virtual ~wxFDIODispatcher() { }
+};
+
+//entry for wxFDIOHandlerMap
 struct wxFDIOHandlerEntry
 {
     wxFDIOHandlerEntry()
@@ -64,34 +89,28 @@ WX_DECLARE_HASH_MAP(
   wxFDIOHandlerMap
 );
 
-// base class for wxSelectDispatcher and wxEpollDispatcher
+// FDIODispatcher that holds map fd <-> FDIOHandler, this should be used if
+// this map isn't maintained elsewhere already as it is usually needed anyhow
 //
-// notice that all pure virtual functions for FD management have implementation
+// notice that all functions for FD management have implementation
 // in the base class and should be called from the derived classes
-class WXDLLIMPEXP_BASE wxFDIODispatcher
-{
+class WXDLLIMPEXP_BASE wxMappedFDIODispatcher : public wxFDIODispatcher {
 public:
-    enum { TIMEOUT_INFINITE = -1 };
-
     // find the handler for the given fd, return NULL if none
     wxFDIOHandler *FindHandler(int fd) const;
-
     // register handler for the given descriptor with the dispatcher, return
     // true on success or false on error
-    virtual bool RegisterFD(int fd, wxFDIOHandler *handler, int flags) = 0;
+    virtual bool RegisterFD(int fd, wxFDIOHandler *handler, int flags);
 
     // modify descriptor flags or handler, return true on success
-    virtual bool ModifyFD(int fd, wxFDIOHandler *handler, int flags) = 0;
+    virtual bool ModifyFD(int fd, wxFDIOHandler *handler, int flags);
 
     // unregister descriptor previously registered with RegisterFD(), the
     // caller is responsible for deleting the returned handler pointer if
     // necessary
-    virtual wxFDIOHandler *UnregisterFD(int fd, int flags) = 0;
+    virtual bool UnregisterFD(int fd, int flags);
 
-    // loops waiting for an event to happen on any of the descriptors
-    virtual void RunLoop(int timeout) = 0;
-
-    virtual ~wxFDIODispatcher() { }
+    virtual ~wxMappedFDIODispatcher() { }
 
 protected:
     // the fd -> handler map containing all the registered handlers

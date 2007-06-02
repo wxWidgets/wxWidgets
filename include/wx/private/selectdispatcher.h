@@ -71,7 +71,7 @@ private:
     static Callback ms_handlers[Max];
 };
 
-class WXDLLIMPEXP_BASE wxSelectDispatcher : public wxFDIODispatcher
+class WXDLLIMPEXP_BASE wxSelectDispatcher : public wxMappedFDIODispatcher
 {
 public:
     // returns the unique instance of this class, the pointer shouldn't be
@@ -86,7 +86,7 @@ public:
     // implement pure virtual methods of the base class
     virtual bool RegisterFD(int fd, wxFDIOHandler *handler, int flags = wxFDIO_ALL);
     virtual bool ModifyFD(int fd, wxFDIOHandler *handler, int flags = wxFDIO_ALL);
-    virtual wxFDIOHandler *UnregisterFD(int fd, int flags = wxFDIO_ALL);
+    virtual bool UnregisterFD(int fd, int flags = wxFDIO_ALL);
     virtual void RunLoop(int timeout = TIMEOUT_INFINITE);
 
 protected:
