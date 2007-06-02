@@ -488,6 +488,9 @@ DocStr(wxRect,
 width and height properties.  In wxPython most palces that expect a
 wx.Rect can also accept a (x,y,width,height) tuple.", "");
 
+
+%typemap(in) wxRect*;
+
 class wxRect
 {
 public:
@@ -776,6 +779,9 @@ usually, but not necessarily, the larger one.", "");
 
     %property(Empty, IsEmpty, doc="See `IsEmpty`");
 };
+
+%apply wxRect& { wxRect* };
+
 
 
 MustHaveApp(wxIntersectRect);
