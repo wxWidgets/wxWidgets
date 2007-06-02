@@ -9,6 +9,7 @@ class TestPanel(wx.Panel):
         wx.Panel.__init__(self, parent, -1)
 
         sizer = wx.FlexGridSizer(0, 3, 5, 5)
+        sizer.AddGrowableCol(1)
         box = wx.BoxSizer(wx.VERTICAL)
         fs = self.GetFont().GetPointSize()
         bf = wx.Font(fs+4, wx.SWISS, wx.NORMAL, wx.BOLD)
@@ -38,7 +39,7 @@ class TestPanel(wx.Panel):
                       0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
             sizer.Add(wx.TextCtrl(self, -1, func(*args),
                                   size=(275,-1), style=wx.TE_READONLY),
-                      0, wx.ALIGN_RIGHT|wx.ALIGN_CENTER_VERTICAL)
+                      0, wx.EXPAND|wx.ALIGN_CENTER_VERTICAL)
 
             btn = wx.Button(self, wx.ID_HELP)
             sizer.Add(btn)
@@ -64,7 +65,8 @@ class TestPanel(wx.Panel):
                  wx.StandardPaths.ResourceCat_Messages )
 
         self.Bind(wx.EVT_BUTTON, self.OnShowDoc, id=wx.ID_HELP)
-        box.Add(sizer, 0, wx.CENTER|wx.ALL, 10)
+
+        box.Add(sizer, 0, wx.CENTER|wx.EXPAND|wx.ALL, 20)
         self.SetSizer(box)
 
 
