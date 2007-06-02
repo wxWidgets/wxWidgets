@@ -153,6 +153,13 @@ wxX11:
 - Make Enter key activate the default button (David Hart)
 
 
+2.8.5
+-----
+
+wxMSW:
+
+- Added msw.font.no-proof-quality system option, see manual for description
+
 2.8.4
 -----
 
