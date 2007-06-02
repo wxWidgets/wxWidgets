@@ -1597,6 +1597,10 @@ public:
     // classify this encoding as explained in wxMBConv::GetMBNulLen() comment
     virtual size_t GetMBNulLen() const;
 
+#if wxUSE_UNICODE_UTF8
+    virtual bool IsUTF8() const;
+#endif
+
     virtual wxMBConv *Clone() const
     {
         wxMBConv_iconv *p = new wxMBConv_iconv(m_name);
@@ -1974,6 +1978,14 @@ size_t wxMBConv_iconv::GetMBNulLen() const
 
     return m_minMBCharWidth;
 }
+
+#if wxUSE_UNICODE_UTF8
+bool wxMBConv_iconv::IsUTF8() const
+{
+    return wxStricmp(m_name, "UTF-8") == 0 ||
+           wxStricmp(m_name, "UTF8") == 0;
+}
+#endif
 
 #endif // HAVE_ICONV
 
@@ -3613,8 +3625,24 @@ size_t wxCSConv::GetMBNulLen() const
         return m_convReal->GetMBNulLen();
     }
 
+    // otherwise, we are ISO-8859-1
     return 1;
 }
+
+#if wxUSE_UNICODE_UTF8
+bool wxCSConv::IsUTF8() const
+{
+    CreateConvIfNeeded();
+
+    if ( m_convReal )
+    {
+        return m_convReal->IsUTF8();
+    }
+
+    // otherwise, we are ISO-8859-1
+    return false;
+}
+#endif
 
 
 #if wxUSE_UNICODE

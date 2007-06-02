@@ -223,6 +223,10 @@ public:
         return m_conv->GetMBNulLen();
     }
 
+#if wxUSE_UNICODE_UTF8
+    virtual bool IsUTF8() const { return m_conv->IsUTF8(); }
+#endif
+
     virtual wxMBConv *Clone() const { return new wxConvBrokenFileNames(*this); }
 
 private:
@@ -398,6 +402,10 @@ public:
     virtual size_t MB2WC(wchar_t *outputBuf, const char *psz, size_t outputSize) const;
     virtual size_t WC2MB(char *outputBuf, const wchar_t *psz, size_t outputSize) const;
     virtual size_t GetMBNulLen() const;
+
+#if wxUSE_UNICODE_UTF8
+    virtual bool IsUTF8() const;
+#endif
 
     virtual wxMBConv *Clone() const { return new wxCSConv(*this); }
 
