@@ -18,9 +18,9 @@
 
 #include "wx/cpp.h"
 #include "wx/chartype.h"
-#include "wx/wxcrt.h"
 #include "wx/strconv.h"
 #include "wx/buffer.h"
+#include "wx/unichar.h"
 
 class WXDLLIMPEXP_BASE wxCStrData;
 class WXDLLIMPEXP_BASE wxString;
@@ -417,6 +417,35 @@ WX_ARG_NORMALIZER_FORWARD(std::string, const std::string&);
 WX_ARG_NORMALIZER_FORWARD(wxStdWideString, const wxStdWideString&);
 
 #endif // wxUSE_STD_STRING
+
+
+// versions for wxUniChar, wxUniCharRef:
+
+#if !wxUSE_UTF8_LOCALE_ONLY
+template<>
+struct wxArgNormalizerWchar<const wxUniChar&>
+    : public wxArgNormalizerWchar<wxChar/*FIXME-UTF8: should be wchar_t after ANSI removal*/>
+{
+    wxArgNormalizerWchar(const wxUniChar& s)
+        : wxArgNormalizerWchar<wxChar>((wxChar)s) {}
+};
+#endif // !wxUSE_UTF8_LOCALE_ONLY
+
+#if wxUSE_UNICODE_UTF8
+template<>
+struct wxArgNormalizerUtf8<const wxUniChar&>
+    : public wxArgNormalizerUtf8<char>
+{
+    wxArgNormalizerUtf8(const wxUniChar& s)
+        // FIXME-UTF8: this is lossy, we need to convert to string, but that
+        // requires format string update
+        : wxArgNormalizerUtf8<char>((const char)s) {}
+};
+#endif // wxUSE_UNICODE_UTF8
+
+WX_ARG_NORMALIZER_FORWARD(wxUniChar, const wxUniChar&);
+WX_ARG_NORMALIZER_FORWARD(const wxUniCharRef&, const wxUniChar&);
+WX_ARG_NORMALIZER_FORWARD(wxUniCharRef, const wxUniChar&);
 
 
 #undef WX_ARG_NORMALIZER_FORWARD
