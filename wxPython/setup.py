@@ -482,7 +482,12 @@ wxpExtensions.append(ext)
 
 
 swig_sources = run_swig(['richtext.i'], 'src', GENDIR, PKGDIR,
-                        USE_SWIG, swig_force, swig_args, swig_deps)
+                        USE_SWIG, swig_force, swig_args,
+                        swig_deps + [ 'src/_richtextbuffer.i',
+                                      'src/_richtextctrl.i',
+                                      'src/_richtexthtml.i',
+                                      'src/_richtextxml.i',
+                                      ])
 if not MONOLITHIC and findLib('richtext', libdirs):
     richLib = makeLibName('richtext')
 else:
