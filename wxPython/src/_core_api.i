@@ -241,6 +241,8 @@ static wxPyCoreAPI API = {
     wxPoint2D_LIST_helper,
     wxRect2D_helper,
 
+    wxPyCBOutputStream_create,
+    wxPyCBOutputStream_copy,
 };
 
 #endif
