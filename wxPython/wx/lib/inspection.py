@@ -511,6 +511,8 @@ class InspectionInfoPanel(wx.stc.StyledTextCtrl):
         st.append(self.Fmt('name',       obj.GetName()))
         st.append(self.Fmt('class',      obj.__class__))
         st.append(self.Fmt('bases',      obj.__class__.__bases__))
+        if hasattr(obj, 'this'):
+            st.append(self.Fmt('this',      repr(obj.this)))
         st.append(self.Fmt('id',         obj.GetId()))
         st.append(self.Fmt('style',      obj.GetWindowStyle()))
         st.append(self.Fmt('pos',        obj.GetPosition()))
@@ -561,6 +563,8 @@ class InspectionInfoPanel(wx.stc.StyledTextCtrl):
     def FmtSizer(self, obj):
         st = ['Sizer:']
         st.append(self.Fmt('class',      obj.__class__))
+        if hasattr(obj, 'this'):
+            st.append(self.Fmt('this',      repr(obj.this)))
         st.append(self.Fmt('pos',        obj.GetPosition()))
         st.append(self.Fmt('size',       obj.GetSize()))
         st.append(self.Fmt('minsize',    obj.GetMinSize()))
