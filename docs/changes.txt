@@ -87,6 +87,7 @@ Major new features in 2.8 release
   wxDirPickerCtrl, wxFilePickerCtrl, wxFontPickerCtrl, wxCollapsiblePane,
   wxSearchCtrl, wxAboutBox, wxTreebook, tar streams.
 
+
 2.8.5
 -----
 
@@ -100,13 +101,13 @@ All (GUI):
 
 
 wxMSW:
-- Correct problem with page setup dialog when using
-  Landscape mode.
+- Correct problem with page setup dialog when using landscape mode
+- Added msw.font.no-proof-quality system option, see manual for description
 
 wxGTK:
 
 - More work on setting defaults in GNOME print dialogs.
-- Also made Landscape printing work as per wxMSW.
+- Also made landscape printing work as per wxMSW.
 - Add support for clipping in GNOME print backend.
 - Speed up wxBitmap::Rescale()
 - Add right button event for wxToolbar's tools (Tim Kosse)
