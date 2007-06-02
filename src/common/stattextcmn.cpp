@@ -54,26 +54,26 @@ const wxChar *wxMarkupEntities[][wxMARKUP_ENTITY_MAX] =
 
 void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
 {
-    const wxChar *lastSpace = NULL;
     wxString line;
 
-    const wxChar *lineStart = text.c_str();
-    for ( const wxChar *p = lineStart; ; p++ )
+    wxString::const_iterator lastSpace = text.end();
+    wxString::const_iterator lineStart = text.begin();
+    for ( wxString::const_iterator p = lineStart; ; ++p )
     {
         if ( IsStartOfNewLine() )
         {
             OnNewLine();
 
-            lastSpace = NULL;
+            lastSpace = text.end();
             line.clear();
             lineStart = p;
         }
 
-        if ( *p == _T('\n') || *p == _T('\0') )
+        if ( p == text.end() || *p == _T('\n') )
         {
             DoOutputLine(line);
 
-            if ( *p == _T('\0') )
+            if ( p == text.end() )
                 break;
         }
         else // not EOL
@@ -83,7 +83,7 @@ void wxTextWrapper::Wrap(wxWindow *win, const wxString& text, int widthMax)
 
             line += *p;
 
-            if ( widthMax >= 0 && lastSpace )
+            if ( widthMax >= 0 && lastSpace != text.end() )
             {
                 int width;
                 win->GetTextExtent(line, &width, NULL);
@@ -161,10 +161,10 @@ wxString wxStaticTextBase::RemoveMarkup(const wxString& text)
     bool inside_tag = false;
 
     wxString label;
-    const wxChar *source = text;
-    for (size_t i=0, max=text.length(); i<max; i++)
+    for ( wxString::const_iterator source = text.begin();
+          source != text.end(); ++source )
     {
-        switch (source[i])
+        switch ( (*source).GetValue() )
         {
             case wxT('<'):
                 if (inside_tag)
@@ -186,7 +186,7 @@ wxString wxStaticTextBase::RemoveMarkup(const wxString& text)
 
             case wxT('&'):
                 {
-                    if (i == max-1)
+                    if ( source+1 == text.end() )
                     {
                         wxLogDebug(wxT("Cannot use & as last character of the string '%s'"),
                                    text.c_str());
@@ -195,38 +195,39 @@ wxString wxStaticTextBase::RemoveMarkup(const wxString& text)
 
                     // is this ampersand introducing a mnemonic or rather an entity?
                     bool isMnemonic = true;
+                    size_t distanceFromEnd = text.end() - source;
                     for (size_t j=0; j < wxMARKUP_ENTITY_MAX; j++)
                     {
                         const wxChar *entity = wxMarkupEntities[wxMARKUP_ELEMENT_NAME][j];
                         size_t entityLen = wxStrlen(entity);
 
-                        if (max - i >= entityLen &&
-                            wxStrncmp(entity, &source[i], entityLen) == 0)
+                        if (distanceFromEnd >= entityLen &&
+                            wxString(source, source + entityLen) == entity)
                         {
                             // replace the &entity; string with the entity reference
                             label << wxMarkupEntities[wxMARKUP_ELEMENT_VALUE][j];
-                            
-                            // little exception: when the entity reference is "&"
-                            // (i.e. when entity is "&amp;"), substitute it with &&
-                            // instead of a single ampersand:
+                            // little exception: when the entity reference is
+                            // "&" (i.e. when entity is "&amp;"), substitute it
+                            // with && instead of a single ampersand:
                             if (*wxMarkupEntities[wxMARKUP_ELEMENT_VALUE][j] == wxT('&'))
                                 label << wxT('&');
-                            i += entityLen - 1;     // the -1 is because main for()
-                                                    // loop already increments i
+                            // the -1 is because main for() loop already
+                            // increments i:
+                            source += entityLen - 1;
                             isMnemonic = false;
                             break;
                         }
                     }
 
                     if (isMnemonic)
-                        label << text[i];
+                        label << *source;
                 }
                 break;
 
 
             default:
                 if (!inside_tag)
-                    label << text[i];
+                    label << *source;
         }
     }
 
@@ -238,7 +239,8 @@ wxString wxStaticTextBase::EscapeMarkup(const wxString& text)
 {
     wxString ret;
 
-    for (const wxChar *source = text; *source != wxT('\0'); source++)
+    for (wxString::const_iterator source = text.begin();
+         source != text.end(); ++source)
     {
         bool isEntity = false;
 
@@ -328,12 +330,10 @@ wxString wxStaticTextBase::Ellipsize(const wxString& label) const
     wxString curLine;
     wxSize reqsize;
     size_t len;
-    for ( const wxChar *pc = label; ; pc++ )
+    for ( wxString::const_iterator pc = label.begin(); ; ++pc )
     {
-        switch ( *pc )
+        if ( pc == label.end() || *pc == _T('\n') )
         {
-        case _T('\n'):
-        case _T('\0'):
             len = curLine.length();
             if (len > 0 &&
                 dc.GetPartialTextExtents(curLine, charOffsets))
@@ -446,31 +446,34 @@ wxString wxStaticTextBase::Ellipsize(const wxString& label) const
             }
 
             // add this (ellipsized) row to the rest of the label
-            ret << curLine << *pc;
-            curLine.clear();
-
-            if ( *pc == _T('\0') )
+            ret << curLine;
+            if ( pc == label.end() )
+            {
                 return ret;
-
-            break;
-
-            // we need to remove mnemonics from the label for
-            // correct calculations
-        case _T('&'):
-            // pc+1 is safe: at worst we'll hit the \0
-            if (*(pc+1) == _T('&'))
+            }
+            else
+            {
+                ret << *pc;
+                curLine.clear();
+            }
+        }
+        // we need to remove mnemonics from the label for correct calculations
+        else if ( *pc == _T('&') )
+        {
+            // pc+1 is safe: at worst we'll be at end()
+            wxString::const_iterator next = pc + 1;
+            if ( next != label.end() && *next == _T('&') )
                 curLine += _T('&');          // && becomes &
             //else: remove this ampersand
-
-            break;
-
-            // we need also to expand tabs to properly calc their size
-        case _T('\t'):
+        }
+        // we need also to expand tabs to properly calc their size
+        else if ( *pc == _T('\t') )
+        {
             // Windows natively expands the TABs to 6 spaces. Do the same:
             curLine += wxT("      ");
-            break;
-
-        default:
+        }
+        else
+        {
             curLine += *pc;
         }
     }
