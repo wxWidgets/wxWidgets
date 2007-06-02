@@ -98,6 +98,20 @@ LRESULT APIENTRY _EXPORT wxNotebookWndProc(HWND hwnd,
 #endif // USE_NOTEBOOK_ANTIFLICKER
 
 // ----------------------------------------------------------------------------
+// global functions
+// ----------------------------------------------------------------------------
+
+static bool HasTroubleWithNonTopTabs()
+{
+    const int verComCtl32 = wxApp::GetComCtl32Version();
+
+    // 600 is XP, 616 is Vista -- and both have a problem with tabs not on top
+    // (but don't just test for >= 600 as Microsoft might decide to fix it in
+    // later versions, who knows...)
+    return verComCtl32 >= 600 && verComCtl32 <= 616;
+}
+
+// ----------------------------------------------------------------------------
 // event table
 // ----------------------------------------------------------------------------
 
@@ -283,11 +297,11 @@ bool wxNotebook::Create(wxWindow *parent,
 #endif
 
 #if !wxUSE_UXTHEME
-    // ComCtl32 notebook tabs simply don't work unless they're on top if we have uxtheme, we can
-    // work around it later (after control creation), but if we don't have uxtheme, we have to clear
-    // those styles
-    const int verComCtl32 = wxApp::GetComCtl32Version();
-    if ( verComCtl32 == 600 )
+    // ComCtl32 notebook tabs simply don't work unless they're on top if we
+    // have uxtheme, we can work around it later (after control creation), but
+    // if we have been compiled without uxtheme support, we have to clear those
+    // styles
+    if ( HasTroubleWithNonTopTabs() )
     {
         style &= ~(wxBK_BOTTOM | wxBK_LEFT | wxBK_RIGHT);
     }
@@ -360,16 +374,16 @@ bool wxNotebook::Create(wxWindow *parent,
     // comctl32.dll 6.0 doesn't support non-top tabs with visual styles (the
     // control is simply not rendered correctly), so we disable themes
     // if possible, otherwise we simply clear the styles.
-    // It's probably not possible to have UXTHEME without ComCtl32 6 or better, but lets
-    // check it anyway.
-    const int verComCtl32 = wxApp::GetComCtl32Version();
-    if ( verComCtl32 == 600 )
+    if ( HasTroubleWithNonTopTabs() &&
+            (style & (wxBK_BOTTOM | wxBK_LEFT | wxBK_RIGHT)) )
     {
         // check if we use themes at all -- if we don't, we're still okay
-        if ( wxUxThemeEngine::GetIfActive() && (style & (wxBK_BOTTOM|wxBK_LEFT|wxBK_RIGHT)))
+        if ( wxUxThemeEngine::GetIfActive() )
         {
-            wxUxThemeEngine::GetIfActive()->SetWindowTheme((HWND)this->GetHandle(), L"", L"");
-            SetBackgroundColour(GetThemeBackgroundColour());    //correct the background color for the new non-themed control
+            wxUxThemeEngine::GetIfActive()->SetWindowTheme(GetHwnd(), L"", L"");
+
+            // correct the background color for the new non-themed control
+            SetBackgroundColour(GetThemeBackgroundColour()); 
         }
     }
 #endif // wxUSE_UXTHEME

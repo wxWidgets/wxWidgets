@@ -159,6 +159,7 @@ wxX11:
 wxMSW:
 
 - Added msw.font.no-proof-quality system option, see manual for description
+- Fix appearance of notebook with non-top tabs under Windows Vista
 
 2.8.4
 -----
