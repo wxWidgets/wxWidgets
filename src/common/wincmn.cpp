@@ -324,10 +324,27 @@ wxWindowBase::~wxWindowBase()
         wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent((wxWindow*)this),
                                               wxTopLevelWindow);
 
-        if ( tlw && tlw->GetDefaultItem() == this )
-            tlw->SetDefaultItem(NULL);
-        if ( tlw && tlw->GetTmpDefaultItem() == this )
-            tlw->SetTmpDefaultItem(NULL);
+        if ( tlw )
+        {
+            wxWindow* tmpDefaultItem = tlw->GetTmpDefaultItem();
+            if ( tmpDefaultItem == this )
+                tlw->SetTmpDefaultItem(NULL);
+            else if ( tmpDefaultItem )
+            {
+                // A temporary default item masks the real default item, so
+                // temporarily unset the temporary default item so we can access the
+                // real default item.
+                tlw->SetTmpDefaultItem(NULL);
+
+                if ( tlw->GetDefaultItem() == this )
+                    tlw->SetDefaultItem(NULL);
+
+                // Set the temporary default item back.
+                tlw->SetTmpDefaultItem(tmpDefaultItem);
+            }
+            else if ( tlw->GetDefaultItem() == this )
+                tlw->SetDefaultItem(NULL);
+        }
     }
 
     // reset the dangling pointer our parent window may keep to us
