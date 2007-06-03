@@ -227,6 +227,8 @@ bool wxBitmapRefData::Create( int w , int h , int d )
 #else
     m_hBitmap = CGBitmapContextCreate((char*) data, m_width, m_height, 8, m_bytesPerRow, wxMacGetGenericRGBColorSpace(), kCGImageAlphaNoneSkipFirst );
     wxASSERT_MSG( m_hBitmap , wxT("Unable to create CGBitmapContext context") ) ;
+    CGContextTranslateCTM( m_hBitmap, 0,  m_height );
+    CGContextScaleCTM( m_hBitmap, 1, -1 );
 #endif
     m_ok = ( m_hBitmap != NULL ) ;
 
@@ -243,6 +245,8 @@ void wxBitmapRefData::UseAlpha( bool use )
     CGContextRelease( m_hBitmap );
     m_hBitmap = CGBitmapContextCreate((char*) m_memBuf.GetData(), m_width, m_height, 8, m_bytesPerRow, wxMacGetGenericRGBColorSpace(), m_hasAlpha ? kCGImageAlphaPremultipliedFirst : kCGImageAlphaNoneSkipFirst );
     wxASSERT_MSG( m_hBitmap , wxT("Unable to create CGBitmapContext context") ) ;
+    CGContextTranslateCTM( m_hBitmap, 0,  m_height );
+    CGContextScaleCTM( m_hBitmap, 1, -1 );
 #else
     if ( m_hasAlpha )
     {
