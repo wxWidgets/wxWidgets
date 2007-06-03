@@ -1621,6 +1621,8 @@ COND_TOOLKIT__BASE_MACOSX_HDR =  \
 	wx/unix/private.h \
 	wx/unix/stackwalk.h \
 	wx/unix/stdpaths.h \
+	wx/mac/corefoundation/cfdataref.h \
+	wx/mac/corefoundation/cfref.h \
 	wx/mac/corefoundation/cfstring.h \
 	wx/mac/corefoundation/hid.h \
 	wx/mac/corefoundation/stdpaths.h
@@ -1634,6 +1636,8 @@ COND_TOOLKIT_COCOA_BASE_MACOSX_HDR =  \
 	wx/unix/private.h \
 	wx/unix/stackwalk.h \
 	wx/unix/stdpaths.h \
+	wx/mac/corefoundation/cfdataref.h \
+	wx/mac/corefoundation/cfref.h \
 	wx/mac/corefoundation/cfstring.h \
 	wx/mac/corefoundation/hid.h \
 	wx/mac/corefoundation/stdpaths.h
@@ -1647,11 +1651,15 @@ COND_TOOLKIT_GTK_BASE_MACOSX_HDR =  \
 	wx/unix/private.h \
 	wx/unix/stackwalk.h \
 	wx/unix/stdpaths.h \
+	wx/mac/corefoundation/cfdataref.h \
+	wx/mac/corefoundation/cfref.h \
 	wx/mac/corefoundation/cfstring.h \
 	wx/mac/corefoundation/hid.h \
 	wx/mac/corefoundation/stdpaths.h
 @COND_TOOLKIT_GTK@BASE_MACOSX_HDR = $(COND_TOOLKIT_GTK_BASE_MACOSX_HDR)
 COND_TOOLKIT_MAC_BASE_MACOSX_HDR =  \
+	wx/mac/corefoundation/cfdataref.h \
+	wx/mac/corefoundation/cfref.h \
 	wx/mac/corefoundation/cfstring.h \
 	wx/mac/corefoundation/hid.h \
 	wx/mac/corefoundation/stdpaths.h \
@@ -1668,6 +1676,8 @@ COND_TOOLKIT_MOTIF_BASE_MACOSX_HDR =  \
 	wx/unix/private.h \
 	wx/unix/stackwalk.h \
 	wx/unix/stdpaths.h \
+	wx/mac/corefoundation/cfdataref.h \
+	wx/mac/corefoundation/cfref.h \
 	wx/mac/corefoundation/cfstring.h \
 	wx/mac/corefoundation/hid.h \
 	wx/mac/corefoundation/stdpaths.h
@@ -1681,6 +1691,8 @@ COND_TOOLKIT_X11_BASE_MACOSX_HDR =  \
 	wx/unix/private.h \
 	wx/unix/stackwalk.h \
 	wx/unix/stdpaths.h \
+	wx/mac/corefoundation/cfdataref.h \
+	wx/mac/corefoundation/cfref.h \
 	wx/mac/corefoundation/cfstring.h \
 	wx/mac/corefoundation/hid.h \
 	wx/mac/corefoundation/stdpaths.h
