@@ -23,7 +23,14 @@ public:
     typedef unsigned short NativeFormat;
 
     wxDataFormat(NativeFormat format = wxDF_INVALID) { m_format = format; }
+
+    // we need constructors from all string types as implicit conversions to
+    // wxString don't apply when we already rely on implicit conversion of a,
+    // for example, "char *" string to wxDataFormat, and existing code does it
     wxDataFormat(const wxString& format) { SetId(format); }
+    wxDataFormat(const char *format) { SetId(format); }
+    wxDataFormat(const wchar_t *format) { SetId(format); }
+    wxDataFormat(const wxCStrData& format) { SetId(format); }
 
     wxDataFormat& operator=(NativeFormat format)
         { m_format = format; return *this; }
