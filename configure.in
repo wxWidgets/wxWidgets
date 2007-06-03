@@ -598,7 +598,7 @@ if test $DEBUG_CONFIGURE = 1; then
 else
   DEFAULT_wxUSE_UNIVERSAL=no
   DEFAULT_wxUSE_STL=no
-  DEFAULT_wxUSE_EXTENDED_RTTI=no
+  DEFAULT_wxUSE_EXTENDED_RTTI=yes
 
   DEFAULT_wxUSE_NANOX=no
 
@@ -5745,6 +5745,7 @@ fi
 
 if test "$wxUSE_EXTENDED_RTTI" = "yes"; then
   AC_DEFINE(wxUSE_EXTENDED_RTTI)
+  SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS xti"
 fi
 
 if test "$wxUSE_APPLE_IEEE" = "yes"; then
