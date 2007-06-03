@@ -156,6 +156,10 @@ wxX11:
 2.8.5
 -----
 
+All (GUI):
+
+- Added raw RGB support and colour normalization to PNM handler (Ray Johnston)
+
 wxMSW:
 
 - Correct problem with page setup dialog when using landscape mode
