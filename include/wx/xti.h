@@ -2,7 +2,7 @@
 // Name:        wx/xti.h
 // Purpose:     runtime metadata information (extended class info)
 // Author:      Stefan Csomor
-// Modified by:
+// Modified by: 
 // Created:     27/07/03
 // RCS-ID:      $Id$
 // Copyright:   (c) 1997 Julian Smart
@@ -351,8 +351,7 @@ void wxFlagsToString( wxString &s , const e& data )
 // ----------------------------------------------------------------------------
 // Type Information
 // ----------------------------------------------------------------------------
-//
-//
+
 //  All data exposed by the RTTI is characterized using the following classes.
 //  The first characterization is done by wxTypeKind. All enums up to and including
 //  wxT_CUSTOM represent so called simple types. These cannot be divided any further.
@@ -362,7 +361,7 @@ void wxFlagsToString( wxString &s , const e& data )
 
 enum wxTypeKind
 {
-    wxT_VOID = 0, // unknown type
+    wxT_VOID = 0,   // unknown type
     wxT_BOOL,
     wxT_CHAR,
     wxT_UCHAR,
@@ -372,18 +371,18 @@ enum wxTypeKind
     wxT_ULONG,
     wxT_FLOAT,
     wxT_DOUBLE,
-    wxT_STRING, // must be wxString
-    wxT_SET, // must be wxBitset<> template
+    wxT_STRING,     // must be wxString
+    wxT_SET,        // must be wxBitset<> template
     wxT_ENUM,
-    wxT_CUSTOM, // user defined type (e.g. wxPoint)
+    wxT_CUSTOM,     // user defined type (e.g. wxPoint)
 
     wxT_LAST_SIMPLE_TYPE_KIND = wxT_CUSTOM ,
 
     wxT_OBJECT_PTR, // object reference
-    wxT_OBJECT , // embedded object
-    wxT_COLLECTION , // collection
+    wxT_OBJECT,     // embedded object
+    wxT_COLLECTION, // collection
 
-    wxT_DELEGATE , // for connecting against an event source
+    wxT_DELEGATE,   // for connecting against an event source
 
     wxT_LAST_TYPE_KIND = wxT_DELEGATE // sentinel for bad data, asserts, debugging
 };
@@ -457,6 +456,8 @@ public:
         else 
             wxLogError( wxGetTranslation(_T("String conversions not supported")) ); 
     }
+
+    // statics:
 
 #if wxUSE_UNICODE
     static wxTypeInfo *FindType(const char *typeName) 
@@ -622,11 +623,16 @@ private:
 class WXDLLIMPEXP_BASE wxDelegateTypeInfo : public wxTypeInfo
 {
 public:
-    wxDelegateTypeInfo( int eventType , wxClassInfo* eventClass , converterToString_t to = NULL , converterFromString_t from = NULL );
-    wxDelegateTypeInfo( int eventType , int lastEventType, wxClassInfo* eventClass , converterToString_t to = NULL , converterFromString_t from = NULL );
+    wxDelegateTypeInfo( int eventType , wxClassInfo* eventClass , 
+                        converterToString_t to = NULL , 
+                        converterFromString_t from = NULL );
+    wxDelegateTypeInfo( int eventType , int lastEventType, wxClassInfo* eventClass , 
+                        converterToString_t to = NULL , converterFromString_t from = NULL );
+
     int GetEventType() const { return m_eventType; }
     int GetLastEventType() const { return m_lastEventType; }
     const wxClassInfo* GetEventClass() const { return m_eventClass; }
+
 private:
     const wxClassInfo *m_eventClass; // (extended will merge into classinfo)
     int m_eventType;
@@ -769,11 +775,18 @@ public:
     wxObject* GetAsObject();
 
     // get the typeinfo of the stored object
-    const wxTypeInfo* GetTypeInfo() const { return m_data->GetTypeInfo(); }
+    const wxTypeInfo* GetTypeInfo() const 
+    { 
+        if (!m_data)
+            return NULL;
+        return m_data->GetTypeInfo(); 
+    }
 
     // returns this value as string
     wxString GetAsString() const
     {
+        if (!GetTypeInfo())
+            return wxEmptyString;
         wxString s;
         GetTypeInfo()->ConvertToString( *this , s );
         return s;
@@ -1071,6 +1084,7 @@ enum
 class WXDLLIMPEXP_BASE wxPropertyInfo
 {
     friend class WXDLLIMPEXP_BASE wxDynamicClassInfo;
+
 public:
     wxPropertyInfo(wxPropertyInfo* &iter,
                    wxClassInfo* itsClass,
@@ -1782,6 +1796,7 @@ class WXDLLIMPEXP_BASE wxClassInfo
     friend class WXDLLIMPEXP_BASE wxPropertyInfo;
     friend class WXDLLIMPEXP_BASE wxHandlerInfo;
     friend wxObject *wxCreateDynamicObject(const wxChar *name);
+
 public:
     wxClassInfo(const wxClassInfo **_Parents,
         const wxChar *_UnitName,
@@ -1883,11 +1898,16 @@ public:
 
     wxObjectConstructorFn      GetConstructor() const 
         { return m_objectConstructor; }
-    static const wxClassInfo  *GetFirst() 
-        { return sm_first; }
     const wxClassInfo         *GetNext() const 
         { return m_next; }
+    
+    // statics:
+
+    static void                CleanUp();
     static wxClassInfo        *FindClass(const wxChar *className);
+    static const wxClassInfo  *GetFirst() 
+        { return sm_first; }
+
 
     // Climb upwards through inheritance hierarchy.
     // Dual inheritance is catered for.
@@ -1920,8 +1940,6 @@ public:
 
     // gets the streaming callback from this class or any superclass
     wxObjectStreamingCallback GetStreamingCallback() const;
-
-    static void CleanUp();
 
     // returns the first property
     const wxPropertyInfo* GetFirstProperty() const 
