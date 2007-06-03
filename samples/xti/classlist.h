@@ -13,26 +13,23 @@
 #define _CLASSLIST_H_
 
 
-/*!
- * Includes
- */
+// ----------------------------------------------------------------------------
+// includes
+// ----------------------------------------------------------------------------
 
 ////@begin includes
 #include "wx/choicebk.h"
 #include "wx/treectrl.h"
 ////@end includes
 
-/*!
- * Forward declarations
- */
-
 ////@begin forward declarations
 class wxTreeCtrl;
 ////@end forward declarations
 
-/*!
- * Control identifiers
- */
+
+// ----------------------------------------------------------------------------
+// IDs
+// ----------------------------------------------------------------------------
 
 ////@begin control identifiers
 #define ID_LISTMODE 10006
@@ -48,9 +45,9 @@ class wxTreeCtrl;
 ////@end control identifiers
 
 
-/*!
- * wxClassListDialog class declaration
- */
+// ----------------------------------------------------------------------------
+// wxClassListDialog
+// ----------------------------------------------------------------------------
 
 class wxClassListDialog: public wxDialog
 {    
@@ -60,10 +57,18 @@ class wxClassListDialog: public wxDialog
 public:
     /// Constructors
     wxClassListDialog();
-    wxClassListDialog( wxWindow* parent, wxWindowID id = SYMBOL_WXCLASSLISTDIALOG_IDNAME, const wxString& caption = SYMBOL_WXCLASSLISTDIALOG_TITLE, const wxPoint& pos = SYMBOL_WXCLASSLISTDIALOG_POSITION, const wxSize& size = SYMBOL_WXCLASSLISTDIALOG_SIZE, long style = SYMBOL_WXCLASSLISTDIALOG_STYLE );
+    wxClassListDialog( wxWindow* parent, wxWindowID id = SYMBOL_WXCLASSLISTDIALOG_IDNAME, 
+                       const wxString& caption = SYMBOL_WXCLASSLISTDIALOG_TITLE, 
+                       const wxPoint& pos = SYMBOL_WXCLASSLISTDIALOG_POSITION, 
+                       const wxSize& size = SYMBOL_WXCLASSLISTDIALOG_SIZE, 
+                       long style = SYMBOL_WXCLASSLISTDIALOG_STYLE );
 
     /// Creation
-    bool Create( wxWindow* parent, wxWindowID id = SYMBOL_WXCLASSLISTDIALOG_IDNAME, const wxString& caption = SYMBOL_WXCLASSLISTDIALOG_TITLE, const wxPoint& pos = SYMBOL_WXCLASSLISTDIALOG_POSITION, const wxSize& size = SYMBOL_WXCLASSLISTDIALOG_SIZE, long style = SYMBOL_WXCLASSLISTDIALOG_STYLE );
+    bool Create( wxWindow* parent, wxWindowID id = SYMBOL_WXCLASSLISTDIALOG_IDNAME, 
+                 const wxString& caption = SYMBOL_WXCLASSLISTDIALOG_TITLE, 
+                 const wxPoint& pos = SYMBOL_WXCLASSLISTDIALOG_POSITION, 
+                 const wxSize& size = SYMBOL_WXCLASSLISTDIALOG_SIZE, 
+                 long style = SYMBOL_WXCLASSLISTDIALOG_STYLE );
 
     /// Destructor
     ~wxClassListDialog();
@@ -75,11 +80,15 @@ public:
     void CreateControls();
 
     void InitControls();
+    int AddClassesWithParent(const wxClassInfo *parent, const wxTreeItemId &id);
 
 ////@begin wxClassListDialog event handler declarations
 
     /// wxEVT_COMMAND_LISTBOX_SELECTED event handler for ID_LISTBOX
     void OnListboxSelected( wxCommandEvent& event );
+
+    /// wxEVT_COMMAND_TREE_SEL_CHANGED event handler for ID_TREECTRL
+    void OnTreectrlSelChanged( wxTreeEvent& event );
 
 ////@end wxClassListDialog event handler declarations
 
@@ -95,6 +104,7 @@ public:
     /// Should we show tooltips?
     static bool ShowToolTips();
 
+protected:
 ////@begin wxClassListDialog member variables
     wxListBox* m_pListBox;
     wxTreeCtrl* m_pTreeCtrl;

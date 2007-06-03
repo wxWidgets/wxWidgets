@@ -21,8 +21,7 @@
 #include "wx/wx.h"
 #endif
 
-////@begin includes
-////@end includes
+// includes
 
 #include "classlist.h"
 
@@ -32,6 +31,8 @@ BEGIN_EVENT_TABLE( wxClassListDialog, wxDialog )
 
 ////@begin wxClassListDialog event table entries
     EVT_LISTBOX( ID_LISTBOX, wxClassListDialog::OnListboxSelected )
+
+    EVT_TREE_SEL_CHANGED( ID_TREECTRL, wxClassListDialog::OnTreectrlSelChanged )
 
 ////@end wxClassListDialog event table entries
 END_EVENT_TABLE()
@@ -72,8 +73,6 @@ bool wxClassListDialog::Create( wxWindow* parent, wxWindowID id, const wxString&
 
 wxClassListDialog::~wxClassListDialog()
 {
-////@begin wxClassListDialog destruction
-////@end wxClassListDialog destruction
 }
 
 void wxClassListDialog::Init()
@@ -94,10 +93,10 @@ void wxClassListDialog::CreateControls()
     itemDialog1->SetSizer(itemBoxSizer2);
 
     wxStaticText* itemStaticText3 = new wxStaticText( itemDialog1, wxID_STATIC, _("This is the list of wxWidgets classes registered in the XTI system:"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemBoxSizer2->Add(itemStaticText3, 0, wxALIGN_CENTER_HORIZONTAL|wxALL, 5);
+    itemBoxSizer2->Add(itemStaticText3, 0, wxALIGN_LEFT|wxALL, 5);
 
     wxBoxSizer* itemBoxSizer4 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer2->Add(itemBoxSizer4, 1, wxGROW|wxALL, 5);
+    itemBoxSizer2->Add(itemBoxSizer4, 1, wxGROW, 5);
 
     wxChoicebook* itemChoicebook5 = new wxChoicebook( itemDialog1, ID_LISTMODE, wxDefaultPosition, wxDefaultSize, wxCHB_DEFAULT );
 
@@ -115,7 +114,7 @@ void wxClassListDialog::CreateControls()
     wxBoxSizer* itemBoxSizer10 = new wxBoxSizer(wxVERTICAL);
     itemPanel9->SetSizer(itemBoxSizer10);
 
-    m_pTreeCtrl = new wxTreeCtrl( itemPanel9, ID_TREECTRL, wxDefaultPosition, wxSize(100, 100), wxTR_SINGLE );
+    m_pTreeCtrl = new wxTreeCtrl( itemPanel9, ID_TREECTRL, wxDefaultPosition, wxSize(100, 100), wxTR_HAS_BUTTONS |wxTR_SINGLE );
     itemBoxSizer10->Add(m_pTreeCtrl, 1, wxGROW, 5);
 
     itemChoicebook5->AddPage(itemPanel9, _("Classes by parent"));
@@ -141,15 +140,55 @@ void wxClassListDialog::CreateControls()
     InitControls();
 }
 
+int wxClassListDialog::AddClassesWithParent(const wxClassInfo *parent, const wxTreeItemId &id)
+{
+    const wxClassInfo *ci = wxClassInfo::GetFirst();
+    int count = 0;
+    while (ci)
+    {
+        // is this class derived from the given parent?
+        if (wxString(ci->GetBaseClassName1()) == parent->GetClassName() ||
+            wxString(ci->GetBaseClassName2()) == parent->GetClassName())
+        {
+            wxTreeItemId child = m_pTreeCtrl->AppendItem(id, ci->GetClassName());
+            
+            // update the name of this child with the count of the children classes
+            int ret = AddClassesWithParent(ci, child);
+            m_pTreeCtrl->SetItemText(child,
+                                     m_pTreeCtrl->GetItemText(child) +
+                                     wxString::Format(wxT(" [%d]"), ret));
+            count += ret+1;
+        }
+        
+        ci = ci->GetNext();
+    }
+
+    // reorder all the children we've just added
+
+
+    return count;
+}
+
 void wxClassListDialog::InitControls()
 {
     const wxClassInfo *ci = wxClassInfo::GetFirst();
     while (ci)
     {
+        // init the listbox
         m_pListBox->Append(
             wxString::Format(wxT("[%d] %s"), m_pListBox->GetCount()+1, ci->GetClassName()));
+        
         ci = ci->GetNext();
     }
+
+    wxTreeItemId id = m_pTreeCtrl->AddRoot(_T("wxObject"));
+    int count = AddClassesWithParent(CLASSINFO(wxObject), id);
+    m_pTreeCtrl->SetItemText(id, m_pTreeCtrl->GetItemText(id) +
+                                 wxString::Format(wxT(" [%d]"), count));
+
+    // initially expand the root item
+    m_pTreeCtrl->Expand(id);
+    m_pTreeCtrl->SortChildren(id);
 }
 
 wxBitmap wxClassListDialog::GetBitmapResource( const wxString& name )
@@ -181,9 +220,14 @@ void wxClassListDialog::OnListboxSelected( wxCommandEvent& WXUNUSED(event) )
 {
     // get info about the selected class
     wxString classname = m_pListBox->GetStringSelection().AfterFirst(_T(' '));
-    const wxClassInfo *info = wxClassInfo::FindClass(classname);
+    m_pTextCtrl->SetValue(DumpClassInfo(wxClassInfo::FindClass(classname)));
+}
 
-    m_pTextCtrl->SetValue(DumpClassInfo(info));
+void wxClassListDialog::OnTreectrlSelChanged( wxTreeEvent& event )
+{
+    // get info about the selected class
+    wxString classname = m_pTreeCtrl->GetItemText(event.GetItem()).BeforeFirst(_T(' '));
+    m_pTextCtrl->SetValue(DumpClassInfo(wxClassInfo::FindClass(classname)));
 }
 
 
@@ -262,6 +306,9 @@ wxString DumpClassInfo(const wxClassInfo *info)
 {
     wxString infostr;
 
+    if (!info)
+        return wxEmptyString;
+
     // basic stuff:
 
     infostr << _T("\n BASIC RTTI INFO ABOUT ") << info->GetClassName();
@@ -305,5 +352,3 @@ wxString DumpClassInfo(const wxClassInfo *info)
 
     return infostr;
 }
-
-
