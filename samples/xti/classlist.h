@@ -37,11 +37,11 @@ class wxTreeCtrl;
 #define ID_PANEL 10007
 #define ID_TREECTRL 10008
 #define ID_TEXTCTRL 10004
-#define SYMBOL_WXCLASSLISTDIALOG_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX
-#define SYMBOL_WXCLASSLISTDIALOG_TITLE _("wxWidgets class list")
-#define SYMBOL_WXCLASSLISTDIALOG_IDNAME wxID_ANY
-#define SYMBOL_WXCLASSLISTDIALOG_SIZE wxSize(400, 300)
-#define SYMBOL_WXCLASSLISTDIALOG_POSITION wxDefaultPosition
+#define SYMBOL_CLASSLISTDIALOG_STYLE wxCAPTION|wxRESIZE_BORDER|wxSYSTEM_MENU|wxCLOSE_BOX
+#define SYMBOL_CLASSLISTDIALOG_TITLE _("wxWidgets class list")
+#define SYMBOL_CLASSLISTDIALOG_IDNAME wxID_ANY
+#define SYMBOL_CLASSLISTDIALOG_SIZE wxSize(400, 300)
+#define SYMBOL_CLASSLISTDIALOG_POSITION wxDefaultPosition
 ////@end control identifiers
 
 
@@ -49,29 +49,32 @@ class wxTreeCtrl;
 // wxClassListDialog
 // ----------------------------------------------------------------------------
 
-class wxClassListDialog: public wxDialog
+class ClassListDialog: public wxDialog
 {    
-    DECLARE_DYNAMIC_CLASS( wxClassListDialog )
+    // we explicitely don't want to use the following macro:
+    //     DECLARE_DYNAMIC_CLASS( ClassListDialog )
+    // as otherwise the ClassListDialog class would appear in the list
+    // shown by this dialog!
     DECLARE_EVENT_TABLE()
 
 public:
     /// Constructors
-    wxClassListDialog();
-    wxClassListDialog( wxWindow* parent, wxWindowID id = SYMBOL_WXCLASSLISTDIALOG_IDNAME, 
-                       const wxString& caption = SYMBOL_WXCLASSLISTDIALOG_TITLE, 
-                       const wxPoint& pos = SYMBOL_WXCLASSLISTDIALOG_POSITION, 
-                       const wxSize& size = SYMBOL_WXCLASSLISTDIALOG_SIZE, 
-                       long style = SYMBOL_WXCLASSLISTDIALOG_STYLE );
+    ClassListDialog();
+    ClassListDialog( wxWindow* parent, wxWindowID id = SYMBOL_CLASSLISTDIALOG_IDNAME, 
+                       const wxString& caption = SYMBOL_CLASSLISTDIALOG_TITLE, 
+                       const wxPoint& pos = SYMBOL_CLASSLISTDIALOG_POSITION, 
+                       const wxSize& size = SYMBOL_CLASSLISTDIALOG_SIZE, 
+                       long style = SYMBOL_CLASSLISTDIALOG_STYLE );
 
     /// Creation
-    bool Create( wxWindow* parent, wxWindowID id = SYMBOL_WXCLASSLISTDIALOG_IDNAME, 
-                 const wxString& caption = SYMBOL_WXCLASSLISTDIALOG_TITLE, 
-                 const wxPoint& pos = SYMBOL_WXCLASSLISTDIALOG_POSITION, 
-                 const wxSize& size = SYMBOL_WXCLASSLISTDIALOG_SIZE, 
-                 long style = SYMBOL_WXCLASSLISTDIALOG_STYLE );
+    bool Create( wxWindow* parent, wxWindowID id = SYMBOL_CLASSLISTDIALOG_IDNAME, 
+                 const wxString& caption = SYMBOL_CLASSLISTDIALOG_TITLE, 
+                 const wxPoint& pos = SYMBOL_CLASSLISTDIALOG_POSITION, 
+                 const wxSize& size = SYMBOL_CLASSLISTDIALOG_SIZE, 
+                 long style = SYMBOL_CLASSLISTDIALOG_STYLE );
 
     /// Destructor
-    ~wxClassListDialog();
+    ~ClassListDialog();
 
     /// Initialises member variables
     void Init();
@@ -82,7 +85,7 @@ public:
     void InitControls();
     int AddClassesWithParent(const wxClassInfo *parent, const wxTreeItemId &id);
 
-////@begin wxClassListDialog event handler declarations
+////@begin ClassListDialog event handler declarations
 
     /// wxEVT_COMMAND_LISTBOX_SELECTED event handler for ID_LISTBOX
     void OnListboxSelected( wxCommandEvent& event );
@@ -90,26 +93,28 @@ public:
     /// wxEVT_COMMAND_TREE_SEL_CHANGED event handler for ID_TREECTRL
     void OnTreectrlSelChanged( wxTreeEvent& event );
 
-////@end wxClassListDialog event handler declarations
+////@end ClassListDialog event handler declarations
 
-////@begin wxClassListDialog member function declarations
+////@begin ClassListDialog member function declarations
 
     /// Retrieves bitmap resources
     wxBitmap GetBitmapResource( const wxString& name );
 
     /// Retrieves icon resources
     wxIcon GetIconResource( const wxString& name );
-////@end wxClassListDialog member function declarations
+////@end ClassListDialog member function declarations
 
     /// Should we show tooltips?
     static bool ShowToolTips();
 
 protected:
-////@begin wxClassListDialog member variables
-    wxListBox* m_pListBox;
-    wxTreeCtrl* m_pTreeCtrl;
+////@begin ClassListDialog member variables
+    wxStaticText* m_pClassCountText;
+    wxListBox* m_pRawListBox;
+    wxTreeCtrl* m_pParentTreeCtrl;
+    wxListBox* m_pSizeListBox;
     wxTextCtrl* m_pTextCtrl;
-////@end wxClassListDialog member variables
+////@end ClassListDialog member variables
 };
 
 #endif

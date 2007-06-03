@@ -235,7 +235,7 @@ void MyFrame::OnDepersist(wxCommandEvent& WXUNUSED(event))
 
 void MyFrame::OnDumpClasses(wxCommandEvent& WXUNUSED(event))
 {
-    wxClassListDialog dlg(this);
+    ClassListDialog dlg(this);
     dlg.ShowModal();
 }
 

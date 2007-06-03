@@ -26,15 +26,15 @@
 #include "classlist.h"
 
 
-IMPLEMENT_DYNAMIC_CLASS( wxClassListDialog, wxDialog )
-BEGIN_EVENT_TABLE( wxClassListDialog, wxDialog )
+// IMPLEMENT_DYNAMIC_CLASS( ClassListDialog, wxDialog )  -- see the header
+BEGIN_EVENT_TABLE( ClassListDialog, wxDialog )
 
-////@begin wxClassListDialog event table entries
-    EVT_LISTBOX( ID_LISTBOX, wxClassListDialog::OnListboxSelected )
+////@begin ClassListDialog event table entries
+    EVT_LISTBOX( ID_LISTBOX, ClassListDialog::OnListboxSelected )
 
-    EVT_TREE_SEL_CHANGED( ID_TREECTRL, wxClassListDialog::OnTreectrlSelChanged )
+    EVT_TREE_SEL_CHANGED( ID_TREECTRL, ClassListDialog::OnTreectrlSelChanged )
 
-////@end wxClassListDialog event table entries
+////@end ClassListDialog event table entries
 END_EVENT_TABLE()
 
 
@@ -42,12 +42,12 @@ END_EVENT_TABLE()
 // wxClassListDialog
 // ----------------------------------------------------------------------------
 
-wxClassListDialog::wxClassListDialog()
+ClassListDialog::ClassListDialog()
 {
     Init();
 }
 
-wxClassListDialog::wxClassListDialog( wxWindow* parent, wxWindowID id, 
+ClassListDialog::ClassListDialog( wxWindow* parent, wxWindowID id, 
                                       const wxString& caption, const wxPoint& pos, 
                                       const wxSize& size, long style )
 {
@@ -55,7 +55,7 @@ wxClassListDialog::wxClassListDialog( wxWindow* parent, wxWindowID id,
     Create(parent, id, caption, pos, size, style);
 }
 
-bool wxClassListDialog::Create( wxWindow* parent, wxWindowID id, const wxString& caption, 
+bool ClassListDialog::Create( wxWindow* parent, wxWindowID id, const wxString& caption, 
                                 const wxPoint& pos, const wxSize& size, long style )
 {
     SetExtraStyle(wxWS_EX_BLOCK_EVENTS);
@@ -71,76 +71,92 @@ bool wxClassListDialog::Create( wxWindow* parent, wxWindowID id, const wxString&
     return true;
 }
 
-wxClassListDialog::~wxClassListDialog()
+ClassListDialog::~ClassListDialog()
 {
 }
 
-void wxClassListDialog::Init()
+void ClassListDialog::Init()
 {
-////@begin wxClassListDialog member initialisation
-    m_pListBox = NULL;
-    m_pTreeCtrl = NULL;
+////@begin ClassListDialog member initialisation
+    m_pClassCountText = NULL;
+    m_pRawListBox = NULL;
+    m_pParentTreeCtrl = NULL;
+    m_pSizeListBox = NULL;
     m_pTextCtrl = NULL;
-////@end wxClassListDialog member initialisation
+////@end ClassListDialog member initialisation
 }
 
-void wxClassListDialog::CreateControls()
+void ClassListDialog::CreateControls()
 {    
-////@begin wxClassListDialog content construction
-    wxClassListDialog* itemDialog1 = this;
+////@begin ClassListDialog content construction
+    ClassListDialog* itemDialog1 = this;
 
     wxBoxSizer* itemBoxSizer2 = new wxBoxSizer(wxVERTICAL);
     itemDialog1->SetSizer(itemBoxSizer2);
 
-    wxStaticText* itemStaticText3 = new wxStaticText( itemDialog1, wxID_STATIC, _("This is the list of wxWidgets classes registered in the XTI system:"), wxDefaultPosition, wxDefaultSize, 0 );
+    wxStaticText* itemStaticText3 = new wxStaticText( itemDialog1, wxID_STATIC, _("This is the list of wxWidgets classes registered in the XTI system.\nNote that not all wxWidgets classes are registered nor all registered classes are completely _described_ using XTI metadata."), wxDefaultPosition, wxDefaultSize, 0 );
     itemBoxSizer2->Add(itemStaticText3, 0, wxALIGN_LEFT|wxALL, 5);
 
-    wxBoxSizer* itemBoxSizer4 = new wxBoxSizer(wxHORIZONTAL);
-    itemBoxSizer2->Add(itemBoxSizer4, 1, wxGROW, 5);
+    m_pClassCountText = new wxStaticText( itemDialog1, wxID_STATIC, _("There are _RUNTIME_COMPUTED_ classes registered."), wxDefaultPosition, wxDefaultSize, 0 );
+    m_pClassCountText->SetFont(wxFont(8, wxSWISS, wxNORMAL, wxBOLD, false, wxT("Tahoma")));
+    itemBoxSizer2->Add(m_pClassCountText, 0, wxALIGN_LEFT|wxLEFT|wxRIGHT|wxBOTTOM, 5);
 
-    wxChoicebook* itemChoicebook5 = new wxChoicebook( itemDialog1, ID_LISTMODE, wxDefaultPosition, wxDefaultSize, wxCHB_DEFAULT );
+    wxBoxSizer* itemBoxSizer5 = new wxBoxSizer(wxHORIZONTAL);
+    itemBoxSizer2->Add(itemBoxSizer5, 1, wxGROW, 5);
 
-    wxPanel* itemPanel6 = new wxPanel( itemChoicebook5, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-    wxBoxSizer* itemBoxSizer7 = new wxBoxSizer(wxHORIZONTAL);
-    itemPanel6->SetSizer(itemBoxSizer7);
+    wxChoicebook* itemChoicebook6 = new wxChoicebook( itemDialog1, ID_LISTMODE, wxDefaultPosition, wxDefaultSize, wxCHB_DEFAULT );
 
-    wxArrayString m_pListBoxStrings;
-    m_pListBox = new wxListBox( itemPanel6, ID_LISTBOX, wxDefaultPosition, wxDefaultSize, m_pListBoxStrings, wxLB_SINGLE );
-    itemBoxSizer7->Add(m_pListBox, 1, wxGROW, 5);
+    wxPanel* itemPanel7 = new wxPanel( itemChoicebook6, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+    wxBoxSizer* itemBoxSizer8 = new wxBoxSizer(wxHORIZONTAL);
+    itemPanel7->SetSizer(itemBoxSizer8);
 
-    itemChoicebook5->AddPage(itemPanel6, _("Raw list"));
+    wxArrayString m_pRawListBoxStrings;
+    m_pRawListBox = new wxListBox( itemPanel7, ID_LISTBOX, wxDefaultPosition, wxDefaultSize, m_pRawListBoxStrings, wxLB_SINGLE );
+    itemBoxSizer8->Add(m_pRawListBox, 1, wxGROW, 5);
 
-    wxPanel* itemPanel9 = new wxPanel( itemChoicebook5, ID_PANEL, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
-    wxBoxSizer* itemBoxSizer10 = new wxBoxSizer(wxVERTICAL);
-    itemPanel9->SetSizer(itemBoxSizer10);
+    itemChoicebook6->AddPage(itemPanel7, _("Raw list"));
 
-    m_pTreeCtrl = new wxTreeCtrl( itemPanel9, ID_TREECTRL, wxDefaultPosition, wxSize(100, 100), wxTR_HAS_BUTTONS |wxTR_SINGLE );
-    itemBoxSizer10->Add(m_pTreeCtrl, 1, wxGROW, 5);
+    wxPanel* itemPanel10 = new wxPanel( itemChoicebook6, ID_PANEL, wxDefaultPosition, wxDefaultSize, wxTAB_TRAVERSAL );
+    wxBoxSizer* itemBoxSizer11 = new wxBoxSizer(wxVERTICAL);
+    itemPanel10->SetSizer(itemBoxSizer11);
 
-    itemChoicebook5->AddPage(itemPanel9, _("Classes by parent"));
+    m_pParentTreeCtrl = new wxTreeCtrl( itemPanel10, ID_TREECTRL, wxDefaultPosition, wxSize(100, 100), wxTR_HAS_BUTTONS |wxTR_SINGLE );
+    itemBoxSizer11->Add(m_pParentTreeCtrl, 1, wxGROW, 5);
 
-    itemBoxSizer4->Add(itemChoicebook5, 0, wxGROW|wxALL, 5);
+    itemChoicebook6->AddPage(itemPanel10, _("Classes by parent"));
+
+    wxPanel* itemPanel13 = new wxPanel( itemChoicebook6, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxSUNKEN_BORDER|wxTAB_TRAVERSAL );
+    wxBoxSizer* itemBoxSizer14 = new wxBoxSizer(wxHORIZONTAL);
+    itemPanel13->SetSizer(itemBoxSizer14);
+
+    wxArrayString m_pSizeListBoxStrings;
+    m_pSizeListBox = new wxListBox( itemPanel13, ID_LISTBOX, wxDefaultPosition, wxDefaultSize, m_pSizeListBoxStrings, wxLB_SINGLE );
+    itemBoxSizer14->Add(m_pSizeListBox, 1, wxGROW, 5);
+
+    itemChoicebook6->AddPage(itemPanel13, _("Classes by size"));
+
+    itemBoxSizer5->Add(itemChoicebook6, 0, wxGROW|wxALL, 5);
 
     m_pTextCtrl = new wxTextCtrl( itemDialog1, ID_TEXTCTRL, _T(""), wxDefaultPosition, wxSize(500, -1), wxTE_MULTILINE|wxTE_READONLY );
-    itemBoxSizer4->Add(m_pTextCtrl, 3, wxGROW|wxALL, 5);
+    itemBoxSizer5->Add(m_pTextCtrl, 3, wxGROW|wxALL, 5);
 
-    wxStdDialogButtonSizer* itemStdDialogButtonSizer13 = new wxStdDialogButtonSizer;
+    wxStdDialogButtonSizer* itemStdDialogButtonSizer17 = new wxStdDialogButtonSizer;
 
-    itemBoxSizer2->Add(itemStdDialogButtonSizer13, 0, wxGROW|wxALL, 5);
-    wxButton* itemButton14 = new wxButton( itemDialog1, wxID_OK, _("&OK"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemStdDialogButtonSizer13->AddButton(itemButton14);
+    itemBoxSizer2->Add(itemStdDialogButtonSizer17, 0, wxGROW|wxALL, 5);
+    wxButton* itemButton18 = new wxButton( itemDialog1, wxID_OK, _("&OK"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemStdDialogButtonSizer17->AddButton(itemButton18);
 
-    wxButton* itemButton15 = new wxButton( itemDialog1, wxID_CANCEL, _("&Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
-    itemStdDialogButtonSizer13->AddButton(itemButton15);
+    wxButton* itemButton19 = new wxButton( itemDialog1, wxID_CANCEL, _("&Cancel"), wxDefaultPosition, wxDefaultSize, 0 );
+    itemStdDialogButtonSizer17->AddButton(itemButton19);
 
-    itemStdDialogButtonSizer13->Realize();
+    itemStdDialogButtonSizer17->Realize();
 
-////@end wxClassListDialog content construction
+////@end ClassListDialog content construction
 
     InitControls();
 }
 
-int wxClassListDialog::AddClassesWithParent(const wxClassInfo *parent, const wxTreeItemId &id)
+int ClassListDialog::AddClassesWithParent(const wxClassInfo *parent, const wxTreeItemId &id)
 {
     const wxClassInfo *ci = wxClassInfo::GetFirst();
     int count = 0;
@@ -150,12 +166,12 @@ int wxClassListDialog::AddClassesWithParent(const wxClassInfo *parent, const wxT
         if (wxString(ci->GetBaseClassName1()) == parent->GetClassName() ||
             wxString(ci->GetBaseClassName2()) == parent->GetClassName())
         {
-            wxTreeItemId child = m_pTreeCtrl->AppendItem(id, ci->GetClassName());
+            wxTreeItemId child = m_pParentTreeCtrl->AppendItem(id, ci->GetClassName());
             
             // update the name of this child with the count of the children classes
             int ret = AddClassesWithParent(ci, child);
-            m_pTreeCtrl->SetItemText(child,
-                                     m_pTreeCtrl->GetItemText(child) +
+            m_pParentTreeCtrl->SetItemText(child,
+                                     m_pParentTreeCtrl->GetItemText(child) +
                                      wxString::Format(wxT(" [%d]"), ret));
             count += ret+1;
         }
@@ -164,49 +180,78 @@ int wxClassListDialog::AddClassesWithParent(const wxClassInfo *parent, const wxT
     }
 
     // reorder all the children we've just added
-
+    m_pParentTreeCtrl->SortChildren(id);
 
     return count;
 }
 
-void wxClassListDialog::InitControls()
+int GetSizeOfClass(const wxString &cn)
 {
+    const wxClassInfo *ci = wxClassInfo::FindClass(cn);
+    if (ci)
+        return ci->GetSize();
+    return 0;
+}
+
+int CompareClassSizes(const wxString &class1, const wxString &class2)
+{
+    return GetSizeOfClass(class1) - GetSizeOfClass(class2);
+}
+
+void ClassListDialog::InitControls()
+{
+    // create a wxArrayString with the names of all classes:
     const wxClassInfo *ci = wxClassInfo::GetFirst();
+    wxArrayString arr;
     while (ci)
     {
-        // init the listbox
-        m_pListBox->Append(
-            wxString::Format(wxT("[%d] %s"), m_pListBox->GetCount()+1, ci->GetClassName()));
-        
+        arr.Add(ci->GetClassName());
         ci = ci->GetNext();
     }
 
-    wxTreeItemId id = m_pTreeCtrl->AddRoot(_T("wxObject"));
+    arr.Sort();     // sort alphabetically
+
+    // now add it to the raw-mode listbox
+    for (unsigned int i=0; i<arr.GetCount(); i++)
+        m_pRawListBox->Append(arr[i]);
+
+    // sort again using size as sortkey
+    arr.Sort((wxArrayString::CompareFunction)CompareClassSizes);
+
+    // now add it to the size-mode listbox
+    for (unsigned int i=0; i<arr.GetCount(); i++)
+        m_pSizeListBox->Append(arr[i]);
+
+    // add root item to parent-mode treectrl
+    wxTreeItemId id = m_pParentTreeCtrl->AddRoot(_T("wxObject"));
     int count = AddClassesWithParent(CLASSINFO(wxObject), id);
-    m_pTreeCtrl->SetItemText(id, m_pTreeCtrl->GetItemText(id) +
+    m_pParentTreeCtrl->SetItemText(id, m_pParentTreeCtrl->GetItemText(id) +
                                  wxString::Format(wxT(" [%d]"), count));
 
     // initially expand the root item
-    m_pTreeCtrl->Expand(id);
-    m_pTreeCtrl->SortChildren(id);
+    m_pParentTreeCtrl->Expand(id);
+
+    // last, tell the user how many registered classes are present
+    m_pClassCountText->SetLabel(
+        wxString::Format(wxT("There are %d classes registered in wxXTI."), arr.GetCount()));
 }
 
-wxBitmap wxClassListDialog::GetBitmapResource( const wxString& name )
+wxBitmap ClassListDialog::GetBitmapResource( const wxString& name )
 {
     // Bitmap retrieval
-////@begin wxClassListDialog bitmap retrieval
+////@begin ClassListDialog bitmap retrieval
     wxUnusedVar(name);
     return wxNullBitmap;
-////@end wxClassListDialog bitmap retrieval
+////@end ClassListDialog bitmap retrieval
 }
 
-wxIcon wxClassListDialog::GetIconResource( const wxString& name )
+wxIcon ClassListDialog::GetIconResource( const wxString& name )
 {
     // Icon retrieval
-////@begin wxClassListDialog icon retrieval
+////@begin ClassListDialog icon retrieval
     wxUnusedVar(name);
     return wxNullIcon;
-////@end wxClassListDialog icon retrieval
+////@end ClassListDialog icon retrieval
 }
 
 
@@ -216,17 +261,17 @@ wxIcon wxClassListDialog::GetIconResource( const wxString& name )
 
 wxString DumpClassInfo(const wxClassInfo*);
 
-void wxClassListDialog::OnListboxSelected( wxCommandEvent& WXUNUSED(event) )
+void ClassListDialog::OnListboxSelected( wxCommandEvent& event )
 {
     // get info about the selected class
-    wxString classname = m_pListBox->GetStringSelection().AfterFirst(_T(' '));
+    wxString classname = event.GetString().BeforeFirst(_T(' '));
     m_pTextCtrl->SetValue(DumpClassInfo(wxClassInfo::FindClass(classname)));
 }
 
-void wxClassListDialog::OnTreectrlSelChanged( wxTreeEvent& event )
+void ClassListDialog::OnTreectrlSelChanged( wxTreeEvent& event )
 {
     // get info about the selected class
-    wxString classname = m_pTreeCtrl->GetItemText(event.GetItem()).BeforeFirst(_T(' '));
+    wxString classname = m_pParentTreeCtrl->GetItemText(event.GetItem()).BeforeFirst(_T(' '));
     m_pTextCtrl->SetValue(DumpClassInfo(wxClassInfo::FindClass(classname)));
 }
 
