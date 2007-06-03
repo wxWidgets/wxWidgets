@@ -51,7 +51,8 @@ XTI_CXXFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) \
 XTI_OBJECTS =  \
 	$(__xti___win32rc) \
 	$(__xti_os2_lib_res) \
-	xti_xti.o
+	xti_xti.o \
+	xti_classlist.o
 
 ### Conditionally set variables: ###
 
@@ -188,6 +189,9 @@ xti_sample_rc.o: $(srcdir)/../../samples/sample.rc
 
 xti_xti.o: $(srcdir)/xti.cpp
 	$(CXXC) -c -o $@ $(XTI_CXXFLAGS) $(srcdir)/xti.cpp
+
+xti_classlist.o: $(srcdir)/classlist.cpp
+	$(CXXC) -c -o $@ $(XTI_CXXFLAGS) $(srcdir)/classlist.cpp
 
 
 # Include dependency info, if present:

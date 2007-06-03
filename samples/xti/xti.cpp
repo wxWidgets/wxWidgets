@@ -1,11 +1,11 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        minimal.cpp
-// Purpose:     Minimal wxWidgets sample
-// Author:      Julian Smart
+// Name:        xti.cpp
+// Purpose:     eXtended RTTI support sample
+// Author:      Stefan Csomor, Francesco Montorsi
 // Modified by:
-// Created:     04/01/98
+// Created:     13/5/2007
 // RCS-ID:      $Id$
-// Copyright:   (c) Julian Smart
+// Copyright:   (c) Stefan Csomor, Francesco Montorsi
 // Licence:     wxWindows licence
 /////////////////////////////////////////////////////////////////////////////
 
@@ -42,6 +42,8 @@
 #include "wx/txtstrm.h"
 #include "wx/wfstream.h"
 
+#include "classlist.h"
+
 #if !wxUSE_EXTENDED_RTTI
     #error This sample requires XTI (eXtended RTTI) enabled
 #endif
@@ -51,8 +53,6 @@
 // resources
 // ----------------------------------------------------------------------------
 
-// the application icon (under Windows and OS/2 it is in resources and even
-// though we could still include the XPM here it would be unused)
 #if !defined(__WXMSW__) && !defined(__WXPM__)
     #include "../sample.xpm"
 #endif
@@ -65,12 +65,6 @@
 class MyApp : public wxApp
 {
 public:
-    // override base class virtuals
-    // ----------------------------
-
-    // this one is called on application startup and is a good place for the app
-    // initialization (doing it here and not in the ctor allows to have an error
-    // return: if OnInit() returns false, the application terminates)
     virtual bool OnInit();
 };
 
@@ -81,7 +75,9 @@ public:
     // ctor(s)
     MyFrame(const wxString& title);
 
-    // event handlers (these functions should _not_ be virtual)
+    void OnPersist(wxCommandEvent& event);
+    void OnDepersist(wxCommandEvent& event);
+    void OnDumpClasses(wxCommandEvent& event);
     void OnQuit(wxCommandEvent& event);
     void OnAbout(wxCommandEvent& event);
 
@@ -98,11 +94,10 @@ private:
 enum
 {
     // menu items
+    Minimal_Persist = wxID_HIGHEST,
+    Minimal_Depersist,
+    Minimal_DumpClasses,
     Minimal_Quit = wxID_EXIT,
-
-    // it is important for the id corresponding to the "About" command to have
-    // this standard value as otherwise it won't be handled properly under Mac
-    // (where it is special and put into the "Apple" menu)
     Minimal_About = wxID_ABOUT
 };
 
@@ -110,19 +105,14 @@ enum
 // event tables and other macros for wxWidgets
 // ----------------------------------------------------------------------------
 
-// the event tables connect the wxWidgets events with the functions (event
-// handlers) which process them. It can be also done at run-time, but for the
-// simple menu events like this the static method is much simpler.
 BEGIN_EVENT_TABLE(MyFrame, wxFrame)
+    EVT_MENU(Minimal_Persist, MyFrame::OnPersist)
+    EVT_MENU(Minimal_Depersist, MyFrame::OnDepersist)
+    EVT_MENU(Minimal_DumpClasses, MyFrame::OnDumpClasses)
     EVT_MENU(Minimal_Quit,  MyFrame::OnQuit)
     EVT_MENU(Minimal_About, MyFrame::OnAbout)
 END_EVENT_TABLE()
 
-// Create a new application object: this macro will allow wxWidgets to create
-// the application object during program execution (it's better than using a
-// static object for many reasons) and also implements the accessor function
-// wxGetApp() which will return the reference of the right type (i.e. MyApp and
-// not wxApp)
 IMPLEMENT_APP(MyApp)
 
 // ============================================================================
@@ -133,17 +123,18 @@ IMPLEMENT_APP(MyApp)
 // the application class
 // ----------------------------------------------------------------------------
 
-// 'Main program' equivalent: the program execution "starts" here
+wxObject* CreateFrameRTTI();
+wxObject* TryLoad();
+static void TryCode();
+
 bool MyApp::OnInit()
 {
-    // call the base class initialization method, currently it only parses a
-    // few common command-line options but it could be do more in the future
     if ( !wxApp::OnInit() )
         return false;
 
 #if 1
     // create the main application window
-    MyFrame *frame = new MyFrame(_T("Minimal wxWidgets App"));
+    MyFrame *frame = new MyFrame(_T("Extended RTTI sample"));
 
     // and show it (the frames, unlike simple controls, are not shown when
     // created initially)
@@ -189,9 +180,8 @@ bool MyApp::OnInit()
 // main frame
 // ----------------------------------------------------------------------------
 
-// frame constructor
 MyFrame::MyFrame(const wxString& title)
-       : wxFrame(NULL, wxID_ANY, title)
+       : wxFrame(NULL, wxID_ANY, title, wxDefaultPosition, wxSize(300, 200))
 {
     // set the frame icon
     SetIcon(wxICON(sample));
@@ -204,6 +194,14 @@ MyFrame::MyFrame(const wxString& title)
     wxMenu *helpMenu = new wxMenu;
     helpMenu->Append(Minimal_About, _T("&About...\tF1"), _T("Show about dialog"));
 
+    fileMenu->Append(Minimal_Persist, _T("Persist a wxFrame to XML..."), 
+                     _T("Creates a wxFrame using wxXTI and saves its description as XML"));
+    fileMenu->Append(Minimal_Depersist, _T("Depersist XML file..."), 
+                     _T("Loads the description of wxFrame from XML"));
+    fileMenu->AppendSeparator();
+    fileMenu->Append(Minimal_DumpClasses, _T("Dump registered classes..."), 
+                     _T("Dumps the description of all wxWidgets classes registered in XTI"));
+    fileMenu->AppendSeparator();
     fileMenu->Append(Minimal_Quit, _T("E&xit\tAlt-X"), _T("Quit this program"));
 
     // now append the freshly created menu to the menu bar...
@@ -223,7 +221,23 @@ MyFrame::MyFrame(const wxString& title)
 }
 
 
+// ----------------------------------------------------------------------------
 // event handlers
+// ----------------------------------------------------------------------------
+
+void MyFrame::OnPersist(wxCommandEvent& WXUNUSED(event))
+{
+}
+
+void MyFrame::OnDepersist(wxCommandEvent& WXUNUSED(event))
+{
+}
+
+void MyFrame::OnDumpClasses(wxCommandEvent& WXUNUSED(event))
+{
+    wxClassListDialog dlg(this);
+    dlg.ShowModal();
+}
 
 void MyFrame::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
@@ -236,12 +250,10 @@ void MyFrame::OnAbout(wxCommandEvent& WXUNUSED(event))
     wxMessageBox(wxString::Format(
                     _T("Welcome to %s!\n")
                     _T("\n")
-                    _T("This is the minimal wxWidgets sample\n")
-                    _T("running under %s."),
-                    wxVERSION_STRING,
-                    wxGetOsDescription().c_str()
+                    _T("This sample demonstrates wxWidgets eXtended RTTI (XTI)")
+                    wxVERSION_STRING
                  ),
-                 _T("About wxWidgets minimal sample"),
+                 _T("About wxWidgets XTI sample"),
                  wxOK | wxICON_INFORMATION,
                  this);
 }
