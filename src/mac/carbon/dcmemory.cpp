@@ -81,10 +81,6 @@ void wxMemoryDC::DoSelect( const wxBitmap& bitmap )
         {
             CGContextSetFillColorSpace( bmCtx, genericColorSpace );
             CGContextSetStrokeColorSpace( bmCtx, genericColorSpace );
-
-            CGContextTranslateCTM( bmCtx , 0 ,  m_selected.GetHeight() ) ;
-            CGContextScaleCTM( bmCtx , 1 , -1 ) ;
-
 			SetGraphicsContext( wxGraphicsContext::CreateFromNative( bmCtx ) );
         }
         m_ok = (m_graphicContext != NULL) ;
