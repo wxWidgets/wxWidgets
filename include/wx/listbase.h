@@ -336,7 +336,7 @@ protected:
         m_col = 0;
         m_state = 0;
         m_stateMask = 0;
-        m_image = 0;
+        m_image = -1;
         m_data = 0;
 
         m_format = wxLIST_FORMAT_CENTRE;
