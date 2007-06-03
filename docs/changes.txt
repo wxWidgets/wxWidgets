@@ -91,6 +91,10 @@ Major new features in 2.8 release
 2.8.5
 -----
 
+All (GUI):
+
+- Added colour normalization to PNM image handler (Ray Johnston)
+
 wxMSW:
 
 - Fix crash when destroying a default button (Tim Kosse)
