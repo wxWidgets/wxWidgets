@@ -158,7 +158,7 @@ wxX11:
 
 All (GUI):
 
-- Added raw RGB support and colour normalization to PNM handler (Ray Johnston)
+- Added colour normalization to PNM image handler (Ray Johnston)
 
 wxMSW:
 
