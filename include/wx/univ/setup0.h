@@ -207,10 +207,10 @@
 
 // Set wxUSE_EXTENDED_RTTI to 1 to use extended RTTI
 //
-// Default is 0
+// Default is 1
 //
-// Recommended setting: 0
-#define wxUSE_EXTENDED_RTTI 0
+// Recommended setting: 1
+#define wxUSE_EXTENDED_RTTI 1
 
 // Support for message/error logging. This includes wxLogXXX() functions and
 // wxLog and derived classes. Don't set this to 0 unless you really know what

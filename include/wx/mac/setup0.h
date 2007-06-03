@@ -195,10 +195,10 @@
 
 // Set wxUSE_EXTENDED_RTTI to 1 to use extended RTTI
 //
-// Default is 0
+// Default is 1
 //
-// Recommended setting: 0 (this is still work in progress...)
-#define wxUSE_EXTENDED_RTTI 0
+// Recommended setting: 1
+#define wxUSE_EXTENDED_RTTI 1
 
 // Set wxUSE_STL to 1 to derive wxList(Foo) and wxArray(Foo) from
 // std::list<Foo*> and std::vector<Foo*>, with a compatibility interface,
