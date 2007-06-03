@@ -1327,12 +1327,14 @@ wxChar * WXDLLEXPORT wxGetenv(const wxChar *name)
 #endif
 }
 
+#endif // wxNEED_WX_STDLIB_H
+
+#ifdef wxNEED_WXSYSTEM
 int WXDLLEXPORT wxSystem(const wxChar *psz)
 {
     return system(wxConvLibc.cWX2MB(psz));
 }
-
-#endif // wxNEED_WX_STDLIB_H
+#endif // wxNEED_WXSYSTEM
 
 #ifdef wxNEED_WX_TIME_H
 WXDLLEXPORT size_t

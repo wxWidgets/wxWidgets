@@ -814,13 +814,24 @@ WXDLLIMPEXP_BASE wxChar * wxStrtok(wxChar *psz, const wxChar *delim, wxChar **sa
 WXDLLIMPEXP_BASE double   wxAtof(const wxChar *psz);
 #endif
 
+/*
+   mingw32 doesn't provide _tsystem() even though it does provide all the other
+   stdlib.h functions wrappers so check for it separately:
+ */
+#if defined(__MINGW32__) && wxUSE_UNICODE && !defined(_tsystem)
+    #define wxNEED_WXSYSTEM
+#endif
+
 #ifdef wxNEED_WX_STDLIB_H
 WXDLLIMPEXP_BASE int      wxAtoi(const wxChar *psz);
 WXDLLIMPEXP_BASE long     wxAtol(const wxChar *psz);
 WXDLLIMPEXP_BASE wxChar * wxGetenv(const wxChar *name);
-WXDLLIMPEXP_BASE int      wxSystem(const wxChar *psz);
+#define wxNEED_WXSYSTEM
 #endif
 
+#ifdef wxNEED_WXSYSTEM
+WXDLLIMPEXP_BASE int      wxSystem(const wxChar *psz);
+#endif
 
 /* time.h functions */
 #ifdef wxNEED_WX_TIME_H
