@@ -40952,8 +40952,7 @@ SWIGINTERN PyObject *_wrap_DragImage_BeginDrag(PyObject *SWIGUNUSEDPARM(self), P
   int res3 = 0 ;
   bool val4 ;
   int ecode4 = 0 ;
-  void *argp5 = 0 ;
-  int res5 = 0 ;
+  wxRect temp5 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -40986,11 +40985,10 @@ SWIGINTERN PyObject *_wrap_DragImage_BeginDrag(PyObject *SWIGUNUSEDPARM(self), P
     arg4 = static_cast< bool >(val4);
   }
   if (obj4) {
-    res5 = SWIG_ConvertPtr(obj4, &argp5,SWIGTYPE_p_wxRect, 0 |  0 );
-    if (!SWIG_IsOK(res5)) {
-      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "DragImage_BeginDrag" "', expected argument " "5"" of type '" "wxRect *""'"); 
+    {
+      arg5 = &temp5;
+      if ( ! wxRect_helper(obj4, &arg5)) SWIG_fail;
     }
-    arg5 = reinterpret_cast< wxRect * >(argp5);
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();

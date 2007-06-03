@@ -13030,8 +13030,7 @@ SWIGINTERN PyObject *_wrap_LayoutAlgorithm_LayoutMDIFrame(PyObject *SWIGUNUSEDPA
   int res1 = 0 ;
   void *argp2 = 0 ;
   int res2 = 0 ;
-  void *argp3 = 0 ;
-  int res3 = 0 ;
+  wxRect temp3 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -13051,11 +13050,10 @@ SWIGINTERN PyObject *_wrap_LayoutAlgorithm_LayoutMDIFrame(PyObject *SWIGUNUSEDPA
   }
   arg2 = reinterpret_cast< wxMDIParentFrame * >(argp2);
   if (obj2) {
-    res3 = SWIG_ConvertPtr(obj2, &argp3,SWIGTYPE_p_wxRect, 0 |  0 );
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "LayoutAlgorithm_LayoutMDIFrame" "', expected argument " "3"" of type '" "wxRect *""'"); 
+    {
+      arg3 = &temp3;
+      if ( ! wxRect_helper(obj2, &arg3)) SWIG_fail;
     }
-    arg3 = reinterpret_cast< wxRect * >(argp3);
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13339,8 +13337,7 @@ SWIGINTERN PyObject *_wrap_new_TipWindow(PyObject *SWIGUNUSEDPARM(self), PyObjec
   bool temp2 = false ;
   int val3 ;
   int ecode3 = 0 ;
-  void *argp4 = 0 ;
-  int res4 = 0 ;
+  wxRect temp4 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -13368,11 +13365,10 @@ SWIGINTERN PyObject *_wrap_new_TipWindow(PyObject *SWIGUNUSEDPARM(self), PyObjec
     arg3 = static_cast< int >(val3);
   }
   if (obj3) {
-    res4 = SWIG_ConvertPtr(obj3, &argp4,SWIGTYPE_p_wxRect, 0 |  0 );
-    if (!SWIG_IsOK(res4)) {
-      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "new_TipWindow" "', expected argument " "4"" of type '" "wxRect *""'"); 
+    {
+      arg4 = &temp4;
+      if ( ! wxRect_helper(obj3, &arg4)) SWIG_fail;
     }
-    arg4 = reinterpret_cast< wxRect * >(argp4);
   }
   {
     if (!wxPyCheckForApp()) SWIG_fail;

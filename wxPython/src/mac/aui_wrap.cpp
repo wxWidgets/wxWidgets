@@ -7023,8 +7023,7 @@ SWIGINTERN PyObject *_wrap_AuiPaneInfo_rect_set(PyObject *SWIGUNUSEDPARM(self), 
   wxRect *arg2 = (wxRect *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  wxRect temp2 ;
   PyObject *swig_obj[2] ;
   
   if (!SWIG_Python_UnpackTuple(args,"AuiPaneInfo_rect_set",2,2,swig_obj)) SWIG_fail;
@@ -7033,11 +7032,10 @@ SWIGINTERN PyObject *_wrap_AuiPaneInfo_rect_set(PyObject *SWIGUNUSEDPARM(self), 
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AuiPaneInfo_rect_set" "', expected argument " "1"" of type '" "wxAuiPaneInfo *""'"); 
   }
   arg1 = reinterpret_cast< wxAuiPaneInfo * >(argp1);
-  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2,SWIGTYPE_p_wxRect, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AuiPaneInfo_rect_set" "', expected argument " "2"" of type '" "wxRect *""'"); 
+  {
+    arg2 = &temp2;
+    if ( ! wxRect_helper(swig_obj[1], &arg2)) SWIG_fail;
   }
-  arg2 = reinterpret_cast< wxRect * >(argp2);
   if (arg1) (arg1)->rect = *arg2;
   
   resultobj = SWIG_Py_Void();
@@ -9616,8 +9614,7 @@ SWIGINTERN PyObject *_wrap_AuiDockInfo_rect_set(PyObject *SWIGUNUSEDPARM(self), 
   wxRect *arg2 = (wxRect *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  wxRect temp2 ;
   PyObject *swig_obj[2] ;
   
   if (!SWIG_Python_UnpackTuple(args,"AuiDockInfo_rect_set",2,2,swig_obj)) SWIG_fail;
@@ -9626,11 +9623,10 @@ SWIGINTERN PyObject *_wrap_AuiDockInfo_rect_set(PyObject *SWIGUNUSEDPARM(self), 
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AuiDockInfo_rect_set" "', expected argument " "1"" of type '" "wxAuiDockInfo *""'"); 
   }
   arg1 = reinterpret_cast< wxAuiDockInfo * >(argp1);
-  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2,SWIGTYPE_p_wxRect, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AuiDockInfo_rect_set" "', expected argument " "2"" of type '" "wxRect *""'"); 
+  {
+    arg2 = &temp2;
+    if ( ! wxRect_helper(swig_obj[1], &arg2)) SWIG_fail;
   }
-  arg2 = reinterpret_cast< wxRect * >(argp2);
   if (arg1) (arg1)->rect = *arg2;
   
   resultobj = SWIG_Py_Void();
@@ -10566,8 +10562,7 @@ SWIGINTERN PyObject *_wrap_AuiDockUIPart_rect_set(PyObject *SWIGUNUSEDPARM(self)
   wxRect *arg2 = (wxRect *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  wxRect temp2 ;
   PyObject *swig_obj[2] ;
   
   if (!SWIG_Python_UnpackTuple(args,"AuiDockUIPart_rect_set",2,2,swig_obj)) SWIG_fail;
@@ -10576,11 +10571,10 @@ SWIGINTERN PyObject *_wrap_AuiDockUIPart_rect_set(PyObject *SWIGUNUSEDPARM(self)
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AuiDockUIPart_rect_set" "', expected argument " "1"" of type '" "wxAuiDockUIPart *""'"); 
   }
   arg1 = reinterpret_cast< wxAuiDockUIPart * >(argp1);
-  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2,SWIGTYPE_p_wxRect, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AuiDockUIPart_rect_set" "', expected argument " "2"" of type '" "wxRect *""'"); 
+  {
+    arg2 = &temp2;
+    if ( ! wxRect_helper(swig_obj[1], &arg2)) SWIG_fail;
   }
-  arg2 = reinterpret_cast< wxRect * >(argp2);
   if (arg1) (arg1)->rect = *arg2;
   
   resultobj = SWIG_Py_Void();
@@ -12357,8 +12351,7 @@ SWIGINTERN PyObject *_wrap_AuiNotebookPage_rect_set(PyObject *SWIGUNUSEDPARM(sel
   wxRect *arg2 = (wxRect *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  wxRect temp2 ;
   PyObject *swig_obj[2] ;
   
   if (!SWIG_Python_UnpackTuple(args,"AuiNotebookPage_rect_set",2,2,swig_obj)) SWIG_fail;
@@ -12367,11 +12360,10 @@ SWIGINTERN PyObject *_wrap_AuiNotebookPage_rect_set(PyObject *SWIGUNUSEDPARM(sel
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AuiNotebookPage_rect_set" "', expected argument " "1"" of type '" "wxAuiNotebookPage *""'"); 
   }
   arg1 = reinterpret_cast< wxAuiNotebookPage * >(argp1);
-  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2,SWIGTYPE_p_wxRect, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AuiNotebookPage_rect_set" "', expected argument " "2"" of type '" "wxRect *""'"); 
+  {
+    arg2 = &temp2;
+    if ( ! wxRect_helper(swig_obj[1], &arg2)) SWIG_fail;
   }
-  arg2 = reinterpret_cast< wxRect * >(argp2);
   if (arg1) (arg1)->rect = *arg2;
   
   resultobj = SWIG_Py_Void();
@@ -12737,8 +12729,7 @@ SWIGINTERN PyObject *_wrap_AuiTabContainerButton_rect_set(PyObject *SWIGUNUSEDPA
   wxRect *arg2 = (wxRect *) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  wxRect temp2 ;
   PyObject *swig_obj[2] ;
   
   if (!SWIG_Python_UnpackTuple(args,"AuiTabContainerButton_rect_set",2,2,swig_obj)) SWIG_fail;
@@ -12747,11 +12738,10 @@ SWIGINTERN PyObject *_wrap_AuiTabContainerButton_rect_set(PyObject *SWIGUNUSEDPA
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "AuiTabContainerButton_rect_set" "', expected argument " "1"" of type '" "wxAuiTabContainerButton *""'"); 
   }
   arg1 = reinterpret_cast< wxAuiTabContainerButton * >(argp1);
-  res2 = SWIG_ConvertPtr(swig_obj[1], &argp2,SWIGTYPE_p_wxRect, 0 |  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "AuiTabContainerButton_rect_set" "', expected argument " "2"" of type '" "wxRect *""'"); 
+  {
+    arg2 = &temp2;
+    if ( ! wxRect_helper(swig_obj[1], &arg2)) SWIG_fail;
   }
-  arg2 = reinterpret_cast< wxRect * >(argp2);
   if (arg1) (arg1)->rect = *arg2;
   
   resultobj = SWIG_Py_Void();
@@ -13132,10 +13122,8 @@ SWIGINTERN PyObject *_wrap_AuiTabArt_DrawTab(PyObject *SWIGUNUSEDPARM(self), PyO
   wxRect temp5 ;
   int val6 ;
   int ecode6 = 0 ;
-  void *argp7 = 0 ;
-  int res7 = 0 ;
-  void *argp8 = 0 ;
-  int res8 = 0 ;
+  wxRect temp7 ;
+  wxRect temp8 ;
   void *argp9 = 0 ;
   int res9 = 0 ;
   PyObject * obj0 = 0 ;
@@ -13187,16 +13175,14 @@ SWIGINTERN PyObject *_wrap_AuiTabArt_DrawTab(PyObject *SWIGUNUSEDPARM(self), PyO
     SWIG_exception_fail(SWIG_ArgError(ecode6), "in method '" "AuiTabArt_DrawTab" "', expected argument " "6"" of type '" "int""'");
   } 
   arg6 = static_cast< int >(val6);
-  res7 = SWIG_ConvertPtr(obj6, &argp7,SWIGTYPE_p_wxRect, 0 |  0 );
-  if (!SWIG_IsOK(res7)) {
-    SWIG_exception_fail(SWIG_ArgError(res7), "in method '" "AuiTabArt_DrawTab" "', expected argument " "7"" of type '" "wxRect *""'"); 
+  {
+    arg7 = &temp7;
+    if ( ! wxRect_helper(obj6, &arg7)) SWIG_fail;
   }
-  arg7 = reinterpret_cast< wxRect * >(argp7);
-  res8 = SWIG_ConvertPtr(obj7, &argp8,SWIGTYPE_p_wxRect, 0 |  0 );
-  if (!SWIG_IsOK(res8)) {
-    SWIG_exception_fail(SWIG_ArgError(res8), "in method '" "AuiTabArt_DrawTab" "', expected argument " "8"" of type '" "wxRect *""'"); 
+  {
+    arg8 = &temp8;
+    if ( ! wxRect_helper(obj7, &arg8)) SWIG_fail;
   }
-  arg8 = reinterpret_cast< wxRect * >(argp8);
   res9 = SWIG_ConvertPtr(obj8, &argp9,SWIGTYPE_p_int, 0 |  0 );
   if (!SWIG_IsOK(res9)) {
     SWIG_exception_fail(SWIG_ArgError(res9), "in method '" "AuiTabArt_DrawTab" "', expected argument " "9"" of type '" "int *""'"); 
@@ -13238,8 +13224,7 @@ SWIGINTERN PyObject *_wrap_AuiTabArt_DrawButton(PyObject *SWIGUNUSEDPARM(self), 
   int ecode6 = 0 ;
   int val7 ;
   int ecode7 = 0 ;
-  void *argp8 = 0 ;
-  int res8 = 0 ;
+  wxRect temp8 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -13290,11 +13275,10 @@ SWIGINTERN PyObject *_wrap_AuiTabArt_DrawButton(PyObject *SWIGUNUSEDPARM(self), 
     SWIG_exception_fail(SWIG_ArgError(ecode7), "in method '" "AuiTabArt_DrawButton" "', expected argument " "7"" of type '" "int""'");
   } 
   arg7 = static_cast< int >(val7);
-  res8 = SWIG_ConvertPtr(obj7, &argp8,SWIGTYPE_p_wxRect, 0 |  0 );
-  if (!SWIG_IsOK(res8)) {
-    SWIG_exception_fail(SWIG_ArgError(res8), "in method '" "AuiTabArt_DrawButton" "', expected argument " "8"" of type '" "wxRect *""'"); 
+  {
+    arg8 = &temp8;
+    if ( ! wxRect_helper(obj7, &arg8)) SWIG_fail;
   }
-  arg8 = reinterpret_cast< wxRect * >(argp8);
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     (arg1)->DrawButton(*arg2,arg3,(wxRect const &)*arg4,arg5,arg6,arg7,arg8);

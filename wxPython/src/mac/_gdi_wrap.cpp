@@ -19839,8 +19839,7 @@ SWIGINTERN PyObject *_wrap_DC_GetAsBitmap(PyObject *SWIGUNUSEDPARM(self), PyObje
   SwigValueWrapper<wxBitmap > result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  wxRect temp2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
@@ -19854,11 +19853,10 @@ SWIGINTERN PyObject *_wrap_DC_GetAsBitmap(PyObject *SWIGUNUSEDPARM(self), PyObje
   }
   arg1 = reinterpret_cast< wxDC * >(argp1);
   if (obj1) {
-    res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxRect, 0 |  0 );
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "DC_GetAsBitmap" "', expected argument " "2"" of type '" "wxRect const *""'"); 
+    {
+      arg2 = &temp2;
+      if ( ! wxRect_helper(obj1, &arg2)) SWIG_fail;
     }
-    arg2 = reinterpret_cast< wxRect * >(argp2);
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -24006,8 +24004,7 @@ SWIGINTERN PyObject *_wrap_ScreenDC_StartDrawingOnTop(PyObject *SWIGUNUSEDPARM(s
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  wxRect temp2 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
@@ -24021,11 +24018,10 @@ SWIGINTERN PyObject *_wrap_ScreenDC_StartDrawingOnTop(PyObject *SWIGUNUSEDPARM(s
   }
   arg1 = reinterpret_cast< wxScreenDC * >(argp1);
   if (obj1) {
-    res2 = SWIG_ConvertPtr(obj1, &argp2,SWIGTYPE_p_wxRect, 0 |  0 );
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "ScreenDC_StartDrawingOnTop" "', expected argument " "2"" of type '" "wxRect *""'"); 
+    {
+      arg2 = &temp2;
+      if ( ! wxRect_helper(obj1, &arg2)) SWIG_fail;
     }
-    arg2 = reinterpret_cast< wxRect * >(argp2);
   }
   {
     PyThreadState* __tstate = wxPyBeginAllowThreads();

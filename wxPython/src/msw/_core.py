@@ -1997,15 +1997,51 @@ DefaultSize = cvar.DefaultSize
 class OutputStream(object):
     """Proxy of C++ OutputStream class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """__init__(self, PyObject p) -> OutputStream"""
+        _core_.OutputStream_swiginit(self,_core_.new_OutputStream(*args, **kwargs))
+    __swig_destroy__ = _core_.delete_OutputStream
+    __del__ = lambda self : None;
+    def close(*args, **kwargs):
+        """close(self)"""
+        return _core_.OutputStream_close(*args, **kwargs)
+
+    def flush(*args, **kwargs):
+        """flush(self)"""
+        return _core_.OutputStream_flush(*args, **kwargs)
+
+    def eof(*args, **kwargs):
+        """eof(self) -> bool"""
+        return _core_.OutputStream_eof(*args, **kwargs)
+
+    def seek(*args, **kwargs):
+        """seek(self, int offset, int whence=0)"""
+        return _core_.OutputStream_seek(*args, **kwargs)
+
+    def tell(*args, **kwargs):
+        """tell(self) -> int"""
+        return _core_.OutputStream_tell(*args, **kwargs)
+
     def write(*args, **kwargs):
-        """write(self, PyObject obj)"""
+        """write(self, PyObject data)"""
         return _core_.OutputStream_write(*args, **kwargs)
+
+    def PutC(*args, **kwargs):
+        """PutC(self, char c)"""
+        return _core_.OutputStream_PutC(*args, **kwargs)
 
     def LastWrite(*args, **kwargs):
         """LastWrite(self) -> size_t"""
         return _core_.OutputStream_LastWrite(*args, **kwargs)
+
+    def SeekO(*args, **kwargs):
+        """SeekO(self, unsigned long pos, int mode=FromStart) -> unsigned long"""
+        return _core_.OutputStream_SeekO(*args, **kwargs)
+
+    def TellO(*args, **kwargs):
+        """TellO(self) -> unsigned long"""
+        return _core_.OutputStream_TellO(*args, **kwargs)
 
 _core_.OutputStream_swigregister(OutputStream)
 
@@ -8100,6 +8136,53 @@ def GetAccelFromString(*args, **kwargs):
   return _core_.GetAccelFromString(*args, **kwargs)
 #---------------------------------------------------------------------------
 
+class WindowList_iterator(object):
+    """This class serves as an iterator for a wxWindowList object."""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    __swig_destroy__ = _core_.delete_WindowList_iterator
+    __del__ = lambda self : None;
+    def next(*args, **kwargs):
+        """next(self) -> Window"""
+        return _core_.WindowList_iterator_next(*args, **kwargs)
+
+_core_.WindowList_iterator_swigregister(WindowList_iterator)
+NullAcceleratorTable = cvar.NullAcceleratorTable
+PanelNameStr = cvar.PanelNameStr
+
+class WindowList(object):
+    """
+    This class wraps a wxList-based class and gives it a Python
+    sequence-like interface.  Sequence operations supported are length,
+    index access and iteration.
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    __swig_destroy__ = _core_.delete_WindowList
+    __del__ = lambda self : None;
+    def __len__(*args, **kwargs):
+        """__len__(self) -> size_t"""
+        return _core_.WindowList___len__(*args, **kwargs)
+
+    def __getitem__(*args, **kwargs):
+        """__getitem__(self, size_t index) -> Window"""
+        return _core_.WindowList___getitem__(*args, **kwargs)
+
+    def __contains__(*args, **kwargs):
+        """__contains__(self, Window obj) -> bool"""
+        return _core_.WindowList___contains__(*args, **kwargs)
+
+    def __iter__(*args, **kwargs):
+        """__iter__(self) -> WindowList_iterator"""
+        return _core_.WindowList___iter__(*args, **kwargs)
+
+    def __repr__(self):
+        return "wxWindowList: " + repr(list(self))
+
+_core_.WindowList_swigregister(WindowList)
+
 class VisualAttributes(object):
     """struct containing all the visual attributes of a control"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -8129,8 +8212,6 @@ class VisualAttributes(object):
     colFg = property(_get_colFg) 
     colBg = property(_get_colBg) 
 _core_.VisualAttributes_swigregister(VisualAttributes)
-NullAcceleratorTable = cvar.NullAcceleratorTable
-PanelNameStr = cvar.PanelNameStr
 
 WINDOW_VARIANT_NORMAL = _core_.WINDOW_VARIANT_NORMAL
 WINDOW_VARIANT_SMALL = _core_.WINDOW_VARIANT_SMALL
@@ -9083,12 +9164,11 @@ class Window(EvtHandler):
 
     def GetChildren(*args, **kwargs):
         """
-        GetChildren(self) -> PyObject
+        GetChildren(self) -> WindowList
 
-        Returns a list of the window's children.  NOTE: Currently this is a
-        copy of the child window list maintained by the window, so the return
-        value of this function is only valid as long as the window's children
-        do not change.
+        Returns an object containing a list of the window's children.  The
+        object provides a Python sequence-like interface over the internal
+        list maintained by the window..
         """
         return _core_.Window_GetChildren(*args, **kwargs)
 
@@ -10584,13 +10664,10 @@ def Window_FromHWND(*args, **kwargs):
 
 def GetTopLevelWindows(*args):
   """
-    GetTopLevelWindows() -> PyObject
+    GetTopLevelWindows() -> WindowList
 
-    Returns a list of the the application's top-level windows, (frames,
-    dialogs, etc.)  NOTE: Currently this is a copy of the list maintained
-    by wxWidgets, and so it is only valid as long as no top-level windows
-    are closed or new top-level windows are created.
-
+    Returns a list-like object of the the application's top-level windows, (frames,
+    dialogs, etc.)
     """
   return _core_.GetTopLevelWindows(*args)
 #---------------------------------------------------------------------------
@@ -10665,6 +10742,52 @@ class PyValidator(Validator):
 _core_.PyValidator_swigregister(PyValidator)
 
 #---------------------------------------------------------------------------
+
+class MenuItemList_iterator(object):
+    """This class serves as an iterator for a wxMenuItemList object."""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    __swig_destroy__ = _core_.delete_MenuItemList_iterator
+    __del__ = lambda self : None;
+    def next(*args, **kwargs):
+        """next(self) -> MenuItem"""
+        return _core_.MenuItemList_iterator_next(*args, **kwargs)
+
+_core_.MenuItemList_iterator_swigregister(MenuItemList_iterator)
+DefaultValidator = cvar.DefaultValidator
+
+class MenuItemList(object):
+    """
+    This class wraps a wxList-based class and gives it a Python
+    sequence-like interface.  Sequence operations supported are length,
+    index access and iteration.
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    __swig_destroy__ = _core_.delete_MenuItemList
+    __del__ = lambda self : None;
+    def __len__(*args, **kwargs):
+        """__len__(self) -> size_t"""
+        return _core_.MenuItemList___len__(*args, **kwargs)
+
+    def __getitem__(*args, **kwargs):
+        """__getitem__(self, size_t index) -> MenuItem"""
+        return _core_.MenuItemList___getitem__(*args, **kwargs)
+
+    def __contains__(*args, **kwargs):
+        """__contains__(self, MenuItem obj) -> bool"""
+        return _core_.MenuItemList___contains__(*args, **kwargs)
+
+    def __iter__(*args, **kwargs):
+        """__iter__(self) -> MenuItemList_iterator"""
+        return _core_.MenuItemList___iter__(*args, **kwargs)
+
+    def __repr__(self):
+        return "wxMenuItemList: " + repr(list(self))
+
+_core_.MenuItemList_swigregister(MenuItemList)
 
 class Menu(EvtHandler):
     """Proxy of C++ Menu class"""
@@ -10808,7 +10931,7 @@ class Menu(EvtHandler):
         return _core_.Menu_GetMenuItemCount(*args, **kwargs)
 
     def GetMenuItems(*args, **kwargs):
-        """GetMenuItems(self) -> PyObject"""
+        """GetMenuItems(self) -> MenuItemList"""
         return _core_.Menu_GetMenuItems(*args, **kwargs)
 
     def FindItem(*args, **kwargs):
@@ -10921,7 +11044,6 @@ class Menu(EvtHandler):
     Style = property(GetStyle,doc="See `GetStyle`") 
     Title = property(GetTitle,SetTitle,doc="See `GetTitle` and `SetTitle`") 
 _core_.Menu_swigregister(Menu)
-DefaultValidator = cvar.DefaultValidator
 
 #---------------------------------------------------------------------------
 
@@ -11811,6 +11933,53 @@ def SizerFlags_GetDefaultBorder(*args):
     """
   return _core_.SizerFlags_GetDefaultBorder(*args)
 
+#---------------------------------------------------------------------------
+
+class SizerItemList_iterator(object):
+    """This class serves as an iterator for a wxSizerItemList object."""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    __swig_destroy__ = _core_.delete_SizerItemList_iterator
+    __del__ = lambda self : None;
+    def next(*args, **kwargs):
+        """next(self) -> SizerItem"""
+        return _core_.SizerItemList_iterator_next(*args, **kwargs)
+
+_core_.SizerItemList_iterator_swigregister(SizerItemList_iterator)
+
+class SizerItemList(object):
+    """
+    This class wraps a wxList-based class and gives it a Python
+    sequence-like interface.  Sequence operations supported are length,
+    index access and iteration.
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    __swig_destroy__ = _core_.delete_SizerItemList
+    __del__ = lambda self : None;
+    def __len__(*args, **kwargs):
+        """__len__(self) -> size_t"""
+        return _core_.SizerItemList___len__(*args, **kwargs)
+
+    def __getitem__(*args, **kwargs):
+        """__getitem__(self, size_t index) -> SizerItem"""
+        return _core_.SizerItemList___getitem__(*args, **kwargs)
+
+    def __contains__(*args, **kwargs):
+        """__contains__(self, SizerItem obj) -> bool"""
+        return _core_.SizerItemList___contains__(*args, **kwargs)
+
+    def __iter__(*args, **kwargs):
+        """__iter__(self) -> SizerItemList_iterator"""
+        return _core_.SizerItemList___iter__(*args, **kwargs)
+
+    def __repr__(self):
+        return "wxSizerItemList: " + repr(list(self))
+
+_core_.SizerItemList_swigregister(SizerItemList)
+
 class SizerItem(Object):
     """
     The wx.SizerItem class is used to track the position, size and other
@@ -12632,9 +12801,10 @@ class Sizer(Object):
 
     def GetChildren(*args, **kwargs):
         """
-        GetChildren(self) -> list
+        GetChildren(self) -> SizerItemList
 
-        Returns a list of all the `wx.SizerItem` objects managed by the sizer.
+        Returns all of the `wx.SizerItem` objects managed by the sizer in a
+        list-like object.
         """
         return _core_.Sizer_GetChildren(*args, **kwargs)
 
