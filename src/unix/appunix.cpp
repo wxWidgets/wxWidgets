@@ -12,19 +12,12 @@
 #include "wx/log.h"
 #include "wx/evtloop.h"
 
-//this code should not be compiled when GUI is defined
-//(monolithic build issue)
-#if !wxUSE_GUI
-
 #include <signal.h>
 #include <unistd.h>
 
-bool wxAppConsoleUnix::Initialize(int& argc, wxChar** argv)
+bool wxAppConsole::Initialize(int& argc, wxChar** argv)
 {
-    if ( !wxAppConsole::Initialize(argc,argv) )
-        return false;
-
-    if ( !m_mainLoop->IsOk() )
+    if ( !wxAppConsoleBase::Initialize(argc,argv) )
         return false;
 
     sigemptyset(&m_signalsCaught);
@@ -32,9 +25,9 @@ bool wxAppConsoleUnix::Initialize(int& argc, wxChar** argv)
     return true;
 }
 
-void wxAppConsoleUnix::HandleSignal(int signal)
+void wxAppConsole::HandleSignal(int signal)
 {
-    wxAppConsoleUnix * const app = wxTheApp;
+    wxAppConsole * const app = wxTheApp;
     if ( !app )
         return;
 
@@ -42,7 +35,7 @@ void wxAppConsoleUnix::HandleSignal(int signal)
     app->WakeUpIdle();
 }
 
-void wxAppConsoleUnix::CheckSignal()
+void wxAppConsole::CheckSignal()
 {
     for ( SignalHandlerHash::iterator it = m_signalHandlerHash.begin();
           it != m_signalHandlerHash.end();
@@ -57,13 +50,13 @@ void wxAppConsoleUnix::CheckSignal()
     }
 }
 
-bool wxAppConsoleUnix::SetSignalHandler(int signal, SignalHandler handler)
+bool wxAppConsole::SetSignalHandler(int signal, SignalHandler handler)
 {
     const bool install = handler != SIG_DFL && handler != SIG_IGN;
 
     struct sigaction sa;
     memset(&sa, 0, sizeof(sa));
-    sa.sa_handler = &wxAppConsoleUnix::HandleSignal;
+    sa.sa_handler = &wxAppConsole::HandleSignal;
     sa.sa_flags = SA_RESTART;
     int res = sigaction(signal, &sa, 0);
     if ( res != 0 )
@@ -80,4 +73,3 @@ bool wxAppConsoleUnix::SetSignalHandler(int signal, SignalHandler handler)
     return true;
 }
 
-#endif // !wxUSE_GUI

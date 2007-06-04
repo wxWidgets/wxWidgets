@@ -12,7 +12,7 @@
 #include <signal.h>
 
 // wxApp subclass implementing event processing for console applications
-class WXDLLIMPEXP_BASE wxAppConsoleUnix : public wxAppConsole
+class WXDLLIMPEXP_BASE wxAppConsole : public wxAppConsoleBase
 {
 public:
     // override base class initialization
