@@ -58,7 +58,7 @@ wxDataFormat::wxDataFormat( wxDataFormatId type )
     SetType( type );
 }
 
-wxDataFormat::wxDataFormat( const wxString &id )
+void wxDataFormat::InitFromString( const wxString &id )
 {
     PrepareFormats();
     SetId( id );
