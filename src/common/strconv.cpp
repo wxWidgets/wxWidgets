@@ -1982,8 +1982,8 @@ size_t wxMBConv_iconv::GetMBNulLen() const
 #if wxUSE_UNICODE_UTF8
 bool wxMBConv_iconv::IsUTF8() const
 {
-    return wxStricmp(m_name, "UTF-8") == 0 ||
-           wxStricmp(m_name, "UTF8") == 0;
+    return wxStricmp(m_name, _T("UTF-8")) == 0 ||
+           wxStricmp(m_name, _T("UTF8")) == 0;
 }
 #endif
 
