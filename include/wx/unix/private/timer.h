@@ -31,10 +31,17 @@ public:
     virtual bool Start(int milliseconds = -1, bool oneShot = false);
     virtual void Stop();
 
+    // for wxTimerScheduler only: resets the internal flag indicating that the
+    // timer is running
+    void MarkStopped()
+    {
+        wxASSERT_MSG( m_isRunning, _T("stopping non-running timer?") );
+
+        m_isRunning = false;
+    }
+
 private:
     bool m_isRunning;
-
-    friend class wxTimerScheduler;
 };
 
 // ----------------------------------------------------------------------------
