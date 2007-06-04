@@ -133,7 +133,7 @@ public:
 
     // static sink function - see DoLog() for function to overload in the
     // derived classes
-    static void OnLog(wxLogLevel level, const wxChar *szString, time_t t);
+    static void OnLog(wxLogLevel level, const wxString& szString, time_t t);
 
     // message buffering
 
@@ -223,7 +223,7 @@ public:
     static wxTraceMask GetTraceMask() { return ms_ulTraceMask; }
 
     // is this trace mask in the list?
-    static bool IsAllowedTraceMask(const wxChar *mask);
+    static bool IsAllowedTraceMask(const wxString& mask);
 
     // return the current loglevel limit
     static wxLogLevel GetLogLevel() { return ms_logLevel; }
@@ -255,11 +255,28 @@ protected:
 
     // default DoLog() prepends the time stamp and a prefix corresponding
     // to the message to szString and then passes it to DoLogString()
-    virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t);
+    virtual void DoLog(wxLogLevel level, const wxString& szString, time_t t);
+#if WXWIN_COMPATIBILITY_2_8
+    // these shouldn't be used by new code
+    virtual void DoLog(wxLogLevel WXUNUSED(level),
+                       const char *WXUNUSED(szString), time_t WXUNUSED(t)) {}
+    virtual void DoLog(wxLogLevel WXUNUSED(level),
+                       const wchar_t *WXUNUSED(szString), time_t WXUNUSED(t)) {}
+#endif
+
+    void LogString(const wxString& szString, time_t t)
+        { DoLogString(szString, t); }
 
     // default DoLogString does nothing but is not pure virtual because if
     // you override DoLog() you might not need it at all
-    virtual void DoLogString(const wxChar *szString, time_t t);
+    virtual void DoLogString(const wxString& szString, time_t t);
+#if WXWIN_COMPATIBILITY_2_8
+    // these shouldn't be used by new code
+    virtual void DoLogString(const char *WXUNUSED(szString),
+                             time_t WXUNUSED(t)) {}
+    virtual void DoLogString(const wchar_t *WXUNUSED(szString),
+                             time_t WXUNUSED(t)) {}
+#endif
 
     // log a line containing the number of times the previous message was
     // repeated
@@ -313,8 +330,8 @@ public:
     virtual void Flush();
 
 protected:
-    virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t);
-    virtual void DoLogString(const wxChar *szString, time_t t);
+    virtual void DoLog(wxLogLevel level, const wxString& szString, time_t t);
+    virtual void DoLogString(const wxString& szString, time_t t);
 
 private:
     wxString m_str;
@@ -332,7 +349,7 @@ public:
 
 protected:
     // implement sink function
-    virtual void DoLogString(const wxChar *szString, time_t t);
+    virtual void DoLogString(const wxString& szString, time_t t);
 
     FILE *m_fp;
 
@@ -350,7 +367,7 @@ public:
 
 protected:
     // implement sink function
-    virtual void DoLogString(const wxChar *szString, time_t t);
+    virtual void DoLogString(const wxString& szString, time_t t);
 
     // using ptr here to avoid including <iostream.h> from this file
     wxSTD ostream *m_ostr;
@@ -421,7 +438,7 @@ public:
 
 protected:
     // pass the chain to the old logger if needed
-    virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t);
+    virtual void DoLog(wxLogLevel level, const wxString& szString, time_t t);
 
 private:
     // the current log target

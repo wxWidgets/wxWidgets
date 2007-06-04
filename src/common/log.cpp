@@ -475,7 +475,7 @@ unsigned wxLog::DoLogNumberOfRepeats()
 #endif
         ms_prevCounter = 0;
         ms_prevString.clear();
-        pLogger->DoLog(ms_prevLevel, msg.c_str(), ms_prevTimeStamp);
+        pLogger->DoLog(ms_prevLevel, msg, ms_prevTimeStamp);
     }
     return retval;
 }
@@ -491,7 +491,7 @@ wxLog::~wxLog()
 }
 
 /* static */
-void wxLog::OnLog(wxLogLevel level, const wxChar *szString, time_t t)
+void wxLog::OnLog(wxLogLevel level, const wxString& szString, time_t t)
 {
     if ( IsEnabled() && ms_logLevel >= level )
     {
@@ -611,12 +611,19 @@ void wxLog::TimeStamp(wxString *str)
 #endif // wxUSE_DATETIME
 }
 
-void wxLog::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
+void wxLog::DoLog(wxLogLevel level, const wxString& szString, time_t t)
 {
+#if WXWIN_COMPATIBILITY_2_8
+    // DoLog() signature changed since 2.8, so we call the old versions here
+    // so that existing custom log classes still work:
+    DoLog(level, (const char*)szString.mb_str(), t);
+    DoLog(level, (const wchar_t*)szString.wc_str(), t);
+#endif
+
     switch ( level ) {
         case wxLOG_FatalError:
-            DoLogString(wxString(_("Fatal error: ")) + szString, t);
-            DoLogString(_("Program aborted."), t);
+            LogString(_("Fatal error: ") + szString, t);
+            LogString(_("Program aborted."), t);
             Flush();
 #ifdef __WXWINCE__
             ExitThread(3);
@@ -626,11 +633,11 @@ void wxLog::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
             break;
 
         case wxLOG_Error:
-            DoLogString(wxString(_("Error: ")) + szString, t);
+            LogString(_("Error: ") + szString, t);
             break;
 
         case wxLOG_Warning:
-            DoLogString(wxString(_("Warning: ")) + szString, t);
+            LogString(_("Warning: ") + szString, t);
             break;
 
         case wxLOG_Info:
@@ -638,7 +645,7 @@ void wxLog::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
         case wxLOG_Message:
         case wxLOG_Status:
         default:    // log unknown log levels too
-                DoLogString(szString, t);
+                LogString(szString, t);
             break;
 
         case wxLOG_Trace:
@@ -648,16 +655,26 @@ void wxLog::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
                 wxString msg = level == wxLOG_Trace ? wxT("Trace: ")
                                                     : wxT("Debug: ");
                 msg << szString;
-                DoLogString(msg, t);
+                LogString(msg, t);
             }
 #endif // Debug
             break;
     }
 }
 
-void wxLog::DoLogString(const wxChar *WXUNUSED(szString), time_t WXUNUSED(t))
+void wxLog::DoLogString(const wxString& szString, time_t t)
 {
+#if WXWIN_COMPATIBILITY_2_8
+    // DoLogString() signature changed since 2.8, so we call the old versions
+    // here so that existing custom log classes still work; unfortunately this
+    // also means that we can't have the wxFAIL_MSG below in compat mode
+    DoLogString((const char*)szString.mb_str(), t);
+    DoLogString((const wchar_t*)szString.wc_str(), t);
+#else
     wxFAIL_MSG(wxT("DoLogString must be overriden if it's called."));
+    wxUnusedVar(szString);
+    wxUnusedVar(t);
+#endif
 }
 
 void wxLog::Flush()
@@ -665,7 +682,7 @@ void wxLog::Flush()
     // nothing to do here
 }
 
-/*static*/ bool wxLog::IsAllowedTraceMask(const wxChar *mask)
+/*static*/ bool wxLog::IsAllowedTraceMask(const wxString& mask)
 {
     for ( wxArrayString::iterator it = ms_aTraceMasks.begin(),
                                   en = ms_aTraceMasks.end();
@@ -689,7 +706,7 @@ void wxLogBuffer::Flush()
     }
 }
 
-void wxLogBuffer::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
+void wxLogBuffer::DoLog(wxLogLevel level, const wxString& szString, time_t t)
 {
     switch ( level )
     {
@@ -714,7 +731,7 @@ void wxLogBuffer::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
     }
 }
 
-void wxLogBuffer::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
+void wxLogBuffer::DoLogString(const wxString& szString, time_t WXUNUSED(t))
 {
     m_str << szString << _T("\n");
 }
@@ -731,7 +748,7 @@ wxLogStderr::wxLogStderr(FILE *fp)
         m_fp = fp;
 }
 
-void wxLogStderr::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
+void wxLogStderr::DoLogString(const wxString& szString, time_t WXUNUSED(t))
 {
     wxString str;
     TimeStamp(&str);
@@ -770,11 +787,11 @@ wxLogStream::wxLogStream(wxSTD ostream *ostr)
         m_ostr = ostr;
 }
 
-void wxLogStream::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
+void wxLogStream::DoLogString(const wxString& szString, time_t WXUNUSED(t))
 {
-    wxString str;
-    TimeStamp(&str);
-    (*m_ostr) << wxConvertWX2MB(str) << wxConvertWX2MB(szString) << wxSTD endl;
+    wxString stamp;
+    TimeStamp(&stamp);
+    (*m_ostr) << stamp << szString << wxSTD endl;
 }
 #endif // wxUSE_STD_IOSTREAM
 
@@ -816,7 +833,7 @@ void wxLogChain::Flush()
         m_logNew->Flush();
 }
 
-void wxLogChain::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
+void wxLogChain::DoLog(wxLogLevel level, const wxString& szString, time_t t)
 {
     // let the previous logger show it
     if ( m_logOld && IsPassingMessages() )

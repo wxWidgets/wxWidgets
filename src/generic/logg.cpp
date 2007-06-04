@@ -81,7 +81,7 @@
 
 // this function is a wrapper around strftime(3)
 // allows to exclude the usage of wxDateTime
-static wxString TimeStamp(const wxChar *format, time_t t)
+static wxString TimeStamp(const wxString& format, time_t t)
 {
 #if wxUSE_DATETIME
     wxChar buf[4096];
@@ -363,7 +363,7 @@ void wxLogGui::Flush()
 }
 
 // log all kinds of messages
-void wxLogGui::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
+void wxLogGui::DoLog(wxLogLevel level, const wxString& szString, time_t t)
 {
     switch ( level ) {
         case wxLOG_Info:
@@ -638,7 +638,7 @@ void wxLogWindow::Show(bool bShow)
     m_pLogFrame->Show(bShow);
 }
 
-void wxLogWindow::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
+void wxLogWindow::DoLog(wxLogLevel level, const wxString& szString, time_t t)
 {
     // first let the previous logger show it
     wxLogPassThrough::DoLog(level, szString, t);
@@ -648,11 +648,11 @@ void wxLogWindow::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
             case wxLOG_Status:
                 // by default, these messages are ignored by wxLog, so process
                 // them ourselves
-                if ( !wxIsEmpty(szString) )
+                if ( !szString.empty() )
                 {
                     wxString str;
                     str << _("Status: ") << szString;
-                    DoLogString(str, t);
+                    LogString(str, t);
                 }
                 break;
 
@@ -670,7 +670,7 @@ void wxLogWindow::DoLog(wxLogLevel level, const wxChar *szString, time_t t)
     }
 }
 
-void wxLogWindow::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
+void wxLogWindow::DoLogString(const wxString& szString, time_t WXUNUSED(t))
 {
     // put the text into our window
     wxTextCtrl *pText = m_pLogFrame->TextCtrl();
@@ -1158,7 +1158,7 @@ wxLogTextCtrl::wxLogTextCtrl(wxTextCtrl *pTextCtrl)
     m_pTextCtrl = pTextCtrl;
 }
 
-void wxLogTextCtrl::DoLogString(const wxChar *szString, time_t WXUNUSED(t))
+void wxLogTextCtrl::DoLogString(const wxString& szString, time_t WXUNUSED(t))
 {
     wxString msg;
     TimeStamp(&msg);

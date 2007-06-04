@@ -30,7 +30,7 @@ public:
 
 protected:
     // implement sink function
-    virtual void DoLogString(const wxChar *szString, time_t t);
+    virtual void DoLogString(const wxString& szString, time_t t);
 
 private:
     // the control we use
@@ -57,7 +57,7 @@ public:
     virtual void Flush();
 
 protected:
-    virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t);
+    virtual void DoLog(wxLogLevel level, const wxString& szString, time_t t);
 
     // empty everything
     void Clear();
@@ -112,8 +112,8 @@ public:
     virtual void OnFrameDelete(wxFrame *frame);
 
 protected:
-    virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t);
-    virtual void DoLogString(const wxChar *szString, time_t t);
+    virtual void DoLog(wxLogLevel level, const wxString& szString, time_t t);
+    virtual void DoLogString(const wxString& szString, time_t t);
 
 private:
     wxLogFrame *m_pLogFrame;      // the log frame

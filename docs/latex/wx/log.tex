@@ -201,7 +201,7 @@ Returns the currently allowed list of string trace masks.
 
 \membersection{wxLog::OnLog}\label{wxlogonlog}
 
-\func{static void}{OnLog}{\param{wxLogLevel }{ level}, \param{const char * }{ message}}
+\func{static void}{OnLog}{\param{wxLogLevel }{ level}, \param{const wxString\& }{ message}}
 
 Forwards the message at specified level to the {\it DoLog()} function of the
 active log target if there is any, does nothing otherwise.
@@ -250,7 +250,7 @@ flushed soon.
 
 \membersection{wxLog::DoLog}\label{wxlogdolog}
 
-\func{virtual void}{DoLog}{\param{wxLogLevel }{level}, \param{const wxChar }{*msg}, \param{time\_t }{timestamp}}
+\func{virtual void}{DoLog}{\param{wxLogLevel }{level}, \param{const wxString\& }{msg}, \param{time\_t }{timestamp}}
 
 Called to process the message of the specified severity. {\it msg} is the text
 of the message as specified in the call of {\it wxLogXXX()} function which
@@ -262,7 +262,7 @@ corresponding to the log level and then calls
 
 \membersection{wxLog::DoLogString}\label{wxlogdologstring}
 
-\func{virtual void}{DoLogString}{\param{const wxChar }{*msg}, \param{time\_t }{timestamp}}
+\func{virtual void}{DoLogString}{\param{const wxString\& }{msg}, \param{time\_t }{timestamp}}
 
 Called to log the specified string. The timestamp is already included in the
 string but still passed to this function.
@@ -368,7 +368,7 @@ for details.
 
 \membersection{wxLog::IsAllowedTraceMask}\label{wxlogisallowedtracemask}
 
-\func{static bool}{IsAllowedTraceMask}{\param{const wxChar *}{mask}}
+\func{static bool}{IsAllowedTraceMask}{\param{const wxString\& }{mask}}
 
 Returns true if the {\it mask} is one of allowed masks for
 \helpref{wxLogTrace}{wxlogtrace}.
