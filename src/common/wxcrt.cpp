@@ -253,9 +253,7 @@ int vswscanf(const wxChar *ws, const wxChar *format, va_list argptr)
     wxCHECK_MSG( wxStrstr(format, _T("%c")) == NULL, -1,
                  _T("incomplete vswscanf implementation doesn't allow %c") );
 
-    va_list argcopy;
-    wxVaCopy(argcopy, argptr);
-    return vsscanf(wxConvLibc.cWX2MB(ws), wxConvLibc.cWX2MB(format), argcopy);
+    return vsscanf(wxConvLibc.cWX2MB(ws), wxConvLibc.cWX2MB(format), argptr);
 }
 
 int vfwscanf(FILE *stream, const wxChar *format, va_list argptr)
@@ -754,11 +752,8 @@ template<typename T>
 static size_t PrintfViaString(T *out, size_t outsize,
                               const wxString& format, va_list argptr)
 {
-    va_list argcopy;
-    wxVaCopy(argcopy, argptr);
-
     wxString s;
-    s.PrintfV(format, argcopy);
+    s.PrintfV(format, argptr);
 
     return ConvertStringToBuf(s, out, outsize);
 }
@@ -766,21 +761,18 @@ static size_t PrintfViaString(T *out, size_t outsize,
 
 int wxVsprintf(char *str, const wxString& format, va_list argptr)
 {
-    va_list argcopy;
-    wxVaCopy(argcopy, argptr);
-
 #if wxUSE_UTF8_LOCALE_ONLY
-    return vsprintf(str, format.wx_str(), argcopy);
+    return vsprintf(str, format.wx_str(), argptr);
 #else
     #if wxUSE_UNICODE_UTF8
     if ( wxLocaleIsUtf8 )
-        return vsprintf(str, format.wx_str(), argcopy);
+        return vsprintf(str, format.wx_str(), argptr);
     else
     #endif
     #if wxUSE_UNICODE
-    return PrintfViaString(str, wxNO_LEN, format, argcopy);
+    return PrintfViaString(str, wxNO_LEN, format, argptr);
     #else
-    return wxCRT_Vsprintf(str, format, argcopy);
+    return wxCRT_Vsprintf(str, format, argptr);
     #endif
 #endif
 }
@@ -788,18 +780,15 @@ int wxVsprintf(char *str, const wxString& format, va_list argptr)
 #if wxUSE_UNICODE
 int wxVsprintf(wchar_t *str, const wxString& format, va_list argptr)
 {
-    va_list argcopy;
-    wxVaCopy(argcopy, argptr);
-
 #if wxUSE_UNICODE_WCHAR
-    return wxCRT_Vsprintf(str, format, argcopy);
+    return wxCRT_Vsprintf(str, format, argptr);
 #else // wxUSE_UNICODE_UTF8
     #if !wxUSE_UTF8_LOCALE_ONLY
     if ( !wxLocaleIsUtf8 )
-        return wxCRT_Vsprintf(str, format, argcopy);
+        return wxCRT_Vsprintf(str, format, argptr);
     else
     #endif
-        return PrintfViaString(str, wxNO_LEN, format, argcopy);
+        return PrintfViaString(str, wxNO_LEN, format, argptr);
 #endif // wxUSE_UNICODE_UTF8
 }
 #endif // wxUSE_UNICODE
@@ -807,15 +796,12 @@ int wxVsprintf(wchar_t *str, const wxString& format, va_list argptr)
 int wxVsnprintf(char *str, size_t size, const wxString& format, va_list argptr)
 {
     int rv;
-    va_list argcopy;
-    wxVaCopy(argcopy, argptr);
-
 #if wxUSE_UTF8_LOCALE_ONLY
-    rv = vsnprintf(str, size, format.wx_str(), argcopy);
+    rv = vsnprintf(str, size, format.wx_str(), argptr);
 #else
     #if wxUSE_UNICODE_UTF8
     if ( wxLocaleIsUtf8 )
-        rv = vsnprintf(str, size, format.wx_str(), argcopy);
+        rv = vsnprintf(str, size, format.wx_str(), argptr);
     else
     #endif
     #if wxUSE_UNICODE
@@ -823,10 +809,10 @@ int wxVsnprintf(char *str, size_t size, const wxString& format, va_list argptr)
         // NB: if this code is called, then wxString::PrintV() would use the
         //     wchar_t* version of wxVsnprintf(), so it's safe to use PrintV()
         //     from here
-        rv = PrintfViaString(str, size, format, argcopy);
+        rv = PrintfViaString(str, size, format, argptr);
     }
     #else
-    rv = wxCRT_Vsnprintf(str, size, format, argcopy);
+    rv = wxCRT_Vsnprintf(str, size, format, argptr);
     #endif
 #endif
 
@@ -841,22 +827,20 @@ int wxVsnprintf(char *str, size_t size, const wxString& format, va_list argptr)
 int wxVsnprintf(wchar_t *str, size_t size, const wxString& format, va_list argptr)
 {
     int rv;
-    va_list argcopy;
-    wxVaCopy(argcopy, argptr);
 
 #if wxUSE_UNICODE_WCHAR
-    rv = wxCRT_Vsnprintf(str, size, format, argcopy);
+    rv = wxCRT_Vsnprintf(str, size, format, argptr);
 #else // wxUSE_UNICODE_UTF8
     #if !wxUSE_UTF8_LOCALE_ONLY
     if ( !wxLocaleIsUtf8 )
-        rv = wxCRT_Vsnprintf(str, size, format, argcopy);
+        rv = wxCRT_Vsnprintf(str, size, format, argptr);
     else
     #endif
     {
         // NB: if this code is called, then wxString::PrintV() would use the
         //     char* version of wxVsnprintf(), so it's safe to use PrintV()
         //     from here
-        rv = PrintfViaString(str, size, format, argcopy);
+        rv = PrintfViaString(str, size, format, argptr);
     }
 #endif // wxUSE_UNICODE_UTF8
 
