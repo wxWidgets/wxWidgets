@@ -26,7 +26,7 @@ def get_acroversion():
                     r'SOFTWARE\Adobe\Adobe Acrobat\%version%\InstallPath',]
             
         for regkey in acrosoft:
-            for version in ('7.0', '6.0', '5.0', '4.0'):
+            for version in ('8.0', '7.0', '6.0', '5.0', '4.0'):
                 try:
                     path = _winreg.QueryValue(_winreg.HKEY_LOCAL_MACHINE,
                                               regkey.replace('%version%', version))
