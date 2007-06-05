@@ -25,13 +25,18 @@ class TextDocument(wx.lib.docview.Document):
 
     def SaveObject(self, fileObject):
         view = self.GetFirstView()
-        fileObject.write(view.GetTextCtrl().GetValue())
+        val = view.GetTextCtrl().GetValue()
+        if wx.USE_UNICODE:
+            val = val.encode('utf-8')
+        fileObject.write(val)
         return True
 
 
     def LoadObject(self, fileObject):
         view = self.GetFirstView()
         data = fileObject.read()
+        if wx.USE_UNICODE:
+            data = data.decode('utf-8')
         view.GetTextCtrl().SetValue(data)
         return True
 
@@ -93,7 +98,7 @@ class TextView(wx.lib.docview.View):
             wordWrapStyle = wx.TE_WORDWRAP
         else:
             wordWrapStyle = wx.TE_DONTWRAP
-        textCtrl = wx.TextCtrl(parent, -1, pos = wx.DefaultPosition, size = parent.GetClientSize(), style = wx.TE_MULTILINE | wordWrapStyle)
+        textCtrl = wx.TextCtrl(parent, -1, pos = wx.DefaultPosition, size = parent.GetClientSize(), style = wx.TE_MULTILINE | wx.TE_RICH | wordWrapStyle)
         textCtrl.SetFont(font)
         textCtrl.SetForegroundColour(color)
         textCtrl.SetValue(value)
@@ -521,7 +526,7 @@ class TextOptionsPanel(wx.Panel):
         nativeFont.FromString(self._textFont.GetNativeFontInfoDesc())
         font = wx.NullFont
         font.SetNativeFontInfo(nativeFont)
-        font.SetPointSize(self._sampleTextCtrl.GetFont().GetPointSize())  # Use the standard point size
+        #font.SetPointSize(self._sampleTextCtrl.GetFont().GetPointSize())  # Use the standard point size
         self._sampleTextCtrl.SetFont(font)
         self._sampleTextCtrl.SetForegroundColour(self._textColor)
         self._sampleTextCtrl.SetValue(_("%d pt. %s") % (self._textFont.GetPointSize(), self._textFont.GetFaceName()))
