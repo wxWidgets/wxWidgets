@@ -304,7 +304,7 @@ class ParamFont(PPanel):
             except KeyError: error = True; wx.LogError('Invalid style specification')
             try: weight = fontWeightsXml2wx[self.value[3]]
             except KeyError: error = True; wx.LogError('Invalid weight specification')
-            try: underlined = bool(self.value[4])
+            try: underlined = bool(int(self.value[4]))
             except ValueError: error = True; wx.LogError('Invalid underlined flag specification')
             face = self.value[5]
         except IndexError:
