@@ -345,7 +345,8 @@ protected:
 #if defined(__UNIX__)
     #include "wx/unix/app.h"
 #else
-    typedef wxAppConsoleBase wxAppConsole;
+    // this has to be a class and not a typedef as we forward declare it
+    class wxAppConsole : public wxAppConsoleBase { };
 #endif
 
 // ----------------------------------------------------------------------------
