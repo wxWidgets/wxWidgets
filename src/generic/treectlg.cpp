@@ -2223,8 +2223,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 
     if ( HasFlag(wxTR_FULL_ROW_HIGHLIGHT) )
     {
-        int x, w, h;
-        x=0;
+        int x = 0, w = 0, h = 0;
         GetVirtualSize(&w, &h);
         wxRect rect( x, item->GetY()+offset, w, total_h-offset);
 #if !defined(__WXGTK20__) && !defined(__WXMAC__)
