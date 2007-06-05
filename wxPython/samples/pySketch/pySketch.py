@@ -56,45 +56,46 @@ import traceback, types
 
 # Our menu item IDs:
 
-menu_UNDO          = 10001 # Edit menu items.
-menu_SELECT_ALL    = 10002
-menu_DUPLICATE     = 10003
-menu_EDIT_TEXT     = 10004
-menu_DELETE        = 10005
+menu_UNDO          = wx.NewId() # Edit menu items.
+menu_REDO          = wx.NewId()
+menu_SELECT_ALL    = wx.NewId()
+menu_DUPLICATE     = wx.NewId()
+menu_EDIT_TEXT     = wx.NewId()
+menu_DELETE        = wx.NewId()
 
-menu_SELECT        = 10101 # Tools menu items.
-menu_LINE          = 10102
-menu_RECT          = 10103
-menu_ELLIPSE       = 10104
-menu_TEXT          = 10105
+menu_SELECT        = wx.NewId() # Tools menu items.
+menu_LINE          = wx.NewId()
+menu_RECT          = wx.NewId()
+menu_ELLIPSE       = wx.NewId()
+menu_TEXT          = wx.NewId()
 
-menu_MOVE_FORWARD  = 10201 # Object menu items.
-menu_MOVE_TO_FRONT = 10202
-menu_MOVE_BACKWARD = 10203
-menu_MOVE_TO_BACK  = 10204
+menu_MOVE_FORWARD  = wx.NewId() # Object menu items.
+menu_MOVE_TO_FRONT = wx.NewId()
+menu_MOVE_BACKWARD = wx.NewId()
+menu_MOVE_TO_BACK  = wx.NewId()
 
-menu_ABOUT         = 10205 # Help menu items.
+menu_ABOUT         = wx.NewId() # Help menu items.
 
 # Our tool IDs:
 
-id_SELECT  = 11001
-id_LINE    = 11002
-id_RECT    = 11003
-id_ELLIPSE = 11004
-id_TEXT    = 11005
+id_SELECT  = wx.NewId()
+id_LINE    = wx.NewId()
+id_RECT    = wx.NewId()
+id_ELLIPSE = wx.NewId()
+id_TEXT    = wx.NewId()
 
 # Our tool option IDs:
 
-id_FILL_OPT   = 12001
-id_PEN_OPT    = 12002
-id_LINE_OPT   = 12003
+id_FILL_OPT   = wx.NewId()
+id_PEN_OPT    = wx.NewId()
+id_LINE_OPT   = wx.NewId()
 
-id_LINESIZE_0 = 13001
-id_LINESIZE_1 = 13002
-id_LINESIZE_2 = 13003
-id_LINESIZE_3 = 13004
-id_LINESIZE_4 = 13005
-id_LINESIZE_5 = 13006
+id_LINESIZE_0 = wx.NewId()
+id_LINESIZE_1 = wx.NewId()
+id_LINESIZE_2 = wx.NewId()
+id_LINESIZE_3 = wx.NewId()
+id_LINESIZE_4 = wx.NewId()
+id_LINESIZE_5 = wx.NewId()
 
 # DrawObject type IDs:
 
@@ -175,6 +176,7 @@ class DrawingFrame(wx.Frame):
 
         self.editMenu = wx.Menu()
         self.editMenu.Append(menu_UNDO,          "Undo\tCTRL-Z")
+        self.editMenu.Append(menu_REDO,          "Redo\tCTRL-Y")
         self.editMenu.AppendSeparator()
         self.editMenu.Append(menu_SELECT_ALL,    "Select All\tCTRL-A")
         self.editMenu.AppendSeparator()
@@ -227,6 +229,9 @@ class DrawingFrame(wx.Frame):
         self.toolbar.AddSimpleTool(menu_UNDO,
                                    wx.ArtProvider.GetBitmap(wx.ART_UNDO, wx.ART_TOOLBAR, tsize),
                                    "Undo")
+        self.toolbar.AddSimpleTool(menu_REDO,
+                                   wx.ArtProvider.GetBitmap(wx.ART_REDO, wx.ART_TOOLBAR, tsize),
+                                   "Redo")
         self.toolbar.AddSeparator()
         self.toolbar.AddSimpleTool(menu_DUPLICATE,
                                    wx.Bitmap("images/duplicate.bmp",
@@ -256,6 +261,7 @@ class DrawingFrame(wx.Frame):
         (wx.ID_EXIT,   self.doExit),
 
         (menu_UNDO,          self.doUndo),
+        (menu_REDO,          self.doRedo),
         (menu_SELECT_ALL,    self.doSelectAll),
         (menu_DUPLICATE,     self.doDuplicate),
         (menu_EDIT_TEXT,     self.doEditText),
@@ -391,7 +397,8 @@ class DrawingFrame(wx.Frame):
         self.fileName  = fileName
         self.contents  = []     # front-to-back ordered list of DrawingObjects.
         self.selection = []     # List of selected DrawingObjects.
-        self.undoInfo  = None   # Saved contents for undo.
+        self.undoStack = []     # Stack of saved contents for undo.
+        self.redoStack = []     # Stack of saved contents for redo.
         self.dragMode  = drag_NONE # Current mouse-drag mode.
 
         if self.fileName != None:
@@ -937,26 +944,22 @@ class DrawingFrame(wx.Frame):
     def doUndo(self, event):
         """ Respond to the "Undo" menu command.
         """
-        if self.undoInfo == None: return
+        if not self.undoStack: return 
 
-        undoData = self.undoInfo
-        self._saveUndoInfo() # For undoing the undo...
+        state = self._buildStoredState()
+        self.redoStack.append(state)
+        state = self.undoStack.pop()
+        self._restoreStoredState(state)
 
-        self.contents = []
+    def doRedo(self, event):
+        """ Respond to the "Redo" menu.
+        """
+        if not self.redoStack: return
 
-        for type, data in undoData["contents"]:
-            obj = DrawingObject(type)
-            obj.setData(data)
-            self.contents.append(obj)
-
-        self.selection = []
-        for i in undoData["selection"]:
-            self.selection.append(self.contents[i])
-
-        self.dirty = True
-        self.drawPanel.Refresh()
-        self._adjustMenus()
-
+        state = self._buildStoredState()
+        self.undoStack.append(state)
+        state = self.redoStack.pop()
+        self._restoreStoredState(state)
 
     def doSelectAll(self, event):
         """ Respond to the "Select All" menu command.
@@ -1350,7 +1353,7 @@ class DrawingFrame(wx.Frame):
 
         self.dirty = False
         self.selection = []
-        self.undoInfo  = None
+        self.undoStack  = None
 
         self.drawPanel.Refresh()
         self._adjustMenus()
@@ -1408,7 +1411,8 @@ class DrawingFrame(wx.Frame):
         """
         canSave   = (self.fileName != None) and self.dirty
         canRevert = (self.fileName != None) and self.dirty
-        canUndo   = self.undoInfo != None
+        canUndo   = self.undoStack!=[]
+        canRedo   = self.redoStack!=[]
         selection = len(self.selection) > 0
         onlyOne   = len(self.selection) == 1
         isText    = onlyOne and (self.selection[0].getType() == obj_TEXT)
@@ -1421,6 +1425,7 @@ class DrawingFrame(wx.Frame):
         self.fileMenu.Enable(wx.ID_REVERT, canRevert)
 
         self.editMenu.Enable(menu_UNDO,      canUndo)
+        self.editMenu.Enable(menu_REDO,      canRedo)
         self.editMenu.Enable(menu_DUPLICATE, selection)
         self.editMenu.Enable(menu_EDIT_TEXT, isText)
         self.editMenu.Enable(menu_DELETE,    selection)
@@ -1442,6 +1447,7 @@ class DrawingFrame(wx.Frame):
         self.toolbar.EnableTool(wx.ID_OPEN,          True)
         self.toolbar.EnableTool(wx.ID_SAVE,          canSave)
         self.toolbar.EnableTool(menu_UNDO,          canUndo)
+        self.toolbar.EnableTool(menu_REDO,          canRedo)
         self.toolbar.EnableTool(menu_DUPLICATE,     selection)
         self.toolbar.EnableTool(menu_MOVE_FORWARD,  onlyOne and not front)
         self.toolbar.EnableTool(menu_MOVE_BACKWARD, onlyOne and not back)
@@ -1452,7 +1458,7 @@ class DrawingFrame(wx.Frame):
         """
         if self.curTool == newToolIcon: return # Nothing to do.
 
-        if self.curTool != None:
+        if self.curTool is not None:
             self.curTool.deselect()
 
         newToolIcon.select()
@@ -1498,12 +1504,14 @@ class DrawingFrame(wx.Frame):
             self.optionIndicator.setLineSize(size)
 
 
-    def _saveUndoInfo(self):
+    def _buildStoredState(self):
         """ Remember the current state of the document, to allow for undo.
 
             We make a copy of the document's contents, so that we can return to
             the previous contents if the user does something and then wants to
-            undo the operation.
+            undo the operation.  
+
+            Returns an object representing the current document state.
         """
         savedContents = []
         for obj in self.contents:
@@ -1514,8 +1522,46 @@ class DrawingFrame(wx.Frame):
             if self.contents[i] in self.selection:
                 savedSelection.append(i)
 
-        self.undoInfo = {"contents"  : savedContents,
-                         "selection" : savedSelection}
+        info = {"contents"  : savedContents,
+                "selection" : savedSelection}
+
+        return info
+        
+    def _restoreStoredState(self, savedState):
+        """Restore the state of the document to a previous point for undo/redo.
+
+        Takes a stored state object and recreates the document from it.
+        Used by undo/redo implementation.
+        """
+        self.contents = []
+
+        for type, data in savedState["contents"]:
+            obj = DrawingObject(type)
+            obj.setData(data)
+            self.contents.append(obj)
+
+        self.selection = []
+        for i in savedState["selection"]:
+            self.selection.append(self.contents[i])
+
+        self.dirty = True
+        self.drawPanel.Refresh()
+        self._adjustMenus()
+
+    def _saveUndoInfo(self):
+        """ Remember the current state of the document, to allow for undo.
+
+            We make a copy of the document's contents, so that we can return to
+            the previous contents if the user does something and then wants to
+            undo the operation.
+            
+            This should be called only for a new modification to the document
+            since it erases the redo history.
+        """
+        state = self._buildStoredState()
+
+        self.undoStack.append(state)
+        self.redoStack = []
 
 
     def _resizeObject(self, obj, anchorPt, oldPt, newPt):
@@ -2266,7 +2312,7 @@ class ToolPaletteIcon(GenBitmapButton):
         if self.isSelected: return # Nothing to do!
 
         bmp = wx.Bitmap("images/" + self.iconName + "IconSel.bmp",
-                       wx.BITMAP_TYPE_BMP)
+                        wx.BITMAP_TYPE_BMP)
         self.SetBitmapLabel(bmp)
         self.isSelected = True
 
@@ -2279,9 +2325,11 @@ class ToolPaletteIcon(GenBitmapButton):
         if not self.isSelected: return # Nothing to do!
 
         bmp = wx.Bitmap("images/" + self.iconName + "Icon.bmp",
-                       wx.BITMAP_TYPE_BMP)
+                        wx.BITMAP_TYPE_BMP)
         self.SetBitmapLabel(bmp)
         self.isSelected = False
+        # Force a redraw
+        self.Refresh()
 
 #----------------------------------------------------------------------------
 
