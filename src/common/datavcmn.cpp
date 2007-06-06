@@ -614,8 +614,6 @@ wxString wxDataViewSortedListModel::GetColumnType( unsigned int col ) const
     return m_child->GetColumnType( col );
 }
 
-#include "wx/crt.h"
-
 void wxDataViewSortedListModel::GetValue( wxVariant &variant, unsigned int col, unsigned int row ) const
 {
     unsigned int child_row = m_array[row];
@@ -1131,6 +1129,7 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_ROW_SELECTED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_ROW_ACTIVATED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_CLICK)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_COLUMN_HEADER_RIGHT_CLICK)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_COLUMN_SORTED)
 
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_MODEL_ROW_APPENDED)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_DATAVIEW_MODEL_ROW_PREPENDED)
