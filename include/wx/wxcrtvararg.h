@@ -31,31 +31,17 @@
     #define  wxCRT_Vfprintf  _vftprintf
     #define  wxCRT_Vprintf   _vtprintf
     #define  wxCRT_Vsprintf  _vstprintf
-    #define  wxCRT_Vscanf    _vtscanf
-    #define  wxCRT_Vfscanf   _vftscanf
-    #define  wxCRT_Vsscanf   _vstscanf
 #else /* !TCHAR-aware compilers */
 
     #if !wxUSE_UNICODE /* ASCII */
         #define  wxCRT_Fprintf   fprintf
-        #define  wxCRT_Fscanf    fscanf
         #define  wxCRT_Printf    printf
         #define  wxCRT_Vfprintf  vfprintf
         #define  wxCRT_Vprintf   vprintf
         #define  wxCRT_Vsprintf  vsprintf
-        #define  wxCRT_Scanf     scanf
-        #define  wxCRT_Sscanf    sscanf
-        #define  wxCRT_Vsscanf   vsscanf
     #endif /* ASCII */
 #endif /* TCHAR-aware compilers/the others */
 
-/* Required for wxScanf() etc. */
-#define wxCRT_VscanfA   vscanf
-#define wxCRT_VsscanfA  vsscanf
-#define wxCRT_VfscanfA  vfscanf
-#define wxCRT_VscanfW   vwscanf
-#define wxCRT_VsscanfW  vswscanf
-#define wxCRT_VfscanfW  vfwscanf
 
 /* printf() family saga */
 
@@ -238,6 +224,24 @@
 #endif
 
 
+/* Required for wxScanf() etc. */
+#define wxCRT_ScanfA     scanf
+#define wxCRT_SscanfA    sscanf
+#define wxCRT_FscanfA    fscanf
+#define wxCRT_VsscanfA   vsscanf
+
+#if defined(wxNEED_PRINTF_CONVERSION) || defined(wxNEED_WPRINTF)
+    int wxCRT_ScanfW(const wchar_t *format, ...) ATTRIBUTE_PRINTF_1;
+    int wxCRT_SscanfW(const wchar_t *str, const wchar_t *format, ...) ATTRIBUTE_PRINTF_2;
+    int wxCRT_FscanfW(FILE *stream, const wchar_t *format, ...) ATTRIBUTE_PRINTF_2;
+    int wxCRT_VsscanfW(const wchar_t *str, const wchar_t *format, va_list ap);
+#else
+    #define wxCRT_ScanfW     wscanf
+    #define wxCRT_SscanfW    swscanf
+    #define wxCRT_FscanfW    fwscanf
+    #define wxCRT_VsscanfW   vswscanf
+#endif
+
 // ----------------------------------------------------------------------------
 // user-friendly wrappers to CRT functions
 // ----------------------------------------------------------------------------
@@ -387,21 +391,59 @@ wxVsnprintf(wchar_t *str, size_t size, const wxString& format, va_list argptr);
 // the type of output string values is determined by the type of format string
 // only.
 
-int WXDLLIMPEXP_BASE wxScanf(const char *format, ...);
-int WXDLLIMPEXP_BASE wxScanf(const wchar_t *format, ...);
+#define _WX_SCANFUNC_EXTRACT_ARGS_1(x)   x
+#define _WX_SCANFUNC_EXTRACT_ARGS_2(x,y) x, y
+#define _WX_SCANFUNC_EXTRACT_ARGS(N, args) _WX_SCANFUNC_EXTRACT_ARGS_##N args
 
-int WXDLLIMPEXP_BASE wxFscanf(FILE *stream, const char *format, ...);
-int WXDLLIMPEXP_BASE wxFscanf(FILE *stream, const wchar_t *format, ...);
+#define _WX_VARARG_PASS_WRITABLE(i) a##i
 
-int WXDLLIMPEXP_BASE wxSscanf(const char *str, const char *format, ...);
-int WXDLLIMPEXP_BASE wxSscanf(const wchar_t *str, const wchar_t *format, ...);
-int WXDLLIMPEXP_BASE wxSscanf(const wxCharBuffer& str, const char *format, ...);
-int WXDLLIMPEXP_BASE wxSscanf(const wxWCharBuffer& str, const wchar_t *format, ...);
-int WXDLLIMPEXP_BASE wxSscanf(const wxString& str, const char *format, ...);
-int WXDLLIMPEXP_BASE wxSscanf(const wxString& str, const wchar_t *format, ...);
-int WXDLLIMPEXP_BASE wxSscanf(const wxCStrData& str, const char *format, ...);
-int WXDLLIMPEXP_BASE wxSscanf(const wxCStrData& str, const wchar_t *format, ...);
+#define _WX_DEFINE_SCANFUNC(N, dummy1, name, impl, passfixed, numfixed, fixed)\
+    template<_WX_VARARG_JOIN(N, _WX_VARARG_TEMPL)>                            \
+    int name(_WX_SCANFUNC_EXTRACT_ARGS(numfixed, fixed),                      \
+             _WX_VARARG_JOIN(N, _WX_VARARG_ARG))                              \
+    {                                                                         \
+        return  impl(_WX_SCANFUNC_EXTRACT_ARGS(numfixed, passfixed),          \
+                     _WX_VARARG_JOIN(N, _WX_VARARG_PASS_WRITABLE));           \
+    }
 
+#define WX_DEFINE_SCANFUNC(name, numfixed, fixed, impl, passfixed)            \
+    inline int name(_WX_SCANFUNC_EXTRACT_ARGS(numfixed, fixed))               \
+    {                                                                         \
+        return impl(_WX_SCANFUNC_EXTRACT_ARGS(numfixed, passfixed));          \
+    }                                                                         \
+    _WX_VARARG_ITER(_WX_VARARG_MAX_ARGS,                                      \
+                    _WX_DEFINE_SCANFUNC,                                      \
+                    dummy1, name, impl, passfixed, numfixed, fixed)
+
+WX_DEFINE_SCANFUNC(wxScanf, 1, (const char *format),
+                   wxCRT_ScanfA, (format))
+WX_DEFINE_SCANFUNC(wxScanf, 1, (const wchar_t *format),
+                   wxCRT_ScanfW, (format))
+
+WX_DEFINE_SCANFUNC(wxFscanf, 2, (FILE *stream, const char *format),
+                   wxCRT_FscanfA, (stream, format))
+WX_DEFINE_SCANFUNC(wxFscanf, 2, (FILE *stream, const wchar_t *format),
+                   wxCRT_FscanfW, (stream, format))
+
+WX_DEFINE_SCANFUNC(wxSscanf, 2, (const char *str, const char *format),
+                   wxCRT_SscanfA, (str, format))
+WX_DEFINE_SCANFUNC(wxSscanf, 2, (const wchar_t *str, const wchar_t *format),
+                   wxCRT_SscanfW, (str, format))
+WX_DEFINE_SCANFUNC(wxSscanf, 2, (const wxCharBuffer& str, const char *format),
+                   wxCRT_SscanfA, (str.data(), format))
+WX_DEFINE_SCANFUNC(wxSscanf, 2, (const wxWCharBuffer& str, const wchar_t *format),
+                   wxCRT_SscanfW, (str.data(), format))
+WX_DEFINE_SCANFUNC(wxSscanf, 2, (const wxString& str, const char *format),
+                   wxCRT_SscanfA, (str.mb_str(), format))
+WX_DEFINE_SCANFUNC(wxSscanf, 2, (const wxString& str, const wchar_t *format),
+                   wxCRT_SscanfW, (str.wc_str(), format))
+WX_DEFINE_SCANFUNC(wxSscanf, 2, (const wxCStrData& str, const char *format),
+                   wxCRT_SscanfA, (str.AsCharBuf(), format))
+WX_DEFINE_SCANFUNC(wxSscanf, 2, (const wxCStrData& str, const wchar_t *format),
+                   wxCRT_SscanfW, (str.AsWCharBuf(), format))
+
+// Visual C++ doesn't provide vsscanf()
+#ifndef __VISUALC___
 int WXDLLIMPEXP_BASE wxVsscanf(const char *str, const char *format, va_list ap);
 int WXDLLIMPEXP_BASE wxVsscanf(const wchar_t *str, const wchar_t *format, va_list ap);
 int WXDLLIMPEXP_BASE wxVsscanf(const wxCharBuffer& str, const char *format, va_list ap);
@@ -410,5 +452,6 @@ int WXDLLIMPEXP_BASE wxVsscanf(const wxString& str, const char *format, va_list 
 int WXDLLIMPEXP_BASE wxVsscanf(const wxString& str, const wchar_t *format, va_list ap);
 int WXDLLIMPEXP_BASE wxVsscanf(const wxCStrData& str, const char *format, va_list ap);
 int WXDLLIMPEXP_BASE wxVsscanf(const wxCStrData& str, const wchar_t *format, va_list ap);
+#endif // !__VISUALC__
 
 #endif /* _WX_WXCRTVARARG_H_ */
