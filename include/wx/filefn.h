@@ -139,16 +139,16 @@ enum wxFileKind
 #if defined( __WXWINCE__)
     typedef __int64 wxFileOffset;
     #define wxFileOffsetFmtSpec _("I64")
-    int wxOpen(const wxChar *filename, int oflag, int WXUNUSED(pmode));
-    int wxAccess(const wxChar *name, int WXUNUSED(how));
-    int wxClose(int fd);
-    int wxFsync(int WXUNUSED(fd));
-    int wxRead(int fd, void *buf, unsigned int count);
-    int wxWrite(int fd, const void *buf, unsigned int count);
-    int wxEof(int fd);
-    wxFileOffset wxSeek(int fd, wxFileOffset offset, int origin);
+    WXDLLIMPEXP_BASE int wxOpen(const wxChar *filename, int oflag, int WXUNUSED(pmode));
+    WXDLLIMPEXP_BASE int wxAccess(const wxChar *name, int WXUNUSED(how));
+    WXDLLIMPEXP_BASE int wxClose(int fd);
+    WXDLLIMPEXP_BASE int wxFsync(int WXUNUSED(fd));
+    WXDLLIMPEXP_BASE int wxRead(int fd, void *buf, unsigned int count);
+    WXDLLIMPEXP_BASE int wxWrite(int fd, const void *buf, unsigned int count);
+    WXDLLIMPEXP_BASE int wxEof(int fd);
+    WXDLLIMPEXP_BASE wxFileOffset wxSeek(int fd, wxFileOffset offset, int origin);
     #define wxLSeek wxSeek
-    wxFileOffset wxTell(int fd);
+    WXDLLIMPEXP_BASE wxFileOffset wxTell(int fd);
 
     // always Unicode under WinCE
     #define   wxMkDir      _wmkdir
