@@ -18,7 +18,7 @@ for i in "$@"; do
 	carbon)        PORT="mac" ;;
 	cocoa)         PORT="cocoa" ;;
 	static)        STATIC=1 ;;
-	*)
+	*)             
 	    usage
 	    exit
 	    ;;
