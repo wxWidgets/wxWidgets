@@ -30,6 +30,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxMask, wxObject)
 
 #ifdef __DARWIN__
     #include <ApplicationServices/ApplicationServices.h>
+    #include <QuickTime/QuickTime.h>
 #else
     #include <PictUtils.h>
 #endif
@@ -644,6 +645,20 @@ PicHandle wxBitmapRefData::GetPictHandle()
         SetGWorld( origPort , origDev ) ;
         if ( clipRgn )
             DisposeRgn( clipRgn ) ;
+#else
+        GraphicsExportComponent exporter = 0;
+        OSStatus err = OpenADefaultComponent(GraphicsExporterComponentType, kQTFileTypePicture, &exporter);
+        if (noErr == err)
+        {
+            m_pictHandle = (PicHandle) NewHandle(0);
+            if ( m_pictHandle )
+            {
+                err = GraphicsExportSetInputCGBitmapContext( exporter, m_hBitmap);
+                err = GraphicsExportSetOutputHandle(exporter, (Handle)m_pictHandle);
+                err = GraphicsExportDoExport(exporter, NULL);
+            }
+            CloseComponent( exporter );
+        }
 #endif
     }
 
