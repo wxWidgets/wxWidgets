@@ -5,8 +5,7 @@
 # RCS-ID:       $Id$
 
 import wx
-from component import manager
-
+from component import Manager
 # Global id constants
 class ID:
     MENU = wx.NewId()
@@ -20,6 +19,7 @@ class ID:
     SUBCLASS = wx.NewId()
     REF = wx.NewId()
     COMMENT = wx.NewId()    
+    FIRST_COMPONENT = wx.NewId()
 
 class XMLTreeMenu(wx.Menu):
     '''dynamic pulldown menu for XMLTree'''
@@ -31,7 +31,7 @@ class XMLTreeMenu(wx.Menu):
             self.Append(ID.COLLAPSE, 'Collapse', 'Collapse tree')
             return              # no commands if no selection
         # Populate create menu
-        if tree.ctrl:
+        if tree.forceSibling:
             needInsert = True
         else:
             needInsert = tree.NeedInsert(item)
@@ -42,14 +42,14 @@ class XMLTreeMenu(wx.Menu):
             menu = self.CreateSubMenus()
         # Select correct label for create menu
         if not needInsert:
-            if tree.shift:
+            if tree.forceInsert:
                 self.AppendMenu(ID.INSERT, 'Insert Child', menu,
                                 'Create child object as the first child')
             else:
                 self.AppendMenu(ID.APPEND, 'Append Child', menu,
                                 'Create child object as the last child')
         else:
-            if tree.shift:
+            if tree.forceInsert:
                 self.AppendMenu(ID.SIBLING, 'Create Sibling', menu,
                                 'Create sibling before selected object')
             else:
@@ -58,7 +58,7 @@ class XMLTreeMenu(wx.Menu):
 
     def CreateTopLevelMenu(self):
         m = wx.Menu()
-        for index,component,label,help in manager.menus[None]:
+        for index,component,label,help in Manager.menus[None]:
             m.Append(component.id, label, help)
         m.AppendSeparator()
         m.Append(ID.REF, 'reference...', 'Create object_ref node')
@@ -67,11 +67,11 @@ class XMLTreeMenu(wx.Menu):
 
     def CreateSubMenus(self):
         menu = wx.Menu()
-        for name in manager.menuNames[1:]:
+        for name in Manager.menuNames[1:]:
             # Skip empty menu groups
-            if not manager.menus.get(name, []): continue
+            if not Manager.menus.get(name, []): continue
             m = wx.Menu()
-            for index,component,label,help in manager.menus[name]:
+            for index,component,label,help in Manager.menus[name]:
                 m.Append(component.id, label, help)
             menu.AppendMenu(ID.MENU, name, m)
             menu.AppendSeparator()

@@ -15,9 +15,9 @@ import sys
 # Global constants
 
 progname = 'XRCed'
-version = '0.1.8-5'
+version = '0.2.0-0'
 # Minimal wxWidgets version
-MinWxVersion = (2,6,0)
+MinWxVersion = (2,8,0)
 if wx.VERSION[:3] < MinWxVersion:
     print '''\
 ******************************* WARNING **************************************
@@ -29,12 +29,6 @@ if wx.VERSION[:3] < MinWxVersion:
 #defaultEncoding = ''
 # you comment above and can uncomment this:
 defaultEncoding = wx.GetDefaultPyEncoding()
-
-try:
-    True
-except NameError:
-    True = 1==1
-    False = 1==0
 
 # Global variables
 

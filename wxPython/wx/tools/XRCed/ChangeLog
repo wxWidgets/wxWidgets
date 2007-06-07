@@ -1,0 +1,10 @@
+2007-06-07  Roman Rolinsky  <rolinsky@hartman.femagsoft.com>
+
+	* started to implement MVP pattern classes
+
+	* implemented multi-group support for components
+
+2007-05-31  Roman Rolinsky  <rolinsky@hartman.femagsoft.com>
+
+	* first test of plugin degisn
+

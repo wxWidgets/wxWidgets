@@ -602,7 +602,6 @@ class XML_Tree(wx.TreeCtrl):
         # Add minimal structure
         if self.dom: self.dom.unlink()
         self.dom = dom
-        self.dummyNode = self.dom.createComment('dummy node')
         # Find 'resource' child, add it's children
         self.mainNode = dom.documentElement
         self.rootObj = xxxMainNode(self.dom)
@@ -616,11 +615,10 @@ class XML_Tree(wx.TreeCtrl):
             else:
                 self.mainNode.removeChild(node)
                 node.unlink()
+        self.testElem = self.dom.createElement('dummy')
         if self.mainNode.firstChild:
-            self.testElem = self.dom.createElement('dummy')
             self.mainNode.insertBefore(self.testElem, self.mainNode.firstChild)
         else:
-            self.testElem = self.dom.createElement('dummy')
             self.mainNode.appendChild(self.testElem)
         self.Expand(self.root)
 
