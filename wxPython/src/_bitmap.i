@@ -24,10 +24,10 @@
 //---------------------------------------------------------------------------
 
 %{
-// See http://tinyurl.com/e5adr for what premultiplying alpha means.  It
-// appears to me that the other platforms are already doing it, so I'll just
-// automatically do it for wxMSW here.
-#ifdef __WXMSW__
+// See http://tinyurl.com/e5adr for what premultiplying alpha means. wxMSW and
+// wxMac want to have the values premultiplied by the alpha value, but the
+// other platforms don't.  These macros help keep the code clean.
+#if defined(__WXMSW__) || (defined(__WXMAC__) && wxMAC_USE_CORE_GRAPHICS)
 #define wxPy_premultiply(p, a)   ((p) * (a) / 0xff)
 #define wxPy_unpremultiply(p, a) ((a) ? ((p) * 0xff / (a)) : (p))    
 #else
@@ -500,8 +500,8 @@ def BitmapFromBuffer(width, height, dataBuffer, alphaBuffer=None):
     expected to contain a series of RGB bytes and be width*height*3
     bytes long.  A buffer object can optionally be supplied for the
     image's alpha channel data, and it is expected to be width*height
-    bytes long.  On Windows the RGB values are 'premultiplied' by the
-    alpha values.  (The other platforms do the multiplication
+    bytes long.  On Windows and Mac the RGB values are 'premultiplied'
+    by the alpha values.  (The other platforms do the multiplication
     themselves.)
 
     Unlike `wx.ImageFromBuffer` the bitmap created with this function
@@ -567,8 +567,8 @@ def BitmapFromBufferRGBA(width, height, dataBuffer):
     parameter must be a Python object that implements the buffer
     interface, such as a string, array, etc.  The dataBuffer object is
     expected to contain a series of RGBA bytes (red, green, blue and
-    alpha) and be width*height*4 bytes long.  On Windows the RGB
-    values are 'premultiplied' by the alpha values.  (The other
+    alpha) and be width*height*4 bytes long.  On Windows and Mac the
+    RGB values are 'premultiplied' by the alpha values.  (The other
     platforms do the multiplication themselves.)
 
     Unlike `wx.ImageFromBuffer` the bitmap created with this function
