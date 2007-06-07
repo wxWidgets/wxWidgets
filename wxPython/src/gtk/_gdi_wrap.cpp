@@ -2925,10 +2925,10 @@ SWIGINTERN bool wxPen___ne__(wxPen *self,wxPen const *other){ return other ? (*s
 #include <wx/rawbmp.h>
 
 
-// See http://tinyurl.com/e5adr for what premultiplying alpha means.  It
-// appears to me that the other platforms are already doing it, so I'll just
-// automatically do it for wxMSW here.
-#ifdef __WXMSW__
+// See http://tinyurl.com/e5adr for what premultiplying alpha means. wxMSW and
+// wxMac want to have the values premultiplied by the alpha value, but the
+// other platforms don't.  These macros help keep the code clean.
+#if defined(__WXMSW__) || (defined(__WXMAC__) && wxMAC_USE_CORE_GRAPHICS)
 #define wxPy_premultiply(p, a)   ((p) * (a) / 0xff)
 #define wxPy_unpremultiply(p, a) ((a) ? ((p) * 0xff / (a)) : (p))    
 #else

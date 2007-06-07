@@ -774,8 +774,8 @@ def BitmapFromBuffer(width, height, dataBuffer, alphaBuffer=None):
     expected to contain a series of RGB bytes and be width*height*3
     bytes long.  A buffer object can optionally be supplied for the
     image's alpha channel data, and it is expected to be width*height
-    bytes long.  On Windows the RGB values are 'premultiplied' by the
-    alpha values.  (The other platforms do the multiplication
+    bytes long.  On Windows and Mac the RGB values are 'premultiplied'
+    by the alpha values.  (The other platforms do the multiplication
     themselves.)
 
     Unlike `wx.ImageFromBuffer` the bitmap created with this function
@@ -804,8 +804,8 @@ def BitmapFromBufferRGBA(width, height, dataBuffer):
     parameter must be a Python object that implements the buffer
     interface, such as a string, array, etc.  The dataBuffer object is
     expected to contain a series of RGBA bytes (red, green, blue and
-    alpha) and be width*height*4 bytes long.  On Windows the RGB
-    values are 'premultiplied' by the alpha values.  (The other
+    alpha) and be width*height*4 bytes long.  On Windows and Mac the
+    RGB values are 'premultiplied' by the alpha values.  (The other
     platforms do the multiplication themselves.)
 
     Unlike `wx.ImageFromBuffer` the bitmap created with this function

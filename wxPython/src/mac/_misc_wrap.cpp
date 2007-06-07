@@ -8167,6 +8167,7 @@ SWIGINTERN PyObject *_wrap_Thread_IsMain(PyObject *SWIGUNUSEDPARM(self), PyObjec
   
   if (!SWIG_Python_UnpackTuple(args,"Thread_IsMain",0,0,0)) SWIG_fail;
   {
+    if (!wxPyCheckForApp()) SWIG_fail;
     PyThreadState* __tstate = wxPyBeginAllowThreads();
     result = (bool)wxThread_IsMain();
     wxPyEndAllowThreads(__tstate);
