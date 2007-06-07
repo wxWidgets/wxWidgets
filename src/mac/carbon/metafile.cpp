@@ -24,18 +24,11 @@
 
 #include "wx/metafile.h"
 #include "wx/clipbrd.h"
-#include "wx/mac/private.h"
+#include "wx/mac/uma.h"
 #include "wx/graphics.h"
 
 #include <stdio.h>
 #include <string.h>
-
-// NB: The new implementation added in 1.34.4.2 uses a number of APIs which 
-// were introduced in Tiger. Unfortunately, this also left the class with
-// no implementation for Panther+CoreGraphics (which wxPython currently uses). 
-// I've restored compilation for Panther+CoreGraphics but this does little more
-// than make it compile. It does not show Metafiles and
-#define USE_CG_METAFILE (wxMAC_USE_CORE_GRAPHICS && (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4))
 
 IMPLEMENT_DYNAMIC_CLASS(wxMetafile, wxObject)
 IMPLEMENT_ABSTRACT_CLASS(wxMetafileDC, wxDC)
@@ -45,12 +38,12 @@ IMPLEMENT_ABSTRACT_CLASS(wxMetafileDC, wxDC)
 class wxMetafileRefData: public wxGDIRefData
 {
 public:
-#if USE_CG_METAFILE
+#if wxMAC_USE_CORE_GRAPHICS
     // creates a metafile from memory, assumes ownership
     wxMetafileRefData(CFDataRef data);    
 #else
     // creates a metafile from memory, assumes ownership
-    wxMetafileRefData(PicHandle data);    
+    wxMetafileRefData(Handle data);    
 #endif
     // prepares a recording metafile
     wxMetafileRefData( int width, int height);    
@@ -62,8 +55,8 @@ public:
 
     int GetWidth() const { return m_width; }
     int GetHeight() const { return m_height; }
-    
-#if USE_CG_METAFILE
+
+#if wxMAC_USE_CORE_GRAPHICS
     CGPDFDocumentRef GetPDFDocument() const { return m_pdfDoc; }
     void UpdateDocumentFromData() ;
 
@@ -75,7 +68,7 @@ public:
     // ends the recording
     void Close();
 private:
-#if USE_CG_METAFILE
+#if wxMAC_USE_CORE_GRAPHICS
     wxCFDataRef m_data;
     wxCFRef<CGPDFDocumentRef> m_pdfDoc;
     CGContextRef m_context;
@@ -86,7 +79,7 @@ private:
     int m_height ;
 };
 
-#if! USE_CG_METAFILE
+#if! wxMAC_USE_CORE_GRAPHICS
 wxMetafileRefData::wxMetafileRefData(PicHandle pict)
 {
     Init();
@@ -109,7 +102,7 @@ wxMetafileRefData::wxMetafileRefData(CFDataRef data) :
 wxMetafileRefData::wxMetafileRefData( const wxString& filename )
 {
     Init();
-#if USE_CG_METAFILE
+#if wxMAC_USE_CORE_GRAPHICS
     if ( !filename.empty() )
     {
         wxCFRef<CFMutableStringRef> cfMutableString(CFStringCreateMutableCopy(NULL, 0, wxMacCFStringHolder(filename)));
@@ -130,19 +123,21 @@ wxMetafileRefData::wxMetafileRefData( int width, int height)
     
     m_width = width;
     m_height = height;
-#if USE_CG_METAFILE
+#if wxMAC_USE_CORE_GRAPHICS
     CGRect r = CGRectMake( 0 , 0 , width  , height );
 
     CFMutableDataRef data = CFDataCreateMutable(kCFAllocatorDefault, 0);
     m_data.reset(data);
-    CGDataConsumerRef dataConsumer = CGDataConsumerCreateWithCFData(data);
+    CGDataConsumerRef dataConsumer = UMACGDataConsumerCreateWithCFData(data);
     m_context = CGPDFContextCreate( dataConsumer, (width != 0 && height != 0) ? &r : NULL , NULL );
     CGDataConsumerRelease( dataConsumer );
     if ( m_context )
     {
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
         if ( &CGPDFContextBeginPage != NULL )
             CGPDFContextBeginPage(m_context, NULL);
         else
+#endif
             CGContextBeginPage(m_context, NULL);
 
         CGColorSpaceRef genericColorSpace  = wxMacGetGenericRGBColorSpace();
@@ -161,7 +156,7 @@ wxMetafileRefData::wxMetafileRefData( int width, int height)
 
 wxMetafileRefData::~wxMetafileRefData()
 {
-#if! USE_CG_METAFILE
+#if! wxMAC_USE_CORE_GRAPHICS
     if (m_metafile)
     {
         KillPicture( (PicHandle)m_metafile );
@@ -172,7 +167,7 @@ wxMetafileRefData::~wxMetafileRefData()
 
 void wxMetafileRefData::Init()
 {
-#if USE_CG_METAFILE
+#if wxMAC_USE_CORE_GRAPHICS
     m_context = NULL;
 #else
     m_metafile = NULL;
@@ -183,10 +178,12 @@ void wxMetafileRefData::Init()
 
 void wxMetafileRefData::Close()
 {
-#if USE_CG_METAFILE
+#if wxMAC_USE_CORE_GRAPHICS
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
     if ( &CGPDFContextEndPage != NULL )
         CGPDFContextEndPage(m_context);
     else
+#endif
         CGContextEndPage(m_context);
 
     CGContextRelease(m_context);
@@ -198,10 +195,10 @@ void wxMetafileRefData::Close()
 #endif
 }
 
-#if USE_CG_METAFILE
+#if wxMAC_USE_CORE_GRAPHICS
 void wxMetafileRefData::UpdateDocumentFromData() 
 {
-    wxCFRef<CGDataProviderRef> provider(CGDataProviderCreateWithCFData(m_data));
+    wxCFRef<CGDataProviderRef> provider(UMACGDataProviderCreateWithCFData(m_data));
     m_pdfDoc.reset(CGPDFDocumentCreateWithProvider(provider));
     if ( m_pdfDoc != NULL )
     {
@@ -224,7 +221,7 @@ wxMetaFile::~wxMetaFile()
 
 bool wxMetaFile::IsOk() const
 {
-#if USE_CG_METAFILE
+#if wxMAC_USE_CORE_GRAPHICS
     return (M_METAFILEDATA && (M_METAFILEDATA->GetData() != NULL));
 #else
     return (M_METAFILEDATA && (M_METAFILEDATA->GetHandle() != NULL));
@@ -233,7 +230,7 @@ bool wxMetaFile::IsOk() const
 
 WXHMETAFILE wxMetaFile::GetHMETAFILE() const
 {
-#if USE_CG_METAFILE
+#if wxMAC_USE_CORE_GRAPHICS
     return (WXHMETAFILE) (CFDataRef) M_METAFILEDATA->GetData();
 #else
     return (WXHMETAFILE) M_METAFILEDATA->GetHandle();
@@ -268,7 +265,7 @@ void wxMetafile::SetHMETAFILE(WXHMETAFILE mf)
 {
     UnRef();
 
-#if USE_CG_METAFILE
+#if wxMAC_USE_CORE_GRAPHICS
     m_refData = new wxMetafileRefData((CFDataRef)mf);
 #else
     m_refData = new wxMetafileRefData((PicHandle)mf);
@@ -284,7 +281,7 @@ bool wxMetaFile::Play(wxDC *dc)
         return false;
 
     {
-#if USE_CG_METAFILE
+#if wxMAC_USE_CORE_GRAPHICS
         CGContextRef cg = (CGContextRef) dc->GetGraphicsContext()->GetNativeContext();
         CGPDFDocumentRef doc = M_METAFILEDATA->GetPDFDocument();
         CGPDFPageRef page = CGPDFDocumentGetPage( doc, 1 );
@@ -292,29 +289,7 @@ bool wxMetaFile::Play(wxDC *dc)
         CGContextDrawPDFPage( cg, page );
 //        CGContextTranslateCTM( cg, 0, bounds.size.width );
 //        CGContextScaleCTM( cg, 1, -1 );
-#elif wxMAC_USE_CORE_GRAPHICS
-        // FIXME: Please check the implementation, this is based solely on
-        // the original CoreGraphics impl and I'm not sure if this is right.
-        PicHandle pict = (PicHandle)GetHMETAFILE();
-        HLock((Handle)pict);
-        CGDataProviderRef dataProvider = CGDataProviderCreateWithData ( NULL, *pict,
-                                  GetHandleSize((Handle)pict), NULL );
-        QDPictRef cgPictRef = QDPictCreateWithProvider(dataProvider);
-        CGContextRef cg = (CGContextRef) dc->GetGraphicsContext()->GetNativeContext();
-        CGRect bounds = QDPictGetBounds( cgPictRef ) ;
-
-        CGContextSaveGState(cg);
-        CGContextTranslateCTM(cg, 0 , bounds.size.width );
-        CGContextScaleCTM(cg, 1, -1);
-        QDPictDrawToCGContext( cg , bounds , cgPictRef ) ;
-        CGContextRestoreGState( cg ) ;
-        
-        QDPictRelease(cgPictRef);
-        CGDataProviderRelease(dataProvider);
  #else
-        // FIXME: This code doesn't work for the case where wxMAC_USE_CORE_GRAPHICS
-        // is used. However, the old CG code used QDPictRef which is gone from the
-        // current code. 
         PicHandle pict = (PicHandle)GetHMETAFILE();
         wxMacPortSetter helper( dc );
         Rect picFrame;
@@ -355,11 +330,9 @@ wxMetaFileDC::wxMetaFileDC(
     wxMetafileRefData* metafiledata = new wxMetafileRefData(width, height);
     m_metaFile->UnRef();
     m_metaFile->SetRefData( metafiledata );
-#if USE_CG_METAFILE
+#if wxMAC_USE_CORE_GRAPHICS
     SetGraphicsContext( wxGraphicsContext::CreateFromNative(metafiledata->GetContext()));
     m_ok = (m_graphicContext != NULL) ;
-#elif wxMAC_USE_CORE_GRAPHICS
-    // we don't do anything here for now
 #else
     Rect r = { 0, 0, height, width };
     RectRgn( (RgnHandle)m_macBoundaryClipRgn, &r );
@@ -388,7 +361,7 @@ void wxMetaFileDC::DoGetSize(int *width, int *height) const
 
 wxMetaFile *wxMetaFileDC::Close()
 {
-#if USE_CG_METAFILE
+#if wxMAC_USE_CORE_GRAPHICS
     delete m_graphicContext;
     m_graphicContext = NULL;
     m_ok = false;
@@ -402,7 +375,7 @@ wxMetaFile *wxMetaFileDC::Close()
 #if wxUSE_DATAOBJ
 size_t wxMetafileDataObject::GetDataSize() const
 {
-#if USE_CG_METAFILE
+#if wxMAC_USE_CORE_GRAPHICS
     CFIndex length = 0;
     wxMetafileRefData* refData = M_METAFILEREFDATA(m_metafile);
     if ( refData )
@@ -416,7 +389,7 @@ size_t wxMetafileDataObject::GetDataSize() const
 bool wxMetafileDataObject::GetDataHere(void *buf) const
 {
     bool result = false;
-#if USE_CG_METAFILE
+#if wxMAC_USE_CORE_GRAPHICS
     wxMetafileRefData* refData = M_METAFILEREFDATA(m_metafile);
     if ( refData )
     {   
@@ -440,7 +413,7 @@ bool wxMetafileDataObject::GetDataHere(void *buf) const
 
 bool wxMetafileDataObject::SetData(size_t len, const void *buf)
 {
-#if USE_CG_METAFILE
+#if wxMAC_USE_CORE_GRAPHICS
     wxMetafileRefData* metafiledata = new wxMetafileRefData(wxCFRefFromGet(wxCFDataRef((UInt8*)buf, len).get()));
     m_metafile.UnRef();
     m_metafile.SetRefData( metafiledata );
