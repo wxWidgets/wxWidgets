@@ -1,7 +1,7 @@
 import unittest
 import wx
 
-'''
+"""
 This file contains classes and methods for unit testing the API of wx.Window.
 
 TODO: use this test class as the base of a unittest inheritance hierarchy,
@@ -51,10 +51,10 @@ UnregisterHotKey, Update, UpdateWindowUI, UseBgCol, Validate, WarpPointer
 GetAdjustedBestSize -> Use GetEffectiveMinSize instead.
 GetBestFittingSize(*args, **kwargs) -> Use GetEffectiveMinSize instead.
 SetBestFittingSize -> Use SetInitialSize
-'''
+"""
 
 class WindowTestFrame(wx.Frame):
-    '''A simple frame class to test wx.Window'''
+    """A simple frame class to test wx.Window"""
     def __init__(self, parent, id):
         wx.Frame.__init__(self, parent, id, 'TestFrame',
                 size=(340, 200))
@@ -65,7 +65,7 @@ class WindowTestFrame(wx.Frame):
                             for id, name in zip(self.children_ids, self.children_names) )
 
 class WindowTestChild(wx.Frame):
-    '''Test out methods relating to children of windows'''
+    """Test out methods relating to children of windows"""
     def __init__(self, parent, id, name):
         wx.Frame.__init__(self, parent=parent, id=id, name=name,
                 size=(20,20))
@@ -157,15 +157,15 @@ class WindowTest(unittest.TestCase):
     ## Test Methods ##
     ##################
     def testWindowChildren(self):
-        '''GetParent
-        Tests to make sure the window's children register as such'''
+        """GetParent
+        Tests to make sure the window's children register as such"""
         for child in self.children:
             self.assertEquals(self.testControl, child.GetParent())
     
     # interesting... enable/disable doesn't do it to the children, like 
     # the documentation says. even though they are indeed children.
     def testEnableDisable(self):
-        '''Enable, Disable, IsEnabled'''
+        """Enable, Disable, IsEnabled"""
         self.testControl.Enable(True)
         self.assert_(self.testControl.IsEnabled())
         for child in self.children:
@@ -188,7 +188,7 @@ class WindowTest(unittest.TestCase):
         self.assert_(not self.testControl.Disable())
     
     def testShowHide(self):
-        '''Show, Hide, IsShown'''
+        """Show, Hide, IsShown"""
         self.testControl.Show(True)
         self.assert_(self.testControl.IsShown())
         self.testControl.Show(False)
@@ -203,20 +203,20 @@ class WindowTest(unittest.TestCase):
         self.assert_(not self.testControl.Hide())
     
     def testBackgroundColor(self):
-        '''SetBackgroundColour, GetBackgroundColour'''
+        """SetBackgroundColour, GetBackgroundColour"""
         for test, actual in self.COLOUR_TESTS:
             self.testControl.SetBackgroundColour(test)
             self.assertEquals(actual, self.testControl.GetBackgroundColour())
     
     # see testBackgroundColor
     def testForegroundColor(self):
-        '''SetForegroundColour, GetForegroundColour'''
+        """SetForegroundColour, GetForegroundColour"""
         for test, actual in self.COLOUR_TESTS:
             self.testControl.SetForegroundColour(test)
             self.assertEquals(actual, self.testControl.GetForegroundColour())
     
     def testBackgroundStyle(self):
-        '''SetBackgroundStyle, GetBackgroundStyle'''
+        """SetBackgroundStyle, GetBackgroundStyle"""
         possible_styles = ( wx.BG_STYLE_COLOUR, wx.BG_STYLE_CUSTOM, wx.BG_STYLE_SYSTEM,
                             wx.BG_STYLE_COLOUR | wx.BG_STYLE_CUSTOM,
                             wx.BG_STYLE_COLOUR | wx.BG_STYLE_SYSTEM,
@@ -229,7 +229,7 @@ class WindowTest(unittest.TestCase):
     
     # not strictly a test, there's no way to verify!
     def testCenter(self):
-        '''Center, Centre'''
+        """Center, Centre"""
         self.testControl.Center() # default: BOTH
         self.testControl.Center(wx.HORIZONTAL)
         self.testControl.Center(wx.BOTH)
@@ -245,7 +245,7 @@ class WindowTest(unittest.TestCase):
         # center the window on the entire screen and not on its parent window."
     
     def testFreezeThaw(self):
-        '''Freeze, Thaw, IsFrozen'''
+        """Freeze, Thaw, IsFrozen"""
         self.testControl.Freeze()
         self.assert_(self.testControl.IsFrozen())
         self.testControl.Thaw()
@@ -258,7 +258,7 @@ class WindowTest(unittest.TestCase):
     #               and checking responses
     # TODO: implement C++ equality method in wxAcceleratorTable
     def testAcceleratorTable(self):
-        '''SetAcceleratorTable, GetAcceleratorTable'''
+        """SetAcceleratorTable, GetAcceleratorTable"""
         # from wx.AcceleratorTable documentation, ids replaced
         #aTable = wx.AcceleratorTable([(wx.ACCEL_ALT,  ord('X'), wx.ID_ANY),
         #                      (wx.ACCEL_CTRL, ord('H'), wx.ID_ANY),
@@ -270,7 +270,7 @@ class WindowTest(unittest.TestCase):
         pass
     
     def testParent(self):
-        '''GetParent, Reparent'''
+        """GetParent, Reparent"""
         parent = self.testControl.GetParent()
         self.assertEquals(parent, self.frame)
         self.assert_(not self.testControl.Reparent(parent))
@@ -281,31 +281,31 @@ class WindowTest(unittest.TestCase):
             self.assert_(False)
     
     def testGrandParent(self):
-        '''GetGrandParent, Reparent'''
+        """GetGrandParent, Reparent"""
         self.assertEquals(None, self.testControl.GetGrandParent())
         self.testControl.Reparent(self.yetAnotherFrame)
         self.assertEquals(self.anotherFrame, self.testControl.GetGrandParent())
         
     def testSize(self):
-        '''SetSize, GetSize'''
+        """SetSize, GetSize"""
         for size in self.SIZES:
             self.testControl.SetSize(size)
             self.assertEquals(size, self.testControl.GetSize())
     
     def testMinSize(self):
-        '''SetMinSize, GetMinSize'''
+        """SetMinSize, GetMinSize"""
         for min_size in self.SIZES:
             self.testControl.SetMinSize(min_size)
             self.assertEquals(min_size, self.testControl.GetMinSize())
             
     def testMaxSize(self):
-        '''SetMaxSize, GetMaxSize'''
+        """SetMaxSize, GetMaxSize"""
         for max_size in self.SIZES:
             self.testControl.SetMaxSize(max_size)
             self.assertEquals(max_size, self.testControl.GetMaxSize())
     
     def testSizeHints(self):
-        '''SetSizeHints, GetMinWidth, GetMinHeight, GetMaxWidth, GetMaxHeight'''
+        """SetSizeHints, GetMinWidth, GetMinHeight, GetMaxWidth, GetMaxHeight"""
         for minW, minH, maxW, maxH in self.SIZE_HINTS:
             self.testControl.SetSizeHints(minW, minH, maxW, maxH)
             self.assertEquals(minW, self.testControl.GetMinWidth())
@@ -315,24 +315,24 @@ class WindowTest(unittest.TestCase):
         self.assertRaises(wx.PyAssertionError, self.testControl.SetSizeHints, 100,100,10,10)
     
     def testRect(self):
-        '''SetRect, GetRect'''
+        """SetRect, GetRect"""
         for rect in self.RECTS:
             self.testControl.SetRect(rect)
             self.assertEquals(rect, self.testControl.GetRect())
     
     def testName(self):
-        '''SetName, GetName'''
+        """SetName, GetName"""
         self.testControl.SetName("The Name of the Panel")
         self.assertEquals("The Name of the Panel", self.testControl.GetName())
     
     def testFont(self):
-        '''SetFont, GetFont'''
+        """SetFont, GetFont"""
         for font in self.FONTS:
             self.testControl.SetFont(font)
             self.assertEquals(font, self.testControl.GetFont())
     
     def testFindWindow(self):
-        '''FindWindowById, FindWindowByName'''
+        """FindWindowById, FindWindowByName"""
         for child, id, name in zip(self.children, self.children_ids, self.children_names):
             self.assertEquals(child, self.testControl.FindWindowById(id))
             self.assertEquals(child, self.testControl.FindWindowByName(name))

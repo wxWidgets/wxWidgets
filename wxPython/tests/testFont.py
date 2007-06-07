@@ -1,7 +1,7 @@
 import unittest
 import wx
 
-'''
+"""
 This file contains classes and methods for unit testing the API of wx.Font
 
 NOTE: The documentation for font currently omits a large number of constants.
@@ -34,7 +34,7 @@ CONSTANTS:
         wx.FONTWEIGHT_LIGHT
         wx.FONTWEIGHT_MAX
         wx.FONTWEIGHT_NORMAL
-'''
+"""
 
 class FontTest(unittest.TestCase):
     def setUp(self):
