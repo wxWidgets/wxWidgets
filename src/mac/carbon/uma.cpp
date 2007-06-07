@@ -742,6 +742,72 @@ Rect * UMAGetControlBoundsInWindowCoords( ControlRef theControl, Rect *bounds )
     return bounds ;
 }
 
+size_t UMAPutBytesCFRefCallback( void *info, const void *bytes, size_t count )
+{
+    CFMutableDataRef data = (CFMutableDataRef) info;
+    if ( data )
+    {
+        CFDataAppendBytes( data, (const UInt8*) bytes, count );
+    }
+    return count;
+}
+
+void UMAReleaseCFDataProviderCallback( void *info, const void *data, size_t count )
+{
+    if ( info )
+        CFRelease( (CFDataRef) info );
+}
+
+void UMAReleaseCFDataConsumerCallback( void *info )
+{
+    if ( info )
+        CFRelease( (CFDataRef) info );
+}
+
+CGDataProviderRef UMACGDataProviderCreateWithCFData( CFDataRef data )
+{
+    if ( data == NULL )
+        return NULL;
+        
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+    if( &CGDataProviderCreateWithCFData != NULL )
+    {
+        return CGDataProviderCreateWithCFData( data );
+    }
+#endif
+
+    // make sure we keep it until done
+    CFRetain( data );
+    CGDataProviderRef provider = CGDataProviderCreateWithData( (void*) data , CFDataGetBytePtr( data ) ,
+        CFDataGetLength( data ), UMAReleaseCFDataProviderCallback );
+    // if provider couldn't be created, release the data again
+    if ( provider == NULL )
+        CFRelease( data );
+    return provider;
+}
+
+CGDataConsumerRef UMACGDataConsumerCreateWithCFData( CFMutableDataRef data )
+{
+    if ( data == NULL )
+        return NULL;
+        
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+    if( &CGDataConsumerCreateWithCFData != NULL )
+    {
+        return CGDataConsumerCreateWithCFData( data );
+    }
+#endif
+    // make sure we keep it until done
+    CFRetain( data );
+    CGDataConsumerCallbacks callbacks;
+    callbacks.putBytes = UMAPutBytesCFRefCallback;
+    callbacks.releaseConsumer = UMAReleaseCFDataConsumerCallback;
+    CGDataConsumerRef consumer = CGDataConsumerCreate( data , &callbacks );
+    // if consumer couldn't be created, release the data again
+    if ( consumer == NULL )
+        CFRelease( data );
+    return consumer;
+}
 #endif  // wxUSE_GUI
 
 #if wxUSE_BASE

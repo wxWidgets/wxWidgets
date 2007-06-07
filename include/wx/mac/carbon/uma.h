@@ -104,6 +104,11 @@ OSStatus UMADrawThemePlacard( const Rect *inRect , ThemeDrawState inState ) ;
 
 #define GetWindowUpdateRgn( inWindow , updateRgn ) GetWindowRegion( inWindow , kWindowUpdateRgn, updateRgn )
 
+// Quartz 
+
+CGDataProviderRef UMACGDataProviderCreateWithCFData( CFDataRef data );
+CGDataConsumerRef UMACGDataConsumerCreateWithCFData( CFDataRef data );
+
 #endif // wxUSE_GUI
 
 #endif
