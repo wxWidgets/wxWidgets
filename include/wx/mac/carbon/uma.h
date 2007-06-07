@@ -107,7 +107,7 @@ OSStatus UMADrawThemePlacard( const Rect *inRect , ThemeDrawState inState ) ;
 // Quartz 
 
 CGDataProviderRef UMACGDataProviderCreateWithCFData( CFDataRef data );
-CGDataConsumerRef UMACGDataConsumerCreateWithCFData( CFDataRef data );
+CGDataConsumerRef UMACGDataConsumerCreateWithCFData( CFMutableDataRef data );
 
 #endif // wxUSE_GUI
 
