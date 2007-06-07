@@ -18,21 +18,21 @@ CacheBestSize, CanSetTransparent, CaptureMouse, CenterOnParent, CentreOnParent,
 ClearBackground, ClientToScreen, ClientToScreenXY, Close, ConvertDialogPointToPixels, 
 ConvertDialogSizeToPixels, ConvertPixelPointToDialog, ConvertPixelSizeToDialog, 
 Create, Destroy, DestroyChildren, DissociateHandle, DLG_PNT, DLG_SZE, DragAcceptFiles, 
-FindFocus, FindWindowById, FindWindowByName, Fit, FitInside, GetAutoLayout, GetBestSize, 
+FindFocus, Fit, FitInside, GetAutoLayout, GetBestSize, 
 GetBestSizeTuple, GetBestVirtualSize, GetBorder, GetCapture, GetCaret, GetCharHeight, 
 GetCharWidth, GetChildren, GetClassDefaultAttributes, GetClientAreaOrigin, GetClientRect, 
 GetClientSize, GetClientSizeTuple, GetConstraints, GetContainingSizer, GetCursor, 
 GetDefaultAttributes, GetDropTarget, GetEffectiveMinSize, GetEventHandler, GetExtraStyle, 
-GetFullTextExtent, GetGrandParent, GetHandle, GetHelpText, 
+GetFullTextExtent, GetHandle, GetHelpText, 
 GetHelpTextAtPoint, GetId, GetLabel, GetLayoutDirection, GetPosition, GetPositionTuple, 
 GetScreenPosition, GetScreenPositionTuple, GetScreenRect, GetScrollPos, GetScrollRange, 
 GetScrollThumb, GetSizer, GetSizeTuple, GetTextExtent, GetThemeEnabled, GetToolTip, 
 GetTopLevelParent, GetUpdateClientRect, GetUpdateRegion, GetValidator, GetVirtualSize, 
 GetVirtualSizeTuple, GetWindowBorderSize, GetWindowStyle, GetWindowStyleFlag, GetWindowVariant, 
-HasCapture, HasFlag, HasMultiplePages, HasScrollbar, HasTransparentBackground, Hide, HitTest, 
+HasCapture, HasFlag, HasMultiplePages, HasScrollbar, HasTransparentBackground, HitTest, 
 HitTestXY, InheritAttributes, InheritsBackgroundColour, InitDialog, InvalidateBestSize, 
 IsBeingDeleted, IsDoubleBuffered, IsExposed, IsExposedPoint, IsExposedRect, IsRetained, 
-IsShown, IsShownOnScreen, IsTopLevel, Layout, LineDown, LineUp, Lower, MakeModal, Move, 
+IsShownOnScreen, IsTopLevel, Layout, LineDown, LineUp, Lower, MakeModal, Move, 
 MoveAfterInTabOrder, MoveBeforeInTabOrder, MoveXY, Navigate, NewControlId, NextControlId, 
 PageDown, PageUp, PopEventHandler, PopupMenu, PopupMenuXY, PostCreate, PrepareDC, PrevControlId, 
 PushEventHandler, Raise, Refresh, RefreshRect, RegisterHotKey, ReleaseMouse, RemoveChild, 
@@ -45,7 +45,7 @@ SetLayoutDirection, SetOwnBackgroundColour, SetOwnFont, SetOwnForegroundColour, 
 SetScrollbar, SetScrollPos, SetSizeHintsSz, SetSizer, SetSizerAndFit, SetSizeWH, SetThemeEnabled, 
 SetToolTip, SetToolTipString, SetTransparent, SetValidator, SetVirtualSize, SetVirtualSizeHints, 
 SetVirtualSizeHintsSz, SetVirtualSizeWH, SetWindowStyle, SetWindowStyleFlag, SetWindowVariant, 
-ShouldInheritColours, Show, ToggleWindowStyle, TransferDataFromWindow, TransferDataToWindow, 
+ShouldInheritColours, ToggleWindowStyle, TransferDataFromWindow, TransferDataToWindow, 
 UnregisterHotKey, Update, UpdateWindowUI, UseBgCol, Validate, WarpPointer
 
 GetAdjustedBestSize -> Use GetEffectiveMinSize instead.
@@ -59,19 +59,26 @@ class WindowTestFrame(wx.Frame):
         wx.Frame.__init__(self, parent, id, 'TestFrame',
                 size=(340, 200))
         self.testControl = wx.Window(self, wx.ID_ANY)
+        self.children_ids = (42, 43, 44)
+        self.children_names = ('Child One', 'Child Two', 'Child Three' )
+        self.children = ( WindowTestChild(self.testControl, id, name=name)
+                            for id, name in zip(self.children_ids, self.children_names) )
+
+class WindowTestChild(wx.Frame):
+    '''Test out methods relating to children of windows'''
+    def __init__(self, parent, id, name):
+        wx.Frame.__init__(self, parent=parent, id=id, name=name,
+                size=(20,20))
 
 
 class WindowTest(unittest.TestCase):
-    #####################
-    ## Fixture Methods ##
-    #####################
-    def setUp(self):
+    def __init__(self, arg):
+        # superclass setup
+        super(WindowTest,self).__init__(arg)
+        # WindowTest setup
         self.app = wx.PySimpleApp()
-        self.frame = WindowTestFrame(parent=None, id=wx.ID_ANY)
         self.anotherFrame = wx.Frame(parent=None, id=wx.ID_ANY)
-        # we just do this to shorten typing :-)
-        self.testControl = self.frame.testControl
-        # set up common code
+        self.yetAnotherFrame = wx.Frame(parent=self.anotherFrame, id=wx.ID_ANY)
         self.RED = wx.Color(255,0,0)
         self.GREEN = wx.Color(0,255,0)
         self.BLUE = wx.Color(0,0,255)
@@ -129,8 +136,19 @@ class WindowTest(unittest.TestCase):
                         wx.Font(72, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_ITALIC, wx.FONTWEIGHT_NORMAL),
                         wx.Font(96, wx.FONTFAMILY_MAX, wx.FONTSTYLE_SLANT, wx.FONTWEIGHT_BOLD),
                         wx.Font(128, wx.FONTFAMILY_SCRIPT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_LIGHT),
-                        wx.Font(256, wx.FONTFAMILY_MAX, wx.FONTSTYLE_ITALIC, wx.FONTWEIGHT_BOLD),
+                        wx.Font(256, wx.FONTFAMILY_MAX, wx.FONTSTYLE_ITALIC, wx.FONTWEIGHT_BOLD)
                     )
+    
+    #####################
+    ## Fixture Methods ##
+    #####################
+    def setUp(self):
+        self.frame = WindowTestFrame(parent=None, id=wx.ID_ANY)
+        # we just do this to shorten typing :-)
+        self.testControl = self.frame.testControl
+        self.children = self.frame.children
+        self.children_ids = self.frame.children_ids
+        self.children_names = self.frame.children_names
 
     def tearDown(self):
         self.frame.Destroy()
@@ -138,31 +156,64 @@ class WindowTest(unittest.TestCase):
     ##################
     ## Test Methods ##
     ##################
+    def testWindowChildren(self):
+        '''GetParent
+        Tests to make sure the window's children register as such'''
+        for child in self.children:
+            self.assertEquals(self.testControl, child.GetParent())
+    
+    # interesting... enable/disable doesn't do it to the children, like 
+    # the documentation says. even though they are indeed children.
     def testEnableDisable(self):
         '''Enable, Disable, IsEnabled'''
         self.testControl.Enable(True)
         self.assert_(self.testControl.IsEnabled())
+        for child in self.children:
+            self.assert_(child.IsEnabled())
         self.testControl.Enable(False)
         self.assert_(not self.testControl.IsEnabled())
+        for child in self.children:
+            self.assert_(not child.IsEnabled())
         self.testControl.Enable()
         self.assert_(self.testControl.IsEnabled())
+        for child in self.children:
+            self.assert_(child.IsEnabled())
         self.testControl.Disable()
         self.assert_(not self.testControl.IsEnabled())
+        for child in self.children:
+            self.assert_(not child.IsEnabled())
+        self.testControl.Enable()
+        self.assert_(not self.testControl.Enable())
+        self.assert_(self.testControl.Disable())
+        self.assert_(not self.testControl.Disable())
+    
+    def testShowHide(self):
+        '''Show, Hide, IsShown'''
+        self.testControl.Show(True)
+        self.assert_(self.testControl.IsShown())
+        self.testControl.Show(False)
+        self.assert_(not self.testControl.IsShown())
+        self.testControl.Show()
+        self.assert_(self.testControl.IsShown())
+        self.testControl.Hide()
+        self.assert_(not self.testControl.IsShown())
+        self.testControl.Show()
+        self.assert_(not self.testControl.Show())
+        self.assert_(self.testControl.Hide())
+        self.assert_(not self.testControl.Hide())
     
     def testBackgroundColor(self):
         '''SetBackgroundColour, GetBackgroundColour'''
         for test, actual in self.COLOUR_TESTS:
             self.testControl.SetBackgroundColour(test)
-            gotten = self.testControl.GetBackgroundColour()
-            self.assertEquals(gotten, actual)
+            self.assertEquals(actual, self.testControl.GetBackgroundColour())
     
     # see testBackgroundColor
     def testForegroundColor(self):
         '''SetForegroundColour, GetForegroundColour'''
         for test, actual in self.COLOUR_TESTS:
             self.testControl.SetForegroundColour(test)
-            gotten = self.testControl.GetForegroundColour()
-            self.assertEquals(gotten, actual)
+            self.assertEquals(actual, self.testControl.GetForegroundColour())
     
     def testBackgroundStyle(self):
         '''SetBackgroundStyle, GetBackgroundStyle'''
@@ -229,6 +280,12 @@ class WindowTest(unittest.TestCase):
         else:
             self.assert_(False)
     
+    def testGrandParent(self):
+        '''GetGrandParent, Reparent'''
+        self.assertEquals(None, self.testControl.GetGrandParent())
+        self.testControl.Reparent(self.yetAnotherFrame)
+        self.assertEquals(self.anotherFrame, self.testControl.GetGrandParent())
+        
     def testSize(self):
         '''SetSize, GetSize'''
         for size in self.SIZES:
@@ -273,6 +330,12 @@ class WindowTest(unittest.TestCase):
         for font in self.FONTS:
             self.testControl.SetFont(font)
             self.assertEquals(font, self.testControl.GetFont())
+    
+    def testFindWindow(self):
+        '''FindWindowById, FindWindowByName'''
+        for child, id, name in zip(self.children, self.children_ids, self.children_names):
+            self.assertEquals(child, self.testControl.FindWindowById(id))
+            self.assertEquals(child, self.testControl.FindWindowByName(name))
     
 
 def suite():

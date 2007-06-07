@@ -11,14 +11,24 @@ class ButtonTestFrame(wx.Frame):
     def __init__(self, parent, id):
         wx.Frame.__init__(self, parent, id, 'TestFrame',
                 size=(340, 200))
-        self.testControl = wx.Button(self, -1)
+        self.testControl = wx.Button(parent=self, id=wx.ID_ANY)
 
 class ButtonTest(testWindow.WindowTest):
+    def __init__(self, arg):
+        # superclass setup
+        super(ButtonTest, self).__init__(arg)
+        # ButtonTest setup
+        
     #####################
     ## Fixture Methods ##
     #####################
-    
-    # modified setUp and tearDown go here
+    def setUp(self):
+        self.frame = ButtonTestFrame(parent=None, id=wx.ID_ANY)
+        # we just do this to shorten typing :-)
+        self.testControl = self.frame.testControl
+        self.children = []
+        self.children_ids = []
+        self.children_names = []
 
     ##################
     ## Test Methods ##
