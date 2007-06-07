@@ -1,6 +1,8 @@
 import unittest
 import wx
 
+import testWindow
+
 '''
 This file contains classes and methods for unit testing the API of wx.Button
 '''
@@ -11,24 +13,19 @@ class ButtonTestFrame(wx.Frame):
                 size=(340, 200))
         self.testControl = wx.Button(self, -1)
 
-class ButtonTest(unittest.TestCase):
+class ButtonTest(testWindow.WindowTest):
     #####################
     ## Fixture Methods ##
     #####################
-    def setUp(self):
-        self.app = wx.PySimpleApp()
-        self.frame = ButtonTestFrame(parent=None, id=-1)
-        # we just do this to shorten typing :-)
-        self.testControl = self.frame.testControl
-
-    def tearDown(self):
-        self.frame.Destroy()
+    
+    # modified setUp and tearDown go here
 
     ##################
     ## Test Methods ##
     ##################
     
-    # tests go here
+    # additional tests go here
+    pass
 
 def suite():
     suite = unittest.makeSuite(ButtonTest)

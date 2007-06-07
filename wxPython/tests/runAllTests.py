@@ -15,9 +15,13 @@ figleaf.start(ignore_python_lib=False)
 
 import unittest
 import testWindow
-# all other testing modules go here
+import testButton
+import testFont
 
-alltests = unittest.TestSuite(( testWindow.suite() ))
+alltests = unittest.TestSuite(( testWindow.suite(),
+                                testButton.suite(),
+                                testFont.suite()
+                                ))
 
 results = unittest.TestResult()
 alltests.run(results)
