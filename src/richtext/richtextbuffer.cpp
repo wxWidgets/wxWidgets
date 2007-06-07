@@ -1429,8 +1429,6 @@ wxString wxRichTextParagraphLayoutBox::GetTextForRange(const wxRichTextRange& ra
         wxRichTextObject* child = node->GetData();
         if (!child->GetRange().IsOutside(range))
         {
-//            if (lineCount > 0)
-//                text += wxT("\n");
             wxRichTextRange childRange = range;
             childRange.LimitTo(child->GetRange());
 
@@ -1438,7 +1436,7 @@ wxString wxRichTextParagraphLayoutBox::GetTextForRange(const wxRichTextRange& ra
 
             text += childText;
 
-            if (childRange.GetEnd() == child->GetRange().GetEnd())
+            if ((childRange.GetEnd() == child->GetRange().GetEnd()) && node->GetNext())
                 text += wxT("\n");
 
             lineCount ++;

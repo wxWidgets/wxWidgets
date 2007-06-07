@@ -409,7 +409,7 @@ void wxRichTextCtrl::OnLeftUp(wxMouseEvent& event)
                         if (!urlTarget.IsEmpty())
                         {
                             wxMouseEvent mouseEvent(event);
-                            
+
                             long startPos = 0, endPos = 0;
                             wxRichTextObject* obj = GetBuffer().GetLeafObjectAtPosition(position);
                             if (obj)
@@ -417,12 +417,12 @@ void wxRichTextCtrl::OnLeftUp(wxMouseEvent& event)
                                 startPos = obj->GetRange().GetStart();
                                 endPos = obj->GetRange().GetEnd();
                             }
-                            
+
                             wxTextUrlEvent urlEvent(GetId(), mouseEvent, startPos, endPos);
                             InitCommandEvent(urlEvent);
-                            
+
                             urlEvent.SetString(urlTarget);
-                            
+
                             GetEventHandler()->ProcessEvent(urlEvent);
                         }
                     }
@@ -513,7 +513,7 @@ void wxRichTextCtrl::OnRightClick(wxMouseEvent& WXUNUSED(event))
         GetId());
     cmdEvent.SetEventObject(this);
     cmdEvent.SetPosition(m_caretPosition+1);
-    
+
     GetEventHandler()->ProcessEvent(cmdEvent);
 }
 
@@ -525,7 +525,7 @@ void wxRichTextCtrl::OnLeftDClick(wxMouseEvent& WXUNUSED(event))
         GetId());
     cmdEvent.SetEventObject(this);
     cmdEvent.SetPosition(m_caretPosition+1);
-    
+
     if (!GetEventHandler()->ProcessEvent(cmdEvent))
     {
         SelectWord(GetCaretPosition()+1);
@@ -540,7 +540,7 @@ void wxRichTextCtrl::OnMiddleClick(wxMouseEvent& event)
         GetId());
     cmdEvent.SetEventObject(this);
     cmdEvent.SetPosition(m_caretPosition+1);
-    
+
     if (!GetEventHandler()->ProcessEvent(cmdEvent))
         event.Skip();
 }
@@ -2064,30 +2064,21 @@ void wxRichTextCtrl::DoSetValue(const wxString& value, int flags)
 {
     Clear();
 
-    // if the text is long enough, it's faster to just set it instead of first
-    // comparing it with the old one (chances are that it will be different
-    // anyhow, this comparison is there to avoid flicker for small single-line
-    // edit controls mostly)
-    if ( (value.length() > 0x400) || (value != GetValue()) )
+    if (!value.IsEmpty())
     {
+        // Remove empty paragraph
+        GetBuffer().Clear();
         DoWriteText(value);
 
         // for compatibility, don't move the cursor when doing SetValue()
         SetInsertionPoint(0);
     }
-    else // same text
+    else
     {
-        if ( flags & SetValue_SendEvent )
-        {
-            // still send an event for consistency
+        // still send an event for consistency
+        if (flags & SetValue_SendEvent)
             SendTextUpdatedEvent();
-        }
     }
-
-    // we should reset the modified flag even if the value didn't really change
-
-    // mark the control as being not dirty - we changed its text, not the
-    // user
     DiscardEdits();
 }
 
