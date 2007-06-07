@@ -4,212 +4,53 @@ import wx
 '''
 This file contains classes and methods for unit testing the API of wx.Window.
 
+TODO: use this test class as the base of a unittest inheritance hierarchy,
+    so that each class derived from wx.Window will have all the WindowTests
+    run against it.
+
 To find out where a particular method is tested, search for the name of that
 method.  Each test contains, as a docstring, the names of the methods tested
 within them.  Additionally, the following methods have yet to have tests
 written for them:
+    
+AcceptsFocus, AcceptsFocusFromKeyboard, AddChild, AdjustForLayoutDirection, AssociateHandle, 
+CacheBestSize, CanSetTransparent, CaptureMouse, CenterOnParent, CentreOnParent, 
+ClearBackground, ClientToScreen, ClientToScreenXY, Close, ConvertDialogPointToPixels, 
+ConvertDialogSizeToPixels, ConvertPixelPointToDialog, ConvertPixelSizeToDialog, 
+Create, Destroy, DestroyChildren, DissociateHandle, DLG_PNT, DLG_SZE, DragAcceptFiles, 
+FindFocus, FindWindowById, FindWindowByName, Fit, FitInside, GetAutoLayout, GetBestSize, 
+GetBestSizeTuple, GetBestVirtualSize, GetBorder, GetCapture, GetCaret, GetCharHeight, 
+GetCharWidth, GetChildren, GetClassDefaultAttributes, GetClientAreaOrigin, GetClientRect, 
+GetClientSize, GetClientSizeTuple, GetConstraints, GetContainingSizer, GetCursor, 
+GetDefaultAttributes, GetDropTarget, GetEffectiveMinSize, GetEventHandler, GetExtraStyle, 
+GetFullTextExtent, GetGrandParent, GetHandle, GetHelpText, 
+GetHelpTextAtPoint, GetId, GetLabel, GetLayoutDirection, GetPosition, GetPositionTuple, 
+GetScreenPosition, GetScreenPositionTuple, GetScreenRect, GetScrollPos, GetScrollRange, 
+GetScrollThumb, GetSizer, GetSizeTuple, GetTextExtent, GetThemeEnabled, GetToolTip, 
+GetTopLevelParent, GetUpdateClientRect, GetUpdateRegion, GetValidator, GetVirtualSize, 
+GetVirtualSizeTuple, GetWindowBorderSize, GetWindowStyle, GetWindowStyleFlag, GetWindowVariant, 
+HasCapture, HasFlag, HasMultiplePages, HasScrollbar, HasTransparentBackground, Hide, HitTest, 
+HitTestXY, InheritAttributes, InheritsBackgroundColour, InitDialog, InvalidateBestSize, 
+IsBeingDeleted, IsDoubleBuffered, IsExposed, IsExposedPoint, IsExposedRect, IsRetained, 
+IsShown, IsShownOnScreen, IsTopLevel, Layout, LineDown, LineUp, Lower, MakeModal, Move, 
+MoveAfterInTabOrder, MoveBeforeInTabOrder, MoveXY, Navigate, NewControlId, NextControlId, 
+PageDown, PageUp, PopEventHandler, PopupMenu, PopupMenuXY, PostCreate, PrepareDC, PrevControlId, 
+PushEventHandler, Raise, Refresh, RefreshRect, RegisterHotKey, ReleaseMouse, RemoveChild, 
+RemoveEventHandler, ScreenToClient, ScreenToClientXY, ScrollLines, ScrollPages, 
+ScrollWindow, SendSizeEvent, SetAutoLayout, SetCaret, SetClientRect, SetClientSize, 
+SetClientSizeWH, SetConstraints, SetContainingSizer, SetCursor, SetDimensions, SetDoubleBuffered, 
+SetDropTarget, SetEventHandler, SetExtraStyle, SetFocus, SetFocusFromKbd, 
+SetHelpText, SetHelpTextForId, SetId, SetInitialSize, SetLabel, 
+SetLayoutDirection, SetOwnBackgroundColour, SetOwnFont, SetOwnForegroundColour, SetPosition, 
+SetScrollbar, SetScrollPos, SetSizeHintsSz, SetSizer, SetSizerAndFit, SetSizeWH, SetThemeEnabled, 
+SetToolTip, SetToolTipString, SetTransparent, SetValidator, SetVirtualSize, SetVirtualSizeHints, 
+SetVirtualSizeHintsSz, SetVirtualSizeWH, SetWindowStyle, SetWindowStyleFlag, SetWindowVariant, 
+ShouldInheritColours, Show, ToggleWindowStyle, TransferDataFromWindow, TransferDataToWindow, 
+UnregisterHotKey, Update, UpdateWindowUI, UseBgCol, Validate, WarpPointer
 
-AcceptsFocus
-AcceptsFocusFromKeyboard
-AddChild
-AdjustForLayoutDirection
-AssociateHandle
-CacheBestSize
-CanSetTransparent
-CaptureMouse
-CenterOnParent
-CentreOnParent
-ClearBackground
-ClientToScreen
-ClientToScreenXY
-Close
-ConvertDialogPointToPixels
-ConvertDialogSizeToPixels
-ConvertPixelPointToDialog
-ConvertPixelSizeToDialog
-Create
-Destroy
-DestroyChildren
-DissociateHandle
-DLG_PNT
-DLG_SZE
-DragAcceptFiles
-FindFocus
-FindWindowById
-FindWindowByName
-Fit
-FitInside
 GetAdjustedBestSize -> Use GetEffectiveMinSize instead.
-GetAutoLayout
 GetBestFittingSize(*args, **kwargs) -> Use GetEffectiveMinSize instead.
-GetBestSize
-GetBestSizeTuple
-GetBestVirtualSize
-GetBorder
-GetCapture
-GetCaret
-GetCharHeight
-GetCharWidth
-GetChildren
-GetClassDefaultAttributes
-GetClientAreaOrigin
-GetClientRect
-GetClientSize
-GetClientSizeTuple
-GetConstraints
-GetContainingSizer
-GetCursor
-GetDefaultAttributes
-GetDropTarget
-GetEffectiveMinSize
-GetEventHandler
-GetExtraStyle
-GetFont
-GetForegroundColour
-GetFullTextExtent
-GetGrandParent
-GetHandle
-GetHelpText
-GetHelpTextAtPoint
-GetId
-GetLabel
-GetLayoutDirection
-GetPosition
-GetPositionTuple
-GetScreenPosition
-GetScreenPositionTuple
-GetScreenRect
-GetScrollPos
-GetScrollRange
-GetScrollThumb
-GetSizer
-GetSizeTuple
-GetTextExtent
-GetThemeEnabled
-GetToolTip
-GetTopLevelParent
-GetUpdateClientRect
-GetUpdateRegion
-GetValidator
-GetVirtualSize
-GetVirtualSizeTuple
-GetWindowBorderSize
-GetWindowStyle
-GetWindowStyleFlag
-GetWindowVariant
-HasCapture
-HasFlag
-HasMultiplePages
-HasScrollbar
-HasTransparentBackground
-Hide
-HitTest
-HitTestXY
-InheritAttributes
-InheritsBackgroundColour
-InitDialog
-InvalidateBestSize
-IsBeingDeleted
-IsDoubleBuffered
-IsExposed
-IsExposedPoint
-IsExposedRect
-IsRetained
-IsShown
-IsShownOnScreen
-IsTopLevel
-Layout
-LineDown
-LineUp
-Lower
-MakeModal
-Move
-MoveAfterInTabOrder
-MoveBeforeInTabOrder
-MoveXY
-Navigate
-NewControlId
-NextControlId
-PageDown
-PageUp
-PopEventHandler
-PopupMenu
-PopupMenuXY
-PostCreate
-PrepareDC
-PrevControlId
-PushEventHandler
-Raise
-Refresh
-RefreshRect
-RegisterHotKey
-ReleaseMouse
-RemoveChild
-RemoveEventHandler
-Reparent
-ScreenToClient
-ScreenToClientXY
-ScrollLines
-ScrollPages
-ScrollWindow
-SendSizeEvent
-SetAutoLayout
 SetBestFittingSize -> Use SetInitialSize
-SetCaret
-SetClientRect
-SetClientSize
-SetClientSizeWH
-SetConstraints
-SetContainingSizer
-SetCursor
-SetDimensions
-SetDoubleBuffered
-SetDropTarget
-SetEventHandler
-SetExtraStyle
-SetFocus
-SetFocusFromKbd
-SetFont
-SetForegroundColour
-SetHelpText
-SetHelpTextForId
-SetId
-SetInitialSize
-SetLabel
-SetLayoutDirection
-SetOwnBackgroundColour
-SetOwnFont
-SetOwnForegroundColour
-SetPosition
-SetScrollbar
-SetScrollPos
-SetSizeHintsSz
-SetSizer
-SetSizerAndFit
-SetSizeWH
-SetThemeEnabled
-SetToolTip
-SetToolTipString
-SetTransparent
-SetValidator
-SetVirtualSize
-SetVirtualSizeHints
-SetVirtualSizeHintsSz
-SetVirtualSizeWH
-SetWindowStyle
-SetWindowStyleFlag
-SetWindowVariant
-ShouldInheritColours
-Show
-ToggleWindowStyle
-TransferDataFromWindow
-TransferDataToWindow
-UnregisterHotKey
-Update
-UpdateWindowUI
-UseBgCol
-Validate
-WarpPointer
 '''
 
 class WindowTestFrame(wx.Frame):
@@ -227,6 +68,7 @@ class WindowTest(unittest.TestCase):
     def setUp(self):
         self.app = wx.PySimpleApp()
         self.frame = WindowTestFrame(parent=None, id=wx.ID_ANY)
+        self.anotherFrame = wx.Frame(parent=None, id=wx.ID_ANY)
         # we just do this to shorten typing :-)
         self.testControl = self.frame.testControl
         # set up common code
@@ -272,6 +114,23 @@ class WindowTest(unittest.TestCase):
                             (0,0,0,0), (10,10,100,100),
                             (1000,1000,9999,9999), (1, 10, 100, 1000)
                         )
+        # TODO: delegate to testFont module
+        self.FONTS = (
+                        wx.Font(1, wx.FONTFAMILY_DECORATIVE, wx.FONTSTYLE_SLANT, wx.FONTWEIGHT_NORMAL),
+                        wx.Font(8, wx.FONTFAMILY_ROMAN, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD),
+                        wx.Font(10, wx.FONTFAMILY_TELETYPE, wx.FONTSTYLE_SLANT, wx.FONTWEIGHT_NORMAL),
+                        wx.Font(12, wx.FONTFAMILY_MODERN, wx.FONTSTYLE_ITALIC, wx.FONTWEIGHT_LIGHT),
+                        wx.Font(16, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD),
+                        wx.Font(18, wx.FONTFAMILY_SCRIPT, wx.FONTSTYLE_SLANT, wx.FONTWEIGHT_LIGHT),
+                        wx.Font(24, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_ITALIC, wx.FONTWEIGHT_NORMAL),
+                        wx.Font(32, wx.FONTFAMILY_DECORATIVE, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD),
+                        wx.Font(36, wx.FONTFAMILY_UNKNOWN, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_LIGHT),
+                        wx.Font(48, wx.FONTFAMILY_MODERN, wx.FONTSTYLE_SLANT, wx.FONTWEIGHT_BOLD),
+                        wx.Font(72, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_ITALIC, wx.FONTWEIGHT_NORMAL),
+                        wx.Font(96, wx.FONTFAMILY_MAX, wx.FONTSTYLE_SLANT, wx.FONTWEIGHT_BOLD),
+                        wx.Font(128, wx.FONTFAMILY_SCRIPT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_LIGHT),
+                        wx.Font(256, wx.FONTFAMILY_MAX, wx.FONTSTYLE_ITALIC, wx.FONTWEIGHT_BOLD),
+                    )
 
     def tearDown(self):
         self.frame.Destroy()
@@ -360,9 +219,15 @@ class WindowTest(unittest.TestCase):
         pass
     
     def testParent(self):
-        '''GetParent'''
+        '''GetParent, Reparent'''
         parent = self.testControl.GetParent()
         self.assertEquals(parent, self.frame)
+        self.assert_(not self.testControl.Reparent(parent))
+        if self.testControl.Reparent(self.anotherFrame):
+            newParent = self.testControl.GetParent()
+            self.assertEquals(newParent, self.anotherFrame)
+        else:
+            self.assert_(False)
     
     def testSize(self):
         '''SetSize, GetSize'''
@@ -402,6 +267,12 @@ class WindowTest(unittest.TestCase):
         '''SetName, GetName'''
         self.testControl.SetName("The Name of the Panel")
         self.assertEquals("The Name of the Panel", self.testControl.GetName())
+    
+    def testFont(self):
+        '''SetFont, GetFont'''
+        for font in self.FONTS:
+            self.testControl.SetFont(font)
+            self.assertEquals(font, self.testControl.GetFont())
     
 
 def suite():
