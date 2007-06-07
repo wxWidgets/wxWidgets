@@ -2035,30 +2035,21 @@ void wxRichTextCtrl::DoSetValue(const wxString& value, int flags)
 {
     Clear();
 
-    // if the text is long enough, it's faster to just set it instead of first
-    // comparing it with the old one (chances are that it will be different
-    // anyhow, this comparison is there to avoid flicker for small single-line
-    // edit controls mostly)
-    if ( (value.length() > 0x400) || (value != GetValue()) )
+    if (!value.IsEmpty())
     {
+        // Remove empty paragraph
+        GetBuffer().Clear();
         DoWriteText(value);
 
         // for compatibility, don't move the cursor when doing SetValue()
         SetInsertionPoint(0);
     }
-    else // same text
+    else
     {
-        if ( flags & SetValue_SendEvent )
-        {
-            // still send an event for consistency
+        // still send an event for consistency
+        if (flags & SetValue_SendEvent)
             SendTextUpdatedEvent();
-        }
     }
-
-    // we should reset the modified flag even if the value didn't really change
-
-    // mark the control as being not dirty - we changed its text, not the
-    // user
     DiscardEdits();
 }
 
