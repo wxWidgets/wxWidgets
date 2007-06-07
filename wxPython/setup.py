@@ -574,6 +574,11 @@ if BUILD_GLCANVAS:
         gl_libs = libs + ['opengl32', 'glu32'] + makeLibName('gl')
         gl_lflags = lflags
 
+    if sys.platform[:6] == "darwin" and WXPORT == 'mac':
+        if not ARCH == "":
+            gl_lflags.append("-arch")
+            gl_lflags.append(ARCH)
+    
     ext = Extension('_glcanvas',
                     swig_sources,
 

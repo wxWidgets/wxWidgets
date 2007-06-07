@@ -200,6 +200,10 @@ WXDLLVER = '%d%d' % (VER_MAJOR, VER_MINOR)
 WXPY_SRC = '.'  # Assume we're in the source tree already, but allow the
                 # user to change it, particularly for extension building.
 
+ARCH = ''       # If this is set, add an -arch XXX flag to cflags
+                # Only tested (and presumably, needed) for OS X universal
+                # binary builds created using lipo.
+
 
 #----------------------------------------------------------------------
 
@@ -271,7 +275,7 @@ for flag in [ 'BUILD_ACTIVEX', 'BUILD_DLLWIDGET',
 # String options
 for option in ['WX_CONFIG', 'SYS_WX_CONFIG', 'WXDLLVER', 'BUILD_BASE',
                'WXPORT', 'SWIG', 'CONTRIBS_INC', 'WXPY_SRC', 'FLAVOUR',
-               'VER_FLAGS',
+               'VER_FLAGS', 'ARCH',
                ]:
     for x in range(len(sys.argv)):
         if sys.argv[x].find(option) == 0:
@@ -483,7 +487,10 @@ class wx_install_headers(distutils.command.install_headers.install_headers):
             return
 
         root = self.root
-        if root is None or WXPREFIX.startswith(root):
+        #print "WXPREFIX is %s, root is %s" % (WXPREFIX, root)
+        # hack for universal builds, which append i386/ppc
+        # to the root
+        if root is None or WXPREFIX.startswith(os.path.dirname(root)):
             root = ''
         for header, location in headers:
             install_dir = os.path.normpath(root +
@@ -600,9 +607,9 @@ def adjustLFLAGS(lflags, libdirs, libs):
 
     # remove any flags for universal binaries, we'll get those from
     # distutils instead
-    return [flag for flag in newLFLAGS
-            if flag not in ['-isysroot', '-arch', 'ppc', 'i386'] and
-            not flag.startswith('/Developer') ]
+    return newLFLAGS #[flag for flag in newLFLAGS
+           # if flag not in ['-isysroot', '-arch', 'ppc', 'i386'] and
+           # not flag.startswith('/Developer') ]
 
 
 
@@ -789,6 +796,14 @@ elif os.name == 'posix':
         GENDIR = 'mac'
         libs = ['stdc++']
         NO_SCRIPTS = 1
+        if not ARCH == "":
+            cflags.append("-arch")
+            cflags.append(ARCH)
+            lflags.append("-arch")
+            lflags.append(ARCH)
+            #if ARCH == "ppc":
+            #    cflags.append("-isysroot")
+            #    cflags.append("/Developer/SDKs/MacOSX10.3.9.sdk")
 
 
     else:
