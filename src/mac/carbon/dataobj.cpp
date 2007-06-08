@@ -819,7 +819,8 @@ bool wxBitmapDataObject::SetData( size_t nSize, const void *pBuf )
     {
         m_bitmap.Create( CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );
         CGRect r = CGRectMake( 0 , 0 , CGImageGetWidth(cgImageRef)  , CGImageGetHeight(cgImageRef) );
-        CGContextDrawImage( (CGContextRef) m_bitmap.GetHBITMAP() , r, cgImageRef ) ;
+        // since our context is upside down we dont use CGContextDrawImage
+        HIViewDrawCGImage( (CGContextRef) m_bitmap.GetHBITMAP() , &r, cgImageRef ) ;
         CGImageRelease(cgImageRef);
         cgImageRef = NULL;
     }
