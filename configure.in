@@ -3859,6 +3859,11 @@ if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_UNICODE_UTF8" = "auto" ; then
         wxUSE_UNICODE_UTF8=yes
     elif test "$TOOLKIT" = "GTK" -a "$WXGTK20" = "1" ; then
         wxUSE_UNICODE_UTF8=yes
+    elif test "$USE_OS2" = "1" ; then
+        dnl wide char support is quite incomplete in libc;
+        dnl UTF-8 might actually work when evaluating/setting
+        dnl code pages correctly, even for ports other than GTK20.
+        wxUSE_UNICODE_UTF8=yes
     else
         wxUSE_UNICODE_UTF8=no
     fi
