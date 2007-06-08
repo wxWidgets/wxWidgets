@@ -29,7 +29,6 @@ def get_acroversion():
             if "acrobat" in key.lower():
                 acrokeys.append(_winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, 'Software\\Adobe\\%s' % key))
         for acrokey in acrokeys:
-            print acrokey
             for index in range(_winreg.QueryInfoKey(acrokey)[0]):
                 key = _winreg.EnumKey(acrokey, index)
                 try:
