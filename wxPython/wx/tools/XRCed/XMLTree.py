@@ -46,6 +46,7 @@ class XMLTree(wx.TreeCtrl):
         # Insert/append mode flags
         self.forceSibling = self.forceInsert = False
 
+
     def OnRightDown(self, evt):
         menu = XMLTreeMenu(self)
         self.PopupMenu(menu, evt.GetPosition())
@@ -59,3 +60,6 @@ class XMLTree(wx.TreeCtrl):
         # If leaf item or collapsed container, then insert mode
         return not isContainer or \
             self.GetChildrenCount(item, False) and not self.IsExpanded(item)
+
+    def Clear(self):
+        print 'NYI:', self

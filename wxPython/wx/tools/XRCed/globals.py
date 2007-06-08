@@ -32,6 +32,8 @@ defaultEncoding = wx.GetDefaultPyEncoding()
 
 # Global variables
 
+debug = False
+
 class Globals:
     panel = None
     tree = None

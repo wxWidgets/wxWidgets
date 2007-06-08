@@ -24,7 +24,6 @@ class MyDocument(minidom.Document):
 class _Model:
     def __init__(self):
         self.dom = None
-        self.init()
 
     def init(self):
         self.path = ''

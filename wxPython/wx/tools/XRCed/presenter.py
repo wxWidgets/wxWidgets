@@ -12,7 +12,19 @@ import os
 # Presenter class linking model to view objects
 class _Presenter:
     def init(self):
+        Model.init()
         self.setModified(False)
+        view.frame.Clear()
+        view.tree.Clear()
+
+    def getPath(self):
+        return Model.path
+
+    def loadXML(self, path):
+        Model.loadXML(path)
+
+    def saveXML(self, path):
+        Model.saveXML(path)
 
     def setModified(self, state=True):
         self.modified = state

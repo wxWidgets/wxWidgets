@@ -19,6 +19,7 @@ parentChildGroups = {
     'menu': ['menu', 'menu_item','separator']
 }
 
+
 class Component(object):
     '''base component class'''
     def __init__(self, name, groups, attributes, defaults={}, **kargs):
@@ -87,10 +88,10 @@ class _ComponentManager:
     def __init__(self):
         self.components = {}
         self.ids = {}
+        self.firstId = self.lastId = wx.NewId()
         self.menus = {}
         self.panels = {}
-        # None reserved for top-level menu
-        self.menuNames = [None, 'control', 'button', 'box', 
+        self.menuNames = ['root', 'control', 'button', 'box', 
                           'container', 'sizer', 'custom']
         self.panelNames = ['Windows', 'Panels', 'Menus', 'Sizers', 
                            'Controls', 'Custom']
@@ -99,7 +100,7 @@ class _ComponentManager:
         '''register component object'''
         self.components[component.name] = component
         # unique wx ID for event handling
-        component.id = wx.NewId()
+        component.id = self.lastId = wx.NewId()
         self.ids[component.id] = component
 
     def forget(self, name):

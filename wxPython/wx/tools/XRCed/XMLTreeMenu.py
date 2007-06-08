@@ -18,8 +18,8 @@ class ID:
     SIBLING = wx.NewId()
     SUBCLASS = wx.NewId()
     REF = wx.NewId()
-    COMMENT = wx.NewId()    
-    FIRST_COMPONENT = wx.NewId()
+    COMMENT = wx.NewId()
+
 
 class XMLTreeMenu(wx.Menu):
     '''dynamic pulldown menu for XMLTree'''
@@ -58,7 +58,7 @@ class XMLTreeMenu(wx.Menu):
 
     def CreateTopLevelMenu(self):
         m = wx.Menu()
-        for index,component,label,help in Manager.menus[None]:
+        for index,component,label,help in Manager.menus['root']:
             m.Append(component.id, label, help)
         m.AppendSeparator()
         m.Append(ID.REF, 'reference...', 'Create object_ref node')
