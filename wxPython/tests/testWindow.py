@@ -1,12 +1,21 @@
 import unittest
 import wx
 
+import testColor
+
 """
 This file contains classes and methods for unit testing the API of wx.Window.
 
-TODO: use this test class as the base of a unittest inheritance hierarchy,
-    so that each class derived from wx.Window will have all the WindowTests
-    run against it.
+WindowTest is meant to be the base class of all test cases for classes derived
+from wx.Window.  For the tests to run properly, derived classes must make sure
+to call the constructor's superclass.  Additionally, they must create a few class
+properties from within the setUp method.  Generally these are just symbols pointing
+to their respective data within the testframe.
+These properties include:
+    testControl - an alias of frame.testControl
+    children - a sequence of frames whose parent is the testControl
+    children_ids - IDs corresponding to each child
+    children_names - names corresponding to each child
 
 To find out where a particular method is tested, search for the name of that
 method.  Each test contains, as a docstring, the names of the methods tested
@@ -61,14 +70,8 @@ class WindowTestFrame(wx.Frame):
         self.testControl = wx.Window(self, wx.ID_ANY)
         self.children_ids = (42, 43, 44)
         self.children_names = ('Child One', 'Child Two', 'Child Three' )
-        self.children = ( WindowTestChild(self.testControl, id, name=name)
+        self.children = ( wx.Frame(self.testControl, id=id, name=name)
                             for id, name in zip(self.children_ids, self.children_names) )
-
-class WindowTestChild(wx.Frame):
-    """Test out methods relating to children of windows"""
-    def __init__(self, parent, id, name):
-        wx.Frame.__init__(self, parent=parent, id=id, name=name,
-                size=(20,20))
 
 
 class WindowTest(unittest.TestCase):
@@ -79,24 +82,7 @@ class WindowTest(unittest.TestCase):
         self.app = wx.PySimpleApp()
         self.anotherFrame = wx.Frame(parent=None, id=wx.ID_ANY)
         self.yetAnotherFrame = wx.Frame(parent=self.anotherFrame, id=wx.ID_ANY)
-        self.RED = wx.Color(255,0,0)
-        self.GREEN = wx.Color(0,255,0)
-        self.BLUE = wx.Color(0,0,255)
-        # TODO: delegate to testColour module
-        self.COLOUR_TESTS = (
-                        (wx.Color(255,0,0), self.RED), 
-                        (wx.Color(0,255,0), self.GREEN),
-                        (wx.Color(0,0,255), self.BLUE),
-                        ('RED', self.RED),
-                        ('GREEN', self.GREEN),
-                        ('BLUE', self.BLUE),
-                        ('#FF0000', self.RED),
-                        ('#00FF00', self.GREEN),
-                        ('#0000FF', self.BLUE),
-                        ((255,0,0), self.RED),
-                        ((0,255,0), self.GREEN),
-                        ((0,0,255), self.BLUE)
-                    )
+        self.COLOUR_TESTS = testColor.getColourData()
         # TODO: delegate to testSize module
         self.SIZES = ( 
                         wx.Size(1,1), wx.Size(5,5),
@@ -104,8 +90,8 @@ class WindowTest(unittest.TestCase):
                         wx.Size(100,100), wx.Size(100,500),
                         wx.Size(200,100), wx.Size(500,500),
                         wx.Size(1000,1000), wx.Size(1,1000),
-                        wx.Size(1000,1), wx.Size(314, 217),
-                        wx.Size(31415, 27182), wx.Size(0,0)
+                        wx.Size(1000,1), wx.Size(31415, 27182),
+                        wx.Size(32767, 32767), wx.Size(0,0)
                     )
         # TODO: delegate to testRect module
         # TODO: find out if 32767 is some Windows limit, or a hard one.
