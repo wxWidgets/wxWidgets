@@ -8,7 +8,7 @@ from globals import *
 from XMLTree import *
 from component import Manager
 from presenter import Presenter
-import os,traceback
+import os,sys,shutil,tempfile,traceback
 
 class TaskBarIcon(wx.TaskBarIcon):
     def __init__(self, frame):
@@ -251,10 +251,8 @@ class Frame(wx.Frame):
     def OnSaveOrSaveAs(self, evt):
         path = Presenter.getPath()
         if evt.GetId() == wx.ID_SAVEAS or not path:
-            if path: name = ''
-            else: name = defaultName
             dirname = os.path.abspath(os.path.dirname(path))
-            dlg = wx.FileDialog(self, 'Save As', dirname, name, '*.xrc',
+            dlg = wx.FileDialog(self, 'Save As', dirname, '', '*.xrc',
                                wx.SAVE | wx.OVERWRITE_PROMPT | wx.CHANGE_DIR)
             if dlg.ShowModal() == wx.ID_OK:
                 path = dlg.GetPath()
@@ -278,8 +276,6 @@ class Frame(wx.Frame):
             else:
                 # otherwise create a new one
                 conf.localconf = self.CreateLocalConf(path)
-        else:
-            path = self.dataFile
         self.SetStatusText('Saving...')
         wx.BeginBusyCursor()
         try:
@@ -289,7 +285,7 @@ class Frame(wx.Frame):
                 self.Save(tmpName) # save temporary file first
                 shutil.move(tmpName, path)
                 self.dataFile = path
-                Presenter.SetModified(False)
+                Presenter.setModified(False)
                 if conf.localconf.ReadBool("autogenerate", False):
                     pypath = conf.localconf.Read("filename")
                     embed = conf.localconf.ReadBool("embedResource", False)
@@ -341,9 +337,14 @@ class Frame(wx.Frame):
             # If save was successful, modified flag is unset
             if not Presenter.modified: return True
         elif say == wx.ID_NO:
-            Presenter.SetModified(False)
+            Presenter.setModified(False)
             return True
         return False
+
+    def CreateLocalConf(self, path):
+        name = os.path.splitext(path)[0]
+        name += '.xcfg'
+        return wx.FileConfig(localFilename=name)
 
     def Clear(self):
         print 'NYI:', self

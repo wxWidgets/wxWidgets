@@ -29,7 +29,7 @@ class _Presenter:
     def setModified(self, state=True):
         self.modified = state
         name = os.path.basename(Model.path)
-        if not name: name = 'UNTITLED.xrc'
+        if not name: name = 'UNTITLED'
         # Update GUI
         if state:
             view.frame.SetTitle(progname + ': ' + name + ' *')
