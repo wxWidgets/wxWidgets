@@ -140,7 +140,8 @@ FIXME: this template has (at least) the following bugs:
     <!--    The debug define we need with win32 compilers           -->
     <!--    (on Linux, the wx-config program is used).              -->
     <set var="WXDEBUG_DEFINE">
-        <if cond="WX_PYTHON=='1' or WX_DEBUG=='1'">__WXDEBUG__</if>
+        <if cond="WX_PYTHON=='1'">__WXDEBUG__</if>
+        <if cond="WX_PYTHON=='0' and WX_DEBUG=='1'">__WXDEBUG__</if>
     </set>
 
     <!--    These are handy ways of dealing with the                -->
