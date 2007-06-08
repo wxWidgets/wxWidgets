@@ -32,8 +32,7 @@ GetBestSizeTuple, GetBestVirtualSize, GetBorder, GetCapture, GetCaret, GetCharHe
 GetCharWidth, GetChildren, GetClassDefaultAttributes, GetClientAreaOrigin, GetClientRect, 
 GetClientSize, GetClientSizeTuple, GetConstraints, GetContainingSizer, GetCursor, 
 GetDefaultAttributes, GetDropTarget, GetEffectiveMinSize, GetEventHandler, GetExtraStyle, 
-GetFullTextExtent, GetHandle, GetHelpText, 
-GetHelpTextAtPoint, GetId, GetLabel, GetLayoutDirection, GetPosition, GetPositionTuple, 
+GetFullTextExtent, GetHandle, GetHelpText, GetHelpTextAtPoint, GetLabel, GetLayoutDirection,
 GetScreenPosition, GetScreenPositionTuple, GetScreenRect, GetScrollPos, GetScrollRange, 
 GetScrollThumb, GetSizer, GetSizeTuple, GetTextExtent, GetThemeEnabled, GetToolTip, 
 GetTopLevelParent, GetUpdateClientRect, GetUpdateRegion, GetValidator, GetVirtualSize, 
@@ -41,16 +40,15 @@ GetVirtualSizeTuple, GetWindowBorderSize, GetWindowStyle, GetWindowStyleFlag, Ge
 HasCapture, HasFlag, HasMultiplePages, HasScrollbar, HasTransparentBackground, HitTest, 
 HitTestXY, InheritAttributes, InheritsBackgroundColour, InitDialog, InvalidateBestSize, 
 IsBeingDeleted, IsDoubleBuffered, IsExposed, IsExposedPoint, IsExposedRect, IsRetained, 
-IsShownOnScreen, IsTopLevel, Layout, LineDown, LineUp, Lower, MakeModal, Move, 
-MoveAfterInTabOrder, MoveBeforeInTabOrder, MoveXY, Navigate, NewControlId, NextControlId, 
+IsShownOnScreen, IsTopLevel, Layout, LineDown, LineUp, Lower, MakeModal, 
+MoveAfterInTabOrder, MoveBeforeInTabOrder, Navigate, NewControlId, NextControlId, 
 PageDown, PageUp, PopEventHandler, PopupMenu, PopupMenuXY, PostCreate, PrepareDC, PrevControlId, 
 PushEventHandler, Raise, Refresh, RefreshRect, RegisterHotKey, ReleaseMouse, RemoveChild, 
 RemoveEventHandler, ScreenToClient, ScreenToClientXY, ScrollLines, ScrollPages, 
 ScrollWindow, SendSizeEvent, SetAutoLayout, SetCaret, SetClientRect, SetClientSize, 
 SetClientSizeWH, SetConstraints, SetContainingSizer, SetCursor, SetDimensions, SetDoubleBuffered, 
 SetDropTarget, SetEventHandler, SetExtraStyle, SetFocus, SetFocusFromKbd, 
-SetHelpText, SetHelpTextForId, SetId, SetInitialSize, SetLabel, 
-SetLayoutDirection, SetOwnBackgroundColour, SetOwnFont, SetOwnForegroundColour, SetPosition, 
+SetHelpText, SetHelpTextForId, SetInitialSize, SetLabel, SetLayoutDirection, 
 SetScrollbar, SetScrollPos, SetSizeHintsSz, SetSizer, SetSizerAndFit, SetSizeWH, SetThemeEnabled, 
 SetToolTip, SetToolTipString, SetTransparent, SetValidator, SetVirtualSize, SetVirtualSizeHints, 
 SetVirtualSizeHintsSz, SetVirtualSizeWH, SetWindowStyle, SetWindowStyleFlag, SetWindowVariant, 
@@ -124,6 +122,12 @@ class WindowTest(unittest.TestCase):
                         wx.Font(128, wx.FONTFAMILY_SCRIPT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_LIGHT),
                         wx.Font(256, wx.FONTFAMILY_MAX, wx.FONTSTYLE_ITALIC, wx.FONTWEIGHT_BOLD)
                     )
+        # TODO: delegate to testPoint module
+        self.POINTS = (
+                        wx.Point(0,0), wx.Point(1,2), wx.Point(2,1), wx.Point(10,10),
+                        wx.Point(20,30), wx.Point(66,99), wx.Point(100,200),
+                        wx.Point(999,789), wx.Point(1000,2000), wx.Point(3141,2718)
+                )
     
     #####################
     ## Fixture Methods ##
@@ -148,8 +152,6 @@ class WindowTest(unittest.TestCase):
         for child in self.children:
             self.assertEquals(self.testControl, child.GetParent())
     
-    # interesting... enable/disable doesn't do it to the children, like 
-    # the documentation says. even though they are indeed children.
     def testEnableDisable(self):
         """Enable, Disable, IsEnabled"""
         self.testControl.Enable(True)
@@ -194,11 +196,24 @@ class WindowTest(unittest.TestCase):
             self.testControl.SetBackgroundColour(test)
             self.assertEquals(actual, self.testControl.GetBackgroundColour())
     
-    # see testBackgroundColor
+    # what is the difference between SetOwnBackgroundColour and SetBackgroundColour?
+    # the docs don't say anything about SetOwnBackgroundColour
+    def testOwnBackgroundColor(self):
+        """SetOwnBackgroundColour"""
+        for test, actual in self.COLOUR_TESTS:
+            self.testControl.SetOwnBackgroundColour(test)
+            self.assertEquals(actual, self.testControl.GetBackgroundColour())
+    
     def testForegroundColor(self):
         """SetForegroundColour, GetForegroundColour"""
         for test, actual in self.COLOUR_TESTS:
             self.testControl.SetForegroundColour(test)
+            self.assertEquals(actual, self.testControl.GetForegroundColour())
+    
+    def testOwnForegroundColor(self):
+        """SetOwnForegroundColour"""
+        for test, actual in self.COLOUR_TESTS:
+            self.testControl.SetOwnForegroundColour(test)
             self.assertEquals(actual, self.testControl.GetForegroundColour())
     
     def testBackgroundStyle(self):
@@ -213,6 +228,7 @@ class WindowTest(unittest.TestCase):
             self.testControl.SetBackgroundStyle(style)
             self.assertEquals(self.testControl.GetBackgroundStyle(), style)
     
+    # TODO: refactor this method
     # not strictly a test, there's no way to verify!
     def testCenter(self):
         """Center, Centre"""
@@ -224,11 +240,11 @@ class WindowTest(unittest.TestCase):
         self.testControl.Centre(wx.HORIZONTAL)
         self.testControl.Centre(wx.BOTH)
         self.testControl.Centre(wx.VERTICAL)
-        # TODO: find out why the following call fails
-        # self.testControl.Center(wx.CENTER_ON_SCREEN)
-        # Documentation states:
-        # "It may also include wx.CENTER_ON_SCREEN flag if you want to
-        # center the window on the entire screen and not on its parent window."
+        # must fail if window has no parent
+        self.assertRaises(wx.PyAssertionError, self.testControl.Center, wx.CENTER_ON_SCREEN)
+        # This, however, functions properly (it has a parent)
+        for child in self.children:
+            child.Center(wx.CENTER_ON_SCREEN)
     
     def testFreezeThaw(self):
         """Freeze, Thaw, IsFrozen"""
@@ -317,12 +333,49 @@ class WindowTest(unittest.TestCase):
             self.testControl.SetFont(font)
             self.assertEquals(font, self.testControl.GetFont())
     
+    def testOwnFont(self):
+        """SetOwnFont"""
+        for font in self.FONTS:
+            self.testControl.SetOwnFont(font)
+            self.assertEquals(font, self.testControl.GetFont())
+    
     def testFindWindow(self):
         """FindWindowById, FindWindowByName"""
         for child, id, name in zip(self.children, self.children_ids, self.children_names):
             self.assertEquals(child, self.testControl.FindWindowById(id))
             self.assertEquals(child, self.testControl.FindWindowByName(name))
     
+    def testId(self):
+        """SetId, GetId"""
+        for id in (42, 314, 2718):
+            self.testControl.SetId(id)
+            self.assertEquals(id, self.testControl.GetId())
+    
+    def testPosition(self):
+        """SetPosition, GetPosition"""
+        for point in self.POINTS:
+            self.testControl.SetPosition(point)
+            self.assertEquals(point, self.testControl.GetPosition())
+        # TODO:
+        # setting point of (-1,-1) does not affect position
+        # is this expected behavior??
+        unchanged = self.testControl.GetPosition()
+        self.testControl.SetPosition(wx.Point(-1,-1))
+        self.assertEquals(unchanged, self.testControl.GetPosition())
+    
+    def testMove(self):
+        """Move, MoveXY, GetPositionTuple"""
+        for point in self.POINTS:
+            self.testControl.Move(point)
+            self.assertEquals(point.Get(), self.testControl.GetPositionTuple())
+        # TODO: what is expected behavior? see 'testPosition' above.
+        unchanged = self.testControl.GetPositionTuple()
+        self.testControl.Move(wx.Point(-1,-1))
+        self.assertEquals(unchanged,self.testControl.GetPositionTuple())
+        for point in self.POINTS:
+            x,y = point.Get()
+            self.testControl.MoveXY(x,y)
+            self.assertEquals((x,y), self.testControl.GetPositionTuple())
 
 def suite():
     suite = unittest.makeSuite(WindowTest)

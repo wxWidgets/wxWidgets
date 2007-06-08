@@ -70,6 +70,7 @@ class ColorTest(unittest.TestCase):
             self.assertEquals(str(tup), str(color))
             self.assertEquals('rgb'+str(col_tup), 
                                 color.GetAsString(wx.C2S_CSS_SYNTAX))
+            # TODO: implement tests for below flags
             # wx.C2S_NAME 	return colour name, when possible
             # wx.C2S_CSS_SYNTAX 	return colour in rgb(r,g,b) syntax
             # wx.C2S_HTML_SYNTAX 	return colour in #rrggbb syntax
