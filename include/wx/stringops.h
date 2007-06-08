@@ -140,15 +140,10 @@ struct WXDLLIMPEXP_BASE wxStringOperationsUtf8
         return dist;
     }
 
-    // buffer for single UTF-8 character
-    struct Utf8CharBuffer
-    {
-        char data[5];
-        operator const char*() const { return data; }
-    };
-
     // encodes the character as UTF-8:
-    static Utf8CharBuffer EncodeChar(const wxUniChar& ch);
+    typedef wxUniChar::Utf8CharBuffer Utf8CharBuffer;
+    static Utf8CharBuffer EncodeChar(const wxUniChar& ch)
+        { return ch.AsUTF8(); }
 
     // returns n copies of ch encoded in UTF-8 string
     static wxCharBuffer EncodeNChars(size_t n, const wxUniChar& ch);

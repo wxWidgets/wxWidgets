@@ -71,6 +71,19 @@ public:
     // Returns Unicode code point value of the character
     value_type GetValue() const { return m_value; }
 
+#if wxUSE_UNICODE_UTF8
+    // buffer for single UTF-8 character
+    struct Utf8CharBuffer
+    {
+        char data[5];
+        operator const char*() const { return data; }
+    };
+
+    // returns the character encoded as UTF-8
+    // (NB: implemented in stringops.cpp)
+    Utf8CharBuffer AsUTF8() const;
+#endif // wxUSE_UNICODE_UTF8
+
     // Returns true if the character is an ASCII character:
     bool IsAscii() const { return m_value < 0x80; }
 
@@ -182,6 +195,11 @@ public:
 #endif
 
     wxUniChar::value_type GetValue() const { return UniChar().GetValue(); }
+
+#if wxUSE_UNICODE_UTF8
+    wxUniChar::Utf8CharBuffer AsUTF8() const { return UniChar().AsUTF8(); }
+#endif // wxUSE_UNICODE_UTF8
+
     bool IsAscii() const { return UniChar().IsAscii(); }
 
     // Assignment operators:
