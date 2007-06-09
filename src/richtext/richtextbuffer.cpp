@@ -8170,19 +8170,48 @@ bool wxRichTextImageBlock::Load(wxImage& image)
     return success;
 }
 
+// Array used in DecToHex conversion routine.
+static char hexArray[] = "0123456789ABCDEF";
+
+// Convert decimal integer to 2-character hex string
+inline void wxRichTextDecToHex(int dec, char* buf)
+{
+    int firstDigit = (int)(dec/16.0);
+    int secondDigit = (int)(dec - (firstDigit*16.0));
+    buf[0] = hexArray[firstDigit];
+    buf[1] = hexArray[secondDigit];
+}
+
 // Write data in hex to a stream
 bool wxRichTextImageBlock::WriteHex(wxOutputStream& stream)
 {
-    wxString hex;
-    int i;
-    for (i = 0; i < (int) m_dataSize; i++)
+    const int bufSize = 512;
+    char buf[bufSize+1];
+
+    int left = m_dataSize;
+    int n, i, j;
+    j = 0;
+    while (left > 0)
     {
-        hex = wxDecToHex(m_data[i]);
-        wxCharBuffer buf = hex.ToAscii();
+        if (left*2 > bufSize)
+        {
+            n = bufSize; left -= (bufSize/2);
+        }
+        else
+        {
+            n = left*2; left = 0;
+        }
 
-        stream.Write((const char*) buf, hex.length());
+        char* b = buf;
+        for (i = 0; i < (n/2); i++)
+        {
+            wxRichTextDecToHex(m_data[j], b);
+            b += 2; j ++;
+        }
+
+        buf[n] = 0;
+        stream.Write((const char*) buf, n);
     }
-
     return true;
 }
 
@@ -8194,7 +8223,7 @@ bool wxRichTextImageBlock::ReadHex(wxInputStream& stream, int length, int imageT
     if (m_data)
         delete[] m_data;
 
-    wxString str(wxT("  "));
+    wxChar str[2];
     m_data = new unsigned char[dataSize];
     int i;
     for (i = 0; i < dataSize; i ++)
