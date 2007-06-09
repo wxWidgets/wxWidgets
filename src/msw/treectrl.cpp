@@ -2335,6 +2335,24 @@ wxTreeCtrl::MSWDefWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam)
         if ( wParam == VK_SPACE || wParam == VK_RETURN )
             return 0;
     }
+#if wxUSE_DRAGIMAGE
+    else if ( nMsg == WM_KEYDOWN )
+    {
+        if ( wParam == VK_ESCAPE )
+        {
+            if ( m_dragImage )
+            {
+                m_dragImage->EndDrag();
+                delete m_dragImage;
+                m_dragImage = NULL;
+
+                // if we don't do it, the tree seems to think that 2 items
+                // are selected simultaneously which is quite weird
+                TreeView_SelectDropTarget(GetHwnd(), 0);
+            }
+        }
+    }
+#endif // wxUSE_DRAGIMAGE
 
     return wxControl::MSWDefWindowProc(nMsg, wParam, lParam);
 }
