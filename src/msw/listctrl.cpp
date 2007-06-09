@@ -2417,7 +2417,8 @@ static RECT GetCustomDrawnItemRect(const NMCUSTOMDRAW& nmcd)
     return rc;
 }
 
-static bool HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
+static
+bool HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont, int colCount)
 {
     NMCUSTOMDRAW& nmcd = pLVCD->nmcd;
 
@@ -2432,7 +2433,7 @@ static bool HandleSubItemPrepaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
     // get the rectangle to paint
     RECT rc;
     ListView_GetSubItemRect(hwndList, item, col, LVIR_BOUNDS, &rc);
-    if ( !col )
+    if ( !col && colCount > 1 )
     {
         // broken ListView_GetSubItemRect() returns the entire item rect for
         // 0th subitem while we really need just the part for this column
@@ -2602,7 +2603,7 @@ static void HandleItemPaint(LPNMLVCUSTOMDRAW pLVCD, HFONT hfont)
     for ( int col = 0; col < colCount; col++ )
     {
         pLVCD->iSubItem = col;
-        HandleSubItemPrepaint(pLVCD, hfont);
+        HandleSubItemPrepaint(pLVCD, hfont, colCount);
     }
 
     HandleItemPostpaint(nmcd);
