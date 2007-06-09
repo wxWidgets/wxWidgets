@@ -634,7 +634,7 @@ void wxWindow::SetLabel(const wxString& label)
 
 wxString wxWindow::GetLabel() const
 {
-    char *label;
+    char *label = NULL;
     XtVaGetValues((Widget)GetMainWidget(), XmNtitle, &label, NULL);
 
     return wxString(label);
