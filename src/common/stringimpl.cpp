@@ -162,9 +162,9 @@ void wxStringImpl::InitWith(const wxStringCharType *psz,
 
   // if the length is not given, assume the string to be NUL terminated
   if ( nLength == npos ) {
-    wxASSERT_MSG( nPos <= Strsize(psz), _T("index out of bounds") );
+    wxASSERT_MSG( nPos <= wxStrlen(psz), _T("index out of bounds") );
 
-    nLength = Strsize(psz + nPos);
+    nLength = wxStrlen(psz + nPos);
   }
 
   STATISTICS_ADD(InitialLength, nLength);
@@ -426,7 +426,7 @@ wxStringImpl& wxStringImpl::insert(size_t nPos,
 {
     wxASSERT( nPos <= length() );
 
-    if ( n == npos ) n = Strsize(sz);
+    if ( n == npos ) n = wxStrlen(sz);
     if ( n == 0 ) return *this;
 
     if ( !Alloc(length() + n) || !CopyBeforeWrite() ) {
@@ -666,7 +666,7 @@ wxStringImpl& wxStringImpl::operator=(wxStringCharType ch)
 // assigns C string
 wxStringImpl& wxStringImpl::operator=(const wxStringCharType *psz)
 {
-  if ( !AssignCopy(Strsize(psz), psz) ) {
+  if ( !AssignCopy(wxStrlen(psz), psz) ) {
     wxFAIL_MSG( _T("out of memory in wxStringImpl::operator=(const wxStringCharType *)") );
   }
   return *this;
@@ -769,7 +769,7 @@ wxStringCharType *wxStringImpl::DoGetWriteBuf(size_t nLen)
 // put string back in a reasonable state after GetWriteBuf
 void wxStringImpl::DoUngetWriteBuf()
 {
-  DoUngetWriteBuf(Strsize(m_pchData));
+  DoUngetWriteBuf(wxStrlen(m_pchData));
 }
 
 void wxStringImpl::DoUngetWriteBuf(size_t nLen)

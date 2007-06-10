@@ -873,7 +873,7 @@ public:
    ~wxMsgCatalogFile();
 
     // load the catalog from disk (szDirPrefix corresponds to language)
-    bool Load(const wxChar *szDirPrefix, const wxChar *szName,
+    bool Load(const wxString& szDirPrefix, const wxString& szName,
               wxPluralFormsCalculatorPtr& rPluralFormsCalculator);
 
     // fills the hash with string-translation pairs
@@ -1015,7 +1015,7 @@ wxMsgCatalogFile::~wxMsgCatalogFile()
 // return the directories to search for message catalogs under the given
 // prefix, separated by wxPATH_SEP
 static
-wxString GetMsgCatalogSubdirs(const wxChar *prefix, const wxChar *lang)
+wxString GetMsgCatalogSubdirs(const wxString& prefix, const wxString& lang)
 {
     wxString searchPath;
     searchPath << prefix << wxFILE_SEP_PATH << lang;
@@ -1037,7 +1037,7 @@ wxString GetMsgCatalogSubdirs(const wxChar *prefix, const wxChar *lang)
 }
 
 // construct the search path for the given language
-static wxString GetFullSearchPath(const wxChar *lang)
+static wxString GetFullSearchPath(const wxString& lang)
 {
     // first take the entries explicitly added by the program
     wxArrayString paths;
@@ -1097,7 +1097,7 @@ static wxString GetFullSearchPath(const wxChar *lang)
 }
 
 // open disk file and read in it's contents
-bool wxMsgCatalogFile::Load(const wxChar *szDirPrefix, const wxChar *szName,
+bool wxMsgCatalogFile::Load(const wxString& szDirPrefix, const wxString& szName,
                             wxPluralFormsCalculatorPtr& rPluralFormsCalculator)
 {
   wxString searchPath;
@@ -1118,15 +1118,14 @@ bool wxMsgCatalogFile::Load(const wxChar *szDirPrefix, const wxChar *szName,
 
 
   searchPath += GetFullSearchPath(szDirPrefix);
-  const wxChar *sublocale = wxStrchr(szDirPrefix, wxT('_'));
-  if ( sublocale )
+  size_t sublocaleIndex = szDirPrefix.find(wxT('_'));
+  if ( sublocaleIndex != wxString::npos )
   {
       // also add just base locale name: for things like "fr_BE" (belgium
       // french) we should use "fr" if no belgium specific message catalogs
       // exist
       searchPath << wxPATH_SEP
-                 << GetFullSearchPath(wxString(szDirPrefix).
-                                      Left((size_t)(sublocale - szDirPrefix)));
+                 << GetFullSearchPath(szDirPrefix.Left(sublocaleIndex));
   }
 
   // don't give translation errors here because the wxstd catalog might
@@ -1546,7 +1545,7 @@ bool wxLocale::Init(const wxString& name,
       256);
   if (ret != 0)
   {
-    m_pszOldLocale = wxStrdup(localeName);
+    m_pszOldLocale = wxStrdup(wxConvLibc.cWC2MB(localeName));
   }
   else
     m_pszOldLocale = NULL;
@@ -1554,7 +1553,7 @@ bool wxLocale::Init(const wxString& name,
   // TODO: how to find languageId
   // SetLocaleInfo(languageId, SORT_DEFAULT, localeName);
 #else
-  wxMB2WXbuf oldLocale = wxSetlocale(LC_ALL, szLocale);
+  const char *oldLocale = wxSetlocale(LC_ALL, szLocale);
   if ( oldLocale )
       m_pszOldLocale = wxStrdup(oldLocale);
   else
@@ -1601,33 +1600,33 @@ bool wxLocale::Init(const wxString& name,
 
 
 #if defined(__UNIX__) && wxUSE_UNICODE && !defined(__WXMAC__)
-static wxWCharBuffer wxSetlocaleTryUTF8(int c, const wxChar *lc)
+static const char *wxSetlocaleTryUTF8(int c, const wxString& lc)
 {
-    wxMB2WXbuf l;
+    const char *l;
 
     // NB: We prefer to set UTF-8 locale if it's possible and only fall back to
     //     non-UTF-8 locale if it fails
 
-    if ( lc && lc[0] != 0 )
+    if ( !lc.empty() )
     {
         wxString buf(lc);
         wxString buf2;
         buf2 = buf + wxT(".UTF-8");
-        l = wxSetlocale(c, buf2.c_str());
+        l = wxSetlocale(c, buf2);
         if ( !l )
         {
             buf2 = buf + wxT(".utf-8");
-            l = wxSetlocale(c, buf2.c_str());
+            l = wxSetlocale(c, buf2);
         }
         if ( !l )
         {
             buf2 = buf + wxT(".UTF8");
-            l = wxSetlocale(c, buf2.c_str());
+            l = wxSetlocale(c, buf2);
         }
         if ( !l )
         {
             buf2 = buf + wxT(".utf8");
-            l = wxSetlocale(c, buf2.c_str());
+            l = wxSetlocale(c, buf2);
         }
     }
 
@@ -1671,12 +1670,12 @@ bool wxLocale::Init(int language, int flags)
 
     // Set the locale:
 #if defined(__OS2__)
-    wxMB2WXbuf retloc = wxSetlocale(LC_ALL , wxEmptyString);
+    const char *retloc = wxSetlocale(LC_ALL , wxEmptyString);
 #elif defined(__UNIX__) && !defined(__WXMAC__)
     if (language != wxLANGUAGE_DEFAULT)
         locale = info->CanonicalName;
 
-    wxMB2WXbuf retloc = wxSetlocaleTryUTF8(LC_ALL, locale);
+    const char *retloc = wxSetlocaleTryUTF8(LC_ALL, locale);
 
     const wxString langOnly = locale.Left(2);
     if ( !retloc )
@@ -1743,9 +1742,9 @@ bool wxLocale::Init(int language, int flags)
     //
     // this contradicts IBM own docs but this is not of much help, so just work
     // around it in the crudest possible manner
-    wxChar *p = wxStrchr((wxChar *)retloc, _T(' '));
+    char *p = wxStrchr(retloc, ' ');
     if ( p )
-        *p = _T('\0');
+        *p = '\0';
 #endif // __AIX__
 
 #elif defined(__WIN32__)
@@ -1760,10 +1759,7 @@ bool wxLocale::Init(int language, int flags)
         #define SETLOCALE_FAILS_ON_UNICODE_LANGS
     #endif
 
-#if !wxUSE_UNICODE
-    const
-#endif
-    wxMB2WXbuf retloc = wxT("C");
+    const char *retloc = "C";
     if (language != wxLANGUAGE_DEFAULT)
     {
         if (info->WinLang == 0)
@@ -1812,9 +1808,9 @@ bool wxLocale::Init(int language, int flags)
                 retloc = wxSetlocale(LC_ALL, locale);
 #endif
 #ifdef SETLOCALE_FAILS_ON_UNICODE_LANGS
-                if (codepage == 0 && (const wxChar*)retloc == NULL)
+                if (codepage == 0 && retloc == NULL)
                 {
-                    retloc = wxT("C");
+                    retloc = "C";
                 }
 #endif
             }
@@ -1829,14 +1825,14 @@ bool wxLocale::Init(int language, int flags)
         retloc = NULL;
 #endif
 #ifdef SETLOCALE_FAILS_ON_UNICODE_LANGS
-        if ((const wxChar*)retloc == NULL)
+        if (retloc == NULL)
         {
             wxChar buffer[16];
             if (GetLocaleInfo(LOCALE_USER_DEFAULT,
                               LOCALE_IDEFAULTANSICODEPAGE, buffer, 16) > 0 &&
                  wxStrcmp(buffer, wxT("0")) == 0)
             {
-                retloc = wxT("C");
+                retloc = "C";
             }
         }
 #endif
@@ -1853,7 +1849,7 @@ bool wxLocale::Init(int language, int flags)
     else
         locale = info->CanonicalName;
 
-    wxMB2WXbuf retloc = wxSetlocale(LC_ALL, locale);
+    const char *retloc = wxSetlocale(LC_ALL, locale);
 
     if ( !retloc )
     {
@@ -2561,7 +2557,7 @@ const wxLanguageInfo *wxLocale::FindLanguageInfo(const wxString& locale)
             // looking
             //
             // OTOH, maybe we had already found a language match and in this
-            // case don't overwrite it becauce the entry for the default
+            // case don't overwrite it because the entry for the default
             // country always appears first in ms_languagesDB
             if ( !infoRet )
                 infoRet = info;
@@ -2763,10 +2759,10 @@ bool wxLocale::IsAvailable(int lang)
         return false;
 
 #elif defined(__UNIX__)
-    
-    // Test if setting the locale works, then set it back. 
-    wxMB2WXbuf oldLocale = wxSetlocale(LC_ALL, wxEmptyString);
-    wxMB2WXbuf tmp = wxSetlocaleTryUTF8(LC_ALL, info->CanonicalName);
+
+    // Test if setting the locale works, then set it back.
+    const char *oldLocale = wxSetlocale(LC_ALL, "");
+    const char *tmp = wxSetlocaleTryUTF8(LC_ALL, info->CanonicalName);
     if ( !tmp )
     {
         // Some C libraries don't like xx_YY form and require xx only
@@ -2775,8 +2771,8 @@ bool wxLocale::IsAvailable(int lang)
             return false;
     }
     // restore the original locale
-    wxSetlocale(LC_ALL, oldLocale);    
-#endif 
+    wxSetlocale(LC_ALL, oldLocale);
+#endif
 
     return true;
 }

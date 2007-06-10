@@ -286,7 +286,7 @@ bool wxVariantDataLong::Read(wxInputStream& str)
 
 bool wxVariantDataLong::Read(wxString& str)
 {
-    m_value = wxAtol((const wxChar*) str);
+    m_value = wxAtol(str);
     return true;
 }
 
@@ -436,7 +436,7 @@ bool wxVariantDoubleData::Read(wxInputStream& str)
 
 bool wxVariantDoubleData::Read(wxString& str)
 {
-    m_value = wxAtof((const wxChar*) str);
+    m_value = wxAtof(str);
     return true;
 }
 
@@ -579,7 +579,7 @@ bool wxVariantDataBool::Read(wxInputStream& str)
 
 bool wxVariantDataBool::Read(wxString& str)
 {
-    m_value = (wxAtol((const wxChar*) str) != 0);
+    m_value = (wxAtol(str) != 0);
     return true;
 }
 
@@ -1239,7 +1239,7 @@ bool wxVariantDataDateTime::Read(wxSTD istream& WXUNUSED(str))
 
 bool wxVariantDataDateTime::Read(wxString& str)
 {
-    if(! m_value.ParseDateTime(str))
+    if(! m_value.ParseDateTime(str.c_str()/*FIXME-UTF8*/))
         return false;
     return true;
 }
@@ -1757,7 +1757,7 @@ bool wxVariant::Convert(long* value) const
         *value = (long) (((wxVariantDataBool*)GetData())->GetValue());
 #endif
     else if (type == wxT("string"))
-        *value = wxAtol((const wxChar*) ((wxVariantDataString*)GetData())->GetValue());
+        *value = wxAtol(((wxVariantDataString*)GetData())->GetValue());
     else
         return false;
 
@@ -1804,7 +1804,7 @@ bool wxVariant::Convert(double* value) const
         *value = (double) (((wxVariantDataBool*)GetData())->GetValue());
 #endif
     else if (type == wxT("string"))
-        *value = (double) wxAtof((const wxChar*) ((wxVariantDataString*)GetData())->GetValue());
+        *value = (double) wxAtof(((wxVariantDataString*)GetData())->GetValue());
     else
         return false;
 
@@ -1846,7 +1846,9 @@ bool wxVariant::Convert(wxDateTime* value) const
     // Fallback to string conversion
     wxString val;
     return Convert(&val) &&
-                (value->ParseDateTime(val) || value->ParseDate(val) || value->ParseTime(val));
+                (value->ParseDateTime(val.c_str()/*FIXME-UTF8*/) ||
+                 value->ParseDate(val.c_str()/*FIXME-UTF8*/) ||
+                 value->ParseTime(val.c_str()/*FIXME-UTF8*/));
 }
 #endif // wxUSE_DATETIME
 

@@ -1903,6 +1903,10 @@ SOURCE=..\..\include\wx\wxcrt.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\include\wx\wxcrtbase.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\include\wx\wxcrtvararg.h
 # End Source File
 # Begin Source File

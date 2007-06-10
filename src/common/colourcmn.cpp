@@ -46,7 +46,7 @@ bool wxColourBase::FromString(const wxString& str)
         // according to http://www.w3.org/TR/REC-CSS2/syndata.html#color-units
         // values outside 0-255 range are allowed but should be clipped
         int red, green, blue;
-        if (wxSscanf(str.substr(3), wxT("(%d, %d, %d)"), &red, &green, &blue) != 3)
+        if (wxSscanf(str.wx_str() + 3, wxT("(%d, %d, %d)"), &red, &green, &blue) != 3)
             return false;
 
         Set((unsigned char)wxClip(red,0,255),
@@ -57,7 +57,7 @@ bool wxColourBase::FromString(const wxString& str)
     {
         // hexadecimal prefixed with # (HTML syntax)
         unsigned long tmp;
-        if (wxSscanf(str.substr(1), wxT("%lx"), &tmp) != 1)
+        if (wxSscanf(str.wx_str() + 1, wxT("%lx"), &tmp) != 1)
             return false;
 
         Set((unsigned char)(tmp >> 16),

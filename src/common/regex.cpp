@@ -56,7 +56,11 @@
 #ifdef __REG_NOFRONT
 #   define WXREGEX_USING_BUILTIN
 #   define WXREGEX_IF_NEED_LEN(x) ,x
-#   define WXREGEX_CHAR(x) x
+#   if wxUSE_UNICODE
+#       define WXREGEX_CHAR(x) x.wc_str()
+#   else
+#       define WXREGEX_CHAR(x) x.mb_str()
+#   endif
 #else
 #   ifdef HAVE_RE_SEARCH
 #       define WXREGEX_IF_NEED_LEN(x) ,x
@@ -67,7 +71,7 @@
 #   if wxUSE_UNICODE
 #       define WXREGEX_CONVERT_TO_MB
 #   endif
-#   define WXREGEX_CHAR(x) wxConvertWX2MB(x)
+#   define WXREGEX_CHAR(x) x.mb_str()
 #   define wx_regfree regfree
 #   define wx_regerror regerror
 #endif
@@ -293,8 +297,11 @@ bool wxRegExImpl::Compile(const wxString& expr, int flags)
     // compile it
 #ifdef WXREGEX_USING_BUILTIN
     bool conv = true;
-    int errorcode = wx_re_comp(&m_RegEx, expr, expr.length(), flagsRE);
+    // FIXME-UTF8: use wc_str() after removing ANSI build
+    int errorcode = wx_re_comp(&m_RegEx, expr.c_str(), expr.length(), flagsRE);
 #else
+    // FIXME-UTF8: this is potentially broken, we shouldn't even try it
+    //             and should always use builtin regex library (or PCRE?)
     const wxWX2MBbuf conv = expr.mbc_str();
     int errorcode = conv ? regcomp(&m_RegEx, conv, flagsRE) : REG_BADPAT;
 #endif

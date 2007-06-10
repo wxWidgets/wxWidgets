@@ -225,6 +225,7 @@ wx/wfstream.h
 wx/wx.h
 wx/wxchar.h
 wx/wxcrt.h
+wx/wxcrtbase.h
 wx/wxcrtvararg.h
 wx/wxprec.h
 wx/xti.h

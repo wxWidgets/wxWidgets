@@ -545,7 +545,7 @@ private:
                    m_strShort;        // short name for the locale
     int            m_language;        // this locale wxLanguage value
 
-    const wxChar  *m_pszOldLocale;    // previous locale from setlocale()
+    const char  *m_pszOldLocale;      // previous locale from setlocale()
     wxLocale      *m_pOldLocale;      // previous wxLocale
 
     wxMsgCatalog  *m_pMsgCat;         // pointer to linked list of catalogs

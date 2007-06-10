@@ -59,6 +59,9 @@ Changes in behaviour which may result in compilation errors
   to const wxChar*:
      wxLogError(_("error: %s"), !err.empty() ? (const wxChar*)err.c_str() : "")
 
+- wxCtime() and wxAsctime() return char*; this is incompatible with Unicode
+  build in wxWidgets 2.8 that returned wchar_t*. 
+
 - DigitalMars compiler has a bug that prevents it from using
   wxUniChar::operator bool in conditions and it erroneously reports type
   conversion ambiguity in expressions such as this:

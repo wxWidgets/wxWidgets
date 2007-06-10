@@ -13,16 +13,11 @@
 #define _WX_BUFFER_H
 
 #include "wx/chartype.h"
-#include "wx/wxcrt.h"
+#include "wx/wxcrtbase.h"
 
 #include <stdlib.h>             // malloc() and free()
 
 class WXDLLIMPEXP_BASE wxCStrData;
-
-inline char *wxStrDup(const char *s) { return wxStrdupA(s); }
-#if wxUSE_WCHAR_T
-    inline wchar_t *wxStrDup(const wchar_t *ws) { return wxStrdupW(ws); }
-#endif
 
 // ----------------------------------------------------------------------------
 // Special classes for (wide) character strings: they use malloc/free instead
@@ -36,7 +31,7 @@ public:
     typedef T CharType;
 
     wxCharTypeBuffer(const CharType *str = NULL)
-        : m_str(str ? wxStrDup(str) : NULL),
+        : m_str(str ? wxStrdup(str) : NULL),
           m_owned(true)
     {
     }
@@ -103,7 +98,7 @@ public:
     {
         if ( m_owned )
             free(m_str);
-        m_str = str ? wxStrDup(str) : NULL;
+        m_str = str ? wxStrdup(str) : NULL;
         m_owned = true;
         return *this;
     }

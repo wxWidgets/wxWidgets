@@ -44,7 +44,7 @@ using namespace std ;
 // special test mode: define all functions below even if we don't really need
 // them to be able to test them
 #ifdef wxTEST_PRINTF
-    #undef wxVsnprintf_
+    #undef wxCRT_VsnprintfW_
 #endif
 
 // ----------------------------------------------------------------------------
@@ -53,13 +53,13 @@ using namespace std ;
 // (very useful for i18n purposes)
 // ----------------------------------------------------------------------------
 
-#if !defined(wxVsnprintf_)
+#if !defined(wxCRT_VsnprintfW_)
 
-#if !wxUSE_WXVSNPRINTF
-    #error wxUSE_WXVSNPRINTF must be 1 if our wxVsnprintf_ is used
+#if !wxUSE_WXVSNPRINTFW
+    #error "wxUSE_WXVSNPRINTFW must be 1 if our wxCRT_VsnprintfW_ is used"
 #endif
 
-// wxUSE_STRUTILS says our wxVsnprintf_ implementation to use or not to
+// wxUSE_STRUTILS says our wxCRT_VsnprintfW_ implementation to use or not to
 // use wxStrlen and wxStrncpy functions over one-char processing loops.
 //
 // Some benchmarking revealed that wxUSE_STRUTILS == 1 has the following
@@ -99,7 +99,7 @@ using namespace std ;
     #define SYSTEM_SPRINTF_IS_UNSAFE
 #endif
 
-// the conversion specifiers accepted by wxVsnprintf_
+// the conversion specifiers accepted by wxCRT_VsnprintfW_
 enum wxPrintfArgType {
     wxPAT_INVALID = -1,
 
@@ -126,7 +126,7 @@ enum wxPrintfArgType {
     wxPAT_NLONGINT      // %ln
 };
 
-// an argument passed to wxVsnprintf_
+// an argument passed to wxCRT_VsnprintfW_
 typedef union {
     int pad_int;                        //  %d, %i, %o, %u, %x, %X
     long int pad_longint;               // %ld, etc
@@ -152,7 +152,7 @@ typedef union {
 
 
 // Contains parsed data relative to a conversion specifier given to
-// wxVsnprintf_ and parsed from the format string
+// wxCRT_VsnprintfW_ and parsed from the format string
 // NOTE: in C++ there is almost no difference between struct & classes thus
 //       there is no performance gain by using a struct here...
 class wxPrintfConvSpec
@@ -176,18 +176,18 @@ public:
     // pointer to the '%' of this conversion specifier in the format string
     // NOTE: this points somewhere in the string given to the Parse() function -
     //       it's task of the caller ensure that memory is still valid !
-    const wxChar *m_pArgPos;
+    const wchar_t *m_pArgPos;
 
     // pointer to the last character of this conversion specifier in the
     // format string
     // NOTE: this points somewhere in the string given to the Parse() function -
     //       it's task of the caller ensure that memory is still valid !
-    const wxChar *m_pArgEnd;
+    const wchar_t *m_pArgEnd;
 
     // a little buffer where formatting flags like #+\.hlqLZ are stored by Parse()
     // for use in Process()
     // NB: even if this buffer is used only for numeric conversion specifiers and
-    //     thus could be safely declared as a char[] buffer, we want it to be wxChar
+    //     thus could be safely declared as a char[] buffer, we want it to be wchar_t
     //     so that in Unicode builds we can avoid to convert its contents to Unicode
     //     chars when copying it in user's buffer.
     char m_szFlags[wxMAX_SVNPRINTF_FLAGBUFFER_LEN];
@@ -196,19 +196,19 @@ public:
 public:
 
     // we don't declare this as a constructor otherwise it would be called
-    // automatically and we don't want this: to be optimized, wxVsnprintf_
+    // automatically and we don't want this: to be optimized, wxCRT_VsnprintfW_
     // calls this function only on really-used instances of this class.
     void Init();
 
     // Parses the first conversion specifier in the given string, which must
     // begin with a '%'. Returns false if the first '%' does not introduce a
     // (valid) conversion specifier and thus should be ignored.
-    bool Parse(const wxChar *format);
+    bool Parse(const wchar_t *format);
 
     // Process this conversion specifier and puts the result in the given
     // buffer. Returns the number of characters written in 'buf' or -1 if
     // there's not enough space.
-    int Process(wxChar *buf, size_t lenMax, wxPrintfArg *p, size_t written);
+    int Process(wchar_t *buf, size_t lenMax, wxPrintfArg *p, size_t written);
 
     // Loads the argument of this conversion specifier from given va_list.
     bool LoadArg(wxPrintfArg *p, va_list &argptr);
@@ -232,7 +232,7 @@ void wxPrintfConvSpec::Init()
     m_szFlags[0] = '%';
 }
 
-bool wxPrintfConvSpec::Parse(const wxChar *format)
+bool wxPrintfConvSpec::Parse(const wchar_t *format)
 {
     bool done = false;
 
@@ -254,7 +254,7 @@ bool wxPrintfConvSpec::Parse(const wxChar *format)
         }
 
         // what follows '%'?
-        const wxChar ch = *(++m_pArgEnd);
+        const wchar_t ch = *(++m_pArgEnd);
         switch ( ch )
         {
             case wxT('\0'):
@@ -637,7 +637,7 @@ bool wxPrintfConvSpec::LoadArg(wxPrintfArg *p, va_list &argptr)
     return true;    // loading was successful
 }
 
-int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p, size_t written)
+int wxPrintfConvSpec::Process(wchar_t *buf, size_t lenMax, wxPrintfArg *p, size_t written)
 {
     // buffer to avoid dynamic memory allocation each time for small strings;
     // note that this buffer is used only to hold results of number formatting,
@@ -688,7 +688,7 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p, size_t
         case wxPAT_CHAR:
         case wxPAT_WCHAR:
             {
-                wxChar val =
+                wchar_t val =
 #if wxUSE_UNICODE
                     p->pad_wchar;
 
@@ -820,11 +820,11 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p, size_t
                 // conversion, but we can optimise by making use of the fact
                 // that we are formatting numbers, this should mean only 7-bit
                 // ascii characters are involved.
-                wxChar *bufptr = buf;
-                const wxChar *bufend = buf + lenMax;
+                wchar_t *bufptr = buf;
+                const wchar_t *bufend = buf + lenMax;
                 const char *scratchptr = szScratch;
 
-                // Simply copy each char to a wxChar, stopping on the first
+                // Simply copy each char to a wchar_t, stopping on the first
                 // null or non-ascii byte. Checking '(signed char)*scratchptr
                 // > 0' is an extra optimisation over '*scratchptr != 0 &&
                 // isascii(*scratchptr)', though it assumes signed char is
@@ -866,9 +866,9 @@ int wxPrintfConvSpec::Process(wxChar *buf, size_t lenMax, wxPrintfArg *p, size_t
 //
 static int wxCopyStrWithPercents(
         size_t maxOut,
-        wxChar *dest,
+        wchar_t *dest,
         size_t maxIn,
-        const wxChar *source)
+        const wchar_t *source)
 {
     size_t written = 0;
 
@@ -894,13 +894,13 @@ static int wxCopyStrWithPercents(
     return written;
 }
 
-int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
-                             const wxChar *format, va_list argptr)
+int WXDLLEXPORT wxCRT_VsnprintfW_(wchar_t *buf, size_t lenMax,
+                                  const wchar_t *format, va_list argptr)
 {
     // useful for debugging, to understand if we are really using this function
     // rather than the system implementation
 #if 0
-    wprintf(L"Using wxVsnprintf_\n");
+    wprintf(L"Using wxCRT_VsnprintfW_\n");
 #endif
 
     // required memory:
@@ -914,7 +914,7 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
     size_t lenCur = 0;
 
     size_t nargs = 0;
-    const wxChar *toparse = format;
+    const wchar_t *toparse = format;
 
     // parse the format string
     bool posarg_present = false, nonposarg_present = false;
@@ -1053,10 +1053,10 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
 #undef APPEND_CH
 #undef CHECK_PREC
 
-#else    // wxVsnprintf_ is defined
+#else    // wxCRT_VsnprintfW_ is defined
 
-#if wxUSE_WXVSNPRINTF
-    #error wxUSE_WXVSNPRINTF must be 0 if our wxVsnprintf_ is not used
+#if wxUSE_WXVSNPRINTFW
+    #error "wxUSE_WXVSNPRINTFW must be 0 if our wxCRT_VsnprintfW_ is not used"
 #endif
 
-#endif // !wxVsnprintf_
+#endif // !wxCRT_VsnprintfW_

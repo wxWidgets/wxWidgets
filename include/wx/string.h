@@ -51,7 +51,7 @@
     #include <StringMgr.h>
 #endif
 
-#include "wx/wxcrt.h"       // for wxChar, wxStrlen() etc.
+#include "wx/wxcrtbase.h"   // for wxChar, wxStrlen() etc.
 #include "wx/strvararg.h"
 #include "wx/buffer.h"      // for wxCharBuffer
 #include "wx/strconv.h"     // for wxConvertXXX() macros and wxMBConv classes
@@ -1510,11 +1510,7 @@ public:
   bool IsSameAs(const wxWCharBuffer& str, bool compareWithCase = true) const
     { return IsSameAs(str.data(), compareWithCase); }
     // comparison with a single character: returns true if equal
-  bool IsSameAs(wxUniChar c, bool compareWithCase = true) const
-    {
-      return (length() == 1) && (compareWithCase ? GetChar(0u) == c
-                              : wxToupper(GetChar(0u)) == wxToupper(c));
-    }
+  bool IsSameAs(wxUniChar c, bool compareWithCase = true) const;
   // FIXME-UTF8: remove these overloads
   bool IsSameAs(wxUniCharRef c, bool compareWithCase = true) const
     { return IsSameAs(wxUniChar(c), compareWithCase); }

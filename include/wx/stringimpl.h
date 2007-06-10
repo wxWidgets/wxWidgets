@@ -24,7 +24,7 @@
 
 #include "wx/defs.h"        // everybody should include this
 #include "wx/chartype.h"    // for wxChar
-#include "wx/wxcrt.h"       // for wxStrlen() etc.
+#include "wx/wxcrtbase.h"   // for wxStrlen() etc.
 
 #include <stdlib.h>
 
@@ -401,7 +401,7 @@ public:
     { ConcatSelf(str.length(), str.c_str()); return *this; }
     // append first n (or all if n == npos) characters of sz
   wxStringImpl& append(const wxStringCharType *sz)
-    { ConcatSelf(Strsize(sz), sz); return *this; }
+    { ConcatSelf(wxStrlen(sz), sz); return *this; }
   wxStringImpl& append(const wxStringCharType *sz, size_t n)
     { ConcatSelf(n, sz); return *this; }
     // append n copies of ch
@@ -418,7 +418,7 @@ public:
     { clear(); return append(str, pos, n); }
     // same as `= first n (or all if n == npos) characters of sz'
   wxStringImpl& assign(const wxStringCharType *sz)
-    { clear(); return append(sz, Strsize(sz)); }
+    { clear(); return append(sz, wxStrlen(sz)); }
   wxStringImpl& assign(const wxStringCharType *sz, size_t n)
     { clear(); return append(sz, n); }
     // same as `= n copies of ch'
@@ -545,13 +545,6 @@ public:
   wxStringCharType *DoGetWriteBuf(size_t nLen);
   void DoUngetWriteBuf();
   void DoUngetWriteBuf(size_t nLen);
-
-private:
-#if wxUSE_UNICODE_UTF8
-  static size_t Strsize(const wxStringCharType *s) { return strlen(s); }
-#else
-  static size_t Strsize(const wxStringCharType *s) { return wxStrlen(s); }
-#endif
 
   friend class WXDLLIMPEXP_BASE wxString;
 };

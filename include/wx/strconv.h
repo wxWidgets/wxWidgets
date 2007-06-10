@@ -519,12 +519,6 @@ extern WXDLLIMPEXP_DATA_BASE(wxMBConv *) wxConvUI;
 // ----------------------------------------------------------------------------
 
 // filenames are multibyte on Unix and widechar on Windows
-#if defined(__UNIX__) || defined(__WXMAC__)
-    #define wxMBFILES 1
-#else
-    #define wxMBFILES 0
-#endif
-
 #if wxMBFILES && wxUSE_UNICODE
     #define wxFNCONV(name) wxConvFileName->cWX2MB(name)
     #define wxFNSTRINGCAST wxMBSTRINGCAST
