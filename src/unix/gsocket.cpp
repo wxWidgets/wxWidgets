@@ -1751,6 +1751,12 @@ void GSocket::Detected_Read()
     {
       CALL_CALLBACK(this, GSOCK_CONNECTION);
     }
+    else if (num == 0)
+    {
+      /* graceful shutdown */
+      CALL_CALLBACK(this, GSOCK_LOST);
+      Shutdown();
+    }
     else
     {
       /* Do not throw a lost event in cases where the socket isn't really lost */
