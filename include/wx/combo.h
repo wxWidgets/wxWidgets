@@ -484,7 +484,7 @@ protected:
 
     // Standard textctrl positioning routine. Just give it platform-dependant
     // textctrl coordinate adjustment.
-    void PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust );
+    virtual void PositionTextCtrl( int textCtrlXAdjust, int textCtrlYAdjust );
 
     // event handlers
     void OnSizeEvent( wxSizeEvent& event );
