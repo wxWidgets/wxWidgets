@@ -576,7 +576,7 @@ int wxCRT_VsnprintfA(char *buf, size_t len, const char *format, va_list argptr)
     int rt = wxCRT_VsnprintfW(wbuf.data(), len,
                               (const wchar_t*)wxConvLibc.cMB2WC(format),
                               argptr);
-    if ( rt < 0 || rt >= len )
+    if ( rt < 0 || rt >= (int)len )
         return rt;
 
     if ( wxConvLibc.FromWChar(buf, len, wbuf) == wxCONV_FAILED )
