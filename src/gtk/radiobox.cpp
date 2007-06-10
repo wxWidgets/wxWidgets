@@ -275,7 +275,8 @@ bool wxRadioBox::Create( wxWindow *parent, wxWindowID id, const wxString& title,
             radio_button_group = gtk_radio_button_get_group( GTK_RADIO_BUTTON(rbtn) );
 
         label.Empty();
-        for ( const wxChar *pc = choices[i]; *pc; pc++ )
+        for ( wxString::const_iterator pc = choices[i].begin();
+              pc != choices[i].end(); ++pc )
         {
             if ( *pc != wxT('&') )
                 label += *pc;

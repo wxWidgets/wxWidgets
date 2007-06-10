@@ -23,7 +23,7 @@
 // the archive classes they use.
 
 const wxArchiveClassFactory *
-wxArchiveClassFactory::Find(const wxChar *protocol, wxStreamProtocolType type)
+wxArchiveClassFactory::Find(const wxString& protocol, wxStreamProtocolType type)
 {
     for (const wxArchiveClassFactory *f = GetFirst(); f; f = f->GetNext())
         if (f->CanHandle(protocol, type))

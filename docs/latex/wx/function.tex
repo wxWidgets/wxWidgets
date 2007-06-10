@@ -1044,7 +1044,7 @@ temporary storage that should not be deallocated.
 
 \membersection{::wxFindFirstFile}\label{wxfindfirstfile}
 
-\func{wxString}{wxFindFirstFile}{\param{const char *}{spec}, \param{int}{ flags = 0}}
+\func{wxString}{wxFindFirstFile}{\param{const wxString\& }{spec}, \param{int}{ flags = 0}}
 
 This function does directory searching; returns the first file
 that matches the path {\it spec}, or the empty string. Use \helpref{wxFindNextFile}{wxfindnextfile} to
@@ -1342,7 +1342,7 @@ Note that empty tokens will be generated if there are two or more adjacent separ
 
 \membersection{::wxSplitPath}\label{wxsplitfunction}
 
-\func{void}{wxSplitPath}{\param{const char *}{ fullname}, \param{wxString *}{ path}, \param{wxString *}{ name}, \param{wxString *}{ ext}}
+\func{void}{wxSplitPath}{\param{const wxString\&}{ fullname}, \param{wxString *}{ path}, \param{wxString *}{ name}, \param{wxString *}{ ext}}
 
 {\bf NB:} This function is obsolete, please use
 \helpref{wxFileName::SplitPath}{wxfilenamesplitpath} instead.

@@ -1444,7 +1444,7 @@ extern WXDLLIMPEXP_BASE long wxEncodingToCodepage(wxFontEncoding encoding)
     return (long) ret;
 }
 
-extern long wxCharsetToCodepage(const wxChar *name)
+extern long wxCharsetToCodepage(const char *name)
 {
     // first get the font encoding for this charset
     if ( !name )
@@ -1463,7 +1463,7 @@ extern long wxCharsetToCodepage(const wxChar *name)
 #include "wx/msw/registry.h"
 
 // this should work if Internet Exploiter is installed
-extern long wxCharsetToCodepage(const wxChar *name)
+extern long wxCharsetToCodepage(const char *name)
 {
     if (!name)
         return GetACP();

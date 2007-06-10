@@ -75,7 +75,7 @@ wxHTTP::wxHeaderIterator wxHTTP::FindHeader(const wxString& header)
     wxHeaderIterator it = m_headers.begin();
     for ( wxHeaderIterator en = m_headers.end(); it != en; ++it )
     {
-        if ( wxStricmp(it->first, header) == 0 )
+        if ( header.CmpNoCase(it->first) == 0 )
             break;
     }
 
@@ -87,7 +87,7 @@ wxHTTP::wxHeaderConstIterator wxHTTP::FindHeader(const wxString& header) const
     wxHeaderConstIterator it = m_headers.begin();
     for ( wxHeaderConstIterator en = m_headers.end(); it != en; ++it )
     {
-        if ( wxStricmp(it->first, header) == 0 )
+        if ( header.CmpNoCase(it->first) == 0 )
             break;
     }
 
@@ -274,8 +274,8 @@ bool wxHTTP::BuildRequest(const wxString& path, wxHTTP_Req req)
 
     wxString buf;
     buf.Printf(wxT("%s %s HTTP/1.0\r\n"), request, path.c_str());
-    const wxWX2MBbuf pathbuf = wxConvLocal.cWX2MB(buf);
-    Write(pathbuf, strlen(wxMBSTRINGCAST pathbuf));
+    const wxWX2MBbuf pathbuf = buf.mb_str();
+    Write(pathbuf, strlen(pathbuf));
     SendHeaders();
     Write("\r\n", 2);
 
@@ -407,7 +407,7 @@ wxInputStream *wxHTTP::GetInputStream(const wxString& path)
     inp_stream = new wxHTTPStream(this);
 
     if (!GetHeader(wxT("Content-Length")).empty())
-        inp_stream->m_httpsize = wxAtoi(WXSTRINGCAST GetHeader(wxT("Content-Length")));
+        inp_stream->m_httpsize = wxAtoi(GetHeader(wxT("Content-Length")));
     else
         inp_stream->m_httpsize = (size_t)-1;
 

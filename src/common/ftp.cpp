@@ -314,7 +314,7 @@ char wxFTP::GetResult()
             }
             else // subsequent line of multiline reply
             {
-                if ( wxStrncmp(line, code, LEN_CODE) == 0 )
+                if ( line.compare(0, LEN_CODE, code) == 0 )
                 {
                     if ( chMarker == _T(' ') )
                     {
@@ -378,7 +378,7 @@ bool wxFTP::SetTransferMode(TransferMode transferMode)
 
     if ( !DoSimpleCommand(_T("TYPE"), mode) )
     {
-        wxLogError(_("Failed to set FTP transfer mode to %s."), (const wxChar*)
+        wxLogError(_("Failed to set FTP transfer mode to %s."),
                    (transferMode == ASCII ? _("ASCII") : _("binary")));
 
         return false;
@@ -707,18 +707,20 @@ wxSocketBase *wxFTP::GetPassivePort()
         return NULL;
     }
 
-    const wxChar *addrStart = wxStrchr(m_lastResult, _T('('));
-    const wxChar *addrEnd = addrStart ? wxStrchr(addrStart, _T(')')) : NULL;
-    if ( !addrEnd )
+    size_t addrStart = m_lastResult.find(_T('('));
+    size_t addrEnd = (addrStart == wxString::npos)
+                     ? wxString::npos
+                     : m_lastResult.find(_T(')'), addrStart);
+
+    if ( addrEnd == wxString::npos )
     {
         m_lastError = wxPROTO_PROTERR;
-
         return NULL;
     }
 
     // get the port number and address
     int a[6];
-    wxString straddr(addrStart + 1, addrEnd);
+    wxString straddr(m_lastResult, addrStart + 1, addrEnd - (addrStart + 1));
     wxSscanf(straddr, wxT("%d,%d,%d,%d,%d,%d"),
              &a[2],&a[3],&a[4],&a[5],&a[0],&a[1]);
 

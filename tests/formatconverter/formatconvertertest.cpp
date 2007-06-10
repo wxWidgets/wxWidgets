@@ -286,7 +286,7 @@ void FormatConverterTestCase::doTest(const wxChar *input,
 void FormatConverterTestCase::check(const wxString& input,
                                     const wxString& expected)
 {
-    wxString result = wxConvertFormat(input);
+    wxString result = wxConvertFormat(input.wc_str());
     wxString msg = _T("input: '") + input +
                    _T("', result: '") + result +
                    _T("', expected: '") + expected + _T("'");

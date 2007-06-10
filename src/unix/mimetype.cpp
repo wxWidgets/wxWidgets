@@ -1367,14 +1367,15 @@ size_t wxFileTypeImpl::GetAllCommands(wxArrayString *verbs,
 
 bool wxFileTypeImpl::GetExtensions(wxArrayString& extensions)
 {
-    wxString strExtensions = m_manager->GetExtension(m_index[0]);
+    const wxString strExtensions = m_manager->GetExtension(m_index[0]);
     extensions.Empty();
 
     // one extension in the space or comma-delimited list
     wxString strExt;
-    for ( const wxChar *p = strExtensions; /* nothing */; p++ )
+    wxString::const_iterator end = strExtensions.end();
+    for ( wxString::const_iterator p = strExtensions.begin(); /* nothing */; ++p )
     {
-        if ( *p == wxT(' ') || *p == wxT(',') || *p == wxT('\0') )
+        if ( p == end || *p == wxT(' ') || *p == wxT(',') )
         {
             if ( !strExt.empty() )
             {
@@ -1384,7 +1385,7 @@ bool wxFileTypeImpl::GetExtensions(wxArrayString& extensions)
             //else: repeated spaces
             // (shouldn't happen, but it's not that important if it does happen)
 
-            if ( *p == wxT('\0') )
+            if ( p == end )
                 break;
         }
         else if ( *p == wxT('.') )
@@ -2488,8 +2489,7 @@ wxMimeTypesManagerImpl::ProcessOtherMailcapField(MailcapLineData& data,
     }
 
     // is this something of the form foo=bar?
-    const wxChar *pEq = wxStrchr(curField, wxT('='));
-    if ( pEq != NULL )
+    if ( curField.find('=') != wxString::npos )
     {
         // split "LHS = RHS" in 2
         wxString lhs = curField.BeforeFirst(wxT('=')),

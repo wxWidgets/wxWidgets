@@ -82,8 +82,10 @@ public:
   void Compress(bool on);
 
   // unhide the Execute overload from wxConnectionBase
+  // FIXME-UTF8: change Execute() to DoExecute() to avoid having to do this;
+  //             don't use c_str() below after removing ANSI build
   virtual bool Execute(const wxString& str)
-    { return Execute(str, -1, wxIPC_TEXT); }
+    { return Execute(str.c_str(), -1, wxIPC_TEXT); }
 
 protected:
   wxSocketBase       *m_sock;

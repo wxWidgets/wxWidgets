@@ -112,7 +112,7 @@ static const wxChar *s_MRUEntryFormat = wxT("&%d %s");
 // local functions
 // ----------------------------------------------------------------------------
 
-static wxString FindExtension(const wxChar *path)
+static wxString FindExtension(const wxString& path)
 {
     wxString ext;
     wxSplitPath(path, NULL, NULL, &ext);
@@ -456,8 +456,7 @@ bool wxDocument::OnSaveModified()
             msgTitle = wxString(_("Warning"));
 
         wxString prompt;
-        prompt.Printf(_("Do you want to save changes to document %s?"),
-                (const wxChar *)title);
+        prompt.Printf(_("Do you want to save changes to document %s?"), title);
         int res = wxMessageBox(prompt, msgTitle,
                 wxYES_NO|wxCANCEL|wxICON_QUESTION,
                 GetDocumentWindow());

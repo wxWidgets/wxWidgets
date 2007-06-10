@@ -82,8 +82,7 @@ wxAnimation& wxAnimation::operator=(const wxAnimation& that)
 bool wxAnimation::LoadFile(const wxString &name, wxAnimationType WXUNUSED(type))
 {
     UnRef();
-    m_pixbuf = gdk_pixbuf_animation_new_from_file(
-        wxConvFileName->cWX2MB(name), NULL);
+    m_pixbuf = gdk_pixbuf_animation_new_from_file(name.fn_str(), NULL);
     return IsOk();
 }
 

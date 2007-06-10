@@ -55,14 +55,12 @@ static wxString GetGtkHotKey( const wxMenuItem& item );
 
 static wxString wxReplaceUnderscore( const wxString& title )
 {
-    const wxChar *pc;
-
     // GTK 1.2 wants to have "_" instead of "&" for accelerators
     wxString str;
-    pc = title;
-    while (*pc != wxT('\0'))
+
+    for ( wxString::const_iterator pc = title.begin(); pc != title.end(); ++pc )
     {
-        if ((*pc == wxT('&')) && (*(pc+1) == wxT('&')))
+        if ((*pc == wxT('&')) && (pc+1 != title.end()) && (*(pc+1) == wxT('&')))
         {
             // "&" is doubled to indicate "&" instead of accelerator
             ++pc;
@@ -83,7 +81,6 @@ static wxString wxReplaceUnderscore( const wxString& title )
 
             str << *pc;
         }
-        ++pc;
     }
 
     // wxPrintf( wxT("before %s after %s\n"), title.c_str(), str.c_str() );

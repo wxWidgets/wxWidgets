@@ -767,7 +767,7 @@ static wxString wxCreateTempImpl(
     path += _T("XXXXXX");
 
     // we need to copy the path to the buffer in which mkstemp() can modify it
-    wxCharBuffer buf( wxConvFile.cWX2MB( path ) );
+    wxCharBuffer buf(path.fn_str());
 
     // cast is safe because the string length doesn't change
     int fdTemp = mkstemp( (char*)(const char*) buf );

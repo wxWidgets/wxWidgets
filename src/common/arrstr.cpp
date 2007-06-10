@@ -197,7 +197,7 @@ void wxArrayString::Shrink()
 }
 
 // searches the array for an item (forward or backwards)
-int wxArrayString::Index(const wxChar *sz, bool bCase, bool bFromEnd) const
+int wxArrayString::Index(const wxString& str, bool bCase, bool bFromEnd) const
 {
   if ( m_autoSort ) {
     // use binary search in the sorted array
@@ -211,7 +211,7 @@ int wxArrayString::Index(const wxChar *sz, bool bCase, bool bFromEnd) const
     while ( lo < hi ) {
       i = (lo + hi)/2;
 
-      res = wxStrcmp(sz, m_pItems[i]);
+      res = str.compare(m_pItems[i]);
       if ( res < 0 )
         hi = i;
       else if ( res > 0 )
@@ -228,7 +228,7 @@ int wxArrayString::Index(const wxChar *sz, bool bCase, bool bFromEnd) const
       if ( m_nCount > 0 ) {
         size_t ui = m_nCount;
         do {
-          if ( m_pItems[--ui].IsSameAs(sz, bCase) )
+          if ( m_pItems[--ui].IsSameAs(str, bCase) )
             return ui;
         }
         while ( ui != 0 );
@@ -236,7 +236,7 @@ int wxArrayString::Index(const wxChar *sz, bool bCase, bool bFromEnd) const
     }
     else {
       for( size_t ui = 0; ui < m_nCount; ui++ ) {
-        if( m_pItems[ui].IsSameAs(sz, bCase) )
+        if( m_pItems[ui].IsSameAs(str, bCase) )
           return ui;
       }
     }

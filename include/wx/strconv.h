@@ -29,6 +29,8 @@
 
 #if wxUSE_WCHAR_T
 
+class WXDLLIMPEXP_BASE wxString;
+
 // the error value returned by wxMBConv methods
 #define wxCONV_FAILED ((size_t)-1)
 
@@ -199,7 +201,7 @@ public:
 class WXDLLIMPEXP_BASE wxConvBrokenFileNames : public wxMBConv
 {
 public:
-    wxConvBrokenFileNames(const wxChar *charset);
+    wxConvBrokenFileNames(const wxString& charset);
     wxConvBrokenFileNames(const wxConvBrokenFileNames& conv)
         : wxMBConv(),
           m_conv(conv.m_conv ? conv.m_conv->Clone() : NULL)
@@ -387,7 +389,7 @@ class WXDLLIMPEXP_BASE wxCSConv : public wxMBConv
 public:
     // we can be created either from charset name or from an encoding constant
     // but we can't have both at once
-    wxCSConv(const wxChar *charset);
+    wxCSConv(const wxString& charset);
     wxCSConv(wxFontEncoding encoding);
 
     wxCSConv(const wxCSConv& conv);
@@ -426,12 +428,12 @@ private:
 
     // set the name (may be only called when m_name == NULL), makes copy of
     // charset string
-    void SetName(const wxChar *charset);
+    void SetName(const char *charset);
 
 
     // note that we can't use wxString here because of compilation
     // dependencies: we're included from wx/string.h
-    wxChar *m_name;
+    char *m_name;
     wxFontEncoding m_encoding;
 
     // use CreateConvIfNeeded() before accessing m_convReal!

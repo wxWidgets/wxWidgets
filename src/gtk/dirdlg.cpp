@@ -148,7 +148,7 @@ wxDirDialog::wxDirDialog(wxWindow* parent, const wxString& title,
 
         if ( !defaultPath.empty() )
             gtk_file_chooser_set_current_folder( GTK_FILE_CHOOSER(m_widget),
-                    wxConvFileName->cWX2MB(defaultPath) );
+                    defaultPath.fn_str() );
     }
     else
         wxGenericDirDialog::Create(parent, title, defaultPath, style, pos, sz, name);
@@ -192,7 +192,8 @@ void wxDirDialog::SetPath(const wxString& dir)
     {
         if (wxDirExists(dir))
         {
-            gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget), wxConvFileName->cWX2MB(dir));
+            gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget),
+                                                dir.fn_str());
         }
     }
     else
@@ -204,7 +205,7 @@ wxString wxDirDialog::GetPath() const
     if (!gtk_check_version(2,4,0))
     {
         wxGtkString str(gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(m_widget)));
-        return wxConvFileName->cMB2WX(str);
+        return wxString(str, *wxConvFileName);
     }
 
     return wxGenericDirDialog::GetPath();

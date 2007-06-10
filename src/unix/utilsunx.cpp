@@ -917,7 +917,8 @@ wxOperatingSystemId wxGetOsVersion(int *verMaj, int *verMin)
     // get OS version
     int major, minor;
     wxString release = wxGetCommandOutput(wxT("uname -r"));
-    if ( release.empty() || wxSscanf(release, wxT("%d.%d"), &major, &minor) != 2 )
+    if ( release.empty() ||
+         wxSscanf(release.c_str(), wxT("%d.%d"), &major, &minor) != 2 )
     {
         // failed to get version string or unrecognized format
         major =
@@ -1051,7 +1052,7 @@ bool wxGetDiskSpace(const wxString& path, wxDiskspaceSize_t *pTotal, wxDiskspace
 bool wxGetEnv(const wxString& var, wxString *value)
 {
     // wxGetenv is defined as getenv()
-    wxChar *p = wxGetenv(var);
+    char *p = wxGetenv(var);
     if ( !p )
         return false;
 

@@ -1156,29 +1156,25 @@ wxString wxFilterClassFactoryBase::PopExtension(const wxString& location) const
 }
 
 wxString::size_type wxFilterClassFactoryBase::FindExtension(
-        const wxChar *location) const
+        const wxString& location) const
 {
-    size_t len = wxStrlen(location);
-
     for (const wxChar *const *p = GetProtocols(wxSTREAM_FILEEXT); *p; p++)
     {
-        size_t l = wxStrlen(*p);
-
-        if (l <= len && wxStrcmp(*p, location + len - l) == 0)
-            return len - l;
+        if ( location.EndsWith(*p) )
+            return location.length() - wxStrlen(*p);
     }
 
     return wxString::npos;
 }
 
-bool wxFilterClassFactoryBase::CanHandle(const wxChar *protocol,
+bool wxFilterClassFactoryBase::CanHandle(const wxString& protocol,
                                          wxStreamProtocolType type) const
 {
     if (type == wxSTREAM_FILEEXT)
         return FindExtension(protocol) != wxString::npos;
     else
         for (const wxChar *const *p = GetProtocols(type); *p; p++)
-            if (wxStrcmp(*p, protocol) == 0)
+            if (protocol == *p)
                 return true;
 
     return false;
