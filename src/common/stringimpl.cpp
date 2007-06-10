@@ -30,6 +30,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/stringimpl.h"
+    #include "wx/wxcrt.h"
 #endif
 
 #include <ctype.h>
