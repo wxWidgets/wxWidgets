@@ -145,10 +145,9 @@ protected:
 
     // Adds text to the output.
     // This is called from Parse() and must be overriden in derived classes.
-    // txt is not guaranteed to be only one word. It is largest continuous part of text
-    // (= not broken by tags)
-    // NOTE : using char* because of speed improvements
-    virtual void AddText(const wxChar* txt) = 0;
+    // txt is not guaranteed to be only one word. It is largest continuous part
+    // of text (= not broken by tags)
+    virtual void AddText(const wxString& txt) = 0;
 
     // Adds tag and proceeds it. Parse() may (and usually is) called from this method.
     // This is called from Parse() and may be overriden.

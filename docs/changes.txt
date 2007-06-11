@@ -60,7 +60,7 @@ Changes in behaviour which may result in compilation errors
      wxLogError(_("error: %s"), !err.empty() ? (const wxChar*)err.c_str() : "")
 
 - wxCtime() and wxAsctime() return char*; this is incompatible with Unicode
-  build in wxWidgets 2.8 that returned wchar_t*. 
+  build in wxWidgets 2.8 that returned wchar_t*.
 
 - DigitalMars compiler has a bug that prevents it from using
   wxUniChar::operator bool in conditions and it erroneously reports type
@@ -68,6 +68,8 @@ Changes in behaviour which may result in compilation errors
      for ( wxString::const_iterator p = s.begin(); *p; ++p )
   This can be worked around by explicitly casting to bool:
      for ( wxString::const_iterator p = s.begin(); (bool)*p; ++p )
+
+- virtual wxHtmlParser::AddText() takes wxString, not wxChar*, argument now.
 
 Deprecated methods and their replacements
 -----------------------------------------
