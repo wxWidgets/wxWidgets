@@ -220,8 +220,8 @@
         we don't have them at all or because they don't have the semantics we
         need
      */
-    int wxCRT_PrintfW( const wchar_t *format, ... ) ATTRIBUTE_PRINTF_1;
-    int wxCRT_FprintfW( FILE *stream, const wchar_t *format, ... ) ATTRIBUTE_PRINTF_2;
+    int wxCRT_PrintfW( const wchar_t *format, ... );
+    int wxCRT_FprintfW( FILE *stream, const wchar_t *format, ... );
     int wxCRT_VfprintfW( FILE *stream, const wchar_t *format, va_list ap );
     int wxCRT_VprintfW( const wchar_t *format, va_list ap );
     int wxCRT_VsprintfW( wchar_t *str, const wchar_t *format, va_list ap );
@@ -247,9 +247,9 @@
 #define wxCRT_VsscanfA   vsscanf
 
 #if defined(wxNEED_PRINTF_CONVERSION) || defined(wxNEED_WPRINTF)
-    int wxCRT_ScanfW(const wchar_t *format, ...) ATTRIBUTE_PRINTF_1;
-    int wxCRT_SscanfW(const wchar_t *str, const wchar_t *format, ...) ATTRIBUTE_PRINTF_2;
-    int wxCRT_FscanfW(FILE *stream, const wchar_t *format, ...) ATTRIBUTE_PRINTF_2;
+    int wxCRT_ScanfW(const wchar_t *format, ...);
+    int wxCRT_SscanfW(const wchar_t *str, const wchar_t *format, ...);
+    int wxCRT_FscanfW(FILE *stream, const wchar_t *format, ...);
     int wxCRT_VsscanfW(const wchar_t *str, const wchar_t *format, va_list ap);
 #else
     #define wxCRT_ScanfW     wscanf
