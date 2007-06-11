@@ -11,6 +11,11 @@
 #ifndef _WX_CRT_H_
 #define _WX_CRT_H_
 
-#include "wx/wxchar.h"
+// include wxChar type definition:
+#include "wx/chartype.h"
+
+// and wrappers for CRT functions:
+#include "wx/wxcrt.h"
+#include "wx/wxcrtvararg.h"
 
 #endif // _WX_CRT_H_

@@ -42,7 +42,7 @@
 #include "wx/msgout.h"
 #include "wx/textfile.h"
 #include "wx/thread.h"
-#include "wx/wxchar.h"
+#include "wx/crt.h"
 
 // other standard headers
 #ifndef __WXWINCE__

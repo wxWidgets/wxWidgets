@@ -20,7 +20,7 @@
     #pragma hdrstop
 #endif
 
-#include "wx/wxchar.h"
+#include "wx/crt.h"
 
 #define _ISOC9X_SOURCE 1 // to get vsscanf()
 #define _BSD_SOURCE    1 // to still get strdup()
@@ -90,7 +90,7 @@ size_t WXDLLEXPORT wxMB2WC(wchar_t *buf, const char *psz, size_t n)
   // to just get the size of the needed buffer -- this is needed as otherwise
   // we have no idea about how much space we need and if the CRT doesn't
   // support it (the only currently known example being Metrowerks, see
-  // wx/wxchar.h) we don't use its mbstowcs() at all
+  // wx/crt.h) we don't use its mbstowcs() at all
 #ifdef HAVE_WCSRTOMBS
   return mbsrtowcs((wchar_t *) NULL, &psz, 0, &mbstate);
 #else

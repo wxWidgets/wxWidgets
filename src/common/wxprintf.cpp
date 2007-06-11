@@ -20,7 +20,7 @@
     #pragma hdrstop
 #endif
 
-#include "wx/wxchar.h"
+#include "wx/crt.h"
 
 #include <string.h>
 

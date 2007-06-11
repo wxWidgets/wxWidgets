@@ -13,6 +13,9 @@
 #ifndef _WX_WXCRTVARARG_H_
 #define _WX_WXCRTVARARG_H_
 
+// NB: User code should include wx/crt.h instead of including this
+//     header directly.
+
 #include "wx/wxcrt.h"
 #include "wx/strvararg.h"
 

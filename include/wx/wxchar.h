@@ -12,11 +12,8 @@
 #ifndef _WX_WXCHAR_H_
 #define _WX_WXCHAR_H_
 
-// include wxChar type definition:
-#include "wx/chartype.h"
-
-// and wrappers for CRT functions:
-#include "wx/wxcrt.h"
-#include "wx/wxcrtvararg.h"
+// This header used to define CRT functions wrappers in wxWidgets 2.8. This is
+// now done in (headers included by) wx/crt.h, so include it for compatibility:
+#include "wx/crt.h"
 
 #endif /* _WX_WXCHAR_H_ */
