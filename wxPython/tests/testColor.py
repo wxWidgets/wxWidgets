@@ -4,14 +4,10 @@ import wx
 """
 This file contains classes and methods for unit testing the API of wx.Color
 (as well as wx.Colour, because they're the same thing)
-
-IDEA: implement all the tests for just wx.Color, then abstract the tests
-        to run against a particular symbol that can be substituted into.
-        then sub both wx.Color and wx.Colour into it.
-        (yes i know that they refer to the same thing.  but let's be thorough.)
         
 Methods yet to test:
-Alpha, GetPixel, GetRGB, SetFromName, SetRGB
+__del__, __eq__, __getitem__, __len__, __ne__, __nonzero__, __reduce__, 
+__repr__, __str__, GetPixel, GetRGB, SetFromName, SetRGB
 """
 
 RED = wx.Colour(255,0,0)
@@ -38,6 +34,9 @@ class ColorTest(unittest.TestCase):
     ##################
     ## Test Methods ##
     ##################
+    
+    def testColorColourAlias(self):
+        self.assertEquals(wx.Color, wx.Colour)
     
     def testConstructor(self):
         """__init__"""

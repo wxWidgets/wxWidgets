@@ -19,11 +19,11 @@ These properties include:
 
 To find out where a particular method is tested, search for the name of that
 method.  Each test contains, as a docstring, the names of the methods tested
-within them.  Additionally, the following methods have yet to have tests
-written for them:
-    
-AcceptsFocus, AcceptsFocusFromKeyboard, AddChild, AdjustForLayoutDirection, AssociateHandle, 
-CacheBestSize, CanSetTransparent, CaptureMouse, CenterOnParent, CentreOnParent, 
+within them.  Additionally, below is a list of methods needing tests.
+
+Methods yet to test:
+__init__, AcceptsFocus, AcceptsFocusFromKeyboard, AddChild, AdjustForLayoutDirection,
+AssociateHandle, CacheBestSize, CanSetTransparent, CaptureMouse, CenterOnParent, CentreOnParent, 
 ClearBackground, ClientToScreen, ClientToScreenXY, Close, ConvertDialogPointToPixels, 
 ConvertDialogSizeToPixels, ConvertPixelPointToDialog, ConvertPixelSizeToDialog, 
 Create, Destroy, DestroyChildren, DissociateHandle, DLG_PNT, DLG_SZE, DragAcceptFiles, 

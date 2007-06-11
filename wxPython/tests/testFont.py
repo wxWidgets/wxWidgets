@@ -7,9 +7,6 @@ This file contains classes and methods for unit testing the API of wx.Font
 NOTE: The documentation for font currently omits a large number of constants.
     I had to look through the wx module itself to find them, and I'll copy
     that information here.
-
-TODO: fix the fact that wx.FONTSTYLE_MAX and wx.FONTWEIGHT_MAX aren't
-    implemented on any modern platforms
     
 CONSTANTS:
     wx.FONTFAMILY_xxx constants:
@@ -34,6 +31,15 @@ CONSTANTS:
         wx.FONTWEIGHT_LIGHT
         wx.FONTWEIGHT_MAX
         wx.FONTWEIGHT_NORMAL
+
+Methods yet to test:
+__init__, __del__, __eq__, __ne__, __nonzero__, GetDefaultEncoding, GetEncoding, GetFaceName
+GetFamily, GetFamilyString, GetNativeFontInfo, GetNativeFontInfoDesc, GetNativeFontInfoUserDesc,
+GetNoAntiAliasing, GetPixelSize, GetPointSize, GetStyle, GetStyleString, GetUnderlined,
+GetWeight, GetWeightString, IsFixedWidth, IsOk, IsUsingSizeInPixels, Ok, SetDefaultEncoding,
+SetEncoding, SetFaceName, SetFamily, SetNativeFontInfo, SetNativeFontInfoFromString,
+SetNativeFontInfoUserDesc, SetNoAntiAliasing, SetPixelSize, SetPointSize, SetStyle, SetUnderlined
+SetWeight
 """
 
 class FontTest(unittest.TestCase):
