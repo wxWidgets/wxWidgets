@@ -414,18 +414,37 @@ inline int wxStricmp_String(const wxString& s1, const T& s2)
     { return s1.CmpNoCase(s2); }
 WX_STRCMP_FUNC(wxStricmp, wxCRT_StricmpA, wxCRT_StricmpW, wxStricmp_String)
 
+
+// GCC 3.3 has a bug that causes it to fail compilation if the template's
+// implementation uses overloaded function declared later (see the wxStrcoll()
+// call in wxStrcoll_String<T>()), so we have to forward-declare the template
+// and implement it below WX_STRCMP_FUNC. OTOH, this fails to compile with VC6,
+// so we do it for GCC only.
+#ifdef __GNUG__
+template<typename T>
+inline int wxStrcoll_String(const wxString& s1, const T& s2);
+WX_STRCMP_FUNC(wxStrcoll, wxCRT_StrcollA, wxCRT_StrcollW, wxStrcoll_String)
+#endif // __GNUG__
+
 template<typename T>
 inline int wxStrcoll_String(const wxString& s1, const T& s2)
 {
 #if wxUSE_UNICODE
     // NB: strcoll() doesn't work correctly on UTF-8 strings, so we have to use
-    //     wc_str() even if wxUSE_UNICODE_UTF8:
-    return wxStrcoll(s1.wc_str(), s2);
+    //     wc_str() even if wxUSE_UNICODE_UTF8; the (const wchar_t*) cast is
+    //     there just as optimization to avoid going through
+    //     wxStrcoll<wxWCharBuffer>:
+    return wxStrcoll((const wchar_t*)s1.wc_str(), s2);
 #else
-    return wxStrcoll(s1.mb_str(), s2);
+    return wxStrcoll((const char*)s1.mb_str(), s2);
 #endif
 }
+
+#ifndef __GNUG__
+// this is exactly the same WX_STRCMP_FUNC line as above wxStrcoll_String<>
 WX_STRCMP_FUNC(wxStrcoll, wxCRT_StrcollA, wxCRT_StrcollW, wxStrcoll_String)
+#endif
+
 
 template<typename T>
 inline int wxStrspn_String(const wxString& s1, const T& s2)
