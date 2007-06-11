@@ -1656,23 +1656,25 @@ void wxUpdateLocaleIsUtf8()
 // ============================================================================
 
 #if wxUSE_UNICODE_WCHAR
-    #define CALL_ANSI_OR_UNICODE(callA, callW)  return callW
+    #define CALL_ANSI_OR_UNICODE(return_kw, callA, callW)  return_kw callW
 #elif wxUSE_UNICODE_UTF8 && !wxUSE_UTF8_LOCALE_ONLY
-    #define CALL_ANSI_OR_UNICODE(callA, callW) \
-            return wxLocaleIsUtf8 ? callA : callW
+    #define CALL_ANSI_OR_UNICODE(return_kw, callA, callW) \
+            return_kw wxLocaleIsUtf8 ? callA : callW
 #else // ANSI or UTF8 only
-    #define CALL_ANSI_OR_UNICODE(callA, callW)  return callA
+    #define CALL_ANSI_OR_UNICODE(return_kw, callA, callW)  return_kw callA
 #endif
 
 int wxPuts(const wxString& s)
 {
-    CALL_ANSI_OR_UNICODE(wxCRT_PutsA(s.mb_str()),
+    CALL_ANSI_OR_UNICODE(return,
+                         wxCRT_PutsA(s.mb_str()),
                          wxCRT_PutsW(s.wc_str()));
 }
 
 int wxFputs(const wxString& s, FILE *stream)
 {
-    CALL_ANSI_OR_UNICODE(wxCRT_FputsA(s.mb_str(), stream),
+    CALL_ANSI_OR_UNICODE(return,
+                         wxCRT_FputsA(s.mb_str(), stream),
                          wxCRT_FputsW(s.wc_str(), stream));
 }
 
@@ -1681,7 +1683,8 @@ int wxFputc(const wxUniChar& c, FILE *stream)
 #if !wxUSE_UNICODE // FIXME-UTF8: temporary, remove this with ANSI build
     return wxCRT_FputcA((char)c, stream);
 #else
-    CALL_ANSI_OR_UNICODE(wxCRT_FputsA(c.AsUTF8(), stream),
+    CALL_ANSI_OR_UNICODE(return,
+                         wxCRT_FputsA(c.AsUTF8(), stream),
                          wxCRT_FputcW((wchar_t)c, stream));
 #endif
 }
@@ -1689,7 +1692,9 @@ int wxFputc(const wxUniChar& c, FILE *stream)
 void wxPerror(const wxString& s)
 {
 #ifdef wxCRT_PerrorW
-    CALL_ANSI_OR_UNICODE(wxCRT_PerrorA(s.mb_str()), wxCRT_PerrorW(s.wc_str()));
+    CALL_ANSI_OR_UNICODE(wxEMPTY_PARAMETER_VALUE,
+                         wxCRT_PerrorA(s.mb_str()),
+                         wxCRT_PerrorW(s.wc_str()));
 #else
     wxCRT_PerrorA(s.mb_str());
 #endif
