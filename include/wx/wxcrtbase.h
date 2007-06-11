@@ -173,15 +173,16 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
     #define wxCRT_StrxfrmW   wcsxfrm
 
     /* Almost all compiler have strdup(), but not quite all: CodeWarrior under
-       Mac and VC++ for Windows CE don't provide it */
+       Mac and VC++ for Windows CE don't provide it; additionally, gcc under
+       Mac doesn't have wcsdup: */
     #if defined(__VISUALC__) && __VISUALC__ >= 1400
         #define wxCRT_StrdupA _strdup
     #elif !(defined(__MWERKS__) && defined(__WXMAC__)) && !defined(__WXWINCE__)
         #define wxCRT_StrdupA strdup
     #endif
-    #ifdef __WINDOWS__
+    #if defined(__WINDOWS__)
         #define wxCRT_StrdupW _wcsdup
-    #else
+    #elif !defined(__DARWIN__)
         #define wxCRT_StrdupW wcsdup
     #endif
 #else
