@@ -6,7 +6,7 @@ Recent Changes for wxPython
 * 
 
 Added some SWIG magic that allows wx C++ lists to be exposed to
-wxPython as sqequence-like wrappers around the real list, instead of
+wxPython as sequence-like wrappers around the real list, instead of
 making a Python list that is a copy of the real list as was done
 before.  These sequence-like objects support indexing, iteration and
 containment tests ("obj in seq") but not anything that would modify the
@@ -18,6 +18,17 @@ wx.Menu.GetMenuItems.  Care should be taken to be sure that you don't
 try to use the sequence after the C++ object the list belongs to has
 been destroyed.
 
+Updated wrappers for the RichTextCtrl classes that were already
+wrapped, and added support for loading rich xml files and saving as
+HTML or XML.
+
+Added wxRoses sample from Ric Werme.
+
+Added better wrappers for wx.OutputStream and wxPython now deals with
+them similarly to how it handles wx.InputStreams.  Specifically, any
+Python file-like object can be passed where a wx.OutputStream is
+expected and the data will be written to the file object
+appropriately.
 
 
 
