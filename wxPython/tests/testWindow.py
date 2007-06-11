@@ -2,6 +2,7 @@ import unittest
 import wx
 
 import testColor
+import testRect
 
 """
 This file contains classes and methods for unit testing the API of wx.Window.
@@ -91,15 +92,7 @@ class WindowTest(unittest.TestCase):
                         wx.Size(1000,1), wx.Size(31415, 27182),
                         wx.Size(32767, 32767), wx.Size(0,0)
                     )
-        # TODO: delegate to testRect module
-        # TODO: find out if 32767 is some Windows limit, or a hard one.
-        #       Can we get rid of this magic number?
-        self.RECTS = (
-                        wx.Rect(1,1,1,1), wx.Rect(1,1,1000,1000),
-                        wx.Rect(1000,1000,1,1), wx.Rect(1000,1000,1000,1000),
-                        wx.Rect(10,200,3000,1), wx.Rect(1,999,111,9999),
-                        wx.Rect(32767,32767,32767,32767), wx.Rect()
-                    )
+        self.RECTS = testRect.getRectData()
         self.SIZE_HINTS = ( # minW, minH, maxW, maxH
                             (0,0,1000,1000), (0,0,1,1),
                             (0,0,0,0), (10,10,100,100),
