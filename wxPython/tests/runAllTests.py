@@ -18,11 +18,13 @@ import testWindow
 import testButton
 import testFont
 import testColor
+import testControl
 
 alltests = unittest.TestSuite(( testWindow.suite(),
                                 testButton.suite(),
                                 testFont.suite(),
-                                testColor.suite()
+                                testColor.suite(),
+                                testControl.suite()
                                 ))
 
 results = unittest.TestResult()
