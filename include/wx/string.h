@@ -639,7 +639,7 @@ public:
       private:                                                              \
           underlying_iterator m_cur
 
-  class const_iterator;
+  class WXDLLIMPEXP_BASE const_iterator;
 
 #if wxUSE_UNICODE_UTF8
   // NB: In UTF-8 build, (non-const) iterator needs to keep reference
@@ -656,7 +656,7 @@ public:
   //     string and traversing it in wxUniCharRef::operator=(). Head of the
   //     list is stored in wxString. (FIXME-UTF8)
 
-  class iterator
+  class WXDLLIMPEXP_BASE iterator
   {
       WX_STR_ITERATOR_IMPL(iterator, wxChar*, wxUniCharRef);
 
@@ -687,7 +687,7 @@ public:
       friend class const_iterator;
   };
 
-  class const_iterator
+  class WXDLLIMPEXP_BASE const_iterator
   {
       // NB: reference_type is intentionally value, not reference, the character
       //     may be encoded differently in wxString data:
@@ -726,7 +726,7 @@ public:
 
 #else // !wxUSE_UNICODE_UTF8
 
-  class iterator
+  class WXDLLIMPEXP_BASE iterator
   {
       WX_STR_ITERATOR_IMPL(iterator, wxChar*, wxUniCharRef);
 
@@ -753,7 +753,7 @@ public:
       friend class const_iterator;
   };
 
-  class const_iterator
+  class WXDLLIMPEXP_BASE const_iterator
   {
       // NB: reference_type is intentionally value, not reference, the character
       //     may be encoded differently in wxString data:
@@ -2520,6 +2520,12 @@ private:
 private:
   wxStringImpl m_impl;
 
+#ifdef __VISUALC__
+    // "struct 'ConvertedBuffer<T>' needs to have dll-interface to be used by
+    // clients of class 'wxString'" - this is private, we don't care
+    #pragma warning (disable:4251)
+#endif
+
   // buffers for compatibility conversion from (char*)c_str() and
   // (wchar_t*)c_str():
   // FIXME-UTF8: bechmark various approaches to keeping compatibility buffers
@@ -2546,6 +2552,10 @@ private:
 #endif
 #if !wxUSE_UNICODE_WCHAR
   ConvertedBuffer<wchar_t> m_convertedToWChar;
+#endif
+
+#ifdef __VISUALC__
+    #pragma warning (default:4251)
 #endif
 
 #if wxUSE_UNICODE_UTF8

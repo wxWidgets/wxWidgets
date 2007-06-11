@@ -150,8 +150,17 @@ private:
 #endif // wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
 
 private:
+#ifdef __VISUALC__
+    // "struct 'ConvertedBuffer<T>' needs to have dll-interface to be used by
+    // clients of class 'wxString'" - this is private, we don't care
+    #pragma warning (disable:4251)
+#endif
     wxCharBuffer  m_char;
     wxWCharBuffer m_wchar;
+#ifdef __VISUALC__
+    #pragma warning (default:4251)
+#endif
+
     // NB: we can use a pointer here, because wxFormatString is only used
     //     as function argument, so it has shorter life than the string
     //     passed to the ctor

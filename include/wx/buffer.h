@@ -150,7 +150,7 @@ private:
     bool m_owned;
 };
 
-class WXDLLIMPEXP_BASE wxCharBuffer : public wxCharTypeBuffer<char>
+class wxCharBuffer : public wxCharTypeBuffer<char>
 {
 public:
     typedef wxCharTypeBuffer<char> wxCharTypeBufferBase;
@@ -165,7 +165,7 @@ public:
 };
 
 #if wxUSE_WCHAR_T
-class WXDLLIMPEXP_BASE wxWCharBuffer : public wxCharTypeBuffer<wchar_t>
+class wxWCharBuffer : public wxCharTypeBuffer<wchar_t>
 {
 public:
     typedef wxCharTypeBuffer<wchar_t> wxCharTypeBufferBase;

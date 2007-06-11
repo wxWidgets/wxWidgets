@@ -263,9 +263,9 @@ public:
   // we need to declare const_iterator in wxStringImpl scope, the friend
   // declaration inside iterator class itself is not enough, or at least not
   // for g++ 3.4 (g++ 4 is ok)
-  class const_iterator;
+  class WXDLLIMPEXP_BASE const_iterator;
 
-  class iterator
+  class WXDLLIMPEXP_BASE iterator
   {
     WX_DEFINE_STRINGIMPL_ITERATOR(iterator,
                                   wxStringCharType&,
@@ -274,7 +274,7 @@ public:
     friend class const_iterator;
   };
 
-  class const_iterator
+  class WXDLLIMPEXP_BASE const_iterator
   {
   public:
       const_iterator(iterator i) : m_ptr(i.m_ptr) { }
