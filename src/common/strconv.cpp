@@ -2738,7 +2738,7 @@ public:
     }
 
 #if wxUSE_FONTMAP
-    wxMBConv_mac(const wxChar* name)
+    wxMBConv_mac(const char* name)
     {
         Init( wxMacGetSystemEncFromFontEnc( wxFontMapperBase::Get()->CharsetToEncoding(name, false) ) );
     }
