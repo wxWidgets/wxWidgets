@@ -65,6 +65,7 @@ public:
 #endif
 
     wxUniChar(int c) { m_value = c; }
+    wxUniChar(long int c) { m_value = c; }
 
     wxUniChar(const wxUniCharRef& c);
 
@@ -93,6 +94,7 @@ public:
     operator char() const { return To8bit(m_value); }
     operator wchar_t() const { return m_value; }
     operator int() const { return m_value; }
+    operator long int() const { return m_value; }
 #ifndef wxWCHAR_T_IS_UINT
     operator unsigned int() const { return m_value; }
 #endif
@@ -127,6 +129,7 @@ public:
     wxUniChar& operator=(unsigned char c) { m_value = From8bit((char)c); return *this; }
     wxUniChar& operator=(wchar_t c) { m_value = c; return *this; }
     wxUniChar& operator=(int c) { m_value = c; return *this; }
+    wxUniChar& operator=(long int c) { m_value = c; return *this; }
 #ifdef wxWINT_T_IS_SEPARATE_TYPE
     wxUniChar& operator=(wint_t c) { m_value = c; return *this; }
 #endif
@@ -140,6 +143,7 @@ public:
     bool operator op(unsigned char c) const { return m_value op From8bit((char)c); } \
     bool operator op(wchar_t c) const { return m_value op (value_type)c; }    \
     bool operator op(int c) const { return m_value op (value_type)c; }        \
+    bool operator op(long int c) const { return m_value op (value_type)c; }   \
     wxIF_WINT_T_TYPE( bool operator op(wint_t c) const { return m_value op (value_type)c; } )
 
     wxFOR_ALL_COMPARISONS(wxDEFINE_UNICHAR_OPERATOR)
@@ -216,6 +220,7 @@ public:
     wxUniCharRef& operator=(unsigned char c) { return *this = wxUniChar(c); }
     wxUniCharRef& operator=(wchar_t c) { return *this = wxUniChar(c); }
     wxUniCharRef& operator=(int c) { return *this = wxUniChar(c); }
+    wxUniCharRef& operator=(long int c) { return *this = wxUniChar(c); }
 #ifdef wxWINT_T_IS_SEPARATE_TYPE
     wxUniCharRef& operator=(wint_t c) { return *this = wxUniChar(c); }
 #endif
@@ -223,6 +228,7 @@ public:
     // Conversions to the same types as wxUniChar is convertible too:
     operator char() const { return UniChar(); }
     operator int() const { return UniChar(); }
+    operator long int() const { return UniChar(); }
     operator unsigned char() const { return UniChar(); }
     operator wchar_t() const { return UniChar(); }
 #ifdef wxWINT_T_IS_SEPARATE_TYPE
@@ -248,6 +254,7 @@ public:
     bool operator op(unsigned char c) const { return UniChar() op c; }        \
     bool operator op(wchar_t c) const { return UniChar() op c; }              \
     bool operator op(int c) const { return UniChar() op c; }                  \
+    bool operator op(long int c) const { return UniChar() op c; }             \
     wxIF_WINT_T_TYPE( bool operator op(wint_t c) const { return UniChar() op c; } )
 
     wxFOR_ALL_COMPARISONS(wxDEFINE_UNICHARREF_OPERATOR)
