@@ -42,6 +42,29 @@ SetNativeFontInfoUserDesc, SetNoAntiAliasing, SetPixelSize, SetPointSize, SetSty
 SetWeight
 """
 
+# TODO:
+#   Verify completeness of this list. Flesh it out, perhaps automate the font creation process,
+#   perhaps return a generator.
+def getFontData():
+    return (
+                wx.Font(1, wx.FONTFAMILY_DECORATIVE, wx.FONTSTYLE_SLANT, wx.FONTWEIGHT_NORMAL),
+                wx.Font(8, wx.FONTFAMILY_ROMAN, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD),
+                wx.Font(10, wx.FONTFAMILY_TELETYPE, wx.FONTSTYLE_SLANT, wx.FONTWEIGHT_NORMAL),
+                wx.Font(12, wx.FONTFAMILY_MODERN, wx.FONTSTYLE_ITALIC, wx.FONTWEIGHT_LIGHT),
+                wx.Font(16, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD),
+                wx.Font(18, wx.FONTFAMILY_SCRIPT, wx.FONTSTYLE_SLANT, wx.FONTWEIGHT_LIGHT),
+                wx.Font(24, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_ITALIC, wx.FONTWEIGHT_NORMAL),
+                wx.Font(32, wx.FONTFAMILY_DECORATIVE, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_BOLD),
+                wx.Font(36, wx.FONTFAMILY_UNKNOWN, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_LIGHT),
+                wx.Font(48, wx.FONTFAMILY_MODERN, wx.FONTSTYLE_SLANT, wx.FONTWEIGHT_BOLD),
+                wx.Font(72, wx.FONTFAMILY_SWISS, wx.FONTSTYLE_ITALIC, wx.FONTWEIGHT_NORMAL),
+                wx.Font(96, wx.FONTFAMILY_MAX, wx.FONTSTYLE_SLANT, wx.FONTWEIGHT_BOLD),
+                wx.Font(128, wx.FONTFAMILY_SCRIPT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_LIGHT),
+                wx.Font(256, wx.FONTFAMILY_MAX, wx.FONTSTYLE_ITALIC, wx.FONTWEIGHT_BOLD)
+        )
+
+# -----------------------------------------------------------
+
 class FontTest(unittest.TestCase):
     def setUp(self):
         self.app = wx.PySimpleApp()
