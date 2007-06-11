@@ -530,22 +530,82 @@ inline const char *wxStrrchr(const char *s, char c)
     { return wxCRT_StrrchrA(s, c); }
 inline const wchar_t *wxStrrchr(const wchar_t *s, wchar_t c)
     { return wxCRT_StrrchrW(s, c); }
+inline const char *wxStrchr(const char *s, const wxUniChar& c)
+    { return wxCRT_StrchrA(s, (char)c); }
+inline const wchar_t *wxStrchr(const wchar_t *s, const wxUniChar& c)
+    { return wxCRT_StrchrW(s, (wchar_t)c); }
+inline const char *wxStrrchr(const char *s, const wxUniChar& c)
+    { return wxCRT_StrrchrA(s, (char)c); }
+inline const wchar_t *wxStrrchr(const wchar_t *s, const wxUniChar& c)
+    { return wxCRT_StrrchrW(s, (wchar_t)c); }
+inline const char *wxStrchr(const char *s, const wxUniCharRef& c)
+    { return wxCRT_StrchrA(s, (char)c); }
+inline const wchar_t *wxStrchr(const wchar_t *s, const wxUniCharRef& c)
+    { return wxCRT_StrchrW(s, (wchar_t)c); }
+inline const char *wxStrrchr(const char *s, const wxUniCharRef& c)
+    { return wxCRT_StrrchrA(s, (char)c); }
+inline const wchar_t *wxStrrchr(const wchar_t *s, const wxUniCharRef& c)
+    { return wxCRT_StrrchrW(s, (wchar_t)c); }
 template<typename T>
 inline const T* wxStrchr(const wxCharTypeBuffer<T>& s, T c)
     { return wxStrchr(s.data(), c); }
 template<typename T>
 inline const T* wxStrrchr(const wxCharTypeBuffer<T>& s, T c)
     { return wxStrrchr(s.data(), c); }
+template<typename T>
+inline const T* wxStrchr(const wxCharTypeBuffer<T>& s, const wxUniChar& c)
+    { return wxStrchr(s.data(), (T)c); }
+template<typename T>
+inline const T* wxStrrchr(const wxCharTypeBuffer<T>& s, const wxUniChar& c)
+    { return wxStrrchr(s.data(), (T)c); }
+template<typename T>
+inline const T* wxStrchr(const wxCharTypeBuffer<T>& s, const wxUniCharRef& c)
+    { return wxStrchr(s.data(), (T)c); }
+template<typename T>
+inline const T* wxStrrchr(const wxCharTypeBuffer<T>& s, const wxUniCharRef& c)
+    { return wxStrrchr(s.data(), (T)c); }
 // these functions return char* pointer into the non-temporary conversion buffer
 // used by c_str()'s implicit conversion to char*, for ANSI build compatibility
 inline const char* wxStrchr(const wxString& s, char c)
     { return wxCRT_StrchrA((const char*)s.c_str(), c); }
 inline const char* wxStrrchr(const wxString& s, char c)
     { return wxCRT_StrrchrA((const char*)s.c_str(), c); }
+inline const char* wxStrchr(const wxString& s, int c)
+    { return wxCRT_StrchrA((const char*)s.c_str(), c); }
+inline const char* wxStrrchr(const wxString& s, int c)
+    { return wxCRT_StrrchrA((const char*)s.c_str(), c); }
+inline const char* wxStrchr(const wxString& s, const wxUniChar& c)
+    { return wxCRT_StrchrA((const char*)s.c_str(), (char)c); }
+inline const char* wxStrrchr(const wxString& s, const wxUniChar& c)
+    { return wxCRT_StrrchrA((const char*)s.c_str(), (char)c); }
+inline const char* wxStrchr(const wxString& s, const wxUniCharRef& c)
+    { return wxCRT_StrchrA((const char*)s.c_str(), (char)c); }
+inline const char* wxStrrchr(const wxString& s, const wxUniCharRef& c)
+    { return wxCRT_StrrchrA((const char*)s.c_str(), (char)c); }
+inline const wchar_t* wxStrchr(const wxString& s, wchar_t c)
+    { return wxCRT_StrchrW((const wchar_t*)s.c_str(), c); }
+inline const wchar_t* wxStrrchr(const wxString& s, wchar_t c)
+    { return wxCRT_StrrchrW((const wchar_t*)s.c_str(), c); }
 inline const char* wxStrchr(const wxCStrData& s, char c)
-    { return wxCRT_StrchrA((const char*)s.AsCharBuf(), c); }
+    { return wxCRT_StrchrA(s.AsChar(), c); }
 inline const char* wxStrrchr(const wxCStrData& s, char c)
-    { return wxCRT_StrrchrA((const char*)s.AsCharBuf(), c); }
+    { return wxCRT_StrrchrA(s.AsChar(), c); }
+inline const char* wxStrchr(const wxCStrData& s, int c)
+    { return wxCRT_StrchrA(s.AsChar(), c); }
+inline const char* wxStrrchr(const wxCStrData& s, int c)
+    { return wxCRT_StrrchrA(s.AsChar(), c); }
+inline const char* wxStrchr(const wxCStrData& s, const wxUniChar& c)
+    { return wxCRT_StrchrA(s.AsChar(), (char)c); }
+inline const char* wxStrrchr(const wxCStrData& s, const wxUniChar& c)
+    { return wxCRT_StrrchrA(s.AsChar(), (char)c); }
+inline const char* wxStrchr(const wxCStrData& s, const wxUniCharRef& c)
+    { return wxCRT_StrchrA(s.AsChar(), (char)c); }
+inline const char* wxStrrchr(const wxCStrData& s, const wxUniCharRef& c)
+    { return wxCRT_StrrchrA(s.AsChar(), (char)c); }
+inline const wchar_t* wxStrchr(const wxCStrData& s, wchar_t c)
+    { return wxCRT_StrchrW(s.AsWChar(), c); }
+inline const wchar_t* wxStrrchr(const wxCStrData& s, wchar_t c)
+    { return wxCRT_StrrchrW(s.AsWChar(), c); }
 
 inline const char *wxStrpbrk(const char *s, const char *accept)
     { return wxCRT_StrpbrkA(s, accept); }
