@@ -21,6 +21,7 @@
     #include "wx/object.h"
     #include "wx/hash.h"
     #include "wx/memory.h"
+    #include "wx/crt.h"
 #endif
 
 #include <string.h>

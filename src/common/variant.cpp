@@ -23,6 +23,7 @@
 #ifndef WX_PRECOMP
     #include "wx/string.h"
     #include "wx/math.h"
+    #include "wx/crt.h"
     #if wxUSE_STREAMS
         #include "wx/stream.h"
     #endif

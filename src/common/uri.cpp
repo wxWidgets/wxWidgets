@@ -23,6 +23,10 @@
     #pragma hdrstop
 #endif
 
+#ifndef WX_PRECOMP
+    #include "wx/crt.h"
+#endif
+
 #include "wx/uri.h"
 
 // ---------------------------------------------------------------------------

@@ -32,6 +32,7 @@
     #include "wx/string.h"
     #include "wx/log.h"
     #include "wx/intl.h"
+    #include "wx/crt.h"
 #endif //WX_PRECOMP
 
 // FreeBSD, Watcom and DMars require this, CW doesn't have nor need it.

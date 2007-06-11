@@ -18,6 +18,10 @@
 
 #if wxUSE_STREAMS
 
+#ifndef WX_PRECOMP
+    #include "wx/crt.h"
+#endif
+
 #include "wx/txtstrm.h"
 #include <ctype.h>
 
