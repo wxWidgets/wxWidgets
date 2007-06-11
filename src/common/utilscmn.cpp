@@ -140,6 +140,15 @@ void wxDecToHex(int dec, wxChar *buf)
     buf[2] = 0;
 }
 
+// Convert decimal integer to 2 characters
+void wxDecToHex(int dec, char* ch1, char* ch2)
+{
+    int firstDigit = (int)(dec/16.0);
+    int secondDigit = (int)(dec - (firstDigit*16.0));
+    (*ch1) = (char) hexArray[firstDigit];
+    (*ch2) = (char) hexArray[secondDigit];
+}
+
 // Convert decimal integer to 2-character hex string
 wxString wxDecToHex(int dec)
 {
@@ -821,7 +830,7 @@ bool wxLaunchDefaultBrowser(const wxString& urlOrig, int flags)
         wxLogDebug(wxT("ICStart error %d"), (int) err);
         return false;
     }
-#else 
+#else
     // (non-Mac, non-MSW)
 
 #ifdef __UNIX__

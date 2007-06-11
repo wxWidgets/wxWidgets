@@ -8170,18 +8170,6 @@ bool wxRichTextImageBlock::Load(wxImage& image)
     return success;
 }
 
-// Array used in DecToHex conversion routine.
-static char hexArray[] = "0123456789ABCDEF";
-
-// Convert decimal integer to 2-character hex string
-inline void wxRichTextDecToHex(int dec, char* buf)
-{
-    int firstDigit = (int)(dec/16.0);
-    int secondDigit = (int)(dec - (firstDigit*16.0));
-    buf[0] = hexArray[firstDigit];
-    buf[1] = hexArray[secondDigit];
-}
-
 // Write data in hex to a stream
 bool wxRichTextImageBlock::WriteHex(wxOutputStream& stream)
 {
@@ -8205,7 +8193,7 @@ bool wxRichTextImageBlock::WriteHex(wxOutputStream& stream)
         char* b = buf;
         for (i = 0; i < (n/2); i++)
         {
-            wxRichTextDecToHex(m_data[j], b);
+            wxDecToHex(m_data[j], b, b+1);
             b += 2; j ++;
         }
 
