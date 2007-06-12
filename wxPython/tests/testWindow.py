@@ -94,7 +94,7 @@ class WindowTest(unittest.TestCase):
                         wx.Size(1000,1), wx.Size(31415, 27182),
                         wx.Size(32767, 32767), wx.Size(0,0)
                     )
-        self.RECTS = testRect.getRectData()
+        self.RECTS = testRect.getValidRectData()
         self.SIZE_HINTS = ( # minW, minH, maxW, maxH
                             (0,0,1000,1000), (0,0,1,1),
                             (0,0,0,0), (10,10,100,100),
