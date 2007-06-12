@@ -3,7 +3,7 @@
  * Template for the set.h file for VMS                                       *
  * Created from setup.h_in                                                   *
  * Author : J.Jansen (joukj@hrem.nano.tudelft.nl)                            *
- * Date : 16 May 2007                                                        *
+ * Date : 4 June 2007                                                        *
  *                                                                           *
  *****************************************************************************/
 
@@ -261,6 +261,7 @@ typedef pid_t GPid;
 #define wxUSE_DYNAMIC_LOADER  0
 
 #define wxUSE_SOCKETS       1
+#include <socket.h>
 
 #define wxUSE_FILESYSTEM    1
 
@@ -802,6 +803,11 @@ typedef pid_t GPid;
  * wxWebKitCtrl
  */
 #define wxUSE_WEBKIT 1
+
+/*
+ * Objective-C class name uniquifying
+ */
+#define wxUSE_OBJC_UNIQUIFYING 0
 
 /*
  * The const keyword is being introduced more in wxWindows.
