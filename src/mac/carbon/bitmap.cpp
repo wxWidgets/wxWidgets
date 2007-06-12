@@ -646,6 +646,7 @@ PicHandle wxBitmapRefData::GetPictHandle()
         if ( clipRgn )
             DisposeRgn( clipRgn ) ;
 #else
+#ifndef __LP64__
         GraphicsExportComponent exporter = 0;
         OSStatus err = OpenADefaultComponent(GraphicsExporterComponentType, kQTFileTypePicture, &exporter);
         if (noErr == err)
@@ -656,9 +657,17 @@ PicHandle wxBitmapRefData::GetPictHandle()
                 err = GraphicsExportSetInputCGBitmapContext( exporter, m_hBitmap);
                 err = GraphicsExportSetOutputHandle(exporter, (Handle)m_pictHandle);
                 err = GraphicsExportDoExport(exporter, NULL);
+				size_t handleSize = GetHandleSize( (Handle) m_pictHandle );
+				// the 512 bytes header is only needed for pict files, but not in memory
+				if ( handleSize >= 512 )
+				{
+					memmove( *m_pictHandle , (char*)(*m_pictHandle)+512, handleSize - 512 );
+					SetHandleSize( (Handle) m_pictHandle, handleSize - 512 );
+				}
             }
             CloseComponent( exporter );
         }
+#endif
 #endif
     }
 
@@ -682,77 +691,86 @@ CGImageRef wxBitmapRefData::CGImageCreate() const
     CGImageRef image ;
     if ( m_rawAccessCount > 0 || m_cgImageRef == NULL )
     {
-        size_t imageSize = m_height * m_bytesPerRow ;
-        void * dataBuffer = m_memBuf.GetData() ;
-        int w = m_width ;
-        int h = m_height ;
-        CGImageAlphaInfo alphaInfo = kCGImageAlphaNoneSkipFirst ;
-        wxMemoryBuffer* membuf = NULL ;
-
-        if ( m_bitmapMask )
+#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+        if ( UMAGetSystemVersion() >= 0x1040 && m_depth != 1 && m_bitmapMask == NULL )
         {
-            alphaInfo = kCGImageAlphaFirst ;
-            membuf = new wxMemoryBuffer( imageSize ) ;
-            memcpy( membuf->GetData() , dataBuffer , imageSize ) ;
-            unsigned char *sourcemaskstart = (unsigned char *) m_bitmapMask->GetRawAccess() ;
-            int maskrowbytes = m_bitmapMask->GetBytesPerRow() ;
-            unsigned char *destalphastart = (unsigned char *) membuf->GetData() ;
-            for ( int y = 0 ; y < h ; ++y , destalphastart += m_bytesPerRow, sourcemaskstart += maskrowbytes)
+            image = CGBitmapContextCreateImage( m_hBitmap );
+        }
+        else
+#endif
+        {
+            size_t imageSize = m_height * m_bytesPerRow ;
+            void * dataBuffer = m_memBuf.GetData() ;
+            int w = m_width ;
+            int h = m_height ;
+            CGImageAlphaInfo alphaInfo = kCGImageAlphaNoneSkipFirst ;
+            wxMemoryBuffer* membuf = NULL ;
+
+            if ( m_bitmapMask )
             {
-                unsigned char *sourcemask = sourcemaskstart ;
-                unsigned char *destalpha = destalphastart ;
-                for ( int x = 0 ; x < w ; ++x , sourcemask += kMaskBytesPerPixel , destalpha += 4 )
+                alphaInfo = kCGImageAlphaFirst ;
+                membuf = new wxMemoryBuffer( imageSize ) ;
+                memcpy( membuf->GetData() , dataBuffer , imageSize ) ;
+                unsigned char *sourcemaskstart = (unsigned char *) m_bitmapMask->GetRawAccess() ;
+                int maskrowbytes = m_bitmapMask->GetBytesPerRow() ;
+                unsigned char *destalphastart = (unsigned char *) membuf->GetData() ;
+                for ( int y = 0 ; y < h ; ++y , destalphastart += m_bytesPerRow, sourcemaskstart += maskrowbytes)
                 {
-                    *destalpha = 0xFF - *sourcemask ;
+                    unsigned char *sourcemask = sourcemaskstart ;
+                    unsigned char *destalpha = destalphastart ;
+                    for ( int x = 0 ; x < w ; ++x , sourcemask += kMaskBytesPerPixel , destalpha += 4 )
+                    {
+                        *destalpha = 0xFF - *sourcemask ;
+                    }
                 }
             }
-        }
-        else
-        {
-            if ( m_hasAlpha )
+            else
             {
-#if wxMAC_USE_PREMULTIPLIED_ALPHA
-                alphaInfo = kCGImageAlphaPremultipliedFirst ;
-#else
-                alphaInfo = kCGImageAlphaFirst ;
-#endif
+                if ( m_hasAlpha )
+                {
+    #if wxMAC_USE_PREMULTIPLIED_ALPHA
+                    alphaInfo = kCGImageAlphaPremultipliedFirst ;
+    #else
+                    alphaInfo = kCGImageAlphaFirst ;
+    #endif
+                }
+
+                membuf = new wxMemoryBuffer( m_memBuf ) ;
             }
+            
+            CGDataProviderRef dataProvider = NULL ;
+            if ( m_depth == 1 )
+            {
+                wxMemoryBuffer* maskBuf = new wxMemoryBuffer( m_width * m_height );
+                unsigned char * maskBufData = (unsigned char *) maskBuf->GetData();
+                unsigned char * bufData = (unsigned char *) membuf->GetData() ;
+                // copy one color component
+                for( int i = 0 ; i < m_width * m_height ; ++i )
+                    maskBufData[i] = bufData[i*4+3];
+                dataProvider =
+                    CGDataProviderCreateWithData(
+                        maskBuf , (const void *) maskBufData , m_width * m_height,
+                        wxMacMemoryBufferReleaseProc );
+                // as we are now passing the mask buffer to the data provider, we have
+                // to release the membuf ourselves
+                delete membuf ;
 
-            membuf = new wxMemoryBuffer( m_memBuf ) ;
+                image = ::CGImageMaskCreate( w, h, 8, 8, m_width , dataProvider, NULL, false );
+            }
+            else
+            {
+                CGColorSpaceRef colorSpace = wxMacGetGenericRGBColorSpace();
+                dataProvider =
+                    CGDataProviderCreateWithData(
+                        membuf , (const void *)membuf->GetData() , imageSize,
+                        wxMacMemoryBufferReleaseProc );
+                image =
+                ::CGImageCreate(
+                    w, h, 8 , 32 , m_bytesPerRow , colorSpace, alphaInfo ,
+                    dataProvider, NULL , false , kCGRenderingIntentDefault );
+            }
+            CGDataProviderRelease( dataProvider);
         }
-        
-        CGDataProviderRef dataProvider = NULL ;
-        if ( m_depth == 1 )
-        {
-            wxMemoryBuffer* maskBuf = new wxMemoryBuffer( m_width * m_height );
-            unsigned char * maskBufData = (unsigned char *) maskBuf->GetData();
-            unsigned char * bufData = (unsigned char *) membuf->GetData() ;
-            // copy one color component
-            for( int i = 0 ; i < m_width * m_height ; ++i )
-                maskBufData[i] = bufData[i*4+3];
-            dataProvider =
-                CGDataProviderCreateWithData(
-                    maskBuf , (const void *) maskBufData , m_width * m_height,
-                    wxMacMemoryBufferReleaseProc );
-            // as we are now passing the mask buffer to the data provider, we have
-            // to release the membuf ourselves
-            delete membuf ;
-
-            image = ::CGImageMaskCreate( w, h, 8, 8, m_width , dataProvider, NULL, false );
-        }
-        else
-        {
-            CGColorSpaceRef colorSpace = wxMacGetGenericRGBColorSpace();
-            dataProvider =
-                CGDataProviderCreateWithData(
-                    membuf , (const void *)membuf->GetData() , imageSize,
-                    wxMacMemoryBufferReleaseProc );
-            image =
-            ::CGImageCreate(
-                w, h, 8 , 32 , m_bytesPerRow , colorSpace, alphaInfo ,
-                dataProvider, NULL , false , kCGRenderingIntentDefault );
-        }
-        CGDataProviderRelease( dataProvider);
     }
     else
     {
