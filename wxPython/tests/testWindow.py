@@ -4,6 +4,7 @@ import wx
 import testColor
 import testRect
 import testFont
+import testPoint
 
 """
 This file contains classes and methods for unit testing the API of wx.Window.
@@ -100,12 +101,7 @@ class WindowTest(unittest.TestCase):
                             (1000,1000,9999,9999), (1, 10, 100, 1000)
                         )
         self.FONTS = testFont.getFontData()
-        # TODO: delegate to testPoint module
-        self.POINTS = (
-                        wx.Point(0,0), wx.Point(1,2), wx.Point(2,1), wx.Point(10,10),
-                        wx.Point(20,30), wx.Point(66,99), wx.Point(100,200),
-                        wx.Point(999,789), wx.Point(1000,2000), wx.Point(3141,2718)
-                )
+        self.POINTS = testPoint.getValidPointData()
     
     #####################
     ## Fixture Methods ##
