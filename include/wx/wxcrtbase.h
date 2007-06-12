@@ -428,6 +428,7 @@ WXDLLIMPEXP_BASE wchar_t *wxCRT_StrtokW(wchar_t *psz, const wchar_t *delim, wcha
             WXDLLIMPEXP_BASE int wxMSLU__wrename(const wchar_t *oldname, const wchar_t *newname);
             WXDLLIMPEXP_BASE int wxMSLU__wremove(const wchar_t *name);
             #define wxCRT_Fopen     wxMSLU__wfopen
+            #define wxCRT_Freopen   wxMSLU__wfreopen
             #define wxCRT_Remove    wxMSLU__wremove
             #define wxCRT_Rename    wxMSLU__wrename
     #else
