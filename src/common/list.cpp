@@ -30,6 +30,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/list.h"
+    #include "wx/crt.h"
 #endif
 
 #if !wxUSE_STL
