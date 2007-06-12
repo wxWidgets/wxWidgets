@@ -7,10 +7,10 @@ This file contains classes and methods for unit testing the API of wx.Color
         
 Methods yet to test:
 __del__, __eq__, __getitem__, __len__, __ne__, __nonzero__, __reduce__, 
-__repr__, __str__, GetPixel, GetRGB, SetFromName, SetRGB
+__repr__, __str__, GetPixel, SetFromName
 """
 
-def getColourData():
+def getColourEquivalents():
     return (
             (wx.Color(255,0,0), RED), (wx.Color(0,255,0), GREEN), (wx.Color(0,0,255), BLUE),
             ('RED', RED), ('GREEN', GREEN), ('BLUE', BLUE),
@@ -18,7 +18,18 @@ def getColourData():
             ((255,0,0), RED), ((0,255,0), GREEN), ((0,0,255), BLUE)
         )
 
+def getColourData():
+    return tuple( wx.Colour(*rgba) for rgba in getColourTuples() )
+
 # -----------------------------------------------------------
+
+def getColourTuples():
+    return (
+                (0,0,0,0), (1,1,1), (255,0,0), (0,255,0), (0,0,255),
+                (100,100,100), (32,64,128,254), (254,121,61), (9,12,81),
+                (4,1,7,99), (255,0,0,23), (0,255,0,94), (0,0,255,102),
+                (100,100,100,128), (32,64,128,2), (254,121,61,0), (9,12,81,255),
+        )
 
 # -----------------------------------------------------------
 
@@ -89,6 +100,16 @@ class ColorTest(unittest.TestCase):
         for color in (c1, c2, c3):
             self.assert_(color.IsOk())
             self.assert_(color.Ok())
+    
+    def testGetSetRGB(self):
+        """SetRGB, GetRGB"""
+        for color in getColourData():
+            sludge = color.GetRGB()
+            del color
+            color = wx.Colour()
+            color.SetRGB(sludge)
+            self.assertEquals(sludge, color.GetRGB())
+            
 
 def suite():
     suite = unittest.makeSuite(ColorTest)

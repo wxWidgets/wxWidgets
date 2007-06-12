@@ -84,7 +84,7 @@ class WindowTest(unittest.TestCase):
         self.app = wx.PySimpleApp()
         self.anotherFrame = wx.Frame(parent=None, id=wx.ID_ANY)
         self.yetAnotherFrame = wx.Frame(parent=self.anotherFrame, id=wx.ID_ANY)
-        self.COLOUR_TESTS = testColor.getColourData()
+        self.COLOUR_TESTS = testColor.getColourEquivalents()
         self.SIZES = testSize.getValidSizeData()
         self.RECTS = testRect.getValidRectData()
         self.SIZE_HINTS = testSize.getValidSizeHints()
