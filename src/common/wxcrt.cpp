@@ -336,11 +336,11 @@ static int vwprintf(const wchar_t *format, va_list argptr)
 class wxFormatConverter
 {
 public:
-    wxFormatConverter(const wxChar *format);
+    wxFormatConverter(const wchar_t *format);
 
     // notice that we only translated the string if m_fmtOrig == NULL (as set
     // by CopyAllBefore()), otherwise we should simply use the original format
-    operator const wxChar *() const
+    operator const wchar_t *() const
         { return m_fmtOrig ? m_fmtOrig : m_fmt.c_str(); }
 
 private:
@@ -348,7 +348,7 @@ private:
     // copy if we are translating but doesn't do anything at all if we don't,
     // so we don't create the translated format string at all unless we really
     // need to (i.e. InsertFmtChar() is called)
-    wxChar CopyFmtChar(wxChar ch)
+    wchar_t CopyFmtChar(wchar_t ch)
     {
         if ( !m_fmtOrig )
         {
@@ -366,7 +366,7 @@ private:
     }
 
     // insert an extra character
-    void InsertFmtChar(wxChar ch)
+    void InsertFmtChar(wchar_t ch)
     {
         if ( m_fmtOrig )
         {
@@ -387,13 +387,13 @@ private:
         m_fmtOrig = NULL;
     }
 
-    static bool IsFlagChar(wxChar ch)
+    static bool IsFlagChar(wchar_t ch)
     {
         return ch == _T('-') || ch == _T('+') ||
                ch == _T('0') || ch == _T(' ') || ch == _T('#');
     }
 
-    void SkipDigits(const wxChar **ptpc)
+    void SkipDigits(const wchar_t **ptpc)
     {
         while ( **ptpc >= _T('0') && **ptpc <= _T('9') )
             CopyFmtChar(*(*ptpc)++);
@@ -403,13 +403,13 @@ private:
     wxString m_fmt;
 
     // the original format
-    const wxChar *m_fmtOrig;
+    const wchar_t *m_fmtOrig;
 
     // the number of characters already copied
     size_t m_nCopied;
 };
 
-wxFormatConverter::wxFormatConverter(const wxChar *format)
+wxFormatConverter::wxFormatConverter(const wchar_t *format)
 {
     m_fmtOrig = format;
     m_nCopied = 0;
@@ -503,7 +503,7 @@ wxFormatConverter::wxFormatConverter(const wxChar *format)
 
 #ifdef __WXDEBUG__
 // For testing the format converter
-wxString wxConvertFormat(const wxChar *format)
+wxString wxConvertFormat(const wchar_t *format)
 {
     return wxString(wxFormatConverter(format));
 }
@@ -1306,8 +1306,8 @@ wchar_t* WXDLLEXPORT wxCRT_GetenvW(const wchar_t *name)
     // NB: buffer returned by getenv() is allowed to be overwritten next
     //     time getenv() is called, so it is OK to use static string
     //     buffer to hold the data.
-    static wxWCharBuffer value((wxChar*)NULL);
-    value = wxConvLibc.cMB2WX(getenv(wxConvLibc.cWX2MB(name)));
+    static wxWCharBuffer value((wchar_t*)NULL);
+    value = wxConvLibc.cMB2WC(getenv(wxConvLibc.cWC2MB(name)));
     return value.data();
 }
 #endif // !wxCRT_GetenvW
