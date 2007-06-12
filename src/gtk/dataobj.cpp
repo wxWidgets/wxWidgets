@@ -276,9 +276,8 @@ bool wxFileDataObject::SetData(size_t WXUNUSED(size), const void *buf)
                 // function to unescape the 8-bit strings pointed to
                 // by buf, but this does the same in wx code.
                 wxString filename_unicode = wxURI::Unescape(filename.c_str() + lenPrefix);
-                wxCharBuffer filename_8bit = wxConvISO8859_1.cWX2MB( filename_unicode );
-                filename_unicode = wxConvFileName->cMB2WX( filename_8bit );
-                AddFile( filename_unicode );
+                wxCharBuffer filename_8bit = filename_unicode.mb_str(wxConvISO8859_1);
+                AddFile(wxString(filename_8bit, *wxConvFileName));
                 filename.Empty();
             }
             else if ( !filename.empty() )
