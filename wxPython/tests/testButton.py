@@ -26,12 +26,17 @@ class ButtonTest(testControl.ControlTest):
     ## Fixture Methods ##
     #####################
     def setUp(self):
+        self.app = wx.PySimpleApp()
         self.frame = ButtonTestFrame(parent=None, id=wx.ID_ANY)
         # we just do this to shorten typing :-)
         self.testControl = self.frame.testControl
         self.children = []
         self.children_ids = []
         self.children_names = []
+    
+    def tearDown(self):
+        self.frame.Destroy()
+        self.app.Destroy()
 
     ##################
     ## Test Methods ##

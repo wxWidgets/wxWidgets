@@ -107,6 +107,7 @@ class WindowTest(unittest.TestCase):
     ## Fixture Methods ##
     #####################
     def setUp(self):
+        self.app = wx.PySimpleApp()
         self.frame = WindowTestFrame(parent=None, id=wx.ID_ANY)
         # we just do this to shorten typing :-)
         self.testControl = self.frame.testControl
@@ -116,6 +117,7 @@ class WindowTest(unittest.TestCase):
 
     def tearDown(self):
         self.frame.Destroy()
+        self.app = wx.PySimpleApp()
         
     ##################
     ## Test Methods ##
