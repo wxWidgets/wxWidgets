@@ -21,6 +21,7 @@ import testColor
 import testControl
 import testRect
 import testPoint
+import testSize
 
 alltests = unittest.TestSuite(( testWindow.suite(),
                                 testButton.suite(),
@@ -28,7 +29,8 @@ alltests = unittest.TestSuite(( testWindow.suite(),
                                 testColor.suite(),
                                 testControl.suite(),
                                 testRect.suite(),
-                                testPoint.suite()
+                                testPoint.suite(),
+                                testSize.suite()
                                 ))
 
 results = unittest.TestResult()

@@ -122,7 +122,7 @@ class PointTest(unittest.TestCase):
         self.assertEquals( ONE+ZERO, ONE )
         self.assertEquals( TWO+NEG_ONE, ONE )
     
-    def testSubtract(self):
+    def testSubtraction(self):
         """__sub__"""
         self.assertEquals( ONE-ONE, ZERO )
         self.assertEquals( NEG_ONE-NEG_ONE, ZERO )

@@ -10,10 +10,6 @@ __del__, __eq__, __getitem__, __len__, __ne__, __nonzero__, __reduce__,
 __repr__, __str__, GetPixel, GetRGB, SetFromName, SetRGB
 """
 
-RED = wx.Colour(255,0,0)
-GREEN = wx.Colour(0,255,0)
-BLUE = wx.Colour(0,0,255)
-
 def getColourData():
     return (
             (wx.Color(255,0,0), RED), (wx.Color(0,255,0), GREEN), (wx.Color(0,0,255), BLUE),
@@ -24,12 +20,23 @@ def getColourData():
 
 # -----------------------------------------------------------
 
+# -----------------------------------------------------------
+
+RED = wx.Colour(255,0,0)
+GREEN = wx.Colour(0,255,0)
+BLUE = wx.Colour(0,0,255)
+
+# -----------------------------------------------------------
+
 class ColorTest(unittest.TestCase):
     #####################
     ## Fixture Methods ##
     #####################
     def setUp(self):
         self.app = wx.PySimpleApp()
+    
+    def tearDown(self):
+        self.app.Destroy()
         
     ##################
     ## Test Methods ##

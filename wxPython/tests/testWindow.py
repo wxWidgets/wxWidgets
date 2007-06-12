@@ -5,6 +5,7 @@ import testColor
 import testRect
 import testFont
 import testPoint
+import testSize
 
 """
 This file contains classes and methods for unit testing the API of wx.Window.
@@ -84,22 +85,10 @@ class WindowTest(unittest.TestCase):
         self.anotherFrame = wx.Frame(parent=None, id=wx.ID_ANY)
         self.yetAnotherFrame = wx.Frame(parent=self.anotherFrame, id=wx.ID_ANY)
         self.COLOUR_TESTS = testColor.getColourData()
-        # TODO: delegate to testSize module
-        self.SIZES = ( 
-                        wx.Size(1,1), wx.Size(5,5),
-                        wx.Size(10,10), wx.Size(10,1000),
-                        wx.Size(100,100), wx.Size(100,500),
-                        wx.Size(200,100), wx.Size(500,500),
-                        wx.Size(1000,1000), wx.Size(1,1000),
-                        wx.Size(1000,1), wx.Size(31415, 27182),
-                        wx.Size(32767, 32767), wx.Size(0,0)
-                    )
+        self.SIZES = testSize.getValidSizeData()
         self.RECTS = testRect.getValidRectData()
-        self.SIZE_HINTS = ( # minW, minH, maxW, maxH
-                            (0,0,1000,1000), (0,0,1,1),
-                            (0,0,0,0), (10,10,100,100),
-                            (1000,1000,9999,9999), (1, 10, 100, 1000)
-                        )
+        self.SIZE_HINTS = testSize.getValidSizeHints()
+        self.INVALID_SIZE_HINTS = testSize.getInvalidSizeHints()
         self.FONTS = testFont.getFontData()
         self.POINTS = testPoint.getValidPointData()
     
@@ -117,7 +106,7 @@ class WindowTest(unittest.TestCase):
 
     def tearDown(self):
         self.frame.Destroy()
-        self.app = wx.PySimpleApp()
+        self.app.Destroy()
         
     ##################
     ## Test Methods ##
@@ -290,7 +279,8 @@ class WindowTest(unittest.TestCase):
             self.assertEquals(minH, self.testControl.GetMinHeight())
             self.assertEquals(maxW, self.testControl.GetMaxWidth())
             self.assertEquals(maxH, self.testControl.GetMaxHeight())
-        self.assertRaises(wx.PyAssertionError, self.testControl.SetSizeHints, 100,100,10,10)
+        for invalid_hint in self.INVALID_SIZE_HINTS:
+            self.assertRaises(wx.PyAssertionError, self.testControl.SetSizeHints, *invalid_hint)
     
     def testRect(self):
         """SetRect, GetRect"""
