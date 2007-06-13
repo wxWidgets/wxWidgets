@@ -633,7 +633,7 @@ void StringTestCase::ToDouble()
 
     // we need to use decimal point, not comma or whatever is its value for the
     // current locale
-    wxSetlocale(LC_ALL, _T("C"));
+    wxSetlocale(LC_ALL, "C");
 
     size_t n;
     for ( n = 0; n < WXSIZEOF(doubleData); n++ )
