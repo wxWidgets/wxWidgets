@@ -735,9 +735,10 @@ bool wxGCDC::DoBlit(
 
     if ( logical_func == wxNO_OP )
         return true;
-    else if ( logical_func != wxCOPY )
+    else if ( !m_graphicContext->SetLogicalFunction( logical_func ) )
+    
     {
-        wxFAIL_MSG( wxT("Blitting is only supported with wxCOPY logical operation.") );
+        wxFAIL_MSG( wxT("Logical function is not supported by the graphics context.") );
         return false;
     }
 
@@ -775,6 +776,9 @@ bool wxGCDC::DoBlit(
         wxFAIL_MSG( wxT("Cannot Blit. Unable to get contents of DC as bitmap.") );
         return false;
     }
+
+    // reset logical function
+    m_graphicContext->SetLogicalFunction( m_logicalFunction );
 
     return true;
 }

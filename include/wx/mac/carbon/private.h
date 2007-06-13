@@ -479,7 +479,7 @@ void wxMacNativeToRect( const Rect *n , wxRect* wx );
 void wxMacPointToNative( const wxPoint* wx , Point *n );
 void wxMacNativeToPoint( const Point *n , wxPoint* wx );
 
-wxWindow *              wxFindControlFromMacControl(ControlRef inControl );
+wxWindowMac *           wxFindControlFromMacControl(ControlRef inControl );
 wxTopLevelWindowMac*    wxFindWinFromMacWindow( WindowRef inWindow );
 wxMenu*                 wxFindMenuFromMacMenu(MenuRef inMenuRef);
 
@@ -489,7 +489,7 @@ wxMenu*                 wxFindMenuFromMacCommand( const HICommand &macCommandId 
 
 extern wxWindow* g_MacLastWindow;
 pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , EventRef event , void *data );
-Rect wxMacGetBoundsForControl( wxWindow* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin = true );
+Rect wxMacGetBoundsForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin = true );
 
 ControlActionUPP GetwxMacLiveScrollbarActionProc();
 

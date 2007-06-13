@@ -61,7 +61,9 @@ public:
     virtual void Iconize(bool iconize = true);
     virtual bool IsIconized() const;
     virtual void SetIcon(const wxIcon& icon);
+#ifndef __WXUNIVERSAL__
     virtual void SetIcons(const wxIconBundle& icons) { SetIcon( icons.GetIcon( -1 ) ); }
+#endif
     virtual void Restore();
 
     virtual bool SetShape(const wxRegion& region);

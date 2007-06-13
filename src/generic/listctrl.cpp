@@ -25,7 +25,7 @@
 
 #include "wx/listctrl.h"
 
-#if (!defined(__WXMSW__) || defined(__WXUNIVERSAL__)) && !defined(__WXMAC__)
+#if (!defined(__WXMSW__) || defined(__WXUNIVERSAL__)) && (!defined(__WXMAC__)|| defined(__WXUNIVERSAL__))
     // if we have a native version, its implementation file does all this
     IMPLEMENT_DYNAMIC_CLASS(wxListItem, wxObject)
     IMPLEMENT_DYNAMIC_CLASS(wxListView, wxListCtrl)
