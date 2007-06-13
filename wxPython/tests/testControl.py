@@ -7,7 +7,7 @@ import testWindow
 This file contains classes and methods for unit testing the API of wx.Control
 
 Methods yet to test:
-__init__, Command, Create, GetAlignment, GetClassDefaultAttributes, GetLabelText
+__init__, Command, Create, GetAlignment, GetLabelText
 """
 
 class ControlTestFrame(wx.Frame):
@@ -44,8 +44,18 @@ class ControlTest(testWindow.WindowTest):
     
     # TODO: affirm that this is expected behavior
     def testAllControlsNeedParents(self):
+        """
+        All instances of wx.Control need to have a parent"""
         class_under_test = type(self.testControl)
         self.assertRaises(wx.PyAssertionError, class_under_test, None)
+    
+    def testDefaultAttributes(self):
+        """GetClassDefaultAttributes"""
+        attrs = wx.Control.GetClassDefaultAttributes()
+        self.assert_(isinstance(attrs, wx.VisualAttributes))
+        self.assert_(attrs.colBg.IsOk())
+        self.assert_(attrs.colFg.IsOk())
+        self.assert_(attrs.font.IsOk())
 
 def suite():
     suite = unittest.makeSuite(ControlTest)

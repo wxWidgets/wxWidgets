@@ -100,6 +100,11 @@ class ColorTest(unittest.TestCase):
         for color in (c1, c2, c3):
             self.assert_(color.IsOk())
             self.assert_(color.Ok())
+        # HACK: to generate an invalid wx.Colour instance
+        # NOTE: cannot access colBg directly without crashing the interpreter
+        attr = wx.VisualAttributes()
+        self.assert_(not attr.colBg.Ok())
+        self.assert_(not attr.colBg.IsOk())
     
     def testGetSetRGB(self):
         """SetRGB, GetRGB"""

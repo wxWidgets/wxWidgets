@@ -36,7 +36,7 @@ Methods yet to test:
 __init__, __del__, __eq__, __ne__, __nonzero__, GetDefaultEncoding, GetEncoding, GetFaceName
 GetFamily, GetFamilyString, GetNativeFontInfo, GetNativeFontInfoDesc, GetNativeFontInfoUserDesc,
 GetNoAntiAliasing, GetPixelSize, GetPointSize, GetStyle, GetStyleString, GetUnderlined,
-GetWeight, GetWeightString, IsFixedWidth, IsOk, IsUsingSizeInPixels, Ok, SetDefaultEncoding,
+GetWeight, GetWeightString, IsFixedWidth, IsUsingSizeInPixels, SetDefaultEncoding,
 SetEncoding, SetFaceName, SetFamily, SetNativeFontInfo, SetNativeFontInfoFromString,
 SetNativeFontInfoUserDesc, SetNoAntiAliasing, SetPixelSize, SetPointSize, SetStyle, SetUnderlined
 SetWeight
@@ -83,6 +83,17 @@ class FontTest(unittest.TestCase):
         # wx.FONTWEIGHT_MAX dies
         self.assertRaises(wx.PyAssertionError, wx.Font, 12, wx.FONTFAMILY_DEFAULT,
                                             wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_MAX)
+    
+    def testOk(self):
+        """IsOk, Ok"""
+        for font in getFontData():
+            self.assert_(font.IsOk())
+            self.assert_(font.Ok())
+        # HACK: to generate an invalid wx.Font instance
+        # NOTE: cannot access font directly without crashing the interpreter
+        attr = wx.VisualAttributes()
+        self.assert_(not attr.font.Ok())
+        self.assert_(not attr.font.IsOk())
 
 
 def suite():
