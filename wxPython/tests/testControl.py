@@ -10,12 +10,6 @@ Methods yet to test:
 __init__, Command, Create, GetAlignment, GetLabelText
 """
 
-class ControlTestFrame(wx.Frame):
-    def __init__(self, parent, id):
-        wx.Frame.__init__(self, parent, id, 'TestFrame',
-                size=(340, 200))
-        self.testControl = wx.Control(parent=self, id=wx.ID_ANY)
-
 class ControlTest(testWindow.WindowTest):
     def __init__(self, arg):
         # superclass setup
@@ -27,9 +21,8 @@ class ControlTest(testWindow.WindowTest):
     #####################
     def setUp(self):
         self.app = wx.PySimpleApp()
-        self.frame = ControlTestFrame(parent=None, id=wx.ID_ANY)
-        # we just do this to shorten typing :-)
-        self.testControl = self.frame.testControl
+        self.frame = wx.Frame(parent=None, id=wx.ID_ANY)
+        self.testControl = wx.Control(parent=self.frame, id=wx.ID_ANY)
         self.children = []
         self.children_ids = []
         self.children_names = []

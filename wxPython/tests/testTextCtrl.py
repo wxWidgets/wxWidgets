@@ -18,12 +18,6 @@ SetEditable, SetInsertionPoint, SetInsertionPointEnd, SetMaxLength, SetModified,
 SetSelection, SetStyle, ShowPosition, Undo, write, WriteText, XYToPosition
 """
 
-class TextCtrlTestFrame(wx.Frame):
-    def __init__(self, parent, id, value=""):
-        wx.Frame.__init__(self, parent, id, 'TestFrame',
-                size=(340, 200))
-        self.testControl = wx.TextCtrl(parent=self, id=wx.ID_ANY, value=value)
-
 class TextCtrlTest(testControl.ControlTest):
     def __init__(self, arg):
         # superclass setup
@@ -35,15 +29,15 @@ class TextCtrlTest(testControl.ControlTest):
     #####################
     def setUp(self):
         self.app = wx.PySimpleApp()
-        self.frame = TextCtrlTestFrame(parent=None, id=wx.ID_ANY)
-        # we just do this to shorten typing :-)
-        self.testControl = self.frame.testControl
+        self.frame = wx.Frame(parent=None, id=wx.ID_ANY)
+        self.testControl = wx.TextCtrl(parent=self.frame, id=wx.ID_ANY, value="")
         self.children = []
         self.children_ids = []
         self.children_names = []
     
     def tearDown(self):
         self.app.Destroy()
+        self.frame.Destroy()
         
     ##################
     ## Test Methods ##
@@ -67,13 +61,26 @@ class TextCtrlTest(testControl.ControlTest):
     
     def testValue(self):
         """SetValue, GetValue"""
+        val = "Hello, World!\nLorem Ipsum!"
         self.assertEquals("", self.testControl.GetValue())
-        self.testControl.SetValue("Hello, World!\nLorem Ipsum!")
-        self.assertEquals("Hello, World!\nLorem Ipsum!", self.testControl.GetValue())
+        self.testControl.SetValue(val)
+        self.assertEquals(val, self.testControl.GetValue())
     
+    # NOTE: Uncomment the last line to observe some weird behavior
     def testCopyCutPaste(self):
         """Copy, Cut, Paste"""
-        pass
+        txt = "Yet Another TextControl"
+        more = "Here is some more text!"
+        otherControl = wx.TextCtrl(self.frame, id=wx.ID_ANY, value=txt)
+        # sanity checks
+        self.assert_(self.testControl.IsEmpty())
+        self.assertEquals(txt, otherControl.GetValue())
+        # copy/paste
+        otherControl.Copy()
+        self.testControl.Paste()
+        self.assertEquals(txt, otherControl.GetValue())
+        #self.assertEquals(txt, self.testControl.GetValue())
+        
 
 def suite():
     suite = unittest.makeSuite(TextCtrlTest)

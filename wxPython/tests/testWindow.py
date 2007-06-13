@@ -64,18 +64,6 @@ GetBestFittingSize(*args, **kwargs) -> Use GetEffectiveMinSize instead.
 SetBestFittingSize -> Use SetInitialSize
 """
 
-class WindowTestFrame(wx.Frame):
-    """A simple frame class to test wx.Window"""
-    def __init__(self, parent, id):
-        wx.Frame.__init__(self, parent, id, 'TestFrame',
-                size=(340, 200))
-        self.testControl = wx.Window(self, wx.ID_ANY)
-        self.children_ids = (42, 43, 44)
-        self.children_names = ('Child One', 'Child Two', 'Child Three' )
-        self.children = ( wx.Frame(self.testControl, id=id, name=name)
-                            for id, name in zip(self.children_ids, self.children_names) )
-
-
 class WindowTest(unittest.TestCase):
     def __init__(self, arg):
         # superclass setup
@@ -97,12 +85,12 @@ class WindowTest(unittest.TestCase):
     #####################
     def setUp(self):
         self.app = wx.PySimpleApp()
-        self.frame = WindowTestFrame(parent=None, id=wx.ID_ANY)
-        # we just do this to shorten typing :-)
-        self.testControl = self.frame.testControl
-        self.children = self.frame.children
-        self.children_ids = self.frame.children_ids
-        self.children_names = self.frame.children_names
+        self.frame = wx.Frame(parent=None, id=wx.ID_ANY)
+        self.testControl = wx.Window(parent=self.frame, id=wx.ID_ANY)
+        self.children_ids = (42, 43, 44)
+        self.children_names = ('Child One', 'Child Two', 'Child Three')
+        self.children = ( wx.Frame(self.testControl, id=id, name=name)
+                            for id, name in zip(self.children_ids, self.children_names) )
 
     def tearDown(self):
         self.frame.Destroy()
