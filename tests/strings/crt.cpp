@@ -138,42 +138,42 @@ void CrtTestCase::Strcmp()
 
 void CrtTestCase::Strspn()
 {
-    CPPUNIT_ASSERT( wxStrspn(strMB, "xyz") == 0 );
-    CPPUNIT_ASSERT( wxStrspn(strWC, "xyz") == 0 );
-    CPPUNIT_ASSERT( wxStrspn(strWX, "xyz") == 0 );
-    CPPUNIT_ASSERT( wxStrspn(strMB, L"xyz") == 0 );
-    CPPUNIT_ASSERT( wxStrspn(strWC, L"xyz") == 0 );
-    CPPUNIT_ASSERT( wxStrspn(strWX, L"xyz") == 0 );
+    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrspn(strMB, "xyz") );
+    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrspn(strWC, "xyz") );
+    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrspn(strWX, "xyz") );
+    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrspn(strMB, L"xyz") );
+    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrspn(strWC, L"xyz") );
+    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrspn(strWX, L"xyz") );
 
-    CPPUNIT_ASSERT( wxStrspn(strMB, "hleo") == 5 );
-    CPPUNIT_ASSERT( wxStrspn(strWC, "hleo") == 5 );
-    CPPUNIT_ASSERT( wxStrspn(strWX, "hleo") == 5 );
+    CPPUNIT_ASSERT_EQUAL( (size_t)5, wxStrspn(strMB, "hleo") );
+    CPPUNIT_ASSERT_EQUAL( (size_t)5, wxStrspn(strWC, "hleo") );
+    CPPUNIT_ASSERT_EQUAL( (size_t)5, wxStrspn(strWX, "hleo") );
 
-    CPPUNIT_ASSERT( wxStrspn(strMB, "ld") == 0 );
-    CPPUNIT_ASSERT( wxStrspn(strWC, "ld") == 0 );
-    CPPUNIT_ASSERT( wxStrspn(strWX, "ld") == 0 );
+    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrspn(strMB, "ld") );
+    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrspn(strWC, "ld") );
+    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrspn(strWX, "ld") );
 
-    CPPUNIT_ASSERT( wxStrspn(strMB, strWC) == strWX.length() );
-    CPPUNIT_ASSERT( wxStrspn(strWC, strWX) == strWX.length() );
-    CPPUNIT_ASSERT( wxStrspn(strWX, strMB) == strWX.length() );
+    CPPUNIT_ASSERT_EQUAL( strWX.length(), wxStrspn(strMB, strWC) );
+    CPPUNIT_ASSERT_EQUAL( strWX.length(), wxStrspn(strWC, strWX) );
+    CPPUNIT_ASSERT_EQUAL( strWX.length(), wxStrspn(strWX, strMB) );
 }
 
 void CrtTestCase::Strcspn()
 {
-    CPPUNIT_ASSERT( wxStrcspn(strMB, strWX) == 0 );
-    CPPUNIT_ASSERT( wxStrcspn(strWC, strMB) == 0 );
-    CPPUNIT_ASSERT( wxStrcspn(strWX, strWC) == 0 );
+    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrcspn(strMB, strWX) );
+    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrcspn(strWC, strMB) );
+    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrcspn(strWX, strWC) );
 
-    CPPUNIT_ASSERT( wxStrcspn(strMB, ", ") == 5 );
-    CPPUNIT_ASSERT( wxStrcspn(strWC, ", ") == 5 );
-    CPPUNIT_ASSERT( wxStrcspn(strWX, ", ") == 5 );
+    CPPUNIT_ASSERT_EQUAL( (size_t)5, wxStrcspn(strMB, ", ") );
+    CPPUNIT_ASSERT_EQUAL( (size_t)5, wxStrcspn(strWC, ", ") );
+    CPPUNIT_ASSERT_EQUAL( (size_t)5, wxStrcspn(strWX, ", ") );
 
-    CPPUNIT_ASSERT( wxStrcspn(strMB, "hel") == 0 );
-    CPPUNIT_ASSERT( wxStrcspn(strWC, "hel") == 0 );
-    CPPUNIT_ASSERT( wxStrcspn(strWX, "hel") == 0 );
+    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrcspn(strMB, "hel") );
+    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrcspn(strWC, "hel") );
+    CPPUNIT_ASSERT_EQUAL( (size_t)0, wxStrcspn(strWX, "hel") );
 
-    CPPUNIT_ASSERT( wxStrcspn(strMB, "xy") == strWX.length() );
-    CPPUNIT_ASSERT( wxStrcspn(strWC, "xy") == strWX.length() );
-    CPPUNIT_ASSERT( wxStrcspn(strWX, "xy") == strWX.length() );
+    CPPUNIT_ASSERT_EQUAL( strWX.length(), wxStrcspn(strMB, "xy") );
+    CPPUNIT_ASSERT_EQUAL( strWX.length(), wxStrcspn(strWC, "xy") );
+    CPPUNIT_ASSERT_EQUAL( strWX.length(), wxStrcspn(strWX, "xy") );
 }
 
