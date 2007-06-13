@@ -25,6 +25,14 @@
 #include "wx/textfile.h"
 
 // ----------------------------------------------------------------------------
+// constants
+// ----------------------------------------------------------------------------
+
+static const char *strMB = "hello, world";
+static const wchar_t *strWC = L"hello, world";
+static const wxString strWX("hello, world");
+
+// ----------------------------------------------------------------------------
 // test class
 // ----------------------------------------------------------------------------
 
@@ -130,10 +138,6 @@ void CrtTestCase::Strcmp()
 
 void CrtTestCase::Strspn()
 {
-    const char *strMB = "hello, world";
-    const char *strWC = "hello, world";
-    const wxString strWX("hello, world");
-
     CPPUNIT_ASSERT( wxStrspn(strMB, "xyz") == 0 );
     CPPUNIT_ASSERT( wxStrspn(strWC, "xyz") == 0 );
     CPPUNIT_ASSERT( wxStrspn(strWX, "xyz") == 0 );
@@ -156,10 +160,6 @@ void CrtTestCase::Strspn()
 
 void CrtTestCase::Strcspn()
 {
-    const char *strMB = "hello, world";
-    const char *strWC = "hello, world";
-    const wxString strWX("hello, world");
-
     CPPUNIT_ASSERT( wxStrcspn(strMB, strWX) == 0 );
     CPPUNIT_ASSERT( wxStrcspn(strWC, strMB) == 0 );
     CPPUNIT_ASSERT( wxStrcspn(strWX, strWC) == 0 );
@@ -176,3 +176,4 @@ void CrtTestCase::Strcspn()
     CPPUNIT_ASSERT( wxStrcspn(strWC, "xy") == strWX.length() );
     CPPUNIT_ASSERT( wxStrcspn(strWX, "xy") == strWX.length() );
 }
+
