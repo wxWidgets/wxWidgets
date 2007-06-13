@@ -499,7 +499,8 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
             }
             else
             {
-                currentMouseWindow = wxFindControlFromMacControl( control ) ;
+                currentMouseWindow = (wxWindow*) wxFindControlFromMacControl( control ) ;
+#ifndef __WXUNIVERSAL__
                 if ( currentMouseWindow == NULL && cEvent.GetKind() == kEventMouseMoved )
                 {
 #if wxUSE_TOOLBAR
@@ -507,11 +508,12 @@ pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , Ev
                     // instead of its children (wxToolBarTools)
                     ControlRef parent ;
                     GetSuperControl(control, &parent );
-                    wxWindow *wxParent = wxFindControlFromMacControl( parent ) ;
+                    wxWindow *wxParent = (wxWindow*) wxFindControlFromMacControl( parent ) ;
                     if ( wxParent && wxParent->IsKindOf( CLASSINFO( wxToolBar ) ) )
                         currentMouseWindow = wxParent ;
 #endif
                 }
+#endif
             }
 
             // disabled windows must not get any input messages
@@ -733,6 +735,7 @@ static pascal OSStatus wxMacTopLevelWindowEventHandler( EventHandlerCallRef hand
             wxRect r( newRect.left , newRect.top , newRect.right - newRect.left , newRect.bottom - newRect.top ) ;
             if ( attributes & kWindowBoundsChangeSizeChanged )
             {
+#ifndef __WXUNIVERSAL__
                 // according to the other ports we handle this within the OS level
                 // resize event, not within a wxSizeEvent
                 wxFrame *frame = wxDynamicCast( toplevelWindow , wxFrame ) ;
@@ -740,7 +743,7 @@ static pascal OSStatus wxMacTopLevelWindowEventHandler( EventHandlerCallRef hand
                 {
                     frame->PositionBars();
                 }
-
+#endif
                 wxSizeEvent event( r.GetSize() , toplevelWindow->GetId() ) ;
                 event.SetEventObject( toplevelWindow ) ;
 

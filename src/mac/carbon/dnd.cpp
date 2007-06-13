@@ -387,7 +387,7 @@ pascal OSErr wxMacWindowDragTrackingHandler(
             wxMacGlobalToLocal( theWindow, &localMouse );
 
             {
-                wxWindow *win = NULL;
+                wxWindowMac *win = NULL;
                 ControlPartCode controlPart;
                 ControlRef control = wxMacFindControlUnderMouse(
                     toplevel, localMouse, theWindow, &controlPart );
@@ -422,7 +422,7 @@ pascal OSErr wxMacWindowDragTrackingHandler(
                     if ( win )
                     {
                         // this window is entered
-                        trackingGlobals->m_currentTargetWindow = win;
+                        trackingGlobals->m_currentTargetWindow = (wxWindow*)win;
                         trackingGlobals->m_currentTarget = win->GetDropTarget();
                         {
                             if ( trackingGlobals->m_currentTarget )

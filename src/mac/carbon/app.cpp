@@ -435,6 +435,7 @@ UInt32 wxIdToMacCommand( int wxId )
 wxMenu* wxFindMenuFromMacCommand( const HICommand &command , wxMenuItem* &item )
 {
     wxMenu* itemMenu = NULL ;
+#ifndef __WXUNIVERSAL__
     int id = 0 ;
 
     // for 'standard' commands which don't have a wx-menu
@@ -477,7 +478,7 @@ wxMenu* wxFindMenuFromMacCommand( const HICommand &command , wxMenuItem* &item )
                 item = (wxMenuItem*) refCon ;
         }
     }
-
+#endif
     return itemMenu ;
 }
 
@@ -513,6 +514,7 @@ wxMacAppMenuEventHandler( EventHandlerCallRef handler , EventRef event , void *d
 {
     wxMacCarbonEvent cEvent( event ) ;
     MenuRef menuRef = cEvent.GetParameter<MenuRef>(kEventParamDirectObject) ;
+#ifndef __WXUNIVERSAL__
     wxMenu* menu = wxFindMenuFromMacMenu( menuRef ) ;
 
     if ( menu )
@@ -558,7 +560,7 @@ wxMacAppMenuEventHandler( EventHandlerCallRef handler , EventRef event , void *d
                 }
             }
     }
-
+#endif
     return eventNotHandledErr;
 }
 
@@ -1104,9 +1106,10 @@ void wxApp::OnIdle(wxIdleEvent& event)
     // either events to the threads other than main or events posted with
     // wxPostEvent() functions
     wxMacProcessNotifierAndPendingEvents();
-
+#ifndef __WXUNIVERSAL__
   if (!wxMenuBar::MacGetInstalledMenuBar() && wxMenuBar::MacGetCommonMenuBar())
     wxMenuBar::MacGetCommonMenuBar()->MacInstallMenuBar();
+#endif
 }
 
 void wxApp::WakeUpIdle()

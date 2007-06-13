@@ -121,12 +121,12 @@ END_EVENT_TABLE()
 //
 
 
-void wxMacNativeToWindow( const wxWindow* window , RgnHandle handle )
+void wxMacNativeToWindow( const wxWindowMac* window , RgnHandle handle )
 {
     OffsetRgn( handle , window->MacGetLeftBorderSize() , window->MacGetTopBorderSize() ) ;
 }
 
-void wxMacNativeToWindow( const wxWindow* window , Rect *rect )
+void wxMacNativeToWindow( const wxWindowMac* window , Rect *rect )
 {
     OffsetRect( rect , window->MacGetLeftBorderSize() , window->MacGetTopBorderSize() ) ;
 }
@@ -135,12 +135,12 @@ void wxMacNativeToWindow( const wxWindow* window , Rect *rect )
 // directed towards native control
 //
 
-void wxMacWindowToNative( const wxWindow* window , RgnHandle handle )
+void wxMacWindowToNative( const wxWindowMac* window , RgnHandle handle )
 {
     OffsetRgn( handle , -window->MacGetLeftBorderSize() , -window->MacGetTopBorderSize() );
 }
 
-void wxMacWindowToNative( const wxWindow* window , Rect *rect )
+void wxMacWindowToNative( const wxWindowMac* window , Rect *rect )
 {
     OffsetRect( rect , -window->MacGetLeftBorderSize() , -window->MacGetTopBorderSize() ) ;
 }
@@ -266,7 +266,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                         wxMacCGContextStateSaver sg( cgContext ) ;
                         float alpha = 1.0 ;
                         {
-                            wxWindow* iter = thisWindow ;
+                            wxWindowMac* iter = thisWindow ;
                             while ( iter ) 
                             {
                                 alpha *= (float) iter->GetTransparent()/255.0 ;
@@ -357,7 +357,7 @@ static pascal OSStatus wxMacWindowControlEventHandler( EventHandlerCallRef handl
                 else
                 {
                     // panel wants to track the window which was the last to have focus in it
-                    wxChildFocusEvent eventFocus(thisWindow);
+                    wxChildFocusEvent eventFocus((wxWindow*)thisWindow);
                     thisWindow->GetEventHandler()->ProcessEvent(eventFocus);
 
 #if wxUSE_CARET
@@ -571,7 +571,7 @@ pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , Even
 	I don't have time to look into that right now.
 		-- CL
 */
-                    if ( wxTheApp->MacSendCharEvent(
+                    if ( wxTheApp->MacSendCharEvent((wxWindow*)
                                                     focus , message , 0 , when , 0 , 0 , uniChars[pos] ) )
                     {
                         result = noErr ;
@@ -604,7 +604,7 @@ pascal OSStatus wxMacUnicodeTextEventHandler( EventHandlerCallRef handler , Even
                     WXEVENTHANDLERCALLREF formerHandler = wxTheApp->MacGetCurrentEventHandlerCallRef() ;
                     wxTheApp->MacSetCurrentEvent( event , handler ) ;
 
-                    if ( wxTheApp->MacSendCharEvent(
+                    if ( wxTheApp->MacSendCharEvent((wxWindow*)
                         focus , message , modifiers , when , point.h , point.v , uniChars[pos] ) )
                     {
                         result = noErr ;
@@ -647,6 +647,7 @@ static pascal OSStatus wxMacWindowCommandEventHandler( EventHandlerCallRef handl
         {
             case kEventProcessCommand :
                 {
+                    // HiliteMenu(0);
                     if (item->IsCheckable())
                         item->Check( !item->IsChecked() ) ;
 
@@ -896,7 +897,7 @@ pascal void wxMacLiveScrollbarActionProc( ControlRef control , ControlPartCode p
 {
     if ( partCode != 0)
     {
-        wxWindow*  wx = wxFindControlFromMacControl( control ) ;
+        wxWindowMac*  wx = wxFindControlFromMacControl( control ) ;
         if ( wx )
             wx->MacHandleControlClick( (WXWidget) control , partCode , true /* stillDown */ ) ;
     }
@@ -907,18 +908,18 @@ wxMAC_DEFINE_PROC_GETTER( ControlActionUPP , wxMacLiveScrollbarActionProc ) ;
 // implementation
 // ===========================================================================
 
-WX_DECLARE_HASH_MAP(ControlRef, wxWindow*, wxPointerHash, wxPointerEqual, MacControlMap);
+WX_DECLARE_HASH_MAP(ControlRef, wxWindowMac*, wxPointerHash, wxPointerEqual, MacControlMap);
 
 static MacControlMap wxWinMacControlList;
 
-wxWindow *wxFindControlFromMacControl(ControlRef inControl )
+wxWindowMac *wxFindControlFromMacControl(ControlRef inControl )
 {
     MacControlMap::iterator node = wxWinMacControlList.find(inControl);
 
     return (node == wxWinMacControlList.end()) ? NULL : node->second;
 }
 
-void wxAssociateControlWithMacControl(ControlRef inControl, wxWindow *control)
+void wxAssociateControlWithMacControl(ControlRef inControl, wxWindowMac *control)
 {
     // adding NULL ControlRef is (first) surely a result of an error and
     // (secondly) breaks native event processing
@@ -927,7 +928,7 @@ void wxAssociateControlWithMacControl(ControlRef inControl, wxWindow *control)
     wxWinMacControlList[inControl] = control;
 }
 
-void wxRemoveMacControlAssociation(wxWindow *control)
+void wxRemoveMacControlAssociation(wxWindowMac *control)
 {
    // iterate over all the elements in the class
     // is the iterator stable ? as we might have two associations pointing to the same wxWindow
@@ -1027,7 +1028,7 @@ wxWindowMac::~wxWindowMac()
     // wxRemoveMacControlAssociation( this ) ;
     // If we delete an item, we should initialize the parent panel,
     // because it could now be invalid.
-    wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(this), wxTopLevelWindow);
+    wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent((wxWindow*)this), wxTopLevelWindow);
     if ( tlw )
     {
         if ( tlw->GetDefaultItem() == (wxButton*) this)
@@ -1047,12 +1048,14 @@ wxWindowMac::~wxWindowMac()
     if ( g_MacLastWindow == this )
         g_MacLastWindow = NULL ;
 
-    wxFrame* frame = wxDynamicCast( wxGetTopLevelParent( this ) , wxFrame ) ;
+#ifndef __WXUNIVERSAL__
+    wxFrame* frame = wxDynamicCast( wxGetTopLevelParent( (wxWindow*)this ) , wxFrame ) ;
     if ( frame )
     {
         if ( frame->GetLastFocus() == this )
             frame->SetLastFocus( NULL ) ;
     }
+#endif
 
     // delete our drop target if we've got one
 #if wxUSE_DRAG_AND_DROP
@@ -1123,7 +1126,7 @@ bool wxWindowMac::Create(wxWindowMac *parent,
             | kControlWantsActivate
             | kControlWantsIdle ;
 
-        m_peer = new wxMacControl(this) ;
+        m_peer = new wxMacControl((wxWindow*)this) ;
         OSStatus err =::CreateUserPaneControl( MAC_WXHWND(GetParent()->MacGetTopLevelWindowRef()) , &bounds, features , m_peer->GetControlRefAddr() );
         verify_noerr( err );
 
@@ -1139,7 +1142,7 @@ bool wxWindowMac::Create(wxWindowMac *parent,
     }
 #endif
 
-    wxWindowCreateEvent event(this);
+    wxWindowCreateEvent event((wxWindow*)this);
     GetEventHandler()->AddPendingEvent(event);
 
     return true;
@@ -1370,7 +1373,7 @@ void wxWindowMac::SetFocus()
 
 void wxWindowMac::DoCaptureMouse()
 {
-    wxApp::s_captureWindow = this ;
+    wxApp::s_captureWindow = (wxWindow*)this ;
 }
 
 wxWindow * wxWindowBase::GetCapture()
@@ -1798,7 +1801,8 @@ bool wxWindowMac::SetCursor(const wxCursor& cursor)
 #if wxUSE_MENUS
 bool wxWindowMac::DoPopupMenu(wxMenu *menu, int x, int y)
 {
-    menu->SetInvokingWindow(this);
+#ifndef __WXUNIVERSAL__
+    menu->SetInvokingWindow((wxWindow*)this);
     menu->UpdateUI();
 
     if ( x == wxDefaultCoord && y == wxDefaultCoord )
@@ -1835,6 +1839,10 @@ bool wxWindowMac::DoPopupMenu(wxMenu *menu, int x, int y)
     menu->SetInvokingWindow( NULL );
 
   return true;
+#else
+    // actually this shouldn't be called, because universal is having its own implementation
+    return false;
+#endif
 }
 #endif
 
@@ -1849,7 +1857,7 @@ void wxWindowMac::DoSetToolTip(wxToolTip *tooltip)
     wxWindowBase::DoSetToolTip(tooltip);
 
     if ( m_tooltip )
-        m_tooltip->SetWindow(this);
+        m_tooltip->SetWindow((wxWindow*)this);
 }
 
 #endif
@@ -2261,7 +2269,7 @@ bool wxWindowMac::MacIsReallyShown()
         return m_peer->IsVisible();
 #endif
 
-    wxWindow* win = this ;
+    wxWindowMac* win = this ;
     while ( win->IsShown() )
     {
         if ( win->IsTopLevel() )
@@ -2294,14 +2302,14 @@ void wxWindowMac::MacFlashInvalidAreas()
 
 int wxWindowMac::GetCharHeight() const
 {
-    wxClientDC dc( (wxWindowMac*)this ) ;
+    wxClientDC dc( (wxWindow*)this ) ;
 
     return dc.GetCharHeight() ;
 }
 
 int wxWindowMac::GetCharWidth() const
 {
-    wxClientDC dc( (wxWindowMac*)this ) ;
+    wxClientDC dc( (wxWindow*)this ) ;
 
     return dc.GetCharWidth() ;
 }
@@ -2313,7 +2321,7 @@ void wxWindowMac::GetTextExtent(const wxString& string, int *x, int *y,
     if ( !fontToUse )
         fontToUse = &m_font;
 
-    wxClientDC dc( (wxWindowMac*) this ) ;
+    wxClientDC dc( (wxWindow*)this ) ;
     long lx,ly,ld,le ;
     dc.GetTextExtent( string , &lx , &ly , &ld, &le, (wxFont *)fontToUse ) ;
     if ( externalLeading )
@@ -2384,7 +2392,7 @@ bool wxWindowMac::IsFrozen() const
     return m_frozenness != 0;
 }
 
-wxWindowMac *wxGetActiveWindow()
+wxWindow *wxGetActiveWindow()
 {
     // actually this is a windows-only concept
     return NULL;
@@ -2736,11 +2744,11 @@ void wxWindowMac::MacOnScroll( wxScrollEvent &event )
 }
 
 // Get the window with the focus
-wxWindowMac *wxWindowBase::DoFindFocus()
+wxWindow *wxWindowBase::DoFindFocus()
 {
     ControlRef control ;
     GetKeyboardFocus( GetUserFocusWindow() , &control ) ;
-    return wxFindControlFromMacControl( control ) ;
+    return (wxWindow*)wxFindControlFromMacControl( control ) ;
 }
 
 void wxWindowMac::OnSetFocus( wxFocusEvent& event )
@@ -2957,12 +2965,12 @@ void wxWindowMac::MacUpdateClippedRects() const
 
     int x , y ;
     wxSize size ;
-    const wxWindow* child = this ;
-    const wxWindow* parent = NULL ;
+    const wxWindowMac* child = this ;
+    const wxWindowMac* parent = NULL ;
 
     while ( !child->IsTopLevel() && ( parent = child->GetParent() ) != NULL )
     {
-        if ( parent->MacIsChildOfClientArea(child) )
+        if ( parent->MacIsChildOfClientArea((wxWindow*)child) )
         {
             size = parent->GetClientSize() ;
             wxPoint origin = parent->GetClientAreaOrigin() ;
@@ -3039,7 +3047,7 @@ bool wxWindowMac::MacDoRedraw( WXHRGN updatergnr , long time )
             // for all the others only their client area, otherwise they
             // might be drawing with full alpha and eg put blue into
             // the grow-box area of a scrolled window (scroll sample)
-            wxDC* dc = new wxWindowDC(this);
+            wxDC* dc = new wxWindowDC((wxWindow*)this);
             if ( IsTopLevel() )
                 dc->SetClippingRegion(wxRegion(updatergn));
             else
@@ -3161,10 +3169,10 @@ void wxWindowMac::MacCreateScrollBars( long style )
         wxSize hSize(width - adjust, scrlsize) ;
 
         if ( style & wxVSCROLL )
-            m_vScrollBar = new wxScrollBar(this, wxID_ANY, vPoint, vSize , wxVERTICAL);
+            m_vScrollBar = new wxScrollBar((wxWindow*)this, wxID_ANY, vPoint, vSize , wxVERTICAL);
 
         if ( style  & wxHSCROLL )
-            m_hScrollBar = new wxScrollBar(this, wxID_ANY, hPoint, hSize , wxHORIZONTAL);
+            m_hScrollBar = new wxScrollBar((wxWindow*)this, wxID_ANY, hPoint, hSize , wxHORIZONTAL);
     }
 
     // because the create does not take into account the client area origin
@@ -3335,12 +3343,12 @@ long wxWindowMac::MacRemoveBordersFromStyle( long style )
 
 // Find the wxWindowMac at the current mouse position, returning the mouse
 // position.
-wxWindowMac * wxFindWindowAtPointer( wxPoint& pt )
+wxWindow * wxFindWindowAtPointer( wxPoint& pt )
 {
     pt = wxGetMousePosition();
     wxWindowMac* found = wxFindWindowAtPoint(pt);
 
-    return found;
+    return (wxWindow*) found;
 }
 
 // Get the current mouse position.
@@ -3390,7 +3398,7 @@ void wxWindowMac::MacHandleControlClick( WXWidget control , wxInt16 controlpart 
 {
 }
 
-Rect wxMacGetBoundsForControl( wxWindow* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin )
+Rect wxMacGetBoundsForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin )
 {
     int x, y, w, h ;
 
