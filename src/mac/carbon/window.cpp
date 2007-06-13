@@ -1245,7 +1245,9 @@ void wxWindowMac::DoSetWindowVariant( wxWindowVariant variant )
 void wxWindowMac::MacUpdateControlFont()
 {
     m_peer->SetFont( GetFont() , GetForegroundColour() , GetWindowStyle() ) ;
-    Refresh() ;
+    // do not trigger refreshes upon invisible and possible partly created objects
+    if ( MacIsReallyShown() )
+        Refresh() ;
 }
 
 bool wxWindowMac::SetFont(const wxFont& font)
@@ -2141,7 +2143,9 @@ void wxWindowMac::SetLabel(const wxString& title)
     if ( m_peer && m_peer->Ok() )
         m_peer->SetLabel( m_label ) ;
 
-    Refresh() ;
+    // do not trigger refreshes upon invisible and possible partly created objects
+    if ( MacIsReallyShown() )
+        Refresh() ;
 }
 
 wxString wxWindowMac::GetLabel() const
