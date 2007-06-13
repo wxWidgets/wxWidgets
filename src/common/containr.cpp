@@ -141,12 +141,16 @@ void wxControlContainer::SetLastFocus(wxWindow *win)
     }
 
     // propagate the last focus upwards so that our parent can set focus back
-    // to us if it loses it now and regains later
-    wxWindow *parent = m_winParent->GetParent();
-    if ( parent )
+    // to us if it loses it now and regains later; do *not* do this if we are
+    // a toplevel window (e.g. wxDialog) that has another frame as its parent
+    if ( !m_winParent->IsTopLevel() )
     {
-        wxChildFocusEvent eventFocus(m_winParent);
-        parent->GetEventHandler()->ProcessEvent(eventFocus);
+        wxWindow *parent = m_winParent->GetParent();
+        if ( parent )
+        {
+            wxChildFocusEvent eventFocus(m_winParent);
+            parent->GetEventHandler()->ProcessEvent(eventFocus);
+        }
     }
 }
 
