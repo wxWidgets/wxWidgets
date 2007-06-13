@@ -2,11 +2,14 @@ import unittest
 import wx
 
 import testWindow
+import testItemContainer
 
 """
-This file contains classes and methods for unit testing the API of wx.Control
+This file contains classes and methods for unit testing the API of wx.Control,
+as well as a base class for testing subclasses of wx.ControlWithItems (and
+a few tests for wx.ControlWithItems itself).
 
-Methods yet to test:
+Methods yet to test for wx.Control:
 __init__, Command, Create, GetAlignment, GetLabelText
 """
 
@@ -47,9 +50,36 @@ class ControlTest(testWindow.WindowTest):
         self.assert_(attrs.colFg.IsOk())
         self.assert_(attrs.font.IsOk())
 
+# -----------------------------------------------------------
+
+class ControlWithItemsTest(unittest.TestCase):
+    #####################
+    ## Fixture Methods ##
+    #####################
+    def setUp(self):
+        self.app = wx.PySimpleApp()
+    
+    def tearDown(self):
+        self.app.Destroy()
+        
+    ##################
+    ## Test Methods ##
+    ##################
+    
+    def testConstructorFails(self):
+        self.assertRaises(AttributeError, wx.ControlWithItems)
+
+
+class ControlWithItemsBase(ControlTest, testItemContainer.ItemContainerBase):
+    """Mixing wx.Control with wx.ItemContainer """
+    pass
+
+# -----------------------------------------------------------
+
 def suite():
     suite = unittest.makeSuite(ControlTest)
-    return unittest.TestSuite(suite)
+    suite2 = unittest.makeSuite(ControlWithItemsTest)
+    return unittest.TestSuite((suite,suite2))
     
 if __name__ == '__main__':
     unittest.main(defaultTest='suite')
