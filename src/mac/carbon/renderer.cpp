@@ -149,8 +149,13 @@ int wxRendererMac::DrawHeaderButton( wxWindow *win,
         CGContextTranslateCTM( cgContext, 0, bounds.bottom - bounds.top );
         CGContextScaleCTM( cgContext, 1, -1 );
 
-        HIShapeReplacePathInCGContext( HIShapeCreateWithQDRgn( (RgnHandle) dc.m_macCurrentClipRgn ), cgContext );
-        CGContextClip( cgContext );
+        HIShapeRef shape = HIShapeCreateWithQDRgn( (RgnHandle) dc.m_macCurrentClipRgn );
+        if ( shape != 0 )
+        {
+            HIShapeReplacePathInCGContext( shape , cgContext );
+            CFRelease( shape );
+            CGContextClip( cgContext );
+        }
         HIViewConvertRect( &headerRect, (HIViewRef) win->GetHandle(), (HIViewRef) win->MacGetTopLevelWindow()->GetHandle() );
 #endif
 
