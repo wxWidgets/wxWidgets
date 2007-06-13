@@ -42,7 +42,10 @@ class ControlTest(testWindow.WindowTest):
     ## Test Methods ##
     ##################
     
-    # additional tests go here
+    # TODO: affirm that this is expected behavior
+    def testAllControlsNeedParents(self):
+        class_under_test = type(self.testControl)
+        self.assertRaises(wx.PyAssertionError, class_under_test, None)
 
 def suite():
     suite = unittest.makeSuite(ControlTest)
