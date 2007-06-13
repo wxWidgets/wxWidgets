@@ -17,6 +17,7 @@
 
 #include "wx/string.h"
 #include "wx/dynarray.h"
+#include "wx/arrstr.h"
 #include "wx/datetime.h"
 #include "wx/list.h"
 #include "wx/gdicmn.h"
@@ -26,8 +27,6 @@
 #include "wx/artprov.h"
 #include "wx/colour.h"
 #include "wx/animate.h"
-#include "wx/dynarray.h"
-#include "wx/arrstr.h"
 
 #include "wx/xml/xml.h"
 
