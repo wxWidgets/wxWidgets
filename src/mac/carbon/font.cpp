@@ -684,6 +684,7 @@ wxSize wxFont::GetPixelSize() const
     dc->SetFont(*(wxFont *)this,*wxBLACK);
     wxDouble width, height = 0;
     dc->GetTextExtent( wxT("g"), &width, &height, NULL, NULL);
+    delete dc;
     return wxSize((int)width, (int)height);
 #else
     return wxFontBase::GetPixelSize();
