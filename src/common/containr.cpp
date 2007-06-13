@@ -75,10 +75,8 @@ bool wxControlContainerBase::ShouldAcceptFocus() const
         wxWindow *child = node->GetData();
         node = node->GetNext();
 
-#ifdef __WXMAC__
-        if ( m_winParent->MacIsWindowScrollbar( child ) )
+        if ( !m_winParent->IsClientAreaChild(child) )
             continue;
-#endif
 
         if ( child->CanAcceptFocus() )
             return false;
@@ -658,11 +656,10 @@ bool wxSetFocusToChild(wxWindow *win, wxWindow **childLastFocused)
         wxWindow *child = node->GetData();
         node = node->GetNext();
 
-#ifdef __WXMAC__
-        if ( child->GetParent()->MacIsWindowScrollbar( child ) )
+        // skip special windows:
+        if ( !win->IsClientAreaChild(child) )
             continue;
-#endif
-        
+
         if ( child->CanAcceptFocusFromKeyboard() && !child->IsTopLevel() )
         {
 #ifdef __WXMSW__

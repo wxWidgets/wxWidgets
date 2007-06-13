@@ -641,6 +641,11 @@ public:
     virtual void AddChild( wxWindowBase *child );
     virtual void RemoveChild( wxWindowBase *child );
 
+    // returns true if the child is in the client area of the window, i.e. is
+    // not scrollbar, toolbar etc.
+    virtual bool IsClientAreaChild(const wxWindow *WXUNUSED(child)) const
+        { return true; }
+
     // looking for windows
     // -------------------
 

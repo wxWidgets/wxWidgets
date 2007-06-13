@@ -13,7 +13,6 @@
 #define _WX_DIALOG_H_BASE_
 
 #include "wx/defs.h"
-#include "wx/containr.h"
 #include "wx/toplevel.h"
 
 class WXDLLEXPORT wxSizer;
@@ -141,7 +140,6 @@ private:
 
     DECLARE_NO_COPY_CLASS(wxDialogBase)
     DECLARE_EVENT_TABLE()
-    WX_DECLARE_CONTROL_CONTAINER();
 };
 
 
