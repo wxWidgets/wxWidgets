@@ -86,9 +86,6 @@ class ButtonTest(testControl.ControlTest):
         self.app = wx.PySimpleApp()
         self.frame = wx.Frame(parent=None, id=wx.ID_ANY)
         self.testControl = wx.Button(parent=self.frame, id=wx.ID_ANY)
-        self.children = []
-        self.children_ids = []
-        self.children_names = []
     
     def tearDown(self):
         self.frame.Destroy()

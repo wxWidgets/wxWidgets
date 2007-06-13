@@ -79,6 +79,10 @@ class WindowTest(unittest.TestCase):
         self.INVALID_SIZE_HINTS = testSize.getInvalidSizeHints()
         self.FONTS = testFont.getFontData()
         self.POINTS = testPoint.getValidPointData()
+        # make derived classes less annoying
+        self.children = []
+        self.children_ids = []
+        self.children_names = []
     
     #####################
     ## Fixture Methods ##
