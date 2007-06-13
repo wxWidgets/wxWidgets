@@ -1794,10 +1794,17 @@ void wxMacMLTEControl::AdjustCreationAttributes( const wxColour &background, boo
             options |=
                 kTXNSupportEditCommandProcessing
                 | kTXNSupportEditCommandUpdating
-                | kTXNSupportSpellCheckCommandProcessing
-                | kTXNSupportSpellCheckCommandUpdating
                 | kTXNSupportFontCommandProcessing
                 | kTXNSupportFontCommandUpdating;
+
+            // only spell check when not read-only 
+            // todo : use system options for the other cases
+            bool checkSpelling = !(m_windowStyle & wxTE_READONLY); 
+
+            if ( checkSpelling )
+                options |=
+                    kTXNSupportSpellCheckCommandProcessing
+                    | kTXNSupportSpellCheckCommandUpdating;              
 
             TXNSetCommandEventSupport( m_txn , options ) ;
         }
