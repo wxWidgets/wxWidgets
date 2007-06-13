@@ -121,6 +121,8 @@ bool wxDialog::Show(bool show)
         // usually will result in TransferDataToWindow() being called
         InitDialog();
 
+    HiliteMenu(0);
+
     if ( m_isModalStyle )
     {
         if ( show )
