@@ -39,12 +39,12 @@
 #define HAS_FILE_STREAMS (wxUSE_STREAMS && (wxUSE_FILE || wxUSE_FFILE))
 
 #if HAS_FILE_STREAMS
-    #if wxUSE_FILE
-        typedef wxFileInputStream wxImageFileInputStream;
-        typedef wxFileOutputStream wxImageFileOutputStream;
-    #elif wxUSE_FFILE
+    #if wxUSE_FFILE
         typedef wxFFileInputStream wxImageFileInputStream;
         typedef wxFFileOutputStream wxImageFileOutputStream;
+    #elif wxUSE_FILE
+        typedef wxFileInputStream wxImageFileInputStream;
+        typedef wxFileOutputStream wxImageFileOutputStream;
     #endif // wxUSE_FILE/wxUSE_FFILE
 #endif // HAS_FILE_STREAMS
 
