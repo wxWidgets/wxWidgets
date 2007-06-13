@@ -22,3 +22,16 @@ Running all tests is straightfoward enough.  Typing
 It is entirely possible that the existing tests can and should 
 be folded into this Test Suite, but that is another topic for
 another day.
+
+--------------------------------------------------
+               Classes Under Test
+--------------------------------------------------
+wx.Button	-> testButton
+wx.Color	-> testColor
+wx.Colour	-> testColor
+wx.Control	-> testControl
+wx.Font	-> testFont
+wx.Point	-> testPoint
+wx.Rect	-> testRect
+wx.Size	-> testSize
+wx.Window	-> testWindow
