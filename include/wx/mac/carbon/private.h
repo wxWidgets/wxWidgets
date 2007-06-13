@@ -1292,6 +1292,16 @@ private :
 
 // toplevel.cpp
 
+class wxMacDeferredWindowDeleter : public wxObject
+{
+public :
+    wxMacDeferredWindowDeleter( WindowRef windowRef );
+    virtual ~wxMacDeferredWindowDeleter();
+
+protected :
+    WindowRef m_macWindow ;
+} ;
+
 ControlRef wxMacFindControlUnderMouse( wxTopLevelWindowMac* toplevelWindow, const Point& location , WindowRef window , ControlPartCode *outPart );
 
 #ifndef __LP64__

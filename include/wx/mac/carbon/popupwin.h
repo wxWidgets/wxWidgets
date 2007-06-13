@@ -20,6 +20,7 @@ class WXDLLEXPORT wxPopupWindow : public wxPopupWindowBase
 {
 public:
     wxPopupWindow() { }
+    ~wxPopupWindow();
 
     wxPopupWindow(wxWindow *parent, int flags = wxBORDER_NONE)
         { (void)Create(parent, flags); }
@@ -28,9 +29,16 @@ public:
 
     virtual bool Show(bool show = true);
 
+    WXWindow MacGetPopupWindowRef() const ;
+
 protected:
     // popups handle the position like wxTopLevelWindow, not wxWindow
     virtual void DoGetPosition(int *x, int *y) const;
+    virtual void DoMoveWindow(int x, int y, int width, int height);
+    virtual void DoGetSize( int *width, int *height ) const;
+    virtual void DoGetClientSize( int *width, int *height ) const;
+    
+    WXWindow m_popupWindowRef ;
 
     DECLARE_DYNAMIC_CLASS_NO_COPY(wxPopupWindow)
 };

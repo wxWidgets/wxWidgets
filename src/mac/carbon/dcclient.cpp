@@ -120,7 +120,7 @@ wxWindowDC::wxWindowDC()
 wxWindowDC::wxWindowDC(wxWindow *window)
 {
     m_window = window ;
-    wxTopLevelWindowMac* rootwindow = window->MacGetTopLevelWindow() ;
+    WindowRef rootwindow = (WindowRef) window->MacGetTopLevelWindowRef() ;
     if (!rootwindow)
         return;
 
@@ -152,7 +152,7 @@ wxWindowDC::wxWindowDC(wxWindow *window)
     window->MacWindowToRootWindow( &x , &y ) ;
     m_macLocalOrigin.x = x ;
     m_macLocalOrigin.y = y ;
-    m_macPort = UMAGetWindowPort( (WindowRef) rootwindow->MacGetWindowRef() ) ;
+    m_macPort = UMAGetWindowPort( rootwindow ) ;
 
     CopyRgn( (RgnHandle) window->MacGetVisibleRegion(true).GetWXHRGN() , (RgnHandle) m_macBoundaryClipRgn ) ;
     OffsetRgn( (RgnHandle) m_macBoundaryClipRgn , m_macLocalOrigin.x , m_macLocalOrigin.y ) ;

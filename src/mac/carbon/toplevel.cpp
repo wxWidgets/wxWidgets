@@ -76,7 +76,6 @@ static pascal long wxShapedMacWindowDef(short varCode, WindowRef window, SInt16 
 BEGIN_EVENT_TABLE(wxTopLevelWindowMac, wxTopLevelWindowBase)
 END_EVENT_TABLE()
 
-
 // ---------------------------------------------------------------------------
 // Carbon Events
 // ---------------------------------------------------------------------------
@@ -909,22 +908,15 @@ void wxTopLevelWindowMac::Init()
     m_macFullScreenData = NULL ;
 }
 
-class wxMacDeferredWindowDeleter : public wxObject
+wxMacDeferredWindowDeleter::wxMacDeferredWindowDeleter( WindowRef windowRef )
 {
-public :
-    wxMacDeferredWindowDeleter( WindowRef windowRef )
-    {
-        m_macWindow = windowRef ;
-    }
+    m_macWindow = windowRef ;
+}
 
-    virtual ~wxMacDeferredWindowDeleter()
-    {
-        UMADisposeWindow( (WindowRef) m_macWindow ) ;
-    }
-
-protected :
-    WindowRef m_macWindow ;
-} ;
+wxMacDeferredWindowDeleter::~wxMacDeferredWindowDeleter()
+{
+    UMADisposeWindow( (WindowRef) m_macWindow ) ;
+}
 
 bool wxTopLevelWindowMac::Create(wxWindow *parent,
                                  wxWindowID id,
@@ -1064,16 +1056,19 @@ void  wxTopLevelWindowMac::MacSetBackgroundBrush( const wxBrush &brush )
     }
 }
 
+void wxTopLevelWindowMacInstallTopLevelWindowEventHandler(WindowRef window, EventHandlerRef* handler, void *ref)
+{
+    InstallWindowEventHandler(window, GetwxMacTopLevelEventHandlerUPP(),
+        GetEventTypeCount(eventList), eventList, ref, handler );
+}
+
 void wxTopLevelWindowMac::MacInstallTopLevelWindowEventHandler()
 {
     if ( m_macEventHandler != NULL )
     {
         verify_noerr( ::RemoveEventHandler( (EventHandlerRef) m_macEventHandler ) ) ;
     }
-
-    InstallWindowEventHandler(
-        MAC_WXHWND(m_macWindow), GetwxMacTopLevelEventHandlerUPP(),
-        GetEventTypeCount(eventList), eventList, this, (EventHandlerRef *)&m_macEventHandler );
+    wxTopLevelWindowMacInstallTopLevelWindowEventHandler(MAC_WXHWND(m_macWindow),(EventHandlerRef *)&m_macEventHandler,this);
 }
 
 void  wxTopLevelWindowMac::MacCreateRealWindow(

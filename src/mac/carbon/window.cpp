@@ -53,6 +53,10 @@
     #include "wx/caret.h"
 #endif
 
+#if wxUSE_POPUPWIN
+    #include "wx/popupwin.h"
+#endif
+
 #if wxUSE_DRAG_AND_DROP
 #include "wx/dnd.h"
 #endif
@@ -3142,8 +3146,16 @@ WXWindow wxWindowMac::MacGetTopLevelWindowRef() const
     while ( iter )
     {
         if ( iter->IsTopLevel() )
-            return ((wxTopLevelWindow*)iter)->MacGetWindowRef() ;
-
+        {
+            wxTopLevelWindow* toplevel = wxDynamicCast(iter,wxTopLevelWindow);
+            if ( toplevel )
+                return toplevel->MacGetWindowRef();
+#if wxUSE_POPUPWIN
+            wxPopupWindow* popupwin = wxDynamicCast(iter,wxPopupWindow);
+            if ( popupwin )
+                return popupwin->MacGetPopupWindowRef();
+#endif
+        }
         iter = iter->GetParent() ;
     }
 
