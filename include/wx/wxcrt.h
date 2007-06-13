@@ -630,22 +630,33 @@ inline const char *wxStrpbrk(const char *s, const char *accept)
     { return wxCRT_StrpbrkA(s, accept); }
 inline const wchar_t *wxStrpbrk(const wchar_t *s, const wchar_t *accept)
     { return wxCRT_StrpbrkW(s, accept); }
-inline const char *wxStrpbrk(const char *s, const wxCharBuffer& accept)
-    { return wxCRT_StrpbrkA(s, accept.data()); }
 inline const char *wxStrpbrk(const char *s, const wxString& accept)
     { return wxCRT_StrpbrkA(s, accept.mb_str()); }
 inline const char *wxStrpbrk(const char *s, const wxCStrData& accept)
     { return wxCRT_StrpbrkA(s, accept.AsCharBuf()); }
-inline const wchar_t *wxStrpbrk(const wchar_t *s, const wxWCharBuffer& accept)
-    { return wxCRT_StrpbrkW(s, accept.data()); }
 inline const wchar_t *wxStrpbrk(const wchar_t *s, const wxString& accept)
     { return wxCRT_StrpbrkW(s, accept.wc_str()); }
 inline const wchar_t *wxStrpbrk(const wchar_t *s, const wxCStrData& accept)
     { return wxCRT_StrpbrkW(s, accept.AsWCharBuf()); }
 inline const char *wxStrpbrk(const wxString& s, const wxString& accept)
     { return wxCRT_StrpbrkA(s.c_str(), accept.mb_str()); }
+inline const char *wxStrpbrk(const wxString& s, const char *accept)
+    { return wxCRT_StrpbrkA(s.c_str(), accept); }
+inline const wchar_t *wxStrpbrk(const wxString& s, const wchar_t *accept)
+    { return wxCRT_StrpbrkW(s.wc_str(), accept); }
+inline const char *wxStrpbrk(const wxString& s, const wxCStrData& accept)
+    { return wxCRT_StrpbrkA(s.c_str(), accept.AsCharBuf()); }
 inline const char *wxStrpbrk(const wxCStrData& s, const wxString& accept)
     { return wxCRT_StrpbrkA(s.AsChar(), accept.mb_str()); }
+inline const char *wxStrpbrk(const wxCStrData& s, const char *accept)
+    { return wxCRT_StrpbrkA(s.AsChar(), accept); }
+inline const wchar_t *wxStrpbrk(const wxCStrData& s, const wchar_t *accept)
+    { return wxCRT_StrpbrkW(s.AsWChar(), accept); }
+inline const char *wxStrpbrk(const wxCStrData& s, const wxCStrData& accept)
+    { return wxCRT_StrpbrkA(s.AsChar(), accept.AsCharBuf()); }
+template <typename S, typename T>
+inline const T *wxStrpbrk(const S& s, const wxCharTypeBuffer<T>& accept)
+    { return wxStrpbrk(s, accept.data()); }
 
 
 /* inlined non-const versions */

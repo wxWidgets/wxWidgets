@@ -47,12 +47,14 @@ private:
         CPPUNIT_TEST( Strcmp );
         CPPUNIT_TEST( Strspn );
         CPPUNIT_TEST( Strcspn );
+        CPPUNIT_TEST( Strpbrk );
     CPPUNIT_TEST_SUITE_END();
 
     void SetGetEnv();
     void Strcmp();
     void Strspn();
     void Strcspn();
+    void Strpbrk();
 
     DECLARE_NO_COPY_CLASS(CrtTestCase)
 };
@@ -175,5 +177,35 @@ void CrtTestCase::Strcspn()
     CPPUNIT_ASSERT_EQUAL( strWX.length(), wxStrcspn(strMB, "xy") );
     CPPUNIT_ASSERT_EQUAL( strWX.length(), wxStrcspn(strWC, "xy") );
     CPPUNIT_ASSERT_EQUAL( strWX.length(), wxStrcspn(strWX, "xy") );
+}
+
+void CrtTestCase::Strpbrk()
+{
+    const wxString s(", ");
+
+    CPPUNIT_ASSERT_EQUAL(  ',', *wxStrpbrk(strMB,  ", ") );
+    CPPUNIT_ASSERT_EQUAL( L',', *wxStrpbrk(strWC, L", ") );
+    CPPUNIT_ASSERT_EQUAL(  ',', *wxStrpbrk(strWX,  ", ") );
+    CPPUNIT_ASSERT_EQUAL( L',', *wxStrpbrk(strWX, L", ") );
+
+    CPPUNIT_ASSERT_EQUAL(  ',', *wxStrpbrk(strMB, s) );
+    CPPUNIT_ASSERT_EQUAL( L',', *wxStrpbrk(strWC, s) );
+    CPPUNIT_ASSERT_EQUAL(  ',', *wxStrpbrk(strWX, s) );
+    CPPUNIT_ASSERT_EQUAL(  ',', *wxStrpbrk(strWX.c_str(), s) );
+
+    CPPUNIT_ASSERT_EQUAL(  ',', *wxStrpbrk(strMB, s.c_str()) );
+    CPPUNIT_ASSERT_EQUAL( L',', *wxStrpbrk(strWC, s.c_str()) );
+    CPPUNIT_ASSERT_EQUAL(  ',', *wxStrpbrk(strWX, s.c_str()) );
+    CPPUNIT_ASSERT_EQUAL(  ',', *wxStrpbrk(strWX.c_str(), s.c_str()) );
+
+    CPPUNIT_ASSERT_EQUAL(  ',', *wxStrpbrk(strMB, s.mb_str()) );
+    CPPUNIT_ASSERT_EQUAL( L',', *wxStrpbrk(strWC, s.wc_str()) );
+    CPPUNIT_ASSERT_EQUAL(  ',', *wxStrpbrk(strWX, s.mb_str()) );
+    CPPUNIT_ASSERT_EQUAL( L',', *wxStrpbrk(strWX, s.wc_str()) );
+    CPPUNIT_ASSERT_EQUAL(  ',', *wxStrpbrk(strWX.c_str(), s.mb_str()) );
+    CPPUNIT_ASSERT_EQUAL( L',', *wxStrpbrk(strWX.c_str(), s.wc_str()) );
+
+    CPPUNIT_ASSERT_EQUAL( (const char *)NULL, wxStrpbrk(strWX, "xyz") );
+    CPPUNIT_ASSERT_EQUAL( (const wchar_t *)NULL, wxStrpbrk(strWX.c_str(), L"xyz") );
 }
 
