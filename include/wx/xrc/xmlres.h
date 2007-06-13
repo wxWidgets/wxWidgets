@@ -26,6 +26,8 @@
 #include "wx/artprov.h"
 #include "wx/colour.h"
 #include "wx/animate.h"
+#include "wx/dynarray.h"
+#include "wx/arrstr.h"
 
 #include "wx/xml/xml.h"
 
