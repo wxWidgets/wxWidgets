@@ -16,12 +16,12 @@ which do not contain an underscore, as well as the
 'runAllTests.py imports every Unit Test module, so you can find
 the complete list there.
 
-Running all tests is straightfoward enough.  Typing
+Running all tests is straightfoward.  Typing
 'python runAllTests.py' at the command line should do the trick.
 
 It is entirely possible that the existing tests can and should 
-be folded into this Test Suite, but that is another topic for
-another day.
+be folded into this Test Suite, but that is another topic 
+entirely.
 
 --------------------------------------------------
                Classes Under Test
