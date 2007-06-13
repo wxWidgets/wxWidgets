@@ -169,7 +169,7 @@ public :
     void StrokeLineSegments( CGContextRef ctxRef , const CGPoint pts[] , size_t count )
     {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-        if ( CGContextStrokeLineSegments!=NULL  )
+        if ( &CGContextStrokeLineSegments!=NULL  )
         {
             CGContextStrokeLineSegments( ctxRef , pts , count );
         }
@@ -541,7 +541,7 @@ wxMacCoreGraphicsBrushData::wxMacCoreGraphicsBrushData(wxGraphicsRenderer* rende
         if ( brush.MacGetBrushKind() == kwxMacBrushTheme )
         {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-            if ( HIThemeBrushCreateCGColor != 0 )
+            if ( UMAGetSystemVersion()  >= 0x1040 )
             {
                 CGColorRef color ;
                 HIThemeBrushCreateCGColor( brush.MacGetTheme(), &color );
@@ -853,7 +853,7 @@ bool wxMacCoreGraphicsMatrixData::IsEqual( const wxGraphicsMatrixData* t) const
 {
     const CGAffineTransform* tm = (CGAffineTransform*) t->GetNativeMatrix();
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-    if ( CGAffineTransformEqualToTransform!=NULL )
+    if ( &CGAffineTransformEqualToTransform!=NULL )
     {
         return CGAffineTransformEqualToTransform(m_matrix, *((CGAffineTransform*) t->GetNativeMatrix()));
     }
@@ -1107,7 +1107,7 @@ void wxMacCoreGraphicsPathData::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wx
 bool wxMacCoreGraphicsPathData::Contains( wxDouble x, wxDouble y, int fillStyle) const
 {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-    if ( CGPathContainsPoint!=NULL )
+    if ( &CGPathContainsPoint!=NULL )
     {
         return CGPathContainsPoint( m_path, NULL, CGPointMake(x,y), fillStyle == wxODDEVEN_RULE );
     }
