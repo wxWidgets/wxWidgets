@@ -1141,6 +1141,18 @@ typedef float wxFloat32;
 #   endif
 #endif /* wxUSE_WCHAR_T */
 
+/*
+   This constant should be used instead of NULL in vararg functions taking
+   wxChar* arguments: passing NULL (which is the same as 0, unless the compiler
+   defines it specially, e.g. like gcc does with its __null built-in) doesn't
+   work in this case as va_arg() wouldn't interpret the integer 0 correctly
+   when trying to convert it to a pointer on architectures where sizeof(int) is
+   strictly less than sizeof(void *).
+
+   Examples of places where this must be used include wxFileTypeInfo ctor.
+ */
+#define wxNullPtr ((void *)NULL)
+
 /*  ---------------------------------------------------------------------------- */
 /*  byte ordering related definition and macros */
 /*  ---------------------------------------------------------------------------- */
