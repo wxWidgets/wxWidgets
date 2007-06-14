@@ -1,6 +1,14 @@
 Recent Changes for wxPython
 =====================================================================
 
+2.6.4.0
+-------
+* 12-June-2007
+
+Several bug fixes to both wxWidgets and wxPython.
+
+
+
 2.6.3.3
 -------
 * 15-July-2006
