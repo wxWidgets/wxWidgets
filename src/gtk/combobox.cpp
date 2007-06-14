@@ -1121,7 +1121,7 @@ void wxComboBox::Replace( long from, long to, const wxString& value )
     const char *utf8 = value.utf8_str();
 #else
     wxCharBuffer buffer(value.utf8_str());
-    char char *utf8 = buffer;
+    const char *utf8 = buffer;
 #endif
     gtk_editable_insert_text(GTK_EDITABLE(entry), utf8, strlen(utf8), &pos);
 }
