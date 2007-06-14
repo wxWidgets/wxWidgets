@@ -52,6 +52,10 @@
     #include  "wx/msw/private.h"  // includes windows.h for LOGFONT
 #endif
 
+#if defined(__WXMAC__)
+    #include "wx/mac/private.h"
+#endif
+
 #if wxUSE_FONTMAP
     #include "wx/fontmap.h"
 #endif // wxUSE_FONTMAP
@@ -596,6 +600,28 @@ bool wxGUIAppTraitsBase::ShowAssertDialog(const wxString& msg)
               wxT("You can also choose [Cancel] to suppress ")
               wxT("further warnings.");
 
+#ifdef __WXMAC__
+    // in order to avoid reentrancy problems, use the lowest alert API available
+    CFOptionFlags exitButton;
+    wxMacCFStringHolder cfText(msgDlg);
+    OSStatus err = CFUserNotificationDisplayAlert(
+            0, kAlertStopAlert, NULL, NULL, NULL, CFSTR("wxWidgets Debug Alert"), cfText,
+            CFSTR("Yes"), CFSTR("No"), CFSTR("Cancel"), &exitButton );
+    if ( err == noErr )
+    {
+        switch( exitButton )
+        {
+            case 0 : // yes
+                wxTrap();
+                break;
+            case 2 : // cancel
+                // no more asserts
+                return true;
+            case 1 : // no -> nothing to do
+                break ;
+        }
+    }
+#else
     switch ( wxMessageBox(msgDlg, wxT("wxWidgets Debug Alert"),
                           wxYES_NO | wxCANCEL | wxICON_STOP ) )
     {
@@ -609,7 +635,7 @@ bool wxGUIAppTraitsBase::ShowAssertDialog(const wxString& msg)
 
         //case wxNO: nothing to do
     }
-
+#endif
     return false;
 #endif // !wxUSE_MSGDLG/wxUSE_MSGDLG
 }
