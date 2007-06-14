@@ -22756,11 +22756,13 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-#include <stdio.h>
+#include <sys/types.h> /* for off_t */
+     #include <stdio.h>
 int
 main ()
 {
-return fseeko (stdin, 0, 0) && (fseeko) (stdin, 0, 0);
+int (*fp) (FILE *, off_t, int) = fseeko;
+     return fseeko (stdin, 0, 0) && fp (stdin, 0, 0);
   ;
   return 0;
 }
@@ -22800,11 +22802,13 @@ cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
 #define _LARGEFILE_SOURCE 1
-#include <stdio.h>
+#include <sys/types.h> /* for off_t */
+     #include <stdio.h>
 int
 main ()
 {
-return fseeko (stdin, 0, 0) && (fseeko) (stdin, 0, 0);
+int (*fp) (FILE *, off_t, int) = fseeko;
+     return fseeko (stdin, 0, 0) && fp (stdin, 0, 0);
   ;
   return 0;
 }
@@ -31784,6 +31788,8 @@ if test "$wxUSE_UNICODE" = "yes" -a "$wxUSE_UNICODE_UTF8" = "auto" ; then
         wxUSE_UNICODE_UTF8=yes
     elif test "$TOOLKIT" = "GTK" -a "$WXGTK20" = "1" ; then
         wxUSE_UNICODE_UTF8=yes
+    elif test "$USE_OS2" = "1" ; then
+                                wxUSE_UNICODE_UTF8=yes
     else
         wxUSE_UNICODE_UTF8=no
     fi
@@ -42294,13 +42300,9 @@ fi
 
 
 if test "$wxUSE_DATETIME" = "yes"; then
-
-for ac_func in strptime
-do
-as_ac_var=`echo "ac_cv_func_$ac_func" | $as_tr_sh`
-{ echo "$as_me:$LINENO: checking for $ac_func" >&5
-echo $ECHO_N "checking for $ac_func... $ECHO_C" >&6; }
-if { as_var=$as_ac_var; eval "test \"\${$as_var+set}\" = set"; }; then
+        { echo "$as_me:$LINENO: checking for strptime" >&5
+echo $ECHO_N "checking for strptime... $ECHO_C" >&6; }
+if test "${ac_cv_func_strptime+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
 else
   cat >conftest.$ac_ext <<_ACEOF
@@ -42309,12 +42311,12 @@ _ACEOF
 cat confdefs.h >>conftest.$ac_ext
 cat >>conftest.$ac_ext <<_ACEOF
 /* end confdefs.h.  */
-/* Define $ac_func to an innocuous variant, in case <limits.h> declares $ac_func.
+/* Define strptime to an innocuous variant, in case <limits.h> declares strptime.
    For example, HP-UX 11i <limits.h> declares gettimeofday.  */
-#define $ac_func innocuous_$ac_func
+#define strptime innocuous_strptime
 
 /* System header to define __stub macros and hopefully few prototypes,
-    which can conflict with char $ac_func (); below.
+    which can conflict with char strptime (); below.
     Prefer <limits.h> to <assert.h> if __STDC__ is defined, since
     <limits.h> exists even on freestanding compilers.  */
 
@@ -42324,7 +42326,7 @@ cat >>conftest.$ac_ext <<_ACEOF
 # include <assert.h>
 #endif
 
-#undef $ac_func
+#undef strptime
 
 /* Override any GCC internal prototype to avoid an error.
    Use char because int might match the return type of a GCC
@@ -42332,18 +42334,18 @@ cat >>conftest.$ac_ext <<_ACEOF
 #ifdef __cplusplus
 extern "C"
 #endif
-char $ac_func ();
+char strptime ();
 /* The GNU C library defines this for functions which it implements
     to always fail with ENOSYS.  Some functions are actually named
     something starting with __ and the normal name is an alias.  */
-#if defined __stub_$ac_func || defined __stub___$ac_func
+#if defined __stub_strptime || defined __stub___strptime
 choke me
 #endif
 
 int
 main ()
 {
-return $ac_func ();
+return strptime ();
   ;
   return 0;
 }
@@ -42366,27 +42368,19 @@ eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
 	 test ! -s conftest.err
        } && test -s conftest$ac_exeext &&
        $as_test_x conftest$ac_exeext; then
-  eval "$as_ac_var=yes"
+  ac_cv_func_strptime=yes
 else
   echo "$as_me: failed program was:" >&5
 sed 's/^/| /' conftest.$ac_ext >&5
 
-	eval "$as_ac_var=no"
+	ac_cv_func_strptime=no
 fi
 
 rm -f core conftest.err conftest.$ac_objext conftest_ipa8_conftest.oo \
       conftest$ac_exeext conftest.$ac_ext
 fi
-ac_res=`eval echo '${'$as_ac_var'}'`
-	       { echo "$as_me:$LINENO: result: $ac_res" >&5
-echo "${ECHO_T}$ac_res" >&6; }
-if test `eval echo '${'$as_ac_var'}'` = yes; then
-  cat >>confdefs.h <<_ACEOF
-#define `echo "HAVE_$ac_func" | $as_tr_cpp` 1
-_ACEOF
-
-fi
-done
+{ echo "$as_me:$LINENO: result: $ac_cv_func_strptime" >&5
+echo "${ECHO_T}$ac_cv_func_strptime" >&6; }
 
     if test "$ac_cv_func_strptime" = "yes"; then
         { echo "$as_me:$LINENO: checking for strptime declaration" >&5
@@ -42465,6 +42459,77 @@ echo "${ECHO_T}$wx_cv_func_strptime_decl" >&6; }
 #define HAVE_STRPTIME_DECL 1
 _ACEOF
 
+    else
+        wx_strptime_decl="extern char *strptime(const char *, const char *, struct tm *);"
+    fi
+    if test "$ac_cv_func_strptime" = "yes"; then
+                                        { echo "$as_me:$LINENO: checking whether strptime() fails on invalid strings" >&5
+echo $ECHO_N "checking whether strptime() fails on invalid strings... $ECHO_C" >&6; }
+if test "${wx_cv_func_strptime_ok+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  if test "$cross_compiling" = yes; then
+                  wx_cv_func_strptime_ok=no
+
+else
+  cat >conftest.$ac_ext <<_ACEOF
+
+                    #include <stdlib.h>
+                    #include <time.h>
+                    #include "confdefs.h"
+
+                    $wx_strptime_decl
+
+                    int main()
+                    {
+                        return !!strptime("", "%x", NULL);
+                    }
+
+_ACEOF
+rm -f conftest$ac_exeext
+if { (ac_try="$ac_link"
+case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_link") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); } && { ac_try='./conftest$ac_exeext'
+  { (case "(($ac_try" in
+  *\"* | *\`* | *\\*) ac_try_echo=\$ac_try;;
+  *) ac_try_echo=$ac_try;;
+esac
+eval "echo \"\$as_me:$LINENO: $ac_try_echo\"") >&5
+  (eval "$ac_try") 2>&5
+  ac_status=$?
+  echo "$as_me:$LINENO: \$? = $ac_status" >&5
+  (exit $ac_status); }; }; then
+  wx_cv_func_strptime_ok=yes
+else
+  echo "$as_me: program exited with status $ac_status" >&5
+echo "$as_me: failed program was:" >&5
+sed 's/^/| /' conftest.$ac_ext >&5
+
+( exit $ac_status )
+wx_cv_func_strptime_ok=no
+fi
+rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext conftest.$ac_objext conftest.$ac_ext
+fi
+
+
+
+fi
+{ echo "$as_me:$LINENO: result: $wx_cv_func_strptime_ok" >&5
+echo "${ECHO_T}$wx_cv_func_strptime_ok" >&6; }
+
+        if test "$wx_cv_func_strptime_ok" = "yes"; then
+            cat >>confdefs.h <<\_ACEOF
+#define HAVE_STRPTIME 1
+_ACEOF
+
+        fi
     fi
 
             { echo "$as_me:$LINENO: checking for timezone variable in <time.h>" >&5
