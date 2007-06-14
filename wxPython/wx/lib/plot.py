@@ -554,6 +554,7 @@ class PlotCanvas(wx.Panel):
         self._ySpec= 'auto'
         self._gridEnabled= False
         self._legendEnabled= False
+        self._titleEnabled= True
         
         # Fonts
         self._fontCache = {}
@@ -566,6 +567,8 @@ class PlotCanvas(wx.Panel):
         self.last_PointLabel= None
         self._pointLabelFunc= None
         self.canvas.Bind(wx.EVT_LEAVE_WINDOW, self.OnLeave)
+
+        self._useScientificNotation = False
 
         self.canvas.Bind(wx.EVT_PAINT, self.OnPaint)
         self.canvas.Bind(wx.EVT_SIZE, self.OnSize)
@@ -746,6 +749,12 @@ class PlotCanvas(wx.Panel):
         """Set True to show scrollbars"""
         return self.sb_vert.IsShown()
 
+    def SetUseScientificNotation(self, useScientificNotation):
+        self._useScientificNotation = useScientificNotation
+
+    def GetUseScientificNotation(self):
+        return self._useScientificNotation
+
     def SetEnableDrag(self, value):
         """Set True to enable drag."""
         if value not in [True,False]:
@@ -798,6 +807,17 @@ class PlotCanvas(wx.Panel):
     def GetEnableLegend(self):
         """True if Legend enabled."""
         return self._legendEnabled
+
+    def SetEnableTitle(self, value):
+        """Set True to enable title."""
+        if value not in [True,False]:
+            raise TypeError, "Value should be True or False"
+        self._titleEnabled= value 
+        self.Redraw()
+
+    def GetEnableTitle(self):
+        """True if title enabled."""
+        return self._titleEnabled
 
     def SetEnablePointLabel(self, value):
         """Set True to enable pointLabel."""
@@ -1038,11 +1058,14 @@ class PlotCanvas(wx.Panel):
         textSize_scale= _Numeric.array([rhsW+lhsW,bottomH+topH]) # make plot area smaller by text size
         textSize_shift= _Numeric.array([lhsW, bottomH])          # shift plot area by this amount
 
-        # drawing title and labels text
-        dc.SetFont(self._getFont(self._fontSizeTitle))
-        titlePos= (self.plotbox_origin[0]+ lhsW + (self.plotbox_size[0]-lhsW-rhsW)/2.- titleWH[0]/2.,
-                 self.plotbox_origin[1]- self.plotbox_size[1])
-        dc.DrawText(graphics.getTitle(),titlePos[0],titlePos[1])
+        # draw title if requested
+        if self._titleEnabled:
+            dc.SetFont(self._getFont(self._fontSizeTitle))
+            titlePos= (self.plotbox_origin[0]+ lhsW + (self.plotbox_size[0]-lhsW-rhsW)/2.- titleWH[0]/2.,
+                       self.plotbox_origin[1]- self.plotbox_size[1])
+            dc.DrawText(graphics.getTitle(),titlePos[0],titlePos[1])
+
+        # draw label text
         dc.SetFont(self._getFont(self._fontSizeAxis))
         xLabelPos= (self.plotbox_origin[0]+ lhsW + (self.plotbox_size[0]-lhsW-rhsW)/2.- xLabelWH[0]/2.,
                  self.plotbox_origin[1]- xLabelWH[1])
@@ -1131,7 +1154,7 @@ class PlotCanvas(wx.Panel):
             l.append(cn)
         return l
 
-    def GetClosetPoint(self, pntXY, pointScaled= True):
+    def GetClosestPoint(self, pntXY, pointScaled= True):
         """Returns list with
             [curveNumber, legend, index of closest point, pointXY, scaledXY, distance]
             list for only the closest curve.
@@ -1151,6 +1174,8 @@ class PlotCanvas(wx.Panel):
         mdist = min(dists)  #Min dist
         i = dists.index(mdist)  #index for min dist
         return closestPts[i]  #this is the closest point on closest curve
+    
+    GetClosetPoint = GetClosestPoint
 
     def UpdatePointLabel(self, mDataDict):
         """Updates the pointLabel point on screen with data contained in
@@ -1355,8 +1380,11 @@ class PlotCanvas(wx.Panel):
         """Draws Title and labels and returns width and height for each"""
         # TextExtents for Title and Axis Labels
         dc.SetFont(self._getFont(self._fontSizeTitle))
-        title= graphics.getTitle()
-        titleWH= dc.GetTextExtent(title)
+        if self._titleEnabled:
+            title= graphics.getTitle()
+            titleWH= dc.GetTextExtent(title)
+        else:
+            titleWH= (0,0)
         dc.SetFont(self._getFont(self._fontSizeAxis))
         xLabel, yLabel= graphics.getXLabel(),graphics.getYLabel()
         xLabelWH= dc.GetTextExtent(xLabel)
@@ -1565,7 +1593,7 @@ class PlotCanvas(wx.Panel):
                 error = e
                 factor = f
         grid = factor * 10.**power
-        if power > 4 or power < -4:
+        if self._useScientificNotation and (power > 4 or power < -4):
             format = '%+7.1e'        
         elif power >= 0:
             digits = max(1, int(power))
@@ -2021,7 +2049,7 @@ class TestFrame(wx.Frame):
         if self.client.GetEnablePointLabel() == True:
             #make up dict with info for the pointLabel
             #I've decided to mark the closest point on the closest curve
-            dlst= self.client.GetClosetPoint( self.client._getXY(event), pointScaled= True)
+            dlst= self.client.GetClosestPoint( self.client._getXY(event), pointScaled= True)
             if dlst != []:    #returns [] if none
                 curveNum, legend, pIndex, pointXY, scaledXY, distance = dlst
                 #make up dictionary to pass to my user function (see DrawPointLabel) 

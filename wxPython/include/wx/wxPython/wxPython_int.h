@@ -352,12 +352,16 @@ class wxPyClientData;
 class wxPyUserData;
 class wxPyOORClientData;
 class wxPyCBInputStream;
+class wxPyCBOutputStream;
 
 void wxPyClientData_dtor(wxPyClientData* self);
 void wxPyUserData_dtor(wxPyUserData* self);
 void wxPyOORClientData_dtor(wxPyOORClientData* self);
 wxPyCBInputStream* wxPyCBInputStream_create(PyObject *py, bool block);
 wxPyCBInputStream* wxPyCBInputStream_copy(wxPyCBInputStream* other);
+
+wxPyCBOutputStream* wxPyCBOutputStream_create(PyObject *py, bool block);
+wxPyCBOutputStream* wxPyCBOutputStream_copy(wxPyCBOutputStream* other);
 
 //---------------------------------------------------------------------------
 // Export a C API in a struct.  Other modules will be able to load this from
@@ -435,6 +439,9 @@ struct wxPyCoreAPI {
     wxPoint2D*          (*p_wxPoint2D_LIST_helper)(PyObject* source, size_t* npoints);
     bool                (*p_wxRect2D_helper)(PyObject* source, wxRect2D** obj);
 
+    wxPyCBOutputStream*  (*p_wxPyCBOutputStream_create)(PyObject *py, bool block);
+    wxPyCBOutputStream*  (*p_wxPyCBOutputStream_copy)(wxPyCBOutputStream* other);
+    
 };
 
 

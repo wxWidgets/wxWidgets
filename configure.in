@@ -17,7 +17,7 @@ dnl ---------------------------------------------------------------------------
 dnl initialization
 dnl ---------------------------------------------------------------------------
 
-AC_INIT([wxWidgets], [2.8.1], [wx-dev@lists.wxwidgets.org])
+AC_INIT([wxWidgets], [2.8.4], [wx-dev@lists.wxwidgets.org])
 
 dnl the file passed to AC_CONFIG_SRCDIR should be specific to our package
 AC_CONFIG_SRCDIR([wx-config.in])
@@ -34,7 +34,7 @@ dnl wx_release_number += 1
 
 wx_major_version_number=2
 wx_minor_version_number=8
-wx_release_number=1
+wx_release_number=4
 wx_subrelease_number=1
 
 WX_RELEASE=$wx_major_version_number.$wx_minor_version_number
@@ -1831,11 +1831,13 @@ dnl ------------------------------------------------------------------------
 dnl Check for headers
 dnl ------------------------------------------------------------------------
 
-AC_CHECK_HEADERS(stdlib.h fnmatch.h langinfo.h malloc.h unistd.h wchar.h)
+dnl Note: non-empty last parameter makes check compile-only,
+dnl   skipping worthless preprocessing check
+AC_CHECK_HEADERS(stdlib.h fnmatch.h langinfo.h malloc.h unistd.h wchar.h,,, [AC_INCLUDES_DEFAULT()])
 
 dnl maybe wchar_t is in wcstr.h if we don't have wchar.h?
 if test "$ac_cv_header_wchar_h" != "yes"; then
-    AC_CHECK_HEADERS(wcstr.h)
+    AC_CHECK_HEADER(wcstr.h,,, [AC_INCLUDES_DEFAULT()])
 fi
 
 case "${host}" in
@@ -1853,7 +1855,7 @@ esac
 
 dnl POSIX needs this for select(), but old systems don't have it
 if test "$USE_UNIX" = 1 ; then
-    AC_CHECK_HEADERS([sys/select.h])
+    AC_CHECK_HEADER([sys/select.h],,, [AC_INCLUDES_DEFAULT()])
 fi
 
 dnl ---------------------------------------------------------------------------
@@ -1920,6 +1922,7 @@ dnl checks needed to define wxVaCopy
 AC_CACHE_CHECK([for va_copy],
     wx_cv_func_va_copy,
     [
+        AC_LANG_PUSH(C++)
         AC_LINK_IFELSE([
             #include <stdarg.h>
             void foo(char *f, ...)
@@ -1938,6 +1941,7 @@ AC_CACHE_CHECK([for va_copy],
             wx_cv_func_va_copy=yes,
             wx_cv_func_va_copy=no
         )
+        AC_LANG_POP()
     ]
 )
 
@@ -2100,18 +2104,55 @@ if test "x$SUNCC" = xyes; then
     CFLAGS="-erroff=E_NO_EXPLICIT_TYPE_GIVEN $CFLAGS"
 fi
 
-dnl SGI mipsPro compiler gives this warning for "conversion from pointer to
-dnl same-sized integral type" even when there is an explicit cast and as there
-dnl is no way to turn it off and there are hundreds of these warnings in wx
-dnl sources, just turn it off for now
+dnl SGI mipsPro compiler version 7.4.4 and later (and maybe some earlier
+dnl versions too but it's known that 7.4 doesn't give this warning) gives this
+dnl warning for "conversion from pointer to same-sized integral type" even when
+dnl there is an explicit cast and as there is no way to turn it off and there
+dnl are hundreds of these warnings in wx sources, just turn it off for now
 dnl
 dnl a better long term solution would be to use #pragma set/reset woff in
 dnl wxPtrToUInt() and use it instead of casts elsewhere
 if test "x$SGICC" = "xyes"; then
-    CFLAGS="-woff 3970 $CFLAGS"
+    AC_CACHE_CHECK([if cc version is 7.4.4 or greater],
+        wx_cv_prog_sgicc744,
+        [
+            AC_TRY_COMPILE([],
+                [
+                    #if _SGI_COMPILER_VERSION >= 744
+                    chock me: mipsPro is 7.4.4 or later
+                    #endif
+                ],
+                wx_cv_prog_sgicc744=no,
+                wx_cv_prog_sgicc744=yes
+            )
+        ]
+    )
+
+    if test "x$wx_cv_prog_sgicc744" = "xyes"; then
+        CFLAGS="-woff 3970 $CFLAGS"
+    fi
 fi
 if test "x$SGICXX" = "xyes"; then
-    CXXFLAGS="-woff 3970 $CXXFLAGS"
+    AC_CACHE_CHECK([if CC version is 7.4.4 or greater],
+        wx_cv_prog_sgicxx744,
+        [
+            AC_LANG_PUSH(C++)
+            AC_TRY_COMPILE([],
+                [
+                    #if _SGI_COMPILER_VERSION >= 744
+                    chock me: mipsPro is 7.4.4 or later
+                    #endif
+                ],
+                wx_cv_prog_sgicxx744=no,
+                wx_cv_prog_sgicxx744=yes
+            )
+            AC_LANG_POP()
+        ]
+    )
+
+    if test "x$wx_cv_prog_sgicxx744" = "xyes"; then
+        CXXFLAGS="-woff 3970 $CXXFLAGS"
+    fi
 fi
 
 dnl HP-UX c89/aCC compiler warnings
@@ -2137,7 +2178,7 @@ if test "x$COMPAQCXX" = "xyes"; then
     dnl intconlosbit: "conversion to integral type of smaller size could lose
     dnl               data" this is a useful warning but there are too many of
     dnl               them for now
-    CXXFLAGS="-w0 -msg_disable basclsnondto,unrimpret,intconlosbit"
+    CXXFLAGS="-w0 -msg_disable basclsnondto,unrimpret,intconlosbit $CXXFLAGS"
 fi
 
 dnl the next few tests are all for C++ features and so need to be done using
@@ -2278,7 +2319,9 @@ if test "$wxUSE_STL" = "yes"; then
                 wx_cv_class_stdhashmapset=yes,
                 wx_cv_class_stdhashmapset=no)
             ]
-        )]
+        )],
+        [],
+        [ ]
     )
 
     if test "$wx_cv_class_stdhashmapset" = yes; then
@@ -2296,7 +2339,9 @@ if test "$wxUSE_STL" = "yes"; then
                 wx_cv_class_gnuhashmapset=yes,
                 wx_cv_class_gnuhashmapset=no)
             ]
-        )]
+        )],
+        [],
+        [ ]
     )
 
     if test "$wx_cv_class_gnuhashmapset" = yes; then
@@ -2591,7 +2636,7 @@ if test "$wxUSE_REGEX" != "no"; then
     if test "$wxUSE_REGEX" = "sys" -o "$wxUSE_REGEX" = "yes" ; then
         dnl according to Unix 98 specs, regcomp() is in libc but I believe that
         dnl on some old systems it may be in libregex - check for it too?
-        AC_CHECK_HEADER(regex.h, [AC_CHECK_FUNCS(regcomp re_search)])
+        AC_CHECK_HEADER(regex.h, [AC_CHECK_FUNCS(regcomp re_search)],, [ ])
 
         if test "x$ac_cv_func_regcomp" != "xyes"; then
             if test "$wxUSE_REGEX" = "sys" ; then
@@ -2659,7 +2704,7 @@ if test "$wxUSE_ZLIB" != "no" ; then
             )
             dnl If the test above did not come up with a value (e.g. cross
             dnl compiling) then this should give a definitive answer
-            AC_CHECK_HEADER(zlib.h)
+            AC_CHECK_HEADER(zlib.h,,, [ ])
 
             system_zlib_h_ok=$ac_cv_header_zlib_h
         fi
@@ -2730,7 +2775,7 @@ if test "$wxUSE_LIBPNG" != "no" ; then
                     unset ac_cv_header_png_h
                 )]
             )
-            AC_CHECK_HEADER(png.h)
+            AC_CHECK_HEADER(png.h,,, [ ])
 
             if test "$ac_cv_header_png_h" = "yes"; then
                 AC_CHECK_LIB(png, png_check_sig, PNG_LINK=" -lpng -lz", , [-lz -lm])
@@ -2855,7 +2900,9 @@ if test "$wxUSE_LIBTIFF" != "no" ; then
                                          TIFF_LINK=" -ltiff",
                                          ,
                                          $TIFF_PREREQ_LINKS)
-                        ]
+                        ],
+                        [],
+                        [ ]
                        )
 
         if test "x$TIFF_LINK" = "x" ; then
@@ -2893,7 +2940,7 @@ if test "$wxUSE_EXPAT" != "no"; then
     AC_DEFINE(wxUSE_XML)
 
     if test "$wxUSE_EXPAT" = "sys" -o "$wxUSE_EXPAT" = "yes" ; then
-        AC_CHECK_HEADER([expat.h], [found_expat_h=1])
+        AC_CHECK_HEADER([expat.h], [found_expat_h=1],, [ ])
         if test "x$found_expat_h" = "x1"; then
             dnl Expat 1.95.6 comes with broken expat.h:
             AC_CACHE_CHECK([if expat.h is valid C++ header],
@@ -2935,7 +2982,7 @@ dnl Check for libmspack
 dnl ------------------------------------------------------------------------
 
 if test "$wxUSE_LIBMSPACK" != "no"; then
-    AC_CHECK_HEADER([mspack.h], [found_mspack_h=1])
+    AC_CHECK_HEADER([mspack.h], [found_mspack_h=1],, [ ])
     if test "x$found_mspack_h" = "x1"; then
         AC_CHECK_LIB(mspack, mspack_create_chm_decompressor,
                      MSPACK_LINK=" -lmspack")
@@ -2964,11 +3011,12 @@ WIDGET_SET=
 dnl are we building for a win32 target environment?
 dnl If so, setup common stuff needed for both GUI and Base libs.
 if test "$USE_WIN32" = 1 ; then
-    AC_CHECK_HEADERS(w32api.h)
-    AC_CHECK_HEADER(windows.h, [],
+    AC_CHECK_HEADER(w32api.h,,, [ ])
+    AC_CHECK_HEADER(windows.h,,
     [
         AC_MSG_ERROR(please set CFLAGS to contain the location of windows.h)
-    ])
+    ],
+    [ ])
 
     dnl --- FIXME: This is still a somewhat random list of libs,
     dnl ---        some of them should probably be included conditionally.
@@ -3007,7 +3055,7 @@ if test "$USE_WIN32" = 1 ; then
     WIN32INSTALL=win32install
 
     dnl pbt.h is missing on Wine at least
-    AC_CHECK_HEADERS(pbt.h, [], [AC_DEFINE(NEED_PBT_H)])
+    AC_CHECK_HEADER(pbt.h,, [AC_DEFINE(NEED_PBT_H)], [ ])
 fi
 
 if test "$wxUSE_GUI" = "yes"; then
@@ -3800,8 +3848,8 @@ dnl do this after test for X11 above so that we have a chance of finding Xlib.h
 if test "$wxUSE_GUI" = "yes"; then
     if test "$wxUSE_UNIX" = "yes" -a "$wxUSE_PM" != 1; then
         dnl defines HAVE_X11_XKBLIB_H
-        AC_CHECK_HEADERS(X11/Xlib.h)
-        AC_CHECK_HEADERS([X11/XKBlib.h], [], [],
+        AC_CHECK_HEADER(X11/Xlib.h,,, [ ])
+        AC_CHECK_HEADER([X11/XKBlib.h],,,
                          [
                           #if HAVE_X11_XLIB_H
                             #include <X11/Xlib.h>
@@ -3825,7 +3873,7 @@ if test "$TOOLKIT" != "MSW" ; then
         dnl This is not ideal we really ough to use the unixodbc-config
         dnl  or iodbc-config if they exist.
 
-        AC_CHECK_HEADER([sql.h], [found_sql_h=1])
+        AC_CHECK_HEADER([sql.h], [found_sql_h=1],, [ ])
         if test "x$found_sql_h" = "x1" ; then
             AC_CHECK_LIB(iodbc, SQLAllocEnv, ODBC_LINK=" -liodbc",
             [
@@ -3884,7 +3932,7 @@ dnl ---------------------------------------------------------------------------
             WX_PATH_FIND_LIBRARIES([$SEARCH_LIB],Xxf86vm)
             if test "$ac_find_libraries" != "" ; then
                 AC_MSG_RESULT([yes])
-                AC_CHECK_HEADERS([X11/extensions/xf86vmode.h],
+                AC_CHECK_HEADER([X11/extensions/xf86vmode.h],
                                  [
                                   GUI_TK_LIBRARY="$GUI_TK_LIBRARY -lXxf86vm"
                                  ],
@@ -3907,7 +3955,7 @@ dnl ---------------------------------------------------------------------------
 dnl ---------------------------------------------------------------------------
 dnl DirectDraw for MSW - optionally used by WxDisplay.
 dnl ---------------------------------------------------------------------------
-        AC_CHECK_HEADERS([ddraw.h], [], [], [#include <windows.h>])
+        AC_CHECK_HEADER([ddraw.h], [], [], [#include <windows.h>])
     fi
 fi
 
@@ -4011,7 +4059,9 @@ if test "$wxUSE_OPENGL" = "yes"; then
                     fi
                 fi
             ])
-        ])
+        ],
+        [],
+        [ ])
 
         if test "x$OPENGL_LIBS" = "x"; then
             dnl it should be an error and not a warning because OpenGL is not on
@@ -4626,7 +4676,7 @@ if test "$wxUSE_UNICODE" = yes; then
 #include <wchar.h>"
     case "${host}" in
         *-*-solaris2* )
-            AC_CHECK_HEADERS(widec.h)
+            AC_CHECK_HEADER(widec.h,,, [AC_INCLUDES_DEFAULT()])
             if test "$ac_cv_header_widec_h" = "yes"; then
                 wchar_headers="$wchar_headers
 #include <widec.h>"
@@ -4655,7 +4705,11 @@ if test "$wxUSE_FILE" = "yes"; then
     WX_CHECK_FUNCS(fsync)
 fi
 
+dnl at least under IRIX with mipsPro the C99 round() function is available when
+dnl building using the C compiler but not when using C++ one
+AC_LANG_PUSH(C++)
 WX_CHECK_FUNCS(round,,,[#include <math.h>])
+AC_LANG_POP()
 
 dnl the following tests are for Unix(like) systems only
 if test "$TOOLKIT" != "MSW"; then
@@ -4989,9 +5043,11 @@ dnl ------------------------------------------
 dnl Check for ESD:
 EXTRALIBS_ESD=
 AC_CHECK_LIB(esd, esd_close, [
-    AC_CHECK_HEADERS([esd.h], [
+    AC_CHECK_HEADER([esd.h], [
     EXTRALIBS_ESD="-lesd"
-  ])
+  ],
+  [],
+  [ ])
 ])
 AC_SUBST(EXTRALIBS_ESD)
 
@@ -5226,7 +5282,7 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
         AC_DEFINE(wxHAVE_PTHREAD_CLEANUP)
       fi
 
-      AC_CHECK_HEADERS(sched.h)
+      AC_CHECK_HEADER(sched.h,,, [AC_INCLUDES_DEFAULT()])
       if test "$ac_cv_header_sched_h" = "yes"; then
           AC_CHECK_FUNC(sched_yield,
             AC_DEFINE(HAVE_SCHED_YIELD),
@@ -6029,8 +6085,7 @@ dnl ---------------------------------------------------------------------------
 
 if test "$wxUSE_DATETIME" = "yes"; then
     dnl check for strptime and for its declaration as some systems lack it
-    dnl FIXME: use WX_CHECK_FUNCS instead
-    AC_CHECK_FUNCS(strptime)
+    AC_CHECK_FUNC(strptime)
     if test "$ac_cv_func_strptime" = "yes"; then
         AC_CACHE_CHECK([for strptime declaration], wx_cv_func_strptime_decl,
             [
@@ -6052,6 +6107,40 @@ if test "$wxUSE_DATETIME" = "yes"; then
     fi
     if test "$wx_cv_func_strptime_decl" = "yes"; then
         AC_DEFINE(HAVE_STRPTIME_DECL)
+    else
+        wx_strptime_decl="extern char *strptime(const char *, const char *, struct tm *);"
+    fi
+    if test "$ac_cv_func_strptime" = "yes"; then
+        dnl strptime() behaviour doesn't conform to POSIX under Mac OS X <
+        dnl 10.5 and possibly other BSD variants, check that strptime() we
+        dnl have fails to parse format when the string doesn't match it instea
+        dnl of just stopping immediately and returning non-NULL
+        AC_CACHE_CHECK([whether strptime() fails on invalid strings],
+            wx_cv_func_strptime_ok,
+            [AC_RUN_IFELSE(
+                [
+                    #include <stdlib.h>
+                    #include <time.h>
+                    #include "confdefs.h"
+
+                    $wx_strptime_decl
+
+                    int main()
+                    {
+                        struct tm t;
+                        return !!strptime("", "%x", &t);
+                    }
+                ],
+                wx_cv_func_strptime_ok=yes,
+                wx_cv_func_strptime_ok=no,
+                dnl be pessimistic when cross-compiling
+                wx_cv_func_strptime_ok=no
+            )]
+        )
+
+        if test "$wx_cv_func_strptime_ok" = "yes"; then
+            AC_DEFINE(HAVE_STRPTIME)
+        fi
     fi
 
     dnl check for timezone variable
@@ -6433,7 +6522,7 @@ if test "$wxUSE_GUI" = "yes" -a "$wxUSE_JOYSTICK" = "yes"; then
             dnl can't be compiled because of an error and with the default
             dnl AC_CHECK_HEADER semantics we'd still detect it in this case and
             dnl build would fail later
-            AC_CHECK_HEADER(linux/joystick.h, wxUSE_JOYSTICK=yes,,[#include <stdio.h>])
+            AC_CHECK_HEADER(linux/joystick.h, [wxUSE_JOYSTICK=yes],, [AC_INCLUDES_DEFAULT()])
         fi
     fi
 
@@ -6570,7 +6659,7 @@ if test "$USE_WIN32" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
                           -o "$wxUSE_CLIPBOARD"     = "yes" \
                           -o "$wxUSE_OLE"     = "yes" \
                           -o "$wxUSE_DRAG_AND_DROP" = "yes" \) ; then
-    AC_CHECK_HEADERS(ole2.h)
+    AC_CHECK_HEADER(ole2.h,,, [ ])
 
     if test "$ac_cv_header_ole2_h" = "yes" ; then
         if test "$GCC" = yes ; then
@@ -6585,7 +6674,7 @@ if test "$USE_WIN32" = 1 -a \( "$wxUSE_DATAOBJ"       = "yes" \
             if test "$wxUSE_OLE" = "yes" ; then
                 AC_DEFINE(wxUSE_OLE)
                 AC_DEFINE(wxUSE_OLE_AUTOMATION)
-                AC_DEFINE(wxUSE_OLE_ACTIVEX)
+                AC_DEFINE(wxUSE_ACTIVEX)
                 SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS oleauto"
             fi
         fi
@@ -7011,17 +7100,14 @@ if test "$wxUSE_TREECTRL" = "yes"; then
 fi
 
 if test "$wxUSE_POPUPWIN" = "yes"; then
-    if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1 ; then
-        AC_MSG_WARN([Popup window not yet supported under Mac OS X... disabled])
+    if test "$wxUSE_MAC" = 1 -o "$wxUSE_COCOA" = 1 -o "$wxUSE_PM" = 1 \
+            -o "$wxUSE_DFB" = 1; then
+        AC_MSG_WARN([Popup window not yet supported on this platform... disabled])
     else
-        if test "$wxUSE_PM" = 1; then
-            AC_MSG_WARN([wxPopupWindow not yet supported under PM... disabled])
-        else
-            AC_DEFINE(wxUSE_POPUPWIN)
-            SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS popup"
+        AC_DEFINE(wxUSE_POPUPWIN)
+        SAMPLES_SUBDIRS="$SAMPLES_SUBDIRS popup"
 
-            USES_CONTROLS=1
-        fi
+        USES_CONTROLS=1
     fi
 fi
 

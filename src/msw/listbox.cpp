@@ -798,7 +798,7 @@ bool wxListBox::MSWOnDraw(WXDRAWITEMSTRUCT *item)
     if ( itemID == (UINT)-1 )
         return false;
 
-    long data = ListBox_GetItemData(GetHwnd(), pStruct->itemID);
+    LRESULT data = ListBox_GetItemData(GetHwnd(), pStruct->itemID);
 
     wxCHECK( data && (data != LB_ERR), false );
 

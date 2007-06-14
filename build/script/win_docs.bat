@@ -1,5 +1,7 @@
 rem Uncomment the next line to set the version; used also in wxWidgets.iss
-SET WXW_VER=2.8.1
+SET WXW_VER=2.8.4
+
+
 if (%WXW_VER%)==() SET WXW_VER=CVS
 
 echo docs building for %WXW_VER%
@@ -57,7 +59,7 @@ mkdir %WXWIN%\docs\pdf
 mkdir %WXWIN%\docs\htmlhelp
 mkdir %WXWIN%\docs\htb
 echo starting word >>  c:\temp.log
-start /WAIT winword /mwx_ps
+start /WAIT winword /mwx28_ps
 
 
 echo cvs doc up part 2 >>  c:\temp.log

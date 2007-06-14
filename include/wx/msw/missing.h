@@ -138,6 +138,40 @@
 #define LWA_ALPHA 2
 #endif
 
+#if defined __VISUALC__ && __VISUALC__ <= 1200 && !defined MIIM_BITMAP
+#define MIIM_STRING      0x00000040
+#define MIIM_BITMAP      0x00000080
+#define MIIM_FTYPE       0x00000100
+#define HBMMENU_CALLBACK            ((HBITMAP) -1)
+typedef struct tagMENUINFO
+{
+    DWORD   cbSize;
+    DWORD   fMask;
+    DWORD   dwStyle;
+    UINT    cyMax;
+    HBRUSH  hbrBack;
+    DWORD   dwContextHelpID;
+    DWORD   dwMenuData;
+}   MENUINFO, FAR *LPMENUINFO;
+struct wxMENUITEMINFO_
+{
+    UINT cbSize;
+    UINT fMask;
+    UINT fType;
+    UINT fState;
+    UINT wID;
+    HMENU hSubMenu;
+    HBITMAP hbmpChecked;
+    HBITMAP hbmpUnchecked;
+    DWORD dwItemData;
+    LPTSTR dwTypeData;
+    UINT cch;
+    HBITMAP hbmpItem;
+};
+#else
+#define wxMENUITEMINFO_ MENUITEMINFO
+#endif
+
 /*
  * The following are required for VC++ 5 when the PSDK is not available.
  */

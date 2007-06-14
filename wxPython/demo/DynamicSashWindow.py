@@ -91,11 +91,11 @@ class SimpleView(wx.Panel):
 #----------------------------------------------------------------------
 
 def runTest(frame, nb, log):
-    if wx.Platform == "__WXMAC__":
-        from Main import MessagePanel
-        win = MessagePanel(nb, 'This demo currently fails on the Mac. The problem is being looked into...',
-                           'Sorry', wx.ICON_WARNING)
-        return win
+##     if wx.Platform == "__WXMAC__":
+##         from Main import MessagePanel
+##         win = MessagePanel(nb, 'This demo currently fails on the Mac. The problem is being looked into...',
+##                            'Sorry', wx.ICON_WARNING)
+##         return win
 
     if 1:
         win = gizmos.DynamicSashWindow(nb, -1, style =  wx.CLIP_CHILDREN

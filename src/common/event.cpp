@@ -352,7 +352,7 @@ wxEvent::wxEvent(int theId, wxEventType commandType )
 }
 
 wxEvent::wxEvent(const wxEvent &src)
-    : wxObject()
+    : wxObject(src)
     , m_eventObject(src.m_eventObject)
     , m_eventType(src.m_eventType)
     , m_timeStamp(src.m_timeStamp)
@@ -1028,9 +1028,10 @@ wxEvtHandler::~wxEvtHandler()
 
     if (m_dynamicEvents)
     {
-        wxList::iterator it = m_dynamicEvents->begin(),
-                         en = m_dynamicEvents->end();
-        for (;it != en; ++it)
+        for ( wxList::iterator it = m_dynamicEvents->begin(),
+                               end = m_dynamicEvents->end();
+              it != end;
+              ++it )
         {
 #if WXWIN_COMPATIBILITY_EVENT_TYPES
             wxEventTableEntry *entry = (wxEventTableEntry*)*it;

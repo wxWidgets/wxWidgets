@@ -70,10 +70,10 @@ public:
     void SetFilename(const wxString& filename, bool notifyViews = false);
     wxString GetFilename() const { return m_documentFile; }
 
-    void SetTitle(const wxString& title) { m_documentTitle = title; };
+    void SetTitle(const wxString& title) { m_documentTitle = title; }
     wxString GetTitle() const { return m_documentTitle; }
 
-    void SetDocumentName(const wxString& name) { m_documentTypeName = name; };
+    void SetDocumentName(const wxString& name) { m_documentTypeName = name; }
     wxString GetDocumentName() const { return m_documentTypeName; }
 
     bool GetDocumentSaved() const { return m_savedYet; }
@@ -180,7 +180,7 @@ public:
     virtual void SetDocument(wxDocument *doc);
 
     wxString GetViewName() const { return m_viewTypeName; }
-    void SetViewName(const wxString& name) { m_viewTypeName = name; };
+    void SetViewName(const wxString& name) { m_viewTypeName = name; }
 
     wxWindow *GetFrame() const { return m_viewFrame ; }
     void SetFrame(wxWindow *frame) { m_viewFrame = frame; }
@@ -194,7 +194,7 @@ public:
 
     // Called by framework if created automatically by the default document
     // manager class: gives view a chance to initialise
-    virtual bool OnCreate(wxDocument *WXUNUSED(doc), long WXUNUSED(flags)) { return true; };
+    virtual bool OnCreate(wxDocument *WXUNUSED(doc), long WXUNUSED(flags)) { return true; }
 
     // Checks if the view is the last one for the document; if so, asks user
     // to confirm save data (if modified). If ok, deletes itself and returns
@@ -260,21 +260,21 @@ public:
     // creation
     virtual bool InitDocument(wxDocument* doc, const wxString& path, long flags = 0);
 
-    wxString GetDefaultExtension() const { return m_defaultExt; };
+    wxString GetDefaultExtension() const { return m_defaultExt; }
     wxString GetDescription() const { return m_description; }
-    wxString GetDirectory() const { return m_directory; };
+    wxString GetDirectory() const { return m_directory; }
     wxDocManager *GetDocumentManager() const { return m_documentManager; }
     void SetDocumentManager(wxDocManager *manager) { m_documentManager = manager; }
-    wxString GetFileFilter() const { return m_fileFilter; };
-    long GetFlags() const { return m_flags; };
+    wxString GetFileFilter() const { return m_fileFilter; }
+    long GetFlags() const { return m_flags; }
     virtual wxString GetViewName() const { return m_viewTypeName; }
     virtual wxString GetDocumentName() const { return m_docTypeName; }
 
-    void SetFileFilter(const wxString& filter) { m_fileFilter = filter; };
-    void SetDirectory(const wxString& dir) { m_directory = dir; };
-    void SetDescription(const wxString& descr) { m_description = descr; };
-    void SetDefaultExtension(const wxString& ext) { m_defaultExt = ext; };
-    void SetFlags(long flags) { m_flags = flags; };
+    void SetFileFilter(const wxString& filter) { m_fileFilter = filter; }
+    void SetDirectory(const wxString& dir) { m_directory = dir; }
+    void SetDescription(const wxString& descr) { m_description = descr; }
+    void SetDefaultExtension(const wxString& ext) { m_defaultExt = ext; }
+    void SetFlags(long flags) { m_flags = flags; }
 
     bool IsVisible() const { return ((m_flags & wxTEMPLATE_VISIBLE) == wxTEMPLATE_VISIBLE); }
 

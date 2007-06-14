@@ -52,10 +52,6 @@
 #endif
 
 #ifndef __DARWIN__
-#include <Scrap.h>
-#endif
-
-#ifndef __DARWIN__
 #include <MacTextEditor.h>
 #include <ATSUnicode.h>
 #include <TextCommon.h>
@@ -261,7 +257,6 @@ public :
 protected :
     HIViewRef m_scrollView ;
     HIViewRef m_textView ;
-    EventHandlerRef m_textEventHandlerRef ;
 };
 
 #endif
@@ -1383,14 +1378,13 @@ bool wxMacUnicodeTextControl::Create( wxTextCtrl *wxPeer,
 
     InstallControlEventHandler( m_controlRef , GetwxMacUnicodeTextControlEventHandlerUPP(),
                                 GetEventTypeCount(unicodeTextControlEventList), unicodeTextControlEventList, this,
-                                &m_focusHandlerRef);
+                                NULL);
                                 
     return true;
 }
 
 wxMacUnicodeTextControl::~wxMacUnicodeTextControl()
 {
-    ::RemoveEventHandler( m_focusHandlerRef );
 }
 
 void wxMacUnicodeTextControl::VisibilityChanged(bool shown)
@@ -1800,10 +1794,26 @@ void wxMacMLTEControl::AdjustCreationAttributes( const wxColour &background, boo
             options |=
                 kTXNSupportEditCommandProcessing
                 | kTXNSupportEditCommandUpdating
-                | kTXNSupportSpellCheckCommandProcessing
-                | kTXNSupportSpellCheckCommandUpdating
                 | kTXNSupportFontCommandProcessing
                 | kTXNSupportFontCommandUpdating;
+
+            // only spell check when not read-only 
+            // use system options for the default
+            bool checkSpelling = false ; 
+            if ( !(m_windowStyle & wxTE_READONLY) )
+            {   
+#if wxUSE_SYSTEM_OPTIONS
+                if ( wxSystemOptions::HasOption( wxMAC_TEXTCONTROL_USE_SPELL_CHECKER ) && (wxSystemOptions::GetOptionInt( wxMAC_TEXTCONTROL_USE_SPELL_CHECKER ) == 1) )
+                {
+                    checkSpelling = true ;
+                }
+#endif
+            }
+            
+            if ( checkSpelling )
+                options |=
+                    kTXNSupportSpellCheckCommandProcessing
+                    | kTXNSupportSpellCheckCommandUpdating;              
 
             TXNSetCommandEventSupport( m_txn , options ) ;
         }
@@ -1898,21 +1908,16 @@ void wxMacMLTEControl::SetStyle( long start, long end, const wxTextAttr& style )
 
 void wxMacMLTEControl::Copy()
 {
-    ClearCurrentScrap();
     TXNCopy( m_txn );
-    TXNConvertToPublicScrap();
 }
 
 void wxMacMLTEControl::Cut()
 {
-    ClearCurrentScrap();
     TXNCut( m_txn );
-    TXNConvertToPublicScrap();
 }
 
 void wxMacMLTEControl::Paste()
 {
-    TXNConvertFromPublicScrap();
     TXNPaste( m_txn );
 }
 
@@ -1976,7 +1981,10 @@ void wxMacMLTEControl::Remove( long from , long to )
 
 void wxMacMLTEControl::GetSelection( long* from, long* to) const
 {
-    TXNGetSelection( m_txn , (TXNOffset*) from , (TXNOffset*) to ) ;
+    TXNOffset f,t ;
+    TXNGetSelection( m_txn , &f , &t ) ;
+    *from = f;
+    *to = t;
 }
 
 void wxMacMLTEControl::SetSelection( long from , long to )
@@ -3073,12 +3081,11 @@ wxMacMLTEHIViewControl::wxMacMLTEHIViewControl( wxTextCtrl *wxPeer,
 
     InstallControlEventHandler( m_textView , GetwxMacTextControlEventHandlerUPP(),
                                 GetEventTypeCount(eventList), eventList, this,
-                                &m_textEventHandlerRef);
+                                NULL);
 }
 
 wxMacMLTEHIViewControl::~wxMacMLTEHIViewControl()
 {
-    ::RemoveEventHandler( m_textEventHandlerRef ) ;
 }
 
 OSStatus wxMacMLTEHIViewControl::SetFocus( ControlFocusPart focusPart )
@@ -3089,6 +3096,9 @@ OSStatus wxMacMLTEHIViewControl::SetFocus( ControlFocusPart focusPart )
 bool wxMacMLTEHIViewControl::HasFocus() const
 {
     ControlRef control ;
+    if ( GetUserFocusWindow() == NULL )
+        return false;
+        
     GetKeyboardFocus( GetUserFocusWindow() , &control ) ;
     return control == m_textView ;
 }

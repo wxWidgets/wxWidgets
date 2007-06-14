@@ -1030,6 +1030,7 @@ wxMenu::~wxMenu()
    {
        // see wxMenu::Init
        gtk_widget_unref( m_menu );
+       g_object_unref( m_accel );
        // if the menu is inserted in another menu at this time, there was
        // one more reference to it:
        if ( m_owner )
@@ -1362,10 +1363,10 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
                 hotkey << wxT("Down" );
                 break;
             case WXK_PAGEUP:
-                hotkey << wxT("PgUp" );
+                hotkey << wxT("Page_Up" );
                 break;
             case WXK_PAGEDOWN:
-                hotkey << wxT("PgDn" );
+                hotkey << wxT("Page_Down" );
                 break;
             case WXK_LEFT:
                 hotkey << wxT("Left" );
@@ -1483,10 +1484,10 @@ static wxString GetGtkHotKey( const wxMenuItem& item )
                 hotkey << wxT("KP_Down" );
                 break;
             case WXK_NUMPAD_PAGEUP:
-                hotkey << wxT("KP_PgUp" );
+                hotkey << wxT("KP_Page_Up" );
                 break;
             case WXK_NUMPAD_PAGEDOWN:
-                hotkey << wxT("KP_PgDn" );
+                hotkey << wxT("KP_Page_Down" );
                 break;
             case WXK_NUMPAD_END:
                 hotkey << wxT("KP_End" );

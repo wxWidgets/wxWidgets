@@ -105,7 +105,8 @@ public:
     virtual bool MSWCommand(WXUINT param, WXWORD id);
     bool MSWProcessEditMsg(WXUINT msg, WXWPARAM wParam, WXLPARAM lParam);
     virtual WXLRESULT MSWWindowProc(WXUINT nMsg, WXWPARAM wParam, WXLPARAM lParam);
-
+    bool MSWShouldPreProcessMessage(WXMSG *pMsg);
+    
     WXHWND GetEditHWND() const;
 
     // Standard event handling

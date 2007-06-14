@@ -19,9 +19,11 @@ public:
 
     wxDataFormat();
     wxDataFormat(wxDataFormatId vType);
+    wxDataFormat(const wxDataFormat& rFormat);
     wxDataFormat(const wxString& rId);
     wxDataFormat(const wxChar* pId);
     wxDataFormat(NativeFormat vFormat);
+    ~wxDataFormat();
 
     wxDataFormat& operator=(NativeFormat vFormat)
         { SetId(vFormat); return *this; }
@@ -29,11 +31,13 @@ public:
     // comparison (must have both versions)
     bool operator==(const wxDataFormat& format) const ;
     bool operator!=(const wxDataFormat& format) const
-        { return ! ( *this != format ); }
+        { return ! ( *this == format ); }
     bool operator==(wxDataFormatId format) const
         { return m_type == (wxDataFormatId)format; }
     bool operator!=(wxDataFormatId format) const
         { return m_type != (wxDataFormatId)format; }
+
+    wxDataFormat& operator=(const wxDataFormat& format);
 
     // explicit and implicit conversions to NativeFormat which is one of
     // standard data types (implicit conversion is useful for preserving the
@@ -54,7 +58,7 @@ public:
 
     // returns true if the format is one of those defined in wxDataFormatId
     bool IsStandard() const { return m_type > 0 && m_type < wxDF_PRIVATE; }
-    
+
 private:
     wxDataFormatId   m_type;
     NativeFormat     m_format;

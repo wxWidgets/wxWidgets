@@ -810,7 +810,8 @@ bool wxGtkDataViewListModelNotifier::RowChanged( unsigned int row )
 bool wxGtkDataViewListModelNotifier::ValueChanged( unsigned int model_col, unsigned int model_row )
 {
     // This adds GTK+'s missing MVC logic for ValueChanged
-    wxNode *node = GetOwner()->m_viewingColumns.GetFirst();
+    wxObjectList::compatibility_iterator
+        node = GetOwner()->m_viewingColumns.GetFirst();
     while (node)
     {
         wxDataViewViewingColumn* viewing_column = (wxDataViewViewingColumn*) node->GetData();
@@ -847,7 +848,8 @@ bool wxGtkDataViewListModelNotifier::RowsReordered( unsigned int *new_order )
     gtk_tree_path_free (path);
 
     // This adds GTK+'s missing MVC logic for RowsReordered
-    wxNode *node = GetOwner()->m_viewingColumns.GetFirst();
+    wxObjectList::compatibility_iterator
+        node = GetOwner()->m_viewingColumns.GetFirst();
     while (node)
     {
         wxDataViewViewingColumn* viewing_column = (wxDataViewViewingColumn*) node->GetData();

@@ -185,50 +185,28 @@ wxWindow* wxFindWindowAtPoint(const wxPoint& pt)
 
 wxCharBuffer wxConvertToGTK(const wxString& s, wxFontEncoding enc)
 {
-    wxCharBuffer buf;
-    if ( enc == wxFONTENCODING_UTF8 )
+    wxWCharBuffer wbuf;
+    if ( enc == wxFONTENCODING_SYSTEM || enc == wxFONTENCODING_DEFAULT )
     {
-        // no need for conversion at all, but do check that we have a valid
-        // UTF-8 string because passing invalid UTF-8 to GTK+ is going to
-        // result in a GTK+ error message and, especially, loss of data which
-        // was supposed to be shown in the GUI
-        if ( wxConvUTF8.ToWChar(NULL, 0, s, s.length()) == wxCONV_FAILED )
-        {
-            // warn the programmer that something is probably wrong in his code
-            //
-            // NB: don't include the string in output because chances are that
-            //     this invalid UTF-8 string could result in more errors itself
-            //     if the application shows logs in the GUI and so we get into
-            //     an infinite loop
-            wxLogDebug(_T("Invalid UTF-8 string in wxConvertToGTK()"));
-
-            // but still try to show at least something on the screen
-            wxMBConvUTF8 utf8permissive(wxMBConvUTF8::MAP_INVALID_UTF8_TO_OCTAL);
-            wxWCharBuffer wbuf(utf8permissive.cMB2WC(s));
-            buf = wxConvUTF8.cWC2MB(wbuf);
-        }
-        else // valid UTF-8 string, no need to convert
-        {
-            buf = wxCharBuffer(s);
-        }
+        wbuf = wxConvUI->cMB2WC(s);
     }
-    else // !UTF-8
+    else // another encoding, use generic conversion class
     {
-        wxWCharBuffer wbuf;
-        if ( enc == wxFONTENCODING_SYSTEM || enc == wxFONTENCODING_DEFAULT )
-        {
-            wbuf = wxConvUI->cMB2WC(s);
-        }
-        else // another encoding, use generic conversion class
-        {
-            wbuf = wxCSConv(enc).cMB2WC(s);
-        }
-
-        if ( wbuf )
-            buf = wxConvUTF8.cWC2MB(wbuf);
+        wbuf = wxCSConv(enc).cMB2WC(s);
     }
 
-    return buf;
+    if ( !wbuf && !s.empty() )
+    {
+        // conversion failed, but we still want to show something to the user
+        // even if it's going to be wrong it is better than nothing
+        //
+        // we choose ISO8859-1 here arbitrarily, it's just the most common
+        // encoding probably and, also importantly here, conversion from it
+        // never fails as it's done internally by wxCSConv
+        wbuf = wxCSConv(wxFONTENCODING_ISO8859_1).cMB2WC(s);
+    }
+
+    return wxConvUTF8.cWC2MB(wbuf);
 }
 
 #endif // !wxUSE_UNICODE

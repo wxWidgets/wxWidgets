@@ -1199,8 +1199,8 @@ public:
                       wxSize(200, wxDefaultCoord),
                       0, NULL, wxCB_DROPDOWN | wxCB_READONLY));
 
-        sizer->Add(FontSize = new wxSpinCtrl(this, wxID_ANY));
-        FontSize->SetRange(2, 100);
+        sizer->Add(FontSize = new wxSpinCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition,
+                      wxDefaultSize, wxSP_ARROW_KEYS, 2, 100, 2, _T("wxSpinCtrl")));
 
         topsizer->Add(sizer, 0, wxLEFT|wxRIGHT|wxTOP, 10);
 

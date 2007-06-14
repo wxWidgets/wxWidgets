@@ -97,7 +97,7 @@ public:
     }
 
     // Gets the split mode
-    wxSplitMode GetSplitMode() const { return m_splitMode; };
+    wxSplitMode GetSplitMode() const { return m_splitMode; }
 
     // Initialize with one window
     void Initialize(wxWindow *window);

@@ -41,8 +41,9 @@ class TestPanel(wx.Panel):
 
         self.Bind(wx.EVT_SEARCHCTRL_SEARCH_BTN, self.OnSearch, self.search)
         self.Bind(wx.EVT_SEARCHCTRL_CANCEL_BTN, self.OnCancel, self.search)
-        self.search.Bind(wx.EVT_TEXT_ENTER, self.OnDoSearch, self.search)
-        
+        self.Bind(wx.EVT_TEXT_ENTER, self.OnDoSearch, self.search)
+        ##self.Bind(wx.EVT_TEXT, self.OnDoSearch, self.search)        
+
 
     def OnToggleSearchButton(self, evt):
         self.search.ShowSearchButton( evt.GetInt() )

@@ -6711,8 +6711,8 @@ SWIGINTERN PyObject *_wrap_XmlDocument_SaveToStream(PyObject *SWIGUNUSEDPARM(sel
   bool result;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 = 0 ;
-  int res2 = 0 ;
+  wxPyOutputStream *temp2 ;
+  bool created2 ;
   int val3 ;
   int ecode3 = 0 ;
   PyObject * obj0 = 0 ;
@@ -6728,14 +6728,20 @@ SWIGINTERN PyObject *_wrap_XmlDocument_SaveToStream(PyObject *SWIGUNUSEDPARM(sel
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "XmlDocument_SaveToStream" "', expected argument " "1"" of type '" "wxXmlDocument const *""'"); 
   }
   arg1 = reinterpret_cast< wxXmlDocument * >(argp1);
-  res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxOutputStream,  0 );
-  if (!SWIG_IsOK(res2)) {
-    SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "XmlDocument_SaveToStream" "', expected argument " "2"" of type '" "wxOutputStream &""'"); 
+  {
+    if (wxPyConvertSwigPtr(obj1, (void **)&temp2, wxT("wxPyOutputStream"))) {
+      arg2 = temp2->m_wxos;
+      created2 = false;
+    } else {
+      PyErr_Clear();  // clear the failure of the wxPyConvert above
+      arg2 = wxPyCBOutputStream_create(obj1, false);
+      if (arg2 == NULL) {
+        PyErr_SetString(PyExc_TypeError, "Expected wx.OutputStream or Python file-like object.");
+        SWIG_fail;
+      }
+      created2 = true;
+    }
   }
-  if (!argp2) {
-    SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "XmlDocument_SaveToStream" "', expected argument " "2"" of type '" "wxOutputStream &""'"); 
-  }
-  arg2 = reinterpret_cast< wxOutputStream * >(argp2);
   if (obj2) {
     ecode3 = SWIG_AsVal_int(obj2, &val3);
     if (!SWIG_IsOK(ecode3)) {
@@ -6752,8 +6758,14 @@ SWIGINTERN PyObject *_wrap_XmlDocument_SaveToStream(PyObject *SWIGUNUSEDPARM(sel
   {
     resultobj = result ? Py_True : Py_False; Py_INCREF(resultobj);
   }
+  {
+    if (created2) delete arg2; 
+  }
   return resultobj;
 fail:
+  {
+    if (created2) delete arg2; 
+  }
   return NULL;
 }
 

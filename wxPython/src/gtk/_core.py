@@ -1997,15 +1997,51 @@ DefaultSize = cvar.DefaultSize
 class OutputStream(object):
     """Proxy of C++ OutputStream class"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """__init__(self, PyObject p) -> OutputStream"""
+        _core_.OutputStream_swiginit(self,_core_.new_OutputStream(*args, **kwargs))
+    __swig_destroy__ = _core_.delete_OutputStream
+    __del__ = lambda self : None;
+    def close(*args, **kwargs):
+        """close(self)"""
+        return _core_.OutputStream_close(*args, **kwargs)
+
+    def flush(*args, **kwargs):
+        """flush(self)"""
+        return _core_.OutputStream_flush(*args, **kwargs)
+
+    def eof(*args, **kwargs):
+        """eof(self) -> bool"""
+        return _core_.OutputStream_eof(*args, **kwargs)
+
+    def seek(*args, **kwargs):
+        """seek(self, int offset, int whence=0)"""
+        return _core_.OutputStream_seek(*args, **kwargs)
+
+    def tell(*args, **kwargs):
+        """tell(self) -> int"""
+        return _core_.OutputStream_tell(*args, **kwargs)
+
     def write(*args, **kwargs):
-        """write(self, PyObject obj)"""
+        """write(self, PyObject data)"""
         return _core_.OutputStream_write(*args, **kwargs)
+
+    def PutC(*args, **kwargs):
+        """PutC(self, char c)"""
+        return _core_.OutputStream_PutC(*args, **kwargs)
 
     def LastWrite(*args, **kwargs):
         """LastWrite(self) -> size_t"""
         return _core_.OutputStream_LastWrite(*args, **kwargs)
+
+    def SeekO(*args, **kwargs):
+        """SeekO(self, unsigned long pos, int mode=FromStart) -> unsigned long"""
+        return _core_.OutputStream_SeekO(*args, **kwargs)
+
+    def TellO(*args, **kwargs):
+        """TellO(self) -> unsigned long"""
+        return _core_.OutputStream_TellO(*args, **kwargs)
 
 _core_.OutputStream_swigregister(OutputStream)
 
@@ -4580,7 +4616,7 @@ class ScrollEvent(CommandEvent):
     """
     A scroll event holds information about events sent from stand-alone
     scrollbars and sliders. Note that scrolled windows do not send
-    instnaces of this event class, but send the `wx.ScrollWinEvent`
+    instances of this event class, but send the `wx.ScrollWinEvent`
     instead.
     """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -8100,6 +8136,53 @@ def GetAccelFromString(*args, **kwargs):
   return _core_.GetAccelFromString(*args, **kwargs)
 #---------------------------------------------------------------------------
 
+class WindowList_iterator(object):
+    """This class serves as an iterator for a wxWindowList object."""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    __swig_destroy__ = _core_.delete_WindowList_iterator
+    __del__ = lambda self : None;
+    def next(*args, **kwargs):
+        """next(self) -> Window"""
+        return _core_.WindowList_iterator_next(*args, **kwargs)
+
+_core_.WindowList_iterator_swigregister(WindowList_iterator)
+NullAcceleratorTable = cvar.NullAcceleratorTable
+PanelNameStr = cvar.PanelNameStr
+
+class WindowList(object):
+    """
+    This class wraps a wxList-based class and gives it a Python
+    sequence-like interface.  Sequence operations supported are length,
+    index access and iteration.
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    __swig_destroy__ = _core_.delete_WindowList
+    __del__ = lambda self : None;
+    def __len__(*args, **kwargs):
+        """__len__(self) -> size_t"""
+        return _core_.WindowList___len__(*args, **kwargs)
+
+    def __getitem__(*args, **kwargs):
+        """__getitem__(self, size_t index) -> Window"""
+        return _core_.WindowList___getitem__(*args, **kwargs)
+
+    def __contains__(*args, **kwargs):
+        """__contains__(self, Window obj) -> bool"""
+        return _core_.WindowList___contains__(*args, **kwargs)
+
+    def __iter__(*args, **kwargs):
+        """__iter__(self) -> WindowList_iterator"""
+        return _core_.WindowList___iter__(*args, **kwargs)
+
+    def __repr__(self):
+        return "wxWindowList: " + repr(list(self))
+
+_core_.WindowList_swigregister(WindowList)
+
 class VisualAttributes(object):
     """struct containing all the visual attributes of a control"""
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
@@ -8113,12 +8196,22 @@ class VisualAttributes(object):
         _core_.VisualAttributes_swiginit(self,_core_.new_VisualAttributes(*args, **kwargs))
     __swig_destroy__ = _core_.delete_VisualAttributes
     __del__ = lambda self : None;
-    font = property(_core_.VisualAttributes_font_get, _core_.VisualAttributes_font_set)
-    colFg = property(_core_.VisualAttributes_colFg_get, _core_.VisualAttributes_colFg_set)
-    colBg = property(_core_.VisualAttributes_colBg_get, _core_.VisualAttributes_colBg_set)
+    def _get_font(*args, **kwargs):
+        """_get_font(self) -> Font"""
+        return _core_.VisualAttributes__get_font(*args, **kwargs)
+
+    def _get_colFg(*args, **kwargs):
+        """_get_colFg(self) -> Colour"""
+        return _core_.VisualAttributes__get_colFg(*args, **kwargs)
+
+    def _get_colBg(*args, **kwargs):
+        """_get_colBg(self) -> Colour"""
+        return _core_.VisualAttributes__get_colBg(*args, **kwargs)
+
+    font = property(_get_font) 
+    colFg = property(_get_colFg) 
+    colBg = property(_get_colBg) 
 _core_.VisualAttributes_swigregister(VisualAttributes)
-NullAcceleratorTable = cvar.NullAcceleratorTable
-PanelNameStr = cvar.PanelNameStr
 
 WINDOW_VARIANT_NORMAL = _core_.WINDOW_VARIANT_NORMAL
 WINDOW_VARIANT_SMALL = _core_.WINDOW_VARIANT_SMALL
@@ -9071,12 +9164,11 @@ class Window(EvtHandler):
 
     def GetChildren(*args, **kwargs):
         """
-        GetChildren(self) -> PyObject
+        GetChildren(self) -> WindowList
 
-        Returns a list of the window's children.  NOTE: Currently this is a
-        copy of the child window list maintained by the window, so the return
-        value of this function is only valid as long as the window's children
-        do not change.
+        Returns an object containing a list of the window's children.  The
+        object provides a Python sequence-like interface over the internal
+        list maintained by the window..
         """
         return _core_.Window_GetChildren(*args, **kwargs)
 
@@ -9096,6 +9188,14 @@ class Window(EvtHandler):
         isn't one.
         """
         return _core_.Window_GetGrandParent(*args, **kwargs)
+
+    def GetTopLevelParent(*args, **kwargs):
+        """
+        GetTopLevelParent(self) -> Window
+
+        Returns the first frame or dialog in this window's parental hierarchy.
+        """
+        return _core_.Window_GetTopLevelParent(*args, **kwargs)
 
     def IsTopLevel(*args, **kwargs):
         """
@@ -9195,7 +9295,7 @@ class Window(EvtHandler):
 
         Pushes this event handler onto the event handler stack for the window.
         An event handler is an object that is capable of processing the events
-        sent to a window.  (In other words, is able to dispatch the events to
+        sent to a window.  (In other words, is able to dispatch the events to a
         handler function.)  By default, the window is its own event handler,
         but an application may wish to substitute another, for example to
         allow central implementation of event-handling for a variety of
@@ -10355,9 +10455,15 @@ class Window(EvtHandler):
         self.thisown = pre.thisown
         pre.thisown = 0
         if hasattr(self, '_setOORInfo'):
-            self._setOORInfo(self)
+            try:
+                self._setOORInfo(self)
+            except TypeError:
+                pass
         if hasattr(self, '_setCallbackInfo'):
-            self._setCallbackInfo(self, pre.__class__)
+            try:
+                self._setCallbackInfo(self, pre.__class__)
+            except TypeError:
+                pass
 
     def SendSizeEvent(self):
         self.GetEventHandler().ProcessEvent(wx.SizeEvent((-1,-1)))
@@ -10387,6 +10493,7 @@ class Window(EvtHandler):
     Font = property(GetFont,SetFont,doc="See `GetFont` and `SetFont`") 
     ForegroundColour = property(GetForegroundColour,SetForegroundColour,doc="See `GetForegroundColour` and `SetForegroundColour`") 
     GrandParent = property(GetGrandParent,doc="See `GetGrandParent`") 
+    TopLevelParent = property(GetTopLevelParent,doc="See `GetTopLevelParent`") 
     Handle = property(GetHandle,doc="See `GetHandle`") 
     HelpText = property(GetHelpText,SetHelpText,doc="See `GetHelpText` and `SetHelpText`") 
     Id = property(GetId,SetId,doc="See `GetId` and `SetId`") 
@@ -10553,13 +10660,10 @@ def Window_FromHWND(*args, **kwargs):
 
 def GetTopLevelWindows(*args):
   """
-    GetTopLevelWindows() -> PyObject
+    GetTopLevelWindows() -> WindowList
 
-    Returns a list of the the application's top-level windows, (frames,
-    dialogs, etc.)  NOTE: Currently this is a copy of the list maintained
-    by wxWidgets, and so it is only valid as long as no top-level windows
-    are closed or new top-level windows are created.
-
+    Returns a list-like object of the the application's top-level windows, (frames,
+    dialogs, etc.)
     """
   return _core_.GetTopLevelWindows(*args)
 #---------------------------------------------------------------------------
@@ -10634,6 +10738,52 @@ class PyValidator(Validator):
 _core_.PyValidator_swigregister(PyValidator)
 
 #---------------------------------------------------------------------------
+
+class MenuItemList_iterator(object):
+    """This class serves as an iterator for a wxMenuItemList object."""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    __swig_destroy__ = _core_.delete_MenuItemList_iterator
+    __del__ = lambda self : None;
+    def next(*args, **kwargs):
+        """next(self) -> MenuItem"""
+        return _core_.MenuItemList_iterator_next(*args, **kwargs)
+
+_core_.MenuItemList_iterator_swigregister(MenuItemList_iterator)
+DefaultValidator = cvar.DefaultValidator
+
+class MenuItemList(object):
+    """
+    This class wraps a wxList-based class and gives it a Python
+    sequence-like interface.  Sequence operations supported are length,
+    index access and iteration.
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    __swig_destroy__ = _core_.delete_MenuItemList
+    __del__ = lambda self : None;
+    def __len__(*args, **kwargs):
+        """__len__(self) -> size_t"""
+        return _core_.MenuItemList___len__(*args, **kwargs)
+
+    def __getitem__(*args, **kwargs):
+        """__getitem__(self, size_t index) -> MenuItem"""
+        return _core_.MenuItemList___getitem__(*args, **kwargs)
+
+    def __contains__(*args, **kwargs):
+        """__contains__(self, MenuItem obj) -> bool"""
+        return _core_.MenuItemList___contains__(*args, **kwargs)
+
+    def __iter__(*args, **kwargs):
+        """__iter__(self) -> MenuItemList_iterator"""
+        return _core_.MenuItemList___iter__(*args, **kwargs)
+
+    def __repr__(self):
+        return "wxMenuItemList: " + repr(list(self))
+
+_core_.MenuItemList_swigregister(MenuItemList)
 
 class Menu(EvtHandler):
     """Proxy of C++ Menu class"""
@@ -10777,7 +10927,7 @@ class Menu(EvtHandler):
         return _core_.Menu_GetMenuItemCount(*args, **kwargs)
 
     def GetMenuItems(*args, **kwargs):
-        """GetMenuItems(self) -> PyObject"""
+        """GetMenuItems(self) -> MenuItemList"""
         return _core_.Menu_GetMenuItems(*args, **kwargs)
 
     def FindItem(*args, **kwargs):
@@ -10890,7 +11040,6 @@ class Menu(EvtHandler):
     Style = property(GetStyle,doc="See `GetStyle`") 
     Title = property(GetTitle,SetTitle,doc="See `GetTitle` and `SetTitle`") 
 _core_.Menu_swigregister(Menu)
-DefaultValidator = cvar.DefaultValidator
 
 #---------------------------------------------------------------------------
 
@@ -11030,7 +11179,6 @@ class MenuBar(Window):
             self.Append(m, l)
 
     Frame = property(GetFrame,doc="See `GetFrame`") 
-    Menu = property(GetMenu,doc="See `GetMenu`") 
     MenuCount = property(GetMenuCount,doc="See `GetMenuCount`") 
     Menus = property(GetMenus,SetMenus,doc="See `GetMenus` and `SetMenus`") 
 _core_.MenuBar_swigregister(MenuBar)
@@ -11565,6 +11713,269 @@ _core_.ControlWithItems_swigregister(ControlWithItems)
 
 #---------------------------------------------------------------------------
 
+class SizerFlags(object):
+    """
+    Normally, when you add an item to a sizer via `wx.Sizer.Add`, you have
+    to specify a lot of flags and parameters which can be unwieldy. This
+    is where wx.SizerFlags comes in: it allows you to specify all
+    parameters using the named methods instead. For example, instead of::
+
+        sizer.Add(ctrl, 0, wx.EXPAND | wx.ALL, 10)
+
+    you can now write::
+
+        sizer.AddF(ctrl, wx.SizerFlags().Expand().Border(wx.ALL, 10))
+
+    This is more readable and also allows you to create wx.SizerFlags
+    objects which can be reused for several sizer items.::
+
+        flagsExpand = wx.SizerFlags(1)
+        flagsExpand.Expand().Border(wx.ALL, 10)
+        sizer.AddF(ctrl1, flagsExpand)
+        sizer.AddF(ctrl2, flagsExpand)
+
+    Note that by specification, all methods of wx.SizerFlags return the
+    wx.SizerFlags object itself allowing chaining multiple method calls
+    like in the examples above.
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self, int proportion=0) -> SizerFlags
+
+        Constructs the flags object with the specified proportion.
+        """
+        _core_.SizerFlags_swiginit(self,_core_.new_SizerFlags(*args, **kwargs))
+    __swig_destroy__ = _core_.delete_SizerFlags
+    __del__ = lambda self : None;
+    def Proportion(*args, **kwargs):
+        """
+        Proportion(self, int proportion) -> SizerFlags
+
+        Sets the item's proportion value.
+        """
+        return _core_.SizerFlags_Proportion(*args, **kwargs)
+
+    def Align(*args, **kwargs):
+        """
+        Align(self, int alignment) -> SizerFlags
+
+        Sets the item's alignment
+        """
+        return _core_.SizerFlags_Align(*args, **kwargs)
+
+    def Expand(*args, **kwargs):
+        """
+        Expand(self) -> SizerFlags
+
+        Sets the wx.EXPAND flag, which will cause the item to be expanded to
+        fill as much space as it is given by the sizer.
+        """
+        return _core_.SizerFlags_Expand(*args, **kwargs)
+
+    def Centre(*args, **kwargs):
+        """
+        Centre(self) -> SizerFlags
+
+        Same as `Center` for those with an alternate dialect of English.
+        """
+        return _core_.SizerFlags_Centre(*args, **kwargs)
+
+    def Center(*args, **kwargs):
+        """
+        Center(self) -> SizerFlags
+
+        Sets the centering alignment flags.
+        """
+        return _core_.SizerFlags_Center(*args, **kwargs)
+
+    def Left(*args, **kwargs):
+        """
+        Left(self) -> SizerFlags
+
+        Aligns the object to the left, a shortcut for calling
+        Align(wx.ALIGN_LEFT)
+        """
+        return _core_.SizerFlags_Left(*args, **kwargs)
+
+    def Right(*args, **kwargs):
+        """
+        Right(self) -> SizerFlags
+
+        Aligns the object to the right, a shortcut for calling
+        Align(wx.ALIGN_RIGHT)
+        """
+        return _core_.SizerFlags_Right(*args, **kwargs)
+
+    def Top(*args, **kwargs):
+        """
+        Top(self) -> SizerFlags
+
+        Aligns the object to the top of the available space, a shortcut for
+        calling Align(wx.ALIGN_TOP)
+        """
+        return _core_.SizerFlags_Top(*args, **kwargs)
+
+    def Bottom(*args, **kwargs):
+        """
+        Bottom(self) -> SizerFlags
+
+        Aligns the object to the bottom of the available space, a shortcut for
+        calling Align(wx.ALIGN_BOTTOM)
+        """
+        return _core_.SizerFlags_Bottom(*args, **kwargs)
+
+    def Shaped(*args, **kwargs):
+        """
+        Shaped(self) -> SizerFlags
+
+        Sets the wx.SHAPED flag.
+        """
+        return _core_.SizerFlags_Shaped(*args, **kwargs)
+
+    def FixedMinSize(*args, **kwargs):
+        """
+        FixedMinSize(self) -> SizerFlags
+
+        Sets the wx.FIXED_MINSIZE flag.
+        """
+        return _core_.SizerFlags_FixedMinSize(*args, **kwargs)
+
+    def Border(*args, **kwargs):
+        """
+        Border(self, int direction=ALL, int borderInPixels=-1) -> SizerFlags
+
+        Sets the border of the item in the direction(s) or sides given by the
+        direction parameter.  If the borderInPixels value is not given then
+        the default border size (see `GetDefaultBorder`) will be used.
+        """
+        return _core_.SizerFlags_Border(*args, **kwargs)
+
+    def DoubleBorder(*args, **kwargs):
+        """
+        DoubleBorder(self, int direction=ALL) -> SizerFlags
+
+        Sets the border in the given direction to twice the default border
+        size.
+        """
+        return _core_.SizerFlags_DoubleBorder(*args, **kwargs)
+
+    def TripleBorder(*args, **kwargs):
+        """
+        TripleBorder(self, int direction=ALL) -> SizerFlags
+
+        Sets the border in the given direction to three times the default
+        border size.
+        """
+        return _core_.SizerFlags_TripleBorder(*args, **kwargs)
+
+    def HorzBorder(*args, **kwargs):
+        """
+        HorzBorder(self) -> SizerFlags
+
+        Sets the left and right borders to the default border size.
+        """
+        return _core_.SizerFlags_HorzBorder(*args, **kwargs)
+
+    def DoubleHorzBorder(*args, **kwargs):
+        """
+        DoubleHorzBorder(self) -> SizerFlags
+
+        Sets the left and right borders to twice the default border size.
+        """
+        return _core_.SizerFlags_DoubleHorzBorder(*args, **kwargs)
+
+    def GetDefaultBorder(*args, **kwargs):
+        """
+        GetDefaultBorder() -> int
+
+        Returns the default border size used by the other border methods
+        """
+        return _core_.SizerFlags_GetDefaultBorder(*args, **kwargs)
+
+    GetDefaultBorder = staticmethod(GetDefaultBorder)
+    def GetProportion(*args, **kwargs):
+        """
+        GetProportion(self) -> int
+
+        Returns the proportion value to be used in the sizer item.
+        """
+        return _core_.SizerFlags_GetProportion(*args, **kwargs)
+
+    def GetFlags(*args, **kwargs):
+        """
+        GetFlags(self) -> int
+
+        Returns the flags value to be used in the sizer item.
+        """
+        return _core_.SizerFlags_GetFlags(*args, **kwargs)
+
+    def GetBorderInPixels(*args, **kwargs):
+        """
+        GetBorderInPixels(self) -> int
+
+        Returns the border value in pixels to be used in the sizer item.
+        """
+        return _core_.SizerFlags_GetBorderInPixels(*args, **kwargs)
+
+_core_.SizerFlags_swigregister(SizerFlags)
+
+def SizerFlags_GetDefaultBorder(*args):
+  """
+    SizerFlags_GetDefaultBorder() -> int
+
+    Returns the default border size used by the other border methods
+    """
+  return _core_.SizerFlags_GetDefaultBorder(*args)
+
+#---------------------------------------------------------------------------
+
+class SizerItemList_iterator(object):
+    """This class serves as an iterator for a wxSizerItemList object."""
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    __swig_destroy__ = _core_.delete_SizerItemList_iterator
+    __del__ = lambda self : None;
+    def next(*args, **kwargs):
+        """next(self) -> SizerItem"""
+        return _core_.SizerItemList_iterator_next(*args, **kwargs)
+
+_core_.SizerItemList_iterator_swigregister(SizerItemList_iterator)
+
+class SizerItemList(object):
+    """
+    This class wraps a wxList-based class and gives it a Python
+    sequence-like interface.  Sequence operations supported are length,
+    index access and iteration.
+    """
+    thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
+    def __init__(self): raise AttributeError, "No constructor defined"
+    __repr__ = _swig_repr
+    __swig_destroy__ = _core_.delete_SizerItemList
+    __del__ = lambda self : None;
+    def __len__(*args, **kwargs):
+        """__len__(self) -> size_t"""
+        return _core_.SizerItemList___len__(*args, **kwargs)
+
+    def __getitem__(*args, **kwargs):
+        """__getitem__(self, size_t index) -> SizerItem"""
+        return _core_.SizerItemList___getitem__(*args, **kwargs)
+
+    def __contains__(*args, **kwargs):
+        """__contains__(self, SizerItem obj) -> bool"""
+        return _core_.SizerItemList___contains__(*args, **kwargs)
+
+    def __iter__(*args, **kwargs):
+        """__iter__(self) -> SizerItemList_iterator"""
+        return _core_.SizerItemList___iter__(*args, **kwargs)
+
+    def __repr__(self):
+        return "wxSizerItemList: " + repr(list(self))
+
+_core_.SizerItemList_swigregister(SizerItemList)
+
 class SizerItem(Object):
     """
     The wx.SizerItem class is used to track the position, size and other
@@ -11960,6 +12371,15 @@ class Sizer(Object):
         """
         return _core_.Sizer_Add(*args, **kwargs)
 
+    def AddF(*args, **kwargs):
+        """
+        AddF(self, item, wx.SizerFlags flags) -> wx.SizerItem
+
+        Similar to `Add` but uses the `wx.SizerFlags` convenience class for
+        setting the various flags, options and borders.
+        """
+        return _core_.Sizer_AddF(*args, **kwargs)
+
     def Insert(*args, **kwargs):
         """
         Insert(self, int before, item, int proportion=0, int flag=0, int border=0,
@@ -11970,6 +12390,15 @@ class Sizer(Object):
         """
         return _core_.Sizer_Insert(*args, **kwargs)
 
+    def InsertF(*args, **kwargs):
+        """
+        InsertF(self, int before, item, wx.SizerFlags flags) -> wx.SizerItem
+
+        Similar to `Insert`, but uses the `wx.SizerFlags` convenience class
+        for setting the various flags, options and borders.
+        """
+        return _core_.Sizer_InsertF(*args, **kwargs)
+
     def Prepend(*args, **kwargs):
         """
         Prepend(self, item, int proportion=0, int flag=0, int border=0,
@@ -11979,6 +12408,15 @@ class Sizer(Object):
         this sizer.  See `Add` for a description of the parameters.
         """
         return _core_.Sizer_Prepend(*args, **kwargs)
+
+    def PrependF(*args, **kwargs):
+        """
+        PrependF(self, item, wx.SizerFlags flags) -> wx.SizerItem
+
+        Similar to `Prepend` but uses the `wx.SizerFlags` convenience class
+        for setting the various flags, options and borders.
+        """
+        return _core_.Sizer_PrependF(*args, **kwargs)
 
     def Remove(*args, **kwargs):
         """
@@ -12007,7 +12445,7 @@ class Sizer(Object):
 
     def GetItem(*args, **kwargs):
         """
-        GetItem(self, item) -> wx.SizerItem
+        GetItem(self, item, recursive=False) -> wx.SizerItem
 
         Returns the `wx.SizerItem` which holds the *item* given.  The *item*
         parameter can be either a window, a sizer, or the zero-based index of
@@ -12047,9 +12485,9 @@ class Sizer(Object):
         """
         if isinstance(olditem, wx.Window):
             return self._ReplaceWin(olditem, item, recursive)
-        elif isinstnace(olditem, wx.Sizer):
+        elif isinstance(olditem, wx.Sizer):
             return self._ReplaceSizer(olditem, item, recursive)
-        elif isinstnace(olditem, int):
+        elif isinstance(olditem, int):
             return self._ReplaceItem(olditem, item)
         else:
             raise TypeError("Expected Window, Sizer, or integer for first parameter.")
@@ -12359,9 +12797,10 @@ class Sizer(Object):
 
     def GetChildren(*args, **kwargs):
         """
-        GetChildren(self) -> list
+        GetChildren(self) -> SizerItemList
 
-        Returns a list of all the `wx.SizerItem` objects managed by the sizer.
+        Returns all of the `wx.SizerItem` objects managed by the sizer in a
+        list-like object.
         """
         return _core_.Sizer_GetChildren(*args, **kwargs)
 

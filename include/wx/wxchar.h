@@ -129,6 +129,7 @@
 #elif defined(__BORLANDC__) && (__BORLANDC__ >= 0x520)
     #define wxHAVE_TCHAR_SUPPORT
     #include <ctype.h>
+    #include <memory.h>
 #elif defined(__WATCOMC__)
     #define wxHAVE_TCHAR_SUPPORT
 #elif defined(__DMC__)
@@ -1217,10 +1218,22 @@ WXDLLIMPEXP_BASE wxWCharBuffer wxSetlocale(int category, const wxChar *locale);
 WXDLLIMPEXP_BASE double   wxAtof(const wxChar *psz);
 #endif
 
+/*
+   mingw32 doesn't provide _tsystem() even though it does provide all the other
+   stdlib.h functions wrappers so check for it separately:
+ */
+#if defined(__MINGW32__) && wxUSE_UNICODE && !defined(_tsystem)
+    #define wxNEED_WXSYSTEM
+#endif
+
 #ifdef wxNEED_WX_STDLIB_H
 WXDLLIMPEXP_BASE int      wxAtoi(const wxChar *psz);
 WXDLLIMPEXP_BASE long     wxAtol(const wxChar *psz);
 WXDLLIMPEXP_BASE wxChar * wxGetenv(const wxChar *name);
+#define wxNEED_WXSYSTEM
+#endif
+
+#ifdef wxNEED_WXSYSTEM
 WXDLLIMPEXP_BASE int      wxSystem(const wxChar *psz);
 #endif
 

@@ -2285,9 +2285,10 @@ def GetColourFromUser(*args, **kwargs):
         String caption=EmptyString) -> Colour
     """
   return _windows_.GetColourFromUser(*args, **kwargs)
+DD_CHANGE_DIR = _windows_.DD_CHANGE_DIR
+DD_DIR_MUST_EXIST = _windows_.DD_DIR_MUST_EXIST
 DD_NEW_DIR_BUTTON = _windows_.DD_NEW_DIR_BUTTON
 DD_DEFAULT_STYLE = _windows_.DD_DEFAULT_STYLE
-DD_CHANGE_DIR = _windows_.DD_CHANGE_DIR
 class DirDialog(Dialog):
     """
     wx.DirDialog allows the user to select a directory by browising the
@@ -3474,7 +3475,8 @@ class PyPanel(Panel):
     def __init__(self, *args, **kwargs): 
         """
         __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, String name=PanelNameStr) -> PyPanel
+            Size size=DefaultSize, long style=wxTAB_TRAVERSAL|wxNO_BORDER, 
+            String name=PanelNameStr) -> PyPanel
         """
         _windows_.PyPanel_swiginit(self,_windows_.new_PyPanel(*args, **kwargs))
         self._setOORInfo(self);PyPanel._setCallbackInfo(self, self, PyPanel)
@@ -3651,7 +3653,8 @@ class PyScrolledWindow(ScrolledWindow):
     def __init__(self, *args, **kwargs): 
         """
         __init__(self, Window parent, int id=-1, Point pos=DefaultPosition, 
-            Size size=DefaultSize, long style=0, String name=PanelNameStr) -> PyScrolledWindow
+            Size size=DefaultSize, long style=wxHSCROLL|wxVSCROLL, 
+            String name=PanelNameStr) -> PyScrolledWindow
         """
         _windows_.PyScrolledWindow_swiginit(self,_windows_.new_PyScrolledWindow(*args, **kwargs))
         self._setOORInfo(self);PyScrolledWindow._setCallbackInfo(self, self, PyScrolledWindow)

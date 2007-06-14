@@ -1,27 +1,18 @@
+#!/usr/bin/env python
 
-
-#print "running:", wx.__version__
-##First, make sure Numeric or numarray can be imported.
 try:
-    import Numeric
-    import RandomArray
-    haveNumeric = True
+    import numpy as N
+    import numpy.random as RandomArray
+    haveNumpy = True
+    #print "Using numpy, version:", N.__version__
 except ImportError:
-    # Numeric isn't there, let's try numarray
-    try:
-        import numarray as Numeric
-        import numarray.random_array as RandomArray
-        haveNumeric = True
-    except ImportError:
-        # numarray isn't there either
-        haveNumeric = False
-        errorText = (
-        "The FloatCanvas requires either the Numeric or numarray module\n\n"
-        "You can get them at:\n"
-        "http://sourceforge.net/projects/numpy\n\n"
-        "NOTE: The Numeric module is substantially faster than numarray for this\n"
-        "purpose, if you have lots of objects\n"
-        )
+            # numpy isn't there
+            haveNumpy = False
+            errorText = (
+            "The FloatCanvas requires the numpy module, version 1.* \n\n"
+            "You can get info about it at:\n"
+            "http://numpy.scipy.org/\n\n"
+            )
       
 #---------------------------------------------------------------------------
 
@@ -100,7 +91,10 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             item = draw_menu.Append(-1, "&Arrows","Run a test of Arrows")
             self.Bind(wx.EVT_MENU, self.ArrowTest, item)
 
-            item = draw_menu.Append(-1, "&Hide","Run a test of the Show() Hide() Show() and methods")
+            item = draw_menu.Append(-1, "&ArrowLine Test","Run a test of drawing Arrow Lines")
+            self.Bind(wx.EVT_MENU, self.ArrowLineTest, item)
+
+            item = draw_menu.Append(-1, "&Hide","Run a test of hiding and showing objects")
             self.Bind(wx.EVT_MENU, self.HideTest, item)
 
             MenuBar.Append(draw_menu, "&Tests")
@@ -122,9 +116,11 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
 
             
             # Add the Canvas
-            self.Canvas = NavCanvas.NavCanvas(self,
-                                              Debug = 0,
-                                              BackgroundColor = "DARK SLATE BLUE")
+            NC = NavCanvas.NavCanvas(self,
+                                     Debug = 0,
+                                     BackgroundColor = "DARK SLATE BLUE")
+
+            self.Canvas = NC.Canvas # reference the contained FloatCanvas
 
             self.MsgWindow = wx.TextCtrl(self, wx.ID_ANY,
                                          "Look Here for output from events\n",
@@ -135,13 +131,14 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             
             ##Create a sizer to manage the Canvas and message window
             MainSizer = wx.BoxSizer(wx.VERTICAL)
-            MainSizer.Add(self.Canvas, 4, wx.EXPAND)
+            MainSizer.Add(NC, 4, wx.EXPAND)
             MainSizer.Add(self.MsgWindow, 1, wx.EXPAND | wx.ALL, 5)
 
             self.SetSizer(MainSizer)
-            wx.EVT_CLOSE(self, self.OnCloseWindow)
+            self.Bind(wx.EVT_CLOSE, self.OnCloseWindow)
 
-            FloatCanvas.EVT_MOTION(self.Canvas, self.OnMove ) 
+            self.Canvas.Bind(FloatCanvas.EVT_MOTION, self.OnMove) 
+            self.Canvas.Bind(FloatCanvas.EVT_MOUSEWHEEL, self.OnWheel) 
 
             self.EventsAreBound = False
 
@@ -161,56 +158,39 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
         def BindAllMouseEvents(self):
             if not self.EventsAreBound:
                 ## Here is how you catch FloatCanvas mouse events
-                FloatCanvas.EVT_LEFT_DOWN(self.Canvas, self.OnLeftDown ) 
-                FloatCanvas.EVT_LEFT_UP(self.Canvas, self.OnLeftUp )
-                FloatCanvas.EVT_LEFT_DCLICK(self.Canvas, self.OnLeftDouble ) 
+                self.Canvas.Bind(FloatCanvas.EVT_LEFT_DOWN, self.OnLeftDown) 
+                self.Canvas.Bind(FloatCanvas.EVT_LEFT_UP, self.OnLeftUp)
+                self.Canvas.Bind(FloatCanvas.EVT_LEFT_DCLICK, self.OnLeftDouble) 
 
-                FloatCanvas.EVT_MIDDLE_DOWN(self.Canvas, self.OnMiddleDown ) 
-                FloatCanvas.EVT_MIDDLE_UP(self.Canvas, self.OnMiddleUp ) 
-                FloatCanvas.EVT_MIDDLE_DCLICK(self.Canvas, self.OnMiddleDouble ) 
+                self.Canvas.Bind(FloatCanvas.EVT_MIDDLE_DOWN, self.OnMiddleDown) 
+                self.Canvas.Bind(FloatCanvas.EVT_MIDDLE_UP, self.OnMiddleUp) 
+                self.Canvas.Bind(FloatCanvas.EVT_MIDDLE_DCLICK, self.OnMiddleDouble) 
 
-                FloatCanvas.EVT_RIGHT_DOWN(self.Canvas, self.OnRightDown ) 
-                FloatCanvas.EVT_RIGHT_UP(self.Canvas, self.OnRightUp ) 
-                FloatCanvas.EVT_RIGHT_DCLICK(self.Canvas, self.OnRightDouble ) 
+                self.Canvas.Bind(FloatCanvas.EVT_RIGHT_DOWN, self.OnRightDown) 
+                self.Canvas.Bind(FloatCanvas.EVT_RIGHT_UP, self.OnRightUp) 
+                self.Canvas.Bind(FloatCanvas.EVT_RIGHT_DCLICK, self.OnRightDouble) 
 
-                FloatCanvas.EVT_MOUSEWHEEL(self.Canvas, self.OnWheel ) 
             self.EventsAreBound = True
+
 
         def UnBindAllMouseEvents(self):
             ## Here is how you unbind FloatCanvas mouse events
-            FloatCanvas.EVT_LEFT_DOWN(self.Canvas, None ) 
-            FloatCanvas.EVT_LEFT_UP(self.Canvas, None )
-            FloatCanvas.EVT_LEFT_DCLICK(self.Canvas, None) 
+            self.Canvas.Unbind(FloatCanvas.EVT_LEFT_DOWN)
+            self.Canvas.Unbind(FloatCanvas.EVT_LEFT_UP)
+            self.Canvas.Unbind(FloatCanvas.EVT_LEFT_DCLICK)
 
-            FloatCanvas.EVT_MIDDLE_DOWN(self.Canvas, None )
-            FloatCanvas.EVT_MIDDLE_UP(self.Canvas, None )
-            FloatCanvas.EVT_MIDDLE_DCLICK(self.Canvas, None )
+            self.Canvas.Unbind(FloatCanvas.EVT_MIDDLE_DOWN)
+            self.Canvas.Unbind(FloatCanvas.EVT_MIDDLE_UP)
+            self.Canvas.Unbind(FloatCanvas.EVT_MIDDLE_DCLICK)
 
-            FloatCanvas.EVT_RIGHT_DOWN(self.Canvas, None )
-            FloatCanvas.EVT_RIGHT_UP(self.Canvas, None )
-            FloatCanvas.EVT_RIGHT_DCLICK(self.Canvas, None )
-
-            FloatCanvas.EVT_MOUSEWHEEL(self.Canvas, None )
-            FloatCanvas.EVT_LEFT_DOWN(self.Canvas, None ) 
-            FloatCanvas.EVT_LEFT_UP(self.Canvas, None )
-            FloatCanvas.EVT_LEFT_DCLICK(self.Canvas, None) 
-
-            FloatCanvas.EVT_MIDDLE_DOWN(self.Canvas, None )
-            FloatCanvas.EVT_MIDDLE_UP(self.Canvas, None )
-            FloatCanvas.EVT_MIDDLE_DCLICK(self.Canvas, None )
-
-            FloatCanvas.EVT_RIGHT_DOWN(self.Canvas, None )
-            FloatCanvas.EVT_RIGHT_UP(self.Canvas, None )
-            FloatCanvas.EVT_RIGHT_DCLICK(self.Canvas, None )
-
-            FloatCanvas.EVT_MOUSEWHEEL(self.Canvas, None )
+            self.Canvas.Unbind(FloatCanvas.EVT_RIGHT_DOWN)
+            self.Canvas.Unbind(FloatCanvas.EVT_RIGHT_UP)
+            self.Canvas.Unbind(FloatCanvas.EVT_RIGHT_DCLICK)
 
             self.EventsAreBound = False
 
 
         def PrintCoords(self,event):
-            #print "coords are: %s"%(event.Coords,)
-            #print "pixel coords are: %s\n"%(event.GetPosition(),)
             self.Log("coords are: %s"%(event.Coords,))
             self.Log("pixel coords are: %s\n"%(event.GetPosition(),))
 
@@ -256,7 +236,7 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             self.PrintCoords(event)
 
         def OnRightUp(self, event):
-            self.Log("RightDown")
+            self.Log("RightUp")
             self.PrintCoords(event)
 
         def OnRightDouble(self, event):
@@ -278,6 +258,7 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             Updates the status bar with the world coordinates
             """
             self.SetStatusText("%.2f, %.2f"%tuple(event.Coords))
+            event.Skip()
 
         def OnAbout(self, event):
             dlg = wx.MessageDialog(self,
@@ -293,8 +274,7 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
 
         def Clear(self,event = None):
             self.UnBindAllMouseEvents()
-            self.Canvas.ClearAll()
-            self.Canvas.SetProjectionFun(None)
+            self.Canvas.InitAll()
             self.Canvas.Draw()
 
         def OnQuit(self,event):
@@ -304,7 +284,12 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             self.Destroy()
 
         def DrawTest(self,event=None):
-            wx.GetApp().Yield()
+            """
+            This demo draws a few of everything
+
+            """
+            
+            wx.GetApp().Yield(True)
 
             Range = (-10,10)
             colors = self.colors
@@ -312,8 +297,12 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             self.BindAllMouseEvents()
             Canvas = self.Canvas
 
-            Canvas.ClearAll()
-            Canvas.SetProjectionFun(None)
+            Canvas.InitAll()
+            #            
+            ## these set the limits for how much you can zoom in and out
+            Canvas.MinScale = 14
+            Canvas.MaxScale = 500
+            
 
             ############# Random tests of everything ##############
 
@@ -417,6 +406,18 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
                                 LineColor = colors[random.randint(0,len(colors)-1)],
                                 ArrowHeadAngle = random.uniform(20,90))
 
+            # ArrowLines
+            for i in range(5):
+                points = []
+                for j in range(random.randint(2,10)):
+                    point = (random.randint(Range[0],Range[1]),random.randint(Range[0],Range[1]))
+                    points.append(point)
+                lw = random.randint(1,10)
+                cf = random.randint(0,len(colors)-1)
+                cl = random.randint(0,len(colors)-1)
+                Canvas.AddArrowLine(points, LineWidth = lw, LineColor = colors[cl], ArrowHeadSize= 16)
+
+
             Canvas.ZoomToBB()
 
         def TestAnimation(self,event=None):
@@ -429,15 +430,13 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             having to re-draw the whole background.
 
             """
-            wx.GetApp().Yield()
+            wx.GetApp().Yield(True)
             Range = (-10,10)
             self.Range = Range
 
             self.UnBindAllMouseEvents()
             Canvas = self.Canvas
-
-            Canvas.ClearAll()
-            Canvas.SetProjectionFun(None)
+            Canvas.InitAll()
 
             ##		Random tests of everything:
             colors = self.colors
@@ -543,14 +542,13 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             self.Timer.Start(self.FrameDelay)
             #print "Did %i frames in %f seconds"%(N, (time.time() - start) )
 
-        def TestHitTest(self,event=None):
-            wx.GetApp().Yield()
+        def TestHitTest(self, event=None):
+            wx.GetApp().Yield(True)
 
             self.UnBindAllMouseEvents()
             Canvas = self.Canvas
 
-            Canvas.ClearAll()
-            Canvas.SetProjectionFun(None)
+            Canvas.InitAll()
 
             #Add a Hit-able rectangle
             w, h = 60, 20
@@ -558,7 +556,7 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             dx = 80
             dy = 40
             x, y = 20, 20
-            FontSize = 8
+            FontSize = 10
 
             #Add one that is not HitAble
             Canvas.AddRectangle((x,y), (w, h), LineWidth = 2)
@@ -709,7 +707,7 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             R.Name = color
             R.Bind(FloatCanvas.EVT_FC_ENTER_OBJECT, self.RectMouseOver)
             R.Bind(FloatCanvas.EVT_FC_LEAVE_OBJECT, self.RectMouseLeave)
-            Canvas.AddText("Mouse ENter&Leave", (x, y), Size = FontSize, Position = "bl")
+            Canvas.AddText("Mouse Enter&Leave", (x, y), Size = FontSize, Position = "bl")
             Canvas.AddText(R.Name, (x, y+h), Size = FontSize, Position = "tl")
 
             x = 20
@@ -722,7 +720,7 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
 
             x += dx
             color = "SEA GREEN"
-            Points = Numeric.array(( (x, y), (x, y+2.*h/3), (x+w, y+h), (x+w, y+h/2.), (x + 2.*w/3, y+h/2.), (x + 2.*w/3,y) ), Numeric.Float)
+            Points = N.array(( (x, y), (x, y+2.*h/3), (x+w, y+h), (x+w, y+h/2.), (x + 2.*w/3, y+h/2.), (x + 2.*w/3,y) ), N.float_)
             R = Canvas.AddPolygon(Points,  LineWidth = 2, FillColor = color)
             R.Name = color + " Polygon"
             R.Bind(FloatCanvas.EVT_FC_RIGHT_DOWN, self.RectGotHitRight)
@@ -731,7 +729,7 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
 
             x += dx
             color = "Red"
-            Points = Numeric.array(( (x, y), (x, y+2.*h/3), (x+w, y+h), (x+w, y+h/2.), (x + 2.*w/3, y+h/2.), (x + 2.*w/3,y) ), Numeric.Float)
+            Points = N.array(( (x, y), (x, y+2.*h/3), (x+w, y+h), (x+w, y+h/2.), (x + 2.*w/3, y+h/2.), (x + 2.*w/3,y) ), N.float_)
             R = Canvas.AddPointSet(Points,  Diameter = 4, Color = color)
             R.Name = "PointSet"
             R.Bind(FloatCanvas.EVT_FC_LEFT_DOWN, self.PointSetGotHit)
@@ -755,7 +753,7 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             x += dx
             color = "Cyan"
             Point = (x + w/2, y)
-            #Points = Numeric.array(( (x, y), (x, y+2.*h/3), (x+w, y+h), (x+w, y+h/2.), (x + 2.*w/3, y+h/2.), (x + 2.*w/3,y) ), Numeric.Float)
+            #Points = N.array(( (x, y), (x, y+2.*h/3), (x+w, y+h), (x+w, y+h/2.), (x + 2.*w/3, y+h/2.), (x + 2.*w/3,y) ), N.float_)
             R = Canvas.AddSquarePoint(Point,  Size = 8, Color = color)
             R.Name = "SquarePoint"
             R.Bind(FloatCanvas.EVT_FC_LEFT_DOWN, self.RectGotHit)
@@ -766,13 +764,12 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             self.Canvas.ZoomToBB()
 
         def TestHitTestForeground(self,event=None):
-            wx.GetApp().Yield()
+            wx.GetApp().Yield(True)
 
             self.UnBindAllMouseEvents()
             Canvas = self.Canvas
 
-            Canvas.ClearAll()
-            Canvas.SetProjectionFun(None)
+            Canvas.InitAll()
 
             #Add a Hitable rectangle
             w, h = 60, 20
@@ -871,13 +868,14 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
 
 
         def TestText(self, event= None):
-            wx.GetApp().Yield()
+            wx.GetApp().Yield(True)
 
             self.BindAllMouseEvents()
             Canvas = self.Canvas
-            Canvas.ClearAll()
-            Canvas.SetProjectionFun(None)
+            Canvas.InitAll()
+            
 
+            DefaultSize = 12           
             Point  = (3, 0)
 
             ## Add a non-visible rectangle, just to get a Bounding Box
@@ -889,29 +887,29 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
 
             # Text
             String = "Some text"
-            self.Canvas.AddText("Top Left",Point,Size = 14,Color = "Yellow",BackgroundColor = "Blue", Position = "tl")
-            self.Canvas.AddText("Bottom Left",Point,Size = 14,Color = "Cyan",BackgroundColor = "Black",Position = "bl")
-            self.Canvas.AddText("Top Right",Point,Size = 14,Color = "Black",BackgroundColor = "Cyan",Position = "tr")
-            self.Canvas.AddText("Bottom Right",Point,Size = 14,Color = "Blue",BackgroundColor = "Yellow",Position = "br")
+            self.Canvas.AddText("Top Left",Point,Size = DefaultSize,Color = "Yellow",BackgroundColor = "Blue", Position = "tl")
+            self.Canvas.AddText("Bottom Left",Point,Size = DefaultSize,Color = "Cyan",BackgroundColor = "Black",Position = "bl")
+            self.Canvas.AddText("Top Right",Point,Size = DefaultSize,Color = "Black",BackgroundColor = "Cyan",Position = "tr")
+            self.Canvas.AddText("Bottom Right",Point,Size = DefaultSize,Color = "Blue",BackgroundColor = "Yellow",Position = "br")
             Canvas.AddPointSet((Point), Color = "White", Diameter = 2)
 
             Point  = (3, 2)
 
             Canvas.AddPointSet((Point), Color = "White", Diameter = 2)
-            self.Canvas.AddText("Top Center",Point,Size = 14,Color = "Black",Position = "tc")
-            self.Canvas.AddText("Bottom Center",Point,Size = 14,Color = "White",Position = "bc")
+            self.Canvas.AddText("Top Center",Point,Size = DefaultSize,Color = "Black",Position = "tc")
+            self.Canvas.AddText("Bottom Center",Point,Size = DefaultSize,Color = "White",Position = "bc")
 
             Point  = (3, 4)
 
             Canvas.AddPointSet((Point), Color = "White", Diameter = 2)
-            self.Canvas.AddText("Center Right",Point,Size = 14,Color = "Black",Position = "cr")
-            self.Canvas.AddText("Center Left",Point,Size = 14,Color = "Black",Position = "cl")
+            self.Canvas.AddText("Center Right",Point,Size = DefaultSize,Color = "Black",Position = "cr")
+            self.Canvas.AddText("Center Left",Point,Size = DefaultSize,Color = "Black",Position = "cl")
 
             Point  = (3, -2)
 
             Canvas.AddPointSet((Point), Color = "White", Diameter = 2)
             self.Canvas.AddText("Center Center",
-                                Point, Size = 14,
+                                Point, Size = DefaultSize,
                                 Color = "Black",
                                 Position = "cc")
 
@@ -927,18 +925,17 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             self.Canvas.AddText("ROMAN ITALIC BOLD Font", (-10, -5), Family = wx.ROMAN, Weight=wx.BOLD, Style=wx.ITALIC)
 
             # NOTE: this font exists on my Linux box..who knows were else you'll find it!
-            Font = wx.Font(20, wx.DEFAULT, wx.ITALIC, wx.NORMAL, False, "zapf chancery")
-            self.Canvas.AddText("zapf chancery Font", (-10, -6), Font = Font)
+            Font = wx.Font(20, wx.DEFAULT, wx.ITALIC, wx.NORMAL, False, "helvetica")
+            self.Canvas.AddText("Helvetica Italic", (-10, -6), Font = Font)
 
             self.Canvas.ZoomToBB()
 
         def TestScaledText(self, event= None):
-            wx.GetApp().Yield()
+            wx.GetApp().Yield(True)
 
             self.BindAllMouseEvents()
             Canvas = self.Canvas
-            Canvas.ClearAll()
-            Canvas.SetProjectionFun(None)
+            Canvas.InitAll()
 
             Point  = (0, 0)
 
@@ -977,24 +974,23 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             Canvas.AddPointSet((x,0), Color = "White", Diameter = 4)
 
 
-            # NOTE: this font exists on my Linux box..who knows were else you'll find it!
+            # NOTE: this font exists on my OS-X.who knows were else you'll find it!
             Point = (-100, 50)
-            Font = wx.Font(12, wx.DEFAULT, wx.ITALIC, wx.NORMAL, False, "zapf chancery")
-            T = self.Canvas.AddScaledText("zapf chancery Font", Point, Size = 20, Font = Font, Position = 'bc')
+            Font = wx.Font(12, wx.DEFAULT, wx.ITALIC, wx.NORMAL, False, "helvetica")
+            T = self.Canvas.AddScaledText("Helvetica Italic", Point, Size = 20, Font = Font, Position = 'bc')
 
             Point = (-50, -50)
-            Font = wx.Font(12, wx.DEFAULT, wx.ITALIC, wx.NORMAL, False, "bookman")
-            T = self.Canvas.AddScaledText("Bookman Font", Point, Size = 8, Font = Font)
+            Font = wx.Font(12, wx.DEFAULT, wx.ITALIC, wx.NORMAL, False, "times")
+            T = self.Canvas.AddScaledText("Times Font", Point, Size = 8, Font = Font)
 
             self.Canvas.ZoomToBB()
 
         def TestScaledTextBox(self, event= None):
-            wx.GetApp().Yield()
+            wx.GetApp().Yield(True)
 
             self.UnBindAllMouseEvents()
             Canvas = self.Canvas
-            Canvas.ClearAll()
-            Canvas.SetProjectionFun(None)
+            Canvas.InitAll()
 
             Point = (45,40)
             Box = Canvas.AddScaledTextBox("A Two Line\nString",
@@ -1010,7 +1006,7 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
                                           Family = wx.ROMAN,
                                           Style = wx.NORMAL,
                                           Weight = wx.NORMAL,
-                                          Underline = False,
+                                          Underlined = False,
                                           Position = 'br',
                                           Alignment = "left",
                                           InForeground = False)
@@ -1058,7 +1054,7 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
                                           Family = wx.TELETYPE,
                                           Style = wx.NORMAL,
                                           Weight = wx.NORMAL,
-                                          Underline = False,
+                                          Underlined = False,
                                           Position = 'cr',
                                           Alignment = "left",
                                           InForeground = False)
@@ -1076,7 +1072,7 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
                                           Family = wx.TELETYPE,
                                           Style = wx.NORMAL,
                                           Weight = wx.NORMAL,
-                                          Underline = False,
+                                          Underlined = False,
                                           Position = 'cl',
                                           Alignment = "left",
                                           InForeground = False)
@@ -1097,7 +1093,7 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
                                           Family = wx.TELETYPE,
                                           Style = wx.NORMAL,
                                           Weight = wx.NORMAL,
-                                          Underline = False,
+                                          Underlined = False,
                                           Position = 'tc',
                                           Alignment = "left",
                                           InForeground = False)
@@ -1115,7 +1111,7 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
                                           Family = wx.TELETYPE,
                                           Style = wx.NORMAL,
                                           Weight = wx.NORMAL,
-                                          Underline = False,
+                                          Underlined = False,
                                           Position = 'bc',
                                           Alignment = "left",
                                           InForeground = False)
@@ -1143,7 +1139,7 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
                                           Family = wx.ROMAN,
                                           Alignment = "right"
                                           )
-            Point = Numeric.array((100, -20), Numeric.Float)
+            Point = N.array((100, -20), N.float_)
             Box = Canvas.AddScaledTextBox("Here is even more auto wrapped text. This time the line spacing is set to 0.8. \n\nThe Padding is set to 0.",
                                           Point,
                                           Size = 3,
@@ -1157,8 +1153,8 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
                                           )
             Canvas.AddPoint(Point, "Red", 2)
 
-            Point = Numeric.array((0, -40), Numeric.Float)
-    #        Point = Numeric.array((0, 0), Numeric.Float)
+            Point = N.array((0, -40), N.float_)
+    #        Point = N.array((0, 0), N.float_)
             for Position in ["tl", "bl", "tr", "br"]:
     #        for Position in ["br"]:
                 Box = Canvas.AddScaledTextBox("Here is a\nfour liner\nanother line\nPosition=%s"%Position,
@@ -1176,7 +1172,7 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
                                           )
             Canvas.AddPoint(Point, "Red", 4)
 
-            Point = Numeric.array((-20, 60), Numeric.Float)
+            Point = N.array((-20, 60), N.float_)
             Box = Canvas.AddScaledTextBox("Here is some\ncentered\ntext",
                                           Point,
                                           Size = 4,
@@ -1192,7 +1188,7 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
                                           LineSpacing = 0.8
                                           )
 
-            Point = Numeric.array((-20, 20), Numeric.Float)
+            Point = N.array((-20, 20), N.float_)
             Box = Canvas.AddScaledTextBox("Here is some\nright aligned\ntext",
                                           Point,
                                           Size = 4,
@@ -1207,7 +1203,7 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
                                           LineSpacing = 0.8
                                           )
 
-            Point = Numeric.array((100, -60), Numeric.Float)
+            Point = N.array((100, -60), N.float_)
             Box = Canvas.AddScaledTextBox("Here is some auto wrapped text. This time it is centered, rather than right aligned.\n\nThe Padding is set to 2.",
                                           Point,
                                           Size = 3,
@@ -1230,13 +1226,12 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             self.Log("I'm the TextBox")
 
         def TestBitmap(self, event= None):
-            wx.GetApp().Yield()
+            wx.GetApp().Yield(True)
 
             self.UnBindAllMouseEvents()
             Canvas = self.Canvas
-            Canvas.ClearAll()
-            Canvas.SetProjectionFun(None)
-
+            Canvas.InitAll()
+            
             Canvas.AddRectangle((10, 20),
                                 (400, 100),
                                 LineWidth = 3,
@@ -1295,16 +1290,17 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             self.Canvas.ZoomToBB()
 
         def DrawMap(self,event = None):
-            wx.GetApp().Yield()
+            wx.GetApp().Yield(True)
             import os, time
+            
+            self.Canvas.InitAll()
+            self.Canvas.SetProjectionFun("FlatEarth")
             self.BindAllMouseEvents()
 
         ## Test of Actual Map Data
-            self.Canvas.ClearAll()
-            self.Canvas.SetProjectionFun("FlatEarth")
             #start = time.clock()
             self.Log("Loading Map from a File")
-            wx.GetApp().Yield() # so log text will get displayed now.
+            wx.GetApp().Yield(True) # so log text will get displayed now.
             Shorelines = self.Read_MapGen(os.path.join("data",'world.dat'),stats = 0)
             #print "It took %f seconds to load %i shorelines"%(time.clock() - start,len(Shorelines) )
             #start = time.clock()
@@ -1316,17 +1312,17 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             #print "It took %f seconds to draw %i shorelines"%(time.clock() - start,len(Shorelines) )
 
 
+
         def LineTest(self,event = None):
-            wx.GetApp().Yield()
+            wx.GetApp().Yield(True)
             import os, time
 #            import random
             colors = self.colors
             Range = (-10,10)
         ## Test of drawing lots of lines
             Canvas = self.Canvas
-            Canvas.ClearAll()
-            Canvas.SetProjectionFun(None)
-            #start = time.clock()
+            Canvas.InitAll()
+                        #start = time.clock()
             linepoints = []
             linecolors = []
             linewidths = []
@@ -1345,17 +1341,44 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             Canvas.ZoomToBB()
             #print "It took %f seconds to draw %i lines"%(time.clock() - start,len(linepoints) )
 
+        def ArrowLineTest(self,event = None):
+            wx.GetApp().Yield(True)
+            Canvas = self.Canvas
+            Canvas.InitAll()
+            #            import os, time
+##            import random
+            Range = (-100,100)
+            colors = self.colors
+
+            # Lines
+            for i in range(5):
+                points = []
+                for j in range(random.randint(2,10)):
+                    point = (random.randint(Range[0],Range[1]),random.randint(Range[0],Range[1]))
+                    points.append(point)
+                lw = random.randint(1,4)
+                cf = random.randint(0,len(colors)-1)
+                cl = random.randint(0,len(colors)-1)
+                al = random.randint(8,20)
+                aa = random.randint(20,90)
+                Canvas.AddArrowLine(points,
+                                    LineWidth = lw,
+                                    LineColor = colors[cl],
+                                    ArrowHeadSize = al,
+                                    ArrowHeadAngle = aa)
+
+            Canvas.ZoomToBB()
+
         def SpeedTest(self,event=None):
-            wx.GetApp().Yield()
+            wx.GetApp().Yield(True)
             BigRange = (-1000,1000)
             colors = self.colors
 
             self.UnBindAllMouseEvents()
             Canvas = self.Canvas
 
-            Canvas.ClearAll()
-            Canvas.SetProjectionFun(None)
-
+            Canvas.InitAll()
+            
             # Pointset
             coords = []
             for i in range(1000):
@@ -1369,7 +1392,7 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             Canvas.ZoomToBB()
 
         def PropertiesChangeTest(self,event=None):
-            wx.GetApp().Yield()
+            wx.GetApp().Yield(True)
 
             Range = (-10,10)
             colors = self.colors
@@ -1377,9 +1400,8 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             self.UnBindAllMouseEvents()
             Canvas = self.Canvas
 
-            Canvas.ClearAll()
-            Canvas.SetProjectionFun(None)
-
+            Canvas.InitAll()
+            
             self.ColorObjectsAll = []
             self.ColorObjectsLine = []
             self.ColorObjectsColor = []
@@ -1512,13 +1534,14 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             self.Canvas.Draw(Force = True)
 
         def ArrowTest(self,event=None):
-            wx.GetApp().Yield()
+            wx.GetApp().Yield(True)
             self.UnBindAllMouseEvents()
             Canvas = self.Canvas
 
-            Canvas.ClearAll()
-            Canvas.SetProjectionFun(None)
-
+            Canvas.InitAll()
+            Canvas.MinScale = 15
+            Canvas.MaxScale = 30
+            
             # put in a rectangle to get a bounding box
             Canvas.AddRectangle((0,0), (20,20), LineColor = None)
 
@@ -1534,16 +1557,18 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
 
             Canvas.AddText("Clickable Arrow", (4,18), Position = "bc")
             Arrow = Canvas.AddArrow((4,18), 80, Direction = 90 ,LineWidth = 3, LineColor = "Red",   ArrowHeadAngle = 30)
+            Arrow.HitLineWidth = 6
             Arrow.Bind(FloatCanvas.EVT_FC_LEFT_DOWN, self.ArrowClicked)
 
-            Canvas.AddText("Changable Arrow", (16,4), Position = "cc")
+            Canvas.AddText("Changable Arrow: try clicking it", (16,4), Position = "tc")
             self.RotArrow = Canvas.AddArrow((16,4), 80, Direction = 0 ,LineWidth = 3, LineColor = "Green",   ArrowHeadAngle = 30)
+            self.RotArrow.HitLineWidth = 6
             self.RotArrow.Bind(FloatCanvas.EVT_FC_LEFT_DOWN, self.RotateArrow)
 
             Canvas.ZoomToBB()
 
         def ArrowClicked(self,event):
-            print "The Arrow was Clicked"
+            self.Log("The Arrow was Clicked")
 
         def RotateArrow(self,event):
             ##print "The Changeable Arrow was Clicked"
@@ -1557,13 +1582,12 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             self.Canvas.Draw(Force = True)
 
         def HideTest(self, event=None):
-            wx.GetApp().Yield()
+            wx.GetApp().Yield(True)
 
             self.UnBindAllMouseEvents()
             Canvas = self.Canvas
-            Canvas.ClearAll()
-            Canvas.SetProjectionFun(None)
-
+            Canvas.InitAll()
+            
             Range = (-10,10)
 
             # Create a couple random Polygons
@@ -1616,22 +1640,32 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
 
         def HidePoly(self, Button):
             Poly = Button.HidePoly
+
             if Poly.Visible:
-                Poly.Hide()
+                Poly.Visible = False
                 Button.SetText(Button.String.replace("Hide","Show"))
             else:
-                Poly.Show()
+                Poly.Visible = True
                 Button.SetText(Button.String.replace("Show", "Hide"))
             self.Canvas.Draw(True)
 
+
         def TempTest(self, event= None):
-            wx.GetApp().Yield()
+            """
+            
+            This is the start of a poly editor test, but it's not complete
+            so you can only run it through a command line flag:
+            
+            python FloatCanvasDemo.py --temp
+            
+            """
+            
+            wx.GetApp().Yield(True)
 
             self.UnBindAllMouseEvents()
             Canvas = self.Canvas
-            Canvas.ClearAll()
-            Canvas.SetProjectionFun(None)
-
+            Canvas.InitAll()
+            
             Range = (-10,10)
 
             # Create a random Polygon
@@ -1654,7 +1688,6 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             Canvas.ZoomToBB()
 
         def SelectPoly(self, Object):
-            print "In SelectPoly"
             Canvas = self.Canvas
             if Object is self.SelectedPoly:
                 pass
@@ -1673,7 +1706,7 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             Canvas.Draw()
 
         def SelectPointHit(self, Point):
-            print "Point Num: %i Hit"%Point.VerticeNum
+            self.Log("Point Num: %i Hit"%Point.VerticeNum)
             self.SelectedPoint = Point
 
         def Read_MapGen(self, filename, stats = 0,AllLines=0):
@@ -1697,11 +1730,11 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
             for line in data:
                 if line:
                     if line == "# -b": #New segment beginning
-                        if segment: Shorelines.append(Numeric.array(segment))
+                        if segment: Shorelines.append(N.array(segment))
                         segment = []
                     else:
                         segment.append(map(float,string.split(line)))
-            if segment: Shorelines.append(Numeric.array(segment))
+            if segment: Shorelines.append(N.array(segment))
 
             if stats:
                 NumSegments = len(Shorelines)
@@ -1728,13 +1761,16 @@ def BuildDrawFrame(): # this gets called when needed, rather than on import
       
 if __name__ == "__main__":
 
+    # running stand alone, Use wxversion:
+#    import wxversion
+#    wxversion.select("2.6")
+#    wxversion.select("2.8")
     import wx
    
     
     # check options:
     import sys, getopt
-    optlist, args = getopt.getopt(sys.argv[1:],'l',["local",
-                                                    "all",
+    optlist, args = getopt.getopt(sys.argv[1:],'l',["all",
                                                     "text",
                                                     "map",
                                                     "stext",
@@ -1747,40 +1783,15 @@ if __name__ == "__main__":
                                                     "temp",
                                                     "props",
                                                     "arrow",
+                                                    "arrowline",
                                                     "hide"])
 
-    if not haveNumeric:
+    if not haveNumpy:
         raise ImportError(errorText)
     StartUpDemo = "all" # the default
-    for opt in optlist:
-        if opt[0] == "--all":
-            StartUpDemo = "all"
-        elif opt[0] == "--text":
-            StartUpDemo = "text"
-        elif opt[0] == "--map":
-            StartUpDemo = "map"
-        elif opt[0] == "--stext":
-            StartUpDemo = "stext"
-        elif opt[0] == "--stextbox":
-            StartUpDemo = "stextbox"
-        elif opt[0] == "--bitmap":
-            StartUpDemo = "bitmap"
-        elif opt[0] == "--hit":
-            StartUpDemo = "hit"
-        elif opt[0] == "--hitf":
-            StartUpDemo = "hitf"
-        elif opt[0] == "--animate":
-            StartUpDemo = "animate"
-        elif opt[0] == "--speed":
-            StartUpDemo = "speed"
-        elif opt[0] == "--temp":
-            StartUpDemo = "temp"
-        elif opt[0] == "--props":
-            StartUpDemo = "props"
-        elif opt[0] == "--arrow":
-            StartUpDemo = "arrow"
-        elif opt[0] == "--hide":
-            StartUpDemo = "hide"
+    if optlist:
+        StartUpDemo = optlist[0][0][2:]
+
 
     class DemoApp(wx.App):
         """
@@ -1844,6 +1855,7 @@ if __name__ == "__main__":
             frame.Show()
 
             ## check to see if the demo is set to start in a particular mode.
+            ## fixme: should this be in a dict instead?
             if StartUpDemo == "text":
                 frame.TestText()
             elif StartUpDemo == "stext":
@@ -1859,25 +1871,20 @@ if __name__ == "__main__":
             elif StartUpDemo == "hit":
                 frame.TestHitTest()
             elif StartUpDemo == "hitf":
-                "starting TestHitTestForeground"
                 frame.TestHitTestForeground()
             elif StartUpDemo == "animate":
-                "starting TestAnimation"
                 frame.TestAnimation()
             elif StartUpDemo == "speed":
-                "starting SpeedTest"
                 frame.SpeedTest()
             elif StartUpDemo == "temp":
-                "starting temp Test"
                 frame.TempTest()
             elif StartUpDemo == "props":
-                "starting PropertiesChange Test"
                 frame.PropertiesChangeTest()
             elif StartUpDemo == "arrow":
-                "starting arrow Test"
                 frame.ArrowTest()
+            elif StartUpDemo == "arrowline":
+                frame.ArrowLineTest()
             elif StartUpDemo == "hide":
-                "starting Hide Test"
                 frame.HideTest()
 
             return True
@@ -1889,14 +1896,14 @@ else:
     # It's not running stand-alone, set up for wxPython demo.
     # don't  neeed wxversion here.
     import wx
-    if not haveNumeric:
+    if not haveNumpy:
         ## TestPanel and runTest used for integration into wxPython Demo
         class TestPanel(wx.Panel):
             def __init__(self, parent, log):
                 self.log = log
                 wx.Panel.__init__(self, parent, -1)
 
-                import images
+                from wx.lib.floatcanvas.ScreenShot import getScreenShotBitmap
 
                 note1 = wx.StaticText(self, -1, errorText)
                 note2 = wx.StaticText(self, -1, "This is what the FloatCanvas can look like:")
@@ -1904,7 +1911,7 @@ else:
                 S.Add((10, 10), 1)
                 S.Add(note1, 0, wx.ALIGN_CENTER)
                 S.Add(note2, 0, wx.ALIGN_CENTER | wx.BOTTOM, 4)
-                S.Add(wx.StaticBitmap(self,-1,images.getFloatCanvasBitmap()),0,wx.ALIGN_CENTER)
+                S.Add(wx.StaticBitmap(self,-1,getScreenShotBitmap()),0,wx.ALIGN_CENTER)
                 S.Add((10, 10), 1)
                 self.SetSizer(S)
                 self.Layout()

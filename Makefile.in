@@ -70,7 +70,7 @@ wx_top_builddir = @wx_top_builddir@
 DESTDIR = 
 WX_RELEASE = 2.8
 WX_RELEASE_NODOT = 28
-WX_VERSION = $(WX_RELEASE).0
+WX_VERSION = $(WX_RELEASE).4
 LIBDIRNAME = $(wx_top_builddir)/lib
 WXREGEX_CFLAGS = -D__WX$(TOOLKIT)__ $(__WXUNIV_DEFINE_p) $(____SHARED) \
 	$(CPPFLAGS) $(CFLAGS)
@@ -1511,7 +1511,7 @@ LOCALE_MSW_LINGUAS =  it
 @COND_DEPS_TRACKING_1@CXXC = $(BK_DEPS) $(CXX)
 @COND_USE_PLUGINS_0@PLUGIN_ADV_EXTRALIBS = $(EXTRALIBS_SDL)
 @COND_PLATFORM_MACOSX_1@WXMACVERSION_CMD = \
-@COND_PLATFORM_MACOSX_1@	-compatibility_version 1.0 -current_version 1.0
+@COND_PLATFORM_MACOSX_1@	-compatibility_version 2.0 -current_version 2.1
 @COND_USE_GUI_0@PORTNAME = base
 @COND_USE_GUI_1@PORTNAME = $(TOOLKIT_LOWERCASE)$(TOOLKIT_VERSION)
 @COND_TOOLKIT_MAC@WXBASEPORT = _carbon
@@ -1621,6 +1621,8 @@ COND_TOOLKIT__BASE_MACOSX_HDR =  \
 	wx/unix/private.h \
 	wx/unix/stackwalk.h \
 	wx/unix/stdpaths.h \
+	wx/mac/corefoundation/cfdataref.h \
+	wx/mac/corefoundation/cfref.h \
 	wx/mac/corefoundation/cfstring.h \
 	wx/mac/corefoundation/hid.h \
 	wx/mac/corefoundation/stdpaths.h
@@ -1634,6 +1636,8 @@ COND_TOOLKIT_COCOA_BASE_MACOSX_HDR =  \
 	wx/unix/private.h \
 	wx/unix/stackwalk.h \
 	wx/unix/stdpaths.h \
+	wx/mac/corefoundation/cfdataref.h \
+	wx/mac/corefoundation/cfref.h \
 	wx/mac/corefoundation/cfstring.h \
 	wx/mac/corefoundation/hid.h \
 	wx/mac/corefoundation/stdpaths.h
@@ -1647,11 +1651,15 @@ COND_TOOLKIT_GTK_BASE_MACOSX_HDR =  \
 	wx/unix/private.h \
 	wx/unix/stackwalk.h \
 	wx/unix/stdpaths.h \
+	wx/mac/corefoundation/cfdataref.h \
+	wx/mac/corefoundation/cfref.h \
 	wx/mac/corefoundation/cfstring.h \
 	wx/mac/corefoundation/hid.h \
 	wx/mac/corefoundation/stdpaths.h
 @COND_TOOLKIT_GTK@BASE_MACOSX_HDR = $(COND_TOOLKIT_GTK_BASE_MACOSX_HDR)
 COND_TOOLKIT_MAC_BASE_MACOSX_HDR =  \
+	wx/mac/corefoundation/cfdataref.h \
+	wx/mac/corefoundation/cfref.h \
 	wx/mac/corefoundation/cfstring.h \
 	wx/mac/corefoundation/hid.h \
 	wx/mac/corefoundation/stdpaths.h \
@@ -1668,6 +1676,8 @@ COND_TOOLKIT_MOTIF_BASE_MACOSX_HDR =  \
 	wx/unix/private.h \
 	wx/unix/stackwalk.h \
 	wx/unix/stdpaths.h \
+	wx/mac/corefoundation/cfdataref.h \
+	wx/mac/corefoundation/cfref.h \
 	wx/mac/corefoundation/cfstring.h \
 	wx/mac/corefoundation/hid.h \
 	wx/mac/corefoundation/stdpaths.h
@@ -1681,6 +1691,8 @@ COND_TOOLKIT_X11_BASE_MACOSX_HDR =  \
 	wx/unix/private.h \
 	wx/unix/stackwalk.h \
 	wx/unix/stdpaths.h \
+	wx/mac/corefoundation/cfdataref.h \
+	wx/mac/corefoundation/cfref.h \
 	wx/mac/corefoundation/cfstring.h \
 	wx/mac/corefoundation/hid.h \
 	wx/mac/corefoundation/stdpaths.h
@@ -1984,6 +1996,7 @@ COND_TOOLKIT_COCOA_GUI_HDR =  \
 	wx/cocoa/textctrl.h \
 	wx/cocoa/timer.h \
 	wx/cocoa/toolbar.h \
+	wx/cocoa/tooltip.h \
 	wx/cocoa/toplevel.h \
 	wx/cocoa/window.h \
 	wx/generic/caret.h \
@@ -4555,9 +4568,12 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS =  \
 	monodll_tbarwce.o \
 	monodll_textctrlce.o
 @COND_TOOLKIT_WINCE@__GUI_SRC_OBJECTS = $(COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS)
-@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS = \
-@COND_PLATFORM_MACOSX_1@	monodll_webkit.o monodll_fontdlgosx.o \
-@COND_PLATFORM_MACOSX_1@	monodll_colordlgosx.o
+COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS =  \
+	monodll_webkit.o \
+	monodll_fontdlgosx.o \
+	monodll_colordlgosx.o \
+	monodll_utilscocoa.o
+@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS = $(COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_1 = \
 @COND_TOOLKIT_COCOA@	monodll_gsockosx.o monodll_hid.o monodll_utilsexc_cf.o
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_1 =  \
@@ -6337,9 +6353,12 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1 =  \
 	monolib_tbarwce.o \
 	monolib_textctrlce.o
 @COND_TOOLKIT_WINCE@__GUI_SRC_OBJECTS_1 = $(COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_1)
-@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS_1 = \
-@COND_PLATFORM_MACOSX_1@	monolib_webkit.o monolib_fontdlgosx.o \
-@COND_PLATFORM_MACOSX_1@	monolib_colordlgosx.o
+COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS_1 =  \
+	monolib_webkit.o \
+	monolib_fontdlgosx.o \
+	monolib_colordlgosx.o \
+	monolib_utilscocoa.o
+@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS_1 = $(COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS_1)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_3 = \
 @COND_TOOLKIT_COCOA@	monolib_gsockosx.o monolib_hid.o monolib_utilsexc_cf.o
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_3 =  \
@@ -8348,9 +8367,12 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2 =  \
 	coredll_tbarwce.o \
 	coredll_textctrlce.o
 @COND_TOOLKIT_WINCE@__GUI_SRC_OBJECTS_2 = $(COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_2)
-@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS_2 = \
-@COND_PLATFORM_MACOSX_1@	coredll_webkit.o coredll_fontdlgosx.o \
-@COND_PLATFORM_MACOSX_1@	coredll_colordlgosx.o
+COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS_2 =  \
+	coredll_webkit.o \
+	coredll_fontdlgosx.o \
+	coredll_colordlgosx.o \
+	coredll_utilscocoa.o
+@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS_2 = $(COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS_2)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_5 = \
 @COND_TOOLKIT_COCOA@	coredll_gsockosx.o coredll_hid.o coredll_utilsexc_cf.o
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_5 =  \
@@ -9803,9 +9825,12 @@ COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3 =  \
 	corelib_tbarwce.o \
 	corelib_textctrlce.o
 @COND_TOOLKIT_WINCE@__GUI_SRC_OBJECTS_3 = $(COND_TOOLKIT_WINCE___GUI_SRC_OBJECTS_3)
-@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS_3 = \
-@COND_PLATFORM_MACOSX_1@	corelib_webkit.o corelib_fontdlgosx.o \
-@COND_PLATFORM_MACOSX_1@	corelib_colordlgosx.o
+COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS_3 =  \
+	corelib_webkit.o \
+	corelib_fontdlgosx.o \
+	corelib_colordlgosx.o \
+	corelib_utilscocoa.o
+@COND_PLATFORM_MACOSX_1@__MAC_OSX_SRC_OBJECTS_3 = $(COND_PLATFORM_MACOSX_1___MAC_OSX_SRC_OBJECTS_3)
 @COND_TOOLKIT_COCOA@__LOWLEVEL_SRC_OBJECTS_7 = \
 @COND_TOOLKIT_COCOA@	corelib_gsockosx.o corelib_hid.o corelib_utilsexc_cf.o
 COND_TOOLKIT_DFB___LOWLEVEL_SRC_OBJECTS_7 =  \
@@ -11241,9 +11266,9 @@ COND_TOOLKIT_MSW___ADVANCED_PLATFORM_SRC_OBJECTS_9 =  \
 @COND_USE_SOVERSION_0@dll___targetsuf2 = .$(SO_SUFFIX)
 @COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1@dll___targetsuf3 \
 @COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1@	= \
-@COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1@	.$(SO_SUFFIX).0.0.0
+@COND_PLATFORM_MACOSX_0_USE_SOVERCYGWIN_0_USE_SOVERSION_1@	.$(SO_SUFFIX).0.1.1
 @COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@dll___targetsuf3 \
-@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .0.0.0.$(SO_SUFFIX)
+@COND_PLATFORM_MACOSX_1_USE_SOVERSION_1@	= .0.1.1.$(SO_SUFFIX)
 @COND_USE_SOVERCYGWIN_1_USE_SOVERSION_1@dll___targetsuf3 = -0.$(SO_SUFFIX)
 @COND_USE_SOVERSION_0@dll___targetsuf3 = .$(SO_SUFFIX)
 @COND_TOOLKIT_MSW@__RCDEFDIR_p = --include-dir \
@@ -12905,6 +12930,9 @@ monodll_fontdlgosx.o: $(srcdir)/src/mac/carbon/fontdlgosx.mm $(MONODLL_ODEP)
 
 monodll_colordlgosx.o: $(srcdir)/src/mac/carbon/colordlgosx.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/colordlgosx.mm
+
+monodll_utilscocoa.o: $(srcdir)/src/mac/carbon/utilscocoa.mm $(MONODLL_ODEP)
+	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/mac/carbon/utilscocoa.mm
 
 monodll_NSBox.o: $(srcdir)/src/cocoa/NSBox.mm $(MONODLL_ODEP)
 	$(CXXC) -c -o $@ $(MONODLL_CXXFLAGS) $(srcdir)/src/cocoa/NSBox.mm
@@ -17024,6 +17052,9 @@ monolib_fontdlgosx.o: $(srcdir)/src/mac/carbon/fontdlgosx.mm $(MONOLIB_ODEP)
 
 monolib_colordlgosx.o: $(srcdir)/src/mac/carbon/colordlgosx.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/colordlgosx.mm
+
+monolib_utilscocoa.o: $(srcdir)/src/mac/carbon/utilscocoa.mm $(MONOLIB_ODEP)
+	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/mac/carbon/utilscocoa.mm
 
 monolib_NSBox.o: $(srcdir)/src/cocoa/NSBox.mm $(MONOLIB_ODEP)
 	$(CXXC) -c -o $@ $(MONOLIB_CXXFLAGS) $(srcdir)/src/cocoa/NSBox.mm
@@ -22143,6 +22174,9 @@ coredll_fontdlgosx.o: $(srcdir)/src/mac/carbon/fontdlgosx.mm $(COREDLL_ODEP)
 coredll_colordlgosx.o: $(srcdir)/src/mac/carbon/colordlgosx.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/colordlgosx.mm
 
+coredll_utilscocoa.o: $(srcdir)/src/mac/carbon/utilscocoa.mm $(COREDLL_ODEP)
+	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/mac/carbon/utilscocoa.mm
+
 coredll_NSBox.o: $(srcdir)/src/cocoa/NSBox.mm $(COREDLL_ODEP)
 	$(CXXC) -c -o $@ $(COREDLL_CXXFLAGS) $(srcdir)/src/cocoa/NSBox.mm
 
@@ -25097,6 +25131,9 @@ corelib_fontdlgosx.o: $(srcdir)/src/mac/carbon/fontdlgosx.mm $(CORELIB_ODEP)
 
 corelib_colordlgosx.o: $(srcdir)/src/mac/carbon/colordlgosx.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/colordlgosx.mm
+
+corelib_utilscocoa.o: $(srcdir)/src/mac/carbon/utilscocoa.mm $(CORELIB_ODEP)
+	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/mac/carbon/utilscocoa.mm
 
 corelib_NSBox.o: $(srcdir)/src/cocoa/NSBox.mm $(CORELIB_ODEP)
 	$(CXXC) -c -o $@ $(CORELIB_CXXFLAGS) $(srcdir)/src/cocoa/NSBox.mm

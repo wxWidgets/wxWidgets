@@ -44,16 +44,21 @@ wxGLContext::wxGLContext(
                          )
 {
     m_window = win;
-
+#ifndef __LP64__
     m_drawable = (AGLDrawable) UMAGetWindowPort(MAC_WXHWND(win->MacGetTopLevelWindowRef()));
+#endif
 
     m_glContext = aglCreateContext(fmt, other ? other->m_glContext : NULL);
     wxCHECK_RET( m_glContext, wxT("Couldn't create OpenGl context") );
 
     GLboolean b;
+#ifndef __LP64__
     b = aglSetDrawable(m_glContext, m_drawable);
-    wxCHECK_RET( b, wxT("Couldn't bind OpenGl context") );
     aglEnable(m_glContext , AGL_BUFFER_RECT ) ;
+#else
+    b = aglSetHIViewRef(m_glContext, (HIViewRef) win->GetHandle());
+#endif
+    wxCHECK_RET( b, wxT("Couldn't bind OpenGl context") );
     b = aglSetCurrentContext(m_glContext);
     wxCHECK_RET( b, wxT("Couldn't activate OpenGl context") );
 }
@@ -243,6 +248,7 @@ void wxGLCanvas::UpdateContext()
 
 void wxGLCanvas::SetViewport()
 {
+#ifndef __LP64__
     // viewport is initially set to entire port
     // adjust glViewport to just this window
     int x = 0 ;
@@ -284,6 +290,7 @@ void wxGLCanvas::SetViewport()
             parms[0] += 20000 ;
         aglSetInteger( m_glContext->m_glContext , AGL_BUFFER_RECT , parms ) ;
    }
+#endif
 }
 
 void wxGLCanvas::OnSize(wxSizeEvent& event)

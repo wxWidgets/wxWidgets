@@ -1157,6 +1157,10 @@ gtk_wxwindow_commit_cb (GtkIMContext *context,
         wxFillOtherKeyEventFields(event,
                                   window, window->m_imData->lastKeyEvent);
     }
+    else
+    {
+        event.SetEventObject( window );
+    }
 
     const wxWxCharBuffer data(wxGTK_CONV_BACK(str));
     if( !data )
@@ -1682,7 +1686,11 @@ gtk_window_button_release_callback( GtkWidget *widget,
     event.SetEventObject( win );
     event.SetId( win->GetId() );
 
-    return win->GTKProcessEvent(event);
+    bool ret = win->GTKProcessEvent(event);
+    
+    g_lastMouseEvent = NULL;
+    
+    return ret;
 }
 
 //-----------------------------------------------------------------------------
@@ -1900,12 +1908,14 @@ gtk_window_focus_out_callback( GtkWidget *widget,
     }
 #endif // wxUSE_CARET
 
-    gboolean ret = FALSE;
-
     // don't send the window a kill focus event if it thinks that it doesn't
     // have focus already
     if ( win->m_hasFocus )
     {
+        // the event handler might delete the window when it loses focus, so
+        // check whether this is a custom window before calling it
+        const bool has_wxwindow = win->m_wxwindow != NULL;
+
         win->m_hasFocus = false;
 
         wxFocusEvent event( wxEVT_KILL_FOCUS, win->GetId() );
@@ -1913,14 +1923,13 @@ gtk_window_focus_out_callback( GtkWidget *widget,
 
         (void)win->GTKProcessEvent( event );
 
-        ret = TRUE;
+        // Disable default focus handling for custom windows
+        // since the default GTK+ handler issues a repaint
+        if ( has_wxwindow )
+            return TRUE;
     }
 
-    // Disable default focus handling for custom windows
-    // since the default GTK+ handler issues a repaint
-    if (win->m_wxwindow)
-        return ret;
-
+    // continue with normal processing
     return FALSE;
 }
 
@@ -2133,16 +2142,11 @@ void gtk_window_size_callback( GtkWidget *WXUNUSED(widget),
     if ((client_width == win->m_oldClientWidth) && (client_height == win->m_oldClientHeight))
         return;
 
-#if 0
-        wxPrintf( wxT("size_allocate ") );
-        if (win->GetClassInfo() && win->GetClassInfo()->GetClassName())
-            wxPrintf( win->GetClassInfo()->GetClassName() );
-        wxPrintf( wxT(" %d %d %d %d\n"),
-                alloc->x,
-                alloc->y,
-                alloc->width,
-                alloc->height );
-#endif
+    if ( !client_width && !client_height )
+    {
+        // the window is currently unmapped, don't generate size events
+        return;
+    }
 
     win->m_oldClientWidth = client_width;
     win->m_oldClientHeight = client_height;

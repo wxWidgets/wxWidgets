@@ -476,7 +476,7 @@ class XmlDocument(_core.Object):
         return _xrc.XmlDocument_Save(*args, **kwargs)
 
     def SaveToStream(*args, **kwargs):
-        """SaveToStream(self, OutputStream stream, int indentstep=1) -> bool"""
+        """SaveToStream(self, wxOutputStream stream, int indentstep=1) -> bool"""
         return _xrc.XmlDocument_SaveToStream(*args, **kwargs)
 
     def IsOk(*args, **kwargs):

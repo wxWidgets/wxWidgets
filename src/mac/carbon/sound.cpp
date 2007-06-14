@@ -79,6 +79,13 @@
 static wxTimer* lastSoundTimer=NULL;
 static bool lastSoundIsPlaying=false;
 
+#if !defined(__DARWIN__) || !defined(__LP64__)
+#define USE_QUICKTIME 1
+#else
+#define USE_QUICKTIME 0
+#endif
+
+#if USE_QUICKTIME
 // ------------------------------------------------------------------
 //          wxQTTimer - Handle Asyncronous Playing
 // ------------------------------------------------------------------
@@ -244,6 +251,8 @@ inline bool wxInitQT ()
     }
 }
 
+#endif
+
 wxSound::wxSound()
 : m_hSnd(NULL), m_waveLength(0), m_pTimer(NULL), m_type(wxSound_NONE)
 {
@@ -295,6 +304,8 @@ bool wxSound::Create(const wxString& fileName, bool isResource)
 bool wxSound::DoPlay(unsigned flags) const
 {
     Stop();
+
+#if USE_QUICKTIME
 
     Movie movie;
 
@@ -439,6 +450,7 @@ bool wxSound::DoPlay(unsigned flags) const
 
         DisposeMovie(movie);
     }
+#endif
 
     return true;
 }
@@ -460,10 +472,13 @@ void wxSound::Stop()
 
 void* wxSound::GetHandle()
 {
+#if USE_QUICKTIME
     if(m_type == wxSound_RESOURCE)
         return (void*)  ((wxSMTimer*)m_pTimer)->GetChannel();
 
     return (void*) ((wxQTTimer*) m_pTimer)->GetMovie();
+#endif
+    return NULL;
 }
 
 #endif //wxUSE_SOUND

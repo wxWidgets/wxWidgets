@@ -1927,7 +1927,7 @@ class Process(_core.EvtHandler):
         return _misc_.Process_GetErrorStream(*args, **kwargs)
 
     def GetOutputStream(*args, **kwargs):
-        """GetOutputStream(self) -> OutputStream"""
+        """GetOutputStream(self) -> wxOutputStream"""
         return _misc_.Process_GetOutputStream(*args, **kwargs)
 
     def CloseOutput(*args, **kwargs):
@@ -4362,12 +4362,12 @@ class TimeSpan(object):
     def __str__(self):
         return self.Format().encode(wx.GetDefaultPyEncoding())
 
-    Days = property(GetDays,doc="See `GetDays`") 
-    Hours = property(GetHours,doc="See `GetHours`") 
-    Milliseconds = property(GetMilliseconds,doc="See `GetMilliseconds`") 
-    Minutes = property(GetMinutes,doc="See `GetMinutes`") 
-    Seconds = property(GetSeconds,doc="See `GetSeconds`") 
-    Weeks = property(GetWeeks,doc="See `GetWeeks`") 
+    days = property(GetDays,doc="See `GetDays`") 
+    hours = property(GetHours,doc="See `GetHours`") 
+    milliseconds = property(GetMilliseconds,doc="See `GetMilliseconds`") 
+    minutes = property(GetMinutes,doc="See `GetMinutes`") 
+    seconds = property(GetSeconds,doc="See `GetSeconds`") 
+    weeks = property(GetWeeks,doc="See `GetWeeks`") 
 _misc_.TimeSpan_swigregister(TimeSpan)
 
 def TimeSpan_Milliseconds(*args, **kwargs):
@@ -4559,11 +4559,11 @@ class DateSpan(object):
         """__ne__(self, DateSpan other) -> bool"""
         return _misc_.DateSpan___ne__(*args, **kwargs)
 
-    Days = property(GetDays,SetDays,doc="See `GetDays` and `SetDays`") 
-    Months = property(GetMonths,SetMonths,doc="See `GetMonths` and `SetMonths`") 
-    TotalDays = property(GetTotalDays,doc="See `GetTotalDays`") 
-    Weeks = property(GetWeeks,SetWeeks,doc="See `GetWeeks` and `SetWeeks`") 
-    Years = property(GetYears,SetYears,doc="See `GetYears` and `SetYears`") 
+    days = property(GetDays,SetDays,doc="See `GetDays` and `SetDays`") 
+    months = property(GetMonths,SetMonths,doc="See `GetMonths` and `SetMonths`") 
+    totalDays = property(GetTotalDays,doc="See `GetTotalDays`") 
+    weeks = property(GetWeeks,SetWeeks,doc="See `GetWeeks` and `SetWeeks`") 
+    years = property(GetYears,SetYears,doc="See `GetYears` and `SetYears`") 
 _misc_.DateSpan_swigregister(DateSpan)
 
 def DateSpan_Days(*args, **kwargs):
@@ -4688,14 +4688,15 @@ class DataFormat(object):
         """
         return _misc_.DataFormat_GetType(*args, **kwargs)
 
-    def GetId(*args, **kwargs):
-        """
-        GetId(self) -> String
+    def _GetId(*args, **kwargs):
+        """_GetId(self) -> String"""
+        return _misc_.DataFormat__GetId(*args, **kwargs)
 
-        Returns the name of a custom format (this function will fail for a
-        standard format).
-        """
-        return _misc_.DataFormat_GetId(*args, **kwargs)
+    def GetId(self):
+        """Returns the name of a custom format (this function will fail for a
+     format)."""
+        nolog = wx.LogNull()
+        return self._GetId()
 
     def SetId(*args, **kwargs):
         """
@@ -5686,7 +5687,6 @@ class Clipboard(_core.Object):
         return _misc_.Clipboard_Get(*args, **kwargs)
 
     Get = staticmethod(Get)
-    Data = property(GetData,SetData,doc="See `GetData` and `SetData`") 
 _misc_.Clipboard_swigregister(Clipboard)
 
 def Clipboard_Get(*args):
@@ -6006,7 +6006,7 @@ class StandardPaths(object):
     that these are just  examples and the actual values may differ. For
     example, under Windows the system administrator may change the
     standard directories locations, i.e. the Windows directory may be
-    named W:\Win2003 instead of the default C:\Windows.
+    named W:/Win2003 instead of the default C:/Windows.
 
     The strings appname and username should be replaced with the value
     returned by `wx.App.GetAppName` and the name of the currently logged
@@ -6053,7 +6053,7 @@ class StandardPaths(object):
         GetConfigDir(self) -> String
 
         Return the directory with system config files: /etc under Unix,
-        'c:\Documents and Settings\All Users\Application Data' under Windows,
+        'c:/Documents and Settings/All Users/Application Data' under Windows,
         /Library/Preferences for Mac
         """
         return _misc_.StandardPaths_GetConfigDir(*args, **kwargs)
@@ -6063,7 +6063,7 @@ class StandardPaths(object):
         GetUserConfigDir(self) -> String
 
         Return the directory for the user config files: $HOME under Unix,
-        'c:\Documents and Settings\username' under Windows, and 
+        'c:/Documents and Settings/username' under Windows, and 
         ~/Library/Preferences under Mac
             
         Only use this if you have a single file to put there, otherwise
@@ -6077,7 +6077,7 @@ class StandardPaths(object):
 
         Return the location of the application's global, (i.e. not
         user-specific,) data files: prefix/share/appname under Unix,
-        'c:\Program Files\appname' under Windows,
+        'c:/Program Files/appname' under Windows,
         appname.app/Contents/SharedSupport app bundle directory under Mac.
         """
         return _misc_.StandardPaths_GetDataDir(*args, **kwargs)
@@ -6097,8 +6097,8 @@ class StandardPaths(object):
         GetUserDataDir(self) -> String
 
         Return the directory for the user-dependent application data files:
-        $HOME/.appname under Unix, c:\Documents and
-        Settings\username\Application Data\appname under Windows and
+        $HOME/.appname under Unix, c:/Documents and
+        Settings/username/Application Data/appname under Windows and
         ~/Library/Application Support/appname under Mac
         """
         return _misc_.StandardPaths_GetUserDataDir(*args, **kwargs)
@@ -6111,7 +6111,7 @@ class StandardPaths(object):
         with the other machines
 
         Same as `GetUserDataDir` for all platforms except Windows where it is
-        the 'Local Settings\Application Data\appname' directory.
+        the 'Local Settings/Application Data/appname' directory.
         """
         return _misc_.StandardPaths_GetUserLocalDataDir(*args, **kwargs)
 
@@ -6157,7 +6157,7 @@ class StandardPaths(object):
 
         Return the Documents directory for the current user.
 
-        C:\Documents and Settings\username\Documents under Windows,
+        C:/Documents and Settings/username/Documents under Windows,
         $HOME under Unix and ~/Documents under Mac
         """
         return _misc_.StandardPaths_GetDocumentsDir(*args, **kwargs)

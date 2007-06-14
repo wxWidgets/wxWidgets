@@ -16,7 +16,6 @@ GROUP_WINDOWS, GROUP_MENUS, GROUP_SIZERS, GROUP_CONTROLS = range(GROUPNUM)
 
 # States depending on current selection and Control/Shift keys
 STATE_ROOT, STATE_MENUBAR, STATE_TOOLBAR, STATE_MENU, STATE_STDDLGBTN, STATE_ELSE = range(6)
-
 # Left toolbar for GUI elements
 class Tools(wx.Panel):
     TOOL_SIZE = (30, 30)
@@ -57,7 +56,6 @@ class Tools(wx.Panel):
              (ID_NEW.STATIC_TEXT, images.getToolStaticTextBitmap()),
              (ID_NEW.STATIC_BITMAP, images.getToolStaticBitmapBitmap()),
              (ID_NEW.STATIC_LINE, images.getToolStaticLineBitmap()),
-             
              (ID_NEW.BUTTON, images.getToolButtonBitmap()),
              (ID_NEW.BITMAP_BUTTON, images.getToolBitmapButtonBitmap()),
              (ID_NEW.STATIC_BOX, images.getToolStaticBoxBitmap()),
@@ -87,47 +85,65 @@ class Tools(wx.Panel):
 
              (ID_NEW.UNKNOWN, images.getToolUnknownBitmap())]
             ]
+        self.boxes = {}
         for grp in groups:
             self.AddGroup(grp[0])
             for b in grp[1:]:
                 self.AddButton(b[0], b[1], g.pullDownMenu.createMap[b[0]])
-        self.SetAutoLayout(True)
         self.SetSizerAndFit(self.sizer)
         # Allow to be resized in vertical direction only
         self.SetSizeHints(self.GetSize()[0], -1)
         # Events
         wx.EVT_COMMAND_RANGE(self, ID_NEW.PANEL, ID_NEW.LAST,
-                          wx.wxEVT_COMMAND_BUTTON_CLICKED, g.frame.OnCreate)
+                             wx.wxEVT_COMMAND_BUTTON_CLICKED, g.frame.OnCreate)
         wx.EVT_KEY_DOWN(self, self.OnKeyDown)
         wx.EVT_KEY_UP(self, self.OnKeyUp)
+        # wxMSW does not generate click events for StaticBox
+        if wx.Platform == '__WXMSW__':
+            self.Bind(wx.EVT_LEFT_DOWN, self.OnClickBox)
+        self.drag = None
 
     def AddButton(self, id, image, text):
         from wx.lib import buttons
         button = buttons.GenBitmapButton(self, id, image, size=self.TOOL_SIZE,
-                                           style=wx.NO_BORDER|wx.WANTS_CHARS)
+                                         style=wx.NO_BORDER|wx.WANTS_CHARS)
         button.SetBezelWidth(0)
         wx.EVT_KEY_DOWN(button, self.OnKeyDown)
         wx.EVT_KEY_UP(button, self.OnKeyUp)
+        wx.EVT_LEFT_DOWN(button, self.OnLeftDownOnButton)
+        wx.EVT_MOTION(button, self.OnMotionOnButton)
         button.SetToolTipString(text)
         self.curSizer.Add(button)
         self.groups[-1][1][id] = button
 
     def AddGroup(self, name):
         # Each group is inside box
-        box = wx.StaticBox(self, -1, name, style=wx.WANTS_CHARS)
-        box.SetFont(g.smallerFont())
+        id = wx.NewId()
+        box = wx.StaticBox(self, id, '[+] '+name, style=wx.WANTS_CHARS)
+        box.SetForegroundColour(wx.Colour(64, 64, 64))
+#        box.SetFont(g.smallerFont())
+        box.show = True
+        box.name = name
+        box.gnum = len(self.groups)
+        box.Bind(wx.EVT_LEFT_DOWN, self.OnClickBox)
         boxSizer = wx.StaticBoxSizer(box, wx.VERTICAL)
-        boxSizer.Add((0, 4))
-        self.curSizer = wx.GridSizer(0, 3)
+        boxSizer.Add((0, 0))
+        self.boxes[id] = box
+        self.curSizer = wx.GridSizer(0, 3, 3, 3)
         boxSizer.Add(self.curSizer)
-        self.sizer.Add(boxSizer, 0, wx.TOP | wx.LEFT | wx.RIGHT, 4)
+        self.sizer.Add(boxSizer, 0, wx.TOP | wx.LEFT | wx.RIGHT | wx.EXPAND, 4)
         self.groups.append((box,{}))
 
     # Enable/disable group
     def EnableGroup(self, gnum, enable = True):
         grp = self.groups[gnum]
-        grp[0].Enable(enable)
         for b in grp[1].values(): b.Enable(enable)
+
+    # Show/hide group
+    def ShowGroup(self, gnum, show = True):
+        grp = self.groups[gnum]
+        grp[0].show = show
+        for b in grp[1].values(): b.Show(show)
 
     # Enable/disable group item
     def EnableGroupItem(self, gnum, id, enable = True):
@@ -139,6 +155,65 @@ class Tools(wx.Panel):
         grp = self.groups[gnum]
         for id in ids:
             grp[1][id].Enable(enable)
+
+    def OnClickBox(self, evt):
+        if wx.Platform == '__WXMSW__':
+            box = None
+            for id,b in self.boxes.items():
+                # How to detect a click on a label?
+                if b.GetRect().Inside(evt.GetPosition()):
+                    box = b
+                    break
+            if not box: 
+                evt.Skip()
+                return
+        else:
+            box = self.boxes[evt.GetId()]
+        # Collapse/restore static box, change label
+        self.ShowGroup(box.gnum, not box.show)
+        if box.show: box.SetLabel('[+] ' + box.name)
+        else: box.SetLabel('[-] ' + box.name)
+        self.Layout()
+        self.Refresh()
+        #for b in self.boxes.items():
+
+    # DaD
+    def OnLeftDownOnButton(self, evt):
+        self.posDown = evt.GetPosition()
+        self.idDown = evt.GetId()
+        self.btnDown = evt.GetEventObject()
+        evt.Skip()
+
+    def OnMotionOnButton(self, evt):
+        # Detect dragging
+        if evt.Dragging() and evt.LeftIsDown():
+            d = evt.GetPosition() - self.posDown
+            if max(abs(d[0]), abs(d[1])) >= 5:
+                if self.btnDown.HasCapture(): 
+                    # Generate up event to release mouse
+                    evt = wx.MouseEvent(wx.EVT_LEFT_UP.typeId)
+                    evt.SetId(self.idDown)
+                    # Set flag to prevent normal button operation this time
+                    self.drag = True
+                    self.btnDown.ProcessEvent(evt)
+                self.StartDrag()
+        evt.Skip()
+
+    def StartDrag(self):
+        do = MyDataObject()
+        do.SetData(str(self.idDown))
+        bm = self.btnDown.GetBitmapLabel()
+        # wxGTK requires wxIcon cursor, wxWIN and wxMAC require wxCursor
+        if wx.Platform == '__WXGTK__':
+            icon = wx.EmptyIcon()
+            icon.CopyFromBitmap(bm)
+            dragSource = wx.DropSource(self, icon)
+        else:
+            curs = wx.CursorFromImage(wx.ImageFromBitmap(bm))
+            dragSource = wx.DropSource(self, curs)
+        dragSource.SetData(do)
+        g.frame.SetStatusText('Release the mouse button over the test window')
+        dragSource.DoDragDrop()
 
     # Process key events
     def OnKeyDown(self, evt):
@@ -289,3 +364,4 @@ class Tools(wx.Panel):
                 self.EnableGroupItem(GROUP_MENUS, ID_NEW.MENU_BAR)
         # Save state
         self.state = state
+        self.Refresh()

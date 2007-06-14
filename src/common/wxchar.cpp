@@ -1199,7 +1199,11 @@ int WXDLLEXPORT wxVsnprintf_(wxChar *buf, size_t lenMax,
         return lenMax+1;     // not enough space in the output buffer !
     }
 
-    wxASSERT(lenCur == wxStrlen(buf));
+    // Don't do:
+    //      wxASSERT(lenCur == wxStrlen(buf));
+    // in fact if we embedded NULLs in the output buffer (using %c with a '\0')
+    // such check would fail
+
     return lenCur;
 }
 
@@ -2136,13 +2140,14 @@ wxChar * WXDLLEXPORT wxGetenv(const wxChar *name)
     return getenv(name);
 #endif
 }
+#endif // wxNEED_WX_STDLIB_H
 
+#ifdef wxNEED_WXSYSTEM
 int WXDLLEXPORT wxSystem(const wxChar *psz)
 {
     return system(wxConvLibc.cWX2MB(psz));
 }
-
-#endif // wxNEED_WX_STDLIB_H
+#endif // wxNEED_WXSYSTEM
 
 #ifdef wxNEED_WX_TIME_H
 WXDLLEXPORT size_t

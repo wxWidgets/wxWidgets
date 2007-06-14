@@ -1920,8 +1920,8 @@ class DocManager(wx.EvtHandler):
                 newDoc.SetDocumentName(temp.GetDocumentName())
                 newDoc.SetDocumentTemplate(temp)
                 if not newDoc.OnOpenDocument(path):
-                    newDoc.DeleteAllViews()  # Implicitly deleted by DeleteAllViews
                     frame = newDoc.GetFirstView().GetFrame()
+                    newDoc.DeleteAllViews()  # Implicitly deleted by DeleteAllViews
                     if frame:
                         frame.Destroy() # DeleteAllViews doesn't get rid of the frame, so we'll explicitly destroy it.
                     return None

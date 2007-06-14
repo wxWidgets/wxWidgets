@@ -448,8 +448,11 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
     if (encName.empty())
         encName = _T("UTF-8");
 #endif // wxUSE_INTL
+
+#if wxUSE_WCHAR_T
     static wxConvBrokenFileNames fileconv(encName);
     wxConvFileName = &fileconv;
+#endif // wxUSE_WCHAR_T
 
 #if wxUSE_UNICODE
     // gtk_init() wants UTF-8, not wchar_t, so convert
@@ -478,7 +481,7 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         {
             while ( strcmp(wxConvUTF8.cWX2MB(argv[i]), argvGTK[i]) != 0 )
             {
-                memmove(argv + i, argv + i + 1, argc - i);
+                memmove(argv + i, argv + i + 1, (argc - i)*sizeof(*argv));
             }
         }
 
@@ -503,6 +506,10 @@ bool wxApp::Initialize(int& argc, wxChar **argv)
         wxLogError(wxT("Unable to initialize gtk, is DISPLAY set properly?"));
         return false;
     }
+
+    // update internal arg[cv] as GTK+ may have removed processed options:
+    this->argc = argc;
+    this->argv = argv;
 
     // we can not enter threads before gtk_init is done
     gdk_threads_enter();

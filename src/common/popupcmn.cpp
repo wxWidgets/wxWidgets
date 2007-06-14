@@ -301,7 +301,7 @@ bool wxPopupTransientWindow::Show( bool show )
     }
 #endif
 
-#ifdef __WXMSW__
+#if defined( __WXMSW__ ) || defined( __WMAC__ )
     if (!show && m_child && m_child->HasCapture())
     {
         m_child->ReleaseMouse();
@@ -343,7 +343,7 @@ bool wxPopupTransientWindow::Show( bool show )
     }
 #endif
 
-#ifdef __WXMSW__
+#if defined( __WXMSW__ ) || defined( __WMAC__ )
     if (show && m_child)
     {
         // Assume that the mouse is outside the popup to begin with

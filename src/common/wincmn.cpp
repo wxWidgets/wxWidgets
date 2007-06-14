@@ -324,10 +324,27 @@ wxWindowBase::~wxWindowBase()
         wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent((wxWindow*)this),
                                               wxTopLevelWindow);
 
-        if ( tlw && tlw->GetDefaultItem() == this )
-            tlw->SetDefaultItem(NULL);
-        if ( tlw && tlw->GetTmpDefaultItem() == this )
-            tlw->SetTmpDefaultItem(NULL);
+        if ( tlw )
+        {
+            wxWindow* tmpDefaultItem = tlw->GetTmpDefaultItem();
+            if ( tmpDefaultItem == this )
+                tlw->SetTmpDefaultItem(NULL);
+            else if ( tmpDefaultItem )
+            {
+                // A temporary default item masks the real default item, so
+                // temporarily unset the temporary default item so we can access the
+                // real default item.
+                tlw->SetTmpDefaultItem(NULL);
+
+                if ( tlw->GetDefaultItem() == this )
+                    tlw->SetDefaultItem(NULL);
+
+                // Set the temporary default item back.
+                tlw->SetTmpDefaultItem(tmpDefaultItem);
+            }
+            else if ( tlw->GetDefaultItem() == this )
+                tlw->SetDefaultItem(NULL);
+        }
     }
 
     // reset the dangling pointer our parent window may keep to us
@@ -497,7 +514,18 @@ wxSize wxWindowBase::DoGetBestSize() const
 
     if ( m_windowSizer )
     {
-        best = GetWindowSizeForVirtualSize(m_windowSizer->GetMinSize());
+        // Adjust to window size, since the return value of GetWindowSizeForVirtualSize is
+        // expressed in window and not client size
+        wxSize minSize = m_windowSizer->GetMinSize();
+        wxSize size(GetSize());
+        wxSize clientSize(GetClientSize());
+
+        wxSize minWindowSize(minSize.x + size.x - clientSize.x,
+                             minSize.y + size.y - clientSize.y);
+
+        best = GetWindowSizeForVirtualSize(minWindowSize);
+
+        return best;
     }
 #if wxUSE_CONSTRAINTS
     else if ( m_constraints )

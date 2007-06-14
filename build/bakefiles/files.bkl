@@ -146,6 +146,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     src/mac/corefoundation/utilsexc_base.cpp
 </set>
 <set var="BASE_COREFOUNDATION_HDR" hints="files">
+    wx/mac/corefoundation/cfdataref.h
+    wx/mac/corefoundation/cfref.h
     wx/mac/corefoundation/cfstring.h
     wx/mac/corefoundation/hid.h
     wx/mac/corefoundation/stdpaths.h
@@ -2073,6 +2075,8 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     <!-- Native color/font dialogs -->
     src/mac/carbon/fontdlgosx.mm
     src/mac/carbon/colordlgosx.mm
+    <!-- cocoa bridge -->
+    src/mac/carbon/utilscocoa.mm
 </if>
 </set>
 
@@ -2518,6 +2522,7 @@ IMPORTANT: please read docs/tech/tn0016.txt before modifying this file!
     wx/cocoa/textctrl.h
     wx/cocoa/timer.h
     wx/cocoa/toolbar.h
+    wx/cocoa/tooltip.h
     wx/cocoa/toplevel.h
     wx/cocoa/window.h
     <!-- Generic implementations used by wxCocoa: -->

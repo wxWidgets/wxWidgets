@@ -209,21 +209,23 @@ wxMetafileDC::~wxMetafileDC()
     m_hDC = 0;
 }
 
-void wxMetafileDC::GetTextExtent(const wxString& string, long *x, long *y,
-                                 long *descent, long *externalLeading, wxFont *theFont, bool WXUNUSED(use16bit)) const
+void wxMetafileDC::DoGetTextExtent(const wxString& string,
+                                   wxCoord *x, wxCoord *y,
+                                   wxCoord *descent,
+                                   wxCoord *externalLeading,
+                                   const wxFont *theFont) const
 {
-    wxFont *fontToUse = theFont;
+    const wxFont *fontToUse = theFont;
     if (!fontToUse)
-        fontToUse = (wxFont*) &m_font;
+        fontToUse = &m_font;
 
-    HDC dc = GetDC(NULL);
+    ScreenHDC dc;
+    SelectInHDC selFont(dc, GetHfontOf(*fontToUse));
 
     SIZE sizeRect;
     TEXTMETRIC tm;
-    ::GetTextExtentPoint32(dc, WXSTRINGCAST string, wxStrlen(WXSTRINGCAST string), &sizeRect);
-    GetTextMetrics(dc, &tm);
-
-    ReleaseDC(NULL, dc);
+    ::GetTextExtentPoint32(dc, string, string.length(), &sizeRect);
+    ::GetTextMetrics(dc, &tm);
 
     if ( x )
         *x = sizeRect.cx;
@@ -233,6 +235,22 @@ void wxMetafileDC::GetTextExtent(const wxString& string, long *x, long *y,
         *descent = tm.tmDescent;
     if ( externalLeading )
         *externalLeading = tm.tmExternalLeading;
+}
+
+void wxMetafileDC::GetTextExtent(const wxString& string, long *x, long *y,
+                                 long *descent, long *externalLeading, wxFont *theFont, bool WXUNUSED(use16bit)) const
+{
+    wxCoord xc, yc, dc, elc;
+    DoGetTextExtent(string, &xc, &yc, &dc, &elc, theFont);
+
+    if ( x )
+        *x = xc;
+    if ( y )
+        *y = yc;
+    if ( descent )
+        *descent = dc;
+    if ( externalLeading )
+        *externalLeading = elc;
 }
 
 void wxMetafileDC::DoGetSize(int *width, int *height) const

@@ -261,7 +261,7 @@ wxProgressDialog::wxProgressDialog(wxString const &title,
         sizeDlg.y += 2*LAYOUT_MARGIN;
 
         // try to make the dialog not square but rectangular of reasonable width
-        sizeDlg.x = (wxCoord)wxMax(widthText, 4*sizeDlg.y/3);
+        sizeDlg.x = (wxCoord)wxMax(widthText*2, 4*sizeDlg.y/3);
         sizeDlg.x *= 3;
         sizeDlg.x /= 2;
         SetClientSize(sizeDlg);

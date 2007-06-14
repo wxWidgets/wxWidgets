@@ -138,21 +138,25 @@ static void gtk_tree_entry_init (GTypeInstance* instance, gpointer g_class)
 static void gtk_tree_entry_string_transform_func(const GValue *src_value,
                                                  GValue *dest_value)
 {
+    GtkTreeEntry *entry;
+
     /* Make sure src is a treeentry and dest can hold a string */
     g_assert(GTK_IS_TREE_ENTRY(src_value->data[0].v_pointer));
     g_assert(G_VALUE_HOLDS(dest_value, G_TYPE_STRING));
 
     /* TODO: Use strdup here or just pass it? */
-    GtkTreeEntry* entry = GTK_TREE_ENTRY(src_value->data[0].v_pointer);
+    entry = GTK_TREE_ENTRY(src_value->data[0].v_pointer);
 
     g_value_set_string(dest_value, entry->label);
 }
 
 static void gtk_tree_entry_dispose(GObject* obj)
 {
+    GtkTreeEntry *entry;
+
     g_assert(GTK_IS_TREE_ENTRY(obj));
 
-    GtkTreeEntry* entry = GTK_TREE_ENTRY(obj);
+    entry = GTK_TREE_ENTRY(obj);
 
     /* free label if it exists */
     if(entry->label)

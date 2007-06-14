@@ -115,14 +115,20 @@ int wxDialog::ShowModal()
     // forbidden
     if ( !GetParent() && !(GetWindowStyleFlag() & wxDIALOG_NO_PARENT) )
     {
-        wxWindow *parent = wxTheApp->GetTopWindow();
+        extern WXDLLIMPEXP_DATA_CORE(wxList) wxPendingDelete;
+
+        wxWindow * const parent = wxTheApp->GetTopWindow();
+
         if ( parent &&
                 parent != this &&
-                    !parent->IsBeingDeleted() &&
-                        !(parent->GetExtraStyle() & wxWS_EX_TRANSIENT) )
+                    parent->IsShownOnScreen() &&
+                        !parent->IsBeingDeleted() &&
+                            !wxPendingDelete.Member(parent) &&
+                                !(parent->GetExtraStyle() & wxWS_EX_TRANSIENT) )
         {
             m_parent = parent;
-            gtk_window_set_transient_for( GTK_WINDOW(m_widget), GTK_WINDOW(parent->m_widget) );
+            gtk_window_set_transient_for( GTK_WINDOW(m_widget),
+                                          GTK_WINDOW(parent->m_widget) );
         }
     }
 

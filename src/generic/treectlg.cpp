@@ -1445,6 +1445,7 @@ wxTreeItemId wxGenericTreeCtrl::DoInsertItem(const wxTreeItemId& parentId,
     parent->Insert( item, previous == (size_t)-1 ? parent->GetChildren().size()
                                                  : previous );
 
+    InvalidateBestSize();
     return item;
 }
 
@@ -1479,6 +1480,7 @@ wxTreeItemId wxGenericTreeCtrl::AddRoot(const wxString& text,
         m_current->SetHilight( true );
     }
 
+    InvalidateBestSize();
     return m_anchor;
 }
 
@@ -1539,6 +1541,7 @@ void wxGenericTreeCtrl::DeleteChildren(const wxTreeItemId& itemId)
     wxGenericTreeItem *item = (wxGenericTreeItem*) itemId.m_pItem;
     ChildrenClosing(item);
     item->DeleteChildren(this);
+    InvalidateBestSize();
 }
 
 void wxGenericTreeCtrl::Delete(const wxTreeItemId& itemId)
@@ -1603,6 +1606,8 @@ void wxGenericTreeCtrl::Delete(const wxTreeItemId& itemId)
         m_select_me = NULL;
 
     delete item;
+
+    InvalidateBestSize();        
 }
 
 void wxGenericTreeCtrl::DeleteAllItems()
@@ -2218,8 +2223,7 @@ void wxGenericTreeCtrl::PaintItem(wxGenericTreeItem *item, wxDC& dc)
 
     if ( HasFlag(wxTR_FULL_ROW_HIGHLIGHT) )
     {
-        int x, w, h;
-        x=0;
+        int x = 0, w = 0, h = 0;
         GetVirtualSize(&w, &h);
         wxRect rect( x, item->GetY()+offset, w, total_h-offset);
 #if !defined(__WXGTK20__) && !defined(__WXMAC__)

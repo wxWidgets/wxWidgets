@@ -954,9 +954,11 @@ void wxComboBox::SetValue( const wxString& value )
 #endif
         entry = GTK_ENTRY( GTK_COMBO(m_widget)->entry );
 
+    DisableEvents();
     wxString tmp;
     if (!value.IsNull()) tmp = value;
     gtk_entry_set_text( entry, wxGTK_CONV( tmp ) );
+    EnableEvents();
 
     InvalidateBestSize();
 }

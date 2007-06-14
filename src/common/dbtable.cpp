@@ -59,7 +59,10 @@ ULONG lastTableID = 0;
 
 
 #ifdef __WXDEBUG__
+    #include "wx/thread.h"
+
     wxList TablesInUse;
+    wxCriticalSection csTablesInUse;
 #endif
 
 
@@ -195,7 +198,10 @@ bool wxDbTable::initialize(wxDb *pwxDb, const wxString &tblName, const UWORD num
     tableInUse->tableName = tblName;
     tableInUse->tableID   = tableID;
     tableInUse->pDb       = pDb;
-    TablesInUse.Append(tableInUse);
+    {
+        wxCriticalSectionLocker lock(csTablesInUse);
+        TablesInUse.Append(tableInUse);
+    }
 #endif
 
     pDb->WriteSqlLog(s);
@@ -321,17 +327,20 @@ void wxDbTable::cleanup()
         bool found = false;
 
         wxList::compatibility_iterator pNode;
-        pNode = TablesInUse.GetFirst();
-        while (pNode && !found)
         {
-            if (((wxTablesInUse *)pNode->GetData())->tableID == tableID)
+            wxCriticalSectionLocker lock(csTablesInUse);
+            pNode = TablesInUse.GetFirst();
+            while (!found && pNode)
             {
-                found = true;
-                delete (wxTablesInUse *)pNode->GetData();
-                TablesInUse.Erase(pNode);
+                if (((wxTablesInUse *)pNode->GetData())->tableID == tableID)
+                {
+                    found = true;
+                    delete (wxTablesInUse *)pNode->GetData();
+                    TablesInUse.Erase(pNode);
+                }
+                else
+                    pNode = pNode->GetNext();
             }
-            else
-                pNode = pNode->GetNext();
         }
         if (!found)
         {

@@ -290,8 +290,6 @@ static inline wxMBConv& GetConv(const wxDataFormat& format)
 size_t wxTextDataObject::GetDataSize(const wxDataFormat& format) const
 {
     size_t len = GetConv(format).WC2MB( NULL, GetText().c_str(), 0 );
-    len += (format == wxDF_UNICODETEXT ? 2 : 1);
-
     return len;
 }
 
@@ -301,11 +299,7 @@ bool wxTextDataObject::GetDataHere(const wxDataFormat& format, void *buf) const
         return false;
 
     wxCharBuffer buffer = GetConv(format).cWX2MB( GetText().c_str() );
-
     size_t len = GetConv(format).WC2MB( NULL, GetText().c_str(), 0 );
-    len += (format == wxDF_UNICODETEXT ? 2 : 1);
-
-    // trailing (uni)char 0
     memcpy( (char*)buf, (const char*)buffer, len );
 
     return true;

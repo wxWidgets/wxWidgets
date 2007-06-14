@@ -116,7 +116,7 @@ void wxVListBoxComboPopup::PaintComboControl( wxDC& dc, const wxRect& rect )
 
         if ( m_value >= 0 )
         {
-            OnDrawItem(dc,rect,m_value,wxODCB_PAINTING_CONTROL);
+            OnDrawItem(dc,rect,m_value,flags);
             return;
         }
     }
@@ -129,13 +129,20 @@ void wxVListBoxComboPopup::OnDrawItem(wxDC& dc, const wxRect& rect, size_t n) co
     // TODO: Maybe this code could be moved to wxVListBox::OnPaint?
     dc.SetFont(m_useFont);
 
+    int flags = 0;
+
     // Set correct text colour for selected items
     if ( wxVListBox::GetSelection() == (int) n )
+    {
         dc.SetTextForeground( wxSystemSettings::GetColour(wxSYS_COLOUR_HIGHLIGHTTEXT) );
+        flags |= wxODCB_PAINTING_SELECTED;
+    }
     else
+    {
         dc.SetTextForeground( wxSystemSettings::GetColour(wxSYS_COLOUR_WINDOWTEXT) );
+    }
 
-    OnDrawItem(dc,rect,(int)n,0);
+    OnDrawItem(dc,rect,(int)n,flags);
 }
 
 wxCoord wxVListBoxComboPopup::OnMeasureItem(size_t n) const

@@ -433,16 +433,15 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                     !pItem->GetBackgroundColour().Ok() &&
                         !pItem->GetFont().Ok() )
         {
-            // try to use InsertMenuItem() as it's guaranteed to look correct
+            // try to use InsertMenuItem() as it's guaranteed to look correct      
             // while our owner-drawn code is not
 
             // first compile-time check
+            // MIIM_BITMAP only works under Win98/2000+
 #if defined(MIIM_BITMAP) && (_WIN32_WINNT >= 0x0500)
-            WinStruct<MENUITEMINFO> mii;
-
-            // now run-time one: MIIM_BITMAP only works under WinME/2000+
+            WinStruct<wxMENUITEMINFO_> mii;
             if ( wxGetWinVersion() >= wxWinVersion_98 )
-            {
+            { 
                 mii.fMask = MIIM_STRING | MIIM_DATA | MIIM_BITMAP;
                 if ( pItem->IsCheckable() )
                 {
@@ -480,7 +479,8 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                 }
                 mii.hbmpItem = HBMMENU_CALLBACK;
 
-                ok = ::InsertMenuItem(GetHmenu(), pos, TRUE /* by pos */, &mii);
+                ok = ::InsertMenuItem(GetHmenu(), pos, TRUE /* by pos */,
+                                      (MENUITEMINFO*)&mii);
                 if ( !ok )
                 {
                     wxLogLastError(wxT("InsertMenuItem()"));
@@ -512,7 +512,7 @@ bool wxMenu::DoInsertOrAppend(wxMenuItem *pItem, size_t pos)
                     pItem->ResetOwnerDrawn();
                 }
             }
-#endif // MIIM_BITMAP
+#endif // defined(MIIM_BITMAP) && (_WIN32_WINNT >= 0x0500)
         }
 
         if ( !ok )
@@ -777,10 +777,15 @@ bool wxMenu::MSWCommand(WXUINT WXUNUSED(param), WXWORD id)
     // ignore commands from the menu title
     if ( id != (WXWORD)idMenuTitle )
     {
-        // get the checked status of the command: notice that menuState is the
-        // old state of the menu, so the test for MF_CHECKED must be inverted
+        // update the check item when it's clicked
+        wxMenuItem * const item = FindItem(id);
+        if ( item && item->IsCheckable() )
+            item->Toggle();
+
+        // get the status of the menu item: note that it has been just changed
+        // by Toggle() above so here we already get the new state of the item
         UINT menuState = ::GetMenuState(GetHmenu(), id, MF_BYCOMMAND);
-        SendEvent(id, !(menuState & MF_CHECKED));
+        SendEvent(id, menuState & MF_CHECKED);
     }
 
     return true;

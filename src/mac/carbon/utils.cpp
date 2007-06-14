@@ -863,10 +863,14 @@ void wxMacControl::Init()
 
 void wxMacControl::Dispose()
 {
+    wxASSERT_MSG( m_controlRef != NULL , wxT("Control Handle already NULL, Dispose called twice ?") );
     wxASSERT_MSG( IsValidControlHandle(m_controlRef) , wxT("Invalid Control Handle (maybe already released) in Dispose") );
 
     // we cannot check the ref count here anymore, as autorelease objects might delete their refs later
-    CFRelease(m_controlRef);
+    // we can have situations when being embedded, where the control gets deleted behind our back, so only
+    // CFRelease if we are safe
+    if ( IsValidControlHandle(m_controlRef) )
+        CFRelease(m_controlRef);
     m_controlRef = NULL;
 }
 
@@ -998,6 +1002,7 @@ void wxMacControl::SuperChangedPosition()
 void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , long windowStyle )
 {
     m_font = font;
+#ifndef __LP64__
     ControlFontStyleRec fontStyle;
     if ( font.MacGetThemeFontID() != kThemeCurrentPortFont )
     {
@@ -1048,6 +1053,7 @@ void wxMacControl::SetFont( const wxFont & font , const wxColour& foreground , l
     }
 
     ::SetControlFontStyle( m_controlRef , &fontStyle );
+#endif
 }
 
 void wxMacControl::SetBackground( const wxBrush &WXUNUSED(brush) )

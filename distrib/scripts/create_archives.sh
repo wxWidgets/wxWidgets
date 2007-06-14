@@ -60,15 +60,15 @@ getfilelist(){
   fi
 
   if [ $port = "mgl" ] || [ $port = "all" ]; then
-    filelist="$filelist mgl.rsp"
+    filelist="$filelist univ.rsp mgl.rsp"
   fi
   
   if [ $port = "dfb" ] || [ $port = "all" ]; then
-    filelist="$filelist dfb.rsp" 
+    filelist="$filelist univ.rsp dfb.rsp" 
   fi
   
   if [ $port = "gtk" ] || [ $port = "all" ]; then
-    filelist="$filelist gtk.rsp"
+    filelist="$filelist gtk.rsp gtk1.rsp"
   fi
 
   if [ $port = "motif" ] || [ $port = "all" ]; then

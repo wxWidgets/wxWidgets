@@ -18,6 +18,49 @@
 #include "gdk/gdk.h"
 #include "gtk/gtk.h"
 
+
+// ============================================================================
+// implementation
+// ============================================================================
+
+// constants taken from GTK sources
+#define LABEL_PAD 1
+#define LABEL_SIDE_PAD 2
+
+//-----------------------------------------------------------------------------
+// "gtk_frame_size_allocate" signal
+//-----------------------------------------------------------------------------
+
+extern "C" {
+
+static void
+gtk_frame_size_allocate (GtkWidget     *widget,
+                         GtkAllocation *allocation,
+                         wxStaticBox *p)
+{
+    GtkFrame *frame = GTK_FRAME (widget);
+
+    // this handler gets called _after_ the GTK+'s own signal handler; thus we
+    // need to fix only the width of the GtkLabel
+    // (everything else has already been handled by the GTK+ signal handler).
+
+    if (frame->label_widget && GTK_WIDGET_VISIBLE (frame->label_widget))
+    {
+        GtkAllocation ca = frame->label_widget->allocation;
+
+        // we want the GtkLabel to not exceed maxWidth:
+        int maxWidth = allocation->width - 2*LABEL_SIDE_PAD - 2*LABEL_PAD;
+        maxWidth = wxMax(2, maxWidth);      // maxWidth must always be positive!
+
+        // truncate the label to the GtkFrame width...
+        ca.width = wxMin(ca.width, maxWidth);
+        gtk_widget_size_allocate(frame->label_widget, &ca);
+    }
+}
+
+}
+
+
 //-----------------------------------------------------------------------------
 // wxStaticBox
 //-----------------------------------------------------------------------------
@@ -74,6 +117,11 @@ bool wxStaticBox::Create( wxWindow *parent,
 
     if ( style & (wxALIGN_RIGHT | wxALIGN_CENTER) ) // left alignment is default
         gtk_frame_set_label_align(GTK_FRAME( m_widget ), xalign, 0.5);
+
+    // in order to clip the label widget, we must connect to the size allocate
+    // signal of this GtkFrame after the default GTK+'s allocate size function
+    g_signal_connect_after (m_widget, "size_allocate",
+                            G_CALLBACK (gtk_frame_size_allocate), this);
 
     return TRUE;
 }

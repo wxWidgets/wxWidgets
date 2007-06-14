@@ -3648,7 +3648,12 @@ bool wxGridStringTable::DeleteCols( size_t pos, size_t numCols )
 
     if ( !m_colLabels.IsEmpty() )
     {
-        m_colLabels.RemoveAt( colID, numCols );
+        // m_colLabels stores just as many elements as it needs, e.g. if only
+        // the label of the first column had been set it would have only one
+        // element and not numCols, so account for it
+        int nToRm = m_colLabels.size() - colID;
+        if ( nToRm > 0 )
+            m_colLabels.RemoveAt( colID, nToRm );
     }
 
     for ( row = 0; row < curNumRows; row++ )
@@ -4357,24 +4362,33 @@ wxGrid::wxGridSelectionModes wxGrid::GetSelectionMode() const
 bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership,
                        wxGrid::wxGridSelectionModes selmode )
 {
+    bool checkSelection = false;
     if ( m_created )
     {
         // stop all processing
         m_created = false;
 
-        if (m_ownTable)
+        if (m_table) 
         {
-            wxGridTableBase *t = m_table;
+            m_table->SetView(0);
+            if( m_ownTable )
+                delete m_table;
             m_table = NULL;
-            delete t;
         }
 
         delete m_selection;
-
-        m_table = NULL;
         m_selection = NULL;
+
+        m_ownTable = false;
         m_numRows = 0;
         m_numCols = 0;
+        checkSelection = true;
+
+        // kill row and column size arrays
+        m_colWidths.Empty();
+        m_colRights.Empty();
+        m_rowHeights.Empty();
+        m_rowBottoms.Empty();
     }
 
     if (table)
@@ -4386,7 +4400,28 @@ bool wxGrid::SetTable( wxGridTableBase *table, bool takeOwnership,
         m_table->SetView( this );
         m_ownTable = takeOwnership;
         m_selection = new wxGridSelection( this, selmode );
-
+        if (checkSelection)
+        {
+            // If the newly set table is smaller than the
+            // original one current cell and selection regions
+            // might be invalid,
+            m_selectingKeyboard = wxGridNoCellCoords;
+            m_currentCellCoords = 
+              wxGridCellCoords(wxMin(m_numRows, m_currentCellCoords.GetRow()),
+                               wxMin(m_numCols, m_currentCellCoords.GetCol()));
+            if (m_selectingTopLeft.GetRow() >= m_numRows ||
+                m_selectingTopLeft.GetCol() >= m_numCols)
+            {
+                m_selectingTopLeft = wxGridNoCellCoords;
+                m_selectingBottomRight = wxGridNoCellCoords;
+            }
+            else
+                m_selectingBottomRight =
+                  wxGridCellCoords(wxMin(m_numRows,
+                                         m_selectingBottomRight.GetRow()),
+                                   wxMin(m_numCols,
+                                         m_selectingBottomRight.GetCol()));
+        }
         CalcDimensions();
 
         m_created = true;
@@ -5891,13 +5926,6 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                 SaveEditControlValue();
             }
 
-            // Have we captured the mouse yet?
-            if (! m_winCapture)
-            {
-                m_winCapture = m_gridWin;
-                m_winCapture->CaptureMouse();
-            }
-
             if ( coords != wxGridNoCellCoords )
             {
                 if ( event.CmdDown() )
@@ -5917,6 +5945,7 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                                    coords.GetRow(),
                                    coords.GetCol(),
                                    event );
+                        return;
                     }
                 }
                 else
@@ -5938,6 +5967,14 @@ void wxGrid::ProcessGridCellMouseEvent( wxMouseEvent& event )
                     // scrolling is way to fast, at least on MSW - also on GTK.
                 }
             }
+            // Have we captured the mouse yet?
+            if (! m_winCapture)
+            {
+                m_winCapture = m_gridWin;
+                m_winCapture->CaptureMouse();
+            }
+
+            
         }
         else if ( m_cursorMode == WXGRID_CURSOR_RESIZE_ROW )
         {
@@ -6866,14 +6903,10 @@ void wxGrid::Refresh(bool eraseb, const wxRect* rect)
     }
 }
 
-void wxGrid::OnSize( wxSizeEvent& event )
+void wxGrid::OnSize( wxSizeEvent& WXUNUSED(event) )
 {
-    // position the child windows
-    CalcWindowSizes();
-
-    // don't call CalcDimensions() from here, the base class handles the size
-    // changes itself
-    event.Skip();
+    // update our children window positions and scrollbars
+    CalcDimensions();
 }
 
 void wxGrid::OnKeyDown( wxKeyEvent& event )
@@ -9578,7 +9611,7 @@ void wxGrid::SetCellHighlightPenWidth(int width)
         // make any visible change if the the thickness is getting smaller.
         int row = m_currentCellCoords.GetRow();
         int col = m_currentCellCoords.GetCol();
-        if ( GetColWidth(col) <= 0 || GetRowHeight(row) <= 0 )
+        if ( row == -1 || col == -1 || GetColWidth(col) <= 0 || GetRowHeight(row) <= 0 )
             return;
 
         wxRect rect = CellToRect(row, col);

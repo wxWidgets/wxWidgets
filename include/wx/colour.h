@@ -84,9 +84,9 @@ public:
     {
         // we don't need to know sizeof(long) here because we assume that the three
         // least significant bytes contain the R, G and B values
-        Set((ChannelType)colRGB,
-            (ChannelType)(colRGB >> 8),
-            (ChannelType)(colRGB >> 16));
+        Set((ChannelType)(0xFF & colRGB),
+            (ChannelType)(0xFF & (colRGB >> 8)),
+            (ChannelType)(0xFF & (colRGB >> 16)));
     }
 
 

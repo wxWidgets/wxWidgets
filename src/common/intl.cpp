@@ -18,12 +18,6 @@
 // headers
 // ----------------------------------------------------------------------------
 
-#if defined(__BORLANDC__) && !defined(__WXDEBUG__)
-    // There's a bug in Borland's compiler that breaks wxLocale with -O2,
-    // so make sure that flag is not used for this file:
-    #pragma option -O1
-#endif
-
 #ifdef __EMX__
 // The following define is needed by Innotek's libc to
 // make the definition of struct localeconv available.
@@ -1310,7 +1304,7 @@ void wxMsgCatalogFile::FillHash(wxMessagesHash& hash,
                             : new wxCSConv(msgIdCharset);
 
 #elif wxUSE_FONTMAP
-    wxASSERT_MSG( msgIdCharset == NULL,
+    wxASSERT_MSG( msgIdCharset.empty(),
                   _T("non-ASCII msgid languages only supported if wxUSE_WCHAR_T=1") );
 
     wxEncodingConverter converter;
@@ -1436,6 +1430,7 @@ bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName,
 
     file.FillHash(m_messages, msgIdCharset, bConvertEncoding);
 
+#if wxUSE_WCHAR_T
     // we should use a conversion compatible with the message catalog encoding
     // in the GUI if we don't convert the strings to the current conversion but
     // as the encoding is global, only change it once, otherwise we could get
@@ -1451,6 +1446,7 @@ bool wxMsgCatalog::Load(const wxChar *szDirPrefix, const wxChar *szName,
         wxConvUI =
         m_conv = new wxCSConv(file.GetCharset());
     }
+#endif // wxUSE_WCHAR_T
 
     return true;
 }
@@ -2505,7 +2501,9 @@ const wxLanguageInfo *wxLocale::GetLanguageInfo(int lang)
     {
         if ( ms_languagesDB->Item(i).Language == lang )
         {
-            return &ms_languagesDB->Item(i);
+            // We need to create a temporary here in order to make this work with BCC in final build mode
+            wxLanguageInfo *ptr = &ms_languagesDB->Item(i);
+            return ptr;
         }
     }
 

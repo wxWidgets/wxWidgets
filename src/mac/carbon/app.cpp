@@ -435,6 +435,7 @@ UInt32 wxIdToMacCommand( int wxId )
 wxMenu* wxFindMenuFromMacCommand( const HICommand &command , wxMenuItem* &item )
 {
     wxMenu* itemMenu = NULL ;
+#ifndef __WXUNIVERSAL__
     int id = 0 ;
 
     // for 'standard' commands which don't have a wx-menu
@@ -460,7 +461,8 @@ wxMenu* wxFindMenuFromMacCommand( const HICommand &command , wxMenuItem* &item )
 
         // is it part of the application or the Help menu, then look for the id directly
         if ( ( GetMenuHandle( kwxMacAppleMenuId ) != NULL && command.menu.menuRef == GetMenuHandle( kwxMacAppleMenuId ) ) ||
-             ( mh != NULL && command.menu.menuRef == mh ) )
+             ( mh != NULL && command.menu.menuRef == mh ) || 
+             wxMenuBar::MacGetWindowMenuHMenu() != NULL && command.menu.menuRef == wxMenuBar::MacGetWindowMenuHMenu() )
         {
             wxMenuBar* mbar = wxMenuBar::MacGetInstalledMenuBar() ;
             if ( mbar )
@@ -476,7 +478,7 @@ wxMenu* wxFindMenuFromMacCommand( const HICommand &command , wxMenuItem* &item )
                 item = (wxMenuItem*) refCon ;
         }
     }
-
+#endif
     return itemMenu ;
 }
 
@@ -512,6 +514,7 @@ wxMacAppMenuEventHandler( EventHandlerCallRef handler , EventRef event , void *d
 {
     wxMacCarbonEvent cEvent( event ) ;
     MenuRef menuRef = cEvent.GetParameter<MenuRef>(kEventParamDirectObject) ;
+#ifndef __WXUNIVERSAL__
     wxMenu* menu = wxFindMenuFromMacMenu( menuRef ) ;
 
     if ( menu )
@@ -557,7 +560,7 @@ wxMacAppMenuEventHandler( EventHandlerCallRef handler , EventRef event , void *d
                 }
             }
     }
-
+#endif
     return eventNotHandledErr;
 }
 
@@ -899,6 +902,9 @@ bool wxApp::OnInitGui()
                                sQuitHandler , 0 , FALSE ) ;
     }
 
+    if ( !wxMacInitCocoa() )
+        return false;
+
     return true ;
 }
 
@@ -1100,9 +1106,10 @@ void wxApp::OnIdle(wxIdleEvent& event)
     // either events to the threads other than main or events posted with
     // wxPostEvent() functions
     wxMacProcessNotifierAndPendingEvents();
-
+#ifndef __WXUNIVERSAL__
   if (!wxMenuBar::MacGetInstalledMenuBar() && wxMenuBar::MacGetCommonMenuBar())
     wxMenuBar::MacGetCommonMenuBar()->MacInstallMenuBar();
+#endif
 }
 
 void wxApp::WakeUpIdle()
@@ -1154,6 +1161,15 @@ bool wxApp::Yield(bool onlyIfNeeded)
         return false;
     }
 
+#if wxUSE_THREADS
+    // Yielding from a non-gui thread needs to bail out, otherwise we end up
+    // possibly sending events in the thread too.
+    if ( !wxThread::IsMain() )
+    {
+        return true;
+    }
+#endif // wxUSE_THREADS
+
     s_inYield = true;
 
     // by definition yield should handle all non-processed events
@@ -1193,6 +1209,7 @@ bool wxApp::Yield(bool onlyIfNeeded)
 
 void wxApp::MacDoOneEvent()
 {
+    wxMacAutoreleasePool autoreleasepool;
     EventRef theEvent;
 
     s_inReceiveEvent = true ;
@@ -1586,7 +1603,7 @@ bool wxApp::MacSendCharEvent( wxWindow* focus , long keymessage , long modifiers
         wxWindow* focus = wxFindWinFromMacWindow( FrontWindow() ) ;
         if ( focus )
         {
-            if ( keyval == WXK_RETURN )
+            if ( keyval == WXK_RETURN || keyval == WXK_NUMPAD_ENTER )
             {
                 wxTopLevelWindow *tlw = wxDynamicCast(wxGetTopLevelParent(focus), wxTopLevelWindow);
                 if ( tlw && tlw->GetDefaultItem() )
@@ -1625,9 +1642,13 @@ void wxApp::MacCreateKeyEvent( wxKeyEvent& event, wxWindow* focus , long keymess
     {
         // control interferes with some built-in keys like pgdown, return etc. therefore we remove the controlKey modifier
         // and look at the character after
+#ifdef __LP64__
+		// TODO new implementation using TextInputSources
+#else
         UInt32 state = 0;
         UInt32 keyInfo = KeyTranslate((Ptr)GetScriptManagerVariable(smKCHRCache), ( modifiers & (~(controlKey | shiftKey | optionKey))) | keycode, &state);
         keychar = short(keyInfo & charCodeMask);
+#endif
     }
 
     long keyval = wxMacTranslateKey(keychar, keycode) ;

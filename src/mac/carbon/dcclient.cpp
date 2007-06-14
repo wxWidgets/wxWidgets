@@ -120,7 +120,7 @@ wxWindowDC::wxWindowDC()
 wxWindowDC::wxWindowDC(wxWindow *window)
 {
     m_window = window ;
-    wxTopLevelWindowMac* rootwindow = window->MacGetTopLevelWindow() ;
+    WindowRef rootwindow = (WindowRef) window->MacGetTopLevelWindowRef() ;
     if (!rootwindow)
         return;
 
@@ -152,7 +152,7 @@ wxWindowDC::wxWindowDC(wxWindow *window)
     window->MacWindowToRootWindow( &x , &y ) ;
     m_macLocalOrigin.x = x ;
     m_macLocalOrigin.y = y ;
-    m_macPort = UMAGetWindowPort( (WindowRef) rootwindow->MacGetWindowRef() ) ;
+    m_macPort = UMAGetWindowPort( rootwindow ) ;
 
     CopyRgn( (RgnHandle) window->MacGetVisibleRegion(true).GetWXHRGN() , (RgnHandle) m_macBoundaryClipRgn ) ;
     OffsetRgn( (RgnHandle) m_macBoundaryClipRgn , m_macLocalOrigin.x , m_macLocalOrigin.y ) ;
@@ -258,6 +258,7 @@ wxClientDC::wxClientDC()
 wxClientDC::wxClientDC(wxWindow *window) :
     wxWindowDC( window )
 {
+    wxCHECK_RET( window, _T("invalid window in wxClientDC") );
     wxPoint origin = window->GetClientAreaOrigin() ;
     m_window->GetClientSize( &m_width , &m_height);
     SetDeviceOrigin( origin.x, origin.y );
@@ -266,6 +267,7 @@ wxClientDC::wxClientDC(wxWindow *window) :
 #else
 wxClientDC::wxClientDC(wxWindow *window)
 {
+    wxCHECK_RET( window, _T("invalid window in wxClientDC") );
     m_window = window ;
     wxTopLevelWindowMac* rootwindow = window->MacGetTopLevelWindow() ;
     if (!rootwindow)

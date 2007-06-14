@@ -488,6 +488,9 @@ DocStr(wxRect,
 width and height properties.  In wxPython most palces that expect a
 wx.Rect can also accept a (x,y,width,height) tuple.", "");
 
+
+%typemap(in) wxRect*;
+
 class wxRect
 {
 public:
@@ -572,7 +575,7 @@ public:
 
 
     DocDeclStr(
-        wxRect&, Inflate(wxCoord dx, wxCoord dy),
+        wxRect, Inflate(wxCoord dx, wxCoord dy),
         "Increases the size of the rectangle.
 
 The left border is moved farther left and the right border is moved
@@ -776,6 +779,9 @@ usually, but not necessarily, the larger one.", "");
 
     %property(Empty, IsEmpty, doc="See `IsEmpty`");
 };
+
+%apply wxRect& { wxRect* };
+
 
 
 MustHaveApp(wxIntersectRect);

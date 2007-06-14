@@ -251,13 +251,13 @@ static struct hostent * deepCopyHostent(struct hostent *h,
   misalign = sizeof(char *) - pos%sizeof(char *);
   if(misalign < sizeof(char *))
     pos += misalign;
-  
+
   /* leave space for pointer list */
   p = h->h_aliases;
   char **h_aliases = (char **)(buffer + pos);
   while(*(p++) != 0)
     pos += sizeof(char *);
-  
+
   /* copy aliases and fill new pointer list */
   for (p = h->h_aliases, q = h_aliases; *p != 0; p++, q++)
   {
@@ -389,13 +389,13 @@ static struct servent * deepCopyServent(struct servent *s,
   unsigned int misalign = sizeof(char *) - pos%sizeof(char *);
   if(misalign < sizeof(char *))
     pos += misalign;
-  
+
   /* leave space for pointer list */
   char **p = s->s_aliases, **q;
   char **s_aliases = (char **)(buffer + pos);
   while(*(p++) != 0)
     pos += sizeof(char *);
-  
+
   /* copy addresses and fill new pointer list */
   for (p = s->s_aliases, q = s_aliases; *p != 0; p++, q++){
     len = strlen(*p);
@@ -587,7 +587,7 @@ void GSocket::Shutdown()
   /* If socket has been created, shutdown it */
   if (m_fd != INVALID_SOCKET)
   {
-    shutdown(m_fd, 2);
+    shutdown(m_fd, 1);
     Close();
   }
 
@@ -762,7 +762,7 @@ GSocketError GSocket::SetServer()
 
   /* FreeBSD variants can't use MSG_NOSIGNAL, and instead use a socket option */
 #ifdef SO_NOSIGPIPE
-  setsockopt(m_fd, SOL_SOCKET, SO_NOSIGPIPE, (const char*)&arg, sizeof(u_long));
+  setsockopt(m_fd, SOL_SOCKET, SO_NOSIGPIPE, (const char*)&arg, sizeof(arg));
 #endif
 
   ioctl(m_fd, FIONBIO, &arg);
@@ -773,9 +773,9 @@ GSocketError GSocket::SetServer()
    */
   if (m_reusable)
   {
-    setsockopt(m_fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&arg, sizeof(u_long));
+    setsockopt(m_fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&arg, sizeof(arg));
 #ifdef SO_REUSEPORT
-    setsockopt(m_fd, SOL_SOCKET, SO_REUSEPORT, (const char*)&arg, sizeof(u_long));
+    setsockopt(m_fd, SOL_SOCKET, SO_REUSEPORT, (const char*)&arg, sizeof(arg));
 #endif
   }
 
@@ -967,7 +967,7 @@ GSocketError GSocket::Connect(GSocketStream stream)
 
   /* FreeBSD variants can't use MSG_NOSIGNAL, and instead use a socket option */
 #ifdef SO_NOSIGPIPE
-  setsockopt(m_fd, SOL_SOCKET, SO_NOSIGPIPE, (const char*)&arg, sizeof(u_long));
+  setsockopt(m_fd, SOL_SOCKET, SO_NOSIGPIPE, (const char*)&arg, sizeof(arg));
 #endif
 
 #if defined(__EMX__) || defined(__VISAGECPP__)
@@ -979,9 +979,9 @@ GSocketError GSocket::Connect(GSocketStream stream)
   // If the reuse flag is set, use the applicable socket reuse flags(s)
   if (m_reusable)
   {
-    setsockopt(m_fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&arg, sizeof(u_long));
+    setsockopt(m_fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&arg, sizeof(arg));
 #ifdef SO_REUSEPORT
-    setsockopt(m_fd, SOL_SOCKET, SO_REUSEPORT, (const char*)&arg, sizeof(u_long));
+    setsockopt(m_fd, SOL_SOCKET, SO_REUSEPORT, (const char*)&arg, sizeof(arg));
 #endif
   }
 
@@ -1111,6 +1111,14 @@ GSocketError GSocket::SetNonOriented()
 #endif
   gs_gui_functions->Enable_Events(this);
 
+  if (m_reusable)
+  {
+    setsockopt(m_fd, SOL_SOCKET, SO_REUSEADDR, (const char*)&arg, sizeof(arg));
+#ifdef SO_REUSEPORT
+    setsockopt(m_fd, SOL_SOCKET, SO_REUSEPORT, (const char*)&arg, sizeof(arg));
+#endif
+  }
+
   /* Bind to the local address,
    * and retrieve the actual address bound.
    */
@@ -1160,17 +1168,16 @@ int GSocket::Read(char *buffer, int size)
     else
       ret = Recv_Dgram(buffer, size);
 
-    /* If recv returned zero, then the connection is lost, and errno is not set.
+    /* If recv returned zero, then the connection has been gracefully closed.
      * Otherwise, recv has returned an error (-1), in which case we have lost the
      * socket only if errno does _not_ indicate that there may be more data to read.
      */
     if (ret == 0)
     {
-      m_error = GSOCK_IOERR;
+      /* Make sure wxSOCKET_LOST event gets sent and shut down the socket */
       m_detected = GSOCK_LOST_FLAG;
-      Close();
-      // Signal an error for return
-      return -1;
+      Detected_Read();
+      return 0;
     }
     else if (ret == -1)
     {
@@ -1319,7 +1326,7 @@ GSocketEventFlags GSocket::Select(GSocketEventFlags flags)
       {
         /* This is a TCP server socket that detected a connection.
           While the INPUT_FLAG is also set, it doesn't matter on
-          this kind of  sockets, as we can only Accept() from them. */        
+          this kind of  sockets, as we can only Accept() from them. */
         result |= GSOCK_CONNECTION_FLAG;
         m_detected |= GSOCK_CONNECTION_FLAG;
       }
@@ -1743,6 +1750,12 @@ void GSocket::Detected_Read()
     if (m_server && m_stream)
     {
       CALL_CALLBACK(this, GSOCK_CONNECTION);
+    }
+    else if (num == 0)
+    {
+      /* graceful shutdown */
+      CALL_CALLBACK(this, GSOCK_LOST);
+      Shutdown();
     }
     else
     {

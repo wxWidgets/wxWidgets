@@ -17,6 +17,7 @@
 
 #ifndef WX_PRECOMP
     #include "wx/dcclient.h"
+    #include "wx/dcmemory.h"
     #include "wx/log.h"
     #include "wx/region.h"
 #endif
@@ -168,7 +169,7 @@ public :
     void StrokeLineSegments( CGContextRef ctxRef , const CGPoint pts[] , size_t count )
     {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-        if ( CGContextStrokeLineSegments!=NULL  )
+        if ( &CGContextStrokeLineSegments!=NULL  )
         {
             CGContextStrokeLineSegments( ctxRef , pts , count );
         }
@@ -296,7 +297,7 @@ wxMacCoreGraphicsPenData::wxMacCoreGraphicsPenData( wxGraphicsRenderer* renderer
 {
     Init();
 
-    float components[4] = { pen.GetColour().Red() / 255.0 , pen.GetColour().Green() / 255.0 ,
+    CGFloat components[4] = { pen.GetColour().Red() / 255.0 , pen.GetColour().Green() / 255.0 ,
             pen.GetColour().Blue() / 255.0 , pen.GetColour().Alpha() / 255.0 } ;
     m_color.Set( CGColorCreate( wxMacGetGenericRGBColorSpace() , components ) ) ;
 
@@ -540,7 +541,7 @@ wxMacCoreGraphicsBrushData::wxMacCoreGraphicsBrushData(wxGraphicsRenderer* rende
         if ( brush.MacGetBrushKind() == kwxMacBrushTheme )
         {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-            if ( HIThemeBrushCreateCGColor != 0 )
+            if ( UMAGetSystemVersion()  >= 0x1040 )
             {
                 CGColorRef color ;
                 HIThemeBrushCreateCGColor( brush.MacGetTheme(), &color );
@@ -552,14 +553,14 @@ wxMacCoreGraphicsBrushData::wxMacCoreGraphicsBrushData(wxGraphicsRenderer* rende
                 // as close as we can get, unfortunately < 10.4 things get difficult
                 RGBColor color;
                 GetThemeBrushAsColor( brush.MacGetTheme(), 32, true, &color );
-                float components[4] = {  (CGFloat) color.red / 65536,
+                CGFloat components[4] = {  (CGFloat) color.red / 65536,
                     (CGFloat) color.green / 65536, (CGFloat) color.blue / 65536, 1 } ;
                 m_color.Set( CGColorCreate( wxMacGetGenericRGBColorSpace() , components ) ) ;
             }
         }
         else
         {
-            float components[4] = { brush.GetColour().Red() / 255.0 , brush.GetColour().Green() / 255.0 ,
+            CGFloat components[4] = { brush.GetColour().Red() / 255.0 , brush.GetColour().Green() / 255.0 ,
                 brush.GetColour().Blue() / 255.0 , brush.GetColour().Alpha() / 255.0 } ;
             m_color.Set( CGColorCreate( wxMacGetGenericRGBColorSpace() , components ) ) ;
         }
@@ -696,7 +697,7 @@ wxMacCoreGraphicsFontData::wxMacCoreGraphicsFontData(wxGraphicsRenderer* rendere
 
     // we need the scale here ...
 
-    Fixed atsuSize = IntToFixed( int( 1 * font.MacGetFontSize()) );
+    Fixed atsuSize = IntToFixed( int( 1 * font.GetPointSize()) );
     RGBColor atsuColor = MAC_WXCOLORREF( col.GetPixel() );
     ATSUAttributeTag atsuTags[] =
     {
@@ -852,7 +853,7 @@ bool wxMacCoreGraphicsMatrixData::IsEqual( const wxGraphicsMatrixData* t) const
 {
     const CGAffineTransform* tm = (CGAffineTransform*) t->GetNativeMatrix();
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-    if ( CGAffineTransformEqualToTransform!=NULL )
+    if ( &CGAffineTransformEqualToTransform!=NULL )
     {
         return CGAffineTransformEqualToTransform(m_matrix, *((CGAffineTransform*) t->GetNativeMatrix()));
     }
@@ -1106,7 +1107,7 @@ void wxMacCoreGraphicsPathData::GetBox(wxDouble *x, wxDouble *y, wxDouble *w, wx
 bool wxMacCoreGraphicsPathData::Contains( wxDouble x, wxDouble y, int fillStyle) const
 {
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-    if ( CGPathContainsPoint!=NULL )
+    if ( &CGPathContainsPoint!=NULL )
     {
         return CGPathContainsPoint( m_path, NULL, CGPointMake(x,y), fillStyle == wxODDEVEN_RULE );
     }
@@ -1319,7 +1320,12 @@ void wxMacCoreGraphicsContext::EnsureIsValid()
 {
     if ( !m_cgContext )
     {
-        OSStatus status = QDBeginCGContext( GetWindowPort( m_windowRef ) , &m_cgContext );
+        OSStatus status = 
+#ifndef __LP64__
+            QDBeginCGContext( GetWindowPort( m_windowRef ) , &m_cgContext );
+#else
+            paramErr;
+#endif
         wxASSERT_MSG( status == noErr , wxT("Cannot nest wxDCs on the same window") );
 
         CGContextConcatCTM( m_cgContext, m_windowTransform );
@@ -1550,7 +1556,11 @@ void wxMacCoreGraphicsContext::SetNativeContext( CGContextRef cg )
         CGContextRestoreGState( m_cgContext );
         CGContextRestoreGState( m_cgContext );
         if ( m_releaseContext )
+        {
+#ifndef __LP64__
             QDEndCGContext( GetWindowPort( m_windowRef ) , &m_cgContext);
+#endif
+        }
         else
             CGContextRelease(m_cgContext);
     }
@@ -2013,7 +2023,16 @@ wxGraphicsRenderer* wxGraphicsRenderer::GetDefaultRenderer()
 
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContext( const wxWindowDC& dc)
 {
-   return new wxMacCoreGraphicsContext(this,(CGContextRef)dc.GetWindow()->MacGetCGContextRef() );
+    wxMemoryDC* mdc = wxDynamicCast(&dc, wxMemoryDC);
+    if ( mdc )
+    {
+        return new wxMacCoreGraphicsContext(this, 
+            (CGContextRef)mdc->GetGraphicsContext()->GetNativeContext());
+    }
+    else
+    {
+        return new wxMacCoreGraphicsContext(this,(CGContextRef)dc.GetWindow()->MacGetCGContextRef() );
+    }
 }
 
 wxGraphicsContext * wxMacCoreGraphicsRenderer::CreateContextFromNativeContext( void * context )

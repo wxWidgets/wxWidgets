@@ -155,7 +155,7 @@ bool wxMacCarbonPrintData::TransferFrom( const wxPrintData &data )
 #endif
 
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-    if ( PMSetDuplex!=NULL )
+    if ( &PMSetDuplex!=NULL )
     {
         PMDuplexMode mode = 0 ;
         switch( data.GetDuplex() )
@@ -241,7 +241,7 @@ bool wxMacCarbonPrintData::TransferTo( wxPrintData &data )
         data.SetColour( !(color == kPMBlackAndWhite) ) ;
 #endif
 #if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
-    if ( PMGetDuplex!=NULL )
+    if ( &PMGetDuplex!=NULL )
     {
         PMDuplexMode mode = 0 ;
         PMGetDuplex( (PMPrintSettings) m_macPrintSettings, &mode ) ;

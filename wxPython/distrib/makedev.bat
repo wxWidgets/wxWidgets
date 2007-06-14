@@ -6,6 +6,12 @@ rem   or extensions that can share the same DLL.
 setlocal
 set BASE=_distrib_zip\wxPython-%1
 
+set TYPE=h
+if %2 == "debug" set TYPE=d
+
+set DELTYPE=d
+if %2 == "debug" set DELTYPE=h 
+
 rem **** Make a directory to build up a distribution tree
 mkdir _distrib_zip
 mkdir %BASE%
@@ -30,19 +36,19 @@ copy  %WXWIN%\wxPython\src\*.py              %BASE%\include\wx\wxPython\i_files
 
 mkdir %BASE%\lib
 mkdir %BASE%\lib\vc_dll
-mkdir %BASE%\lib\vc_dll\mswh
-mkdir %BASE%\lib\vc_dll\mswuh
+mkdir %BASE%\lib\vc_dll\msw%TYPE%
+mkdir %BASE%\lib\vc_dll\mswu%TYPE%
 
-copy /s %WXWIN%\lib\vc_dll\mswh\*            %BASE%\lib\vc_dll\mswh
-copy /s %WXWIN%\lib\vc_dll\mswuh\*           %BASE%\lib\vc_dll\mswuh
+copy /s %WXWIN%\lib\vc_dll\msw%TYPE%\*            %BASE%\lib\vc_dll\mswh
+copy /s %WXWIN%\lib\vc_dll\mswu%TYPE%\*           %BASE%\lib\vc_dll\mswuh
 copy %WXWIN%\lib\vc_dll\*                    %BASE%\lib\vc_dll
 
 
 rem *** remove unneeded files
 cd _distrib_zip
 
-ffind /SB wx*d_*.*		>  del-files
-ffind /SB wx*d.*		>> del-files
+ffind /SB wx*%DELTYPE%_*.*		>  del-files
+ffind /SB wx*%DELTYPE%.*		>> del-files
 ffind /SB .#*			>> del-files
 ffind /SB .cvsignore		>> del-files
 
@@ -68,8 +74,10 @@ rm del-files
 rm del-dirs
 
 rem *** bundle it all up  TODO: don't hard-code the 2.8
-tar cvf ../dist/wxPython2.8-win32-devel-%1.tar wxPython-%1
-bzip2 -9 ../dist/wxPython2.8-win32-devel-%1.tar
+set EXT=
+if %2 == "debug" set EXT="-debug"
+tar cvf ../dist/wxPython2.8-win32-devel-%1%EXT%.tar wxPython-%1
+bzip2 -9 ../dist/wxPython2.8-win32-devel-%1%EXT%.tar
 
 rem *** cleanup
 cd ..

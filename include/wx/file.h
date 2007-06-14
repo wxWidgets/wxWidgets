@@ -100,6 +100,8 @@ public:
   bool Write(const wxString& s, const wxMBConv& conv = wxConvUTF8)
   {
       const wxWX2MBbuf buf = s.mb_str(conv);
+      if (!buf)
+          return false;
       size_t size = strlen(buf);
       return Write((const char *) buf, size) == size;
   }

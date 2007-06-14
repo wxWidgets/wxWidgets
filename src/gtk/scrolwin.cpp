@@ -108,15 +108,15 @@ void wxScrollHelperNative::DoAdjustScrollbar(GtkRange* range,
         *linesPerPage = 0;
     }
 
-    // ensure that the scroll position is always in valid range
-    if ( *pos > *lines )
-        *pos = *lines;
-
     GtkAdjustment* adj = range->adjustment;
     adj->step_increment = 1;
     adj->page_increment =
     adj->page_size = page_size;
     gtk_range_set_range(range, 0, upper);
+
+    // ensure that the scroll position is always in valid range
+    if (*pos > *lines)
+        *pos = *lines;
 }
 
 void wxScrollHelperNative::AdjustScrollbars()

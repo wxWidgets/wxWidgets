@@ -654,6 +654,8 @@ void wxListCtrl::FireMouseEvent(wxEventType eventType, wxPoint position)
 
 void wxListCtrl::OnChar(wxKeyEvent& event)
 {
+
+    
     if (m_dbImpl)
     {
         wxListEvent le( wxEVT_COMMAND_LIST_KEY_DOWN, GetId() );
@@ -661,6 +663,35 @@ void wxListCtrl::OnChar(wxKeyEvent& event)
         le.m_code = event.GetKeyCode();
         le.m_itemIndex = -1;
         
+        if (m_current == -1)
+        {
+            // if m_current isn't set, check if there's been a selection
+            // made before continuing
+            m_current = GetNextItem(-1, wxLIST_NEXT_BELOW, wxLIST_STATE_SELECTED);
+        }
+        
+        // We need to determine m_current ourselves when navigation keys
+        // are used. Note that PAGEUP and PAGEDOWN do not alter the current
+        // item on native Mac ListCtrl, so we only handle up and down keys.
+        switch ( event.GetKeyCode() )
+        {
+            case WXK_UP:
+                if ( m_current > 0 )
+                    m_current -= 1;
+                else
+                    m_current = 0;
+                    
+                break;
+
+            case WXK_DOWN:
+                if ( m_current < GetItemCount() - 1 )
+                    m_current += 1;
+                else
+                    m_current = GetItemCount() - 1;
+                    
+                break;
+        }
+
         if (m_current != -1)
         {
             le.m_itemIndex = m_current;
@@ -1174,7 +1205,7 @@ bool wxListCtrl::SetItemState(long item, long state, long stateMask)
     if (m_dbImpl)
     {
         DataBrowserSetOption option = kDataBrowserItemsAdd;
-        if ( stateMask == wxLIST_STATE_SELECTED && state == 0 )
+        if ( (stateMask & wxLIST_STATE_SELECTED) && state == 0 )
             option = kDataBrowserItemsRemove;
 
         if (item == -1)
@@ -1202,7 +1233,14 @@ bool wxListCtrl::SetItemState(long item, long state, long stateMask)
             if ( HasFlag(wxLC_VIRTUAL) )
             {
                 long itemID = item+1;
+                bool isSelected = IsDataBrowserItemSelected(m_dbImpl->GetControlRef(), (DataBrowserItemID)itemID );
+                bool isSelectedState = (state == wxLIST_STATE_SELECTED);
+
+                // toggle the selection state if wxListInfo state and actual state don't match.
+                if ( (stateMask & wxLIST_STATE_SELECTED) && isSelected != isSelectedState )
+                {
                 SetDataBrowserSelectedItems(m_dbImpl->GetControlRef(), 1, (DataBrowserItemID*)&itemID, option);
+            }
             }
             else
             {
@@ -1288,7 +1326,7 @@ long wxListCtrl::GetItemData(long item) const
 }
 
 // Sets the item data
-bool wxListCtrl::SetItemData(long item, long data)
+bool wxListCtrl::SetItemPtrData(long item, wxUIntPtr data)
 {
     if (m_genericImpl)
         return m_genericImpl->SetItemData(item, data);
@@ -1300,6 +1338,11 @@ bool wxListCtrl::SetItemData(long item, long data)
     info.m_data = data;
 
     return SetItem(info);
+}
+
+bool wxListCtrl::SetItemData(long item, long data)
+{
+    return SetItemPtrData(item, data);
 }
 
 wxRect wxListCtrl::GetViewRect() const
@@ -1578,8 +1621,8 @@ long wxListCtrl::GetNextItem(long item, int geom, int state) const
                     return line;
             }
         }
-        
-        if ( geom == wxLIST_NEXT_ALL || geom == wxLIST_NEXT_ABOVE )
+
+        if ( geom == wxLIST_NEXT_ABOVE )
         {
             int item2 = item;
             if ( item2 == -1 )
@@ -2624,7 +2667,9 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     Rect enclosingRect;
     CGRect enclosingCGRect, iconCGRect, textCGRect;
     Boolean active;
+#ifndef __LP64__
     ThemeDrawingState savedState = NULL;
+#endif
     CGContextRef context = (CGContextRef)list->MacGetDrawingContext();
     RGBColor labelColor;
     labelColor.red = 0;
@@ -2655,9 +2700,10 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     }
     if (itemState == kDataBrowserItemIsSelected)
     {
-
+#ifndef __LP64__
         GetThemeDrawingState(&savedState);
-        
+#endif
+
         if (active && hasFocus)
         {
             GetThemeBrushAsColor(kThemeBrushAlternatePrimaryHighlightColor, 32, true, &backgroundColor);
@@ -2720,19 +2766,29 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
     }
 
     HIThemeTextHorizontalFlush hFlush = kHIThemeTextHorizontalFlushLeft;
-    UInt16 fontID = kThemeViewsFont;
+    HIThemeTextInfo info;
+
+#ifdef __LP64__
+    info.version = kHIThemeTextInfoVersionOne;
+    info.fontID = kThemeViewsFont;
+    if (font.Ok())
+    {
+        info.fontID = kThemeSpecifiedFont;
+        info.font = (CTFontRef) font.MacGetCTFont();
+    }
+#else
+    info.version = kHIThemeTextInfoVersionZero;
+    info.fontID = kThemeViewsFont;
 
     if (font.Ok())
     {
         if (font.GetFamily() != wxFONTFAMILY_DEFAULT)
-            fontID = font.MacGetThemeFontID();
+            info.fontID = font.MacGetThemeFontID();
 
-// FIXME: replace these with CG or ATSUI calls so we can remove this #ifndef.
-#ifndef __LP64__
         ::TextSize( (short)(font.MacGetFontSize()) ) ;
         ::TextFace( font.MacGetFontStyle() ) ;
-#endif
     }
+#endif
 
     wxListItem item;
     list->GetColumn(listColumn, item);
@@ -2749,10 +2805,7 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
         }
     }
 
-    HIThemeTextInfo info;
-    info.version = kHIThemeTextInfoVersionZero;
     info.state = active ? kThemeStateActive : kThemeStateInactive;
-    info.fontID = fontID;
     info.horizontalFlushness = hFlush;
     info.verticalFlushness = kHIThemeTextVerticalFlushCenter;
     info.options = kHIThemeTextBoxOptionNone;
@@ -2768,8 +2821,10 @@ void wxMacDataBrowserListCtrlControl::DrawItem(
 
     CGContextRestoreGState(context);
 
+#ifndef __LP64__
     if (savedState != NULL)
         SetThemeDrawingState(savedState, true);
+#endif
 }
 
 OSStatus wxMacDataBrowserListCtrlControl::GetSetItemData(DataBrowserItemID itemID,

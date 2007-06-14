@@ -211,9 +211,12 @@ class TestPanel(wx.Panel):
 
 
     def OnButton(self, evt):
-        win = TestFrame(self, self.log)
-        win.Show(True)
+        self.win = TestFrame(self, self.log)
+        self.win.Show(True)
 
+
+    def ShutdownDemo(self):
+        self.win.Close()
 
 #---------------------------------------------------------------------------
 

@@ -54,6 +54,7 @@ The controls at the top reconfigure the resulting control at the bottom.
 
 
         self.limit_target = wx.CheckBox( panel, -1, "Limit control" )
+        self.limit_on_field_change = wx.CheckBox( panel, -1, "Limit on field change" )
         self.allow_none = wx.CheckBox( panel, -1, "Allow empty control" )
         self.group_digits = wx.CheckBox( panel, -1, "Group digits" )
         self.group_digits.SetValue( True )
@@ -102,21 +103,26 @@ value entry ctrl:""")
 
 
         grid1.Add( self.limit_target, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
-        grid1.Add( self.allow_none, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        grid1.Add( self.limit_on_field_change, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        
         hbox1 = wx.BoxSizer( wx.HORIZONTAL )
         hbox1.Add( (17,5), 0, wx.ALIGN_LEFT|wx.ALL, 5)
-        hbox1.Add( self.group_digits, 0, wx.ALIGN_LEFT|wx.LEFT, 5 )
+        hbox1.Add( self.allow_none, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
         grid1.Add( hbox1, 0, wx.ALIGN_LEFT|wx.ALL, 5)
         grid1.Add( (5,5), 0, wx.ALIGN_LEFT|wx.ALL, 5)
 
-        grid1.Add( self.allow_negative, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
-        grid1.Add( self.use_parens, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
+        grid1.Add( self.group_digits, 0, wx.ALIGN_LEFT|wx.LEFT, 5 )
+        grid1.Add( self.allow_negative, 0, wx.ALIGN_LEFT|wx.ALL, 5 )        
         hbox2 = wx.BoxSizer( wx.HORIZONTAL )
         hbox2.Add( (17,5), 0, wx.ALIGN_LEFT|wx.ALL, 5)
-        hbox2.Add( self.select_on_entry, 0, wx.ALIGN_LEFT|wx.LEFT, 5 )
+        hbox2.Add( self.use_parens, 0, wx.ALIGN_LEFT|wx.ALL, 5 )
         grid1.Add( hbox2, 0, wx.ALIGN_LEFT|wx.ALL, 5)
         grid1.Add( (5,5), 0, wx.ALIGN_LEFT|wx.ALL, 5)
-
+        
+        grid1.Add( self.select_on_entry, 0, wx.ALIGN_LEFT|wx.LEFT, 5 )
+        grid1.Add( (5,5), 0, wx.ALIGN_LEFT|wx.ALL, 5)
+        grid1.Add( (5,5), 0, wx.ALIGN_LEFT|wx.ALL, 5)
+        grid1.Add( (5,5), 0, wx.ALIGN_LEFT|wx.ALL, 5)
 
         grid2 = wx.FlexGridSizer( 0, 2, 0, 0 )
         grid2.Add( label, 0, wx.ALIGN_LEFT|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5 )
@@ -151,7 +157,8 @@ value entry ctrl:""")
         self.Bind(masked.EVT_NUM, self.SetTargetMinMax, self.min )
         self.Bind(masked.EVT_NUM, self.SetTargetMinMax, self.max )
 
-        self.Bind(wx.EVT_CHECKBOX, self.SetTargetMinMax, self.limit_target )
+        self.Bind(wx.EVT_CHECKBOX, self.OnSetLimited, self.limit_target )
+        self.Bind(wx.EVT_CHECKBOX, self.OnSetLimitOnFieldChange, self.limit_on_field_change )
         self.Bind(wx.EVT_CHECKBOX, self.OnSetAllowNone, self.allow_none )
         self.Bind(wx.EVT_CHECKBOX, self.OnSetGroupDigits, self.group_digits )
         self.Bind(wx.EVT_CHECKBOX, self.OnSetAllowNegative, self.allow_negative )
@@ -218,10 +225,26 @@ value entry ctrl:""")
         self.SetTargetMinMax()
 
 
+    def OnSetLimited( self, event ):
+        limited = self.limit_target.GetValue()
+        self.target_ctl.SetLimited( limited )
+        limit_on_field_change = self.limit_on_field_change.GetValue()
+        if limited and limit_on_field_change:
+            self.limit_on_field_change.SetValue(False)
+            self.target_ctl.SetLimitOnFieldChange( False )
+        self.SetTargetMinMax()
+
+
+    def OnSetLimitOnFieldChange( self, event ):
+        limit_on_field_change = self.limit_on_field_change.GetValue()
+        self.target_ctl.SetLimitOnFieldChange( limit_on_field_change )
+        limited = self.limit_target.GetValue()
+        if limited and limit_on_field_change:
+            self.limit_target.SetValue(False)
+            self.target_ctl.SetLimited( False )
+
     def SetTargetMinMax( self, event=None ):
         min = max = None
-        self.target_ctl.SetLimited( self.limit_target.GetValue() )
-
         if self.set_min.GetValue():
             min = self.min.GetValue()
         if self.set_max.GetValue():

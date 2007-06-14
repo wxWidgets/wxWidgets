@@ -157,10 +157,8 @@ class MyCanvas(wx.ScrolledWindow):
         self.x, self.y = self.ConvertEventCoords(event)
 
     def ConvertEventCoords(self, event):
-        xView, yView = self.GetViewStart()
-        xDelta, yDelta = self.GetScrollPixelsPerUnit()
-        return (event.GetX() + (xView * xDelta),
-                event.GetY() + (yView * yDelta))
+        newpos = self.CalcUnscrolledPosition(event.GetX(), event.GetY())
+        return newpos
 
     def OnLeftButtonEvent(self, event):
         if event.LeftDown():
@@ -172,23 +170,34 @@ class MyCanvas(wx.ScrolledWindow):
 
         elif event.Dragging() and self.drawing:
             if BUFFERED:
-                # If doing buffered drawing, create the buffered DC, giving it
-                # it a real DC to blit to when done.
-                cdc = wx.ClientDC(self)
-                self.PrepareDC(cdc)
-                dc = wx.BufferedDC(cdc, self.buffer)
+                # If doing buffered drawing we'll just update the
+                # buffer here and then refresh that portion of the
+                # window, then that portion of the buffer will be
+                # redrawn in the EVT_PAINT handler.
+                dc = wx.BufferedDC(None, self.buffer)
             else:
+                # otherwise we'll draw directly to a wx.ClientDC
                 dc = wx.ClientDC(self)
                 self.PrepareDC(dc)
 
-            dc.BeginDrawing()
             dc.SetPen(wx.Pen('MEDIUM FOREST GREEN', 4))
             coords = (self.x, self.y) + self.ConvertEventCoords(event)
             self.curLine.append(coords)
             dc.DrawLine(*coords)
             self.SetXY(event)
-            dc.EndDrawing()
-
+            
+            if BUFFERED:
+                # figure out what part of the window to refresh
+                x1,y1, x2,y2 = dc.GetBoundingBox()
+                x1,y1 = self.CalcScrolledPosition(x1, y1)
+                x2,y2 = self.CalcScrolledPosition(x2, y2)
+                # make a rectangle
+                rect = wx.Rect()
+                rect.SetTopLeft((x1,y1))
+                rect.SetBottomRight((x2,y2))
+                rect.Inflate(2,2)
+                # refresh it
+                self.RefreshRect(rect)
 
         elif event.LeftUp() and self.drawing:
             self.lines.append(self.curLine)

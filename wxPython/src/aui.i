@@ -11,7 +11,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 %define DOCSTRING
-"The wx.aui moduleis an Advanced User Interface library that aims to
+"The wx.aui module is an Advanced User Interface library that aims to
 implement \"cutting-edge\" interface usability and design features so
 developers can quickly and easily create beautiful and usable
 application interfaces.
@@ -58,7 +58,7 @@ interface:
 **Usage**
 
 The following example shows a simple implementation that utilizes
-`wx.aui.FrameManager` to manage three text controls in a frame window::
+`wx.aui.AuiManager` to manage three text controls in a frame window::
 
     import wx
     import wx.aui
@@ -170,7 +170,7 @@ The following example shows a simple implementation that utilizes
                                             const wxPaneInfo& pane_info,
                                             const wxPoint& drop_pos);
 
-// A typemap for the return value of wxFrameManager::GetAllPanes
+// A typemap for the return value of wxAuiManager::GetAllPanes
 %typemap(out) wxAuiPaneInfoArray& {
     $result = PyList_New(0);
     for (size_t i=0; i < $1->GetCount(); i++) {
@@ -179,6 +179,7 @@ The following example shows a simple implementation that utilizes
     }
 }
 
+//%ignore wxAuiManager::~wxAuiManager;
 
 %nokwargs wxAuiTabContainer::SetActivePage;
 
@@ -202,6 +203,11 @@ The following example shows a simple implementation that utilizes
 %ignore wxAuiMDIParentFrame::~wxAuiMDIParentFrame;
 %rename(PreAuiMDIParentFrame) wxAuiMDIParentFrame::wxAuiMDIParentFrame();
 
+// Ignore these for now because they need a typemap for the return value, see below.
+%ignore wxAuiMDIParentFrame::GetNotebook;
+%ignore wxAuiMDIParentFrame::GetActiveChild;
+%ignore wxAuiMDIParentFrame::GetClientWindow;
+
 %pythonAppend wxAuiMDIChildFrame::wxAuiMDIChildFrame    "self._setOORInfo(self)";
 %pythonAppend wxAuiMDIChildFrame::wxAuiMDIChildFrame()  "val._setOORInfo(val)";
 %ignore wxAuiMDIChildFrame::~wxAuiMDIChildFrame;
@@ -212,6 +218,8 @@ The following example shows a simple implementation that utilizes
 %ignore wxAuiMDIClientWindow::~wxAuiMDIClientWindow;
 %rename(PreAuiMDIClientWindow) wxAuiMDIClientWindow::wxAuiMDIClientWindow();
 
+
+%typemap(out) wxEvtHandler*             { $result = wxPyMake_wxObject($1, $owner); }
 
 //---------------------------------------------------------------------------
 // Get all our defs from the REAL header files.
@@ -227,7 +235,7 @@ The following example shows a simple implementation that utilizes
 #undef wxColor
 
 //---------------------------------------------------------------------------
-// Methods to inject into the FrameManager class that will sort out calls to
+// Methods to inject into the AuiManager class that will sort out calls to
 // the overloaded versions of GetPane and AddPane
 
 %extend wxAuiManager {
@@ -240,7 +248,7 @@ The following example shows a simple implementation that utilizes
         widget reference or by pane name, which acts as a unique id
         for a window pane. The returned `PaneInfo` object may then be
         modified to change a pane's look, state or position. After one
-        or more modifications to the `PaneInfo`, `FrameManager.Update`
+        or more modifications to the `PaneInfo`, `AuiManager.Update`
         should be called to realize the changes to the user interface.
 
         If the lookup failed (meaning the pane could not be found in
@@ -300,12 +308,43 @@ The following example shows a simple implementation that utilizes
     ~wxAuiPaneButton() {}
 }
 
+%extend wxAuiMDIParentFrame {
+    %typemap(out) wxAuiNotebook*          { $result = wxPyMake_wxObject($1, $owner); }
+    %typemap(out) wxAuiMDIChildFrame*     { $result = wxPyMake_wxObject($1, $owner); }
+    %typemap(out) wxAuiMDIClientWindow*   { $result = wxPyMake_wxObject($1, $owner); }
+
+    %rename(GetNotebook) _GetNotebook;
+    %rename(GetActiveChild) _GetActiveChild;
+    %rename(GetClientWindow) _GetClientWindow;
+     
+    wxAuiNotebook* _GetNotebook() const
+    {
+        return self->GetNotebook();
+    }
+    
+    wxAuiMDIChildFrame* _GetActiveChild() const
+    {
+        return self->GetActiveChild();
+    }
+    
+    wxAuiMDIClientWindow* _GetClientWindow() const
+    {
+        return self->GetClientWindow();
+    }
+
+    %typemap(out) wxAuiNotebook*;       
+    %typemap(out) wxAuiMDIChildFrame*;  
+    %typemap(out) wxAuiMDIClientWindow*;
+}
+     
+     
 //---------------------------------------------------------------------------
 
 %{
 // A wxDocArt class that knows how to forward virtuals to Python methods
 class wxPyAuiDockArt :  public wxAuiDefaultDockArt
 {
+public:
     wxPyAuiDockArt() : wxAuiDefaultDockArt() {}
 
     DEC_PYCALLBACK_INT_INT(GetMetric);
@@ -479,9 +518,11 @@ methods to the Python methods implemented in the derived class.", "");
 
 class wxPyAuiDockArt :  public wxAuiDefaultDockArt
 {
+public:
     %pythonAppend wxPyAuiDockArt     setCallbackInfo(PyAuiDockArt)
-    wxPyAuiDocArt();
+    wxPyAuiDockArt();
 
+    void _setCallbackInfo(PyObject* self, PyObject* _class);
 };
 
 
@@ -527,6 +568,7 @@ class wxPyAuiDockArt :  public wxAuiDefaultDockArt
 // A wxTabArt class that knows how to forward virtuals to Python methods
 class wxPyAuiTabArt :  public wxAuiDefaultTabArt
 {
+public:
     wxPyAuiTabArt() : wxAuiDefaultTabArt() {}
 
     
@@ -714,7 +756,6 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
     DEC_PYCALLBACK__FONT(SetNormalFont);
     DEC_PYCALLBACK__FONT(SetSelectedFont);
     DEC_PYCALLBACK__FONT(SetMeasuringFont);
-//    DEC_PYCALLBACK_INT_WIN(GetBestTabCtrlSize);
 
     PYPRIVATE;
 };
@@ -723,7 +764,6 @@ class wxPyAuiTabArt :  public wxAuiDefaultTabArt
 IMP_PYCALLBACK__FONT(wxPyAuiTabArt, wxAuiDefaultTabArt, SetNormalFont);
 IMP_PYCALLBACK__FONT(wxPyAuiTabArt, wxAuiDefaultTabArt, SetSelectedFont);
 IMP_PYCALLBACK__FONT(wxPyAuiTabArt, wxAuiDefaultTabArt, SetMeasuringFont);
-//IMP_PYCALLBACK_INT_WIN(wxPyAuiTabArt, wxAuiDefaultTabArt, GetBestTabCtrlSize);
 %}
 
 
@@ -734,9 +774,11 @@ methods to the Python methods implemented in the derived class.", "");
 
 class wxPyAuiTabArt :  public wxAuiDefaultTabArt
 {
+public:
     %pythonAppend wxPyAuiTabArt     setCallbackInfo(PyAuiTabArt)
     wxPyAuiTabArt();
 
+    void _setCallbackInfo(PyObject* self, PyObject* _class);   
 };
 
 

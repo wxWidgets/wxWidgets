@@ -70,9 +70,9 @@ public:
 
     // TODO: should this go into a wxFrameworkSettings class perhaps?
     static void UseNativeStatusBar(bool useNative)
-        { m_useNativeStatusBar = useNative; };
+        { m_useNativeStatusBar = useNative; }
     static bool UsesNativeStatusBar()
-        { return m_useNativeStatusBar; };
+        { return m_useNativeStatusBar; }
 #endif // wxUSE_STATUSBAR
 
 #if wxUSE_MENUS

@@ -83,12 +83,14 @@ static pascal void NavEventProc(
                 ::NavCustomControl(ioParams->context, kNavCtlSetLocation, (void *) &theLocation);
         }
 
-        NavMenuItemSpec  menuItem;
-        menuItem.version = kNavMenuItemSpecVersion;
-        menuItem.menuCreator = 'WXNG';
-        menuItem.menuType = data->currentfilter;
-        wxMacStringToPascal( data->name[data->currentfilter] , (StringPtr)(menuItem.menuItemName) ) ;
-        ::NavCustomControl(ioParams->context, kNavCtlSelectCustomType, &menuItem);
+        if( data->extensions.GetCount() > 0 )
+        {
+            NavMenuItemSpec  menuItem;
+            memset( &menuItem, 0, sizeof(menuItem) );
+            menuItem.version = kNavMenuItemSpecVersion;
+            menuItem.menuType = data->currentfilter;
+            ::NavCustomControl(ioParams->context, kNavCtlSelectCustomType, &menuItem);
+        }
     }
     else if ( inSelector == kNavCBPopupMenuSelect )
     {
@@ -102,14 +104,13 @@ static pascal void NavEventProc(
             {
                 int i = menu->menuType ;
                 wxString extension =  data->extensions[i].AfterLast('.') ;
-                extension.MakeLower() ;
                 wxString sfilename ;
 
                 wxMacCFStringHolder cfString( NavDialogGetSaveFileName( ioParams->context ) , false  );
                 sfilename = cfString.AsString() ;
 
                 int pos = sfilename.Find('.', true) ;
-                if ( pos != wxNOT_FOUND )
+                if ( pos != wxNOT_FOUND && extension != wxT("*") )
                 {
                     sfilename = sfilename.Left(pos+1)+extension ;
                     cfString.Assign( sfilename , wxFONTENCODING_DEFAULT ) ;
@@ -143,7 +144,7 @@ void MakeUserDataRec(OpenUserDataRec *myData , const wxString& filter )
                 }
                 else
                 {
-                    myData->extensions.Add( current.MakeUpper() ) ;
+                    myData->extensions.Add( current ) ;
                     ++filterIndex ;
                 }
 
@@ -162,9 +163,9 @@ void MakeUserDataRec(OpenUserDataRec *myData , const wxString& filter )
         if ( current.empty() )
             myData->extensions.Add( myData->name[filterIndex] ) ;
         else
-            myData->extensions.Add( current.MakeUpper() ) ;
+            myData->extensions.Add( current ) ;
         if ( filterIndex == 0 || isName )
-            myData->name.Add( current.MakeUpper() ) ;
+            myData->name.Add( current ) ;
 
         ++filterIndex ;
 
@@ -212,6 +213,7 @@ static Boolean CheckFile( const wxString &filename , OSType type , OpenUserDataR
                 wxString extension = tokenizer.GetNextToken() ;
                 if ( extension.GetChar(0) == '*' )
                     extension = extension.Mid(1) ;
+                extension.MakeUpper();
 
                 if ( file.length() >= extension.length() && extension == file.Right(extension.length() ) )
                     return true ;
@@ -223,34 +225,6 @@ static Boolean CheckFile( const wxString &filename , OSType type , OpenUserDataR
 
     return true ;
 }
-
-#if !TARGET_API_MAC_OSX
-static pascal Boolean CrossPlatformFileFilter(CInfoPBPtr myCInfoPBPtr, void *dataPtr)
-{
-    OpenUserDataRecPtr data = (OpenUserDataRecPtr) dataPtr ;
-    // return true if this item is invisible or a file
-
-    Boolean visibleFlag;
-    Boolean folderFlag;
-
-    visibleFlag = ! (myCInfoPBPtr->hFileInfo.ioFlFndrInfo.fdFlags & kIsInvisible);
-    folderFlag = (myCInfoPBPtr->hFileInfo.ioFlAttrib & 0x10);
-
-    // because the semantics of the filter proc are "true means don't show
-    // it" we need to invert the result that we return
-
-    if ( !visibleFlag )
-        return true ;
-
-    if ( !folderFlag )
-    {
-        wxString file = wxMacMakeStringFromPascal( myCInfoPBPtr->hFileInfo.ioNamePtr ) ;
-        return !CheckFile( file , myCInfoPBPtr->hFileInfo.ioFlFndrInfo.fdType , data ) ;
-    }
-
-    return false ;
-}
-#endif
 
 // end wxmac
 
@@ -282,9 +256,19 @@ pascal Boolean CrossPlatformFilterCallback(
             FSRef fsref ;
             if ( AEGetDescData (theItem, &fsref, sizeof (FSRef)) == noErr )
             {
+#if 1
                 memcpy( &fsref , *theItem->dataHandle , sizeof(FSRef) ) ;
                 wxString file = wxMacFSRefToPath( &fsref ) ;
                 display = CheckFile( file , theInfo->fileAndFolder.fileInfo.finderInfo.fdType , data ) ;
+#else
+                CFStringRef itemUTI = NULL;
+                OSStatus status = LSCopyItemAttribute (&fsref, kLSRolesAll, kLSItemContentType, (CFTypeRef*)&itemUTI);
+                if (status == noErr)
+                {
+                    display = UTTypeConformsTo (itemUTI, CFSTR("public.text") );
+                    CFRelease (itemUTI);  
+                }
+#endif
             }
         }
     }
@@ -339,10 +323,6 @@ int wxFileDialog::ShowModal()
         if (!numFilters)
             dialogCreateOptions.optionFlags |= kNavNoTypePopup;
 
-        // The extension is important
-        if (numFilters < 2)
-            dialogCreateOptions.optionFlags |= kNavPreserveSaveFileExtension;
-
 #if TARGET_API_MAC_OSX
         if (!(m_windowStyle & wxFD_OVERWRITE_PROMPT))
             dialogCreateOptions.optionFlags |= kNavDontConfirmReplacement;
@@ -380,7 +360,10 @@ int wxFileDialog::ShowModal()
         ::DisposeNavObjectFilterUPP(navFilterUPP);
 
     if (err != noErr)
+    {
+        ::NavDialogDispose(dialog);
         return wxID_CANCEL;
+    }
 
     NavReplyRecord navReply;
     err = ::NavDialogGetReply(dialog, &navReply);
@@ -411,6 +394,7 @@ int wxFileDialog::ShowModal()
             if (!thePath)
             {
                 ::NavDisposeReply(&navReply);
+                ::NavDialogDispose(dialog);
                 return wxID_CANCEL;
             }
 
@@ -427,6 +411,7 @@ int wxFileDialog::ShowModal()
     }
 
     ::NavDisposeReply(&navReply);
+    ::NavDialogDispose(dialog);
 
     return (err == noErr) ? wxID_OK : wxID_CANCEL;
 }

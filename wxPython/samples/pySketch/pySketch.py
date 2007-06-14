@@ -5,7 +5,9 @@
     This is completely free software; please feel free to adapt or use this in
     any way you like.
 
-    Author: Erik Westra (ewestra@wave.co.nz)
+    Original Author: Erik Westra (ewestra@wave.co.nz)
+
+    Other contributors: Bill Baxter (wbaxter@gmail.com)
 
     #########################################################################
 
@@ -41,11 +43,14 @@
       * I suspect that the reference counting for some wxPoint objects is
         getting mucked up; when the user quits, we get errors about being
         unable to call del on a 'None' object.
+
+      * Saving files via pickling is not a robust cross-platform solution.
 """
 import sys
 import cPickle, os.path
+import copy
 import wx
-from wx.lib.buttons import GenBitmapButton
+from wx.lib.buttons import GenBitmapButton,GenBitmapToggleButton
 
 
 import traceback, types
@@ -56,80 +61,48 @@ import traceback, types
 
 # Our menu item IDs:
 
-menu_UNDO          = 10001 # Edit menu items.
-menu_SELECT_ALL    = 10002
-menu_DUPLICATE     = 10003
-menu_EDIT_TEXT     = 10004
-menu_DELETE        = 10005
+menu_DUPLICATE     = wx.NewId() # Edit menu items.
+menu_EDIT_PROPS    = wx.NewId()
 
-menu_SELECT        = 10101 # Tools menu items.
-menu_LINE          = 10102
-menu_RECT          = 10103
-menu_ELLIPSE       = 10104
-menu_TEXT          = 10105
+menu_SELECT        = wx.NewId() # Tools menu items.
+menu_LINE          = wx.NewId()
+menu_POLYGON       = wx.NewId()
+menu_RECT          = wx.NewId()
+menu_ELLIPSE       = wx.NewId()
+menu_TEXT          = wx.NewId()
 
-menu_MOVE_FORWARD  = 10201 # Object menu items.
-menu_MOVE_TO_FRONT = 10202
-menu_MOVE_BACKWARD = 10203
-menu_MOVE_TO_BACK  = 10204
+menu_DC            = wx.NewId() # View menu items.
+menu_GCDC          = wx.NewId()
 
-menu_ABOUT         = 10205 # Help menu items.
+menu_MOVE_FORWARD  = wx.NewId() # Object menu items.
+menu_MOVE_TO_FRONT = wx.NewId()
+menu_MOVE_BACKWARD = wx.NewId()
+menu_MOVE_TO_BACK  = wx.NewId()
+
+menu_ABOUT         = wx.NewId() # Help menu items.
 
 # Our tool IDs:
 
-id_SELECT  = 11001
-id_LINE    = 11002
-id_RECT    = 11003
-id_ELLIPSE = 11004
-id_TEXT    = 11005
+id_SELECT   = wx.NewId()
+id_LINE     = wx.NewId()
+id_POLYGON  = wx.NewId()
+id_SCRIBBLE = wx.NewId()
+id_RECT     = wx.NewId()
+id_ELLIPSE  = wx.NewId()
+id_TEXT     = wx.NewId()
 
 # Our tool option IDs:
 
-id_FILL_OPT   = 12001
-id_PEN_OPT    = 12002
-id_LINE_OPT   = 12003
+id_FILL_OPT   = wx.NewId()
+id_PEN_OPT    = wx.NewId()
+id_LINE_OPT   = wx.NewId()
 
-id_LINESIZE_0 = 13001
-id_LINESIZE_1 = 13002
-id_LINESIZE_2 = 13003
-id_LINESIZE_3 = 13004
-id_LINESIZE_4 = 13005
-id_LINESIZE_5 = 13006
-
-# DrawObject type IDs:
-
-obj_LINE    = 1
-obj_RECT    = 2
-obj_ELLIPSE = 3
-obj_TEXT    = 4
-
-# Selection handle IDs:
-
-handle_NONE         = 1
-handle_TOP_LEFT     = 2
-handle_TOP_RIGHT    = 3
-handle_BOTTOM_LEFT  = 4
-handle_BOTTOM_RIGHT = 5
-handle_START_POINT  = 6
-handle_END_POINT    = 7
-
-# Dragging operations:
-
-drag_NONE   = 1
-drag_RESIZE = 2
-drag_MOVE   = 3
-drag_DRAG   = 4
-
-# Visual Feedback types:
-
-feedback_LINE    = 1
-feedback_RECT    = 2
-feedback_ELLIPSE = 3
-
-# Mouse-event action parameter types:
-
-param_RECT = 1
-param_LINE = 2
+id_LINESIZE_0 = wx.NewId()
+id_LINESIZE_1 = wx.NewId()
+id_LINESIZE_2 = wx.NewId()
+id_LINESIZE_3 = wx.NewId()
+id_LINESIZE_4 = wx.NewId()
+id_LINESIZE_5 = wx.NewId()
 
 # Size of the drawing page, in pixels.
 
@@ -157,47 +130,59 @@ class DrawingFrame(wx.Frame):
                                  wx.NO_FULL_REPAINT_ON_RESIZE)
 
         # Setup our menu bar.
-
         menuBar = wx.MenuBar()
 
         self.fileMenu = wx.Menu()
-        self.fileMenu.Append(wx.ID_NEW,    "New\tCTRL-N")
-        self.fileMenu.Append(wx.ID_OPEN,   "Open...\tCTRL-O")
-        self.fileMenu.Append(wx.ID_CLOSE,  "Close\tCTRL-W")
+        self.fileMenu.Append(wx.ID_NEW,    "New\tCtrl-N", "Create a new document")
+        self.fileMenu.Append(wx.ID_OPEN,   "Open...\tCtrl-O", "Open an existing document")
+        self.fileMenu.Append(wx.ID_CLOSE,  "Close\tCtrl-W")
         self.fileMenu.AppendSeparator()
-        self.fileMenu.Append(wx.ID_SAVE,   "Save\tCTRL-S")
+        self.fileMenu.Append(wx.ID_SAVE,   "Save\tCtrl-S")
         self.fileMenu.Append(wx.ID_SAVEAS, "Save As...")
         self.fileMenu.Append(wx.ID_REVERT, "Revert...")
         self.fileMenu.AppendSeparator()
-        self.fileMenu.Append(wx.ID_EXIT,   "Quit\tCTRL-Q")
+        self.fileMenu.Append(wx.ID_EXIT,   "Quit\tCtrl-Q")
 
         menuBar.Append(self.fileMenu, "File")
 
         self.editMenu = wx.Menu()
-        self.editMenu.Append(menu_UNDO,          "Undo\tCTRL-Z")
+        self.editMenu.Append(wx.ID_UNDO,      "Undo\tCtrl-Z")
+        self.editMenu.Append(wx.ID_REDO,      "Redo\tCtrl-Y")
         self.editMenu.AppendSeparator()
-        self.editMenu.Append(menu_SELECT_ALL,    "Select All\tCTRL-A")
+        self.editMenu.Append(wx.ID_SELECTALL, "Select All\tCtrl-A")
         self.editMenu.AppendSeparator()
-        self.editMenu.Append(menu_DUPLICATE,     "Duplicate\tCTRL-D")
-        self.editMenu.Append(menu_EDIT_TEXT,     "Edit...\tCTRL-E")
-        self.editMenu.Append(menu_DELETE,        "Delete\tDEL")
+        self.editMenu.Append(menu_DUPLICATE,  "Duplicate\tCtrl-D")
+        self.editMenu.Append(menu_EDIT_PROPS,"Edit...\tCtrl-E", "Edit object properties")
+        self.editMenu.Append(wx.ID_CLEAR,     "Delete\tDel")
 
         menuBar.Append(self.editMenu, "Edit")
 
+        self.viewMenu = wx.Menu()
+        self.viewMenu.Append(menu_DC,  "Normal quality", 
+                             "Normal rendering using wx.DC",
+                             kind=wx.ITEM_RADIO)
+        self.viewMenu.Append(menu_GCDC,"High quality", 
+                             "Anti-aliased rendering using wx.GCDC", 
+                             kind=wx.ITEM_RADIO)
+
+        menuBar.Append(self.viewMenu, "View")
+
         self.toolsMenu = wx.Menu()
-        self.toolsMenu.Append(menu_SELECT,  "Selection", kind=wx.ITEM_CHECK)
-        self.toolsMenu.Append(menu_LINE,    "Line",      kind=wx.ITEM_CHECK)
-        self.toolsMenu.Append(menu_RECT,    "Rectangle", kind=wx.ITEM_CHECK)
-        self.toolsMenu.Append(menu_ELLIPSE, "Ellipse",   kind=wx.ITEM_CHECK)
-        self.toolsMenu.Append(menu_TEXT,    "Text",      kind=wx.ITEM_CHECK)
+        self.toolsMenu.Append(id_SELECT,  "Selection", kind=wx.ITEM_RADIO)
+        self.toolsMenu.Append(id_LINE,    "Line",      kind=wx.ITEM_RADIO)
+        self.toolsMenu.Append(id_POLYGON, "Polygon",   kind=wx.ITEM_RADIO)
+        self.toolsMenu.Append(id_SCRIBBLE,"Scribble",  kind=wx.ITEM_RADIO)
+        self.toolsMenu.Append(id_RECT,    "Rectangle", kind=wx.ITEM_RADIO)
+        self.toolsMenu.Append(id_ELLIPSE, "Ellipse",   kind=wx.ITEM_RADIO)
+        self.toolsMenu.Append(id_TEXT,    "Text",      kind=wx.ITEM_RADIO)
 
         menuBar.Append(self.toolsMenu, "Tools")
 
         self.objectMenu = wx.Menu()
         self.objectMenu.Append(menu_MOVE_FORWARD,  "Move Forward")
-        self.objectMenu.Append(menu_MOVE_TO_FRONT, "Move to Front\tCTRL-F")
+        self.objectMenu.Append(menu_MOVE_TO_FRONT, "Move to Front\tCtrl-F")
         self.objectMenu.Append(menu_MOVE_BACKWARD, "Move Backward")
-        self.objectMenu.Append(menu_MOVE_TO_BACK,  "Move to Back\tCTRL-B")
+        self.objectMenu.Append(menu_MOVE_TO_BACK,  "Move to Back\tCtrl-B")
 
         menuBar.Append(self.objectMenu, "Object")
 
@@ -208,44 +193,47 @@ class DrawingFrame(wx.Frame):
 
         self.SetMenuBar(menuBar)
 
+        # Create our statusbar
+
+        self.CreateStatusBar()
+
         # Create our toolbar.
 
-        tsize = (16,16)
-        self.toolbar = self.CreateToolBar(wx.TB_HORIZONTAL |
-                                          wx.NO_BORDER | wx.TB_FLAT)
+        tsize = (15,15)
+        self.toolbar = self.CreateToolBar(wx.TB_HORIZONTAL | wx.NO_BORDER | wx.TB_FLAT)
 
-        self.toolbar.AddSimpleTool(wx.ID_NEW,
-                                   wx.ArtProvider.GetBitmap(wx.ART_NEW, wx.ART_TOOLBAR, tsize),
-                                   "New")
-        self.toolbar.AddSimpleTool(wx.ID_OPEN,
-                                   wx.ArtProvider.GetBitmap(wx.ART_FILE_OPEN, wx.ART_TOOLBAR, tsize),
-                                   "Open")
-        self.toolbar.AddSimpleTool(wx.ID_SAVE,
-                                   wx.ArtProvider.GetBitmap(wx.ART_FILE_SAVE, wx.ART_TOOLBAR, tsize),
-                                   "Save")
+        artBmp = wx.ArtProvider.GetBitmap
+        self.toolbar.AddSimpleTool(
+            wx.ID_NEW, artBmp(wx.ART_NEW, wx.ART_TOOLBAR, tsize), "New")
+        self.toolbar.AddSimpleTool(
+            wx.ID_OPEN, artBmp(wx.ART_FILE_OPEN, wx.ART_TOOLBAR, tsize), "Open")
+        self.toolbar.AddSimpleTool(
+            wx.ID_SAVE, artBmp(wx.ART_FILE_SAVE, wx.ART_TOOLBAR, tsize), "Save")
+        self.toolbar.AddSimpleTool(
+            wx.ID_SAVEAS, artBmp(wx.ART_FILE_SAVE_AS, wx.ART_TOOLBAR, tsize),
+            "Save As...")
+        #-------
         self.toolbar.AddSeparator()
-        self.toolbar.AddSimpleTool(menu_UNDO,
-                                   wx.ArtProvider.GetBitmap(wx.ART_UNDO, wx.ART_TOOLBAR, tsize),
-                                   "Undo")
+        self.toolbar.AddSimpleTool(
+            wx.ID_UNDO, artBmp(wx.ART_UNDO, wx.ART_TOOLBAR, tsize), "Undo")
+        self.toolbar.AddSimpleTool(
+            wx.ID_REDO, artBmp(wx.ART_REDO, wx.ART_TOOLBAR, tsize), "Redo")
         self.toolbar.AddSeparator()
-        self.toolbar.AddSimpleTool(menu_DUPLICATE,
-                                   wx.Bitmap("images/duplicate.bmp",
-                                            wx.BITMAP_TYPE_BMP),
-                                   "Duplicate")
+        self.toolbar.AddSimpleTool(
+            menu_DUPLICATE, wx.Bitmap("images/duplicate.bmp", wx.BITMAP_TYPE_BMP),
+            "Duplicate")
+        #-------
         self.toolbar.AddSeparator()
-        self.toolbar.AddSimpleTool(menu_MOVE_FORWARD,
-                                   wx.Bitmap("images/moveForward.bmp",
-                                            wx.BITMAP_TYPE_BMP),
-                                   "Move Forward")
-        self.toolbar.AddSimpleTool(menu_MOVE_BACKWARD,
-                                   wx.Bitmap("images/moveBack.bmp",
-                                            wx.BITMAP_TYPE_BMP),
-                                   "Move Backward")
+        self.toolbar.AddSimpleTool(
+            menu_MOVE_FORWARD, wx.Bitmap("images/moveForward.bmp", wx.BITMAP_TYPE_BMP),
+            "Move Forward")
+        self.toolbar.AddSimpleTool(
+            menu_MOVE_BACKWARD, wx.Bitmap("images/moveBack.bmp", wx.BITMAP_TYPE_BMP),
+            "Move Backward")
 
         self.toolbar.Realize()
 
-        # Associate each menu/toolbar item with the method that handles that
-        # item.
+        # Associate menu/toolbar items with their handlers.
         menuHandlers = [
         (wx.ID_NEW,    self.doNew),
         (wx.ID_OPEN,   self.doOpen),
@@ -255,17 +243,23 @@ class DrawingFrame(wx.Frame):
         (wx.ID_REVERT, self.doRevert),
         (wx.ID_EXIT,   self.doExit),
 
-        (menu_UNDO,          self.doUndo),
-        (menu_SELECT_ALL,    self.doSelectAll),
+        (wx.ID_UNDO,         self.doUndo),
+        (wx.ID_REDO,         self.doRedo),
+        (wx.ID_SELECTALL,    self.doSelectAll),
         (menu_DUPLICATE,     self.doDuplicate),
-        (menu_EDIT_TEXT,     self.doEditText),
-        (menu_DELETE,        self.doDelete),
+        (menu_EDIT_PROPS,    self.doEditObject),
+        (wx.ID_CLEAR,        self.doDelete),
 
-        (menu_SELECT,  self.doChooseSelectTool),
-        (menu_LINE,    self.doChooseLineTool),
-        (menu_RECT,    self.doChooseRectTool),
-        (menu_ELLIPSE, self.doChooseEllipseTool),
-        (menu_TEXT,    self.doChooseTextTool),
+        (id_SELECT,  self.onChooseTool, self.updChooseTool),
+        (id_LINE,    self.onChooseTool, self.updChooseTool),
+        (id_POLYGON, self.onChooseTool, self.updChooseTool),
+        (id_SCRIBBLE,self.onChooseTool, self.updChooseTool),
+        (id_RECT,    self.onChooseTool, self.updChooseTool),
+        (id_ELLIPSE, self.onChooseTool, self.updChooseTool),
+        (id_TEXT,    self.onChooseTool, self.updChooseTool),
+
+        (menu_DC,      self.doChooseQuality),
+        (menu_GCDC,    self.doChooseQuality),
 
         (menu_MOVE_FORWARD,  self.doMoveForward),
         (menu_MOVE_TO_FRONT, self.doMoveToFront),
@@ -274,10 +268,11 @@ class DrawingFrame(wx.Frame):
 
         (menu_ABOUT, self.doShowAbout)]
         for combo in menuHandlers:
-                id, handler = combo
-                self.Bind(wx.EVT_MENU, handler, id = id)
+            id, handler = combo[:2]
+            self.Bind(wx.EVT_MENU, handler, id = id)
+            if len(combo)>2:
+                self.Bind(wx.EVT_UPDATE_UI, combo[2], id = id)
                 
-        
         # Install our own method to handle closing the window.  This allows us
         # to ask the user if he/she wants to save before closing the window, as
         # well as keeping track of which windows are currently open.
@@ -298,23 +293,40 @@ class DrawingFrame(wx.Frame):
 
         self.toolPalette = wx.BoxSizer(wx.VERTICAL)
 
-        self.selectIcon  = ToolPaletteIcon(self.topPanel, id_SELECT,
-                                           "select", "Selection Tool")
-        self.lineIcon    = ToolPaletteIcon(self.topPanel, id_LINE,
-                                           "line", "Line Tool")
-        self.rectIcon    = ToolPaletteIcon(self.topPanel, id_RECT,
-                                           "rect", "Rectangle Tool")
-        self.ellipseIcon = ToolPaletteIcon(self.topPanel, id_ELLIPSE,
-                                           "ellipse", "Ellipse Tool")
-        self.textIcon    = ToolPaletteIcon(self.topPanel, id_TEXT,
-                                           "text", "Text Tool")
+        self.selectIcon  = ToolPaletteToggle(self.topPanel, id_SELECT,
+                                           "select", "Selection Tool", mode=wx.ITEM_RADIO)
+        self.lineIcon    = ToolPaletteToggle(self.topPanel, id_LINE,
+                                           "line", "Line Tool", mode=wx.ITEM_RADIO)
+        self.polygonIcon = ToolPaletteToggle(self.topPanel, id_POLYGON,
+                                             "polygon", "Polygon Tool", mode=wx.ITEM_RADIO)
+        self.scribbleIcon = ToolPaletteToggle(self.topPanel, id_SCRIBBLE,
+                                             "scribble", "Scribble Tool", mode=wx.ITEM_RADIO)
+        self.rectIcon    = ToolPaletteToggle(self.topPanel, id_RECT,
+                                           "rect", "Rectangle Tool", mode=wx.ITEM_RADIO)
+        self.ellipseIcon = ToolPaletteToggle(self.topPanel, id_ELLIPSE,
+                                           "ellipse", "Ellipse Tool", mode=wx.ITEM_RADIO)
+        self.textIcon    = ToolPaletteToggle(self.topPanel, id_TEXT,
+                                             "text", "Text Tool", mode=wx.ITEM_RADIO)
+
+        # Create the tools
+        self.tools = {
+            'select'  : (self.selectIcon,   SelectDrawingTool()),
+            'line'    : (self.lineIcon,     LineDrawingTool()),
+            'polygon' : (self.polygonIcon,  PolygonDrawingTool()),
+            'scribble': (self.scribbleIcon, ScribbleDrawingTool()),
+            'rect'    : (self.rectIcon,     RectDrawingTool()),
+            'ellipse' : (self.ellipseIcon,  EllipseDrawingTool()),
+            'text'    : (self.textIcon,     TextDrawingTool())
+        }
+
 
         toolSizer = wx.GridSizer(0, 2, 5, 5)
         toolSizer.Add(self.selectIcon)
-        toolSizer.Add((0, 0)) # Gap to make tool icons line up nicely.
         toolSizer.Add(self.lineIcon)
         toolSizer.Add(self.rectIcon)
         toolSizer.Add(self.ellipseIcon)
+        toolSizer.Add(self.polygonIcon)
+        toolSizer.Add(self.scribbleIcon)
         toolSizer.Add(self.textIcon)
 
         self.optionIndicator = ToolOptionIndicator(self.topPanel)
@@ -323,12 +335,12 @@ class DrawingFrame(wx.Frame):
 
         optionSizer = wx.BoxSizer(wx.HORIZONTAL)
 
-        self.penOptIcon  = ToolPaletteIcon(self.topPanel, id_PEN_OPT,
-                                           "penOpt", "Set Pen Colour")
-        self.fillOptIcon = ToolPaletteIcon(self.topPanel, id_FILL_OPT,
-                                           "fillOpt", "Set Fill Colour")
-        self.lineOptIcon = ToolPaletteIcon(self.topPanel, id_LINE_OPT,
-                                           "lineOpt", "Set Line Size")
+        self.penOptIcon  = ToolPaletteButton(self.topPanel, id_PEN_OPT,
+                                             "penOpt", "Set Pen Colour",)
+        self.fillOptIcon = ToolPaletteButton(self.topPanel, id_FILL_OPT,
+                                             "fillOpt", "Set Fill Colour")
+        self.lineOptIcon = ToolPaletteButton(self.topPanel, id_LINE_OPT,
+                                             "lineOpt", "Set Line Size")
 
         margin = wx.LEFT | wx.RIGHT
         optionSizer.Add(self.penOptIcon,  0, margin, 1)
@@ -343,11 +355,13 @@ class DrawingFrame(wx.Frame):
 
         # Make the tool palette icons respond when the user clicks on them.
 
-        self.selectIcon.Bind(wx.EVT_BUTTON, self.onToolIconClick)
-        self.lineIcon.Bind(wx.EVT_BUTTON, self.onToolIconClick)
-        self.rectIcon.Bind(wx.EVT_BUTTON, self.onToolIconClick)
-        self.ellipseIcon.Bind(wx.EVT_BUTTON, self.onToolIconClick)
-        self.textIcon.Bind(wx.EVT_BUTTON, self.onToolIconClick)
+        for tool in self.tools.itervalues():
+            tool[0].Bind(wx.EVT_BUTTON,    self.onChooseTool)
+
+        self.selectIcon.Bind(wx.EVT_BUTTON, self.onChooseTool)
+        self.lineIcon.Bind(wx.EVT_BUTTON, self.onChooseTool)
+
+
         self.penOptIcon.Bind(wx.EVT_BUTTON, self.onPenOptionIconClick)
         self.fillOptIcon.Bind(wx.EVT_BUTTON, self.onFillOptionIconClick)
         self.lineOptIcon.Bind(wx.EVT_BUTTON, self.onLineOptionIconClick)
@@ -355,18 +369,22 @@ class DrawingFrame(wx.Frame):
         # Setup the main drawing area.
 
         self.drawPanel = wx.ScrolledWindow(self.topPanel, -1,
-                                          style=wx.SUNKEN_BORDER)
+                                          style=wx.SUNKEN_BORDER|wx.NO_FULL_REPAINT_ON_RESIZE)
         self.drawPanel.SetBackgroundColour(wx.WHITE)
 
         self.drawPanel.EnableScrolling(True, True)
         self.drawPanel.SetScrollbars(20, 20, PAGE_WIDTH / 20, PAGE_HEIGHT / 20)
 
-        self.drawPanel.Bind(wx.EVT_LEFT_DOWN, self.onMouseEvent)
-        self.drawPanel.Bind(wx.EVT_LEFT_DCLICK, self.onDoubleClickEvent)
-        self.drawPanel.Bind(wx.EVT_RIGHT_DOWN, self.onRightClick)
-        self.drawPanel.Bind(wx.EVT_MOTION, self.onMouseEvent)
-        self.drawPanel.Bind(wx.EVT_LEFT_UP, self.onMouseEvent)
-        self.drawPanel.Bind(wx.EVT_PAINT, self.onPaintEvent)
+        self.drawPanel.Bind(wx.EVT_MOUSE_EVENTS, self.onMouseEvent)
+
+        self.drawPanel.Bind(wx.EVT_IDLE, self.onIdle)
+        self.drawPanel.Bind(wx.EVT_SIZE, self.onSize)
+        self.drawPanel.Bind(wx.EVT_PAINT, self.onPaint)
+        self.drawPanel.Bind(wx.EVT_ERASE_BACKGROUND, self.onEraseBackground)
+        self.drawPanel.Bind(wx.EVT_SCROLLWIN, self.onPanelScroll)
+
+        self.Bind(wx.EVT_TIMER, self.onIdle)
+
 
         # Position everything in the window.
 
@@ -382,8 +400,13 @@ class DrawingFrame(wx.Frame):
 
         # Select an initial tool.
 
+        self.curToolName = None
+        self.curToolIcon = None
         self.curTool = None
-        self._setCurrentTool(self.selectIcon)
+        self.setCurrentTool("select")
+
+        # Set initial dc mode to fast
+        self.wrapDC = lambda dc: dc
 
         # Setup our frame to hold the contents of a sketch document.
 
@@ -391,34 +414,35 @@ class DrawingFrame(wx.Frame):
         self.fileName  = fileName
         self.contents  = []     # front-to-back ordered list of DrawingObjects.
         self.selection = []     # List of selected DrawingObjects.
-        self.undoInfo  = None   # Saved contents for undo.
-        self.dragMode  = drag_NONE # Current mouse-drag mode.
+        self.undoStack = []     # Stack of saved contents for undo.
+        self.redoStack = []     # Stack of saved contents for redo.
 
         if self.fileName != None:
             self.loadContents()
+
+        self._initBuffer()
 
         self._adjustMenus()
 
         # Finally, set our initial pen, fill and line options.
 
-        self.penColour  = wx.BLACK
-        self.fillColour = wx.WHITE
-        self.lineSize   = 1
+        self._setPenColour(wx.BLACK)
+        self._setFillColour(wx.Colour(215,253,254))
+        self._setLineSize(2)
+        
+        self.backgroundFillBrush = None # create on demand
+
+        # Start the background redraw timer
+        # This is optional, but it gives the double-buffered contents a 
+        # chance to redraw even when idle events are disabled (like during 
+        # resize and scrolling)
+        self.redrawTimer = wx.Timer(self)
+        self.redrawTimer.Start(700)
+
 
     # ============================
     # == Event Handling Methods ==
     # ============================
-
-    def onToolIconClick(self, event):
-        """ Respond to the user clicking on one of our tool icons.
-        """
-        iconID = event.GetEventObject().GetId()
-        if   iconID == id_SELECT:   self.doChooseSelectTool()
-        elif iconID == id_LINE:     self.doChooseLineTool()
-        elif iconID == id_RECT:     self.doChooseRectTool()
-        elif iconID == id_ELLIPSE:  self.doChooseEllipseTool()
-        elif iconID == id_TEXT:     self.doChooseTextTool()
-        else:                       wx.Bell(); print "1"
 
 
     def onPenOptionIconClick(self, event):
@@ -431,6 +455,7 @@ class DrawingFrame(wx.Frame):
             data.SetColour(self.penColour)
 
         dialog = wx.ColourDialog(self, data)
+        dialog.SetTitle('Choose line colour')
         if dialog.ShowModal() == wx.ID_OK:
             c = dialog.GetColourData().GetColour()
             self._setPenColour(wx.Colour(c.Red(), c.Green(), c.Blue()))
@@ -447,6 +472,7 @@ class DrawingFrame(wx.Frame):
             data.SetColour(self.fillColour)
 
         dialog = wx.ColourDialog(self, data)
+        dialog.SetTitle('Choose fill colour')
         if dialog.ShowModal() == wx.ID_OK:
             c = dialog.GetColourData().GetColour()
             self._setFillColour(wx.Colour(c.Red(), c.Green(), c.Blue()))
@@ -472,294 +498,46 @@ class DrawingFrame(wx.Frame):
             We make the arrow keys move the selected object(s) by one pixel in
             the given direction.
         """
+        step = 1
+        if event.ShiftDown():
+            step = 20
+
         if event.GetKeyCode() == wx.WXK_UP:
-            self._moveObject(0, -1)
+            self._moveObject(0, -step)
         elif event.GetKeyCode() == wx.WXK_DOWN:
-            self._moveObject(0, 1)
+            self._moveObject(0, step)
         elif event.GetKeyCode() == wx.WXK_LEFT:
-            self._moveObject(-1, 0)
+            self._moveObject(-step, 0)
         elif event.GetKeyCode() == wx.WXK_RIGHT:
-            self._moveObject(1, 0)
+            self._moveObject(step, 0)
         else:
             event.Skip()
 
 
     def onMouseEvent(self, event):
-        """ Respond to the user clicking on our main drawing panel.
+        """ Respond to mouse events in the main drawing panel
 
             How we respond depends on the currently selected tool.
         """
-        if not (event.LeftDown() or event.Dragging() or event.LeftUp()):
-            return # Ignore mouse movement without click/drag.
+        if self.curTool is None: return
 
-        if self.curTool == self.selectIcon:
-            feedbackType = feedback_RECT
-            action       = self.selectByRectangle
-            actionParam  = param_RECT
-            selecting    = True
-            dashedLine   = True
-        elif self.curTool == self.lineIcon:
-            feedbackType = feedback_LINE
-            action       = self.createLine
-            actionParam  = param_LINE
-            selecting    = False
-            dashedLine   = False
-        elif self.curTool == self.rectIcon:
-            feedbackType = feedback_RECT
-            action       = self.createRect
-            actionParam  = param_RECT
-            selecting    = False
-            dashedLine   = False
-        elif self.curTool == self.ellipseIcon:
-            feedbackType = feedback_ELLIPSE
-            action       = self.createEllipse
-            actionParam  = param_RECT
-            selecting    = False
-            dashedLine   = False
-        elif self.curTool == self.textIcon:
-            feedbackType = feedback_RECT
-            action       = self.createText
-            actionParam  = param_RECT
-            selecting    = False
-            dashedLine   = True
-        else:
-            wx.Bell(); print "2"
-            return
+        # Translate event into canvas coordinates and pass to current tool
+        origx,origy = event.X, event.Y
+        pt = self._getEventCoordinates(event)
+        event.m_x = pt.x
+        event.m_y = pt.y
+        handled = self.curTool.onMouseEvent(self,event)
+        event.m_x = origx
+        event.m_y = origy
 
-        if event.LeftDown():
-            mousePt = self._getEventCoordinates(event)
-            if selecting:
-                obj, handle = self._getObjectAndSelectionHandleAt(mousePt)
+        if handled: return
 
-            if selecting and (obj != None) and (handle != handle_NONE):
+        # otherwise handle it ourselves
+        if event.RightDown():
+            self.doPopupContextMenu(event)
+        
 
-                # The user clicked on an object's selection handle.  Let the
-                # user resize the clicked-on object.
-
-                self.dragMode     = drag_RESIZE
-                self.resizeObject = obj
-
-                if obj.getType() == obj_LINE:
-                    self.resizeFeedback = feedback_LINE
-                    pos  = obj.getPosition()
-                    startPt = wx.Point(pos.x + obj.getStartPt().x,
-                                      pos.y + obj.getStartPt().y)
-                    endPt   = wx.Point(pos.x + obj.getEndPt().x,
-                                      pos.y + obj.getEndPt().y)
-                    if handle == handle_START_POINT:
-                        self.resizeAnchor  = endPt
-                        self.resizeFloater = startPt
-                    else:
-                        self.resizeAnchor  = startPt
-                        self.resizeFloater = endPt
-                else:
-                    self.resizeFeedback = feedback_RECT
-                    pos  = obj.getPosition()
-                    size = obj.getSize()
-                    topLeft  = wx.Point(pos.x, pos.y)
-                    topRight = wx.Point(pos.x + size.width, pos.y)
-                    botLeft  = wx.Point(pos.x, pos.y + size.height)
-                    botRight = wx.Point(pos.x + size.width, pos.y + size.height)
-
-                    if handle == handle_TOP_LEFT:
-                        self.resizeAnchor  = botRight
-                        self.resizeFloater = topLeft
-                    elif handle == handle_TOP_RIGHT:
-                        self.resizeAnchor  = botLeft
-                        self.resizeFloater = topRight
-                    elif handle == handle_BOTTOM_LEFT:
-                        self.resizeAnchor  = topRight
-                        self.resizeFloater = botLeft
-                    elif handle == handle_BOTTOM_RIGHT:
-                        self.resizeAnchor  = topLeft
-                        self.resizeFloater = botRight
-
-                self.curPt = mousePt
-                self.resizeOffsetX = self.resizeFloater.x - mousePt.x
-                self.resizeOffsetY = self.resizeFloater.y - mousePt.y
-                endPt = wx.Point(self.curPt.x + self.resizeOffsetX,
-                                self.curPt.y + self.resizeOffsetY)
-                self._drawVisualFeedback(self.resizeAnchor, endPt,
-                                         self.resizeFeedback, False)
-
-            elif selecting and (self._getObjectAt(mousePt) != None):
-
-                # The user clicked on an object to select it.  If the user
-                # drags, he/she will move the object.
-
-                self.select(self._getObjectAt(mousePt))
-                self.dragMode = drag_MOVE
-                self.moveOrigin = mousePt
-                self.curPt      = mousePt
-                self._drawObjectOutline(0, 0)
-
-            else:
-
-                # The user is dragging out a selection rect or new object.
-
-                self.dragOrigin = mousePt
-                self.curPt      = mousePt
-                self.drawPanel.SetCursor(wx.CROSS_CURSOR)
-                self.drawPanel.CaptureMouse()
-                self._drawVisualFeedback(mousePt, mousePt, feedbackType,
-                                         dashedLine)
-                self.dragMode = drag_DRAG
-
-            event.Skip()
-            return
-
-        if event.Dragging():
-            if self.dragMode == drag_RESIZE:
-
-                # We're resizing an object.
-
-                mousePt = self._getEventCoordinates(event)
-                if (self.curPt.x != mousePt.x) or (self.curPt.y != mousePt.y):
-                    # Erase previous visual feedback.
-                    endPt = wx.Point(self.curPt.x + self.resizeOffsetX,
-                                    self.curPt.y + self.resizeOffsetY)
-                    self._drawVisualFeedback(self.resizeAnchor, endPt,
-                                             self.resizeFeedback, False)
-                    self.curPt = mousePt
-                    # Draw new visual feedback.
-                    endPt = wx.Point(self.curPt.x + self.resizeOffsetX,
-                                    self.curPt.y + self.resizeOffsetY)
-                    self._drawVisualFeedback(self.resizeAnchor, endPt,
-                                             self.resizeFeedback, False)
-
-            elif self.dragMode == drag_MOVE:
-
-                # We're moving a selected object.
-
-                mousePt = self._getEventCoordinates(event)
-                if (self.curPt.x != mousePt.x) or (self.curPt.y != mousePt.y):
-                    # Erase previous visual feedback.
-                    self._drawObjectOutline(self.curPt.x - self.moveOrigin.x,
-                                            self.curPt.y - self.moveOrigin.y)
-                    self.curPt = mousePt
-                    # Draw new visual feedback.
-                    self._drawObjectOutline(self.curPt.x - self.moveOrigin.x,
-                                            self.curPt.y - self.moveOrigin.y)
-
-            elif self.dragMode == drag_DRAG:
-
-                # We're dragging out a new object or selection rect.
-
-                mousePt = self._getEventCoordinates(event)
-                if (self.curPt.x != mousePt.x) or (self.curPt.y != mousePt.y):
-                    # Erase previous visual feedback.
-                    self._drawVisualFeedback(self.dragOrigin, self.curPt,
-                                             feedbackType, dashedLine)
-                    self.curPt = mousePt
-                    # Draw new visual feedback.
-                    self._drawVisualFeedback(self.dragOrigin, self.curPt,
-                                             feedbackType, dashedLine)
-
-            event.Skip()
-            return
-
-        if event.LeftUp():
-            if self.dragMode == drag_RESIZE:
-
-                # We're resizing an object.
-
-                mousePt = self._getEventCoordinates(event)
-                # Erase last visual feedback.
-                endPt = wx.Point(self.curPt.x + self.resizeOffsetX,
-                                self.curPt.y + self.resizeOffsetY)
-                self._drawVisualFeedback(self.resizeAnchor, endPt,
-                                         self.resizeFeedback, False)
-
-                resizePt = wx.Point(mousePt.x + self.resizeOffsetX,
-                                   mousePt.y + self.resizeOffsetY)
-
-                if (self.resizeFloater.x != resizePt.x) or \
-                   (self.resizeFloater.y != resizePt.y):
-                   self._resizeObject(self.resizeObject,
-                                      self.resizeAnchor,
-                                      self.resizeFloater,
-                                      resizePt)
-                else:
-                    self.drawPanel.Refresh() # Clean up after empty resize.
-
-            elif self.dragMode == drag_MOVE:
-
-                # We're moving a selected object.
-
-                mousePt = self._getEventCoordinates(event)
-                # Erase last visual feedback.
-                self._drawObjectOutline(self.curPt.x - self.moveOrigin.x,
-                                        self.curPt.y - self.moveOrigin.y)
-                if (self.moveOrigin.x != mousePt.x) or \
-                   (self.moveOrigin.y != mousePt.y):
-                    self._moveObject(mousePt.x - self.moveOrigin.x,
-                                     mousePt.y - self.moveOrigin.y)
-                else:
-                    self.drawPanel.Refresh() # Clean up after empty drag.
-
-            elif self.dragMode == drag_DRAG:
-
-                # We're dragging out a new object or selection rect.
-
-                mousePt = self._getEventCoordinates(event)
-                # Erase last visual feedback.
-                self._drawVisualFeedback(self.dragOrigin, self.curPt,
-                                         feedbackType, dashedLine)
-                self.drawPanel.ReleaseMouse()
-                self.drawPanel.SetCursor(wx.STANDARD_CURSOR)
-                # Perform the appropriate action for the current tool.
-                if actionParam == param_RECT:
-                    x1 = min(self.dragOrigin.x, self.curPt.x)
-                    y1 = min(self.dragOrigin.y, self.curPt.y)
-                    x2 = max(self.dragOrigin.x, self.curPt.x)
-                    y2 = max(self.dragOrigin.y, self.curPt.y)
-
-                    startX = x1
-                    startY = y1
-                    width  = x2 - x1
-                    height = y2 - y1
-
-                    if not selecting:
-                        if ((x2-x1) < 8) or ((y2-y1) < 8): return # Too small.
-
-                    action(x1, y1, x2-x1, y2-y1)
-                elif actionParam == param_LINE:
-                    action(self.dragOrigin.x, self.dragOrigin.y,
-                           self.curPt.x, self.curPt.y)
-
-            self.dragMode = drag_NONE # We've finished with this mouse event.
-            event.Skip()
-
-
-    def onDoubleClickEvent(self, event):
-        """ Respond to a double-click within our drawing panel.
-        """
-        mousePt = self._getEventCoordinates(event)
-        obj = self._getObjectAt(mousePt)
-        if obj == None: return
-
-        # Let the user edit the given object.
-
-        if obj.getType() == obj_TEXT:
-            editor = EditTextObjectDialog(self, "Edit Text Object")
-            editor.objectToDialog(obj)
-            if editor.ShowModal() == wx.ID_CANCEL:
-                editor.Destroy()
-                return
-
-            self._saveUndoInfo()
-
-            editor.dialogToObject(obj)
-            editor.Destroy()
-
-            self.dirty = True
-            self.drawPanel.Refresh()
-            self._adjustMenus()
-        else:
-            wx.Bell(); print "3"
-
-
-    def onRightClick(self, event):
+    def doPopupContextMenu(self, event):
         """ Respond to the user right-clicking within our drawing panel.
 
             We select the clicked-on item, if necessary, and display a pop-up
@@ -767,7 +545,7 @@ class DrawingFrame(wx.Frame):
             item(s).
         """
         mousePt = self._getEventCoordinates(event)
-        obj = self._getObjectAt(mousePt)
+        obj = self.getObjectAt(mousePt)
 
         if obj == None: return # Nothing selected.
 
@@ -779,51 +557,161 @@ class DrawingFrame(wx.Frame):
 
         menu = wx.Menu()
         menu.Append(menu_DUPLICATE, "Duplicate")
-        menu.Append(menu_EDIT_TEXT, "Edit...")
-        menu.Append(menu_DELETE,    "Delete")
+        menu.Append(menu_EDIT_PROPS,"Edit...")
+        menu.Append(wx.ID_CLEAR,    "Delete")
         menu.AppendSeparator()
         menu.Append(menu_MOVE_FORWARD,   "Move Forward")
         menu.Append(menu_MOVE_TO_FRONT,  "Move to Front")
         menu.Append(menu_MOVE_BACKWARD,  "Move Backward")
         menu.Append(menu_MOVE_TO_BACK,   "Move to Back")
 
-        menu.Enable(menu_EDIT_TEXT,     obj.getType() == obj_TEXT)
+        menu.Enable(menu_EDIT_PROPS,    obj.hasPropertyEditor())
         menu.Enable(menu_MOVE_FORWARD,  obj != self.contents[0])
         menu.Enable(menu_MOVE_TO_FRONT, obj != self.contents[0])
         menu.Enable(menu_MOVE_BACKWARD, obj != self.contents[-1])
         menu.Enable(menu_MOVE_TO_BACK,  obj != self.contents[-1])
 
-        self.Bind(wx.EVT_MENU, self.doDuplicate, id=menu_DUPLICATE)
-        self.Bind(wx.EVT_MENU, self.doEditText, id=menu_EDIT_TEXT)
-        self.Bind(wx.EVT_MENU, self.doDelete, id=menu_DELETE)
+        self.Bind(wx.EVT_MENU, self.doDuplicate,   id=menu_DUPLICATE)
+        self.Bind(wx.EVT_MENU, self.doEditObject,  id=menu_EDIT_PROPS)
+        self.Bind(wx.EVT_MENU, self.doDelete,      id=wx.ID_CLEAR)
         self.Bind(wx.EVT_MENU, self.doMoveForward, id=menu_MOVE_FORWARD)
         self.Bind(wx.EVT_MENU, self.doMoveToFront, id=menu_MOVE_TO_FRONT)
-        self.Bind(wx.EVT_MENU, self.doMoveBackward, id=menu_MOVE_BACKWARD)
-        self.Bind(wx.EVT_MENU, self.doMoveToBack, id=menu_MOVE_TO_BACK)  
+        self.Bind(wx.EVT_MENU, self.doMoveBackward,id=menu_MOVE_BACKWARD)
+        self.Bind(wx.EVT_MENU, self.doMoveToBack,  id=menu_MOVE_TO_BACK)  
                             
         # Show the pop-up menu.
 
         clickPt = wx.Point(mousePt.x + self.drawPanel.GetPosition().x,
                           mousePt.y + self.drawPanel.GetPosition().y)
-        self.drawPanel.PopupMenu(menu, clickPt)
+        self.drawPanel.PopupMenu(menu, mousePt)
         menu.Destroy()
 
 
-    def onPaintEvent(self, event):
-        """ Respond to a request to redraw the contents of our drawing panel.
+    def onSize(self, event):
         """
-        dc = wx.PaintDC(self.drawPanel)
+        Called when the window is resized.  We set a flag so the idle
+        handler will resize the buffer.
+        """
+        self.requestRedraw()
+
+
+    def onIdle(self, event):
+        """
+        If the size was changed then resize the bitmap used for double
+        buffering to match the window size.  We do it in Idle time so
+        there is only one refresh after resizing is done, not lots while
+        it is happening.
+        """
+        if self._reInitBuffer and self.IsShown():
+            self._initBuffer()
+            self.drawPanel.Refresh(False)
+
+    def requestRedraw(self):
+        """Requests a redraw of the drawing panel contents.
+
+        The actual redrawing doesn't happen until the next idle time.
+        """
+        self._reInitBuffer = True
+
+    def onPaint(self, event):
+        """
+        Called when the window is exposed.
+        """
+        # Create a buffered paint DC.  It will create the real
+        # wx.PaintDC and then blit the bitmap to it when dc is
+        # deleted.
+        dc = wx.BufferedPaintDC(self.drawPanel, self.buffer)
+
+
+        # On Windows, if that's all we do things look a little rough
+        # So in order to make scrolling more polished-looking
+        # we iterate over the exposed regions and fill in unknown
+        # areas with a fall-back pattern.
+
+        if wx.Platform != '__WXMSW__':
+            return
+
+        # First get the update rects and subtract off the part that 
+        # self.buffer has correct already
+        region = self.drawPanel.GetUpdateRegion()
+        panelRect = self.drawPanel.GetClientRect()
+        offset = list(self.drawPanel.CalcUnscrolledPosition(0,0))
+        offset[0] -= self.saved_offset[0]
+        offset[1] -= self.saved_offset[1]
+        region.Subtract(-offset[0],- offset[1],panelRect.Width, panelRect.Height)
+
+        # Now iterate over the remaining region rects and fill in with a pattern
+        rgn_iter = wx.RegionIterator(region)
+        if rgn_iter.HaveRects():
+            self.setBackgroundMissingFillStyle(dc)
+            offset = self.drawPanel.CalcUnscrolledPosition(0,0)
+        while rgn_iter:
+            r = rgn_iter.GetRect()
+            if r.Size != self.drawPanel.ClientSize:
+                dc.DrawRectangleRect(r)
+            rgn_iter.Next()
+            
+
+    def setBackgroundMissingFillStyle(self, dc):
+        if self.backgroundFillBrush is None:
+            # Win95 can only handle a 8x8 stipple bitmaps max
+            #stippleBitmap = wx.BitmapFromBits("\xf0"*4 + "\x0f"*4,8,8)
+            # ...but who uses Win95?
+            stippleBitmap = wx.BitmapFromBits("\x06",2,2)
+            stippleBitmap.SetMask(wx.Mask(stippleBitmap))
+            bgbrush = wx.Brush(wx.WHITE, wx.STIPPLE_MASK_OPAQUE)
+            bgbrush.SetStipple(stippleBitmap)
+            self.backgroundFillBrush = bgbrush
+
+        dc.SetPen(wx.TRANSPARENT_PEN)
+        dc.SetBrush(self.backgroundFillBrush)
+        dc.SetTextForeground(wx.LIGHT_GREY)
+        dc.SetTextBackground(wx.WHITE)
+            
+
+    def onEraseBackground(self, event):
+        """
+        Overridden to do nothing to prevent flicker
+        """
+        pass
+
+
+    def onPanelScroll(self, event):
+        """
+        Called when the user changes scrolls the drawPanel
+        """
+        # make a note to ourselves to redraw when we get a chance
+        self.requestRedraw()
+        event.Skip()
+        pass
+
+    def drawContents(self, dc):
+        """
+        Does the actual drawing of all drawing contents with the specified dc
+        """
+        # PrepareDC sets the device origin according to current scrolling
         self.drawPanel.PrepareDC(dc)
-        dc.BeginDrawing()
 
-        for i in range(len(self.contents)-1, -1, -1):
-            obj = self.contents[i]
+        gdc = self.wrapDC(dc)
+
+        # First pass draws objects
+        ordered_selection = []
+        for obj in self.contents[::-1]:
             if obj in self.selection:
-                obj.draw(dc, True)
+                obj.draw(gdc, True)
+                ordered_selection.append(obj)
             else:
-                obj.draw(dc, False)
+                obj.draw(gdc, False)
 
-        dc.EndDrawing()
+        # First pass draws objects
+        if self.curTool is not None:
+            self.curTool.draw(gdc)
+
+        # Second pass draws selection handles so they're always on top
+        for obj in ordered_selection:
+            obj.drawHandles(gdc)
+
+
 
     # ==========================
     # == Menu Command Methods ==
@@ -937,26 +825,22 @@ class DrawingFrame(wx.Frame):
     def doUndo(self, event):
         """ Respond to the "Undo" menu command.
         """
-        if self.undoInfo == None: return
+        if not self.undoStack: return 
 
-        undoData = self.undoInfo
-        self._saveUndoInfo() # For undoing the undo...
+        state = self._buildStoredState()
+        self.redoStack.append(state)
+        state = self.undoStack.pop()
+        self._restoreStoredState(state)
 
-        self.contents = []
+    def doRedo(self, event):
+        """ Respond to the "Redo" menu.
+        """
+        if not self.redoStack: return
 
-        for type, data in undoData["contents"]:
-            obj = DrawingObject(type)
-            obj.setData(data)
-            self.contents.append(obj)
-
-        self.selection = []
-        for i in undoData["selection"]:
-            self.selection.append(self.contents[i])
-
-        self.dirty = True
-        self.drawPanel.Refresh()
-        self._adjustMenus()
-
+        state = self._buildStoredState()
+        self.undoStack.append(state)
+        state = self.redoStack.pop()
+        self._restoreStoredState(state)
 
     def doSelectAll(self, event):
         """ Respond to the "Select All" menu command.
@@ -967,13 +851,12 @@ class DrawingFrame(wx.Frame):
     def doDuplicate(self, event):
         """ Respond to the "Duplicate" menu command.
         """
-        self._saveUndoInfo()
+        self.saveUndoInfo()
 
         objs = []
         for obj in self.contents:
             if obj in self.selection:
-                newObj = DrawingObject(obj.getType())
-                newObj.setData(obj.getData())
+                newObj = copy.deepcopy(obj)
                 pos = obj.getPosition()
                 newObj.setPosition(wx.Point(pos.x + 10, pos.y + 10))
                 objs.append(newObj)
@@ -983,34 +866,26 @@ class DrawingFrame(wx.Frame):
         self.selectMany(objs)
 
 
-    def doEditText(self, event):
-        """ Respond to the "Edit Text" menu command.
+    def doEditObject(self, event):
+        """ Respond to the "Edit..." menu command.
         """
         if len(self.selection) != 1: return
 
         obj = self.selection[0]
-        if obj.getType() != obj_TEXT: return
+        if not obj.hasPropertyEditor(): 
+            assert False, "doEditObject called on non-editable"
 
-        editor = EditTextObjectDialog(self, "Edit Text Object")
-        editor.objectToDialog(obj)
-        if editor.ShowModal() == wx.ID_CANCEL:
-            editor.Destroy()
-            return
-
-        self._saveUndoInfo()
-
-        editor.dialogToObject(obj)
-        editor.Destroy()
-
-        self.dirty = True
-        self.drawPanel.Refresh()
-        self._adjustMenus()
+        ret = obj.doPropertyEdit(self)
+        if ret:
+            self.dirty = True
+            self.requestRedraw()
+            self._adjustMenus()
 
 
     def doDelete(self, event):
         """ Respond to the "Delete" menu command.
         """
-        self._saveUndoInfo()
+        self.saveUndoInfo()
 
         for obj in self.selection:
             self.contents.remove(obj)
@@ -1018,56 +893,53 @@ class DrawingFrame(wx.Frame):
         self.deselectAll()
 
 
-    def doChooseSelectTool(self, event=None):
-        """ Respond to the "Select Tool" menu command.
+    def onChooseTool(self, event):
+        """ Respond to tool selection menu and tool palette selections
         """
-        self._setCurrentTool(self.selectIcon)
-        self.drawPanel.SetCursor(wx.STANDARD_CURSOR)
-        self._adjustMenus()
+        obj = event.GetEventObject()
+        id2name = { id_SELECT: "select",
+                    id_LINE: "line",
+                    id_POLYGON: "polygon",
+                    id_SCRIBBLE: "scribble",
+                    id_RECT: "rect",
+                    id_ELLIPSE: "ellipse",
+                    id_TEXT: "text" }
+        toolID = event.GetId()
+        name = id2name.get( toolID )
+        
+        if name:
+            self.setCurrentTool(name)
+
+    def updChooseTool(self, event):
+        """UI update event that keeps tool menu in sync with the PaletteIcons"""
+        obj = event.GetEventObject()
+        id2name = { id_SELECT: "select",
+                    id_LINE: "line",
+                    id_POLYGON: "polygon",
+                    id_SCRIBBLE: "scribble",
+                    id_RECT: "rect",
+                    id_ELLIPSE: "ellipse",
+                    id_TEXT: "text" }
+        toolID = event.GetId()
+        event.Check( toolID == self.curToolIcon.GetId() )
 
 
-    def doChooseLineTool(self, event=None):
-        """ Respond to the "Line Tool" menu command.
+    def doChooseQuality(self, event):
+        """Respond to the render quality menu commands
         """
-        self._setCurrentTool(self.lineIcon)
-        self.drawPanel.SetCursor(wx.CROSS_CURSOR)
-        self.deselectAll()
+        if event.GetId() == menu_DC:
+            self.wrapDC = lambda dc: dc
+        else:
+            self.wrapDC = lambda dc: wx.GCDC(dc)
         self._adjustMenus()
-
-
-    def doChooseRectTool(self, event=None):
-        """ Respond to the "Rect Tool" menu command.
-        """
-        self._setCurrentTool(self.rectIcon)
-        self.drawPanel.SetCursor(wx.CROSS_CURSOR)
-        self.deselectAll()
-        self._adjustMenus()
-
-
-    def doChooseEllipseTool(self, event=None):
-        """ Respond to the "Ellipse Tool" menu command.
-        """
-        self._setCurrentTool(self.ellipseIcon)
-        self.drawPanel.SetCursor(wx.CROSS_CURSOR)
-        self.deselectAll()
-        self._adjustMenus()
-
-
-    def doChooseTextTool(self, event=None):
-        """ Respond to the "Text Tool" menu command.
-        """
-        self._setCurrentTool(self.textIcon)
-        self.drawPanel.SetCursor(wx.CROSS_CURSOR)
-        self.deselectAll()
-        self._adjustMenus()
-
+        self.requestRedraw()
 
     def doMoveForward(self, event):
         """ Respond to the "Move Forward" menu command.
         """
         if len(self.selection) != 1: return
 
-        self._saveUndoInfo()
+        self.saveUndoInfo()
 
         obj = self.selection[0]
         index = self.contents.index(obj)
@@ -1076,7 +948,7 @@ class DrawingFrame(wx.Frame):
         del self.contents[index]
         self.contents.insert(index-1, obj)
 
-        self.drawPanel.Refresh()
+        self.requestRedraw()
         self._adjustMenus()
 
 
@@ -1085,13 +957,13 @@ class DrawingFrame(wx.Frame):
         """
         if len(self.selection) != 1: return
 
-        self._saveUndoInfo()
+        self.saveUndoInfo()
 
         obj = self.selection[0]
         self.contents.remove(obj)
         self.contents.insert(0, obj)
 
-        self.drawPanel.Refresh()
+        self.requestRedraw()
         self._adjustMenus()
 
 
@@ -1100,7 +972,7 @@ class DrawingFrame(wx.Frame):
         """
         if len(self.selection) != 1: return
 
-        self._saveUndoInfo()
+        self.saveUndoInfo()
 
         obj = self.selection[0]
         index = self.contents.index(obj)
@@ -1109,7 +981,7 @@ class DrawingFrame(wx.Frame):
         del self.contents[index]
         self.contents.insert(index+1, obj)
 
-        self.drawPanel.Refresh()
+        self.requestRedraw()
         self._adjustMenus()
 
 
@@ -1118,13 +990,13 @@ class DrawingFrame(wx.Frame):
         """
         if len(self.selection) != 1: return
 
-        self._saveUndoInfo()
+        self.saveUndoInfo()
 
         obj = self.selection[0]
         self.contents.remove(obj)
         self.contents.append(obj)
 
-        self.drawPanel.Refresh()
+        self.requestRedraw()
         self._adjustMenus()
 
 
@@ -1170,8 +1042,12 @@ class DrawingFrame(wx.Frame):
         lab4.SetFont(boldFont)
         lab4.SetSize(lab4.GetBestSize())
 
-        lab5 = wx.StaticText(panel, -1, "Author: Erik Westra " + \
-                                       "(ewestra@wave.co.nz)")
+        lab5 = wx.StaticText(panel, -1,
+                             "Author: Erik Westra " + \
+                             "(ewestra@wave.co.nz)\n" + \
+                             "Contributors: Bill Baxter " +\
+                             "(wbaxter@gmail.com)  ")
+
         lab5.SetFont(boldFont)
         lab5.SetSize(lab5.GetBestSize())
 
@@ -1204,89 +1080,62 @@ class DrawingFrame(wx.Frame):
         btn = dialog.ShowModal()
         dialog.Destroy()
 
+    def getTextEditor(self):
+        if not hasattr(self,'textEditor') or not self.textEditor:
+            self.textEditor = EditTextObjectDialog(self, "Edit Text Object")
+        return self.textEditor
+
     # =============================
     # == Object Creation Methods ==
     # =============================
 
-    def createLine(self, x1, y1, x2, y2):
-        """ Create a new line object at the given position and size.
+    def addObject(self, obj, select=True):
+        """Add a new drawing object to the canvas.
+        
+        If select is True then also select the object
         """
-        self._saveUndoInfo()
-
-        topLeftX  = min(x1, x2)
-        topLeftY  = min(y1, y2)
-        botRightX = max(x1, x2)
-        botRightY = max(y1, y2)
-
-        obj = DrawingObject(obj_LINE, position=wx.Point(topLeftX, topLeftY),
-                            size=wx.Size(botRightX-topLeftX,
-                                        botRightY-topLeftY),
-                            penColour=self.penColour,
-                            fillColour=self.fillColour,
-                            lineSize=self.lineSize,
-                            startPt = wx.Point(x1 - topLeftX, y1 - topLeftY),
-                            endPt   = wx.Point(x2 - topLeftX, y2 - topLeftY))
+        self.saveUndoInfo()
         self.contents.insert(0, obj)
         self.dirty = True
-        self.doChooseSelectTool()
-        self.select(obj)
+        if select:
+            self.select(obj)
+        #self.setCurrentTool('select')
 
+    def saveUndoInfo(self):
+        """ Remember the current state of the document, to allow for undo.
 
-    def createRect(self, x, y, width, height):
-        """ Create a new rectangle object at the given position and size.
+            We make a copy of the document's contents, so that we can return to
+            the previous contents if the user does something and then wants to
+            undo the operation.
+            
+            This should be called only for a new modification to the document
+            since it erases the redo history.
         """
-        self._saveUndoInfo()
+        state = self._buildStoredState()
 
-        obj = DrawingObject(obj_RECT, position=wx.Point(x, y),
-                            size=wx.Size(width, height),
-                            penColour=self.penColour,
-                            fillColour=self.fillColour,
-                            lineSize=self.lineSize)
-        self.contents.insert(0, obj)
+        self.undoStack.append(state)
+        self.redoStack = []
         self.dirty = True
-        self.doChooseSelectTool()
-        self.select(obj)
-
-
-    def createEllipse(self, x, y, width, height):
-        """ Create a new ellipse object at the given position and size.
-        """
-        self._saveUndoInfo()
-
-        obj = DrawingObject(obj_ELLIPSE, position=wx.Point(x, y),
-                            size=wx.Size(width, height),
-                            penColour=self.penColour,
-                            fillColour=self.fillColour,
-                            lineSize=self.lineSize)
-        self.contents.insert(0, obj)
-        self.dirty = True
-        self.doChooseSelectTool()
-        self.select(obj)
-
-
-    def createText(self, x, y, width, height):
-        """ Create a new text object at the given position and size.
-        """
-        editor = EditTextObjectDialog(self, "Create Text Object")
-        if editor.ShowModal() == wx.ID_CANCEL:
-            editor.Destroy()
-            return
-
-        self._saveUndoInfo()
-
-        obj = DrawingObject(obj_TEXT, position=wx.Point(x, y),
-                                      size=wx.Size(width, height))
-        editor.dialogToObject(obj)
-        editor.Destroy()
-
-        self.contents.insert(0, obj)
-        self.dirty = True
-        self.doChooseSelectTool()
-        self.select(obj)
+        self._adjustMenus()
 
     # =======================
     # == Selection Methods ==
     # =======================
+
+    def setCurrentTool(self, toolName):
+        """ Set the currently selected tool.
+        """
+        
+        toolIcon, tool = self.tools[toolName]
+        if self.curToolIcon is not None:
+            self.curToolIcon.SetValue(False)
+
+        toolIcon.SetValue(True)
+        self.curToolName = toolName
+        self.curToolIcon = toolIcon
+        self.curTool = tool
+        self.drawPanel.SetCursor(tool.getDefaultCursor())
+
 
     def selectAll(self):
         """ Select every DrawingObject in our document.
@@ -1294,7 +1143,7 @@ class DrawingFrame(wx.Frame):
         self.selection = []
         for obj in self.contents:
             self.selection.append(obj)
-        self.drawPanel.Refresh()
+        self.requestRedraw()
         self._adjustMenus()
 
 
@@ -1302,23 +1151,27 @@ class DrawingFrame(wx.Frame):
         """ Deselect every DrawingObject in our document.
         """
         self.selection = []
-        self.drawPanel.Refresh()
+        self.requestRedraw()
         self._adjustMenus()
 
 
-    def select(self, obj):
+    def select(self, obj, add=False):
         """ Select the given DrawingObject within our document.
-        """
-        self.selection = [obj]
-        self.drawPanel.Refresh()
-        self._adjustMenus()
 
+        If 'add' is True obj is added onto the current selection
+        """
+        if not add:
+            self.selection = []
+        if obj not in self.selection:
+            self.selection += [obj]
+            self.requestRedraw()
+            self._adjustMenus()
 
     def selectMany(self, objs):
         """ Select the given list of DrawingObjects.
         """
         self.selection = objs
-        self.drawPanel.Refresh()
+        self.requestRedraw()
         self._adjustMenus()
 
 
@@ -1329,8 +1182,35 @@ class DrawingFrame(wx.Frame):
         for obj in self.contents:
             if obj.objectWithinRect(x, y, width, height):
                 self.selection.append(obj)
-        self.drawPanel.Refresh()
+        self.requestRedraw()
         self._adjustMenus()
+
+    def getObjectAndSelectionHandleAt(self, pt):
+        """ Return the object and selection handle at the given point.
+
+            We draw selection handles (small rectangles) around the currently
+            selected object(s).  If the given point is within one of the
+            selection handle rectangles, we return the associated object and a
+            code indicating which selection handle the point is in.  If the
+            point isn't within any selection handle at all, we return the tuple
+            (None, None).
+        """
+        for obj in self.selection:
+            handle = obj.getSelectionHandleContainingPoint(pt.x, pt.y)
+            if handle is not None:
+                return obj, handle
+
+        return None, None
+
+
+    def getObjectAt(self, pt):
+        """ Return the first object found which is at the given point.
+        """
+        for obj in self.contents:
+            if obj.objectContainsPoint(pt.x, pt.y):
+                return obj
+        return None
+
 
     # ======================
     # == File I/O Methods ==
@@ -1339,35 +1219,50 @@ class DrawingFrame(wx.Frame):
     def loadContents(self):
         """ Load the contents of our document into memory.
         """
-        f = open(self.fileName, "rb")
-        objData = cPickle.load(f)
-        f.close()
 
-        for type, data in objData:
-            obj = DrawingObject(type)
-            obj.setData(data)
-            self.contents.append(obj)
+        try:
+            f = open(self.fileName, "rb")
+            objData = cPickle.load(f)
+            f.close()
 
-        self.dirty = False
-        self.selection = []
-        self.undoInfo  = None
+            for klass, data in objData:
+                obj = klass()
+                obj.setData(data)
+                self.contents.append(obj)
 
-        self.drawPanel.Refresh()
-        self._adjustMenus()
+            self.dirty = False
+            self.selection = []
+            self.undoStack  = []
+            self.redoStack  = []
+
+            self.requestRedraw()
+            self._adjustMenus()
+        except:
+            response = wx.MessageBox("Unable to load " + self.fileName + ".",
+                                     "Error", wx.OK|wx.ICON_ERROR, self)
+
 
 
     def saveContents(self):
         """ Save the contents of our document to disk.
         """
-        objData = []
-        for obj in self.contents:
-            objData.append([obj.getType(), obj.getData()])
+        # SWIG-wrapped native wx contents cannot be pickled, so 
+        # we have to convert our data to something pickle-friendly.
+        
+        try:
+            objData = []
+            for obj in self.contents:
+                objData.append([obj.__class__, obj.getData()])
 
-        f = open(self.fileName, "wb")
-        cPickle.dump(objData, f)
-        f.close()
+            f = open(self.fileName, "wb")
+            cPickle.dump(objData, f)
+            f.close()
 
-        self.dirty = False
+            self.dirty = False
+            self._adjustMenus()
+        except:
+            response = wx.MessageBox("Unable to load " + self.fileName + ".",
+                                     "Error", wx.OK|wx.ICON_ERROR, self)
 
 
     def askIfUserWantsToSave(self, action):
@@ -1402,16 +1297,38 @@ class DrawingFrame(wx.Frame):
     # == Private Methods ==
     # =====================
 
+    def _initBuffer(self):
+        """Initialize the bitmap used for buffering the display."""
+        size = self.drawPanel.GetSize()
+        self.buffer = wx.EmptyBitmap(max(1,size.width),max(1,size.height))
+        dc = wx.BufferedDC(None, self.buffer)
+        dc.SetBackground(wx.Brush(self.drawPanel.GetBackgroundColour()))
+        dc.Clear()
+        self.drawContents(dc)
+        del dc  # commits all drawing to the buffer
+
+        self.saved_offset = self.drawPanel.CalcUnscrolledPosition(0,0)
+
+        self._reInitBuffer = False
+
+
+
     def _adjustMenus(self):
         """ Adjust our menus and toolbar to reflect the current state of the
             world.
+
+            Doing this manually rather than using an EVT_UPDATE_UI is a bit
+            more efficient (since it's only done when it's really needed), 
+            but it means we have to remember to call _adjustMenus any time
+            menus may need adjusting.
         """
         canSave   = (self.fileName != None) and self.dirty
         canRevert = (self.fileName != None) and self.dirty
-        canUndo   = self.undoInfo != None
+        canUndo   = self.undoStack!=[]
+        canRedo   = self.redoStack!=[]
         selection = len(self.selection) > 0
         onlyOne   = len(self.selection) == 1
-        isText    = onlyOne and (self.selection[0].getType() == obj_TEXT)
+        hasEditor = onlyOne and self.selection[0].hasPropertyEditor()
         front     = onlyOne and (self.selection[0] == self.contents[0])
         back      = onlyOne and (self.selection[0] == self.contents[-1])
 
@@ -1420,16 +1337,11 @@ class DrawingFrame(wx.Frame):
         self.fileMenu.Enable(wx.ID_SAVE,   canSave)
         self.fileMenu.Enable(wx.ID_REVERT, canRevert)
 
-        self.editMenu.Enable(menu_UNDO,      canUndo)
+        self.editMenu.Enable(wx.ID_UNDO,      canUndo)
+        self.editMenu.Enable(wx.ID_REDO,      canRedo)
         self.editMenu.Enable(menu_DUPLICATE, selection)
-        self.editMenu.Enable(menu_EDIT_TEXT, isText)
-        self.editMenu.Enable(menu_DELETE,    selection)
-
-        self.toolsMenu.Check(menu_SELECT,  self.curTool == self.selectIcon)
-        self.toolsMenu.Check(menu_LINE,    self.curTool == self.lineIcon)
-        self.toolsMenu.Check(menu_RECT,    self.curTool == self.rectIcon)
-        self.toolsMenu.Check(menu_ELLIPSE, self.curTool == self.ellipseIcon)
-        self.toolsMenu.Check(menu_TEXT,    self.curTool == self.textIcon)
+        self.editMenu.Enable(menu_EDIT_PROPS,hasEditor)
+        self.editMenu.Enable(wx.ID_CLEAR,    selection)
 
         self.objectMenu.Enable(menu_MOVE_FORWARD,  onlyOne and not front)
         self.objectMenu.Enable(menu_MOVE_TO_FRONT, onlyOne and not front)
@@ -1438,85 +1350,98 @@ class DrawingFrame(wx.Frame):
 
         # Enable/disable our toolbar icons.
 
-        self.toolbar.EnableTool(wx.ID_NEW,           True)
-        self.toolbar.EnableTool(wx.ID_OPEN,          True)
-        self.toolbar.EnableTool(wx.ID_SAVE,          canSave)
-        self.toolbar.EnableTool(menu_UNDO,          canUndo)
+        self.toolbar.EnableTool(wx.ID_NEW,          True)
+        self.toolbar.EnableTool(wx.ID_OPEN,         True)
+        self.toolbar.EnableTool(wx.ID_SAVE,         canSave)
+        self.toolbar.EnableTool(wx.ID_UNDO,         canUndo)
+        self.toolbar.EnableTool(wx.ID_REDO,         canRedo)
         self.toolbar.EnableTool(menu_DUPLICATE,     selection)
         self.toolbar.EnableTool(menu_MOVE_FORWARD,  onlyOne and not front)
         self.toolbar.EnableTool(menu_MOVE_BACKWARD, onlyOne and not back)
-
-
-    def _setCurrentTool(self, newToolIcon):
-        """ Set the currently selected tool.
-        """
-        if self.curTool == newToolIcon: return # Nothing to do.
-
-        if self.curTool != None:
-            self.curTool.deselect()
-
-        newToolIcon.select()
-        self.curTool = newToolIcon
 
 
     def _setPenColour(self, colour):
         """ Set the default or selected object's pen colour.
         """
         if len(self.selection) > 0:
-            self._saveUndoInfo()
+            self.saveUndoInfo()
             for obj in self.selection:
                 obj.setPenColour(colour)
-            self.drawPanel.Refresh()
-        else:
-            self.penColour = colour
-            self.optionIndicator.setPenColour(colour)
+            self.requestRedraw()
+
+        self.penColour = colour
+        self.optionIndicator.setPenColour(colour)
 
 
     def _setFillColour(self, colour):
         """ Set the default or selected object's fill colour.
         """
         if len(self.selection) > 0:
-            self._saveUndoInfo()
+            self.saveUndoInfo()
             for obj in self.selection:
                 obj.setFillColour(colour)
-            self.drawPanel.Refresh()
-        else:
-            self.fillColour = colour
-            self.optionIndicator.setFillColour(colour)
+            self.requestRedraw()
+
+        self.fillColour = colour
+        self.optionIndicator.setFillColour(colour)
 
 
     def _setLineSize(self, size):
         """ Set the default or selected object's line size.
         """
         if len(self.selection) > 0:
-            self._saveUndoInfo()
+            self.saveUndoInfo()
             for obj in self.selection:
                 obj.setLineSize(size)
-            self.drawPanel.Refresh()
-        else:
-            self.lineSize = size
-            self.optionIndicator.setLineSize(size)
+            self.requestRedraw()
+
+        self.lineSize = size
+        self.optionIndicator.setLineSize(size)
 
 
-    def _saveUndoInfo(self):
+    def _buildStoredState(self):
         """ Remember the current state of the document, to allow for undo.
 
             We make a copy of the document's contents, so that we can return to
             the previous contents if the user does something and then wants to
-            undo the operation.
+            undo the operation.  
+
+            Returns an object representing the current document state.
         """
         savedContents = []
         for obj in self.contents:
-            savedContents.append([obj.getType(), obj.getData()])
+            savedContents.append([obj.__class__, obj.getData()])
 
         savedSelection = []
         for i in range(len(self.contents)):
             if self.contents[i] in self.selection:
                 savedSelection.append(i)
 
-        self.undoInfo = {"contents"  : savedContents,
-                         "selection" : savedSelection}
+        info = {"contents"  : savedContents,
+                "selection" : savedSelection}
 
+        return info
+        
+    def _restoreStoredState(self, savedState):
+        """Restore the state of the document to a previous point for undo/redo.
+
+        Takes a stored state object and recreates the document from it.
+        Used by undo/redo implementation.
+        """
+        self.contents = []
+
+        for draw_class, data in savedState["contents"]:
+            obj = draw_class()
+            obj.setData(data)
+            self.contents.append(obj)
+
+        self.selection = []
+        for i in savedState["selection"]:
+            self.selection.append(self.contents[i])
+
+        self.dirty = True
+        self._adjustMenus()
+        self.requestRedraw()
 
     def _resizeObject(self, obj, anchorPt, oldPt, newPt):
         """ Resize the given object.
@@ -1528,12 +1453,12 @@ class DrawingFrame(wx.Frame):
             new point is less than the anchor point the object will need to be
             moved as well as resized, to avoid giving it a negative size.
         """
-        if obj.getType() == obj_TEXT:
+        if isinstance(obj, TextDrawingObject):
             # Not allowed to resize text objects -- they're sized to fit text.
-            wx.Bell(); print "4"
+            wx.Bell()
             return
 
-        self._saveUndoInfo()
+        self.saveUndoInfo()
 
         topLeft  = wx.Point(min(anchorPt.x, newPt.x),
                            min(anchorPt.y, newPt.y))
@@ -1543,7 +1468,7 @@ class DrawingFrame(wx.Frame):
         newWidth  = botRight.x - topLeft.x
         newHeight = botRight.y - topLeft.y
 
-        if obj.getType() == obj_LINE:
+        if isinstance(obj, LineDrawingObject):
             # Adjust the line so that its start and end points match the new
             # overall object size.
 
@@ -1575,13 +1500,13 @@ class DrawingFrame(wx.Frame):
         obj.setPosition(topLeft)
         obj.setSize(wx.Size(botRight.x - topLeft.x, botRight.y - topLeft.y))
 
-        self.drawPanel.Refresh()
+        self.requestRedraw()
 
 
     def _moveObject(self, offsetX, offsetY):
         """ Move the currently selected object(s) by the given offset.
         """
-        self._saveUndoInfo()
+        self.saveUndoInfo()
 
         for obj in self.selection:
             pos = obj.getPosition()
@@ -1589,7 +1514,7 @@ class DrawingFrame(wx.Frame):
             pos.y = pos.y + offsetY
             obj.setPosition(pos)
 
-        self.drawPanel.Refresh()
+        self.requestRedraw()
 
 
     def _buildLineSizePopup(self, lineSize):
@@ -1629,7 +1554,7 @@ class DrawingFrame(wx.Frame):
         elif id == id_LINESIZE_4: self._setLineSize(4)
         elif id == id_LINESIZE_5: self._setLineSize(5)
         else:
-            wx.Bell(); print "5"
+            wx.Bell()
             return
 
         self.optionIndicator.setLineSize(self.lineSize)
@@ -1645,33 +1570,6 @@ class DrawingFrame(wx.Frame):
         unitX, unitY = self.drawPanel.GetScrollPixelsPerUnit()
         return wx.Point(event.GetX() + (originX * unitX),
                        event.GetY() + (originY * unitY))
-
-
-    def _getObjectAndSelectionHandleAt(self, pt):
-        """ Return the object and selection handle at the given point.
-
-            We draw selection handles (small rectangles) around the currently
-            selected object(s).  If the given point is within one of the
-            selection handle rectangles, we return the associated object and a
-            code indicating which selection handle the point is in.  If the
-            point isn't within any selection handle at all, we return the tuple
-            (None, handle_NONE).
-        """
-        for obj in self.selection:
-            handle = obj.getSelectionHandleContainingPoint(pt.x, pt.y)
-            if handle != handle_NONE:
-                return obj, handle
-
-        return None, handle_NONE
-
-
-    def _getObjectAt(self, pt):
-        """ Return the first object found which is at the given point.
-        """
-        for obj in self.contents:
-            if obj.objectContainsPoint(pt.x, pt.y):
-                return obj
-        return None
 
 
     def _drawObjectOutline(self, offsetX, offsetY):
@@ -1702,109 +1600,607 @@ class DrawingFrame(wx.Frame):
         dc.EndDrawing()
 
 
-    def _drawVisualFeedback(self, startPt, endPt, type, dashedLine):
-        """ Draw visual feedback for a drawing operation.
+#============================================================================
+class DrawingTool(object):
+    """Base class for drawing tools"""
 
-            The visual feedback consists of a line, ellipse, or rectangle based
-            around the two given points.  'type' should be one of the following
-            predefined feedback type constants:
+    def __init__(self):
+        pass
 
-                feedback_RECT     ->  draw rectangular feedback.
-                feedback_LINE     ->  draw line feedback.
-                feedback_ELLIPSE  ->  draw elliptical feedback.
+    def getDefaultCursor(self):
+        """Return the cursor to use by default which this drawing tool is selected"""
+        return wx.STANDARD_CURSOR
 
-            if 'dashedLine' is True, the feedback is drawn as a dashed rather
-            than a solid line.
+    def draw(self,dc):
+        pass
 
-            Note that the feedback is drawn by *inverting* the window's
-            contents, so calling _drawVisualFeedback twice in succession will
-            restore the window's contents back to what they were previously.
+
+    def onMouseEvent(self,parent, event):
+        """Mouse events passed in from the parent.
+
+        Returns True if the event is handled by the tool,
+        False if the canvas can try to use it.
         """
-        dc = wx.ClientDC(self.drawPanel)
-        self.drawPanel.PrepareDC(dc)
-        dc.BeginDrawing()
-        if dashedLine:
-            dc.SetPen(wx.BLACK_DASHED_PEN)
-        else:
-            dc.SetPen(wx.BLACK_PEN)
-        dc.SetBrush(wx.TRANSPARENT_BRUSH)
-        dc.SetLogicalFunction(wx.INVERT)
-
-        if type == feedback_RECT:
-            dc.DrawRectangle(startPt.x, startPt.y,
-                             endPt.x - startPt.x,
-                             endPt.y - startPt.y)
-        elif type == feedback_LINE:
-            dc.DrawLine(startPt.x, startPt.y, endPt.x, endPt.y)
-        elif type == feedback_ELLIPSE:
-            dc.DrawEllipse(startPt.x, startPt.y,
-                           endPt.x - startPt.x,
-                           endPt.y - startPt.y)
-
-        dc.EndDrawing()
+        event.Skip()
+        return False
 
 #----------------------------------------------------------------------------
+class SelectDrawingTool(DrawingTool):
+    """Represents the tool for selecting things"""
 
-class DrawingObject:
-    """ An object within the drawing panel.
+    def __init__(self):
+        self.curHandle = None
+        self.curObject = None
+        self.objModified = False
+        self.startPt = None
+        self.curPt = None
+
+    def getDefaultCursor(self):
+        """Return the cursor to use by default which this drawing tool is selected"""
+        return wx.STANDARD_CURSOR
+
+    def draw(self, dc):
+        if self._doingRectSelection():
+            dc.SetPen(wx.BLACK_DASHED_PEN)
+            dc.SetBrush(wx.TRANSPARENT_BRUSH)
+            x = [self.startPt.x, self.curPt.x]; x.sort()
+            y = [self.startPt.y, self.curPt.y]; y.sort()
+            dc.DrawRectangle(x[0],y[0], x[1]-x[0],y[1]-y[0])
+
+
+    def onMouseEvent(self,parent, event):
+        handlers = { wx.EVT_LEFT_DOWN.evtType[0]:   self.onMouseLeftDown,
+                     wx.EVT_MOTION.evtType[0]:      self.onMouseMotion,
+                     wx.EVT_LEFT_UP.evtType[0]:     self.onMouseLeftUp,
+                     wx.EVT_LEFT_DCLICK.evtType[0]: self.onMouseLeftDClick }
+        handler = handlers.get(event.GetEventType())
+        if handler is not None:
+            return handler(parent,event)
+        else:
+            event.Skip()
+            return False
+
+    def onMouseLeftDown(self,parent,event):
+        mousePt = wx.Point(event.X,event.Y)
+        obj, handle = parent.getObjectAndSelectionHandleAt(mousePt)
+        self.startPt = mousePt
+        self.curPt = mousePt
+        if obj is not None and handle is not None:
+            self.curObject = obj
+            self.curHandle = handle
+        else:
+            self.curObject = None
+            self.curHandle = None
+        
+        obj = parent.getObjectAt(mousePt)
+        if self.curObject is None and obj is not None:
+            self.curObject = obj
+            self.dragDelta = obj.position-mousePt
+            self.curHandle = None
+            parent.select(obj, event.ShiftDown())
+            
+        return True
+
+    def onMouseMotion(self,parent,event):
+        if not event.LeftIsDown(): return
+
+        self.curPt = wx.Point(event.X,event.Y)
+
+        obj,handle = self.curObject,self.curHandle
+        if self._doingDragHandle():
+            self._prepareToModify(parent)
+            obj.moveHandle(handle,event.X,event.Y)
+            parent.requestRedraw()
+
+        elif self._doingDragObject():
+            self._prepareToModify(parent)
+            obj.position = self.curPt + self.dragDelta
+            parent.requestRedraw()
+
+        elif self._doingRectSelection():
+            parent.requestRedraw()
+
+        return True
+
+    def onMouseLeftUp(self,parent,event):
+
+        obj,handle = self.curObject,self.curHandle
+        if self._doingDragHandle():
+            obj.moveHandle(handle,event.X,event.Y)
+            obj.finalizeHandle(handle,event.X,event.Y)
+
+        elif self._doingDragObject():
+            curPt = wx.Point(event.X,event.Y)
+            obj.position = curPt + self.dragDelta
+
+        elif self._doingRectSelection():
+            x = [event.X, self.startPt.x]
+            y = [event.Y, self.startPt.y]
+            x.sort()
+            y.sort()
+            parent.selectByRectangle(x[0],y[0],x[1]-x[0],y[1]-y[0])
+            
+
+        self.curObject = None
+        self.curHandle = None
+        self.curPt = None
+        self.startPt = None
+        self.objModified = False
+        parent.requestRedraw()
+
+        return True
+
+    def onMouseLeftDClick(self,parent,event):
+        event.Skip()
+        mousePt = wx.Point(event.X,event.Y)
+        obj = parent.getObjectAt(mousePt)
+        if obj and obj.hasPropertyEditor():
+            if obj.doPropertyEdit(parent):
+                parent.requestRedraw()
+                return True
+
+        return False
+
+    
+    def _prepareToModify(self,parent):
+        if not self.objModified:
+            parent.saveUndoInfo()
+            self.objModified = True
+        
+    def _doingRectSelection(self):
+        return self.curObject is None \
+               and self.startPt is not None \
+               and self.curPt is not None
+
+    def _doingDragObject(self):
+        return self.curObject is not None and self.curHandle is None
+
+    def _doingDragHandle(self):
+        return self.curObject is not None and self.curHandle is not None
+
+
+
+#----------------------------------------------------------------------------
+class LineDrawingTool(DrawingTool):
+    """Represents the tool for drawing lines"""
+
+    def __init__(self):
+        self.newObject = None
+        self.startPt = None
+
+
+    def getDefaultCursor(self):
+        """Return the cursor to use by default which this drawing tool is selected"""
+        return wx.StockCursor(wx.CURSOR_PENCIL)
+
+    def draw(self, dc):
+        if self.newObject is None: return
+        self.newObject.draw(dc,True)
+
+    def onMouseEvent(self,parent, event):
+        handlers = { wx.EVT_LEFT_DOWN.evtType[0]: self.onMouseLeftDown,
+                     wx.EVT_MOTION.evtType[0]:    self.onMouseMotion,
+                     wx.EVT_LEFT_UP.evtType[0]:   self.onMouseLeftUp }
+        handler = handlers.get(event.GetEventType())
+        if handler is not None:
+            return handler(parent,event)
+        else:
+            event.Skip()
+            return False
+
+    def onMouseLeftDown(self,parent, event):
+        self.startPt = wx.Point(event.GetX(), event.GetY())
+        self.newObject = None
+        event.Skip()
+        return True
+
+    def onMouseMotion(self,parent, event):
+        if not event.Dragging(): return
+
+        if self.newObject is None:
+            obj = LineDrawingObject(startPt=wx.Point(0,0),
+                                    penColour=parent.penColour,
+                                    fillColour=parent.fillColour,
+                                    lineSize=parent.lineSize,
+                                    position=wx.Point(event.X,event.Y))
+            self.newObject = obj
+
+        self._updateObjFromEvent(self.newObject, event)
+
+        parent.requestRedraw()
+        event.Skip()
+        return True
+
+    def onMouseLeftUp(self,parent, event):
+
+        if self.newObject is None:
+            return
+
+        self._updateObjFromEvent(self.newObject,event)
+
+        parent.addObject(self.newObject)
+
+        self.newObject = None
+        self.startPt = None
+
+        event.Skip()
+        return True
+
+
+    def _updateObjFromEvent(self,obj,event):
+        obj.setEndPt(wx.Point(event.X,event.Y))
+
+
+#----------------------------------------------------------------------------
+class RectDrawingTool(DrawingTool):
+    """Represents the tool for drawing rectangles"""
+
+    def __init__(self):
+        self.newObject = None
+
+    def getDefaultCursor(self):
+        """Return the cursor to use by default which this drawing tool is selected"""
+        return wx.CROSS_CURSOR
+
+    def draw(self, dc):
+        if self.newObject is None: return
+        self.newObject.draw(dc,True)
+
+
+    def onMouseEvent(self,parent, event):
+        handlers = { wx.EVT_LEFT_DOWN.evtType[0]: self.onMouseLeftDown,
+                     wx.EVT_MOTION.evtType[0]:    self.onMouseMotion,
+                     wx.EVT_LEFT_UP.evtType[0]:   self.onMouseLeftUp }
+        handler = handlers.get(event.GetEventType())
+        if handler is not None:
+            return handler(parent,event)
+        else:
+            event.Skip()
+            return False
+
+    def onMouseLeftDown(self,parent, event):
+        self.startPt = wx.Point(event.GetX(), event.GetY())
+        self.newObject = None
+        event.Skip()
+        return True
+
+    def onMouseMotion(self,parent, event):
+        if not event.Dragging(): return
+
+        if self.newObject is None:
+            obj = RectDrawingObject(penColour=parent.penColour,
+                                    fillColour=parent.fillColour,
+                                    lineSize=parent.lineSize)
+            self.newObject = obj
+
+        self._updateObjFromEvent(self.newObject, event)
+
+        parent.requestRedraw()
+        event.Skip()
+        return True
+
+    def onMouseLeftUp(self,parent, event):
+
+        if self.newObject is None:
+            return
+
+        self._updateObjFromEvent(self.newObject,event)
+
+        parent.addObject(self.newObject)
+
+        self.newObject = None
+
+        event.Skip()
+        return True
+
+
+    def _updateObjFromEvent(self,obj,event):
+        x = [event.X, self.startPt.x]
+        y = [event.Y, self.startPt.y]
+        x.sort()
+        y.sort()
+        width = x[1]-x[0]
+        height = y[1]-y[0]
+
+        obj.setPosition(wx.Point(x[0],y[0]))
+        obj.setSize(wx.Size(width,height))
+
+        
+
+
+#----------------------------------------------------------------------------
+class EllipseDrawingTool(DrawingTool):
+    """Represents the tool for drawing ellipses"""
+
+    def getDefaultCursor(self):
+        """Return the cursor to use by default which this drawing tool is selected"""
+        return wx.CROSS_CURSOR
+
+
+    def __init__(self):
+        self.newObject = None
+
+    def getDefaultCursor(self):
+        """Return the cursor to use by default which this drawing tool is selected"""
+        return wx.CROSS_CURSOR
+
+    def draw(self, dc):
+        if self.newObject is None: return
+        self.newObject.draw(dc,True)
+
+
+    def onMouseEvent(self,parent, event):
+        handlers = { wx.EVT_LEFT_DOWN.evtType[0]: self.onMouseLeftDown,
+                     wx.EVT_MOTION.evtType[0]:    self.onMouseMotion,
+                     wx.EVT_LEFT_UP.evtType[0]:   self.onMouseLeftUp }
+        handler = handlers.get(event.GetEventType())
+        if handler is not None:
+            return handler(parent,event)
+        else:
+            event.Skip()
+            return False
+            
+    def onMouseLeftDown(self,parent, event):
+        self.startPt = wx.Point(event.GetX(), event.GetY())
+        self.newObject = None
+        event.Skip()
+        return True
+
+    def onMouseMotion(self,parent, event):
+        if not event.Dragging(): return
+
+        if self.newObject is None:
+            obj = EllipseDrawingObject(penColour=parent.penColour,
+                                       fillColour=parent.fillColour,
+                                       lineSize=parent.lineSize)
+            self.newObject = obj
+
+        self._updateObjFromEvent(self.newObject, event)
+
+        parent.requestRedraw()
+        event.Skip()
+        return True 
+
+    def onMouseLeftUp(self,parent, event):
+
+        if self.newObject is None:
+            return
+
+        self._updateObjFromEvent(self.newObject,event)
+
+        parent.addObject(self.newObject)
+
+        self.newObject = None
+
+        event.Skip()
+        return True
+
+
+    def _updateObjFromEvent(self,obj,event):
+        x = [event.X, self.startPt.x]
+        y = [event.Y, self.startPt.y]
+        x.sort()
+        y.sort()
+        width = x[1]-x[0]
+        height = y[1]-y[0]
+
+        obj.setPosition(wx.Point(x[0],y[0]))
+        obj.setSize(wx.Size(width,height))
+
+
+#----------------------------------------------------------------------------
+class PolygonDrawingTool(DrawingTool):
+    """Represents the tool for drawing polygons"""
+
+    def __init__(self):
+        self.newObject = None
+
+    def getDefaultCursor(self):
+        """Return the cursor to use by default which this drawing tool is selected"""
+        return wx.CROSS_CURSOR
+
+
+    def draw(self, dc):
+        if self.newObject is None: return
+        self.newObject.draw(dc,True)
+
+
+    def onMouseEvent(self,parent, event):
+        handlers = { wx.EVT_LEFT_DOWN.evtType[0]:  self.onMouseLeftDown,
+                     wx.EVT_MOTION.evtType[0]:     self.onMouseMotion,
+                     wx.EVT_LEFT_UP.evtType[0]:    self.onMouseLeftUp, 
+                     wx.EVT_LEFT_DCLICK.evtType[0]:self.onMouseLeftDClick }
+        handler = handlers.get(event.GetEventType())
+        if handler is not None:
+            return handler(parent,event)
+        else:
+            event.Skip()
+            return False
+            
+    def onMouseLeftDown(self,parent, event):
+        event.Skip()
+        self.startPt = (event.GetX(), event.GetY())
+        if self.newObject is None:
+            obj = PolygonDrawingObject(points=[(0,0)],penColour=parent.penColour,
+                                       fillColour=parent.fillColour,
+                                       lineSize=parent.lineSize,
+                                       position=wx.Point(event.X, event.Y))
+            obj.addPoint(event.X,event.Y)
+            self.newObject = obj
+        else:
+            CLOSE_THRESH=3
+            pt0 = self.newObject.getPoint(0)
+            if abs(pt0[0]-event.X)<CLOSE_THRESH and abs(pt0[1]-event.Y)<CLOSE_THRESH:
+                self.newObject.popPoint()
+                parent.addObject(self.newObject)
+                self.newObject = None
+            else:
+                self.newObject.addPoint(event.X,event.Y)
+
+        return True
+
+    def onMouseMotion(self,parent, event):
+
+        event.Skip()
+        if self.newObject:
+            self.newObject.movePoint(-1, event.X, event.Y)
+            parent.requestRedraw()
+            return True 
+
+        return False
+
+    def onMouseLeftDClick(self,parent,event):
+        event.Skip()
+        if self.newObject:
+            CLOSE_THRESH=3
+            pt0 = self.newObject.getPoint(0)
+            if abs(pt0[0]-event.X)<CLOSE_THRESH and abs(pt0[1]-event.Y)<CLOSE_THRESH:
+                self.newObject.popPoint()
+            self.newObject.popPoint()
+            parent.addObject(self.newObject)
+            self.newObject = None
+
+        return True
+
+    def onMouseLeftUp(self,parent, event):
+        event.Skip()
+        return True
+
+        
+
+
+#----------------------------------------------------------------------------
+class ScribbleDrawingTool(DrawingTool):
+    """Represents the tool for drawing scribble drawing objects"""
+
+    def __init__(self):
+        self.newObject = None
+
+    def getDefaultCursor(self):
+        """Return the cursor to use by default which this drawing tool is selected"""
+        return wx.StockCursor(wx.CURSOR_PENCIL)
+
+    def draw(self, dc):
+        if self.newObject is None: return
+        self.newObject.draw(dc,True)
+
+
+    def onMouseEvent(self,parent, event):
+        handlers = { wx.EVT_LEFT_DOWN.evtType[0]:  self.onMouseLeftDown,
+                     wx.EVT_MOTION.evtType[0]:     self.onMouseMotion,
+                     wx.EVT_LEFT_UP.evtType[0]:    self.onMouseLeftUp 
+                    }
+        handler = handlers.get(event.GetEventType())
+        if handler is not None:
+            return handler(parent,event)
+        else:
+            event.Skip()
+            return False
+            
+    def onMouseLeftDown(self,parent, event):
+        event.Skip()
+        obj = ScribbleDrawingObject(points=[(0,0)],penColour=parent.penColour,
+                                    fillColour=parent.fillColour,
+                                    lineSize=parent.lineSize,
+                                    position=wx.Point(event.X, event.Y))
+        self.newObject = obj
+        return True
+
+    def onMouseMotion(self,parent, event):
+        event.Skip()
+        if self.newObject:
+            self.newObject.addPoint(event.X,event.Y)
+            parent.requestRedraw()
+            return True 
+
+        return False
+
+    def onMouseLeftUp(self,parent, event):
+        event.Skip()
+        if self.newObject:
+            parent.addObject(self.newObject)
+            self.newObject = None
+        return True
+
+        
+
+
+
+#----------------------------------------------------------------------------
+class TextDrawingTool(DrawingTool):
+    """Represents the tool for drawing text"""
+
+    def getDefaultCursor(self):
+        """Return the cursor to use by default which this drawing tool is selected"""
+        return wx.StockCursor(wx.CURSOR_IBEAM)
+
+    def onMouseEvent(self,parent, event):
+        handlers = { #wx.EVT_LEFT_DOWN.evtType[0]: self.onMouseLeftDown,
+                     #wx.EVT_MOTION.evtType[0]:    self.onMouseMotion,
+                     wx.EVT_LEFT_UP.evtType[0]:   self.onMouseLeftUp 
+                     }
+        handler = handlers.get(event.GetEventType())
+        if handler is not None:
+            return handler(parent,event)
+        else:
+            event.Skip()
+            return False
+
+    def onMouseLeftUp(self,parent, event):
+
+        editor = parent.getTextEditor()
+        editor.SetTitle("Create Text Object")
+        if editor.ShowModal() == wx.ID_CANCEL:
+            editor.Hide()
+            return True
+
+        obj = TextDrawingObject(position=wx.Point(event.X, event.Y))
+        editor.dialogToObject(obj)
+        editor.Hide()
+
+        parent.addObject(obj)
+
+        event.Skip()
+        return True
+
+
+
+#============================================================================
+class DrawingObject(object):
+    """ Base class for objects within the drawing panel.
 
         A pySketch document consists of a front-to-back ordered list of
         DrawingObjects.  Each DrawingObject has the following properties:
 
-            'type'          What type of object this is (text, line, etc).
             'position'      The position of the object within the document.
             'size'          The size of the object within the document.
             'penColour'     The colour to use for drawing the object's outline.
             'fillColour'    Colour to use for drawing object's interior.
             'lineSize'      Line width (in pixels) to use for object's outline.
-            'startPt'       The point, relative to the object's position, where
-                            an obj_LINE object's line should start.
-            'endPt'         The point, relative to the object's position, where
-                            an obj_LINE object's line should end.
-            'text'          The object's text (obj_TEXT objects only).
-            'textFont'      The text object's font name.
-            'textSize'      The text object's point size.
-            'textBoldface'  If True, this text object will be drawn in
-                            boldface.
-            'textItalic'    If True, this text object will be drawn in italic.
-            'textUnderline' If True, this text object will be drawn underlined.
             """
 
     # ==================
     # == Constructors ==
     # ==================
 
-    def __init__(self, type, position=wx.Point(0, 0), size=wx.Size(0, 0),
+    def __init__(self, position=wx.Point(0, 0), size=wx.Size(0, 0),
                  penColour=wx.BLACK, fillColour=wx.WHITE, lineSize=1,
-                 text=None, startPt=wx.Point(0, 0), endPt=wx.Point(0,0)):
+                 ):
         """ Standard constructor.
-
-            'type' is the type of object being created.  This should be one of
-            the following constants:
-
-                obj_LINE
-                obj_RECT
-                obj_ELLIPSE
-                obj_TEXT
 
             The remaining parameters let you set various options for the newly
             created DrawingObject.
         """
-        self.type              = type
-        self.position          = position
-        self.size              = size
+        # One must take great care with constructed default arguments
+        # like wx.Point(0,0) above.  *EVERY* caller that uses the
+        # default will get the same instance.  Thus, below we make a
+        # deep copy of those arguments with object defaults.
+
+        self.position          = wx.Point(position.x,position.y)
+        self.size              = wx.Size(size.x,size.y)
         self.penColour         = penColour
         self.fillColour        = fillColour
         self.lineSize          = lineSize
-        self.startPt           = startPt
-        self.endPt             = endPt
-        self.text              = text
-        self.textFont          = wx.SystemSettings_GetFont(
-                                    wx.SYS_DEFAULT_GUI_FONT).GetFaceName()
-        self.textSize          = 12
-        self.textBoldface      = False
-        self.textItalic        = False
-        self.textUnderline     = False
 
     # =============================
     # == Object Property Methods ==
@@ -1815,7 +2211,7 @@ class DrawingObject:
 
             This is used to save this DrawingObject to disk.
         """
-        return [self.type, self.position.x, self.position.y,
+        return [self.position.x, self.position.y,
                 self.size.width, self.size.height,
                 self.penColour.Red(),
                 self.penColour.Green(),
@@ -1823,15 +2219,7 @@ class DrawingObject:
                 self.fillColour.Red(),
                 self.fillColour.Green(),
                 self.fillColour.Blue(),
-                self.lineSize,
-                self.startPt.x, self.startPt.y,
-                self.endPt.x, self.endPt.y,
-                self.text,
-                self.textFont,
-                self.textSize,
-                self.textBoldface,
-                self.textItalic,
-                self.textUnderline]
+                self.lineSize]
 
 
     def setData(self, data):
@@ -1840,34 +2228,34 @@ class DrawingObject:
             'data' is a copy of the object's saved data, as returned by
             getData() above.  This is used to restore a previously saved
             DrawingObject.
+
+            Returns an iterator to any remaining data not consumed by 
+            this base class method.
         """
         #data = copy.deepcopy(data) # Needed?
 
-        self.type              = data[0]
-        self.position          = wx.Point(data[1], data[2])
-        self.size              = wx.Size(data[3], data[4])
-        self.penColour         = wx.Colour(red=data[5],
-                                          green=data[6],
-                                          blue=data[7])
-        self.fillColour        = wx.Colour(red=data[8],
-                                          green=data[9],
-                                          blue=data[10])
-        self.lineSize          = data[11]
-        self.startPt           = wx.Point(data[12], data[13])
-        self.endPt             = wx.Point(data[14], data[15])
-        self.text              = data[16]
-        self.textFont          = data[17]
-        self.textSize          = data[18]
-        self.textBoldface      = data[19]
-        self.textItalic        = data[20]
-        self.textUnderline     = data[21]
+        d = iter(data)
+        try:
+            self.position          = wx.Point(d.next(), d.next())
+            self.size              = wx.Size(d.next(), d.next())
+            self.penColour         = wx.Colour(red=d.next(),
+                                              green=d.next(),
+                                              blue=d.next())
+            self.fillColour        = wx.Colour(red=d.next(),
+                                              green=d.next(),
+                                              blue=d.next())
+            self.lineSize          = d.next()
+        except StopIteration:
+            raise ValueError('Not enough data in setData call')
+
+        return d
 
 
-    def getType(self):
-        """ Return this DrawingObject's type.
-        """
-        return self.type
+    def hasPropertyEditor(self):
+        return False
 
+    def doPropertyEdit(self, parent):
+        assert False, "Must be overridden if hasPropertyEditor returns True"
 
     def setPosition(self, position):
         """ Set the origin (top-left corner) for this DrawingObject.
@@ -1929,101 +2317,6 @@ class DrawingObject:
         return self.lineSize
 
 
-    def setStartPt(self, startPt):
-        """ Set the starting point for this line DrawingObject.
-        """
-        self.startPt = startPt
-
-
-    def getStartPt(self):
-        """ Return the starting point for this line DrawingObject.
-        """
-        return self.startPt
-
-
-    def setEndPt(self, endPt):
-        """ Set the ending point for this line DrawingObject.
-        """
-        self.endPt = endPt
-
-
-    def getEndPt(self):
-        """ Return the ending point for this line DrawingObject.
-        """
-        return self.endPt
-
-
-    def setText(self, text):
-        """ Set the text for this DrawingObject.
-        """
-        self.text = text
-
-
-    def getText(self):
-        """ Return this DrawingObject's text.
-        """
-        return self.text
-
-
-    def setTextFont(self, font):
-        """ Set the typeface for this text DrawingObject.
-        """
-        self.textFont = font
-
-
-    def getTextFont(self):
-        """ Return this text DrawingObject's typeface.
-        """
-        return self.textFont
-
-
-    def setTextSize(self, size):
-        """ Set the point size for this text DrawingObject.
-        """
-        self.textSize = size
-
-
-    def getTextSize(self):
-        """ Return this text DrawingObject's text size.
-        """
-        return self.textSize
-
-
-    def setTextBoldface(self, boldface):
-        """ Set the boldface flag for this text DrawingObject.
-        """
-        self.textBoldface = boldface
-
-
-    def getTextBoldface(self):
-        """ Return this text DrawingObject's boldface flag.
-        """
-        return self.textBoldface
-
-
-    def setTextItalic(self, italic):
-        """ Set the italic flag for this text DrawingObject.
-        """
-        self.textItalic = italic
-
-
-    def getTextItalic(self):
-        """ Return this text DrawingObject's italic flag.
-        """
-        return self.textItalic
-
-
-    def setTextUnderline(self, underline):
-        """ Set the underling flag for this text DrawingObject.
-        """
-        self.textUnderline = underline
-
-
-    def getTextUnderline(self):
-        """ Return this text DrawingObject's underline flag.
-        """
-        return self.textUnderline
-
     # ============================
     # == Object Drawing Methods ==
     # ============================
@@ -2031,20 +2324,35 @@ class DrawingObject:
     def draw(self, dc, selected):
         """ Draw this DrawingObject into our window.
 
-            'dc' is the device context to use for drawing.  If 'selected' is
-            True, the object is currently selected and should be drawn as such.
+            'dc' is the device context to use for drawing.  
+
+            If 'selected' is True, the object is currently selected.
+            Drawing objects can use this to change the way selected objects
+            are drawn, however the actual drawing of selection handles
+            should be done in the 'drawHandles' method
         """
-        if self.type != obj_TEXT:
-            if self.lineSize == 0:
-                dc.SetPen(wx.Pen(self.penColour, self.lineSize, wx.TRANSPARENT))
-            else:
-                dc.SetPen(wx.Pen(self.penColour, self.lineSize, wx.SOLID))
-            dc.SetBrush(wx.Brush(self.fillColour, wx.SOLID))
+        if self.lineSize == 0:
+            dc.SetPen(wx.Pen(self.penColour, self.lineSize, wx.TRANSPARENT))
         else:
-            dc.SetTextForeground(self.penColour)
-            dc.SetTextBackground(self.fillColour)
+            dc.SetPen(wx.Pen(self.penColour, self.lineSize, wx.SOLID))
+        dc.SetBrush(wx.Brush(self.fillColour, wx.SOLID))
 
         self._privateDraw(dc, self.position, selected)
+
+
+    def drawHandles(self, dc):
+        """Draw selection handles for this DrawingObject"""
+
+        # Default is to draw selection handles at all four corners.
+        dc.SetPen(wx.BLACK_PEN)
+        dc.SetBrush(wx.BLACK_BRUSH)
+        
+        x,y = self.position
+        self._drawSelHandle(dc, x, y)
+        self._drawSelHandle(dc, x + self.size.width, y)
+        self._drawSelHandle(dc, x, y + self.size.height)
+        self._drawSelHandle(dc, x + self.size.width, y + self.size.height)
+
 
     # =======================
     # == Selection Methods ==
@@ -2062,16 +2370,14 @@ class DrawingObject:
         if y < self.position.y: return False
         if y > self.position.y + self.size.y: return False
 
-        if self.type in [obj_RECT, obj_TEXT]:
-            # Rectangles and text are easy -- they're always selected if the
-            # point is within their bounds.
-            return True
+        # Now things get tricky.  There's no straightforward way of
+        # knowing whether the point is within an arbitrary object's
+        # bounds...to get around this, we draw the object into a
+        # memory-based bitmap and see if the given point was drawn.
+        # This could no doubt be done more efficiently by some tricky
+        # maths, but this approach works and is simple enough.
 
-        # Now things get tricky.  There's no straightforward way of knowing
-        # whether the point is within the object's bounds...to get around this,
-        # we draw the object into a memory-based bitmap and see if the given
-        # point was drawn.  This could no doubt be done more efficiently by
-        # some tricky maths, but this approach works and is simple enough.
+        # Subclasses can implement smarter faster versions of this.
 
         bitmap = wx.EmptyBitmap(self.size.x + 10, self.size.y + 10)
         dc = wx.MemoryDC()
@@ -2089,37 +2395,84 @@ class DrawingObject:
         else:
             return False
 
+    handle_TOP    = 0
+    handle_BOTTOM = 1
+    handle_LEFT   = 0
+    handle_RIGHT  = 1
 
     def getSelectionHandleContainingPoint(self, x, y):
         """ Return the selection handle containing the given point, if any.
 
             We return one of the predefined selection handle ID codes.
         """
-        if self.type == obj_LINE:
-            # We have selection handles at the start and end points.
-            if self._pointInSelRect(x, y, self.position.x + self.startPt.x,
-                                          self.position.y + self.startPt.y):
-                return handle_START_POINT
-            elif self._pointInSelRect(x, y, self.position.x + self.endPt.x,
-                                            self.position.y + self.endPt.y):
-                return handle_END_POINT
-            else:
-                return handle_NONE
+        # Default implementation assumes selection handles at all four bbox corners.
+        # Return a list so we can modify the contents later in moveHandle()
+        if self._pointInSelRect(x, y, self.position.x, self.position.y):
+            return [self.handle_TOP, self.handle_LEFT]
+        elif self._pointInSelRect(x, y, self.position.x + self.size.width,
+                                        self.position.y):
+            return [self.handle_TOP, self.handle_RIGHT]
+        elif self._pointInSelRect(x, y, self.position.x,
+                                        self.position.y + self.size.height):
+            return [self.handle_BOTTOM, self.handle_LEFT]
+        elif self._pointInSelRect(x, y, self.position.x + self.size.width,
+                                        self.position.y + self.size.height):
+            return [self.handle_BOTTOM, self.handle_RIGHT]
         else:
-            # We have selection handles at all four corners.
-            if self._pointInSelRect(x, y, self.position.x, self.position.y):
-                return handle_TOP_LEFT
-            elif self._pointInSelRect(x, y, self.position.x + self.size.width,
-                                            self.position.y):
-                return handle_TOP_RIGHT
-            elif self._pointInSelRect(x, y, self.position.x,
-                                            self.position.y + self.size.height):
-                return handle_BOTTOM_LEFT
-            elif self._pointInSelRect(x, y, self.position.x + self.size.width,
-                                            self.position.y + self.size.height):
-                return handle_BOTTOM_RIGHT
+            return None
+
+    def moveHandle(self, handle, x, y):
+        """ Move the specified selection handle to given canvas location.
+        """
+        assert handle is not None
+
+        # Default implementation assumes selection handles at all four bbox corners.
+        pt = wx.Point(x,y)
+        x,y = self.position
+        w,h = self.size
+        if handle[0] == self.handle_TOP:
+            if handle[1] == self.handle_LEFT:
+                dpos = pt - self.position
+                self.position = pt
+                self.size.width -= dpos.x
+                self.size.height -= dpos.y
             else:
-                return handle_NONE
+                dx = pt.x - ( x + w )
+                dy = pt.y - ( y )
+                self.position.y = pt.y
+                self.size.width += dx
+                self.size.height -= dy
+        else: # BOTTOM
+            if handle[1] == self.handle_LEFT:
+                dx = pt.x - ( x )
+                dy = pt.y - ( y + h )
+                self.position.x = pt.x
+                self.size.width -= dx
+                self.size.height += dy
+            else: 
+                dpos = pt - self.position
+                dpos.x -= w
+                dpos.y -= h
+                self.size.width += dpos.x
+                self.size.height += dpos.y
+
+
+        # Finally, normalize so no negative widths or heights.
+        # And update the handle variable accordingly.
+        if self.size.height<0:
+            self.position.y += self.size.height
+            self.size.height = -self.size.height
+            handle[0] = 1-handle[0]
+
+        if self.size.width<0:
+            self.position.x += self.size.width
+            self.size.width = -self.size.width
+            handle[1] = 1-handle[1]
+            
+
+
+    def finalizeHandle(self, handle, x, y):
+        pass
 
 
     def objectWithinRect(self, x, y, width, height):
@@ -2132,29 +2485,6 @@ class DrawingObject:
         return True
 
     # =====================
-    # == Utility Methods ==
-    # =====================
-
-    def fitToText(self):
-        """ Resize a text DrawingObject so that it fits it's text exactly.
-        """
-        if self.type != obj_TEXT: return
-
-        if self.textBoldface: weight = wx.BOLD
-        else:                 weight = wx.NORMAL
-        if self.textItalic: style = wx.ITALIC
-        else:               style = wx.NORMAL
-        font = wx.Font(self.textSize, wx.DEFAULT, style, weight,
-                      self.textUnderline, self.textFont)
-
-        dummyWindow = wx.Frame(None, -1, "")
-        dummyWindow.SetFont(font)
-        width, height = dummyWindow.GetTextExtent(self.text)
-        dummyWindow.Destroy()
-
-        self.size = wx.Size(width, height)
-
-    # =====================
     # == Private Methods ==
     # =====================
 
@@ -2162,52 +2492,9 @@ class DrawingObject:
         """ Private routine to draw this DrawingObject.
 
             'dc' is the device context to use for drawing, while 'position' is
-            the position in which to draw the object.  If 'selected' is True,
-            the object is drawn with selection handles.  This private drawing
-            routine assumes that the pen and brush have already been set by the
-            caller.
+            the position in which to draw the object.
         """
-        if self.type == obj_LINE:
-            dc.DrawLine(position.x + self.startPt.x,
-                        position.y + self.startPt.y,
-                        position.x + self.endPt.x,
-                        position.y + self.endPt.y)
-        elif self.type == obj_RECT:
-            dc.DrawRectangle(position.x, position.y,
-                             self.size.width, self.size.height)
-        elif self.type == obj_ELLIPSE:
-            dc.DrawEllipse(position.x, position.y,
-                           self.size.width, self.size.height)
-        elif self.type == obj_TEXT:
-            if self.textBoldface: weight = wx.BOLD
-            else:                 weight = wx.NORMAL
-            if self.textItalic: style = wx.ITALIC
-            else:               style = wx.NORMAL
-            font = wx.Font(self.textSize, wx.DEFAULT, style, weight,
-                          self.textUnderline, self.textFont)
-            dc.SetFont(font)
-            dc.DrawText(self.text, position.x, position.y)
-
-        if selected:
-            dc.SetPen(wx.TRANSPARENT_PEN)
-            dc.SetBrush(wx.BLACK_BRUSH)
-
-            if self.type == obj_LINE:
-                # Draw selection handles at the start and end points.
-                self._drawSelHandle(dc, position.x + self.startPt.x,
-                                        position.y + self.startPt.y)
-                self._drawSelHandle(dc, position.x + self.endPt.x,
-                                        position.y + self.endPt.y)
-            else:
-                # Draw selection handles at all four corners.
-                self._drawSelHandle(dc, position.x, position.y)
-                self._drawSelHandle(dc, position.x + self.size.width,
-                                        position.y)
-                self._drawSelHandle(dc, position.x,
-                                        position.y + self.size.height)
-                self._drawSelHandle(dc, position.x + self.size.width,
-                                        position.y + self.size.height)
-
+        pass
 
     def _drawSelHandle(self, dc, x, y):
         """ Draw a selection handle around this DrawingObject.
@@ -2228,9 +2515,686 @@ class DrawingObject:
         elif y > rY + 3: return False
         else:            return True
 
-#----------------------------------------------------------------------------
 
-class ToolPaletteIcon(GenBitmapButton):
+#----------------------------------------------------------------------------
+class LineDrawingObject(DrawingObject):
+    """ DrawingObject subclass that represents one line segment.
+
+        Adds the following members to the base DrawingObject:
+            'startPt'       The point, relative to the object's position, where
+                            the line starts.
+            'endPt'         The point, relative to the object's position, where
+                            the line ends.
+            """
+
+    def __init__(self, startPt=wx.Point(0,0), endPt=wx.Point(0,0), *varg, **kwarg):
+        DrawingObject.__init__(self, *varg, **kwarg)
+
+        self.startPt           = wx.Point(startPt.x,startPt.y)
+        self.endPt             = wx.Point(endPt.x,endPt.y)
+
+    # ============================
+    # == Object Drawing Methods ==
+    # ============================
+
+    def drawHandles(self, dc):
+        """Draw selection handles for this DrawingObject"""
+
+        dc.SetPen(wx.BLACK_PEN)
+        dc.SetBrush(wx.BLACK_BRUSH)
+
+        x,y = self.position
+        # Draw selection handles at the start and end points.
+        self._drawSelHandle(dc, x + self.startPt.x, y + self.startPt.y)
+        self._drawSelHandle(dc, x + self.endPt.x,   y + self.endPt.y)
+
+
+
+    # =======================
+    # == Selection Methods ==
+    # =======================
+
+
+    handle_START_POINT = 1
+    handle_END_POINT = 2
+
+    def getSelectionHandleContainingPoint(self, x, y):
+        """ Return the selection handle containing the given point, if any.
+
+            We return one of the predefined selection handle ID codes.
+        """
+        # We have selection handles at the start and end points.
+        if self._pointInSelRect(x, y, self.position.x + self.startPt.x,
+                                      self.position.y + self.startPt.y):
+            return self.handle_START_POINT
+        elif self._pointInSelRect(x, y, self.position.x + self.endPt.x,
+                                        self.position.y + self.endPt.y):
+            return self.handle_END_POINT
+        else:
+            return None
+        
+    def moveHandle(self, handle, x, y):
+        """Move the handle to specified handle to the specified canvas coordinates
+        """
+        ptTrans = wx.Point(x-self.position.x, y-self.position.y)
+        if handle == self.handle_START_POINT:
+            self.startPt = ptTrans
+        elif handle == self.handle_END_POINT:
+            self.endPt = ptTrans
+        else:
+            raise ValueError("Bad handle type for a line")
+
+        self._updateBoundingBox()
+
+    # =============================
+    # == Object Property Methods ==
+    # =============================
+
+    def getData(self):
+        """ Return a copy of the object's internal data.
+
+            This is used to save this DrawingObject to disk.
+        """
+        # get the basics
+        data = DrawingObject.getData(self)
+        # add our specifics
+        data += [self.startPt.x, self.startPt.y,
+                 self.endPt.x,   self.endPt.y]
+        return data
+
+    def setData(self, data):
+        """ Set the object's internal data.
+
+            'data' is a copy of the object's saved data, as returned by
+            getData() above.  This is used to restore a previously saved
+            DrawingObject.
+        """
+        #data = copy.deepcopy(data) # Needed?
+
+        d = DrawingObject.setData(self, data)
+
+        try:
+            self.startPt           = wx.Point(d.next(), d.next())
+            self.endPt             = wx.Point(d.next(), d.next())
+        except StopIteration:
+            raise ValueError('Not enough data in setData call')
+
+        return d
+
+
+    def setStartPt(self, startPt):
+        """ Set the starting point for this line DrawingObject.
+        """
+        self.startPt = startPt - self.position
+        self._updateBoundingBox()
+
+
+    def getStartPt(self):
+        """ Return the starting point for this line DrawingObject.
+        """
+        return self.startPt + self.position
+
+
+    def setEndPt(self, endPt):
+        """ Set the ending point for this line DrawingObject.
+        """
+        self.endPt = endPt - self.position
+        self._updateBoundingBox()
+
+
+    def getEndPt(self):
+        """ Return the ending point for this line DrawingObject.
+        """
+        return self.endPt + self.position
+
+
+    # =====================
+    # == Private Methods ==
+    # =====================
+
+
+    def _privateDraw(self, dc, position, selected):
+        """ Private routine to draw this DrawingObject.
+
+            'dc' is the device context to use for drawing, while 'position' is
+            the position in which to draw the object.  If 'selected' is True,
+            the object is drawn with selection handles.  This private drawing
+            routine assumes that the pen and brush have already been set by the
+            caller.
+        """
+        dc.DrawLine(position.x + self.startPt.x,
+                    position.y + self.startPt.y,
+                    position.x + self.endPt.x,
+                    position.y + self.endPt.y)
+            
+    def _updateBoundingBox(self):
+        x = [self.startPt.x, self.endPt.x]; x.sort()
+        y = [self.startPt.y, self.endPt.y]; y.sort()
+
+        dp = wx.Point(-x[0],-y[0])
+        self.position.x += x[0]
+        self.position.y += y[0]
+        self.size.width = x[1]-x[0]
+        self.size.height = y[1]-y[0]
+
+        self.startPt += dp
+        self.endPt += dp
+
+#----------------------------------------------------------------------------
+class PolygonDrawingObject(DrawingObject):
+    """ DrawingObject subclass that represents a poly-line or polygon
+    """
+    def __init__(self, points=[], *varg, **kwarg):
+        DrawingObject.__init__(self, *varg, **kwarg)
+        self.points = list(points)
+
+    # =======================
+    # == Selection Methods ==
+    # =======================
+
+    def getSelectionHandleContainingPoint(self, x, y):
+        """ Return the selection handle containing the given point, if any.
+
+            We return one of the predefined selection handle ID codes.
+        """
+        # We have selection handles at the start and end points.
+        for i,p in enumerate(self.points):
+            if self._pointInSelRect(x, y,
+                                    self.position.x + p[0],
+                                    self.position.y + p[1]):
+                return i+1
+
+        return None
+        
+
+    def addPoint(self, x,y):
+        self.points.append((x-self.position.x,y-self.position.y))
+        self._updateBoundingBox()
+
+    def getPoint(self, idx):
+        x,y = self.points[idx]
+        return (x+self.position.x,y+self.position.y)
+
+    def movePoint(self, idx, x,y):
+        self.points[idx] = (x-self.position.x,y-self.position.y)
+        self._updateBoundingBox()
+
+    def popPoint(self, idx=-1):
+        self.points.pop(idx)
+        self._updateBoundingBox()
+
+    # =====================
+    # == Drawing Methods ==
+    # =====================
+
+    def drawHandles(self, dc):
+        """Draw selection handles for this DrawingObject"""
+
+        dc.SetPen(wx.BLACK_PEN)
+        dc.SetBrush(wx.BLACK_BRUSH)
+
+        x,y = self.position
+        # Draw selection handles at the start and end points.
+        for p in self.points:
+            self._drawSelHandle(dc, x + p[0], y + p[1])
+
+    def moveHandle(self, handle, x, y):
+        """Move the specified handle"""
+        self.movePoint(handle-1,x,y)
+
+
+    # =============================
+    # == Object Property Methods ==
+    # =============================
+
+    def getData(self):
+        """ Return a copy of the object's internal data.
+
+            This is used to save this DrawingObject to disk.
+        """
+        # get the basics
+        data = DrawingObject.getData(self)
+        # add our specifics
+        data += [list(self.points)]
+
+        return data
+
+
+    def setData(self, data):
+        """ Set the object's internal data.
+
+            'data' is a copy of the object's saved data, as returned by
+            getData() above.  This is used to restore a previously saved
+            DrawingObject.
+        """
+        #data = copy.deepcopy(data) # Needed?
+        d = DrawingObject.setData(self, data)
+
+        try:
+            self.points            = d.next()
+        except StopIteration:
+            raise ValueError('Not enough data in setData call')
+
+        return d
+        
+
+    # =====================
+    # == Private Methods ==
+    # =====================
+    def _privateDraw(self, dc, position, selected):
+        """ Private routine to draw this DrawingObject.
+
+            'dc' is the device context to use for drawing, while 'position' is
+            the position in which to draw the object.  If 'selected' is True,
+            the object is drawn with selection handles.  This private drawing
+            routine assumes that the pen and brush have already been set by the
+            caller.
+        """
+        dc.DrawPolygon(self.points, position.x, position.y)
+
+    def _updateBoundingBox(self):
+        x = min([p[0] for p in self.points])
+        y = min([p[1] for p in self.points])
+        x2 = max([p[0] for p in self.points])
+        y2 = max([p[1] for p in self.points])
+        dx = -x
+        dy = -y
+        self.position.x += x
+        self.position.y += y
+        self.size.width = x2-x
+        self.size.height = y2-y
+        # update coords also because they're relative to self.position
+        for i,p in enumerate(self.points):
+            self.points[i] = (p[0]+dx,p[1]+dy)
+            
+
+#----------------------------------------------------------------------------
+class ScribbleDrawingObject(DrawingObject):
+    """ DrawingObject subclass that represents a poly-line or polygon
+    """
+    def __init__(self, points=[], *varg, **kwarg):
+        DrawingObject.__init__(self, *varg, **kwarg)
+        self.points = list(points)
+
+    # =======================
+    # == Selection Methods ==
+    # =======================
+
+    def addPoint(self, x,y):
+        self.points.append((x-self.position.x,y-self.position.y))
+        self._updateBoundingBox()
+
+    def getPoint(self, idx):
+        x,y = self.points[idx]
+        return (x+self.position.x,y+self.position.y)
+
+    def movePoint(self, idx, x,y):
+        self.points[idx] = (x-self.position.x,y-self.position.y)
+        self._updateBoundingBox()
+
+    def popPoint(self, idx=-1):
+        self.points.pop(idx)
+        self._updateBoundingBox()
+
+
+    # =============================
+    # == Object Property Methods ==
+    # =============================
+
+    def getData(self):
+        """ Return a copy of the object's internal data.
+
+            This is used to save this DrawingObject to disk.
+        """
+        # get the basics
+        data = DrawingObject.getData(self)
+        # add our specifics
+        data += [list(self.points)]
+
+        return data
+
+
+    def setData(self, data):
+        """ Set the object's internal data.
+
+            'data' is a copy of the object's saved data, as returned by
+            getData() above.  This is used to restore a previously saved
+            DrawingObject.
+        """
+        #data = copy.deepcopy(data) # Needed?
+        d = DrawingObject.setData(self, data)
+
+        try:
+            self.points            = d.next()
+        except StopIteration:
+            raise ValueError('Not enough data in setData call')
+
+        return d
+        
+
+    # =====================
+    # == Private Methods ==
+    # =====================
+    def _privateDraw(self, dc, position, selected):
+        """ Private routine to draw this DrawingObject.
+
+            'dc' is the device context to use for drawing, while 'position' is
+            the position in which to draw the object.  If 'selected' is True,
+            the object is drawn with selection handles.  This private drawing
+            routine assumes that the pen and brush have already been set by the
+            caller.
+        """
+        dc.SetBrush(wx.TRANSPARENT_BRUSH)
+        dc.DrawLines(self.points, position.x, position.y)
+
+    def _updateBoundingBox(self):
+        x = min([p[0] for p in self.points])
+        y = min([p[1] for p in self.points])
+        x2 = max([p[0] for p in self.points])
+        y2 = max([p[1] for p in self.points])
+        dx = -x
+        dy = -y
+        self.position = wx.Point(self.position.x + x,self.position.y + y)
+        self.size = wx.Size(x2-x, y2-y)
+        #self.position.x += x
+        #self.position.y += y
+        #self.size.width = x2-x
+        #self.size.height = y2-y
+        # update coords also because they're relative to self.position
+        for i,p in enumerate(self.points):
+            self.points[i] = (p[0]+dx,p[1]+dy)
+
+#----------------------------------------------------------------------------
+class RectDrawingObject(DrawingObject):
+    """ DrawingObject subclass that represents an axis-aligned rectangle.
+    """
+    def __init__(self, *varg, **kwarg):
+        DrawingObject.__init__(self, *varg, **kwarg)
+
+    def objectContainsPoint(self, x, y):
+        """ Returns True iff this object contains the given point.
+
+            This is used to determine if the user clicked on the object.
+        """
+        # Firstly, ignore any points outside of the object's bounds.
+
+        if x < self.position.x: return False
+        if x > self.position.x + self.size.x: return False
+        if y < self.position.y: return False
+        if y > self.position.y + self.size.y: return False
+
+        # Rectangles are easy -- they're always selected if the
+        # point is within their bounds.
+        return True
+
+    # =====================
+    # == Private Methods ==
+    # =====================
+
+    def _privateDraw(self, dc, position, selected):
+        """ Private routine to draw this DrawingObject.
+
+            'dc' is the device context to use for drawing, while 'position' is
+            the position in which to draw the object.  If 'selected' is True,
+            the object is drawn with selection handles.  This private drawing
+            routine assumes that the pen and brush have already been set by the
+            caller.
+        """
+        dc.DrawRectangle(position.x, position.y,
+                         self.size.width, self.size.height)
+
+
+#----------------------------------------------------------------------------
+class EllipseDrawingObject(DrawingObject):
+    """ DrawingObject subclass that represents an axis-aligned ellipse.
+    """
+    def __init__(self, *varg, **kwarg):
+        DrawingObject.__init__(self, *varg, **kwarg)
+
+    # =====================
+    # == Private Methods ==
+    # =====================
+    def _privateDraw(self, dc, position, selected):
+        """ Private routine to draw this DrawingObject.
+
+            'dc' is the device context to use for drawing, while 'position' is
+            the position in which to draw the object.  If 'selected' is True,
+            the object is drawn with selection handles.  This private drawing
+            routine assumes that the pen and brush have already been set by the
+            caller.
+        """
+        dc.DrawEllipse(position.x, position.y,
+                       self.size.width, self.size.height)
+
+
+
+
+#----------------------------------------------------------------------------
+class TextDrawingObject(DrawingObject):
+    """ DrawingObject subclass that holds text.
+
+        Adds the following members to the base DrawingObject:
+            'text'          The object's text (obj_TEXT objects only).
+            'textFont'      The text object's font name.
+            """
+
+    def __init__(self, text=None, *varg, **kwarg):
+        DrawingObject.__init__(self, *varg, **kwarg)
+
+        self.text              = text
+        self.textFont          = wx.SystemSettings_GetFont(wx.SYS_DEFAULT_GUI_FONT)
+
+
+    # =============================
+    # == Object Property Methods ==
+    # =============================
+
+    def getData(self):
+        """ Return a copy of the object's internal data.
+
+            This is used to save this DrawingObject to disk.
+        """
+        # get the basics
+        data = DrawingObject.getData(self)
+        # add our specifics
+        data += [self.text, self.textFont.GetNativeFontInfoDesc()]
+
+        return data
+
+
+    def setData(self, data):
+        """ Set the object's internal data.
+
+            'data' is a copy of the object's saved data, as returned by
+            getData() above.  This is used to restore a previously saved
+            DrawingObject.
+        """
+        d = DrawingObject.setData(self, data)
+
+        try:
+            self.text              = d.next()
+            desc                   = d.next()
+            self.textFont = wx.FontFromNativeInfoString(desc)
+        except StopIteration:
+            raise ValueError('Not enough data in setData call')
+
+        return d
+        
+
+    def hasPropertyEditor(self):
+        return True
+
+    def doPropertyEdit(self, parent):
+        editor = parent.getTextEditor()
+        editor.SetTitle("Edit Text Object")
+        editor.objectToDialog(self)
+        if editor.ShowModal() == wx.ID_CANCEL:
+            editor.Hide()
+            return False
+
+        parent.saveUndoInfo()
+
+        editor.dialogToObject(self)
+        editor.Hide()
+
+        return True
+
+
+    def setText(self, text):
+        """ Set the text for this DrawingObject.
+        """
+        self.text = text
+
+
+    def getText(self):
+        """ Return this DrawingObject's text.
+        """
+        return self.text
+
+
+    def setFont(self, font):
+        """ Set the font for this text DrawingObject.
+        """
+        self.textFont = font
+
+
+    def getFont(self):
+        """ Return this text DrawingObject's font.
+        """
+        return self.textFont
+
+
+
+    # ============================
+    # == Object Drawing Methods ==
+    # ============================
+
+    def draw(self, dc, selected):
+        """ Draw this DrawingObject into our window.
+
+            'dc' is the device context to use for drawing.  If 'selected' is
+            True, the object is currently selected and should be drawn as such.
+        """
+        dc.SetTextForeground(self.penColour)
+        dc.SetTextBackground(self.fillColour)
+
+        self._privateDraw(dc, self.position, selected)
+
+    def objectContainsPoint(self, x, y):
+        """ Returns True iff this object contains the given point.
+
+            This is used to determine if the user clicked on the object.
+        """
+        # Firstly, ignore any points outside of the object's bounds.
+
+        if x < self.position.x: return False
+        if x > self.position.x + self.size.x: return False
+        if y < self.position.y: return False
+        if y > self.position.y + self.size.y: return False
+
+        # Text is easy -- it's always selected if the
+        # point is within its bounds.
+        return True
+
+
+    def fitToText(self):
+        """ Resize a text DrawingObject so that it fits it's text exactly.
+        """
+
+        dummyWindow = wx.Frame(None, -1, "")
+        dummyWindow.SetFont(self.textFont)
+        width, height = dummyWindow.GetTextExtent(self.text)
+        dummyWindow.Destroy()
+
+        self.size = wx.Size(width, height)
+
+    # =====================
+    # == Private Methods ==
+    # =====================
+
+    def _privateDraw(self, dc, position, selected):
+        """ Private routine to draw this DrawingObject.
+
+            'dc' is the device context to use for drawing, while 'position' is
+            the position in which to draw the object.  If 'selected' is True,
+            the object is drawn with selection handles.  This private drawing
+            routine assumes that the pen and brush have already been set by the
+            caller.
+        """
+        dc.SetFont(self.textFont)
+        dc.DrawText(self.text, position.x, position.y)
+
+
+
+#----------------------------------------------------------------------------
+class ToolPaletteToggleX(wx.ToggleButton):
+    """ An icon appearing in the tool palette area of our sketching window.
+
+        Note that this is actually implemented as a wx.Bitmap rather
+        than as a wx.Icon.  wx.Icon has a very specific meaning, and isn't
+        appropriate for this more general use.
+    """
+
+    def __init__(self, parent, iconID, iconName, toolTip, mode = wx.ITEM_NORMAL):
+        """ Standard constructor.
+
+            'parent'   is the parent window this icon will be part of.
+            'iconID'   is the internal ID used for this icon.
+            'iconName' is the name used for this icon.
+            'toolTip'  is the tool tip text to show for this icon.
+            'mode'     is one of wx.ITEM_NORMAL, wx.ITEM_CHECK, wx.ITEM_RADIO
+
+            The icon name is used to get the appropriate bitmap for this icon.
+        """
+        bmp = wx.Bitmap("images/" + iconName + "Icon.bmp", wx.BITMAP_TYPE_BMP)
+        bmpsel = wx.Bitmap("images/" + iconName + "IconSel.bmp", wx.BITMAP_TYPE_BMP)
+
+        wx.ToggleButton.__init__(self, parent, iconID,
+                                 size=(bmp.GetWidth()+1, bmp.GetHeight()+1)
+                                 )
+        self.SetLabel( iconName )
+        self.SetToolTip(wx.ToolTip(toolTip))
+        #self.SetBitmapLabel(bmp)
+        #self.SetBitmapSelected(bmpsel)
+
+        self.iconID     = iconID
+        self.iconName   = iconName
+
+class ToolPaletteToggle(GenBitmapToggleButton):
+    """ An icon appearing in the tool palette area of our sketching window.
+
+        Note that this is actually implemented as a wx.Bitmap rather
+        than as a wx.Icon.  wx.Icon has a very specific meaning, and isn't
+        appropriate for this more general use.
+    """
+
+    def __init__(self, parent, iconID, iconName, toolTip, mode = wx.ITEM_NORMAL):
+        """ Standard constructor.
+
+            'parent'   is the parent window this icon will be part of.
+            'iconID'   is the internal ID used for this icon.
+            'iconName' is the name used for this icon.
+            'toolTip'  is the tool tip text to show for this icon.
+            'mode'     is one of wx.ITEM_NORMAL, wx.ITEM_CHECK, wx.ITEM_RADIO
+
+            The icon name is used to get the appropriate bitmap for this icon.
+        """
+        bmp = wx.Bitmap("images/" + iconName + "Icon.bmp", wx.BITMAP_TYPE_BMP)
+        bmpsel = wx.Bitmap("images/" + iconName + "IconSel.bmp", wx.BITMAP_TYPE_BMP)
+
+        GenBitmapToggleButton.__init__(self, parent, iconID, bitmap=bmp, 
+                                       size=(bmp.GetWidth()+1, bmp.GetHeight()+1),
+                                       style=wx.BORDER_NONE)
+
+        self.SetToolTip(wx.ToolTip(toolTip))
+        self.SetBitmapLabel(bmp)
+        self.SetBitmapSelected(bmpsel)
+
+        self.iconID     = iconID
+        self.iconName   = iconName
+
+
+class ToolPaletteButton(GenBitmapButton):
     """ An icon appearing in the tool palette area of our sketching window.
 
         Note that this is actually implemented as a wx.Bitmap rather
@@ -2249,39 +3213,16 @@ class ToolPaletteIcon(GenBitmapButton):
             The icon name is used to get the appropriate bitmap for this icon.
         """
         bmp = wx.Bitmap("images/" + iconName + "Icon.bmp", wx.BITMAP_TYPE_BMP)
-        GenBitmapButton.__init__(self, parent, iconID, bmp, wx.DefaultPosition,
-                                wx.Size(bmp.GetWidth(), bmp.GetHeight()))
+        GenBitmapButton.__init__(self, parent, iconID, bitmap=bmp, 
+                                 size=(bmp.GetWidth()+1, bmp.GetHeight()+1),
+                                 style=wx.BORDER_NONE)
         self.SetToolTip(wx.ToolTip(toolTip))
+        self.SetBitmapLabel(bmp)
 
         self.iconID     = iconID
         self.iconName   = iconName
-        self.isSelected = False
 
 
-    def select(self):
-        """ Select the icon.
-
-            The icon's visual representation is updated appropriately.
-        """
-        if self.isSelected: return # Nothing to do!
-
-        bmp = wx.Bitmap("images/" + self.iconName + "IconSel.bmp",
-                       wx.BITMAP_TYPE_BMP)
-        self.SetBitmapLabel(bmp)
-        self.isSelected = True
-
-
-    def deselect(self):
-        """ Deselect the icon.
-
-            The icon's visual representation is updated appropriately.
-        """
-        if not self.isSelected: return # Nothing to do!
-
-        bmp = wx.Bitmap("images/" + self.iconName + "Icon.bmp",
-                       wx.BITMAP_TYPE_BMP)
-        self.SetBitmapLabel(bmp)
-        self.isSelected = False
 
 #----------------------------------------------------------------------------
 
@@ -2297,7 +3238,13 @@ class ToolOptionIndicator(wx.Window):
         self.fillColour = wx.WHITE
         self.lineSize   = 1
 
-        self.Bind(wx.EVT_PAINT, self.OnPaint)
+        # Win95 can only handle a 8x8 stipple bitmaps max
+        #self.stippleBitmap = wx.BitmapFromBits("\xf0"*4 + "\x0f"*4,8,8)
+        # ...but who uses Win95?
+        self.stippleBitmap = wx.BitmapFromBits("\xff\x00"*8+"\x00\xff"*8,16,16)
+        self.stippleBitmap.SetMask(wx.Mask(self.stippleBitmap))
+
+        self.Bind(wx.EVT_PAINT, self.onPaint)
 
 
     def setPenColour(self, penColour):
@@ -2321,11 +3268,19 @@ class ToolOptionIndicator(wx.Window):
         self.Refresh()
 
 
-    def OnPaint(self, event):
+    def onPaint(self, event):
         """ Paint our tool option indicator.
         """
         dc = wx.PaintDC(self)
         dc.BeginDrawing()
+
+        dc.SetPen(wx.BLACK_PEN)
+        bgbrush = wx.Brush(wx.WHITE, wx.STIPPLE_MASK_OPAQUE)
+        bgbrush.SetStipple(self.stippleBitmap)
+        dc.SetTextForeground(wx.LIGHT_GREY)
+        dc.SetTextBackground(wx.WHITE)
+        dc.SetBrush(bgbrush)
+        dc.DrawRectangle(0, 0, self.GetSize().width,self.GetSize().height)
 
         if self.lineSize == 0:
             dc.SetPen(wx.Pen(self.penColour, self.lineSize, wx.TRANSPARENT))
@@ -2333,8 +3288,11 @@ class ToolOptionIndicator(wx.Window):
             dc.SetPen(wx.Pen(self.penColour, self.lineSize, wx.SOLID))
         dc.SetBrush(wx.Brush(self.fillColour, wx.SOLID))
 
-        dc.DrawRectangle(5, 5, self.GetSize().width - 10,
-                               self.GetSize().height - 10)
+        size = self.GetSize()
+        ctrx = size.x/2
+        ctry = size.y/2
+        radius = min(size)//2 - 5
+        dc.DrawCircle(ctrx, ctry, radius)
 
         dc.EndDrawing()
 
@@ -2349,75 +3307,40 @@ class EditTextObjectDialog(wx.Dialog):
     def __init__(self, parent, title):
         """ Standard constructor.
         """
-        wx.Dialog.__init__(self, parent, -1, title)
+        wx.Dialog.__init__(self, parent, -1, title,
+                           style=wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER)
 
-        self.textCtrl = wx.TextCtrl(self, 1001, "", style=wx.TE_PROCESS_ENTER,
-                                   validator=TextObjectValidator())
+        self.textCtrl = wx.TextCtrl(
+            self, 1001, "Enter text here", style=wx.TE_PROCESS_ENTER|wx.TE_RICH,
+            validator=TextObjectValidator()
+            )
         extent = self.textCtrl.GetFullTextExtent("Hy")
         lineHeight = extent[1] + extent[3]
         self.textCtrl.SetSize(wx.Size(-1, lineHeight * 4))
+        self.curFont = self.textCtrl.GetFont()
+        self.curClr = wx.BLACK
 
         self.Bind(wx.EVT_TEXT_ENTER, self._doEnter, id=1001)
 
-        fonts = wx.FontEnumerator()
-        fonts.EnumerateFacenames()
-        self.fontList = fonts.GetFacenames()
-        self.fontList.sort()
-
-        fontLabel = wx.StaticText(self, -1, "Font:")
-        self._setFontOptions(fontLabel, weight=wx.BOLD)
-
-        self.fontCombo = wx.ComboBox(self, -1, "", wx.DefaultPosition,
-                                    wx.DefaultSize, self.fontList,
-                                    style = wx.CB_READONLY)
-        self.fontCombo.SetSelection(0) # Default to first available font.
-
-        self.sizeList = ["8", "9", "10", "12", "14", "16",
-                         "18", "20", "24", "32", "48", "72"]
-
-        sizeLabel = wx.StaticText(self, -1, "Size:")
-        self._setFontOptions(sizeLabel, weight=wx.BOLD)
-
-        self.sizeCombo = wx.ComboBox(self, -1, "", wx.DefaultPosition,
-                                    wx.DefaultSize, self.sizeList,
-                                    style=wx.CB_READONLY)
-        self.sizeCombo.SetSelection(3) # Default to 12 point text.
+        fontBtn = wx.Button(self, -1, "Select Font...")
+        self.Bind(wx.EVT_BUTTON, self.OnSelectFont, fontBtn)
 
         gap = wx.LEFT | wx.TOP | wx.RIGHT
 
-        comboSizer = wx.BoxSizer(wx.HORIZONTAL)
-        comboSizer.Add(fontLabel,      0, gap | wx.ALIGN_CENTRE_VERTICAL, 5)
-        comboSizer.Add(self.fontCombo, 0, gap, 5)
-        comboSizer.Add((5, 5)) # Spacer.
-        comboSizer.Add(sizeLabel,      0, gap | wx.ALIGN_CENTRE_VERTICAL, 5)
-        comboSizer.Add(self.sizeCombo, 0, gap, 5)
+        self.okButton     = wx.Button(self, wx.ID_OK,     "&OK")
+        self.okButton.SetDefault()
+        self.cancelButton = wx.Button(self, wx.ID_CANCEL, "&Cancel")
 
-        self.boldCheckbox      = wx.CheckBox(self, -1, "Bold")
-        self.italicCheckbox    = wx.CheckBox(self, -1, "Italic")
-        self.underlineCheckbox = wx.CheckBox(self, -1, "Underline")
+        btnSizer = wx.StdDialogButtonSizer()
 
-        self._setFontOptions(self.boldCheckbox,      weight=wx.BOLD)
-        self._setFontOptions(self.italicCheckbox,    style=wx.ITALIC)
-        self._setFontOptions(self.underlineCheckbox, underline=True)
-
-        styleSizer = wx.BoxSizer(wx.HORIZONTAL)
-        styleSizer.Add(self.boldCheckbox,      0, gap, 5)
-        styleSizer.Add(self.italicCheckbox,    0, gap, 5)
-        styleSizer.Add(self.underlineCheckbox, 0, gap, 5)
-
-        self.okButton     = wx.Button(self, wx.ID_OK,     "OK")
-        self.cancelButton = wx.Button(self, wx.ID_CANCEL, "Cancel")
-
-        btnSizer = wx.BoxSizer(wx.HORIZONTAL)
         btnSizer.Add(self.okButton,     0, gap, 5)
         btnSizer.Add(self.cancelButton, 0, gap, 5)
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.textCtrl, 1, gap | wx.EXPAND,       5)
+        sizer.Add(fontBtn,    0, gap | wx.ALIGN_RIGHT, 5)
         sizer.Add((10, 10)) # Spacer.
-        sizer.Add(comboSizer,    0, gap | wx.ALIGN_CENTRE, 5)
-        sizer.Add(styleSizer,    0, gap | wx.ALIGN_CENTRE, 5)
-        sizer.Add((10, 10)) # Spacer.
+        btnSizer.Realize()
         sizer.Add(btnSizer,      0, gap | wx.ALIGN_CENTRE, 5)
 
         self.SetAutoLayout(True)
@@ -2427,58 +3350,51 @@ class EditTextObjectDialog(wx.Dialog):
         self.textCtrl.SetFocus()
 
 
+    def OnSelectFont(self, evt):
+        """Shows the font dialog and sets the font of the sample text"""
+        data = wx.FontData()
+        data.EnableEffects(True)
+        data.SetColour(self.curClr)         # set colour
+        data.SetInitialFont(self.curFont)
+
+        dlg = wx.FontDialog(self, data)
+        
+        if dlg.ShowModal() == wx.ID_OK:
+            data = dlg.GetFontData()
+            font = data.GetChosenFont()
+            colour = data.GetColour()
+
+            self.curFont = font
+            self.curClr = colour
+
+            self.textCtrl.SetFont(font)
+            # Update dialog for the new height of the text
+            self.GetSizer().Fit(self)
+
+        dlg.Destroy()
+
+
     def objectToDialog(self, obj):
         """ Copy the properties of the given text object into the dialog box.
         """
         self.textCtrl.SetValue(obj.getText())
         self.textCtrl.SetSelection(0, len(obj.getText()))
 
-        for i in range(len(self.fontList)):
-            if self.fontList[i] == obj.getTextFont():
-                self.fontCombo.SetSelection(i)
-                break
+        self.curFont = obj.getFont()
+        self.textCtrl.SetFont(self.curFont)
 
-        for i in range(len(self.sizeList)):
-            if self.sizeList[i] == str(obj.getTextSize()):
-                self.sizeCombo.SetSelection(i)
-                break
-
-        self.boldCheckbox.SetValue(obj.getTextBoldface())
-        self.italicCheckbox.SetValue(obj.getTextItalic())
-        self.underlineCheckbox.SetValue(obj.getTextUnderline())
 
 
     def dialogToObject(self, obj):
         """ Copy the properties from the dialog box into the given text object.
         """
         obj.setText(self.textCtrl.GetValue())
-        obj.setTextFont(self.fontCombo.GetValue())
-        obj.setTextSize(int(self.sizeCombo.GetValue()))
-        obj.setTextBoldface(self.boldCheckbox.GetValue())
-        obj.setTextItalic(self.italicCheckbox.GetValue())
-        obj.setTextUnderline(self.underlineCheckbox.GetValue())
+        obj.setFont(self.curFont)
         obj.fitToText()
 
     # ======================
     # == Private Routines ==
     # ======================
-
-    def _setFontOptions(self, ctrl, family=None, pointSize=-1,
-                                    style=wx.NORMAL, weight=wx.NORMAL,
-                                    underline=False):
-        """ Change the font settings for the given control.
-
-            The meaning of the 'family', 'pointSize', 'style', 'weight' and
-            'underline' parameters are the same as for the wx.Font constructor.
-            If the family and/or pointSize isn't specified, the current default
-            value is used.
-        """
-        if family == None: family = ctrl.GetFont().GetFamily()
-        if pointSize == -1: pointSize = ctrl.GetFont().GetPointSize()
-
-        ctrl.SetFont(wx.Font(pointSize, family, style, weight, underline))
-        ctrl.SetSize(ctrl.GetBestSize()) # Adjust size to reflect font change.
-
 
     def _doEnter(self, event):
         """ Respond to the user hitting the ENTER key.
@@ -2570,15 +3486,17 @@ class ExceptionHandler:
             s = self._buff + s
             self._buff = ""
 
+            f = open("errors.txt", "a")
+            f.write(s)
+            f.close()
+
             if s[:9] == "Traceback":
                 # Tell the user than an exception occurred.
                 wx.MessageBox("An internal error has occurred.\nPlease " + \
                              "refer to the 'errors.txt' file for details.",
                              "Error", wx.OK | wx.CENTRE | wx.ICON_EXCLAMATION)
 
-            f = open("errors.txt", "a")
-            f.write(s)
-            f.close()
+
         except:
             pass # Don't recursively crash on errors.
 

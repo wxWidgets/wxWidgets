@@ -49,6 +49,7 @@
 
 #ifdef __WXMAC_CARBON__
 #include "wx/mac/corefoundation/cfstring.h"
+#include "wx/mac/corefoundation/cfdataref.h"
 #endif
 
 #ifndef FixedToInt
@@ -429,6 +430,11 @@ public :
 
     operator refType () const { return m_ref; }
 
+    wxMacCFRefHolder& operator=(refType r)
+    {
+        Set( r );
+        return *this;
+    }
 private :
     refType m_ref;
     bool m_release;
@@ -473,7 +479,7 @@ void wxMacNativeToRect( const Rect *n , wxRect* wx );
 void wxMacPointToNative( const wxPoint* wx , Point *n );
 void wxMacNativeToPoint( const Point *n , wxPoint* wx );
 
-wxWindow *              wxFindControlFromMacControl(ControlRef inControl );
+wxWindowMac *           wxFindControlFromMacControl(ControlRef inControl );
 wxTopLevelWindowMac*    wxFindWinFromMacWindow( WindowRef inWindow );
 wxMenu*                 wxFindMenuFromMacMenu(MenuRef inMenuRef);
 
@@ -483,7 +489,7 @@ wxMenu*                 wxFindMenuFromMacCommand( const HICommand &macCommandId 
 
 extern wxWindow* g_MacLastWindow;
 pascal OSStatus wxMacTopLevelMouseEventHandler( EventHandlerCallRef handler , EventRef event , void *data );
-Rect wxMacGetBoundsForControl( wxWindow* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin = true );
+Rect wxMacGetBoundsForControl( wxWindowMac* window , const wxPoint& pos , const wxSize &size , bool adjustForOrigin = true );
 
 ControlActionUPP GetwxMacLiveScrollbarActionProc();
 
@@ -1227,9 +1233,13 @@ public:
 
     // returns a Pict from the bitmap content
     PicHandle     GetPictHandle();
+#if wxMAC_USE_CORE_GRAPHICS
+    CGContextRef  GetBitmapContext() const;
+#else
     GWorldPtr     GetHBITMAP(GWorldPtr * mask = NULL ) const;
     void          UpdateAlphaMask() const;
-
+#endif
+    int           GetBytesPerRow() const { return m_bytesPerRow; }
 private :
     bool Create(int width , int height , int depth);
     void Init();
@@ -1247,10 +1257,14 @@ private :
 #endif
     IconRef       m_iconRef;
     PicHandle     m_pictHandle;
+#if wxMAC_USE_CORE_GRAPHICS
+    CGContextRef  m_hBitmap;
+#else
     GWorldPtr     m_hBitmap;
     GWorldPtr     m_hMaskBitmap;
     wxMemoryBuffer m_maskMemBuf;
     int            m_maskBytesPerRow;
+#endif
 };
 
 class WXDLLEXPORT wxIconRefData : public wxGDIRefData
@@ -1277,6 +1291,16 @@ private :
 };
 
 // toplevel.cpp
+
+class wxMacDeferredWindowDeleter : public wxObject
+{
+public :
+    wxMacDeferredWindowDeleter( WindowRef windowRef );
+    virtual ~wxMacDeferredWindowDeleter();
+
+protected :
+    WindowRef m_macWindow ;
+} ;
 
 ControlRef wxMacFindControlUnderMouse( wxTopLevelWindowMac* toplevelWindow, const Point& location , WindowRef window , ControlPartCode *outPart );
 
@@ -1332,6 +1356,21 @@ void wxMacLocalToGlobal( WindowRef window , Point*pt );
 void wxMacGlobalToLocal( WindowRef window , Point*pt );
 
 #endif
+
+//---------------------------------------------------------------------------
+// cocoa bridging utilities
+//---------------------------------------------------------------------------
+
+bool wxMacInitCocoa();
+
+class wxMacAutoreleasePool
+{
+public :
+    wxMacAutoreleasePool();
+    ~wxMacAutoreleasePool();
+private :
+    void* m_pool;
+};
 
 #endif
     // _WX_PRIVATE_H_

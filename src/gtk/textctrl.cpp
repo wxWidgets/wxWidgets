@@ -144,7 +144,16 @@ static void wxGtkTextApplyTagsFromAttr(GtkWidget *text,
             case wxTEXT_ALIGNMENT_CENTER:
                 align = GTK_JUSTIFY_CENTER;
                 break;
-            // gtk+ doesn't support justify as of gtk+-2.7.4
+// gtk+ doesn't support justify before gtk+-2.11.0 with pango-1.17 being available
+// (but if new enough pango isn't available it's a mere gtk warning)
+#if GTK_CHECK_VERSION(2,11,0)
+            case wxTEXT_ALIGNMENT_JUSTIFIED:
+                if (!gtk_check_version(2,11,0))
+                    align = GTK_JUSTIFY_FILL;
+                else
+                    align = GTK_JUSTIFY_LEFT;
+                break;
+#endif
         }
 
         g_snprintf(buf, sizeof(buf), "WXALIGNMENT %d", align);
@@ -1119,8 +1128,12 @@ wxString wxTextCtrl::GetLineText( long lineNo ) const
     {
         GtkTextIter line;
         gtk_text_buffer_get_iter_at_line(m_buffer,&line,lineNo);
+
         GtkTextIter end = line;
-        gtk_text_iter_forward_to_line_end(&end);
+        // avoid skipping to the next line end if this one is empty
+        if ( !gtk_text_iter_ends_line(&line) )
+            gtk_text_iter_forward_to_line_end(&end);
+
         wxGtkString text(gtk_text_buffer_get_text(m_buffer, &line, &end, true));
         result = wxGTK_CONV_BACK(text);
     }

@@ -154,7 +154,7 @@ IMPLEMENT_DYNAMIC_CLASS(wxToolBar, wxControl)
 //-----------------------------------------------------------------------------
 
 extern "C" {
-static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget),
+static void gtk_toolbar_callback( GtkWidget *widget,
                                   wxToolBarTool *tool )
 {
     if (g_isIdle)
@@ -169,6 +169,14 @@ static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget),
 
     if (tool->CanBeToggled())
     {
+        if (tool->IsRadio() &&
+            gtk_toggle_button_get_active( GTK_TOGGLE_BUTTON(widget)) &&
+            tool->IsToggled())
+        {
+            // pressed an already pressed radio button
+            return;
+        }
+    
         tool->Toggle();
 
         tool->SetImage(tool->GetBitmap());
@@ -187,6 +195,30 @@ static void gtk_toolbar_callback( GtkWidget *WXUNUSED(widget),
 
         tool->SetImage(tool->GetBitmap());
     }
+}
+}
+
+//-----------------------------------------------------------------------------
+// "right-click"
+//-----------------------------------------------------------------------------
+extern "C" {
+static gboolean gtk_toolbar_tool_rclick_callback(GtkWidget *WXUNUSED(widget),
+                                                 GdkEventButton *event,
+                                                 wxToolBarToolBase *tool)
+{
+    if (event->button != 3)
+        return FALSE;
+
+    wxToolBar *tbar = (wxToolBar *)tool->GetToolBar();
+
+    if (tbar->m_blockEvent) return TRUE;
+
+    if (g_blockEventsOnDrag) return TRUE;
+    if (!tool->IsEnabled()) return TRUE;
+
+    tbar->OnRightClick( tool->GetId(), (int)event->x, (int)event->y );
+
+    return TRUE;
 }
 }
 
@@ -450,12 +482,15 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                                );
 
                 wxCHECK_MSG(tool->m_item != NULL, false, _T("gtk_toolbar_insert_element() failed"));
-
+                
                 g_signal_connect (tool->m_item, "enter_notify_event",
                                   G_CALLBACK (gtk_toolbar_tool_callback),
                                   tool);
                 g_signal_connect (tool->m_item, "leave_notify_event",
                                   G_CALLBACK (gtk_toolbar_tool_callback),
+                                  tool);
+                g_signal_connect(tool->m_item, "button-press-event",
+                                  G_CALLBACK (gtk_toolbar_tool_rclick_callback),
                                   tool);
             }
             break;
@@ -595,6 +630,30 @@ void wxToolBar::SetToolShortHelp( int id, const wxString& helpString )
         gtk_tooltips_set_tip(m_toolbar->tooltips, tool->m_item,
                              wxGTK_CONV( helpString ), "");
     }
+}
+
+void wxToolBar::SetToolNormalBitmap( int id, const wxBitmap& bitmap )
+{
+    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, FindById(id));
+    if ( tool )
+    {
+        wxCHECK_RET( tool->IsButton(), wxT("Can only set bitmap on button tools."));
+
+        tool->SetNormalBitmap(bitmap);
+        tool->SetImage(tool->GetBitmap());
+    }    
+}
+
+void wxToolBar::SetToolDisabledBitmap( int id, const wxBitmap& bitmap )
+{
+    wxToolBarTool* tool = wx_static_cast(wxToolBarTool*, FindById(id));
+    if ( tool )
+    {
+        wxCHECK_RET( tool->IsButton(), wxT("Can only set bitmap on button tools."));
+
+        tool->SetDisabledBitmap(bitmap);
+        tool->SetImage(tool->GetBitmap());
+    }    
 }
 
 // ----------------------------------------------------------------------------

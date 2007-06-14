@@ -45,6 +45,10 @@ public:
              long style = wxDEFAULT_DIALOG_STYLE);
     void Init();
 
+#if wxABI_VERSION >= 20804
+    virtual ~wxWizard();
+#endif
+
     // implement base class pure virtuals
     virtual bool RunWizard(wxWizardPage *firstPage);
     virtual wxWizardPage *GetCurrentPage() const;

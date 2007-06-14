@@ -176,15 +176,17 @@ class RichTextFrame(wx.Frame):
         
 
     def OnFileOpen(self, evt):
-        # TODO: Use RichTextBuffer.GetExtWildcard to get the wildcard string
+        # This gives us a string suitable for the file dialog based on
+        # the file handlers that are loaded
+        wildcard, types = rt.RichTextBuffer.GetExtWildcard(save=False)
         dlg = wx.FileDialog(self, "Choose a filename",
-                            wildcard="All files (*.*)|*.*",
+                            wildcard=wildcard,
                             style=wx.OPEN)
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
             if path:
-                # TODO: use the filter index to determine what file type to use
-                self.rtc.LoadFile(path, rt.RICHTEXT_TYPE_TEXT)
+                fileType = types[dlg.GetFilterIndex()]
+                self.rtc.LoadFile(path, fileType)
         dlg.Destroy()
 
         
@@ -193,20 +195,53 @@ class RichTextFrame(wx.Frame):
             self.OnFileSaveAs(evt)
             return
         self.rtc.SaveFile()
+
         
     def OnFileSaveAs(self, evt):
-        # TODO: Use RichTextBuffer.GetExtWildcard to get the wildcard string
+        wildcard, types = rt.RichTextBuffer.GetExtWildcard(save=True)
+
         dlg = wx.FileDialog(self, "Choose a filename",
-                            wildcard="All files (*.*)|*.*",
+                            wildcard=wildcard,
                             style=wx.SAVE)
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
             if path:
-                self.rtc.SaveFile(path)
+                fileType = types[dlg.GetFilterIndex()]
+                ext = rt.RichTextBuffer.FindHandlerByType(fileType).GetExtension()
+                if not path.endswith(ext):
+                    path += '.' + ext
+                self.rtc.SaveFile(path, fileType)
         dlg.Destroy()
         
                 
-    def OnFileViewHTML(self, evt): pass
+    def OnFileViewHTML(self, evt):
+        # Get an instance of the html file handler, use it to save the
+        # document to a StringIO stream, and then display the
+        # resulting html text in a dialog with a HtmlWindow.
+        handler = rt.RichTextHTMLHandler()
+        handler.SetFlags(rt.RICHTEXT_HANDLER_SAVE_IMAGES_TO_MEMORY)
+        handler.SetFontSizeMapping([7,9,11,12,14,22,100])
+
+        import cStringIO
+        stream = cStringIO.StringIO()
+        if not handler.SaveStream(self.rtc.GetBuffer(), stream):
+            return
+
+        import wx.html
+        dlg = wx.Dialog(self, title="HTML", style=wx.DEFAULT_DIALOG_STYLE|wx.RESIZE_BORDER)
+        html = wx.html.HtmlWindow(dlg, size=(500,400), style=wx.BORDER_SUNKEN)
+        html.SetPage(stream.getvalue())
+        btn = wx.Button(dlg, wx.ID_CANCEL)
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        sizer.Add(html, 1, wx.ALL|wx.EXPAND, 5)
+        sizer.Add(btn, 0, wx.ALL|wx.CENTER, 10)
+        dlg.SetSizer(sizer)
+        sizer.Fit(dlg)
+
+        dlg.ShowModal()
+
+        handler.DeleteTemporaryImages()
+        
 
     
     def OnFileExit(self, evt):
@@ -533,6 +568,7 @@ class RichTextFrame(wx.Frame):
 
 #----------------------------------------------------------------------
 
+
 class TestPanel(wx.Panel):
     def __init__(self, parent, log):
         self.log = log
@@ -541,6 +577,30 @@ class TestPanel(wx.Panel):
         b = wx.Button(self, -1, "Show the RichTextCtrl sample", (50,50))
         self.Bind(wx.EVT_BUTTON, self.OnButton, b)
 
+        self.AddRTCHandlers()
+
+
+    def AddRTCHandlers(self):
+        # make sure we haven't already added them.
+        if rt.RichTextBuffer.FindHandlerByType(rt.RICHTEXT_TYPE_HTML) is not None:
+            return
+        
+        # This would normally go in your app's OnInit method.  I'm
+        # not sure why these file handlers are not loaded by
+        # default by the C++ richtext code, I guess it's so you
+        # can change the name or extension if you wanted...
+        rt.RichTextBuffer.AddHandler(rt.RichTextHTMLHandler())
+        rt.RichTextBuffer.AddHandler(rt.RichTextXMLHandler())
+
+        # ...like this
+        rt.RichTextBuffer.AddHandler(rt.RichTextXMLHandler(name="Other XML",
+                                                           ext="ox",
+                                                           type=99))
+
+        # This is needed for the view as HTML option since we tell it
+        # to store the images in the memory file system.
+        wx.FileSystem.AddHandler(wx.MemoryFSHandler())
+
 
     def OnButton(self, evt):
         win = RichTextFrame(self, -1, "wx.richtext.RichTextCtrl",
@@ -548,9 +608,11 @@ class TestPanel(wx.Panel):
                             style = wx.DEFAULT_FRAME_STYLE)
         win.Show(True)
 
-        # give easy access to PyShell if it's running
+        # give easy access to the demo's PyShell if it's running
         self.rtfrm = win
         self.rtc = win.rtc
+
+
 
 #----------------------------------------------------------------------
 

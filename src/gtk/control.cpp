@@ -252,9 +252,6 @@ wxVisualAttributes wxControl::GetDefaultAttributes() const
                                              UseGTKStyleBase());
 }
 
-
-#define SHIFT (8*(sizeof(short int)-sizeof(char)))
-
 // static
 wxVisualAttributes
 wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
@@ -277,17 +274,11 @@ wxControl::GetDefaultAttributesFromGTKWidget(GtkWidget* widget,
         state = GTK_STATE_NORMAL;
 
     // get the style's colours
-    attr.colFg = wxColour(style->fg[state].red   >> SHIFT,
-                          style->fg[state].green >> SHIFT,
-                          style->fg[state].blue  >> SHIFT);
+    attr.colFg = wxColour(style->fg[state]);
     if (useBase)
-        attr.colBg = wxColour(style->base[state].red   >> SHIFT,
-                              style->base[state].green >> SHIFT,
-                              style->base[state].blue  >> SHIFT);
+        attr.colBg = wxColour(style->base[state]);
     else
-        attr.colBg = wxColour(style->bg[state].red   >> SHIFT,
-                              style->bg[state].green >> SHIFT,
-                              style->bg[state].blue  >> SHIFT);
+        attr.colBg = wxColour(style->bg[state]);
 
     // get the style's font
     if ( !style->font_desc )

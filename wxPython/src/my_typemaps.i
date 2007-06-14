@@ -172,6 +172,9 @@ MAKE_INT_ARRAY_TYPEMAPS(styles, styles_field)
     $1 = wxPySimple_typecheck($input, wxT("wxRect"), 4);
 }
 
+%apply wxRect& { wxRect* };
+
+
 
 %typemap(in) wxPoint2D& (wxPoint2D temp) {
     $1 = &temp;

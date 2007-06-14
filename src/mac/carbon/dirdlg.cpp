@@ -77,7 +77,7 @@ wxDirDialog::wxDirDialog(wxWindow *parent,
 
 int wxDirDialog::ShowModal()
 {
-    NavDialogRef dialog;
+    NavDialogRef dialog = NULL;
     NavDialogCreationOptions options;
     NavReplyRecord reply ;
     bool disposeReply = false ;
@@ -134,6 +134,9 @@ int wxDirDialog::ShowModal()
     // apparently cancelling shouldn't change m_path
     if ( err != noErr && err != userCanceledErr )
         m_path = wxEmptyString ;
+    	
+	if ( dialog )
+    	::NavDialogDispose(dialog);
 
     return (err == noErr) ? wxID_OK : wxID_CANCEL ;
 }

@@ -2,7 +2,7 @@
 # Don't modify this file, modify the SWIG interface instead.
 
 """
-The wx.aui moduleis an Advanced User Interface library that aims to
+The wx.aui module is an Advanced User Interface library that aims to
 implement "cutting-edge" interface usability and design features so
 developers can quickly and easily create beautiful and usable
 application interfaces.
@@ -49,7 +49,7 @@ interface:
 **Usage**
 
 The following example shows a simple implementation that utilizes
-`wx.aui.FrameManager` to manage three text controls in a frame window::
+`wx.aui.AuiManager` to manage three text controls in a frame window::
 
     import wx
     import wx.aui
@@ -713,7 +713,7 @@ class AuiManager(_core.EvtHandler):
         widget reference or by pane name, which acts as a unique id
         for a window pane. The returned `PaneInfo` object may then be
         modified to change a pane's look, state or position. After one
-        or more modifications to the `PaneInfo`, `FrameManager.Update`
+        or more modifications to the `PaneInfo`, `AuiManager.Update`
         should be called to realize the changes to the user interface.
 
         If the lookup failed (meaning the pane could not be found in
@@ -1495,10 +1495,6 @@ class AuiMDIParentFrame(_windows.Frame):
         """GetArtProvider(self) -> AuiTabArt"""
         return _aui.AuiMDIParentFrame_GetArtProvider(*args, **kwargs)
 
-    def GetNotebook(*args, **kwargs):
-        """GetNotebook(self) -> AuiNotebook"""
-        return _aui.AuiMDIParentFrame_GetNotebook(*args, **kwargs)
-
     def GetWindowMenu(*args, **kwargs):
         """GetWindowMenu(self) -> Menu"""
         return _aui.AuiMDIParentFrame_GetWindowMenu(*args, **kwargs)
@@ -1515,17 +1511,9 @@ class AuiMDIParentFrame(_windows.Frame):
         """ProcessEvent(self, Event event) -> bool"""
         return _aui.AuiMDIParentFrame_ProcessEvent(*args, **kwargs)
 
-    def GetActiveChild(*args, **kwargs):
-        """GetActiveChild(self) -> AuiMDIChildFrame"""
-        return _aui.AuiMDIParentFrame_GetActiveChild(*args, **kwargs)
-
     def SetActiveChild(*args, **kwargs):
         """SetActiveChild(self, AuiMDIChildFrame pChildFrame)"""
         return _aui.AuiMDIParentFrame_SetActiveChild(*args, **kwargs)
-
-    def GetClientWindow(*args, **kwargs):
-        """GetClientWindow(self) -> AuiMDIClientWindow"""
-        return _aui.AuiMDIParentFrame_GetClientWindow(*args, **kwargs)
 
     def OnCreateClient(*args, **kwargs):
         """OnCreateClient(self) -> AuiMDIClientWindow"""
@@ -1550,6 +1538,18 @@ class AuiMDIParentFrame(_windows.Frame):
     def ActivatePrevious(*args, **kwargs):
         """ActivatePrevious(self)"""
         return _aui.AuiMDIParentFrame_ActivatePrevious(*args, **kwargs)
+
+    def GetNotebook(*args, **kwargs):
+        """GetNotebook(self) -> AuiNotebook"""
+        return _aui.AuiMDIParentFrame_GetNotebook(*args, **kwargs)
+
+    def GetActiveChild(*args, **kwargs):
+        """GetActiveChild(self) -> AuiMDIChildFrame"""
+        return _aui.AuiMDIParentFrame_GetActiveChild(*args, **kwargs)
+
+    def GetClientWindow(*args, **kwargs):
+        """GetClientWindow(self) -> AuiMDIClientWindow"""
+        return _aui.AuiMDIParentFrame_GetClientWindow(*args, **kwargs)
 
 _aui.AuiMDIParentFrame_swigregister(AuiMDIParentFrame)
 
@@ -1719,8 +1719,22 @@ class PyAuiDockArt(AuiDefaultDockArt):
     methods to the Python methods implemented in the derived class.
     """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self) -> PyAuiDockArt
+
+        This version of the `AuiDockArt` class has been instrumented to be
+        subclassable in Python and to reflect all calls to the C++ base class
+        methods to the Python methods implemented in the derived class.
+        """
+        _aui.PyAuiDockArt_swiginit(self,_aui.new_PyAuiDockArt(*args, **kwargs))
+        PyAuiDockArt._setCallbackInfo(self, self, PyAuiDockArt)
+
+    def _setCallbackInfo(*args, **kwargs):
+        """_setCallbackInfo(self, PyObject self, PyObject _class)"""
+        return _aui.PyAuiDockArt__setCallbackInfo(*args, **kwargs)
+
 _aui.PyAuiDockArt_swigregister(PyAuiDockArt)
 
 class PyAuiTabArt(AuiDefaultTabArt):
@@ -1730,8 +1744,22 @@ class PyAuiTabArt(AuiDefaultTabArt):
     methods to the Python methods implemented in the derived class.
     """
     thisown = property(lambda x: x.this.own(), lambda x, v: x.this.own(v), doc='The membership flag')
-    def __init__(self): raise AttributeError, "No constructor defined"
     __repr__ = _swig_repr
+    def __init__(self, *args, **kwargs): 
+        """
+        __init__(self) -> PyAuiTabArt
+
+        This version of the `TabArt` class has been instrumented to be
+        subclassable in Python and to reflect all calls to the C++ base class
+        methods to the Python methods implemented in the derived class.
+        """
+        _aui.PyAuiTabArt_swiginit(self,_aui.new_PyAuiTabArt(*args, **kwargs))
+        PyAuiTabArt._setCallbackInfo(self, self, PyAuiTabArt)
+
+    def _setCallbackInfo(*args, **kwargs):
+        """_setCallbackInfo(self, PyObject self, PyObject _class)"""
+        return _aui.PyAuiTabArt__setCallbackInfo(*args, **kwargs)
+
 _aui.PyAuiTabArt_swigregister(PyAuiTabArt)
 
 

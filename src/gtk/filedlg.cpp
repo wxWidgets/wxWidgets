@@ -65,6 +65,17 @@ static void gtk_filedialog_ok_callback(GtkWidget *widget, wxFileDialog *dialog)
         }
     }
 
+    if (style & wxFD_FILE_MUST_EXIST)
+    {
+        if ( !g_file_test(filename, G_FILE_TEST_EXISTS) )
+        {
+            wxMessageDialog dlg( dialog, _("Please choose an existing file."), 
+                                 _("Error"), wxOK| wxICON_ERROR);
+            dlg.ShowModal();
+            return;
+        }
+    }
+
     // change to the directory where the user went if asked
     if (style & wxFD_CHANGE_DIR)
     {
@@ -234,17 +245,14 @@ wxFileDialog::wxFileDialog(wxWindow *parent, const wxString& message,
         fn.AssignDir(defaultDir);
 
     // set the initial file name and/or directory
-    wxString fname = fn.GetFullName();
-    if ( fname.empty() )
+    const wxString dir = fn.GetPath();
+    if ( !dir.empty() )
     {
-        wxString dir = fn.GetPath();
-        if ( !dir.empty() )
-        {
-            gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget),
-                                                dir.fn_str());
-        }
+        gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(m_widget),
+                                            dir.fn_str());
     }
 
+    const wxString fname = fn.GetFullName();
     if ( style & wxFD_SAVE )
     {
         if ( !fname.empty() )

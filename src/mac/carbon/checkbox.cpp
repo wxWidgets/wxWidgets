@@ -136,11 +136,13 @@ bool wxBitmapCheckBox::Create(wxWindow *parent,
     const wxPoint& pos,
     const wxSize& size,
     long style,
-    const wxValidator& validator,
+    const wxValidator& wxVALIDATOR_PARAM(validator),
     const wxString& name)
 {
     SetName(name);
+#if wxUSE_VALIDATORS
     SetValidator(validator);
+#endif
     m_windowStyle = style;
 
     if (parent)
