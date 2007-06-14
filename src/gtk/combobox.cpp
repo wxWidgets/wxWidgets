@@ -1117,12 +1117,13 @@ void wxComboBox::Replace( long from, long to, const wxString& value )
     if (value.IsNull()) return;
     gint pos = (gint)to;
 
-#if wxUSE_UNICODE
-    wxCharBuffer buffer = wxConvUTF8.cWX2MB( value );
-    gtk_editable_insert_text( GTK_EDITABLE(entry), (const char*) buffer, strlen( (const char*) buffer ), &pos );
+#if wxUSE_UNICODE_UTF8
+    const char *utf8 = value.utf8_str();
 #else
-    gtk_editable_insert_text( GTK_EDITABLE(entry), value.c_str(), value.length(), &pos );
+    wxCharBuffer buffer(value.utf8_str());
+    char char *utf8 = buffer;
 #endif
+    gtk_editable_insert_text(GTK_EDITABLE(entry), utf8, strlen(utf8), &pos);
 }
 
 void wxComboBox::SetSelection( long from, long to )
