@@ -55,6 +55,7 @@ endif
 # wxwidget$RELEASE-$FLAVOUR ($VERSION) to satify dpkg-source and
 # to correctly set the release below.
 DEBIAN_WXFLAVOUR := $(shell pwd | sed -e 's@.*/wxwidgets[0-9.]\+-\?\(.*\)-[0-9.]\+-\?.*@\1@')
+full_version := $(shell pwd | sed -e 's@.*/wxwidgets[0-9.]\+-\?.*-\([0-9.]\+\)-\?.*@\1@')
 
 release   := $(shell dpkg-parsechangelog | sed -n 's/^Source: wxwidgets//p')
 
@@ -96,6 +97,7 @@ package_gtk_dbg         := libwxgtk$(release)-dbg
 package_gtk_py_lib      := python-wxgtk$(release)
 package_gtk_py_ver       = python-wxversion
 package_gtk_py_tools     = python-wxtools
+package_gtk_py_addons    = python-wxaddons
 
 package_headers         := wx$(release)-headers
 package_i18n            := wx$(release)-i18n
@@ -105,7 +107,7 @@ package_common           = wx-common
 
 # The packages listed here are common to all wx versions, and may be provided
 # by another source package if more than one is in the release simultaneously.
-common_packages	:= $(package_common) $(package_gtk_py_ver) $(package_gtk_py_tools)
+common_packages	:= $(package_common) $(package_gtk_py_ver) $(package_gtk_py_tools) $(package_gtk_py_addons)
 
 
 package_gtk_dbg_py      := python-wxgtk$(release)-dbg
@@ -702,10 +704,13 @@ install-gtk-py-ver: install-gtk-py-lib
 	dh_clean -k
 
 ifndef DEBIAN_WX_DEFAULT_VERSION
-
 	dh_movefiles --sourcedir=debian/$(package_gtk_py_lib) $(pydir)/wxversion.py
+	if [ -e debian/$(package_gtk_py_lib)/$(pydir)/wxPython_common-$(full_version).egg-info ]; then \
+		dh_movefiles --sourcedir=debian/$(package_gtk_py_lib) $(pydir)/wxPython_common-$(full_version).egg-info; \
+	fi
 else
 	rm debian/$(package_gtk_py_lib)/$(pydir)/wxversion.py
+	rm -f debian/$(package_gtk_py_lib)/$(pydir)/wxPython_common-$(full_version).egg-info
 endif
 
 install-gtk-py-tools: DH_OPTIONS=-p$(package_gtk_py_tools)
@@ -746,7 +751,22 @@ endif
 
 	rm -r debian/$(package_gtk_py_lib)/usr/bin
 
-install-gtk-py: install-gtk-py-tools
+install-gtk-py-addons: DH_OPTIONS=-p$(package_gtk_py_addons)
+install-gtk-py-addons: install-gtk-py-tools
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+ifndef DEBIAN_WX_DEFAULT_VERSION
+	dh_movefiles --sourcedir=debian/$(package_gtk_py_lib) $(pydir)/wxaddons
+	if [ -e debian/$(package_gtk_py_lib)/$(pydir)/wxaddons-$(full_version).egg-info ]; then \
+		dh_movefiles --sourcedir=debian/$(package_gtk_py_lib) $(pydir)/wxaddons-$(full_version).egg-info; \
+	fi
+else
+	rm -r debian/$(package_gtk_py_lib)/$(pydir)/wxaddons*
+endif
+
+
+install-gtk-py: install-gtk-py-addons
 
 
 install-common: DH_OPTIONS=-p$(package_common)

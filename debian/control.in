@@ -1,8 +1,8 @@
 Source: wxwidgets=V
 Section: libs
 Priority: optional
-Build-Depends: debhelper (>=4.0), flex, bison, gettext, libgtk2.0-dev, =PY, =PY-dev, zlib1g-dev, libjpeg62-dev, libpng12-dev, libtiff4-dev, libgl1-mesa-dev | libgl-dev, libglu1-mesa-dev | libglu-dev, libesd0-dev, libgnomeprintui2.2-dev
-Maintainer: Ron Lee <ron@debian.org>
+Build-Depends: debhelper (>=4.0), flex, bison, gettext, libgtk2.0-dev, =PY, =PY-dev, zlib1g-dev, libjpeg62-dev, libpng12-dev, libtiff4-dev, libsm-dev, libgl1-mesa-dev | libgl-dev, libglu1-mesa-dev | libglu-dev, libesd0-dev, libgnomeprintui2.2-dev, libgconf2-dev, libgstreamer0.10-dev, libgstreamer-plugins-base0.10-dev
+Maintainer: wxWidgets dev-team <wx-dev@lists.wxwidgets.org>
 Standards-Version: 3.6.2.1
 
 Package: libwxbase=SOV
@@ -147,6 +147,18 @@ Description: wxWidgets Cross-platform C++ GUI toolkit (wxPython version selector
  unpopular ones as well).  For more information see http://wxwidgets.org
  .
  This package provides the wxPython version selector.
+
+Package: python-wxaddons
+Architecture: all
+Section: python
+Conflicts: python-wxgtk2.6 (<= 2.6.3.3)
+Replaces:
+Description: wxWidgets Cross-platform C++ GUI toolkit (wxPython add-on packages base)
+ wxWidgets (formerly known as wxWindows) is a class library for C++ providing
+ GUI components and other facilities on several popular platforms (and some
+ unpopular ones as well).  For more information see http://wxwidgets.org
+ .
+ This package provides a base Python package for 3rd party add-ons.
 
 Package: python-wxtools
 Architecture: all
