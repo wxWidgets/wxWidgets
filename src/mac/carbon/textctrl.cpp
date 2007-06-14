@@ -1798,9 +1798,18 @@ void wxMacMLTEControl::AdjustCreationAttributes( const wxColour &background, boo
                 | kTXNSupportFontCommandUpdating;
 
             // only spell check when not read-only 
-            // todo : use system options for the other cases
-            bool checkSpelling = !(m_windowStyle & wxTE_READONLY); 
-
+            // use system options for the default
+            bool checkSpelling = false ; 
+            if ( !(m_windowStyle & wxTE_READONLY) )
+            {   
+#if wxUSE_SYSTEM_OPTIONS
+                if ( wxSystemOptions::HasOption( wxMAC_TEXTCONTROL_USE_SPELL_CHECKER ) && (wxSystemOptions::GetOptionInt( wxMAC_TEXTCONTROL_USE_SPELL_CHECKER ) == 1) )
+                {
+                    checkSpelling = true ;
+                }
+#endif
+            }
+            
             if ( checkSpelling )
                 options |=
                     kTXNSupportSpellCheckCommandProcessing
