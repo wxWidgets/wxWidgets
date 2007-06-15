@@ -6134,7 +6134,8 @@ if test "$wxUSE_DATETIME" = "yes"; then
 
                     int main()
                     {
-                        return !!strptime("", "%x", NULL);
+                        struct tm t;
+                        return !!strptime("", "%x", &t);
                     }
                 ],
                 wx_cv_func_strptime_ok=yes,

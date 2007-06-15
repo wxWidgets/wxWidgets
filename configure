@@ -42482,7 +42482,8 @@ else
 
                     int main()
                     {
-                        return !!strptime("", "%x", NULL);
+                        struct tm t;
+                        return !!strptime("", "%x", &t);
                     }
 
 _ACEOF
