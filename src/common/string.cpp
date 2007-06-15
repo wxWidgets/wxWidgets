@@ -1566,6 +1566,11 @@ static int DoStringPrintfV(wxString& str,
         if ( !buf )
         {
             // out of memory
+
+            // in UTF-8 build, leaving uninitialized junk in the buffer
+            // could result in invalid non-empty UTF-8 string, so just
+            // reset the string to empty on failure:
+            buf[0] = '\0';
             return -1;
         }
 
@@ -1594,6 +1599,7 @@ static int DoStringPrintfV(wxString& str,
             // we know that our own implementation of wxVsnprintf() returns -1
             // only for a format error - thus there's something wrong with
             // the user's format string
+            buf[0] = '\0';
             return -1;
 #else // possibly using system version
             // assume it only returns error if there is not enough space, but
