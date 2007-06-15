@@ -216,4 +216,9 @@ exceptions has been switched off}
 don't include compiler flags needed for multithreaded code generation. This
 implies that wxUSE\_THREADS is $0$ and also that other (non-wx-based) threading
 packages cannot be used neither.}
+\twocolitem{WXMAKINGDLL\_XXX}{used internally and defined when building the
+library \texttt{XXX} as a DLL; when a monolithic wxWidgets build is used only a
+single \texttt{WXMAKINGDLL} symbol is defined}
+\twocolitem{WXUSINGDLL}{defined when compiling code which uses wxWidgets as a
+DLL/shared library}
 \end{twocollist}
