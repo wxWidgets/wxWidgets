@@ -174,7 +174,7 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
 
     /* Almost all compiler have strdup(), but not quite all: CodeWarrior under
        Mac and VC++ for Windows CE don't provide it; additionally, gcc under
-       Mac doesn't have wcsdup: */
+       Mac and OpenVMS do not have wcsdup: */
     #if defined(__VISUALC__) && __VISUALC__ >= 1400
         #define wxCRT_StrdupA _strdup
     #elif !(defined(__MWERKS__) && defined(__WXMAC__)) && !defined(__WXWINCE__)
@@ -182,7 +182,7 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
     #endif
     #if defined(__WINDOWS__)
         #define wxCRT_StrdupW _wcsdup
-    #elif !defined(__DARWIN__)
+    #elif !defined(__DARWIN__) && !defined( __VMS )
         #define wxCRT_StrdupW wcsdup
     #endif
 #else
@@ -541,7 +541,9 @@ WXDLLIMPEXP_BASE wchar_t * wxCRT_GetenvW(const wchar_t *name);
     #define  wxCRT_AtolW           _wtol
     /* _wtof doesn't exist */
 #else
+#ifndef __VMS
     #define wxCRT_AtofW(s)         wcstof(s, NULL)
+#endif
     #define wxCRT_AtolW(s)         wcstol(s, NULL, 10)
     /* wcstoi doesn't exist */
 #endif

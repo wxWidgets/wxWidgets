@@ -600,8 +600,16 @@ int wxCRT_ScanfW(const wchar_t *format, ...)
     va_list argptr;
     va_start(argptr, format);
 
-    int ret = vwscanf(wxFormatConverter(format), argptr);
-
+#ifdef __VMS
+#if (__DECCXX_VER >= 70100000) && !defined(__STD_CFRONT) && !defined( __NONAMESPACE_STD )
+   int ret = std::vwscanf(wxFormatConverter(format), argptr);
+#else
+   int ret = vwscanf(wxFormatConverter(format), argptr);
+#endif
+#else
+   int ret = vwscanf(wxFormatConverter(format), argptr);
+#endif
+   
     va_end(argptr);
 
     return ret;
@@ -614,7 +622,15 @@ int wxCRT_SscanfW(const wchar_t *str, const wchar_t *format, ...)
     va_list argptr;
     va_start(argptr, format);
 
-    int ret = vswscanf(str, wxFormatConverter(format), argptr);
+#ifdef __VMS
+#if (__DECCXX_VER >= 70100000) && !defined(__STD_CFRONT) && !defined( __NONAMESPACE_STD )
+   int ret = std::vswscanf(str, wxFormatConverter(format), argptr);
+#else
+   int ret = vswscanf(str, wxFormatConverter(format), argptr);
+#endif
+#else
+   int ret = vswscanf(str, wxFormatConverter(format), argptr);
+#endif
 
     va_end(argptr);
 
@@ -627,7 +643,15 @@ int wxCRT_FscanfW(FILE *stream, const wchar_t *format, ...)
 {
     va_list argptr;
     va_start(argptr, format);
-    int ret = vfwscanf(stream, wxFormatConverter(format), argptr);
+#ifdef __VMS
+#if (__DECCXX_VER >= 70100000) && !defined(__STD_CFRONT) && !defined( __NONAMESPACE_STD )
+   int ret = std::vfwscanf(stream, wxFormatConverter(format), argptr);
+#else
+   int ret = vfwscanf(stream, wxFormatConverter(format), argptr);
+#endif
+#else
+   int ret = vfwscanf(stream, wxFormatConverter(format), argptr);
+#endif
 
     va_end(argptr);
 
@@ -638,7 +662,15 @@ int wxCRT_FscanfW(FILE *stream, const wchar_t *format, ...)
 #ifndef wxCRT_VsscanfW
 int wxCRT_VsscanfW(const wchar_t *str, const wchar_t *format, va_list argptr)
 {
-    return vswscanf(str, wxFormatConverter(format), argptr);
+#ifdef __VMS
+#if (__DECCXX_VER >= 70100000) && !defined(__STD_CFRONT) && !defined( __NONAMESPACE_STD )
+   return std::vswscanf(str, wxFormatConverter(format), argptr);
+#else
+   return vswscanf(str, wxFormatConverter(format), argptr);
+#endif
+#else
+   return vswscanf(str, wxFormatConverter(format), argptr);
+#endif
 }
 #endif
 

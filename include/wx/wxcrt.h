@@ -420,11 +420,12 @@ WX_STRCMP_FUNC(wxStricmp, wxCRT_StricmpA, wxCRT_StricmpW, wxStricmp_String)
 // call in wxStrcoll_String<T>()), so we have to forward-declare the template
 // and implement it below WX_STRCMP_FUNC. OTOH, this fails to compile with VC6,
 // so we do it for GCC only.
-#ifdef __GNUG__
+// The same is needed for HP CXX on OpenVMS 
+#if defined( __GNUG__ ) || defined( __VMS )
 template<typename T>
 inline int wxStrcoll_String(const wxString& s1, const T& s2);
 WX_STRCMP_FUNC(wxStrcoll, wxCRT_StrcollA, wxCRT_StrcollW, wxStrcoll_String)
-#endif // __GNUG__
+#endif // __GNUG__ or __VMS
 
 template<typename T>
 inline int wxStrcoll_String(const wxString& s1, const T& s2)
@@ -440,7 +441,7 @@ inline int wxStrcoll_String(const wxString& s1, const T& s2)
 #endif
 }
 
-#ifndef __GNUG__
+#if !defined( __GNUG__ ) && !defined( __VMS )
 // this is exactly the same WX_STRCMP_FUNC line as above wxStrcoll_String<>
 WX_STRCMP_FUNC(wxStrcoll, wxCRT_StrcollA, wxCRT_StrcollW, wxStrcoll_String)
 #endif
