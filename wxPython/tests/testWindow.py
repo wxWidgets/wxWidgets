@@ -33,13 +33,13 @@ ConvertDialogSizeToPixels, ConvertPixelPointToDialog, ConvertPixelSizeToDialog,
 Create, Destroy, DestroyChildren, DissociateHandle, DLG_PNT, DLG_SZE, DragAcceptFiles, 
 FindFocus, Fit, FitInside, GetAutoLayout, GetBestSize, 
 GetBestSizeTuple, GetBestVirtualSize, GetBorder, GetCapture, GetCaret, GetCharHeight, 
-GetCharWidth, GetChildren, GetClassDefaultAttributes, GetClientAreaOrigin, GetClientRect, 
+GetCharWidth, GetClassDefaultAttributes, GetClientAreaOrigin, GetClientRect, 
 GetClientSize, GetClientSizeTuple, GetConstraints, GetContainingSizer, GetCursor, 
 GetDefaultAttributes, GetDropTarget, GetEffectiveMinSize, GetEventHandler, GetExtraStyle, 
-GetFullTextExtent, GetHandle, GetHelpText, GetHelpTextAtPoint, GetLabel, GetLayoutDirection,
+GetFullTextExtent, GetHandle, GetHelpTextAtPoint, GetLayoutDirection,
 GetScreenPosition, GetScreenPositionTuple, GetScreenRect, GetScrollPos, GetScrollRange, 
-GetScrollThumb, GetSizer, GetSizeTuple, GetTextExtent, GetThemeEnabled, GetToolTip, 
-GetTopLevelParent, GetUpdateClientRect, GetUpdateRegion, GetValidator, GetVirtualSize, 
+GetScrollThumb, GetTextExtent, GetThemeEnabled, GetToolTip, 
+GetUpdateClientRect, GetUpdateRegion, GetValidator, GetVirtualSize, 
 GetVirtualSizeTuple, GetWindowBorderSize, GetWindowStyle, GetWindowStyleFlag, GetWindowVariant, 
 HasCapture, HasFlag, HasMultiplePages, HasScrollbar, HasTransparentBackground, HitTest, 
 HitTestXY, InheritAttributes, InheritsBackgroundColour, InitDialog, InvalidateBestSize, 
@@ -52,8 +52,8 @@ RemoveEventHandler, ScreenToClient, ScreenToClientXY, ScrollLines, ScrollPages,
 ScrollWindow, SendSizeEvent, SetAutoLayout, SetCaret, SetClientRect, SetClientSize, 
 SetClientSizeWH, SetConstraints, SetContainingSizer, SetCursor, SetDimensions, SetDoubleBuffered, 
 SetDropTarget, SetEventHandler, SetExtraStyle, SetFocus, SetFocusFromKbd, 
-SetHelpText, SetHelpTextForId, SetInitialSize, SetLabel, SetLayoutDirection, 
-SetScrollbar, SetScrollPos, SetSizeHintsSz, SetSizer, SetSizerAndFit, SetSizeWH, SetThemeEnabled, 
+SetHelpTextForId, SetInitialSize, SetLayoutDirection, 
+SetScrollbar, SetScrollPos, SetSizeHintsSz, SetSizerAndFit, SetSizeWH, SetThemeEnabled, 
 SetToolTip, SetToolTipString, SetTransparent, SetValidator, SetVirtualSize, SetVirtualSizeHints, 
 SetVirtualSizeHintsSz, SetVirtualSizeWH, SetWindowStyle, SetWindowStyleFlag, SetWindowVariant, 
 ShouldInheritColours, ToggleWindowStyle, TransferDataFromWindow, TransferDataToWindow, 
@@ -108,6 +108,14 @@ class WindowTest(unittest.TestCase):
         Tests to make sure the window's children register as such"""
         for child in self.children:
             self.assertEquals(self.testControl, child.GetParent())
+    
+    def testGetChildren(self):
+        """GetChildren"""
+        a = wx.Window(self.testControl)
+        b = wx.Window(self.testControl)
+        c = wx.Window(self.testControl)
+        for child in (a,b,c):
+            self.assert_(child in self.testControl.GetChildren())
     
     def testEnableDisable(self):
         """Enable, Disable, IsEnabled"""
@@ -246,10 +254,11 @@ class WindowTest(unittest.TestCase):
         self.assertEquals(self.anotherFrame, self.testControl.GetGrandParent())
         
     def testSize(self):
-        """SetSize, GetSize"""
+        """SetSize, GetSize, GetSizeTuple"""
         for size in self.SIZES:
             self.testControl.SetSize(size)
             self.assertEquals(size, self.testControl.GetSize())
+            self.assertEquals(size.Get(), self.testControl.GetSizeTuple())
     
     def testMinSize(self):
         """SetMinSize, GetMinSize"""
@@ -334,6 +343,40 @@ class WindowTest(unittest.TestCase):
             x,y = point.Get()
             self.testControl.MoveXY(x,y)
             self.assertEquals((x,y), self.testControl.GetPositionTuple())
+    
+    def testTopLevelParent(self):
+        """GetTopLevelParent"""
+        parent = wx.Frame(None)
+        one = wx.Window(parent)
+        two = wx.Window(one)
+        three = wx.Window(two)
+        four = wx.Window(three)
+        self.assertEquals(parent, four.GetTopLevelParent())
+    
+    def testSizer(self):
+        """SetSizer, GetSizer"""
+        # TODO: test for other functionality provided in SetSizer
+        sz = wx.BoxSizer()
+        self.testControl.SetSizer(sz)
+        self.assertEquals(sz, self.testControl.GetSizer())
+    
+    def testLabel(self):
+        """SetLabel, GetLabel"""
+        one = "here is one label"
+        two = "and here there is another"
+        self.testControl.SetLabel(one)
+        self.assertEquals(one, self.testControl.GetLabel())
+        self.testControl.SetLabel(two)
+        self.assertEquals(two, self.testControl.GetLabel())
+        self.assertNotEquals(one, self.testControl.GetLabel())
+    
+    # NOTE: this is peculiar
+    def testHelpText(self):
+        """SetHelpText, GetHelpText"""
+        txt = "Here is some help text!"
+        self.testControl.SetHelpText(txt)
+        #self.assertEquals(txt, self.testControl.GetHelpText())
+        
 
 def suite():
     suite = unittest.makeSuite(WindowTest)
