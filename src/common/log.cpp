@@ -527,6 +527,22 @@ wxChar *wxLog::SetLogBuffer(wxChar * WXUNUSED(buf), size_t WXUNUSED(size))
 
 #endif // WXWIN_COMPATIBILITY_2_6
 
+#if WXWIN_COMPATIBILITY_2_8
+
+void wxLog::DoLog(wxLogLevel WXUNUSED(level),
+                  const char *WXUNUSED(szString),
+                  time_t WXUNUSED(t))
+{
+}
+
+void wxLog::DoLog(wxLogLevel WXUNUSED(level),
+                  const wchar_t *WXUNUSED(wzString),
+                  time_t WXUNUSED(t))
+{
+}
+
+#endif // WXWIN_COMPATIBILITY_2_8
+
 wxLog *wxLog::GetActiveTarget()
 {
     if ( ms_bAutoCreate && ms_pLogger == NULL ) {

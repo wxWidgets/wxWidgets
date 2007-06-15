@@ -69,6 +69,8 @@ the corresponding topic.
 \helpref{wxDROP\_ICON}{wxdropicon}\\
 \helpref{wxDebugMsg}{wxdebugmsg}\\
 \helpref{WXDEBUG\_NEW}{debugnew}\\
+\helpref{wxDEPRECATED}{wxdeprecated}\\
+\helpref{wxDEPRECATED\_BUT\_USED\_INTERNALLY}{wxdeprecatedbutusedinternally}\\
 \helpref{wxDirExists}{functionwxdirexists}\\
 \helpref{wxDirSelector}{wxdirselector}\\
 \helpref{wxDisplayDepth}{wxdisplaydepth}\\
@@ -2856,6 +2858,36 @@ it is quoted automatically by the macro)}
 
 \docparam{dynlib}{the library to load the function from}
 
+
+
+\membersection{wxDEPRECATED}\label{wxdeprecated}
+
+This macro can be used around a function declaration to generate warnings
+indicating that this function is deprecated (i.e. obsolete and planned to be
+removed in the future) when it is used. Only Visual C++ 7 and higher and g++
+compilers currently support this functionality.
+
+Example of use:
+\begin{verbatim}
+    // old function, use wxString version instead
+    wxDEPRECATED( void wxGetSomething(char *buf, size_t len) );
+
+    // ...
+    wxString wxGetSomething();
+\end{verbatim}
+
+
+\membersection{wxDEPRECATED\_BUT\_USED\_INTERNALLY}\label{wxdeprecatedbutusedinternally}
+
+This is a special version of \helpref{wxDEPRECATED}{wxdeprecated} macro which
+only does something when the deprecated function is used from the code outside
+wxWidgets itself but doesn't generate warnings when it is used from wxWidgets.
+It is used with the virtual functions which are called by the library itself --
+even if such function is deprecated the library still has to call it to ensure
+that the existing code overriding it continues to work, but the use of this
+macro ensures that a deprecation warning will be generated if this function is
+used from the user code or, in case of Visual C++, even when it is simply
+overridden.
 
 
 \membersection{wxEXPLICIT}\label{wxexplicit}

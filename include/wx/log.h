@@ -258,11 +258,14 @@ protected:
     virtual void DoLog(wxLogLevel level, const wxString& szString, time_t t);
 #if WXWIN_COMPATIBILITY_2_8
     // these shouldn't be used by new code
-    virtual void DoLog(wxLogLevel WXUNUSED(level),
-                       const char *WXUNUSED(szString), time_t WXUNUSED(t)) {}
-    virtual void DoLog(wxLogLevel WXUNUSED(level),
-                       const wchar_t *WXUNUSED(szString), time_t WXUNUSED(t)) {}
-#endif
+    wxDEPRECATED_BUT_USED_INTERNALLY(
+        virtual void DoLog(wxLogLevel level, const char *szString, time_t t)
+    );
+
+    wxDEPRECATED_BUT_USED_INTERNALLY(
+        virtual void DoLog(wxLogLevel level, const wchar_t *wzString, time_t t)
+    );
+#endif // WXWIN_COMPATIBILITY_2_8
 
     void LogString(const wxString& szString, time_t t)
         { DoLogString(szString, t); }

@@ -523,6 +523,17 @@ typedef int wxWindowID;
     #define wxDEPRECATED(x) x
 #endif
 
+/*
+   Special variant of the macro above which should be used for the functions
+   which are deprecated but called by wx itself: this often happens with
+   deprecated virtual functions which are called by the library.
+ */
+#ifdef WXBUILDING
+#   define wxDEPRECATED_BUT_USED_INTERNALLY(x) x
+#else
+#   define wxDEPRECATED_BUT_USED_INTERNALLY(x) wxDEPRECATED(x)
+#endif
+
 /*  everybody gets the assert and other debug macros */
 #include "wx/debug.h"
 
