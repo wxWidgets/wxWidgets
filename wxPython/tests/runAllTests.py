@@ -14,28 +14,25 @@ import figleaf
 figleaf.start(ignore_python_lib=False)
 
 import unittest
-import testWindow
+# individual modules of the test suite:
 import testButton
-import testFont
 import testColor
 import testControl
-import testRect
-import testPoint
-import testSize
-import testTextCtrl
+import testFont
 import testItemContainer
+import testListBox
+import testPoint
+import testRect
+import testSize
+import testSizer
+import testTextCtrl
+import testWindow
 
-alltests = unittest.TestSuite(( testWindow.suite(),
-                                testButton.suite(),
-                                testFont.suite(),
-                                testColor.suite(),
-                                testControl.suite(),
-                                testRect.suite(),
-                                testPoint.suite(),
-                                testSize.suite(),
-                                testTextCtrl.suite(),
-                                testItemContainer.suite()
-                                ))
+modules = (testButton, testColor, testControl, testFont, testItemContainer,
+            testListBox, testPoint, testRect, testSize, testSizer, testTextCtrl,
+            testWindow)
+
+alltests = unittest.TestSuite([mod.suite() for mod in modules])
 
 results = unittest.TestResult()
 alltests.run(results)
