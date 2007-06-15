@@ -12,7 +12,7 @@ Create, DiscardEdits, EmulateKeyPress, GetClassDefaultAttributes,
 GetDefaultStyle, GetInsertionPoint, GetLastPosition, GetLineLength, GetLineText,
 GetNumberOfLines, GetRange, GetSelection, GetString, GetStringSelection,
 GetStyle, HitTest, HitTestPos, IsEditable, IsModified,
-IsMultiLine, IsSingleLine, LoadFile,  MacCheckSpelling, MarkDirty, PositionToXY,
+LoadFile,  MacCheckSpelling, MarkDirty, PositionToXY,
 Redo, Remove, Replace, SaveFile, SelectAll, SendTextUpdatedEvent, SetDefaultStyle,
 SetEditable, SetInsertionPoint, SetInsertionPointEnd, SetMaxLength, SetModified,
 SetSelection, SetStyle, ShowPosition, Undo, write, WriteText, XYToPosition
@@ -63,20 +63,50 @@ class TextCtrlTest(testControl.ControlTest):
         self.testControl.SetValue(val)
         self.assertEquals(val, self.testControl.GetValue())
     
-    # NOTE: Uncomment the last line to observe some weird behavior
     def testCopyCutPaste(self):
         """Copy, Cut, Paste"""
-        txt = "Yet Another TextControl"
-        more = "Here is some more text!"
-        otherControl = wx.TextCtrl(self.frame, id=wx.ID_ANY, value=txt)
+        txt1 = "Yet Another TextControl"
+        txt2 = "Here is some more text!"
+        txt3 = "And here is the third."
+        otherControl = wx.TextCtrl(self.frame, id=wx.ID_ANY, value=txt1)
         # sanity checks
         self.assert_(self.testControl.IsEmpty())
-        self.assertEquals(txt, otherControl.GetValue())
+        self.assertEquals(txt1, otherControl.GetValue())
         # copy/paste
+        otherControl.SelectAll() # need to select in order to copy!
         otherControl.Copy()
         self.testControl.Paste()
-        self.assertEquals(txt, otherControl.GetValue())
-        #self.assertEquals(txt, self.testControl.GetValue())
+        self.assertEquals(txt1, otherControl.GetValue())
+        self.assertEquals(txt1, self.testControl.GetValue())
+        # cut/paste
+        otherControl.SetValue(txt2)
+        otherControl.SelectAll()
+        otherControl.Cut()
+        self.testControl.Paste()
+        self.assert_(otherControl.IsEmpty())
+        self.assertEquals(txt1+txt2, self.testControl.GetValue())
+        self.testControl.SelectAll()
+        self.testControl.Paste()
+        self.assertEquals(txt2, self.testControl.GetValue())
+        # you can't copy what isn't selected...
+        otherControl.SetValue(txt3)
+        self.testControl.Clear()
+        otherControl.Copy()
+        self.testControl.Paste()
+        self.assertNotEquals(txt3, self.testControl.GetValue())
+        self.assertEquals(txt2, self.testControl.GetValue())
+        
+    
+    # TODO: what should IsMultiLine return True?
+    def testSingleMultiLine(self):
+        """IsMultiLine, IsSingleLine"""
+        self.testControl.SetValue("this is a single line")
+        self.assert_(self.testControl.IsSingleLine())
+        self.assert_(not self.testControl.IsMultiLine())
+        # this doesn't do it...
+        #self.testControl.SetValue("this\nis\na\nmulti\nline\n")
+        #self.assert_(self.testControl.IsMultiLine())
+        #self.assert_(not self.testControl.IsSingleLine())
         
 
 def suite():
