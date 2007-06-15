@@ -43,7 +43,7 @@ public:
     virtual wxTimerImpl *CreateTimerImpl(wxTimer *timer);
 #endif
 
-#if defined(__WXMAC__) || defined(__WXCOCOA__)
+#if (defined(__WXMAC__) || defined(__WXCOCOA__)) && wxUSE_STDPATHS
     virtual wxStandardPathsBase& GetStandardPaths();
 #endif
     virtual wxPortId GetToolkitVersion(int *majVer, int *minVer) const;
