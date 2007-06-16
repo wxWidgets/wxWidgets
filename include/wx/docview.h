@@ -141,7 +141,21 @@ public:
     virtual void SetDocumentTemplate(wxDocTemplate *temp) { m_documentTemplate = temp; }
 
     // Get title, or filename if no title, else [unnamed]
+    //
+    // NB: this method will be deprecated in wxWidgets 3.0, you still need to
+    //     override it if you need to modify the existing behaviour in this
+    //     version but use GetUserReadableName() below if you just need to call
+    //     it
     virtual bool GetPrintableName(wxString& buf) const;
+
+#if wxABI_VERSION >= 20805
+    wxString GetUserReadableName() const
+    {
+        wxString s;
+        GetPrintableName(s);
+        return s;
+    }
+#endif // wxABI 2.8.5+
 
     // Returns a window that can be used as a parent for document-related
     // dialogs. Override if necessary.

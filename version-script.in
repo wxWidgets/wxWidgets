@@ -27,6 +27,7 @@
 # public symbols added in 2.8.5 (please keep in alphabetical order):
 @WX_VERSION_TAG@.5 {
     global:
+        *wxDocument*GetUserReadableName*;
         *wxMetafileDC*DoGetTextExtent*;
 };
 
