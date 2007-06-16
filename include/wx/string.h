@@ -1207,11 +1207,19 @@ public:
 #if wxUSE_UNICODE_UTF8
     static wxString FromUTF8(const char *utf8)
     {
+      if ( !utf8 )
+          return wxEmptyString;
+
       wxASSERT( wxStringOperations::IsValidUtf8String(utf8) );
       return FromImpl(wxStringImpl(utf8));
     }
     static wxString FromUTF8(const char *utf8, size_t len)
     {
+      if ( !utf8 )
+          return wxEmptyString;
+      if ( len == npos )
+          return FromUTF8(utf8);
+
       wxASSERT( wxStringOperations::IsValidUtf8String(utf8, len) );
       return FromImpl(wxStringImpl(utf8, len));
     }
