@@ -881,21 +881,20 @@ inline size_t wxStrftime(wchar_t *s, size_t max,
 
 // FIXME-UTF8: we'd be better off implementing these ourselves, as the CRT
 //             version is locale-dependent
-// FIXME-UTF8: should we return bool from these instead of int?
 // FIXME-UTF8: these don't work when EOF is passed in because of wxUniChar,
 //             is this OK or not?
 
-inline int wxIsalnum(const wxUniChar& c)  { return wxCRT_IsalnumW(c); }
-inline int wxIsalpha(const wxUniChar& c)  { return wxCRT_IsalphaW(c); }
-inline int wxIscntrl(const wxUniChar& c)  { return wxCRT_IscntrlW(c); }
-inline int wxIsdigit(const wxUniChar& c)  { return wxCRT_IsdigitW(c); }
-inline int wxIsgraph(const wxUniChar& c)  { return wxCRT_IsgraphW(c); }
-inline int wxIslower(const wxUniChar& c)  { return wxCRT_IslowerW(c); }
-inline int wxIsprint(const wxUniChar& c)  { return wxCRT_IsprintW(c); }
-inline int wxIspunct(const wxUniChar& c)  { return wxCRT_IspunctW(c); }
-inline int wxIsspace(const wxUniChar& c)  { return wxCRT_IsspaceW(c); }
-inline int wxIsupper(const wxUniChar& c)  { return wxCRT_IsupperW(c); }
-inline int wxIsxdigit(const wxUniChar& c) { return wxCRT_IsxdigitW(c); }
+inline bool wxIsalnum(const wxUniChar& c)  { return wxCRT_IsalnumW(c) != 0; }
+inline bool wxIsalpha(const wxUniChar& c)  { return wxCRT_IsalphaW(c) != 0; }
+inline bool wxIscntrl(const wxUniChar& c)  { return wxCRT_IscntrlW(c) != 0; }
+inline bool wxIsdigit(const wxUniChar& c)  { return wxCRT_IsdigitW(c) != 0; }
+inline bool wxIsgraph(const wxUniChar& c)  { return wxCRT_IsgraphW(c) != 0; }
+inline bool wxIslower(const wxUniChar& c)  { return wxCRT_IslowerW(c) != 0; }
+inline bool wxIsprint(const wxUniChar& c)  { return wxCRT_IsprintW(c) != 0; }
+inline bool wxIspunct(const wxUniChar& c)  { return wxCRT_IspunctW(c) != 0; }
+inline bool wxIsspace(const wxUniChar& c)  { return wxCRT_IsspaceW(c) != 0; }
+inline bool wxIsupper(const wxUniChar& c)  { return wxCRT_IsupperW(c) != 0; }
+inline bool wxIsxdigit(const wxUniChar& c) { return wxCRT_IsxdigitW(c) != 0; }
 
 inline wxUniChar wxTolower(const wxUniChar& c) { return wxCRT_TolowerW(c); }
 inline wxUniChar wxToupper(const wxUniChar& c) { return wxCRT_ToupperW(c); }
