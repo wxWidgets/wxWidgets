@@ -974,8 +974,11 @@ class ButtonInfo(Control):
         self._shortHelp = shortHelp
         self._longHelp = longHelp
 
-        disabledbmp = GrayOut(bmp)
-
+        if bmp:
+            disabledbmp = GrayOut(bmp)
+        else:
+            disabledbmp = wx.NullBitmap
+            
         self._bitmaps = {"Normal": bmp, "Toggled": None, "Disabled": disabledbmp,
                          "Hover": None, "Pressed": None}        
 

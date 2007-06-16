@@ -1459,7 +1459,7 @@ class FNBRenderer:
 
         # erase old bitmap
         posx = self.GetDropArrowButtonPos(pc)
-        dc.DrawBitmap(self._xBgBmp, posx, 6)
+        dc.DrawBitmap(self._rightBgBmp, posx, 6)
 
         # Draw the new bitmap
         dc.DrawBitmap(downBmp, posx, 6, True)
@@ -3353,6 +3353,7 @@ class FlatNotebook(wx.Panel):
 
         self._pages.DoDeletePage(page)
         self.Refresh()
+        self.Update()  
 
         # Fire a closed event
         closedEvent = FlatNotebookEvent(wxEVT_FLATNOTEBOOK_PAGE_CLOSED, self.GetId())
@@ -4733,12 +4734,13 @@ class PageContainer(wx.Panel):
 
         for i in xrange(len(self._pagesInfoVec)):
             pi = self._pagesInfoVec[i]
-            item = wx.MenuItem(popupMenu, i, pi.GetCaption(), pi.GetCaption(), wx.ITEM_NORMAL)
+            item = wx.MenuItem(popupMenu, i+1, pi.GetCaption(), pi.GetCaption(), wx.ITEM_NORMAL)
             self.Bind(wx.EVT_MENU, self.OnTabMenuSelection, item)
 
-            # This code is commented, since there is an alignment problem with wx2.6.3 & Menus
-            # if self.TabHasImage(ii):
-            #   item.SetBitmaps( (*m_ImageList)[pi.GetImageIndex()] );
+            # There is an alignment problem with wx2.6.3 & Menus so only use
+            # images for versions above 2.6.3
+            if wx.VERSION > (2, 6, 3, 0) and self.TabHasImage(i):
+                item.SetBitmap(self.GetImageList().GetBitmap(pi.GetImageIndex()))
 
             popupMenu.AppendItem(item)
             item.Enable(pi.GetEnabled())
@@ -4749,7 +4751,7 @@ class PageContainer(wx.Panel):
     def OnTabMenuSelection(self, event):
         """ Handles the wx.EVT_MENU event for L{PageContainer}. """
 
-        selection = event.GetId()
+        selection = event.GetId() - 1
         self.FireEvent(selection)
 
 
