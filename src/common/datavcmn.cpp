@@ -944,7 +944,7 @@ public:
                                 { return SendEvent( wxEVT_COMMAND_DATAVIEW_MODEL_ROW_CHANGED, row ); }
     virtual bool ValueChanged( unsigned int col, unsigned int row )
                                 { return SendEvent( wxEVT_COMMAND_DATAVIEW_MODEL_VALUE_CHANGED, row, col ); }
-    virtual bool RowsReordered( unsigned int *new_order )
+    virtual bool RowsReordered( unsigned int * WXUNUSED(new_order) )
                                 { return SendEvent( wxEVT_COMMAND_DATAVIEW_MODEL_ROWS_REORDERED ); }
     virtual bool Cleared()      { return SendEvent( wxEVT_COMMAND_DATAVIEW_MODEL_CLEARED ); }
 

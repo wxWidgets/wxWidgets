@@ -122,7 +122,11 @@ public:
     virtual bool SetValue( const wxVariant &variant, unsigned int col, unsigned int row ) = 0;
 
     // override to set cell attributes
-    virtual void GetAttr( wxListItemAttr &attr, unsigned int col, unsigned int row ) { }
+    virtual void GetAttr( wxListItemAttr& WXUNUSED(attr),
+                          unsigned int WXUNUSED(col),
+                          unsigned int WXUNUSED(row) )
+    {
+    }
 
     // delegated notifiers
     virtual bool RowAppended();
