@@ -241,8 +241,7 @@ bool wxDocument::OnNewDocument()
     Modify(false);
     SetDocumentSaved(false);
 
-    wxString name;
-    GetDocumentManager()->MakeDefaultName(name);
+    const wxString name = GetDocumentManager()->MakeNewDocumentName();
     SetTitle(name);
     SetFilename(name, true);
 
@@ -408,23 +407,41 @@ bool wxDocument::Revert()
 
 
 // Get title, or filename if no title, else unnamed
+#if WXWIN_COMPATIBILITY_2_8
 bool wxDocument::GetPrintableName(wxString& buf) const
 {
-    if (!m_documentTitle.empty())
-    {
-        buf = m_documentTitle;
-        return true;
-    }
-    else if (!m_documentFile.empty())
-    {
-        buf = wxFileNameFromPath(m_documentFile);
-        return true;
-    }
-    else
-    {
-        buf = _("unnamed");
-        return true;
-    }
+    // this function can not only be overridden by the user code but also
+    // called by it so we need to ensure that we return the same thing as
+    // GetUserReadableName() but we can't call it because this would result in
+    // an infinite recursion, hence we use the helper DoGetUserReadableName()
+    buf = DoGetUserReadableName();
+
+    return true;
+}
+#endif // WXWIN_COMPATIBILITY_2_8
+
+wxString wxDocument::GetUserReadableName() const
+{
+#if WXWIN_COMPATIBILITY_2_8
+    // we need to call the old virtual function to ensure that the overridden
+    // version of it is still called
+    wxString name;
+    if ( GetPrintableName(name) )
+        return name;
+#endif // WXWIN_COMPATIBILITY_2_8
+
+    return DoGetUserReadableName();
+}
+
+wxString wxDocument::DoGetUserReadableName() const
+{
+    if ( !m_documentTitle.empty() )
+        return m_documentTitle;
+
+    if ( !m_documentFile.empty() )
+        return wxFileNameFromPath(m_documentFile);
+
+    return _("unnamed");
 }
 
 wxWindow *wxDocument::GetDocumentWindow() const
@@ -446,8 +463,7 @@ bool wxDocument::OnSaveModified()
 {
     if (IsModified())
     {
-        wxString title;
-        GetPrintableName(title);
+        wxString title = GetUserReadableName();
 
         wxString msgTitle;
         if (!wxTheApp->GetAppName().empty())
@@ -663,9 +679,7 @@ void wxView::OnChangeFilename()
     wxDocument *doc = GetDocument();
     if (!doc) return;
 
-    wxString name;
-    doc->GetPrintableName(name);
-    win->SetLabel(name);
+    win->SetLabel(doc->GetUserReadableName());
 }
 
 void wxView::SetDocument(wxDocument *doc)
@@ -1404,13 +1418,30 @@ wxDocument *wxDocManager::GetCurrentDocument() const
         return (wxDocument *) NULL;
 }
 
-// Make a default document name
-bool wxDocManager::MakeDefaultName(wxString& name)
+// Make a default name for a new document
+#if WXWIN_COMPATIBILITY_2_8
+bool wxDocManager::MakeDefaultName(wxString& WXUNUSED(name))
 {
-    name.Printf(_("unnamed%d"), m_defaultDocumentNameCounter);
-    m_defaultDocumentNameCounter++;
+    // we consider that this function can only be overridden by the user code,
+    // not called by it as it only makes sense to call it internally, so we
+    // don't bother to return anything from here
+    return false;
+}
+#endif // WXWIN_COMPATIBILITY_2_8
 
-    return true;
+wxString wxDocManager::MakeNewDocumentName()
+{
+    wxString name;
+
+#if WXWIN_COMPATIBILITY_2_8
+    if ( !MakeDefaultName(name) )
+#endif // WXWIN_COMPATIBILITY_2_8
+    {
+        name.Printf(_("unnamed%d"), m_defaultDocumentNameCounter);
+        m_defaultDocumentNameCounter++;
+    }
+
+    return name;
 }
 
 // Make a frame title (override this to do something different)
@@ -1423,8 +1454,7 @@ wxString wxDocManager::MakeFrameTitle(wxDocument* doc)
         title = appName;
     else
     {
-        wxString docName;
-        doc->GetPrintableName(docName);
+        wxString docName = doc->GetUserReadableName();
         title = docName + wxString(_(" - ")) + appName;
     }
     return title;

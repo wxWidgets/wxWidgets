@@ -79,6 +79,9 @@ Deprecated methods and their replacements
   or wxStringBufferLength instead.
 - wxDIRCTRL_SHOW_FILTERS style is deprecated, filters are alwsys shown if
   specified so this style should simply be removed
+- wxDocManager::MakeDefaultName() replaced by MakeNewDocumentName() and
+  wxDocument::GetPrintableName() with GetUserReadableName() which are simpler
+  to use
 
 
 Major new features in this release
