@@ -11565,6 +11565,7 @@ static PyObject *_wrap_new_ImageFromData(PyObject *, PyObject *args, PyObject *k
     buffer arg3 ;
     int arg4 ;
     wxImage *result;
+    Py_ssize_t temp3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -11582,7 +11583,8 @@ static PyObject *_wrap_new_ImageFromData(PyObject *, PyObject *args, PyObject *k
         if (SWIG_arg_fail(2)) SWIG_fail;
     }
     {
-        if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &arg4) == -1) SWIG_fail;
+        if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &temp3) == -1) SWIG_fail;
+        arg4 = (int)temp3;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -11607,6 +11609,8 @@ static PyObject *_wrap_new_ImageFromDataWithAlpha(PyObject *, PyObject *args, Py
     buffer arg5 ;
     int arg6 ;
     wxImage *result;
+    Py_ssize_t temp3 ;
+    Py_ssize_t temp5 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -11625,11 +11629,13 @@ static PyObject *_wrap_new_ImageFromDataWithAlpha(PyObject *, PyObject *args, Py
         if (SWIG_arg_fail(2)) SWIG_fail;
     }
     {
-        if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &arg4) == -1) SWIG_fail;
+        if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &temp3) == -1) SWIG_fail;
+        arg4 = (int)temp3;
     }
     {
         if (obj3 != Py_None) {
-            if (PyObject_AsReadBuffer(obj3, (const void**)(&arg5), &arg6) == -1) SWIG_fail;
+            if (PyObject_AsReadBuffer(obj3, (const void**)(&arg5), &temp5) == -1) SWIG_fail;
+            arg6 = (int)temp5;
         }
     }
     {
@@ -13370,6 +13376,7 @@ static PyObject *_wrap_Image_SetData(PyObject *, PyObject *args, PyObject *kwarg
     wxImage *arg1 = (wxImage *) 0 ;
     buffer arg2 ;
     int arg3 ;
+    Py_ssize_t temp2 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -13380,7 +13387,8 @@ static PyObject *_wrap_Image_SetData(PyObject *, PyObject *args, PyObject *kwarg
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImage, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
-        if (PyObject_AsReadBuffer(obj1, (const void**)(&arg2), &arg3) == -1) SWIG_fail;
+        if (PyObject_AsReadBuffer(obj1, (const void**)(&arg2), &temp2) == -1) SWIG_fail;
+        arg3 = (int)temp2;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13427,6 +13435,7 @@ static PyObject *_wrap_Image_SetDataBuffer(PyObject *, PyObject *args, PyObject 
     wxImage *arg1 = (wxImage *) 0 ;
     buffer arg2 ;
     int arg3 ;
+    Py_ssize_t temp2 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -13437,7 +13446,8 @@ static PyObject *_wrap_Image_SetDataBuffer(PyObject *, PyObject *args, PyObject 
     SWIG_Python_ConvertPtr(obj0, (void **)&arg1, SWIGTYPE_p_wxImage, SWIG_POINTER_EXCEPTION | 0);
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
-        if (PyObject_AsReadBuffer(obj1, (const void**)(&arg2), &arg3) == -1) SWIG_fail;
+        if (PyObject_AsReadBuffer(obj1, (const void**)(&arg2), &temp2) == -1) SWIG_fail;
+        arg3 = (int)temp2;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -13484,6 +13494,7 @@ static PyObject *_wrap_Image_SetAlphaData(PyObject *, PyObject *args, PyObject *
     wxImage *arg1 = (wxImage *) 0 ;
     buffer arg2 ;
     int arg3 ;
+    Py_ssize_t temp2 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -13495,7 +13506,8 @@ static PyObject *_wrap_Image_SetAlphaData(PyObject *, PyObject *args, PyObject *
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         if (obj1 != Py_None) {
-            if (PyObject_AsReadBuffer(obj1, (const void**)(&arg2), &arg3) == -1) SWIG_fail;
+            if (PyObject_AsReadBuffer(obj1, (const void**)(&arg2), &temp2) == -1) SWIG_fail;
+            arg3 = (int)temp2;
         }
     }
     {
@@ -13543,6 +13555,7 @@ static PyObject *_wrap_Image_SetAlphaBuffer(PyObject *, PyObject *args, PyObject
     wxImage *arg1 = (wxImage *) 0 ;
     buffer arg2 ;
     int arg3 ;
+    Py_ssize_t temp2 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     char *kwnames[] = {
@@ -13554,7 +13567,8 @@ static PyObject *_wrap_Image_SetAlphaBuffer(PyObject *, PyObject *args, PyObject
     if (SWIG_arg_fail(1)) SWIG_fail;
     {
         if (obj1 != Py_None) {
-            if (PyObject_AsReadBuffer(obj1, (const void**)(&arg2), &arg3) == -1) SWIG_fail;
+            if (PyObject_AsReadBuffer(obj1, (const void**)(&arg2), &temp2) == -1) SWIG_fail;
+            arg3 = (int)temp2;
         }
     }
     {
@@ -14709,6 +14723,8 @@ static PyObject *_wrap__ImageFromBuffer(PyObject *, PyObject *args, PyObject *kw
     buffer arg5 = (buffer) NULL ;
     int arg6 = (int) 0 ;
     wxImage *result;
+    Py_ssize_t temp3 ;
+    Py_ssize_t temp5 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -14727,12 +14743,14 @@ static PyObject *_wrap__ImageFromBuffer(PyObject *, PyObject *args, PyObject *kw
         if (SWIG_arg_fail(2)) SWIG_fail;
     }
     {
-        if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &arg4) == -1) SWIG_fail;
+        if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &temp3) == -1) SWIG_fail;
+        arg4 = (int)temp3;
     }
     if (obj3) {
         {
             if (obj3 != Py_None) {
-                if (PyObject_AsReadBuffer(obj3, (const void**)(&arg5), &arg6) == -1) SWIG_fail;
+                if (PyObject_AsReadBuffer(obj3, (const void**)(&arg5), &temp5) == -1) SWIG_fail;
+                arg6 = (int)temp5;
             }
         }
     }
