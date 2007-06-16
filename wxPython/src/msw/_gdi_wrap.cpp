@@ -5449,6 +5449,8 @@ static PyObject *_wrap__BitmapFromBufferAlpha(PyObject *, PyObject *args, PyObje
     buffer arg5 ;
     int arg6 ;
     wxBitmap *result;
+    Py_ssize_t temp3 ;
+    Py_ssize_t temp5 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -5467,11 +5469,13 @@ static PyObject *_wrap__BitmapFromBufferAlpha(PyObject *, PyObject *args, PyObje
         if (SWIG_arg_fail(2)) SWIG_fail;
     }
     {
-        if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &arg4) == -1) SWIG_fail;
+        if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &temp3) == -1) SWIG_fail;
+        arg4 = (int)temp3;
     }
     {
         if (obj3 != Py_None) {
-            if (PyObject_AsReadBuffer(obj3, (const void**)(&arg5), &arg6) == -1) SWIG_fail;
+            if (PyObject_AsReadBuffer(obj3, (const void**)(&arg5), &temp5) == -1) SWIG_fail;
+            arg6 = (int)temp5;
         }
     }
     {
@@ -5495,6 +5499,7 @@ static PyObject *_wrap__BitmapFromBuffer(PyObject *, PyObject *args, PyObject *k
     buffer arg3 ;
     int arg4 ;
     wxBitmap *result;
+    Py_ssize_t temp3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -5512,7 +5517,8 @@ static PyObject *_wrap__BitmapFromBuffer(PyObject *, PyObject *args, PyObject *k
         if (SWIG_arg_fail(2)) SWIG_fail;
     }
     {
-        if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &arg4) == -1) SWIG_fail;
+        if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &temp3) == -1) SWIG_fail;
+        arg4 = (int)temp3;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
@@ -5535,6 +5541,7 @@ static PyObject *_wrap__BitmapFromBufferRGBA(PyObject *, PyObject *args, PyObjec
     buffer arg3 ;
     int arg4 ;
     wxBitmap *result;
+    Py_ssize_t temp3 ;
     PyObject * obj0 = 0 ;
     PyObject * obj1 = 0 ;
     PyObject * obj2 = 0 ;
@@ -5552,7 +5559,8 @@ static PyObject *_wrap__BitmapFromBufferRGBA(PyObject *, PyObject *args, PyObjec
         if (SWIG_arg_fail(2)) SWIG_fail;
     }
     {
-        if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &arg4) == -1) SWIG_fail;
+        if (PyObject_AsReadBuffer(obj2, (const void**)(&arg3), &temp3) == -1) SWIG_fail;
+        arg4 = (int)temp3;
     }
     {
         PyThreadState* __tstate = wxPyBeginAllowThreads();
