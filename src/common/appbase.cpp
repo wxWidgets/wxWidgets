@@ -45,6 +45,11 @@
 #include "wx/ptr_scpd.h"
 #include "wx/tokenzr.h"
 
+#if wxUSE_EXCEPTIONS && wxUSE_STL
+    #include <exception>
+    #include <typeinfo>
+#endif
+
 #if !defined(__WXMSW__) || defined(__WXMICROWIN__)
   #include  <signal.h>      // for SIGTRAP used by wxTrap()
 #endif  //Win/Unix
@@ -414,11 +419,37 @@ wxAppConsoleBase::HandleEvent(wxEvtHandler *handler,
     (handler->*func)(event);
 }
 
+void wxAppConsoleBase::OnUnhandledException()
+{
+#ifdef __WXDEBUG__
+    // we're called from an exception handler so we can re-throw the exception
+    // to recover its type
+    wxString what;
+    try
+    {
+        throw;
+    }
+#if wxUSE_STL
+    catch ( std::exception& e )
+    {
+        what.Printf("std::exception of type \"%s\", what() = \"%s\"",
+                    typeid(e).name(), e.what());
+    }
+#endif // wxUSE_STL
+    catch ( ... )
+    {
+        what = "unknown exception";
+    }
+
+    wxMessageOutputBest().Printf(
+        "*** Caught unhandled %s; terminating\n", what
+    );
+#endif // __WXDEBUG__
+}
+
 // ----------------------------------------------------------------------------
 // exceptions support
 // ----------------------------------------------------------------------------
-
-#if wxUSE_EXCEPTIONS
 
 bool wxAppConsoleBase::OnExceptionInMainLoop()
 {
@@ -429,9 +460,6 @@ bool wxAppConsoleBase::OnExceptionInMainLoop()
     return false;
 #endif
 }
-
-#endif // wxUSE_EXCEPTIONS
-
 
 #endif // wxUSE_EXCEPTIONS
 

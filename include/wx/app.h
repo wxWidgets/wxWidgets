@@ -197,10 +197,10 @@ public:
                              wxEvent& event) const;
 
     // Called when an unhandled C++ exception occurs inside OnRun(): note that
-    // the exception type is lost by now, so if you really want to handle the
-    // exception you should override OnRun() and put a try/catch around
-    // MainLoop() call there or use OnExceptionInMainLoop()
-    virtual void OnUnhandledException() { }
+    // the main event loop has already terminated by now and the program will
+    // exit, if you need to really handle the exceptions you need to override
+    // OnExceptionInMainLoop()
+    virtual void OnUnhandledException();
 #endif // wxUSE_EXCEPTIONS
 
     // event processing functions

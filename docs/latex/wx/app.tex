@@ -519,10 +519,13 @@ should return $0$ in case of successful termination.
 
 This function is called when an unhandled C++ exception occurs inside 
 \helpref{OnRun()}{wxapponrun} (the exceptions which occur during the program
-startup and shutdown might not be caught at all).
-Note that the exception type is lost by now, so if you want to really handle
-the exception you should override \helpref{OnRun()}{wxapponrun} and put a
-try/catch clause around the call to the base class version there.
+startup and shutdown might not be caught at all). Notice that by now the main
+event loop has been terminated and the program will exit, if you want to
+prevent this from happening (i.e. continue running after catching an exception)
+you need to override \helpref{OnExceptionInMainLoop}{wxapponexceptioninmainloop}.
+
+The default implementation shows information about the exception in debug build
+but does nothing in the release build.
 
 
 \membersection{wxApp::ProcessMessage}\label{wxappprocessmessage}
