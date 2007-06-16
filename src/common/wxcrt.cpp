@@ -43,13 +43,6 @@
     #include "wx/log.h"
 #endif
 
-#if defined(__WIN32__) && defined(wxNEED_WX_CTYPE_H)
-  #include <windef.h>
-    #include <winbase.h>
-    #include <winnls.h>
-    #include <winnt.h>
-#endif
-
 #ifdef __WXWINCE__
     // there is no errno.h under CE apparently
     #define wxSET_ERRNO(value)
@@ -933,29 +926,6 @@ int wxVsnprintf(wchar_t *str, size_t size, const wxString& format, va_list argpt
 // ctype.h stuff (currently unused)
 // ----------------------------------------------------------------------------
 
-#if defined(__WIN32__) && defined(wxNEED_WX_CTYPE_H)
-static inline WORD wxMSW_ctype(wchar_t ch)
-{
-  WORD ret;
-  GetStringTypeEx(LOCALE_USER_DEFAULT, CT_CTYPE1, &ch, 1, &ret);
-  return ret;
-}
-
-int wxCRT_IsalnumW(wchar_t ch) { return IsCharAlphaNumeric(ch); }
-int wxCRT_IsalphaW(wchar_t ch) { return IsCharAlpha(ch); }
-int wxCRT_IscntrlW(wchar_t ch) { return wxMSW_ctype(ch) & C1_CNTRL; }
-int wxCRT_IsdigitW(wchar_t ch) { return wxMSW_ctype(ch) & C1_DIGIT; }
-int wxCRT_IsgraphW(wchar_t ch) { return wxMSW_ctype(ch) & (C1_DIGIT|C1_PUNCT|C1_ALPHA); }
-int wxCRT_IslowerW(wchar_t ch) { return IsCharLower(ch); }
-int wxCRT_IsprintW(wchar_t ch) { return wxMSW_ctype(ch) & (C1_DIGIT|C1_SPACE|C1_PUNCT|C1_ALPHA); }
-int wxCRT_IspunctW(wchar_t ch) { return wxMSW_ctype(ch) & C1_PUNCT; }
-int wxCRT_IsspaceW(wchar_t ch) { return wxMSW_ctype(ch) & C1_SPACE; }
-int wxCRT_IsupperW(wchar_t ch) { return IsCharUpper(ch); }
-int wxCRT_IsxdigitW(wchar_t ch) { return wxMSW_ctype(ch) & C1_XDIGIT; }
-int wxCRT_Tolower(wchar_t ch) { return (wchar_t)CharLower((LPTSTR)(ch)); }
-int wxCRT_Toupper(wchar_t ch) { return (wchar_t)CharUpper((LPTSTR)(ch)); }
-#endif
-
 #ifdef wxNEED_WX_MBSTOWCS
 
 WXDLLEXPORT size_t wxMbstowcs (wchar_t * out, const char * in, size_t outlen)
@@ -1003,39 +973,6 @@ WXDLLEXPORT size_t wxWcstombs (char * out, const wchar_t * in, size_t outlen)
 }
 
 #endif // wxNEED_WX_MBSTOWCS
-
-#if defined(wxNEED_WX_CTYPE_H)
-
-#include <CoreFoundation/CoreFoundation.h>
-
-#define cfalnumset CFCharacterSetGetPredefined(kCFCharacterSetAlphaNumeric)
-#define cfalphaset CFCharacterSetGetPredefined(kCFCharacterSetLetter)
-#define cfcntrlset CFCharacterSetGetPredefined(kCFCharacterSetControl)
-#define cfdigitset CFCharacterSetGetPredefined(kCFCharacterSetDecimalDigit)
-//CFCharacterSetRef cfgraphset = kCFCharacterSetControl && !' '
-#define cflowerset CFCharacterSetGetPredefined(kCFCharacterSetLowercaseLetter)
-//CFCharacterSetRef cfprintset = !kCFCharacterSetControl
-#define cfpunctset CFCharacterSetGetPredefined(kCFCharacterSetPunctuation)
-#define cfspaceset CFCharacterSetGetPredefined(kCFCharacterSetWhitespaceAndNewline)
-#define cfupperset CFCharacterSetGetPredefined(kCFCharacterSetUppercaseLetter)
-
-int wxCRT_IsalnumW(wchar_t ch) { return CFCharacterSetIsCharacterMember(cfalnumset, ch); }
-int wxCRT_IsalphaW(wchar_t ch) { return CFCharacterSetIsCharacterMember(cfalphaset, ch); }
-int wxCRT_IscntrlW(wchar_t ch) { return CFCharacterSetIsCharacterMember(cfcntrlset, ch); }
-int wxCRT_IsdigitW(wchar_t ch) { return CFCharacterSetIsCharacterMember(cfdigitset, ch); }
-int wxCRT_IsgraphW(wchar_t ch) { return !CFCharacterSetIsCharacterMember(cfcntrlset, ch) && ch != ' '; }
-int wxCRT_IslowerW(wchar_t ch) { return CFCharacterSetIsCharacterMember(cflowerset, ch); }
-int wxCRT_IsprintW(wchar_t ch) { return !CFCharacterSetIsCharacterMember(cfcntrlset, ch); }
-int wxCRT_IspunctW(wchar_t ch) { return CFCharacterSetIsCharacterMember(cfpunctset, ch); }
-int wxCRT_IsspaceW(wchar_t ch) { return CFCharacterSetIsCharacterMember(cfspaceset, ch); }
-int wxCRT_IsupperW(wchar_t ch) { return CFCharacterSetIsCharacterMember(cfupperset, ch); }
-int wxCRT_IsxdigitW(wchar_t ch) { return wxCRT_IsdigitW(ch) || (ch>='a' && ch<='f') || (ch>='A' && ch<='F'); }
-
-// FIXME: these are broken!
-extern "C" int wxCRT_TolowerW(wchar_t ch) { return (wchar_t)tolower((char)(ch)); }
-extern "C" int wxCRT_ToupperW(wchar_t ch) { return (wchar_t)toupper((char)(ch)); }
-
-#endif  // wxNEED_WX_CTYPE_H
 
 #ifndef wxCRT_StrdupA
 WXDLLEXPORT char *wxCRT_StrdupA(const char *s)
@@ -1110,51 +1047,10 @@ int WXDLLEXPORT wxCRT_StrnicmpW(const wchar_t *s1, const wchar_t *s2, size_t n)
 // string.h functions
 // ----------------------------------------------------------------------------
 
-#ifndef wxCRT_StrcatW
-WXDLLEXPORT wchar_t *wxCRT_StrcatW(wchar_t *dest, const wchar_t *src)
-{
-  wchar_t *ret = dest;
-  while (*dest) dest++;
-  while ((*dest++ = *src++));
-  return ret;
-}
-#endif
-
-#ifndef wxCRT_StrchrW
-WXDLLEXPORT const wchar_t *wxCRT_StrchrW(const wchar_t *s, wchar_t c)
-{
-    // be careful here as the terminating NUL makes part of the string
-    while ( *s != c )
-    {
-        if ( !*s++ )
-            return NULL;
-    }
-
-    return s;
-}
-#endif
-
-#ifndef wxCRT_StrcmpW
-WXDLLEXPORT int wxCRT_StrcmpW(const wchar_t *s1, const wchar_t *s2)
-{
-  while ((*s1 == *s2) && *s1) s1++, s2++;
-  if ((wxUChar)*s1 < (wxUChar)*s2) return -1;
-  if ((wxUChar)*s1 > (wxUChar)*s2) return 1;
-  return 0;
-}
-#endif
-
-#ifndef wxCRT_StrcpyW
-WXDLLEXPORT wchar_t * wxCRT_StrcpyW(wchar_t *dest, const wchar_t *src)
-{
-  wchar_t *ret = dest;
-  while ((*dest++ = *src++));
-  return ret;
-}
-#endif
-
-template<typename T>
-static inline size_t wxCRT_DoStrlen(const T *s)
+// this (and wxCRT_StrncmpW below) are extern "C" because they are needed
+// by regex code, the rest isn't needed, so it's not declared as extern "C"
+#ifndef wxCRT_StrlenW
+extern "C" WXDLLEXPORT size_t wxCRT_StrlenW(const wchar_t *s)
 {
     size_t n = 0;
     while ( *s++ )
@@ -1162,175 +1058,11 @@ static inline size_t wxCRT_DoStrlen(const T *s)
 
     return n;
 }
-
-// these two (and wxCRT_StrncmpW below) are extern "C" because they are needed
-// by regex code, the rest isn't needed, so it's not declared as extern "C"
-#ifndef wxCRT_StrlenA
-WXDLLEXPORT size_t wxCRT_StrlenA(const char *s)
-    { return wxCRT_DoStrlen(s); }
-#endif
-#ifndef wxCRT_StrlenW
-extern "C" WXDLLEXPORT size_t wxCRT_StrlenW(const wchar_t *s)
-    { return wxCRT_DoStrlen(s); }
 #endif
 
-#ifndef wxCRT_StrncatW
-WXDLLEXPORT wchar_t * wxCRT_StrncatW(wchar_t *dest, const wchar_t *src, size_t n)
-{
-  wchar_t *ret = dest;
-  while (*dest) dest++;
-  while (n && (*dest++ = *src++)) n--;
-  return ret;
-}
-#endif
-
-#ifndef wxCRT_StrncmpW
-extern "C"
-WXDLLEXPORT int wxCRT_StrncmpW(const wchar_t *s1, const wchar_t *s2, size_t n)
-{
-  while (n && (*s1 == *s2) && *s1) n--, s1++, s2++;
-  if (n) {
-    if ((wxUChar)*s1 < (wxUChar)*s2) return -1;
-    if ((wxUChar)*s1 > (wxUChar)*s2) return 1;
-  }
-  return 0;
-}
-#endif
-
-#ifndef wxCRT_StrncpyW
-WXDLLEXPORT wchar_t * wxCRT_StrncpyW(wchar_t *dest, const wchar_t *src, size_t n)
-{
-  wchar_t *ret = dest;
-  while (n && (*dest++ = *src++)) n--;
-  while (n) *dest++=0, n--; // the docs specify padding with zeroes
-  return ret;
-}
-#endif
-
-#ifndef wxCRT_StrpbrkW
-WXDLLEXPORT const wchar_t * wxCRT_StrpbrkW(const wchar_t *s, const wchar_t *accept)
-{
-  while (*s && !wxCRT_Strchr(accept, *s))
-      s++;
-
-  return *s ? s : NULL;
-}
-#endif
-
-#ifndef wxCRT_StrrchrW
-WXDLLEXPORT const wchar_t * wxCRT_StrrchrW(const wchar_t *s, wchar_t c)
-{
-    const wchar_t *ret = NULL;
-    do
-    {
-        if ( *s == c )
-            ret = s;
-        s++;
-    }
-    while ( *s );
-
-    return ret;
-}
-#endif
-
-#ifndef wxCRT_StrspnW
-WXDLLEXPORT size_t wxCRT_StrspnW(const wchar_t *s, const wchar_t *accept)
-{
-  size_t len = 0;
-  while (wxCRT_Strchr(accept, *s++)) len++;
-  return len;
-}
-#endif
-
-#ifndef wxCRT_StrstrW
-WXDLLEXPORT const wchar_t *wxCRT_StrstrW(const wchar_t *haystack, const wchar_t *needle)
-{
-    wxASSERT_MSG( needle != NULL, _T("NULL argument in wxCRT_Strstr") );
-
-    // VZ: this is not exactly the most efficient string search algorithm...
-
-    const size_t len = wxStrlen(needle);
-
-    while ( const wchar_t *fnd = wxCRT_Strchr(haystack, *needle) )
-    {
-        if ( !wxCRT_Strncmp(fnd, needle, len) )
-            return fnd;
-
-        haystack = fnd + 1;
-    }
-
-    return NULL;
-}
-#endif
-
-#ifndef wxCRT_StrtodW
-WXDLLEXPORT double wxCRT_StrtodW(const wchar_t *nptr, wchar_t **endptr)
-{
-  const wchar_t *start = nptr;
-
-  // FIXME: only correct for C locale
-  while (wxIsspace(*nptr)) nptr++;
-  if (*nptr == wxT('+') || *nptr == wxT('-')) nptr++;
-  while (wxIsdigit(*nptr)) nptr++;
-  if (*nptr == wxT('.')) {
-    nptr++;
-    while (wxIsdigit(*nptr)) nptr++;
-  }
-  if (*nptr == wxT('E') || *nptr == wxT('e')) {
-    nptr++;
-    if (*nptr == wxT('+') || *nptr == wxT('-')) nptr++;
-    while (wxIsdigit(*nptr)) nptr++;
-  }
-
-  wxString data(nptr, nptr-start);
-  wxWX2MBbuf dat = data.mb_str(wxConvLibc);
-  char *rdat = wxMBSTRINGCAST dat;
-  double ret = strtod(dat, &rdat);
-
-  if (endptr) *endptr = (wchar_t *)(start + (rdat - (const char *)dat));
-
-  return ret;
-}
-#endif // !wxCRT_StrtodW
-
-#ifndef wxCRT_StrtolW
-WXDLLEXPORT long int wxCRT_StrtolW(const wchar_t *nptr, wchar_t **endptr, int base)
-{
-  const wchar_t *start = nptr;
-
-  // FIXME: only correct for C locale
-  while (wxIsspace(*nptr)) nptr++;
-  if (*nptr == wxT('+') || *nptr == wxT('-')) nptr++;
-  if (((base == 0) || (base == 16)) &&
-      (nptr[0] == wxT('0') && nptr[1] == wxT('x'))) {
-    nptr += 2;
-    base = 16;
-  }
-  else if ((base == 0) && (nptr[0] == wxT('0'))) base = 8;
-  else if (base == 0) base = 10;
-
-  while ((wxIsdigit(*nptr) && (*nptr - wxT('0') < base)) ||
-         (wxIsalpha(*nptr) && (wxToupper(*nptr) - wxT('A') + 10 < base))) nptr++;
-
-  wxString data(start, nptr-start);
-  wxWX2MBbuf dat = data.mb_str(wxConvLibc);
-  char *rdat = wxMBSTRINGCAST dat;
-  long int ret = strtol(dat, &rdat, base);
-
-  if (endptr) *endptr = (wchar_t *)(start + (rdat - (const char *)dat));
-
-  return ret;
-}
-#endif // !wxCRT_StrtolW
-
-#ifndef wxCRT_StrtoulW
-WXDLLEXPORT unsigned long int wxCRT_StrtoulW(const wchar_t *nptr, wchar_t **endptr, int base)
-{
-    return (unsigned long int) wxCRT_StrtolW(nptr, endptr, base);
-}
-#endif
-
-
+// ----------------------------------------------------------------------------
+// stdlib.h functions
+// ----------------------------------------------------------------------------
 
 #ifndef wxCRT_GetenvW
 wchar_t* WXDLLEXPORT wxCRT_GetenvW(const wchar_t *name)

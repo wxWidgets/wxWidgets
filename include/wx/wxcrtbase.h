@@ -142,52 +142,33 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
 #define wxCRT_StrstrA    strstr
 #define wxCRT_StrxfrmA   strxfrm
 
-/*
-   The system C library on Mac OS X 10.2 and below does not support unicode: in
-   other words all wide-character functions such as towupper et al. do simply
-   not exist so we need to provide our own in that context, except for the
-   wchar_t definition/typedef itself.
+#define wxCRT_StrcatW    wcscat
+#define wxCRT_StrchrW    wcschr
+#define wxCRT_StrcmpW    wcscmp
+#define wxCRT_StrcollW   wcscoll
+#define wxCRT_StrcpyW    wcscpy
+#define wxCRT_StrcspnW   wcscspn
+#define wxCRT_StrncatW   wcsncat
+#define wxCRT_StrncmpW   wcsncmp
+#define wxCRT_StrncpyW   wcsncpy
+#define wxCRT_StrpbrkW   wcspbrk
+#define wxCRT_StrrchrW   wcsrchr
+#define wxCRT_StrspnW    wcsspn
+#define wxCRT_StrstrW    wcsstr
+#define wxCRT_StrxfrmW   wcsxfrm
 
-   We need to do this for both project builder and CodeWarrior as the latter
-   uses the system C library in Mach builds for wide character support, which
-   as mentioned does not exist on 10.2 and below.
-*/
-#if defined(__DARWIN__) && (MAC_OS_X_VERSION_MAX_ALLOWED < MAC_OS_X_VERSION_10_2)
-    #define wxHAS_NO_WCS_FUNCTIONS
+/* Almost all compiler have strdup(), but not quite all: CodeWarrior under
+   Mac and VC++ for Windows CE don't provide it; additionally, gcc under
+   Mac and OpenVMS do not have wcsdup: */
+#if defined(__VISUALC__) && __VISUALC__ >= 1400
+    #define wxCRT_StrdupA _strdup
+#elif !(defined(__MWERKS__) && defined(__WXMAC__)) && !defined(__WXWINCE__)
+    #define wxCRT_StrdupA strdup
 #endif
-
-#ifndef wxHAS_NO_WCS_FUNCTIONS
-    #define wxCRT_StrcatW    wcscat
-    #define wxCRT_StrchrW    wcschr
-    #define wxCRT_StrcmpW    wcscmp
-    #define wxCRT_StrcollW   wcscoll
-    #define wxCRT_StrcpyW    wcscpy
-    #define wxCRT_StrcspnW   wcscspn
-    #define wxCRT_StrncatW   wcsncat
-    #define wxCRT_StrncmpW   wcsncmp
-    #define wxCRT_StrncpyW   wcsncpy
-    #define wxCRT_StrpbrkW   wcspbrk
-    #define wxCRT_StrrchrW   wcsrchr
-    #define wxCRT_StrspnW    wcsspn
-    #define wxCRT_StrstrW    wcsstr
-    #define wxCRT_StrxfrmW   wcsxfrm
-
-    /* Almost all compiler have strdup(), but not quite all: CodeWarrior under
-       Mac and VC++ for Windows CE don't provide it; additionally, gcc under
-       Mac and OpenVMS do not have wcsdup: */
-    #if defined(__VISUALC__) && __VISUALC__ >= 1400
-        #define wxCRT_StrdupA _strdup
-    #elif !(defined(__MWERKS__) && defined(__WXMAC__)) && !defined(__WXWINCE__)
-        #define wxCRT_StrdupA strdup
-    #endif
-    #if defined(__WINDOWS__)
-        #define wxCRT_StrdupW _wcsdup
-    #elif !defined(__DARWIN__) && !defined( __VMS )
-        #define wxCRT_StrdupW wcsdup
-    #endif
-#else
-    #define wxCRT_StrdupA    strdup
-    /* the rest is implemented in our code */
+#if defined(__WINDOWS__)
+    #define wxCRT_StrdupW _wcsdup
+#elif !defined(__DARWIN__) && !defined( __VMS )
+    #define wxCRT_StrdupW wcsdup
 #endif
 
 #ifdef wxHAVE_TCHAR_SUPPORT
@@ -454,23 +435,21 @@ WXDLLIMPEXP_BASE wchar_t *wxCRT_StrtokW(wchar_t *psz, const wchar_t *delim, wcha
 #define wxCRT_FgetcA      fgetc
 #define wxCRT_UngetcA     ungetc
 
-#ifndef wxHAS_NO_WCS_FUNCTIONS
-    #ifdef wxHAVE_TCHAR_SUPPORT
-        #define wxCRT_PutsW   _putws
-        #define wxCRT_FputsW  fputws
-        #define wxCRT_FputcW  fputwc
-    #endif
-    #ifdef HAVE_FPUTWS
-        #define wxCRT_FputsW  fputws
-    #endif
-    #ifdef HAVE_PUTWS
-        #define wxCRT_PutsW   putws
-    #endif
-    #ifdef HAVE_FPUTWC
-        #define wxCRT_FputcW  fputwc
-    #endif
-    #define wxCRT_FgetsW  fgetws
-#endif // !wxHAS_NO_WCS_FUNCTIONS
+#ifdef wxHAVE_TCHAR_SUPPORT
+    #define wxCRT_PutsW   _putws
+    #define wxCRT_FputsW  fputws
+    #define wxCRT_FputcW  fputwc
+#endif
+#ifdef HAVE_FPUTWS
+    #define wxCRT_FputsW  fputws
+#endif
+#ifdef HAVE_PUTWS
+    #define wxCRT_PutsW   putws
+#endif
+#ifdef HAVE_FPUTWC
+    #define wxCRT_FputcW  fputwc
+#endif
+#define wxCRT_FgetsW  fgetws
 
 #ifndef wxCRT_PutsW
 WXDLLIMPEXP_BASE int wxCRT_PutsW(const wchar_t *ws);
@@ -601,66 +580,41 @@ WXDLLIMPEXP_BASE size_t wxCRT_StrftimeW(wchar_t *s, size_t max,
                                 ctype.h
    ------------------------------------------------------------------------- */
 
-#ifdef wxHAS_NO_WCS_FUNCTIONS
-    #define wxNEED_WX_CTYPE_H
-#endif
-
 #ifdef __WATCOMC__
   #define WXWCHAR_T_CAST(c) (wint_t)(c)
 #else
   #define WXWCHAR_T_CAST(c) c
 #endif
 
-#ifdef wxNEED_WX_CTYPE_H
+#define wxCRT_IsalnumW(c)   iswalnum(WXWCHAR_T_CAST(c))
+#define wxCRT_IsalphaW(c)   iswalpha(WXWCHAR_T_CAST(c))
+#define wxCRT_IscntrlW(c)   iswcntrl(WXWCHAR_T_CAST(c))
+#define wxCRT_IsdigitW(c)   iswdigit(WXWCHAR_T_CAST(c))
+#define wxCRT_IsgraphW(c)   iswgraph(WXWCHAR_T_CAST(c))
+#define wxCRT_IslowerW(c)   iswlower(WXWCHAR_T_CAST(c))
+#define wxCRT_IsprintW(c)   iswprint(WXWCHAR_T_CAST(c))
+#define wxCRT_IspunctW(c)   iswpunct(WXWCHAR_T_CAST(c))
+#define wxCRT_IsspaceW(c)   iswspace(WXWCHAR_T_CAST(c))
+#define wxCRT_IsupperW(c)   iswupper(WXWCHAR_T_CAST(c))
+#define wxCRT_IsxdigitW(c)  iswxdigit(WXWCHAR_T_CAST(c))
 
-    /* RN: Used only under OSX <= 10.2 currently */
-    WXDLLIMPEXP_BASE int wxCRT_IsalnumW(wchar_t ch);
-    WXDLLIMPEXP_BASE int wxCRT_IsalphaW(wchar_t ch);
-    WXDLLIMPEXP_BASE int wxCRT_IscntrlW(wchar_t ch);
-    WXDLLIMPEXP_BASE int wxCRT_IsdigitW(wchar_t ch);
-    WXDLLIMPEXP_BASE int wxCRT_IsgraphW(wchar_t ch);
-    WXDLLIMPEXP_BASE int wxCRT_IslowerW(wchar_t ch);
-    WXDLLIMPEXP_BASE int wxCRT_IsprintW(wchar_t ch);
-    WXDLLIMPEXP_BASE int wxCRT_IspunctW(wchar_t ch);
-    WXDLLIMPEXP_BASE int wxCRT_IsspaceW(wchar_t ch);
-    WXDLLIMPEXP_BASE int wxCRT_IsupperW(wchar_t ch);
-    WXDLLIMPEXP_BASE int wxCRT_IsxdigitW(wchar_t ch);
-    /* extern "C" because needed by regex code */
-    WXDLLIMPEXP_BASE extern "C" int wxCRT_TolowerW(wchar_t ch);
-    WXDLLIMPEXP_BASE extern "C" int wxCRT_ToupperW(wchar_t ch);
-
-#else // !defined(wxNEED_WX_CTYPE_H)
-
-    #define wxCRT_IsalnumW(c)   iswalnum(WXWCHAR_T_CAST(c))
-    #define wxCRT_IsalphaW(c)   iswalpha(WXWCHAR_T_CAST(c))
-    #define wxCRT_IscntrlW(c)   iswcntrl(WXWCHAR_T_CAST(c))
-    #define wxCRT_IsdigitW(c)   iswdigit(WXWCHAR_T_CAST(c))
-    #define wxCRT_IsgraphW(c)   iswgraph(WXWCHAR_T_CAST(c))
-    #define wxCRT_IslowerW(c)   iswlower(WXWCHAR_T_CAST(c))
-    #define wxCRT_IsprintW(c)   iswprint(WXWCHAR_T_CAST(c))
-    #define wxCRT_IspunctW(c)   iswpunct(WXWCHAR_T_CAST(c))
-    #define wxCRT_IsspaceW(c)   iswspace(WXWCHAR_T_CAST(c))
-    #define wxCRT_IsupperW(c)   iswupper(WXWCHAR_T_CAST(c))
-    #define wxCRT_IsxdigitW(c)  iswxdigit(WXWCHAR_T_CAST(c))
-
-    #ifdef __GLIBC__
-        #if defined(__GLIBC__) && (__GLIBC__ == 2) && (__GLIBC_MINOR__ == 0)
-            /* /usr/include/wctype.h incorrectly declares translations */
-            /* tables which provokes tons of compile-time warnings -- try */
-            /* to correct this */
-            #define wxCRT_TolowerW(wc) towctrans((wc), (wctrans_t)__ctype_tolower)
-            #define wxCRT_ToupperW(wc) towctrans((wc), (wctrans_t)__ctype_toupper)
-        #else /* !glibc 2.0 */
-            #define wxCRT_TolowerW   towlower
-            #define wxCRT_ToupperW   towupper
-        #endif
-    #else // !__GLIBC__
-        /* There is a bug in VC6 C RTL: toxxx() functions dosn't do anything
-           with signed chars < 0, so "fix" it here. */
-        #define wxCRT_TolowerW(c)   towlower((wxUChar)(wxChar)(c))
-        #define wxCRT_ToupperW(c)   towupper((wxUChar)(wxChar)(c))
-    #endif // __GLIBC__/!__GLIBC__
-#endif // !defined(wxNEED_WX_CTYPE_H)
+#ifdef __GLIBC__
+    #if defined(__GLIBC__) && (__GLIBC__ == 2) && (__GLIBC_MINOR__ == 0)
+        /* /usr/include/wctype.h incorrectly declares translations */
+        /* tables which provokes tons of compile-time warnings -- try */
+        /* to correct this */
+        #define wxCRT_TolowerW(wc) towctrans((wc), (wctrans_t)__ctype_tolower)
+        #define wxCRT_ToupperW(wc) towctrans((wc), (wctrans_t)__ctype_toupper)
+    #else /* !glibc 2.0 */
+        #define wxCRT_TolowerW   towlower
+        #define wxCRT_ToupperW   towupper
+    #endif
+#else // !__GLIBC__
+    /* There is a bug in VC6 C RTL: toxxx() functions dosn't do anything
+       with signed chars < 0, so "fix" it here. */
+    #define wxCRT_TolowerW(c)   towlower((wxUChar)(wxChar)(c))
+    #define wxCRT_ToupperW(c)   towupper((wxUChar)(wxChar)(c))
+#endif // __GLIBC__/!__GLIBC__
 
 
 
