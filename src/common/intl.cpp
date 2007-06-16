@@ -1602,7 +1602,7 @@ bool wxLocale::Init(const wxString& name,
 #if defined(__UNIX__) && wxUSE_UNICODE && !defined(__WXMAC__)
 static const char *wxSetlocaleTryUTF8(int c, const wxString& lc)
 {
-    const char *l;
+    const char *l = NULL;
 
     // NB: We prefer to set UTF-8 locale if it's possible and only fall back to
     //     non-UTF-8 locale if it fails
