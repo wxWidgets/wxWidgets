@@ -4,11 +4,13 @@
 # Created:      07.06.2007
 # RCS-ID:       $Id$
 
+import os,sys,shutil,tempfile,traceback
 from globals import *
-from XMLTree import *
+from XMLTree import XMLTree
+from AttributePanel import Panel
 from component import Manager
 from presenter import Presenter
-import os,sys,shutil,tempfile,traceback
+import images
 
 class TaskBarIcon(wx.TaskBarIcon):
     def __init__(self, frame):
@@ -127,10 +129,43 @@ class Frame(wx.Frame):
         self.menuBar = menuBar
         self.SetMenuBar(menuBar)
 
-        global tree
-        tree = XMLTree(self)
+        # Build interface
+        sizer = wx.BoxSizer(wx.VERTICAL)
+        #sizer.Add(wx.StaticLine(self, -1), 0, wx.EXPAND)
+        # Horizontal sizer for toolbar and splitter
+        self.toolsSizer = sizer1 = wx.BoxSizer()
+        splitter = wx.SplitterWindow(self, -1, style=wx.SP_3DSASH)
+        self.splitter = splitter
+        splitter.SetMinimumPaneSize(100)
 
-        # Load resources
+        global tree
+        tree = XMLTree(splitter)
+
+        # Miniframe for split mode
+        miniFrame = wx.MiniFrame(self, -1, 'Properties & Style',
+                                 (conf.panelX, conf.panelY),
+                                 (conf.panelWidth, conf.panelHeight))
+        self.miniFrame = miniFrame
+        sizer2 = wx.BoxSizer()
+        miniFrame.SetSizer(sizer2)
+        # Create panel for parameters
+        global panel
+        if conf.embedPanel:
+            panel = Panel(splitter)
+            # Set plitter windows
+            splitter.SplitVertically(tree, panel, conf.sashPos)
+        else:
+            panel = Panel(miniFrame)
+            sizer2.Add(panel, 1, wx.EXPAND)
+            miniFrame.Show(True)
+            splitter.Initialize(tree)
+        if wx.Platform == '__WXMAC__':
+            sizer1.Add(splitter, 1, wx.EXPAND|wx.RIGHT, 5)
+        else:
+            sizer1.Add(splitter, 1, wx.EXPAND)
+        sizer.Add(sizer1, 1, wx.EXPAND)
+        self.SetAutoLayout(True)
+        self.SetSizer(sizer)
 
         # Component events
         wx.EVT_MENU_RANGE(self, Manager.firstId, Manager.lastId,
@@ -200,13 +235,10 @@ class Frame(wx.Frame):
         wx.EVT_UPDATE_UI(self, self.ID_REFRESH, self.OnUpdateUI)
 
     def OnComponent(self, evt):
-        component = Manager.findById(evt.GetId())
-        print component
-        item = tree.GetSelection()
-        tree.AppendItem(item, component.name, component.imageId)
-        tree.Expand(item)
-        # Notify Presenter
-        Presenter.setModified()
+        '''Hadnler for creating new elements.'''
+        comp = Manager.findById(evt.GetId())
+        print comp
+        Presenter.create(comp)
 
     def OnNew(self, evt):
         if not self.AskSave(): return

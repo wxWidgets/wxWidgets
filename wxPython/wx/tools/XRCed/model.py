@@ -4,9 +4,9 @@
 # Created:      07.06.2007
 # RCS-ID:       $Id$
 
-from globals import *
-from xml.dom import minidom
 import os,sys
+from xml.dom import minidom
+from globals import *
 
 # Redefine writing to include encoding
 class MyDocument(minidom.Document):
@@ -25,12 +25,16 @@ class _Model:
     def __init__(self):
         self.dom = None
 
-    def init(self):
+    def init(self, dom=None):
         self.path = ''
         if self.dom: self.dom.unlink()
-        self.dom = MyDocument()
-        self.mainNode = self.dom.createElement('resource')
-        self.dom.appendChild(self.mainNode)
+        if not dom:
+            self.dom = MyDocument()
+            self.mainNode = self.dom.createElement('resource')
+            self.dom.appendChild(self.mainNode)
+        else:
+            self.dom = dom
+            self.mainNode = dom.documentElement
         # Dummy element used for temporarily renaming noname nodes
         self.testElem = self.dom.createElement('dummy')
         self.mainNode.appendChild(self.testElem)
@@ -39,6 +43,7 @@ class _Model:
         f = open(path)
         dom = minidom.parse(f)
         f.close()
+        self.init(dom)
 
         # Set encoding global variable and default encoding
         if dom.encoding:
@@ -71,6 +76,11 @@ class _Model:
         domCopy.unlink()
 
     def indent(self, dom):
-        pass
+        print 'NYI'
+
+    def createObjectNode(self, className):
+        node = self.dom.createElement('object')
+        node.setAttribute('class', className)
+        return node
 
 Model = _Model()

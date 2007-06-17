@@ -6,6 +6,7 @@
 
 import wx
 from component import Manager
+
 # Global id constants
 class ID:
     MENU = wx.NewId()

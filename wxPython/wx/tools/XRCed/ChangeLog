@@ -1,3 +1,11 @@
+2007-06-17  Roman Rolinsky  <scroll@lem.lan>
+
+	* initial implementation of AttributePanel (former PropPage)
+
+	* Open menu command working
+	
+	* XMLTree.Flush, _Presenter.create, _Presenter.setData methods
+
 2007-06-07  Roman Rolinsky  <rolinsky@hartman.femagsoft.com>
 
 	* started to implement MVP pattern classes
