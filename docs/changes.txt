@@ -173,6 +173,7 @@ wxMSW:
 - Correct problem with page setup dialog when using landscape mode
 - Added msw.font.no-proof-quality system option, see manual for description
 - Fix appearance of notebook with non-top tabs under Windows Vista
+- Fixed bug with symbol resolving in wxStackWalker (Axel Gembe)
 
 wxGTK:
 
