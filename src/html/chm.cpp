@@ -825,13 +825,11 @@ wxFSFile* wxChmFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs),
     // Open a stream to read the content of the chm-file
     s = new wxChmInputStream(leftFilename.GetFullPath(), right, true);
 
-    wxString mime = GetMimeTypeFromExt(location);
-
     if ( s )
     {
         return new wxFSFile(s,
                             left + _T("#chm:") + right,
-                            mime,
+                            wxEmptyString,
                             GetAnchor(location),
                             wxDateTime(wxFileModificationTime(left)));
     }

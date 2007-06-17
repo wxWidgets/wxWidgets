@@ -122,7 +122,7 @@ wxFSFile* wxMemoryFSHandlerBase::OpenFile(wxFileSystem& WXUNUSED(fs), const wxSt
         if (obj == NULL)  return NULL;
         else return new wxFSFile(new wxMemoryInputStream(obj -> m_Data, obj -> m_Len),
                             location,
-                            GetMimeTypeFromExt(location),
+                            wxEmptyString,
                             GetAnchor(location)
 #if wxUSE_DATETIME
                             , obj -> m_Time

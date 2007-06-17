@@ -29,14 +29,29 @@
 #include "wx/tokenzr.h"
 #include "wx/private/fileback.h"
 
+// ----------------------------------------------------------------------------
+// wxFSFile
+// ----------------------------------------------------------------------------
 
-//--------------------------------------------------------------------------------
+const wxString& wxFSFile::GetMimeType() const
+{
+    if ( m_MimeType.empty() && !m_Location.empty() )
+    {
+        wxConstCast(this, wxFSFile)->m_MimeType =
+            wxFileSystemHandler::GetMimeTypeFromExt(m_Location);
+    }
+
+    return m_MimeType;
+}
+
+// ----------------------------------------------------------------------------
 // wxFileSystemHandler
-//--------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 
 IMPLEMENT_ABSTRACT_CLASS(wxFileSystemHandler, wxObject)
 
 
+/* static */
 wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
 {
     wxString ext, mime;
@@ -123,7 +138,8 @@ wxString wxFileSystemHandler::GetMimeTypeFromExt(const wxString& location)
 
 
 
-wxString wxFileSystemHandler::GetProtocol(const wxString& location) const
+/* static */
+wxString wxFileSystemHandler::GetProtocol(const wxString& location)
 {
     wxString s = wxEmptyString;
     int i, l = location.length();
@@ -138,7 +154,8 @@ wxString wxFileSystemHandler::GetProtocol(const wxString& location) const
 }
 
 
-wxString wxFileSystemHandler::GetLeftLocation(const wxString& location) const
+/* static */
+wxString wxFileSystemHandler::GetLeftLocation(const wxString& location)
 {
     int i;
     bool fnd = false;
@@ -150,7 +167,8 @@ wxString wxFileSystemHandler::GetLeftLocation(const wxString& location) const
     return wxEmptyString;
 }
 
-wxString wxFileSystemHandler::GetRightLocation(const wxString& location) const
+/* static */
+wxString wxFileSystemHandler::GetRightLocation(const wxString& location)
 {
     int i, l = location.length();
     int l2 = l + 1;
@@ -166,7 +184,8 @@ wxString wxFileSystemHandler::GetRightLocation(const wxString& location) const
     else return location.Mid(i + 1, l2 - i - 2);
 }
 
-wxString wxFileSystemHandler::GetAnchor(const wxString& location) const
+/* static */
+wxString wxFileSystemHandler::GetAnchor(const wxString& location)
 {
     wxChar c;
     int l = location.length();
@@ -230,7 +249,7 @@ wxFSFile* wxLocalFSHandler::OpenFile(wxFileSystem& WXUNUSED(fs), const wxString&
 
     return new wxFSFile(is,
                         right,
-                        GetMimeTypeFromExt(location),
+                        wxEmptyString,
                         GetAnchor(location)
 #if wxUSE_DATETIME
                         ,wxDateTime(wxFileModificationTime(fullpath))

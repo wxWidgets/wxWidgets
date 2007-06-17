@@ -50,7 +50,7 @@ public:
     {
         m_Stream = stream;
         m_Location = loc;
-        m_MimeType = mimetype; m_MimeType.MakeLower();
+        m_MimeType = mimetype.Lower();
         m_Anchor = anchor;
 #if wxUSE_DATETIME
         m_Modif = modif;
@@ -78,7 +78,7 @@ public:
     }
 
     // returns file's mime type
-    const wxString& GetMimeType() const { return m_MimeType; }
+    const wxString& GetMimeType() const;
 
     // returns the original location (aka filename) of the file
     const wxString& GetLocation() const { return m_Location; }
@@ -132,28 +132,28 @@ public:
     virtual wxString FindFirst(const wxString& spec, int flags = 0);
     virtual wxString FindNext();
 
+    // Returns MIME type of the file - w/o need to open it
+    // (default behaviour is that it returns type based on extension)
+    static wxString GetMimeTypeFromExt(const wxString& location);
+
 protected:
     // returns protocol ("file", "http", "tar" etc.) The last (most right)
     // protocol is used:
     // {it returns "tar" for "file:subdir/archive.tar.gz#tar:/README.txt"}
-    wxString GetProtocol(const wxString& location) const;
+    static wxString GetProtocol(const wxString& location);
 
     // returns left part of address:
     // {it returns "file:subdir/archive.tar.gz" for "file:subdir/archive.tar.gz#tar:/README.txt"}
-    wxString GetLeftLocation(const wxString& location) const;
+    static wxString GetLeftLocation(const wxString& location);
 
     // returns anchor part of address:
     // {it returns "anchor" for "file:subdir/archive.tar.gz#tar:/README.txt#anchor"}
     // NOTE:  anchor is NOT a part of GetLeftLocation()'s return value
-    wxString GetAnchor(const wxString& location) const;
+    static wxString GetAnchor(const wxString& location);
 
     // returns right part of address:
     // {it returns "/README.txt" for "file:subdir/archive.tar.gz#tar:/README.txt"}
-    wxString GetRightLocation(const wxString& location) const;
-
-    // Returns MIME type of the file - w/o need to open it
-    // (default behaviour is that it returns type based on extension)
-    wxString GetMimeTypeFromExt(const wxString& location);
+    static wxString GetRightLocation(const wxString& location);
 
     DECLARE_ABSTRACT_CLASS(wxFileSystemHandler)
 };
