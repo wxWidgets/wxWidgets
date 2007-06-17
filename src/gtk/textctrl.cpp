@@ -1285,14 +1285,7 @@ bool wxTextCtrl::Enable( bool enable )
         return false;
     }
 
-    if ( IsMultiLine() )
-    {
-        SetEditable( enable );
-    }
-    else
-    {
-        gtk_widget_set_sensitive( m_text, enable );
-    }
+    gtk_widget_set_sensitive( m_text, enable );
 
     return true;
 }
