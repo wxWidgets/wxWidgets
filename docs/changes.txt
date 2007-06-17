@@ -95,6 +95,8 @@ All (GUI):
 
 - Added colour normalization to PNM image handler (Ray Johnston)
 - Fixed selecting part of word from right to left in wxHTML (Michael Hieke)
+- Selecting text in wxHTML with character precision was made easier, it's
+  enough to select half of a character (Michael Hieke)
 
 wxMSW:
 
