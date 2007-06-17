@@ -23,7 +23,7 @@ c.addStyles('wxDEFAULT_FRAME_STYLE', 'wxDEFAULT_DIALOG_STYLE', 'wxCAPTION',
             'wxNO_3D', 'wxTAB_TRAVERSAL')
 c.addExStyles('wxWS_EX_VALIDATE_RECURSIVELY', 'wxFRAME_EX_METAL')
 Manager.register(c)
-Manager.setMenu(c, None, 'Frame', 'Frame window', 10)
+Manager.setMenu(c, 'root', 'Frame', 'Frame window', 10)
 
 c = Component('wxStaticText', ['control','tool'],
               ['pos', 'size', 'label'], {'label': 'LABEL'})
