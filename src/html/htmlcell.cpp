@@ -386,6 +386,16 @@ void wxHtmlWordCell::Split(const wxDC& dc,
     wxPoint pt2 = (selTo == wxDefaultPosition) ?
                    wxPoint(m_Width, wxDefaultCoord) : selTo - GetAbsPos();
 
+    // if the selection is entirely within this cell, make sure pt1 < pt2 in
+    // order to make the rest of this function simpler:
+    if ( selFrom != wxDefaultPosition && selTo != wxDefaultPosition &&
+         selFrom.x > selTo.x )
+    {
+        wxPoint tmp = pt1;
+        pt1 = pt2;
+        pt2 = tmp;
+    }
+
     unsigned len = m_Word.length();
     unsigned i = 0;
     pos1 = 0;
