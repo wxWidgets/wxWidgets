@@ -94,6 +94,7 @@ Major new features in 2.8 release
 All (GUI):
 
 - Added colour normalization to PNM image handler (Ray Johnston)
+- Fixed selecting part of word from right to left in wxHTML (Michael Hieke)
 
 wxMSW:
 
