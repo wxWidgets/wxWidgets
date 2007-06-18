@@ -7,8 +7,10 @@ import testTopLevelWindow
 This file contains classes and methods for unit testing the API of wx.Frame.
         
 Methods yet to test:
-
-
+__init__, Command, Create, CreateStatusBar, CreateToolBar, DoGiveHelp, DoMenuUpdates,
+GetClassDefaultAttributes, GetMenuBar, GetStatusBar, GetStatusBarPane, GetToolBar,
+PopStatusText, ProcessCommand, PushStatusText, SendSizeEvent, SetMenuBar, SetStatusBar,
+SetStatusBarPane, SetStatusText, SetStatusWidths, SetToolBar
 """
 
 class FrameTest(testTopLevelWindow.TopLevelWindowBase):
@@ -22,14 +24,20 @@ class FrameTest(testTopLevelWindow.TopLevelWindowBase):
         self.frame = wx.Frame(parent=None, id=wx.ID_ANY)
         self.testControl = wx.Frame(parent=self.frame, id=wx.ID_ANY)
     
-    # TODO: find out why these three tests fail in FrameTest
-    # but nowhere else.
-    def testCenter(self):
-        pass
-    def testRect(self):
-        pass
+    # Overridden tests:
+    # TODO: Why do these wx.Window tests fail on wx.Frame
+    def testCenterFails(self):
+        self.testControl.Center(wx.CENTER_ON_SCREEN)
+    
+    # it looks as though wx.Frame has a minimum size of 123,34.
     def testSize(self):
-        pass
+        self.testControl.SetSize(wx.Size(1,1))
+        self.assertEquals(wx.Size(123,34),self.testControl.GetSize())
+    
+    # and the same goes for GetRect
+    def testRect(self):
+        self.testControl.SetRect(wx.Rect(0,0,0,0))
+        self.assertEquals(wx.Rect(0,0,123,34),self.testControl.GetRect())
 
 
 def suite():

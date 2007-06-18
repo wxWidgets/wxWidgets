@@ -151,13 +151,12 @@ class WindowTest(unittest.TestCase):
         
     def testShownOnScreen(self):
         """IsShownOnScreen"""
-        self.testControl.Hide()
-        self.assert_(not self.testControl.IsShownOnScreen())
         self.testControl.Show()
         self.assert_(not self.testControl.IsShownOnScreen())
         self.frame.Show()
         self.assert_(self.testControl.IsShownOnScreen())
         self.frame.Hide()
+        self.assert_(not self.testControl.IsShownOnScreen())
     
     def testBackgroundColor(self):
         """SetBackgroundColour, GetBackgroundColour"""
@@ -209,11 +208,15 @@ class WindowTest(unittest.TestCase):
         self.testControl.Centre(wx.HORIZONTAL)
         self.testControl.Centre(wx.BOTH)
         self.testControl.Centre(wx.VERTICAL)
-        # must fail if window has no parent
-        self.assertRaises(wx.PyAssertionError, self.testControl.Center, wx.CENTER_ON_SCREEN)
         # This, however, functions properly (it has a parent)
         for child in self.children:
             child.Center(wx.CENTER_ON_SCREEN)
+    
+    def testCenterFails(self):
+        """
+        Can't center on screen without a parent.
+        Or maybe there's some other criterion I'm missing..."""
+        self.assertRaises(wx.PyAssertionError, self.testControl.Center, wx.CENTER_ON_SCREEN)
     
     def testFreezeThaw(self):
         """Freeze, Thaw, IsFrozen"""
