@@ -29,6 +29,7 @@
 #include "wx/wfstream.h"
 #include "wx/utils.h"
 #include "wx/hashset.h"
+#include "wx/mimetype.h"
 
 WX_DECLARE_HASH_SET(wxString, wxStringHash, wxStringEqual, StringSet);
 
@@ -613,6 +614,14 @@ _T("#include <wx/filesys.h>\n")
 _T("#include <wx/fs_mem.h>\n")
 _T("#include <wx/xrc/xmlres.h>\n")
 _T("#include <wx/xrc/xh_all.h>\n")
+_T("\n")
+_T("#if wxCHECK_VERSION(2,8,5) && wxABI_VERSION >= 20805\n")
+_T("    #define XRC_ADD_FILE(name, data, size, mime) \\\n")
+_T("        wxMemoryFSHandler::AddFileWithMimeType(name, data, size, mime)\n")
+_T("#else\n")
+_T("    #define XRC_ADD_FILE(name, data, size, mime) \\\n")
+_T("        wxMemoryFSHandler::AddFile(name, data, size)\n")
+_T("#endif\n")
 _T("\n"));
 
     for (i = 0; i < flist.GetCount(); i++)
@@ -637,8 +646,21 @@ _T("\n"));
     for (i = 0; i < flist.GetCount(); i++)
     {
         wxString s;
-        s.Printf(_T("    wxMemoryFSHandler::AddFile(wxT(\"XRC_resource/") + flist[i] +
-                 _T("\"), xml_res_file_%i, xml_res_size_%i);\n"), i, i);
+
+        wxString mime;
+        wxString ext = wxFileName(flist[i]).GetExt();
+        if ( ext.Lower() == _T("xrc") )
+            mime = _T("text/xml");
+        else
+        {
+            wxFileType *ft = wxTheMimeTypesManager->GetFileTypeFromExtension(ext);
+            if ( ft )
+                ft->GetMimeType(&mime);
+        }
+
+        s.Printf(_T("    XRC_ADD_FILE(wxT(\"XRC_resource/") + flist[i] +
+                 _T("\"), xml_res_file_%i, xml_res_size_%i, _T(\"%s\"));\n"),
+                 i, i, mime.c_str());
         file.Write(s);
     }
 

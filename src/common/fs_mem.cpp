@@ -34,19 +34,21 @@ class MemFSHashObj : public wxObject
 {
     public:
 
-        MemFSHashObj(const void *data, size_t len)
+        MemFSHashObj(const void *data, size_t len, const wxString& mime)
         {
             m_Data = new char[len];
             memcpy(m_Data, data, len);
             m_Len = len;
+            m_MimeType = mime;
             InitTime();
         }
 
-        MemFSHashObj(const wxMemoryOutputStream& stream)
+        MemFSHashObj(const wxMemoryOutputStream& stream, const wxString& mime)
         {
             m_Len = stream.GetSize();
             m_Data = new char[m_Len];
             stream.CopyTo(m_Data, m_Len);
+            m_MimeType = mime;
             InitTime();
         }
 
@@ -57,6 +59,7 @@ class MemFSHashObj : public wxObject
 
         char *m_Data;
         size_t m_Len;
+        wxString m_MimeType;
 #if wxUSE_DATETIME
         wxDateTime m_Time;
 #endif // wxUSE_DATETIME
@@ -122,7 +125,7 @@ wxFSFile* wxMemoryFSHandlerBase::OpenFile(wxFileSystem& WXUNUSED(fs), const wxSt
         if (obj == NULL)  return NULL;
         else return new wxFSFile(new wxMemoryInputStream(obj -> m_Data, obj -> m_Len),
                             location,
-                            wxEmptyString,
+                            obj->m_MimeType,
                             GetAnchor(location)
 #if wxUSE_DATETIME
                             , obj -> m_Time
@@ -171,16 +174,39 @@ bool wxMemoryFSHandlerBase::CheckHash(const wxString& filename)
 }
 
 
-/*static*/ void wxMemoryFSHandlerBase::AddFile(const wxString& filename, const wxString& textdata)
+/*static*/
+void wxMemoryFSHandlerBase::AddFileWithMimeType(const wxString& filename,
+                                                const wxString& textdata,
+                                                const wxString& mimetype)
 {
-    AddFile(filename, (const void*) textdata.mb_str(), textdata.length());
+    AddFileWithMimeType(filename,
+                        (const void*) textdata.mb_str(), textdata.length(),
+                        mimetype);
 }
 
 
-/*static*/ void wxMemoryFSHandlerBase::AddFile(const wxString& filename, const void *binarydata, size_t size)
+/*static*/
+void wxMemoryFSHandlerBase::AddFileWithMimeType(const wxString& filename,
+                                                const void *binarydata, size_t size,
+                                                const wxString& mimetype)
 {
     if (!CheckHash(filename)) return;
-    m_Hash -> Put(filename, new MemFSHashObj(binarydata, size));
+    m_Hash -> Put(filename, new MemFSHashObj(binarydata, size, mimetype));
+}
+
+/*static*/
+void wxMemoryFSHandlerBase::AddFile(const wxString& filename,
+                                    const wxString& textdata)
+{
+    AddFileWithMimeType(filename, textdata, wxEmptyString);
+}
+
+
+/*static*/
+void wxMemoryFSHandlerBase::AddFile(const wxString& filename,
+                                    const void *binarydata, size_t size)
+{
+    AddFileWithMimeType(filename, binarydata, size, wxEmptyString);
 }
 
 
@@ -213,7 +239,17 @@ wxMemoryFSHandler::AddFile(const wxString& filename,
 
     wxMemoryOutputStream mems;
     if (image.Ok() && image.SaveFile(mems, (int)type))
-        m_Hash -> Put(filename, new MemFSHashObj(mems));
+    {
+        m_Hash->Put
+                (
+                    filename,
+                    new MemFSHashObj
+                        (
+                            mems,
+                            wxImage::FindHandler(type)->GetMimeType()
+                        )
+                );
+    }
     else
     {
         wxString s;
