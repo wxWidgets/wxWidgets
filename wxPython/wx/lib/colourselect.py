@@ -140,10 +140,10 @@ class ColourSelect(wx.BitmapButton):
 
     def SetBitmap(self, bmp):
         self.SetBitmapLabel(bmp)
-        self.SetBitmapSelected(bmp)
-        self.SetBitmapDisabled(bmp)
-        self.SetBitmapFocus(bmp)
-        self.SetBitmapSelected(bmp)
+        #self.SetBitmapSelected(bmp)
+        #self.SetBitmapDisabled(bmp)
+        #self.SetBitmapFocus(bmp)
+        #self.SetBitmapSelected(bmp)
         self.Refresh()
         
 
