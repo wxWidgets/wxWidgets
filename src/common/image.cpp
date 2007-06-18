@@ -675,13 +675,13 @@ wxImage wxImage::ResampleBicubic(int width, int height) const
     for ( int dsty = 0; dsty < height; dsty++ )
     {
         // We need to calculate the source pixel to interpolate from - Y-axis
-        double srcpixy = dsty * M_IMGDATA->m_height / height;
+        double srcpixy = double(dsty * M_IMGDATA->m_height) / height;
         double dy = srcpixy - (int)srcpixy;
 
         for ( int dstx = 0; dstx < width; dstx++ )
         {
             // X-axis of pixel to interpolate from
-            double srcpixx = dstx * M_IMGDATA->m_width / width;
+            double srcpixx = double(dstx * M_IMGDATA->m_width) / width;
             double dx = srcpixx - (int)srcpixx;
 
             // Sums for each color channel
