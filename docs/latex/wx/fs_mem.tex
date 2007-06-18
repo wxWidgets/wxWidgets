@@ -78,9 +78,9 @@ Constructor.
 
 \func{static void}{AddFile}{\param{const wxString\& }{filename}, \param{const wxBitmap\& }{bitmap}, \param{long }{type}}
 
-\func{static void}{AddFile}{\param{const wxString\& }{filename}, \param{const wxString\& }{textdata}}
+\func{static void}{AddFile}{\param{const wxString\& }{filename}, \param{const wxString\& }{textdata}, \param{const wxString\& }{mimetype}}
 
-\func{static void}{AddFile}{\param{const wxString\& }{filename}, \param{const void* }{binarydata}, \param{size\_t }{size}}
+\func{static void}{AddFile}{\param{const wxString\& }{filename}, \param{const void* }{binarydata}, \param{size\_t }{size}, \param{const wxString\& }{mimetype}}
 
 Add file to list of files stored in memory. Stored 
 data (bitmap, text or raw data)
@@ -91,6 +91,8 @@ The \arg{type} argument is one of {\tt wxBITMAP\_TYPE\_XXX} constants.
 Note that you must use a \arg{type} value (aka image format)
 that wxWidgets can save (e.g. JPG, PNG, see \helpref{wxImage
 documentation}{wximage})!
+
+Versions that take \arg{mimetype} argument are available since version 2.8.5.
 
 
 \membersection{wxMemoryFSHandler::RemoveFile}\label{wxmemoryfshandlerremovefile}
