@@ -560,25 +560,6 @@ int wxCRT_VsnprintfW(wchar_t *str, size_t size, const wchar_t *format, va_list a
 }
 #endif // !wxCRT_VsnprintfW
 
-// FIXME-UTF8: we only implement widechar version of vsnprintf() in wxprint.cpp,
-//             so this one has to convert the data for now
-#ifndef wxCRT_VsnprintfA
-int wxCRT_VsnprintfA(char *buf, size_t len, const char *format, va_list argptr)
-{
-    wxWCharBuffer wbuf(len);
-    int rt = wxCRT_VsnprintfW(wbuf.data(), len,
-                              (const wchar_t*)wxConvLibc.cMB2WC(format),
-                              argptr);
-    if ( rt < 0 || rt >= (int)len )
-        return rt;
-
-    if ( wxConvLibc.FromWChar(buf, len, wbuf) == wxCONV_FAILED )
-        return -1;
-
-    return rt;
-}
-#endif // !wxCRT_VsnprintfA
-
 #ifndef wxCRT_VsprintfW
 int wxCRT_VsprintfW( wchar_t *str, const wchar_t *format, va_list argptr )
 {
