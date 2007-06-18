@@ -254,6 +254,7 @@ const wxClassInfo* wxMediaCtrl::NextBackend(wxClassInfo::const_iterator* it)
         if ( classInfo->IsKindOf(CLASSINFO(wxMediaBackend)) &&
              classInfo != CLASSINFO(wxMediaBackend) )
         {
+            ++(*it);
             return classInfo;
         }
     }
