@@ -50,10 +50,10 @@ public:
 // #endif
 
     /// Can we save using this handler?
-    virtual bool CanSave() const { return true; }
+    virtual bool CanSave() const;
 
     /// Can we load using this handler?
-    virtual bool CanLoad() const { return true; }
+    virtual bool CanLoad() const;
 
 
 //     bool HasParam(wxXmlNode* node, const wxString& param);
