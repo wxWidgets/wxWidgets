@@ -30,6 +30,11 @@ Python file-like object can be passed where a wx.OutputStream is
 expected and the data will be written to the file object
 appropriately.
 
+Added some patches from Billy B. that improve the pySketch sample.
+
+Added patch from Chriss Mellon that gives PyShell a custom context
+menu that is better integrated with the shell environment.
+
 
 
 
