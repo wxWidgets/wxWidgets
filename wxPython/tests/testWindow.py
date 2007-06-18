@@ -44,7 +44,7 @@ GetVirtualSizeTuple, GetWindowBorderSize, GetWindowStyle, GetWindowStyleFlag, Ge
 HasCapture, HasFlag, HasMultiplePages, HasScrollbar, HasTransparentBackground, HitTest, 
 HitTestXY, InheritAttributes, InheritsBackgroundColour, InitDialog, InvalidateBestSize, 
 IsBeingDeleted, IsDoubleBuffered, IsExposed, IsExposedPoint, IsExposedRect, IsRetained, 
-IsShownOnScreen, IsTopLevel, Layout, LineDown, LineUp, Lower, MakeModal, 
+Layout, LineDown, LineUp, Lower, MakeModal, 
 MoveAfterInTabOrder, MoveBeforeInTabOrder, Navigate, NewControlId, NextControlId, 
 PageDown, PageUp, PopEventHandler, PopupMenu, PopupMenuXY, PostCreate, PrepareDC, PrevControlId, 
 PushEventHandler, Raise, Refresh, RefreshRect, RegisterHotKey, ReleaseMouse, RemoveChild, 
@@ -148,6 +148,16 @@ class WindowTest(unittest.TestCase):
         self.assert_(not self.testControl.Show())
         self.assert_(self.testControl.Hide())
         self.assert_(not self.testControl.Hide())
+        
+    def testShownOnScreen(self):
+        """IsShownOnScreen"""
+        self.testControl.Hide()
+        self.assert_(not self.testControl.IsShownOnScreen())
+        self.testControl.Show()
+        self.assert_(not self.testControl.IsShownOnScreen())
+        self.frame.Show()
+        self.assert_(self.testControl.IsShownOnScreen())
+        self.frame.Hide()
     
     def testBackgroundColor(self):
         """SetBackgroundColour, GetBackgroundColour"""
@@ -370,6 +380,10 @@ class WindowTest(unittest.TestCase):
         txt = "Here is some help text!"
         self.testControl.SetHelpText(txt)
         #self.assertEquals(txt, self.testControl.GetHelpText())
+    
+    def testTopLevel(self):
+        """IsTopLevel"""
+        self.assert_(not self.testControl.IsTopLevel())
         
 
 def suite():

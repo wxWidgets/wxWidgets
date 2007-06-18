@@ -19,6 +19,7 @@ import testButton
 import testColor
 import testControl
 import testFont
+import testFrame
 import testItemContainer
 import testListBox
 import testPoint
@@ -26,11 +27,12 @@ import testRect
 import testSize
 import testSizer
 import testTextCtrl
+import testTopLevelWindow
 import testWindow
 
-modules = (testButton, testColor, testControl, testFont, testItemContainer,
+modules = (testButton, testColor, testControl, testFont, testFrame, testItemContainer,
             testListBox, testPoint, testRect, testSize, testSizer, testTextCtrl,
-            testWindow)
+            testTopLevelWindow, testWindow)
 
 alltests = unittest.TestSuite([mod.suite() for mod in modules])
 maxstr = max(( mod.__name__ for mod in modules ))
