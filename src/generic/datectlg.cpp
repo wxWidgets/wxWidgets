@@ -199,10 +199,10 @@ public:
         cev.SetEventObject(datePicker);
         cev.SetId(datePicker->GetId());
         cev.SetDate(dt);
-        GetParent()->GetEventHandler()->ProcessEvent(cev);
+        datePicker->GetEventHandler()->ProcessEvent(cev);
 
         wxDateEvent event(datePicker, dt, wxEVT_DATE_CHANGED);
-        datePicker->GetParent()->GetEventHandler()->ProcessEvent(event);
+        datePicker->GetEventHandler()->ProcessEvent(event);
     }
 
 private:
