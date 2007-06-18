@@ -428,7 +428,7 @@ au_check_word( GtkTextIter *s, GtkTextIter *e )
     gtk_text_iter_backward_find_char( &end, pred_nonpunct_or_slash, NULL, &start );
     gtk_text_iter_forward_char(&end);
 
-    gchar* text = gtk_text_iter_get_text( &start, &end );
+    wxGtkString text(gtk_text_iter_get_text( &start, &end ));
     size_t len = strlen(text), prefix_len;
     size_t n;
 
