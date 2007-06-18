@@ -390,6 +390,10 @@ struct WXDLLIMPEXP_BASE wxStringIteratorNode
     wxStringImpl::const_iterator *m_citer;
     wxStringImpl::iterator *m_iter;
     wxStringIteratorNode *m_prev, *m_next;
+
+    // the node belongs to a particular iterator instance, it's not copied
+    // when a copy of the iterator is made
+    DECLARE_NO_COPY_CLASS(wxStringIteratorNode)
 };
 #endif // wxUSE_UNICODE_UTF8
 
@@ -663,6 +667,8 @@ public:
   public:
       iterator(const iterator& i)
           : m_cur(i.m_cur), m_node(i.str(), &m_cur) {}
+      iterator& operator=(const iterator& i)
+        { m_cur = i.m_cur; return *this; }
 
       reference operator*()
         { return wxUniCharRef::CreateForString(m_node, m_cur); }
@@ -698,6 +704,11 @@ public:
           : m_cur(i.m_cur), m_node(i.str(), &m_cur) {}
       const_iterator(const iterator& i)
           : m_cur(i.m_cur), m_node(i.str(), &m_cur) {}
+
+      const_iterator& operator=(const const_iterator& i)
+        { m_cur = i.m_cur; return *this; }
+      const_iterator& operator=(const iterator& i)
+        { m_cur = i.m_cur; return *this; }
 
       reference operator*() const
         { return wxStringOperations::DecodeChar(m_cur); }
@@ -2575,6 +2586,10 @@ private:
   {
       wxStringIteratorNodeHead() : ptr(NULL) {}
       wxStringIteratorNode *ptr;
+
+      // copying is disallowed as it would result in more than one pointer into
+      // the same linked list
+      DECLARE_NO_COPY_CLASS(wxStringIteratorNodeHead)
   };
 
   wxStringIteratorNodeHead m_iterators;
