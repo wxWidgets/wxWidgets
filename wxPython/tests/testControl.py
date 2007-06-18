@@ -10,7 +10,7 @@ as well as a base class for testing subclasses of wx.ControlWithItems (and
 a few tests for wx.ControlWithItems itself).
 
 Methods yet to test for wx.Control:
-__init__, Command, Create, GetAlignment, GetLabelText
+__init__, Command, Create, GetAlignment
 """
 
 class ControlTest(testWindow.WindowTest):
@@ -42,22 +42,24 @@ class ControlTest(testWindow.WindowTest):
         self.assert_(attrs.colBg.IsOk())
         self.assert_(attrs.colFg.IsOk())
         self.assert_(attrs.font.IsOk())
+    
+    # NOTE: only makes sense when called in ControlTest.
+    #   otherwise the results are padded with meaningless tests.
+    #   how to generalize this for inheritance?
+    def testLabelText(self):
+        """GetLabelText"""
+        name = 'Name of Control'
+        ctrl = wx.Control(parent=self.frame, name=name)
+        self.assertEquals(name, ctrl.GetLabelText())
 
 # -----------------------------------------------------------
 
 class ControlWithItemsTest(unittest.TestCase):
-    #####################
-    ## Fixture Methods ##
-    #####################
     def setUp(self):
         self.app = wx.PySimpleApp()
     
     def tearDown(self):
         self.app.Destroy()
-        
-    ##################
-    ## Test Methods ##
-    ##################
     
     def testConstructorFails(self):
         self.assertRaises(AttributeError, wx.ControlWithItems)
