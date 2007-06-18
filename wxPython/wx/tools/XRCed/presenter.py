@@ -17,6 +17,7 @@ class _Presenter:
         self.setModified(False)
         view.frame.Clear()
         view.tree.Clear()
+        self.panels = []
 
     def getPath(self):
         return Model.path
@@ -29,6 +30,7 @@ class _Presenter:
         Model.saveXML(path)
 
     def setModified(self, state=True):
+        '''set global modified state.'''
         self.modified = state
         name = os.path.basename(Model.path)
         if not name: name = 'UNTITLED'
@@ -42,12 +44,13 @@ class _Presenter:
         '''Set data and view for current tree item.'''
         if item == view.tree.root:
             print 'NYI'
+            self.panels = []
         else:
             node = view.tree.GetPyData(item)
             className = node.getAttribute('class')
             comp = Manager.components[className]
             print comp
-            view.panel.SetData(comp, node)
+            self.panels = view.panel.SetData(comp, node)
 
     def create(self, comp):
         # Add dom node
@@ -60,6 +63,25 @@ class _Presenter:
         # Notify Presenter
         self.setModified()
 
+    def update(self):
+        '''update DOM with new attribute values'''
+        for panel in self.panels:
+            # Replace node contents except object children
+            for n in panel.node.childNodes[:]:
+                if not is_object(n):
+                    panel.node.removeChild(n)
+                    n.unlink()
+        print view.panel.controls
+        for a,w in view.panel.controls.items():
+            value = w.GetValue()
+            if not value: continue
+            print value
+            elem = Model.dom.createElement(a)
+            text = Model.dom.createTextNode(w.GetValue())
+            print a,w.GetValue()
+            elem.appendChild(text)
+            view.panel.node.appendChild(elem)
+            view.panel.node.appendChild(Model.dom.createTextNode('\n'))
 
 # Singleton class
 Presenter = _Presenter()

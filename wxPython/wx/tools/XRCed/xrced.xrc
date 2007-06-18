@@ -713,4 +713,23 @@
       </object>
     </object>
   </object>
+  <object class="wxPanel" name="PANEL_ATTRIBUTES">
+    <object class="wxBoxSizer">
+      <orient>wxVERTICAL</orient>
+      <object class="sizeritem">
+        <object class="wxStaticBoxSizer">
+          <label>XML ID</label>
+          <orient>wxVERTICAL</orient>
+          <object class="sizeritem">
+            <object class="wxTextCtrl" name="TEXT_XRCID">
+              <size>100,-1d</size>
+            </object>
+          </object>
+        </object>
+      </object>
+      <object class="sizeritem">
+        <object class="wxNotebook" name="NOTEBOOK"/>
+      </object>
+    </object>
+  </object>
 </resource>

@@ -67,7 +67,7 @@ class _Model:
         domCopy = MyDocument()
         mainNode = domCopy.appendChild(self.mainNode.cloneNode(True))
         # Remove first child (testElem)
-        testElem = mainNode.firstChild
+        testElem = mainNode.lastChild
         mainNode.removeChild(testElem)
         testElem.unlink()
         self.indent(mainNode)

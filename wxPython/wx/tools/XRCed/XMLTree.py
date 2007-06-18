@@ -4,24 +4,11 @@
 # Created:      31.05.2007
 # RCS-ID:       $Id$
 
-from xml.dom import minidom
+from globals import *
 from XMLTreeMenu import *
 from model import Model
 from presenter import Presenter
 import images
-
-# Test for object elements (!!! move somewhere?)
-def is_object(node):
-    return node.nodeType == minidom.Node.ELEMENT_NODE and \
-           node.tagName in ['object', 'object_ref'] or \
-           node.nodeType == minidom.Node.COMMENT_NODE
-
-# Test for object elements (!!! move somewhere?)
-def is_object(node):
-    return node.nodeType == minidom.Node.ELEMENT_NODE and \
-           node.tagName in ['object', 'object_ref'] or \
-           node.nodeType == minidom.Node.COMMENT_NODE
-
 
 class XMLTree(wx.TreeCtrl):
     def __init__(self, parent):
@@ -71,7 +58,9 @@ class XMLTree(wx.TreeCtrl):
         menu.Destroy()
 
     def OnSelChanged(self, evt):
-        if evt.GetOldItem(): print 'old:',self.GetItemText(evt.GetOldItem())
+        if evt.GetOldItem(): 
+            print 'old:',self.GetItemText(evt.GetOldItem())
+            Presenter.update()
         if evt.GetItem(): print 'new:',self.GetItemText(evt.GetItem())
         # Tell presenter to update current data and view
         Presenter.setData(evt.GetItem())

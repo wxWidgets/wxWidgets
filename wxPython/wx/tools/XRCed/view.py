@@ -22,7 +22,7 @@ class TaskBarIcon(wx.TaskBarIcon):
 
 class Frame(wx.Frame):
     def __init__(self):
-        wx.Frame.__init__(self, None, -1, '')
+        wx.Frame.__init__(self, None, -1, '', size=(600,400))
         global frame
         frame = self
         bar = self.CreateStatusBar(2)

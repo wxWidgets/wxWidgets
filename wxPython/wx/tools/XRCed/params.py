@@ -274,9 +274,12 @@ class ParamFont(PPanel):
         return self.value
     def SetValue(self, value):
         self.freeze = True              # disable other handlers
-        if not value: value = self._defaultValue()
+#        if not value: value = self._defaultValue()
         self.value = value
-        self.text.SetValue(str(value))  # update text ctrl
+        if value:
+            self.text.SetValue(str(value))
+        else:
+            self.text.SetValue('')
         self.freeze = False
     def OnButtonSelect(self, evt):
         if self.textModified:           # text has newer value
@@ -285,6 +288,7 @@ class ParamFont(PPanel):
             except SyntaxError:
                 wx.LogError('Syntax error in parameter value: ' + self.GetName())
                 self.value = self._defaultValue()
+        if not self.value: self.value = self._defaultValue()
         # Make initial font
         # Default values
         size = g.sysFont().GetPointSize()
@@ -762,6 +766,7 @@ class RadioBox(PPanel):
         self.freeze = False
     def OnRadioChoice(self, evt):
         if self.freeze: return
+        print evt.GetSelection()
         if evt.GetSelection():
             self.value = evt.GetEventObject().GetName()
             self.SetModified()
@@ -769,8 +774,8 @@ class RadioBox(PPanel):
         return self.value
 
 class ParamBool(RadioBox):
-    values = {'yes': '1', 'no': '0'}
-    seulav = {'1': 'yes', '0': 'no'}
+    values = {'yes': '1', 'no': '0', 'default': ''}
+    seulav = {'1': 'yes', '0': 'no', '': 'default'}
     def __init__(self, parent, name):
         RadioBox.__init__(self, parent, -1, choices=self.values.keys(), name=name)
     def GetValue(self):
@@ -780,8 +785,8 @@ class ParamBool(RadioBox):
         self.SetStringSelection(self.seulav[value])
 
 class ParamOrient(RadioBox):
-    values = {'horizontal': 'wxHORIZONTAL', 'vertical': 'wxVERTICAL'}
-    seulav = {'wxHORIZONTAL': 'horizontal', 'wxVERTICAL': 'vertical'}
+    values = {'horizontal': 'wxHORIZONTAL', 'vertical': 'wxVERTICAL', 'default': ''}
+    seulav = {'wxHORIZONTAL': 'horizontal', 'wxVERTICAL': 'vertical', '':'default'}
     def __init__(self, parent, name):
         RadioBox.__init__(self, parent, -1, choices=self.values.keys(), name=name)
     def GetValue(self):
@@ -931,7 +936,7 @@ paramDict = {
     'border': ParamUnit, 'cols': ParamIntNN, 'rows': ParamIntNN,
     'vgap': ParamUnit, 'hgap': ParamUnit,
     'checkable': ParamBool, 'checked': ParamBool, 'radio': ParamBool,
-    'accel': ParamAccel,
+    'accel': ParamAccel, 'centered': ParamBool,
     'label': ParamMultilineText, 'title': ParamText, 'value': ParamText,
     'content': ParamContent, 'selection': ParamIntNN,
     'min': ParamInt, 'max': ParamInt,

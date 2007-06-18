@@ -80,3 +80,10 @@ class MyDataObject(wx.PyDataObjectSimple):
     def SetData(self, data):
         self.data = data
         return True
+
+# Test for object elements (!!! move somewhere?)
+def is_object(node):
+    return node.nodeType == node.ELEMENT_NODE and \
+           node.tagName in ['object', 'object_ref'] or \
+           node.nodeType == node.COMMENT_NODE
+

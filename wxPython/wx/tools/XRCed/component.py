@@ -19,6 +19,14 @@ parentChildGroups = {
     'menu': ['menu', 'menu_item','separator']
 }
 
+# Some helper DOM functions
+def get_node_text(node):
+    '''get collected element texts'''
+    t = ''
+    for n in node.childNodes:
+        if n.nodeType == node.TEXT_NODE:
+            t += n.data
+    return t
 
 class Component(object):
     '''base component class'''
@@ -43,8 +51,11 @@ class Component(object):
     def addExStyles(self, *styles):
         self.exStyles.extend(styles)
 
-    def setData(self, node):
-        self.node = node
+    def getValue(self, node, attr):
+        for n in node.childNodes:
+            if n.nodeType == node.ELEMENT_NODE and n.tagName == attr:
+                return get_node_text(n)
+        return ''
 
     # Order components having same index by group and name
     def __cmp__(self, other):
