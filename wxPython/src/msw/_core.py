@@ -2920,6 +2920,22 @@ class Image(Object):
         """
         return _core_.Image_SaveMimeFile(*args, **kwargs)
 
+    def SaveStream(*args, **kwargs):
+        """
+        SaveStream(self, wxOutputStream stream, int type) -> bool
+
+        Saves an image in the named file.
+        """
+        return _core_.Image_SaveStream(*args, **kwargs)
+
+    def SaveMimeStream(*args, **kwargs):
+        """
+        SaveMimeStream(self, wxOutputStream stream, String mimetype) -> bool
+
+        Saves an image in the named file.
+        """
+        return _core_.Image_SaveMimeStream(*args, **kwargs)
+
     def CanReadStream(*args, **kwargs):
         """
         CanReadStream(InputStream stream) -> bool

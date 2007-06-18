@@ -223,9 +223,9 @@ class Colour(_core.Object):
 
     def Get(*args, **kwargs):
         """
-        Get() -> (r, g, b)
+        Get(self, bool includeAlpha=False) -> (r,g,b) or (r,g,b,a)
 
-        Returns the RGB intensity values as a tuple.
+        Returns the RGB intensity values as a tuple, optionally the alpha value as well.
         """
         return _gdi_.Colour_Get(*args, **kwargs)
 
