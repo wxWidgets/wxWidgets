@@ -165,8 +165,8 @@ is returned if the pixel is invalid (on X, unallocated).", "");
     %extend {
         KeepGIL(Get);
         DocAStr(Get,
-                "Get() -> (r, g, b)",
-                "Returns the RGB intensity values as a tuple.", "");
+                "Get(self, bool includeAlpha=False) -> (r,g,b) or (r,g,b,a)",
+                "Returns the RGB intensity values as a tuple, optionally the alpha value as well.", "");
         PyObject* Get(bool includeAlpha=false) {
             PyObject* rv = PyTuple_New(includeAlpha ? 4 : 3);
             int red = -1;
