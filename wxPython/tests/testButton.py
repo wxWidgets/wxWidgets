@@ -78,10 +78,7 @@ class ButtonTest(testControl.ControlTest):
         # superclass setup
         super(ButtonTest, self).__init__(arg)
         # ButtonTest setup
-        
-    #####################
-    ## Fixture Methods ##
-    #####################
+
     def setUp(self):
         self.app = wx.PySimpleApp()
         self.frame = wx.Frame(parent=None, id=wx.ID_ANY)
@@ -90,10 +87,6 @@ class ButtonTest(testControl.ControlTest):
     def tearDown(self):
         self.frame.Destroy()
         self.app.Destroy()
-
-    ##################
-    ## Test Methods ##
-    ##################
     
     def testGetDefaultSize(self):
         """GetDefaultSize

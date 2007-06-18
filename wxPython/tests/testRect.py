@@ -61,18 +61,11 @@ def getMixedRectTuples():
 # -----------------------------------------------------------
 
 class RectTest(unittest.TestCase):
-    #####################
-    ## Fixture Methods ##
-    #####################
     def setUp(self):
         self.app = wx.PySimpleApp()
         
     def tearDown(self):
         self.app.Destroy()
-        
-    ##################
-    ## Test Methods ##
-    ##################
     
     def testGet(self):
         """__init__, Get"""
@@ -82,7 +75,6 @@ class RectTest(unittest.TestCase):
         rect = wx.Rect()
         self.assertEquals((0,0,0,0), rect.Get())
     
-
 
 def suite():
     suite = unittest.makeSuite(RectTest)

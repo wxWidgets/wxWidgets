@@ -18,10 +18,7 @@ class ControlTest(testWindow.WindowTest):
         # superclass setup
         super(ControlTest, self).__init__(arg)
         # ControlTest setup
-        
-    #####################
-    ## Fixture Methods ##
-    #####################
+
     def setUp(self):
         self.app = wx.PySimpleApp()
         self.frame = wx.Frame(parent=None, id=wx.ID_ANY)
@@ -30,10 +27,6 @@ class ControlTest(testWindow.WindowTest):
     def tearDown(self):
         self.frame.Destroy()
         self.app.Destroy()
-
-    ##################
-    ## Test Methods ##
-    ##################
     
     # TODO: affirm that this is expected behavior
     def testAllControlsNeedParents(self):

@@ -13,26 +13,18 @@ IsEmpty, Select, SetClientData, SetItems, SetSelection, SetString, SetStringSele
 """
 
 class ItemContainerTest(unittest.TestCase):
-    #####################
-    ## Fixture Methods ##
-    #####################
     def setUp(self):
         self.app = wx.PySimpleApp()
     
     def tearDown(self):
         self.app.Destroy()
-        
-    ##################
-    ## Test Methods ##
-    ##################
     
     def testConstructorFails(self):
         self.assertRaises(AttributeError, wx.ItemContainer)
+        
+# -----------------------------------------------------------
     
 class ItemContainerBase(unittest.TestCase):
-    #####################
-    ## Fixture Methods ##
-    #####################
     def setUp(self):
         self.app = wx.PySimpleApp()
         self.frame = wx.Frame(parent=None, id=wx.ID_ANY)
@@ -41,10 +33,6 @@ class ItemContainerBase(unittest.TestCase):
     def tearDown(self):
         self.app.Destroy()
         self.frame.Destroy()
-        
-    ##################
-    ## Test Methods ##
-    ##################
         
 
 def suite():

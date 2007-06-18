@@ -83,10 +83,7 @@ class WindowTest(unittest.TestCase):
         self.children = []
         self.children_ids = []
         self.children_names = []
-    
-    #####################
-    ## Fixture Methods ##
-    #####################
+
     def setUp(self):
         self.app = wx.PySimpleApp()
         self.frame = wx.Frame(parent=None, id=wx.ID_ANY)
@@ -99,10 +96,7 @@ class WindowTest(unittest.TestCase):
     def tearDown(self):
         self.frame.Destroy()
         self.app.Destroy()
-        
-    ##################
-    ## Test Methods ##
-    ##################
+
     def testWindowChildren(self):
         """GetParent
         Tests to make sure the window's children register as such"""

@@ -24,9 +24,6 @@ class TextCtrlTest(testControl.ControlTest):
         super(TextCtrlTest, self).__init__(arg)
         # TextCtrlTest setup
         
-    #####################
-    ## Fixture Methods ##
-    #####################
     def setUp(self):
         self.app = wx.PySimpleApp()
         self.frame = wx.Frame(parent=None, id=wx.ID_ANY)
@@ -35,10 +32,6 @@ class TextCtrlTest(testControl.ControlTest):
     def tearDown(self):
         self.app.Destroy()
         self.frame.Destroy()
-        
-    ##################
-    ## Test Methods ##
-    ##################
     
     def testClear(self):
         """Clear"""

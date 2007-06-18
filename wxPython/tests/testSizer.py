@@ -19,19 +19,11 @@ SetItemMinSize, SetMinSize, SetSizeHints, SetVirtualSizeHints, Show, ShowItems
 """
 
 class SizerTest(unittest.TestCase):
-
-    #####################
-    ## Fixture Methods ##
-    #####################
     def setUp(self):
         self.app = wx.PySimpleApp()
     
     def tearDown(self):
         self.app.Destroy()
-        
-    ##################
-    ## Test Methods ##
-    ##################
     
     def testConstructorFails(self):
         self.assertRaises(AttributeError, wx.Sizer)
@@ -39,11 +31,7 @@ class SizerTest(unittest.TestCase):
 # -----------------------------------------------------------
 
 class SizerBase(unittest.TestCase):
-    
     # to be overridden in derived classes
-    #####################
-    ## Fixture Methods ##
-    #####################
     def setUp(self):
         self.app = wx.PySimpleApp()
         self.frame = wx.Frame(parent=None, id=wx.ID_ANY)
@@ -52,10 +40,6 @@ class SizerBase(unittest.TestCase):
     def tearDown(self):
         self.app.Destroy()
         self.frame.Destroy()
-        
-    ##################
-    ## Test Methods ##
-    ##################
 
 
 def suite():

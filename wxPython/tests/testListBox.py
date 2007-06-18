@@ -15,9 +15,6 @@ SetItemFont, SetItemForegroundColour, SetSelection, SetStringSelection
 """
 
 class ListBoxTest(testControl.ControlWithItemsBase):
-    #####################
-    ## Fixture Methods ##
-    #####################
     def setUp(self):
         self.app = wx.PySimpleApp()
         self.frame = wx.Frame(parent=None, id=wx.ID_ANY)
@@ -26,11 +23,6 @@ class ListBoxTest(testControl.ControlWithItemsBase):
     def tearDown(self):
         self.app.Destroy()
         self.frame.Destroy()
-        
-    ##################
-    ## Test Methods ##
-    ##################
-    
         
 
 def suite():

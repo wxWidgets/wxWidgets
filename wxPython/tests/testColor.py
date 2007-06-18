@@ -40,18 +40,11 @@ BLUE = wx.Colour(0,0,255)
 # -----------------------------------------------------------
 
 class ColorTest(unittest.TestCase):
-    #####################
-    ## Fixture Methods ##
-    #####################
     def setUp(self):
         self.app = wx.PySimpleApp()
     
     def tearDown(self):
         self.app.Destroy()
-        
-    ##################
-    ## Test Methods ##
-    ##################
     
     def testColorColourAlias(self):
         self.assertEquals(wx.Color, wx.Colour)

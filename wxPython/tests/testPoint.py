@@ -66,18 +66,11 @@ TWO     = wx.Point(2,2)
 # -----------------------------------------------------------
 
 class PointTest(unittest.TestCase):
-    #####################
-    ## Fixture Methods ##
-    #####################
     def setUp(self):
         self.app = wx.PySimpleApp()
     
     def tearDown(self):
         self.app.Destroy()
-        
-    ##################
-    ## Test Methods ##
-    ##################
     
     def testConstructor(self):
         """__init__"""
@@ -86,7 +79,6 @@ class PointTest(unittest.TestCase):
             self.assertEquals((x,y), point.Get())
         point = wx.Point()
         self.assertEquals((0,0), point)
-            
         
     def testGetSet(self):
         """Set, Get"""
@@ -132,6 +124,7 @@ class PointTest(unittest.TestCase):
         self.assertEquals( ZERO-NEG_ONE, ONE )
         self.assertEquals( NEG_ONE-ZERO, NEG_ONE )
         self.assertEquals( ONE-ZERO, ONE )
+
 
 def suite():
     suite = unittest.makeSuite(PointTest)
