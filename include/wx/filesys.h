@@ -205,7 +205,8 @@ public:
     wxString FindNext();
 
     // find a file in a list of directories, returns false if not found
-    bool FindFileInPath(wxString *pStr, const wxChar *path, const wxChar *file);
+    bool FindFileInPath(wxString *pStr,
+                        const wxString& path, const wxString& file);
 
     // Adds FS handler.
     // In fact, this class is only front-end to the FS handlers :-)

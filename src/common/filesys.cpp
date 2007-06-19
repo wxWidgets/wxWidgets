@@ -518,16 +518,19 @@ wxString wxFileSystem::FindNext()
 }
 
 bool wxFileSystem::FindFileInPath(wxString *pStr,
-                                  const wxChar *path,
-                                  const wxChar *basename)
+                                  const wxString& path,
+                                  const wxString& basename)
 {
     // we assume that it's not empty
-    wxCHECK_MSG( !wxIsEmpty(basename), false,
+    wxCHECK_MSG( !basename.empty(), false,
                 _T("empty file name in wxFileSystem::FindFileInPath"));
 
+    wxString name;
     // skip path separator in the beginning of the file name if present
-    if ( wxIsPathSeparator(*basename) )
-       basename++;
+    if ( wxIsPathSeparator(basename[0u]) )
+        name = basename.substr(1);
+    else
+        name = basename;
 
     wxStringTokenizer tokenizer(path, wxPATH_SEP);
     while ( tokenizer.HasMoreTokens() )
@@ -535,7 +538,7 @@ bool wxFileSystem::FindFileInPath(wxString *pStr,
         wxString strFile = tokenizer.GetNextToken();
         if ( !wxEndsWithPathSeparator(strFile) )
             strFile += wxFILE_SEP_PATH;
-        strFile += basename;
+        strFile += name;
 
         wxFSFile *file = OpenFile(strFile);
         if ( file )
