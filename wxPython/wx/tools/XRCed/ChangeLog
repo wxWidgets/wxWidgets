@@ -1,3 +1,9 @@
+2007-06-19  Scroll  <scroll@localhost.localdomain>
+
+	* implemented SmartContainer; Unique AttributePanel class for all
+	attributes (main, window and implicit); added some core
+	components; added deleting (simple implementation)
+
 2007-06-17  Roman Rolinsky  <scroll@lem.lan>
 
 	* initial implementation of AttributePanel (former PropPage)

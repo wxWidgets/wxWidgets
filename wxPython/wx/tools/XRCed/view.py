@@ -68,8 +68,7 @@ class Frame(wx.Frame):
         menu.Append(wx.ID_CUT, 'Cut\tCtrl-X', 'Cut to the clipboard')
         menu.Append(wx.ID_COPY, '&Copy\tCtrl-C', 'Copy to the clipboard')
         menu.Append(wx.ID_PASTE, '&Paste\tCtrl-V', 'Paste from the clipboard')
-        self.ID_DELETE = wx.NewId()
-        menu.Append(self.ID_DELETE, '&Delete\tCtrl-D', 'Delete object')
+        menu.Append(wx.ID_DELETE, '&Delete\tCtrl-D', 'Delete object')
         menu.AppendSeparator()
         self.ID_LOCATE = wx.NewId()
         self.ID_TOOL_LOCATE = wx.NewId()
@@ -188,6 +187,8 @@ class Frame(wx.Frame):
 #        wx.EVT_KEY_UP(self, tools.OnKeyUp)
 #        wx.EVT_ICONIZE(self, self.OnIconize)
 
+        wx.EVT_MENU(self, wx.ID_DELETE, self.OnCutDelete)
+
         return
 
         # Edit
@@ -197,7 +198,6 @@ class Frame(wx.Frame):
         wx.EVT_MENU(self, wx.ID_COPY, self.OnCopy)
         wx.EVT_MENU(self, wx.ID_PASTE, self.OnPaste)
         wx.EVT_MENU(self, self.ID_TOOL_PASTE, self.OnPaste)
-        wx.EVT_MENU(self, self.ID_DELETE, self.OnCutDelete)
         wx.EVT_MENU(self, self.ID_LOCATE, self.OnLocate)
         wx.EVT_MENU(self, self.ID_TOOL_LOCATE, self.OnLocate)
         # View
@@ -226,7 +226,7 @@ class Frame(wx.Frame):
         wx.EVT_UPDATE_UI(self, self.ID_TOOL_PASTE, self.OnUpdateUI)
         wx.EVT_UPDATE_UI(self, wx.ID_UNDO, self.OnUpdateUI)
         wx.EVT_UPDATE_UI(self, wx.ID_REDO, self.OnUpdateUI)
-        wx.EVT_UPDATE_UI(self, self.ID_DELETE, self.OnUpdateUI)
+        wx.EVT_UPDATE_UI(self, wx.ID_DELETE, self.OnUpdateUI)
         wx.EVT_UPDATE_UI(self, self.ID_TEST, self.OnUpdateUI)
         wx.EVT_UPDATE_UI(self, self.ID_MOVEUP, self.OnUpdateUI)
         wx.EVT_UPDATE_UI(self, self.ID_MOVEDOWN, self.OnUpdateUI)
@@ -239,6 +239,9 @@ class Frame(wx.Frame):
         comp = Manager.findById(evt.GetId())
         print comp
         Presenter.create(comp)
+
+    def OnCutDelete(self, evt):
+        Presenter.delete()
 
     def OnNew(self, evt):
         if not self.AskSave(): return

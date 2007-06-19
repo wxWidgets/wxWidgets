@@ -18,6 +18,8 @@ class _Presenter:
         view.frame.Clear()
         view.tree.Clear()
         self.panels = []
+        self.comp = None                # component shown in panel
+        self.container = None           # current container (None if root)
 
     def getPath(self):
         return Model.path
@@ -44,20 +46,32 @@ class _Presenter:
         '''Set data and view for current tree item.'''
         if item == view.tree.root:
             print 'NYI'
+            self.comp = self.container = None
+            view.panel.Clear()
             self.panels = []
         else:
             node = view.tree.GetPyData(item)
             className = node.getAttribute('class')
-            comp = Manager.components[className]
-            print comp
-            self.panels = view.panel.SetData(comp, node)
+            self.comp = Manager.components[className]
+            print self.comp
+            parentItem = view.tree.GetItemParent(item)
+            parentNode = view.tree.GetPyData(parentItem)
+            if parentNode == Model.mainNode:
+                self.container = None
+            else:
+                parentClass = parentNode.getAttribute('class')
+                self.container = Manager.components[parentClass]
+            self.panels = view.panel.SetData(self.container, self.comp, node)
 
     def create(self, comp):
         # Add dom node
         node = Model.createObjectNode(comp.name)
         item = view.tree.GetSelection()
         parentNode = view.tree.GetPyData(item)
-        parentNode.appendChild(node)
+        if self.comp:
+            self.comp.appendChild(parentNode, node)
+        else:
+            Model.mainNode.appendChild(node)
         view.tree.AppendItem(item, comp.name, comp.imageId, data=wx.TreeItemData(node))
         view.tree.Expand(item)
         # Notify Presenter
@@ -65,23 +79,39 @@ class _Presenter:
 
     def update(self):
         '''update DOM with new attribute values'''
+        if self.comp and self.comp.hasName:
+            view.panel.node.setAttribute('name', view.panel.controlName.GetValue())
         for panel in self.panels:
             # Replace node contents except object children
             for n in panel.node.childNodes[:]:
                 if not is_object(n):
                     panel.node.removeChild(n)
                     n.unlink()
-        print view.panel.controls
-        for a,w in view.panel.controls.items():
-            value = w.GetValue()
-            if not value: continue
-            print value
-            elem = Model.dom.createElement(a)
-            text = Model.dom.createTextNode(w.GetValue())
-            print a,w.GetValue()
-            elem.appendChild(text)
-            view.panel.node.appendChild(elem)
-            view.panel.node.appendChild(Model.dom.createTextNode('\n'))
+        for panel in self.panels:
+            for a,w in panel.controls:
+                value = w.GetValue()
+                print a,value
+                if value: 
+                    elem = Model.dom.createElement(a)
+                    text = Model.dom.createTextNode(w.GetValue())
+                    elem.appendChild(text)
+                    panel.node.appendChild(elem)
+                    panel.node.appendChild(Model.dom.createTextNode('\n'))
+
+    def delete(self):
+        '''delete selected objects'''
+        item = view.tree.GetSelection()
+        parentItem = view.tree.GetItemParent(item)
+        parentNode = view.tree.GetPyData(parentItem)
+        for item in view.tree.GetSelections():
+            node = view.tree.GetPyData(item)
+            if parentItem == view.tree.root:
+                Model.mainNode.removeChild(node)
+            else:
+                self.container.removeChild(parentNode, node)
+            node.unlink()
+            view.tree.Delete(item)
+
 
 # Singleton class
 Presenter = _Presenter()

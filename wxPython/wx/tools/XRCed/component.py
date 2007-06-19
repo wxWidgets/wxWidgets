@@ -4,7 +4,9 @@
 # Created:      31.05.2007
 # RCS-ID:       $Id$
 
+from globals import *
 import wx,sys,bisect
+from model import Model
 
 # Group compatibility specifications. 
 # Key is the parent group, value is the list of child groups.
@@ -30,14 +32,15 @@ def get_node_text(node):
 
 class Component(object):
     '''base component class'''
+    # Common window attributes
+    windowAttributes = ['fg', 'bg', 'font', 'enabled', 
+                        'focused', 'hidden', 'tooltip', 'help']
+    hasName = True                      # most elements have XRC IDs
     def __init__(self, name, groups, attributes, defaults={}, **kargs):
         self.name = name
         self.groups = groups
         self.attributes = attributes
         self.defaults = defaults        # default values for some attributes
-        # Common window attributes
-        self.windowAttributes = ['fg', 'bg', 'font', 'enabled', 
-                                 'focused', 'hidden', 'tooltip', 'help']
         self.styles = []
         self.exStyles = []
         # Tree image
@@ -82,7 +85,7 @@ class Component(object):
         return component.groups == groups
 
 
-class ContainerComponent(Component):
+class Container(Component):
     '''base class for containers'''
     def canHaveChild(self, component):
         # Test exclusion of main group first
@@ -93,6 +96,62 @@ class ContainerComponent(Component):
                 return True
         return False
 
+    def requireImplicit(self, node):
+        '''if there are implicit nodes for this particular node'''
+        return False
+
+    def getTreeNode(self, node):
+        '''some containers may hide some internal elements'''
+        return node
+
+    def appendChild(self, parentNode, node):
+        '''some containers may insert additional elements'''
+        parentNode.appendChild(node)
+
+    def removeChild(self, parentNode, node):
+        '''some containers may remove additional elements'''
+        parentNode.removeChild(node)
+
+
+class SmartContainer(Container):
+    '''base class for containers with implicit nodes'''
+    def getTreeNode(self, node):
+        if node.getAttribute('class') == self.implicitClass:
+            for n in node.childNodes:
+                if is_object(n): return n
+        # Maybe some children are not implicit
+        return node
+
+    def appendChild(self, parentNode, node):
+        if self.requireImplicit(node):
+            elem = Model.createObjectNode(self.implicitClass)
+            elem.appendChild(node)
+            parentNode.appendChild(elem)
+        else:
+            parentNode.appendChild(node)
+
+    def removeChild(self, parentNode, node):
+        if self.requireImplicit(node):
+            implicitNode = node.parentNode
+            implicitNode.removeChild(node)
+            parentNode.removeChild(implicitNode)
+            implicitNode.unlink()
+        else:
+            parentNode.removeChild(node)
+
+
+class Sizer(SmartContainer):
+    '''sizers are not windows and have common implicit node'''
+    windowAttributes = []
+    hasName = False
+    implicitClass = 'sizeritem'
+    implicitPageName = 'SizerItem Attributes'
+    implicitAttributes = ['option', 'flag', 'border', 'minsize', 'ratio']
+
+    def requireImplicit(self, node):
+        '''if there are implicit nodes for this particular component'''
+        return node.getAttribute('class') != 'spacer'
+    
 
 class _ComponentManager:
     '''manager instance collects information from component plugins.'''

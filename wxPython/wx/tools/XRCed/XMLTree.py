@@ -8,6 +8,7 @@ from globals import *
 from XMLTreeMenu import *
 from model import Model
 from presenter import Presenter
+import view
 import images
 
 class XMLTree(wx.TreeCtrl):
@@ -47,6 +48,7 @@ class XMLTree(wx.TreeCtrl):
 
         # Register events
         self.Bind(wx.EVT_RIGHT_DOWN, self.OnRightDown)
+        self.Bind(wx.EVT_TREE_SEL_CHANGING, self.OnSelChanging)
         self.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnSelChanged)
         
         # Insert/append mode flags
@@ -56,6 +58,17 @@ class XMLTree(wx.TreeCtrl):
         menu = XMLTreeMenu(self)
         self.PopupMenu(menu, evt.GetPosition())
         menu.Destroy()
+
+    def OnSelChanging(self, evt):
+        # Permit multiple selection for same level only
+        state = wx.GetMouseState()
+        oldItem = evt.GetOldItem()
+        if oldItem and (state.ShiftDown() or state.ControlDown()) and \
+           self.GetItemParent(oldItem) != self.GetItemParent(evt.GetItem()):
+            evt.Veto()
+            view.frame.SetStatusText('Veto selection (not same level)')
+            return
+        evt.Skip()
 
     def OnSelChanged(self, evt):
         if evt.GetOldItem(): 
@@ -101,7 +114,7 @@ class XMLTree(wx.TreeCtrl):
 #            self.SetItemTextColour(item, self.COLOUR_HIDDEN)
         # Try to find children objects
         for n in filter(is_object, node.childNodes):
-            self.AddNode(item, n)
+            self.AddNode(item, comp.getTreeNode(n))
 
     def Flush(self):
         '''Update all items after changes in model.'''

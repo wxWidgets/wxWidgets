@@ -57,6 +57,9 @@ class XMLTreeMenu(wx.Menu):
                 self.AppendMenu(ID.SIBLING, 'Create Sibling', menu,
                                 'Create sibling after selected object')
 
+        self.AppendSeparator()
+        self.Append(wx.ID_DELETE, 'Delete', 'Delete object')
+
     def CreateTopLevelMenu(self):
         m = wx.Menu()
         for index,component,label,help in Manager.menus['root']:

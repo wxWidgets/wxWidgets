@@ -6,8 +6,9 @@
 
 import string
 import os.path
-from globals import *
 from types import *
+from globals import *
+from presenter import Presenter
 
 genericStyles = [
     'wxSIMPLE_BORDER', 'wxSUNKEN_BORDER', 'wxDOUBLE_BORDER',
@@ -26,13 +27,14 @@ genericExStyles = [
     ]
 
 # Global vars initialized in Panel.__init__ for button and textbox size in screen pixels
-buttonSize = textSise = None
+buttonSize = textSize = None
 # Default Button size in dialog units
 buttonSizeD = (35,-1)
 
 
 # Class that can properly disable children
 class PPanel(wx.Panel):
+    isCheck = False
     def __init__(self, parent, name):
         wx.Panel.__init__(self, parent, -1, name=name)
         self.modified = self.freeze = False
@@ -120,14 +122,14 @@ class ParamFlag(ParamBinaryOr):
 
 class ParamNonGenericStyle(ParamBinaryOr):
     def __init__(self, parent, name):
-        self.values = g.currentXXX.winStyles
+        self.values = Presenter.comp.styles
         ParamBinaryOr.__init__(self, parent, name)
 
 class ParamStyle(ParamBinaryOr):
     equal = {'wxALIGN_CENTER': 'wxALIGN_CENTRE'}
     def __init__(self, parent, name):
         ParamBinaryOr.__init__(self, parent, name)
-        self.valuesSpecific = g.currentXXX.winStyles
+        self.valuesSpecific = Presenter.comp.styles
         if self.valuesSpecific:         # override if using specific styles
             # Remove duplicates
             self.valuesGeneric = [s for s in genericStyles
@@ -179,10 +181,7 @@ class ParamStyle(ParamBinaryOr):
 
 class ParamExStyle(ParamBinaryOr):
     def __init__(self, parent, name):
-        if g.currentXXX:
-            self.values = g.currentXXX.exStyles + genericExStyles
-        else:
-            self.values = []
+        self.values = Presenter.comp.exStyles + genericExStyles
         ParamBinaryOr.__init__(self, parent, name)
 
 class ParamColour(PPanel):
@@ -773,20 +772,44 @@ class RadioBox(PPanel):
     def GetStringSelection(self):
         return self.value
 
-class ParamBool(RadioBox):
-    values = {'yes': '1', 'no': '0', 'default': ''}
-    seulav = {'1': 'yes', '0': 'no', '': 'default'}
+# Boxless radiobox
+class CheckBox(PPanel):
+    isCheck = True
+    def __init__(self, parent, id, 
+                 pos=wx.DefaultPosition, name='checkbox'):
+        PPanel.__init__(self, parent, name)
+        topSizer = wx.BoxSizer()
+        self.check = wx.CheckBox(self, -1, name, size=(-1,buttonSize[1]))
+        topSizer.Add(self.check, 0, wx.RIGHT, 5)
+        self.check.Bind(wx.EVT_CHECKBOX, self.OnCheck)
+        self.SetSizer(topSizer)
+    def OnCheck(self, evt):
+        if self.freeze: return
+        print evt.IsChecked()
+        self.SetModified()
+
+class ParamBool(CheckBox):
+    defaultString = '(default is False)'
     def __init__(self, parent, name):
-        RadioBox.__init__(self, parent, -1, choices=self.values.keys(), name=name)
+        CheckBox.__init__(self, parent, -1, name=name)
     def GetValue(self):
-        return self.values[self.GetStringSelection()]
+        return ('', '1')[self.check.IsChecked()]
     def SetValue(self, value):
-        if not value: value = '1'
-        self.SetStringSelection(self.seulav[value])
+        self.check.SetValue(value == '1')
+
+class ParamInverseBool(CheckBox):
+    '''like ParamBool but defined if unchecked'''
+    defaultString = '(default is True)'
+    def __init__(self, parent, name):
+        CheckBox.__init__(self, parent, -1, name=name)
+    def GetValue(self):
+        return ('0', '')[self.check.IsChecked()]
+    def SetValue(self, value):
+        self.check.SetValue(not value or value == '1')
 
 class ParamOrient(RadioBox):
-    values = {'horizontal': 'wxHORIZONTAL', 'vertical': 'wxVERTICAL', 'default': ''}
-    seulav = {'wxHORIZONTAL': 'horizontal', 'wxVERTICAL': 'vertical', '':'default'}
+    values = {'horizontal': 'wxHORIZONTAL', 'vertical': 'wxVERTICAL'}
+    seulav = {'wxHORIZONTAL': 'horizontal', 'wxVERTICAL': 'vertical'}
     def __init__(self, parent, name):
         RadioBox.__init__(self, parent, -1, choices=self.values.keys(), name=name)
     def GetValue(self):
@@ -929,7 +952,7 @@ class ParamBitmap(PPanel):
         dlg.Destroy()
 
 paramDict = {
-    'flag': ParamFlag,
+    'flag': ParamFlag, 'orient': ParamOrient,
     'style': ParamStyle, 'exstyle': ParamExStyle,
     'pos': ParamPosSize, 'size': ParamPosSize,
     'cellpos': ParamPosSize, 'cellspan': ParamPosSize,
@@ -941,7 +964,7 @@ paramDict = {
     'content': ParamContent, 'selection': ParamIntNN,
     'min': ParamInt, 'max': ParamInt,
     'fg': ParamColour, 'bg': ParamColour, 'font': ParamFont,
-    'enabled': ParamBool, 'focused': ParamBool, 'hidden': ParamBool,
+    'enabled': ParamInverseBool, 'focused': ParamBool, 'hidden': ParamBool,
     'tooltip': ParamText, 'bitmap': ParamBitmap, 'icon': ParamBitmap,
     'encoding': ParamEncoding, 'borders': ParamUnit,
     'comment': ParamComment
