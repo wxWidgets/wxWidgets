@@ -227,11 +227,13 @@ int wxAddProcessCallbackForPid(wxEndProcessData *proc_data, int pid)
 // put it in because it's already compiled for wxCocoa and wxMac GUI lib.
 #if wxUSE_GUI
 
+#if wxUSE_STDPATHS
 static wxStandardPathsCF gs_stdPaths;
 wxStandardPathsBase& wxGUIAppTraits::GetStandardPaths()
 {
     return gs_stdPaths;
 }
+#endif
 
 #endif // wxUSE_GUI
 
