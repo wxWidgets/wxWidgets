@@ -115,7 +115,7 @@ public:
 
     // call glcolor() for the colour with the given name, return false if
     // colour not found
-    bool SetColour(const wxChar *colour);
+    bool SetColour(const wxString& colour);
 
 
 

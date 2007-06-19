@@ -62,7 +62,7 @@ void wxGLCanvasBase::SetCurrent(const wxGLContext& context) const
     context.SetCurrent(*wx_static_cast(const wxGLCanvas *, this));
 }
 
-bool wxGLCanvasBase::SetColour(const wxChar *colour)
+bool wxGLCanvasBase::SetColour(const wxString& colour)
 {
     wxColour col = wxTheColourDatabase->Find(colour);
     if ( !col.Ok() )
