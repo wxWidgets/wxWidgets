@@ -625,8 +625,8 @@ bool wxGetEnv(const wxString& WXUNUSED_IN_WINCE(var),
 #endif // WinCE/32
 }
 
-bool wxSetEnv(const wxString& WXUNUSED_IN_WINCE(var),
-              const wxChar *WXUNUSED_IN_WINCE(value))
+bool wxDoSetEnv(const wxString& WXUNUSED_IN_WINCE(var),
+                const wxChar *WXUNUSED_IN_WINCE(value))
 {
     // some compilers have putenv() or _putenv() or _wputenv() but it's better
     // to always use Win32 function directly instead of dealing with them
@@ -634,7 +634,7 @@ bool wxSetEnv(const wxString& WXUNUSED_IN_WINCE(var),
     // no environment variables under CE
     return false;
 #else
-    if ( !::SetEnvironmentVariable(var, value) )
+    if ( !::SetEnvironmentVariable(var.wx_str(), value) )
     {
         wxLogLastError(_T("SetEnvironmentVariable"));
 
@@ -643,6 +643,16 @@ bool wxSetEnv(const wxString& WXUNUSED_IN_WINCE(var),
 
     return true;
 #endif
+}
+
+bool wxSetEnv(const wxString& variable, const wxString& value)
+{
+    return wxDoSetEnv(variable, value.wx_str());
+}
+
+bool wxUnsetEnv(const wxString& variable)
+{
+    return wxDoSetEnv(variable, NULL);
 }
 
 // ----------------------------------------------------------------------------

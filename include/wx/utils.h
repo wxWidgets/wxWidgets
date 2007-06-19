@@ -457,10 +457,30 @@ WXDLLIMPEXP_BASE bool wxHandleFatalExceptions(bool doit = true);
 WXDLLIMPEXP_BASE bool wxGetEnv(const wxString& var, wxString *value);
 
 // set the env var name to the given value, return true on success
-WXDLLIMPEXP_BASE bool wxSetEnv(const wxString& var, const wxChar *value);
+WXDLLIMPEXP_BASE bool wxSetEnv(const wxString& var, const wxString& value);
 
 // remove the env var from environment
-inline bool wxUnsetEnv(const wxString& var) { return wxSetEnv(var, NULL); }
+WXDLLIMPEXP_BASE bool wxUnsetEnv(const wxString& var);
+
+#if WXWIN_COMPATIBILITY_2_8
+inline bool wxSetEnv(const wxString& var, const char *value)
+    { return wxSetEnv(var, wxString(value)); }
+inline bool wxSetEnv(const wxString& var, const wchar_t *value)
+    { return wxSetEnv(var, wxString(value)); }
+template<typename T>
+inline bool wxSetEnv(const wxString& var, const wxCharTypeBuffer<T>& value)
+    { return wxSetEnv(var, wxString(value)); }
+inline bool wxSetEnv(const wxString& var, const wxCStrData& value)
+    { return wxSetEnv(var, wxString(value)); }
+
+// this one is for passing NULL directly - don't use it, use wxUnsetEnv instead
+wxDEPRECATED( inline bool wxSetEnv(const wxString& var, int value) );
+inline bool wxSetEnv(const wxString& var, int value)
+{
+    wxASSERT_MSG( value == 0, "using non-NULL integer as string?" );
+    return wxUnsetEnv(var);
+}
+#endif // WXWIN_COMPATIBILITY_2_8
 
 // ----------------------------------------------------------------------------
 // Network and username functions.

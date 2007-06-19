@@ -4686,12 +4686,16 @@ Returns \true if the variable exists, \false otherwise.
 
 \membersection{wxSetEnv}\label{wxsetenv}
 
-\func{bool}{wxSetEnv}{\param{const wxString\&}{ var}, \param{const wxChar *}{value}}
+\func{bool}{wxSetEnv}{\param{const wxString\&}{ var}, \param{const wxString\& }{value}}
 
 Sets the value of the environment variable {\it var} (adding it if necessary)
 to {\it value}.
 
 Returns \true on success.
+
+\wxheading{See also}
+
+\helpref{wxUnsetEnv}{wxunsetenv}
 
 
 \membersection{wxUnsetEnv}\label{wxunsetenv}
@@ -4703,3 +4707,7 @@ Removes the variable {\it var} from the environment.
 function.
 
 Returns \true on success.
+
+\wxheading{See also}
+
+\helpref{wxSetEnv}{wxsetenv}

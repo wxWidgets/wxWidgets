@@ -96,7 +96,7 @@ bool wxGetEnv(const wxString& var, wxString *value)
     return true;
 }
 
-bool wxSetEnv(const wxString& variable, const wxChar *value)
+static bool wxDoSetEnv(const wxString& variable, const char *value)
 {
     wxString s = variable;
     if ( value )
@@ -111,6 +111,17 @@ bool wxSetEnv(const wxString& variable, const wxChar *value)
 
     return putenv(buf) == 0;
 }
+
+bool wxSetEnv(const wxString& variable, const wxString& value)
+{
+    return wxDoSetEnv(variable, value.mb_str());
+}
+
+bool wxUnsetEnv(const wxString& variable)
+{
+    return wxDoSetEnv(variable, NULL);
+}
+
 
 //----------------------------------------------------------------------------
 // Hostname, username, home directory
