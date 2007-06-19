@@ -41,28 +41,40 @@ maxlen = len(maxstr)
 results = unittest.TestResult()
 alltests.run(results)
 
-total = 0
+total_successes = 0
+total_failures  = 0
+total_errors    = 0
 for module in modules:
+    # run suite
     suite = module.suite()
     results = unittest.TestResult()
     suite.run(results)
-    
-    if results.wasSuccessful():
-        print "%s:\t%d tests passed" % (module.__name__, results.testsRun)
-        total += results.testsRun
-    else:
-        print "\n%d tests failed!\n" % (len(results.failures))
-        for error in results.failures:
-            print "------ " + str(error[0]) + " ------"
-            print error[1]
-
+    # report on it
+    failures  = len(results.failures)
+    errors    = len(results.errors)
+    successes = results.testsRun - failures - errors
+    total_failures  += failures
+    total_errors    += errors
+    total_successes += successes
+    print "%s:\t%d tests passed" % (module.__name__, successes)
+    if failures > 0:
+        print "%s:\t%d tests failed!\n" % (module.__name__, failures)
+        for failure in results.failures:
+            print "------ " + str(failure[0]) + " ------"
+            print failure[1]
+    if errors > 0:
+        print "%s:\t%d tests in error!\n" % (module.__name__, errors)
         for error in results.errors:
             print "------ " + str(error[0]) + " ------"
             print error[1]
 
-# TODO: add reporting for failures as well
+
 print "----------------------"
-print "%d tests passed in total!" % (total)
+print "%d tests passed in total!" % (total_successes)
+if total_failures > 0:
+    print "%d tests failed in total!" % (total_failures)
+if total_errors > 0:
+    print "%d tests erred in total!" % (total_errors)
 
 figleaf.stop()
 figleaf.write_coverage(figfile)
