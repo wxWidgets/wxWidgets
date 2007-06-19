@@ -28,7 +28,7 @@
 #include "wx/msw/private.h"
 #include "wx/msw/debughlp.h"
 
-const wxChar *wxDynamicLibrary::ms_dllext = _T(".dll");
+const wxString wxDynamicLibrary::ms_dllext(_T(".dll"));
 
 // ----------------------------------------------------------------------------
 // private classes
