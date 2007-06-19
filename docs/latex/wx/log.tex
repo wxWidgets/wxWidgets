@@ -341,7 +341,7 @@ Returns whether the repetition counting mode is enabled.
 
 \membersection{wxLog::SetTimestamp}\label{wxlogsettimestamp}
 
-\func{void}{SetTimestamp}{\param{const char * }{ format}}
+\func{void}{SetTimestamp}{\param{const wxStrgin\&}{ format}}
 
 Sets the timestamp format prepended by the default log targets to all
 messages. The string may contain any normal characters as well as \%
@@ -350,7 +350,7 @@ Passing a NULL value (not empty string) to this function disables message timest
 
 \membersection{wxLog::GetTimestamp}\label{wxloggettimestamp}
 
-\constfunc{const char *}{GetTimestamp}{\void}
+\constfunc{const wxString\&}{GetTimestamp}{\void}
 
 Returns the current timestamp format string.
 

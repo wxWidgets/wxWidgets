@@ -906,7 +906,7 @@ wxLogLevel      wxLog::ms_logLevel     = wxLOG_Max;  // log everything by defaul
 
 size_t          wxLog::ms_suspendCount = 0;
 
-const wxChar   *wxLog::ms_timestamp    = wxT("%X");  // time only, no date
+wxString        wxLog::ms_timestamp(wxT("%X"));  // time only, no date
 
 wxTraceMask     wxLog::ms_ulTraceMask  = (wxTraceMask)0;
 wxArrayString   wxLog::ms_aTraceMasks;

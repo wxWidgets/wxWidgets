@@ -211,7 +211,7 @@ public:
     // sets the timestamp string: this is used as strftime() format string
     // for the log targets which add time stamps to the messages - set it
     // to NULL to disable time stamping completely.
-    static void SetTimestamp(const wxChar *ts) { ms_timestamp = ts; }
+    static void SetTimestamp(const wxString& ts) { ms_timestamp = ts; }
 
 
     // accessors
@@ -229,7 +229,7 @@ public:
     static wxLogLevel GetLogLevel() { return ms_logLevel; }
 
     // get the current timestamp format string (may be NULL)
-    static const wxChar *GetTimestamp() { return ms_timestamp; }
+    static const wxString& GetTimestamp() { return ms_timestamp; }
 
 
     // helpers
@@ -309,7 +309,7 @@ private:
 
     // format string for strftime(), if NULL, time stamping log messages is
     // disabled
-    static const wxChar *ms_timestamp;
+    static wxString    ms_timestamp;
 
     static wxTraceMask ms_ulTraceMask;   // controls wxLogTrace behaviour
     static wxArrayString ms_aTraceMasks; // more powerful filter for wxLogTrace
