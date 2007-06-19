@@ -2712,11 +2712,11 @@ void wxWindowMac::ScrollWindow(int dx, int dy, const wxRect *rect)
         {
             wxRect rc( x, y, w, h );
             if (rect->Intersects( rc ))
-                child->SetSize( x + dx, y + dy, w, h );
+                child->SetSize( x + dx, y + dy, w, h, wxSIZE_AUTO|wxSIZE_ALLOW_MINUS_ONE );
         }
         else
         {
-            child->SetSize( x + dx, y + dy, w, h );
+            child->SetSize( x + dx, y + dy, w, h, wxSIZE_AUTO|wxSIZE_ALLOW_MINUS_ONE );
         }
     }
 }
@@ -2781,7 +2781,7 @@ void wxWindowMac::OnSetFocus( wxFocusEvent& event )
         Rect rect ;
 
         m_peer->GetRect( &rect ) ;
-        // auf den umgebenden Rahmen zurck
+        // auf den umgebenden Rahmen zur�ck
         InsetRect( &rect, -1 , -1 ) ;
 
         wxTopLevelWindowMac* top = MacGetTopLevelWindow();
