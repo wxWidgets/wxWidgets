@@ -611,7 +611,7 @@ void wxLog::ClearTraceMasks()
 void wxLog::TimeStamp(wxString *str)
 {
 #if wxUSE_DATETIME
-    if ( ms_timestamp )
+    if ( !ms_timestamp.empty() )
     {
         wxChar buf[256];
         time_t timeNow;
