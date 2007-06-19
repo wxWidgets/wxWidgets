@@ -234,7 +234,7 @@ wxFileStream::wxFileStream(const wxString& fileName)
 // ----------------------------------------------------------------------------
 
 wxFFileInputStream::wxFFileInputStream(const wxString& fileName,
-                                       const wxChar *mode)
+                                       const wxString& mode)
                   : wxInputStream()
 {
     m_file = new wxFFile(fileName, mode);
@@ -310,7 +310,7 @@ bool wxFFileInputStream::IsOk() const
 // ----------------------------------------------------------------------------
 
 wxFFileOutputStream::wxFFileOutputStream(const wxString& fileName,
-                                         const wxChar *mode)
+                                         const wxString& mode)
 {
     m_file = new wxFFile(fileName, mode);
     m_file_destroy = true;
