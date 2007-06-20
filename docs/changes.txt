@@ -99,6 +99,7 @@ All (GUI):
   enough to select half of a character (Michael Hieke)
 - Significantly improved startup times of XRC-based applications using
   embedded resources on Unix (requires resources recompilation)
+- Fixed freeing of "static" alpha data in wxImage (Axel Gembe)
 
 wxMSW:
 
