@@ -101,6 +101,7 @@ All:
 - Add support for wxStream-derived classes to wxRTTI (Stas Sergeev)
 - Added wxStreamBuffer::Truncate() (Stas Sergeev)
 - Allow using  wxEventLoop in console applications (Lukasz Michalski)
+- Added functions for Base64 en/decoding (Charles Reimers)
 
 All (GUI):
 
@@ -167,6 +168,11 @@ wxX11:
 All (GUI):
 
 - Added colour normalization to PNM image handler (Ray Johnston)
+- Fixed selecting part of word from right to left in wxHTML (Michael Hieke)
+- Selecting text in wxHTML with character precision was made easier, it's
+  enough to select half of a character (Michael Hieke)
+- Significantly improved startup times of XRC-based applications using
+  embedded resources on Unix (requires resources recompilation)
 - Fixed freeing of "static" alpha data in wxImage (Axel Gembe)
 
 wxMSW:
