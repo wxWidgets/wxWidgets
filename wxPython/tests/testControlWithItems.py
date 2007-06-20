@@ -15,10 +15,10 @@ if sys.platform.find('win32') != -1:
     BaseControlClass = testControl.ControlWinTest
     BaseItemContainerClass = testItemContainer.ItemContainerWinBase
 elif sys.platform.find('linux') != -1:
-    BaseClass = testControl.ControlLinuxTest
+    BaseControlClass = testControl.ControlLinuxTest
     BaseItemContainerClass = testItemContainer.ItemContainerLinuxBase
 elif sys.platform.find('mac') != -1:
-    BaseClass = testControl.ControlMacTest
+    BaseControlClass = testControl.ControlMacTest
     BaseItemContainerClass = testItemContainer.ItemContainerMacBase
 
 

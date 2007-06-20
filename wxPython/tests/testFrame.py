@@ -1,5 +1,6 @@
 import unittest
 import wx
+import sys
 
 import testTopLevelWindow
 
@@ -18,7 +19,10 @@ class FrameTest(testTopLevelWindow.TopLevelWindowBase):
         self.app = wx.PySimpleApp()
         self.frame = wx.Frame(parent=None, id=wx.ID_ANY)
         self.testControl = wx.Frame(parent=self.frame, id=wx.ID_ANY)
-    
+
+# -----------------------------------------------------------
+
+class FrameWinTest(FrameTest):
     # Overridden tests:
     # TODO: Why do these wx.Window tests fail on wx.Frame
     def testCenterFails(self):
@@ -34,8 +38,22 @@ class FrameTest(testTopLevelWindow.TopLevelWindowBase):
         self.testControl.SetRect(wx.Rect(0,0,0,0))
         self.assertEquals(wx.Rect(0,0,123,34),self.testControl.GetRect())
 
+class FrameLinuxTest(FrameTest):
+    pass
+
+class FrameMacTest(FrameTest):
+    pass
+
+# -----------------------------------------------------------
 
 def suite():
+    testclass = FrameTest
+    if sys.platform.find('win32') != -1:
+        testclass = FrameWinTest
+    elif sys.platform.find('linux') != -1:
+        testclass = FrameLinuxTest
+    elif sys.platform.find('mac') != -1:
+        testclass = FrameMacTest
     suite = unittest.makeSuite(FrameTest)
     return suite
     

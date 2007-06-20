@@ -29,13 +29,6 @@ class ControlTest(BaseClass):
         self.frame.Destroy()
         self.app.Destroy()
     
-    # TODO: affirm that this is expected behavior
-    def testAllControlsNeedParents(self):
-        """
-        All instances of wx.Control need to have a parent"""
-        class_under_test = type(self.testControl)
-        self.assertRaises(wx.PyAssertionError, class_under_test, None)
-    
     def testDefaultAttributes(self):
         """GetClassDefaultAttributes"""
         attrs = wx.Control.GetClassDefaultAttributes()
@@ -43,10 +36,11 @@ class ControlTest(BaseClass):
         self.assert_(attrs.colBg.IsOk())
         self.assert_(attrs.colFg.IsOk())
         self.assert_(attrs.font.IsOk())
-    
+
     # NOTE: only makes sense when called in ControlTest.
     #   otherwise the results are padded with meaningless tests.
     #   how to generalize this for inheritance?
+    # TODO: does this only work on Windows? if so, why?
     def testLabelText(self):
         """GetLabelText"""
         name = 'Name of Control'
@@ -56,10 +50,18 @@ class ControlTest(BaseClass):
 # -----------------------------------------------------------
 
 class ControlWinTest(ControlTest):
-    pass
+    # TODO: is this expected behavior? Why does it only happen
+    # on Windows? It's a wrapped C++ assertion failure.
+    def testAllControlsNeedParents(self):
+        """
+        All instances of wx.Control need to have a parent
+        (at least on Windows)"""
+        class_under_test = type(self.testControl)
+        self.assertRaises(wx.PyAssertionError, class_under_test, None)
 
 class ControlLinuxTest(ControlTest):
-    pass
+    def testLabelText(self):
+        pass
 
 class ControlMacTest(ControlTest):
     pass

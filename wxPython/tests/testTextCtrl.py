@@ -1,5 +1,6 @@
 import unittest
 import wx
+import sys
 
 import testControl
 
@@ -18,7 +19,15 @@ SetEditable, SetInsertionPoint, SetInsertionPointEnd, SetMaxLength, SetModified,
 SetSelection, SetStyle, ShowPosition, Undo, write, WriteText, XYToPosition
 """
 
-class TextCtrlTest(testControl.ControlTest):
+BaseClass = testControl.ControlTest
+if sys.platform.find('win32') != -1:
+    BaseClass = testControl.ControlWinTest
+elif sys.platform.find('linux') != -1:
+    BaseClass = testControl.ControlLinuxTest
+elif sys.platform.find('mac') != -1:
+    BaseClass = testControl.ControlMacTest
+
+class TextCtrlTest(BaseClass):
     def setUp(self):
         self.app = wx.PySimpleApp()
         self.frame = wx.Frame(parent=None, id=wx.ID_ANY)

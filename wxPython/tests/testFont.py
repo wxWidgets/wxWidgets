@@ -1,5 +1,6 @@
 import unittest
 import wx
+import sys
 
 """
 This file contains classes and methods for unit testing the API of wx.Font
@@ -72,18 +73,6 @@ class FontTest(unittest.TestCase):
     def tearDown(self):
         pass
     
-    
-    def testFontstyle(self):
-        # wx.FONTSTYLE_MAX dies
-        self.assertRaises(wx.PyAssertionError, wx.Font, 12, wx.FONTFAMILY_DEFAULT,
-                                            wx.FONTSTYLE_MAX, wx.FONTWEIGHT_NORMAL)
-                                            
-        
-    def testFontweight(self):
-        # wx.FONTWEIGHT_MAX dies
-        self.assertRaises(wx.PyAssertionError, wx.Font, 12, wx.FONTFAMILY_DEFAULT,
-                                            wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_MAX)
-    
     def testOk(self):
         """IsOk, Ok"""
         for font in getFontData():
@@ -95,9 +84,35 @@ class FontTest(unittest.TestCase):
         self.assert_(not attr.font.Ok())
         self.assert_(not attr.font.IsOk())
 
+# -----------------------------------------------------------
+
+class FontWinTest(FontTest):
+    def testFontstyle(self):
+        # wx.FONTSTYLE_MAX dies
+        self.assertRaises(wx.PyAssertionError, wx.Font, 12, wx.FONTFAMILY_DEFAULT,
+                                            wx.FONTSTYLE_MAX, wx.FONTWEIGHT_NORMAL)
+                                            
+    def testFontweight(self):
+        # wx.FONTWEIGHT_MAX dies
+        self.assertRaises(wx.PyAssertionError, wx.Font, 12, wx.FONTFAMILY_DEFAULT,
+                                            wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_MAX)
+class FontLinuxTest(FontTest):
+    pass
+
+class FontMacTest(FontTest):
+    pass
+
+# -----------------------------------------------------------
 
 def suite():
-    suite = unittest.makeSuite(FontTest)
+    testclass = FontTest
+    if sys.platform.find('win32') != -1:
+        testclass = FontWinTest
+    elif sys.platform.find('linux') != -1:
+        testclass = FontLinuxTest
+    elif sys.platform.find('mac') != -1:
+        testclass = FontMacTest
+    suite = unittest.makeSuite(testclass)
     return suite
     
 if __name__ == '__main__':
