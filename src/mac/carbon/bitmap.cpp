@@ -691,7 +691,7 @@ CGImageRef wxBitmapRefData::CGImageCreate() const
     CGImageRef image ;
     if ( m_rawAccessCount > 0 || m_cgImageRef == NULL )
     {
-#if MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4
+#if (MAC_OS_X_VERSION_MAX_ALLOWED >= MAC_OS_X_VERSION_10_4) && wxMAC_USE_CORE_GRAPHICS
         if ( UMAGetSystemVersion() >= 0x1040 && m_depth != 1 && m_bitmapMask == NULL )
         {
             image = CGBitmapContextCreateImage( m_hBitmap );
@@ -1549,7 +1549,7 @@ void wxBitmap::SetMask(wxMask *mask)
 WXHBITMAP wxBitmap::GetHBITMAP(WXHBITMAP* mask) const
 {
 #if !wxMAC_USE_CORE_GRAPHICS
-    return WXHBITMAP(M_BITMAPDATA->GetHBITMAP((CGContextRef*)mask));
+    return WXHBITMAP(M_BITMAPDATA->GetHBITMAP((GWorldPtr*)mask));
 #else
     return WXHBITMAP(M_BITMAPDATA->GetBitmapContext());
 #endif
