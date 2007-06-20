@@ -22,6 +22,7 @@
 #include "wx/app.h"
 #include "wx/mac/uma.h"
 #include "wx/geometry.h"
+#include "wx/sysopt.h"
 
 
 #ifdef __WXMAC_OSX__
@@ -842,28 +843,31 @@ bool wxToolBar::Create(
     OSStatus err = noErr;
 
 #if wxMAC_USE_NATIVE_TOOLBAR
-    wxString labelStr = wxString::Format( wxT("%xd"), (int)this );
-    err = HIToolbarCreate(
-        wxMacCFStringHolder( labelStr, wxFont::GetDefaultEncoding() ), 0,
-        (HIToolbarRef*) &m_macHIToolbarRef );
-
-    if (m_macHIToolbarRef != NULL)
+    if (parent->IsKindOf(CLASSINFO(wxFrame)) && wxSystemOptions::GetOptionInt(wxT("mac.toolbar.no-native")) != 1)
     {
-        InstallEventHandler( HIObjectGetEventTarget((HIToolbarRef)m_macHIToolbarRef ), ToolbarDelegateHandler,
-                GetEventTypeCount( kToolbarEvents ), kToolbarEvents, this, NULL );
+        wxString labelStr = wxString::Format( wxT("%xd"), (int)this );
+        err = HIToolbarCreate(
+          wxMacCFStringHolder( labelStr, wxFont::GetDefaultEncoding() ), 0,
+          (HIToolbarRef*) &m_macHIToolbarRef );
 
-        HIToolbarDisplayMode mode = kHIToolbarDisplayModeDefault;
-        HIToolbarDisplaySize displaySize = kHIToolbarDisplaySizeSmall;
+        if (m_macHIToolbarRef != NULL)
+        {
+            InstallEventHandler( HIObjectGetEventTarget((HIToolbarRef)m_macHIToolbarRef ), ToolbarDelegateHandler,
+                    GetEventTypeCount( kToolbarEvents ), kToolbarEvents, this, NULL );
 
-        if ( style & wxTB_NOICONS )
-            mode = kHIToolbarDisplayModeLabelOnly;
-        else if ( style & wxTB_TEXT )
-            mode = kHIToolbarDisplayModeIconAndLabel;
-        else
-            mode = kHIToolbarDisplayModeIconOnly;
+            HIToolbarDisplayMode mode = kHIToolbarDisplayModeDefault;
+            HIToolbarDisplaySize displaySize = kHIToolbarDisplaySizeSmall;
 
-        HIToolbarSetDisplayMode( (HIToolbarRef) m_macHIToolbarRef, mode );
-        HIToolbarSetDisplaySize( (HIToolbarRef) m_macHIToolbarRef, displaySize );
+            if ( style & wxTB_NOICONS )
+                mode = kHIToolbarDisplayModeLabelOnly;
+            else if ( style & wxTB_TEXT )
+                mode = kHIToolbarDisplayModeIconAndLabel;
+            else
+                mode = kHIToolbarDisplayModeIconOnly;
+
+            HIToolbarSetDisplayMode( (HIToolbarRef) m_macHIToolbarRef, mode );
+          HIToolbarSetDisplaySize( (HIToolbarRef) m_macHIToolbarRef, displaySize );
+       }
     }
 #endif // wxMAC_USE_NATIVE_TOOLBAR
 
@@ -1470,12 +1474,17 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 
                 // in flat style we need a visual separator
 #if wxMAC_USE_NATIVE_TOOLBAR
-                err = HIToolbarItemCreate(
-                    kHIToolbarSeparatorIdentifier,
-                    kHIToolbarItemCantBeRemoved | kHIToolbarItemIsSeparator | kHIToolbarItemAllowDuplicates,
-                    &item );
-                if (err == noErr)
-                    tool->SetToolbarItemRef( item );
+                if (m_macHIToolbarRef != NULL)
+                {
+                    err = HIToolbarItemCreate(
+                        kHIToolbarSeparatorIdentifier,
+                        kHIToolbarItemCantBeRemoved | kHIToolbarItemIsSeparator | kHIToolbarItemAllowDuplicates,
+                        &item );
+                    if (err == noErr)
+                        tool->SetToolbarItemRef( item );
+                }
+                else
+                    err = noErr;
 #endif // wxMAC_USE_NATIVE_TOOLBAR
 
                 CreateSeparatorControl( window, &toolrect, &controlHandle );
@@ -1504,20 +1513,25 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
                 }
 
 #if wxMAC_USE_NATIVE_TOOLBAR
-                wxString labelStr = wxString::Format(wxT("%xd"), (int)tool);
-                err = HIToolbarItemCreate(
-                    wxMacCFStringHolder(labelStr, wxFont::GetDefaultEncoding()),
-                    kHIToolbarItemCantBeRemoved | kHIToolbarItemAnchoredLeft | kHIToolbarItemAllowDuplicates, &item );
-                if (err  == noErr)
+                if (m_macHIToolbarRef != NULL)
                 {
-                    InstallEventHandler(
-                        HIObjectGetEventTarget(item), GetwxMacToolBarEventHandlerUPP(),
-                        GetEventTypeCount(toolBarEventList), toolBarEventList, tool, NULL );
+                    wxString labelStr = wxString::Format(wxT("%xd"), (int)tool);
+                    err = HIToolbarItemCreate(
+                        wxMacCFStringHolder(labelStr, wxFont::GetDefaultEncoding()),
+                        kHIToolbarItemCantBeRemoved | kHIToolbarItemAnchoredLeft | kHIToolbarItemAllowDuplicates, &item );
+                    if (err  == noErr)
+                    {
+                        InstallEventHandler(
+                            HIObjectGetEventTarget(item), GetwxMacToolBarEventHandlerUPP(),
+                            GetEventTypeCount(toolBarEventList), toolBarEventList, tool, NULL );
 
-                    HIToolbarItemSetIconRef( item, info.u.iconRef );
-                    HIToolbarItemSetCommandID( item, kHIToolbarCommandPressAction );
-                    tool->SetToolbarItemRef( item );
+                        HIToolbarItemSetIconRef( item, info.u.iconRef );
+                        HIToolbarItemSetCommandID( item, kHIToolbarCommandPressAction );
+                        tool->SetToolbarItemRef( item );
+                    }
                 }
+                else
+                    err = noErr;
 #endif // wxMAC_USE_NATIVE_TOOLBAR
 
                 wxMacReleaseBitmapButton( &info );
@@ -1538,6 +1552,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
         case wxTOOL_STYLE_CONTROL:
 
 #if wxMAC_USE_NATIVE_TOOLBAR
+            if (m_macHIToolbarRef != NULL)
             {
                 wxCHECK_MSG( tool->GetControl(), false, _T("control must be non-NULL") );
 
@@ -1552,7 +1567,11 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
                 }
                 CFRelease( data ) ;
            }
-
+           else
+           {
+               err = noErr;
+               break;
+           }
 #else
                 // right now there's nothing to do here
 #endif
@@ -1564,7 +1583,7 @@ bool wxToolBar::DoInsertTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolBase)
 
 #if wxMAC_USE_NATIVE_TOOLBAR
     wxString label = tool->GetLabel();
-    if ( !label.empty() )
+    if (m_macHIToolbarRef && !label.empty() )
     {
         // strip mnemonics from the label for compatibility
         // with the usual labels in wxStaticText sense
@@ -1630,10 +1649,13 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolbase)
 #endif
 
 #if wxMAC_USE_NATIVE_TOOLBAR
-    if ( removeIndex != -1 && m_macHIToolbarRef )
+    if (m_macHIToolbarRef != NULL)
     {
-        HIToolbarRemoveItemAtIndex( (HIToolbarRef) m_macHIToolbarRef, removeIndex );
-        tool->SetIndex( -1 );
+        if ( removeIndex != -1 && m_macHIToolbarRef )
+        {
+            HIToolbarRemoveItemAtIndex( (HIToolbarRef) m_macHIToolbarRef, removeIndex );
+            tool->SetIndex( -1 );
+        }
     }
 #endif
     switch ( tool->GetStyle() )
@@ -1668,8 +1690,11 @@ bool wxToolBar::DoDeleteTool(size_t WXUNUSED(pos), wxToolBarToolBase *toolbase)
         tool2->SetPosition( pt );
 
 #if wxMAC_USE_NATIVE_TOOLBAR
-        if ( removeIndex != -1 && tool2->GetIndex() > removeIndex )
-            tool2->SetIndex( tool2->GetIndex() - 1 );
+        if (m_macHIToolbarRef != NULL)
+        {
+            if ( removeIndex != -1 && tool2->GetIndex() > removeIndex )
+                tool2->SetIndex( tool2->GetIndex() - 1 );
+        }
 #endif
     }
 
