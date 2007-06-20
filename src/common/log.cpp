@@ -157,7 +157,7 @@ IMPLEMENT_LOG_FUNCTION(Status)
 void wxSafeShowMessage(const wxString& title, const wxString& text)
 {
 #ifdef __WINDOWS__
-    ::MessageBox(NULL, text, title, MB_OK | MB_ICONSTOP);
+    ::MessageBox(NULL, text.wx_str(), title.wx_str(), MB_OK | MB_ICONSTOP);
 #else
     wxFprintf(stderr, _T("%s: %s\n"), title.c_str(), text.c_str());
     fflush(stderr);

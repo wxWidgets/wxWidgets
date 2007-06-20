@@ -57,7 +57,7 @@ IMPLEMENT_ABSTRACT_CLASS(wxEnhMetaFileDC, wxDC)
 
 // we must pass NULL if the string is empty to metafile functions
 static inline const wxChar *GetMetaFileName(const wxString& fn)
-    { return !fn ? (const wxChar *)NULL : (const wxChar*)fn.c_str(); }
+    { return !fn ? (const wxChar *)NULL : (const wxChar*)fn.wx_str(); }
 
 // ============================================================================
 // implementation
@@ -75,7 +75,7 @@ void wxEnhMetaFile::Init()
     }
     else // have valid file name, load metafile from it
     {
-        m_hMF = (WXHANDLE)::GetEnhMetaFile(m_filename);
+        m_hMF = (WXHANDLE)::GetEnhMetaFile(m_filename.fn_str());
         if ( !m_hMF )
             wxLogSysError(_("Failed to load metafile from file \"%s\"."),
                           m_filename.c_str());
@@ -219,7 +219,7 @@ wxEnhMetaFileDC::wxEnhMetaFileDC(const wxString& filename,
 
     ScreenHDC hdcRef;
     m_hDC = (WXHDC)::CreateEnhMetaFile(hdcRef, GetMetaFileName(filename),
-                                       pRect, description);
+                                       pRect, description.wx_str());
     if ( !m_hDC )
     {
         wxLogLastError(_T("CreateEnhMetaFile"));

@@ -66,7 +66,7 @@ public:
 private:
     // helper function: reads the command corresponding to the specified verb
     // from the registry (returns an empty string if not found)
-    wxString GetCommand(const wxChar *verb) const;
+    wxString GetCommand(const wxString& verb) const;
 
     // get the registry path for the given verb
     wxString GetVerbPath(const wxString& verb) const;

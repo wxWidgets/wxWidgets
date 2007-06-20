@@ -1117,6 +1117,7 @@ void wxComboBox::Replace( long from, long to, const wxString& value )
     if (value.IsNull()) return;
     gint pos = (gint)to;
 
+    // FIXME-UTF8: wouldn't be needed if utf8_str() always returned a buffer
 #if wxUSE_UNICODE_UTF8
     const char *utf8 = value.utf8_str();
 #else

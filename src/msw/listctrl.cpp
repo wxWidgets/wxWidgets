@@ -1424,7 +1424,7 @@ long wxListCtrl::FindItem(long start, const wxString& str, bool partial)
     findInfo.flags = LVFI_STRING;
     if ( partial )
         findInfo.flags |= LVFI_PARTIAL;
-    findInfo.psz = str;
+    findInfo.psz = str.wx_str();
 
     // ListView_FindItem() excludes the first item from search and to look
     // through all the items you need to start from -1 which is unnatural and

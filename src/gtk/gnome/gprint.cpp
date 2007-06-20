@@ -1512,17 +1512,15 @@ void wxGnomePrintDC::DoDrawRotatedText(const wxString& text, wxCoord x, wxCoord 
 
     bool underlined = m_font.Ok() && m_font.GetUnderlined();
 
-#if wxUSE_UNICODE
-    const wxCharBuffer data = wxConvUTF8.cWC2MB( text );
+    // FIXME-UTF8: wouldn't be needed if utf8_str() always returned a buffer
+#if wxUSE_UNICODE_UTF8
+    const char *data = text.utf8_str();
 #else
-    const wxWCharBuffer wdata = wxConvLocal.cMB2WC( text );
-    if ( !wdata )
-        return;
-    const wxCharBuffer data = wxConvUTF8.cWC2MB( wdata );
+    const wxCharBuffer data = text.utf8_str();
 #endif
 
-    size_t datalen = strlen((const char*)data);
-    pango_layout_set_text( m_layout, (const char*) data, datalen);
+    size_t datalen = strlen(data);
+    pango_layout_set_text( m_layout, data, datalen);
 
     if (underlined)
     {
@@ -1850,26 +1848,13 @@ void wxGnomePrintDC::DoGetTextExtent(const wxString& string, wxCoord *width, wxC
         pango_layout_set_font_description( m_layout, theFont->GetNativeFontInfo()->description );
 
     // Set layout's text
-#if wxUSE_UNICODE
-    const wxCharBuffer data = wxConvUTF8.cWC2MB( string );
-    const char *dataUTF8 = (const char *)data;
-#else
-    const wxWCharBuffer wdata = wxConvLocal.cMB2WC( string );
-    if ( !wdata )
-    {
-        if (width) (*width) = 0;
-        if (height) (*height) = 0;
-        return;
-    }
-    const wxCharBuffer data = wxConvUTF8.cWC2MB( wdata );
-    const char *dataUTF8 = (const char *)data;
-#endif
 
-    if ( !dataUTF8 )
-    {
-        // hardly ideal, but what else can we do if conversion failed?
-        return;
-    }
+    // FIXME-UTF8: wouldn't be needed if utf8_str() always returned a buffer
+#if wxUSE_UNICODE_UTF8
+    const char *dataUTF8 = string.utf8_str();
+#else
+    const wxCharBuffer dataUTF8 = string.utf8_str();
+#endif
 
     pango_layout_set_text( m_layout, dataUTF8, strlen(dataUTF8) );
 

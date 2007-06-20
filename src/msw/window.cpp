@@ -1979,7 +1979,7 @@ void wxWindowMSW::GetTextExtent(const wxString& string,
 
     SIZE sizeRect;
     TEXTMETRIC tm;
-    ::GetTextExtentPoint32(hdc, string, string.length(), &sizeRect);
+    ::GetTextExtentPoint32(hdc, string.wx_str(), string.length(), &sizeRect);
     GetTextMetrics(hdc, &tm);
 
     if ( x )
@@ -3369,8 +3369,8 @@ bool wxWindowMSW::MSWCreate(const wxChar *wclass,
     m_hWnd = (WXHWND)::CreateWindowEx
                        (
                         extendedStyle,
-                        className,
-                        title ? title : (const wxChar*)m_windowName.c_str(),
+                        className.wx_str(),
+                        title ? title : m_windowName.wx_str(),
                         style,
                         x, y, w, h,
                         (HWND)MSWGetParent(),

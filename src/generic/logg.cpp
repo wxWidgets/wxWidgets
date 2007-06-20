@@ -407,7 +407,7 @@ void wxLogGui::DoLog(wxLogLevel level, const wxString& szString, time_t t)
                     // don't prepend debug/trace here: it goes to the
                     // debug window anyhow
                     str += wxT("\r\n");
-                    OutputDebugString(str);
+                    OutputDebugString(str.wx_str());
                 #else
                     // send them to stderr
                     wxFprintf(stderr, wxT("[%s] %s\n"),

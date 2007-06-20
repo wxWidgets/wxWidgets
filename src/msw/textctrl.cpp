@@ -446,7 +446,7 @@ bool wxTextCtrl::MSWCreateText(const wxString& value,
         valueWin = value;
     }
 
-    if ( !MSWCreateControl(windowClass, msStyle, pos, size, valueWin) )
+    if ( !MSWCreateControl(windowClass.wx_str(), msStyle, pos, size, valueWin) )
         return false;
 
 #if wxUSE_RICHEDIT

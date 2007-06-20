@@ -317,7 +317,7 @@ wxFileExists (const wxString& filename)
 #elif defined(__WIN32__) && !defined(__WXMICROWIN__)
     // we must use GetFileAttributes() instead of the ANSI C functions because
     // it can cope with network (UNC) paths unlike them
-    DWORD ret = ::GetFileAttributes(filename);
+    DWORD ret = ::GetFileAttributes(filename.fn_str());
 
     return (ret != (DWORD)-1) && !(ret & FILE_ATTRIBUTE_DIRECTORY);
 #else // !__WIN32__
@@ -1125,7 +1125,7 @@ wxCopyFile (const wxString& file1, const wxString& file2, bool overwrite)
     // instead of our code if available
     //
     // NB: 3rd parameter is bFailIfExists i.e. the inverse of overwrite
-    if ( !::CopyFile(file1, file2, !overwrite) )
+    if ( !::CopyFile(file1.fn_str(), file2.fn_str(), !overwrite) )
     {
         wxLogSysError(_("Failed to copy the file '%s' to '%s'"),
                       file1.c_str(), file2.c_str());
@@ -1272,7 +1272,7 @@ bool wxRemoveFile(const wxString& file)
  || (defined(__MWERKS__) && defined(__MSL__))
     int res = wxRemove(file);
 #elif defined(__WXMAC__)
-    int res = unlink(wxFNCONV(file));
+    int res = unlink(file.fn_str());
 #elif defined(__WXPALMOS__)
     int res = 1;
     // TODO with VFSFileDelete()
@@ -1288,7 +1288,7 @@ bool wxMkdir(const wxString& dir, int perm)
 #if defined(__WXPALMOS__)
     return false;
 #elif defined(__WXMAC__) && !defined(__UNIX__)
-    return (mkdir( wxFNCONV(dir) , 0 ) == 0);
+    return (mkdir(dir.fn_str() , 0 ) == 0);
 #else // !Mac
     const wxChar *dirname = dir.c_str();
 
@@ -1376,7 +1376,7 @@ bool wxDirExists(const wxString& pathName)
     return false;
 #elif defined(__WIN32__) && !defined(__WXMICROWIN__)
     // stat() can't cope with network paths
-    DWORD ret = ::GetFileAttributes(strPath);
+    DWORD ret = ::GetFileAttributes(strPath.fn_str());
 
     return (ret != (DWORD)-1) && (ret & FILE_ATTRIBUTE_DIRECTORY);
 #elif defined(__OS2__)
@@ -1662,7 +1662,7 @@ bool wxSetWorkingDirectory(const wxString& d)
     wxUnusedVar(d);
     return false;
 #else
-    return (bool)(SetCurrentDirectory(d) != 0);
+    return (bool)(SetCurrentDirectory(d.fn_str()) != 0);
 #endif
 #else
     // Must change drive, too.

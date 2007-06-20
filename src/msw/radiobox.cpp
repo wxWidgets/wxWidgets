@@ -170,7 +170,7 @@ bool wxRadioBox::Create(wxWindow *parent,
         long newId = NewControlId();
 
         HWND hwndBtn = ::CreateWindow(_T("BUTTON"),
-                                      choices[i],
+                                      choices[i].wx_str(),
                                       styleBtn,
                                       0, 0, 0, 0,   // will be set in SetSize()
                                       GetHwndOf(parent),

@@ -158,19 +158,18 @@ enum MnemonicsFlag
     MNEMONICS_CONVERT_MARKUP
 };
 
-static wxString GTKProcessMnemonics(const wxChar* label, MnemonicsFlag flag)
+static wxString GTKProcessMnemonics(const wxString& label, MnemonicsFlag flag)
 {
-    const size_t len = wxStrlen(label);
     wxString labelGTK;
-    labelGTK.reserve(len);
-    for ( size_t i = 0; i < len; i++ )
+    labelGTK.reserve(label.length());
+    for ( wxString::const_iterator i = label.begin(); i != label.end(); ++i )
     {
-        wxChar ch = label[i];
+        wxChar ch = *i;
 
         switch ( ch )
         {
             case wxT('&'):
-                if ( i == len - 1 )
+                if ( i + 1 == label.end() )
                 {
                     // "&" at the end of string is an error
                     wxLogDebug(wxT("Invalid label \"%s\"."), label);
@@ -180,6 +179,7 @@ static wxString GTKProcessMnemonics(const wxChar* label, MnemonicsFlag flag)
                 if ( flag == MNEMONICS_CONVERT_MARKUP )
                 {
                     bool isMnemonic = true;
+                    size_t distanceFromEnd = label.end() - i;
 
                     // is this ampersand introducing a mnemonic or rather an entity?
                     for (size_t j=0; j < wxMARKUP_ENTITY_MAX; j++)
@@ -187,8 +187,8 @@ static wxString GTKProcessMnemonics(const wxChar* label, MnemonicsFlag flag)
                         const wxChar *entity = wxMarkupEntities[wxMARKUP_ELEMENT_NAME][j];
                         size_t entityLen = wxStrlen(entity);
 
-                        if (len - i >= entityLen &&
-                            wxStrncmp(entity, &label[i], entityLen) == 0)
+                        if (distanceFromEnd >= entityLen &&
+                            wxString(i, i + entityLen) == entity)
                         {
                             labelGTK << entity;
                             i += entityLen - 1;     // the -1 is because main for()
@@ -203,7 +203,7 @@ static wxString GTKProcessMnemonics(const wxChar* label, MnemonicsFlag flag)
                         continue;
                 }
 
-                ch = label[++i]; // skip '&' itself
+                ch = *(++i); // skip '&' itself
                 switch ( ch )
                 {
                     case wxT('&'):

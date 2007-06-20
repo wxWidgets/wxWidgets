@@ -50,7 +50,7 @@ class WXDLLIMPEXP_CORE wxFontMapper;
 class WXDLLIMPEXP_BASE wxFontMapperBase
 {
 public:
-    // constructtor and such
+    // constructor and such
     // ---------------------
 
     // default ctor

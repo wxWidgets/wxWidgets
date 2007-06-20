@@ -200,7 +200,7 @@ bool wxFileTypeImpl::EnsureExtKeyExists()
 // get the command to use
 // ----------------------------------------------------------------------------
 
-wxString wxFileTypeImpl::GetCommand(const wxChar *verb) const
+wxString wxFileTypeImpl::GetCommand(const wxString& verb) const
 {
     // suppress possible error messages
     wxLogNull nolog;

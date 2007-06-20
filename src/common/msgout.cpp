@@ -128,7 +128,8 @@ void wxMessageOutputBest::Output(const wxString& str)
 #ifdef __WINDOWS__
     if ( !IsInConsole() )
     {
-        ::MessageBox(NULL, str, _T("wxWidgets"), MB_ICONINFORMATION | MB_OK);
+        ::MessageBox(NULL, str.wx_str(), _T("wxWidgets"),
+                     MB_ICONINFORMATION | MB_OK);
     }
     else
 #endif // __WINDOWS__/!__WINDOWS__
@@ -167,7 +168,7 @@ void wxMessageOutputDebug::Output(const wxString& str)
 #if defined(__WXMSW__) && !defined(__WXMICROWIN__)
     out.Replace(wxT("\t"), wxT("        "));
     out.Replace(wxT("\n"), wxT("\r\n"));
-    ::OutputDebugString(out);
+    ::OutputDebugString(out.wx_str());
 #elif defined(__WXMAC__) && !defined(__DARWIN__)
     if ( wxIsDebuggerRunning() )
     {

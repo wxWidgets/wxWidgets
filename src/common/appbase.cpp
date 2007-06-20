@@ -959,7 +959,7 @@ bool DoShowAssertDialog(const wxString& msg)
               wxT("You can also choose [Cancel] to suppress ")
               wxT("further warnings.");
 
-    switch ( ::MessageBox(NULL, msgDlg, _T("wxWidgets Debug Alert"),
+    switch ( ::MessageBox(NULL, msgDlg.wx_str(), _T("wxWidgets Debug Alert"),
                           MB_YESNOCANCEL | MB_ICONSTOP ) )
     {
         case IDYES:
@@ -1027,7 +1027,7 @@ void ShowAssertDialog(const wxString& szFile,
 
 #if defined(__WXMSW__) && !defined(__WXMICROWIN__)
         msg << wxT("\r\n");
-        OutputDebugString(msg );
+        OutputDebugString(msg.wx_str());
 #else
         // send to stderr
         wxFprintf(stderr, wxT("%s\n"), msg.c_str());

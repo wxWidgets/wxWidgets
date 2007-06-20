@@ -109,7 +109,7 @@ int wxMessageDialog::ShowModal()
 #endif // wxUSE_UNICODE
 
     // do show the dialog
-    int msAns = MessageBox(hWnd, message, m_caption, msStyle);
+    int msAns = MessageBox(hWnd, message.wx_str(), m_caption.wx_str(), msStyle);
     int ans;
     switch (msAns)
     {

@@ -218,7 +218,7 @@ void wxStatusBar95::SetStatusText(const wxString& strText, int nField)
 
     // Pass both field number and style. MSDN library doesn't mention
     // that nField and style have to be 'ORed'
-    if ( !StatusBar_SetText(GetHwnd(), nField | style, strText) )
+    if ( !StatusBar_SetText(GetHwnd(), nField | style, strText.wx_str()) )
     {
         wxLogLastError(wxT("StatusBar_SetText"));
     }
@@ -404,7 +404,7 @@ void wxStatusBar95::SetStatusStyles(int n, const int styles[])
         // the fields' styles. MSDN library doesn't mention
         // that nField and style have to be 'ORed'
         wxString text = GetStatusText(i);
-        if (!StatusBar_SetText(GetHwnd(), style | i, text))
+        if (!StatusBar_SetText(GetHwnd(), style | i, text.wx_str()))
         {
             wxLogLastError(wxT("StatusBar_SetText"));
         }

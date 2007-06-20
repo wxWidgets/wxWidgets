@@ -514,7 +514,7 @@ bool wxGetDiskSpace(const wxString& WXUNUSED_IN_WINCE(path),
         ULARGE_INTEGER bytesFree, bytesTotal;
 
         // may pass the path as is, GetDiskFreeSpaceEx() is smart enough
-        if ( !pGetDiskFreeSpaceEx(path,
+        if ( !pGetDiskFreeSpaceEx(path.fn_str(),
                                   &bytesFree,
                                   &bytesTotal,
                                   NULL) )
@@ -564,7 +564,7 @@ bool wxGetDiskSpace(const wxString& WXUNUSED_IN_WINCE(path),
 
         // FIXME: this is wrong, we should extract the root drive from path
         //        instead, but this is the job for wxFileName...
-        if ( !::GetDiskFreeSpace(path,
+        if ( !::GetDiskFreeSpace(path.fn_str(),
                                  &lSectorsPerCluster,
                                  &lBytesPerSector,
                                  &lNumberOfFreeClusters,
@@ -608,7 +608,7 @@ bool wxGetEnv(const wxString& WXUNUSED_IN_WINCE(var),
     return false;
 #else // Win32
     // first get the size of the buffer
-    DWORD dwRet = ::GetEnvironmentVariable(var, NULL, 0);
+    DWORD dwRet = ::GetEnvironmentVariable(var.wx_str(), NULL, 0);
     if ( !dwRet )
     {
         // this means that there is no such variable
@@ -617,7 +617,8 @@ bool wxGetEnv(const wxString& WXUNUSED_IN_WINCE(var),
 
     if ( value )
     {
-        (void)::GetEnvironmentVariable(var, wxStringBuffer(*value, dwRet),
+        (void)::GetEnvironmentVariable(var.wx_str(),
+                                       wxStringBuffer(*value, dwRet),
                                        dwRet);
     }
 

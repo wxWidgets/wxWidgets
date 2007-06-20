@@ -254,12 +254,12 @@ wxCursor::wxCursor(const wxString& filename,
     switch ( kind )
     {
         case wxBITMAP_TYPE_CUR_RESOURCE:
-            hcursor = ::LoadCursor(wxGetInstance(), filename);
+            hcursor = ::LoadCursor(wxGetInstance(), filename.fn_str());
             break;
 
 #ifndef __WXWINCE__
         case wxBITMAP_TYPE_CUR:
-            hcursor = ::LoadCursorFromFile(filename);
+            hcursor = ::LoadCursorFromFile(filename.fn_str());
             break;
 #endif
 

@@ -934,7 +934,7 @@ void wxTreeCtrl::SetItemText(const wxTreeItemId& item, const wxString& text)
     {
         if ( item == m_idEdited )
         {
-            ::SetWindowText(hwndEdit, text);
+            ::SetWindowText(hwndEdit, text.wx_str());
         }
     }
 }

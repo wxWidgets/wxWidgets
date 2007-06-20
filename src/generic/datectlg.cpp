@@ -181,7 +181,7 @@ public:
 
         if ( !s.empty() )
         {
-            pDt->ParseFormat(s, m_format);
+            pDt->ParseFormat(s.c_str(), m_format);
             if ( !pDt->IsValid() )
                 return false;
         }
