@@ -1,4 +1,4 @@
-///////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 // Name:        tests/strings/stdstrings.cpp
 // Purpose:     wxString unit test
 // Author:      Vadim Zeitlin, Wlodzimierz ABX Skiba
@@ -101,7 +101,7 @@ void StdStringTestCase::StdConstructors()
     CPPUNIT_ASSERT( s7 == s1 );
     CPPUNIT_ASSERT( s8 == _T("efgh") );
 
-    const char *pc = s1;
+    const char *pc = s1.c_str();
     WX_ASSERT_STR_EQUAL( "bcd", wxString(pc + 1, pc + 4) );
 
     const wchar_t *pw = s2.c_str();
@@ -165,7 +165,7 @@ void StdStringTestCase::StdAssign()
     CPPUNIT_ASSERT( s5 == _T("aaa") );
     CPPUNIT_ASSERT( s6 == _T("ef") );
 
-    const char *pc = s1;
+    const char *pc = s1.c_str();
     s7.assign(pc, pc + 2);
     WX_ASSERT_STR_EQUAL( "de", s7 );
 
@@ -539,10 +539,21 @@ void StdStringTestCase::StdConversion()
     CPPUNIT_ASSERT( s3 == "std::wstring value" );
 
     wxString s4("hello");
+
+    // wxString -> std::string conversion is only available in wxUSE_STL case,
+    // because it conflicts with conversion to const char*/wchar_t*:
+#if wxUSE_STL
     std::string s5 = s4;
     CPPUNIT_ASSERT( s5 == "hello" );
 
     wxStdWideString s6 = s4;
     CPPUNIT_ASSERT( s6 == "hello" );
+#endif
+
+    std::string s7(s4);
+    CPPUNIT_ASSERT( s7 == "hello" );
+
+    wxStdWideString s8(s4);
+    CPPUNIT_ASSERT( s8 == "hello" );
 }
 #endif // wxUSE_STD_STRING

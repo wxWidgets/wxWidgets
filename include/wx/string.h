@@ -1003,7 +1003,12 @@ public:
     wxString(const std::string& str)
         { assign(str.c_str(), str.length()); }
   #endif
+#endif // wxUSE_STD_STRING
 
+  // Unlike ctor from std::string, we provide conversion to std::string only
+  // if wxUSE_STL and not merely wxUSE_STD_STRING (which is on by default),
+  // because it conflicts with operator const char/wchar_t*:
+#if wxUSE_STL
   #if wxUSE_UNICODE_WCHAR && wxUSE_STL_BASED_WXSTRING
     // wxStringImpl is std::string in the encoding we want
     operator const wxStdWideString&() const { return m_impl; }
@@ -1176,8 +1181,13 @@ public:
 
     // implicit conversion to C string
     operator wxCStrData() const { return c_str(); }
+
+    // these operators conflict with operators for conversion to std::string,
+    // so they must be disabled in STL build:
+#if !wxUSE_STL
     operator const char*() const { return c_str(); }
     operator const wchar_t*() const { return c_str(); }
+#endif
 
     // implicit conversion to untyped pointer for compatibility with previous
     // wxWidgets versions: this is the same as conversion to const char * so it

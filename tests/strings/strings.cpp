@@ -736,10 +736,13 @@ void StringTestCase::CStrDataImplicitConversion()
     wxString s("foo");
 
     CPPUNIT_ASSERT( CheckStrConstWChar(s, s.c_str()) );
-    CPPUNIT_ASSERT( CheckStrConstWChar(s, s) );
-
     CPPUNIT_ASSERT( CheckStrConstChar(s, s.c_str()) );
+
+    // implicit conversion of wxString is not available in STL build
+#if !wxUSE_STL
+    CPPUNIT_ASSERT( CheckStrConstWChar(s, s) );
     CPPUNIT_ASSERT( CheckStrConstChar(s, s) );
+#endif
 }
 
 void StringTestCase::ExplicitConversion()
