@@ -1,19 +1,25 @@
 import unittest
 import wx
+import sys
 
 import testWindow
-import testItemContainer
 
 """
-This file contains classes and methods for unit testing the API of wx.Control,
-as well as a base class for testing subclasses of wx.ControlWithItems (and
-a few tests for wx.ControlWithItems itself).
+This file contains classes and methods for unit testing the API of wx.Control.
 
 Methods yet to test for wx.Control:
 __init__, Command, Create, GetAlignment
 """
 
-class ControlTest(testWindow.WindowTest):
+BaseClass = testWindow.WindowTest
+if sys.platform.find('win32') != -1:
+    BaseClass = testWindow.WindowWinTest
+elif sys.platform.find('linux') != -1:
+    BaseClass = testWindow.WindowLinuxTest
+elif sys.platform.find('mac') != -1:
+    BaseClass = testWindow.WindowMacTest
+
+class ControlTest(BaseClass):
     def setUp(self):
         self.app = wx.PySimpleApp()
         self.frame = wx.Frame(parent=None, id=wx.ID_ANY)
@@ -49,27 +55,27 @@ class ControlTest(testWindow.WindowTest):
 
 # -----------------------------------------------------------
 
-class ControlWithItemsTest(unittest.TestCase):
-    def setUp(self):
-        self.app = wx.PySimpleApp()
-    
-    def tearDown(self):
-        self.app.Destroy()
-    
-    def testConstructorFails(self):
-        self.assertRaises(AttributeError, wx.ControlWithItems)
+class ControlWinTest(ControlTest):
+    pass
 
+class ControlLinuxTest(ControlTest):
+    pass
 
-class ControlWithItemsBase(ControlTest, testItemContainer.ItemContainerBase):
-    """Mixing wx.Control with wx.ItemContainer """
+class ControlMacTest(ControlTest):
     pass
 
 # -----------------------------------------------------------
 
 def suite():
-    suite = unittest.makeSuite(ControlTest)
-    suite2 = unittest.makeSuite(ControlWithItemsTest)
-    return unittest.TestSuite((suite,suite2))
+    testclass = ControlTest
+    if sys.platform.find('win32') != -1:
+        testclass = ControlWinTest
+    elif sys.platform.find('linux') != -1:
+        testclass = ControlLinuxTest
+    elif sys.platform.find('mac') != -1:
+        testclass = ControlMacTest
+    suite = unittest.makeSuite(testclass)
+    return suite
     
 if __name__ == '__main__':
     unittest.main(defaultTest='suite')

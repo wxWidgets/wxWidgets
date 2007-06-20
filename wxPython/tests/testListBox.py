@@ -1,7 +1,7 @@
 import unittest
 import wx
 
-import testControl
+import testControlWithItems
 
 """
 This file contains classes and methods for unit testing the API of wx.ListBox.
@@ -14,7 +14,7 @@ SetItemFont, SetItemForegroundColour, SetSelection, SetStringSelection
 
 """
 
-class ListBoxTest(testControl.ControlWithItemsBase):
+class ListBoxTest(testControlWithItems.ControlWithItemsBase):
     def setUp(self):
         self.app = wx.PySimpleApp()
         self.frame = wx.Frame(parent=None, id=wx.ID_ANY)

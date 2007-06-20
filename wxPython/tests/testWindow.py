@@ -1,5 +1,6 @@
 import unittest
 import wx
+import sys
 
 import testColor
 import testRect
@@ -387,10 +388,29 @@ class WindowTest(unittest.TestCase):
         Tests to make sure the window's children register as such"""
         for child in self.children:
             self.assertEquals(self.testControl, child.GetParent())
-        
+
+# -----------------------------------------------------------
+
+class WindowWinTest(WindowTest):
+    pass
+
+class WindowMacTest(WindowTest):
+    pass
+
+class WindowLinuxTest(WindowTest):
+    pass
+
+# -----------------------------------------------------------
 
 def suite():
-    suite = unittest.makeSuite(WindowTest)
+    testclass = WindowTest
+    if sys.platform.find('win32') != -1:
+        testclass = WindowWinTest
+    elif system.platform.find('linux') != -1:
+        testclass = WindowLinuxTest
+    elif system.platform.find('mac') != -1:
+        testclass = WindowMacTest
+    suite = unittest.makeSuite(testclass)
     return suite
     
 if __name__ == '__main__':
