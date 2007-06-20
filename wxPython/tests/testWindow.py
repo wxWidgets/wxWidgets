@@ -406,9 +406,9 @@ def suite():
     testclass = WindowTest
     if sys.platform.find('win32') != -1:
         testclass = WindowWinTest
-    elif system.platform.find('linux') != -1:
+    elif sys.platform.find('linux') != -1:
         testclass = WindowLinuxTest
-    elif system.platform.find('mac') != -1:
+    elif sys.platform.find('mac') != -1:
         testclass = WindowMacTest
     suite = unittest.makeSuite(testclass)
     return suite
