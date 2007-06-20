@@ -167,6 +167,7 @@ wxX11:
 All (GUI):
 
 - Added colour normalization to PNM image handler (Ray Johnston)
+- Fixed freeing of "static" alpha data in wxImage (Axel Gembe)
 
 wxMSW:
 

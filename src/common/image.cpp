@@ -1665,7 +1665,9 @@ void wxImage::SetAlpha( unsigned char *alpha, bool static_data )
         alpha = (unsigned char *)malloc(M_IMGDATA->m_width*M_IMGDATA->m_height);
     }
 
-    free(M_IMGDATA->m_alpha);
+    if( !M_IMGDATA->m_staticAlpha )
+        free(M_IMGDATA->m_alpha);
+
     M_IMGDATA->m_alpha = alpha;
     M_IMGDATA->m_staticAlpha = static_data;
 }
@@ -1898,8 +1900,11 @@ bool wxImage::ConvertAlphaToMask(unsigned char threshold)
         }
     }
 
-    free(M_IMGDATA->m_alpha);
+    if( !M_IMGDATA->m_staticAlpha )
+        free(M_IMGDATA->m_alpha);
+
     M_IMGDATA->m_alpha = NULL;
+    M_IMGDATA->m_staticAlpha = false;
 
     return true;
 }
