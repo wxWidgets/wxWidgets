@@ -699,6 +699,9 @@ static pascal OSStatus ControlToolbarItemHandler( EventHandlerCallRef inCallRef,
                                 sz = wxSize(0,0) ;
                         }
 
+                        // Extra width to avoid edge of combobox being cut off
+                        sz.x += 3;
+                        
                         HISize min, max;
                         min.width = max.width = sz.x ;
                         min.height = max.height = sz.y ;
