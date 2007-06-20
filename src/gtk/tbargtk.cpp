@@ -363,9 +363,11 @@ void gtktoolwidget_size_callback( GtkWidget *widget,
 //-----------------------------------------------------------------------------
 
 static void wxInsertChildInToolBar( wxWindow* WXUNUSED(parent),
-                                    wxWindow* WXUNUSED(child) )
+                                    wxWindow* child)
 {
-    // we don't do anything here
+    // Child widget will be inserted into GtkToolbar by DoInsertTool. Ref it
+    // here so reparenting into wxToolBar doesn't delete it.
+    g_object_ref(child->m_widget);
 }
 
 // ----------------------------------------------------------------------------
@@ -653,6 +655,8 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                                        (const char *) NULL,
                                        posGtk
                                       );
+            // release reference obtained by wxInsertChildInToolBar
+            g_object_unref(tool->GetControl()->m_widget);
 
             // connect after in order to correct size_allocate events
             g_signal_connect_after (tool->GetControl()->m_widget, "size_allocate",
