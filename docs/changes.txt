@@ -142,7 +142,6 @@ wxGTK:
 - wxTopLevelWindow::GetSize() returns the size including the WM decorations.
 - wxTopLevelWindow::GetClientSize() returns 0x0 when the window is minimized.
 - Added support for colour cursors (Pascal Monasse).
-- Setting foreground colour of single line wxTextCtrl now works
 - Pass current control text to EVT_TEXT handler for wxSpinCtrl (John Ratliff)
 - Added gtk.tlw.can-set-transparency system option
 
@@ -188,6 +187,7 @@ wxMSW:
 
 wxGTK:
 
+- Setting foreground colour of single line wxTextCtrl now works
 - More work on setting defaults in GNOME print dialogs.
 - Also made landscape printing work as per wxMSW.
 - Add support for clipping in GNOME print backend.
