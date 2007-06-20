@@ -47,6 +47,12 @@
     #error You need to enable XPM support to use XPM bitmaps with toolbar!
 #endif // USE_XPM_BITMAPS
 
+// If this is 1, the sample will test an extra toolbar identical to the
+// main one, but not managed by the frame. This can test subtle differences
+// in the way toolbars are handled, especially on Mac where there is one
+// native, 'installed' toolbar.
+#define USE_UNMANAGED_TOOLBAR 0
+
 // ----------------------------------------------------------------------------
 // resources
 // ----------------------------------------------------------------------------
@@ -96,6 +102,7 @@ public:
             const wxSize& size = wxDefaultSize,
             long style = wxDEFAULT_FRAME_STYLE|wxCLIP_CHILDREN|wxNO_FULL_REPAINT_ON_RESIZE);
 
+    void PopulateToolbar(wxToolBarBase* toolBar);
     void RecreateToolbar();
 
     void OnQuit(wxCommandEvent& event);
@@ -153,6 +160,9 @@ private:
     Positions           m_toolbarPosition;
 
     wxTextCtrl         *m_textWindow;
+
+    wxPanel            *m_panel;
+    wxToolBar          *m_extraToolBar;
 
     wxToolBar          *m_tbar;
 
@@ -331,6 +341,11 @@ void MyFrame::RecreateToolbar()
     toolBar = CreateToolBar(style, ID_TOOLBAR);
 #endif
 
+    PopulateToolbar(toolBar);
+}
+
+void MyFrame::PopulateToolbar(wxToolBarBase* toolBar)
+{
     // Set up toolbar
     enum
     {
@@ -580,21 +595,22 @@ MyFrame::MyFrame(wxFrame* parent,
     // Create the toolbar
     RecreateToolbar();
 
-    m_textWindow = new wxTextCtrl(this, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
+    m_panel = new wxPanel(this, wxID_ANY);
+#if USE_UNMANAGED_TOOLBAR
+    m_extraToolBar = new wxToolBar(m_panel, wxID_ANY, wxDefaultPosition, wxDefaultSize, wxTB_TEXT|wxTB_FLAT|wxTB_TOP);
+    PopulateToolbar(m_extraToolBar);
+#else
+    m_extraToolBar = NULL;
+#endif
+    
+    m_textWindow = new wxTextCtrl(m_panel, wxID_ANY, wxEmptyString, wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE);
+
+    wxBoxSizer* sizer = new wxBoxSizer(wxVERTICAL);
+    m_panel->SetSizer(sizer);
+    if (m_extraToolBar)
+        sizer->Add(m_extraToolBar, 0, wxEXPAND, 0);
+    sizer->Add(m_textWindow, 1, wxEXPAND, 0);
 }
-
-#if USE_GENERIC_TBAR
-
-wxToolBar* MyFrame::OnCreateToolBar(long style,
-                                    wxWindowID id,
-                                    const wxString& name)
-{
-    return (wxToolBar *)new wxToolBarSimple(this, id,
-                                            wxDefaultPosition, wxDefaultSize,
-                                            style, name);
-}
-
-#endif // USE_GENERIC_TBAR
 
 void MyFrame::LayoutChildren()
 {
@@ -612,7 +628,7 @@ void MyFrame::LayoutChildren()
         offset = 0;
     }
 
-    m_textWindow->SetSize(offset, 0, size.x - offset, size.y);
+    m_panel->SetSize(offset, 0, size.x - offset, size.y);
 }
 
 void MyFrame::OnSize(wxSizeEvent& event)
