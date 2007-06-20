@@ -14,11 +14,6 @@ SetStatusBarPane, SetStatusText, SetStatusWidths, SetToolBar
 """
 
 class FrameTest(testTopLevelWindow.TopLevelWindowBase):
-    def __init__(self, arg):
-        # superclass setup
-        super(FrameTest, self).__init__(arg)
-        # FrameTest setup
-        
     def setUp(self):
         self.app = wx.PySimpleApp()
         self.frame = wx.Frame(parent=None, id=wx.ID_ANY)

@@ -14,11 +14,6 @@ __init__, Command, Create, GetAlignment
 """
 
 class ControlTest(testWindow.WindowTest):
-    def __init__(self, arg):
-        # superclass setup
-        super(ControlTest, self).__init__(arg)
-        # ControlTest setup
-
     def setUp(self):
         self.app = wx.PySimpleApp()
         self.frame = wx.Frame(parent=None, id=wx.ID_ANY)

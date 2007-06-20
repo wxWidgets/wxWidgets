@@ -16,11 +16,6 @@ SetTmpDefaultItem, ShowFullScreen
 """
 
 class TopLevelWindowBase(testWindow.WindowTest):
-    def __init__(self, arg):
-        # superclass setup
-        super(TopLevelWindowBase, self).__init__(arg)
-        # TopLevelWindowTest setup
-
     def setUp(self):
         self.app = wx.PySimpleApp()
         self.frame = wx.Frame(parent=None, id=wx.ID_ANY)

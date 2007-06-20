@@ -19,11 +19,6 @@ SetSelection, SetStyle, ShowPosition, Undo, write, WriteText, XYToPosition
 """
 
 class TextCtrlTest(testControl.ControlTest):
-    def __init__(self, arg):
-        # superclass setup
-        super(TextCtrlTest, self).__init__(arg)
-        # TextCtrlTest setup
-        
     def setUp(self):
         self.app = wx.PySimpleApp()
         self.frame = wx.Frame(parent=None, id=wx.ID_ANY)
