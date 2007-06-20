@@ -43,7 +43,7 @@ public:
     wxMetafileRefData(CFDataRef data);    
 #else
     // creates a metafile from memory, assumes ownership
-    wxMetafileRefData(Handle data);    
+    wxMetafileRefData(PicHandle data);    
 #endif
     // prepares a recording metafile
     wxMetafileRefData( int width, int height);    
@@ -79,7 +79,7 @@ private:
     int m_height ;
 };
 
-#if! wxMAC_USE_CORE_GRAPHICS
+#if !wxMAC_USE_CORE_GRAPHICS
 wxMetafileRefData::wxMetafileRefData(PicHandle pict)
 {
     Init();
