@@ -209,17 +209,15 @@ wxCursor::wxCursor(const wxImage& image)
     HCURSOR hcursor = wxBitmapToHCURSOR( wxBitmap(imageSized),
                                          hotSpotX, hotSpotY );
 
-#if wxUSE_WXDIB
     if ( !hcursor )
     {
         wxLogWarning(_("Failed to create cursor."));
         return;
     }
-#endif // wxUSE_WXDIB
 
     m_refData = new wxCursorRefData(hcursor, true /* delete it later */);
 }
-#endif
+#endif // wxUSE_IMAGE
 
 wxCursor::wxCursor(const char WXUNUSED(bits)[],
                    int WXUNUSED(width),
