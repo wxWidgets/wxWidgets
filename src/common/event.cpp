@@ -1056,7 +1056,7 @@ wxEvtHandler::~wxEvtHandler()
 
 #if wxUSE_THREADS
 
-bool wxEvtHandler::ProcessThreadEvent(wxEvent& event)
+bool wxEvtHandler::ProcessThreadEvent(const wxEvent& event)
 {
     // check that we are really in a child thread
     wxASSERT_MSG( !wxThread::IsMain(),
@@ -1077,7 +1077,7 @@ void wxEvtHandler::ClearEventLocker()
 
 #endif // wxUSE_THREADS
 
-void wxEvtHandler::AddPendingEvent(wxEvent& event)
+void wxEvtHandler::AddPendingEvent(const wxEvent& event)
 {
     // 1) Add event to list of pending events of this event handler
 

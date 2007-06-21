@@ -2337,12 +2337,12 @@ public:
     virtual bool ProcessEvent(wxEvent& event);
 
     // add an event to be processed later
-    virtual void AddPendingEvent(wxEvent& event);
+    virtual void AddPendingEvent(const wxEvent& event);
 
     void ProcessPendingEvents();
 
 #if wxUSE_THREADS
-    bool ProcessThreadEvent(wxEvent& event);
+    bool ProcessThreadEvent(const wxEvent& event);
 #endif
 
     // Dynamic association of a member function handler with the event handler,
@@ -2498,7 +2498,7 @@ private:
 
 // Post a message to the given eventhandler which will be processed during the
 // next event loop iteration
-inline void wxPostEvent(wxEvtHandler *dest, wxEvent& event)
+inline void wxPostEvent(wxEvtHandler *dest, const wxEvent& event)
 {
     wxCHECK_RET( dest, wxT("need an object to post event to in wxPostEvent") );
 
