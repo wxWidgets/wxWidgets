@@ -103,7 +103,7 @@ class rose:
         line = []
         stop = self.nextpt + self.step
         keep_running = True
-        if stop > self.endpt:
+        if stop >= self.endpt:
             stop = self.endpt
             keep_running = False
         for i in range (self.nextpt, stop + 1):
@@ -122,10 +122,13 @@ class rose:
         self.sin_table = [sin(2.0 * pi * i / vectors) for i in range(vectors)]
         self.cos_table = [cos(2.0 * pi * i / vectors) for i in range(vectors)]
             
-    # Rescale (x,y) data to match our window.
+    # Rescale (x,y) data to match our window.  Note the negative scaling in the
+    # Y direction, this compensates for Y moving down the screen, but up on
+    # graph paper.
     def rescale(self, line, offset, scale):
         for i in range(len(line)):
-            line[i] = (line[i][0] * scale + offset[0], line[i][1] * scale + offset[1])
+            line[i] = (line[i][0] *   scale  + offset[0],
+                       line[i][1] * (-scale) + offset[1])
         return line
 
     # Euler's Method for computing the greatest common divisor.  Knuth's
@@ -213,40 +216,34 @@ class rose:
         self.next()
         return self.restart()
 
-    # Stop/Redraw button.
-    def cmd_stop(self):
-        if self.cmd_state == self.CMD_STOP:
-            self.restart()		# Redraw current pattern
-        elif self.cmd_state == self.CMD_GO:
-            self.cmd_state = self.CMD_STOP
-            self.update_labels()
-
-    # Skip/Forward button.  CMD_STOP & CMD_GO both just call resume.
-    def cmd_step(self):
-        # print 'cmd_step, cmd_state', self.cmd_state
-        self.resume()		# Draw next pattern
-
-    # Go/Redraw button
-    def cmd_go(self):
+    # Go/Stop button.
+    def cmd_go_stop(self):
         if self.cmd_state == self.CMD_STOP:
             self.cmd_state = self.CMD_GO
-            self.update_labels()
             self.resume()		# Draw next pattern
         elif self.cmd_state == self.CMD_GO:
-            self.restart()		# Redraw current pattern
+            self.cmd_state = self.CMD_STOP
+        self.update_labels()
 
     # Centralize button naming to share with initialization.
+    # Leave colors to the application (assuming it cares), we can't guess
+    # what's available.
     def update_labels(self):
         if self.cmd_state == self.CMD_STOP:
-            self.AppCmdLabels(('Redraw', 'Forward', 'Go', 'Back'))
+            self.AppCmdLabels(('Go', 'Redraw', 'Backward', 'Forward'))
         else:		# Must be in state CMD_GO
-            self.AppCmdLabels(('Stop', 'Skip', 'Redraw', 'Reverse'))
+            self.AppCmdLabels(('Stop', 'Redraw', 'Reverse', 'Skip'))
 
-    # Reverse button.  Useful for when you see an interesting pattern and want
+    # Redraw/Redraw button
+    def cmd_redraw(self):
+        self.restart()		# Redraw current pattern
+
+    # Backward/Reverse button
+    # Useful for when you see an interesting pattern and want
     # to go back to it.  If running, just change direction.  If stopped, back
     # up one step.  The resume code handles the step, then we change the
     # incrementers back to what they were. (Unless resume changed them too.)
-    def cmd_reverse(self):
+    def cmd_backward(self):
         self.sincr = -self.sincr
         self.pincr = -self.pincr
         if self.cmd_state == self.CMD_STOP:
@@ -256,6 +253,10 @@ class rose:
         else:
             self.AppSetIncrs(self.sincr, self.pincr)
         
+    # Forward/Skip button.  CMD_STOP & CMD_GO both just call resume.
+    def cmd_step(self):
+        self.resume()		# Draw next pattern
+
     # Handler called on each timer event.  This handles the metered drawing
     # of a rose and the delays between them.  It also registers for the next
     # timer event unless we're idle (rose is done and the delay between

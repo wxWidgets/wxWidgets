@@ -15,6 +15,59 @@
 # This module is responsible for everything involving GUI usage
 # as clroses knows nothing about wxpython, tkintr, etc.
 
+# There are some notes about how the Roses algorithm works in clroses.py,
+# but the best reference should be at http://WermeNH.com/roses/index.html .
+
+# There are a number of enhancements that could be done to wxRoses, and
+# contributions are welcome as long as you don't destory the general
+# structure, flavor, and all that.  The following list is in the order
+# I'd like to see done.  Some are easy, some aren't, some are easy if
+# you have experience in the right parts of external code.
+
+# Brighter crossing points.
+# Where many vectors cross, the display becomes washed out as a solid shape
+# of light.  On (antique) refresh vector graphics systems, crossing points
+# are brighter because the electron beam paints the pixels multiple times.
+# This gives complex patterns a lacy feel to some, and a 3-D sense to
+# fluted shapes where vectors lie tangent to some curve.  It would be
+# nice to do the same in a bitmap buffer, the code to draw a vector is
+# pretty simple, adding something that adds brightness to it via math or
+# a lookup table ought to be a simple addition.
+
+# Monochrome is so 20th century.
+# There are a number of things that could be done with color.  The simplest
+# is to step through colors in a color list, better things to do would be
+# for clroses.py to determine the length of an interesting "generator pattern,"
+# e.g. the square in the opening display.  Then it could change colors either
+# every four vectors or cycle through the first four colors in the list.
+
+# Bookmark that Rose!
+# As you play with wxRoses, you'll come across some patterns that are
+# "keepers."  A bookmark mechanism would be handy.
+
+# Save that Rose!
+# It would be nice to have a Menu-bar/File/Save-as dialog to save a pattern
+# as a jpg/png/gif file.
+
+# Themes
+# A pulldown option to select various themes is worthwhile.  E.g.:
+#  Start an interesting animation,
+#  Select complex, lacy Roses,
+#  Select the author's favorites,
+#  Return to the initial Rose.
+# Actually, all that's necessary are some pre-loaded bookmarks.
+
+# Help text
+# Standard fare, or:
+
+# Slide show
+# At CMU I created an interactive slide show that walked people through
+# all the options and made suggestions about how to choose Style and Petal.
+# I forget exactly what I said and may not have listings for it.  At any rate,
+# making the help mechanism start one of several "lessons" where it could
+# control the display (without blocking the user's control) would be pretty
+# straightforward.
+
 import wx
 import clroses
 import wx.lib.colourselect as cs
@@ -73,7 +126,7 @@ class RosePanel(wx.Panel):
         self.useBuffer = True
 
         # set default colors
-        self.SetBackgroundColour((51,51,51))      # gray20
+        self.SetBackgroundColour((51, 51, 51))    # gray20
         self.SetForegroundColour((164, 211, 238)) # lightskyblue2
         
         # connect the size and paint events to handlers
@@ -151,9 +204,9 @@ class OptionsPanel(wx.Panel):
             sizer.Add(lbl, 0, wx.ALIGN_CENTER_VERTICAL)
             return sizer, btn
         
-        s, self.fg = makeCButton('foreground')
+        s, self.fg = makeCButton('Foreground')
         sizer.Add(s)        
-        s, self.bg = makeCButton('background')
+        s, self.bg = makeCButton('Background')
         sizer.Add(s)
         self.SetSizer(sizer)
 
@@ -197,6 +250,18 @@ class OptionsPanel(wx.Panel):
 # This class also derives from clroses.rose so it can implement the
 # required interfaces to connect the GUI to the rose engine.
 class MyFrame(wx.Frame, clroses.rose):
+    # Color matching dictionary, convert label name to color:
+    # Stop and Go ala traffic lights,
+    # Skip and Forward look ahead to the purple mountain majesties (really bluish),
+    # Reverse and Backward look morosely behind to maroon memories,
+    # Redraw looks at the brown earth right below your feet.
+    # Yeah, so it's lame.  All I really wanted was to color Stop and Go.
+    labelColours = {
+        'Go': 'dark green', 'Stop': 'red',
+        'Redraw': 'brown', 'Skip': 'dark slate blue',
+        'Backward': 'maroon', 'Forward': 'dark slate blue', 'Reverse': 'maroon'
+        }
+
     def __init__(self):
         def makeSP(name, labels, statictexts = None):
             panel = wx.Panel(self.side_panel, -1)
@@ -219,22 +284,31 @@ class MyFrame(wx.Frame, clroses.rose):
         self.side_panel = wx.Panel(self)
         
         # The cmd panel is four buttons whose names and foreground colors
-        # change.  Plop them in a StaticBox like the SpinPanels.
+        # change.  Plop them in a StaticBox like the SpinPanels.  Use
+        # a 2x2 grid, but StaticBoxSizer can't handle that.  Therefore,
+        # create a sub panel, layout the buttons there, then give that to
+        # a higher panel that has the static box stuff.
         self.cmd_panel = wx.Panel(self.side_panel, -1)
-        box = wx.StaticBox(self.cmd_panel, -1, 'Command')
-        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        self.sub_panel = wx.Panel(self.cmd_panel, -1)
+        sizer = wx.GridSizer(rows = 2, cols = 2)
         global ctrl_buttons
-        border = 'wxMac' in wx.PlatformInfo and 3 or 0
-        for name, color, handler in (
-                ('Redraw',  'red',        self.OnRedraw),
-                ('Forward', 'magenta',    self.OnForward),
-                ('Go',      'dark green', self.OnGo),
-                ('Back',    'blue',       self.OnBack)):
-            button = wx.Button(self.cmd_panel, -1, name)
-            button.SetForegroundColour(color)
+        border = 'wxMac' in wx.PlatformInfo and 3 or 1
+        for name, handler in (
+                ('Go',       self.OnGoStop),
+                ('Redraw',   self.OnRedraw),
+                ('Backward', self.OnBackward),
+                ('Forward',  self.OnForward)):
+            button = wx.Button(self.sub_panel, -1, name)
+            button.SetForegroundColour(self.labelColours[name])
             ctrl_buttons[name] = button
             button.Bind(wx.EVT_BUTTON, handler)
-            sizer.Add(button, 0, wx.EXPAND|wx.TOP|wx.BOTTOM, border)
+            sizer.Add(button, 0, wx.EXPAND|wx.ALL, border)
+        self.sub_panel.SetSizer(sizer)
+
+        # Set up cmd_panel with StaticBox stuff
+        box = wx.StaticBox(self.cmd_panel, -1, 'Command')
+        sizer = wx.StaticBoxSizer(box, wx.VERTICAL)
+        sizer.Add(self.sub_panel)
         self.cmd_panel.SetSizer(sizer)
 
         # Now make the rest of the control panels...
@@ -243,7 +317,7 @@ class MyFrame(wx.Frame, clroses.rose):
         # important.
         # In the SpinPanel data (name, min, value, max), value will be
         # overridden by clroses.py defaults.
-        self.coe_panel = makeSP('Coefficients',
+        self.coe_panel = makeSP('Coefficient',
                                (('Style',     0, 100, 3600),
                                 ('Sincr', -3600,  -1, 3600),
                                 ('Petal',     0,   2, 3600),
@@ -309,29 +383,29 @@ class MyFrame(wx.Frame, clroses.rose):
     # Command button event handlers.  These are relabled when changing between auto
     # and manual modes.  They simply reflect the call to a method in the base class.
     #
-    # Stop/Redraw button
+    # Go/Stop button
+    def OnGoStop(self, event):
+        if verbose:
+            print 'OnGoStop'
+        self.cmd_go_stop()
+
+    # Redraw/Redraw
     def OnRedraw(self, event):
         if verbose:
             print 'OnRedraw'
-        self.cmd_stop()
+        self.cmd_redraw()
 
-    # Skip/Forward
+    # Backward/Reverse
+    def OnBackward(self, event):
+        if verbose:
+            print 'OnBackward'
+        self.cmd_backward()
+
+    # Forward/Skip
     def OnForward(self, event):
         if verbose:
             print 'OnForward'
         self.cmd_step()
-
-    # Redraw/Go
-    def OnGo(self, event):
-        if verbose:
-            print 'OnGo'
-        self.cmd_go()
-
-    # Reverse/Back
-    def OnBack(self, event):
-        if verbose:
-            print 'OnBack'
-        self.cmd_reverse()
 
 
     # The clroses.roses class expects to have methods available that
@@ -379,8 +453,9 @@ class MyFrame(wx.Frame, clroses.rose):
     # Command buttons change their names based on the whether we're in auto
     # or manual mode.
     def AppCmdLabels(self, labels):
-        for name, label in map(None, ('Redraw', 'Forward', 'Go', 'Back'), labels):
+        for name, label in map(None, ('Go', 'Redraw', 'Backward', 'Forward'), labels):
             ctrl_buttons[name].SetLabel(label)
+            ctrl_buttons[name].SetForegroundColour(self.labelColours[label])
 
 
     # Timer methods.  The paranoia about checking up on the callers is
