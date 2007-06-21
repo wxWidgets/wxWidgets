@@ -93,6 +93,7 @@ typedef unsigned int    size_t;
 typedef unsigned int    time_t;
 typedef unsigned char   byte;
 typedef unsigned long   wxUIntPtr;
+typedef double          wxDouble;
 
 #define wxWindowID      int
 #define wxCoord         int
