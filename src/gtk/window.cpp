@@ -4126,9 +4126,8 @@ void wxWindowGTK::SetScrollbar(int orient,
                                int range,
                                bool WXUNUSED(update))
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
-    wxCHECK_RET( m_wxwindow != NULL, wxT("window needs client area for scrolling") );
-    wxCHECK_RET( m_wxwindow != m_widget, wxT("no scrolling for this wxWindow, use wxHSCROLL or wxVSCROLL") );
+    GtkRange * const sb = m_scrollBar[ScrollDirFromOrient(orient)];
+    wxCHECK_RET( sb, _T("this window is not scrollable") );
 
     if (range > 0)
     {
@@ -4145,7 +4144,7 @@ void wxWindowGTK::SetScrollbar(int orient,
         pos = range - thumbVisible;
     if (pos < 0)
         pos = 0;
-    GtkAdjustment* adj = m_scrollBar[ScrollDirFromOrient(orient)]->adjustment;
+    GtkAdjustment * const adj = sb->adjustment;
     adj->step_increment = 1;
     adj->page_increment =
     adj->page_size = thumbVisible;
@@ -4156,16 +4155,15 @@ void wxWindowGTK::SetScrollbar(int orient,
 
 void wxWindowGTK::SetScrollPos(int orient, int pos, bool WXUNUSED(refresh))
 {
-    wxCHECK_RET( m_widget != NULL, wxT("invalid window") );
-    wxCHECK_RET( m_wxwindow != NULL, wxT("window needs client area for scrolling") );
-    wxCHECK_RET( m_wxwindow != m_widget, wxT("no scrolling for this wxWindow, use wxHSCROLL or wxVSCROLL") );
+    const int dir = ScrollDirFromOrient(orient);
+    GtkRange * const sb = m_scrollBar[dir];
+    wxCHECK_RET( sb, _T("this window is not scrollable") );
 
     // This check is more than an optimization. Without it, the slider
     //   will not move smoothly while tracking when using wxScrollHelper.
     if (GetScrollPos(orient) != pos)
     {
-        const int dir = ScrollDirFromOrient(orient);
-        GtkAdjustment* adj = m_scrollBar[dir]->adjustment;
+        GtkAdjustment* adj = sb->adjustment;
         const int max = int(adj->upper - adj->page_size);
         if (pos > max)
             pos = max;
@@ -4183,29 +4181,26 @@ void wxWindowGTK::SetScrollPos(int orient, int pos, bool WXUNUSED(refresh))
 
 int wxWindowGTK::GetScrollThumb(int orient) const
 {
-    wxCHECK_MSG( m_widget != NULL, 0, wxT("invalid window") );
-    wxCHECK_MSG( m_wxwindow != NULL, 0, wxT("window needs client area for scrolling") );
-    wxCHECK_MSG( m_wxwindow != m_widget, 0, wxT("no scrolling for this wxWindow, use wxHSCROLL or wxVSCROLL") );
+    GtkRange * const sb = m_scrollBar[ScrollDirFromOrient(orient)];
+    wxCHECK_MSG( sb, 0, _T("this window is not scrollable") );
 
-    return int(m_scrollBar[ScrollDirFromOrient(orient)]->adjustment->page_size);
+    return int(sb->adjustment->page_size);
 }
 
 int wxWindowGTK::GetScrollPos( int orient ) const
 {
-    wxCHECK_MSG( m_widget != NULL, 0, wxT("invalid window") );
-    wxCHECK_MSG( m_wxwindow != NULL, 0, wxT("window needs client area for scrolling") );
-    wxCHECK_MSG( m_wxwindow != m_widget, 0, wxT("no scrolling for this wxWindow, use wxHSCROLL or wxVSCROLL") );
+    GtkRange * const sb = m_scrollBar[ScrollDirFromOrient(orient)];
+    wxCHECK_MSG( sb, 0, _T("this window is not scrollable") );
 
-    return int(m_scrollBar[ScrollDirFromOrient(orient)]->adjustment->value + 0.5);
+    return int(sb->adjustment->value + 0.5);
 }
 
 int wxWindowGTK::GetScrollRange( int orient ) const
 {
-    wxCHECK_MSG( m_widget != NULL, 0, wxT("invalid window") );
-    wxCHECK_MSG( m_wxwindow != NULL, 0, wxT("window needs client area for scrolling") );
-    wxCHECK_MSG( m_wxwindow != m_widget, 0, wxT("no scrolling for this wxWindow, use wxHSCROLL or wxVSCROLL") );
+    GtkRange * const sb = m_scrollBar[ScrollDirFromOrient(orient)];
+    wxCHECK_MSG( sb, 0, _T("this window is not scrollable") );
 
-    return int(m_scrollBar[ScrollDirFromOrient(orient)]->adjustment->upper);
+    return int(sb->adjustment->upper);
 }
 
 // Determine if increment is the same as +/-x, allowing for some small
