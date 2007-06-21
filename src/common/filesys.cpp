@@ -27,6 +27,7 @@
 #include "wx/mimetype.h"
 #include "wx/filename.h"
 #include "wx/tokenzr.h"
+#include "wx/uri.h"
 #include "wx/private/fileback.h"
 
 
@@ -591,8 +592,7 @@ wxFileName wxFileSystem::URLToFileName(const wxString& url)
         path = path.Mid(2);
 #endif
 
-    path.Replace(wxT("%25"), wxT("%"));
-    path.Replace(wxT("%3A"), wxT(":"));
+    path = wxURI::Unescape(path);
 
 #ifdef __WXMSW__
     // file urls either start with a forward slash (local harddisk),
@@ -639,6 +639,7 @@ wxString wxFileSystem::FileNameToURL(const wxFileName& filename)
 #endif
 
     url.Replace(g_nativePathString, g_unixPathString);
+    url.Replace(wxT("#"), wxT("%23"));
     url.Replace(wxT("%"), wxT("%25"));
     url.Replace(wxT(":"), wxT("%3A"));
     url = wxT("file:") + url;
