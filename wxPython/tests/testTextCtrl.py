@@ -8,15 +8,15 @@ import testControl
 This file contains classes and methods for unit testing the API of wx.TextCtrl
         
 Methods yet to test:
-__init__, AppendText, CanCopy, CanCut, CanPaste, CanRedo, CanUndo, ChangeValue,
+__init__, CanCopy, CanCut, CanPaste, CanRedo, CanUndo, ChangeValue,
 Create, DiscardEdits, EmulateKeyPress, GetClassDefaultAttributes,
-GetDefaultStyle, GetInsertionPoint, GetLastPosition, GetLineLength, GetLineText,
-GetNumberOfLines, GetRange, GetSelection, GetString, GetStringSelection,
+GetDefaultStyle, GetLastPosition, GetLineLength, GetLineText,
+GetNumberOfLines, GetString,
 GetStyle, HitTest, HitTestPos, IsEditable, IsModified,
 LoadFile,  MacCheckSpelling, MarkDirty, PositionToXY,
-Redo, Remove, Replace, SaveFile, SelectAll, SendTextUpdatedEvent, SetDefaultStyle,
-SetEditable, SetInsertionPoint, SetInsertionPointEnd, SetMaxLength, SetModified,
-SetSelection, SetStyle, ShowPosition, Undo, write, WriteText, XYToPosition
+Redo, SaveFile, SelectAll, SendTextUpdatedEvent, SetDefaultStyle,
+SetEditable, SetMaxLength, SetModified,
+SetStyle, ShowPosition, Undo, write, XYToPosition
 """
 
 BaseClass = testControl.ControlTest
@@ -37,29 +37,7 @@ class TextCtrlTest(BaseClass):
         self.app.Destroy()
         self.frame.Destroy()
     
-    def testClear(self):
-        """Clear"""
-        # TODO: ensure wx.wxEVT_COMMAND_TEXT_UPDATED event generated
-        self.testControl.SetValue("Text text text")
-        self.assert_(not self.testControl.IsEmpty())
-        self.testControl.Clear()
-        self.assert_(self.testControl.IsEmpty())
-    
-    def testIsEmpty(self):
-        """IsEmpty"""
-        self.assert_(self.testControl.IsEmpty())
-        self.testControl.SetValue("Not Empty")
-        self.assert_(not self.testControl.IsEmpty())
-        self.testControl.SetValue("")
-        self.assert_(self.testControl.IsEmpty())
-    
-    def testValue(self):
-        """SetValue, GetValue"""
-        val = "Hello, World!\nLorem Ipsum!"
-        self.assertEquals("", self.testControl.GetValue())
-        self.testControl.SetValue(val)
-        self.assertEquals(val, self.testControl.GetValue())
-    
+    # TODO: break up this method into smaller tests
     def testCopyCutPaste(self):
         """Copy, Cut, Paste"""
         txt1 = "Yet Another TextControl"
@@ -92,18 +70,116 @@ class TextCtrlTest(BaseClass):
         self.testControl.Paste()
         self.assertNotEquals(txt3, self.testControl.GetValue())
         self.assertEquals(txt2, self.testControl.GetValue())
-        
     
-    # TODO: what should IsMultiLine return True?
-    def testSingleMultiLine(self):
-        """IsMultiLine, IsSingleLine"""
-        self.testControl.SetValue("this is a single line")
+    def testIsEmpty(self):
+        """IsEmpty"""
+        self.assert_(self.testControl.IsEmpty())
+        self.testControl.SetValue("Not Empty")
+        self.assert_(not self.testControl.IsEmpty())
+        self.testControl.SetValue("")
+        self.assert_(self.testControl.IsEmpty())
+        
+    # how can a wx.TextCtrl be both single and multi line simultaneously?
+    def testMultiLine(self):
+        """IsMultiLine"""
+        multi = wx.TextCtrl(parent=self.frame, id=wx.ID_ANY,
+                                    style=wx.TE_MULTILINE)
+        self.assert_(multi.IsMultiLine())
+        self.assert_(not self.testControl.IsSingleLine())
+        
+    def testSingleLine(self):
+        """IsSingleLine"""
         self.assert_(self.testControl.IsSingleLine())
         self.assert_(not self.testControl.IsMultiLine())
-        # this doesn't do it...
-        #self.testControl.SetValue("this\nis\na\nmulti\nline\n")
-        #self.assert_(self.testControl.IsMultiLine())
-        #self.assert_(not self.testControl.IsSingleLine())
+    
+    # Text manipulation methods of wx.TextCtrl (Table 7.4 in "wxPython in Action")
+    # AppendText, Clear, EmulateKeyPress, GetInsertionPoint, SetInsertionPoint,
+    # SetInsertionPointEnd, GetRange, GetSelection, GetStringSelection, SetSelection,
+    # GetValue, SetValue, Remove, Replace, WriteText
+    
+    def testAppendText(self):
+        """AppendText"""
+        txt1 = "The quick brown fox"
+        txt2 = " jumps over the lazy dog."
+        txt = txt1+txt2
+        self.testControl.SetValue(txt1)
+        self.testControl.AppendText(txt2)
+        self.assertEquals(txt, self.testControl.GetValue())
+        self.assertEquals(len(txt), self.testControl.GetInsertionPoint())
+    
+    def testClear(self):
+        """Clear"""
+        # TODO: ensure wx.wxEVT_COMMAND_TEXT_UPDATED event generated
+        self.testControl.SetValue("Text text text")
+        self.assert_(not self.testControl.IsEmpty())
+        self.testControl.Clear()
+        self.assert_(self.testControl.IsEmpty())
+    
+    def testGetRange(self):
+        """GetRange"""
+        txt = "The quick brown fox jumps over the lazy dog."
+        self.testControl.SetValue(txt)
+        for i,j in ((0,2),(1,9),(7,len(txt))):
+            self.assert_(txt[i:j], self.testControl.GetRange(i,j))
+        
+    def testInsertionPoint(self):
+        """SetInsertionPoint, GetInsertionPoint"""
+        txt = "The quick brown fox jumps over the lazy dog."
+        self.testControl.SetValue(txt)
+        # Is 1 the lowest possible value for GetInsertionPoint()?
+        self.testControl.SetInsertionPoint(0)
+        self.assert_(0, self.testControl.GetInsertionPoint())
+        self.testControl.SetInsertionPoint(10)
+        self.assert_(10, self.testControl.GetInsertionPoint())
+        self.testControl.SetInsertionPoint(999)
+        self.assert_(len(txt), self.testControl.GetInsertionPoint())
+    
+    def testInsertionPointEnd(self):
+        """SetInsertionPointEnd"""
+        txt = "The quick brown fox jumps over the lazy dog."
+        self.testControl.SetValue(txt)
+        self.testControl.SetInsertionPointEnd()
+        self.assert_(len(txt), self.testControl.GetInsertionPoint())
+    
+    def testRemove(self):
+        """Remove"""
+        txt = "The quick brown fox jumps over the lazy dog."
+        self.testControl.SetValue(txt)
+        self.testControl.Remove(0,len(txt))
+        self.assert_(self.testControl.IsEmpty())
+        for i,j in ((0,2),(2,10),(7,len(txt))):
+            self.testControl.SetValue(txt)
+            removed = txt[:i]+txt[j:]
+            self.testControl.Remove(i,j)
+            self.assertEquals(removed, self.testControl.GetValue())
+    
+    def testReplace(self):
+        """Replace"""
+        txt = "The quick brown fox jumps over the lazy dog."
+        rep = "asdf jkl;"
+        for i,j in ((0,2),(2,10),(7,len(txt))):
+            self.testControl.SetValue(txt)
+            replaced = txt[:i]+rep+txt[j:]
+            self.testControl.Replace(i,j,rep)
+            self.assertEquals(replaced, self.testControl.GetValue())
+        
+    def testSelection(self):
+        """SetSelection, GetSelection, GetStringSelection"""
+        txt = "The quick brown fox jumps over the lazy dog."
+        self.testControl.SetValue(txt)
+        for i,j in ((0,2),(1,9),(7,len(txt))):
+            self.testControl.SetSelection(i,j)
+            self.assert_((i,j), self.testControl.GetSelection())
+            self.assert_(txt[i:j], self.testControl.GetStringSelection())
+    
+    def testValue(self):
+        """SetValue, GetValue"""
+        val = "Hello, World!\nLorem Ipsum!"
+        self.assertEquals("", self.testControl.GetValue())
+        self.testControl.SetValue(val)
+        self.assertEquals(val, self.testControl.GetValue())
+        self.testControl.SetValue("")
+        self.assertEquals("", self.testControl.GetValue())
         
 
 def suite():
