@@ -927,7 +927,7 @@ wxTextCtrl::StreamIn(const wxString& value,
 #else // !wxUSE_UNICODE_MSLU
     wxCSConv conv(encoding);
 
-    const size_t len = conv.MB2WC(NULL, value, value.length());
+    const size_t len = conv.MB2WC(NULL, value.mb_str(), value.length());
 
 #if wxUSE_WCHAR_T
     wxWCharBuffer wchBuf(len);
@@ -937,7 +937,7 @@ wxTextCtrl::StreamIn(const wxString& value,
     wchar_t *wpc = wchBuf;
 #endif
 
-    conv.MB2WC(wpc, value, value.length());
+    conv.MB2WC(wpc, value.mb_str(), value.length());
 #endif // wxUSE_UNICODE_MSLU
 
     // finally, stream it in the control
