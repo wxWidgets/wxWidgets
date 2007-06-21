@@ -16,9 +16,7 @@
     #pragma hdrstop
 #endif
 
-// Doesn't yet compile in Unicode mode
-
-#if wxUSE_CONFIG && !wxUSE_UNICODE
+#if wxUSE_CONFIG
 
 #ifndef   WX_PRECOMP
     #include "wx/msw/wrapwin.h"
@@ -154,7 +152,7 @@ const wxString& wxIniConfig::GetPath() const
     s_str << m_strGroup;
     if ( !m_strPath.empty() )
       s_str << wxCONFIG_PATH_SEPARATOR;
-    for ( const char *p = m_strPath; *p != '\0'; p++ ) {
+    for ( const wxChar *p = m_strPath; *p != '\0'; p++ ) {
       s_str << (*p == PATH_SEP_REPLACE ? wxCONFIG_PATH_SEPARATOR : *p);
     }
   }
@@ -257,14 +255,14 @@ bool wxIniConfig::HasEntry(const wxString& WXUNUSED(strName)) const
 // is current group empty?
 bool wxIniConfig::IsEmpty() const
 {
-    char szBuf[1024];
+    wxChar szBuf[1024];
 
-    GetPrivateProfileString(m_strGroup, NULL, "",
+    GetPrivateProfileString(m_strGroup, NULL, _T(""),
                             szBuf, WXSIZEOF(szBuf), m_strLocalFilename);
     if ( !wxIsEmpty(szBuf) )
         return false;
 
-    GetProfileString(m_strGroup, NULL, "", szBuf, WXSIZEOF(szBuf));
+    GetProfileString(m_strGroup, NULL, _T(""), szBuf, WXSIZEOF(szBuf));
     if ( !wxIsEmpty(szBuf) )
         return false;
 
@@ -280,17 +278,17 @@ bool wxIniConfig::DoReadString(const wxString& szKey, wxString *pstr) const
   wxConfigPathChanger path(this, szKey);
   wxString strKey = GetPrivateKeyName(path.Name());
 
-  char szBuf[1024]; // @@ should dynamically allocate memory...
+  wxChar szBuf[1024]; // FIXME: should dynamically allocate memory...
 
   // first look in the private INI file
 
   // NB: the lpDefault param to GetPrivateProfileString can't be NULL
-  GetPrivateProfileString(m_strGroup, strKey, "",
+  GetPrivateProfileString(m_strGroup, strKey, _T(""),
                           szBuf, WXSIZEOF(szBuf), m_strLocalFilename);
   if ( wxIsEmpty(szBuf) ) {
     // now look in win.ini
     wxString strKey = GetKeyName(path.Name());
-    GetProfileString(m_strGroup, strKey, "", szBuf, WXSIZEOF(szBuf));
+    GetProfileString(m_strGroup, strKey, _T(""), szBuf, WXSIZEOF(szBuf));
   }
 
   if ( wxIsEmpty(szBuf) )
@@ -353,11 +351,7 @@ bool wxIniConfig::DoWriteString(const wxString& szKey, const wxString& szValue)
 
 bool wxIniConfig::DoWriteLong(const wxString& szKey, long lValue)
 {
-  // ltoa() is not ANSI :-(
-  char szBuf[40];   // should be good for sizeof(long) <= 16 (128 bits)
-  sprintf(szBuf, "%ld", lValue);
-
-  return Write(szKey, szBuf);
+  return Write(szKey, wxString::Format(_T("%ld"), lValue));
 }
 
 bool wxIniConfig::Flush(bool /* bCurrentOnly */)
@@ -377,7 +371,7 @@ bool wxIniConfig::DeleteEntry(const wxString& szKey, bool bGroupIfEmptyAlso)
   wxString strKey = GetPrivateKeyName(path.Name());
 
   if (WritePrivateProfileString(m_strGroup, strKey,
-                                         (const char*) NULL, m_strLocalFilename) == 0)
+                                NULL, m_strLocalFilename) == 0)
     return false;
 
   if ( !bGroupIfEmptyAlso || !IsEmpty() )
@@ -418,7 +412,7 @@ bool wxIniConfig::DeleteAll()
   WriteProfileString(GetVendorName(), NULL, NULL);
 
   // then delete our own ini file
-  char szBuf[MAX_PATH];
+  wxChar szBuf[MAX_PATH];
   size_t nRc = GetWindowsDirectory(szBuf, WXSIZEOF(szBuf));
   if ( nRc == 0 )
   {
@@ -454,5 +448,4 @@ bool wxIniConfig::RenameGroup(const wxString& WXUNUSED(oldName),
     return false;
 }
 
-#endif
-    // wxUSE_CONFIG && wxUSE_UNICODE
+#endif // wxUSE_CONFIG
