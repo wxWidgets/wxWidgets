@@ -26,6 +26,170 @@
 const wxChar wxDataViewCtrlNameStr[] = wxT("dataviewCtrl");
 
 
+// --------------------------------------------------------
+// wxDataViewPath
+// --------------------------------------------------------
+
+wxDataViewPath::wxDataViewPath( unsigned int path[], unsigned int depth )
+{
+    int i = 0;
+    //I am wondering whether limitation check should be performed here.
+    for( ; i < depth; i ++ )
+    {
+        m_path.Add( path[i] );
+    }
+}
+
+wxDataViewPath::wxDataViewPath( wxString &path )
+{
+    //I will implement this method later
+}
+
+wxDataViewPath::wxDataViewPath( const wxDataViewPath &path )
+{
+    m_path = path.m_path;
+}
+
+void wxDataViewPath::NextSibling()
+{
+    m_path.Last() ++;
+}
+
+void wxDataViewPath::PreviousSibling()
+{
+    m_path.Last()  --;
+}
+
+void wxDataViewPath::FirstChild()
+{
+    AddBranch(1);
+}
+
+void wxDataViewPath::Parent()
+{
+    m_path.RemoveAt( m_path.GetCount() -1 );
+}
+
+wxString wxDataViewPath::ToString() const
+{
+    //I will implement this later
+    return wxString();
+}
+
+int wxDataViewPath::GetDepth() const 
+{
+    return m_path.GetCount();
+}
+
+void wxDataViewPath::AddBranch( int branch )
+{
+    m_path.Add( branch );
+}
+
+wxDataViewPath & wxDataViewPath::operator=( const wxDataViewPath &path )
+{
+    m_path = path.m_path;
+    return *this;
+}
+
+bool operator== ( const wxDataViewPath &left, const wxDataViewPath & right )
+{
+    if( left.GetDepth() != right.GetDepth() )
+        return false;
+    int count = left.GetDepth();
+    int i = 0;
+    for( ; i < count; i ++ )
+    {
+        if( left.m_path.Item(i) != right.m_path.Item(i) )
+            return false;
+    }
+
+    return true;
+}
+
+
+// ---------------------------------------------------------
+// wxDataViewModel
+// ---------------------------------------------------------
+
+bool wxDataViewModel::ItemInserted( const wxDataViewPath &path )
+{
+    bool ret = true;
+    wxList::compatibility_iterator node = m_notifiers.GetFirst();
+    while (node)
+    {
+        wxDataViewModelNotifier* notifier = (wxDataViewModelNotifier*) node->GetData();
+        if (!notifier->ItemInserted( path ))
+            ret = false;
+        node = node->GetNext();
+    }
+
+    return ret;
+}
+
+bool wxDataViewModel::ItemDeleted( const wxDataViewPath &path )
+{
+    bool ret = true;
+    wxList::compatibility_iterator node = m_notifiers.GetFirst();
+    while (node)
+    {
+        wxDataViewModelNotifier* notifier = (wxDataViewModelNotifier*) node->GetData();
+        if (!notifier->ItemDeleted( path ))
+            ret = false;
+        node = node->GetNext();
+    }
+
+    return ret;
+
+}
+
+bool wxDataViewModel::ValueChanged( const wxDataViewPath &path )
+{
+    bool ret = true;
+    wxList::compatibility_iterator node = m_notifiers.GetFirst();
+    while (node)
+    {
+        wxDataViewModelNotifier* notifier = (wxDataViewModelNotifier*) node->GetData();
+        if (!notifier->ValueChanged( path ))
+            ret = false;
+        node = node->GetNext();
+    }
+
+    return ret;
+
+}
+
+void wxDataViewModel::AddNotifier( wxDataViewModelNotifier *notifier)
+{
+    m_notifiers.Append( notifier );
+    notifier->SetOwner( this );
+}
+
+void wxDataViewModel::RemoveNotifier( wxDataViewModelNotifier *notifier )
+{
+    m_notifiers.DeleteObject( notifier );
+}
+
+
+// ---------------------------------------------------------
+// wxDataViewTreeModel
+// ---------------------------------------------------------
+
+wxDataViewTreeModel::wxDataViewTreeModel()
+{
+
+}
+
+wxDataViewTreeModel::~wxDataViewTreeModel()
+{
+
+}
+
+bool wxDataViewTreeModel::IsTree() const
+{
+    return true;
+}
+
 // ---------------------------------------------------------
 // wxDataViewListModel
 // ---------------------------------------------------------

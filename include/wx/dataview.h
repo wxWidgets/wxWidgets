@@ -2,7 +2,7 @@
 // Name:        wx/dataview.h
 // Purpose:     wxDataViewCtrl base classes
 // Author:      Robert Roebling
-// Modified by:
+// Modified by: Bo Yang, 2007/06/18
 // Created:     08.01.06
 // RCS-ID:      $Id$
 // Copyright:   (c) Robert Roebling
@@ -20,6 +20,7 @@
 #include "wx/textctrl.h"
 #include "wx/bitmap.h"
 #include "wx/variant.h"
+#include "wx/dynarray.h"
 
 
 #if defined(__WXGTK20__)
@@ -39,7 +40,10 @@
 // wxDataViewCtrl globals
 // ----------------------------------------------------------------------------
 
+class WXDLLIMPEXP_ADV wxDataViewPath;
+class WXDLLIMPEXP_ADV wxDataViewItem;
 class WXDLLIMPEXP_ADV wxDataViewModel;
+class WXDLLIMPEXP_ADV wxDataViewModelNotifier;
 class WXDLLIMPEXP_ADV wxDataViewListModel;
 class WXDLLIMPEXP_ADV wxDataViewCtrl;
 class WXDLLIMPEXP_ADV wxDataViewColumn;
@@ -59,6 +63,57 @@ extern WXDLLIMPEXP_DATA_ADV(const wxChar) wxDataViewCtrlNameStr[];
 // the default alignment of wxDataViewRenderers:
 #define wxDVR_DEFAULT_ALIGNMENT         (wxALIGN_LEFT|wxALIGN_TOP)
 
+// ---------------------------------------------------------
+//wxDataViewPath
+//---------------------------------------------------------
+WX_DEFINE_EXPORTED_ARRAY_SIZE_T(unsigned int, wxDataViewPathArray);
+
+
+class WXDLLIMPEXP_ADV wxDataViewPath
+{
+public:
+    wxDataViewPath(){};
+    wxDataViewPath( unsigned int path[],  unsigned int depth );
+    wxDataViewPath( wxString &path );
+    wxDataViewPath( const wxDataViewPath &path );
+    ~wxDataViewPath(){};
+
+    //These methods are used to navigate through the tree
+    void NextSibling();
+    void PreviousSibling();
+    void FirstChild();
+    void Parent();
+
+    //Convert the path to a string formatted "0:3:4"
+    wxString ToString() const;
+    int GetDepth() const;
+    const wxDataViewPathArray & GetPathAsArray() const
+    {
+        return m_path;
+    }
+
+    void AddBranch( int branch );
+
+    friend bool operator == ( const wxDataViewPath &left, const wxDataViewPath &right );
+    wxDataViewPath & operator = ( const wxDataViewPath &path );
+
+private:
+    wxDataViewPathArray m_path; 
+};
+
+
+// --------------------------------------------------------
+//wxDataViewItem
+// --------------------------------------------------------
+
+class WXDLLIMPEXP_ADV wxDataViewItemBase
+{
+public:
+    wxDataViewItemBase(){};
+    ~wxDataViewItemBase(){};
+
+    virtual bool isOK() = 0;
+};
 
 // ---------------------------------------------------------
 // wxDataViewModel
@@ -69,9 +124,86 @@ class WXDLLIMPEXP_ADV wxDataViewModel: public wxObjectRefData
 public:
     wxDataViewModel() { }
 
+    virtual bool SetValue( const wxDataViewPath &path, unsigned int column, const wxVariant &variant ) = 0;
+    virtual void GetValue( const wxDataViewPath &path, unsigned int column, wxVariant &variant ) const = 0;
+
+    virtual wxString GetColumnType( unsigned int column ) const = 0;
+    virtual unsigned int GetColumnCount() const = 0;
+
+    virtual bool HasChildren( const wxDataViewPath &path ) const = 0;
+    virtual unsigned int GetChildrenCount( const wxDataViewPath &path ) const = 0;
+
+    virtual unsigned int GetRootLevelItemCount() const = 0;
+    virtual bool IsTree() const = 0;
+
+    //delegated notifiers
+    virtual bool ItemInserted( const wxDataViewPath &path );
+    virtual bool ItemDeleted( const wxDataViewPath &path );
+    virtual bool ValueChanged( const wxDataViewPath &path );
+
+    //Notifiers methods
+    void AddNotifier( wxDataViewModelNotifier * notifier );
+    void RemoveNotifier( wxDataViewModelNotifier * notifier );
+
 protected:
     // the user should not delete this class directly: he should use DecRef() instead!
     virtual ~wxDataViewModel() { }
+
+private:
+    wxList m_notifiers;
+};
+
+// --------------------------------------------------------
+// wxDataViewModelNotifier
+// --------------------------------------------------------
+
+class WXDLLIMPEXP_ADV wxDataViewModelNotifier: public wxObject
+{
+public:
+    wxDataViewModelNotifier() {}
+    virtual ~wxDataViewModelNotifier() { m_owner = NULL; }
+
+    //If the parent is NULL, the changed node is the root level node; if the prev is NULL.
+    //And this notifiers miss the reorder method.
+    virtual bool ItemInserted( const wxDataViewPath &path ) = 0;
+    virtual bool ItemDeleted( const wxDataViewPath &path ) = 0;
+    virtual bool ValueChanged( const wxDataViewPath &path ) = 0;
+
+    void SetOwner( wxDataViewModel *owner ) { m_owner = owner; }
+    wxDataViewModel * GetOwner( ) { return m_owner; }
+private:
+    wxDataViewModel * m_owner;
+};
+
+
+// --------------------------------------------------------
+// wxDataViewTreeModel
+// --------------------------------------------------------
+//I must admit that, this class seems no meaning at all now. But I want to make it a helper class just as what the GTKTreeStore is.
+//I will add more method and make the pure-virtual functions virtual ones. It make sense that time.
+class WXDLLIMPEXP_ADV wxDataViewTreeModel: public wxDataViewModel
+{
+public:
+    wxDataViewTreeModel();
+
+    virtual bool SetValue( const wxDataViewPath &path, unsigned int column, const wxVariant &variant ) = 0;
+    virtual void GetValue( const wxDataViewPath &path, unsigned int column, wxVariant &variant ) const = 0;
+
+    virtual wxString GetColumnType( unsigned int column ) const = 0;
+    virtual unsigned int GetColumnCount() const = 0;
+
+    virtual bool HasChildren( const wxDataViewPath &path ) const = 0;
+    virtual unsigned int GetChildrenCount( const wxDataViewPath &path ) const = 0;
+
+    virtual unsigned int GetRootLevelItemCount() const = 0;
+    virtual bool IsTree() const;
+	
+protected:
+    virtual ~wxDataViewTreeModel();
+
+private:
+    
+    
 };
 
 // ---------------------------------------------------------
@@ -134,6 +266,25 @@ public:
     // return type as reported by wxVariant
     virtual wxString GetColumnType( unsigned int col ) const = 0;
 
+    //These two methods are used for new DataViewCtrl
+    virtual bool SetValue( const wxDataViewPath &path, unsigned int column, const wxVariant &variant )
+    {
+        unsigned int row = path.GetPathAsArray().Item(0);
+        return SetValue( variant, column, row);
+    }
+    virtual void GetValue( const wxDataViewPath &path, unsigned int column, wxVariant &variant ) const
+    {
+        unsigned int row = path.GetPathAsArray().Item(0);
+        GetValue( variant, column, row);
+    }
+
+    //I implement following four methods for the complaince of the DataViewModel.
+    virtual bool HasChildren( const wxDataViewPath &path ) const { return false ;}
+    virtual unsigned int GetChildrenCount( const wxDataViewPath &path ) const { return 0; }
+
+    virtual unsigned int GetRootLevelItemCount() const { return GetRowCount(); }
+    virtual bool IsTree() const { return false; }
+	
     // get value into a wxVariant
     virtual void GetValue( wxVariant &variant, unsigned int col, unsigned int row ) const = 0;
 
@@ -413,6 +564,10 @@ protected:
 // ---------------------------------------------------------
 // wxDataViewCtrlBase
 // ---------------------------------------------------------
+
+//Declare an array for contain the selections of wxDataViewItem
+
+WX_DECLARE_USER_EXPORTED_OBJARRAY(wxDataViewItem,wxArrayDataViewItems,WXDLLIMPEXP_ADV);
 
 #define wxDV_SINGLE                  0x0000     // for convenience
 #define wxDV_MULTIPLE                0x0001     // can select multiple items
