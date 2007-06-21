@@ -661,8 +661,8 @@ wxString wxFileSystem::FileNameToURL(const wxFileName& filename)
 #endif
 
     url.Replace(g_nativePathString, g_unixPathString);
+    url.Replace(wxT("%"), wxT("%25")); // '%'s must be replaced first!
     url.Replace(wxT("#"), wxT("%23"));
-    url.Replace(wxT("%"), wxT("%25"));
     url.Replace(wxT(":"), wxT("%3A"));
     url = wxT("file:") + url;
     return url;
