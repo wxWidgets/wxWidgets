@@ -27,6 +27,12 @@
 # public symbols added in 2.8.5 (please keep in alphabetical order):
 @WX_VERSION_TAG@.5 {
     global:
+        *wxAuiNotebook*GetHeightForPageHeight*;
+        *wxAuiNotebook*GetTabCtrlHeight*;
+        *wxAuiNotebook*SetFont*;
+        *wxAuiNotebook*SetMeasuringFont*;
+        *wxAuiNotebook*SetNormalFont*;
+        *wxAuiNotebook*SetSelectedFont*;
         *wxDocument*GetUserReadableName*;
         *wxLogChain*DetachOldLog*;
         *wxMemoryFSHandler*AddFileWithMimeType*;
