@@ -1302,7 +1302,7 @@ void wxGnomePrintDC::DoDrawRoundedRectangle(wxCoord x, wxCoord y, wxCoord width,
 void wxGnomePrintDC::makeEllipticalPath(wxCoord x, wxCoord y,
                                         wxCoord width, wxCoord height)
 {
-    double r = 4 * (sqrt (2) - 1) / 3;
+    double r = 4 * (sqrt(2.) - 1) / 3;
     double  halfW = 0.5 * width,
             halfH = 0.5 * height,
             halfWR = r * halfW,
