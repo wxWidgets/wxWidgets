@@ -69,8 +69,11 @@ Tab and Shift-Tab.}
 \twocolitem{\windowstyle{wxNO\_FULL\_REPAINT\_ON\_RESIZE}}{On Windows, this style used to disable repainting
 the window completely when its size is changed. Since this behaviour is now the default, the style is now obsolete
 and no longer has an effect.}
-\twocolitem{\windowstyle{wxVSCROLL}}{Use this style to enable a vertical scrollbar.}
-\twocolitem{\windowstyle{wxHSCROLL}}{Use this style to enable a horizontal scrollbar.}
+\twocolitem{\windowstyle{wxVSCROLL}}{Use this style to enable a vertical
+scrollbar. Notice that this style should cannot be used with native controls
+which don't support scrollbars nor with top-level windows in most ports.}
+\twocolitem{\windowstyle{wxHSCROLL}}{Use this style to enable a horizontal
+scrollbar. The same limitations as for wxVSCROLL apply to this style.}
 \twocolitem{\windowstyle{wxALWAYS\_SHOW\_SB}}{If a window has scrollbars,
 disable them instead of hiding them when they are not needed (i.e. when the
 size of the window is big enough to not require the scrollbars to navigate it).
