@@ -434,6 +434,13 @@ target but the log messages are also passed to the previous log target if any.
 
 Destroys the previous log target.
 
+\membersection{wxLogChain::DetachOldLog}\label{wxlogchaindetacholdlog}
+
+\func{void}{DetachOldLog}{\void}
+
+Detaches the old log target so it won't be destroyed when the wxLogChain object
+is destroyed.
+
 \membersection{wxLogChain::GetOldLog}\label{wxlogchaingetoldlog}
 
 \constfunc{wxLog *}{GetOldLog}{\void}

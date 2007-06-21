@@ -415,6 +415,11 @@ public:
     // override base class version to flush the old logger as well
     virtual void Flush();
 
+    // call to avoid destroying the old log target
+#if wxABI_VERSION >= 20805 /* 2.8.5+ only */
+	void DetachOldLog() { m_logOld = NULL; }
+#endif
+
 protected:
     // pass the chain to the old logger if needed
     virtual void DoLog(wxLogLevel level, const wxChar *szString, time_t t);
