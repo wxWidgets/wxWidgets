@@ -417,7 +417,7 @@ public:
 
     // call to avoid destroying the old log target
 #if wxABI_VERSION >= 20805 /* 2.8.5+ only */
-	void DetachOldLog() { m_logOld = NULL; }
+    void DetachOldLog() { m_logOld = NULL; }
 #endif
 
 protected:
