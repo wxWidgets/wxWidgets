@@ -667,12 +667,12 @@ int wxAuiDefaultTabArt::ShowDropDown(wxWindow* wnd,
     {
         const wxAuiNotebookPage& page = pages.Item(i);
         wxString caption = page.caption;
-        
+
         // if there is no caption, make it a space.  This will prevent
         // an assert in the menu code.
         if (caption.IsEmpty())
             caption = wxT(" ");
-            
+
         menuPopup.AppendCheckItem(1000+i, caption);
     }
 
@@ -2977,16 +2977,16 @@ bool wxAuiNotebook::FindTab(wxWindow* page, wxAuiTabCtrl** ctrl, int* idx)
 void wxAuiNotebook::Split(size_t page, int direction)
 {
     wxSize cli_size = GetClientSize();
-    
+
     // get the page's window pointer
     wxWindow* wnd = GetPage(page);
     if (!wnd)
         return;
-    
+
     // notebooks with 1 or less pages can't be split
     if (GetPageCount() < 2)
         return;
-        
+
     // find out which tab control the page currently belongs to
     wxAuiTabCtrl *src_tabs, *dest_tabs;
     int src_idx = -1;
@@ -2995,7 +2995,7 @@ void wxAuiNotebook::Split(size_t page, int direction)
         return;
     if (!src_tabs || src_idx == -1)
         return;
-    
+
     // choose a split size
     wxSize split_size;
     if (GetPageCount() > 2)
@@ -3010,8 +3010,8 @@ void wxAuiNotebook::Split(size_t page, int direction)
         split_size.x /= 2;
         split_size.y /= 2;
     }
-    
-    
+
+
     // create a new tab frame
     wxTabFrame* new_tabs = new wxTabFrame;
     new_tabs->m_rect = wxRect(wxPoint(0,0), split_size);
@@ -3029,7 +3029,7 @@ void wxAuiNotebook::Split(size_t page, int direction)
     // about where the pane should be added
     wxAuiPaneInfo pane_info = wxAuiPaneInfo().Bottom().CaptionVisible(false);
     wxPoint mouse_pt;
-        
+
     if (direction == wxLEFT)
     {
         pane_info.Left();
@@ -3050,10 +3050,10 @@ void wxAuiNotebook::Split(size_t page, int direction)
         pane_info.Bottom();
         mouse_pt = wxPoint(cli_size.x/2, cli_size.y);
     }
-        
+
     m_mgr.AddPane(new_tabs, pane_info, mouse_pt);
     m_mgr.Update();
-            
+
     // remove the page from the source tabs
     wxAuiNotebookPage page_info = src_tabs->GetPage(src_idx);
     page_info.active = false;
@@ -3080,10 +3080,10 @@ void wxAuiNotebook::Split(size_t page, int direction)
 
     // force the set selection function reset the selection
     m_curpage = -1;
-    
+
     // set the active page to the one we just split off
     SetSelection(m_tabs.GetIdxFromWindow(page_info.window));
-    
+
     UpdateHintWindowSize();
 }
 
@@ -3591,6 +3591,57 @@ void wxAuiNotebook::OnTabButton(wxCommandEvent& command_evt)
 }
 
 
+// Sets the normal font
+void wxAuiNotebook::SetNormalFont(const wxFont& font)
+{
+    m_normal_font = font;
+    GetArtProvider()->SetNormalFont(font);
+}
+
+// Sets the selected tab font
+void wxAuiNotebook::SetSelectedFont(const wxFont& font)
+{
+    m_selected_font = font;
+    GetArtProvider()->SetSelectedFont(font);
+}
+
+// Sets the measuring font
+void wxAuiNotebook::SetMeasuringFont(const wxFont& font)
+{
+    GetArtProvider()->SetMeasuringFont(font);
+}
+
+// Sets the tab font
+bool wxAuiNotebook::SetFont(const wxFont& font)
+{
+    wxControl::SetFont(font);
+
+    wxFont normalFont(font);
+    wxFont selectedFont(normalFont);
+    selectedFont.SetWeight(wxBOLD);
+
+    SetNormalFont(normalFont);
+    SetSelectedFont(selectedFont);
+    SetMeasuringFont(selectedFont);
+
+    return true;
+}
+
+// Gets the tab control height
+int wxAuiNotebook::GetTabCtrlHeight() const
+{
+    return m_tab_ctrl_height;
+}
+
+// Gets the height of the notebook for a given page height
+int wxAuiNotebook::GetHeightForPageHeight(int pageHeight)
+{
+    UpdateTabCtrlHeight();
+
+    int tabCtrlHeight = GetTabCtrlHeight();
+    int decorHeight = 2;
+    return tabCtrlHeight + pageHeight + decorHeight;
+}
 
 
 #endif // wxUSE_AUI
