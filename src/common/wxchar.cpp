@@ -2025,7 +2025,7 @@ WXDLLEXPORT double wxStrtod(const wxChar *nptr, wxChar **endptr)
     while (wxIsdigit(*nptr)) nptr++;
   }
 
-  wxString data(nptr, nptr-start);
+  wxString data(start, nptr-start);
   wxWX2MBbuf dat = data.mb_str(wxConvLibc);
   char *rdat = wxMBSTRINGCAST dat;
   double ret = strtod(dat, &rdat);
