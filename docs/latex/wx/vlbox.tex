@@ -27,7 +27,9 @@ use this class directly because it has pure virtual functions, but will need to
 derive your own class, such as \helpref{wxHtmlListBox}{wxhtmllistbox}, from it.
 
 However it emits the same events as \helpref{wxListBox}{wxlistbox} and the same
-event macros may be used with it.
+event macros may be used with it. Since wxVListBox does not store its items
+itself, the events will only contain the index, not any contents such as the
+string of an item.
 
 \wxheading{Derived from}
 
