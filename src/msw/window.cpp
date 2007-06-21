@@ -3490,7 +3490,7 @@ bool wxWindowMSW::HandleTooltipNotify(WXUINT code,
                     (
                         CP_ACP,
                         0,                      // no flags
-                        ttip,
+                        ttip.wx_str(),
                         tipLength,
                         buf,
                         WXSIZEOF(buf) - 1
