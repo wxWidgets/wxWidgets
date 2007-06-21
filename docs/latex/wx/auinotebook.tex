@@ -81,6 +81,13 @@ Deletes a page at the given index.  Calling this method will generate a page cha
 
 Returns the associated art provider.
 
+\membersection{wxAuiNotebook::GetHeightForPageHeight}\label{wxauinotebookgetheightforpageheight}
+
+\func{int}{GetHeightForPageHeight}{\param{int }{pageHeight}}
+
+Returns the desired height of the notebook for the given page height. Use this to fit the notebook to
+a given page size.
+
 \membersection{wxAuiNotebook::GetPage}\label{wxauinotebookgetpage}
 
 \constfunc{wxWindow*}{GetPage}{\param{size\_t }{page\_idx}}
@@ -112,11 +119,23 @@ the notebook, wxNOT\_FOUND is returned.
 
 Returns the tab label for the page.
 
+\membersection{wxAuiNotebook::GetTabCtrlHeight}\label{wxauinotebookgettabctrlheight}
+
+\constfunc{int}{GetTabCtrlHeight}{\void}
+
+Returns the height of the tab control.
+
 \membersection{wxAuiNotebook::GetSelection}\label{wxauinotebookgetselection}
 
 \constfunc{int}{GetSelection}{\void}
 
 Returns the currently selected page.
+
+\membersection{wxAuiNotebook::GetTabCtrlHeight}\label{wxauinotebookgettabctrlheight}
+
+\constfunc{int}{GetTabCtrlHeight}{\void}
+
+Returns the height of the tab control.
 
 \membersection{wxAuiNotebook::InsertPage}\label{wxauinotebookinsertpage}
 
@@ -136,6 +155,30 @@ Removes a page, without deleting the window pointer.
 \func{void}{SetArtProvider}{\param{wxAuiTabArt* }{art}}
 
 Sets the art provider to be used by the notebook.
+
+\membersection{wxAuiNotebook::SetFont}\label{wxauinotebooksetfont}
+
+\func{bool}{SetFont}{\param{const wxFont\& }{font}}
+
+Sets the font for drawing the tab labels, using a bold version of the font for selected tab labels.
+
+\membersection{wxAuiNotebook::SetNormalFont}\label{wxauinotebooksetnormalfont}
+
+\func{void}{SetNormalFont}{\param{const wxFont\& }{font}}
+
+Sets the font for drawing unselected tab labels.
+
+\membersection{wxAuiNotebook::SetSelectedFont}\label{wxauinotebooksetselectedfont}
+
+\func{void}{SetSelectedFont}{\param{const wxFont\& }{font}}
+
+Sets the font for drawing selected tab labels.
+
+\membersection{wxAuiNotebook::SetMeasuringFont}\label{wxauinotebooksetmeasuringfont}
+
+\func{void}{SetMeasuringFont}{\param{const wxFont\& }{font}}
+
+Sets the font for measuring tab labels.
 
 \membersection{wxAuiNotebook::SetPageBitmap}\label{wxauinotebooksetpagebitmap}
 

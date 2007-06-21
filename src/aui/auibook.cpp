@@ -3595,7 +3595,57 @@ void wxAuiNotebook::OnTabButton(wxCommandEvent& command_evt)
     }
 }
 
+// Sets the normal font
+void wxAuiNotebook::SetNormalFont(const wxFont& font)
+{
+    m_normal_font = font;
+    GetArtProvider()->SetNormalFont(font);
+}
 
+// Sets the selected tab font
+void wxAuiNotebook::SetSelectedFont(const wxFont& font)
+{
+    m_selected_font = font;
+    GetArtProvider()->SetSelectedFont(font);
+}
+
+// Sets the measuring font
+void wxAuiNotebook::SetMeasuringFont(const wxFont& font)
+{
+    GetArtProvider()->SetMeasuringFont(font);
+}
+
+// Sets the tab font
+bool wxAuiNotebook::SetFont(const wxFont& font)
+{
+    wxControl::SetFont(font);
+
+    wxFont normalFont(font);
+    wxFont selectedFont(normalFont);
+    selectedFont.SetWeight(wxBOLD);
+
+    SetNormalFont(normalFont);
+    SetSelectedFont(selectedFont);
+    SetMeasuringFont(selectedFont);
+
+    return true;
+}
+
+// Gets the tab control height
+int wxAuiNotebook::GetTabCtrlHeight() const
+{
+    return m_tab_ctrl_height;
+}
+
+// Gets the height of the notebook for a given page height
+int wxAuiNotebook::GetHeightForPageHeight(int pageHeight)
+{
+    UpdateTabCtrlHeight();
+
+    int tabCtrlHeight = GetTabCtrlHeight();
+    int decorHeight = 2;
+    return tabCtrlHeight + pageHeight + decorHeight;
+}
 
 
 #endif // wxUSE_AUI
