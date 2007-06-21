@@ -2742,8 +2742,8 @@ void wxWindowGTK::DoSetSize( int x, int y, int width, int height, int sizeFlags 
             }
         }
 
-        DoMoveWindow( m_x-top_border,
-                      m_y-left_border,
+        DoMoveWindow( m_x - left_border,
+                      m_y - top_border,
                       m_width+left_border+right_border,
                       m_height+top_border+bottom_border );
     }
