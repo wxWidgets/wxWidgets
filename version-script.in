@@ -28,6 +28,7 @@
 @WX_VERSION_TAG@.5 {
     global:
         *wxDocument*GetUserReadableName*;
+        *wxLogChain*DetachOldLog*;
         *wxMemoryFSHandler*AddFileWithMimeType*;
         *wxMetafileDC*DoGetTextExtent*;
 };
