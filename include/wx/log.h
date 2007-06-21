@@ -439,6 +439,9 @@ public:
     // override base class version to flush the old logger as well
     virtual void Flush();
 
+    // call to avoid destroying the old log target
+    void DetachOldLog() { m_logOld = NULL; }
+
 protected:
     // pass the chain to the old logger if needed
     virtual void DoLog(wxLogLevel level, const wxString& szString, time_t t);
@@ -457,13 +460,28 @@ private:
 };
 
 // a chain log target which uses itself as the new logger
-class WXDLLIMPEXP_BASE wxLogPassThrough : public wxLogChain
+
+#define wxLogPassThrough wxLogInterposer
+
+class WXDLLIMPEXP_BASE wxLogInterposer : public wxLogChain
 {
 public:
-    wxLogPassThrough();
+    wxLogInterposer();
 
 private:
-    DECLARE_NO_COPY_CLASS(wxLogPassThrough)
+    DECLARE_NO_COPY_CLASS(wxLogInterposer)
+};
+
+// a temporary interposer which doesn't destroy the old log target
+// (calls DetachOldLog)
+
+class WXDLLIMPEXP_BASE wxLogInterposerTemp : public wxLogChain
+{
+public:
+    wxLogInterposerTemp();
+
+private:
+    DECLARE_NO_COPY_CLASS(wxLogInterposerTemp)
 };
 
 #if wxUSE_GUI

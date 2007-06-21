@@ -434,6 +434,13 @@ target but the log messages are also passed to the previous log target if any.
 
 Destroys the previous log target.
 
+\membersection{wxLogChain::DetachOldLog}\label{wxlogchaindetacholdlog}
+
+\func{void}{DetachOldLog}{\void}
+
+Detaches the old log target so it won't be destroyed when the wxLogChain object
+is destroyed.
+
 \membersection{wxLogChain::GetOldLog}\label{wxlogchaingetoldlog}
 
 \constfunc{wxLog *}{GetOldLog}{\void}
@@ -564,17 +571,45 @@ Suspends logging.
 
 Resumes logging.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% wxLogPassThrough %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% wxLogInterposer %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\section{\class{wxLogPassThrough}}\label{wxlogpassthrough}
+\section{\class{wxLogInterposer}}\label{wxloginterposer}
 
 A special version of \helpref{wxLogChain}{wxlogchain} which uses itself as the
-new log target. Maybe more clearly, it means that this is a log target which
-forwards the log messages to the previously installed one in addition to
+new log target. It forwards log messages to the previously installed one in addition to
 processing them itself.
 
 Unlike \helpref{wxLogChain}{wxlogchain} which is usually used directly as is,
 this class must be derived from to implement \helpref{DoLog}{wxlogdolog}
+and/or \helpref{DoLogString}{wxlogdologstring} methods.
+
+wxLogInterposer destroys the previous log target in its destructor. If you
+don't want this to happen, use wxLogInterposerTemp instead.
+
+\wxheading{Derived from}
+
+\helpref{wxLogChain}{wxlogchain}
+
+\wxheading{Include files}
+
+<wx/log.h>
+
+\latexignore{\rtfignore{\wxheading{Members}}}
+
+\membersection{wxLogInterposer::wxLogInterposer}\label{wxloginterposerctor}
+
+The default constructor installs this object as the current active log target.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% wxLogInterposerTemp %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{\class{wxLogInterposerTemp}}\label{wxloginterposertemp}
+
+A special version of \helpref{wxLogChain}{wxlogchain} which uses itself as the
+new log target. It forwards log messages to the previously installed one in addition to
+processing them itself. Unlike \helpref{wxLogInterposer}{wxloginterposer}, it doesn't
+delete the old target which means it can be used to temporarily redirect log output.
+
+As per wxLogInterposer, this class must be derived from to implement \helpref{DoLog}{wxlogdolog}
 and/or \helpref{DoLogString}{wxlogdologstring} methods.
 
 \wxheading{Derived from}
@@ -587,9 +622,9 @@ and/or \helpref{DoLogString}{wxlogdologstring} methods.
 
 \latexignore{\rtfignore{\wxheading{Members}}}
 
-\membersection{wxLogPassThrough::wxLogPassThrough}\label{wxlogpassthroughctor}
+\membersection{wxLogInterposerTemp::wxLogInterposerTemp}\label{wxloginterposertempctor}
 
-Default ctor installs this object as the current active log target.
+The default constructor installs this object as the current active log target.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% wxLogStderr %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -693,7 +728,7 @@ them normally by showing the standard log dialog.
 
 \wxheading{Derived from}
 
-\helpref{wxLogPassThrough}{wxlogpassthrough}
+\helpref{wxLogInterposer}{wxloginterposer}
 
 \wxheading{Include files}
 
