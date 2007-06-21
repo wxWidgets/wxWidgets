@@ -245,7 +245,7 @@ public:
         wxPyEndBlockThreads(blocked);
 
         wxMemoryFSHandler::AddFile(filename, ptr, size);
-    }
+    }    
 %}
 
 
@@ -280,6 +280,26 @@ public:
     // Add a file to the memory FS
     %pythoncode { AddFile = staticmethod(MemoryFSHandler_AddFile) }
 
+    %extend {
+        static void AddFileWithMimeType(const wxString& filename,
+                                        PyObject* data,
+                                        const wxString& mimetype)
+        {
+            if (! PyString_Check(data)) {
+                wxPyBLOCK_THREADS(PyErr_SetString(PyExc_TypeError,
+                                                  "Expected string object"));
+                return;
+            }
+
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
+            void*  ptr = (void*)PyString_AsString(data);
+            size_t size = PyString_Size(data);
+            wxPyEndBlockThreads(blocked);
+
+            wxMemoryFSHandler::AddFileWithMimeType(filename, ptr, size, mimetype);
+        }
+    }
+    
     bool CanOpen(const wxString& location);
     %newobject OpenFile;
     wxFSFile* OpenFile(wxFileSystem& fs, const wxString& location);
