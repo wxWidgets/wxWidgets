@@ -592,11 +592,11 @@ static size_t PrintfViaString(T *out, size_t outsize,
 int wxVsprintf(char *str, const wxString& format, va_list argptr)
 {
 #if wxUSE_UTF8_LOCALE_ONLY
-    return vsprintf(str, format.wx_str(), argptr);
+    return wxCRT_VsprintfA(str, format.wx_str(), argptr);
 #else
     #if wxUSE_UNICODE_UTF8
     if ( wxLocaleIsUtf8 )
-        return vsprintf(str, format.wx_str(), argptr);
+        return wxCRT_VsprintfA(str, format.wx_str(), argptr);
     else
     #endif
     #if wxUSE_UNICODE
