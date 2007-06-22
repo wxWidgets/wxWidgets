@@ -996,12 +996,7 @@ void wxTextCtrl::DoSetValue( const wxString &value, int flags )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
-    // the control won't be modified any more as we programmatically replace
-    // all the existing text, so reset the flag and don't set it again (and do
-    // it now, before the text event handler is ran so that IsModified() called
-    // from there returns the expected value)
     m_modified = false;
-    DontMarkDirtyOnNextChange();
 
     wxFontEncoding enc = m_defaultStyle.HasFont()
                             ? m_defaultStyle.GetFont().GetEncoding()
@@ -1018,19 +1013,13 @@ void wxTextCtrl::DoSetValue( const wxString &value, int flags )
         return;
     }
 
-    // if the control is not empty, two "changed" signals are emitted,
-    // otherwise only one and we need to ignore either both or one of them
-    int ignore = flags & SetValue_SendEvent ? 0 : 1;
-    if ( !IsEmpty() )
-        ignore++;
-
-    if ( ignore )
-        IgnoreNextTextUpdate(ignore);
-
     if ( IsMultiLine() )
     {
+        g_signal_handlers_disconnect_by_func (m_buffer,
+                    (gpointer) gtk_text_changed_callback, this);
+                    
         gtk_text_buffer_set_text( m_buffer, buffer, strlen(buffer) );
-
+                    
         if ( !m_defaultStyle.IsDefault() )
         {
             GtkTextIter start, end;
@@ -1038,21 +1027,22 @@ void wxTextCtrl::DoSetValue( const wxString &value, int flags )
             wxGtkTextApplyTagsFromAttr(m_widget, m_buffer, m_defaultStyle,
                                        &start, &end);
         }
+        
+        g_signal_connect (m_buffer, "changed",
+                          G_CALLBACK (gtk_text_changed_callback), this);
     }
-    else // single line
+    else
     {
+        g_signal_handlers_disconnect_by_func (m_text,
+                          (gpointer) gtk_text_changed_callback, this);
+                          
         gtk_entry_set_text( GTK_ENTRY(m_text), buffer );
+        
+        g_signal_connect (m_text, "changed",
+                          G_CALLBACK (gtk_text_changed_callback), this);
     }
-
-    // if, for whatever reason, the callback wasn't called the expected number
-    // of times, still reset the flags to the default values
-    m_dontMarkDirty = false;
-    m_countUpdatesToIgnore = 0;
-
-
-    // GRG, Jun/2000: Changed this after a lot of discussion in
-    //   the lists. wxWidgets 2.2 will have a set of flags to
-    //   customize this behaviour.
+                    
+    // This was added after discussion on the list
     SetInsertionPoint(0);
 }
 
