@@ -193,6 +193,7 @@ wxGTK:
 - Add support for clipping in GNOME print backend.
 - Speed up wxBitmap::Rescale()
 - Add right button event for wxToolbar's tools (Tim Kosse)
+- Don't unconditionally add wxCAPTION style to wxMiniFrame
 
 
 2.8.4
