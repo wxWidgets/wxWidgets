@@ -117,12 +117,10 @@ public:
     // operator unspecified_bool_type() would only makes the ambiguity worse.)
     operator bool() const { return m_value != 0; }
     bool operator!() const { return !((bool)*this); }
-#if (defined(__VISUALC__) && __VISUALC__ < 1400) || \
-    defined(__DIGITALMARS__) || defined(__BORLANDC__)
-    // We need this for VC++ < 8 or DigitalMars and expressions like
-    // "str[0] && *p":
+
+    // And this one is needed by some (not all, but not using ifdefs makes the
+    // code easier) compilers to parse "str[0] && *p" successfully
     bool operator&&(bool v) const { return (bool)*this && v; }
-#endif
 
     // Assignment operators:
     wxUniChar& operator=(const wxUniChar& c) { m_value = c.m_value; return *this; }
