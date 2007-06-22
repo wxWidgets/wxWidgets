@@ -1,7 +1,7 @@
 import unittest
 import wx
-import sys
 
+import wxtest
 import testColor
 import testRect
 import testFont
@@ -13,11 +13,14 @@ This file contains classes and methods for unit testing the API of wx.Window.
 
 WindowTest is meant to be the base class of all test cases for classes derived
 from wx.Window.  For the tests to run properly, derived classes must make sure
-to call the constructor's superclass.  Additionally, they must create a few class
-properties from within the setUp method.  Generally these are just symbols pointing
-to their respective data within the testframe.
-These properties include:
+to call the constructor's superclass if they override it.  Additionally, they must create a 
+few class properties from within the setUp method, and may create a few more.
+
+Required properties:
     testControl - an alias of frame.testControl
+
+Optional properties:
+    frame - just a generic frame, to use as a parent for Windows that need one
     children - a sequence of frames whose parent is the testControl
     children_ids - IDs corresponding to each child
     children_names - names corresponding to each child
@@ -32,7 +35,7 @@ AssociateHandle, CacheBestSize, CanSetTransparent, CaptureMouse, CenterOnParent,
 ClearBackground, ClientToScreen, ClientToScreenXY, Close, ConvertDialogPointToPixels, 
 ConvertDialogSizeToPixels, ConvertPixelPointToDialog, ConvertPixelSizeToDialog, 
 Create, Destroy, DestroyChildren, DissociateHandle, DLG_PNT, DLG_SZE, DragAcceptFiles, 
-FindFocus, Fit, FitInside, GetAutoLayout, GetBestSize, 
+FindFocus, Fit, FitInside, GetAcceleratorTable, GetAutoLayout, GetBestSize, 
 GetBestSizeTuple, GetBestVirtualSize, GetBorder, GetCapture, GetCaret, GetCharHeight, 
 GetCharWidth, GetClassDefaultAttributes, GetClientAreaOrigin, GetClientRect, 
 GetClientSize, GetClientSizeTuple, GetConstraints, GetContainingSizer, GetCursor, 
@@ -50,7 +53,7 @@ MoveAfterInTabOrder, MoveBeforeInTabOrder, Navigate, NewControlId, NextControlId
 PageDown, PageUp, PopEventHandler, PopupMenu, PopupMenuXY, PostCreate, PrepareDC, PrevControlId, 
 PushEventHandler, Raise, Refresh, RefreshRect, RegisterHotKey, ReleaseMouse, RemoveChild, 
 RemoveEventHandler, ScreenToClient, ScreenToClientXY, ScrollLines, ScrollPages, 
-ScrollWindow, SendSizeEvent, SetAutoLayout, SetCaret, SetClientRect, SetClientSize, 
+ScrollWindow, SendSizeEvent, SetAcceleratorTable, SetAutoLayout, SetCaret, SetClientRect, SetClientSize, 
 SetClientSizeWH, SetConstraints, SetContainingSizer, SetCursor, SetDimensions, SetDoubleBuffered, 
 SetDropTarget, SetEventHandler, SetExtraStyle, SetFocus, SetFocusFromKbd, 
 SetHelpTextForId, SetInitialSize, SetLayoutDirection, 
@@ -98,24 +101,6 @@ class WindowTest(unittest.TestCase):
         self.frame.Destroy()
         self.app.Destroy()
     
-    # This fails because there does not exist a method for equality 
-    # checking of wxAcceleratorTables
-    # TODO: rewrite to manually check each AcceleratorEntry
-    # TODO: test the AcceleratorTable by firing simulated events
-    #               and checking responses
-    # TODO: implement C++ equality method in wxAcceleratorTable
-    def testAcceleratorTable(self):
-        """SetAcceleratorTable, GetAcceleratorTable"""
-        # from wx.AcceleratorTable documentation, ids replaced
-        #aTable = wx.AcceleratorTable([(wx.ACCEL_ALT,  ord('X'), wx.ID_ANY),
-        #                      (wx.ACCEL_CTRL, ord('H'), wx.ID_ANY),
-        #                      (wx.ACCEL_CTRL, ord('F'), wx.ID_ANY),
-        #                      (wx.ACCEL_NORMAL, wx.WXK_F3, wx.ID_ANY)
-        #                      ])
-        #self.testControl.SetAcceleratorTable(aTable)
-        #self.assertEquals(aTable, self.testControl.GetAcceleratorTable())
-        pass
-    
     def testBackgroundColor(self):
         """SetBackgroundColour, GetBackgroundColour"""
         for test, actual in self.COLOUR_TESTS:
@@ -146,6 +131,9 @@ class WindowTest(unittest.TestCase):
         self.testControl.Centre(wx.HORIZONTAL)
         self.testControl.Centre(wx.BOTH)
         self.testControl.Centre(wx.VERTICAL)
+        # This test is finicky.
+        if wxtest.PlatformIsWindows():
+            self.assertRaises(wx.PyAssertionError, self.testControl.Center, wx.CENTER_ON_SCREEN)
         # This, however, functions properly (it has a parent)
         for child in self.children:
             child.Center(wx.CENTER_ON_SCREEN)
@@ -200,11 +188,13 @@ class WindowTest(unittest.TestCase):
     
     def testGetChildren(self):
         """GetChildren"""
-        a = wx.Window(self.testControl)
-        b = wx.Window(self.testControl)
-        c = wx.Window(self.testControl)
-        for child in (a,b,c):
-            self.assert_(child in self.testControl.GetChildren())
+        # segfaults on Ubuntu for unknown reason
+        if wxtest.PlatformIsNotLinux():
+            a = wx.Window(self.testControl)
+            b = wx.Window(self.testControl)
+            c = wx.Window(self.testControl)
+            for child in (a,b,c):
+                self.assert_(child in self.testControl.GetChildren())
     
     def testGrandParent(self):
         """GetGrandParent, Reparent"""
@@ -225,6 +215,12 @@ class WindowTest(unittest.TestCase):
             self.testControl.SetId(id)
             self.assertEquals(id, self.testControl.GetId())
     
+    # At least one of these came out valid on Ubuntu.
+    # TODO: isolate the culprit
+    def testInvalidSizeHints(self):
+        for invalid_hint in self.INVALID_SIZE_HINTS:
+            self.assertRaises(wx.PyAssertionError, self.testControl.SetSizeHints, *invalid_hint)
+            
     def testLabel(self):
         """SetLabel, GetLabel"""
         one = "here is one label"
@@ -381,50 +377,9 @@ class WindowTest(unittest.TestCase):
         for child in self.children:
             self.assertEquals(self.testControl, child.GetParent())
 
-# -----------------------------------------------------------
-
-class WindowWinTest(WindowTest):
-    # Turns out this is a windows-only thing. Expected behavior,
-    # or interesting quirk?
-    def testCenterFails(self):
-        """
-        Can't center on screen without a parent.
-        Or maybe there's some other criterion I'm missing..."""
-        self.assertRaises(wx.PyAssertionError, self.testControl.Center, wx.CENTER_ON_SCREEN)
-
-    # At least one of these came out valid on Ubuntu.
-    # TODO: isolate the cause
-    def testInvalidSizeHints(self):
-        for invalid_hint in self.INVALID_SIZE_HINTS:
-            self.assertRaises(wx.PyAssertionError, self.testControl.SetSizeHints, *invalid_hint)
-
-class WindowMacTest(WindowTest):
-    pass
-
-class WindowLinuxTest(WindowTest):
-    # Haven't figured out why exactly this test causes a
-    # segfault on Ubuntu
-    def testGetChildren(self):
-        pass
-
-    # fails for unknown reason on Ubuntu
-    def testFreezeThaw(self):
-        pass
-
-    def testLabel(self):
-        pass
-
-# -----------------------------------------------------------
 
 def suite():
-    testclass = WindowTest
-    if sys.platform.find('win32') != -1:
-        testclass = WindowWinTest
-    elif sys.platform.find('linux') != -1:
-        testclass = WindowLinuxTest
-    elif sys.platform.find('mac') != -1:
-        testclass = WindowMacTest
-    suite = unittest.makeSuite(testclass)
+    suite = unittest.makeSuite(WindowTest)
     return suite
     
 if __name__ == '__main__':

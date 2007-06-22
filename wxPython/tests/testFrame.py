@@ -1,7 +1,7 @@
 import unittest
 import wx
-import sys
 
+import wxtest
 import testTopLevelWindow
 
 """
@@ -19,41 +19,33 @@ class FrameTest(testTopLevelWindow.TopLevelWindowBase):
         self.app = wx.PySimpleApp()
         self.frame = wx.Frame(parent=None, id=wx.ID_ANY)
         self.testControl = wx.Frame(parent=self.frame, id=wx.ID_ANY)
-
-# -----------------------------------------------------------
-
-class FrameWinTest(FrameTest):
+    
     # Overridden tests:
-    # TODO: Why do these wx.Window tests fail on wx.Frame
+    # TODO: Why do these wx.Window tests fail on wx.Frame?
     def testCenterFails(self):
-        self.testControl.Center(wx.CENTER_ON_SCREEN)
-    
-    # it looks as though wx.Frame has a minimum size of 123,34.
+        if wxtest.PlatformIsWindows():
+            self.testControl.Center(wx.CENTER_ON_SCREEN)
+        else:
+            super(FrameTest,self).testCenterFails(self)
+            
+    # it looks as though wx.Frame has a minimum size of 123,34 (on Windows)
     def testSize(self):
-        self.testControl.SetSize(wx.Size(1,1))
-        self.assertEquals(wx.Size(123,34),self.testControl.GetSize())
+        if wxtest.PlatformIsWindows():
+            self.testControl.SetSize(wx.Size(1,1))
+            self.assertEquals(wx.Size(123,34),self.testControl.GetSize())
+        else:
+            super(FrameTest,self).testSize(self)
     
-    # and the same goes for GetRect
+    # and the same goes for GetRect(again, on Windows)
     def testRect(self):
-        self.testControl.SetRect(wx.Rect(0,0,0,0))
-        self.assertEquals(wx.Rect(0,0,123,34),self.testControl.GetRect())
-
-class FrameLinuxTest(FrameTest):
-    pass
-
-class FrameMacTest(FrameTest):
-    pass
-
-# -----------------------------------------------------------
+        if wxtest.PlatformIsWindows():
+            self.testControl.SetRect(wx.Rect(0,0,0,0))
+            self.assertEquals(wx.Rect(0,0,123,34),self.testControl.GetRect())
+        else:
+            super(FrameTest,self).testSize(self)
+            
 
 def suite():
-    testclass = FrameTest
-    if sys.platform.find('win32') != -1:
-        testclass = FrameWinTest
-    elif sys.platform.find('linux') != -1:
-        testclass = FrameLinuxTest
-    elif sys.platform.find('mac') != -1:
-        testclass = FrameMacTest
     suite = unittest.makeSuite(FrameTest)
     return suite
     

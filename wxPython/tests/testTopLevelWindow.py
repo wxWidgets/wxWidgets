@@ -1,6 +1,5 @@
 import unittest
 import wx
-import sys
 
 import testWindow
 
@@ -16,15 +15,7 @@ RequestUserAttention, Restore, SetDefaultItem, SetIcon, SetIcons, SetShape, SetT
 SetTmpDefaultItem, ShowFullScreen
 """
 
-BaseClass = testWindow.WindowTest
-if sys.platform.find('win32') != -1:
-    BaseClass = testWindow.WindowWinTest
-elif sys.platform.find('linux') != -1:
-    BaseClass = testWindow.WindowLinuxTest
-elif sys.platform.find('mac') != -1:
-    BaseClass = testWindow.WindowMacTest
-
-class TopLevelWindowBase(BaseClass):
+class TopLevelWindowBase(testWindow.WindowTest):
     def setUp(self):
         self.app = wx.PySimpleApp()
         self.frame = wx.Frame(parent=None, id=wx.ID_ANY)

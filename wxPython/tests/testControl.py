@@ -1,7 +1,7 @@
 import unittest
 import wx
-import sys
 
+import wxtest
 import testWindow
 
 """
@@ -11,15 +11,7 @@ Methods yet to test for wx.Control:
 __init__, Command, Create, GetAlignment
 """
 
-BaseClass = testWindow.WindowTest
-if sys.platform.find('win32') != -1:
-    BaseClass = testWindow.WindowWinTest
-elif sys.platform.find('linux') != -1:
-    BaseClass = testWindow.WindowLinuxTest
-elif sys.platform.find('mac') != -1:
-    BaseClass = testWindow.WindowMacTest
-
-class ControlTest(BaseClass):
+class ControlTest(testWindow.WindowTest):
     def setUp(self):
         self.app = wx.PySimpleApp()
         self.frame = wx.Frame(parent=None, id=wx.ID_ANY)
@@ -28,6 +20,19 @@ class ControlTest(BaseClass):
     def tearDown(self):
         self.frame.Destroy()
         self.app.Destroy()
+    
+    # TODO: is this expected behavior? Why does it only happen
+    # on Windows? It's a wrapped C++ assertion failure.
+    def testAllControlsNeedParents(self):
+        """
+        All instances of wx.Control need to have a parent
+        (at least on Windows)"""
+        class_under_test = type(self.testControl)
+        if wxtest.PlatformIsWindows():
+            self.assertRaises(wx.PyAssertionError, class_under_test, None)
+        else:
+            # if not windows, doesn't raise exception
+            class_under_test(None)
     
     def testDefaultAttributes(self):
         """GetClassDefaultAttributes"""
@@ -46,37 +51,10 @@ class ControlTest(BaseClass):
         name = 'Name of Control'
         ctrl = wx.Control(parent=self.frame, name=name)
         self.assertEquals(name, ctrl.GetLabelText())
-
-# -----------------------------------------------------------
-
-class ControlWinTest(ControlTest):
-    # TODO: is this expected behavior? Why does it only happen
-    # on Windows? It's a wrapped C++ assertion failure.
-    def testAllControlsNeedParents(self):
-        """
-        All instances of wx.Control need to have a parent
-        (at least on Windows)"""
-        class_under_test = type(self.testControl)
-        self.assertRaises(wx.PyAssertionError, class_under_test, None)
-
-class ControlLinuxTest(ControlTest):
-    def testLabelText(self):
-        pass
-
-class ControlMacTest(ControlTest):
-    pass
-
-# -----------------------------------------------------------
+    
 
 def suite():
-    testclass = ControlTest
-    if sys.platform.find('win32') != -1:
-        testclass = ControlWinTest
-    elif sys.platform.find('linux') != -1:
-        testclass = ControlLinuxTest
-    elif sys.platform.find('mac') != -1:
-        testclass = ControlMacTest
-    suite = unittest.makeSuite(testclass)
+    suite = unittest.makeSuite(ControlTest)
     return suite
     
 if __name__ == '__main__':

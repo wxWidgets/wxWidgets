@@ -33,15 +33,6 @@ class ItemContainerBase(unittest.TestCase):
     def tearDown(self):
         self.app.Destroy()
         self.frame.Destroy()
-
-class ItemContainerWinBase(ItemContainerBase):
-    pass
-
-class ItemContainerLinuxBase(ItemContainerBase):
-    pass
-
-class ItemContainerMacBase(ItemContainerBase):
-    pass
         
 
 def suite():

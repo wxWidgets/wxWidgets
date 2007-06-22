@@ -1,6 +1,5 @@
 import unittest
 import wx
-import sys
 
 import testControl
 
@@ -24,8 +23,9 @@ def getIdLabelPairs(without_mnemonic=True):
                 (wx.ID_DELETE,      '&Delete'),
                 (wx.ID_FIND,        '&Find'),
                 # TODO: fix docs or code!
-                #(wx.ID_REPLACE, 'Find and rep&lace'),
-                    (wx.ID_REPLACE, 'Replace'), # unknown ampersand position
+                (wx.ID_REPLACE, 'Find and rep&lace'),
+                # here's what wx.ID_REPLACE actually is (on Windows at least)
+                #(wx.ID_REPLACE, 'Replace'), # unknown ampersand position
                 (wx.ID_BACKWARD,    '&Back'),
                 (wx.ID_DOWN,        '&Down'),
                 (wx.ID_FORWARD,     '&Forward'),
@@ -74,15 +74,7 @@ def getIdLabelPairs(without_mnemonic=True):
 
 # -----------------------------------------------------------
 
-BaseClass = testControl.ControlTest
-if sys.platform.find('win32') != -1:
-    BaseClass = testControl.ControlWinTest
-elif sys.platform.find('linux') != -1:
-    BaseClass = testControl.ControlLinuxTest
-elif sys.platform.find('mac') != -1:
-    BaseClass = testControl.ControlMacTest
-
-class ButtonTest(BaseClass):
+class ButtonTest(testControl.ControlTest):
     def setUp(self):
         self.app = wx.PySimpleApp()
         self.frame = wx.Frame(parent=None, id=wx.ID_ANY)
