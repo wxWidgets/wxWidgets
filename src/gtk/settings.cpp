@@ -126,7 +126,7 @@ static bool GetColourFromGTKWidget(GdkColor& gdkColor,
         }
     }
 
-    gtk_widget_destroy( widget );
+    gtk_object_sink((GtkObject*)widget);
 
     return ok;
 }
@@ -140,14 +140,7 @@ static void GetTooltipColors()
     gs_objects.m_colTooltip = wxColor(c);
     c = tooltips->tip_window->style->fg[GTK_STATE_NORMAL];
     gs_objects.m_colTooltipText = wxColor(c);
-#if GTK_CHECK_VERSION(2, 9, 0)
-    if (gtk_check_version(2, 9, 0) == NULL)
-        g_object_ref_sink(tooltips);
-    else
-#endif
-    {
-        gtk_object_sink((GtkObject*)tooltips);
-    }
+    gtk_object_sink((GtkObject*)tooltips);
 }
 
 wxColour wxSystemSettingsNative::GetColour( wxSystemColour index )
@@ -355,7 +348,7 @@ wxFont wxSystemSettingsNative::GetFont( wxSystemFont index )
                         gs_objects.m_fontSystem = wxFont(wxString::FromAscii(font_name));
                     g_free (font_name);
                 }
-                gtk_widget_destroy( widget );
+                gtk_object_sink((GtkObject*)widget);
             }
             font = gs_objects.m_fontSystem;
             break;
