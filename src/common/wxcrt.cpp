@@ -548,6 +548,9 @@ int wxDoSnprintfUtf8(wchar_t *str, size_t size, const char *format, ...)
 
 #if wxUSE_UNICODE
 
+namespace
+{
+
 #if !wxUSE_UTF8_LOCALE_ONLY
 int wxInternalConvertStringToBuf(const wxString& s, char *out, size_t outsize)
 {
@@ -572,6 +575,8 @@ int wxInternalConvertStringToBuf(const wxString& s, wchar_t *out, size_t outsize
     return len;
 }
 #endif // wxUSE_UNICODE_UTF8
+
+} // anonymous namespace
 
 template<typename T>
 static size_t PrintfViaString(T *out, size_t outsize,
