@@ -20,7 +20,8 @@
 // passing wxUniChar[Ref] to functions taking wint_t such as iswalnum() &c
 #if (defined(__GNUC__) && \
         !defined(__DARWIN__) && !defined(__OS2__) && !defined(__DOS__)) || \
-    (defined(__VISUALC__) && defined(_NATIVE_WCHAR_T_DEFINED))
+    (defined(__VISUALC__) && defined(_NATIVE_WCHAR_T_DEFINED)) || \
+    wxCHECK_SUNCC_VERSION(5, 9)
     #define wxWINT_T_IS_SEPARATE_TYPE
 #endif
 
