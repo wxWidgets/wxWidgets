@@ -793,7 +793,7 @@ void MyFrame::FileOpen2(wxCommandEvent& WXUNUSED(event) )
     s_extDef = path.AfterLast(_T('.'));
 
     wxLogMessage(_T("You selected the file '%s', remembered extension '%s'"),
-                 (const wxChar*) path, (const wxChar*) s_extDef);
+                 path, s_extDef);
 }
 
 void MyFrame::FilesOpen(wxCommandEvent& WXUNUSED(event) )
