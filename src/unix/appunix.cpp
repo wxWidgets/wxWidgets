@@ -52,13 +52,23 @@ void wxAppConsole::CheckSignal()
     }
 }
 
+// the type of the signal handlers we use is "void(*)(int)" while the real
+// signal handlers are extern "C" and so have incompatible type and at least
+// Sun CC warns about it, so use explicit casts to suppress these warnings as
+// they should be harmless
+extern "C"
+{
+    typedef void (*SignalHandler_t)(int);
+}
+
 bool wxAppConsole::SetSignalHandler(int signal, SignalHandler handler)
 {
-    const bool install = handler != SIG_DFL && handler != SIG_IGN;
+    const bool install = (SignalHandler_t)handler != SIG_DFL &&
+                         (SignalHandler_t)handler != SIG_IGN;
 
     struct sigaction sa;
     memset(&sa, 0, sizeof(sa));
-    sa.sa_handler = &wxAppConsole::HandleSignal;
+    sa.sa_handler = (SignalHandler_t)&wxAppConsole::HandleSignal;
     sa.sa_flags = SA_RESTART;
     int res = sigaction(signal, &sa, 0);
     if ( res != 0 )
