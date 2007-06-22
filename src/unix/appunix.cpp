@@ -15,9 +15,11 @@
 #include <signal.h>
 #include <unistd.h>
 
-bool wxAppConsole::Initialize(int& argc, wxChar** argv)
+// use unusual names for arg[cv] to avoid clashes with wxApp members with the
+// same names
+bool wxAppConsole::Initialize(int& argc_, wxChar** argv_)
 {
-    if ( !wxAppConsoleBase::Initialize(argc,argv) )
+    if ( !wxAppConsoleBase::Initialize(argc_, argv_) )
         return false;
 
     sigemptyset(&m_signalsCaught);
