@@ -23,75 +23,13 @@ dnl  DEALINGS IN THE SOFTWARE.
 dnl
 dnl  $Id$
 dnl
-dnl  Compiler detection macros by David Elliott
+dnl  Compiler detection macros by David Elliott and Vadim Zeitlin
 dnl
 
 
 dnl ===========================================================================
-dnl Macros to detect non-GNU compilers (MetroWerks, XLC)
+dnl Macros to detect different C/C++ compilers
 dnl ===========================================================================
-
-dnl Based on autoconf _AC_LANG_COMPILER_GNU
-AC_DEFUN([_AC_BAKEFILE_LANG_COMPILER_MWERKS],
-[AC_CACHE_CHECK([whether we are using the Metrowerks _AC_LANG compiler],
-    [bakefile_cv_[]_AC_LANG_ABBREV[]_compiler_mwerks],
-    [AC_TRY_COMPILE([],[#ifndef __MWERKS__
-       choke me
-#endif
-],
-        [bakefile_compiler_mwerks=yes],
-        [bakefile_compiler_mwerks=no])
-    bakefile_cv_[]_AC_LANG_ABBREV[]_compiler_mwerks=$bakefile_compiler_mwerks
-    ])
-])
-
-dnl Loosely based on autoconf AC_PROG_CC
-dnl TODO: Maybe this should wrap the call to AC_PROG_CC and be used instead.
-AC_DEFUN([AC_BAKEFILE_PROG_MWCC],
-[AC_LANG_PUSH(C)
-_AC_BAKEFILE_LANG_COMPILER_MWERKS
-MWCC=`test $bakefile_cv_c_compiler_mwerks = yes && echo yes`
-AC_LANG_POP(C)
-])
-
-dnl Loosely based on autoconf AC_PROG_CXX
-dnl TODO: Maybe this should wrap the call to AC_PROG_CXX and be used instead.
-AC_DEFUN([AC_BAKEFILE_PROG_MWCXX],
-[AC_LANG_PUSH(C++)
-_AC_BAKEFILE_LANG_COMPILER_MWERKS
-MWCXX=`test $bakefile_cv_cxx_compiler_mwerks = yes && echo yes`
-AC_LANG_POP(C++)
-])
-
-dnl Based on autoconf _AC_LANG_COMPILER_GNU
-AC_DEFUN([_AC_BAKEFILE_LANG_COMPILER_XLC],
-[AC_CACHE_CHECK([whether we are using the IBM xlC _AC_LANG compiler],
-    [bakefile_cv_[]_AC_LANG_ABBREV[]_compiler_xlc],
-    [AC_TRY_COMPILE([],[#ifndef __xlC__
-       choke me
-#endif
-],
-        [bakefile_compiler_xlc=yes],
-        [bakefile_compiler_xlc=no])
-    bakefile_cv_[]_AC_LANG_ABBREV[]_compiler_xlc=$bakefile_compiler_xlc
-    ])
-])
-
-dnl Loosely based on autoconf AC_PROG_CC
-AC_DEFUN([AC_BAKEFILE_PROG_XLCC],
-[AC_LANG_PUSH(C)
-_AC_BAKEFILE_LANG_COMPILER_XLC
-XLCC=`test $bakefile_cv_c_compiler_xlc = yes && echo yes`
-AC_LANG_POP(C)
-])
-
-dnl Loosely based on autoconf AC_PROG_CXX
-AC_DEFUN([AC_BAKEFILE_PROG_XLCXX],
-[AC_LANG_PUSH(C++)
-_AC_BAKEFILE_LANG_COMPILER_XLC
-XLCXX=`test $bakefile_cv_cxx_compiler_xlc = yes && echo yes`
-AC_LANG_POP(C++)
-])
 
 dnl Based on autoconf _AC_LANG_COMPILER_GNU
 dnl _AC_BAKEFILE_LANG_COMPILER(NAME, LANG, SYMBOL, IF-YES, IF-NO)
@@ -113,12 +51,34 @@ AC_DEFUN([_AC_BAKEFILE_LANG_COMPILER],
          )
         ]
     )
-    AC_LANG_POP($2)
     if test "x$bakefile_cv_[]_AC_LANG_ABBREV[]_compiler_[]$3" = "xyes"; then
         :; $4
     else
         :; $5
     fi
+    AC_LANG_POP($2)
+])
+
+dnl CodeWarrior Metrowerks compiler defines __MWERKS__ for both C and C++
+AC_DEFUN([AC_BAKEFILE_PROG_MWCC],
+[
+    _AC_BAKEFILE_LANG_COMPILER(Metrowerks, C, __MWERKS__, MWCC=yes)
+])
+
+AC_DEFUN([AC_BAKEFILE_PROG_MWCXX],
+[
+    _AC_BAKEFILE_LANG_COMPILER(Metrowerks, C++, __MWERKS__, MWCXX=yes)
+])
+
+dnl IBM xlC compiler defines __xlC__ for both C and C++
+AC_DEFUN([AC_BAKEFILE_PROG_XLCC],
+[
+    _AC_BAKEFILE_LANG_COMPILER([IBM xlC], C, __xlC__, XLCC=yes)
+])
+
+AC_DEFUN([AC_BAKEFILE_PROG_XLCXX],
+[
+    _AC_BAKEFILE_LANG_COMPILER([IBM xlC], C++, __xlC__, XLCXX=yes)
 ])
 
 dnl recent versions of SGI mipsPro compiler define _SGI_COMPILER_VERSION
