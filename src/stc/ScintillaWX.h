@@ -72,7 +72,7 @@ class ScintillaWX;
 class wxSTCDropTarget : public wxTextDropTarget {
 public:
     void SetScintilla(ScintillaWX* swx) {
-        this->swx = swx;
+        m_swx = swx;
     }
 
     bool OnDropText(wxCoord x, wxCoord y, const wxString& data);
@@ -81,7 +81,7 @@ public:
     void OnLeave();
 
 private:
-    ScintillaWX* swx;
+    ScintillaWX* m_swx;
 };
 #endif
 
