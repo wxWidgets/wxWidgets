@@ -756,9 +756,21 @@ bool wxTextCtrl::Create( wxWindow *parent,
         gtk_widget_show(m_text);
     }
 
+
+    if (multi_line)
+    {
+        g_signal_connect (m_buffer, "changed",
+                          G_CALLBACK (gtk_text_changed_callback), this);
+    }
+    else
+    {
+        g_signal_connect (m_text, "changed",
+                          G_CALLBACK (gtk_text_changed_callback), this);
+    }
+
     if (!value.empty())
     {
-        SetValue( value );
+        DoSetValue( value, 0 );
     }
 
     if (style & wxTE_PASSWORD)
@@ -771,13 +783,9 @@ bool wxTextCtrl::Create( wxWindow *parent,
     if ( style & (wxTE_RIGHT | wxTE_CENTRE) )
         GTKSetJustification();
 
-    // We want to be notified about text changes.
     if (multi_line)
     {
-        g_signal_connect (m_buffer, "changed",
-                          G_CALLBACK (gtk_text_changed_callback), this);
-
-        // .. and handle URLs on multi-line controls with wxTE_AUTO_URL style
+        // Handle URLs on multi-line controls with wxTE_AUTO_URL style
         if (style & wxTE_AUTO_URL)
         {
             GtkTextIter start, end;
@@ -812,11 +820,6 @@ bool wxTextCtrl::Create( wxWindow *parent,
             gtk_text_buffer_get_end_iter(m_buffer, &end);
             au_check_range(&start, &end);
         }
-    }
-    else
-    {
-        g_signal_connect (m_text, "changed",
-                          G_CALLBACK (gtk_text_changed_callback), this);
     }
 
     g_signal_connect (m_text, "copy-clipboard",
@@ -1002,12 +1005,7 @@ void wxTextCtrl::DoSetValue( const wxString &value, int flags )
 {
     wxCHECK_RET( m_text != NULL, wxT("invalid text ctrl") );
 
-    // the control won't be modified any more as we programmatically replace
-    // all the existing text, so reset the flag and don't set it again (and do
-    // it now, before the text event handler is ran so that IsModified() called
-    // from there returns the expected value)
     m_modified = false;
-    DontMarkDirtyOnNextChange();
 
     const wxCharBuffer buffer(wxGTK_CONV_ENC(value, GetTextEncoding()));
     if ( !buffer )
@@ -1018,34 +1016,33 @@ void wxTextCtrl::DoSetValue( const wxString &value, int flags )
         return;
     }
 
-    // if the control is not empty, two "changed" signals are emitted,
-    // otherwise only one and we need to ignore either both or one of them
-    int ignore = flags & SetValue_SendEvent ? 0 : 1;
-    if ( !IsEmpty() )
-        ignore++;
-
-    if ( ignore )
-        IgnoreNextTextUpdate(ignore);
-
     if ( IsMultiLine() )
     {
+        g_signal_handlers_disconnect_by_func (m_buffer,
+                    (gpointer) gtk_text_changed_callback, this);
+                    
         gtk_text_buffer_set_text( m_buffer, buffer, strlen(buffer) );
+                    
+        
+        g_signal_connect (m_buffer, "changed",
+                          G_CALLBACK (gtk_text_changed_callback), this);
     }
-    else // single line
+    else
     {
+        g_signal_handlers_disconnect_by_func (m_text,
+                          (gpointer) gtk_text_changed_callback, this);
+                          
         gtk_entry_set_text( GTK_ENTRY(m_text), buffer );
+        
+        g_signal_connect (m_text, "changed",
+                          G_CALLBACK (gtk_text_changed_callback), this);
     }
-
-    // if, for whatever reason, the callback wasn't called the expected number
-    // of times, still reset the flags to the default values
-    m_dontMarkDirty = false;
-    m_countUpdatesToIgnore = 0;
-
-
-    // GRG, Jun/2000: Changed this after a lot of discussion in
-    //   the lists. wxWidgets 2.2 will have a set of flags to
-    //   customize this behaviour.
+                    
+    // This was added after discussion on the list
     SetInsertionPoint(0);
+    
+    if (flags & SetValue_SendEvent)
+        SendTextUpdatedEvent();
 }
 
 void wxTextCtrl::WriteText( const wxString &text )
