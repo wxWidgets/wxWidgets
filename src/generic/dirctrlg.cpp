@@ -1192,6 +1192,11 @@ void wxGenericDirCtrl::SetFilter(const wxString& filter)
 #else
         m_currentFilterStr = wxT("*.*");
 #endif
+
+    // current filter index is meaningless after filter change, set it to zero
+    SetFilterIndex(0);
+    if (m_filterListCtrl)
+        m_filterListCtrl->FillFilterList(m_filter, 0);
 }
 
 // Extract description and actual filter from overall filter string
