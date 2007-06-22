@@ -261,7 +261,7 @@ static int vfwscanf(FILE *stream, const wchar_t *format, va_list argptr)
     return -1;
 }
 
-#define vswprintf wxCRT_VsnprintfW_
+#define vswprintf wxCRT_VsnprintfW
 
 static int vfwprintf(FILE *stream, const wchar_t *format, va_list argptr)
 {
@@ -285,223 +285,6 @@ static int vwprintf(const wchar_t *format, va_list argptr)
 
 #endif // wxNEED_WPRINTF
 
-#ifdef wxNEED_PRINTF_CONVERSION
-
-// ----------------------------------------------------------------------------
-// wxFormatConverter: class doing the "%s" -> "%ls" conversion
-// ----------------------------------------------------------------------------
-
-/*
-   Here are the gory details. We want to follow the Windows/MS conventions,
-   that is to have
-
-   In ANSI mode:
-
-   format specifier         results in
-   -----------------------------------
-   %c, %hc, %hC             char
-   %lc, %C, %lC             wchar_t
-
-   In Unicode mode:
-
-   format specifier         results in
-   -----------------------------------
-   %hc, %C, %hC             char
-   %c, %lc, %lC             wchar_t
-
-
-   while on POSIX systems we have %C identical to %lc and %c always means char
-   (in any mode) while %lc always means wchar_t,
-
-   So to use native functions in order to get our semantics we must do the
-   following translations in Unicode mode (nothing to do in ANSI mode):
-
-   wxWidgets specifier      POSIX specifier
-   ----------------------------------------
-
-   %hc, %C, %hC             %c
-   %c                       %lc
-
-
-   And, of course, the same should be done for %s as well.
-*/
-
-class wxFormatConverter
-{
-public:
-    wxFormatConverter(const wchar_t *format);
-
-    // notice that we only translated the string if m_fmtOrig == NULL (as set
-    // by CopyAllBefore()), otherwise we should simply use the original format
-    operator const wchar_t *() const
-        { return m_fmtOrig ? m_fmtOrig : m_fmt.c_str(); }
-
-private:
-    // copy another character to the translated format: this function does the
-    // copy if we are translating but doesn't do anything at all if we don't,
-    // so we don't create the translated format string at all unless we really
-    // need to (i.e. InsertFmtChar() is called)
-    wchar_t CopyFmtChar(wchar_t ch)
-    {
-        if ( !m_fmtOrig )
-        {
-            // we're translating, do copy
-            m_fmt += ch;
-        }
-        else
-        {
-            // simply increase the count which should be copied by
-            // CopyAllBefore() later if needed
-            m_nCopied++;
-        }
-
-        return ch;
-    }
-
-    // insert an extra character
-    void InsertFmtChar(wchar_t ch)
-    {
-        if ( m_fmtOrig )
-        {
-            // so far we haven't translated anything yet
-            CopyAllBefore();
-        }
-
-        m_fmt += ch;
-    }
-
-    void CopyAllBefore()
-    {
-        wxASSERT_MSG( m_fmtOrig && m_fmt.empty(), _T("logic error") );
-
-        m_fmt = wxString(m_fmtOrig, m_nCopied);
-
-        // we won't need it any longer
-        m_fmtOrig = NULL;
-    }
-
-    static bool IsFlagChar(wchar_t ch)
-    {
-        return ch == _T('-') || ch == _T('+') ||
-               ch == _T('0') || ch == _T(' ') || ch == _T('#');
-    }
-
-    void SkipDigits(const wchar_t **ptpc)
-    {
-        while ( **ptpc >= _T('0') && **ptpc <= _T('9') )
-            CopyFmtChar(*(*ptpc)++);
-    }
-
-    // the translated format
-    wxString m_fmt;
-
-    // the original format
-    const wchar_t *m_fmtOrig;
-
-    // the number of characters already copied
-    size_t m_nCopied;
-};
-
-wxFormatConverter::wxFormatConverter(const wchar_t *format)
-{
-    m_fmtOrig = format;
-    m_nCopied = 0;
-
-    while ( *format )
-    {
-        if ( CopyFmtChar(*format++) == _T('%') )
-        {
-            // skip any flags
-            while ( IsFlagChar(*format) )
-                CopyFmtChar(*format++);
-
-            // and possible width
-            if ( *format == _T('*') )
-                CopyFmtChar(*format++);
-            else
-                SkipDigits(&format);
-
-            // precision?
-            if ( *format == _T('.') )
-            {
-                CopyFmtChar(*format++);
-                if ( *format == _T('*') )
-                    CopyFmtChar(*format++);
-                else
-                    SkipDigits(&format);
-            }
-
-            // next we can have a size modifier
-            enum
-            {
-                Default,
-                Short,
-                Long
-            } size;
-
-            switch ( *format )
-            {
-                case _T('h'):
-                    size = Short;
-                    format++;
-                    break;
-
-                case _T('l'):
-                    // "ll" has a different meaning!
-                    if ( format[1] != _T('l') )
-                    {
-                        size = Long;
-                        format++;
-                        break;
-                    }
-                    //else: fall through
-
-                default:
-                    size = Default;
-            }
-
-            // and finally we should have the type
-            switch ( *format )
-            {
-                case _T('C'):
-                case _T('S'):
-                    // %C and %hC -> %c and %lC -> %lc
-                    if ( size == Long )
-                        CopyFmtChar(_T('l'));
-
-                    InsertFmtChar(*format++ == _T('C') ? _T('c') : _T('s'));
-                    break;
-
-                case _T('c'):
-                case _T('s'):
-                    // %c -> %lc but %hc stays %hc and %lc is still %lc
-                    if ( size == Default)
-                        InsertFmtChar(_T('l'));
-                    // fall through
-
-                default:
-                    // nothing special to do
-                    if ( size != Default )
-                        CopyFmtChar(*(format - 1));
-                    CopyFmtChar(*format++);
-            }
-        }
-    }
-}
-
-#else // !wxNEED_PRINTF_CONVERSION
-    // no conversion necessary
-    #define wxFormatConverter(x) (x)
-#endif // wxNEED_PRINTF_CONVERSION/!wxNEED_PRINTF_CONVERSION
-
-#ifdef __WXDEBUG__
-// For testing the format converter
-wxString wxConvertFormat(const wchar_t *format)
-{
-    return wxString(wxFormatConverter(format));
-}
-#endif
-
 // ----------------------------------------------------------------------------
 // wxPrintf(), wxScanf() and relatives
 // ----------------------------------------------------------------------------
@@ -517,7 +300,7 @@ int wxCRT_PrintfW( const wchar_t *format, ... )
     va_list argptr;
     va_start(argptr, format);
 
-    int ret = vwprintf( wxFormatConverter(format), argptr );
+    int ret = vwprintf( format, argptr );
 
     va_end(argptr);
 
@@ -531,7 +314,7 @@ int wxCRT_FprintfW( FILE *stream, const wchar_t *format, ... )
     va_list argptr;
     va_start( argptr, format );
 
-    int ret = vfwprintf( stream, wxFormatConverter(format), argptr );
+    int ret = vfwprintf( stream, format, argptr );
 
     va_end(argptr);
 
@@ -542,29 +325,22 @@ int wxCRT_FprintfW( FILE *stream, const wchar_t *format, ... )
 #ifndef wxCRT_VfprintfW
 int wxCRT_VfprintfW( FILE *stream, const wchar_t *format, va_list argptr )
 {
-    return vfwprintf( stream, wxFormatConverter(format), argptr );
+    return vfwprintf( stream, format, argptr );
 }
 #endif
 
 #ifndef wxCRT_VprintfW
 int wxCRT_VprintfW( const wchar_t *format, va_list argptr )
 {
-    return vwprintf( wxFormatConverter(format), argptr );
+    return vwprintf( format, argptr );
 }
 #endif
-
-#ifndef wxCRT_VsnprintfW
-int wxCRT_VsnprintfW(wchar_t *str, size_t size, const wchar_t *format, va_list argptr )
-{
-    return vswprintf( str, size, wxFormatConverter(format), argptr );
-}
-#endif // !wxCRT_VsnprintfW
 
 #ifndef wxCRT_VsprintfW
 int wxCRT_VsprintfW( wchar_t *str, const wchar_t *format, va_list argptr )
 {
     // same as for wxSprintf()
-    return vswprintf(str, INT_MAX / 4, wxFormatConverter(format), argptr);
+    return vswprintf(str, INT_MAX / 4, format, argptr);
 }
 #endif
 
@@ -576,12 +352,12 @@ int wxCRT_ScanfW(const wchar_t *format, ...)
 
 #ifdef __VMS
 #if (__DECCXX_VER >= 70100000) && !defined(__STD_CFRONT) && !defined( __NONAMESPACE_STD )
-   int ret = std::vwscanf(wxFormatConverter(format), argptr);
+   int ret = std::vwscanf(format, argptr);
 #else
-   int ret = vwscanf(wxFormatConverter(format), argptr);
+   int ret = vwscanf(format, argptr);
 #endif
 #else
-   int ret = vwscanf(wxFormatConverter(format), argptr);
+   int ret = vwscanf(format, argptr);
 #endif
    
     va_end(argptr);
@@ -598,12 +374,12 @@ int wxCRT_SscanfW(const wchar_t *str, const wchar_t *format, ...)
 
 #ifdef __VMS
 #if (__DECCXX_VER >= 70100000) && !defined(__STD_CFRONT) && !defined( __NONAMESPACE_STD )
-   int ret = std::vswscanf(str, wxFormatConverter(format), argptr);
+   int ret = std::vswscanf(str, format, argptr);
 #else
-   int ret = vswscanf(str, wxFormatConverter(format), argptr);
+   int ret = vswscanf(str, format, argptr);
 #endif
 #else
-   int ret = vswscanf(str, wxFormatConverter(format), argptr);
+   int ret = vswscanf(str, format, argptr);
 #endif
 
     va_end(argptr);
@@ -619,12 +395,12 @@ int wxCRT_FscanfW(FILE *stream, const wchar_t *format, ...)
     va_start(argptr, format);
 #ifdef __VMS
 #if (__DECCXX_VER >= 70100000) && !defined(__STD_CFRONT) && !defined( __NONAMESPACE_STD )
-   int ret = std::vfwscanf(stream, wxFormatConverter(format), argptr);
+   int ret = std::vfwscanf(stream, format, argptr);
 #else
-   int ret = vfwscanf(stream, wxFormatConverter(format), argptr);
+   int ret = vfwscanf(stream, format, argptr);
 #endif
 #else
-   int ret = vfwscanf(stream, wxFormatConverter(format), argptr);
+   int ret = vfwscanf(stream, format, argptr);
 #endif
 
     va_end(argptr);
@@ -638,12 +414,12 @@ int wxCRT_VsscanfW(const wchar_t *str, const wchar_t *format, va_list argptr)
 {
 #ifdef __VMS
 #if (__DECCXX_VER >= 70100000) && !defined(__STD_CFRONT) && !defined( __NONAMESPACE_STD )
-   return std::vswscanf(str, wxFormatConverter(format), argptr);
+   return std::vswscanf(str, format, argptr);
 #else
-   return vswscanf(str, wxFormatConverter(format), argptr);
+   return vswscanf(str, format, argptr);
 #endif
 #else
-   return vswscanf(str, wxFormatConverter(format), argptr);
+   return vswscanf(str, format, argptr);
 #endif
 }
 #endif

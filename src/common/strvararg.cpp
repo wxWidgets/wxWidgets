@@ -83,11 +83,453 @@ wxArgNormalizedString::operator wxString() const
 }
 
 // ----------------------------------------------------------------------------
+// wxFormatConverter: class doing the "%s" and "%c" normalization
+// ----------------------------------------------------------------------------
+
+/*
+   There are four problems with wxPrintf() etc. format strings:
+
+   1) The printf vararg macros convert all forms of strings into
+      wxStringCharType* representation. This may make the format string
+      incorrect: for example, if %ls was used together with a wchar_t*
+      variadic argument, this would no longer work, because the templates
+      would change wchar_t* argument to wxStringCharType* and %ls would now
+      be incorrect in e.g. UTF-8 build. We need make sure only one specifier
+      form is used.
+
+   2) To complicate matters further, the meaning of %s and %c is different
+      under Windows and on Unix. The Windows/MS convention is as follows:
+
+       In ANSI mode:
+
+       format specifier         results in
+       -----------------------------------
+       %s, %hs, %hS             char*
+       %ls, %S, %lS             wchar_t*
+
+       In Unicode mode:
+
+       format specifier         results in
+       -----------------------------------
+       %hs, %S, %hS             char*
+       %s, %ls, %lS             wchar_t*
+
+       (While on POSIX systems we have %C identical to %lc and %c always means
+       char (in any mode) while %lc always means wchar_t.)
+
+      In other words, we should _only_ use %s on Windows and %ls on Unix for
+      wxUSE_UNICODE_WCHAR build.
+
+   3) To make things even worse, we need two forms in UTF-8 build: one for
+      passing strings to ANSI functions under UTF-8 locales (this one should
+      use %s) and one for widechar functions used under non-UTF-8 locales
+      (this one should use %ls).
+
+   And, of course, the same should be done for %c as well.
+
+   4) Finally, in UTF-8 build when calling ANSI printf() function, we need to
+      translate %c to %s, because not every Unicode character can be
+      represented by a char.
+
+
+   wxScanf() family of functions is simpler, because we don't normalize their
+   variadic arguments and we only have to handle 2) above and only for widechar
+   versions.
+*/
+
+template<typename T>
+class wxFormatConverterBase
+{
+public:
+    typedef T CharType;
+
+    wxFormatConverterBase()
+    {
+        m_fmtOrig = NULL;
+        m_fmtLast = NULL;
+        m_nCopied = 0;
+    }
+
+    wxCharTypeBuffer<CharType> Convert(const CharType *format)
+    {
+        // this is reset to NULL if we modify the format string
+        m_fmtOrig = format;
+
+        while ( *format )
+        {
+            if ( CopyFmtChar(*format++) == _T('%') )
+            {
+                // skip any flags
+                while ( IsFlagChar(*format) )
+                    CopyFmtChar(*format++);
+
+                // and possible width
+                if ( *format == _T('*') )
+                    CopyFmtChar(*format++);
+                else
+                    SkipDigits(&format);
+
+                // precision?
+                if ( *format == _T('.') )
+                {
+                    CopyFmtChar(*format++);
+                    if ( *format == _T('*') )
+                        CopyFmtChar(*format++);
+                    else
+                        SkipDigits(&format);
+                }
+
+                // next we can have a size modifier
+                SizeModifier size;
+
+                switch ( *format )
+                {
+                    case 'h':
+                        size = Size_Short;
+                        format++;
+                        break;
+
+                    case 'l':
+                        // "ll" has a different meaning!
+                        if ( format[1] != 'l' )
+                        {
+                            size = Size_Long;
+                            format++;
+                            break;
+                        }
+                        //else: fall through
+
+                    default:
+                        size = Size_Default;
+                }
+
+                CharType outConv = *format;
+                SizeModifier outSize = size;
+
+                // and finally we should have the type
+                switch ( *format )
+                {
+                    case _T('S'):
+                    case _T('s'):
+                        // all strings were converted into the same form by
+                        // wxArgNormalizer<T>, this form depends on the context
+                        // in which the value is used (scanf/printf/wprintf):
+                        HandleString(*format, size, outConv, outSize);
+                        break;
+
+                    case _T('C'):
+                    case _T('c'):
+                        HandleChar(*format, size, outConv, outSize);
+                        break;
+
+                    default:
+                        // nothing special to do
+                        break;
+                }
+
+                if ( outConv == *format && outSize == size ) // no change
+                {
+                    if ( size != Size_Default )
+                        CopyFmtChar(*(format - 1));
+                    CopyFmtChar(*format);
+                }
+                else // something changed
+                {
+                    switch ( outSize )
+                    {
+                        case Size_Long:
+                            InsertFmtChar(_T('l'));
+                            break;
+
+                        case Size_Short:
+                            InsertFmtChar(_T('h'));
+                            break;
+
+                        case Size_Default:
+                            // nothing to do
+                            break;
+                    }
+                    InsertFmtChar(outConv);
+                }
+
+                format++;
+            }
+        }
+
+        // notice that we only translated the string if m_fmtOrig == NULL (as
+        // set by CopyAllBefore()), otherwise we should simply use the original
+        // format
+        if ( m_fmtOrig )
+        {
+            return wxCharTypeBuffer<CharType>::CreateNonOwned(m_fmtOrig);
+        }
+        else
+        {
+            // NULL-terminate converted format string:
+            *m_fmtLast = 0;
+            return m_fmt;
+        }
+    }
+
+    virtual ~wxFormatConverterBase() {}
+
+protected:
+    enum SizeModifier
+    {
+        Size_Default,
+        Size_Short,
+        Size_Long
+    };
+
+    // called to handle %S or %s; 'conv' is conversion specifier ('S' or 's'
+    // respectively), 'size' is the preceding size modifier; the new values of
+    // conversion and size specifiers must be written to outConv and outSize
+    virtual void HandleString(CharType conv, SizeModifier size,
+                              CharType& outConv, SizeModifier& outSize) = 0;
+
+    // ditto for %C or %c
+    virtual void HandleChar(CharType conv, SizeModifier size,
+                            CharType& outConv, SizeModifier& outSize) = 0;
+
+private:
+    // copy another character to the translated format: this function does the
+    // copy if we are translating but doesn't do anything at all if we don't,
+    // so we don't create the translated format string at all unless we really
+    // need to (i.e. InsertFmtChar() is called)
+    CharType CopyFmtChar(CharType ch)
+    {
+        if ( !m_fmtOrig )
+        {
+            // we're translating, do copy
+            *(m_fmtLast++) = ch;
+        }
+        else
+        {
+            // simply increase the count which should be copied by
+            // CopyAllBefore() later if needed
+            m_nCopied++;
+        }
+
+        return ch;
+    }
+
+    // insert an extra character
+    void InsertFmtChar(CharType ch)
+    {
+        if ( m_fmtOrig )
+        {
+            // so far we haven't translated anything yet
+            CopyAllBefore();
+        }
+
+        *(m_fmtLast++) = ch;
+    }
+
+    void CopyAllBefore()
+    {
+        wxASSERT_MSG( m_fmtOrig && m_fmt.data() == NULL, "logic error" );
+
+        // the modified format string is guaranteed to be no longer than
+        // 3/2 of the original (worst case: the entire format string consists
+        // of "%s" repeated and is expanded to "%ls" on Unix), so we can
+        // allocate the buffer now and not worry about running out of space if
+        // we over-allocate a bit:
+        size_t fmtLen = wxStrlen(m_fmtOrig);
+        // worst case is of even length, so there's no rounding error in *3/2:
+        m_fmt.extend(fmtLen * 3 / 2);
+
+        if ( m_nCopied > 0 )
+            wxStrncpy(m_fmt.data(), m_fmtOrig, m_nCopied);
+        m_fmtLast = m_fmt.data() + m_nCopied;
+
+        // we won't need it any longer and resetting it also indicates that we
+        // modified the format
+        m_fmtOrig = NULL;
+    }
+
+    static bool IsFlagChar(CharType ch)
+    {
+        return ch == _T('-') || ch == _T('+') ||
+               ch == _T('0') || ch == _T(' ') || ch == _T('#');
+    }
+
+    void SkipDigits(const CharType **ptpc)
+    {
+        while ( **ptpc >= _T('0') && **ptpc <= _T('9') )
+            CopyFmtChar(*(*ptpc)++);
+    }
+
+    // the translated format
+    wxCharTypeBuffer<CharType> m_fmt;
+    CharType *m_fmtLast;
+
+    // the original format
+    const CharType *m_fmtOrig;
+
+    // the number of characters already copied (i.e. already parsed, but left
+    // unmodified)
+    size_t m_nCopied;
+};
+
+
+
+#ifdef __WINDOWS
+
+// on Windows, we should use %s and %c regardless of the build:
+class wxPrintfFormatConverterWchar : public wxFormatConverterBase<wchar_t>
+{
+    virtual void HandleString(CharType WXUNUSED(conv),
+                              SizeModifier WXUNUSED(size),
+                              CharType& outConv, SizeModifier& outSize)
+    {
+        outConv = 's';
+        outSize = Size_Default;
+    }
+
+    virtual void HandleChar(CharType WXUNUSED(conv),
+                            SizeModifier WXUNUSED(size),
+                            CharType& outConv, SizeModifier& outSize)
+    {
+        outConv = 'c';
+        outSize = Size_Default;
+    }
+};
+
+#else // !__WINDOWS__
+
+// on Unix, it's %s for ANSI functions and %ls for widechar:
+
+#if !wxUSE_UTF8_LOCALE_ONLY
+class wxPrintfFormatConverterWchar : public wxFormatConverterBase<wchar_t>
+{
+    virtual void HandleString(CharType WXUNUSED(conv),
+                              SizeModifier WXUNUSED(size),
+                              CharType& outConv, SizeModifier& outSize)
+    {
+        outConv = 's';
+        outSize = Size_Long;
+    }
+
+    virtual void HandleChar(CharType WXUNUSED(conv),
+                            SizeModifier WXUNUSED(size),
+                            CharType& outConv, SizeModifier& outSize)
+    {
+        outConv = 'c';
+        outSize = Size_Long;
+    }
+};
+#endif // !wxUSE_UTF8_LOCALE_ONLY
+
+#if wxUSE_UNICODE_UTF8
+class wxPrintfFormatConverterUtf8 : public wxFormatConverterBase<char>
+{
+    virtual void HandleString(CharType WXUNUSED(conv),
+                              SizeModifier WXUNUSED(size),
+                              CharType& outConv, SizeModifier& outSize)
+    {
+        outConv = 's';
+        outSize = Size_Default;
+    }
+
+    virtual void HandleChar(CharType WXUNUSED(conv),
+                            SizeModifier WXUNUSED(size),
+                            CharType& outConv, SizeModifier& outSize)
+    {
+        // added complication: %c should be translated to %s in UTF-8 build
+        outConv = 's';
+        outSize = Size_Default;
+    }
+};
+#endif // wxUSE_UNICODE_UTF8
+
+#endif // __WINDOWS__/!__WINDOWS__
+
+#if !wxUSE_UNICODE // FIXME-UTF8: remove
+class wxPrintfFormatConverterANSI : public wxFormatConverterBase<char>
+{
+    virtual void HandleString(CharType WXUNUSED(conv),
+                              SizeModifier WXUNUSED(size),
+                              CharType& outConv, SizeModifier& outSize)
+    {
+        outConv = 's';
+        outSize = Size_Default;
+    }
+
+    virtual void HandleChar(CharType WXUNUSED(conv),
+                            SizeModifier WXUNUSED(size),
+                            CharType& outConv, SizeModifier& outSize)
+    {
+        outConv = 'c';
+        outSize = Size_Default;
+    }
+};
+#endif // ANSI
+
+#ifndef __WINDOWS__
+/*
+
+   wxScanf() format translation is different, we need to translate %s to %ls
+   and %c to %lc on Unix (but not Windows and for widechar functions only!).
+
+   So to use native functions in order to get our semantics we must do the
+   following translations in Unicode mode:
+
+   wxWidgets specifier      POSIX specifier
+   ----------------------------------------
+
+   %hc, %C, %hC             %c
+   %c                       %lc
+
+ */
+class wxScanfFormatConverterWchar : public wxFormatConverterBase<wchar_t>
+{
+    virtual void HandleString(CharType conv, SizeModifier size,
+                              CharType& outConv, SizeModifier& outSize)
+    {
+        outConv = 's';
+        outSize = GetOutSize(conv == 'S', size);
+    }
+
+    virtual void HandleChar(CharType conv, SizeModifier size,
+                            CharType& outConv, SizeModifier& outSize)
+    {
+        outConv = 'c';
+        outSize = GetOutSize(conv == 'C', size);
+    }
+
+    SizeModifier GetOutSize(bool convIsUpper, SizeModifier size)
+    {
+        // %S and %hS -> %s and %lS -> %ls
+        if ( convIsUpper )
+        {
+            if ( size == Size_Long )
+                return Size_Long;
+            else
+                return Size_Default;
+        }
+        else // %s or %c
+        {
+            if ( size == Size_Default )
+                return Size_Long;
+            else
+                return size;
+        }
+    }
+};
+
+const wxWCharBuffer wxScanfConvertFormatW(const wchar_t *format)
+{
+    return wxScanfFormatConverterWchar().Convert(format);
+}
+#endif // !__WINDOWS__
+
+
+// ----------------------------------------------------------------------------
 // wxFormatString
 // ----------------------------------------------------------------------------
 
 #if !wxUSE_UNICODE_WCHAR
-const char* wxFormatString::AsChar()
+const char* wxFormatString::InputAsChar()
 {
     if ( m_char )
         return m_char.data();
@@ -110,10 +552,22 @@ const char* wxFormatString::AsChar()
 
     return m_char.data();
 }
+
+const char* wxFormatString::AsChar()
+{
+    if ( !m_convertedChar )
+#if !wxUSE_UNICODE // FIXME-UTF8: remove this
+        m_convertedChar = wxPrintfFormatConverterANSI().Convert(InputAsChar());
+#else
+        m_convertedChar = wxPrintfFormatConverterUtf8().Convert(InputAsChar());
+#endif
+
+    return m_convertedChar.data();
+}
 #endif // !wxUSE_UNICODE_WCHAR
 
 #if wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY
-const wchar_t* wxFormatString::AsWChar()
+const wchar_t* wxFormatString::InputAsWChar()
 {
     if ( m_wchar )
         return m_wchar.data();
@@ -143,5 +597,13 @@ const wchar_t* wxFormatString::AsWChar()
     m_wchar = wxConvLibc.cMB2WC(m_char.data());
 
     return m_wchar.data();
+}
+
+const wchar_t* wxFormatString::AsWChar()
+{
+    if ( !m_convertedWChar )
+        m_convertedWChar = wxPrintfFormatConverterWchar().Convert(InputAsWChar());
+
+    return m_convertedWChar.data();
 }
 #endif // wxUSE_UNICODE && !wxUSE_UTF8_LOCALE_ONLY

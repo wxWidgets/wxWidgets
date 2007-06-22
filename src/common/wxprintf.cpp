@@ -44,7 +44,7 @@ using namespace std ;
 // special test mode: define all functions below even if we don't really need
 // them to be able to test them
 #ifdef wxTEST_PRINTF
-    #undef wxCRT_VsnprintfW_
+    #undef wxCRT_VsnprintfW
     #undef wxCRT_VsnprintfA
 #endif
 
@@ -58,9 +58,9 @@ using namespace std ;
 // common code for both ANSI and Unicode versions
 // ----------------------------------------------------------------------------
 
-#if !defined(wxCRT_VsnprintfW_) || !defined(wxCRT_VsnprintfA)
+#if !defined(wxCRT_VsnprintfW) || !defined(wxCRT_VsnprintfA)
 
-// wxUSE_STRUTILS says our wxCRT_VsnprintfW_ implementation to use or not to
+// wxUSE_STRUTILS says our wxCRT_VsnprintfW implementation to use or not to
 // use wxStrlen and wxStrncpy functions over one-char processing loops.
 //
 // Some benchmarking revealed that wxUSE_STRUTILS == 1 has the following
@@ -103,7 +103,7 @@ using namespace std ;
 namespace
 {
 
-// the conversion specifiers accepted by wxCRT_VsnprintfW_
+// the conversion specifiers accepted by wxCRT_VsnprintfW
 enum wxPrintfArgType {
     wxPAT_INVALID = -1,
 
@@ -130,7 +130,7 @@ enum wxPrintfArgType {
     wxPAT_NLONGINT      // %ln
 };
 
-// an argument passed to wxCRT_VsnprintfW_
+// an argument passed to wxCRT_VsnprintfW
 typedef union {
     int pad_int;                        //  %d, %i, %o, %u, %x, %X
     long int pad_longint;               // %ld, etc
@@ -172,7 +172,7 @@ template<> struct wxPrintfStringHelper<wchar_t>
 
 
 // Contains parsed data relative to a conversion specifier given to
-// wxCRT_VsnprintfW_ and parsed from the format string
+// wxCRT_VsnprintfW and parsed from the format string
 // NOTE: in C++ there is almost no difference between struct & classes thus
 //       there is no performance gain by using a struct here...
 template<typename CharType>
@@ -217,7 +217,7 @@ public:
 public:
 
     // we don't declare this as a constructor otherwise it would be called
-    // automatically and we don't want this: to be optimized, wxCRT_VsnprintfW_
+    // automatically and we don't want this: to be optimized, wxCRT_VsnprintfW
     // calls this function only on really-used instances of this class.
     void Init();
 
@@ -868,7 +868,7 @@ static int wxDoVsnprintf(CharType *buf, size_t lenMax,
     // useful for debugging, to understand if we are really using this function
     // rather than the system implementation
 #if 0
-    wprintf(L"Using wxCRT_VsnprintfW_\n");
+    wprintf(L"Using wxCRT_VsnprintfW\n");
 #endif
 
     // required memory:
@@ -1023,31 +1023,31 @@ static int wxDoVsnprintf(CharType *buf, size_t lenMax,
 
 } // anonymous namespace
 
-#endif // !defined(wxCRT_VsnprintfW_) || !defined(wxCRT_VsnprintfA)
+#endif // !defined(wxCRT_VsnprintfW) || !defined(wxCRT_VsnprintfA)
 
 // ----------------------------------------------------------------------------
-// wxCRT_VsnprintfW_
+// wxCRT_VsnprintfW
 // ----------------------------------------------------------------------------
 
-#if !defined(wxCRT_VsnprintfW_)
+#if !defined(wxCRT_VsnprintfW)
 
 #if !wxUSE_WXVSNPRINTFW
-    #error "wxUSE_WXVSNPRINTFW must be 1 if our wxCRT_VsnprintfW_ is used"
+    #error "wxUSE_WXVSNPRINTFW must be 1 if our wxCRT_VsnprintfW is used"
 #endif
 
-int wxCRT_VsnprintfW_(wchar_t *buf, size_t len,
-                      const wchar_t *format, va_list argptr)
+int wxCRT_VsnprintfW(wchar_t *buf, size_t len,
+                     const wchar_t *format, va_list argptr)
 {
     return wxDoVsnprintf(buf, len, format, argptr);
 }
 
-#else    // wxCRT_VsnprintfW_ is defined
+#else    // wxCRT_VsnprintfW is defined
 
 #if wxUSE_WXVSNPRINTFW
-    #error "wxUSE_WXVSNPRINTFW must be 0 if our wxCRT_VsnprintfW_ is not used"
+    #error "wxUSE_WXVSNPRINTFW must be 0 if our wxCRT_VsnprintfW is not used"
 #endif
 
-#endif // !wxCRT_VsnprintfW_
+#endif // !wxCRT_VsnprintfW
 
 // ----------------------------------------------------------------------------
 // wxCRT_VsnprintfA
