@@ -1746,8 +1746,8 @@ wxMBConv_iconv::wxMBConv_iconv(const char *name)
 
         wxLogTrace(TRACE_STRCONV,
                    wxT("iconv wchar_t charset is \"%s\"%s"),
-                   ms_wcCharsetName.empty() ? _T("<none>")
-                                            : ms_wcCharsetName.c_str(),
+                   ms_wcCharsetName.empty() ? wxString("<none>")
+                                            : ms_wcCharsetName,
                    ms_wcNeedsSwap ? _T(" (needs swap)")
                                   : _T(""));
     }
@@ -1956,7 +1956,7 @@ size_t wxMBConv_iconv::GetMBNulLen() const
         wxMutexLocker lock(self->m_iconvMutex);
 #endif
 
-        wchar_t *wnul = L"";
+        const wchar_t *wnul = L"";
         char buf[8]; // should be enough for NUL in any encoding
         size_t inLen = sizeof(wchar_t),
                outLen = WXSIZEOF(buf);
