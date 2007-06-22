@@ -132,7 +132,6 @@ public:
     void Write8(const wxUint8 *buffer, size_t size);
     void WriteDouble(const double *buffer, size_t size);
 
-    wxDataOutputStream& operator<<(const wxChar *string);
     wxDataOutputStream& operator<<(const wxString& string);
     wxDataOutputStream& operator<<(wxInt8 c);
     wxDataOutputStream& operator<<(wxInt16 i);

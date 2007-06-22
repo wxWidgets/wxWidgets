@@ -438,12 +438,6 @@ wxTextOutputStream& wxTextOutputStream::PutChar(wxChar c)
     return *this;
 }
 
-wxTextOutputStream& wxTextOutputStream::operator<<(const wxChar *string)
-{
-    WriteString( wxString(string) );
-    return *this;
-}
-
 wxTextOutputStream& wxTextOutputStream::operator<<(const wxString& string)
 {
     WriteString( string );
