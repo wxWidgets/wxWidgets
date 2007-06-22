@@ -25,6 +25,7 @@
 
 #include "wx/strvararg.h"
 #include "wx/string.h"
+#include "wx/crt.h"
 
 // ============================================================================
 // implementation
