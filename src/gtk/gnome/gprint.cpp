@@ -1762,6 +1762,8 @@ void wxGnomePrintDC::SetBackground( const wxBrush& brush )
 
 void wxGnomePrintDC::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wxCoord height)
 {
+    wxDC::DoSetClippingRegion( x, y, width, height );
+    
     gs_lgp->gnome_print_gsave( m_gpc );
     
     gs_lgp->gnome_print_newpath( m_gpc );
@@ -1775,6 +1777,8 @@ void wxGnomePrintDC::DoSetClippingRegion(wxCoord x, wxCoord y, wxCoord width, wx
 
 void wxGnomePrintDC::DestroyClippingRegion()
 {
+    wxDC::DestroyClippingRegion();
+
     gs_lgp->gnome_print_grestore( m_gpc );
     
 #if 0
