@@ -7,11 +7,15 @@ import testControl
 This file contains classes and methods for unit testing the API of wx.Button
 
 Methods yet to test:
-__init__, Create, GetClassDefaultAttributes, SetDefault
+__init__, Create, GetClassDefaultAttributes
 """
 
 def getIdLabelPairs(without_mnemonic=True):
-    """ID/Label pairs were copied from the docs"""
+    """ID/Label pairs were copied from the docs.
+    Upon inspection of the wx package, there appear to be more IDs than
+    are documented here.
+    TODO: determine if the below (in the docs) are the only IDs applying to
+        instances of wx.Button, or if there are omissions"""
     pairs = (
                 (wx.ID_ADD,         'Add'),
                 (wx.ID_APPLY,       '&Apply'),
@@ -97,6 +101,11 @@ class ButtonTest(testControl.ControlTest):
         for id,label in getIdLabelPairs():
             b = wx.Button(self.frame, id)
             self.assertEquals(label, b.GetLabelText())
+    
+    def testSetDefault(self):
+        """SetDefault"""
+        self.testControl.SetDefault()
+        self.assertEquals(self.testControl, self.frame.DefaultItem)
         
 
 def suite():
