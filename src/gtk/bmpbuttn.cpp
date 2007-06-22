@@ -194,19 +194,12 @@ void wxBitmapButton::OnSetBitmap()
     if (!the_one.Ok()) the_one = m_bmpNormal;
     if (!the_one.Ok()) return;
 
-    GdkBitmap *mask = (GdkBitmap *) NULL;
-    if (the_one.GetMask()) mask = the_one.GetMask()->GetBitmap();
-
     GtkWidget *child = GTK_BIN(m_widget)->child;
     if (child == NULL)
     {
         // initial bitmap
-        GtkWidget *pixmap;
-
-        if (the_one.HasPixbuf())
-            pixmap = gtk_image_new_from_pixbuf(the_one.GetPixbuf());
-        else
-            pixmap = gtk_image_new_from_pixmap(the_one.GetPixmap(), mask);
+        GtkWidget *pixmap = 
+            gtk_image_new_from_pixbuf(the_one.GetPixbuf());
 
         gtk_widget_show(pixmap);
         gtk_container_add(GTK_CONTAINER(m_widget), pixmap);
@@ -214,10 +207,7 @@ void wxBitmapButton::OnSetBitmap()
     else
     {   // subsequent bitmaps
         GtkImage *pixmap = GTK_IMAGE(child);
-        if (the_one.HasPixbuf())
-            gtk_image_set_from_pixbuf(pixmap, the_one.GetPixbuf());
-        else
-            gtk_image_set_from_pixmap(pixmap, the_one.GetPixmap(), mask);
+        gtk_image_set_from_pixbuf(pixmap, the_one.GetPixbuf());
     }
 }
 
