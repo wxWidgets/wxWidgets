@@ -2771,8 +2771,9 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             wxPen pen(GetRuleColour(), 1, wxSOLID);
             wxSize clientSize = GetClientSize();
 
-            // Don't draw the first one
-            for ( size_t i = visibleFrom + 1; i <= visibleTo; i++ )
+            size_t i = visibleFrom;
+            if (i == 0) i = 1; // Don't draw the first one
+            for ( ; i <= visibleTo; i++ )
             {
                 dc.SetPen(pen);
                 dc.SetBrush( *wxTRANSPARENT_BRUSH );
@@ -2806,8 +2807,10 @@ void wxListMainWindow::OnPaint( wxPaintEvent &WXUNUSED(event) )
             {
                 int colWidth = GetColumnWidth(col);
                 x += colWidth;
-                dc.DrawLine(x - dev_x - 2, firstItemRect.GetY() - 1 - dev_y,
-                            x - dev_x - 2, lastItemRect.GetBottom() + 1 - dev_y);
+                int x_pos = x - dev_x;
+                if (col < GetColumnCount()-1) x_pos -= 2;
+                dc.DrawLine(x_pos, firstItemRect.GetY() - 1 - dev_y,
+                            x_pos, lastItemRect.GetBottom() + 1 - dev_y);
             }
         }
     }
