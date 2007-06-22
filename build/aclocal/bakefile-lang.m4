@@ -1,5 +1,5 @@
 dnl
-dnl  This file is part of Bakefile (http://bakefile.sourceforge.net)
+dnl  This file is part of Bakefile (http://www.bakefile.org)
 dnl
 dnl  Copyright (C) 2003-2007 Vaclav Slavik, David Elliott and others
 dnl
@@ -228,7 +228,12 @@ dnl _AC_BAKEFILE_PROG_COMPILER(LANG)
 AC_DEFUN([_AC_BAKEFILE_PROG_COMPILER],
 [
     AC_PROG_$1
+
+    dnl Intel compiler can be used under several different OS and even
+    dnl different architectures (x86, amd64 and Itanium) so it's easier to just
+    dnl always test for it
     AC_BAKEFILE_PROG_INTEL$1
+
     dnl if we're using gcc, we can't be using any of incompatible compilers
     if test "x$G$1" != "xyes"; then
         if test "x$1" = "xC"; then
@@ -253,6 +258,11 @@ AC_DEFUN([_AC_BAKEFILE_PROG_COMPILER],
 
             IRIX*)
                 AC_BAKEFILE_PROG_SGI$1
+                ;;
+
+            Linux*)
+                dnl Sun CC is now available under Linux too
+                AC_BAKEFILE_PROG_SUN$1
                 ;;
 
             HP-UX*)
