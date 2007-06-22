@@ -19,6 +19,7 @@ import testButton
 import testColor
 import testControl
 import testControlWithItems
+import testDialog
 import testFont
 import testFrame
 import testItemContainer
@@ -32,8 +33,8 @@ import testTextCtrl
 import testTopLevelWindow
 import testWindow
 
-modules = (testButton, testColor, testControl, testControlWithItems, testFont, testFrame, 
-            testItemContainer, testListBox, testPoint, testRect, testSize, testSizer,
+modules = (testButton, testColor, testControl, testControlWithItems, testDialog, testFont,
+            testFrame, testItemContainer, testListBox, testPoint, testRect, testSize, testSizer,
             testStaticText, testTextCtrl, testTopLevelWindow, testWindow)
 
 alltests = unittest.TestSuite([mod.suite() for mod in modules])
