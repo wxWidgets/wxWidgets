@@ -4132,6 +4132,11 @@ if test "$wxUSE_SHARED" = "yes"; then
     dnl use versioned symbols if available on the platform
     WX_VERSIONED_SYMBOLS([\$(wx_top_builddir)/version-script])
 
+    dnl test for Sun CC which can be used under both Solaris and Linux
+    if test "x$SUNCXX" = xyes; then
+        SAMPLES_RPATH_FLAG="-R\$(wx_top_builddir)/lib"
+        WXCONFIG_RPATH="-R\$libdir"
+    else
     case "${host}" in
       *-*-linux* | *-*-gnu* )
         SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
@@ -4139,41 +4144,39 @@ if test "$wxUSE_SHARED" = "yes"; then
         ;;
 
       *-*-solaris2* )
-        if test "$GCC" = yes ; then
-            dnl newer versions of gcc need -isystem to compile X headers on
-            dnl Solaris (which use old style C syntax)
-            CPPFLAGS="-isystem /usr/openwin/include $CPPFLAGS"
+        dnl here we know that Sun CC is not used as we tested for it above,
+        dnl hence we must be using gcc
 
-            dnl gcc may use Sun's ld, in which case -rpath gives a confusing
-            dnl error message. We have to try both -Wl,-rpath and -Wl,-R:
-            saveLdflags="$LDFLAGS"
-            LDFLAGS="$saveLdflags -Wl,-rpath,/"
-            AC_MSG_CHECKING([if the linker accepts -rpath])
-            AC_TRY_LINK(
-                [],[],
-                [
-                    AC_MSG_RESULT([yes])
-                    SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
-                    WXCONFIG_RPATH="-Wl,-rpath,\$libdir"
-                ],[
-                    AC_MSG_RESULT([no])
-                    AC_MSG_CHECKING([if the linker accepts -R])
-                    LDFLAGS="$saveLdflags -Wl,-R,/"
-                    AC_TRY_LINK(
-                        [],[],
-                        [
-                            AC_MSG_RESULT([yes])
-                            SAMPLES_RPATH_FLAG="-Wl,-R,\$(wx_top_builddir)/lib"
-                            WXCONFIG_RPATH="-Wl,-R,\$libdir"
-                        ],[
-                            AC_MSG_RESULT([no])
-                        ])
-                ])
-            LDFLAGS="$saveLdflags"
-        else
-            SAMPLES_RPATH_FLAG="-R\$(wx_top_builddir)/lib"
-            WXCONFIG_RPATH="-R\$libdir"
-        fi
+        dnl newer versions of gcc need -isystem to compile X headers on
+        dnl Solaris (which use old style C syntax)
+        CPPFLAGS="-isystem /usr/openwin/include $CPPFLAGS"
+
+        dnl gcc may use Sun's ld, in which case -rpath gives a confusing
+        dnl error message. We have to try both -Wl,-rpath and -Wl,-R:
+        saveLdflags="$LDFLAGS"
+        LDFLAGS="$saveLdflags -Wl,-rpath,/"
+        AC_MSG_CHECKING([if the linker accepts -rpath])
+        AC_TRY_LINK(
+            [],[],
+            [
+                AC_MSG_RESULT([yes])
+                SAMPLES_RPATH_FLAG="-Wl,-rpath,\$(wx_top_builddir)/lib"
+                WXCONFIG_RPATH="-Wl,-rpath,\$libdir"
+            ],[
+                AC_MSG_RESULT([no])
+                AC_MSG_CHECKING([if the linker accepts -R])
+                LDFLAGS="$saveLdflags -Wl,-R,/"
+                AC_TRY_LINK(
+                    [],[],
+                    [
+                        AC_MSG_RESULT([yes])
+                        SAMPLES_RPATH_FLAG="-Wl,-R,\$(wx_top_builddir)/lib"
+                        WXCONFIG_RPATH="-Wl,-R,\$libdir"
+                    ],[
+                        AC_MSG_RESULT([no])
+                    ])
+            ])
+        LDFLAGS="$saveLdflags"
       ;;
 
       *-*-darwin* )
@@ -4205,6 +4208,7 @@ EOF
         ;;
 
     esac
+    fi
 
     if test $wxUSE_RPATH = "no"; then
         SAMPLES_RPATH_FLAG=''
@@ -5262,6 +5266,10 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
       dnl wouldn't be found by it
       AC_CACHE_CHECK([for pthread_cleanup_push/pop], wx_cv_func_pthread_cleanup,
       [
+        dnl C compiler may treat pthread_cleanup_push() as an undeclared
+        dnl function and not give a warning even if it's unavailable, so use
+        dnl the C++ one for this test
+        AC_LANG_PUSH(C++)
         AC_TRY_COMPILE([#include <pthread.h>
                void ThreadCleanupFunc(void *p);
             ],
@@ -5275,6 +5283,7 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
                wx_cv_func_pthread_cleanup=no
             ]
         )
+        AC_LANG_POP()
       ])
       if test "x$wx_cv_func_pthread_cleanup" = "xyes"; then
         AC_DEFINE(wxHAVE_PTHREAD_CLEANUP)
