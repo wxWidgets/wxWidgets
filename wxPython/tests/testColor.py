@@ -2,8 +2,8 @@ import unittest
 import wx
 
 """
-This file contains classes and methods for unit testing the API of wx.Color
-(as well as wx.Colour, because they're the same thing)
+This file contains classes and methods for unit testing the API of wx.Colour
+(as well as wx.Color, because they're the same thing)
         
 Methods yet to test:
 __del__, __eq__, __getitem__, __len__, __ne__, __nonzero__, __reduce__, 
@@ -36,6 +36,23 @@ def getColourTuples():
 RED = wx.Colour(255,0,0)
 GREEN = wx.Colour(0,255,0)
 BLUE = wx.Colour(0,0,255)
+# wx.NullColour
+
+# from inspection of wx.TheColourDatabase
+def getColourNames():
+    return ('BLACK','BLUE','SLATE BLUE','GREEN','SPRING GREEN','CYAN','NAVY',
+            'STEEL BLUE','FOREST GREEN','SEA GREEN','DARK GREY','MIDNIGHT BLUE',
+            'DARK GREEN','DARK SLATE GREY','MEDIUM BLUE','SKY BLUE','LIME GREEN',
+            'MEDIUM AQUAMARINE','CORNFLOWER BLUE','MEDIUM SEA GREEN','INDIAN RED',
+            'VIOLET','DARK OLIVE GREEN','DIM GREY','CADET BLUE','MEDIUM GREY',
+            'DARK SLATE BLUE','MEDIUM FOREST GREEN','SALMON','DARK TURQUOISE',
+            'AQUAMARINE','MEDIUM TURQUOISE','MEDIUM SLATE BLUE','MEDIUM SPRING GREEN',
+            'GREY','FIREBRICK','MAROON','SIENNA','LIGHT STEEL BLUE','PALE GREEN',
+            'MEDIUM ORCHID','GREEN YELLOW','DARK ORCHID','YELLOW GREEN','BLUE VIOLET',
+            'KHAKI','BROWN','TURQUOISE','PURPLE','LIGHT BLUE','LIGHT GREY','ORANGE',
+            'VIOLET RED','GOLD','THISTLE','WHEAT','MEDIUM VIOLET RED','ORCHID',
+            'TAN','GOLDENROD','PLUM','MEDIUM GOLDENROD','RED','ORANGE RED',
+            'LIGHT MAGENTA','CORAL','PINK','YELLOW','WHITE')
 
 # -----------------------------------------------------------
 
@@ -54,15 +71,15 @@ class ColorTest(unittest.TestCase):
         self.assertRaises(OverflowError, wx.Colour, -1)
         self.assertRaises(OverflowError, wx.Colour, 256)
         
-    def testSingleAccessors(self):
-        """Red, Green, Blue, Alpha"""
-        for i in range(256):
-            colour = wx.Colour(i,i,i,i)
-            self.assertEquals(i, colour.Red())
-            self.assertEquals(i, colour.Green())
-            self.assertEquals(i, colour.Blue())
-            self.assertEquals(i, colour.Alpha())
-    
+    def testGetSetRGB(self):
+        """SetRGB, GetRGB"""
+        for color in getColourData():
+            sludge = color.GetRGB()
+            del color
+            color = wx.Colour()
+            color.SetRGB(sludge)
+            self.assertEquals(sludge, color.GetRGB())
+            
     def testMultipleAccessors(self):
         """Get, Set"""
         for i in range(256):
@@ -70,20 +87,6 @@ class ColorTest(unittest.TestCase):
             color.Set(i,i,i,i)
             self.assertEquals((i,i,i), color.Get())
             self.assertEquals(i, color.Alpha())
-    
-    def testStringRepresentation(self):
-        """GetAsString"""
-        for i in range(256):
-            tup = (i,i,i,i)
-            col_tup = (i,i,i)
-            color = wx.Colour(i,i,i,i)
-            self.assertEquals(str(tup), str(color))
-            self.assertEquals('rgb'+str(col_tup), 
-                                color.GetAsString(wx.C2S_CSS_SYNTAX))
-            # TODO: implement tests for below flags
-            # wx.C2S_NAME 	return colour name, when possible
-            # wx.C2S_CSS_SYNTAX 	return colour in rgb(r,g,b) syntax
-            # wx.C2S_HTML_SYNTAX 	return colour in #rrggbb syntax
     
     def testOk(self):
         """IsOk, Ok"""
@@ -99,14 +102,28 @@ class ColorTest(unittest.TestCase):
         self.assert_(not attr.colBg.Ok())
         self.assert_(not attr.colBg.IsOk())
     
-    def testGetSetRGB(self):
-        """SetRGB, GetRGB"""
-        for color in getColourData():
-            sludge = color.GetRGB()
-            del color
-            color = wx.Colour()
-            color.SetRGB(sludge)
-            self.assertEquals(sludge, color.GetRGB())
+    def testSingleAccessors(self):
+        """Red, Green, Blue, Alpha"""
+        for i in range(256):
+            colour = wx.Colour(i,i,i,i)
+            self.assertEquals(i, colour.Red())
+            self.assertEquals(i, colour.Green())
+            self.assertEquals(i, colour.Blue())
+            self.assertEquals(i, colour.Alpha())
+            
+    def testStringRepresentation(self):
+        """GetAsString"""
+        for i in range(256):
+            tup = (i,i,i,i)
+            col_tup = (i,i,i)
+            color = wx.Colour(i,i,i,i)
+            self.assertEquals(str(tup), str(color))
+            self.assertEquals('rgb'+str(col_tup), 
+                                color.GetAsString(wx.C2S_CSS_SYNTAX))
+            # TODO: implement tests for below flags
+            # wx.C2S_NAME 	return colour name, when possible
+            # wx.C2S_CSS_SYNTAX 	return colour in rgb(r,g,b) syntax
+            # wx.C2S_HTML_SYNTAX 	return colour in #rrggbb syntax
             
 
 def suite():

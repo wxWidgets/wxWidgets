@@ -11,7 +11,6 @@ __init__, AppendAndEnsureVisible, Create, Deselect, DeselectAll, EnsureVisible,
 GetClassDefaultAttributes, GetSelections, HitTest, Insert, InsertItems, IsSelected,
 IsSorted, Select, Set, SetFirstItem, SetFirstItemStr, SetItemBackgroundColour,
 SetItemFont, SetItemForegroundColour, SetSelection, SetStringSelection
-
 """
 
 class ListBoxTest(testControlWithItems.ControlWithItemsBase):

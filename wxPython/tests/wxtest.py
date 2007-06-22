@@ -20,6 +20,9 @@ The two use case types are as follows (the second is preferred):
         # mac-specific test
     if wxtest.PlatformIsNotWindows():
         # test not to be run on windows
+
+Possible TODO: instead of using sys to determine platform, use contents of wx.PlatformInfo.
+        Also, Linux should maybe be replaced by Gtk
 """
 
 # A poor attempt at enums

@@ -104,8 +104,10 @@ class WindowTest(unittest.TestCase):
     def testBackgroundColor(self):
         """SetBackgroundColour, GetBackgroundColour"""
         for test, actual in self.COLOUR_TESTS:
-            self.testControl.SetBackgroundColour(test)
+            self.assert_(self.testControl.SetBackgroundColour(test))
+                        # return True when background colour changed
             self.assertEquals(actual, self.testControl.GetBackgroundColour())
+            self.assert_(not self.testControl.SetBackgroundColour(test))
             
     def testBackgroundStyle(self):
         """SetBackgroundStyle, GetBackgroundStyle"""
@@ -176,8 +178,10 @@ class WindowTest(unittest.TestCase):
     def testForegroundColor(self):
         """SetForegroundColour, GetForegroundColour"""
         for test, actual in self.COLOUR_TESTS:
-            self.testControl.SetForegroundColour(test)
+            self.assert_(self.testControl.SetForegroundColour(test))
+                            # return True when background colour changed
             self.assertEquals(actual, self.testControl.GetForegroundColour())
+            self.assert_(not self.testControl.SetForegroundColour(test))
             
     def testFreezeThaw(self):
         """Freeze, Thaw, IsFrozen"""

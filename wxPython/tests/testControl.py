@@ -42,13 +42,11 @@ class ControlTest(testWindow.WindowTest):
         self.assert_(attrs.colFg.IsOk())
         self.assert_(attrs.font.IsOk())
 
-    # NOTE: only makes sense when called in ControlTest.
-    #   otherwise the results are padded with meaningless tests.
-    #   how to generalize this for inheritance?
     # TODO: does this only work on Windows? if so, why?
     def testLabelText(self):
         """GetLabelText"""
         name = 'Name of Control'
+        class_under_test = type(self.testControl)
         ctrl = wx.Control(parent=self.frame, name=name)
         self.assertEquals(name, ctrl.GetLabelText())
     

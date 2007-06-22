@@ -7,15 +7,13 @@ import testControl
 This file contains classes and methods for unit testing the API of wx.TextCtrl
         
 Methods yet to test:
-__init__, CanCopy, CanCut, CanPaste, CanRedo, CanUndo, ChangeValue,
-Create, DiscardEdits, EmulateKeyPress, GetClassDefaultAttributes,
-GetDefaultStyle, GetLastPosition, GetLineLength, GetLineText,
-GetNumberOfLines, GetString,
-GetStyle, HitTest, HitTestPos, IsEditable, IsModified,
-LoadFile,  MacCheckSpelling, MarkDirty, PositionToXY,
-Redo, SaveFile, SelectAll, SendTextUpdatedEvent, SetDefaultStyle,
-SetEditable, SetMaxLength, SetModified,
-SetStyle, ShowPosition, Undo, write, XYToPosition
+__init__, CanCopy, CanCut, CanPaste, CanRedo, CanUndo, ChangeValue, Create, 
+DiscardEdits, EmulateKeyPress, GetClassDefaultAttributes, GetDefaultStyle,
+GetLastPosition, GetLineLength, GetLineText, GetNumberOfLines, GetString,
+GetStyle, HitTest, HitTestPos, IsEditable, IsModified, LoadFile, MacCheckSpelling,
+MarkDirty, PositionToXY, Redo, SaveFile, SelectAll, SendTextUpdatedEvent,
+SetDefaultStyle, SetEditable, SetMaxLength, SetModified, SetStyle, ShowPosition,
+Undo, write, XYToPosition
 """
 
 class TextCtrlTest(testControl.ControlTest):
