@@ -32,6 +32,8 @@ protected:
     // implement sink function
     virtual void DoLogString(const wxString& szString, time_t t);
 
+    wxSUPPRESS_DOLOGSTRING_HIDE_WARNING()
+
 private:
     // the control we use
     wxTextCtrl *m_pTextCtrl;
@@ -58,6 +60,8 @@ public:
 
 protected:
     virtual void DoLog(wxLogLevel level, const wxString& szString, time_t t);
+
+    wxSUPPRESS_DOLOG_HIDE_WARNING()
 
     // empty everything
     void Clear();
@@ -114,6 +118,9 @@ public:
 protected:
     virtual void DoLog(wxLogLevel level, const wxString& szString, time_t t);
     virtual void DoLogString(const wxString& szString, time_t t);
+
+    wxSUPPRESS_DOLOG_HIDE_WARNING()
+    wxSUPPRESS_DOLOGSTRING_HIDE_WARNING()
 
 private:
     wxLogFrame *m_pLogFrame;      // the log frame

@@ -279,6 +279,23 @@ protected:
                              time_t WXUNUSED(t)) {}
     virtual void DoLogString(const wchar_t *WXUNUSED(szString),
                              time_t WXUNUSED(t)) {}
+#endif // WXWIN_COMPATIBILITY_2_8
+
+    // this macro should be used in the derived classes to avoid warnings about
+    // hiding the other DoLog() overloads when overriding DoLog(wxString) --
+    // but don't use it with MSVC which doesn't give this warning but does give
+    // warning when a deprecated function is overridden
+#if WXWIN_COMPATIBILITY_2_8 && !defined(__VISUALC__)
+    #define wxSUPPRESS_DOLOG_HIDE_WARNING()                                   \
+        virtual void DoLog(wxLogLevel, const char *, time_t) { }              \
+        virtual void DoLog(wxLogLevel, const wchar_t *, time_t) { }
+
+    #define wxSUPPRESS_DOLOGSTRING_HIDE_WARNING()                             \
+        virtual void DoLogString(const char *, time_t) { }                    \
+        virtual void DoLogString(const wchar_t *, time_t) { }
+#else
+    #define wxSUPPRESS_DOLOG_HIDE_WARNING()
+    #define wxSUPPRESS_DOLOGSTRING_HIDE_WARNING()
 #endif
 
     // log a line containing the number of times the previous message was
@@ -336,6 +353,9 @@ protected:
     virtual void DoLog(wxLogLevel level, const wxString& szString, time_t t);
     virtual void DoLogString(const wxString& szString, time_t t);
 
+    wxSUPPRESS_DOLOG_HIDE_WARNING()
+    wxSUPPRESS_DOLOGSTRING_HIDE_WARNING()
+
 private:
     wxString m_str;
 
@@ -354,6 +374,8 @@ protected:
     // implement sink function
     virtual void DoLogString(const wxString& szString, time_t t);
 
+    wxSUPPRESS_DOLOGSTRING_HIDE_WARNING()
+
     FILE *m_fp;
 
     DECLARE_NO_COPY_CLASS(wxLogStderr)
@@ -371,6 +393,8 @@ public:
 protected:
     // implement sink function
     virtual void DoLogString(const wxString& szString, time_t t);
+
+    wxSUPPRESS_DOLOGSTRING_HIDE_WARNING()
 
     // using ptr here to avoid including <iostream.h> from this file
     wxSTD ostream *m_ostr;
@@ -445,6 +469,8 @@ public:
 protected:
     // pass the chain to the old logger if needed
     virtual void DoLog(wxLogLevel level, const wxString& szString, time_t t);
+
+    wxSUPPRESS_DOLOG_HIDE_WARNING()
 
 private:
     // the current log target
