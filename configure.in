@@ -3099,26 +3099,21 @@ if test "$wxUSE_GUI" = "yes"; then
                 wx_cv_lib_gtk=
                 if test "x$wxGTK_VERSION" != "x1"
                 then
-                    dnl The gthread.pc that ships with solaris returns '-mt',
+                    dnl The gthread.pc that ships with Solaris returns '-mt',
                     dnl it's correct for Sun CC, but gcc requires '-pthreads'.
                     dnl So disable the compile check and remove the -mt below.
                     case "${host}" in
                         *-*-solaris2* )
                             if test "$wxUSE_THREADS" = "yes" -a "$GCC" = yes; then
-                            enable_gtktest=no
+                                enable_gtktest=no
                             fi
                     esac
 
                     AM_PATH_GTK_2_0(2.0.0, wx_cv_lib_gtk=2.0, , $GTK_MODULES)
 
-                    dnl Remove the '-mt' for gcc on solaris
+                    dnl Solaris also requires -lX11 for static lib
                     case "${host}" in
                         *-*-solaris2* )
-                            if test "$wxUSE_THREADS" = "yes" -a "$GCC" = yes; then
-                                GTK_CFLAGS=`echo $GTK_CFLAGS | sed 's/-mt//'`
-                                GTK_LIBS=`echo $GTK_LIBS | sed 's/-mt//'`
-                            fi
-                            dnl solaris also requires -lX11 for static lib
                             if test "$wxUSE_SHARED" != "yes"; then
                                 GTK_LIBS="$GTK_LIBS -lX11"
                             fi
@@ -5115,13 +5110,15 @@ if test "$TOOLKIT" != "MSW" -a "$USE_OS2" != 1; then
         dnl with the convention that anything starting with '-' is a cpp flag
         dnl while anything else is a library (i.e. there is an implicit "-l")
         THREAD_OPTS="-pthread"
+        if test "x$SUNCXX" = xyes; then
+            THREAD_OPTS="-mt lthread $THREAD_OPTS"
+        fi
+
         case "${host}" in
           *-*-solaris2* | *-*-sunos4* )
                 if test "x$GCC" = "xyes"; then
                     dnl Solaris/gcc combination use this one for some reason
                     THREAD_OPTS="-pthreads $THREAD_OPTS"
-                else
-                    THREAD_OPTS="-mt $THREAD_OPTS"
                 fi
                 ;;
           *-*-freebsd*)
@@ -7487,16 +7484,6 @@ if test "$wxUSE_MEDIACTRL" = "yes"; then
 
 
         if test "$wxUSE_GSTREAMER" = "yes"; then
-            dnl system gstreamer package is compiled with Sun CC and outputs
-            dnl CC-specific "-mt" in its flags, remove it for gcc compilation
-            case "${host}" in
-                *-*-solaris2* )
-                    if "$GCC" = yes; then
-                        GST_CFLAGS=`echo $GST_CFLAGS | sed 's/-mt//'`
-                        GST_LIBS=`echo $GST_LIBS | sed 's/-mt//'`
-                    fi
-            esac
-
             CPPFLAGS="$GST_CFLAGS $CPPFLAGS"
             LIBS="$GST_LIBS $LIBS"
 
@@ -8029,6 +8016,38 @@ fi
 
 dnl TOOLCHAIN_DEFS should be used for both wx and client code
 WXCONFIG_CPPFLAGS="$WXCONFIG_CPPFLAGS $TOOLCHAIN_DEFS"
+
+
+dnl Sun cc is compatible with gcc and so either of them can use the C
+dnl libraries built with the other, i.e. gcc can be used to build wxGTK under
+dnl Solaris where GTK+ is compiled using cc and cc can be used under Linux
+dnl where GTK+ is built with gcc
+dnl
+dnl However the compiler options are not compatible at all and in particular
+dnl gcc doesn't like cc -mt option and cc doesn't like -pthread. We simply
+dnl filter them out as we already have the correct options for multithreaded
+dnl programs if we're using threads (and if we don't, it shouldn't matter)
+case "${host}" in
+    *-*-solaris2* )
+        dnl system packages are compiled with Sun CC and so pkg-config outputs
+        dnl CC-specific "-mt" flag, remove it when using gcc
+        if "$GCC" = yes; then
+            CPPFLAGS=`echo $CPPFLAGS | sed 's/-mt//'`
+            LIBS=`echo $LIBS | sed 's/-mt//'`
+            EXTRALIBS_GUI=`echo $EXTRALIBS_GUI | sed 's/-mt//'`
+        fi
+        ;;
+
+    *-*-linux* )
+        dnl OTOH when using Sun CC under Linux, the flags contain gcc-specific
+        dnl -pthreads which Sun CC doesn't know about
+        if test "x$SUNCXX" = xyes; then
+            CPPFLAGS=`echo $CPPFLAGS | sed 's/-pthread//'`
+            LIBS=`echo $LIBS | sed 's/-pthread//'`
+            EXTRALIBS_GUI=`echo $EXTRALIBS_GUI | sed 's/-pthread//'`
+        fi
+        ;;
+esac
 
 dnl for convenience, sort the samples in alphabetical order
 dnl
