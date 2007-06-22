@@ -7,7 +7,7 @@ Its major use is to provide a standard means of determining the current
 platform, for platform-specific testing.  There are currently three choices
 of platform: Windows, Linux, and Mac.
 
-The two types of use cases are as follows:
+The two use case types are as follows (the second is preferred):
     
     # Method 1:
     if wxtest.CURRENT_PLATFORM == wxtest.MAC:
@@ -34,7 +34,7 @@ if sys.platform.find('win32') != -1:
 elif sys.platform.find('linux') != -1:
     CURRENT_PLATFORM = LINUX
 elif sys.platform.find('mac') != -1:
-    CURRENT_PLATFORM = MAc
+    CURRENT_PLATFORM = MAC
 else:
     raise EnvironmentError("Unknown platform!")
 
