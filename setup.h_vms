@@ -191,7 +191,7 @@ typedef pid_t GPid;
 
 
 #ifndef wxUSE_UNICODE
-    #define wxUSE_UNICODE 0
+    #define wxUSE_UNICODE 1
 #endif
 
 #define wxUSE_WCHAR_T 1

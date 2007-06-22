@@ -575,7 +575,7 @@ if test $DEBUG_CONFIGURE = 1; then
   DEFAULT_wxUSE_POPUPWIN=no
   DEFAULT_wxUSE_TIPWINDOW=no
 
-  DEFAULT_wxUSE_UNICODE=no
+  DEFAULT_wxUSE_UNICODE=yes
   DEFAULT_wxUSE_UNICODE_MSLU=no
   DEFAULT_wxUSE_UNICODE_UTF8=auto
   DEFAULT_wxUSE_UNICODE_UTF8_LOCALE=no
@@ -803,7 +803,7 @@ else
   DEFAULT_wxUSE_POPUPWIN=yes
   DEFAULT_wxUSE_TIPWINDOW=yes
 
-  DEFAULT_wxUSE_UNICODE=no
+  DEFAULT_wxUSE_UNICODE=yes
   DEFAULT_wxUSE_UNICODE_MSLU=yes
   DEFAULT_wxUSE_UNICODE_UTF8=auto
   DEFAULT_wxUSE_UNICODE_UTF8_LOCALE=no
@@ -1010,7 +1010,7 @@ WX_ARG_ENABLE(tarstream,     [  --enable-tarstream      use wxTar streams], wxUS
 WX_ARG_ENABLE(textbuf,       [  --enable-textbuf        use wxTextBuffer class], wxUSE_TEXTBUFFER)
 WX_ARG_ENABLE(textfile,      [  --enable-textfile       use wxTextFile class], wxUSE_TEXTFILE)
 WX_ARG_ENABLE(timer,         [  --enable-timer          use wxTimer class], wxUSE_TIMER)
-WX_ARG_ENABLE(unicode,       [  --enable-unicode        compile wxString with Unicode support], wxUSE_UNICODE)
+WX_ARG_ENABLE(unicode,       [  --enable-unicode       compile without Unicode support], wxUSE_UNICODE)
 WX_ARG_ENABLE(sound,         [  --enable-sound          use wxSound class], wxUSE_SOUND)
 WX_ARG_ENABLE(mediactrl,     [  --enable-mediactrl      use wxMediaCtrl class], wxUSE_MEDIACTRL)
 WX_ARG_ENABLE(gstreamer8,    [  --enable-gstreamer8     force GStreamer 0.8 instead of 0.10 with the wxMediaCtrl class on unix], wxUSE_GSTREAMER8)

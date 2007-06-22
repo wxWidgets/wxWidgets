@@ -156,11 +156,11 @@
 // (Windows 9x doesn't support it and the programs compiled in Unicode mode
 // will not run under 9x -- but see wxUSE_UNICODE_MSLU below).
 //
-// Default is 0
+// Default is 1
 //
-// Recommended setting: 0 (unless you only plan to use Windows NT/2000/XP)
+// Recommended setting: 1
 #ifndef wxUSE_UNICODE
-    #define wxUSE_UNICODE 0
+    #define wxUSE_UNICODE 1
 #endif
 
 // Setting wxUSE_WCHAR_T to 1 gives you some degree of Unicode support without

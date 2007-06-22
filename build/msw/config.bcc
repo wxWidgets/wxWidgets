@@ -57,7 +57,7 @@ WXUNIV = 0
 
 # Compile Unicode build of wxWidgets? [0,1]
 !ifndef UNICODE
-UNICODE = 0
+UNICODE = 1
 !endif
 
 # Use MSLU library when building Unicode version. [0,1]
