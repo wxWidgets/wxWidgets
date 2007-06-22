@@ -757,6 +757,18 @@ bool wxTextCtrl::Create( wxWindow *parent,
         gtk_widget_show(m_text);
     }
 
+    // We want to be notified about text changes.
+    if (multi_line)
+    {
+        g_signal_connect (m_buffer, "changed",
+                          G_CALLBACK (gtk_text_changed_callback), this);
+    }
+    else
+    {
+        g_signal_connect (m_text, "changed",
+                          G_CALLBACK (gtk_text_changed_callback), this);
+    }
+
     if (!value.empty())
     {
         SetValue( value );
@@ -772,13 +784,9 @@ bool wxTextCtrl::Create( wxWindow *parent,
     if ( style & (wxTE_RIGHT | wxTE_CENTRE) )
         GTKSetJustification();
 
-    // We want to be notified about text changes.
     if (multi_line)
     {
-        g_signal_connect (m_buffer, "changed",
-                          G_CALLBACK (gtk_text_changed_callback), this);
-
-        // .. and handle URLs on multi-line controls with wxTE_AUTO_URL style
+        // Handle URLs on multi-line controls with wxTE_AUTO_URL style
         if (style & wxTE_AUTO_URL)
         {
             GtkTextIter start, end;
@@ -814,12 +822,7 @@ bool wxTextCtrl::Create( wxWindow *parent,
             au_check_range(&start, &end);
         }
     }
-    else
-    {
-        g_signal_connect (m_text, "changed",
-                          G_CALLBACK (gtk_text_changed_callback), this);
-    }
-
+    
     g_signal_connect (m_text, "copy-clipboard",
                       G_CALLBACK (gtk_copy_clipboard_callback), this);
     g_signal_connect (m_text, "cut-clipboard",
