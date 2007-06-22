@@ -3962,11 +3962,16 @@ bool wxWindowGTK::SetBackgroundStyle(wxBackgroundStyle style)
 
     if (style == wxBG_STYLE_CUSTOM)
     {
-        GdkWindow *window = (GdkWindow*) NULL;
-        if (m_wxwindow)
+        GdkWindow *window;
+        if ( m_wxwindow )
+        {
             window = GTK_PIZZA(m_wxwindow)->bin_window;
+        }
         else
-            window = GetConnectWidget()->window;
+        {
+            GtkWidget * const w = GetConnectWidget();
+            window = w ? w->window : NULL;
+        }
 
         if (window)
         {
@@ -3979,9 +3984,11 @@ bool wxWindowGTK::SetBackgroundStyle(wxBackgroundStyle style)
 #endif
             m_needsStyleChange = false;
         }
-        else
+        else // window not realized yet
+        {
             // Do in OnIdle, because the window is not yet available
             m_needsStyleChange = true;
+        }
 
         // Don't apply widget style, or we get a grey background
     }
