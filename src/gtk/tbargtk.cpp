@@ -137,6 +137,7 @@ public:
                 wxFAIL_MSG( _T("unknown toolbar child type") );
                 // fall through
 
+            case wxITEM_DROPDOWN:
             case wxITEM_NORMAL:
                 return GTK_TOOLBAR_CHILD_BUTTON;
         }
@@ -192,7 +193,7 @@ static void gtk_toolbar_callback( GtkWidget *widget,
             // pressed an already pressed radio button
             return;
         }
-    
+
         tool->Toggle();
 
         tool->SetImage(tool->GetBitmap());
@@ -265,7 +266,7 @@ static gint gtk_toolbar_buddy_leave_callback( GtkWidget *WXUNUSED(widget),
 }
 
 //-----------------------------------------------------------------------------
-// "left-click" on dropdown 
+// "left-click" on dropdown
 //-----------------------------------------------------------------------------
 
 extern "C"
@@ -294,22 +295,22 @@ static gboolean gtk_toolbar_dropdown_lclick_callback(GtkWidget *widget,
     {
         return TRUE;
     }
-    
+
     wxMenu * const menu = tool->GetDropdownMenu();
     if (!menu)
         return TRUE;
 
     // simulate press
     gtk_toggle_button_set_active( GTK_TOGGLE_BUTTON(widget), TRUE );
-    
+
     g_signal_connect (menu->m_menu, "hide",
                                     G_CALLBACK (gtk_pop_tb_hide_callback),
                                     widget);
-    
-    tbar->PopupMenu( menu, widget->allocation.x, 
+
+    tbar->PopupMenu( menu, widget->allocation.x,
                            widget->allocation.y + widget->allocation.height );
-                           
-    
+
+
     return TRUE;
 }
 }
@@ -518,24 +519,21 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
     }
 
     int posGtk = 0;
-    if (pos > 0)
-    {    
-        size_t i;
-        for (i = 0; i < pos; i++)
+    if ( pos > 0 )
+    {
+        for ( size_t i = 0; i < pos; i++ )
         {
             posGtk++;
-            
-        
-            // if we have a dropdown menu, we use 2 GTK tools
-            // internally
+
+            // if we have a dropdown menu, we use 2 GTK tools internally
             wxToolBarToolsList::compatibility_iterator node = m_tools.Item( i );
             wxToolBarTool *tool = (wxToolBarTool*) node->GetData();
-            if (tool->IsButton() && (tool->GetKind() == wxITEM_DROPDOWN))
+            if ( tool->IsButton() && (tool->GetKind() == wxITEM_DROPDOWN) )
                 posGtk++;
         }
     }
-    
-    
+
+
     switch ( tool->GetStyle() )
     {
         case wxTOOL_STYLE_BUTTON:
@@ -609,12 +607,12 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                     GtkWidget *image = gtk_image_new_from_pixbuf( pixbuf );
                     gtk_widget_show( image );
                     gtk_container_add( GTK_CONTAINER(dropdown), image );
-                    
+
                     if (GetWindowStyle() & wxTB_FLAT)
                         gtk_button_set_relief( GTK_BUTTON(dropdown), GTK_RELIEF_NONE );
-	                GTK_WIDGET_UNSET_FLAGS (dropdown, GTK_CAN_FOCUS);
+                    GTK_WIDGET_UNSET_FLAGS (dropdown, GTK_CAN_FOCUS);
                     gtk_widget_show( dropdown );
-                
+
                     g_signal_connect (dropdown, "enter_notify_event",
                                   G_CALLBACK (gtk_toolbar_buddy_enter_callback),
                                   tool->m_item);
@@ -624,12 +622,12 @@ bool wxToolBar::DoInsertTool(size_t pos, wxToolBarToolBase *toolBase)
                     g_signal_connect(dropdown, "button-press-event",
                                   G_CALLBACK (gtk_toolbar_dropdown_lclick_callback),
                                   tool);
-                                  
+
                     GtkRequisition req;
                     (* GTK_WIDGET_CLASS( GTK_OBJECT_GET_CLASS(tool->m_item) )->size_request )
                         (tool->m_item, &req );
-                    gtk_widget_set_size_request( dropdown, -1, req.height );     
-                                  
+                    gtk_widget_set_size_request( dropdown, -1, req.height );
+
                     gtk_toolbar_insert_widget(
                                        m_toolbar,
                                        dropdown,
