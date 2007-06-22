@@ -45,6 +45,7 @@ the corresponding topic.
 \helpref{wxCHECK\_GCC\_VERSION}{wxcheckgccversion}\\
 \helpref{wxCHECK\_MSG}{wxcheckmsg}\\
 \helpref{wxCHECK\_RET}{wxcheckret}\\
+\helpref{wxCHECK\_SUNCC\_VERSION}{wxchecksunccversion}\\
 \helpref{wxCHECK\_VERSION}{wxcheckversion}\\
 \helpref{wxCHECK\_VERSION\_FULL}{wxcheckversionfull}\\
 \helpref{wxCHECK\_W32API\_VERSION}{wxcheckw32apiversion}\\
@@ -315,6 +316,15 @@ and so normally is not useful.
 Returns $1$ if the compiler being used to compile the code is GNU C++
 compiler (g++) version major.minor or greater. Otherwise, and also if
 the compiler is not GNU C++ at all, returns $0$.
+
+
+\membersection{wxCHECK\_SUNCC\_VERSION}\label{wxchecksunccversion}
+
+\func{bool}{wxCHECK\_SUNCC\_VERSION}{\param{}{major, minor}}
+
+Returns $1$ if the compiler being used to compile the code is Sun CC Pro
+compiler and its version is at least \texttt{major.minor}. Otherwise returns
+$0$.
 
 
 \membersection{wxCHECK\_VERSION}\label{wxcheckversion}
