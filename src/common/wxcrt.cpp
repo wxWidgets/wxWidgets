@@ -549,7 +549,7 @@ int wxDoSnprintfUtf8(wchar_t *str, size_t size, const char *format, ...)
 #if wxUSE_UNICODE
 
 #if !wxUSE_UTF8_LOCALE_ONLY
-static int ConvertStringToBuf(const wxString& s, char *out, size_t outsize)
+int wxInternalConvertStringToBuf(const wxString& s, char *out, size_t outsize)
 {
     const wxWX2WCbuf buf = s.wc_str();
 
@@ -562,7 +562,7 @@ static int ConvertStringToBuf(const wxString& s, char *out, size_t outsize)
 #endif // !wxUSE_UTF8_LOCALE_ONLY
 
 #if wxUSE_UNICODE_UTF8
-static int ConvertStringToBuf(const wxString& s, wchar_t *out, size_t outsize)
+int wxInternalConvertStringToBuf(const wxString& s, wchar_t *out, size_t outsize)
 {
     const wxWX2WCbuf buf(s.wc_str());
     size_t len = wxWcslen(buf);
@@ -580,7 +580,7 @@ static size_t PrintfViaString(T *out, size_t outsize,
     wxString s;
     s.PrintfV(format, argptr);
 
-    return ConvertStringToBuf(s, out, outsize);
+    return wxInternalConvertStringToBuf(s, out, outsize);
 }
 #endif // wxUSE_UNICODE
 
