@@ -16,6 +16,8 @@ figleaf.start(ignore_python_lib=False)
 import unittest
 # individual modules of the test suite:
 import testButton
+import testCheckListBox
+import testChoice
 import testColor
 import testControl
 import testControlWithItems
@@ -33,9 +35,9 @@ import testTextCtrl
 import testTopLevelWindow
 import testWindow
 
-modules = (testButton, testColor, testControl, testControlWithItems, testDialog, testFont,
-            testFrame, testItemContainer, testListBox, testPoint, testRect, testSize, testSizer,
-            testStaticText, testTextCtrl, testTopLevelWindow, testWindow)
+modules = (testButton, testCheckListBox, testChoice, testColor, testControl, testControlWithItems,
+            testDialog, testFont, testFrame, testItemContainer, testListBox, testPoint, testRect,
+            testSize, testSizer, testStaticText, testTextCtrl, testTopLevelWindow, testWindow)
 
 alltests = unittest.TestSuite([mod.suite() for mod in modules])
 maxstr = max(( mod.__name__ for mod in modules ))
