@@ -32,11 +32,9 @@ gtk_value_changed(GtkRange* range, wxScrollBar* win)
     if (eventType != wxEVT_NULL)
     {
         const int orient = win->HasFlag(wxSB_VERTICAL) ? wxVERTICAL : wxHORIZONTAL;
-        const int i = orient == wxVERTICAL;
         const int value = win->GetThumbPosition();
         wxScrollEvent event(eventType, win->GetId(), value, orient);
         event.SetEventObject(win);
-        win->m_blockValueChanged[i] = true;
         win->GetEventHandler()->ProcessEvent(event);
         if (!win->m_isScrolling)
         {
@@ -44,7 +42,6 @@ gtk_value_changed(GtkRange* range, wxScrollBar* win)
             event.SetEventObject(win);
             win->GetEventHandler()->ProcessEvent(event);
         }
-        win->m_blockValueChanged[i] = false;
     }
 }
 }
@@ -144,7 +141,7 @@ bool wxScrollBar::Create(wxWindow *parent, wxWindowID id,
 
     m_scrollBar[int(isVertical)] = (GtkRange*)m_widget;
 
-    g_signal_connect(m_widget, "value_changed",
+    g_signal_connect_after(m_widget, "value_changed",
                      G_CALLBACK(gtk_value_changed), this);
     g_signal_connect(m_widget, "button_press_event",
                      G_CALLBACK(gtk_button_press_event), this);
@@ -201,11 +198,14 @@ void wxScrollBar::SetThumbPosition( int viewStart )
 
         m_scrollPos[i] =
         adj->value = viewStart;
-        // If a "value_changed" signal emission is not already in progress
-        if (!m_blockValueChanged[i])
-        {
-            gtk_adjustment_value_changed(adj);
-        }
+        
+        g_signal_handlers_disconnect_by_func( m_widget,
+                              (gpointer)gtk_value_changed, this);
+
+        gtk_adjustment_value_changed(adj);
+        
+        g_signal_connect_after(m_widget, "value_changed",
+                     G_CALLBACK(gtk_value_changed), this);
     }
 }
 

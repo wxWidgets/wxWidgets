@@ -1240,15 +1240,6 @@ template<typename T> void InitMouseEvent(wxWindowGTK *win,
     event.m_leftDown = (gdk_event->state & GDK_BUTTON1_MASK);
     event.m_middleDown = (gdk_event->state & GDK_BUTTON2_MASK);
     event.m_rightDown = (gdk_event->state & GDK_BUTTON3_MASK);
-    if (event.GetEventType() == wxEVT_MOUSEWHEEL)
-    {
-       event.m_linesPerAction = 3;
-       event.m_wheelDelta = 120;
-       if (((GdkEventButton*)gdk_event)->button == 4)
-           event.m_wheelRotation = 120;
-       else if (((GdkEventButton*)gdk_event)->button == 5)
-           event.m_wheelRotation = -120;
-    }
 
     wxPoint pt = win->GetClientAreaOrigin();
     event.m_x = (wxCoord)gdk_event->x - pt.x;
@@ -1545,13 +1536,6 @@ gtk_window_button_press_callback( GtkWidget *widget,
                 ;
         }
     }
-    else if (gdk_event->button == 4 || gdk_event->button == 5)
-    {
-        if (gdk_event->type == GDK_BUTTON_PRESS )
-        {
-            event_type = wxEVT_MOUSEWHEEL;
-        }
-    }
 
     if ( event_type == wxEVT_NULL )
     {
@@ -1742,7 +1726,7 @@ gtk_window_motion_notify_callback( GtkWidget *widget,
 }
 
 //-----------------------------------------------------------------------------
-// "scroll_event", (mouse wheel event)
+// "scroll_event" (mouse wheel event)
 //-----------------------------------------------------------------------------
 
 static gboolean
@@ -2020,9 +2004,7 @@ gtk_scrollbar_value_changed(GtkRange* range, wxWindow* win)
         wxScrollWinEvent event(eventType, win->GetScrollPos(orient), orient);
         event.SetEventObject(win);
 
-        win->m_blockValueChanged[dir] = true;
         win->GTKProcessEvent(event);
-        win->m_blockValueChanged[dir] = false;
     }
 }
 
@@ -2264,7 +2246,6 @@ void wxWindowGTK::Init()
     {
         m_scrollBar[dir] = NULL;
         m_scrollPos[dir] = 0;
-        m_blockValueChanged[dir] = false;
     }
 
     m_oldClientWidth =
@@ -2400,7 +2381,7 @@ bool wxWindowGTK::Create( wxWindow *parent,
             g_signal_handler_block(m_scrollBar[dir], handler_id);
 
             // these handlers get notified when scrollbar slider moves
-            g_signal_connect(m_scrollBar[dir], "value_changed",
+            g_signal_connect_after(m_scrollBar[dir], "value_changed",
                          G_CALLBACK(gtk_scrollbar_value_changed), this);
         }
 
@@ -4178,11 +4159,13 @@ void wxWindowGTK::SetScrollPos(int orient, int pos, bool WXUNUSED(refresh))
             pos = 0;
         m_scrollPos[dir] = adj->value = pos;
 
-        // If a "value_changed" signal emission is not already in progress
-        if (!m_blockValueChanged[dir])
-        {
-            gtk_adjustment_value_changed(adj);
-        }
+        g_signal_handlers_disconnect_by_func( m_scrollBar[dir],
+                              (gpointer)gtk_scrollbar_value_changed, this);
+
+        gtk_adjustment_value_changed(adj);
+        
+        g_signal_connect_after(m_scrollBar[dir], "value_changed",
+                               G_CALLBACK(gtk_scrollbar_value_changed), this);
     }
 }
 
@@ -4272,7 +4255,7 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
 
     // No scrolling requested.
     if ((dx == 0) && (dy == 0)) return;
-
+    
     m_clipPaintRegion = true;
 
     if (GetLayoutDirection() == wxLayout_RightToLeft)

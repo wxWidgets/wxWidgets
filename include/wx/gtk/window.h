@@ -265,10 +265,6 @@ public:
     // horizontal/vertical scroll position
     double m_scrollPos[ScrollDir_Max];
 
-    // if true, don't notify about adjustment change (without resetting the
-    // flag, so this has to be done manually)
-    bool m_blockValueChanged[ScrollDir_Max];
-
     // return the scroll direction index corresponding to the given orientation
     // (which is wxVERTICAL or wxHORIZONTAL)
     static ScrollDir ScrollDirFromOrient(int orient)
