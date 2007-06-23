@@ -5,10 +5,8 @@
 # RCS-ID:       $Id$
 
 from globals import *
-from XMLTreeMenu import *
 from model import Model
-from presenter import Presenter
-import view
+from component import Manager
 import images
 
 class XMLTree(wx.TreeCtrl):
@@ -46,38 +44,8 @@ class XMLTree(wx.TreeCtrl):
         self.SetItemHasChildren(self.root)
         self.Expand(self.root)
 
-        # Register events
-        self.Bind(wx.EVT_RIGHT_DOWN, self.OnRightDown)
-        self.Bind(wx.EVT_TREE_SEL_CHANGING, self.OnSelChanging)
-        self.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnSelChanged)
-        
         # Insert/append mode flags
         self.forceSibling = self.forceInsert = False
-
-    def OnRightDown(self, evt):
-        menu = XMLTreeMenu(self)
-        self.PopupMenu(menu, evt.GetPosition())
-        menu.Destroy()
-
-    def OnSelChanging(self, evt):
-        # Permit multiple selection for same level only
-        state = wx.GetMouseState()
-        oldItem = evt.GetOldItem()
-        if oldItem and (state.ShiftDown() or state.ControlDown()) and \
-           self.GetItemParent(oldItem) != self.GetItemParent(evt.GetItem()):
-            evt.Veto()
-            view.frame.SetStatusText('Veto selection (not same level)')
-            return
-        evt.Skip()
-
-    def OnSelChanged(self, evt):
-        if evt.GetOldItem(): 
-            print 'old:',self.GetItemText(evt.GetOldItem())
-            Presenter.update()
-        if evt.GetItem(): print 'new:',self.GetItemText(evt.GetItem())
-        # Tell presenter to update current data and view
-        Presenter.setData(evt.GetItem())
-        evt.Skip()
 
     def NeedInsert(self, item):
         '''return true if item must be inserted after current vs. appending'''
@@ -93,8 +61,6 @@ class XMLTree(wx.TreeCtrl):
         self.UnselectAll()
         self.DeleteChildren(self.root)
         self.Expand(self.root)
-        # Reset item data after possible model change
-        self.SetPyData(self.root, Model.mainNode)
 
     # Add tree item for given parent item if node is DOM element node with
     # object/object_ref tag. xxxParent is parent xxx object

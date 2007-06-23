@@ -31,6 +31,17 @@ buttonSize = textSize = None
 # Default Button size in dialog units
 buttonSizeD = (35,-1)
 
+def InitSizes(panel):
+    '''Set pixel common size based on parent window.'''
+    cTmp = wx.Button(panel, -1, '')
+    global buttonSize
+    buttonSize = (panel.DLG_SZE(buttonSizeD)[0], cTmp.GetSize()[1])
+    cTmp.Destroy()
+    cTmp = wx.TextCtrl(panel, -1, '')
+    global textSize
+    textSize = cTmp.GetSize()
+    cTmp.Destroy()
+    
 
 # Class that can properly disable children
 class PPanel(wx.Panel):

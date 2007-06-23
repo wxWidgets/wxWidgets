@@ -32,7 +32,7 @@ defaultEncoding = wx.GetDefaultPyEncoding()
 
 # Global variables
 
-debug = False
+debug = True
 
 class Globals:
     panel = None

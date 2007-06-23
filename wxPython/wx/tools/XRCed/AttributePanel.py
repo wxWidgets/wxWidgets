@@ -4,7 +4,9 @@
 # Created:      17.06.2007
 # RCS-ID:       $Id$
 
-from params import *
+import wx
+from globals import *
+import params
 import component
 
 # Attribute panel containing notebook
@@ -20,11 +22,11 @@ class Panel(wx.Panel):
         topSizer = wx.BoxSizer(wx.VERTICAL)
         sizer = wx.FlexGridSizer(2, 2, 1, 5)
         label = wx.StaticText(self, -1, 'class:')
-        self.controlClass = ParamText(self, 'class', 200)
+        self.controlClass = params.ParamText(self, 'class', 200)
         sizer.AddMany([ (label, 0, wx.ALIGN_CENTER_VERTICAL),
                         (self.controlClass, 0, wx.LEFT, 5) ])
         self.labelName = wx.StaticText(self, -1, 'XRC ID:')
-        self.controlName = ParamText(self, 'XML_name', 200)
+        self.controlName = params.ParamText(self, 'XML_name', 200)
         sizer.AddMany([ (self.labelName, 0, wx.ALIGN_CENTER_VERTICAL),
                         (self.controlName, 0, wx.LEFT, 5) ])
         topSizer.Add(sizer, 0, wx.ALL, 10)
@@ -34,13 +36,7 @@ class Panel(wx.Panel):
         self.modified = False
 
         # Set common sizes
-        import params
-        cTmp = wx.Button(self, -1, '')
-        params.buttonSize = (self.DLG_SZE(buttonSizeD)[0], cTmp.GetSize()[1])
-        cTmp.Destroy()
-        cTmp = wx.TextCtrl(self, -1, '')
-        params.textSize = cTmp.GetSize()
-        cTmp.Destroy()
+        params.InitSizes(self)
 
         # Create scrolled windows for panels
         self.page1 = wx.ScrolledWindow(self.nb, -1)
@@ -158,9 +154,9 @@ class Panel(wx.Panel):
     
     def SetModified(self, value):
         # Register undo object when modifying first time
-#        if not self.modified and value:
-#           g.undoMan.RegisterUndo(UndoEdit())
-#           g.frame.SetModified()
+        if not self.modified and value:
+           g.undoMan.RegisterUndo(UndoEdit())
+#           view.frame.SetModified()
         self.modified = value
         
     def Apply(self):
@@ -177,7 +173,7 @@ class AttributePanel(wx.Panel):
         self.controls = []
         sizer = wx.FlexGridSizer(len(attributes), 2, 1, 5)
         for a in attributes:
-            paramClass = paramDict.get(a, ParamText)
+            paramClass = params.paramDict.get(a, params.ParamText)
             control = paramClass(self, a)
             sParam = a
             if control.isCheck: # checkbox-like control

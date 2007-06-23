@@ -2,10 +2,13 @@
 from globals import *
 import view
 from presenter import Presenter
+from listener import Listener
+import undo
 import plugin
 
 app = wx.PySimpleApp()
-conf = view.conf = wx.Config(style = wx.CONFIG_USE_LOCAL_FILE)
+
+conf = g.conf = wx.Config(style = wx.CONFIG_USE_LOCAL_FILE)
 conf.localconf = None
 conf.autoRefresh = conf.ReadInt('autorefresh', True)
 #pos = conf.ReadInt('x', -1), conf.ReadInt('y', -1)
@@ -26,9 +29,14 @@ g.fileHistory.Load(conf)
 
 plugin.load_plugins('plugins')
 
-frame = view.Frame()
+g.undoMan = undo.UndoManager()
+
+# Setup MVP
+view.CreateView()
 Presenter.init()
+Listener.Install(view.frame, view.tree, view.panel)
+
 if len(sys.argv) > 1:
     Presenter.loadXML(sys.argv[1])
-frame.Show()
+view.frame.Show()
 app.MainLoop()

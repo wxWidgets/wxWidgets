@@ -35,9 +35,6 @@ class _Model:
         else:
             self.dom = dom
             self.mainNode = dom.documentElement
-        # Dummy element used for temporarily renaming noname nodes
-        self.testElem = self.dom.createElement('dummy')
-        self.mainNode.appendChild(self.testElem)
 
     def loadXML(self, path):
         f = open(path)
@@ -67,9 +64,6 @@ class _Model:
         domCopy = MyDocument()
         mainNode = domCopy.appendChild(self.mainNode.cloneNode(True))
         # Remove first child (testElem)
-        testElem = mainNode.lastChild
-        mainNode.removeChild(testElem)
-        testElem.unlink()
         self.indent(mainNode)
         domCopy.writexml(f, encoding = g.currentEncoding)
         f.close()
