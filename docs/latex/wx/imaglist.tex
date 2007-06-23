@@ -28,7 +28,7 @@ wxImageList is used principally in conjunction with \helpref{wxTreeCtrl}{wxtreec
 
 Default constructor.
 
-\func{}{wxImageList}{\param{int }{width}, \param{int }{height}, \param{const bool }{mask = true},\rtfsp
+\func{}{wxImageList}{\param{int }{width}, \param{int }{height}, \param{bool }{mask = true},\rtfsp
 \param{int }{initialCount = 1}}
 
 Constructor specifying the image size, whether image masks should be created, and the initial size of the list.
@@ -91,7 +91,7 @@ implements the following methods:\par
 }
 \membersection{wxImageList::Create}\label{wximagelistcreate}
 
-\func{bool}{Create}{\param{int }{width}, \param{int }{height}, \param{const bool }{mask = true},\rtfsp
+\func{bool}{Create}{\param{int }{width}, \param{int }{height}, \param{bool }{mask = true},\rtfsp
 \param{int }{initialCount = 1}}
 
 Initializes the list. See \helpref{wxImageList::wxImageList}{wximagelistconstr} for details.
@@ -100,7 +100,7 @@ Initializes the list. See \helpref{wxImageList::wxImageList}{wximagelistconstr} 
 
 \func{bool}{Draw}{\param{int}{ index}, \param{wxDC\&}{ dc}, \param{int }{x},\rtfsp
 \param{int }{y}, \param{int }{flags = wxIMAGELIST\_DRAW\_NORMAL},\rtfsp
-\param{const bool }{solidBackground = false}}
+\param{bool }{solidBackground = false}}
 
 Draws a specified image onto a device context.
 
