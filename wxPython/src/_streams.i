@@ -61,17 +61,42 @@
     }
 }
 
-
-
 %typemap(out) wxInputStream* {
     wxPyInputStream * _ptr = NULL;
-
-    if ($1) {
+    if ($1)
         _ptr = new wxPyInputStream($1);
-    }
     $result = wxPyConstructObject(_ptr, wxT("wxPyInputStream"), $owner);
 }
 
+
+//---------------------------------------------------------------------------
+// Typemaps for wxOutputStream.  We only need in by reference and out by
+// pointer in this one.
+
+
+%typemap(in) wxOutputStream&  (wxPyOutputStream* temp, bool created) {
+    if (wxPyConvertSwigPtr($input, (void **)&temp, wxT("wxPyOutputStream"))) {
+        $1 = temp->m_wxos;
+        created = false;
+    } else {
+        PyErr_Clear();  // clear the failure of the wxPyConvert above
+        $1 = wxPyCBOutputStream_create($input, false);
+        if ($1 == NULL) {
+            PyErr_SetString(PyExc_TypeError, "Expected wx.OutputStream or Python file-like object.");
+            SWIG_fail;
+        }
+        created = true;
+    }
+}
+%typemap(freearg) wxOutputStream& { if (created$argnum) delete $1; }
+
+
+%typemap(out) wxOutputStream* {
+    wxPyOutputStream * _ptr = NULL;
+    if ($1)
+        _ptr = new wxPyOutputStream($1);
+    $result = wxPyConstructObject(_ptr, wxT("wxPyOutputStream"), $owner);
+}
 
 //---------------------------------------------------------------------------
 
@@ -107,14 +132,6 @@ public:
     void seek(int offset, int whence=0);
     int tell();
 
-    /*
-      bool isatty();
-      int fileno();
-      void truncate(int size=-1);
-      void write(wxString data);
-      void writelines(wxStringPtrList);
-    */
-
     char Peek();
     char GetC();
     size_t LastRead();
@@ -128,43 +145,41 @@ public:
 
 
 
-// TODO:  make a more fully implemented file interface...
-class wxOutputStream {
-public:
-    /*
-      void close();
-      void flush();
-      wxString* read(int size=-1);
-      wxString* readline(int size=-1);
-      wxStringPtrList* readlines(int sizehint=-1);
-      void seek(int offset, int whence=0);
-      int tell();
-      bool isatty();
-      int fileno();
-      void truncate(int size=-1);
-      void write(wxString data);
-      void writelines(wxStringPtrList);
-    */
 
+%rename(OutputStream) wxPyOutputStream;
+class wxPyOutputStream
+{
+public:
     %extend {
-        void write(PyObject* obj) {
-            // We use only strings for the streams, not unicode
-            PyObject* str = PyObject_Str(obj);
-            if (! str) {
-                PyErr_SetString(PyExc_TypeError, "Unable to convert to string");
-                return;
-            }
-            self->Write(PyString_AS_STRING(str),
-                        PyString_GET_SIZE(str));
-            Py_DECREF(str);
+        wxPyOutputStream(PyObject* p) {
+            wxOutputStream* wxis = wxPyCBOutputStream::create(p);
+            if (wxis)
+                return new wxPyOutputStream(wxis);
+            else
+                return NULL;
         }
     }
-    size_t LastWrite() const;
+    ~wxPyOutputStream();
+
+    void close();
+    void flush();
+    bool eof();
+    void seek(int offset, int whence=0);
+    int tell();
+
+    void write(PyObject* data);
+    //void writelines(wxStringArray& arr);
+
+    void PutC(char c);
+    size_t LastWrite();
+    unsigned long SeekO(unsigned long pos, wxSeekMode mode = wxFromStart);
+    unsigned long TellO();
 };
 
 
 //---------------------------------------------------------------------------
 %init %{
     wxPyPtrTypeMap_Add("wxInputStream", "wxPyInputStream");
+    wxPyPtrTypeMap_Add("wxOutputStream", "wxPyOutputStream");
 %}
 //---------------------------------------------------------------------------

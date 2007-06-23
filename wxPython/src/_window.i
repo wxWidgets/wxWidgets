@@ -24,6 +24,9 @@ MAKE_CONST_WXSTRING(PanelNameStr);
 %newgroup
 
 
+wxLIST_WRAPPER(wxWindowList, wxWindow);
+
+
 DocStr(wxVisualAttributes,
     "struct containing all the visual attributes of a control", "");
 
@@ -124,9 +127,14 @@ Styles
                                    deactivate it.
                                    
     wx.VSCROLL                     Use this style to enable a vertical scrollbar.
+                                   Notice that this style cannot be used with
+                                   native controls which don't support scrollbars
+                                   nor with top-level windows in most ports.
                                    
     wx.HSCROLL                     Use this style to enable a horizontal scrollbar.
-                                   
+                                   The same limitations as for wx.VSCROLL apply to
+                                   this style.
+
     wx.ALWAYS_SHOW_SB              If a window has scrollbars, disable them
                                    instead of hiding them when they are
                                    not needed (i.e. when the size of the
@@ -990,26 +998,16 @@ before win instead of putting it right after it.", "");
 
     
 
-
-
-
-
     // parent/children relations
     // -------------------------
 
 
-    //wxWindowList& GetChildren();  // TODO: Do a typemap or a wrapper for wxWindowList
-    %extend {
         DocStr(GetChildren,
-               "Returns a list of the window's children.  NOTE: Currently this is a
-copy of the child window list maintained by the window, so the return
-value of this function is only valid as long as the window's children
-do not change.", "");
-        PyObject* GetChildren() {
-            wxWindowList& list = self->GetChildren();
-            return wxPy_ConvertList(&list);
-        }
-    }
+               "Returns an object containing a list of the window's children.  The
+object provides a Python sequence-like interface over the internal
+list maintained by the window..", "");
+    wxWindowList& GetChildren(); 
+
 
     DocDeclStr(
         wxWindow *, GetParent() const,
@@ -2318,14 +2316,11 @@ MustHaveApp(wxWindow_FromHWND);
 //---------------------------------------------------------------------------
 
 DocStr(GetTopLevelWindows,
-"Returns a list of the the application's top-level windows, (frames,
-dialogs, etc.)  NOTE: Currently this is a copy of the list maintained
-by wxWidgets, and so it is only valid as long as no top-level windows
-are closed or new top-level windows are created.
-", "");
+"Returns a list-like object of the the application's top-level windows, (frames,
+dialogs, etc.)", "");
 %inline %{
-    PyObject* GetTopLevelWindows() {
-        return wxPy_ConvertList(&wxTopLevelWindows);
+    wxWindowList& GetTopLevelWindows() {
+        return wxTopLevelWindows;
     }
 %}
 

@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////
-// Name:        _window.i
+// Name:        _panel.i
 // Purpose:     SWIG interface for wxPanel and wxScrolledWindow
 //
 // Author:      Robin Dunn

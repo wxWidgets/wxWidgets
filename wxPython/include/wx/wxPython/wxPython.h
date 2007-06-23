@@ -124,6 +124,8 @@ inline wxPyCoreAPI* wxPyGetCoreAPIPtr()
 #define wxRect2D_helper(a,b)                    (wxPyGetCoreAPIPtr()->p_wxRect2D_helper(a,b))
 #define wxPosition_helper(a,b)                  (wxPyGetCoreAPIPtr()->p_wxPosition_helper(a,b))
 
+#define wxPyCBOutputStream_create(a, b)         (wxPyGetCoreAPIPtr()->p_wxPyCBOutputStream_create(a, b))
+#define wxPyCBOutputStream_copy(a)              (wxPyGetCoreAPIPtr()->p_wxPyCBOutputStream_copy(a))
 
 //----------------------------------------------------------------------
 #endif

@@ -35,7 +35,7 @@ Blue (RGB) intensity values, and is used to determine drawing colours,
 window colours, etc.  Valid RGB values are in the range 0 to 255.
 
 In wxPython there are typemaps that will automatically convert from a
-colour name, from a '#RRGGBB' colour hex value string, or from a 3
+colour name, from a '#RRGGBB' colour hex value string, or from a 3 or 4
 integer tuple to a wx.Colour object when calling C++ methods that
 expect a wxColour.  This means that the following are all
 equivallent::
@@ -59,7 +59,7 @@ public:
     
     DocCtorStr(
         wxColour(byte red=0, byte green=0, byte blue=0, byte alpha=wxALPHA_OPAQUE),
-        "Constructs a colour from red, green and blue values.
+        "Constructs a colour from red, green, blue and alpha values.
 
 :see: Alternate constructors `wx.NamedColour` and `wx.ColourRGB`.
 ", "");
@@ -165,8 +165,8 @@ is returned if the pixel is invalid (on X, unallocated).", "");
     %extend {
         KeepGIL(Get);
         DocAStr(Get,
-                "Get() -> (r, g, b)",
-                "Returns the RGB intensity values as a tuple.", "");
+                "Get(self, bool includeAlpha=False) -> (r,g,b) or (r,g,b,a)",
+                "Returns the RGB intensity values as a tuple, optionally the alpha value as well.", "");
         PyObject* Get(bool includeAlpha=false) {
             PyObject* rv = PyTuple_New(includeAlpha ? 4 : 3);
             int red = -1;

@@ -11,7 +11,7 @@
 /////////////////////////////////////////////////////////////////////////////
 
 %define DOCSTRING
-"The wx.aui moduleis an Advanced User Interface library that aims to
+"The wx.aui module is an Advanced User Interface library that aims to
 implement \"cutting-edge\" interface usability and design features so
 developers can quickly and easily create beautiful and usable
 application interfaces.

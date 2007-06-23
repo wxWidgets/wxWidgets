@@ -169,6 +169,11 @@ border size.", "");
 };
 
 //---------------------------------------------------------------------------
+%newgroup
+
+wxLIST_WRAPPER( wxSizerItemList, wxSizerItem );
+
+
 
 DocStr(wxSizerItem,
 "The wx.SizerItem class is used to track the position, size and other
@@ -1247,20 +1252,11 @@ as well.", "");
 
 
 
-    // wxList& GetChildren();
-    %extend {
-        DocAStr(GetChildren,
-                "GetChildren(self) -> list",
-                "Returns a list of all the `wx.SizerItem` objects managed by the sizer.", "");
-        PyObject* GetChildren() {
-            wxSizerItemList& list = self->GetChildren();
-            return wxPy_ConvertList(&list);
-        }
-    }
+    DocStr(GetChildren,
+           "Returns all of the `wx.SizerItem` objects managed by the sizer in a
+list-like object.", "");
+    wxSizerItemList& GetChildren();
 
-
-    // Manage whether individual windows or subsizers are considered
-    // in the layout calculations or not.
 
     %extend {
         DocAStr(Show,

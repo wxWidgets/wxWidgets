@@ -350,9 +350,6 @@ MustHaveApp(wxGraphicsPath);
 MustHaveApp(wxGraphicsContext);
 MustHaveApp(wxGCDC);
 
-typedef double wxDouble;
-
-
 //---------------------------------------------------------------------------
 
 

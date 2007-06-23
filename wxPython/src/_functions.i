@@ -451,7 +451,7 @@ public:
 };
 
 
-MustHaveApp(wxThread);
+MustHaveApp(wxThread_IsMain);
 %inline %{
     bool wxThread_IsMain() {
 #ifdef WXP_WITH_THREAD

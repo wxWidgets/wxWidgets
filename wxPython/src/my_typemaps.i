@@ -173,6 +173,10 @@ MAKE_INT_ARRAY_TYPEMAPS(styles, styles_field)
 }
 
 
+%apply wxRect& { wxRect* };
+
+
+
 %typemap(in) wxPoint2D& (wxPoint2D temp) {
     $1 = &temp;
     if ( ! wxPoint2D_helper($input, &$1)) SWIG_fail;

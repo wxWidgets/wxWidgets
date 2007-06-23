@@ -292,6 +292,22 @@ class Shell(editwindow.EditWindow):
         self.Bind(wx.EVT_CHAR, self.OnChar)
         self.Bind(wx.EVT_KEY_DOWN, self.OnKeyDown)
 
+        # Assign handler for the context menu
+        self.Bind(wx.EVT_CONTEXT_MENU, self.OnContextMenu)
+        self.Bind(wx.EVT_UPDATE_UI, self.OnUpdateUI)
+        
+        # Assign handlers for edit events
+        self.Bind(wx.EVT_MENU, lambda evt: self.Cut(), id=wx.ID_CUT)
+        self.Bind(wx.EVT_MENU, lambda evt: self.Copy(), id=wx.ID_COPY)
+        self.Bind(wx.EVT_MENU, lambda evt: self.CopyWithPrompts(), id=frame.ID_COPY_PLUS)
+        self.Bind(wx.EVT_MENU, lambda evt: self.Paste(), id=wx.ID_PASTE)
+        self.Bind(wx.EVT_MENU, lambda evt: self.PasteAndRun(), id=frame.ID_PASTE_PLUS)
+        self.Bind(wx.EVT_MENU, lambda evt: self.SelectAll(), id=wx.ID_SELECTALL)
+        self.Bind(wx.EVT_MENU, lambda evt: self.Clear(), id=wx.ID_CLEAR)
+        self.Bind(wx.EVT_MENU, lambda evt: self.Undo(), id=wx.ID_UNDO)
+        self.Bind(wx.EVT_MENU, lambda evt: self.Redo(), id=wx.ID_REDO)
+        
+
         # Assign handler for idle time.
         self.waiting = False
         self.Bind(wx.EVT_IDLE, self.OnIdle)
@@ -1366,6 +1382,48 @@ Platform: %s""" % \
         config.WriteBool('View/WrapMode', self.GetWrapMode())
         config.WriteBool('View/ShowLineNumbers', self.lineNumbers)
         config.WriteInt('View/Zoom/Shell', self.GetZoom())
+
+    def GetContextMenu(self):
+        """
+            Create and return a context menu for the shell.
+            This is used instead of the scintilla default menu
+            in order to correctly respect our immutable buffer.
+        """
+        menu = wx.Menu()
+        menu.Append(wx.ID_UNDO, "Undo")
+        menu.Append(wx.ID_REDO, "Redo")
+        
+        menu.AppendSeparator()
+        
+        menu.Append(wx.ID_CUT, "Cut")
+        menu.Append(wx.ID_COPY, "Copy")
+        menu.Append(frame.ID_COPY_PLUS, "Copy Plus")
+        menu.Append(wx.ID_PASTE, "Paste")
+        menu.Append(frame.ID_PASTE_PLUS, "Paste Plus")
+        menu.Append(wx.ID_CLEAR, "Clear")
+        
+        menu.AppendSeparator()
+        
+        menu.Append(wx.ID_SELECTALL, "Select All")
+        return menu
+        
+    def OnContextMenu(self, evt):
+        menu = self.GetContextMenu()
+        self.PopupMenu(menu)
+        
+    def OnUpdateUI(self, evt):
+        id = evt.Id
+        if id in (wx.ID_CUT, wx.ID_CLEAR):
+            evt.Enable(self.CanCut())
+        elif id in (wx.ID_COPY, frame.ID_COPY_PLUS):
+            evt.Enable(self.CanCopy())
+        elif id in (wx.ID_PASTE, frame.ID_PASTE_PLUS):
+            evt.Enable(self.CanPaste())
+        elif id == wx.ID_UNDO:
+            evt.Enable(self.CanUndo())
+        elif id == wx.ID_REDO:
+            evt.Enable(self.CanRedo())
+        
 
 
 

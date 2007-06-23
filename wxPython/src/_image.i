@@ -642,6 +642,17 @@ string.", "",
         bool , SaveFile( const wxString& name, const wxString& mimetype ),
         "Saves an image in the named file.", "",
         SaveMimeFile);
+
+    DocDeclStrName(
+        bool , SaveFile( wxOutputStream& stream, int type ),
+        "Saves an image in the named file.", "",
+        SaveStream);
+
+    
+    DocDeclStrName(
+        bool , SaveFile( wxOutputStream& stream, const wxString& mimetype ),
+        "Saves an image in the named file.", "",
+        SaveMimeStream);
     
 
     DocDeclStrName(

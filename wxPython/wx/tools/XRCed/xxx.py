@@ -197,7 +197,7 @@ class xxxObject:
     # Special parameters
     specials = []
     # Bitmap tags
-    bitmapTags = ['bitmap', 'bitmap2', 'icon']
+    bitmapTags = ['bitmap', 'bitmap2', 'icon', 'selected', 'focus', 'disabled']
     # Required paremeters: none by default
     required = []
     # Default parameters with default values

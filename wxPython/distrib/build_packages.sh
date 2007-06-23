@@ -5,7 +5,7 @@ debug=no
 reswig=no
 all=no
 
-if [ "$1" = "all" ]; then 
+if [ "$1" = all ]; then
   all=yes
 else
   PY_VERSION=$1
@@ -99,7 +99,7 @@ if [ "$OSTYPE" = "cygwin" ]; then
   $WXWIN/wxPython/distrib/makedemo
   
   $TOOLS/Python$PY_VERSION/python `cygpath -d $WXWIN/wxPython/distrib/make_installer_inno4.py` $UNICODE_FLAG
-elif [ "$OSTYPE" = "darwin" ]; then
+elif [ "${OSTYPE:0:6}" = "darwin" ]; then
   OSX_VERSION=`sw_vers -productVersion`
   echo "OS X Version: ${OSX_VERSION:0:4}"
   cd $WXWIN/wxPython

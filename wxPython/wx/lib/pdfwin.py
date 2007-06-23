@@ -22,19 +22,24 @@ def get_acroversion():
     global _acroversion
     if _acroversion == None:
         import _winreg
-        acrosoft = [r'SOFTWARE\Adobe\Acrobat Reader\%version%\InstallPath',
-                    r'SOFTWARE\Adobe\Adobe Acrobat\%version%\InstallPath',]
-            
-        for regkey in acrosoft:
-            for version in ('7.0', '6.0', '5.0', '4.0'):
+        adobesoft = _winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, r'Software\Adobe')
+        acrokeys, acroversions = [], []
+        for index in range(_winreg.QueryInfoKey(adobesoft)[0]):
+            key = _winreg.EnumKey(adobesoft, index)
+            if "acrobat" in key.lower():
+                acrokeys.append(_winreg.OpenKey(_winreg.HKEY_LOCAL_MACHINE, 'Software\\Adobe\\%s' % key))
+        for acrokey in acrokeys:
+            for index in range(_winreg.QueryInfoKey(acrokey)[0]):
+                key = _winreg.EnumKey(acrokey, index)
                 try:
-                    path = _winreg.QueryValue(_winreg.HKEY_LOCAL_MACHINE,
-                                              regkey.replace('%version%', version))
-                    _acroversion = version
-                    break
+                    acroversions.append(float(key))
                 except:
-                    continue
+                    pass
+        acroversions.sort(reverse=True)
+        if acroversions:
+            _acroversion = acroversions[0]
     return _acroversion
+            
 
 #----------------------------------------------------------------------
 
@@ -54,7 +59,7 @@ def get_acroversion():
 # Co-ordinates passed as parameters are in points (1/72 inch).
 
 
-if get_acroversion() >= '7.0':
+if get_acroversion() >= 7.0:
 
     from wx.lib.activexwrapper import MakeActiveXClass
     import win32com.client.gencache

@@ -1442,7 +1442,10 @@ class wxPythonDemo(wx.Frame):
         menu = wx.Menu()
         findItem = wx.MenuItem(menu, -1, '&Find\tCtrl-F', 'Find in the Demo Code')
         findItem.SetBitmap(images.catalog['find'].getBitmap())
-        findNextItem = wx.MenuItem(menu, -1, 'Find &Next\tF3', 'Find Next')
+        if 'wxMac' not in wx.PlatformInfo:
+            findNextItem = wx.MenuItem(menu, -1, 'Find &Next\tF3', 'Find Next')
+        else:
+            findNextItem = wx.MenuItem(menu, -1, 'Find &Next\tCtrl-G', 'Find Next')
         findNextItem.SetBitmap(images.catalog['findnext'].getBitmap())
         menu.AppendItem(findItem)
         menu.AppendItem(findNextItem)
@@ -1455,8 +1458,9 @@ class wxPythonDemo(wx.Frame):
         inspToolItem = wx.MenuItem(menu, -1, 'Open &Widget Inspector\tF6',
                                    'A tool that lets you browse the live widgets and sizers in an application')
         inspToolItem.SetBitmap(images.catalog['inspect'].getBitmap())
-        menu.AppendItem(inspToolItem)        
-        menu.AppendSeparator()
+        menu.AppendItem(inspToolItem)
+        if 'wxMac' not in wx.PlatformInfo:
+            menu.AppendSeparator()
         helpItem = menu.Append(-1, '&About wxPython Demo', 'wxPython RULES!!!')
         wx.App.SetMacAboutMenuItemId(helpItem.GetId())
 

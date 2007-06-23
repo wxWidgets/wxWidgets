@@ -93,6 +93,7 @@ typedef unsigned int    size_t;
 typedef unsigned int    time_t;
 typedef unsigned char   byte;
 typedef unsigned long   wxUIntPtr;
+typedef double          wxDouble;
 
 #define wxWindowID      int
 #define wxCoord         int
@@ -408,6 +409,19 @@ typedef unsigned long   wxUIntPtr;
     %enddef
 #endif
 
+#ifdef _DO_FULL_DOCS
+    %define %RenameDocStr(newname, docstr, details, type, decl)
+        %feature("docstring") decl docstr;
+        %rename(newname) decl;
+        type decl
+    %enddef        
+#else
+    %define %RenameDocStr(newname, docstr, details, type, decl)
+        %feature("docstring") decl docstr details;
+        %rename(newname) decl;
+        type decl
+    %enddef        
+#endif
 
 //---------------------------------------------------------------------------
 // Generates a base_On* method that just wraps a call to the On*, and mark it
@@ -457,6 +471,204 @@ FORWARD_DECLARE(wxHtmlTagHandler, HtmlTagHandler);
 FORWARD_DECLARE(wxConfigBase,     ConfigBase);
 FORWARD_DECLARE(wxIcon,           Icon);
 FORWARD_DECLARE(wxStaticBox,      StaticBox);
+
+
+//---------------------------------------------------------------------------
+// This macro makes a class to wrap a type specific class derived from wxList,
+// and make it look like a Python sequence, including with iterator support
+
+%define wxLIST_WRAPPER(ListClass, ItemClass)
+// first a bit of C++ code...    
+%{
+class ListClass##_iterator
+{
+public:
+    ListClass##_iterator(ListClass::compatibility_iterator start)
+        : m_node(start) {}
+    
+    ItemClass* next() {
+        ItemClass* obj = NULL;
+        if (m_node) {
+            obj = m_node->GetData();
+            m_node = m_node->GetNext();
+        }
+        else PyErr_SetString(PyExc_StopIteration, "");
+        return obj;
+    }
+private:
+    ListClass::compatibility_iterator m_node;
+};
+%}
+
+// Now declare the classes for SWIG
+
+DocStr(ListClass##_iterator,
+"This class serves as an iterator for a ListClass object.", "");
+
+class ListClass##_iterator
+{
+public:
+    //ListClass##_iterator();
+    ~ListClass_iterator();
+    KeepGIL(next);
+    ItemClass* next();
+};
+
+
+DocStr(ListClass,
+"This class wraps a wxList-based class and gives it a Python
+sequence-like interface.  Sequence operations supported are length,
+index access and iteration.", "");
+
+class ListClass
+{
+public:
+    //ListClass();      This will always be created by some C++ function
+    ~ListClass();
+
+    %extend {
+        KeepGIL(__len__);
+        size_t __len__() {
+            return self->size();
+        }
+
+        KeepGIL(__getitem__);
+        ItemClass* __getitem__(size_t index) {
+            if (index < self->size()) {
+                ListClass::compatibility_iterator node = self->Item(index);
+                if (node) return node->GetData();
+            }
+            PyErr_SetString(PyExc_IndexError, "Invalid list index");
+            return NULL;
+        }
+
+        KeepGIL(__contains__);
+        bool __contains__(const ItemClass* obj) {
+            return self->Find(obj) != NULL;
+        }
+
+        KeepGIL(__iter__);
+        %newobject __iter__;
+        ListClass##_iterator* __iter__() {
+            return new ListClass##_iterator(self->GetFirst());
+        }
+    }
+    %pythoncode {
+        def __repr__(self):
+            return "ListClass: " + repr(list(self))
+    }
+};
+%enddef
+
+
+
+// This macro is similar to the above, but it is to be used when there isn't a
+// type-specific C++ list class to use.  In other words the C++ code is using
+// a plain wxList and typecasting the node values, so we'll do the same.
+%define wxUNTYPED_LIST_WRAPPER(ListClass, ItemClass)
+// first a bit of C++ code...    
+%{
+class ListClass
+{
+public:
+    ListClass(wxList* theList)
+        : m_list(theList) {}
+    ~ListClass() {}
+public:
+    wxList* m_list;
+};
+
+class ListClass##_iterator
+{
+public:
+    ListClass##_iterator(wxList::compatibility_iterator start)
+        : m_node(start) {}
+    
+    ItemClass* next() {
+        ItemClass* obj = NULL;
+        if (m_node) {
+            obj = (ItemClass*)m_node->GetData();
+            m_node = m_node->GetNext();
+        }
+        else PyErr_SetString(PyExc_StopIteration, "");
+        return obj;
+    }
+private:
+    wxList::compatibility_iterator m_node;
+};
+%}
+
+// Now declare the classes for SWIG
+
+DocStr(ListClass##_iterator,
+"This class serves as an iterator for a ListClass object.", "");
+
+class ListClass##_iterator
+{
+public:
+    //ListClass##_iterator();
+    ~ListClass_iterator();
+    KeepGIL(next);
+    ItemClass* next();
+};
+
+
+DocStr(ListClass,
+"This class wraps a wxList-based class and gives it a Python
+sequence-like interface.  Sequence operations supported are length,
+index access and iteration.", "");
+class ListClass
+{
+public:
+    //ListClass();      This will always be created by some C++ function
+    ~ListClass();
+
+    %extend {
+        KeepGIL(__len__);
+        size_t __len__() {
+            return self->m_list->size();
+        }
+
+        KeepGIL(__getitem__);
+        ItemClass* __getitem__(size_t index) {
+            if (index < self->m_list->size()) {
+                wxList::compatibility_iterator node = self->m_list->Item(index);
+                if (node) return (ItemClass*)node->GetData();
+            }
+            PyErr_SetString(PyExc_IndexError, "Invalid list index");
+            return NULL;
+        }
+
+        KeepGIL(__contains__);
+        bool __contains__(const ItemClass* obj) {
+            return self->m_list->Find(obj) != NULL;
+        }
+
+        KeepGIL(__iter__);
+        %newobject __iter__;
+        ListClass##_iterator* __iter__() {
+            return new ListClass##_iterator(self->m_list->GetFirst());
+        }
+    }
+    %pythoncode {
+        def __repr__(self):
+            return "ListClass: " + repr(list(self))
+    }
+};
+
+// A typemap to handle converting a wxList& return value to this new list
+// type.  To use this just change the return value type in the class
+// definition to this typedef instead of wxList, then SWIG will use the
+// typemap.
+%{
+typedef wxList ListClass##_t;
+%}
+%typemap(out) ListClass##_t& {
+    ListClass* mylist = new ListClass($1);
+    $result = SWIG_NewPointerObj(SWIG_as_voidptr(mylist), SWIGTYPE_p_##ListClass, SWIG_POINTER_OWN );
+}
+%enddef
+
 
 
 //---------------------------------------------------------------------------

@@ -214,7 +214,8 @@ public:
     void PassMessages(bool bDoPass);
     bool IsPassingMessages();
     wxLog *GetOldLog();
-
+    void DetachOldLog();
+    
     %property(OldLog, GetOldLog, doc="See `GetOldLog`");    
 };
 

@@ -16,6 +16,9 @@
 //---------------------------------------------------------------------------
 %newgroup
 
+wxLIST_WRAPPER(wxMenuItemList, wxMenuItem);
+
+
 
 MustHaveApp(wxMenu);
 
@@ -169,12 +172,7 @@ public:
 
     // get the items
     size_t GetMenuItemCount() const;
-    %extend {
-        PyObject* GetMenuItems() {
-            wxMenuItemList& list = self->GetMenuItems();
-            return wxPy_ConvertList(&list);
-        }
-    }
+    wxMenuItemList& GetMenuItems();
 
     // search
     int FindItem(const wxString& item) const;

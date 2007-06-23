@@ -276,7 +276,10 @@ if [ $skipbuild != yes ]; then
         export WXROOT
         export BUILDPREFIX=$PREFIX
         export INSTALLDIR=$INSTALLROOT$PREFIX
-        $WXDIR/distrib/scripts/mac/macbuild wxpython universal $CHARTYPE
+        $WXDIR/distrib/scripts/mac/macbuild-lipo wxpython $CHARTYPE
+        if [ $? != 0 ]; then
+            exit $?
+        fi
     else
         make $MAKEJOBS
         make $MAKEJOBS -C contrib/src/gizmos
@@ -289,20 +292,60 @@ if [ $skipbuild != yes ]; then
     fi
 
     # Build wxPython
+    if [ $universal = yes ]; then
+        # build ppc, then i386, then lipo them together
+        ARCH=ppc
+        export CXX="g++-3.3 -DMAC_OS_X_VERSION_MAX_ALLOWED=1030"
+        export CC="gcc-3.3 -DMAC_OS_X_VERSION_MAX_ALLOWED=1030"
+        export MACOSX_DEPLOYMENT_TARGET=10.3
+        mkdir -p $INSTALLROOT/$ARCH
+        mkdir -p $WXBLD/$ARCH
+        
+        echo "Building wxPython for PPC..."
+        cd $WXROOT/wxPython
+        $PYTHON setup.py \
+        UNICODE=$PYUNICODEOPT \
+        NO_SCRIPTS=1 \
+        EP_ADD_OPTS=1 \
+        WX_CONFIG="$INSTALLROOT/$PREFIX/bin/wx-config --prefix=$INSTALLROOT$PREFIX" \
+        BUILD_BASE=$WXBLD/$ARCH/wxPython \
+        ARCH="$ARCH" \
+        build
+        
+        ARCH=i386
+        export CXX="g++-4.0 -arch i386"
+        export CC="gcc-4.0 -arch i386"
+        export MACOSX_DEPLOYMENT_TARGET=10.4
+        mkdir -p $INSTALLROOT/$ARCH
+        mkdir -p $WXBLD/$ARCH
+        
+        echo "Building wxPython for Intel..."
+        
     cd $WXROOT/wxPython
     $PYTHON setup.py \
 	UNICODE=$PYUNICODEOPT \
 	NO_SCRIPTS=1 \
 	EP_ADD_OPTS=1 \
+        WX_CONFIG="$INSTALLROOT/$PREFIX/bin/wx-config --prefix=$INSTALLROOT$PREFIX" \
+        BUILD_BASE=$WXBLD/$ARCH/wxPython \
+        ARCH="$ARCH" \
+        build
+    
+    else
+        cd $WXROOT/wxPython
+        $PYTHON setup.py \
+        UNICODE=$PYUNICODEOPT \
+        NO_SCRIPTS=1 \
+        EP_ADD_OPTS=1 \
 	WX_CONFIG="$WXBLD_CONFIG --inplace" \
 	BUILD_BASE=$WXBLD/wxPython \
 	SWIG=$SWIGBIN \
 	USE_SWIG=$SWIGIT \
 	build
+	fi
 fi
 
 #----------------------------------------------------------------------
-
 if [ $skipinstall != yes ]; then
     # Install wxWidgets
     cd $WXBLD
@@ -317,17 +360,51 @@ if [ $skipinstall != yes ]; then
     rm wx-config
     ln -s ../lib/wx/config/* wx-config
 
-    # and wxPython
+    if [ $universal == yes ]; then
+        ARCH=ppc
+        export CXX="g++-3.3 -DMAC_OS_X_VERSION_MAX_ALLOWED=1030"
+        export CC="gcc-3.3 -DMAC_OS_X_VERSION_MAX_ALLOWED=1030"
+        export MACOSX_DEPLOYMENT_TARGET=10.3
     cd $WXROOT/wxPython
     $PYTHON setup.py \
 	UNICODE=$PYUNICODEOPT \
 	NO_SCRIPTS=1 \
 	EP_ADD_OPTS=1 \
 	WX_CONFIG="$INSTALLROOT$PREFIX/bin/wx-config --prefix=$INSTALLROOT$PREFIX" \
+        BUILD_BASE=$WXBLD/$ARCH/wxPython \
+        install \
+        --root=$INSTALLROOT/$ARCH
+
+        ARCH=i386
+        export CXX="g++-4.0 -arch i386"
+        export CC="gcc-4.0 -arch i386"
+        export MACOSX_DEPLOYMENT_TARGET=10.4
+        cd $WXROOT/wxPython
+        $PYTHON setup.py \
+        UNICODE=$PYUNICODEOPT \
+        NO_SCRIPTS=1 \
+        EP_ADD_OPTS=1 \
+        WX_CONFIG="$INSTALLROOT$PREFIX/bin/wx-config --prefix=$INSTALLROOT$PREFIX" \
+        BUILD_BASE=$WXBLD/$ARCH/wxPython \
+        install \
+        --root=$INSTALLROOT/$ARCH
+        
+        echo "Lipoing $INSTALLROOT/ppc and $INSTALLROOT/i386..."
+        $PYTHON $WXROOT/distrib/scripts/mac/lipo-dir.py $INSTALLROOT/ppc $INSTALLROOT/i386 $INSTALLROOT
+    
+        rm -rf $INSTALLROOT/ppc $INSTALLROOT/i386
+        
+    else
+        cd $WXROOT/wxPython
+        $PYTHON setup.py \
+        UNICODE=$PYUNICODEOPT \
+        NO_SCRIPTS=1 \
+        EP_ADD_OPTS=1 \
+        WX_CONFIG="$INSTALLROOT$PREFIX/bin/wx-config --prefix=$INSTALLROOT$PREFIX" \
 	BUILD_BASE=$WXBLD/wxPython \
 	install \
 	--root=$INSTALLROOT
-
+    fi
 
     # Apple's Python Framework (such as what comes with Panther)
     # sym-links the site-packages dir in the framework to

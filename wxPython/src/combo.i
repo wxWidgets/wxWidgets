@@ -712,6 +712,7 @@ Nearly all of the methods of this class are overridable in Python.", "");
 
 MustHaveApp(wxPyComboPopup);
 %rename(ComboPopup) wxPyComboPopup;
+%typemap(out) wxPyComboCtrl*  { $result = wxPyMake_wxObject($1, (bool)$owner); }
 
 class wxPyComboPopup
 {
@@ -849,7 +850,6 @@ implementation returns ``False``.", "");
 is associated with.", "");
 
 };
-
 
 
 //---------------------------------------------------------------------------
