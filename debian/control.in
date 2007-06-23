@@ -151,7 +151,7 @@ Description: wxWidgets Cross-platform C++ GUI toolkit (wxPython version selector
 Package: python-wxaddons
 Architecture: all
 Section: python
-Conflicts: python-wxgtk2.6
+Conflicts: python-wxgtk2.6 (<< 2.6.4.0)
 Replaces:
 Description: wxWidgets Cross-platform C++ GUI toolkit (wxPython add-on packages base)
  wxWidgets (formerly known as wxWindows) is a class library for C++ providing

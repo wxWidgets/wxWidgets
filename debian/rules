@@ -61,6 +61,7 @@ wx_major_version_number := $(shell sed -n 's/^wx_major_version_number=//p' confi
 wx_minor_version_number := $(shell sed -n 's/^wx_minor_version_number=//p' configure.in)
 wx_release_number       := $(shell sed -n 's/^wx_release_number=//p' configure.in)
 wx_subrelease_number    := $(shell sed -n 's/^wx_subrelease_number=//p' configure.in)
+full_version := $(wx_major_version_number).$(wx_minor_version_number).$(wx_release_number).$(wx_subrelease_number)
 
 ##release   := $(shell dpkg-parsechangelog | sed -n 's/^Source: wxwidgets//p' | sed 's/-ansi//')
 release  := $(wx_major_version_number).$(wx_minor_version_number)
@@ -145,8 +146,10 @@ endif
 
 ifeq ($(WX_OPENGL),1)
     GTK_CONFIGURE_OPTIONS += --with-opengl
+    PY_OPENGL = BUILD_GLCANVAS=1
 else
     GTK_CONFIGURE_OPTIONS += --without-opengl
+    PY_OPENGL = BUILD_GLCANVAS=0
 endif
 
 # Packages to build:
@@ -464,6 +467,7 @@ build-gtk-py-stamp: build-gtk-shared-stamp purge-dbg-py
 						WX_CONFIG='$(wxconfig)'	\
 						WXPORT=$(pytoolkit)	\
 						$(PY_UNICODE)		\
+						$(PY_OPENGL)		\
 					    	FLAVOUR=$(DEBIAN_WXFLAVOUR)
 	touch $@
 
@@ -545,6 +549,7 @@ build-gtk-dbg-py-stamp: build-gtk-debug-stamp purge-release-py
 					    WX_CONFIG='$(wxconfig-dbg)' \
 					    WXPORT=$(pytoolkit)		\
 					    $(PY_UNICODE)		\
+					    $(PY_OPENGL)		\
 					    FLAVOUR=$(addsuffix -,$(DEBIAN_WXFLAVOUR))dbg
 	touch $@
 
@@ -725,6 +730,7 @@ install-gtk-py-lib: build-gtk-py-stamp
 			      SYS_WX_CONFIG='$(py_wxconfig)'			\
 			      WXPORT=$(pytoolkit)				\
 			      $(PY_UNICODE)					\
+			      $(PY_OPENGL)					\
 			      FLAVOUR=$(DEBIAN_WXFLAVOUR)
 
 	mv debian/$(package_gtk_py_lib)/$(pydir)/wx.pth 			\
@@ -742,10 +748,13 @@ install-gtk-py-ver: install-gtk-py-lib
 	dh_clean -k
 
 ifndef DEBIAN_WX_DEFAULT_VERSION
-
 	dh_movefiles --sourcedir=debian/$(package_gtk_py_lib) $(pydir)/wxversion.py
+	if [ -e debian/$(package_gtk_py_lib)/$(pydir)/wxPython_common-$(full_version).egg-info ]; then \
+		dh_movefiles --sourcedir=debian/$(package_gtk_py_lib) $(pydir)/wxPython_common-$(full_version).egg-info; \
+	fi
 else
 	rm debian/$(package_gtk_py_lib)/$(pydir)/wxversion.py
+	rm debian/$(package_gtk_py_lib)/$(pydir)/wxPython_common-$(full_version).egg-info
 endif
 
 
@@ -794,10 +803,12 @@ install-gtk-py-addons: install-gtk-py-tools
 	dh_testroot
 	dh_clean -k
 ifndef DEBIAN_WX_DEFAULT_VERSION
-
 	dh_movefiles --sourcedir=debian/$(package_gtk_py_lib) $(pydir)/wxaddons
+	if [ -e debian/$(package_gtk_py_lib)/$(pydir)/wxaddons-$(full_version).egg-info ]; then \
+		dh_movefiles --sourcedir=debian/$(package_gtk_py_lib) $(pydir)/wxaddons-$(full_version).egg-info; \
+	fi
 else
-	rm -r debian/$(package_gtk_py_lib)/$(pydir)/wxaddons
+	rm -r debian/$(package_gtk_py_lib)/$(pydir)/wxaddons*
 endif
 
 
@@ -874,6 +885,7 @@ install-gtk-dbg-py: build-gtk-dbg-py-stamp
 			      SYS_WX_CONFIG='$(pyd_wxconfig)'			\
 			      WXPORT=$(pytoolkit)				\
 			      $(PY_UNICODE)					\
+			      $(PY_OPENGL)					\
 			      FLAVOUR=$(addsuffix -,$(DEBIAN_WXFLAVOUR))dbg
 
 	mv debian/$(package_gtk_py_lib)/$(pydir)/wx.pth 			\
