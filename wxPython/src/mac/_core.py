@@ -1674,7 +1674,7 @@ class Rect2D(object):
     __repr__ = _swig_repr
     def __init__(self, *args, **kwargs): 
         """
-        __init__(self, wxDouble x=0.0, wxDouble y=0.0, wxDouble w=0.0, wxDouble h=0.0) -> Rect2D
+        __init__(self, Double x=0.0, Double y=0.0, Double w=0.0, Double h=0.0) -> Rect2D
 
         wx.Rect2D is a rectangle, with position and size, in a 2D coordinate system
         with floating point component values.
@@ -1691,51 +1691,51 @@ class Rect2D(object):
         return _core_.Rect2D_GetSize(*args, **kwargs)
 
     def GetLeft(*args, **kwargs):
-        """GetLeft(self) -> wxDouble"""
+        """GetLeft(self) -> Double"""
         return _core_.Rect2D_GetLeft(*args, **kwargs)
 
     def SetLeft(*args, **kwargs):
-        """SetLeft(self, wxDouble n)"""
+        """SetLeft(self, Double n)"""
         return _core_.Rect2D_SetLeft(*args, **kwargs)
 
     def MoveLeftTo(*args, **kwargs):
-        """MoveLeftTo(self, wxDouble n)"""
+        """MoveLeftTo(self, Double n)"""
         return _core_.Rect2D_MoveLeftTo(*args, **kwargs)
 
     def GetTop(*args, **kwargs):
-        """GetTop(self) -> wxDouble"""
+        """GetTop(self) -> Double"""
         return _core_.Rect2D_GetTop(*args, **kwargs)
 
     def SetTop(*args, **kwargs):
-        """SetTop(self, wxDouble n)"""
+        """SetTop(self, Double n)"""
         return _core_.Rect2D_SetTop(*args, **kwargs)
 
     def MoveTopTo(*args, **kwargs):
-        """MoveTopTo(self, wxDouble n)"""
+        """MoveTopTo(self, Double n)"""
         return _core_.Rect2D_MoveTopTo(*args, **kwargs)
 
     def GetBottom(*args, **kwargs):
-        """GetBottom(self) -> wxDouble"""
+        """GetBottom(self) -> Double"""
         return _core_.Rect2D_GetBottom(*args, **kwargs)
 
     def SetBottom(*args, **kwargs):
-        """SetBottom(self, wxDouble n)"""
+        """SetBottom(self, Double n)"""
         return _core_.Rect2D_SetBottom(*args, **kwargs)
 
     def MoveBottomTo(*args, **kwargs):
-        """MoveBottomTo(self, wxDouble n)"""
+        """MoveBottomTo(self, Double n)"""
         return _core_.Rect2D_MoveBottomTo(*args, **kwargs)
 
     def GetRight(*args, **kwargs):
-        """GetRight(self) -> wxDouble"""
+        """GetRight(self) -> Double"""
         return _core_.Rect2D_GetRight(*args, **kwargs)
 
     def SetRight(*args, **kwargs):
-        """SetRight(self, wxDouble n)"""
+        """SetRight(self, Double n)"""
         return _core_.Rect2D_SetRight(*args, **kwargs)
 
     def MoveRightTo(*args, **kwargs):
-        """MoveRightTo(self, wxDouble n)"""
+        """MoveRightTo(self, Double n)"""
         return _core_.Rect2D_MoveRightTo(*args, **kwargs)
 
     def GetLeftTop(*args, **kwargs):
@@ -1820,8 +1820,8 @@ class Rect2D(object):
 
     def Inset(*args):
         """
-        Inset(self, wxDouble x, wxDouble y)
-        Inset(self, wxDouble left, wxDouble top, wxDouble right, wxDouble bottom)
+        Inset(self, Double x, Double y)
+        Inset(self, Double left, Double top, Double right, Double bottom)
         """
         return _core_.Rect2D_Inset(*args)
 
@@ -1859,7 +1859,7 @@ class Rect2D(object):
 
     def Scale(*args):
         """
-        Scale(self, wxDouble f)
+        Scale(self, Double f)
         Scale(self, int num, int denum)
         """
         return _core_.Rect2D_Scale(*args)
@@ -1885,7 +1885,7 @@ class Rect2D(object):
     width = property(_core_.Rect2D_width_get, _core_.Rect2D_width_set)
     height = property(_core_.Rect2D_height_get, _core_.Rect2D_height_set)
     def Set(*args, **kwargs):
-        """Set(self, wxDouble x=0, wxDouble y=0, wxDouble width=0, wxDouble height=0)"""
+        """Set(self, Double x=0, Double y=0, Double width=0, Double height=0)"""
         return _core_.Rect2D_Set(*args, **kwargs)
 
     def Get(*args, **kwargs):
@@ -2316,6 +2316,11 @@ class MemoryFSHandler(CPPFileSystemHandler):
 
     RemoveFile = staticmethod(RemoveFile)
     AddFile = staticmethod(MemoryFSHandler_AddFile) 
+    def AddFileWithMimeType(*args, **kwargs):
+        """AddFileWithMimeType(String filename, PyObject data, String mimetype)"""
+        return _core_.MemoryFSHandler_AddFileWithMimeType(*args, **kwargs)
+
+    AddFileWithMimeType = staticmethod(AddFileWithMimeType)
     def CanOpen(*args, **kwargs):
         """CanOpen(self, String location) -> bool"""
         return _core_.MemoryFSHandler_CanOpen(*args, **kwargs)
@@ -2337,6 +2342,10 @@ _core_.MemoryFSHandler_swigregister(MemoryFSHandler)
 def MemoryFSHandler_RemoveFile(*args, **kwargs):
   """MemoryFSHandler_RemoveFile(String filename)"""
   return _core_.MemoryFSHandler_RemoveFile(*args, **kwargs)
+
+def MemoryFSHandler_AddFileWithMimeType(*args, **kwargs):
+  """MemoryFSHandler_AddFileWithMimeType(String filename, PyObject data, String mimetype)"""
+  return _core_.MemoryFSHandler_AddFileWithMimeType(*args, **kwargs)
 
 IMAGE_ALPHA_TRANSPARENT = _core_.IMAGE_ALPHA_TRANSPARENT
 IMAGE_ALPHA_THRESHOLD = _core_.IMAGE_ALPHA_THRESHOLD

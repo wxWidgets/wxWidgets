@@ -84,7 +84,7 @@ class Colour(_core.Object):
     window colours, etc.  Valid RGB values are in the range 0 to 255.
 
     In wxPython there are typemaps that will automatically convert from a
-    colour name, from a '#RRGGBB' colour hex value string, or from a 3
+    colour name, from a '#RRGGBB' colour hex value string, or from a 3 or 4
     integer tuple to a wx.Colour object when calling C++ methods that
     expect a wxColour.  This means that the following are all
     equivallent::
@@ -106,7 +106,7 @@ class Colour(_core.Object):
         """
         __init__(self, byte red=0, byte green=0, byte blue=0, byte alpha=ALPHA_OPAQUE) -> Colour
 
-        Constructs a colour from red, green and blue values.
+        Constructs a colour from red, green, blue and alpha values.
 
         :see: Alternate constructors `wx.NamedColour` and `wx.ColourRGB`.
 

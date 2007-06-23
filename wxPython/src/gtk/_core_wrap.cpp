@@ -2465,38 +2465,38 @@ SWIG_Python_MustGetPtr(PyObject *obj, swig_type_info *ty, int argnum, int flags)
 
 #define SWIGTYPE_p_buffer swig_types[0]
 #define SWIGTYPE_p_char swig_types[1]
-#define SWIGTYPE_p_form_ops_t swig_types[2]
-#define SWIGTYPE_p_int swig_types[3]
-#define SWIGTYPE_p_long swig_types[4]
-#define SWIGTYPE_p_unsigned_char swig_types[5]
-#define SWIGTYPE_p_unsigned_int swig_types[6]
-#define SWIGTYPE_p_unsigned_long swig_types[7]
-#define SWIGTYPE_p_wxANIHandler swig_types[8]
-#define SWIGTYPE_p_wxAcceleratorEntry swig_types[9]
-#define SWIGTYPE_p_wxAcceleratorTable swig_types[10]
-#define SWIGTYPE_p_wxActivateEvent swig_types[11]
-#define SWIGTYPE_p_wxAppTraits swig_types[12]
-#define SWIGTYPE_p_wxArrayString swig_types[13]
-#define SWIGTYPE_p_wxBMPHandler swig_types[14]
-#define SWIGTYPE_p_wxBitmap swig_types[15]
-#define SWIGTYPE_p_wxBoxSizer swig_types[16]
-#define SWIGTYPE_p_wxButton swig_types[17]
-#define SWIGTYPE_p_wxCURHandler swig_types[18]
-#define SWIGTYPE_p_wxCaret swig_types[19]
-#define SWIGTYPE_p_wxChildFocusEvent swig_types[20]
-#define SWIGTYPE_p_wxClipboardTextEvent swig_types[21]
-#define SWIGTYPE_p_wxCloseEvent swig_types[22]
-#define SWIGTYPE_p_wxColour swig_types[23]
-#define SWIGTYPE_p_wxCommandEvent swig_types[24]
-#define SWIGTYPE_p_wxContextMenuEvent swig_types[25]
-#define SWIGTYPE_p_wxControl swig_types[26]
-#define SWIGTYPE_p_wxControlWithItems swig_types[27]
-#define SWIGTYPE_p_wxCursor swig_types[28]
-#define SWIGTYPE_p_wxDC swig_types[29]
-#define SWIGTYPE_p_wxDateEvent swig_types[30]
-#define SWIGTYPE_p_wxDateTime swig_types[31]
-#define SWIGTYPE_p_wxDisplayChangedEvent swig_types[32]
-#define SWIGTYPE_p_wxDouble swig_types[33]
+#define SWIGTYPE_p_double swig_types[2]
+#define SWIGTYPE_p_form_ops_t swig_types[3]
+#define SWIGTYPE_p_int swig_types[4]
+#define SWIGTYPE_p_long swig_types[5]
+#define SWIGTYPE_p_unsigned_char swig_types[6]
+#define SWIGTYPE_p_unsigned_int swig_types[7]
+#define SWIGTYPE_p_unsigned_long swig_types[8]
+#define SWIGTYPE_p_wxANIHandler swig_types[9]
+#define SWIGTYPE_p_wxAcceleratorEntry swig_types[10]
+#define SWIGTYPE_p_wxAcceleratorTable swig_types[11]
+#define SWIGTYPE_p_wxActivateEvent swig_types[12]
+#define SWIGTYPE_p_wxAppTraits swig_types[13]
+#define SWIGTYPE_p_wxArrayString swig_types[14]
+#define SWIGTYPE_p_wxBMPHandler swig_types[15]
+#define SWIGTYPE_p_wxBitmap swig_types[16]
+#define SWIGTYPE_p_wxBoxSizer swig_types[17]
+#define SWIGTYPE_p_wxButton swig_types[18]
+#define SWIGTYPE_p_wxCURHandler swig_types[19]
+#define SWIGTYPE_p_wxCaret swig_types[20]
+#define SWIGTYPE_p_wxChildFocusEvent swig_types[21]
+#define SWIGTYPE_p_wxClipboardTextEvent swig_types[22]
+#define SWIGTYPE_p_wxCloseEvent swig_types[23]
+#define SWIGTYPE_p_wxColour swig_types[24]
+#define SWIGTYPE_p_wxCommandEvent swig_types[25]
+#define SWIGTYPE_p_wxContextMenuEvent swig_types[26]
+#define SWIGTYPE_p_wxControl swig_types[27]
+#define SWIGTYPE_p_wxControlWithItems swig_types[28]
+#define SWIGTYPE_p_wxCursor swig_types[29]
+#define SWIGTYPE_p_wxDC swig_types[30]
+#define SWIGTYPE_p_wxDateEvent swig_types[31]
+#define SWIGTYPE_p_wxDateTime swig_types[32]
+#define SWIGTYPE_p_wxDisplayChangedEvent swig_types[33]
 #define SWIGTYPE_p_wxDropFilesEvent swig_types[34]
 #define SWIGTYPE_p_wxDuplexMode swig_types[35]
 #define SWIGTYPE_p_wxEraseEvent swig_types[36]
@@ -3485,8 +3485,22 @@ SWIGINTERN wxString wxFileSystem_URLToFileName(wxString const &url){
         wxPyEndBlockThreads(blocked);
 
         wxMemoryFSHandler::AddFile(filename, ptr, size);
-    }
+    }    
 
+SWIGINTERN void wxMemoryFSHandler_AddFileWithMimeType(wxString const &filename,PyObject *data,wxString const &mimetype){
+            if (! PyString_Check(data)) {
+                wxPyBLOCK_THREADS(PyErr_SetString(PyExc_TypeError,
+                                                  "Expected string object"));
+                return;
+            }
+
+            wxPyBlock_t blocked = wxPyBeginBlockThreads();
+            void*  ptr = (void*)PyString_AsString(data);
+            size_t size = PyString_Size(data);
+            wxPyEndBlockThreads(blocked);
+
+            wxMemoryFSHandler::AddFileWithMimeType(filename, ptr, size, mimetype);
+        }
 
 #include "wx/wxPython/pyistream.h"
 
@@ -9309,14 +9323,14 @@ SWIGINTERN PyObject *_wrap_new_Rect2D(PyObject *SWIGUNUSEDPARM(self), PyObject *
   wxDouble arg3 = (wxDouble) 0.0 ;
   wxDouble arg4 = (wxDouble) 0.0 ;
   wxRect2D *result = 0 ;
-  void *argp1 ;
-  int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  void *argp3 ;
-  int res3 = 0 ;
-  void *argp4 ;
-  int res4 = 0 ;
+  double val1 ;
+  int ecode1 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -9327,64 +9341,32 @@ SWIGINTERN PyObject *_wrap_new_Rect2D(PyObject *SWIGUNUSEDPARM(self), PyObject *
   
   if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"|OOOO:new_Rect2D",kwnames,&obj0,&obj1,&obj2,&obj3)) SWIG_fail;
   if (obj0) {
-    {
-      res1 = SWIG_ConvertPtr(obj0, &argp1, SWIGTYPE_p_wxDouble,  0  | 0);
-      if (!SWIG_IsOK(res1)) {
-        SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "new_Rect2D" "', expected argument " "1"" of type '" "wxDouble""'"); 
-      }  
-      if (!argp1) {
-        SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Rect2D" "', expected argument " "1"" of type '" "wxDouble""'");
-      } else {
-        wxDouble * temp = reinterpret_cast< wxDouble * >(argp1);
-        arg1 = *temp;
-        if (SWIG_IsNewObj(res1)) delete temp;
-      }
-    }
+    ecode1 = SWIG_AsVal_double(obj0, &val1);
+    if (!SWIG_IsOK(ecode1)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "new_Rect2D" "', expected argument " "1"" of type '" "wxDouble""'");
+    } 
+    arg1 = static_cast< wxDouble >(val1);
   }
   if (obj1) {
-    {
-      res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxDouble,  0  | 0);
-      if (!SWIG_IsOK(res2)) {
-        SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "new_Rect2D" "', expected argument " "2"" of type '" "wxDouble""'"); 
-      }  
-      if (!argp2) {
-        SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Rect2D" "', expected argument " "2"" of type '" "wxDouble""'");
-      } else {
-        wxDouble * temp = reinterpret_cast< wxDouble * >(argp2);
-        arg2 = *temp;
-        if (SWIG_IsNewObj(res2)) delete temp;
-      }
-    }
+    ecode2 = SWIG_AsVal_double(obj1, &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "new_Rect2D" "', expected argument " "2"" of type '" "wxDouble""'");
+    } 
+    arg2 = static_cast< wxDouble >(val2);
   }
   if (obj2) {
-    {
-      res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_wxDouble,  0  | 0);
-      if (!SWIG_IsOK(res3)) {
-        SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "new_Rect2D" "', expected argument " "3"" of type '" "wxDouble""'"); 
-      }  
-      if (!argp3) {
-        SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Rect2D" "', expected argument " "3"" of type '" "wxDouble""'");
-      } else {
-        wxDouble * temp = reinterpret_cast< wxDouble * >(argp3);
-        arg3 = *temp;
-        if (SWIG_IsNewObj(res3)) delete temp;
-      }
-    }
+    ecode3 = SWIG_AsVal_double(obj2, &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "new_Rect2D" "', expected argument " "3"" of type '" "wxDouble""'");
+    } 
+    arg3 = static_cast< wxDouble >(val3);
   }
   if (obj3) {
-    {
-      res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_wxDouble,  0  | 0);
-      if (!SWIG_IsOK(res4)) {
-        SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "new_Rect2D" "', expected argument " "4"" of type '" "wxDouble""'"); 
-      }  
-      if (!argp4) {
-        SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "new_Rect2D" "', expected argument " "4"" of type '" "wxDouble""'");
-      } else {
-        wxDouble * temp = reinterpret_cast< wxDouble * >(argp4);
-        arg4 = *temp;
-        if (SWIG_IsNewObj(res4)) delete temp;
-      }
-    }
+    ecode4 = SWIG_AsVal_double(obj3, &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "new_Rect2D" "', expected argument " "4"" of type '" "wxDouble""'");
+    } 
+    arg4 = static_cast< wxDouble >(val4);
   }
   {
     result = (wxRect2D *)new wxRect2D(arg1,arg2,arg3,arg4);
@@ -9491,10 +9473,10 @@ SWIGINTERN PyObject *_wrap_Rect2D_GetLeft(PyObject *SWIGUNUSEDPARM(self), PyObje
   }
   arg1 = reinterpret_cast< wxRect2D * >(argp1);
   {
-    result = ((wxRect2D const *)arg1)->GetLeft();
+    result = (wxDouble)((wxRect2D const *)arg1)->GetLeft();
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_NewPointerObj((new wxDouble(static_cast< const wxDouble& >(result))), SWIGTYPE_p_wxDouble, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
   return NULL;
@@ -9507,8 +9489,8 @@ SWIGINTERN PyObject *_wrap_Rect2D_SetLeft(PyObject *SWIGUNUSEDPARM(self), PyObje
   wxDouble arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
@@ -9521,19 +9503,11 @@ SWIGINTERN PyObject *_wrap_Rect2D_SetLeft(PyObject *SWIGUNUSEDPARM(self), PyObje
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect2D_SetLeft" "', expected argument " "1"" of type '" "wxRect2D *""'"); 
   }
   arg1 = reinterpret_cast< wxRect2D * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxDouble,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Rect2D_SetLeft" "', expected argument " "2"" of type '" "wxDouble""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Rect2D_SetLeft" "', expected argument " "2"" of type '" "wxDouble""'");
-    } else {
-      wxDouble * temp = reinterpret_cast< wxDouble * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
-  }
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Rect2D_SetLeft" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
   {
     (arg1)->SetLeft(arg2);
     if (PyErr_Occurred()) SWIG_fail;
@@ -9551,8 +9525,8 @@ SWIGINTERN PyObject *_wrap_Rect2D_MoveLeftTo(PyObject *SWIGUNUSEDPARM(self), PyO
   wxDouble arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
@@ -9565,19 +9539,11 @@ SWIGINTERN PyObject *_wrap_Rect2D_MoveLeftTo(PyObject *SWIGUNUSEDPARM(self), PyO
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect2D_MoveLeftTo" "', expected argument " "1"" of type '" "wxRect2D *""'"); 
   }
   arg1 = reinterpret_cast< wxRect2D * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxDouble,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Rect2D_MoveLeftTo" "', expected argument " "2"" of type '" "wxDouble""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Rect2D_MoveLeftTo" "', expected argument " "2"" of type '" "wxDouble""'");
-    } else {
-      wxDouble * temp = reinterpret_cast< wxDouble * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
-  }
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Rect2D_MoveLeftTo" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
   {
     (arg1)->MoveLeftTo(arg2);
     if (PyErr_Occurred()) SWIG_fail;
@@ -9605,10 +9571,10 @@ SWIGINTERN PyObject *_wrap_Rect2D_GetTop(PyObject *SWIGUNUSEDPARM(self), PyObjec
   }
   arg1 = reinterpret_cast< wxRect2D * >(argp1);
   {
-    result = ((wxRect2D const *)arg1)->GetTop();
+    result = (wxDouble)((wxRect2D const *)arg1)->GetTop();
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_NewPointerObj((new wxDouble(static_cast< const wxDouble& >(result))), SWIGTYPE_p_wxDouble, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
   return NULL;
@@ -9621,8 +9587,8 @@ SWIGINTERN PyObject *_wrap_Rect2D_SetTop(PyObject *SWIGUNUSEDPARM(self), PyObjec
   wxDouble arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
@@ -9635,19 +9601,11 @@ SWIGINTERN PyObject *_wrap_Rect2D_SetTop(PyObject *SWIGUNUSEDPARM(self), PyObjec
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect2D_SetTop" "', expected argument " "1"" of type '" "wxRect2D *""'"); 
   }
   arg1 = reinterpret_cast< wxRect2D * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxDouble,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Rect2D_SetTop" "', expected argument " "2"" of type '" "wxDouble""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Rect2D_SetTop" "', expected argument " "2"" of type '" "wxDouble""'");
-    } else {
-      wxDouble * temp = reinterpret_cast< wxDouble * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
-  }
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Rect2D_SetTop" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
   {
     (arg1)->SetTop(arg2);
     if (PyErr_Occurred()) SWIG_fail;
@@ -9665,8 +9623,8 @@ SWIGINTERN PyObject *_wrap_Rect2D_MoveTopTo(PyObject *SWIGUNUSEDPARM(self), PyOb
   wxDouble arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
@@ -9679,19 +9637,11 @@ SWIGINTERN PyObject *_wrap_Rect2D_MoveTopTo(PyObject *SWIGUNUSEDPARM(self), PyOb
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect2D_MoveTopTo" "', expected argument " "1"" of type '" "wxRect2D *""'"); 
   }
   arg1 = reinterpret_cast< wxRect2D * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxDouble,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Rect2D_MoveTopTo" "', expected argument " "2"" of type '" "wxDouble""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Rect2D_MoveTopTo" "', expected argument " "2"" of type '" "wxDouble""'");
-    } else {
-      wxDouble * temp = reinterpret_cast< wxDouble * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
-  }
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Rect2D_MoveTopTo" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
   {
     (arg1)->MoveTopTo(arg2);
     if (PyErr_Occurred()) SWIG_fail;
@@ -9719,10 +9669,10 @@ SWIGINTERN PyObject *_wrap_Rect2D_GetBottom(PyObject *SWIGUNUSEDPARM(self), PyOb
   }
   arg1 = reinterpret_cast< wxRect2D * >(argp1);
   {
-    result = ((wxRect2D const *)arg1)->GetBottom();
+    result = (wxDouble)((wxRect2D const *)arg1)->GetBottom();
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_NewPointerObj((new wxDouble(static_cast< const wxDouble& >(result))), SWIGTYPE_p_wxDouble, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
   return NULL;
@@ -9735,8 +9685,8 @@ SWIGINTERN PyObject *_wrap_Rect2D_SetBottom(PyObject *SWIGUNUSEDPARM(self), PyOb
   wxDouble arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
@@ -9749,19 +9699,11 @@ SWIGINTERN PyObject *_wrap_Rect2D_SetBottom(PyObject *SWIGUNUSEDPARM(self), PyOb
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect2D_SetBottom" "', expected argument " "1"" of type '" "wxRect2D *""'"); 
   }
   arg1 = reinterpret_cast< wxRect2D * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxDouble,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Rect2D_SetBottom" "', expected argument " "2"" of type '" "wxDouble""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Rect2D_SetBottom" "', expected argument " "2"" of type '" "wxDouble""'");
-    } else {
-      wxDouble * temp = reinterpret_cast< wxDouble * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
-  }
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Rect2D_SetBottom" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
   {
     (arg1)->SetBottom(arg2);
     if (PyErr_Occurred()) SWIG_fail;
@@ -9779,8 +9721,8 @@ SWIGINTERN PyObject *_wrap_Rect2D_MoveBottomTo(PyObject *SWIGUNUSEDPARM(self), P
   wxDouble arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
@@ -9793,19 +9735,11 @@ SWIGINTERN PyObject *_wrap_Rect2D_MoveBottomTo(PyObject *SWIGUNUSEDPARM(self), P
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect2D_MoveBottomTo" "', expected argument " "1"" of type '" "wxRect2D *""'"); 
   }
   arg1 = reinterpret_cast< wxRect2D * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxDouble,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Rect2D_MoveBottomTo" "', expected argument " "2"" of type '" "wxDouble""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Rect2D_MoveBottomTo" "', expected argument " "2"" of type '" "wxDouble""'");
-    } else {
-      wxDouble * temp = reinterpret_cast< wxDouble * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
-  }
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Rect2D_MoveBottomTo" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
   {
     (arg1)->MoveBottomTo(arg2);
     if (PyErr_Occurred()) SWIG_fail;
@@ -9833,10 +9767,10 @@ SWIGINTERN PyObject *_wrap_Rect2D_GetRight(PyObject *SWIGUNUSEDPARM(self), PyObj
   }
   arg1 = reinterpret_cast< wxRect2D * >(argp1);
   {
-    result = ((wxRect2D const *)arg1)->GetRight();
+    result = (wxDouble)((wxRect2D const *)arg1)->GetRight();
     if (PyErr_Occurred()) SWIG_fail;
   }
-  resultobj = SWIG_NewPointerObj((new wxDouble(static_cast< const wxDouble& >(result))), SWIGTYPE_p_wxDouble, SWIG_POINTER_OWN |  0 );
+  resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
   return NULL;
@@ -9849,8 +9783,8 @@ SWIGINTERN PyObject *_wrap_Rect2D_SetRight(PyObject *SWIGUNUSEDPARM(self), PyObj
   wxDouble arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
@@ -9863,19 +9797,11 @@ SWIGINTERN PyObject *_wrap_Rect2D_SetRight(PyObject *SWIGUNUSEDPARM(self), PyObj
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect2D_SetRight" "', expected argument " "1"" of type '" "wxRect2D *""'"); 
   }
   arg1 = reinterpret_cast< wxRect2D * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxDouble,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Rect2D_SetRight" "', expected argument " "2"" of type '" "wxDouble""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Rect2D_SetRight" "', expected argument " "2"" of type '" "wxDouble""'");
-    } else {
-      wxDouble * temp = reinterpret_cast< wxDouble * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
-  }
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Rect2D_SetRight" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
   {
     (arg1)->SetRight(arg2);
     if (PyErr_Occurred()) SWIG_fail;
@@ -9893,8 +9819,8 @@ SWIGINTERN PyObject *_wrap_Rect2D_MoveRightTo(PyObject *SWIGUNUSEDPARM(self), Py
   wxDouble arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   char *  kwnames[] = {
@@ -9907,19 +9833,11 @@ SWIGINTERN PyObject *_wrap_Rect2D_MoveRightTo(PyObject *SWIGUNUSEDPARM(self), Py
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect2D_MoveRightTo" "', expected argument " "1"" of type '" "wxRect2D *""'"); 
   }
   arg1 = reinterpret_cast< wxRect2D * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxDouble,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Rect2D_MoveRightTo" "', expected argument " "2"" of type '" "wxDouble""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Rect2D_MoveRightTo" "', expected argument " "2"" of type '" "wxDouble""'");
-    } else {
-      wxDouble * temp = reinterpret_cast< wxDouble * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
-  }
+  ecode2 = SWIG_AsVal_double(obj1, &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Rect2D_MoveRightTo" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
   {
     (arg1)->MoveRightTo(arg2);
     if (PyErr_Occurred()) SWIG_fail;
@@ -10582,10 +10500,10 @@ SWIGINTERN PyObject *_wrap_Rect2D_Inset__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
   wxDouble arg3 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  void *argp3 ;
-  int res3 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
   
   if ((nobjs < 3) || (nobjs > 3)) SWIG_fail;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxRect2D, 0 |  0 );
@@ -10593,32 +10511,16 @@ SWIGINTERN PyObject *_wrap_Rect2D_Inset__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect2D_Inset" "', expected argument " "1"" of type '" "wxRect2D *""'"); 
   }
   arg1 = reinterpret_cast< wxRect2D * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_wxDouble,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Rect2D_Inset" "', expected argument " "2"" of type '" "wxDouble""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Rect2D_Inset" "', expected argument " "2"" of type '" "wxDouble""'");
-    } else {
-      wxDouble * temp = reinterpret_cast< wxDouble * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
-  }
-  {
-    res3 = SWIG_ConvertPtr(swig_obj[2], &argp3, SWIGTYPE_p_wxDouble,  0  | 0);
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Rect2D_Inset" "', expected argument " "3"" of type '" "wxDouble""'"); 
-    }  
-    if (!argp3) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Rect2D_Inset" "', expected argument " "3"" of type '" "wxDouble""'");
-    } else {
-      wxDouble * temp = reinterpret_cast< wxDouble * >(argp3);
-      arg3 = *temp;
-      if (SWIG_IsNewObj(res3)) delete temp;
-    }
-  }
+  ecode2 = SWIG_AsVal_double(swig_obj[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Rect2D_Inset" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
+  ecode3 = SWIG_AsVal_double(swig_obj[2], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Rect2D_Inset" "', expected argument " "3"" of type '" "wxDouble""'");
+  } 
+  arg3 = static_cast< wxDouble >(val3);
   {
     (arg1)->Inset(arg2,arg3);
     if (PyErr_Occurred()) SWIG_fail;
@@ -10639,14 +10541,14 @@ SWIGINTERN PyObject *_wrap_Rect2D_Inset__SWIG_1(PyObject *SWIGUNUSEDPARM(self), 
   wxDouble arg5 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  void *argp3 ;
-  int res3 = 0 ;
-  void *argp4 ;
-  int res4 = 0 ;
-  void *argp5 ;
-  int res5 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  double val5 ;
+  int ecode5 = 0 ;
   
   if ((nobjs < 5) || (nobjs > 5)) SWIG_fail;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxRect2D, 0 |  0 );
@@ -10654,58 +10556,26 @@ SWIGINTERN PyObject *_wrap_Rect2D_Inset__SWIG_1(PyObject *SWIGUNUSEDPARM(self), 
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect2D_Inset" "', expected argument " "1"" of type '" "wxRect2D *""'"); 
   }
   arg1 = reinterpret_cast< wxRect2D * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_wxDouble,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Rect2D_Inset" "', expected argument " "2"" of type '" "wxDouble""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Rect2D_Inset" "', expected argument " "2"" of type '" "wxDouble""'");
-    } else {
-      wxDouble * temp = reinterpret_cast< wxDouble * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
-  }
-  {
-    res3 = SWIG_ConvertPtr(swig_obj[2], &argp3, SWIGTYPE_p_wxDouble,  0  | 0);
-    if (!SWIG_IsOK(res3)) {
-      SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Rect2D_Inset" "', expected argument " "3"" of type '" "wxDouble""'"); 
-    }  
-    if (!argp3) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Rect2D_Inset" "', expected argument " "3"" of type '" "wxDouble""'");
-    } else {
-      wxDouble * temp = reinterpret_cast< wxDouble * >(argp3);
-      arg3 = *temp;
-      if (SWIG_IsNewObj(res3)) delete temp;
-    }
-  }
-  {
-    res4 = SWIG_ConvertPtr(swig_obj[3], &argp4, SWIGTYPE_p_wxDouble,  0  | 0);
-    if (!SWIG_IsOK(res4)) {
-      SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "Rect2D_Inset" "', expected argument " "4"" of type '" "wxDouble""'"); 
-    }  
-    if (!argp4) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Rect2D_Inset" "', expected argument " "4"" of type '" "wxDouble""'");
-    } else {
-      wxDouble * temp = reinterpret_cast< wxDouble * >(argp4);
-      arg4 = *temp;
-      if (SWIG_IsNewObj(res4)) delete temp;
-    }
-  }
-  {
-    res5 = SWIG_ConvertPtr(swig_obj[4], &argp5, SWIGTYPE_p_wxDouble,  0  | 0);
-    if (!SWIG_IsOK(res5)) {
-      SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "Rect2D_Inset" "', expected argument " "5"" of type '" "wxDouble""'"); 
-    }  
-    if (!argp5) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Rect2D_Inset" "', expected argument " "5"" of type '" "wxDouble""'");
-    } else {
-      wxDouble * temp = reinterpret_cast< wxDouble * >(argp5);
-      arg5 = *temp;
-      if (SWIG_IsNewObj(res5)) delete temp;
-    }
-  }
+  ecode2 = SWIG_AsVal_double(swig_obj[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Rect2D_Inset" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
+  ecode3 = SWIG_AsVal_double(swig_obj[2], &val3);
+  if (!SWIG_IsOK(ecode3)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Rect2D_Inset" "', expected argument " "3"" of type '" "wxDouble""'");
+  } 
+  arg3 = static_cast< wxDouble >(val3);
+  ecode4 = SWIG_AsVal_double(swig_obj[3], &val4);
+  if (!SWIG_IsOK(ecode4)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Rect2D_Inset" "', expected argument " "4"" of type '" "wxDouble""'");
+  } 
+  arg4 = static_cast< wxDouble >(val4);
+  ecode5 = SWIG_AsVal_double(swig_obj[4], &val5);
+  if (!SWIG_IsOK(ecode5)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "Rect2D_Inset" "', expected argument " "5"" of type '" "wxDouble""'");
+  } 
+  arg5 = static_cast< wxDouble >(val5);
   {
     (arg1)->Inset(arg2,arg3,arg4,arg5);
     if (PyErr_Occurred()) SWIG_fail;
@@ -11031,8 +10901,8 @@ SWIGINTERN PyObject *_wrap_Rect2D_Scale__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
   wxDouble arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
   
   if ((nobjs < 2) || (nobjs > 2)) SWIG_fail;
   res1 = SWIG_ConvertPtr(swig_obj[0], &argp1,SWIGTYPE_p_wxRect2D, 0 |  0 );
@@ -11040,19 +10910,11 @@ SWIGINTERN PyObject *_wrap_Rect2D_Scale__SWIG_0(PyObject *SWIGUNUSEDPARM(self), 
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect2D_Scale" "', expected argument " "1"" of type '" "wxRect2D *""'"); 
   }
   arg1 = reinterpret_cast< wxRect2D * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_wxDouble,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Rect2D_Scale" "', expected argument " "2"" of type '" "wxDouble""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Rect2D_Scale" "', expected argument " "2"" of type '" "wxDouble""'");
-    } else {
-      wxDouble * temp = reinterpret_cast< wxDouble * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
-  }
+  ecode2 = SWIG_AsVal_double(swig_obj[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Rect2D_Scale" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
   {
     (arg1)->Scale(arg2);
     if (PyErr_Occurred()) SWIG_fail;
@@ -11194,8 +11056,8 @@ SWIGINTERN PyObject *_wrap_Rect2D_x_set(PyObject *SWIGUNUSEDPARM(self), PyObject
   wxDouble arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
   PyObject *swig_obj[2] ;
   
   if (!SWIG_Python_UnpackTuple(args,"Rect2D_x_set",2,2,swig_obj)) SWIG_fail;
@@ -11204,19 +11066,11 @@ SWIGINTERN PyObject *_wrap_Rect2D_x_set(PyObject *SWIGUNUSEDPARM(self), PyObject
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect2D_x_set" "', expected argument " "1"" of type '" "wxRect2D *""'"); 
   }
   arg1 = reinterpret_cast< wxRect2D * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_wxDouble,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Rect2D_x_set" "', expected argument " "2"" of type '" "wxDouble""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Rect2D_x_set" "', expected argument " "2"" of type '" "wxDouble""'");
-    } else {
-      wxDouble * temp = reinterpret_cast< wxDouble * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
-  }
+  ecode2 = SWIG_AsVal_double(swig_obj[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Rect2D_x_set" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
   if (arg1) (arg1)->m_x = arg2;
   
   resultobj = SWIG_Py_Void();
@@ -11241,8 +11095,8 @@ SWIGINTERN PyObject *_wrap_Rect2D_x_get(PyObject *SWIGUNUSEDPARM(self), PyObject
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect2D_x_get" "', expected argument " "1"" of type '" "wxRect2D *""'"); 
   }
   arg1 = reinterpret_cast< wxRect2D * >(argp1);
-  result =  ((arg1)->m_x);
-  resultobj = SWIG_NewPointerObj((new wxDouble(static_cast< const wxDouble& >(result))), SWIGTYPE_p_wxDouble, SWIG_POINTER_OWN |  0 );
+  result = (wxDouble) ((arg1)->m_x);
+  resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
   return NULL;
@@ -11255,8 +11109,8 @@ SWIGINTERN PyObject *_wrap_Rect2D_y_set(PyObject *SWIGUNUSEDPARM(self), PyObject
   wxDouble arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
   PyObject *swig_obj[2] ;
   
   if (!SWIG_Python_UnpackTuple(args,"Rect2D_y_set",2,2,swig_obj)) SWIG_fail;
@@ -11265,19 +11119,11 @@ SWIGINTERN PyObject *_wrap_Rect2D_y_set(PyObject *SWIGUNUSEDPARM(self), PyObject
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect2D_y_set" "', expected argument " "1"" of type '" "wxRect2D *""'"); 
   }
   arg1 = reinterpret_cast< wxRect2D * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_wxDouble,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Rect2D_y_set" "', expected argument " "2"" of type '" "wxDouble""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Rect2D_y_set" "', expected argument " "2"" of type '" "wxDouble""'");
-    } else {
-      wxDouble * temp = reinterpret_cast< wxDouble * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
-  }
+  ecode2 = SWIG_AsVal_double(swig_obj[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Rect2D_y_set" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
   if (arg1) (arg1)->m_y = arg2;
   
   resultobj = SWIG_Py_Void();
@@ -11302,8 +11148,8 @@ SWIGINTERN PyObject *_wrap_Rect2D_y_get(PyObject *SWIGUNUSEDPARM(self), PyObject
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect2D_y_get" "', expected argument " "1"" of type '" "wxRect2D *""'"); 
   }
   arg1 = reinterpret_cast< wxRect2D * >(argp1);
-  result =  ((arg1)->m_y);
-  resultobj = SWIG_NewPointerObj((new wxDouble(static_cast< const wxDouble& >(result))), SWIGTYPE_p_wxDouble, SWIG_POINTER_OWN |  0 );
+  result = (wxDouble) ((arg1)->m_y);
+  resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
   return NULL;
@@ -11316,8 +11162,8 @@ SWIGINTERN PyObject *_wrap_Rect2D_width_set(PyObject *SWIGUNUSEDPARM(self), PyOb
   wxDouble arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
   PyObject *swig_obj[2] ;
   
   if (!SWIG_Python_UnpackTuple(args,"Rect2D_width_set",2,2,swig_obj)) SWIG_fail;
@@ -11326,19 +11172,11 @@ SWIGINTERN PyObject *_wrap_Rect2D_width_set(PyObject *SWIGUNUSEDPARM(self), PyOb
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect2D_width_set" "', expected argument " "1"" of type '" "wxRect2D *""'"); 
   }
   arg1 = reinterpret_cast< wxRect2D * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_wxDouble,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Rect2D_width_set" "', expected argument " "2"" of type '" "wxDouble""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Rect2D_width_set" "', expected argument " "2"" of type '" "wxDouble""'");
-    } else {
-      wxDouble * temp = reinterpret_cast< wxDouble * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
-  }
+  ecode2 = SWIG_AsVal_double(swig_obj[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Rect2D_width_set" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
   if (arg1) (arg1)->m_width = arg2;
   
   resultobj = SWIG_Py_Void();
@@ -11363,8 +11201,8 @@ SWIGINTERN PyObject *_wrap_Rect2D_width_get(PyObject *SWIGUNUSEDPARM(self), PyOb
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect2D_width_get" "', expected argument " "1"" of type '" "wxRect2D *""'"); 
   }
   arg1 = reinterpret_cast< wxRect2D * >(argp1);
-  result =  ((arg1)->m_width);
-  resultobj = SWIG_NewPointerObj((new wxDouble(static_cast< const wxDouble& >(result))), SWIGTYPE_p_wxDouble, SWIG_POINTER_OWN |  0 );
+  result = (wxDouble) ((arg1)->m_width);
+  resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
   return NULL;
@@ -11377,8 +11215,8 @@ SWIGINTERN PyObject *_wrap_Rect2D_height_set(PyObject *SWIGUNUSEDPARM(self), PyO
   wxDouble arg2 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
   PyObject *swig_obj[2] ;
   
   if (!SWIG_Python_UnpackTuple(args,"Rect2D_height_set",2,2,swig_obj)) SWIG_fail;
@@ -11387,19 +11225,11 @@ SWIGINTERN PyObject *_wrap_Rect2D_height_set(PyObject *SWIGUNUSEDPARM(self), PyO
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect2D_height_set" "', expected argument " "1"" of type '" "wxRect2D *""'"); 
   }
   arg1 = reinterpret_cast< wxRect2D * >(argp1);
-  {
-    res2 = SWIG_ConvertPtr(swig_obj[1], &argp2, SWIGTYPE_p_wxDouble,  0  | 0);
-    if (!SWIG_IsOK(res2)) {
-      SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Rect2D_height_set" "', expected argument " "2"" of type '" "wxDouble""'"); 
-    }  
-    if (!argp2) {
-      SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Rect2D_height_set" "', expected argument " "2"" of type '" "wxDouble""'");
-    } else {
-      wxDouble * temp = reinterpret_cast< wxDouble * >(argp2);
-      arg2 = *temp;
-      if (SWIG_IsNewObj(res2)) delete temp;
-    }
-  }
+  ecode2 = SWIG_AsVal_double(swig_obj[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Rect2D_height_set" "', expected argument " "2"" of type '" "wxDouble""'");
+  } 
+  arg2 = static_cast< wxDouble >(val2);
   if (arg1) (arg1)->m_height = arg2;
   
   resultobj = SWIG_Py_Void();
@@ -11424,8 +11254,8 @@ SWIGINTERN PyObject *_wrap_Rect2D_height_get(PyObject *SWIGUNUSEDPARM(self), PyO
     SWIG_exception_fail(SWIG_ArgError(res1), "in method '" "Rect2D_height_get" "', expected argument " "1"" of type '" "wxRect2D *""'"); 
   }
   arg1 = reinterpret_cast< wxRect2D * >(argp1);
-  result =  ((arg1)->m_height);
-  resultobj = SWIG_NewPointerObj((new wxDouble(static_cast< const wxDouble& >(result))), SWIGTYPE_p_wxDouble, SWIG_POINTER_OWN |  0 );
+  result = (wxDouble) ((arg1)->m_height);
+  resultobj = SWIG_From_double(static_cast< double >(result));
   return resultobj;
 fail:
   return NULL;
@@ -11441,14 +11271,14 @@ SWIGINTERN PyObject *_wrap_Rect2D_Set(PyObject *SWIGUNUSEDPARM(self), PyObject *
   wxDouble arg5 = (wxDouble) 0 ;
   void *argp1 = 0 ;
   int res1 = 0 ;
-  void *argp2 ;
-  int res2 = 0 ;
-  void *argp3 ;
-  int res3 = 0 ;
-  void *argp4 ;
-  int res4 = 0 ;
-  void *argp5 ;
-  int res5 = 0 ;
+  double val2 ;
+  int ecode2 = 0 ;
+  double val3 ;
+  int ecode3 = 0 ;
+  double val4 ;
+  int ecode4 = 0 ;
+  double val5 ;
+  int ecode5 = 0 ;
   PyObject * obj0 = 0 ;
   PyObject * obj1 = 0 ;
   PyObject * obj2 = 0 ;
@@ -11465,64 +11295,32 @@ SWIGINTERN PyObject *_wrap_Rect2D_Set(PyObject *SWIGUNUSEDPARM(self), PyObject *
   }
   arg1 = reinterpret_cast< wxRect2D * >(argp1);
   if (obj1) {
-    {
-      res2 = SWIG_ConvertPtr(obj1, &argp2, SWIGTYPE_p_wxDouble,  0  | 0);
-      if (!SWIG_IsOK(res2)) {
-        SWIG_exception_fail(SWIG_ArgError(res2), "in method '" "Rect2D_Set" "', expected argument " "2"" of type '" "wxDouble""'"); 
-      }  
-      if (!argp2) {
-        SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Rect2D_Set" "', expected argument " "2"" of type '" "wxDouble""'");
-      } else {
-        wxDouble * temp = reinterpret_cast< wxDouble * >(argp2);
-        arg2 = *temp;
-        if (SWIG_IsNewObj(res2)) delete temp;
-      }
-    }
+    ecode2 = SWIG_AsVal_double(obj1, &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "Rect2D_Set" "', expected argument " "2"" of type '" "wxDouble""'");
+    } 
+    arg2 = static_cast< wxDouble >(val2);
   }
   if (obj2) {
-    {
-      res3 = SWIG_ConvertPtr(obj2, &argp3, SWIGTYPE_p_wxDouble,  0  | 0);
-      if (!SWIG_IsOK(res3)) {
-        SWIG_exception_fail(SWIG_ArgError(res3), "in method '" "Rect2D_Set" "', expected argument " "3"" of type '" "wxDouble""'"); 
-      }  
-      if (!argp3) {
-        SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Rect2D_Set" "', expected argument " "3"" of type '" "wxDouble""'");
-      } else {
-        wxDouble * temp = reinterpret_cast< wxDouble * >(argp3);
-        arg3 = *temp;
-        if (SWIG_IsNewObj(res3)) delete temp;
-      }
-    }
+    ecode3 = SWIG_AsVal_double(obj2, &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "Rect2D_Set" "', expected argument " "3"" of type '" "wxDouble""'");
+    } 
+    arg3 = static_cast< wxDouble >(val3);
   }
   if (obj3) {
-    {
-      res4 = SWIG_ConvertPtr(obj3, &argp4, SWIGTYPE_p_wxDouble,  0  | 0);
-      if (!SWIG_IsOK(res4)) {
-        SWIG_exception_fail(SWIG_ArgError(res4), "in method '" "Rect2D_Set" "', expected argument " "4"" of type '" "wxDouble""'"); 
-      }  
-      if (!argp4) {
-        SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Rect2D_Set" "', expected argument " "4"" of type '" "wxDouble""'");
-      } else {
-        wxDouble * temp = reinterpret_cast< wxDouble * >(argp4);
-        arg4 = *temp;
-        if (SWIG_IsNewObj(res4)) delete temp;
-      }
-    }
+    ecode4 = SWIG_AsVal_double(obj3, &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "Rect2D_Set" "', expected argument " "4"" of type '" "wxDouble""'");
+    } 
+    arg4 = static_cast< wxDouble >(val4);
   }
   if (obj4) {
-    {
-      res5 = SWIG_ConvertPtr(obj4, &argp5, SWIGTYPE_p_wxDouble,  0  | 0);
-      if (!SWIG_IsOK(res5)) {
-        SWIG_exception_fail(SWIG_ArgError(res5), "in method '" "Rect2D_Set" "', expected argument " "5"" of type '" "wxDouble""'"); 
-      }  
-      if (!argp5) {
-        SWIG_exception_fail(SWIG_ValueError, "invalid null reference " "in method '" "Rect2D_Set" "', expected argument " "5"" of type '" "wxDouble""'");
-      } else {
-        wxDouble * temp = reinterpret_cast< wxDouble * >(argp5);
-        arg5 = *temp;
-        if (SWIG_IsNewObj(res5)) delete temp;
-      }
-    }
+    ecode5 = SWIG_AsVal_double(obj4, &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "Rect2D_Set" "', expected argument " "5"" of type '" "wxDouble""'");
+    } 
+    arg5 = static_cast< wxDouble >(val5);
   }
   {
     wxRect2D_Set(arg1,arg2,arg3,arg4,arg5);
@@ -14538,6 +14336,61 @@ fail:
   {
     if (temp1)
     delete arg1;
+  }
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_MemoryFSHandler_AddFileWithMimeType(PyObject *SWIGUNUSEDPARM(self), PyObject *args, PyObject *kwargs) {
+  PyObject *resultobj = 0;
+  wxString *arg1 = 0 ;
+  PyObject *arg2 = (PyObject *) 0 ;
+  wxString *arg3 = 0 ;
+  bool temp1 = false ;
+  bool temp3 = false ;
+  PyObject * obj0 = 0 ;
+  PyObject * obj1 = 0 ;
+  PyObject * obj2 = 0 ;
+  char *  kwnames[] = {
+    (char *) "filename",(char *) "data",(char *) "mimetype", NULL 
+  };
+  
+  if (!PyArg_ParseTupleAndKeywords(args,kwargs,(char *)"OOO:MemoryFSHandler_AddFileWithMimeType",kwnames,&obj0,&obj1,&obj2)) SWIG_fail;
+  {
+    arg1 = wxString_in_helper(obj0);
+    if (arg1 == NULL) SWIG_fail;
+    temp1 = true;
+  }
+  arg2 = obj1;
+  {
+    arg3 = wxString_in_helper(obj2);
+    if (arg3 == NULL) SWIG_fail;
+    temp3 = true;
+  }
+  {
+    PyThreadState* __tstate = wxPyBeginAllowThreads();
+    wxMemoryFSHandler_AddFileWithMimeType((wxString const &)*arg1,arg2,(wxString const &)*arg3);
+    wxPyEndAllowThreads(__tstate);
+    if (PyErr_Occurred()) SWIG_fail;
+  }
+  resultobj = SWIG_Py_Void();
+  {
+    if (temp1)
+    delete arg1;
+  }
+  {
+    if (temp3)
+    delete arg3;
+  }
+  return resultobj;
+fail:
+  {
+    if (temp1)
+    delete arg1;
+  }
+  {
+    if (temp3)
+    delete arg3;
   }
   return NULL;
 }
@@ -58933,6 +58786,7 @@ static PyMethodDef SwigMethods[] = {
 	 { (char *)"__wxMemoryFSHandler_AddFile_Data", (PyCFunction) _wrap___wxMemoryFSHandler_AddFile_Data, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"new_MemoryFSHandler", (PyCFunction)_wrap_new_MemoryFSHandler, METH_NOARGS, NULL},
 	 { (char *)"MemoryFSHandler_RemoveFile", (PyCFunction) _wrap_MemoryFSHandler_RemoveFile, METH_VARARGS | METH_KEYWORDS, NULL},
+	 { (char *)"MemoryFSHandler_AddFileWithMimeType", (PyCFunction) _wrap_MemoryFSHandler_AddFileWithMimeType, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MemoryFSHandler_CanOpen", (PyCFunction) _wrap_MemoryFSHandler_CanOpen, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MemoryFSHandler_OpenFile", (PyCFunction) _wrap_MemoryFSHandler_OpenFile, METH_VARARGS | METH_KEYWORDS, NULL},
 	 { (char *)"MemoryFSHandler_FindFirst", (PyCFunction) _wrap_MemoryFSHandler_FindFirst, METH_VARARGS | METH_KEYWORDS, NULL},
@@ -60794,6 +60648,7 @@ static void *_p_wxPyCommandEventTo_p_wxCommandEvent(void *x) {
 }
 static swig_type_info _swigt__p_buffer = {"_p_buffer", "buffer *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_double = {"_p_double", "double *|wxDouble *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_form_ops_t = {"_p_form_ops_t", "enum form_ops_t *|form_ops_t *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_int = {"_p_int", "int *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_long = {"_p_long", "long *", 0, 0, (void*)0, 0};
@@ -60825,7 +60680,6 @@ static swig_type_info _swigt__p_wxDC = {"_p_wxDC", "wxDC *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxDateEvent = {"_p_wxDateEvent", "wxDateEvent *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxDateTime = {"_p_wxDateTime", "wxDateTime *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxDisplayChangedEvent = {"_p_wxDisplayChangedEvent", "wxDisplayChangedEvent *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_wxDouble = {"_p_wxDouble", "wxDouble *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxDropFilesEvent = {"_p_wxDropFilesEvent", "wxDropFilesEvent *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxDuplexMode = {"_p_wxDuplexMode", "enum wxDuplexMode *|wxDuplexMode *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_wxEraseEvent = {"_p_wxEraseEvent", "wxEraseEvent *", 0, 0, (void*)0, 0};
@@ -60939,6 +60793,7 @@ static swig_type_info _swigt__p_wxZipFSHandler = {"_p_wxZipFSHandler", "wxZipFSH
 static swig_type_info *swig_type_initial[] = {
   &_swigt__p_buffer,
   &_swigt__p_char,
+  &_swigt__p_double,
   &_swigt__p_form_ops_t,
   &_swigt__p_int,
   &_swigt__p_long,
@@ -60970,7 +60825,6 @@ static swig_type_info *swig_type_initial[] = {
   &_swigt__p_wxDateEvent,
   &_swigt__p_wxDateTime,
   &_swigt__p_wxDisplayChangedEvent,
-  &_swigt__p_wxDouble,
   &_swigt__p_wxDropFilesEvent,
   &_swigt__p_wxDuplexMode,
   &_swigt__p_wxEraseEvent,
@@ -61084,6 +60938,7 @@ static swig_type_info *swig_type_initial[] = {
 
 static swig_cast_info _swigc__p_buffer[] = {  {&_swigt__p_buffer, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_double[] = {  {&_swigt__p_double, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_form_ops_t[] = {  {&_swigt__p_form_ops_t, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_int[] = {  {&_swigt__p_int, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_long[] = {  {&_swigt__p_long, 0, 0, 0},{0, 0, 0, 0}};
@@ -61115,7 +60970,6 @@ static swig_cast_info _swigc__p_wxDC[] = {  {&_swigt__p_wxDC, 0, 0, 0},{0, 0, 0,
 static swig_cast_info _swigc__p_wxDateEvent[] = {  {&_swigt__p_wxDateEvent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxDateTime[] = {  {&_swigt__p_wxDateTime, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxDisplayChangedEvent[] = {  {&_swigt__p_wxDisplayChangedEvent, 0, 0, 0},{0, 0, 0, 0}};
-static swig_cast_info _swigc__p_wxDouble[] = {  {&_swigt__p_wxDouble, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxDropFilesEvent[] = {  {&_swigt__p_wxDropFilesEvent, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxDuplexMode[] = {  {&_swigt__p_wxDuplexMode, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_wxEraseEvent[] = {  {&_swigt__p_wxEraseEvent, 0, 0, 0},{0, 0, 0, 0}};
@@ -61229,6 +61083,7 @@ static swig_cast_info _swigc__p_wxZipFSHandler[] = {  {&_swigt__p_wxZipFSHandler
 static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_buffer,
   _swigc__p_char,
+  _swigc__p_double,
   _swigc__p_form_ops_t,
   _swigc__p_int,
   _swigc__p_long,
@@ -61260,7 +61115,6 @@ static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_wxDateEvent,
   _swigc__p_wxDateTime,
   _swigc__p_wxDisplayChangedEvent,
-  _swigc__p_wxDouble,
   _swigc__p_wxDropFilesEvent,
   _swigc__p_wxDuplexMode,
   _swigc__p_wxEraseEvent,
