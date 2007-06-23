@@ -114,9 +114,13 @@ wxGTK:
 - Setting foreground colour of single line wxTextCtrl now works
 - More work on setting defaults in GNOME print dialogs.
 - Also made landscape printing work as per wxMSW.
-- Add support for clipping in GNOME print backend.
+- Add support for (rectangular) clipping in GNOME print backend.
 - Speed up wxBitmap::Rescale()
 - Add right button event for wxToolbar's tools (Tim Kosse)
+- Made wxWindow::SetScrollPos and wxScrollbar::SetThumbPos
+  not emit any event
+- Correct hyperactive mouse wheel support
+- Correct grid line mode in wxListCtrl
 - Don't unconditionally add wxCAPTION style to wxMiniFrame
 
 
