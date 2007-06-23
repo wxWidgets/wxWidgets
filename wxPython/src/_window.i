@@ -127,10 +127,9 @@ Styles
                                    deactivate it.
                                    
     wx.VSCROLL                     Use this style to enable a vertical scrollbar.
-                                   Notice that this style should cannot be used
-                                   with native controls which don't support
-                                   scrollbars nor with top-level windows in most
-                                   ports.
+                                   Notice that this style cannot be used with
+                                   native controls which don't support scrollbars
+                                   nor with top-level windows in most ports.
                                    
     wx.HSCROLL                     Use this style to enable a horizontal scrollbar.
                                    The same limitations as for wx.VSCROLL apply to
