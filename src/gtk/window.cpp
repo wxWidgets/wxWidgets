@@ -4243,8 +4243,6 @@ void wxWindowGTK::ScrollWindow( int dx, int dy, const wxRect* WXUNUSED(rect) )
     // No scrolling requested.
     if ((dx == 0) && (dy == 0)) return;
     
-    Update();
-
     m_clipPaintRegion = true;
 
     if (GetLayoutDirection() == wxLayout_RightToLeft)
