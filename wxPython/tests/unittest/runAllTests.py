@@ -18,7 +18,7 @@ import unittest
 import testButton
 import testCheckListBox
 import testChoice
-import testColor
+import testColour
 import testControl
 import testControlWithItems
 import testDialog
@@ -35,7 +35,7 @@ import testTextCtrl
 import testTopLevelWindow
 import testWindow
 
-modules = (testButton, testCheckListBox, testChoice, testColor, testControl, testControlWithItems,
+modules = (testButton, testCheckListBox, testChoice, testColour, testControl, testControlWithItems,
             testDialog, testFont, testFrame, testItemContainer, testListBox, testPoint, testRect,
             testSize, testSizer, testStaticText, testTextCtrl, testTopLevelWindow, testWindow)
 
