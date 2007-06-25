@@ -93,17 +93,19 @@ int wxControl::FindAccelIndex(const wxString& label, wxString *labelOnly)
     }
 
     int indexAccel = -1;
-    for ( const wxChar *pc = label; *pc != wxT('\0'); pc++ )
+    for ( wxString::const_iterator pc = label.begin(); pc != label.end(); ++pc )
     {
         if ( *pc == MNEMONIC_PREFIX )
         {
-            pc++; // skip it
-            if ( *pc != MNEMONIC_PREFIX )
+            ++pc; // skip it
+            if ( pc == label.end() )
+                break;
+            else if ( *pc != MNEMONIC_PREFIX )
             {
                 if ( indexAccel == -1 )
                 {
                     // remember it (-1 is for MNEMONIC_PREFIX itself
-                    indexAccel = pc - label.c_str() - 1;
+                    indexAccel = pc - label.begin() - 1;
                 }
                 else
                 {

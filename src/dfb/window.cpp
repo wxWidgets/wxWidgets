@@ -757,7 +757,9 @@ void wxWindowDFB::PaintOverlays(const wxRect& rect)
     for ( wxDfbOverlaysList::const_iterator i = m_overlays->begin();
           i != m_overlays->end(); ++i )
     {
-        wxOverlayImpl *overlay = *i;
+        // FIXME: the cast is necessary for STL build where the iterator
+        //        (incorrectly) returns void* and not wxOverlayImpl*
+        wxOverlayImpl *overlay = (wxOverlayImpl*) *i;
 
         wxRect orectOrig(overlay->GetRect());
         wxRect orect(orectOrig);
