@@ -31,13 +31,15 @@ import testRect
 import testSize
 import testSizer
 import testStaticText
+import testTextAttr
 import testTextCtrl
 import testTopLevelWindow
 import testWindow
 
 modules = (testButton, testCheckListBox, testChoice, testColour, testControl, testControlWithItems,
             testDialog, testFont, testFrame, testItemContainer, testListBox, testPoint, testRect,
-            testSize, testSizer, testStaticText, testTextCtrl, testTopLevelWindow, testWindow)
+            testSize, testSizer, testStaticText, testTextAttr, testTextCtrl, testTopLevelWindow,
+            testWindow)
 
 alltests = unittest.TestSuite([mod.suite() for mod in modules])
 maxstr = max(( mod.__name__ for mod in modules ))
