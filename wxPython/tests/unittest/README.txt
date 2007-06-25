@@ -18,6 +18,7 @@ but that is another topic entirely.
 --------------------------------------------------
  # from most recent wxPython documentation
  # and not yet including sub-modules
+
 AboutDialogInfo
 AcceleratorEntry
 AcceleratorTable
@@ -41,14 +42,11 @@ BufferedDC
 BufferedPaintDC
 BusyCursor
 BusyInfo
-Button
 CalculateLayoutEvent
 CallLater
 Caret
 CheckBox
-CheckListBox
 ChildFocusEvent
-Choice
 Choicebook
 ChoicebookEvent
 ClientDC
@@ -58,8 +56,6 @@ ClipboardTextEvent
 CloseEvent
 CollapsiblePane
 CollapsiblePaneEvent
-Color
-Colour
 ColourData
 ColourDatabase
 ColourDialog
@@ -73,8 +69,6 @@ ConfigPathChanger
 ContextHelp
 ContextHelpButton
 ContextMenuEvent
-Control
-ControlWithItems
 CPPFileSystemHandler
 CURHandler
 Cursor
@@ -93,7 +87,6 @@ DCClipper
 DCOverlay
 DCPenChanger
 DCTextColourChanger
-Dialog
 DirDialog
 DirFilterListCtrl
 DirPickerCtrl
@@ -126,7 +119,6 @@ FindReplaceData
 FindReplaceDialog
 FlexGridSizer
 FocusEvent
-Font
 FontData
 FontDialog
 FontEnumerator
@@ -134,7 +126,6 @@ FontList
 FontMapper
 FontPickerCtrl
 FontPickerEvent
-Frame
 FSFile
 FutureCall
 Gauge
@@ -178,7 +169,6 @@ IndividualLayoutConstraint
 InitDialogEvent
 InputStream
 InternetFSHandler
-ItemContainer
 Joystick
 JoystickEvent
 JPEGHandler
@@ -188,7 +178,6 @@ LayoutAlgorithm
 LayoutConstraints
 Listbook
 ListbookEvent
-ListBox
 ListCtrl
 ListEvent
 ListItem
@@ -259,7 +248,6 @@ PixelDataBase
 PlatformInformation
 PNGHandler
 PNMHandler
-Point
 Point2D
 PopupTransientWindow
 PopupWindow
@@ -312,7 +300,6 @@ QueryNewPaletteEvent
 RadioBox
 RadioButton
 RealPoint
-Rect
 Rect2D
 Region
 RegionIterator
@@ -333,9 +320,7 @@ SimpleHelpProvider
 SimpleHtmlListBox
 SingleChoiceDialog
 SingleInstanceChecker
-Size
 SizeEvent
-Sizer
 SizerFlags
 SizerItem
 Slider
@@ -353,7 +338,6 @@ StaticBitmap
 StaticBox
 StaticBoxSizer
 StaticLine
-StaticText
 StatusBar
 StdDialogButtonSizer
 StockGDI
@@ -364,7 +348,6 @@ SystemSettings
 TaskBarIcon
 TaskBarIconEvent
 TextAttr
-TextCtrl
 TextDataObject
 TextDropTarget
 TextEntryDialog
@@ -384,7 +367,6 @@ ToolBarToolBase
 Toolbook
 ToolbookEvent
 ToolTip
-TopLevelWindow
 Treebook
 TreebookEvent
 TreeCtrl
@@ -398,7 +380,6 @@ VideoMode
 VisualAttributes
 VListBox
 VScrolledWindow
-Window
 WindowCreateEvent
 WindowDC
 WindowDestroyEvent
