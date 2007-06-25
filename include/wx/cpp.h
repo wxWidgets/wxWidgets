@@ -53,5 +53,5 @@
  */
 #define wxEMPTY_PARAMETER_VALUE /* Fake macro parameter value */
 
-#endif // _WX_CPP_H_
+#endif /* _WX_CPP_H_ */
 

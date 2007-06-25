@@ -107,19 +107,19 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
 
 #ifdef __cplusplus
     #if wxUSE_UNICODE_UTF8
-        // flag indicating whether the current locale uses UTF-8 or not; must be
-        // updated every time the locale is changed!
+        /* flag indicating whether the current locale uses UTF-8 or not; must be
+           updated every time the locale is changed! */
         #if wxUSE_UTF8_LOCALE_ONLY
         #define wxLocaleIsUtf8 true
         #else
         extern WXDLLIMPEXP_BASE bool wxLocaleIsUtf8;
         #endif
-        // function used to update the flag:
+        /* function used to update the flag: */
         extern WXDLLIMPEXP_BASE void wxUpdateLocaleIsUtf8();
-    #else // !wxUSE_UNICODE_UTF8
+    #else /* !wxUSE_UNICODE_UTF8 */
         inline void wxUpdateLocaleIsUtf8() {}
-    #endif // wxUSE_UNICODE_UTF8/!wxUSE_UNICODE_UTF8
-#endif // __cplusplus
+    #endif /* wxUSE_UNICODE_UTF8/!wxUSE_UNICODE_UTF8 */
+#endif /* __cplusplus */
 
 
 /* -------------------------------------------------------------------------
@@ -392,14 +392,14 @@ WXDLLIMPEXP_BASE wchar_t *wxCRT_StrtokW(wchar_t *psz, const wchar_t *delim, wcha
 
 /* these functions are only needed in the form used for filenames (i.e. char*
    on Unix, wchar_t* on Windows), so we don't need to use A/W suffix: */
-#if wxMBFILES || !wxUSE_UNICODE // ANSI filenames
+#if wxMBFILES || !wxUSE_UNICODE /* ANSI filenames */
 
     #define wxCRT_Fopen   fopen
     #define wxCRT_Freopen freopen
     #define wxCRT_Remove  remove
     #define wxCRT_Rename  rename
 
-#else // Unicode filenames
+#else /* Unicode filenames */
 
     /* special case: these functions are missing under Win9x with Unicows so we
        have to implement them ourselves */
@@ -426,7 +426,7 @@ WXDLLIMPEXP_BASE wchar_t *wxCRT_StrtokW(wchar_t *psz, const wchar_t *delim, wcha
         #endif
     #endif
 
-#endif // wxMBFILES/!wxMBFILES
+#endif /* wxMBFILES/!wxMBFILES */
 
 #define wxCRT_PutsA       puts
 #define wxCRT_FputsA      fputs
@@ -609,12 +609,12 @@ WXDLLIMPEXP_BASE size_t wxCRT_StrftimeW(wchar_t *s, size_t max,
         #define wxCRT_TolowerW   towlower
         #define wxCRT_ToupperW   towupper
     #endif
-#else // !__GLIBC__
+#else /* !__GLIBC__ */
     /* There is a bug in VC6 C RTL: toxxx() functions dosn't do anything
        with signed chars < 0, so "fix" it here. */
     #define wxCRT_TolowerW(c)   towlower((wxUChar)(wxChar)(c))
     #define wxCRT_ToupperW(c)   towupper((wxUChar)(wxChar)(c))
-#endif // __GLIBC__/!__GLIBC__
+#endif /* __GLIBC__/!__GLIBC__ */
 
 
 
