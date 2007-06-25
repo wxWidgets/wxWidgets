@@ -441,10 +441,6 @@ static bool NodeContainsFilename(wxXmlNode *node)
    if ( name == _T("icon") )
        return true;
 
-   // URLs in wxHtmlWindow:
-   if ( name == _T("url") )
-       return true;
-
    // wxBitmapButton:
    wxXmlNode *parent = node->GetParent();
    if (parent != NULL &&
@@ -462,6 +458,15 @@ static bool NodeContainsFilename(wxXmlNode *node)
                klass == _T("wxIcon") ||
                 klass == _T("data") )
            return true;
+   }
+
+   // URLs in wxHtmlWindow:
+   if ( name == _T("url") &&
+        parent != NULL &&
+        parent->GetPropVal(_T("class"), _T("")) == _T("wxHtmlWindow") )
+   {
+       // FIXME: this is wrong for e.g. http:// URLs
+       return true;
    }
 
    return false;
