@@ -13,23 +13,21 @@ fi
 # just do an update if we started a build but it failed somewhere
 if [ ! -d $WX_WEB_DIR ]; then  
   cd $WX_TEMP_DIR
-  cvs -d:pserver:anoncvs:anoncvs@cvs.wxwidgets.org:/pack/cvsroots/wxwidgets login
   echo "Grabbing wxWebSite sources..."
-  cvs -d:pserver:anoncvs@cvs.wxwidgets.org:/pack/cvsroots/wxwidgets checkout wxWebSite
+  svn co https://svn.wxwidgets.org/svn/wxWebSite/trunk wxWebSite
 else
     cd $WX_WEB_DIR
-    cvs update -d -P
+    svn up
 fi
 
 if [ ! -d $WX_SRC_DIR ]; then
   cd $WX_TEMP_DIR
-  cvs -d:pserver:anoncvs:anoncvs@cvs.wxwidgets.org:/pack/cvsroots/wxwidgets login
   echo "Grabbing wx CVS with tag $BUILD_TAG"
-  cvs -d:pserver:anoncvs@cvs.wxwidgets.org:/pack/cvsroots/wxwidgets checkout -r $BUILD_TAG wxWidgets
+  svn co https://svn.wxwidgets.org/svn/wxWidgets/trunk wxWidgets
   cd $WX_SRC_DIR
 else
   cd $WX_SRC_DIR
-  cvs update -d -P
+  svn up
 fi
 
 # this is where we will store the wxAll tarball we create
