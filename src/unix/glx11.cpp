@@ -161,9 +161,6 @@ wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
             if ( p >= n - 2 )
                 return false;
 
-            // notice that for boolean attributes we use "continue" in the
-            // switch to skip the assignment of the attribute value at the end
-            // of the loop which is done for integer attributes
             switch ( wxattrs[arg++] )
             {
                 case WX_GL_RGBA:
@@ -175,6 +172,9 @@ wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
                     {
                         glattrs[p++] = GLX_RGBA;
                     }
+
+                    // use "continue" to skip the assignment of the attribute
+                    // value at the end of the loop
                     continue;
 
                 case WX_GL_BUFFER_SIZE:
@@ -187,6 +187,10 @@ wxGLCanvasX11::ConvertWXAttrsToGL(const int *wxattrs, int *glattrs, size_t n)
 
                 case WX_GL_DOUBLEBUFFER:
                     glattrs[p++] = GLX_DOUBLEBUFFER;
+                    glattrs[p++] = True;
+
+                    // again, we don't have value for this one in wx list (even
+                    // though OpenGL does use it)
                     continue;
 
                 case WX_GL_STEREO:
