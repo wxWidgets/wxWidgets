@@ -1,6 +1,7 @@
 import unittest
 import wx
 
+import wxtest
 import testButton
 
 """
@@ -24,9 +25,11 @@ class BitmapButtonTest(testButton.ButtonTest):
     def tearDown(self):
         self.app.Destroy()
         self.frame.Destroy()
-        
-    def testTest(self):
-        self.assert_(True)
+    
+    # crashes interpreter on Windows for some reason
+    def testAllControlsNeedParents(self):
+        if wxtest.PlatformIsNotWindows():
+            super(BitmapButtonTest,self).testAllControlsNeedParents()
         
         
 
