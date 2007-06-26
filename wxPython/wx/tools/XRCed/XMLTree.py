@@ -11,7 +11,7 @@ import images
 
 class XMLTree(wx.TreeCtrl):
     def __init__(self, parent):
-        style = wx.TR_HAS_BUTTONS | wx.TR_MULTIPLE | wx.TR_EDIT_LABELS
+        style = wx.TR_HAS_BUTTONS | wx.TR_MULTIPLE | wx.TR_EDIT_LABELS | wx.TR_HIDE_ROOT
         wx.TreeCtrl.__init__(self, parent, style=style)
 
         # Color scheme
@@ -35,32 +35,20 @@ class XMLTree(wx.TreeCtrl):
         self.rootImage = il.Add(images.getTreeRootImage().Scale(16,16).ConvertToBitmap())
         # Loop through registered components which have images
         for component in Manager.components.values():
-            if component.image:
-                component.imageId = il.Add(component.image.Scale(16,16).ConvertToBitmap())
+            for im in component.images:
+                im.Id = il.Add(im.Scale(16,16).ConvertToBitmap())
         self.il = il
         self.SetImageList(il)
 
         self.root = self.AddRoot('XML tree', self.rootImage)
         self.SetItemHasChildren(self.root)
-        self.Expand(self.root)
-
-        # Insert/append mode flags
-        self.forceSibling = self.forceInsert = False
-
-    def NeedInsert(self, item):
-        '''return true if item must be inserted after current vs. appending'''
-        if item == self.GetRootItem(): return False
-#        isContainer = self.GetPyData(item).hasChildren
-        isContainer = True      # DEBUG
-        # If leaf item or collapsed container, then insert mode
-        return not isContainer or \
-            self.GetChildrenCount(item, False) and not self.IsExpanded(item)
+#        self.Expand(self.root)
 
     def Clear(self):
         '''Clear everything except the root item.'''
         self.UnselectAll()
         self.DeleteChildren(self.root)
-        self.Expand(self.root)
+#        self.Expand(self.root)
 
     # Add tree item for given parent item if node is DOM element node with
     # object/object_ref tag. xxxParent is parent xxx object
@@ -68,7 +56,7 @@ class XMLTree(wx.TreeCtrl):
         # Append tree item
         className = node.getAttribute('class')
         comp = Manager.components[className]
-        item = self.AppendItem(parent, className, image=comp.imageId,
+        item = self.AppendItem(parent, className, image=comp.getTreeImageId(node),
                                data=wx.TreeItemData(node))
         # Different color for comments and references
         if className == 'comment':
@@ -87,3 +75,25 @@ class XMLTree(wx.TreeCtrl):
         self.Clear()
         for n in filter(is_object, Model.mainNode.childNodes):
             self.AddNode(self.root, n)
+
+    def ExpandAll(self, item):
+        if self.ItemHasChildren(item):
+            if not self.IsExpanded(item):
+                self.Expand(item)
+            i, cookie = self.GetFirstChild(item)
+            children = []
+            while i.IsOk():
+                children.append(i)
+                i, cookie = self.GetNextChild(item, cookie)
+            map(self.ExpandAll, children)
+
+    def CollapseAll(self, item):
+        if self.ItemHasChildren(item):
+            i, cookie = self.GetFirstChild(item)
+            children = []
+            while i.IsOk():
+                children.append(i)
+                i, cookie = self.GetNextChild(item, cookie)
+            map(self.CollapseAll, children)
+            if item != self.GetRootItem():
+                self.Collapse(item)

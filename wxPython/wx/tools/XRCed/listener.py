@@ -9,7 +9,7 @@ import os,sys,shutil,tempfile
 from globals import *
 from presenter import Presenter
 from component import Manager
-from XMLTreeMenu import *
+from XMLTreeMenu import ID
 
 class _Listener:
     '''
@@ -47,9 +47,10 @@ class _Listener:
         # Edit
         wx.EVT_MENU(frame, wx.ID_UNDO, self.OnUndo)
         wx.EVT_MENU(frame, wx.ID_REDO, self.OnRedo)
-        wx.EVT_MENU(frame, wx.ID_CUT, self.OnCutDelete)
+        wx.EVT_MENU(frame, wx.ID_CUT, self.OnCut)
         wx.EVT_MENU(frame, wx.ID_COPY, self.OnCopy)
         wx.EVT_MENU(frame, wx.ID_PASTE, self.OnPaste)
+        wx.EVT_MENU(frame, wx.ID_DELETE, self.OnDelete)
         wx.EVT_MENU(frame, frame.ID_TOOL_PASTE, self.OnPaste)
         wx.EVT_MENU(frame, frame.ID_LOCATE, self.OnLocate)
         wx.EVT_MENU(frame, frame.ID_TOOL_LOCATE, self.OnLocate)
@@ -76,12 +77,12 @@ class _Listener:
         wx.EVT_UPDATE_UI(frame, wx.ID_CUT, self.OnUpdateUI)
         wx.EVT_UPDATE_UI(frame, wx.ID_COPY, self.OnUpdateUI)
         wx.EVT_UPDATE_UI(frame, wx.ID_PASTE, self.OnUpdateUI)
+        wx.EVT_UPDATE_UI(frame, wx.ID_DELETE, self.OnUpdateUI)
         wx.EVT_UPDATE_UI(frame, frame.ID_LOCATE, self.OnUpdateUI)
         wx.EVT_UPDATE_UI(frame, frame.ID_TOOL_LOCATE, self.OnUpdateUI)
         wx.EVT_UPDATE_UI(frame, frame.ID_TOOL_PASTE, self.OnUpdateUI)
         wx.EVT_UPDATE_UI(frame, wx.ID_UNDO, self.OnUpdateUI)
         wx.EVT_UPDATE_UI(frame, wx.ID_REDO, self.OnUpdateUI)
-        wx.EVT_UPDATE_UI(frame, wx.ID_DELETE, self.OnUpdateUI)
         wx.EVT_UPDATE_UI(frame, frame.ID_TEST, self.OnUpdateUI)
         wx.EVT_UPDATE_UI(frame, frame.ID_MOVEUP, self.OnUpdateUI)
         wx.EVT_UPDATE_UI(frame, frame.ID_MOVEDOWN, self.OnUpdateUI)
@@ -94,15 +95,20 @@ class _Listener:
         tree.Bind(wx.EVT_RIGHT_DOWN, self.OnTreeRightDown)
         tree.Bind(wx.EVT_TREE_SEL_CHANGING, self.OnTreeSelChanging)
         tree.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnTreeSelChanged)        
-        
+        wx.EVT_MENU(frame, ID.COLLAPSE, self.OnCollapse)
+        wx.EVT_MENU(frame, ID.EXPAND, self.OnExpand)
+
     def OnComponent(self, evt):
         '''Hadnler for creating new elements.'''
         comp = Manager.findById(evt.GetId())
-        print comp
         Presenter.create(comp)
 
-    def OnCutDelete(self, evt):
-        '''wx.ID_CUT and wx.ID_DELETE hadndler.'''
+    def OnCut(self, evt):
+        '''wx.ID_CUT handler.'''
+        Presenter.cut()
+
+    def OnDelete(self, evt):
+        '''wx.ID_DELETE handler.'''
         Presenter.delete()
 
     def OnNew(self, evt):
@@ -180,18 +186,12 @@ class _Listener:
         wx.BeginBusyCursor()
         try:
             try:
-                tmpFile,tmpName = tempfile.mkstemp(prefix='xrced-')
-                os.close(tmpFile)
-                Presenter.save(tmpName) # save temporary file first
-                shutil.move(tmpName, path)
-                print path
-                self.dataFile = path
-                Presenter.setModified(False)
+                Presenter.save(path) # save temporary file first
                 if g.conf.localconf.ReadBool("autogenerate", False):
                     pypath = g.conf.localconf.Read("filename")
                     embed = g.conf.localconf.ReadBool("embedResource", False)
                     genGettext = g.conf.localconf.ReadBool("genGettext", False)
-                    self.GeneratePython(self.dataFile, pypath, embed, genGettext)
+                    self.GeneratePython(path, pypath, embed, genGettext)
                     
                 self.frame.SetStatusText('Data saved')
                 self.SaveRecent(path)
@@ -230,11 +230,6 @@ class _Listener:
         '''wx.EVT_CLOSE handler'''
         if not self.AskSave(): return
         if g.testWin: g.testWin.Destroy()
-#        if not panel.GetPageCount() == 2:
-#            panel.page2.Destroy()
-#        else:
-            # If we don't do this, page does not get destroyed (a bug?)
-#            panel.RemovePage(1)
         if not self.frame.IsIconized():
             g.conf.x, g.conf.y = self.frame.GetPosition()
             if wx.Platform == '__WXMAC__':
@@ -249,6 +244,8 @@ class _Listener:
         evt.Skip()
 
     def OnUndo(self, evt):
+        raise NotImplementedError # !!!
+
         # Extra check to not mess with idle updating
         if undoMan.CanUndo():
             undoMan.Undo()
@@ -257,11 +254,15 @@ class _Listener:
                 self.SetModified(False)
 
     def OnRedo(self, evt):
+        raise NotImplementedError # !!!
+
         if undoMan.CanRedo():
             undoMan.Redo()
             self.SetModified(True)
 
     def OnCopy(self, evt):
+        raise NotImplementedError # !!!
+
         selected = tree.selection
         if not selected: return         # key pressed event
         xxx = tree.GetPyData(selected)
@@ -282,400 +283,33 @@ class _Listener:
             wx.MessageBox("Unable to open the clipboard", "Error")
 
     def OnPaste(self, evt):
-        selected = tree.selection
-        if not selected: return         # key pressed event
-        # For pasting with Ctrl pressed
-        appendChild = True
-        if evt.GetId() == pullDownMenu.ID_PASTE_SIBLING: appendChild = False
-        elif evt.GetId() == self.ID_TOOL_PASTE:
-            if g.tree.ctrl: appendChild = False
-            else: appendChild = not tree.NeedInsert(selected)
-        else: appendChild = not tree.NeedInsert(selected)
-        xxx = tree.GetPyData(selected)
-        if not appendChild:
-            # If has next item, insert, else append to parent
-            nextItem = tree.GetNextSibling(selected)
-            parentLeaf = tree.GetItemParent(selected)
-        # Expanded container (must have children)
-        elif tree.IsExpanded(selected) and tree.GetChildrenCount(selected, False):
-            # Insert as first child
-            nextItem = tree.GetFirstChild(selected)[0]
-            parentLeaf = selected
-        else:
-            # No children or unexpanded item - appendChild stays True
-            nextItem = wx.TreeItemId()   # no next item
-            parentLeaf = selected
-        parent = tree.GetPyData(parentLeaf).treeObject()
-
-        # Create a copy of clipboard pickled element
-        success = success_node = False
-        if wx.TheClipboard.Open():
-            try:
-                data = wx.CustomDataObject('XRCED')
-                if wx.TheClipboard.IsSupported(data.GetFormat()):
-                    try:
-                        success = wx.TheClipboard.GetData(data)
-                    except:
-                        # there is a problem if XRCED_node is in clipboard
-                        # but previous SetData was for XRCED
-                        pass
-                if not success:             # try other format
-                    data = wx.CustomDataObject('XRCED_node')
-                    if wx.TheClipboard.IsSupported(data.GetFormat()):
-                        success_node = wx.TheClipboard.GetData(data)
-            finally:
-                wx.TheClipboard.Close()
-
-        if not success and not success_node:
-            wx.MessageBox(
-                "There is no data in the clipboard in the required format",
-                "Error")
-            return
-
-        xml = cPickle.loads(data.GetData()) # xml representation of element
-        if success:
-            elem = minidom.parseString(xml).childNodes[0]
-        else:
-            elem = g.tree.dom.createComment(xml)
-        
-        # Tempopary xxx object to test things
-        xxx = MakeXXXFromDOM(parent, elem)
-        
-        # Check compatibility
-        if not self.ItemsAreCompatible(parent, xxx.treeObject()): return
-
-        # Check parent and child relationships.
-        # If parent is sizer or notebook, child is of wrong class or
-        # parent is normal window, child is child container then detach child.
-        isChildContainer = isinstance(xxx, xxxChildContainer)
-        parentIsBook = parent.__class__ in [xxxNotebook, xxxChoicebook, xxxListbook]
-        if isChildContainer and \
-           ((parent.isSizer and not isinstance(xxx, xxxSizerItem)) or \
-            (parentIsBook and not isinstance(xxx, xxxPage)) or \
-           not (parent.isSizer or parentIsBook)):
-            elem.removeChild(xxx.child.node) # detach child
-            elem.unlink()           # delete child container
-            elem = xxx.child.node # replace
-            # This may help garbage collection
-            xxx.child.parent = None
-            isChildContainer = False
-        # Parent is sizer or notebook, child is not child container
-        if parent.isSizer and not isChildContainer and not isinstance(xxx, xxxSpacer):
-            # Create sizer item element
-            sizerItemElem = MakeEmptyDOM(parent.itemTag)
-            sizerItemElem.appendChild(elem)
-            elem = sizerItemElem
-        elif isinstance(parent, xxxNotebook) and not isChildContainer:
-            pageElem = MakeEmptyDOM('notebookpage')
-            pageElem.appendChild(elem)
-            elem = pageElem
-        elif isinstance(parent, xxxChoicebook) and not isChildContainer:
-            pageElem = MakeEmptyDOM('choicebookpage')
-            pageElem.appendChild(elem)
-            elem = pageElem
-        elif isinstance(parent, xxxListbook) and not isChildContainer:
-            pageElem = MakeEmptyDOM('listbookpage')
-            pageElem.appendChild(elem)
-            elem = pageElem
-        # Insert new node, register undo
-        newItem = tree.InsertNode(parentLeaf, parent, elem, nextItem)
-        undoMan.RegisterUndo(UndoPasteCreate(parentLeaf, parent, newItem, selected))
-        # Scroll to show new item (!!! redundant?)
-        tree.EnsureVisible(newItem)
-        tree.SelectItem(newItem)
-        if not tree.IsVisible(newItem):
-            tree.ScrollTo(newItem)
-            tree.Refresh()
-        # Update view?
-        if g.testWin and tree.IsHighlatable(newItem):
-            if conf.autoRefresh:
-                tree.needUpdate = True
-                tree.pendingHighLight = newItem
-            else:
-                tree.pendingHighLight = None
-        self.SetModified()
-        self.SetStatusText('Pasted')
-
+        raise NotImplementedError
 
     def ItemsAreCompatible(self, parent, child):
-        # Check compatibility
-        error = False
-        # Comments are always compatible
-        if child.__class__ == xxxComment:
-            return True
-        # Top-level
-        if child.__class__ in [xxxDialog, xxxFrame, xxxWizard]:
-            # Top-level classes
-            if parent.__class__ != xxxMainNode: error = True
-        elif child.__class__ == xxxMenuBar:
-            # Menubar can be put in frame or dialog
-            if parent.__class__ not in [xxxMainNode, xxxFrame, xxxDialog]: error = True
-        elif child.__class__ == xxxToolBar:
-            # Toolbar can be top-level of child of panel or frame
-            if parent.__class__ not in [xxxMainNode, xxxPanel, xxxFrame] and \
-               not parent.isSizer: error = True
-        elif not parent.hasChildren:
-            error = True
-        elif child.__class__ == xxxPanel and parent.__class__ == xxxMainNode:
-            pass
-        elif child.__class__ == xxxSpacer:
-            if not parent.isSizer: error = True
-        elif child.__class__ == xxxSeparator:
-            if not parent.__class__ in [xxxMenu, xxxToolBar]: error = True
-        elif child.__class__ == xxxTool:
-            if parent.__class__ != xxxToolBar: error = True
-        elif child.__class__ == xxxMenu:
-            if not parent.__class__ in [xxxMainNode, xxxMenuBar, xxxMenu]: error = True
-        elif child.__class__ == xxxMenuItem:
-            if not parent.__class__ in [xxxMenuBar, xxxMenu]: error = True
-        elif child.isSizer and parent.__class__ in [xxxNotebook, xxxChoicebook, xxxListbook]:
-            error = True
-        else:                           # normal controls can be almost anywhere
-            if parent.__class__ == xxxMainNode or \
-               parent.__class__ in [xxxMenuBar, xxxMenu]: error = True
-        if error:
-            if parent.__class__ == xxxMainNode: parentClass = 'root'
-            else: parentClass = parent.className
-            wx.LogError('Incompatible parent/child: parent is %s, child is %s!' %
-                       (parentClass, child.className))
-            return False
-        return True
+        raise NotImplementedError
 
     def OnMoveUp(self, evt):
-        selected = tree.selection
-        if not selected: return
-
-        index = tree.ItemIndex(selected)
-        if index == 0: return # No previous sibling found
-
-        # Remove highlight, update testWin
-        if g.testWin and g.testWin.highLight:
-            g.testWin.highLight.Remove()
-            tree.needUpdate = True
-
-        # Undo info
-        self.lastOp = 'MOVEUP'
-        status = 'Moved before previous sibling'
-
-        # Prepare undo data
-        panel.Apply()
-        tree.UnselectAll()
-
-        parent = tree.GetItemParent(selected)
-        elem = tree.RemoveLeaf(selected)
-        nextItem = tree.GetFirstChild(parent)[0]
-        for i in range(index - 1): nextItem = tree.GetNextSibling(nextItem)
-        selected = tree.InsertNode(parent, tree.GetPyData(parent).treeObject(), elem, nextItem)
-        newIndex = tree.ItemIndex(selected)
-        tree.SelectItem(selected)
-
-        undoMan.RegisterUndo(UndoMove(parent, index, parent, newIndex))
-
-        self.modified = True
-        self.SetStatusText(status)
-
-        return
+        raise NotImplementedError
 
     def OnMoveDown(self, evt):
-        selected = tree.selection
-        if not selected: return
-
-        index = tree.ItemIndex(selected)
-        next = tree.GetNextSibling(selected)
-        if not next: return
-
-        # Remove highlight, update testWin
-        if g.testWin and g.testWin.highLight:
-            g.testWin.highLight.Remove()
-            tree.needUpdate = True
-
-        # Undo info
-        self.lastOp = 'MOVEDOWN'
-        status = 'Moved after next sibling'
-
-        # Prepare undo data
-        panel.Apply()
-        tree.UnselectAll()
-
-        parent = tree.GetItemParent(selected)
-        elem = tree.RemoveLeaf(selected)
-        nextItem = tree.GetFirstChild(parent)[0]
-        for i in range(index + 1): nextItem = tree.GetNextSibling(nextItem)
-        selected = tree.InsertNode(parent, tree.GetPyData(parent).treeObject(), elem, nextItem)
-        newIndex = tree.ItemIndex(selected)
-        tree.SelectItem(selected)
-
-        undoMan.RegisterUndo(UndoMove(parent, index, parent, newIndex))
-
-        self.modified = True
-        self.SetStatusText(status)
-
-        return
+        raise NotImplementedError
     
     def OnMoveLeft(self, evt):
-        selected = tree.selection
-        if not selected: return
-
-        oldParent = tree.GetItemParent(selected)
-        if not oldParent: return
-        pparent = tree.GetItemParent(oldParent)
-        if not pparent: return
-
-        # Check compatibility
-        if not self.ItemsAreCompatible(tree.GetPyData(pparent).treeObject(), tree.GetPyData(selected).treeObject()): return
-
-        if g.testWin and g.testWin.highLight:
-            g.testWin.highLight.Remove()
-            tree.needUpdate = True
-
-        # Undo info
-        self.lastOp = 'MOVELEFT'
-        status = 'Made next sibling of parent'
-
-        # Prepare undo data
-        panel.Apply()
-        tree.UnselectAll()
-
-        oldIndex = tree.ItemIndex(selected)
-        elem = tree.RemoveLeaf(selected)
-        nextItem = tree.GetFirstChild(pparent)[0]
-        parentIndex = tree.ItemIndex(oldParent)
-        for i in range(parentIndex + 1): nextItem = tree.GetNextSibling(nextItem)
-
-        # Check parent and child relationships.
-        # If parent is sizer or notebook, child is of wrong class or
-        # parent is normal window, child is child container then detach child.
-        parent = tree.GetPyData(pparent).treeObject()
-        xxx = MakeXXXFromDOM(parent, elem)
-        isChildContainer = isinstance(xxx, xxxChildContainer)
-        if isChildContainer and \
-           ((parent.isSizer and not isinstance(xxx, xxxSizerItem)) or \
-            (isinstance(parent, xxxNotebook) and not isinstance(xxx, xxxNotebookPage)) or \
-           not (parent.isSizer or isinstance(parent, xxxNotebook))):
-            elem.removeChild(xxx.child.node) # detach child
-            elem.unlink()           # delete child container
-            elem = xxx.child.node # replace
-            # This may help garbage collection
-            xxx.child.parent = None
-            isChildContainer = False
-        # Parent is sizer or notebook, child is not child container
-        if parent.isSizer and not isChildContainer and not isinstance(xxx, xxxSpacer):
-            # Create sizer item element
-            sizerItemElem = MakeEmptyDOM('sizeritem')
-            sizerItemElem.appendChild(elem)
-            elem = sizerItemElem
-        elif isinstance(parent, xxxNotebook) and not isChildContainer:
-            pageElem = MakeEmptyDOM('notebookpage')
-            pageElem.appendChild(elem)
-            elem = pageElem
-
-        selected = tree.InsertNode(pparent, tree.GetPyData(pparent).treeObject(), elem, nextItem)
-        newIndex = tree.ItemIndex(selected)
-        tree.SelectItem(selected)
-
-        undoMan.RegisterUndo(UndoMove(oldParent, oldIndex, pparent, newIndex))
-        
-        self.modified = True
-        self.SetStatusText(status)
+        raise NotImplementedError
 
     def OnMoveRight(self, evt):
-        selected = tree.selection
-        if not selected: return
-
-        oldParent = tree.GetItemParent(selected)
-        if not oldParent: return
-        
-        newParent = tree.GetPrevSibling(selected)
-        if not newParent: return
-
-        parent = tree.GetPyData(newParent).treeObject()
-
-        # Check compatibility
-        if not self.ItemsAreCompatible(parent, tree.GetPyData(selected).treeObject()): return
-
-        # Remove highlight, update testWin
-        if g.testWin and g.testWin.highLight:
-            g.testWin.highLight.Remove()
-            tree.needUpdate = True
-
-        # Prepare undo data
-        panel.Apply()
-        tree.UnselectAll()
-
-        # Undo info
-        self.lastOp = 'MOVERIGHT'
-        status = 'Made last child of previous sibling'
-
-        oldIndex = tree.ItemIndex(selected)
-        elem = tree.RemoveLeaf(selected)
-
-        # Check parent and child relationships.
-        # If parent is sizer or notebook, child is of wrong class or
-        # parent is normal window, child is child container then detach child.
-        xxx = MakeXXXFromDOM(parent, elem)
-        isChildContainer = isinstance(xxx, xxxChildContainer)
-        if isChildContainer and \
-           ((parent.isSizer and not isinstance(xxx, xxxSizerItem)) or \
-            (isinstance(parent, xxxNotebook) and not isinstance(xxx, xxxNotebookPage)) or \
-           not (parent.isSizer or isinstance(parent, xxxNotebook))):
-            elem.removeChild(xxx.child.node) # detach child
-            elem.unlink()           # delete child container
-            elem = xxx.child.node # replace
-            # This may help garbage collection
-            xxx.child.parent = None
-            isChildContainer = False
-        # Parent is sizer or notebook, child is not child container
-        if parent.isSizer and not isChildContainer and not isinstance(xxx, xxxSpacer):
-            # Create sizer item element
-            sizerItemElem = MakeEmptyDOM('sizeritem')
-            sizerItemElem.appendChild(elem)
-            elem = sizerItemElem
-        elif isinstance(parent, xxxNotebook) and not isChildContainer:
-            pageElem = MakeEmptyDOM('notebookpage')
-            pageElem.appendChild(elem)
-            elem = pageElem
-
-        selected = tree.InsertNode(newParent, tree.GetPyData(newParent).treeObject(), elem, wx.TreeItemId())
-
-        newIndex = tree.ItemIndex(selected)
-        tree.Expand(selected)
-        tree.SelectItem(selected)
-
-        undoMan.RegisterUndo(UndoMove(oldParent, oldIndex, newParent, newIndex))
-
-        self.modified = True
-        self.SetStatusText(status)
+        raise NotImplementedError
 
     def OnLocate(self, evt):
-        if g.testWin:
-            if evt.GetId() == self.ID_LOCATE or \
-               evt.GetId() == self.ID_TOOL_LOCATE and evt.IsChecked():
-                self.SetHandler(g.testWin, g.testWin)
-                g.testWin.Connect(wx.ID_ANY, wx.ID_ANY, wx.wxEVT_LEFT_DOWN, self.OnTestWinLeftDown)
-                if evt.GetId() == self.ID_LOCATE:
-                    self.tb.ToggleTool(self.ID_TOOL_LOCATE, True)
-            elif evt.GetId() == self.ID_TOOL_LOCATE and not evt.IsChecked():
-                self.SetHandler(g.testWin, None)
-                g.testWin.Disconnect(wx.ID_ANY, wx.ID_ANY, wx.wxEVT_LEFT_DOWN)
-            self.SetStatusText('Click somewhere in your test window now')
+        raise NotImplementedError
 
     def OnRefresh(self, evt):
-        # If modified, apply first
-        selection = tree.selection
-        if selection:
-            xxx = tree.GetPyData(selection)
-            if xxx and panel.IsModified():
-                tree.Apply(xxx, selection)
-        if g.testWin:
-            # (re)create
-            tree.CreateTestWin(g.testWin.item)
-        panel.modified = False
-        tree.needUpdate = False
+        raise NotImplementedError
 
     def OnAutoRefresh(self, evt):
         conf.autoRefresh = evt.IsChecked()
-        self.menuBar.Check(self.ID_AUTO_REFRESH, conf.autoRefresh)
-        self.tb.ToggleTool(self.ID_AUTO_REFRESH, conf.autoRefresh)
+        self.menuBar.Check(ID.AUTO_REFRESH, conf.autoRefresh)
+        self.tb.ToggleTool(ID.AUTO_REFRESH, conf.autoRefresh)
 
     def OnAbout(self, evt):
         str = '''\
@@ -712,39 +346,11 @@ Homepage: http://xrced.sourceforge.net\
 
 
     def OnEmbedPanel(self, evt):
-        conf.embedPanel = evt.IsChecked()
-        if conf.embedPanel:
-            # Remember last dimentions
-            conf.panelX, conf.panelY = self.miniFrame.GetPosition()
-            conf.panelWidth, conf.panelHeight = self.miniFrame.GetSize()
-            size = self.GetSize()
-            pos = self.GetPosition()
-            sizePanel = panel.GetSize()
-            panel.Reparent(self.splitter)
-            self.miniFrame.GetSizer().Remove(panel)
-            # Widen
-            self.SetDimensions(pos.x, pos.y, size.width + sizePanel.width, size.height)
-            self.splitter.SplitVertically(tree, panel, conf.sashPos)
-            self.miniFrame.Show(False)
-        else:
-            conf.sashPos = self.splitter.GetSashPosition()
-            pos = self.GetPosition()
-            size = self.GetSize()
-            sizePanel = panel.GetSize()
-            self.splitter.Unsplit(panel)
-            sizer = self.miniFrame.GetSizer()
-            panel.Reparent(self.miniFrame)
-            panel.Show(True)
-            sizer.Add(panel, 1, wx.EXPAND)
-            self.miniFrame.Show(True)
-            self.miniFrame.SetDimensions(conf.panelX, conf.panelY,
-                                         conf.panelWidth, conf.panelHeight)
-            self.miniFrame.Layout()
-            # Reduce width
-            self.SetDimensions(pos.x, pos.y,
-                               max(size.width - sizePanel.width, self.minWidth), size.height)
+        self.frame.EmbedUnembed(evt.IsChecked())
 
     def OnShowTools(self, evt):
+        raise NotImplementedError # !!!
+
         conf.showTools = evt.IsChecked()
         g.tools.Show(conf.showTools)
         if conf.showTools:
@@ -754,10 +360,14 @@ Homepage: http://xrced.sourceforge.net\
         self.toolsSizer.Layout()
         
     def OnTest(self, evt):
+        raise NotImplementedError # !!!
+
         if not tree.selection: return   # key pressed event
         tree.ShowTestWindow(tree.selection)
 
     def OnTestHide(self, evt):
+        raise NotImplementedError # !!!
+
         tree.CloseTestWindow()
 
     def OnUpdateUI(self, evt):
@@ -778,6 +388,8 @@ Homepage: http://xrced.sourceforge.net\
         elif evt.GetId() == wx.ID_REDO:  evt.Enable(g.undoMan.CanRedo())
 
     def OnIdle(self, evt):
+        raise NotImplementedError # !!!
+
         if self.inIdle: return          # Recursive call protection
         self.inIdle = True
         #print 'onidle',tree.needUpdate,tree.pendingHighLight
@@ -805,6 +417,8 @@ Homepage: http://xrced.sourceforge.net\
             self.inIdle = False
 
     def OnIconize(self, evt):
+        raise NotImplementedError # !!!
+
         if evt.Iconized():
             conf.x, conf.y = self.GetPosition()
             conf.width, conf.height = self.GetSize()
@@ -826,9 +440,9 @@ Homepage: http://xrced.sourceforge.net\
     #
     
     def OnTreeRightDown(self, evt):
-        menu = XMLTreeMenu(self.tree)
-        self.tree.PopupMenu(menu, evt.GetPosition())
-        menu.Destroy()
+        forceSibling = evt.ControlDown()
+        forceInsert = evt.ShiftDown()
+        Presenter.popupMenu(forceSibling, forceInsert, evt.GetPosition())
 
     def OnTreeSelChanging(self, evt):
         # Permit multiple selection for same level only
@@ -843,14 +457,21 @@ Homepage: http://xrced.sourceforge.net\
 
     def OnTreeSelChanged(self, evt):
         if evt.GetOldItem(): 
-            print 'old:', self.tree.GetItemText(evt.GetOldItem())
-            Presenter.update()
-        if evt.GetItem(): print 'new:',self.tree.GetItemText(evt.GetItem())
+            Presenter.update(evt.GetOldItem())
         # Tell presenter to update current data and view
         Presenter.setData(evt.GetItem())
         evt.Skip()
 
+    # Expand/collapse subtree
+    def OnExpand(self, evt):
+        if self.tree.GetSelection(): 
+            map(self.tree.ExpandAll, self.tree.GetSelections())
+        else: self.tree.ExpandAll(self.tree.GetRootItem())
 
+    def OnCollapse(self, evt):
+        if self.tree.GetSelection(): 
+            map(self.tree.CollapseAll, self.tree.GetSelections())
+        else: self.tree.CollapseAll(self.tree.GetRootItem())
 
 # Singleton class
 Listener = _Listener()

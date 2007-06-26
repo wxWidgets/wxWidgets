@@ -70,7 +70,7 @@ class _Model:
         domCopy.unlink()
 
     def indent(self, dom):
-        print 'NYI'
+        pass # !!! TODO
 
     def createObjectNode(self, className):
         node = self.dom.createElement('object')

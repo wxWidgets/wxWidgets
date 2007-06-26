@@ -1,10 +1,11 @@
 # Test module for future super xrced version :)
 import os
 from globals import *
-import view
+import params
 from presenter import Presenter
 from listener import Listener
 from component import Manager
+import view
 import undo
 import plugin
 

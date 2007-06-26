@@ -24,41 +24,52 @@ class ID:
 
 class XMLTreeMenu(wx.Menu):
     '''dynamic pulldown menu for XMLTree'''
-    def __init__(self, tree):
+    def __init__(self, tree, createSibling, insertBefore):
+        '''
+        Create tree pull-down menu. createSibling flag is set if the
+        child must be a sibling of the selected item, insertBefore
+        flag is set if the child should be put before selected item in
+        sibling mode or as the first child in non-sibling mode.
+        '''
         wx.Menu.__init__(self)
-        item = tree.GetSelection()
-        if not item:
-            self.Append(ID.EXPAND, 'Expand', 'Expand tree')
-            self.Append(ID.COLLAPSE, 'Collapse', 'Collapse tree')
-            return              # no commands if no selection
-        # Populate create menu
-        if tree.forceSibling:
-            needInsert = True
-        else:
-            needInsert = tree.NeedInsert(item)
+        items = tree.GetSelections()
         root = tree.GetRootItem()
-        if item == root or needInsert and tree.GetItemParent(item) == root:
-            menu = self.CreateTopLevelMenu()
-        else:
-            menu = self.CreateSubMenus()
-        # Select correct label for create menu
-        if not needInsert:
-            if tree.forceInsert:
-                self.AppendMenu(ID.INSERT, 'Insert Child', menu,
-                                'Create child object as the first child')
+        if len(items) <= 1:
+            item = tree.GetSelection()
+            if not item: item = root
+            if item == root or tree.GetItemParent(item) == root and createSibling:
+                menu = self.CreateTopLevelMenu()
             else:
-                self.AppendMenu(ID.APPEND, 'Append Child', menu,
-                                'Create child object as the last child')
-        else:
-            if tree.forceInsert:
-                self.AppendMenu(ID.SIBLING, 'Create Sibling', menu,
-                                'Create sibling before selected object')
+                menu = self.CreateSubMenus()
+            # Select correct label for submenu
+            if createSibling:
+                if insertBefore:
+                    self.AppendMenu(ID.SIBLING, 'Create Sibling', menu,
+                                    'Create sibling before selected object')
+                else:
+                    self.AppendMenu(ID.SIBLING, 'Create Sibling', menu,
+                                    'Create sibling after selected object')
             else:
-                self.AppendMenu(ID.SIBLING, 'Create Sibling', menu,
-                                'Create sibling after selected object')
+                if insertBefore:
+                    self.AppendMenu(ID.INSERT, 'Insert', menu,
+                                    'Create object as the first child')
+                else:
+                    self.AppendMenu(ID.APPEND, 'Append', menu,
+                                    'Create object as the last child')
 
-        self.AppendSeparator()
-        self.Append(wx.ID_DELETE, 'Delete', 'Delete object')
+            self.AppendSeparator()
+            self.Append(wx.ID_CUT, 'Cut', 'Cut to the clipboard')
+            self.Append(wx.ID_COPY, 'Copy', 'Copy to the clipboard')
+            if createSibling and item != root:
+                self.Append(ID.PASTE_SIBLING, 'Paste Sibling',
+                            'Paste from the clipboard as a sibling')
+            else:
+                self.Append(wx.ID_PASTE, 'Paste', 'Paste from the clipboard')
+        if items:
+            self.Append(wx.ID_DELETE, 'Delete', 'Delete selected objects')
+            self.AppendSeparator()
+        self.Append(ID.EXPAND, 'Expand', 'Expand tree')
+        self.Append(ID.COLLAPSE, 'Collapse', 'Collapse tree')
 
     def CreateTopLevelMenu(self):
         m = wx.Menu()

@@ -4,8 +4,10 @@
 # Created:      07.06.2007
 # RCS-ID:       $Id$
 
+import os
 from globals import *
 from XMLTree import XMLTree
+from XMLTreeMenu import ID,XMLTreeMenu
 from AttributePanel import Panel
 import images
 
@@ -21,6 +23,17 @@ def CreateView():
     Create all necessary view objects. Some of them are set as module
     global variables for convenience.
     '''
+
+    # Load resources
+    res = xrc.EmptyXmlResource()
+    # !!! Blocking of assert failure occurring in older unicode builds
+    try:
+        quietlog = wx.LogNull()
+        res.Load(os.path.join(g.basePath, 'xrced.xrc'))
+    except wx._core.PyAssertionError:
+        print 'PyAssertionError was ignored'
+    g.res = res
+
     global frame
     frame = Frame()                     # frame creates other
 
@@ -44,8 +57,8 @@ class Frame(wx.Frame):
         menu.Append(wx.ID_OPEN, '&Open...\tCtrl-O', 'Open XRC file')
         
         self.recentMenu = wx.Menu()
-#        g.fileHistory.UseMenu(self.recentMenu)
-#        g.fileHistory.AddFilesToMenu()
+        g.fileHistory.UseMenu(self.recentMenu)
+        g.fileHistory.AddFilesToMenu()
 
         menu.AppendMenu(-1, 'Open &Recent', self.recentMenu, 'Open a recent file')
         
@@ -129,6 +142,68 @@ class Frame(wx.Frame):
         self.menuBar = menuBar
         self.SetMenuBar(menuBar)
 
+        # Create toolbar
+        tb = self.CreateToolBar(wx.TB_HORIZONTAL | wx.NO_BORDER | wx.TB_FLAT)
+        if wx.Platform != '__WXMAC__':
+            # Redefine AddSeparator on wxGTK and wxMSW to add vertical line
+            def _AddSeparator():
+                tb.AddControl(wx.StaticLine(tb, -1, size=(-1,23), 
+                                            style=wx.LI_VERTICAL))
+            tb.AddSeparator = _AddSeparator
+        
+        # Use tango icons and slightly wider bitmap size on Mac
+        if wx.Platform in ['__WXMAC__', '__WXMSW__']:
+            tb.SetToolBitmapSize((26,26))
+        else:
+            tb.SetToolBitmapSize((24,24))
+        new_bmp  = wx.ArtProvider.GetBitmap(wx.ART_NORMAL_FILE, wx.ART_TOOLBAR)
+        open_bmp = wx.ArtProvider.GetBitmap(wx.ART_FILE_OPEN, wx.ART_TOOLBAR)
+        save_bmp = wx.ArtProvider.GetBitmap(wx.ART_FILE_SAVE, wx.ART_TOOLBAR)
+        undo_bmp = wx.ArtProvider.GetBitmap(wx.ART_UNDO, wx.ART_TOOLBAR)
+        redo_bmp = wx.ArtProvider.GetBitmap(wx.ART_REDO, wx.ART_TOOLBAR)
+        cut_bmp  = wx.ArtProvider.GetBitmap(wx.ART_CUT, wx.ART_TOOLBAR)
+        copy_bmp = wx.ArtProvider.GetBitmap(wx.ART_COPY, wx.ART_TOOLBAR)
+        paste_bmp= wx.ArtProvider.GetBitmap(wx.ART_PASTE, wx.ART_TOOLBAR)
+        tb.AddSimpleTool(wx.ID_NEW, new_bmp, 'New', 'New file')
+        tb.AddSimpleTool(wx.ID_OPEN, open_bmp, 'Open', 'Open file')
+        tb.AddSimpleTool(wx.ID_SAVE, save_bmp, 'Save', 'Save file')
+        tb.AddSeparator()
+        tb.AddSimpleTool(wx.ID_UNDO, undo_bmp, 'Undo', 'Undo')
+        tb.AddSimpleTool(wx.ID_REDO, redo_bmp, 'Redo', 'Redo')
+        tb.AddSeparator()
+        tb.AddSimpleTool(wx.ID_CUT, cut_bmp, 'Cut', 'Cut')
+        tb.AddSimpleTool(wx.ID_COPY, copy_bmp, 'Copy', 'Copy')
+        tb.AddSimpleTool(self.ID_TOOL_PASTE, paste_bmp, 'Paste', 'Paste')
+        tb.AddSeparator()
+        bmp = wx.ArtProvider.GetBitmap(self.ART_LOCATE, wx.ART_TOOLBAR)
+        tb.AddSimpleTool(self.ID_TOOL_LOCATE, bmp,
+                         'Locate', 'Locate control in test window and select it', True)
+        bmp = wx.ArtProvider.GetBitmap(self.ART_TEST, wx.ART_TOOLBAR)
+        tb.AddSimpleTool(self.ID_TEST, bmp, 'Test', 'Test window')
+        bmp = wx.ArtProvider.GetBitmap(self.ART_REFRESH, wx.ART_TOOLBAR)
+        tb.AddSimpleTool(self.ID_REFRESH, bmp, 'Refresh', 'Refresh view')
+        bmp = wx.ArtProvider.GetBitmap(self.ART_AUTO_REFRESH, wx.ART_TOOLBAR)
+        tb.AddSimpleTool(self.ID_AUTO_REFRESH, bmp,
+                         'Auto-refresh', 'Toggle auto-refresh mode', True)
+        tb.AddSeparator()
+        bmp = wx.ArtProvider.GetBitmap(self.ART_MOVEUP, wx.ART_TOOLBAR)
+        tb.AddSimpleTool(self.ID_MOVEUP, bmp,
+                         'Up', 'Move before previous sibling')
+        bmp = wx.ArtProvider.GetBitmap(self.ART_MOVEDOWN, wx.ART_TOOLBAR)
+        tb.AddSimpleTool(self.ID_MOVEDOWN, bmp,
+                         'Down', 'Move after next sibling')
+        bmp = wx.ArtProvider.GetBitmap(self.ART_MOVELEFT, wx.ART_TOOLBAR)
+        tb.AddSimpleTool(self.ID_MOVELEFT, bmp,
+                         'Make Sibling', 'Make sibling of parent')
+        bmp = wx.ArtProvider.GetBitmap(self.ART_MOVERIGHT, wx.ART_TOOLBAR)
+        tb.AddSimpleTool(self.ID_MOVERIGHT, bmp,
+                         'Make Child', 'Make child of previous sibling')
+        tb.ToggleTool(self.ID_AUTO_REFRESH, g.conf.autoRefresh)
+        tb.Realize()
+ 
+        self.tb = tb
+        self.minWidth = tb.GetSize()[0] # minimal width is the size of toolbar
+
         # Build interface
         sizer = wx.BoxSizer(wx.VERTICAL)
         #sizer.Add(wx.StaticLine(self, -1), 0, wx.EXPAND)
@@ -168,4 +243,95 @@ class Frame(wx.Frame):
         self.SetSizer(sizer)
 
     def Clear(self):
-        tree.Clear()
+        pass
+
+    def EmbedUnembed(self, embedPanel):
+        conf = g.conf
+        conf.embedPanel = embedPanel
+        if conf.embedPanel:
+            # Remember last dimentions
+            conf.panelX, conf.panelY = self.miniFrame.GetPosition()
+            conf.panelWidth, conf.panelHeight = self.miniFrame.GetSize()
+            size = self.GetSize()
+            pos = self.GetPosition()
+            sizePanel = panel.GetSize()
+            panel.Reparent(self.splitter)
+            self.miniFrame.GetSizer().Remove(panel)
+            # Widen
+            self.SetDimensions(pos.x, pos.y, size.width + sizePanel.width, size.height)
+            self.splitter.SplitVertically(tree, panel, conf.sashPos)
+            self.miniFrame.Show(False)
+        else:
+            conf.sashPos = self.splitter.GetSashPosition()
+            pos = self.GetPosition()
+            size = self.GetSize()
+            sizePanel = panel.GetSize()
+            self.splitter.Unsplit(panel)
+            sizer = self.miniFrame.GetSizer()
+            panel.Reparent(self.miniFrame)
+            panel.Show(True)
+            sizer.Add(panel, 1, wx.EXPAND)
+            self.miniFrame.Show(True)
+            self.miniFrame.SetDimensions(conf.panelX, conf.panelY,
+                                         conf.panelWidth, conf.panelHeight)
+            self.miniFrame.Layout()
+            # Reduce width
+            self.SetDimensions(pos.x, pos.y,
+                               max(size.width - sizePanel.width, self.minWidth), size.height)
+        
+
+# ScrolledMessageDialog - modified from wxPython lib to set fixed-width font
+class ScrolledMessageDialog(wx.Dialog):
+    def __init__(self, parent, msg, caption, pos = wx.DefaultPosition, size = (500,300)):
+        from wx.lib.layoutf import Layoutf
+        wx.Dialog.__init__(self, parent, -1, caption, pos, size)
+        text = wx.TextCtrl(self, -1, msg, wx.DefaultPosition,
+                             wx.DefaultSize, wx.TE_MULTILINE | wx.TE_READONLY)
+        text.SetFont(g.modernFont())
+        dc = wx.WindowDC(text)
+        w, h = dc.GetFullTextExtent(' ', g.modernFont())[:2]
+        ok = wx.Button(self, wx.ID_OK, "OK")
+        ok.SetDefault()
+        text.SetConstraints(Layoutf('t=t5#1;b=t5#2;l=l5#1;r=r5#1', (self,ok)))
+        text.SetSize((w * 80 + 30, h * 40))
+        text.ShowPosition(1)            # scroll to the first line
+        ok.SetConstraints(Layoutf('b=b5#1;x%w50#1;w!80;h!35', (self,)))
+        self.SetAutoLayout(True)
+        self.Fit()
+        self.CenterOnScreen(wx.BOTH)
+
+# ArtProvider for toolbar icons
+class ToolArtProvider(wx.ArtProvider):
+    def __init__(self):
+        wx.ArtProvider.__init__(self)
+        self.images = {
+            'ART_LOCATE': images.getLocateImage(),
+            'ART_TEST': images.getTestImage(),
+            'ART_REFRESH': images.getRefreshImage(),
+            'ART_AUTO_REFRESH': images.getAutoRefreshImage(),
+            'ART_MOVEUP': images.getMoveUpImage(),
+            'ART_MOVEDOWN': images.getMoveDownImage(),
+            'ART_MOVELEFT': images.getMoveLeftImage(),
+            'ART_MOVERIGHT': images.getMoveRightImage()
+            }
+        if wx.Platform in ['__WXMAC__', '__WXMSW__']:
+            self.images.update({
+                    wx.ART_NORMAL_FILE: images.getNewImage(),
+                    wx.ART_FILE_OPEN: images.getOpenImage(),
+                    wx.ART_FILE_SAVE: images.getSaveImage(),
+                    wx.ART_UNDO: images.getUndoImage(),
+                    wx.ART_REDO: images.getRedoImage(),
+                    wx.ART_CUT: images.getCutImage(),
+                    wx.ART_COPY: images.getCopyImage(),
+                    wx.ART_PASTE: images.getPasteImage()
+                    })
+    def CreateBitmap(self, id, client, size):
+        bmp = wx.NullBitmap
+        if id in self.images:
+            img = self.images[id]
+            # Alpha not implemented completely there
+            if wx.Platform in ['__WXMAC__', '__WXMSW__']:
+                img.ConvertAlphaToMask()
+            bmp = wx.BitmapFromImage(img)
+        return bmp
+

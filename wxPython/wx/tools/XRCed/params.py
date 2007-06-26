@@ -5,7 +5,7 @@
 # RCS-ID:       $Id$
 
 import string
-import os.path
+import os
 from types import *
 from globals import *
 from presenter import Presenter
@@ -48,20 +48,17 @@ class PPanel(wx.Panel):
     isCheck = False
     def __init__(self, parent, name):
         wx.Panel.__init__(self, parent, -1, name=name)
-        self.modified = self.freeze = False
+        self.freeze = False
     def Enable(self, value):
         self.enabled = value
         # Something strange is going on with enable so we make sure...
         for w in self.GetChildren():
             w.Enable(value)
         #wx.Panel.Enable(self, value)
-    def SetModified(self, state=True):
-        self.modified = state
-        if state: g.panel.SetModified(True)
     # Common method to set modified state
     def OnChange(self, evt):
         if self.freeze: return
-        self.SetModified()
+        Presenter.setApplied(False)
         evt.Skip()
 
 class ParamBinaryOr(PPanel):
@@ -85,7 +82,7 @@ class ParamBinaryOr(PPanel):
         self.text.SetValue(value)
         self.freeze = False
     def OnButtonChoices(self, evt):
-        dlg = g.frame.res.LoadDialog(self, 'DIALOG_CHOICES')
+        dlg = g.res.LoadDialog(self, 'DIALOG_CHOICES')
         if self.GetName() == 'flag':  dlg.SetTitle('Sizer item flags')
         elif self.GetName() == 'style':  dlg.SetTitle('Window styles')
         elif self.GetName() == 'exstyle':  dlg.SetTitle('Extended window styles')
@@ -112,7 +109,7 @@ class ParamBinaryOr(PPanel):
             # Add ignored flags
             value.extend(ignored)
             self.SetValue('|'.join(value))
-            self.SetModified()
+            Presenter.setApplied(False)
         dlg.Destroy()
 
 class ParamFlag(ParamBinaryOr):
@@ -149,7 +146,7 @@ class ParamStyle(ParamBinaryOr):
         else:
             self.values = genericStyles
     def OnButtonChoicesBoth(self, evt):
-        dlg = g.frame.res.LoadDialog(self, 'DIALOG_STYLES')
+        dlg = g.res.LoadDialog(self, 'DIALOG_STYLES')
         listBoxSpecific = xrc.XRCCTRL(dlg, 'CHECKLIST_SPECIFIC')
         listBoxSpecific.InsertItems(self.valuesSpecific, 0)
         listBoxGeneric = xrc.XRCCTRL(dlg, 'CHECKLIST_GENERIC')
@@ -187,7 +184,7 @@ class ParamStyle(ParamBinaryOr):
                       for i in range(listBoxGeneric.GetCount())
                       if listBoxGeneric.IsChecked(i)] + ignored
             self.SetValue('|'.join(value))
-            self.SetModified()
+            Presenter.setApplied(False)
         dlg.Destroy()
 
 class ParamExStyle(ParamBinaryOr):
@@ -214,8 +211,7 @@ class ParamColour(PPanel):
         return self.text.GetValue()
     def SetValue(self, value):
         self.freeze = True
-        if not value: value = '#FFFFFF'
-        self.text.SetValue(str(value))  # update text ctrl
+        self.text.SetValue(value)  # update text ctrl
         try:
             colour = wx.Colour(int(value[1:3], 16), int(value[3:5], 16), int(value[5:7], 16))
             self.button.SetBackgroundColour(colour)
@@ -236,7 +232,7 @@ class ParamColour(PPanel):
         dlg = wx.ColourDialog(self, data)
         if dlg.ShowModal() == wx.ID_OK:
             self.SetValue('#%02X%02X%02X' % dlg.GetColourData().GetColour().Get())
-            self.SetModified()
+            Presenter.setApplied(False)
         dlg.Destroy()
 
 ################################################################################
@@ -255,101 +251,92 @@ fontFamiliesXml2wx = ReverseMap(fontFamiliesWx2Xml)
 fontStylesXml2wx = ReverseMap(fontStylesWx2Xml)
 fontWeightsXml2wx = ReverseMap(fontWeightsWx2Xml)
 
+# My font picker
+class FontPickerCtrl(wx.Button):
+    def __init__(self, parent, id=-1, font=wx.NullFont, size=wx.DefaultSize, style=0):
+        wx.Button.__init__(self, parent, id)
+
 class ParamFont(PPanel):
     def __init__(self, parent, name):
         PPanel.__init__(self, parent, name)
         self.ID_TEXT_CTRL = wx.NewId()
         self.ID_BUTTON_SELECT = wx.NewId()
         sizer = wx.BoxSizer()
-        self.text = wx.TextCtrl(self, self.ID_TEXT_CTRL, size=(200,-1))
-        sizer.Add(self.text, 0, wx.RIGHT | wx.ALIGN_CENTER_VERTICAL, 5)
-        self.button = wx.Button(self, self.ID_BUTTON_SELECT, 'Select...', size=buttonSize)
+        self.button = wx.FontPickerCtrl(self, size=buttonSize,
+                                        style=wx.FNTP_FONTDESC_AS_LABEL|wx.FNTP_USE_TEXTCTRL)
+        self.text = self.button.GetTextCtrl()
         sizer.Add(self.button, 0, wx.ALIGN_CENTER_VERTICAL)
         self.SetSizer(sizer)
-        self.textModified = False
-        wx.EVT_BUTTON(self, self.ID_BUTTON_SELECT, self.OnButtonSelect)
-        wx.EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
-    def OnChange(self, evt):
-        PPanel.OnChange(self, evt)
-        self.textModified = True
-    def _defaultValue(self):
-        return [`g.sysFont().GetPointSize()`, 'default', 'normal', 'normal', '0', '', '']
-    def GetValue(self):
-        if self.textModified:           # text has newer value
-            try:
-                return eval(self.text.GetValue())
-            except SyntaxError:
-                wx.LogError('Syntax error in parameter value: ' + self.GetName())
-                return self._defaultValue()
-        return self.value
-    def SetValue(self, value):
-        self.freeze = True              # disable other handlers
-#        if not value: value = self._defaultValue()
-        self.value = value
-        if value:
-            self.text.SetValue(str(value))
+        self.Bind(wx.EVT_FONTPICKER_CHANGED, self.OnPickFont)
+        self.text.Bind(wx.EVT_TEXT, self.OnText)
+        self.text.Bind(wx.EVT_KILL_FOCUS, self.OnTextKillFocus)
+    def OnText(self, evt):
+        Presenter.setApplied(False)
+        if evt.GetString():
+            evt.Skip()
         else:
-            self.text.SetValue('')
-        self.freeze = False
-    def OnButtonSelect(self, evt):
-        if self.textModified:           # text has newer value
-            try:
-                self.value = eval(self.text.GetValue())
-            except SyntaxError:
-                wx.LogError('Syntax error in parameter value: ' + self.GetName())
-                self.value = self._defaultValue()
-        if not self.value: self.value = self._defaultValue()
-        # Make initial font
-        # Default values
-        size = g.sysFont().GetPointSize()
-        family = wx.DEFAULT
-        style = weight = wx.NORMAL
-        underlined = 0
-        face = ''
-        enc = wx.FONTENCODING_DEFAULT
-        # Fall back to default if exceptions
+            self.text.ChangeValue('')
+    def OnTextKillFocus(self, evt):
+        if self.text.GetValue():
+            evt.Skip()
+    def GetValue(self):
+        return self.value
+    def dict2font(self, d):
         error = False
-        try:
-            try: size = int(self.value[0])
-            except ValueError: error = True; wx.LogError('Invalid size specification')
-            try: family = fontFamiliesXml2wx[self.value[1]]
-            except KeyError: error = True; wx.LogError('Invalid family specification')
-            try: style = fontStylesXml2wx[self.value[2]]
-            except KeyError: error = True; wx.LogError('Invalid style specification')
-            try: weight = fontWeightsXml2wx[self.value[3]]
-            except KeyError: error = True; wx.LogError('Invalid weight specification')
-            try: underlined = bool(self.value[4])
-            except ValueError: error = True; wx.LogError('Invalid underlined flag specification')
-            face = self.value[5]
-        except IndexError:
-            error = True
+        if 'size' in d:
+            try:                size = int(d['size'])
+            except ValueError:  error = True; wx.LogError('Invalid size specification')
+        else:
+            size = g.sysFont().GetPointSize()
+        if 'family' in d:
+            try:                family = fontFamiliesXml2wx[d['family']]
+            except KeyError:    error = True; wx.LogError('Invalid family specification')
+        else:
+            family = wx.DEFAULT
+        if 'style' in d:
+            try:                style = fontStylesXml2wx[d['style']]
+            except KeyError:    error = True; wx.LogError('Invalid style specification')
+        else:
+            style = wx.NORMAL
+        if 'weight' in d:
+            try:                weight = fontWeightsXml2wx[d['weight']]
+            except KeyError:    error = True; wx.LogError('Invalid weight specification')
+        else:
+            weight = wx.NORMAL
+        try: underlined = bool(d.get('underlined', 0))
+        except ValueError: error = True; wx.LogError('Invalid underlined flag specification')
+        face = d.get('face','')
+        enc = wx.FONTENCODING_DEFAULT
         mapper = wx.FontMapper()
-        if not self.value[6]: enc = mapper.CharsetToEncoding(self.value[6])
-            
+        if 'encoding' in d: enc = mapper.CharsetToEncoding(d['encoding'])
         if error: wx.LogError('Invalid font specification')
         if enc == wx.FONTENCODING_DEFAULT: enc = wx.FONTENCODING_SYSTEM
         font = wx.Font(size, family, style, weight, underlined, face, enc)
-        data = wx.FontData()
-        data.SetInitialFont(font)
-        dlg = wx.FontDialog(self, data)
-        if dlg.ShowModal() == wx.ID_OK:
-            font = dlg.GetFontData().GetChosenFont()
-            if font.GetEncoding() == wx.FONTENCODING_SYSTEM:
-                encName = ''
-            else:
-                encName = wx.FontMapper.GetEncodingName(font.GetEncoding()).encode()
-            value = [str(font.GetPointSize()),
-                     fontFamiliesWx2Xml.get(font.GetFamily(), "default"),
-                     fontStylesWx2Xml.get(font.GetStyle(), "normal"),
-                     fontWeightsWx2Xml.get(font.GetWeight(), "normal"),
-                     str(int(font.GetUnderlined())),
-                     font.GetFaceName().encode(),
-                     encName
-                     ]
-            self.SetValue(value)
-            self.SetModified()
-            self.textModified = False
-        dlg.Destroy()
+        return font
+        
+    def SetValue(self, value):
+        self.freeze = True              # disable other handlers
+        if not value:
+            self.text.ChangeValue('')
+        else:
+            self.button.SetSelectedFont(self.dict2font(value))
+        self.value = value
+        self.freeze = False
+    def OnPickFont(self, evt):
+        font = evt.GetFont()
+        if font.GetEncoding() == wx.FONTENCODING_SYSTEM:
+            encName = ''
+        else:
+            encName = wx.FontMapper.GetEncodingName(font.GetEncoding()).encode()
+        value = {'size': str(font.GetPointSize()),
+                 'family': fontFamiliesWx2Xml.get(font.GetFamily(), "default"),
+                 'style': fontStylesWx2Xml.get(font.GetStyle(), "normal"),
+                 'weight': fontWeightsWx2Xml.get(font.GetWeight(), "normal"),
+                 'underlined': str(int(font.GetUnderlined())),
+                 'face': font.GetFaceName().encode(),
+                 'encoding': encName}
+        self.SetValue(value)
+        Presenter.setApplied(False)
 
 ################################################################################
 
@@ -429,7 +416,7 @@ class ParamUnit(PPanel):
             self.spin.SetValue(intValue)
             if x:                       # 0 can be passed to update spin value only
                 self.text.SetValue(str(intValue) + units)
-                self.SetModified()
+                Presenter.setApplied(False)
         except:
             # !!! Strange, if I use wx.LogWarning, event is re-generated
             print 'ERROR: incorrect unit format'
@@ -462,12 +449,12 @@ class ParamMultilineText(PPanel):
         self.text.SetValue(value)
         self.freeze = False             # disable other handlers
     def OnButtonEdit(self, evt):
-        dlg = g.frame.res.LoadDialog(self, 'DIALOG_TEXT')
+        dlg = g.res.LoadDialog(self, 'DIALOG_TEXT')
         textCtrl = xrc.XRCCTRL(dlg, 'TEXT')
         textCtrl.SetValue(self.text.GetValue())
         if dlg.ShowModal() == wx.ID_OK:
             self.text.SetValue(textCtrl.GetValue())
-            self.SetModified()
+            Presenter.setApplied(False)
         dlg.Destroy()
 
 class ParamText(PPanel):
@@ -514,7 +501,7 @@ class ContentDialog(wx.Dialog):
     def __init__(self, parent, value):
         # Load from resource
         pre = wx.PreDialog()
-        g.frame.res.LoadOnDialog(pre, parent, 'DIALOG_CONTENT')
+        g.res.LoadOnDialog(pre, parent, 'DIALOG_CONTENT')
         self.PostCreate(pre)
         self.list = xrc.XRCCTRL(self, 'LIST')
         # Set list items
@@ -563,7 +550,7 @@ class ContentDialog(wx.Dialog):
 class ContentCheckListDialog(wx.Dialog):
     def __init__(self, parent, value):
         pre = wx.PreDialog()
-        g.frame.res.LoadOnDialog(pre, parent, 'DIALOG_CONTENT_CHECKLIST')
+        g.res.LoadOnDialog(pre, parent, 'DIALOG_CONTENT_CHECKLIST')
         self.PostCreate(pre)
         self.list = xrc.XRCCTRL(self, 'CHECK_LIST')
         # Set list items
@@ -633,7 +620,7 @@ class ParamContent(PPanel):
         wx.EVT_BUTTON(self, self.ID_BUTTON_EDIT, self.OnButtonEdit)
         wx.EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
     def OnChange(self, evt):
-        PPanel.OnChange(self, evt)
+        Presenter.setApplied(False)
         self.textModified = True
     def GetValue(self):
         if self.textModified:           # text has newer value
@@ -658,12 +645,9 @@ class ParamContent(PPanel):
             for i in range(dlg.list.GetCount()):
                 value.append(dlg.list.GetString(i))
             self.SetValue(value)
-            self.SetModified()
+            Presenter.setApplied(False)
             self.textModified = False
         dlg.Destroy()
-    def SetModified(self, state=True):
-        PPanel.SetModified(self, state)
-        self.textModified = False
 
 # CheckList content
 class ParamContentCheckList(ParamContent):
@@ -678,7 +662,7 @@ class ParamContentCheckList(ParamContent):
             for i in range(dlg.list.GetCount()):
                 value.append((dlg.list.GetString(i), int(dlg.list.IsChecked(i))))
             self.SetValue(value)
-            self.SetModified()
+            Presenter.setApplied(False)
             self.textModified = False
         dlg.Destroy()
     def SetValue(self, value):
@@ -692,16 +676,13 @@ class ParamContentCheckList(ParamContent):
 class IntListDialog(wx.Dialog):
     def __init__(self, parent, value):
         pre = wx.PreDialog()
-        g.frame.res.LoadOnDialog(pre, parent, 'DIALOG_INTLIST')
+        g.res.LoadOnDialog(pre, parent, 'DIALOG_INTLIST')
         self.PostCreate(pre)
         self.list = xrc.XRCCTRL(self, 'LIST')
         # Set list items
         value.sort()
         for v in value:
-            if type(v) != IntType:
-                wx.LogError('Invalid item type')
-            else:
-                self.list.Append(str(v))
+            self.list.Append(v)
         self.SetAutoLayout(True)
         self.GetSizer().Fit(self)
         # Callbacks
@@ -743,16 +724,16 @@ class ParamIntList(ParamContent):
     def OnButtonEdit(self, evt):
         if self.textModified:           # text has newer value
             try:
-                self.value = map(int, self.text.GetValue().split('|'))
+                self.value = self.text.GetValue().split('|')
             except ValueError:
                 self.value = []
         dlg = IntListDialog(self, self.value)
         if dlg.ShowModal() == wx.ID_OK:
             value = []
             for i in range(dlg.list.GetCount()):
-                value.append(int(dlg.list.GetString(i)))
+                value.append(dlg.list.GetString(i))
             self.SetValue(value)
-            self.SetModified()
+            Presenter.setApplied()
             self.textModified = False
         dlg.Destroy()
 
@@ -776,10 +757,9 @@ class RadioBox(PPanel):
         self.freeze = False
     def OnRadioChoice(self, evt):
         if self.freeze: return
-        print evt.GetSelection()
         if evt.GetSelection():
             self.value = evt.GetEventObject().GetName()
-            self.SetModified()
+            Presenter.setApplied(False)
     def GetStringSelection(self):
         return self.value
 
@@ -796,8 +776,7 @@ class CheckBox(PPanel):
         self.SetSizer(topSizer)
     def OnCheck(self, evt):
         if self.freeze: return
-        print evt.IsChecked()
-        self.SetModified()
+        Presenter.setApplied(False)
 
 class ParamBool(CheckBox):
     defaultString = '(default is False)'
@@ -855,7 +834,7 @@ class ParamFile(PPanel):
         wx.EVT_BUTTON(self, self.ID_BUTTON_BROWSE, self.OnButtonBrowse)
         wx.EVT_TEXT(self, self.ID_TEXT_CTRL, self.OnChange)
     def OnChange(self, evt):
-        PPanel.OnChange(self, evt)
+        Presenter.setApplied(False)
         self.textModified = True
     def GetValue(self):
         if self.textModified:           # text has newer value
@@ -880,14 +859,14 @@ class ParamFile(PPanel):
                 curpath = os.path.join(os.getcwd(), '')
             common = os.path.commonprefix([curpath, dlg.GetPath()])
             self.SetValue(dlg.GetPath()[len(common):])
-            self.SetModified()
+            Presenter.setApplied(False)
             self.textModified = False
         dlg.Destroy()
 
 class ParamBitmap(PPanel):
     def __init__(self, parent, name):
         pre = wx.PrePanel()
-        g.frame.res.LoadOnPanel(pre, parent, 'PANEL_BITMAP')
+        g.res.LoadOnPanel(pre, parent, 'PANEL_BITMAP')
         self.PostCreate(pre)
         self.modified = self.freeze = False
         self.radio_std = xrc.XRCCTRL(self, 'RADIO_STD')
@@ -906,10 +885,10 @@ class ParamBitmap(PPanel):
         wx.EVT_TEXT(self, xrc.XRCID('COMBO_STD'), self.OnChange)
         wx.EVT_TEXT(self, xrc.XRCID('TEXT_FILE'), self.OnChange)
     def OnRadioStd(self, evt):
-        self.SetModified()
+        Presenter.setApplied(False)
         self.SetValue(['wxART_MISSING_IMAGE',''])
     def OnRadioFile(self, evt):
-        self.SetModified()
+        Presenter.setApplied(False)
         self.SetValue(['',''])
     def updateRadios(self):
         if self.value[0]:
@@ -925,10 +904,10 @@ class ParamBitmap(PPanel):
             self.button.Enable(True)
             self.combo.Enable(False)
     def OnChange(self, evt):
-        PPanel.OnChange(self, evt)
+        Presenter.setApplied(False)
         self.textModified = True
     def OnCombo(self, evt):
-        PPanel.OnChange(self, evt)
+        Presenter.setApplied(False)
         self.value[0] = self.combo.GetValue()
     def GetValue(self):
         if self.textModified:           # text has newer value
@@ -958,7 +937,7 @@ class ParamBitmap(PPanel):
                 curpath = os.path.join(os.getcwd(), '')
             common = os.path.commonprefix([curpath, dlg.GetPath()])
             self.SetValue(['', dlg.GetPath()[len(common):]])
-            self.SetModified()
+            Presenter.setApplied(False)
             self.textModified = False
         dlg.Destroy()
 
