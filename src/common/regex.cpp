@@ -58,9 +58,9 @@
 #   define WXREGEX_USING_BUILTIN
 #   define WXREGEX_IF_NEED_LEN(x) ,x
 #   if wxUSE_UNICODE
-#       define WXREGEX_CHAR(x) x.wc_str()
+#       define WXREGEX_CHAR(x) (x).wc_str()
 #   else
-#       define WXREGEX_CHAR(x) x.mb_str()
+#       define WXREGEX_CHAR(x) (x).mb_str()
 #   endif
 #else
 #   ifdef HAVE_RE_SEARCH
@@ -72,7 +72,7 @@
 #   if wxUSE_UNICODE
 #       define WXREGEX_CONVERT_TO_MB
 #   endif
-#   define WXREGEX_CHAR(x) x.mb_str()
+#   define WXREGEX_CHAR(x) (x).mb_str()
 #   define wx_regfree regfree
 #   define wx_regerror regerror
 #endif
