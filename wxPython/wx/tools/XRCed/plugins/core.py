@@ -11,6 +11,11 @@ import images
 
 print 'creating core components'
 
+# Dictionary for renaming some attributes
+#renameDict = {'orient':'orientation', 'option':'proportion',
+#              'usenotebooksizer':'usesizer', 'dontattachtoframe':'dontattach',
+#              }
+
 ### wxFrame
 
 c = Container('wxFrame', ['frame','window','top_level'], 
@@ -44,22 +49,26 @@ Manager.setMenu(c, 'container', 'Panel', 'Panel window', 10)
 
 ### wxBoxSizer
 
-c = Sizer('wxBoxSizer', ['sizer'],
-          ['orient'], {'orient': 'wxVERTICAL'})
+c = BoxSizer('wxBoxSizer', ['sizer'], ['orient'], 
+             defaults={'orient': 'wxVERTICAL'},
+             images=[images.getTreeSizerVImage(), images.getTreeSizerHImage()])
 Manager.register(c)
 Manager.setMenu(c, 'sizer', 'BoxSizer', 'Box sizer', 10)
 
 ### wxStaticBoxSizer
 
-c = Sizer('wxStaticBoxSizer', ['sizer'],
-          ['label', 'orient'], {'orient': 'wxVERTICAL'})
+c = BoxSizer('wxStaticBoxSizer', ['sizer'], ['label', 'orient'], 
+             defaults={'orient': 'wxVERTICAL'},
+             images=[images.getTreeSizerVImage(), images.getTreeSizerHImage()])
 Manager.register(c)
 Manager.setMenu(c, 'sizer', 'StaticBoxSizer', 'StaticBox sizer', 20)
 
 ### wxGridSizer
 
 c = Sizer('wxGridSizer', ['sizer'],
-          ['cols', 'rows', 'vhap', 'hgap'], {'cols': '2', 'rows': '2'})
+          ['cols', 'rows', 'vhap', 'hgap'], 
+          defaults={'cols': '2', 'rows': '2'},
+          image=images.getTreeSizerGridImage())
 Manager.register(c)
 Manager.setMenu(c, 'sizer', 'GridSizer', 'Grid sizer', 30)
 
@@ -67,9 +76,29 @@ Manager.setMenu(c, 'sizer', 'GridSizer', 'Grid sizer', 30)
 
 c = Sizer('wxFlexGridSizer', ['sizer'],
           ['cols', 'rows', 'vhap', 'hgap', 'growablecols', 'growablerows'],
-          {'cols': '2', 'rows': '2'})
+          defaults={'cols': '2', 'rows': '2'},
+          image=images.getTreeSizerFlexGridImage())
+c.setSpecial('growablecols', MultiAttribute)
+c.setParamClass('growablecols', params.ParamIntList)
+c.setSpecial('growablerows', MultiAttribute)
+c.setParamClass('growablerows', params.ParamIntList)
 Manager.register(c)
 Manager.setMenu(c, 'sizer', 'FlexGridSizer', 'FlexGrid sizer', 40)
+
+### wxGridBagSizer
+
+c = Sizer('wxGridBagSizer', ['sizer'],
+          ['vhap', 'hgap', 'growablecols', 'growablerows'],
+          image=images.getTreeSizerGridBagImage(),
+          implicit_attributes=['option', 'flag', 'border', 'minsize', 'ratio', 'cellpos', 'cellspan'])
+c.setSpecial('growablecols', MultiAttribute)
+c.setParamClass('growablecols', params.ParamIntList)
+c.setSpecial('growablerows', MultiAttribute)
+c.setParamClass('growablerows', params.ParamIntList)
+c.setImplicitParamClass('cellpos', params.ParamPosSize)
+c.setImplicitParamClass('cellspan', params.ParamPosSize)
+Manager.register(c)
+Manager.setMenu(c, 'sizer', 'GridBagSizer', 'GridBag sizer', 50)
 
 ### spacer
 
@@ -82,7 +111,8 @@ Manager.setMenu(c, 'sizer', 'spacer', 'spacer', 60)
 ### wxStaticText
 
 c = Component('wxStaticText', ['control','tool'],
-              ['pos', 'size', 'label'], {'label': 'LABEL'})
+              ['pos', 'size', 'label'], 
+              defaults={'label': 'LABEL'})
 c.addStyles('wxALIGN_LEFT', 'wxALIGN_RIGHT', 'wxALIGN_CENTRE', 'wxST_NO_AUTORESIZE')
 Manager.register(c)
 Manager.setMenu(c, 'control', 'Label', 'Label', 10)
@@ -109,6 +139,7 @@ c.addStyles('wxTE_NO_VSCROLL',
             'wxTE_DONTWRAP',
             'wxTE_LINEWRAP',
             'wxTE_WORDWRAP')
+c.setParamClass('value', params.ParamMultilineText)
 Manager.register(c)
 Manager.setMenu(c, 'control', 'TextCtrl', 'Text field', 20)
 
@@ -117,6 +148,21 @@ Manager.setMenu(c, 'control', 'TextCtrl', 'Text field', 20)
 c = Component('wxChoice', ['control','tool'],
               ['pos', 'size', 'content', 'selection'])
 c.addStyles('wxCB_SORT')
+c.setSpecial('content', ContentAttribute)
 Manager.register(c)
 Manager.setMenu(c, 'control', 'Choice', 'Choice control', 30)
 
+### wxNotebook
+
+c = SmartContainer('wxNotebook', ['window', 'control'], ['pos', 'size'], 
+                   implicit_name='notebookpage', 
+                   implicit_page='Page Attributes', 
+                   implicit_attributes=['label', 'selected'],
+                   implicit_params={'selected': params.ParamBool})
+c.addStyles('wxNB_TOP', 'wxNB_LEFT', 'wxNB_RIGHT', 'wxNB_BOTTOM',
+            'wxNB_FIXEDWIDTH', 'wxNB_MULTILINE', 'wxNB_NOPAGETHEME', 
+            'wxNB_FLAT')
+c.setParamClass('selected', params.ParamBool)
+c.setParamClass('label', params.ParamText)
+Manager.register(c)
+Manager.setMenu(c, 'container', 'Notebook', 'Notebook control', 20)
