@@ -4468,6 +4468,8 @@ if test "$wxUSE_WCHAR_T" = "yes"; then
         AC_DEFINE(HAVE_WCSLEN)
     fi
 
+    AC_CHECK_FUNCS([wcsdup])
+
     dnl On HP-UX aCC need this define to find mbstrtowcs() &c
     dnl Can't be used for g++ since the mbstate_t in wchar.h can conflict
     dnl with g++'s in <cwchar> (unless -D_INCLUDE__STDC_A1_SOURCE is in the

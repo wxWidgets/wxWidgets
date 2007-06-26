@@ -167,7 +167,7 @@ WXDLLIMPEXP_BASE void *calloc( size_t num, size_t size );
 #endif
 #if defined(__WINDOWS__)
     #define wxCRT_StrdupW _wcsdup
-#elif !defined(__DARWIN__) && !defined( __VMS )
+#elif defined(HAVE_WCSDUP)
     #define wxCRT_StrdupW wcsdup
 #endif
 

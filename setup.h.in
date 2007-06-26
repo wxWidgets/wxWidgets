@@ -912,6 +912,9 @@
 /* Define if you have wcslen function  */
 #undef HAVE_WCSLEN
 
+/* Define if you have wcsdup function  */
+#undef HAVE_WCSDUP
+
 /* Define if you have wcstoull() and wcstoll() */
 #undef HAVE_WCSTOULL
 

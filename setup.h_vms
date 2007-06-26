@@ -997,6 +997,9 @@ typedef pid_t GPid;
 /* Define if you have wcslen function  */
 #define HAVE_WCSLEN 1
 
+/* Define if you have wcsdup function  */
+#define HAVE_WCSDUP 0
+
 /* Define if you have wcstoull() and wcstoll() */
 #undef HAVE_WCSTOULL
 
