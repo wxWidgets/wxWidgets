@@ -26,7 +26,6 @@ class _Model:
         self.dom = None
 
     def init(self, dom=None):
-        self.path = ''
         if self.dom: self.dom.unlink()
         if not dom:
             self.dom = MyDocument()
@@ -49,11 +48,6 @@ class _Model:
         else:
             g.currentEncoding = ''
         
-        # Change dir
-        self.path = path = os.path.abspath(path)
-        dir = os.path.dirname(path)
-        if dir: os.chdir(dir)
-
     def saveXML(self, path):
         if g.currentEncoding:
             import codecs

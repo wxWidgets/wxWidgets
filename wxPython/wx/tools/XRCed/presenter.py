@@ -16,6 +16,7 @@ from component import Manager
 class _Presenter:
     def init(self):
         Model.init()
+        self.path = ''
         # Global modified state
         self.setModified(False)
         view.frame.Clear()
@@ -27,9 +28,6 @@ class _Presenter:
         self.container = None           # current container (None if root)
         # Insert/append mode flags
         self.createSibling = self.insertBefore = False
-
-    def getPath(self):
-        return Model.path
 
     def loadXML(self, path):
         Model.loadXML(path)
@@ -44,7 +42,12 @@ class _Presenter:
             wx.LogError('File does not exists: %s' % path)
             return False
         try:
-            self.loadXML(path)
+            self.path = os.path.abspath(path)
+            self.loadXML(self.path)
+            # Change dir
+            dir = os.path.dirname(self.path)
+            if dir: os.chdir(dir)
+            self.setModified(False)
             g.conf.localconf = self.createLocalConf(path)
         except:
             inf = sys.exc_info()
@@ -62,7 +65,7 @@ class _Presenter:
             os.close(tmpFile)
             self.saveXML(tmpName)
             shutil.move(tmpName, path)
-            Model.path = path
+            self.path = path
             self.setModified(False)
         except:
             inf = sys.exc_info()
@@ -73,9 +76,9 @@ class _Presenter:
     def setModified(self, state=True):
         '''Set global modified state.'''
         self.modified = state
-        # Panel applied flag
-        self.applied = not state
-        name = os.path.basename(Model.path)
+        # Set applied flag
+        if not state: self.applied = True
+        name = os.path.basename(self.path)
         if not name: name = 'UNTITLED'
         # Update GUI
         if state:
@@ -165,7 +168,7 @@ class _Presenter:
                 self.comp.appendChild(parentNode, child)
                 item = view.tree.AppendItem(item, comp.name, 
                                             comp.getTreeImageId(child), data=data)
-        # Notify Presenter
+        view.tree.EnsureVisible(item)
         self.setModified()
         return item
 
@@ -203,6 +206,11 @@ class _Presenter:
             node.unlink()
             view.tree.Delete(item)
         view.panel.Clear()
+        # Reset variables
+        self.comp = Manager.rootComponent
+        self.container = None
+        self.setApplied()
+        self.setModified()
 
     def cut(self):
         self.copy()
@@ -261,8 +269,6 @@ class _Presenter:
             node = Model.dom.createComment(data)
             raise NotImplementedError
 
-        item = view.tree.GetSelection()
-
         # Check compatibility
         if self.createSibling: container = self.container
         else: container = self.comp
@@ -272,14 +278,15 @@ class _Presenter:
             node.unlink()
             return
 
-        if not self.applied:
+        item = view.tree.GetSelection()
+        if item and not self.applied:
             self.update(item)
         
         item = self.create(comp, node)
-        view.tree.EnsureVisible(item)
         # Add children
         for n in filter(is_object, node.childNodes):
             view.tree.AddNode(item, comp.getTreeNode(n))
+        self.setModified()
         
     def createLocalConf(self, path):
         name = os.path.splitext(path)[0]

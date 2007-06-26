@@ -30,7 +30,7 @@ class _Listener:
                           self.OnComponent)
 
         # Other events
-#        wx.EVT_IDLE(frame, self.OnIdle)
+        wx.EVT_IDLE(frame, self.OnIdle)
         wx.EVT_CLOSE(frame, self.OnCloseWindow)
 #        wx.EVT_KEY_DOWN(frame, tools.OnKeyDown)
 #        wx.EVT_KEY_UP(frame, tools.OnKeyUp)
@@ -115,7 +115,7 @@ class _Listener:
     def OnOpen(self, evt):
         '''wx.ID_OPEN handler.'''
         if not self.AskSave(): return
-        dlg = wx.FileDialog(self.frame, 'Open', os.path.dirname(Presenter.getPath()),
+        dlg = wx.FileDialog(self.frame, 'Open', os.path.dirname(Presenter.path),
                            '', '*.xrc', wx.OPEN | wx.CHANGE_DIR)
         if dlg.ShowModal() == wx.ID_OK:
             path = dlg.GetPath()
@@ -151,7 +151,7 @@ class _Listener:
 
     def OnSaveOrSaveAs(self, evt):
         '''wx.ID_SAVE and wx.ID_SAVEAS handler'''
-        path = Presenter.getPath()
+        path = Presenter.path
         if evt.GetId() == wx.ID_SAVEAS or not path:
             dirname = os.path.abspath(os.path.dirname(path))
             dlg = wx.FileDialog(self.frame, 'Save As', dirname, '', '*.xrc',
@@ -394,10 +394,14 @@ Homepage: http://xrced.sourceforge.net\
         self.inUpdateUI = False
 
     def OnIdle(self, evt):
-        raise NotImplementedError # !!!
-
         if self.inIdle: return          # Recursive call protection
         self.inIdle = True
+        if not Presenter.applied:
+            item = self.tree.GetSelection()
+            if item: Presenter.update(item)
+        self.inIdle = False
+        return
+
         #print 'onidle',tree.needUpdate,tree.pendingHighLight
         try:
             if tree.needUpdate:
