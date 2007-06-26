@@ -240,10 +240,7 @@ public:
     // see wxUniChar::operator bool etc. for explanation
     operator bool() const { return (bool)UniChar(); }
     bool operator!() const { return !UniChar(); }
-#if (defined(__VISUALC__) && __VISUALC__ < 1400) || \
-    defined(__DIGITALMARS__) || defined(__BORLANDC__)
     bool operator&&(bool v) const { return UniChar() && v; }
-#endif
 
     // Comparison operators:
 #define wxDEFINE_UNICHARREF_OPERATOR(op)                                      \
