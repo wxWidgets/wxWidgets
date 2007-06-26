@@ -513,7 +513,11 @@ int wxRegExImpl::Replace(wxString *text,
     // note that "^" shouldn't match after the first call to Matches() so we
     // use wxRE_NOTBOL to prevent it from happening
     while ( (!maxMatches || countRepl < maxMatches) &&
+#ifndef WXREGEX_CONVERT_TO_MB
             Matches(textstr + matchStart,
+#else
+            Matches(textstr.data() + matchStart,
+#endif 
                     countRepl ? wxRE_NOTBOL : 0
                     WXREGEX_IF_NEED_LEN(textlen - matchStart)) )
     {
@@ -559,7 +563,12 @@ int wxRegExImpl::Replace(wxString *text,
                     }
                     else
                     {
+#ifndef WXREGEX_CONVERT_TO_MB
                         textNew += wxString(textstr + matchStart + start,
+#else
+                        textNew += wxString(textstr.data() + matchStart +
+					    start,
+#endif
                                             *wxConvCurrent, len);
 
                         mayHaveBackrefs = true;
@@ -589,7 +598,8 @@ int wxRegExImpl::Replace(wxString *text,
 #ifndef WXREGEX_CONVERT_TO_MB
         result.append(*text, matchStart, start);
 #else
-        result.append(wxString(textstr + matchStart, *wxConvCurrent, start));
+        result.append(wxString(textstr.data() + matchStart, *wxConvCurrent, 
+			       start));
 #endif
         matchStart += start;
         result.append(textNew);
@@ -602,7 +612,7 @@ int wxRegExImpl::Replace(wxString *text,
 #ifndef WXREGEX_CONVERT_TO_MB
     result.append(*text, matchStart, wxString::npos);
 #else
-    result.append(wxString(textstr + matchStart, *wxConvCurrent));
+    result.append(wxString(textstr.data() + matchStart, *wxConvCurrent));
 #endif
     *text = result;
 
