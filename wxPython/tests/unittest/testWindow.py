@@ -74,14 +74,6 @@ class WindowTest(unittest.TestCase):
         super(WindowTest,self).__init__(arg)
         # WindowTest setup
         self.app = wx.PySimpleApp()
-        self.anotherFrame = wx.Frame(parent=None, id=wx.ID_ANY)
-        self.yetAnotherFrame = wx.Frame(parent=self.anotherFrame, id=wx.ID_ANY)
-        self.SIZES = testSize.getValidSizeData()
-        self.RECTS = testRect.getValidRectData()
-        self.SIZE_HINTS = testSize.getValidSizeHints()
-        self.INVALID_SIZE_HINTS = testSize.getInvalidSizeHints()
-        self.FONTS = testFont.getFontData()
-        self.POINTS = testPoint.getValidPointData()
         # make derived classes less annoying
         self.children = []
         self.children_ids = []
@@ -170,7 +162,7 @@ class WindowTest(unittest.TestCase):
             
     def testFont(self):
         """SetFont, GetFont"""
-        for font in self.FONTS:
+        for font in testFont.getFontData():
             self.testControl.SetFont(font)
             self.assertEquals(font, self.testControl.GetFont())
             
@@ -202,8 +194,10 @@ class WindowTest(unittest.TestCase):
     def testGrandParent(self):
         """GetGrandParent, Reparent"""
         self.assertEquals(None, self.testControl.GetGrandParent())
-        self.testControl.Reparent(self.yetAnotherFrame)
-        self.assertEquals(self.anotherFrame, self.testControl.GetGrandParent())
+        grandparent = wx.Frame(self.frame)
+        parent = wx.Frame(grandparent)
+        self.testControl.Reparent(parent)
+        self.assertEquals(grandparent, self.testControl.GetGrandParent())
     
     # NOTE: this is peculiar
     def testHelpText(self):
@@ -221,7 +215,7 @@ class WindowTest(unittest.TestCase):
     # At least one of these came out valid on Ubuntu.
     # TODO: isolate the culprit
     def testInvalidSizeHints(self):
-        for invalid_hint in self.INVALID_SIZE_HINTS:
+        for invalid_hint in testSize.getInvalidSizeHints():
             self.assertRaises(wx.PyAssertionError, self.testControl.SetSizeHints, *invalid_hint)
             
     def testLabel(self):
@@ -236,26 +230,26 @@ class WindowTest(unittest.TestCase):
 
     def testMaxSize(self):
         """SetMaxSize, GetMaxSize"""
-        for max_size in self.SIZES:
+        for max_size in testSize.getValidSizeData():
             self.testControl.SetMaxSize(max_size)
             self.assertEquals(max_size, self.testControl.GetMaxSize())
             
     def testMinSize(self):
         """SetMinSize, GetMinSize"""
-        for min_size in self.SIZES:
+        for min_size in testSize.getValidSizeData():
             self.testControl.SetMinSize(min_size)
             self.assertEquals(min_size, self.testControl.GetMinSize())
             
     def testMove(self):
         """Move, MoveXY, GetPositionTuple"""
-        for point in self.POINTS:
+        for point in testPoint.getValidPointData():
             self.testControl.Move(point)
             self.assertEquals(point.Get(), self.testControl.GetPositionTuple())
         # TODO: what is expected behavior? see 'testPosition' above.
         unchanged = self.testControl.GetPositionTuple()
         self.testControl.Move(wx.Point(-1,-1))
         self.assertEquals(unchanged,self.testControl.GetPositionTuple())
-        for point in self.POINTS:
+        for point in testPoint.getValidPointData():
             x,y = point.Get()
             self.testControl.MoveXY(x,y)
             self.assertEquals((x,y), self.testControl.GetPositionTuple())
@@ -275,7 +269,7 @@ class WindowTest(unittest.TestCase):
     
     def testOwnFont(self):
         """SetOwnFont"""
-        for font in self.FONTS:
+        for font in testFont.getFontData():
             self.testControl.SetOwnFont(font)
             self.assertEquals(font, self.testControl.GetFont())
             
@@ -290,15 +284,16 @@ class WindowTest(unittest.TestCase):
         parent = self.testControl.GetParent()
         self.assertEquals(parent, self.frame)
         self.assert_(not self.testControl.Reparent(parent))
-        if self.testControl.Reparent(self.anotherFrame):
+        anotherFrame = wx.Frame(self.frame)
+        if self.testControl.Reparent(anotherFrame):
             newParent = self.testControl.GetParent()
-            self.assertEquals(newParent, self.anotherFrame)
+            self.assertEquals(newParent, anotherFrame)
         else:
             self.assert_(False)
     
     def testPosition(self):
         """SetPosition, GetPosition"""
-        for point in self.POINTS:
+        for point in testPoint.getValidPointData():
             self.testControl.SetPosition(point)
             self.assertEquals(point, self.testControl.GetPosition())
         # TODO:
@@ -310,7 +305,7 @@ class WindowTest(unittest.TestCase):
     
     def testRect(self):
         """SetRect, GetRect"""
-        for rect in self.RECTS:
+        for rect in testRect.getValidRectData():
             self.testControl.SetRect(rect)
             self.assertEquals(rect, self.testControl.GetRect())
         
@@ -340,14 +335,14 @@ class WindowTest(unittest.TestCase):
     
     def testSize(self):
         """SetSize, GetSize, GetSizeTuple"""
-        for size in self.SIZES:
+        for size in testSize.getValidSizeData():
             self.testControl.SetSize(size)
             self.assertEquals(size, self.testControl.GetSize())
             self.assertEquals(size.Get(), self.testControl.GetSizeTuple())
     
     def testSizeHints(self):
         """SetSizeHints, GetMinWidth, GetMinHeight, GetMaxWidth, GetMaxHeight"""
-        for minW, minH, maxW, maxH in self.SIZE_HINTS:
+        for minW, minH, maxW, maxH in testSize.getValidSizeHints():
             self.testControl.SetSizeHints(minW, minH, maxW, maxH)
             self.assertEquals(minW, self.testControl.GetMinWidth())
             self.assertEquals(minH, self.testControl.GetMinHeight())
