@@ -14,7 +14,9 @@ echo Building wxWidgets-%WXW_VER% docs... > c:\temp.log
 
 set WXWIN=c:\wx\wxWidgets
 set DAILY=c:\daily
-set PATH=%PATH%;C:\wx\wxw26b\utils\tex2rtf\src\vc_based;C:\wx\Gnu\bin;c:\progra~1\htmlhe~1;C:\PROGRA~1\INNOSE~1
+
+rem svn already in my path...
+set PATH=%PATH%;C:\wx\oldcvs\wxw26b\utils\tex2rtf\src\vc_based;c:\wx\Gnu\bin;c:\progra~1\htmlhe~1;C:\PROGRA~1\INNOSE~1
 set PATH=%PATH%;C:\Program Files\gs\gs8.51\lib;C:\Program Files\gs\gs8.51\bin
 rem add nmake to the path to build the docs
 call  \vc6
@@ -28,14 +30,16 @@ SET >>  c:\temp.log
 rem update wxwidgets (holds docs) and inno (cvs wxMSW setup.exe only)
 c:
 cd %WXWIN%
-cvs up -P -d
+svn cleanup
+svn up 
 
 rem now inno
 cd \wx\inno\wxWidgets
 del c*.*
 if exist include\wx\msw\setup.h del include\wx\msw\setup.h
 if exist include\wx\univ\setup.h del include\wx\univ\setup.h
-cvs up -P
+svn cleanup
+svn up 
 dos2unix configure
 dos2unix config.guess
 dos2unix config.sub
