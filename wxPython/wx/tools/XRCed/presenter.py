@@ -52,6 +52,9 @@ class _Presenter:
         return True
             
     def save(self, path):
+        # Apply changes if needed
+        if not self.applied:
+            self.update(view.tree.GetSelection())
         try:
             tmpFile,tmpName = tempfile.mkstemp(prefix='xrced-')
             os.close(tmpFile)
@@ -152,8 +155,8 @@ class _Presenter:
             if parentItem != root:
                 view.tree.Expand(parentItem)
         else:
-            if self.insertBefore:
-                nextNode = self.container.getTreeNode(parentNode.firstChild)
+            if self.insertBefore and parentNode.firstChild:
+                nextNode = self.comp.getTreeNode(parentNode.firstChild)
                 self.comp.insertBefore(parentNode, child, nextNode)
                 view.tree.PrependItem(item, comp.name, comp.getTreeImageId(child), data=data)
             else:
@@ -182,6 +185,7 @@ class _Presenter:
                 if value: 
                     self.comp.addAttribute(panel.node, a, value)
         view.tree.SetItemImage(item, self.comp.getTreeImageId(node))
+        self.setApplied()
 
     def delete(self):
         '''Delete selected object(s).'''
