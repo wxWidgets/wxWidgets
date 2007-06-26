@@ -95,5 +95,5 @@ class XMLTree(wx.TreeCtrl):
                 children.append(i)
                 i, cookie = self.GetNextChild(item, cookie)
             map(self.CollapseAll, children)
-            if item != self.GetRootItem():
+            if item != self.root:
                 self.Collapse(item)

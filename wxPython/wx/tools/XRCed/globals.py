@@ -30,6 +30,20 @@ if wx.VERSION[:3] < MinWxVersion:
 # you comment above and can uncomment this:
 defaultEncoding = wx.GetDefaultPyEncoding()
 
+# Global id constants
+class ID:
+    MENU = wx.NewId()
+    EXPAND = wx.NewId()
+    COLLAPSE = wx.NewId()
+    PASTE_SIBLING = wx.NewId()
+    TOOL_PASTE = wx.NewId()
+    INSERT = wx.NewId()
+    APPEND = wx.NewId()
+    SIBLING = wx.NewId()
+    SUBCLASS = wx.NewId()
+    REF = wx.NewId()
+    COMMENT = wx.NewId()
+
 # Global variables
 
 debug = True

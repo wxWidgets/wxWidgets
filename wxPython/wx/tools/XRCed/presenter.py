@@ -97,7 +97,8 @@ class _Presenter:
         if not item or item == view.tree.root:
             self.container = None
             self.comp = Manager.rootComponent
-            self.panels = view.panel.SetData(None, self.comp, None)
+            self.panels = []
+            view.panel.Clear()
         else:
             node = view.tree.GetPyData(item)
             className = node.getAttribute('class')
@@ -113,24 +114,12 @@ class _Presenter:
 
     def popupMenu(self, forceSibling, forceInsert, pos):
         '''Show popup menu and set sibling/insert flags.'''
-        if not self.comp.isContainer():
-            self.createSibling = True
-        else:
+        if self.comp.isContainer():
             self.createSibling = forceSibling
         self.insertBefore = forceInsert
         menu = view.XMLTreeMenu(view.tree, self.createSibling, self.insertBefore)
         view.tree.PopupMenu(menu, pos)
         menu.Destroy()        
-
-    # !!! NOT USED AT THE MOMENT
-    def needInsert(self, item):
-        '''Return True if item must be inserted after current vs. appending'''
-        if item == self.GetRootItem(): return False
-#        isContainer = self.GetPyData(item).hasChildren
-        isContainer = True      # DEBUG
-        # If leaf item or collapsed container, then insert mode
-        return not isContainer or \
-            self.GetChildrenCount(item, False) and not self.IsExpanded(item)
 
     def create(self, comp, child=None):
         '''Add DOM node as child or sibling depending on flags. Return new item.'''
@@ -138,10 +127,9 @@ class _Presenter:
             child = Model.createObjectNode(comp.name)
         data = wx.TreeItemData(child)
         item = view.tree.GetSelection()
-        root = view.tree.GetRootItem()
         if not item: 
-            item = root
-        if item == root:
+            item = view.tree.root
+        if item == view.tree.root:
             self.createSibling = False # can't create sibling of root
         if self.createSibling:
             parentItem = view.tree.GetItemParent(item)

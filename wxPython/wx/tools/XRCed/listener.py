@@ -9,7 +9,6 @@ import os,sys,shutil,tempfile
 from globals import *
 from presenter import Presenter
 from component import Manager
-from XMLTreeMenu import ID
 
 class _Listener:
     '''
@@ -94,13 +93,16 @@ class _Listener:
         wx.EVT_UPDATE_UI(frame, frame.ID_MOVERIGHT, self.OnUpdateUI)
         wx.EVT_UPDATE_UI(frame, frame.ID_REFRESH, self.OnUpdateUI)
 
-        # XMLTree events
-        # Register events
-        tree.Bind(wx.EVT_RIGHT_DOWN, self.OnTreeRightDown)
-        tree.Bind(wx.EVT_TREE_SEL_CHANGING, self.OnTreeSelChanging)
-        tree.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnTreeSelChanged)        
         wx.EVT_MENU(frame, ID.COLLAPSE, self.OnCollapse)
         wx.EVT_MENU(frame, ID.EXPAND, self.OnExpand)
+
+        # XMLTree events
+        # Register events
+#        tree.Bind(wx.EVT_LEFT_DOWN, self.OnTreeLeftDown)
+        tree.Bind(wx.EVT_RIGHT_DOWN, self.OnTreeRightDown)
+        tree.Bind(wx.EVT_TREE_SEL_CHANGING, self.OnTreeSelChanging)
+        tree.Bind(wx.EVT_TREE_SEL_CHANGED, self.OnTreeSelChanged)
+        tree.Bind(wx.EVT_TREE_ITEM_COLLAPSED, self.OnTreeItemCollapsed)
 
     def OnComponent(self, evt):
         '''Hadnler for creating new elements.'''
@@ -443,12 +445,30 @@ Homepage: http://xrced.sourceforge.net\
                 self.miniFrame.Show(True)
         evt.Skip()
 
+    # Expand/collapse subtree
+    def OnExpand(self, evt):
+        if self.tree.GetSelection(): 
+            map(self.tree.ExpandAll, self.tree.GetSelections())
+        else: self.tree.ExpandAll(self.tree.root)
+
+    def OnCollapse(self, evt):
+        if self.tree.GetSelection(): 
+            map(self.tree.CollapseAll, self.tree.GetSelections())
+        else: self.tree.CollapseAll(self.tree.root)
 
 
     #
     # XMLTree event handlers
     #
     
+    def OnTreeLeftDown(self, evt):
+        pt = evt.GetPosition();
+        item, flags = self.tree.HitTest(pt)
+#        print item,flags
+        if flags & wx.TREE_HITTEST_NOWHERE or not item:
+            self.tree.UnselectAll()
+        evt.Skip()
+
     def OnTreeRightDown(self, evt):
         forceSibling = evt.ControlDown()
         forceInsert = evt.ShiftDown()
@@ -470,18 +490,17 @@ Homepage: http://xrced.sourceforge.net\
             Presenter.update(evt.GetOldItem())
         # Tell presenter to update current data and view
         Presenter.setData(evt.GetItem())
+        # Set initial sibling/insert modes
+        Presenter.createSibling = not Presenter.comp.isContainer()
+        Presenter.insertBefore = False
         evt.Skip()
 
-    # Expand/collapse subtree
-    def OnExpand(self, evt):
-        if self.tree.GetSelection(): 
-            map(self.tree.ExpandAll, self.tree.GetSelections())
-        else: self.tree.ExpandAll(self.tree.GetRootItem())
-
-    def OnCollapse(self, evt):
-        if self.tree.GetSelection(): 
-            map(self.tree.CollapseAll, self.tree.GetSelections())
-        else: self.tree.CollapseAll(self.tree.GetRootItem())
+    def OnTreeItemCollapsed(self, evt):
+        # If no selection, reset panel
+        if not self.tree.GetSelection():
+            if not Presenter.applied: Presenter.update()
+            Presenter.setData(None)
+        evt.Skip()
 
 # Singleton class
 Listener = _Listener()

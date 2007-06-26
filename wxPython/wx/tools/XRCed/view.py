@@ -7,7 +7,7 @@
 import os
 from globals import *
 from XMLTree import XMLTree
-from XMLTreeMenu import ID,XMLTreeMenu
+from XMLTreeMenu import XMLTreeMenu
 from AttributePanel import Panel
 import images
 
@@ -217,7 +217,7 @@ class Frame(wx.Frame):
         tree = XMLTree(splitter)
 
         # Miniframe for split mode
-        miniFrame = wx.MiniFrame(self, -1, 'Properties & Style',
+        miniFrame = wx.MiniFrame(self, -1, 'Attributes',
                                  (g.conf.panelX, g.conf.panelY),
                                  (g.conf.panelWidth, g.conf.panelHeight))
         self.miniFrame = miniFrame

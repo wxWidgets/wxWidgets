@@ -5,22 +5,8 @@
 # RCS-ID:       $Id$
 
 import wx
+from globals import ID
 from component import Manager
-
-# Global id constants
-class ID:
-    MENU = wx.NewId()
-    EXPAND = wx.NewId()
-    COLLAPSE = wx.NewId()
-    PASTE_SIBLING = wx.NewId()
-    TOOL_PASTE = wx.NewId()
-    INSERT = wx.NewId()
-    APPEND = wx.NewId()
-    SIBLING = wx.NewId()
-    SUBCLASS = wx.NewId()
-    REF = wx.NewId()
-    COMMENT = wx.NewId()
-
 
 class XMLTreeMenu(wx.Menu):
     '''dynamic pulldown menu for XMLTree'''
@@ -33,11 +19,10 @@ class XMLTreeMenu(wx.Menu):
         '''
         wx.Menu.__init__(self)
         items = tree.GetSelections()
-        root = tree.GetRootItem()
         if len(items) <= 1:
             item = tree.GetSelection()
-            if not item: item = root
-            if item == root or tree.GetItemParent(item) == root and createSibling:
+            if not item: item = tree.root
+            if item == tree.root or tree.GetItemParent(item) == tree.root and createSibling:
                 menu = self.CreateTopLevelMenu()
             else:
                 menu = self.CreateSubMenus()
@@ -60,7 +45,7 @@ class XMLTreeMenu(wx.Menu):
             self.AppendSeparator()
             self.Append(wx.ID_CUT, 'Cut', 'Cut to the clipboard')
             self.Append(wx.ID_COPY, 'Copy', 'Copy to the clipboard')
-            if createSibling and item != root:
+            if createSibling and item != tree.root:
                 self.Append(ID.PASTE_SIBLING, 'Paste Sibling',
                             'Paste from the clipboard as a sibling')
             else:
