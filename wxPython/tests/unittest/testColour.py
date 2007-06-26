@@ -7,21 +7,39 @@ This file contains classes and methods for unit testing the API of wx.Colour
         
 Methods yet to test:
 __del__, __eq__, __getitem__, __len__, __ne__, __nonzero__, __reduce__, 
-__repr__, __str__, GetPixel, SetFromName
+__repr__, __str__, GetAsString, GetPixel
 """
-
+            
 def getColourEquivalents():
-    return (
-            (wx.Color(255,0,0), RED), (wx.Color(0,255,0), GREEN), (wx.Color(0,0,255), BLUE),
-            ('RED', RED), ('GREEN', GREEN), ('BLUE', BLUE),
-            ('#FF0000', RED), ('#00FF00', GREEN), ('#0000FF', BLUE),
-            ((255,0,0), RED), ((0,255,0), GREEN), ((0,0,255), BLUE)
-        )
+    # doesn't include wx.Colour instances, only equivalents
+    return ( getColourEquivalentNames() +
+                getColourEquivalentHexValues() +
+                getColourEquivalentTuples() )
+    
+def getColourEquivalentNames():
+    return tuple((name, wx.TheColourDatabase.FindColour(name)) for name in getColourNames())
+
+def getColourEquivalentHexValues():
+    return tuple((hexify(col), col) for name,col in getColourEquivalentNames())
+    
+def getColourEquivalentTuples():
+    return tuple((col.Get(), col) for name,col in getColourEquivalentNames())
+
+def hexify(col):
+    (r,g,b) = col.Get()
+    rhex, ghex, bhex = hex(r)[2:], hex(g)[2:], hex(b)[2:]
+    if len(rhex) == 1:
+        rhex = '0' + rhex
+    if len(ghex) == 1:
+        ghex = '0' + ghex
+    if len(bhex) == 1:
+        bhex = '0' + bhex
+    return '#' + rhex + ghex + bhex
+
+# -----------------------------------------------------------
 
 def getColourData():
     return tuple( wx.Colour(*rgba) for rgba in getColourTuples() )
-
-# -----------------------------------------------------------
 
 def getColourTuples():
     return (
@@ -31,15 +49,8 @@ def getColourTuples():
                 (100,100,100,128), (32,64,128,2), (254,121,61,0), (9,12,81,255),
         )
 
-# -----------------------------------------------------------
-
-RED = wx.Colour(255,0,0)
-GREEN = wx.Colour(0,255,0)
-BLUE = wx.Colour(0,0,255)
-# wx.NullColour
-
-# from inspection of wx.TheColourDatabase
 def getColourNames():
+    """from inspection of wx.TheColourDatabase"""
     return ('BLACK','BLUE','SLATE BLUE','GREEN','SPRING GREEN','CYAN','NAVY',
             'STEEL BLUE','FOREST GREEN','SEA GREEN','DARK GREY','MIDNIGHT BLUE',
             'DARK GREEN','DARK SLATE GREY','MEDIUM BLUE','SKY BLUE','LIME GREEN',
@@ -65,6 +76,13 @@ class ColorTest(unittest.TestCase):
     
     def testColorColourAlias(self):
         self.assertEquals(wx.Color, wx.Colour)
+    
+    def testSetFromName(self):
+        """SetFromName"""
+        for name,colour in getColourEquivalentNames():
+            newcol = wx.Colour()
+            newcol.SetFromName(name)
+            self.assertEquals(colour, newcol)
     
     def testConstructor(self):
         """__init__"""
@@ -111,24 +129,20 @@ class ColorTest(unittest.TestCase):
             self.assertEquals(i, colour.Blue())
             self.assertEquals(i, colour.Alpha())
             
-    def testStringRepresentation(self):
-        """GetAsString"""
-        for i in range(256):
-            tup = (i,i,i,i)
-            col_tup = (i,i,i)
-            color = wx.Colour(i,i,i,i)
-            self.assertEquals(str(tup), str(color))
-            self.assertEquals('rgb'+str(col_tup), 
-                                color.GetAsString(wx.C2S_CSS_SYNTAX))
-            # TODO: implement tests for below flags
-            # wx.C2S_NAME 	return colour name, when possible
-            # wx.C2S_CSS_SYNTAX 	return colour in rgb(r,g,b) syntax
-            # wx.C2S_HTML_SYNTAX 	return colour in #rrggbb syntax
-            
 
 def suite():
     suite = unittest.makeSuite(ColorTest)
     return suite
     
 if __name__ == '__main__':
+    # test getColourEquivalents
+    print "Testing getColourEquivalents... ",
+    app = wx.PySimpleApp()
+    f = wx.Frame(None)
+    for test, colour in getColourEquivalents():
+        f.SetBackgroundColour(test)
+        #print 'Test: ', test
+        #print 'Colour: ', colour
+        assert colour == f.GetBackgroundColour()
+    print "Done"
     unittest.main(defaultTest='suite')
