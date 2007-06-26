@@ -1,6 +1,8 @@
 import unittest
 import wx
 
+import testColour
+
 """
 This file contains classes and methods for unit testing the API of wx.TextAttr.
         
@@ -24,10 +26,10 @@ class TextAttrTest(unittest.TestCase):
         """SetBackgroundColour, GetBackgroundColour, HasBackgroundColour"""
         self.assert_(not self.testControl.HasBackgroundColour())
         self.assertEquals(wx.NullColour, self.testControl.GetBackgroundColour())
-        col = wx.Colour(31,41,59)
-        self.testControl.SetBackgroundColour(col)
-        self.assert_(self.testControl.HasBackgroundColour())
-        self.assertEquals(col, self.testControl.GetBackgroundColour())
+        for test,colour in testColour.getColourEquivalents():
+            self.testControl.SetBackgroundColour(test)
+            self.assert_(self.testControl.HasBackgroundColour())
+            self.assertEquals(colour, self.testControl.GetBackgroundColour())
     
     def testIsDefault(self):
         """IsDefault"""
@@ -59,10 +61,10 @@ class TextAttrTest(unittest.TestCase):
         """SetTextColour, GetTextColour, HasTextColour"""
         self.assert_(not self.testControl.HasTextColour())
         self.assertEquals(wx.NullColour, self.testControl.GetTextColour())
-        col = wx.Colour(27,18,28)
-        self.testControl.SetTextColour(col)
-        self.assert_(self.testControl.HasTextColour())
-        self.assertEquals(col, self.testControl.GetTextColour())
+        for test,colour in testColour.getColourEquivalents():
+            self.testControl.SetTextColour(test)
+            self.assert_(self.testControl.HasTextColour())
+            self.assertEquals(colour, self.testControl.GetTextColour())
     
 
 def suite():

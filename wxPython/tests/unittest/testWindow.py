@@ -76,7 +76,6 @@ class WindowTest(unittest.TestCase):
         self.app = wx.PySimpleApp()
         self.anotherFrame = wx.Frame(parent=None, id=wx.ID_ANY)
         self.yetAnotherFrame = wx.Frame(parent=self.anotherFrame, id=wx.ID_ANY)
-        self.COLOUR_TESTS = testColour.getColourEquivalents()
         self.SIZES = testSize.getValidSizeData()
         self.RECTS = testRect.getValidRectData()
         self.SIZE_HINTS = testSize.getValidSizeHints()
@@ -103,7 +102,7 @@ class WindowTest(unittest.TestCase):
     
     def testBackgroundColor(self):
         """SetBackgroundColour, GetBackgroundColour"""
-        for test, actual in self.COLOUR_TESTS:
+        for test, actual in testColour.getColourEquivalents():
             self.assert_(self.testControl.SetBackgroundColour(test))
                         # return True when background colour changed
             self.assertEquals(actual, self.testControl.GetBackgroundColour())
@@ -177,7 +176,7 @@ class WindowTest(unittest.TestCase):
             
     def testForegroundColor(self):
         """SetForegroundColour, GetForegroundColour"""
-        for test, actual in self.COLOUR_TESTS:
+        for test, actual in testColour.getColourEquivalents():
             self.assert_(self.testControl.SetForegroundColour(test))
                             # return True when background colour changed
             self.assertEquals(actual, self.testControl.GetForegroundColour())
@@ -270,7 +269,7 @@ class WindowTest(unittest.TestCase):
     # the docs don't say anything about SetOwnBackgroundColour
     def testOwnBackgroundColor(self):
         """SetOwnBackgroundColour"""
-        for test, actual in self.COLOUR_TESTS:
+        for test, actual in testColour.getColourEquivalents():
             self.testControl.SetOwnBackgroundColour(test)
             self.assertEquals(actual, self.testControl.GetBackgroundColour())
     
@@ -282,7 +281,7 @@ class WindowTest(unittest.TestCase):
             
     def testOwnForegroundColor(self):
         """SetOwnForegroundColour"""
-        for test, actual in self.COLOUR_TESTS:
+        for test, actual in testColour.getColourEquivalents():
             self.testControl.SetOwnForegroundColour(test)
             self.assertEquals(actual, self.testControl.GetForegroundColour())
     
