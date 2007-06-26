@@ -5,6 +5,8 @@
 # RCS-ID:       $Id$
 
 import os,tempfile,shutil
+from xml.parsers import expat
+import cPickle
 from globals import *
 import view
 from model import Model
@@ -24,7 +26,7 @@ class _Presenter:
         self.comp = Manager.rootComponent # component shown in panel (or the root component)
         self.container = None           # current container (None if root)
         # Insert/append mode flags
-        self.forceSibling = self.forceInsert = False
+        self.createSibling = self.insertBefore = False
 
     def getPath(self):
         return Model.path
@@ -127,9 +129,10 @@ class _Presenter:
         return not isContainer or \
             self.GetChildrenCount(item, False) and not self.IsExpanded(item)
 
-    def create(self, comp):
-        # Add DOM node as child or sibling depending on flags
-        child = Model.createObjectNode(comp.name)
+    def create(self, comp, child=None):
+        '''Add DOM node as child or sibling depending on flags. Return new item.'''
+        if child is None:
+            child = Model.createObjectNode(comp.name)
         data = wx.TreeItemData(child)
         item = view.tree.GetSelection()
         root = view.tree.GetRootItem()
@@ -146,26 +149,25 @@ class _Presenter:
             node = view.tree.GetPyData(item)
             if self.insertBefore:
                 self.container.insertBefore(parentNode, child, node)
-                view.tree.InsertItemBefore(parentItem, item, comp.name, 
-                                           comp.getTreeImageId(child), data=data)
+                item = view.tree.InsertItemBefore(parentItem, item, comp.name, 
+                                                  comp.getTreeImageId(child), data=data)
             else:
                 self.container.insertAfter(parentNode, child, node)
-                view.tree.InsertItem(parentItem, item, comp.name, 
-                                     comp.getTreeImageId(child), data=data)
-            if parentItem != root:
-                view.tree.Expand(parentItem)
+                item = view.tree.InsertItem(parentItem, item, comp.name, 
+                                            comp.getTreeImageId(child), data=data)
         else:
-            if self.insertBefore and parentNode.firstChild:
-                nextNode = self.comp.getTreeNode(parentNode.firstChild)
+            if self.insertBefore and view.tree.ItemHasChildren(item):
+                nextNode = view.tree.GetPyData(view.tree.GetFirstChild(item))
                 self.comp.insertBefore(parentNode, child, nextNode)
-                view.tree.PrependItem(item, comp.name, comp.getTreeImageId(child), data=data)
+                item = view.tree.PrependItem(item, comp.name, 
+                                             comp.getTreeImageId(child), data=data)
             else:
                 self.comp.appendChild(parentNode, child)
-                view.tree.AppendItem(item, comp.name, comp.getTreeImageId(child), data=data)
-            if item != root:
-                view.tree.Expand(item)
+                item = view.tree.AppendItem(item, comp.name, 
+                                            comp.getTreeImageId(child), data=data)
         # Notify Presenter
         self.setModified()
+        return item
 
     def update(self, item):
         '''Update DOM with new attribute values. Update tree if necessary.'''
@@ -203,8 +205,82 @@ class _Presenter:
         view.panel.Clear()
 
     def cut(self):
-        raise NotImplementedError
+        self.copy()
+        self.delete()
 
+    def copy(self):
+        # Update values from panel first
+        item = view.tree.GetSelection()
+        if not self.applied:
+            self.update(item)
+        node = view.tree.GetPyData(item)
+        if wx.TheClipboard.Open():
+            if node.nodeType == node.ELEMENT_NODE:
+                data = wx.CustomDataObject('XRCED_elem')
+                s = node.toxml(encoding=expat.native_encoding)
+            else:
+                data = wx.CustomDataObject('XRCED_node')
+                s = node.data
+            data.SetData(cPickle.dumps(s))
+            wx.TheClipboard.SetData(data)
+            wx.TheClipboard.Close()
+        else:
+            wx.MessageBox("Unable to open the clipboard", "Error")        
+
+    def paste(self):
+        success = success_node = False
+        if wx.TheClipboard.IsOpened() or wx.TheClipboard.Open():
+            try:
+                data = wx.CustomDataObject('XRCED_elem')
+                if wx.TheClipboard.IsSupported(data.GetFormat()):
+                    try:
+                        success = wx.TheClipboard.GetData(data)
+                    except:
+                        # there is a problem if XRCED_node is in clipboard
+                        # but previous SetData was for XRCED
+                        pass
+                if not success:             # try other format
+                    data = wx.CustomDataObject('XRCED_node')
+                    if wx.TheClipboard.IsSupported(data.GetFormat()):
+                        success_node = wx.TheClipboard.GetData(data)
+            finally:
+                wx.TheClipboard.Close()
+
+        if not success and not success_node:
+            wx.MessageBox(
+                "There is no data in the clipboard in the required format",
+                "Error")
+            return
+
+        # XML representation of element or node value string
+        data = cPickle.loads(data.GetData()) 
+        if success:
+            node = Model.parseString(data)
+            comp = Manager.components[node.getAttribute('class')]
+        else:
+            node = Model.dom.createComment(data)
+            raise NotImplementedError
+
+        item = view.tree.GetSelection()
+
+        # Check compatibility
+        if self.createSibling: container = self.container
+        else: container = self.comp
+        if not container.canHaveChild(comp):
+            wx.LogError('Incompatible parent/child: parent is %s, child is %s!' %
+                        (container.name, comp.name))
+            node.unlink()
+            return
+
+        if not self.applied:
+            self.update(item)
+        
+        item = self.create(comp, node)
+        view.tree.EnsureVisible(item)
+        # Add children
+        for n in filter(is_object, node.childNodes):
+            view.tree.AddNode(item, comp.getTreeNode(n))
+        
     def createLocalConf(self, path):
         name = os.path.splitext(path)[0]
         name += '.xcfg'

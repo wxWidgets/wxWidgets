@@ -21,6 +21,9 @@ class _Listener:
         self.frame = frame
         self.tree = tree
         self.panel = panel
+
+        # Some local members
+        self.inUpdateUI = self.inIdle = False
         
         # Component events
         wx.EVT_MENU_RANGE(frame, Manager.firstId, Manager.lastId,
@@ -50,6 +53,7 @@ class _Listener:
         wx.EVT_MENU(frame, wx.ID_CUT, self.OnCut)
         wx.EVT_MENU(frame, wx.ID_COPY, self.OnCopy)
         wx.EVT_MENU(frame, wx.ID_PASTE, self.OnPaste)
+        wx.EVT_MENU(frame, ID.PASTE_SIBLING, self.OnPasteSibling)
         wx.EVT_MENU(frame, wx.ID_DELETE, self.OnDelete)
         wx.EVT_MENU(frame, frame.ID_TOOL_PASTE, self.OnPaste)
         wx.EVT_MENU(frame, frame.ID_LOCATE, self.OnLocate)
@@ -102,14 +106,6 @@ class _Listener:
         '''Hadnler for creating new elements.'''
         comp = Manager.findById(evt.GetId())
         Presenter.create(comp)
-
-    def OnCut(self, evt):
-        '''wx.ID_CUT handler.'''
-        Presenter.cut()
-
-    def OnDelete(self, evt):
-        '''wx.ID_DELETE handler.'''
-        Presenter.delete()
 
     def OnNew(self, evt):
         '''wx.ID_NEW hadndler.'''
@@ -260,30 +256,25 @@ class _Listener:
             undoMan.Redo()
             self.SetModified(True)
 
-    def OnCopy(self, evt):
-        raise NotImplementedError # !!!
+    def OnCut(self, evt):
+        '''wx.ID_CUT handler.'''
+        Presenter.cut()
 
-        selected = tree.selection
-        if not selected: return         # key pressed event
-        xxx = tree.GetPyData(selected)
-        if wx.TheClipboard.Open():
-            if xxx.isElement:
-                data = wx.CustomDataObject('XRCED')
-                # Set encoding in header
-                # (False,True)
-                s = xxx.node.toxml(encoding=expat.native_encoding)
-            else:
-                data = wx.CustomDataObject('XRCED_node')
-                s = xxx.node.data
-            data.SetData(cPickle.dumps(s))
-            wx.TheClipboard.SetData(data)
-            wx.TheClipboard.Close()
-            self.SetStatusText('Copied')
-        else:
-            wx.MessageBox("Unable to open the clipboard", "Error")
+    def OnDelete(self, evt):
+        '''wx.ID_DELETE handler.'''
+        Presenter.delete()
+
+    def OnCopy(self, evt):
+        '''wx.ID_COPY handler.'''
+        Presenter.copy()
 
     def OnPaste(self, evt):
-        raise NotImplementedError
+        '''wx.ID_PASTE handler.'''
+        Presenter.paste()
+
+    def OnPasteSibling(self, evt):
+        '''ID.PASTE_SIBLING handler.'''
+        Presenter.paste()
 
     def ItemsAreCompatible(self, parent, child):
         raise NotImplementedError
@@ -371,12 +362,26 @@ Homepage: http://xrced.sourceforge.net\
         tree.CloseTestWindow()
 
     def OnUpdateUI(self, evt):
+        if self.inUpdateUI: return          # Recursive call protection
+        self.inUpdateUI = True
         if evt.GetId() in [wx.ID_CUT, wx.ID_COPY, wx.ID_DELETE]:
             evt.Enable(bool(self.tree.GetSelection()))
         elif evt.GetId() == wx.ID_SAVE:
             evt.Enable(Presenter.modified)
         elif evt.GetId() in [wx.ID_PASTE, self.frame.ID_TOOL_PASTE]:
-            evt.Enable(bool(self.tree.GetSelection()))
+# !!! Does not work on wxGTK
+#             enabled = False
+#             if not wx.TheClipboard.IsOpened() and wx.TheClipboard.Open():
+#                 data = wx.CustomDataObject('XRCED_elem')
+#                 if wx.TheClipboard.IsSupported(data.GetFormat()):
+#                     enabled = True
+#                 else:
+#                     data = wx.CustomDataObject('XRCED_node')
+#                     if wx.TheClipboard.IsSupported(data.GetFormat()):
+#                         enabled = True
+#                 wx.TheClipboard.Close()
+#             evt.Enable(enabled)
+            evt.Enable(True)
         elif evt.GetId() in [self.frame.ID_TEST,
                              self.frame.ID_MOVEUP, self.frame.ID_MOVEDOWN,
                              self.frame.ID_MOVELEFT, self.frame.ID_MOVERIGHT]:
@@ -386,6 +391,7 @@ Homepage: http://xrced.sourceforge.net\
             evt.Enable(g.testWin is not None)
         elif evt.GetId() == wx.ID_UNDO:  evt.Enable(g.undoMan.CanUndo())
         elif evt.GetId() == wx.ID_REDO:  evt.Enable(g.undoMan.CanRedo())
+        self.inUpdateUI = False
 
     def OnIdle(self, evt):
         raise NotImplementedError # !!!

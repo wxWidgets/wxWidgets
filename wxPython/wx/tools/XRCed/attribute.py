@@ -59,7 +59,7 @@ class FontAttribute:
     def get(node):
         value = {}
         for n in node.childNodes:
-            if n.nodeType == node.ELEMENT_NODE and n.tagName in FontAttribute.attributes:
+            if n.nodeType == node.ELEMENT_NODE:
                 value[n.tagName] = Attribute.get(n)
         return value
     get = staticmethod(get)

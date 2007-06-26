@@ -77,4 +77,7 @@ class _Model:
         node.setAttribute('class', className)
         return node
 
+    def parseString(self, data):
+        return minidom.parseString(data).childNodes[0]
+
 Model = _Model()

@@ -5,6 +5,7 @@
 # RCS-ID:       $Id$
 
 import wx,sys,bisect
+from sets import Set
 from globals import *
 from model import Model
 from attribute import *
@@ -110,11 +111,13 @@ class Component(object):
 class Container(Component):
     '''Base class for containers.'''
     def canHaveChild(self, component):
-        # Test exclusion of main group first
-        if '!'+component.groups[0] in self.groups: return False
+        # Test exclusion first
+        for g in self.groups:
+            if '!'+component.groups[0] in parentChildGroups.get(g, []): return False
         # Test for any possible parent-child
+        groups = Set(component.groups)
         for g in self.groups: 
-            if component.groups.intersection(parentChildGroups[g]):
+            if groups.intersection(parentChildGroups.get(g, [])):
                 return True
         return False
 
