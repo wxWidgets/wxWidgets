@@ -2672,36 +2672,19 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
     wxWindow* wnd = m_tabs.GetWindowFromIdx(page_idx);
     wxWindow* new_active = NULL;
 
+    // make sure we found the page
+    if (!wnd)
+        return false;
+        
     // find out which onscreen tab ctrl owns this tab
     wxAuiTabCtrl* ctrl;
     int ctrl_idx;
     if (!FindTab(wnd, &ctrl, &ctrl_idx))
         return false;
 
-    // find a new page and set it as active
-    int new_idx = ctrl_idx+1;
-    if (new_idx >= (int)ctrl->GetPageCount())
-        new_idx = ctrl_idx-1;
+    bool is_curpage = (m_curpage == (int)page_idx);
+    bool is_active_in_split = ctrl->GetPage(ctrl_idx).active;
 
-    if (new_idx >= 0 && new_idx < (int)ctrl->GetPageCount())
-    {
-        new_active = ctrl->GetWindowFromIdx(new_idx);
-    }
-     else
-    {
-        // set the active page to the first page that
-        // isn't the one being deleted
-        size_t i, page_count = m_tabs.GetPageCount();
-        for (i = 0; i < page_count; ++i)
-        {
-            wxWindow* w = m_tabs.GetWindowFromIdx(i);
-            if (wnd != w)
-            {
-                new_active = m_tabs.GetWindowFromIdx(i);
-                break;
-            }
-        }
-    }
 
     // remove the tab from main catalog
     if (!m_tabs.RemovePage(wnd))
@@ -2710,7 +2693,47 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
     // remove the tab from the onscreen tab ctrl
     ctrl->RemovePage(wnd);
 
+    if (is_active_in_split)
+    {
+        int ctrl_new_page_count = (int)ctrl->GetPageCount();
+        
+        if (ctrl_idx >= ctrl_new_page_count)
+            ctrl_idx = ctrl_new_page_count-1;
+        
+        if (ctrl_idx >= 0 && ctrl_idx < (int)ctrl->GetPageCount())
+        {
+            // set new page as active in the tab split
+            ctrl->SetActivePage(ctrl_idx);
+            
+            // if the page deleted was the current page for the
+            // entire tab control, then record the window
+            // pointer of the new active page for activation
+            if (is_curpage)
+            {
+                new_active = ctrl->GetWindowFromIdx(ctrl_idx);
+            }
+        }
+    }
 
+    
+    if (!new_active)
+    {
+        // we haven't yet found a new page to active,
+        // so select the next page from the main tab
+        // catalogue
+        
+        if (page_idx < m_tabs.GetPageCount())
+        {
+            new_active = m_tabs.GetPage(page_idx).window;
+        }
+        
+        if (!new_active && m_tabs.GetPageCount() > 0)
+        {
+            new_active = m_tabs.GetPage(0).window;
+        }
+    }
+
+    
     RemoveEmptyTabFrames();
 
     // set new active pane
@@ -2719,7 +2742,7 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
         m_curpage = -1;
         SetSelectionToWindow(new_active);
     }
-
+    
     return true;
 }
 
@@ -3518,7 +3541,8 @@ void wxAuiNotebook::RemoveEmptyTabFrames()
             // window closing, refreshs are pending
             if (!wxPendingDelete.Member(tab_frame->m_tabs))
                 wxPendingDelete.Append(tab_frame->m_tabs);
-            //tab_frame->m_tabs->Destroy();
+                
+            tab_frame->m_tabs = NULL;
 
             delete tab_frame;
         }
