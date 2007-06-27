@@ -246,17 +246,15 @@ CustomMacro::~CustomMacro()
         delete [] macroBody;
 }
 
-void TexOutput(const wxChar *s, bool ordinaryText)
+void TexOutput(const wxString& s, bool ordinaryText)
 {
-  int len = wxStrlen(s);
-
   // Update current column, but only if we're guaranteed to
   // be ordinary text (not mark-up stuff)
   int i;
   if (ordinaryText)
-    for (i = 0; i < len; i++)
+    for (wxString::const_iterator i = s.begin(); i != s.end(); ++i)
     {
-      if (s[i] == 13 || s[i] == 10)
+      if (*i == 13 || *i == 10)
         currentColumn = 0;
       else
         currentColumn ++;

@@ -162,7 +162,7 @@ extern FILE *CurrentOutput2;
 void AddMacroDef(int the_id, const wxChar *name, int n, bool ignore = false, bool forbidden = false);
 void TexInitialize(int bufSize);
 void TexCleanUp(void);
-void TexOutput(const wxChar *s, bool ordinaryText = false);
+void TexOutput(const wxString& s, bool ordinaryText = false);
 wxChar *GetArgData(TexChunk *chunk);
 wxChar *GetArgData(void);             // Get the string for the current argument
 int GetNoArgs(void);                // Get the number of arguments for the current macro

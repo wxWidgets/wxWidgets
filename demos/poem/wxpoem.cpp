@@ -888,7 +888,7 @@ long MainWindow::DoSearch(void)
 
         // Only match if we're looking at a different poem
         // (no point in displaying the same poem again)
-        if ((ch == m_searchString[i]) && (last_poem_start != previous_poem_start))
+        if ((m_searchString[i] == ch) && (last_poem_start != previous_poem_start))
         {
             if (i == 0)
                 last_find = ftell(file);

@@ -337,8 +337,8 @@ void MyFrame::OnExecute(wxCommandEvent& WXUNUSED(event))
     {
         wxString s = _T("Date");
 
-        m_client->GetConnection()->Execute((wxChar *)s.c_str());
-        m_client->GetConnection()->Execute((wxChar *)s.c_str(), (s.Length() + 1) * sizeof(wxChar));
+        m_client->GetConnection()->Execute((const wxChar *)s.c_str());
+        m_client->GetConnection()->Execute((const wxChar *)s.c_str(), (s.Length() + 1) * sizeof(wxChar));
 #if wxUSE_DDE_FOR_IPC
         wxLogMessage(_T("DDE Execute can only be used to send text strings, not arbitrary data.\nThe type argument will be ignored, text truncated, converted to Unicode and null terminated."));
 #endif
@@ -353,9 +353,9 @@ void MyFrame::OnPoke(wxCommandEvent& WXUNUSED(event))
     if (m_client->IsConnected())
     {
         wxString s = wxDateTime::Now().Format();
-        m_client->GetConnection()->Poke(_T("Date"), (wxChar *)s.c_str());
+        m_client->GetConnection()->Poke(_T("Date"), (const wxChar *)s.c_str());
         s = wxDateTime::Now().FormatTime() + _T(" ") + wxDateTime::Now().FormatDate();
-        m_client->GetConnection()->Poke(_T("Date"), (wxChar *)s.c_str(), (s.Length() + 1) * sizeof(wxChar));
+        m_client->GetConnection()->Poke(_T("Date"), (const wxChar *)s.c_str(), (s.Length() + 1) * sizeof(wxChar));
         char bytes[3];
         bytes[0] = '1'; bytes[1] = '2'; bytes[2] = '3';
         m_client->GetConnection()->Poke(_T("bytes[3]"), (wxChar *)bytes, 3, wxIPC_PRIVATE);
