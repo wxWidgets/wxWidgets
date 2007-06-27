@@ -47,6 +47,10 @@ DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_BEGIN_DRAG)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_END_DRAG)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION)
 DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_UP)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_DOWN)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_UP)
+DEFINE_EVENT_TYPE(wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_DOWN)
 
 
 IMPLEMENT_CLASS(wxAuiNotebook, wxControl)
@@ -1968,6 +1972,10 @@ BEGIN_EVENT_TABLE(wxAuiTabCtrl, wxControl)
     EVT_LEFT_DOWN(wxAuiTabCtrl::OnLeftDown)
     EVT_LEFT_DCLICK(wxAuiTabCtrl::OnLeftDown)
     EVT_LEFT_UP(wxAuiTabCtrl::OnLeftUp)
+    EVT_MIDDLE_DOWN(wxAuiTabCtrl::OnMiddleDown)
+    EVT_MIDDLE_UP(wxAuiTabCtrl::OnMiddleUp)
+    EVT_RIGHT_DOWN(wxAuiTabCtrl::OnRightDown)
+    EVT_RIGHT_UP(wxAuiTabCtrl::OnRightUp)
     EVT_MOTION(wxAuiTabCtrl::OnMotion)
     EVT_LEAVE_WINDOW(wxAuiTabCtrl::OnLeaveWindow)
     EVT_AUINOTEBOOK_BUTTON(wxID_ANY, wxAuiTabCtrl::OnButton)
@@ -2097,6 +2105,54 @@ void wxAuiTabCtrl::OnLeftUp(wxMouseEvent& evt)
     m_click_pt = wxDefaultPosition;
     m_is_dragging = false;
     m_click_tab = NULL;
+}
+
+void wxAuiTabCtrl::OnMiddleUp(wxMouseEvent& evt)
+{
+    wxWindow* wnd = NULL;
+    if (!TabHitTest(evt.m_x, evt.m_y, &wnd))
+        return;
+
+    wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_UP, m_windowId);
+    e.SetEventObject(this);
+    e.SetSelection(GetIdxFromWindow(wnd));
+    GetEventHandler()->ProcessEvent(e);
+}
+
+void wxAuiTabCtrl::OnMiddleDown(wxMouseEvent& evt)
+{
+    wxWindow* wnd = NULL;
+    if (!TabHitTest(evt.m_x, evt.m_y, &wnd))
+        return;
+
+    wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_DOWN, m_windowId);
+    e.SetEventObject(this);
+    e.SetSelection(GetIdxFromWindow(wnd));
+    GetEventHandler()->ProcessEvent(e);
+}
+
+void wxAuiTabCtrl::OnRightUp(wxMouseEvent& evt)
+{
+    wxWindow* wnd = NULL;
+    if (!TabHitTest(evt.m_x, evt.m_y, &wnd))
+        return;
+
+    wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_UP, m_windowId);
+    e.SetEventObject(this);
+    e.SetSelection(GetIdxFromWindow(wnd));
+    GetEventHandler()->ProcessEvent(e);
+}
+
+void wxAuiTabCtrl::OnRightDown(wxMouseEvent& evt)
+{
+    wxWindow* wnd = NULL;
+    if (!TabHitTest(evt.m_x, evt.m_y, &wnd))
+        return;
+
+    wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_DOWN, m_windowId);
+    e.SetEventObject(this);
+    e.SetSelection(GetIdxFromWindow(wnd));
+    GetEventHandler()->ProcessEvent(e);
 }
 
 void wxAuiTabCtrl::OnMotion(wxMouseEvent& evt)
@@ -2336,6 +2392,18 @@ BEGIN_EVENT_TABLE(wxAuiNotebook, wxControl)
     EVT_COMMAND_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
                       wxEVT_COMMAND_AUINOTEBOOK_BUTTON,
                       wxAuiNotebook::OnTabButton)
+    EVT_COMMAND_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
+                      wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_DOWN,
+                      wxAuiNotebook::OnTabMiddleDown)
+    EVT_COMMAND_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
+                      wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_UP,
+                      wxAuiNotebook::OnTabMiddleUp)
+    EVT_COMMAND_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
+                      wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_DOWN,
+                      wxAuiNotebook::OnTabRightDown)
+    EVT_COMMAND_RANGE(wxAuiBaseTabCtrlId, wxAuiBaseTabCtrlId+500,
+                      wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_UP,
+                      wxAuiNotebook::OnTabRightUp)
 END_EVENT_TABLE()
 
 wxAuiNotebook::wxAuiNotebook()
@@ -3629,6 +3697,70 @@ void wxAuiNotebook::OnTabButton(wxCommandEvent& command_evt)
             }
         }
     }
+}
+
+
+void wxAuiNotebook::OnTabMiddleDown(wxCommandEvent& evt)
+{
+    // patch event through to owner
+    wxAuiTabCtrl* tabs = (wxAuiTabCtrl*)evt.GetEventObject();
+    wxWindow* wnd = tabs->GetWindowFromIdx(evt.GetSelection());
+
+    wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_DOWN, m_windowId);
+    e.SetSelection(m_tabs.GetIdxFromWindow(wnd));
+    e.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(e);
+}
+
+void wxAuiNotebook::OnTabMiddleUp(wxCommandEvent& evt)
+{
+    // if the wxAUI_NB_MIDDLE_CLICK_CLOSE is specified, middle
+    // click should act like a tab close action.  However, first
+    // give the owner an opportunity to handle the middle up event
+    // for custom action
+    
+    wxAuiTabCtrl* tabs = (wxAuiTabCtrl*)evt.GetEventObject();
+    wxWindow* wnd = tabs->GetWindowFromIdx(evt.GetSelection());
+
+    wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_UP, m_windowId);
+    e.SetSelection(m_tabs.GetIdxFromWindow(wnd));
+    e.SetEventObject(this);
+    if (GetEventHandler()->ProcessEvent(e))
+        return;
+    if (!e.IsAllowed())
+        return;
+ 
+    // check if we are supposed to close on middle-up
+    if ((m_flags & wxAUI_NB_MIDDLE_CLICK_CLOSE) == 0)
+        return;
+    
+    // simulate the user pressing the close button on the tab
+    evt.SetInt(wxAUI_BUTTON_CLOSE);
+    OnTabButton(evt);
+}
+
+void wxAuiNotebook::OnTabRightDown(wxCommandEvent& evt)
+{
+    // patch event through to owner
+    wxAuiTabCtrl* tabs = (wxAuiTabCtrl*)evt.GetEventObject();
+    wxWindow* wnd = tabs->GetWindowFromIdx(evt.GetSelection());
+
+    wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_DOWN, m_windowId);
+    e.SetSelection(m_tabs.GetIdxFromWindow(wnd));
+    e.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(e);
+}
+
+void wxAuiNotebook::OnTabRightUp(wxCommandEvent& evt)
+{
+    // patch event through to owner
+    wxAuiTabCtrl* tabs = (wxAuiTabCtrl*)evt.GetEventObject();
+    wxWindow* wnd = tabs->GetWindowFromIdx(evt.GetSelection());
+
+    wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_UP, m_windowId);
+    e.SetSelection(m_tabs.GetIdxFromWindow(wnd));
+    e.SetEventObject(this);
+    GetEventHandler()->ProcessEvent(e);
 }
 
 // Sets the normal font

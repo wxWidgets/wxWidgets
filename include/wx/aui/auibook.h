@@ -45,13 +45,14 @@ enum wxAuiNotebookOption
     wxAUI_NB_CLOSE_BUTTON        = 1 << 10,
     wxAUI_NB_CLOSE_ON_ACTIVE_TAB = 1 << 11,
     wxAUI_NB_CLOSE_ON_ALL_TABS   = 1 << 12,
-
+    wxAUI_NB_MIDDLE_CLICK_CLOSE  = 1 << 13,
 
     wxAUI_NB_DEFAULT_STYLE = wxAUI_NB_TOP |
                              wxAUI_NB_TAB_SPLIT |
                              wxAUI_NB_TAB_MOVE |
                              wxAUI_NB_SCROLL_BUTTONS |
-                             wxAUI_NB_CLOSE_ON_ACTIVE_TAB
+                             wxAUI_NB_CLOSE_ON_ACTIVE_TAB |
+                             wxAUI_NB_MIDDLE_CLICK_CLOSE
 };
 
 
@@ -452,6 +453,10 @@ protected:
     void OnSize(wxSizeEvent& evt);
     void OnLeftDown(wxMouseEvent& evt);
     void OnLeftUp(wxMouseEvent& evt);
+    void OnMiddleDown(wxMouseEvent& evt);
+    void OnMiddleUp(wxMouseEvent& evt);
+    void OnRightDown(wxMouseEvent& evt);
+    void OnRightUp(wxMouseEvent& evt);
     void OnMotion(wxMouseEvent& evt);
     void OnLeaveWindow(wxMouseEvent& evt);
     void OnButton(wxAuiNotebookEvent& evt);
@@ -579,6 +584,10 @@ protected:
     void OnTabDragMotion(wxCommandEvent& evt);
     void OnTabEndDrag(wxCommandEvent& evt);
     void OnTabButton(wxCommandEvent& evt);
+    void OnTabMiddleDown(wxCommandEvent& evt);
+    void OnTabMiddleUp(wxCommandEvent& evt);
+    void OnTabRightDown(wxCommandEvent& evt);
+    void OnTabRightUp(wxCommandEvent& evt);
 
     // set selection to the given window (which must be non-NULL and be one of
     // our pages, otherwise an assert is raised)
@@ -627,6 +636,10 @@ BEGIN_DECLARE_EVENT_TYPES()
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_END_DRAG, 0)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION, 0)
     DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND, 0)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_DOWN, 0)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_UP, 0)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_DOWN, 0)
+    DECLARE_EXPORTED_EVENT_TYPE(WXDLLIMPEXP_AUI, wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_UP, 0)
 END_DECLARE_EVENT_TYPES()
 
 typedef void (wxEvtHandler::*wxAuiNotebookEventFunction)(wxAuiNotebookEvent&);
@@ -650,6 +663,14 @@ typedef void (wxEvtHandler::*wxAuiNotebookEventFunction)(wxAuiNotebookEvent&);
     wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_DRAG_MOTION, winid, wxAuiNotebookEventHandler(fn))
 #define EVT_AUINOTEBOOK_ALLOW_DND(winid, fn) \
     wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_ALLOW_DND, winid, wxAuiNotebookEventHandler(fn))
+#define EVT_AUINOTEBOOK_TAB_MIDDLE_DOWN(winid, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_DOWN, winid, wxAuiNotebookEventHandler(fn))
+#define EVT_AUINOTEBOOK_TAB_MIDDLE_UP(winid, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_TAB_MIDDLE_UP, winid, wxAuiNotebookEventHandler(fn))
+#define EVT_AUINOTEBOOK_TAB_RIGHT_DOWN(winid, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_DOWN, winid, wxAuiNotebookEventHandler(fn))
+#define EVT_AUINOTEBOOK_TAB_RIGHT_UP(winid, fn) \
+    wx__DECLARE_EVT1(wxEVT_COMMAND_AUINOTEBOOK_TAB_RIGHT_UP, winid, wxAuiNotebookEventHandler(fn))
 
 #else
 
