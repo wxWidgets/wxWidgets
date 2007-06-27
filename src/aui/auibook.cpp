@@ -2642,7 +2642,14 @@ bool wxAuiNotebook::InsertPage(size_t page_idx,
 // and destroys the window as well
 bool wxAuiNotebook::DeletePage(size_t page_idx)
 {
+    if (page_idx >= m_tabs.GetPageCount())
+        return false;
+        
     wxWindow* wnd = m_tabs.GetWindowFromIdx(page_idx);
+    
+    // hide the window in advance, as this will
+    // prevent flicker
+    ShowWnd(wnd, false);
 
     if (!RemovePage(page_idx))
         return false;
