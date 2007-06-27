@@ -15,35 +15,21 @@ figleaf.start(ignore_python_lib=False)
 
 import unittest
 # individual modules of the test suite:
-import testBitmapButton
-import testButton
-import testCheckListBox
-import testChoice
-import testColour
-import testControl
-import testControlWithItems
-import testDialog
-import testFont
-import testFrame
-import testItemContainer
-import testListBox
-import testPoint
-import testRect
-import testSize
-import testSizer
-import testSlider
-import testSpinCtrl
-import testStaticText
-import testTextAttr
-import testTextCtrl
-import testToggleButton
-import testTopLevelWindow
+# TODO: a more organized way of adding them
+import testBitmapButton, testButton, testCheckListBox, testChoice
+import testColour, testControl, testControlWithItems
+import testDialog, testFont, testFrame, testGauge, testItemContainer
+import testListBox, testPoint, testRect, testSize
+import testSizer, testSlider, testSpinCtrl
+import testStaticText, testTextAttr, testTextCtrl
+import testToggleButton, testTopLevelWindow
 import testWindow
 
 modules = ( testBitmapButton, testButton, testCheckListBox, testChoice, testColour, testControl,
-            testControlWithItems, testDialog, testFont, testFrame, testItemContainer, testListBox,
-            testPoint, testRect, testSize, testSizer, testSlider, testSpinCtrl, testStaticText,
-            testTextAttr, testTextCtrl, testToggleButton, testTopLevelWindow, testWindow)
+            testControlWithItems, testDialog, testFont, testFrame, testGauge, testItemContainer,
+            testListBox, testPoint, testRect, testSize, testSizer, testSlider, testSpinCtrl,
+            testStaticText, testTextAttr, testTextCtrl, testToggleButton, testTopLevelWindow,
+            testWindow)
 
 alltests = unittest.TestSuite([mod.suite() for mod in modules])
 maxstr = max(( mod.__name__ for mod in modules ))
