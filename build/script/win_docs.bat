@@ -50,7 +50,7 @@ echo CVS update  >>  c:\temp.log
 rem just build the formats not in the CVS to keep down the .#makefile...
 cd \wx\inno\wxWidgets\build\bakefiles
 del .bakefile_gen.state
-bakefile_gen -f dmars,dmars,msevc4prj,dmars_smake >> c:\temp.log
+bakefile_gen -f dmars,dmars_smake,msevc4prj >> c:\temp.log
 
 
 cd %WXWIN%\build\script
@@ -96,15 +96,6 @@ mkdir c:\wx\inno\wxWidgets\docs\htmlhelp
 copy docs\htmlhelp\wx.chm \wx\inno\wxWidgets\docs\htmlhelp\wx.chm
 cd %WXWIN%\build\script
 iscc wxwidgets.iss >> c:\temp.log
-
-rem echo setting S
-rem echo yes > net use s: /delete
-rem net use s: \\biolpc22\bake 
-rem net use >> c:\temp.log
-
-rem copy %DAILY%\*.ZIP s:\bkl-cronjob\archives\win
-rem copy %DAILY%\*.exe s:\bkl-cronjob\archives\win\*.exe
-rem dir s: /od >> c:\temp.log
 
 echo docs built for %WXW_VER%
 echo docs built for %WXW_VER% >> c:\temp.log
