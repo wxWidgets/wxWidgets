@@ -71,9 +71,12 @@ Changes in behaviour which may result in compilation errors
 
 - virtual wxHtmlParser::AddText() takes wxString, not wxChar*, argument now.
 
-- Funtions that took wxChar* arguments that could by NULL in wxWidgets 2.8.
+- Functions that took wxChar* arguments that could by NULL in wxWidgets 2.8.
   are deprecated and passing NULL to them won't compile anymore, wxEmptyString
-  must be used instead.
+  must be used instead. In some cases new functions can be used too, e.g.:
+    * use wxLog::DisableTimestamp() instead of wxLog::SetTimestamp(NULL)
+    * wxUnsetEnv(var) instead of wxSetEnv(var, NULL)
+
 
 Deprecated methods and their replacements
 -----------------------------------------

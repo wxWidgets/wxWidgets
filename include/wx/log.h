@@ -208,10 +208,13 @@ public:
     // get string trace masks
     static const wxArrayString &GetTraceMasks() { return ms_aTraceMasks; }
 
-    // sets the timestamp string: this is used as strftime() format string
-    // for the log targets which add time stamps to the messages - set it
-    // to NULL to disable time stamping completely.
+    // sets the time stamp string format: this is used as strftime() format
+    // string for the log targets which add time stamps to the messages; set
+    // it to empty string to disable time stamping completely.
     static void SetTimestamp(const wxString& ts) { ms_timestamp = ts; }
+
+    // disable time stamping of log messages
+    static void DisableTimestamp() { SetTimestamp(wxEmptyString); }
 
 
     // accessors
