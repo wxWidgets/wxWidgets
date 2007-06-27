@@ -71,12 +71,9 @@ Changes in behaviour which may result in compilation errors
 
 - virtual wxHtmlParser::AddText() takes wxString, not wxChar*, argument now.
 
-- Functions that took wxChar* arguments that could by NULL in wxWidgets 2.8.
+- Funtions that took wxChar* arguments that could by NULL in wxWidgets 2.8.
   are deprecated and passing NULL to them won't compile anymore, wxEmptyString
-  must be used instead. In some cases new functions can be used too, e.g.:
-    * use wxLog::DisableTimestamp() instead of wxLog::SetTimestamp(NULL)
-    * wxUnsetEnv(var) instead of wxSetEnv(var, NULL)
-
+  must be used instead.
 
 Deprecated methods and their replacements
 -----------------------------------------
@@ -180,6 +177,8 @@ All (GUI):
 - Significantly improved startup times of XRC-based applications using
   embedded resources on Unix (requires resources recompilation)
 - Fixed freeing of "static" alpha data in wxImage (Axel Gembe)
+- Don't invalidate the font in SetNativeFontInfo[Desc]() if the string is
+  invalid, to conform to the documented behaviour (Langhammer)
 
 wxMSW:
 
