@@ -132,12 +132,12 @@ gtkcombo_combo_select_child_callback( GtkList *WXUNUSED(list), GtkWidget *WXUNUS
     // Quickly set the value of the combo box
     // as GTK+ does that only AFTER the event
     // is sent.
-    g_signal_handlers_disconnect_by_func (GTK_COMBO (combo->GetHandle())->entry,
-                                          (gpointer) gtkcombo_text_changed_callback,
-                                          combo);
+    GtkWidget* entry = GTK_COMBO(combo->GetHandle())->entry;
+    g_signal_handlers_block_by_func(
+        entry, (gpointer)gtkcombo_text_changed_callback, combo);
     combo->SetValue( combo->GetStringSelection() );
-    g_signal_connect_after (GTK_COMBO (combo->GetHandle())->entry, "changed",
-                            G_CALLBACK (gtkcombo_text_changed_callback), combo);
+    g_signal_handlers_unblock_by_func(
+        entry, (gpointer)gtkcombo_text_changed_callback, combo);
 
     // throw a SELECTED event only if the combobox popup is hidden (wxID_NONE)
     // because when combobox popup is shown, gtkcombo_combo_select_child_callback is
@@ -1214,20 +1214,20 @@ void wxComboBox::DisableEvents()
 #ifdef __WXGTK24__
     if (!gtk_check_version(2,4,0))
     {
-        g_signal_handlers_disconnect_by_func (GTK_BIN(m_widget)->child,
-                (gpointer)gtkcombobox_text_changed_callback, this);
+        g_signal_handlers_block_by_func(GTK_BIN(m_widget)->child,
+            (gpointer)gtkcombobox_text_changed_callback, this);
 
-        g_signal_handlers_disconnect_by_func (m_widget,
-                (gpointer)gtkcombobox_changed_callback, this);
+        g_signal_handlers_block_by_func(m_widget,
+            (gpointer)gtkcombobox_changed_callback, this);
     }
     else
 #endif
     {
-        g_signal_handlers_disconnect_by_func (GTK_COMBO(m_widget)->list,
-                (gpointer) gtkcombo_combo_select_child_callback, this);
+        g_signal_handlers_block_by_func(GTK_COMBO(m_widget)->list,
+            (gpointer) gtkcombo_combo_select_child_callback, this);
 
-        g_signal_handlers_disconnect_by_func (GTK_COMBO(m_widget)->entry,
-                (gpointer) gtkcombo_text_changed_callback, this);
+        g_signal_handlers_block_by_func(GTK_COMBO(m_widget)->entry,
+            (gpointer) gtkcombo_text_changed_callback, this);
     }
 }
 
@@ -1236,21 +1236,20 @@ void wxComboBox::EnableEvents()
 #ifdef __WXGTK24__
     if (!gtk_check_version(2,4,0))
     {
-        g_signal_connect_after (GTK_BIN(m_widget)->child, "changed",
-                            G_CALLBACK (gtkcombobox_text_changed_callback), this);
+        g_signal_handlers_unblock_by_func(GTK_BIN(m_widget)->child,
+            (gpointer)gtkcombobox_text_changed_callback, this);
 
-        g_signal_connect_after (m_widget, "changed",
-                            G_CALLBACK (gtkcombobox_changed_callback), this);
+        g_signal_handlers_unblock_by_func(m_widget,
+            (gpointer)gtkcombobox_changed_callback, this);
     }
     else
 #endif
     {
-        g_signal_connect_after (GTK_COMBO(m_widget)->list, "select-child",
-                            G_CALLBACK (gtkcombo_combo_select_child_callback),
-                            this);
-        g_signal_connect_after (GTK_COMBO(m_widget)->entry, "changed",
-                            G_CALLBACK (gtkcombo_text_changed_callback),
-                            this );
+        g_signal_handlers_unblock_by_func(GTK_COMBO(m_widget)->list,
+            (gpointer) gtkcombo_combo_select_child_callback, this);
+
+        g_signal_handlers_unblock_by_func(GTK_COMBO(m_widget)->entry,
+            (gpointer) gtkcombo_text_changed_callback, this);
     }
 }
 

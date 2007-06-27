@@ -555,9 +555,8 @@ void wxRadioBox::GtkDisableEvents()
     wxRadioBoxButtonsInfoList::compatibility_iterator node = m_buttonsInfo.GetFirst();
     while (node)
     {
-        g_signal_handlers_disconnect_by_func (node->GetData()->button,
-                                              (gpointer) gtk_radiobutton_clicked_callback,
-                                              this);
+        g_signal_handlers_block_by_func(node->GetData()->button,
+            (gpointer)gtk_radiobutton_clicked_callback, this);
 
         node = node->GetNext();
     }
@@ -568,8 +567,8 @@ void wxRadioBox::GtkEnableEvents()
     wxRadioBoxButtonsInfoList::compatibility_iterator node = m_buttonsInfo.GetFirst();
     while (node)
     {
-        g_signal_connect (node->GetData()->button, "clicked",
-                          G_CALLBACK (gtk_radiobutton_clicked_callback), this);
+        g_signal_handlers_unblock_by_func(node->GetData()->button,
+            (gpointer)gtk_radiobutton_clicked_callback, this);
 
         node = node->GetNext();
     }

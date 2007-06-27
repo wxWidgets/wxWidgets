@@ -1016,11 +1016,11 @@ void wxTextCtrl::DoSetValue( const wxString &value, int flags )
         return;
     }
 
+    void* blockWidget = IsMultiLine() ? (void*)m_buffer : (void*)m_text;
+    g_signal_handlers_block_by_func(blockWidget,
+        (gpointer)gtk_text_changed_callback, this);
     if ( IsMultiLine() )
     {
-        g_signal_handlers_disconnect_by_func (m_buffer,
-                    (gpointer) gtk_text_changed_callback, this);
-                    
         gtk_text_buffer_set_text( m_buffer, buffer, strlen(buffer) );
                     
         if ( !m_defaultStyle.IsDefault() )
@@ -1030,20 +1030,13 @@ void wxTextCtrl::DoSetValue( const wxString &value, int flags )
             wxGtkTextApplyTagsFromAttr(m_widget, m_buffer, m_defaultStyle,
                                        &start, &end);
         }
-        
-        g_signal_connect (m_buffer, "changed",
-                          G_CALLBACK (gtk_text_changed_callback), this);
     }
     else
     {
-        g_signal_handlers_disconnect_by_func (m_text,
-                          (gpointer) gtk_text_changed_callback, this);
-                          
         gtk_entry_set_text( GTK_ENTRY(m_text), buffer );
-        
-        g_signal_connect (m_text, "changed",
-                          G_CALLBACK (gtk_text_changed_callback), this);
     }
+    g_signal_handlers_unblock_by_func(blockWidget,
+        (gpointer)gtk_text_changed_callback, this);
                     
     // This was added after discussion on the list
     SetInsertionPoint(0);

@@ -294,26 +294,22 @@ int wxNotebook::DoSetSelection( size_t page, int flags )
 
     if ( !(flags & SetSelection_SendEvent) )
     {
-        g_signal_handlers_disconnect_by_func (m_widget,
-                                             (gpointer) gtk_notebook_page_changing_callback,
-                                             this);
+        g_signal_handlers_block_by_func(m_widget,
+            (gpointer)gtk_notebook_page_changing_callback, this);
 
-        g_signal_handlers_disconnect_by_func (m_widget,
-                                             (gpointer) gtk_notebook_page_changed_callback,
-                                             this);
+        g_signal_handlers_block_by_func(m_widget,
+            (gpointer)gtk_notebook_page_changed_callback, this);
     }
 
     gtk_notebook_set_current_page( GTK_NOTEBOOK(m_widget), page );
 
     if ( !(flags & SetSelection_SendEvent) )
     {
-        // reconnect to signals
+        g_signal_handlers_unblock_by_func(m_widget,
+            (gpointer)gtk_notebook_page_changing_callback, this);
 
-        g_signal_connect (m_widget, "switch_page",
-                          G_CALLBACK (gtk_notebook_page_changing_callback), this);
-
-        g_signal_connect_after (m_widget, "switch_page",
-                      G_CALLBACK (gtk_notebook_page_changed_callback), this);
+        g_signal_handlers_unblock_by_func(m_widget,
+            (gpointer)gtk_notebook_page_changed_callback, this);
     }
 
     wxNotebookPage *client = GetPage(page);

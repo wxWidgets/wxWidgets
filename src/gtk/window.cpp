@@ -4159,13 +4159,13 @@ void wxWindowGTK::SetScrollPos(int orient, int pos, bool WXUNUSED(refresh))
             pos = 0;
         m_scrollPos[dir] = adj->value = pos;
 
-        g_signal_handlers_disconnect_by_func( m_scrollBar[dir],
-                              (gpointer)gtk_scrollbar_value_changed, this);
+        g_signal_handlers_block_by_func(m_scrollBar[dir],
+            (gpointer)gtk_scrollbar_value_changed, this);
 
         gtk_adjustment_value_changed(adj);
-        
-        g_signal_connect_after(m_scrollBar[dir], "value_changed",
-                               G_CALLBACK(gtk_scrollbar_value_changed), this);
+
+        g_signal_handlers_unblock_by_func(m_scrollBar[dir],
+            (gpointer)gtk_scrollbar_value_changed, this);
     }
 }
 

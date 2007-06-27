@@ -199,13 +199,13 @@ void wxScrollBar::SetThumbPosition( int viewStart )
         m_scrollPos[i] =
         adj->value = viewStart;
         
-        g_signal_handlers_disconnect_by_func( m_widget,
-                              (gpointer)gtk_value_changed, this);
+        g_signal_handlers_block_by_func(m_widget,
+            (gpointer)gtk_value_changed, this);
 
         gtk_adjustment_value_changed(adj);
-        
-        g_signal_connect_after(m_widget, "value_changed",
-                     G_CALLBACK(gtk_value_changed), this);
+
+        g_signal_handlers_unblock_by_func(m_widget,
+            (gpointer)gtk_value_changed, this);
     }
 }
 
