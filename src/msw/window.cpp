@@ -3151,6 +3151,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
             break;
 #endif
 
+#if wxUSE_MENUS
         case WM_MENUCHAR:
             // we're only interested in our own menus, not MF_SYSMENU
             if ( HIWORD(wParam) == MF_POPUP )
@@ -3164,6 +3165,7 @@ WXLRESULT wxWindowMSW::MSWWindowProc(WXUINT message, WXWPARAM wParam, WXLPARAM l
                 }
             }
             break;
+#endif // wxUSE_MENUS
 
 #ifndef __WXWINCE__
         case WM_POWERBROADCAST:
@@ -5195,6 +5197,7 @@ bool wxWindowMSW::HandleKeyUp(WXWPARAM wParam, WXLPARAM lParam)
     return GetEventHandler()->ProcessEvent(event);
 }
 
+#if wxUSE_MENUS
 int wxWindowMSW::HandleMenuChar(int WXUNUSED_IN_WINCE(chAccel),
                                 WXLPARAM WXUNUSED_IN_WINCE(lParam))
 {
@@ -5276,6 +5279,7 @@ bool wxWindowMSW::HandleClipboardEvent( WXUINT nMsg )
 
     return GetEventHandler()->ProcessEvent(evt);
 }
+#endif // wxUSE_MENUS
 
 // ---------------------------------------------------------------------------
 // joystick

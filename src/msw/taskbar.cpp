@@ -171,6 +171,7 @@ bool wxTaskBarIcon::RemoveIcon()
     return Shell_NotifyIcon(NIM_DELETE, &notifyData) != 0;
 }
 
+#if wxUSE_MENUS
 bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
 {
     wxASSERT_MSG( m_win != NULL, _T("taskbar icon not initialized") );
@@ -206,6 +207,7 @@ bool wxTaskBarIcon::PopupMenu(wxMenu *menu)
 
     return rval;
 }
+#endif // wxUSE_MENUS
 
 void wxTaskBarIcon::RegisterWindowMessages()
 {
