@@ -546,7 +546,7 @@ MyFrame::MyFrame()
                                 wxTE_MULTILINE);
     m_textctrl->SetEditable(false);
 
-    wxLog::SetTimestamp(NULL);
+    wxLog::DisableTimestamp();
     m_logOld = wxLog::SetActiveTarget(new wxLogTextCtrl(m_textctrl));
 
     wxLogMessage(_T("Brief explanations: the commands or the \"Menu\" menu ")

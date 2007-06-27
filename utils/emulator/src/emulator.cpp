@@ -105,7 +105,7 @@ wxEmulatorApp::wxEmulatorApp()
 bool wxEmulatorApp::OnInit()
 {
 #if wxUSE_LOG
-    wxLog::SetTimestamp(NULL);
+    wxLog::DisableTimestamp();
 #endif // wxUSE_LOG
     wxInitAllImageHandlers();
 
