@@ -980,19 +980,18 @@ wxString wxString::FromAscii(const char *ascii, size_t len)
 
     wxString res;
 
-    wxImplStringBuffer buf(res, len);
-    wxStringCharType *dest = buf;
-
-    for ( ;; )
     {
-        unsigned char c = (unsigned char)*ascii++;
-        wxASSERT_MSG( c < 0x80,
-                      _T("Non-ASCII value passed to FromAscii().") );
+        wxImplStringBuffer buf(res, len);
+        wxStringCharType *dest = buf;
 
-        *dest++ = (wchar_t)c;
+        for ( ; len > 0; --len )
+        {
+            unsigned char c = (unsigned char)*ascii++;
+            wxASSERT_MSG( c < 0x80,
+                          _T("Non-ASCII value passed to FromAscii().") );
 
-        if ( c == '\0' )
-            break;
+            *dest++ = (wchar_t)c;
+        }
     }
 
     return res;
