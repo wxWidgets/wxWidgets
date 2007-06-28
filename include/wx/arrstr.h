@@ -104,7 +104,8 @@ public:
     //     supported it...
   wxArrayString(int autoSort) { Init(autoSort != 0); }
     // C string array ctor
-  wxArrayString(size_t sz, const wxChar** a);
+  wxArrayString(size_t sz, const char** a);
+  wxArrayString(size_t sz, const wchar_t** a);
     // wxString string array ctor
   wxArrayString(size_t sz, const wxString* a);
     // copy ctor
@@ -167,7 +168,7 @@ public:
     // expand the array to have count elements
   void SetCount(size_t count);
     // remove first item matching this value
-  void Remove(const wxChar *sz);
+  void Remove(const wxString& sz);
     // remove item by index
   void RemoveAt(size_t nIndex, size_t nRemove = 1);
 

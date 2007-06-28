@@ -67,7 +67,9 @@ Default constructor.
 Copy constructor. Note that when an array is assigned to a sorted array, its contents is
 automatically sorted during construction.
 
-\func{}{wxArrayString}{\param{size\_t}{ sz}, \param{const wxChar**}{ arr}}
+\func{}{wxArrayString}{\param{size\_t}{ sz}, \param{const char**}{ arr}}
+
+\func{}{wxArrayString}{\param{size\_t}{ sz}, \param{const wchar\_t**}{ arr}}
 
 Constructor from a C string array. Pass a size {\it sz} and array {\it arr}.
 
@@ -163,7 +165,7 @@ Returns the number of items in the array.
 
 \membersection{wxArrayString::Index}\label{wxarraystringindex}
 
-\func{int}{Index}{\param{const wxChar *}{ sz}, \param{bool}{ bCase = true}, \param{bool}{ bFromEnd = false}}
+\func{int}{Index}{\param{const wxString\& }{ sz}, \param{bool}{ bCase = true}, \param{bool}{ bFromEnd = false}}
 
 Search the element in the array, starting from the beginning if
 {\it bFromEnd} is false or from end otherwise. If {\it bCase}, comparison is
@@ -221,7 +223,7 @@ are done in release mode.
 
 \membersection{wxArrayString::Remove}\label{wxarraystringremove}
 
-\func{void}{Remove}{\param{const wxChar *}{ sz}}
+\func{void}{Remove}{\param{const wxString\&}{ sz}}
 
 Removes the first item matching this value. An assert failure is provoked by
 an attempt to remove an element which does not exist in debug build.

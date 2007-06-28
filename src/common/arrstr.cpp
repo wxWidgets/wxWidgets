@@ -27,7 +27,16 @@
 // ArrayString
 // ============================================================================
 
-wxArrayString::wxArrayString(size_t sz, const wxChar** a)
+wxArrayString::wxArrayString(size_t sz, const char** a)
+{
+#if !wxUSE_STL
+    Init(false);
+#endif
+    for (size_t i=0; i < sz; i++)
+        Add(a[i]);
+}
+
+wxArrayString::wxArrayString(size_t sz, const wchar_t** a)
 {
 #if !wxUSE_STL
     Init(false);
@@ -355,7 +364,7 @@ void wxArrayString::RemoveAt(size_t nIndex, size_t nRemove)
 }
 
 // removes item from array (by value)
-void wxArrayString::Remove(const wxChar *sz)
+void wxArrayString::Remove(const wxString& sz)
 {
   int iIndex = Index(sz);
 
