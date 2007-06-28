@@ -3126,7 +3126,7 @@ void wxStringIteratorNode::DoSet(const wxString *str,
                                  wxStringImpl::const_iterator *citer,
                                  wxStringImpl::iterator *iter)
 {
-    m_next = m_prev = NULL;
+    m_prev = NULL;
     m_iter = iter;
     m_citer = citer;
     m_str = str;
@@ -3136,6 +3136,10 @@ void wxStringIteratorNode::DoSet(const wxString *str,
         wx_const_cast(wxString*, m_str)->m_iterators.ptr = this;
         if ( m_next )
             m_next->m_prev = this;
+    }
+    else
+    {
+        m_next = NULL;
     }
 }
 
