@@ -30,7 +30,6 @@ App
 ArtProvider
 AutoBufferedPaintDC
 Bitmap
-BitmapButton
 BitmapDataObject
 BMPHandler
 BookCtrlBase
@@ -45,7 +44,6 @@ BusyInfo
 CalculateLayoutEvent
 CallLater
 Caret
-CheckBox
 ChildFocusEvent
 Choicebook
 ChoicebookEvent
@@ -128,7 +126,6 @@ FontPickerCtrl
 FontPickerEvent
 FSFile
 FutureCall
-Gauge
 GBPosition
 GBSizerItem
 GBSpan
@@ -323,10 +320,8 @@ SingleInstanceChecker
 SizeEvent
 SizerFlags
 SizerItem
-Slider
 Sound
 SpinButton
-SpinCtrl
 SpinEvent
 SplashScreen
 SplashScreenWindow
@@ -347,7 +342,6 @@ SystemOptions
 SystemSettings
 TaskBarIcon
 TaskBarIconEvent
-TextAttr
 TextDataObject
 TextDropTarget
 TextEntryDialog
@@ -360,7 +354,6 @@ TimerRunner
 TimeSpan
 TipProvider
 TipWindow
-ToggleButton
 ToolBar
 ToolBarBase
 ToolBarToolBase
