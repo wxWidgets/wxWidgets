@@ -294,7 +294,6 @@ PyWindow
 Quantize
 QueryLayoutInfoEvent
 QueryNewPaletteEvent
-RadioBox
 RealPoint
 Rect2D
 Region
