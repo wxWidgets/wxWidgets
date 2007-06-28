@@ -2094,6 +2094,7 @@ void wxAuiTabCtrl::OnLeftUp(wxMouseEvent& evt)
         if (!(m_pressed_button->cur_state & wxAUI_BUTTON_STATE_DISABLED))
         {
             wxAuiNotebookEvent evt(wxEVT_COMMAND_AUINOTEBOOK_BUTTON, m_windowId);
+            evt.SetSelection(GetIdxFromWindow(m_click_tab));
             evt.SetInt(m_pressed_button->id);
             evt.SetEventObject(this);
             GetEventHandler()->ProcessEvent(evt);
@@ -2744,6 +2745,12 @@ bool wxAuiNotebook::DeletePage(size_t page_idx)
 // but does not destroy the window
 bool wxAuiNotebook::RemovePage(size_t page_idx)
 {
+    // save active window pointer
+    wxWindow* active_wnd = NULL;
+    if (m_curpage >= 0)
+        active_wnd = m_tabs.GetWindowFromIdx(m_curpage);
+    
+    // save pointer of window being deleted
     wxWindow* wnd = m_tabs.GetWindowFromIdx(page_idx);
     wxWindow* new_active = NULL;
 
@@ -2788,6 +2795,11 @@ bool wxAuiNotebook::RemovePage(size_t page_idx)
                 new_active = ctrl->GetWindowFromIdx(ctrl_idx);
             }
         }
+    }
+     else
+    {
+        // we are not deleting the active page, so keep it the same
+        new_active = active_wnd;
     }
 
     
@@ -3667,12 +3679,11 @@ void wxAuiNotebook::OnTabButton(wxCommandEvent& command_evt)
 
     if (button_id == wxAUI_BUTTON_CLOSE)
     {
-        int selection = tabs->GetActivePage();
+        int selection = evt.GetSelection();
 
         if (selection != -1)
         {
             wxWindow* close_wnd = tabs->GetWindowFromIdx(selection);
-
 
             // ask owner if it's ok to close the tab
             wxAuiNotebookEvent e(wxEVT_COMMAND_AUINOTEBOOK_PAGE_CLOSE, m_windowId);
