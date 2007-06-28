@@ -122,7 +122,7 @@ public:
     void SetConfigPath(const wxString& prefix);
 
     // return default config path
-    static const wxChar *GetDefaultConfigPath();
+    static const wxString& GetDefaultConfigPath();
 #endif // wxUSE_CONFIG
 
 
