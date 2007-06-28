@@ -113,7 +113,7 @@ public:
 
         wxPoint yearPosition = yearControl->GetPosition();
 
-        SetFormat(wxT("%x"));
+        SetFormat("%x");
 
         width = yearPosition.x + yearSize.x+2+CALBORDER/2;
         if (width < calSize.x-4)
@@ -259,7 +259,7 @@ private:
         return m_combo->GetParent()->HasFlag(flag);
     }
 
-    bool SetFormat(const wxChar *fmt)
+    bool SetFormat(const wxString& fmt)
     {
         m_format.clear();
 
