@@ -17,10 +17,10 @@ to call the constructor's superclass if they override it.  Additionally, they mu
 few class properties from within the setUp method, and may create a few more.
 
 Required properties:
+    frame - just a generic frame, to use as a parent for Windows that need one
     testControl - an alias of frame.testControl
 
 Optional properties:
-    frame - just a generic frame, to use as a parent for Windows that need one
     children - a sequence of frames whose parent is the testControl
     children_ids - IDs corresponding to each child
     children_names - names corresponding to each child
@@ -34,32 +34,32 @@ __init__, AcceptsFocus, AcceptsFocusFromKeyboard, AddChild, AdjustForLayoutDirec
 AssociateHandle, CacheBestSize, CanSetTransparent, CaptureMouse, CenterOnParent, CentreOnParent, 
 ClearBackground, ClientToScreen, ClientToScreenXY, Close, ConvertDialogPointToPixels, 
 ConvertDialogSizeToPixels, ConvertPixelPointToDialog, ConvertPixelSizeToDialog, 
-Create, Destroy, DestroyChildren, DissociateHandle, DLG_PNT, DLG_SZE, DragAcceptFiles, 
+Create, DestroyChildren, DissociateHandle, DLG_PNT, DLG_SZE, DragAcceptFiles, 
 FindFocus, Fit, FitInside, GetAcceleratorTable, GetAutoLayout, GetBestSize, 
 GetBestSizeTuple, GetBestVirtualSize, GetBorder, GetCapture, GetCaret, GetCharHeight, 
-GetCharWidth, GetClassDefaultAttributes, GetClientAreaOrigin, GetClientRect, 
-GetClientSize, GetClientSizeTuple, GetConstraints, GetContainingSizer, GetCursor, 
+GetCharWidth, GetClassDefaultAttributes, GetClientAreaOrigin,
+GetConstraints, GetContainingSizer, GetCursor, 
 GetDefaultAttributes, GetDropTarget, GetEffectiveMinSize, GetEventHandler, GetExtraStyle, 
 GetFullTextExtent, GetHandle, GetHelpTextAtPoint, GetLayoutDirection,
 GetScreenPosition, GetScreenPositionTuple, GetScreenRect, GetScrollPos, GetScrollRange, 
-GetScrollThumb, GetTextExtent, GetThemeEnabled, GetToolTip, 
-GetUpdateClientRect, GetUpdateRegion, GetValidator, GetVirtualSize, 
-GetVirtualSizeTuple, GetWindowBorderSize, GetWindowStyle, GetWindowStyleFlag, GetWindowVariant, 
+GetScrollThumb, GetTextExtent, GetThemeEnabled,
+GetUpdateClientRect, GetUpdateRegion, GetValidator, GetWindowBorderSize, 
+GetWindowStyle, GetWindowStyleFlag, GetWindowVariant,
 HasCapture, HasFlag, HasMultiplePages, HasScrollbar, HasTransparentBackground, HitTest, 
 HitTestXY, InheritAttributes, InheritsBackgroundColour, InitDialog, InvalidateBestSize, 
-IsBeingDeleted, IsDoubleBuffered, IsExposed, IsExposedPoint, IsExposedRect, IsRetained, 
+IsDoubleBuffered, IsExposed, IsExposedPoint, IsExposedRect, IsRetained, 
 Layout, LineDown, LineUp, Lower, MakeModal, 
 MoveAfterInTabOrder, MoveBeforeInTabOrder, Navigate, NewControlId, NextControlId, 
 PageDown, PageUp, PopEventHandler, PopupMenu, PopupMenuXY, PostCreate, PrepareDC, PrevControlId, 
 PushEventHandler, Raise, Refresh, RefreshRect, RegisterHotKey, ReleaseMouse, RemoveChild, 
 RemoveEventHandler, ScreenToClient, ScreenToClientXY, ScrollLines, ScrollPages, 
-ScrollWindow, SendSizeEvent, SetAcceleratorTable, SetAutoLayout, SetCaret, SetClientRect, SetClientSize, 
-SetClientSizeWH, SetConstraints, SetContainingSizer, SetCursor, SetDimensions, SetDoubleBuffered, 
+ScrollWindow, SendSizeEvent, SetAcceleratorTable, SetAutoLayout, SetCaret, 
+SetConstraints, SetContainingSizer, SetCursor, SetDimensions, SetDoubleBuffered,
 SetDropTarget, SetEventHandler, SetExtraStyle, SetFocus, SetFocusFromKbd, 
 SetHelpTextForId, SetInitialSize, SetLayoutDirection, 
-SetScrollbar, SetScrollPos, SetSizeHintsSz, SetSizerAndFit, SetSizeWH, SetThemeEnabled, 
-SetToolTip, SetToolTipString, SetTransparent, SetValidator, SetVirtualSize, SetVirtualSizeHints, 
-SetVirtualSizeHintsSz, SetVirtualSizeWH, SetWindowStyle, SetWindowStyleFlag, SetWindowVariant, 
+SetScrollbar, SetScrollPos, SetSizeHintsSz, SetSizerAndFit, SetThemeEnabled, 
+SetTransparent, SetValidator, SetVirtualSizeHints, SetVirtualSizeHintsSz,
+SetWindowStyle, SetWindowStyleFlag, SetWindowVariant,
 ShouldInheritColours, ToggleWindowStyle, TransferDataFromWindow, TransferDataToWindow, 
 UnregisterHotKey, Update, UpdateWindowUI, UseBgCol, Validate, WarpPointer
 
@@ -130,6 +130,41 @@ class WindowTest(unittest.TestCase):
         # This, however, functions properly (it has a parent)
         for child in self.children:
             child.Center(wx.CENTER_ON_SCREEN)
+
+    # Looks like this one fails on Windows
+    # (first two attributes of the wx.Rect are 0 in every instance)
+    def testClientRect(self):
+        """SetClientRect, GetClientRect"""
+        for rect in testRect.getValidRectData():
+            self.testControl.SetClientRect(rect)
+            self.assertEquals(rect, self.testControl.GetClientRect())
+    
+    def testClientSize(self):
+        """SetClientSize, GetClientSize"""
+        for size in testSize.getValidSizeData():
+            self.testControl.SetClientSize(size)
+            self.assertEquals(size, self.testControl.GetClientSize())
+    
+    def testClientSizeWH(self):
+        """SetClientSizeWH, GetClientSizeTuple"""
+        for w,h in testSize.getValidSizeData():
+            self.testControl.SetClientSizeWH(w,h)
+            self.assertEquals((w,h), self.testControl.GetClientSizeTuple())
+    
+    def testDestroy(self):
+        """Destroy"""
+        self.assert_(self.testControl.Destroy())
+        flag = False
+        try:
+            # for some reason, an assertRaises statement here will also 
+            # raise an wx.PyDeadObjectError
+            self.testControl.Destroy()
+        except wx.PyDeadObjectError:
+            flag = True
+        finally:
+            self.assert_(flag)
+        # put back a dummy object so cleanup can happen
+        self.testControl = wx.Window(self.frame)
     
     def testEnableDisable(self):
         """Enable, Disable, IsEnabled"""
@@ -213,11 +248,17 @@ class WindowTest(unittest.TestCase):
             self.assertEquals(id, self.testControl.GetId())
     
     # At least one of these came out valid on Ubuntu.
-    # TODO: isolate the culprit
+    # TODO: isolate the culprit (and make the whole thing more robust)
     def testInvalidSizeHints(self):
         for invalid_hint in testSize.getInvalidSizeHints():
             self.assertRaises(wx.PyAssertionError, self.testControl.SetSizeHints, *invalid_hint)
-            
+    
+    def testIsBeingDeleted(self):
+        """IsBeingDeleted
+        TODO: find a way to test this when it will return True
+        """
+        self.assert_(not self.testControl.IsBeingDeleted())
+    
     def testLabel(self):
         """SetLabel, GetLabel"""
         one = "here is one label"
@@ -309,19 +350,21 @@ class WindowTest(unittest.TestCase):
             self.testControl.SetRect(rect)
             self.assertEquals(rect, self.testControl.GetRect())
         
-    def testShowHide(self):
-        """Show, Hide, IsShown"""
+    def testShow(self):
+        """Show, IsShown"""
         self.testControl.Show(True)
         self.assert_(self.testControl.IsShown())
-        self.testControl.Show(False)
+        self.assert_(self.testControl.Show(False))
         self.assert_(not self.testControl.IsShown())
-        self.testControl.Show()
+        self.assert_(self.testControl.Show())
         self.assert_(self.testControl.IsShown())
-        self.testControl.Hide()
-        self.assert_(not self.testControl.IsShown())
-        self.testControl.Show()
         self.assert_(not self.testControl.Show())
+    
+    def testHide(self):
+        """Hide"""
+        self.testControl.Show()
         self.assert_(self.testControl.Hide())
+        self.assert_(not self.testControl.IsShown())
         self.assert_(not self.testControl.Hide())
         
     def testShownOnScreen(self):
@@ -334,11 +377,16 @@ class WindowTest(unittest.TestCase):
         self.assert_(not self.testControl.IsShownOnScreen())
     
     def testSize(self):
-        """SetSize, GetSize, GetSizeTuple"""
+        """SetSize, GetSize"""
         for size in testSize.getValidSizeData():
             self.testControl.SetSize(size)
             self.assertEquals(size, self.testControl.GetSize())
-            self.assertEquals(size.Get(), self.testControl.GetSizeTuple())
+    
+    def testSizeWH(self):
+        """SetSizeWH, GetSizeTuple"""
+        for w,h in testSize.getValidSizeData():
+            self.testControl.SetSizeWH(w,h)
+            self.assertEquals((w,h), self.testControl.GetSizeTuple())
     
     def testSizeHints(self):
         """SetSizeHints, GetMinWidth, GetMinHeight, GetMaxWidth, GetMaxHeight"""
@@ -356,6 +404,21 @@ class WindowTest(unittest.TestCase):
         self.testControl.SetSizer(sz)
         self.assertEquals(sz, self.testControl.GetSizer())
     
+    def testToolTip(self):
+        """SetToolTip, GetToolTip"""
+        # wx.ToolTips don't have an equality test, so do it manually
+        tip = wx.ToolTip('Here is a tip!')
+        self.testControl.SetToolTip(tip)
+        tip2 = self.testControl.GetToolTip()
+        self.assertEquals(self.testControl, tip2.GetWindow())
+        self.assertEquals(tip.GetTip(), tip2.GetTip())
+    
+    def testToolTipString(self):
+        """SetToolTipString"""
+        for txt in ('one','two','three'):
+            self.testControl.SetToolTipString(txt)
+            self.assertEquals(txt, self.testControl.GetToolTip().GetTip())
+    
     def testTopLevel(self):
         """IsTopLevel"""
         self.assert_(not self.testControl.IsTopLevel())
@@ -368,6 +431,18 @@ class WindowTest(unittest.TestCase):
         three = wx.Window(two)
         four = wx.Window(three)
         self.assertEquals(parent, four.GetTopLevelParent())
+    
+    def testVirtualSize(self):
+        """SetVirtualSize, GetVirtualSize"""
+        for size in testSize.getValidSizeData():
+            self.testControl.SetVirtualSize(size)
+            self.assertEquals(size, self.testControl.GetVirtualSize())
+    
+    def testVirtualSizeWH(self):
+        """SetVirtualSizeWH, GetVirtualSizeTuple"""
+        for w,h in testSize.getValidSizeData():
+            self.testControl.SetVirtualSizeWH(w,h)
+            self.assertEquals((w,h),self.testControl.GetVirtualSizeTuple())
         
     def testWindowChildren(self):
         """GetParent
