@@ -973,33 +973,34 @@ int wxString::CmpNoCase(const wxString& s) const
 #endif
 #endif
 
-wxString wxString::FromAscii(const char *ascii)
+wxString wxString::FromAscii(const char *ascii, size_t len)
 {
-    if (!ascii)
+    if (!ascii || len == 0)
        return wxEmptyString;
 
-    size_t len = strlen(ascii);
     wxString res;
 
-    if ( len )
+    wxImplStringBuffer buf(res, len);
+    wxStringCharType *dest = buf;
+
+    for ( ;; )
     {
-        wxImplStringBuffer buf(res, len);
-        wxStringCharType *dest = buf;
+        unsigned char c = (unsigned char)*ascii++;
+        wxASSERT_MSG( c < 0x80,
+                      _T("Non-ASCII value passed to FromAscii().") );
 
-        for ( ;; )
-        {
-            unsigned char c = (unsigned char)*ascii++;
-            wxASSERT_MSG( c < 0x80,
-                          _T("Non-ASCII value passed to FromAscii().") );
+        *dest++ = (wchar_t)c;
 
-            *dest++ = (wchar_t)c;
-
-            if ( c == '\0' )
-                break;
-        }
+        if ( c == '\0' )
+            break;
     }
 
     return res;
+}
+
+wxString wxString::FromAscii(const char *ascii)
+{
+    return FromAscii(ascii, strlen(ascii));
 }
 
 wxString wxString::FromAscii(const char ascii)
