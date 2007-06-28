@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 // Name:        wx/dfb/nonownedwnd.h
-// Purpose:     declares wxNonTopLevelWindow class
+// Purpose:     declares wxNonOwnedWindow class
 // Author:      Vaclav Slavik
 // Modified by:
 // Created:     2006-12-24
