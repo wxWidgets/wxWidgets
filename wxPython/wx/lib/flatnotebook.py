@@ -11,7 +11,7 @@
 # Python Code By:
 #
 # Andrea Gavana, @ 02 Oct 2006
-# Latest Revision: 16 Apr 2007, 11.00 GMT
+# Latest Revision: 26 Jun 2007, 21.00 GMT
 #
 #
 # For All Kind Of Problems, Requests Of Enhancements And Bug Reports, Please
@@ -58,9 +58,9 @@ License And Version:
 
 FlatNotebook Is Freeware And Distributed Under The wxPython License. 
 
-Latest Revision: Andrea Gavana @ 16 Apr 2007, 11.00 GMT
+Latest Revision: Andrea Gavana @ 26 Jun 2007, 21.00 GMT
 
-Version 2.0.
+Version 2.1.
 
 @undocumented: FNB_HEIGHT_SPACER, VERTICAL_BORDER_PADDING, VC8_SHAPE_LEN,
     wxEVT*, left_arrow_*, right_arrow*, x_button*, down_arrow*,
@@ -892,6 +892,7 @@ class PageInfo:
         self._region = wx.Region()
         self._xRect = wx.Rect()
         self._color = None
+        self._hasFocus = False
 
 
     def SetCaption(self, value):
@@ -960,7 +961,7 @@ class PageInfo:
         return self._bEnabled 
 
 
-    def Enable(self, enabled):
+    def EnableTab(self, enabled):
         """ Sets the tab enabled or disabled. """
 
         self._bEnabled = enabled 
@@ -1282,6 +1283,13 @@ class FNBRenderer:
         self._leftBgBmp = wx.EmptyBitmap(16, 14)
         self._rightBgBmp = wx.EmptyBitmap(16, 14)
         self._tabHeight = None
+
+        if wx.Platform == "__WXMAC__":
+            self._focusPen = wx.Pen(wx.BLACK, 1, wx.SOLID)
+        else:
+            self._focusPen = wx.Pen(wx.BLACK, 1, wx.USER_DASH)
+            self._focusPen.SetDashes([1, 1])
+            self._focusPen.SetCap(wx.CAP_BUTT)
 
 
     def GetLeftButtonPos(self, pageContainer):
@@ -1872,6 +1880,8 @@ class FNBRenderer:
 
             pc._pagesInfoVec[i].SetPosition(wx.Point(posx, posy))
             pc._pagesInfoVec[i].SetSize(wx.Size(tabWidth, tabHeight))
+            self.DrawFocusRectangle(dc, pc, pc._pagesInfoVec[i])
+
             posx += tabWidth
         
         # Update all tabs that can not fit into the screen as non-visible
@@ -1889,6 +1899,25 @@ class FNBRenderer:
         if pc.HasFlag(FNB_FF2):
             self.DrawTabsLine(pc, dc, x1, x2)
 
+
+    def DrawFocusRectangle(self, dc, pageContainer, page):
+        """ Draws a focus rectangle like the native Notebooks. """
+        
+        if not page._hasFocus:
+            return
+
+        tabPos = page.GetPosition()
+        if pageContainer.GetParent().GetWindowStyleFlag() & FNB_VC8:
+            vc8ShapeLen = self.CalcTabHeight(pageContainer) - VERTICAL_BORDER_PADDING - 2
+            tabPos.x += vc8ShapeLen
+            
+        rect = wx.RectPS(tabPos, page.GetSize())
+        rect = wx.Rect(rect.x+2, rect.y+2, rect.width-4, rect.height-8)
+        
+        dc.SetBrush(wx.TRANSPARENT_BRUSH)
+        dc.SetPen(self._focusPen)
+        dc.DrawRoundedRectangleRect(rect, 2)
+        
 
     def DrawDragHint(self, pc, tabIdx):
         """
@@ -2736,6 +2765,8 @@ class FNBRendererVC8(FNBRenderer):
             # Draw the tab
             self.DrawTabX(pc, dc, x_rect, tabIdx, btnStatus)
 
+        self.DrawFocusRectangle(dc, pc, pc._pagesInfoVec[tabIdx])
+
 
     def FillVC8GradientColour(self, pageContainer, dc, tabPoints, bSelectedTab, tabIdx):
         """ Fills a tab with a gradient shading. """
@@ -2975,7 +3006,7 @@ class FNBRendererVC8(FNBRenderer):
 # Class FlatNotebook
 # ---------------------------------------------------------------------------- #
 
-class FlatNotebook(wx.Panel):
+class FlatNotebook(wx.PyPanel):
     """
     Display one or more windows in a notebook.
     
@@ -3011,7 +3042,7 @@ class FlatNotebook(wx.Panel):
         self._windows = []
         self._popupWin = None
 
-        wx.Panel.__init__(self, parent, id, pos, size, style)
+        wx.PyPanel.__init__(self, parent, id, pos, size, style)
         
         self._pages = PageContainer(self, wx.ID_ANY, wx.DefaultPosition, wx.DefaultSize, style)
 
@@ -3058,6 +3089,24 @@ class FlatNotebook(wx.Panel):
         self._pDropTarget = FNBDropTarget(self)
         self.SetDropTarget(self._pDropTarget)
 
+
+    def DoGetBestSize(self):
+        """ Overrides DoGetBestSize to handle sizers nicely. """
+
+        if not self._windows:
+            # Something is better than nothing... no pages!
+            return wx.Size(20, 20)
+
+        maxWidth = maxHeight = 0
+        tabHeight = self.GetPageBestSize().height
+
+        for win in self._windows:
+            # Loop over all the windows to get their best size
+            width, height = win.GetBestSize()
+            maxWidth, maxHeight = max(maxWidth, width), max(maxHeight, height)
+
+        return wx.Size(maxWidth, maxHeight+tabHeight)
+    
 
     def SetActiveTabTextColour(self, textColour):
         """ Sets the text colour for the active tab. """
@@ -3452,10 +3501,7 @@ class FlatNotebook(wx.Panel):
                 # change pages
                 self.AdvanceSelection(event.GetDirection())
         else:
-            # pass to the parent
-            if self.GetParent():
-                event.SetCurrentFocus(self)
-                self.GetParent().ProcessEvent(event)
+            event.Skip()
             
 
     def GetPageShapeAngle(self, page_index):
@@ -3531,7 +3577,7 @@ class FlatNotebook(wx.Panel):
     def SetWindowStyleFlag(self, style):
         """ Sets the L{FlatNotebook} window style flags. """
             
-        wx.Panel.SetWindowStyleFlag(self, style)
+        wx.PyPanel.SetWindowStyleFlag(self, style)
         renderer = self._pages._mgr.GetRenderer(self.GetWindowStyleFlag())
         renderer._tabHeight = None
 
@@ -3673,14 +3719,14 @@ class FlatNotebook(wx.Panel):
         return self._pages.GetEnabled(page)
 
 
-    def Enable(self, page, enabled=True):
+    def EnableTab(self, page, enabled=True):
         """ Enables or disables a tab. """
 
         if page >= len(self._windows):
             return
 
         self._windows[page].Enable(enabled)
-        self._pages.Enable(page, enabled)
+        self._pages.EnableTab(page, enabled)
 
 
     def GetNonActiveTabTextColour(self):
@@ -3789,6 +3835,8 @@ class PageContainer(wx.Panel):
         self.Bind(wx.EVT_LEAVE_WINDOW, self.OnMouseLeave)
         self.Bind(wx.EVT_ENTER_WINDOW, self.OnMouseEnterWindow)
         self.Bind(wx.EVT_LEFT_DCLICK, self.OnLeftDClick)
+        self.Bind(wx.EVT_SET_FOCUS, self.OnSetFocus)
+        self.Bind(wx.EVT_KILL_FOCUS, self.OnKillFocus)
 
 
     def OnEraseBackground(self, event):
@@ -4356,7 +4404,7 @@ class PageContainer(wx.Panel):
                 dc = wx.ClientDC(self)
                 
                 if bRedrawX:
-                
+                                
                     render.DrawX(self, dc)
                 
                 if bRedrawLeft:
@@ -4369,7 +4417,7 @@ class PageContainer(wx.Panel):
                 
                 if bRedrawTabX:
                 
-                    render.DrawTabX(self, dc, self._pagesInfoVec[tabIdx].GetXRect(), tabIdx, self._nTabXButtonStatus)
+                    self.Refresh()
 
                 if bRedrawDropArrow:
 
@@ -4663,13 +4711,13 @@ class PageContainer(wx.Panel):
         return self._pagesInfoVec[page].GetEnabled()
 
 
-    def Enable(self, page, enabled=True):
+    def EnableTab(self, page, enabled=True):
         """ Enables or disables a tab. """
 
         if page >= len(self._pagesInfoVec):
             return
         
-        self._pagesInfoVec[page].Enable(enabled)
+        self._pagesInfoVec[page].EnableTab(enabled)
         
 
     def GetSingleLineBorderColour(self):
@@ -4727,6 +4775,37 @@ class PageContainer(wx.Panel):
             event.Skip()
         
 
+    def OnSetFocus(self, event):
+        """ Handles the wx.EVT_SET_FOCUS event for L{PageContainer}. """
+
+        if self._iActivePage < 0:
+            event.Skip()
+            return
+
+        self.SetFocusedPage(self._iActivePage)
+
+
+    def OnKillFocus(self, event):
+        """ Handles the wx.EVT_KILL_FOCUS event for L{PageContainer}. """
+
+        self.SetFocusedPage()
+        
+
+    def SetFocusedPage(self, pageIndex=-1):
+        """
+        Sets/Unsets the focus on the appropriate page.
+        If pageIndex is defaulted, we have lost focus and no focus indicator is drawn.
+        """
+
+        for indx, page in enumerate(self._pagesInfoVec):
+            if indx == pageIndex:
+                page._hasFocus = True
+            else:
+                page._hasFocus = False
+            
+        self.Refresh()
+        
+
     def PopupTabsMenu(self):
         """ Pops up the menu activated with the drop down arrow in the navigation area. """
 
@@ -4743,7 +4822,7 @@ class PageContainer(wx.Panel):
                 item.SetBitmap(self.GetImageList().GetBitmap(pi.GetImageIndex()))
 
             popupMenu.AppendItem(item)
-            item.Enable(pi.GetEnabled())
+            item.EnableTab(pi.GetEnabled())
             
         self.PopupMenu(popupMenu)
 
@@ -4781,6 +4860,7 @@ class PageContainer(wx.Panel):
             event.SetEventType(wxEVT_FLATNOTEBOOK_PAGE_CHANGED)
             event.SetOldSelection(oldSelection)
             self.GetParent().GetEventHandler().ProcessEvent(event)
+            self.SetFocus()
             
 
     def SetImageList(self, imglist):
