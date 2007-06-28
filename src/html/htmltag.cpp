@@ -407,7 +407,15 @@ wxString wxHtmlTag::GetParam(const wxString& par, bool with_commas) const
 }
 
 int wxHtmlTag::ScanParam(const wxString& par,
-                         const wxChar *format,
+                         const char *format,
+                         void *param) const
+{
+    wxString parval = GetParam(par);
+    return wxSscanf(parval, format, param);
+}
+
+int wxHtmlTag::ScanParam(const wxString& par,
+                         const wchar_t *format,
                          void *param) const
 {
     wxString parval = GetParam(par);
