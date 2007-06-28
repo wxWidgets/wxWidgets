@@ -89,8 +89,8 @@ protected:
 class WXDLLEXPORT wxLogWindow : public wxLogPassThrough
 {
 public:
-    wxLogWindow(wxWindow *pParent,         // the parent frame (can be NULL)
-                const wxChar *szTitle,    // the title of the frame
+    wxLogWindow(wxWindow *pParent,        // the parent frame (can be NULL)
+                const wxString& szTitle,  // the title of the frame
                 bool bShow = true,        // show window immediately?
                 bool bPassToOld = true);  // pass messages to the old target?
 
